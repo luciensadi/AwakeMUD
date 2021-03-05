@@ -451,7 +451,7 @@ void iedit_disp_val2_menu(struct descriptor_data * d)
       if (d->iedit_limit_edits)
         d->iedit_limit_edits++;
       iedit_disp_val4_menu(d);
-      break;
+      return;
     case ITEM_SPELL_FORMULA:
       iedit_disp_spells_menu(d);
       break;
@@ -488,7 +488,7 @@ void iedit_disp_val2_menu(struct descriptor_data * d)
           if (d->iedit_limit_edits)
             d->iedit_limit_edits++;
           iedit_disp_val3_menu(d);
-          break;
+          return;
         case TYPE_UPGRADE:
           send_to_char("  0) MPCP (replacement)\r\n  1) Active memory\r\n"
                        "  2) Storage memory\r\n  3) Hitcher Jack\r\n  4) IO speed\r\n"
@@ -919,7 +919,7 @@ void iedit_disp_val6_menu(struct descriptor_data * d)
       if (d->iedit_limit_edits)
         d->iedit_limit_edits++;
       iedit_disp_val7_menu(d);
-      break;
+      return;
     default:
       iedit_disp_menu(d);
   }
@@ -946,6 +946,7 @@ void iedit_disp_val7_menu(struct descriptor_data * d)
         if (d->iedit_limit_edits)
           d->iedit_limit_edits++;
         iedit_disp_val8_menu(d);
+        return;
       }
       break;
     case ITEM_FIREWEAPON:
@@ -985,17 +986,22 @@ void iedit_disp_val8_menu(struct descriptor_data * d)
   switch (GET_OBJ_TYPE(d->edit_obj))
   {
     case ITEM_WEAPON:
-      if (access_level(CH, LVL_ADMIN) && IS_GUN(GET_OBJ_VAL(OBJ, 3))) {
-        if (GET_OBJ_VAL(OBJ, 7) >= -1)
-          send_to_char("Enter vnum of object to attach on top: ", CH);
-        else {
-          // Skipping this field while doing nothing? Re-increment our counter.
-          if (d->iedit_limit_edits)
-            d->iedit_limit_edits++;
-          iedit_disp_val9_menu(d);
-        }
-      } else
-        iedit_disp_menu(d);
+      if (IS_GUN(GET_WEAPON_ATTACK_TYPE(OBJ))) {
+        if (access_level(CH, LVL_ADMIN)) {
+          if (GET_WEAPON_ATTACH_TOP_VNUM(OBJ) >= -1)
+            send_to_char("Enter vnum of object to attach on top: ", CH);
+          else {
+            // Skipping this field while doing nothing? Re-increment our counter.
+            if (d->iedit_limit_edits)
+              d->iedit_limit_edits++;
+            iedit_disp_val9_menu(d);
+            return;
+          }
+        } else
+          iedit_disp_menu(d);
+      } else {
+        send_to_char("Enter weapon focus rating (0 for no focus, up to 4): ", CH);
+      }
       break;
     case ITEM_WORN:
       send_to_char("Concealability rating (+harder -easier): ", CH);
@@ -1022,14 +1028,15 @@ void iedit_disp_val9_menu(struct descriptor_data * d)
       send_to_char("Armored clothing set (0 for no set): ", CH);
       break;
     case ITEM_WEAPON:
-      if (access_level(CH, LVL_ADMIN)) {
-        if (GET_OBJ_VAL(OBJ, 8) >= -1)
+      if (access_level(CH, LVL_ADMIN) && IS_GUN(GET_WEAPON_ATTACK_TYPE(OBJ))) {
+        if (GET_WEAPON_ATTACH_BARREL_VNUM(OBJ) >= -1)
           send_to_char("Enter vnum of object to attach on barrel: ", CH);
         else {
           // Skipping this field while doing nothing? Re-increment our counter.
           if (d->iedit_limit_edits)
             d->iedit_limit_edits++;
           iedit_disp_val10_menu(d);
+          return;
         }
       } else
         iedit_disp_menu(d);
@@ -1053,13 +1060,14 @@ void iedit_disp_val10_menu(struct descriptor_data * d)
   switch (GET_OBJ_TYPE(d->edit_obj))
   {
     case ITEM_WEAPON:
-      if (GET_OBJ_VAL(OBJ, 9) >= -1)
-        send_to_char("Enter vnum of object to attach under: ", CH);
+      if (GET_WEAPON_ATTACH_UNDER_VNUM(OBJ) >= -1)
+        send_to_char("Enter vnum of object to attach underneath: ", CH);
       else {
         // Skipping this field while doing nothing? Re-increment our counter.
         if (d->iedit_limit_edits)
           d->iedit_limit_edits++;
         iedit_disp_val11_menu(d);
+        return;
       }
       break;
     default:
@@ -1734,7 +1742,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
             return;
           }
           iedit_disp_val1_menu(d);
-          break;
+          return;
         case 'h':
         case 'H':
           iedit_disp_prompt_apply_menu(d);
@@ -2407,6 +2415,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
           if (number < 1 || number > 4) {
             send_to_char("Must be between 1 and 4: ", d->character);
             iedit_disp_val4_menu(d);
+            return;
           }
           break;
         case ITEM_DECK_ACCESSORY:
@@ -2662,23 +2671,32 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
       number = atoi(arg);
       switch (GET_OBJ_TYPE(d->edit_obj)) {
         case ITEM_WEAPON:
-          if (!access_level(CH, LVL_ADMIN)) {
-            struct obj_data *you_know_this_would_leak_memory_right = NULL;
-            if (!(you_know_this_would_leak_memory_right = read_object(number, VIRTUAL))) {
-              send_to_char("Invalid vnum.\r\n", CH);
-              iedit_disp_val8_menu(d);
-            } else {
-              extract_obj(you_know_this_would_leak_memory_right);
-            }
-          }
-          if (number > 0) {
-            modified = FALSE;
-            for (j = 0; (j < MAX_OBJ_AFFECT && !modified); j++)
-              if (!(OBJ->affected[j].modifier)) {
-                OBJ->affected[j].location = read_object(number, VIRTUAL)->affected[0].location;
-                OBJ->affected[j].modifier = read_object(number, VIRTUAL)->affected[0].modifier;
-                modified = TRUE;
+          if (IS_GUN(GET_WEAPON_ATTACK_TYPE(OBJ))) {
+            if (!access_level(CH, LVL_ADMIN)) {
+              struct obj_data *you_know_this_would_leak_memory_right = NULL;
+              if (!(you_know_this_would_leak_memory_right = read_object(number, VIRTUAL))) {
+                send_to_char("Invalid vnum.\r\n", CH);
+                iedit_disp_val8_menu(d);
+                return;
+              } else {
+                extract_obj(you_know_this_would_leak_memory_right);
               }
+            }
+            if (number > 0) {
+              modified = FALSE;
+              for (j = 0; (j < MAX_OBJ_AFFECT && !modified); j++)
+                if (!(OBJ->affected[j].modifier)) {
+                  OBJ->affected[j].location = read_object(number, VIRTUAL)->affected[0].location;
+                  OBJ->affected[j].modifier = read_object(number, VIRTUAL)->affected[0].modifier;
+                  modified = TRUE;
+                }
+            }
+          } else {
+            if (number < 0 || number > 4) {
+              send_to_char("Weapon focus rating must be between 0 (no focus) and 4.\r\n", CH);
+              iedit_disp_val8_menu(d);
+              return;
+            }
           }
           break;
         default:
@@ -2697,6 +2715,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
             if (!(you_know_this_would_leak_memory_right = read_object(number, VIRTUAL))) {
               send_to_char("Invalid vnum.\r\n", CH);
               iedit_disp_val9_menu(d);
+              return;
             } else {
               extract_obj(you_know_this_would_leak_memory_right);
             }
@@ -2727,6 +2746,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
             if (!(you_know_this_would_leak_memory_right = read_object(number, VIRTUAL))) {
               send_to_char("Invalid vnum.\r\n", CH);
               iedit_disp_val10_menu(d);
+              return;
             } else {
               extract_obj(you_know_this_would_leak_memory_right);
             }

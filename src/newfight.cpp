@@ -191,6 +191,7 @@ struct ranged_combat_data {
 
 struct melee_combat_data {
   int skill;
+  int skill_bonus;
   int power;
   int dam_type;
   int damage_level;
@@ -199,7 +200,7 @@ struct melee_combat_data {
   int modifiers[NUM_COMBAT_MODIFIERS];
   
   melee_combat_data(struct char_data *ch, struct obj_data *weapon, bool weapon_is_gun, struct cyberware_data *cyber) :
-    skill(0), power(0), dam_type(0), damage_level(0), is_physical(FALSE)
+    skill(0), skill_bonus(0), power(0), dam_type(0), damage_level(0), is_physical(FALSE)
   {
     assert(ch != NULL);
     
@@ -212,6 +213,15 @@ struct melee_combat_data {
     damage_level = MODERATE;
     
     if (weapon) {
+      // Weapon foci. NPC use them implicitly.
+      if (IS_NPC(ch)
+          || (GET_TRADITION(ch) == TRAD_ADEPT
+              && GET_WEAPON_FOCUS_BONDED_BY(weapon) == GET_IDNUM(ch)
+              && GET_WEAPON_FOCUS_BOND_STATUS(weapon) == 0))
+      {
+        skill_bonus = GET_WEAPON_FOCUS_RATING(weapon);
+      }
+      
       if (weapon_is_gun) {
         if (does_weapon_have_bayonet(weapon)) {
           dam_type = TYPE_PIERCE;
@@ -763,9 +773,13 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     def->dice = GET_WIL(def->ch);
   } else {
     act("Computing dice for attacker...", 1, att->ch, NULL, NULL, TO_ROLLS );
-    att->dice = get_skill(att->ch, att->melee->skill, att->tn) + (att->too_tall ? 0 : MIN(GET_SKILL(att->ch, att->melee->skill), GET_OFFENSE(att->ch)));
+    att->dice = att->melee->skill_bonus + get_skill(att->ch, att->melee->skill, att->tn);
+    if (!att->too_tall)
+      att->dice += MIN(GET_SKILL(att->ch, att->melee->skill) + att->melee->skill_bonus, GET_OFFENSE(att->ch));
     act("Computing dice for defender...", 1, att->ch, NULL, NULL, TO_ROLLS );
-    def->dice = get_skill(def->ch, def->melee->skill, def->tn) + (def->too_tall ? 0 : MIN(GET_SKILL(def->ch, def->melee->skill), GET_OFFENSE(def->ch)));
+    def->dice = def->melee->skill_bonus + get_skill(def->ch, def->melee->skill, def->tn);
+    if (!def->too_tall)
+      def->dice += MIN(GET_SKILL(def->ch, def->melee->skill) + def->melee->skill_bonus, GET_OFFENSE(def->ch));
   }
   
   // Adepts get bonus dice when counterattacking. Ip Man approves.

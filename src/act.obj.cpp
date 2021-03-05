@@ -2458,6 +2458,8 @@ int can_wield_both(struct char_data *ch, struct obj_data *one, struct obj_data *
   if ((IS_GUN(GET_OBJ_VAL(one, 3)) && !IS_GUN(GET_OBJ_VAL(two, 3))) ||
       (IS_GUN(GET_OBJ_VAL(two, 3)) && !IS_GUN(GET_OBJ_VAL(one, 3))))
     return FALSE;
+  else if (!IS_GUN(GET_OBJ_VAL(one, 3)) && !IS_GUN(GET_OBJ_VAL(two, 3)))
+    return FALSE;
   else if (IS_OBJ_STAT(one, ITEM_TWOHANDS) || IS_OBJ_STAT(two, ITEM_TWOHANDS))
     return FALSE;
 
@@ -2881,6 +2883,14 @@ ACMD(do_wield)
   } else {
     if (!CAN_WEAR(obj, ITEM_WEAR_WIELD))
       send_to_char(ch, "You can't wield %s.\r\n", GET_OBJ_NAME(obj));
+    else if (GET_OBJ_TYPE(obj) == ITEM_WEAPON 
+             && !IS_GUN(GET_WEAPON_ATTACK_TYPE(obj)) 
+             && GET_WEAPON_FOCUS_BONDED_BY(obj) == GET_IDNUM(ch)
+             && GET_MAG(ch) * 2 < GET_WEAPON_FOCUS_RATING(obj)) 
+    {
+      send_to_char(ch, "%s is too powerful for you to wield!\r\n", capitalize(GET_OBJ_NAME(obj)));
+      return;
+    }
     else if (GET_OBJ_VAL(obj, 4) >= SKILL_MACHINE_GUNS && GET_OBJ_VAL(obj, 4) <= SKILL_ASSAULT_CANNON &&
              (GET_STR(ch) < 8 || GET_BOD(ch) < 8)) {
       bool found = FALSE;
@@ -3305,6 +3315,9 @@ int draw_from_readied_holster(struct char_data *ch, struct obj_data *holster) {
     GET_HOLSTER_READY_STATUS(holster) = 0;
     return 0;
   }
+  
+  if (!CAN_WEAR(contents, ITEM_WEAR_WIELD))
+    return 0;
   
   // Did we fill up our hands, or do we only have one free hand for a two-handed weapon? Skip.
   if ((GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD)) || ((GET_EQ(ch, WEAR_WIELD) || GET_EQ(ch, WEAR_HOLD)) && IS_OBJ_STAT(contents, ITEM_TWOHANDS)))

@@ -41,6 +41,9 @@ extern int can_wield_both(struct char_data *, struct obj_data *, struct obj_data
 extern int max_ability(int i);
 extern int calculate_vehicle_entry_load(struct veh_data *veh);
 
+int get_skill_num_in_use_for_weapons(struct char_data *ch);
+int get_skill_dice_in_use_for_weapons(struct char_data *ch);
+
 struct obj_data *find_obj(struct char_data *ch, char *name, int num);
 
 char *fname(char *namelist)
@@ -462,9 +465,9 @@ void affect_total_veh(struct veh_data * veh)
 
 void affect_total(struct char_data * ch)
 {
-  struct obj_data *cyber, *one, *two, *obj;
+  struct obj_data *cyber, *obj;
   struct sustain_data *sust;
-  sh_int i, j, skill;
+  sh_int i, j, skill_dice;
   int has_rig = 0, has_trigger = -1, has_wired = 0, has_mbw = 0;
   bool wearing = FALSE;
   
@@ -807,50 +810,7 @@ void affect_total(struct char_data * ch)
     GET_TARGET_MOD(ch) += 4;
   }
   
-  if (AFF_FLAGGED(ch, AFF_MANNING) || AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE)) {
-    skill = GET_SKILL(ch, SKILL_GUNNERY);
-  } else {
-    one = (GET_EQ(ch, WEAR_WIELD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_WEAPON) ? GET_EQ(ch, WEAR_WIELD) :
-           (struct obj_data *) NULL;
-    two = (GET_EQ(ch, WEAR_HOLD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_HOLD)) == ITEM_WEAPON) ? GET_EQ(ch, WEAR_HOLD) :
-           (struct obj_data *) NULL;
-           
-    if (!one && !two) {
-      if(has_cyberweapon(ch))
-        skill = GET_SKILL(ch, SKILL_CYBER_IMPLANTS);
-      else 
-        skill = GET_SKILL(ch, SKILL_UNARMED_COMBAT);
-    } 
-    
-    else if (one) {
-      if (!GET_SKILL(ch, GET_OBJ_VAL(one, 4)))
-        skill = GET_SKILL(ch, return_general(GET_OBJ_VAL(one, 4)));
-      else 
-        skill = GET_SKILL(ch, GET_OBJ_VAL(one, 4));
-    } 
-    
-    else if (two) {
-      if (!GET_SKILL(ch, GET_OBJ_VAL(two, 4)))
-        skill = GET_SKILL(ch, return_general(GET_OBJ_VAL(two, 4)));
-      else 
-        skill = GET_SKILL(ch, GET_OBJ_VAL(two, 4));
-    } 
-    
-    // This broken-ass code never worked. "If neither one or two, or if one, or if two, or..." no, that's a full logical stop.
-    else {
-      if (GET_SKILL(ch, GET_OBJ_VAL(one, 4)) <= GET_SKILL(ch, GET_OBJ_VAL(two, 4))) {
-        if (!GET_SKILL(ch, GET_OBJ_VAL(one, 4)))
-          skill = GET_SKILL(ch, return_general(GET_OBJ_VAL(one, 4)));
-        else 
-          skill = GET_SKILL(ch, GET_OBJ_VAL(one, 4));
-      } else {
-        if (!GET_SKILL(ch, GET_OBJ_VAL(two, 4)))
-          skill = GET_SKILL(ch, return_general(GET_OBJ_VAL(two, 4)));
-        else 
-          skill = GET_SKILL(ch, GET_OBJ_VAL(two, 4));
-      }
-    }
-  }
+  skill_dice = get_skill_dice_in_use_for_weapons(ch);
   
   GET_COMBAT(ch) += (GET_QUI(ch) + GET_WIL(ch) + GET_INT(ch)) / 2;
   if (GET_TOTALBAL(ch) > GET_QUI(ch))
@@ -865,35 +825,36 @@ void affect_total(struct char_data * ch)
   // Apply gyromount penalties, but only if you're wielding a gun. 
   // TODO: Ideally, this would only apply if you have uncompensated recoil, but that's a looot of code.
   if (GET_EQ(ch, WEAR_WIELD) 
-      && GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_WEAPON
-      && IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_WIELD)))) 
+      && GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_WEAPON) 
   {
-    bool added_gyro_penalty = FALSE;
-    for (i = 0; !added_gyro_penalty && i < (NUM_WEARS -1); i++)
-      if (GET_EQ(ch, i) && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_GYRO) {
-        added_gyro_penalty = TRUE;
-        GET_COMBAT(ch) /= 2;
-      }
-      
-    /*
-    if (!added_gyro_penalty) {
-      for (struct obj_data *cyb = ch->cyberware; !added_gyro_penalty && cyb; cyb = cyb->next_content) {
-        if (GET_CYBERWARE_TYPE(cyb) == CYB_ARMS && IS_SET(GET_CYBERWARE_FLAGS(cyb), ARMS_MOD_GYROMOUNT)) {
+    if (IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_WIELD)))) {
+      bool added_gyro_penalty = FALSE;
+      for (i = 0; !added_gyro_penalty && i < (NUM_WEARS -1); i++)
+        if (GET_EQ(ch, i) && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_GYRO) {
           added_gyro_penalty = TRUE;
           GET_COMBAT(ch) /= 2;
         }
+        
+      /*
+      if (!added_gyro_penalty) {
+        for (struct obj_data *cyb = ch->cyberware; !added_gyro_penalty && cyb; cyb = cyb->next_content) {
+          if (GET_CYBERWARE_TYPE(cyb) == CYB_ARMS && IS_SET(GET_CYBERWARE_FLAGS(cyb), ARMS_MOD_GYROMOUNT)) {
+            added_gyro_penalty = TRUE;
+            GET_COMBAT(ch) /= 2;
+          }
+        }
       }
+      */
     }
-    */
   }
   
   GET_DEFENSE(ch) = MIN(GET_DEFENSE(ch), GET_COMBAT(ch));
   GET_BODY(ch) = MIN(GET_BODY(ch), GET_COMBAT(ch) - GET_DEFENSE(ch));
   GET_OFFENSE(ch) = GET_COMBAT(ch) - GET_DEFENSE(ch) - GET_BODY(ch);
-  if (GET_OFFENSE(ch) > skill)
+  if (GET_OFFENSE(ch) > skill_dice)
   {
-    GET_DEFENSE(ch) += GET_OFFENSE(ch) - skill;
-    GET_OFFENSE(ch) = skill;
+    GET_DEFENSE(ch) += GET_OFFENSE(ch) - skill_dice;
+    GET_OFFENSE(ch) = skill_dice;
   }
   if ((IS_NPC(ch) && GET_MAG(ch) > 0) || (GET_TRADITION(ch) == TRAD_SHAMANIC ||
                                           GET_TRADITION(ch) == TRAD_HERMETIC))
@@ -2959,4 +2920,74 @@ int veh_skill(struct char_data *ch, struct veh_data *veh)
     skill = MAX(skill, 4);
   
   return skill;
+}
+
+int get_skill_num_in_use_for_weapons(struct char_data *ch) {
+  struct obj_data *one, *two;
+  int skill_num;
+  
+  if (AFF_FLAGGED(ch, AFF_MANNING) || AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE)) {
+    skill_num = SKILL_GUNNERY;
+  } else {
+    one = (GET_EQ(ch, WEAR_WIELD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_WEAPON) ? GET_EQ(ch, WEAR_WIELD) :
+           (struct obj_data *) NULL;
+    two = (GET_EQ(ch, WEAR_HOLD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_HOLD)) == ITEM_WEAPON) ? GET_EQ(ch, WEAR_HOLD) :
+           (struct obj_data *) NULL;
+           
+    if (!one && !two) {
+      if(has_cyberweapon(ch))
+        skill_num = SKILL_CYBER_IMPLANTS;
+      else 
+        skill_num = SKILL_UNARMED_COMBAT;
+    } 
+    
+    else if (one) {
+      if (!GET_SKILL(ch, GET_OBJ_VAL(one, 4)))
+        skill_num = return_general(GET_OBJ_VAL(one, 4));
+      else 
+        skill_num = GET_OBJ_VAL(one, 4);
+    } 
+    
+    else if (two) {
+      if (!GET_SKILL(ch, GET_OBJ_VAL(two, 4)))
+        skill_num = return_general(GET_OBJ_VAL(two, 4));
+      else 
+        skill_num = GET_OBJ_VAL(two, 4);
+    } 
+    
+    // This broken-ass code never worked. "If neither one or two, or if one, or if two, or..." no, that's a full logical stop.
+    else {
+      if (GET_SKILL(ch, GET_OBJ_VAL(one, 4)) <= GET_SKILL(ch, GET_OBJ_VAL(two, 4))) {
+        if (!GET_SKILL(ch, GET_OBJ_VAL(one, 4)))
+          skill_num = return_general(GET_OBJ_VAL(one, 4));
+        else 
+          skill_num = GET_OBJ_VAL(one, 4);
+      } else {
+        if (!GET_SKILL(ch, GET_OBJ_VAL(two, 4)))
+          skill_num = return_general(GET_OBJ_VAL(two, 4));
+        else 
+          skill_num = GET_OBJ_VAL(two, 4);
+      }
+    }
+  }
+  
+  return skill_num;
+}
+
+int get_skill_dice_in_use_for_weapons(struct char_data *ch) {
+  int skill_num = get_skill_num_in_use_for_weapons(ch);
+  int skill_dice = GET_SKILL(ch, skill_num);
+  
+  if (GET_EQ(ch, WEAR_WIELD) 
+      && GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_WEAPON
+      && !IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_WIELD)))
+      && GET_WEAPON_FOCUS_RATING(GET_EQ(ch, WEAR_WIELD))
+      && (IS_NPC(ch) 
+          || (GET_WEAPON_FOCUS_BONDED_BY(GET_EQ(ch, WEAR_WIELD)) == GET_IDNUM(ch)
+              && GET_WEAPON_FOCUS_BOND_STATUS(GET_EQ(ch, WEAR_WIELD)) == 0)))
+  {
+    skill_dice += GET_WEAPON_FOCUS_RATING(GET_EQ(ch, WEAR_WIELD));
+  }
+  
+  return skill_dice;
 }

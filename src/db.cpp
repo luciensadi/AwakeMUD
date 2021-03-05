@@ -73,6 +73,7 @@ extern void weight_change_object(struct obj_data * obj, float weight);
 extern void generate_archetypes();
 extern void populate_mobact_aggression_octets();
 extern void write_world_to_disk(int vnum);
+extern void handle_weapon_attachments(struct obj_data *obj);
 
 extern void auto_repair_obj(struct obj_data *obj, const char *source);
 
@@ -3107,30 +3108,11 @@ struct obj_data *read_object(int nr, int type)
     }
     GET_OBJ_VAL(obj, 3) = atoi(buf);
     GET_OBJ_VAL(obj, 6) = number(0, 9999);
-  } else if (GET_OBJ_TYPE(obj) == ITEM_GUN_MAGAZINE)
+  } else if (GET_OBJ_TYPE(obj) == ITEM_GUN_MAGAZINE) {
     GET_OBJ_VAL(obj, 9) = GET_OBJ_VAL(obj, 0);
-  else if (GET_OBJ_TYPE(obj) == ITEM_WEAPON) {
-    int real_obj;
-    for (int i = ACCESS_LOCATION_TOP; i <= ACCESS_LOCATION_UNDER; i++)
-      if (GET_OBJ_VAL(obj, i) > 0 && (real_obj = real_object(GET_OBJ_VAL(obj, i))) > 0) {
-        struct obj_data *mod = &obj_proto[real_obj];
-        // We know the attachment code will throw a fit if we attach over the top of an 'existing' object, so wipe it out without removing it.
-        GET_OBJ_VAL(obj, i) = 0;
-        attach_attachment_to_weapon(mod, obj, NULL, i - ACCESS_ACCESSORY_LOCATION_DELTA);
-      }
-    if (IS_GUN(GET_OBJ_VAL(obj, 3))) {
-      if (IS_SET(GET_OBJ_VAL(obj, 10), 1 << MODE_SS))
-        GET_OBJ_VAL(obj, 11) = MODE_SS;
-      else if (IS_SET(GET_OBJ_VAL(obj, 10), 1 << MODE_SA))
-        GET_OBJ_VAL(obj, 11) = MODE_SA;
-      else if (IS_SET(GET_OBJ_VAL(obj, 10), 1 << MODE_BF))
-        GET_OBJ_VAL(obj, 11) = MODE_BF;
-      else if (IS_SET(GET_OBJ_VAL(obj, 10), 1 << MODE_FA)) {
-        GET_OBJ_VAL(obj, 11) = MODE_FA;
-        GET_OBJ_TIMER(obj) = 10;
-      }
-    }
-  }
+  } else if (GET_OBJ_TYPE(obj) == ITEM_WEAPON)
+    handle_weapon_attachments(obj);
+  
   return obj;
 }
 
@@ -4734,7 +4716,7 @@ void load_saved_veh()
   FILE *fl;
   struct veh_data *veh = NULL, *veh2 = NULL;
   long vnum, owner;
-  struct obj_data *obj, *last_obj = NULL, *attach = NULL;
+  struct obj_data *obj, *last_obj = NULL;
   long veh_room = 0;
 
   if (!(fl = fopen("veh/vfile", "r"))) {
@@ -4801,16 +4783,8 @@ void load_saved_veh()
         }
         if (GET_OBJ_TYPE(obj) == ITEM_PHONE && GET_ITEM_PHONE_SWITCHED_ON(obj))
           add_phone_to_list(obj);
-        if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && IS_GUN(GET_OBJ_VAL(obj, 3))) {
-          int real_obj;
-          for (int q = ACCESS_LOCATION_TOP; q <= ACCESS_LOCATION_UNDER; q++)
-            if (GET_OBJ_VAL(obj, q) > 0 && (real_obj = real_object(GET_OBJ_VAL(obj, q))) > 0 && 
-               (attach = &obj_proto[real_obj])) {
-              // The cost of the item was preserved, but nothing else was. Re-attach the item, then subtract its cost.
-              // We know the attachment code will throw a fit if we attach over the top of an 'existing' object, so wipe it out without removing it.
-              GET_OBJ_VAL(obj, q) = 0;
-              attach_attachment_to_weapon(attach, obj, NULL, q - ACCESS_ACCESSORY_LOCATION_DELTA);
-            }
+        if (GET_OBJ_TYPE(obj) == ITEM_WEAPON) {
+          handle_weapon_attachments(obj);
         }
         snprintf(buf, sizeof(buf), "%s/Condition", sect_name);
         GET_OBJ_CONDITION(obj) = data.GetInt(buf, GET_OBJ_CONDITION(obj));
@@ -4989,7 +4963,6 @@ void load_saved_veh()
 
 void load_consist(void)
 {
-  struct obj_data *attach;
   File file;
   
   for (int nr = 0; nr <= top_of_world; nr++) {
@@ -5030,16 +5003,8 @@ void load_consist(void)
             snprintf(buf, sizeof(buf), "%s/Inside", sect_name);
             
             // Handle weapon attachments.
-            if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && IS_GUN(GET_OBJ_VAL(obj, 3))) {
-              int real_obj;
-              for (int q = ACCESS_LOCATION_TOP; q <= ACCESS_LOCATION_UNDER; q++)
-                if (GET_OBJ_VAL(obj, q) > 0 && (real_obj = real_object(GET_OBJ_VAL(obj, q))) > 0 &&
-                    (attach = &obj_proto[real_obj])) {
-                  // We know the attachment code will throw a fit if we attach over the top of an 'existing' object, so wipe it out without removing it.
-                  GET_OBJ_VAL(obj, q) = 0;
-                  attach_attachment_to_weapon(attach, obj, NULL, q - ACCESS_ACCESSORY_LOCATION_DELTA);
-                }
-            }
+            if (GET_OBJ_TYPE(obj) == ITEM_WEAPON)
+              handle_weapon_attachments(obj);
             
             else if (GET_OBJ_VNUM(obj) == OBJ_SPECIAL_PC_CORPSE) {
               // Invalid belongings.

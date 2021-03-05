@@ -2414,83 +2414,70 @@ ACMD(do_bond)
         ch, obj, 0, TO_CHAR);
     return;
   }
-  /*
-  // If it's an unbonded magazine, we need to search for the weapon they selected.
-  else if (GET_OBJ_TYPE(obj) == ITEM_GUN_MAGAZINE) {
-    // Define aliases used for code readability; nobody likes juggling 'i' and 'obj'.
-    struct obj_data *magazine = obj, *weapon = NULL;
-    
-    // Convenience: If they selected a pre-bonded magazine, just keep rolling through.
-    if (GET_OBJ_VAL(magazine, 0)) {
-      for (obj = obj->next_content; obj; obj = obj->next_content) {
-        if (isname(buf1, obj->text.keywords) || isname(buf2, GET_OBJ_NAME(obj))) {
-          // We found something that matches the keywords-- but is it already bonded?
-          if (GET_OBJ_VAL(magazine, 0))
-            continue;
-          
-          // Good to go.
-          magazine = obj;
-          break;
-        }
-      }
-    }
-    
-    // If we found no valid magazines, terminate.
-    if (!magazine || GET_OBJ_VAL(magazine, 0)) {
-      send_to_char("All of your magazines have already been bonded to something else.\r\n", ch);
-      return;
-    }
-    
-    // Iterate through character's inventory to find the selected weapon.
-    for (weapon = ch->carrying; weapon; weapon = weapon->next_content) {
-      if (GET_OBJ_TYPE(weapon) == ITEM_WEAPON && (isname(buf1, weapon->text.keywords) || isname(buf2, GET_OBJ_NAME(weapon))))
-        break;
-    }
-    
-    // If nothing was found, fail.
-    if (!weapon) {
-      send_to_char("You don't have that weapon.\r\n", ch);
-      return;
-    }
-    
-    // Assign the magazine's values to the correct values supplied by the weapon.
-    GET_MAGAZINE_BONDED_MAXAMMO(magazine) = GET_WEAPON_MAX_AMMO(weapon);
-    GET_MAGAZINE_AMMO_TYPE(magazine) = GET_WEAPON_ATTACK_TYPE(weapon);
-    snprintf(buf, sizeof(buf), "a %d-round %s magazine", GET_MAGAZINE_BONDED_MAXAMMO(magazine), weapon_type[GET_MAGAZINE_AMMO_TYPE(magazine)]);
-    if (magazine->restring)
-      delete [] magazine->restring;
-    magazine->restring = str_dup(buf);
-    send_to_char(ch, "You bond a new magazine to %s.\r\n", GET_OBJ_NAME(weapon));
-    return;
-  }
   
-  else if (GET_OBJ_TYPE(obj) == ITEM_WEAPON) {
-    if (IS_GUN(GET_OBJ_VAL(obj, 3))) {
-      for (struct obj_data *i = ch->carrying; i; i = i->next_content) {
-        if (GET_OBJ_TYPE(i) == ITEM_GUN_MAGAZINE && !GET_OBJ_VAL(i, 0)) {
-          GET_OBJ_VAL(i, 0) = GET_OBJ_VAL(obj, 5);
-          GET_OBJ_VAL(i, 1) = GET_OBJ_VAL(obj, 3);
-          snprintf(buf, sizeof(buf), "a %d-round %s magazine", GET_OBJ_VAL(i, 0), weapon_type[GET_OBJ_VAL(i, 1)]);
-          if (i->restring)
-            delete [] i->restring;
-          i->restring = str_dup(buf);
-          send_to_char(ch, "You bond a new magazine to %s.\r\n", GET_OBJ_NAME(obj));
-          return;
-        }
-      }
-      send_to_char("You can't find any blank magazines to bond to that weapon.\r\n", ch);
+  else if (GET_OBJ_TYPE(obj) == ITEM_WEAPON
+           && !IS_GUN(GET_WEAPON_ATTACK_TYPE(obj))
+           && GET_WEAPON_FOCUS_RATING(obj) > 0) 
+  {
+    if (GET_TRADITION(ch) != TRAD_ADEPT) {
+      send_to_char("Only Adepts can only bond weapon foci.\r\n", ch);
       return;
-    } 
-    else 
-      send_to_char(ch, "%s can't take magazines.\r\n", GET_OBJ_NAME(obj));
+    }
+    if (GET_WEAPON_FOCUS_BONDED_BY(obj) > 0) {
+      send_to_char(ch, "%s is already bonded to %s.", 
+                   capitalize(GET_OBJ_NAME(obj)), 
+                   GET_WEAPON_FOCUS_BONDED_BY(obj) == GET_IDNUM(ch) ? "you" : "someone else");
+      return;
+    }
+    if (((GET_MAG(ch) * 2) / 100) < GET_WEAPON_FOCUS_RATING(obj)) {
+      send_to_char(ch, "%s is too powerful for you to bond! You need at least %d magic to bond it, and you have %d.\r\n", capitalize(GET_OBJ_NAME(obj)), (int) ((GET_WEAPON_FOCUS_RATING(obj) + 1) / 2));
+      return;
+    }
+    
+    if (IS_WORKING(ch)) {
+      send_to_char(TOOBUSY, ch);
+      return;
+    }
+    if (GET_POS(ch) > POS_SITTING) {
+      send_to_char("You must be sitting to perform a bonding ritual.\r\n", ch);
+      return;
+    }
+    
+    if (GET_WEAPON_FOCUS_BOND_STATUS(obj) > 0) {
+      GET_WEAPON_FOCUS_BOND_STATUS(obj) = GET_WEAPON_FOCUS_RATING(obj) * 60;
+      send_to_char(ch, "You restart the ritual to bond %s.\r\n", GET_OBJ_NAME(obj));
+      act("$n begins a ritual to bond $p.", TRUE, ch, obj, 0, TO_ROOM);
+      AFF_FLAGS(ch).SetBit(AFF_BONDING);
+      ch->char_specials.programming = obj;
+      return;
+    }
+    
+    karma = (3 + GET_WEAPON_REACH(obj)) * GET_WEAPON_FOCUS_RATING(obj);
+    
+    if (GET_KARMA(ch) < karma * 100) {
+      send_to_char(ch, "You don't have enough karma to bond that (Need %d).\r\n", karma);
+      return;
+    }
+    GET_KARMA(ch) -= karma * 100;
+    GET_WEAPON_FOCUS_BOND_STATUS(obj) = GET_WEAPON_FOCUS_RATING(obj) * 60;
+    GET_WEAPON_FOCUS_BONDED_BY(obj) = GET_IDNUM(ch);
+    
+    if (access_level(ch, LVL_BUILDER)) {
+      send_to_char(ch, "You use your staff powers to greatly accelerate the bonding ritual.\r\n");
+      GET_WEAPON_FOCUS_BOND_STATUS(obj) = 1;
+    }
+    
+    send_to_char(ch, "You begin the ritual to bond %s.\r\n", GET_OBJ_NAME(obj));
+    act("$n begins a ritual to bond $p.", TRUE, ch, obj, 0, TO_ROOM);
+    AFF_FLAGS(ch).SetBit(AFF_BONDING);
+    ch->char_specials.programming = obj;
     return;
   }
-  */
   
   else if (GET_OBJ_TYPE(obj) == ITEM_FOCUS) {
     if (GET_TRADITION(ch) == TRAD_MUNDANE)
       send_to_char(ch, "You can't bond foci.\r\n");
-    else if (GET_TRADITION(ch) == TRAD_ADEPT && GET_FOCUS_TYPE(obj) != FOCI_WEAPON)
+    else if (GET_TRADITION(ch) == TRAD_ADEPT)
       send_to_char("Adepts can only bond weapon foci.\r\n", ch);
     else if (GET_FOCUS_BONDED_TO(obj) && GET_FOCUS_BONDED_TO(obj) != GET_IDNUM(ch))
       send_to_char(ch, "%s is already bonded to someone else.\r\n", capitalize(GET_OBJ_NAME(obj)));
@@ -4807,6 +4794,10 @@ bool focus_is_usable_by_ch(struct obj_data *focus, struct char_data *ch) {
   // Focus is not a focus.
   if (GET_OBJ_TYPE(focus) != ITEM_FOCUS)
     return FALSE;
+    
+  // NPCs get the advantage of the foci they're wearing without having to bond them.
+  if (IS_NPC(ch))
+    return TRUE;
     
   // Focus not bonded to character.
   if (GET_FOCUS_BONDED_TO(focus) != GET_IDNUM(ch))

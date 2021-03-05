@@ -536,10 +536,14 @@ void update_buildrepair(void)
           AFF_FLAGS(desc->character).RemoveBit(AFF_PROGRAM);
           CH->char_specials.timer = 0;
         }
-      } else if (AFF_FLAGGED(CH, AFF_BONDING) && --GET_OBJ_VAL(PROG, 9) < 1) {
-        send_to_char(CH, "You complete the bonding ritual for %s.\r\n", GET_OBJ_NAME(PROG));
-        CH->char_specials.timer = 0;
-        STOP_WORKING(CH);
+      } else if (AFF_FLAGGED(CH, AFF_BONDING)) {
+        if ((GET_OBJ_TYPE(PROG) == ITEM_WEAPON && --GET_WEAPON_FOCUS_BOND_STATUS(PROG) < 1)
+            || (GET_OBJ_TYPE(PROG) == ITEM_FOCUS && --GET_OBJ_VAL(PROG, 9) < 1))
+        {
+          send_to_char(CH, "You complete the bonding ritual for %s.\r\n", GET_OBJ_NAME(PROG));
+          CH->char_specials.timer = 0;
+          STOP_WORKING(CH);
+        }
       } else if (AFF_FLAGGED(CH, AFF_CONJURE) && --CH->char_specials.conjure[2] < 1) {
         if ((GET_OBJ_COST(PROG) -= CH->char_specials.conjure[1] * 1000) <= 0)
           extract_obj(PROG);

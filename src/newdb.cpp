@@ -37,6 +37,7 @@ extern Playergroup *loaded_playergroups;
 
 extern void save_bullet_pants(struct char_data *ch);
 extern void load_bullet_pants(struct char_data *ch);
+extern void handle_weapon_attachments(struct obj_data *obj);
 
 void auto_repair_obj(struct obj_data *obj, const char *source);
 
@@ -753,7 +754,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
   }
 
   {
-    struct obj_data *obj = NULL, *last_obj = NULL, *attach = NULL;
+    struct obj_data *obj = NULL, *last_obj = NULL;
     long vnum;
     int inside = 0, last_in = 0;
     snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_worn WHERE idnum=%ld ORDER BY posi;", GET_IDNUM(ch));
@@ -776,16 +777,8 @@ bool load_char(const char *name, char_data *ch, bool logon)
           GET_OBJ_VAL(obj, 4) = 0;
         if (GET_OBJ_TYPE(obj) == ITEM_FOCUS && GET_OBJ_VAL(obj, 4))
           GET_FOCI(ch)++;
-        if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && IS_GUN(GET_OBJ_VAL(obj, 3))) {
-          int real_obj;
-          for (int q = ACCESS_LOCATION_TOP; q <= ACCESS_LOCATION_UNDER; q++)
-            if (GET_OBJ_VAL(obj, q) > 0 && (real_obj = real_object(GET_OBJ_VAL(obj, q))) > 0 && 
-               (attach = &obj_proto[real_obj])) {
-              // Zero out the attachment so that we don't get attaching-overtop errors.
-              GET_OBJ_VAL(obj, q) = 0;
-              attach_attachment_to_weapon(attach, obj, NULL, q - ACCESS_ACCESSORY_LOCATION_DELTA);
-            }
-        }
+        if (GET_OBJ_TYPE(obj) == ITEM_WEAPON)
+          handle_weapon_attachments(obj);
         inside = atoi(row[17]);
         GET_OBJ_TIMER(obj) = atoi(row[19]);
         
@@ -822,7 +815,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
   }
 
   {
-    struct obj_data *last_obj = NULL, *obj, *attach = NULL;
+    struct obj_data *last_obj = NULL, *obj;
     int vnum = 0;
     int inside = 0, last_in = 0;
     snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_inv WHERE idnum=%ld ORDER BY posi;", GET_IDNUM(ch));
@@ -853,17 +846,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
               GET_FOCI(ch)++;
             break;
           case ITEM_WEAPON:
-            if (IS_GUN(GET_OBJ_VAL(obj, 3))) {
-              // Process attachments.
-              int real_obj;
-              for (int q = ACCESS_LOCATION_TOP; q <= ACCESS_LOCATION_UNDER; q++)
-                if (GET_OBJ_VAL(obj, q) > 0 && (real_obj = real_object(GET_OBJ_VAL(obj, q))) > 0 &&
-                   (attach = &obj_proto[real_obj])) {
-                  // Zero out the attachment so that we don't get attaching-overtop errors.
-                  GET_OBJ_VAL(obj, q) = 0;
-                  attach_attachment_to_weapon(attach, obj, NULL, q - ACCESS_ACCESSORY_LOCATION_DELTA);
-                }
-            }
+            handle_weapon_attachments(obj);
             break;
           case ITEM_GUN_AMMO:
             // Process weight.

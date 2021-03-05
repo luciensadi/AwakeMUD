@@ -3942,8 +3942,10 @@ extern ACMD_DECLARE(do_pool);
 
 ACMD(do_cpool)
 {
-  int dodge = 0, bod = 0, off = 0, total = GET_COMBAT(ch), low = 0;
-  struct obj_data *one = NULL, *two = NULL;
+  extern int get_skill_num_in_use_for_weapons(struct char_data *ch);
+  extern int get_skill_dice_in_use_for_weapons(struct char_data *ch);
+  
+  int dodge = 0, bod = 0, off = 0, total = GET_COMBAT(ch);
 
   if (!*argument) {
     do_pool(ch, argument, 0, 0);
@@ -3964,63 +3966,12 @@ ACMD(do_cpool)
   total -= ch->real_abils.defense_pool = GET_DEFENSE(ch) = MIN(dodge, total);
   total -= ch->real_abils.body_pool = GET_BODY(ch) = MIN(bod, total);
   
-  if (AFF_FLAGGED(ch, AFF_MANNING) || AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE)) {
-    low = GET_SKILL(ch, SKILL_GUNNERY);
-    if (off > low) {
-      send_to_char(ch, "You're not skilled enough with gunnery, so your offense pool is capped at %d.\r\n", low);
-      off = low;
-    }
-  } else {
-    one = (GET_EQ(ch, WEAR_WIELD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_WEAPON) ? GET_EQ(ch, WEAR_WIELD) :
-           (struct obj_data *) NULL;
-    two = (GET_EQ(ch, WEAR_HOLD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_HOLD)) == ITEM_WEAPON) ? GET_EQ(ch, WEAR_HOLD) :
-           (struct obj_data *) NULL;
-           
-    if (!one && !two) {
-      if(has_cyberweapon(ch))
-        low = GET_SKILL(ch, SKILL_CYBER_IMPLANTS);
-      else 
-        low = GET_SKILL(ch, SKILL_UNARMED_COMBAT);
-    } 
-    
-    else if (one) {
-      if (!GET_SKILL(ch, GET_OBJ_VAL(one, 4)))
-        low = GET_SKILL(ch, return_general(GET_OBJ_VAL(one, 4)));
-      else 
-        low = GET_SKILL(ch, GET_OBJ_VAL(one, 4));
-    } 
-    
-    else if (two) {
-      if (!GET_SKILL(ch, GET_OBJ_VAL(two, 4)))
-        low = GET_SKILL(ch, return_general(GET_OBJ_VAL(two, 4)));
-      else 
-        low = GET_SKILL(ch, GET_OBJ_VAL(two, 4));
-    } 
-    
-    // This broken-ass code never worked. "If neither one or two, or if one, or if two, or..." no, that's a full logical stop.
-    else {
-      if (GET_SKILL(ch, GET_OBJ_VAL(one, 4)) <= GET_SKILL(ch, GET_OBJ_VAL(two, 4))) {
-        if (!GET_SKILL(ch, GET_OBJ_VAL(one, 4)))
-          low = GET_SKILL(ch, return_general(GET_OBJ_VAL(one, 4)));
-        else 
-          low = GET_SKILL(ch, GET_OBJ_VAL(one, 4));
-      } else {
-        if (!GET_SKILL(ch, GET_OBJ_VAL(two, 4)))
-          low = GET_SKILL(ch, return_general(GET_OBJ_VAL(two, 4)));
-        else 
-          low = GET_SKILL(ch, GET_OBJ_VAL(two, 4));
-      }
-    }
-    
-    if (!one)
-      one = two;
-      
-    if (off > low) {
-      send_to_char(ch, "You're not skilled enough with %s, so your offense pool is capped at %d.\r\n",
-                   one ? GET_OBJ_NAME(one) : (has_cyberweapon(ch) ? "cyberweapons" : "your hands"),
-                   low);
-      off = low;
-    }
+  int skill_num = get_skill_num_in_use_for_weapons(ch);
+  int skill_dice = get_skill_dice_in_use_for_weapons(ch);
+  
+  if (off > skill_dice) {    
+    send_to_char(ch, "You're not skilled enough with %s, so your offense pool is capped at %d.\r\n", skills[skill_num].name, skill_dice);
+    off = skill_dice;
   }
   
   total -= ch->real_abils.offense_pool = GET_OFFENSE(ch) = MIN(total, off);

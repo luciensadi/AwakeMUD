@@ -797,8 +797,11 @@ bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struc
 #define GET_WEAPON_MAX_AMMO(weapon)            (GET_OBJ_VAL((weapon), 5))
 #define GET_WEAPON_REACH(weapon)               (GET_OBJ_VAL((weapon), 6))
 #define GET_WEAPON_ATTACH_TOP_VNUM(weapon)     (GET_OBJ_VAL((weapon), 7))
+#define GET_WEAPON_FOCUS_RATING(weapon)        (GET_OBJ_VAL((weapon), 7)) /* Only melee weapons can be weapon foci, so reusing attach is OK. */
 #define GET_WEAPON_ATTACH_BARREL_VNUM(weapon)  (GET_OBJ_VAL((weapon), 8))
+#define GET_WEAPON_FOCUS_BOND_STATUS(weapon)   (GET_OBJ_VAL((weapon), 8)) /* Only melee weapons can be weapon foci, so reusing attach is OK. */
 #define GET_WEAPON_ATTACH_UNDER_VNUM(weapon)   (GET_OBJ_VAL((weapon), 9))
+#define GET_WEAPON_FOCUS_BONDED_BY(weapon)     (GET_OBJ_VAL((weapon), 9)) /* Only melee weapons can be weapon foci, so reusing attach is OK. */
 #define GET_WEAPON_POSSIBLE_FIREMODES(weapon)  (GET_OBJ_VAL((weapon), 10))
 #define GET_WEAPON_FIREMODE(weapon)            (GET_OBJ_VAL((weapon), 11))
 #define GET_WEAPON_INTEGRAL_RECOIL_COMP(weap)  (GET_OBJ_ATTEMPT((weap)))

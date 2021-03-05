@@ -2275,7 +2275,10 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
                   !IS_DAMTYPE_PHYSICAL(get_weapon_damage_type(j)) ? " (stun)" : "");
         }
         if (GET_WEAPON_REACH(j)) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt grants %d meters of reach when wielded.", GET_WEAPON_REACH(j));
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt grants ^c%d^n meters of reach when wielded.", GET_WEAPON_REACH(j));
+        }
+        if (GET_WEAPON_FOCUS_RATING(j) > 0) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt is a weapon focus of rating ^c%d^n. When bonded and wielded, its rating is added to your weapon skill.", GET_WEAPON_FOCUS_RATING(j));
         }
       }
       break;

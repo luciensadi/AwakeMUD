@@ -30,6 +30,7 @@ extern void ASSIGNMOB(long mob, SPECIAL(fname));
 extern void add_phone_to_list(struct obj_data *obj);
 extern void weight_change_object(struct obj_data * obj, float weight);
 extern void auto_repair_obj(struct obj_data *obj, const char *source);
+extern void handle_weapon_attachments(struct obj_data *obj);
 
 struct landlord *landlords = NULL;
 ACMD_CONST(do_say);
@@ -127,14 +128,8 @@ bool House_load(struct house_control_rec *house)
       if (GET_OBJ_TYPE(obj) == ITEM_PHONE && GET_ITEM_PHONE_SWITCHED_ON(obj))
         add_phone_to_list(obj);
       int real_obj;
-      if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && IS_GUN(GET_OBJ_VAL(obj, 3)))
-        for (int q = ACCESS_LOCATION_TOP; q <= ACCESS_LOCATION_UNDER; q++)
-          if (GET_OBJ_VAL(obj, q) > 0 && (real_obj = real_object(GET_OBJ_VAL(obj, q))) > 0 && 
-             (attach = &obj_proto[real_obj])) {
-            // We know the attachment code will throw a fit if we attach over the top of an 'existing' object, so wipe it out without removing it.
-            GET_OBJ_VAL(obj, q) = 0;
-            attach_attachment_to_weapon(attach, obj, NULL, q - ACCESS_ACCESSORY_LOCATION_DELTA);
-          }
+      if (GET_OBJ_TYPE(obj) == ITEM_WEAPON)
+        handle_weapon_attachments(obj);
       snprintf(buf, sizeof(buf), "%s/Condition", sect_name);
       GET_OBJ_CONDITION(obj) = data.GetInt(buf, GET_OBJ_CONDITION(obj));
       snprintf(buf, sizeof(buf), "%s/Timer", sect_name);

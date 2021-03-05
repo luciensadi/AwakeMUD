@@ -3329,6 +3329,37 @@ int get_armor_penalty_grade(struct char_data *ch) {
   return ARMOR_PENALTY_NONE;
 }
 
+void handle_weapon_attachments(struct obj_data *obj) {  
+  if (GET_OBJ_TYPE(obj) != ITEM_WEAPON)
+    return;
+    
+  if (!IS_GUN(GET_WEAPON_ATTACK_TYPE(obj)))
+    return;
+  
+  int real_obj;
+  
+  for (int i = ACCESS_LOCATION_TOP; i <= ACCESS_LOCATION_UNDER; i++)
+    if (GET_OBJ_VAL(obj, i) > 0 && (real_obj = real_object(GET_OBJ_VAL(obj, i))) > 0) {
+      struct obj_data *mod = &obj_proto[real_obj];
+      // We know the attachment code will throw a fit if we attach over the top of an 'existing' object, so wipe it out without removing it.
+      GET_OBJ_VAL(obj, i) = 0;
+      attach_attachment_to_weapon(mod, obj, NULL, i - ACCESS_ACCESSORY_LOCATION_DELTA);
+    }
+    
+  if (!GET_WEAPON_FIREMODE(obj)) {
+    if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(obj), 1 << MODE_SS))
+      GET_WEAPON_FIREMODE(obj) = MODE_SS;
+    else if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(obj), 1 << MODE_SA))
+      GET_WEAPON_FIREMODE(obj) = MODE_SA;
+    else if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(obj), 1 << MODE_BF))
+      GET_WEAPON_FIREMODE(obj) = MODE_BF;
+    else if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(obj), 1 << MODE_FA)) {
+      GET_WEAPON_FIREMODE(obj) = MODE_FA;
+      GET_OBJ_TIMER(obj) = 10;
+    }
+  }
+}
+
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.
 // Great for swapping out old Classic weapons, cyberware, etc for the new guaranteed-canon versions.
 #define PAIR(classic, current) case (classic): return (current);

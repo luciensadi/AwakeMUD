@@ -1604,7 +1604,7 @@ enum {
 #define FOCI_SPIRIT    3
 #define FOCI_POWER    4
 #define FOCI_SUSTAINED    5
-#define FOCI_WEAPON    6
+// #define FOCI_WEAPON    6
 #define FOCI_SPELL_DEFENSE 7
 
 #define ACCESS_SMARTLINK  1
