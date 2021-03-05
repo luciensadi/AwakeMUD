@@ -269,6 +269,12 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
     
     // You must have the essence to support it.
     if (GET_OBJ_TYPE(obj) == ITEM_CYBERWARE) {
+      if (IS_OBJ_STAT(obj, ITEM_MAGIC_INCOMPATIBLE) && (GET_MAGIC(ch) > 0 || GET_TRADITION(ch) != TRAD_MUNDANE)) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " That would eradicate your magic!");
+        do_say(keeper, buf, cmd_say, SCMD_SAYTO);
+        return FALSE;
+      }
+      
       if (GET_REAL_ESS(ch) + GET_ESSHOLE(ch) < (GET_TOTEM(ch) == TOTEM_EAGLE ?
                                 GET_CYBERWARE_ESSENCE_COST(obj) << 1 : GET_CYBERWARE_ESSENCE_COST(obj))) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " That operation would kill you!");
@@ -321,6 +327,12 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
     
     // You must have the index to support it.
     else if (GET_OBJ_TYPE(obj) == ITEM_BIOWARE) {
+      if (IS_OBJ_STAT(obj, ITEM_MAGIC_INCOMPATIBLE) && (GET_MAGIC(ch) > 0 || GET_TRADITION(ch) != TRAD_MUNDANE)) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " That would eradicate your magic!");
+        do_say(keeper, buf, cmd_say, SCMD_SAYTO);
+        return FALSE;
+      }
+      
       int esscost = GET_OBJ_VAL(obj, 4); 
       if (GET_INDEX(ch) + esscost > 900) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " That operation would kill you!");

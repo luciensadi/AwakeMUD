@@ -970,6 +970,17 @@ bool should_save_this_vehicle(struct veh_data *veh) {
     // It's towed.
     if (!veh->in_veh && !veh->in_room)
       return TRUE;
+      
+    // We don't preserve damaged watercraft, etc.
+    switch (veh->type) {
+      case VEH_CAR:
+      case VEH_BIKE:
+      case VEH_DRONE:
+      case VEH_TRUCK:
+        break;
+      default:
+        return FALSE;
+    }
   }
   
   return TRUE;

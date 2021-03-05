@@ -1067,49 +1067,49 @@ enum {
 
 /* item types: used by obj_data.obj_flags.type_flag */
 
-#define ITEM_LIGHT          1        /* Item is a light source            */
-#define ITEM_WORKSHOP       2        /* Item is a workshop (veh, etc)     */
-#define ITEM_CAMERA         3        /* Item is a camera                  */
-#define ITEM_PART            4        /* Item is a component of something  */
-#define ITEM_WEAPON         5        /* Item is a weapon                  */
-#define ITEM_FIREWEAPON     6        /* Item is bow/xbow                  */
-#define ITEM_MISSILE        7        /* Item is arrow/bolt                */
-#define ITEM_CUSTOM_DECK    8        /* Item is a custom cyberdeck        */
-#define ITEM_GYRO           9        /* Item is Gyroscopic Harness        */
-#define ITEM_DRUG           10       /* Item is a drug                    */
-#define ITEM_WORN           11       /* Item is worn, includes armor      */
-#define ITEM_OTHER          12       /* Misc object                       */
-#define ITEM_MAGIC_TOOL     13       /* Item is a library, etc            */
-#define ITEM_DOCWAGON       14       /* Item is a docwagon contract       */
-#define ITEM_CONTAINER      15       /* Item is a container               */
-#define ITEM_RADIO          16       /* Item is radio                     */
-#define ITEM_DRINKCON       17       /* Item is a drink container         */
-#define ITEM_KEY            18       /* Item is a key                     */
-#define ITEM_FOOD           19       /* Item is food                      */
-#define ITEM_MONEY          20       /* Item is money (nuyen/credstick)   */
-#define ITEM_PHONE          21       /* Item is a phone                   */
-#define ITEM_BIOWARE        22       /* Item is bioware                   */
-#define ITEM_FOUNTAIN       23       /* Item is a fountain                */
-#define ITEM_CYBERWARE      24       /* Item is cyberware                 */
-#define ITEM_CYBERDECK      25       /* Item is a cyberdeck               */
-#define ITEM_PROGRAM        26       /* Item is a program                 */
-#define ITEM_GUN_MAGAZINE   27       /* Item is a gun magazine            */
-#define ITEM_GUN_ACCESSORY  28       /* Item is a gun accessory           */
-#define ITEM_SPELL_FORMULA  29       /* Item is a spell formula           */
-#define ITEM_FOCUS          31       /* magical foci of various types     */
-#define ITEM_PATCH          32       /* type of slap patch                */
-#define ITEM_CLIMBING       33       /* climbing gear                     */
-#define ITEM_QUIVER         34       /* holds projectiles                 */
-#define ITEM_DECK_ACCESSORY 35       /* decking accessory                 */
-#define ITEM_RCDECK         36       /* remote control deck               */
-#define ITEM_CHIP           37
-#define ITEM_MOD             38
-#define ITEM_HOLSTER         39
-#define ITEM_DESIGN          40
-#define ITEM_QUEST          41
-#define ITEM_GUN_AMMO        42
-#define ITEM_KEYRING        43
-#define NUM_ITEMS            44
+#define ITEM_LIGHT              1        /* Item is a light source            */
+#define ITEM_WORKSHOP           2        /* Item is a workshop (veh, etc)     */
+#define ITEM_CAMERA             3        /* Item is a camera                  */
+#define ITEM_PART               4        /* Item is a component of something  */
+#define ITEM_WEAPON             5        /* Item is a weapon                  */
+#define ITEM_FIREWEAPON         6        /* Item is bow/xbow                  */
+#define ITEM_MISSILE            7        /* Item is arrow/bolt                */
+#define ITEM_CUSTOM_DECK        8        /* Item is a custom cyberdeck        */
+#define ITEM_GYRO               9        /* Item is Gyroscopic Harness        */
+#define ITEM_DRUG               10       /* Item is a drug                    */
+#define ITEM_WORN               11       /* Item is worn, includes armor      */
+#define ITEM_OTHER              12       /* Misc object                       */
+#define ITEM_MAGIC_TOOL         13       /* Item is a library, etc            */
+#define ITEM_DOCWAGON           14       /* Item is a docwagon contract       */
+#define ITEM_CONTAINER          15       /* Item is a container               */
+#define ITEM_RADIO              16       /* Item is radio                     */
+#define ITEM_DRINKCON           17       /* Item is a drink container         */
+#define ITEM_KEY                18       /* Item is a key                     */
+#define ITEM_FOOD               19       /* Item is food                      */
+#define ITEM_MONEY              20       /* Item is money (nuyen/credstick)   */
+#define ITEM_PHONE              21       /* Item is a phone                   */
+#define ITEM_BIOWARE            22       /* Item is bioware                   */
+#define ITEM_FOUNTAIN           23       /* Item is a fountain                */
+#define ITEM_CYBERWARE          24       /* Item is cyberware                 */
+#define ITEM_CYBERDECK          25       /* Item is a cyberdeck               */
+#define ITEM_PROGRAM            26       /* Item is a program                 */
+#define ITEM_GUN_MAGAZINE       27       /* Item is a gun magazine            */
+#define ITEM_GUN_ACCESSORY      28       /* Item is a gun accessory           */
+#define ITEM_SPELL_FORMULA      29       /* Item is a spell formula           */
+#define ITEM_FOCUS              31       /* magical foci of various types     */
+#define ITEM_PATCH              32       /* type of slap patch                */
+#define ITEM_CLIMBING           33       /* climbing gear                     */
+#define ITEM_QUIVER             34       /* holds projectiles                 */
+#define ITEM_DECK_ACCESSORY     35       /* decking accessory                 */
+#define ITEM_RCDECK             36       /* remote control deck               */
+#define ITEM_CHIP               37
+#define ITEM_MOD                38
+#define ITEM_HOLSTER            39
+#define ITEM_DESIGN             40
+#define ITEM_QUEST              41
+#define ITEM_GUN_AMMO           42
+#define ITEM_KEYRING            43
+#define NUM_ITEMS               44
 
 
 /* take/wear flags: used by obj_data.obj_flags.wear_flags */
@@ -1144,34 +1144,35 @@ enum {
 /* extra object flags: used by obj_data.obj_flags.extra_flags */
 /* see: https://github.com/luciensadi/AwakeMUD/wiki/Item-Extra-Flags */
 
-#define ITEM_GLOW           0     /* Item is glowing              */
-#define ITEM_HUM            1     /* Item is humming              */
-#define ITEM_NORENT         2     /* Item cannot be rented        */
-#define ITEM_NODONATE       3     /* Item cannot be donated       */
-#define ITEM_NOINVIS        4     /* Item cannot be made invis    */
-#define ITEM_INVISIBLE      5     /* Item is invisible            */
-#define ITEM_MAGIC          6     /* Item is magical              */
-#define ITEM_NODROP         7     /* Item is cursed: can't drop   */
-#define ITEM_FORMFIT        8     /* Item is blessed              */
-#define ITEM_NOSELL         9     /* Shopkeepers won't touch it   */
-#define ITEM_CORPSE         10    /* Item is a corpse             */
-#define ITEM_GODONLY        11    /* Only a god may use this item */
-#define ITEM_TWOHANDS       12    /* weapon takes 2 hands to use */
-#define ITEM_COMPBURST      13    /* Weapon requires complex action to use burst fire */
-#define ITEM_VOLATILE       14    /* connected item loaded in ip zone */
-#define ITEM_WIZLOAD        15    /* item was loaded by an immortal */
-#define ITEM_NOTROLL        16
-#define ITEM_NOELF          17
-#define ITEM_NODWARF        18
-#define ITEM_NOORK          19
-#define ITEM_NOHUMAN        20
-#define ITEM_SNIPER         21
-#define ITEM_IMMLOAD        22
-#define ITEM_NERPS          23    /* Item does not actually have any coded effect. */
-#define ITEM_BLOCKS_ARMOR   24    // Can't wear other armors with this.
-#define ITEM_HARDENED_ARMOR 25    // Applies hardened armor rules (deflect attacks with power <= armor rating) CC p51
-#define ITEM_DONT_TOUCH     26    // Warns strenuously on editing.
-#define ITEM_EXTRA_MAX      27
+#define ITEM_GLOW               0     /* Item is glowing              */
+#define ITEM_HUM                1     /* Item is humming              */
+#define ITEM_NORENT             2     /* Item cannot be rented        */
+#define ITEM_NODONATE           3     /* Item cannot be donated       */
+#define ITEM_NOINVIS            4     /* Item cannot be made invis    */
+#define ITEM_INVISIBLE          5     /* Item is invisible            */
+#define ITEM_MAGIC              6     /* Item is magical              */
+#define ITEM_NODROP             7     /* Item is cursed: can't drop   */
+#define ITEM_FORMFIT            8     /* Item is blessed              */
+#define ITEM_NOSELL             9     /* Shopkeepers won't touch it   */
+#define ITEM_CORPSE             10    /* Item is a corpse             */
+#define ITEM_GODONLY            11    /* Only a god may use this item */
+#define ITEM_TWOHANDS           12    /* weapon takes 2 hands to use */
+#define ITEM_COMPBURST          13    /* Weapon requires complex action to use burst fire */
+#define ITEM_VOLATILE           14    /* connected item loaded in ip zone */
+#define ITEM_WIZLOAD            15    /* item was loaded by an immortal */
+#define ITEM_NOTROLL            16
+#define ITEM_NOELF              17
+#define ITEM_NODWARF            18
+#define ITEM_NOORK              19
+#define ITEM_NOHUMAN            20
+#define ITEM_SNIPER             21
+#define ITEM_IMMLOAD            22
+#define ITEM_NERPS              23    /* Item does not actually have any coded effect. */
+#define ITEM_BLOCKS_ARMOR       24    // Can't wear other armors with this.
+#define ITEM_HARDENED_ARMOR     25    // Applies hardened armor rules (deflect attacks with power <= armor rating) CC p51
+#define ITEM_DONT_TOUCH         26    // Warns strenuously on editing.
+#define ITEM_MAGIC_INCOMPATIBLE 27    // Incompatible with magic. Used for cyberware and bioware.
+#define ITEM_EXTRA_MAX          28
 
 /* Ammo types */ 
 #define AMMO_NORMAL     0
