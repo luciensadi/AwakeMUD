@@ -1322,6 +1322,10 @@ void shop_info(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
                 GET_WEAPON_REACH(obj), GET_WEAPON_REACH(obj) > 1 ? "s" : "");
       }
       
+      if (GET_WEAPON_FOCUS_RATING(obj)) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " It is a weapon focus of force %d.", GET_WEAPON_FOCUS_RATING(obj));
+      }
+      
       // Map strength bonus to phrase.
       if (GET_WEAPON_STR_BONUS(obj) != 0) {
         if (GET_WEAPON_STR_BONUS(obj) == 1) {
