@@ -82,7 +82,7 @@ bool House_load(struct house_control_rec *house)
   File fl;
   char fname[MAX_STRING_LENGTH];
   rnum_t rnum;
-  struct obj_data *obj = NULL, *last_obj = NULL, *attach = NULL;
+  struct obj_data *obj = NULL, *last_obj = NULL;
   long vnum;
   int inside = 0, last_in = 0;
 
@@ -127,7 +127,6 @@ bool House_load(struct house_control_rec *house)
       }
       if (GET_OBJ_TYPE(obj) == ITEM_PHONE && GET_ITEM_PHONE_SWITCHED_ON(obj))
         add_phone_to_list(obj);
-      int real_obj;
       if (GET_OBJ_TYPE(obj) == ITEM_WEAPON)
         handle_weapon_attachments(obj);
       snprintf(buf, sizeof(buf), "%s/Condition", sect_name);

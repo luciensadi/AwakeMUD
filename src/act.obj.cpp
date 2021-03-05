@@ -3326,6 +3326,14 @@ int draw_from_readied_holster(struct char_data *ch, struct obj_data *holster) {
   // TODO: What does this check mean?
   if (GET_OBJ_VAL(holster, 4) >= SKILL_MACHINE_GUNS && GET_OBJ_VAL(holster, 4) <= SKILL_ASSAULT_CANNON)
     return 0;
+    
+  if (GET_OBJ_TYPE(contents) == ITEM_WEAPON 
+           && !IS_GUN(GET_WEAPON_ATTACK_TYPE(contents)) 
+           && GET_WEAPON_FOCUS_BONDED_BY(contents) == GET_IDNUM(ch)
+           && GET_MAG(ch) * 2 < GET_WEAPON_FOCUS_RATING(contents)) 
+  {
+    return 0;
+  }
   
   int where = 0;
   if (!GET_EQ(ch, WEAR_WIELD) && can_wield_both(ch, GET_EQ(ch, WEAR_HOLD), contents))
