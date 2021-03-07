@@ -1684,7 +1684,11 @@ int write_to_descriptor(int desc, const char *txt) {
   total = strlen(txt);
   
   do {
+#ifdef __APPLE__
     if ((bytes_written = write(desc, txt, total)) < 0) {
+#else
+    if ((bytes_written = send(desc, txt, total, MSG_NOSIGNAL)) < 0) {
+#endif
 #ifdef EWOULDBLOCK
       if (errno == EWOULDBLOCK)
         errno = EAGAIN;
