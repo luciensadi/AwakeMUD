@@ -219,6 +219,10 @@ void validate_in_obj_pointers(struct obj_data *obj, struct obj_data *in_obj) {
     mudlog("SYSERR: Received duplicate items to validate_in_obj_pointers! [OBJ_NESTING_ERROR_GREP_STRING]", NULL, LOG_SYSLOG, TRUE);
     return;
   }
+  
+  // Cyberdeck parts do some WEIRD shit with in_obj. Best to leave it alone.
+  if (GET_OBJ_TYPE(in_obj) == ITEM_PART || GET_OBJ_TYPE(obj->in_obj) == ITEM_PART)
+    return;
     
   if (in_obj && obj->in_obj != in_obj) {
     snprintf(buf3, sizeof(buf3), "^YSYSERR: in_obj mismatch for %s (%ld) in %ld! Rectifying... [OBJ_NESTING_ERROR_GREP_STRING]", 
