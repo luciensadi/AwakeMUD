@@ -587,7 +587,7 @@ struct command_info cmd_info[] =
     { "hcontrol" , POS_DEAD    , do_hcontrol , LVL_EXECUTIVE, 0 },
     { "heal"     , POS_STANDING, do_heal     , 0, 0 },
     { "hedit"    , POS_DEAD    , do_hedit    , LVL_BUILDER, 0 },
-    { "helpedit" , POS_DEAD    , do_helpedit , LVL_DEVELOPER, 0 },
+    { "helpedit" , POS_DEAD    , do_helpedit , LVL_FIXER, 0 },
     { "helpexport",POS_DEAD    , do_helpexport, LVL_DEVELOPER, 0 },
     { "hit"      , POS_FIGHTING, do_hit      , 0, SCMD_HIT },
     { "highlight", POS_DEAD    , do_highlight, 0, 0 },

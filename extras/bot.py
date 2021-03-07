@@ -107,6 +107,7 @@ def telnet(client, host, port):
     ]
 
     reconnect = False
+    increment = 0
     while 1:
         time.sleep(1)
         try:
@@ -122,6 +123,11 @@ def telnet(client, host, port):
                     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                     continue
                 reconnect = False
+                
+            # Pretty much a keepalive. Ensures we miss no more than 5 minutes of traffic.
+            increment = (increment + 1) % 300
+            if increment == 0:
+                s.send('\r\n'.encode())
 
             socket_list = [sys.stdin, s]
 

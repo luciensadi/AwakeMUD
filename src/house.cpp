@@ -324,7 +324,7 @@ void House_save(struct house_control_rec *house, const char *file_name, long rnu
       if (obj->photo)
         fprintf(fl, "\t\tPhoto:$\n%s~\n", cleanup(buf2, obj->photo));
         
-      if (obj->contains) {
+      if (obj->contains && !IS_OBJ_STAT(obj, ITEM_NORENT) && !IS_OBJ_STAT(obj, ITEM_PART)) {
         obj = obj->contains;
         level++;
         continue;
