@@ -232,7 +232,7 @@ struct melee_combat_data {
             || (GET_WEAPON_FOCUS_BONDED_BY(weapon) == GET_IDNUM(ch)
                 && GET_WEAPON_FOCUS_BOND_STATUS(weapon) == 0))
         {
-          skill_bonus = GET_WEAPON_FOCUS_RATING(weapon);
+          skill_bonus = min(4, GET_WEAPON_FOCUS_RATING(weapon));
         }
       }
     } else if (cyber->num_cyberweapons > 0) {
