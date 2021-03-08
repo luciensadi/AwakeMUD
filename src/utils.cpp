@@ -2554,16 +2554,11 @@ struct obj_data *unattach_attachment_from_weapon(int location, struct obj_data *
   weight_change_object(weapon, -GET_OBJ_WEIGHT(attachment));
   
   // Subtract the attachment's cost from the weapon's cost.
-  int cost_delta = GET_OBJ_COST(weapon) - GET_OBJ_COST(attachment);
-  if (cost_delta < 0) {
+  if (GET_OBJ_COST(attachment) > GET_OBJ_COST(weapon)) {
+    GET_OBJ_COST(attachment) = GET_OBJ_COST(weapon);
     GET_OBJ_COST(weapon) = 0;
-    GET_OBJ_COST(attachment) += cost_delta;
-    if (GET_OBJ_COST(attachment) < 0) {
-      snprintf(buf, sizeof(buf), "BUILD ERROR: Weapon %s (%ld) had crazy-high attachment nuyen value - %s (%ld) would have had negative cost.", 
-               GET_OBJ_NAME(weapon), GET_OBJ_VNUM(weapon), GET_OBJ_NAME(attachment), GET_OBJ_VNUM(attachment));
-    }
   } else {
-    GET_OBJ_COST(weapon) -= cost_delta;
+    GET_OBJ_COST(weapon) -= GET_OBJ_COST(attachment);
   }
   
   // Cycle through all the viable attachment affect flags.
