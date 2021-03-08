@@ -224,7 +224,7 @@ void validate_in_obj_pointers(struct obj_data *obj, struct obj_data *in_obj) {
   }
   
   // Cyberdeck parts do some WEIRD shit with in_obj. Best to leave it alone.
-  if (GET_OBJ_TYPE(in_obj) == ITEM_PART || (obj->in_obj && GET_OBJ_TYPE(obj->in_obj) == ITEM_PART))
+  if ((in_obj && GET_OBJ_TYPE(in_obj) == ITEM_PART) || (obj->in_obj && GET_OBJ_TYPE(obj->in_obj) == ITEM_PART))
     return;
     
   if (in_obj && obj->in_obj != in_obj) {
