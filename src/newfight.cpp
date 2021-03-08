@@ -212,15 +212,7 @@ struct melee_combat_data {
     dam_type = TYPE_HIT;
     damage_level = MODERATE;
     
-    if (weapon) {
-      // Weapon foci. NPC use them implicitly.
-      if (IS_NPC(ch)
-          || (GET_WEAPON_FOCUS_BONDED_BY(weapon) == GET_IDNUM(ch)
-              && GET_WEAPON_FOCUS_BOND_STATUS(weapon) == 0))
-      {
-        skill_bonus = GET_WEAPON_FOCUS_RATING(weapon);
-      }
-      
+    if (weapon) {      
       if (weapon_is_gun) {
         if (does_weapon_have_bayonet(weapon)) {
           dam_type = TYPE_PIERCE;
@@ -234,6 +226,14 @@ struct melee_combat_data {
         skill = GET_WEAPON_SKILL(weapon);
         power = GET_WEAPON_POWER(weapon);
         damage_level = GET_WEAPON_DAMAGE_CODE(weapon);
+        
+        // Weapon foci. NPC use them implicitly.
+        if (IS_NPC(ch)
+            || (GET_WEAPON_FOCUS_BONDED_BY(weapon) == GET_IDNUM(ch)
+                && GET_WEAPON_FOCUS_BOND_STATUS(weapon) == 0))
+        {
+          skill_bonus = GET_WEAPON_FOCUS_RATING(weapon);
+        }
       }
     } else if (cyber->num_cyberweapons > 0) {
       skill = SKILL_CYBER_IMPLANTS;
