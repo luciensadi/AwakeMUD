@@ -24,6 +24,7 @@
 #include "constants.h"
 #include "file.h"
 #include "vtable.h"
+#include "limits.h"
 
 extern char *cleanup(char *dest, const char *src);
 extern void ASSIGNMOB(long mob, SPECIAL(fname));
@@ -34,6 +35,8 @@ extern void handle_weapon_attachments(struct obj_data *obj);
 
 struct landlord *landlords = NULL;
 ACMD_CONST(do_say);
+
+void remove_vehicles_from_apartment(struct room_data *room);
 
 
 void House_delete_file(vnum_t vnum, char *name);
@@ -221,7 +224,7 @@ void validate_in_obj_pointers(struct obj_data *obj, struct obj_data *in_obj) {
   }
   
   // Cyberdeck parts do some WEIRD shit with in_obj. Best to leave it alone.
-  if (GET_OBJ_TYPE(in_obj) == ITEM_PART || GET_OBJ_TYPE(obj->in_obj) == ITEM_PART)
+  if (GET_OBJ_TYPE(in_obj) == ITEM_PART || (obj->in_obj && GET_OBJ_TYPE(obj->in_obj) == ITEM_PART))
     return;
     
   if (in_obj && obj->in_obj != in_obj) {
@@ -655,8 +658,14 @@ SPECIAL(landlord_spec)
       obj_to_char(key, ch);
       room_record->owner = GET_IDNUM(ch);
       room_record->date = time(0) + (SECS_PER_REAL_DAY*30);
-      ROOM_FLAGS(&world[real_room(room_record->vnum)]).SetBit(ROOM_HOUSE);
+      
+      int rnum = real_room(room_record->vnum);
+      ROOM_FLAGS(&world[rnum]).SetBit(ROOM_HOUSE);
       ROOM_FLAGS(&world[room_record->atrium]).SetBit(ROOM_ATRIUM);
+      
+      // Shift all the vehicles out of it.
+      remove_vehicles_from_apartment(&world[rnum]);
+      
       House_crashsave(room_record->vnum);
       House_save_control();
     }
@@ -673,7 +682,9 @@ SPECIAL(landlord_spec)
       do_say(recep, "I would get fired if I did that.", 0, 0);
     else {
       room_record->owner = 0;
-      ROOM_FLAGS(&world[real_room(room_record->vnum)]).RemoveBit(ROOM_HOUSE);
+      int rnum = real_room(room_record->vnum);
+      ROOM_FLAGS(&world[rnum]).RemoveBit(ROOM_HOUSE);
+      remove_vehicles_from_apartment(&world[rnum]);
       // TODO: What if there are multiple houses connected to this atrium? This would induce a bug.
       ROOM_FLAGS(&world[room_record->atrium]).RemoveBit(ROOM_ATRIUM);
       House_save_control();
@@ -826,21 +837,7 @@ void House_boot(void)
           House_delete_file(temp->vnum, buf2);
           
           // Move all vehicles from this apartment to a public garage.
-          struct veh_data *veh = NULL;
-          while (world[real_room(temp->vnum)].vehicles) {
-            veh = world[real_room(temp->vnum)].vehicles;
-#ifdef DEBUG
-            snprintf(buf, sizeof(buf), "debug: Shifting vehicle '%s' (%ld) from '%s' (%ld) to '%s' (%ld).",
-                    veh->description, veh->idnum,
-                    world[real_room(temp->vnum)].name,
-                    world[real_room(temp->vnum)].number,
-                    world[real_room(RM_SEATTLE_PARKING_GARAGE)].name,
-                    world[real_room(RM_SEATTLE_PARKING_GARAGE)].number);
-            mudlog(buf, NULL, LOG_SYSLOG, TRUE);
-#endif
-            veh_from_room(veh);
-            veh_to_room(veh, &world[real_room(RM_SEATTLE_PARKING_GARAGE)]);
-          }
+          remove_vehicles_from_apartment(&world[real_room(temp->vnum)]);
         }
       }
       if (last)
@@ -940,7 +937,7 @@ void hcontrol_destroy_house(struct char_data * ch, char *arg)
   else
   {
     ROOM_FLAGS(&world[real_house]).RemoveBit(ROOM_HOUSE);
-
+    remove_vehicles_from_apartment(&world[real_house]);
     House_get_filename(i->vnum, buf2, MAX_STRING_LENGTH);
     House_delete_file(i->vnum, buf2);
     i->owner = 0;
@@ -1130,4 +1127,13 @@ void House_list_guests(struct char_data *ch, struct house_control_rec *i, int qu
     strcat(buf, "None");
   strcat(buf, "\r\n");
   send_to_char(buf, ch);
+}
+
+void remove_vehicles_from_apartment(struct room_data *room) {
+  struct veh_data *veh;
+  while ((veh = room->vehicles)) {
+    veh_from_room(veh);
+    veh_to_room(veh, &world[real_room(RM_SEATTLE_PARKING_GARAGE)]);
+  }
+  save_vehicles();
 }
