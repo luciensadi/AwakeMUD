@@ -5252,6 +5252,13 @@ SPECIAL(mageskill_hermes)
           if (GET_LQUEST(ch, i) == QST_MAGE_INTRO)
             dq = TRUE;
         if (dq) {
+          // Reject people who couldn't pass the quest.
+          if (GET_MAG(ch) <= 0 || GET_TRADITION(ch) == TRAD_MUNDANE || GET_TRADITION(ch) == TRAD_ADEPT) {
+            snprintf(arg, sizeof(arg), "%s It's nice, isn't it? It's something that only elite mages and shamans can obtain.", GET_CHAR_NAME(ch));
+            do_say(mage, arg, 0, SCMD_SAYTO);   
+            return TRUE;
+          }
+          
           snprintf(arg, sizeof(arg), "%s So Harold has sent another one my way has he? Sometimes I don't trust his better judgement, but business is business.", GET_CHAR_NAME(ch));
           do_say(mage, arg, 0, SCMD_SAYTO);          
           snprintf(arg, sizeof(arg), "%s We are part of an order dedicated to higher learning in the field of magic. We are widespread around the metroplex and have our hands in more business than you would like to believe.", GET_CHAR_NAME(ch));
@@ -5330,11 +5337,11 @@ SPECIAL(mageskill_herbie)
       snprintf(arg, sizeof(arg), "%s You have my recommendation, I can help you no further.", GET_CHAR_NAME(ch));
       do_say(mage, arg, 0, SCMD_SAYTO);
     } else if (!GET_OBJ_VAL(recom, 2)) {
-      snprintf(arg, sizeof(arg), "%s Excellent, you have come. I need someone to create a spell for me to sell-- two of them, actually. Any spell is fine, just as long as it is force 4 or above.", GET_CHAR_NAME(ch));
+      snprintf(arg, sizeof(arg), "%s Excellent, you have come. I need you to create a spell for me to sell-- two of them, actually. Any spell is fine, just as long as it is force 4 or above.", GET_CHAR_NAME(ch));
       do_say(mage, arg, 0, SCMD_SAYTO);
       GET_OBJ_VAL(recom, 2)++;
     } else {
-      snprintf(arg, sizeof(arg), "%s Did you not hear me? Bring me two force-four spells to sell.", GET_CHAR_NAME(ch));
+      snprintf(arg, sizeof(arg), "%s Did you not hear me? Bring me two force-four spells you've made for me to sell.", GET_CHAR_NAME(ch));
       do_say(mage, arg, 0, SCMD_SAYTO);
     }
     return TRUE;

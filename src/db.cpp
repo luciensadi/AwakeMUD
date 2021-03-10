@@ -1867,7 +1867,7 @@ void parse_object(File &fl, long nr)
           snprintf(buf, sizeof(buf), "a %d-%s box of %s %s ammunition",
                   GET_AMMOBOX_QUANTITY(obj),
                   type_as_string,
-                  GET_AMMOBOX_WEAPON(obj) == WEAP_CANNON ? "normal" : ammo_type[GET_AMMOBOX_TYPE(obj)].name,
+                  ammo_type[GET_AMMOBOX_TYPE(obj)].name,
                   weapon_type[GET_AMMOBOX_WEAPON(obj)]);
         } else {
           strlcpy(buf, "a nondescript box of ammunition", sizeof(buf));
