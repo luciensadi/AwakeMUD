@@ -1025,6 +1025,9 @@ bool mobact_process_movement(struct char_data *ch) {
     
   // NPC in a vehicle that's not in another vehicle? Have them drive and obey the rules of the road.
   if (ch->in_veh) {
+    // Guard against a weird crash that happens occasionally.
+    ch->in_room = NULL;
+    
     // Give up if our vehicle is nested.
     if (ch->in_veh->in_veh)
       return FALSE;

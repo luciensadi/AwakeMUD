@@ -810,6 +810,12 @@ ACMD(do_goto)
     send_to_char(ch, "Sorry, you need to be a level-%d immortal to go there.\r\n", location->staff_level_lock);
     return;
   }
+  
+  // Block level-2 goto for anything outside their edit zone.
+  if (builder_cant_go_there(ch, location)) {
+    send_to_char("Sorry, as a first-level builder you're only able to move to rooms you have edit access for.\r\n", ch);
+    return;
+  }
 
   if (POOFOUT(ch))
     act(POOFOUT(ch), TRUE, ch, 0, 0, TO_ROOM);

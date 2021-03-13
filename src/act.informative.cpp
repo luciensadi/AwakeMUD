@@ -393,7 +393,7 @@ void list_veh_to_char(struct veh_data * list, struct char_data * ch)
                i->veh_number,
                GET_ROOM_NAME(get_veh_in_room(i)),
                GET_ROOM_VNUM(get_veh_in_room(i)));
-      i->next = NULL;
+      i->next_veh = NULL;
       mudlog(errbuf, ch, LOG_SYSLOG, TRUE);
       break;
     }

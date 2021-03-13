@@ -55,6 +55,7 @@ extern int ability_cost(int abil, int level);
 extern void weight_change_object(struct obj_data * obj, float weight);
 extern void calc_weight(struct char_data *ch);
 extern const char *get_ammobox_default_restring(struct obj_data *ammobox);
+extern bool can_edit_zone(struct char_data *ch, int zone);
 
 /* creates a random number in interval [from;to] */
 int number(int from, int to)
@@ -3353,6 +3354,29 @@ void handle_weapon_attachments(struct obj_data *obj) {
       GET_OBJ_TIMER(obj) = 10;
     }
   }
+}
+
+// Use this to restrict builder movement. Handy for preventing unproven builders abusing their privileges to learn game secrets.
+bool builder_cant_go_there(struct char_data *ch, struct room_data *room) {
+  if (GET_LEVEL(ch) == LVL_BUILDER) {
+    // We assume all builders can go to staff-locked rooms, which are staff-only.
+    if (room->staff_level_lock > 1)
+      return FALSE;
+    
+    // Otherwise, iterate and find the zone for the room. We allow them to go there if they have edit access.
+    // Note the deliberate exclusion of zone 100 permissions: They can only go to locked areas of 100 to prevent builder/player interaction.
+    for (int counter = 0; counter <= top_of_zone_table; counter++) {
+      if (GET_ROOM_VNUM(room) >= (zone_table[counter].number * 100) 
+          && GET_ROOM_VNUM(room) <= zone_table[counter].top) 
+      {
+        if (can_edit_zone(ch, counter))
+          return FALSE;
+          
+        return TRUE;
+      }
+    }
+  }
+  return FALSE;
 }
 
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.

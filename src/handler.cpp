@@ -1148,6 +1148,12 @@ void char_to_room(struct char_data * ch, struct room_data *room)
     log("SYSLOG: Illegal value(s) passed to char_to_room");
     room = &world[0];
   }
+  
+  // Warn on exceeding privileges, but don't fail.
+  if (builder_cant_go_there(ch, room)) {
+    mudlog("Warning: Builder exceeding allowed bounds. Make sure their loadroom etc is set properly.", ch, LOG_WIZLOG, TRUE);
+  }
+  
   ch->next_in_room = room->people;
   room->people = ch;
   ch->in_room = room;

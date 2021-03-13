@@ -40,6 +40,7 @@ extern int get_vehicle_modifier(struct veh_data *veh);
 extern int calculate_vehicle_entry_load(struct veh_data *veh);
 extern bool passed_flee_success_check(struct char_data *ch);
 extern int calculate_swim_successes(struct char_data *ch);
+extern bool can_edit_zone(struct char_data *ch, int zone);
 
 extern sh_int mortal_start_room;
 extern sh_int frozen_start_room;
@@ -79,6 +80,11 @@ int can_move(struct char_data *ch, int dir, int extra)
   {
     send_to_char("The thought of leaving your master makes you weep.\r\n", ch);
     act("$n bursts into tears.", FALSE, ch, 0, 0, TO_ROOM);
+    return 0;
+  }
+  // Builders are restricted to their zone.
+  if (builder_cant_go_there(ch, EXIT(ch, dir)->to_room)) {
+    send_to_char("Sorry, as a first-level builder you're only able to move to rooms you have edit access for.\r\n", ch);
     return 0;
   }
   if (ROOM_FLAGGED(EXIT(ch, dir)->to_room, ROOM_FREEWAY) && GET_LEVEL(ch) == 1) {
