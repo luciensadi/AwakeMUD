@@ -3364,12 +3364,14 @@ bool builder_cant_go_there(struct char_data *ch, struct room_data *room) {
       return FALSE;
     
     // Otherwise, iterate and find the zone for the room. We allow them to go there if they have edit access.
-    // Note the deliberate exclusion of zone 100 permissions: They can only go to locked areas of 100 to prevent builder/player interaction.
     for (int counter = 0; counter <= top_of_zone_table; counter++) {
       if (GET_ROOM_VNUM(room) >= (zone_table[counter].number * 100) 
           && GET_ROOM_VNUM(room) <= zone_table[counter].top) 
       {
         if (can_edit_zone(ch, counter))
+          return FALSE;
+        
+        if (zone_table[counter].number == 100)
           return FALSE;
           
         return TRUE;
