@@ -11,7 +11,11 @@
 extern void write_index_file(const char *suffix);
 
 #define CH              d->character
+#ifdef NO_CLS
+#define CLS(ch)         ;
+#else
 #define CLS(ch)         send_to_char("\033[H\033[J", ch)
+#endif
 #define ZCMD            zone_table[zone].cmd[cmd_no]
 
 #define VEDIT_CONFIRM_EDIT           0

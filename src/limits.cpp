@@ -37,6 +37,7 @@
 #include "newmail.h"
 #include "config.h"
 #include "transport.h"
+#include "memory.h"
 
 extern class objList ObjList;
 extern int modify_target(struct char_data *ch);
@@ -439,6 +440,7 @@ void check_idling(void)
         extract_char(ch);
       } else if (IS_SENATOR(ch) && ch->char_specials.timer > 15 &&
                  GET_INVIS_LEV(ch) < 2 &&
+                 access_level(ch, LVL_EXECUTIVE) &&
                  PRF_FLAGGED(ch, PRF_AUTOINVIS))
         perform_immort_invis(ch, 2);
     }
@@ -469,53 +471,151 @@ void check_bioware(struct char_data *ch)
     }
 }
 
+int calculate_swim_successes(struct char_data *ch) {
+  int swim_test_target, skill_dice, opposing_dice, successes, water_wings_bonus = 0, fin_bonus = 0;
+  
+  if (IS_NPC(ch) || IS_SENATOR(ch) || !ch->in_room)
+    return 20;
+    
+  for (int x = WEAR_LIGHT; x < NUM_WEARS; x++)
+    if (GET_EQ(ch, x) && GET_OBJ_TYPE(GET_EQ(ch, x)) == ITEM_CLIMBING && GET_OBJ_VAL(GET_EQ(ch, x), 1) == CLIMBING_TYPE_WATER_WINGS)
+      water_wings_bonus += GET_OBJ_VAL(GET_EQ(ch, x), 0);
+      
+  for (struct obj_data *cyber = ch->cyberware; cyber; cyber = cyber->next_content)
+    if (GET_OBJ_VAL(cyber, 0) == CYB_FIN && !GET_OBJ_VAL(cyber, 9)) {
+      fin_bonus = GET_QUI(ch) / 2;
+      break;
+    }
+    
+  snprintf(buf, sizeof(buf), "modify_target results: ");
+  swim_test_target = MAX(2, ch->in_room->rating) + modify_target_rbuf_raw(ch, buf, sizeof(buf), 4) - water_wings_bonus;
+  act(buf, FALSE, ch, 0, 0, TO_ROLLS);
+      
+  if (GET_POS(ch) < POS_RESTING)
+    skill_dice = MAX(1, (int)(GET_REAL_BOD(ch) / 3));
+  else
+    skill_dice = get_skill(ch, SKILL_ATHLETICS, swim_test_target);
+    
+  // Fins only matter if you're conscious and able to use them.
+  if (GET_POS(ch) >= POS_RESTING)
+    skill_dice += fin_bonus;
+    
+  opposing_dice = MAX(2, ch->in_room->rating);
+    
+  successes = success_test(skill_dice, swim_test_target);
+  successes -= success_test(opposing_dice, skill_dice);
+  
+  snprintf(buf, sizeof(buf), "%s rolled %d dice against TN %d (lowered from %d by WW %d), opposed by %d dice at TN %d: %d net success%s.\r\n",
+           GET_CHAR_NAME(ch),
+           skill_dice,
+           swim_test_target,
+           swim_test_target + water_wings_bonus,
+           water_wings_bonus,
+           opposing_dice,
+           skill_dice,
+           successes,
+           successes != 1 ? "es" : ""
+         );
+  act(buf, FALSE, ch, 0, 0, TO_ROLLS);
+  
+  return successes;
+}
+
+void analyze_swim_successes(struct char_data *temp_char) {
+  extern class memoryClass *Mem;
+  
+  struct room_data *room = temp_char->in_room;
+  int old_sector_type = room->sector_type;
+  room->sector_type = SPIRIT_SEA;
+  
+  int old_ath_skill = GET_SKILL(temp_char, SKILL_ATHLETICS);
+  int old_level = GET_LEVEL(temp_char);
+  
+  GET_LEVEL(temp_char) = 1;
+  
+  GET_BOD(temp_char) = 6;
+  GET_STR(temp_char) = 6;
+  GET_WIL(temp_char) = 6;
+  GET_QUI(temp_char) = 6;
+  GET_INT(temp_char) = 6;
+  GET_CHA(temp_char) = 6;
+  
+  
+  for (int ath_skill_level = 0; ath_skill_level <= 12; ath_skill_level++) {
+    GET_SKILL(temp_char, SKILL_ATHLETICS) = ath_skill_level;
+    for (int water_rating = 2; water_rating <= 10; water_rating++) {
+      room->rating = water_rating;
+      
+      int results[100];
+      memset(results, 0, sizeof(results));
+      
+      for (int iteration_counter = 0; iteration_counter < 10000; iteration_counter++) {
+        int successes = calculate_swim_successes(temp_char);
+        results[successes + 50]++;
+      }
+      
+      log_vfprintf("Results at skill %d, rating %d:", ath_skill_level, water_rating);
+      for (int i = 0; i < 100; i++) {
+        if (results[i])
+          log_vfprintf("%d: %d", i - 50, results[i]);
+      }
+    }
+  }
+  GET_SKILL(temp_char, SKILL_ATHLETICS) = old_ath_skill;
+  room->sector_type = old_sector_type;
+  GET_LEVEL(temp_char) = old_level;
+}
+
 void check_swimming(struct char_data *ch)
 {
-  int target, skill, i, dam, test;
+  int target, i, dam, test;
   
-  if (IS_NPC(ch) || IS_SENATOR(ch))
+  if (!ch || IS_NPC(ch) || IS_SENATOR(ch) || !ch->in_room)
     return;
   
-  target = MAX(2, ch->in_room->rating);
-  if (GET_POS(ch) < POS_RESTING)
-  {
-    target -= success_test(MAX(1, (int)(GET_REAL_BOD(ch) / 3)), target);
+  i = calculate_swim_successes(ch);
+  target = MAX(2, ch->in_room->rating) - i;
+      
+  if (GET_POS(ch) < POS_RESTING) {    
     dam = convert_damage(stage(target, 0));
     if (dam > 0) {
+      send_to_char("The feeling of dull impacts makes its way through the haze in your mind.\r\n", ch);
       act("$n's unconscious body is mercilessly thrown about by the current.",
           FALSE, ch, 0, 0, TO_ROOM);
       damage(ch, ch, dam, TYPE_DROWN, FALSE);
+    } else {
+      act("$n's unconscious body bobs in the current.", FALSE, ch, 0, 0, TO_ROOM);
     }
     return;
   }
-  skill = SKILL_ATHLETICS;
-  i = get_skill(ch, skill, target);
-  i = resisted_test(i, target + modify_target(ch), target, i);
-  if (i < 0)
-  {
-    test = success_test(GET_WIL(ch), modify_target(ch) - i);
+  
+  // Roll their damage test, in case it matters here.
+  test = success_test(GET_WIL(ch), target);
+  
+  snprintf(buf, sizeof(buf), "%s rolled %d against TN %d: %d successes for staging down damage.\r\n",
+           GET_CHAR_NAME(ch),
+           GET_WIL(ch),
+           target,
+           test
+         );
+  act(buf, FALSE, ch, 0, 0, TO_ROLLS);
+  
+  if (i < 0) {
     dam = convert_damage(stage(-test, SERIOUS));
     if (dam > 0) {
-      send_to_char(ch, "You struggle to prevent your lungs getting "
-                   "flooded with water.\r\n");
+      send_to_char(ch, "You fail to keep the water out of your lungs, and a racking cough seizes you.\r\n");
       damage(ch, ch, dam, TYPE_DROWN, FALSE);
     }
-  } else if (!i)
-  {
-    test = success_test(GET_WIL(ch), 3 + modify_target(ch));
+  } else if (!i) {
     dam = convert_damage(stage(-test, MODERATE));
     if (dam > 0) {
-      send_to_char(ch, "You struggle to prevent your lungs getting "
-                   "flooded with water.\r\n");
+      send_to_char(ch, "Your head briefly slips below the surface, and you struggle to keep from inhaling water.\r\n");
       damage(ch, ch, dam, TYPE_DROWN, FALSE);
     }
-  } else if (i < 3)
-  {
-    test = success_test(GET_WIL(ch), 5 - i + modify_target(ch));
+  } else if (i < 3) {
     dam = convert_damage(stage(-test, LIGHT));
     if (dam > 0) {
-      send_to_char(ch, "You struggle to prevent your lungs getting "
-                   "flooded with water.\r\n");
+      send_to_char(ch, "You struggle to keep your head above the water.\r\n");
       damage(ch, ch, dam, TYPE_DROWN, FALSE);
     }
   }
@@ -621,10 +721,31 @@ void point_update(void)
       if (GET_TEMP_ESSLOSS(i) > 0)
         GET_TEMP_ESSLOSS(i) = MAX(0, GET_TEMP_ESSLOSS(i) - 100);
         
+#ifdef USE_PRIVATE_CE_WORLD
+      if (SHOTS_FIRED(i) >= MARKSMAN_QUEST_SHOTS_FIRED_REQUIREMENT && SHOTS_TRIGGERED(i) != -1) {
+        bool has_a_quest_item = FALSE;
+        struct obj_data *tmp = NULL;
+        
+        // Check carried.
+        for (tmp = i->carrying; !has_a_quest_item && tmp; tmp = tmp->next_content)
+          has_a_quest_item = GET_OBJ_VNUM(tmp) == OBJ_MARKSMAN_LETTER || GET_OBJ_VNUM(tmp) == OBJ_MARKSMAN_BADGE;
+          
+        // Check worn.
+        for (int worn = 0; !has_a_quest_item && worn < NUM_WEARS; worn++)
+          has_a_quest_item = GET_EQ(i, worn) && GET_OBJ_VNUM(GET_EQ(i, worn)) == OBJ_MARKSMAN_BADGE;
+          
+        SHOTS_TRIGGERED(i) = (SHOTS_TRIGGERED(i) + 1) % 20;
+        
+        if (!has_a_quest_item && SHOTS_TRIGGERED(i) == 0) {
+          send_to_char("^GYou feel you could benefit with some time at a shooting range.^n\r\n", i);
+        }
+      }
+#else
       if (SHOTS_FIRED(i) >= 10000 && !SHOTS_TRIGGERED(i) && !number(0, 3)) {
         SHOTS_TRIGGERED(i)++;
         send_to_char("You feel you could benefit with some time at a shooting range.\r\n", i);
       }
+#endif    
       
       if (GET_MAG(i) > 0) {
         int force = 0, total = 0;
@@ -653,7 +774,7 @@ void point_update(void)
       if (i->bioware)
         check_bioware(i);
         
-      for (int x = 0; x < NUM_DRUGS; x++) {
+      for (int x = MIN_DRUG; x < NUM_DRUGS; x++) {
         if (GET_DRUG_ADDICT(i, x) > 0) {
           int tsl = (time(0) - GET_DRUG_LASTFIX(i, x)) / SECS_PER_MUD_DAY;
           GET_DRUG_ADDTIME(i, x)++;
@@ -849,6 +970,17 @@ bool should_save_this_vehicle(struct veh_data *veh) {
     // It's towed.
     if (!veh->in_veh && !veh->in_room)
       return TRUE;
+      
+    // We don't preserve damaged watercraft, etc.
+    switch (veh->type) {
+      case VEH_CAR:
+      case VEH_BIKE:
+      case VEH_DRONE:
+      case VEH_TRUCK:
+        break;
+      default:
+        return FALSE;
+    }
   }
   
   return TRUE;

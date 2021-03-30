@@ -73,8 +73,9 @@ extern void weight_change_object(struct obj_data * obj, float weight);
 extern void generate_archetypes();
 extern void populate_mobact_aggression_octets();
 extern void write_world_to_disk(int vnum);
+extern void handle_weapon_attachments(struct obj_data *obj);
 
-extern void auto_repair_obj(struct obj_data *obj);
+extern void auto_repair_obj(struct obj_data *obj, const char *source);
 
 
 /**************************************************************************
@@ -390,7 +391,7 @@ void require_that_field_exists_in_table(const char *field_name, const char *tabl
 }
 
 void boot_world(void)
-{
+{  
   // Sanity check to ensure we haven't added more bits than our bitfield can hold.
   if (Bitfield::TotalWidth() < PRF_MAX) {
     log("Error: You have more PRF flags defined than bitfield space. You'll need to either expand the size of bitfields or reduce your flag count.");
@@ -1199,9 +1200,13 @@ void parse_room(File &fl, long nr)
   room->y = data.GetInt("Y", DEFAULT_DIMENSIONS_Y);
   room->z = data.GetFloat("Z", DEFAULT_DIMENSIONS_Z);
   room->type = data.GetInt("RoomType", 0);
-  // read in directions
-  int i;
-  for (i = 0; *fulldirs[i] != '\n'; i++) {
+  
+  // read in directions, but only if we're not a cab.
+  if (!((GET_ROOM_VNUM(room) >= FIRST_SEATTLE_CAB && GET_ROOM_VNUM(room) <= LAST_SEATTLE_CAB)
+         || (GET_ROOM_VNUM(room) >= FIRST_PORTLAND_CAB && GET_ROOM_VNUM(room) <= LAST_PORTLAND_CAB)
+         || (GET_ROOM_VNUM(room) >= FIRST_CARIBBEAN_CAB && GET_ROOM_VNUM(room) <= LAST_CARIBBEAN_CAB)))
+  {
+    for (int i = 0; *fulldirs[i] != '\n'; i++) {
     char sect[16];
     snprintf(sect, sizeof(sect), "EXIT %s", fulldirs[i]);
 
@@ -1213,7 +1218,11 @@ void parse_room(File &fl, long nr)
       snprintf(field, sizeof(field), "%s/ToVnum", sect);
       int to_vnum = data.GetInt(field, -1);
 
-      if (to_vnum < 0) {
+      if (to_vnum < 0
+          || (to_vnum >= FIRST_SEATTLE_CAB && to_vnum <= LAST_SEATTLE_CAB)
+          || (to_vnum >= FIRST_PORTLAND_CAB && to_vnum <= LAST_PORTLAND_CAB)
+          || (to_vnum >= FIRST_CARIBBEAN_CAB && to_vnum <= LAST_CARIBBEAN_CAB)) 
+      {
         log_vfprintf("Room #%d's %s exit had invalid destination -- skipping",
             nr, fulldirs[i]);
         continue;
@@ -1279,11 +1288,12 @@ void parse_room(File &fl, long nr)
 #endif
     }
   }
+  }
 
   room->ex_description = NULL;
 
   // finally, read in extra descriptions
-  for (i = 0; true; i++) {
+  for (int i = 0; true; i++) {
     char sect[16];
     snprintf(sect, sizeof(sect), "EXTRADESC %d", i);
 
@@ -1857,7 +1867,7 @@ void parse_object(File &fl, long nr)
           snprintf(buf, sizeof(buf), "a %d-%s box of %s %s ammunition",
                   GET_AMMOBOX_QUANTITY(obj),
                   type_as_string,
-                  GET_AMMOBOX_WEAPON(obj) == WEAP_CANNON ? "normal" : ammo_type[GET_AMMOBOX_TYPE(obj)].name,
+                  ammo_type[GET_AMMOBOX_TYPE(obj)].name,
                   weapon_type[GET_AMMOBOX_WEAPON(obj)]);
         } else {
           strlcpy(buf, "a nondescript box of ammunition", sizeof(buf));
@@ -3098,30 +3108,11 @@ struct obj_data *read_object(int nr, int type)
     }
     GET_OBJ_VAL(obj, 3) = atoi(buf);
     GET_OBJ_VAL(obj, 6) = number(0, 9999);
-  } else if (GET_OBJ_TYPE(obj) == ITEM_GUN_MAGAZINE)
+  } else if (GET_OBJ_TYPE(obj) == ITEM_GUN_MAGAZINE) {
     GET_OBJ_VAL(obj, 9) = GET_OBJ_VAL(obj, 0);
-  else if (GET_OBJ_TYPE(obj) == ITEM_WEAPON) {
-    int real_obj;
-    for (int i = ACCESS_LOCATION_TOP; i <= ACCESS_LOCATION_UNDER; i++)
-      if (GET_OBJ_VAL(obj, i) > 0 && (real_obj = real_object(GET_OBJ_VAL(obj, i))) > 0) {
-        struct obj_data *mod = &obj_proto[real_obj];
-        // We know the attachment code will throw a fit if we attach over the top of an 'existing' object, so wipe it out without removing it.
-        GET_OBJ_VAL(obj, i) = 0;
-        attach_attachment_to_weapon(mod, obj, NULL, i - ACCESS_ACCESSORY_LOCATION_DELTA);
-      }
-    if (IS_GUN(GET_OBJ_VAL(obj, 3))) {
-      if (IS_SET(GET_OBJ_VAL(obj, 10), 1 << MODE_SS))
-        GET_OBJ_VAL(obj, 11) = MODE_SS;
-      else if (IS_SET(GET_OBJ_VAL(obj, 10), 1 << MODE_SA))
-        GET_OBJ_VAL(obj, 11) = MODE_SA;
-      else if (IS_SET(GET_OBJ_VAL(obj, 10), 1 << MODE_BF))
-        GET_OBJ_VAL(obj, 11) = MODE_BF;
-      else if (IS_SET(GET_OBJ_VAL(obj, 10), 1 << MODE_FA)) {
-        GET_OBJ_VAL(obj, 11) = MODE_FA;
-        GET_OBJ_TIMER(obj) = 10;
-      }
-    }
-  }
+  } else if (GET_OBJ_TYPE(obj) == ITEM_WEAPON)
+    handle_weapon_attachments(obj);
+  
   return obj;
 }
 
@@ -4010,6 +4001,8 @@ void free_char(struct char_data * ch)
     DELETE_ARRAY_IF_EXTANT(ch->player.poofout);
     DELETE_ARRAY_IF_EXTANT(ch->char_specials.arrive);
     DELETE_ARRAY_IF_EXTANT(ch->char_specials.leave);
+    DELETE_ARRAY_IF_EXTANT(ch->player.highlight_color_code);
+    DELETE_ARRAY_IF_EXTANT(ch->player.email);
     
     if(!IS_NPC(ch))
       DELETE_ARRAY_IF_EXTANT(ch->player.host);
@@ -4079,8 +4072,7 @@ void free_char(struct char_data * ch)
     }
   }
   
-  if (IS_NPC(ch))
-    clearMemory(ch);
+  clearMemory(ch);    
   
   clear_char(ch);
 }
@@ -4349,6 +4341,11 @@ void clear_room(struct room_data *room)
 
 void clear_vehicle(struct veh_data *veh)
 {
+  /* TODO: We are leaking more memory here from mods etc, but it's suuuuuuuuuper 
+      rare that we ever actually extract a vehicle from the game, so the effort
+      to fix it is currently not warranted. -- LS */
+  DELETE_ARRAY_IF_EXTANT(veh->restring);
+  DELETE_ARRAY_IF_EXTANT(veh->restring_long);
   memset((char *) veh, 0, sizeof(struct veh_data));
   veh->in_room = NULL;
 }
@@ -4719,7 +4716,7 @@ void load_saved_veh()
   FILE *fl;
   struct veh_data *veh = NULL, *veh2 = NULL;
   long vnum, owner;
-  struct obj_data *obj, *last_obj = NULL, *attach = NULL;
+  struct obj_data *obj, *last_obj = NULL;
   long veh_room = 0;
 
   if (!(fl = fopen("veh/vfile", "r"))) {
@@ -4767,6 +4764,8 @@ void load_saved_veh()
     veh->restring_long = str_dup(data.GetString("VEHICLE/VRestringLong", NULL));
     int inside = 0, last_in = 0;
     int num_objs = data.NumSubsections("CONTENTS");
+    
+    snprintf(buf3, sizeof(buf3), "veh-load %ld owned by %ld", veh->idnum, veh->owner);
     for (int i = 0; i < num_objs; i++) {
       const char *sect_name = data.GetIndexSection("CONTENTS", i);
       snprintf(buf, sizeof(buf), "%s/Vnum", sect_name);
@@ -4784,16 +4783,8 @@ void load_saved_veh()
         }
         if (GET_OBJ_TYPE(obj) == ITEM_PHONE && GET_ITEM_PHONE_SWITCHED_ON(obj))
           add_phone_to_list(obj);
-        if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && IS_GUN(GET_OBJ_VAL(obj, 3))) {
-          int real_obj;
-          for (int q = ACCESS_LOCATION_TOP; q <= ACCESS_LOCATION_UNDER; q++)
-            if (GET_OBJ_VAL(obj, q) > 0 && (real_obj = real_object(GET_OBJ_VAL(obj, q))) > 0 && 
-               (attach = &obj_proto[real_obj])) {
-              // The cost of the item was preserved, but nothing else was. Re-attach the item, then subtract its cost.
-              // We know the attachment code will throw a fit if we attach over the top of an 'existing' object, so wipe it out without removing it.
-              GET_OBJ_VAL(obj, q) = 0;
-              attach_attachment_to_weapon(attach, obj, NULL, q - ACCESS_ACCESSORY_LOCATION_DELTA);
-            }
+        if (GET_OBJ_TYPE(obj) == ITEM_WEAPON) {
+          handle_weapon_attachments(obj);
         }
         snprintf(buf, sizeof(buf), "%s/Condition", sect_name);
         GET_OBJ_CONDITION(obj) = data.GetInt(buf, GET_OBJ_CONDITION(obj));
@@ -4837,7 +4828,7 @@ void load_saved_veh()
         
         // Don't auto-repair cyberdecks until they're fully loaded.
         if (GET_OBJ_TYPE(obj) != ITEM_CYBERDECK)
-          auto_repair_obj(obj);
+          auto_repair_obj(obj, buf3);
         
         if (inside > 0) {
           if (inside == last_in)
@@ -4895,7 +4886,7 @@ void load_saved_veh()
         snprintf(buf, sizeof(buf), "%s/AmmoWeap", sect_name);
         GET_AMMOBOX_WEAPON(ammo) = data.GetInt(buf, 0);
         ammo->restring = str_dup(get_ammobox_default_restring(ammo));
-        auto_repair_obj(ammo);
+        auto_repair_obj(ammo, buf3);
         obj_to_obj(ammo, obj);
       }
       snprintf(buf, sizeof(buf), "%s/Vnum", sect_name);
@@ -4910,7 +4901,7 @@ void load_saved_veh()
           snprintf(buf, sizeof(buf), "%s/Value %d", sect_name, x);
           GET_OBJ_VAL(weapon, x) = data.GetInt(buf, GET_OBJ_VAL(weapon, x));
         }
-        auto_repair_obj(weapon);
+        auto_repair_obj(weapon, buf3);
         obj_to_obj(weapon, obj);
         veh->usedload += GET_OBJ_WEIGHT(weapon);
       }
@@ -4972,7 +4963,6 @@ void load_saved_veh()
 
 void load_consist(void)
 {
-  struct obj_data *attach;
   File file;
   
   for (int nr = 0; nr <= top_of_world; nr++) {
@@ -4980,6 +4970,7 @@ void load_consist(void)
       snprintf(buf, sizeof(buf), "storage/%ld", world[nr].number);
       if ((file.Open(buf, "r"))) {
         log_vfprintf("Restoring storage contents for room %ld (%s)...", world[nr].number, buf);
+        snprintf(buf3, sizeof(buf3), "storage room %ld (%s)", world[nr].number, buf);
         VTable data;
         data.Parse(&file);
         file.Close();
@@ -5012,16 +5003,8 @@ void load_consist(void)
             snprintf(buf, sizeof(buf), "%s/Inside", sect_name);
             
             // Handle weapon attachments.
-            if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && IS_GUN(GET_OBJ_VAL(obj, 3))) {
-              int real_obj;
-              for (int q = ACCESS_LOCATION_TOP; q <= ACCESS_LOCATION_UNDER; q++)
-                if (GET_OBJ_VAL(obj, q) > 0 && (real_obj = real_object(GET_OBJ_VAL(obj, q))) > 0 &&
-                    (attach = &obj_proto[real_obj])) {
-                  // We know the attachment code will throw a fit if we attach over the top of an 'existing' object, so wipe it out without removing it.
-                  GET_OBJ_VAL(obj, q) = 0;
-                  attach_attachment_to_weapon(attach, obj, NULL, q - ACCESS_ACCESSORY_LOCATION_DELTA);
-                }
-            }
+            if (GET_OBJ_TYPE(obj) == ITEM_WEAPON)
+              handle_weapon_attachments(obj);
             
             else if (GET_OBJ_VNUM(obj) == OBJ_SPECIAL_PC_CORPSE) {
               // Invalid belongings.
@@ -5056,7 +5039,7 @@ void load_consist(void)
             
             // Don't auto-repair cyberdecks until they're fully loaded.
             if (GET_OBJ_TYPE(obj) != ITEM_CYBERDECK)
-              auto_repair_obj(obj);
+              auto_repair_obj(obj, buf3);
             
             inside = data.GetInt(buf, 0);
             if (inside > 0) {
@@ -5176,6 +5159,8 @@ void boot_shop_orders(void)
 
 void price_cyber(struct obj_data *obj)
 {
+  bool has_strength = FALSE, has_qui = FALSE;
+  
   switch (GET_OBJ_VAL(obj, 0)) {
     case CYB_CHIPJACK:
       GET_OBJ_VAL(obj, 1) = 0;
@@ -5542,160 +5527,168 @@ void price_cyber(struct obj_data *obj)
       GET_OBJ_AVAILDAY(obj) = 2;
       break;
     case CYB_SKULL:
-      GET_OBJ_AVAILDAY(obj) = GET_OBJ_AVAILTN(obj) = GET_CYBERWARE_ESSENCE_COST(obj) = GET_OBJ_COST(obj) = 0;
-      if (!IS_SET(GET_OBJ_VAL(obj, 3), SKULL_MOD_OBVIOUS)) {
+      GET_OBJ_AVAILTN(obj) = 6;
+      GET_OBJ_AVAILDAY(obj) = 4;
+      GET_CYBERWARE_ESSENCE_COST(obj) = 75;
+      obj->obj_flags.extra_flags.SetBit(ITEM_MAGIC_INCOMPATIBLE);
+      
+      if (IS_SET(GET_CYBERWARE_FLAGS(obj), SKULL_MOD_OBVIOUS)) {
         GET_OBJ_COST(obj) = 35000;
-        GET_OBJ_AVAILTN(obj) = 6;
-        GET_OBJ_AVAILDAY(obj) = 4;
-        GET_CYBERWARE_ESSENCE_COST(obj) = 75;
-      }
-      if (!IS_SET(GET_OBJ_VAL(obj, 3), SKULL_MOD_SYNTHETIC)) {
+      } else if (IS_SET(GET_CYBERWARE_FLAGS(obj), SKULL_MOD_SYNTHETIC)) {
         GET_OBJ_COST(obj) = 55000;
-        GET_OBJ_AVAILTN(obj) = 6;
-        GET_OBJ_AVAILDAY(obj) = 4;
-        GET_CYBERWARE_ESSENCE_COST(obj) = 75;
+      } else {
+        log_vfprintf("ERROR: Cyberskull %ld is neither obvious nor synthetic!", GET_OBJ_VNUM(obj));
+        GET_OBJ_COST(obj) = 99999999;
+        GET_CYBERWARE_ESSENCE_COST(obj) = 999;
       }
-      if (IS_SET(GET_OBJ_VAL(obj, 3), SKULL_MOD_ARMORMOD1)) {
+      
+      if (IS_SET(GET_CYBERWARE_FLAGS(obj), SKULL_MOD_ARMOR_MOD1)) {
         GET_OBJ_COST(obj) += 6500;
         GET_OBJ_AVAILTN(obj) = MAX(GET_OBJ_AVAILTN(obj), 8);
         GET_OBJ_AVAILDAY(obj) = MAX(GET_OBJ_AVAILDAY(obj), 14);
+      }
       break;
     case CYB_TORSO:
-      GET_OBJ_AVAILDAY(obj) = GET_OBJ_AVAILTN(obj) = GET_CYBERWARE_ESSENCE_COST(obj) = GET_OBJ_COST(obj) = 0;
-      if (!IS_SET(GET_OBJ_VAL(obj, 3), TORSO_MOD_OBVIOUS)) {
+      GET_OBJ_AVAILTN(obj) = 6;
+      GET_OBJ_AVAILDAY(obj) = 4;
+      GET_CYBERWARE_ESSENCE_COST(obj) = 150;
+      obj->obj_flags.extra_flags.SetBit(ITEM_MAGIC_INCOMPATIBLE);
+      
+      if (IS_SET(GET_CYBERWARE_FLAGS(obj), TORSO_MOD_OBVIOUS)) {
         GET_OBJ_COST(obj) = 90000;
-        GET_OBJ_AVAILTN(obj) = 6;
-        GET_OBJ_AVAILDAY(obj) = 4;
-        GET_CYBERWARE_ESSENCE_COST(obj) = 150;
-      }
-      if (!IS_SET(GET_OBJ_VAL(obj, 3), TORSO_MOD_SYNTHETIC)) {
+      } else if (IS_SET(GET_CYBERWARE_FLAGS(obj), TORSO_MOD_SYNTHETIC)) {
         GET_OBJ_COST(obj) = 120000;
-        GET_OBJ_AVAILTN(obj) = 6;
-        GET_OBJ_AVAILDAY(obj) = 4;
-        GET_CYBERWARE_ESSENCE_COST(obj) = 150;
+      } else {
+        log_vfprintf("ERROR: Cybertorso %ld is neither obvious nor synthetic!", GET_OBJ_VNUM(obj));
+        GET_OBJ_COST(obj) = 99999999;
+        GET_CYBERWARE_ESSENCE_COST(obj) = 999;
       }
-      if (IS_SET(GET_OBJ_VAL(obj, 3), TORSO_MOD_ARMORMOD1)) {
+      
+      if (IS_SET(GET_CYBERWARE_FLAGS(obj), TORSO_MOD_ARMOR_MOD1)) {
         GET_OBJ_COST(obj) += 6500;
         GET_OBJ_AVAILTN(obj) = MAX(GET_OBJ_AVAILTN(obj), 8);
         GET_OBJ_AVAILDAY(obj) = MAX(GET_OBJ_AVAILDAY(obj), 14);
       }
-      if (IS_SET(GET_OBJ_VAL(obj, 3), TORSO_MOD_ARMORMOD2)) {
+      else if (IS_SET(GET_CYBERWARE_FLAGS(obj), TORSO_MOD_ARMOR_MOD2)) {
         GET_OBJ_COST(obj) += 13000;
         GET_OBJ_AVAILTN(obj) = MAX(GET_OBJ_AVAILTN(obj), 8);
         GET_OBJ_AVAILDAY(obj) = MAX(GET_OBJ_AVAILDAY(obj), 14);
       }
-      if (IS_SET(GET_OBJ_VAL(obj, 3), TORSO_MOD_ARMORMOD3)) {
+      else if (IS_SET(GET_CYBERWARE_FLAGS(obj), TORSO_MOD_ARMOR_MOD3)) {
         GET_OBJ_COST(obj) += 19500;
         GET_OBJ_AVAILTN(obj) = MAX(GET_OBJ_AVAILTN(obj), 8);
         GET_OBJ_AVAILDAY(obj) = MAX(GET_OBJ_AVAILDAY(obj), 14);
+      }
       break;
-    case CYB_LEGS:
-      GET_OBJ_AVAILDAY(obj) = GET_OBJ_AVAILTN(obj) = GET_CYBERWARE_ESSENCE_COST(obj) = GET_OBJ_COST(obj) = 0;
-      if (!IS_SET(GET_OBJ_VAL(obj, 3), LEGS_MOD_OBVIOUS)) {
+    case CYB_LEGS:      
+      GET_OBJ_AVAILTN(obj) = 4;
+      GET_OBJ_AVAILDAY(obj) = 4;
+      GET_CYBERWARE_ESSENCE_COST(obj) = 200;
+      obj->obj_flags.extra_flags.SetBit(ITEM_MAGIC_INCOMPATIBLE);
+      
+      if (IS_SET(GET_CYBERWARE_FLAGS(obj), LEGS_MOD_OBVIOUS)) {
         GET_OBJ_COST(obj) = 150000;
-        GET_OBJ_AVAILTN(obj) = 4;
-        GET_OBJ_AVAILDAY(obj) = 4;
-        GET_CYBERWARE_ESSENCE_COST(obj) = 200;
-      }
-      if (!IS_SET(GET_OBJ_VAL(obj, 3), LEGS_MOD_SYNTHETIC)) {
+      } else if (IS_SET(GET_CYBERWARE_FLAGS(obj), LEGS_MOD_SYNTHETIC)) {
         GET_OBJ_COST(obj) = 200000;
-        GET_OBJ_AVAILTN(obj) = 4;
-        GET_OBJ_AVAILDAY(obj) = 4;
-        GET_CYBERWARE_ESSENCE_COST(obj) = 200;
+      } else {
+        log_vfprintf("ERROR: Cyberleg %ld is neither obvious nor synthetic!", GET_OBJ_VNUM(obj));
+        GET_OBJ_COST(obj) = 99999999;
+        GET_CYBERWARE_ESSENCE_COST(obj) = 999;
       }
-      if (IS_SET(GET_OBJ_VAL(obj, 3), LEGS_MOD_ARMORMOD1)) {
+      
+      if (IS_SET(GET_CYBERWARE_FLAGS(obj), LEGS_MOD_ARMOR_MOD1)) {
         GET_OBJ_COST(obj) += 6500;
         GET_OBJ_AVAILTN(obj) = MAX(GET_OBJ_AVAILTN(obj), 8);
         GET_OBJ_AVAILDAY(obj) = MAX(GET_OBJ_AVAILDAY(obj), 14);
       }
-      if (IS_SET(GET_OBJ_VAL(obj, 3), LEGS_MOD_STRENGTH_MOD1)) {
+      
+      if (IS_SET(GET_CYBERWARE_FLAGS(obj), LEGS_MOD_STRENGTH_MOD1)) {
         GET_OBJ_COST(obj) += 20000;
-        GET_OBJ_AVAILTN(obj) = MAX(GET_OBJ_AVAILTN(obj), 2);
-        GET_OBJ_AVAILDAY(obj) = MAX(GET_OBJ_AVAILDAY(obj), 4);
+        has_strength = TRUE;
       }
-      if (IS_SET(GET_OBJ_VAL(obj, 3), LEGS_MOD_STRENGTH_MOD2)) {
+      else if (IS_SET(GET_CYBERWARE_FLAGS(obj), LEGS_MOD_STRENGTH_MOD2)) {
         GET_OBJ_COST(obj) += 40000;
-        GET_OBJ_AVAILTN(obj) = MAX(GET_OBJ_AVAILTN(obj), 2);
-        GET_OBJ_AVAILDAY(obj) = MAX(GET_OBJ_AVAILDAY(obj), 4);
+        has_strength = TRUE;
       }
-      if (IS_SET(GET_OBJ_VAL(obj, 3), LEGS_MOD_STRENGTH_MOD3)) {
+      else if (IS_SET(GET_CYBERWARE_FLAGS(obj), LEGS_MOD_STRENGTH_MOD3)) {
         GET_OBJ_COST(obj) += 60000;
-        GET_OBJ_AVAILTN(obj) = MAX(GET_OBJ_AVAILTN(obj), 2);
-        GET_OBJ_AVAILDAY(obj) = MAX(GET_OBJ_AVAILDAY(obj), 4);
+        has_strength = TRUE;
       }
-      if (IS_SET(GET_OBJ_VAL(obj, 3), LEGS_MOD_QUICKNESS_MOD1)) {
-        GET_OBJ_COST(obj) += 20000;
-        GET_OBJ_AVAILTN(obj) = MAX(GET_OBJ_AVAILTN(obj), 2);
-        GET_OBJ_AVAILDAY(obj) = MAX(GET_OBJ_AVAILDAY(obj), 4);
+      
+      if (IS_SET(GET_CYBERWARE_FLAGS(obj), LEGS_MOD_QUICKNESS_MOD1)) {
+        GET_OBJ_COST(obj) += 30000 * (has_strength ? 1.1 : 1);
+        has_qui = TRUE;
       }
-      if (IS_SET(GET_OBJ_VAL(obj, 3), LEGS_MOD_QUICKNESS_MOD2)) {
-        GET_OBJ_COST(obj) += 40000;
-        GET_OBJ_AVAILTN(obj) = MAX(GET_OBJ_AVAILTN(obj), 2);
-        GET_OBJ_AVAILDAY(obj) = MAX(GET_OBJ_AVAILDAY(obj), 4);
+      else if (IS_SET(GET_CYBERWARE_FLAGS(obj), LEGS_MOD_QUICKNESS_MOD2)) {
+        GET_OBJ_COST(obj) += 60000 * (has_strength ? 1.1 : 1);
+        has_qui = TRUE;
       }
-      if (IS_SET(GET_OBJ_VAL(obj, 3), LEGS_MOD_QUICKNESS_MOD3)) {
-        GET_OBJ_COST(obj) += 60000;
-        GET_OBJ_AVAILTN(obj) = MAX(GET_OBJ_AVAILTN(obj), 2);
-        GET_OBJ_AVAILDAY(obj) = MAX(GET_OBJ_AVAILDAY(obj), 4);
+      else if (IS_SET(GET_CYBERWARE_FLAGS(obj), LEGS_MOD_QUICKNESS_MOD3)) {
+        GET_OBJ_COST(obj) += 90000 * (has_strength ? 1.1 : 1);
+        has_qui = TRUE;
+      }
+      
+      if (has_strength || has_qui) {
+        GET_OBJ_AVAILTN(obj) = MAX(GET_OBJ_AVAILTN(obj), 8);
+        GET_OBJ_AVAILDAY(obj) = MAX(GET_OBJ_AVAILDAY(obj), 28);
+      }
       break;
     case CYB_ARMS:
       GET_OBJ_AVAILDAY(obj) = GET_OBJ_AVAILTN(obj) = GET_CYBERWARE_ESSENCE_COST(obj) = GET_OBJ_COST(obj) = 0;
-      if (IS_SET(GET_OBJ_VAL(obj, 3), ARMS_MOD_OBVIOUS)) {
+      
+      GET_OBJ_AVAILTN(obj) = 4;
+      GET_OBJ_AVAILDAY(obj) = 4;
+      GET_CYBERWARE_ESSENCE_COST(obj) = 200;
+      obj->obj_flags.extra_flags.SetBit(ITEM_MAGIC_INCOMPATIBLE);
+      
+      if (IS_SET(GET_CYBERWARE_FLAGS(obj), ARMS_MOD_OBVIOUS)) {
         GET_OBJ_COST(obj) = 75000;
-        GET_OBJ_AVAILTN(obj) = 4;
-        GET_OBJ_AVAILDAY(obj) = 4;
-        GET_CYBERWARE_ESSENCE_COST(obj) = 200;
-      }
-      if (!IS_SET(GET_OBJ_VAL(obj, 3), ARMS_MOD_SYNTHETIC)) {
+      } else if (IS_SET(GET_CYBERWARE_FLAGS(obj), ARMS_MOD_SYNTHETIC)) {
         GET_OBJ_COST(obj) = 100000;
-        GET_OBJ_AVAILTN(obj) = 4;
-        GET_OBJ_AVAILDAY(obj) = 4;
-        GET_CYBERWARE_ESSENCE_COST(obj) = 200;
+      } else {
+        log_vfprintf("ERROR: Cyberarm %ld is neither obvious nor synthetic!", GET_OBJ_VNUM(obj));
+        GET_OBJ_COST(obj) = 99999999;
+        GET_CYBERWARE_ESSENCE_COST(obj) = 999;
       }
-      if (!IS_SET(GET_OBJ_VAL(obj, 3), ARMS_MOD_ARMORMOD1)) {
+      
+      if (!IS_SET(GET_CYBERWARE_FLAGS(obj), ARMS_MOD_ARMOR_MOD1)) {
         GET_OBJ_COST(obj) += 6500;
         GET_OBJ_AVAILTN(obj) = MAX(GET_OBJ_AVAILTN(obj), 8);
         GET_OBJ_AVAILDAY(obj) = MAX(GET_OBJ_AVAILDAY(obj), 14);
       }
-      if (IS_SET(GET_OBJ_VAL(obj, 3), ARMS_MOD_STRENGTH_MOD1)) {
+      
+      if (IS_SET(GET_CYBERWARE_FLAGS(obj), ARMS_MOD_STRENGTH_MOD1)) {
         GET_OBJ_COST(obj) += 20000;
-        GET_OBJ_AVAILTN(obj) = MAX(GET_OBJ_AVAILTN(obj), 2);
-        GET_OBJ_AVAILDAY(obj) = MAX(GET_OBJ_AVAILDAY(obj), 4);
-      }
-      if (IS_SET(GET_OBJ_VAL(obj, 3), ARMS_MOD_STRENGTH_MOD2)) {
+        has_strength = TRUE;
+      } else if (IS_SET(GET_CYBERWARE_FLAGS(obj), ARMS_MOD_STRENGTH_MOD2)) {
         GET_OBJ_COST(obj) += 40000;
-        GET_OBJ_AVAILTN(obj) = MAX(GET_OBJ_AVAILTN(obj), 2);
-        GET_OBJ_AVAILDAY(obj) = MAX(GET_OBJ_AVAILDAY(obj), 4);
-      }
-      if (IS_SET(GET_OBJ_VAL(obj, 3), ARMS_MOD_STRENGTH_MOD3)) {
+        has_strength = TRUE;
+      } else if (IS_SET(GET_CYBERWARE_FLAGS(obj), ARMS_MOD_STRENGTH_MOD3)) {
         GET_OBJ_COST(obj) += 60000;
-        GET_OBJ_AVAILTN(obj) = MAX(GET_OBJ_AVAILTN(obj), 2);
-        GET_OBJ_AVAILDAY(obj) = MAX(GET_OBJ_AVAILDAY(obj), 4);
+        has_strength = TRUE;
       }
-      if (IS_SET(GET_OBJ_VAL(obj, 3), ARMS_MOD_QUICKNESS_MOD1)) {
-        GET_OBJ_COST(obj) += 20000;
-        GET_OBJ_AVAILTN(obj) = MAX(GET_OBJ_AVAILTN(obj), 2);
-        GET_OBJ_AVAILDAY(obj) = MAX(GET_OBJ_AVAILDAY(obj), 4);
+      
+      if (IS_SET(GET_CYBERWARE_FLAGS(obj), ARMS_MOD_QUICKNESS_MOD1)) {
+        GET_OBJ_COST(obj) += 30000 * (has_strength ? 1.1 : 1);
+        has_qui = TRUE;
+      } else if (IS_SET(GET_CYBERWARE_FLAGS(obj), ARMS_MOD_QUICKNESS_MOD2)) {
+        GET_OBJ_COST(obj) += 60000 * (has_strength ? 1.1 : 1);
+        has_qui = TRUE;
+      } else if (IS_SET(GET_CYBERWARE_FLAGS(obj), ARMS_MOD_QUICKNESS_MOD3)) {
+        GET_OBJ_COST(obj) += 90000 * (has_strength ? 1.1 : 1);
+        has_qui = TRUE;
       }
-      if (IS_SET(GET_OBJ_VAL(obj, 3), ARMS_MOD_QUICKNESS_MOD2)) {
-        GET_OBJ_COST(obj) += 40000;
-        GET_OBJ_AVAILTN(obj) = MAX(GET_OBJ_AVAILTN(obj), 2);
-        GET_OBJ_AVAILDAY(obj) = MAX(GET_OBJ_AVAILDAY(obj), 4);
+      
+      if (has_strength || has_qui) {
+        GET_OBJ_AVAILTN(obj) = MAX(GET_OBJ_AVAILTN(obj), 8);
+        GET_OBJ_AVAILDAY(obj) = MAX(GET_OBJ_AVAILDAY(obj), 28);
       }
-      if (IS_SET(GET_OBJ_VAL(obj, 3), ARMS_MOD_QUICKNESS_MOD3)) {
-        GET_OBJ_COST(obj) += 60000;
-        GET_OBJ_AVAILTN(obj) = MAX(GET_OBJ_AVAILTN(obj), 2);
-        GET_OBJ_AVAILDAY(obj) = MAX(GET_OBJ_AVAILDAY(obj), 4);
-      }
-      if (IS_SET(GET_OBJ_VAL(obj, 3), ARMS_MOD_QUICKNESS_MOD3)) {
-        GET_OBJ_COST(obj) += 60000;
-        GET_OBJ_AVAILTN(obj) = MAX(GET_OBJ_AVAILTN(obj), 2);
-        GET_OBJ_AVAILDAY(obj) = MAX(GET_OBJ_AVAILDAY(obj), 4);
-      }
-      if (IS_SET(GET_OBJ_VAL(obj, 3), ARMS_MOD_GYROMOUNT)) {
+      
+      if (IS_SET(GET_CYBERWARE_FLAGS(obj), ARMS_MOD_GYROMOUNT)) {
         GET_OBJ_COST(obj) += 40000;
         GET_OBJ_AVAILTN(obj) = MAX(GET_OBJ_AVAILTN(obj), 10);
         GET_OBJ_AVAILDAY(obj) = MAX(GET_OBJ_AVAILDAY(obj), 21);
+      }
       break;
     case CYB_DERMALSHEATHING:
       GET_CYBERWARE_ESSENCE_COST(obj) = 70 * GET_OBJ_VAL(obj, 1);

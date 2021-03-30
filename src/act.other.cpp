@@ -51,6 +51,7 @@ ACMD_CONST(do_say);
 SPECIAL(shop_keeper);
 SPECIAL(spraypaint);
 SPECIAL(johnson);
+SPECIAL(anticoagulant);
 extern char *how_good(int skill, int percent);
 extern void perform_tell(struct char_data *, struct char_data *, char *);
 extern void obj_magic(struct char_data * ch, struct obj_data * obj, char *argument);
@@ -60,7 +61,7 @@ extern char *short_object(int virt, int where);
 extern bool read_extratext(struct char_data * ch);
 extern int return_general(int skill_num);
 extern int belongs_to(struct char_data *ch, struct obj_data *obj);
-extern char *make_desc(struct char_data *ch, struct char_data *i, char *buf, int act, bool dont_capitalize_a_an);
+extern char *make_desc(struct char_data *ch, struct char_data *i, char *buf, int act, bool dont_capitalize_a_an, size_t buf_size);
 extern void weight_change_object(struct obj_data * obj, float weight);
 
 extern bool restring_with_args(struct char_data *ch, char *argument, bool using_sysp);
@@ -737,8 +738,19 @@ ACMD(do_use)
       GET_OBJ_VAL(obj, 4) = 0;
     }
     return;
-  } else if (GET_OBJ_TYPE(obj) == ITEM_DRUG)
+  } else if (GET_OBJ_TYPE(obj) == ITEM_DRUG) {
     do_drug_take(ch, obj);
+  } else if (GET_OBJ_SPEC(obj) && GET_OBJ_SPEC(obj) == anticoagulant) {
+    for (struct obj_data *cyber = ch->bioware; cyber; cyber = cyber->next_content) {
+      if (GET_OBJ_VAL(cyber, 0) == BIO_PLATELETFACTORY) {
+        GET_OBJ_VAL(cyber, 5) = 36;
+        GET_OBJ_VAL(cyber, 6) = 0;
+        break;
+      }
+    }
+    send_to_char("You take the aspirin.\r\n", ch);
+    extract_obj(obj);
+  }
   else send_to_char("You can't do anything different with that.\r\n", ch);
 }
 
@@ -1258,7 +1270,7 @@ ACMD(do_toggle)
       }
       mode = 24;
       result = 1;
-    } else if (is_abbrev(argument, "showpgtags")) {
+    } else if (is_abbrev(argument, "showpgtags") || is_abbrev(argument, "showgrouptags") || is_abbrev(argument, "showtags")) {
       result = PRF_TOG_CHK(ch, PRF_SHOWGROUPTAG);
       mode = 27;
     } else if (is_abbrev(argument, "keepalives")) {
@@ -1464,7 +1476,7 @@ ACMD(do_reload)
     }
     
     // Mounted weapon reloading via 'reload <vehicle> [x]'
-    else if ((veh = get_veh_list(buf, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch))) {
+    else if (*buf && (veh = get_veh_list(buf, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch))) {
       if (veh->type != VEH_DRONE) {
         send_to_char("You have to be inside a vehicle to reload the mounts.\r\n", ch);
         return;
@@ -1519,11 +1531,18 @@ ACMD(do_reload)
               update_ammobox_ammo_quantity(i, -max);
               GET_AMMOBOX_WEAPON(ammo) = GET_AMMOBOX_WEAPON(i);
               GET_AMMOBOX_TYPE(ammo) = GET_AMMOBOX_TYPE(i);
-              if (GET_AMMOBOX_QUANTITY(i) == 0 && !i->restring && !(*i->restring)) {
-                send_to_char(ch, "You insert %d rounds of ammunition into %s, then junk the empty %s.\r\n", max, decapitalize_a_an(GET_OBJ_NAME(m)), GET_OBJ_NAME(i));
+              if (GET_AMMOBOX_QUANTITY(i) == 0 && (!i->restring || !(*i->restring))) {
+                send_to_char(ch, "You insert %d %s into %s, then junk the empty %s.\r\n", 
+                             max, 
+                             get_ammo_representation(GET_AMMOBOX_WEAPON(i), GET_AMMOBOX_TYPE(i), max),
+                             decapitalize_a_an(GET_OBJ_NAME(m)), 
+                             GET_OBJ_NAME(i));
                 extract_obj(i);
               } else {
-                send_to_char(ch, "You insert %d rounds of ammunition into %s.\r\n", max, decapitalize_a_an(GET_OBJ_NAME(m)));
+                send_to_char(ch, "You insert %d %s into %s.\r\n", 
+                             max, 
+                             get_ammo_representation(GET_AMMOBOX_WEAPON(i), GET_AMMOBOX_TYPE(i), max),
+                             decapitalize_a_an(GET_OBJ_NAME(m)));
               }
               return;
             }            
@@ -1541,7 +1560,7 @@ ACMD(do_reload)
             ammo->restring = str_dup(get_ammobox_default_restring(ammo));
             obj_to_obj(ammo, m);
             
-            if (GET_AMMOBOX_QUANTITY(i) == 0 && !i->restring && !(*i->restring)) {
+            if (GET_AMMOBOX_QUANTITY(i) == 0 && (!i->restring || !(*i->restring))) {
               send_to_char(ch, "You insert %d rounds of ammunition into %s, then junk the empty %s.\r\n", max, decapitalize_a_an(GET_OBJ_NAME(m)), GET_OBJ_NAME(i));
               extract_obj(i);
             } else {
@@ -1648,6 +1667,16 @@ ACMD(do_eject)
 {
   if (GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_WIELD)->contains) {
     struct obj_data *magazine = GET_EQ(ch, WEAR_WIELD)->contains;
+    
+    if (GET_OBJ_TYPE(magazine) != ITEM_GUN_MAGAZINE) {
+      send_to_char("^YSomething has gone really wrong.^n Staff have been automatically alerted, but you should DM Lucien on Discord as well. Do not junk or otherwise get rid of this weapon, it has stuff in it that's not a magazine!\r\n", ch);
+      snprintf(buf, sizeof(buf), "^RSYSERR^g: Stranded objects in %s's %s!", GET_CHAR_NAME(ch), GET_OBJ_NAME(GET_EQ(ch, WEAR_WIELD)));
+      mudlog(buf, ch, LOG_SYSLOG, TRUE);
+      const char *ptr = generate_new_loggable_representation(GET_EQ(ch, WEAR_WIELD));
+      mudlog(ptr, ch, LOG_SYSLOG, TRUE);
+      delete [] ptr;
+      return;
+    }
     
     // Strip out the ammo and put it in your bullet pants, then destroy the mag.
     update_bulletpants_ammo_quantity(ch, GET_MAGAZINE_BONDED_ATTACKTYPE(magazine), GET_MAGAZINE_AMMO_TYPE(magazine), GET_MAGAZINE_AMMO_COUNT(magazine));
@@ -2652,18 +2681,18 @@ ACMD(do_photo)
           send_to_char(ch, "You don't seem to see them through the viewfinder.\r\n");
           return;
         }
-        snprintf(buf2, sizeof(buf2), "a photo of %s^n", make_desc(ch, i, buf, 2, TRUE));
+        snprintf(buf2, sizeof(buf2), "a photo of %s^n", make_desc(ch, i, buf, 2, TRUE, sizeof(buf)));
         if (i->in_veh) {
           snprintf(buf, sizeof(buf), "^c%s^c sitting in the %s of %s^n\r\n%s",
-                  make_desc(ch, i, buf3, 2, FALSE),
+                  make_desc(ch, i, buf3, 2, FALSE, sizeof(buf3)),
                   i->vfront ? "front" : "back",
                   decapitalize_a_an(GET_VEH_NAME(i->in_veh)),
                   i->player.physical_text.look_desc);
         } else {
-          snprintf(buf, sizeof(buf), "^c%s^c in %s^n\r\n%s", make_desc(ch, i, buf3, 2, FALSE),
+          snprintf(buf, sizeof(buf), "^c%s^c in %s^n\r\n%s", make_desc(ch, i, buf3, 2, FALSE, sizeof(buf3)),
                   GET_ROOM_NAME(ch->in_room), i->player.physical_text.look_desc);
         }
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s is using:\r\n", make_desc(ch, i, buf3, 2, FALSE));
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s is using:\r\n", make_desc(ch, i, buf3, 2, FALSE, sizeof(buf3)));
         for (int j = 0; j < NUM_WEARS; j++)
           if (GET_EQ(i, j) && CAN_SEE_OBJ(ch, GET_EQ(i, j))) {
             // Describe special-case wielded/held objects.
@@ -2748,7 +2777,7 @@ ACMD(do_photo)
           strcat(buf, tch->player.physical_text.room_desc);
           continue;
         }
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s", make_desc(ch, tch, buf3, 2, FALSE));
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s", make_desc(ch, tch, buf3, 2, FALSE, sizeof(buf3)));
         if (CH_IN_COMBAT(tch)) {
           strcat(buf, " is here, fighting ");
           if (FIGHTING(tch) == ch)
@@ -3061,7 +3090,7 @@ ACMD(do_assense)
         mag = 0;
       else if (init)
         mag -= GET_GRADE(vict) * 100;
-      strcpy(buf, make_desc(ch, vict, buf2, 2, FALSE));
+      strcpy(buf, make_desc(ch, vict, buf2, 2, FALSE, sizeof(buf2)));
       if (success < 3) {
         if (vict->cyberware) {
           if (GET_SEX(vict) != SEX_NEUTRAL || (IS_NPC(vict) && MOB_FLAGGED(vict, MOB_INANIMATE)))
@@ -3383,6 +3412,31 @@ ACMD(do_assense)
         if (mem)
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", and is seems to have been built by %s", mem->mem);
       }
+    } else if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && !IS_GUN(GET_WEAPON_ATTACK_TYPE(obj)) && GET_WEAPON_FOCUS_RATING(obj) > 0) {
+      strlcat(buf, "a weapon focus", sizeof(buf));
+      if (success >= 5) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ". It is of force %d", GET_WEAPON_FOCUS_RATING(obj));
+      } else if (success >= 3) {
+        if (GET_WEAPON_FOCUS_RATING(obj) < GET_MAG(ch) / 100)
+          strcat(buf, ". It has less astral presence than you");
+        else if (GET_WEAPON_FOCUS_RATING(obj) == GET_MAG(ch) / 100)
+          strcat(buf, ". It has the same amount of astral presence as you");
+        else
+          strcat(buf, ". It has more astral presence than you");
+      }
+      if (success >= 3) {
+        if (GET_IDNUM(ch) == GET_WEAPON_FOCUS_BONDED_BY(obj))
+          strcat(buf, ", it is bonded to you");
+        else {
+          for (mem = GET_MEMORY(ch); mem; mem = mem->next)
+            if (mem->idnum == GET_WEAPON_FOCUS_BONDED_BY(obj))
+              break;
+          if (mem)
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", it seems to have been bonded by %s", mem->mem);
+          else
+            strcat(buf, ", though the astral signature is unfamiliar to you");
+        }
+      }
     } else
       strcat(buf, "a mundane object");
     strcat(buf, ".\r\n");
@@ -3440,18 +3494,26 @@ ACMD(do_packup)
         break;
     }
   }
-  if (!shop)
+  
+  if (!shop) {
     send_to_char(ch, "There is no workshop here to pack up.\r\n");
-  else {
-    send_to_char(ch, "You begin to pack up %s here.\r\n", GET_OBJ_NAME(shop));
-    act("$n begins to pack up $P.", FALSE, ch, 0, shop, TO_ROOM);
-    if (access_level(ch, LVL_BUILDER)) {
-      send_to_char("You use your staff powers to greatly accelerate the process.\r\n", ch);
-      GET_OBJ_VAL(shop, 3) = 1;
-    } else
-      GET_OBJ_VAL(shop, 3) = 3;
-    AFF_FLAGS(ch).SetBit(AFF_PACKING);
+    return;
   }
+  
+  // No packing up zoneloaded shops.
+  if (!(CAN_WEAR(shop, ITEM_WEAR_TAKE))) {
+    send_to_char(ch, "It's best to leave %s alone.\r\n", GET_OBJ_NAME(shop));
+    return;
+  }
+    
+  send_to_char(ch, "You begin to pack up %s here.\r\n", GET_OBJ_NAME(shop));
+  act("$n begins to pack up $P.", FALSE, ch, 0, shop, TO_ROOM);
+  if (access_level(ch, LVL_BUILDER)) {
+    send_to_char("You use your staff powers to greatly accelerate the process.\r\n", ch);
+    GET_OBJ_VAL(shop, 3) = 1;
+  } else
+    GET_OBJ_VAL(shop, 3) = 3;
+  AFF_FLAGS(ch).SetBit(AFF_PACKING);
 }
 
 ACMD(do_jack)
@@ -3661,12 +3723,12 @@ ACMD(do_delete)
       break;
   if (!obj)
     send_to_char("You don't have that many files in your memory.\r\n", ch);
-  else {
-    send_to_char(ch, "You %sdelete %s from your headware memory.\r\n", GET_OBJ_VAL(obj, 9) ? "unlink and " : "", GET_OBJ_NAME(obj));
-    if (GET_OBJ_VAL(obj, 9))
-      ch->char_specials.saved.skills[GET_OBJ_VAL(obj, 0)][1] = 0;
+  else {    
+    send_to_char(ch, "You %sdelete %s from your headware memory.\r\n", GET_CHIP_LINKED(obj) ? "unlink and " : "", GET_OBJ_NAME(obj));
+    if (GET_CHIP_LINKED(obj))
+      ch->char_specials.saved.skills[GET_CHIP_SKILL(obj)][1] = 0;
     obj_from_obj(obj);
-    GET_OBJ_VAL(memory, 5) -= GET_OBJ_VAL(obj, 2) + GET_OBJ_VAL(obj, 8);
+    GET_OBJ_VAL(memory, 5) -= GET_CHIP_SIZE(obj) - GET_CHIP_COMPRESSION_FACTOR(obj);
     extract_obj(obj);
   }
 }
@@ -3863,6 +3925,40 @@ ACMD(do_survey)
       strcat(buf, "here is not much to take cover behind.");
       break;
   }
+  switch (light_level(room)) {
+    case LIGHT_NORMAL:
+      strlcat(buf, " There is an adequate amount of light here.", sizeof(buf));
+      break;
+    case LIGHT_NORMALNOLIT:
+      strlcat(buf, " There is an adequate amount of natural light here.", sizeof(buf));
+      break;
+    case LIGHT_FULLDARK:
+      strlcat(buf, " It is completely dark.", sizeof(buf));
+      break;
+    case LIGHT_MINLIGHT:
+      strlcat(buf, " A minimal amount of light outlines shadows in the darkness.", sizeof(buf));
+      break;
+    case LIGHT_PARTLIGHT:
+      strlcat(buf, " There's some light, but not quite enough to see clearly without improved vision.", sizeof(buf));
+      break;
+    case LIGHT_GLARE:
+      strlcat(buf, " There's a lot of glare here.", sizeof(buf));
+      break;
+    case LIGHT_MIST:
+      strlcat(buf, " It's misty.", sizeof(buf));
+      break;
+    case LIGHT_LIGHTSMOKE:
+      strlcat(buf, " There's some light smoke here.", sizeof(buf));
+      break;
+    case LIGHT_HEAVYSMOKE:
+      strlcat(buf, " There's some heavy smoke here.", sizeof(buf));
+      break;
+    case LIGHT_THERMALSMOKE:
+      strlcat(buf, " There's some heavy thermal smoke here.", sizeof(buf));
+      break;
+    default:
+      strlcat(buf, " There is an ERRONEOUS light level here. Notify staff!", sizeof(buf));
+  }
   strcat(buf, "\r\n");
   send_to_char(buf, ch);
 }
@@ -3871,8 +3967,10 @@ extern ACMD_DECLARE(do_pool);
 
 ACMD(do_cpool)
 {
-  int dodge = 0, bod = 0, off = 0, total = GET_COMBAT(ch), low = 0;
-  struct obj_data *one = NULL, *two = NULL;
+  extern int get_skill_num_in_use_for_weapons(struct char_data *ch);
+  extern int get_skill_dice_in_use_for_weapons(struct char_data *ch);
+  
+  int dodge = 0, bod = 0, off = 0, total = GET_COMBAT(ch);
 
   if (!*argument) {
     do_pool(ch, argument, 0, 0);
@@ -3893,63 +3991,12 @@ ACMD(do_cpool)
   total -= ch->real_abils.defense_pool = GET_DEFENSE(ch) = MIN(dodge, total);
   total -= ch->real_abils.body_pool = GET_BODY(ch) = MIN(bod, total);
   
-  if (AFF_FLAGGED(ch, AFF_MANNING) || AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE)) {
-    low = GET_SKILL(ch, SKILL_GUNNERY);
-    if (off > low) {
-      send_to_char(ch, "You're not skilled enough with gunnery, so your offense pool is capped at %d.\r\n", low);
-      off = low;
-    }
-  } else {
-    one = (GET_EQ(ch, WEAR_WIELD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_WEAPON) ? GET_EQ(ch, WEAR_WIELD) :
-           (struct obj_data *) NULL;
-    two = (GET_EQ(ch, WEAR_HOLD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_HOLD)) == ITEM_WEAPON) ? GET_EQ(ch, WEAR_HOLD) :
-           (struct obj_data *) NULL;
-           
-    if (!one && !two) {
-      if(has_cyberweapon(ch))
-        low = GET_SKILL(ch, SKILL_CYBER_IMPLANTS);
-      else 
-        low = GET_SKILL(ch, SKILL_UNARMED_COMBAT);
-    } 
-    
-    else if (one) {
-      if (!GET_SKILL(ch, GET_OBJ_VAL(one, 4)))
-        low = GET_SKILL(ch, return_general(GET_OBJ_VAL(one, 4)));
-      else 
-        low = GET_SKILL(ch, GET_OBJ_VAL(one, 4));
-    } 
-    
-    else if (two) {
-      if (!GET_SKILL(ch, GET_OBJ_VAL(two, 4)))
-        low = GET_SKILL(ch, return_general(GET_OBJ_VAL(two, 4)));
-      else 
-        low = GET_SKILL(ch, GET_OBJ_VAL(two, 4));
-    } 
-    
-    // This broken-ass code never worked. "If neither one or two, or if one, or if two, or..." no, that's a full logical stop.
-    else {
-      if (GET_SKILL(ch, GET_OBJ_VAL(one, 4)) <= GET_SKILL(ch, GET_OBJ_VAL(two, 4))) {
-        if (!GET_SKILL(ch, GET_OBJ_VAL(one, 4)))
-          low = GET_SKILL(ch, return_general(GET_OBJ_VAL(one, 4)));
-        else 
-          low = GET_SKILL(ch, GET_OBJ_VAL(one, 4));
-      } else {
-        if (!GET_SKILL(ch, GET_OBJ_VAL(two, 4)))
-          low = GET_SKILL(ch, return_general(GET_OBJ_VAL(two, 4)));
-        else 
-          low = GET_SKILL(ch, GET_OBJ_VAL(two, 4));
-      }
-    }
-    
-    if (!one)
-      one = two;
-      
-    if (off > low) {
-      send_to_char(ch, "You're not skilled enough with %s, so your offense pool is capped at %d.\r\n",
-                   one ? GET_OBJ_NAME(one) : (has_cyberweapon(ch) ? "cyberweapons" : "your hands"),
-                   low);
-      off = low;
-    }
+  int skill_num = get_skill_num_in_use_for_weapons(ch);
+  int skill_dice = get_skill_dice_in_use_for_weapons(ch);
+  
+  if (off > skill_dice) {    
+    send_to_char(ch, "You're not skilled enough with %s, so your offense pool is capped at %d.\r\n", skills[skill_num].name, skill_dice);
+    off = skill_dice;
   }
   
   total -= ch->real_abils.offense_pool = GET_OFFENSE(ch) = MIN(total, off);

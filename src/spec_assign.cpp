@@ -49,27 +49,50 @@ struct teach_data teachers[] = {
                       // Begin NERP teachers.
                        { 1001, { SKILL_BR_EDGED, SKILL_BR_POLEARM, SKILL_BR_CLUB, SKILL_BR_THROWINGWEAPONS, SKILL_BR_WHIPS, 
                          SKILL_BR_PROJECTILES, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "After about an hour of shuffling slides you feel you can now do "
-                         "your job safer.\r\n", AMATEUR },
-                       { 1002, { SKILL_BR_PISTOL, SKILL_BR_SHOTGUN, SKILL_BR_RIFLE, SKILL_BR_HEAVYWEAPON, SKILL_BR_SMG, 
+                         "your job safer.\r\n", ADVANCED },
+                       /*{ 1002, { SKILL_BR_PISTOL, SKILL_BR_SHOTGUN, SKILL_BR_RIFLE, SKILL_BR_HEAVYWEAPON, SKILL_BR_SMG, 
                          SKILL_BR_ARMOR, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "After about an hour of shuffling slides you feel you can now do your job "
-                         "safer.\r\n", AMATEUR }, 
+                         "safer.\r\n", AMATEUR },  */
                        { 1003, { SKILL_SINGING, SKILL_CHANTING, SKILL_DANCING, SKILL_INSTRUMENT, SKILL_ACTING, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                         "After about an hour of shuffling slides you feel you can now do your job safer.\r\n", AMATEUR },
+                         "After about an hour of shuffling slides you feel you can now do your job safer.\r\n", ADVANCED },
                        { 1004, { SKILL_OFFHAND_EDGED, SKILL_OFFHAND_CLUB, SKILL_OFFHAND_CYBERIMPLANTS, SKILL_OFFHAND_WHIP, 
                          SKILL_SPRAY_WEAPONS, SKILL_GUNCANE, SKILL_BRACERGUN, SKILL_BLOWGUN, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "After about an hour of "
-                         "shuffling slides you feel you can now do your job safer.\r\n", AMATEUR },
+                         "shuffling slides you feel you can now do your job safer.\r\n", ADVANCED },
                        { 1005, { SKILL_NAVI_LAND, SKILL_NAVI_AIR, SKILL_NAVI_WATER, SKILL_PILOT_ROTORCRAFT, SKILL_PILOT_FIXEDWING,
                          SKILL_PILOT_VECTORTHRUST, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "After about an hour of shuffling slides you feel you can now do " 
-                         "your job safer.\r\n", AMATEUR },
+                         "your job safer.\r\n", ADVANCED },
                        { 1006, { SKILL_INTIMIDATION, SKILL_INTERROGATION, SKILL_LEADERSHIP, SKILL_SURVIVAL, SKILL_LEGERDEMAIN,
                          SKILL_TRACK, SKILL_DISGUISE, SKILL_SMALL_UNIT_TACTICS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "After about an hour of shuffling slides you "
-                         "feel you can now do your job safer.\r\n", AMATEUR },
+                         "feel you can now do your job safer.\r\n", ADVANCED },
                        { 1007, { SKILL_ANIMAL_HANDLING, SKILL_ANIMAL_TAMING, SKILL_CHEMISTRY, SKILL_PHARMA, 
-                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "After about an hour of shuffling slides you feel you can now do your job safer.\r\n", AMATEUR },
+                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "After about an hour of shuffling slides you feel you can now do your job safer.\r\n", ADVANCED },
                        { 1008, { SKILL_DEMOLITIONS, SKILL_DIVING, SKILL_PARACHUTING, SKILL_UNDERWATER_COMBAT, SKILL_LOCK_PICKING,
                          SKILL_RIDING, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "After about an hour of shuffling slides you feel you can now do your job "
-                         "safer.\r\n", AMATEUR },
+                         "safer.\r\n", ADVANCED },
                       // End NERP teachers.
+                      
+#ifdef USE_PRIVATE_CE_WORLD
+                       { 780, { SKILL_ASSAULT_RIFLES, SKILL_MACHINE_GUNS, SKILL_PISTOLS, SKILL_RIFLES, SKILL_SHOTGUNS,
+                         SKILL_SMG, SKILL_ASSAULT_CANNON, SKILL_BR_PISTOL, SKILL_BR_SHOTGUN, SKILL_BR_RIFLE,
+                         SKILL_BR_HEAVYWEAPON, SKILL_BR_SMG, 0, 0, 0, 0, 0, 0, 0, 0 },
+                         "Ma Deuce puts you through firearm drills that make you piss blood when you're done.\r\n", ADVANCED },
+                         
+  { 782, { SKILL_CLUBS, SKILL_CYBER_IMPLANTS, SKILL_EDGED_WEAPONS, SKILL_POLE_ARMS, SKILL_UNARMED_COMBAT,
+    SKILL_WHIPS_FLAILS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    "You polish and hone your melee skills and learn to flow like water.\r\n", ADVANCED },
+  { 784, { SKILL_PILOT_BIKE, SKILL_PILOT_CAR, SKILL_PILOT_TRUCK, SKILL_BR_BIKE,
+    SKILL_BR_DRONE, SKILL_BR_CAR, SKILL_BR_TRUCK, SKILL_GUNNERY, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    "You pick up a few new tricks of the trade and emerge more skilled than before.\r\n", ADVANCED },
+  { 786, { SKILL_COMPUTER, SKILL_BR_COMPUTER, SKILL_DATA_BROKERAGE, SKILL_CYBERTERM_DESIGN,
+    SKILL_ELECTRONICS, SKILL_BR_ELECTRONICS, SKILL_PROGRAM_COMBAT, SKILL_PROGRAM_CYBERTERM,
+    SKILL_PROGRAM_DEFENSIVE, SKILL_PROGRAM_OPERATIONAL, SKILL_PROGRAM_SPECIAL, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    "You spend hours training yourself in various electronic protocols.\r\n", ADVANCED },
+  { 788, { SKILL_CORPORATE_ETIQUETTE, SKILL_ELF_ETIQUETTE, SKILL_MEDIA_ETIQUETTE, SKILL_NEGOTIATION,
+    SKILL_STREET_ETIQUETTE, SKILL_TRIBAL_ETIQUETTE, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    "You spend a long time learning how to make small talk and directing conversations.\r\n", ADVANCED },
+  { 790, { SKILL_ATHLETICS, SKILL_BIOTECH, SKILL_POLICE_PROCEDURES, SKILL_STEALTH,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    "After hours of study and physical practice, you feel like you've learned\r\nsomething.\r\n.", ADVANCED },
+#endif
                       
                        { 2508, { SKILL_BIOTECH, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "After hours of medical research and instruction, you begin "
                          "to\r\nunderstand more of the basic biotech procedures.\r\n", AMATEUR },
@@ -159,7 +182,7 @@ struct teach_data teachers[] = {
      SKILL_RUSSIAN, SKILL_SALISH, SKILL_SIOUX, SKILL_SPANISH, SKILL_SPERETHIEL, SKILL_UTE }, "Socrates shows you the intricities "
        "of the language and you emerge with a greater understanding.\r\n", ADVANCED },
        
-   { 13499, { SKILL_COMPUTER, SKILL_ELECTRONICS, SKILL_BR_COMPUTER, SKILL_BR_ELECTRONICS, SKILL_PROGRAM_COMBAT, SKILL_PROGRAM_DEFENSIVE, SKILL_PROGRAM_CYBERTERM, SKILL_CYBERTERM_DESIGN, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "Brian explains some concepts you had yet to understand "
+   { 3125, { SKILL_COMPUTER, SKILL_ELECTRONICS, SKILL_BR_COMPUTER, SKILL_BR_ELECTRONICS, SKILL_PROGRAM_COMBAT, SKILL_PROGRAM_DEFENSIVE, SKILL_PROGRAM_CYBERTERM, SKILL_CYBERTERM_DESIGN, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "Brian explains some concepts you had yet to understand "
      "and\r\nyou feel like you've learned something.\r\n", AMATEUR },
      
    { 14608, { SKILL_PILOT_CAR, SKILL_MACHINE_GUNS, SKILL_ASSAULT_CANNON, SKILL_PILOT_BIKE, SKILL_PILOT_TRUCK, SKILL_GUNNERY, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -552,6 +575,23 @@ void assign_mobiles(void)
   SPECIAL(airport_guard);
   SPECIAL(axehead);
   SPECIAL(chargen_docwagon_checker);
+  SPECIAL(fatcop);
+  
+#ifdef USE_PRIVATE_CE_WORLD
+  SPECIAL(marksmanship_first);
+  SPECIAL(marksmanship_second);
+  SPECIAL(marksmanship_third);
+  SPECIAL(marksmanship_fourth);
+  SPECIAL(marksmanship_master);
+  SPECIAL(marksmanship_trainer);
+
+  ASSIGNMOB(22870, marksmanship_first);
+  ASSIGNMOB(4101, marksmanship_second);
+  ASSIGNMOB(24501, marksmanship_third);
+  ASSIGNMOB(3722, marksmanship_fourth);
+  ASSIGNMOB(5914, marksmanship_master);
+  ASSIGNMOB(779, marksmanship_trainer);
+#endif
 
   /* trainers */
   for (i = 0; trainers[i].vnum != 0; i++)
@@ -728,6 +768,9 @@ void assign_mobiles(void)
   
   /* Neophyte expansion */
   ASSIGNMOB(60599, chargen_docwagon_checker);
+  
+  /* Homewood */
+  ASSIGNMOB(30705, fatcop);
 #endif
 }
 
@@ -908,6 +951,7 @@ void assign_rooms(void)
   SPECIAL(chargen_spirit_combat_west);
   SPECIAL(archetype_chargen_magic_split);
   SPECIAL(archetype_chargen_reverse_magic_split);
+  SPECIAL(chargen_language_annex);
   SPECIAL(nerpcorpolis_lobby);
   SPECIAL(troll_barrier);
 
@@ -927,12 +971,17 @@ void assign_rooms(void)
   ASSIGNROOM(60562, auth_room);
   ASSIGNROOM(60514, chargen_career_archetype_paths);
   ASSIGNROOM(60594, chargen_spirit_combat_west);
+  
   /* CharGen - allow forgetting skills */
   ASSIGNROOM(60507, chargen_unpractice_skill);
   ASSIGNROOM(60508, chargen_unpractice_skill);
   ASSIGNROOM(60509, chargen_unpractice_skill);
   ASSIGNROOM(60513, chargen_unpractice_skill);
+  #ifdef REQUIRE_LANGUAGE_SKILL_POINTS_BE_USED_ONLY_FOR_LANGUAGE
+  ASSIGNROOM(60512, chargen_language_annex);
+  #else
   ASSIGNROOM(60512, chargen_unpractice_skill);
+  #endif
   ASSIGNROOM(60511, chargen_unpractice_skill);
   ASSIGNROOM(60510, chargen_unpractice_skill);
   ASSIGNROOM(60591, chargen_unpractice_skill);

@@ -80,7 +80,7 @@ extern void list_detailed_quest(struct char_data *ch, long rnum);
 extern int vnum_vehicles(char *searchname, struct char_data * ch);
 extern void disp_init_menu(struct descriptor_data *d);
 
-extern const char *pgroup_print_privileges(Bitfield privileges);
+extern const char *pgroup_print_privileges(Bitfield privileges, bool full);
 extern void nonsensical_reply(struct char_data *ch, const char *arg, const char *mode);
 extern void display_pockets_to_char(struct char_data *ch, struct char_data *vict);
 
@@ -810,6 +810,12 @@ ACMD(do_goto)
     send_to_char(ch, "Sorry, you need to be a level-%d immortal to go there.\r\n", location->staff_level_lock);
     return;
   }
+  
+  // Block level-2 goto for anything outside their edit zone.
+  if (builder_cant_go_there(ch, location)) {
+    send_to_char("Sorry, as a first-level builder you're only able to move to rooms you have edit access for.\r\n", ch);
+    return;
+  }
 
   if (POOFOUT(ch))
     act(POOFOUT(ch), TRUE, ch, 0, 0, TO_ROOM);
@@ -1196,7 +1202,7 @@ void do_stat_object(struct char_data * ch, struct obj_data * j)
   strcat(buf, j->in_obj ? j->in_obj->text.name : "None");
   strcat(buf, ", Carried by: ");
   if (j->carried_by)
-    strcat(buf, GET_CHAR_NAME(j->carried_by));
+    strcat(buf, GET_CHAR_NAME(j->carried_by) ? GET_CHAR_NAME(j->carried_by): "BROKEN");
   else
     strcat(buf, "Nobody");
   strcat(buf, ", Worn by: ");
@@ -1393,18 +1399,20 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Rank ^c%d/%d^n member of group '^c%s^n' (^c%s^n), with privileges:\r\n  ^c%s^n\r\n",
             GET_PGROUP_MEMBER_DATA(k)->rank, MAX_PGROUP_RANK,
             GET_PGROUP(k)->get_name(), GET_PGROUP(k)->get_alias(),
-            pgroup_print_privileges(GET_PGROUP_MEMBER_DATA(k)->privileges));
+            pgroup_print_privileges(GET_PGROUP_MEMBER_DATA(k)->privileges, FALSE));
   }
   
-  if (!IS_NPC(k) && access_level(ch, LVL_ADMIN))
+  if (!IS_NPC(k) && access_level(ch, LVL_ADMIN)) {
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Email: ^y%s^n  Multiplier: ^c%.2f^n\r\n", GET_EMAIL(k), (float) GET_CHAR_MULTIPLIER(k) / 100);
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "ShotsFired: ^c%d^n, ShotsTriggered: ^c%d^n\r\n", SHOTS_FIRED(k), SHOTS_TRIGGERED(k));
+  }
 
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Title: %s\r\n", (k->player.title ? k->player.title : "<None>"));
 
   switch (GET_TRADITION(k))
   {
   case TRAD_ADEPT:
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Tradition: Adept, Grade: ^c%d^n AddPoint Used: %d/%d", GET_GRADE(k), k->points.extrapp, (int)(GET_TKE(k) / 50) + 1);
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Tradition: Adept, Grade: ^c%d^n, AddPoint Used: %d/%d, points available %0.2f", GET_GRADE(k), k->points.extrapp, (int)(GET_TKE(k) / 50) + 1, ((float) GET_PP(k) / 100));
     if (BOOST(ch)[BOD][0] || BOOST(ch)[STR][0] || BOOST(ch)[QUI][0])
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[Boosts: BOD ^c%d^n STR ^c%d^c QUI ^c%d^n]", BOOST(ch)[BOD][1], BOOST(ch)[STR][1], BOOST(ch)[QUI][1]);
     break;
@@ -2112,6 +2120,19 @@ ACMD(do_vstat)
     send_to_char("A NEGATIVE number??\r\n", ch);
     return;
   }
+  
+  // Require that they have access to edit the zone they're statting.
+  for (int counter = 0; counter <= top_of_zone_table; counter++) {
+    if ((number >= (zone_table[counter].number * 100)) && (number <= (zone_table[counter].top))) {
+      if (!can_edit_zone(ch, zone_table[counter].number)) {
+        send_to_char("Sorry, you don't have access to edit that zone.\r\n", ch);
+        return;
+      }
+      break;
+    }
+  }
+  
+  
   if (is_abbrev(buf, "host")) {
     if ((r_num = real_host(number)) < 0) {
       send_to_char("There is no host with that number.\r\n", ch);
@@ -2678,9 +2699,17 @@ ACMD(do_invis)
     if (GET_INVIS_LEV(ch) > 0)
       perform_immort_vis(ch);
     /* Fixing from going max invis */
-    else
+    else if (GET_LEVEL(ch) >= LVL_EXECUTIVE)
       perform_immort_invis(ch, 2);
+    else
+      send_to_char(ch, "Due to player concerns, it is not possible for immortals under level %d to go invisible.", LVL_EXECUTIVE);
   } else {
+    if (GET_LEVEL(ch) < LVL_EXECUTIVE) {
+      send_to_char(ch, "Due to player concerns, it is not possible for immortals under level %d to go invisible.", LVL_EXECUTIVE);
+      perform_immort_vis(ch);
+      return;
+    }
+    
     level = atoi(arg);
     if (!access_level(ch, level)) {
       send_to_char("You can't go invisible above your own level.\r\n", ch);
@@ -3881,7 +3910,7 @@ ACMD(do_show)
       
       // Flag mobs with no stats
       if (total_stats == 0) {
-        strncat(buf, " has not had its attributes set yet", sizeof(buf) - strlen(buf) - 1);
+        strlcat(buf, " has not had its attributes set yet", sizeof(buf));
         printed = TRUE;
       }
       
@@ -4125,6 +4154,9 @@ ACMD(do_set)
                { "race", LVL_PRESIDENT, PC, NUMBER },
                { "rolls", LVL_PRESIDENT, PC, BINARY },
                { "multiplier", LVL_PRESIDENT, PC, NUMBER },
+               { "shotsfired", LVL_PRESIDENT, PC, NUMBER },
+               { "shotstriggered", LVL_PRESIDENT, PC, NUMBER },
+               { "powerpoints", LVL_PRESIDENT, PC, NUMBER },
                { "\n", 0, BOTH, MISC }
              };
 
@@ -4696,6 +4728,24 @@ ACMD(do_set)
     snprintf(buf, sizeof(buf),"%s changed %s's multiplier to %.2f.", GET_CHAR_NAME(ch), GET_NAME(vict), (float) GET_CHAR_MULTIPLIER(vict) / 100);
     mudlog(buf, ch, LOG_WIZLOG, TRUE );
     break;
+  case 76: /* shotsfired */
+    RANGE(0, 50000);
+    SHOTS_FIRED(vict) = value;
+    snprintf(buf, sizeof(buf),"%s changed %s's shots_fired to %d.", GET_CHAR_NAME(ch), GET_NAME(vict), value);
+    mudlog(buf, ch, LOG_WIZLOG, TRUE );
+    break;
+  case 77: /* shotstriggered */
+    RANGE(-1, 100);
+    SHOTS_TRIGGERED(vict) = value;
+    snprintf(buf, sizeof(buf),"%s changed %s's shots_triggered to %d.", GET_CHAR_NAME(ch), GET_NAME(vict), value);
+    mudlog(buf, ch, LOG_WIZLOG, TRUE );
+    break;
+  case 78: /* powerpoints */
+    RANGE(0, 100);
+    GET_PP(vict) = value;
+    snprintf(buf, sizeof(buf),"%s changed %s's powerpoints to %d.", GET_CHAR_NAME(ch), GET_NAME(vict), value);
+    mudlog(buf, ch, LOG_WIZLOG, TRUE );
+    break;
   default:
     snprintf(buf, sizeof(buf), "Can't set that!");
     break;
@@ -4798,7 +4848,7 @@ ACMD(do_logwatch)
     if (PRF_FLAGGED(ch, PRF_SYSLOG)) {
       send_to_char("You no longer watch the SysLog.\r\n", ch);
       PRF_FLAGS(ch).RemoveBit(PRF_SYSLOG);
-    } else if (access_level(ch, LVL_ADMIN)) {
+    } else if (access_level(ch, LVL_CONSPIRATOR)) {
       send_to_char("You will now see the SysLog.\r\n", ch);
       PRF_FLAGS(ch).SetBit(PRF_SYSLOG);
     } else {
@@ -5640,35 +5690,35 @@ bool restring_with_args(struct char_data *ch, char *argument, bool using_sysp) {
     send_to_char("Sorry, gun attachments and vehicle mods can't be restrung.\r\n", ch);
     return FALSE;
   }
+  if (GET_OBJ_TYPE(obj) == ITEM_CLIMBING && GET_OBJ_VAL(obj, 1) == CLIMBING_TYPE_WATER_WINGS) {
+    send_to_char("No amount of cosmetic changes could hide the garishness of water wings.\r\n", ch);
+    return FALSE;
+  }
   if (strlen(buf) >= LINE_LENGTH) {
     send_to_char(ch, "That restring is too long, please shorten it. The maximum length is %d characters.\r\n", LINE_LENGTH - 1);
     return FALSE;
   }
   
-  if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
+  if (using_sysp) {
+    if (GET_SYSTEM_POINTS(ch) < SYSP_RESTRING_COST) {
+      send_to_char(ch, "It costs %d system points to restring something, and you only have %d.\r\n",
+                   SYSP_RESTRING_COST,
+                   GET_SYSTEM_POINTS(ch));
+      return FALSE;
+    }
+    GET_SYSTEM_POINTS(ch) -= SYSP_RESTRING_COST;
+  } else if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
     if (!GET_RESTRING_POINTS(ch)) {
       send_to_char("You don't have enough restring points left to restring that.\r\n", ch);
       return FALSE;
     }
     GET_RESTRING_POINTS(ch)--;
-  } 
-  
-  else {
-    if (using_sysp) {
-      if (GET_SYSTEM_POINTS(ch) < SYSP_RESTRING_COST) {
-        send_to_char(ch, "It costs %d system points to restring something, and you only have %d.\r\n",
-                     SYSP_RESTRING_COST,
-                     GET_SYSTEM_POINTS(ch));
-        return FALSE;
-      }
-      GET_SYSTEM_POINTS(ch) -= SYSP_RESTRING_COST;
-    } else {
-      if (GET_KARMA(ch) < 250) {
-        send_to_char("You don't have enough karma to restring that. It costs 2.5 karma.\r\n", ch);
-        return FALSE;
-      }
-      GET_KARMA(ch) -= 250;
+  } else {
+    if (GET_KARMA(ch) < 250) {
+      send_to_char("You don't have enough karma to restring that. It costs 2.5 karma.\r\n", ch);
+      return FALSE;
     }
+    GET_KARMA(ch) -= 250;
   }
   
   snprintf(buf2, sizeof(buf2), "%s restrung '%s' to '%s'", GET_CHAR_NAME(ch), obj->text.name, buf);
@@ -6037,26 +6087,26 @@ int audit_zone_rooms_(struct char_data *ch, int zone_num, bool verbose) {
     
     // Check its strings.
     if (!strcmp(GET_ROOM_NAME(room), STRING_ROOM_TITLE_UNFINISHED)) {
-      strncat(buf, "  - Default room title used. This room will NOT be saved in the world files.\r\n", sizeof(buf) - strlen(buf) - 1);
+      strlcat(buf, "  - Default room title used. This room will NOT be saved in the world files.\r\n", sizeof(buf));
       issues++;
       printed = TRUE;
     }
     
     if (!strcmp(GET_ROOM_DESC(room), STRING_ROOM_DESC_UNFINISHED)) {
-      strncat(buf, "  - Default room desc used.\r\n", sizeof(buf) - strlen(buf) - 1);
+      strlcat(buf, "  - Default room desc used.\r\n", sizeof(buf));
       issues++;
       printed = TRUE;
     }
     
     if (room->matrix > 0) {
       if (real_host(room->matrix) < 1) {
-        strncat(buf, "  - Invalid Matrix host specified.\r\n", sizeof(buf) - strlen(buf) - 1);
+        strlcat(buf, "  - Invalid Matrix host specified.\r\n", sizeof(buf));
         issues++;
         printed = TRUE;
       }
       
       if (!strcmp(room->address, STRING_ROOM_JACKPOINT_NO_ADDR)) {
-        strncat(buf, "  - Default jackpoint address used.\r\n", sizeof(buf) - strlen(buf) - 1);
+        strlcat(buf, "  - Default jackpoint address used.\r\n", sizeof(buf));
         issues++;
         printed = TRUE;
       }
@@ -6064,32 +6114,38 @@ int audit_zone_rooms_(struct char_data *ch, int zone_num, bool verbose) {
     
     // Check its flags.
     if (ROOM_FLAGGED(room, ROOM_ENCOURAGE_CONGREGATION)) {
-      strncat(buf, "  - Socialization flag is set.\r\n", sizeof(buf) - strlen(buf) - 1);
+      strlcat(buf, "  - Socialization flag is set.\r\n", sizeof(buf));
       issues++;
       printed = TRUE;
     }
     
     if (ROOM_FLAGGED(room, ROOM_NOMAGIC)) {
-      strncat(buf, "  - !magic flag is set.\r\n", sizeof(buf) - strlen(buf) - 1);
+      strlcat(buf, "  - !magic flag is set.\r\n", sizeof(buf));
       issues++;
       printed = TRUE;
     }
     
     if (ROOM_FLAGGED(room, ROOM_ARENA)) {
-      strncat(buf, "  - Arena flag is set.\r\n", sizeof(buf) - strlen(buf) - 1);
+      strlcat(buf, "  - Arena flag is set.\r\n", sizeof(buf));
       issues++;
       printed = TRUE;
     }
     
     // Staff-only is allowed in the staff HQ area. Otherwise, flag it.
     if ((GET_ROOM_VNUM(room) < 10000 || GET_ROOM_VNUM(room) > 10099) && ROOM_FLAGGED(room, ROOM_STAFF_ONLY)) {
-      strncat(buf, "  - Staff-only flag is set.\r\n", sizeof(buf) - strlen(buf) - 1);
+      strlcat(buf, "  - Staff-only flag is set.\r\n", sizeof(buf));
       issues++;
       printed = TRUE;
     }
     
-    if (ROOM_FLAGS(room).AreAnySet(ROOM_HOUSE_CRASH, ROOM_BFS_MARK, ROOM_OLC, ROOM_NOQUIT, ROOM_ASTRAL, ENDBIT)) {
-      strncat(buf, "  - System-controlled or unimplemented flags are set.\r\n", sizeof(buf) - strlen(buf) - 1);
+    if (ROOM_FLAGS(room).AreAnySet(ROOM_HOUSE_CRASH, ROOM_BFS_MARK, ROOM_OLC, ROOM_ASTRAL, ENDBIT)) {
+      strlcat(buf, "  - System-controlled or unimplemented flags are set.\r\n", sizeof(buf));
+      issues++;
+      printed = TRUE;
+    }
+    
+    if (ROOM_FLAGS(room).IsSet(ROOM_NOQUIT)) {
+      strlcat(buf, "  - Room is flagged !QUIT.\r\n", sizeof(buf));
       issues++;
       printed = TRUE;
     }
@@ -6104,6 +6160,12 @@ int audit_zone_rooms_(struct char_data *ch, int zone_num, bool verbose) {
     
     if (room->staff_level_lock > 0) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - Staff-locked to level %d.\r\n", room->staff_level_lock);
+      issues++;
+      printed = TRUE;
+    }
+    
+    if ((IS_WATER(room) || ROOM_FLAGGED(room, ROOM_FALL)) && room->rating == 0) {
+      strlcat(buf, "  - Swim / Fall rating not set.\r\n", sizeof(buf));
       issues++;
       printed = TRUE;
     }
@@ -6212,9 +6274,17 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
       issues++;
     }
     
+    if (GET_BALLISTIC(mob) > 10 || GET_IMPACT(mob) > 10) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - has high armor ratings %db / %di^n.\r\n",
+               GET_BALLISTIC(mob),
+               GET_IMPACT(mob));
+      printed = TRUE;
+      issues++;
+    }
+    
     // Flag mobs with no stats
     if (total_stats == 0) {
-      strncat(buf, "  - has not had its attributes set yet.\r\n", sizeof(buf) - strlen(buf) - 1);
+      strlcat(buf, "  - has not had its attributes set yet.\r\n", sizeof(buf));
       printed = TRUE;
       issues++;
     }
@@ -6238,7 +6308,7 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
     }
     
     // Flag mobs with high nuyen.
-    if (GET_NUYEN(mob) > 100 || GET_BANK(mob) > 100) {
+    if (GET_NUYEN(mob) >= 200 || GET_BANK(mob) >= 200) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - high grinding rewards (%ld/%ld)^n.\r\n", GET_NUYEN(mob), GET_BANK(mob));
       printed = TRUE;
       issues++;
@@ -6253,7 +6323,7 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
     
     // Flag mobs with neutral (default) gender
     if (GET_SEX(mob) == SEX_NEUTRAL) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - neutral (default) gender^n (is this intentional?).\r\n");
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - neutral (default) gender (is this intentional?).\r\n");
       printed = TRUE;
       issues++;
     }
@@ -6807,6 +6877,26 @@ int audit_zone_commands_(struct char_data *ch, int zone_num, bool verbose) {
   if (verbose)
     send_to_char(ch, "\r\n^WAuditing zone commands for zone %d...^n\r\n", zone_table[zone_num].number);
   
+  bool zone_has_rooms = FALSE;
+  for (int vnum = zone_table[zone_num].number * 100; !zone_has_rooms && vnum <= zone_table[zone_num].top; vnum++)
+    zone_has_rooms = real_room(vnum) >= 0;
+  // No rooms? No worries.
+  if (!zone_has_rooms)
+    return 0;
+  
+  if (zone_table[zone_num].lifespan > 10) {
+    send_to_char(ch, "\r\nZone ^c%d^n (%s^n): Lifespan is high (^c%d^n > 10)", 
+                 zone_table[zone_num].number, 
+                 zone_table[zone_num].name,
+                 zone_table[zone_num].lifespan);
+  }
+  
+  if (zone_table[zone_num].reset_mode == 0) {
+    send_to_char(ch, "\r\nZone ^c%d^n (%s^n): Zone ^ydoes not reset^n", 
+                 zone_table[zone_num].number, 
+                 zone_table[zone_num].name);
+  }
+  
   for (int cmd_no = 0; cmd_no < zone_table[zone_num].num_cmds; cmd_no++) {
     
   }
@@ -6829,7 +6919,10 @@ ACMD(do_audit) {
   #define AUDIT_ALL_ZONES(func_suffix)                           \
   if (!str_cmp(arg1, #func_suffix)) {                            \
     for (zonenum = 0; zonenum <= top_of_zone_table; zonenum++) { \
-      if (!zone_table[zonenum].connected)                        \
+      if (!zone_table[zonenum].connected                         \
+          || zone_table[zonenum].number == 0                     \
+          || zone_table[zonenum].number == 10                    \
+          || zone_table[zonenum].number == 100)                  \
         continue;                                                \
       audit_zone_ ## func_suffix ## _(ch, zonenum, FALSE);       \
     }                                                            \
@@ -6888,4 +6981,87 @@ ACMD(do_coredump) {
   send_to_char("Creating core dump...\r\n", ch);
   int procnum = create_dump();
   send_to_char(ch, "Done. Child process %d has been created and crashed.\r\n", procnum);
+}
+
+ACMD(do_forceput) {
+  char arg1[MAX_INPUT_LENGTH], arg2[MAX_INPUT_LENGTH];
+  struct obj_data *obj = NULL, *cont = NULL;
+  int obj_dotmode, cont_dotmode;
+  
+  two_arguments(argument, arg1, arg2);
+  obj_dotmode = find_all_dots(arg1);
+  cont_dotmode = find_all_dots(arg2);
+
+  if (!*arg1) {
+    send_to_char("Force-put what in what?\r\n", ch);
+    return;
+  }
+  
+  if (obj_dotmode != FIND_INDIV) {
+    send_to_char("You can only force-put one thing at a time.\r\n", ch);
+    return;
+  }
+  
+  if (!(obj = get_obj_in_list_vis(ch, arg1, ch->carrying))) {
+    send_to_char(ch, "You aren't carrying %s %s.\r\n", AN(arg1), arg1);
+    return;
+  }
+  
+  if (!*arg2) {
+    send_to_char("You must specify a container to put it into.", ch);
+    return;
+  }
+  
+  if (cont_dotmode != FIND_INDIV) {
+    send_to_char("You can only force-put into one thing at a time.\r\n", ch);
+    return;
+  }
+  
+  if (!(cont = get_obj_in_list_vis(ch, arg2, ch->carrying))) {
+    send_to_char(ch, "You aren't carrying %s %s.\r\n", AN(arg2), arg2);
+    return;
+  }
+  
+  send_to_char(ch, "Bypassing all restrictions and calculations, you forcibly put %s in %s. Hope you know what you're doing!\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(cont));
+  obj_from_char(obj);
+  obj_to_obj(obj, cont);
+}
+
+ACMD(do_forceget) {
+  char arg1[MAX_INPUT_LENGTH], arg2[MAX_INPUT_LENGTH];
+  struct obj_data *obj = NULL, *cont = NULL;
+  int obj_dotmode, cont_dotmode;
+  
+  two_arguments(argument, arg1, arg2);
+  obj_dotmode = find_all_dots(arg1);
+  cont_dotmode = find_all_dots(arg2);
+
+  if (!*arg1 || !*arg2) {
+    send_to_char("Force-get what from what?\r\n", ch);
+    return;
+  }
+  
+  if (cont_dotmode != FIND_INDIV) {
+    send_to_char("You can only force-get from one thing at a time.\r\n", ch);
+    return;
+  }
+  
+  if (!(cont = get_obj_in_list_vis(ch, arg2, ch->carrying))) {
+    send_to_char(ch, "You aren't carrying %s %s.\r\n", AN(arg2), arg2);
+    return;
+  }
+  
+  if (obj_dotmode != FIND_INDIV) {
+    send_to_char("You can only force-get one thing at a time.\r\n", ch);
+    return;
+  }
+  
+  if (!(obj = get_obj_in_list_vis(ch, arg1, cont->contains))) {
+    send_to_char(ch, "%s doesn't have %s %s in it.\r\n", capitalize(GET_OBJ_NAME(cont)), AN(arg1), arg1);
+    return;
+  }  
+  
+  send_to_char(ch, "Bypassing all restrictions and calculations, you forcibly get %s from %s. Hope you know what you're doing!\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(cont));
+  obj_from_obj(obj);
+  obj_to_char(obj, ch);
 }

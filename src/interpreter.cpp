@@ -181,6 +181,8 @@ ACMD_DECLARE(do_flip);
 ACMD_DECLARE(do_focus);
 ACMD_DECLARE(do_follow);
 ACMD_DECLARE(do_force);
+ACMD_DECLARE(do_forceget);
+ACMD_DECLARE(do_forceput);
 ACMD_DECLARE(do_forget);
 ACMD_DECLARE(do_fuckups);
 ACMD_DECLARE(do_gecho);
@@ -452,7 +454,7 @@ struct command_info cmd_info[] =
     { "afk"      , POS_DEAD    , do_afk      , 0, 0 },
     { "ammo"     , POS_LYING   , do_ammo     , 0, 0 },
     { "assense"  , POS_LYING   , do_assense  , 0, 0 },
-    { "at"       , POS_DEAD    , do_at       , LVL_BUILDER, 0 },
+    { "at"       , POS_DEAD    , do_at       , LVL_EXECUTIVE, 0 },
     { "attach"   , POS_RESTING , do_attach   , 0, 0 },
 #ifdef SELFADVANCE
     // Allows running an unattended test port where anyone can bump themselves up to level 9.
@@ -556,6 +558,8 @@ struct command_info cmd_info[] =
     { "extend"   , POS_SITTING , do_retract  , 0, 0 },
 
     { "force"    , POS_SLEEPING, do_force    , LVL_CONSPIRATOR, 0 },
+    { "forceget" , POS_SLEEPING, do_forceget , LVL_PRESIDENT, 0 },
+    { "forceput" , POS_SLEEPING, do_forceput , LVL_PRESIDENT, 0 },
     { "forget"   , POS_DEAD    , do_forget   , 0, 0 },
     { "fill"     , POS_SITTING , do_pour     , 0, SCMD_FILL },
     { "finger"   , POS_DEAD    , do_last     , 0, SCMD_FINGER },
@@ -583,7 +587,7 @@ struct command_info cmd_info[] =
     { "hcontrol" , POS_DEAD    , do_hcontrol , LVL_EXECUTIVE, 0 },
     { "heal"     , POS_STANDING, do_heal     , 0, 0 },
     { "hedit"    , POS_DEAD    , do_hedit    , LVL_BUILDER, 0 },
-    { "helpedit" , POS_DEAD    , do_helpedit , LVL_DEVELOPER, 0 },
+    { "helpedit" , POS_DEAD    , do_helpedit , LVL_FIXER, 0 },
     { "helpexport",POS_DEAD    , do_helpexport, LVL_DEVELOPER, 0 },
     { "hit"      , POS_FIGHTING, do_hit      , 0, SCMD_HIT },
     { "highlight", POS_DEAD    , do_highlight, 0, 0 },
@@ -602,7 +606,7 @@ struct command_info cmd_info[] =
     { "iclist"   , POS_DEAD    , do_iclist   , LVL_BUILDER, 0 },
     { "iclone"   , POS_DEAD    , do_iclone   , LVL_BUILDER, 0 },
     { "idea"     , POS_DEAD    , do_gen_write, 0, SCMD_IDEA },
-    { "idelete"  , POS_DEAD    , do_idelete  , LVL_PRESIDENT, 0 },
+    //{ "idelete"  , POS_DEAD    , do_idelete  , LVL_PRESIDENT, 0 },
     { "iedit"    , POS_DEAD    , do_iedit    , LVL_BUILDER, 0 },
     { "ignore"   , POS_DEAD    , do_ignore   , 0, 0 },
     { "ilist"    , POS_DEAD    , do_ilist    , LVL_BUILDER, 0 },
@@ -682,7 +686,7 @@ struct command_info cmd_info[] =
     { "penalize" , POS_DEAD    , do_penalize , LVL_FIXER, 0 },
     { "perceive" , POS_LYING   , do_astral   , 0, SCMD_PERCEIVE },
     { "perfmon"  , POS_DEAD    , do_perfmon  , LVL_ADMIN, 0 },
-//    { "pgroup"   , POS_LYING   , do_pgroup   , 0, 0 },
+    { "pgroup"   , POS_LYING   , do_pgroup   , 0, 0 },
     { "phone"    , POS_LYING   , do_phone    , 0, 0 },
     { "phonelist", POS_DEAD    , do_phonelist, LVL_BUILDER, 0 },
     { "photo"    , POS_RESTING , do_photo    , 0, 0 },
@@ -743,6 +747,7 @@ struct command_info cmd_info[] =
     { "return"   , POS_DEAD    , do_return   , 0, 0 },
     { "rlist"    , POS_DEAD    , do_rlist    , LVL_BUILDER, 0 },
     { "room"     , POS_DEAD    , do_room     , LVL_BUILDER, 0 },
+    { "roll"     , POS_DEAD    , do_dice     , 0, 0 },
     { "rpe"      , POS_DEAD    , do_wizutil  , LVL_ADMIN, SCMD_RPE },
     { "rpetalk"  , POS_DEAD    , do_gen_comm , 0, SCMD_RPETALK },
     { "redit"    , POS_DEAD    , do_redit    , LVL_BUILDER, 0 },
@@ -859,7 +864,7 @@ struct command_info cmd_info[] =
     { "who"      , POS_DEAD    , do_who      , 0, 0 },
     { "whoami"   , POS_DEAD    , do_gen_ps   , 0, SCMD_WHOAMI },
     { "whotitle" , POS_DEAD    , do_wiztitle , LVL_BUILDER, SCMD_WHOTITLE },
-    { "where"    , POS_RESTING , do_where    , 1, LVL_PRESIDENT },
+    { "where"    , POS_DEAD    , do_where    , 1, LVL_PRESIDENT },
     { "whisper"  , POS_LYING   , do_spec_comm, 0, SCMD_WHISPER },
     { "wield"    , POS_RESTING , do_wield    , 0, 0 },
     { "wimpy"    , POS_DEAD    , do_wimpy    , 0, 0 },
@@ -1066,7 +1071,6 @@ struct command_info cmd_info[] =
     { "rtfm"     , POS_STANDING, do_action   , 0, 0 },
     { "roar"     , POS_RESTING , do_action   , 0, 0 },
     { "rofl"     , POS_RESTING , do_action   , 0, 0 },
-    { "roll"     , POS_LYING   , do_action   , 0, 0 },
     { "rose"     , POS_STANDING, do_action   , 0, 0 },
     { "rub"      , POS_RESTING , do_action   , 0, 0 },
     { "ruffle"   , POS_STANDING, do_action   , 0, 0 },
@@ -1650,6 +1654,8 @@ ACMD(do_alias)
 
   if (IS_NPC(ch) && !(ch->desc && ch->desc->original))
     return;
+    
+  ch->alias_dirty_bit = TRUE;
 
   repl = any_one_arg(argument, arg);
 
@@ -2216,7 +2222,7 @@ int perform_dupe_check(struct descriptor_data *d)
     return 0;
 
   /* Okay, we've found a target.  Connect d to target. */
-  Mem->DeleteCh(d->character); /* get rid of the old char */
+  extract_char(d->character); /* get rid of the old char */
   d->character = target;
   d->character->desc = d;
   d->original = NULL;
@@ -2411,8 +2417,12 @@ void nanny(struct descriptor_data * d, char *arg)
         d->invalid_name++;
         if (d->invalid_name > 3)
           close_socket(d);
-        else
-          SEND_TO_Q("Invalid name, please try another. Names must be standard letters with no spaces, numbers, or punctuation, and cannot be a reserved word.\r\nName: ", d);
+        else {
+          snprintf(buf, sizeof(buf), "Invalid name '%s', please try another. Names must be standard letters with no spaces, numbers, or punctuation, and cannot be a reserved word.\r\nName: ", arg);
+          SEND_TO_Q(buf, d);
+        }
+        
+          
         return;
       }
       if (does_player_exist(tmp_name)) {
@@ -2506,14 +2516,22 @@ void nanny(struct descriptor_data * d, char *arg)
     // Clear their idle counter so they don't get dropped mysteriously.
     d->idle_tics = 0;
 
-    if (!*arg)
+    if (!*arg) {
       close_socket(d);
-    else if (str_cmp(arg, "abort") == 0) {
+      return;
+    }
+  
+    if (str_cmp(arg, "abort") == 0) {
       /* turn echo back on */
       echo_on(d);
       
+      d->character->desc = NULL;
+      extract_char(d->character);
+      d->character = NULL;
+      
       SEND_TO_Q("OK, let's try a different name.\r\n\r\nWhat's your handle, chummer? ", d);
       STATE(d) = CON_GET_NAME;
+      return;
     } else {
       if (!validate_and_update_password(arg, GET_PASSWD(d->character))) {
         snprintf(buf, sizeof(buf), "Bad PW: %s [%s]",
@@ -3000,7 +3018,7 @@ void log_command(struct char_data *ch, const char *argument, const char *tcname)
     
   // Discard directional commands and other high-noise things that can't affect other players.
   const char *discard_commands[] = {
-    "north", "south", "east", "west",
+    "north", "south", "east", "west", "up", "down",
     "northeast", "ne",
     "southeast", "se",
     "southwest", "sw",

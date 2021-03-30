@@ -36,9 +36,7 @@ extern void dominator_mode_switch(struct char_data *ch, struct obj_data *obj, in
 extern float get_bulletpants_weight(struct char_data *ch);
 
 // Corpse saving externs.
-extern void House_save(struct house_control_rec *house, const char *file_name, long rnum);
 extern void write_world_to_disk(int vnum);
-extern bool Storage_get_filename(vnum_t vnum, char *filename, int filename_size);
 
 extern SPECIAL(fence);
 extern SPECIAL(hacker);
@@ -474,12 +472,12 @@ ACMD(do_put)
     }
     
     // If it's got a creator set, it's not done yet.
-    if (GET_AMMOBOX_CREATOR(cont)) {
+    if (GET_AMMOBOX_INTENDED_QUANTITY(cont) > 0) {
       send_to_char(ch, "%s still has disassembled rounds in it. It needs to be completed first.\r\n", GET_OBJ_NAME(cont));
       return;
     }
     
-    if (GET_AMMOBOX_CREATOR(obj)) {
+    if (GET_AMMOBOX_INTENDED_QUANTITY(obj) > 0) {
       send_to_char(ch, "%s still has disassembled rounds in it. It needs to be completed first.\r\n", GET_OBJ_NAME(obj));
       return;
     }
@@ -816,7 +814,7 @@ void perform_get_from_container(struct char_data * ch, struct obj_data * obj,
       get_check_money(ch, obj);
       
       if (cont->obj_flags.extra_flags.IsSet(ITEM_CORPSE) && GET_OBJ_VAL(cont, 4) && !cont->contains) {
-        if (ROOM_FLAGGED(cont->in_room, ROOM_CORPSE_SAVE_HACK)) {
+        if (cont->in_room && ROOM_FLAGGED(cont->in_room, ROOM_CORPSE_SAVE_HACK)) {
           bool should_clear_flag = TRUE;
           
           // Iterate through items in room, making sure there are no other corpses.
@@ -1331,19 +1329,26 @@ ACMD(do_get)
           } else {
             veh->usedload -= GET_OBJ_VAL(cont, 1);
             GET_MOD(veh, found) = NULL;
-            int rnum = GET_VEH_RNUM(veh);
+            int rnum = real_vehicle(GET_VEH_VNUM(veh));
             if (rnum <= -1)
               send_to_char(ch, "Bro, your vehicle is _fucked_. Contact staff.\r\n");
+            
             for (found = 0; found < MAX_OBJ_AFFECT; found++) {
+              affect_veh(veh, cont->affected[found].location, -(cont->affected[found].modifier));
+              
               switch (cont->affected[found].location) {
                 case VAFF_SEN:
-                  affect_veh(veh, VAFF_SEN, rnum >= 0 ? veh_proto[rnum].sensor : 0);
+                  if (veh->sensor <= 0)
+                    affect_veh(veh, VAFF_SEN, rnum >= 0 ? veh_proto[rnum].sensor : 0);
+                  break;
                 case VAFF_AUTO:
-                  affect_veh(veh, VAFF_AUTO, rnum >= 0 ? veh_proto[rnum].autonav : 0);
+                  if (veh->autonav <= 0)
+                    affect_veh(veh, VAFF_AUTO, rnum >= 0 ? veh_proto[rnum].autonav : 0);
+                  break;
                 case VAFF_PILOT:
-                  affect_veh(veh, VAFF_PILOT, rnum >= 0 ? veh_proto[rnum].pilot : 0);
-                default:
-                  affect_veh(veh, cont->affected[found].location, -(cont->affected[found].modifier));
+                  if (veh->pilot <= 0)
+                    affect_veh(veh, VAFF_PILOT, rnum >= 0 ? veh_proto[rnum].pilot : 0);
+                  break;
               }
             }
           }
@@ -1359,6 +1364,17 @@ ACMD(do_get)
                                                                  GET_OBJ_TYPE(cont) == ITEM_DECK_ACCESSORY))) {
         snprintf(buf, sizeof(buf), "$p is not a %s", (!cyberdeck ? "container" : "cyberdeck"));
         act(buf, FALSE, ch, cont, 0, TO_CHAR);
+        
+        if (access_level(ch, LVL_ADMIN) && !str_cmp(arg1, "force-all")) {
+          send_to_char("Hoping you know what you're doing, you forcibly remove its contents anyways.\r\n", ch);
+          struct obj_data *next;
+          for (struct obj_data *contained = cont->contains; contained; contained = next) {
+            next = contained->next_content;
+            obj_from_obj(contained);
+            obj_to_char(contained, ch);
+            send_to_char(ch, "You retrieve %s from %s.\r\n", GET_OBJ_NAME(contained), GET_OBJ_NAME(cont));
+          }
+        }
       } else {
         get_from_container(ch, cont, arg1, mode);
       }
@@ -1910,6 +1926,7 @@ void weight_change_object(struct obj_data * obj, float weight)
   struct obj_data *tmp_obj = NULL;
   struct char_data *tmp_ch = NULL;
   struct veh_data *tmp_veh = NULL;
+  int worn_on = -1;
 
   // Remove it from its container (subtracting its current weight from the container's values).
   if ((tmp_ch = obj->carried_by))
@@ -1918,6 +1935,8 @@ void weight_change_object(struct obj_data * obj, float weight)
     obj_from_obj(obj);
   else if ((tmp_veh = obj->in_veh))
     obj_from_room(obj);
+  else if (obj->worn_by && (worn_on = obj->worn_on) >= 0)
+    unequip_char((tmp_ch = obj->worn_by), obj->worn_on, TRUE);
   
   // If none of the above are true, then this object is either in a room or is being juggled by the code somewhere (ex: zoneloading). Either way, no parent containers need updating.
   
@@ -1925,9 +1944,12 @@ void weight_change_object(struct obj_data * obj, float weight)
   GET_OBJ_WEIGHT(obj) = MAX(0, GET_OBJ_WEIGHT(obj) + weight);
   
   // Return it to its container, re-adding its weight.
-  if (tmp_ch)
-    obj_to_char(obj, tmp_ch);
-  else if (tmp_obj)
+  if (tmp_ch) {
+    if (worn_on >= 0)
+      equip_char(tmp_ch, obj, worn_on);
+    else
+      obj_to_char(obj, tmp_ch);
+  } else if (tmp_obj)
     obj_to_obj(obj, tmp_obj);
   else if (tmp_veh)
     obj_to_veh(obj, tmp_veh);
@@ -2004,7 +2026,7 @@ ACMD(do_drink)
     return;
   }
   if (!(temp = get_obj_in_list_vis(ch, arg, ch->carrying))) {
-    if (!(temp = get_obj_in_list_vis(ch, arg, ch->in_room->contents))) {
+    if (!ch->in_room || !(temp = get_obj_in_list_vis(ch, arg, ch->in_room->contents))) {
       send_to_char(ch, "You don't see anything named '%s' here.\r\n", arg);
       return;
     } else
@@ -2385,7 +2407,7 @@ void wear_message(struct char_data * ch, struct obj_data * obj, int where)
                                 "You wear $p around your waist."},
 
                                {"$n puts $p around $s thigh.",
-                                "You put $p around your thigh"},
+                                "You put $p around your thigh."},
 
                                {"$n puts $p around $s thigh.",
                                 "You put $p around your thigh."},
@@ -2435,6 +2457,8 @@ int can_wield_both(struct char_data *ch, struct obj_data *one, struct obj_data *
     return TRUE;
   if ((IS_GUN(GET_OBJ_VAL(one, 3)) && !IS_GUN(GET_OBJ_VAL(two, 3))) ||
       (IS_GUN(GET_OBJ_VAL(two, 3)) && !IS_GUN(GET_OBJ_VAL(one, 3))))
+    return FALSE;
+  else if (!IS_GUN(GET_OBJ_VAL(one, 3)) && !IS_GUN(GET_OBJ_VAL(two, 3)))
     return FALSE;
   else if (IS_OBJ_STAT(one, ITEM_TWOHANDS) || IS_OBJ_STAT(two, ITEM_TWOHANDS))
     return FALSE;
@@ -2658,21 +2682,22 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where, bool 
   else
     obj_from_char(obj);
   equip_char(ch, obj, where);
-  int total = 0;
   
   if (print_messages) {
-    if (GET_TOTALBAL(ch) > GET_QUI(ch))
-      total += GET_TOTALBAL(ch) - GET_QUI(ch);
-    else if (GET_TOTALIMP(ch) > GET_QUI(ch))
-      total += GET_TOTALIMP(ch) - GET_QUI(ch);
-    if (total >= GET_QUI(ch))
-      send_to_char("You are wearing so much armor that you can't move!\r\n", ch);
-    else if (total >= (float) GET_QUI(ch) * 3/4)
-      send_to_char("Your movement is severely restricted by your armor.\r\n", ch);
-    else if (total >= (float) GET_QUI(ch) / 2)
-      send_to_char("Your movement is restricted by your armor.\r\n", ch);
-    else if (total)
-      send_to_char("Your movement is mildly restricted by your armor.\r\n", ch);
+    switch (get_armor_penalty_grade(ch)) {
+      case ARMOR_PENALTY_TOTAL:
+        send_to_char("You are wearing so much armor that you can't move!\r\n", ch);
+        break;
+      case ARMOR_PENALTY_HEAVY:
+        send_to_char("Your movement is severely restricted by your armor.\r\n", ch);
+        break;
+      case ARMOR_PENALTY_MEDIUM:
+        send_to_char("Your movement is restricted by your armor.\r\n", ch);
+        break;
+      case ARMOR_PENALTY_LIGHT:
+        send_to_char("Your movement is mildly restricted by your armor.\r\n", ch);
+        break;
+    }
   }
 }
 
@@ -2713,9 +2738,9 @@ int find_eq_pos(struct char_data * ch, struct obj_data * obj, char *arg)
       "!RESERVED!",
       "belly",
       "waist",
-      "legs",
       "thigh",
-      "!RESERVED!",
+      "thigh",
+      "legs",
       "ankle",
       "!RESERVED!",
       "sock",
@@ -2858,6 +2883,14 @@ ACMD(do_wield)
   } else {
     if (!CAN_WEAR(obj, ITEM_WEAR_WIELD))
       send_to_char(ch, "You can't wield %s.\r\n", GET_OBJ_NAME(obj));
+    else if (GET_OBJ_TYPE(obj) == ITEM_WEAPON 
+             && !IS_GUN(GET_WEAPON_ATTACK_TYPE(obj)) 
+             && GET_WEAPON_FOCUS_BONDED_BY(obj) == GET_IDNUM(ch)
+             && GET_MAG(ch) * 2 < GET_WEAPON_FOCUS_RATING(obj)) 
+    {
+      send_to_char(ch, "%s is too powerful for you to wield!\r\n", capitalize(GET_OBJ_NAME(obj)));
+      return;
+    }
     else if (GET_OBJ_VAL(obj, 4) >= SKILL_MACHINE_GUNS && GET_OBJ_VAL(obj, 4) <= SKILL_ASSAULT_CANNON &&
              (GET_STR(ch) < 8 || GET_BOD(ch) < 8)) {
       bool found = FALSE;
@@ -2913,10 +2946,15 @@ void perform_remove(struct char_data * ch, int pos)
     act("$p: you can't carry that many items!", FALSE, ch, obj, 0, TO_CHAR);
     return;
   }
+  
+  int previous_armor_penalty = get_armor_penalty_grade(ch);
 
   obj_to_char(unequip_char(ch, pos, TRUE), ch);
   act("You stop using $p.", FALSE, ch, obj, 0, TO_CHAR);
   act("$n stops using $p.", TRUE, ch, obj, 0, TO_ROOM);
+  
+  if (previous_armor_penalty && !get_armor_penalty_grade(ch))
+    send_to_char("You can move freely again.\r\n", ch);
 
   // Unready the holster.
   if (GET_OBJ_TYPE(obj) == ITEM_HOLSTER)
@@ -3278,6 +3316,9 @@ int draw_from_readied_holster(struct char_data *ch, struct obj_data *holster) {
     return 0;
   }
   
+  if (!CAN_WEAR(contents, ITEM_WEAR_WIELD))
+    return 0;
+  
   // Did we fill up our hands, or do we only have one free hand for a two-handed weapon? Skip.
   if ((GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD)) || ((GET_EQ(ch, WEAR_WIELD) || GET_EQ(ch, WEAR_HOLD)) && IS_OBJ_STAT(contents, ITEM_TWOHANDS)))
     return 0;
@@ -3285,6 +3326,14 @@ int draw_from_readied_holster(struct char_data *ch, struct obj_data *holster) {
   // TODO: What does this check mean?
   if (GET_OBJ_VAL(holster, 4) >= SKILL_MACHINE_GUNS && GET_OBJ_VAL(holster, 4) <= SKILL_ASSAULT_CANNON)
     return 0;
+    
+  if (GET_OBJ_TYPE(contents) == ITEM_WEAPON 
+           && !IS_GUN(GET_WEAPON_ATTACK_TYPE(contents)) 
+           && GET_WEAPON_FOCUS_BONDED_BY(contents) == GET_IDNUM(ch)
+           && GET_MAG(ch) * 2 < GET_WEAPON_FOCUS_RATING(contents)) 
+  {
+    return 0;
+  }
   
   int where = 0;
   if (!GET_EQ(ch, WEAR_WIELD) && can_wield_both(ch, GET_EQ(ch, WEAR_HOLD), contents))

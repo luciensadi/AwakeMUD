@@ -1527,7 +1527,7 @@ ACMD(do_mount)
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (Manned by %s)", (found_mem(GET_MEMORY(ch), obj->worn_by) ?
               (found_mem(GET_MEMORY(ch), obj->worn_by))->mem
               : GET_NAME(obj->worn_by)));
-    strcat(buf, "\r\n");
+    strlcat(buf, "\r\n", sizeof(buf));
     send_to_char(buf, ch);
     i++;
   }

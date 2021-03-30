@@ -72,7 +72,7 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 #define MAX_CAB_FARE  250
 
 // What should the level of new characters' starting language be?
-#define STARTING_LANGUAGE_SKILL_LEVEL  6
+#define STARTING_LANGUAGE_SKILL_LEVEL  10
 
 // How many restring points should newbies get to use in chargen?
 #define STARTING_RESTRING_POINTS  5
@@ -113,9 +113,18 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 #define ELEVATOR_BUTTON_PRESS_CHANCE 20
 
 // Wizlock message.
-#define WIZLOCK_MSG "Sorry, new characters can't be created at the moment. In the meantime, join our Discord at https://discord.gg/q5VCMkv!"
+#define WIZLOCK_MSG "Sorry, the game is currently locked. While you wait for it to open, feel free to join our Discord at https://discord.gg/q5VCMkv!"
 
 // Discord server URL. Comment out if you don't have one.
 #define DISCORD_SERVER_URL "https://discord.gg/q5VCMkv"
+
+// Credsticks should generate every 1:X kills, and have X * kill's credits. Setting this too high will cause things like wageslaves having silver credsticks, so be cautious.
+#define CREDSTICK_RARITY_FACTOR 10
+
+// At what point will the Marksman quest trigger?
+#define MARKSMAN_QUEST_SHOTS_FIRED_REQUIREMENT 2000
+
+// How likely are you to lose stats on death? 1/X where X is this value.
+#define DEATH_PENALTY_CHANCE 25
 
 #endif

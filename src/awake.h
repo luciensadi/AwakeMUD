@@ -1067,49 +1067,49 @@ enum {
 
 /* item types: used by obj_data.obj_flags.type_flag */
 
-#define ITEM_LIGHT          1        /* Item is a light source            */
-#define ITEM_WORKSHOP       2        /* Item is a workshop (veh, etc)     */
-#define ITEM_CAMERA         3        /* Item is a camera                  */
-#define ITEM_PART            4        /* Item is a component of something  */
-#define ITEM_WEAPON         5        /* Item is a weapon                  */
-#define ITEM_FIREWEAPON     6        /* Item is bow/xbow                  */
-#define ITEM_MISSILE        7        /* Item is arrow/bolt                */
-#define ITEM_CUSTOM_DECK    8        /* Item is a custom cyberdeck        */
-#define ITEM_GYRO           9        /* Item is Gyroscopic Harness        */
-#define ITEM_DRUG           10       /* Item is a drug                    */
-#define ITEM_WORN           11       /* Item is worn, includes armor      */
-#define ITEM_OTHER          12       /* Misc object                       */
-#define ITEM_MAGIC_TOOL     13       /* Item is a library, etc            */
-#define ITEM_DOCWAGON       14       /* Item is a docwagon contract       */
-#define ITEM_CONTAINER      15       /* Item is a container               */
-#define ITEM_RADIO          16       /* Item is radio                     */
-#define ITEM_DRINKCON       17       /* Item is a drink container         */
-#define ITEM_KEY            18       /* Item is a key                     */
-#define ITEM_FOOD           19       /* Item is food                      */
-#define ITEM_MONEY          20       /* Item is money (nuyen/credstick)   */
-#define ITEM_PHONE          21       /* Item is a phone                   */
-#define ITEM_BIOWARE        22       /* Item is bioware                   */
-#define ITEM_FOUNTAIN       23       /* Item is a fountain                */
-#define ITEM_CYBERWARE      24       /* Item is cyberware                 */
-#define ITEM_CYBERDECK      25       /* Item is a cyberdeck               */
-#define ITEM_PROGRAM        26       /* Item is a program                 */
-#define ITEM_GUN_MAGAZINE   27       /* Item is a gun magazine            */
-#define ITEM_GUN_ACCESSORY  28       /* Item is a gun accessory           */
-#define ITEM_SPELL_FORMULA  29       /* Item is a spell formula           */
-#define ITEM_FOCUS          31       /* magical foci of various types     */
-#define ITEM_PATCH          32       /* type of slap patch                */
-#define ITEM_CLIMBING       33       /* climbing gear                     */
-#define ITEM_QUIVER         34       /* holds projectiles                 */
-#define ITEM_DECK_ACCESSORY 35       /* decking accessory                 */
-#define ITEM_RCDECK         36       /* remote control deck               */
-#define ITEM_CHIP           37
-#define ITEM_MOD             38
-#define ITEM_HOLSTER         39
-#define ITEM_DESIGN          40
-#define ITEM_QUEST          41
-#define ITEM_GUN_AMMO        42
-#define ITEM_KEYRING        43
-#define NUM_ITEMS            44
+#define ITEM_LIGHT              1        /* Item is a light source            */
+#define ITEM_WORKSHOP           2        /* Item is a workshop (veh, etc)     */
+#define ITEM_CAMERA             3        /* Item is a camera                  */
+#define ITEM_PART               4        /* Item is a component of something  */
+#define ITEM_WEAPON             5        /* Item is a weapon                  */
+#define ITEM_FIREWEAPON         6        /* Item is bow/xbow                  */
+#define ITEM_MISSILE            7        /* Item is arrow/bolt                */
+#define ITEM_CUSTOM_DECK        8        /* Item is a custom cyberdeck        */
+#define ITEM_GYRO               9        /* Item is Gyroscopic Harness        */
+#define ITEM_DRUG               10       /* Item is a drug                    */
+#define ITEM_WORN               11       /* Item is worn, includes armor      */
+#define ITEM_OTHER              12       /* Misc object                       */
+#define ITEM_MAGIC_TOOL         13       /* Item is a library, etc            */
+#define ITEM_DOCWAGON           14       /* Item is a docwagon contract       */
+#define ITEM_CONTAINER          15       /* Item is a container               */
+#define ITEM_RADIO              16       /* Item is radio                     */
+#define ITEM_DRINKCON           17       /* Item is a drink container         */
+#define ITEM_KEY                18       /* Item is a key                     */
+#define ITEM_FOOD               19       /* Item is food                      */
+#define ITEM_MONEY              20       /* Item is money (nuyen/credstick)   */
+#define ITEM_PHONE              21       /* Item is a phone                   */
+#define ITEM_BIOWARE            22       /* Item is bioware                   */
+#define ITEM_FOUNTAIN           23       /* Item is a fountain                */
+#define ITEM_CYBERWARE          24       /* Item is cyberware                 */
+#define ITEM_CYBERDECK          25       /* Item is a cyberdeck               */
+#define ITEM_PROGRAM            26       /* Item is a program                 */
+#define ITEM_GUN_MAGAZINE       27       /* Item is a gun magazine            */
+#define ITEM_GUN_ACCESSORY      28       /* Item is a gun accessory           */
+#define ITEM_SPELL_FORMULA      29       /* Item is a spell formula           */
+#define ITEM_FOCUS              31       /* magical foci of various types     */
+#define ITEM_PATCH              32       /* type of slap patch                */
+#define ITEM_CLIMBING           33       /* climbing gear                     */
+#define ITEM_QUIVER             34       /* holds projectiles                 */
+#define ITEM_DECK_ACCESSORY     35       /* decking accessory                 */
+#define ITEM_RCDECK             36       /* remote control deck               */
+#define ITEM_CHIP               37
+#define ITEM_MOD                38
+#define ITEM_HOLSTER            39
+#define ITEM_DESIGN             40
+#define ITEM_QUEST              41
+#define ITEM_GUN_AMMO           42
+#define ITEM_KEYRING            43
+#define NUM_ITEMS               44
 
 
 /* take/wear flags: used by obj_data.obj_flags.wear_flags */
@@ -1144,34 +1144,35 @@ enum {
 /* extra object flags: used by obj_data.obj_flags.extra_flags */
 /* see: https://github.com/luciensadi/AwakeMUD/wiki/Item-Extra-Flags */
 
-#define ITEM_GLOW           0     /* Item is glowing              */
-#define ITEM_HUM            1     /* Item is humming              */
-#define ITEM_NORENT         2     /* Item cannot be rented        */
-#define ITEM_NODONATE       3     /* Item cannot be donated       */
-#define ITEM_NOINVIS        4     /* Item cannot be made invis    */
-#define ITEM_INVISIBLE      5     /* Item is invisible            */
-#define ITEM_MAGIC          6     /* Item is magical              */
-#define ITEM_NODROP         7     /* Item is cursed: can't drop   */
-#define ITEM_FORMFIT        8     /* Item is blessed              */
-#define ITEM_NOSELL         9     /* Shopkeepers won't touch it   */
-#define ITEM_CORPSE         10    /* Item is a corpse             */
-#define ITEM_GODONLY        11    /* Only a god may use this item */
-#define ITEM_TWOHANDS       12    /* weapon takes 2 hands to use */
-#define ITEM_COMPBURST      13    /* Weapon requires complex action to use burst fire */
-#define ITEM_VOLATILE       14    /* connected item loaded in ip zone */
-#define ITEM_WIZLOAD        15    /* item was loaded by an immortal */
-#define ITEM_NOTROLL        16
-#define ITEM_NOELF          17
-#define ITEM_NODWARF        18
-#define ITEM_NOORK          19
-#define ITEM_NOHUMAN        20
-#define ITEM_SNIPER         21
-#define ITEM_IMMLOAD        22
-#define ITEM_NERPS          23    /* Item does not actually have any coded effect. */
-#define ITEM_BLOCKS_ARMOR   24    // Can't wear other armors with this.
-#define ITEM_HARDENED_ARMOR 25    // Applies hardened armor rules (deflect attacks with power <= armor rating) CC p51
-#define ITEM_DONT_TOUCH     26    // Warns strenuously on editing.
-#define ITEM_EXTRA_MAX      27
+#define ITEM_GLOW               0     /* Item is glowing              */
+#define ITEM_HUM                1     /* Item is humming              */
+#define ITEM_NORENT             2     /* Item cannot be rented        */
+#define ITEM_NODONATE           3     /* Item cannot be donated       */
+#define ITEM_NOINVIS            4     /* Item cannot be made invis    */
+#define ITEM_INVISIBLE          5     /* Item is invisible            */
+#define ITEM_MAGIC              6     /* Item is magical              */
+#define ITEM_NODROP             7     /* Item is cursed: can't drop   */
+#define ITEM_FORMFIT            8     /* Item is blessed              */
+#define ITEM_NOSELL             9     /* Shopkeepers won't touch it   */
+#define ITEM_CORPSE             10    /* Item is a corpse             */
+#define ITEM_GODONLY            11    /* Only a god may use this item */
+#define ITEM_TWOHANDS           12    /* weapon takes 2 hands to use */
+#define ITEM_COMPBURST          13    /* Weapon requires complex action to use burst fire */
+#define ITEM_VOLATILE           14    /* connected item loaded in ip zone */
+#define ITEM_WIZLOAD            15    /* item was loaded by an immortal */
+#define ITEM_NOTROLL            16
+#define ITEM_NOELF              17
+#define ITEM_NODWARF            18
+#define ITEM_NOORK              19
+#define ITEM_NOHUMAN            20
+#define ITEM_SNIPER             21
+#define ITEM_IMMLOAD            22
+#define ITEM_NERPS              23    /* Item does not actually have any coded effect. */
+#define ITEM_BLOCKS_ARMOR       24    // Can't wear other armors with this.
+#define ITEM_HARDENED_ARMOR     25    // Applies hardened armor rules (deflect attacks with power <= armor rating) CC p51
+#define ITEM_DONT_TOUCH         26    // Warns strenuously on editing.
+#define ITEM_MAGIC_INCOMPATIBLE 27    // Incompatible with magic. Used for cyberware and bioware.
+#define ITEM_EXTRA_MAX          28
 
 /* Ammo types */ 
 #define AMMO_NORMAL     0
@@ -1196,6 +1197,7 @@ enum {
 #define TYPE_PARTS       3
 #define TYPE_COOKER       4
 
+#define MIN_DRUG 1
 #define DRUG_ACTH  1
 #define DRUG_HYPER  2
 #define DRUG_JAZZ  3
@@ -1337,54 +1339,56 @@ enum {
 #define GRADE_BETA  2
 #define GRADE_DELTA  3
 
-#define CYB_CHIPJACK    0
-#define CYB_DATAJACK    1
-#define CYB_DATALOCK    2
-#define CYB_KNOWSOFTLINK  3
-#define CYB_MEMORY    4
-#define CYB_TOOTHCOMPARTMENT  5
-#define CYB_PHONE    6
-#define CYB_RADIO    7
-#define CYB_EYES    8
-#define CYB_BONELACING    9
-#define CYB_FINGERTIP    10
-#define CYB_HANDBLADE    11
-#define CYB_HANDRAZOR    12
-#define CYB_HANDSPUR    13
-#define CYB_VOICEMOD    14
+#define CYB_CHIPJACK         0
+#define CYB_DATAJACK         1
+#define CYB_DATALOCK         2
+#define CYB_KNOWSOFTLINK     3
+#define CYB_MEMORY           4
+#define CYB_TOOTHCOMPARTMENT 5
+#define CYB_PHONE            6
+#define CYB_RADIO            7
+#define CYB_EYES             8
+#define CYB_BONELACING       9
+#define CYB_FINGERTIP        10
+#define CYB_HANDBLADE        11
+#define CYB_HANDRAZOR        12
+#define CYB_HANDSPUR         13
+#define CYB_VOICEMOD         14
 #define CYB_BOOSTEDREFLEXES  15
-#define CYB_DERMALPLATING  16
-#define CYB_FILTRATION    17
-#define CYB_SIMRIG    18
-#define CYB_SKILLWIRE    19
-#define CYB_VCR      20
-#define CYB_WIREDREFLEXES  21
+#define CYB_DERMALPLATING    16
+#define CYB_FILTRATION       17
+#define CYB_SIMRIG           18
+#define CYB_SKILLWIRE        19
+#define CYB_VCR              20
+#define CYB_WIREDREFLEXES    21
 #define CYB_REACTIONENHANCE  22
-#define CYB_REFLEXTRIGGER  23
-#define CYB_BALANCEAUG    24
-#define CYB_ORALDART    25
-#define CYB_ORALGUN    26
-#define CYB_ORALSLASHER    27
-#define CYB_ASIST    28
-#define CYB_CHIPJACKEXPERT  29
-#define CYB_CRANIALCYBER  30
-#define CYB_DATACOMPACT    31
-#define CYB_ENCEPHALON    32
-#define CYB_MATHSSPU    33
-#define CYB_AUTOINJECT    34
-#define CYB_BALANCETAIL    35
-#define CYB_BODYCOMPART    36
-#define CYB_FIN      37
-#define CYB_SKULL    38
-#define CYB_TORSO    39
+#define CYB_REFLEXTRIGGER    23
+#define CYB_BALANCEAUG       24
+#define CYB_ORALDART         25
+#define CYB_ORALGUN          26
+#define CYB_ORALSLASHER      27
+#define CYB_ASIST            28
+#define CYB_CHIPJACKEXPERT   29
+#define CYB_CRANIALCYBER     30
+#define CYB_DATACOMPACT      31
+#define CYB_ENCEPHALON       32
+#define CYB_MATHSSPU         33
+#define CYB_AUTOINJECT       34
+#define CYB_BALANCETAIL      35
+#define CYB_BODYCOMPART      36
+#define CYB_FIN              37
+#define CYB_SKULL            38
+#define CYB_TORSO            39
 #define CYB_DERMALSHEATHING  40
-#define CYB_FOOTANCHOR    41
-#define CYB_HYDRAULICJACK  42
-#define CYB_MOVEBYWIRE    43
-#define CYB_CLIMBINGCLAWS  44
-#define CYB_SMARTLINK    45
-#define CYB_MUSCLEREP    46
-#define NUM_CYBER    47
+#define CYB_FOOTANCHOR       41
+#define CYB_HYDRAULICJACK    42
+#define CYB_MOVEBYWIRE       43
+#define CYB_CLIMBINGCLAWS    44
+#define CYB_SMARTLINK        45
+#define CYB_MUSCLEREP        46
+#define CYB_ARMS             47
+#define CYB_LEGS             48
+#define NUM_CYBER            49
 
 #define BIO_ADRENALPUMP    0
 #define BIO_CATSEYES    1
@@ -1600,7 +1604,7 @@ enum {
 #define FOCI_SPIRIT    3
 #define FOCI_POWER    4
 #define FOCI_SUSTAINED    5
-#define FOCI_WEAPON    6
+// #define FOCI_WEAPON    6
 #define FOCI_SPELL_DEFENSE 7
 
 #define ACCESS_SMARTLINK  1
@@ -1959,14 +1963,15 @@ enum {
 #define CON_SPE_CREATE   37
 #define CON_INITIATE     38
 #define CON_DECORATE     39
-#define CON_POCKETSEC     40
-#define CON_VEHCUST       41
+#define CON_POCKETSEC    40
+#define CON_VEHCUST      41
 #define CON_BCUSTOMIZE   42
 #define CON_TRIDEO       43
 #define CON_AMMO_CREATE  44
 #define CON_ASKNAME      45            /* Ask user for name            */
 #define CON_PGEDIT       46
 #define CON_HELPEDIT     47
+// If you add another state, you need to touch comm.cpp's close_socket and make sure it's reflected there!
 
 /* arbitrary constants used by index_boot() (must be unique) */
 #define DB_BOOT_WLD     0
@@ -2082,11 +2087,17 @@ enum {
 #define PULSE_VIOLENCE            (3 RL_SEC)
 #define PULSE_MONORAIL            (5 RL_SEC)
 
-#define MAX_SOCK_BUF              (22 * 1024) /* Size of kernel's sock buf   */ // was 12 * 1024, increased arbitrarily
+#ifdef USE_PRIVATE_CE_WORLD
+#define MAX_SOCK_BUF              4194304 /* hand-picked from `cat /proc/sys/net/ipv4/tcp_wmem` */
+#else
+// You can probably change this value (see example above)-- it was set in the dark ages where the max sock buf was 12288.
+#define MAX_SOCK_BUF              (12 * 1024) /* Size of kernel's sock buf   */
+#endif
+
 #define MAX_PROMPT_LENGTH         96          /* Max length of prompt        */
 #define GARBAGE_SPACE             32
 #define SMALL_BUFSIZE             1024
-#define LARGE_BUFSIZE    (MAX_SOCK_BUF - GARBAGE_SPACE - MAX_PROMPT_LENGTH)
+#define LARGE_BUFSIZE             (MAX_SOCK_BUF - GARBAGE_SPACE - MAX_PROMPT_LENGTH)
 
 #define MAX_STRING_LENGTH         32768
 #define MAX_INPUT_LENGTH          2048     /* Max length per *line* of input */
@@ -2116,8 +2127,9 @@ enum {
 #define COMBAT_MOD_REACH           8
 #define COMBAT_MOD_VEHICLE_DAMAGE  9
 #define COMBAT_MOD_DEFENDER_MOVING 10
+#define COMBAT_MOD_IN_MELEE_COMBAT 11
 
-#define NUM_COMBAT_MODIFIERS       11
+#define NUM_COMBAT_MODIFIERS       12
 // End new combat modifiers.
 
 // Locations, to remove the magic numbers from the code.
@@ -2148,9 +2160,11 @@ enum {
 #define RM_CARIB_PARKING_GARAGE      RM_DANTES_GARAGE
 #define RM_OCEAN_PARKING_GARAGE      RM_DANTES_GARAGE
 #define RM_PORTLAND_PARKING_GARAGE   RM_DANTES_GARAGE
-#define RM_PAINTER_LOT               37519
+#define RM_PAINTER_LOT               37518
 #define RM_MULTNOMAH_GATE_NORTH      17598
 #define RM_MULTNOMAH_GATE_SOUTH      17599
+#define RM_MAGE_TRAINER              778
+#define RM_GUN_TRAINER               781
 
 // Chargen room defines
 #define RM_CHARGEN_PATH_OF_THE_MAGICIAN_SHAMANIC  60520
@@ -2231,6 +2245,11 @@ enum {
 #define OBJ_MITSUHAMA_Z4                   1847
 #define OBJ_LONDON_FOG_PROFESSIONAL        8439
 #define OBJ_THIGH_HOLSTER                  3494
+#define OBJ_MARKSMAN_LETTER                5962
+#define OBJ_MARKSMAN_BADGE                 5961
+#define OBJ_MAGEBLING                      5734
+#define OBJ_MAGE_LETTER                    5735
+#define OBJ_MODIFIED_BARRET_SNIPER_RIFLE   14636
 
 #define OBJ_CMT_AVATAR                     80004
 #define OBJ_NOVATECH_SIX_SENSORS           17116
@@ -2242,7 +2261,7 @@ enum {
 #define OBJ_TRANSYS_RIFFLE                 1140
 #define OBJ_RENRAKU_BYPASS                 6109
 #define OBJ_FOXFIRE_KITSUNE                1966
-#define OBJ_TRANSYS_ARMOR                 1139
+#define OBJ_TRANSYS_ARMOR                  1139
 #define OBJ_MATRIX_SWORD                   387
 
 #define OBJ_CYB_CERAMIC_BONE_LACING        85066
@@ -2255,9 +2274,9 @@ enum {
 #define OBJ_CYB_SMARTLINK_II 85118
 #define OBJ_CYB_EYE_PACKAGE_LL_TH_FC_ALPHA 566
 
-#define OBJ_BIO_MUSCLE_TONER_III 85811
-#define OBJ_BIO_CEREBRAL_BOOSTER_II 85927
-#define OBJ_BIO_MUSCLE_AUGMENTATION_II 85806
+#define OBJ_BIO_MUSCLE_TONER_III           85811
+#define OBJ_BIO_CEREBRAL_BOOSTER_II        85927
+#define OBJ_BIO_MUSCLE_AUGMENTATION_II     85806
 #define OBJ_BIO_ENHANCED_ARTICULATION      85803
 #define OBJ_BIO_MUSCLE_TONER_IV            85812
 #define OBJ_BIO_TRAUMA_DAMPER              85940
@@ -2267,26 +2286,28 @@ enum {
 
 #define OBJ_OLD_BLANK_MAGAZINE_FROM_CLASSIC 601
 
-#define BOTTOM_OF_TEMPLATE_ITEMS    106
-#define OBJ_BLANK_OPTICAL_CHIP      106
-#define OBJ_BLANK_PROGRAM_DESIGN    107
-#define OBJ_BLANK_PROGRAM           108
-#define OBJ_BLANK_PHOTO             109
-#define OBJ_ROLL_OF_NUYEN           110
-#define OBJ_PIECE_OF_MAIL           111
-#define OBJ_BLANK_PART_DESIGN       112
-#define OBJ_CUSTOM_CYBERDECK_SHELL  113
-#define OBJ_SHAMANIC_LODGE          114
-#define OBJ_HERMETIC_CIRCLE         115
-#define OBJ_CONJURING_MATERIALS     116
-#define OBJ_BLANK_SPELL_FORMULA     117
-#define OBJ_POCKET_SECRETARY_FOLDER 118
-#define OBJ_NEOPHYTE_SUBSIDY_CARD   119
-#define OBJ_GRAFFITI                120
-#define OBJ_BLANK_AMMOBOX           121
-#define TOP_OF_TEMPLATE_ITEMS       121
+#define BOTTOM_OF_TEMPLATE_ITEMS           106
+#define OBJ_BLANK_OPTICAL_CHIP             106
+#define OBJ_BLANK_PROGRAM_DESIGN           107
+#define OBJ_BLANK_PROGRAM                  108
+#define OBJ_BLANK_PHOTO                    109
+#define OBJ_ROLL_OF_NUYEN                  110
+#define OBJ_PIECE_OF_MAIL                  111
+#define OBJ_BLANK_PART_DESIGN              112
+#define OBJ_CUSTOM_CYBERDECK_SHELL         113
+#define OBJ_SHAMANIC_LODGE                 114
+#define OBJ_HERMETIC_CIRCLE                115
+#define OBJ_CONJURING_MATERIALS            116
+#define OBJ_BLANK_SPELL_FORMULA            117
+#define OBJ_POCKET_SECRETARY_FOLDER        118
+#define OBJ_NEOPHYTE_SUBSIDY_CARD          119
+#define OBJ_GRAFFITI                       120
+#define OBJ_BLANK_AMMOBOX                  121
+#define TOP_OF_TEMPLATE_ITEMS              121
 
-#define OBJ_BLANK_MAGAZINE          127
+#define OBJ_BLANK_MAGAZINE                 127
+
+#define QST_MAGE_INTRO                     5743
 
 // Misc defines from spec_procs.cpp
 #define LIBRARY_SKILL    3
@@ -2429,5 +2450,14 @@ enum {
 #define MOUNT_MINITURRET         5
 
 #define PC_CORPSE_BARRIER 75
+
+#define ARMOR_PENALTY_TOTAL  4
+#define ARMOR_PENALTY_HEAVY  3
+#define ARMOR_PENALTY_MEDIUM 2
+#define ARMOR_PENALTY_LIGHT  1
+#define ARMOR_PENALTY_NONE   0
+
+#define CLIMBING_TYPE_JUST_CLIMBING 0
+#define CLIMBING_TYPE_WATER_WINGS   1
 
 #endif

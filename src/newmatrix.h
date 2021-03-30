@@ -13,6 +13,21 @@
 
 #define FILE_PROTECTION_SCRAMBLED 1
 
+#define IC_CRIPPLER         0  // Destroys programs.
+#define IC_KILLER           1  // NERP
+#define IC_PROBE            2  // NERP
+#define IC_SCRAMBLE         3  // NERP
+#define IC_TARBABY          4  // Removes programs from active memory.
+#define IC_SCOUT            5  // Increases tally.
+#define IC_TRACE            6  // Locates your meatspace body. Increases tally.
+#define IC_BLASTER          7  // Damages your deck on attack, also harms you
+#define IC_RIPPER           8  // Destroys persona chips. Damages deck if it reduces the value to 0.
+#define IC_SPARKY           9  // Damages your deck on attack
+#define IC_TARPIT           10 // Deletes programs from your active and possibly storage memory.
+#define IC_LETHAL_BLACK     11 // Deals lethal damage to decker. Damages deck.
+#define IC_NON_LETHAL_BLACK 12 // Deals nonlethal damage to decker. Damages deck?
+#define NUM_OF_IC_TYPES     13
+
 struct host_data {
   vnum_t vnum;
   rnum_t rnum;

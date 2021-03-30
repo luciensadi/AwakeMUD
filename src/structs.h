@@ -202,6 +202,8 @@ struct room_data
   byte silence[2];
   SPECIAL(*func);
   
+  bool dirty_bit;
+  
   int staff_level_lock;
   int elevator_number;
 
@@ -218,8 +220,8 @@ struct room_data
 #endif
   room_data() :
       name(NULL), description(NULL), night_desc(NULL), ex_description(NULL),
-      matrix(0), access(0), io(0), trace(0),
-      bandwidth(0), jacknumber(0), address(NULL), peaceful(0), func(NULL),
+      matrix(0), access(0), io(0), trace(0), bandwidth(0), jacknumber(0), 
+      address(NULL), peaceful(0), func(NULL), dirty_bit(FALSE),
       staff_level_lock(0), contents(NULL), people(NULL), vehicles(NULL), watching(NULL)
   {
     for (int i = 0; i < NUM_OF_DIRS; i++) {
@@ -742,6 +744,8 @@ struct char_data
   
   int congregation_bonus_pool;         /* Bonuses accrued from spending time in a congregation room */
   
+  bool alias_dirty_bit;
+  
   /* Named after 'magic bullet pants', the 'technology' in FPS games that allows you to never have to worry about which mag has how much ammo in it. */
   unsigned short bullet_pants[(END_OF_AMMO_USING_WEAPONS + 1) - START_OF_AMMO_USING_WEAPONS][NUM_AMMOTYPES];
   
@@ -751,7 +755,7 @@ struct char_data
       in_room(NULL), was_in_room(NULL), player_specials(NULL), in_veh(NULL), persona(NULL), squeue(NULL), sustained(NULL),
       ssust(NULL), carrying(NULL), desc(NULL), cyberware(NULL), bioware(NULL), next_in_room(NULL), next(NULL),
       next_fighting(NULL), next_in_zone(NULL), next_in_veh(NULL), next_watching(NULL), followers(NULL),
-      master(NULL), spells(NULL), pgroup(NULL), pgroup_invitations(NULL)
+      master(NULL), spells(NULL), pgroup(NULL), pgroup_invitations(NULL), congregation_bonus_pool(0), alias_dirty_bit(FALSE)
   {
     for (int i = 0; i < NUM_WEARS; i++)
       equipment[i] = NULL;
@@ -857,6 +861,7 @@ struct descriptor_data
   struct host_data *edit_host;  /* hedit */
   struct matrix_icon *edit_icon; /* icedit */
   struct help_data *edit_helpfile;
+  // If you add more of these edit_whatevers, touch comm.cpp's free_editing_structs and add them!
   
   Playergroup *edit_pgroup; /* playergroups */
   
@@ -1089,6 +1094,7 @@ struct ammo_data
 };
 
 /* Combat data. */
+#ifdef USE_OLD_HIT
 struct combat_data
 {
   // Generic combat data.
@@ -1166,6 +1172,7 @@ struct combat_data
       weapon_skill = SKILL_UNARMED_COMBAT;
   }
 };
+#endif
 
 struct help_data {
   // title: varchar 128

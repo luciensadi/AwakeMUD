@@ -453,12 +453,12 @@ ACMD(do_cook) {
 void part_design(struct char_data *ch, struct obj_data *part) {
 
     if (!GET_OBJ_VAL(part, 3) || GET_OBJ_TYPE(part) != ITEM_PART)
-        send_to_char(ch, "You don't need to design that part.\r\n");
+        send_to_char(ch, "You don't need to design %s.\r\n", GET_OBJ_NAME(part));
     else if (GET_OBJ_VAL(part, 3) > 0) {
         if (GET_OBJ_VAL(part, 7) != GET_IDNUM(ch))
-            send_to_char(ch, "Someone is already working on that part.\r\n");
+            send_to_char(ch, "Someone is already working on %s.\r\n", GET_OBJ_NAME(part));
         else {
-            send_to_char(ch, "You continue to design that project.\r\n");
+            send_to_char(ch, "You continue to design %s.\r\n", GET_OBJ_NAME(part));
             AFF_FLAGS(ch).SetBit(AFF_PART_DESIGN);
             ch->char_specials.programming = part;
         }

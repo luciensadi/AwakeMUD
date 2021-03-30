@@ -207,17 +207,17 @@ void iedit_disp_spells_menu(struct descriptor_data * d)
 void iedit_disp_cybereyes_menu(struct descriptor_data *d)
 {
   CLS(CH);
-  for (int y = 0; y < NUM_EYEMODS; y += 2)
-    send_to_char(CH, "%2d) %-20s %2d) %-20s\r\n", y+1, eyemods[y], y+2, y+1 < NUM_EYEMODS ? eyemods[y+1] : "");
-  sprintbit(GET_OBJ_VAL(OBJ, 3), eyemods, buf1, sizeof(buf1));
+  for (int y = 0; y < NUM_EYEMODS; y++)
+    send_to_char(CH, "%2d) %-20s\r\n", y+1, eyemods[y]);
+  sprintbit(GET_CYBERWARE_FLAGS(OBJ), eyemods, buf1, sizeof(buf1));
   send_to_char(CH, "Set Options: ^c%s^n\r\nEnter options (0 to quit): ", buf1);
 }
 
 void iedit_disp_cyberarms_menu(struct descriptor_data *d)
 {
   CLS(CH);
-  for (int y = 0; y < NUM_ARMS_MOD; y += 2)
-    send_to_char(CH, "%2d) %-20s %2d) %-20s\r\n", y+1, armsmods[y], y+2, y+1 < NUM_ARMS_MOD ? armsmods[y+1] : "");
+  for (int y = 0; y < NUM_ARMS_MODS; y++)
+    send_to_char(CH, "%2d) %-20s\r\n", y+1, armsmods[y]);
   sprintbit(GET_CYBERWARE_FLAGS(OBJ), armsmods, buf1, sizeof(buf1));
   send_to_char(CH, "Set Options: ^c%s^n\r\nEnter options (0 to quit): ", buf1);
 }
@@ -225,8 +225,8 @@ void iedit_disp_cyberarms_menu(struct descriptor_data *d)
 void iedit_disp_cyberlegs_menu(struct descriptor_data *d)
 {
   CLS(CH);
-  for (int y = 0; y < NUM_LEGS_MOD; y += 2)
-    send_to_char(CH, "%2d) %-20s %2d) %-20s\r\n", y+1, legsmods[y], y+2, y+1 < NUM_LEGS_MOD ? legsmods[y+1] : "");
+  for (int y = 0; y < NUM_LEGS_MODS; y++)
+    send_to_char(CH, "%2d) %-20s\r\n", y+1, legsmods[y]);
   sprintbit(GET_CYBERWARE_FLAGS(OBJ), legsmods, buf1, sizeof(buf1));
   send_to_char(CH, "Set Options: ^c%s^n\r\nEnter options (0 to quit): ", buf1);
 }
@@ -234,8 +234,8 @@ void iedit_disp_cyberlegs_menu(struct descriptor_data *d)
 void iedit_disp_cyberskull_menu(struct descriptor_data *d)
 {
   CLS(CH);
-  for (int y = 0; y < NUM_SKULL_MOD; y += 2)
-    send_to_char(CH, "%2d) %-20s %2d) %-20s\r\n", y+1, skullmods[y], y+2, y+1 < NUM_SKULL_MOD ? skullmods[y+1] : "");
+  for (int y = 0; y < NUM_SKULL_MODS; y++)
+    send_to_char(CH, "%2d) %-20s\r\n", y+1, skullmods[y]);
   sprintbit(GET_CYBERWARE_FLAGS(OBJ), skullmods, buf1, sizeof(buf1));
   send_to_char(CH, "Set Options: ^c%s^n\r\nEnter options (0 to quit): ", buf1);
 }
@@ -243,8 +243,8 @@ void iedit_disp_cyberskull_menu(struct descriptor_data *d)
 void iedit_disp_cybertorso_menu(struct descriptor_data *d)
 {
   CLS(CH);
-  for (int y = 0; y < NUM_TORSO_MOD; y += 2)
-    send_to_char(CH, "%2d) %-20s %2d) %-20s\r\n", y+1, torsomods[y], y+2, y+1 < NUM_TORSO_MOD ? torsomods[y+1] : "");
+  for (int y = 0; y < NUM_TORSO_MODS; y++)
+    send_to_char(CH, "%2d) %-20s\r\n", y+1, torsomods[y]);
   sprintbit(GET_CYBERWARE_FLAGS(OBJ), torsomods, buf1, sizeof(buf1));
   send_to_char(CH, "Set Options: ^c%s^n\r\nEnter options (0 to quit): ", buf1);
 }
@@ -428,6 +428,9 @@ void iedit_disp_val2_menu(struct descriptor_data * d)
   d->edit_mode = IEDIT_VALUE_2;
   switch (GET_OBJ_TYPE(d->edit_obj))
   {
+    case ITEM_CLIMBING:
+      send_to_char("Is this a pair of water wings? (1 for yes, 0 for no): ", CH);
+      break;
     case ITEM_WORKSHOP:
       send_to_char(CH, "1) Kit\r\n2) Workshop\r\n3) Facility\r\nEnter Type: ");
       break;
@@ -448,7 +451,7 @@ void iedit_disp_val2_menu(struct descriptor_data * d)
       if (d->iedit_limit_edits)
         d->iedit_limit_edits++;
       iedit_disp_val4_menu(d);
-      break;
+      return;
     case ITEM_SPELL_FORMULA:
       iedit_disp_spells_menu(d);
       break;
@@ -485,7 +488,7 @@ void iedit_disp_val2_menu(struct descriptor_data * d)
           if (d->iedit_limit_edits)
             d->iedit_limit_edits++;
           iedit_disp_val3_menu(d);
-          break;
+          return;
         case TYPE_UPGRADE:
           send_to_char("  0) MPCP (replacement)\r\n  1) Active memory\r\n"
                        "  2) Storage memory\r\n  3) Hitcher Jack\r\n  4) IO speed\r\n"
@@ -916,7 +919,7 @@ void iedit_disp_val6_menu(struct descriptor_data * d)
       if (d->iedit_limit_edits)
         d->iedit_limit_edits++;
       iedit_disp_val7_menu(d);
-      break;
+      return;
     default:
       iedit_disp_menu(d);
   }
@@ -943,6 +946,7 @@ void iedit_disp_val7_menu(struct descriptor_data * d)
         if (d->iedit_limit_edits)
           d->iedit_limit_edits++;
         iedit_disp_val8_menu(d);
+        return;
       }
       break;
     case ITEM_FIREWEAPON:
@@ -982,17 +986,22 @@ void iedit_disp_val8_menu(struct descriptor_data * d)
   switch (GET_OBJ_TYPE(d->edit_obj))
   {
     case ITEM_WEAPON:
-      if (access_level(CH, LVL_ADMIN) && IS_GUN(GET_OBJ_VAL(OBJ, 3))) {
-        if (GET_OBJ_VAL(OBJ, 7) >= -1)
-          send_to_char("Enter vnum of object to attach on top: ", CH);
-        else {
-          // Skipping this field while doing nothing? Re-increment our counter.
-          if (d->iedit_limit_edits)
-            d->iedit_limit_edits++;
-          iedit_disp_val9_menu(d);
-        }
-      } else
-        iedit_disp_menu(d);
+      if (IS_GUN(GET_WEAPON_ATTACK_TYPE(OBJ))) {
+        if (access_level(CH, LVL_ADMIN)) {
+          if (GET_WEAPON_ATTACH_TOP_VNUM(OBJ) >= -1)
+            send_to_char("Enter vnum of object to attach on top: ", CH);
+          else {
+            // Skipping this field while doing nothing? Re-increment our counter.
+            if (d->iedit_limit_edits)
+              d->iedit_limit_edits++;
+            iedit_disp_val9_menu(d);
+            return;
+          }
+        } else
+          iedit_disp_menu(d);
+      } else {
+        send_to_char("Enter weapon focus rating (0 for no focus, up to 4): ", CH);
+      }
       break;
     case ITEM_WORN:
       send_to_char("Concealability rating (+harder -easier): ", CH);
@@ -1019,14 +1028,15 @@ void iedit_disp_val9_menu(struct descriptor_data * d)
       send_to_char("Armored clothing set (0 for no set): ", CH);
       break;
     case ITEM_WEAPON:
-      if (access_level(CH, LVL_ADMIN)) {
-        if (GET_OBJ_VAL(OBJ, 8) >= -1)
+      if (access_level(CH, LVL_ADMIN) && IS_GUN(GET_WEAPON_ATTACK_TYPE(OBJ))) {
+        if (GET_WEAPON_ATTACH_BARREL_VNUM(OBJ) >= -1)
           send_to_char("Enter vnum of object to attach on barrel: ", CH);
         else {
           // Skipping this field while doing nothing? Re-increment our counter.
           if (d->iedit_limit_edits)
             d->iedit_limit_edits++;
           iedit_disp_val10_menu(d);
+          return;
         }
       } else
         iedit_disp_menu(d);
@@ -1050,13 +1060,14 @@ void iedit_disp_val10_menu(struct descriptor_data * d)
   switch (GET_OBJ_TYPE(d->edit_obj))
   {
     case ITEM_WEAPON:
-      if (GET_OBJ_VAL(OBJ, 9) >= -1)
-        send_to_char("Enter vnum of object to attach under: ", CH);
+      if (GET_WEAPON_ATTACH_UNDER_VNUM(OBJ) >= -1)
+        send_to_char("Enter vnum of object to attach underneath: ", CH);
       else {
         // Skipping this field while doing nothing? Re-increment our counter.
         if (d->iedit_limit_edits)
           d->iedit_limit_edits++;
         iedit_disp_val11_menu(d);
+        return;
       }
       break;
     default:
@@ -1731,7 +1742,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
             return;
           }
           iedit_disp_val1_menu(d);
-          break;
+          return;
         case 'h':
         case 'H':
           iedit_disp_prompt_apply_menu(d);
@@ -2045,6 +2056,12 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
       /* here, I do need to check for outofrange values */
       number = atoi(arg);
       switch (GET_OBJ_TYPE(d->edit_obj)) {
+        case ITEM_CLIMBING:
+          if (number < CLIMBING_TYPE_JUST_CLIMBING || number > CLIMBING_TYPE_WATER_WINGS) {
+            send_to_char("Invalid choice. Enter 1 for water wings, 0 for climbing gear: ", CH);
+            return;
+          }
+          break;
         case ITEM_WORKSHOP:
           if (number < 1 || number > 3) {
             send_to_char(CH, "Invalid value. Enter Type: ");
@@ -2115,7 +2132,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
         case ITEM_DECK_ACCESSORY:
           switch (GET_OBJ_VAL(OBJ, 0)) {
             case TYPE_FILE:
-              if (number < 0) {
+              if (number <= 0) {
                 send_to_char("Size must be greater than 0.  File size: ", CH);
                 return;
               }
@@ -2242,9 +2259,10 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
           break;
         case ITEM_DECK_ACCESSORY:
           if (GET_OBJ_VAL(OBJ, 0) == TYPE_FILE) {
-            if (number <= 0)
+            if (number <= 0) {
               send_to_char("Size must be greater than 0. File size in megapulses: ", CH);
               return;
+            }
           }
           switch (GET_OBJ_VAL(OBJ, 1)) {
             case 0:
@@ -2397,6 +2415,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
           if (number < 1 || number > 4) {
             send_to_char("Must be between 1 and 4: ", d->character);
             iedit_disp_val4_menu(d);
+            return;
           }
           break;
         case ITEM_DECK_ACCESSORY:
@@ -2412,78 +2431,90 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
             case CYB_HANDBLADE:
             case CYB_HANDSPUR:
             case CYB_REFLEXTRIGGER:
-            case CYB_CYBERARMS:
-              if (number < 0 || number >= NUM_ARMS_MODS)
+            case CYB_ARMS:
+              if (number < 0 || number > NUM_ARMS_MODS) {
                 send_to_char("Invalid Input! Enter options (0 to quit): ", CH);
                 return;
               }
               if (number == 0) {
+                if (!(IS_SET(GET_CYBERWARE_FLAGS(OBJ), ARMS_MOD_OBVIOUS) || IS_SET(GET_CYBERWARE_FLAGS(OBJ), ARMS_MOD_SYNTHETIC))) {
+                  send_to_char("Defaulting to Obvious.\r\n", CH);
+                  SET_BIT(GET_CYBERWARE_FLAGS(OBJ), ARMS_MOD_OBVIOUS);
+                }
                 iedit_disp_menu(d);
                 return;
               }
               number--;
               TOGGLE_BIT(GET_CYBERWARE_FLAGS(OBJ), 1 << number);
               CLS(CH);
-              sprintbit(GET_CYBERWARE_FLAGS(OBJ), cyber_arms, buf1, sizeof(buf1));
-              send_to_char(CH, " 1) Obvious\r\n 2) Synthetic\r\n 3) Armor Mod1\r\n 4) Strength Mod1\r\n 5) Strength Mod2\r\n
-                               " 6) Strength Mod3\r\n  7) Quickness Mod1\r\n  8) Quickness Mod2\r\n  9) Quickness Mod3\r\n
-                               " 10) Cyberarm Gyromount\r\n Current Flags: ^c%s^n\r\n Enter options (0 to quit): ", buf1);
-                return;
-              }
-              break;
-            case CYB_CYBERLEGS:
-              if (number < 0 || number >= NUM_LEGS_MODS)
+              sprintbit(GET_CYBERWARE_FLAGS(OBJ), armsmods, buf1, sizeof(buf1));
+              for (int mod_num = 0; mod_num < NUM_ARMS_MODS; mod_num++)
+                send_to_char(CH, " %d) %s\r\n", mod_num + 1, armsmods[mod_num]);
+              send_to_char(CH, "Current Flags: ^c%s^n\r\n Enter options (0 to quit): ", buf1);
+              return;
+            case CYB_LEGS:
+              if (number < 0 || number > NUM_LEGS_MODS) {
                 send_to_char("Invalid Input! Enter options (0 to quit): ", CH);
                 return;
               }
               if (number == 0) {
+                if (!(IS_SET(GET_CYBERWARE_FLAGS(OBJ), LEGS_MOD_OBVIOUS) || IS_SET(GET_CYBERWARE_FLAGS(OBJ), LEGS_MOD_SYNTHETIC))) {
+                  send_to_char("Defaulting to Obvious.\r\n", CH);
+                  SET_BIT(GET_CYBERWARE_FLAGS(OBJ), LEGS_MOD_OBVIOUS);
+                }
                 iedit_disp_menu(d);
                 return;
               }
               number--;
               TOGGLE_BIT(GET_CYBERWARE_FLAGS(OBJ), 1 << number);
               CLS(CH);
-              sprintbit(GET_CYBERWARE_FLAGS(OBJ), cyber_legs, buf1, sizeof(buf1));
-              send_to_char(CH, "  1) Obvious\r\n 2) Synthetic\r\n 3) Armor Mod1\r\n 4) Strength Mod1\r\n
-                           "  5) Strength Mod2\r\n 6) Strength Mod3\r\n  7) Quickness Mod1\r\n  8) Quickness Mod2\r\n
-                           "  9) Quickness Mod3\r\n  Current Flags: ^c%s^n\r\n Enter options (0 to quit): ", buf1);
-                return;
-              }
-              break;
-            case CYB_CYBERSKULL:
-              if (number < 0 || number >= NUM_SKULL_MODS)
+              sprintbit(GET_CYBERWARE_FLAGS(OBJ), legsmods, buf1, sizeof(buf1));
+              for (int mod_num = 0; mod_num < NUM_LEGS_MODS; mod_num++)
+                send_to_char(CH, " %d) %s\r\n", mod_num + 1, legsmods[mod_num]);
+              send_to_char(CH, "Current Flags: ^c%s^n\r\n Enter options (0 to quit): ", buf1);
+              return;
+            case CYB_SKULL:
+              if (number < 0 || number > NUM_SKULL_MODS) {
                 send_to_char("Invalid Input! Enter options (0 to quit): ", CH);
                 return;
               }
               if (number == 0) {
+                if (!(IS_SET(GET_CYBERWARE_FLAGS(OBJ), SKULL_MOD_OBVIOUS) || IS_SET(GET_CYBERWARE_FLAGS(OBJ), SKULL_MOD_SYNTHETIC))) {
+                  send_to_char("Defaulting to Obvious.\r\n", CH);
+                  SET_BIT(GET_CYBERWARE_FLAGS(OBJ), SKULL_MOD_OBVIOUS);
+                }
                 iedit_disp_menu(d);
                 return;
               }
               number--;
               TOGGLE_BIT(GET_CYBERWARE_FLAGS(OBJ), 1 << number);
               CLS(CH);
-              sprintbit(GET_CYBERWARE_FLAGS(OBJ), cyber_skull, buf1, sizeof(buf1));
-              send_to_char(CH, " 1) Obvious\r\n 2) Synthetic\r\n 3) Armor Mod1\r\n Current Flags: ^c%s^n\r\n Enter options (0 to quit): ", buf1);
-                return;
-              }
-              break;
-            case CYB_CYBERTORSO:
-              if (number < 0 || number >= NUM_TORSO_MODS)
+              sprintbit(GET_CYBERWARE_FLAGS(OBJ), skullmods, buf1, sizeof(buf1));
+              for (int mod_num = 0; mod_num < NUM_SKULL_MODS; mod_num++)
+                send_to_char(CH, " %d) %s\r\n", mod_num + 1, skullmods[mod_num]);
+              send_to_char(CH, "Current Flags: ^c%s^n\r\n Enter options (0 to quit): ", buf1);
+              return;
+            case CYB_TORSO:
+              if (number < 0 || number > NUM_TORSO_MODS) {
                 send_to_char("Invalid Input! Enter options (0 to quit): ", CH);
                 return;
               }
               if (number == 0) {
+                if (!(IS_SET(GET_CYBERWARE_FLAGS(OBJ), TORSO_MOD_OBVIOUS) || IS_SET(GET_CYBERWARE_FLAGS(OBJ), TORSO_MOD_SYNTHETIC))) {
+                  send_to_char("Defaulting to Obvious.\r\n", CH);
+                  SET_BIT(GET_CYBERWARE_FLAGS(OBJ), TORSO_MOD_OBVIOUS);
+                }
                 iedit_disp_menu(d);
                 return;
               }
               number--;
               TOGGLE_BIT(GET_CYBERWARE_FLAGS(OBJ), 1 << number);
               CLS(CH);
-              sprintbit(GET_CYBERWARE_FLAGS(OBJ), cyber_torso, buf1, sizeof(buf1));
-              send_to_char(CH, "  1) Obvious\r\n 2) Synthetic\r\n 3) Armor Mod1\r\n 4) Armor Mod1\r\n 5) Armor Mod2\r\n 6) Armor Mod3\r\n Current Flags: ^c%s^n\r\n Enter options (0 to quit): ", buf1);
-                return;
-              }
-              break;
+              sprintbit(GET_CYBERWARE_FLAGS(OBJ), torsomods, buf1, sizeof(buf1));
+              for (int mod_num = 0; mod_num < NUM_TORSO_MODS; mod_num++)
+                send_to_char(CH, " %d) %s\r\n", mod_num + 1, torsomods[mod_num]);
+              send_to_char(CH, "Current Flags: ^c%s^n\r\n Enter options (0 to quit): ", buf1);
+              return;
             case CYB_DERMALSHEATHING:
               if (number < 0 || number > 1) {
                 send_to_char("Invalid Input! Enter 1 or 0: ", CH);
@@ -2640,23 +2671,32 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
       number = atoi(arg);
       switch (GET_OBJ_TYPE(d->edit_obj)) {
         case ITEM_WEAPON:
-          if (!access_level(CH, LVL_ADMIN)) {
-            struct obj_data *you_know_this_would_leak_memory_right = NULL;
-            if (!(you_know_this_would_leak_memory_right = read_object(number, VIRTUAL))) {
-              send_to_char("Invalid vnum.\r\n", CH);
-              iedit_disp_val8_menu(d);
-            } else {
-              extract_obj(you_know_this_would_leak_memory_right);
-            }
-          }
-          if (number > 0) {
-            modified = FALSE;
-            for (j = 0; (j < MAX_OBJ_AFFECT && !modified); j++)
-              if (!(OBJ->affected[j].modifier)) {
-                OBJ->affected[j].location = read_object(number, VIRTUAL)->affected[0].location;
-                OBJ->affected[j].modifier = read_object(number, VIRTUAL)->affected[0].modifier;
-                modified = TRUE;
+          if (IS_GUN(GET_WEAPON_ATTACK_TYPE(OBJ))) {
+            if (!access_level(CH, LVL_ADMIN)) {
+              struct obj_data *you_know_this_would_leak_memory_right = NULL;
+              if (!(you_know_this_would_leak_memory_right = read_object(number, VIRTUAL))) {
+                send_to_char("Invalid vnum.\r\n", CH);
+                iedit_disp_val8_menu(d);
+                return;
+              } else {
+                extract_obj(you_know_this_would_leak_memory_right);
               }
+            }
+            if (number > 0) {
+              modified = FALSE;
+              for (j = 0; (j < MAX_OBJ_AFFECT && !modified); j++)
+                if (!(OBJ->affected[j].modifier)) {
+                  OBJ->affected[j].location = read_object(number, VIRTUAL)->affected[0].location;
+                  OBJ->affected[j].modifier = read_object(number, VIRTUAL)->affected[0].modifier;
+                  modified = TRUE;
+                }
+            }
+          } else {
+            if (number < 0 || number > 4) {
+              send_to_char("Weapon focus rating must be between 0 (no focus) and 4.\r\n", CH);
+              iedit_disp_val8_menu(d);
+              return;
+            }
           }
           break;
         default:
@@ -2675,6 +2715,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
             if (!(you_know_this_would_leak_memory_right = read_object(number, VIRTUAL))) {
               send_to_char("Invalid vnum.\r\n", CH);
               iedit_disp_val9_menu(d);
+              return;
             } else {
               extract_obj(you_know_this_would_leak_memory_right);
             }
@@ -2705,6 +2746,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
             if (!(you_know_this_would_leak_memory_right = read_object(number, VIRTUAL))) {
               send_to_char("Invalid vnum.\r\n", CH);
               iedit_disp_val10_menu(d);
+              return;
             } else {
               extract_obj(you_know_this_would_leak_memory_right);
             }

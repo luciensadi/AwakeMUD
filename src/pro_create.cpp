@@ -459,6 +459,7 @@ void update_buildrepair(void)
             CH->char_specials.timer = 0;
             obj_from_char(PROG);
             obj_to_obj(PROG, PROG->contains);
+            GET_PART_BUILDER_IDNUM(PROG) = 0; // Wipe out the builder's idnum so it can be worked on by someone else.
             PROG->contains = NULL;
             GET_OBJ_VAL(PROG, 4) = -2;
             if (!GET_OBJ_VAL(PROG->in_obj, 0))
@@ -535,10 +536,14 @@ void update_buildrepair(void)
           AFF_FLAGS(desc->character).RemoveBit(AFF_PROGRAM);
           CH->char_specials.timer = 0;
         }
-      } else if (AFF_FLAGGED(CH, AFF_BONDING) && --GET_OBJ_VAL(PROG, 9) < 1) {
-        send_to_char(CH, "You complete the bonding ritual for %s.\r\n", GET_OBJ_NAME(PROG));
-        CH->char_specials.timer = 0;
-        STOP_WORKING(CH);
+      } else if (AFF_FLAGGED(CH, AFF_BONDING)) {
+        if ((GET_OBJ_TYPE(PROG) == ITEM_WEAPON && --GET_WEAPON_FOCUS_BOND_STATUS(PROG) < 1)
+            || (GET_OBJ_TYPE(PROG) == ITEM_FOCUS && --GET_OBJ_VAL(PROG, 9) < 1))
+        {
+          send_to_char(CH, "You complete the bonding ritual for %s.\r\n", GET_OBJ_NAME(PROG));
+          CH->char_specials.timer = 0;
+          STOP_WORKING(CH);
+        }
       } else if (AFF_FLAGGED(CH, AFF_CONJURE) && --CH->char_specials.conjure[2] < 1) {
         if ((GET_OBJ_COST(PROG) -= CH->char_specials.conjure[1] * 1000) <= 0)
           extract_obj(PROG);
@@ -604,7 +609,6 @@ void update_buildrepair(void)
         GET_AMMOBOX_INTENDED_QUANTITY(PROG) -= 10;
         if (GET_AMMOBOX_INTENDED_QUANTITY(PROG) <= 0) {
           send_to_char(CH, "You have finished building %s.\r\n", GET_OBJ_NAME(PROG));
-          GET_AMMOBOX_CREATOR(PROG) = 0;
           STOP_WORKING(CH);
         } else ammo_test(CH, PROG);
       } else if (AFF_FLAGGED(CH, AFF_SPELLDESIGN) && --GET_OBJ_VAL(PROG, 6) < 1) {

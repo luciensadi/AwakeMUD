@@ -282,7 +282,7 @@ SPECIAL(taxi_sign) {
   // Set up our default string.
   strncpy(buf, "The keyword for each location is listed after the location name.  ^WSAY^n the keyword to the driver, and for a small fee, he will drive you to your destination.\r\n", sizeof(buf) - 1);
   if (!PRF_FLAGGED(ch, PRF_SCREENREADER))
-    strncat(buf, "-------------------------------------------------\r\n", sizeof(buf) - strlen(buf) - 1);
+    strlcat(buf, "-------------------------------------------------\r\n", sizeof(buf));
   
   bool is_first_printed_dest_title = TRUE;
   
@@ -355,6 +355,17 @@ void create_linked_exit(int rnum_a, int dir_a, int rnum_b, int dir_b, const char
   #ifdef USE_DEBUG_CANARIES
       world[rnum_a].dir_option[dir_a]->canary = CANARY_VALUE;
   #endif
+      snprintf(buf, sizeof(buf), "Successfully created %s exit from %s (%ld) to %s (%ld) for %s.",
+               dirs[dir_a],
+               GET_ROOM_NAME(&world[rnum_a]),
+               GET_ROOM_VNUM(&world[rnum_a]),
+               rnum_b >= 0 ? GET_ROOM_NAME(&world[rnum_b]) : "nowhere???",
+               rnum_b >= 0 ? GET_ROOM_VNUM(&world[rnum_b]) : -1,
+               source
+              );
+#ifdef TRANSPORT_DEBUG
+      mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+#endif
     } else {
       snprintf(buf, sizeof(buf), "WARNING: create_linked_exit() for %s (%s from %ld) would have overwritten an existing exit!", 
                source, dirs[dir_a], GET_ROOM_VNUM(&world[rnum_a]));
@@ -377,6 +388,17 @@ void create_linked_exit(int rnum_a, int dir_a, int rnum_b, int dir_b, const char
   #ifdef USE_DEBUG_CANARIES
       world[rnum_b].dir_option[dir_b]->canary = CANARY_VALUE;
   #endif
+      snprintf(buf, sizeof(buf), "Successfully created %s exit from %s (%ld) to %s (%ld) for %s.",
+               dirs[dir_b],
+               GET_ROOM_NAME(&world[rnum_b]),
+               GET_ROOM_VNUM(&world[rnum_b]),
+               rnum_b >= 0 ? GET_ROOM_NAME(&world[rnum_a]) : "nowhere???",
+               rnum_b >= 0 ? GET_ROOM_VNUM(&world[rnum_a]) : -1,
+               source
+              );
+#ifdef TRANSPORT_DEBUG
+      mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+#endif
     } else {
       snprintf(buf, sizeof(buf), "WARNING: create_linked_exit() for %s (%s from %ld) would have overwritten an existing exit!", 
                source, dirs[dir_b], GET_ROOM_VNUM(&world[rnum_b]));
@@ -393,6 +415,15 @@ void delete_exit(int bus, int to, const char *source) {
     return;
   }
   
+  snprintf(buf, sizeof(buf), "Successfully deleted %s exit from %s (%ld) to %s (%ld) for %s.",
+           dirs[to],
+           GET_ROOM_NAME(&world[bus]),
+           GET_ROOM_VNUM(&world[bus]),
+           world[bus].dir_option[to]->to_room ? GET_ROOM_NAME(world[bus].dir_option[to]->to_room) : "nowhere???",
+           world[bus].dir_option[to]->to_room ? GET_ROOM_VNUM(world[bus].dir_option[to]->to_room) : -1,
+           source
+          );
+  
   if (world[bus].dir_option[to]->keyword)
     delete [] world[bus].dir_option[to]->keyword;
     
@@ -402,6 +433,10 @@ void delete_exit(int bus, int to, const char *source) {
   delete world[bus].dir_option[to];
   
   world[bus].dir_option[to] = NULL;
+  
+#ifdef TRANSPORT_DEBUG
+  mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+#endif
 }
 
 void delete_linked_exit(int bus, int to, int room, int from, const char *source) {
@@ -427,30 +462,54 @@ void close_taxi_door(struct room_data *room, int dir, struct room_data *taxi)
              dirs[dir]);
     mudlog(buf, NULL, LOG_SYSLOG, TRUE);
   } else {
+    snprintf(buf, sizeof(buf), "Successfully deleted %s exit from %s (%ld) to %s (%ld) for close-taxi-door (first block).",
+             dirs[dir],
+             GET_ROOM_NAME(room),
+             GET_ROOM_VNUM(room),
+             room->dir_option[dir]->to_room ? GET_ROOM_NAME(room->dir_option[dir]->to_room) : "nowhere???",
+             room->dir_option[dir]->to_room ? GET_ROOM_VNUM(room->dir_option[dir]->to_room) : -1
+            );
+            
     if (room->dir_option[dir]->keyword)
       delete [] room->dir_option[dir]->keyword;
     if (room->dir_option[dir]->general_description)
       delete [] room->dir_option[dir]->general_description;
     delete room->dir_option[dir];
     room->dir_option[dir] = NULL;
+    
+#ifdef TRANSPORT_DEBUG
+    mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+#endif
   }
 
   dir = rev_dir[dir];
 
   if (!taxi || !taxi->dir_option[dir]) {
-    snprintf(buf, sizeof(buf), "WARNING: Taxi %ld had invalid room or exit! (first block - %s (%ld)'s %s)", 
+    snprintf(buf, sizeof(buf), "WARNING: Taxi %ld had invalid room or exit! (second block - %s (%ld)'s %s)", 
              taxi ? GET_ROOM_VNUM(taxi) : -1,
              taxi ? GET_ROOM_NAME(taxi) : "NO ROOM",
              taxi ? GET_ROOM_VNUM(taxi) : -1,
              dirs[dir]);
     mudlog(buf, NULL, LOG_SYSLOG, TRUE);
   } else {
+    snprintf(buf, sizeof(buf), "Successfully deleted %s exit from %s (%ld) to %s (%ld) for close-taxi-door (second block).",
+             dirs[dir],
+             GET_ROOM_NAME(taxi),
+             GET_ROOM_VNUM(taxi),
+             taxi->dir_option[dir]->to_room ? GET_ROOM_NAME(taxi->dir_option[dir]->to_room) : "nowhere???",
+             taxi->dir_option[dir]->to_room ? GET_ROOM_VNUM(taxi->dir_option[dir]->to_room) : -1
+            );
+            
     if (taxi->dir_option[dir]->keyword)
       delete [] taxi->dir_option[dir]->keyword;
     if (taxi->dir_option[dir]->general_description)
       delete [] taxi->dir_option[dir]->general_description;
     delete taxi->dir_option[dir];
     taxi->dir_option[dir] = NULL;
+    
+#ifdef TRANSPORT_DEBUG
+    mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+#endif
   }
 }
 
@@ -1968,7 +2027,7 @@ void extend_walkway_st(int ferry, int to, int room, int from)
   
   create_linked_exit(ferry, to, room, from, "extend_walkway_st");
   
-  send_to_room("The ferry docks at the pier, and extends its walkway.\r\n", &world[room]);
+  send_to_room("The Seattle ferry docks at the pier, and extends its walkway.\r\n", &world[room]);
   send_to_room("The ferry docks at the pier, and extends its walkway.\r\n", &world[ferry]);
 }
 void contract_walkway_st(int ferry, int to, int room, int from)
@@ -1978,7 +2037,7 @@ void contract_walkway_st(int ferry, int to, int room, int from)
 
   delete_linked_exit(ferry, to, room, from, "contract_walkway_st");
   
-  send_to_room("The walkway recedes, and the ferry departs.\r\n", &world[room]);
+  send_to_room("The walkway recedes, and the Seattle ferry departs.\r\n", &world[room]);
   send_to_room("The walkway recedes, and the ferry departs.\r\n", &world[ferry]);
 }
 
@@ -2274,7 +2333,7 @@ void extend_walkway(int ferry, int to, int room, int from)
   
   create_linked_exit(ferry, to, room, from, "extend_walkway");
   
-  send_to_room("The ferry docks, and the walkway extends.\r\n", &world[room]);
+  send_to_room("The Bradenton ferry docks, and the walkway extends.\r\n", &world[room]);
   send_to_room("The ferry docks, and the walkway extends.\r\n", &world[ferry]);
 }
 
@@ -2285,7 +2344,7 @@ void contract_walkway(int ferry, int to, int room, int from)
   
   delete_linked_exit(ferry, to, room, from, "contract_walkway");
   
-  send_to_room("The walkway recedes, and the ferry departs.\r\n", &world[room]);
+  send_to_room("The walkway recedes, and the Bradenton ferry departs.\r\n", &world[room]);
   send_to_room("The walkway recedes, and the ferry departs.\r\n", &world[ferry]);
 }
 

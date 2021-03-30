@@ -38,6 +38,9 @@ extern bool hunting_escortee(struct char_data *ch, struct char_data *vict);
 extern void death_penalty(struct char_data *ch);
 extern int get_vehicle_modifier(struct veh_data *veh);
 extern int calculate_vehicle_entry_load(struct veh_data *veh);
+extern bool passed_flee_success_check(struct char_data *ch);
+extern int calculate_swim_successes(struct char_data *ch);
+extern bool can_edit_zone(struct char_data *ch, int zone);
 
 extern sh_int mortal_start_room;
 extern sh_int frozen_start_room;
@@ -55,7 +58,7 @@ ACMD_DECLARE(do_prone);
 int can_move(struct char_data *ch, int dir, int extra)
 {
   SPECIAL(escalator);
-  int test, i, target, skill, dam;
+  int dam;
 
   if (IS_AFFECTED(ch, AFF_PETRIFY))
     return 0;
@@ -64,16 +67,24 @@ int can_move(struct char_data *ch, int dir, int extra)
   if (IS_SET(extra, CHECK_SPECIAL) && special(ch, convert_dir[dir], &empty_argument))
     return 0;
 
-  if (ch->in_room && ch->in_room->icesheet[0] && !IS_ASTRAL(ch))
-    if (success_test(GET_QUI(ch), ch->in_room->icesheet[0] + modify_target(ch)) < 1)
+  if (ch->in_room && ch->in_room->icesheet[0] && !IS_ASTRAL(ch)) {
+    if (FIGHTING(ch) && success_test(GET_QUI(ch), ch->in_room->icesheet[0] + modify_target(ch)) < 1)
     {
       send_to_char("The ice at your feet causes you to trip and fall!\r\n", ch);
       return 0;
+    } else {
+      send_to_char("You step cautiously across the ice sheet, keeping yourself from falling.\r\n", ch);
     }
+  }
   if (IS_AFFECTED(ch, AFF_CHARM) && ch->master && ((ch->in_room && (ch->in_room == ch->master->in_room)) || ((ch->in_veh && ch->in_veh == ch->master->in_veh))))
   {
     send_to_char("The thought of leaving your master makes you weep.\r\n", ch);
     act("$n bursts into tears.", FALSE, ch, 0, 0, TO_ROOM);
+    return 0;
+  }
+  // Builders are restricted to their zone.
+  if (builder_cant_go_there(ch, EXIT(ch, dir)->to_room)) {
+    send_to_char("Sorry, as a first-level builder you're only able to move to rooms you have edit access for.\r\n", ch);
     return 0;
   }
   if (ROOM_FLAGGED(EXIT(ch, dir)->to_room, ROOM_FREEWAY) && GET_LEVEL(ch) == 1) {
@@ -111,41 +122,25 @@ int can_move(struct char_data *ch, int dir, int extra)
   */
 
   if (ch->in_room && IS_WATER(ch->in_room) && !IS_NPC(ch) && !IS_SENATOR(ch))
-  {
-    target = MAX(2, ch->in_room->rating);
-    skill = SKILL_ATHLETICS;
-        
-    i = get_skill(ch, skill, target);
-    for (struct obj_data *cyber = ch->cyberware; cyber; cyber = cyber->next_content)
-      if (GET_OBJ_VAL(cyber, 0) == CYB_FIN && !GET_OBJ_VAL(cyber, 9)) {
-        i += GET_QUI(ch) / 2;
-        break;
-      }
-    i = resisted_test(i, target + modify_target(ch), target, i);
-    if (i < 0) {
-      test = success_test(GET_WIL(ch), modify_target(ch) - i);
+  {    
+    int swimming_successes = calculate_swim_successes(ch);
+    int target = MAX(2, ch->in_room->rating) + modify_target(ch) - swimming_successes;
+    int test = success_test(GET_WIL(ch), target);
+    
+    if (swimming_successes < 0) {
       dam = convert_damage(stage(-test, SERIOUS));
-      send_to_char(ch, "You struggle to retain consciousness as the current "
-                   "resists your every move.\r\n");
-      if (dam > 0)
-        damage(ch, ch, dam, TYPE_DROWN, FALSE);
-      if (GET_POS(ch) < POS_STANDING)
+      send_to_char(ch, "You struggle to retain consciousness as the current resists your every move.\r\n");
+      if (dam > 0 && (damage(ch, ch, dam, TYPE_DROWN, FALSE) || GET_POS(ch) < POS_STANDING))
         return 0;
-    } else if (!i) {
-      test = success_test(GET_WIL(ch), 3 + modify_target(ch));
+    } else if (!swimming_successes) {
       dam = convert_damage(stage(-test, MODERATE));
       send_to_char(ch, "The current resists your movements.\r\n");
-      if (dam > 0)
-        damage(ch, ch, dam, TYPE_DROWN, FALSE);
-      if (GET_POS(ch) < POS_STANDING)
+      if (dam > 0 && (damage(ch, ch, dam, TYPE_DROWN, FALSE) || GET_POS(ch) < POS_STANDING))
         return 0;
-    } else if (i < 3) {
-      test = success_test(GET_WIL(ch), 5 - i + modify_target(ch));
+    } else if (swimming_successes < 3) {
       dam = convert_damage(stage(-test, LIGHT));
       send_to_char(ch, "The current weakly resists your efforts to move.\r\n");
-      if (dam > 0)
-        damage(ch, ch, dam, TYPE_DROWN, FALSE);
-      if (GET_POS(ch) < POS_STANDING)
+      if (dam > 0 && (damage(ch, ch, dam, TYPE_DROWN, FALSE) || GET_POS(ch) < POS_STANDING))
         return 0;
     }
   }
@@ -321,13 +316,18 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
       if (!FIGHTING(tch) && CAN_SEE(tch, ch) && hunting_escortee(tch, ch))
         set_fighting(tch, ch);
       else if (IS_NPC(tch)) {
-        if ((!IS_NPC(ch) || IS_PROJECT(ch) || is_escortee(ch)) &&
-               !PRF_FLAGGED(ch, PRF_NOHASSLE) && !FIGHTING(tch) &&
-               MOB_FLAGGED(tch, MOB_AGGRESSIVE) && CAN_SEE(tch, ch) &&
-               IS_SET(extra, LEADER) && AWAKE(tch))
-          set_fighting(tch, ch);
+        if ((!IS_NPC(ch) || IS_PROJECT(ch) || is_escortee(ch)) 
+            && !PRF_FLAGGED(ch, PRF_NOHASSLE) 
+            && MOB_FLAGGED(tch, MOB_AGGRESSIVE) 
+            && !FIGHTING(tch) 
+            && CAN_SEE(tch, ch) 
+            && IS_SET(extra, LEADER) 
+            && AWAKE(tch)) 
+        {
           GET_MOBALERT(tch) = MALERT_ALERT;
-          GET_MOBALERTTIME(tch) = 20;      
+          GET_MOBALERTTIME(tch) = 20;   
+          set_fighting(tch, ch);
+        }
       }
     }
   }
@@ -381,7 +381,7 @@ bool check_fall(struct char_data *ch, int modifier, const char *fall_message)
   int i, autosucc = 0, dice, success;
 
   for (i = WEAR_LIGHT; i < NUM_WEARS; i++)
-    if (GET_EQ(ch, i) && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_CLIMBING)
+    if (GET_EQ(ch, i) && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_CLIMBING && GET_OBJ_VAL(GET_EQ(ch, i), 1) == CLIMBING_TYPE_JUST_CLIMBING)
       base_target -= GET_OBJ_VAL(GET_EQ(ch, i), 0);
   for (struct obj_data *cyber = ch->cyberware; cyber; cyber = cyber->next_content)
     if (GET_OBJ_VAL(cyber, 0) == CYB_BALANCETAIL)
@@ -765,11 +765,11 @@ int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vic
     return 0;
   }
   
-  if (GET_POS(ch) >= POS_FIGHTING && FIGHTING(ch) && !AFF_FLAGGED(ch, AFF_PRONE)) {
+  if (GET_POS(ch) >= POS_FIGHTING && FIGHTING(ch)) {
     WAIT_STATE(ch, PULSE_VIOLENCE * 2);
-    bool succeeded = (!(IS_NPC(FIGHTING(ch)) && MOB_FLAGGED(FIGHTING(ch), MOB_NOKILL))) ? success_test(GET_QUI(ch), GET_QUI(FIGHTING(ch))) : TRUE;
-    if (succeeded && (CAN_GO(ch, dir) && (!IS_NPC(ch) ||
-        !ROOM_FLAGGED(ch->in_room->dir_option[dir]->to_room, ROOM_NOMOB)))) {
+    if (passed_flee_success_check(ch) 
+        && (CAN_GO(ch, dir) 
+            && (!IS_NPC(ch) || !ROOM_FLAGGED(ch->in_room->dir_option[dir]->to_room, ROOM_NOMOB)))) {
       act("$n searches for a quick escape!", TRUE, ch, 0, 0, TO_ROOM);
       send_to_char("You start moving away for a clever escape.\r\n", ch);
     } else {
@@ -854,12 +854,7 @@ int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vic
     }
   }
 
-  int total = 0;
-  if (GET_TOTALBAL(ch) > GET_QUI(ch))
-    total += GET_TOTALBAL(ch) - GET_QUI(ch);
-  if (GET_TOTALIMP(ch) > GET_QUI(ch))
-    total += GET_TOTALIMP(ch) - GET_QUI(ch);
-  if (total >= GET_QUI(ch)) {
+  if (get_armor_penalty_grade(ch) == ARMOR_PENALTY_TOTAL) {
     send_to_char("You are wearing too much armor to move!\r\n", ch);
     return 0;
   }
@@ -1445,6 +1440,8 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
   door = ch->in_room;
   if (drag)
     snprintf(buf2, sizeof(buf2), "$n is dragged into %s.\r\n", GET_VEH_NAME(found_veh));
+  else if (found_veh->type == VEH_BIKE)
+    snprintf(buf2, sizeof(buf2), "$n gets on %s.\r\n", GET_VEH_NAME(found_veh));
   else
     snprintf(buf2, sizeof(buf2), "$n climbs into %s.\r\n", GET_VEH_NAME(found_veh));
   act(buf2, FALSE, ch, 0, 0, TO_ROOM);
@@ -1453,9 +1450,15 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
   if (drag)
     act("$n is dragged in.", FALSE, ch, 0, 0, TO_VEH);
   else {
-    act("$n climbs in.", FALSE, ch, 0, 0, TO_VEH);
-    send_to_char(ch, "You climb into %s.\r\n", GET_VEH_NAME(found_veh));
-    GET_POS(ch) = POS_SITTING;
+    if (found_veh->type == VEH_BIKE) {
+      act("$n gets on.", FALSE, ch, 0, 0, TO_VEH);
+      send_to_char(ch, "You get on %s.\r\n", GET_VEH_NAME(found_veh));
+      GET_POS(ch) = POS_SITTING;
+    } else {
+      act("$n climbs in.", FALSE, ch, 0, 0, TO_VEH);
+      send_to_char(ch, "You climb into %s.\r\n", GET_VEH_NAME(found_veh));
+      GET_POS(ch) = POS_SITTING;
+    }
   }
   DELETE_ARRAY_IF_EXTANT(GET_DEFPOS(ch));
   for (k = ch->followers; k; k = next)
@@ -1587,7 +1590,8 @@ ACMD(do_enter)
           }
 
 
-    send_to_char(ch, "There is no %s here.\r\n", buf);
+    send_to_char(ch, "There is no '%s' here.\r\n", buf);
+    return;
   } 
   
   // Is there an elevator car here?

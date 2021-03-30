@@ -161,9 +161,13 @@ bool ammo_test(struct char_data *ch, struct obj_data *obj)
     csuccess--;
   snprintf(buf, sizeof(buf), "AmmoTest: Skill %d, Target %d, Success %d(c%d/t%d)", skill, target, success, csuccess, success - csuccess);
   act(buf, FALSE, ch, NULL, NULL, TO_ROLLS);
-  if (success > 0)
+  if (success > 0) {
     GET_AMMOBOX_TIME_TO_COMPLETION(obj) = (int)((ammo_type[GET_AMMOBOX_TYPE(obj)].time / MAX(success - csuccess, 1)) * 60);
-  else
+    if (IS_SENATOR(ch)) {
+      send_to_char(ch, "You use your staff powers to greatly accelerate the build time (was %d).\r\n", GET_AMMOBOX_TIME_TO_COMPLETION(obj));
+      GET_AMMOBOX_TIME_TO_COMPLETION(obj) = 1;
+    }
+  } else
     GET_AMMOBOX_TIME_TO_COMPLETION(obj) = -1;
   GET_NUYEN(ch) -= (int)((get_ammo_cost(GET_AMMOBOX_WEAPON(obj), GET_AMMOBOX_TYPE(obj)) * 10) * (1 - (csuccess * .05)));
   GET_OBJ_VAL(obj, 10) = GET_AMMOBOX_TIME_TO_COMPLETION(obj);

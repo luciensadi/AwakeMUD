@@ -98,6 +98,7 @@ void    update_ammobox_ammo_quantity(struct obj_data *ammobox, int amount);
 void    destroy_door(struct room_data *room, int dir);
 bool    spell_is_nerp(int spell_num);
 char    get_final_character_from_string(const char *str);
+bool    builder_cant_go_there(struct char_data *ch, struct room_data *room);
 
 // Skill-related.
 char *how_good(int skill, int rank);
@@ -397,10 +398,13 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define GET_NOT(ch)           ((ch)->points.noto)
 #define GET_TKE(ch)           ((ch)->points.tke)
 #define GET_SIG(ch)	      ((ch)->points.sig)
+
 #define GET_TOTALBAL(ch)      ((ch)->points.ballistic[1])
 #define GET_BALLISTIC(ch)     ((ch)->points.ballistic[0])
 #define GET_TOTALIMP(ch)      ((ch)->points.impact[1])
 #define GET_IMPACT(ch)          ((ch)->points.impact[0])
+int get_armor_penalty_grade(struct char_data *ch);
+
 #define GET_PHYSICAL(ch)        ((ch)->points.physical)
 #define GET_MAX_PHYSICAL(ch)  ((ch)->points.max_physical)
 #define GET_GRADE(ch)   	((ch)->points.grade)
@@ -794,8 +798,11 @@ bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struc
 #define GET_WEAPON_MAX_AMMO(weapon)            (GET_OBJ_VAL((weapon), 5))
 #define GET_WEAPON_REACH(weapon)               (GET_OBJ_VAL((weapon), 6))
 #define GET_WEAPON_ATTACH_TOP_VNUM(weapon)     (GET_OBJ_VAL((weapon), 7))
+#define GET_WEAPON_FOCUS_RATING(weapon)        (GET_OBJ_VAL((weapon), 7)) /* Only melee weapons can be weapon foci, so reusing attach is OK. */
 #define GET_WEAPON_ATTACH_BARREL_VNUM(weapon)  (GET_OBJ_VAL((weapon), 8))
+#define GET_WEAPON_FOCUS_BOND_STATUS(weapon)   (GET_OBJ_VAL((weapon), 8)) /* Only melee weapons can be weapon foci, so reusing attach is OK. */
 #define GET_WEAPON_ATTACH_UNDER_VNUM(weapon)   (GET_OBJ_VAL((weapon), 9))
+#define GET_WEAPON_FOCUS_BONDED_BY(weapon)     (GET_OBJ_VAL((weapon), 9)) /* Only melee weapons can be weapon foci, so reusing attach is OK. */
 #define GET_WEAPON_POSSIBLE_FIREMODES(weapon)  (GET_OBJ_VAL((weapon), 10))
 #define GET_WEAPON_FIREMODE(weapon)            (GET_OBJ_VAL((weapon), 11))
 #define GET_WEAPON_INTEGRAL_RECOIL_COMP(weap)  (GET_OBJ_ATTEMPT((weap)))
@@ -804,6 +811,10 @@ bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struc
                                                     GET_OBJ_VAL((weapon), (loc)) : 0)
 
 #define WEAPON_CAN_USE_FIREMODE(weapon, mode)  (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(weapon), 1 << (mode)))
+#define WEAPON_IS_SS(eq)  (GET_OBJ_TYPE(eq) == ITEM_WEAPON && GET_OBJ_VAL(eq, 11) == MODE_SS)
+#define WEAPON_IS_SA(eq)    (GET_OBJ_TYPE(eq) == ITEM_WEAPON && GET_OBJ_VAL(eq, 11) == MODE_SA)
+#define WEAPON_IS_BF(eq)   (GET_OBJ_TYPE(eq) == ITEM_WEAPON && GET_OBJ_VAL(eq, 11) == MODE_BF)
+#define WEAPON_IS_FA(eq)    (GET_OBJ_TYPE(eq) == ITEM_WEAPON && GET_OBJ_VAL(eq, 11) == MODE_FA)
 
 // ITEM_FIREWEAPON convenience defines
 
@@ -860,6 +871,7 @@ bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struc
 
 // ITEM_CYBERWARE convenience defines
 #define GET_CYBERWARE_TYPE(cyberware)          (GET_OBJ_VAL((cyberware), 0))
+#define GET_CYBERWARE_RATING(cyberware)        (GET_OBJ_VAL((cyberware), 1))
 #define GET_CYBERWARE_FLAGS(cyberware)         (GET_OBJ_VAL((cyberware), 3)) // CYBERWEAPON_RETRACTABLE, CYBERWEAPON_IMPROVED
 #define GET_CYBERWARE_LACING_TYPE(cyberware)   (GET_OBJ_VAL((cyberware), 3)) // Yes, this is also value 3. Great design here.
 #define GET_CYBERWARE_ESSENCE_COST(cyberware)  (GET_OBJ_VAL((cyberware), 4))

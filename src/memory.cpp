@@ -123,8 +123,45 @@ void memoryClass::DeleteObject(struct obj_data *obj)
 
 void memoryClass::DeleteCh(struct char_data *ch)
 {
+  extern struct char_data *combat_list;
+  extern void stop_fighting(struct char_data * ch);
+  
+  // Verify that we don't have a nulled-out character in the player list. This might add a lot of lag.
+  struct char_data *prev = character_list, *next = NULL;
+  if (prev && prev == ch) {
+    mudlog("^YWARNING: Would have left a nulled-out character in the character list!", ch, LOG_SYSLOG, TRUE);
+    character_list = character_list->next;
+  } else {
+    for (struct char_data *i = character_list; i; i = i->next) {
+      if (i == ch) {
+        mudlog("^YWARNING: Would have left a nulled-out character in the character list!", ch, LOG_SYSLOG, TRUE);
+        prev->next = i->next;
+        i->next = NULL;
+        break;
+      }
+      prev = i;
+    }
+  }
+  
+  prev = combat_list;
+  if (prev) {
+    for (struct char_data *i = combat_list; i; i = next) {
+      next = i->next_fighting;
+      if (FIGHTING(i) == ch) {
+        mudlog("^YWARNING: Would have left a nulled-out character as a combat target!", ch, LOG_SYSLOG, TRUE);
+        stop_fighting(i);
+        if (FIGHTING(i) == ch) {
+          mudlog("^RWE'RE GONNA CRASH, BOIS: Failed to wipe out the fighting pointer pointing to our nulled-out character!", ch, LOG_SYSLOG, TRUE);
+          continue;
+        }
+      }
+      prev = i;
+    }
+  }
+  
   free_char(ch);
-  Ch->Push(ch);
+  delete ch;
+  // Ch->Push(ch);
 }
 
 void memoryClass::DeleteRoom(struct room_data *room)

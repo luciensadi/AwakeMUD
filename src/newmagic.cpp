@@ -23,6 +23,8 @@ extern void damage_equip(struct char_data *ch, struct char_data *vict, int power
 extern void damage_obj(struct char_data *ch, struct obj_data *obj, int power, int type);
 extern void check_killer(struct char_data * ch, struct char_data * vict);
 extern void nonsensical_reply(struct char_data *ch, const char *arg, const char *mode);
+extern void send_mob_aggression_warnings(struct char_data *pc, struct char_data *mob);
+extern bool mob_is_aggressive(struct char_data *ch, bool include_base_aggression);
 
 bool focus_is_usable_by_ch(struct obj_data *focus, struct char_data *ch);
 
@@ -687,6 +689,17 @@ void magic_perception(struct char_data *ch, int force, int spell)
       if (IS_DUAL(vict) || IS_ASTRAL(vict))
         act("You notice $n manipulating the astral plane.", FALSE, ch, 0, vict, TO_VICT);
       else act("You notice $n performing magic.", TRUE, ch, 0, vict, TO_VICT);
+      
+#ifdef GUARDS_ATTACK_MAGES
+      // Guards and fighters don't like people casting magic around them.
+      if (IS_NPC(vict) && (MOB_FLAGGED(vict, MOB_GUARD) 
+                           || mob_is_aggressive(vict, TRUE)
+                           || GET_MOBALERT(vict) == MALERT_ALARM)) 
+      {
+        send_mob_aggression_warnings(ch, vict);
+        set_fighting(vict, ch);
+      }
+#endif
     }
   }
 }
@@ -1720,9 +1733,15 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
         act("The lightning hits $n, but seems to be easily absorbed.", FALSE, vict, 0, ch, TO_ROOM);
         send_to_char("Your body absorbs the lightning without harm.\r\n", vict);
       }
-      for (int i = 0; i < NUM_WEARS; i++)
-        if (GET_EQ(vict, i) && (GET_OBJ_MATERIAL(GET_EQ(vict, i)) == 10 || GET_OBJ_MATERIAL(GET_EQ(vict, i)) == 11))
+      for (int i = 0; i < NUM_WEARS; i++) {
+        if (number(0, 1) 
+            && GET_EQ(vict, i) 
+            && (GET_OBJ_MATERIAL(GET_EQ(vict, i)) == 10 
+                || GET_OBJ_MATERIAL(GET_EQ(vict, i)) == 11))
+        {
           damage_obj(vict, GET_EQ(vict, i), force, DAMOBJ_LIGHTNING);
+        }
+      }
       damage(ch, vict, dam, TYPE_MANIPULATION_SPELL, PHYSICAL);
       if (IS_NPC(vict) && !IS_NPC(ch))
         GET_LASTHIT(vict) = GET_IDNUM(ch);
@@ -2395,83 +2414,70 @@ ACMD(do_bond)
         ch, obj, 0, TO_CHAR);
     return;
   }
-  /*
-  // If it's an unbonded magazine, we need to search for the weapon they selected.
-  else if (GET_OBJ_TYPE(obj) == ITEM_GUN_MAGAZINE) {
-    // Define aliases used for code readability; nobody likes juggling 'i' and 'obj'.
-    struct obj_data *magazine = obj, *weapon = NULL;
-    
-    // Convenience: If they selected a pre-bonded magazine, just keep rolling through.
-    if (GET_OBJ_VAL(magazine, 0)) {
-      for (obj = obj->next_content; obj; obj = obj->next_content) {
-        if (isname(buf1, obj->text.keywords) || isname(buf2, GET_OBJ_NAME(obj))) {
-          // We found something that matches the keywords-- but is it already bonded?
-          if (GET_OBJ_VAL(magazine, 0))
-            continue;
-          
-          // Good to go.
-          magazine = obj;
-          break;
-        }
-      }
-    }
-    
-    // If we found no valid magazines, terminate.
-    if (!magazine || GET_OBJ_VAL(magazine, 0)) {
-      send_to_char("All of your magazines have already been bonded to something else.\r\n", ch);
-      return;
-    }
-    
-    // Iterate through character's inventory to find the selected weapon.
-    for (weapon = ch->carrying; weapon; weapon = weapon->next_content) {
-      if (GET_OBJ_TYPE(weapon) == ITEM_WEAPON && (isname(buf1, weapon->text.keywords) || isname(buf2, GET_OBJ_NAME(weapon))))
-        break;
-    }
-    
-    // If nothing was found, fail.
-    if (!weapon) {
-      send_to_char("You don't have that weapon.\r\n", ch);
-      return;
-    }
-    
-    // Assign the magazine's values to the correct values supplied by the weapon.
-    GET_MAGAZINE_BONDED_MAXAMMO(magazine) = GET_WEAPON_MAX_AMMO(weapon);
-    GET_MAGAZINE_AMMO_TYPE(magazine) = GET_WEAPON_ATTACK_TYPE(weapon);
-    snprintf(buf, sizeof(buf), "a %d-round %s magazine", GET_MAGAZINE_BONDED_MAXAMMO(magazine), weapon_type[GET_MAGAZINE_AMMO_TYPE(magazine)]);
-    if (magazine->restring)
-      delete [] magazine->restring;
-    magazine->restring = str_dup(buf);
-    send_to_char(ch, "You bond a new magazine to %s.\r\n", GET_OBJ_NAME(weapon));
-    return;
-  }
   
-  else if (GET_OBJ_TYPE(obj) == ITEM_WEAPON) {
-    if (IS_GUN(GET_OBJ_VAL(obj, 3))) {
-      for (struct obj_data *i = ch->carrying; i; i = i->next_content) {
-        if (GET_OBJ_TYPE(i) == ITEM_GUN_MAGAZINE && !GET_OBJ_VAL(i, 0)) {
-          GET_OBJ_VAL(i, 0) = GET_OBJ_VAL(obj, 5);
-          GET_OBJ_VAL(i, 1) = GET_OBJ_VAL(obj, 3);
-          snprintf(buf, sizeof(buf), "a %d-round %s magazine", GET_OBJ_VAL(i, 0), weapon_type[GET_OBJ_VAL(i, 1)]);
-          if (i->restring)
-            delete [] i->restring;
-          i->restring = str_dup(buf);
-          send_to_char(ch, "You bond a new magazine to %s.\r\n", GET_OBJ_NAME(obj));
-          return;
-        }
-      }
-      send_to_char("You can't find any blank magazines to bond to that weapon.\r\n", ch);
+  else if (GET_OBJ_TYPE(obj) == ITEM_WEAPON
+           && !IS_GUN(GET_WEAPON_ATTACK_TYPE(obj))
+           && GET_WEAPON_FOCUS_RATING(obj) > 0) 
+  {
+    if (GET_TRADITION(ch) == TRAD_MUNDANE) {
+      send_to_char("Mundanes can't bond weapon foci.\r\n", ch);
       return;
-    } 
-    else 
-      send_to_char(ch, "%s can't take magazines.\r\n", GET_OBJ_NAME(obj));
+    }
+    if (GET_WEAPON_FOCUS_BONDED_BY(obj) > 0) {
+      send_to_char(ch, "%s is already bonded to %s.", 
+                   capitalize(GET_OBJ_NAME(obj)), 
+                   GET_WEAPON_FOCUS_BONDED_BY(obj) == GET_IDNUM(ch) ? "you" : "someone else");
+      return;
+    }
+    if (((GET_MAG(ch) * 2) / 100) < GET_WEAPON_FOCUS_RATING(obj)) {
+      send_to_char(ch, "%s is too powerful for you to bond! You need at least %d magic to bond it, and you have %d.\r\n", capitalize(GET_OBJ_NAME(obj)), (int) ((GET_WEAPON_FOCUS_RATING(obj) + 1) / 2));
+      return;
+    }
+    
+    if (IS_WORKING(ch)) {
+      send_to_char(TOOBUSY, ch);
+      return;
+    }
+    if (GET_POS(ch) > POS_SITTING) {
+      send_to_char("You must be sitting to perform a bonding ritual.\r\n", ch);
+      return;
+    }
+    
+    if (GET_WEAPON_FOCUS_BOND_STATUS(obj) > 0) {
+      GET_WEAPON_FOCUS_BOND_STATUS(obj) = GET_WEAPON_FOCUS_RATING(obj) * 60;
+      send_to_char(ch, "You restart the ritual to bond %s.\r\n", GET_OBJ_NAME(obj));
+      act("$n begins a ritual to bond $p.", TRUE, ch, obj, 0, TO_ROOM);
+      AFF_FLAGS(ch).SetBit(AFF_BONDING);
+      ch->char_specials.programming = obj;
+      return;
+    }
+    
+    karma = (3 + GET_WEAPON_REACH(obj)) * GET_WEAPON_FOCUS_RATING(obj);
+    
+    if (GET_KARMA(ch) < karma * 100) {
+      send_to_char(ch, "You don't have enough karma to bond that (Need %d).\r\n", karma);
+      return;
+    }
+    GET_KARMA(ch) -= karma * 100;
+    GET_WEAPON_FOCUS_BOND_STATUS(obj) = GET_WEAPON_FOCUS_RATING(obj) * 60;
+    GET_WEAPON_FOCUS_BONDED_BY(obj) = GET_IDNUM(ch);
+    
+    if (access_level(ch, LVL_BUILDER)) {
+      send_to_char(ch, "You use your staff powers to greatly accelerate the bonding ritual.\r\n");
+      GET_WEAPON_FOCUS_BOND_STATUS(obj) = 1;
+    }
+    
+    send_to_char(ch, "You begin the ritual to bond %s.\r\n", GET_OBJ_NAME(obj));
+    act("$n begins a ritual to bond $p.", TRUE, ch, obj, 0, TO_ROOM);
+    AFF_FLAGS(ch).SetBit(AFF_BONDING);
+    ch->char_specials.programming = obj;
     return;
   }
-  */
   
   else if (GET_OBJ_TYPE(obj) == ITEM_FOCUS) {
     if (GET_TRADITION(ch) == TRAD_MUNDANE)
       send_to_char(ch, "You can't bond foci.\r\n");
-    else if (GET_TRADITION(ch) == TRAD_ADEPT && GET_FOCUS_TYPE(obj) != FOCI_WEAPON)
+    else if (GET_TRADITION(ch) == TRAD_ADEPT)
       send_to_char("Adepts can only bond weapon foci.\r\n", ch);
     else if (GET_FOCUS_BONDED_TO(obj) && GET_FOCUS_BONDED_TO(obj) != GET_IDNUM(ch))
       send_to_char(ch, "%s is already bonded to someone else.\r\n", capitalize(GET_OBJ_NAME(obj)));
@@ -2550,7 +2556,10 @@ ACMD(do_bond)
             break;
           }
         if (!spell) {
-          send_to_char(ch, "You don't know a spell called '%s' to bond.\r\n", buf2);
+          if (*buf2)
+            send_to_char(ch, "You don't know a spell called '%s' to bond.\r\n", buf2);
+          else
+            send_to_char(ch, "You need to specify the spell you want to bond %s for.\r\n", GET_OBJ_NAME(obj));
           return;
         }
         if (GET_FOCUS_TYPE(obj) == FOCI_SUSTAINED && spells[spirit].duration != SUSTAINED) {
@@ -3365,6 +3374,14 @@ POWER(spirit_sustain)
     for (sust = GET_SUSTAINED(ch); sust; sust = sust->next)
       if (sust->caster && --i == 0)
         break;
+    
+    // Anti-crash.
+    if (!sust) {
+      mudlog("SYSERR: We would have crashed from a bad sustain!", ch, LOG_SYSLOG, TRUE);
+      send_to_char("Your elemental can't sustain that spell.\r\n", ch);
+      return;
+    }
+    
     if (sust->focus || sust->spirit) {
       send_to_char("You aren't sustaining that spell yourself.\r\n", ch);
       return;
@@ -3806,10 +3823,15 @@ ACMD(do_order)
       return;
     }
     if (GET_TRADITION(ch) == TRAD_HERMETIC) {
-      if (order == SERV_APPEAR && spirit->called) {
-        send_to_char(ch, "That %s is already here!\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
-        return;
-      } else if (!spirit->called && order != SERV_APPEAR) {
+      if (order == SERV_APPEAR) {
+        if (spirit->called) {
+          send_to_char(ch, "That %s is already here!\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
+          return;
+        } else {
+          spirit_appear(ch, NULL, spirit, buf2);
+          return;
+        }
+      } else if (!spirit->called) {
         send_to_char(ch, "That %s is waiting on the metaplanes.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
         return;
       }
@@ -3992,7 +4014,7 @@ ACMD(do_deactivate)
         send_to_char(ch, "You don't have %s activated.\r\n", adept_powers[i]);
       else {
         int total = 0;
-        for (int q = GET_POWER_ACT(ch, i);q > 0; q--)
+        for (int q = GET_POWER_ACT(ch, i); q > 0; q--)
           total += ability_cost(i, q);
         GET_POWER_POINTS(ch) -= total;
         deactivate_power(ch, i);
@@ -4501,7 +4523,7 @@ ACMD(do_initiate)
     }
     
     if (ch->points.extrapp > (int)(GET_TKE(ch) / 50)) {
-      send_to_char(ch, "You do not have enough TKE to purchase a powerpoint. You need %d.\r\n", 50 * (ch->points.extrapp - (int)(GET_TKE(ch) / 50)));
+      send_to_char(ch, "You haven't earned enough TKE to purchase %s powerpoint yet. You need at least %d.\r\n", ch->points.extrapp ? "another" : "a", 50 * ch->points.extrapp);
       return;
     }
     
@@ -4772,6 +4794,10 @@ bool focus_is_usable_by_ch(struct obj_data *focus, struct char_data *ch) {
   // Focus is not a focus.
   if (GET_OBJ_TYPE(focus) != ITEM_FOCUS)
     return FALSE;
+    
+  // NPCs get the advantage of the foci they're wearing without having to bond them.
+  if (IS_NPC(ch))
+    return TRUE;
     
   // Focus not bonded to character.
   if (GET_FOCUS_BONDED_TO(focus) != GET_IDNUM(ch))

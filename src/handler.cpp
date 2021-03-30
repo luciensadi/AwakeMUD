@@ -41,6 +41,9 @@ extern int can_wield_both(struct char_data *, struct obj_data *, struct obj_data
 extern int max_ability(int i);
 extern int calculate_vehicle_entry_load(struct veh_data *veh);
 
+int get_skill_num_in_use_for_weapons(struct char_data *ch);
+int get_skill_dice_in_use_for_weapons(struct char_data *ch);
+
 struct obj_data *find_obj(struct char_data *ch, char *name, int num);
 
 char *fname(char *namelist)
@@ -462,9 +465,9 @@ void affect_total_veh(struct veh_data * veh)
 
 void affect_total(struct char_data * ch)
 {
-  struct obj_data *cyber, *one, *two, *obj;
+  struct obj_data *cyber, *obj;
   struct sustain_data *sust;
-  sh_int i, j, skill;
+  sh_int i, j, skill_dice;
   int has_rig = 0, has_trigger = -1, has_wired = 0, has_mbw = 0;
   bool wearing = FALSE;
   
@@ -624,6 +627,7 @@ void affect_total(struct char_data * ch)
         GET_IMPACT(ch) += suitimp;
       else {
         if (suitimp >= highestimp) {
+          // TODO: The calculations for totalbal/totalimp are a little screwy in conjunction with sets-- looks like sets are counted twice.
           GET_IMPACT(ch) -= highestimp;
           GET_IMPACT(ch) += highestimp / 2;
           GET_IMPACT(ch) += suitimp;
@@ -806,50 +810,7 @@ void affect_total(struct char_data * ch)
     GET_TARGET_MOD(ch) += 4;
   }
   
-  if (AFF_FLAGGED(ch, AFF_MANNING) || AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE)) {
-    skill = GET_SKILL(ch, SKILL_GUNNERY);
-  } else {
-    one = (GET_EQ(ch, WEAR_WIELD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_WEAPON) ? GET_EQ(ch, WEAR_WIELD) :
-           (struct obj_data *) NULL;
-    two = (GET_EQ(ch, WEAR_HOLD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_HOLD)) == ITEM_WEAPON) ? GET_EQ(ch, WEAR_HOLD) :
-           (struct obj_data *) NULL;
-           
-    if (!one && !two) {
-      if(has_cyberweapon(ch))
-        skill = GET_SKILL(ch, SKILL_CYBER_IMPLANTS);
-      else 
-        skill = GET_SKILL(ch, SKILL_UNARMED_COMBAT);
-    } 
-    
-    else if (one) {
-      if (!GET_SKILL(ch, GET_OBJ_VAL(one, 4)))
-        skill = GET_SKILL(ch, return_general(GET_OBJ_VAL(one, 4)));
-      else 
-        skill = GET_SKILL(ch, GET_OBJ_VAL(one, 4));
-    } 
-    
-    else if (two) {
-      if (!GET_SKILL(ch, GET_OBJ_VAL(two, 4)))
-        skill = GET_SKILL(ch, return_general(GET_OBJ_VAL(two, 4)));
-      else 
-        skill = GET_SKILL(ch, GET_OBJ_VAL(two, 4));
-    } 
-    
-    // This broken-ass code never worked. "If neither one or two, or if one, or if two, or..." no, that's a full logical stop.
-    else {
-      if (GET_SKILL(ch, GET_OBJ_VAL(one, 4)) <= GET_SKILL(ch, GET_OBJ_VAL(two, 4))) {
-        if (!GET_SKILL(ch, GET_OBJ_VAL(one, 4)))
-          skill = GET_SKILL(ch, return_general(GET_OBJ_VAL(one, 4)));
-        else 
-          skill = GET_SKILL(ch, GET_OBJ_VAL(one, 4));
-      } else {
-        if (!GET_SKILL(ch, GET_OBJ_VAL(two, 4)))
-          skill = GET_SKILL(ch, return_general(GET_OBJ_VAL(two, 4)));
-        else 
-          skill = GET_SKILL(ch, GET_OBJ_VAL(two, 4));
-      }
-    }
-  }
+  skill_dice = get_skill_dice_in_use_for_weapons(ch);
   
   GET_COMBAT(ch) += (GET_QUI(ch) + GET_WIL(ch) + GET_INT(ch)) / 2;
   if (GET_TOTALBAL(ch) > GET_QUI(ch))
@@ -860,19 +821,40 @@ void affect_total(struct char_data * ch)
     GET_COMBAT(ch) = 0;
   if (GET_TRADITION(ch) == TRAD_ADEPT)
     GET_IMPACT(ch) += GET_POWER(ch, ADEPT_MYSTIC_ARMOR);
-  for (i = 0; i < (NUM_WEARS -1); i++)
-    if (GET_EQ(ch, i) && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_GYRO)
-    {
-      GET_COMBAT(ch) /= 2;
-      break;
+    
+  // Apply gyromount penalties, but only if you're wielding a gun. 
+  // TODO: Ideally, this would only apply if you have uncompensated recoil, but that's a looot of code.
+  if (GET_EQ(ch, WEAR_WIELD) 
+      && GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_WEAPON) 
+  {
+    if (IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_WIELD)))) {
+      bool added_gyro_penalty = FALSE;
+      for (i = 0; !added_gyro_penalty && i < (NUM_WEARS -1); i++)
+        if (GET_EQ(ch, i) && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_GYRO) {
+          added_gyro_penalty = TRUE;
+          GET_COMBAT(ch) /= 2;
+        }
+        
+      /*
+      if (!added_gyro_penalty) {
+        for (struct obj_data *cyb = ch->cyberware; !added_gyro_penalty && cyb; cyb = cyb->next_content) {
+          if (GET_CYBERWARE_TYPE(cyb) == CYB_ARMS && IS_SET(GET_CYBERWARE_FLAGS(cyb), ARMS_MOD_GYROMOUNT)) {
+            added_gyro_penalty = TRUE;
+            GET_COMBAT(ch) /= 2;
+          }
+        }
+      }
+      */
     }
+  }
+  
   GET_DEFENSE(ch) = MIN(GET_DEFENSE(ch), GET_COMBAT(ch));
   GET_BODY(ch) = MIN(GET_BODY(ch), GET_COMBAT(ch) - GET_DEFENSE(ch));
   GET_OFFENSE(ch) = GET_COMBAT(ch) - GET_DEFENSE(ch) - GET_BODY(ch);
-  if (GET_OFFENSE(ch) > skill)
+  if (GET_OFFENSE(ch) > skill_dice)
   {
-    GET_DEFENSE(ch) += GET_OFFENSE(ch) - skill;
-    GET_OFFENSE(ch) = skill;
+    GET_DEFENSE(ch) += GET_OFFENSE(ch) - skill_dice;
+    GET_OFFENSE(ch) = skill_dice;
   }
   if ((IS_NPC(ch) && GET_MAG(ch) > 0) || (GET_TRADITION(ch) == TRAD_SHAMANIC ||
                                           GET_TRADITION(ch) == TRAD_HERMETIC))
@@ -1166,9 +1148,16 @@ void char_to_room(struct char_data * ch, struct room_data *room)
     log("SYSLOG: Illegal value(s) passed to char_to_room");
     room = &world[0];
   }
+  
+  // Warn on exceeding privileges, but don't fail.
+  if (builder_cant_go_there(ch, room)) {
+    mudlog("Warning: Builder exceeding allowed bounds. Make sure their loadroom etc is set properly.", ch, LOG_WIZLOG, TRUE);
+  }
+  
   ch->next_in_room = room->people;
   room->people = ch;
   ch->in_room = room;
+  room->dirty_bit = TRUE;
   if (IS_SENATOR(ch) && PRF_FLAGGED(ch, PRF_PACIFY))
     room->peaceful++;
   
@@ -1227,32 +1216,43 @@ bool check_obj_to_x_preconditions(struct obj_data * object, struct char_data *ch
   }
   
   // Pre-compose our message header.
-  snprintf(buf3, sizeof(buf3), "ERROR: check_obj_to_x_preconditions() failure for %s (%ld): ", GET_OBJ_NAME(object), GET_OBJ_VNUM(object));
-  
-  // Fail if the object already has next_content. This implies that it's part of someone else's linked list-- never merge them!
-  if (object->next_content) {
-    strcat(ENDOF(buf3), "It's already part of a next_content linked list.");
-    mudlog(buf3, ch, LOG_SYSLOG, TRUE);
-    return FALSE;
-  }
+  snprintf(buf3, sizeof(buf3), "ERROR: check_obj_to_x_preconditions() failure for %s (%ld): \r\n", GET_OBJ_NAME(object), GET_OBJ_VNUM(object));
+  size_t starting_strlen = strlen(buf3);
 
   // We can't give an object away that's already someone else's possession.
   if (object->carried_by) {
-    snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "Object already belongs to %s.", GET_CHAR_NAME(object->carried_by));
-    mudlog(buf3, ch, LOG_SYSLOG, TRUE);
-    return FALSE;
+    snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "- Object already carried by %s.\r\n", GET_CHAR_NAME(object->carried_by));
   }
   
   // We can't give an object away if it's sitting in a room.
   if (object->in_room) {
-    snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "Object is already in room %ld.", object->in_room->number);
-    mudlog(buf3, ch, LOG_SYSLOG, TRUE);
-    return FALSE;
+    snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "- Object is already in room %ld.\r\n", object->in_room->number);
   }
   
   // We can't give an object away if it's in a vehicle.
   if (object->in_veh) {
-    snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "Object is already in vehicle %s.", GET_VEH_NAME(object->in_veh));
+    snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "- Object is already in vehicle %s.\r\n", GET_VEH_NAME(object->in_veh));
+  }
+  
+  // We can't give an object away if it's in another object.
+  if (object->in_obj) {
+    snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "- Object is already in object %s.\r\n", GET_OBJ_NAME(object->in_obj));
+  }
+  
+  // Fail if the object already has next_content. This implies that it's part of someone else's linked list-- never merge them!
+  if (object->next_content) {
+    strcat(ENDOF(buf3), "- It's already part of a next_content linked list.\r\n");
+  }
+  
+  // Can't give away something that's worn by someone else.
+  if (object->worn_by) {
+    snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "- Object already carried by %s.\r\n", GET_CHAR_NAME(object->carried_by));
+  }
+  
+  // If we added anything, log it.
+  if (starting_strlen != strlen(buf3)) {
+    const char *representation = generate_new_loggable_representation(object);
+    strlcat(buf3, representation, sizeof(buf3));
     mudlog(buf3, ch, LOG_SYSLOG, TRUE);
     return FALSE;
   }
@@ -1741,6 +1741,8 @@ void obj_to_room(struct obj_data * object, struct room_data *room)
     return;
   }
   
+  room->dirty_bit = TRUE;
+  
   for (i = room->contents; i; i = i->next_content) {
     if (i->item_number == object->item_number &&
         !strcmp(i->text.room_desc, object->text.room_desc) &&
@@ -1793,6 +1795,9 @@ void obj_from_room(struct obj_data * object)
       remove_workshop_from_room(object);
     REMOVE_FROM_LIST(object, object->in_room->contents, next_content);
   }
+  
+  if (object->in_room)
+    object->in_room->dirty_bit = TRUE;
   
   object->in_veh = NULL;
   object->in_room = NULL;
@@ -1858,15 +1863,19 @@ void obj_to_obj(struct obj_data * obj, struct obj_data * obj_to)
   for (tmp_obj = obj->in_obj; tmp_obj->in_obj; tmp_obj = tmp_obj->in_obj)
     GET_OBJ_WEIGHT(tmp_obj) += GET_OBJ_WEIGHT(obj);
   
-  // Update the highest container's weight as well.
-  if (GET_OBJ_TYPE(tmp_obj) != ITEM_CYBERDECK || GET_OBJ_TYPE(tmp_obj) != ITEM_CUSTOM_DECK || GET_OBJ_TYPE(tmp_obj) != ITEM_DECK_ACCESSORY)
+  // Update the highest container's weight as well, provided it's not a deck or a computer.
+  if (GET_OBJ_TYPE(tmp_obj) != ITEM_CYBERDECK || GET_OBJ_TYPE(tmp_obj) != ITEM_CUSTOM_DECK || GET_OBJ_TYPE(tmp_obj) != ITEM_DECK_ACCESSORY) {
     GET_OBJ_WEIGHT(tmp_obj) += GET_OBJ_WEIGHT(obj);
+    
+    // If someone's carrying or wearing the highest container, increment their carry weight by the weight of the obj we just put in.
+    if (tmp_obj->carried_by)
+      IS_CARRYING_W(tmp_obj->carried_by) += GET_OBJ_WEIGHT(obj);
+    if (tmp_obj->worn_by)
+      IS_CARRYING_W(tmp_obj->worn_by) += GET_OBJ_WEIGHT(obj);
+  }
   
-  // If someone's carrying or wearing the highest container, increment their carry weight by the weight of the obj we just put in.
-  if (tmp_obj->carried_by)
-    IS_CARRYING_W(tmp_obj->carried_by) += GET_OBJ_WEIGHT(obj);
-  if (tmp_obj->worn_by)
-    IS_CARRYING_W(tmp_obj->worn_by) += GET_OBJ_WEIGHT(obj);
+  if (tmp_obj && tmp_obj->in_room)
+    tmp_obj->in_room->dirty_bit = TRUE;
 }
 
 
@@ -1893,17 +1902,21 @@ void obj_from_obj(struct obj_data * obj)
     GET_OBJ_WEIGHT(temp) -= GET_OBJ_WEIGHT(obj);
     
   // Decks don't get their weight deducted from.
-  if (GET_OBJ_TYPE(temp) != ITEM_CYBERDECK || GET_OBJ_TYPE(temp) != ITEM_DECK_ACCESSORY || GET_OBJ_TYPE(temp) != ITEM_CUSTOM_DECK)
+  if (GET_OBJ_TYPE(temp) != ITEM_CYBERDECK || GET_OBJ_TYPE(temp) != ITEM_DECK_ACCESSORY || GET_OBJ_TYPE(temp) != ITEM_CUSTOM_DECK) {
     GET_OBJ_WEIGHT(temp) -= GET_OBJ_WEIGHT(obj);
+    
+    // Recalculate the bearer's weight.
+    if (temp->carried_by)
+      IS_CARRYING_W(temp->carried_by) -= GET_OBJ_WEIGHT(obj);
+    if (temp->worn_by)
+      IS_CARRYING_W(temp->worn_by) -= GET_OBJ_WEIGHT(obj);
+  }
   
   obj->in_obj = NULL;
   obj->next_content = NULL;
-  
-  // Recalculate the bearer's weight.
-  if (temp->carried_by)
-    IS_CARRYING_W(temp->carried_by) -= GET_OBJ_WEIGHT(obj);
-  if (temp->worn_by)
-    IS_CARRYING_W(temp->worn_by) -= GET_OBJ_WEIGHT(obj);
+    
+  if (temp && temp->in_room)
+    temp->in_room->dirty_bit = TRUE;
 }
 
 void extract_icon(struct matrix_icon * icon)
@@ -2082,11 +2095,16 @@ void extract_obj(struct obj_data * obj)
 {
   struct phone_data *phone, *temp;
   bool set = FALSE;
+  
+  if (obj->in_room)
+    obj->in_room->dirty_bit = TRUE;
+  
   if (obj->worn_by != NULL)
     if (unequip_char(obj->worn_by, obj->worn_on, TRUE) != obj)
       log("SYSLOG: Inconsistent worn_by and worn_on pointers!!");
   if (GET_OBJ_TYPE(obj) == ITEM_PHONE ||
-      (GET_OBJ_TYPE(obj) == ITEM_CYBERWARE && GET_OBJ_VAL(obj, 0) == CYB_PHONE)) {
+      (GET_OBJ_TYPE(obj) == ITEM_CYBERWARE && GET_OBJ_VAL(obj, 0) == CYB_PHONE)) 
+  {
     for (phone = phone_list; phone; phone = phone->next) {
       if (phone->phone == obj) {
         if (phone->dest) {
@@ -2163,8 +2181,12 @@ void extract_char(struct char_data * ch)
   
   extern struct char_data *combat_list;
   
-  ACMD_CONST(do_return);
   void die_follower(struct char_data * ch);
+  
+  ACMD_CONST(do_return);
+  
+  if (ch->in_room)
+    ch->in_room->dirty_bit = TRUE;
   
   if (!IS_NPC(ch))
     playerDB.SaveChar(ch, GET_LOADROOM(ch));
@@ -2353,6 +2375,9 @@ void extract_char(struct char_data * ch)
   struct room_data *in_room = ch->in_room;
   if (ch->in_room || ch->in_veh)
     char_from_room(ch);
+    
+  /* wipe out their memory struct since PCs can have memory as well now */
+  clearMemory(ch);
   
   if (!IS_NPC(ch))
   {
@@ -2380,7 +2405,6 @@ void extract_char(struct char_data * ch)
   {
     if (GET_MOB_RNUM(ch) > -1)          /* if mobile */
       mob_index[GET_MOB_RNUM(ch)].number--;
-    clearMemory(ch);            /* Only NPC's can have memory */
     Mem->DeleteCh(ch);
   }
 }
@@ -2902,4 +2926,74 @@ int veh_skill(struct char_data *ch, struct veh_data *veh)
     skill = MAX(skill, 4);
   
   return skill;
+}
+
+int get_skill_num_in_use_for_weapons(struct char_data *ch) {
+  struct obj_data *one, *two;
+  int skill_num;
+  
+  if (AFF_FLAGGED(ch, AFF_MANNING) || AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE)) {
+    skill_num = SKILL_GUNNERY;
+  } else {
+    one = (GET_EQ(ch, WEAR_WIELD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_WEAPON) ? GET_EQ(ch, WEAR_WIELD) :
+           (struct obj_data *) NULL;
+    two = (GET_EQ(ch, WEAR_HOLD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_HOLD)) == ITEM_WEAPON) ? GET_EQ(ch, WEAR_HOLD) :
+           (struct obj_data *) NULL;
+           
+    if (!one && !two) {
+      if(has_cyberweapon(ch))
+        skill_num = SKILL_CYBER_IMPLANTS;
+      else 
+        skill_num = SKILL_UNARMED_COMBAT;
+    } 
+    
+    else if (one) {
+      if (!GET_SKILL(ch, GET_OBJ_VAL(one, 4)))
+        skill_num = return_general(GET_OBJ_VAL(one, 4));
+      else 
+        skill_num = GET_OBJ_VAL(one, 4);
+    } 
+    
+    else if (two) {
+      if (!GET_SKILL(ch, GET_OBJ_VAL(two, 4)))
+        skill_num = return_general(GET_OBJ_VAL(two, 4));
+      else 
+        skill_num = GET_OBJ_VAL(two, 4);
+    } 
+    
+    // This broken-ass code never worked. "If neither one or two, or if one, or if two, or..." no, that's a full logical stop.
+    else {
+      if (GET_SKILL(ch, GET_OBJ_VAL(one, 4)) <= GET_SKILL(ch, GET_OBJ_VAL(two, 4))) {
+        if (!GET_SKILL(ch, GET_OBJ_VAL(one, 4)))
+          skill_num = return_general(GET_OBJ_VAL(one, 4));
+        else 
+          skill_num = GET_OBJ_VAL(one, 4);
+      } else {
+        if (!GET_SKILL(ch, GET_OBJ_VAL(two, 4)))
+          skill_num = return_general(GET_OBJ_VAL(two, 4));
+        else 
+          skill_num = GET_OBJ_VAL(two, 4);
+      }
+    }
+  }
+  
+  return skill_num;
+}
+
+int get_skill_dice_in_use_for_weapons(struct char_data *ch) {
+  int skill_num = get_skill_num_in_use_for_weapons(ch);
+  int skill_dice = GET_SKILL(ch, skill_num);
+  
+  if (GET_EQ(ch, WEAR_WIELD) 
+      && GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_WEAPON
+      && !IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_WIELD)))
+      && GET_WEAPON_FOCUS_RATING(GET_EQ(ch, WEAR_WIELD))
+      && (IS_NPC(ch) 
+          || (GET_WEAPON_FOCUS_BONDED_BY(GET_EQ(ch, WEAR_WIELD)) == GET_IDNUM(ch)
+              && GET_WEAPON_FOCUS_BOND_STATUS(GET_EQ(ch, WEAR_WIELD)) == 0)))
+  {
+    skill_dice += GET_WEAPON_FOCUS_RATING(GET_EQ(ch, WEAR_WIELD));
+  }
+  
+  return skill_dice;
 }

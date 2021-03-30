@@ -15,7 +15,6 @@
 #include "memory.h"
 
 #define IC d->edit_icon
-#define NUM_OF_IC_TYPES 13
 extern char *cleanup(char *dest, const char *src);
 
 const char *crippler[4] =

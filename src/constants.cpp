@@ -969,6 +969,7 @@ const char *extra_bits[] =
     "BLOCKS_ARMOR",
     "HARDENED_ARMOR",
     "DONT_TOUCH",
+    "MAGIC_INCOMPATIBLE",
     "\n"
   };
   
@@ -1001,6 +1002,7 @@ const char *pc_readable_extra_bits[] =
     "Prevents Wearing Other Armor",
     "Hardened Armor (NERP)",
     "Derived from Template Item",
+    "Incompatible with Magic",
     "\n"
   };
 
@@ -1750,15 +1752,15 @@ struct ammo_data ammo_type[] =
 
 const char *positions[] =
   {
-    " is lying here, dead",
-    " is lying here, mortally wounded",
-    " is lying here, stunned",
-    " is sleeping here",
-    " is lying here",
-    " is resting here",
-    " is sitting here",
+    "is lying here, dead",
+    "is lying here, mortally wounded",
+    "is lying here, stunned",
+    "is sleeping here",
+    "is lying here",
+    "is resting here",
+    "is sitting here",
     "!FIGHTING!",
-    " is standing here"
+    "is standing here"
   };
 
 int racial_limits[][2][6] = {
@@ -2208,6 +2210,8 @@ const char *cyber_types[] = {
   "Balance Tail",
   "Body Compartment",
   "CyberFin",
+  "CyberSkull",
+  "CyberTorso",
   "Dermal Sheathing",
   "Foot Anchor",
   "Hydraulic Jack",
@@ -2215,11 +2219,8 @@ const char *cyber_types[] = {
   "Climbing Claws",
   "Smartlink",
   "Muscle Replacement",
-  "Cyberarms Mods",
-  "Cyberlegs Mods",
-  "Cyberskull Mods",
-  "Cybertorso Mods",
-  "Cyberarm Gyromount"
+  "Paired Set of Cyber Arms",
+  "Paired Set of Cyber Legs"
 };
 
 const char *decap_cyber_types[] = {
@@ -2261,6 +2262,8 @@ const char *decap_cyber_types[] = {
   "balance tail",
   "body compartment",
   "cyber fin",
+  "cyber skull",
+  "cyber torso",
   "dermal sheathing",
   "foot anchor",
   "hydraulic jack",
@@ -2268,11 +2271,8 @@ const char *decap_cyber_types[] = {
   "climbing claws",
   "smartlink",
   "muscle replacement",
-  "cyberarms modifications",
-  "cyberlegs modifications",
-  "cyberskull modifications",
-  "cybertorso modifications",
-  "cyberarm gyromount"
+  "paired set of cyber arms",
+  "paired set of cyber legs"
 };
 
 const char *bio_types[] = {
@@ -2412,26 +2412,26 @@ const char *combat_modifiers[] =
   "Visibility",
   "Position",
   "Gyro",
-  "Reach",
+  "Net Reach",
   "VehDamaged",
-  "Defender Moving"
+  "Defender Moving",
+  "In Melee Combat"
 };
 
-const char *pgroup_privileges[] =
+struct pgroup_priv_struct pgroup_privileges[] =
 {
-  "Administrator",
-  "Auditor",
-  "Architect",
-  "Co-Conspirator",
-  "Driver",
-  "Landlord",
-  "Leader",
-  "Manager",
-  "Mechanic",
-  "Procurer",
-  "Recruiter",
-  "Tenant",
-  "Treasurer"
+  {"Administrator" , TRUE  , "Administrators can grant any privilege that they possess. They can also promote and demote anyone below their level. Only the Leader may assign the Administrator privilege." },
+  {"Auditor"       , TRUE  , "Auditors can see the pgroup's logs." },
+  {"Architect"     , FALSE , "Architects can alter the PGHQ's blueprints." },
+  {"Co-Conspirator", TRUE  , "Co-Conspirators pierce the veil of secrecy and see unredacted logs even in secret orgs. No effect in non-secret orgs." },
+  {"Driver"        , FALSE , "Drivers are authorized to use PG vehicles." },
+  {"Landlord"      , FALSE , "Landlords are authorized to modify PG housing, including leasing and releasing rooms." },
+  {"Leader"        , TRUE  , "The Leader of the group has all permissions. There can be only one leader. Power is transferred through abdication and contesting." },
+  {"Mechanic"      , FALSE , "Mechanics can install and remove components from PG vehicles." },
+  {"Procurer"      , FALSE , "Procurers can purchase things with PG funds." },
+  {"Recruiter"     , TRUE  , "Recruiters can send invitations to join the PG." },
+  {"Tenant"        , FALSE , "Tenants may enter all PG apartments." },
+  {"Treasurer"     , TRUE  , "Treasurers may see the balance of the PG account, and can wire money from it." }
 };
 
 const char *workshops[] = {
@@ -2529,7 +2529,8 @@ const char *message_history_channels[] = {
   "Says",
   "Shouts",
   "Tells",
-  "Wiztells"
+  "Wiztells",
+  "Emotes"
 };
 
 const char *pgroup_settings[] = {

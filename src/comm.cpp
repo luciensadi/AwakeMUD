@@ -1345,8 +1345,13 @@ int make_prompt(struct descriptor_data * d)
                 strcpy(str, "@z");
               break;
             case 'v':
-              if (GET_REAL_LEVEL(d->character) >= LVL_BUILDER)
-                snprintf(str, sizeof(str), "%ld", d->character->in_room->number);
+              if (GET_REAL_LEVEL(d->character) >= LVL_BUILDER) {
+                struct room_data *room = get_ch_in_room(d->character);
+                if (room)
+                  snprintf(str, sizeof(str), "%ld", room->number);
+                else
+                  strlcpy(str, "(fuck if I know mate)", sizeof(str));
+              }
               else
                 strcpy(str, "@v");
               break;
@@ -1679,7 +1684,11 @@ int write_to_descriptor(int desc, const char *txt) {
   total = strlen(txt);
   
   do {
+#ifdef __APPLE__
     if ((bytes_written = write(desc, txt, total)) < 0) {
+#else
+    if ((bytes_written = send(desc, txt, total, MSG_NOSIGNAL)) < 0) {
+#endif
 #ifdef EWOULDBLOCK
       if (errno == EWOULDBLOCK)
         errno = EAGAIN;
@@ -1846,10 +1855,10 @@ int process_input(struct descriptor_data *t) {
     
     if (*tmp == '!' && t->connected != CON_CNFPASSWD )
       strcpy(tmp, t->last_input);
-    else if (*tmp == '|' && t->connected != CON_CNFPASSWD ) {
+/*    else if (*tmp == '|' && t->connected != CON_CNFPASSWD ) {
       if (!(failed_subst = perform_subst(t, t->last_input, tmp)))
-        strcpy(t->last_input, tmp);
-    } else
+        strcpy(t->last_input, tmp); */  // I don't know what the hell this was intended to do, but it comes out mangled when I use it. Disabling. -- LS.
+    else
       strlcpy(t->last_input, tmp, MAX_INPUT_LENGTH);
     assert(t->last_input_canary == 31337);
     
@@ -1920,14 +1929,14 @@ int perform_subst(struct descriptor_data *t, char *orig, char *subst)
   New[(strpos - orig)] = '\0';
   
   /* now, the replacement string */
-  strncat(New, second, (MAX_INPUT_LENGTH - strlen(New) - 1));
+  strlcat(New, second, MAX_INPUT_LENGTH);
   
   /* now, if there's anything left in the original after the string to
    * replaced, copy that too. */
   if (((strpos - orig) + strlen(first)) < strlen(orig))
-    strncat(New, strpos + strlen(first), (MAX_INPUT_LENGTH - strlen(New) - 1));
+    strlcat(New, strpos + strlen(first), MAX_INPUT_LENGTH);
   
-  /* terminate the string in case of an overflow from strncat */
+  /* terminate the string in case of an overflow from strncat  -- useless code now -LS */
   New[MAX_INPUT_LENGTH-1] = '\0';
   strcpy(subst, New);
   
@@ -2008,8 +2017,10 @@ void close_socket(struct descriptor_data *d)
   if (d->character)
   {
     /* added to Free up temporary editing constructs */
-    if (d->connected == CON_PART_CREATE || d->connected == CON_SPELL_CREATE || d->connected == CON_PLAYING || (d->connected >= CON_SPELL_CREATE &&
-                                                                                                               d->connected <= CON_BCUSTOMIZE)) {
+    if (d->connected == CON_PLAYING 
+        || d->connected == CON_PART_CREATE 
+        || (d->connected >= CON_SPELL_CREATE && d->connected <= CON_HELPEDIT && d->connected != CON_ASKNAME)) 
+    {
       if (d->connected == CON_VEHCUST)
         d->edit_veh = NULL;
       if (d->connected == CON_POCKETSEC) {
@@ -2028,8 +2039,9 @@ void close_socket(struct descriptor_data *d)
       free_editing_structs(d, STATE(d));
       d->character->desc = NULL;
     } else {
-      snprintf(buf, sizeof(buf), "Losing player: %s.",
-              GET_CHAR_NAME(d->character) ? GET_CHAR_NAME(d->character) : "<null>");
+      snprintf(buf, sizeof(buf), "Cleaning up data structures from %s's disconnection (state %d).",
+              GET_CHAR_NAME(d->character) ? GET_CHAR_NAME(d->character) : "<null>",
+              d->connected);
       mudlog(buf, d->character, LOG_CONNLOG, TRUE);
       // we do this because objects can be given to characters in chargen
       for (int i = 0; i < NUM_WEARS; i++)
@@ -2044,6 +2056,7 @@ void close_socket(struct descriptor_data *d)
           DELETE_AND_NULL(one);
         }
       d->character->spells = NULL;
+      
       Mem->DeleteCh(d->character);
     }
   }
@@ -2625,11 +2638,12 @@ const char *get_voice_perceived_by(struct char_data *speaker, struct char_data *
 const char *perform_act(const char *orig, struct char_data * ch, struct obj_data * obj,
                  void *vict_obj, struct char_data * to)
 {
-  extern char *make_desc(char_data *ch, char_data *i, char *buf, int act, bool dont_capitalize_a_an);
+  extern char *make_desc(char_data *ch, char_data *i, char *buf, int act, bool dont_capitalize_a_an, size_t buf_size);
   const char *i = NULL;
   char *buf;
   struct char_data *vict;
   static char lbuf[MAX_STRING_LENGTH];
+  char temp_buf[MAX_STRING_LENGTH];
   struct remem *mem = NULL;
   char temp[MAX_STRING_LENGTH];
   buf = lbuf;
@@ -2695,7 +2709,7 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
             if (IS_SENATOR(to) && !IS_NPC(ch))
               i = GET_CHAR_NAME(ch);
             else
-              i = make_desc(to, ch, buf, TRUE, TRUE);
+              i = make_desc(to, ch, temp_buf, TRUE, TRUE, sizeof(temp_buf));
           } else {
             if (IS_SENATOR(ch))
               i = GET_CHAR_NAME(ch);
@@ -2712,7 +2726,7 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
             if (IS_SENATOR(to) && !IS_NPC(vict))
               i = GET_CHAR_NAME(vict);
             else
-              i = make_desc(to, vict, buf, TRUE, TRUE);
+              i = make_desc(to, vict, temp_buf, TRUE, TRUE, sizeof(temp_buf));
           } else {
             if (IS_SENATOR(vict))
               i = "an invisible staff member";
@@ -2767,13 +2781,13 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
             if (!IS_NPC(ch)) {
               i = GET_CHAR_NAME(ch);
             } else {
-              i = make_desc(to, ch, buf, TRUE, TRUE);
+              i = make_desc(to, ch, temp_buf, TRUE, TRUE, sizeof(temp_buf));
             }
           }
           
           // If they're visible, it's simple.
           else if (CAN_SEE(to, ch)) {
-            i = make_desc(to, ch, buf, TRUE, TRUE);
+            i = make_desc(to, ch, temp_buf, TRUE, TRUE, sizeof(temp_buf));
           }
           
           // If we've gotten here, the speaker is an invisible player or staff member.
@@ -3048,74 +3062,91 @@ void msdp_update() {
   MSSPSetPlayers( PlayerCount );
 }
 
+bool ch_is_eligible_to_receive_socialization_bonus(struct char_data *ch) {
+  // NPCs don't get social bonuses.
+  if (IS_NPC(ch))
+    return FALSE;
+    
+  // You're invisible? You can't get the bonus. Too easy to just idle in a bar watching Netflix for karma.
+  // And to anyone reading the code and thinking "Oh, it'd be a great prank to make my rival invis while they RP so they don't get the bonus!" -- no, that's abusing the system and will be punished.
+  if (IS_AFFECTED(ch, AFF_IMP_INVIS)
+       || IS_AFFECTED(ch, AFF_SPELLIMPINVIS)
+       || IS_AFFECTED(ch, AFF_INVISIBLE)
+       || IS_AFFECTED(ch, AFF_SPELLINVIS)) 
+    return FALSE;
+  
+  // You must be present.
+  if (!ch->desc || ch->char_specials.timer >= 10)
+    return FALSE;
+    
+  return TRUE;
+}
+
 void increase_congregation_bonus_pools() {
   // Apply congregation / socializing bonuses. We specifically don't want to tell them when it's full,
   // because that encourages breaking off from RP to go burn it down again. Let them chill.
   for (struct char_data *i = character_list; i; i = i->next) {
-    if (!IS_NPC(i) && i->in_room && ROOM_FLAGGED(i->in_room, ROOM_ENCOURAGE_CONGREGATION)) {
-      if (!i->desc || i->char_specials.timer >= 10) {
-        snprintf(buf, sizeof(buf), "Socialization: Skipping %s's opportunity to earn social points-- no link, or idle.", GET_CHAR_NAME(i));
-        act(buf, FALSE, i, 0, 0, TO_ROLLS);
-        continue;
-      }
+    if (!ch_is_eligible_to_receive_socialization_bonus(i))
+      continue;
       
-      if (GET_CONGREGATION_BONUS(i) == MAX_CONGREGATION_BONUS) {
-        snprintf(buf, sizeof(buf), "Socialization: Skipping %s's opportunity to earn social points-- already maximized.", GET_CHAR_NAME(i));
-        act(buf, FALSE, i, 0, 0, TO_ROLLS);
-        continue;
-      }
-      
-      int occupants = 1, total_occupants = 1;
-           
-      // Two iterations over the room. First, if you're not an NPC and not idle, you proceed to second check.
-      for (struct char_data *tempch = i->in_room->people; tempch; tempch = tempch->next_in_room) {
-        if (tempch == i || IS_NPC(tempch))
-          continue;
-          
-        if (!tempch->desc || tempch->char_specials.timer >= 10) {
-          snprintf(buf, sizeof(buf), "Socialization: Skipping %s in occupant count-- no link, or idle.", GET_CHAR_NAME(tempch));
-          act(buf, FALSE, i, 0, 0, TO_ROLLS);
-          continue;
-        }
-          
-        total_occupants++;
-          
-        // Second, if your host does not match anyone else's host, you count as an occupant.
-        bool is_multichar = FALSE;
-        for (struct char_data *descch = i->in_room->people; descch; descch = descch->next_in_room) {
-          if (descch == tempch || IS_NPC(descch) || !descch->desc || descch->char_specials.timer >= 10)
-            continue;
-            
-          if (!strcmp(descch->desc->host, tempch->desc->host)) {
-            snprintf(buf, sizeof(buf), "Socialization: Skipping %s in occupant count-- multichar of %s.", GET_CHAR_NAME(descch), GET_CHAR_NAME(tempch));
-            act(buf, FALSE, i, 0, 0, TO_ROLLS);
-            is_multichar = TRUE;
-            break;
-          }
-        }
-        if (is_multichar)
-          continue;
-        
-        snprintf(buf, sizeof(buf), "Socialization: Counting %s as an occupant.", GET_CHAR_NAME(tempch));
-        act(buf, FALSE, i, 0, 0, TO_ROLLS);
-        occupants++;
-      }
-      
-      int point_gain = 1;
-      if (occupants >= 10)
-        point_gain = 4;
-      else if (occupants >= 6)
-        point_gain = 3;
-      else if (occupants >= 3)
-        point_gain = 2;
-      
-      snprintf(buf, sizeof(buf), "Socialization: %s gets %d (valid PC occupants: %d of %d).", 
-               GET_CHAR_NAME(i), 
-               MIN(GET_CONGREGATION_BONUS(i) + point_gain, MAX_CONGREGATION_BONUS) - GET_CONGREGATION_BONUS(i),
-               occupants,
-               total_occupants);
+    // Not in a social room? This doesn't apply to you.
+    if (!i->in_room || !ROOM_FLAGGED(i->in_room, ROOM_ENCOURAGE_CONGREGATION))
+      continue;
+    
+    // You can't be maxed out.
+    if (GET_CONGREGATION_BONUS(i) == MAX_CONGREGATION_BONUS) {
+      snprintf(buf, sizeof(buf), "Socialization: Skipping %s's opportunity to earn social points-- already maximized.", GET_CHAR_NAME(i));
       act(buf, FALSE, i, 0, 0, TO_ROLLS);
-      GET_CONGREGATION_BONUS(i) = MIN(GET_CONGREGATION_BONUS(i) + point_gain, MAX_CONGREGATION_BONUS);
+      continue;
     }
+    
+    int occupants = 1, total_occupants = 1;
+         
+    // Two iterations over the room. First, if you're not an NPC and not idle, you proceed to second check.
+    for (struct char_data *tempch = i->in_room->people; tempch; tempch = tempch->next_in_room) {
+      if (tempch == i || !ch_is_eligible_to_receive_socialization_bonus(tempch))
+        continue;
+        
+      total_occupants++;
+        
+      // Second, if your host does not match anyone else's host, you count as an occupant.
+      // Disabled this code for now since grapevine is a thing. It's still against the rules, we just don't check it here.
+      /*
+      bool is_multichar = FALSE;
+      for (struct char_data *descch = i->in_room->people; descch; descch = descch->next_in_room) {
+        if (descch == tempch || IS_NPC(descch) || !descch->desc || descch->char_specials.timer >= 10)
+          continue;
+          
+        if (!strcmp(descch->desc->host, tempch->desc->host)) {
+          snprintf(buf, sizeof(buf), "Socialization: Skipping %s in occupant count-- multichar of %s.", GET_CHAR_NAME(descch), GET_CHAR_NAME(tempch));
+          act(buf, FALSE, i, 0, 0, TO_ROLLS);
+          is_multichar = TRUE;
+          break;
+        }
+      }
+      if (is_multichar)
+        continue;
+      */
+      
+      snprintf(buf, sizeof(buf), "Socialization: Counting %s as an occupant.", GET_CHAR_NAME(tempch));
+      act(buf, FALSE, i, 0, 0, TO_ROLLS);
+      occupants++;
+    }
+    
+    int point_gain = 1;
+    if (occupants >= 10)
+      point_gain = 4;
+    else if (occupants >= 6)
+      point_gain = 3;
+    else if (occupants >= 3)
+      point_gain = 2;
+    
+    snprintf(buf, sizeof(buf), "Socialization: %s gets %d (valid PC occupants: %d of %d).", 
+             GET_CHAR_NAME(i), 
+             MIN(GET_CONGREGATION_BONUS(i) + point_gain, MAX_CONGREGATION_BONUS) - GET_CONGREGATION_BONUS(i),
+             occupants,
+             total_occupants);
+    act(buf, FALSE, i, 0, 0, TO_ROLLS);
+    GET_CONGREGATION_BONUS(i) = MIN(GET_CONGREGATION_BONUS(i) + point_gain, MAX_CONGREGATION_BONUS);
   }
 }

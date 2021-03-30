@@ -24,15 +24,19 @@
 #include "constants.h"
 #include "file.h"
 #include "vtable.h"
+#include "limits.h"
 
 extern char *cleanup(char *dest, const char *src);
 extern void ASSIGNMOB(long mob, SPECIAL(fname));
 extern void add_phone_to_list(struct obj_data *obj);
 extern void weight_change_object(struct obj_data * obj, float weight);
-extern void auto_repair_obj(struct obj_data *obj);
+extern void auto_repair_obj(struct obj_data *obj, const char *source);
+extern void handle_weapon_attachments(struct obj_data *obj);
 
 struct landlord *landlords = NULL;
 ACMD_CONST(do_say);
+
+void remove_vehicles_from_apartment(struct room_data *room);
 
 
 void House_delete_file(vnum_t vnum, char *name);
@@ -81,7 +85,7 @@ bool House_load(struct house_control_rec *house)
   File fl;
   char fname[MAX_STRING_LENGTH];
   rnum_t rnum;
-  struct obj_data *obj = NULL, *last_obj = NULL, *attach = NULL;
+  struct obj_data *obj = NULL, *last_obj = NULL;
   long vnum;
   int inside = 0, last_in = 0;
 
@@ -96,6 +100,7 @@ bool House_load(struct house_control_rec *house)
   VTable data;
   data.Parse(&fl);
   fl.Close();
+  snprintf(buf3, sizeof(buf3), "house-load %s", fname);
   for (int i = 0; i < MAX_GUESTS; i++)
   {
     snprintf(buf, sizeof(buf), "GUESTS/Guest%d", i);
@@ -125,15 +130,8 @@ bool House_load(struct house_control_rec *house)
       }
       if (GET_OBJ_TYPE(obj) == ITEM_PHONE && GET_ITEM_PHONE_SWITCHED_ON(obj))
         add_phone_to_list(obj);
-      int real_obj;
-      if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && IS_GUN(GET_OBJ_VAL(obj, 3)))
-        for (int q = ACCESS_LOCATION_TOP; q <= ACCESS_LOCATION_UNDER; q++)
-          if (GET_OBJ_VAL(obj, q) > 0 && (real_obj = real_object(GET_OBJ_VAL(obj, q))) > 0 && 
-             (attach = &obj_proto[real_obj])) {
-            // We know the attachment code will throw a fit if we attach over the top of an 'existing' object, so wipe it out without removing it.
-            GET_OBJ_VAL(obj, q) = 0;
-            attach_attachment_to_weapon(attach, obj, NULL, q - ACCESS_ACCESSORY_LOCATION_DELTA);
-          }
+      if (GET_OBJ_TYPE(obj) == ITEM_WEAPON)
+        handle_weapon_attachments(obj);
       snprintf(buf, sizeof(buf), "%s/Condition", sect_name);
       GET_OBJ_CONDITION(obj) = data.GetInt(buf, GET_OBJ_CONDITION(obj));
       snprintf(buf, sizeof(buf), "%s/Timer", sect_name);
@@ -178,7 +176,7 @@ bool House_load(struct house_control_rec *house)
       
       // Don't auto-repair cyberdecks until they're fully loaded.
       if (GET_OBJ_TYPE(obj) != ITEM_CYBERDECK)
-        auto_repair_obj(obj);
+        auto_repair_obj(obj, buf3);
       
       inside = data.GetInt(buf, 0);
       if (inside > 0) {
@@ -220,8 +218,17 @@ void validate_in_obj_pointers(struct obj_data *obj, struct obj_data *in_obj) {
   if (!obj)
     return;
     
+  if (obj == in_obj) {
+    mudlog("SYSERR: Received duplicate items to validate_in_obj_pointers! [OBJ_NESTING_ERROR_GREP_STRING]", NULL, LOG_SYSLOG, TRUE);
+    return;
+  }
+  
+  // Cyberdeck parts do some WEIRD shit with in_obj. Best to leave it alone.
+  if ((in_obj && GET_OBJ_TYPE(in_obj) == ITEM_PART) || (obj->in_obj && GET_OBJ_TYPE(obj->in_obj) == ITEM_PART))
+    return;
+    
   if (in_obj && obj->in_obj != in_obj) {
-    snprintf(buf3, sizeof(buf3), "^YSYSERR: in_obj mismatch for %s (%ld) in %ld! Rectifying...", 
+    snprintf(buf3, sizeof(buf3), "^YSYSERR: in_obj mismatch for %s (%ld) in %ld! Rectifying... [OBJ_NESTING_ERROR_GREP_STRING]", 
              GET_OBJ_NAME(obj),
              GET_OBJ_VNUM(obj),
              get_obj_in_room(obj) ? GET_ROOM_VNUM(get_obj_in_room(obj)) : -1);
@@ -229,7 +236,15 @@ void validate_in_obj_pointers(struct obj_data *obj, struct obj_data *in_obj) {
     obj->in_obj = in_obj;
   }
   
+  struct obj_data *previous = NULL;
   for (struct obj_data *tmp_obj = obj->contains; tmp_obj; tmp_obj = tmp_obj->next_content) {
+    if (tmp_obj == obj) {
+      mudlog("^RSYSERR: Detected duplicate items to validate_in_obj_pointers! There's no way to un-fuck this programmatically, so we're losing items. [OBJ_NESTING_ERROR_GREP_STRING]^n", NULL, LOG_SYSLOG, TRUE);
+      if (previous)
+        previous->next_content = NULL;
+      obj->contains = NULL;
+      return;
+    }
     validate_in_obj_pointers(tmp_obj, obj);
   }
 }
@@ -252,7 +267,7 @@ void House_save(struct house_control_rec *house, const char *file_name, long rnu
     perror("SYSERR: Error saving house file");
     return;
   } else {
-    log_vfprintf("Saving house %s.", file_name);
+    // log_vfprintf("Saving house %s.", file_name);
   }
   
   char print_buffer[FILEBUF_SIZE];
@@ -283,11 +298,10 @@ void House_save(struct house_control_rec *house, const char *file_name, long rnu
   for (int o = 0; obj;)
   {
     if ((real_obj = real_object(GET_OBJ_VNUM(obj))) == -1) {
-      snprintf(buf, sizeof(buf), "^YWarning: Will lose house item %s^g from %s^g (%ld) due to nonexistent rnum. [house_error_grep_string]", 
+      log_vfprintf("Warning: Will lose house item %s from %s (%ld) due to nonexistent rnum. [house_error_grep_string]", 
                GET_OBJ_NAME(obj),
                GET_ROOM_NAME(obj->in_room),
                GET_ROOM_VNUM(obj->in_room));
-      mudlog(buf, NULL, LOG_SYSLOG, TRUE);
       obj = obj->next_content;
       continue;
     }
@@ -317,7 +331,7 @@ void House_save(struct house_control_rec *house, const char *file_name, long rnu
       if (obj->photo)
         fprintf(fl, "\t\tPhoto:$\n%s~\n", cleanup(buf2, obj->photo));
         
-      if (obj->contains) {
+      if (obj->contains && !IS_OBJ_STAT(obj, ITEM_NORENT) && !IS_OBJ_STAT(obj, ITEM_PART)) {
         obj = obj->contains;
         level++;
         continue;
@@ -335,13 +349,17 @@ void House_save(struct house_control_rec *house, const char *file_name, long rnu
     }
 
     if (obj->in_obj)
-      while (obj && !obj->next_content && level >= 0) {
+      while (obj && !obj->next_content && level > 0) {
         obj = obj->in_obj;
         level--;
       }
 
     if (obj)
       obj = obj->next_content;
+  }
+  
+  if (level != 0) {
+    log_vfprintf("Warning: Non-zero level at finish when saving %s.", file_name);
   }
   
   fclose(fl);
@@ -374,6 +392,17 @@ void House_crashsave(vnum_t vnum)
   if ((rnum = real_room(vnum)) == NOWHERE)
     return;
     
+  // If the dirty bit is not set, we don't save the room-- it means nobody was here.
+  // YES, this does induce bugs, like evaluate programs not decaying if nobody is around to see it happen--
+  // but fuck it, if someone exploits it we'll just ban them. Easy enough.
+  if (!world[rnum].dirty_bit && !world[rnum].people) {
+    // log_vfprintf("Skipping save for room %ld: Dirty bit is false and room has no occupants.", vnum);
+    return;
+  } else {
+    // Clear the dirty bit now that we've processed it.
+    world[rnum].dirty_bit = FALSE;
+  }
+    
   // Calculate whether or not we should keep this house.
   bool should_we_keep_this_file = FALSE;
   house = find_house(vnum);
@@ -401,9 +430,10 @@ void House_crashsave(vnum_t vnum)
   if (house) {
     if (!House_get_filename(vnum, buf, sizeof(buf)))
       return;
-  } else
+  } else {
     if (!Storage_get_filename(vnum, buf, sizeof(buf)))
       return;
+  }
   
   // If it has no guests and no objects, why save it?
   if (!should_we_keep_this_file) {
@@ -628,8 +658,14 @@ SPECIAL(landlord_spec)
       obj_to_char(key, ch);
       room_record->owner = GET_IDNUM(ch);
       room_record->date = time(0) + (SECS_PER_REAL_DAY*30);
-      ROOM_FLAGS(&world[real_room(room_record->vnum)]).SetBit(ROOM_HOUSE);
+      
+      int rnum = real_room(room_record->vnum);
+      ROOM_FLAGS(&world[rnum]).SetBit(ROOM_HOUSE);
       ROOM_FLAGS(&world[room_record->atrium]).SetBit(ROOM_ATRIUM);
+      
+      // Shift all the vehicles out of it.
+      remove_vehicles_from_apartment(&world[rnum]);
+      
       House_crashsave(room_record->vnum);
       House_save_control();
     }
@@ -646,7 +682,10 @@ SPECIAL(landlord_spec)
       do_say(recep, "I would get fired if I did that.", 0, 0);
     else {
       room_record->owner = 0;
-      ROOM_FLAGS(&world[real_room(room_record->vnum)]).RemoveBit(ROOM_HOUSE);
+      int rnum = real_room(room_record->vnum);
+      ROOM_FLAGS(&world[rnum]).RemoveBit(ROOM_HOUSE);
+      remove_vehicles_from_apartment(&world[rnum]);
+      // TODO: What if there are multiple houses connected to this atrium? This would induce a bug.
       ROOM_FLAGS(&world[room_record->atrium]).RemoveBit(ROOM_ATRIUM);
       House_save_control();
       House_get_filename(room_record->vnum, buf2, MAX_STRING_LENGTH);
@@ -798,21 +837,7 @@ void House_boot(void)
           House_delete_file(temp->vnum, buf2);
           
           // Move all vehicles from this apartment to a public garage.
-          struct veh_data *veh = NULL;
-          while (world[real_room(temp->vnum)].vehicles) {
-            veh = world[real_room(temp->vnum)].vehicles;
-#ifdef DEBUG
-            snprintf(buf, sizeof(buf), "debug: Shifting vehicle '%s' (%ld) from '%s' (%ld) to '%s' (%ld).",
-                    veh->description, veh->idnum,
-                    world[real_room(temp->vnum)].name,
-                    world[real_room(temp->vnum)].number,
-                    world[real_room(RM_SEATTLE_PARKING_GARAGE)].name,
-                    world[real_room(RM_SEATTLE_PARKING_GARAGE)].number);
-            mudlog(buf, NULL, LOG_SYSLOG, TRUE);
-#endif
-            veh_from_room(veh);
-            veh_to_room(veh, &world[real_room(RM_SEATTLE_PARKING_GARAGE)]);
-          }
+          remove_vehicles_from_apartment(&world[real_room(temp->vnum)]);
         }
       }
       if (last)
@@ -912,7 +937,7 @@ void hcontrol_destroy_house(struct char_data * ch, char *arg)
   else
   {
     ROOM_FLAGS(&world[real_house]).RemoveBit(ROOM_HOUSE);
-
+    remove_vehicles_from_apartment(&world[real_house]);
     House_get_filename(i->vnum, buf2, MAX_STRING_LENGTH);
     House_delete_file(i->vnum, buf2);
     i->owner = 0;
@@ -1102,4 +1127,13 @@ void House_list_guests(struct char_data *ch, struct house_control_rec *i, int qu
     strcat(buf, "None");
   strcat(buf, "\r\n");
   send_to_char(buf, ch);
+}
+
+void remove_vehicles_from_apartment(struct room_data *room) {
+  struct veh_data *veh;
+  while ((veh = room->vehicles)) {
+    veh_from_room(veh);
+    veh_to_room(veh, &world[real_room(RM_SEATTLE_PARKING_GARAGE)]);
+  }
+  save_vehicles();
 }

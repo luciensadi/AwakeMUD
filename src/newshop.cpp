@@ -123,8 +123,8 @@ int buy_price(struct obj_data *obj, vnum_t shop_nr)
   // Base cost.
   int cost = GET_OBJ_COST(obj);
   
-  // Multiply base cost by the shop's profit.
-  cost = (int) round(cost * shop_table[shop_nr].profit_buy);
+  // Multiply base cost by the shop's profit. Under no circumstances will we sell to them for less than 1x cost.
+  cost = (int) round(cost * MAX(1, shop_table[shop_nr].profit_buy));
   
   // If the shop is black or grey market, multiply base cost by the item's street index.
   if (shop_table[shop_nr].type != SHOP_LEGAL && GET_OBJ_STREET_INDEX(obj) > 0)
@@ -269,6 +269,12 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
     
     // You must have the essence to support it.
     if (GET_OBJ_TYPE(obj) == ITEM_CYBERWARE) {
+      if (IS_OBJ_STAT(obj, ITEM_MAGIC_INCOMPATIBLE) && (GET_MAG(ch) > 0 || GET_TRADITION(ch) != TRAD_MUNDANE)) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " That would eradicate your magic!");
+        do_say(keeper, buf, cmd_say, SCMD_SAYTO);
+        return FALSE;
+      }
+      
       if (GET_REAL_ESS(ch) + GET_ESSHOLE(ch) < (GET_TOTEM(ch) == TOTEM_EAGLE ?
                                 GET_CYBERWARE_ESSENCE_COST(obj) << 1 : GET_CYBERWARE_ESSENCE_COST(obj))) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " That operation would kill you!");
@@ -321,6 +327,12 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
     
     // You must have the index to support it.
     else if (GET_OBJ_TYPE(obj) == ITEM_BIOWARE) {
+      if (IS_OBJ_STAT(obj, ITEM_MAGIC_INCOMPATIBLE) && (GET_MAG(ch) > 0 || GET_TRADITION(ch) != TRAD_MUNDANE)) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " That would eradicate your magic!");
+        do_say(keeper, buf, cmd_say, SCMD_SAYTO);
+        return FALSE;
+      }
+      
       int esscost = GET_OBJ_VAL(obj, 4); 
       if (GET_INDEX(ch) + esscost > 900) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " That operation would kill you!");
@@ -418,9 +430,9 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
         || (GET_OBJ_TYPE(obj) == ITEM_GUN_AMMO))
     {
       bought = 0;
+      float current_obj_weight = 0;
           
       // Deduct money up to the amount they can afford. Update the object's cost to match.
-      float current_obj_weight = GET_OBJ_WEIGHT(obj);
       while (bought < buynum && (cred ? GET_OBJ_VAL(cred, 0) : GET_NUYEN(ch)) >= price) {
         bought++;
         
@@ -468,8 +480,8 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
         
         struct obj_data *orig = ch->carrying;
         for (; orig; orig = orig->next_content) {
-          if (GET_OBJ_TYPE(obj) == GET_OBJ_TYPE(orig) && 
-              !GET_AMMOBOX_CREATOR(obj) &&
+          if (GET_OBJ_TYPE(obj) == ITEM_GUN_AMMO && 
+              GET_AMMOBOX_INTENDED_QUANTITY(obj) <= 0 &&
               GET_AMMOBOX_WEAPON(obj) == GET_AMMOBOX_WEAPON(orig) &&
               GET_AMMOBOX_TYPE(obj) == GET_AMMOBOX_TYPE(orig))
             break;
@@ -508,8 +520,9 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
       else {
         struct obj_data *orig = ch->carrying;
         for (; orig; orig = orig->next_content)
-          if (GET_OBJ_TYPE(obj) == GET_OBJ_TYPE(orig) && GET_OBJ_VAL(obj, 0) == GET_OBJ_VAL(orig, 0) &&
-              GET_OBJ_VAL(obj, 1) == GET_OBJ_VAL(orig, 1))
+          if (GET_OBJ_TYPE(obj) == GET_OBJ_TYPE(orig) 
+              && GET_OBJ_VAL(obj, 0) == GET_OBJ_VAL(orig, 0) 
+              && GET_OBJ_VAL(obj, 1) == GET_OBJ_VAL(orig, 1))
             break;
         if (orig) {
           GET_OBJ_COST(orig) += GET_OBJ_COST(obj);
@@ -658,7 +671,7 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
         send_to_char(ch, "You stare unblinkingly at %s until %s makes an exception to the no-credstick, no-sale policy.\r\n",
                      GET_NAME(keeper), HSSH(keeper));
       } else {
-        sprintf(buf, "%s No Credstick, No Sale.", GET_CHAR_NAME(ch));
+        snprintf(buf, sizeof(buf), "%s No Credstick, No Sale.", GET_CHAR_NAME(ch));
         do_say(keeper, buf, cmd_say, SCMD_SAYTO);
         return;
       }
@@ -677,7 +690,7 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
         send_to_char(ch, "You stare unblinkingly at %s until %s makes an exception to the no-credstick, no-sale policy.\r\n",
                      GET_NAME(keeper), HSSH(keeper));
       } else {
-        sprintf(buf, "%s No Credstick, No Sale.", GET_CHAR_NAME(ch));
+        snprintf(buf, sizeof(buf), "%s No Credstick, No Sale.", GET_CHAR_NAME(ch));
         do_say(keeper, buf, cmd_say, SCMD_SAYTO);
         return;
       }
@@ -1309,6 +1322,10 @@ void shop_info(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
                 GET_WEAPON_REACH(obj), GET_WEAPON_REACH(obj) > 1 ? "s" : "");
       }
       
+      if (GET_WEAPON_FOCUS_RATING(obj)) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " It is a weapon focus of force %d.", GET_WEAPON_FOCUS_RATING(obj));
+      }
+      
       // Map strength bonus to phrase.
       if (GET_WEAPON_STR_BONUS(obj) != 0) {
         if (GET_WEAPON_STR_BONUS(obj) == 1) {
@@ -1585,11 +1602,11 @@ void shop_check(char *arg, struct char_data *ch, struct char_data *keeper, vnum_
       if (real_obj >= 0)
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %d) %-30s (%d) - ", i, GET_OBJ_NAME(&obj_proto[real_obj]), order->number);
       else
-        strncat(buf, " ERROR\r\n", sizeof(buf) - strlen(buf) - 1);
+        strlcat(buf, " ERROR\r\n", sizeof(buf));
       if (totaltime < 0)
-        strncat(buf, " AVAILABLE\r\n", sizeof(buf) - strlen(buf) - 1);
+        strlcat(buf, " AVAILABLE\r\n", sizeof(buf));
       else if (totaltime < 1 && (int)(24 * totaltime) == 0)
-        strncat(buf, " less than one hour\r\n", sizeof(buf) - strlen(buf) - 1);
+        strlcat(buf, " less than one hour\r\n", sizeof(buf));
       else
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %d %s\r\n", totaltime < 1 ? (int)(24 * totaltime) : (int)totaltime,
                 totaltime < 1 ? "hours" : (totaltime == 1 ? "day" : "days"));
@@ -1624,7 +1641,7 @@ void shop_rec(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t 
           send_to_char(ch, "You stare unblinkingly at %s until %s makes an exception to the no-credstick, no-sale policy.\r\n",
                        GET_NAME(keeper), HSSH(keeper));
         } else {
-          sprintf(buf, "%s No Credstick, No Sale.", GET_CHAR_NAME(ch));
+          snprintf(buf, sizeof(buf), "%s No Credstick, No Sale.", GET_CHAR_NAME(ch));
           do_say(keeper, buf, cmd_say, SCMD_SAYTO);
           return;
         }
@@ -2415,7 +2432,7 @@ bool can_sell_object(struct obj_data *obj, struct char_data *keeper, int shop_nr
   // Don't allow sale of forbidden vnums.
   if (GET_OBJ_VNUM(obj) == OBJ_OLD_BLANK_MAGAZINE_FROM_CLASSIC
       || GET_OBJ_VNUM(obj) == OBJ_BLANK_MAGAZINE) {
-    strncat(buf2, "matching a forbidden vnum.", sizeof(buf2) - strlen(buf2) - 1);
+    strlcat(buf2, "matching a forbidden vnum.", sizeof(buf2));
     mudlog(buf2, keeper, LOG_SYSLOG, TRUE);
     extract_obj(obj);
     return FALSE;
@@ -2443,7 +2460,7 @@ bool can_sell_object(struct obj_data *obj, struct char_data *keeper, int shop_nr
     /*
     case ITEM_FIREWEAPON:
     case ITEM_MISSILE:
-      strncat(buf, "being a fireweapon or fireweapon ammo.", sizeof(buf) - strlen(buf) - 1);
+      strlcat(buf, "being a fireweapon or fireweapon ammo.", sizeof(buf));
       mudlog(buf2, keeper, LOG_SYSLOG, TRUE);
       extract_obj(obj);
       return FALSE;

@@ -55,6 +55,7 @@ extern int ability_cost(int abil, int level);
 extern void weight_change_object(struct obj_data * obj, float weight);
 extern void calc_weight(struct char_data *ch);
 extern const char *get_ammobox_default_restring(struct obj_data *ammobox);
+extern bool can_edit_zone(struct char_data *ch, int zone);
 
 /* creates a random number in interval [from;to] */
 int number(int from, int to)
@@ -177,20 +178,54 @@ int light_level(struct room_data *room)
     mudlog("SYSERR: light_level() called on null room.", NULL, LOG_SYSLOG, TRUE);
     return LIGHT_NORMAL;
   }
+  
+  int artificial_light_level = -1;
+  
+  // Flashlights. More flashlights, more light.
+  if (room->light[0])
+    artificial_light_level = room->light[0] == 1 ? LIGHT_MINLIGHT : LIGHT_PARTLIGHT;
+    
+  // Light spell.
+  if (room->light[1])
+    artificial_light_level = LIGHT_NORMAL;  
+    
+  int candidate_light_level = room->vision[0];
+  
+  switch (artificial_light_level) {
+    case LIGHT_MINLIGHT:
+      if (room->vision[0] == LIGHT_FULLDARK) 
+        candidate_light_level = LIGHT_MINLIGHT;
+      else
+        candidate_light_level = room->vision[0];
+      break;
+    case LIGHT_PARTLIGHT:
+      if (room->vision[0] == LIGHT_FULLDARK || room->vision[0] == LIGHT_MINLIGHT) 
+        candidate_light_level = LIGHT_PARTLIGHT;
+      else
+        candidate_light_level = room->vision[0];
+      break;
+    case LIGHT_NORMAL:
+      if (room->vision[0] == LIGHT_FULLDARK || room->vision[0] == LIGHT_MINLIGHT || room->vision[0] == LIGHT_NORMALNOLIT) 
+        candidate_light_level = LIGHT_NORMAL;
+      else
+        candidate_light_level = room->vision[0];
+      break;
+  }
+  
   if (room->sector_type == SPIRIT_HEARTH)
-    return room->vision[0];
+    return candidate_light_level;
   if (room->sector_type == SPIRIT_CITY) {
     if ((time_info.hours > 6 && time_info.hours < 19))
-      return room->vision[0];
-    else if (room->vision[0] == LIGHT_NORMALNOLIT)
+      return candidate_light_level;
+    else if (candidate_light_level == LIGHT_NORMALNOLIT)
       return LIGHT_MINLIGHT;
     else
       return LIGHT_PARTLIGHT;
   }
-  if ((time_info.hours < 6 || time_info.hours > 19) && (room->vision[0] > LIGHT_MINLIGHT || room->vision[0] <= LIGHT_NORMALNOLIT))
+  if ((time_info.hours < 6 || time_info.hours > 19) && (candidate_light_level > LIGHT_MINLIGHT || candidate_light_level <= LIGHT_NORMALNOLIT))
     return LIGHT_MINLIGHT;
   else
-    return room->vision[0];
+    return candidate_light_level;
 }
 
 int damage_modifier(struct char_data *ch, char *rbuf, int rbuf_size)
@@ -1235,7 +1270,7 @@ int negotiate(struct char_data *ch, struct char_data *tch, int comp, int baseval
     int tch_delta = success_test(GET_SKILL(tch, comp), GET_INT(ch)+mod+tmod) / 2;
     chnego += ch_delta;
     tchnego += tch_delta;
-    snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "\r\nidk what this 'comp' field is, but it was true, so we got an additional %d PC and %d successes.", ch_delta, tch_delta);
+    snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "\r\nAdded additional rolls for %s, so we got an additional %d PC and %d successes.", skills[comp].name, ch_delta, tch_delta);
   }
   int num = chnego - tchnego;
   if (num > 0)
@@ -1295,6 +1330,7 @@ int get_skill(struct char_data *ch, int skill, int &target)
   {
     int mbw = 0, enhan = 0, synth = 0;
     int totalskill = GET_SKILL(ch, skill);
+    bool should_gain_physical_boosts = !PLR_FLAGGED(ch, PLR_MATRIX) && !PLR_FLAGGED(ch, PLR_REMOTE);
     
     // If their skill in this area has not been boosted, they get to add their task pool up to the skill's learned level.
     if (REAL_SKILL(ch, skill) == GET_SKILL(ch, skill))
@@ -1305,7 +1341,7 @@ int get_skill(struct char_data *ch, int skill, int &target)
       int expert = 0;
       bool chip = FALSE;;
       for (struct obj_data *obj = ch->cyberware; obj; obj = obj->next_content)
-        if (GET_OBJ_VAL(obj, 0) == CYB_MOVEBYWIRE)
+        if (should_gain_physical_boosts && GET_OBJ_VAL(obj, 0) == CYB_MOVEBYWIRE)
           mbw = GET_OBJ_VAL(obj, 1);
         else if (GET_OBJ_VAL(obj, 0) == CYB_CHIPJACKEXPERT)
           expert = GET_OBJ_VAL(obj, 1);
@@ -1327,7 +1363,7 @@ int get_skill(struct char_data *ch, int skill, int &target)
     }
     
     // Iterate through their bioware, looking for anything important.
-    if (ch->bioware) {
+    if (should_gain_physical_boosts && ch->bioware) {
       for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content) {
         if (GET_OBJ_VAL(bio, 0) == BIO_REFLEXRECORDER && GET_OBJ_VAL(bio, 3) == skill) {
           act("Reflex Recorder skill increase: 1", 1, ch, NULL, NULL, TO_ROLLS);
@@ -1413,22 +1449,17 @@ int get_skill(struct char_data *ch, int skill, int &target)
         case SKILL_BR_HEAVYWEAPON:
         case SKILL_BR_SMG:
         case SKILL_BR_ARMOR:
-          act("Enhanced Articulation skill increase: +1", 1, ch, NULL, NULL, TO_ROLLS);
-          totalskill++;
-          break;
-          // Vehicle skills
         case SKILL_PILOT_ROTORCRAFT:
         case SKILL_PILOT_FIXEDWING:
         case SKILL_PILOT_VECTORTHRUST:
         case SKILL_PILOT_BIKE:
         case SKILL_PILOT_CAR:
         case SKILL_PILOT_TRUCK:
-          // You only get the bonus for vehicle skills if you're physically driving the vehicle.
-          if (!AFF_FLAGGED(ch, AFF_RIG)) {
+          // Enhanced articulation only matters if you're actually using your body for the thing.
+          if (!AFF_FLAGGED(ch, AFF_RIG) && !PLR_FLAGGED(ch, PLR_REMOTE)) {
             act("Enhanced Articulation skill increase: +1", 1, ch, NULL, NULL, TO_ROLLS);
             totalskill++;
           }
-          break;
           break;
         default:
           break;
@@ -1477,40 +1508,40 @@ bool biocyber_compatibility(struct obj_data *obj1, struct obj_data *obj2, struct
       cyber1 = obj2;
   }
   if (cyber1 && cyber2) {
-    if (GET_OBJ_VAL(cyber1, 0) != CYB_EYES)
-      switch (GET_OBJ_VAL(cyber1, 0)) {
+    if (GET_CYBERWARE_TYPE(cyber1) != CYB_EYES)
+      switch (GET_CYBERWARE_TYPE(cyber1)) {
         case CYB_FILTRATION:
-          if (GET_OBJ_VAL(cyber1, 3) == GET_OBJ_VAL(cyber2, 3)) {
+          if (GET_CYBERWARE_FLAGS(cyber1) == GET_CYBERWARE_FLAGS(cyber2)) {
             send_to_char("You already have this type of filtration installed.\r\n", ch);
             return FALSE;
           }
           break;
         case CYB_DATAJACK:
-          if (GET_OBJ_VAL(cyber2, 0) == CYB_EYES && IS_SET(GET_OBJ_VAL(cyber2, 3), EYE_DATAJACK)) {
+          if (GET_CYBERWARE_TYPE(cyber2) == CYB_EYES && IS_SET(GET_CYBERWARE_FLAGS(cyber2), EYE_DATAJACK)) {
             send_to_char("You already have an eye datajack installed.\r\n", ch);
             return FALSE;
           }
           break;
         case CYB_VCR:
-          if (GET_OBJ_VAL(cyber2, 0) == CYB_BOOSTEDREFLEXES) {
+          if (GET_CYBERWARE_TYPE(cyber2) == CYB_BOOSTEDREFLEXES) {
             send_to_char("Vehicle Control Rigs are not compatible with Boosted reflexes.\r\n", ch);
             return FALSE;
           }
           break;
         case CYB_BOOSTEDREFLEXES:
-          if (GET_OBJ_VAL(cyber2, 0) == CYB_VCR) {
+          if (GET_CYBERWARE_TYPE(cyber2) == CYB_VCR) {
             send_to_char("Boosted reflexes is not compatible with Vehicle Control Rigs.\r\n", ch);
             return FALSE;
           }
           // fall through
         case CYB_MOVEBYWIRE:
         case CYB_WIREDREFLEXES:
-          if (GET_OBJ_VAL(cyber2, 0) == CYB_WIREDREFLEXES || GET_OBJ_VAL(cyber2, 0) == CYB_MOVEBYWIRE ||
-              GET_OBJ_VAL(cyber2, 0) == CYB_BOOSTEDREFLEXES) {
+          if (GET_CYBERWARE_TYPE(cyber2) == CYB_WIREDREFLEXES || GET_CYBERWARE_TYPE(cyber2) == CYB_MOVEBYWIRE ||
+              GET_CYBERWARE_TYPE(cyber2) == CYB_BOOSTEDREFLEXES) {
             send_to_char("You already have reaction enhancing cyberware installed.\r\n", ch);
             return FALSE;
           }
-          if (GET_OBJ_VAL(cyber1, 0) == CYB_MOVEBYWIRE && GET_OBJ_VAL(cyber2, 0) == CYB_REACTIONENHANCE) {
+          if (GET_CYBERWARE_TYPE(cyber1) == CYB_MOVEBYWIRE && GET_CYBERWARE_TYPE(cyber2) == CYB_REACTIONENHANCE) {
             send_to_char("Move-by-wire is not compatible with reaction enhancers.\r\n", ch);
             return FALSE;
           }
@@ -1518,7 +1549,7 @@ bool biocyber_compatibility(struct obj_data *obj1, struct obj_data *obj2, struct
         case CYB_ORALSLASHER:
         case CYB_ORALDART:
         case CYB_ORALGUN:
-          if (GET_OBJ_VAL(cyber2, 0) == CYB_ORALSLASHER || GET_OBJ_VAL(cyber2, 0) == CYB_ORALDART || GET_OBJ_VAL(cyber2, 0)
+          if (GET_CYBERWARE_TYPE(cyber2) == CYB_ORALSLASHER || GET_CYBERWARE_TYPE(cyber2) == CYB_ORALDART || GET_CYBERWARE_TYPE(cyber2)
               == CYB_ORALGUN) {
             send_to_char("You already have a weapon in your mouth.\r\n", ch);
             return FALSE;
@@ -1526,159 +1557,155 @@ bool biocyber_compatibility(struct obj_data *obj1, struct obj_data *obj2, struct
           break;
         case CYB_DERMALPLATING:
         case CYB_DERMALSHEATHING:
-          if (GET_OBJ_VAL(cyber2, 0) == CYB_DERMALPLATING || GET_OBJ_VAL(cyber2, 0) == CYB_DERMALSHEATHING) {
-            send_to_char("You already have an skin modification.\r\n", ch);
-            return FALSE;
+          switch (GET_CYBERWARE_TYPE(cyber2)) {
+            case CYB_DERMALPLATING:
+            case CYB_DERMALSHEATHING:
+              send_to_char("You already have an skin modification.\r\n", ch);
+              return FALSE;
+            case CYB_ARMS:
+            case CYB_LEGS:
+            case CYB_SKULL:
+            case CYB_TORSO:
+              send_to_char("Skin modifications are incompatible with cybernetic replacements (limbs, skull, torso).\r\n", ch);
+              return FALSE;
           }
           break;
         case CYB_REACTIONENHANCE:
-          if (GET_OBJ_VAL(cyber2, 0) == CYB_MOVEBYWIRE) {
+          if (GET_CYBERWARE_TYPE(cyber2) == CYB_MOVEBYWIRE) {
             send_to_char("Reaction enhancers are not compatible with Move-by-wire.\r\n", ch);
             return FALSE;
           }
           break;
+        case CYB_ARMS:
+        case CYB_LEGS:
+        case CYB_SKULL:
+        case CYB_TORSO:
+          switch (GET_CYBERWARE_TYPE(cyber2)) {
+            case CYB_DERMALPLATING:
+            case CYB_DERMALSHEATHING:
+              send_to_char("Cybernetic replacements (limbs, skull, torso) are incompatible with skin modifications.\r\n", ch);
+              return FALSE;
+            case CYB_BONELACING:
+              send_to_char("Cybernetic replacements (limbs, skull, torso) are incompatible with bone lacings.\r\n", ch);
+              return FALSE;
+            case CYB_MUSCLEREP:
+              send_to_char("Cybernetic replacements (limbs, skull, torso) are incompatible with muscle replacements.\r\n", ch);
+              return FALSE;
+          }
+          
+          if (GET_CYBERWARE_TYPE(cyber1) == GET_CYBERWARE_TYPE(cyber2)) {
+            send_to_char("You already have a cybernetic replacement of that type installed.\r\n", ch);
+            return FALSE;
+          }
+            
+          break;
+        case CYB_MUSCLEREP:
+          switch (GET_CYBERWARE_TYPE(cyber2)) {
+            case CYB_ARMS:
+            case CYB_LEGS:
+            case CYB_SKULL:
+            case CYB_TORSO:
+              send_to_char("Muscle replacements are incompatible with cybernetic replacements (limbs, skull, torso).\r\n", ch);
+              return FALSE;
+          }
+          break;
+        case CYB_BONELACING:
+          switch (GET_CYBERWARE_TYPE(cyber2)) {
+            case CYB_ARMS:
+            case CYB_LEGS:
+            case CYB_SKULL:
+            case CYB_TORSO:
+              send_to_char("Bone lacings are incompatible with cybernetic replacements (limbs, skull, torso).\r\n", ch);
+              return FALSE;
+          }
+          return FALSE;
       }
-    if (IS_SET(GET_OBJ_VAL(cyber1, 3), EYE_DATAJACK) && GET_OBJ_VAL(cyber2, 0) == CYB_DATAJACK) {
+    if (IS_SET(GET_CYBERWARE_FLAGS(cyber1), EYE_DATAJACK) && GET_CYBERWARE_TYPE(cyber2) == CYB_DATAJACK) {
       send_to_char("You already have a datajack installed.\r\n", ch);
       return FALSE;
     }
-    if (GET_OBJ_VAL(cyber2, 0) == CYB_EYES && GET_OBJ_VAL(cyber1, 0) == CYB_EYES)
+    if (GET_CYBERWARE_TYPE(cyber2) == CYB_EYES && GET_CYBERWARE_TYPE(cyber1) == CYB_EYES)
       for (int bit = EYE_CAMERA; bit <= EYE_ULTRASOUND; bit *= 2) {
-        if (IS_SET(GET_OBJ_VAL(cyber2, 3), bit) && IS_SET(GET_OBJ_VAL(cyber1, 3), bit)) {
+        if (IS_SET(GET_CYBERWARE_FLAGS(cyber2), bit) && IS_SET(GET_CYBERWARE_FLAGS(cyber1), bit)) {
           send_to_char("You already have eye modifications with this option installed.\r\n", ch);
           return FALSE;
         }
-        if (bit >= EYE_OPTMAG1 && bit <= EYE_OPTMAG3 && IS_SET(GET_OBJ_VAL(cyber1, 3), bit))
-          if (IS_SET(GET_OBJ_VAL(cyber2, 3), EYE_ELECMAG1) || IS_SET(GET_OBJ_VAL(cyber2, 3), EYE_ELECMAG2) || IS_SET(GET_OBJ_VAL(cyber2, 3), EYE_ELECMAG3)) {
+        if (bit >= EYE_OPTMAG1 && bit <= EYE_OPTMAG3 && IS_SET(GET_CYBERWARE_FLAGS(cyber1), bit))
+          if (IS_SET(GET_CYBERWARE_FLAGS(cyber2), EYE_ELECMAG1) || IS_SET(GET_CYBERWARE_FLAGS(cyber2), EYE_ELECMAG2) || IS_SET(GET_CYBERWARE_FLAGS(cyber2), EYE_ELECMAG3)) {
             send_to_char("Optical magnification is not compatible with electronic magnification.\r\n", ch);
             return FALSE;
           }
-        if (bit >= EYE_ELECMAG1 && bit <= EYE_ELECMAG3 && IS_SET(GET_OBJ_VAL(cyber1, 3), bit))
-          if (IS_SET(GET_OBJ_VAL(cyber2, 3), EYE_OPTMAG1) || IS_SET(GET_OBJ_VAL(cyber2, 3), EYE_OPTMAG2) || IS_SET(GET_OBJ_VAL(cyber2, 3), EYE_OPTMAG3)) {
+        if (bit >= EYE_ELECMAG1 && bit <= EYE_ELECMAG3 && IS_SET(GET_CYBERWARE_FLAGS(cyber1), bit))
+          if (IS_SET(GET_CYBERWARE_FLAGS(cyber2), EYE_OPTMAG1) || IS_SET(GET_CYBERWARE_FLAGS(cyber2), EYE_OPTMAG2) || IS_SET(GET_CYBERWARE_FLAGS(cyber2), EYE_OPTMAG3)) {
             send_to_char("Optical magnification is not compatible with electronic magnification.\r\n", ch);
             return FALSE;
           }
       }
   } else if (bio1 && cyber1) {
-    switch (GET_OBJ_VAL(cyber1, 0)) {
+    switch (GET_CYBERWARE_TYPE(cyber1)) {
       case CYB_FILTRATION:
-        if (GET_OBJ_VAL(bio1, 0) == BIO_TRACHEALFILTER && GET_OBJ_VAL(cyber1, 3) == FILTER_AIR) {
+        if (GET_BIOWARE_TYPE(bio1) == BIO_TRACHEALFILTER && GET_CYBERWARE_FLAGS(cyber1) == FILTER_AIR) {
           send_to_char("Air filtration cyberware is not compatible with a Tracheal Filter.\r\n", ch);
           return FALSE;
         }
-        if (GET_OBJ_VAL(bio1, 0) == BIO_DIGESTIVEEXPANSION && GET_OBJ_VAL(cyber1, 3) == FILTER_INGESTED) {
+        if (GET_BIOWARE_TYPE(bio1) == BIO_DIGESTIVEEXPANSION && GET_CYBERWARE_FLAGS(cyber1) == FILTER_INGESTED) {
           send_to_char("Tracheal Filtration cyberware is not compatible with Digestive Expansion.\r\n", ch);
           return FALSE;
         }
         break;
       case CYB_MOVEBYWIRE:
-        if (GET_OBJ_VAL(bio1, 0) == BIO_ADRENALPUMP) {
+        if (GET_BIOWARE_TYPE(bio1) == BIO_ADRENALPUMP) {
           send_to_char("Adrenal Pumps are not compatible with Move-By-Wire.\r\n", ch);
           return FALSE;
         }
-        if (GET_OBJ_VAL(bio1, 0) == BIO_SYNAPTICACCELERATOR) {
+        if (GET_BIOWARE_TYPE(bio1) == BIO_SYNAPTICACCELERATOR) {
           send_to_char("Synaptic Accelerators are not compatible with Move-By-Wire.\r\n", ch);
           return FALSE;
         }
-        if (GET_OBJ_VAL(bio1, 0) == BIO_SUPRATHYROIDGLAND) {
+        if (GET_BIOWARE_TYPE(bio1) == BIO_SUPRATHYROIDGLAND) {
           send_to_char("Suprathyroid Glands are not compatible with Move-By-Wire.\r\n", ch);
           return FALSE;
         }
         break;
       case CYB_WIREDREFLEXES:
-        if (GET_OBJ_VAL(bio1, 0) == BIO_SYNAPTICACCELERATOR) {
+        if (GET_BIOWARE_TYPE(bio1) == BIO_SYNAPTICACCELERATOR) {
           send_to_char("Your Synaptic Accelerator is not compatible with Wired Reflexes.\r\n", ch);
           return FALSE;
         }
         break;
       case CYB_EYES:
-        if (GET_OBJ_VAL(bio1, 0) == BIO_CATSEYES || GET_OBJ_VAL(bio1, 0) == BIO_NICTATINGGLAND) {
+        if (GET_BIOWARE_TYPE(bio1) == BIO_CATSEYES || GET_BIOWARE_TYPE(bio1) == BIO_NICTATINGGLAND) {
           send_to_char("Bioware and cyberware eye modifications aren't compatible.\r\n", ch);
           return FALSE;
         }
         break;
       case CYB_MUSCLEREP:
-        if (GET_OBJ_VAL(bio1, 0) == BIO_MUSCLEAUG || GET_OBJ_VAL(bio1, 0) == BIO_MUSCLETONER) {
+        if (GET_BIOWARE_TYPE(bio1) == BIO_MUSCLEAUG || GET_BIOWARE_TYPE(bio1) == BIO_MUSCLETONER) {
           send_to_char("Muscle replacement isn't compatible with Muscle Augmentation or Toners.\r\n", ch);
           return FALSE;
         }
         break;
       case CYB_DERMALPLATING:
       case CYB_DERMALSHEATHING:
-        if (GET_OBJ_VAL(bio1, 0) == BIO_ORTHOSKIN) {
+        if (GET_BIOWARE_TYPE(bio1) == BIO_ORTHOSKIN) {
           send_to_char("Orthoskin is not compatible with Dermal Plating or Sheathing.\r\n", ch);
           return FALSE;
         }
         break;
-      case CYB_CYBERARMS:
-        if (GET_BIOWARE_TYPE(bio1, 0) == BIO_MUSCLEAUG)
-          send_to_char("Cyber Arms are incompatible with Muscle Augmentations.\r\n", ch);
-        if (GET_BIOWARE_TYPE(bio1, 0) == BIO_MUSCLETONER)
-          send_to_char("Cyber Arms are incompatible with Muscle Toners.\r\n", ch);
-        if (GET_BIOWARE_TYPE(bio1, 0) == BIO_ORTHOSKIN)
-          send_to_char("Cyber Arms are incompatible with Orthoskin.\r\n", ch);
-        if (GET_CYBERWARE_TYPE(cyber2, 0) == CYB_DERMALPLATING)
-          send_to_char("Cyber Arms are incompatible with Dermal Plating.\r\n", ch);
-        if (GET_CYBERWARE_TYPE(cyber2, 0) == CYB_DERMALSHEATHING)
-          send_to_char("Cyber Arms are incompatible with Dermal Sheathing.\r\n", ch);
-        if (GET_CYBERWARE_TYPE(cyber2, 0) == CYB_BONELACING)
-          send_to_char("Cyber Arms are incompatible with Bone Lacing.\r\n", ch);
-        if (GET_CYBERWARE_TYPE(cyber2, 0) == CYB_CYBERARMS)
-          send_to_char("Cyber Arms are incompatible with other Cyber Arms.\r\n", ch);
+      case CYB_ARMS:
+      case CYB_LEGS:
+      case CYB_SKULL:
+      case CYB_TORSO:
+        if (GET_BIOWARE_TYPE(bio1) == BIO_MUSCLEAUG) {
+          send_to_char("Cybernetic replacements (limbs, skull, torso) are incompatible with Muscle Augmentations.\r\n", ch);
+          return FALSE;
+        } 
+        if (GET_BIOWARE_TYPE(bio1) == BIO_MUSCLETONER) {
+          send_to_char("Cybernetic replacements (limbs, skull, torso) are incompatible with Muscle Toners.\r\n", ch);
           return FALSE;
         }
-        break;
-      case CYB_CYBERLEGS:
-        if (GET_BIOWARE_TYPE(bio1, 0) == BIO_MUSCLEAUG)
-          send_to_char("Cyber Legs are incompatible with Muscle Augmentations.\r\n", ch);
-        if (GET_BIOWARE_TYPE(bio1, 0) == BIO_MUSCLETONER)
-          send_to_char("Cyber Legs are incompatible with Muscle Toners.\r\n", ch);
-        if (GET_BIOWARE_TYPE(bio1, 0) == BIO_ORTHOSKIN)
-          send_to_char("Cyber Legs are incompatible with Orthoskin.\r\n", ch);
-        if (GET_CYBERWARE_TYPE(cyber2, 0) == CYB_DERMALPLATING)
-          send_to_char("Cyber Legs are incompatible with Dermal Plating.\r\n", ch);
-        if (GET_CYBERWARE_TYPE(cyber2, 0) == CYB_DERMALSHEATHING)
-          send_to_char("Cyber Legs are incompatible with Dermal Sheathing.\r\n", ch);
-        if (GET_CYBERWARE_TYPE(cyber2, 0) == CYB_BONELACING)
-          send_to_char("Cyber Legs are incompatible with Bone Lacing.\r\n", ch);
-        if (GET_CYBERWARE_TYPE(cyber2, 0) == CYB_CYBERARMS)
-          send_to_char("Cyber Legs are incompatible with other Cyber Legs.\r\n", ch);
-          return FALSE;
-        }
-        break;
-      case CYB_CYBERSKULL:
-        if (GET_BIOWARE_TYPE(bio1, 0) == BIO_MUSCLEAUG)
-          send_to_char("Cyber Skulls are incompatible with Muscle Augmentations.\r\n", ch);
-        if (GET_BIOWARE_TYPE(bio1, 0) == BIO_MUSCLETONER)
-          send_to_char("Cyber Skulls are incompatible with Muscle Toners.\r\n", ch);
-        if (GET_BIOWARE_TYPE(bio1, 0) == BIO_ORTHOSKIN)
-          send_to_char("Cyber Skulls are incompatible with Orthoskin.\r\n", ch);
-        if (GET_CYBERWARE_TYPE(cyber2, 0) == CYB_DERMALPLATING)
-          send_to_char("Cyber Skulls are incompatible with Dermal Plating.\r\n", ch);
-        if (GET_CYBERWARE_TYPE(cyber2, 0) == CYB_DERMALSHEATHING)
-          send_to_char("Cyber Skulls are incompatible with Dermal Sheathing.\r\n", ch);
-        if (GET_CYBERWARE_TYPE(cyber2, 0) == CYB_BONELACING)
-          send_to_char("Cyber Skulls are incompatible with Bone Lacing.\r\n", ch);
-        if (GET_CYBERWARE_TYPE(cyber2, 0) == CYB_CYBERARMS)
-          send_to_char("Cyber Skulls are incompatible with other Cyber Skulls.\r\n", ch);
-          return FALSE;
-        }
-        break;
-      case CYB_CYBERTORSO:
-        if (GET_BIOWARE_TYPE(bio1, 0) == BIO_MUSCLEAUG)
-          send_to_char("Cyber Torsos are incompatible with Muscle Augmentations.\r\n", ch);
-        if (GET_BIOWARE_TYPE(bio1, 0) == BIO_MUSCLETONER)
-          send_to_char("Cyber Torsos are incompatible with Muscle Toners.\r\n", ch);
-        if (GET_BIOWARE_TYPE(bio1, 0) == BIO_ORTHOSKIN)
-          send_to_char("Cyber Torsos are incompatible with Orthoskin.\r\n", ch);
-        if (GET_CYBERWARE_TYPE(cyber2, 0) == CYB_DERMALPLATING)
-          send_to_char("Cyber Torsos are incompatible with Dermal Plating.\r\n", ch);
-        if (GET_CYBERWARE_TYPE(cyber2, 0) == CYB_DERMALSHEATHING)
-          send_to_char("Cyber Torsos are incompatible with Dermal Sheathing.\r\n", ch);
-        if (GET_CYBERWARE_TYPE(cyber2, 0) == CYB_BONELACING)
-          send_to_char("Cyber Torsos are incompatible with Bone Lacing.\r\n", ch);
-        if (GET_CYBERWARE_TYPE(cyber2, 0) == CYB_CYBERARMS)
-          send_to_char("Cyber Torsos are incompatible with other Cyber Torsos.\r\n", ch);
+        if (GET_BIOWARE_TYPE(bio1) == BIO_ORTHOSKIN) {
+          send_to_char("Cybernetic replacements (limbs, skull, torso) are incompatible with Orthoskin.\r\n", ch);
           return FALSE;
         }
         break;
@@ -1722,9 +1749,12 @@ void reduce_abilities(struct char_data *vict)
 
 void magic_loss(struct char_data *ch, int magic, bool msg)
 {
+  log_vfprintf("Subtracting %d magic from %s.", magic, GET_CHAR_NAME(ch));
   if (GET_TRADITION(ch) == TRAD_MUNDANE)
     return;
+    
   GET_REAL_MAG(ch) = MAX(0, GET_REAL_MAG(ch) - magic);
+  
   if (GET_REAL_MAG(ch) < 100) {
     send_to_char(ch, "You feel the last of your magic leave your body.\r\n", ch);
     PLR_FLAGS(ch).RemoveBit(PLR_PERCEIVE);
@@ -1733,15 +1763,21 @@ void magic_loss(struct char_data *ch, int magic, bool msg)
     mysql_wrapper(mysql, buf);
     snprintf(buf, sizeof(buf), "UPDATE pfiles SET Tradition=%d WHERE idnum=%ld;", TRAD_MUNDANE, GET_IDNUM(ch));
     mysql_wrapper(mysql, buf);
+    
     for (int i = 0; i < NUM_WEARS; i++)
       if (GET_EQ(ch, i) && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_FOCUS && GET_OBJ_VAL(GET_EQ(ch, i), 2) == GET_IDNUM(ch))
         GET_OBJ_VAL(GET_EQ(ch, i), 2) = GET_OBJ_VAL(GET_EQ(ch, i), 4) =  GET_OBJ_VAL(GET_EQ(ch, i), 9) = 0;
+        
     struct sustain_data *nextsust;
+    
     for (struct sustain_data *sust = GET_SUSTAINED(ch); sust; sust = nextsust) {
       nextsust = sust->next;
       if (sust->caster)
         end_sustained_spell(ch, sust);
     }
+    
+    // TODO: Deactivate adept powers.
+    
     return;
   }
   if (msg)
@@ -2057,7 +2093,7 @@ struct room_data *get_veh_in_room(struct veh_data *veh) {
   /*  This is not precisely an error case-- it just means the vehicle is being towed. -- LS. 
   if (!veh->in_room) {
     char errbuf[500];
-    sprintf(errbuf, "SYSERR: get_veh_in_room called on veh %s, but it's not in a room or vehicle!", GET_VEH_NAME(veh));
+    snprintf(errbuf, sizeof(errbuf), "SYSERR: get_veh_in_room called on veh %s, but it's not in a room or vehicle!", GET_VEH_NAME(veh));
     mudlog(errbuf, NULL, LOG_SYSLOG, TRUE); 
     
   }
@@ -2519,16 +2555,11 @@ struct obj_data *unattach_attachment_from_weapon(int location, struct obj_data *
   weight_change_object(weapon, -GET_OBJ_WEIGHT(attachment));
   
   // Subtract the attachment's cost from the weapon's cost.
-  int cost_delta = GET_OBJ_COST(weapon) - GET_OBJ_COST(attachment);
-  if (cost_delta < 0) {
+  if (GET_OBJ_COST(attachment) > GET_OBJ_COST(weapon)) {
+    GET_OBJ_COST(attachment) = GET_OBJ_COST(weapon);
     GET_OBJ_COST(weapon) = 0;
-    GET_OBJ_COST(attachment) += cost_delta;
-    if (GET_OBJ_COST(attachment) < 0) {
-      snprintf(buf, sizeof(buf), "BUILD ERROR: Weapon %s (%ld) had crazy-high attachment nuyen value - %s (%ld) would have had negative cost.", 
-               GET_OBJ_NAME(weapon), GET_OBJ_VNUM(weapon), GET_OBJ_NAME(attachment), GET_OBJ_VNUM(attachment));
-    }
   } else {
-    GET_OBJ_COST(weapon) -= cost_delta;
+    GET_OBJ_COST(weapon) -= GET_OBJ_COST(attachment);
   }
   
   // Cycle through all the viable attachment affect flags.
@@ -3112,7 +3143,7 @@ bool combine_ammo_boxes(struct char_data *ch, struct obj_data *from, struct obj_
     return FALSE;
   }
   
-  if (GET_AMMOBOX_CREATOR(from) || GET_AMMOBOX_CREATOR(into)) {
+  if (GET_AMMOBOX_INTENDED_QUANTITY(from) > 0 || GET_AMMOBOX_INTENDED_QUANTITY(into) > 0) {
     mudlog("SYSERR: combine_ammo_boxes received a box that was not yet completed.", ch, LOG_SYSLOG, TRUE);
     return FALSE;
   }
@@ -3271,6 +3302,83 @@ float get_proto_weight(struct obj_data *obj) {
     return 0.00;
   else
     return GET_OBJ_WEIGHT(&obj_proto[rnum]);
+}
+
+int get_armor_penalty_grade(struct char_data *ch) {
+  int total = 0;
+  
+  if (GET_TOTALBAL(ch) > GET_QUI(ch))
+    total += GET_TOTALBAL(ch) - GET_QUI(ch);
+  if (GET_TOTALIMP(ch) > GET_QUI(ch))
+    total += GET_TOTALIMP(ch) - GET_QUI(ch);
+  if (total > 0) {
+    if (total >= GET_QUI(ch))
+      return ARMOR_PENALTY_TOTAL;
+    else if (total >= GET_QUI(ch) * 3/4)
+      return ARMOR_PENALTY_HEAVY;
+    else if (total >= GET_QUI(ch) / 2)
+      return ARMOR_PENALTY_MEDIUM;
+    else
+      return ARMOR_PENALTY_LIGHT;
+  }
+  
+  return ARMOR_PENALTY_NONE;
+}
+
+void handle_weapon_attachments(struct obj_data *obj) {  
+  if (GET_OBJ_TYPE(obj) != ITEM_WEAPON)
+    return;
+    
+  if (!IS_GUN(GET_WEAPON_ATTACK_TYPE(obj)))
+    return;
+  
+  int real_obj;
+  
+  for (int i = ACCESS_LOCATION_TOP; i <= ACCESS_LOCATION_UNDER; i++)
+    if (GET_OBJ_VAL(obj, i) > 0 && (real_obj = real_object(GET_OBJ_VAL(obj, i))) > 0) {
+      struct obj_data *mod = &obj_proto[real_obj];
+      // We know the attachment code will throw a fit if we attach over the top of an 'existing' object, so wipe it out without removing it.
+      GET_OBJ_VAL(obj, i) = 0;
+      attach_attachment_to_weapon(mod, obj, NULL, i - ACCESS_ACCESSORY_LOCATION_DELTA);
+    }
+    
+  if (!GET_WEAPON_FIREMODE(obj)) {
+    if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(obj), 1 << MODE_SS))
+      GET_WEAPON_FIREMODE(obj) = MODE_SS;
+    else if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(obj), 1 << MODE_SA))
+      GET_WEAPON_FIREMODE(obj) = MODE_SA;
+    else if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(obj), 1 << MODE_BF))
+      GET_WEAPON_FIREMODE(obj) = MODE_BF;
+    else if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(obj), 1 << MODE_FA)) {
+      GET_WEAPON_FIREMODE(obj) = MODE_FA;
+      GET_OBJ_TIMER(obj) = 10;
+    }
+  }
+}
+
+// Use this to restrict builder movement. Handy for preventing unproven builders abusing their privileges to learn game secrets.
+bool builder_cant_go_there(struct char_data *ch, struct room_data *room) {
+  if (GET_LEVEL(ch) == LVL_BUILDER) {
+    // We assume all builders can go to staff-locked rooms, which are staff-only.
+    if (room->staff_level_lock > 1)
+      return FALSE;
+    
+    // Otherwise, iterate and find the zone for the room. We allow them to go there if they have edit access.
+    for (int counter = 0; counter <= top_of_zone_table; counter++) {
+      if (GET_ROOM_VNUM(room) >= (zone_table[counter].number * 100) 
+          && GET_ROOM_VNUM(room) <= zone_table[counter].top) 
+      {
+        if (can_edit_zone(ch, counter))
+          return FALSE;
+        
+        if (zone_table[counter].number == 100)
+          return FALSE;
+          
+        return TRUE;
+      }
+    }
+  }
+  return FALSE;
 }
 
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.
