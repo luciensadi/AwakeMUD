@@ -5933,6 +5933,25 @@ void price_cyber(struct obj_data *obj)
         GET_OBJ_AVAILDAY(obj) = MAX(GET_OBJ_AVAILDAY(obj), 1);
       }
       break;
+    case CYB_TACTICALCOMPUTER:
+      GET_CYBERWARE_ESSENCE_COST(obj) = 130 + (GET_OBJ_VAL(obj, 1) * 20);
+      GET_OBJ_AVAILTN(obj) = 12;
+      GET_OBJ_AVAILDAY(obj) = 60;
+      switch (GET_OBJ_VAL(obj, 1)) {
+        case 1:
+          GET_OBJ_COST(obj) = 400000;
+          break;
+        case 2:
+          GET_OBJ_COST(obj) = 420000;
+          break;
+        case 3:
+          GET_OBJ_COST(obj) = 440000;
+          break;
+        case 4:
+          GET_OBJ_COST(obj) = 460000;
+          break;
+      }
+      break;
   }
   switch (GET_OBJ_VAL(obj, 2)) {
     case GRADE_ALPHA:
