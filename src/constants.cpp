@@ -2220,7 +2220,8 @@ const char *cyber_types[] = {
   "Smartlink",
   "Muscle Replacement",
   "Paired Set of Cyber Arms",
-  "Paired Set of Cyber Legs"
+  "Paired Set of Cyber Legs",
+  "Tactical Computer"
 };
 
 const char *decap_cyber_types[] = {
@@ -2272,7 +2273,8 @@ const char *decap_cyber_types[] = {
   "smartlink",
   "muscle replacement",
   "paired set of cyber arms",
-  "paired set of cyber legs"
+  "paired set of cyber legs",
+  "tactical computer"
 };
 
 const char *bio_types[] = {
