@@ -795,7 +795,7 @@ struct command_info cmd_info[] =
     { "stand"    , POS_LYING   , do_stand    , 0, 0 },
     { "stat"     , POS_DEAD    , do_stat     , LVL_BUILDER, 0 },
     { "status"   , POS_LYING   , do_status   , 0, 0 },
-    { "steal"    , POS_STANDING, do_steal    , 0, 0 },
+    { "steal"    , POS_LYING   , do_steal    , 0, 0 },
     { "stop"     , POS_LYING   , do_stop     , 0, 0 },
     { "subscribe", POS_SITTING , do_subscribe, 0, 0 },
     { "subpoint" , POS_DEAD    , do_subpoint , LVL_ARCHITECT, 0 },

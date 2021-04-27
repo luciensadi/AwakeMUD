@@ -2251,6 +2251,7 @@ enum {
 #define OBJ_MAGEBLING                      5734
 #define OBJ_MAGE_LETTER                    5735
 #define OBJ_MODIFIED_BARRET_SNIPER_RIFLE   14636
+#define OBJ_STAFF_REBATE_FOR_DECKBUILDING  10003
 
 #define OBJ_CMT_AVATAR                     80004
 #define OBJ_NOVATECH_SIX_SENSORS           17116
