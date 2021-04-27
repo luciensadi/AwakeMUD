@@ -197,6 +197,35 @@ ACMD(do_steal)
     send_to_char(ch, "You cannot steal items until you are authed.\r\n");
     return;
   }
+  
+  if (!IS_SENATOR(ch) && GET_POS(ch) < POS_STANDING) {
+    switch (GET_POS(ch)) {
+      case POS_DEAD:
+        send_to_char("Lie still; you are DEAD!!! :-(\r\n", ch);
+        mudlog("WARNING: Dead character is still trying to perform actions.", ch, LOG_SYSLOG, TRUE);
+        break;
+      case POS_MORTALLYW:
+        send_to_char("You are in a pretty bad shape! You can either wait for help, or give up by typing ^WDIE^n.\r\n", ch);
+        break;
+      case POS_STUNNED:
+        send_to_char("All you can do right now is think about the stars! You can either wait to recover, or give up by typing ^WDIE^n.\r\n", ch);
+        break;
+      case POS_SLEEPING:
+        send_to_char("In your dreams, or what?\r\n", ch);
+        break;
+      case POS_RESTING:
+        send_to_char("Nah... You feel too relaxed to do that..\r\n", ch);
+        break;
+      case POS_SITTING:
+      case POS_LYING:
+        send_to_char("Maybe you should get on your feet first?\r\n", ch);
+        break;
+      case POS_FIGHTING:
+        send_to_char("No way!  You're fighting for your life!\r\n", ch);
+        break;
+    }
+    return;
+  }
 
   ACMD_DECLARE(do_gen_comm);
 

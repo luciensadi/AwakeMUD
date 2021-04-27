@@ -3381,6 +3381,19 @@ bool builder_cant_go_there(struct char_data *ch, struct room_data *room) {
   return FALSE;
 }
 
+// Allows morts to have accelerated deckbuilding actions. Useful for when their deck breaks.
+bool get_and_deduct_one_deckbuilding_token_from_char(struct char_data *ch) {
+  for (struct obj_data *ptr = ch->carrying; ptr; ptr = ptr->next_content) {
+    if (GET_OBJ_VNUM(ptr) == OBJ_STAFF_REBATE_FOR_DECKBUILDING) {
+      mudlog("Consuming a deckbuilding token to accelerate a deckbuilding task.", ch, LOG_CHEATLOG, TRUE);
+      extract_obj(ptr);
+      return TRUE;
+    }
+  }
+  
+  return FALSE;
+}
+
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.
 // Great for swapping out old Classic weapons, cyberware, etc for the new guaranteed-canon versions.
 #define PAIR(classic, current) case (classic): return (current);
