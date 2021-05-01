@@ -164,6 +164,7 @@ void process_boost(void);
 class memoryClass *Mem = new memoryClass();
 void show_string(struct descriptor_data * d, char *input);
 extern void update_paydata_market();
+extern void warn_about_apartment_deletion();
 
 #ifdef USE_DEBUG_CANARIES
 void check_memory_canaries();
@@ -957,6 +958,8 @@ void game_loop(int mother_desc)
     
     // Every IRL day
     if (!(pulse % (60 * PASSES_PER_SEC * 60 * 24))) {
+      warn_about_apartment_deletion();
+      
       /* Check if the MySQL connection is active, and if not, recreate it. */
 #ifdef DEBUG
       unsigned long oldthread = mysql_thread_id(mysql);
