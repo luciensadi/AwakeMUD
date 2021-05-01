@@ -124,13 +124,12 @@ extern void DeleteChar(vnum_t idnum);
 extern bool load_char(const char *name, struct char_data *ch, bool logon);
 extern vnum_t get_player_id(char *name);
 extern char *get_player_name(vnum_t id);
-extern char *prepare_quotes(char *dest, const char *str, size_t size_of_dest);
+extern char *prepare_quotes(char *dest, const char *str, size_t size_of_dest, bool include_newline_processing=FALSE);
 extern bool get_plr_flag_is_set_by_idnum(int flag, vnum_t id);
 extern bool get_prf_flag_is_set_by_idnum(int flag, vnum_t id);
 extern bool get_aff_flag_is_set_by_idnum(int flag, vnum_t id);
 
 extern MYSQL *mysql;
 
-int mysql_wrapper(MYSQL *mysql, const char *query);
-char *prepare_quotes(char *dest, const char *str, size_t size_of_dest);
+extern int mysql_wrapper(MYSQL *mysql, const char *query);
 #endif // ifndef __newdb_h__
