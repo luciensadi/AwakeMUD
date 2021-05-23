@@ -1700,12 +1700,12 @@ ACMD(do_stat)
           strcpy(buf2, char_name);
           delete [] char_name;
         } else {
-          send_to_char("There is no such player.\r\n", ch);
+          send_to_char(ch, "Idnum %d does not correspond to any existing PC.\r\n", idnum);
           return;
         }
       }
       if (!(does_player_exist(buf2)))
-        send_to_char("There is no such player.\r\n", ch);
+        send_to_char(ch, "Couldn't find any PC named '%s'.\r\n", buf2);
       else {
         victim = playerDB.LoadChar(buf2, TRUE);
         do_stat_character(ch, victim);
