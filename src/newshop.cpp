@@ -1063,7 +1063,7 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
   
   
   if (shop_table[shop_nr].flags.IsSet(SHOP_DOCTOR)) {
-    strcpy(buf, " ##   Available   Item                                Rating Ess/Index    Price\r\n"
+    strcpy(buf, " **   Available      Item                                Rating Ess/Index    Price\r\n"
                 "-------------------------------------------------------------------------------\r\n");
     
     for (struct shop_sell_data *sell = shop_table[shop_nr].selling; sell; sell = sell->next, i++) {
@@ -1074,17 +1074,17 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
       }
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %2d)  ", i);
       if (sell->type == SELL_ALWAYS || (sell->type == SELL_AVAIL && GET_OBJ_AVAILDAY(obj) == 0))
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Yes         ");
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Yes            ");
       else if (sell->type == SELL_AVAIL) {
         if (GET_OBJ_AVAILDAY(obj) < 1)
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "~%-2d Hours   ", (int)(24 * GET_OBJ_AVAILDAY(obj)));
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "~%-2d Hours      ", (int)(24 * GET_OBJ_AVAILDAY(obj)));
         else
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "~%-2d Day%c    ", (int)GET_OBJ_AVAILDAY(obj), GET_OBJ_AVAILDAY(obj) > 1 ? 's' : ' ');
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "~%-2d Day%c       ", (int)GET_OBJ_AVAILDAY(obj), GET_OBJ_AVAILDAY(obj) > 1 ? 's' : ' ');
       } else {
         if (sell->stock <= 0)
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Out Of Stock");
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "(Out Of Stock) ");
         else
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-3d         ", sell->stock);
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-3d            ", sell->stock);
       }
       if (GET_OBJ_VAL(obj, 1) > 0)
         snprintf(buf2, sizeof(buf2), "%d", GET_OBJ_VAL(obj, 1));
@@ -1103,7 +1103,7 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
     }
   } else
   {
-    strcpy(buf, " ##   Available   Item                                              Price\r\n"
+    strcpy(buf, " **   Available      Item                                              Price\r\n"
             "------------------------------------------------------------------------------\r\n");
     for (struct shop_sell_data *sell = shop_table[shop_nr].selling; sell; sell = sell->next, i++) {
       obj = read_object(sell->vnum, VIRTUAL);
@@ -1113,17 +1113,17 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
       }
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %2d)  ", i);
       if (sell->type == SELL_ALWAYS || (sell->type == SELL_AVAIL && GET_OBJ_AVAILDAY(obj) == 0))
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Yes         ");
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Yes            ");
       else if (sell->type == SELL_AVAIL) {
         if (GET_OBJ_AVAILDAY(obj) < 1)
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "~%-2d Hours   ", (int)(24 * GET_OBJ_AVAILDAY(obj)));
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "~%-2d Hours      ", (int)(24 * GET_OBJ_AVAILDAY(obj)));
         else
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "~%-2d Day%c    ", (int)GET_OBJ_AVAILDAY(obj), GET_OBJ_AVAILDAY(obj) > 1 ? 's' : ' ');
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "~%-2d Day%c       ", (int)GET_OBJ_AVAILDAY(obj), GET_OBJ_AVAILDAY(obj) > 1 ? 's' : ' ');
       } else {
         if (sell->stock <= 0)
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Out Of Stock");
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "(Out Of Stock) ");
         else
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-3d         ", sell->stock);
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-3d            ", sell->stock);
       }
       
       if (IS_OBJ_STAT(obj, ITEM_NERPS)) {
