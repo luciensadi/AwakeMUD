@@ -3394,6 +3394,32 @@ bool get_and_deduct_one_deckbuilding_token_from_char(struct char_data *ch) {
   return FALSE;
 }
 
+// States whether a program can be copied or not.
+bool program_can_be_copied(struct obj_data *prog) {
+  if (!prog)
+    return FALSE;
+    
+  switch (GET_OBJ_VAL(prog, 0)) {
+    case SOFT_ASIST_COLD:
+    case SOFT_ASIST_HOT:
+    case SOFT_HARDENING:
+    case SOFT_ICCM:
+    case SOFT_ICON:
+    case SOFT_MPCP: 
+    case SOFT_REALITY:
+    case SOFT_RESPONSE:
+    case SOFT_BOD:
+    case SOFT_SENSOR:
+    case SOFT_MASKING:
+    case SOFT_EVASION:
+    case SOFT_SUITE:
+      return FALSE;
+  }
+  
+  return TRUE;
+}
+
+
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.
 // Great for swapping out old Classic weapons, cyberware, etc for the new guaranteed-canon versions.
 #define PAIR(classic, current) case (classic): return (current);

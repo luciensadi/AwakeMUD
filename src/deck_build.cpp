@@ -428,9 +428,26 @@ ACMD(do_cook) {
           send_to_char(ch, "You need at least %d nuyen worth of optical chips to encode %s.\r\n", cost, GET_OBJ_NAME(chip));
           return;
       }
-      GET_OBJ_VAL(chip->in_obj, 3) -= GET_OBJ_VAL(chip, 2);
-      obj_from_obj(chip);
+      
+      /* Instead of removing the software from the machine, we copy it instead if it's a cookable copyable thing. */
+      if (program_can_be_copied(chip)) {
+        struct obj_data *newp = read_object(OBJ_BLANK_PROGRAM, VIRTUAL);
+        newp->restring = str_dup(GET_OBJ_NAME(chip));
+        GET_OBJ_VAL(newp, 0) = GET_OBJ_VAL(chip, 0);
+        GET_OBJ_VAL(newp, 1) = GET_OBJ_VAL(chip, 1);
+        GET_OBJ_VAL(newp, 2) = GET_OBJ_VAL(chip, 2);
+        GET_OBJ_VAL(newp, 3) = GET_OBJ_VAL(chip, 3);
+        chip = newp;
+        send_to_char("You save a copy to disk before sending it to your cooker.\r\n", ch);
+      } else {
+        // Can't be copied? OK, use the old behavior of removing the item.
+        GET_OBJ_VAL(chip->in_obj, 3) -= GET_OBJ_VAL(chip, 2);
+        obj_from_obj(chip);
+        send_to_char(ch, "%s is too bespoke to be useful for a different deck, so you send it to your cooker without copying it first.\r\n", capitalize(GET_OBJ_NAME(chip)));
+      }
+      
       obj_to_obj(chip, cooker);
+      
       int target = 4;
       int skill = get_skill(ch, SKILL_BR_COMPUTER, target) + MIN(GET_SKILL(ch, SKILL_BR_COMPUTER), GET_DECK_ACCESSORY_COOKER_RATING(cooker));
       int success = success_test(skill, target);
@@ -468,18 +485,18 @@ void part_design(struct char_data *ch, struct obj_data *part) {
             ch->char_specials.programming = part;
         }
     } else {
-        int target = GET_OBJ_VAL(part, 2)/2, skill = get_skill(ch, SKILL_CYBERTERM_DESIGN, target);
-        GET_OBJ_VAL(part, 3) = GET_OBJ_VAL(part, 2) * 2;
+        int target = GET_PART_TARGET_MPCP(part)/2, skill = get_skill(ch, SKILL_CYBERTERM_DESIGN, target);
+        GET_PART_DESIGN_COMPLETION(part) = GET_PART_TARGET_MPCP(part) * 2;
         GET_OBJ_VAL(part, 5) = success_test(skill, target) << 1;
-        GET_OBJ_VAL(part, 7) = GET_IDNUM(ch);
+        GET_PART_BUILDER_IDNUM(part) = GET_IDNUM(ch);
         if (get_and_deduct_one_deckbuilding_token_from_char(ch)) {
           send_to_char("A deckbuilding token fuzzes into digital static, greatly accelerating the design process.\r\n", ch);
-          GET_OBJ_VAL(part, 3) = 1;
+          GET_PART_DESIGN_COMPLETION(part) = 1;
           GET_OBJ_VAL(part, 5) = 100;
         }
         if (access_level(ch, LVL_ADMIN)) {
           send_to_char("You use your admin powers to greatly accelerate the design process.\r\n", ch);
-          GET_OBJ_VAL(part, 3) = 1;
+          GET_PART_DESIGN_COMPLETION(part) = 1;
           GET_OBJ_VAL(part, 5) = 100;
         }
         send_to_char(ch, "You begin to design %s.\r\n", GET_OBJ_NAME(part));
@@ -849,6 +866,8 @@ ACMD(do_build) {
 
 ACMD(do_progress)
 {
+  int amount_left, amount_needed;
+  
   if (AFF_FLAGS(ch).IsSet(AFF_CIRCLE)) {
     send_to_char(ch, "The hermetic circle you are working on is about %d%% completed.\r\n", 
                        (int)(((float)((GET_OBJ_VAL(ch->char_specials.programming, 1) * 60) -
@@ -897,15 +916,18 @@ ACMD(do_progress)
   }
   
   if (AFF_FLAGS(ch).IsSet(AFF_PART_DESIGN)) {
+    amount_left = GET_PART_DESIGN_COMPLETION(GET_BUILDING(ch));
+    amount_needed = GET_PART_TARGET_MPCP(GET_BUILDING(ch)) * 2;
     send_to_char(ch, "You are about %d%% of the way through designing %s.\r\n",
-           (int)(((float)(GET_OBJ_VAL(GET_BUILDING(ch), 2) * 2 - GET_OBJ_VAL(GET_BUILDING(ch), 3)) / 
-           GET_OBJ_VAL(GET_BUILDING(ch), 2) * 2) * 100), GET_OBJ_NAME(GET_BUILDING(ch)));
+           (int)(((float)(amount_needed - amount_left) * 100) / amount_needed), GET_OBJ_NAME(GET_BUILDING(ch)));
     return;
   }
     
   if (AFF_FLAGS(ch).IsSet(AFF_DESIGN)) {
+    amount_left = GET_OBJ_VAL(GET_BUILDING(ch), 4);
+    amount_needed = GET_OBJ_TIMER(GET_BUILDING(ch));
     send_to_char(ch, "You are about %d%% of the way through designing %s.\r\n", 
-                 (int)(((float)(GET_OBJ_TIMER(GET_BUILDING(ch)) - GET_OBJ_VAL(GET_BUILDING(ch), 4)) / (GET_OBJ_TIMER(GET_BUILDING(ch)) != 0 ? GET_OBJ_TIMER(GET_BUILDING(ch)) : 1) * 100)), GET_OBJ_NAME(GET_BUILDING(ch)));
+           (int)(((float)(amount_needed - amount_left) * 100) / amount_needed), GET_OBJ_NAME(GET_BUILDING(ch)));
     return;
   }
   

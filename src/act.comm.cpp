@@ -1041,12 +1041,19 @@ ACMD(do_gen_comm)
 
   if (subcmd == SCMD_NEWBIE) {
     if (IS_NPC(ch)) {
-      send_to_char("No.\r\n", ch);
+      send_to_char("NPCs can't use the newbie channel.\r\n", ch);
       return;
-    } else if (!IS_SENATOR(ch) && !PLR_FLAGGED(ch, PLR_NEWBIE) && !PRF_FLAGGED(ch, PRF_NEWBIEHELPER)) {
+    }
+    else if (PLR_FLAGGED(ch, PLR_NEWBIE_MUTED)) {
+      send_to_char("You can't talk on that channel.\r\n", ch);
+      return;
+    }
+    /* Anyone can send to the newbie channel now.
+    else if (!IS_SENATOR(ch) && !PLR_FLAGGED(ch, PLR_NEWBIE) && !PRF_FLAGGED(ch, PRF_NEWBIEHELPER)) {
       send_to_char("You are too experienced to use the newbie channel.\r\n", ch);
       return;
     }
+    */
   }
 
   skip_spaces(&argument);
@@ -1206,7 +1213,7 @@ ACMD(do_gen_comm)
           continue;
         break;
       case SCMD_NEWBIE:
-        if (!(PLR_FLAGGED(i->character, PLR_NEWBIE) || IS_SENATOR(i->character) || PRF_FLAGGED(i->character, PRF_NEWBIEHELPER)))
+        if (PRF_FLAGGED(i->character, PRF_NONEWBIE) || PLR_FLAGGED(i->character, PLR_NEWBIE_MUTED))
           continue;
         break;
       case SCMD_RPETALK:

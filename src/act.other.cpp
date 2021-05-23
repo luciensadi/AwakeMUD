@@ -1128,6 +1128,8 @@ const char *tog_messages[][2] = {
                              "You will no longer see text highlights from characters.\r\n"},
                             {"You will now see pseudolanguage strings.\r\n",
                              "You will no longer see pseudolanguage strings.\r\n"},
+                            {"You will now see the idle nuyen reward messages.\r\n",
+                             "You will no longer see the idle nuyen reward messages.\r\n"}
                           };
 
 ACMD(do_toggle)
@@ -1336,6 +1338,9 @@ ACMD(do_toggle)
     } else if (is_abbrev(argument, "pseudolanguage") || is_abbrev(argument, "nopseudolanguage")) {
       result = PRF_TOG_CHK(ch, PRF_NOPSEUDOLANGUAGE);
       mode = 36;
+    } else if (is_abbrev(argument, "noidlenuyenmessage") || is_abbrev(argument, "no idle nuyen message")) {
+      result = PRF_TOG_CHK(ch, PRF_NO_IDLE_NUYEN_REWARD_MESSAGE);
+      mode = 37;
     } else {
       send_to_char("That is not a valid toggle option.\r\n", ch);
       return;
@@ -4223,9 +4228,11 @@ ACMD(do_ammo) {
   
   if (primary && IS_GUN(GET_WEAPON_ATTACK_TYPE(primary))) {
     if (primary->contains) {
-      send_to_char(ch, "Primary: %d / %d rounds of ammunition.\r\n",
-                   MIN(GET_WEAPON_MAX_AMMO(primary), GET_OBJ_VAL(primary->contains, 9)),
-                   GET_OBJ_VAL(primary, 5));
+      send_to_char(ch, "Primary: %d / %d %s.\r\n",
+                   MIN(GET_WEAPON_MAX_AMMO(primary), GET_MAGAZINE_AMMO_COUNT(primary->contains)),
+                   GET_OBJ_VAL(primary, 5),
+                   get_ammo_representation(GET_WEAPON_ATTACK_TYPE(primary), GET_MAGAZINE_AMMO_TYPE(primary->contains), GET_MAGAZINE_AMMO_COUNT(primary->contains))
+                 );
     } else {
       send_to_char(ch, "Primary: 0 / %d rounds of ammunition.\r\n", GET_WEAPON_MAX_AMMO(primary));
     }
@@ -4237,9 +4244,11 @@ ACMD(do_ammo) {
   
   if (secondary && IS_GUN(GET_WEAPON_ATTACK_TYPE(secondary))) {
     if (secondary->contains) {
-      send_to_char(ch, "Secondary: %d / %d rounds of ammunition.\r\n",
+      send_to_char(ch, "Secondary: %d / %d %s.\r\n",
                    MIN(GET_WEAPON_MAX_AMMO(secondary), GET_OBJ_VAL(secondary->contains, 9)),
-                   GET_WEAPON_MAX_AMMO(secondary));
+                   GET_WEAPON_MAX_AMMO(secondary),
+                   get_ammo_representation(GET_WEAPON_ATTACK_TYPE(secondary), GET_MAGAZINE_AMMO_TYPE(secondary->contains), GET_MAGAZINE_AMMO_COUNT(secondary->contains))
+                 );
     } else {
       send_to_char(ch, "Secondary: 0 / %d rounds of ammunition.\r\n", GET_WEAPON_MAX_AMMO(secondary));
     }

@@ -978,10 +978,10 @@ SPECIAL(taxi)
       }
       do_say(ch, argument, 0, 0);
     }
-  } else if (CMD_IS("nod") || CMD_IS("agree")) {
+  } else if ((CMD_IS("nod") || CMD_IS("agree")) && CAN_SEE(driver, ch)) {
     comm = CMD_TAXI_YES;
     do_action(ch, argument, cmd, 0);
-  } else if ((CMD_IS("shake") || CMD_IS("disagree")) && !*argument) {
+  } else if ((CMD_IS("shake") || CMD_IS("disagree")) && CAN_SEE(driver, ch)) {
     comm = CMD_TAXI_NO;
     do_action(ch, argument, cmd, 0);
   } else

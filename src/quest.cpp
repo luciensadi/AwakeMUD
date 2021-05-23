@@ -40,6 +40,9 @@ extern bool resize_qst_array(void);
 extern char *cleanup(char *, const char *);
 extern int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
                         const char *sname, struct room_data *random_donation_room);
+                        
+unsigned int get_johnson_overall_max_rep(struct char_data *johnson);
+unsigned int get_johnson_overall_min_rep(struct char_data *johnson);
 
 ACMD_CONST(do_say);
 ACMD_DECLARE(do_action);
@@ -990,7 +993,14 @@ SPECIAL(johnson)
       
       // Reject high-rep characters.
       if (rep_too_high(ch, GET_SPARE2(johnson))) {
-        do_say(johnson, "With rep as high as yours? I can't afford your rates for this one!", 0, 0);
+        unsigned int johnson_max_rep = get_johnson_overall_max_rep(johnson);
+        if (johnson_max_rep < GET_REP(ch)) {
+          do_say(johnson, "My jobs aren't high-profile enough for someone with your rep!", 0, 0);
+          send_to_char(ch, "[OOC: This Johnson caps out at %d reputation, so you won't get any further work from them.]", johnson_max_rep);
+        } else {
+          do_say(johnson, "With rep as high as yours? I can't afford your rates for this one!", 0, 0);
+        }
+        
         GET_SPARE1(johnson) = -1;
         if (memory(johnson, ch))
           forget(johnson, ch);
@@ -999,7 +1009,14 @@ SPECIAL(johnson)
       
       // Reject low-rep characters.
       if (rep_too_low(ch, GET_SPARE2(johnson))) {
-        do_say(johnson, "You don't have a good enough rep for this one.", 0, 0);
+        unsigned int johnson_min_rep = get_johnson_overall_min_rep(johnson);
+        if (johnson_min_rep > GET_REP(ch)) {
+          do_say(johnson, "You're not even worth my time right now.", 0, 0);
+          send_to_char(ch, "[OOC: This Johnson has a minimum reputation requirement of %d. Come back when you have at least that much rep.]", johnson_min_rep);
+        } else {
+          do_say(johnson, "You don't have a good enough rep for this one.", 0, 0);
+        }
+        
         GET_SPARE1(johnson) = -1;
         if (memory(johnson, ch))
           forget(johnson, ch);
@@ -2603,4 +2620,38 @@ ACMD(do_endrun) {
   // Error case.
   mudlog("SYSERR: Attempted remote job termination, but the Johnson could not be found!", ch, LOG_SYSLOG, TRUE);
   send_to_char("You dial your phone, but something's up with the connection, and you can't get through.\r\n", ch);
+}
+
+unsigned int get_johnson_overall_max_rep(struct char_data *johnson) {
+  unsigned int max_rep = 0;
+  
+  bool johnson_is_from_disconnected_zone = vnum_from_non_connected_zone(GET_MOB_VNUM(johnson));
+  
+  for (int i = 0; i <= top_of_questt; i++) {
+    if (quest_table[i].johnson == GET_MOB_VNUM(johnson)
+        && (johnson_is_from_disconnected_zone 
+            || !vnum_from_non_connected_zone(quest_table[i].vnum))) 
+    {
+      max_rep = MAX(max_rep, quest_table[i].max_rep);
+    }
+  }
+  
+  return max_rep;
+}
+
+unsigned int get_johnson_overall_min_rep(struct char_data *johnson) {
+  unsigned int min_rep = UINT_MAX;
+  
+  bool johnson_is_from_disconnected_zone = vnum_from_non_connected_zone(GET_MOB_VNUM(johnson));
+  
+  for (int i = 0; i <= top_of_questt; i++) {
+    if (quest_table[i].johnson == GET_MOB_VNUM(johnson)
+        && (johnson_is_from_disconnected_zone 
+            || !vnum_from_non_connected_zone(quest_table[i].vnum))) 
+    {
+      min_rep = MIN(min_rep, quest_table[i].min_rep);
+    }
+  }
+  
+  return min_rep;
 }

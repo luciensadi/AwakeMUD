@@ -402,51 +402,32 @@ ACMD(do_program)
 ACMD(do_copy)
 {
   struct obj_data *comp, *prog;
-  if (!*argument) {
-    send_to_char("What program do you want to copy?\r\n", ch);
-    return;
-  }
+  
+  FAILURE_CASE(!*argument, "What program do you want to copy?");
+  
   if (!(comp = can_program(ch)))
     return;
+    
   skip_spaces(&argument);
+  
   for (prog = comp->contains; prog; prog = prog->next_content)
     if ((isname(argument, prog->text.keywords) || isname(argument, prog->restring)) && GET_OBJ_TYPE(prog) == ITEM_PROGRAM)
       break;
-  if (!prog)
-    send_to_char("The program isn't on that computer.\r\n", ch);
-  else if (GET_OBJ_TIMER(prog))
-    send_to_char("You can't copy from an optical chip.\r\n", ch);
-  else if (GET_OBJ_VAL(prog, 2) > GET_OBJ_VAL(comp, 2) - GET_OBJ_VAL(comp, 3))
-    send_to_char("There isn't enough space on there to copy that.\r\n", ch);
-  else {
-    switch (GET_OBJ_VAL(prog, 0)) {
-      case SOFT_ASIST_COLD:
-      case SOFT_ASIST_HOT:
-      case SOFT_HARDENING:
-      case SOFT_ICCM:
-      case SOFT_ICON:
-      case SOFT_MPCP: 
-      case SOFT_REALITY:
-      case SOFT_RESPONSE:
-      case SOFT_BOD:
-      case SOFT_SENSOR:
-      case SOFT_MASKING:
-      case SOFT_EVASION:
-      case SOFT_SUITE:
-        send_to_char("You can't copy this program.\r\n", ch);
-        return;     
-    }
-
-    GET_OBJ_VAL(comp, 3) += GET_OBJ_VAL(prog, 2);
-    struct obj_data *newp = read_object(OBJ_BLANK_PROGRAM, VIRTUAL);
-    newp->restring = str_dup(GET_OBJ_NAME(prog));
-    GET_OBJ_VAL(newp, 0) = GET_OBJ_VAL(prog, 0);
-    GET_OBJ_VAL(newp, 1) = GET_OBJ_VAL(prog, 1);
-    GET_OBJ_VAL(newp, 2) = GET_OBJ_VAL(prog, 2);
-    GET_OBJ_VAL(newp, 3) = GET_OBJ_VAL(prog, 3);
-    obj_to_obj(newp, comp);
-    send_to_char(ch, "You copy %s.\r\n", GET_OBJ_NAME(prog));
-  }
+  
+  FAILURE_CASE(!prog, "The program isn't on that computer.");
+  FAILURE_CASE(GET_OBJ_TIMER(prog), "You can't copy from an optical chip.");
+  FAILURE_CASE(GET_OBJ_VAL(prog, 2) > GET_OBJ_VAL(comp, 2) - GET_OBJ_VAL(comp, 3), "There isn't enough space on there to copy that.");
+  FAILURE_CASE(!program_can_be_copied(prog), "You can't copy this program.");
+  
+  GET_OBJ_VAL(comp, 3) += GET_OBJ_VAL(prog, 2);
+  struct obj_data *newp = read_object(OBJ_BLANK_PROGRAM, VIRTUAL);
+  newp->restring = str_dup(GET_OBJ_NAME(prog));
+  GET_OBJ_VAL(newp, 0) = GET_OBJ_VAL(prog, 0);
+  GET_OBJ_VAL(newp, 1) = GET_OBJ_VAL(prog, 1);
+  GET_OBJ_VAL(newp, 2) = GET_OBJ_VAL(prog, 2);
+  GET_OBJ_VAL(newp, 3) = GET_OBJ_VAL(prog, 3);
+  obj_to_obj(newp, comp);
+  send_to_char(ch, "You copy %s.\r\n", GET_OBJ_NAME(prog));
 }
 
 #undef CH

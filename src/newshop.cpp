@@ -175,8 +175,10 @@ struct shop_sell_data *find_obj_shop(char *arg, vnum_t shop_nr, struct obj_data 
   struct shop_sell_data *sell = shop_table[shop_nr].selling;
   if (*arg == '#' && atoi(arg+1) > 0)
   {
-    int num = atoi(arg+1) - 1;
-    for (;sell; sell = sell->next, num--) {      
+    int num = atoi(arg+1);
+    for (;sell; sell = sell->next) {
+      num--;
+            
       int real_obj = real_object(sell->vnum);
       
       if (real_obj >= 0) {
@@ -187,7 +189,7 @@ struct shop_sell_data *find_obj_shop(char *arg, vnum_t shop_nr, struct obj_data 
           continue;
         }
         extract_obj(temp_obj);
-        if (num == 0)
+        if (num <= 0)
           break;
       } else {
         num++;

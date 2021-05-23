@@ -3322,6 +3322,14 @@ ACMD(do_wizutil)
         GET_FREEZE_LEV(vict) = 0;
         act("A sudden fireball conjured from nowhere thaws $n!", TRUE, vict, 0, 0, TO_ROOM);
         break;
+      case SCMD_MUTE_NEWBIE:
+        result = PLR_TOG_CHK(vict, PLR_NEWBIE_MUTED);
+        snprintf(buf, sizeof(buf), "Newbie muted %s for %s by %s.", ONOFF(result),
+                GET_CHAR_NAME(vict), GET_CHAR_NAME(ch));
+        mudlog(buf, ch, LOG_WIZLOG, TRUE);
+        strcat(buf, "\r\n");
+        send_to_char(buf, ch);
+        break;
       default:
         log("SYSERR: Unknown subcmd passed to do_wizutil (act.wizard.c)");
         break;

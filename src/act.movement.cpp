@@ -213,10 +213,10 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
         act(buf2, TRUE, ch, 0, tch, TO_VICT);
     for (tveh = ch->in_room->vehicles; tveh; tveh = tveh->next_veh) {
       for (tch = tveh->people; tch; tch = tch->next_in_veh)
-        if (tveh->cspeed <= SPEED_IDLE || success_test(GET_INT(tch), 4))
+        if (!PRF_FLAGGED(tch, PRF_MOVEGAG) && (tveh->cspeed <= SPEED_IDLE || success_test(GET_INT(tch), 4)))
           act(buf2, TRUE, ch, 0, tch, TO_VICT);
           
-      if (tveh->rigger && (tveh->cspeed <= SPEED_IDLE || success_test(GET_INT(tveh->rigger), 4)))
+      if (tveh->rigger && !PRF_FLAGGED(tveh->rigger, PRF_MOVEGAG) && (tveh->cspeed <= SPEED_IDLE || success_test(GET_INT(tveh->rigger), 4)))
         act(buf2, TRUE, ch, 0, tch, TO_VICT & TO_SLEEP);
     }
     if (ch->in_room->watching)

@@ -57,6 +57,8 @@ bool memory(struct char_data *ch, struct char_data *vict);
 extern void do_probe_veh(struct char_data *ch, struct veh_data * k);
 extern int get_paydata_market_minimum(int host_color);
 extern void new_quest(struct char_data *mob, bool force_assignation=FALSE);
+extern unsigned int get_johnson_overall_max_rep(struct char_data *johnson);
+extern unsigned int get_johnson_overall_min_rep(struct char_data *johnson);
 
 extern struct command_info cmd_info[];
 
@@ -3737,7 +3739,7 @@ SPECIAL(desktop)
     send_to_char(ch, " contains:\r\n");
     for (struct obj_data *soft = obj->contains; soft; soft = soft->next_content) {
       if (GET_OBJ_TYPE(soft) == ITEM_DESIGN)
-        send_to_char(ch, "%-40s %dMp (%dMp taken) %2.2f%% Complete\r\n", soft->restring, GET_OBJ_VAL(soft, 6),
+        send_to_char(ch, "%-40s %dMp (%dMp taken) (Design) %2.2f%% Complete\r\n", soft->restring, GET_OBJ_VAL(soft, 6),
                      GET_OBJ_VAL(soft, 6) + (GET_OBJ_VAL(soft, 6) / 10),
                      GET_OBJ_TIMER(soft) ? (GET_OBJ_VAL(soft, 5) ?
                                             ((float)(GET_OBJ_TIMER(soft) - GET_OBJ_VAL(soft, 5)) / (GET_OBJ_TIMER(soft) != 0 ? GET_OBJ_TIMER(soft) : 1)) * 100 :
@@ -3863,6 +3865,8 @@ SPECIAL(quest_debug_scanner)
       }
       
       snprintf(buf, sizeof(buf), "NPC %s's quest-related information:\r\n", GET_CHAR_NAME(to));
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Overall max rep: %d, overall min rep: %d\r\n",
+              get_johnson_overall_max_rep(to), get_johnson_overall_min_rep(to));
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "SPARE1: %ld, SPARE2: %ld (corresponds to quest vnum %ld)\r\n",
               GET_SPARE1(to), GET_SPARE2(to), GET_SPARE2(to) ? quest_table[GET_SPARE2(to)].vnum : -1);
       strcat(buf, "NPC's memory records hold the following character IDs: \r\n");

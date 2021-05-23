@@ -658,6 +658,7 @@ struct command_info cmd_info[] =
     { "mute"     , POS_DEAD    , do_wizutil  , LVL_EXECUTIVE, SCMD_SQUELCH },
     { "muteooc"  , POS_DEAD    , do_wizutil  , LVL_EXECUTIVE, SCMD_SQUELCHOOC },
     { "mutetells", POS_DEAD    , do_wizutil  , LVL_EXECUTIVE, SCMD_SQUELCHTELLS },
+    { "mutenewbie",POS_DEAD    , do_wizutil  , LVL_EXECUTIVE, SCMD_MUTE_NEWBIE },
     { "murder"   , POS_FIGHTING, do_hit      , 0, SCMD_MURDER },
     
     { "newbie"   , POS_DEAD    , do_gen_comm , 0, SCMD_NEWBIE },
