@@ -209,9 +209,13 @@ ACMD(do_design)
     } else
       send_to_char(ch, "Design what?\r\n");
     return;
-  }
+  }  
   if (GET_POS(ch) > POS_SITTING) {
     send_to_char(ch, "You have to be sitting to do that.\r\n");
+    return;
+  }
+  if (IS_WORKING(ch)) {
+    send_to_char(TOOBUSY, ch);
     return;
   }
 
@@ -334,7 +338,7 @@ ACMD(do_program)
     } else
       send_to_char(ch, "Program What?\r\n");
     return;
-  }
+  }  
   if (GET_POS(ch) > POS_SITTING) {
     send_to_char(ch, "You have to be sitting to do that.\r\n");
     return;
