@@ -477,7 +477,8 @@ void affect_total(struct char_data * ch)
   int old_max_hacking = GET_MAX_HACKING(ch);
   int old_rem_hacking = GET_REM_HACKING(ch);
   
-  /* effects of used equipment */
+  
+  /* remove the effects of used equipment */
   for (i = 0; i < (NUM_WEARS - 1); i++)
   {
     if (GET_EQ(ch, i)) {
@@ -494,11 +495,12 @@ void affect_total(struct char_data * ch)
     }
   }
   
+  // remove the effects of foci
   for (obj = ch->carrying; obj; obj = obj->next_content)
     if (GET_OBJ_TYPE(obj) == ITEM_FOCUS)
       remove_focus_effect(ch, obj);
   
-  /* effects of cyberware */
+  /* remove the effects of cyberware */
   for (cyber = ch->cyberware; cyber; cyber = cyber->next_content)
   {
     for (j = 0; j < MAX_OBJ_AFFECT; j++)
@@ -508,7 +510,7 @@ void affect_total(struct char_data * ch)
                     cyber->obj_flags.bitvector, FALSE);
   }
   
-  /* effects of bioware */
+  /* remove the effects of bioware */
   for (cyber = ch->bioware; cyber; cyber = cyber->next_content)
   {
     if ((GET_OBJ_VAL(cyber, 0) != BIO_ADRENALPUMP || (GET_OBJ_VAL(cyber, 0) == BIO_ADRENALPUMP))
@@ -520,18 +522,22 @@ void affect_total(struct char_data * ch)
                       cyber->obj_flags.bitvector, FALSE);
   }
   
+  // remove the effects of spells
   AFF_FLAGS(ch).RemoveBit(AFF_INVISIBLE);
   for (sust = GET_SUSTAINED(ch); sust; sust = sust->next)
     if (!sust->caster)
       spell_modify(ch, sust, FALSE);
   
+  // reset the affected ability scores
   ch->aff_abils = ch->real_abils;
   
   /* calculate reaction before you add eq, cyberware, etc so that things *
    * such as wired reflexes work properly (as they only modify reaction  *
    * and not intelligence and quickness).            -cjd                */
-  GET_REAL_REA(ch) = (GET_REAL_INT(ch) + GET_REAL_QUI(ch)) >> 1;
+  GET_REAL_REA(ch) = (GET_REAL_INT(ch) + GET_REAL_QUI(ch)) / 2;
   GET_REA(ch) = 0;
+  
+  // Apply newbie flag removal.
   if (PLR_FLAGGED(ch, PLR_NEWBIE) && GET_TKE(ch) > NEWBIE_KARMA_THRESHOLD)
     PLR_FLAGS(ch).RemoveBit(PLR_NEWBIE);
   
@@ -542,24 +548,30 @@ void affect_total(struct char_data * ch)
   GET_ASTRAL(ch) = 0;
   GET_MAGIC(ch) = 0;
   GET_CONTROL(ch) = 0;
+  
+  // Set reach, depending on race. Stripped out the 'you only get it at X height' thing since it's not canon and a newbie trap.
   if ((GET_RACE(ch) == RACE_TROLL || GET_RACE(ch) == RACE_CYCLOPS || GET_RACE(ch) == RACE_FOMORI ||
-       GET_RACE(ch) == RACE_GIANT || GET_RACE(ch) == RACE_MINOTAUR) && GET_HEIGHT(ch) > 260)
+       GET_RACE(ch) == RACE_GIANT || GET_RACE(ch) == RACE_MINOTAUR) /* && GET_HEIGHT(ch) > 260 */)
     GET_REACH(ch) = 1;
-  else GET_REACH(ch) = 0;
+  else
+    GET_REACH(ch) = 0;
   // reset initiative dice
   GET_INIT_DICE(ch) = 0;
   /* reset # of foci char has */
   
-  if (IS_SPIRIT(ch) || IS_ELEMENTAL(ch))
-    GET_IMPACT(ch) = GET_BALLISTIC(ch) = GET_SPARE1(ch) * 2;
-  else if (IS_NPC(ch))
+  // Reset armor-related stats.
   {
-    GET_BALLISTIC(ch) = mob_proto[GET_MOB_RNUM(ch)].points.ballistic[0];
-    GET_IMPACT(ch) = mob_proto[GET_MOB_RNUM(ch)].points.impact[0];
-  } else
-    GET_BALLISTIC(ch) = GET_IMPACT(ch) = 0;
-  
-  GET_TOTALBAL(ch) = GET_TOTALIMP(ch) = 0;
+    if (IS_SPIRIT(ch) || IS_ELEMENTAL(ch)) {
+      GET_IMPACT(ch) = GET_BALLISTIC(ch) = GET_SPARE1(ch) * 2;
+    } else if (IS_NPC(ch)) {
+      GET_BALLISTIC(ch) = mob_proto[GET_MOB_RNUM(ch)].points.ballistic[0];
+      GET_IMPACT(ch) = mob_proto[GET_MOB_RNUM(ch)].points.impact[0];
+    } else {
+      GET_BALLISTIC(ch) = GET_IMPACT(ch) = 0;
+    }
+    
+    GET_TOTALBAL(ch) = GET_TOTALIMP(ch) = 0;
+  }
   
   for (obj = ch->carrying; obj; obj = obj->next_content) {
     if (GET_OBJ_TYPE(obj) == ITEM_FOCUS)
@@ -636,6 +648,7 @@ void affect_total(struct char_data * ch)
     }
     
     // Add armor clothing set, if any.
+    // KNOWN ISSUE: If the sum of bal or imp is x.5, the .5 is dropped here.
     if (suitbal || suitimp) {
       suitbal /= 100;
       suitimp /= 100;
