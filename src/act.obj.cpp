@@ -32,6 +32,7 @@ extern int modify_target(struct char_data *ch);
 extern int return_general(int skill_num);
 extern bool check_quest_delivery(struct char_data *ch, struct char_data *mob, struct obj_data *obj);
 extern void check_quest_delivery(struct char_data *ch, struct obj_data *obj);
+extern void check_quest_destroy(struct char_data *ch, struct obj_data *obj);
 extern void dominator_mode_switch(struct char_data *ch, struct obj_data *obj, int mode);
 extern float get_bulletpants_weight(struct char_data *ch);
 
@@ -1555,6 +1556,11 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
     return 0;
   case SCMD_JUNK:
     value = MAX(1, MIN(200, GET_OBJ_COST(obj) >> 4));
+    if (!IS_NPC(ch) && GET_QUEST(ch))
+      check_quest_destroy(ch, obj);
+    else if (AFF_FLAGGED(ch, AFF_GROUP) && ch->master &&
+             !IS_NPC(ch->master) && GET_QUEST(ch->master))
+      check_quest_destroy(ch->master, obj);
     extract_obj(obj);
     return value;
   default:
