@@ -561,31 +561,52 @@ void affect_total(struct char_data * ch)
   
   GET_TOTALBAL(ch) = GET_TOTALIMP(ch) = 0;
   
-  for (obj = ch->carrying; obj; obj = obj->next_content)
+  for (obj = ch->carrying; obj; obj = obj->next_content) {
     if (GET_OBJ_TYPE(obj) == ITEM_FOCUS)
       apply_focus_effect(ch, obj);
+  }
+      
   /* effects of equipment */
   {
     struct obj_data *worn_item = NULL;
-    int suitbal = 0, suitimp = 0, suittype = 0,  highestbal = 0, highestimp = 0;
+    // Matched set values: ballistic, impact, and the numerical index of the suit itself.
+    int suitbal = 0, suitimp = 0, suittype = 0;
+    // Maximums tracking for the /2 logic.
+    int highestbal = 0, highestimp = 0;
+    // Track the total for worn items.
+    int totalbal = 0, totalimp = 0;
+    // Track the total for formfit.
+    int formfitbal = 0, formfitimp = 0;
+    
     for (i = 0; i < (NUM_WEARS - 1); i++) {
       if ((worn_item = GET_EQ(ch, i))) {
         wearing = TRUE;
-        if (GET_OBJ_TYPE(worn_item) == ITEM_FOCUS)
+        
+        // Foci don't do aff_modify for some reason?
+        if (GET_OBJ_TYPE(worn_item) == ITEM_FOCUS) {
           apply_focus_effect(ch, worn_item);
-        else
+        } else {
           for (j = 0; j < MAX_OBJ_AFFECT; j++)
             affect_modify(ch,
                           worn_item->affected[j].location,
                           worn_item->affected[j].modifier,
                           worn_item->obj_flags.bitvector, TRUE);
+        }
+        
         if (GET_OBJ_TYPE(worn_item) == ITEM_WORN) {
+          // If it's part of an armor set we're already wearing, add it directly.
+          // KNOWN ISSUE: If it finds your single Vashon item, it will check for Vashon only, even if you're wearing a full suit of Trog Moxie as well.
           if (GET_WORN_MATCHED_SET(worn_item) && (!suittype || suittype == GET_WORN_MATCHED_SET(worn_item))) {
             suitbal += GET_WORN_BALLISTIC(worn_item);
             suitimp += GET_WORN_IMPACT(worn_item);
             suittype = GET_WORN_MATCHED_SET(worn_item);
-          } else if (GET_WORN_BALLISTIC(worn_item) || GET_WORN_IMPACT(worn_item)) {
+          }
+          
+          // Otherwise, if it has an armor rating, handle that.
+          else if (GET_WORN_BALLISTIC(worn_item) || GET_WORN_IMPACT(worn_item)) {
             int bal = 0, imp = 0;
+            
+            // Remember that matched set items are 100x their expected value-- compensate for this.
             if (GET_WORN_MATCHED_SET(worn_item)) {
               bal = (int)(GET_WORN_BALLISTIC(worn_item) / 100);
               imp = (int)(GET_WORN_IMPACT(worn_item) / 100);
@@ -593,60 +614,48 @@ void affect_total(struct char_data * ch)
               bal = GET_WORN_BALLISTIC(worn_item);
               imp = GET_WORN_IMPACT(worn_item);
             }
-            struct obj_data *temp_item = NULL;
-            for (j = 0; j < (NUM_WEARS - 1); j++) {
-              if ((temp_item = GET_EQ(ch, j)) && j != i && GET_OBJ_TYPE(temp_item) == ITEM_WORN) {
-                if ((highestbal || GET_WORN_BALLISTIC(worn_item) <
-                     (GET_WORN_MATCHED_SET(temp_item) ? GET_WORN_BALLISTIC(temp_item) / 100 : GET_WORN_BALLISTIC(temp_item))) &&
-                    bal == GET_WORN_BALLISTIC(worn_item))
-                  bal /= 2;
-                if ((highestimp || GET_WORN_IMPACT(worn_item) <
-                     (GET_WORN_MATCHED_SET(temp_item) ? GET_WORN_IMPACT(temp_item) / 100 : GET_WORN_IMPACT(temp_item))) &&
-                    imp == GET_WORN_IMPACT(worn_item))
-                  imp /= 2;
-              }
-            }
-            if (bal == GET_WORN_BALLISTIC(worn_item))
+            
+            // Keep track of which worn item provides the highest total value.
+            if (bal + imp > highestbal + highestimp) {
               highestbal = bal;
-            if (imp == GET_WORN_IMPACT(worn_item))
               highestimp = imp;
-            GET_IMPACT(ch) += imp;
-            GET_BALLISTIC(ch) += bal;
-            if (!IS_OBJ_STAT(worn_item, ITEM_FORMFIT)) {
-              GET_TOTALIMP(ch) += GET_WORN_BALLISTIC(worn_item) / (GET_WORN_MATCHED_SET(worn_item) ? 100 : 1);
-              GET_TOTALBAL(ch) += GET_WORN_IMPACT(worn_item) / (GET_WORN_MATCHED_SET(worn_item) ? 100 : 1);
+            }
+            
+            // Add the value to the current worn armor total.
+            totalbal += bal;
+            totalimp += imp;
+            
+            // If it's formfit, track it there for later math.
+            if (IS_OBJ_STAT(worn_item, ITEM_FORMFIT)) {
+              formfitbal += bal;
+              formfitimp += imp;
             }
           }
         }
       }
     }
+    
+    // Add armor clothing set, if any.
     if (suitbal || suitimp) {
-      suitimp /= 100;
       suitbal /= 100;
-      if (GET_IMPACT(ch) == 0)
-        GET_IMPACT(ch) += suitimp;
-      else {
-        if (suitimp >= highestimp) {
-          // TODO: The calculations for totalbal/totalimp are a little screwy in conjunction with sets-- looks like sets are counted twice.
-          GET_IMPACT(ch) -= highestimp;
-          GET_IMPACT(ch) += highestimp / 2;
-          GET_IMPACT(ch) += suitimp;
-        } else GET_IMPACT(ch) += suitimp / 2;
-        GET_TOTALIMP(ch) += suitimp;
-      }
-      if (GET_BALLISTIC(ch) == 0)
-        GET_BALLISTIC(ch) += suitbal;
-      else {
-        if (suitbal >= highestbal) {
-          GET_BALLISTIC(ch) -= highestbal;
-          GET_BALLISTIC(ch) += highestbal / 2;
-          GET_BALLISTIC(ch) += suitbal;
-        } else GET_BALLISTIC(ch) += suitbal / 2;
-        GET_TOTALBAL(ch) += suitbal;
+      suitimp /= 100;
+      
+      if (suitbal + suitimp > highestbal + highestimp) {
+        highestbal = suitbal;
+        highestimp = suitimp;
       }
       
+      totalbal += suitbal;
+      totalimp += suitimp;
     }
+    
+    GET_IMPACT(ch) += highestimp + (int)((totalimp - highestimp) / 2);
+    GET_BALLISTIC(ch) += highestbal + (int)((totalbal - highestbal) / 2);
+    
+    GET_TOTALIMP(ch) += totalimp - formfitimp;
+    GET_TOTALBAL(ch) += totalbal - formfitbal;
   }
+  
   if (GET_RACE(ch) == RACE_TROLL || GET_RACE(ch) == RACE_MINOTAUR)
     GET_IMPACT(ch)++;
   
