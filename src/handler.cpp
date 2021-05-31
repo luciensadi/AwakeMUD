@@ -712,11 +712,14 @@ void affect_total(struct char_data * ch)
                       cyber->affected[j].modifier,
                       cyber->obj_flags.bitvector, TRUE);
   }
+  
   for (sust = GET_SUSTAINED(ch); sust; sust = sust->next)
     if (!sust->caster)
       spell_modify(ch, sust, TRUE);
+      
   if (GET_TEMP_QUI_LOSS(ch))
     GET_QUI(ch) = MAX(0, GET_QUI(ch) - (GET_TEMP_QUI_LOSS(ch) / 4));
+    
   i = ((IS_NPC(ch) || (GET_LEVEL(ch) >= LVL_ADMIN)) ? 50 : 20);
   GET_REA(ch) += (GET_INT(ch) + GET_QUI(ch)) >> 1;
   GET_QUI(ch) = MAX(0, MIN(GET_QUI(ch), i));
@@ -929,35 +932,44 @@ void affect_total(struct char_data * ch)
     GET_REA(ch) += has_mbw * 2;
     GET_INIT_DICE(ch) += has_mbw;
   }
+  
+  // Update current vision to match what's being worn.
   if (AFF_FLAGGED(ch, AFF_INFRAVISION))
     CURRENT_VISION(ch) = THERMOGRAPHIC;
   else if (AFF_FLAGGED(ch, AFF_LOW_LIGHT))
     CURRENT_VISION(ch) = LOWLIGHT;
   else
     CURRENT_VISION(ch) = NATURAL_VISION(ch);
+    
+  // Strip invisibility from ruthenium etc if you're wearing about or body items that aren't also ruthenium.
   if (AFF_FLAGGED(ch, AFF_INVISIBLE) || AFF_FLAGGED(ch, AFF_IMP_INVIS))
   {
     if (GET_EQ(ch, WEAR_ABOUT)) {
       if (!(GET_OBJ_AFFECT(GET_EQ(ch, WEAR_ABOUT)).IsSet(AFF_INVISIBLE) || GET_OBJ_AFFECT(GET_EQ(ch, WEAR_ABOUT)).IsSet(AFF_IMP_INVIS)))
         AFF_FLAGS(ch).RemoveBits(AFF_INVISIBLE, AFF_IMP_INVIS, ENDBIT);
-      else
-        return;
     }
     if (GET_EQ(ch, WEAR_BODY) &&
         (!(GET_OBJ_AFFECT(GET_EQ(ch, WEAR_BODY)).IsSet(AFF_INVISIBLE) || GET_OBJ_AFFECT(GET_EQ(ch, WEAR_BODY)).IsSet(AFF_IMP_INVIS))))
       AFF_FLAGS(ch).RemoveBits(AFF_INVISIBLE, AFF_IMP_INVIS, ENDBIT);
   }
-  if (GET_EQ(ch, WEAR_WIELD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_WEAPON) {
-    if (!IS_GUN(GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 3)) && GET_WEAPON_REACH(GET_EQ(ch, WEAR_WIELD)) > 0)
-      GET_REACH(ch) += GET_WEAPON_REACH(GET_EQ(ch, WEAR_WIELD));
-    else if (IS_GUN(GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 3))) {
-      if (GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 4) != SKILL_PISTOLS)
+  
+  // Apply reach from weapon, if any.
+  struct obj_data *weapon = GET_EQ(ch, WEAR_WIELD);
+  if (weapon && GET_OBJ_TYPE(weapon) == ITEM_WEAPON) {
+    // Melee weapons grant reach according to their set stat.
+    if (!IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon))) {
+      if (GET_WEAPON_REACH(weapon) > 0)
+        GET_REACH(ch) += GET_WEAPON_REACH(weapon);
+    } 
+    // Ranged weapons grant 0 reach if pistol, 2 reach if anything else with a bayonet, 1 reach for all other categories.
+    else {
+      if (GET_WEAPON_SKILL(weapon) != SKILL_PISTOLS)
         GET_REACH(ch)++;
       struct obj_data *attach = NULL;
-      if (GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 9) &&
-          real_object(GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 9)) > 0 &&
-          (attach = &obj_proto[real_object(GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 9))]) &&
-          GET_OBJ_VAL(attach, 1) == ACCESS_BAYONET)
+      if (GET_WEAPON_ATTACH_UNDER_VNUM(weapon)
+          && real_object(GET_WEAPON_ATTACH_UNDER_VNUM(weapon)) > 0
+          && (attach = &obj_proto[real_object(GET_WEAPON_ATTACH_UNDER_VNUM(weapon))])
+          && GET_OBJ_VAL(attach, 1) == ACCESS_BAYONET)
         GET_REACH(ch)++;
     }
   }
