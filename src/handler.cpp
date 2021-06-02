@@ -965,11 +965,8 @@ void affect_total(struct char_data * ch)
     else {
       if (GET_WEAPON_SKILL(weapon) != SKILL_PISTOLS)
         GET_REACH(ch)++;
-      struct obj_data *attach = NULL;
-      if (GET_WEAPON_ATTACH_UNDER_VNUM(weapon)
-          && real_object(GET_WEAPON_ATTACH_UNDER_VNUM(weapon)) > 0
-          && (attach = &obj_proto[real_object(GET_WEAPON_ATTACH_UNDER_VNUM(weapon))])
-          && GET_OBJ_VAL(attach, 1) == ACCESS_BAYONET)
+      struct obj_data *attach = get_obj_proto_for_vnum(GET_WEAPON_ATTACH_UNDER_VNUM(weapon));
+      if (attach && GET_ACCESSORY_TYPE(attach) == ACCESS_BAYONET)
         GET_REACH(ch)++;
     }
   }
@@ -2722,26 +2719,21 @@ struct obj_data *create_nuyen(int amount)
 
 int find_skill_num(char *name)
 {
-  int index = 0, ok;
-  char *temp, *temp2;
-  char first[256], first2[256];
-  
-  while (++index < MAX_SKILLS) {
+  char *rest_of_name;
+  char word_to_evaluate[256];
+    
+  for (int index = 1; index < MAX_SKILLS; index++) {
     if (is_abbrev(name, skills[index].name))
       return index;
     
-    ok = 1;
-    temp = any_one_arg(skills[index].name, first);
-    temp2 = any_one_arg(name, first2);
-    while (*first && *first2 && ok) {
-      if (!is_abbrev(first2, first))
-        ok = 0;
-      temp = any_one_arg(temp, first);
-      temp2 = any_one_arg(temp2, first2);
+    // Go through the individual words of the skill's name and try to match them. Ex: "Assault Cannons" -> "assault", "cannons"
+    rest_of_name = any_one_arg(skills[index].name, word_to_evaluate);
+    while (*word_to_evaluate) {
+      if (is_abbrev(name, word_to_evaluate))
+        return index;
+        
+      rest_of_name = any_one_arg(rest_of_name, word_to_evaluate);
     }
-    
-    if (ok && !*first2)
-      return index;
   }
   
   return -1;

@@ -398,12 +398,12 @@ SPECIAL(metamagic_teacher)
   }
 
   if (GET_METAMAGIC(ch, i) == 2 || GET_METAMAGIC(ch, i) == 4) {
-    send_to_char("You already know that metamagic technique.\r\n", ch);
+    send_to_char(ch, "You already know how to use %s.\r\n", metamagic[i]);
     return TRUE;
   }
 
   if (!GET_METAMAGIC(ch, i)) {
-    send_to_char("You aren't close enough to the astral plane to learn that.\r\n", ch);
+    send_to_char(ch, "You aren't close enough to the astral plane to learn %s.\r\n", metamagic[i]);
     return TRUE;
   }
   /* "Hey, I have an idea!" "What?" "Let's arbitrarily restrict who can train where so that the builders have to do more work!"
@@ -425,9 +425,10 @@ SPECIAL(metamagic_teacher)
     send_to_char("Try as you might, you fail to understand how to learn that technique.\r\n", ch);
     return TRUE;
   }
+  
   int cost = (int)((GET_MAG(ch) / 100) * 1000 * (14 / suc));
   if (GET_NUYEN(ch) < cost) {
-    send_to_char(ch, "You don't have the %d nuyen required to learn that.\r\n", cost);
+    send_to_char(ch, "You don't have the %d nuyen required to learn %s.\r\n", cost, metamagic[i]);
     return TRUE;
   }
   GET_NUYEN(ch) -= cost;
@@ -532,7 +533,7 @@ SPECIAL(nerp_skills_teacher) {
   skill_num = find_skill_num(argument);
   
   if (skill_num < 0) {
-    send_to_char(ch, "%s doesn't seem to know anything about that subject.\r\n", GET_NAME(master));
+    send_to_char(ch, "That's not a valid skill name. You can use any keyword from the skill, but don't use quotes or other punctuation.\r\n");
     return TRUE;
   }
   
@@ -559,7 +560,7 @@ SPECIAL(nerp_skills_teacher) {
   }
   
   if (GET_SKILL(ch, skill_num) >= max) {
-    snprintf(arg, sizeof(arg), "%s You already know more than I can teach you in that area.", GET_CHAR_NAME(ch));
+    snprintf(arg, sizeof(arg), "%s You already know more than I can teach you about %s.", GET_CHAR_NAME(ch), skills[skill_num].name);
     do_say(master, arg, 0, SCMD_SAYTO);
     return TRUE;
   }
@@ -760,14 +761,14 @@ SPECIAL(teacher)
 
   if ((teachers[ind].type == NEWBIE && GET_SKILL_POINTS(ch) <= 0 && GET_KARMA(ch) <= 0)
       || (teachers[ind].type != NEWBIE && GET_KARMA(ch) <= 0)) {
-    send_to_char("You do not seem to be able to practice now.\r\n", ch);
+    send_to_char(ch, "You don't have the %s to learn anything right now.\r\n", teachers[ind].type == NEWBIE ? "skill points" : "karma");
     return TRUE;
-  }
+  }  
 
   skill_num = find_skill_num(argument);
 
   if (skill_num < 0) {
-    send_to_char(ch, "%s doesn't seem to know anything about that subject.\r\n", GET_NAME(master));
+    send_to_char(ch, "That's not a valid skill name. You can use any keyword from the skill, but don't use quotes or other punctuation.\r\n");
     return TRUE;
   }
   
@@ -775,7 +776,7 @@ SPECIAL(teacher)
     if (skill_num == teachers[ind].s[i])
       break;
   if (i >= NUM_TEACHER_SKILLS) {
-    send_to_char(ch, "%s doesn't seem to know about that subject.\r\n", GET_NAME(master));
+    send_to_char(ch, "%s doesn't seem to know about %s.\r\n", GET_NAME(master), skills[skill_num].name);
     return TRUE;
   }
   
@@ -786,13 +787,13 @@ SPECIAL(teacher)
   
   // Deny some magic skills to mundane (different flavor from next block, same effect).
   if ((skill_num == SKILL_CENTERING || skill_num == SKILL_ENCHANTING) && GET_TRADITION(ch) == TRAD_MUNDANE) {
-    send_to_char("Without access to the astral plane you can't even begin to fathom the basics of that skill.\r\n", ch);
+    send_to_char(ch, "Without access to the astral plane you can't even begin to fathom the basics of %s.\r\n", skills[skill_num].name);
     return TRUE;
   }
   
   // Deny all magic skills to mundane.
   if (skills[skill_num].requires_magic && GET_TRADITION(ch) == TRAD_MUNDANE) {
-    send_to_char("Without the ability to channel magic, that skill would be useless to you.\r\n", ch);
+    send_to_char(ch, "Without the ability to channel magic, the skill of %s would be useless to you.\r\n", skills[skill_num].name);
     return TRUE;
   }
   
@@ -819,9 +820,9 @@ SPECIAL(teacher)
   max = get_max_skill_for_char(ch, skill_num, teachers[ind].type);
   if (GET_SKILL(ch, skill_num) >= max) {
     if (max == LIBRARY_SKILL)
-      send_to_char("You can't find any books that tell you things you don't already know.\r\n", ch);
+      send_to_char(ch, "You can't find any books that tell you things you don't already know about %s.\r\n", skills[skill_num].name);
     else {
-      snprintf(arg, sizeof(arg), "%s You already know more than I can teach you in that area.", GET_CHAR_NAME(ch));
+      snprintf(arg, sizeof(arg), "%s You already know more than I can teach you about %s.", GET_CHAR_NAME(ch), skills[skill_num].name);
       do_say(master, arg, 0, SCMD_SAYTO);
     }
     return TRUE;
@@ -829,7 +830,7 @@ SPECIAL(teacher)
 
   if (GET_KARMA(ch) < get_skill_price(ch, skill_num) * 100 &&
       GET_SKILL_POINTS(ch) <= 0) {
-    send_to_char("You don't have enough karma to improve that skill.\r\n", ch);
+    send_to_char(ch, "You don't have enough karma to improve your skill in %s.\r\n", skills[skill_num].name);
     return TRUE;
   }
   if (!PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
@@ -1354,11 +1355,11 @@ SPECIAL(adept_trainer)
 
   // Post-increase messaging to let them know they've maxed out.
   if (GET_POWER_TOTAL(ch, power) >= GET_MAG(ch) / 100)
-    send_to_char("You feel you've reached the limits of your magical ability in that area.\r\n", ch);
+    send_to_char(ch, "You feel you've reached the limits of your magical ability in %s.\r\n", adept_powers[power]);
   
   // If they haven't maxed out but their teacher has, let them know that instead.
   else if (GET_POWER_TOTAL(ch, power) >= max_ability(power) || GET_POWER_TOTAL(ch, power) >= adepts[ind].skills[power])
-    send_to_char("You have learned all your teacher knows in that area.\r\n", ch);
+    send_to_char(ch, "You have learned all your teacher knows about %s.\r\n", adept_powers[power]);
 
   // Update character and end routine.
   affect_total(ch);
@@ -1678,7 +1679,7 @@ SPECIAL(jeff) {
       return TRUE;
     }
 
-    if (!*arg3 || strcasecmp("jeff", arg3))
+    if (!*arg3 || (strcasecmp("jeff", arg3) && (strcasecmp("to", arg3) || strcasecmp("jeff", temp))))
       return FALSE;
 
     int amount = atoi(arg1);
@@ -5008,6 +5009,24 @@ SPECIAL(weapon_dominator) {
 
 extern void end_quest(struct char_data *ch);
 
+#define REST_STOP_QUEST_VNUM       5000
+#define REST_STOP_VNUM             8198
+#define REST_STOP_TRUCK_CARGO_AREA 5062
+#define REST_STOP_TRUCK_CABIN_AREA 5063
+
+void orkish_truckdriver_drive_away(struct room_data *drivers_room) {
+  delete drivers_room->dir_option[WEST];
+  drivers_room->dir_option[WEST] = NULL;
+  
+  struct char_data *temp, *temp_next;
+  for (temp = world[real_room(REST_STOP_TRUCK_CARGO_AREA)].people; temp; temp = temp_next) {
+    temp_next = temp->next_in_room;
+    send_to_char("You jump off the truck as it takes off!\r\n", temp);
+    char_from_room(temp);
+    char_to_room(temp, drivers_room);
+  }
+}
+
 SPECIAL(orkish_truckdriver)
 {
   struct char_data *driver = (struct char_data *) me;
@@ -5018,48 +5037,38 @@ SPECIAL(orkish_truckdriver)
   }
   
   if (FIGHTING(driver)) {
-    if (quest_table[GET_QUEST(FIGHTING(driver))].vnum == 5000) {
+    if (quest_table[GET_QUEST(FIGHTING(driver))].vnum == REST_STOP_QUEST_VNUM) {
       send_to_char("The driver has been alerted! The run is a failure!\r\n", FIGHTING(driver));
-      if (driver->in_room->dir_option[WEST]) {
-        delete driver->in_room->dir_option[WEST];
-        driver->in_room->dir_option[WEST] = NULL;
-        for (struct char_data *temp = world[real_room(5062)].people; temp; temp = temp->next_in_room) {
-          send_to_char("You jump off the truck as it takes off!\r\n", temp);
-          char_from_room(temp);
-          char_to_room(temp, driver->in_room);
-        }
-      }
+      if (driver->in_room->dir_option[WEST])
+        orkish_truckdriver_drive_away(driver->in_room);
       end_quest(FIGHTING(driver));
     }
+    return FALSE;
   }
-  if (driver->in_room->number == 8198 && (time_info.hours < 2 || time_info.hours > 3)) {
+  
+  if (driver->in_room->number == REST_STOP_VNUM && (time_info.hours < 2 || time_info.hours > 3)) {
     act("$n says goodbye to the girl at the stand and hops into his truck. Its engine rumbles into life and it drives off into the distance.", FALSE, driver, 0, 0, TO_ROOM);
-    if (driver->in_room->dir_option[WEST]) {
-      delete driver->in_room->dir_option[WEST];
-      driver->in_room->dir_option[WEST] = NULL;
-      struct char_data *next = NULL;
-      for (struct char_data *temp = world[real_room(5062)].people; next; temp = next) {
-        next = temp->next_in_room;
-        send_to_char("You jump off the truck as it takes off!\r\n", temp);
-        char_from_room(temp);
-        char_to_room(temp, driver->in_room);
-      }
-    }
+    if (driver->in_room->dir_option[WEST])
+      orkish_truckdriver_drive_away(driver->in_room);
     char_from_room(driver);
-    char_to_room(driver, &world[real_room(5063)]);
-  } else if (driver->in_room->number == 5063 && (time_info.hours == 2 || time_info.hours == 3)) {
+    char_to_room(driver, &world[real_room(REST_STOP_TRUCK_CABIN_AREA)]);
+  } else if (driver->in_room->number == REST_STOP_TRUCK_CABIN_AREA && (time_info.hours == 2 || time_info.hours == 3)) {
     char_from_room(driver);
-    char_to_room(driver, &world[real_room(8198)]);
+    char_to_room(driver, &world[real_room(REST_STOP_VNUM)]);
     if (!driver->in_room->dir_option[WEST]) {
       driver->in_room->dir_option[WEST] = new room_direction_data;
       memset((char *) driver->in_room->dir_option[WEST], 0,
              sizeof (struct room_direction_data));
-      driver->in_room->dir_option[WEST]->to_room = &world[real_room(5062)];
+      driver->in_room->dir_option[WEST]->to_room = &world[real_room(REST_STOP_TRUCK_CARGO_AREA)];
     }
     act("A GMC 4201 pulls into the rest stop, the orkish truck driver getting out and going over the coffee stand.", FALSE, driver, 0, 0, TO_ROOM);
   }
   return FALSE;
 }
+#undef REST_STOP_QUEST_VNUM
+#undef REST_STOP_VNUM
+#undef REST_STOP_TRUCK_CARGO_AREA
+#undef REST_STOP_TRUCK_CABIN_AREA
 
 SPECIAL(Janis_Amer_Girl) {
   NO_DRAG_BULLSHIT;

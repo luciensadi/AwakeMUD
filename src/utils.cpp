@@ -2522,6 +2522,11 @@ struct obj_data *unattach_attachment_from_weapon(int location, struct obj_data *
   
   if (GET_ACCESSORY_TYPE(attachment) == ACCESS_GASVENT) {
     if (ch) {
+      // TODO: Update: You can now remove a gas vent, as long as you're in a room with a deployed weapons workshop and have some nuyen on hand to cover the new barrel's cost.
+      // TODO: Ensure workshop.
+      // TODO: Ensure nuyen.
+      // TODO: Remove and destroy vent, then return. This either requires code duplication or modification of below code to not return vents-- if the latter, verify that it's supposed to happen!
+      //     ex: destroying a vent rather than returning it, and the caller calls extract on the returned value.
       send_to_char(ch, "%s is permanently attached to %s and can't be removed.\r\n",
                    GET_OBJ_NAME(attachment), GET_OBJ_NAME(weapon));
       return NULL;
@@ -3417,6 +3422,17 @@ bool program_can_be_copied(struct obj_data *prog) {
   }
   
   return TRUE;
+}
+
+struct obj_data *get_obj_proto_for_vnum(vnum_t vnum) {
+  if (vnum <= 0)
+    return NULL;
+
+  int rnum = real_object(vnum);
+  if (rnum < 0)
+    return NULL;
+    
+  return &obj_proto[rnum];
 }
 
 

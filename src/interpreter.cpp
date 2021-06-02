@@ -2005,6 +2005,14 @@ int is_abbrev(const char *arg1, const char *arg2)
   
   if (!*arg1 || !*arg2)
     return 0;
+    
+  /* This is theoretically a better way to write the code below. I don't have time to test it, so I won't put it in, but I wrote it anyways. -LS.
+
+  while (LOWER(*(arg1++)) == LOWER(*(arg2++)));
+  
+  return !*arg1; 
+
+  */
 
   for (; *arg1 && *arg2; arg1++, arg2++)
     if (LOWER(*arg1) != LOWER(*arg2))
@@ -2092,10 +2100,9 @@ int special(struct char_data * ch, int cmd, char *arg)
         if (GET_OBJ_SPEC(i) (ch, i, cmd, arg))
           return 1;
     /* special in mobile present? */
-    if (!veh)
+    if (ch->in_room)
     {
-      struct char_data *k;
-      for (k = ch->in_room->people; k; k = k->next_in_room) {
+      for (struct char_data *k = ch->in_room->people; k; k = k->next_in_room) {
         if (GET_MOB_SPEC(k) != NULL)
           if (GET_MOB_SPEC(k) (ch, k, cmd, arg))
             return 1;

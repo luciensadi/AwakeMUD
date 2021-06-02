@@ -101,6 +101,7 @@ char    get_final_character_from_string(const char *str);
 bool    builder_cant_go_there(struct char_data *ch, struct room_data *room);
 bool    get_and_deduct_one_deckbuilding_token_from_char(struct char_data *ch);
 bool    program_can_be_copied(struct obj_data *prog);
+struct  obj_data *get_obj_proto_for_vnum(vnum_t vnum);
 
 // Skill-related.
 char *how_good(int skill, int rank);

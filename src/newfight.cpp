@@ -1114,11 +1114,7 @@ bool does_weapon_have_bayonet(struct obj_data *weapon) {
   if (!(weapon && GET_OBJ_TYPE(weapon) == ITEM_WEAPON && IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon))))
     return FALSE;
 
-  long attach_obj;
-  struct obj_data *attach_proto = NULL;
+  struct obj_data *attach_proto = get_obj_proto_for_vnum(GET_WEAPON_ATTACH_UNDER_VNUM(weapon));
   
-  return (GET_WEAPON_ATTACH_UNDER_VNUM(weapon)
-          && (attach_obj = real_object(GET_WEAPON_ATTACH_UNDER_VNUM(weapon))) > 0
-          && (attach_proto = &obj_proto[attach_obj])
-          && GET_OBJ_VAL(attach_proto, 1) == ACCESS_BAYONET);
+  return (attach_proto && GET_OBJ_VAL(attach_proto, 1) == ACCESS_BAYONET);
 }
