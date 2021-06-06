@@ -4839,7 +4839,7 @@ void vram(struct veh_data * veh, struct char_data * ch, struct veh_data * tveh)
     int staged_damage = stage(ch_resist, damage_total);
     damage_total = convert_damage(staged_damage);
     
-    veh_resist = success_test(veh->body, power);
+    veh_resist = success_test(veh->body, power - (veh->body * 1 /* TODO: Replace this 1 with the number of successes rolled on the ram test. */));
     veh_dam -= veh_resist;
     
     bool will_damage_vehicle = FALSE;
@@ -4930,7 +4930,7 @@ void vram(struct veh_data * veh, struct char_data * ch, struct veh_data * tveh)
       }
     chkdmg(tveh);
     
-    veh_resist = 0 - success_test(veh->body, power);
+    veh_resist = 0 - success_test(veh->body, power - (veh->body * 1 /* TODO: Replace this 1 with the number of successes rolled on the ram test. */));
     staged_damage = stage(veh_resist, veh_dam);
     damage_total = convert_damage(staged_damage);
     veh->damage += damage_total;

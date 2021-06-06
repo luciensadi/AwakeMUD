@@ -41,6 +41,7 @@ extern int calculate_vehicle_entry_load(struct veh_data *veh);
 extern bool passed_flee_success_check(struct char_data *ch);
 extern int calculate_swim_successes(struct char_data *ch);
 extern bool can_edit_zone(struct char_data *ch, int zone);
+extern void send_mob_aggression_warnings(struct char_data *pc, struct char_data *mob);
 
 extern sh_int mortal_start_room;
 extern sh_int frozen_start_room;
@@ -148,6 +149,45 @@ int can_move(struct char_data *ch, int dir, int extra)
   return 1;
 }
 
+bool should_tch_see_chs_movement_message(struct char_data *tch, struct char_data *ch) {
+  if (!tch) {
+    mudlog("SYSERR: Received null tch to s_v_o_s_m_m!", tch, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+  
+  if (!ch) {
+    mudlog("SYSERR: Received null ch to s_v_o_s_m_m!", tch, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+  
+  // Absolutely can't see for whatever reason.
+  if (tch == ch || PRF_FLAGGED(tch, PRF_MOVEGAG) || !AWAKE(tch) || !CAN_SEE(tch, ch))
+    return FALSE;
+  
+  // Failed to see from vehicle.
+  if (tch->in_veh && (tch->in_veh->cspeed > SPEED_IDLE && success_test(GET_INT(tch), 4) <= 0)) {
+    return FALSE;
+  }
+  
+  // Check for stealth and other person-to-person modifiers.
+  if (IS_AFFECTED(ch, AFF_SNEAK)) {
+    int target = GET_SKILL(ch, SKILL_STEALTH) ? 0 : 4;
+    int skill = get_skill(ch, SKILL_STEALTH, target);
+    int tchtarg = skill;
+    
+    if (affected_by_spell(ch, SPELL_STEALTH))
+      tchtarg += 4;
+    if (ch->in_room->silence[0])
+      tchtarg += ch->in_room->silence[1];
+    
+    if (resisted_test(GET_INT(tch), tchtarg, skill, (GET_INT(tch) + target)) <= 0)
+      return FALSE;
+  }
+  
+  // If we got here, we can see it.  
+  return TRUE;
+}
+
 /* do_simple_move assumes
  *      1. That there is no master and no followers.
  *      2. That the direction exists.
@@ -159,7 +199,6 @@ int can_move(struct char_data *ch, int dir, int extra)
 int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *vict)
 {
   // This function is exempt from get_ch_in_room() requirements since it is only ever invoked by a character standing in a room.
-  int saw_sneaker, skill, target;
   struct char_data *tch;
   struct veh_data *tveh;
   struct room_data *was_in = NULL;
@@ -190,39 +229,30 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
   if (ch->in_room->dir_option[dir]->go_into_secondperson)
     send_to_char(ch, "%s\r\n", ch->in_room->dir_option[dir]->go_into_secondperson);
 
-  if (IS_AFFECTED(ch, AFF_SNEAK))
-  {
-    target = GET_SKILL(ch, SKILL_STEALTH) ? 0 : 4;
-    skill = get_skill(ch, SKILL_STEALTH, target);
-    int tchtarg = skill;
-    if (affected_by_spell(ch, SPELL_STEALTH))
-      tchtarg += 4;
-    if (ch->in_room->silence[0])
-      tchtarg += ch->in_room->silence[1];
-    for (tch = ch->in_room->people; tch; tch = tch->next_in_room) {
-      if (AWAKE(tch) && CAN_SEE(tch, ch) && (tch != ch) && !PRF_FLAGGED(tch, PRF_MOVEGAG)) {
-        saw_sneaker = resisted_test(GET_INT(tch), tchtarg, skill, (GET_INT(tch) + target));
-        if (saw_sneaker >= 0)
-          act(buf2, TRUE, ch, 0, tch, TO_VICT);
-      }
-    }
-  } else
-  {
-    for (tch = ch->in_room->people; tch; tch = tch->next_in_room)
-      if (tch != ch && !PRF_FLAGGED(tch, PRF_MOVEGAG))
-        act(buf2, TRUE, ch, 0, tch, TO_VICT);
-    for (tveh = ch->in_room->vehicles; tveh; tveh = tveh->next_veh) {
-      for (tch = tveh->people; tch; tch = tch->next_in_veh)
-        if (!PRF_FLAGGED(tch, PRF_MOVEGAG) && (tveh->cspeed <= SPEED_IDLE || success_test(GET_INT(tch), 4)))
-          act(buf2, TRUE, ch, 0, tch, TO_VICT);
-          
-      if (tveh->rigger && !PRF_FLAGGED(tveh->rigger, PRF_MOVEGAG) && (tveh->cspeed <= SPEED_IDLE || success_test(GET_INT(tveh->rigger), 4)))
-        act(buf2, TRUE, ch, 0, tch, TO_VICT & TO_SLEEP);
-    }
-    if (ch->in_room->watching)
-      for (struct char_data *tch = ch->in_room->watching; tch; tch = tch->next_watching)
-          act(buf2, TRUE, ch, 0, tch, TO_VICT);
+  // People in the room.
+  for (tch = ch->in_room->people; tch; tch = tch->next_in_room) {
+    if (should_tch_see_chs_movement_message(tch, ch))
+      act(buf2, TRUE, ch, 0, tch, TO_VICT);
   }
+    
+  // Vehicle occupants.
+  for (tveh = ch->in_room->vehicles; tveh; tveh = tveh->next_veh) {
+    for (tch = tveh->people; tch; tch = tch->next_in_veh) {
+      if (should_tch_see_chs_movement_message(tch, ch))
+        act(buf2, TRUE, ch, 0, tch, TO_VICT);
+    }
+      
+    if (tveh->rigger && should_tch_see_chs_movement_message(tveh->rigger, ch))
+      act(buf2, TRUE, ch, 0, tch, TO_VICT & TO_SLEEP);
+  }
+  
+  // Watchers.
+  if (ch->in_room->watching) {
+    for (struct char_data *tch = ch->in_room->watching; tch; tch = tch->next_watching)
+      if (should_tch_see_chs_movement_message(tch, ch))
+        act(buf2, TRUE, ch, 0, tch, TO_VICT);
+  }
+
   was_in = ch->in_room;
   STOP_WORKING(ch);
   char_from_room(ch);
@@ -273,63 +303,48 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
     snprintf(buf2, sizeof(buf2), "$n %s %s.", (IS_WATER(ch->in_room) ?
                                 "swims in from" : "arrives from"), thedirs[rev_dir[dir]]);
 
-  if (IS_AFFECTED(ch, AFF_SNEAK))
-  {
-    target = (GET_SKILL(ch, SKILL_STEALTH) ? 0 : 4);
-    skill = get_skill(ch, SKILL_STEALTH, target);
-    int tchtarg = skill;
-    if (affected_by_spell(ch, SPELL_STEALTH))
-      tchtarg += 4;
-    if (ch->in_room->silence[0])
-      tchtarg += ch->in_room->silence[1];
-    for (tch = ch->in_room->people; tch; tch = tch->next_in_room) {
-      if (AWAKE(tch) && CAN_SEE(tch, ch) && (tch != ch)) {
-        saw_sneaker = resisted_test(GET_INT(tch), tchtarg, skill, (GET_INT(tch) + target));
-        if (saw_sneaker >= 0) {
-          if (!PRF_FLAGGED(tch, PRF_MOVEGAG))
-            act(buf2, TRUE, ch, 0, tch, TO_VICT);
-          if (IS_NPC(tch)) {
-            if ((!IS_NPC(ch) || IS_PROJECT(ch)) &&
-                !PRF_FLAGGED(ch, PRF_NOHASSLE) && !FIGHTING(tch) &&
-                MOB_FLAGGED(tch, MOB_AGGRESSIVE) && CAN_SEE(tch, ch) &&
-                IS_SET(extra, LEADER) && AWAKE(tch))
-              set_fighting(tch, ch);
+  
+  // People in the room.
+  for (tch = ch->in_room->people; tch; tch = tch->next_in_room) {
+    if (should_tch_see_chs_movement_message(tch, ch)) {
+      act(buf2, TRUE, ch, 0, tch, TO_VICT);
+      
+      if (IS_NPC(tch) && !FIGHTING(tch)) {
+        if (hunting_escortee(tch, ch)) {
+          set_fighting(tch, ch);
+        } else {
+          if ((!IS_NPC(ch) || IS_PROJECT(ch) || is_escortee(ch)) 
+              && !PRF_FLAGGED(ch, PRF_NOHASSLE) 
+              && MOB_FLAGGED(tch, MOB_AGGRESSIVE) 
+              && !FIGHTING(tch)
+              && IS_SET(extra, LEADER)) 
+          {
             GET_MOBALERT(tch) = MALERT_ALERT;
             GET_MOBALERTTIME(tch) = 20;
+            send_mob_aggression_warnings(ch, tch);
+            set_fighting(tch, ch);
           }
         }
       }
     }
-  } else
-  {
-    for (tch = ch->in_room->people; tch; tch = tch->next_in_room)
-      if (tch != ch && !PRF_FLAGGED(tch, PRF_MOVEGAG))
+  }
+    
+  // Vehicle occupants.
+  for (tveh = ch->in_room->vehicles; tveh; tveh = tveh->next_veh) {
+    for (tch = tveh->people; tch; tch = tch->next_in_veh) {
+      if (should_tch_see_chs_movement_message(tch, ch))
         act(buf2, TRUE, ch, 0, tch, TO_VICT);
-    for (tveh = ch->in_room->vehicles; tveh; tveh = tveh->next_veh)
-      for (tch = tveh->people; tch; tch = tch->next_in_veh)
-        if (tveh->cspeed <= SPEED_IDLE || success_test(GET_INT(tch), 4))
-          act(buf2, TRUE, ch, 0, tch, TO_VICT);
-    if (ch->in_room->watching)
-      for (struct char_data *tch = ch->in_room->watching; tch; tch = tch->next_watching)
-        act(buf2, TRUE, ch, 0, tch, TO_VICT);
-    for (tch = ch->in_room->people; tch; tch = tch->next_in_room) {
-      if (!FIGHTING(tch) && CAN_SEE(tch, ch) && hunting_escortee(tch, ch))
-        set_fighting(tch, ch);
-      else if (IS_NPC(tch)) {
-        if ((!IS_NPC(ch) || IS_PROJECT(ch) || is_escortee(ch)) 
-            && !PRF_FLAGGED(ch, PRF_NOHASSLE) 
-            && MOB_FLAGGED(tch, MOB_AGGRESSIVE) 
-            && !FIGHTING(tch) 
-            && CAN_SEE(tch, ch) 
-            && IS_SET(extra, LEADER) 
-            && AWAKE(tch)) 
-        {
-          GET_MOBALERT(tch) = MALERT_ALERT;
-          GET_MOBALERTTIME(tch) = 20;   
-          set_fighting(tch, ch);
-        }
-      }
     }
+      
+    if (tveh->rigger && should_tch_see_chs_movement_message(tveh->rigger, ch))
+      act(buf2, TRUE, ch, 0, tch, TO_VICT & TO_SLEEP);
+  }
+  
+  // Watchers.
+  if (ch->in_room->watching) {
+    for (struct char_data *tch = ch->in_room->watching; tch; tch = tch->next_watching)
+      if (should_tch_see_chs_movement_message(tch, ch))
+        act(buf2, TRUE, ch, 0, tch, TO_VICT);
   }
 
 #ifdef DEATH_FLAGS

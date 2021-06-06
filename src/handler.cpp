@@ -945,12 +945,17 @@ void affect_total(struct char_data * ch)
   if (AFF_FLAGGED(ch, AFF_INVISIBLE) || AFF_FLAGGED(ch, AFF_IMP_INVIS))
   {
     if (GET_EQ(ch, WEAR_ABOUT)) {
-      if (!(GET_OBJ_AFFECT(GET_EQ(ch, WEAR_ABOUT)).IsSet(AFF_INVISIBLE) || GET_OBJ_AFFECT(GET_EQ(ch, WEAR_ABOUT)).IsSet(AFF_IMP_INVIS)))
+      if (!(GET_OBJ_AFFECT(GET_EQ(ch, WEAR_ABOUT)).IsSet(AFF_INVISIBLE) 
+            || GET_OBJ_AFFECT(GET_EQ(ch, WEAR_ABOUT)).IsSet(AFF_IMP_INVIS))) {
         AFF_FLAGS(ch).RemoveBits(AFF_INVISIBLE, AFF_IMP_INVIS, ENDBIT);
+      }
     }
-    if (GET_EQ(ch, WEAR_BODY) &&
-        (!(GET_OBJ_AFFECT(GET_EQ(ch, WEAR_BODY)).IsSet(AFF_INVISIBLE) || GET_OBJ_AFFECT(GET_EQ(ch, WEAR_BODY)).IsSet(AFF_IMP_INVIS))))
-      AFF_FLAGS(ch).RemoveBits(AFF_INVISIBLE, AFF_IMP_INVIS, ENDBIT);
+    else if (GET_EQ(ch, WEAR_BODY) 
+             && (!(GET_OBJ_AFFECT(GET_EQ(ch, WEAR_BODY)).IsSet(AFF_INVISIBLE) 
+                   || GET_OBJ_AFFECT(GET_EQ(ch, WEAR_BODY)).IsSet(AFF_IMP_INVIS)))) 
+    {
+      AFF_FLAGS(ch).RemoveBits(AFF_INVISIBLE, AFF_IMP_INVIS, ENDBIT);                 
+    }
   }
   
   // Apply reach from weapon, if any.
