@@ -2165,7 +2165,7 @@ void idle_delete()
 #ifndef IDLEDELETE_DRYRUN
 		// TODO: Increase idle deletion leniency time by their TKE.
     int tke = atoi(row[2]);
-    time_t lastd = atol(row[0]);
+    time_t lastd = atoi(row[1]);
     if (lastd < (time(0) - (SECS_PER_REAL_DAY * (50 + (tke / 5))))) {
       DeleteChar(atol(row[0]));
       deleted++;
