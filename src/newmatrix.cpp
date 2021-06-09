@@ -1281,6 +1281,11 @@ ACMD(do_matrix_look)
         send_to_icon(PERSONA, "^yA file named %s floats here.^n\r\n", GET_OBJ_NAME(obj));
       }
     }
+    
+    if (obj == obj->next_content) {
+      mudlog("SYSERR: Infinite loop detected in Matrix object listing. Discarding subsequent objects.", NULL, LOG_SYSLOG, TRUE);
+      break;
+    }
   }    
 }
 
