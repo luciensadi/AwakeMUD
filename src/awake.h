@@ -497,6 +497,10 @@ enum {
 #define AFF_SURPRISE    48
 #define AFF_AMMOBUILD    49
 #define AFF_MAX       50
+// TODO: If you add another long-state action like building, designing, etc:
+// - Add it to the check_bioware exclusion in limits.cpp
+// - Add it to the IS_WORKING and STOP_WORKING macros in utils.h
+// - Check for anywhere I've missed in this comment
 
 
 /* room-related defines */

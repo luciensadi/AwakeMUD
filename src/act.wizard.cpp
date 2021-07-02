@@ -1372,7 +1372,7 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
   } else if (PLR_FLAGGED(k, PLR_NOSTAT) && !access_level(ch, LVL_DEVELOPER) &&
              GET_LEVEL(ch) <= GET_LEVEL(k))
   {
-    send_to_char("Sorry, you can't do that.\r\n", ch);
+    send_to_char("That character is protected by the NoStat flag. You need to be a higher level than them to stat them.\r\n", ch);
     return;
   }
 
@@ -2341,7 +2341,7 @@ void do_advance_with_mode(struct char_data *ch, char *argument, int cmd, int sub
 
   if (GET_LEVEL(ch) <= GET_LEVEL(victim)
       && ch != victim) {
-    send_to_char("Maybe that's not such a great idea.\r\n", ch);
+    send_to_char("You need to be a higher level than your victim to do that.\r\n", ch);
     return;
   }
   if (IS_NPC(victim)) {
@@ -2796,7 +2796,7 @@ ACMD(do_dc)
     return;
   }
   if (GET_LEVEL(vict) >= GET_LEVEL(ch)) {
-    send_to_char("Maybe that's not such a good idea...\r\n", ch);
+    send_to_char("You need to be a higher level than your victim to do that.\r\n", ch);
     return;
   }
   if (!vict->desc) {
@@ -4202,7 +4202,7 @@ ACMD(do_set)
 
     if (vict) {
       if (!access_level(ch, GET_LEVEL(vict)+1)) {
-        send_to_char("Sorry, you can't do that.\r\n", ch);
+        send_to_char("You must be a higher level than your victim in order to affect them in this manner.\r\n", ch);
         SET_CLEANUP(false);
         return;
       }
@@ -4214,7 +4214,7 @@ ACMD(do_set)
 
   if (ch != vict && !access_level(ch, LVL_ADMIN)) {
     if (!IS_NPC(vict) && !access_level(ch, GET_LEVEL(vict)+1)) {
-      send_to_char("Maybe that's not such a great idea...\r\n", ch);
+      send_to_char("You need to be a higher level than your victim to do that.\r\n", ch);
 
       SET_CLEANUP(false);
 

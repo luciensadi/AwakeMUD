@@ -260,6 +260,10 @@ void fry_mpcp(struct matrix_icon *icon, struct matrix_icon *targ, int success)
 {
   if (success >= 2 && targ->decker->deck)
   {
+    if (targ->decker->ch && PLR_FLAGGED(targ->decker->ch, PLR_NEWBIE)) {
+      send_to_icon(targ, "(OOC message: Be careful with these enemies; your deck would have taken permanent damage if you weren't a newbie!)");
+      return;
+    }
     snprintf(buf, sizeof(buf), "%s uses the opportunity to fry your MPCP!\r\n", CAP(icon->name));
     send_to_icon(targ, buf);
     while (success >= 2 && targ->decker->mpcp > 0) {

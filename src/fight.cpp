@@ -717,7 +717,7 @@ void raw_kill(struct char_data * ch)
           i = real_room(RM_OCEAN_DOCWAGON);
           break;
         default:
-          snprintf(buf, sizeof(buf), "SYSERR: Bad jurisdiction type %d in room %ld encountered in raw_kill() while transferring %s (%ld).",
+          snprintf(buf, sizeof(buf), "SYSERR: Bad jurisdiction type %d in room %ld encountered in raw_kill() while transferring %s (%ld). Sending to Dante's entrance.",
                   GET_JURISDICTION(in_room),
                   in_room->number,
                   GET_CHAR_NAME(ch), GET_IDNUM(ch));

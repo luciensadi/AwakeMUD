@@ -2224,8 +2224,17 @@ void extract_char(struct char_data * ch)
   if (ch->in_room)
     ch->in_room->dirty_bit = TRUE;
   
-  if (!IS_NPC(ch))
+  if (!IS_NPC(ch)) {
+    // Terminate the player's quest, if any.
+    if (GET_QUEST(ch)) {
+      // Remove all NPCs tied to this player's quest.
+      // TODO
+      // Remove all objects tied to this player's quest.
+    }
+    
+    // Save the player.
     playerDB.SaveChar(ch, GET_LOADROOM(ch));
+  }
   
   if (!IS_NPC(ch) && !ch->desc)
   {

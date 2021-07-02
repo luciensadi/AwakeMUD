@@ -449,8 +449,13 @@ void check_idling(void)
 
 void check_bioware(struct char_data *ch)
 {
-  if (!ch->desc || (ch->desc && ch->desc->connected) || PLR_FLAGGED(ch, PLR_NEWBIE))
+  if (!ch->desc 
+      || (ch->desc && ch->desc->connected) 
+      || PLR_FLAGGED(ch, PLR_NEWBIE)
+      || AFF_FLAGS(ch).AreAnySet(AFF_PROGRAM, AFF_DESIGN, AFF_PART_BUILD, AFF_PART_DESIGN, AFF_SPELLDESIGN, AFF_AMMOBUILD, ENDBIT)
+  ) {
     return;
+  }
   
   struct obj_data *bio;
   for (bio = ch->bioware; bio; bio = bio->next_content)
