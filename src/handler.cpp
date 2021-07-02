@@ -40,6 +40,7 @@ extern int return_general(int skill_num);
 extern int can_wield_both(struct char_data *, struct obj_data *, struct obj_data *);
 extern int max_ability(int i);
 extern int calculate_vehicle_entry_load(struct veh_data *veh);
+extern void end_quest(struct char_data *ch);
 
 int get_skill_num_in_use_for_weapons(struct char_data *ch);
 int get_skill_dice_in_use_for_weapons(struct char_data *ch);
@@ -2225,11 +2226,10 @@ void extract_char(struct char_data * ch)
     ch->in_room->dirty_bit = TRUE;
   
   if (!IS_NPC(ch)) {
-    // Terminate the player's quest, if any.
+    // Terminate the player's quest, if any. Realistically, we shouldn't ever trigger this code, but if it happens we're ready for it.
     if (GET_QUEST(ch)) {
-      // Remove all NPCs tied to this player's quest.
-      // TODO
-      // Remove all objects tied to this player's quest.
+      mudlog("Warning: extract_char received PC with quest still active.", ch, LOG_SYSLOG, TRUE);
+      end_quest(ch);
     }
     
     // Save the player.

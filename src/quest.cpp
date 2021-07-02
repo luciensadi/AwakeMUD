@@ -152,10 +152,12 @@ void load_quest_targets(struct char_data *johnson, struct char_data *ch)
   {
     if (quest_table[num].mob[i].load == QML_LOCATION &&
         (rnum = real_mobile(quest_table[num].mob[i].vnum)) > -1 &&
-        (room = real_room(quest_table[num].mob[i].l_data)) > -1) {
+        (room = real_room(quest_table[num].mob[i].l_data)) > -1) 
+    {
       mob = read_mobile(rnum, REAL);
       mob->mob_specials.quest_id = GET_IDNUM(ch);
       char_to_room(mob, &world[room]);
+      act("$n has arrived.", FALSE, mob, 0, 0, TO_ROOM);
       if(quest_table[num].mob[i].objective == QMO_LOCATION)
         add_follower(mob, ch);
       for (j = 0; j < quest_table[num].num_objs; j++)
@@ -195,11 +197,14 @@ void load_quest_targets(struct char_data *johnson, struct char_data *ch)
           obj = NULL;
         }
       mob = NULL;
-    } else if (quest_table[num].mob[i].load == QML_FOLQUESTER &&
-               (rnum = real_mobile(quest_table[num].mob[i].vnum)) > -1) {
+    } 
+    else if (quest_table[num].mob[i].load == QML_FOLQUESTER &&
+               (rnum = real_mobile(quest_table[num].mob[i].vnum)) > -1) 
+    {
       mob = read_mobile(rnum, REAL);
       mob->mob_specials.quest_id = GET_IDNUM(ch);
       char_to_room(mob, ch->in_room);
+      act("$n has arrived.", FALSE, mob, 0, 0, TO_ROOM);
       for (j = 0; j < quest_table[num].num_objs; j++)
         if (quest_table[num].obj[j].l_data == i &&
             (rnum = real_object(quest_table[num].obj[j].vnum)) > -1) {
@@ -298,6 +303,7 @@ void extract_quest_targets(int num)
       for (i = 0; i < NUM_WEARS; i++)
         if (GET_EQ(mob, i))
           extract_obj(GET_EQ(mob, i));
+      act("$n slips away quietly.", FALSE, mob, 0, 0, TO_ROOM);
       extract_char(mob);
     }
   }

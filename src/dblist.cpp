@@ -437,6 +437,14 @@ void objList::RemoveQuestObjs(int id)
     next = temp->next;
 
     if (temp->data->obj_flags.quest_id == id) {
+      if (temp->data->carried_by)
+        act("$p disintegrates.", FALSE, temp->data->carried_by, temp->data, 0, TO_CHAR);
+      else if (temp->data->worn_by)
+        act("$p disintegrates.", FALSE, temp->data->carried_by, temp->data, 0, TO_CHAR);
+      else if (temp->data->in_room && temp->data->in_room->people) {
+        act("$p disintegrates.", TRUE, temp->data->in_room->people, temp->data, 0, TO_ROOM);
+        act("$p disintegrates.", TRUE, temp->data->in_room->people, temp->data, 0, TO_CHAR);
+      }
       extract_obj(temp->data);
     }
   }
