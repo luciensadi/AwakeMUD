@@ -1005,8 +1005,12 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
   char buf[MAX_STRING_LENGTH];
   if (!is_open(keeper, shop_nr))
     return;
+    
+  /*   We allow anyone to view the list, on the presumption that you're just browsing the shelves or whatnot.
   if (!is_ok_char(keeper, ch, shop_nr))
     return;
+  */
+  
   struct obj_data *obj;
   int i = 1;
   
