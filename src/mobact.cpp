@@ -243,22 +243,29 @@ bool vict_is_valid_aggro_target(struct char_data *ch, struct char_data *vict) {
   if (!vict_is_valid_target(ch, vict))
     return FALSE;
     
-  if (MOB_FLAGS(ch).IsSet(MOB_AGGRESSIVE) || (mob_is_aggressive(ch, FALSE) && (
-      // If NPC is aggro towards elves, and victim is an elf subrace, or...
-      (MOB_FLAGGED(ch, MOB_AGGR_ELF) &&
-       (GET_RACE(vict) == RACE_ELF || GET_RACE(vict) == RACE_WAKYAMBI || GET_RACE(vict) == RACE_NIGHTONE || GET_RACE(vict) == RACE_DRYAD)) ||
-      // If NPC is aggro towards dwarves, and victim is a dwarf subrace, or...
-      (MOB_FLAGGED(ch, MOB_AGGR_DWARF) &&
-       (GET_RACE(vict) == RACE_DWARF || GET_RACE(vict) == RACE_GNOME || GET_RACE(vict) == RACE_MENEHUNE || GET_RACE(vict) == RACE_KOBOROKURU)) ||
-      // If NPC is aggro towards humans, and victim is human, or...
-      (MOB_FLAGGED(ch, MOB_AGGR_HUMAN) &&
-       GET_RACE(vict) == RACE_HUMAN) ||
-      // If NPC is aggro towards orks, and victim is an ork subrace, or...
-      (MOB_FLAGGED(ch, MOB_AGGR_ORK) &&
-       (GET_RACE(vict) == RACE_ORK || GET_RACE(vict) == RACE_HOBGOBLIN || GET_RACE(vict) == RACE_OGRE || GET_RACE(vict) == RACE_SATYR || GET_RACE(vict) == RACE_ONI)) ||
-      // If NPC is aggro towards trolls, and victim is a troll subrace:
-      (MOB_FLAGGED(ch, MOB_AGGR_TROLL) &&
-       (GET_RACE(vict) == RACE_TROLL || GET_RACE(vict) == RACE_CYCLOPS || GET_RACE(vict) == RACE_FOMORI || GET_RACE(vict) == RACE_GIANT || GET_RACE(vict) == RACE_MINOTAUR)))))
+  if (MOB_FLAGS(ch).IsSet(MOB_AGGRESSIVE) 
+      || (mob_is_aggressive(ch, FALSE) 
+          && (GET_MOBALERT(ch) == MALERT_ALARM 
+              ||  (
+                    // If NPC is aggro towards elves, and victim is an elf subrace, or...
+                    (MOB_FLAGGED(ch, MOB_AGGR_ELF) &&
+                     (GET_RACE(vict) == RACE_ELF || GET_RACE(vict) == RACE_WAKYAMBI || GET_RACE(vict) == RACE_NIGHTONE || GET_RACE(vict) == RACE_DRYAD)) ||
+                    // If NPC is aggro towards dwarves, and victim is a dwarf subrace, or...
+                    (MOB_FLAGGED(ch, MOB_AGGR_DWARF) &&
+                     (GET_RACE(vict) == RACE_DWARF || GET_RACE(vict) == RACE_GNOME || GET_RACE(vict) == RACE_MENEHUNE || GET_RACE(vict) == RACE_KOBOROKURU)) ||
+                    // If NPC is aggro towards humans, and victim is human, or...
+                    (MOB_FLAGGED(ch, MOB_AGGR_HUMAN) &&
+                     GET_RACE(vict) == RACE_HUMAN) ||
+                    // If NPC is aggro towards orks, and victim is an ork subrace, or...
+                    (MOB_FLAGGED(ch, MOB_AGGR_ORK) &&
+                     (GET_RACE(vict) == RACE_ORK || GET_RACE(vict) == RACE_HOBGOBLIN || GET_RACE(vict) == RACE_OGRE || GET_RACE(vict) == RACE_SATYR || GET_RACE(vict) == RACE_ONI)) ||
+                    // If NPC is aggro towards trolls, and victim is a troll subrace:
+                    (MOB_FLAGGED(ch, MOB_AGGR_TROLL) &&
+                     (GET_RACE(vict) == RACE_TROLL || GET_RACE(vict) == RACE_CYCLOPS || GET_RACE(vict) == RACE_FOMORI || GET_RACE(vict) == RACE_GIANT || GET_RACE(vict) == RACE_MINOTAUR))
+                  )
+              )
+          )
+      )
     // Kick their ass.
   {
 #ifdef MOBACT_DEBUG
@@ -275,8 +282,8 @@ bool vict_is_valid_aggro_target(struct char_data *ch, struct char_data *vict) {
     return TRUE;
   }
   
-  // We allow alarmed, non-aggro NPCs to attack, but only if the victim could otherwise hurt them.
-  if (GET_MOBALERT(ch) == MALERT_ALARM && can_hurt(vict, ch, 0, TRUE)) {
+  // We allow alarmed, non-aggro NPCs to attack, but only if the victim could otherwise hurt them, and only if they're otherwise aggressive (guard, helper, etc)
+  if (GET_MOBALERT(ch) == MALERT_ALARM && (MOB_FLAGGED(ch, MOB_HELPER) || MOB_FLAGGED(ch, MOB_GUARD)) && can_hurt(vict, ch, 0, TRUE)) {
 #ifdef MOBACT_DEBUG
     snprintf(buf3, sizeof(buf3), "vict_is_valid_aggro_target: I am alarmed and %s can hurt me, so they are a valid aggro target.", GET_CHAR_NAME(vict));
     do_say(ch, buf3, 0, 0);
