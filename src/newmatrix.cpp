@@ -1629,7 +1629,12 @@ ACMD(do_connect)
     send_to_char("It seems that host has been shut down.\r\n", ch);
     return;
   }
-  GET_POS(ch) = POS_SITTING;
+  
+  if (GET_POS(ch) != POS_SITTING) {
+    GET_POS(ch) = POS_SITTING;
+    send_to_char(ch, "You find a place to sit and work with your deck.\r\n");
+  }
+  
   icon = Mem->GetIcon();
   icon->condition = 10;
   if (ch->player.matrix_text.name)
@@ -1704,7 +1709,7 @@ ACMD(do_connect)
     GET_MAX_HACKING(ch) = 0;
     DECKER->response = 0;
   }
-  for (struct obj_data *soft = cyberdeck->contains; soft; soft = soft->next_content)
+  for (struct obj_data *soft = cyberdeck->contains; soft; soft = soft->next_content) {
     if (GET_OBJ_TYPE(soft) == ITEM_PROGRAM) {
       GET_OBJ_VAL(soft, 8) = GET_OBJ_VAL(soft, 9) = 0;
       if (GET_OBJ_VNUM(soft) != OBJ_BLANK_PROGRAM) {
@@ -1778,6 +1783,8 @@ ACMD(do_connect)
         break;
       }
     }
+  }
+  
   if (icon_list)
     PERSONA->next = icon_list;
   icon_list = PERSONA;
@@ -1791,11 +1798,15 @@ ACMD(do_connect)
   
   if (DECKER->bod <= 0) {
     send_to_char("You'll have a hard time forming a durable persona with no Body chip.\r\n", ch);
+    extract_icon(PERSONA);
+    PERSONA = NULL;
     return;
   }
   
   if (DECKER->sensor <= 0) {
     send_to_char("You'll have a hard time receiving Matrix data with no Sensor chip.\r\n", ch);
+    extract_icon(PERSONA);
+    PERSONA = NULL;
     return;
   }
   
