@@ -5881,11 +5881,11 @@ ACMD(do_setfind)
   
   for (int obj_idx = 0; obj_idx <= top_of_objt; obj_idx++) {
     if (GET_OBJ_TYPE(&obj_proto[obj_idx]) == ITEM_WORN && GET_WORN_MATCHED_SET(&obj_proto[obj_idx]) == number) {
-      send_to_char(ch, "[%5ld] Set ^y%3d^n: ^c%3db %3di^n %s^n%s\r\n",
+      send_to_char(ch, "[%5ld] Set ^y%3d^n: ^c%3.2fb %3.2fi^n %s^n%s\r\n",
               OBJ_VNUM_RNUM(obj_idx),
               number,
-              GET_WORN_BALLISTIC(&obj_proto[obj_idx]) / 100,
-              GET_WORN_IMPACT(&obj_proto[obj_idx]) / 100,
+              (float) GET_WORN_BALLISTIC(&obj_proto[obj_idx]) / 100,
+              (float) GET_WORN_IMPACT(&obj_proto[obj_idx]) / 100,
               obj_proto[obj_idx].text.name,
               obj_proto[obj_idx].source_info ? "  ^g(canon)^n" : "");
     }
