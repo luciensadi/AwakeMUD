@@ -2318,11 +2318,12 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       imp = GET_WORN_IMPACT(j);
       if (GET_WORN_MATCHED_SET(j)) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is part of matched set number ^c%d^n. Wear all the matched items to receive its full value.\r\n", GET_WORN_MATCHED_SET(j));
-        bal = (int)(GET_WORN_BALLISTIC(j) / 100);
-        imp = (int)(GET_WORN_IMPACT(j) / 100);
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It provides ^c%.2f^n ballistic armor and ^c%.2f^n impact armor. "
+                                                        "People have a ^c%d^n target number when trying to see under it.\r\n", (float)bal / 100, (float)imp / 100, GET_WORN_CONCEAL_RATING(j));
+      } else {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It provides ^c%d^n ballistic armor and ^c%d^n impact armor. "
+                                                        "People have a ^c%d^n target number when trying to see under it.\r\n", bal, imp, GET_WORN_CONCEAL_RATING(j));
       }
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It provides ^c%d^n ballistic armor and ^c%d^n impact armor. "
-                                                      "People have a ^c%d^n target number when trying to see under it.\r\n", bal, imp, GET_WORN_CONCEAL_RATING(j));
       break;
     case ITEM_DOCWAGON:
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%s^n contract that ^c%s bonded%s^n.",
