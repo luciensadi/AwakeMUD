@@ -1047,7 +1047,7 @@ void dam_message(int dam, struct char_data * ch, struct char_data * victim, int 
     {
       "$n grazes $N as $e #W $M.",      /* 1: 1..2  */
       "You graze $N as you #w $M.",
-      "$n grazes you as $e #W you."
+      "$n grazes you as $e #W you."     // TODO: Known bug: This can output 'as they hits you'. Requires an extensive overhaul to fix.
     },
     
     {
