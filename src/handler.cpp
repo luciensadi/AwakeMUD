@@ -2225,6 +2225,16 @@ void extract_char(struct char_data * ch)
   if (ch->in_room)
     ch->in_room->dirty_bit = TRUE;
   
+  if ((ch->in_veh && AFF_FLAGGED(ch, AFF_PILOT)) || PLR_FLAGGED(ch, PLR_REMOTE)) {
+    RIG_VEH(ch, veh);
+    
+    send_to_veh("Now driverless, the vehicle slows to a stop.\r\n", veh, ch, FALSE);
+    AFF_FLAGS(ch).RemoveBits(AFF_PILOT, AFF_RIG, ENDBIT);
+    stop_chase(veh);
+    if (!veh->dest)
+      veh->cspeed = SPEED_OFF;
+  }
+  
   if (!IS_NPC(ch)) {
     // Terminate the player's quest, if any. Realistically, we shouldn't ever trigger this code, but if it happens we're ready for it.
     if (GET_QUEST(ch)) {

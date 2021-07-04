@@ -1431,7 +1431,7 @@ SPECIAL(call_elevator)
     else if (i == 0)
       send_to_char(ch, "The floor indicator shows that the elevator is currently at the ground floor.\r\n");
     else
-      send_to_char(ch, "The floor indicator shows that the elevator is current at floor %d.\r\n", 0 - i);
+      send_to_char(ch, "The floor indicator shows that the elevator is currently at floor %d.\r\n", 0 - i);
     return TRUE;
   }
 

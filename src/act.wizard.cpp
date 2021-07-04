@@ -676,7 +676,7 @@ struct room_data *find_target_room(struct char_data * ch, char *roomstr)
       location = target_obj->in_room;
     else {
       if ((location = get_obj_in_room(target_obj))) {
-        send_to_char(ch, "Going to that object's containing room. Veh: %s, In-Obj: %s, Carried-By: %s, Worn-By: %s",
+        send_to_char(ch, "Going to that object's containing room. Veh: %s, In-Obj: %s, Carried-By: %s, Worn-By: %s.\r\n",
                      target_obj->in_veh ? GET_VEH_NAME(target_obj->in_veh) : "(null)",
                      target_obj->in_obj ? GET_OBJ_NAME(target_obj->in_obj) : "(null)",
                      target_obj->carried_by ? GET_CHAR_NAME(target_obj->carried_by) : "(null)",

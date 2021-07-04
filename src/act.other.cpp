@@ -3074,12 +3074,11 @@ ACMD(do_assense)
               snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " cast at force %d", sus->force);
             else if (success > 3) {
               if (sus->force > GET_MAG(ch) / 100)
-                strcat(buf, " cast at a force higher than");
-              if (sus->force == GET_MAG(ch) / 100)
-                strcat(buf, " cast at a force equal to");
+                strcat(buf, " cast at a force higher than your magic");
+              else if (sus->force == GET_MAG(ch) / 100)
+                strcat(buf, " cast at a force equal to your magic");
               else
-                strcat(buf, " cast at a force lower than");
-              strcat(buf, " your magic");
+                strcat(buf, " cast at a force lower than your magic");
             }
             if (success >= 3) {
               if (GET_IDNUM(ch) == GET_IDNUM(sus->other))

@@ -616,20 +616,24 @@ void make_corpse(struct char_data * ch)
 
 void death_cry(struct char_data * ch)
 {
-  int door;
-  struct room_data *was_in = NULL;
   
   snprintf(buf3, sizeof(buf3), "$n cries out $s last breath as $e die%s!", HSSH_SHOULD_PLURAL(ch) ? "s" : "");
   act(buf3, FALSE, ch, 0, 0, TO_ROOM);
-  was_in = ch->in_room;
+  
+  if (ch->in_veh) {
+    snprintf(buf3, sizeof(buf3), "A cry of agony comes from within %s!\r\n", GET_VEH_NAME(ch->in_veh));
+    send_to_room(buf3, get_ch_in_room(ch));
+    return;
+  }
   
   for (struct char_data *listener = ch->in_room->people; listener; listener = listener->next_in_room)
     if (IS_NPC(listener)) {
       GET_MOBALERTTIME(listener) = 30;
       GET_MOBALERT(listener) = MALERT_ALARM;
     }
-  
-  for (door = 0; door < NUM_OF_DIRS; door++)
+    
+  struct room_data *was_in = ch->in_room;
+  for (int door = 0; door < NUM_OF_DIRS; door++)
   {
     if (CAN_GO(ch, door)) {
       ch->in_room = was_in->dir_option[door]->to_room;
@@ -725,6 +729,18 @@ void raw_kill(struct char_data * ch)
           i = real_room(RM_ENTRANCE_TO_DANTES);
           break;
       }
+      
+      if ((ch->in_veh && AFF_FLAGGED(ch, AFF_PILOT)) || PLR_FLAGGED(ch, PLR_REMOTE)) {
+        struct veh_data *veh;
+        RIG_VEH(ch, veh);
+        
+        send_to_veh("Now driverless, the vehicle slows to a stop.\r\n", veh, ch, FALSE);
+        AFF_FLAGS(ch).RemoveBits(AFF_PILOT, AFF_RIG, ENDBIT);
+        stop_chase(veh);
+        if (!veh->dest)
+          veh->cspeed = SPEED_OFF;
+      }
+      
       char_from_room(ch);
       char_to_room(ch, &world[i]);
       PLR_FLAGS(ch).SetBit(PLR_JUST_DIED);
