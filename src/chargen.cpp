@@ -598,7 +598,7 @@ int parse_race(struct descriptor_data *d, const char *arg)
       display_help(buf2, MAX_STRING_LENGTH, "elf", d->character);
       break;
     case '4':
-      display_help(buf2, MAX_STRING_LENGTH, "ork", d->character);
+      display_help(buf2, MAX_STRING_LENGTH, "orks", d->character);
       break;
     case '5':
       display_help(buf2, MAX_STRING_LENGTH, "troll", d->character);
