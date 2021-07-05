@@ -488,12 +488,12 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define GET_FOCI(ch)		((ch)->char_specials.foci)
 #define GET_QUEST(ch)		((ch)->desc && (ch)->desc->original ? (ch)->desc->original->player_specials->questnum : \
                                                                       (ch)->player_specials->questnum)
-#define GET_LQUEST(ch, i)	((ch)->player_specials->last_quest[i])
+#define GET_LQUEST(ch, i)	      ((ch)->player_specials->last_quest[i])
 #define POOFIN(ch)              ((ch)->player.poofin)
 #define POOFOUT(ch)             ((ch)->player.poofout)
-#define GET_PROMPT(ch)		((PLR_FLAGGED((ch), PLR_MATRIX) ? (ch)->player.matrixprompt : (ch)->player.prompt))
-#define GET_ALIASES(ch)		((ch)->desc && (ch)->desc->original ? (ch)->desc->original->player_specials->aliases : (ch)->player_specials->aliases)
-#define GET_MEMORY(ch)		((ch)->player_specials->remem)
+#define GET_PROMPT(ch)          ((PLR_FLAGGED((ch), PLR_MATRIX) ? (ch)->player.matrixprompt : (ch)->player.prompt))
+#define GET_ALIASES(ch)         ((ch)->desc && (ch)->desc->original ? (ch)->desc->original->player_specials->aliases : (ch)->player_specials->aliases)
+#define GET_PLAYER_MEMORY(ch)   ((ch)->player_specials->remem)
 #define GET_IGNORE(ch)		((ch)->player_specials->ignored)
 #define GET_LAST_TELL(ch)	((ch)->player_specials->last_tell)
 #define GET_LAST_DAMAGETIME(ch)	((ch)->points.lastdamage)
@@ -539,7 +539,7 @@ int get_armor_penalty_grade(struct char_data *ch);
 
 #define GET_MOB_WAIT(ch)      ((ch)->mob_specials.wait_state)
 #define GET_DEFAULT_POS(ch)   ((ch)->mob_specials.default_pos)
-#define MEMORY(ch)            ((ch)->mob_specials.memory)
+#define GET_MOB_MEMORY(ch)    ((ch)->mob_specials.memory)
 #define GET_LASTHIT(ch)	      ((ch)->mob_specials.lasthit)
 
 #define GET_SPARE1(ch)  ((ch)->mob_specials.spare1)

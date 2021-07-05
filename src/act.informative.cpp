@@ -179,9 +179,9 @@ char *make_desc(struct char_data *ch, struct char_data *i, char *buf, int act, b
       strlcpy(buf, dont_capitalize_a_an ? decapitalize_a_an(CAP(GET_NAME(i))) : CAP(GET_NAME(i)), buf_size);
       if (IS_SENATOR(ch) && !IS_NPC(i))
         snprintf(ENDOF(buf), buf_size - strlen(buf), " (%s)", CAP(GET_CHAR_NAME(i)));
-      else if ((mem = found_mem(GET_MEMORY(ch), i)))
+      else if ((mem = safe_found_mem(ch, i)))
         snprintf(ENDOF(buf), buf_size - strlen(buf), " (%s)", CAP(mem->mem));
-    } else if ((mem = found_mem(GET_MEMORY(ch), i)) && act != 2)
+    } else if ((mem = safe_found_mem(ch, i)) && act != 2)
       strlcpy(buf, CAP(mem->mem), buf_size);
     else
       strlcpy(buf, dont_capitalize_a_an ? decapitalize_a_an(CAP(GET_NAME(i))) : CAP(GET_NAME(i)), buf_size);
@@ -344,8 +344,8 @@ void show_veh_to_char(struct veh_data * vehicle, struct char_data * ch)
   
   else {
     if (vehicle->type == VEH_BIKE && vehicle->people && CAN_SEE(ch, vehicle->people))
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s sitting on ", CAP(found_mem(GET_MEMORY(ch), vehicle->people) ?
-                                                found_mem(GET_MEMORY(ch), vehicle->people)->mem :
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s sitting on ", CAP(safe_found_mem(ch, vehicle->people) ?
+                                                safe_found_mem(ch, vehicle->people)->mem :
                                                 GET_NAME(vehicle->people)));
     switch (vehicle->cspeed) {
       case SPEED_OFF:

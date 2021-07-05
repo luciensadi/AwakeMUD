@@ -3974,7 +3974,7 @@ void free_char(struct char_data * ch)
       free_alias(a);
     }
 
-    for (b = GET_MEMORY(ch); b; b = nextr) {
+    for (b = GET_PLAYER_MEMORY(ch); b; b = nextr) {
       nextr = b->next;
       DELETE_ARRAY_IF_EXTANT(b->mem);
       DELETE_AND_NULL(b);

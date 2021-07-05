@@ -754,7 +754,7 @@ bool mobact_process_memory(struct char_data *ch, struct room_data *room) {
   struct char_data *vict = NULL;
   
   /* Mob Memory */
-  if (MOB_FLAGGED(ch, MOB_MEMORY) && MEMORY(ch)) {
+  if (MOB_FLAGGED(ch, MOB_MEMORY) && GET_MOB_MEMORY(ch)) {
     for (vict = room->people; vict; vict = vict->next_in_room) {
       // Skip NPCs, invisibles, and nohassle targets.
       if (IS_NPC(vict) || !CAN_SEE_ROOM_SPECIFIED(ch, vict, room) || PRF_FLAGGED(vict, PRF_NOHASSLE))
@@ -1394,16 +1394,16 @@ void remember(struct char_data * ch, struct char_data * victim)
   if (!IS_NPC(ch))
     return;
 
-  for (tmp = MEMORY(ch); tmp && !present; tmp = tmp->next)
+  for (tmp = GET_MOB_MEMORY(ch); tmp && !present; tmp = tmp->next)
     if (tmp->id == GET_IDNUM(victim))
       present = TRUE;
 
   if (!present)
   {
     tmp = new memory_rec;
-    tmp->next = MEMORY(ch);
+    tmp->next = GET_MOB_MEMORY(ch);
     tmp->id = GET_IDNUM(victim);
-    MEMORY(ch) = tmp;
+    GET_MOB_MEMORY(ch) = tmp;
   }
 }
 
@@ -1412,7 +1412,7 @@ void forget(struct char_data * ch, struct char_data * victim)
 {
   memory_rec *curr, *prev = NULL;
 
-  if (!(curr = MEMORY(ch)))
+  if (!(curr = GET_MOB_MEMORY(ch)))
     return;
 
   while (curr && curr->id != GET_IDNUM(victim))
@@ -1424,8 +1424,8 @@ void forget(struct char_data * ch, struct char_data * victim)
   if (!curr)
     return;                     /* person wasn't there at all. */
 
-  if (curr == MEMORY(ch))
-    MEMORY(ch) = curr->next;
+  if (curr == GET_MOB_MEMORY(ch))
+    GET_MOB_MEMORY(ch) = curr->next;
   else
     prev->next = curr->next;
 
@@ -1437,7 +1437,7 @@ bool memory(struct char_data *ch, struct char_data *vict)
 {
   memory_rec *names;
 
-  for (names = MEMORY(ch); names; names = names->next)
+  for (names = GET_MOB_MEMORY(ch); names; names = names->next)
     if (names->id == GET_IDNUM(vict))
       return(TRUE);
 
@@ -1449,7 +1449,7 @@ void clearMemory(struct char_data * ch)
 {
   memory_rec *curr, *next;
 
-  curr = MEMORY(ch);
+  curr = GET_MOB_MEMORY(ch);
 
   while (curr)
   {
@@ -1458,7 +1458,7 @@ void clearMemory(struct char_data * ch)
     curr = next;
   }
 
-  MEMORY(ch) = NULL;
+  GET_MOB_MEMORY(ch) = NULL;
 }
 bool attempt_reload(struct char_data *mob, int pos)
 {

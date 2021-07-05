@@ -3601,9 +3601,59 @@ void make_newbie(struct obj_data *obj)
     }
   }
 }
+
+void process_auth_room(struct char_data *ch) {
+  PLR_FLAGS(ch).RemoveBit(PLR_NOT_YET_AUTHED);
+  GET_NUYEN(ch) = 0;
+  make_newbie(ch->carrying);
+  for (int i = 0; i < NUM_WEARS; i++)
+    if (GET_EQ(ch, i))
+      make_newbie(GET_EQ(ch, i));
+  for (struct obj_data *obj = ch->cyberware; obj; obj = obj->next_content)
+    GET_OBJ_COST(obj) = 1;
+  for (struct obj_data *obj = ch->bioware; obj; obj = obj->next_content)
+    GET_OBJ_COST(obj) = 1;
+  char_from_room(ch);
+  char_to_room(ch, &world[real_room(RM_NEWBIE_LOBBY)]);
+  send_to_char(ch, "^YYou are now Authorized. Welcome to Awakened Worlds.^n\r\n");
+  
+  for (struct obj_data *obj = ch->cyberware; obj; obj = obj->next_content)
+    if (GET_OBJ_VAL(obj, 0) == CYB_MEMORY) {
+      if (obj->contains) {
+        while (obj->contains) {
+          GET_OBJ_VAL(obj, 5) -= GET_OBJ_VAL(obj->contains, 2) + GET_OBJ_VAL(obj->contains, 8);
+          if (GET_OBJ_VAL(obj->contains, 9)) 
+            ch->char_specials.saved.skills[GET_OBJ_VAL(obj->contains, 0)][1] = 0;
+          extract_obj(obj->contains);
+        }
+        send_to_char(ch, "A brief tingle runs through you as %s is wiped clean.\r\n", GET_OBJ_NAME(obj));
+      }
+    }
+      
+  if (real_object(OBJ_NEWBIE_RADIO)>-1)
+  {
+    struct obj_data *radio = read_object(OBJ_NEWBIE_RADIO, VIRTUAL);
+    GET_OBJ_VAL(radio, 0) = 8;
+    obj_to_char(radio, ch);
+    send_to_char(ch, "You have been given a radio.^n\r\n");
+  }
+  // Heal them.
+  GET_PHYSICAL(ch) = 1000;
+  GET_MENTAL(ch) = 1000;
+  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_chargendata WHERE idnum=%ld;", GET_IDNUM(ch));
+  mysql_wrapper(mysql, buf);
+  
+  playerDB.SaveChar(ch);
+  
+  // Make them look.
+  // if (!PRF_FLAGGED(ch, PRF_SCREENREADER))
+  look_at_room(ch, 0);
+}
+
 SPECIAL(auth_room)
 {
   if ((CMD_IS("say") || CMD_IS("'") || CMD_IS("sayto") || CMD_IS("\"")) && !IS_ASTRAL(ch)) {
+    /*
     skip_spaces(&argument);
     if (   !str_cmp("I have read the rules and policies, understand them, and agree to abide by them during my stay here.", argument)
         || !str_cmp("\"I have read the rules and policies, understand them, and agree to abide by them during my stay here.\"", argument) // Complete copy-paste with both quotes
@@ -3612,51 +3662,22 @@ SPECIAL(auth_room)
         || !str_cmp("\"I have read the rules and policies, understand them, and agree to abideby them during my stay here.\"", argument) // Complete copy-paste with both quotes and linewrap space.
         || !str_cmp("I have read the rules and policies, understand them, and agree to abideby them during my stay here.\"", argument)) // Partial copy-paste with trailing quote and linewrap space.
     {
-      PLR_FLAGS(ch).RemoveBit(PLR_NOT_YET_AUTHED);
-      GET_NUYEN(ch) = 0;
-      make_newbie(ch->carrying);
-      for (int i = 0; i < NUM_WEARS; i++)
-        if (GET_EQ(ch, i))
-          make_newbie(GET_EQ(ch, i));
-      for (struct obj_data *obj = ch->cyberware; obj; obj = obj->next_content)
-        GET_OBJ_COST(obj) = 1;
-      for (struct obj_data *obj = ch->bioware; obj; obj = obj->next_content)
-        GET_OBJ_COST(obj) = 1;
-      char_from_room(ch);
-      char_to_room(ch, &world[real_room(RM_NEWBIE_LOBBY)]);
-      send_to_char(ch, "^YYou are now Authorized. Welcome to Awakened Worlds.^n\r\n");
-      
-      for (struct obj_data *obj = ch->cyberware; obj; obj = obj->next_content)
-        if (GET_OBJ_VAL(obj, 0) == CYB_MEMORY) {
-          if (obj->contains) {
-            while (obj->contains) {
-              GET_OBJ_VAL(obj, 5) -= GET_OBJ_VAL(obj->contains, 2) + GET_OBJ_VAL(obj->contains, 8);
-              if (GET_OBJ_VAL(obj->contains, 9)) 
-                ch->char_specials.saved.skills[GET_OBJ_VAL(obj->contains, 0)][1] = 0;
-              extract_obj(obj->contains);
-            }
-            send_to_char(ch, "A brief tingle runs through you as %s is wiped clean.\r\n", GET_OBJ_NAME(obj));
-          }
-        }
-          
-      if (real_object(OBJ_NEWBIE_RADIO)>-1)
-      {
-        struct obj_data *radio = read_object(OBJ_NEWBIE_RADIO, VIRTUAL);
-        GET_OBJ_VAL(radio, 0) = 8;
-        obj_to_char(radio, ch);
-        send_to_char(ch, "You have been given a radio.^n\r\n");
-      }
-      // Heal them.
-      GET_PHYSICAL(ch) = 1000;
-      GET_MENTAL(ch) = 1000;
-      snprintf(buf, sizeof(buf), "DELETE FROM pfiles_chargendata WHERE idnum=%ld;", GET_IDNUM(ch));
-      mysql_wrapper(mysql, buf);
-      
-      playerDB.SaveChar(ch);
-      
-      // Make them look.
-      // if (!PRF_FLAGGED(ch, PRF_SCREENREADER))
-      look_at_room(ch, 0);
+      process_auth_room(ch);
+    }
+    */
+    
+    // Honestly, it's not like this is some kind of legally binding agreement. Hand-wave them through to avoid losing players over this thing.
+    process_auth_room(ch);
+  }
+  else if (CMD_IS("inventory")) {
+    skip_spaces(&argument);
+    
+    // Close enough.
+    if (!str_cmp("have read the rules and policies, understand them, and agree to abide by them during my stay here.", argument))
+      process_auth_room(ch);
+    else {
+      send_to_char(ch, "You should use the SAY command here, and be careful about line breaks. Example: ^Wsay I have read the rules and policies, understand them, and agree to abide by them during my stay here.^n\r\n^n");
+      return TRUE;
     }
   }
   return FALSE;
@@ -3870,8 +3891,8 @@ SPECIAL(quest_debug_scanner)
               get_johnson_overall_max_rep(to), get_johnson_overall_min_rep(to));
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "SPARE1: %ld, SPARE2: %ld (corresponds to quest vnum %ld)\r\n",
               GET_SPARE1(to), GET_SPARE2(to), GET_SPARE2(to) ? quest_table[GET_SPARE2(to)].vnum : -1);
-      strcat(buf, "NPC's memory records hold the following character IDs: \r\n");
-      for (memory_rec *tmp = MEMORY(to); tmp; tmp = tmp->next)
+      strcat(buf, "NPC's mob memory records hold the following character IDs: \r\n");
+      for (memory_rec *tmp = GET_MOB_MEMORY(to); tmp; tmp = tmp->next)
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %ld\r\n", tmp->id);
       send_to_char(buf, ch);
       return TRUE;

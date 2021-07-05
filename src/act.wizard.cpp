@@ -500,8 +500,8 @@ ACMD(do_echo)
             else if (tmp_vict) {
               // Check for visibility.
               if (CAN_SEE(targ, vict)) {
-                if (found_mem(GET_MEMORY(targ), vict)) {
-                  strcpy(tmp_name, CAP(found_mem(GET_MEMORY(targ), vict)->mem));
+                if (safe_found_mem(targ, vict)) {
+                  strcpy(tmp_name, CAP(safe_found_mem(targ, vict)->mem));
                 } else {
                   strcpy(tmp_name, GET_NAME(vict));
                 }
@@ -554,7 +554,7 @@ ACMD(do_echo)
                 else
                   strncpy(check, "you", sizeof(check) - 1);
               else if (vict)
-                snprintf(check, sizeof(check), "%s", CAN_SEE(targ, vict) ? (found_mem(GET_MEMORY(targ), vict) ? CAP(found_mem(GET_MEMORY(targ), vict)->mem)
+                snprintf(check, sizeof(check), "%s", CAN_SEE(targ, vict) ? (safe_found_mem(targ, vict) ? CAP(safe_found_mem(targ, vict)->mem)
                         : GET_NAME(vict)) : "someone");
               snprintf(buf2 + newn, sizeof(buf) - newn, "%s", check);
               newn += strlen(check);
@@ -1948,7 +1948,7 @@ ACMD(do_return)
       
       if (IS_NPC(vict) && GET_MOB_VNUM(vict) >= 50 && GET_MOB_VNUM(vict) < 70 &&
           PLR_FLAGGED(ch, PLR_PROJECT)) {
-        GET_MEMORY(vict) = NULL;
+        GET_PLAYER_MEMORY(vict) = NULL;
         extract_char(vict);
         char_from_room(ch);
         char_to_room(ch, GET_WAS_IN(ch));

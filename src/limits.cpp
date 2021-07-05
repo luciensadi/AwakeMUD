@@ -1505,7 +1505,7 @@ void misc_update(void)
           o = obj->next_content;
           extract_obj(obj);
         }
-        GET_MEMORY(ch) = NULL;
+        GET_PLAYER_MEMORY(ch) = NULL;
         extract_char(ch);
       }
       else if (!ch->desc && GET_MOB_VNUM(ch) >= 50 && GET_MOB_VNUM(ch) < 70) {

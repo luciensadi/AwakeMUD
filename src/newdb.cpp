@@ -658,8 +658,8 @@ bool load_char(const char *name, char_data *ch, bool logon)
     remem *a = new remem;
     a->idnum = atol(row[1]);
     a->mem = str_dup(row[2]);
-    a->next = GET_MEMORY(ch);
-    GET_MEMORY(ch) = a;
+    a->next = GET_PLAYER_MEMORY(ch);
+    GET_PLAYER_MEMORY(ch) = a;
   }
   mysql_free_result(res);
 
@@ -1311,7 +1311,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
   mysql_wrapper(mysql, buf);
   strcpy(buf, "INSERT INTO pfiles_memory (idnum, remembered, asname) VALUES (");
   q = 0;
-  for (struct remem *b = GET_MEMORY(player); b; b = b->next) {
+  for (struct remem *b = GET_PLAYER_MEMORY(player); b; b = b->next) {
     if (q)
       strcat(buf, "), (");
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %ld, '%s'", GET_IDNUM(player), b->idnum, prepare_quotes(buf3, b->mem, sizeof(buf3) / sizeof(buf3[0])));

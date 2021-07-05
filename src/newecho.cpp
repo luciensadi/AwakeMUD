@@ -138,7 +138,7 @@ const char *generate_display_string_for_character(struct char_data *actor, struc
     // Switch between display strings based on if the viewer can see and knows the target character.
     if (!CAN_SEE(viewer, target_ch))
       display_string = "someone";
-    else if ((mem_record = found_mem(GET_MEMORY(viewer), target_ch)))
+    else if (!IS_NPC(viewer) && (mem_record = safe_found_mem(viewer, target_ch)))
       display_string = CAP(mem_record->mem);
     else
       display_string = GET_NAME(target_ch);
@@ -322,7 +322,7 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
             continue;
             
           // Check for exact match with memory.
-          if ((mem_record = found_mem(GET_MEMORY(actor), target_ch)) && !str_cmp(mem_record->mem, tag_check_string))
+          if (!IS_NPC(actor) && (mem_record = safe_found_mem(actor, target_ch)) && !str_cmp(mem_record->mem, tag_check_string))
             break;
         }
         if (target_ch)
@@ -340,7 +340,7 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
             continue;
             
           // Check for imprecise match with memory.
-          if ((mem_record = found_mem(GET_MEMORY(actor), target_ch)) && !strn_cmp(mem_record->mem, tag_check_string, strlen(tag_check_string)))
+          if (!IS_NPC(actor) && (mem_record = safe_found_mem(actor, target_ch)) && !strn_cmp(mem_record->mem, tag_check_string, strlen(tag_check_string)))
             break;
         }
         if (target_ch)
@@ -756,7 +756,7 @@ ACMD(do_new_echo) {
        viewer; 
        viewer = ch->in_room ? viewer->next_in_room : viewer->next_in_veh) {
     // If they've ignored you, no luck.
-    if (found_mem(GET_IGNORE(viewer), ch))
+    if (!IS_NPC(viewer) && unsafe_found_mem(GET_IGNORE(viewer), ch))
       continue;
     
     // If it's aecho, only send to people who see astral.
@@ -930,8 +930,8 @@ const char *replace_too_long_words(struct char_data *ch, struct char_data *speak
           } 
           
           // Go through memory.
-          if (!should_highlight) {
-            struct remem *mem_record = found_mem(GET_MEMORY(speaker), ch);
+          if (!should_highlight && !IS_NPC(speaker)) {
+            struct remem *mem_record = safe_found_mem(speaker, ch);
             if (mem_record && !str_cmp(mem_record->mem, tag_check_string))
               should_highlight = TRUE;
           }

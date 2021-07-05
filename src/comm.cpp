@@ -2632,7 +2632,7 @@ const char *get_voice_perceived_by(struct char_data *speaker, struct char_data *
     }
     
     // Non-staff, but remembered the speaker? You see their remembered name.
-    if ((mem = found_mem(GET_MEMORY(listener), speaker))) {
+    if ((mem = safe_found_mem(listener, speaker))) {
       snprintf(voice_buf, sizeof(voice_buf), "%s(%s)", speaker->player.physical_text.room_desc, CAP(mem->mem));
       return voice_buf;
     }
@@ -2822,7 +2822,7 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
                   // Voice is new and must be deleted.
                   char* voice = strip_ending_punctuation_new(ch->player.physical_text.room_desc);
                   
-                  if ((mem = found_mem(GET_MEMORY(to), ch)))
+                  if ((mem = safe_found_mem(to, ch)))
                     snprintf(temp, sizeof(temp), "%s(%s)", voice, CAP(mem->mem));
                   else
                     snprintf(temp, sizeof(temp), "%s", voice);
