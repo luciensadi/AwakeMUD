@@ -670,8 +670,10 @@ void affect_total(struct char_data * ch)
     GET_TOTALBAL(ch) += totalbal - formfitbal;
     
     // CC p45: If the only thing you're wearing that gives armor is your matched set, it doesn't apply penalties.
+    /*  Still under discussion, so not enabled yet.
     if ((suitimp || suitbal) && GET_TOTALIMP(ch) == suitimp && GET_TOTALBAL(ch) == suitbal)
       GET_TOTALIMP(ch) = GET_TOTALBAL(ch) = 0;
+    */
   }
   
   if (GET_RACE(ch) == RACE_TROLL || GET_RACE(ch) == RACE_MINOTAUR)
