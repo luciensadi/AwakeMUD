@@ -127,4 +127,9 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 // How likely are you to lose stats on death? 1/X where X is this value.
 #define DEATH_PENALTY_CHANCE 25
 
+// Configs for the idle nuyen reward, in nuyen and minutes respectively.
+#define IDLE_NUYEN_REWARD_AMOUNT               1000
+#define IDLE_NUYEN_REWARD_THRESHOLD_IN_MINUTES 10
+#define IDLE_NUYEN_MINUTES_BETWEEN_AWARDS      60
+
 #endif

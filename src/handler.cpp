@@ -40,6 +40,7 @@ extern int return_general(int skill_num);
 extern int can_wield_both(struct char_data *, struct obj_data *, struct obj_data *);
 extern int max_ability(int i);
 extern int calculate_vehicle_entry_load(struct veh_data *veh);
+extern void end_quest(struct char_data *ch);
 
 int get_skill_num_in_use_for_weapons(struct char_data *ch);
 int get_skill_dice_in_use_for_weapons(struct char_data *ch);
@@ -477,7 +478,8 @@ void affect_total(struct char_data * ch)
   int old_max_hacking = GET_MAX_HACKING(ch);
   int old_rem_hacking = GET_REM_HACKING(ch);
   
-  /* effects of used equipment */
+  
+  /* remove the effects of used equipment */
   for (i = 0; i < (NUM_WEARS - 1); i++)
   {
     if (GET_EQ(ch, i)) {
@@ -494,11 +496,12 @@ void affect_total(struct char_data * ch)
     }
   }
   
+  // remove the effects of foci
   for (obj = ch->carrying; obj; obj = obj->next_content)
     if (GET_OBJ_TYPE(obj) == ITEM_FOCUS)
       remove_focus_effect(ch, obj);
   
-  /* effects of cyberware */
+  /* remove the effects of cyberware */
   for (cyber = ch->cyberware; cyber; cyber = cyber->next_content)
   {
     for (j = 0; j < MAX_OBJ_AFFECT; j++)
@@ -508,7 +511,7 @@ void affect_total(struct char_data * ch)
                     cyber->obj_flags.bitvector, FALSE);
   }
   
-  /* effects of bioware */
+  /* remove the effects of bioware */
   for (cyber = ch->bioware; cyber; cyber = cyber->next_content)
   {
     if ((GET_OBJ_VAL(cyber, 0) != BIO_ADRENALPUMP || (GET_OBJ_VAL(cyber, 0) == BIO_ADRENALPUMP))
@@ -520,18 +523,22 @@ void affect_total(struct char_data * ch)
                       cyber->obj_flags.bitvector, FALSE);
   }
   
+  // remove the effects of spells
   AFF_FLAGS(ch).RemoveBit(AFF_INVISIBLE);
   for (sust = GET_SUSTAINED(ch); sust; sust = sust->next)
     if (!sust->caster)
       spell_modify(ch, sust, FALSE);
   
+  // reset the affected ability scores
   ch->aff_abils = ch->real_abils;
   
   /* calculate reaction before you add eq, cyberware, etc so that things *
    * such as wired reflexes work properly (as they only modify reaction  *
    * and not intelligence and quickness).            -cjd                */
-  GET_REAL_REA(ch) = (GET_REAL_INT(ch) + GET_REAL_QUI(ch)) >> 1;
+  GET_REAL_REA(ch) = (GET_REAL_INT(ch) + GET_REAL_QUI(ch)) / 2;
   GET_REA(ch) = 0;
+  
+  // Apply newbie flag removal.
   if (PLR_FLAGGED(ch, PLR_NEWBIE) && GET_TKE(ch) > NEWBIE_KARMA_THRESHOLD)
     PLR_FLAGS(ch).RemoveBit(PLR_NEWBIE);
   
@@ -542,50 +549,77 @@ void affect_total(struct char_data * ch)
   GET_ASTRAL(ch) = 0;
   GET_MAGIC(ch) = 0;
   GET_CONTROL(ch) = 0;
+  
+  // Set reach, depending on race. Stripped out the 'you only get it at X height' thing since it's not canon and a newbie trap.
   if ((GET_RACE(ch) == RACE_TROLL || GET_RACE(ch) == RACE_CYCLOPS || GET_RACE(ch) == RACE_FOMORI ||
-       GET_RACE(ch) == RACE_GIANT || GET_RACE(ch) == RACE_MINOTAUR) && GET_HEIGHT(ch) > 260)
+       GET_RACE(ch) == RACE_GIANT || GET_RACE(ch) == RACE_MINOTAUR) /* && GET_HEIGHT(ch) > 260 */)
     GET_REACH(ch) = 1;
-  else GET_REACH(ch) = 0;
+  else
+    GET_REACH(ch) = 0;
   // reset initiative dice
   GET_INIT_DICE(ch) = 0;
   /* reset # of foci char has */
   
-  if (IS_SPIRIT(ch) || IS_ELEMENTAL(ch))
-    GET_IMPACT(ch) = GET_BALLISTIC(ch) = GET_SPARE1(ch) * 2;
-  else if (IS_NPC(ch))
+  // Reset armor-related stats.
   {
-    GET_BALLISTIC(ch) = mob_proto[GET_MOB_RNUM(ch)].points.ballistic[0];
-    GET_IMPACT(ch) = mob_proto[GET_MOB_RNUM(ch)].points.impact[0];
-  } else
-    GET_BALLISTIC(ch) = GET_IMPACT(ch) = 0;
+    if (IS_SPIRIT(ch) || IS_ELEMENTAL(ch)) {
+      GET_IMPACT(ch) = GET_BALLISTIC(ch) = GET_SPARE1(ch) * 2;
+    } else if (IS_NPC(ch)) {
+      GET_BALLISTIC(ch) = mob_proto[GET_MOB_RNUM(ch)].points.ballistic[0];
+      GET_IMPACT(ch) = mob_proto[GET_MOB_RNUM(ch)].points.impact[0];
+    } else {
+      GET_BALLISTIC(ch) = GET_IMPACT(ch) = 0;
+    }
+    
+    GET_TOTALBAL(ch) = GET_TOTALIMP(ch) = 0;
+  }
   
-  GET_TOTALBAL(ch) = GET_TOTALIMP(ch) = 0;
-  
-  for (obj = ch->carrying; obj; obj = obj->next_content)
+  for (obj = ch->carrying; obj; obj = obj->next_content) {
     if (GET_OBJ_TYPE(obj) == ITEM_FOCUS)
       apply_focus_effect(ch, obj);
+  }
+      
   /* effects of equipment */
   {
     struct obj_data *worn_item = NULL;
-    int suitbal = 0, suitimp = 0, suittype = 0,  highestbal = 0, highestimp = 0;
+    // Matched set values: ballistic, impact, and the numerical index of the suit itself.
+    int suitbal = 0, suitimp = 0, suittype = 0;
+    // Maximums tracking for the /2 logic.
+    int highestbal = 0, highestimp = 0;
+    // Track the total for worn items.
+    int totalbal = 0, totalimp = 0;
+    // Track the total for formfit.
+    int formfitbal = 0, formfitimp = 0;
+    
     for (i = 0; i < (NUM_WEARS - 1); i++) {
       if ((worn_item = GET_EQ(ch, i))) {
         wearing = TRUE;
-        if (GET_OBJ_TYPE(worn_item) == ITEM_FOCUS)
+        
+        // Foci don't do aff_modify for some reason?
+        if (GET_OBJ_TYPE(worn_item) == ITEM_FOCUS) {
           apply_focus_effect(ch, worn_item);
-        else
+        } else {
           for (j = 0; j < MAX_OBJ_AFFECT; j++)
             affect_modify(ch,
                           worn_item->affected[j].location,
                           worn_item->affected[j].modifier,
                           worn_item->obj_flags.bitvector, TRUE);
+        }
+        
         if (GET_OBJ_TYPE(worn_item) == ITEM_WORN) {
+          // If it's part of an armor set we're already wearing, add it directly.
+          // KNOWN ISSUE: If it finds your single Vashon item, it will check for Vashon only, even if you're wearing a full suit of Trog Moxie as well.
           if (GET_WORN_MATCHED_SET(worn_item) && (!suittype || suittype == GET_WORN_MATCHED_SET(worn_item))) {
             suitbal += GET_WORN_BALLISTIC(worn_item);
             suitimp += GET_WORN_IMPACT(worn_item);
             suittype = GET_WORN_MATCHED_SET(worn_item);
-          } else if (GET_WORN_BALLISTIC(worn_item) || GET_WORN_IMPACT(worn_item)) {
+          }
+          
+          // Otherwise, if it has an armor rating, handle that.
+          else if (GET_WORN_BALLISTIC(worn_item) || GET_WORN_IMPACT(worn_item)) {
             int bal = 0, imp = 0;
+            
+            // Remember that matched set items are 100x their expected value-- compensate for this.
             if (GET_WORN_MATCHED_SET(worn_item)) {
               bal = (int)(GET_WORN_BALLISTIC(worn_item) / 100);
               imp = (int)(GET_WORN_IMPACT(worn_item) / 100);
@@ -593,60 +627,55 @@ void affect_total(struct char_data * ch)
               bal = GET_WORN_BALLISTIC(worn_item);
               imp = GET_WORN_IMPACT(worn_item);
             }
-            struct obj_data *temp_item = NULL;
-            for (j = 0; j < (NUM_WEARS - 1); j++) {
-              if ((temp_item = GET_EQ(ch, j)) && j != i && GET_OBJ_TYPE(temp_item) == ITEM_WORN) {
-                if ((highestbal || GET_WORN_BALLISTIC(worn_item) <
-                     (GET_WORN_MATCHED_SET(temp_item) ? GET_WORN_BALLISTIC(temp_item) / 100 : GET_WORN_BALLISTIC(temp_item))) &&
-                    bal == GET_WORN_BALLISTIC(worn_item))
-                  bal /= 2;
-                if ((highestimp || GET_WORN_IMPACT(worn_item) <
-                     (GET_WORN_MATCHED_SET(temp_item) ? GET_WORN_IMPACT(temp_item) / 100 : GET_WORN_IMPACT(temp_item))) &&
-                    imp == GET_WORN_IMPACT(worn_item))
-                  imp /= 2;
-              }
-            }
-            if (bal == GET_WORN_BALLISTIC(worn_item))
+            
+            // Keep track of which worn item provides the highest total value.
+            if (bal + imp > highestbal + highestimp) {
               highestbal = bal;
-            if (imp == GET_WORN_IMPACT(worn_item))
               highestimp = imp;
-            GET_IMPACT(ch) += imp;
-            GET_BALLISTIC(ch) += bal;
-            if (!IS_OBJ_STAT(worn_item, ITEM_FORMFIT)) {
-              GET_TOTALIMP(ch) += GET_WORN_BALLISTIC(worn_item) / (GET_WORN_MATCHED_SET(worn_item) ? 100 : 1);
-              GET_TOTALBAL(ch) += GET_WORN_IMPACT(worn_item) / (GET_WORN_MATCHED_SET(worn_item) ? 100 : 1);
+            }
+            
+            // Add the value to the current worn armor total.
+            totalbal += bal;
+            totalimp += imp;
+            
+            // If it's formfit, track it there for later math.
+            if (IS_OBJ_STAT(worn_item, ITEM_FORMFIT)) {
+              formfitbal += bal;
+              formfitimp += imp;
             }
           }
         }
       }
     }
+    
+    // Add armor clothing set, if any.
+    // KNOWN ISSUE: If the sum of bal or imp is x.5, the .5 is dropped here.
     if (suitbal || suitimp) {
-      suitimp /= 100;
       suitbal /= 100;
-      if (GET_IMPACT(ch) == 0)
-        GET_IMPACT(ch) += suitimp;
-      else {
-        if (suitimp >= highestimp) {
-          // TODO: The calculations for totalbal/totalimp are a little screwy in conjunction with sets-- looks like sets are counted twice.
-          GET_IMPACT(ch) -= highestimp;
-          GET_IMPACT(ch) += highestimp / 2;
-          GET_IMPACT(ch) += suitimp;
-        } else GET_IMPACT(ch) += suitimp / 2;
-        GET_TOTALIMP(ch) += suitimp;
-      }
-      if (GET_BALLISTIC(ch) == 0)
-        GET_BALLISTIC(ch) += suitbal;
-      else {
-        if (suitbal >= highestbal) {
-          GET_BALLISTIC(ch) -= highestbal;
-          GET_BALLISTIC(ch) += highestbal / 2;
-          GET_BALLISTIC(ch) += suitbal;
-        } else GET_BALLISTIC(ch) += suitbal / 2;
-        GET_TOTALBAL(ch) += suitbal;
+      suitimp /= 100;
+      
+      if (suitbal + suitimp > highestbal + highestimp) {
+        highestbal = suitbal;
+        highestimp = suitimp;
       }
       
+      totalbal += suitbal;
+      totalimp += suitimp;
     }
+    
+    GET_IMPACT(ch) += highestimp + (int)((totalimp - highestimp) / 2);
+    GET_BALLISTIC(ch) += highestbal + (int)((totalbal - highestbal) / 2);
+    
+    GET_TOTALIMP(ch) += totalimp - formfitimp;
+    GET_TOTALBAL(ch) += totalbal - formfitbal;
+    
+    // CC p45: If the only thing you're wearing that gives armor is your matched set, it doesn't apply penalties.
+    /*  Still under discussion, so not enabled yet.
+    if ((suitimp || suitbal) && GET_TOTALIMP(ch) == suitimp && GET_TOTALBAL(ch) == suitbal)
+      GET_TOTALIMP(ch) = GET_TOTALBAL(ch) = 0;
+    */
   }
+  
   if (GET_RACE(ch) == RACE_TROLL || GET_RACE(ch) == RACE_MINOTAUR)
     GET_IMPACT(ch)++;
   
@@ -690,11 +719,14 @@ void affect_total(struct char_data * ch)
                       cyber->affected[j].modifier,
                       cyber->obj_flags.bitvector, TRUE);
   }
+  
   for (sust = GET_SUSTAINED(ch); sust; sust = sust->next)
     if (!sust->caster)
       spell_modify(ch, sust, TRUE);
+      
   if (GET_TEMP_QUI_LOSS(ch))
     GET_QUI(ch) = MAX(0, GET_QUI(ch) - (GET_TEMP_QUI_LOSS(ch) / 4));
+    
   i = ((IS_NPC(ch) || (GET_LEVEL(ch) >= LVL_ADMIN)) ? 50 : 20);
   GET_REA(ch) += (GET_INT(ch) + GET_QUI(ch)) >> 1;
   GET_QUI(ch) = MAX(0, MIN(GET_QUI(ch), i));
@@ -907,35 +939,46 @@ void affect_total(struct char_data * ch)
     GET_REA(ch) += has_mbw * 2;
     GET_INIT_DICE(ch) += has_mbw;
   }
+  
+  // Update current vision to match what's being worn.
   if (AFF_FLAGGED(ch, AFF_INFRAVISION))
     CURRENT_VISION(ch) = THERMOGRAPHIC;
   else if (AFF_FLAGGED(ch, AFF_LOW_LIGHT))
     CURRENT_VISION(ch) = LOWLIGHT;
   else
     CURRENT_VISION(ch) = NATURAL_VISION(ch);
+    
+  // Strip invisibility from ruthenium etc if you're wearing about or body items that aren't also ruthenium.
   if (AFF_FLAGGED(ch, AFF_INVISIBLE) || AFF_FLAGGED(ch, AFF_IMP_INVIS))
   {
     if (GET_EQ(ch, WEAR_ABOUT)) {
-      if (!(GET_OBJ_AFFECT(GET_EQ(ch, WEAR_ABOUT)).IsSet(AFF_INVISIBLE) || GET_OBJ_AFFECT(GET_EQ(ch, WEAR_ABOUT)).IsSet(AFF_IMP_INVIS)))
+      if (!(GET_OBJ_AFFECT(GET_EQ(ch, WEAR_ABOUT)).IsSet(AFF_INVISIBLE) 
+            || GET_OBJ_AFFECT(GET_EQ(ch, WEAR_ABOUT)).IsSet(AFF_IMP_INVIS))) {
         AFF_FLAGS(ch).RemoveBits(AFF_INVISIBLE, AFF_IMP_INVIS, ENDBIT);
-      else
-        return;
+      }
     }
-    if (GET_EQ(ch, WEAR_BODY) &&
-        (!(GET_OBJ_AFFECT(GET_EQ(ch, WEAR_BODY)).IsSet(AFF_INVISIBLE) || GET_OBJ_AFFECT(GET_EQ(ch, WEAR_BODY)).IsSet(AFF_IMP_INVIS))))
-      AFF_FLAGS(ch).RemoveBits(AFF_INVISIBLE, AFF_IMP_INVIS, ENDBIT);
+    else if (GET_EQ(ch, WEAR_BODY) 
+             && (!(GET_OBJ_AFFECT(GET_EQ(ch, WEAR_BODY)).IsSet(AFF_INVISIBLE) 
+                   || GET_OBJ_AFFECT(GET_EQ(ch, WEAR_BODY)).IsSet(AFF_IMP_INVIS)))) 
+    {
+      AFF_FLAGS(ch).RemoveBits(AFF_INVISIBLE, AFF_IMP_INVIS, ENDBIT);                 
+    }
   }
-  if (GET_EQ(ch, WEAR_WIELD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_WEAPON) {
-    if (!IS_GUN(GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 3)) && GET_WEAPON_REACH(GET_EQ(ch, WEAR_WIELD)) > 0)
-      GET_REACH(ch) += GET_WEAPON_REACH(GET_EQ(ch, WEAR_WIELD));
-    else if (IS_GUN(GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 3))) {
-      if (GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 4) != SKILL_PISTOLS)
+  
+  // Apply reach from weapon, if any.
+  struct obj_data *weapon = GET_EQ(ch, WEAR_WIELD);
+  if (weapon && GET_OBJ_TYPE(weapon) == ITEM_WEAPON) {
+    // Melee weapons grant reach according to their set stat.
+    if (!IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon))) {
+      if (GET_WEAPON_REACH(weapon) > 0)
+        GET_REACH(ch) += GET_WEAPON_REACH(weapon);
+    } 
+    // Ranged weapons grant 0 reach if pistol, 2 reach if anything else with a bayonet, 1 reach for all other categories.
+    else {
+      if (GET_WEAPON_SKILL(weapon) != SKILL_PISTOLS)
         GET_REACH(ch)++;
-      struct obj_data *attach = NULL;
-      if (GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 9) &&
-          real_object(GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 9)) > 0 &&
-          (attach = &obj_proto[real_object(GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 9))]) &&
-          GET_OBJ_VAL(attach, 1) == ACCESS_BAYONET)
+      struct obj_data *attach = get_obj_proto_for_vnum(GET_WEAPON_ATTACH_UNDER_VNUM(weapon));
+      if (attach && GET_ACCESSORY_TYPE(attach) == ACCESS_BAYONET)
         GET_REACH(ch)++;
     }
   }
@@ -2188,8 +2231,26 @@ void extract_char(struct char_data * ch)
   if (ch->in_room)
     ch->in_room->dirty_bit = TRUE;
   
-  if (!IS_NPC(ch))
+  if ((ch->in_veh && AFF_FLAGGED(ch, AFF_PILOT)) || PLR_FLAGGED(ch, PLR_REMOTE)) {
+    RIG_VEH(ch, veh);
+    
+    send_to_veh("Now driverless, the vehicle slows to a stop.\r\n", veh, ch, FALSE);
+    AFF_FLAGS(ch).RemoveBits(AFF_PILOT, AFF_RIG, ENDBIT);
+    stop_chase(veh);
+    if (!veh->dest)
+      veh->cspeed = SPEED_OFF;
+  }
+  
+  if (!IS_NPC(ch)) {
+    // Terminate the player's quest, if any. Realistically, we shouldn't ever trigger this code, but if it happens we're ready for it.
+    if (GET_QUEST(ch)) {
+      mudlog("Warning: extract_char received PC with quest still active.", ch, LOG_SYSLOG, TRUE);
+      end_quest(ch);
+    }
+    
+    // Save the player.
     playerDB.SaveChar(ch, GET_LOADROOM(ch));
+  }
   
   if (!IS_NPC(ch) && !ch->desc)
   {
@@ -2688,26 +2749,21 @@ struct obj_data *create_nuyen(int amount)
 
 int find_skill_num(char *name)
 {
-  int index = 0, ok;
-  char *temp, *temp2;
-  char first[256], first2[256];
-  
-  while (++index < MAX_SKILLS) {
+  char *rest_of_name;
+  char word_to_evaluate[256];
+    
+  for (int index = 1; index < MAX_SKILLS; index++) {
     if (is_abbrev(name, skills[index].name))
       return index;
     
-    ok = 1;
-    temp = any_one_arg(skills[index].name, first);
-    temp2 = any_one_arg(name, first2);
-    while (*first && *first2 && ok) {
-      if (!is_abbrev(first2, first))
-        ok = 0;
-      temp = any_one_arg(temp, first);
-      temp2 = any_one_arg(temp2, first2);
+    // Go through the individual words of the skill's name and try to match them. Ex: "Assault Cannons" -> "assault", "cannons"
+    rest_of_name = any_one_arg(skills[index].name, word_to_evaluate);
+    while (*word_to_evaluate) {
+      if (is_abbrev(name, word_to_evaluate))
+        return index;
+        
+      rest_of_name = any_one_arg(rest_of_name, word_to_evaluate);
     }
-    
-    if (ok && !*first2)
-      return index;
   }
   
   return -1;

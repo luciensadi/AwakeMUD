@@ -130,6 +130,7 @@ char *colorize(struct descriptor_data *d, const char *str, bool skip_check = FAL
 void send_keepalives();
 void msdp_update();
 void increase_congregation_bonus_pools();
+void send_nuyen_rewards_to_pcs();
 
 /* extern fcnts */
 extern void DBInit();
@@ -164,6 +165,7 @@ void process_boost(void);
 class memoryClass *Mem = new memoryClass();
 void show_string(struct descriptor_data * d, char *input);
 extern void update_paydata_market();
+extern void warn_about_apartment_deletion();
 
 #ifdef USE_DEBUG_CANARIES
 void check_memory_canaries();
@@ -955,8 +957,15 @@ void game_loop(int mother_desc)
       process_boost();
     }
     
+    // By default, every IRL hour, but configurable in config.h.
+    if (!(pulse % (60 * PASSES_PER_SEC * IDLE_NUYEN_MINUTES_BETWEEN_AWARDS))) {
+      send_nuyen_rewards_to_pcs();
+    }
+    
     // Every IRL day
     if (!(pulse % (60 * PASSES_PER_SEC * 60 * 24))) {
+      warn_about_apartment_deletion();
+      
       /* Check if the MySQL connection is active, and if not, recreate it. */
 #ifdef DEBUG
       unsigned long oldthread = mysql_thread_id(mysql);
@@ -2623,7 +2632,7 @@ const char *get_voice_perceived_by(struct char_data *speaker, struct char_data *
     }
     
     // Non-staff, but remembered the speaker? You see their remembered name.
-    if ((mem = found_mem(GET_MEMORY(listener), speaker))) {
+    if ((mem = safe_found_mem(listener, speaker))) {
       snprintf(voice_buf, sizeof(voice_buf), "%s(%s)", speaker->player.physical_text.room_desc, CAP(mem->mem));
       return voice_buf;
     }
@@ -2813,7 +2822,7 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
                   // Voice is new and must be deleted.
                   char* voice = strip_ending_punctuation_new(ch->player.physical_text.room_desc);
                   
-                  if ((mem = found_mem(GET_MEMORY(to), ch)))
+                  if ((mem = safe_found_mem(to, ch)))
                     snprintf(temp, sizeof(temp), "%s(%s)", voice, CAP(mem->mem));
                   else
                     snprintf(temp, sizeof(temp), "%s", voice);
@@ -3149,4 +3158,35 @@ void increase_congregation_bonus_pools() {
     act(buf, FALSE, i, 0, 0, TO_ROLLS);
     GET_CONGREGATION_BONUS(i) = MIN(GET_CONGREGATION_BONUS(i) + point_gain, MAX_CONGREGATION_BONUS);
   }
+}
+
+void send_nuyen_rewards_to_pcs() {
+  struct char_data *ch;
+  bool already_printed = FALSE;
+  snprintf(buf, sizeof(buf), "Standard idle bonus of %d nuyen awarded to: ", IDLE_NUYEN_REWARD_AMOUNT);
+  
+  for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
+    if (d->connected == CON_PLAYING
+        || d->connected == CON_PART_CREATE
+        || (d->connected >= CON_SPELL_CREATE 
+            && d->connected <= CON_HELPEDIT 
+            && d->connected != CON_ASKNAME))
+    {
+      ch = (d->original ? d->original : d->character);
+      if (IS_SENATOR(ch))
+        continue;
+        
+      if (ch->char_specials.timer > IDLE_NUYEN_REWARD_THRESHOLD_IN_MINUTES) {
+        if (!PRF_FLAGGED(ch, PRF_NO_IDLE_NUYEN_REWARD_MESSAGE))
+          send_to_char(ch, "[OOC message: You have been awarded the standard idling bonus of %d nuyen. You can TOGGLE NOIDLE to hide these messages while still getting the reward.]\r\n", IDLE_NUYEN_REWARD_AMOUNT);
+        GET_NUYEN(ch) += IDLE_NUYEN_REWARD_AMOUNT;
+        
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s%s", already_printed ? ", " : "", GET_CHAR_NAME(ch));
+        already_printed = TRUE;
+      }
+    }
+  }
+  
+  if (already_printed)
+    mudlog(buf, NULL, LOG_SYSLOG, TRUE);
 }

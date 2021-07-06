@@ -32,12 +32,13 @@ extern void add_phone_to_list(struct obj_data *obj);
 extern void weight_change_object(struct obj_data * obj, float weight);
 extern void auto_repair_obj(struct obj_data *obj, const char *source);
 extern void handle_weapon_attachments(struct obj_data *obj);
+extern void raw_store_mail(long to, long from_id, const char *from_name, const char *message_pointer);
 
 struct landlord *landlords = NULL;
 ACMD_CONST(do_say);
 
 void remove_vehicles_from_apartment(struct room_data *room);
-
+void warn_about_apartment_deletion();
 
 void House_delete_file(vnum_t vnum, char *name);
 
@@ -858,6 +859,8 @@ void House_boot(void)
 
   fclose(fl);
   House_save_control();
+  
+  warn_about_apartment_deletion();
 }
 
 /* "House Control" functions */
@@ -1136,4 +1139,31 @@ void remove_vehicles_from_apartment(struct room_data *room) {
     veh_to_room(veh, &world[real_room(RM_SEATTLE_PARKING_GARAGE)]);
   }
   save_vehicles();
+}
+
+void warn_about_apartment_deletion() {
+  //log("Beginning apartment deletion warning cycle.");
+  for (struct landlord *llord = landlords; llord; llord = llord->next) {
+    for (struct house_control_rec *house = llord->rooms; house; house = house->next) {      
+      if (!house->owner) {
+        //log_vfprintf("No owner for %s.", house->name);
+        continue;
+      }
+        
+      int days_until_deletion = (house->date - time(0)) / (60 * 60 * 24);
+      
+      if (days_until_deletion <= 5 && days_until_deletion > 0) {
+        snprintf(buf, sizeof(buf), "Remember to pay your rent for apartment %s. It will be deemed abandoned and its contents reclaimed in %d days.\r\n", house->name, days_until_deletion);
+        raw_store_mail(house->owner, 0, "Your landlord", buf);
+        //log(buf);
+      } else if (days_until_deletion <= 0) {
+        snprintf(buf, sizeof(buf), "Remember to pay your rent for apartment %s! It will be deemed abandoned and its contents reclaimed at any time.\r\n", house->name);
+        raw_store_mail(house->owner, 0, "Your landlord", buf);
+        //log(buf);
+      } else {
+        //log_vfprintf("House %s is OK-- %d days left (%d - %d)", house->name, days_until_deletion, house->date, time(0));
+      }
+    }
+  }
+  //log("Apartment deletion warning cycle complete.");
 }

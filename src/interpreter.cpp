@@ -658,6 +658,7 @@ struct command_info cmd_info[] =
     { "mute"     , POS_DEAD    , do_wizutil  , LVL_EXECUTIVE, SCMD_SQUELCH },
     { "muteooc"  , POS_DEAD    , do_wizutil  , LVL_EXECUTIVE, SCMD_SQUELCHOOC },
     { "mutetells", POS_DEAD    , do_wizutil  , LVL_EXECUTIVE, SCMD_SQUELCHTELLS },
+    { "mutenewbie",POS_DEAD    , do_wizutil  , LVL_EXECUTIVE, SCMD_MUTE_NEWBIE },
     { "murder"   , POS_FIGHTING, do_hit      , 0, SCMD_MURDER },
     
     { "newbie"   , POS_DEAD    , do_gen_comm , 0, SCMD_NEWBIE },
@@ -2004,6 +2005,14 @@ int is_abbrev(const char *arg1, const char *arg2)
   
   if (!*arg1 || !*arg2)
     return 0;
+    
+  /* This is theoretically a better way to write the code below. I don't have time to test it, so I won't put it in, but I wrote it anyways. -LS.
+
+  while (LOWER(*(arg1++)) == LOWER(*(arg2++)));
+  
+  return !*arg1; 
+
+  */
 
   for (; *arg1 && *arg2; arg1++, arg2++)
     if (LOWER(*arg1) != LOWER(*arg2))
@@ -2091,10 +2100,9 @@ int special(struct char_data * ch, int cmd, char *arg)
         if (GET_OBJ_SPEC(i) (ch, i, cmd, arg))
           return 1;
     /* special in mobile present? */
-    if (!veh)
+    if (ch->in_room)
     {
-      struct char_data *k;
-      for (k = ch->in_room->people; k; k = k->next_in_room) {
+      for (struct char_data *k = ch->in_room->people; k; k = k->next_in_room) {
         if (GET_MOB_SPEC(k) != NULL)
           if (GET_MOB_SPEC(k) (ch, k, cmd, arg))
             return 1;

@@ -40,6 +40,9 @@ extern bool resize_qst_array(void);
 extern char *cleanup(char *, const char *);
 extern int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
                         const char *sname, struct room_data *random_donation_room);
+                        
+unsigned int get_johnson_overall_max_rep(struct char_data *johnson);
+unsigned int get_johnson_overall_min_rep(struct char_data *johnson);
 
 ACMD_CONST(do_say);
 ACMD_DECLARE(do_action);
@@ -149,10 +152,12 @@ void load_quest_targets(struct char_data *johnson, struct char_data *ch)
   {
     if (quest_table[num].mob[i].load == QML_LOCATION &&
         (rnum = real_mobile(quest_table[num].mob[i].vnum)) > -1 &&
-        (room = real_room(quest_table[num].mob[i].l_data)) > -1) {
+        (room = real_room(quest_table[num].mob[i].l_data)) > -1) 
+    {
       mob = read_mobile(rnum, REAL);
       mob->mob_specials.quest_id = GET_IDNUM(ch);
       char_to_room(mob, &world[room]);
+      act("$n has arrived.", FALSE, mob, 0, 0, TO_ROOM);
       if(quest_table[num].mob[i].objective == QMO_LOCATION)
         add_follower(mob, ch);
       for (j = 0; j < quest_table[num].num_objs; j++)
@@ -192,11 +197,14 @@ void load_quest_targets(struct char_data *johnson, struct char_data *ch)
           obj = NULL;
         }
       mob = NULL;
-    } else if (quest_table[num].mob[i].load == QML_FOLQUESTER &&
-               (rnum = real_mobile(quest_table[num].mob[i].vnum)) > -1) {
+    } 
+    else if (quest_table[num].mob[i].load == QML_FOLQUESTER &&
+               (rnum = real_mobile(quest_table[num].mob[i].vnum)) > -1) 
+    {
       mob = read_mobile(rnum, REAL);
       mob->mob_specials.quest_id = GET_IDNUM(ch);
       char_to_room(mob, ch->in_room);
+      act("$n has arrived.", FALSE, mob, 0, 0, TO_ROOM);
       for (j = 0; j < quest_table[num].num_objs; j++)
         if (quest_table[num].obj[j].l_data == i &&
             (rnum = real_object(quest_table[num].obj[j].vnum)) > -1) {
@@ -295,6 +303,7 @@ void extract_quest_targets(int num)
       for (i = 0; i < NUM_WEARS; i++)
         if (GET_EQ(mob, i))
           extract_obj(GET_EQ(mob, i));
+      act("$n slips away quietly.", FALSE, mob, 0, 0, TO_ROOM);
       extract_char(mob);
     }
   }
@@ -990,7 +999,14 @@ SPECIAL(johnson)
       
       // Reject high-rep characters.
       if (rep_too_high(ch, GET_SPARE2(johnson))) {
-        do_say(johnson, "With rep as high as yours? I can't afford your rates for this one!", 0, 0);
+        unsigned int johnson_max_rep = get_johnson_overall_max_rep(johnson);
+        if (johnson_max_rep < GET_REP(ch)) {
+          do_say(johnson, "My jobs aren't high-profile enough for someone with your rep!", 0, 0);
+          send_to_char(ch, "[OOC: This Johnson caps out at %d reputation, so you won't get any further work from them.]", johnson_max_rep);
+        } else {
+          do_say(johnson, "With rep as high as yours? I can't afford your rates for this one!", 0, 0);
+        }
+        
         GET_SPARE1(johnson) = -1;
         if (memory(johnson, ch))
           forget(johnson, ch);
@@ -999,7 +1015,14 @@ SPECIAL(johnson)
       
       // Reject low-rep characters.
       if (rep_too_low(ch, GET_SPARE2(johnson))) {
-        do_say(johnson, "You don't have a good enough rep for this one.", 0, 0);
+        unsigned int johnson_min_rep = get_johnson_overall_min_rep(johnson);
+        if (johnson_min_rep > GET_REP(ch)) {
+          do_say(johnson, "You're not even worth my time right now.", 0, 0);
+          send_to_char(ch, "[OOC: This Johnson has a minimum reputation requirement of %d. Come back when you have at least that much rep.]", johnson_min_rep);
+        } else {
+          do_say(johnson, "You don't have a good enough rep for this one.", 0, 0);
+        }
+        
         GET_SPARE1(johnson) = -1;
         if (memory(johnson, ch))
           forget(johnson, ch);
@@ -2603,4 +2626,38 @@ ACMD(do_endrun) {
   // Error case.
   mudlog("SYSERR: Attempted remote job termination, but the Johnson could not be found!", ch, LOG_SYSLOG, TRUE);
   send_to_char("You dial your phone, but something's up with the connection, and you can't get through.\r\n", ch);
+}
+
+unsigned int get_johnson_overall_max_rep(struct char_data *johnson) {
+  unsigned int max_rep = 0;
+  
+  bool johnson_is_from_disconnected_zone = vnum_from_non_connected_zone(GET_MOB_VNUM(johnson));
+  
+  for (int i = 0; i <= top_of_questt; i++) {
+    if (quest_table[i].johnson == GET_MOB_VNUM(johnson)
+        && (johnson_is_from_disconnected_zone 
+            || !vnum_from_non_connected_zone(quest_table[i].vnum))) 
+    {
+      max_rep = MAX(max_rep, quest_table[i].max_rep);
+    }
+  }
+  
+  return max_rep;
+}
+
+unsigned int get_johnson_overall_min_rep(struct char_data *johnson) {
+  unsigned int min_rep = UINT_MAX;
+  
+  bool johnson_is_from_disconnected_zone = vnum_from_non_connected_zone(GET_MOB_VNUM(johnson));
+  
+  for (int i = 0; i <= top_of_questt; i++) {
+    if (quest_table[i].johnson == GET_MOB_VNUM(johnson)
+        && (johnson_is_from_disconnected_zone 
+            || !vnum_from_non_connected_zone(quest_table[i].vnum))) 
+    {
+      min_rep = MIN(min_rep, quest_table[i].min_rep);
+    }
+  }
+  
+  return min_rep;
 }

@@ -978,10 +978,10 @@ SPECIAL(taxi)
       }
       do_say(ch, argument, 0, 0);
     }
-  } else if (CMD_IS("nod") || CMD_IS("agree")) {
+  } else if ((CMD_IS("nod") || CMD_IS("agree")) && CAN_SEE(driver, ch)) {
     comm = CMD_TAXI_YES;
     do_action(ch, argument, cmd, 0);
-  } else if ((CMD_IS("shake") || CMD_IS("disagree")) && !*argument) {
+  } else if ((CMD_IS("shake") || CMD_IS("disagree")) && CAN_SEE(driver, ch)) {
     comm = CMD_TAXI_NO;
     do_action(ch, argument, cmd, 0);
   } else
@@ -1431,7 +1431,7 @@ SPECIAL(call_elevator)
     else if (i == 0)
       send_to_char(ch, "The floor indicator shows that the elevator is currently at the ground floor.\r\n");
     else
-      send_to_char(ch, "The floor indicator shows that the elevator is current at floor %d.\r\n", 0 - i);
+      send_to_char(ch, "The floor indicator shows that the elevator is currently at floor %d.\r\n", 0 - i);
     return TRUE;
   }
 

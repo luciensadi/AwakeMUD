@@ -376,10 +376,10 @@ struct archetype_data *generate_decker() {
   
   // Set skills.
   arch->skills[SKILL_SMG] = 6;
-  arch->skills[SKILL_CYBERTERM_DESIGN] = 6;
+  arch->skills[SKILL_BR_COMPUTER] = 6;
   arch->skills[SKILL_COMPUTER] = 6;
+  arch->skills[SKILL_CYBERTERM_DESIGN] = 4;
   arch->skills[SKILL_ELECTRONICS] = 3;
-  arch->skills[SKILL_BR_COMPUTER] = 4;
   arch->skills[SKILL_NEGOTIATION] = 2;
   arch->skills[SKILL_CORPORATE_ETIQUETTE] = 2;
   arch->skills[SKILL_STREET_ETIQUETTE] = 1;

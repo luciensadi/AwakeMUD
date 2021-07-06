@@ -260,6 +260,10 @@ void fry_mpcp(struct matrix_icon *icon, struct matrix_icon *targ, int success)
 {
   if (success >= 2 && targ->decker->deck)
   {
+    if (targ->decker->ch && PLR_FLAGGED(targ->decker->ch, PLR_NEWBIE)) {
+      send_to_icon(targ, "(OOC message: Be careful with these enemies; your deck would have taken permanent damage if you weren't a newbie!)");
+      return;
+    }
     snprintf(buf, sizeof(buf), "%s uses the opportunity to fry your MPCP!\r\n", CAP(icon->name));
     send_to_icon(targ, buf);
     while (success >= 2 && targ->decker->mpcp > 0) {
@@ -1281,6 +1285,11 @@ ACMD(do_matrix_look)
         send_to_icon(PERSONA, "^yA file named %s floats here.^n\r\n", GET_OBJ_NAME(obj));
       }
     }
+    
+    if (obj == obj->next_content) {
+      mudlog("SYSERR: Infinite loop detected in Matrix object listing. Discarding subsequent objects.", NULL, LOG_SYSLOG, TRUE);
+      break;
+    }
   }    
 }
 
@@ -1620,7 +1629,12 @@ ACMD(do_connect)
     send_to_char("It seems that host has been shut down.\r\n", ch);
     return;
   }
-  GET_POS(ch) = POS_SITTING;
+  
+  if (GET_POS(ch) != POS_SITTING) {
+    GET_POS(ch) = POS_SITTING;
+    send_to_char(ch, "You find a place to sit and work with your deck.\r\n");
+  }
+  
   icon = Mem->GetIcon();
   icon->condition = 10;
   if (ch->player.matrix_text.name)
@@ -1695,7 +1709,7 @@ ACMD(do_connect)
     GET_MAX_HACKING(ch) = 0;
     DECKER->response = 0;
   }
-  for (struct obj_data *soft = cyberdeck->contains; soft; soft = soft->next_content)
+  for (struct obj_data *soft = cyberdeck->contains; soft; soft = soft->next_content) {
     if (GET_OBJ_TYPE(soft) == ITEM_PROGRAM) {
       GET_OBJ_VAL(soft, 8) = GET_OBJ_VAL(soft, 9) = 0;
       if (GET_OBJ_VNUM(soft) != OBJ_BLANK_PROGRAM) {
@@ -1769,12 +1783,14 @@ ACMD(do_connect)
         break;
       }
     }
+  }
+  
   if (icon_list)
     PERSONA->next = icon_list;
   icon_list = PERSONA;
   icon_to_host(PERSONA, host);
   if (DECKER->bod + DECKER->sensor + DECKER->evasion + DECKER->masking > DECKER->mpcp * 3) {
-    send_to_char(ch, "Your deck overloads on persona programs and crashes. You'll have to keep the combined bod, sensor, evasion, and masking rating below %d.\r\n", DECKER->mpcp * 3);
+    send_to_char(ch, "Your deck overloads on persona programs and crashes. You'll have to keep the combined bod, sensor, evasion, and masking rating less than or equal to %d.\r\n", DECKER->mpcp * 3);
     extract_icon(PERSONA);
     PERSONA = NULL;
     return;
@@ -1782,11 +1798,15 @@ ACMD(do_connect)
   
   if (DECKER->bod <= 0) {
     send_to_char("You'll have a hard time forming a durable persona with no Body chip.\r\n", ch);
+    extract_icon(PERSONA);
+    PERSONA = NULL;
     return;
   }
   
   if (DECKER->sensor <= 0) {
     send_to_char("You'll have a hard time receiving Matrix data with no Sensor chip.\r\n", ch);
+    extract_icon(PERSONA);
+    PERSONA = NULL;
     return;
   }
   

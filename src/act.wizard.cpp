@@ -500,8 +500,8 @@ ACMD(do_echo)
             else if (tmp_vict) {
               // Check for visibility.
               if (CAN_SEE(targ, vict)) {
-                if (found_mem(GET_MEMORY(targ), vict)) {
-                  strcpy(tmp_name, CAP(found_mem(GET_MEMORY(targ), vict)->mem));
+                if (safe_found_mem(targ, vict)) {
+                  strcpy(tmp_name, CAP(safe_found_mem(targ, vict)->mem));
                 } else {
                   strcpy(tmp_name, GET_NAME(vict));
                 }
@@ -554,7 +554,7 @@ ACMD(do_echo)
                 else
                   strncpy(check, "you", sizeof(check) - 1);
               else if (vict)
-                snprintf(check, sizeof(check), "%s", CAN_SEE(targ, vict) ? (found_mem(GET_MEMORY(targ), vict) ? CAP(found_mem(GET_MEMORY(targ), vict)->mem)
+                snprintf(check, sizeof(check), "%s", CAN_SEE(targ, vict) ? (safe_found_mem(targ, vict) ? CAP(safe_found_mem(targ, vict)->mem)
                         : GET_NAME(vict)) : "someone");
               snprintf(buf2 + newn, sizeof(buf) - newn, "%s", check);
               newn += strlen(check);
@@ -676,7 +676,7 @@ struct room_data *find_target_room(struct char_data * ch, char *roomstr)
       location = target_obj->in_room;
     else {
       if ((location = get_obj_in_room(target_obj))) {
-        send_to_char(ch, "Going to that object's containing room. Veh: %s, In-Obj: %s, Carried-By: %s, Worn-By: %s",
+        send_to_char(ch, "Going to that object's containing room. Veh: %s, In-Obj: %s, Carried-By: %s, Worn-By: %s.\r\n",
                      target_obj->in_veh ? GET_VEH_NAME(target_obj->in_veh) : "(null)",
                      target_obj->in_obj ? GET_OBJ_NAME(target_obj->in_obj) : "(null)",
                      target_obj->carried_by ? GET_CHAR_NAME(target_obj->carried_by) : "(null)",
@@ -1372,7 +1372,7 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
   } else if (PLR_FLAGGED(k, PLR_NOSTAT) && !access_level(ch, LVL_DEVELOPER) &&
              GET_LEVEL(ch) <= GET_LEVEL(k))
   {
-    send_to_char("Sorry, you can't do that.\r\n", ch);
+    send_to_char("That character is protected by the NoStat flag. You need to be a higher level than them to stat them.\r\n", ch);
     return;
   }
 
@@ -1700,12 +1700,12 @@ ACMD(do_stat)
           strcpy(buf2, char_name);
           delete [] char_name;
         } else {
-          send_to_char("There is no such player.\r\n", ch);
+          send_to_char(ch, "Idnum %d does not correspond to any existing PC.\r\n", idnum);
           return;
         }
       }
       if (!(does_player_exist(buf2)))
-        send_to_char("There is no such player.\r\n", ch);
+        send_to_char(ch, "Couldn't find any PC named '%s'.\r\n", buf2);
       else {
         victim = playerDB.LoadChar(buf2, TRUE);
         do_stat_character(ch, victim);
@@ -1948,7 +1948,7 @@ ACMD(do_return)
       
       if (IS_NPC(vict) && GET_MOB_VNUM(vict) >= 50 && GET_MOB_VNUM(vict) < 70 &&
           PLR_FLAGGED(ch, PLR_PROJECT)) {
-        GET_MEMORY(vict) = NULL;
+        GET_PLAYER_MEMORY(vict) = NULL;
         extract_char(vict);
         char_from_room(ch);
         char_to_room(ch, GET_WAS_IN(ch));
@@ -2341,7 +2341,7 @@ void do_advance_with_mode(struct char_data *ch, char *argument, int cmd, int sub
 
   if (GET_LEVEL(ch) <= GET_LEVEL(victim)
       && ch != victim) {
-    send_to_char("Maybe that's not such a great idea.\r\n", ch);
+    send_to_char("You need to be a higher level than your victim to do that.\r\n", ch);
     return;
   }
   if (IS_NPC(victim)) {
@@ -2796,7 +2796,7 @@ ACMD(do_dc)
     return;
   }
   if (GET_LEVEL(vict) >= GET_LEVEL(ch)) {
-    send_to_char("Maybe that's not such a good idea...\r\n", ch);
+    send_to_char("You need to be a higher level than your victim to do that.\r\n", ch);
     return;
   }
   if (!vict->desc) {
@@ -3321,6 +3321,14 @@ ACMD(do_wizutil)
         send_to_char("Thawed.\r\n", ch);
         GET_FREEZE_LEV(vict) = 0;
         act("A sudden fireball conjured from nowhere thaws $n!", TRUE, vict, 0, 0, TO_ROOM);
+        break;
+      case SCMD_MUTE_NEWBIE:
+        result = PLR_TOG_CHK(vict, PLR_NEWBIE_MUTED);
+        snprintf(buf, sizeof(buf), "Newbie muted %s for %s by %s.", ONOFF(result),
+                GET_CHAR_NAME(vict), GET_CHAR_NAME(ch));
+        mudlog(buf, ch, LOG_WIZLOG, TRUE);
+        strcat(buf, "\r\n");
+        send_to_char(buf, ch);
         break;
       default:
         log("SYSERR: Unknown subcmd passed to do_wizutil (act.wizard.c)");
@@ -4194,7 +4202,7 @@ ACMD(do_set)
 
     if (vict) {
       if (!access_level(ch, GET_LEVEL(vict)+1)) {
-        send_to_char("Sorry, you can't do that.\r\n", ch);
+        send_to_char("You must be a higher level than your victim in order to affect them in this manner.\r\n", ch);
         SET_CLEANUP(false);
         return;
       }
@@ -4206,7 +4214,7 @@ ACMD(do_set)
 
   if (ch != vict && !access_level(ch, LVL_ADMIN)) {
     if (!IS_NPC(vict) && !access_level(ch, GET_LEVEL(vict)+1)) {
-      send_to_char("Maybe that's not such a great idea...\r\n", ch);
+      send_to_char("You need to be a higher level than your victim to do that.\r\n", ch);
 
       SET_CLEANUP(false);
 
@@ -5853,11 +5861,11 @@ ACMD(do_setfind)
     for (int i = 1; i < 1000; i++) {
       for (int obj_idx = 0; obj_idx <= top_of_objt; obj_idx++) {
         if (GET_OBJ_TYPE(&obj_proto[obj_idx]) == ITEM_WORN && GET_WORN_MATCHED_SET(&obj_proto[obj_idx]) == i) {
-          send_to_char(ch, "[%5ld] Set ^y%3d^n: ^c%3db %3di^n %s^n%s\r\n",
+          send_to_char(ch, "[%5ld] Set ^y%3d^n: ^c%3.2fb %3.2fi^n %s^n%s\r\n",
                   OBJ_VNUM_RNUM(obj_idx),
                   i,
-                  GET_WORN_BALLISTIC(&obj_proto[obj_idx]) / 100,
-                  GET_WORN_IMPACT(&obj_proto[obj_idx]) / 100,
+                  (float) GET_WORN_BALLISTIC(&obj_proto[obj_idx]) / 100,
+                  (float) GET_WORN_IMPACT(&obj_proto[obj_idx]) / 100,
                   obj_proto[obj_idx].text.name,
                   obj_proto[obj_idx].source_info ? "  ^g(canon)^n" : "");
         }
@@ -5873,11 +5881,11 @@ ACMD(do_setfind)
   
   for (int obj_idx = 0; obj_idx <= top_of_objt; obj_idx++) {
     if (GET_OBJ_TYPE(&obj_proto[obj_idx]) == ITEM_WORN && GET_WORN_MATCHED_SET(&obj_proto[obj_idx]) == number) {
-      send_to_char(ch, "[%5ld] Set ^y%3d^n: ^c%3db %3di^n %s^n%s\r\n",
+      send_to_char(ch, "[%5ld] Set ^y%3d^n: ^c%3.2fb %3.2fi^n %s^n%s\r\n",
               OBJ_VNUM_RNUM(obj_idx),
               number,
-              GET_WORN_BALLISTIC(&obj_proto[obj_idx]) / 100,
-              GET_WORN_IMPACT(&obj_proto[obj_idx]) / 100,
+              (float) GET_WORN_BALLISTIC(&obj_proto[obj_idx]) / 100,
+              (float) GET_WORN_IMPACT(&obj_proto[obj_idx]) / 100,
               obj_proto[obj_idx].text.name,
               obj_proto[obj_idx].source_info ? "  ^g(canon)^n" : "");
     }

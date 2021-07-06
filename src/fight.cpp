@@ -616,20 +616,24 @@ void make_corpse(struct char_data * ch)
 
 void death_cry(struct char_data * ch)
 {
-  int door;
-  struct room_data *was_in = NULL;
   
   snprintf(buf3, sizeof(buf3), "$n cries out $s last breath as $e die%s!", HSSH_SHOULD_PLURAL(ch) ? "s" : "");
   act(buf3, FALSE, ch, 0, 0, TO_ROOM);
-  was_in = ch->in_room;
+  
+  if (ch->in_veh) {
+    snprintf(buf3, sizeof(buf3), "A cry of agony comes from within %s!\r\n", GET_VEH_NAME(ch->in_veh));
+    send_to_room(buf3, get_ch_in_room(ch));
+    return;
+  }
   
   for (struct char_data *listener = ch->in_room->people; listener; listener = listener->next_in_room)
     if (IS_NPC(listener)) {
       GET_MOBALERTTIME(listener) = 30;
       GET_MOBALERT(listener) = MALERT_ALARM;
     }
-  
-  for (door = 0; door < NUM_OF_DIRS; door++)
+    
+  struct room_data *was_in = ch->in_room;
+  for (int door = 0; door < NUM_OF_DIRS; door++)
   {
     if (CAN_GO(ch, door)) {
       ch->in_room = was_in->dir_option[door]->to_room;
@@ -717,7 +721,7 @@ void raw_kill(struct char_data * ch)
           i = real_room(RM_OCEAN_DOCWAGON);
           break;
         default:
-          snprintf(buf, sizeof(buf), "SYSERR: Bad jurisdiction type %d in room %ld encountered in raw_kill() while transferring %s (%ld).",
+          snprintf(buf, sizeof(buf), "SYSERR: Bad jurisdiction type %d in room %ld encountered in raw_kill() while transferring %s (%ld). Sending to Dante's entrance.",
                   GET_JURISDICTION(in_room),
                   in_room->number,
                   GET_CHAR_NAME(ch), GET_IDNUM(ch));
@@ -725,6 +729,18 @@ void raw_kill(struct char_data * ch)
           i = real_room(RM_ENTRANCE_TO_DANTES);
           break;
       }
+      
+      if ((ch->in_veh && AFF_FLAGGED(ch, AFF_PILOT)) || PLR_FLAGGED(ch, PLR_REMOTE)) {
+        struct veh_data *veh;
+        RIG_VEH(ch, veh);
+        
+        send_to_veh("Now driverless, the vehicle slows to a stop.\r\n", veh, ch, FALSE);
+        AFF_FLAGS(ch).RemoveBits(AFF_PILOT, AFF_RIG, ENDBIT);
+        stop_chase(veh);
+        if (!veh->dest)
+          veh->cspeed = SPEED_OFF;
+      }
+      
       char_from_room(ch);
       char_to_room(ch, &world[i]);
       PLR_FLAGS(ch).SetBit(PLR_JUST_DIED);
@@ -1031,7 +1047,7 @@ void dam_message(int dam, struct char_data * ch, struct char_data * victim, int 
     {
       "$n grazes $N as $e #W $M.",      /* 1: 1..2  */
       "You graze $N as you #w $M.",
-      "$n grazes you as $e #W you."
+      "$n grazes you with $s #w."
     },
     
     {
@@ -4839,7 +4855,7 @@ void vram(struct veh_data * veh, struct char_data * ch, struct veh_data * tveh)
     int staged_damage = stage(ch_resist, damage_total);
     damage_total = convert_damage(staged_damage);
     
-    veh_resist = success_test(veh->body, power);
+    veh_resist = success_test(veh->body, power - (veh->body * 1 /* TODO: Replace this 1 with the number of successes rolled on the ram test. */));
     veh_dam -= veh_resist;
     
     bool will_damage_vehicle = FALSE;
@@ -4930,7 +4946,7 @@ void vram(struct veh_data * veh, struct char_data * ch, struct veh_data * tveh)
       }
     chkdmg(tveh);
     
-    veh_resist = 0 - success_test(veh->body, power);
+    veh_resist = 0 - success_test(veh->body, power - (veh->body * 1 /* TODO: Replace this 1 with the number of successes rolled on the ram test. */));
     staged_damage = stage(veh_resist, veh_dam);
     damage_total = convert_damage(staged_damage);
     veh->damage += damage_total;

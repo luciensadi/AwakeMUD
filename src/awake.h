@@ -303,7 +303,8 @@ enum {
 #define PLR_RPE                 37
 #define PLR_NO_IDLE_OUT         38 /* Player will not idle out (morts- for test chars) */
 #define PLR_TELLS_MUTED         39 /* Remove their ability to send tells. */
-#define PLR_MAX                 40
+#define PLR_NEWBIE_MUTED        40 /* Remove their ability to talk on the newbie channel. */
+#define PLR_MAX                 41
 
 
 
@@ -347,62 +348,63 @@ enum {
 /* preference flags: used by char_data.player_specials.pref */
 
 // If you add to this list, also add to constant.cpp's preference_bits[].
-#define PRF_PACIFY              0
-#define PRF_COMPACT             1 
-#define PRF_AUTOEXIT            2  /* Display exits in a room       */
-#define PRF_FIGHTGAG            3  /* Gag extra fight messages  */
-#define PRF_MOVEGAG             4  /* Gag extra movement messages    */
-#define PRF_DEAF                5  /* Can't hear shouts     */
-#define PRF_NOTELL              6  /* Can't receive tells     */
-#define PRF_NORADIO             7  /* Can't hear radio frequencies     */
-#define PRF_NONEWBIE            8  /* Can't hear newbie channel    */
-#define PRF_NOREPEAT            9  /* No repetition of comm commands  */
-#define PRF_HARDCORE            10
-#define PRF_PKER                11 /* is able to pk/be pked        */
-#define PRF_QUEST               12 /* On quest        */
-#define PRF_AFK                 13 /* Afk   */
-#define PRF_UNUSED1_PLS_REPLACE 14 /* EMPTY SPACE, FILL ME! */
-#define PRF_UNUSED2_PLS_REPLACE 15 /* EMPTY SPACE, FILL ME!        15 */
-#define PRF_NOHASSLE            16 /* Aggr mobs won't attack  */
-#define PRF_ROOMFLAGS           17 /* Can see room flags (ROOM_x) */
-#define PRF_HOLYLIGHT           18 /* Can see in dark   */
-#define PRF_CONNLOG             19 /* Views ConnLog      */
-#define PRF_DEATHLOG            20 /* Views DeathLog        */
-#define PRF_MISCLOG             21 /* Views MiscLog          */
-#define PRF_WIZLOG              22 /* Views WizLog          */
-#define PRF_SYSLOG              23 /* Views SysLog         */
-#define PRF_ZONELOG             24 /* Views ZoneLog          */
-#define PRF_LONGEXITS           25
-#define PRF_ROLLS               26 /* sees details on rolls        */
-#define PRF_NOOOC               27 /* can't hear ooc channel      */
-#define PRF_AUTOINVIS           28 /* to toggle auto-invis for immortals    */
-#define PRF_CHEATLOG            29 /* Views CheatLog         */
-#define PRF_ASSIST              30 /* auto assist */
-#define PRF_BANLOG              31
-#define PRF_NORPE               32
-#define PRF_NOHIRED             33
-#define PRF_GRIDLOG             34
-#define PRF_WRECKLOG            35
-#define PRF_QUESTOR             36
-#define PRF_NEWBIEHELPER        37
-#define PRF_MENUGAG              38
-#define PRF_LONGWEAPON          39
-#define PRF_PGROUPLOG           40
-#define PRF_SHOWGROUPTAG        41
-#define PRF_KEEPALIVE           42
-#define PRF_SCREENREADER        43
-#define PRF_NOCOLOR             44
-#define PRF_NOPROMPT            45
-#define PRF_HELPLOG             46
-#define PRF_PURGELOG            47
-#define PRF_NOAUTOKILL          48
-#define PRF_NO_RADIO_NAMES      49
-#define PRF_FUCKUPLOG           50
-#define PRF_ECONLOG             51
-#define PRF_BRIEF               52
-#define PRF_NOHIGHLIGHT         53
-#define PRF_NOPSEUDOLANGUAGE    54
-#define PRF_MAX                 55
+#define PRF_PACIFY                       0
+#define PRF_COMPACT                      1 
+#define PRF_AUTOEXIT                     2  /* Display exits in a room       */
+#define PRF_FIGHTGAG                     3  /* Gag extra fight messages  */
+#define PRF_MOVEGAG                      4  /* Gag extra movement messages    */
+#define PRF_DEAF                         5  /* Can't hear shouts     */
+#define PRF_NOTELL                       6  /* Can't receive tells     */
+#define PRF_NORADIO                      7  /* Can't hear radio frequencies     */
+#define PRF_NONEWBIE                     8  /* Can't hear newbie channel    */
+#define PRF_NOREPEAT                     9  /* No repetition of comm commands  */
+#define PRF_HARDCORE                     10
+#define PRF_PKER                         11 /* is able to pk/be pked        */
+#define PRF_QUEST                        12 /* On quest        */
+#define PRF_AFK                          13 /* Afk   */
+#define PRF_UNUSED1_PLS_REPLACE          14 /* EMPTY SPACE, FILL ME! */
+#define PRF_UNUSED2_PLS_REPLACE          15 /* EMPTY SPACE, FILL ME!        15 */
+#define PRF_NOHASSLE                     16 /* Aggr mobs won't attack  */
+#define PRF_ROOMFLAGS                    17 /* Can see room flags (ROOM_x) */
+#define PRF_HOLYLIGHT                    18 /* Can see in dark   */
+#define PRF_CONNLOG                      19 /* Views ConnLog      */
+#define PRF_DEATHLOG                     20 /* Views DeathLog        */
+#define PRF_MISCLOG                      21 /* Views MiscLog          */
+#define PRF_WIZLOG                       22 /* Views WizLog          */
+#define PRF_SYSLOG                       23 /* Views SysLog         */
+#define PRF_ZONELOG                      24 /* Views ZoneLog          */
+#define PRF_LONGEXITS                    25
+#define PRF_ROLLS                        26 /* sees details on rolls        */
+#define PRF_NOOOC                        27 /* can't hear ooc channel      */
+#define PRF_AUTOINVIS                    28 /* to toggle auto-invis for immortals    */
+#define PRF_CHEATLOG                     29 /* Views CheatLog         */
+#define PRF_ASSIST                       30 /* auto assist */
+#define PRF_BANLOG                       31
+#define PRF_NORPE                        32
+#define PRF_NOHIRED                      33
+#define PRF_GRIDLOG                      34
+#define PRF_WRECKLOG                     35
+#define PRF_QUESTOR                      36
+#define PRF_NEWBIEHELPER                 37
+#define PRF_MENUGAG                      38
+#define PRF_LONGWEAPON                   39
+#define PRF_PGROUPLOG                    40
+#define PRF_SHOWGROUPTAG                 41
+#define PRF_KEEPALIVE                    42
+#define PRF_SCREENREADER                 43
+#define PRF_NOCOLOR                      44
+#define PRF_NOPROMPT                     45
+#define PRF_HELPLOG                      46
+#define PRF_PURGELOG                     47
+#define PRF_NOAUTOKILL                   48
+#define PRF_NO_RADIO_NAMES               49
+#define PRF_FUCKUPLOG                    50
+#define PRF_ECONLOG                      51
+#define PRF_BRIEF                        52
+#define PRF_NOHIGHLIGHT                  53
+#define PRF_NOPSEUDOLANGUAGE             54
+#define PRF_NO_IDLE_NUYEN_REWARD_MESSAGE 55
+#define PRF_MAX                          56
 
 /* log watch */
 
@@ -495,6 +497,10 @@ enum {
 #define AFF_SURPRISE    48
 #define AFF_AMMOBUILD    49
 #define AFF_MAX       50
+// TODO: If you add another long-state action like building, designing, etc:
+// - Add it to the check_bioware exclusion in limits.cpp
+// - Add it to the IS_WORKING and STOP_WORKING macros in utils.h
+// - Check for anywhere I've missed in this comment
 
 
 /* room-related defines */
@@ -1763,6 +1769,7 @@ enum {
 #define SCMD_POWERPOINT   9
 #define SCMD_AUTHORIZE    10
 #define SCMD_SQUELCHTELLS 11
+#define SCMD_MUTE_NEWBIE  12
 
 /* do_say */
 #define SCMD_SAY        0

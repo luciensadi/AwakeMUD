@@ -243,22 +243,29 @@ bool vict_is_valid_aggro_target(struct char_data *ch, struct char_data *vict) {
   if (!vict_is_valid_target(ch, vict))
     return FALSE;
     
-  if (MOB_FLAGS(ch).IsSet(MOB_AGGRESSIVE) || (mob_is_aggressive(ch, FALSE) && (
-      // If NPC is aggro towards elves, and victim is an elf subrace, or...
-      (MOB_FLAGGED(ch, MOB_AGGR_ELF) &&
-       (GET_RACE(vict) == RACE_ELF || GET_RACE(vict) == RACE_WAKYAMBI || GET_RACE(vict) == RACE_NIGHTONE || GET_RACE(vict) == RACE_DRYAD)) ||
-      // If NPC is aggro towards dwarves, and victim is a dwarf subrace, or...
-      (MOB_FLAGGED(ch, MOB_AGGR_DWARF) &&
-       (GET_RACE(vict) == RACE_DWARF || GET_RACE(vict) == RACE_GNOME || GET_RACE(vict) == RACE_MENEHUNE || GET_RACE(vict) == RACE_KOBOROKURU)) ||
-      // If NPC is aggro towards humans, and victim is human, or...
-      (MOB_FLAGGED(ch, MOB_AGGR_HUMAN) &&
-       GET_RACE(vict) == RACE_HUMAN) ||
-      // If NPC is aggro towards orks, and victim is an ork subrace, or...
-      (MOB_FLAGGED(ch, MOB_AGGR_ORK) &&
-       (GET_RACE(vict) == RACE_ORK || GET_RACE(vict) == RACE_HOBGOBLIN || GET_RACE(vict) == RACE_OGRE || GET_RACE(vict) == RACE_SATYR || GET_RACE(vict) == RACE_ONI)) ||
-      // If NPC is aggro towards trolls, and victim is a troll subrace:
-      (MOB_FLAGGED(ch, MOB_AGGR_TROLL) &&
-       (GET_RACE(vict) == RACE_TROLL || GET_RACE(vict) == RACE_CYCLOPS || GET_RACE(vict) == RACE_FOMORI || GET_RACE(vict) == RACE_GIANT || GET_RACE(vict) == RACE_MINOTAUR)))))
+  if (MOB_FLAGS(ch).IsSet(MOB_AGGRESSIVE) 
+      || (mob_is_aggressive(ch, FALSE) 
+          && (GET_MOBALERT(ch) == MALERT_ALARM 
+              ||  (
+                    // If NPC is aggro towards elves, and victim is an elf subrace, or...
+                    (MOB_FLAGGED(ch, MOB_AGGR_ELF) &&
+                     (GET_RACE(vict) == RACE_ELF || GET_RACE(vict) == RACE_WAKYAMBI || GET_RACE(vict) == RACE_NIGHTONE || GET_RACE(vict) == RACE_DRYAD)) ||
+                    // If NPC is aggro towards dwarves, and victim is a dwarf subrace, or...
+                    (MOB_FLAGGED(ch, MOB_AGGR_DWARF) &&
+                     (GET_RACE(vict) == RACE_DWARF || GET_RACE(vict) == RACE_GNOME || GET_RACE(vict) == RACE_MENEHUNE || GET_RACE(vict) == RACE_KOBOROKURU)) ||
+                    // If NPC is aggro towards humans, and victim is human, or...
+                    (MOB_FLAGGED(ch, MOB_AGGR_HUMAN) &&
+                     GET_RACE(vict) == RACE_HUMAN) ||
+                    // If NPC is aggro towards orks, and victim is an ork subrace, or...
+                    (MOB_FLAGGED(ch, MOB_AGGR_ORK) &&
+                     (GET_RACE(vict) == RACE_ORK || GET_RACE(vict) == RACE_HOBGOBLIN || GET_RACE(vict) == RACE_OGRE || GET_RACE(vict) == RACE_SATYR || GET_RACE(vict) == RACE_ONI)) ||
+                    // If NPC is aggro towards trolls, and victim is a troll subrace:
+                    (MOB_FLAGGED(ch, MOB_AGGR_TROLL) &&
+                     (GET_RACE(vict) == RACE_TROLL || GET_RACE(vict) == RACE_CYCLOPS || GET_RACE(vict) == RACE_FOMORI || GET_RACE(vict) == RACE_GIANT || GET_RACE(vict) == RACE_MINOTAUR))
+                  )
+              )
+          )
+      )
     // Kick their ass.
   {
 #ifdef MOBACT_DEBUG
@@ -275,8 +282,8 @@ bool vict_is_valid_aggro_target(struct char_data *ch, struct char_data *vict) {
     return TRUE;
   }
   
-  // We allow alarmed, non-aggro NPCs to attack, but only if the victim could otherwise hurt them.
-  if (GET_MOBALERT(ch) == MALERT_ALARM && can_hurt(vict, ch, 0, TRUE)) {
+  // We allow alarmed, non-aggro NPCs to attack, but only if the victim could otherwise hurt them, and only if they're otherwise aggressive (guard, helper, etc)
+  if (GET_MOBALERT(ch) == MALERT_ALARM && (MOB_FLAGGED(ch, MOB_HELPER) || MOB_FLAGGED(ch, MOB_GUARD)) && can_hurt(vict, ch, 0, TRUE)) {
 #ifdef MOBACT_DEBUG
     snprintf(buf3, sizeof(buf3), "vict_is_valid_aggro_target: I am alarmed and %s can hurt me, so they are a valid aggro target.", GET_CHAR_NAME(vict));
     do_say(ch, buf3, 0, 0);
@@ -747,7 +754,7 @@ bool mobact_process_memory(struct char_data *ch, struct room_data *room) {
   struct char_data *vict = NULL;
   
   /* Mob Memory */
-  if (MOB_FLAGGED(ch, MOB_MEMORY) && MEMORY(ch)) {
+  if (MOB_FLAGGED(ch, MOB_MEMORY) && GET_MOB_MEMORY(ch)) {
     for (vict = room->people; vict; vict = vict->next_in_room) {
       // Skip NPCs, invisibles, and nohassle targets.
       if (IS_NPC(vict) || !CAN_SEE_ROOM_SPECIFIED(ch, vict, room) || PRF_FLAGGED(vict, PRF_NOHASSLE))
@@ -1387,16 +1394,16 @@ void remember(struct char_data * ch, struct char_data * victim)
   if (!IS_NPC(ch))
     return;
 
-  for (tmp = MEMORY(ch); tmp && !present; tmp = tmp->next)
+  for (tmp = GET_MOB_MEMORY(ch); tmp && !present; tmp = tmp->next)
     if (tmp->id == GET_IDNUM(victim))
       present = TRUE;
 
   if (!present)
   {
     tmp = new memory_rec;
-    tmp->next = MEMORY(ch);
+    tmp->next = GET_MOB_MEMORY(ch);
     tmp->id = GET_IDNUM(victim);
-    MEMORY(ch) = tmp;
+    GET_MOB_MEMORY(ch) = tmp;
   }
 }
 
@@ -1405,7 +1412,7 @@ void forget(struct char_data * ch, struct char_data * victim)
 {
   memory_rec *curr, *prev = NULL;
 
-  if (!(curr = MEMORY(ch)))
+  if (!(curr = GET_MOB_MEMORY(ch)))
     return;
 
   while (curr && curr->id != GET_IDNUM(victim))
@@ -1417,8 +1424,8 @@ void forget(struct char_data * ch, struct char_data * victim)
   if (!curr)
     return;                     /* person wasn't there at all. */
 
-  if (curr == MEMORY(ch))
-    MEMORY(ch) = curr->next;
+  if (curr == GET_MOB_MEMORY(ch))
+    GET_MOB_MEMORY(ch) = curr->next;
   else
     prev->next = curr->next;
 
@@ -1430,7 +1437,7 @@ bool memory(struct char_data *ch, struct char_data *vict)
 {
   memory_rec *names;
 
-  for (names = MEMORY(ch); names; names = names->next)
+  for (names = GET_MOB_MEMORY(ch); names; names = names->next)
     if (names->id == GET_IDNUM(vict))
       return(TRUE);
 
@@ -1442,7 +1449,7 @@ void clearMemory(struct char_data * ch)
 {
   memory_rec *curr, *next;
 
-  curr = MEMORY(ch);
+  curr = GET_MOB_MEMORY(ch);
 
   while (curr)
   {
@@ -1451,7 +1458,7 @@ void clearMemory(struct char_data * ch)
     curr = next;
   }
 
-  MEMORY(ch) = NULL;
+  GET_MOB_MEMORY(ch) = NULL;
 }
 bool attempt_reload(struct char_data *mob, int pos)
 {

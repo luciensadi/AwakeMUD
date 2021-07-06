@@ -947,49 +947,61 @@ int resist_spell(struct char_data *ch, int spell, int force, int sub)
 void cast_combat_spell(struct char_data *ch, int spell, int force, char *arg)
 {
   struct char_data *vict = NULL;
-  two_arguments(arg, buf, buf1);
   bool reflected = FALSE;
   int basedamage = 0;
+  
+  two_arguments(arg, buf, buf1);
+  
   if (!*buf)
   {
     send_to_char("What damage level do you wish to cast that spell at?\r\n", ch);
     return;
-  } else
-  {
-    for (basedamage = 0; *wound_name[basedamage] != '\n'; basedamage++)
-      if (is_abbrev(buf, wound_name[basedamage]))
-        break;
-    if (basedamage > 4 || basedamage == 0) {
-      send_to_char(ch, "'%s' is not a valid damage level, please choose between Light, Moderate, Serious and Deadly.\r\n", capitalize(buf));
-      return;
-    }
+  } 
+  
+  for (basedamage = 0; *wound_name[basedamage] != '\n'; basedamage++)
+    if (is_abbrev(buf, wound_name[basedamage]))
+      break;
+  if (basedamage > 4 || basedamage == 0) {
+    send_to_char(ch, "'%s' is not a valid damage level, please choose between Light, Moderate, Serious and Deadly.\r\n", capitalize(buf));
+    return;
   }
+  
   if (*buf1)
     vict = get_char_room_vis(ch, buf1);
+    
   if (!check_spell_victim(ch, vict, spell, buf1))
     return;
+    
   if (ch == vict) {
     send_to_char("You can't target yourself with a combat spell!\r\n", ch);
     return;
   }
+  
   if (get_ch_in_room(ch)->peaceful) {
     send_to_char("This room just has a peaceful, easy feeling...\r\n", ch);
     return;
   }
-  int target = modify_target(ch), skill = GET_SKILL(ch, SKILL_SORCERY) + MIN(GET_SKILL(ch, SKILL_SORCERY), GET_CASTING(ch)), success = 0;
+  
+  int target = modify_target(ch), skill = GET_SKILL(ch, SKILL_SORCERY) + MIN(GET_SKILL(ch, SKILL_SORCERY), GET_CASTING(ch));
+  int success = 0;
   spell_bonus(ch, spell, skill, target);
+  
   if (skill == -1)
     return;
+    
   check_killer(ch, vict);
   struct char_data *temp = vict;
+  
   switch (spell)
   {
   case SPELL_MANABOLT:
     target += GET_WIL(vict);
-    if ((!IS_NPC(ch) && (IS_NPC(vict) && MOB_FLAGGED(vict, MOB_INANIMATE))) || (PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict)))
-      success = -1;
-    else
-      success = success_test(skill, target);
+    if ((!IS_NPC(ch) && (IS_NPC(vict) && MOB_FLAGGED(vict, MOB_INANIMATE))) || (PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict))) {
+      act("You can't affect $N with manabolt.", TRUE, ch, 0, vict, TO_CHAR);
+      return;
+    }
+    
+    success = success_test(skill, target);
     if (success > 0 && GET_REFLECT(vict) && (reflected = reflect_spell(ch, vict, spell, force, 0, target, success))) {
       vict = ch;
       ch = temp;      
@@ -1019,10 +1031,12 @@ void cast_combat_spell(struct char_data *ch, int spell, int force, char *arg)
     break;
   case SPELL_STUNBOLT:
     target += GET_WIL(vict);
-    if ((!IS_NPC(ch) && IS_NPC(vict) && MOB_FLAGGED(vict, MOB_INANIMATE)) || (PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict)))
-      success = -1;
-    else
-      success = success_test(skill, target);
+    if ((!IS_NPC(ch) && IS_NPC(vict) && MOB_FLAGGED(vict, MOB_INANIMATE)) || (PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict))) {
+      act("You can't affect $N with stunbolt.", TRUE, ch, 0, vict, TO_CHAR);
+      return;
+    }
+    
+    success = success_test(skill, target);
     if (success > 0 && GET_REFLECT(vict) && (reflected = reflect_spell(ch, vict, spell, force, 0, target, success))) {
       vict = ch;
       ch = temp;      
@@ -1052,10 +1066,12 @@ void cast_combat_spell(struct char_data *ch, int spell, int force, char *arg)
     break;
   case SPELL_POWERBOLT:
     target += GET_BOD(vict);
-    if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict))
-      success = -1;
-    else
-      success = success_test(skill, target);
+    if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict)) {
+      act("You have the KILLER flag, so you can't affect $N with powerbolt.", TRUE, ch, 0, vict, TO_CHAR);
+      return;
+    }
+    
+    success = success_test(skill, target);
     if (success > 0 && GET_REFLECT(vict) && (reflected = reflect_spell(ch, vict, spell, force, 0, target, success))) {
       vict = ch;
       ch = temp;      
@@ -1236,11 +1252,12 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
     case SPELL_INCREF1:
     case SPELL_INCREF2:
     case SPELL_INCREF3:
-      if (GET_REAL_REA(vict) != GET_REA(vict) || GET_INIT_DICE(ch))
-        success = -1;
-      else
-        success = success_test(skill, GET_REA(vict) + target);
-      if (success > 0) {
+      if (GET_REAL_REA(vict) != GET_REA(vict) || GET_INIT_DICE(ch)) {
+        act("$N's reflexes have already been modified, so you can't cast that spell on $m.", FALSE, ch, 0, vict, TO_CHAR);
+        return;
+      }
+      
+      if ((success = success_test(skill, GET_REA(vict) + target)) > 0) {
         create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
         send_to_char("The world slows down around you.\r\n", ch);
         act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
@@ -1271,12 +1288,14 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
               cyber = false;
             break;
           }
-        } else if (GET_SUSTAINED(vict))
-          for (struct sustain_data *sus = GET_SUSTAINED(vict); sus; sus = sus->next)
+        } else if (GET_SUSTAINED(vict)) {
+          for (struct sustain_data *sus = GET_SUSTAINED(vict); sus; sus = sus->next) {
             if (sus->caster == FALSE && (sus->spell == SPELL_INCATTR || sus->spell == SPELL_DECATTR) && sus->subtype == sub) {
               cyber = false;
               break;
             }
+          }
+        }
         if (cyber && (spell == SPELL_DECATTR || spell == SPELL_INCATTR || spell == SPELL_INCREA)) {
           snprintf(buf, sizeof(buf), "$N's %s has been modified by technological means and is immune to this spell.\r\n", attributes[sub]);
           act(buf, TRUE, ch, 0, vict, TO_CHAR);
@@ -1333,10 +1352,12 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
         target += GET_WIL(vict);
       else
         target += GET_INT(vict);
-      if (!IS_NPC(ch) && !IS_NPC(vict) && PLR_FLAGGED(ch, PLR_KILLER))
-        success = -1;
-      else
-        success = success_test(skill, target);
+      if (!IS_NPC(ch) && !IS_NPC(vict) && PLR_FLAGGED(ch, PLR_KILLER)) {
+        act("You have the KILLER flag, so you can't affect $N with a mind-altering spell.", TRUE, ch, 0, vict, TO_CHAR);
+        return;
+      }
+      
+      success = success_test(skill, target);
       if (success > 0 && GET_REFLECT(vict) && (reflected = reflect_spell(ch, vict, spell, force, 0, target, success))) {
         vict = ch;
         ch = temp;
@@ -1505,9 +1526,12 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       send_to_char("You can't target yourself with a combat spell!\r\n", ch);
       return;
     }
-    if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict))
-      success = -1;
-    else success = success_test(skill, target + 4);
+    if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict)) {
+      act("You have the KILLER flag, so you can't affect $N with ignite.", TRUE, ch, 0, vict, TO_CHAR);
+      return;
+    }
+    
+    success = success_test(skill, target + 4);
     if (success > 0 && GET_REFLECT(vict) && (reflected = reflect_spell(ch, vict, spell, force, 0, target + 4, success))) {
       vict = ch;
       ch = temp;      
@@ -1551,10 +1575,12 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
     }
     success += success_test(skill, 4 + target);
       
-    send_to_char("You feel a rush of air head towards you!\r\n", vict);
+    if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict)) {
+      act("You have the KILLER flag, so you can't affect $N with clout.", TRUE, ch, 0, vict, TO_CHAR);
+      return;
+    }
       
-    if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict))
-      success = -1;
+    send_to_char("You feel a rush of air head towards you!\r\n", vict);
     
     if (success <= 0) {
       act("Your clout spell harmlessly disperses as $n dodges it.", FALSE, vict, 0, ch, TO_VICT);
@@ -1596,10 +1622,13 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       target -= 2;
     else
       success -= success_test(GET_DEFENSE(vict) + GET_DEFENSE(vict) ? GET_POWER(vict, ADEPT_SIDESTEP) : 0, 4 + damage_modifier(vict, buf, sizeof(buf)));
+    if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict)) {
+      act("You have the KILLER flag, so you can't affect $N with flamethrower.", TRUE, ch, 0, vict, TO_CHAR);
+      return;
+    }
+  
     act("$n's hands seem to spontaneously combust as $e directs a stream of flame at $N!", TRUE, ch, 0, vict, TO_ROOM);
-    if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict))
-      success = -1;
-    else success += success_test(skill, target + 4);
+    success += success_test(skill, target + 4);
     if (success > 0 && GET_REFLECT(vict) && (reflected = reflect_spell(ch, vict, spell, force, 0, target + 4, success))) {
       vict = ch;
       ch = temp;      
@@ -1649,10 +1678,13 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       target -= 2;
     else
       success -= success_test(GET_DEFENSE(vict) + GET_DEFENSE(vict) ? GET_POWER(vict, ADEPT_SIDESTEP) : 0, 4 + damage_modifier(vict, buf, sizeof(buf)));
+    
+    if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict)) {
+      act("You have the KILLER flag, so you can't affect $N with acid stream.", TRUE, ch, 0, vict, TO_CHAR);
+      return;
+    }
     act("Dark clouds form around $n moments before it condenses into a dark sludge and flies towards $N!", TRUE, ch, 0, vict, TO_ROOM);
-    if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict))
-      success = -1;
-    else success += success_test(skill, target + 4);
+    success += success_test(skill, target + 4);
     if (success > 0 && GET_REFLECT(vict) && (reflected = reflect_spell(ch, vict, spell, force, 0, target + 4, success))) {
       vict = ch;
       ch = temp;      
@@ -1700,10 +1732,12 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       // NOTE: Added sidestep here. Not sure if you should be able to sidestep lightning, but if you can dodge it in the first place...
       success -= success_test(GET_DEFENSE(vict) + GET_DEFENSE(vict) ? GET_POWER(vict, ADEPT_SIDESTEP) : 0, 4 + damage_modifier(vict, buf, sizeof(buf)));
     }
+    if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict)) {
+      act("You have the KILLER flag, so you can't affect $N with lightning bolt.", TRUE, ch, 0, vict, TO_CHAR);
+      return;
+    }
     act("Lightning bursts forth from $n and heads directly towards $N!", TRUE, ch, 0, vict, TO_ROOM);
-    if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict))
-      success = -1;
-    else success += success_test(skill, target + 4);
+    success += success_test(skill, target + 4);
     if (success > 0 && GET_REFLECT(vict) && (reflected = reflect_spell(ch, vict, spell, force, 0, target + 4, success))) {
       vict = ch;
       ch = temp;      
@@ -1758,10 +1792,12 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       // NOTE: Added sidestep here. Not sure if you should be able to sidestep lightning, but if you can dodge it in the first place...
       success -= success_test(GET_DEFENSE(vict) + GET_DEFENSE(vict) ? GET_POWER(vict, ADEPT_SIDESTEP) : 0, 4 + damage_modifier(vict, buf, sizeof(buf)));
     }
+    if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict)) {
+      act("You have the KILLER flag, so you can't affect $N with your laser.", TRUE, ch, 0, vict, TO_CHAR);
+      return;
+    }
     act("A thin laser beam is emitted from $n and heads directly towards $N!", TRUE, ch, 0, vict, TO_ROOM);
-    if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict))
-      success = -1;
-    else success += success_test(skill, target + 4);
+    success += success_test(skill, target + 4);
     if (success > 0 && GET_REFLECT(vict) && (reflected = reflect_spell(ch, vict, spell, force, 0, target + 4, success))) {
       vict = ch;
       ch = temp;      
@@ -1812,10 +1848,12 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
     }
     success += success_test(skill, 4 + target);
       
-    send_to_char("You see a cloud of steam vapours rush towards you!\r\n", vict);
+    if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict)) {
+      act("You have the KILLER flag, so you can't affect $N with your steam cloud.", TRUE, ch, 0, vict, TO_CHAR);
+      return;
+    }
       
-    if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict))
-      success = -1;
+    send_to_char("You see a cloud of steam vapours rush towards you!\r\n", vict);
     
     if (success <= 0) {
       act("Your steam spell harmlessly evaporates as $n dodges it.", FALSE, vict, 0, ch, TO_VICT);
@@ -1861,10 +1899,12 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
     }
     success += success_test(skill, 4 + target);
       
-    send_to_char("The air around you explodes into a deafening roar!\r\n", vict);
+    if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict)) {
+      act("You have the KILLER flag, so you can't affect $N with thunderbolt.", TRUE, ch, 0, vict, TO_CHAR);
+      return;
+    }
       
-    if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict))
-      success = -1;
+    send_to_char("The air around you explodes into a deafening roar!\r\n", vict);
     
     if (success <= 0) {
       act("Your thunderbolt spell harmlessly echoes as $n dodges it.", FALSE, vict, 0, ch, TO_VICT);
@@ -1910,10 +1950,12 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
     }
     success += success_test(skill, 4 + target);
       
-    send_to_char("You see a bolt of water head towards you!\r\n", vict);
+    if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict)) {
+      act("You have the KILLER flag, so you can't affect $N with waterbolt.", TRUE, ch, 0, vict, TO_CHAR);
+      return;
+    }
       
-    if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict))
-      success = -1;
+    send_to_char("You see a bolt of water head towards you!\r\n", vict);
     
     if (success <= 0) {
       act("Your waterbolt spell harmlessly evaporates as $n dodges it.", FALSE, vict, 0, ch, TO_VICT);

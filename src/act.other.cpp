@@ -1128,6 +1128,8 @@ const char *tog_messages[][2] = {
                              "You will no longer see text highlights from characters.\r\n"},
                             {"You will now see pseudolanguage strings.\r\n",
                              "You will no longer see pseudolanguage strings.\r\n"},
+                            {"You will now see the idle nuyen reward messages.\r\n",
+                             "You will no longer see the idle nuyen reward messages.\r\n"}
                           };
 
 ACMD(do_toggle)
@@ -1336,6 +1338,9 @@ ACMD(do_toggle)
     } else if (is_abbrev(argument, "pseudolanguage") || is_abbrev(argument, "nopseudolanguage")) {
       result = PRF_TOG_CHK(ch, PRF_NOPSEUDOLANGUAGE);
       mode = 36;
+    } else if (is_abbrev(argument, "noidlenuyenmessage") || is_abbrev(argument, "no idle nuyen message")) {
+      result = PRF_TOG_CHK(ch, PRF_NO_IDLE_NUYEN_REWARD_MESSAGE);
+      mode = 37;
     } else {
       send_to_char("That is not a valid toggle option.\r\n", ch);
       return;
@@ -2131,7 +2136,7 @@ ACMD(do_astral)
   GET_ASTRAL(astral) = GET_ASTRAL(ch);
   GET_COMBAT(astral) = GET_ASTRAL(ch);
   GET_MAGIC(astral) = GET_MAGIC(ch);
-  GET_MEMORY(astral) = GET_MEMORY(ch);
+  GET_PLAYER_MEMORY(astral) = GET_PLAYER_MEMORY(ch);
 
   if (ch->in_veh)
     char_to_room(astral, ch->in_veh->in_room);
@@ -2607,7 +2612,7 @@ ACMD(do_remember)
   else if (IS_SENATOR(vict))
     send_to_char(ch, "Try as you might, you can't seem to remember them.\r\n");
   else {
-    for (temp = GET_MEMORY(ch); temp; temp = temp->next)
+    for (temp = GET_PLAYER_MEMORY(ch); temp; temp = temp->next)
       if (GET_IDNUM(vict) == temp->idnum) {
         DELETE_AND_NULL_ARRAY(temp->mem);
         temp->mem = str_dup(buf2);
@@ -2618,13 +2623,23 @@ ACMD(do_remember)
     m = new remem;
     m->mem = str_dup(buf2);
     m->idnum = GET_IDNUM(vict);
-    m->next = GET_MEMORY(ch);
-    GET_MEMORY(ch) = m;
+    m->next = GET_PLAYER_MEMORY(ch);
+    GET_PLAYER_MEMORY(ch) = m;
     send_to_char(ch, "Remembered %s as %s\r\n", GET_NAME(vict), buf2);
   }
 }
 
-struct remem *found_mem(struct remem *mem, struct char_data *ch)
+// Preferentially use this over found_mem, since found_mem with an NPC causes undefined behavior (aka crashes).
+struct remem *safe_found_mem(struct char_data *rememberer, struct char_data *ch)
+{
+  if (!rememberer || !ch || IS_NPC(rememberer))
+    return NULL;
+    
+  return unsafe_found_mem(GET_PLAYER_MEMORY(rememberer), ch);
+}
+
+// Avoid using this unless you know exactly what you're doing and have safeguarded against NPCs invoking this.
+struct remem *unsafe_found_mem(struct remem *mem, struct char_data *ch)
 {
   if (IS_NPC(ch))
     return NULL;
@@ -2638,7 +2653,7 @@ int recog(struct char_data *ch, struct char_data *i, char *name)
 {
   struct remem *mem;
 
-  if (!(mem = found_mem(GET_MEMORY(ch), i)))
+  if (!(mem = safe_found_mem(ch, i)))
     return 0;
 
   if (!strn_cmp(name, mem->mem, strlen(name)))
@@ -3069,18 +3084,17 @@ ACMD(do_assense)
               snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " cast at force %d", sus->force);
             else if (success > 3) {
               if (sus->force > GET_MAG(ch) / 100)
-                strcat(buf, " cast at a force higher than");
-              if (sus->force == GET_MAG(ch) / 100)
-                strcat(buf, " cast at a force equal to");
+                strcat(buf, " cast at a force higher than your magic");
+              else if (sus->force == GET_MAG(ch) / 100)
+                strcat(buf, " cast at a force equal to your magic");
               else
-                strcat(buf, " cast at a force lower than");
-              strcat(buf, " your magic");
+                strcat(buf, " cast at a force lower than your magic");
             }
             if (success >= 3) {
               if (GET_IDNUM(ch) == GET_IDNUM(sus->other))
                 strcat(buf, ". It was cast by you");
               else {
-                for (mem = GET_MEMORY(ch); mem; mem = mem->next)
+                for (mem = GET_PLAYER_MEMORY(ch); mem; mem = mem->next)
                   if (mem->idnum == GET_IDNUM(sus->other))
                     break;
                 if (mem)
@@ -3393,7 +3407,7 @@ ACMD(do_assense)
         if (GET_IDNUM(ch) == GET_OBJ_VAL(obj, 2))
           strcat(buf, ", it is bonded to you");
         else {
-          for (mem = GET_MEMORY(ch); mem; mem = mem->next)
+          for (mem = GET_PLAYER_MEMORY(ch); mem; mem = mem->next)
             if (mem->idnum == GET_OBJ_VAL(obj, 2))
               break;
           if (mem)
@@ -3416,7 +3430,7 @@ ACMD(do_assense)
           strcat(buf, ". It has more astral presence than you");
       }
       if (success >= 3) {
-        for (mem = GET_MEMORY(ch); mem; mem = mem->next)
+        for (mem = GET_PLAYER_MEMORY(ch); mem; mem = mem->next)
           if (mem->idnum == GET_OBJ_VAL(obj, 3))
             break;
         if (mem)
@@ -3435,7 +3449,7 @@ ACMD(do_assense)
           strcat(buf, ". It has more astral presence than you");
       }
       if (success >= 3) {
-        for (mem = GET_MEMORY(ch); mem; mem = mem->next)
+        for (mem = GET_PLAYER_MEMORY(ch); mem; mem = mem->next)
           if (mem->idnum == GET_OBJ_VAL(obj, 3))
             break;
         if (mem)
@@ -3457,7 +3471,7 @@ ACMD(do_assense)
         if (GET_IDNUM(ch) == GET_WEAPON_FOCUS_BONDED_BY(obj))
           strcat(buf, ", it is bonded to you");
         else {
-          for (mem = GET_MEMORY(ch); mem; mem = mem->next)
+          for (mem = GET_PLAYER_MEMORY(ch); mem; mem = mem->next)
             if (mem->idnum == GET_WEAPON_FOCUS_BONDED_BY(obj))
               break;
           if (mem)
@@ -4223,9 +4237,11 @@ ACMD(do_ammo) {
   
   if (primary && IS_GUN(GET_WEAPON_ATTACK_TYPE(primary))) {
     if (primary->contains) {
-      send_to_char(ch, "Primary: %d / %d rounds of ammunition.\r\n",
-                   MIN(GET_WEAPON_MAX_AMMO(primary), GET_OBJ_VAL(primary->contains, 9)),
-                   GET_OBJ_VAL(primary, 5));
+      send_to_char(ch, "Primary: %d / %d %s.\r\n",
+                   MIN(GET_WEAPON_MAX_AMMO(primary), GET_MAGAZINE_AMMO_COUNT(primary->contains)),
+                   GET_OBJ_VAL(primary, 5),
+                   get_ammo_representation(GET_WEAPON_ATTACK_TYPE(primary), GET_MAGAZINE_AMMO_TYPE(primary->contains), GET_MAGAZINE_AMMO_COUNT(primary->contains))
+                 );
     } else {
       send_to_char(ch, "Primary: 0 / %d rounds of ammunition.\r\n", GET_WEAPON_MAX_AMMO(primary));
     }
@@ -4237,9 +4253,11 @@ ACMD(do_ammo) {
   
   if (secondary && IS_GUN(GET_WEAPON_ATTACK_TYPE(secondary))) {
     if (secondary->contains) {
-      send_to_char(ch, "Secondary: %d / %d rounds of ammunition.\r\n",
+      send_to_char(ch, "Secondary: %d / %d %s.\r\n",
                    MIN(GET_WEAPON_MAX_AMMO(secondary), GET_OBJ_VAL(secondary->contains, 9)),
-                   GET_WEAPON_MAX_AMMO(secondary));
+                   GET_WEAPON_MAX_AMMO(secondary),
+                   get_ammo_representation(GET_WEAPON_ATTACK_TYPE(secondary), GET_MAGAZINE_AMMO_TYPE(secondary->contains), GET_MAGAZINE_AMMO_COUNT(secondary->contains))
+                 );
     } else {
       send_to_char(ch, "Secondary: 0 / %d rounds of ammunition.\r\n", GET_WEAPON_MAX_AMMO(secondary));
     }

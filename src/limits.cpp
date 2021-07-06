@@ -449,8 +449,13 @@ void check_idling(void)
 
 void check_bioware(struct char_data *ch)
 {
-  if (!ch->desc || (ch->desc && ch->desc->connected) || PLR_FLAGGED(ch, PLR_NEWBIE))
+  if (!ch->desc 
+      || (ch->desc && ch->desc->connected) 
+      || PLR_FLAGGED(ch, PLR_NEWBIE)
+      || AFF_FLAGS(ch).AreAnySet(AFF_PROGRAM, AFF_DESIGN, AFF_PART_BUILD, AFF_PART_DESIGN, AFF_SPELLDESIGN, AFF_AMMOBUILD, ENDBIT)
+  ) {
     return;
+  }
   
   struct obj_data *bio;
   for (bio = ch->bioware; bio; bio = bio->next_content)
@@ -1500,7 +1505,7 @@ void misc_update(void)
           o = obj->next_content;
           extract_obj(obj);
         }
-        GET_MEMORY(ch) = NULL;
+        GET_PLAYER_MEMORY(ch) = NULL;
         extract_char(ch);
       }
       else if (!ch->desc && GET_MOB_VNUM(ch) >= 50 && GET_MOB_VNUM(ch) < 70) {

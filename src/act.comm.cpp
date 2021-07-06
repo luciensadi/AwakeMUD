@@ -133,7 +133,7 @@ ACMD(do_say)
         if (to == tmp)
           snprintf(buf2, MAX_STRING_LENGTH, " to you");
         else
-          snprintf(buf2, MAX_STRING_LENGTH, " to %s^n", CAN_SEE(tmp, to) ? (found_mem(GET_MEMORY(tmp), to) ? CAP(found_mem(GET_MEMORY(tmp), to)->mem)
+          snprintf(buf2, MAX_STRING_LENGTH, " to %s^n", CAN_SEE(tmp, to) ? (safe_found_mem(tmp, to) ? CAP(safe_found_mem(tmp, to)->mem)
                   : GET_NAME(to)) : "someone");
       }
       
@@ -164,8 +164,8 @@ ACMD(do_say)
     
     else {
       if (to)
-        snprintf(buf2, MAX_STRING_LENGTH, " to %s^n", CAN_SEE(ch, to) ? (found_mem(GET_MEMORY(ch), to) ?
-                                                   CAP(found_mem(GET_MEMORY(ch), to)->mem) : GET_NAME(to)) : "someone");
+        snprintf(buf2, MAX_STRING_LENGTH, " to %s^n", CAN_SEE(ch, to) ? (safe_found_mem(ch, to) ?
+                                                   CAP(safe_found_mem(ch, to)->mem) : GET_NAME(to)) : "someone");
       snprintf(buf, sizeof(buf), "You say%s in %s, \"%s%s%s^n\"\r\n", 
                (to ? buf2 : ""), 
                skills[language].name,
@@ -291,7 +291,7 @@ ACMD(do_tell)
   }
 
   // Enable blocking of tells from everyone except staff.
-  if ((!access_level(ch, LVL_BUILDER) && PRF_FLAGGED(vict, PRF_NOTELL)) || found_mem(GET_IGNORE(vict), source)) {
+  if ((!access_level(ch, LVL_BUILDER) && PRF_FLAGGED(vict, PRF_NOTELL)) || (!IS_NPC(vict) && unsafe_found_mem(GET_IGNORE(vict), source))) {
     act("$E has disabled tells.", FALSE, ch, 0, vict, TO_CHAR);
     return;
   }
@@ -338,7 +338,7 @@ ACMD(do_reply)
       return;
     }
     
-    if (PRF_FLAGGED(tch, PRF_NOTELL) || found_mem(GET_IGNORE(tch), ch->desc && ch->desc->original ? ch->desc->original : ch)) {
+    if (PRF_FLAGGED(tch, PRF_NOTELL) || (!IS_NPC(tch) && unsafe_found_mem(GET_IGNORE(tch), ch->desc && ch->desc->original ? ch->desc->original : ch))) {
       act("$E has disabled tells.", FALSE, ch, 0, tch, TO_CHAR);
       return;
     }
@@ -1041,12 +1041,19 @@ ACMD(do_gen_comm)
 
   if (subcmd == SCMD_NEWBIE) {
     if (IS_NPC(ch)) {
-      send_to_char("No.\r\n", ch);
+      send_to_char("NPCs can't use the newbie channel.\r\n", ch);
       return;
-    } else if (!IS_SENATOR(ch) && !PLR_FLAGGED(ch, PLR_NEWBIE) && !PRF_FLAGGED(ch, PRF_NEWBIEHELPER)) {
+    }
+    else if (PLR_FLAGGED(ch, PLR_NEWBIE_MUTED)) {
+      send_to_char("You can't talk on that channel.\r\n", ch);
+      return;
+    }
+    /* Anyone can send to the newbie channel now.
+    else if (!IS_SENATOR(ch) && !PLR_FLAGGED(ch, PLR_NEWBIE) && !PRF_FLAGGED(ch, PRF_NEWBIEHELPER)) {
       send_to_char("You are too experienced to use the newbie channel.\r\n", ch);
       return;
     }
+    */
   }
 
   skip_spaces(&argument);
@@ -1150,7 +1157,7 @@ ACMD(do_gen_comm)
       return;
     delete_doubledollar(argument);
     for ( d = descriptor_list; d != NULL; d = d->next ) {
-      if (!d->character || found_mem(GET_IGNORE(d->character), ch))
+      if (!d->character || (!IS_NPC(d->character) && unsafe_found_mem(GET_IGNORE(d->character), ch)))
         continue;
       if (!access_level(d->character, LVL_BUILDER) 
           && ((d->connected != CON_PLAYING && !PRF_FLAGGED(d->character, PRF_MENUGAG))
@@ -1206,7 +1213,7 @@ ACMD(do_gen_comm)
           continue;
         break;
       case SCMD_NEWBIE:
-        if (!(PLR_FLAGGED(i->character, PLR_NEWBIE) || IS_SENATOR(i->character) || PRF_FLAGGED(i->character, PRF_NEWBIEHELPER)))
+        if (PRF_FLAGGED(i->character, PRF_NONEWBIE) || PLR_FLAGGED(i->character, PLR_NEWBIE_MUTED))
           continue;
         break;
       case SCMD_RPETALK:
@@ -1689,7 +1696,7 @@ ACMD(do_ignore)
     if (struct char_data *tch = get_player_vis(ch, argument, FALSE)) {
       if (GET_LEVEL(tch) > LVL_MORTAL)
         send_to_char("You can't ignore staff members.\r\n", ch);
-      else if ((list = found_mem(GET_IGNORE(ch), tch))) {
+      else if ((list = (!IS_NPC(ch) ? unsafe_found_mem(GET_IGNORE(ch), tch) : NULL))) {
         struct remem *temp;
         REMOVE_FROM_LIST(list, GET_IGNORE(ch), next);
         DELETE_AND_NULL(list);
