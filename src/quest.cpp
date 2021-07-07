@@ -27,6 +27,7 @@
 #include "constants.h"
 #include "newmatrix.h"
 #include "config.h"
+#include "bullet_pants.h"
 
 extern bool memory(struct char_data *ch, struct char_data *vict);
 extern class objList ObjList;
@@ -178,6 +179,42 @@ void load_quest_targets(struct char_data *johnson, struct char_data *ch)
               obj->obj_flags.quest_id = GET_IDNUM(ch);
               obj->obj_flags.extra_flags.SetBits(ITEM_NODONATE, ITEM_NORENT, ITEM_NOSELL, ENDBIT);
               equip_char(mob, obj, pos);
+              
+              // Could be a weapon-- make sure it's loaded if it is.
+              if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && IS_GUN(GET_WEAPON_ATTACK_TYPE(obj))) {       
+                // If it's carried by an NPC, make sure it's loaded.     
+                if (GET_WEAPON_MAX_AMMO(obj) > 0) {
+                  // Reload from their ammo.
+                  for (int index = 0; index < NUM_AMMOTYPES; index++) {
+                    if (GET_BULLETPANTS_AMMO_AMOUNT(mob, GET_WEAPON_ATTACK_TYPE(obj), npc_ammo_usage_preferences[index]) > 0) {
+                      reload_weapon_from_bulletpants(mob, obj, npc_ammo_usage_preferences[index]);
+                      break;
+                    }
+                  }
+                  
+                  // If they failed to reload, they have no ammo. Give them some normal and reload with it.
+                  if (!obj->contains || GET_MAGAZINE_AMMO_COUNT(obj->contains) == 0) {
+                    GET_BULLETPANTS_AMMO_AMOUNT(mob, GET_WEAPON_ATTACK_TYPE(obj), AMMO_NORMAL) = GET_WEAPON_MAX_AMMO(obj) * NUMBER_OF_MAGAZINES_TO_GIVE_TO_UNEQUIPPED_MOBS;
+                    reload_weapon_from_bulletpants(mob, obj, AMMO_NORMAL);
+                    
+                    // Decrement their debris-- we want this reload to not create clutter.
+                    get_ch_in_room(mob)->debris--;
+                  }
+                }
+                
+                // Set the firemode.
+                if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(obj), 1 << MODE_BF)) {
+                  GET_WEAPON_FIREMODE(obj) = MODE_BF;
+                } else if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(obj), 1 << MODE_FA)) {
+                  GET_WEAPON_FIREMODE(obj) = MODE_FA;
+                  GET_OBJ_TIMER(obj) = 10;
+                } else if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(obj), 1 << MODE_SA)) {
+                  GET_WEAPON_FIREMODE(obj) = MODE_SA;
+                } else if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(obj), 1 << MODE_SS)) {
+                  GET_WEAPON_FIREMODE(obj) = MODE_SS;
+                }
+              }
+              // Weapon is loaded, and the mob has its ammo.
             }
             break;
           case QOL_TARMOB_C:
