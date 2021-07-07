@@ -310,13 +310,13 @@ ACMD(do_design)
   if (GET_OBJ_TIMER(prog) == GET_OBJ_VAL(prog, 4)) {
     if (get_and_deduct_one_deckbuilding_token_from_char(ch)) {
       send_to_char("A deckbuilding token fuzzes into digital static, greatly accelerating the design time.\r\n", ch);
-      GET_OBJ_TIMER(prog) = 0;
       GET_OBJ_VAL(prog, 8) = 10;
+      GET_OBJ_VAL(prog, 4) = 1;
     }
     else if (access_level(ch, LVL_ADMIN)) {
       send_to_char(ch, "You use your admin powers to greatly accelerate the design time of %s.\r\n", prog->restring);
-      GET_OBJ_TIMER(prog) = 0;
       GET_OBJ_VAL(prog, 8) = 10;
+      GET_OBJ_VAL(prog, 4) = 1;
     } else {
       send_to_char(ch, "You begin designing %s.\r\n", prog->restring);
       GET_OBJ_VAL(prog, 8) = success_test(skill, target);
