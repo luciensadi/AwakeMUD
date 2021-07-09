@@ -2326,25 +2326,28 @@ struct transport_type tacsea[2] =
     { 2099, NORTH, 14500, SOUTH }
   };
 
-void extend_walkway(int ferry, int to, int room, int from)
+void extend_walkway(int ferry, int to, int room, int from, const char *ferry_name)
 {
   assert(ferry > 0);
   assert(room > 0);
   
   create_linked_exit(ferry, to, room, from, "extend_walkway");
   
-  send_to_room("The Bradenton ferry docks, and the walkway extends.\r\n", &world[room]);
+  snprintf(buf3, sizeof(buf3), "The %s ferry docks, and the walkway extends.\r\n", ferry_name);
+  send_to_room(buf3, &world[room]);
+  
   send_to_room("The ferry docks, and the walkway extends.\r\n", &world[ferry]);
 }
 
-void contract_walkway(int ferry, int to, int room, int from)
+void contract_walkway(int ferry, int to, int room, int from, const char *ferry_name)
 {
   assert(ferry > 0);
   assert(room > 0);
   
   delete_linked_exit(ferry, to, room, from, "contract_walkway");
   
-  send_to_room("The walkway recedes, and the Bradenton ferry departs.\r\n", &world[room]);
+  snprintf(buf3, sizeof(buf3), "The walkway recedes, and the %s ferry departs.\r\n", ferry_name);
+  send_to_room(buf3, &world[room]);
   send_to_room("The walkway recedes, and the ferry departs.\r\n", &world[ferry]);
 }
 
@@ -2368,11 +2371,11 @@ void process_seatac_ferry(void)
     break;
   case 1:
   case 14:
-    extend_walkway(ferry, tacsea[ind].to, dock, tacsea[ind].from);
+    extend_walkway(ferry, tacsea[ind].to, dock, tacsea[ind].from, "Bradenton-Tacoma");
     break;
   case 4:
   case 17:
-    contract_walkway(ferry, tacsea[ind].to, dock, tacsea[ind].from);
+    contract_walkway(ferry, tacsea[ind].to, dock, tacsea[ind].from, "Bradenton-Tacoma");
     break;
   case 5:
     send_to_room("A voice announces through a rusting speaker, "
@@ -2418,11 +2421,11 @@ void process_victoria_ferry(void)
     break;
   case 1:
   case 28:
-    extend_walkway(ferry, victoria[ind].to, dock, victoria[ind].from);
+    extend_walkway(ferry, victoria[ind].to, dock, victoria[ind].from, "Victoria-Sauteurs");
     break;
   case 8:
   case 34:
-    contract_walkway(ferry, victoria[ind].to, dock, victoria[ind].from);
+    contract_walkway(ferry, victoria[ind].to, dock, victoria[ind].from, "Victoria-Sauteurs");
     break;
   case 23:
     send_to_room("The ferryman calls out, "
@@ -2468,12 +2471,12 @@ void process_sugarloaf_ferry(void)
   case 1:
   case 28:
   case 54:
-    extend_walkway(ferry, sugarloaf[ind].to, dock, sugarloaf[ind].from);
+    extend_walkway(ferry, sugarloaf[ind].to, dock, sugarloaf[ind].from, "Sugar Loaf Island - Green Island - Sauteurs");
     break;
   case 8:
   case 34:
   case 60:
-    contract_walkway(ferry, sugarloaf[ind].to, dock, sugarloaf[ind].from);
+    contract_walkway(ferry, sugarloaf[ind].to, dock, sugarloaf[ind].from, "Sugar Loaf Island - Green Island - Sauteurs");
     break;
   case 23:
     send_to_room("The ferryman calls out, "

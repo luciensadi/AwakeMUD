@@ -1740,7 +1740,7 @@ void send_message_history_to_descriptor(struct descriptor_data *d, int channel, 
   }
   
   if (d->message_history[channel].NumItems() == 0) {
-    snprintf(buf, sizeof(buf), "You haven't heard any messages %s yet.\r\n", channel_string);
+    snprintf(buf, sizeof(buf), "You have no messages %s yet.\r\n", channel_string);
     write_to_output(buf, d);
     return;
   }
