@@ -2027,7 +2027,7 @@ void extend_walkway_st(int ferry, int to, int room, int from)
   
   create_linked_exit(ferry, to, room, from, "extend_walkway_st");
   
-  send_to_room("The Seattle ferry docks at the pier, and extends its walkway.\r\n", &world[room]);
+  send_to_room("The Seattle-Tacoma ferry docks at the pier, and extends its walkway.\r\n", &world[room]);
   send_to_room("The ferry docks at the pier, and extends its walkway.\r\n", &world[ferry]);
 }
 void contract_walkway_st(int ferry, int to, int room, int from)
@@ -2037,7 +2037,7 @@ void contract_walkway_st(int ferry, int to, int room, int from)
 
   delete_linked_exit(ferry, to, room, from, "contract_walkway_st");
   
-  send_to_room("The walkway recedes, and the Seattle ferry departs.\r\n", &world[room]);
+  send_to_room("The walkway recedes, and the Seattle-Tacoma ferry departs.\r\n", &world[room]);
   send_to_room("The walkway recedes, and the ferry departs.\r\n", &world[ferry]);
 }
 
@@ -2056,7 +2056,7 @@ void process_seattle_ferry(void)
 
   switch (where) {
   case 0:
-    send_to_room("The ferry approaches, gliding across the bay towards "
+    send_to_room("The Seattle-Tacoma ferry approaches, gliding across the bay towards "
                  "the dock.\r\n", &world[dock]);
     break;
   case 1:
@@ -2072,7 +2072,7 @@ void process_seattle_ferry(void)
                  "\"Next stop: Tacoma.\"\r\n", &world[ferry]);
     break;
   case 13:
-    send_to_room("The ferry approaches, gliding across the bay towards "
+    send_to_room("The Seattle-Tacoma ferry approaches, gliding across the bay towards "
                  "the dock.\r\n", &world[dock]);
     break;
   case 18:
@@ -2366,7 +2366,7 @@ void process_seatac_ferry(void)
 
   switch (where) {
   case 0:
-    send_to_room("The ferry approaches, gliding across the bay towards "
+    send_to_room("The Bradenton-Tacoma ferry approaches, gliding across the bay towards "
                  "the dock.\r\n", &world[dock]);
     break;
   case 1:
@@ -2382,7 +2382,7 @@ void process_seatac_ferry(void)
                  "\"Next stop: Bradenton.\"\r\n", &world[ferry]);
     break;
   case 13:
-    send_to_room("The ferry approaches, gliding across the bay towards "
+    send_to_room("The Bradenton-Tacoma ferry approaches, gliding across the bay towards "
                  "the dock.\r\n", &world[dock]);
     break;
   case 18:
@@ -2416,7 +2416,7 @@ void process_victoria_ferry(void)
   switch (where) {
   case 0:
   case 26:
-    send_to_room("The ferry approaches, gliding across the sea towards "
+    send_to_room("The Victoria-Sauteurs ferry approaches, gliding across the sea towards "
                  "the dock.\r\n", &world[dock]);
     break;
   case 1:
@@ -2429,11 +2429,11 @@ void process_victoria_ferry(void)
     break;
   case 23:
     send_to_room("The ferryman calls out, "
-                 "\"Next stop Victoria.\"\r\n", &world[ferry]);
+                 "\"Next stop: Victoria.\"\r\n", &world[ferry]);
     break;
   case 49:
     send_to_room("The ferryman calls out, "
-                 "\"Next stop Sauteurs.\"\r\n", &world[ferry]);
+                 "\"Next stop: Sauteurs.\"\r\n", &world[ferry]);
     break;
   }
 
@@ -2465,7 +2465,7 @@ void process_sugarloaf_ferry(void)
   case 0:
   case 26:
   case 52:
-    send_to_room("The ferry approaches, gliding across the sea towards "
+    send_to_room("The island ferry approaches, gliding across the sea towards "
                  "the dock.\r\n", &world[dock]);
     break;
   case 1:
@@ -2480,15 +2480,15 @@ void process_sugarloaf_ferry(void)
     break;
   case 23:
     send_to_room("The ferryman calls out, "
-                 "\"Next stop Sugar Loaf Island.\"\r\n", &world[ferry]);
+                 "\"Next stop: Sugar Loaf Island.\"\r\n", &world[ferry]);
     break;
   case 49:
     send_to_room("The ferryman calls out,, "
-                 "\"Next stop Green Island.\"\r\n", &world[ferry]);
+                 "\"Next stop: Green Island.\"\r\n", &world[ferry]);
     break;
   case 75:
     send_to_room("The ferryman calls out,, "
-                 "\"Next stop Sauteurs.\"\r\n", &world[ferry]);
+                 "\"Next stop: Sauteurs.\"\r\n", &world[ferry]);
     break;
     
   }
