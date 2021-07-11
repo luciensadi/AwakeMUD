@@ -2256,8 +2256,8 @@ int perform_dupe_check(struct descriptor_data *d)
     SEND_TO_Q("You take over your own body, already in use!\r\n", d);
     act("$n shakes $s head to clear it.",
         TRUE, d->character, 0, 0, TO_ROOM);
-    snprintf(buf, sizeof(buf), "%s has re-logged in ... disconnecting old socket.",
-            GET_CHAR_NAME(d->character));
+    snprintf(buf, sizeof(buf), "%s [%s] has re-logged in ... disconnecting old socket.",
+            GET_CHAR_NAME(d->character), d->host);
     mudlog(buf, d->character, LOG_CONNLOG, TRUE);
     if (d->character->persona)
     {
