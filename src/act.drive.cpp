@@ -1681,7 +1681,7 @@ ACMD(do_gridguide)
     return;
   } 
   
-  if (!str_cmp(arg, "del")) {
+  if (is_abbrev(arg, "delete")) {
     struct grid_data *temp;
     for (grid = veh->grid; grid; grid = grid->next)
       if (!str_cmp(buf2, grid->name))
@@ -1695,7 +1695,7 @@ ACMD(do_gridguide)
       send_to_char("You remove the destination from the system.\r\n", ch);
       act("$n punches something into the autonav.", FALSE, ch, 0 , 0, TO_ROOM);
     }
-  } else if (!str_cmp(arg, "add")) {
+  } else if (is_abbrev(arg, "add")) {
     int i = 0;
     for (grid = veh->grid; grid; grid = grid->next) {
       if (!str_cmp(buf2, grid->name)) {
@@ -1741,6 +1741,9 @@ ACMD(do_gridguide)
     veh->grid = grid;
     send_to_char("You add the destination into the system.\r\n", ch);
     act("$n punches something into the autonav.", FALSE, ch, 0 , 0, TO_ROOM);
+  }
+  else {
+    send_to_char("Sorry, that command wasn't recognized. You can 'gridguide add' or 'gridguide del'.\r\n", ch);
   }
 }
 
