@@ -556,8 +556,9 @@ ACMD(do_spellset)
     return;
   }
   force = atoi(force_arg);
-  if (force < 1) {
-    send_to_char("Minimum force is 1.\r\n", ch);
+  
+  if (force >= 1 && (GET_TRADITION(vict) == TRAD_ADEPT || GET_TRADITION(vict) == TRAD_MUNDANE || GET_ASPECT(vict) == ASPECT_CONJURER)) {
+    send_to_char(ch, "%s can't learn spells. You can only delete them from them with Force = 0.\r\n", GET_CHAR_NAME(vict));
     return;
   }
   // TODO Does the magic attribute or sorcery skill limit the force? 
@@ -570,7 +571,8 @@ ACMD(do_spellset)
   strcpy(buf, spells[spelltoset].name);
   // Require that the attribute spells have an attribute specified (see spell->subtype comment).
   if (spelltoset == SPELL_INCATTR || spelltoset == SPELL_INCCYATTR ||
-      spelltoset == SPELL_DECATTR || spelltoset == SPELL_DECCYATTR) {
+      spelltoset == SPELL_DECATTR || spelltoset == SPELL_DECCYATTR)
+  {
     // Check for the argument.
     if (!*argument) {
       send_to_char("You must supply one of 'bod', 'qui', 'str', 'int', 'wil', 'cha', 'rea'.\r\n", ch);
@@ -594,17 +596,65 @@ ACMD(do_spellset)
     }
   }
   
-  // TODO: Checks for validity (if the character is unable to use the spell, don't set it).
-  // TODO: What if you want to remove a spell from someone?
+  // Checks for validity (if the character is unable to use the spell, don't set it).
+  if (force > 0) {
+    if ((GET_ASPECT(vict) == ASPECT_ELEMFIRE && spells[spelltoset].category != COMBAT) ||
+        (GET_ASPECT(vict) == ASPECT_ELEMEARTH && spells[spelltoset].category != MANIPULATION) ||
+        (GET_ASPECT(vict) == ASPECT_ELEMWATER && spells[spelltoset].category != ILLUSION) ||
+        (GET_ASPECT(vict) == ASPECT_ELEMAIR && spells[spelltoset].category != DETECTION)) {
+      send_to_char("Spell is not compatible with character's aspect.\r\n", ch);
+      return;
+    }
+    
+    if (GET_ASPECT(vict) == ASPECT_SHAMANIST) {
+      int skill = 0, target = 0;
+      totem_bonus(vict, 0, spelltoset, target, skill);
+      if (skill < 1) {
+        send_to_char("Spell is not compatible with character's totem.\r\n", ch);
+        return;
+      }
+    }
+  }
   
-  struct spell_data *spell = new spell_data;
+  struct spell_data *spell = NULL;
+  
+  // Find the spell if they have it already.
+  for (spell = GET_SPELLS(vict); spell; spell = spell->next) {
+    if (spell->type == spelltoset && spell->subtype == subtype) {
+      // Found it! Handle accordingly.
+      int old_force = spell->force;
+      
+      // Spell removal, or just set it?
+      if (force <= 0) {
+        struct spell_data *temp;
+        REMOVE_FROM_LIST(spell, GET_SPELLS(vict), next);
+        delete spell;
+        spell = NULL;
+      } else {
+        spell->force = force;
+      }
+      
+      send_to_char(ch, "%s's %s changed from force %d to %d.\r\n", GET_CHAR_NAME(vict), spells[spelltoset].name, old_force, force);
+      snprintf(buf, sizeof(buf), "$n has set your '%s' spell to Force %d (from %d).", spells[spelltoset].name, force, old_force);
+      act(buf, TRUE, ch, NULL, vict, TO_VICT);
+      snprintf(buf, sizeof(buf), "%s set %s's '%s' spell to Force %d (was %d).", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), spells[spelltoset].name, force, old_force);
+      mudlog(buf, ch, LOG_WIZLOG, TRUE);
+      return;
+    }
+  }
 
-  // Three lines away from working spellset command. How do I get the damn values?
+  // They didn't have it before, so we can just call it done.
+  if (force <= 0) {
+    send_to_char(ch, "%s doesn't have the %s spell.\r\n", GET_CHAR_NAME(vict), spells[spelltoset].name);
+    return;
+  }
+  
+  spell = new spell_data;
 
   /* spell->name is a pointer to a char, and other code (spell release etc) deletes what it points to
       on cleanup. Thus, you need to clone the spell_type's name into the spell_data to assign your
       new spell a name. */
-  spell->name = str_dup(buf);
+  spell->name = str_dup(spells[spelltoset].name);
   
   /* The index of the spells[] table is a 1:1 mapping of the SPELL_ type, so you can just set the
       spell->type field to your spelltoset value. */
@@ -620,8 +670,10 @@ ACMD(do_spellset)
   GET_SPELLS(vict) = spell;
   
   send_to_char("OK.\r\n", ch);
-  snprintf(buf, sizeof(buf), "$n has set your '%s' spell to Force %d.", spells[spelltoset].name, force);
+  snprintf(buf, sizeof(buf), "$n has given you the '%s' spell at Force %d.", spells[spelltoset].name, force);
   act(buf, TRUE, ch, NULL, vict, TO_VICT);
+  snprintf(buf, sizeof(buf), "%s set %s's '%s' spell to Force %d (was 0).", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), spells[spelltoset].name, force);
+  mudlog(buf, ch, LOG_WIZLOG, TRUE);
 }
 
 
