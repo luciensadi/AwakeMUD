@@ -871,19 +871,25 @@ ACMD(do_gen_write)
     send_to_char("You must be Authorized to use that command.\r\n", ch);
     return;
   }
+  
+  const char *cmd_name = "Error";
 
   switch (subcmd) {
   case SCMD_BUG:
     filename = BUG_FILE;
+    cmd_name = "bug";
     break;
   case SCMD_TYPO:
     filename = TYPO_FILE;
+    cmd_name = "typo";
     break;
   case SCMD_IDEA:
     filename = IDEA_FILE;
+    cmd_name = "idea";
     break;
   case SCMD_PRAISE:
     filename = PRAISE_FILE;
+    cmd_name = "praise";
     break;
   default:
     return;
@@ -905,7 +911,7 @@ ACMD(do_gen_write)
     return;
   }
   snprintf(buf, sizeof(buf), "%s %s: %s", (ch->desc->original ? GET_CHAR_NAME(ch->desc->original) : GET_CHAR_NAME(ch)),
-          CMD_NAME, argument);
+          cmd_name, argument);
   mudlog(buf, ch, LOG_MISCLOG, FALSE);
 
   if (stat(filename, &fbuf) < 0) {

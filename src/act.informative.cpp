@@ -4135,11 +4135,12 @@ ACMD(do_who)
             color = "<span style=\"color:#FF0000\">";
             break; // bold red
           case 'G':
-          case 'E':
           case 'J':
+          case 'E':
             color = "<span style=\"color:#00FF00\">";
             break; // bold green
           case 'Y':
+          case 'O':
             color = "<span style=\"color:#FFFF00\">";
             break; // bold yellow
           case 'B':
