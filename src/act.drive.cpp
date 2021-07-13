@@ -1047,27 +1047,31 @@ ACMD(do_repair)
   target += (veh->damage - 2) / 2;
   target += modify_target(ch);
 
-  for (obj = ch->carrying; obj && !mod; obj = obj->next_content)
-    if (GET_OBJ_TYPE(obj) == ITEM_WORKSHOP && GET_WORKSHOP_TYPE(obj) == TYPE_VEHICLE && GET_WORKSHOP_GRADE(obj) == TYPE_KIT)
-      mod = TYPE_KIT;
-  for (int i = 0; i < NUM_WEARS && !mod; i++)
-    if ((obj = GET_EQ(ch, i)) && GET_OBJ_TYPE(obj) == ITEM_WORKSHOP && GET_WORKSHOP_TYPE(obj) == TYPE_VEHICLE && GET_WORKSHOP_GRADE(obj) == TYPE_KIT)
-      mod = TYPE_KIT;
-  shop = find_workshop(ch, TYPE_VEHICLE);
-  if (!shop) {
-    if (veh->damage >= VEH_DAMAGE_NEEDS_WORKSHOP) {
-      send_to_char("You'll need a garage with a vehicle workshop unpacked in it to fix this much damage.\r\n", ch);
-      return;
+  if (!access_level(ch, LVL_ADMIN)) {
+    for (obj = ch->carrying; obj && !mod; obj = obj->next_content)
+      if (GET_OBJ_TYPE(obj) == ITEM_WORKSHOP && GET_WORKSHOP_TYPE(obj) == TYPE_VEHICLE && GET_WORKSHOP_GRADE(obj) == TYPE_KIT)
+        mod = TYPE_KIT;
+    for (int i = 0; i < NUM_WEARS && !mod; i++)
+      if ((obj = GET_EQ(ch, i)) && GET_OBJ_TYPE(obj) == ITEM_WORKSHOP && GET_WORKSHOP_TYPE(obj) == TYPE_VEHICLE && GET_WORKSHOP_GRADE(obj) == TYPE_KIT)
+        mod = TYPE_KIT;
+    shop = find_workshop(ch, TYPE_VEHICLE);
+    if (!shop) {
+      if (veh->damage >= VEH_DAMAGE_NEEDS_WORKSHOP) {
+        send_to_char("You'll need a garage with a vehicle workshop unpacked in it to fix this much damage.\r\n", ch);
+        return;
+      }
+      target += 2;
     }
-    target += 2;
-  }
-  
-  if (shop && GET_WORKSHOP_GRADE(shop) == TYPE_FACILITY) {
-    target -= 2;
-  } else if (mod == TYPE_KIT) {
-    target += 2;
+    
+    if (shop && GET_WORKSHOP_GRADE(shop) == TYPE_FACILITY) {
+      target -= 2;
+    } else if (mod == TYPE_KIT) {
+      target += 2;
+    } else {
+      target += 4;
+    }
   } else {
-    target += 4;
+    target = 1;
   }
 
   if ((success = (GET_LEVEL(ch) > LVL_MORTAL ? 50 : success_test(skill, target))) < 1) {

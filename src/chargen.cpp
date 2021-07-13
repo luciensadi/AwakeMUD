@@ -316,8 +316,17 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
     for (int j = 0; j < NUM_ARCHETYPE_SOFTWARE; j++) {
       struct obj_data *program;
       if ((program = read_object(archetypes[i]->software[j], VIRTUAL))) {
-        // Default the program.
-        GET_OBJ_VAL(program, 4)++;
+        // Default the program, but only if it's not bod/sens/mask/evas.
+        switch (GET_OBJ_VAL(program, 0)) {
+          case SOFT_BOD:
+          case SOFT_SENSOR:
+          case SOFT_MASKING:
+          case SOFT_EVASION:
+            break;
+          default:
+            GET_OBJ_VAL(program, 4)++;
+            break;
+        }  
         
         // Install it to the deck.
         obj_to_obj(program, temp_obj);

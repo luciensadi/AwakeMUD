@@ -961,7 +961,7 @@ SPECIAL(taxi)
     if (!found) {
       if (GET_ACTIVE(driver) == ACT_AWAIT_YESNO) {
         if (str_str(argument, "yes") || str_str(argument, "sure") || str_str(argument, "alright") ||
-            str_str(argument, "yeah") || str_str(argument, "okay") || str_str(argument, "yup")) {
+            str_str(argument, "yeah") || str_str(argument, "okay") || str_str(argument, "yup") || str_str(argument, "OK")) {
           comm = CMD_TAXI_YES;
         } else if (str_str(argument, "no") || str_str(argument, "nah") || str_str(argument, "negative")) {
           comm = CMD_TAXI_NO;
