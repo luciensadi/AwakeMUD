@@ -3173,7 +3173,8 @@ void send_nuyen_rewards_to_pcs() {
             && d->connected != CON_ASKNAME))
     {
       ch = (d->original ? d->original : d->character);
-      if (IS_SENATOR(ch))
+      // Staff and chargen characters don't get the idle bonus.
+      if (IS_SENATOR(ch) || PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED))
         continue;
         
       if (ch->char_specials.timer > IDLE_NUYEN_REWARD_THRESHOLD_IN_MINUTES) {
