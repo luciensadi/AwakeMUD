@@ -1382,11 +1382,12 @@ ACMD(do_skills)
   if (subcmd == SCMD_SKILLS) {
     // Append skills.
     for (i = MIN_SKILLS; i < MAX_SKILLS; i++) {
+      if (SKILL_IS_LANGUAGE(i))
+        continue;
+        
       if (!mode_all && *arg && !is_abbrev(arg, skills[i].name))
         continue;
-      
-      if (i == SKILL_ENGLISH)
-        i = SKILL_ANIMAL_HANDLING;
+        
       if ((GET_SKILL(ch, i)) > 0) {
         snprintf(buf2, sizeof(buf2), "%-30s %s\r\n", skills[i].name, how_good(i, GET_SKILL(ch, i)));
         strcat(buf, buf2);
