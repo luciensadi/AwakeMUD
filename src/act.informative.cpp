@@ -4097,20 +4097,27 @@ ACMD(do_who)
             color = "<span style=\"color:#000000\">";
             break; // black
           case 'r':
+          case 't':
             color = "<span style=\"color:#990000\">";
-            break; // red
+            break; // red / tan
           case 'g':
+          case 'j':
+          case 'e':
             color = "<span style=\"color:#336633\">";
-            break; // green
+            break; // green / jade / lime
           case 'y':
+          case 'o':
             color = "<span style=\"color:#CC9933\">";
-            break; // yellow
+            break; // yellow / orange
           case 'b':
+          case 'a':
             color = "<span style=\"color:#3333CC\">";
-            break; // blue
+            break; // blue / azure
           case 'm':
+          case 'p':
+          case 'v':
             color = "<span style=\"color:#663366\">";
-            break; // magenta
+            break; // magenta / pink / violet
           case 'n':
             color = "<span style=\"color:#CCCCCC\">";
             break; // normal
@@ -4124,18 +4131,24 @@ ACMD(do_who)
             color = "<span style=\"color:#666666\">";
             break; // bold black
           case 'R':
+          case 'T':
             color = "<span style=\"color:#FF0000\">";
             break; // bold red
           case 'G':
+          case 'E':
+          case 'J':
             color = "<span style=\"color:#00FF00\">";
             break; // bold green
           case 'Y':
             color = "<span style=\"color:#FFFF00\">";
             break; // bold yellow
           case 'B':
+          case 'A':
             color = "<span style=\"color:#0000FF\">";
             break; // bold blue
           case 'M':
+          case 'P':
+          case 'V':
             color = "<span style=\"color:#FF00FF\">";
             break; // bold magenta
           case 'N':
@@ -4162,7 +4175,40 @@ ACMD(do_who)
           *temp++ = '^';
           *temp++ = *str++;
         }
-      } else
+      } 
+      else if (*str == '<') {
+        str++;
+        *temp++ = '&';
+        *temp++ = 'l';
+        *temp++ = 't';
+        *temp++ = ';';
+      }
+      else if (*str == '>') {
+        str++;
+        *temp++ = '&';
+        *temp++ = 'g';
+        *temp++ = 't';
+        *temp++ = ';';
+      }
+      else if (*str == '(') {
+        str++;
+        *temp++ = '&';
+        *temp++ = 'l';
+        *temp++ = 'p';
+        *temp++ = 'a';
+        *temp++ = 'r';
+        *temp++ = ';';
+      }
+      else if (*str == ')') {
+        str++;
+        *temp++ = '&';
+        *temp++ = 'r';
+        *temp++ = 'p';
+        *temp++ = 'a';
+        *temp++ = 'r';
+        *temp++ = ';';
+      } 
+      else
         *temp++ = *str++;
     }
     *temp = '\0';
