@@ -605,7 +605,7 @@ struct command_info cmd_info[] =
     { "icedit"   , POS_DEAD    , do_icedit   , LVL_BUILDER, 0 },
     { "iclist"   , POS_DEAD    , do_iclist   , LVL_BUILDER, 0 },
     { "iclone"   , POS_DEAD    , do_iclone   , LVL_BUILDER, 0 },
-    { "id"       , POS_RESTING , do_examine  , 0, SCMD_PROBE },
+    { "identify" , POS_RESTING , do_examine  , 0, SCMD_PROBE }, // deliberately out of order to guard idea
     { "idea"     , POS_DEAD    , do_gen_write, 0, SCMD_IDEA },
     //{ "idelete"  , POS_DEAD    , do_idelete  , LVL_PRESIDENT, 0 },
     { "iedit"    , POS_DEAD    , do_iedit    , LVL_BUILDER, 0 },
