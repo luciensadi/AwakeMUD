@@ -5064,6 +5064,8 @@ ACMD(do_position)
 ACMD(do_status)
 {
   struct char_data *targ = ch;
+  bool printed = FALSE;
+  
   if (GET_LEVEL(ch) >= LVL_BUILDER && *argument) {
     skip_spaces(&argument);
     targ = get_char_room_vis(ch, argument);
@@ -5072,29 +5074,41 @@ ACMD(do_status)
     if (!targ)
       targ = ch;
   }
+  
   if (ch == targ)
     send_to_char("You are affected by:\r\n", ch);
   else send_to_char(ch, "%s is affected by:\r\n", GET_CHAR_NAME(targ));
-  if (ch->real_abils.esshole)
+  
+  if (ch->real_abils.esshole) {
     send_to_char(ch, "  Essence Hole (%.2f)\r\n", (float)targ->real_abils.esshole / 100);
+    printed = TRUE;
+  }
   switch (get_armor_penalty_grade(targ)) {
     case ARMOR_PENALTY_TOTAL:
       send_to_char("  Bulky Armor (Insane)\r\n", ch);
+      printed = TRUE;
       break;
     case ARMOR_PENALTY_HEAVY:
       send_to_char("  Bulky Armor (Serious)\r\n", ch);
+      printed = TRUE;
       break;
     case ARMOR_PENALTY_MEDIUM:
       send_to_char("  Bulky Armor (Moderate)\r\n", ch);
+      printed = TRUE;
       break;
     case ARMOR_PENALTY_LIGHT:
       send_to_char("  Bulky Armor (Light)\r\n", ch);
+      printed = TRUE;
       break;
   }
-  if (GET_REACH(targ))
+  if (GET_REACH(targ)) {
     send_to_char(ch, "Extra Reach (%dm)\r\n", GET_REACH(targ));
-  if (GET_DRUG_AFFECT(targ) && GET_DRUG_STAGE(targ) > 0)
+    printed = TRUE;
+  }
+  if (GET_DRUG_AFFECT(targ) && GET_DRUG_STAGE(targ) > 0) {
     send_to_char(ch, "  %s (%s)\r\n", drug_types[GET_DRUG_AFFECT(targ)].name, GET_DRUG_STAGE(targ) == 1 ? "Up" : "Down");
+    printed = TRUE;
+  }
   for (struct sustain_data *sust = GET_SUSTAINED(targ); sust; sust = sust->next)
     if (!sust->caster) {
       strlcpy(buf, spells[sust->spell].name, sizeof(buf));
@@ -5103,9 +5117,11 @@ ACMD(do_status)
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (%s)", attributes[sust->subtype]);
       send_to_char(buf, ch);
       send_to_char("\r\n", ch);
+      printed = TRUE;
     }
   if (GET_SUSTAINED_NUM(targ)) {
     send_to_char("You are sustaining:\r\n", ch);
+    printed = TRUE;
     int i = 1;
     for (struct sustain_data *sust = GET_SUSTAINED(targ); sust; sust = sust->next)
       if (sust->caster || sust->spirit == targ) {
@@ -5121,6 +5137,27 @@ ACMD(do_status)
         send_to_char("\r\n", ch);
         i++;
       }
+  }
+  
+  if (!printed) {
+    send_to_char(ch, "Nothing.\r\n");
+  }
+  
+  if (GET_MAG(ch) > 0) {
+    send_to_char("\r\n", ch);
+    int force = 0, total = 0;
+    for (int x = 0; x < NUM_WEARS; x++)
+      if (GET_EQ(ch, x) && GET_OBJ_TYPE(GET_EQ(ch, x)) == ITEM_FOCUS && GET_OBJ_VAL(GET_EQ(ch, x), 2) == GET_IDNUM(ch) && GET_OBJ_VAL(GET_EQ(ch, x), 4)) {
+        force += GET_OBJ_VAL(GET_EQ(ch, x), 1);
+        total++;
+      }
+    if (force == 0) {
+      send_to_char(ch, "You're not using any foci.\r\n");
+    } else if (force * 100 > GET_REAL_MAG(ch) * 2) {
+      send_to_char(ch, "^YYou are at risk of geas from using too many points of foci! You're using %d, and need to reduce to %d.^n\r\n", force, GET_REAL_MAG(ch) * 2 / 100);
+    } else {
+      send_to_char(ch, "You're using a total of %d points of foci. If this gets above %d, you'll be at risk of geas.\r\n", force, GET_REAL_MAG(ch) * 2 / 100);
+    }
   }
 }
 
