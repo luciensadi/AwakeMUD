@@ -950,6 +950,7 @@ void assign_rooms(void)
   SPECIAL(airport_gate);
   SPECIAL(chargen_south_from_trainer);
   SPECIAL(chargen_skill_annex);
+  SPECIAL(south_of_chargen_skill_annex);
   SPECIAL(chargen_unpractice_skill);
   SPECIAL(floor_has_glass_shards);
   SPECIAL(chargen_career_archetype_paths);
@@ -973,6 +974,7 @@ void assign_rooms(void)
   /* CharGen */
   ASSIGNROOM(60505, chargen_south_from_trainer);
   ASSIGNROOM(60506, chargen_skill_annex);
+  ASSIGNROOM(60513, south_of_chargen_skill_annex);
   ASSIGNROOM(60562, auth_room);
   ASSIGNROOM(60514, chargen_career_archetype_paths);
   ASSIGNROOM(60594, chargen_spirit_combat_west);
@@ -981,7 +983,6 @@ void assign_rooms(void)
   ASSIGNROOM(60507, chargen_unpractice_skill);
   ASSIGNROOM(60508, chargen_unpractice_skill);
   ASSIGNROOM(60509, chargen_unpractice_skill);
-  ASSIGNROOM(60513, chargen_unpractice_skill);
   #ifdef REQUIRE_LANGUAGE_SKILL_POINTS_BE_USED_ONLY_FOR_LANGUAGE
   ASSIGNROOM(60512, chargen_language_annex);
   #else

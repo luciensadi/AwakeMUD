@@ -4632,6 +4632,31 @@ SPECIAL(chargen_language_annex) {
   return FALSE;
 }
 
+void remap_chargen_archetype_paths_and_perform_command(struct room_data *room, struct char_data *ch, char *argument, int cmd) {
+  // Store the current exit, then overwrite with our custom one.
+  struct room_data *east_temp_to_room = room->dir_option[EAST]->to_room;
+  if (GET_TRADITION(ch) == TRAD_HERMETIC)
+    room->dir_option[EAST]->to_room = &world[real_room(RM_CHARGEN_PATH_OF_THE_MAGICIAN_HERMETIC)];
+  else if (GET_TRADITION(ch) == TRAD_SHAMANIC)
+    room->dir_option[EAST]->to_room = &world[real_room(RM_CHARGEN_PATH_OF_THE_MAGICIAN_SHAMANIC)];
+  else
+    room->dir_option[EAST]->to_room = NULL;
+    
+  // Same for the south exit.
+  struct room_data *south_temp_to_room = room->dir_option[SOUTH]->to_room;
+  if (GET_TRADITION(ch) != TRAD_ADEPT)
+    room->dir_option[SOUTH]->to_room = NULL;
+  
+  // Execute the actual command as normal. We know it'll always be cmd_info since you can't rig or mtx in chargen.
+  ((*cmd_info[cmd].command_pointer) (ch, argument, cmd, cmd_info[cmd].subcmd));
+  
+  // Restore the east exit for the room to the normal one.
+  room->dir_option[EAST]->to_room = east_temp_to_room;
+  
+  // Same for the south exit.
+  room->dir_option[SOUTH]->to_room = south_temp_to_room;
+}
+
 // Prevent people from moving south from teachers until they've spent all their skill points.
 SPECIAL(chargen_skill_annex) {
   NO_DRAG_BULLSHIT;
@@ -4669,6 +4694,20 @@ SPECIAL(chargen_skill_annex) {
   // Tie in with the chargen_unpractice_skill routine above.
   if (CMD_IS("unpractice")) {
     return chargen_unpractice_skill(ch, NULL, cmd, argument);
+  }
+  
+  return FALSE;
+}
+
+SPECIAL(south_of_chargen_skill_annex) {
+  NO_DRAG_BULLSHIT;
+  
+  if (!ch || !cmd || IS_NPC(ch)) 
+    return FALSE;
+    
+  if ((CMD_IS("s") || CMD_IS("south"))) {
+    remap_chargen_archetype_paths_and_perform_command(((struct room_data *) me)->dir_option[SOUTH]->to_room, ch, argument, cmd);
+    return TRUE;
   }
   
   return FALSE;
@@ -4762,7 +4801,6 @@ SPECIAL(chargen_career_archetype_paths) {
   NO_DRAG_BULLSHIT;
   
   struct room_data *room = (struct room_data *) me;
-  struct room_data *temp_to_room = NULL;
   
   if (!ch || !cmd || IS_NPC(ch))
     return FALSE;
@@ -4779,21 +4817,7 @@ SPECIAL(chargen_career_archetype_paths) {
     return TRUE;
   }
   
-  // Map the east exit to the correct branch of magic's path, then proceed.
-  
-  // Store the current exit, then overwrite with our custom one.
-  temp_to_room = room->dir_option[EAST]->to_room;
-  if (GET_TRADITION(ch) == TRAD_HERMETIC)
-    room->dir_option[EAST]->to_room = &world[real_room(RM_CHARGEN_PATH_OF_THE_MAGICIAN_HERMETIC)];
-  else
-    room->dir_option[EAST]->to_room = &world[real_room(RM_CHARGEN_PATH_OF_THE_MAGICIAN_SHAMANIC)];
-  
-  // Execute the actual command as normal. We know it'll always be cmd_info since you can't rig or mtx in chargen.
-  ((*cmd_info[cmd].command_pointer) (ch, argument, cmd, cmd_info[cmd].subcmd));
-  
-  // Restore the east exit for the room to the normal one.
-  room->dir_option[EAST]->to_room = temp_to_room;
-    
+  remap_chargen_archetype_paths_and_perform_command(room, ch, argument, cmd);    
   return TRUE;
 }
 
