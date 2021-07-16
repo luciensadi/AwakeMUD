@@ -302,17 +302,25 @@ int damage_modifier(struct char_data *ch, char *rbuf, int rbuf_size)
   return base_target;
 }
 
+int sustain_modifier(struct char_data *ch, char *rbuf, size_t rbuf_len) {
+  int base_target = 0;
+  
+  if (GET_SUSTAINED_NUM(ch) > 0) {
+    base_target += ((GET_SUSTAINED_NUM(ch) - GET_SUSTAINED_FOCI(ch)) * 2);
+    buf_mod(rbuf, rbuf_len, "Sustain", (GET_SUSTAINED_NUM(ch) - GET_SUSTAINED_FOCI(ch)) * 2);
+  }
+  
+  return base_target;
+}
+
 // Adds the combat_mode toggle
 int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int current_visibility_penalty) {
   extern time_info_data time_info;
   int base_target = 0, light_target = 0;
+  // get damage modifier
   base_target += damage_modifier(ch, rbuf, rbuf_len);
   // then apply modifiers for sustained spells
-  if (GET_SUSTAINED_NUM(ch) > 0)
-  {
-    base_target += ((GET_SUSTAINED_NUM(ch) - GET_SUSTAINED_FOCI(ch)) * 2);
-    buf_mod(rbuf, rbuf_len, "Sustain", (GET_SUSTAINED_NUM(ch) - GET_SUSTAINED_FOCI(ch)) * 2);
-  }
+  base_target += sustain_modifier(ch, rbuf, rbuf_len);
   
   struct room_data *temp_room = get_ch_in_room(ch);
   

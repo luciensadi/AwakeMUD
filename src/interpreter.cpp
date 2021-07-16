@@ -3116,6 +3116,9 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("but", "put");
   COMMAND_ALIAS("cyberwear", "cyberware");
   COMMAND_ALIAS("biowear", "bioware");
+  COMMAND_ALIAS("lsit", "list");  
+  COMMAND_ALIAS("out", "put"); 
+  COMMAND_ALIAS("ivn", "inventory");
   
   // Combat stuff.
   COMMAND_ALIAS("attack", "kill");
@@ -3175,6 +3178,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("gold", "balance");
   COMMAND_ALIAS("suggest", "idea");
   COMMAND_ALIAS("chat", "ooc");
+  COMMAND_ALIAS("gossip", "ooc");
   COMMAND_ALIAS("purchase", "buy");
   COMMAND_ALIAS("stats", "score");
   COMMAND_ALIAS("attributes", "score");
@@ -3199,6 +3203,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("scna", "scan");
   
   COMMAND_ALIAS("speak", "language");
+  
   
   // Found nothing, return the failure code.
   return -1;
