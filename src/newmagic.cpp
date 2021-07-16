@@ -2954,10 +2954,10 @@ ACMD(do_conjure)
         break;
       }
       
-    // Modify the TN for wound penalties.
-    target += damage_modifier(ch, buf3, sizeof(buf3));
-    snprintf(buf2, sizeof(buf2), "Wound modifiers: %s", buf3);
-    act(buf2, FALSE, ch, 0, 0, TO_ROLLS);
+    // Modify the TN for wound penalties and sustains.
+    target += damage_modifier(ch, buf3, sizeof(buf3)) + sustain_modifier(ch, buf2, sizeof(buf2));
+    snprintf(buf, sizeof(buf), "Sustain: %s\r\nWound modifiers: %s", buf3, buf2);
+    act(buf, FALSE, ch, 0, 0, TO_ROLLS);
     
     int success = success_test(skill, target);
     if (!conjuring_drain(ch, force) && AWAKE(ch)) {

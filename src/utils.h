@@ -57,6 +57,7 @@ int     modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, i
 int     modify_target_rbuf(struct char_data *ch, char *rbuf, int rbuf_len);
 int     modify_target(struct char_data *ch);
 int     damage_modifier(struct char_data *ch, char *rbuf, int rbuf_len);
+int     sustain_modifier(struct char_data *ch, char *rbuf, size_t rbuf_len);
 char *  capitalize(const char *source);
 char *  decapitalize_a_an(const char *source);
 char *  string_to_uppercase(const char *source);
