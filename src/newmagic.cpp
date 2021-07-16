@@ -2929,6 +2929,8 @@ ACMD(do_conjure)
       send_to_char("You aren't in the correct domain to conjure that spirit.\r\n", ch);
       return;
     }
+    
+    // Calculate the skill and TN used.
     int skill = GET_SKILL(ch, SKILL_CONJURING), target = force;
     if (ch->in_room->background[CURRENT_BACKGROUND_TYPE] == AURA_POWERSITE)
       skill += GET_BACKGROUND_COUNT(ch->in_room);
@@ -2939,6 +2941,8 @@ ACMD(do_conjure)
       send_to_char("Your totem will not let you conjure that spirit!\r\n", ch);
       return;
     }
+    
+    // Modify the skill rating by foci.
     for (int i = 0; i < NUM_WEARS; i++)
       if (GET_EQ(ch, i) 
           && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_FOCUS 
@@ -2949,6 +2953,12 @@ ACMD(do_conjure)
         skill += GET_OBJ_VAL(GET_EQ(ch, i), 1);
         break;
       }
+      
+    // Modify the TN for wound penalties.
+    target += damage_modifier(ch, buf3, sizeof(buf3));
+    snprintf(buf2, sizeof(buf2), "Wound modifiers: %s", buf3);
+    act(buf2, FALSE, ch, 0, 0, TO_ROLLS);
+    
     int success = success_test(skill, target);
     if (!conjuring_drain(ch, force) && AWAKE(ch)) {
       if (success < 1)
