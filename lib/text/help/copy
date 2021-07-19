@@ -1,9 +1,0 @@
-COPY
-
-Usage: ^gCOPY <program>^n
-
-This command is used to make copies of uncooked programs on
-desktop or laptop computers. It cannot be used to make copies
-of programs required for cyberdeck construction.
-
-^WSee Also: PROGRAM, COOK^n

@@ -1,9 +1,0 @@
-VIEW
-
-Usage: ^gVIEW <number>^n
-
-This command is used to display a file in headware memory over an
-image link or display link capable cybereye. It is useful for looking
-at photos that have been uploaded or displaying video footage.
-
-^WSee Also: MEMORY, DELETE, PHOTO^n

@@ -1,9 +1,0 @@
-DRAG
-
-Usage: ^gDRAG <person> <direction/vehicle>^n
-
-Drag is used to forcibly drag a person in a direction or into
-a vehicle. They must either be unconcious or laying down for
-them to be able to be dragged. Drag can also be used to free
-someone from the spirit power Bind.
-

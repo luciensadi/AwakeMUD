@@ -1,8 +1,0 @@
-ACCIDENT
-
-Usage: ^gORDER <spirit> ACCIDENT <target>^n
-
-This commands a spirit to cause the target to have a minor accident, along
-the lines of falling over. This causes the target to lose a turn in combat.
-
-^WSee Also: ORDER^N

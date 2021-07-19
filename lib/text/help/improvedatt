@@ -1,8 +1,0 @@
-"IMPROVED ATTRIBUTES"
-
-This power adds its rating to one of the users physical attributes.
-It is a permenant addition and is used when calculating karma costs
-for increasing attributes. Also, when the base rating plus the improved
-rating is more than the racial modified limit it costs a whole power
-point instead of only a half.
-

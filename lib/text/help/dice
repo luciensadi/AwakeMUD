@@ -1,9 +1,0 @@
-DICE
-
-Usage: ^gDICE <number of dice> [target number]^n
-
-This command is used for rolling dice for the whole room to see. 
-You can either use it for open tests without a target number or 
-you can specify a target number and it will also displays successes.
-
-^WSee Also: TARGET NUMBER^n

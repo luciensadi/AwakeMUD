@@ -1,9 +1,0 @@
-COMMANDS
-
-Usage: ^gCOMMANDS^n
-
-The COMMANDS command gives a canonical list of all the known verbs.
-
-Each command listed idealistically has a help file available, accessible by
-typing "^gHELP <command>^n".
-

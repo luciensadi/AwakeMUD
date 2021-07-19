@@ -1,9 +1,0 @@
-REMEMBER
-
-Usage: ^gREMEMBER <keyword> <name to remember by>^n
-
-This command is used to remember a person as name, so that their
-name is used in messages instead of their description or voice.
-In some cases you will see their description followed by their name.
-
-^WSee Also: CUSTOMIZE^n

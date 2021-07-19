@@ -1,8 +1,0 @@
-LANGUAGE
-
-Usage: ^gLANGUAGE
-       LANGUAGE <name of language>^n
-
-This command is used to list the languages you know and also to
-switch between languages. Whichever language you currently have
-set is the language you will perform all speaking actions in.

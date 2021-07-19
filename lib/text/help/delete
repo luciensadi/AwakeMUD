@@ -1,9 +1,0 @@
-DELETE
-
-Usage: ^gDELETE <number in list>^n
-
-This command is used to delete an item from headware memory.
-Be careful with this, once the item is gone, it is gone for good
-and cannot be retrieved.
-
-^WSee Also: MEMORY, VIEW^n

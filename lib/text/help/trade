@@ -1,9 +1,0 @@
-TRADE
-
-Usage: ^gTRADE <KARMA/NUYEN>^n
-
-Trade is for spending nuyen to get karma or karma to get nuyen.
-To purchase karma it costs 3d6 x 100 nuyen. You must have the maximum
-cost (1800 nuyen) in your possession before you use the command. Trading
-your karma for nuyen will get you 2d6 x 100 nuyen.
-

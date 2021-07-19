@@ -1,8 +1,0 @@
-MEMORY
-
-Usage: ^gMEMORY^n
-
-This command is used to list the contents on your headware memory.
-Items displayed in red are compressed.
-
-^WSee Also: LOAD, LINK, DELETE, VIEW^n

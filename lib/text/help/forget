@@ -1,9 +1,0 @@
-FORGET
-
-Usage: ^gFORGET <spell)^n
-
-This command is used in character generation to forget a learned spell
-and return all the used force points on it. Once outside of character
-generation you will no longer be able to use this command.
-
-^WSee Also: LEARN^n

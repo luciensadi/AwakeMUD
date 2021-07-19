@@ -1,9 +1,0 @@
-PAY
-
-Usage: ^gPAY <apartment name>^n
-
-This command is used to pay your lease on an apartment or other living
-area for another real life month. It is non-refundable and cannot be
-transferred once payed.
-
-^WSee Also: HOUSES^n

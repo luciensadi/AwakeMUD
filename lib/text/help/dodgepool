@@ -1,9 +1,0 @@
-"DODGE POOL"
-
-Dodge pool is used to attempt to dodge incoming attacks. It is
-possible to completly dodge attacks if you have enough dice allocated
-to it. Dodge pool is not used in melee combat and any dice allocated 
-to it are discarded.
-
-^WSee Also: CPOOL, POOLS, COMBAT POOL, BODY POOL^n
-
