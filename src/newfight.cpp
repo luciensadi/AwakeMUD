@@ -1127,10 +1127,12 @@ bool does_weapon_have_bayonet(struct obj_data *weapon) {
 
   struct obj_data *attach_proto = get_obj_proto_for_vnum(GET_WEAPON_ATTACH_UNDER_VNUM(weapon));
   
+  /*
   if (!attach_proto)
     log_vfprintf("No proto found for vnum %d", GET_WEAPON_ATTACH_UNDER_VNUM(weapon));
   if (GET_ACCESSORY_TYPE(attach_proto) != ACCESS_BAYONET)
     log_vfprintf("Vnum %d is not a bayonet", GET_WEAPON_ATTACH_UNDER_VNUM(weapon));
+  */
   
   return (attach_proto && GET_ACCESSORY_TYPE(attach_proto) == ACCESS_BAYONET);
 }

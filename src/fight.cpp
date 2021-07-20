@@ -2846,10 +2846,10 @@ bool process_has_ammo(struct char_data *ch, struct obj_data *wielded, bool deduc
     
     // No magazine, but has a bayonet? They're in charge mode.
     else if (does_weapon_have_bayonet(wielded)) {
-      send_to_char(ch, "has bayonet\r\n");
+      // send_to_char(ch, "has bayonet\r\n");
       return TRUE;
     } else {
-      send_to_char(ch, "no bayonet\r\n");
+      // send_to_char(ch, "no bayonet\r\n");
     }
     
     // The weapon requires a magazine and doesn't have one.
