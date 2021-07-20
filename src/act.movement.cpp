@@ -68,7 +68,7 @@ int can_move(struct char_data *ch, int dir, int extra)
   if (IS_SET(extra, CHECK_SPECIAL) && special(ch, convert_dir[dir], &empty_argument))
     return 0;
 
-  if (ch->in_room && ch->in_room->icesheet[0] && !IS_ASTRAL(ch)) {
+  if (ch->in_room && ch->in_room->icesheet[0] && !IS_ASTRAL(ch) && !IS_PROJECT(ch)) {
     if (FIGHTING(ch) && success_test(GET_QUI(ch), ch->in_room->icesheet[0] + modify_target(ch)) < 1)
     {
       send_to_char("The ice at your feet causes you to trip and fall!\r\n", ch);
@@ -98,7 +98,7 @@ int can_move(struct char_data *ch, int dir, int extra)
       send_to_char("That's private property -- no trespassing!\r\n", ch);
       return 0;
     }
-  if (ROOM_FLAGGED(EXIT(ch, dir)->to_room, ROOM_TUNNEL) && !IS_ASTRAL(ch))
+  if (ROOM_FLAGGED(EXIT(ch, dir)->to_room, ROOM_TUNNEL) && !IS_ASTRAL(ch) && !IS_PROJECT(ch))
     if (EXIT(ch, dir)->to_room->people &&
         EXIT(ch, dir)->to_room->people->next_in_room)
     {
@@ -376,7 +376,7 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
   }
 #endif
     
-  if (ROOM_FLAGGED(ch->in_room, ROOM_FALL) && !IS_ASTRAL(ch) && !(IS_SENATOR(ch) && PRF_FLAGGED(ch, PRF_NOHASSLE))) {
+  if (ROOM_FLAGGED(ch->in_room, ROOM_FALL) && !IS_ASTRAL(ch) && !IS_PROJECT(ch) && !(IS_SENATOR(ch) && PRF_FLAGGED(ch, PRF_NOHASSLE))) {
     perform_fall(ch);
     return 1;
   }
@@ -743,7 +743,7 @@ void move_vehicle(struct char_data *ch, int dir)
     look_at_room(ch, 0, 0);
   for (tch = veh->in_room->people; tch; tch = tch->next_in_room)
     if (IS_NPC(tch) && AWAKE(tch) && MOB_FLAGGED(tch, MOB_AGGRESSIVE) &&
-        !CH_IN_COMBAT(tch) && !IS_ASTRAL(tch))
+        !CH_IN_COMBAT(tch) && !IS_ASTRAL(tch) && !IS_PROJECT(tch))
       set_fighting(tch, veh);
   if (PLR_FLAGGED(ch, PLR_REMOTE))
     ch->in_room = was_in;
@@ -804,7 +804,7 @@ int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vic
   }
   
   if (IS_SET(EXIT(ch, dir)->exit_info, EX_CLOSED) &&
-            !((IS_ASTRAL(ch) && !IS_SET(EXIT(ch, dir)->exit_info, EX_ASTRALLY_WARDED)) /* door is astrally passable and char ia astral */
+            !(((IS_ASTRAL(ch) || IS_PROJECT(ch)) && !IS_SET(EXIT(ch, dir)->exit_info, EX_ASTRALLY_WARDED)) /* door is astrally passable and char ia astral */
               || GET_REAL_LEVEL(ch) >= LVL_BUILDER)) /* char is staff */
   {
     if (!LIGHT_OK(ch))
@@ -812,7 +812,7 @@ int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vic
     else if (IS_SET(EXIT(ch, dir)->exit_info, EX_HIDDEN))
       send_to_char("You cannot go that way...\r\n", ch);
     else {
-      if (IS_ASTRAL(ch)) {
+      if (IS_ASTRAL(ch) || IS_PROJECT(ch)) {
         send_to_char("As you approach, the cobalt flash of an astral barrier warns you back.\r\n", ch);
       } else if (EXIT(ch, dir)->keyword) {
         bool plural = !strcmp(fname(EXIT(ch, dir)->keyword), "doors");

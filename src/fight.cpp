@@ -31,6 +31,7 @@ extern struct message_list fight_messages[MAX_MESSAGES];
 
 extern const char *KILLER_FLAG_MESSAGE;
 
+bool does_weapon_have_bayonet(struct obj_data *weapon);
 
 int find_sight(struct char_data *ch);
 void damage_door(struct char_data *ch, struct room_data *room, int dir, int power, int type);
@@ -304,11 +305,11 @@ void set_fighting(struct char_data * ch, struct char_data * vict, ...)
       draw_weapon(ch);
     
     if (GET_EQ(ch, WEAR_WIELD))
-      if (!IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_WIELD))) &&
+      if ((!IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_WIELD))) || (!GET_EQ(ch, WEAR_WIELD)->contains && does_weapon_have_bayonet(GET_EQ(ch, WEAR_WIELD)))) &&
           GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_WIELD)) != TYPE_ARROW)
         AFF_FLAGS(ch).SetBit(AFF_APPROACH);
     if (GET_EQ(ch, WEAR_HOLD))
-      if (!IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_HOLD))) &&
+      if ((!IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_HOLD))) || (!GET_EQ(ch, WEAR_HOLD)->contains && does_weapon_have_bayonet(GET_EQ(ch, WEAR_HOLD)))) &&
           GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_HOLD)) != TYPE_ARROW)
         AFF_FLAGS(ch).SetBit(AFF_APPROACH);
     if (!GET_EQ(ch, WEAR_WIELD) && !GET_EQ(ch, WEAR_HOLD))
@@ -2816,6 +2817,10 @@ bool process_has_ammo(struct char_data *ch, struct obj_data *wielded, bool deduc
       return FALSE;
     } // End manned checks.
     
+    // Check for a non-ammo-requiring gun. No deduction needed here.
+    if (GET_WEAPON_MAX_AMMO(wielded) < 0)
+      return TRUE;
+      
     // Check for a magazine.
     if (wielded->contains) {
       // Loaded? Good to go.
@@ -2837,11 +2842,15 @@ bool process_has_ammo(struct char_data *ch, struct obj_data *wielded, bool deduc
       
       // Regardless-- no ammo in the current weapon means we lose our turn.
       return FALSE;
-    } // End magazine checks.
+    } 
     
-    // Check for a non-ammo-requiring gun. No deduction needed here.
-    if (GET_WEAPON_MAX_AMMO(wielded) < 0)
+    // No magazine, but has a bayonet? They're in charge mode.
+    else if (does_weapon_have_bayonet(wielded)) {
+      send_to_char(ch, "has bayonet\r\n");
       return TRUE;
+    } else {
+      send_to_char(ch, "no bayonet\r\n");
+    }
     
     // The weapon requires a magazine and doesn't have one.
     send_to_char("*Click*\r\n", ch);

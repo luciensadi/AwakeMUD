@@ -57,7 +57,7 @@ struct taxi_dest_type
 
 struct dest_data
 {
-  const char *keyword, *str;
+  const char *keyword, *subkeyword, *str;
   vnum_t vnum;
   unsigned int type;
   bool enabled;

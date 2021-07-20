@@ -515,41 +515,53 @@ bool ch_already_rents_here(struct house_control_rec *room, struct char_data *ch)
 }
 
 void display_room_list_to_character(struct char_data *ch, struct landlord *lord) {
-  send_to_char(ch, "The following rooms are free: \r\n");
-  send_to_char(ch, "Name     Class     Price      Name     Class     Price\r\n");
-  send_to_char(ch, "-----    ------    ------     -----    ------    -----\r\n");
+  bool printed_message_yet = FALSE;
   
-  bool found_any = FALSE;
-  bool on_first_entry_in_column = TRUE;
-  for (struct house_control_rec *room_record = lord->rooms; room_record; room_record = room_record->next) {
-    if (!room_record->owner) {
-      found_any = TRUE;
-      if (on_first_entry_in_column) {
-        snprintf(buf, sizeof(buf), "%-5s    %-6s    %-8d",
-                room_record->name,
-                lifestyle[room_record->mode].name,
-                lord->basecost * lifestyle[room_record->mode].cost);
-        on_first_entry_in_column = FALSE;
-      } else {
-        snprintf(buf2, sizeof(buf2), "   %-5s    %-6s    %-8d\r\n",
-                room_record->name,
-                lifestyle[room_record->mode].name,
-                lord->basecost * lifestyle[room_record->mode].cost);
-        strcat(buf, buf2);
-        send_to_char(buf, ch);
-        on_first_entry_in_column = TRUE;
+  if (PRF_FLAGGED(ch, PRF_SCREENREADER)) {
+    for (struct house_control_rec *room_record = lord->rooms; room_record; room_record = room_record->next) {
+      if (!room_record->owner) {
+        if (!printed_message_yet)
+          send_to_char(ch, "The following rooms are free: \r\n");
+          
+        printed_message_yet = TRUE;
+        send_to_char(ch, "Room %s (lifestyle %s): %d nuyen.\r\n", 
+                     room_record->name,
+                     lifestyle[room_record->mode].name,
+                     lord->basecost * lifestyle[room_record->mode].cost);
       }
     }
-  }
-  if (!on_first_entry_in_column)
-    strcat(buf, "\r\n\n");
-  else
-    strcpy(buf, "\r\n");
     
-  if (!found_any) {
+    if (!printed_message_yet) {
+      send_to_char(ch, "It looks like all the rooms here have been claimed.\r\n");
+    }
+    return;
+  }
+  
+  // Non-screenreader display.
+  bool on_first_entry_in_column = TRUE;
+  strlcpy(buf, "", sizeof(buf));
+  for (struct house_control_rec *room_record = lord->rooms; room_record; room_record = room_record->next) {
+    if (!room_record->owner) {
+      if (!printed_message_yet) {
+        send_to_char(ch, "The following rooms are free: \r\n");
+        send_to_char(ch, "Name     Class     Price      Name     Class     Price\r\n");
+        send_to_char(ch, "-----    ------    ------     -----    ------    -----\r\n");
+      }
+        
+      printed_message_yet = TRUE;
+      
+      send_to_char(ch, "%s%-5s    %-6s    %-8d%s",
+              on_first_entry_in_column ? "" : "   ",
+              room_record->name,
+              lifestyle[room_record->mode].name,
+              lord->basecost * lifestyle[room_record->mode].cost,
+              on_first_entry_in_column ? "" : "\r\n");
+      on_first_entry_in_column = !on_first_entry_in_column;
+    }
+  }
+    
+  if (!printed_message_yet) {
     send_to_char("It looks like all the rooms here have been claimed.\r\n", ch);
-  } else {
-    send_to_char(buf, ch);
   }
 }
 

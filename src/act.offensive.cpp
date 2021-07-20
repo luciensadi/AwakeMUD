@@ -42,6 +42,7 @@ extern void perform_get_from_container(struct char_data *, struct obj_data *, st
 extern int can_wield_both(struct char_data *, struct obj_data *, struct obj_data *);
 extern void draw_weapon(struct char_data *);
 extern bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype, bool include_func_protections);
+extern bool does_weapon_have_bayonet(struct obj_data *weapon);
 
 
 ACMD(do_assist)
@@ -376,11 +377,23 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
       WAIT_STATE(ch, PULSE_VIOLENCE + 2);
       act("$n attacks $N.", TRUE, ch, 0, vict, TO_NOTVICT);
       if (GET_EQ(ch, WEAR_WIELD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_WEAPON) {
-        act("You aim $p at $N!", FALSE, ch, GET_EQ(ch, WEAR_WIELD), vict, TO_CHAR);
-        act("$n aims $p straight at you!", FALSE, ch, GET_EQ(ch, WEAR_WIELD), vict, TO_VICT);
+        if (!GET_EQ(ch, WEAR_WIELD)->contains && does_weapon_have_bayonet(GET_EQ(ch, WEAR_WIELD))) {
+          act("With your weapon empty, you aim the bayonet on $p at $N!", FALSE, ch, GET_EQ(ch, WEAR_WIELD), vict, TO_CHAR);
+          act("$n aims the bayonet on $p straight at you!", FALSE, ch, GET_EQ(ch, WEAR_WIELD), vict, TO_VICT);
+        }
+        else {
+          act("You aim $p at $N!", FALSE, ch, GET_EQ(ch, WEAR_WIELD), vict, TO_CHAR);
+          act("$n aims $p straight at you!", FALSE, ch, GET_EQ(ch, WEAR_WIELD), vict, TO_VICT);
+        }
       } else if (GET_EQ(ch, WEAR_HOLD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_HOLD)) == ITEM_WEAPON) {
-        act("You aim $p at $N!", FALSE, ch, GET_EQ(ch, WEAR_HOLD), vict, TO_CHAR);
-        act("$n aims $p straight at you!", FALSE, ch, GET_EQ(ch, WEAR_HOLD), vict, TO_VICT);
+        if (!GET_EQ(ch, WEAR_HOLD)->contains && does_weapon_have_bayonet(GET_EQ(ch, WEAR_HOLD))) {
+          act("With your weapon empty, you aim the bayonet on $p at $N!", FALSE, ch, GET_EQ(ch, WEAR_HOLD), vict, TO_CHAR);
+          act("$n aims the bayonet on $p straight at you!", FALSE, ch, GET_EQ(ch, WEAR_HOLD), vict, TO_VICT);
+        }
+        else {
+          act("You aim $p at $N!", FALSE, ch, GET_EQ(ch, WEAR_HOLD), vict, TO_CHAR);
+          act("$n aims $p straight at you!", FALSE, ch, GET_EQ(ch, WEAR_HOLD), vict, TO_VICT);
+        }
       } else {
         act("You take a swing at $N!", FALSE, ch, 0, vict, TO_CHAR);
         act("$n prepares to take a swing at you!", FALSE, ch, 0, vict, TO_VICT);
@@ -481,6 +494,11 @@ ACMD(do_shoot)
 
   if (!pos) {
     send_to_char("Normally guns or bows are used to do that.\r\n", ch);
+    return;
+  }
+  
+  if (((weapon = GET_EQ(ch, WEAR_WIELD)) || (weapon = GET_EQ(ch, WEAR_HOLD))) && GET_OBJ_TYPE(weapon) == ITEM_WEAPON && !weapon->contains) {
+    send_to_char("You should probably load it first.\r\n", ch);
     return;
   }
 

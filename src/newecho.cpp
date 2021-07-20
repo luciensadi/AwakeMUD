@@ -515,15 +515,25 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
         
       NEW_EMOTE_DEBUG_SPEECH(actor, "\r\nLanguage in use for $n is now %s (target: '%s').\r\n", skills[language_in_use].name, language_string);
         
-      // Snip the language block from the mutable string. Handles a single space after the closing parens.
+      // First, add the language tag string.
+      if (language_in_use != SKILL_ENGLISH) {
+        char language_tag_string[500];
+        snprintf(language_tag_string, sizeof(language_tag_string), "(%s) ", capitalize(skills[language_in_use].name));
+        strlcpy(storage_string, language_tag_string, sizeof(storage_string));
+      } else {
+        strlcpy(storage_string, "", sizeof(storage_string));
+      }
+      
+      // Snip the language block from the mutable string (we wrote the proper one to storage already). Handles a single space after the closing parens.
       if (language_idx + 1 < (int) strlen(mutable_echo_string) && isspace(mutable_echo_string[language_idx + 1]))
-        strlcpy(storage_string, mutable_echo_string + language_idx + 2, sizeof(storage_string));
+        strlcat(storage_string, mutable_echo_string + language_idx + 2, sizeof(storage_string));
       else
-        strlcpy(storage_string, mutable_echo_string + language_idx + 1, sizeof(storage_string));
+        strlcat(storage_string, mutable_echo_string + language_idx + 1, sizeof(storage_string));
         
-      // Decrement i here to make it point at the area where the parens is.
+      // Decrement i here to make it point at the area where the parens is. Remember that i points to the original string, not our storage string.
       i--;
       
+      // Stitch it all together.
       strlcpy(mutable_echo_string + i, storage_string, sizeof(mutable_echo_string) - i);
       
       // i now points to the character at the start of the speech.

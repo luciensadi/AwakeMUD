@@ -63,6 +63,7 @@ extern int return_general(int skill_num);
 extern int belongs_to(struct char_data *ch, struct obj_data *obj);
 extern char *make_desc(struct char_data *ch, struct char_data *i, char *buf, int act, bool dont_capitalize_a_an, size_t buf_size);
 extern void weight_change_object(struct obj_data * obj, float weight);
+extern bool does_weapon_have_bayonet(struct obj_data *weapon);
 
 extern bool restring_with_args(struct char_data *ch, char *argument, bool using_sysp);
 
@@ -1706,8 +1707,9 @@ ACMD(do_reload)
 
 ACMD(do_eject)
 {
-  if (GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_WIELD)->contains) {
-    struct obj_data *magazine = GET_EQ(ch, WEAR_WIELD)->contains;
+  struct obj_data *weapon = GET_EQ(ch, WEAR_WIELD);
+  if (weapon && weapon->contains) {
+    struct obj_data *magazine = weapon->contains;
     
     if (GET_OBJ_TYPE(magazine) != ITEM_GUN_MAGAZINE) {
       send_to_char("^YSomething has gone really wrong.^n Staff have been automatically alerted, but you should DM Lucien on Discord as well. Do not junk or otherwise get rid of this weapon, it has stuff in it that's not a magazine!\r\n", ch);
@@ -1725,8 +1727,16 @@ ACMD(do_eject)
     extract_obj(magazine);
     act("$n ejects and pockets a magazine from $p.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_ROOM);
     act("You eject and pocket a magazine from $p.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_CHAR);
+    
+    // If it has a bayonet and you're in combat, you charge forth.
+    if (FIGHTING(ch) && does_weapon_have_bayonet(weapon)) {
+      send_to_char("With your weapon empty, you decide to do a bayonet charge!\r\n", ch);
+      act("$n lets out a banshee screech and charges in with $s bayonet!", FALSE, ch, NULL, NULL, TO_ROOM);
+      if (AFF_FLAGGED(FIGHTING(ch), AFF_APPROACH))
+        AFF_FLAGS(FIGHTING(ch)).RemoveBit(AFF_APPROACH);
+    }
   } else {
-    send_to_char(ch, "But it's already empty.\r\n");
+    send_to_char(ch, "%s is already empty.\r\n", capitalize(GET_OBJ_NAME(weapon)));
   }
 }
 
@@ -3502,46 +3512,120 @@ ACMD(do_unpack)
       send_to_char("This vehicle isn't large enough to set up a workshop in.\r\n", ch);
       return;
     } else if (ch->vfront) {
-      send_to_char("You can't set up a vehicle in the front seat.\r\n", ch);
+      send_to_char("You can't set up a workshop in the front seat.\r\n", ch);
     }
   }
+  
+  // Only one unpacked workshop per room.
   FOR_ITEMS_AROUND_CH(ch, shop) {
-    if (GET_OBJ_TYPE(shop) == ITEM_WORKSHOP && GET_WORKSHOP_GRADE(shop) == TYPE_WORKSHOP) {
-      if (GET_WORKSHOP_IS_SETUP(shop) || GET_WORKSHOP_UNPACK_TICKS(shop)) {
-        send_to_char("There is already a workshop set up here.\r\n", ch);
+    if (GET_WORKSHOP_IS_SETUP(shop) || GET_WORKSHOP_UNPACK_TICKS(shop)) {
+      send_to_char("There is already a workshop set up here.\r\n", ch);
+      return;
+    }
+  }
+  shop = NULL;
+  
+  argument = one_argument(argument, arg);
+  int dotmode = find_all_dots(arg);
+
+  /* Targeted unpack. */
+  if (dotmode == FIND_ALL || dotmode == FIND_ALLDOT) {
+    send_to_char("You'd have to be some kind of superhero to work with multiple workshops at once.\r\n", ch);
+    return;
+  }
+  
+  if (*arg) {
+    if (ch->in_room) {
+      if (!(shop = get_obj_in_list_vis(ch, arg, ch->in_room->contents))) {
+        send_to_char(ch, "You don't see a %s here.\r\n", arg);
         return;
-      } else
+      }
+    } 
+    else if (ch->in_veh) {
+      if (!(shop = get_obj_in_list_vis(ch, arg, ch->in_veh->contents))) {
+        send_to_char(ch, "You don't see a %s here.\r\n", arg);
+        return;
+      }
+    }
+    else {
+      mudlog("SYSERR: Found no room or vehicle in do_unpack!", ch, LOG_SYSLOG, TRUE);
+      return;
+    }
+  }
+  
+  if (!shop) {
+    FOR_ITEMS_AROUND_CH(ch, shop) {
+      if (GET_OBJ_TYPE(shop) == ITEM_WORKSHOP && GET_WORKSHOP_GRADE(shop) == TYPE_WORKSHOP)
         break;
     }
   }
-  if (!shop)
+  
+  if (!shop) {
     send_to_char(ch, "There is no workshop here to set up.\r\n");
-  else {
-    if (!ch->in_veh && GET_OBJ_VAL(shop, 0) == TYPE_VEHICLE && !ROOM_FLAGGED(ch->in_room, ROOM_GARAGE)) {
-      send_to_char("You can't unpack that here.\r\n", ch);
-      return;
-    }
-    send_to_char(ch, "You begin to set up %s here.\r\n", GET_OBJ_NAME(shop));
-    act("$n begins to set up $P.", FALSE, ch, 0, shop, TO_ROOM);
-    if (access_level(ch, LVL_BUILDER)) {
-      send_to_char("You use your staff powers to greatly accelerate the process.\r\n", ch);
-      GET_WORKSHOP_UNPACK_TICKS(shop) = 1;
-    } else
-      GET_WORKSHOP_UNPACK_TICKS(shop) = 3;
-    AFF_FLAGS(ch).SetBit(AFF_PACKING);
+    return;
   }
+  
+  if (GET_WORKSHOP_UNPACK_TICKS(shop)) {
+    send_to_char(ch, "Someone is already working on %s.\r\n", GET_OBJ_NAME(shop));
+    return;
+  }
+  
+  if (GET_WORKSHOP_IS_SETUP(shop)) {
+    send_to_char(ch, "%s has already been set up.\r\n", capitalize(GET_OBJ_NAME(shop)));
+    return;
+  }
+  
+  if (!ch->in_veh && GET_OBJ_VAL(shop, 0) == TYPE_VEHICLE && !ROOM_FLAGGED(ch->in_room, ROOM_GARAGE)) {
+    send_to_char("Vehicle workshops can only be deployed in trucks and garage-flagged rooms.\r\n", ch);
+    return;
+  }
+  send_to_char(ch, "You begin to set up %s here.\r\n", GET_OBJ_NAME(shop));
+  act("$n begins to set up $P.", FALSE, ch, 0, shop, TO_ROOM);
+  if (access_level(ch, LVL_BUILDER)) {
+    send_to_char("You use your staff powers to greatly accelerate the process.\r\n", ch);
+    GET_WORKSHOP_UNPACK_TICKS(shop) = 1;
+  } else
+    GET_WORKSHOP_UNPACK_TICKS(shop) = 3;
+  AFF_FLAGS(ch).SetBit(AFF_PACKING);
 }
 
 ACMD(do_packup)
 {
   struct obj_data *shop = NULL;
-  FOR_ITEMS_AROUND_CH(ch, shop) {
-    if (GET_OBJ_TYPE(shop) == ITEM_WORKSHOP && GET_OBJ_VAL(shop, 1) > 1) {
-      if (GET_OBJ_VAL(shop, 3)) {
-        send_to_char(ch, "Someone is already working on the workshop.\r\n");
+  
+  argument = one_argument(argument, arg);
+  int dotmode = find_all_dots(arg);
+
+  /* Targeted pack. */
+  if (dotmode == FIND_ALL || dotmode == FIND_ALLDOT) {
+    send_to_char("You'd have to be some kind of superhero to work with multiple workshops at once.\r\n", ch);
+    return;
+  }
+  if (*arg) {
+    if (ch->in_room) {
+      if (!(shop = get_obj_in_list_vis(ch, arg, ch->in_room->contents))) {
+        send_to_char(ch, "You don't see a %s here.\r\n", arg);
         return;
-      } else if (GET_OBJ_VAL(shop, 2))
-        break;
+      }
+    } 
+    else if (ch->in_veh) {
+      if (!(shop = get_obj_in_list_vis(ch, arg, ch->in_veh->contents))) {
+        send_to_char(ch, "You don't see a %s here.\r\n", arg);
+        return;
+      }
+    }
+    else {
+      mudlog("SYSERR: Found no room or vehicle in do_packup!", ch, LOG_SYSLOG, TRUE);
+      return;
+    }
+  }
+  
+  if (!shop) {
+    FOR_ITEMS_AROUND_CH(ch, shop) {
+      if (GET_OBJ_TYPE(shop) == ITEM_WORKSHOP && GET_OBJ_VAL(shop, 1) > 1) {
+        if (GET_OBJ_VAL(shop, 2))
+          break;
+      }
     }
   }
   
@@ -3553,6 +3637,16 @@ ACMD(do_packup)
   // No packing up zoneloaded shops.
   if (!(CAN_WEAR(shop, ITEM_WEAR_TAKE))) {
     send_to_char(ch, "It's best to leave %s alone.\r\n", GET_OBJ_NAME(shop));
+    return;
+  }
+  
+  if (!GET_WORKSHOP_IS_SETUP(shop)) {
+    send_to_char(ch, "%s hasn't been unpacked yet.\r\n", capitalize(GET_OBJ_NAME(shop)));
+    return;
+  }
+  
+  if (GET_WORKSHOP_UNPACK_TICKS(shop)) {
+    send_to_char(ch, "Someone is already working on %s.\r\n", GET_OBJ_NAME(shop));
     return;
   }
     

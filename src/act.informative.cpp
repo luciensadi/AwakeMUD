@@ -256,6 +256,9 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
       } else if (GET_OBJ_TYPE(object) == ITEM_GUN_AMMO) {
         snprintf(buf, sizeof(buf), "^gA metal box of %s has been left here.^n", get_ammo_representation(GET_AMMOBOX_WEAPON(object), GET_AMMOBOX_TYPE(object), 0));
       } else {
+        if (GET_OBJ_TYPE(object) == ITEM_WORKSHOP && GET_WORKSHOP_GRADE(object) == TYPE_WORKSHOP && GET_WORKSHOP_IS_SETUP(object) && !GET_WORKSHOP_UNPACK_TICKS(object)) {
+          strlcat(buf, "(deployed) ", sizeof(buf));
+        }
         strlcat(buf, object->text.room_desc, sizeof(buf));
       }
     }
@@ -3572,7 +3575,7 @@ ACMD(do_bioware)
   
   send_to_char("You have the following bioware:\r\n", ch);
   for (obj = ch->bioware; obj != NULL; obj = obj->next_content) {
-    snprintf(buf, sizeof(buf), "%-40s Rating: %-2d     Body Index: %0.2f\r\n",
+    snprintf(buf, sizeof(buf), "%-40s Rating: %-2d     Bioware Index: %0.2f\r\n",
             GET_OBJ_NAME(obj),
             GET_OBJ_VAL(obj, 1), ((float)GET_OBJ_VAL(obj, 4) / 100));
     send_to_char(buf, ch);
@@ -4907,7 +4910,7 @@ ACMD(do_scan)
   if (!specific) {
     struct room_data *in_room = get_ch_in_room(ch);
     for (i = 0; i < NUM_OF_DIRS; ++i) {
-      if (CAN_GO(ch, i)) {
+      if (CAN_GO(ch, i) && !IS_SET(EXIT(ch, i)->exit_info, EX_HIDDEN)) {
         if (EXIT(ch, i)->to_room == in_room) {
           send_to_char(ch, "%s: More of the same.\r\n", dirs[i]);
           continue;
@@ -5211,14 +5214,14 @@ ACMD(do_mort_show)
     send_to_char("Show what to who?\r\n", ch);
     return;
   }
-  generic_find(buf1, FIND_OBJ_INV | FIND_OBJ_EQUIP, ch, &vict, &obj);
-  if (!obj) {
-    send_to_char("You don't have that item.\r\n", ch);
+  
+  if (!(obj = get_obj_in_list_vis(ch, buf1, ch->carrying))) {
+    send_to_char(ch, "You don't have %s '%s' in your inventory.\r\n", AN(buf1), buf1);
     return;
   }
   
   if (!(vict = get_char_room_vis(ch, buf2))) {
-    send_to_char("You don't see them here.\r\n", ch);
+    send_to_char(ch, "You don't see %s '%s' here.\r\n", AN(buf2), buf2);
     return;
   }
   act("$n shows $p to $N.", TRUE, ch, obj, vict, TO_ROOM);

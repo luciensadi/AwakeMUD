@@ -1185,8 +1185,8 @@ void shop_value(char *arg, struct char_data *ch, struct char_data *keeper, vnum_
 bool shop_probe(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t shop_nr) {
   if (!is_open(keeper, shop_nr))
     return FALSE;
-  if (!is_ok_char(keeper, ch, shop_nr))
-    return FALSE;
+  // if (!is_ok_char(keeper, ch, shop_nr))
+  //  return FALSE;
   
   struct obj_data *obj = NULL;
   skip_spaces(&arg);

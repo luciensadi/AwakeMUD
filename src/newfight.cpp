@@ -351,8 +351,12 @@ struct combat_data
                         && GET_WEAPON_SKILL(weapon) <= SKILL_ASSAULT_CANNON);
     
     cyber = new struct cyberware_data(ch);
-    ranged = new struct ranged_combat_data(ch, weapon, weapon_is_gun);
+    ranged = new struct ranged_combat_data(ch, weapon, weapon_is_gun);      
     melee = new struct melee_combat_data(ch, weapon, weapon_is_gun, cyber);
+    
+    // Special case: Bayonet charge.
+    if (weapon_is_gun && !weapon->contains && does_weapon_have_bayonet(weapon))
+      weapon_is_gun = FALSE;
   }
   
   ~combat_data() {
@@ -994,15 +998,17 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
   // Handle spirits and elementals being little divas with their special combat rules.
   if (IS_SPIRIT(def->ch) || IS_ELEMENTAL(def->ch)) {
     if (att->weapon_is_gun) {
-      if (att->ranged->power <= GET_LEVEL(def->ch) * 2)
+      if (att->ranged->power <= GET_LEVEL(def->ch) * 2) {
         damage(att->ch, def->ch, 0, att->ranged->dam_type, att->ranged->is_physical);
-      else
+        return;
+      } else
         att->ranged->power -= GET_LEVEL(def->ch) * 2;
       att->ranged->power = MAX(2, att->ranged->power);
     } else {
-      if (att->melee->power <= GET_LEVEL(def->ch) * 2)
+      if (att->melee->power <= GET_LEVEL(def->ch) * 2) {
         damage(att->ch, def->ch, 0, att->melee->dam_type, att->melee->is_physical);
-      else
+        return;
+      } else
         att->melee->power -= GET_LEVEL(def->ch) * 2;
       att->melee->power = MAX(2, att->melee->power);
     }
@@ -1121,5 +1127,10 @@ bool does_weapon_have_bayonet(struct obj_data *weapon) {
 
   struct obj_data *attach_proto = get_obj_proto_for_vnum(GET_WEAPON_ATTACH_UNDER_VNUM(weapon));
   
-  return (attach_proto && GET_OBJ_VAL(attach_proto, 1) == ACCESS_BAYONET);
+  if (!attach_proto)
+    log_vfprintf("No proto found for vnum %d", GET_WEAPON_ATTACH_UNDER_VNUM(weapon));
+  if (GET_ACCESSORY_TYPE(attach_proto) != ACCESS_BAYONET)
+    log_vfprintf("Vnum %d is not a bayonet", GET_WEAPON_ATTACH_UNDER_VNUM(weapon));
+  
+  return (attach_proto && GET_ACCESSORY_TYPE(attach_proto) == ACCESS_BAYONET);
 }

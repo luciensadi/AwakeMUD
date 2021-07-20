@@ -950,7 +950,7 @@ ACMD(do_progress)
   }
   
   if (AFF_FLAGS(ch).IsSet(AFF_AMMOBUILD)) {
-    send_to_char(ch, "You are about %d%% of the way through making %s.\r\n",
+    send_to_char(ch, "You are about %d%% of the way through making a batch of ammo for %s.\r\n",
            (int)(((float)(GET_OBJ_VAL(GET_BUILDING(ch), 10) - GET_OBJ_VAL(GET_BUILDING(ch), 4)) / 
            GET_OBJ_VAL(GET_BUILDING(ch), 10)) * 100), GET_OBJ_NAME(GET_BUILDING(ch)));
     return;
