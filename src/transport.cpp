@@ -953,7 +953,7 @@ SPECIAL(taxi)
           
           act("$n is ejected from a taxi.", TRUE, ch, 0, 0, TO_ROOM);
           
-          look_at_room(ch, 0);
+          look_at_room(ch, 0, 0);
           return TRUE;
         }
       }
@@ -1885,7 +1885,7 @@ void EscalatorProcess(void)
               GET_LASTROOM(temp) = world[i].number;
               char_to_room(temp, world[i].dir_option[dir]->to_room);
               if (temp->desc)
-                look_at_room(temp, 0);
+                look_at_room(temp, 0, 0);
               break;
             }
       }

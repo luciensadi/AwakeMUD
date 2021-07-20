@@ -2173,7 +2173,7 @@ ACMD(do_astral)
   act("$n swirls into view.", TRUE, astral, 0, 0, TO_ROOM);
 
   PLR_FLAGS(ch).SetBit(PLR_PROJECT);
-  look_at_room(astral, 1);
+  look_at_room(astral, 1, 0);
 }
 
 ACMD(do_customize)

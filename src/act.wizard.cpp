@@ -839,7 +839,7 @@ ACMD(do_goto)
   else
     act("$n appears with an ear-splitting bang.", TRUE, ch, 0, 0, TO_ROOM);
 
-  look_at_room(ch, 0);
+  look_at_room(ch, 0, 0);
 }
 
 void transfer_ch_to_ch(struct char_data *victim, struct char_data *ch) {
@@ -862,7 +862,7 @@ void transfer_ch_to_ch(struct char_data *victim, struct char_data *ch) {
   act("$n arrives from a puff of smoke.", TRUE, victim, 0, 0, TO_ROOM);
   act("$n has transferred you!", FALSE, ch, 0, victim, TO_VICT);
   mudlog(buf2, ch, LOG_WIZLOG, TRUE);
-  look_at_room(victim, 0);
+  look_at_room(victim, 0, 0);
 }
 
 ACMD(do_trans)
@@ -975,7 +975,7 @@ ACMD(do_teleport)
     char_to_room(victim, target);
     act("$n arrives from a puff of smoke.", TRUE, victim, 0, 0, TO_ROOM);
     act("$n has teleported you!", FALSE, ch, 0, victim, TO_VICT);
-    look_at_room(victim, 0);
+    look_at_room(victim, 0, 0);
     snprintf(buf2, sizeof(buf2), "%s teleported %s to %s",
             GET_CHAR_NAME(ch), IS_NPC(victim) ? GET_NAME(victim) : GET_CHAR_NAME(victim), target->name);
     mudlog(buf2, ch, LOG_WIZLOG, TRUE);

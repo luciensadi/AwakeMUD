@@ -3647,7 +3647,7 @@ void process_auth_room(struct char_data *ch) {
   
   // Make them look.
   // if (!PRF_FLAGGED(ch, PRF_SCREENREADER))
-  look_at_room(ch, 0);
+  look_at_room(ch, 0, 0);
 }
 
 SPECIAL(auth_room)
@@ -4112,7 +4112,7 @@ SPECIAL(multnomah_gate) {
       char_to_room(ch, &world[to_room]);
     }
     if (!PRF_FLAGGED(ch, PRF_SCREENREADER))
-      look_at_room(ch, 0);
+      look_at_room(ch, 0, 0);
     return TRUE;
   }
 
@@ -5889,7 +5889,7 @@ SPECIAL(nerpcorpolis_lobby) {
     
     // If not screenreader, look.
     if (!PRF_FLAGGED(ch, PRF_SCREENREADER))
-      look_at_room(ch, 0);
+      look_at_room(ch, 0, 0);
   }
   // We still want them to say whatever it is they're saying.
   return FALSE;
@@ -6039,4 +6039,9 @@ SPECIAL(fatcop) {
   do_say(ch, fatcop_messages[message_num], 0, 0);
   fatcop_last_said = message_num;
   return TRUE;
+}
+
+// The only thing this does is make the object display a usage string if it's on the floor.
+SPECIAL(floor_usable_radio) {
+  return FALSE;
 }

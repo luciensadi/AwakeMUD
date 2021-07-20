@@ -285,7 +285,7 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
     send_to_char("You have to slouch to fit in here.\r\n", ch);
 #endif
   if (ch->desc != NULL)
-    look_at_room(ch, 0);
+    look_at_room(ch, 0, 0);
     
   if (room_is_a_taxicab(was_in->number))
     snprintf(buf2, sizeof(buf2), "$n gets out of the taxi.");
@@ -427,7 +427,7 @@ bool check_fall(struct char_data *ch, int modifier, const char *fall_message)
     act("$n scrabbles for a handhold and manages to arrest $s fall!", TRUE, ch, NULL, NULL, TO_ROOM);
     
     if (!PRF_FLAGGED(ch, PRF_SCREENREADER))
-      look_at_room(ch, 0);
+      look_at_room(ch, 0, 0);
   } else {
     send_to_char("You grab on to the wall and keep yourself from falling!\r\n", ch);
     act("$n grabs onto the wall and keeps $mself from falling!", TRUE, ch, NULL, NULL, TO_ROOM);
@@ -528,7 +528,7 @@ void perform_fall(struct char_data *ch)
     }
     
     if (!PRF_FLAGGED(ch, PRF_SCREENREADER))
-      look_at_room(ch, 0);
+      look_at_room(ch, 0, 0);
     
     if (GET_TRADITION(ch) == TRAD_ADEPT)
       meters -= GET_POWER(ch, ADEPT_FREEFALL) * 2;
@@ -740,7 +740,7 @@ void move_vehicle(struct char_data *ch, int dir)
     was_in = ch->in_room;
   ch->in_room = veh->in_room;
   if (!veh->dest)
-    look_at_room(ch, 0);
+    look_at_room(ch, 0, 0);
   for (tch = veh->in_room->people; tch; tch = tch->next_in_room)
     if (IS_NPC(tch) && AWAKE(tch) && MOB_FLAGGED(tch, MOB_AGGRESSIVE) &&
         !CH_IN_COMBAT(tch) && !IS_ASTRAL(tch))
@@ -1772,7 +1772,7 @@ ACMD(do_leave)
         
         // If not screenreader, look.
         if (!PRF_FLAGGED(ch, PRF_SCREENREADER))
-          look_at_room(ch, 0);
+          look_at_room(ch, 0, 0);
         return;
       }
     }

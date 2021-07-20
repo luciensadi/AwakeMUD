@@ -1727,6 +1727,10 @@ enum {
 
 /* Subcommands section: Originally from interpreter.h */
 
+/* do_exits */
+#define SCMD_LONGEXITS  0
+#define SCMD_SHORTEXITS 1
+
 /* do_dig */
 #define SCMD_DIG        0
 #define SCMD_UNDIG      1
@@ -1829,6 +1833,7 @@ enum {
 /* do_look */
 #define SCMD_LOOK       0
 #define SCMD_READ       1
+#define SCMD_QUICKLOOK  2
 
 /* do_examine */
 #define SCMD_EXAMINE    0

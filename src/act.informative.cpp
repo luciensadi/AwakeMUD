@@ -236,9 +236,10 @@ void get_obj_condition(struct char_data *ch, struct obj_data *obj)
 
 void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
 {
+  SPECIAL(floor_usable_radio);
+  
   *buf = '\0';
-  if ((mode == 0) && object->text.room_desc)
-  {
+  if ((mode == 0) && object->text.room_desc) {
     strlcpy(buf, CCHAR ? CCHAR : "", sizeof(buf));
     if (object->graffiti)
       strlcat(buf, object->graffiti, sizeof(buf));
@@ -258,8 +259,12 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
         strlcat(buf, object->text.room_desc, sizeof(buf));
       }
     }
-  } else if (GET_OBJ_NAME(object) && mode == 1)
-  {
+    // Special case: Radio is spec-flagged. This is pretty much only true for the Docwagon radios.
+    if (GET_OBJ_SPEC(object) == floor_usable_radio) {
+      strlcat(buf, "^y...It's free to use. See ^YHELP RADIO^y for more.^n", sizeof(buf));
+    }
+  } 
+  else if (GET_OBJ_NAME(object) && mode == 1) {
     strlcpy(buf, GET_OBJ_NAME(object), sizeof(buf));
     if (GET_OBJ_TYPE(object) == ITEM_DESIGN)
       strlcat(buf, " (Plan)", sizeof(buf));
@@ -267,26 +272,30 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
       strlcat(buf, " (Uncooked)", sizeof(buf));
     if (GET_OBJ_TYPE(object) == ITEM_FOCUS && GET_OBJ_VAL(object, 9) == GET_IDNUM(ch))
       strlcat(buf, " ^Y(Geas)^n", sizeof(buf));
-  } else if (GET_OBJ_NAME(object) && ((mode == 2) || (mode == 3) || (mode == 4) || (mode == 7)))
+  } 
+  else if (GET_OBJ_NAME(object) && ((mode == 2) || (mode == 3) || (mode == 4) || (mode == 7))) {
     strlcpy(buf, GET_OBJ_NAME(object), sizeof(buf));
-  else if (mode == 5)
-  {
+  } 
+  else if (mode == 5) {
     if (GET_OBJ_DESC(object))
       strlcpy(buf, GET_OBJ_DESC(object), sizeof(buf));
     else
       strlcpy(buf, "You see nothing special..", sizeof(buf));
-  } else if (mode == 8)
+  } 
+  else if (mode == 8) {
     snprintf(buf, sizeof(buf), "\t\t\t\t%s", GET_OBJ_NAME(object));
+  }
   if (mode == 7 || mode == 8) {
-    if (GET_OBJ_TYPE(object) == ITEM_HOLSTER)
-    {
+    if (GET_OBJ_TYPE(object) == ITEM_HOLSTER) {
       if (object->contains)
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (Holding %s)", GET_OBJ_NAME(object->contains));
       if (GET_OBJ_VAL(object, 3) == 1 && ((object->worn_by && object->worn_by == ch) ||
                                           (object->in_obj && object->in_obj->worn_by && object->in_obj->worn_by == ch)))
         strlcat(buf, " ^Y(Ready)", sizeof(buf));
-    } else if (GET_OBJ_TYPE(object) == ITEM_WORN && object->contains && !PRF_FLAGGED(ch, PRF_COMPACT))
+    } 
+    else if (GET_OBJ_TYPE(object) == ITEM_WORN && object->contains && !PRF_FLAGGED(ch, PRF_COMPACT)) {
       strlcat(buf, " carrying:", sizeof(buf));
+    } 
     else if (GET_OBJ_TYPE(object) == ITEM_FOCUS) {
       if (GET_OBJ_VAL(object, 4))
         strlcat(buf, " ^m(Activated Focus)^n", sizeof(buf));
@@ -297,8 +306,7 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
     if (GET_OBJ_CONDITION(object) * 100 / MAX(1, GET_OBJ_BARRIER(object)) < 100)
       strlcat(buf, " (damaged)", sizeof(buf));
   }
-  if (mode != 3)
-  {
+  if (mode != 3) {
     if (IS_OBJ_STAT(object, ITEM_INVISIBLE)) {
       strlcat(buf, " ^B(invisible)", sizeof(buf));
     }
@@ -1277,46 +1285,52 @@ void disp_long_exits(struct char_data *ch, bool autom)
     ch->in_room = wasin;
   
 }
-void do_auto_exits(struct char_data * ch)
-{
-  int door;
+
+void disp_short_exits(struct char_data *ch) {
   struct veh_data *veh;
   *buf = '\0';
   
-  if (PRF_FLAGGED(ch, PRF_LONGEXITS))
-  {
-    disp_long_exits(ch, TRUE);
-  } else
-  {
-    for (door = 0; door < NUM_OF_DIRS; door++)
-      if (EXIT(ch, door) && EXIT(ch, door)->to_room && EXIT(ch, door)->to_room != &world[0]) {
-        if (ch->in_veh || ch->char_specials.rigging) {
-          RIG_VEH(ch, veh);
-          if (!ROOM_FLAGGED(EXIT(veh, door)->to_room, ROOM_ROAD) &&
-              !ROOM_FLAGGED(EXIT(veh, door)->to_room, ROOM_GARAGE) &&
-              !IS_SET(EXIT(ch, door)->exit_info, EX_HIDDEN))
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "(%s) ", exitdirs[door]);
-          else if (!IS_SET(EXIT(ch, door)->exit_info, EX_CLOSED | EX_HIDDEN))
+  for (int door = 0; door < NUM_OF_DIRS; door++)
+    if (EXIT(ch, door) && EXIT(ch, door)->to_room && EXIT(ch, door)->to_room != &world[0]) {
+      if (ch->in_veh || ch->char_specials.rigging) {
+        RIG_VEH(ch, veh);
+        if (!ROOM_FLAGGED(EXIT(veh, door)->to_room, ROOM_ROAD) &&
+            !ROOM_FLAGGED(EXIT(veh, door)->to_room, ROOM_GARAGE) &&
+            !IS_SET(EXIT(ch, door)->exit_info, EX_HIDDEN))
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "(%s) ", exitdirs[door]);
+        else if (!IS_SET(EXIT(ch, door)->exit_info, EX_CLOSED | EX_HIDDEN))
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s ", exitdirs[door]);
+      } else {
+        if (!IS_SET(EXIT(ch, door)->exit_info, EX_HIDDEN) || GET_LEVEL(ch) > LVL_MORTAL) {
+          if (IS_SET(EXIT(ch, door)->exit_info, EX_LOCKED))
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s(L) ", exitdirs[door]);
+          else if (IS_SET(EXIT(ch, door)->exit_info, EX_CLOSED))
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s(C) ", exitdirs[door]);
+          else
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s ", exitdirs[door]);
-        } else {
-          if (!IS_SET(EXIT(ch, door)->exit_info, EX_HIDDEN) || GET_LEVEL(ch) > LVL_MORTAL) {
-            if (IS_SET(EXIT(ch, door)->exit_info, EX_LOCKED))
-              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s(L) ", exitdirs[door]);
-            else if (IS_SET(EXIT(ch, door)->exit_info, EX_CLOSED))
-              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s(C) ", exitdirs[door]);
-            else
-              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s ", exitdirs[door]);
-          }
         }
       }
-    send_to_char(ch, "^c[ Exits: %s]^n\r\n", *buf ? buf : "None! ");
+    }
+  send_to_char(ch, "^c[ Exits: %s]^n\r\n", *buf ? buf : "None! ");
+}
+
+void do_auto_exits(struct char_data * ch)
+{  
+  if (PRF_FLAGGED(ch, PRF_LONGEXITS)) {
+    disp_long_exits(ch, TRUE);
+  } 
+  else {
+    disp_short_exits(ch);
   }
 }
 
 
 ACMD(do_exits)
 {
-  disp_long_exits(ch, FALSE);
+  if (subcmd == SCMD_LONGEXITS)
+    disp_long_exits(ch, FALSE);
+  else
+    disp_short_exits(ch);
 }
 
 void update_blood(void)
@@ -1418,7 +1432,7 @@ void look_in_veh(struct char_data * ch)
   }
 }
 
-void look_at_room(struct char_data * ch, int ignore_brief)
+void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
 {
   if (!LIGHT_OK(ch)) {
     send_to_char("It is pitch black...\r\n", ch);
@@ -1437,6 +1451,7 @@ void look_at_room(struct char_data * ch, int ignore_brief)
     return;
   }
   
+  // Room title.
   if ((PRF_FLAGGED(ch, PRF_ROOMFLAGS) && GET_REAL_LEVEL(ch) >= LVL_BUILDER)) {
     ROOM_FLAGS(ch->in_room).PrintBits(buf, MAX_STRING_LENGTH, room_bits, ROOM_MAX);
     send_to_char(ch, "^C[%5ld] %s [ %s ]^n\r\n", GET_ROOM_VNUM(ch->in_room), GET_ROOM_NAME(ch->in_room), buf);
@@ -1452,7 +1467,7 @@ void look_at_room(struct char_data * ch, int ignore_brief)
   
   // TODO: Why is this code here? If you're in a vehicle, you do look_in_veh() above right?
   if (!(ch->in_veh && get_speed(ch->in_veh) > 200)) {
-    if (ignore_brief || !PRF_FLAGGED(ch, PRF_BRIEF)) {
+    if (!is_quicklook && (ignore_brief || !PRF_FLAGGED(ch, PRF_BRIEF))) {
       if (ch->in_room->night_desc && weather_info.sunlight == SUN_DARK)
         send_to_char(ch->in_room->night_desc, ch);
       else
@@ -1654,7 +1669,7 @@ void look_in_direction(struct char_data * ch, int dir)
       
       char_from_room(ch);
       char_to_room(ch, targ_loc);
-      look_at_room(ch, 0);
+      look_at_room(ch, 1, 0);
       char_from_room(ch);
       char_to_room(ch, original_loc);
     }
@@ -1974,7 +1989,7 @@ ACMD(do_look)
       return;
     }
     if (!*arg)                  /* "look" alone, without an argument at all */
-      look_at_room(ch, 1);
+      look_at_room(ch, 1, subcmd == SCMD_QUICKLOOK);
     else if (is_abbrev(arg, "in"))
       look_in_obj(ch, arg2, FALSE);
     /* did the char type 'look <direction>?' */
@@ -3311,7 +3326,7 @@ ACMD(do_score)
         break;
       }
     if (pain_editor) {
-      strlcat(buf, " ^YMasked by pain editor.      ^b/^L/\r\n", sizeof(buf));
+      strlcat(buf, " ^YMasked by pain editor.         ^b/^L/\r\n", sizeof(buf));
     } else {
       if (mental >= 900 && mental < 1000)
         strlcat(buf, "^b[^R*^b]", sizeof(buf));
@@ -3358,7 +3373,7 @@ ACMD(do_score)
       
     strlcat(buf, "^b/^L/ ^L`\\\\-\\^wHADOWRUN 3rd Edition   ^rPhys: ", sizeof(buf));
     if (pain_editor) {
-      strlcat(buf, " ^YMasked by pain editor.        ^L/^b/\r\n", sizeof(buf));
+      strlcat(buf, " ^YMasked by pain editor.         ^L/^b/\r\n", sizeof(buf));
     } else {
       if (physical >= 900 && physical < 1000)
         strlcat(buf, "^L[^R*^L]", sizeof(buf));
@@ -5102,13 +5117,22 @@ ACMD(do_status)
       break;
   }
   if (GET_REACH(targ)) {
-    send_to_char(ch, "Extra Reach (%dm)\r\n", GET_REACH(targ));
+    send_to_char(ch, "  Extra Reach (%dm)\r\n", GET_REACH(targ));
     printed = TRUE;
   }
   if (GET_DRUG_AFFECT(targ) && GET_DRUG_STAGE(targ) > 0) {
     send_to_char(ch, "  %s (%s)\r\n", drug_types[GET_DRUG_AFFECT(targ)].name, GET_DRUG_STAGE(targ) == 1 ? "Up" : "Down");
     printed = TRUE;
   }
+  
+  for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content) {
+    if (GET_OBJ_VAL(bio, 0) == BIO_PAINEDITOR && GET_OBJ_VAL(bio, 3)) {
+      send_to_char("  An activated pain editor (+1 wil, -1 int)\r\n", ch);
+      printed = TRUE;
+      break;
+    }
+  }
+  
   for (struct sustain_data *sust = GET_SUSTAINED(targ); sust; sust = sust->next)
     if (!sust->caster) {
       strlcpy(buf, spells[sust->spell].name, sizeof(buf));

@@ -145,7 +145,7 @@ int MIN(long a, long b);
 bool    circle_follow(struct char_data *ch, struct char_data * victim);
 
 /* in act.informative.c */
-void    look_at_room(struct char_data *ch, int mode);
+void    look_at_room(struct char_data *ch, int mode, int is_quicklook);
 
 /* in act.movmement.c */
 int     do_simple_move(struct char_data *ch, int dir, int extra, struct
@@ -652,14 +652,9 @@ float get_proto_weight(struct obj_data *obj);
 
 #define HOLYLIGHT_OK(sub)      (GET_REAL_LEVEL(sub) >= LVL_BUILDER && \
    PRF_FLAGGED((sub), PRF_HOLYLIGHT))
-
-#define LIGHT_OK_ROOM_SPECIFIED(sub, provided_room) \
-(IS_ASTRAL(sub) || IS_DUAL(sub) || CURRENT_VISION((sub)) == THERMOGRAPHIC || HOLYLIGHT_OK(sub) || IS_LIGHT(provided_room) || \
-!((light_level(provided_room) == LIGHT_MINLIGHT || light_level(provided_room) == LIGHT_FULLDARK) && CURRENT_VISION((sub)) == NORMAL))
-
-#define LIGHT_OK(sub)          ((IS_ASTRAL(sub) || IS_DUAL(sub) || CURRENT_VISION(sub) == THERMOGRAPHIC || HOLYLIGHT_OK(sub) || IS_LIGHT(get_ch_in_room(sub))) || \
-                    !((light_level(get_ch_in_room(sub)) == LIGHT_MINLIGHT || light_level(get_ch_in_room(sub)) == LIGHT_FULLDARK) && CURRENT_VISION(sub) == NORMAL))
-
+   
+bool LIGHT_OK_ROOM_SPECIFIED(struct char_data *sub, struct room_data *room);
+#define LIGHT_OK(sub)          LIGHT_OK_ROOM_SPECIFIED(sub, get_ch_in_room(sub))
 #define SELF(sub, obj)         ((sub) == (obj))
 
 #define SEE_ASTRAL(sub, obj)   (!IS_ASTRAL(obj) || IS_ASTRAL(sub) || \

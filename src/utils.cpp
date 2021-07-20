@@ -3301,6 +3301,45 @@ bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struc
   return TRUE;
 }
 
+bool LIGHT_OK_ROOM_SPECIFIED(struct char_data *sub, struct room_data *provided_room) {
+  // Fix the ruh-rohs.
+  if (!sub || !provided_room)
+    return FALSE;
+    
+  // If you can see on the astral plane, light means nothing to you.
+  if (IS_ASTRAL(sub) || IS_DUAL(sub))
+    return TRUE;
+    
+  // If you have thermographic vision or holy light, you're good.
+  if (CURRENT_VISION((sub)) == THERMOGRAPHIC || HOLYLIGHT_OK(sub))
+    return TRUE;
+    
+  // Check room light levels.
+  if (IS_LIGHT(provided_room) || (CURRENT_VISION(sub) == NORMAL && (light_level(provided_room) != LIGHT_MINLIGHT && light_level(provided_room) != LIGHT_FULLDARK)))
+    return TRUE;
+    
+  // If you're in a vehicle, we assume you have headlights and interior lights.
+  if (sub->in_veh)
+    return TRUE;
+    
+  // We also give allowances for people in rooms with player-occupied cars.
+  for (struct veh_data *veh = provided_room->vehicles; veh; veh = veh->next_veh) {
+    for (struct char_data *tch = veh->people; tch; tch = tch->next_in_veh)
+      if (!IS_NPC(tch))
+        return TRUE;
+  }
+  
+  // TODO: honestly this code might be better handled if it's replaced by logic that just changes a room's light level based on movement within it
+    
+  // If you have a flashlight equipped, you're good. Note that this requires further checks in combat modifiers-- this is really just partlight.
+  struct obj_data *light = GET_EQ(sub, WEAR_LIGHT);
+  if (light && GET_OBJ_TYPE(light) == ITEM_LIGHT && GET_OBJ_VAL(light, 2) != 0)
+    return TRUE;
+    
+  // No saving grace, you get darkness.
+  return FALSE;
+}
+
 float get_proto_weight(struct obj_data *obj) {
   int rnum = real_object(GET_OBJ_VNUM(obj));
   if (rnum <= -1)

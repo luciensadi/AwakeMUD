@@ -901,8 +901,13 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
       struct combat_data *temp_att = att;
       att = def;
       def = temp_att;
-            
+      
+      // Flip the successes and remove the attacker's TN modifiers for ranged combat. There are probably more here that I'm missing.
       att->successes = -1 * net_successes;
+      att->tn += att->modifiers[COMBAT_MOD_RECOIL];
+      att->tn += att->modifiers[COMBAT_MOD_SMARTLINK];
+      att->tn += att->modifiers[COMBAT_MOD_GYRO];
+      att->tn += att->modifiers[COMBAT_MOD_MOVEMENT];
       
       // Prevent ranged combat messaging.
       att->weapon_is_gun = FALSE;

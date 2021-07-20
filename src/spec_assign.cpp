@@ -803,6 +803,7 @@ void assign_objects(void)
   SPECIAL(spraypaint);
   SPECIAL(restoration_button);
   SPECIAL(nerpcorpolis_button);
+  SPECIAL(floor_usable_radio);
 
   ASSIGNOBJ(3, gen_board);  /* Rift's Board */
   ASSIGNOBJ(4, gen_board);  /* Pook's Board */
@@ -900,12 +901,13 @@ void assign_objects(void)
   ASSIGNOBJ(9826, locker);
   ASSIGNOBJ(60500, chargen_hopper);
   ASSIGNOBJ(10033, quest_debug_scanner);
-  #ifdef USE_PRIVATE_CE_WORLD
+#ifdef USE_PRIVATE_CE_WORLD
   ASSIGNOBJ(70605, desktop);
   // ASSIGNOBJ(10036, restoration_button);
   ASSIGNOBJ(39799, bank);
   ASSIGNOBJ(6997, nerpcorpolis_button);
-  #endif
+  ASSIGNOBJ(16298, floor_usable_radio);
+#endif
   
   ASSIGNOBJ(OBJ_SEATTLE_TAXI_SIGN, taxi_sign);
   ASSIGNOBJ(OBJ_PORTLAND_TAXI_SIGN, taxi_sign);
@@ -916,6 +918,9 @@ void assign_objects(void)
   WSPEC(monowhip);
 
   ASSIGNWEAPON(660, monowhip);
+#ifdef USE_PRIVATE_CE_WORLD
+  ASSIGNWEAPON(25626, monowhip);
+#endif
   ASSIGNWEAPON(80108, monowhip);
 }
 

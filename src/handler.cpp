@@ -746,11 +746,11 @@ void affect_total(struct char_data * ch)
   GET_MAX_MENTAL(ch) -= GET_MENTAL_LOSS(ch) * 100;
   GET_MAX_PHYSICAL(ch) -= GET_PHYSICAL_LOSS(ch) * 100;
   
-  for (cyber = ch->bioware; cyber; cyber = cyber->next_content)
-  {
+  for (cyber = ch->bioware; cyber; cyber = cyber->next_content) {
     if (GET_OBJ_VAL(cyber, 0) == BIO_PAINEDITOR && GET_OBJ_VAL(cyber, 3)) {
-        GET_WIL(ch) += 1;
-        GET_INT(ch) -= 1;
+      GET_WIL(ch) += 1;
+      GET_INT(ch) -= 1;
+      break;
     }
   }
   

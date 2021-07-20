@@ -344,7 +344,7 @@ void copyover_recover()
       else
         load_room = real_room(GET_LOADROOM(d->character));
       char_to_room(d->character, &world[load_room]);
-      //look_at_room(d->character, 0);
+      //look_at_room(d->character, 0, 0);
     }
   }
   fclose (fp);
@@ -381,7 +381,7 @@ void copyover_recover()
   struct char_data *plr = character_list;
   while (plr) {
     if (!IS_NPC(plr) && !PRF_FLAGGED(plr, PRF_SCREENREADER))
-      look_at_room(plr, 0);
+      look_at_room(plr, 0, 0);
     plr = plr->next;
   }
 }
