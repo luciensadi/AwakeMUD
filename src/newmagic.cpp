@@ -1191,7 +1191,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       success = success_test(skill, base_target + target_modifiers);
       if (success > 0 && !AFF_FLAGGED(vict, AFF_DETOX)) {
         create_sustained(ch, vict, spell, force, 0, success, spells[SPELL_STABILIZE].draindamage);
-        send_to_char("You notice the affects of the drugs suddenly wear off.\r\n", vict);
+        send_to_char("You notice the effects of the drugs suddenly wear off.\r\n", vict);
         act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
       } else
         send_to_char(FAILED_CAST, ch);
