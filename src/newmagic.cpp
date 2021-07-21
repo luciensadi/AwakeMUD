@@ -3093,12 +3093,14 @@ ACMD(do_learn)
       (GET_ASPECT(ch) == ASPECT_ELEMWATER && spells[GET_OBJ_VAL(obj, 1)].category != ILLUSION) ||
       (GET_ASPECT(ch) == ASPECT_ELEMAIR && spells[GET_OBJ_VAL(obj, 1)].category != DETECTION)) {
     send_to_char("Glancing over the formula, you realize you can't bind mana in that fashion.\r\n", ch);
+    return;
   }
   if (GET_ASPECT(ch) == ASPECT_SHAMANIST) {
     int skill = 0, target = 0;
     totem_bonus(ch, 0, GET_OBJ_VAL(obj, 1), target, skill);
     if (skill < 1) {
       send_to_char(ch, "%s forbids you from learning this spell.\r\n", totem_types[GET_TOTEM(ch)]);
+      return;
     }
   }
   struct obj_data *library = ch->in_veh ? ch->in_veh->contents : ch->in_room->contents;

@@ -210,7 +210,8 @@ void spell_design(struct char_data *ch, struct obj_data *formula)
     send_to_char("That spell is already complete.\r\n", ch);
   else {
     int skill = GET_SKILL(ch, SKILL_SPELLDESIGN), target = 0, x = 0;
-    if (!skill || skill < GET_OBJ_VAL(formula, 0)) {
+    if (skill < GET_OBJ_VAL(formula, 0) && GET_SKILL(ch, SKILL_SORCERY) >= GET_OBJ_VAL(formula, 0)) {
+      send_to_char("Finding your spell design knowledge insufficient for this task, you fall back on your general grounding in sorcery.\r\n", ch);
       skill = GET_SKILL(ch, SKILL_SORCERY);
       target = 2;
     }
@@ -287,6 +288,11 @@ void spell_design(struct char_data *ch, struct obj_data *formula)
       GET_OBJ_TIMER(formula) = -3;
     } else
       GET_OBJ_VAL(formula, 6) = GET_OBJ_VAL(formula, 7) = drain / success;
+      
+    if (access_level(ch, LVL_ADMIN)) {
+      send_to_char("You use your staff privileges to greatly accelerate the design process.\r\n", ch);
+      GET_OBJ_VAL(formula, 6) = GET_OBJ_VAL(formula, 7) = 1;
+    }
     send_to_char(ch, "You start designing %s.\r\n", GET_OBJ_NAME(formula));
   }
   act("$n sits down and begins to design a spell.", TRUE, ch, 0, 0, TO_ROOM);
