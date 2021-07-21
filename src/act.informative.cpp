@@ -257,7 +257,7 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
         snprintf(buf, sizeof(buf), "^gA metal box of %s has been left here.^n", get_ammo_representation(GET_AMMOBOX_WEAPON(object), GET_AMMOBOX_TYPE(object), 0));
       } else {
         if (GET_OBJ_TYPE(object) == ITEM_WORKSHOP && GET_WORKSHOP_GRADE(object) == TYPE_WORKSHOP && GET_WORKSHOP_IS_SETUP(object) && !GET_WORKSHOP_UNPACK_TICKS(object)) {
-          strlcat(buf, "(deployed) ", sizeof(buf));
+          strlcat(buf, "^n(Deployed) ", sizeof(buf));
         }
         strlcat(buf, object->text.room_desc, sizeof(buf));
       }
@@ -5180,10 +5180,10 @@ ACMD(do_status)
       }
     if (force == 0) {
       send_to_char(ch, "You're not using any foci.\r\n");
-    } else if (force * 100 > GET_REAL_MAG(ch) * 2) {
-      send_to_char(ch, "^YYou are at risk of geas from using too many points of foci! You're using %d, and need to reduce to %d.^n\r\n", force, GET_REAL_MAG(ch) * 2 / 100);
+    } else if (force > (GET_REAL_MAG(ch) / 100) * 2) {
+      send_to_char(ch, "^YYou are at risk of geas from using too many points of foci! You're using %d, and need to reduce to %d.^n\r\n", force, (GET_REAL_MAG(ch) / 100) * 2);
     } else {
-      send_to_char(ch, "You're using a total of %d points of foci. If this gets above %d, you'll be at risk of geas.\r\n", force, GET_REAL_MAG(ch) * 2 / 100);
+      send_to_char(ch, "You're using a total of %d points of foci. If this gets above %d, you'll be at risk of geas.\r\n", force, (GET_REAL_MAG(ch) / 100) * 2);
     }
   }
 }

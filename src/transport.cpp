@@ -81,7 +81,7 @@ struct dest_data seattle_taxi_destinations[] =
   { "TWE", "", "Tacoma Weapons Emporium", 2514, TAXI_DEST_TYPE_SHOPPING, TRUE },
   // TODO: Stopped alphabetizing by title here.
     // { "vieux", "Le Cinema Vieux", 32588 },
-    { "rhio", "big", "The Big Rhino", 32635, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
+    { "rhino", "big", "The Big Rhino", 32635, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
     { "epicenter", "", "The Epicenter", 2418, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
     { "yoshi", "sushi", "Yoshi's Sushi Bar", 32751, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
     { "garage", "parking", "Seattle Parking Garage", 32720, TAXI_DEST_TYPE_OTHER , TRUE },
@@ -925,7 +925,7 @@ SPECIAL(taxi)
           continue;
         
         if (str_str((const char *)argument, destination_list[dest].keyword)
-            || str_str((const char *)argument, destination_list[dest].subkeyword)) 
+            || (*(destination_list[dest].subkeyword) && str_str((const char *)argument, destination_list[dest].subkeyword))) 
         {
           comm = CMD_TAXI_DEST;
           found = TRUE;
