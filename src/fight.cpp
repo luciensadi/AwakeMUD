@@ -1327,14 +1327,37 @@ void weapon_scatter(struct char_data *ch, struct char_data *victim, struct obj_d
         break;
     
     if (vict && (IS_NPC(vict) || (!IS_NPC(vict) && vict->desc)) && can_hurt(ch, vict, TYPE_SCATTERING, TRUE)) {
-      snprintf(buf, sizeof(buf), "A %s flies in from nowhere, hitting you!", ammo_type);
-      act(buf, FALSE, vict, 0, 0, TO_CHAR);
-      snprintf(buf, sizeof(buf), "A %s hums into the room and hits $n!", ammo_type);
-      act(buf, FALSE, vict, 0, 0, TO_ROOM);
-      power = MAX(GET_OBJ_VAL(weapon, 0) - GET_BALLISTIC(vict) - 3, 2);
-      damage_total = MAX(1, GET_OBJ_VAL(weapon, 1));
-      damage_total = convert_damage(stage((2 - success_test(GET_BOD(vict) + GET_BODY(vict), power)), damage_total));
-      damage(ch, vict, damage_total, TYPE_SCATTERING, PHYSICAL);
+      power = MAX(GET_WEAPON_POWER(weapon) - GET_BALLISTIC(vict) - 3, 2);
+      
+      // We do some ghettoized bastardization of the fight code here to make scatterfire a little less OP.
+      if (AWAKE(vict) && !AFF_FLAGGED(vict, AFF_SURPRISE) && !AFF_FLAGGED(vict, AFF_PRONE)) {
+        int def_dice = GET_DEFENSE(vict) + GET_POWER(vict, ADEPT_SIDESTEP);
+        int def_tn = damage_modifier(vict, buf, sizeof(buf));
+        int def_successes = MAX(success_test(def_dice, def_tn), 0);
+        power -= def_successes;
+      }
+      
+      // Successful dodge?
+      if (power <= 0) {
+        snprintf(buf, sizeof(buf), "A %s flies in from nowhere, almost hitting you!", ammo_type);
+        act(buf, FALSE, vict, 0, 0, TO_CHAR);
+        snprintf(buf, sizeof(buf), "A %s hums into the room and barely misses $n!", ammo_type);
+        act(buf, FALSE, vict, 0, 0, TO_ROOM);
+      } 
+      // Failed to dodge.
+      else {
+        snprintf(buf, sizeof(buf), "A %s flies in from nowhere, hitting you!", ammo_type);
+        act(buf, FALSE, vict, 0, 0, TO_CHAR);
+        snprintf(buf, sizeof(buf), "A %s hums into the room and hits $n!", ammo_type);
+        act(buf, FALSE, vict, 0, 0, TO_ROOM);
+        damage_total = MAX(1, GET_WEAPON_DAMAGE_CODE(weapon));
+        damage_total = convert_damage(stage((2 - success_test(GET_BOD(vict) + GET_BODY(vict), power)), damage_total));
+        damage(ch, vict, damage_total, TYPE_SCATTERING, PHYSICAL);
+      }
+      
+      // If you're not already fighting someone else, that's a great reason to get into combat, don't you think?
+      if (!FIGHTING(vict))
+        ranged_response(ch, vict);
       return;
     }
   } else if (i > (MAX(20, total + door + 2) - door))
@@ -3151,6 +3174,9 @@ void astral_fight(struct char_data *ch, struct char_data *vict)
   
   if (attack_success < 1)
   {
+    act("$n whiffs $s attack on $N!", 1, ch, NULL, vict, TO_ROOM);
+    act("$n whiffs $s attack on $N!", 1, ch, NULL, vict, TO_CHAR);
+    act("$n whiffs $s attack on $N!", 1, ch, NULL, vict, TO_VICT);
     if (!AFF_FLAGGED(ch, AFF_COUNTER_ATT)) {
       if ((GET_ASTRAL(vict) > 0) 
           && (attack_success < 0)
@@ -3158,6 +3184,7 @@ void astral_fight(struct char_data *ch, struct char_data *vict)
           && GET_POS(vict) > POS_SLEEPING) {
         send_to_char(ch, "%s counters your attack!\r\n", GET_NAME(vict));
         send_to_char(vict, "You counter %s's attack!\r\n", GET_NAME(ch));
+        act("$n counters $N's attack!", 1, ch, NULL, vict, TO_ROOM);
         AFF_FLAGS(vict).SetBit(AFF_COUNTER_ATT);
         astral_fight(vict, ch);
       }

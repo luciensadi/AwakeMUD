@@ -1592,8 +1592,10 @@ void command_interpreter(struct char_data * ch, char *argument, char *tcname)
     if (GET_POS(ch) < cmd_info[cmd].minimum_position) {
       switch (GET_POS(ch)) {
       case POS_DEAD:
-        send_to_char("Lie still; you are DEAD!!! :-(\r\n", ch);
-        mudlog("WARNING: Dead character is still trying to perform actions.", ch, LOG_SYSLOG, TRUE);
+        // send_to_char("Lie still; you are DEAD!!! :-(\r\n", ch);
+        send_to_char("The last vestiges of your soul begin to leave your rapidly-cooling form.\r\n", ch);
+        mudlog("WARNING: Dead character is still trying to perform actions. Killing them...", ch, LOG_SYSLOG, TRUE);
+        do_die(ch, arg, 0, 0);
         break;
       case POS_MORTALLYW:
         send_to_char("You are in a pretty bad shape! You can either wait for help, or give up by typing ^WDIE^n.\r\n", ch);
