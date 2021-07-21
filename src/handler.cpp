@@ -897,9 +897,11 @@ void affect_total(struct char_data * ch)
     GET_DEFENSE(ch) += GET_OFFENSE(ch) - skill_dice;
     GET_OFFENSE(ch) = skill_dice;
   }
-  if ((IS_NPC(ch) && GET_MAG(ch) > 0) || (GET_TRADITION(ch) == TRAD_SHAMANIC ||
-                                          GET_TRADITION(ch) == TRAD_HERMETIC))
-  {
+  
+  // Set up magic pool info correctly.
+  if (IS_NPC(ch) && (IS_SPIRIT(ch) || IS_ELEMENTAL(ch))) {
+    GET_ASTRAL(ch) = 1.5 * GET_LEVEL(ch);
+  } else if ((IS_NPC(ch) && GET_MAG(ch) > 0) || (GET_TRADITION(ch) == TRAD_SHAMANIC || GET_TRADITION(ch) == TRAD_HERMETIC)) {
     GET_ASTRAL(ch) += GET_GRADE(ch);
     GET_MAGIC(ch) += (GET_INT(ch) + GET_WIL(ch) + (int)(GET_MAG(ch) / 100))/3;
     if (IS_NPC(ch)) {
@@ -911,6 +913,7 @@ void affect_total(struct char_data * ch)
     }
     GET_CASTING(ch) = MAX(0, GET_MAGIC(ch) - GET_DRAIN(ch) - GET_REFLECT(ch) - GET_SDEFENSE(ch));
   }
+  
   if (REAL_SKILL(ch, SKILL_COMPUTER) > 0)
   {
     int mpcp = 0;

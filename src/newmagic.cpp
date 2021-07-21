@@ -2254,7 +2254,7 @@ struct char_data *create_elemental(struct char_data *ch, int type, int force, in
   GET_REAL_WIL(mob) = force;
   GET_ESS(mob) = force * 100;
   GET_LEVEL(mob) = force;
-  GET_ASTRAL(mob) = (int) force * 1.5;
+  GET_ASTRAL(mob) = (sh_int) force * 1.5;
   GET_ACTIVE(mob) = GET_IDNUM(ch);
   GET_SPARE1(mob) = type;
   GET_SPARE2(mob) = force;
