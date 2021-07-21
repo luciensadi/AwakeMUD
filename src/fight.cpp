@@ -2520,10 +2520,18 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
       }
     } else {
       GET_MENTAL(victim) -= MAX(dam * 100, 0);
-      if (!pain && trauma && (!comp || (comp && GET_MENTAL(victim) > 0 && 1000 - GET_MENTAL(victim) > comp)))
-        GET_MENTAL(victim) += 100;
-      if (IS_PROJECT(victim))
+      
+      // Astral projections apply their originator's bioware to the originator, not the projection.
+      if (IS_PROJECT(victim)) {
         GET_MENTAL(victim->desc->original) -= MAX(dam * 100, 0);
+        if (!pain && trauma && (!comp || (comp && GET_MENTAL(victim->desc->original) > 0 && 1000 - GET_MENTAL(victim->desc->original) > comp)))
+          GET_MENTAL(victim) += 100;
+      } 
+      // Non-projections have easier rules.
+      else {
+        if (!pain && trauma && (!comp || (comp && GET_MENTAL(victim) > 0 && 1000 - GET_MENTAL(victim) > comp)))
+          GET_MENTAL(victim) += 100;
+      }
     }
   }
   if (!awake && GET_PHYSICAL(victim) <= 0)
@@ -2983,18 +2991,34 @@ void astral_fight(struct char_data *ch, struct char_data *vict)
     return;
   }
   
+  if (GET_POS(vict) <= POS_DEAD)
+  {
+    log("SYSERR: Attempt to damage a corpse.");
+    return;                     /* -je, 7/7/92 */
+  }
+  
+  snprintf(buf3, sizeof(buf3), "^WWelcome to the ancient-ass astral_fight()! Featuring: %s vs %s.^n", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict));
+  act(buf3, 1, ch, NULL, NULL, TO_ROLLS);
+  
+  // Find astral foci.
   if ((IS_PROJECT(ch) || PLR_FLAGGED(ch, PLR_PERCEIVE))
       && wielded
       && GET_OBJ_TYPE(wielded) == ITEM_WEAPON
-      && GET_OBJ_VAL(wielded, 3) < TYPE_TASER
-      && GET_OBJ_VAL(wielded, 7)
-      && GET_OBJ_VAL(wielded, 8)
-      && GET_OBJ_VAL(wielded, 9) == GET_IDNUM(ch))
-    focus = TRUE;
-  else if (wielded)
+      && GET_WEAPON_ATTACK_TYPE(wielded) < TYPE_TASER
+      && GET_WEAPON_FOCUS_RATING(wielded) > 0
+      && GET_WEAPON_FOCUS_BOND_STATUS(wielded) > 0
+      && (GET_WEAPON_FOCUS_BONDED_BY(wielded) == GET_IDNUM(ch)
+          || (ch->desc && ch->desc->original && GET_WEAPON_FOCUS_BONDED_BY(wielded) == GET_IDNUM(ch->desc->original))))
   {
-    stop_fighting(ch);
-    return;
+    focus = TRUE;
+  }
+  else if (wielded) {
+    snprintf(buf3, sizeof(buf3), "%s is not a weapon focus, so we'll use unarmed combat.^n", capitalize(GET_OBJ_NAME(wielded)));
+    act(buf3, 1, ch, NULL, NULL, TO_ROLLS);
+    send_to_char(ch, "%s can't damage astral forms, so you use your fists instead!\r\n", capitalize(GET_OBJ_NAME(wielded)));
+    wielded = NULL;
+    // stop_fighting(ch);
+    // return;
   }
   
   if (IS_PROJECT(ch) && (ch != vict) && PLR_FLAGGED(vict, PLR_PERCEIVE) &&
@@ -3007,12 +3031,6 @@ void astral_fight(struct char_data *ch, struct char_data *vict)
             GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), GET_ROOM_NAME(get_ch_in_room(vict)));
     mudlog(buf, ch, LOG_MISCLOG, TRUE);
     send_to_char("If you want to be a PLAYER KILLER, so be it...\r\n", ch);
-  }
-  
-  if (GET_POS(vict) <= POS_DEAD)
-  {
-    log("SYSERR: Attempt to damage a corpse.");
-    return;                     /* -je, 7/7/92 */
   }
   
   if (wielded) {
@@ -3069,9 +3087,11 @@ void astral_fight(struct char_data *ch, struct char_data *vict)
   if (((w_type == TYPE_HIT) || (w_type == TYPE_BLUDGEON) || (w_type == TYPE_PUNCH) ||
        (w_type == TYPE_TASER) || (w_type == TYPE_CRUSH) || (w_type == TYPE_POUND)) &&
       (GET_MENTAL(vict) >= 100))
+  {
     is_physical = FALSE;
-  else
+  } else {
     is_physical = TRUE;
+  }
   
   base_target = 4 + modify_target(ch);
   
@@ -3080,19 +3100,21 @@ void astral_fight(struct char_data *ch, struct char_data *vict)
   
   if ((w_type != TYPE_HIT) && wielded)
   {
-    power = (GET_OBJ_VAL(wielded, 0) ? GET_OBJ_VAL(wielded, 0) : GET_STR(ch)) +
-    GET_OBJ_VAL(wielded, 2);
+    power = GET_WEAPON_POWER(wielded) ? GET_WEAPON_POWER(wielded) : GET_WEAPON_STR_BONUS(wielded) + GET_STR(ch);
     if (focus)
-      power += GET_OBJ_VAL(wielded, 8);
+      power += GET_WEAPON_FOCUS_RATING(wielded);
     power -= GET_IMPACT(vict);
     dam = MODERATE;
     if (IS_SPIRIT(vict) || IS_ELEMENTAL(vict))
       skill_total = GET_WIL(ch);
-    else if (GET_SKILL(ch, GET_OBJ_VAL(wielded, 4)) < 1) {
-      newskill = return_general(GET_OBJ_VAL(wielded, 4));
-      skill_total = get_skill(ch, newskill, base_target);
-    } else
-      skill_total = GET_SKILL(ch, GET_OBJ_VAL(wielded, 4));
+    else if (GET_SKILL(ch, GET_WEAPON_SKILL(wielded)) < 1) {
+      newskill = return_general(GET_WEAPON_SKILL(wielded));
+      skill_total = MAX(get_skill(ch, newskill, base_target), GET_SKILL(ch, SKILL_SORCERY));
+    } else {
+      // TODO: Isn't this a bug in that the base target is not modified per the shit-tastically named get_skill()?
+      skill_total = MAX(GET_SKILL(ch, GET_WEAPON_SKILL(wielded)), GET_SKILL(ch, SKILL_SORCERY));
+    }
+      
   } else
   {
     power = GET_STR(ch) - GET_IMPACT(vict);
@@ -3155,8 +3177,10 @@ void astral_fight(struct char_data *ch, struct char_data *vict)
     dam = 0;
   
   damage(ch, vict, dam, w_type, is_physical);
+  /*  This echo-back-damage code is not necessary, it's handled automatically in damage().
   if (IS_PROJECT(vict) && dam > 0)
     damage(vict->desc->original, vict->desc->original, dam, 0, is_physical);
+  */
 }
 
 void remove_throwing(struct char_data *ch)

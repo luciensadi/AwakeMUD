@@ -2254,6 +2254,7 @@ struct char_data *create_elemental(struct char_data *ch, int type, int force, in
   GET_REAL_WIL(mob) = force;
   GET_ESS(mob) = force * 100;
   GET_LEVEL(mob) = force;
+  GET_ASTRAL(mob) = (int) force * 1.5;
   GET_ACTIVE(mob) = GET_IDNUM(ch);
   GET_SPARE1(mob) = type;
   GET_SPARE2(mob) = force;
@@ -2955,6 +2956,7 @@ ACMD(do_conjure)
       }
       
     // Modify the TN for wound penalties and sustains.
+    strlcpy(buf3, "", sizeof(buf3)); strlcpy(buf2, "", sizeof(buf2));
     target += damage_modifier(ch, buf3, sizeof(buf3)) + sustain_modifier(ch, buf2, sizeof(buf2));
     snprintf(buf, sizeof(buf), "Sustain: %s\r\nWound modifiers: %s", buf3, buf2);
     act(buf, FALSE, ch, 0, 0, TO_ROLLS);
@@ -4692,7 +4694,7 @@ void init_parse(struct descriptor_data *d, char *arg)
       } else if (--number > META_MAX) {
         send_to_char("Invalid Response. Select ability to learn: ", CH);
       } else if (!can_metamagic(CH, number)) {
-        send_to_char("You can't learn that metamagic technique. Select ability to learn: ", CH);
+        send_to_char("Your tradition/apect/initiation combination isn't able to learn that metamagic technique. Select ability to learn: ", CH);
       } else {
         init_cost(CH, TRUE);
         GET_METAMAGIC(CH, number)++;

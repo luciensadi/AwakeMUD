@@ -3310,6 +3310,9 @@ bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struc
 }
 
 bool LIGHT_OK_ROOM_SPECIFIED(struct char_data *sub, struct room_data *provided_room) {
+  struct obj_data *light;
+  struct room_data *in_room;
+  
   // Fix the ruh-rohs.
   if (!sub || !provided_room)
     return FALSE;
@@ -3336,14 +3339,20 @@ bool LIGHT_OK_ROOM_SPECIFIED(struct char_data *sub, struct room_data *provided_r
       if (!IS_NPC(tch))
         return TRUE;
   }
+    
+  // If anyone in the room has a flashlight equipped, you're good. Note that this requires further checks in combat modifiers-- this is really just partlight.
+  if ((in_room = get_ch_in_room(sub))) {
+    for (struct char_data *tch = in_room->people; tch; tch = tch->next_in_room) {
+      // Have a flashlight?
+      if ((light = GET_EQ(tch, WEAR_LIGHT)) && GET_OBJ_TYPE(light) == ITEM_LIGHT && GET_OBJ_VAL(light, 2) != 0)
+        return TRUE;
+        
+      // TODO: Have the light spell on them?
+      
+      // TODO: Have the shadow spell on them?
+    }
+  }
   
-  // TODO: honestly this code might be better handled if it's replaced by logic that just changes a room's light level based on movement within it
-    
-  // If you have a flashlight equipped, you're good. Note that this requires further checks in combat modifiers-- this is really just partlight.
-  struct obj_data *light = GET_EQ(sub, WEAR_LIGHT);
-  if (light && GET_OBJ_TYPE(light) == ITEM_LIGHT && GET_OBJ_VAL(light, 2) != 0)
-    return TRUE;
-    
   // No saving grace, you get darkness.
   return FALSE;
 }

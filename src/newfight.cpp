@@ -443,7 +443,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     return;
   }
   
-  // Precondition: If your foe is astral, you don't belong here.
+  // Precondition: If your foe is astral (ex: a non-manifested projection, a dematerialized spirit), you don't belong here.
   if (IS_ASTRAL(def->ch)) {
     if (IS_DUAL(att->ch) || IS_ASTRAL(att->ch))
       astral_fight(att->ch, def->ch);
@@ -768,13 +768,18 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     att->melee->modifiers[COMBAT_MOD_POSITION] -= 2;
   
   // Spirits use different dice than the rest of us plebs.
+  // Disabled this portion for now-- it looks like the original intent was to implement a clash of wills, but the code does not support this at the moment.
+  /*
   if (IS_SPIRIT(def->ch) || IS_ELEMENTAL(def->ch)) {
+    act("Defender is a spirit, so attacker uses wil and defender uses reaction for dice pool.", 1, att->ch, NULL, NULL, TO_ROLLS);
     att->dice = GET_WIL(att->ch);
     def->dice = GET_REA(def->ch);
   } else if (IS_SPIRIT(att->ch) || IS_ELEMENTAL(att->ch)) {
+    act("Attacker is a spirit, so attacker uses reaction and defender uses wil for dice pool.", 1, att->ch, NULL, NULL, TO_ROLLS);
     att->dice = GET_REA(att->ch);
     def->dice = GET_WIL(def->ch);
   } else {
+  */
     act("Computing dice for attacker...", 1, att->ch, NULL, NULL, TO_ROLLS );
     att->dice = att->melee->skill_bonus + get_skill(att->ch, att->melee->skill, att->tn);
     if (!att->too_tall)
@@ -783,7 +788,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     def->dice = def->melee->skill_bonus + get_skill(def->ch, def->melee->skill, def->tn);
     if (!def->too_tall)
       def->dice += MIN(GET_SKILL(def->ch, def->melee->skill) + def->melee->skill_bonus, GET_OFFENSE(def->ch));
-  }
+  // }
   
   // Adepts get bonus dice when counterattacking. Ip Man approves.
   if (GET_POWER(def->ch, ADEPT_COUNTERSTRIKE) > 0) {
@@ -996,6 +1001,8 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
   }
   
   // Handle spirits and elementals being little divas with their special combat rules.
+  // Namely: We require that the attack's power is greater than double the spirit's level, otherwise it takes no damage.
+  // If the attack's power is greater, subtract double the level from it.
   if (IS_SPIRIT(def->ch) || IS_ELEMENTAL(def->ch)) {
     if (att->weapon_is_gun) {
       if (att->ranged->power <= GET_LEVEL(def->ch) * 2) {
