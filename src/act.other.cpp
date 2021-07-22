@@ -1708,35 +1708,41 @@ ACMD(do_reload)
 ACMD(do_eject)
 {
   struct obj_data *weapon = GET_EQ(ch, WEAR_WIELD);
-  if (weapon && weapon->contains) {
-    struct obj_data *magazine = weapon->contains;
-    
-    if (GET_OBJ_TYPE(magazine) != ITEM_GUN_MAGAZINE) {
-      send_to_char("^YSomething has gone really wrong.^n Staff have been automatically alerted, but you should DM Lucien on Discord as well. Do not junk or otherwise get rid of this weapon, it has stuff in it that's not a magazine!\r\n", ch);
-      snprintf(buf, sizeof(buf), "^RSYSERR^g: Stranded objects in %s's %s!", GET_CHAR_NAME(ch), GET_OBJ_NAME(GET_EQ(ch, WEAR_WIELD)));
-      mudlog(buf, ch, LOG_SYSLOG, TRUE);
-      const char *ptr = generate_new_loggable_representation(GET_EQ(ch, WEAR_WIELD));
-      mudlog(ptr, ch, LOG_SYSLOG, TRUE);
-      delete [] ptr;
-      return;
-    }
-    
-    // Strip out the ammo and put it in your bullet pants, then destroy the mag.
-    update_bulletpants_ammo_quantity(ch, GET_MAGAZINE_BONDED_ATTACKTYPE(magazine), GET_MAGAZINE_AMMO_TYPE(magazine), GET_MAGAZINE_AMMO_COUNT(magazine));
-    obj_from_obj(magazine);
-    extract_obj(magazine);
-    act("$n ejects and pockets a magazine from $p.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_ROOM);
-    act("You eject and pocket a magazine from $p.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_CHAR);
-    
-    // If it has a bayonet and you're in combat, you charge forth.
-    if (FIGHTING(ch) && does_weapon_have_bayonet(weapon)) {
-      send_to_char("With your weapon empty, you decide to do a bayonet charge!\r\n", ch);
-      act("$n lets out a banshee screech and charges in with $s bayonet!", FALSE, ch, NULL, NULL, TO_ROOM);
-      if (AFF_FLAGGED(FIGHTING(ch), AFF_APPROACH))
-        AFF_FLAGS(FIGHTING(ch)).RemoveBit(AFF_APPROACH);
-    }
-  } else {
+  if (!weapon || !IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon))) {
+    send_to_char("You're not wielding a firearm.\r\n", ch);
+    return;
+  }
+  
+  if (!weapon->contains) {
     send_to_char(ch, "%s is already empty.\r\n", capitalize(GET_OBJ_NAME(weapon)));
+    return;
+  }
+  
+  struct obj_data *magazine = weapon->contains;
+  
+  if (GET_OBJ_TYPE(magazine) != ITEM_GUN_MAGAZINE) {
+    send_to_char("^YSomething has gone really wrong.^n Staff have been automatically alerted, but you should DM Lucien on Discord as well. Do not junk or otherwise get rid of this weapon, it has stuff in it that's not a magazine!\r\n", ch);
+    snprintf(buf, sizeof(buf), "^RSYSERR^g: Stranded objects in %s's %s!", GET_CHAR_NAME(ch), GET_OBJ_NAME(GET_EQ(ch, WEAR_WIELD)));
+    mudlog(buf, ch, LOG_SYSLOG, TRUE);
+    const char *ptr = generate_new_loggable_representation(GET_EQ(ch, WEAR_WIELD));
+    mudlog(ptr, ch, LOG_SYSLOG, TRUE);
+    delete [] ptr;
+    return;
+  }
+  
+  // Strip out the ammo and put it in your bullet pants, then destroy the mag.
+  update_bulletpants_ammo_quantity(ch, GET_MAGAZINE_BONDED_ATTACKTYPE(magazine), GET_MAGAZINE_AMMO_TYPE(magazine), GET_MAGAZINE_AMMO_COUNT(magazine));
+  obj_from_obj(magazine);
+  extract_obj(magazine);
+  act("$n ejects and pockets a magazine from $p.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_ROOM);
+  act("You eject and pocket a magazine from $p.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_CHAR);
+  
+  // If it has a bayonet and you're in combat, you charge forth.
+  if (FIGHTING(ch) && does_weapon_have_bayonet(weapon)) {
+    send_to_char("With your weapon empty, you decide to do a bayonet charge!\r\n", ch);
+    act("$n lets out a banshee screech and charges in with $s bayonet!", FALSE, ch, NULL, NULL, TO_ROOM);
+    if (AFF_FLAGGED(FIGHTING(ch), AFF_APPROACH))
+      AFF_FLAGS(FIGHTING(ch)).RemoveBit(AFF_APPROACH);
   }
 }
 
