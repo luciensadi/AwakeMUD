@@ -2441,12 +2441,14 @@ ACMD(do_unbond)
     send_to_char(ch, "You don't have a '%s'.\r\n", argument);
     return;
   }
-  if (GET_OBJ_TYPE(obj) == ITEM_FOCUS 
-      && GET_FOCUS_BONDED_TO(obj)) {
+  if (GET_OBJ_TYPE(obj) == ITEM_FOCUS && GET_FOCUS_BONDED_TO(obj)) {
     send_to_char("You sever the focus's bond with the astral plane.\r\n", ch);
     GET_FOCUS_BONDED_TO(obj) = GET_FOCUS_BONDED_SPIRIT_OR_SPELL(obj) = GET_FOCUS_TRADITION(obj) = 0;
+  } else if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && WEAPON_IS_FOCUS(obj) && WEAPON_FOCUS_USABLE_BY(obj, ch)) {
+    send_to_char("You sever the weapon focus's bond with the astral plane.\r\n", ch);
+    GET_WEAPON_FOCUS_BONDED_BY(obj) = GET_WEAPON_FOCUS_BOND_STATUS(obj) = 0;
   } else 
-    send_to_char("You can't unbond that.\r\n", ch);
+    send_to_char(ch, "You can't unbond %s.\r\n", GET_OBJ_NAME(obj));
 }
 
 ACMD(do_bond)

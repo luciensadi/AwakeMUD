@@ -3182,6 +3182,9 @@ ACMD(do_activate)
     GET_FOCI(ch)++;
     affect_total(ch);
     return;
+  } else if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && WEAPON_IS_FOCUS(obj)) {
+    send_to_char(ch, "There's no need to activate or deactivate %s. Just wield it when you want to use it.\r\n", GET_OBJ_NAME(obj));
+    return;
   } else if (GET_OBJ_TYPE(obj) != ITEM_MONEY || !GET_OBJ_VAL(obj, 1)) {
     send_to_char(ch, "You can't activate %s.\r\n", GET_OBJ_NAME(obj));
     return;

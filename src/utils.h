@@ -808,6 +808,9 @@ bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struc
 #define GET_WEAPON_FULL_AUTO_COUNT(weapon)     (GET_OBJ_TIMER((weapon)))
 #define GET_WEAPON_ATTACH_LOC(weapon, loc)     (((loc) >= ACCESS_LOCATION_TOP && (loc) <= ACCESS_LOCATION_UNDER) ? \
                                                     GET_OBJ_VAL((weapon), (loc)) : 0)
+                                                    
+#define WEAPON_IS_FOCUS(obj)                   (GET_OBJ_TYPE((obj)) == ITEM_WEAPON && GET_WEAPON_ATTACK_TYPE((obj)) < TYPE_TASER && GET_WEAPON_FOCUS_RATING((obj)) > 0)
+#define WEAPON_FOCUS_USABLE_BY(obj, ch)        (WEAPON_IS_FOCUS((obj)) && GET_WEAPON_FOCUS_BOND_STATUS((obj)) > 0 && GET_WEAPON_FOCUS_BONDED_BY((obj)))
 
 #define WEAPON_CAN_USE_FIREMODE(weapon, mode)  (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(weapon), 1 << (mode)))
 #define WEAPON_IS_SS(eq)  (GET_OBJ_TYPE(eq) == ITEM_WEAPON && GET_OBJ_VAL(eq, 11) == MODE_SS)

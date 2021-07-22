@@ -5173,11 +5173,21 @@ ACMD(do_status)
   if (GET_MAG(ch) > 0) {
     send_to_char("\r\n", ch);
     int force = 0, total = 0;
-    for (int x = 0; x < NUM_WEARS; x++)
-      if (GET_EQ(ch, x) && GET_OBJ_TYPE(GET_EQ(ch, x)) == ITEM_FOCUS && GET_OBJ_VAL(GET_EQ(ch, x), 2) == GET_IDNUM(ch) && GET_OBJ_VAL(GET_EQ(ch, x), 4)) {
-        force += GET_OBJ_VAL(GET_EQ(ch, x), 1);
+    struct obj_data *focus;
+    for (int x = 0; x < NUM_WEARS; x++) {
+      if (!(focus = GET_EQ(ch, x)))
+        continue;
+        
+      if (GET_OBJ_TYPE(focus) == ITEM_FOCUS && GET_FOCUS_BONDED_TO(focus) == GET_IDNUM(ch) && GET_FOCUS_ACTIVATED(focus)) {
+        force += GET_FOCUS_FORCE(focus);
         total++;
       }
+      
+      else if (GET_OBJ_TYPE(focus) == ITEM_WEAPON && WEAPON_IS_FOCUS(focus) && WEAPON_FOCUS_USABLE_BY(focus, ch)) {
+        force += GET_WEAPON_FOCUS_RATING(focus);
+        total++;
+      }
+    }
     if (force == 0) {
       send_to_char(ch, "You're not using any foci.\r\n");
     } else if (force > (GET_REAL_MAG(ch) / 100) * 2) {

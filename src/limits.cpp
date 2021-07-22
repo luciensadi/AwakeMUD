@@ -752,13 +752,24 @@ void point_update(void)
       }
 #endif    
       
+      // Geas check from focus / foci overuse.
       if (GET_MAG(i) > 0) {
         int force = 0, total = 0;
-        for (int x = 0; x < NUM_WEARS; x++)
-          if (GET_EQ(i, x) && GET_OBJ_TYPE(GET_EQ(i, x)) == ITEM_FOCUS && GET_OBJ_VAL(GET_EQ(i, x), 2) == GET_IDNUM(i) && GET_OBJ_VAL(GET_EQ(i, x), 4)) {
-            force += GET_OBJ_VAL(GET_EQ(i, x), 1);
+        struct obj_data *focus;
+        for (int x = 0; x < NUM_WEARS; x++) {
+          if (!(focus = GET_EQ(i, x)))
+            continue;
+            
+          if (GET_OBJ_TYPE(focus) == ITEM_FOCUS && GET_FOCUS_BONDED_TO(focus) == GET_IDNUM(i) && GET_FOCUS_ACTIVATED(focus)) {
+            force += GET_FOCUS_FORCE(focus);
             total++;
           }
+          
+          else if (GET_OBJ_TYPE(focus) == ITEM_WEAPON && WEAPON_IS_FOCUS(focus) && WEAPON_FOCUS_USABLE_BY(focus, i)) {
+            force += GET_WEAPON_FOCUS_RATING(focus);
+            total++;
+          }
+        }
         if (force * 100 > GET_REAL_MAG(i) * 2 && success_test(GET_REAL_MAG(i) / 100, force / 2) < 1) {
           int num = number(1, total);
           struct obj_data *foci = NULL;
