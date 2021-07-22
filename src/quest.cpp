@@ -828,7 +828,12 @@ SPECIAL(johnson)
       comm = CMD_JOB_YES;
     else if (strstr(argument, "no"))
       comm = CMD_JOB_NO;
-    else {
+    else if (access_level(ch, LVL_BUILDER) && !str_cmp(argument, "clear")) {
+      for (int i = QUEST_TIMER - 1; i >= 0; i--)
+        GET_LQUEST(ch, i) = 0;
+      send_to_char("OK, your quest history has been cleared.\r\n", ch);
+      return FALSE;
+    } else {
       snprintf(buf, sizeof(buf), "INFO: No Johnson keywords found in %s's speech: '%s'.", GET_CHAR_NAME(ch), argument);
       mudlog(buf, ch, LOG_SYSLOG, TRUE);
       return FALSE;
