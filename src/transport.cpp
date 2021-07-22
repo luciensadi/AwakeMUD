@@ -65,6 +65,7 @@ struct dest_data seattle_taxi_destinations[] =
   { "chinatown", "", "ChinaTown", 2527, TAXI_DEST_TYPE_AREA_OF_TOWN, TRUE },
   { "penumbra", "", "Club Penumbra", 32587, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
   { "evergreen", "", "Evergreen Complex", 2201, TAXI_DEST_TYPE_ACCOMMODATIONS, TRUE },
+  { "epicenter", "", "The Epicenter", 2418, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
   { "knight", "center", "Knight Center", 1519, TAXI_DEST_TYPE_CORPORATE_PARK, TRUE },
   { "charne", "", "La Charne", 30548, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, FALSE },
   { "cinema", "vieux", "Le Cinema Vieux", 32588, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE},
@@ -82,7 +83,6 @@ struct dest_data seattle_taxi_destinations[] =
   // TODO: Stopped alphabetizing by title here.
     // { "vieux", "Le Cinema Vieux", 32588 },
     { "rhino", "big", "The Big Rhino", 32635, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
-    { "epicenter", "", "The Epicenter", 2418, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
     { "yoshi", "sushi", "Yoshi's Sushi Bar", 32751, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
     { "garage", "parking", "Seattle Parking Garage", 32720, TAXI_DEST_TYPE_OTHER , TRUE },
     { "formal", "", "Seattle Formal Wear", 32746, TAXI_DEST_TYPE_SHOPPING, TRUE },
