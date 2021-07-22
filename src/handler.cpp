@@ -2139,7 +2139,7 @@ void extract_veh(struct veh_data * veh)
   
   // Perform actual vehicle extraction.
   REMOVE_FROM_LIST(veh, veh_list, next);
-  if (veh->in_room)
+  if (veh->in_room || veh->in_veh)
     veh_from_room(veh);
   veh_index[veh->veh_number].number--;
   Mem->DeleteVehicle(veh);

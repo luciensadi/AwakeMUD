@@ -8,32 +8,12 @@ all play.  Three massive behemoths of sports arenas sit on the western side of
 the highway, dwarfed only by the Rose Garden parking garage. 
 ~
 Flags:	10000000000010000000100
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT northeast]
 	ToVnum:	24114
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	14601
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14601
@@ -47,32 +27,12 @@ to become supremely rich by the corporation long dead after the Crash of '29
 and the Renraku buyouts. 
 ~
 Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14600
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT southwest]
 	ToVnum:	14602
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14602
@@ -85,38 +45,15 @@ brilliantly striking Portland skyline, which is the pride of Elven
 architecture in this modern age. 
 ~
 Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT northeast]
 	ToVnum:	14601
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	14798
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14603
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14603
@@ -130,32 +67,12 @@ time, and you hear car horns being activated liberally, and the occasional
 sperethiel profanities being shouted out by the drivers. 
 ~
 Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	14602
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT southwest]
 	ToVnum:	14604
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14604
@@ -172,38 +89,15 @@ city.  Even the elven nation has their dregs of society.
 from here. 
 ~
 Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT northeast]
 	ToVnum:	14603
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	14605
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT northwest]
 	ToVnum:	14633
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14605
@@ -217,38 +111,15 @@ you see the tall, shining spires and skyscrapers of Downtown Portland, and a
 small club district. 
 ~
 Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14604
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	14606
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14628
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14606
@@ -262,32 +133,12 @@ trails of rust all over their exterior.  Ancients graffiti covers the walls,
 not even sparing the occasional handbill plastered upon the walls. 
 ~
 Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14605
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	14607
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14607
@@ -300,38 +151,15 @@ disgusting eyesores of dilapidated warehouse buildings, covered by decades
 worth of acid rain stains and years worth of gangland graffiti. 
 ~
 Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14606
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	14623
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	14608
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14608
@@ -344,44 +172,18 @@ south.  Traffic is lined from bumper to bumper here, and the sounds of
 carhorns fill the air. 
 ~
 Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14607
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	14609
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	14610
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14631
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14609
@@ -395,25 +197,9 @@ tied back in a ponytail, smoking a Marlboro, sitting behind the counter.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT west]
 	ToVnum:	14608
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14610
@@ -428,44 +214,18 @@ hampered Highway 405, this road sees a lot of action.  To the south are
 several clubs and a restaurant. 
 ~
 Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14608
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	14745
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	14611
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT southwest]
 	ToVnum:	14622
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14611
@@ -477,44 +237,18 @@ up.  Just don't ask what's in it.  It is hot and edible.  East is a nightclub,
 with music blaring out at full volume, and the noise of much activity. 
 ~
 Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14610
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	14613
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	14661
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14612
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14612
@@ -533,25 +267,9 @@ rights.
 ~
 Flags:	11100
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	14611
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14613
@@ -567,43 +285,18 @@ section of the Satyricon, and to the south are a few booths.
 ~
 Flags:	1100
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14620
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	14618
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	14614
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14611
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14614
@@ -616,49 +309,21 @@ to discuss without too much fear of prying eyes and ears.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14613
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT northeast]
 	ToVnum:	14618
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT southeast]
 	ToVnum:	14616
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	14615
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT southwest]
 	ToVnum:	14617
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14615
@@ -671,25 +336,9 @@ area.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14614
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14616
@@ -702,25 +351,9 @@ area.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT northwest]
 	ToVnum:	14614
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14617
@@ -733,25 +366,9 @@ area.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT northeast]
 	ToVnum:	14614
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14618
@@ -765,37 +382,15 @@ just on your east.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	14619
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT southwest]
 	ToVnum:	14614
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14613
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14619
@@ -809,25 +404,9 @@ the stage.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT west]
 	ToVnum:	14618
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14620
@@ -842,39 +421,19 @@ white with black circles around his eyes.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	Keywords:	panel~
 	ToVnum:	14627
 	Flags:	1
 	Material:	wood
-	Barrier:	4
 	KeyVnum:	0
-	HiddenRating:	12
+	HiddenRating:	10
 [EXIT east]
 	ToVnum:	14621
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	14613
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14621
@@ -896,24 +455,9 @@ Trace:	-2
 RTG:	1103
 JackID:	5031123
 Address:	Satyricon, Broadway, Portland
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT west]
 	ToVnum:	14620
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14622
@@ -930,25 +474,9 @@ time.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT northeast]
 	ToVnum:	14610
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14623
@@ -966,38 +494,15 @@ fairly popular with the mid-to-high end wageslaves that frequent the area for
 a taste of something a bit more barbaric. 
 ~
 Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	33010
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	14624
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14607
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14624
@@ -1010,44 +515,18 @@ drivers.  Graffiti covers the walls of the tenements and warehouse buildings
 throughout the area. 
 ~
 Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT northeast]
 	ToVnum:	14699
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT southeast]
 	ToVnum:	14625
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	14747
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14623
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14625
@@ -1061,25 +540,9 @@ walls, and the place smells of sweat and vomit.
 ~
 Flags:	1100
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT northwest]
 	ToVnum:	14624
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14626
@@ -1091,25 +554,9 @@ be out to get you at this moment here.
 ~
 Flags:	1000001100
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT down]
 	ToVnum:	14625
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14627
@@ -1122,26 +569,12 @@ are a few tidbits of ammunition and a few basic weapons and supplies.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT south]
 	Keywords:	panel~
 	ToVnum:	14620
 	Flags:	1
 	Material:	wood
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14628
@@ -1154,32 +587,12 @@ mural, despite the many graffiti overwrites you've seen in other areas. Ahead
 to the west Irving continues, and to the east it runs into Broadway. 
 ~
 Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	14605
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14629
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14629
@@ -1194,32 +607,12 @@ through the entire downtown area, from this point in the Northwest clear down
 to Tir Tairngire State University far south of here. 
 ~
 Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14630
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	14628
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14630
@@ -1233,25 +626,9 @@ from the ventilation and climate control system.
 ~
 Flags:	11100
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT south]
 	ToVnum:	14629
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14631
@@ -1262,25 +639,9 @@ lined up on racks on the wall.
 ~
 Flags:	100000000000000000011100
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	14608
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14632
@@ -1290,20 +651,7 @@ Desc:$
 ~
 Flags:	100000000000000000001000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 BREAK
 #14633
 Name:	At the entrance to the old Trans-Oregon Trucking building
@@ -1315,20 +663,7 @@ a number on the top of the door.
 ~
 Flags:	100
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	Keywords:	boards door
 	Desc:$
@@ -1341,25 +676,19 @@ Some boards loosely nailed against the door to keep people out.
 	KeyVnum:	0
 [EXIT southeast]
 	ToVnum:	14604
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT southwest]
 	ToVnum:	33020
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXTRADESC 0]
-	Keywords:	symbol~~~~
-	Desc:$
-The symbol is the Old Sperethiel symbol for 'medaron' or Death. 
-~
-[EXTRADESC 1]
 	Keywords:	number~~~~
 	Desc:$
 748 NW Hoyt Street 
+~
+[EXTRADESC 1]
+	Keywords:	symbol~~~~
+	Desc:$
+The symbol is the Old Sperethiel symbol for 'medaron' or Death. 
 ~
 BREAK
 #14634
@@ -1375,31 +704,12 @@ here, as there are no lights or electricity to speak of on this floor.
 ~
 Flags:	10000000000001000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14638
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	14635
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	Keywords:	boards boarded door
@@ -1413,9 +723,6 @@ The door leading out is boarded up to keep people out.
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14636
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14635
@@ -1430,31 +737,12 @@ dark here, with no lighting or electricity available.
 ~
 Flags:	10000000000001000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14639
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14634
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14636
@@ -1471,31 +759,12 @@ eastern wall.
 ~
 Flags:	10000000000001000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14637
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	14634
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14637
@@ -1511,31 +780,12 @@ smell of rust and humidity.  Some rat droppings are on the floor.
 ~
 Flags:	10000000000001000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	14638
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	14636
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14638
@@ -1550,43 +800,18 @@ from the decrepit look of them.
 ~
 Flags:	10000000000001000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	14639
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	14634
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14637
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT up]
 	ToVnum:	14640
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14639
@@ -1600,31 +825,12 @@ smell of rust in it, and the humidity is dense.
 ~
 Flags:	10000000000001000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT south]
 	ToVnum:	14635
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14638
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14640
@@ -1640,20 +846,7 @@ activity found on this floor.
 ~
 Flags:	10000000000001000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT south]
 	Keywords:	door iron
 	Desc:$
@@ -1669,15 +862,9 @@ Territory.  Enter and be killed.^n"
 	KeyVnum:	0
 [EXIT up]
 	ToVnum:	14647
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT down]
 	ToVnum:	14638
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14641
@@ -1693,20 +880,7 @@ Tairngire.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	Keywords:	door iron
 	Desc:$
@@ -1720,21 +894,12 @@ bullets.
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	14643
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	14642
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14645
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14642
@@ -1748,37 +913,15 @@ covers the support beams between the floor and ceiling.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14641
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	14644
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14646
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXTRADESC 0]
 	Keywords:	window panoramic~~~~
@@ -1801,31 +944,12 @@ would have cost thousands of nuyen if it weren't stolen.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT south]
 	ToVnum:	14644
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14641
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14644
@@ -1841,31 +965,12 @@ not service this building.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14643
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14642
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14645
@@ -1879,31 +984,12 @@ don't shower.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	14641
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	14646
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14646
@@ -1916,31 +1002,12 @@ this the Ancients Dawghouse.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14645
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	14642
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14647
@@ -1954,20 +1021,7 @@ the iron door in Sperethiel and English.
 ~
 Flags:	10000000000001000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT south]
 	Keywords:	door large iron
 	Desc:$
@@ -1981,9 +1035,6 @@ A large iron door, impassible without the proper key.
 	LockRating:	8
 [EXIT down]
 	ToVnum:	14640
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14648
@@ -1997,20 +1048,7 @@ shows where someone was freshly killed.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	Keywords:	door iron large
 	Desc:$
@@ -2024,21 +1062,12 @@ A very large door blocks the exit.
 	LockRating:	8
 [EXIT east]
 	ToVnum:	14650
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	14652
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14649
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14649
@@ -2052,31 +1081,12 @@ greasy grimey elf behind the storefront, there is a sign that says,
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	14648
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	14653
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14650
@@ -2091,31 +1101,12 @@ favorite weapon, the flyswatter.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT south]
 	ToVnum:	14651
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14648
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14651
@@ -2128,31 +1119,12 @@ lazy expression on his face.  Grease and oil cover the table in smears.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14650
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14652
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14652
@@ -2165,46 +1137,21 @@ business doing their routine upkeep of their respective stores.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14648
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	14651
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14653
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT up]
 	Desc:$
 A rickety ladder takes you up to the next floor. 
 ~
 	ToVnum:	14654
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14653
@@ -2221,31 +1168,12 @@ his lips are sealed.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14649
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	14652
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14654
@@ -2259,31 +1187,13 @@ upward.
 ~
 Flags:	1000000000000000001000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
 	Rating:	1
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT up]
 	ToVnum:	14655
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT down]
 	ToVnum:	14652
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14655
@@ -2297,43 +1207,18 @@ Dawg.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14657
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	14656
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14660
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT down]
 	ToVnum:	14654
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14656
@@ -2347,31 +1232,12 @@ blades he keeps in stock.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14658
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14655
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14657
@@ -2384,43 +1250,18 @@ the air is a mix of rust and blood.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	41050
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	14658
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	14655
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14659
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14658
@@ -2434,31 +1275,12 @@ nuyen scrip bills.  There are a mess of wires in bunches under the table.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT south]
 	ToVnum:	14656
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14657
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14659
@@ -2470,31 +1292,12 @@ which this store was closed down.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	14657
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	14660
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14660
@@ -2507,31 +1310,12 @@ of various schools of Hermetic Magick.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14659
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	14655
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14661
@@ -2545,38 +1329,15 @@ This intersection has a stoplight, though it doesn't see the cross traffic
 from Davis to warrant it. 
 ~
 Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14611
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	14667
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	14662
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14662
@@ -2592,32 +1353,12 @@ the sodium streetlights used in Downtown Portland.  The sidewalks are done in
 brick from Davis Street on south, adding to the ambience of the elven city. 
 ~
 Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14661
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	14663
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14663
@@ -2631,44 +1372,18 @@ seems to glisten in the glow of the sodium streetlights, as they are covered
 in the rain commonplace in Northern Tir Tairngire. 
 ~
 Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14662
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	14668
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	14664
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14718
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14664
@@ -2683,32 +1398,12 @@ Portland franchise has become something of a traditional hangout for the
 riff-raff of the city. 
 ~
 Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14663
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	14665
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14665
@@ -2725,44 +1420,18 @@ pictograms with the splash of color, a surreal image only visible in the Sixth
 World sprawl of Portland, Tir Tairngire. 
 ~
 Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14664
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	20809
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	14712
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14716
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14667
@@ -2774,21 +1443,7 @@ in the tell-tale rain-stains common to Portland buildings.  It continues east
 to the waterfront, and west to Park Blocks and Northwest Portland. 
 ~
 Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	Keywords:	doors glass
 	Desc:$
@@ -2797,19 +1452,12 @@ A pair of glass doors with the number "^Y655^n" in gold letters over the top.
 	ToVnum:	14681
 	Flags:	1
 	Material:	glass
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	14679
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14661
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14668
@@ -2822,32 +1470,12 @@ eastward on to the Waterfront and the area just under the Burnside Bridge, and
 westward past Broadway to Park Blocks and Northwest. 
 ~
 Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	14669
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14663
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14669
@@ -2860,44 +1488,18 @@ from here to the MAX station at Surehand Square and to all points in the
 Portland area.  A parking lot is northeast of here, with an attendant. 
 ~
 Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14680
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT northeast]
 	ToVnum:	14670
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	14671
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14668
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14670
@@ -2909,38 +1511,15 @@ security.  Cars and trucks, vans and bikes all sit in neat rows, and a booth
 holds an attendant who watches for things such as theft and vandalism. 
 ~
 Flags:	100000000000010000000100
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT southwest]
 	ToVnum:	14669
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14680
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT northwest]
 	ToVnum:	14679
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14671
@@ -2952,38 +1531,15 @@ Toadstool is a bar that inhabits the lower floor of the building on the east
 side of the street, a grungy place that sees a few local bands on its stage. 
 ~
 Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14669
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	14672
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	20808
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14672
@@ -2998,31 +1554,12 @@ left hand pillar along the entrance archway.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	14673
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14671
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXTRADESC 0]
 	Keywords:	graffiti grafitti green paint~~~~
@@ -3042,31 +1579,12 @@ your olfactory senses, and rhythmic music plays inside.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	14674
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14672
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14674
@@ -3086,37 +1604,15 @@ various party lights set up every few meters.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14675
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	14676
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14673
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14675
@@ -3130,25 +1626,9 @@ numbers.
 ~
 Flags:	10011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT south]
 	ToVnum:	14674
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14676
@@ -3165,20 +1645,7 @@ plastered all about the bar.
 ~
 Flags:	10011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	Keywords:	door toad hallway
 	Desc:$
@@ -3191,9 +1658,6 @@ A door leads to the Toad's office.
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14674
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXTRADESC 0]
 	Keywords:	trideo~~~~
@@ -3213,20 +1677,7 @@ leading to an office.  A bloodstain is on the floor.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	Keywords:	door office
 	Desc:$
@@ -3259,20 +1710,7 @@ the hall, and some other places you don't recognize.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT south]
 	Keywords:	door hall
 	Desc:$
@@ -3295,44 +1733,18 @@ Lines, a very very slow, but easy way to get from Seattle to Portland and
 back. 
 ~
 Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14744
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT southeast]
 	ToVnum:	14670
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	14680
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14667
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14680
@@ -3344,38 +1756,15 @@ brick buildings housing offices for small companies and storefronts for art
 dealers and electronics manufacturers. 
 ~
 Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14679
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	14670
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	14669
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14681
@@ -3387,20 +1776,7 @@ of metal mailboxes, and a large potted plant sits in the corner.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT south]
 	Keywords:	doors glass
 	Desc:$
@@ -3409,13 +1785,9 @@ A pair of glass doors lead out to Davis Street.
 	ToVnum:	14667
 	Flags:	1
 	Material:	glass
-	Barrier:	4
 	KeyVnum:	0
 [EXIT up]
 	ToVnum:	14682
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14682
@@ -3429,25 +1801,9 @@ fluorescent lighting.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14683
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	Keywords:	door 201 doorway office
@@ -3457,7 +1813,6 @@ The doorway is a plain door made of wood, with the number 201 over it.
 	ToVnum:	14685
 	Flags:	1
 	Material:	wood
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	Keywords:	door office 204
@@ -3467,13 +1822,9 @@ A rather plain, clean wooden door, with the number 204 above it.
 	ToVnum:	14690
 	Flags:	1
 	Material:	wood
-	Barrier:	4
 	KeyVnum:	0
 [EXIT down]
 	ToVnum:	14681
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14683
@@ -3487,25 +1838,9 @@ office from the hallway.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14684
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	Keywords:	doorway office door 202
@@ -3515,13 +1850,9 @@ A plain, clean wooden door with the number "202" over it.
 	ToVnum:	14686
 	Flags:	1
 	Material:	wood
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	14682
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	Keywords:	doorway door 205 office
@@ -3531,7 +1862,6 @@ A plain doorway, wooden and clean, with the number 205 over it.
 	ToVnum:	14689
 	Flags:	1
 	Material:	wood
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14684
@@ -3543,20 +1873,7 @@ and a small evergreen tree sits next to the elevator in a red clay pot.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	Keywords:	door office 203 doorway
 	Desc:$
@@ -3565,13 +1882,9 @@ The door is a plain, clean wooden door with the number "203" over it.
 	ToVnum:	14687
 	Flags:	1
 	Material:	wood
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	14683
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	Keywords:	doorway office door 206
@@ -3581,7 +1894,6 @@ The door is a plain wooden door with the number "206" over it.
 	ToVnum:	14688
 	Flags:	1
 	Material:	wood
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14685
@@ -3601,19 +1913,7 @@ Trace:	-2
 RTG:	1104
 JackID:	5031230
 Address:	An undisclosed location
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT west]
 	Keywords:	door
 	Desc:$
@@ -3622,7 +1922,6 @@ The door leads to the hallway out.
 	ToVnum:	14682
 	Flags:	1
 	Material:	wood
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14686
@@ -3633,20 +1932,7 @@ equipment.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT west]
 	Keywords:	door
 	Desc:$
@@ -3655,7 +1941,6 @@ The doorway leads back to the hall, going out.
 	ToVnum:	14683
 	Flags:	1
 	Material:	wood
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14687
@@ -3666,20 +1951,7 @@ equipment.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT west]
 	Keywords:	door
 	Desc:$
@@ -3688,7 +1960,6 @@ The doorway leads out to the hallway.
 	ToVnum:	14684
 	Flags:	1
 	Material:	wood
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14688
@@ -3707,19 +1978,7 @@ Trace:	-2
 RTG:	1104
 JackID:	5031235
 Address:	An undisclosed location
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	Keywords:	door
 	Desc:$
@@ -3728,7 +1987,6 @@ The doorway leads out towards the hallway going out.
 	ToVnum:	14684
 	Flags:	1
 	Material:	wood
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14689
@@ -3739,20 +1997,7 @@ equipment.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	Keywords:	door
 	Desc:$
@@ -3761,7 +2006,6 @@ The doorway leads out to the hallway which goes south to Davis Street.
 	ToVnum:	14683
 	Flags:	1
 	Material:	wood
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14690
@@ -3772,20 +2016,7 @@ equipment.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	Keywords:	door
 	Desc:$
@@ -3794,7 +2025,6 @@ The door leads to the hallway which goes out.
 	ToVnum:	14682
 	Flags:	1
 	Material:	wood
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14691
@@ -3807,25 +2037,10 @@ red aura covers the mouth of the cavern with a vague film.
 ~
 Flags:	0
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
 	Rating:	5
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14692
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14692
@@ -3839,31 +2054,13 @@ directions, in and out of the cavern.
 ~
 Flags:	0
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
 	Rating:	4
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14693
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	14691
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14693
@@ -3876,43 +2073,19 @@ blackness, and the glowing red eyes that pierce through the veil of shadow.
 ~
 Flags:	0
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
 	Rating:	8
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14695
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT northeast]
 	ToVnum:	14696
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	14692
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT northwest]
 	ToVnum:	14694
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14694
@@ -3926,43 +2099,19 @@ through this host.
 ~
 Flags:	0
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
 	Rating:	9
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14698
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT northeast]
 	ToVnum:	14697
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	14695
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT southeast]
 	ToVnum:	14693
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14695
@@ -3976,43 +2125,19 @@ through this host.
 ~
 Flags:	0
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
 	Rating:	9
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14697
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	14696
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	14693
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14694
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14696
@@ -4026,37 +2151,16 @@ through this host.
 ~
 Flags:	0
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
 	Rating:	9
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT southwest]
 	ToVnum:	14693
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14695
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT northwest]
 	ToVnum:	14697
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14697
@@ -4070,43 +2174,19 @@ cancel alerts.
 ~
 Flags:	0
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
 	Rating:	10
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT southeast]
 	ToVnum:	14696
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	14695
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT southwest]
 	ToVnum:	14694
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14698
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14698
@@ -4119,31 +2199,13 @@ that glisten, and a mist seems to drift off the paydata.
 ~
 Flags:	0
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
 	Rating:	12
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	14697
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	14694
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14699
@@ -4157,31 +2219,12 @@ area.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	14700
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT southwest]
 	ToVnum:	14624
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14700
@@ -4195,25 +2238,9 @@ but government red tape always ends up standing in the way.
 ~
 Flags:	1100
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT west]
 	ToVnum:	14699
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14701
@@ -4228,26 +2255,9 @@ site of the Saturday Market, currently closed due to some governmental red
 tape. 
 ~
 Flags:	10000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT west]
 	ToVnum:	20834
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14702
@@ -4263,26 +2273,7 @@ they are no different than any metatype.
 ~
 Flags:	10000001100
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-[EXIT west]
-	ToVnum:	14799
-	Flags:	0
-	Material:	metal
-	Barrier:	8
-	KeyVnum:	0
 BREAK
 #14703
 Name:	SE 60th Street
@@ -4297,31 +2288,12 @@ is here, to connect the road with the MAX station below.
 ~
 Flags:	10000000000010000000000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14710
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	14705
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14704
@@ -4335,20 +2307,7 @@ Portland's inhabitats think that a public elevator makes for a good urinal.
 ~
 Flags:	10000000000000001100
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 BREAK
 #14705
 Name:	SE 60th Street and Stark Street
@@ -4360,32 +2319,12 @@ here is the Tir Tairngire Royal Hospital, a large, modern hospital complex for
 people in Tir Tairngire. 
 ~
 Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14703
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14706
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14706
@@ -4397,32 +2336,12 @@ this road, making transit painfully slow.  North is the Tir Tairngire Royal
 Hospital complex, separated from the street by a large parking lot. 
 ~
 Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14707
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	14705
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14707
@@ -4438,31 +2357,12 @@ Unit makes for snappy recovery of those critically ill or injured.
 ~
 Flags:	100000000000010000000100
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14708
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	14706
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14708
@@ -4476,21 +2376,7 @@ the Complex, which includes the psychiatric unit and the criminal treatment
 unit, and westward is the Hospital, for higher class patrons. 
 ~
 Flags:	10000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	Keywords:	door glass
 	Desc:$
@@ -4503,9 +2389,6 @@ A glass door.
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	14707
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14709
@@ -4520,25 +2403,9 @@ non-citizens.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	38113
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	Keywords:	door glass
@@ -4559,32 +2426,12 @@ northwest to the I-84 freeway, separating here from Gresham east and Downtown
 west.  Traffic is thick on the onramp, during nearly any hour. 
 ~
 Flags:	10000000000010000000100
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT south]
 	ToVnum:	14703
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT northwest]
 	ToVnum:	24119
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14711
@@ -4598,26 +2445,9 @@ the city. The gang graffiti that often covers most of the walls that separate
 the stations from their stops are next to non-existent here in Gresham. 
 ~
 Flags:	10000000100
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	22000
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14712
@@ -4631,38 +2461,15 @@ strip bar named Mary's and the Broadway Arms hotel both look fairly
 disreputable, as does the Stuffer Shack on the corner. 
 ~
 Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14665
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	14734
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT southwest]
 	ToVnum:	14715
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	Keywords:	door dirty white
@@ -4689,20 +2496,7 @@ cigarette smoke is thick.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	Keywords:	door metal black
 	Desc:$
@@ -4715,9 +2509,6 @@ A black painted metal door separates the bar from the street outside.
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14714
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14714
@@ -4732,25 +2523,9 @@ machines.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	14713
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14715
@@ -4764,25 +2539,9 @@ Tairngire.
 ~
 Flags:	1100
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT northeast]
 	ToVnum:	14712
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14716
@@ -4803,26 +2562,9 @@ Sperethiel letters, with non-neon English captions, barely readable
 underneath.  One can tell where this culture is headed. 
 ~
 Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	14665
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	Keywords:	door church elvis
@@ -4833,13 +2575,9 @@ very artful, reading ^WTHE CHURCH OF ELVIS^n.
 	ToVnum:	14735
 	Flags:	1
 	Material:	wood
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14717
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14717
@@ -4857,44 +2595,18 @@ zoned buildings with offices upstairs, and storefronts downstairs, as well as
 Rocco's Pizza and Powell's Books. 
 ~
 Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14720
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	14716
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	14738
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14721
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14718
@@ -4907,32 +2619,12 @@ behind the Burnside Burger King.  The sounds of traffic fill the air all
 around you. 
 ~
 Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	14663
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14719
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14719
@@ -4945,32 +2637,12 @@ seems to mix with the smell of petrochem and industrial products that fill the
 air elsewhere, at this place. 
 ~
 Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	14718
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	14720
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14720
@@ -4984,38 +2656,15 @@ converted into small parks some time ago.  Couch is a half a block north of
 here, while Burnside is to the south. 
 ~
 Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14719
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	14717
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14722
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14721
@@ -5030,38 +2679,15 @@ west you can see the large white concrete building that houses the forever
 famous Powell's Books complex, an almost literal city of books. 
 ~
 Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14722
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	14717
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14723
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14722
@@ -5074,37 +2700,15 @@ Its a small plot of green in the middle of the gray and neon of the city.
 ~
 Flags:	10000000000
 SecType:	Forest
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	14720
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	14721
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14724
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14723
@@ -5122,44 +2726,18 @@ black streaks telltale of the years of rain they have stood under, housing
 artists lofts, low grade commercial projects and light industrial companies. 
 ~
 Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14724
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	14721
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	2706
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14729
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14724
@@ -5175,38 +2753,15 @@ of town.  Directly west of you is a large brick building, housing the famed
 geek utopia, Powell's Technical Books. 
 ~
 Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	14722
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	14723
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14725
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14725
@@ -5223,31 +2778,12 @@ programs, are often dropped here as well.
 ~
 Flags:	1100
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	14724
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14726
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14726
@@ -5265,37 +2801,15 @@ contracted to the security of this store.  Its all about the information.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14728
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	14725
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	14727
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14727
@@ -5311,25 +2825,9 @@ caffeine.  The lights are bright, coming from fluorescent lighting above you.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14726
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14728
@@ -5348,25 +2846,9 @@ is working with closely.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT south]
 	ToVnum:	14726
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14729
@@ -5383,32 +2865,12 @@ pizza restaurant across from the concrete building.  The West Hills create a
 huge visible barrier between Portland and the Beaverton/Royal Hill sectors. 
 ~
 Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	14723
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14730
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14730
@@ -5426,32 +2888,12 @@ good to die.  They are well known for the 'girth' of their pizza slices, large
 enough to fill a troll for a day. 
 ~
 Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	14729
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT southeast]
 	ToVnum:	14731
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14731
@@ -5465,37 +2907,15 @@ is set up east of here, in front of a kitchen with large ovens.
 ~
 Flags:	1100
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	14733
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14732
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT northwest]
 	ToVnum:	14730
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14732
@@ -5511,25 +2931,9 @@ wall, with red pepper and mozzarella cheese for topping on pizzas.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	14731
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14733
@@ -5548,25 +2952,9 @@ Surehand came to power.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT west]
 	ToVnum:	14731
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14734
@@ -5582,44 +2970,18 @@ to other men wearing tanktops and leather hot pants.  Going south, Broadway
 moves on to the corporate sector and Surehand Square. 
 ~
 Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14712
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	14741
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	33000
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14740
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14735
@@ -5634,20 +2996,7 @@ the stairs.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	Keywords:	door
 	Desc:$
@@ -5656,13 +3005,9 @@ A plain black door.
 	ToVnum:	14716
 	Flags:	1
 	Material:	wood
-	Barrier:	4
 	KeyVnum:	0
 [EXIT up]
 	ToVnum:	14736
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14736
@@ -5677,31 +3022,12 @@ Organs accompany the recorded choir.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT south]
 	ToVnum:	14737
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT down]
 	ToVnum:	14735
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14737
@@ -5717,25 +3043,9 @@ donation".
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14736
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14738
@@ -5749,32 +3059,12 @@ for its popularity with those in alternative lifestyles.  You can see the
 Stark. 
 ~
 Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14717
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	14739
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14739
@@ -5790,44 +3080,18 @@ going eastward before Stark Street crosses Broadway and continues on into the
 corporate sector. 
 ~
 Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14738
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	14740
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	2707
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	2703
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14740
@@ -5843,32 +3107,12 @@ crewcuts wearing leathers do the same.  To the west are venues such as
 in front of Hamburger Mary's, an 'alternative lifestyles' restaurant. 
 ~
 Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	14734
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14739
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14741
@@ -5883,32 +3127,12 @@ rather than concrete, glistening in the streetlights and neon from the nearly
 constant rains that pour onto Portland's streets. 
 ~
 Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	14742
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14734
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14742
@@ -5927,38 +3151,15 @@ to the 'high-class' corporate feel of the Southwest Corporate Sector of the
 downtown area. 
 ~
 Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14743
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	14748
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14741
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14743
@@ -5975,38 +3176,15 @@ sector, with neon signs in Sperethiel all along the lowest level over the
 storefronts at the ground floor. 
 ~
 Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	20808
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	14754
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	14742
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14744
@@ -6020,32 +3198,12 @@ towards Surehand Square and south towards Tigard, Milwaukie and Southeast
 Portland destinations along Division, Powell, and Hawthorne. 
 ~
 Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14746
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	14679
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14745
@@ -6059,32 +3217,12 @@ ground level are covered with ^Ggreen^n and ^Bblue^n graffiti, half of it in
 Sperethiel.  Ancients turf. 
 ~
 Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	14746
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14610
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14746
@@ -6100,38 +3238,15 @@ find use amongst the lower classes as squats and storefronts, as well as the
 occasional office building. 
 ~
 Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14747
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	14744
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14745
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14747
@@ -6147,32 +3262,12 @@ about the street, sticking to the sidewalk, damp from the constantly moist
 weather. 
 ~
 Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14624
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	14746
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14748
@@ -6189,21 +3284,7 @@ built, a marble lined steel and glass superstructure that seems to nearly
 puncture the sky. 
 ~
 Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	Keywords:	doors rotating glass
 	Desc:$
@@ -6213,19 +3294,12 @@ Two large rotating glass doors with the Tir Tairngire National Bank logo,
 	ToVnum:	14750
 	Flags:	1
 	Material:	glass
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	14749
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14742
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14749
@@ -6241,32 +3315,12 @@ white, and gold markings of the Tri-Metropolitan Transit Authority, or Tri-Met
 Busses. 
 ~
 Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14751
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14748
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14750
@@ -6282,20 +3336,7 @@ beeping.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	Keywords:	door large glass
 	Desc:$
@@ -6304,7 +3345,6 @@ A large glass door leads out to the main lobby.
 	ToVnum:	14753
 	Flags:	1
 	Material:	glass
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	Keywords:	doors glass large rotating
@@ -6314,7 +3354,6 @@ Two large rotating glass doors lead out to Stark Street.
 	ToVnum:	14748
 	Flags:	1
 	Material:	glass
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14751
@@ -6333,44 +3372,18 @@ storefronts serve workers for the various corporations welcomed to do business
 within the exclusive elven Royal Principality. 
 ~
 Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	20806
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	2750
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	14749
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14752
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14752
@@ -6385,31 +3398,12 @@ and are kept very clean.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	14751
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14753
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14753
@@ -6425,31 +3419,12 @@ westwards is Sixth Street, while eastwards is Fifth.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	2700
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	14752
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	Keywords:	door glass large
@@ -6460,13 +3435,9 @@ main branch.
 	ToVnum:	14750
 	Flags:	1
 	Material:	glass
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14754
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14754
@@ -6482,31 +3453,12 @@ silver vein.  The air smells of cleaning solutions and coffee.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	14753
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14743
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14755
@@ -6532,26 +3484,9 @@ to be rotten away by the mildew.  The air smells of a potpourri of rotting
 cheese and rotting meat. 
 ~
 Flags:	10000000000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT south]
 	ToVnum:	14756
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14756
@@ -6573,32 +3508,12 @@ graffiti more common on the surface.  The ground is covered with a moss-like
 growth from the years of mildew accumulation from the rain and neglect. 
 ~
 Flags:	1010000000000001000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14755
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	14757
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14757
@@ -6625,25 +3540,9 @@ vandalized beyond any level of usability by carved Ancients tags.
 ~
 Flags:	1000000000000001000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14756
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14795
@@ -6653,20 +3552,7 @@ Desc:$
 ~
 Flags:	0
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 BREAK
 #14796
 Name:	Thomason Autogroup - Motorcycles
@@ -6679,25 +3565,9 @@ There are windows in which you can see the surrounding auto lot.
 ~
 Flags:	100000000000000000001000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT west]
 	ToVnum:	14798
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14797
@@ -6707,20 +3577,7 @@ Desc:$
 ~
 Flags:	0
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 BREAK
 #14798
 Name:	Thomason Autogroup - Cars and Pickups
@@ -6732,32 +3589,12 @@ this year's current model.  A very energetic elf wearing a fine businessman's
 suit sells to anyone with the nuyen and credit to purchase here. 
 ~
 Flags:	100000000000000000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	14796
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	14602
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #14799
@@ -6774,25 +3611,6 @@ of little interest, mostly ads for cellphones and car insurance companies.
 ~
 Flags:	1100
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-[EXIT east]
-	ToVnum:	14702
-	Flags:	0
-	Material:	metal
-	Barrier:	8
-	KeyVnum:	0
 BREAK
 END

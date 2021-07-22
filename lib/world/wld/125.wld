@@ -7,41 +7,18 @@ air mixing with the salty smell of the ocean.
 ~
 Flags:	10000000000000000000100
 SecType:	Field
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12503
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	32500
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	Desc:$
 Tackle Shop
 ~
 	ToVnum:	12501
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12501
@@ -54,35 +31,15 @@ outside.
 ~
 Flags:	0
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12504
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	Desc:$
 Entrance to the Docks
 ~
 	ToVnum:	12500
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12502
@@ -94,32 +51,12 @@ but nothing looks of interest.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	12513
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	12511
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12503
@@ -132,45 +69,18 @@ loading platform seems to be located west of here if the signs are to be
 trusted. There is also a pier that extends northward out over the waterfront.
 ~
 Flags:	10000000000000000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12507
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	12542
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	12500
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	12504
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12504
@@ -184,44 +94,18 @@ indicating the path to the loading platform for the ferry.
 ~
 Flags:	10000000000000000000000
 SecType:	Field
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12588
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	12503
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	12501
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	12505
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12505
@@ -233,38 +117,15 @@ pier, fishing, that you'd expect due to the size of the tackle shop.
 ~
 Flags:	10000000000000000000100
 SecType:	Field
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12589
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	12504
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	12506
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12506
@@ -276,38 +137,15 @@ it said BOAT REPAIR but you can't be sure.
 ~
 Flags:	10000000000000000000000
 SecType:	Field
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	12505
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	12511
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	12514
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12507
@@ -319,32 +157,12 @@ here.
 ~
 Flags:	100
 SecType:	Field
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12508
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	12503
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12508
@@ -356,32 +174,12 @@ towards land.
 ~
 Flags:	0
 SecType:	Field
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12509
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	12507
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12509
@@ -393,26 +191,9 @@ pier supports surround you.
 ~
 Flags:	0
 SecType:	Field
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	12508
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12511
@@ -424,38 +205,15 @@ about trying to keep warm.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12506
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	12502
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	12512
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12512
@@ -468,32 +226,12 @@ squatters.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12511
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	12513
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12513
@@ -504,32 +242,12 @@ also like the rest of the warehouse there isn't anything really useful here.
 ~
 Flags:	10000000001000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12502
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	12512
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12514
@@ -540,32 +258,12 @@ warehouses here but there is another pier inbetween two of them.
 ~
 Flags:	10000000000000000000000
 SecType:	Field
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	12506
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	12515
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12515
@@ -578,38 +276,15 @@ mounted on the outside.
 ~
 Flags:	10000000000000000000000
 SecType:	Field
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	12514
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	12516
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	12523
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12516
@@ -622,26 +297,12 @@ fence.
 ~
 Flags:	0
 SecType:	Field
-MatrixExit:	0
-Crowd:	0
 Cover:	5
 X:	40
 Y:	150
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12515
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	Keywords:	gate fence lock door~
@@ -651,7 +312,6 @@ a barbed wire gate
 	ToVnum:	12517
 	Flags:	1
 	Material:	metal
-	Barrier:	4
 	KeyVnum:	12517
 	LockRating:	2
 	HiddenRating:	1
@@ -665,21 +325,7 @@ thought to be footsteps behind you. You turn around and see nothing though.
 ~
 Flags:	0
 SecType:	Field
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	gate fence~
 	Desc:$
@@ -688,15 +334,11 @@ a gate
 	ToVnum:	12516
 	Flags:	1
 	Material:	metal
-	Barrier:	4
 	KeyVnum:	12517
 	LockRating:	2
 	HiddenRating:	1
 [EXIT south]
 	ToVnum:	12518
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12518
@@ -708,38 +350,15 @@ but you can't seem to tell what exactly goes on here.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12517
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	12521
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	12519
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12519
@@ -751,32 +370,12 @@ places that appear to be on the Japanese coastlines are marked in red.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	12518
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	12520
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12520
@@ -789,32 +388,12 @@ out every crack, hole, or seam in the boxes they are stored in.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12519
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	12521
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12521
@@ -827,39 +406,18 @@ huh.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12518
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	12520
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT down]
 	Keywords:	hatch panel plate~
 	ToVnum:	12590
 	Flags:	1
 	Material:	wood
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12522
@@ -872,32 +430,12 @@ watercraft out on the water.
 ~
 Flags:	0
 SecType:	Field
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12526
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	12525
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12523
@@ -909,38 +447,15 @@ items along here. Nothing really apears useful though.
 ~
 Flags:	10000000000000000000000
 SecType:	Field
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12524
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	12515
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	12527
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12524
@@ -952,32 +467,12 @@ can't read the name from here.
 ~
 Flags:	0
 SecType:	Field
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12525
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	12523
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12525
@@ -990,32 +485,12 @@ west.
 ~
 Flags:	0
 SecType:	Field
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12522
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	12524
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12526
@@ -1027,26 +502,9 @@ on the waters but there is the occasional boat or two that comes in.
 ~
 Flags:	0
 SecType:	Field
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	12522
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12527
@@ -1059,32 +517,12 @@ before.
 ~
 Flags:	10000000000000000000000
 SecType:	Field
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	12523
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	12528
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12528
@@ -1095,39 +533,19 @@ sheds can be clearly seen from the dock, extending back towards the city as
 far as the eye can see. 
 ~
 Flags:	10000000000000000000000
-SecType:	City
-MatrixExit:	0
 Crowd:	1
 Cover:	4
 X:	100
-Y:	20
-Z:	2.50
 RoomType:	6
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	12527
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	11500
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	12529
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12529
@@ -1141,32 +559,12 @@ you never know what you might find inside.
 ~
 Flags:	10000000000000000000000
 SecType:	Field
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	12528
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	12530
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12530
@@ -1178,38 +576,15 @@ off in that direction though. You do smell a lot of what goes on here though.
 ~
 Flags:	10000000000000000000000
 SecType:	Field
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12568
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	12529
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	12535
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12531
@@ -1222,38 +597,15 @@ might be living here.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12528
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	12534
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	12532
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12532
@@ -1265,32 +617,12 @@ turned upside down. Not much else here really.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	12531
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	12533
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12533
@@ -1302,32 +634,12 @@ take it. There are some more crate seats here but other wise empty.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12532
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	12534
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12534
@@ -1340,32 +652,12 @@ places.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12531
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	12533
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12535
@@ -1378,26 +670,9 @@ boat that you saw earlier.
 ~
 Flags:	10000000000000000000000
 SecType:	Field
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12530
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	Keywords:	garage door
@@ -1413,9 +688,6 @@ A well hidden, automatic door
 	HiddenRating:	8
 [EXIT south]
 	ToVnum:	12536
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12536
@@ -1428,38 +700,15 @@ the way here.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12535
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	12541
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	12537
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12537
@@ -1471,32 +720,12 @@ ships in need of repairs though none are here right now.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	12536
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	12538
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12538
@@ -1509,38 +738,15 @@ the whole building.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12537
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	12541
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	12539
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12539
@@ -1553,32 +759,12 @@ used rather soon.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12538
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	12540
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12540
@@ -1591,26 +777,9 @@ did or will.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12541
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	Keywords:	door saints hidden
@@ -1623,9 +792,6 @@ RoomType:	0
 	HiddenRating:	8
 [EXIT west]
 	ToVnum:	12539
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12541
@@ -1637,38 +803,15 @@ the moment. It appears unused though from here you can't really tell.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12536
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	12540
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	12538
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12542
@@ -1681,32 +824,12 @@ distance towards the east farther and you can't see how many to the west.
 ~
 Flags:	10000000000000000000000
 SecType:	Field
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	12543
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	12503
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12543
@@ -1718,38 +841,15 @@ Some seagulls are fighting over food that has been droped by someone.
 ~
 Flags:	10000000000000000000000
 SecType:	Field
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12563
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	12544
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	12542
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12544
@@ -1761,38 +861,15 @@ three shops by the varity of the bags that costumers are leaving with.
 ~
 Flags:	10000000000000000000000
 SecType:	Field
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	12545
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	12572
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	12543
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12545
@@ -1805,38 +882,15 @@ that direction.
 ~
 Flags:	10000000000000000000000
 SecType:	Field
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12559
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	12546
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	12544
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12546
@@ -1848,32 +902,12 @@ that's there. Way off in the distance to the west is where you came in.
 ~
 Flags:	10000000000000000000000
 SecType:	Field
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	12547
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	12545
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12547
@@ -1886,44 +920,18 @@ at least.
 ~
 Flags:	10000000000000000000000
 SecType:	Field
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12555
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	12548
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	12576
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	12546
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12548
@@ -1936,32 +944,12 @@ place hang out.
 ~
 Flags:	10000000000000000000000
 SecType:	Field
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	12549
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	12547
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12549
@@ -1973,32 +961,12 @@ incredible. You'll have to remember to bring a date here sometime.
 ~
 Flags:	10000000000000000000000
 SecType:	Field
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12550
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	12548
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12550
@@ -2010,32 +978,12 @@ this is a big boat but this is the most commonly used one.
 ~
 Flags:	0
 SecType:	Field
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12551
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	12549
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12551
@@ -2047,32 +995,12 @@ stops by very rarly. There isn't much activity on the water right now either.
 ~
 Flags:	0
 SecType:	Field
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12552
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	12550
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12552
@@ -2084,32 +1012,12 @@ able to board. Mostly only the main sections are for passangers though.
 ~
 Flags:	0
 SecType:	Field
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12553
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	12551
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12553
@@ -2121,32 +1029,12 @@ be quite a relaxing place if you could rid it of the fishy smell out of here.
 ~
 Flags:	0
 SecType:	Field
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12554
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	12552
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12554
@@ -2158,26 +1046,9 @@ on the waters but there is the ocasional boat or two that come in.
 ~
 Flags:	0
 SecType:	Field
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	12553
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12555
@@ -2189,32 +1060,12 @@ across to the next dock to the east. The rest are mostly for crew.
 ~
 Flags:	0
 SecType:	Field
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12556
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	12547
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12556
@@ -2226,32 +1077,12 @@ place to ride the boats as crazy as that may seem.
 ~
 Flags:	0
 SecType:	Field
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12557
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	12555
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12557
@@ -2263,32 +1094,12 @@ there are people standing out there. Maybe you should check it out.
 ~
 Flags:	0
 SecType:	Field
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12558
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	12556
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12558
@@ -2300,26 +1111,9 @@ on the waters but there is the ocasional boat or two that come in.
 ~
 Flags:	0
 SecType:	Field
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	12557
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12559
@@ -2331,32 +1125,12 @@ north is out to sea. The Royal Myst is just at the next dock to the west.
 ~
 Flags:	0
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12560
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	12545
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12560
@@ -2370,38 +1144,15 @@ leads you towards a small ferry.
 ~
 Flags:	0
 SecType:	Field
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12561
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	6692
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	12559
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12561
@@ -2413,32 +1164,12 @@ the plesant sound of the waves crashing against the pier is quite soothing.
 ~
 Flags:	0
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12562
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	12560
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12562
@@ -2450,26 +1181,9 @@ on the waters but there is the ocasional boat or two that come in.
 ~
 Flags:	0
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	12561
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12563
@@ -2482,38 +1196,15 @@ from here is the only place to board or get off of the boat.
 ~
 Flags:	100
 SecType:	Field
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12564
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	12543
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	12602
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12564
@@ -2525,32 +1216,12 @@ it normally looks like.
 ~
 Flags:	0
 SecType:	Field
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12565
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	12563
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12565
@@ -2563,32 +1234,12 @@ them.
 ~
 Flags:	0
 SecType:	Field
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12566
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	12564
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12566
@@ -2601,32 +1252,12 @@ sure.
 ~
 Flags:	0
 SecType:	Field
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12567
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	12565
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12567
@@ -2638,26 +1269,9 @@ on the waters but there is the ocasional boat or two that come in.
 ~
 Flags:	0
 SecType:	Field
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	12566
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12568
@@ -2669,38 +1283,15 @@ and hull very weak. Off to the south and east a bit are some more warehouses.
 ~
 Flags:	0
 SecType:	Field
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12569
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	12582
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	12530
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12569
@@ -2712,32 +1303,12 @@ the far distance south is that warehouse that you had seen earlier.
 ~
 Flags:	0
 SecType:	Field
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12570
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	12568
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12570
@@ -2749,32 +1320,12 @@ can't see the name of it but it seems familiar.
 ~
 Flags:	0
 SecType:	Field
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12571
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	12569
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12571
@@ -2786,26 +1337,9 @@ on the waters but there is the occasional boat or two that comes in.
 ~
 Flags:	0
 SecType:	Field
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	12570
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12572
@@ -2817,38 +1351,15 @@ Lounge & Rest. There's not much else here but a gun shop and a junk store.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12544
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	12575
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	12573
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12573
@@ -2860,32 +1371,12 @@ steel balls that clack together...like in the doctor's offices.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12572
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	12574
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12574
@@ -2897,32 +1388,12 @@ long time collectors. There's not much else in here but just plain weapons.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12575
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	12573
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12575
@@ -2934,32 +1405,12 @@ like a great place to sit down, kick up your feet, and take a load off.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	12574
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	12572
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12576
@@ -2971,38 +1422,15 @@ There's the loud sounds of the band playing on stage.
 ~
 Flags:	1100
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12547
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	12581
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	12577
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12577
@@ -3014,38 +1442,15 @@ good material.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12576
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	12580
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	12578
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12578
@@ -3057,38 +1462,15 @@ see some guys that are hooting and hollering at something.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12577
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	12579
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT down]
 	ToVnum:	12598
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12579
@@ -3100,32 +1482,12 @@ seems to consist entirely of metahumans...and no dwarfs either.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12580
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	12578
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12580
@@ -3137,38 +1499,15 @@ though with all of the great people one could grow fond of The Hangin' Tough.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12581
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	12579
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	12577
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12581
@@ -3181,32 +1520,12 @@ being a great club.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	12580
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	12576
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12582
@@ -3219,38 +1538,15 @@ doesn't seem to hold up well.
 ~
 Flags:	0
 SecType:	Field
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12583
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	12568
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT down]
 	ToVnum:	12585
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12583
@@ -3262,32 +1558,12 @@ You'd better be carefull if you try to venture off that way.
 ~
 Flags:	0
 SecType:	Field
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12584
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	12582
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12584
@@ -3298,32 +1574,13 @@ you starting go give way...frag this might not be fun in the long shot...
 ~
 Flags:	1000000000000000000000
 SecType:	Field
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
 	Rating:	10
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	12583
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT down]
 	ToVnum:	12587
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12585
@@ -3336,32 +1593,12 @@ place down here is empty.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12586
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT up]
 	ToVnum:	12582
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12586
@@ -3374,32 +1611,12 @@ and a ladder back up south.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12587
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	12585
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12587
@@ -3412,32 +1629,12 @@ here seems to be empty.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	16
-	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	12586
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT up]
 	ToVnum:	12584
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12588
@@ -3451,38 +1648,15 @@ here seem to be for the ferry passengers.
 ~
 Flags:	0
 SecType:	Field
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	12504
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	12589
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT down]
 	ToVnum:	12611
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12589
@@ -3495,32 +1669,12 @@ to the far east there are ports for large ships.
 ~
 Flags:	0
 SecType:	Field
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	12588
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	12505
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12590
@@ -3533,39 +1687,18 @@ larger open space ahead.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12593
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	12591
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT up]
 	Keywords:	panel hatch~
 	ToVnum:	12521
 	Flags:	1
 	Material:	wood
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12591
@@ -3578,32 +1711,12 @@ open with a crowbar.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12592
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	12590
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12592
@@ -3616,38 +1729,15 @@ unlabeled.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12595
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	12593
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	12591
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12593
@@ -3659,38 +1749,15 @@ human, er maybe metahuman, you can't help but wonder what's inside.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12594
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	12590
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	12592
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12594
@@ -3703,38 +1770,15 @@ came down here.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12597
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	12593
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	12595
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12595
@@ -3747,38 +1791,15 @@ is just mostly boxes.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12596
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	12594
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	12592
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12596
@@ -3791,21 +1812,7 @@ metal.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door metal~
 	ToVnum:	12608
@@ -3815,15 +1822,9 @@ RoomType:	0
 	KeyVnum:	12600
 [EXIT east]
 	ToVnum:	12597
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	12595
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12597
@@ -3836,32 +1837,12 @@ could it go...
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	12594
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	12596
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12598
@@ -3874,38 +1855,15 @@ here too.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12601
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	12599
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT up]
 	ToVnum:	12578
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12599
@@ -3917,32 +1875,12 @@ booths. There are dancers brushing up on you all over down here.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12600
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	12598
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12600
@@ -3955,32 +1893,12 @@ show.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	12601
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	12599
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12601
@@ -3992,44 +1910,18 @@ off to the west and the stairs to go back to the front door are south.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12609
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	12610
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	12598
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	12600
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12602
@@ -4042,38 +1934,15 @@ seem to remember being called the crows nest.
 ~
 Flags:	0
 SecType:	Field
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12603
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	12563
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT down]
 	ToVnum:	12607
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12603
@@ -4085,32 +1954,12 @@ in this year. That must be for the boat masters "effect" to look old.
 ~
 Flags:	0
 SecType:	Field
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12604
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	12602
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12604
@@ -4123,32 +1972,12 @@ ship.
 ~
 Flags:	0
 SecType:	Field
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	12603
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT down]
 	ToVnum:	12605
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12605
@@ -4160,32 +1989,12 @@ because of the fact that they have no matresses on them.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	12606
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT up]
 	ToVnum:	12604
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12606
@@ -4197,32 +2006,12 @@ things on this well kept-up boat.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12605
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	12607
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12607
@@ -4234,32 +2023,12 @@ fully functional but also looks to not have been used in a long time.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	12606
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT up]
 	ToVnum:	12602
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12608
@@ -4272,21 +2041,7 @@ be used for persuation.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT south]
 	Keywords:	door maglock~
 	Desc:$
@@ -4308,26 +2063,9 @@ your direction.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	12601
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12610
@@ -4340,26 +2078,9 @@ things in your direction.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	12601
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12611
@@ -4373,33 +2094,12 @@ winds blow a salty breeze in from the Pacific Ocean, and waves crash on the
 shore. 
 ~
 Flags:	0
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	12612
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT up]
 	ToVnum:	12588
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12612
@@ -4411,33 +2111,12 @@ east is the platform where the SeaTac Transport Ferry docks when collecting
 passengers to take to Tacoma. 
 ~
 Flags:	0
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	12613
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	12611
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12613
@@ -4448,27 +2127,9 @@ cargo for transport to the Tacoma area, across Puget Sound.  The air smells of
 fish and salt, and you can hear seagulls in the distance. 
 ~
 Flags:	100
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	12612
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #12620
@@ -4482,28 +2143,7 @@ glory.  The skyline of Seattle is quite visible on this ferry no matter where
 on its journey it is, the skyscrapers dominate the northeastern sky. 
 ~
 Flags:	10000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
-[EXIT southeast]
-	ToVnum:	2007
-	Flags:	0
-	Material:	metal
-	Barrier:	8
-	KeyVnum:	0
 BREAK
 #12699
 Name:	An unnamed room
@@ -4512,20 +2152,6 @@ Desc:$
 ~
 Flags:	0
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 BREAK
 END
