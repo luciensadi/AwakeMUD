@@ -3491,6 +3491,29 @@ struct obj_data *get_obj_proto_for_vnum(vnum_t vnum) {
   return &obj_proto[rnum];
 }
 
+bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch) {
+  // Nonexistant and non-weapons can't be used as foci.
+  if (!focus || !WEAPON_IS_FOCUS(focus))
+    return FALSE;
+    
+  // Weapons in the middle of bonding can't be used.
+  if (GET_WEAPON_FOCUS_BOND_STATUS(focus) != 0)
+    return FALSE;
+    
+  // Astral projection? We want to check your original character.
+  if (IS_PROJECT(ch)) {
+    if (ch->desc && ch->desc->original)
+      return GET_WEAPON_FOCUS_BONDED_BY(focus) == GET_IDNUM(ch->desc->original);
+  }
+  
+  // Non-projection NPC? You get to use it.
+  if (IS_NPC(ch))
+    return TRUE;
+    
+  // Otherwise, yes but only if you bonded it.
+  return GET_WEAPON_FOCUS_BONDED_BY(focus) == GET_IDNUM(ch);
+}
+
 
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.
 // Great for swapping out old Classic weapons, cyberware, etc for the new guaranteed-canon versions.

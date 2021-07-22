@@ -3051,15 +3051,9 @@ int get_skill_num_in_use_for_weapons(struct char_data *ch) {
 int get_skill_dice_in_use_for_weapons(struct char_data *ch) {
   int skill_num = get_skill_num_in_use_for_weapons(ch);
   int skill_dice = GET_SKILL(ch, skill_num);
+  struct obj_data *weapon = GET_EQ(ch, WEAR_WIELD);
   
-  if (GET_EQ(ch, WEAR_WIELD) 
-      && GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_WEAPON
-      && !IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_WIELD)))
-      && GET_WEAPON_FOCUS_RATING(GET_EQ(ch, WEAR_WIELD))
-      && (IS_NPC(ch) 
-          || (GET_WEAPON_FOCUS_BONDED_BY(GET_EQ(ch, WEAR_WIELD)) == GET_IDNUM(ch)
-              && GET_WEAPON_FOCUS_BOND_STATUS(GET_EQ(ch, WEAR_WIELD)) == 0)))
-  {
+  if (weapon && GET_OBJ_TYPE(weapon) == ITEM_WEAPON && WEAPON_IS_FOCUS(weapon) && WEAPON_FOCUS_USABLE_BY(weapon, ch)) {
     skill_dice += GET_WEAPON_FOCUS_RATING(GET_EQ(ch, WEAR_WIELD));
   }
   

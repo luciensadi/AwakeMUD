@@ -3005,8 +3005,6 @@ void astral_fight(struct char_data *ch, struct char_data *vict)
   int w_type, dam, power, attack_success, newskill, skill_total, base_target;
   bool focus = FALSE, is_physical;
   
-  struct obj_data *wielded = ch->equipment[WEAR_WIELD];
-  
   if (ch->in_room != vict->in_room) {
     stop_fighting(ch);
     if (FIGHTING(vict) == ch)
@@ -3024,14 +3022,11 @@ void astral_fight(struct char_data *ch, struct char_data *vict)
   act(buf3, 1, ch, NULL, NULL, TO_ROLLS);
   
   // Find astral foci.
+  struct obj_data *wielded = ch->equipment[WEAR_WIELD];
   if ((IS_PROJECT(ch) || PLR_FLAGGED(ch, PLR_PERCEIVE))
       && wielded
       && GET_OBJ_TYPE(wielded) == ITEM_WEAPON
-      && GET_WEAPON_ATTACK_TYPE(wielded) < TYPE_TASER
-      && GET_WEAPON_FOCUS_RATING(wielded) > 0
-      && GET_WEAPON_FOCUS_BOND_STATUS(wielded) > 0
-      && (GET_WEAPON_FOCUS_BONDED_BY(wielded) == GET_IDNUM(ch)
-          || (ch->desc && ch->desc->original && GET_WEAPON_FOCUS_BONDED_BY(wielded) == GET_IDNUM(ch->desc->original))))
+      && WEAPON_FOCUS_USABLE_BY(wielded, ch))
   {
     focus = TRUE;
   }

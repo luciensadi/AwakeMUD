@@ -5183,7 +5183,7 @@ ACMD(do_status)
         total++;
       }
       
-      else if (GET_OBJ_TYPE(focus) == ITEM_WEAPON && WEAPON_IS_FOCUS(focus) && WEAPON_FOCUS_USABLE_BY(focus, ch)) {
+      else if ((x == WEAR_WIELD || x == WEAR_HOLD) && GET_OBJ_TYPE(focus) == ITEM_WEAPON && WEAPON_IS_FOCUS(focus) && WEAPON_FOCUS_USABLE_BY(focus, ch)) {
         force += GET_WEAPON_FOCUS_RATING(focus);
         total++;
       }

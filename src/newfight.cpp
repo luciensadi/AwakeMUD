@@ -228,10 +228,7 @@ struct melee_combat_data {
         damage_level = GET_WEAPON_DAMAGE_CODE(weapon);
         
         // Weapon foci. NPC use them implicitly.
-        if (IS_NPC(ch)
-            || (GET_WEAPON_FOCUS_BONDED_BY(weapon) == GET_IDNUM(ch)
-                && GET_WEAPON_FOCUS_BOND_STATUS(weapon) == 0))
-        {
+        if (IS_NPC(ch) || WEAPON_FOCUS_USABLE_BY(weapon, ch)) {
           skill_bonus = min(4, GET_WEAPON_FOCUS_RATING(weapon));
         }
       }
