@@ -3989,7 +3989,7 @@ ACMD(do_dice)
   }
   if (dice <= 0) {
     send_to_char("You have to roll at least 1 die.\r\n", ch);
-  } else if (dice > 30) {
+  } else if (dice >= 100) {
     send_to_char("You can't roll that many dice.\r\n", ch); 
   } else {
     strcat(buf, "and scores:");

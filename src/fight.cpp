@@ -4386,6 +4386,39 @@ void roll_initiative(void)
   return;
 }
 
+/*
+// Bugfix for weird edge case where next_combat_list could become invalidated (ex: quest target extraction after ch death)
+if (next_combat_list != NULL && next_combat_list != combat_list) {
+  bool next_combat_list_is_in_combat_list = FALSE;
+  for (struct char_data *tmp_combat_list = combat_list; tmp_combat_list; tmp_combat_list = tmp_combat_list->next_fighting) {
+    next_combat_list_is_in_combat_list = TRUE;
+  }
+  
+  if (!next_combat_list_is_in_combat_list) {
+    mudlog("CRASH PREVENTION: next_combat_list was not found in combat_list!", NULL, LOG_SYSLOG, TRUE);
+    break;
+  }
+}
+
+ch = next_combat_list;
+*/
+
+bool next_combat_list_is_valid(struct char_data *ncl) {
+  // Beginning or end of loop means NCL is fine.
+  if (next_combat_list == NULL || next_combat_list == combat_list)
+    return TRUE;
+  
+  // Otherwise, ensure NCL is in CL. If it is, good-- return true (valid)
+  // I don't even want to hear about the O(n^2) here. YOU try iterating over a list where any one of the elements can disappear mid-iteration!
+  for (struct char_data *tmp_combat_list = combat_list; tmp_combat_list; tmp_combat_list = tmp_combat_list->next_fighting)
+    if (tmp_combat_list == next_combat_list)
+      return TRUE;
+  
+  // Otherwise, bail out of violence.
+  mudlog("CRASH PREVENTION: next_combat_list was not found in combat_list!", NULL, LOG_SYSLOG, TRUE);
+  return FALSE;
+}
+
 /* control the fights going on.  Called every 2 seconds from comm.c. */
 void perform_violence(void)
 {
@@ -4398,8 +4431,9 @@ void perform_violence(void)
       order_list(TRUE);
     }
   }
-  for (ch = combat_list; ch; ch = next_combat_list) {
+  for (ch = combat_list; ch && next_combat_list_is_valid(next_combat_list); ch = next_combat_list) {
     bool engulfed = FALSE;
+    // Known bug: If next_fighting is killed by ch, this causes Problems(tm)
     next_combat_list = ch->next_fighting;
     
     // You're not in combat or not awake.
