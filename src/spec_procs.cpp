@@ -5749,7 +5749,8 @@ SPECIAL(airport_guard)
   if (cmd && CMD_IS("show")) {
     skip_spaces(&argument);
     struct char_data *guard = (struct char_data *) me;
-    struct obj_data *visa = get_obj_in_list_vis(ch, argument, ch->carrying);
+    one_argument(argument, buf);
+    struct obj_data *visa = get_obj_in_list_vis(ch, buf, ch->carrying);
     if (visa && GET_OBJ_VNUM(visa) == OBJ_CARIBBEAN_VISA) {
       if (GET_OBJ_VAL(visa, 0) == GET_IDNUM(ch)) {
         PLR_FLAGS(ch).SetBit(PLR_VISA);
