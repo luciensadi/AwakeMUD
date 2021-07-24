@@ -1722,8 +1722,10 @@ void damage_obj(struct char_data *ch, struct obj_data *obj, int power, int type)
     return;
   }
   
-  for (struct obj_data *cont = obj->contains; cont; cont = cont->next_content)
-    damage_obj(ch, cont, power, type);
+  if (GET_OBJ_TYPE(obj) != ITEM_CUSTOM_DECK) {
+    for (struct obj_data *cont = obj->contains; cont; cont = cont->next_content)
+      damage_obj(ch, cont, power, type);
+  }
   
   switch (type) {
     case DAMOBJ_ACID:
