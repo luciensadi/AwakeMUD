@@ -244,12 +244,12 @@ ACMD(do_steal)
     send_to_char(ch, "%s slaps your hand away.\r\n", CAP(GET_NAME(vict)));
   else if (!IS_SENATOR(ch) && AWAKE(vict))
     send_to_char("That would be quite a feat.\r\n", ch);
-  else if (!IS_SENATOR(ch) && (!PRF_FLAGGED(ch, PRF_PKER) || !PRF_FLAGGED(vict, PRF_PKER)))
+  else if (!IS_SENATOR(ch) && !IS_NPC(vict) && (!PRF_FLAGGED(ch, PRF_PKER) || !PRF_FLAGGED(vict, PRF_PKER)))
     send_to_char(ch, "Both you and %s need to be toggled PK for that.\r\n", GET_NAME(vict));
   else {
     if (!(obj = get_obj_in_list_vis(vict, obj_name, vict->carrying))) {
       if (!IS_SENATOR(ch)) {
-        send_to_char(ch, "You can't take something the person is wearing.\r\n");
+        send_to_char(ch, "You don't see '%s' in their inventory.\r\n", obj_name);
         return;
       }
       for (eq_pos = 0; eq_pos < NUM_WEARS; eq_pos++)
@@ -288,7 +288,8 @@ ACMD(do_steal)
             if (GET_LEVEL(ch) < LVL_BUILDER)
               act("$n steals $p from $o's unconscious body.", TRUE, ch, obj, vict, TO_ROOM);
           }
-        }
+        } else
+          send_to_char(ch, "%s weighs too much!\r\n", GET_OBJ_NAME(obj));
       } else
         send_to_char("You cannot carry that much.\r\n", ch);
     }
