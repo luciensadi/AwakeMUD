@@ -4392,7 +4392,7 @@ ACMD(do_syspoints) {
   }
   
   // Morts can only view their own system points.
-  if (!access_level(ch, LVL_ADMIN)) {
+  if (!access_level(ch, LVL_CONSPIRATOR)) {
     if (!*argument) {
       send_to_char(ch, "You have %d system points.\r\n", GET_SYSTEM_POINTS(ch));
       return;

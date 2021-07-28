@@ -727,6 +727,14 @@ void affect_total(struct char_data * ch)
   if (GET_TEMP_QUI_LOSS(ch))
     GET_QUI(ch) = MAX(0, GET_QUI(ch) - (GET_TEMP_QUI_LOSS(ch) / 4));
     
+  for (cyber = ch->bioware; cyber; cyber = cyber->next_content) {
+    if (GET_OBJ_VAL(cyber, 0) == BIO_PAINEDITOR && GET_OBJ_VAL(cyber, 3)) {
+      GET_WIL(ch) += 1;
+      GET_INT(ch) -= 1;
+      break;
+    }
+  }
+    
   i = ((IS_NPC(ch) || (GET_LEVEL(ch) >= LVL_ADMIN)) ? 50 : 20);
   GET_REA(ch) += (GET_INT(ch) + GET_QUI(ch)) >> 1;
   GET_QUI(ch) = MAX(0, MIN(GET_QUI(ch), i));
@@ -745,14 +753,6 @@ void affect_total(struct char_data * ch)
   GET_TARGET_MOD(ch) = 0;
   GET_MAX_MENTAL(ch) -= GET_MENTAL_LOSS(ch) * 100;
   GET_MAX_PHYSICAL(ch) -= GET_PHYSICAL_LOSS(ch) * 100;
-  
-  for (cyber = ch->bioware; cyber; cyber = cyber->next_content) {
-    if (GET_OBJ_VAL(cyber, 0) == BIO_PAINEDITOR && GET_OBJ_VAL(cyber, 3)) {
-      GET_WIL(ch) += 1;
-      GET_INT(ch) -= 1;
-      break;
-    }
-  }
   
   if (GET_TRADITION(ch) == TRAD_ADEPT)
   {

@@ -1854,6 +1854,7 @@ struct drug_data drug_types[] =
 
 struct spell_types spells[] =
   {
+    // name, category, vector, target, duration, drainpower, draindamage
     { "UNDEF", 0, 0, 0, 0, 0, 0, 0 },
     { "Death Touch", FALSE, COMBAT, TOUCH, ATT_WIL, INSTANT, 0, -4 },
     { "Manabolt", FALSE, COMBAT, SINGLE, ATT_WIL, INSTANT, 0, -3 },

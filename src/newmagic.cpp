@@ -1261,10 +1261,53 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       break;
     case SPELL_INCREF1:
     case SPELL_INCREF2:
-    case SPELL_INCREF3:
-      if (GET_REAL_REA(vict) != GET_REA(vict) || GET_INIT_DICE(ch)) {
-        act("$N's reflexes have already been modified, so you can't cast that spell on $m.", FALSE, ch, 0, vict, TO_CHAR);
-        return;
+    case SPELL_INCREF3:      
+      if (GET_REAL_REA(vict) != GET_REA(vict) || GET_INIT_DICE(vict)) {
+        int int_with_just_bioware = GET_REAL_INT(vict);
+        int qui_with_just_bioware = GET_REAL_QUI(vict);
+        int initiative_dice_with_just_bioware = 0;
+        
+        for (struct obj_data *bioware = vict->bioware; bioware; bioware = bioware->next_content)
+        {
+          // Skip deactivated adrenal pumps.
+          if (GET_BIOWARE_TYPE(bioware) == BIO_ADRENALPUMP && GET_OBJ_VAL(bioware, 5) <= 0)
+            continue;
+            
+          // Apply the int penalty from an activated pain editor.
+          if (GET_BIOWARE_TYPE(bioware) == BIO_PAINEDITOR && GET_OBJ_VAL(bioware, 3))
+            int_with_just_bioware -= 1;
+            
+          // Add any miscellaneous affects to your int / qui / dice.
+          for (int j = 0; j < MAX_OBJ_AFFECT; j++) {
+            if (bioware->affected[j].location == APPLY_INT) {
+              int_with_just_bioware += bioware->affected[j].modifier;
+            }
+            else if (bioware->affected[j].location == APPLY_QUI) {
+              qui_with_just_bioware += bioware->affected[j].modifier;
+            }
+            else if (bioware->affected[j].location == APPLY_INITIATIVE_DICE) {
+              initiative_dice_with_just_bioware += bioware->affected[j].modifier;
+            }
+          }        
+        }
+        
+        send_to_char(ch, "iwjb %d vs %d, qwjb %d vs %d, dwjb %d vs %d\r\n", 
+                     int_with_just_bioware, GET_INT(vict),
+                     qui_with_just_bioware, GET_QUI(vict),
+                     initiative_dice_with_just_bioware, GET_INIT_DICE(vict)
+                   );
+        
+        // If the numbers don't match exactly, refuse to cast.
+        if ((((int_with_just_bioware + qui_with_just_bioware) / 2) != GET_REA(vict))
+            || (initiative_dice_with_just_bioware != GET_INIT_DICE(vict))) 
+        {
+          if (ch == vict) {
+            send_to_char(ch, "Your reflexes have already been modified, so the increased reflexes spell won't work for you.\r\n");
+          } else {
+            act("$N's reflexes have already been modified, so you can't cast that spell on $m.", FALSE, ch, 0, vict, TO_CHAR);
+          }
+          return;
+        }
       }
       
       if ((success = success_test(skill, GET_REA(vict) + target_modifiers)) > 0) {
