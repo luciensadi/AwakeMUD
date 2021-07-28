@@ -2491,11 +2491,23 @@ struct char_data *get_player_vis(struct char_data * ch, char *name, int inroom)
 {
   struct char_data *i;
   
-  for (i = character_list; i; i = i->next)
-    if (!IS_NPC(i) && (!inroom || i->in_room == ch->in_room) &&
-        (isname(name, GET_KEYWORDS(i)) || isname(name, GET_CHAR_NAME(i)) || recog(ch, i, name))
-        && GET_LEVEL(ch) >= GET_INCOG_LEV(i))
+  // Check for name matches (by memory or by actual name)
+  for (i = character_list; i; i = i->next) {
+    if (IS_NPC(i) || (inroom && i->in_room != ch->in_room) || GET_LEVEL(ch) < GET_INCOG_LEV(i))
+      continue;
+      
+    if (isname(name, GET_CHAR_NAME(i)) || recog(ch, i, name))
       return i;
+  }
+  
+  // Check for loose matches by keywords.
+  for (i = character_list; i; i = i->next) {
+    if (IS_NPC(i) || (inroom && i->in_room != ch->in_room) || GET_LEVEL(ch) < GET_INCOG_LEV(i))
+      continue;
+      
+    if (isname(name, GET_KEYWORDS(i)))
+      return i;
+  }
   
   return NULL;
 }

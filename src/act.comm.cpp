@@ -1206,6 +1206,10 @@ ACMD(do_gen_comm)
       if (i->connected || PLR_FLAGS(i->character).AreAnySet(PLR_WRITING, PLR_MAILING, PLR_EDITING, ENDBIT))
         continue;
     }
+    
+    // Skip ignored people.
+    if (unsafe_found_mem(GET_IGNORE(i->character), ch))
+      continue;
       
     switch (subcmd) {
       case SCMD_SHOUT:
