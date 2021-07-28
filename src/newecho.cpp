@@ -122,7 +122,7 @@ const char *generate_display_string_for_character(struct char_data *actor, struc
     else if (viewer->desc && viewer->desc->original)
       snprintf(result_string, sizeof(result_string), "%s%s (you)%s", 
                viewer_highlight, 
-               GET_NAME(viewer),
+               decapitalize_a_an(GET_NAME(viewer)),
                terminal_code);
     else
       snprintf(result_string, sizeof(result_string), "%s%s%s", 
@@ -141,7 +141,7 @@ const char *generate_display_string_for_character(struct char_data *actor, struc
     else if (!IS_NPC(viewer) && (mem_record = safe_found_mem(viewer, target_ch)))
       display_string = CAP(mem_record->mem);
     else
-      display_string = GET_NAME(target_ch);
+      display_string = decapitalize_a_an(GET_NAME(target_ch));
       
     // Insert the display string into the mutable string in place of the tag. No terminal_code here-- this always happens outside of speech.
     snprintf(result_string, sizeof(result_string), "%s^n", display_string);
@@ -514,21 +514,12 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
         language_in_use = IS_NPC(actor) ? SKILL_ENGLISH : GET_LANGUAGE(actor);
         
       NEW_EMOTE_DEBUG_SPEECH(actor, "\r\nLanguage in use for $n is now %s (target: '%s').\r\n", skills[language_in_use].name, language_string);
-        
-      // First, add the language tag string.
-      if (language_in_use != SKILL_ENGLISH) {
-        char language_tag_string[500];
-        snprintf(language_tag_string, sizeof(language_tag_string), "(%s) ", capitalize(skills[language_in_use].name));
-        strlcpy(storage_string, language_tag_string, sizeof(storage_string));
-      } else {
-        strlcpy(storage_string, "", sizeof(storage_string));
-      }
       
       // Snip the language block from the mutable string (we wrote the proper one to storage already). Handles a single space after the closing parens.
       if (language_idx + 1 < (int) strlen(mutable_echo_string) && isspace(mutable_echo_string[language_idx + 1]))
-        strlcat(storage_string, mutable_echo_string + language_idx + 2, sizeof(storage_string));
+        strlcpy(storage_string, mutable_echo_string + language_idx + 2, sizeof(storage_string));
       else
-        strlcat(storage_string, mutable_echo_string + language_idx + 1, sizeof(storage_string));
+        strlcpy(storage_string, mutable_echo_string + language_idx + 1, sizeof(storage_string));
         
       // Decrement i here to make it point at the area where the parens is. Remember that i points to the original string, not our storage string.
       i--;
@@ -544,11 +535,28 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
     // We're now inside a quote block, with the language for the quote identified. 'i' is the start of the speech.
     char speech_buf[MAX_STRING_LENGTH];
     
+    // First, add the language tag string.
+    if (language_in_use != SKILL_ENGLISH) {
+      snprintf(speech_buf, sizeof(speech_buf), "(%s) ", capitalize(skills[language_in_use].name));
+    } else {
+      strlcpy(speech_buf, "", sizeof(speech_buf));
+    }
+    int speech_buf_len_after_language_tag = strlen(speech_buf);
+    // send_to_char(actor, "^y(%s): current buf: %s; tag length is %d\r\n", GET_CHAR_NAME(viewer), speech_buf, speech_buf_len_after_language_tag);
+    
     // Copy the quote into the speech buf.
     int speech_idx;
-    for (speech_idx = i; speech_idx < (int) strlen(mutable_echo_string) && mutable_echo_string[speech_idx] != '"'; speech_idx++)
-      speech_buf[speech_idx - i] = mutable_echo_string[speech_idx];
-    speech_buf[speech_idx - i] = '\0';
+    bool is_first_letter_in_speech = TRUE;
+    for (speech_idx = i; speech_idx < (int) strlen(mutable_echo_string) && mutable_echo_string[speech_idx] != '"'; speech_idx++) {
+      if (is_first_letter_in_speech) {
+        speech_buf[speech_idx - i + speech_buf_len_after_language_tag] = toupper(mutable_echo_string[speech_idx]);
+        is_first_letter_in_speech = FALSE;
+      } else {
+        speech_buf[speech_idx - i + speech_buf_len_after_language_tag] = mutable_echo_string[speech_idx];
+      }
+    }
+      
+    speech_buf[speech_idx - i + speech_buf_len_after_language_tag] = '\0';
     
     // Write the rest of the emote into the storage string.
     strlcpy(storage_string, mutable_echo_string + speech_idx, sizeof(storage_string));
@@ -571,6 +579,7 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
       quote_termination = ".^n";
     }
     
+    // Known bug: Capitalization does not work after a language word is retained.
     if (replacement) {
       // Insert the replacement.
       snprintf(mutable_echo_string + i, sizeof(mutable_echo_string) - i, "%s%s%s%s", 
@@ -588,7 +597,7 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
                quote_termination,
                storage_string);
                
-      i = speech_idx + strlen(should_highlight ? GET_CHAR_COLOR_HIGHLIGHT(actor) : "") + strlen(quote_termination);
+      i = speech_idx + speech_buf_len_after_language_tag + strlen(should_highlight ? GET_CHAR_COLOR_HIGHLIGHT(actor) : "") + strlen(quote_termination);
     }
     
     i++;
@@ -884,11 +893,30 @@ const char *replace_too_long_words(struct char_data *ch, struct char_data *speak
   bool no_pseudolanguage = PRF_FLAGGED(ch, PRF_NOPSEUDOLANGUAGE);
     
   strlcpy(replaced_message, message, sizeof(replaced_message));
+  
+  // If the speech starts with a single parenthezised word, and that word is a language name, we don't touch it.
+  char *ptr = replaced_message;
+  if (*ptr == '(') {
+    char *verification_ptr = ptr + 1;
+    // Scan the whole ptr looking for a close-parens without illegal characters.
+    for (; *verification_ptr; verification_ptr++) {
+      // send_to_char(ch, "^y%c^n", *verification_ptr);
+      if (*verification_ptr == ')')
+        break;
+      
+      if (!isalpha(*verification_ptr) && *verification_ptr != '\'')
+        break;
+    }
+    
+    // Found a closing parens with no illegal characters before it? Skip the whole thing.
+    if (*verification_ptr == ')')
+      ptr = ++verification_ptr;
+  }
     
   // We specifically use <=, because we know this is null-terminated and we want to act on the null at the end.
   bool at_start_of_new_sentence = TRUE;
   bool need_caps = FALSE;
-  for (char *ptr = replaced_message; ptr && (ptr - replaced_message) <= (int) strlen(replaced_message); ptr++) {
+  for (; ptr && (ptr - replaced_message) <= (int) strlen(replaced_message); ptr++) {
     random_word = NULL;
     need_caps = FALSE;
     // send_to_char(ch, "^y%c^n", *ptr);
