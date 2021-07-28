@@ -4151,9 +4151,9 @@ ACMD(do_set)
                { "pg",              LVL_ADMIN,      PC,     BINARY },
                { "rpe",      LVL_ADMIN, PC, BINARY },
                { "quest",    LVL_VICEPRES, PC , BINARY },
-               { "questor",      LVL_PRESIDENT, PC, BINARY }, // 65
+               { "questor",      LVL_CONSPIRATOR, PC, BINARY }, // 65
                { "aspect",       LVL_ADMIN, PC, NUMBER},
-               { "helper",       LVL_ADMIN, PC, BINARY },
+               { "helper",       LVL_CONSPIRATOR, PC, BINARY },
                { "blacklist",       LVL_VICEPRES, PC, BINARY },
                { "noidle", LVL_VICEPRES, PC, BINARY },
                { "tke", LVL_VICEPRES, PC, NUMBER }, //70
