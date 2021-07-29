@@ -2485,7 +2485,7 @@ void matrix_update()
           mudlog(buf, NULL, LOG_SYSLOG, TRUE);
           return;
         }
-        if (GET_OBJ_TYPE(file->next_content) != ITEM_DECK_ACCESSORY) {
+        if (file->next_content && GET_OBJ_TYPE(file->next_content) != ITEM_DECK_ACCESSORY) {
           snprintf(buf, sizeof(buf), "SYSERR: Found non-file object '%s' (%ld) in Matrix file->next_content! Striking that link, object will be orphaned if not located elsewhere.\r\n", GET_OBJ_NAME(file), GET_OBJ_VNUM(file));
           mudlog(buf, NULL, LOG_SYSLOG, TRUE);
           file->next_content = next = NULL;
