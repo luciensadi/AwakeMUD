@@ -20,6 +20,7 @@
 #include "newdb.h"
 #include "perfmon.h"
 #include "config.h"
+#include "newmatrix.h"
 
 // extern vars
 extern class helpList Help;
@@ -444,6 +445,11 @@ void objList::RemoveQuestObjs(int id)
       else if (temp->data->in_room && temp->data->in_room->people) {
         act("$p disintegrates.", TRUE, temp->data->in_room->people, temp->data, 0, TO_ROOM);
         act("$p disintegrates.", TRUE, temp->data->in_room->people, temp->data, 0, TO_CHAR);
+      }
+      else if (temp->data->in_host) {
+        snprintf(buf3, sizeof(buf3), "%s depixelates and vanishes from the host.\r\n", capitalize(GET_OBJ_NAME(temp->data)));
+        send_to_host(temp->data->in_host->vnum, buf3, NULL, TRUE);
+        obj_from_host(temp->data);
       }
       extract_obj(temp->data);
     }

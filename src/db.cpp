@@ -3437,9 +3437,7 @@ void reset_zone(int zone, int reboot)
     case 'H':                 /* loads a Matrix file into a host */
       if ((obj_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1) ||
           (ZCMD.arg2 == 0 && reboot)) {
-        obj = read_object(ZCMD.arg1, REAL);
-        obj->next_content = matrix[ZCMD.arg3].file;
-        matrix[ZCMD.arg3].file = obj;
+        obj_to_host(read_object(ZCMD.arg1, REAL), &matrix[ZCMD.arg3]);
         last_cmd = 1;
       } else
         last_cmd = 0;

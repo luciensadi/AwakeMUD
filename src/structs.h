@@ -113,6 +113,7 @@ struct obj_data
   struct obj_data *in_obj;        /* In what object NULL when none    */
   struct obj_data *contains;      /* Contains objects                 */
   struct obj_data *next_content;  /* For 'contains' lists             */
+  struct host_data *in_host;      /* For tracking if the object is in a Matrix host. */
   
   struct char_data *targ;	  /* Data for mounts */
   struct veh_data *tveh;
@@ -123,7 +124,7 @@ struct obj_data
 #endif
   obj_data() :
       in_room(NULL), in_veh(NULL), ex_description(NULL), restring(NULL), photo(NULL), graffiti(NULL), source_info(NULL),
-      carried_by(NULL), worn_by(NULL), in_obj(NULL), contains(NULL), next_content(NULL), targ(NULL), tveh(NULL)
+      carried_by(NULL), worn_by(NULL), in_obj(NULL), contains(NULL), next_content(NULL), in_host(NULL), targ(NULL), tveh(NULL)
   {}
 };
 /* ======================================================================= */

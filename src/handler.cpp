@@ -1294,6 +1294,11 @@ bool check_obj_to_x_preconditions(struct obj_data * object, struct char_data *ch
     snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "- Object is already in object %s.\r\n", GET_OBJ_NAME(object->in_obj));
   }
   
+  // We can't give an object away if it's in a host.
+  if (object->in_host) {
+    snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "- Object is already in host %ld.\r\n", object->in_host->vnum);
+  }
+  
   // Fail if the object already has next_content. This implies that it's part of someone else's linked list-- never merge them!
   if (object->next_content) {
     strcat(ENDOF(buf3), "- It's already part of a next_content linked list.\r\n");
@@ -1859,6 +1864,38 @@ void obj_from_room(struct obj_data * object)
   object->next_content = NULL;
 }
 
+/* Put an object in a Matrix host. */
+void obj_to_host(struct obj_data *obj, struct host_data *host) {
+  if (!host) {
+    mudlog("SYSERR: Null host given to obj_to_host!", NULL, LOG_SYSLOG, TRUE);
+    return;
+  }
+  
+  // Check our object-related preconditions. All error logging is done there.
+  if (!check_obj_to_x_preconditions(obj, NULL))
+    return;
+  
+  obj->in_host = host;
+  obj->next_content = host->file;
+  host->file = obj;
+}
+
+/* Remove an object from a Matrix host. */
+void obj_from_host(struct obj_data *obj) {
+  if (!obj) {
+    mudlog("SYSERR: Null obj given to obj_from_host!", NULL, LOG_SYSLOG, TRUE);
+    return;
+  }
+  
+  if (!obj->in_host) {
+    mudlog("SYSERR: Non-hosted obj given to obj_from_host!", NULL, LOG_SYSLOG, TRUE);
+    return;
+  }
+  
+  struct obj_data *temp;
+  REMOVE_FROM_LIST(obj, obj->in_host->file, next_content);
+  obj->in_host = NULL;
+}
 
 /* put an object in an object (quaint)  */
 void obj_to_obj(struct obj_data * obj, struct obj_data * obj_to)
@@ -2195,6 +2232,11 @@ void extract_obj(struct obj_data * obj)
   
   if (obj->in_room || obj->in_veh != NULL) {
     obj_from_room(obj);
+    set = TRUE;
+  }
+  
+  if (obj->in_host) {
+    obj_from_host(obj);
     set = TRUE;
   }
   

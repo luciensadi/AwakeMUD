@@ -303,8 +303,7 @@ void load_quest_targets(struct char_data *johnson, struct char_data *ch)
           obj->obj_flags.extra_flags.SetBits(ITEM_NODONATE, ITEM_NORENT, ITEM_NOSELL, ENDBIT);
           GET_OBJ_VAL(obj, 7) = GET_IDNUM(ch);
           GET_OBJ_VAL(obj, 9) = 1;
-          obj->next_content = matrix[room].file;
-          matrix[room].file = obj;
+          obj_to_host(obj, &matrix[room]);
         }
         obj = NULL;
         break;

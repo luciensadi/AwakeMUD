@@ -1168,9 +1168,7 @@ ACMD(do_locate)
             break;
           }
         }
-        if (matrix[PERSONA->in_host].file)
-          obj->next_content = matrix[PERSONA->in_host].file;
-        matrix[PERSONA->in_host].file = obj;
+        obj_to_host(obj, &matrix[PERSONA->in_host]);
       }
     if (!i)
       send_to_icon(PERSONA, "You fail to find any paydata.\r\n");
@@ -1288,6 +1286,7 @@ ACMD(do_matrix_look)
     
     if (obj == obj->next_content) {
       mudlog("SYSERR: Infinite loop detected in Matrix object listing. Discarding subsequent objects.", NULL, LOG_SYSLOG, TRUE);
+      obj->next_content = NULL;
       break;
     }
   }    
@@ -2101,9 +2100,7 @@ ACMD(do_decrypt)
       send_to_icon(PERSONA, "You fail to %s the IC protecting that file.\r\n", subcmd ? "disarm" : "decrypt");
       if (GET_OBJ_VAL(obj, 5) == 1)
         if (success_test(GET_OBJ_VAL(obj, 6), GET_SKILL(ch, SKILL_COMPUTER)) > 0) {
-          struct obj_data *temp;
           send_to_icon(PERSONA, "The Scramble IC destroys the file!\r\n");
-          REMOVE_FROM_LIST(obj, matrix[PERSONA->in_host].file, next_content);
           extract_obj(obj);
         }
     }
@@ -2316,9 +2313,7 @@ void process_upload(struct matrix_icon *persona)
                        GET_OBJ_VAL(soft, 8) ? "the host" : "active memory");
           if (GET_OBJ_VAL(soft, 8) == 1) {
             obj_from_obj(soft);
-            if (matrix[persona->in_host].file)
-              soft->next_content = matrix[persona->in_host].file;
-            matrix[persona->in_host].file = soft;
+            obj_to_host(soft, &matrix[persona->in_host]);
             // Make it seen by them.
             GET_OBJ_VAL(soft, 7) = GET_IDNUM(persona->decker->ch);
             GET_OBJ_VAL(persona->decker->deck, 5) -= GET_OBJ_VAL(soft, 2);
@@ -2484,6 +2479,16 @@ void matrix_update()
           mudlog("SYSERR: Infinite loop detected in Matrix file handling! Attempting to break out.\r\n", NULL, LOG_SYSLOG, TRUE);
           file->next_content = NULL;
           next = NULL;
+        }
+        if (GET_OBJ_TYPE(file) != ITEM_DECK_ACCESSORY) {
+          snprintf(buf, sizeof(buf), "SYSERR: Found non-file object '%s' (%ld) in Matrix file list! Terminating iteration immediately.\r\n", GET_OBJ_NAME(file), GET_OBJ_VNUM(file));
+          mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+          return;
+        }
+        if (GET_OBJ_TYPE(file->next_content) != ITEM_DECK_ACCESSORY) {
+          snprintf(buf, sizeof(buf), "SYSERR: Found non-file object '%s' (%ld) in Matrix file->next_content! Striking that link, object will be orphaned if not located elsewhere.\r\n", GET_OBJ_NAME(file), GET_OBJ_VNUM(file));
+          mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+          file->next_content = next = NULL;
         }
         if (GET_DECK_ACCESSORY_FILE_REMAINING(file)) {
           struct matrix_icon *persona = find_icon_by_id(GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(file));

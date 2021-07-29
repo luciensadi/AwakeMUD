@@ -225,17 +225,17 @@ void    update_pos(struct char_data *victim);
  * a great application for C++ templates but, alas, this is not C++.  Maybe
  * CircleMUD 4.0 will be...
  */
-#define REMOVE_FROM_LIST(item, head, next)      \
-{  if ((item) == (head))                        \
-      head = (item)->next;                      \
-   else {                                       \
-      temp = head;                              \
-      while (temp && (temp->next != (item)))    \
-         temp = temp->next;                     \
-      if (temp)                                 \
-         temp->next = (item)->next;             \
-   }                                            \
-   (item)->next = NULL;                         \
+#define REMOVE_FROM_LIST(item, head, nextc)      \
+{  if ((item) == (head))                         \
+      head = (item)->nextc;                      \
+   else {                                        \
+      temp = head;                               \
+      while (temp && (temp->nextc != (item)))    \
+         temp = temp->nextc;                     \
+      if (temp)                                  \
+         temp->nextc = (item)->nextc;            \
+   }                                             \
+   (item)->nextc = NULL;                         \
 }
 
 
