@@ -2166,6 +2166,24 @@ void extract_veh(struct veh_data * veh)
     veh->towing = NULL;
   }
   
+  // Disgorge its contents.
+  struct obj_data *nextobj;
+  for (struct obj_data *obj = veh->contents; obj; obj = nextobj) {
+    nextobj = obj->next_content;
+    obj_from_room(obj);
+    if (veh->in_room) {
+      obj_to_room(obj, veh->in_room);
+      snprintf(buf, sizeof(buf), "As %s disintegrates, %s falls out!\r\n", veh->short_description, GET_OBJ_NAME(obj));
+      send_to_room(buf, veh->in_room);
+    } else if (veh->in_veh) {
+      obj_to_veh(obj, veh->in_veh);
+      snprintf(buf, sizeof(buf), "As %s disintegrates, %s falls out!\r\n", veh->short_description, GET_OBJ_NAME(obj));
+      send_to_veh(buf, veh, NULL, FALSE);
+    } else {
+      extract_obj(obj);
+    }
+  }
+  
   // Remove its gridguide info.
   while (veh->grid) {
     struct grid_data *grid = veh->grid;

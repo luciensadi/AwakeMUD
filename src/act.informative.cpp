@@ -4458,7 +4458,7 @@ void print_object_location(int num, struct obj_data *obj, struct char_data *ch,
     } else if (obj->carried_by->in_veh) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " @ veh %ld (%s)\r\n", GET_VEH_VNUM(obj->carried_by->in_veh), GET_VEH_NAME(obj->carried_by->in_veh));
     } else {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " ^Rnowhere^n\r\n");
+      strlcat(buf, " ^Rnowhere^n\r\n", sizeof(buf) - strlen(buf));
     }
   }
   else if (obj->worn_by) {
@@ -4468,7 +4468,7 @@ void print_object_location(int num, struct obj_data *obj, struct char_data *ch,
     } else if (obj->worn_by->in_veh) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " @ veh %ld (%s)\r\n", GET_VEH_VNUM(obj->worn_by->in_veh), GET_VEH_NAME(obj->worn_by->in_veh));
     } else {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " ^Rnowhere^n\r\n");
+      strlcat(buf, " ^Rnowhere^n\r\n", sizeof(buf) - strlen(buf));
     }
   } else if (obj->in_obj) {
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "inside %s%s\r\n",
@@ -4478,7 +4478,7 @@ void print_object_location(int num, struct obj_data *obj, struct char_data *ch,
   } else if (obj->in_veh) {
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "in %s @ %ld%s", GET_VEH_NAME(obj->in_veh), GET_ROOM_VNUM(get_obj_in_room(obj)), obj->in_veh->in_veh ? " (nested veh)" : "");
   } else
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "in an unknown location\r\n");
+    strlcat(buf, " in an unknown location.\r\n", sizeof(buf) - strlen(buf));
 }
 
 void perform_immort_where(struct char_data * ch, char *arg)
