@@ -2419,7 +2419,7 @@ void matrix_update()
         host.shutdown_mpcp = 0;
         host.shutdown_success = 0;
       } else if (!--host.shutdown) {
-        struct obj_data *temp, *nextfile = NULL;
+        struct obj_data *nextfile = NULL;
         host.shutdown_mpcp = 0;
         host.shutdown_success = 0;
         host.alert = 3;
@@ -2428,7 +2428,6 @@ void matrix_update()
         if (host.file)
           for (struct obj_data *obj = host.file; nextfile; obj = nextfile) {
             nextfile = obj->next_content;
-            REMOVE_FROM_LIST(obj, host.file, next_content);
             extract_obj(obj);
           }
         host.reset = srdice() + srdice();
@@ -2507,8 +2506,7 @@ void matrix_update()
                 return;
               }
               
-              struct obj_data *temp;
-              REMOVE_FROM_LIST(file, host.file, next_content);
+              obj_from_host(file);
               obj_to_obj(file, persona->decker->deck);
               send_to_icon(persona, "%s has finished downloading to your deck.\r\n", CAP(GET_OBJ_NAME(file)));
               GET_OBJ_VAL(persona->decker->deck, 5) += GET_DECK_ACCESSORY_FILE_SIZE(file);
