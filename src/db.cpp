@@ -2168,6 +2168,21 @@ void parse_shop(File &fl, long virtual_nr)
   shop->ettiquete = data.GetInt("Etiquette", SKILL_STREET_ETIQUETTE);
   int num_fields = data.NumSubsections("SELLING"), vnum;
   struct shop_sell_data *templist = NULL;
+  
+  // Cap the shop multipliers.
+  if (shop->flags.IsSet(SHOP_CHARGEN)) {
+    shop->profit_buy = 1.0;
+    shop->profit_sell = 1.0;
+  } else {
+    // It should be impossible to set a buy price lower than 1.0.
+    shop->profit_buy = MAX(1.0, shop->profit_buy);
+    
+    // Standardize doc cyberware buy prices.
+    if (shop->flags.IsSet(SHOP_DOCTOR)) {
+      shop->profit_sell = CYBERDOC_MAXIMUM_SELL_TO_SHOPKEEP_MULTIPLIER;
+    }
+  }
+  
   // snprintf(buf3, sizeof(buf3), "Parsing shop items for shop %ld (%d found).", virtual_nr, num_fields);
   for (int x = 0; x < num_fields; x++) {
     const char *name = data.GetIndexSection("SELLING", x);
