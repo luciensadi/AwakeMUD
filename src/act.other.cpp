@@ -3525,6 +3525,9 @@ ACMD(do_unpack)
   
   // Only one unpacked workshop per room.
   FOR_ITEMS_AROUND_CH(ch, shop) {
+    if (GET_OBJ_TYPE(shop) != ITEM_WORKSHOP)
+      continue;
+      
     if (GET_WORKSHOP_IS_SETUP(shop) || GET_WORKSHOP_UNPACK_TICKS(shop)) {
       send_to_char("There is already a workshop set up here.\r\n", ch);
       return;

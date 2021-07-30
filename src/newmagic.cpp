@@ -1291,11 +1291,13 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
           }        
         }
         
+        /*
         send_to_char(ch, "iwjb %d vs %d, qwjb %d vs %d, dwjb %d vs %d\r\n", 
                      int_with_just_bioware, GET_INT(vict),
                      qui_with_just_bioware, GET_QUI(vict),
                      initiative_dice_with_just_bioware, GET_INIT_DICE(vict)
                    );
+        */
         
         // If the numbers don't match exactly, refuse to cast.
         if ((((int_with_just_bioware + qui_with_just_bioware) / 2) != GET_REA(vict))
