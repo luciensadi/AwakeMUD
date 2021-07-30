@@ -713,7 +713,11 @@ struct command_info cmd_info[] =
     { "progress"   , POS_RESTING , do_progress , 0, 0 },
     { "prone"      , POS_FIGHTING, do_prone    , 0, 0 },
     { "push"       , POS_SITTING , do_push     , 0, 0 },
+  #ifdef IS_BUILDPORT
+    { "purge"      , POS_DEAD    , do_purge    , LVL_BUILDER, 0 },
+  #else
     { "purge"      , POS_DEAD    , do_purge    , LVL_ARCHITECT, 0 },
+  #endif
       
     { "quests"     , POS_DEAD    , do_recap    , 0, 0 },
     { "ql"         , POS_LYING   , do_look     , 0, SCMD_QUICKLOOK },
