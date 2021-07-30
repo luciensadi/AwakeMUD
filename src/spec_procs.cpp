@@ -637,6 +637,12 @@ int get_max_skill_for_char(struct char_data *ch, int skill, int type) {
         case SKILL_SORCERY:
         case SKILL_SPELLDESIGN:
         case SKILL_AURA_READING:
+        case SKILL_SINGING:
+        case SKILL_DANCING:
+        case SKILL_CHANTING:
+        case SKILL_INSTRUMENT:
+        case SKILL_MEDITATION:
+        case SKILL_ARCANELANGUAGE:
           return MIN(max, 12);
         default:
           return MIN(max, 8);
