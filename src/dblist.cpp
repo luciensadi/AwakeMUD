@@ -448,7 +448,7 @@ void objList::RemoveQuestObjs(int id)
       }
       else if (temp->data->in_host) {
         snprintf(buf3, sizeof(buf3), "%s depixelates and vanishes from the host.\r\n", capitalize(GET_OBJ_NAME(temp->data)));
-        send_to_host(temp->data->in_host->vnum, buf3, NULL, TRUE);
+        send_to_host(temp->data->in_host->rnum, buf3, NULL, TRUE);
         obj_from_host(temp->data);
       }
       extract_obj(temp->data);
