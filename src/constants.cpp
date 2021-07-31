@@ -480,6 +480,7 @@ const char *player_bits[] =
     "NOIDLEOUT",
     "TELLS_MUTED",
     "NEWBIE_MUTED",
+    "CYBERDOC_PERMITTED",
     "\n"
   };
 
@@ -584,6 +585,7 @@ struct preference_bit_struct preference_bits_v2[] = {
   { "Highlights"           , TRUE , TRUE  },
   { "Pseudolanguage"       , TRUE , TRUE  },
   { "No Idle Nuyen Message", FALSE, TRUE  },
+  { "Cyberdocs Allowed"    , FALSE, TRUE  },
   { "\n"                   , 0    , 0     }
 };
 
@@ -907,6 +909,7 @@ const char *item_types[] =
     "Quest Item",
     "Ammo Box",
     "Keyring",
+    "Shop Container",
     "\n"
   };
 

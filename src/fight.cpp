@@ -2219,6 +2219,9 @@ void gen_death_msg(struct char_data *ch, struct char_data *vict, int attacktype)
     case TYPE_ELEVATOR:
       WRITE_DEATH_MESSAGE("%s got crushed by a moving elevator. Ouch. {%s (%ld)}");
       break;
+    case TYPE_MEDICAL_MISHAP:
+      WRITE_DEATH_MESSAGE("%s inadvertently starred in a medical-themed snuff film. {%s (%ld)}");
+      break;
     case TYPE_CRASH:
       switch(number(0, 1)) {
         case 0:
@@ -2464,7 +2467,7 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
       } else {
         check_killer(ch, victim);
       }
-    } else {
+    } else if (attacktype != TYPE_MEDICAL_MISHAP) {
       check_killer(ch, victim);
     }
   }

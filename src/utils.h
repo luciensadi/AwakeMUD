@@ -867,13 +867,17 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 
 // ITEM_BIOWARE convenience defines
 
-#define GET_BIOWARE_TYPE(bioware)          (GET_OBJ_VAL((bioware), 0))
+#define GET_BIOWARE_TYPE(bioware)              (GET_OBJ_VAL((bioware), 0))
+#define GET_BIOWARE_RATING(bioware)            (GET_OBJ_VAL((bioware), 1))
+#define GET_BIOWARE_IS_CULTURED(bioware)       (GET_OBJ_VAL((bioware), 2) || GET_BIOWARE_TYPE((bioware)) >= BIO_CEREBRALBOOSTER)
+#define GET_BIOWARE_ESSENCE_COST(bioware)      (GET_OBJ_VAL((bioware), 4))
 
 // ITEM_FOUNTAIN convenience defines
 
 // ITEM_CYBERWARE convenience defines
 #define GET_CYBERWARE_TYPE(cyberware)          (GET_OBJ_VAL((cyberware), 0))
 #define GET_CYBERWARE_RATING(cyberware)        (GET_OBJ_VAL((cyberware), 1))
+#define GET_CYBERWARE_GRADE(cyberware)         (GET_OBJ_VAL((cyberware), 2))
 #define GET_CYBERWARE_FLAGS(cyberware)         (GET_OBJ_VAL((cyberware), 3)) // CYBERWEAPON_RETRACTABLE, CYBERWEAPON_IMPROVED
 #define GET_CYBERWARE_LACING_TYPE(cyberware)   (GET_OBJ_VAL((cyberware), 3)) // Yes, this is also value 3. Great design here.
 #define GET_CYBERWARE_ESSENCE_COST(cyberware)  (GET_OBJ_VAL((cyberware), 4))

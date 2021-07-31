@@ -1635,7 +1635,8 @@ vnum_t get_highest_idnum_in_use() {
     snprintf(buf, sizeof(buf), "SELECT idnum FROM %s ORDER BY idnum DESC LIMIT 1;", tables[i]);
     vnum_t new_number = get_one_number_from_query(buf);
     if (highest_pfiles_idnum < new_number) {
-      mudlog("^RSYSERR: SQL database corruption (pfiles idnum lower than supporting table idnum). Will attempt to recover.^g", NULL, LOG_SYSLOG, TRUE);
+      snprintf(buf3, sizeof(buf3), "^RSYSERR: SQL database corruption (pfiles idnum %ld lower than '%s' idnum %ld). Auto-correcting.^g", highest_pfiles_idnum, tables[i], new_number);
+      mudlog(buf3, NULL, LOG_SYSLOG, TRUE);
       highest_pfiles_idnum = new_number;
     }
   }

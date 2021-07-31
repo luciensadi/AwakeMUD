@@ -1137,7 +1137,9 @@ const char *tog_messages[][2] = {
                             {"You will now see pseudolanguage strings.\r\n",
                              "You will no longer see pseudolanguage strings.\r\n"},
                             {"You will now see the idle nuyen reward messages.\r\n",
-                             "You will no longer see the idle nuyen reward messages.\r\n"}
+                             "You will no longer see the idle nuyen reward messages.\r\n"},
+                            {"Player cyberdocs are no longer able to operate on you.\r\n",
+                             "Player cyberdocs are now able to operate on you. This flag will be un-set after each operation.\r\n"}
                           };
 
 ACMD(do_toggle)
@@ -1349,6 +1351,9 @@ ACMD(do_toggle)
     } else if (is_abbrev(argument, "noidlenuyenmessage") || is_abbrev(argument, "no idle nuyen message")) {
       result = PRF_TOG_CHK(ch, PRF_NO_IDLE_NUYEN_REWARD_MESSAGE);
       mode = 37;
+    } else if (is_abbrev(argument, "cyberdoc")) {
+      result = PRF_TOG_CHK(ch, PRF_TOUCH_ME_DADDY);
+      mode = 38;
     } else {
       send_to_char("That is not a valid toggle option.\r\n", ch);
       return;
