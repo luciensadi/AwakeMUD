@@ -6081,17 +6081,17 @@ SPECIAL(medical_workshop) {
   if (!((mode_is_install = CMD_IS("install")) || CMD_IS("uninstall")))
     return FALSE;
     
-  // Require that the medical workshop be unpacked (or that it's a medical facility).
-  if (!((GET_WORKSHOP_GRADE(workshop) == TYPE_WORKSHOP && GET_WORKSHOP_IS_SETUP(workshop)) || GET_WORKSHOP_GRADE(workshop) == TYPE_FACILITY))
+  // Require that the medical workshop be unpacked.
+  if (!GET_WORKSHOP_IS_SETUP(workshop))
     return FALSE;
     
   // Preliminary skill check.
-  if (GET_SKILL(ch, SKILL_BIOTECH) <= 0) {
+  if (GET_SKILL(ch, SKILL_BIOTECH) < 4 || GET_SKILL(ch, SKILL_MEDICINE) < 4) {
     send_to_char("You have no idea where to even start with surgeries. Better leave it to the professionals.\r\n", ch);
     return TRUE;
   }
   
-  if (!PLR_FLAGGED(ch, PLR_CYBERDOC)) {
+  if (!PLR_FLAGGED(ch, PLR_CYBERDOC) && !access_level(ch, LVL_ADMIN)) {
     send_to_char("The cyberdoc role is currently application-only. Please contact staff to request the ability to be a cyberdoc.\r\n", ch);
     return TRUE;
   }
@@ -6190,20 +6190,74 @@ SPECIAL(medical_workshop) {
      - We've identified the 'ware, and it's valid
   */
   
-  // Skill check.
-  int target = 8;
+  // Base TN is the usual 4.
+  int target = 4;
+  snprintf(buf, sizeof(buf), "Medical roll for %s on %s: Base TN %d", GET_CHAR_NAME(ch), GET_CHAR_NAME(found_char), target);
+  
+  // Calculate TN modifiers.
   switch (GET_OBJ_TYPE(ware)) {
     case ITEM_BIOWARE:
-      if (GET_BIOWARE_IS_CULTURED(ware))
+      if (GET_BIOWARE_IS_CULTURED(ware)) {
         target += 2;
+        strlcat(buf, ", cultured so +2", sizeof(buf));
+      }
       break;
     case ITEM_CYBERWARE:
-      target += GET_CYBERWARE_GRADE(ware);
+      switch (GET_CYBERWARE_GRADE(ware)) {
+        case GRADE_ALPHA:
+          target += 1;
+          strlcat(buf, ", alpha so +1", sizeof(buf));
+          break;
+        case GRADE_BETA:
+          target += 3;
+          strlcat(buf, ", beta so +3", sizeof(buf));
+          break;
+        case GRADE_DELTA:
+          target += 6;
+          strlcat(buf, ", delta so +6", sizeof(buf));
+          break;
+      }
       break;
   }
-  int dice = get_skill(ch, SKILL_BIOTECH, target);
+  
+  // Patient is cyber-heavy? +1.
+  if (GET_ESS(found_char) < 200) {
+    target += 1;
+    strlcat(buf, ", low essence so +1", sizeof(buf));
+  }
+  
+  // Shop is unpacked in an actual room instead of a vehicle? -1 TN.
+  if (workshop->in_room) {
+    target -= 1;
+    strlcat(buf, ", in a room so -1", sizeof(buf));
+    
+    // Room is sterile (PGHQ feature)? Another -2.
+    if (ROOM_FLAGGED(workshop->in_room, ROOM_STERILE)) {
+      target -= 2;
+      strlcat(buf, ", room is sterile so -2", sizeof(buf));
+    }
+  }
+  
+  // Shop is a facility? -1 TN.
+  if (GET_WORKSHOP_GRADE(workshop) == TYPE_FACILITY) {
+    target -= 1;
+    strlcat(buf, ", using facility so -1", sizeof(buf));
+  }
+  
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ". Total: %d", target);
+  act(buf, FALSE, ch, 0, 0, TO_ROLLS);
+  
+  // We choose from the lesser of the biotech and medical skills.
+  int skill = GET_SKILL(ch, SKILL_BIOTECH) < GET_SKILL(ch, SKILL_MEDICINE) ? SKILL_BIOTECH : SKILL_MEDICINE;
+  int dice = get_skill(ch, skill, target);
+  snprintf(buf, sizeof(buf), "After get_skill (%s): %d", skills[skill].name, target);
+  act(buf, FALSE, ch, 0, 0, TO_ROLLS);
   target += modify_target(ch);
+  snprintf(buf, sizeof(buf), "After modify_target: %d", target);
+  act(buf, FALSE, ch, 0, 0, TO_ROLLS);
   int successes = success_test(dice, target);
+  snprintf(buf, sizeof(buf), "Got %d successes.", successes);
+  act(buf, FALSE, ch, 0, 0, TO_ROLLS);
   
   // Botch!
   if (successes < 0) {
@@ -6216,29 +6270,34 @@ SPECIAL(medical_workshop) {
     
     // Victim obviously doesn't trust you anymore, so revoke permission.
     send_to_char("(System notice: Automatically disabling your ^WTOGGLE CYBERDOC^n permission.)\r\n", found_char);
-    PRF_TOG_CHK(ch, PRF_TOUCH_ME_DADDY);
+    PRF_FLAGS(found_char).RemoveBit(PRF_TOUCH_ME_DADDY);
     
     return TRUE;
   }
   // Failure, no botch.
   else if (successes == 0) {
-    send_to_char(ch, "You can't quite figure out how to %sinstall %s.", mode_is_install ? "" : "un");
+    send_to_char(ch, "You can't quite figure out how to %sinstall %s.\r\n", mode_is_install ? "" : "un", GET_OBJ_NAME(ware));
     snprintf(buf, sizeof(buf), "$n pokes tentatively at $o, trying to figure out how to %sinstall it.", mode_is_install ? "" : "un");
     act(buf, FALSE, ch, ware, found_char, TO_ROOM);
     return TRUE;
   }
-  // Success.
+  // Standard success gets no conditional block here (it's the default behavior.)
+  // Exceptional success.
+  else if (successes >= CYBERDOC_NO_INJURY_DIE_REQUIREMENT) {
+    send_to_char("Inspiration strikes, and you set to work with near-miraculous precision.\r\n", ch);
+    act("Inspiration strikes, and $n sets to work with near-miraculous precision.", FALSE, ch, NULL, NULL, TO_ROOM);
+  }
     
   // Installation of ware.
   if (mode_is_install) {
     // Perform the installation.
-    install_ware_in_target_character(ware, ch, found_char, TRUE);
+    install_ware_in_target_character(ware, ch, found_char, (successes < CYBERDOC_NO_INJURY_DIE_REQUIREMENT));
   }
   
   // Removal of ware.
   else {
     // Perform the uninstallation.
-    if (uninstall_ware_from_target_character(ware, ch, found_char, TRUE)) {
+    if (uninstall_ware_from_target_character(ware, ch, found_char, (successes < CYBERDOC_NO_INJURY_DIE_REQUIREMENT))) {
       // Give them the ware (only if we succeeded)
       obj_to_char(shop_package_up_ware(ware), ch);
     }
@@ -6246,7 +6305,7 @@ SPECIAL(medical_workshop) {
   
   // Automatically revoke permission.
   send_to_char("(System notice: Automatically disabling your ^WTOGGLE CYBERDOC^n permission.)\r\n", found_char);
-  PRF_TOG_CHK(ch, PRF_TOUCH_ME_DADDY);
+  PRF_FLAGS(found_char).RemoveBit(PRF_TOUCH_ME_DADDY);
   
   return TRUE;
 }

@@ -271,6 +271,7 @@ const char *room_bits[] =
     "ELEVATOR_SHAFT",
     "SOCIALIZE!",
     "CORPSE_SAVE_HACK",
+    "STERILE",
     "\n"
   };
 
@@ -1506,7 +1507,8 @@ struct skill_data skills[] =
     {"Blowgun", QUI, SKILL_TYPE_ACTIVE, FALSE},
     {"Pharmaceuticals", INT, SKILL_TYPE_ACTIVE, FALSE},
     {"Hebrew", INT, SKILL_TYPE_KNOWLEDGE, FALSE},
-    {"Iroquois", INT, SKILL_TYPE_KNOWLEDGE, FALSE}
+    {"Iroquois", INT, SKILL_TYPE_KNOWLEDGE, FALSE},
+    {"Medicine", INT, SKILL_TYPE_KNOWLEDGE, FALSE}
   };
 
 int rev_dir[] =

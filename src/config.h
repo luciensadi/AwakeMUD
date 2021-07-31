@@ -139,5 +139,6 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 // Docs charge 1/factor of the price, up to the maximum configured.
 #define CYBERWARE_INSTALLATION_COST_FACTOR              10
 #define CYBERWARE_INSTALLATION_COST_MAXIMUM             10000
+#define CYBERDOC_NO_INJURY_DIE_REQUIREMENT              5
 
 #endif

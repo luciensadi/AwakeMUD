@@ -563,7 +563,8 @@ enum {
 #define ROOM_ELEVATOR_SHAFT         31 // Don't set this manually
 #define ROOM_ENCOURAGE_CONGREGATION 32
 #define ROOM_CORPSE_SAVE_HACK       33
-#define ROOM_MAX                    34
+#define ROOM_STERILE                34 // Gives a bonus to medical actions.
+#define ROOM_MAX                    35
 
 #define NORMAL    0
 #define LOWLIGHT  1
@@ -916,8 +917,9 @@ enum {
 #define SKILL_PHARMA              132
 #define SKILL_HEBREW              133
 #define SKILL_IROQUOIS            134
+#define SKILL_MEDICINE            135
 
-#define MAX_SKILLS      135
+#define MAX_SKILLS                136
 
 // Skill type definitions.
 #define SKILL_TYPE_ACTIVE         0
