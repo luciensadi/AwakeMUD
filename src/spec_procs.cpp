@@ -6118,6 +6118,12 @@ SPECIAL(medical_workshop) {
     return TRUE;
   }
   
+  // Reject self-targeting.
+  if (found_char == ch) {
+    send_to_char("You can't operate on yourself!\r\n", ch);
+    return TRUE;
+  }
+  
   if (IS_NPC(found_char) || IS_ASTRAL(found_char) || IS_PROJECT(found_char)) {
     send_to_char("Not on NPCs.\r\n", ch);
     return TRUE;

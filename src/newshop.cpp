@@ -1049,7 +1049,8 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
   if (shop_table[shop_nr].flags.IsSet(SHOP_DOCTOR))
   {
     if (!(obj = get_obj_in_list_vis(ch, arg, ch->cyberware))
-        && !(obj = get_obj_in_list_vis(ch, arg, ch->bioware))) {
+        && !(obj = get_obj_in_list_vis(ch, arg, ch->bioware))
+        && !(obj = get_obj_in_list_vis(ch, arg, ch->carrying))) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %s", shop_table[shop_nr].no_such_itemp);
       do_say(keeper, buf, cmd_say, SCMD_SAYTO);
       return;
@@ -1062,6 +1063,24 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
       return;
     }
   }
+  
+  if (GET_OBJ_TYPE(obj) == ITEM_SHOPCONTAINER) {
+    if (!shop_table[shop_nr].flags.IsSet(SHOP_DOCTOR)) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " I won't buy %s off of you. Take it to a cyberdoc.", GET_OBJ_NAME(obj));
+      do_say(keeper, buf, cmd_say, SCMD_SAYTO);
+      return;
+    }
+    
+    if (!obj->contains) {
+      send_to_char(ch, "%s is empty!\r\n", capitalize(GET_OBJ_NAME(obj)));
+      snprintf(buf, sizeof(buf), "SYSERR: Shop container '%s' is empty!", GET_OBJ_NAME(obj));
+      mudlog(buf, ch, LOG_SYSLOG, TRUE);
+      return;
+    }
+    
+    obj = obj->contains;
+  }
+  
   if (!shop_table[shop_nr].buytypes.IsSet(GET_OBJ_TYPE(obj)) || IS_OBJ_STAT(obj, ITEM_NOSELL) || GET_OBJ_COST(obj) < 1)
   {
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %s", shop_table[shop_nr].doesnt_buy);
@@ -1078,11 +1097,22 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
   if (!shop_table[shop_nr].flags.IsSet(SHOP_WONT_NEGO))
     sellprice = negotiate(ch, keeper, 0, sellprice, 0, 0);
     
-  if (shop_table[shop_nr].flags.IsSet(SHOP_DOCTOR))
+  if (shop_table[shop_nr].flags.IsSet(SHOP_DOCTOR) && !obj->in_obj)
     uninstall_ware_from_target_character(obj, keeper, ch, !shop_table[shop_nr].flags.IsSet(SHOP_CHARGEN));
-  else
-    obj_from_char(obj);
-
+  else {
+    if (obj->in_obj) {
+      struct obj_data *container = obj->in_obj;
+      
+      // Pull the 'ware out.
+      obj_from_obj(obj);
+      
+      // Remove the container and junk it.
+      obj_from_char(container);
+      extract_obj(container);
+    } else {
+      obj_from_char(obj);
+    }
+  }
 
   if (!cred || shop_table[shop_nr].type == SHOP_BLACK)
     GET_NUYEN(ch) += sellprice;
