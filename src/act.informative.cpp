@@ -4066,6 +4066,8 @@ ACMD(do_who)
         strlcat(buf1, " (AFK)", sizeof(buf1));
       if (PLR_FLAGGED(tch, PLR_RPE) && (level > LVL_MORTAL || PLR_FLAGGED(ch, PLR_RPE)))
         strlcat(buf1, " ^R(RPE)^n", sizeof(buf1));
+      if (PLR_FLAGGED(tch, PLR_CYBERDOC) && GET_LEVEL(tch) <= LVL_MORTAL)
+        strlcat(buf1, " ^c(Cyberdoc)^n", sizeof(buf1));
       
       if (PRF_FLAGGED(tch, PRF_NEWBIEHELPER) && (level > LVL_MORTAL || PRF_FLAGGED(ch, PRF_NEWBIEHELPER)))
         strlcat(buf1, " ^G(Newbie Helper)^n", sizeof(buf1));

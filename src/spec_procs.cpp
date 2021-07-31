@@ -6199,7 +6199,7 @@ SPECIAL(medical_workshop) {
     damage(ch, found_char, SERIOUS, TYPE_MEDICAL_MISHAP, PHYSICAL);
     
     // Victim obviously doesn't trust you anymore, so revoke permission.
-    send_to_char("(System notice: Automatically disabling your 'toggle cyberdoc' permission.)\r\n", found_char);
+    send_to_char("(System notice: Automatically disabling your ^WTOGGLE CYBERDOC^n permission.)\r\n", found_char);
     PRF_TOG_CHK(ch, PRF_TOUCH_ME_DADDY);
     
     return TRUE;
@@ -6229,7 +6229,7 @@ SPECIAL(medical_workshop) {
   }
   
   // Automatically revoke permission.
-  send_to_char("(System notice: Automatically disabling your 'toggle cyberdoc' permission.)\r\n", found_char);
+  send_to_char("(System notice: Automatically disabling your ^WTOGGLE CYBERDOC^n permission.)\r\n", found_char);
   PRF_TOG_CHK(ch, PRF_TOUCH_ME_DADDY);
   
   return TRUE;
