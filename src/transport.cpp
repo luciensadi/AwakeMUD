@@ -2485,11 +2485,11 @@ void process_sugarloaf_ferry(void)
                  "\"Next stop: Sugar Loaf Island.\"\r\n", &world[ferry]);
     break;
   case 49:
-    send_to_room("The ferryman calls out,, "
+    send_to_room("The ferryman calls out, "
                  "\"Next stop: Green Island.\"\r\n", &world[ferry]);
     break;
   case 75:
-    send_to_room("The ferryman calls out,, "
+    send_to_room("The ferryman calls out, "
                  "\"Next stop: Sauteurs.\"\r\n", &world[ferry]);
     break;
     
