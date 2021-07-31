@@ -16,6 +16,7 @@
 #include "screen.h"
 #include "olc.h"
 #include "constants.h"
+#include "config.h"
 
 extern struct time_info_data time_info;
 extern const char *pc_race_types[];
@@ -26,6 +27,9 @@ extern void do_probe_object(struct char_data * ch, struct obj_data * j);
 ACMD_CONST(do_say);
 
 bool can_sell_object(struct obj_data *obj, struct char_data *keeper, int shop_nr);
+void shop_install(char *argument, struct char_data *ch, struct char_data *keeper, vnum_t shop_nr);
+void shop_uninstall(char *argument, struct char_data *ch, struct char_data *keeper, vnum_t shop_nr);
+struct obj_data *shop_package_up_ware(struct obj_data *obj);
 
 int cmd_say;
 
@@ -215,6 +219,300 @@ struct shop_sell_data *find_obj_shop(char *arg, vnum_t shop_nr, struct obj_data 
   return sell;
 }
 
+bool uninstall_ware_from_target_character(struct obj_data *obj, struct char_data *remover, struct char_data *victim, bool damage_on_operation) {
+  if (GET_OBJ_TYPE(obj) != ITEM_BIOWARE && GET_OBJ_TYPE(obj) != ITEM_CYBERWARE) {
+    snprintf(buf3, sizeof(buf3), "SYSERR: Non-ware object '%s' (%ld) passed to uninstall_ware_from_target_character()!", GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj));
+    mudlog(buf3, remover, LOG_SYSLOG, TRUE);
+    send_to_char(remover, "An unexpected error occurred when trying to uninstall %s.\r\n", GET_OBJ_NAME(obj));
+    return FALSE;
+  }
+  
+  if (GET_OBJ_COST(obj) == 0 && !IS_NPC(remover)) {
+    send_to_char(remover, "%s is Chargen 'ware, so it can't be removed by player cyberdocs. Have your patient sell it to an NPC doc.\r\n", capitalize(GET_OBJ_NAME(obj)));
+    return FALSE;
+  }
+  
+  if (GET_OBJ_TYPE(obj) == ITEM_BIOWARE) {
+    obj_from_bioware(obj);
+    GET_INDEX(victim) -= GET_CYBERWARE_ESSENCE_COST(obj);
+    GET_INDEX(victim) = MAX(0, GET_INDEX(victim));
+  } else {
+    obj_from_cyberware(obj);
+    GET_ESSHOLE(victim) += GET_CYBERWARE_ESSENCE_COST(obj);
+  }
+  
+  if (!IS_NPC(remover)) {
+    snprintf(buf, sizeof(buf), "Player Cyberdoc: %s uninstalled %s from %s.", GET_CHAR_NAME(remover), GET_OBJ_NAME(obj), GET_CHAR_NAME(victim));
+    mudlog(buf, remover, LOG_GRIDLOG, TRUE);
+  }
+  
+  act("$n takes out a sharpened scalpel and lies $N down on the operating table.",
+      FALSE, remover, 0, victim, TO_NOTVICT);
+  if (IS_NPC(remover)) {
+    snprintf(buf, sizeof(buf), "%s Relax...this won't hurt a bit.", GET_CHAR_NAME(victim));
+    do_say(remover, buf, cmd_say, SCMD_SAYTO);
+  }
+  act("You delicately remove $p from $N's body.",
+      FALSE, remover, obj, victim, TO_CHAR);
+  act("$n performs a delicate procedure on $N.",
+      FALSE, remover, 0, victim, TO_NOTVICT);
+  act("$n delicately removes $p from your body.",
+      FALSE, remover, obj, victim, TO_VICT);
+      
+  // If this isn't a newbie shop, damage them like they're just coming out of surgery.
+  if (damage_on_operation) {
+    GET_PHYSICAL(victim) = 100;
+    GET_MENTAL(victim) = 100;
+  }
+  
+  affect_total(victim);
+  if (GET_OBJ_TYPE(obj) == ITEM_CYBERWARE && GET_CYBERWARE_TYPE(obj) == CYB_MEMORY)
+    for (struct obj_data *chip = obj->contains; chip; chip = chip->next_content)
+      if (GET_OBJ_VAL(chip, 9))
+        victim->char_specials.saved.skills[GET_OBJ_VAL(chip, 0)][1] = 0;
+  
+  return TRUE;
+}
+
+bool install_ware_in_target_character(struct obj_data *ware, struct char_data *installer, struct char_data *recipient, bool damage_on_operation) {
+  struct obj_data *check;
+  
+  strlcpy(buf, GET_CHAR_NAME(recipient), sizeof(buf));
+  
+  // Item must be compatible with your current gear.
+  switch (GET_OBJ_TYPE(ware)) {
+    case ITEM_CYBERWARE:
+      for (struct obj_data *bio = recipient->bioware; bio; bio = bio->next_content)
+        if (!biocyber_compatibility(ware, bio, recipient))
+          return FALSE;
+      break;
+    case ITEM_BIOWARE:
+      for (struct obj_data *cyber = recipient->cyberware; cyber; cyber = cyber->next_content)
+        if (!biocyber_compatibility(ware, cyber, recipient))
+          return FALSE;
+      break;
+    default:
+      snprintf(buf3, sizeof(buf3), "SYSERR: Non-ware object '%s' (%ld) passed to install_ware_in_target_character()!", GET_OBJ_NAME(ware), GET_OBJ_VNUM(ware));
+      mudlog(buf3, installer, LOG_SYSLOG, TRUE);
+      send_to_char(installer, "An unexpected error occurred when trying to install %s.\r\n", GET_OBJ_NAME(ware));
+      return FALSE;
+  }
+  
+  // Edge case: We remove the object from its container further down, and we want to make sure this doesn't break anything.
+  if (ware->in_obj && GET_OBJ_TYPE(ware->in_obj) != ITEM_SHOPCONTAINER) {
+    snprintf(buf3, sizeof(buf3), "SYSERR: '%s' (%ld) contained in something that's not a shopcontainer!", GET_OBJ_NAME(ware), GET_OBJ_VNUM(ware));
+    mudlog(buf3, installer, LOG_SYSLOG, TRUE);
+    send_to_char(installer, "An unexpected error occurred when trying to install %s.\r\n", GET_OBJ_NAME(ware));
+    return FALSE;
+  }
+  
+  // Don't shrek the mages.
+  if (IS_OBJ_STAT(ware, ITEM_MAGIC_INCOMPATIBLE) && (GET_MAG(recipient) > 0 || GET_TRADITION(recipient) != TRAD_MUNDANE)) {
+    if (IS_NPC(installer)) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " That operation would eradicate your magic!");
+      do_say(installer, buf, cmd_say, SCMD_SAYTO);
+    } else {
+      send_to_char(installer, "You can't install %s-- it's not compatible with magic.\r\n", GET_OBJ_NAME(ware));
+    }
+    return FALSE;
+  }
+  
+  // Reject installing magic-incompat 'ware into magic-using characters.
+  if (GET_OBJ_TYPE(ware) == ITEM_CYBERWARE) {    
+    int esscost = GET_CYBERWARE_ESSENCE_COST(ware);
+    if (GET_TOTEM(recipient) == TOTEM_EAGLE)
+      esscost *= 2;
+    
+    // Check to see if the operation is even possible with their current essence / hole.
+    if (GET_REAL_ESS(recipient) + GET_ESSHOLE(recipient) < esscost) {
+      if (IS_NPC(installer)) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " That operation would kill you!");
+        do_say(installer, buf, cmd_say, SCMD_SAYTO);
+      } else {
+        send_to_char(installer, "There's not enough meat left to install %s into!\r\n", GET_OBJ_NAME(ware));
+      }
+      return FALSE;
+    }
+    
+    // Check for matching cyberware and related limits.
+    int enhancers = 0;
+    for (check = recipient->cyberware; check != NULL; check = check->next_content) {
+      if ((GET_OBJ_VNUM(check) == GET_OBJ_VNUM(ware))) {
+        if (GET_CYBERWARE_TYPE(check) == CYB_REACTIONENHANCE) {
+          if (++enhancers == 6) {
+            if (IS_NPC(installer)) {
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " You already have the maximum number of reaction enhancers installed.");
+              do_say(installer, buf, cmd_say, SCMD_SAYTO);
+            } else {
+              send_to_char(installer, "You can't install %s-- more reaction enhancers wouldn't have any effect.\r\n", GET_OBJ_NAME(ware));
+            }
+            return FALSE;
+          }
+        } else {
+          if (IS_NPC(installer)) {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " You already have %s installed.", GET_OBJ_NAME(ware));
+            do_say(installer, buf, cmd_say, SCMD_SAYTO);
+          } else {
+            send_to_char(installer, "You can't install %s-- another one is already installed.\r\n", GET_OBJ_NAME(ware));
+          }
+          return FALSE;
+        }
+      }
+      if (GET_CYBERWARE_TYPE(check) == GET_CYBERWARE_TYPE(ware) 
+          && (GET_CYBERWARE_TYPE(ware) != CYB_EYES && GET_CYBERWARE_TYPE(ware) != CYB_FILTRATION && GET_CYBERWARE_TYPE(ware) != CYB_REACTIONENHANCE)) 
+      {
+        if (IS_NPC(installer)) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " You already have %s, and it's too similar to %s for them to work together.", GET_OBJ_NAME(check), GET_OBJ_NAME(ware));
+          do_say(installer, buf, cmd_say, SCMD_SAYTO);
+        } else {
+          send_to_char(installer, "You can't install %s-- it's too similar to the already-installed %s.\r\n", GET_OBJ_NAME(ware), GET_OBJ_NAME(check));
+        }
+        return FALSE;
+      }
+    }
+    
+    // Adapt for essence hole.
+    if (GET_ESSHOLE(recipient) < esscost) {
+      esscost = esscost - GET_ESSHOLE(recipient);
+      
+      // Deduct magic, if any.
+      if (GET_TRADITION(recipient) != TRAD_MUNDANE) {
+        if (GET_REAL_MAG(recipient) - esscost < 100) {
+          if (IS_NPC(installer)) {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " That would take away the last of your magic!");
+            do_say(installer, buf, cmd_say, SCMD_SAYTO);
+          } else {
+            send_to_char(installer, "%s would take away the last of their magic!\r\n", capitalize(GET_OBJ_NAME(ware)));
+          }
+          return FALSE;
+        }
+        magic_loss(recipient, esscost, TRUE);
+      }
+      GET_ESSHOLE(recipient) = 0;
+      GET_REAL_ESS(recipient) -= esscost;
+    } else {
+      GET_ESSHOLE(recipient) -= esscost;
+    }
+    
+    // Unpackage it if needed, and extract the container.
+    if (ware->in_obj && GET_OBJ_TYPE(ware->in_obj) == ITEM_SHOPCONTAINER) {
+      struct obj_data *container = ware->in_obj;
+      obj_from_obj(ware);
+      extract_obj(container);
+    }
+    
+    // Install it.
+    obj_to_cyberware(ware, recipient);
+  } 
+  
+  // You must have the index to support it.
+  else if (GET_OBJ_TYPE(ware) == ITEM_BIOWARE) {    
+    int esscost = GET_BIOWARE_ESSENCE_COST(ware); 
+    if (GET_INDEX(recipient) + esscost > 900) {
+      if (IS_NPC(installer)) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " That operation would kill you!");
+        do_say(installer, buf, cmd_say, SCMD_SAYTO);
+      } else {
+        send_to_char(installer, "There's not enough meat left to install %s into!\r\n", GET_OBJ_NAME(ware));
+      }
+      return FALSE;
+    }
+    
+    if ((GET_BIOWARE_TYPE(ware) == BIO_PATHOGENICDEFENSE || GET_BIOWARE_TYPE(ware) == BIO_TOXINEXTRACTOR) && 
+        GET_BIOWARE_RATING(ware) > GET_REAL_BOD(recipient) / 2)
+    {
+      if (IS_NPC(installer)) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " Your body can't support pathogenic defenses that are that strong.");
+        do_say(installer, buf, cmd_say, SCMD_SAYTO);
+      } else {
+        send_to_char(installer, "The defenses from %s are too powerful for their body.\r\n", GET_OBJ_NAME(ware));
+      }
+      return FALSE;
+    }
+    
+    for (check = recipient->bioware; check; check = check->next_content) {
+      if ((GET_OBJ_VNUM(check) == GET_OBJ_VNUM(ware))) {
+        if (IS_NPC(installer)) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " You already have that installed.");
+          do_say(installer, buf, cmd_say, SCMD_SAYTO);
+        } else {
+          send_to_char(installer, "Another %s is already installed.\r\n", GET_OBJ_NAME(ware));
+        }
+        return FALSE;
+      }
+      if (GET_BIOWARE_TYPE(check) == GET_BIOWARE_TYPE(ware)) {
+        if (IS_NPC(installer)) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " You already have %s installed, and it's too similar to %s for them to work together.", GET_OBJ_NAME(check), GET_OBJ_NAME(ware));
+          do_say(installer, buf, cmd_say, SCMD_SAYTO);
+        } else {
+          send_to_char(installer, "You can't install %s-- the already-installed %s would conflict with it.\r\n", GET_OBJ_NAME(ware), GET_OBJ_NAME(check));
+        }
+        return FALSE;
+      }
+    }
+    
+    GET_INDEX(recipient) += esscost;
+    if (GET_INDEX(recipient) > recipient->real_abils.highestindex) {
+      if (GET_TRADITION(recipient) != TRAD_MUNDANE) {
+        int change = GET_INDEX(recipient) - recipient->real_abils.highestindex;
+        change /= 2;
+        if (GET_REAL_MAG(recipient) - change < 100) {
+          if (IS_NPC(installer)) {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " That would take away the last of your magic!");
+            do_say(installer, buf, cmd_say, SCMD_SAYTO);
+          } else {
+            send_to_char(installer, "You can't install %s-- it would take away the last of their magic.\r\n", GET_OBJ_NAME(ware), GET_OBJ_NAME(check));
+          }
+          do_say(installer, buf, cmd_say, SCMD_SAYTO);
+          GET_INDEX(recipient) -= esscost;
+          return FALSE;
+        }
+        magic_loss(recipient, change, TRUE);
+      }
+      recipient->real_abils.highestindex = GET_INDEX(recipient);
+    }
+    
+    // Unpackage it if needed, and extract the container.
+    if (ware->in_obj && GET_OBJ_TYPE(ware->in_obj) == ITEM_SHOPCONTAINER) {
+      struct obj_data *container = ware->in_obj;
+      obj_from_obj(ware);
+      extract_obj(container);
+    }
+    
+    // Install it.
+    obj_to_bioware(ware, recipient);
+  }
+  
+  if (!IS_NPC(installer)) {
+    snprintf(buf, sizeof(buf), "Player Cyberdoc: %s installed %s in %s.", GET_CHAR_NAME(installer), GET_OBJ_NAME(ware), GET_CHAR_NAME(recipient));
+    mudlog(buf, installer, LOG_GRIDLOG, TRUE);
+  }
+  
+  // Send installation messages.
+  act("$n takes out a sharpened scalpel and lies $N down on the operating table.",
+      FALSE, installer, 0, recipient, TO_NOTVICT);
+  if (IS_NPC(installer)) {
+    snprintf(buf, sizeof(buf), "%s Relax...this won't hurt a bit.", GET_CHAR_NAME(recipient));
+    do_say(installer, buf, cmd_say, SCMD_SAYTO);    
+  }
+  act("You delicately install $p into $N's body.",
+      FALSE, installer, ware, recipient, TO_CHAR);
+  act("$n performs a delicate procedure on $N.",
+      FALSE, installer, 0, recipient, TO_NOTVICT);
+  act("$n delicately installs $p into your body.",
+      FALSE, installer, ware, recipient, TO_VICT);
+      
+  // If this isn't a newbie shop, damage them like they're just coming out of surgery.
+  if (damage_on_operation) { // aka !shop_table[shop_nr].flags.IsSet(SHOP_CHARGEN)
+    GET_PHYSICAL(recipient) = 100;
+    GET_MENTAL(recipient) = 100;
+  }
+  
+  if (GET_BIOOVER(recipient) > 0)
+    send_to_char("You don't feel too well.\r\n", recipient);
+  return TRUE;
+}
+
 // Yes, it's a monstrosity. No, I don't want to hear about it. YOU refactor it.
 bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int buynum, bool cash,
                   struct shop_sell_data *sell, struct obj_data *obj, struct obj_data *cred, int price, 
@@ -246,153 +544,20 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
 
   // Cyberware / bioware doctor.
   if (shop_table[shop_nr].flags.IsSet(SHOP_DOCTOR)) {
-    struct obj_data *check;
-    
-    // Max one of any cyber / bio.
-    if (buynum != 1) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " You can only have one of those installed!");
-      do_say(keeper, buf, cmd_say, SCMD_SAYTO);
-      return FALSE;
-    }
-    
-    // Item must be compatible with your current gear.
-    switch (GET_OBJ_TYPE(obj)) {
-      case ITEM_CYBERWARE:
-        for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content)
-          if (!biocyber_compatibility(obj, bio, ch))
-             return FALSE;
-        break;
-      case ITEM_BIOWARE:
-        for (struct obj_data *cyber = ch->cyberware; cyber; cyber = cyber->next_content)
-          if (!biocyber_compatibility(obj, cyber, ch))
-             return FALSE;
-        break;
-    }
-    
-    // You must have the essence to support it.
-    if (GET_OBJ_TYPE(obj) == ITEM_CYBERWARE) {
-      if (IS_OBJ_STAT(obj, ITEM_MAGIC_INCOMPATIBLE) && (GET_MAG(ch) > 0 || GET_TRADITION(ch) != TRAD_MUNDANE)) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " That would eradicate your magic!");
-        do_say(keeper, buf, cmd_say, SCMD_SAYTO);
-        return FALSE;
-      }
-      
-      if (GET_REAL_ESS(ch) + GET_ESSHOLE(ch) < (GET_TOTEM(ch) == TOTEM_EAGLE ?
-                                GET_CYBERWARE_ESSENCE_COST(obj) << 1 : GET_CYBERWARE_ESSENCE_COST(obj))) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " That operation would kill you!");
-        do_say(keeper, buf, cmd_say, SCMD_SAYTO);
-        return FALSE;
-      }
-      
-      int enhancers = 0;
-      for (check = ch->cyberware; check != NULL; check = check->next_content) {
-        if ((GET_OBJ_VNUM(check) == GET_OBJ_VNUM(obj))) {
-          if (GET_OBJ_VAL(check, 0) == CYB_REACTIONENHANCE) {
-            if (++enhancers == 6) {
-              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " You already have the maximum number of reaction enhancers installed.");
-              do_say(keeper, buf, cmd_say, SCMD_SAYTO);
-              return FALSE;
-            }
-          } else {
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " You already have that installed.");
-            do_say(keeper, buf, cmd_say, SCMD_SAYTO);
-            return FALSE;
-          }
-        }
-        if (GET_OBJ_VAL(check, 0) == GET_OBJ_VAL(obj, 0) 
-            && (GET_OBJ_VAL(obj, 0) != CYB_EYES && GET_OBJ_VAL(obj, 0) != CYB_FILTRATION && GET_OBJ_VAL(obj, 0) != CYB_REACTIONENHANCE)) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " You already have a similar piece of cyberware.");
-          do_say(keeper, buf, cmd_say, SCMD_SAYTO);
-          return FALSE;
-        }
-      }
-      int esscost = GET_CYBERWARE_ESSENCE_COST(obj);
-      if (GET_TOTEM(ch) == TOTEM_EAGLE)
-        esscost *= 2;
-      if (GET_ESSHOLE(ch) < esscost) {
-        esscost = esscost - GET_ESSHOLE(ch);
-        if (GET_TRADITION(ch) != TRAD_MUNDANE) {
-          if (GET_REAL_MAG(ch) - esscost < 100) {
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " That would take away the last of your magic!");
-            do_say(keeper, buf, cmd_say, SCMD_SAYTO);
-            return FALSE;
-          }
-          magic_loss(ch, esscost, TRUE);
-        }
-        GET_ESSHOLE(ch) = 0;
-        GET_REAL_ESS(ch) -= esscost;
-      } else {
-        GET_ESSHOLE(ch) -= esscost;
-      }
-      obj_to_cyberware(obj, ch);
-    } 
-    
-    // You must have the index to support it.
-    else if (GET_OBJ_TYPE(obj) == ITEM_BIOWARE) {
-      if (IS_OBJ_STAT(obj, ITEM_MAGIC_INCOMPATIBLE) && (GET_MAG(ch) > 0 || GET_TRADITION(ch) != TRAD_MUNDANE)) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " That would eradicate your magic!");
-        do_say(keeper, buf, cmd_say, SCMD_SAYTO);
-        return FALSE;
-      }
-      
-      int esscost = GET_OBJ_VAL(obj, 4); 
-      if (GET_INDEX(ch) + esscost > 900) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " That operation would kill you!");
-        do_say(keeper, buf, cmd_say, SCMD_SAYTO);
-        return FALSE;
-      }
-      
-      if ((GET_OBJ_VAL(obj, 0) == BIO_PATHOGENICDEFENSE || GET_OBJ_VAL(obj, 0) == BIO_TOXINEXTRACTOR) && 
-          GET_OBJ_VAL(obj, 1) > GET_REAL_BOD(ch) / 2) {
-        send_to_char("Your body cannot support pathogenic defense of that level.\r\n", ch);
-        return FALSE;
-      }
-      for (check = ch->bioware; check; check = check->next_content) {
-        if ((GET_OBJ_VNUM(check) == GET_OBJ_VNUM(obj))) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " You already have that installed.");
-          do_say(keeper, buf, cmd_say, SCMD_SAYTO);
-          return FALSE;
-        }
-        if (GET_OBJ_VAL(check, 0) == GET_OBJ_VAL(obj, 0)) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " You already have a similar piece of bioware.");
-          do_say(keeper, buf, cmd_say, SCMD_SAYTO);
-          return FALSE;
-        }
-      }
-      GET_INDEX(ch) += esscost;
-      if (GET_INDEX(ch) > ch->real_abils.highestindex) {
-        if (GET_TRADITION(ch) != TRAD_MUNDANE) {
-          int change = GET_INDEX(ch) - ch->real_abils.highestindex;
-          change /= 2;
-          if (GET_REAL_MAG(ch) - change < 100) {
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " That would take away the last of your magic!");
-            do_say(keeper, buf, cmd_say, SCMD_SAYTO);
-            GET_INDEX(ch) -= esscost;
-            return FALSE;
-          }
-          magic_loss(ch, change, TRUE);
-        }
-        ch->real_abils.highestindex = GET_INDEX(ch);
-      }
-      obj_to_bioware(obj, ch);
-    }
-    
-    // Send installation messages.
-    act("$n takes out a sharpened scalpel and lies $N down on the operating table.",
-        FALSE, keeper, 0, ch, TO_NOTVICT);
-    snprintf(buf, sizeof(buf), "%s Relax...this won't hurt a bit.", GET_CHAR_NAME(ch));
-    do_say(keeper, buf, cmd_say, SCMD_SAYTO);    
-    act("You delicately install $p into $N's body.",
-        FALSE, keeper, obj, ch, TO_CHAR);
-    act("$n performs a delicate procedure on $N.",
-        FALSE, keeper, 0, ch, TO_NOTVICT);
-    act("$n delicately installs $p into your body.",
-        FALSE, keeper, obj, ch, TO_VICT);
-        
-    // If this isn't a newbie shop, damage them like they're just coming out of surgery.
     if (!shop_table[shop_nr].flags.IsSet(SHOP_CHARGEN)) {
-      GET_PHYSICAL(ch) = 100;
-      GET_MENTAL(ch) = 100;
+      // We used to have a ton of compatibility checks here, but now we just give them the thing in a box!
+      struct obj_data *shop_container = shop_package_up_ware(obj);
+      act("$n packages up $N's purchase and hands it to $M.", TRUE, keeper, NULL, ch, TO_NOTVICT);
+      act("$n packages up your purchase and hands it to you.", TRUE, keeper, NULL, ch, TO_VICT);
+      obj_to_char(shop_container, ch);
+      
+      snprintf(buf2, sizeof(buf2), "You now have %s.", GET_OBJ_NAME(shop_container));
+      
+      // I'm tempted to reduce the price by the installation cost, but that brings up all sorts of exploits and edge cases.
+      // For example, if install cost is 10k and the thing cost 9k, it's free to purchase, and you can sell it back for a ~3k profit!
+    } else {
+      if (!install_ware_in_target_character(obj, keeper, ch, FALSE))
+        return FALSE;
     }
     
     bought = 1;
@@ -411,8 +576,6 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
       } else if (sell->type == SELL_STOCK)
         sell->stock--;
     }
-    if (GET_BIOOVER(ch) > 0)
-      send_to_char("You don't feel too well.\r\n", ch);
   } 
   
   // Neither cyber nor bioware. Handle as normal object.
@@ -914,39 +1077,10 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
   int sellprice = sell_price(obj, shop_nr);
   if (!shop_table[shop_nr].flags.IsSet(SHOP_WONT_NEGO))
     sellprice = negotiate(ch, keeper, 0, sellprice, 0, 0);
-  if (shop_table[shop_nr].flags.IsSet(SHOP_DOCTOR))
-  {
-    if (GET_OBJ_TYPE(obj) == ITEM_BIOWARE) {
-      obj_from_bioware(obj);
-      GET_INDEX(ch) -= GET_CYBERWARE_ESSENCE_COST(obj);
-      GET_INDEX(ch) = MAX(0, GET_INDEX(ch));
-    } else {
-      obj_from_cyberware(obj);
-      GET_ESSHOLE(ch) += GET_CYBERWARE_ESSENCE_COST(obj);
-    }
-    act("$n takes out a sharpened scalpel and lies $N down on the operating table.",
-        FALSE, keeper, 0, ch, TO_NOTVICT);
-    snprintf(buf, sizeof(buf), "%s Relax...this won't hurt a bit.", GET_CHAR_NAME(ch));
-    do_say(keeper, buf, cmd_say, SCMD_SAYTO);
-    act("You delicately remove $p from $N's body.",
-        FALSE, keeper, obj, ch, TO_CHAR);
-    act("$n performs a delicate procedure on $N.",
-        FALSE, keeper, 0, ch, TO_NOTVICT);
-    act("$n delicately removes $p from your body.",
-        FALSE, keeper, obj, ch, TO_VICT);
-        
-    // If this isn't a newbie shop, damage them like they're just coming out of surgery.
-    if (!shop_table[shop_nr].flags.IsSet(SHOP_CHARGEN)) {
-      GET_PHYSICAL(ch) = 100;
-      GET_MENTAL(ch) = 100;
-    }
     
-    affect_total(ch);
-    if (GET_OBJ_VAL(obj, 0) == CYB_MEMORY)
-      for (struct obj_data *chip = obj->contains; chip; chip = chip->next_content)
-        if (GET_OBJ_VAL(chip, 9))
-          ch->char_specials.saved.skills[GET_OBJ_VAL(chip, 0)][1] = 0;
-  } else
+  if (shop_table[shop_nr].flags.IsSet(SHOP_DOCTOR))
+    uninstall_ware_from_target_character(obj, keeper, ch, !shop_table[shop_nr].flags.IsSet(SHOP_CHARGEN));
+  else
     obj_from_char(obj);
 
 
@@ -1067,8 +1201,8 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
   
   
   if (shop_table[shop_nr].flags.IsSet(SHOP_DOCTOR)) {
-    strcpy(buf, " **   Available      Item                                Rating Ess/Index    Price\r\n"
-                "-------------------------------------------------------------------------------\r\n");
+    strcpy(buf, " **   Availability     Item                              Rating  Ess/Index     Price\r\n"
+                "------------------------------------------------------------------------------------\r\n");
     
     for (struct shop_sell_data *sell = shop_table[shop_nr].selling; sell; sell = sell->next, i++) {
       obj = read_object(sell->vnum, VIRTUAL);
@@ -1080,10 +1214,24 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
       if (sell->type == SELL_ALWAYS || (sell->type == SELL_AVAIL && GET_OBJ_AVAILDAY(obj) == 0))
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Yes            ");
       else if (sell->type == SELL_AVAIL) {
+        int arbitrary_difficulty = GET_OBJ_AVAILTN(obj);
+        if (arbitrary_difficulty <= 2) {
+          strlcat(buf, "Sp. Ord (triv)   ", sizeof(buf));
+        } else if (arbitrary_difficulty <= 4) {
+          strlcat(buf, "Sp. Ord (easy)   ", sizeof(buf));
+        } else if (arbitrary_difficulty <= 7) {
+          strlcat(buf, "Sp. Ord (med)    ", sizeof(buf));
+        } else if (arbitrary_difficulty <= 10) {
+          strlcat(buf, "Sp. Ord (hard)   ", sizeof(buf));
+        } else {
+          strlcat(buf, "Sp. Ord (fixer)  ", sizeof(buf));
+        }
+        /*
         if (GET_OBJ_AVAILDAY(obj) < 1)
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "~%-2d Hours      ", (int)(24 * GET_OBJ_AVAILDAY(obj)));
         else
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "~%-2d Day%c       ", (int)GET_OBJ_AVAILDAY(obj), GET_OBJ_AVAILDAY(obj) > 1 ? 's' : ' ');
+        */
       } else {
         if (sell->stock <= 0)
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "(Out Of Stock) ");
@@ -1107,8 +1255,8 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
     }
   } else
   {
-    strcpy(buf, " **   Available      Item                                              Price\r\n"
-            "------------------------------------------------------------------------------\r\n");
+    strcpy(buf, " **   Availability     Item                                              Price\r\n"
+                "--------------------------------------------------------------------------------\r\n");
     for (struct shop_sell_data *sell = shop_table[shop_nr].selling; sell; sell = sell->next, i++) {
       obj = read_object(sell->vnum, VIRTUAL);
       if (!can_sell_object(obj, keeper, shop_nr)) {
@@ -1119,10 +1267,20 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
       if (sell->type == SELL_ALWAYS || (sell->type == SELL_AVAIL && GET_OBJ_AVAILDAY(obj) == 0))
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Yes            ");
       else if (sell->type == SELL_AVAIL) {
-        if (GET_OBJ_AVAILDAY(obj) < 1)
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "~%-2d Hours      ", (int)(24 * GET_OBJ_AVAILDAY(obj)));
-        else
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "~%-2d Day%c       ", (int)GET_OBJ_AVAILDAY(obj), GET_OBJ_AVAILDAY(obj) > 1 ? 's' : ' ');
+        int arbitrary_difficulty = GET_OBJ_AVAILTN(obj);
+        if (arbitrary_difficulty < 3) {
+          strlcat(buf, "Sp. Ord (triv)   ", sizeof(buf));
+        } else if (arbitrary_difficulty < 5) {
+          strlcat(buf, "Sp. Ord (easy)   ", sizeof(buf));
+        } else if (arbitrary_difficulty < 8) {
+          strlcat(buf, "Sp. Ord (med)    ", sizeof(buf));
+        } else if (arbitrary_difficulty < 10) {
+          strlcat(buf, "Sp. Ord (hard)   ", sizeof(buf));
+        } else if (arbitrary_difficulty < 14) {
+          strlcat(buf, "Sp. Ord (hard+)  ", sizeof(buf));
+        } else {
+          strlcat(buf, "Sp. Ord (fixer)  ", sizeof(buf));
+        }
       } else {
         if (sell->stock <= 0)
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "(Out Of Stock) ");
@@ -1162,7 +1320,8 @@ void shop_value(char *arg, struct char_data *ch, struct char_data *keeper, vnum_
   if (shop_table[shop_nr].flags.IsSet(SHOP_DOCTOR))
   {
     if (!(obj = get_obj_in_list_vis(ch, arg, ch->cyberware))
-        || !(obj = get_obj_in_list_vis(ch, arg, ch->bioware))) {
+        && !(obj = get_obj_in_list_vis(ch, arg, ch->bioware))
+        && !(obj = get_obj_in_list_vis(ch, arg, ch->carrying))) {
       send_to_char(ch, "You don't seem to have a '%s'.\r\n", arg);
       return;
     }
@@ -1173,11 +1332,35 @@ void shop_value(char *arg, struct char_data *ch, struct char_data *keeper, vnum_
       return;
     }
   }
-  strcpy(buf, GET_CHAR_NAME(ch));
+  
+  if (GET_OBJ_TYPE(obj) == ITEM_SHOPCONTAINER) {
+    if (!shop_table[shop_nr].flags.IsSet(SHOP_DOCTOR)) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " I wouldn't buy %s off of you. Take it to a cyberdoc.", GET_OBJ_NAME(obj));
+      do_say(keeper, buf, cmd_say, SCMD_SAYTO);
+      return;
+    }
+    
+    if (!obj->contains) {
+      send_to_char(ch, "%s is empty!\r\n", capitalize(GET_OBJ_NAME(obj)));
+      snprintf(buf, sizeof(buf), "SYSERR: Shop container '%s' is empty!", GET_OBJ_NAME(obj));
+      mudlog(buf, ch, LOG_SYSLOG, TRUE);
+      return;
+    }
+    
+    obj = obj->contains;
+    
+    int install_cost = MIN(CYBERWARE_INSTALLATION_COST_MAXIMUM, GET_OBJ_COST(obj) / CYBERWARE_INSTALLATION_COST_FACTOR);
+      
+    snprintf(buf, sizeof(buf), "%s I'd charge %d nuyen to install it, and", GET_CHAR_NAME(ch), install_cost);
+  } else {
+    // Since we're not pre-filling buf with something else to say, just stick the name in for the sayto target.
+    strcpy(buf, GET_CHAR_NAME(ch));
+  }
+  
   if (!shop_table[shop_nr].buytypes.IsSet(GET_OBJ_TYPE(obj)) || IS_OBJ_STAT(obj, ITEM_NOSELL))
-    strcat(buf, " I wouldn't buy that off of you.");
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " I wouldn't buy %s off of you.", GET_OBJ_NAME(obj));
   else
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " I would be able to give you around %d nuyen for that.", sell_price(obj, shop_nr));
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " I would be able to give you around %d nuyen for %s.", sell_price(obj, shop_nr), GET_OBJ_NAME(obj));
 
   do_say(keeper, buf, cmd_say, SCMD_SAYTO);
 }
@@ -1610,7 +1793,7 @@ void shop_check(char *arg, struct char_data *ch, struct char_data *keeper, vnum_
       else
         strlcat(buf, " ERROR\r\n", sizeof(buf));
       if (totaltime < 0)
-        strlcat(buf, " AVAILABLE\r\n", sizeof(buf));
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " AVAILABLE (%d nuyen / ea)\r\n", order->price);
       else if (totaltime < 1 && (int)(24 * totaltime) == 0)
         strlcat(buf, " less than one hour\r\n", sizeof(buf));
       else
@@ -1760,6 +1943,10 @@ SPECIAL(shop_keeper)
     shop_cancel(argument, ch, keeper, shop_nr);
   else if (CMD_IS("probe"))
     return shop_probe(argument, ch, keeper, shop_nr);
+  else if (CMD_IS("install"))
+    shop_install(argument, ch, keeper, shop_nr);
+  else if (CMD_IS("uninstall"))
+    shop_uninstall(argument, ch, keeper, shop_nr);
   else
     return FALSE;
   return TRUE;
@@ -2475,4 +2662,181 @@ bool can_sell_object(struct obj_data *obj, struct char_data *keeper, int shop_nr
   
   // Can sell it.
   return TRUE;
+}
+
+void shop_install(char *argument, struct char_data *ch, struct char_data *keeper, vnum_t shop_nr) {
+  struct obj_data *obj;
+  
+  // Non-docs won't install things.
+  if (!shop_table[shop_nr].flags.IsSet(SHOP_DOCTOR)) {
+    do_say(keeper, "Hold on now, I'm not a doctor! Find someone else to install your 'ware.", cmd_say, 0);
+    return;
+  }
+  
+  if (!access_level(ch, LVL_ADMIN) && !(CAN_SEE(keeper, ch))) {
+    do_say(keeper, "How am I supposed to work on someone I can't see?", cmd_say, 0);
+    return;
+  }
+  
+  if (IS_PROJECT(ch) || IS_NPC(ch)) {    
+    send_to_char("You're having a hard time getting the shopkeeper's attention.\r\n", ch);
+    return;
+  }
+  
+  argument = one_argument(argument, arg);
+
+  if (!*arg) {
+    send_to_char(ch, "What 'ware you want the shopkeeper to install?\r\n");
+    return;
+  } 
+  
+  int dotmode = find_all_dots(arg);
+
+  /* Can't junk or donate all */
+  if ((dotmode == FIND_ALL) || dotmode == FIND_ALLDOT) {
+    send_to_char(ch, "You'll have to install one thing at a time.\r\n");
+    return;
+  }
+  
+  if (!(obj = get_obj_in_list_vis(ch, arg, ch->carrying))) {
+    send_to_char(ch, "You don't seem to have %s %s in your inventory.\r\n", AN(arg), arg);
+    return;
+  }
+  
+  if (GET_OBJ_TYPE(obj) != ITEM_SHOPCONTAINER) {
+    send_to_char(ch, "Shopkeepers can only install 'ware from packages, and %s doesn't qualify.\r\n", GET_OBJ_NAME(obj));
+    return;
+  }
+  
+  if (!obj->contains) {
+    send_to_char(ch, "%s is empty!\r\n", capitalize(GET_OBJ_NAME(obj)));
+    snprintf(buf, sizeof(buf), "SYSERR: Shop container '%s' is empty!", GET_OBJ_NAME(obj));
+    mudlog(buf, ch, LOG_SYSLOG, TRUE);
+    return;
+  }
+  
+  obj = obj->contains;
+  
+  // We charge 1/X of the price of the thing to install it, up to the configured maximum value.
+  int install_cost = MIN(CYBERWARE_INSTALLATION_COST_MAXIMUM, GET_OBJ_COST(obj) / CYBERWARE_INSTALLATION_COST_FACTOR);
+  
+  // Try to deduct the install cost from their credstick.
+  struct obj_data *cred = get_first_credstick(ch, "credstick");
+  if (!cred || install_cost > GET_ITEM_MONEY_VALUE(cred))
+    cred = NULL;
+    
+  if (!cred && install_cost > GET_NUYEN(ch)) {
+    snprintf(buf, sizeof(buf), "%s I'd charge %d nuyen to install that. Come back when you've got the cash.", GET_CHAR_NAME(ch), install_cost);
+    do_say(keeper, buf, cmd_say, SCMD_SAYTO);
+    return;
+  }
+  
+  // Chargen shops should never see an install command like this, so we automatically assume you're getting injured.
+  if (install_ware_in_target_character(obj, keeper, ch, TRUE)) {
+    snprintf(buf, sizeof(buf), "%s That'll be %d nuyen.", GET_CHAR_NAME(ch), install_cost);
+    do_say(keeper, buf, cmd_say, SCMD_SAYTO);
+    
+    // Success! Deduct the cost from your payment method.
+    if (cred)
+      GET_ITEM_MONEY_VALUE(cred) -= install_cost;
+    else
+      GET_NUYEN(ch) -= install_cost;
+  }
+}
+
+void shop_uninstall(char *argument, struct char_data *ch, struct char_data *keeper, vnum_t shop_nr) {
+  struct obj_data *obj;
+  
+  // Non-docs won't uninstall things.
+  if (!shop_table[shop_nr].flags.IsSet(SHOP_DOCTOR)) {
+    do_say(keeper, "Hold on now, I'm not a doctor! Find someone else to uninstall your 'ware.", cmd_say, 0);
+    return;
+  }
+  
+  if (!access_level(ch, LVL_ADMIN) && !(CAN_SEE(keeper, ch))) {
+    do_say(keeper, "How am I supposed to work on someone I can't see?", cmd_say, 0);
+    return;
+  }
+  
+  if (IS_PROJECT(ch) || IS_NPC(ch)) {    
+    send_to_char("You're having a hard time getting the shopkeeper's attention.\r\n", ch);
+    return;
+  }
+  
+  argument = one_argument(argument, arg);
+
+  if (!*arg) {
+    send_to_char(ch, "What 'ware you want the shopkeeper to uninstall?\r\n");
+    return;
+  } 
+  
+  int dotmode = find_all_dots(arg);
+
+  /* Can't junk or donate all */
+  if ((dotmode == FIND_ALL) || dotmode == FIND_ALLDOT) {
+    send_to_char(ch, "You'll have to uninstall one thing at a time.\r\n");
+    return;
+  }
+  
+  if (!(obj = get_obj_in_list_vis(ch, arg, ch->cyberware)) && !(obj = get_obj_in_list_vis(ch, arg, ch->bioware))) {
+    send_to_char(ch, "You don't seem to have %s %s installed.\r\n", AN(arg), arg);
+    return;
+  }
+  
+  if (GET_OBJ_TYPE(obj) != ITEM_BIOWARE && GET_OBJ_TYPE(obj) != ITEM_CYBERWARE) {
+    send_to_char(ch, "Shopkeepers can only uninstall 'ware.\r\n", GET_OBJ_NAME(obj));
+    return;
+  }
+  
+  // We charge 1/X of the price of the thing to install it, up to the configured maximum value.
+  int uninstall_cost = MIN(CYBERWARE_INSTALLATION_COST_MAXIMUM, GET_OBJ_COST(obj) / CYBERWARE_INSTALLATION_COST_FACTOR);
+  
+  // Try to deduct the install cost from their credstick.
+  struct obj_data *cred = get_first_credstick(ch, "credstick");
+  if (!cred || uninstall_cost > GET_ITEM_MONEY_VALUE(cred))
+    cred = NULL;
+    
+  if (!cred && uninstall_cost > GET_NUYEN(ch)) {
+    snprintf(buf, sizeof(buf), "%s I'd charge %d nuyen to uninstall that. Come back when you've got the cash.", GET_CHAR_NAME(ch), uninstall_cost);
+    do_say(keeper, buf, cmd_say, SCMD_SAYTO);
+    return;
+  }
+  
+  // Chargen shops should never see an install command like this, so we automatically assume you're getting injured.
+  if (uninstall_ware_from_target_character(obj, keeper, ch, TRUE)) {
+    snprintf(buf, sizeof(buf), "%s That'll be %d nuyen.", GET_CHAR_NAME(ch), uninstall_cost);
+    do_say(keeper, buf, cmd_say, SCMD_SAYTO);
+    
+    // Success! Deduct the cost from your payment method.
+    if (cred)
+      GET_ITEM_MONEY_VALUE(cred) -= uninstall_cost;
+    else
+      GET_NUYEN(ch) -= uninstall_cost;
+      
+    // Package it up and hand it over.
+    if (GET_OBJ_COST(obj) > 0) {
+      struct obj_data *shop_container = shop_package_up_ware(obj);
+      act("$n packages up $N's old 'ware and hands it to $M.", TRUE, keeper, NULL, ch, TO_NOTVICT);
+      act("$n packages up your old 'ware and hands it to you.", TRUE, keeper, NULL, ch, TO_VICT);
+      obj_to_char(shop_container, ch);
+    } else {
+      snprintf(buf, sizeof(buf), "%s Sorry, %s was too damaged to be worth reusing.", GET_CHAR_NAME(ch), GET_OBJ_NAME(obj));
+      do_say(keeper, buf, cmd_say, SCMD_SAYTO);
+      extract_obj(obj);
+    }
+  }
+}
+
+struct obj_data *shop_package_up_ware(struct obj_data *obj) {
+  struct obj_data *shop_container = read_object(OBJ_SHOPCONTAINER, VIRTUAL);
+  GET_OBJ_BARRIER(shop_container) = 32;
+  GET_OBJ_MATERIAL(shop_container) = MATERIAL_ADV_PLASTICS;
+  GET_OBJ_COST(shop_container) = 0;
+  
+  snprintf(buf3, sizeof(buf3), "a packaged-up '%s'", GET_OBJ_NAME(obj));
+  DELETE_ARRAY_IF_EXTANT(shop_container->restring);
+  shop_container->restring = str_dup(buf3);
+  
+  obj_to_obj(obj, shop_container);
+  return shop_container;
 }

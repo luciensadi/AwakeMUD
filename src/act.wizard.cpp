@@ -4165,6 +4165,7 @@ ACMD(do_set)
                { "shotsfired", LVL_PRESIDENT, PC, NUMBER },
                { "shotstriggered", LVL_PRESIDENT, PC, NUMBER },
                { "powerpoints", LVL_PRESIDENT, PC, NUMBER },
+               { "cyberdoc", LVL_CONSPIRATOR, PC, BINARY },
                { "\n", 0, BOTH, MISC }
              };
 
@@ -4752,6 +4753,11 @@ ACMD(do_set)
     RANGE(0, 100);
     GET_PP(vict) = value;
     snprintf(buf, sizeof(buf),"%s changed %s's powerpoints to %d.", GET_CHAR_NAME(ch), GET_NAME(vict), value);
+    mudlog(buf, ch, LOG_WIZLOG, TRUE );
+    break;
+  case 79: /* cyberdoc permission */
+    SET_OR_REMOVE(PLR_FLAGS(vict), PLR_CYBERDOC);
+    snprintf(buf, sizeof(buf),"%s turned %s's cyberdoc flag %s.", GET_CHAR_NAME(ch), GET_NAME(vict), PLR_FLAGGED(vict, PLR_CYBERDOC) ? "ON" : "OFF");
     mudlog(buf, ch, LOG_WIZLOG, TRUE );
     break;
   default:

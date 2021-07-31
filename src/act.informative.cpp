@@ -1459,10 +1459,11 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
     ROOM_FLAGS(ch->in_room).PrintBits(buf, MAX_STRING_LENGTH, room_bits, ROOM_MAX);
     send_to_char(ch, "^C[%5ld] %s [ %s ]^n\r\n", GET_ROOM_VNUM(ch->in_room), GET_ROOM_NAME(ch->in_room), buf);
   } else {
-    send_to_char(ch, "^C%s^n%s%s%s%s%s%s\r\n", GET_ROOM_NAME(ch->in_room),
+    send_to_char(ch, "^C%s^n%s%s%s%s%s%s%s\r\n", GET_ROOM_NAME(ch->in_room),
                  ROOM_FLAGGED(ch->in_room, ROOM_GARAGE) ? " (Garage)" : "",
                  ROOM_FLAGGED(ch->in_room, ROOM_STORAGE) && !ROOM_FLAGGED(ch->in_room, ROOM_CORPSE_SAVE_HACK) ? " (Storage)" : "",
                  ROOM_FLAGGED(ch->in_room, ROOM_HOUSE) ? " (Apartment)" : "",
+                 ROOM_FLAGGED(ch->in_room, ROOM_STERILE) ? " (Sterile)" : "",
                  ROOM_FLAGGED(ch->in_room, ROOM_ARENA) ? " ^y(Arena)^n" : "",
                  ch->in_room->matrix && real_host(ch->in_room->matrix) >= 1 ? " (Jackpoint)" : "",
                  ROOM_FLAGGED(ch->in_room, ROOM_ENCOURAGE_CONGREGATION) ? " ^W(Socialization Bonus)^n" : "");
@@ -2393,14 +2394,29 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " Its damage code is ^c%s^n.", wound_name[GET_OBJ_VAL(j, 3)]);
       break;
     case ITEM_BIOWARE:
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^crating-%d %s%s^n that uses ^c%.2f^n index when installed.",
-              GET_OBJ_VAL(j, 1), GET_OBJ_VAL(j, 2) || GET_OBJ_VAL(j, 0) >= BIO_CEREBRALBOOSTER ? "cultured " : "",
-              decap_bio_types[GET_OBJ_VAL(j, 0)], ((float) GET_OBJ_VAL(j, 4) / 100));
+      if (GET_BIOWARE_RATING(j) > 0) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^crating-%d %s%s^n that uses ^c%.2f^n index when installed.",
+                GET_BIOWARE_RATING(j), GET_BIOWARE_IS_CULTURED(j) ? "cultured " : "",
+                decap_bio_types[GET_BIOWARE_TYPE(j)], ((float) GET_BIOWARE_ESSENCE_COST(j) / 100));
+      } else {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%s%s^n that uses ^c%.2f^n index when installed.",
+                GET_BIOWARE_IS_CULTURED(j) ? "cultured " : "",
+                decap_bio_types[GET_BIOWARE_TYPE(j)], ((float) GET_BIOWARE_ESSENCE_COST(j) / 100));
+      }
       break;
     case ITEM_CYBERWARE:
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^crating-%d %s-grade %s^n that uses ^c%.2f^n essence when installed.",
-              GET_OBJ_VAL(j, 1), decap_cyber_grades[GET_OBJ_VAL(j, 2)], decap_cyber_types[GET_OBJ_VAL(j, 0)],
-              ((float) GET_OBJ_VAL(j, 4) / 100));
+      if (GET_CYBERWARE_RATING(j) > 0) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^crating-%d %s-grade %s^n that uses ^c%.2f^n essence when installed.",
+                GET_CYBERWARE_RATING(j), decap_cyber_grades[GET_CYBERWARE_GRADE(j)], decap_cyber_types[GET_CYBERWARE_TYPE(j)],
+                ((float) GET_CYBERWARE_ESSENCE_COST(j) / 100));
+      } else {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%s-grade %s^n that uses ^c%.2f^n essence when installed.",
+                decap_cyber_grades[GET_CYBERWARE_GRADE(j)], decap_cyber_types[GET_CYBERWARE_TYPE(j)],
+                ((float) GET_CYBERWARE_ESSENCE_COST(j) / 100));
+      }
+      if (IS_OBJ_STAT(j, ITEM_MAGIC_INCOMPATIBLE)) {
+        strlcat(buf, "\r\n^yIt is incompatible with magic.^n", sizeof(buf));
+      }
       break;
     case ITEM_WORKSHOP:
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%s^n designed for ^c%s^n.",
@@ -2559,6 +2575,10 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
     case ITEM_KEYRING:
       strlcat(buf, "Nothing stands out about this item's OOC values. Try EXAMINE it instead.", sizeof(buf));
       break;
+    case ITEM_SHOPCONTAINER:
+      send_to_char(ch, "%s is a shop container (see ^WHELP CYBERDOC^n for info). It contains:\r\n\r\n", capitalize(GET_OBJ_NAME(j)));
+      do_probe_object(ch, j->contains);
+      return;
     default:
       strncpy(buf, "This item type has no probe string. Contact the staff to request one.", sizeof(buf) - strlen(buf));
       break;
@@ -4047,6 +4067,8 @@ ACMD(do_who)
         strlcat(buf1, " (AFK)", sizeof(buf1));
       if (PLR_FLAGGED(tch, PLR_RPE) && (level > LVL_MORTAL || PLR_FLAGGED(ch, PLR_RPE)))
         strlcat(buf1, " ^R(RPE)^n", sizeof(buf1));
+      if (PLR_FLAGGED(tch, PLR_CYBERDOC) && GET_LEVEL(tch) <= LVL_MORTAL)
+        strlcat(buf1, " ^c(Cyberdoc)^n", sizeof(buf1));
       
       if (PRF_FLAGGED(tch, PRF_NEWBIEHELPER) && (level > LVL_MORTAL || PRF_FLAGGED(ch, PRF_NEWBIEHELPER)))
         strlcat(buf1, " ^G(Newbie Helper)^n", sizeof(buf1));

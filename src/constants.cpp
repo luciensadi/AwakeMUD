@@ -271,6 +271,7 @@ const char *room_bits[] =
     "ELEVATOR_SHAFT",
     "SOCIALIZE!",
     "CORPSE_SAVE_HACK",
+    "STERILE",
     "\n"
   };
 
@@ -480,6 +481,7 @@ const char *player_bits[] =
     "NOIDLEOUT",
     "TELLS_MUTED",
     "NEWBIE_MUTED",
+    "CYBERDOC_PERMITTED",
     "\n"
   };
 
@@ -584,6 +586,7 @@ struct preference_bit_struct preference_bits_v2[] = {
   { "Highlights"           , TRUE , TRUE  },
   { "Pseudolanguage"       , TRUE , TRUE  },
   { "No Idle Nuyen Message", FALSE, TRUE  },
+  { "Cyberdocs Allowed"    , FALSE, TRUE  },
   { "\n"                   , 0    , 0     }
 };
 
@@ -907,6 +910,7 @@ const char *item_types[] =
     "Quest Item",
     "Ammo Box",
     "Keyring",
+    "Shop Container",
     "\n"
   };
 
@@ -1503,7 +1507,8 @@ struct skill_data skills[] =
     {"Blowgun", QUI, SKILL_TYPE_ACTIVE, FALSE},
     {"Pharmaceuticals", INT, SKILL_TYPE_ACTIVE, FALSE},
     {"Hebrew", INT, SKILL_TYPE_KNOWLEDGE, FALSE},
-    {"Iroquois", INT, SKILL_TYPE_KNOWLEDGE, FALSE}
+    {"Iroquois", INT, SKILL_TYPE_KNOWLEDGE, FALSE},
+    {"Medicine", INT, SKILL_TYPE_KNOWLEDGE, FALSE}
   };
 
 int rev_dir[] =

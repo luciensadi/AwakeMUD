@@ -304,7 +304,8 @@ enum {
 #define PLR_NO_IDLE_OUT         38 /* Player will not idle out (morts- for test chars) */
 #define PLR_TELLS_MUTED         39 /* Remove their ability to send tells. */
 #define PLR_NEWBIE_MUTED        40 /* Remove their ability to talk on the newbie channel. */
-#define PLR_MAX                 41
+#define PLR_CYBERDOC            41 /* Player may act as a cyberdoc. */
+#define PLR_MAX                 42
 
 
 
@@ -404,7 +405,8 @@ enum {
 #define PRF_NOHIGHLIGHT                  53
 #define PRF_NOPSEUDOLANGUAGE             54
 #define PRF_NO_IDLE_NUYEN_REWARD_MESSAGE 55
-#define PRF_MAX                          56
+#define PRF_TOUCH_ME_DADDY               56 /* Allows player cyberdocs to operate on you. Don't @ me. */
+#define PRF_MAX                          57
 
 /* log watch */
 
@@ -561,7 +563,8 @@ enum {
 #define ROOM_ELEVATOR_SHAFT         31 // Don't set this manually
 #define ROOM_ENCOURAGE_CONGREGATION 32
 #define ROOM_CORPSE_SAVE_HACK       33
-#define ROOM_MAX                    34
+#define ROOM_STERILE                34 // Gives a bonus to medical actions.
+#define ROOM_MAX                    35
 
 #define NORMAL    0
 #define LOWLIGHT  1
@@ -914,8 +917,9 @@ enum {
 #define SKILL_PHARMA              132
 #define SKILL_HEBREW              133
 #define SKILL_IROQUOIS            134
+#define SKILL_MEDICINE            135
 
-#define MAX_SKILLS      135
+#define MAX_SKILLS                136
 
 // Skill type definitions.
 #define SKILL_TYPE_ACTIVE         0
@@ -1030,6 +1034,7 @@ enum {
 #define TYPE_ACID             411
 #define TYPE_POLTERGEIST      412
 #define TYPE_ELEVATOR         413
+#define TYPE_MEDICAL_MISHAP   414
 
 #define WEAP_EDGED          0
 #define WEAP_CLUB           1
@@ -1115,7 +1120,8 @@ enum {
 #define ITEM_QUEST              41
 #define ITEM_GUN_AMMO           42
 #define ITEM_KEYRING            43
-#define NUM_ITEMS               44
+#define ITEM_SHOPCONTAINER      44
+#define NUM_ITEMS               45
 
 
 /* take/wear flags: used by obj_data.obj_flags.wear_flags */
@@ -2299,6 +2305,8 @@ enum {
 
 
 #define OBJ_OLD_BLANK_MAGAZINE_FROM_CLASSIC 601
+
+#define OBJ_SHOPCONTAINER                  83
 
 #define BOTTOM_OF_TEMPLATE_ITEMS           106
 #define OBJ_BLANK_OPTICAL_CHIP             106

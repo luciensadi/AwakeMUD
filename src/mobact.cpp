@@ -121,6 +121,9 @@ bool mob_is_aggressive(struct char_data *ch, bool include_base_aggression) {
            
   act(buf2, FALSE, ch, NULL, NULL, TO_ROOM);
 #endif
+
+  if (is_escortee(ch))
+    return FALSE;
   
   if (include_base_aggression && MOB_FLAGS(ch).IsSet(MOB_AGGRESSIVE))
     return TRUE;
@@ -403,6 +406,9 @@ bool mobact_process_in_vehicle_guard(struct char_data *ch) {
   struct char_data *vict = NULL;
   struct room_data *in_room;
   
+  if (is_escortee(ch))
+    return FALSE;
+  
   // Precondition: Vehicle must exist, we must be manning or driving, and we must not be astral.
   if (!ch->in_veh || !(AFF_FLAGGED(ch, AFF_PILOT) || AFF_FLAGGED(ch, AFF_MANNING)) || IS_ASTRAL(ch)) {
 #ifdef MOBACT_DEBUG
@@ -511,6 +517,9 @@ bool mobact_process_in_vehicle_aggro(struct char_data *ch) {
   struct char_data *vict = NULL;
   struct room_data *in_room;
   
+  if (is_escortee(ch))
+    return FALSE;
+    
   // Precondition: Vehicle must exist, we must be manning or driving, and we must not be astral.
   if (!ch->in_veh || !(AFF_FLAGGED(ch, AFF_PILOT) || AFF_FLAGGED(ch, AFF_MANNING)) || IS_ASTRAL(ch)) {
 #ifdef MOBACT_DEBUG
@@ -621,6 +630,9 @@ bool mobact_process_in_vehicle_aggro(struct char_data *ch) {
 bool mobact_process_aggro(struct char_data *ch, struct room_data *room) {
   struct char_data *vict = NULL;
   struct veh_data *veh = NULL;
+  
+  if (is_escortee(ch))
+    return FALSE;
   
   // Conjured spirits and elementals are never aggressive.
   if ((IS_ELEMENTAL(ch) || IS_SPIRIT(ch)) && GET_ACTIVE(ch))
@@ -753,6 +765,9 @@ void send_mob_aggression_warnings(struct char_data *pc, struct char_data *mob) {
 bool mobact_process_memory(struct char_data *ch, struct room_data *room) {
   struct char_data *vict = NULL;
   
+  if (is_escortee(ch))
+    return FALSE;
+  
   /* Mob Memory */
   if (MOB_FLAGGED(ch, MOB_MEMORY) && GET_MOB_MEMORY(ch)) {
     for (vict = room->people; vict; vict = vict->next_in_room) {
@@ -775,6 +790,9 @@ bool mobact_process_memory(struct char_data *ch, struct room_data *room) {
 
 bool mobact_process_helper(struct char_data *ch) {
   struct char_data *vict = NULL;
+  
+  if (is_escortee(ch))
+    return FALSE;
   
   /* Helper Mobs - guards are always helpers */
   if (MOB_FLAGGED(ch, MOB_HELPER) || MOB_FLAGGED(ch, MOB_GUARD)) {
@@ -854,6 +872,9 @@ bool vehicle_is_valid_mob_target(struct veh_data *veh, bool alarmed) {
 bool mobact_process_guard(struct char_data *ch, struct room_data *room) {
   struct char_data *vict = NULL;
   struct veh_data *veh = NULL;
+  
+  if (is_escortee(ch))
+    return FALSE;
   
   // Conjured spirits and elementals are never aggressive.
   if ((IS_ELEMENTAL(ch) || IS_SPIRIT(ch)) && GET_ACTIVE(ch))
@@ -1019,6 +1040,9 @@ int get_push_command_index() {
 
 bool mobact_process_movement(struct char_data *ch) {
   int door;
+  
+  if (is_escortee(ch))
+    return FALSE;
   
   if (MOB_FLAGGED(ch, MOB_SENTINEL) || CH_IN_COMBAT(ch))
     return FALSE;

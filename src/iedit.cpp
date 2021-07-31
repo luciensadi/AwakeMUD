@@ -1808,18 +1808,39 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
       break;
     case IEDIT_TYPE:
       number = atoi(arg);
-      if ((number < 1) || (number > NUM_ITEMS) || (number == ITEM_CYBERWARE && !access_level(CH, LVL_ADMIN)) ||
-          (number == ITEM_BIOWARE && !access_level(CH, LVL_ADMIN))) {
-        send_to_char("That's not a valid choice!\r\n", d->character);
+      if (number < 1 || number > NUM_ITEMS) {
+        send_to_char(d->character, "That's not a valid choice! You must choose something between 1 and %d.\r\n", NUM_ITEMS);
         iedit_disp_type_menu(d);
-      } else if (number != 0 && GET_OBJ_TYPE(d->edit_obj) != number) {
+        return;
+      }
+      
+      switch (number) {
+        case ITEM_CYBERWARE:
+        case ITEM_BIOWARE:
+          if (!access_level(CH, LVL_ADMIN)) {
+            send_to_char("Sorry, only Admin and higher staff members can create those.\r\n", d->character);
+            iedit_disp_type_menu(d);
+            return;
+          }
+          break;
+        case ITEM_SHOPCONTAINER:
+          if (!access_level(CH, LVL_PRESIDENT)) {
+            send_to_char("Sorry, shopcontainers are for code use only and can't be created.\r\n", d->character);
+            iedit_disp_type_menu(d);
+            return;
+          }
+          send_to_char("WARNING: Shopcontainers are for code use only! Hope you know what you're doing...\r\n", d->character);
+          break;
+        case ITEM_GUN_MAGAZINE:
+          send_to_char("Sorry, gun magazines are for code use only and can't be created.\r\n", d->character);
+          iedit_disp_type_menu(d);
+          return;
+      }
+      
+      if (number != 0 && GET_OBJ_TYPE(d->edit_obj) != number) {
         GET_OBJ_TYPE(d->edit_obj) = number;
         for (int index = 0; index < NUM_VALUES; index++)
           GET_OBJ_VAL(d->edit_obj, index) = 0;
-      }
-      
-      if (number == ITEM_GUN_MAGAZINE) {
-        send_to_char("NOTICE: Gun magazines were deprecated with the creation of the new ammo system. You probably don't need to make one.\r\n", d->character);
       }
       
       iedit_disp_menu(d);

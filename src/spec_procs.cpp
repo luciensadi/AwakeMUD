@@ -59,6 +59,10 @@ extern int get_paydata_market_minimum(int host_color);
 extern void new_quest(struct char_data *mob, bool force_assignation=FALSE);
 extern unsigned int get_johnson_overall_max_rep(struct char_data *johnson);
 extern unsigned int get_johnson_overall_min_rep(struct char_data *johnson);
+extern bool uninstall_ware_from_target_character(struct obj_data *obj, struct char_data *remover, struct char_data *victim, bool damage_on_operation);
+extern bool install_ware_in_target_character(struct obj_data *obj, struct char_data *installer, struct char_data *reciever, bool damage_on_operation);
+extern struct obj_data *shop_package_up_ware(struct obj_data *obj);
+
 
 extern struct command_info cmd_info[];
 
@@ -643,9 +647,16 @@ int get_max_skill_for_char(struct char_data *ch, int skill, int type) {
         case SKILL_INSTRUMENT:
         case SKILL_MEDITATION:
         case SKILL_ARCANELANGUAGE:
+        case SKILL_CENTERING:
+        case SKILL_ENCHANTING:
           return MIN(max, 12);
         default:
-          return MIN(max, 8);
+          // Non-aspected mages get their non-magic skills capped at 8.
+          if (GET_ASPECT(ch) == ASPECT_FULL)
+            return MIN(max, 8);
+          
+          // Aspected mages, since they're gimped by their aspect, get them to 10 like adepts.
+          return MIN(max, 10);
       }
   }
 }
@@ -6051,4 +6062,250 @@ SPECIAL(fatcop) {
 // The only thing this does is make the object display a usage string if it's on the floor.
 SPECIAL(floor_usable_radio) {
   return FALSE;
+}
+
+// Override the 'install' command in the presence of an unpacked medical workshop or facility.
+SPECIAL(medical_workshop) {
+  bool mode_is_install = FALSE;
+  struct obj_data *workshop = (struct obj_data *) me;
+  struct obj_data *ware, *found_obj = NULL;
+  struct char_data *found_char = NULL;
+  
+  char target_arg[MAX_INPUT_LENGTH];
+  
+  // No argument given, no character available, no problem. Skip it.
+  if (!*argument || !ch || !workshop || GET_OBJ_TYPE(workshop) != ITEM_WORKSHOP)
+    return FALSE;
+  
+  // Skip anything that's not an expected command.
+  if (!((mode_is_install = CMD_IS("install")) || CMD_IS("uninstall")))
+    return FALSE;
+    
+  // Require that the medical workshop be unpacked.
+  if (!GET_WORKSHOP_IS_SETUP(workshop))
+    return FALSE;
+    
+  // Preliminary skill check.
+  if (GET_SKILL(ch, SKILL_BIOTECH) < 4 || GET_SKILL(ch, SKILL_MEDICINE) < 4) {
+    send_to_char("You have no idea where to even start with surgeries. Better leave it to the professionals.\r\n", ch);
+    return TRUE;
+  }
+  
+  if (!PLR_FLAGGED(ch, PLR_CYBERDOC) && !access_level(ch, LVL_ADMIN)) {
+    send_to_char("The cyberdoc role is currently application-only. Please contact staff to request the ability to be a cyberdoc.\r\n", ch);
+    return TRUE;
+  }
+    
+  if (!*arg) {
+    send_to_char(ch, "Syntax: %sinstall <target character> <'ware>\r\n", mode_is_install ? "" : "un");
+    return TRUE;
+  }
+    
+  // Parse out the victim targeting argument.
+  argument = one_argument(argument, target_arg);
+    
+  // Reject self-targeting.
+  if ((!str_cmp(target_arg, "self") || !str_cmp(target_arg, "me") || !str_cmp(target_arg, "myself"))) {
+    send_to_char("You can't operate on yourself!\r\n", ch);
+    return TRUE;
+  }
+  
+  // Identify the victim. Since this is first, this means our syntax is '[un]install <character> <ware>'.
+  generic_find(target_arg, FIND_CHAR_ROOM, ch, &found_char, &found_obj);
+  
+  if (!found_char) {
+    send_to_char(ch, "You don't see anyone named '%s' here.\r\n", target_arg);
+    return TRUE;
+  }
+  
+  if (IS_NPC(found_char) || IS_ASTRAL(found_char) || IS_PROJECT(found_char)) {
+    send_to_char("Not on NPCs.\r\n", ch);
+    return TRUE;
+  }
+  
+  if (!found_char->desc) {
+    send_to_char("They're disconnected right now, try again later.", ch);
+    return TRUE;
+  }
+  
+  if (GET_LEVEL(found_char) > GET_LEVEL(ch)) {
+    send_to_char("Operating on staff is a terrible idea.\r\n", ch);
+    return TRUE;
+  }
+  
+  // Ensure we have the target's permission.
+  if (!PRF_FLAGGED(found_char, PRF_TOUCH_ME_DADDY)) {
+    send_to_char(ch, "You can't operate on %s-- they need to use the ^WTOGGLE CYBERDOC^n command.\r\n", GET_CHAR_NAME(found_char));
+    return TRUE;
+  }
+  
+  // Parse out the dotmode.
+  int dotmode = find_all_dots(argument);
+
+  // Can't operate with more than one thing at once.
+  if ((dotmode == FIND_ALL) || dotmode == FIND_ALLDOT) {
+    send_to_char(ch, "You'll have to %sinstall one thing at a time.\r\n", mode_is_install ? "" : "un");
+    return TRUE;
+  }
+  
+  // Select the object.
+  if (mode_is_install) {
+    if (!(ware = get_obj_in_list_vis(ch, argument, ch->carrying))) {
+      send_to_char(ch, "You aren't carrying anything called '%s'.\r\n", argument);
+      return TRUE;
+    }
+    
+    if (GET_OBJ_TYPE(ware) != ITEM_SHOPCONTAINER) {
+      send_to_char(ch, "You're standing in a medical %s, so you can only %sinstall 'ware! %s doesn't count.\r\n", 
+                   GET_WORKSHOP_GRADE(workshop) == TYPE_WORKSHOP ? "workshop" : "facility",
+                   mode_is_install ? "" : "un", 
+                   GET_OBJ_NAME(ware));
+      return TRUE;
+    } else {
+      if (!ware->contains) {
+        send_to_char(ch, "Something went wrong! Please alert staff.\r\n");
+        return TRUE;
+      }
+      ware = ware->contains;
+    }
+  } else {
+    if (!(ware = get_obj_in_list_vis(ch, argument, found_char->cyberware)) && !(ware = get_obj_in_list_vis(ch, argument, found_char->bioware))) {
+      send_to_char(ch, "%s doesn't have anything called '%s' installed.\r\n", GET_CHAR_NAME(found_char), argument);
+      return TRUE;
+    }
+  }
+  
+  // Reject operations on anything that isn't 'ware.'
+  if (GET_OBJ_TYPE(ware) != ITEM_BIOWARE && GET_OBJ_TYPE(ware) != ITEM_CYBERWARE) {
+    send_to_char(ch, "You're standing in a medical %s, so you can only %sinstall 'ware! %s doesn't count.\r\n", 
+                 GET_WORKSHOP_GRADE(workshop) == TYPE_WORKSHOP ? "workshop" : "facility",
+                 mode_is_install ? "" : "un", 
+                 GET_OBJ_NAME(ware));
+    return TRUE;
+  }
+  
+  /* We should be good to go. At this point, we expect that:
+     - We're standing in a workshop
+     - We've identified the target, and they have consented
+     - We've identified the 'ware, and it's valid
+  */
+  
+  // Base TN is the usual 4.
+  int target = 4;
+  snprintf(buf, sizeof(buf), "Medical roll for %s on %s: Base TN %d", GET_CHAR_NAME(ch), GET_CHAR_NAME(found_char), target);
+  
+  // Calculate TN modifiers.
+  switch (GET_OBJ_TYPE(ware)) {
+    case ITEM_BIOWARE:
+      if (GET_BIOWARE_IS_CULTURED(ware)) {
+        target += 2;
+        strlcat(buf, ", cultured so +2", sizeof(buf));
+      }
+      break;
+    case ITEM_CYBERWARE:
+      switch (GET_CYBERWARE_GRADE(ware)) {
+        case GRADE_ALPHA:
+          target += 1;
+          strlcat(buf, ", alpha so +1", sizeof(buf));
+          break;
+        case GRADE_BETA:
+          target += 3;
+          strlcat(buf, ", beta so +3", sizeof(buf));
+          break;
+        case GRADE_DELTA:
+          target += 6;
+          strlcat(buf, ", delta so +6", sizeof(buf));
+          break;
+      }
+      break;
+  }
+  
+  // Patient is cyber-heavy? +1.
+  if (GET_ESS(found_char) < 200) {
+    target += 1;
+    strlcat(buf, ", low essence so +1", sizeof(buf));
+  }
+  
+  // Shop is unpacked in an actual room instead of a vehicle? -1 TN.
+  if (workshop->in_room) {
+    target -= 1;
+    strlcat(buf, ", in a room so -1", sizeof(buf));
+    
+    // Room is sterile (PGHQ feature)? Another -2.
+    if (ROOM_FLAGGED(workshop->in_room, ROOM_STERILE)) {
+      target -= 2;
+      strlcat(buf, ", room is sterile so -2", sizeof(buf));
+    }
+  }
+  
+  // Shop is a facility? -1 TN.
+  if (GET_WORKSHOP_GRADE(workshop) == TYPE_FACILITY) {
+    target -= 1;
+    strlcat(buf, ", using facility so -1", sizeof(buf));
+  }
+  
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ". Total: %d", target);
+  act(buf, FALSE, ch, 0, 0, TO_ROLLS);
+  
+  // We choose from the lesser of the biotech and medical skills.
+  int skill = GET_SKILL(ch, SKILL_BIOTECH) < GET_SKILL(ch, SKILL_MEDICINE) ? SKILL_BIOTECH : SKILL_MEDICINE;
+  int dice = get_skill(ch, skill, target);
+  snprintf(buf, sizeof(buf), "After get_skill (%s): %d", skills[skill].name, target);
+  act(buf, FALSE, ch, 0, 0, TO_ROLLS);
+  target += modify_target(ch);
+  snprintf(buf, sizeof(buf), "After modify_target: %d", target);
+  act(buf, FALSE, ch, 0, 0, TO_ROLLS);
+  int successes = success_test(dice, target);
+  snprintf(buf, sizeof(buf), "Got %d successes.", successes);
+  act(buf, FALSE, ch, 0, 0, TO_ROLLS);
+  
+  // Botch!
+  if (successes < 0) {
+    send_to_char(ch, "You fumble your attempt to %sinstall %s!", mode_is_install ? "" : "un");
+    snprintf(buf, sizeof(buf), "$n fumbles $s attempt to %sinstall $o, wounding $N!", mode_is_install ? "" : "un");
+    act(buf, FALSE, ch, ware, found_char, TO_ROOM);
+    
+    // Damage the character. This damage type does not result in a killer check.
+    damage(ch, found_char, SERIOUS, TYPE_MEDICAL_MISHAP, PHYSICAL);
+    
+    // Victim obviously doesn't trust you anymore, so revoke permission.
+    send_to_char("(System notice: Automatically disabling your ^WTOGGLE CYBERDOC^n permission.)\r\n", found_char);
+    PRF_FLAGS(found_char).RemoveBit(PRF_TOUCH_ME_DADDY);
+    
+    return TRUE;
+  }
+  // Failure, no botch.
+  else if (successes == 0) {
+    send_to_char(ch, "You can't quite figure out how to %sinstall %s.\r\n", mode_is_install ? "" : "un", GET_OBJ_NAME(ware));
+    snprintf(buf, sizeof(buf), "$n pokes tentatively at $o, trying to figure out how to %sinstall it.", mode_is_install ? "" : "un");
+    act(buf, FALSE, ch, ware, found_char, TO_ROOM);
+    return TRUE;
+  }
+  // Standard success gets no conditional block here (it's the default behavior.)
+  // Exceptional success.
+  else if (successes >= CYBERDOC_NO_INJURY_DIE_REQUIREMENT) {
+    send_to_char("Inspiration strikes, and you set to work with near-miraculous precision.\r\n", ch);
+    act("Inspiration strikes, and $n sets to work with near-miraculous precision.", FALSE, ch, NULL, NULL, TO_ROOM);
+  }
+    
+  // Installation of ware.
+  if (mode_is_install) {
+    // Perform the installation.
+    install_ware_in_target_character(ware, ch, found_char, (successes < CYBERDOC_NO_INJURY_DIE_REQUIREMENT));
+  }
+  
+  // Removal of ware.
+  else {
+    // Perform the uninstallation.
+    if (uninstall_ware_from_target_character(ware, ch, found_char, (successes < CYBERDOC_NO_INJURY_DIE_REQUIREMENT))) {
+      // Give them the ware (only if we succeeded)
+      obj_to_char(shop_package_up_ware(ware), ch);
+    }
+  }
+  
+  // Automatically revoke permission.
+  send_to_char("(System notice: Automatically disabling your ^WTOGGLE CYBERDOC^n permission.)\r\n", found_char);
+  PRF_FLAGS(found_char).RemoveBit(PRF_TOUCH_ME_DADDY);
+  
+  return TRUE;
 }

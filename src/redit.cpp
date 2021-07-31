@@ -898,8 +898,19 @@ void redit_parse(struct descriptor_data * d, const char *arg)
 
         if (ROOM->room_flags.IsSet(number-1)) {
           ROOM->room_flags.RemoveBit(number-1);
-        } else
+          if (number-1 == ROOM_STERILE) {
+            send_to_char("Automatically removing sterile aura.\r\n", d->character);
+            d->edit_room->background[CURRENT_BACKGROUND_COUNT] = d->edit_room->background[PERMANENT_BACKGROUND_COUNT] = 0;
+            d->edit_room->background[CURRENT_BACKGROUND_TYPE] = d->edit_room->background[PERMANENT_BACKGROUND_TYPE] = 0;
+          }
+        } else {
           ROOM->room_flags.SetBit(number-1);
+          if (number-1 == ROOM_STERILE) {
+            send_to_char("Automatically setting sterile aura.\r\n", d->character);
+            d->edit_room->background[CURRENT_BACKGROUND_COUNT] = d->edit_room->background[PERMANENT_BACKGROUND_COUNT] = 1;
+            d->edit_room->background[CURRENT_BACKGROUND_TYPE] = d->edit_room->background[PERMANENT_BACKGROUND_TYPE] = AURA_STERILITY;
+          }
+        }
         redit_disp_flag_menu(d);
       }
     }
