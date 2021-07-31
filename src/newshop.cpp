@@ -1342,6 +1342,7 @@ void shop_value(char *arg, struct char_data *ch, struct char_data *keeper, vnum_
   if (!is_ok_char(keeper, ch, shop_nr))
     return;
   struct obj_data *obj;
+  strcpy(buf, GET_CHAR_NAME(ch));
   if (!*arg)
   {
     send_to_char("What item do you want valued?\r\n", ch);
@@ -1365,7 +1366,7 @@ void shop_value(char *arg, struct char_data *ch, struct char_data *keeper, vnum_
   
   if (GET_OBJ_TYPE(obj) == ITEM_SHOPCONTAINER) {
     if (!shop_table[shop_nr].flags.IsSet(SHOP_DOCTOR)) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " I wouldn't buy %s off of you. Take it to a cyberdoc.", GET_OBJ_NAME(obj));
+      snprintf(buf, sizeof(buf), "%s I wouldn't buy %s off of you. Take it to a cyberdoc.", GET_CHAR_NAME(ch), GET_OBJ_NAME(obj));
       do_say(keeper, buf, cmd_say, SCMD_SAYTO);
       return;
     }
