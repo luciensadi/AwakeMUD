@@ -922,6 +922,9 @@ void assign_objects(void)
   ASSIGNOBJ(15811, medical_workshop);
   ASSIGNOBJ(16242, medical_workshop);
   ASSIGNOBJ(70611, medical_workshop);
+#ifdef USE_PRIVATE_CE_WORLD
+  ASSIGNOBJ(10039, medical_workshop);
+#endif
   
   WSPEC(monowhip);
 
