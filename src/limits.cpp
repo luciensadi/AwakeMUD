@@ -91,6 +91,8 @@ void mental_gain(struct char_data * ch)
 
   if (ch->in_room && ROOM_FLAGGED(ch->in_room, ROOM_ENCOURAGE_CONGREGATION))
     gain *= 2;
+  else if (ch->in_room && ROOM_FLAGGED(ch->in_room, ROOM_STERILE))
+    gain *= 1.5;
   
   if (GET_TRADITION(ch) == TRAD_ADEPT)
     gain *= GET_POWER(ch, ADEPT_HEALING) + 1;

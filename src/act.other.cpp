@@ -2000,6 +2000,8 @@ ACMD(do_treat)
     }
     return;
   }
+  if (vict->in_room && ROOM_FLAGGED(vict->in_room, ROOM_STERILE))
+    target -= 2;
   i = get_skill(ch, SKILL_BIOTECH, target);
 
   if (find_workshop(ch, TYPE_MEDICAL))
