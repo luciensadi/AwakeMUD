@@ -807,6 +807,7 @@ void assign_objects(void)
   SPECIAL(restoration_button);
   SPECIAL(nerpcorpolis_button);
   SPECIAL(floor_usable_radio);
+  SPECIAL(medical_workshop);
 
   ASSIGNOBJ(3, gen_board);  /* Rift's Board */
   ASSIGNOBJ(4, gen_board);  /* Pook's Board */
@@ -917,6 +918,10 @@ void assign_objects(void)
   ASSIGNOBJ(OBJ_CARIBBEAN_TAXI_SIGN, taxi_sign);
   
   ASSIGNOBJ(10005, weapon_dominator);
+  
+  ASSIGNOBJ(15811, medical_workshop);
+  ASSIGNOBJ(16242, medical_workshop);
+  ASSIGNOBJ(70611, medical_workshop);
   
   WSPEC(monowhip);
 

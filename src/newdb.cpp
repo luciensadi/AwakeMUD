@@ -401,6 +401,9 @@ bool load_char(const char *name, char_data *ch, bool logon)
   AFF_FLAGS(ch).FromString(row[6]);
   PLR_FLAGS(ch).FromString(row[7]);
   PRF_FLAGS(ch).FromString(row[8]);
+  
+  // Unset the cyberdoc flag on load.
+  PRF_FLAGS(ch).RemoveBit(PRF_TOUCH_ME_DADDY);
 
   ch->player.physical_text.room_desc = str_dup(row[9]);
   ch->player.background = str_dup(row[10]);

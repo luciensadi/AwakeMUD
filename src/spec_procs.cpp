@@ -6139,17 +6139,13 @@ SPECIAL(medical_workshop) {
       send_to_char(ch, "You aren't carrying anything called '%s'.\r\n", argument);
       return TRUE;
     }
-  } else {
-    if (!(ware = get_obj_in_list_vis(ch, argument, ch->cyberware)) && !(ware = get_obj_in_list_vis(ch, argument, ch->bioware))) {
-      send_to_char(ch, "%s doesn't have anything called '%s' installed.\r\n", GET_CHAR_NAME(found_char), argument);
-      return TRUE;
-    }
     
     if (GET_OBJ_TYPE(ware) != ITEM_SHOPCONTAINER) {
-      send_to_char(ch, "Sorry, you can only %sinstall 'ware while standing in a medical %s-- %s doesn't count.\r\n", 
-                   mode_is_install ? "" : "un", 
+      send_to_char(ch, "You're standing in a medical %s, so you can only %sinstall 'ware! %s doesn't count.\r\n", 
                    GET_WORKSHOP_GRADE(workshop) == TYPE_WORKSHOP ? "workshop" : "facility",
+                   mode_is_install ? "" : "un", 
                    GET_OBJ_NAME(ware));
+      return TRUE;
     } else {
       if (!ware->contains) {
         send_to_char(ch, "Something went wrong! Please alert staff.\r\n");
@@ -6157,13 +6153,18 @@ SPECIAL(medical_workshop) {
       }
       ware = ware->contains;
     }
+  } else {
+    if (!(ware = get_obj_in_list_vis(ch, argument, found_char->cyberware)) && !(ware = get_obj_in_list_vis(ch, argument, found_char->bioware))) {
+      send_to_char(ch, "%s doesn't have anything called '%s' installed.\r\n", GET_CHAR_NAME(found_char), argument);
+      return TRUE;
+    }
   }
   
   // Reject operations on anything that isn't 'ware.'
   if (GET_OBJ_TYPE(ware) != ITEM_BIOWARE && GET_OBJ_TYPE(ware) != ITEM_CYBERWARE) {
-    send_to_char(ch, "Sorry, you can only %sinstall 'ware while standing in a medical %s-- %s doesn't count.\r\n", 
-                 mode_is_install ? "" : "un", 
+    send_to_char(ch, "You're standing in a medical %s, so you can only %sinstall 'ware! %s doesn't count.\r\n", 
                  GET_WORKSHOP_GRADE(workshop) == TYPE_WORKSHOP ? "workshop" : "facility",
+                 mode_is_install ? "" : "un", 
                  GET_OBJ_NAME(ware));
     return TRUE;
   }

@@ -802,6 +802,22 @@ Material:	paper
 [VALUES]
 	Val0:	25000
 BREAK
+#83
+Keywords:	shopcontainer container
+Name:	a generic shopcontainer
+RoomDesc:$
+A bundle of goods from a shop has been set aside here.~
+LookDesc:$
+It's carefully packaged up in opaque anti-static plastic, protecting the 'ware
+inside it from the elements. See ^WHELP CYBERDOC^n for instructions on what to do
+with it! 
+~
+Type:	Shop Container
+WearFlags:	1
+Material:	metal
+[POINTS]
+	Barrier:	32
+BREAK
 #100
 Keywords:	credstick plastic
 Name:	a plastic credstick
@@ -1176,10 +1192,10 @@ Material:	concrete
 	Barrier:	32
 BREAK
 #121
-Keywords:	metal ammo ammunition box normal edged weapon 10-round rounds
-Name:	a 10-round box of normal edged weapon ammunition
+Keywords:	metal ammo ammunition box nondescript
+Name:	a nondescript box of ammunition
 RoomDesc:$
-A metal box of normal edged weapon rounds has been left here.~
+A metal box of ammunition has been left here.~
 LookDesc:$
 A hefty box of ammunition, banded in metal and secured with flip-down hasps for transportation and storage.~
 Type:	Ammo Box
