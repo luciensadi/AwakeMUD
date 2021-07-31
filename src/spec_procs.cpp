@@ -6118,6 +6118,21 @@ SPECIAL(medical_workshop) {
     return TRUE;
   }
   
+  if (IS_NPC(found_char) || IS_ASTRAL(found_char) || IS_PROJECT(found_char)) {
+    send_to_char("Not on NPCs.\r\n", ch);
+    return TRUE;
+  }
+  
+  if (!found_char->desc) {
+    send_to_char("They're disconnected right now, try again later.", ch);
+    return TRUE;
+  }
+  
+  if (GET_LEVEL(found_char) > GET_LEVEL(ch)) {
+    send_to_char("Operating on staff is a terrible idea.\r\n", ch);
+    return TRUE;
+  }
+  
   // Ensure we have the target's permission.
   if (!PRF_FLAGGED(found_char, PRF_TOUCH_ME_DADDY)) {
     send_to_char(ch, "You can't operate on %s-- they need to use the ^WTOGGLE CYBERDOC^n command.\r\n", GET_CHAR_NAME(found_char));
