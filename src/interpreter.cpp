@@ -2258,17 +2258,19 @@ int perform_dupe_check(struct descriptor_data *d)
   case RECON:
     SEND_TO_Q("Reconnecting.\r\n", d);
     act("$n has reconnected.", TRUE, d->character, 0, 0, TO_ROOM);
-    snprintf(buf, sizeof(buf), "%s [%s] has reconnected.",
-            GET_CHAR_NAME(d->character), d->host);
+    snprintf(buf, sizeof(buf), "%s has reconnected.",
+            GET_CHAR_NAME(d->character));
     mudlog(buf, d->character, LOG_CONNLOG, TRUE);
+    log_vfprintf("[CONNLOG: %s has reconnected from %s]", GET_CHAR_NAME(d->character), d->host);
     break;
   case USURP:
     SEND_TO_Q("You take over your own body, already in use!\r\n", d);
     act("$n shakes $s head to clear it.",
         TRUE, d->character, 0, 0, TO_ROOM);
-    snprintf(buf, sizeof(buf), "%s [%s] has re-logged in ... disconnecting old socket.",
-            GET_CHAR_NAME(d->character), d->host);
+    snprintf(buf, sizeof(buf), "%s has re-logged in ... disconnecting old socket.",
+            GET_CHAR_NAME(d->character));
     mudlog(buf, d->character, LOG_CONNLOG, TRUE);
+    log_vfprintf("[CONNLOG: %s reconnecting from %s]", GET_CHAR_NAME(d->character), d->host);
     if (d->character->persona)
     {
       snprintf(buf, sizeof(buf), "%s depixelizes and vanishes from the host.\r\n", d->character->persona->name);
@@ -2316,9 +2318,10 @@ int perform_dupe_check(struct descriptor_data *d)
     break;
   case UNSWITCH:
     SEND_TO_Q("Reconnecting to unswitched char.", d);
-    snprintf(buf, sizeof(buf), "%s [%s] has reconnected.",
-            GET_CHAR_NAME(d->character), d->host);
+    snprintf(buf, sizeof(buf), "%s has reconnected.",
+            GET_CHAR_NAME(d->character));
     mudlog(buf, d->character, LOG_CONNLOG, TRUE);
+    log_vfprintf("[CONNLOG: %s has reconnected from %s]", GET_CHAR_NAME(d->character), d->host);
     break;
   }
   
@@ -2623,15 +2626,16 @@ void nanny(struct descriptor_data * d, char *arg)
         SEND_TO_Q(motd, d);
 
       if(PLR_FLAGGED(d->character,PLR_NOT_YET_AUTHED))
-        snprintf(buf, sizeof(buf), "%s [%s] has connected (UNAUTHORIZED).",
-                GET_CHAR_NAME(d->character), d->host);
+        snprintf(buf, sizeof(buf), "%s has connected (UNAUTHORIZED).",
+                GET_CHAR_NAME(d->character));
       else
-        snprintf(buf, sizeof(buf), "%s [%s] has connected.",
-                GET_CHAR_NAME(d->character), d->host);
+        snprintf(buf, sizeof(buf), "%s has connected.",
+                GET_CHAR_NAME(d->character));
       DELETE_ARRAY_IF_EXTANT(d->character->player.host);
       d->character->player.host = str_dup(d->host);
       playerDB.SaveChar(d->character);
       mudlog(buf, d->character, LOG_CONNLOG, TRUE);
+      log_vfprintf("[CONNLOG: %s connecting from %s]", GET_CHAR_NAME(d->character), d->host);
       if (load_result) {
         snprintf(buf, sizeof(buf), "\r\n\r\n\007\007\007"
                 "%s%d LOGIN FAILURE%s SINCE LAST SUCCESSFUL LOGIN.%s\r\n",

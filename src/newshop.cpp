@@ -139,6 +139,10 @@ int buy_price(struct obj_data *obj, vnum_t shop_nr)
   // Add the random multiplier to the cost.
   cost += (int) round((cost * shop_table[shop_nr].random_current) / 100);
   
+  // Enforce the final 1x cost requirement. This is an anti-exploit measure to prevent buying a cheap thing at shop A and reselling at shop B for profit.
+  // Note that negotiation happens AFTER this, so people can still negotiate down.
+  cost = MAX(cost, GET_OBJ_COST(obj));
+  
   // Return the final value.
   return cost;
 }
