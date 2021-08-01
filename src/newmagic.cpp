@@ -1261,10 +1261,11 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       break;
     case SPELL_INCREF1:
     case SPELL_INCREF2:
-    case SPELL_INCREF3:      
-      if (GET_REAL_REA(vict) != GET_REA(vict) || GET_INIT_DICE(vict)) {
+    case SPELL_INCREF3:
+      {  
         int int_with_just_bioware = GET_REAL_INT(vict);
         int qui_with_just_bioware = GET_REAL_QUI(vict);
+        int rea_from_bioware = 0;
         int initiative_dice_with_just_bioware = 0;
         
         for (struct obj_data *bioware = vict->bioware; bioware; bioware = bioware->next_content)
@@ -1285,6 +1286,9 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
             else if (bioware->affected[j].location == APPLY_QUI) {
               qui_with_just_bioware += bioware->affected[j].modifier;
             }
+            else if (bioware->affected[j].location == APPLY_REA) {
+              rea_from_bioware += bioware->affected[j].modifier;
+            }
             else if (bioware->affected[j].location == APPLY_INITIATIVE_DICE) {
               initiative_dice_with_just_bioware += bioware->affected[j].modifier;
             }
@@ -1300,7 +1304,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
         */
         
         // If the numbers don't match exactly, refuse to cast.
-        if ((((int_with_just_bioware + qui_with_just_bioware) / 2) != GET_REA(vict))
+        if (((((int_with_just_bioware + qui_with_just_bioware) / 2) + rea_from_bioware) != GET_REA(vict))
             || (initiative_dice_with_just_bioware != GET_INIT_DICE(vict))) 
         {
           if (ch == vict) {
