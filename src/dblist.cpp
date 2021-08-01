@@ -274,7 +274,7 @@ void objList::UpdateCounters(void)
           snprintf(buf, sizeof(buf), "A passerby rolls %s eyes and quickly re-%spacks the half-packed $p.",
                   number(0, 1) == 0 ? "his" : "her",
                   GET_WORKSHOP_IS_SETUP(OBJ) ? "un" : "");
-          act(buf, FALSE, OBJ->in_room->people, NULL, OBJ, TO_ROOM);
+          act(buf, FALSE, OBJ->in_room->people, OBJ, NULL, TO_ROOM);
         }
         GET_WORKSHOP_UNPACK_TICKS(OBJ) = 0;
       }

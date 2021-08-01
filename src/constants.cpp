@@ -481,7 +481,7 @@ const char *player_bits[] =
     "NOIDLEOUT",
     "TELLS_MUTED",
     "NEWBIE_MUTED",
-    "CYBERDOC_PERMITTED",
+    "IS_CYBERDOC",
     "\n"
   };
 
@@ -648,6 +648,8 @@ const char *preference_bits[] =
     "BRIEF",
     "!HIGHLIGHTS",
     "!PSEUDOLANGUAGE",
+    "!IDLE_NUYEN_REWARD_MESSAGE",
+    "CYBERDOC_PERMITTED",
     "\n"
   };
 
