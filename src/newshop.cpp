@@ -2937,21 +2937,25 @@ void save_shop_orders() {
         next_order = order->next;
         totaltime = order->expiration - time(0);
         if (totaltime < 0) {
-          int real_obj = real_object(order->item);
-          snprintf(buf2, sizeof(buf2), "%s can't be held for you any longer at %s. Your pre-payment will be refunded to your account, minus a %d percent restocking fee.\r\n", 
-                   real_obj > 0 ? CAP(obj_proto[real_obj].text.name) : "Something",
-                   shop_table[shop_nr].shopname,
-                   100 / PREORDER_RESTOCKING_FEE_DIVISOR
-                  );
-          int real_mob = real_mobile(shop_table[shop_nr].keeper);
-          if (real_mob > 0)
-            raw_store_mail(order->player, 0, mob_proto[real_mob].player.physical_text.name, (const char *) buf2);
-          else
-            raw_store_mail(order->player, 0, "An anonymous shopkeeper", (const char *) buf2);
-          
-          // Wire the funds. This handles notification for us.
-          if (order->paid > 0)
-            wire_nuyen(NULL, order->paid - (order->paid / PREORDER_RESTOCKING_FEE_DIVISOR), order->player);
+          // Notify them about the expiry, but only for orders with a prepay-- this prevents the 7-day spamstorm when this change is first launched.
+          if (order->paid > 0) {
+            int repayment_amount = order->paid - (order->paid / PREORDER_RESTOCKING_FEE_DIVISOR);
+            int real_obj = real_object(order->item);
+            snprintf(buf2, sizeof(buf2), "%s can't be held for you any longer at %s. %d nuyen will be refunded to your account.\r\n", 
+                     real_obj > 0 ? CAP(obj_proto[real_obj].text.name) : "Something",
+                     shop_table[shop_nr].shopname,
+                     repayment_amount
+                    );
+            int real_mob = real_mobile(shop_table[shop_nr].keeper);
+            if (real_mob > 0)
+              raw_store_mail(order->player, 0, mob_proto[real_mob].player.physical_text.name, (const char *) buf2);
+            else
+              raw_store_mail(order->player, 0, "An anonymous shopkeeper", (const char *) buf2);
+            
+            // Wire the funds. This will not notify them (they're already getting a message through here.)
+            if (repayment_amount > 0)
+              wire_nuyen(NULL, repayment_amount, order->player);
+          }
           
           // Remove the order from the list, then delete it.
           REMOVE_FROM_LIST(order, shop_table[shop_nr].order, next);
