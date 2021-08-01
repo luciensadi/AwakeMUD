@@ -141,4 +141,9 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 #define CYBERWARE_INSTALLATION_COST_MAXIMUM             10000
 #define CYBERDOC_NO_INJURY_DIE_REQUIREMENT              5
 
+// You have to put down 33% of the cost of the item to order it, and orders stick around for X IRL days.
+#define PREORDER_COST_DIVISOR                           3
+#define PREORDERS_ARE_GOOD_FOR_X_DAYS                   7
+#define PREORDER_RESTOCKING_FEE_DIVISOR                 10
+
 #endif

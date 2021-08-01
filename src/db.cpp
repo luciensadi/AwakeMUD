@@ -5160,6 +5160,10 @@ void boot_shop_orders(void)
       order->number = data.GetInt(buf, 0);
       snprintf(buf, sizeof(buf), "%s/Sent", sect_name);
       order->sent = data.GetInt(buf, 0);
+      snprintf(buf, sizeof(buf), "%s/Paid", sect_name);
+      order->paid = data.GetInt(buf, 0);
+      snprintf(buf, sizeof(buf), "%s/Expiration", sect_name);
+      order->expiration = data.GetLong(buf, MAX(time(0), order->timeavail) + (60 * 60 * 24 * PREORDERS_ARE_GOOD_FOR_X_DAYS));
 
       if (order->item && order->player && order->timeavail && order->price && order->number) {
         order->next = list;

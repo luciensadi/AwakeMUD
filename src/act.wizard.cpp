@@ -93,6 +93,7 @@ extern void write_objs_to_disk(int zone);
 extern void alarm_handler(int signal);
 extern bool can_edit_zone(struct char_data *ch, int zone);
 extern const char *render_door_type_string(struct room_direction_data *door);
+extern void save_shop_orders();
 
 extern void DBFinalize();
 
@@ -133,7 +134,7 @@ ACMD(do_copyover)
   FILE *fp;
   struct descriptor_data *d, *d_next;
   struct char_data *och;
-  int mesnum = number(0, 18);
+  int mesnum = number(0, 20);
   
   /* Old messages, preserved for posterity.
   // "I like copyovers, yes I do!  Eating player corpses in a copyover stew!\r\n",
@@ -141,28 +142,34 @@ ACMD(do_copyover)
   // "Yes. We did this copyover solely to fuck YOUR character over.\r\n",
   // "Ahh drek, Maestra's broke the mud again!  Go bug Che and he might fix it.\r\n",
   // "Deleting player corpses, please wait...\r\n",
+  // "Please wait while your character is deleted.\r\n",
+  // "You are mortally wounded and will die soon if not aided.\r\n",
+  // "Connection closed by foreign host.\r\n",
+  // "Jerry Garcia told me to type copyover.  He is wise, isn't he?\r\n",
   */
   const char *messages[] =
     {
       "This copyover has been brought to you by NERPS.  It's more than a lubricant, it's a lifestyle!\r\n", // 0
-      "Yes, the mud is lagging.  Deal with it.\r\n",
-      "Its a copyover.  Now would be a good time to take out the trash.\r\n",
-      "Jerry Garcia told me to type copyover.  He is wise, isn't he?\r\n",
+      "Yes, the MUD is lagging.  Deal with it.\r\n",
+      "It's a copyover.  Now would be a good time to take out the trash.\r\n",
       "My dog told me to copyover. Goood dog, good dog.\r\n",
-      "It's called a changeover, the movie goes on, and nobody in the audience has any idea.\r\n", // 5
-      "Oh shit, I forgot to compile.  I'm gonna have to do this again!\r\n",
-      "Please wait while your character is deleted.\r\n",
-      "You are mortally wounded and will die soon if not aided.\r\n",
-      "Connection closed by foreign host.\r\n",
-      "Someone says \x1B[0;35mOOCly\x1B[0m, \"I'm going to get fired for this.\"\r\n", // 10
+      "It's called a changeover, the movie goes on, and nobody in the audience has any idea.\r\n",
+      "Oh shit, I forgot to compile.  I'm gonna have to do this again!\r\n", // 5
+      "Someone says \x1B[0;35mOOCly\x1B[0m, \"I'm going to get fired for this.\"\r\n",
       "Yum Yum Copyover Stew, out with the old code, in with the new!\r\n",
       "\x1B[0;35m[\x1B[0mSerge\x1B[0;35m] \x1B[0;31m(\x1B[0mOOC\x1B[0;31m)\x1B[0m, \"This porn's taking too long to download, needs more bandwidth. So the Mud'll be back up in a bit.\"\r\n",
       "\x1B[0;35m[\x1B[0mLucien\x1B[0;35m] \x1B[0;31m(\x1B[0mOOC\x1B[0;31m)\x1B[0m, \"Honestly, I give this new code a 30% chance of crashing outright.\"\r\n",
-      "There's a sound like a record scratching, and everything around you stutters to a standstill.",
-      "One moment while we drive up the server cost with heavy CPU usage...\r\n", //15
+      "There's a sound like a record scratching, and everything around you stutters to a standstill.", // 10
+      "One moment while we drive up the server cost with heavy CPU usage...\r\n",
       "You wake up. You're still a lizard sunning on a red rock. It was all a dream. The concept of selling 'feet pics' to pay back 'ripperdocs' is already losing its meaning as you open and lick your own eyeballs to moisten them. Time to eat a bug.\r\n",
       "For the briefest of moments, you peer beyond the veil, catching a glimpse of the whirling, gleaming machinery that lies at the heart of the world. Your mind begins to break down at the sight...\r\n",
-      "Your vision goes black, then starts to fade in again. You're sitting in the back of a cart, your hands bound before you. A disheveled blonde man sitting across from you meets your eyes. \"Hey, you. You're finally awake.\""
+      "Your vision goes black, then starts to fade in again. You're sitting in the back of a cart, your hands bound before you. A disheveled blonde man sitting across from you meets your eyes. \"Hey, you. You're finally awake.\"\r\n",
+      "A sharp tone sounds, and suddenly all you can see is a glitchy field of yellow-and-black. A red info box hovers in front of your paralyzed form, reading \"FIXING ANOMALY, PLEASE STAND BY\"...\r\n", // 15
+      "An unexplainable mist pours into the area, shrouding your surroundings into undefinable half-shapes that twitch oddly in the dimness. As you look around in bewilderment, a civil defense siren begins to sound...\r\n",
+      "Your pocket secretary beeps, and you glance at it distractedly. But what's this? A notification of winning the lottery? A wire transfer of a hundred million nuyen?! You're finally free! You can retire from the shadows and live a normal life! You can--\r\n",
+      "A bone-shaking rumble startles you, and your gaze flicks towards its source-- the rising sun on the horizon. But wait, the sun rose hours ago, and it's not usually shaped like a mushroom, is it...?\r\n",
+      "You're one of the lucky ones-- you were looking at the night sky when it happened. Some barely-discernable speck flickered by, crossing the sky in the span of a second, and shattered the Moon into seven pieces...\r\n",
+      "Some undescribable force urges you to visit https://youtu.be/x31tDT-4fQw.\r\n" // 20
     };
 
   fp = fopen (COPYOVER_FILE, "w");
@@ -313,6 +320,10 @@ ACMD(do_copyover)
   // Save vehicles.
   log("Saving vehicles.");
   save_vehicles();
+  
+  // Save shop orders.
+  log("Saving shop orders.");
+  save_shop_orders();
   
   log("Closing database connection.");
   DBFinalize();

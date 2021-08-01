@@ -767,10 +767,15 @@ SPECIAL(landlord_spec)
     else if (!room_record->owner)
       do_say(recep, "That room is currently available for lease.", 0, 0);
     else {
-      if (room_record->date - time(0) < 0)
+      if (room_record->date - time(0) < 0) {
         strcpy(buf2, "Your rent has expired on that apartment.");
-      else snprintf(buf2, sizeof(buf2), "You are paid for another %d days.", (int)((room_record->date - time(0)) / 86400));
-      do_say(recep, buf2, 0, 0);
+        do_say(recep, buf2, 0, 0);
+      } else {
+        snprintf(buf2, sizeof(buf2), "You are paid for another %d days.", (int)((room_record->date - time(0)) / 86400));
+        do_say(recep, buf2, 0, 0);
+        strlcpy(buf2, "Note: Those are real-world days.", sizeof(buf2));
+        do_say(recep, buf2, 0, SCMD_OSAY);
+      }
     }
     return TRUE;
   }

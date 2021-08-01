@@ -70,9 +70,11 @@ void wire_nuyen(struct char_data *ch, int amount, vnum_t character_id)
     targ = NULL;
   }
   
-  // Deduct from the sender.
-  GET_BANK(ch) -= amount;
-  playerDB.SaveChar(ch);
+  // Deduct from the sender (if any).
+  if (ch) {
+    GET_BANK(ch) -= amount;
+    playerDB.SaveChar(ch);
+  }
   
   // Add to the receiver.
   if (targ) {
@@ -83,13 +85,15 @@ void wire_nuyen(struct char_data *ch, int amount, vnum_t character_id)
     mysql_wrapper(mysql, buf);
   }
   
-  // Mail it.
-  snprintf(buf, sizeof(buf), "%s has wired %d nuyen to your account.\r\n", GET_CHAR_NAME(ch), amount);
-  store_mail(character_id, ch, buf);
+  // Mail it. We don't send mail for NPC shopkeepers refunding you.
+  if (ch) {
+    snprintf(buf, sizeof(buf), "%s has wired %d nuyen to your account.\r\n", ch ? GET_CHAR_NAME(ch) : "Someone", amount);
+    store_mail(character_id, ch, buf);
+  }
   
   // Log it.
   char *player_name = targ ? NULL : get_player_name(character_id);
-  snprintf(buf, sizeof(buf), "%s wired %d nuyen to %s.", GET_CHAR_NAME(ch), amount, targ ? GET_CHAR_NAME(targ) : player_name);
+  snprintf(buf, sizeof(buf), "%s wired %d nuyen to %s.", ch ? GET_CHAR_NAME(ch) : "An NPC", amount, targ ? GET_CHAR_NAME(targ) : player_name);
   DELETE_ARRAY_IF_EXTANT(player_name);
   mudlog(buf, ch, LOG_GRIDLOG, TRUE);
 }

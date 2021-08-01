@@ -17,6 +17,7 @@
 #include "olc.h"
 #include "constants.h"
 #include "config.h"
+#include "newmail.h"
 
 extern struct time_info_data time_info;
 extern const char *pc_race_types[];
@@ -24,6 +25,7 @@ extern const char *pc_race_types[];
 extern struct obj_data *get_first_credstick(struct char_data *ch, const char *arg);
 extern void reduce_abilities(struct char_data *vict);
 extern void do_probe_object(struct char_data * ch, struct obj_data * j);
+extern void wire_nuyen(struct char_data *ch, int amount, vnum_t character_id);
 ACMD_CONST(do_say);
 
 bool can_sell_object(struct obj_data *obj, struct char_data *keeper, int shop_nr);
@@ -909,8 +911,26 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
       return;
     }
     
-    // TODO: If their nuyen is less than half of the list cost, reject. 
-    // Otherwise, deduct half of the list cost from them for the order value (they get it back if they cancel, and it's applied to purchase price if they receive it.)
+    // Prevent trying to pre-order something if you don't have the scratch. Calculated using the flat price, not the negotiated one.
+    int preorder_cost = GET_OBJ_COST(obj) / PREORDER_COST_DIVISOR;
+    if (!cred)
+      cash = TRUE;
+      
+    if (!cash && !cred) {
+      mudlog("SYSERR: Ended up with !cash and !cred in shop purchasing!", ch, LOG_SYSLOG, TRUE);
+      send_to_char(ch, "Sorry, something went wrong.\r\n");
+      extract_obj(obj);
+      return;
+    }
+    
+    if ((cash && GET_NUYEN(ch) < preorder_cost)
+        || (cred && GET_ITEM_MONEY_VALUE(cred) < preorder_cost))
+    {
+      snprintf(buf, sizeof(buf), "%s It'll cost you %d nuyen to place that order. Come back when you've got the funds.", GET_CHAR_NAME(ch), preorder_cost);
+      do_say(keeper, buf, cmd_say, SCMD_SAYTO);
+      extract_obj(obj);
+      return;
+    }
     
     // Calculate TNs, factoring in settings, powers, and racism.
     int target = GET_OBJ_AVAILTN(obj) - GET_AVAIL_OFFSET(ch);
@@ -989,6 +1009,14 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
       totaltime = 0.0;
     }
     
+    // Pay the preorder cost.
+    if (cash) {
+      GET_NUYEN(ch) -= preorder_cost;
+    } else {
+      GET_ITEM_MONEY_VALUE(cred) -= preorder_cost;
+    }
+    send_to_char(ch, "You put down a %d nuyen deposit on your order.\r\n", preorder_cost);
+    
     if (totaltime < 1) {
       int hours = MAX(1, (int)(24 * totaltime));
       snprintf(buf, sizeof(buf), "%s That will take about %d hour%s to come in.", GET_CHAR_NAME(ch), hours, hours == 1 ? "" : "s");
@@ -1019,6 +1047,8 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
       order->next = shop_table[shop_nr].order;
       order->sent = FALSE;
       shop_table[shop_nr].order = order;
+      order->paid = preorder_cost;
+      order->expiration = order->timeavail + (60 * 60 * 24 * PREORDERS_ARE_GOOD_FOR_X_DAYS);
     }
     
     // Clean up.
@@ -1823,8 +1853,26 @@ void shop_check(char *arg, struct char_data *ch, struct char_data *keeper, vnum_
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %d) %-30s (%d) - ", i, GET_OBJ_NAME(&obj_proto[real_obj]), order->number);
       else
         strlcat(buf, " ERROR\r\n", sizeof(buf));
-      if (totaltime < 0)
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " AVAILABLE (%d nuyen / ea)\r\n", order->price);
+      if (totaltime < 0) {
+        time_t time_left = order->expiration - time(0);
+        int days = time_left / (60 * 60 * 24);
+        time_left -= 60 * 60 * 24 * days;
+        
+        int hours = time_left / (60 * 60);
+        time_left -= 60 * 60 * hours;
+        
+        int minutes = time_left / 60;
+        
+        if (days > 0)
+          snprintf(buf3, sizeof(buf3), "in %d IRL day%s, %d hour%s", days, days != 1 ? "s" : "", hours, hours != 1 ? "s" : "");
+        else if (hours > 0)
+          snprintf(buf3, sizeof(buf3), "in %d IRL hour%s, %d minute%s", hours, hours != 1 ? "s" : "", minutes, minutes != 1 ? "s" : "");
+        else if (minutes > 0)
+          snprintf(buf3, sizeof(buf3), "in %d IRL minute%s", minutes, minutes != 1 ? "s" : "");
+        else
+          strlcpy(buf3, "at any moment", sizeof(buf3));
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " AVAILABLE (%d nuyen / ea; expires %s)\r\n", order->price - order->paid, buf3);
+      }
       else if (totaltime < 1 && (int)(24 * totaltime) == 0)
         strlcat(buf, " less than one hour\r\n", sizeof(buf));
       else
@@ -1863,11 +1911,12 @@ void shop_rec(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t 
         } else {
           snprintf(buf, sizeof(buf), "%s No Credstick, No Sale.", GET_CHAR_NAME(ch));
           do_say(keeper, buf, cmd_say, SCMD_SAYTO);
+          extract_obj(obj);
           return;
         }
       }
       shop_receive(ch, keeper, arg, order->number, cred && shop_table[shop_nr].type != SHOP_BLACK? 0 : 1, NULL, obj,
-                       shop_table[shop_nr].type == SHOP_BLACK ? NULL : cred, order->price, shop_nr, order);
+                       shop_table[shop_nr].type == SHOP_BLACK ? NULL : cred, order->price - order->paid, shop_nr, order);
       return;
     }
   }
@@ -2870,4 +2919,87 @@ struct obj_data *shop_package_up_ware(struct obj_data *obj) {
   
   obj_to_obj(obj, shop_container);
   return shop_container;
+}
+
+void save_shop_orders() {
+  FILE *fl;
+  float totaltime = 0;
+  
+  for (int shop_nr = 0; shop_nr <= top_of_shopt; shop_nr++) {
+    // Wipe the existing shop order save files-- they're out of date.
+    snprintf(buf, sizeof(buf), "order/%ld", shop_table[shop_nr].vnum);
+    unlink(buf);
+    
+    if (shop_table[shop_nr].order) {
+      // Expire out orders that have reached their end of life. Yes, this means a whole separate for-loop just for this.
+      struct shop_order_data *next_order, *temp;
+      for (struct shop_order_data *order = shop_table[shop_nr].order; order; order = next_order) {
+        next_order = order->next;
+        totaltime = order->expiration - time(0);
+        if (totaltime < 0) {
+          int real_obj = real_object(order->item);
+          snprintf(buf2, sizeof(buf2), "%s can't be held for you any longer at %s. Your pre-payment will be refunded to your account, minus a %d percent restocking fee.\r\n", 
+                   real_obj > 0 ? CAP(obj_proto[real_obj].text.name) : "Something",
+                   shop_table[shop_nr].shopname,
+                   100 / PREORDER_RESTOCKING_FEE_DIVISOR
+                  );
+          int real_mob = real_mobile(shop_table[shop_nr].keeper);
+          if (real_mob > 0)
+            raw_store_mail(order->player, 0, mob_proto[real_mob].player.physical_text.name, (const char *) buf2);
+          else
+            raw_store_mail(order->player, 0, "An anonymous shopkeeper", (const char *) buf2);
+          
+          // Wire the funds. This handles notification for us.
+          if (order->paid > 0)
+            wire_nuyen(NULL, order->paid - (order->paid / PREORDER_RESTOCKING_FEE_DIVISOR), order->player);
+          
+          // Remove the order from the list, then delete it.
+          REMOVE_FROM_LIST(order, shop_table[shop_nr].order, next);
+          delete order;
+        }
+      }
+      
+      // Since we potentially wiped all the shop orders, we have to check if we have any others-- no sense writing an empty file.
+      if (!shop_table[shop_nr].order)
+        continue;
+      
+      // We have orders, so open the shop file and write the header.
+      if (!(fl = fopen(buf, "w"))) {
+        perror("SYSERR: Error saving order file");
+        continue;
+      }
+      int i = 0;
+      fprintf(fl, "[ORDERS]\n");
+      
+      // Iterate through the orders, writing them each to file. Also, send a mail if the order is ready to be picked up.
+      for (struct shop_order_data *order = shop_table[shop_nr].order; order; order = order->next, i++) {
+        totaltime = order->timeavail - time(0);
+        if (!order->sent && totaltime < 0) {
+          int real_obj = real_object(order->item);
+          snprintf(buf2, sizeof(buf2), "%s has arrived at %s and is ready for pickup for a total cost of %d nuyen. It will be held for you for %d days.\r\n", 
+                   real_obj > 0 ? CAP(obj_proto[real_obj].text.name) : "Something",
+                   shop_table[shop_nr].shopname,
+                   order->price,
+                   PREORDERS_ARE_GOOD_FOR_X_DAYS
+                  );
+          int real_mob = real_mobile(shop_table[shop_nr].keeper);
+          if (real_mob > 0)
+            raw_store_mail(order->player, 0, mob_proto[real_mob].player.physical_text.name, (const char *) buf2);
+          else
+            raw_store_mail(order->player, 0, "An anonymous shopkeeper", (const char *) buf2);
+          order->sent = TRUE;
+        }
+        fprintf(fl, "\t[ORDER %d]\n", i);
+        fprintf(fl, "\t\tItem:\t%ld\n"
+                "\t\tPlayer:\t%ld\n"
+                "\t\tTime:\t%d\n"
+                "\t\tNumber:\t%d\n"
+                "\t\tPrice:\t%d\n"
+                "\t\tSent:\t%d\n"
+                "\t\tPaid:\t%d\n"
+                "\t\tExpiration:\t%ld\n", order->item, order->player, order->timeavail, order->number, order->price, order->sent, order->paid, order->expiration);
+      }
+      fclose(fl);
+    }
+  }
 }

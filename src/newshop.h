@@ -53,6 +53,8 @@ struct shop_order_data {
   int number;
   int price;
   bool sent;
+  int paid;
+  long expiration;
   struct shop_order_data *next;
 
   shop_order_data() :

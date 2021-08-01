@@ -48,6 +48,8 @@ extern void check_adrenaline(struct char_data *, int);
 extern bool House_can_enter_by_idnum(long idnum, vnum_t house);
 extern int get_paydata_market_maximum(int host_color);
 extern int get_paydata_market_minimum(int host_color);
+extern void wire_nuyen(struct char_data *ch, int amount, vnum_t character_id);
+extern void save_shop_orders();
 
 void mental_gain(struct char_data * ch)
 {
@@ -696,7 +698,6 @@ void point_update(void)
   PERF_PROF_SCOPE(pr_, __func__);
   ACMD_DECLARE(do_use);
   struct char_data *i, *next_char;
-  FILE *fl;
   extern struct time_info_data time_info;
   
   // Generate the wholist file.
@@ -902,46 +903,7 @@ void point_update(void)
   }
   
   /* save shop order updates */
-  {
-    float totaltime = 0;
-    for (int shop_nr = 0; shop_nr <= top_of_shopt; shop_nr++) {
-      snprintf(buf, sizeof(buf), "order/%ld", shop_table[shop_nr].vnum);
-      unlink(buf);
-      if (shop_table[shop_nr].order) {
-        if (!(fl = fopen(buf, "w"))) {
-          perror("SYSERR: Error saving order file");
-          continue;
-        }
-        int i = 0;
-        fprintf(fl, "[ORDERS]\n");
-        for (struct shop_order_data *order = shop_table[shop_nr].order; order; order = order->next, i++) {
-          totaltime = order->timeavail - time(0);
-          if (!order->sent && totaltime < 0) {
-            int real_obj = real_object(order->item);
-            snprintf(buf2, sizeof(buf2), "%s has arrived at %s and is ready for pickup for a total cost of %d nuyen.\r\n", 
-                     real_obj > 0 ? CAP(obj_proto[real_obj].text.name) : "Something",
-                     shop_table[shop_nr].shopname,
-                     order->price
-                    );
-            int real_mob = real_mobile(shop_table[shop_nr].keeper);
-            if (real_mob > 0)
-              raw_store_mail(order->player, 0, mob_proto[real_mob].player.physical_text.name, (const char *) buf2);
-            else
-              raw_store_mail(order->player, 0, "An anonymous shopkeeper", (const char *) buf2);
-            order->sent = TRUE;
-          }
-          fprintf(fl, "\t[ORDER %d]\n", i);
-          fprintf(fl, "\t\tItem:\t%ld\n"
-                  "\t\tPlayer:\t%ld\n"
-                  "\t\tTime:\t%d\n"
-                  "\t\tNumber:\t%d\n"
-                  "\t\tPrice:\t%d\n"
-                  "\t\tSent:\t%d\n", order->item, order->player, order->timeavail, order->number, order->price, order->sent);
-        }
-        fclose(fl);
-      }
-    }
-  }
+  save_shop_orders();
   
   /* update object counters */
   ObjList.UpdateCounters();
