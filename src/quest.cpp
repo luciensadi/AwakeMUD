@@ -833,8 +833,8 @@ SPECIAL(johnson)
       send_to_char("OK, your quest history has been cleared.\r\n", ch);
       return FALSE;
     } else {
-      snprintf(buf, sizeof(buf), "INFO: No Johnson keywords found in %s's speech: '%s'.", GET_CHAR_NAME(ch), argument);
-      mudlog(buf, ch, LOG_SYSLOG, TRUE);
+      //snprintf(buf, sizeof(buf), "INFO: No Johnson keywords found in %s's speech: '%s'.", GET_CHAR_NAME(ch), argument);
+      //mudlog(buf, ch, LOG_SYSLOG, TRUE);
       return FALSE;
     }
     need_to_speak = TRUE;
