@@ -226,6 +226,12 @@ struct shop_sell_data *find_obj_shop(char *arg, vnum_t shop_nr, struct obj_data 
 }
 
 bool uninstall_ware_from_target_character(struct obj_data *obj, struct char_data *remover, struct char_data *victim, bool damage_on_operation) {
+  if (remover == victim) {
+    send_to_char(remover, "You can't operate on yourself!\r\n");
+    mudlog("SYSERR: remover = victim in uninstall_ware_from_target_character(). That's not supposed to happen!", remover, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+  
   if (GET_OBJ_TYPE(obj) != ITEM_BIOWARE && GET_OBJ_TYPE(obj) != ITEM_CYBERWARE) {
     snprintf(buf3, sizeof(buf3), "SYSERR: Non-ware object '%s' (%ld) passed to uninstall_ware_from_target_character()!", GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj));
     mudlog(buf3, remover, LOG_SYSLOG, TRUE);
@@ -283,19 +289,29 @@ bool uninstall_ware_from_target_character(struct obj_data *obj, struct char_data
 bool install_ware_in_target_character(struct obj_data *ware, struct char_data *installer, struct char_data *recipient, bool damage_on_operation) {
   struct obj_data *check;
   
+  if (installer == recipient) {
+    send_to_char(installer, "You can't operate on yourself!\r\n");
+    mudlog("SYSERR: installer = recipient in install_ware_in_target_character(). That's not supposed to happen!", installer, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+  
   strlcpy(buf, GET_CHAR_NAME(recipient), sizeof(buf));
   
   // Item must be compatible with your current gear.
   switch (GET_OBJ_TYPE(ware)) {
     case ITEM_CYBERWARE:
       for (struct obj_data *bio = recipient->bioware; bio; bio = bio->next_content)
-        if (!biocyber_compatibility(ware, bio, recipient))
+        if (!biocyber_compatibility(ware, bio, recipient)) {
+          send_to_char(installer, "That 'ware isn't compatible with what's already installed.\r\n");
           return FALSE;
+        }
       break;
     case ITEM_BIOWARE:
       for (struct obj_data *cyber = recipient->cyberware; cyber; cyber = cyber->next_content)
-        if (!biocyber_compatibility(ware, cyber, recipient))
+        if (!biocyber_compatibility(ware, cyber, recipient)) {
+          send_to_char(installer, "That 'ware isn't compatible with what's already installed.\r\n");
           return FALSE;
+        }
       break;
     default:
       snprintf(buf3, sizeof(buf3), "SYSERR: Non-ware object '%s' (%ld) passed to install_ware_in_target_character()!", GET_OBJ_NAME(ware), GET_OBJ_VNUM(ware));
