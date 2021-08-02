@@ -169,7 +169,7 @@ ACMD(do_copyover)
       "Your pocket secretary beeps, and you glance at it distractedly. But what's this? A notification of winning the lottery? A wire transfer of a hundred million nuyen?! You're finally free! You can retire from the shadows and live a normal life! You can--\r\n",
       "A bone-shaking rumble startles you, and your gaze flicks towards its source-- the rising sun on the horizon. But wait, the sun rose hours ago, and it's not usually shaped like a mushroom, is it...?\r\n",
       "You're one of the lucky ones-- you were looking at the night sky when it happened. Some barely-discernable speck flickered by, crossing the sky in the span of a second, and shattered the Moon into seven pieces...\r\n",
-      "Some undescribable force urges you to visit https://youtu.be/x31tDT-4fQw.\r\n" // 20
+      "Some indescribable force urges you to visit https://youtu.be/x31tDT-4fQw.\r\n" // 20
     };
 
   fp = fopen (COPYOVER_FILE, "w");

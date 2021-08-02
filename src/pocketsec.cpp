@@ -11,6 +11,7 @@
 #include "newmail.h"
 #include "newdb.h"
 #include "memory.h"
+#include "config.h"
 
 #define CH d->character
 #define SEC d->edit_obj
@@ -35,6 +36,7 @@
 #define SEC_NOTEADD1		18
 #define SEC_NOTEADD2		19
 #define SEC_NOTEDEL		20
+#define SEC_KEEPMAIL    21
 
 #define POCSEC_FOLDER_MAIL      "Mail"
 #define POCSEC_FOLDER_NOTES     "Notes"
@@ -196,15 +198,35 @@ void pocketsec_mailmenu(struct descriptor_data *d)
   }
   CLS(CH);
   send_to_char(CH, "^LShadowland Mail Network^n\r\n");
+  int expiry_ticks, days, hours, minutes;
   for (mail = folder->contains; mail; mail = mail->next_content) {
     i++;
-    send_to_char(CH, " %2d >%s%s%s\r\n", 
-                 i, 
-                 !GET_OBJ_VAL(mail, 0) ? " ^R" : " ", 
-                 GET_OBJ_NAME(mail),
-                 !GET_OBJ_VAL(mail, 0) ? " (unread)" : "");
+    
+    // Compose our status string.
+    snprintf(buf, sizeof(buf), " %2d > %s%s^n",
+                  i,
+                  !GET_OBJ_VAL(mail, 0) ? "(unread) ^R" : "",
+                  GET_OBJ_NAME(mail)
+                );
+    
+    if (GET_OBJ_TIMER(mail) >= 0) {
+      expiry_ticks = MAIL_EXPIRATION_TICKS - GET_OBJ_TIMER(mail);
+      minutes = expiry_ticks % 60;
+      hours = expiry_ticks % (60 * 24);
+      days = expiry_ticks / (60 * 24);
+      
+      if (days > 0)
+        snprintf(buf2, sizeof(buf2), "%s\r\n", buf);
+      else if (hours > 0 || minutes > 0)
+        snprintf(buf2, sizeof(buf2), "%-30s [expires in %dh %dm]\r\n", buf, hours, minutes);
+      else
+        snprintf(buf2, sizeof(buf2), "%-30s [expiring at any moment!]\r\n", buf);
+    } else {
+      snprintf(buf2, sizeof(buf2), "%s (kept)\r\n", buf);
+    }
+    send_to_char(buf2, CH);
   }
-  send_to_char("\r\n[^cR^n]^cead Mail^n     [^cD^n]^celete Mail^n     [^cS^n]^cend mail^n     [^cB^n]^cack^n\r\n", CH);
+  send_to_char("\r\n[^cR^n]^cead Mail^n     [^cD^n]^celete Mail^n     [^cS^n]^cend Mail^n     [^cK^n]^ceep Mail^n     [^cB^n]^cack^n\r\n", CH);
   d->edit_mode = SEC_MAILMENU;
 }
 
@@ -496,12 +518,17 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
           send_to_char("Send message to whom?\r\n", CH);
           d->edit_mode = SEC_SENDMAIL;
           break;
+        case 'k':
+          send_to_char("Keep which message?\r\n", CH);
+          d->edit_mode = SEC_KEEPMAIL;
+          break;
         case 'b':
           pocketsec_menu(d);
           break;
       }
       break;
     case SEC_DELMAIL:
+    case SEC_KEEPMAIL:
       for (folder = SEC->contains; folder; folder = folder->next_content)
         if (!strcmp(folder->restring, POCSEC_FOLDER_MAIL))
           break;
@@ -511,19 +538,29 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
         folder = generate_pocket_secretary_folder(SEC, POCSEC_FOLDER_MAIL);
       }
       
-      if (arg && *arg == '*') {
-        struct obj_data *next;
-        for (file = folder->contains; file; file = next) {
-          next = file->next_content;
-          extract_obj(file);
+      if (arg) {
+        if (d->edit_mode != SEC_KEEPMAIL && *arg == '*') {
+          struct obj_data *next;
+          for (file = folder->contains; file; file = next) {
+            next = file->next_content;
+            extract_obj(file);
+          }
+          folder->contains = NULL;
+        } else {
+          i = atoi(arg);  
+          for (file = folder->contains; file && i > 1; file = file->next_content)
+            i--;
+          if (file) {
+            if (d->edit_mode == SEC_KEEPMAIL) {
+              if (GET_OBJ_TIMER(file) == -1)
+                GET_OBJ_TIMER(file) = 0;
+              else
+                GET_OBJ_TIMER(file) = -1;
+            } else {
+              extract_obj(file);
+            }
+          }
         }
-        folder->contains = NULL;
-      } else {
-        i = atoi(arg);  
-        for (file = folder->contains; file && i > 1; file = file->next_content)
-          i--;
-        if (file)
-          extract_obj(file);
       }
       
       pocketsec_mailmenu(d);

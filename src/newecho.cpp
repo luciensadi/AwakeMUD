@@ -470,7 +470,7 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
       continue;
     
     // It's a quote mark. Set up our vars and increment i by one so it's pointing at the start of the speech.
-    language_in_use = IS_NPC(actor) ? SKILL_ENGLISH : GET_LANGUAGE(actor);
+    language_in_use = !SKILL_IS_LANGUAGE(GET_LANGUAGE(actor)) ? SKILL_ENGLISH : GET_LANGUAGE(actor);
     i++;
     
     // We only accept parenthetical language as the very first thing in the sentence.
@@ -511,7 +511,7 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
       if (SKILL_IS_LANGUAGE(skill_num))
         language_in_use = skill_num;
       else
-        language_in_use = IS_NPC(actor) ? SKILL_ENGLISH : GET_LANGUAGE(actor);
+        language_in_use = !SKILL_IS_LANGUAGE(GET_LANGUAGE(actor)) ? SKILL_ENGLISH : GET_LANGUAGE(actor);
         
       NEW_EMOTE_DEBUG_SPEECH(actor, "\r\nLanguage in use for $n is now %s (target: '%s').\r\n", skills[language_in_use].name, language_string);
       
@@ -536,7 +536,7 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
     char speech_buf[MAX_STRING_LENGTH];
     
     // First, add the language tag string.
-    if (language_in_use != SKILL_ENGLISH) {
+    if (language_in_use != SKILL_ENGLISH && (IS_NPC(viewer) || GET_SKILL(viewer, language_in_use) > 0)) {
       snprintf(speech_buf, sizeof(speech_buf), "(%s) ", capitalize(skills[language_in_use].name));
     } else {
       strlcpy(speech_buf, "", sizeof(speech_buf));
@@ -699,7 +699,7 @@ ACMD(do_new_echo) {
   
   // Scan the emote for language values. You can only use languages you know, and only up to certain word lengths.
   if (!IS_NPC(ch)) {
-    int language_in_use = GET_LANGUAGE(ch);
+    int language_in_use = !SKILL_IS_LANGUAGE(GET_LANGUAGE(ch)) ? SKILL_ENGLISH : GET_LANGUAGE(ch);
     for (int i = 0; i < (int) strlen(storage_buf); i++) {
       // Skip everything that's not speech.
       if (storage_buf[i] != '"')

@@ -146,4 +146,7 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 #define PREORDERS_ARE_GOOD_FOR_X_DAYS                   7
 #define PREORDER_RESTOCKING_FEE_DIVISOR                 10
 
+// How many minutes must have passed since the creation of a piece of mail before it is auto-deleted?
+#define MAIL_EXPIRATION_TICKS (60 * 24 * 14) /* 14 days */
+
 #endif

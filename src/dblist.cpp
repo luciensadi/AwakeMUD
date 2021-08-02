@@ -284,7 +284,8 @@ void objList::UpdateCounters(void)
     if (GET_OBJ_TYPE(OBJ) == ITEM_DECK_ACCESSORY 
         && GET_OBJ_VAL(OBJ, 0) == TYPE_COOKER 
         && OBJ->contains 
-        && GET_DECK_ACCESSORY_COOKER_TIME_REMAINING(OBJ) > 0) {
+        && GET_DECK_ACCESSORY_COOKER_TIME_REMAINING(OBJ) > 0) 
+    {
       if (--GET_DECK_ACCESSORY_COOKER_TIME_REMAINING(OBJ) < 1) {
         struct obj_data *chip = OBJ->contains;
         act("$p beeps loudly, signaling completion.", FALSE, 0, OBJ, 0, TO_ROOM);
@@ -295,6 +296,16 @@ void objList::UpdateCounters(void)
           GET_OBJ_TIMER(chip) = 1;
       }
       continue;
+    }
+    
+    // Decay mail.
+    if (GET_OBJ_VNUM(OBJ) == OBJ_PIECE_OF_MAIL) {
+      if (GET_OBJ_TIMER(OBJ) != -1 && GET_OBJ_TIMER(OBJ) > MAIL_EXPIRATION_TICKS) {
+        snprintf(buf, sizeof(buf), "Extracting expired mail '%s'.", GET_OBJ_NAME(OBJ));
+        mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+        extract_obj(OBJ);
+        continue;
+      }
     }
 
     // In-game this is a UCAS dress shirt. I suspect the files haven't been updated.

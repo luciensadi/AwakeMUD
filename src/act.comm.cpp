@@ -50,7 +50,7 @@ ACMD(do_say)
 {
   struct char_data *tmp, *to = NULL;
   
-  int language = GET_LANGUAGE(ch) != 0 ? GET_LANGUAGE(ch) : SKILL_ENGLISH;
+  int language = !SKILL_IS_LANGUAGE(GET_LANGUAGE(ch)) ? SKILL_ENGLISH : GET_LANGUAGE(ch);
   
   skip_spaces(&argument);
   
@@ -190,7 +190,7 @@ ACMD(do_exclaim)
   if (!char_can_make_noise(ch, "You can't seem to make any noise.\r\n"))
     return;
     
-  int language = GET_LANGUAGE(ch) != 0 ? GET_LANGUAGE(ch) : SKILL_ENGLISH;
+  int language = !SKILL_IS_LANGUAGE(GET_LANGUAGE(ch)) ? SKILL_ENGLISH : GET_LANGUAGE(ch);
   if (!has_required_language_ability_for_sentence(ch, argument, language))
     return;
   
@@ -359,7 +359,7 @@ ACMD(do_ask)
   if (!char_can_make_noise(ch, "You can't seem to make any noise.\r\n"))
     return;
     
-  int language = GET_LANGUAGE(ch) != 0 ? GET_LANGUAGE(ch) : SKILL_ENGLISH;
+  int language = !SKILL_IS_LANGUAGE(GET_LANGUAGE(ch)) ? SKILL_ENGLISH : GET_LANGUAGE(ch);
   if (!has_required_language_ability_for_sentence(ch, argument, language))
     return;
   
@@ -412,7 +412,7 @@ ACMD(do_spec_comm)
     return;
   }  
     
-  int language = GET_LANGUAGE(ch) != 0 ? GET_LANGUAGE(ch) : SKILL_ENGLISH;
+  int language = !SKILL_IS_LANGUAGE(GET_LANGUAGE(ch)) ? SKILL_ENGLISH : GET_LANGUAGE(ch);
   if (!has_required_language_ability_for_sentence(ch, buf2, language))
     return;
   
@@ -452,7 +452,7 @@ ACMD(do_spec_comm)
     // Message the whisper-ee.
     snprintf(buf, sizeof(buf), "From within %s^n, $z^n says to you in %s, \"%s%s%s^n\"\r\n",
             GET_VEH_NAME(last_veh), 
-            (IS_NPC(vict) || GET_SKILL(vict, language) > 0) ? skills[GET_LANGUAGE(ch)].name : "an unknown language", 
+            (IS_NPC(vict) || GET_SKILL(vict, language) > 0) ? skills[language].name : "an unknown language", 
             (PRF_FLAGGED(vict, PRF_NOHIGHLIGHT) || PRF_FLAGGED(vict, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch), 
             capitalize(replace_too_long_words(vict, ch, buf2, language, GET_CHAR_COLOR_HIGHLIGHT(ch))),
             ispunct(get_final_character_from_string(buf2)) ? "" : ".");
@@ -499,7 +499,7 @@ ACMD(do_spec_comm)
     store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, buf);
     for (vict = veh->people; vict; vict = vict->next_in_veh) {
       snprintf(buf, sizeof(buf), "From outside, $z^n says into the vehicle in %s, \"%s%s%s^n\"\r\n", 
-               (IS_NPC(vict) || GET_SKILL(vict, language) > 0) ? skills[GET_LANGUAGE(ch)].name : "an unknown language", 
+               (IS_NPC(vict) || GET_SKILL(vict, language) > 0) ? skills[language].name : "an unknown language", 
                (PRF_FLAGGED(vict, PRF_NOHIGHLIGHT) || PRF_FLAGGED(vict, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch), 
                capitalize(replace_too_long_words(vict, ch, buf2, language, GET_CHAR_COLOR_HIGHLIGHT(ch))),
                ispunct(get_final_character_from_string(buf2)) ? "" : ".");
@@ -511,7 +511,7 @@ ACMD(do_spec_comm)
   
   snprintf(buf, sizeof(buf), "$z^n %s you in %s, \"%s%s%s^n\"\r\n", 
            action_plur, 
-           (IS_NPC(vict) || GET_SKILL(vict, language) > 0) ? skills[GET_LANGUAGE(ch)].name : "an unknown language", 
+           (IS_NPC(vict) || GET_SKILL(vict, language) > 0) ? skills[language].name : "an unknown language", 
            (PRF_FLAGGED(vict, PRF_NOHIGHLIGHT) || PRF_FLAGGED(vict, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch), 
            capitalize(replace_too_long_words(vict, ch, buf2, language, GET_CHAR_COLOR_HIGHLIGHT(ch))),
            ispunct(get_final_character_from_string(buf2)) ? "" : ".");
@@ -783,7 +783,7 @@ ACMD(do_broadcast)
   if (!char_can_make_noise(ch, "You can't seem to make any noise.\r\n"))
     return;
     
-  int language = GET_LANGUAGE(ch) != 0 ? GET_LANGUAGE(ch) : SKILL_ENGLISH;
+  int language = !SKILL_IS_LANGUAGE(GET_LANGUAGE(ch)) ? SKILL_ENGLISH : GET_LANGUAGE(ch);
   if (!has_required_language_ability_for_sentence(ch, argument, language))
     return;
 
@@ -1070,7 +1070,7 @@ ACMD(do_gen_comm)
     struct room_data *was_in = NULL;
     struct char_data *tmp;
     
-    int language = GET_LANGUAGE(ch) != 0 ? GET_LANGUAGE(ch) : SKILL_ENGLISH;
+    int language = !SKILL_IS_LANGUAGE(GET_LANGUAGE(ch)) ? SKILL_ENGLISH : GET_LANGUAGE(ch);
     if (!has_required_language_ability_for_sentence(ch, argument, language))
       return;
     
@@ -1079,7 +1079,7 @@ ACMD(do_gen_comm)
         snprintf(buf, sizeof(buf), "%s$z%s shouts in %s, \"%s%s%s\"^n", 
                  com_msgs[subcmd][3], 
                  com_msgs[subcmd][3],
-                 (IS_NPC(tmp) || GET_SKILL(tmp, language) > 0) ? skills[GET_LANGUAGE(ch)].name : "an unknown language", 
+                 (IS_NPC(tmp) || GET_SKILL(tmp, language) > 0) ? skills[language].name : "an unknown language", 
                  capitalize(replace_too_long_words(tmp, ch, argument, language, com_msgs[subcmd][3])), 
                  ispunct(get_final_character_from_string(argument)) ? "" : "!", 
                  com_msgs[subcmd][3]);
@@ -1105,7 +1105,7 @@ ACMD(do_gen_comm)
         snprintf(buf1, sizeof(buf1), "%sFrom inside %s^n, $z^n shouts in %s, \"%s%s%s\"^n", 
                  com_msgs[subcmd][3], 
                  decapitalize_a_an(GET_VEH_NAME(ch->in_veh)), 
-                 (IS_NPC(tmp) || GET_SKILL(tmp, language) > 0) ? skills[GET_LANGUAGE(ch)].name : "an unknown language", 
+                 (IS_NPC(tmp) || GET_SKILL(tmp, language) > 0) ? skills[language].name : "an unknown language", 
                  capitalize(replace_too_long_words(tmp, ch, argument, language, com_msgs[subcmd][3])), 
                  ispunct(get_final_character_from_string(argument)) ? "" : "!", 
                  com_msgs[subcmd][3]);
@@ -1137,7 +1137,7 @@ ACMD(do_gen_comm)
           if (tmp != ch) {
             snprintf(buf, sizeof(buf), "%s$z^n shouts in %s, \"%s%s%s\"^n", 
                      com_msgs[subcmd][3], 
-                     (IS_NPC(tmp) || GET_SKILL(tmp, language) > 0) ? skills[GET_LANGUAGE(ch)].name : "an unknown language", 
+                     (IS_NPC(tmp) || GET_SKILL(tmp, language) > 0) ? skills[language].name : "an unknown language", 
                      capitalize(replace_too_long_words(tmp, ch, argument, language, com_msgs[subcmd][3])), 
                      ispunct(get_final_character_from_string(argument)) ? "" : "!", 
                      com_msgs[subcmd][3]);
@@ -1281,7 +1281,7 @@ ACMD(do_language)
   }
 
   if ((lannum = find_skill_num(arg)) && SKILL_IS_LANGUAGE(lannum))
-    if (GET_SKILL(ch, lannum) > 0) {
+    if (GET_SKILL(ch, lannum) > 0 || IS_NPC(ch)) {
       GET_LANGUAGE(ch) = lannum;
       send_to_char(ch, "You will now speak %s.\r\n", skills[lannum].name);
     } else
@@ -1499,7 +1499,7 @@ ACMD(do_phone)
       return;
     }
     
-    int language = GET_LANGUAGE(ch) != 0 ? GET_LANGUAGE(ch) : SKILL_ENGLISH;
+    int language = !SKILL_IS_LANGUAGE(GET_LANGUAGE(ch)) ? SKILL_ENGLISH : GET_LANGUAGE(ch);
     if (!has_required_language_ability_for_sentence(ch, argument, language))
       return;
     
@@ -1531,7 +1531,7 @@ ACMD(do_phone)
     if (tch) {
       snprintf(buf, sizeof(buf), "^Y%s^Y on the other end of the line says in %s, \"%s%s^Y\"", 
               voice, 
-              (IS_NPC(tch) || GET_SKILL(tch, language) > 0) ? skills[GET_LANGUAGE(ch)].name : "an unknown language", 
+              (IS_NPC(tch) || GET_SKILL(tch, language) > 0) ? skills[language].name : "an unknown language", 
               capitalize(replace_too_long_words(tch, ch, argument, language, "^Y")), 
               ispunct(get_final_character_from_string(argument)) ? "" : ".");    
                           
