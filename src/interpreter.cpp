@@ -2490,8 +2490,7 @@ void nanny(struct descriptor_data * d, char *arg)
   case CON_NAME_CNFRM:          /* wait for conf. of new name    */
     if (UPPER(*arg) == 'Y') {
       if (isbanned(d->host) >= BAN_NEW) {
-        snprintf(buf, sizeof(buf), "Request for new char %s denied from [%s] (siteban)",
-                GET_CHAR_NAME(d->character), d->host);
+        snprintf(buf, sizeof(buf), "Request for new char %s denied from [%s] (siteban)", GET_CHAR_NAME(d->character), d->host);
         mudlog(buf, d->character, LOG_BANLOG, TRUE);
         SEND_TO_Q("Sorry, new characters are not allowed from your site.\r\n", d);
         STATE(d) = CON_CLOSE;
@@ -2503,8 +2502,7 @@ void nanny(struct descriptor_data * d, char *arg)
         else {
           SEND_TO_Q(WIZLOCK_MSG, d);
         }
-        snprintf(buf, sizeof(buf), "Request for new char %s denied from %s (wizlock)",
-                GET_CHAR_NAME(d->character), d->host);
+        snprintf(buf, sizeof(buf), "Request for new char %s denied from %s (wizlock)", GET_CHAR_NAME(d->character), d->host);
         mudlog(buf, d->character, LOG_CONNLOG, TRUE);
         STATE(d) = CON_CLOSE;
         return;
@@ -2555,8 +2553,7 @@ void nanny(struct descriptor_data * d, char *arg)
       return;
     } else {
       if (!validate_and_update_password(arg, GET_PASSWD(d->character))) {
-        snprintf(buf, sizeof(buf), "Bad PW: %s [%s]",
-                GET_CHAR_NAME(d->character), d->host);
+        snprintf(buf, sizeof(buf), "Bad PW: %s [%s]", GET_CHAR_NAME(d->character), d->host);
         mudlog(buf, d->character, LOG_CONNLOG, TRUE);
         GET_BAD_PWS(d->character)++;
         d->character->in_room = &world[real_room(GET_LAST_IN(d->character))];
@@ -2594,8 +2591,7 @@ void nanny(struct descriptor_data * d, char *arg)
           !PLR_FLAGGED(d->character, PLR_SITEOK)) {
         SEND_TO_Q("Sorry, this char has not been cleared for login from your site!\r\n", d);
         STATE(d) = CON_CLOSE;
-        snprintf(buf, sizeof(buf), "Connection attempt for %s denied from %s",
-                GET_CHAR_NAME(d->character), d->host);
+        snprintf(buf, sizeof(buf), "Connection attempt for %s denied from %s", GET_CHAR_NAME(d->character), d->host);
         mudlog(buf, d->character, LOG_BANLOG, TRUE);
         return;
       }
@@ -2605,8 +2601,7 @@ void nanny(struct descriptor_data * d, char *arg)
         else
           SEND_TO_Q("The game is temporarily restricted.. try again later.\r\n", d);
         STATE(d) = CON_CLOSE;
-        snprintf(buf, sizeof(buf), "Request for login denied for %s [%s] (wizlock)",
-                GET_CHAR_NAME(d->character), d->host);
+        snprintf(buf, sizeof(buf), "Request for login denied for %s [%s] (wizlock)", GET_CHAR_NAME(d->character), d->host);
         mudlog(buf, d->character, LOG_CONNLOG, TRUE);
         return;
       }

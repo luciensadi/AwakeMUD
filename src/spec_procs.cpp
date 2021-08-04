@@ -6315,3 +6315,53 @@ SPECIAL(medical_workshop) {
   
   return TRUE;
 }
+
+/*
+SPECIAL(business_card_printer) {
+  struct obj_data *printer = (struct obj_data *) me;
+  struct obj_data *card = printer->contains;
+  
+  // No argument given, no character available, no problem. Skip it.
+  if (!*argument || !ch || !printer)
+    return FALSE;
+    
+  // Only accept our expected commands.
+  if (!CMD_IS("set") && !CMD_IS("clear") && !CMD_IS("activate"))
+    return FALSE;
+    
+  // Require an argument. TODO: Does this break anything in subsequent command handling?
+  argument = one_argument(argument, arg);
+  if (!*arg || !str_str("printer", arg))
+    return FALSE;
+    
+  // The SET command configures the printer.
+  if (CMD_IS("set")) {
+    // Extract the next argument.
+    argument = one_argument(argument, arg);
+    if (!*arg) {
+      send_to_char("Syntax: SET PRINTER [material|quality|quantity|title|description]\r\n", ch);
+      return TRUE;
+    }
+    
+    // Set the material used.
+    if (!str_str("material", arg)) {
+      asdf
+    }
+  }
+  
+  // The CLEAR command wipes the printer's memory.
+  else if (CMD_IS("clear")) {
+    
+  }
+  
+  // The ACTIVATE command prints the cards.
+  else if (CMD_IS("activate")) {
+    
+  }
+  
+  // SET to configure various options.
+  // CLEAR to reset it.
+  // ACTIVATE to activate the printing function.
+  return FALSE;
+}
+*/

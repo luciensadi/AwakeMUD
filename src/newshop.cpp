@@ -1254,11 +1254,17 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
       // Finish up with availability info.
       if (!(sell->type == SELL_ALWAYS) && !(sell->type == SELL_AVAIL && GET_OBJ_AVAILDAY(obj) == 0)) {
         if (sell->type == SELL_AVAIL) {
-          if (GET_OBJ_AVAILDAY(obj) < 1) {
-            int hours = 24 * GET_OBJ_AVAILDAY(obj);
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ". It will take %d hour%s to obtain", hours, hours > 1 ? "s" : "");
+          int arbitrary_difficulty = GET_OBJ_AVAILTN(obj);
+          if (arbitrary_difficulty <= 2) {
+            strlcat(buf, ". It's a trivial special order", sizeof(buf));
+          } else if (arbitrary_difficulty <= 4) {
+            strlcat(buf, ". It's an easy special order", sizeof(buf));
+          } else if (arbitrary_difficulty <= 7) {
+            strlcat(buf, ". It's a moderately-difficult special order", sizeof(buf));
+          } else if (arbitrary_difficulty <= 10) {
+            strlcat(buf, ". It's a special order that will take some serious convincing", sizeof(buf));
           } else {
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ". It will take %d day%s to obtain", (int) GET_OBJ_AVAILDAY(obj), GET_OBJ_AVAILDAY(obj) > 1 ? "s" : "");
+            strlcat(buf, ". It's a special order that probably needs a fixer", sizeof(buf));
           }
         } else if (sell->stock <= 0) {
           strcat(buf, ". It is currently out of stock");

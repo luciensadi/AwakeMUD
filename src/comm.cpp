@@ -2979,7 +2979,7 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
   if ( type == TO_ROLLS )
   {
     for (; to; to = to->next_in_room) {
-      if (!PRF_FLAGGED(to, PRF_ROLLS))
+      if (!IS_NPC(to) && !PRF_FLAGGED(to, PRF_ROLLS))
         continue;
       if (SENDOK(to)
           && !(hide_invisible

@@ -422,8 +422,9 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
 
   init_char_sql(d->character);
   GET_CHAR_MULTIPLIER(d->character) = 100;
-  snprintf(buf, sizeof(buf), "%s [%s] new character (archetypal %s).", GET_CHAR_NAME(d->character), d->host, archetypes[i]->name);
+  snprintf(buf, sizeof(buf), "%s new character (archetypal %s).", GET_CHAR_NAME(d->character), archetypes[i]->name);
   mudlog(buf, d->character, LOG_CONNLOG, TRUE);
+  log_vfprintf("[CONNLOG: %s connecting from %s]", GET_CHAR_NAME(d->character), d->host);
   SEND_TO_Q(motd, d);
   SEND_TO_Q("\r\n\n*** PRESS RETURN: ", d);
   STATE(d) = CON_RMOTD;
@@ -543,6 +544,35 @@ void set_attributes(struct char_data *ch, int magic)
   }
 
   ch->aff_abils = ch->real_abils;
+  
+  // Set their natural vision.
+  switch (GET_RACE(ch)) {
+    case RACE_HUMAN:
+    case RACE_OGRE:
+      NATURAL_VISION(ch) = NORMAL;
+      break;
+    case RACE_DWARF:
+    case RACE_GNOME:
+    case RACE_MENEHUNE:
+    case RACE_KOBOROKURU:
+    case RACE_TROLL:
+    case RACE_CYCLOPS:
+    case RACE_FOMORI:
+    case RACE_GIANT:
+    case RACE_MINOTAUR:
+      NATURAL_VISION(ch) = THERMOGRAPHIC;
+      break;
+    case RACE_ORK:
+    case RACE_HOBGOBLIN:
+    case RACE_SATYR:
+    case RACE_ONI:
+    case RACE_ELF:
+    case RACE_WAKYAMBI:
+    case RACE_NIGHTONE:
+    case RACE_DRYAD:
+      NATURAL_VISION(ch) = LOWLIGHT;
+      break;
+  }
 }
 
 void init_create_vars(struct descriptor_data *d)
@@ -893,9 +923,10 @@ static void start_game(descriptor_data *d)
   init_char_sql(d->character);
   GET_CHAR_MULTIPLIER(d->character) = 100;
   if(PLR_FLAGGED(d->character,PLR_NOT_YET_AUTHED)) {
-    snprintf(buf, sizeof(buf), "%s [%s] new character.",
-            GET_CHAR_NAME(d->character), d->host);
+    snprintf(buf, sizeof(buf), "%s new character.",
+            GET_CHAR_NAME(d->character));
     mudlog(buf, d->character, LOG_CONNLOG, TRUE);
+    log_vfprintf("[CONNLOG: %s connecting from %s]", GET_CHAR_NAME(d->character), d->host);
     SEND_TO_Q(motd, d);
     SEND_TO_Q("\r\n\n*** PRESS RETURN: ", d);
     STATE(d) = CON_RMOTD;
@@ -908,9 +939,10 @@ static void start_game(descriptor_data *d)
 
     init_create_vars(d);
 
-    snprintf(buf, sizeof(buf), "%s [%s] new character.",
-            GET_CHAR_NAME(d->character), d->host);
+    snprintf(buf, sizeof(buf), "%s new character.",
+            GET_CHAR_NAME(d->character));
     mudlog(buf, d->character, LOG_CONNLOG, TRUE);
+    log_vfprintf("[CONNLOG: %s connecting from %s]", GET_CHAR_NAME(d->character), d->host);
   }
 }
 

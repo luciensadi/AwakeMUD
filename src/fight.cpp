@@ -4427,6 +4427,7 @@ void perform_violence(void)
 {
   PERF_PROF_SCOPE(pr_, __func__);
   struct char_data *ch = NULL;
+  bool engulfed;
   extern struct index_data *mob_index;
   if (combat_list) {
     if (GET_INIT_ROLL(combat_list) <= 0) {
@@ -4434,10 +4435,26 @@ void perform_violence(void)
       order_list(TRUE);
     }
   }
-  for (ch = combat_list; ch && next_combat_list_is_valid(next_combat_list); ch = next_combat_list) {
-    bool engulfed = FALSE;
-    // Known bug: If next_fighting is killed by ch, this causes Problems(tm)
-    next_combat_list = ch->next_fighting;
+  
+  // This while-loop replaces the combat list for-loop so we can do better edge case checking.
+  ch = NULL;
+  while (ch) {
+    // First iteration: Set ch to combat list. We don't check next_combat_list_is_valid() in this case.
+    if (ch == NULL)
+      ch = combat_list;
+    else {
+      // Subsequent iterations: Check to see if n_c_l is valid. If it is, use it; if not, abort and warn.
+      if (next_combat_list_is_valid(next_combat_list))
+        ch = next_combat_list;
+      else {
+        mudlog("CRASH PREVENTION: Bailing out of combat loop due to invalid next_combat_list. Some people don't get their turns.\r\n", ch, LOG_SYSLOG, TRUE);
+        break;
+      }
+    }
+    next_combat_list = ch->next;
+    
+    // Clear the engulfed status.
+    engulfed = FALSE;
     
     // You're not in combat or not awake.
     if (!CH_IN_COMBAT(ch) || !AWAKE(ch)) {
