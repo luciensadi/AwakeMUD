@@ -1928,6 +1928,12 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
     switch(*arg) {
     case 'y':
     case 'Y':
+      if (!vnum_from_non_connected_zone(d->edit_number)) {
+        snprintf(buf, sizeof(buf),"%s wrote new quest #%ld",
+                GET_CHAR_NAME(d->character), d->edit_number);
+        mudlog(buf, d->character, LOG_WIZLOG, TRUE);
+      }
+      
       if (real_quest(d->edit_number) == -1)
         boot_one_quest(QUEST);
       else
