@@ -408,6 +408,11 @@ void boot_world(void)
     exit(ERROR_BITFIELD_SIZE_EXCEEDED);
   }
   
+  if (MAX_PROTOCOL_BUFFER > MAX_RAW_INPUT_LENGTH) {
+    log("Error: Your maximum protocol buffer exceeds your input length buffer, so there's a risk of overflow.");
+    exit(ERROR_PROTOCOL_BUFFER_EXCEEDS_INPUT_LENGTH);
+  }
+  
   log("Initializing libsodium for crypto functions.");
   if (sodium_init() < 0) {
     // The library could not be initialized. Fail.

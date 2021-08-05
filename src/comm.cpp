@@ -1773,7 +1773,7 @@ int process_input(struct descriptor_data *t) {
     temporary_buffer[bytes_read] = '\0';  /* terminate the string */
     
     // Push the data for processing through KaVir's protocol code. Resize bytes_read to account for the stripped control chars.
-    ProtocolInput(t, temporary_buffer, bytes_read, t->inbuf);
+    ProtocolInput(t, temporary_buffer, bytes_read, t->inbuf, MAX_RAW_INPUT_LENGTH);
     assert(t->inbuf_canary == 31337);
 #ifdef DEBUG_PROTOCOL
     log_vfprintf("Parsed '%s' to '%s', changing length from %d to %lu.",

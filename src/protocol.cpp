@@ -362,7 +362,7 @@ void ProtocolDestroy( protocol_t *apProtocol )
    delete apProtocol;
 }
 
-void ProtocolInput( descriptor_t *apDescriptor, char *apData, int aSize, char *apOut )
+void ProtocolInput( descriptor_t *apDescriptor, char *apData, int aSize, char *apOut, size_t apOutSize )
 {
    static char CmdBuf[MAX_PROTOCOL_BUFFER+1];
    static char IacBuf[MAX_PROTOCOL_BUFFER+1];
@@ -521,7 +521,7 @@ void ProtocolInput( descriptor_t *apDescriptor, char *apData, int aSize, char *a
    CmdBuf[CmdIndex] = '\0';
 
    /* Copy the input buffer back to the player. */
-   strcat( apOut, CmdBuf );
+   strlcat( apOut, CmdBuf, apOutSize );
 }
 
 const char *ProtocolOutput( descriptor_t *apDescriptor, const char *apData, int *apLength )
@@ -1474,11 +1474,12 @@ void MSDPSetTable( descriptor_t *apDescriptor, variable_t aMSDP, const char *apV
          const char MsdpTableStart[] = { (char)MSDP_TABLE_OPEN, '\0' };
          const char MsdpTableStop[]  = { (char)MSDP_TABLE_CLOSE, '\0' };
 
-         char *pTable = new char[strlen(apValue) + 3]; /* 3: START, STOP, NUL */
+         const size_t pTableSize = strlen(apValue) + 3;
+         char *pTable = new char[pTableSize]; /* 3: START, STOP, NUL */
 
-         strcpy(pTable, MsdpTableStart);
-         strcat(pTable, apValue);
-         strcat(pTable, MsdpTableStop);
+         strlcpy(pTable, MsdpTableStart, pTableSize);
+         strlcat(pTable, apValue, pTableSize);
+         strlcat(pTable, MsdpTableStop, pTableSize);
 
          if ( strcmp(pProtocol->pVariables[aMSDP]->pValueString, pTable) )
          {
@@ -1510,11 +1511,12 @@ void MSDPSetArray( descriptor_t *apDescriptor, variable_t aMSDP, const char *apV
          const char MsdpArrayStart[] = { (char)MSDP_ARRAY_OPEN, '\0' };
          const char MsdpArrayStop[]  = { (char)MSDP_ARRAY_CLOSE, '\0' };
 
-         char *pArray = new char[strlen(apValue) + 3]; /* 3: START, STOP, NUL */
+         const size_t pArrayLen = strlen(apValue) + 3;
+         char *pArray = new char[pArrayLen]; /* 3: START, STOP, NUL */
 
-         strcpy(pArray, MsdpArrayStart);
-         strcat(pArray, apValue);
-         strcat(pArray, MsdpArrayStop);
+         strlcpy(pArray, MsdpArrayStart, pArrayLen);
+         strlcat(pArray, apValue, pArrayLen);
+         strlcat(pArray, MsdpArrayStop, pArrayLen);
 
          if ( strcmp(pProtocol->pVariables[aMSDP]->pValueString, pArray) )
          {
@@ -2438,10 +2440,10 @@ static void ExecuteMSDPPair( descriptor_t *apDescriptor, const char *apVariable,
                if ( !VariableNameTable[i].bGUI )
                {
                   /* Add the separator between variables */
-                  strcat( MSDPCommands, " " );
+                  strlcat( MSDPCommands, " ", MAX_OUTPUT_BUFFER );
 
                   /* Add the variable to the list */
-                  strcat( MSDPCommands, VariableNameTable[i].pName );
+                  strlcat( MSDPCommands, VariableNameTable[i].pName, MAX_OUTPUT_BUFFER );
                }
             }
 
@@ -2458,10 +2460,10 @@ static void ExecuteMSDPPair( descriptor_t *apDescriptor, const char *apVariable,
                {
                   /* Add the separator between variables */
                   if ( MSDPCommands[0] != '\0' )
-                     strcat( MSDPCommands, " " );
+                     strlcat( MSDPCommands, " ", MAX_OUTPUT_BUFFER );
 
                   /* Add the variable to the list */
-                  strcat( MSDPCommands, VariableNameTable[i].pName );
+                  strlcat( MSDPCommands, VariableNameTable[i].pName, MAX_OUTPUT_BUFFER );
                }
             }
 
@@ -2478,10 +2480,10 @@ static void ExecuteMSDPPair( descriptor_t *apDescriptor, const char *apVariable,
                {
                   /* Add the separator between variables */
                   if ( MSDPCommands[0] != '\0' )
-                     strcat( MSDPCommands, " " );
+                     strlcat( MSDPCommands, " ", MAX_OUTPUT_BUFFER );
 
                   /* Add the variable to the list */
-                  strcat( MSDPCommands, VariableNameTable[i].pName );
+                  strlcat( MSDPCommands, VariableNameTable[i].pName, MAX_OUTPUT_BUFFER );
                }
             }
 
@@ -2498,10 +2500,10 @@ static void ExecuteMSDPPair( descriptor_t *apDescriptor, const char *apVariable,
                {
                   /* Add the separator between variables */
                   if ( MSDPCommands[0] != '\0' )
-                     strcat( MSDPCommands, " " );
+                     strlcat( MSDPCommands, " ", MAX_OUTPUT_BUFFER );
 
                   /* Add the variable to the list */
-                  strcat( MSDPCommands, VariableNameTable[i].pName );
+                  strlcat( MSDPCommands, VariableNameTable[i].pName, MAX_OUTPUT_BUFFER );
                }
             }
 
@@ -2811,14 +2813,14 @@ static void SendMSSP( descriptor_t *apDescriptor )
       SizePair = strlen(MSSPPair);
       if ( SizePair+SizeBuffer < MAX_MSSP_BUFFER-4 )
       {
-         strcat( MSSPBuffer, MSSPPair );
+         strlcat( MSSPBuffer, MSSPPair, MAX_MSSP_BUFFER );
          SizeBuffer += SizePair;
       }
    }
 
    /* End the subnegotiation sequence */
    snprintf( MSSPPair, sizeof(MSSPPair), "%c%c", IAC, SE );
-   strcat( MSSPBuffer, MSSPPair );
+   strlcat( MSSPBuffer, MSSPPair, MAX_MSSP_BUFFER );
 
    /* Send the sequence */
    Write( apDescriptor, MSSPBuffer );
@@ -2958,9 +2960,10 @@ static char *AllocString( const char *apString )
    if ( apString != NULL )
    {
       int Size = strlen(apString);
-      pResult = new char[Size+1];
+      const size_t pResultSize = Size+1;
+      pResult = new char[pResultSize];
       if ( pResult != NULL )
-         strcpy( pResult, apString );
+         strlcpy( pResult, apString, pResultSize );
    }
 
    return pResult;

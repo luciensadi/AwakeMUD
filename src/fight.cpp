@@ -4438,9 +4438,10 @@ void perform_violence(void)
   
   // This while-loop replaces the combat list for-loop so we can do better edge case checking.
   ch = NULL;
-  while (ch) {
+  bool first_iteration = TRUE;
+  while (ch || first_iteration) {
     // First iteration: Set ch to combat list. We don't check next_combat_list_is_valid() in this case.
-    if (ch == NULL)
+    if (first_iteration)
       ch = combat_list;
     else {
       // Subsequent iterations: Check to see if n_c_l is valid. If it is, use it; if not, abort and warn.
@@ -4451,7 +4452,14 @@ void perform_violence(void)
         break;
       }
     }
-    next_combat_list = ch->next;
+    
+    if (!ch)
+      return;
+    
+    // Clear the first-iteration flag.
+    first_iteration = FALSE;
+      
+    next_combat_list = ch->next_fighting;
     
     // Clear the engulfed status.
     engulfed = FALSE;

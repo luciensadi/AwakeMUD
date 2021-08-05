@@ -2365,18 +2365,19 @@ enum {
 
 
 /* Error codes. */
-#define ERROR_BITFIELD_SIZE_EXCEEDED           10
-#define ERROR_LIBSODIUM_INIT_FAILED            11
-#define ERROR_UNKNOWN_SUBCOMMAND_TO_INDEX_BOOT 12
-#define ERROR_OPENING_INDEX_FILE               13
-#define ERROR_BOOT_ZERO_RECORDS_COUNTED        14
-#define ERROR_ZONEREAD_PREMATURE_EOF           15
-#define ERROR_ZONEREAD_FORMAT_ERROR            16
-#define ERROR_MYSQL_DATABASE_NOT_FOUND         17
-#define ERROR_ARRAY_OUT_OF_BOUNDS              18
-#define ERROR_CANNOT_RESOLVE_VNUM              19
-#define ERROR_DB_TABLE_REQUIRED                20
-#define ERROR_DB_COLUMN_REQUIRED               21
+#define ERROR_BITFIELD_SIZE_EXCEEDED               10
+#define ERROR_LIBSODIUM_INIT_FAILED                11
+#define ERROR_UNKNOWN_SUBCOMMAND_TO_INDEX_BOOT     12
+#define ERROR_OPENING_INDEX_FILE                   13
+#define ERROR_BOOT_ZERO_RECORDS_COUNTED            14
+#define ERROR_ZONEREAD_PREMATURE_EOF               15
+#define ERROR_ZONEREAD_FORMAT_ERROR                16
+#define ERROR_MYSQL_DATABASE_NOT_FOUND             17
+#define ERROR_ARRAY_OUT_OF_BOUNDS                  18
+#define ERROR_CANNOT_RESOLVE_VNUM                  19
+#define ERROR_DB_TABLE_REQUIRED                    20
+#define ERROR_DB_COLUMN_REQUIRED                   21
+#define ERROR_PROTOCOL_BUFFER_EXCEEDS_INPUT_LENGTH 22
 
 // Materials.
 #define MATERIAL_PAPER        0
