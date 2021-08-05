@@ -1113,8 +1113,12 @@ void keepalive(struct descriptor_data *d) {
 void send_keepalives() {
   PERF_PROF_SCOPE(pr_, __func__);
   for (struct descriptor_data *d = descriptor_list; d; d = d->next)
-    if (d->character && PRF_FLAGGED(d->character, PRF_KEEPALIVE))
+    if (d->character && PRF_FLAGGED(d->character, PRF_KEEPALIVE)) {
       keepalive(d);
+      
+      // Set the OOB flag so that we don't re-draw the prompt.
+      d->pProtocol->WriteOOB = TRUE;
+    }
 }
 
 int make_prompt(struct descriptor_data * d)
