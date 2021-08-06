@@ -1423,6 +1423,7 @@ ACMD(do_phone)
     if (k->persona) {
       send_to_icon(k->persona, "A small telephone symbol blinks in the top left of your view.\r\n");
     } else {
+      struct room_data *in_room = get_ch_in_room(ch);
       tch = k->phone->carried_by ? k->phone->carried_by : k->phone->worn_by;
       if (!tch && k->phone->in_obj)
         tch = k->phone->in_obj->carried_by ? k->phone->in_obj->carried_by : k->phone->in_obj->worn_by;
@@ -1434,7 +1435,8 @@ ACMD(do_phone)
             act("$n is startled awake by the ringing of $s phone.", FALSE, tch, 0, 0, TO_ROOM);
         } else if (!GET_OBJ_VAL(k->phone, 3)) {
           act("Your phone rings.", FALSE, tch, 0, 0, TO_CHAR);
-          act("$n's phone rings.", FALSE, tch, NULL, NULL, TO_ROOM);
+          if (in_room && GET_ROOM_VNUM(in_room) > 1)
+            act("$n's phone rings.", FALSE, tch, NULL, NULL, TO_ROOM);
         } else
           act("You feel your phone ring.", FALSE, tch, 0, 0, TO_CHAR);
       } else {
