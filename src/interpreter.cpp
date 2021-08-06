@@ -773,7 +773,7 @@ struct command_info cmd_info[] =
     { "search"     , POS_STANDING, do_search   , 0, 0 },
     { "send"       , POS_SLEEPING, do_send     , LVL_FIXER, 0 },
     { "sedit"      , POS_DEAD    , do_shedit   , LVL_BUILDER, 0 },
-    { "set"        , POS_DEAD    , do_set      , LVL_DEVELOPER, 0 },
+    { "set"        , POS_DEAD    , do_set      , LVL_CONSPIRATOR, 0 },
     { "setfind"    , POS_DEAD    , do_setfind , LVL_VICEPRES, 0 },
     { "settime"    , POS_DEAD    , do_settime  , LVL_DEVELOPER, 0 },
     { "sheath"     , POS_RESTING , do_holster  , 0, 0 },
