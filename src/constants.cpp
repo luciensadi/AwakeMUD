@@ -1811,7 +1811,7 @@ int racial_attribute_modifiers[][6] = {
   {  2,  0,  1,  0,  0,  1  }, // menehune
   {  2,  0,  2, -1,  0,  0  }, // hobgoblin
   {  5, -1,  5, -2, -2,  0  }, // giant
-  {  1,  1,  0,  0,  0,  2  }, // gnome
+  {  1,  0,  1,  0,  0,  2  }, // gnome
   {  2,  0,  2, -1, -1,  1  }, // oni
   {  0,  0,  0,  2,  0,  1  }, // wakyambi
   {  3,  0,  2,  0, -1,  0  }, // ogre
