@@ -166,6 +166,9 @@ class memoryClass *Mem = new memoryClass();
 void show_string(struct descriptor_data * d, char *input);
 extern void update_paydata_market();
 extern void warn_about_apartment_deletion();
+void process_wheres_my_car();
+extern int calculate_distance_between_rooms(vnum_t start_room_vnum, vnum_t target_room_vnum, bool ignore_roads);
+void set_descriptor_canaries(struct descriptor_data *newd);
 
 #ifdef USE_DEBUG_CANARIES
 void check_memory_canaries();
@@ -878,6 +881,7 @@ void game_loop(int mother_desc)
       else
         process_regeneration(0);
       taxi_leaves();
+      process_wheres_my_car();
     }
     
     // Every 29 MUD minutes
@@ -1482,6 +1486,7 @@ void write_to_output(const char *unmodified_txt, struct descriptor_data *t)
   {
     strlcpy(t->output + t->bufptr, txt, t->bufspace);
     assert(t->small_outbuf_canary == 31337);
+    assert(t->output_canary == 31337);
     t->bufspace -= size;
     t->bufptr += size;
     return;
@@ -1528,14 +1533,21 @@ void write_to_output(const char *unmodified_txt, struct descriptor_data *t)
 /* ******************************************************************
  *  socket handling                                                  *
  ****************************************************************** */
+ 
+void set_descriptor_canaries(struct descriptor_data *newd) {
+  newd->canary = 31337;
+  newd->small_outbuf_canary = 31337;
+  newd->inbuf_canary = 31337;
+  newd->output_canary = 31337;
+  newd->last_input_canary = 31337;
+  newd->input_and_character_canary = 31337;
+}
+
 void init_descriptor (struct descriptor_data *newd, int desc)
 {
   static int last_desc = 0;  /* last descriptor number */
   
-  newd->canary = 31337;
-  newd->small_outbuf_canary = 31337;
-  newd->inbuf_canary = 31337;
-  newd->last_input_canary = 31337;
+  set_descriptor_canaries(newd);
   
   newd->descriptor = desc;
   newd->connected = CON_GET_NAME;
@@ -1596,6 +1608,8 @@ int new_descriptor(int s)
   /* create a new descriptor */
   newd = new descriptor_data;
   memset((char *) newd, 0, sizeof(struct descriptor_data));
+  // Set our canaries.
+  set_descriptor_canaries(newd);
   
   /* find the sitename */
   if (nameserver_is_slow || !(from = gethostbyaddr((char *) &peer.sin_addr,
@@ -1627,6 +1641,12 @@ int new_descriptor(int s)
   
   /* prepend to list */
   descriptor_list = newd;
+  
+  // Ensure all the canaries are functional before negotiating the protocol.
+  assert(newd->small_outbuf_canary == 31337);
+  assert(newd->output_canary == 31337);
+  assert(newd->input_and_character_canary == 31337);
+  assert(newd->inbuf_canary == 31337);
   
   // Once the descriptor has been fully created and added to any lists, it's time to negotiate:
   ProtocolNegotiate(newd);
@@ -3199,4 +3219,92 @@ void send_nuyen_rewards_to_pcs() {
   
   if (already_printed)
     mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+}
+
+void process_wheres_my_car() {
+  PERF_PROF_SCOPE( pr_wheres_my_car_, "where's my car");
+  struct room_data *ch_in_room = NULL, *veh_in_room = NULL;
+  
+  // Iterate through all connected PCs in the game, looking for ones who are searching for cars.
+  for (struct descriptor_data *d = descriptor_list; d; d = d->next) {   
+    // Skip anyone not in the playing state.
+    if (d->connected)
+      continue;
+      
+    // Skip anyone who's projecting or doesn't have a character.
+    if (!d->character || d->original)
+      continue;
+      
+    // Skip anyone who hasn't paid for a search.
+    if (GET_NUYEN_PAID_FOR_WHERES_MY_CAR(d->character) <= 0)
+      continue;
+      
+    // Skip anyone not in a room.
+    if (!(ch_in_room = get_ch_in_room(d->character)))
+      continue;
+      
+    int num_vehicles_found = 0, total_vehicles = 0;
+    int reward_amount = GET_NUYEN_PAID_FOR_WHERES_MY_CAR(d->character) - (GET_NUYEN_PAID_FOR_WHERES_MY_CAR(d->character) / 2);
+    int max_distance_searched = GET_NUYEN_PAID_FOR_WHERES_MY_CAR(d->character) / WHERES_MY_CAR_NUYEN_PER_ROOM;
+    int idnum_canary = GET_IDNUM(d->character);
+    
+    // Compose the beginning of our log string.
+    snprintf(buf, sizeof(buf), "%s paid %d",
+             GET_CHAR_NAME(d->character), 
+             GET_NUYEN_PAID_FOR_WHERES_MY_CAR(d->character));
+             
+    // Clear paid amount.
+    GET_NUYEN_PAID_FOR_WHERES_MY_CAR(d->character) = 0;
+    assert(idnum_canary == GET_IDNUM(d->character));
+             
+    send_to_char("After a bit of waiting, your searchers straggle back in. They"
+                 " confer amongst themselves, then give you a report:\r\n", d->character);
+    
+    // Iterate through all the vehicles in the game, looking for ones owned by this character.
+    for (struct veh_data *veh = veh_list; veh; veh = veh->next) {
+      if (veh->owner == GET_IDNUM(d->character) && (veh_in_room = get_veh_in_room(veh))) {
+        total_vehicles++;
+        
+        // Hard limit of 5 vehicles-- otherwise BFS lags us out.
+        if (total_vehicles > 5)
+          break;
+        
+        // If they didn't pay enough to find this one, skip it.
+        int distance = calculate_distance_between_rooms(veh_in_room->number, ch_in_room->number, TRUE);
+        if (distance < 0 || distance > max_distance_searched) {
+          log_vfprintf("Refusing to find vehicle %s: Distance is %d, vs max %d.", GET_VEH_NAME(veh), distance, max_distance_searched);
+          continue;
+        }
+          
+        struct room_data *room = get_veh_in_room(veh);
+        send_to_char(d->character, "%2d) %-30s (At %s^n) [%2d/10] Damage\r\n", 
+                     ++num_vehicles_found, 
+                     GET_VEH_NAME(veh),
+                     room ? room->name : "someone's tow rig, probably", 
+                     veh->damage);
+      }
+    }
+    assert(idnum_canary == GET_IDNUM(d->character));
+    
+    // Either note to the player that they've paid the full amount, or refund the unpaid half.
+    if (num_vehicles_found > 0) {
+      send_to_char(d->character, "\r\nYou %s pay out the promised reward of %d.\r\n", 
+                   num_vehicles_found == total_vehicles ? "nod and" : "begrudgingly", 
+                   reward_amount);
+    } else {
+      send_to_char(d->character, "...It's just a blank piece of paper. You stare them down until they leave, then pocket the reward of %d.\r\n", 
+                   reward_amount);
+      // Credit it back.
+      GET_NUYEN(d->character) += reward_amount;
+    }
+    assert(idnum_canary == GET_IDNUM(d->character));
+    
+    // Finish up our log string and write it to logs.
+    snprintf(buf2, sizeof(buf2), "%s to find %d/%d vehicles (max dist %d).", 
+             buf,
+             num_vehicles_found, 
+             total_vehicles, 
+             max_distance_searched);
+    mudlog(buf2, d->character, LOG_SYSLOG, TRUE);
+  }
 }

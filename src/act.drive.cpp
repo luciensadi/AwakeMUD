@@ -20,7 +20,7 @@
 void die_follower(struct char_data *ch);
 void roll_individual_initiative(struct char_data *ch);
 void order_list(struct char_data *start);
-extern int find_first_step(vnum_t src, vnum_t target);
+extern int find_first_step(vnum_t src, vnum_t target, bool ignore_roads);
 int move_vehicle(struct char_data *ch, int dir);
 ACMD_CONST(do_return);
 
@@ -1622,7 +1622,7 @@ ACMD(do_gridguide)
     send_to_char("The following destinations are available:\r\n", ch);
     for (grid = veh->grid; grid; grid = grid->next) {
       i++;
-      if (!veh->in_room || find_first_step(real_room(veh->in_room->number), real_room(grid->room)) < 0)
+      if (!veh->in_room || find_first_step(real_room(veh->in_room->number), real_room(grid->room), FALSE) < 0)
         snprintf(buf, sizeof(buf), "^r%-20s [%-6ld, %-6ld](Unavailable)\r\n", CAP(grid->name),
                 grid->room - (grid->room * 3), grid->room + 100);
       else
@@ -1657,7 +1657,7 @@ ACMD(do_gridguide)
       return;
     }
     
-    if (!veh->in_room || find_first_step(real_room(veh->in_room->number), real_room(grid->room)) < 0) {
+    if (!veh->in_room || find_first_step(real_room(veh->in_room->number), real_room(grid->room), FALSE) < 0) {
       send_to_char("That destination is currently unavailable.\r\n", ch);
       return;
     }
@@ -1771,7 +1771,7 @@ void process_autonav(void)
       
       int dir = 0;
       for (int x = MIN(MAX((int)get_speed(veh) / 10, 1), MAX_GRIDGUIDE_ROOMS_PER_PULSE); x && dir >= 0 && veh->dest; x--) {
-        dir = find_first_step(real_room(veh->in_room->number), real_room(veh->dest->number));
+        dir = find_first_step(real_room(veh->in_room->number), real_room(veh->dest->number), FALSE);
         if (dir >= 0) {
           veh_moved = TRUE;
           move_vehicle(ch, dir);

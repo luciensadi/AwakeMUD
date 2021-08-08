@@ -5365,3 +5365,35 @@ ACMD(do_search) {
       send_to_char("You feel like there's still something to uncover here...\r\n", ch);
   }
 }
+
+ACMD(do_wheresmycar) {  
+  /* wheresmycar <total amount to spend>
+  
+  Dispatches lunch-breaking wageslaves and street people to find your car. 
+  The distance they're willing to travel depends on how much you spend. 
+  */
+  
+  if (GET_NUYEN_PAID_FOR_WHERES_MY_CAR(ch) != 0) {
+    send_to_char("You've got a group out searching already. You'll have to wait until they return.\r\n", ch);
+    return;
+  }
+  
+  skip_spaces(&argument);
+  int paid = atoi(argument);
+  if (paid < WHERES_MY_CAR_MINIMUM_NUYEN_CHARGE) {
+    send_to_char(ch, "Syntax: wheresmycar <nuyen amount to spend, minimum %d>", WHERES_MY_CAR_MINIMUM_NUYEN_CHARGE);
+    return;
+  }
+  
+  if (GET_NUYEN(ch) < paid) {
+    send_to_char("You don't have that much paper nuyen on hand.\r\n", ch);
+    return;
+  }
+  
+  GET_NUYEN(ch) -= paid;
+  GET_NUYEN_PAID_FOR_WHERES_MY_CAR(ch) = paid;
+  
+  send_to_char(ch, "You gather up a few bored-looking passersby and pay out %d nuyen"
+                   " to have them search for your vehicles, reserving the other half as a"
+                   " reward for whoever finds it. They set off, and you prepare for a wait...\r\n", paid / 2);
+}

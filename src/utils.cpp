@@ -56,6 +56,7 @@ extern void weight_change_object(struct obj_data * obj, float weight);
 extern void calc_weight(struct char_data *ch);
 extern const char *get_ammobox_default_restring(struct obj_data *ammobox);
 extern bool can_edit_zone(struct char_data *ch, int zone);
+extern int find_first_step(vnum_t src, vnum_t target, bool ignore_roads);
 
 /* creates a random number in interval [from;to] */
 int number(int from, int to)
@@ -3512,6 +3513,54 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch) {
     
   // Otherwise, yes but only if you bonded it.
   return GET_WEAPON_FOCUS_BONDED_BY(focus) == GET_IDNUM(ch);
+}
+
+// Cribbed from taxi code. Eventually, we should replace the taxi distance calculation with this.
+// Returns -1 for not found or error.
+int calculate_distance_between_rooms(vnum_t start_room_vnum, vnum_t target_room_vnum, bool ignore_roads) {
+  struct room_data *temp_room = NULL;
+  int dist = 0, x = 0;
+  rnum_t start_room_rnum, target_room_rnum;
+  
+  // Ensure the vnums are valid.
+  start_room_rnum = real_room(start_room_vnum);
+  if (start_room_rnum < 0) {
+    mudlog("SYSERR: Invalid start room vnum passed to calculate_distance_between_rooms().", NULL, LOG_SYSLOG, TRUE);
+    return -1;
+  }
+    
+  target_room_rnum = real_room(target_room_vnum);
+  if (target_room_rnum < 0) {
+    mudlog("SYSERR: Invalid target room vnum passed to calculate_distance_between_rooms().", NULL, LOG_SYSLOG, TRUE);
+    return -1;
+  }
+  
+  temp_room = &world[start_room_rnum];
+  
+  // Remember that temp room starts as null, so if no exit was found then this is skipped.
+  while (temp_room) {
+    x = find_first_step(real_room(temp_room->number), target_room_rnum, ignore_roads);
+    
+    // Arrived at target.
+    if (x == BFS_ALREADY_THERE)
+      break;
+      
+    // Could not find target, and ran out of options.
+    if (x == BFS_ERROR || x == BFS_NO_PATH) {
+      temp_room = NULL;
+      break;
+    }
+    
+    // Continue.
+    temp_room = temp_room->dir_option[x]->to_room;
+    dist++;
+  }
+  
+  // Not found or error: -1.
+  if (!temp_room)
+    return -1;
+  else
+    return dist;
 }
 
 

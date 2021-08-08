@@ -32,7 +32,7 @@
 
 SPECIAL(call_elevator);
 SPECIAL(elevator_spec);
-extern int find_first_step(vnum_t src, vnum_t target);
+extern int calculate_distance_between_rooms(vnum_t start_room_vnum, vnum_t target_room_vnum, bool ignore_roads);
 extern void perform_fall(struct char_data *ch);
 
 ACMD_DECLARE(do_echo);
@@ -994,27 +994,19 @@ SPECIAL(taxi)
     if (real_room(GET_LASTROOM(ch)) <= -1) {
       GET_SPARE1(driver) = MAX_CAB_FARE;
     } else {
+      // We're in a cab, so find the door out. This identifies our start room.
       for (int dir = NORTH; dir < UP; dir++)
         if (ch->in_room->dir_option[dir]) {
           temp_room = ch->in_room->dir_option[dir]->to_room;
           break;
         }
-      int dist = 0;
-      while (temp_room) {
-        int x = find_first_step(real_room(temp_room->number), real_room(destination_list[dest].vnum));
-        if (x == -2)
-          break;
-        else if (x < 0) {
-          temp_room = NULL;
-          break;
-        }
-        temp_room = temp_room->dir_option[x]->to_room;
-        dist++;
-      }
-      if (!temp_room)
+        
+      int distance_between_rooms = calculate_distance_between_rooms(temp_room->number, destination_list[dest].vnum, FALSE);
+      
+      if (distance_between_rooms < 0)
         GET_SPARE1(driver) = MAX_CAB_FARE;
       else
-        GET_SPARE1(driver) = MIN(MAX_CAB_FARE, 5 + dist);
+        GET_SPARE1(driver) = MIN(MAX_CAB_FARE, 5 + distance_between_rooms);
     }
       
     // Rides to the NERPcorpolis are free.

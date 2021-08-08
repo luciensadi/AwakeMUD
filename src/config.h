@@ -149,4 +149,9 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 // How many minutes must have passed since the creation of a piece of mail before it is auto-deleted?
 #define MAIL_EXPIRATION_TICKS (60 * 24 * 14) /* 14 days */
 
+// Configuration for the "where's my car" feature.
+// How many nuyen do NPCs charge per room between searcher and vehicle?
+#define WHERES_MY_CAR_NUYEN_PER_ROOM                    10
+#define WHERES_MY_CAR_MINIMUM_NUYEN_CHARGE              (WHERES_MY_CAR_NUYEN_PER_ROOM * 50)
+
 #endif

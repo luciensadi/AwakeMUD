@@ -544,6 +544,7 @@ struct player_special_data
   ubyte perm_bod;
   struct room_data *watching;
   struct remem *ignored;
+  int nuyen_paid_for_wheres_my_car;
 
   player_special_data() :
       aliases(NULL), remem(NULL), last_tell(0), questnum(0), obj_complete(NULL), 
@@ -828,10 +829,12 @@ struct descriptor_data
   char small_outbuf[SMALL_BUFSIZE];  /* standard output buffer          */
   int small_outbuf_canary;
   char *output;                 /* ptr to the current output buffer     */
+  int output_canary;
   int bufptr;                     /* ptr to end of current output               */
   int bufspace;                 /* space left in the output buffer      */
   struct txt_block *large_outbuf; /* ptr to large buffer, if we need it */
   struct txt_q input;             /* q of unprocessed input             */
+  int input_and_character_canary;
   struct char_data *character;  /* linked to char                       */
   struct char_data *original;   /* original char if switched            */
   struct descriptor_data *snooping; /* Who is this char snooping        */
@@ -871,10 +874,12 @@ struct descriptor_data
   
   // this is for spell creation
 
+  // This is mostly a just-in-case section. Descriptors are zeroed out when created in comm.cpp's new_descriptor().
   descriptor_data() :
       showstr_head(NULL), showstr_point(NULL), str(NULL),
-      output(NULL), large_outbuf(NULL), character(NULL), original(NULL), snooping(NULL),
-      snoop_by(NULL), next(NULL), invalid_command_counter(0), iedit_limit_edits(0), misc_data(NULL),
+      output(NULL), output_canary(31337), large_outbuf(NULL), input_and_character_canary(31337),
+      character(NULL), original(NULL), snooping(NULL), snoop_by(NULL), next(NULL), 
+      invalid_command_counter(0), iedit_limit_edits(0), misc_data(NULL),
       edit_obj(NULL), edit_room(NULL), edit_mob(NULL), edit_quest(NULL), edit_shop(NULL),
       edit_zon(NULL), edit_cmd(NULL), edit_veh(NULL), edit_host(NULL), edit_icon(NULL),
       edit_helpfile(NULL), edit_pgroup(NULL), canary(31337), pProtocol(NULL)

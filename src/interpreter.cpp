@@ -363,6 +363,7 @@ ACMD_DECLARE(do_watch);
 ACMD_DECLARE(do_wear);
 ACMD_DECLARE(do_weather);
 ACMD_DECLARE(do_where);
+ACMD_DECLARE(do_wheresmycar);
 ACMD_DECLARE(do_who);
 ACMD_DECLARE(do_wield);
 ACMD_DECLARE(do_wimpy);
@@ -873,7 +874,8 @@ struct command_info cmd_info[] =
     { "who"        , POS_DEAD    , do_who      , 0, 0 },
     { "whoami"     , POS_DEAD    , do_gen_ps   , 0, SCMD_WHOAMI },
     { "whotitle"   , POS_DEAD    , do_wiztitle , LVL_BUILDER, SCMD_WHOTITLE },
-    { "where"      , POS_DEAD    , do_where    , 1, LVL_PRESIDENT },
+    { "where"      , POS_DEAD    , do_where    , 1, LVL_PRESIDENT }, // todo: why is lvl_president in the scmd slot?
+    { "wheresmycar", POS_RESTING , do_wheresmycar, 1, 0 },
     { "whisper"    , POS_LYING   , do_spec_comm, 0, SCMD_WHISPER },
     { "wield"      , POS_RESTING , do_wield    , 0, 0 },
     { "wimpy"      , POS_DEAD    , do_wimpy    , 0, 0 },
