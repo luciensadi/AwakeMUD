@@ -36,6 +36,7 @@ extern void respond(struct char_data *ch, struct char_data *mob, char *str);
 extern bool can_send_act_to_target(struct char_data *ch, bool hide_invisible, struct obj_data * obj, void *vict_obj, struct char_data *to, int type);
 extern char *how_good(int skill, int percent);
 int find_skill_num(char *name);
+void ring_phone(struct phone_data *k);
 
 
 ACMD_DECLARE(do_say);
@@ -1419,33 +1420,8 @@ ACMD(do_phone)
     phone->dest = k;
     phone->connected = TRUE;
     k->dest = phone;
-
-    if (k->persona) {
-      send_to_icon(k->persona, "A small telephone symbol blinks in the top left of your view.\r\n");
-    } else {
-      struct room_data *in_room = get_ch_in_room(ch);
-      tch = k->phone->carried_by ? k->phone->carried_by : k->phone->worn_by;
-      if (!tch && k->phone->in_obj)
-        tch = k->phone->in_obj->carried_by ? k->phone->in_obj->carried_by : k->phone->in_obj->worn_by;
-      if (tch) {
-        if (GET_POS(tch) == POS_SLEEPING) {
-          GET_POS(tch) = POS_RESTING;
-          send_to_char("You are woken by your phone ringing.\r\n", tch);
-          if (!GET_OBJ_VAL(k->phone, 3))
-            act("$n is startled awake by the ringing of $s phone.", FALSE, tch, 0, 0, TO_ROOM);
-        } else if (!GET_OBJ_VAL(k->phone, 3)) {
-          act("Your phone rings.", FALSE, tch, 0, 0, TO_CHAR);
-          if (in_room && GET_ROOM_VNUM(in_room) > 1)
-            act("$n's phone rings.", FALSE, tch, NULL, NULL, TO_ROOM);
-        } else
-          act("You feel your phone ring.", FALSE, tch, 0, 0, TO_CHAR);
-      } else {
-        snprintf(buf, sizeof(buf), "%s rings.", GET_OBJ_NAME(k->phone));
-        if (k->phone->in_room || k->phone->in_veh)
-          act(buf, FALSE, NULL, k->phone, 0, TO_ROOM);
-        // Edge case: A phone inside a container inside a container won't ring. But do we even want it to?
-      }
-    }
+    
+    ring_phone(k);
     send_to_char("It begins to ring.\r\n", ch);
   } else if (subcmd == SCMD_HANGUP) {
     if (!phone) {
@@ -1523,13 +1499,7 @@ ACMD(do_phone)
     if (phone->dest->persona && phone->dest->persona->decker && phone->dest->persona->decker->ch)
       store_message_to_history(ch->desc, COMM_CHANNEL_PHONE, act(buf, FALSE, ch, 0, phone->dest->persona->decker->ch, TO_DECK));
     else {
-      tch = phone->dest->phone->carried_by;
-      if (!tch)
-        tch = phone->dest->phone->worn_by;
-      if (!tch && phone->dest->phone->in_obj)
-        tch = phone->dest->phone->in_obj->carried_by;
-      if (!tch && phone->dest->phone->in_obj)
-        tch = phone->dest->phone->in_obj->worn_by;
+      tch = get_obj_possessor(phone->dest->phone);
     }
     if (tch) {
       snprintf(buf, sizeof(buf), "^Y%s^Y on the other end of the line says in %s, \"%s%s^Y\"", 
@@ -1636,15 +1606,7 @@ ACMD(do_phonelist)
     if (k->persona && k->persona->decker) {
       tch = k->persona->decker->ch;
     } else if (k->phone) {
-      tch = k->phone->carried_by;
-      if (!tch)
-        tch = k->phone->worn_by;
-      if (!tch)
-        tch = k->phone->worn_by;
-      if (!tch && k->phone->in_obj)
-        tch = k->phone->in_obj->carried_by;
-      if (!tch && k->phone->in_obj)
-        tch = k->phone->in_obj->worn_by;
+      tch = get_obj_possessor(k->phone);
     }
     send_to_char(ch, "%2d) %d (%s) (%s)\r\n", i, k->number, (k->dest ? "Busy" : "Free"),
             (tch ? (IS_NPC(tch) ? GET_NAME(tch) : GET_CHAR_NAME(tch)) : "no one"));
@@ -1652,43 +1614,58 @@ ACMD(do_phonelist)
   }
 }
 
+void ring_phone(struct phone_data *k) {  
+  // Matrix call?
+  if (k->persona) {
+    send_to_icon(k->persona, "A small telephone symbol blinks in the top left of your view.\r\n");
+  }
+  
+  // RL call.
+  else {
+    struct char_data *tch = get_obj_possessor(k->phone);
+    
+    // If it's being carried, notify the carrier, and potentially their room.
+    if (tch) {
+      // Wake 'em up.
+      if (GET_POS(tch) == POS_SLEEPING) {
+        GET_POS(tch) = POS_RESTING;
+        send_to_char("You are woken by your phone ringing.\r\n", tch);
+        if (!GET_OBJ_VAL(k->phone, 3))
+          act("$n is startled awake by the ringing of $s phone.", FALSE, tch, 0, 0, TO_ROOM);
+      }
+      
+      // If the ringer is on, notify the room, otherwise just the carrier.
+      if (!GET_OBJ_VAL(k->phone, 3)) {
+        struct room_data *in_room = get_ch_in_room(tch);
+        act("Your phone rings.", FALSE, tch, 0, 0, TO_CHAR);
+        if (in_room && GET_ROOM_VNUM(in_room) > 1)
+          act("$n's phone rings.", FALSE, tch, 0, 0, TO_ROOM);
+      } 
+      
+      // Just the carrier, then.
+      else {
+        act("You feel your phone ring.", FALSE, tch, 0, 0, TO_CHAR);
+      }
+    } 
+    // Phone is on the ground. Ring there.
+    else {
+      snprintf(buf, sizeof(buf), "%s rings.", GET_OBJ_NAME(k->phone));
+      if (k->phone->in_room || k->phone->in_veh)
+        act(buf, FALSE, NULL, k->phone, 0, TO_ROOM);
+    }
+  }
+}
+
 void phone_check()
 {
   PERF_PROF_SCOPE(pr_, __func__);
-  struct char_data *tch;
-  struct phone_data *k;
-  for (k = phone_list; k; k = k->next) {
+  struct char_data *originator;
+  for (struct phone_data *k = phone_list; k; k = k->next) {
     if (k->dest && !k->connected) {
-      if (k->persona) {
-        send_to_icon(k->persona, "A small telephone symbol blinks in the top left of your view.\r\n");
-        continue;
-      }
-      tch = k->phone->carried_by;
-      if (!tch)
-        tch = k->phone->worn_by;
-      if (!tch && k->phone->in_obj)
-        tch = k->phone->in_obj->carried_by;
-      if (!tch && k->phone->in_obj)
-        tch = k->phone->in_obj->worn_by;
-      if (tch) {
-        if (GET_POS(tch) == POS_SLEEPING) {
-          GET_POS(tch) = POS_RESTING;
-          send_to_char("You are woken by your phone ringing.\r\n", tch);
-          if (!GET_OBJ_VAL(k->phone, 3))
-            act("$n is startled awake by the ringing of $s phone.", FALSE, tch, 0, 0, TO_ROOM);
-          continue;
-        }
-        if (!GET_OBJ_VAL(k->phone, 3)) {
-          act("Your phone rings.", FALSE, tch, 0, 0, TO_CHAR);
-          act("$n's phone rings.", FALSE, tch, 0, 0, TO_ROOM);
-        } else {
-          act("You feel your phone ring.", FALSE, tch, 0, 0, TO_CHAR);
-        }
-      } else {
-        snprintf(buf, sizeof(buf), "%s rings.", GET_OBJ_NAME(k->phone));
-        if (k->phone->in_room || k->phone->in_veh)
-          act(buf, FALSE, NULL, k->phone, 0, TO_ROOM);
-      }
+      ring_phone(k);
+      
+      if (k->dest->phone && (originator = get_obj_possessor(k->dest->phone)))
+        send_to_char("The other end continues to ring.\r\n", originator);
     }
   }
 }
