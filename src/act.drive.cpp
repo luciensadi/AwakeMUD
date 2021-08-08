@@ -237,7 +237,7 @@ ACMD(do_drive)
     VEH->cspeed = SPEED_IDLE;
     VEH->lastin[0] = VEH->in_room;
     stop_manning_weapon_mounts(ch, TRUE);
-    send_to_char("The wheel is in your hands.\r\n", ch);
+    send_to_char("You take the wheel.\r\n", ch);
     snprintf(buf1, sizeof(buf1), "%s takes the wheel.\r\n", capitalize(GET_NAME(ch)));
     send_to_veh(buf1, VEH, ch, FALSE);
   } else {
@@ -610,9 +610,12 @@ ACMD(do_upgrade)
     }
   }
 
-  if ((veh->type == VEH_DRONE && GET_OBJ_VAL(mod, 4) < 1) ||
-      (veh->type != VEH_DRONE && GET_OBJ_VAL(mod, 4) == 1)) {
-    send_to_char(ch, "That part won't fit on.\r\n");
+  if (veh->type == VEH_DRONE && GET_OBJ_VAL(mod, 4) < 1) {
+    send_to_char(ch, "That part won't fit on because it was designed for a standard vehicle.\r\n");
+    return;
+  }
+  if (veh->type != VEH_DRONE && GET_OBJ_VAL(mod, 4) == 1) {
+    send_to_char(ch, "That part won't fit on because it was designed for a drone.\r\n");
     return;
   }
   if (GET_VEHICLE_MOD_TYPE(mod) == TYPE_MOUNT) {
@@ -802,7 +805,7 @@ ACMD(do_control)
     else if (GET_OBJ_VAL(cyber, 0) == CYB_DATAJACK || (GET_OBJ_VAL(cyber, 0) == CYB_EYES && IS_SET(GET_OBJ_VAL(cyber, 3), EYE_DATAJACK)))
       jack = cyber;
 
-  if (IS_WORKING(ch) || AFF_FLAGGED(ch, AFF_PILOT)) {
+  if (AFF_FLAGGED(ch, AFF_PILOT)) {
     send_to_char("While driving? Now that would be a neat trick.\r\n", ch);
     return;
   }
@@ -821,10 +824,6 @@ ACMD(do_control)
     return;
   }
 
-  if (ch->in_veh) {
-    send_to_char(ch, "You can't control a vehicle from inside one.\r\n");
-    return;
-  }
   has_rig = FALSE;
   for (cyber = ch->carrying; cyber; cyber = cyber->next_content)
     if (GET_OBJ_TYPE(cyber) == ITEM_RCDECK)
