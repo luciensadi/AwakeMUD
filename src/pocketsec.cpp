@@ -250,7 +250,7 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
         case 0:
           send_to_char("Good bye.\r\n", CH);
           STATE(d) = CON_PLAYING;
-          act("$n looks up from $s $p.", TRUE, CH, SEC, 0, TO_ROOM);
+          act("$n looks up from $p.", TRUE, CH, SEC, 0, TO_ROOM);
           d->edit_obj = NULL;
           break;
         case 1:

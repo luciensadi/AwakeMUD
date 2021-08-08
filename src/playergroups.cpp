@@ -97,7 +97,7 @@ ACMD(do_accept) {
         if (!IS_NPC(i) && GET_PGROUP_MEMBER_DATA(i) && GET_PGROUP(i)->get_idnum() == pgr->get_idnum()) {
           // Notify the character.
           if (!pgr->is_secret() || !GET_PGROUP_MEMBER_DATA(i)->privileges.AreAnySet(PRIV_COCONSPIRATOR, PRIV_LEADER, ENDBIT)) {
-            send_to_char(i, "%s has joined '%s'.\r\n", GET_CHAR_NAME(ch), pgr->get_name());
+            send_to_char(i, "^G%s has joined '%s'.\r\n^n", GET_CHAR_NAME(ch), pgr->get_name());
           }
         }
       }
@@ -575,7 +575,7 @@ void do_pgroup_disband(struct char_data *ch, char *argument) {
     if (!IS_NPC(i) && GET_PGROUP_MEMBER_DATA(i) && GET_PGROUP(i)->get_idnum() == pgr->get_idnum()) {
       // Notify the character, unless they're the person doing the disbanding.
       if (i != ch) {
-        send_to_char(i, "The playergroup '%s' has been disbanded.\r\n", pgr->get_name());
+        send_to_char(i, "^RThe playergroup '%s' has been disbanded.^n\r\n", pgr->get_name());
       }
       
       // Wipe out the data and null the pointer.

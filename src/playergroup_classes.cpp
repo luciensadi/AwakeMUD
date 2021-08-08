@@ -431,7 +431,10 @@ void Playergroup::invite(struct char_data *ch, char *argument) {
   } else if (GET_TKE(target) < 100) {
     send_to_char(ch, "%s isn't experienced enough to be a valuable addition to your group yet.\r\n", capitalize(GET_CHAR_NAME(target)));
   } else if (GET_PGROUP_MEMBER_DATA(target) && GET_PGROUP(target) && GET_PGROUP(target) == GET_PGROUP(ch)) {
-    send_to_char("They're already part of your group!\r\n", ch);
+    if (is_secret())
+      send_to_char("They can't hear you.\r\n", ch);
+    else
+      send_to_char("They're already part of your group!\r\n", ch);
     // TODO: If the group is secret, this is info disclosure.
   } else if (FALSE) {
     // TODO: The ability to auto-decline invitations / block people / not be harassed by invitation spam.
@@ -441,7 +444,10 @@ void Playergroup::invite(struct char_data *ch, char *argument) {
     
     while (temp) {
       if (temp->pg_idnum == idnum) {
-        send_to_char("They've already been invited to your group.\r\n", ch);
+        if (is_secret())
+          send_to_char("They can't hear you.\r\n", ch);
+        else
+          send_to_char("They've already been invited to your group.\r\n", ch);
         return;
       }
       temp = temp->next;
@@ -449,11 +455,14 @@ void Playergroup::invite(struct char_data *ch, char *argument) {
     
     strcpy(buf, "You invite $N to join your group.");
     act(buf, FALSE, ch, NULL, target, TO_CHAR);
-    snprintf(buf, MAX_STRING_LENGTH, "$n has invited you to join their playergroup, '%s'. You can ACCEPT or DECLINE this at any time in the next %d days.", get_name(), PGROUP_INVITATION_LIFETIME_IN_DAYS);
+    if (is_secret())
+      snprintf(buf, MAX_STRING_LENGTH, "^GSomeone has invited you to join their playergroup, '%s'. You can ACCEPT or DECLINE this at any time in the next %d days.^n", get_name(), PGROUP_INVITATION_LIFETIME_IN_DAYS);
+    else
+      snprintf(buf, MAX_STRING_LENGTH, "^G$n has invited you to join their playergroup, '%s'. You can ACCEPT or DECLINE this at any time in the next %d days.^n", get_name(), PGROUP_INVITATION_LIFETIME_IN_DAYS);
     act(buf, FALSE, ch, NULL, target, TO_VICT);
     
-    // TODO: What if the group is secret? Is this okay?
-    audit_log_vfprintf("%s has invited %s to join the group.", GET_CHAR_NAME(ch), GET_CHAR_NAME(target));
+    if (!is_secret())
+      audit_log_vfprintf("%s has invited %s to join the group.", GET_CHAR_NAME(ch), GET_CHAR_NAME(target));
     
     // Create a new invitation.
     temp = new Pgroup_invitation(GET_PGROUP(ch)->get_idnum());
