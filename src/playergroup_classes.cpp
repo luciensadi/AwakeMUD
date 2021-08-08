@@ -24,6 +24,8 @@
 // The linked list of loaded playergroups.
 extern Playergroup *loaded_playergroups;
 
+extern void raw_store_mail(long to, long from_id, const char *from_name, const char *message_pointer);
+
 /************* Constructors *************/
 Playergroup::Playergroup() :
 idnum(0), bank(0), tag(NULL), name(NULL), alias(NULL)
@@ -460,6 +462,8 @@ void Playergroup::invite(struct char_data *ch, char *argument) {
     else
       snprintf(buf, MAX_STRING_LENGTH, "^G$n has invited you to join their playergroup, '%s'. You can ACCEPT or DECLINE this at any time in the next %d days.^n", get_name(), PGROUP_INVITATION_LIFETIME_IN_DAYS);
     act(buf, FALSE, ch, NULL, target, TO_VICT);
+    snprintf(buf, sizeof(buf), "You have been invited to join the playergroup %s.\r\n", get_name());
+    raw_store_mail(GET_IDNUM(target), GET_IDNUM(ch), is_secret() ? "a shadowy figure" : GET_CHAR_NAME(ch), buf);
     
     if (!is_secret())
       audit_log_vfprintf("%s has invited %s to join the group.", GET_CHAR_NAME(ch), GET_CHAR_NAME(target));

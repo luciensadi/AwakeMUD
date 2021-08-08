@@ -24,6 +24,7 @@
 
 // Externs from other files.
 extern void store_mail(long to, struct char_data *from, const char *message_pointer);
+extern void raw_store_mail(long to, long from_id, const char *from_name, const char *message_pointer);
 
 // Prototypes from this file.
 void perform_pgroup_grant_revoke(struct char_data *ch, char *argument, bool revoke);
@@ -872,11 +873,12 @@ void do_pgroup_outcast(struct char_data *ch, char *argument) {
   
   // Notify the character.
   send_to_char(ch, "You outcast %s from '%s'.\r\n", GET_CHAR_NAME(vict), GET_PGROUP(ch)->get_name());
-  snprintf(buf, sizeof(buf), "^RYou have been outcasted from '%s' (reason: %s).^n\r\n", GET_PGROUP(ch)->get_name(), reason);
-  store_mail(GET_IDNUM(vict), ch, buf);
+  snprintf(buf, sizeof(buf), "^RYou have been outcast from '%s' (reason: %s).^n\r\n", GET_PGROUP(ch)->get_name(), reason);
+  raw_store_mail(GET_IDNUM(vict), GET_IDNUM(ch), GET_PGROUP(ch)->is_secret() ? "a shadowy figure" : GET_CHAR_NAME(ch), buf);
   
   // Save the character.
   if (vict_is_logged_in) {
+    send_to_char(buf, vict);
     // Online characters are saved to the DB without unloading.
     playerDB.SaveChar(vict, GET_LOADROOM(vict));
   } else {
@@ -1492,7 +1494,7 @@ void perform_pgroup_grant_revoke(struct char_data *ch, char *argument, bool revo
     
     // Write to the relevant characters' screens.
     send_to_char(ch, "You grant %s the %s privilege in '%s'.\r\n", GET_CHAR_NAME(vict), pgroup_privileges[priv].name, GET_PGROUP(ch)->get_name());
-    snprintf(buf, sizeof(buf), "You have been granted the %s privilege in '%s'.\r\n", pgroup_privileges[priv].name, GET_PGROUP(ch)->get_name());
+    snprintf(buf, sizeof(buf), "^GYou have been granted the %s privilege in '%s'.^n\r\n", pgroup_privileges[priv].name, GET_PGROUP(ch)->get_name());
   }
   
   // Save the character.
@@ -1598,7 +1600,7 @@ void do_pgroup_promote_demote(struct char_data *ch, char *argument, bool promote
   
   // Notify the character.
   send_to_char(ch, "You %s %s to rank %d.\r\n", promote ? "promote" : "demote", GET_CHAR_NAME(vict), rank);
-  snprintf(buf, sizeof(buf), "You have been %s to rank %d in '%s'.\r\n", promote ? "promoted" : "demoted", rank, GET_PGROUP(ch)->get_name());
+  snprintf(buf, sizeof(buf), "^GYou have been %s to rank %d in '%s'.^n\r\n", promote ? "promoted" : "demoted", rank, GET_PGROUP(ch)->get_name());
   
   // Save the character.
   if (vict_is_logged_in) {
