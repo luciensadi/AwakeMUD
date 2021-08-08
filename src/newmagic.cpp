@@ -4587,19 +4587,27 @@ void disp_meta_menu(struct descriptor_data *d)
 
 bool init_cost(struct char_data *ch, bool spend)
 {
-  int karmacost = (GET_GRADE(ch) + 6) * 300;
+  long karmacost = (GET_GRADE(ch) + 6) * 300;  
   long nuyencost = 25000 + (25000 * (1 << GET_GRADE(ch)));
-  if (nuyencost > 825000)
+  if (nuyencost > 825000 || nuyencost < 0)
     nuyencost = 825000;
+    
+  if (karmacost < 0) {
+    send_to_char("You broke it! You can't initiate until the code is fixed to allow someone at your rank to do so.\r\n", ch);
+    mudlog("lol init capped, karma overflowed... this game was not designed for that init level", ch, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+    
   long tke = 0;
-  if (karmacost > GET_KARMA(ch)) {
+  if (karmacost > GET_KARMA(ch) || (GET_KARMA(ch) - karmacost) > GET_KARMA(ch)) {
     send_to_char(ch, "You do not have enough karma to initiate. It will cost you %d karma.\r\n", (int) (karmacost / 100));
     return FALSE;
   }
-  if (nuyencost > GET_NUYEN(ch)) {
+  if (nuyencost > GET_NUYEN(ch) || (GET_NUYEN(ch) - nuyencost) > GET_NUYEN(ch)) {
     send_to_char(ch, "You do not have enough nuyen to initiate. It will cost you %d nuyen.\r\n", nuyencost);
     return FALSE;
   }
+  
   switch (GET_GRADE(ch)+1) {
     case 1:
       tke = 0;
