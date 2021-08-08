@@ -1811,15 +1811,19 @@ void damage_obj(struct char_data *ch, struct obj_data *obj, int power, int type)
     GET_OBJ_CONDITION(obj)--;
   } else {
     if (ch)
-      send_to_char(ch, "%s%s%s%s has been damaged!\r\n",
+      send_to_char(ch, "%s%s%s%s has been damaged!^n%s\r\n",
                    ch == vict ? "^Y" : "",
                    CAP(inside_buf),
                    GET_OBJ_NAME(obj),
-                   ch == vict ? "^Y" : "");
+                   ch == vict ? "^Y" : "",
+                   ch == vict ? (GET_TKE(vict) <= NEWBIE_KARMA_THRESHOLD * 2 ? " Better find a repairman..." : "") : ""
+                 );
     if (vict && vict != ch)
-      send_to_char(vict, "^Y%s%s^Y has been damaged!^n\r\n",
+      send_to_char(vict, "^Y%s%s^Y has been damaged!^n%s\r\n",
                    CAP(inside_buf),
-                   GET_OBJ_NAME(obj));
+                   GET_OBJ_NAME(obj),
+                   GET_TKE(vict) <= NEWBIE_KARMA_THRESHOLD * 2 ? " Better find a repairman..." : ""
+                 );
     GET_OBJ_CONDITION(obj) -= 1 + (power - rating) / half;
   }
   
@@ -1858,8 +1862,9 @@ void damage_obj(struct char_data *ch, struct obj_data *obj, int power, int type)
       for (temp = obj->contains; temp; temp = next) {
         next = temp->next_content;
         obj_from_obj(temp);
-        if ((IS_OBJ_STAT(obj, ITEM_CORPSE) && !GET_OBJ_VAL(obj, 4) &&
-             GET_OBJ_TYPE(temp) != ITEM_MONEY) || GET_OBJ_VNUM(obj) == OBJ_POCKET_SECRETARY_FOLDER) {
+        if ((IS_OBJ_STAT(obj, ITEM_CORPSE) && !GET_OBJ_VAL(obj, 4) && GET_OBJ_TYPE(temp) != ITEM_MONEY) 
+            || GET_OBJ_VNUM(obj) == OBJ_POCKET_SECRETARY_FOLDER) 
+        {
           extract_obj(temp);
         } else if (vict)
           obj_to_char(temp, vict);
