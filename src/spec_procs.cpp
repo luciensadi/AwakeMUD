@@ -62,6 +62,8 @@ extern unsigned int get_johnson_overall_min_rep(struct char_data *johnson);
 extern bool uninstall_ware_from_target_character(struct obj_data *obj, struct char_data *remover, struct char_data *victim, bool damage_on_operation);
 extern bool install_ware_in_target_character(struct obj_data *obj, struct char_data *installer, struct char_data *reciever, bool damage_on_operation);
 extern struct obj_data *shop_package_up_ware(struct obj_data *obj);
+extern const char *get_plaintext_score_essence(struct char_data *ch);
+extern void diag_char_to_char(struct char_data * i, struct char_data * ch);
 
 
 extern struct command_info cmd_info[];
@@ -6066,7 +6068,7 @@ SPECIAL(floor_usable_radio) {
 
 // Override the 'install' command in the presence of an unpacked medical workshop or facility.
 SPECIAL(medical_workshop) {
-  bool mode_is_install = FALSE;
+  bool mode_is_install = FALSE, mode_is_diagnose = FALSE;
   struct obj_data *workshop = (struct obj_data *) me;
   struct obj_data *ware, *found_obj = NULL;
   struct char_data *found_char = NULL;
@@ -6078,7 +6080,7 @@ SPECIAL(medical_workshop) {
     return FALSE;
   
   // Skip anything that's not an expected command.
-  if (!((mode_is_install = CMD_IS("install")) || CMD_IS("uninstall")))
+  if (!((mode_is_install = CMD_IS("install")) || CMD_IS("uninstall") || (mode_is_diagnose = CMD_IS("diagnose"))))
     return FALSE;
     
   // Require that the medical workshop be unpacked.
@@ -6141,9 +6143,51 @@ SPECIAL(medical_workshop) {
   
   // Ensure we have the target's permission.
   if (!PRF_FLAGGED(found_char, PRF_TOUCH_ME_DADDY)) {
-    send_to_char(ch, "You can't operate on %s-- they need to use the ^WTOGGLE CYBERDOC^n command.\r\n", GET_CHAR_NAME(found_char));
+    send_to_char(ch, "You can't diagnose or operate on %s-- they need to use the ^WTOGGLE CYBERDOC^n command.\r\n", GET_CHAR_NAME(found_char));
     return TRUE;
   }
+  
+  // Diagnostics command.
+  if (mode_is_diagnose) {    
+    act("You fire up $o's diagnostic scanner and point it at $N.\r\n", FALSE, ch, workshop, found_char, TO_CHAR);
+    act("$n fires up $o's diagnostic scanner and points it at $N.\r\n", FALSE, ch, workshop, found_char, TO_ROOM);
+    
+    // Diagnose.
+    diag_char_to_char(found_char, ch);
+    
+    // List cyberware.
+    if (!found_char->cyberware) {
+      act("\r\n$N has no cyberware.", FALSE, ch, 0, found_char, TO_CHAR);
+    } else {
+      act("\r\n$N has the following cyberware:", FALSE, ch, 0, found_char, TO_CHAR);
+      for (struct obj_data *obj = found_char->cyberware; obj != NULL; obj = obj->next_content) {
+        snprintf(buf, sizeof(buf), "%-40s Essence: %0.2f\r\n",
+                GET_OBJ_NAME(obj), ((float)GET_OBJ_VAL(obj, 4) / 100));
+        send_to_char(buf, ch);
+      }
+    }
+    
+    // List bioware.
+    if (!found_char->bioware) {
+      act("\r\n$N has no bioware.", FALSE, ch, 0, found_char, TO_CHAR);
+    } else {
+      act("\r\n$N has the following bioware:", FALSE, ch, 0, found_char, TO_CHAR);
+      for (struct obj_data *obj = found_char->bioware; obj != NULL; obj = obj->next_content) {
+        snprintf(buf, sizeof(buf), "%-40s Rating: %-2d     Bioware Index: %0.2f\r\n",
+                GET_OBJ_NAME(obj),
+                GET_OBJ_VAL(obj, 1), ((float)GET_OBJ_VAL(obj, 4) / 100));
+        send_to_char(buf, ch);
+      }
+    }
+    
+    send_to_char("\r\n", ch);
+    
+    // Show essence and index.
+    send_to_char(get_plaintext_score_essence(found_char), ch);
+    send_to_char(ch, "Essence Hole: %.2f\r\n", (float)found_char->real_abils.esshole / 100);
+    
+    return TRUE;
+  } /* End diagnose command. */
   
   // Parse out the dotmode.
   int dotmode = find_all_dots(argument);
