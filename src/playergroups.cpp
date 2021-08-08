@@ -872,7 +872,7 @@ void do_pgroup_outcast(struct char_data *ch, char *argument) {
   
   // Notify the character.
   send_to_char(ch, "You outcast %s from '%s'.\r\n", GET_CHAR_NAME(vict), GET_PGROUP(ch)->get_name());
-  snprintf(buf, sizeof(buf), "You have been outcasted from '%s' (reason: %s).\r\n", GET_PGROUP(ch)->get_name(), reason);
+  snprintf(buf, sizeof(buf), "^RYou have been outcasted from '%s' (reason: %s).^n\r\n", GET_PGROUP(ch)->get_name(), reason);
   store_mail(GET_IDNUM(vict), ch, buf);
   
   // Save the character.
