@@ -586,6 +586,8 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define CHECK_WAIT(ch)        (((ch)->desc) ? ((ch)->desc->wait > 1) : 0)
 #define STATE(d)                    ((d)->connected)
 
+#define DESCRIPTOR_CONN_STATE_NOT_PLAYING(x) (((x)->connected >= CON_CLOSE && (x)->connected <= CON_MENU) || ((x)->connected >= CON_CHPWD_GETOLD && (x)->connected <= CON_QDELCONF2) || (x)->connected == CON_ASKNAME)
+
 /* object utils **********************************************************/
 
 /*

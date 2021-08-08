@@ -3965,12 +3965,12 @@ ACMD(do_who)
   
   *buf = '\0';
   output_header = 1;
-  
+    
   for (; sort != 0; sort > 0 ? sort-- : sort++) {
     if ( sort == 1 )
       output_header = 1;
     for (d = descriptor_list; d; d = d->next) {
-      if (d->connected)
+      if (DESCRIPTOR_CONN_STATE_NOT_PLAYING(d))
         continue;
       
       if (d->original)
@@ -4100,6 +4100,7 @@ ACMD(do_who)
             strlcat(buf1, " (switched)", sizeof(buf1));
         }
       }
+      
       if (!quest && PRF_FLAGGED(tch, PRF_QUEST))
         strlcat(buf1, " ^Y(hired)^n", sizeof(buf1));
       if (PRF_FLAGGED(tch, PRF_NOTELL))
@@ -4110,6 +4111,8 @@ ACMD(do_who)
         strlcat(buf1, " ^L(BLACKLISTED)^N", sizeof(buf1));
       if (PLR_FLAGGED(tch, PLR_WANTED))
         strlcat(buf1, " ^R(WANTED)^N", sizeof(buf1));
+      if (d->connected)
+        strlcat(buf1, " (editing)", sizeof(buf1));
       strlcat(buf1, "\r\n", sizeof(buf1));
       strlcat(buf, buf1, sizeof(buf));
       

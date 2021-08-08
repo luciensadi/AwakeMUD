@@ -3038,20 +3038,32 @@ ACMD(do_create)
   argument = any_one_arg(argument, buf1);
 
   if (is_abbrev(buf1, "program")) {
-    if (!GET_SKILL(ch, SKILL_COMPUTER))
+    if (!GET_SKILL(ch, SKILL_COMPUTER)) {
       send_to_char("You must learn computer skills to create programs.\r\n", ch);
-    else create_program(ch);
-  } else if (is_abbrev(buf1, "part")) {
-    if (!GET_SKILL(ch, SKILL_BR_COMPUTER))
+      return;
+    }
+    create_program(ch);
+  } 
+  
+  else if (is_abbrev(buf1, "part")) {
+    if (!GET_SKILL(ch, SKILL_BR_COMPUTER)) {
       send_to_char("You must learn computer B/R skills to create parts.\r\n", ch);
-    else create_part(ch);
-  } else if (is_abbrev(buf1, "deck"))
+      return;
+    }
+    create_part(ch);
+  } 
+  
+  else if (is_abbrev(buf1, "deck") || is_abbrev(buf1, "cyberdeck"))
     create_deck(ch);
+  
   else if (is_abbrev(buf1, "ammo") || is_abbrev(buf1, "ammunition"))
     create_ammo(ch);
+  
   else if (is_abbrev(buf1, "spell")) {
-    if (!(GET_SKILL(ch, SKILL_SPELLDESIGN) || GET_SKILL(ch, SKILL_SORCERY)))
+    if (!(GET_SKILL(ch, SKILL_SPELLDESIGN) || GET_SKILL(ch, SKILL_SORCERY))) {
       send_to_char("You must learn Spell Design or Sorcery to create a spell.\r\n", ch);
+      return;
+    }
       
     struct obj_data *library = ch->in_room ? ch->in_room->contents : ch->in_veh->contents;
     for (;library; library = library->next_content)
@@ -3060,14 +3072,16 @@ ACMD(do_create)
             && GET_OBJ_VAL(library, 0) == TYPE_LODGE && GET_OBJ_VAL(library, 3) == GET_IDNUM(ch)) ||
            (GET_TRADITION(ch) != TRAD_SHAMANIC && GET_OBJ_VAL(library, 0) == TYPE_LIBRARY_SPELL)))
         break;
-    if (!library)
+    if (!library) {
       send_to_char(ch, "You don't have the right tools here to create a spell. You'll need to %s.\r\n",
                    GET_TRADITION(ch) == TRAD_SHAMANIC ? "build a lodge" : "get a library");
-    else {
-      ch->desc->edit_number2 = GET_OBJ_VAL(library, 1);
-      create_spell(ch);
+      return;
     }
-  } else {
+    ch->desc->edit_number2 = GET_OBJ_VAL(library, 1);
+    create_spell(ch);
+  } 
+  
+  else {
     send_to_char("You can only create programs, parts, decks, ammunition, and spells.\r\n", ch);
     return;
   }
