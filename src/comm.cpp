@@ -2601,7 +2601,7 @@ void send_to_room(const char *messg, struct room_data *room)
 
 const char *ACTNULL = "<NULL>";
 
-#define CHECK_NULL(pointer, expression)  if ((pointer) == NULL) i = ACTNULL; else i = (expression);
+#define CHECK_NULL(pointer, expression)  (((pointer) == NULL) ? ACTNULL : (expression));
 
 // Uses NEW-- make sure you delete!
 char* strip_ending_punctuation_new(const char* orig) {
@@ -2665,16 +2665,20 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
   // No need to go through all this junk if the to-char has no descriptor.
   if (!to || !to->desc)
     return NULL;
+    
+  // Prep for error case catching.
+  strlcpy(lbuf, "An erroneous voice (alert staff!)", sizeof(lbuf));
+  i = lbuf;
   
   for (;;)
   {
     if (*orig == '$') {
       switch (*(++orig)) {
         case 'a':
-          CHECK_NULL(obj, SANA(obj));
+          i = CHECK_NULL(obj, SANA(obj));
           break;
         case 'A':
-          CHECK_NULL(vict_obj, SANA((struct obj_data *) vict_obj));
+          i = CHECK_NULL(vict_obj, SANA((struct obj_data *) vict_obj));
           break;
         case 'e':
           if (to == ch)
@@ -2695,7 +2699,7 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
           }
           break;
         case 'F':
-          CHECK_NULL(vict_obj, fname((char *) vict_obj));
+          i = CHECK_NULL(vict_obj, fname((char *) vict_obj));
           break;
         case 'm':
           if (to == vict)
@@ -2748,16 +2752,16 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
           }
           break;
         case 'o':
-          CHECK_NULL(obj, OBJN(obj, to));
+          i = CHECK_NULL(obj, OBJN(obj, to));
           break;
         case 'O':
-          CHECK_NULL(vict_obj, OBJN((struct obj_data *) vict_obj, to));
+          i = CHECK_NULL(vict_obj, OBJN((struct obj_data *) vict_obj, to));
           break;
         case 'p':
-          CHECK_NULL(obj, OBJS(obj, to));
+          i = CHECK_NULL(obj, OBJS(obj, to));
           break;
         case 'P':
-          CHECK_NULL(vict_obj, OBJS((struct obj_data *) vict_obj, to));
+          i = CHECK_NULL(vict_obj, OBJS((struct obj_data *) vict_obj, to));
           break;
         case 's':
           if (to == ch)
@@ -2778,7 +2782,7 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
           }
           break;
         case 'T':
-          CHECK_NULL(vict_obj, (char *) vict_obj);
+          i = CHECK_NULL(vict_obj, (char *) vict_obj);
           break;
         case 'v':
           i = get_voice_perceived_by(ch, to);
@@ -2817,12 +2821,12 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
                 for (struct obj_data *obj = ch->cyberware; obj; obj = obj->next_content) {
                   if (GET_OBJ_VAL(obj, 0) == CYB_VOICEMOD && GET_OBJ_VAL(obj, 3)) {
                     masked = TRUE;
+                    i = "a masked voice";
                     break;
                   }
                 }
-                if (masked) {
-                  snprintf(temp, sizeof(temp), "a masked voice");
-                } else {
+                // If they're not using a modulator, compose their voice string.
+                if (!masked) {
                   // Voice is new and must be deleted.
                   char* voice = strip_ending_punctuation_new(ch->player.physical_text.room_desc);
                   
@@ -2846,6 +2850,7 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
           i = "$";
           break;
       }
+      
       while ((*buf = *(i++)))
         buf++;
       orig++;
