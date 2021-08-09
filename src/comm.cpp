@@ -1110,7 +1110,9 @@ void keepalive(struct descriptor_data *d) {
     (char) 0
   };
   
-  SEND_TO_Q(keepalive, d);
+  if (write_to_descriptor(d->descriptor, keepalive) < 0) {
+    mudlog("SYSERR: Failed to write keepalive data to descriptor.", d->character, LOG_SYSLOG, TRUE);
+  }
 }
 
 // Sends keepalives to everyone who's enabled them.

@@ -540,7 +540,7 @@ const char *ProtocolOutput( descriptor_t *apDescriptor, const char *apData, int 
    int i = 0, j = 0; /* Index values */
 
    if (apDescriptor && apDescriptor->canary != 31337) {
-     log("SYSERR: apDescriptor canary was invalid! Handing back unaltered data.");
+     mudlog("SYSERR: apDescriptor canary was invalid! Handing back unaltered data.", NULL, LOG_SYSLOG, TRUE);
      return apData;
    }
    
@@ -549,7 +549,7 @@ const char *ProtocolOutput( descriptor_t *apDescriptor, const char *apData, int 
       return apData;
   
    if (pProtocol->canary != 31337) {
-     log("SYSERR: pprotocol canary was invalid! Handing back unaltered data.");
+     mudlog("SYSERR: pprotocol canary was invalid! Handing back unaltered data.", NULL, LOG_SYSLOG, TRUE);
      return apData;
    }
    if (!pProtocol->pVariables)
