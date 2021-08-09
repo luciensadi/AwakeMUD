@@ -812,7 +812,7 @@ ACMD(do_control)
     send_to_char("While driving? Now that would be a neat trick.\r\n", ch);
     return;
   }
-  if (IS_WORKING(ch))) {
+  if (IS_WORKING(ch)) {
     send_to_char("You can't pilot something while working on another project.\r\n", ch);
     return;
   }
