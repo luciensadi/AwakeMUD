@@ -293,10 +293,6 @@ ACMD(do_rig)
     send_to_char(ch, "Try removing your helmet first.\r\n");
     return;
   }
-  if (ch->in_veh) {
-    send_to_char(ch, "You can't control a vehicle from inside one.\r\n");
-    return;
-  }
   if (GET_SKILL(ch, SKILL_PILOT_CAR) == 0 && GET_SKILL(ch, SKILL_PILOT_BIKE) == 0 &&
       GET_SKILL(ch, SKILL_PILOT_TRUCK) == 0) {
     send_to_char("You have no idea how to do that.\r\n", ch);
@@ -830,7 +826,10 @@ ACMD(do_control)
     send_to_char(ch, "Try removing your helmet first.\r\n");
     return;
   }
-
+  if (ch->in_veh) {
+    send_to_char(ch, "You can't control a vehicle from inside one.\r\n");
+    return;
+  }
   has_rig = FALSE;
   for (cyber = ch->carrying; cyber; cyber = cyber->next_content)
     if (GET_OBJ_TYPE(cyber) == ITEM_RCDECK)
