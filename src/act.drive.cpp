@@ -293,7 +293,10 @@ ACMD(do_rig)
     send_to_char(ch, "Try removing your helmet first.\r\n");
     return;
   }
-
+  if (ch->in_veh) {
+    send_to_char(ch, "You can't control a vehicle from inside one.\r\n");
+    return;
+  }
   if (GET_SKILL(ch, SKILL_PILOT_CAR) == 0 && GET_SKILL(ch, SKILL_PILOT_BIKE) == 0 &&
       GET_SKILL(ch, SKILL_PILOT_TRUCK) == 0) {
     send_to_char("You have no idea how to do that.\r\n", ch);
@@ -807,6 +810,10 @@ ACMD(do_control)
 
   if (AFF_FLAGGED(ch, AFF_PILOT)) {
     send_to_char("While driving? Now that would be a neat trick.\r\n", ch);
+    return;
+  }
+  if (IS_WORKING(ch))) {
+    send_to_char("You can't pilot something while working on another project.\r\n", ch);
     return;
   }
   if (!jack || !has_rig) {
