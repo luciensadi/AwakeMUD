@@ -6149,8 +6149,8 @@ SPECIAL(medical_workshop) {
   
   // Diagnostics command.
   if (mode_is_diagnose) {    
-    act("You fire up $o's diagnostic scanner and point it at $N.\r\n", FALSE, ch, workshop, found_char, TO_CHAR);
-    act("$n fires up $o's diagnostic scanner and points it at $N.\r\n", FALSE, ch, workshop, found_char, TO_ROOM);
+    act("You fire up $p's diagnostic scanner and point it at $N.\r\n", FALSE, ch, workshop, found_char, TO_CHAR);
+    act("$n fires up $p's diagnostic scanner and points it at $N.\r\n", FALSE, ch, workshop, found_char, TO_ROOM);
     
     // Diagnose.
     diag_char_to_char(found_char, ch);
