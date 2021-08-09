@@ -2638,31 +2638,38 @@ char* strip_ending_punctuation_new(const char* orig) {
   return stripped;
 }
 
-const char *get_voice_perceived_by(struct char_data *speaker, struct char_data *listener) {
-  static char voice_buf[150];
+const char *get_voice_perceived_by(struct char_data *speaker, struct char_data *listener, bool invis_staff_should_be_identified) {
+  static char voice_buf[500];
   struct remem *mem = NULL;
   
   if (IS_NPC(speaker))
     return GET_NAME(speaker);
   else {
-    // No radio names mode means just give the voice desc.
-    if (PRF_FLAGGED(listener, PRF_NO_RADIO_NAMES))
-      return speaker->player.physical_text.room_desc;
+    // $z mode: Identify staff members.
+    if (invis_staff_should_be_identified && IS_SENATOR(speaker) && !CAN_SEE(listener, speaker))
+      strlcpy(voice_buf, "an invisible staff member", sizeof(voice_buf));
       
-    // Staff? You see their name.
-    if (IS_SENATOR(listener)) {
-      snprintf(voice_buf, sizeof(voice_buf), "%s(%s)", speaker->player.physical_text.room_desc, GET_CHAR_NAME(speaker));
-      return voice_buf;
+    // Otherwise, compose a voice as usual-- start off with their normal voice, then replace with mask if modulated.
+    else {
+      strlcpy(voice_buf, speaker->player.physical_text.room_desc, sizeof(voice_buf));
+      for (struct obj_data *obj = speaker->cyberware; obj; obj = obj->next_content) {
+        if (GET_CYBERWARE_TYPE(obj) == CYB_VOICEMOD && GET_OBJ_VAL(obj, 3)) {
+          strlcpy(voice_buf, "a masked voice", sizeof(voice_buf));
+          break;
+        }
+      }
     }
+    
+    // No radio names mode means just give the voice desc. Otherwise, staff see speaker's name.
+    if (IS_SENATOR(listener) && !PRF_FLAGGED(listener, PRF_NO_RADIO_NAMES))
+      snprintf(ENDOF(voice_buf), sizeof(voice_buf) - strlen(voice_buf), "(%s)", GET_CHAR_NAME(speaker));
     
     // Non-staff, but remembered the speaker? You see their remembered name.
-    if ((mem = safe_found_mem(listener, speaker))) {
-      snprintf(voice_buf, sizeof(voice_buf), "%s(%s)", speaker->player.physical_text.room_desc, CAP(mem->mem));
-      return voice_buf;
-    }
+    else if ((mem = safe_found_mem(listener, speaker)))
+      snprintf(ENDOF(voice_buf), sizeof(voice_buf) - strlen(voice_buf), "(%s)", CAP(mem->mem));
     
-    // Otherwise, you just get the voice desc.
-    return speaker->player.physical_text.room_desc;
+    // Return our string. If no checks were passed, it just gives their voice desc with no special frills.
+    return voice_buf;
   }
 }
 
@@ -2677,8 +2684,6 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
   struct char_data *vict;
   static char lbuf[MAX_STRING_LENGTH];
   char temp_buf[MAX_STRING_LENGTH];
-  struct remem *mem = NULL;
-  char temp[MAX_STRING_LENGTH];
   buf = lbuf;
   vict = (struct char_data *) vict_obj;
   
@@ -2722,9 +2727,9 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
           i = CHECK_NULL(vict_obj, fname((char *) vict_obj));
           break;
         case 'm':
-          if (to == vict)
+          if (to == ch)
             i = "you";
-          if (CAN_SEE(to, ch))
+          else if (CAN_SEE(to, ch))
             i = HMHR(ch);
           else
             i = "them";
@@ -2742,34 +2747,24 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
         case 'n':
           if (to == ch)
             i = "you";
-          else if (CAN_SEE(to, ch)) {
-            if (IS_SENATOR(to) && !IS_NPC(ch))
-              i = GET_CHAR_NAME(ch);
-            else
-              i = make_desc(to, ch, temp_buf, TRUE, TRUE, sizeof(temp_buf));
-          } else {
-            if (IS_SENATOR(ch))
-              i = GET_CHAR_NAME(ch);
-            else
-              i = "someone";
-          }
+          else if (!IS_NPC(ch) && (IS_SENATOR(to) || IS_SENATOR(ch)))
+            i = GET_CHAR_NAME(ch);
+          else if (CAN_SEE(to, ch))
+            i = make_desc(to, ch, temp_buf, TRUE, TRUE, sizeof(temp_buf));
+          else
+            i = "someone";
           break;
         case 'N':
           if (!vict)
             i = "someone";
           else if (to == vict)
             i = "you";
-          else if (CAN_SEE(to, vict)) {
-            if (IS_SENATOR(to) && !IS_NPC(vict))
-              i = GET_CHAR_NAME(vict);
-            else
-              i = make_desc(to, vict, temp_buf, TRUE, TRUE, sizeof(temp_buf));
-          } else {
-            if (IS_SENATOR(vict))
-              i = "an invisible staff member";
-            else
-              i = "someone";
-          }
+          else if (!IS_NPC(vict) && (IS_SENATOR(to) || IS_SENATOR(vict)))
+            i = GET_CHAR_NAME(vict);
+          else if (CAN_SEE(to, vict))
+            i = make_desc(to, vict, temp_buf, TRUE, TRUE, sizeof(temp_buf));
+          else
+            i = "someone";
           break;
         case 'o':
           i = CHECK_NULL(obj, OBJN(obj, to));
@@ -2792,22 +2787,22 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
             i = "their";
           break;
         case 'S':
-          if (vict_obj) {
-            if (to == vict)
-              i = "your";
-            else if (CAN_SEE(to, vict))
-              i = HSHR(vict);
-            else
-              i = "their";
-          }
+          if (!vict_obj)
+            i = "someone's";
+          else if (to == vict)
+            i = "your";
+          else if (CAN_SEE(to, vict))
+            i = HSHR(vict);
+          else
+            i = "their";
           break;
         case 'T':
           i = CHECK_NULL(vict_obj, (char *) vict_obj);
           break;
-        case 'v':
-          i = get_voice_perceived_by(ch, to);
+        case 'v': /* Just voice */
+          i = get_voice_perceived_by(ch, to, FALSE);
           break;
-        case 'z':
+        case 'z': /* Desc if visible, voice if not */
           // You always know if it's you.
           if (to == ch) {
             i = "you";
@@ -2823,9 +2818,8 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
           }
           
           // If they're visible, it's simple.
-          else if (CAN_SEE(to, ch)) {
+          else if (CAN_SEE(to, ch))
             i = make_desc(to, ch, temp_buf, TRUE, TRUE, sizeof(temp_buf));
-          }
           
           // If we've gotten here, the speaker is an invisible player or staff member.
           else {
@@ -2833,34 +2827,7 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
             if (IS_NPC(ch))
               i = GET_NAME(ch);
             else {
-              if (IS_SENATOR(ch)) {
-                i = "an invisible staff member";
-              } else {
-                // Easy case: If it's a modulator, use that voice.
-                bool masked = FALSE;
-                for (struct obj_data *obj = ch->cyberware; obj; obj = obj->next_content) {
-                  if (GET_OBJ_VAL(obj, 0) == CYB_VOICEMOD && GET_OBJ_VAL(obj, 3)) {
-                    masked = TRUE;
-                    i = "a masked voice";
-                    break;
-                  }
-                }
-                // If they're not using a modulator, compose their voice string.
-                if (!masked) {
-                  // Voice is new and must be deleted.
-                  char* voice = strip_ending_punctuation_new(ch->player.physical_text.room_desc);
-                  
-                  if ((mem = safe_found_mem(to, ch)))
-                    snprintf(temp, sizeof(temp), "%s(%s)", voice, CAP(mem->mem));
-                  else
-                    snprintf(temp, sizeof(temp), "%s", voice);
-                  
-                  i = temp;
-                  
-                  // Voice deleted here.
-                  delete [] voice;
-                }
-              }
+              i = get_voice_perceived_by(ch, to, TRUE);
             }
           }
           break;

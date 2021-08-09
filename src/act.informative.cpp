@@ -5126,6 +5126,10 @@ ACMD(do_status)
     send_to_char(ch, "  Essence Hole (%.2f)\r\n", (float)targ->real_abils.esshole / 100);
     printed = TRUE;
   }
+  if (ch->real_abils.highestindex > GET_INDEX(ch)) {
+    send_to_char(ch, "  Bioware Hole (%.2f)\r\n", (float)(targ->real_abils.highestindex - GET_INDEX(ch)) / 100);
+    printed = TRUE;
+  }
   switch (get_armor_penalty_grade(targ)) {
     case ARMOR_PENALTY_TOTAL:
       send_to_char("  Bulky Armor (Insane)\r\n", ch);

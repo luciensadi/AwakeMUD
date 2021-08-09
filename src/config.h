@@ -138,7 +138,7 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 // How much nuyen do you have to fork over to get an NPC to install 'ware for you?
 // Docs charge 1/factor of the price, up to the maximum configured.
 #define CYBERWARE_INSTALLATION_COST_FACTOR              10
-#define CYBERWARE_INSTALLATION_COST_MAXIMUM             10000
+#define CYBERWARE_INSTALLATION_COST_MAXIMUM             1000000
 #define CYBERDOC_NO_INJURY_DIE_REQUIREMENT              5
 
 // You have to put down 33% of the cost of the item to order it, and orders stick around for X IRL days.

@@ -742,10 +742,6 @@ ACMD(do_broadcast)
   
   radio = find_radio(ch, &cyberware, &vehicle);
 
-  for (struct obj_data *obj = ch->cyberware; obj; obj = obj->next_content)
-    if (GET_OBJ_VAL(obj, 0) == CYB_VOICEMOD && GET_OBJ_VAL(obj, 3))
-      snprintf(voice, sizeof(voice), "A masked voice");
-
   if (IS_NPC(ch) || IS_SENATOR(ch)) {
     argument = any_one_arg(argument, arg);
     if (!str_cmp(arg,"all") && !IS_NPC(ch))
@@ -1075,6 +1071,7 @@ ACMD(do_gen_comm)
     if (!has_required_language_ability_for_sentence(ch, argument, language))
       return;
     
+    // Same room shout.
     for (tmp = ch->in_veh ? ch->in_veh->people : ch->in_room->people; tmp; tmp = (ch->in_veh ? tmp->next_in_veh : tmp->next_in_room)) {
       if (tmp != ch) {
         snprintf(buf, sizeof(buf), "%s$z%s shouts in %s, \"%s%s%s\"^n", 
@@ -1136,8 +1133,9 @@ ACMD(do_gen_comm)
         ch->in_room = ch->in_room->dir_option[door]->to_room;
         for (tmp = get_ch_in_room(ch)->people; tmp; tmp = tmp->next_in_room)
           if (tmp != ch) {
-            snprintf(buf, sizeof(buf), "%s$z^n shouts in %s, \"%s%s%s\"^n", 
+            snprintf(buf, sizeof(buf), "%s$v%s shouts in %s, \"%s%s%s\"^n", 
                      com_msgs[subcmd][3], 
+                     com_msgs[subcmd][3],
                      (IS_NPC(tmp) || GET_SKILL(tmp, language) > 0) ? skills[language].name : "an unknown language", 
                      capitalize(replace_too_long_words(tmp, ch, argument, language, com_msgs[subcmd][3])), 
                      ispunct(get_final_character_from_string(argument)) ? "" : "!", 
