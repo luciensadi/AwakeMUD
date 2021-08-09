@@ -5122,12 +5122,12 @@ ACMD(do_status)
     send_to_char("You are affected by:\r\n", ch);
   else send_to_char(ch, "%s is affected by:\r\n", GET_CHAR_NAME(targ));
   
-  if (ch->real_abils.esshole) {
+  if (targ->real_abils.esshole) {
     send_to_char(ch, "  Essence Hole (%.2f)\r\n", (float)targ->real_abils.esshole / 100);
     printed = TRUE;
   }
-  if (ch->real_abils.highestindex > GET_INDEX(ch)) {
-    send_to_char(ch, "  Bioware Hole (%.2f)\r\n", (float)(targ->real_abils.highestindex - GET_INDEX(ch)) / 100);
+  if (GET_MAG(targ) && targ->real_abils.highestindex > GET_INDEX(targ)) {
+    send_to_char(ch, "  Bioware Hole (%.2f)\r\n", (float)(targ->real_abils.highestindex - GET_INDEX(targ)) / 100);
     printed = TRUE;
   }
   switch (get_armor_penalty_grade(targ)) {
@@ -5157,7 +5157,7 @@ ACMD(do_status)
     printed = TRUE;
   }
   
-  for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content) {
+  for (struct obj_data *bio = targ->bioware; bio; bio = bio->next_content) {
     if (GET_OBJ_VAL(bio, 0) == BIO_PAINEDITOR && GET_OBJ_VAL(bio, 3)) {
       send_to_char("  An activated pain editor (+1 wil, -1 int)\r\n", ch);
       printed = TRUE;
@@ -5176,7 +5176,7 @@ ACMD(do_status)
       printed = TRUE;
     }
   if (GET_SUSTAINED_NUM(targ)) {
-    send_to_char("You are sustaining:\r\n", ch);
+    send_to_char(ch, "%s %s sustaining:\r\n", ch == targ ? "You" : GET_CHAR_NAME(targ), ch == targ ? "are" : "is");
     printed = TRUE;
     int i = 1;
     for (struct sustain_data *sust = GET_SUSTAINED(targ); sust; sust = sust->next)
@@ -5199,30 +5199,39 @@ ACMD(do_status)
     send_to_char(ch, "Nothing.\r\n");
   }
   
-  if (GET_MAG(ch) > 0) {
+  if (GET_MAG(targ) > 0) {
     send_to_char("\r\n", ch);
     int force = 0, total = 0;
     struct obj_data *focus;
     for (int x = 0; x < NUM_WEARS; x++) {
-      if (!(focus = GET_EQ(ch, x)))
+      if (!(focus = GET_EQ(targ, x)))
         continue;
         
-      if (GET_OBJ_TYPE(focus) == ITEM_FOCUS && GET_FOCUS_BONDED_TO(focus) == GET_IDNUM(ch) && GET_FOCUS_ACTIVATED(focus)) {
+      if (GET_OBJ_TYPE(focus) == ITEM_FOCUS && GET_FOCUS_BONDED_TO(focus) == GET_IDNUM(targ) && GET_FOCUS_ACTIVATED(focus)) {
         force += GET_FOCUS_FORCE(focus);
         total++;
       }
       
-      else if ((x == WEAR_WIELD || x == WEAR_HOLD) && GET_OBJ_TYPE(focus) == ITEM_WEAPON && WEAPON_IS_FOCUS(focus) && WEAPON_FOCUS_USABLE_BY(focus, ch)) {
+      else if ((x == WEAR_WIELD || x == WEAR_HOLD) && GET_OBJ_TYPE(focus) == ITEM_WEAPON && WEAPON_IS_FOCUS(focus) && WEAPON_FOCUS_USABLE_BY(focus, targ)) {
         force += GET_WEAPON_FOCUS_RATING(focus);
         total++;
       }
     }
     if (force == 0) {
-      send_to_char(ch, "You're not using any foci.\r\n");
-    } else if (force > (GET_REAL_MAG(ch) / 100) * 2) {
-      send_to_char(ch, "^YYou are at risk of geas from using too many points of foci! You're using %d, and need to reduce to %d.^n\r\n", force, (GET_REAL_MAG(ch) / 100) * 2);
+      if (ch == targ)
+        send_to_char("You're not using any foci.\r\n", ch);
+      else 
+        send_to_char(ch, "%s is not using any foci.\r\n", GET_CHAR_NAME(targ));
+    } else if (force > (GET_REAL_MAG(targ) / 100) * 2) {
+      if (ch == targ)
+        send_to_char(ch, "^YYou are at risk of geas from using too many points of foci! You're using %d, and need to reduce to %d.^n\r\n", force, (GET_REAL_MAG(targ) / 100) * 2);
+      else 
+        send_to_char(ch, "^Y%s is at risk of geas from using too many points of foci! They're using %d, and need to reduce to %d.^n\r\n", GET_CHAR_NAME(targ), force, (GET_REAL_MAG(targ) / 100) * 2);
     } else {
-      send_to_char(ch, "You're using a total of %d points of foci. If this gets above %d, you'll be at risk of geas.\r\n", force, (GET_REAL_MAG(ch) / 100) * 2);
+      if (ch == targ)
+        send_to_char(ch, "You're using a total of %d points of foci. If this gets above %d, you'll be at risk of geas.\r\n", force, (GET_REAL_MAG(targ) / 100) * 2);
+      else
+        send_to_char(ch, "%s is using a total of %d points of foci. If this gets above %d, they'll be at risk of geas.\r\n", GET_CHAR_NAME(targ), force, (GET_REAL_MAG(targ) / 100) * 2);
     }
   }
 }

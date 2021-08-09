@@ -6185,6 +6185,8 @@ SPECIAL(medical_workshop) {
     // Show essence and index.
     send_to_char(get_plaintext_score_essence(found_char), ch);
     send_to_char(ch, "Essence Hole: %.2f\r\n", (float)found_char->real_abils.esshole / 100);
+    if (GET_MAG(found_char))
+      send_to_char(ch, "Bioware Hole: %.2f\r\n", (float)(found_char->real_abils.highestindex - GET_INDEX(found_char)) / 100);
     
     return TRUE;
   } /* End diagnose command. */
