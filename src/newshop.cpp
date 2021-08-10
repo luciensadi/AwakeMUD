@@ -1021,8 +1021,8 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
     }
     act(buf, FALSE, ch, 0, keeper, TO_CHAR);
     
-    // Placed order successfully.
-    float totaltime = ((GET_OBJ_AVAILDAY(obj) * buynum) / success) + (2 * GET_AVAIL_OFFSET(ch));
+    // Placed order successfully. Order time is multiplied by 10% per availoffset tick, then multiplied again by quantity.
+    float totaltime = (GET_OBJ_AVAILDAY(obj) * (0.1 * GET_AVAIL_OFFSET(ch)) * buynum) / success;
     
     if (access_level(ch, LVL_ADMIN)) {
       send_to_char(ch, "You use your staff powers to greatly accelerate the ordering process (was %.2f days).\r\n", totaltime);
@@ -1972,6 +1972,17 @@ void shop_cancel(char *arg, struct char_data *ch, struct char_data *keeper, vnum
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " I'll let my contacts know you no longer want %s.", GET_OBJ_NAME(&obj_proto[real_obj]));
         else
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " I'll let my contacts know you no longer want that.");
+        
+        // Refund the prepayment, minus the usual fee.
+        if (order->paid > 0) {
+          int repayment_amount = order->paid - (order->paid / PREORDER_RESTOCKING_FEE_DIVISOR);
+          if (repayment_amount > 0) {
+            GET_NUYEN(ch) += repayment_amount;
+            act("$n hands $N some nuyen.", FALSE, keeper, 0, ch, TO_ROOM);
+            act("$n hands you some nuyen.", FALSE, keeper, 0, ch, TO_VICT);
+          }
+        }
+          
         REMOVE_FROM_LIST(order, shop_table[shop_nr].order, next);
         delete order;
         do_say(keeper, buf, cmd_say, SCMD_SAYTO);

@@ -4587,10 +4587,14 @@ void disp_meta_menu(struct descriptor_data *d)
 
 bool init_cost(struct char_data *ch, bool spend)
 {
-  long karmacost = (GET_GRADE(ch) + 6) * 300;  
-  long nuyencost = 25000 + (25000 * (1 << GET_GRADE(ch)));
-  if (nuyencost > 825000 || nuyencost < 0)
+  int desired_grade = GET_GRADE(ch) + 1;
+  long karmacost = (desired_grade + 5) * 300;  
+  long nuyencost;
+  
+  if (desired_grade >= 6)
     nuyencost = 825000;
+  else
+    nuyencost = 25000 + (25000 * (1 << GET_GRADE(ch)));
     
   if (karmacost < 0) {
     send_to_char("You broke it! You can't initiate until the code is fixed to allow someone at your rank to do so.\r\n", ch);
@@ -4608,7 +4612,7 @@ bool init_cost(struct char_data *ch, bool spend)
     return FALSE;
   }
   
-  switch (GET_GRADE(ch)+1) {
+  switch (desired_grade) {
     case 1:
       tke = 0;
       break;
