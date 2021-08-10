@@ -58,6 +58,10 @@ void remember(struct char_data * ch, struct char_data * victim);
 void order_list(bool first,...);
 bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype, bool include_func_protections);
 
+bool damage(struct char_data *ch, struct char_data *victim, int dam, int attacktype, bool is_physical);
+bool damage_without_message(struct char_data *ch, struct char_data *victim, int dam, int attacktype, bool is_physical);
+bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int attacktype, bool is_physical, bool send_message);
+
 SPECIAL(johnson);
 SPECIAL(weapon_dominator);
 SPECIAL(landlord_spec);
@@ -2385,9 +2389,16 @@ bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype, bo
   return true;
 }
 
+bool damage(struct char_data *ch, struct char_data *victim, int dam, int attacktype, bool is_physical) {
+  return raw_damage(ch, victim, dam, attacktype, is_physical, TRUE);
+}
+
+bool damage_without_message(struct char_data *ch, struct char_data *victim, int dam, int attacktype, bool is_physical) {
+  return raw_damage(ch, victim, dam, attacktype, is_physical, FALSE);
+}
+
 // return 1 if victim died, 0 otherwise
-bool damage(struct char_data *ch, struct char_data *victim, int dam, int attacktype,
-            bool is_physical)
+bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int attacktype, bool is_physical, bool send_message)
 {
   char rbuf[MAX_STRING_LENGTH];
   int exp;
@@ -2600,29 +2611,31 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
    * death blow, send a skill_message if one exists; if not, default to a
    * dam_message. Otherwise, always send a dam_message.
    */
-  if (attacktype > 0 && ch != victim && attacktype < TYPE_HAND_GRENADE)
-  {
-    if (!IS_WEAPON(attacktype)) {
-      skill_message(dam, ch, victim, attacktype);
-    } else {
-      if (GET_POS(victim) == POS_DEAD) {
-        if (!skill_message(dam, ch, victim, attacktype))
-          dam_message(dam, ch, victim, attacktype);
-      } else
-        dam_message(dam, ch, victim, attacktype);
-    }
-  } else if (dam > 0 && attacktype == TYPE_FALL) {
-    if (dam > 5) {
-      send_to_char(victim, "^RYou slam into the %s at speed, the impact reshaping your body in ways you do not appreciate.^n\r\n",
-                   ROOM_FLAGGED(get_ch_in_room(victim), ROOM_INDOORS) ? "floor" : "ground");
-      snprintf(buf3, sizeof(buf3), "^R$n slams into the %s at speed, the impact reshaping $s body in horrific ways.^n\r\n", ROOM_FLAGGED(get_ch_in_room(victim), ROOM_INDOORS) ? "floor" : "ground");
-      act(buf3, FALSE, victim, 0, 0, TO_ROOM);
-    } else {
-      send_to_char(victim, "^rYou hit the %s with bruising force.^n\r\n", ROOM_FLAGGED(get_ch_in_room(victim), ROOM_INDOORS) ? "floor" : "ground");
-      snprintf(buf3, sizeof(buf3), "^r$n hits the %s with bruising force.^n\r\n", ROOM_FLAGGED(get_ch_in_room(victim), ROOM_INDOORS) ? "floor" : "ground");
-      act(buf3, FALSE, victim, 0, 0, TO_ROOM);
-    }
-  }
+   if (send_message) {
+     if (attacktype > 0 && ch != victim && attacktype < TYPE_HAND_GRENADE)
+     {
+       if (!IS_WEAPON(attacktype)) {
+         skill_message(dam, ch, victim, attacktype);
+       } else {
+         if (GET_POS(victim) == POS_DEAD) {
+           if (!skill_message(dam, ch, victim, attacktype))
+             dam_message(dam, ch, victim, attacktype);
+         } else
+           dam_message(dam, ch, victim, attacktype);
+       }
+     } else if (dam > 0 && attacktype == TYPE_FALL) {
+       if (dam > 5) {
+         send_to_char(victim, "^RYou slam into the %s at speed, the impact reshaping your body in ways you do not appreciate.^n\r\n",
+                      ROOM_FLAGGED(get_ch_in_room(victim), ROOM_INDOORS) ? "floor" : "ground");
+         snprintf(buf3, sizeof(buf3), "^R$n slams into the %s at speed, the impact reshaping $s body in horrific ways.^n\r\n", ROOM_FLAGGED(get_ch_in_room(victim), ROOM_INDOORS) ? "floor" : "ground");
+         act(buf3, FALSE, victim, 0, 0, TO_ROOM);
+       } else {
+         send_to_char(victim, "^rYou hit the %s with bruising force.^n\r\n", ROOM_FLAGGED(get_ch_in_room(victim), ROOM_INDOORS) ? "floor" : "ground");
+         snprintf(buf3, sizeof(buf3), "^r$n hits the %s with bruising force.^n\r\n", ROOM_FLAGGED(get_ch_in_room(victim), ROOM_INDOORS) ? "floor" : "ground");
+         act(buf3, FALSE, victim, 0, 0, TO_ROOM);
+       }
+     }
+   }
   
   if ((ch->in_room != victim->in_room) && total_miss && attacktype < TYPE_SUFFERING &&
       attacktype >= TYPE_PISTOL)

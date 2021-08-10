@@ -34,6 +34,9 @@ extern int check_smartlink(struct char_data *ch, struct obj_data *weapon);
 extern bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype, bool include_func_protections);
 extern int get_weapon_damage_type(struct obj_data* weapon);
 extern bool is_char_too_tall(struct char_data *ch);
+extern bool damage(struct char_data *ch, struct char_data *victim, int dam, int attacktype, bool is_physical);
+extern bool damage_without_message(struct char_data *ch, struct char_data *victim, int dam, int attacktype, bool is_physical);
+
 
 bool does_weapon_have_bayonet(struct obj_data *weapon);
 
@@ -1105,7 +1108,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
   bool defender_died;
   if (att->ranged_combat_mode) {
     combat_message(att->ch, def->ch, att->weapon, MAX(0, damage_total), att->ranged->burst_count);
-    defender_died = damage(att->ch, def->ch, damage_total, att->ranged->dam_type, att->ranged->is_physical);
+    defender_died = damage_without_message(att->ch, def->ch, damage_total, att->ranged->dam_type, att->ranged->is_physical);
   } else {
     defender_died = damage(att->ch, def->ch, damage_total, att->melee->dam_type, att->melee->is_physical);
   
