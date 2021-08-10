@@ -3563,6 +3563,37 @@ int calculate_distance_between_rooms(vnum_t start_room_vnum, vnum_t target_room_
     return dist;
 }
 
+bool item_should_be_treated_as_melee_weapon(struct obj_data *obj) {
+  // Doesn't exist-- fists are melee weapons.
+  if (!obj)
+    return TRUE;
+  
+  // Not a weapon.
+  if (GET_OBJ_TYPE(obj) != ITEM_WEAPON)
+    return FALSE;
+    
+  // It's a gun that has a magazine in it.
+  if (IS_GUN(GET_WEAPON_ATTACK_TYPE(obj)) && obj->contains)
+    return FALSE;
+    
+  return TRUE;
+}
+
+bool item_should_be_treated_as_ranged_weapon(struct obj_data *obj) {
+  // Doesn't exist.
+  if (!obj)
+    return FALSE;
+  
+  // Not a weapon.
+  if (GET_OBJ_TYPE(obj) != ITEM_WEAPON)
+    return FALSE;
+    
+  // It's not a gun, or it doesn't have a magazine.
+  if (!IS_GUN(GET_WEAPON_ATTACK_TYPE(obj)) || !obj->contains)
+    return FALSE;
+    
+  return TRUE;
+}
 
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.
 // Great for swapping out old Classic weapons, cyberware, etc for the new guaranteed-canon versions.

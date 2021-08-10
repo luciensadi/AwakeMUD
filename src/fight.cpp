@@ -95,6 +95,9 @@ extern void write_world_to_disk(int vnum);
 extern bool Storage_get_filename(vnum_t vnum, char *filename, int filename_size);
 extern bool House_get_filename(vnum_t vnum, char *filename, int filename_size);
 
+extern bool item_should_be_treated_as_melee_weapon(struct obj_data *obj);
+extern bool item_should_be_treated_as_ranged_weapon(struct obj_data *obj);
+
 extern struct obj_data *generate_ammobox_from_pockets(struct char_data *ch, int weapontype, int ammotype, int quantity);
 
 /* Weapon attack texts */
@@ -304,15 +307,10 @@ void set_fighting(struct char_data * ch, struct char_data * vict, ...)
     if (!(GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD)))
       draw_weapon(ch);
     
-    if (GET_EQ(ch, WEAR_WIELD))
-      if ((!IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_WIELD))) || (!GET_EQ(ch, WEAR_WIELD)->contains && does_weapon_have_bayonet(GET_EQ(ch, WEAR_WIELD)))) &&
-          GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_WIELD)) != TYPE_ARROW)
-        AFF_FLAGS(ch).SetBit(AFF_APPROACH);
-    if (GET_EQ(ch, WEAR_HOLD))
-      if ((!IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_HOLD))) || (!GET_EQ(ch, WEAR_HOLD)->contains && does_weapon_have_bayonet(GET_EQ(ch, WEAR_HOLD)))) &&
-          GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_HOLD)) != TYPE_ARROW)
-        AFF_FLAGS(ch).SetBit(AFF_APPROACH);
-    if (!GET_EQ(ch, WEAR_WIELD) && !GET_EQ(ch, WEAR_HOLD))
+    if (item_should_be_treated_as_melee_weapon(GET_EQ(ch, WEAR_WIELD)) || item_should_be_treated_as_melee_weapon(GET_EQ(ch, WEAR_HOLD)))
+      AFF_FLAGS(ch).SetBit(AFF_APPROACH);
+      
+    else if (!GET_EQ(ch, WEAR_WIELD) && !GET_EQ(ch, WEAR_HOLD))
       AFF_FLAGS(ch).SetBit(AFF_APPROACH);
   }
   
@@ -3630,14 +3628,23 @@ bool vehicle_has_ultrasound_sensors(struct veh_data *veh) {
 #define BLIND_FIRE_PENALTY 8
 int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
   int modifier = 0;
+  char rbuf[2048];
   
   // If they're in an invis staffer above your level, you done goofed by fighting them. Return special code so we know what caused this in rolls.
-  if (!IS_NPC(victim) && !IS_NPC(ch) && GET_INVIS_LEV(victim) > 0 && !access_level(ch, GET_INVIS_LEV(victim)))
+  if (!IS_NPC(victim) && !IS_NPC(ch) && GET_INVIS_LEV(victim) > 0 && !access_level(ch, GET_INVIS_LEV(victim))) {
+    act("Maximum penalty- fighting invis staff.", 0, ch, 0, 0, TO_ROLLS);
+    if (ch->in_room != victim->in_room)
+      act("Maximum penalty- fighting invis staff.", 0, victim, 0, 0, TO_ROLLS);
     return INVIS_CODE_STAFF;
+  }
     
   // If they're flagged totalinvis (library mobs etc), you shouldn't be fighting them anyways.
-  if (IS_NPC(victim) && MOB_FLAGGED(victim, MOB_TOTALINVIS))
+  if (IS_NPC(victim) && MOB_FLAGGED(victim, MOB_TOTALINVIS)) {
+    act("Maximum penalty- fighting total-invis mob.", 0, ch, 0, 0, TO_ROLLS);
+    if (ch->in_room != victim->in_room)
+      act("Maximum penalty- fighting total-invis mob.", 0, victim, 0, 0, TO_ROLLS);
     return INVIS_CODE_TOTALINVIS;
+  }
     
   // Pre-calculate the things we care about here. First, character vision info.
   bool ch_has_ultrasound = AFF_FLAGGED(ch, AFF_DETECT_INVIS);
@@ -3665,7 +3672,19 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
       return 0;
   } else if (IS_ASTRAL(victim) && !AFF_FLAGGED(victim, AFF_MANIFEST)) {
     // You're not astrally perceiving, and your victim is a non-manifested astral being. Blind fire.
-    return GET_POWER(ch, ADEPT_BLIND_FIGHTING) ? BLIND_FIGHTING_MAX : BLIND_FIRE_PENALTY;
+    if (GET_POWER(ch, ADEPT_BLIND_FIGHTING)) {
+      modifier = BLIND_FIGHTING_MAX;
+      snprintf(rbuf, sizeof(rbuf), "Non-perceiving character fighting non-manifested astral: %d after Blind Fighting", modifier);
+    } else {
+      modifier = BLIND_FIRE_PENALTY;
+      snprintf(rbuf, sizeof(rbuf), "Non-perceiving character fighting non-manifested astral: %d", modifier);
+    }
+    
+    act(rbuf, 0, ch, 0, 0, TO_ROLLS);
+    if (ch->in_room != victim->in_room)
+      act(rbuf, 0, victim, 0, 0, TO_ROLLS);
+      
+    return modifier;
   }
   
   // We are deliberately not handling anything to do with light penalties here.
@@ -3676,7 +3695,11 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
     // Improved invisibility works against tech sensors. Regular invis does not, so we don't account for it here.
     if (vict_is_imp_invis) {
       // Invisibility penalty, we're at the full +8 from not being able to see them. This overwrites weather effects etc.
+      // We don't apply the Adept blind fighting max here, as that's calculated later on.
       modifier = BLIND_FIRE_PENALTY;
+      snprintf(rbuf, sizeof(rbuf), "Ultrasound-using character fighting improved invis: %d", modifier);
+    } else {
+      strlcpy(rbuf, "Ultrasound-using character", sizeof(rbuf));
     }
     
     // Silence level is the highest of the room's silence or the victim's stealth. Stealth in AwakeMUD is a hybrid of
@@ -3686,36 +3709,82 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
     
     // SR3 p196: Silence spell increases hearing perception test TN up to the lower of its successes or the spell's rating.
     // We don't have that test, so it seems reasonable to just shoehorn the TN increase in here.
-    modifier += silence_level;
+    if (silence_level > 0) {
+      modifier += silence_level;
+      snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "- silence level adds %d", silence_level);
+    }
     
     // Finally, apply ultrasound division. We add one since the system expects us to round up and we're using truncating integer math.
-    modifier = (modifier + 1) / 2;
+    if (modifier > 0) {
+      modifier = (modifier + 1) / 2;
+      snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), ", /2 (round up) = %d", modifier);
+      
+      act(rbuf, 0, ch, 0, 0, TO_ROLLS);
+      if (ch->in_room != victim->in_room)
+        act(rbuf, 0, victim, 0, 0, TO_ROLLS);
+    }
   }
   
   // No ultrasound. Check for thermographic vision.
   else if (ch_has_thermographic) {
     // Improved invis? You can't see them.
-    if (vict_is_imp_invis)
-      modifier = 8;
+    if (vict_is_imp_invis) {
+      modifier = BLIND_FIRE_PENALTY;
+      snprintf(rbuf, sizeof(rbuf), "Thermographic-using character fighting improved invis: %d", modifier);
+    }
     
     // Standard invis? (This includes ruthenium, which currently has no rating and is just treated like the invis spell.)
     // House rule: Since everyone and their dog has thermographic, now standard invis is actually a tiny bit useful.
     // This deviates from canon, where thermographic can see through standard invis.
-    else if (vict_is_just_invis)
+    else if (vict_is_just_invis) {
       modifier = 2;
+      snprintf(rbuf, sizeof(rbuf), "Thermographic-using character fighting invis: %d", modifier);
+    }
+      
+    if (modifier > 0) {
+      act(rbuf, 0, ch, 0, 0, TO_ROLLS);
+      if (ch->in_room != victim->in_room)
+        act(rbuf, 0, victim, 0, 0, TO_ROLLS);
+    }
   }
   
   // Low-light and normal vision aren't any help here.
   else {
-    if (vict_is_imp_invis || vict_is_just_invis)
-      modifier = 8;
+    if (vict_is_imp_invis || vict_is_just_invis) {
+      modifier = BLIND_FIRE_PENALTY;
+      
+      snprintf(rbuf, sizeof(rbuf), "Low-light or standard vision fighting invis: %d", modifier);
+      
+      act(rbuf, 0, ch, 0, 0, TO_ROLLS);
+      if (ch->in_room != victim->in_room)
+        act(rbuf, 0, victim, 0, 0, TO_ROLLS);
+    }
   }
   
   // MitS p148: Penalty is capped to +4 with Blind Fighting. We also cap it to +8 without, since that's Blind Fire.
-  if (GET_POWER(ch, ADEPT_BLIND_FIGHTING))
-    return MIN(modifier, BLIND_FIGHTING_MAX);
-  else
-    return MIN(modifier, BLIND_FIRE_PENALTY);
+  if (GET_POWER(ch, ADEPT_BLIND_FIGHTING)) {
+    if (modifier > BLIND_FIGHTING_MAX) {
+      modifier = BLIND_FIGHTING_MAX;
+      
+      snprintf(rbuf, sizeof(rbuf), "Capped to %d by Blind Fighting", modifier);
+      
+      act(rbuf, 0, ch, 0, 0, TO_ROLLS);
+      if (ch->in_room != victim->in_room)
+        act(rbuf, 0, victim, 0, 0, TO_ROLLS);
+    }
+  } else {
+    if (modifier > BLIND_FIRE_PENALTY) {
+      modifier = BLIND_FIRE_PENALTY;
+      
+      snprintf(rbuf, sizeof(rbuf), "Capped to %d", modifier);
+      
+      act(rbuf, 0, ch, 0, 0, TO_ROLLS);
+      if (ch->in_room != victim->in_room)
+        act(rbuf, 0, victim, 0, 0, TO_ROLLS);
+    }
+  }
+  
+  return modifier;
 }
 #undef INVIS_CODE_STAFF
 #undef INVIS_CODE_TOTALINVIS
@@ -4627,17 +4696,23 @@ void perform_violence(void)
     
     // Process melee charging.
     if (IS_AFFECTED(ch, AFF_APPROACH)) {
-      // Many failure conditions for charging at someone.
+      /* Automatic cancellation of charging state (causes success if in same room, failure otherwise):
+        - Opponent charging at you too (both stop charging; clash)
+        - You're no longer in a fighting state (you'll be back in one soon enough; clash)
+        - You both have melee weapons out (both stop charging; clash)
+        - Not in same room (terminate charges)
+      */
       if (IS_AFFECTED(FIGHTING(ch), AFF_APPROACH) 
           || GET_POS(FIGHTING(ch)) < POS_FIGHTING 
-          || (GET_EQ(ch, WEAR_WIELD) && IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_WIELD)))) 
-          || (GET_EQ(ch, WEAR_HOLD) && IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_HOLD))))
-          || (GET_EQ(FIGHTING(ch), WEAR_WIELD) && !(IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(FIGHTING(ch), WEAR_WIELD))))) 
-          || (GET_EQ(FIGHTING(ch), WEAR_HOLD) && !(IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(FIGHTING(ch), WEAR_HOLD))))) 
+          || (item_should_be_treated_as_melee_weapon(GET_EQ(ch, WEAR_WIELD)) && item_should_be_treated_as_melee_weapon(GET_EQ(FIGHTING(ch), WEAR_WIELD)))
           || ch->in_room != FIGHTING(ch)->in_room) {
         AFF_FLAGS(ch).RemoveBit(AFF_APPROACH);
         AFF_FLAGS(FIGHTING(ch)).RemoveBit(AFF_APPROACH);
       } 
+      
+      // No need to charge if you're wielding a gun. Your opponent still charges, if they're doing so.
+      if (item_should_be_treated_as_ranged_weapon(GET_EQ(ch, WEAR_WIELD)))
+        AFF_FLAGS(ch).RemoveBit(AFF_APPROACH);
       
       // Otherwise, process the charge.
       else {
