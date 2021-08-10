@@ -1431,7 +1431,7 @@ ACMD(do_phone)
       return;
     }
     if (phone->dest->persona)
-      send_to_icon(phone->dest->persona, "The flashing phone icon fades from view, and \"Missed Call: %d-%d\" flashes briefly.\r\n", (int) phone->number / 10000, (int) phone->number % 10000);
+      send_to_icon(phone->dest->persona, "The flashing phone icon fades from view, and \"Missed Call: %.4d-%.4d\" flashes briefly.\r\n", (int) phone->number / 10000, (int) phone->number % 10000);
     else {
       tch = phone->dest->phone->carried_by;
       if (!tch)
@@ -1442,9 +1442,9 @@ ACMD(do_phone)
         tch = phone->dest->phone->in_obj->worn_by;
       if (tch) {
         if (phone->dest->connected)
-          send_to_char(tch, "The phone is hung up from the other side. A mechanical voice notes, \"Call ended: %d-%d\".\r\n", (int) phone->number / 10000, (int) phone->number % 10000);
+          send_to_char(tch, "The phone is hung up from the other side. A mechanical voice notes, \"Call ended: %.4d-%.4d\".\r\n", (int) phone->number / 10000, (int) phone->number % 10000);
         else {
-          send_to_char(tch, "Your phone stops ringing, and \"Missed Call: %d-%d\" flashes briefly on its display.\r\n", (int) phone->number / 10000, (int) phone->number % 10000);
+          send_to_char(tch, "Your phone stops ringing, and \"Missed Call: %.4d-%.4d\" flashes briefly on its display.\r\n", (int) phone->number / 10000, (int) phone->number % 10000);
         }
       }
     }

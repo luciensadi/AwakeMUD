@@ -44,7 +44,7 @@
 #define NUM_MEMBERS_NEEDED_TO_FOUND         3 // TODO: Should be 3, but decreased for testing purposes.
 #define COST_TO_FOUND_GROUP                 100000 // Nuyen that must be paid by the founding player in order to make a group official.
 #define PGROUP_INVITATION_LIFETIME_IN_DAYS  7 // Number of IRL days an invitation will be valid for.
-#define DEFAULT_PGROUP_LOG_LOOKUP_LENGTH    1 // Number of IRL days to look back when PGROUP LOGS is passed no argument.
+#define DEFAULT_PGROUP_LOG_LOOKUP_LENGTH    7 // Number of IRL days to look back when PGROUP LOGS is passed no argument.
 
 // Helper functions.
 //  GET_PGROUP_MEMBER_DATA pulls up the character's membership struct, which has rank, privileges, etc.
