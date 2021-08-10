@@ -1098,9 +1098,9 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
   strcpy(buf, GET_CHAR_NAME(ch));
   if (shop_table[shop_nr].flags.IsSet(SHOP_DOCTOR))
   {
-    if (!(obj = get_obj_in_list_vis(ch, arg, ch->cyberware))
-        && !(obj = get_obj_in_list_vis(ch, arg, ch->bioware))
-        && !(obj = get_obj_in_list_vis(ch, arg, ch->carrying))) {
+    if (!(obj = get_obj_in_list_vis(ch, arg, ch->carrying))
+        && !(obj = get_obj_in_list_vis(ch, arg, ch->cyberware))
+        && !(obj = get_obj_in_list_vis(ch, arg, ch->bioware))) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %s", shop_table[shop_nr].no_such_itemp);
       do_say(keeper, buf, cmd_say, SCMD_SAYTO);
       return;
