@@ -123,6 +123,9 @@ struct ranged_combat_data {
   int dam_type;
   int damage_level;
   bool is_physical;
+  int tn;
+  int dice;
+  int successes;
   
   int burst_count;
   int recoil_comp;
@@ -134,10 +137,10 @@ struct ranged_combat_data {
   struct obj_data *magazine;
   struct obj_data *gyro;
   
-  ranged_combat_data(struct char_data *ch, struct obj_data *weapon, bool weapon_is_gun) : 
+  ranged_combat_data(struct char_data *ch, struct obj_data *weapon, bool ranged_combat_mode) : 
     skill(0), power(0), dam_type(0), damage_level(0), is_physical(FALSE),
-    burst_count(0), recoil_comp(0), using_mounted_gun(FALSE),
-    magazine(NULL), gyro(NULL)
+    tn(4), dice(0), successes(0), burst_count(0), recoil_comp(0), 
+    using_mounted_gun(FALSE), magazine(NULL), gyro(NULL)
   {
     memset(modifiers, 0, sizeof(modifiers));
     
@@ -147,7 +150,7 @@ struct ranged_combat_data {
     if (GET_RACE(ch) == RACE_CYCLOPS)
       modifiers[COMBAT_MOD_DISTANCE] += 2;
     
-    if (weapon && weapon_is_gun) {
+    if (weapon && ranged_combat_mode) {
       // Extract our various fields from the weapon.
       skill = GET_WEAPON_SKILL(weapon);
       power = GET_WEAPON_POWER(weapon);
@@ -196,11 +199,14 @@ struct melee_combat_data {
   int dam_type;
   int damage_level;
   bool is_physical;
+  int tn;
+  int dice;
+  int successes;
   
   int modifiers[NUM_COMBAT_MODIFIERS];
   
-  melee_combat_data(struct char_data *ch, struct obj_data *weapon, bool weapon_is_gun, struct cyberware_data *cyber) :
-    skill(0), skill_bonus(0), power(0), dam_type(0), damage_level(0), is_physical(FALSE)
+  melee_combat_data(struct char_data *ch, struct obj_data *weapon, bool ranged_combat_mode, struct cyberware_data *cyber) :
+    skill(0), skill_bonus(0), power(0), dam_type(0), damage_level(0), is_physical(FALSE), tn(4), dice(0), successes(0)
   {
     assert(ch != NULL);
     
@@ -213,7 +219,7 @@ struct melee_combat_data {
     damage_level = MODERATE;
     
     if (weapon) {      
-      if (weapon_is_gun) {
+      if (ranged_combat_mode) {
         if (does_weapon_have_bayonet(weapon)) {
           dam_type = TYPE_PIERCE;
           skill = SKILL_POLE_ARMS;
@@ -311,7 +317,7 @@ struct combat_data
   struct obj_data *weapon;
   
   // Gun data.
-  bool weapon_is_gun;
+  bool ranged_combat_mode;
   
   struct cyberware_data *cyber;
   struct ranged_combat_data *ranged;
@@ -319,22 +325,14 @@ struct combat_data
   
   // Generic combat data.
   bool too_tall;
-  int skill;
-  int tn;
-  int dice;
-  int successes;
-  
-  int modifiers[NUM_COMBAT_MODIFIERS];
   
   combat_data(struct char_data *character, struct obj_data *weap) :
     ch(NULL), 
     veh(NULL), 
     weapon(NULL),
-    weapon_is_gun(FALSE),
-    too_tall(FALSE), skill(0), tn(4), dice(0), successes(0)
+    ranged_combat_mode(FALSE),
+    too_tall(FALSE)
   {    
-    memset(modifiers, 0, sizeof(modifiers));
-    
     ch = character;
     
     assert(ch != NULL);
@@ -342,18 +340,18 @@ struct combat_data
     too_tall = is_char_too_tall(ch);
     
     weapon = weap;
-    weapon_is_gun = weapon
+    ranged_combat_mode = weapon
                     && IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon))
                     && (GET_WEAPON_SKILL(weapon) >= SKILL_PISTOLS
                         && GET_WEAPON_SKILL(weapon) <= SKILL_ASSAULT_CANNON);
     
     cyber = new struct cyberware_data(ch);
-    ranged = new struct ranged_combat_data(ch, weapon, weapon_is_gun);      
-    melee = new struct melee_combat_data(ch, weapon, weapon_is_gun, cyber);
+    ranged = new struct ranged_combat_data(ch, weapon, ranged_combat_mode);      
+    melee = new struct melee_combat_data(ch, weapon, ranged_combat_mode, cyber);
     
     // Special case: Bayonet charge.
-    if (weapon_is_gun && !weapon->contains && does_weapon_have_bayonet(weapon))
-      weapon_is_gun = FALSE;
+    if (ranged_combat_mode && !weapon->contains && does_weapon_have_bayonet(weapon))
+      ranged_combat_mode = FALSE;
   }
   
   ~combat_data() {
@@ -363,6 +361,7 @@ struct combat_data
   }
 };
 
+#define SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER {act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS ); if (att->ch->in_room != def->ch->in_room) act( rbuf, 1, def->ch, NULL, NULL, TO_ROLLS );}
 void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *weap, struct obj_data *vict_weap, struct obj_data *weap_ammo)
 {
   int net_successes, successes_for_use_in_monowhip_test_check;
@@ -378,27 +377,6 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
   struct combat_data *def = &defender_data;
   
   char rbuf[MAX_STRING_LENGTH];
-  
-  // Precondition: If you're wielding a non-weapon, back out.
-  if (att->weapon && (GET_OBJ_TYPE(att->weapon) != ITEM_WEAPON)) {
-    send_to_char(att->ch, "You struggle to figure out how to attack while using %s as a weapon!\r\n", decapitalize_a_an(GET_OBJ_NAME(att->weapon)));
-    return;
-  }
-  
-  // Precondition: If you're asleep or paralyzed, you don't get to fight, and also your opponent closes immediately.
-  if (!AWAKE(att->ch) || GET_QUI(att->ch) <= 0) {
-    AFF_FLAGS(att->ch).RemoveBit(AFF_APPROACH);
-    AFF_FLAGS(def->ch).RemoveBit(AFF_APPROACH);
-    
-    if (AWAKE(att->ch)) {
-      send_to_char("You can't react-- you're paralyzed!\r\n", att->ch);
-    }
-    return;
-  }
-  
-  // Precondition: If you're out of ammo, you don't get to fight. Note the use of the deducting has_ammo here.
-  if (att->weapon && !has_ammo(att->ch, att->weapon))
-    return;
   
   // Short-circuit: If you're wielding an activated Dominator, you don't care about all these pesky rules.
   if (att->weapon && GET_OBJ_SPEC(att->weapon) == weapon_dominator) {
@@ -440,6 +418,27 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     return;
   }
   
+  // Precondition: If you're wielding a non-weapon, back out.
+  if (att->weapon && (GET_OBJ_TYPE(att->weapon) != ITEM_WEAPON)) {
+    send_to_char(att->ch, "You struggle to figure out how to attack while using %s as a weapon!\r\n", decapitalize_a_an(GET_OBJ_NAME(att->weapon)));
+    return;
+  }
+  
+  // Precondition: If you're asleep or paralyzed, you don't get to fight, and also your opponent closes immediately.
+  if (!AWAKE(att->ch) || GET_QUI(att->ch) <= 0) {
+    AFF_FLAGS(att->ch).RemoveBit(AFF_APPROACH);
+    AFF_FLAGS(def->ch).RemoveBit(AFF_APPROACH);
+    
+    if (AWAKE(att->ch)) {
+      send_to_char("You can't react-- you're paralyzed!\r\n", att->ch);
+    }
+    return;
+  }
+  
+  // Precondition: If you're out of ammo, you don't get to fight. Note the use of the deducting has_ammo here.
+  if (att->weapon && !has_ammo(att->ch, att->weapon))
+    return;
+    
   // Precondition: If your foe is astral (ex: a non-manifested projection, a dematerialized spirit), you don't belong here.
   if (IS_ASTRAL(def->ch)) {
     if (IS_DUAL(att->ch) || IS_ASTRAL(att->ch))
@@ -448,23 +447,25 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
   }
   
   // Precondition: If you're in melee combat and your foe isn't present, stop fighting.
-  if (!att->weapon_is_gun && att->ch->in_room != def->ch->in_room) {
+  if (!att->ranged_combat_mode && att->ch->in_room != def->ch->in_room) {
     send_to_char(att->ch, "You relax with the knowledge that your opponent is no longer present.\r\n");
     stop_fighting(att->ch);
     return;
   }
   
   // Remove closing flags if both are melee.
-  if ((!att->weapon_is_gun || AFF_FLAGGED(att->ch, AFF_APPROACH))
-      && (!def->weapon_is_gun || AFF_FLAGGED(def->ch, AFF_APPROACH))) 
+  if ((!att->ranged_combat_mode || AFF_FLAGGED(att->ch, AFF_APPROACH))
+      && (!def->ranged_combat_mode || AFF_FLAGGED(def->ch, AFF_APPROACH))) 
   {
     AFF_FLAGS(att->ch).RemoveBit(AFF_APPROACH);
     AFF_FLAGS(def->ch).RemoveBit(AFF_APPROACH);
   }
   
   // Setup: Calculate sight penalties.
-  att->modifiers[COMBAT_MOD_VISIBILITY] += calculate_vision_penalty(att->ch, def->ch);    
-  def->modifiers[COMBAT_MOD_VISIBILITY] += calculate_vision_penalty(def->ch, att->ch);
+  att->melee->modifiers[COMBAT_MOD_VISIBILITY] += calculate_vision_penalty(att->ch, def->ch);
+  att->ranged->modifiers[COMBAT_MOD_VISIBILITY] += calculate_vision_penalty(att->ch, def->ch);
+  def->melee->modifiers[COMBAT_MOD_VISIBILITY] += calculate_vision_penalty(def->ch, att->ch);
+  def->ranged->modifiers[COMBAT_MOD_VISIBILITY] += calculate_vision_penalty(def->ch, att->ch);
   
   // Early execution: Nerve strike doesn't require as much setup, so perform it here to save on resources.
   if (!att->weapon 
@@ -479,40 +480,44 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
              GET_CHAR_NAME(def->ch),
              GET_IMPACT(def->ch));
     
-    att->tn += GET_IMPACT(def->ch) + modify_target_rbuf_raw(att->ch, rbuf, sizeof(rbuf), att->modifiers[COMBAT_MOD_VISIBILITY]);
+    att->melee->tn += GET_IMPACT(def->ch) + modify_target_rbuf_raw(att->ch, rbuf, sizeof(rbuf), att->melee->modifiers[COMBAT_MOD_VISIBILITY]);
     
     for (int mod_index = 0; mod_index < NUM_COMBAT_MODIFIERS; mod_index++) {
-      buf_mod(rbuf, sizeof(rbuf), combat_modifiers[mod_index], att->modifiers[mod_index]);
-      att->tn += att->modifiers[mod_index];
+      buf_mod(rbuf, sizeof(rbuf), combat_modifiers[mod_index], att->melee->modifiers[mod_index]);
+      att->melee->tn += att->melee->modifiers[mod_index];
     }
     
-    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), ". Total TN is %d.", att->tn);
-    act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );
+    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), ". Total TN is %d.", att->melee->tn);
+    SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
     
     // Calculate the attacker's total skill and execute a success test.
-    att->dice = get_skill(att->ch, SKILL_UNARMED_COMBAT, att->tn);
+    att->melee->dice = get_skill(att->ch, SKILL_UNARMED_COMBAT, att->melee->tn);
     if (!att->too_tall) {
       int bonus = MIN(GET_SKILL(att->ch, SKILL_UNARMED_COMBAT), GET_OFFENSE(att->ch));
-      snprintf(rbuf, sizeof(rbuf), "Attacker is rolling %d + %d dice", att->dice, bonus);
-      att->dice += bonus;
+      snprintf(rbuf, sizeof(rbuf), "Attacker is rolling %d + %d dice", att->melee->dice, bonus);
+      att->melee->dice += bonus;
     } else {
-      snprintf(rbuf, sizeof(rbuf), "Attacker is rolling %d dice (no bonus: too tall)", att->dice);
+      snprintf(rbuf, sizeof(rbuf), "Attacker is rolling %d dice (no bonus: too tall)", att->melee->dice);
     }
     
     if (GET_QUI(def->ch) <= 0) {
       strlcat(rbuf, "-- but we're zeroing out successes since the defender is paralyzed.", sizeof(rbuf));
-      att->successes = 0;
+      att->melee->successes = 0;
     }
     else {
-      att->successes = success_test(att->dice, att->tn);
+      att->melee->successes = success_test(att->melee->dice, att->melee->tn);
       snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), ", and got %d successes, which translates to %d qui loss.", 
-               att->successes,
-               (int) (att->successes / 2));
+               att->melee->successes,
+               (int) (att->melee->successes / 2));
     }
-    act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );
+    SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
+    
+    // Ensure that neither combatant has the closing flag set.
+    AFF_FLAGS(att->ch).RemoveBit(AFF_APPROACH);
+    AFF_FLAGS(def->ch).RemoveBit(AFF_APPROACH);
       
-    if (att->successes > 1) {
-      GET_TEMP_QUI_LOSS(def->ch) += (int) (att->successes / 2); // This used to be * 2!
+    if (att->melee->successes > 1) {
+      GET_TEMP_QUI_LOSS(def->ch) += (int) (att->melee->successes / 2); // This used to be * 2!
       affect_total(def->ch);
       if (GET_QUI(def->ch) <= 0) {
         act("You hit $N's pressure points successfully, $e is paralyzed!", FALSE, att->ch, 0, def->ch, TO_CHAR);
@@ -539,8 +544,8 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     return;
   }
   
-  // Setup for ranged combat.
-  if (att->weapon_is_gun) {
+  // Setup for ranged combat. We assume that if you're here, you have a loaded ranged weapon and are not a candidate for receiving a counterstrike.
+  if (att->weapon && att->ranged_combat_mode) {
     // Precondition: If you're using a heavy weapon, you must be strong enough to wield it, or else be using a gyro. CC p99
     if (!att->ranged->using_mounted_gun
         && !att->ranged->gyro
@@ -671,7 +676,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     // Setup: If your attacker is closing the distance (running), take a penalty per Core p112.
     if (AFF_FLAGGED(def->ch, AFF_APPROACH))
       att->ranged->modifiers[COMBAT_MOD_DEFENDER_MOVING] += 2;
-    else if (!def->weapon_is_gun && def->ch->in_room == att->ch->in_room)
+    else if (!def->ranged_combat_mode && def->ch->in_room == att->ch->in_room)
       att->ranged->modifiers[COMBAT_MOD_IN_MELEE_COMBAT] += 2; // technically supposed to be +2 per attacker, but ehhhh.
     
     // Setup: If you have a gyro mount, it negates recoil and movement penalties up to its rating.
@@ -698,196 +703,275 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
              att->ranged->burst_count, 
              att->ranged->recoil_comp);
              
-    att->tn += modify_target_rbuf_raw(att->ch, rbuf, sizeof(rbuf), att->modifiers[COMBAT_MOD_VISIBILITY]);
+    att->ranged->tn += modify_target_rbuf_raw(att->ch, rbuf, sizeof(rbuf), att->ranged->modifiers[COMBAT_MOD_VISIBILITY]);
     for (int mod_index = 0; mod_index < NUM_COMBAT_MODIFIERS; mod_index++) {
       // Ranged-specific modifiers.
       buf_mod(rbuf, sizeof(rbuf), combat_modifiers[mod_index], att->ranged->modifiers[mod_index]);
-      att->tn += att->ranged->modifiers[mod_index];
-      
-      // General modifiers.
-      buf_mod(rbuf, sizeof(rbuf), combat_modifiers[mod_index], att->modifiers[mod_index]);
-      att->tn += att->modifiers[mod_index];
+      att->ranged->tn += att->ranged->modifiers[mod_index];
     }
     
     // Calculate the attacker's total skill (this modifies TN)
-    att->dice = get_skill(att->ch, att->ranged->skill, att->tn);
+    att->ranged->dice = get_skill(att->ch, att->ranged->skill, att->ranged->tn);
     
-    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "\r\nThus, attacker's TN is: %d.", att->tn);
-    act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );
+    // Minimum TN is 2.
+    att->ranged->tn = MAX(att->ranged->tn, 2);
+    
+    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "\r\nThus, attacker's ranged TN is: %d.", att->ranged->tn);
+    SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
     
     // Execute skill test
     if (!att->too_tall) {
       int bonus = MIN(GET_SKILL(att->ch, att->ranged->skill), GET_OFFENSE(att->ch));
-      snprintf(rbuf, sizeof(rbuf), "Not too tall, so will roll %d + %d dice... ", att->dice, bonus);
-      att->dice += bonus;
+      snprintf(rbuf, sizeof(rbuf), "Not too tall, so will roll %d + %d dice... ", att->ranged->dice, bonus);
+      att->ranged->dice += bonus;
     } else {
-      snprintf(rbuf, sizeof(rbuf), "Too tall, so will roll just %d dice... ", att->dice);
+      snprintf(rbuf, sizeof(rbuf), "Too tall, so will roll just %d dice... ", att->ranged->dice);
     }
     
-    att->successes = success_test(att->dice, att->tn);
-    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "%d successes.", att->successes);
-    act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );
+    att->ranged->successes = success_test(att->ranged->dice, att->ranged->tn);
+    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "%d successes.", att->ranged->successes);
+    SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
     
     // Dodge test.
     if (AWAKE(def->ch) && !AFF_FLAGGED(def->ch, AFF_SURPRISE) && !def->too_tall && !AFF_FLAGGED(def->ch, AFF_PRONE)) {
       // Previous code only allowed you to sidestep if you had also allocated at least one normal dodge die. Why?
-      def->dice = GET_DEFENSE(def->ch) + GET_POWER(def->ch, ADEPT_SIDESTEP);
-      def->tn += damage_modifier(def->ch, buf, sizeof(buf)) + (int)(att->ranged->burst_count / 3) + def->cyber->footanchors;
-      def->successes = MAX(success_test(def->dice, def->tn), 0);
-      att->successes -= def->successes;
+      // We use the ranged slots here since we're positive they won't get used in a counterattack.
+      def->ranged->dice = GET_DEFENSE(def->ch) + GET_POWER(def->ch, ADEPT_SIDESTEP);
       
-      snprintf(rbuf, sizeof(rbuf), "Dodge: Dice %d, TN %d, Successes %d.  This means attacker's net successes = %d.", def->dice, def->tn, def->successes, att->successes);
+      // Set up the defender's modifiers.
+      def->ranged->modifiers[COMBAT_MOD_OPPONENT_BURST_COUNT] = (int)(att->ranged->burst_count / 3);
+      def->ranged->modifiers[COMBAT_MOD_FOOTANCHORS] = def->cyber->footanchors;
+      
+      // Set up the defender's TN. Apply their modifiers.
+      strlcpy(rbuf, "Defender's dodge roll modifiers: ", sizeof(rbuf));
+      def->ranged->tn += modify_target_rbuf_raw(def->ch, rbuf, sizeof(rbuf), def->ranged->modifiers[COMBAT_MOD_VISIBILITY]);      
+      for (int mod_index = 0; mod_index < NUM_COMBAT_MODIFIERS; mod_index++) {
+        buf_mod(rbuf, sizeof(rbuf), combat_modifiers[mod_index], def->ranged->modifiers[mod_index]);
+        def->ranged->tn += att->ranged->modifiers[mod_index];
+      }
+      
+      // Minimum TN is 2.
+      def->ranged->tn = MAX(def->ranged->tn, 2);
+      
+      def->ranged->successes = MAX(success_test(def->ranged->dice, def->ranged->tn), 0);
+      att->ranged->successes -= def->ranged->successes;
+      
+      snprintf(buf3, sizeof(buf3), "Dodge: Dice %d, TN %d, Successes %d.  This means attacker's net successes = %d.", 
+               def->ranged->dice, 
+               def->ranged->tn,
+               def->ranged->successes, 
+               att->ranged->successes);
     } else {
-      att->successes = MAX(att->successes, 1);
-      snprintf(rbuf, sizeof(rbuf), "Opponent unable to dodge, successes confirmed as %d.", att->successes);
+      // Surprised, oversized, unconscious, or prone? No dodge test for you.
+      att->ranged->successes = MAX(att->ranged->successes, 1);
+      snprintf(rbuf, sizeof(rbuf), "Opponent unable to dodge, successes confirmed as %d.", att->melee->successes);
     }
-    act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );
+    SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
     
     // If the ranged attack failed, print the relevant message and terminate.
-    if (att->successes < 1) {
-      snprintf(rbuf, sizeof(rbuf), "%s failed to have net successes, so we're bailing out.", GET_CHAR_NAME(attacker));
-      act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );
+    if (att->ranged->successes < 1) {
+      snprintf(rbuf, sizeof(rbuf), "%s failed to achieve any net successes, so we're bailing out.", GET_CHAR_NAME(attacker));
+      SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
       
       combat_message(att->ch, def->ch, att->weapon, -1, att->ranged->burst_count);
       damage(att->ch, def->ch, -1, att->ranged->dam_type, 0);
       return;
     }
-    // But wait-- there's more! Next we jump down to dealing damage.
-  }
-  // Melee combat.
-  
-  // Setup for melee combat. Used for counterstrike.
-  // todo asdf this whole setup is wrong, what about counterstriking someone who's wielding a ranged weapon? You never get your melee setup, so you're attacking, what, barehanded? And then the weapon code below could potentially just fall back to using your gun anyways    
-  // Setup: Calculate position modifiers.
-  if (AFF_FLAGGED(att->ch, AFF_PRONE))
-    def->melee->modifiers[COMBAT_MOD_POSITION] -= 2;
-  if (AFF_FLAGGED(def->ch, AFF_PRONE))
-    att->melee->modifiers[COMBAT_MOD_POSITION] -= 2;
-  
-  // Spirits use different dice than the rest of us plebs.
-  // Disabled this portion for now-- it looks like the original intent was to implement a clash of wills, but the code does not support this at the moment.
-  /*
-  if (IS_SPIRIT(def->ch) || IS_ELEMENTAL(def->ch)) {
-    act("Defender is a spirit, so attacker uses wil and defender uses reaction for dice pool.", 1, att->ch, NULL, NULL, TO_ROLLS);
-    att->dice = GET_WIL(att->ch);
-    def->dice = GET_REA(def->ch);
-  } else if (IS_SPIRIT(att->ch) || IS_ELEMENTAL(att->ch)) {
-    act("Attacker is a spirit, so attacker uses reaction and defender uses wil for dice pool.", 1, att->ch, NULL, NULL, TO_ROLLS);
-    att->dice = GET_REA(att->ch);
-    def->dice = GET_WIL(def->ch);
-  } else {
-  */
-    act("Computing dice for attacker...", 1, att->ch, NULL, NULL, TO_ROLLS );
-    att->dice = att->melee->skill_bonus + get_skill(att->ch, att->melee->skill, att->tn);
-    if (!att->too_tall)
-      att->dice += MIN(GET_SKILL(att->ch, att->melee->skill) + att->melee->skill_bonus, GET_OFFENSE(att->ch));
-    act("Computing dice for defender...", 1, att->ch, NULL, NULL, TO_ROLLS );
-    def->dice = def->melee->skill_bonus + get_skill(def->ch, def->melee->skill, def->tn);
-    if (!def->too_tall)
-      def->dice += MIN(GET_SKILL(def->ch, def->melee->skill) + def->melee->skill_bonus, GET_OFFENSE(def->ch));
-  // }
-  
-  // Adepts get bonus dice when counterattacking. Ip Man approves.
-  if (GET_POWER(def->ch, ADEPT_COUNTERSTRIKE) > 0) {
-    def->dice += GET_POWER(def->ch, ADEPT_COUNTERSTRIKE);
-    snprintf(rbuf, sizeof(rbuf), "Defender counterstrike dice bonus is %d.", GET_POWER(def->ch, ADEPT_COUNTERSTRIKE));
-    act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );
-  }
-  
-  // Bugfix: If you're unconscious or mortally wounded, you don't get to counterattack.
-  if (GET_PHYSICAL(def->ch) <= 0 || GET_MENTAL(def->ch) <= 0) {
-    def->dice = 0;
-    act("^yDefender incapped, dice capped to zero.^n", 1, att->ch, NULL, NULL, TO_ROLLS );
-  }
     
-  snprintf(rbuf, sizeof(rbuf), "^g%s's dice: ^W%d^g, %s's dice: ^W%d^g.^n", GET_CHAR_NAME(att->ch), att->dice, GET_CHAR_NAME(def->ch), def->dice);
-  act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );
-  
-  // Calculate the net reach.
-  int net_reach = GET_REACH(att->ch) - GET_REACH(def->ch);
-  
-  if (!GET_POWER(att->ch, ADEPT_PENETRATINGSTRIKE) && GET_POWER(att->ch, ADEPT_DISTANCE_STRIKE)) {
-    // MitS 149: Ignore reach modifiers.
-    net_reach = 0;
-  }
-  
-  // Reach is always used offensively. TODO: Add option to use it defensively instead.
-  if (net_reach > 0)
-    att->melee->modifiers[COMBAT_MOD_REACH] -= net_reach;
-  else
-    def->melee->modifiers[COMBAT_MOD_REACH] -= -net_reach;
+    // Calculate the power of the attack.
+    att->ranged->power = GET_WEAPON_POWER(att->weapon) + att->ranged->burst_count;
+    att->ranged->damage_level = GET_WEAPON_DAMAGE_CODE(att->weapon) + (int)(att->ranged->burst_count / 3);
     
-  // -------------------------------------------------------------------------------------------------------
-  // Calculate and display pre-success-test information.
-  snprintf(rbuf, sizeof(rbuf), "^cCalculating melee combat modifiers. %s's TN modifiers: ", GET_CHAR_NAME(att->ch) );
-  // This feels a little shitty, but we know that if we're in melee mode, the TN has not been touched yet, and if we're not then it's already been calculated.
-  att->tn += modify_target_rbuf_raw(att->ch, rbuf, sizeof(rbuf), att->melee->modifiers[COMBAT_MOD_VISIBILITY]);
-  for (int mod_index = 0; mod_index < NUM_COMBAT_MODIFIERS; mod_index++) {
-    // Melee-specific modifiers.
-    buf_mod(rbuf, sizeof(rbuf), combat_modifiers[mod_index], att->melee->modifiers[mod_index]);
-    att->tn += att->melee->modifiers[mod_index];
-    
-    // General modifiers.
-    buf_mod(rbuf, sizeof(rbuf), combat_modifiers[mod_index], att->modifiers[mod_index]);
-    att->tn += att->modifiers[mod_index];
-  }
-  act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );
-  
-  snprintf(rbuf, sizeof(rbuf), "^c%s%s's TN modifiers: ", GET_CHAR_NAME( def->ch ),
-          (GET_PHYSICAL(def->ch) <= 0 || GET_MENTAL(def->ch) <= 0) ? " (incap)" : "" );
-  def->tn += modify_target_rbuf_raw(def->ch, rbuf, sizeof(rbuf), def->melee->modifiers[COMBAT_MOD_VISIBILITY]);
-  for (int mod_index = 0; mod_index < NUM_COMBAT_MODIFIERS; mod_index++) {
-    // Melee-specific modifiers.
-    buf_mod(rbuf, sizeof(rbuf), combat_modifiers[mod_index], def->melee->modifiers[mod_index]);
-    def->tn += def->melee->modifiers[mod_index];
-    
-    // General modifiers.
-    buf_mod(rbuf, sizeof(rbuf), combat_modifiers[mod_index], def->modifiers[mod_index]);
-    def->tn += def->modifiers[mod_index];
-  }
-  act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );
-  
-  att->tn = MAX(att->tn, 2);
-  def->tn = MAX(def->tn, 2);
-
-  // ----------------------
-  if (!att->weapon_is_gun) {
-    if (AWAKE(def->ch) && !AFF_FLAGGED(def->ch, AFF_SURPRISE)) {
-      att->successes = success_test(att->dice, att->tn);
-      def->successes = success_test(def->dice, def->tn);
-      net_successes = att->successes - def->successes;
-    } else {
-      act("Surprised-- defender gets no roll.", FALSE, att->ch, NULL, NULL, TO_ROLLS);
-      att->successes = MAX(1, success_test(att->dice, att->tn));
-      net_successes = att->successes;
+    // Calculate effects of armor on the power of the attack.
+    if (att->ranged->magazine) {
+      switch (GET_MAGAZINE_AMMO_TYPE(att->ranged->magazine)) {
+        case AMMO_APDS:
+          att->ranged->power -= (int)(GET_BALLISTIC(def->ch) / 2);
+          break;
+        case AMMO_EX:
+          att->ranged->power++;
+          // fall through
+        case AMMO_EXPLOSIVE:
+          att->ranged->power++;
+          att->ranged->power -= GET_BALLISTIC(def->ch);
+          break;
+        case AMMO_FLECHETTE:
+          if (!GET_IMPACT(def->ch) && !GET_BALLISTIC(def->ch))
+            att->ranged->damage_level++;
+          else {
+            att->ranged->power -= MAX(GET_BALLISTIC(def->ch), GET_IMPACT(def->ch) * 2);
+          }
+          break;
+        case AMMO_GEL:
+          att->ranged->power -= GET_BALLISTIC(def->ch) + 2;
+          break;
+        default:
+          att->ranged->power -= GET_BALLISTIC(def->ch);
+      }
+    }
+    // Weapon fired without a magazine (probably by an NPC)-- we assume its ammo type is normal.
+    else {
+      att->ranged->power -= GET_BALLISTIC(def->ch);
     }
     
-    successes_for_use_in_monowhip_test_check = att->successes;
+    // Increment character's shots_fired. This is used for internal tracking of eligibility for a skill quest.
+    if (GET_SKILL(att->ch, att->ranged->skill) >= 8 && SHOTS_FIRED(att->ch) < 10000)
+      SHOTS_FIRED(att->ch)++;
+    
+    // Handle spirits and elementals being little divas with their special combat rules.
+    // Namely: We require that the attack's power is greater than double the spirit's level, otherwise it takes no damage.
+    // If the attack's power is greater, subtract double the level from it.
+    if (IS_SPIRIT(def->ch) || IS_ELEMENTAL(def->ch)) {
+      if (att->ranged->power <= GET_LEVEL(def->ch) * 2) {
+        damage(att->ch, def->ch, 0, att->ranged->dam_type, att->ranged->is_physical);
+        return;
+      } else
+        att->ranged->power -= GET_LEVEL(def->ch) * 2;
+    }
+    
+    // Core p113.
+    att->ranged->power = MAX(att->ranged->power, 2);
+  }
+  // Melee combat. If you're here, we don't care about your ranged combat setup-- it's face-beating time. All calculations here are done for both attacker and defender (in case of defender counterstriking)
+  else {
+    // Ensure that neither combatant has the closing flag set.
+    AFF_FLAGS(att->ch).RemoveBit(AFF_APPROACH);
+    AFF_FLAGS(def->ch).RemoveBit(AFF_APPROACH);
+    
+    // Setup: Calculate position modifiers.
+    // It's hard for you to fight while prone.
+    if (AFF_FLAGGED(att->ch, AFF_PRONE))
+      def->melee->modifiers[COMBAT_MOD_POSITION] -= 2;
+      
+    // Treat unconscious as being a position mod of -6 (reflects ease of coup de grace)
+    if (!AWAKE(def->ch))
+      att->melee->modifiers[COMBAT_MOD_POSITION] -= 6;
+    else if (AFF_FLAGGED(def->ch, AFF_PRONE))
+      att->melee->modifiers[COMBAT_MOD_POSITION] -= 2;
+      
+    // Spirits use different dice than the rest of us plebs.
+    // Disabled this portion for now-- it looks like the original intent was to implement a clash of wills, but the code does not support this at the moment.
+    /*
+    if (IS_SPIRIT(def->ch) || IS_ELEMENTAL(def->ch)) {
+      act("Defender is a spirit, so attacker uses wil and defender uses reaction for dice pool.", 1, att->ch, NULL, NULL, TO_ROLLS);
+      att->dice = GET_WIL(att->ch);
+      def->dice = GET_REA(def->ch);
+    } else if (IS_SPIRIT(att->ch) || IS_ELEMENTAL(att->ch)) {
+      act("Attacker is a spirit, so attacker uses reaction and defender uses wil for dice pool.", 1, att->ch, NULL, NULL, TO_ROLLS);
+      att->dice = GET_REA(att->ch);
+      def->dice = GET_WIL(def->ch);
+    } else {
+    */
+    
+    strlcpy(rbuf, "Computing dice for attacker...", sizeof(rbuf));
+    SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
+    att->melee->dice = att->melee->skill_bonus + get_skill(att->ch, att->melee->skill, att->melee->tn);
+    if (!att->too_tall)
+      att->melee->dice += MIN(GET_SKILL(att->ch, att->melee->skill) + att->melee->skill_bonus, GET_OFFENSE(att->ch));
+    strlcpy(rbuf, "Computing dice for defender...", sizeof(rbuf));
+    SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
+    def->melee->dice = def->melee->skill_bonus + get_skill(def->ch, def->melee->skill, def->melee->tn);
+    if (!def->too_tall)
+      def->melee->dice += MIN(GET_SKILL(def->ch, def->melee->skill) + def->melee->skill_bonus, GET_OFFENSE(def->ch));
+      
+    // }
+    
+    // Adepts get bonus dice when counterattacking. Maybe they practice Wing Chun?
+    if (GET_POWER(def->ch, ADEPT_COUNTERSTRIKE) > 0) {
+      def->melee->dice += GET_POWER(def->ch, ADEPT_COUNTERSTRIKE);
+      snprintf(rbuf, sizeof(rbuf), "Defender counterstrike dice bonus is %d.", GET_POWER(def->ch, ADEPT_COUNTERSTRIKE));
+      SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
+    }
+    
+    // Bugfix: If you're unconscious or mortally wounded, you don't get to counterattack.
+    if (GET_PHYSICAL(def->ch) <= 0 || GET_MENTAL(def->ch) <= 0) {
+      def->melee->dice = 0;
+      strlcpy(rbuf, "^yDefender incapped, dice capped to zero.^n", sizeof(rbuf));
+      SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
+    }
+    
+    snprintf(rbuf, sizeof(rbuf), "^g%s's dice: ^W%d^g, %s's dice: ^W%d^g.^n", GET_CHAR_NAME(att->ch), att->melee->dice, GET_CHAR_NAME(def->ch), def->melee->dice);
+    SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
+    
+    // Calculate the net reach.
+    int net_reach = GET_REACH(att->ch) - GET_REACH(def->ch);
+    
+    if (!GET_POWER(att->ch, ADEPT_PENETRATINGSTRIKE) && GET_POWER(att->ch, ADEPT_DISTANCE_STRIKE)) {
+      // MitS 149: Ignore reach modifiers.
+      net_reach = 0;
+    }
+    
+    // Reach is always used offensively. TODO: Add option to use it defensively instead.
+    if (net_reach > 0)
+      att->melee->modifiers[COMBAT_MOD_REACH] -= net_reach;
+    else
+      def->melee->modifiers[COMBAT_MOD_REACH] -= -net_reach;
+      
+    // -------------------------------------------------------------------------------------------------------
+    // Calculate and display pre-success-test information.
+    snprintf(rbuf, sizeof(rbuf), "^cCalculating melee combat modifiers. %s's TN modifiers: ", GET_CHAR_NAME(att->ch) );
+    // This feels a little shitty, but we know that if we're in melee mode, the TN has not been touched yet, and if we're not then it's already been calculated.
+    att->melee->tn += modify_target_rbuf_raw(att->ch, rbuf, sizeof(rbuf), att->melee->modifiers[COMBAT_MOD_VISIBILITY]);
+    for (int mod_index = 0; mod_index < NUM_COMBAT_MODIFIERS; mod_index++) {
+      buf_mod(rbuf, sizeof(rbuf), combat_modifiers[mod_index], att->melee->modifiers[mod_index]);
+      att->melee->tn += att->melee->modifiers[mod_index];
+    }
+    SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
+    
+    snprintf(rbuf, sizeof(rbuf), "^c%s%s's TN modifiers: ", GET_CHAR_NAME( def->ch ),
+            (GET_PHYSICAL(def->ch) <= 0 || GET_MENTAL(def->ch) <= 0) ? " (incap)" : "" );
+    def->melee->tn += modify_target_rbuf_raw(def->ch, rbuf, sizeof(rbuf), def->melee->modifiers[COMBAT_MOD_VISIBILITY]);
+    for (int mod_index = 0; mod_index < NUM_COMBAT_MODIFIERS; mod_index++) {
+      buf_mod(rbuf, sizeof(rbuf), combat_modifiers[mod_index], def->melee->modifiers[mod_index]);
+      def->melee->tn += def->melee->modifiers[mod_index];
+    }
+    SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
+    
+    // Minimum TN is 2.
+    att->melee->tn = MAX(att->melee->tn, 2);
+    def->melee->tn = MAX(def->melee->tn, 2);
+    
+    // Calculate the clash, unless there's some surprise involved (hitting someone unconscious is technically surprising for them)
+    if (AWAKE(def->ch) && !AFF_FLAGGED(def->ch, AFF_SURPRISE)) {
+      att->melee->successes = success_test(att->melee->dice, att->melee->tn);
+      def->melee->successes = success_test(def->melee->dice, def->melee->tn);
+      net_successes = att->melee->successes - def->melee->successes;
+    } else {
+      strlcpy(rbuf, "Surprised-- defender gets no roll.", sizeof(rbuf));
+      SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
+      att->melee->successes = MAX(1, success_test(att->melee->dice, att->melee->tn));
+      net_successes = att->melee->successes;
+    }
+    
+    // Store our successes for the monowhip test, since there's a chance it'll be flipped in counterattack.
+    successes_for_use_in_monowhip_test_check = att->melee->successes;
     
     if (def->weapon && GET_OBJ_TYPE(def->weapon) != ITEM_WEAPON) {
       // Defender's wielding a non-weapon? Whoops, net successes will never be less than 0.
-      act("Defender wielding non-weapon-- cannot win clash.", FALSE, att->ch, NULL, NULL, TO_ROLLS);
+      strlcpy(rbuf, "Defender wielding non-weapon-- cannot win clash.", sizeof(rbuf));
+      SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
       net_successes = MAX(0, net_successes);
     }
     
+    // Compose and send various messages.
     snprintf(rbuf, sizeof(rbuf), "^g%s got ^W%d^g success%s from ^W%d^g dice at TN ^W%d^g.^n\r\n",
              GET_CHAR_NAME(att->ch),
-             att->successes,
-             att->successes != 1 ? "s" : "",
-             att->dice,
-             att->tn);
+             att->melee->successes,
+             att->melee->successes != 1 ? "s" : "",
+             att->melee->dice,
+             att->melee->tn);
     snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "^g%s got ^W%d^g success%s from ^W%d^g dice at TN ^W%d^g.^n\r\n",
              GET_CHAR_NAME(def->ch),
-             def->successes,
-             def->successes != 1 ? "s" : "",
-             def->dice,
-             def->tn);
+             def->melee->successes,
+             def->melee->successes != 1 ? "s" : "",
+             def->melee->dice,
+             def->melee->tn);
              
     if (net_successes < 0) {
       snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "^yNet successes is ^W%d^y, which will cause a counterattack.^n\r\n", net_successes);
     } else
       snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "Net successes is ^W%d^n.\r\n", net_successes);
-    act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );
+    SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
     
     act("$n clashes with $N in melee combat.", FALSE, att->ch, 0, def->ch, TO_ROOM);
     act("You clash with $N in melee combat.", FALSE, att->ch, 0, def->ch, TO_CHAR);
@@ -908,159 +992,118 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
       att = def;
       def = temp_att;
       
-      // Flip the successes and remove the attacker's TN modifiers for ranged combat. There are probably more here that I'm missing.
-      att->successes = -1 * net_successes;
-      att->tn += att->modifiers[COMBAT_MOD_RECOIL];
-      att->tn += att->modifiers[COMBAT_MOD_SMARTLINK];
-      att->tn += att->modifiers[COMBAT_MOD_GYRO];
-      att->tn += att->modifiers[COMBAT_MOD_MOVEMENT];
+      // Flip the successes. Now that we've bifurcated the modifiers between ranged and melee, we no longer need to worry about those here.
+      att->melee->successes = -1 * net_successes;
       
       // Prevent ranged combat messaging.
-      att->weapon_is_gun = FALSE;
-    } else
-      att->successes = net_successes;
-  }
-  
-  // Calculate the power of the attack (applies to both melee and ranged).
-  if (att->weapon) {
-    // Ranged weapon?
-    if (att->weapon_is_gun) {
-      att->ranged->power = GET_WEAPON_POWER(att->weapon) + att->ranged->burst_count;
-      att->ranged->damage_level = GET_WEAPON_DAMAGE_CODE(att->weapon) + (int)(att->ranged->burst_count / 3);
-      
-      // Calculate effects of armor on the power of the attack.
-      if (att->ranged->magazine) {
-        switch (GET_MAGAZINE_AMMO_TYPE(att->ranged->magazine)) {
-          case AMMO_APDS:
-            att->ranged->power -= (int)(GET_BALLISTIC(def->ch) / 2);
-            break;
-          case AMMO_EX:
-            att->ranged->power++;
-            // fall through
-          case AMMO_EXPLOSIVE:
-            att->ranged->power++;
-            att->ranged->power -= GET_BALLISTIC(def->ch);
-            break;
-          case AMMO_FLECHETTE:
-            if (!GET_IMPACT(def->ch) && !GET_BALLISTIC(def->ch))
-              att->ranged->damage_level++;
-            else {
-              att->ranged->power -= MAX(GET_BALLISTIC(def->ch), GET_IMPACT(def->ch) * 2);
-            }
-            break;
-          case AMMO_GEL:
-            att->ranged->power -= GET_BALLISTIC(def->ch) + 2;
-            break;
-          default:
-            att->ranged->power -= GET_BALLISTIC(def->ch);
-        }
-      }
-      // Weapon fired without a magazine (probably by an NPC)-- we assume its ammo type is normal.
-      else {
-        att->ranged->power -= GET_BALLISTIC(def->ch);
-      }
-      
-      // Increment character's shots_fired.
-      if (GET_SKILL(att->ch, att->ranged->skill) >= 8 && SHOTS_FIRED(att->ch) < 10000)
-        SHOTS_FIRED(att->ch)++;
+      att->ranged_combat_mode = FALSE;
+    } else {
+      att->melee->successes = net_successes;
     }
-    // Melee weapon.
-    else {
-      if (att->weapon 
-          && GET_OBJ_RNUM(att->weapon) >= 0
-          && obj_index[GET_OBJ_RNUM(att->weapon)].wfunc == monowhip) {
+    
+    // Calculate the power of the attack.
+    if (att->weapon) {
+      // Monowhips deal flat damage.
+      if (GET_OBJ_RNUM(att->weapon) >= 0 && obj_index[GET_OBJ_RNUM(att->weapon)].wfunc == monowhip) {
         att->melee->power = 10;
         att->melee->damage_level = SERIOUS;
         
         att->melee->power -= GET_IMPACT(def->ch) / 2;
       }
+      // Non-monowhips behave normally.
       else {
         att->melee->power = GET_WEAPON_STR_BONUS(att->weapon) + GET_STR(att->ch);
         att->melee->power -= GET_IMPACT(def->ch);
-      }        
+      }
+    }
+    // Cyber and unarmed combat.
+    else {    
+      // Most of our melee combat fields were set during setup, so we're only here for the effects of armor.
+      if (att->cyber->num_cyberweapons <= 0
+          && GET_POWER(att->ch, ADEPT_PENETRATINGSTRIKE) 
+          && !GET_POWER(att->ch, ADEPT_DISTANCE_STRIKE))
+      {
+        att->melee->power -= MAX(0, GET_IMPACT(def->ch) - GET_POWER(att->ch, ADEPT_PENETRATINGSTRIKE));
+      } else {
+        att->melee->power -= GET_IMPACT(def->ch);
+      }
     }
     
-    // Core p113.
-    att->ranged->power = MAX(att->ranged->power, 2);
-    att->melee->power = MAX(att->melee->power, 2);
-  }
-  // Cyber and unarmed combat.
-  else {    
-    // Most of our melee combat fields were set during setup, so we're only here for the effects of armor.
-    if (att->cyber->num_cyberweapons <= 0
-        && GET_POWER(att->ch, ADEPT_PENETRATINGSTRIKE) 
-        && !GET_POWER(att->ch, ADEPT_DISTANCE_STRIKE))
-    {
-      att->melee->power -= MAX(0, GET_IMPACT(def->ch) - GET_POWER(att->ch, ADEPT_PENETRATINGSTRIKE));
-    } else {
-      att->melee->power -= GET_IMPACT(def->ch);
-    }
-  }
-  
-  // Handle spirits and elementals being little divas with their special combat rules.
-  // Namely: We require that the attack's power is greater than double the spirit's level, otherwise it takes no damage.
-  // If the attack's power is greater, subtract double the level from it.
-  if (IS_SPIRIT(def->ch) || IS_ELEMENTAL(def->ch)) {
-    if (att->weapon_is_gun) {
-      if (att->ranged->power <= GET_LEVEL(def->ch) * 2) {
-        damage(att->ch, def->ch, 0, att->ranged->dam_type, att->ranged->is_physical);
-        return;
-      } else
-        att->ranged->power -= GET_LEVEL(def->ch) * 2;
-      att->ranged->power = MAX(2, att->ranged->power);
-    } else {
+    // Handle spirits and elementals being little divas with their special combat rules.
+    // Namely: We require that the attack's power is greater than double the spirit's level, otherwise it takes no damage.
+    // If the attack's power is greater, subtract double the level from it.
+    if (IS_SPIRIT(def->ch) || IS_ELEMENTAL(def->ch)) {
       if (att->melee->power <= GET_LEVEL(def->ch) * 2) {
         damage(att->ch, def->ch, 0, att->melee->dam_type, att->melee->is_physical);
         return;
-      } else
+      } else {
         att->melee->power -= GET_LEVEL(def->ch) * 2;
-      att->melee->power = MAX(2, att->melee->power);
+      }
     }
+    
+    // Core p113.
+    att->melee->power = MAX(att->melee->power, 2); 
   }
+  // End melee-only calculations. Code beyond here is unified for both ranged and melee.
   
   // Perform body test for damage resistance.
-  int bod_success=0, bod = GET_BOD(def->ch) + (def->too_tall ? 0 : GET_BODY(def->ch));
+  int bod_success = 0;
+  int bod = GET_BOD(def->ch) + (def->too_tall ? 0 : GET_BODY(def->ch));
+  int bod_dice = 0;
+  
+  // If you're a spirit attacking someone who has the conjuring skill, they can opt to use that instead of their body if it's higher.
   if (IS_SPIRIT(att->ch) && GET_MAG(def->ch) > 0 && GET_SKILL(def->ch, SKILL_CONJURING))
-    bod_success = success_test(MAX(bod, GET_SKILL(def->ch, SKILL_CONJURING)), att->weapon_is_gun ? att->ranged->power : att->melee->power);
-  else if (!AWAKE(def->ch))
-    bod_success = 0;
-  else {
-    if (att->weapon_is_gun)
-      bod_success = success_test(bod, att->ranged->power);
-    else
-      bod_success = success_test(bod, att->melee->power);
-  }
+    bod_dice = MAX(bod, GET_SKILL(def->ch, SKILL_CONJURING));
   
-  att->successes -= bod_success;
+  // Unconscious? No dice for you.
+  if (!AWAKE(def->ch))
+    bod_dice = 0;
   
+  // Declare our staged_damage variable, which is modified in the upcoming bod test and staging code.
   int staged_damage = 0;
   
-  // Adjust messaging for unkillable entities.
-  if (can_hurt(att->ch, def->ch, att->weapon_is_gun ? att->ranged->dam_type : att->melee->dam_type, TRUE)) {
-    if (att->weapon_is_gun)
-      staged_damage = stage(att->successes, att->ranged->damage_level);
-    else
-      staged_damage = stage(att->successes, att->melee->damage_level);
+  // Roll the bod test and apply necessary staging.
+  if (att->ranged_combat_mode) {
+    bod_success = success_test(bod, att->ranged->power);
+    att->ranged->successes -= bod_success;
+    
+    // Adjust messaging for unkillable enemies (ranged stanza)
+    if (can_hurt(att->ch, def->ch, att->ranged->dam_type, TRUE)) {
+      staged_damage = stage(att->ranged->successes, att->ranged->damage_level);
+    } else {
+      staged_damage = -1;
+      strlcpy(rbuf, "Damage reduced to -1 due to failure of CAN_HURT().", sizeof(rbuf));
+      SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
+    }
   } else {
-    staged_damage = -1;
-    act("Damage reduced to -1 due to failure of CAN_HURT().", TRUE, att->ch, NULL, NULL, TO_ROLLS);
+    bod_success = success_test(bod, att->melee->power);
+    att->melee->successes -= bod_success;
+    
+    // Adjust messaging for unkillable entities (melee stanza)
+    if (can_hurt(att->ch, def->ch, att->melee->dam_type, TRUE)) {
+      staged_damage = stage(att->melee->successes, att->melee->damage_level);
+    } else {
+      staged_damage = -1;
+      strlcpy(rbuf, "Damage reduced to -1 due to failure of CAN_HURT().", sizeof(rbuf));
+      SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
+    }
   }
   
   int damage_total = convert_damage(staged_damage);
   
   snprintf(rbuf, sizeof(rbuf), "^CBod dice %d, attack power after armor %d, BodSuc %d, ResSuc %d: Dam %s->%s. %d%c.^n",
           bod, 
-          att->weapon_is_gun ? att->ranged->power : att->melee->power, 
+          att->ranged_combat_mode ? att->ranged->power : att->melee->power, 
           bod_success,
-          att->successes,
-          wound_name[MIN(DEADLY, MAX(0,att->weapon_is_gun ? att->ranged->damage_level : att->melee->damage_level))],
+          att->ranged_combat_mode ? att->ranged->successes : att->melee->successes,
+          wound_name[MIN(DEADLY, MAX(0,att->ranged_combat_mode ? att->ranged->damage_level : att->melee->damage_level))],
           wound_name[MIN(DEADLY, MAX(0, staged_damage))],
           damage_total, 
-          (att->weapon_is_gun ? att->ranged->is_physical : att->melee->is_physical) ? 'P' : 'M');
-  act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );
+          (att->ranged_combat_mode ? att->ranged->is_physical : att->melee->is_physical) ? 'P' : 'M');
+  SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
   
   bool defender_died;
-  if (att->weapon_is_gun) {
+  if (att->ranged_combat_mode) {
     combat_message(att->ch, def->ch, att->weapon, MAX(0, damage_total), att->ranged->burst_count);
     defender_died = damage(att->ch, def->ch, damage_total, att->ranged->dam_type, att->ranged->is_physical);
   } else {
@@ -1077,7 +1120,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
           int skill = get_skill(attacker, SKILL_WHIPS_FLAILS, target);
           int successes = success_test(skill, target);
           snprintf(rbuf, sizeof(rbuf), "Monowhip 'flailure' test: Skill of %d, target of %d, successes is %d.", skill, target, successes);
-          act(rbuf, FALSE, attacker, NULL, NULL, TO_ROLLS);
+          SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
           if (successes <= 0) {
             act("^yYour monowhip flails out of control, striking you instead of $N!^n", FALSE, attacker, 0, defender, TO_CHAR);
             act("$n's monowhip completely misses and recoils to hit $m!", TRUE, attacker, 0, 0, TO_ROOM);
@@ -1097,7 +1140,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
   }
   
   // If you're firing a heavy weapon without a gyro, you need to test against the damage of the recoil.
-  if (att->weapon_is_gun
+  if (att->ranged_combat_mode
       && !att->ranged->using_mounted_gun
       && !IS_NPC(att->ch) 
       && !att->ranged->gyro
@@ -1108,7 +1151,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     int recoil_successes = success_test(GET_BOD(att->ch) + GET_BODY(att->ch), GET_WEAPON_POWER(att->weapon) / 2 + modify_target(att->ch) + att->ranged->burst_count);
     int staged_dam = stage(-recoil_successes, LIGHT);
     snprintf(rbuf, sizeof(rbuf), "Heavy Recoil: %d successes, L->%s wound.", recoil_successes, staged_dam == LIGHT ? "L" : "no");
-    act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );
+    SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
     
     // If the attacker dies from recoil, bail out.
     if (damage(att->ch, att->ch, convert_damage(staged_dam), TYPE_HIT, FALSE))
@@ -1123,6 +1166,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
   }
   
 }
+#undef SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER
 
 bool does_weapon_have_bayonet(struct obj_data *weapon) {
   // Precondition: Weapon must exist, must be a weapon-class item, and must be a gun.

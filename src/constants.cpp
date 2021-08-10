@@ -2403,7 +2403,8 @@ const char *background_types[] =
   "power site",
   "blood magic",
   "violence",                   // 15
-  "death"
+  "death",
+  "ERROR"
 };
 
 const char *fire_mode[] =
@@ -2412,7 +2413,8 @@ const char *fire_mode[] =
   "Single Shot",
   "Semi-Automatic",
   "Burst Fire",
-  "Full Automatic"
+  "Full Automatic",
+  "ERROR"
 };
 
 const char *combat_modifiers[] =
@@ -2428,7 +2430,10 @@ const char *combat_modifiers[] =
   "Net Reach",
   "VehDamaged",
   "Defender Moving",
-  "In Melee Combat"
+  "In Melee Combat",
+  "Opponent Burst",
+  "Foot Anchors",
+  "ERROR"
 };
 
 struct pgroup_priv_struct pgroup_privileges[] =

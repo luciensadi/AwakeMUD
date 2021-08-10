@@ -4630,16 +4630,10 @@ void perform_violence(void)
       // Many failure conditions for charging at someone.
       if (IS_AFFECTED(FIGHTING(ch), AFF_APPROACH) 
           || GET_POS(FIGHTING(ch)) < POS_FIGHTING 
-          || (GET_EQ(ch, WEAR_WIELD) 
-              && (IS_GUN(GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 3)) 
-                  || GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 3) == TYPE_ARROW)) 
-          || (GET_EQ(ch, WEAR_HOLD) 
-              && (IS_GUN(GET_OBJ_VAL(GET_EQ(ch, WEAR_HOLD), 3)) 
-                  || GET_OBJ_VAL(GET_EQ(ch, WEAR_HOLD), 3) == TYPE_ARROW))
-          || (GET_EQ(FIGHTING(ch), WEAR_WIELD) 
-              && !(IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(FIGHTING(ch), WEAR_WIELD))))) 
-          || (GET_EQ(FIGHTING(ch), WEAR_HOLD) 
-              && !(IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(FIGHTING(ch), WEAR_HOLD))))) 
+          || (GET_EQ(ch, WEAR_WIELD) && IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_WIELD)))) 
+          || (GET_EQ(ch, WEAR_HOLD) && IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_HOLD))))
+          || (GET_EQ(FIGHTING(ch), WEAR_WIELD) && !(IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(FIGHTING(ch), WEAR_WIELD))))) 
+          || (GET_EQ(FIGHTING(ch), WEAR_HOLD) && !(IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(FIGHTING(ch), WEAR_HOLD))))) 
           || ch->in_room != FIGHTING(ch)->in_room) {
         AFF_FLAGS(ch).RemoveBit(AFF_APPROACH);
         AFF_FLAGS(FIGHTING(ch)).RemoveBit(AFF_APPROACH);

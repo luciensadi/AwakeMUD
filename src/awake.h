@@ -2135,20 +2135,21 @@ enum {
 #define IDENT_LENGTH              8
 
 // New combat modifiers used in the rework of hit().
-#define COMBAT_MOD_RECOIL          0
-#define COMBAT_MOD_MOVEMENT        1
-#define COMBAT_MOD_DUAL_WIELDING   2
-#define COMBAT_MOD_SMARTLINK       3
-#define COMBAT_MOD_DISTANCE        4
-#define COMBAT_MOD_VISIBILITY      5
-#define COMBAT_MOD_POSITION        6
-#define COMBAT_MOD_GYRO            7
-#define COMBAT_MOD_REACH           8
-#define COMBAT_MOD_VEHICLE_DAMAGE  9
-#define COMBAT_MOD_DEFENDER_MOVING 10
-#define COMBAT_MOD_IN_MELEE_COMBAT 11
-
-#define NUM_COMBAT_MODIFIERS       12
+#define COMBAT_MOD_RECOIL                0
+#define COMBAT_MOD_MOVEMENT              1
+#define COMBAT_MOD_DUAL_WIELDING         2
+#define COMBAT_MOD_SMARTLINK             3
+#define COMBAT_MOD_DISTANCE              4
+#define COMBAT_MOD_VISIBILITY            5
+#define COMBAT_MOD_POSITION              6
+#define COMBAT_MOD_GYRO                  7
+#define COMBAT_MOD_REACH                 8
+#define COMBAT_MOD_VEHICLE_DAMAGE        9
+#define COMBAT_MOD_DEFENDER_MOVING       10
+#define COMBAT_MOD_IN_MELEE_COMBAT       11
+#define COMBAT_MOD_OPPONENT_BURST_COUNT  12
+#define COMBAT_MOD_FOOTANCHORS           13
+#define NUM_COMBAT_MODIFIERS             14
 // End new combat modifiers.
 
 // Locations, to remove the magic numbers from the code.
