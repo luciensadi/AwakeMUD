@@ -962,6 +962,7 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 #define GET_VEHICLE_MOD_MOUNT_TYPE(mod)      (GET_OBJ_VAL((mod), 1))
 
 // ITEM_HOLSTER convenience defines
+#define GET_HOLSTER_TYPE(holster)            (GET_OBJ_VAL((holster), 0))
 #define GET_HOLSTER_READY_STATUS(holster)    (GET_OBJ_VAL((holster), 3))
 
 // ITEM_DESIGN convenience defines

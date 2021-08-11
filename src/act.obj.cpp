@@ -3332,10 +3332,11 @@ int draw_from_readied_holster(struct char_data *ch, struct obj_data *holster) {
   if ((GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD)) || ((GET_EQ(ch, WEAR_WIELD) || GET_EQ(ch, WEAR_HOLD)) && IS_OBJ_STAT(contents, ITEM_TWOHANDS)))
     return 0;
   
-  // TODO: What does this check mean?
+  // TODO: What does this check mean? (ed: probably intended to prevent machine guns and assault cannons from being drawn. Nonfunctional.)
   if (GET_OBJ_VAL(holster, 4) >= SKILL_MACHINE_GUNS && GET_OBJ_VAL(holster, 4) <= SKILL_ASSAULT_CANNON)
     return 0;
     
+  // Refuse to let someone draw a weapon focus that is stronger than twice their magic. At least, I think that's what this does?
   if (GET_OBJ_TYPE(contents) == ITEM_WEAPON 
            && !IS_GUN(GET_WEAPON_ATTACK_TYPE(contents)) 
            && GET_WEAPON_FOCUS_BONDED_BY(contents) == GET_IDNUM(ch)
@@ -3396,14 +3397,24 @@ int draw_weapon(struct char_data *ch)
 }
 
 bool holster_can_fit(struct obj_data *holster, struct obj_data *weapon) {
-  bool small_weapon = GET_OBJ_VAL(weapon, 4) == SKILL_PISTOLS || GET_OBJ_VAL(weapon, 4) == SKILL_SMG;
-  switch (GET_OBJ_VAL(holster, 0)) {
-    case 0:
-      return IS_GUN(GET_OBJ_VAL(weapon, 3)) && small_weapon;
-    case 1:
-      return !IS_GUN(GET_OBJ_VAL(weapon, 3));
-    case 2:
-      return IS_GUN(GET_OBJ_VAL(weapon, 3)) && !small_weapon;
+  bool small_weapon = GET_WEAPON_SKILL(weapon) == SKILL_PISTOLS || GET_WEAPON_SKILL(weapon) == SKILL_SMG;
+  switch (GET_HOLSTER_TYPE(holster)) {
+    case HOLSTER_TYPE_SMALL_GUNS:
+      // Handle standard small guns.
+      if (IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon)) && small_weapon)
+        return TRUE;
+      
+      // Check for ranged tasers.
+      return (GET_WEAPON_ATTACK_TYPE(weapon) == WEAP_TASER && GET_WEAPON_SKILL(weapon) == SKILL_TASERS);
+    case HOLSTER_TYPE_MELEE_WEAPONS:
+      // Handle standard melee weapons.
+      if (!IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon)))
+        return TRUE;
+        
+      // Check for melee tasers.
+      return (GET_WEAPON_ATTACK_TYPE(weapon) == WEAP_TASER && GET_WEAPON_SKILL(weapon) != SKILL_TASERS);
+    case HOLSTER_TYPE_LARGE_GUNS:
+      return IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon)) && !small_weapon;
   }
   
   return FALSE;
@@ -3508,26 +3519,20 @@ ACMD(do_holster)
   }
 
   const char *madefor = "<error, report to staff>";
-  switch (GET_OBJ_VAL(cont, 0)) {
-  case 0:
-    madefor = "pistols and SMGs";
-    if (!IS_GUN(GET_OBJ_VAL(obj, 3)))
-      dontfit++;
-    else if (!(GET_OBJ_VAL(obj, 4) == SKILL_PISTOLS || GET_OBJ_VAL(obj, 4) == SKILL_SMG))
-      dontfit++;
-    break;
-  case 1:
-    madefor = "melee weapons";
-    if (IS_GUN(GET_OBJ_VAL(obj, 3)))
-      dontfit++;
-    break;
-  case 2:
-    madefor = "rifles and other longarms";
-    if (!IS_GUN(GET_OBJ_VAL(obj, 3)))
-      dontfit++;
-    else if (GET_OBJ_VAL(obj, 4) == SKILL_PISTOLS || GET_OBJ_VAL(obj, 4) == SKILL_SMG)
-      dontfit++;
-    break;
+  
+  if (!holster_can_fit(cont, obj))
+    dontfit++;
+    
+  switch (GET_HOLSTER_TYPE(cont)) {
+    case HOLSTER_TYPE_SMALL_GUNS:
+      madefor = "pistols and SMGs";
+      break;
+    case HOLSTER_TYPE_MELEE_WEAPONS:
+      madefor = "melee weapons";
+      break;
+    case HOLSTER_TYPE_LARGE_GUNS:
+      madefor = "rifles and other longarms";
+      break;
   }
   if (dontfit) {
     send_to_char(ch, "%s is made for %s, so %s won't fit in it.\r\n", capitalize(GET_OBJ_NAME(cont)), madefor, decapitalize_a_an(GET_OBJ_NAME(obj)));

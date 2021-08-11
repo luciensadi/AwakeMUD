@@ -300,13 +300,12 @@ bool install_ware_in_target_character(struct obj_data *ware, struct char_data *i
   // Item must be compatible with your current gear.
   switch (GET_OBJ_TYPE(ware)) {
     case ITEM_CYBERWARE:
+    case ITEM_BIOWARE:
       for (struct obj_data *bio = recipient->bioware; bio; bio = bio->next_content)
         if (!biocyber_compatibility(ware, bio, recipient)) {
           send_to_char(installer, "That 'ware isn't compatible with what's already installed.\r\n");
           return FALSE;
         }
-      break;
-    case ITEM_BIOWARE:
       for (struct obj_data *cyber = recipient->cyberware; cyber; cyber = cyber->next_content)
         if (!biocyber_compatibility(ware, cyber, recipient)) {
           send_to_char(installer, "That 'ware isn't compatible with what's already installed.\r\n");
