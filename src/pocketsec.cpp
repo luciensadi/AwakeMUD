@@ -72,15 +72,15 @@ void wire_nuyen(struct char_data *ch, int amount, vnum_t character_id)
     targ = NULL;
   }
   
-  // Deduct from the sender (if any).
+  // Deduct from the sender (if any). Not a faucet or sink, unless coming from a shop.
   if (ch) {
-    GET_BANK(ch) -= amount;
+    GET_BANK_RAW(ch) -= amount;
     playerDB.SaveChar(ch);
   }
   
-  // Add to the receiver.
+  // Add to the receiver. Not a faucet or sink, unless coming from a shop.
   if (targ) {
-    GET_BANK(targ) += amount;
+    GET_BANK_RAW(targ) += amount;
     playerDB.SaveChar(targ);
   } else {
     snprintf(buf, sizeof(buf), "UPDATE pfiles SET Bank=Bank+%d WHERE idnum=%ld;", amount, character_id);

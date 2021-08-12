@@ -3178,7 +3178,7 @@ void send_nuyen_rewards_to_pcs() {
       if (ch->char_specials.timer > IDLE_NUYEN_REWARD_THRESHOLD_IN_MINUTES) {
         if (!PRF_FLAGGED(ch, PRF_NO_IDLE_NUYEN_REWARD_MESSAGE))
           send_to_char(ch, "[OOC message: You have been awarded the standard idling bonus of %d nuyen. You can TOGGLE NOIDLE to hide these messages while still getting the reward.]\r\n", IDLE_NUYEN_REWARD_AMOUNT);
-        GET_NUYEN(ch) += IDLE_NUYEN_REWARD_AMOUNT;
+        gain_nuyen(ch, IDLE_NUYEN_REWARD_AMOUNT, NUYEN_INCOME_IDLE_REWARD);
         
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s%s", already_printed ? ", " : "", GET_CHAR_NAME(ch));
         already_printed = TRUE;
@@ -3264,7 +3264,8 @@ void process_wheres_my_car() {
       send_to_char(d->character, "...It's just a blank piece of paper. You stare them down until they leave, then pocket the reward of %d.\r\n", 
                    reward_amount);
       // Credit it back.
-      GET_NUYEN(d->character) += reward_amount;
+      GET_NUYEN_RAW(d->character) += reward_amount;
+      GET_NUYEN_INCOME_THIS_PLAY_SESSION(d->character, NUYEN_OUTFLOW_WHERESMYCAR) -= reward_amount;
     }
     assert(idnum_canary == GET_IDNUM(d->character));
     

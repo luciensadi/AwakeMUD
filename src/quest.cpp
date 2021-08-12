@@ -644,7 +644,7 @@ void reward(struct char_data *ch, struct char_data *johnson)
           mudlog(buf, ch, LOG_SYSLOG, TRUE);
         } else {
           old = (int)(GET_KARMA(f->follower) / 100);
-          GET_NUYEN(f->follower) += nuyen;
+          gain_nuyen(f->follower, nuyen, NUYEN_INCOME_AUTORUNS);
           int gained = gain_karma(f->follower, karma, TRUE, FALSE, TRUE);
           send_to_char(f->follower, "You gain %0.2f karma and %d nuyen for being in %s's group.\r\n", (float) gained * 0.01, nuyen, GET_CHAR_NAME(ch));
         }
@@ -659,7 +659,7 @@ void reward(struct char_data *ch, struct char_data *johnson)
       }
     }
   }
-  GET_NUYEN(ch) += nuyen;
+  gain_nuyen(ch, nuyen, NUYEN_INCOME_AUTORUNS);
   int gained = gain_karma(ch, karma, TRUE, FALSE, TRUE);
   act("$n gives some nuyen to $N.", TRUE, johnson, 0, ch, TO_NOTVICT);
   act("You give some nuyen to $N.", TRUE, johnson, 0, ch, TO_CHAR);

@@ -656,13 +656,13 @@ SPECIAL(landlord_spec)
     if (GET_NUYEN(ch) < cost) {
       if (GET_BANK(ch) >= cost) {
         do_say(recep, "You don't have the money on you, so I'll transfer it from your bank account.", 0, 0);
-        GET_BANK(ch) -= cost;
+        lose_bank(ch, cost, NUYEN_OUTFLOW_HOUSING);
       } else {
         do_say(recep, "Sorry, you don't have the required funds.", 0, 0);
         return TRUE;
       }
     } else {
-      GET_NUYEN(ch) -= cost;
+      lose_nuyen(ch, cost, NUYEN_OUTFLOW_HOUSING);
       send_to_char(ch, "You hand over the cash.\r\n");
     }
     if (obj) {
@@ -680,7 +680,8 @@ SPECIAL(landlord_spec)
               room_record->vnum, room_record->key, GET_CHAR_NAME(ch), GET_IDNUM(ch), HSHR(ch));
       mudlog(buf, ch, LOG_SYSLOG, TRUE);
       do_say(recep, "I seem to have misplaced your key. I've refunded you the nuyen in cash.", 0, 0);
-      GET_NUYEN(ch) += cost;
+      GET_NUYEN_RAW(ch) += cost;
+      GET_NUYEN_INCOME_THIS_PLAY_SESSION(ch, NUYEN_OUTFLOW_HOUSING) -= cost;
     } else {
       do_say(recep, "Thank you, here is your key.", 0, 0);
       obj_to_char(key, ch);
@@ -746,13 +747,13 @@ SPECIAL(landlord_spec)
       if (GET_NUYEN(ch) < cost) {
         if (GET_BANK(ch) >= cost) {
           do_say(recep, "You don't have the money on you, so I'll transfer it from your bank account.", 0, 0);
-          GET_BANK(ch) -= cost;
+          lose_nuyen(ch, cost, NUYEN_OUTFLOW_HOUSING);
         } else {
           do_say(recep, "Sorry, you don't have the required funds.", 0, 0);
           return TRUE;
         }
       } else {
-        GET_NUYEN(ch) -= cost;
+        lose_nuyen(ch, cost, NUYEN_OUTFLOW_HOUSING);
         send_to_char(ch, "You hand over the cash.\r\n");
       }
       if (obj) {
@@ -761,6 +762,7 @@ SPECIAL(landlord_spec)
           extract_obj(obj);
         } else {
           GET_OBJ_VAL(obj, 1) -= origcost;
+          GET_NUYEN_INCOME_THIS_PLAY_SESSION(ch, NUYEN_OUTFLOW_HOUSING) += cost;
           send_to_char(ch, "Your housing card has %d nuyen left on it.\r\n", GET_OBJ_VAL(obj, 1));
         }
       }

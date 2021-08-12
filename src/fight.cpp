@@ -531,7 +531,7 @@ void make_corpse(struct char_data * ch)
   {
     money = create_nuyen(nuyen);
     obj_to_obj(money, corpse);
-    GET_NUYEN(ch) = 0;
+    GET_NUYEN_RAW(ch) = 0;
   }
   
   
@@ -2002,10 +2002,11 @@ void docwagon(struct char_data *ch)
       send_to_char("Not finding sufficient payment, your DocWagon contract was retracted.\r\n", ch);
       extract_obj(docwagon);
     } else if (GET_BANK(ch) < creds) {
-      GET_NUYEN(ch) -= (creds - GET_BANK(ch));
-      GET_BANK(ch) = 0;
-    } else
-      GET_BANK(ch) -= creds;
+      lose_nuyen(ch, creds - GET_BANK(ch), NUYEN_OUTFLOW_DOCWAGON);
+      lose_bank(ch, GET_BANK(ch), NUYEN_OUTFLOW_DOCWAGON);
+    } else {
+      lose_bank(ch, creds, NUYEN_OUTFLOW_DOCWAGON);
+    }
   }
   return;
 }

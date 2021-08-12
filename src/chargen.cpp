@@ -761,7 +761,7 @@ int parse_assign(struct descriptor_data *d, const char *arg)
         case PR_MAGIC:
           break;
         case PR_RESOURCE:
-          GET_NUYEN(d->character) = 0;
+          GET_NUYEN_RAW(d->character) = 0;
           d->ccr.force_points = 0;
           break;
         case PR_SKILL:
@@ -778,7 +778,7 @@ int parse_assign(struct descriptor_data *d, const char *arg)
     case PR_MAGIC:
       break;
     case PR_RESOURCE:
-      GET_NUYEN(d->character) = nuyen_vals[d->ccr.temp];
+      GET_NUYEN_RAW(d->character) = nuyen_vals[d->ccr.temp];
       d->ccr.force_points = force_vals[d->ccr.temp];
       break;
     case PR_SKILL:
@@ -1204,7 +1204,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
           break;
         }
         
-        GET_NUYEN(CH) = resource_table[0][d->ccr.pr[PO_RESOURCES]];
+        GET_NUYEN_RAW(CH) = resource_table[0][d->ccr.pr[PO_RESOURCES]];
         GET_SKILL_POINTS(CH) = d->ccr.pr[PO_SKILL];
         GET_ATT_POINTS(CH) = d->ccr.pr[PO_ATTR]/2;
         if (d->ccr.pr[PO_MAGIC] > 0) {

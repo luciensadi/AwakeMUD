@@ -545,17 +545,25 @@ struct player_special_data
   struct room_data *watching;
   struct remem *ignored;
   int nuyen_paid_for_wheres_my_car;
+  long nuyen_income_this_play_session[NUM_OF_TRACKED_NUYEN_INCOME_SOURCES];
 
   player_special_data() :
       aliases(NULL), remem(NULL), last_tell(0), questnum(0), obj_complete(NULL), 
       mob_complete(NULL), watching(NULL), ignored(NULL)
   {
-    for (int i = 0; i < NUM_DRUGS+1; i++)
-      for (int j = 0; j < 7; j++)
+    for (int i = 0; i < NUM_DRUGS+1; i++) {
+      for (int j = 0; j < 7; j++) {
         drugs[i][j] = 0;
+      }
+    }
     
-    for (int i = 0; i < 5; i++)
+    for (int i = 0; i < 5; i++) {
       drug_affect[i] = 0;
+    }
+      
+    for (int i = 0; i < NUM_OF_TRACKED_NUYEN_INCOME_SOURCES; i++) {
+      nuyen_income_this_play_session[i] = 0;
+    }
   }
 }
 ;

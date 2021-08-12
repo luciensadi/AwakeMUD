@@ -553,7 +553,7 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
   }
   
   // Character must have enough nuyen for it.
-  if ((cred && GET_OBJ_VAL(cred, 0) < price) || (!cred && GET_NUYEN(ch) < price))
+  if ((cred && GET_ITEM_MONEY_VALUE(cred) < price) || (!cred && GET_NUYEN(ch) < price))
   {
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %s", shop_table[shop_nr].not_enough_nuyen);
     do_say(keeper, buf, cmd_say, SCMD_SAYTO);
@@ -584,9 +584,9 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
     bought = 1;
     
     if (cred)
-      GET_OBJ_VAL(cred, 0) -= price;
+      lose_nuyen_from_credstick(ch, cred, price, NUYEN_OUTFLOW_SHOP_PURCHASES);
     else
-      GET_NUYEN(ch) -= price;
+      lose_nuyen(ch, price, NUYEN_OUTFLOW_SHOP_PURCHASES);
       
     if (sell) {
       if (sell->type == SELL_BOUGHT && !--sell->stock) {
@@ -619,7 +619,7 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
       float current_obj_weight = 0;
           
       // Deduct money up to the amount they can afford. Update the object's cost to match.
-      while (bought < buynum && (cred ? GET_OBJ_VAL(cred, 0) : GET_NUYEN(ch)) >= price) {
+      while (bought < buynum && (cred ? GET_ITEM_MONEY_VALUE(cred) : GET_NUYEN(ch)) >= price) {
         bought++;
         
         // Prevent taking more than you can carry.
@@ -636,9 +636,9 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
         }
           
         if (cred)
-          GET_OBJ_VAL(cred, 0) -= price;
+          lose_nuyen_from_credstick(ch, cred, price, NUYEN_OUTFLOW_SHOP_PURCHASES);
         else
-          GET_NUYEN(ch) -= price;
+          lose_nuyen(ch, price, NUYEN_OUTFLOW_SHOP_PURCHASES);
       }
       
       if (bought == 0) {
@@ -659,7 +659,10 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
         // In theory this is dead code now after the 'you can only carry x' code change above. Will see.
         if (IS_CARRYING_W(ch) + GET_OBJ_WEIGHT(obj) > CAN_CARRY_W(ch)) {
           send_to_char("You start gathering up the ammo you paid for, but realize you can't carry it all! The shopkeeper gives you a /look/, then refunds you in cash.\r\n", ch);
-          GET_NUYEN(ch) += price * bought;
+          // In this specific instance, we not only assign raw nuyen, we also decrement the purchase nuyen counter. It's a refund, after all.
+          long refund_amount = price * bought;
+          GET_NUYEN_RAW(ch) += refund_amount;
+          GET_NUYEN_INCOME_THIS_PLAY_SESSION(ch, NUYEN_OUTFLOW_SHOP_PURCHASES) -= refund_amount;
           extract_obj(obj);
           return FALSE;
         }
@@ -724,7 +727,7 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
       while (obj && (bought < buynum 
                      && IS_CARRYING_N(ch) < CAN_CARRY_N(ch) 
                      && IS_CARRYING_W(ch) + GET_OBJ_WEIGHT(obj) <= CAN_CARRY_W(ch) 
-                     && (cred ? GET_OBJ_VAL(cred, 0) : GET_NUYEN(ch)) >= price)) {
+                     && (cred ? GET_ITEM_MONEY_VALUE(cred) : GET_NUYEN(ch)) >= price)) {
         // Visas are ID-locked to the purchaser.
         if (GET_OBJ_VNUM(obj) == OBJ_MULTNOMAH_VISA || GET_OBJ_VNUM(obj) == OBJ_CARIBBEAN_VISA)
           GET_OBJ_VAL(obj, 0) = GET_IDNUM(ch);
@@ -758,9 +761,9 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
         
         // Deduct the cost.
         if (cred)
-          GET_OBJ_VAL(cred, 0) -= price;
+          lose_nuyen_from_credstick(ch, cred, price, NUYEN_OUTFLOW_SHOP_PURCHASES);
         else
-          GET_NUYEN(ch) -= price;
+          lose_nuyen(ch, price, NUYEN_OUTFLOW_SHOP_PURCHASES);
       }
       if (obj) {
         // Obj was loaded but not given to the character.
@@ -774,7 +777,7 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " You can only carry %d.", bought);
       else if (GET_OBJ_WEIGHT(ch->carrying) + IS_CARRYING_W(ch) > CAN_CARRY_W(ch))
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " You can only carry %d.", bought);
-      else if (cash ? GET_NUYEN(ch) : GET_OBJ_VAL(cred, 0) < price)
+      else if ((cash ? GET_NUYEN(ch) : GET_ITEM_MONEY_VALUE(cred)) < price)
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " You can only afford %d.", bought);
       else
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " I'm only willing to give you %d.", bought); // Error case.
@@ -1030,9 +1033,9 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
     
     // Pay the preorder cost.
     if (cash) {
-      GET_NUYEN(ch) -= preorder_cost;
+      lose_nuyen(ch, preorder_cost, NUYEN_OUTFLOW_SHOP_PURCHASES);
     } else {
-      GET_ITEM_MONEY_VALUE(cred) -= preorder_cost;
+      lose_nuyen_from_credstick(ch, cred, preorder_cost, NUYEN_OUTFLOW_SHOP_PURCHASES);
     }
     send_to_char(ch, "You put down a %d nuyen deposit on your order.\r\n", preorder_cost);
     
@@ -1164,9 +1167,9 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
   }
 
   if (!cred || shop_table[shop_nr].type == SHOP_BLACK)
-    GET_NUYEN(ch) += sellprice;
+    gain_nuyen(ch, sellprice, NUYEN_INCOME_SHOP_SALES);
   else
-    GET_OBJ_VAL(cred, 0) += sellprice;
+    gain_nuyen_on_credstick(ch, cred, sellprice, NUYEN_INCOME_SHOP_SALES);
   snprintf(buf3, sizeof(buf3), "%s sold %s^g at %s^g (%ld) for %d.", GET_CHAR_NAME(ch), GET_OBJ_NAME(obj), GET_CHAR_NAME(keeper), shop_table[shop_nr].vnum, sellprice);
   mudlog(buf3, ch, LOG_GRIDLOG, TRUE);
   
@@ -1976,9 +1979,10 @@ void shop_cancel(char *arg, struct char_data *ch, struct char_data *keeper, vnum
         if (order->paid > 0) {
           int repayment_amount = order->paid - (order->paid / PREORDER_RESTOCKING_FEE_DIVISOR);
           if (repayment_amount > 0) {
-            GET_NUYEN(ch) += repayment_amount;
+            // In this instance, we do a raw refund, then decrement the shop purchase amount.
+            GET_NUYEN_RAW(ch) += repayment_amount;
+            GET_NUYEN_INCOME_THIS_PLAY_SESSION(ch, NUYEN_OUTFLOW_SHOP_PURCHASES) -= repayment_amount;
             act("$n hands $N some nuyen.", FALSE, keeper, 0, ch, TO_ROOM);
-            act("$n hands you some nuyen.", FALSE, keeper, 0, ch, TO_VICT);
           }
         }
           
@@ -2854,9 +2858,9 @@ void shop_install(char *argument, struct char_data *ch, struct char_data *keeper
     
     // Success! Deduct the cost from your payment method.
     if (cred)
-      GET_ITEM_MONEY_VALUE(cred) -= install_cost;
+      lose_nuyen_from_credstick(ch, cred, install_cost, NUYEN_OUTFLOW_SHOP_PURCHASES);
     else
-      GET_NUYEN(ch) -= install_cost;
+      lose_nuyen(ch, install_cost, NUYEN_OUTFLOW_SHOP_PURCHASES);
   }
 }
 
@@ -2925,9 +2929,9 @@ void shop_uninstall(char *argument, struct char_data *ch, struct char_data *keep
     
     // Success! Deduct the cost from your payment method.
     if (cred)
-      GET_ITEM_MONEY_VALUE(cred) -= uninstall_cost;
+      lose_nuyen_from_credstick(ch, cred, uninstall_cost, NUYEN_OUTFLOW_SHOP_PURCHASES);
     else
-      GET_NUYEN(ch) -= uninstall_cost;
+      lose_nuyen(ch, uninstall_cost, NUYEN_OUTFLOW_SHOP_PURCHASES);
       
     // Package it up and hand it over.
     if (GET_OBJ_COST(obj) > 0) {
@@ -2989,6 +2993,8 @@ void save_shop_orders() {
               raw_store_mail(order->player, 0, "An anonymous shopkeeper", (const char *) buf2);
             
             // Wire the funds. This will not notify them (they're already getting a message through here.)
+            // This is a thorny one-- this is technically a sink, since we're losing X% of the refunded value, but the PC may not be online.
+            // We'll leave this as an invisible sink for now.
             if (repayment_amount > 0)
               wire_nuyen(NULL, repayment_amount, order->player);
           }

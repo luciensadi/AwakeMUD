@@ -2204,6 +2204,7 @@ bool check_spirit_sector(struct room_data *room, int spirit)
 
 void circle_build(struct char_data *ch, char *type, int force)
 {
+  long cost = force * force;
   if (IS_WORKING(ch))
   {
     send_to_char(TOOBUSY, ch);
@@ -2218,7 +2219,7 @@ void circle_build(struct char_data *ch, char *type, int force)
     send_to_char("You can't build a circle in a vehicle.\r\n", ch);
      return;
   }
-  if (GET_NUYEN(ch) < force * force)
+  if (GET_NUYEN(ch) < cost)
   {
     send_to_char(ch, "You need %d nuyen for the materials needed to construct that circle.\r\n", force * force);
     return;
@@ -2232,7 +2233,7 @@ void circle_build(struct char_data *ch, char *type, int force)
     send_to_char("What element do you wish to dedicate this circle to?\r\n", ch);
     return;
   }
-  GET_NUYEN(ch) -= force * force;
+  lose_nuyen(ch, cost, NUYEN_OUTFLOW_LODGE_AND_CIRCLE);
   struct obj_data *obj = read_object(OBJ_HERMETIC_CIRCLE, VIRTUAL);
   GET_OBJ_VAL(obj, 1) = force;
   GET_OBJ_VAL(obj, 2) = element;
@@ -2251,6 +2252,7 @@ void circle_build(struct char_data *ch, char *type, int force)
 
 void lodge_build(struct char_data *ch, int force)
 {
+  int cost = force * 500;
   if (IS_WORKING(ch)) {
     send_to_char(TOOBUSY, ch);
     return;
@@ -2263,7 +2265,7 @@ void lodge_build(struct char_data *ch, int force)
     send_to_char("You can't build a lodge in a vehicle.\r\n", ch);
      return;
   }
-  if (GET_NUYEN(ch) < force * 500) {
+  if (GET_NUYEN(ch) < cost) {
     send_to_char(ch, "You need %d nuyen worth of materials to construct that lodge.\r\n", force * 500);
     return;
   }
@@ -2271,7 +2273,7 @@ void lodge_build(struct char_data *ch, int force)
     send_to_char("You can't create a lodge higher than your magic rating.\r\n", ch);
     return;
   }
-  GET_NUYEN(ch) -= force * 500;
+  lose_nuyen(ch, cost, NUYEN_OUTFLOW_LODGE_AND_CIRCLE);
   struct obj_data *obj = read_object(OBJ_SHAMANIC_LODGE, VIRTUAL);
   GET_OBJ_VAL(obj, 1) = force;
   GET_OBJ_VAL(obj, 2) = GET_TOTEM(ch);
@@ -4633,7 +4635,7 @@ bool init_cost(struct char_data *ch, bool spend)
     return FALSE;
   }
   if (spend) {
-    GET_NUYEN(ch) -= nuyencost;
+    lose_nuyen(ch, nuyencost, NUYEN_OUTFLOW_INITIATION);
     GET_KARMA(ch) -= karmacost;
   }
   return TRUE;

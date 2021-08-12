@@ -4247,7 +4247,7 @@ ACMD(do_trade)
       send_to_char("You don't have enough karma to trade.\r\n", ch);
     else {
       int amount = dice(2, 6) * 100;
-      GET_NUYEN(ch) += amount;
+      gain_nuyen(ch, amount, NUYEN_INCOME_TRADE_COMMAND);
       GET_KARMA(ch) -= 100;
       send_to_char(ch, "You trade in 1 Karma for %d nuyen.\r\n", amount);
     }
@@ -4257,7 +4257,7 @@ ACMD(do_trade)
       send_to_char("You need to have at least 1,800 nuyen to trade for karma.\r\n", ch);
     else {
       int amount = dice(3, 6) * 100;
-      GET_NUYEN(ch) -= amount;
+      lose_nuyen(ch, amount, NUYEN_OUTFLOW_TRADE_COMMAND);
       GET_KARMA(ch) += 100;
       send_to_char(ch, "You spend %d nuyen to buy 1 point of karma.\r\n", amount);
     }

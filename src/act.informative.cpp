@@ -5403,7 +5403,7 @@ ACMD(do_wheresmycar) {
     return;
   }
   
-  GET_NUYEN(ch) -= paid;
+  lose_nuyen(ch, paid, NUYEN_OUTFLOW_WHERESMYCAR);
   GET_NUYEN_PAID_FOR_WHERES_MY_CAR(ch) = paid;
   
   send_to_char(ch, "You gather up a few bored-looking passersby and pay out %d nuyen"

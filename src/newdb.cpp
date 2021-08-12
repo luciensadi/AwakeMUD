@@ -446,8 +446,8 @@ bool load_char(const char *name, char_data *ch, bool logon)
   GET_HEIGHT(ch) = atoi(row[43]);
   GET_WEIGHT(ch) = atoi(row[44]);
   GET_TRADITION(ch) = atoi(row[45]);
-  GET_NUYEN(ch) = atoi(row[46]);
-  GET_BANK(ch) = atoi(row[47]);
+  GET_NUYEN_RAW(ch) = atoi(row[46]);
+  GET_BANK_RAW(ch) = atoi(row[47]);
   GET_KARMA(ch) = atoi(row[48]);
   GET_REP(ch) = atoi(row[49]);
   GET_NOT(ch) = atoi(row[50]);

@@ -1026,7 +1026,7 @@ SPECIAL(taxi)
       return TRUE;
     }
     if (!IS_SENATOR(ch))
-      GET_NUYEN(ch) -= GET_SPARE1(driver);
+      lose_nuyen(ch, GET_SPARE1(driver), NUYEN_OUTFLOW_TAXIS);
     GET_SPARE1(driver) = (int)(GET_SPARE1(driver) / 50);
     GET_SPARE2(driver) = destination_list[GET_SPARE2(driver)].vnum;
     GET_ACTIVE(driver) = ACT_DRIVING;

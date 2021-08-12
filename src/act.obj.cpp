@@ -638,7 +638,7 @@ bool can_take_obj(struct char_data * ch, struct obj_data * obj)
   return 1;
 }
 
-void get_check_money(struct char_data * ch, struct obj_data * obj)
+void get_check_money(struct char_data * ch, struct obj_data * obj, struct obj_data *from_obj)
 {
   int zone;
 
@@ -650,15 +650,31 @@ void get_check_money(struct char_data * ch, struct obj_data * obj)
         break;
     if (zone <= top_of_zone_table)
       act("$p dissolves in your hands!", FALSE, ch, obj, 0, TO_CHAR);
-    else if (GET_OBJ_VAL(obj, 0) > (!GET_OBJ_VAL(obj, 1) ? 0 : -1)) {
-      if (!GET_OBJ_VAL(obj, 1)) {  //paper money
-        if (GET_OBJ_VAL(obj, 0) > 1)
-          send_to_char(ch, "There were %d nuyen.\r\n", GET_OBJ_VAL(obj, 0));
+    else if (GET_ITEM_MONEY_VALUE(obj) > (!GET_ITEM_MONEY_IS_CREDSTICK(obj) ? 0 : -1)) {
+      if (!GET_ITEM_MONEY_IS_CREDSTICK(obj)) {  //paper money
+        if (GET_ITEM_MONEY_VALUE(obj) > 1)
+          send_to_char(ch, "There were %d nuyen.\r\n", GET_ITEM_MONEY_VALUE(obj));
         else
           send_to_char(ch, "There was 1 nuyen.\r\n");
-        GET_NUYEN(ch) += GET_OBJ_VAL(obj, 0);
-      } else
+        
+        // Income from an NPC corpse is always tracked.
+        if (GET_OBJ_VNUM(from_obj) != OBJ_SPECIAL_PC_CORPSE && IS_OBJ_STAT(from_obj, ITEM_CORPSE)) {
+          gain_nuyen(ch, GET_ITEM_MONEY_VALUE(obj), NUYEN_INCOME_LOOTED_FROM_NPCS);
+        }
+        
+        // Picking up money from a player corpse, or dropped money etc-- not a faucet, came from a PC.
+        else {
+          GET_NUYEN_RAW(ch) += GET_ITEM_MONEY_VALUE(obj);
+        }
+      } else {
+        // Income from an NPC corpse is always tracked. We don't add it to their cash level though-- credstick.
+        if (GET_OBJ_VNUM(from_obj) != OBJ_SPECIAL_PC_CORPSE && IS_OBJ_STAT(from_obj, ITEM_CORPSE)) {
+          GET_NUYEN_INCOME_THIS_PLAY_SESSION(ch, NUYEN_INCOME_LOOTED_FROM_NPCS) += GET_ITEM_MONEY_VALUE(obj);
+        }
+        
+        // Return so we don't extract the credstick.
         return;
+      }
     } else {
       act("$p dissolves in your hands!", FALSE, ch, obj, 0, TO_CHAR);
       mudlog("ERROR: Nuyen value < 1", ch, LOG_SYSLOG, TRUE);
@@ -810,9 +826,12 @@ void perform_get_from_container(struct char_data * ch, struct obj_data * obj,
       else
         act("$n uninstalls $p from $P.", TRUE, ch, obj, cont, TO_ROOM);
       
-      obj_from_obj(obj);
-      obj_to_char(obj, ch);
-      get_check_money(ch, obj);
+      {
+        struct obj_data *was_in_obj = obj->in_obj;
+        obj_from_obj(obj);
+        obj_to_char(obj, ch);
+        get_check_money(ch, obj, was_in_obj);
+      }
       
       if (cont->obj_flags.extra_flags.IsSet(ITEM_CORPSE) && GET_OBJ_VAL(cont, 4) && !cont->contains) {
         if (cont->in_room && ROOM_FLAGGED(cont->in_room, ROOM_CORPSE_SAVE_HACK)) {
@@ -1035,7 +1054,7 @@ int perform_get_from_room(struct char_data * ch, struct obj_data * obj, bool dow
     send_to_veh(buf, ch->in_veh, ch, FALSE);
   } else
     act("$n gets $p.", FALSE, ch, obj, 0, TO_ROOM);
-  get_check_money(ch, obj);
+  get_check_money(ch, obj, NULL);
   affect_total(ch);
   return 1;
 }
@@ -1446,7 +1465,8 @@ void perform_drop_gold(struct char_data * ch, int amount, byte mode, struct room
        || IS_NPC(ch)))
     obj->obj_flags.extra_flags.SetBit(ITEM_WIZLOAD);
 
-  GET_NUYEN(ch) -= amount;
+  // Dropping money is not a sink.
+  GET_NUYEN_RAW(ch) -= amount;
   act("You drop $p.", FALSE, ch, obj, 0, TO_CHAR);
   act("$n drops $p.", TRUE, ch, obj, 0, TO_ROOM);
   affect_total(ch);
@@ -1692,7 +1712,7 @@ ACMD(do_drop)
   }
   if (amount && (subcmd == SCMD_JUNK) && !PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
     send_to_char(ch, "You receive %d nuyen for recycling.\r\n", amount >> 4);
-    GET_NUYEN(ch) += amount >> 4;
+    gain_nuyen(ch, amount >> 4, NUYEN_INCOME_JUNKING);
   }
 }
 
@@ -1838,9 +1858,11 @@ void perform_give_gold(struct char_data *ch, struct char_data *vict, int amount)
     snprintf(buf, sizeof(buf), "$n gives some nuyen to $N.");
     act(buf, TRUE, ch, 0, vict, TO_NOTVICT);
   }
+  
+  // Giving nuyen. NPCs and non-staff PCs lose the amount they give, staff do not.
   if (IS_NPC(ch) || !access_level(ch, LVL_VICEPRES))
-    GET_NUYEN(ch) -= amount;
-  GET_NUYEN(vict) += amount;
+    GET_NUYEN_RAW(ch) -= amount;
+  GET_NUYEN_RAW(vict) += amount;
 
   snprintf(buf, sizeof(buf), "%s gives %s: %d nuyen *",
           GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), amount);
