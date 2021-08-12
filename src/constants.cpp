@@ -2652,10 +2652,10 @@ const char *pc_race_types[] =
     "\n"
   };
 
-struct spirit_table nuyen_faucets_and_sinks[NUM_OF_TRACKED_NUYEN_INCOME_SOURCES] =
+struct nuyen_faucet_or_sink nuyen_faucets_and_sinks[NUM_OF_TRACKED_NUYEN_INCOME_SOURCES] =
   {
-    {"Decking (paydata sales)", NI_IS_FAUCET},
-    {"Shop Sales (mostly NPC loot)", NI_IS_FAUCET},
+    {"Decking (paydata)", NI_IS_FAUCET},
+    {"Shop Sales", NI_IS_FAUCET},
     {"Autoruns", NI_IS_FAUCET},
     {"NPC Loot", NI_IS_FAUCET},
     {"Shop Purchases", NI_IS_SINK},
@@ -2672,12 +2672,12 @@ struct spirit_table nuyen_faucets_and_sinks[NUM_OF_TRACKED_NUYEN_INCOME_SOURCES]
     {"Repairs", NI_IS_SINK},
     {"Where's My Car", NI_IS_SINK},
     {"Junking", NI_IS_FAUCET},
-    {"Trade Command (karma->nuyen)", NI_IS_FAUCET},
+    {"Trade Command (k->n)", NI_IS_FAUCET},
     {"Idle Reward", NI_IS_FAUCET},
     {"Docwagon", NI_IS_SINK},
     {"Lodge/Circle Cost", NI_IS_SINK},
     {"Taxis", NI_IS_SINK},
     {"Playergroups", NI_IS_SINK},
-    {"Trade Command (nuyen->karma)", NI_IS_SINK},
+    {"Trade Command (n->k)", NI_IS_SINK},
     {"Credstick Cracker", NI_IS_SINK}
   };

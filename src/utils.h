@@ -585,8 +585,8 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define GET_MENTAL_LOSS(ch)                        (ch->player_specials->mental_loss)
 #define GET_PHYSICAL_LOSS(ch)                      (ch->player_specials->physical_loss)
 #define GET_PERM_BOD_LOSS(ch)                      (ch->player_specials->perm_bod)
-#define GET_NUYEN_PAID_FOR_WHERES_MY_CAR(ch)       (ch->player_specials->nuyen_paid_for_wheres_my_car)
-#define GET_NUYEN_INCOME_THIS_PLAY_SESSION(ch, i)  (ch->player_specials->nuyen_income_this_play_session[i])
+#define GET_NUYEN_PAID_FOR_WHERES_MY_CAR(ch)       (ch->desc->nuyen_paid_for_wheres_my_car)
+#define GET_NUYEN_INCOME_THIS_PLAY_SESSION(ch, i)  (ch->desc->nuyen_income_this_play_session[i])
 /* descriptor-based utils ************************************************/
 
 #define WAIT_STATE(ch, cycle) { \
