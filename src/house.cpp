@@ -747,7 +747,7 @@ SPECIAL(landlord_spec)
       if (GET_NUYEN(ch) < cost) {
         if (GET_BANK(ch) >= cost) {
           do_say(recep, "You don't have the money on you, so I'll transfer it from your bank account.", 0, 0);
-          lose_nuyen(ch, cost, NUYEN_OUTFLOW_HOUSING);
+          lose_bank(ch, cost, NUYEN_OUTFLOW_HOUSING);
         } else {
           do_say(recep, "Sorry, you don't have the required funds.", 0, 0);
           return TRUE;
