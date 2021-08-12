@@ -658,7 +658,7 @@ void get_check_money(struct char_data * ch, struct obj_data * obj, struct obj_da
           send_to_char(ch, "There was 1 nuyen.\r\n");
         
         // Income from an NPC corpse is always tracked.
-        if (GET_OBJ_VNUM(from_obj) != OBJ_SPECIAL_PC_CORPSE && IS_OBJ_STAT(from_obj, ITEM_CORPSE)) {
+        if (from_obj && (GET_OBJ_VNUM(from_obj) != OBJ_SPECIAL_PC_CORPSE && IS_OBJ_STAT(from_obj, ITEM_CORPSE))) {
           gain_nuyen(ch, GET_ITEM_MONEY_VALUE(obj), NUYEN_INCOME_LOOTED_FROM_NPCS);
         }
         
@@ -668,7 +668,7 @@ void get_check_money(struct char_data * ch, struct obj_data * obj, struct obj_da
         }
       } else {
         // Income from an NPC corpse is always tracked. We don't add it to their cash level though-- credstick.
-        if (GET_OBJ_VNUM(from_obj) != OBJ_SPECIAL_PC_CORPSE && IS_OBJ_STAT(from_obj, ITEM_CORPSE)) {
+        if (from_obj && (GET_OBJ_VNUM(from_obj) != OBJ_SPECIAL_PC_CORPSE && IS_OBJ_STAT(from_obj, ITEM_CORPSE))) {
           GET_NUYEN_INCOME_THIS_PLAY_SESSION(ch, NUYEN_INCOME_LOOTED_FROM_NPCS) += GET_ITEM_MONEY_VALUE(obj);
         }
         
