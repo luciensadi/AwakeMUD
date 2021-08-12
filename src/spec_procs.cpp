@@ -1894,7 +1894,7 @@ SPECIAL(mugger_park)
       if (GET_OBJ_TYPE(obj) == ITEM_MONEY) {
         act("$n grins as he picks up $p from the ground.", FALSE, ch, obj, 0, TO_ROOM);
         act("You grin slightly as you pick up $p.", FALSE, ch, obj, 0, TO_CHAR);
-        GET_NUYEN_RAW(ch) += GET_OBJ_VAL(obj, 0);
+        GET_NUYEN_RAW(ch) += GET_ITEM_MONEY_VALUE(obj);
         extract_obj(obj);
         return TRUE;
       }
