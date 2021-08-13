@@ -39,10 +39,10 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 #define HOST_SECURITY_BLACK_MARKET_MAXIMUM              10000
 
 #define HOST_SECURITY_BLUE_MARKET_MINIMUM               500
-#define HOST_SECURITY_GREEN_MARKET_MINIMUM              1000
-#define HOST_SECURITY_ORANGE_MARKET_MINIMUM             1500
-#define HOST_SECURITY_RED_MARKET_MINIMUM                2000
-#define HOST_SECURITY_BLACK_MARKET_MINIMUM              2500
+#define HOST_SECURITY_GREEN_MARKET_MINIMUM              500
+#define HOST_SECURITY_ORANGE_MARKET_MINIMUM             500
+#define HOST_SECURITY_RED_MARKET_MINIMUM                500
+#define HOST_SECURITY_BLACK_MARKET_MINIMUM              500
 
 // What maximum amount of karma per action do you want PCs < 100 TKE to have?
 #define MAX_NEWCHAR_GAIN                                50
