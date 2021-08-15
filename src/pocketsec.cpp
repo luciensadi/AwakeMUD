@@ -63,6 +63,8 @@ void wire_nuyen(struct char_data *ch, int amount, vnum_t character_id)
 {  
   // First, scan the game to see if the target character is online.
   struct char_data *targ = NULL;
+  char query_buf[1000];
+  
   for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
     targ = d->original ? d->original : d->character;
     
@@ -83,21 +85,21 @@ void wire_nuyen(struct char_data *ch, int amount, vnum_t character_id)
     GET_BANK(targ) += amount;
     playerDB.SaveChar(targ);
   } else {
-    snprintf(buf, sizeof(buf), "UPDATE pfiles SET Bank=Bank+%d WHERE idnum=%ld;", amount, character_id);
-    mysql_wrapper(mysql, buf);
+    snprintf(query_buf, sizeof(query_buf), "UPDATE pfiles SET Bank=Bank+%d WHERE idnum=%ld;", amount, character_id);
+    mysql_wrapper(mysql, query_buf);
   }
   
   // Mail it. We don't send mail for NPC shopkeepers refunding you.
   if (ch) {
-    snprintf(buf, sizeof(buf), "%s has wired %d nuyen to your account.\r\n", ch ? GET_CHAR_NAME(ch) : "Someone", amount);
-    store_mail(character_id, ch, buf);
+    snprintf(query_buf, sizeof(query_buf), "%s has wired %d nuyen to your account.\r\n", ch ? GET_CHAR_NAME(ch) : "Someone", amount);
+    store_mail(character_id, ch, query_buf);
   }
   
   // Log it.
   char *player_name = targ ? NULL : get_player_name(character_id);
-  snprintf(buf, sizeof(buf), "%s wired %d nuyen to %s.", ch ? GET_CHAR_NAME(ch) : "An NPC", amount, targ ? GET_CHAR_NAME(targ) : player_name);
+  snprintf(query_buf, sizeof(query_buf), "%s wired %d nuyen to %s.", ch ? GET_CHAR_NAME(ch) : "An NPC", amount, targ ? GET_CHAR_NAME(targ) : player_name);
   DELETE_ARRAY_IF_EXTANT(player_name);
-  mudlog(buf, ch, LOG_GRIDLOG, TRUE);
+  mudlog(query_buf, ch, LOG_GRIDLOG, TRUE);
 }
 
 void pocketsec_phonemenu(struct descriptor_data *d)
