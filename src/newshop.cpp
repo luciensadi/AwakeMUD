@@ -4,6 +4,7 @@
 #include <ctype.h>
 #include <time.h>
 #include <math.h>
+#include <unistd.h>
 
 #include "structs.h"
 #include "awake.h"
@@ -2958,8 +2959,10 @@ struct obj_data *shop_package_up_ware(struct obj_data *obj) {
 }
 
 void save_shop_orders() {
+  PERF_PROF_SCOPE(pr_, __func__);
   FILE *fl;
   float totaltime = 0;
+  time_t curr_time = time(0);
   
   for (int shop_nr = 0; shop_nr <= top_of_shopt; shop_nr++) {
     // Wipe the existing shop order save files-- they're out of date.
@@ -2971,8 +2974,8 @@ void save_shop_orders() {
       struct shop_order_data *next_order, *temp;
       for (struct shop_order_data *order = shop_table[shop_nr].order; order; order = next_order) {
         next_order = order->next;
-        totaltime = order->expiration - time(0);
-        if (totaltime < 0) {
+        totaltime = order->expiration - curr_time;
+        if (totaltime <= 0) {
           // Notify them about the expiry, but only for orders with a prepay-- this prevents the 7-day spamstorm when this change is first launched.
           if (order->paid > 0) {
             int repayment_amount = order->paid - (order->paid / PREORDER_RESTOCKING_FEE_DIVISOR);
