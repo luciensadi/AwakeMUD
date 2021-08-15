@@ -13,6 +13,7 @@
 #define _awake_h_
 
 #include <time.h>
+#include <iostream>
 
 #if (!defined(WIN32) || defined(__CYGWIN__)) && !defined(osx)
 using namespace std;
@@ -2487,5 +2488,16 @@ enum {
 #define HOLSTER_TYPE_SMALL_GUNS     0
 #define HOLSTER_TYPE_MELEE_WEAPONS  1
 #define HOLSTER_TYPE_LARGE_GUNS     2
+
+#define DIRTY_BIT_SKILLS      0
+#define DIRTY_BIT_POWERS      1
+#define DIRTY_BIT_SPELLS      2
+#define DIRTY_BIT_METAMAGIC   3
+#define DIRTY_BIT_ELEMENTALS  4
+#define DIRTY_BIT_MEMORY      5
+#define DIRTY_BIT_DRUG        6
+#define DIRTY_BIT_ALIAS       7
+
+#define NUM_DIRTY_BITS        8
 
 #endif

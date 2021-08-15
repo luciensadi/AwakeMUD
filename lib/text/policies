@@ -21,9 +21,11 @@
  ^cB)^n Bug exploitation: Those found exploiting bugs for personal gain, or other reasons will be dealt with accordingly.
  ^cC)^n Code-base exploitation: Those found exploiting limitations or what not in the code base will be dealt with appropriately.
 
-^W5)^C Mudbotting^n
+^W5)^C Mudbotting and Triggers^n
  ^cA)^n Botting is illegal, it's strictly powergaming supportive and we do not support powergaming, therefore, persons found MUD-Botting will be dealt with accordingly.
- ^cB)^n Setting up triggers to act while you are away from the computer (build lists for automated deck building/spell designing etc) is illegal. This includes anything that periodically sends commands to the MUD. You will not time out if you are engaged in something that allows you to stay AFK for long periods of times.
+ ^cB)^n Setting up triggers to act while you are away from the computer (build lists for automated deck building/spell designing etc) is illegal. This includes anything that periodically sends commands to the MUD. You will not time out if you are engaged in something that allows you to stay AFK for long periods of times. If you are getting disconnected, use ^WTOGGLE KEEPALIVE^n to engage the network connection preservation pulse.
+ ^cC)^n Triggers that produce game results for your character are illegal, even if you're at the computer. An answering-machine trigger is fine, as there is no material benefit, but an auto-killing trigger is not. You also should not write any triggers that send output to the room or a channel (ex: emoting something every time a player walks in is illegal for spam-reduction reasons).
+ ^cD)^n Auto-looting is a specific exception that you're allowed to write, but tune it so that you don't steal things from other players' kills-- if we get complaints about auto-looters, they will no longer be allowed.
 
 ^W6)^C Blacklisting^n
  ^cA)^n Blacklisting removes major forms of advancement and makes playing the MUD a lot harder. Staff will award you the blacklist flag for the following reasons:

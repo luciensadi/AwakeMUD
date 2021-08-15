@@ -1745,17 +1745,20 @@ bool perform_give(struct char_data * ch, struct char_data * vict, struct obj_dat
     delete [] representation;
   }
   
-  // Group quest rewards.
-  if (AFF_FLAGGED(ch, AFF_GROUP) && ch->master && !IS_NPC(ch->master) && IS_NPC(vict) && GET_QUEST(ch->master)) {
-    if (check_quest_delivery(ch->master, vict, obj))
-      extract_obj(obj);
-  } 
-  // Individual quest rewards.
-  else if (!IS_NPC(ch) && IS_NPC(vict)) {
-    if (GET_QUEST(ch) && check_quest_delivery(ch, vict, obj)) {
+  if (!IS_NPC(ch) && IS_NPC(vict)) {
+    // Group quest reward.
+    if (AFF_FLAGGED(ch, AFF_GROUP) && ch->master && !IS_NPC(ch->master) && IS_NPC(vict) && GET_QUEST(ch->master)) {
+      if (check_quest_delivery(ch->master, vict, obj)) {
+        act("$n nods slightly to $N and tucks $p away.", TRUE, vict, obj, ch, TO_ROOM);
+        extract_obj(obj);
+      }
+    } 
+    // Individual quest reward.
+    else if (GET_QUEST(ch) && check_quest_delivery(ch, vict, obj)) {
       act("$n nods slightly to $N and tucks $p away.", TRUE, vict, obj, ch, TO_ROOM);
       extract_obj(obj);
     }
+    // No quest found.
     else {
       if (GET_MOB_SPEC(vict) || GET_MOB_SPEC2(vict)) {
         // These specs handle objects, so don't mess with them.
