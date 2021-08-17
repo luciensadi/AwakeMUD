@@ -668,6 +668,7 @@ void raw_kill(struct char_data * ch)
             spirit->called = FALSE;
           }
         send_to_char(d->character, "%s is disrupted and returns to the metaplanes to heal.\r\n", CAP(GET_NAME(ch)));
+        GET_ELEMENTALS_DIRTY_BIT(d->character) = TRUE;
         break;
       }
   }

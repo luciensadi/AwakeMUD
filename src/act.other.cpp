@@ -64,6 +64,7 @@ extern int belongs_to(struct char_data *ch, struct obj_data *obj);
 extern char *make_desc(struct char_data *ch, struct char_data *i, char *buf, int act, bool dont_capitalize_a_an, size_t buf_size);
 extern void weight_change_object(struct obj_data * obj, float weight);
 extern bool does_weapon_have_bayonet(struct obj_data *weapon);
+extern void turn_hardcore_on_for_character(struct char_data *ch);
 
 extern bool restring_with_args(struct char_data *ch, char *argument, bool using_sysp);
 
@@ -1304,10 +1305,7 @@ ACMD(do_toggle)
         return;
       }
       if (!PRF_FLAGGED(ch, PRF_HARDCORE)) {
-        PRF_FLAGS(ch).SetBit(PRF_HARDCORE);
-        PLR_FLAGS(ch).SetBit(PLR_NODELETE);
-        snprintf(buf, sizeof(buf), "UPDATE pfiles SET Hardcore=1, NoDelete=1 WHERE idnum=%ld;", GET_IDNUM(ch));
-        mysql_wrapper(mysql, buf);
+        turn_hardcore_on_for_character(ch);
       }
       mode = 24;
       result = 1;
@@ -2162,7 +2160,7 @@ ACMD(do_astral)
   for (int i = 0; i < MAX_SKILLS; i++)
     astral->char_specials.saved.skills[i][0] = ch->char_specials.saved.skills[i][0];
   for (int i = 0; i < META_MAX; i++)
-    GET_METAMAGIC(astral, i) = GET_METAMAGIC(ch, i);
+    SET_METAMAGIC(astral, i, GET_METAMAGIC(ch, i));
   GET_GRADE(astral) = GET_GRADE(ch);
   GET_ASTRAL(astral) = GET_ASTRAL(ch);
   GET_COMBAT(astral) = GET_ASTRAL(ch);
@@ -2648,6 +2646,7 @@ ACMD(do_remember)
         DELETE_AND_NULL_ARRAY(temp->mem);
         temp->mem = str_dup(buf2);
         send_to_char(ch, "Remembered %s as %s\r\n", GET_NAME(vict), buf2);
+        GET_MEMORY_DIRTY_BIT(ch) = TRUE;
         return;
       }
 
@@ -2657,6 +2656,7 @@ ACMD(do_remember)
     m->next = GET_PLAYER_MEMORY(ch);
     GET_PLAYER_MEMORY(ch) = m;
     send_to_char(ch, "Remembered %s as %s\r\n", GET_NAME(vict), buf2);
+    GET_MEMORY_DIRTY_BIT(ch) = TRUE;
   }
 }
 

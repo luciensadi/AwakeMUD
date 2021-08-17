@@ -607,6 +607,8 @@ void end_spirit_existance(struct char_data *ch, bool message)
       GET_NUM_SPIRITS(tempc)--;
       if (message && d->character)
         send_to_char(d->character, "%s returns to the metaplanes, its existence in this world finished.\r\n", CAP(GET_NAME(ch)));
+        
+      GET_ELEMENTALS_DIRTY_BIT(tempc) = TRUE;
       break;
     }
   }
@@ -619,6 +621,7 @@ void elemental_fulfilled_services(struct char_data *ch, struct char_data *mob, s
   {
     send_to_char(ch, "Its services fulfilled, %s departs to the metaplanes.\r\n", CAP(GET_NAME(mob)));
     end_spirit_existance(mob, FALSE);
+    GET_ELEMENTALS_DIRTY_BIT(ch) = TRUE;
   }
 }
 
@@ -2440,6 +2443,7 @@ ACMD(do_contest)
         delete sdata;
         break;
       }
+    GET_ELEMENTALS_DIRTY_BIT(ch) = TRUE;
     if (GET_MOB_VNUM(mob) < 25 || GET_MOB_VNUM(mob) > 28) {
       act("$n senses an opportunity and vanishes!", TRUE, mob, 0, 0, TO_ROOM);
       extract_char(mob);
@@ -2462,6 +2466,8 @@ ACMD(do_contest)
         GET_SPIRIT(ch) = sdata->next;
         GET_NUM_SPIRITS(ch)++;
         GET_NUM_SPIRITS(caster)--;
+        GET_ELEMENTALS_DIRTY_BIT(ch) = TRUE;
+        GET_ELEMENTALS_DIRTY_BIT(caster) = TRUE;
         break;
       }
     GET_ACTIVE(mob) = GET_IDNUM(ch);
@@ -2749,7 +2755,8 @@ ACMD(do_release)
       return;
     }
     int real_mob;
-    for (struct spirit_data *spirit = GET_SPIRIT(ch); spirit; spirit = spirit->next)
+    GET_ELEMENTALS_DIRTY_BIT(ch) = TRUE;
+    for (struct spirit_data *spirit = GET_SPIRIT(ch); spirit; spirit = spirit->next) {
       if (--i == 0) {
         struct spirit_data *temp;
         if (GET_TRADITION(ch) == TRAD_HERMETIC) {
@@ -2771,6 +2778,7 @@ ACMD(do_release)
         GET_NUM_SPIRITS(ch)--;
         return;
       }
+    }
   } else if (is_abbrev(buf, "all")) {
     for (sust = GET_SUSTAINED(ch); sust; sust = next) {
       next = sust->next;
@@ -3026,6 +3034,7 @@ ACMD(do_conjure)
         spirdata->next = GET_SPIRIT(ch);
         GET_SPIRIT(ch) = spirdata;
         GET_NUM_SPIRITS(ch)++;
+        GET_ELEMENTALS_DIRTY_BIT(ch) = TRUE;
         struct char_data *mob = create_elemental(ch, spirit, force, spirdata->id, TRAD_SHAMANIC);
         send_to_char("The spirit hears your call and comes forth from the metaplanes.\r\n", ch);
         act("$n fades into existance on the astral plane.", TRUE, mob, 0, 0, TO_ROOM);
@@ -3086,6 +3095,8 @@ ACMD(do_forget)
 
      REMOVE_FROM_LIST(spell, GET_SPELLS(ch), next);
      delete spell;
+     
+     GET_SPELLS_DIRTY_BIT(ch) = TRUE;
      return;
    }
 }
@@ -3247,6 +3258,7 @@ ACMD(do_learn)
   GET_SPELLS(ch) = spell;
   send_to_char(ch, "You spend %d karma and learn %s.\r\n", force - oldforce, spell->name);
   extract_obj(obj);
+  GET_SPELLS_DIRTY_BIT(ch) = TRUE;
 }
 
 ACMD(do_elemental)
@@ -3892,6 +3904,10 @@ ACMD(do_order)
     send_to_char(ch, "Which %s do you wish to give an order to?\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
     return;
   }
+  
+  // It's not worth parsing this whole thing out for changes. If they use the command, just consider their spirits dirty.
+  GET_ELEMENTALS_DIRTY_BIT(ch) = TRUE;
+  
   for (spirit = GET_SPIRIT(ch); spirit; spirit = spirit->next)
     if (--i == 0)
       break;
@@ -4045,6 +4061,7 @@ ACMD(do_domain)
           REMOVE_FROM_LIST(spirit, GET_SPIRIT(ch), next);
           GET_NUM_SPIRITS(ch)--;
           delete spirit;
+          GET_ELEMENTALS_DIRTY_BIT(ch) = TRUE;
         }
       }
     }
@@ -4764,7 +4781,7 @@ void init_parse(struct descriptor_data *d, char *arg)
         send_to_char("Your tradition/apect/initiation combination isn't able to learn that metamagic technique. Select ability to learn: ", CH);
       } else {
         init_cost(CH, TRUE);
-        GET_METAMAGIC(CH, number)++;
+        SET_METAMAGIC(CH, number, GET_METAMAGIC(CH, number) + 1);
         GET_GRADE(CH)++;
         GET_REAL_MAG(CH) += 100;
         if (GET_TRADITION(CH) == TRAD_ADEPT)

@@ -439,7 +439,7 @@ SPECIAL(metamagic_teacher)
   }
   GET_NUYEN(ch) -= cost;
   send_to_char(ch, "%s runs through how to use %s with you, you walk away knowing exactly how to use it.\r\n", GET_NAME(master), metamagic[i]);
-  GET_METAMAGIC(ch, i)++;
+  SET_METAMAGIC(ch, i, GET_METAMAGIC(ch, i) + 1);
   return TRUE;
 }
 
@@ -1243,6 +1243,7 @@ SPECIAL(spell_trainer)
         spell->next = GET_SPELLS(ch);
         GET_SPELLS(ch) = spell;
       }
+      GET_SPELLS_DIRTY_BIT(ch) = TRUE;
     }
   }
   return TRUE;
@@ -1369,7 +1370,7 @@ SPECIAL(adept_trainer)
 
   // Subtract their PP and increase their power level.
   GET_PP(ch) -= cost;
-  GET_POWER_TOTAL(ch, power)++;
+  SET_POWER_TOTAL(ch, power, GET_POWER_TOTAL(ch, power) + 1);
   send_to_char("After hours of focus and practice, you feel your ability sharpen.\r\n", ch);
 
   // Post-increase messaging to let them know they've maxed out.
@@ -4016,32 +4017,30 @@ SPECIAL(portable_gridguide)
   if (CMD_IS("gridguide") && !ch->in_veh) {
     if (!(ROOM_FLAGGED(ch->in_room, ROOM_ROAD) || ROOM_FLAGGED(ch->in_room, ROOM_GARAGE)) ||
         ROOM_FLAGGED(ch->in_room, ROOM_NOGRID))
-      send_to_char(ch, "The %s flashes up with ^RINVALID LOCATION^n.\r\n", GET_OBJ_NAME(obj));
+      send_to_char(ch, "%s flashes up with ^RINVALID LOCATION^n.\r\n", CAP(GET_OBJ_NAME(obj)));
     else {
       int x = ch->in_room->number - (ch->in_room->number * 3), y = ch->in_room->number + 100;
-      send_to_char(ch, "The %s flashes up with ^R%d, %d^n.\r\n", GET_OBJ_NAME(obj), x, y);
+      send_to_char(ch, "%s flashes up with ^R%d, %d^n.\r\n", CAP(GET_OBJ_NAME(obj)), x, y);
     }
     return TRUE;
   }
   return FALSE;
 }
 
-#define PAINTER_COST 20000
 SPECIAL(painter)
 {
   struct veh_data *veh = NULL;
   struct char_data *painter = (struct char_data *) me;
   extern void vehcust_menu(struct descriptor_data *d);
-  vnum_t real_painter_storage = real_room(painter->in_room->number) + 1;
-  if ((veh = world[real_painter_storage].vehicles))
+  if ((veh = world[real_room(painter->in_room->number + 1)].vehicles))
     if (veh->spare <= time(0)) {
       veh_from_room(veh);
-      veh_to_room(veh, &world[real_room(RM_PAINTER_LOT)]);
+      veh_to_room(veh, &world[real_room(painter->in_room->number)]);
       veh->spare = 0;
-      if (world[real_room(RM_PAINTER_LOT)].people) {
+      if (world[real_room(painter->in_room->number)].people) {
         snprintf(buf, sizeof(buf), "%s is wheeled out into the parking lot.", GET_VEH_NAME(veh));
-        act(buf, FALSE, world[real_room(RM_PAINTER_LOT)].people, 0, 0, TO_ROOM);
-        act(buf, FALSE, world[real_room(RM_PAINTER_LOT)].people, 0, 0, TO_CHAR);
+        act(buf, FALSE, world[real_room(painter->in_room->number)].people, 0, 0, TO_ROOM);
+        act(buf, FALSE, world[real_room(painter->in_room->number)].people, 0, 0, TO_CHAR);
       }
       save_vehicles();
     }
@@ -4057,7 +4056,7 @@ SPECIAL(painter)
     do_say(painter, buf, 0, 0);
     return TRUE;
   }
-  if (world[real_painter_storage].vehicles) {
+  if (world[real_room(painter->in_room->number + 1)].vehicles) {
     do_say(painter, "We're already working on someone's ride, bring it back later.", 0, 0);
     return TRUE;
   }
@@ -4071,7 +4070,7 @@ SPECIAL(painter)
     veh->spare = time(0) + (SECS_PER_MUD_DAY * 3);
     ch->desc->edit_veh = veh;
     veh_from_room(veh);
-    veh_to_room(veh, &world[real_painter_storage]);
+    veh_to_room(veh, &world[real_room(painter->in_room->number + 1)]);
     GET_NUYEN(ch) -= PAINTER_COST;
     snprintf(buf, sizeof(buf), "%s is wheeled into the painting booth.", GET_VEH_NAME(veh));
     act(buf, FALSE, painter, 0, 0, TO_ROOM);
@@ -4085,7 +4084,6 @@ SPECIAL(painter)
   }
   return TRUE;
 }
-#undef PAINTER_COST
 
 SPECIAL(multnomah_gate) {
   NO_DRAG_BULLSHIT;
@@ -4098,7 +4096,7 @@ SPECIAL(multnomah_gate) {
   else to_room = real_room(RM_MULTNOMAH_GATE_NORTH);
 
   if ((world[in_room].number == RM_MULTNOMAH_GATE_NORTH && CMD_IS("south")) || (world[in_room].number == RM_MULTNOMAH_GATE_SOUTH && CMD_IS("north"))) {
-    if (!PLR_FLAGGED(ch, PLR_VISA)) {
+    if (!IS_NPC(ch) && !PLR_FLAGGED(ch, PLR_VISA)) {
       if (access_level(ch, LVL_BUILDER)) {
         send_to_char("You don't even bother making eye contact with the guard as you head towards the gate. Rank hath its privileges.\r\n", ch);
         act("$n doesn't even bother making eye contact with the guard as $e heads towards the gate. Rank hath its privileges.\r\n", TRUE, ch, 0, 0, TO_ROOM);
@@ -4110,7 +4108,7 @@ SPECIAL(multnomah_gate) {
     
     if (ch->in_veh) {
       for (struct char_data *vict = ch->in_veh->people; vict; vict = vict->next_in_veh)
-        if (vict != ch && !PLR_FLAGGED(vict, PLR_VISA) && !IS_NPC(vict) && !access_level(ch, LVL_BUILDER)) {
+        if (vict != ch && !IS_NPC(vict) && !PLR_FLAGGED(vict, PLR_VISA) && !access_level(ch, LVL_BUILDER)) {
           send_to_char("The guards won't open the gate until everyone has shown their visas.\r\n", ch);
           return TRUE;
         }
@@ -4120,13 +4118,15 @@ SPECIAL(multnomah_gate) {
       snprintf(buf, sizeof(buf), "The gate slides open allowing %s to pass through.\r\n", GET_VEH_NAME(ch->in_veh));
       send_to_room(buf, ch->in_veh->in_room);
       for (struct char_data *vict = ch->in_veh->people; vict; vict = vict->next_in_veh)
-        PLR_FLAGS(vict).RemoveBit(PLR_VISA);
+        if (!IS_NPC(vict))
+          PLR_FLAGS(vict).RemoveBit(PLR_VISA);
       veh_from_room(ch->in_veh);
       veh_to_room(ch->in_veh, &world[to_room]);
     }
     else {
       act("The gate opens allowing $n to pass through.\r\n", FALSE, ch, 0, 0, TO_ROOM);
-      PLR_FLAGS(ch).RemoveBit(PLR_VISA);
+      if (!IS_NPC(ch))
+        PLR_FLAGS(ch).RemoveBit(PLR_VISA);
       char_from_room(ch);
       char_to_room(ch, &world[to_room]);
     }
