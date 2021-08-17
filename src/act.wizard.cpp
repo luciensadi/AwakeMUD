@@ -4174,12 +4174,13 @@ ACMD(do_set)
                { "socializationbonus", LVL_ADMIN, PC,     NUMBER },
                { "race", LVL_PRESIDENT, PC, NUMBER },
                { "rolls", LVL_PRESIDENT, PC, BINARY },
-               { "multiplier", LVL_PRESIDENT, PC, NUMBER },
+               { "multiplier", LVL_PRESIDENT, PC, NUMBER }, //75
                { "shotsfired", LVL_PRESIDENT, PC, NUMBER },
                { "shotstriggered", LVL_PRESIDENT, PC, NUMBER },
                { "powerpoints", LVL_PRESIDENT, PC, NUMBER },
                { "cyberdoc", LVL_CONSPIRATOR, PC, BINARY },
-               { "hardcore", LVL_PRESIDENT, PC, BINARY },
+               { "hardcore", LVL_PRESIDENT, PC, BINARY }, //80
+               { "esshole",  LVL_ADMIN, BOTH,   NUMBER },
                { "\n", 0, BOTH, MISC }
              };
 
@@ -4782,6 +4783,12 @@ ACMD(do_set)
     }
     
     snprintf(buf, sizeof(buf),"%s turned %s's hardcore and nodelete flags %s.", GET_CHAR_NAME(ch), GET_NAME(vict), PRF_FLAGGED(vict, PRF_HARDCORE) ? "ON" : "OFF");
+    mudlog(buf, ch, LOG_WIZLOG, TRUE );
+    break;
+  case 81: /* esshole */
+    RANGE(0, 600);
+    snprintf(buf, sizeof(buf),"%s changed %s's esshole from %d to %d.", GET_CHAR_NAME(ch), GET_NAME(vict), GET_ESSHOLE(vict), value);
+    GET_ESSHOLE(vict) = value;
     mudlog(buf, ch, LOG_WIZLOG, TRUE );
     break;
   default:
