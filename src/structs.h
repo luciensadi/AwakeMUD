@@ -441,12 +441,6 @@ struct char_special_data_saved
   ush_int boosted[3][2];           /* str/qui/bod timeleft/amount		*/
   ubyte masking;
   int points;
-  
-  bool dirty;
-  
-  char_special_data_saved() :
-      dirty(FALSE)
-  {}
 };
 
 struct char_special_data
@@ -477,6 +471,8 @@ struct char_special_data
   int timer;                  /* Timer for update                     */
   int actions;
   int coord[3];
+  
+  bool dirty_bits[NUM_DIRTY_BITS];
 
   struct veh_data *subscribe;   /* subscriber list */
   struct veh_data *rigging;     /* Vehicle char is controlling remotely */
@@ -495,6 +491,9 @@ struct char_special_data
     
     for (int i = 0; i < 3; i++)
       coord[i] = 0;
+      
+    for (int i = 0; i < NUM_DIRTY_BITS; i++)
+      dirty_bits[i] = 0;
   }
 };
 

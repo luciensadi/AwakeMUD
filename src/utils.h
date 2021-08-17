@@ -514,12 +514,19 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define REAL_SKILL(ch, i)       ((ch)->char_specials.saved.skills[i][1] > 0 ? 0 : (ch)->char_specials.saved.skills[i][0])
 // SET_SKILL is used only in medit.cpp for NPCs. Set char skills with utils.cpp's set_character_skill().
 #define SET_SKILL(ch, i, pct)   {(ch)->char_specials.saved.skills[i][0] = pct; GET_SKILL_DIRTY_BIT((ch)) = TRUE;}
+
 #define GET_POWER(ch, i)	((ch)->char_specials.saved.powers[i][1] ? \
                                  MIN((ch)->char_specials.saved.powers[i][1], (ch)->char_specials.saved.powers[i][0]) : 0)
-#define GET_POWER_TOTAL(ch, i)	((ch)->char_specials.saved.powers[i][0])
+                                 
+#define GET_POWER_TOTAL(ch, i)	    ((ch)->char_specials.saved.powers[i][0] != 0 ? (ch)->char_specials.saved.powers[i][0] : 0)
+#define SET_POWER_TOTAL(ch, i, amt)	{(ch)->char_specials.saved.powers[i][0] = amt; GET_ADEPT_POWER_DIRTY_BIT(ch) = TRUE;}
+
 #define GET_POWER_ACT(ch, i)	((ch)->char_specials.saved.powers[i][1])
 #define GET_POWER_POINTS(ch)    ((ch)->char_specials.saved.points)
-#define GET_METAMAGIC(ch, i)    ((ch)->char_specials.saved.metamagic[i])
+
+#define GET_METAMAGIC(ch, i)    ((ch)->char_specials.saved.metamagic[i] != 0 ? (ch)->char_specials.saved.metamagic[i] : 0)
+#define SET_METAMAGIC(ch, i, amt)    {(ch)->char_specials.saved.metamagic[i] = amt; GET_METAMAGIC_DIRTY_BIT(ch) = TRUE;}
+
 #define GET_MASKING(ch)		((ch)->char_specials.saved.masking)
 #define GET_CENTERINGSKILL(ch)	((ch)->char_specials.saved.centeringskill)
 #define GET_PP(ch)		((ch)->char_specials.saved.powerpoints)
@@ -528,7 +535,15 @@ int get_armor_penalty_grade(struct char_data *ch);
 
 #define SKILL_IS_LANGUAGE(skill) (((skill) >= SKILL_ENGLISH && (skill) <= SKILL_FRENCH) || ((skill) >= SKILL_HEBREW && (skill) <= SKILL_IROQUOIS))
 
-#define GET_SKILL_DIRTY_BIT(ch)  ((ch)->char_specials.saved.dirty)
+#define GET_SKILL_DIRTY_BIT(ch)         ((ch)->char_specials.dirty_bits[DIRTY_BIT_SKILLS])
+#define GET_ADEPT_POWER_DIRTY_BIT(ch)   ((ch)->char_specials.dirty_bits[DIRTY_BIT_POWERS])
+#define GET_SPELLS_DIRTY_BIT(ch)        ((ch)->char_specials.dirty_bits[DIRTY_BIT_SPELLS])
+#define GET_METAMAGIC_DIRTY_BIT(ch)     ((ch)->char_specials.dirty_bits[DIRTY_BIT_METAMAGIC])
+#define GET_ELEMENTALS_DIRTY_BIT(ch)    ((ch)->char_specials.dirty_bits[DIRTY_BIT_ELEMENTALS])
+#define GET_MEMORY_DIRTY_BIT(ch)        ((ch)->char_specials.dirty_bits[DIRTY_BIT_MEMORY])
+// #define GET_DRUG_DIRTY_BIT(ch)          ((ch)->char_specials.dirty_bits[DIRTY_BIT_DRUG])
+#define GET_ALIAS_DIRTY_BIT(ch)         ((ch)->char_specials.dirty_bits[DIRTY_BIT_ALIAS])
+
 #define GET_CONGREGATION_BONUS(ch) ((ch)->congregation_bonus_pool)
 
 #define GET_MOB_SPEC(ch)       (IS_MOB(ch) ? (mob_index[(ch->nr)].func) : NULL)

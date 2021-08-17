@@ -1683,6 +1683,8 @@ ACMD(do_alias)
       }
     }
   } else { /* otherwise, add or remove aliases */
+    GET_ALIAS_DIRTY_BIT(ch) = TRUE;
+    
     /* is this an alias we've already defined? */
     if ((a = find_alias(GET_ALIASES(ch), arg)) != NULL) {
       REMOVE_FROM_LIST(a, GET_ALIASES(ch), next);
@@ -1701,25 +1703,12 @@ ACMD(do_alias)
         return;
       }
       /* Should cover every possbile case of 'kill', 'hit', and 'murder' */
-      else if ( (strstr(repl,"kill") || strstr(repl,"hit") ||
-                 strstr(repl,"murder") || strstr(repl,"KILL") ||
-                 strstr(repl,"Kill") || strstr(repl,"KIll") ||
-                 strstr(repl,"KILl") || strstr(repl,"kILL") ||
-                 strstr(repl,"kiLL") || strstr(repl,"kilL") ||
-                 strstr(repl,"HIT") || strstr(repl,"Hit") ||
-                 strstr(repl,"HIt") || strstr(repl,"hIT") ||
-                 strstr(repl,"hiT") || strstr(repl,"MURDER") ||
-                 strstr(repl,"Murder") || strstr(repl,"MUrder") ||
-                 strstr(repl,"MURder") || strstr(repl,"MURDer") ||
-                 strstr(repl,"MURDEr") || strstr(repl,"mURDER") ||
-                 strstr(repl,"muRDER") || strstr(repl,"murDER") ||
-                 strstr(repl,"murdER") || strstr(repl,"murdeR"))
-                && strlen(arg) < 4 ) {
+      else if ( (str_str(repl, "kill") || str_str(repl, "hit") || str_str(repl, "murder")) && strlen(arg) < 4 ) {
         send_to_char(
           "If you alias contains the 'kill', 'hit', or 'murder' commands,"
           " it must be accompanied by at least a 4 letter alias.\n\r",ch);
         return;
-      } else if ( strstr(repl,"quit") ) {
+      } else if ( str_str(repl, "quit") ) {
         send_to_char("Aliases cannot contain the 'quit' command.\n\r",ch);
         return;
       }

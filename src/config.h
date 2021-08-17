@@ -154,4 +154,7 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 #define WHERES_MY_CAR_NUYEN_PER_ROOM                    10
 #define WHERES_MY_CAR_MINIMUM_NUYEN_CHARGE              (WHERES_MY_CAR_NUYEN_PER_ROOM * 50)
 
+// How much does it cost to paint (restring) your vehicle?
+#define PAINTER_COST                                    20000
+
 #endif

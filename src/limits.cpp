@@ -863,6 +863,7 @@ void point_update(void)
         }
       }
     }
+    
     if (i->desc && IS_PROJECT(i)) {
       if (AFF_FLAGGED(i->desc->original, AFF_TRACKING) && HUNTING(i->desc->original) && !--HOURS_LEFT_TRACK(i->desc->original)) {
         act("The astral signature leads you to $N.", FALSE, i, 0, HUNTING(i->desc->original), TO_CHAR);
@@ -892,6 +893,7 @@ void point_update(void)
       } else if (GET_ESS(i) <= 100)
         send_to_char("You feel memories of your physical body slipping away.\r\n", i);
     }
+    
     if (is_npc || !PLR_FLAGGED(i, PLR_JUST_DIED)) {
       if (LAST_HEAL(i) > 0)
         LAST_HEAL(i)--;
