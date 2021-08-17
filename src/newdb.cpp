@@ -600,7 +600,8 @@ bool load_char(const char *name, char_data *ch, bool logon)
       res = mysql_use_result(mysql);
       while ((row = mysql_fetch_row(res))) {
         SET_METAMAGIC(ch, atoi(row[1]), atoi(row[2]));
-      } mysql_free_result(res);
+      } 
+      mysql_free_result(res);
     }
     if (GET_TRADITION(ch) != TRAD_ADEPT) {
       snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_spells WHERE idnum=%ld ORDER BY Category DESC, Name DESC;", GET_IDNUM(ch));
