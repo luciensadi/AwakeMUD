@@ -1293,23 +1293,34 @@ ACMD(do_language)
 void add_phone_to_list(struct obj_data *obj)
 {
   struct phone_data *k;
-  bool found = FALSE, cyber = FALSE;
-  if (GET_OBJ_TYPE(obj) == ITEM_CYBERWARE)
-    cyber = TRUE;
+  bool cyber = GET_OBJ_TYPE(obj) == ITEM_CYBERWARE;
+  
+  // Compose the phone number string.
   snprintf(buf, sizeof(buf), "%04d%04d", GET_OBJ_VAL(obj, (cyber ? 3 : 0)), GET_OBJ_VAL(obj, (cyber ? 6 : 1)));
+  
+  // Search the phone list and see if it's already in there.
   for (struct phone_data *j = phone_list; j; j = j->next)
     if (j->number == atoi(buf)) {
-      found = TRUE;
-      break;
+      const char *phone_representation = generate_new_loggable_representation(j->phone);
+      const char *obj_representation = generate_new_loggable_representation(obj);
+      char logstring[MAX_STRING_LENGTH];
+      snprintf(logstring, sizeof(logstring), "SYSERR: Attempted to add phone number %s to the phone list, but it's already there! Refusing to replace '%s' with '%s'.", 
+             buf, 
+             phone_representation, 
+             obj_representation);
+      mudlog(logstring, NULL, LOG_SYSLOG, TRUE);
+      DELETE_ARRAY_IF_EXTANT(phone_representation);
+      DELETE_ARRAY_IF_EXTANT(obj_representation);
+      return;
     }
-  if (!found) {
-    k = new phone_data;
-    k->number = atoi(buf);
-    k->phone = obj;
-    if (phone_list)
-      k->next = phone_list;
-    phone_list = k;
-  }  
+    
+  // It wasn't, so we can add it freely.
+  k = new phone_data;
+  k->number = atoi(buf);
+  k->phone = obj;
+  if (phone_list)
+    k->next = phone_list;
+  phone_list = k;
 }
 
 ACMD(do_phone)
@@ -1337,6 +1348,8 @@ ACMD(do_phone)
     send_to_char("But you don't have a phone.\r\n", ch);
     return;
   }
+  
+  // If the phone is already on, this finds its phone_data record.
   for (phone = phone_list; phone; phone = phone->next)
     if (phone->phone == obj)
       break;

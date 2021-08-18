@@ -1138,7 +1138,9 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     }
   }
   
-  if (!defender_died && !IS_NPC(att->ch) && IS_NPC(def->ch)) {
+  if (defender_died) {
+    def->ch = NULL;
+  } else if (!IS_NPC(att->ch) && IS_NPC(def->ch)) {
     GET_LASTHIT(def->ch) = GET_IDNUM(att->ch);
   }
   
