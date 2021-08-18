@@ -926,6 +926,8 @@ void hcontrol_list_houses(struct char_data *ch)
       {
         int house_rnum = real_room(house->vnum);
         int total = 0;
+        
+        // Count the crap in it, if it exists.
         if (house_rnum > -1) {
           for (struct obj_data *obj = world[house_rnum].contents; obj; obj = obj->next_content)
             total += count_objects(obj);
@@ -937,11 +939,21 @@ void hcontrol_list_houses(struct char_data *ch)
         } else
           total = -1;
           
+        // Get the number of objects in it.
         own_name = get_player_name(house->owner);
         if (!own_name)
           own_name = str_dup("<UNDEF>");
-        snprintf(buf, sizeof(buf), "%7ld %7ld    0     %-14s  %d\r\n",
-                house->vnum, world[house->atrium].number, CAP(own_name), total);
+          
+        // Get the number of guests in it.
+        int guest_num = 0;
+        for (int j = 0; j < MAX_GUESTS; j++) {
+          if (house->guests[j] != 0)
+            guest_num++;
+        }
+        
+        // Output the line.
+        snprintf(buf, sizeof(buf), "%7ld %7ld    %2d    %-14s  %d\r\n",
+                house->vnum, world[house->atrium].number, guest_num, CAP(own_name), total);
         send_to_char(buf, ch);
         DELETE_ARRAY_IF_EXTANT(own_name);
       }
@@ -1038,7 +1050,7 @@ ACMD(do_house)
     send_to_char("You must be in your house to set guests.\r\n", ch);
   else if ((i = find_house(GET_ROOM_VNUM(ch->in_room))) == NULL)
     send_to_char("Um.. this house seems to be screwed up.\r\n", ch);
-  else if (GET_IDNUM(ch) != i->owner)
+  else if (GET_IDNUM(ch) != i->owner && !access_level(ch, LVL_PRESIDENT))
     send_to_char("Only the primary owner can set guests.\r\n", ch);
   else if (!*arg)
     House_list_guests(ch, i, FALSE);

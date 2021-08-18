@@ -583,6 +583,7 @@ void update_buildrepair(void)
         spirit->called = TRUE;
         GET_SPIRIT(CH) = spirit;
         GET_NUM_SPIRITS(CH)++;
+        GET_ELEMENTALS_DIRTY_BIT(CH) = TRUE;
         GET_SPARE2(mob) = spirit->id;
       } else if (AFF_FLAGGED(CH, AFF_CIRCLE) && --GET_OBJ_VAL(PROG, 9) < 1) {
         send_to_char("You complete drawing the circle.\r\n", CH);

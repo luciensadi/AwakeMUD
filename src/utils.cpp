@@ -1730,7 +1730,7 @@ void reduce_abilities(struct char_data *vict)
   for (i = 0; i < ADEPT_NUMPOWER; i++)
     if (GET_POWER_TOTAL(vict, i) > GET_MAG(vict) / 100) {
       GET_PP(vict) += ability_cost(i, GET_POWER_TOTAL(vict, i));
-      GET_POWER_TOTAL(vict, i)--;
+      SET_POWER_TOTAL(vict, i, GET_POWER_TOTAL(vict, i) - 1);
       send_to_char(vict, "Your loss in magic makes you feel less "
                    "skilled in %s.\r\n", adept_powers[i]);
     }
@@ -1743,7 +1743,7 @@ void reduce_abilities(struct char_data *vict)
   {
     if (GET_POWER_TOTAL(vict, i) > 0) {
       GET_PP(vict) += ability_cost(i, GET_POWER_TOTAL(vict, i));
-      GET_POWER_TOTAL(vict, i)--;
+      SET_POWER_TOTAL(vict, i, GET_POWER_TOTAL(vict, i) - 1);
       send_to_char(vict, "Your loss in magic makes you feel less "
                    "skilled in %s.\r\n", adept_powers[i]);
     }
@@ -3593,6 +3593,26 @@ bool item_should_be_treated_as_ranged_weapon(struct obj_data *obj) {
     return FALSE;
     
   return TRUE;
+}
+
+void turn_hardcore_on_for_character(struct char_data *ch) {
+  if (!ch || IS_NPC(ch))
+    return;
+    
+  PRF_FLAGS(ch).SetBit(PRF_HARDCORE);
+  PLR_FLAGS(ch).SetBit(PLR_NODELETE);
+  snprintf(buf, sizeof(buf), "UPDATE pfiles SET Hardcore=1, NoDelete=1 WHERE idnum=%ld;", GET_IDNUM(ch));
+  mysql_wrapper(mysql, buf);
+}
+
+void turn_hardcore_off_for_character(struct char_data *ch) {
+  if (!ch || IS_NPC(ch))
+    return;
+    
+  PRF_FLAGS(ch).RemoveBit(PRF_HARDCORE);
+  PLR_FLAGS(ch).RemoveBit(PLR_NODELETE);
+  snprintf(buf, sizeof(buf), "UPDATE pfiles SET Hardcore=0, NoDelete=0 WHERE idnum=%ld;", GET_IDNUM(ch));
+  mysql_wrapper(mysql, buf);
 }
 
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.

@@ -479,7 +479,7 @@ void string_add(struct descriptor_data *d, char *str)
 ACMD(do_spellset)
 {
   struct char_data *vict;
-  char name[100], help[MAX_STRING_LENGTH];
+  char name[MAX_INPUT_LENGTH], help[MAX_STRING_LENGTH];
   int spelltoset, force, i, qend;
 
   argument = one_argument(argument, name);
@@ -639,6 +639,7 @@ ACMD(do_spellset)
       act(buf, TRUE, ch, NULL, vict, TO_VICT);
       snprintf(buf, sizeof(buf), "%s set %s's '%s' spell to Force %d (was %d).", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), spells[spelltoset].name, force, old_force);
       mudlog(buf, ch, LOG_WIZLOG, TRUE);
+      GET_SPELLS_DIRTY_BIT(ch) = TRUE;
       return;
     }
   }
@@ -668,6 +669,7 @@ ACMD(do_spellset)
   spell->force = force;
   spell->next = GET_SPELLS(vict);
   GET_SPELLS(vict) = spell;
+  GET_SPELLS_DIRTY_BIT(ch) = TRUE;
   
   send_to_char("OK.\r\n", ch);
   snprintf(buf, sizeof(buf), "$n has given you the '%s' spell at Force %d.", spells[spelltoset].name, force);
@@ -871,7 +873,7 @@ ACMD(do_abilityset)
   send_to_char(ch, "You change %s's %s from %d to %d.\r\n", GET_NAME(vict), adept_powers[ability], GET_POWER_TOTAL(vict, ability), value);
   send_to_char(vict, "Your abilities in %s has been altered by the game's administration (%d to %d).\r\n", 
                adept_powers[ability], GET_POWER_TOTAL(vict, ability), value);
-  GET_POWER_TOTAL(vict, ability) = value;
+  SET_POWER_TOTAL(vict, ability, value);
 }
 
 

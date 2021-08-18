@@ -94,6 +94,8 @@ extern void alarm_handler(int signal);
 extern bool can_edit_zone(struct char_data *ch, int zone);
 extern const char *render_door_type_string(struct room_direction_data *door);
 extern void save_shop_orders();
+extern void turn_hardcore_on_for_character(struct char_data *ch);
+extern void turn_hardcore_off_for_character(struct char_data *ch);
 
 extern void DBFinalize();
 
@@ -4172,11 +4174,13 @@ ACMD(do_set)
                { "socializationbonus", LVL_ADMIN, PC,     NUMBER },
                { "race", LVL_PRESIDENT, PC, NUMBER },
                { "rolls", LVL_PRESIDENT, PC, BINARY },
-               { "multiplier", LVL_PRESIDENT, PC, NUMBER },
+               { "multiplier", LVL_PRESIDENT, PC, NUMBER }, //75
                { "shotsfired", LVL_PRESIDENT, PC, NUMBER },
                { "shotstriggered", LVL_PRESIDENT, PC, NUMBER },
                { "powerpoints", LVL_PRESIDENT, PC, NUMBER },
                { "cyberdoc", LVL_CONSPIRATOR, PC, BINARY },
+               { "hardcore", LVL_PRESIDENT, PC, BINARY }, //80
+               { "esshole",  LVL_ADMIN, BOTH,   NUMBER },
                { "\n", 0, BOTH, MISC }
              };
 
@@ -4769,6 +4773,22 @@ ACMD(do_set)
   case 79: /* cyberdoc permission */
     SET_OR_REMOVE(PLR_FLAGS(vict), PLR_CYBERDOC);
     snprintf(buf, sizeof(buf),"%s turned %s's cyberdoc flag %s.", GET_CHAR_NAME(ch), GET_NAME(vict), PLR_FLAGGED(vict, PLR_CYBERDOC) ? "ON" : "OFF");
+    mudlog(buf, ch, LOG_WIZLOG, TRUE );
+    break;
+  case 80: /* hardcore */
+    if (PRF_FLAGS(vict).IsSet(PRF_HARDCORE)) {
+      turn_hardcore_off_for_character(vict);
+    } else {
+      turn_hardcore_on_for_character(vict);
+    }
+    
+    snprintf(buf, sizeof(buf),"%s turned %s's hardcore and nodelete flags %s.", GET_CHAR_NAME(ch), GET_NAME(vict), PRF_FLAGGED(vict, PRF_HARDCORE) ? "ON" : "OFF");
+    mudlog(buf, ch, LOG_WIZLOG, TRUE );
+    break;
+  case 81: /* esshole */
+    RANGE(0, 600);
+    snprintf(buf, sizeof(buf),"%s changed %s's esshole from %d to %d.", GET_CHAR_NAME(ch), GET_NAME(vict), GET_ESSHOLE(vict), value);
+    GET_ESSHOLE(vict) = value;
     mudlog(buf, ch, LOG_WIZLOG, TRUE );
     break;
   default:

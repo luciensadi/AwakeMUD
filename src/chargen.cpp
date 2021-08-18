@@ -220,7 +220,7 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
   // Grant forcepoints for bonding purposes.
   GET_FORCE_POINTS(CH) = archetypes[i]->forcepoints;
   
-  // Set spells, if any. TODO.
+  // Set spells, if any.
   for (int spell_idx = 0; spell_idx < NUM_ARCHETYPE_SPELLS; spell_idx++)
     if (archetypes[i]->spells[spell_idx][0]) {
       struct spell_data *spell = new spell_data;
@@ -230,15 +230,16 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
       spell->force = archetypes[i]->spells[spell_idx][2];
       spell->next = GET_SPELLS(CH);
       GET_SPELLS(CH) = spell;
+      GET_SPELLS_DIRTY_BIT(CH) = TRUE;
     } else {
       break;
     }
   
   // Assign adept abilities.
   for (int power = 0; power < NUM_ARCHETYPE_ABILITIES; power++)
-    if (archetypes[i]->powers[power][0])
-      GET_POWER_TOTAL(CH, archetypes[i]->powers[power][0]) = archetypes[i]->powers[power][1];
-    else
+    if (archetypes[i]->powers[power][0]) {
+      SET_POWER_TOTAL(CH, archetypes[i]->powers[power][0], archetypes[i]->powers[power][1]);
+    } else
       break;
   
   // Equip weapon.
