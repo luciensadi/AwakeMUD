@@ -1154,7 +1154,8 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     int recoil_successes = success_test(GET_BOD(att->ch) + GET_BODY(att->ch), GET_WEAPON_POWER(att->weapon) / 2 + modify_target(att->ch) + att->ranged->burst_count);
     int staged_dam = stage(-recoil_successes, LIGHT);
     snprintf(rbuf, sizeof(rbuf), "Heavy Recoil: %d successes, L->%s wound.", recoil_successes, staged_dam == LIGHT ? "L" : "no");
-    SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
+    // SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
+    act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );
     
     // If the attacker dies from recoil, bail out.
     if (damage(att->ch, att->ch, convert_damage(staged_dam), TYPE_HIT, FALSE))
