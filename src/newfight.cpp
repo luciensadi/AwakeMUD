@@ -759,7 +759,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
       def->ranged->successes = MAX(success_test(def->ranged->dice, def->ranged->tn), 0);
       att->ranged->successes -= def->ranged->successes;
       
-      snprintf(buf3, sizeof(buf3), "Dodge: Dice %d, TN %d, Successes %d.  This means attacker's net successes = %d.", 
+      snprintf(rbuf, sizeof(rbuf), "Dodge: Dice %d, TN %d, Successes %d.  This means attacker's net successes = %d.", 
                def->ranged->dice, 
                def->ranged->tn,
                def->ranged->successes, 
