@@ -36,7 +36,7 @@ struct char_data *find_spirit_by_id(int spiritid, long playerid)
   return NULL;
 }
 
-void adept_release_spell(struct char_data *ch)
+void adept_release_spell(struct char_data *ch, bool end_spell)
 {
   struct sustain_data *spell = GET_SUSTAINED(ch);
   for (; spell; spell = spell->next)
@@ -54,8 +54,16 @@ void adept_release_spell(struct char_data *ch)
   if (spell->spell == SPELL_INCATTR || spell->spell == SPELL_INCCYATTR ||
       spell->spell == SPELL_DECATTR || spell->spell == SPELL_DECCYATTR)
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (%s)", attributes[spell->subtype]);
-  send_to_char(ch, "You stop sustaining %s.\r\n", buf);
-  send_to_char(spell->other, "You suddenly feel the burden of your %s spell fall back on to you.\r\n", buf);
+  
+  
+  if (end_spell) {
+    send_to_char(ch, "You deliberately misalign your powers and disrupt %s.\r\n", buf);
+    send_to_char(spell->other, "You briefly feel the burden of your %s spell fall back on to you.\r\n", buf);
+    end_sustained_spell(spell->other, spell);
+  } else {
+    send_to_char(ch, "You stop sustaining %s.\r\n", buf);
+    send_to_char(spell->other, "You suddenly feel the burden of your %s spell fall back on to you.\r\n", buf);
+  }
 }
 
 void end_sustained_spell(struct char_data *ch, struct sustain_data *sust)
@@ -67,7 +75,7 @@ void end_sustained_spell(struct char_data *ch, struct sustain_data *sust)
       {
         if (vsust->spirit) {
           if (GET_TRADITION(vsust->spirit) == TRAD_ADEPT)
-            adept_release_spell(vsust->spirit);
+            adept_release_spell(vsust->spirit, FALSE);
           else {  
             GET_SUSTAINED_FOCI(sust->other)--;
             GET_SUSTAINED_NUM(vsust->spirit)--;
@@ -4110,7 +4118,7 @@ void deactivate_power(struct char_data *ch, int power)
       break;
     case ADEPT_LIVINGFOCUS:
       if (GET_SUSTAINED_NUM(ch))
-        adept_release_spell(ch);
+        adept_release_spell(ch, FALSE);
       break;
   }
 }
@@ -4865,8 +4873,14 @@ ACMD(do_focus)
       send_to_char("You aren't sustaining any spells.\r\n", ch);
       return;
     }
-    adept_release_spell(ch);
-  } else send_to_char("You can only release sustained spells.\r\n", ch);
+    adept_release_spell(ch, FALSE);
+  } else if (!str_cmp(argument, "disrupt")) {
+    if (!GET_SUSTAINED_NUM(ch)) {
+      send_to_char("You aren't sustaining any spells.\r\n", ch);
+      return;
+    }
+    adept_release_spell(ch, TRUE);
+  } else send_to_char("Syntax: FOCUS RELEASE (to return spell to caster) or FOCUS DISRUPT (to end spell).\r\n", ch);
 }
 
 ACMD(do_metamagic)
