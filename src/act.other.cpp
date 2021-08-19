@@ -2528,18 +2528,20 @@ void cedit_parse(struct descriptor_data *d, char *arg)
       d->edit_mode = CEDIT_LEAVE;
       break;
     case '7':
-      if (!PLR_FLAGGED(CH, PLR_NEWBIE))
+      /* if (!PLR_FLAGGED(CH, PLR_NEWBIE))
         cedit_disp_menu(d, 0);
-      else {
+      else */
+      {
         CLS(CH);
         send_to_char(CH, "1) Tiny\r\n2) Small\r\n3) Average\r\n4) Large\r\n5) Huge\r\nEnter desired height range: ");
         d->edit_mode = CEDIT_HEIGHT;
       }
       break;
     case '8':
-      if (!PLR_FLAGGED(CH, PLR_NEWBIE))
+      /* if (!PLR_FLAGGED(CH, PLR_NEWBIE))
         cedit_disp_menu(d, 0);
-      else {
+      else */
+      {
         CLS(CH);
         send_to_char(CH, "1) Tiny\r\n2) Small\r\n3) Average\r\n4) Large\r\n5) Huge\r\nEnter desired weight range: ");
         d->edit_mode = CEDIT_WEIGHT;
