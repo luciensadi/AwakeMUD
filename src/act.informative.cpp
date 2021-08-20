@@ -256,8 +256,11 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
       } else if (GET_OBJ_TYPE(object) == ITEM_GUN_AMMO) {
         snprintf(buf, sizeof(buf), "^gA metal box of %s has been left here.^n", get_ammo_representation(GET_AMMOBOX_WEAPON(object), GET_AMMOBOX_TYPE(object), 0));
       } else {
-        if (GET_OBJ_TYPE(object) == ITEM_WORKSHOP && GET_WORKSHOP_GRADE(object) == TYPE_WORKSHOP && GET_WORKSHOP_IS_SETUP(object) && !GET_WORKSHOP_UNPACK_TICKS(object)) {
-          strlcat(buf, "^n(Deployed) ^g", sizeof(buf));
+        if (GET_OBJ_TYPE(object) == ITEM_WORKSHOP && GET_WORKSHOP_GRADE(object) == TYPE_WORKSHOP) {
+          if (GET_WORKSHOP_IS_SETUP(object) && !GET_WORKSHOP_UNPACK_TICKS(object))
+            strlcat(buf, "^n(Deployed) ^g", sizeof(buf));
+          else if (GET_WORKSHOP_UNPACK_TICKS(object))
+            strlcat(buf, "^n(Half-Packed) ^g", sizeof(buf));
         }
         strlcat(buf, object->text.room_desc, sizeof(buf));
       }

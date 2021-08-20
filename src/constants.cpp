@@ -580,13 +580,13 @@ struct preference_bit_struct preference_bits_v2[] = {
   { "Helplog"              , TRUE , TRUE  },
   { "Purgelog"             , TRUE , TRUE  },
   { "No Autokill"          , FALSE, TRUE  },
-  { "Voice Names"          , FALSE, TRUE  },
+  { "Voice Names"          , TRUE , TRUE  },
   { "FuckupLog"            , TRUE , TRUE  },
   { "EconLog"              , TRUE , TRUE  },
   { "Brief"                , TRUE , TRUE  },
   { "Highlights"           , TRUE , TRUE  },
   { "Pseudolanguage"       , TRUE , TRUE  },
-  { "No Idle Nuyen Message", FALSE, TRUE  },
+  { "No Idle Nuyen Line"   , FALSE, TRUE  },
   { "Cyberdocs Allowed"    , FALSE, TRUE  },
   { "\n"                   , 0    , 0     }
 };
