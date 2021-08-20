@@ -939,6 +939,14 @@ void list_one_char(struct char_data * i, struct char_data * ch)
                      GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Use the ^YTRAIN^y command to begin." : "");
             already_printed = TRUE;
           }
+          else if (!PLR_FLAGGED(ch, PLR_PAID_FOR_CLOSECOMBAT)) {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s able to help you train in martial arts.%s^n\r\n", 
+                     HSSH(i), 
+                     already_printed ? " also" : "",
+                     HSSH_SHOULD_PLURAL(i) ? "looks" : "look",
+                     GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Use the ^YTRAIN^y command to begin." : "");
+            already_printed = TRUE;
+          }
         }
         if (MOB_HAS_SPEC(GET_MOB_RNUM(i), spell_trainer)) {
           // Mundanes and adepts can't see spell trainers' abilities.
