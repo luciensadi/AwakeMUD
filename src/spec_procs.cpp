@@ -1278,7 +1278,28 @@ SPECIAL(adept_trainer)
   }
 
   if (GET_TRADITION(ch) != TRAD_ADEPT) {
-    snprintf(arg, sizeof(arg), "%s You do not have the talent.", GET_CHAR_NAME(ch));
+    if (PLR_FLAGGED(ch, PLR_PAID_FOR_CLOSECOMBAT)) {
+      snprintf(arg, sizeof(arg), "%s You already know all I can teach you.", GET_CHAR_NAME(ch));
+    }
+    
+    else {
+      if (!*argument) {
+        snprintf(arg, sizeof(arg), "%s The only thing I can teach you is the art of Close Combat.", GET_CHAR_NAME(ch));
+      } else {
+        // at this point we just assume they typed 'train art' or 'train close' or anything else.
+        if (GET_KARMA(ch) >= KARMA_COST_FOR_CLOSECOMBAT) {
+          send_to_char("You drill with your teacher on closing the distance and entering your opponent's range, and you come away feeling like you're better-equipped to fight the hulking giants of the world.\r\n", ch);
+          send_to_char("(OOC: You've unlocked the ^WCLOSECOMBAT^n command!)\r\n", ch);
+          snprintf(arg, sizeof(arg), "%s Good job. You've now learned everything you can from me.", GET_CHAR_NAME(ch));
+          
+          GET_KARMA(ch) -= KARMA_COST_FOR_CLOSECOMBAT;
+          PLR_FLAGS(ch).SetBit(PLR_PAID_FOR_CLOSECOMBAT);
+        } else {
+          send_to_char(ch, "You need %.2f karma to learn close combat.\r\n", KARMA_COST_FOR_CLOSECOMBAT / 100);
+          return TRUE;
+        }
+      }
+    }
     do_say(trainer, arg, 0, SCMD_SAYTO);
     return TRUE;
   }

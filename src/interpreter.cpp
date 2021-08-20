@@ -127,6 +127,7 @@ ACMD_DECLARE(do_build);
 ACMD_DECLARE(do_cast);
 ACMD_DECLARE(do_chipload);
 ACMD_DECLARE(do_cleanse);
+ACMD_DECLARE(do_closecombat);
 ACMD_DECLARE(do_commands);
 ACMD_DECLARE(do_compact);
 ACMD_DECLARE(do_conjure);
@@ -491,6 +492,7 @@ struct command_info cmd_info[] =
     { "cleanse"    , POS_LYING   , do_cleanse  , 0, 0 },
     { "clear"      , POS_DEAD    , do_gen_ps   , 0, SCMD_CLEAR },
     { "close"      , POS_SITTING , do_gen_door , 0, SCMD_CLOSE },
+    { "closecombat", POS_LYING   , do_closecombat, 0, 0 },
     { "cls"        , POS_DEAD    , do_gen_ps   , 0, SCMD_CLEAR },
     { "consider"   , POS_LYING   , do_consider , 0, 0 },
     { "configure"  , POS_DEAD    , do_toggle   , 0, 0 },

@@ -904,6 +904,18 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
       net_reach = 0;
     }
     
+    if (PRF_FLAGGED(att->ch, PRF_CLOSECOMBAT) || PRF_FLAGGED(def->ch, PRF_CLOSECOMBAT)) {
+      // CC p99: Ignore reach modifiers, decrease user's power by one.
+      net_reach = 0;
+      
+      if (PRF_FLAGGED(att->ch, PRF_CLOSECOMBAT)) {
+        att->melee->power -= 1;
+        act("Decreased melee power by 1 and negated net reach due to attacker's close combat toggle.", TRUE, att->ch, NULL, NULL, TO_ROLLS);
+      } else {
+        act("Negated net reach due to defender's close combat toggle.", TRUE, att->ch, NULL, NULL, TO_ROLLS);
+      }
+    }
+    
     // Reach is always used offensively. TODO: Add option to use it defensively instead.
     if (net_reach > 0)
       att->melee->modifiers[COMBAT_MOD_REACH] -= net_reach;

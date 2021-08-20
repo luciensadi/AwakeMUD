@@ -482,6 +482,7 @@ const char *player_bits[] =
     "TELLS_MUTED",
     "NEWBIE_MUTED",
     "IS_CYBERDOC",
+    "PAID_FOR_CLOSECOMBAT",
     "\n"
   };
 
@@ -650,6 +651,7 @@ const char *preference_bits[] =
     "!PSEUDOLANGUAGE",
     "!IDLE_NUYEN_REWARD_MESSAGE",
     "CYBERDOC_PERMITTED",
+    "TRY_FOR_CLOSECOMBAT",
     "\n"
   };
 

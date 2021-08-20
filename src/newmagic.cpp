@@ -38,18 +38,30 @@ struct char_data *find_spirit_by_id(int spiritid, long playerid)
 
 void adept_release_spell(struct char_data *ch, bool end_spell)
 {
-  struct sustain_data *spell = GET_SUSTAINED(ch);
+  struct sustain_data *spell = GET_SUSTAINED(ch), *ospell = NULL;
   for (; spell; spell = spell->next)
     if (spell->spirit == ch)
       break;
+  
+  if (!spell) {
+    mudlog("SYSERR: Could not find spell in adept_release_spell!", ch, LOG_SYSLOG, TRUE);
+    return;
+  }
+  
   GET_SUSTAINED_NUM(ch)--;
   GET_SUSTAINED_FOCI(spell->other)--;
   spell->spirit = NULL;
-  for (struct sustain_data *ospell = GET_SUSTAINED(spell->other); ospell; ospell = ospell->next)
+  for (ospell = GET_SUSTAINED(spell->other); ospell; ospell = ospell->next)
     if (ospell->idnum == spell->idnum && ospell->other == ch) {
       ospell->spirit = NULL;
       break;
     }
+    
+  if (!ospell) {
+    mudlog("SYSERR: Could not match spell with ospell in adept_release_spell!", ch, LOG_SYSLOG, TRUE);
+    return;
+  }
+  
   strcpy(buf, spells[spell->spell].name);
   if (spell->spell == SPELL_INCATTR || spell->spell == SPELL_INCCYATTR ||
       spell->spell == SPELL_DECATTR || spell->spell == SPELL_DECCYATTR)
@@ -58,8 +70,8 @@ void adept_release_spell(struct char_data *ch, bool end_spell)
   
   if (end_spell) {
     send_to_char(ch, "You deliberately misalign your powers and disrupt %s.\r\n", buf);
-    send_to_char(spell->other, "You briefly feel the burden of your %s spell fall back on to you.\r\n", buf);
-    end_sustained_spell(spell->other, spell);
+    send_to_char(spell->other, "You briefly feel the burden of your tattered %s spell fall back on to you before it fizzles away.\r\n", buf);
+    end_sustained_spell(spell->other, ospell);
   } else {
     send_to_char(ch, "You stop sustaining %s.\r\n", buf);
     send_to_char(spell->other, "You suddenly feel the burden of your %s spell fall back on to you.\r\n", buf);
@@ -1329,7 +1341,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       
       if ((success = success_test(skill, GET_REA(vict) + target_modifiers)) > 0) {
         create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
-        send_to_char("The world slows down around you.\r\n", ch);
+        send_to_char("The world slows down around you.\r\n", vict);
         act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
       } else
         send_to_char(FAILED_CAST, ch);

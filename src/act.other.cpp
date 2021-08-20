@@ -4600,3 +4600,17 @@ ACMD(do_stop) {
   
   send_to_char("You're not doing anything that the stop command recognizes. Feel free to use the ^WIDEA^n command to suggest another stoppable thing!\r\n", ch);
 }
+
+ACMD(do_closecombat) {
+  if (IS_NPC(ch) || PLR_FLAGGED(ch, PLR_PAID_FOR_CLOSECOMBAT)) {
+    if (PRF_FLAGGED(ch, PRF_CLOSECOMBAT)) {
+      send_to_char("You decide you won't try to get inside your opponents' reach anymore.\r\n", ch);
+      PRF_FLAGS(ch).RemoveBit(PRF_CLOSECOMBAT);
+    } else {
+      send_to_char("You decide to try to get inside your opponents' reach in fights.\r\n", ch);
+      PRF_FLAGS(ch).SetBit(PRF_CLOSECOMBAT);
+    }
+  } else {
+    send_to_char("You haven't trained in close combat yet. Find an adept trainer or other martial artist to begin.\r\n", ch);
+  }
+}

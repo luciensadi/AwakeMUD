@@ -268,45 +268,46 @@ enum {
 #define NUM_WEARS      39
 
 /* player flags: used by char_data.char_specials.act */
-#define PLR_KILLER              0  /* Player is a player-killer              */
-#define PLR_BLACKLIST           1  /* Player is banned from runs             */
-#define PLR_FROZEN              2  /* Player is frozen                       */
-#define PLR_DONTSET             3  /* Don't EVER set (ISNPC bit)             */
-#define PLR_NEWBIE              4  /* Player is a newbie still               */
-#define PLR_JUST_DIED           5  /* Player just died                       */
-#define PLR_VISA                6  /* Player needs to be crash-saved         */
-#define PLR_SITEOK              8  /* Player has been site-cleared           */
-#define PLR_NOSHOUT             9  /* Player not allowed to shout/goss       */
-#define PLR_NOTITLE             10 /* Player not allowed to set title        */
-#define PLR_DELETED             11 /* Player deleted - space reusable        */
-#define PLR_NODELETE            12 /* Player shouldn't be deleted            */
-#define PLR_NOSTAT              14 /* Player cannot be statted, etc          */
-#define PLR_LOADROOM            15 /* Player uses nonstandard loadroom       */
-#define PLR_INVSTART            16 /* Player should enter game wizinvis      */
-#define PLR_OLC                 19 /* Player has access to olc commands      */
-#define PLR_MATRIX              20 /* Player is in the Matrix                */
-#define PLR_PERCEIVE            21 /* player is astrally perceiving          */
-#define PLR_PROJECT             22 /* player is astrally projecting          */
-#define PLR_SWITCHED            23 /* player is switched to a mob            */
-#define PLR_WRITING             24 /* Player writing (board/mail/olc)        */
-#define PLR_MAILING             25 /* Player is writing mail                 */
-#define PLR_EDITING             26 /* Player is zone editing                 */
-#define PLR_SPELL_CREATE        27 /* Player is creating a spell             */
-#define PLR_CUSTOMIZE           28 /* Player is customizing persona          */
-#define PLR_NOSNOOP             29 /* Player is not snoopable                */
-#define PLR_WANTED              30 /* Player wanted by the law      */
-#define PLR_NOOOC               31 /* Player is muted from the OOC channel   */
-#define PLR_NOT_YET_AUTHED      32 /* Player needs Auth */
-#define PLR_EDCON               33
-#define PLR_REMOTE              34
-#define PLR_INITIATE            35
-#define PLR_DRIVEBY             36
-#define PLR_RPE                 37
-#define PLR_NO_IDLE_OUT         38 /* Player will not idle out (morts- for test chars) */
-#define PLR_TELLS_MUTED         39 /* Remove their ability to send tells. */
-#define PLR_NEWBIE_MUTED        40 /* Remove their ability to talk on the newbie channel. */
-#define PLR_CYBERDOC            41 /* Player may act as a cyberdoc. */
-#define PLR_MAX                 42
+#define PLR_KILLER               0  /* Player is a player-killer              */
+#define PLR_BLACKLIST            1  /* Player is banned from runs             */
+#define PLR_FROZEN               2  /* Player is frozen                       */
+#define PLR_DONTSET              3  /* Don't EVER set (ISNPC bit)             */
+#define PLR_NEWBIE               4  /* Player is a newbie still               */
+#define PLR_JUST_DIED            5  /* Player just died                       */
+#define PLR_VISA                 6  /* Player needs to be crash-saved         */
+#define PLR_SITEOK               8  /* Player has been site-cleared           */
+#define PLR_NOSHOUT              9  /* Player not allowed to shout/goss       */
+#define PLR_NOTITLE              10 /* Player not allowed to set title        */
+#define PLR_DELETED              11 /* Player deleted - space reusable        */
+#define PLR_NODELETE             12 /* Player shouldn't be deleted            */
+#define PLR_NOSTAT               14 /* Player cannot be statted, etc          */
+#define PLR_LOADROOM             15 /* Player uses nonstandard loadroom       */
+#define PLR_INVSTART             16 /* Player should enter game wizinvis      */
+#define PLR_OLC                  19 /* Player has access to olc commands      */
+#define PLR_MATRIX               20 /* Player is in the Matrix                */
+#define PLR_PERCEIVE             21 /* player is astrally perceiving          */
+#define PLR_PROJECT              22 /* player is astrally projecting          */
+#define PLR_SWITCHED             23 /* player is switched to a mob            */
+#define PLR_WRITING              24 /* Player writing (board/mail/olc)        */
+#define PLR_MAILING              25 /* Player is writing mail                 */
+#define PLR_EDITING              26 /* Player is zone editing                 */
+#define PLR_SPELL_CREATE         27 /* Player is creating a spell             */
+#define PLR_CUSTOMIZE            28 /* Player is customizing persona          */
+#define PLR_NOSNOOP              29 /* Player is not snoopable                */
+#define PLR_WANTED               30 /* Player wanted by the law      */
+#define PLR_NOOOC                31 /* Player is muted from the OOC channel   */
+#define PLR_NOT_YET_AUTHED       32 /* Player needs Auth */
+#define PLR_EDCON                33
+#define PLR_REMOTE               34
+#define PLR_INITIATE             35
+#define PLR_DRIVEBY              36
+#define PLR_RPE                  37
+#define PLR_NO_IDLE_OUT          38 /* Player will not idle out (morts- for test chars) */
+#define PLR_TELLS_MUTED          39 /* Remove their ability to send tells. */
+#define PLR_NEWBIE_MUTED         40 /* Remove their ability to talk on the newbie channel. */
+#define PLR_CYBERDOC             41 /* Player may act as a cyberdoc. */
+#define PLR_PAID_FOR_CLOSECOMBAT 42
+#define PLR_MAX                  43
 
 
 
@@ -407,7 +408,8 @@ enum {
 #define PRF_NOPSEUDOLANGUAGE             54
 #define PRF_NO_IDLE_NUYEN_REWARD_MESSAGE 55
 #define PRF_TOUCH_ME_DADDY               56 /* Allows player cyberdocs to operate on you. Don't @ me. */
-#define PRF_MAX                          57
+#define PRF_CLOSECOMBAT                  57
+#define PRF_MAX                          58
 
 /* log watch */
 
