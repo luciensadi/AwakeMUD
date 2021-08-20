@@ -1210,34 +1210,22 @@ bool does_weapon_have_bayonet(struct obj_data *weapon) {
 
 void engage_close_combat_if_appropriate(struct combat_data *att, struct combat_data *def, int net_reach) {
   if (IS_NPC(att->ch) && net_reach != 0 && AFF_FLAGGED(att->ch, AFF_SMART_ENOUGH_TO_TOGGLE_CLOSECOMBAT)) {
-    bool has_enough_skill_to_do_this = FALSE;
-    if (att->weapon
-        && (GET_SKILL(att->ch, GET_WEAPON_SKILL(att->weapon)) >= NPC_SKILL_THRESHOLD_FOR_FREE_SWITCHING_OF_CLOSECOMBAT 
-            || GET_SKILL(att->ch, SKILL_ARMED_COMBAT) >= NPC_SKILL_THRESHOLD_FOR_FREE_SWITCHING_OF_CLOSECOMBAT))
-    {
-      has_enough_skill_to_do_this = TRUE;
-    } else if (GET_SKILL(att->ch, SKILL_UNARMED_COMBAT) >= NPC_SKILL_THRESHOLD_FOR_FREE_SWITCHING_OF_CLOSECOMBAT) {
-      has_enough_skill_to_do_this = TRUE;
+    // If the net reach does not favor the NPC, switch on close combat.
+    if (net_reach < 0 && !AFF_FLAGGED(att->ch, AFF_CLOSECOMBAT)) {
+      AFF_FLAGS(att->ch).SetBit(AFF_CLOSECOMBAT);
+      if (att->weapon)
+        act("$n shifts $s grip on $p, trying to get inside $N's guard!", TRUE, att->ch, att->weapon, def->ch, TO_ROOM);
+      else
+        act("$n ducks in close, trying to get inside $N's guard!", TRUE, att->ch, NULL, def->ch, TO_ROOM);
     }
     
-    if (has_enough_skill_to_do_this) {
-      // If the net reach does not favor the NPC, switch on close combat.
-      if (net_reach < 0 && !AFF_FLAGGED(att->ch, AFF_CLOSECOMBAT)) {
-        AFF_FLAGS(att->ch).SetBit(AFF_CLOSECOMBAT);
-        if (att->weapon)
-          act("$n shifts $s grip on $p, trying to get inside $N's guard!", TRUE, att->ch, att->weapon, def->ch, TO_ROOM);
-        else
-          act("$n ducks in close, trying to get inside $N's guard!", TRUE, att->ch, NULL, def->ch, TO_ROOM);
-      }
-      
-      // Otherwise, switch it off.
-      else if (net_reach > 0 && AFF_FLAGGED(att->ch, AFF_CLOSECOMBAT)) {
-        AFF_FLAGS(att->ch).RemoveBit(AFF_CLOSECOMBAT);
-        if (att->weapon)
-          act("$n shifts $s grip on $p, trying to keep $N outside $s guard!", TRUE, att->ch, att->weapon, def->ch, TO_ROOM);
-        else
-          act("$n backs up, trying to keep $N outside $s guard!", TRUE, att->ch, NULL, def->ch, TO_ROOM);
-      }
-    }      
+    // Otherwise, switch it off.
+    else if (net_reach > 0 && AFF_FLAGGED(att->ch, AFF_CLOSECOMBAT)) {
+      AFF_FLAGS(att->ch).RemoveBit(AFF_CLOSECOMBAT);
+      if (att->weapon)
+        act("$n shifts $s grip on $p, trying to keep $N outside $s guard!", TRUE, att->ch, att->weapon, def->ch, TO_ROOM);
+      else
+        act("$n backs up, trying to keep $N outside $s guard!", TRUE, att->ch, NULL, def->ch, TO_ROOM);
+    } 
   }
 }
