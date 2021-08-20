@@ -902,7 +902,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     
     // Skilled NPCs get to switch to close combat mode at this time (those cheating bastards.)
     engage_close_combat_if_appropriate(att, def, net_reach);
-    engage_close_combat_if_appropriate(def, att, net_reach);    
+    engage_close_combat_if_appropriate(def, att, -net_reach);    
     
     if (!GET_POWER(att->ch, ADEPT_PENETRATINGSTRIKE) && GET_POWER(att->ch, ADEPT_DISTANCE_STRIKE)) {
       // MitS 149: Ignore reach modifiers.
@@ -1213,19 +1213,25 @@ void engage_close_combat_if_appropriate(struct combat_data *att, struct combat_d
     // If the net reach does not favor the NPC, switch on close combat.
     if (net_reach < 0 && !AFF_FLAGGED(att->ch, AFF_CLOSECOMBAT)) {
       AFF_FLAGS(att->ch).SetBit(AFF_CLOSECOMBAT);
-      if (att->weapon)
-        act("$n shifts $s grip on $p, trying to get inside $N's guard!", TRUE, att->ch, att->weapon, def->ch, TO_ROOM);
-      else
-        act("$n ducks in close, trying to get inside $N's guard!", TRUE, att->ch, NULL, def->ch, TO_ROOM);
+      if (att->weapon) {
+        act("$n shifts $s grip on $p, trying to get inside $N's guard!", TRUE, att->ch, att->weapon, def->ch, TO_NOTVICT);
+        act("$n shifts $s grip on $p, trying to get inside your guard!", TRUE, att->ch, att->weapon, def->ch, TO_VICT);
+      } else {
+        act("$n ducks in close, trying to get inside $N's guard!", TRUE, att->ch, NULL, def->ch, TO_NOTVICT);
+        act("$n ducks in close, trying to get inside your guard!", TRUE, att->ch, NULL, def->ch, TO_NOTVICT);
+      }
     }
     
     // Otherwise, switch it off.
     else if (net_reach > 0 && AFF_FLAGGED(att->ch, AFF_CLOSECOMBAT)) {
       AFF_FLAGS(att->ch).RemoveBit(AFF_CLOSECOMBAT);
-      if (att->weapon)
-        act("$n shifts $s grip on $p, trying to keep $N outside $s guard!", TRUE, att->ch, att->weapon, def->ch, TO_ROOM);
-      else
-        act("$n backs up, trying to keep $N outside $s guard!", TRUE, att->ch, NULL, def->ch, TO_ROOM);
+      if (att->weapon) {
+        act("$n shifts $s grip on $p, trying to keep $N outside $s guard!", TRUE, att->ch, att->weapon, def->ch, TO_NOTVICT);
+        act("$n shifts $s grip on $p, trying to keep you outside $s guard!", TRUE, att->ch, att->weapon, def->ch, TO_VICT);
+      } else {
+        act("$n backs up, trying to keep $N outside $s guard!", TRUE, att->ch, NULL, def->ch, TO_NOTVICT);
+        act("$n backs up, trying to keep you outside $s guard!", TRUE, att->ch, NULL, def->ch, TO_VICT);
+      }
     } 
   }
 }
