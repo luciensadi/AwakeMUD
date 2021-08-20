@@ -77,7 +77,7 @@ struct teach_data teachers[] = {
 #ifdef USE_PRIVATE_CE_WORLD
                        { 780, { SKILL_ASSAULT_RIFLES, SKILL_MACHINE_GUNS, SKILL_PISTOLS, SKILL_RIFLES, SKILL_SHOTGUNS,
                          SKILL_SMG, SKILL_ASSAULT_CANNON, SKILL_BR_PISTOL, SKILL_BR_SHOTGUN, SKILL_BR_RIFLE,
-                         SKILL_BR_HEAVYWEAPON, SKILL_BR_SMG, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+                         SKILL_BR_HEAVYWEAPON, SKILL_BR_SMG, SKILL_TASERS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
                          "Ma Deuce puts you through firearm drills that make you piss blood when you're done.\r\n", ADVANCED },
                          
   { 782, { SKILL_CLUBS, SKILL_CYBER_IMPLANTS, SKILL_EDGED_WEAPONS, SKILL_POLE_ARMS, SKILL_UNARMED_COMBAT,
@@ -102,9 +102,9 @@ struct teach_data teachers[] = {
                        { 2701, { SKILL_ATHLETICS, SKILL_STEALTH, SKILL_UNARMED_COMBAT, SKILL_EDGED_WEAPONS,
                          SKILL_WHIPS_FLAILS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
                          "Toh Li gives you the workout of your life, but you come out more learned.", AMATEUR },
-                       { 3722, { SKILL_ATHLETICS, SKILL_RIFLES, SKILL_PISTOLS, SKILL_POLICE_PROCEDURES, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+                       { 3722, { SKILL_ATHLETICS, SKILL_RIFLES, SKILL_PISTOLS, SKILL_POLICE_PROCEDURES, SKILL_TASERS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
                          "After hours of study and physical practice, you feel like you've learned\r\nsomething.\r\n", AMATEUR },
-                       { 4101, { SKILL_SHOTGUNS, SKILL_PISTOLS, SKILL_RIFLES, SKILL_SMG, SKILL_ASSAULT_RIFLES, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+                       { 4101, { SKILL_SHOTGUNS, SKILL_PISTOLS, SKILL_RIFLES, SKILL_SMG, SKILL_ASSAULT_RIFLES, SKILL_TASERS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
                          "After hours of study and target practice, you feel like you've learned\r\nsomething.\r\n", AMATEUR },
                        { 4102, { SKILL_CLUBS, SKILL_EDGED_WEAPONS, SKILL_POLE_ARMS, SKILL_WHIPS_FLAILS,
                          SKILL_PILOT_CAR, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "After hours of study and practice, you feel like you've "
@@ -163,9 +163,9 @@ struct teach_data teachers[] = {
     "Kyle teaches you things you're pretty sure were more effective in the late 1800s.\r\n", NEWBIE },
   */
   
-  { 60540, { SKILL_BR_PISTOL, SKILL_BR_SHOTGUN, SKILL_BR_RIFLE, SKILL_BR_HEAVYWEAPON, SKILL_BR_SMG, // Jean Samuel Pauly
+  { 60540, { SKILL_BR_PISTOL, SKILL_BR_SHOTGUN, SKILL_BR_RIFLE, SKILL_BR_HEAVYWEAPON, SKILL_BR_SMG, // Gary the Gunsmith
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    "Jean walks you through the intricacies of handloading.\r\n", NEWBIE },
+    "Gary walks you through the intricacies of handloading.\r\n", NEWBIE },
   
   { 60506, { SKILL_ASSAULT_RIFLES, SKILL_GUNNERY, SKILL_MACHINE_GUNS, SKILL_PISTOLS, SKILL_RIFLES, SKILL_SHOTGUNS, SKILL_SMG, // Mick
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -239,7 +239,7 @@ struct teach_data teachers[] = {
      "The Master teaches you more than you thought possible.\r\n", ADVANCED },
      
    { 5914, { SKILL_PISTOLS, SKILL_RIFLES, SKILL_SHOTGUNS, SKILL_SMG, SKILL_ASSAULT_RIFLES,
-     SKILL_GUNNERY, SKILL_MACHINE_GUNS, SKILL_BR_RIFLE, SKILL_BR_SMG, SKILL_BR_SHOTGUN, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },  "Lucas runs through some theory with you then lets you "
+     SKILL_GUNNERY, SKILL_MACHINE_GUNS, SKILL_BR_RIFLE, SKILL_BR_SMG, SKILL_BR_SHOTGUN, SKILL_TASERS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },  "Lucas runs through some theory with you then lets you "
      "have a few shots on the range.\r\n", NEWBIE},
      
    { 65119, { SKILL_RUSSIAN, SKILL_GERMAN, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "Olga Chernov brutally crams language forms and syntaxes into your skull.\r\n", AMATEUR },
