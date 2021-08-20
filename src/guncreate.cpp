@@ -24,7 +24,7 @@ void aedit_disp_menu(struct descriptor_data *d)
   CLS(CH);
   send_to_char(CH, "1) Weapon: ^c%s^n\r\n", weapon_type[GET_AMMOBOX_WEAPON(OBJ)]);
   send_to_char(CH, "2) Type: ^c%s^n\r\n", ammo_type[GET_AMMOBOX_TYPE(OBJ)].name);
-  send_to_char(CH, "3) Amount: ^c%d^n\r\n", GET_AMMOBOX_INTENDED_QUANTITY(OBJ));
+  send_to_char(CH, "3) Amount: ^c%d^n  (^c%d^n nuyen)\r\n", GET_AMMOBOX_INTENDED_QUANTITY(OBJ), get_ammo_cost(GET_AMMOBOX_WEAPON(OBJ), GET_AMMOBOX_TYPE(OBJ)) * GET_AMMOBOX_INTENDED_QUANTITY(OBJ));
   send_to_char(CH, "q) Quit\r\nEnter your choice: ");
   d->edit_mode = AEDIT_MENU;
 }
@@ -74,7 +74,13 @@ void aedit_parse(struct descriptor_data *d, const char *arg)
       aedit_disp_weapon_menu(d);
       break;
     case '2':
-      aedit_disp_type_menu(d);
+      if (GET_AMMOBOX_WEAPON(OBJ) == TYPE_TASER) {
+        send_to_char("Only normal taser darts are available.\r\n", CH);
+        GET_AMMOBOX_TYPE(OBJ) = AMMO_NORMAL;
+        aedit_disp_menu(d);
+      } else {
+        aedit_disp_type_menu(d);
+      }
       break;
     case '3':
       send_to_char(CH,"Enter Quantity (In multiples of 10): ");
@@ -105,6 +111,7 @@ void aedit_parse(struct descriptor_data *d, const char *arg)
      send_to_char("Invalid selection.\r\nWeapon Type: ", CH);
    else {
      GET_AMMOBOX_WEAPON(OBJ) = number;
+     GET_AMMOBOX_TYPE(OBJ) = AMMO_NORMAL;
      aedit_disp_menu(d);
    }
    break; 
