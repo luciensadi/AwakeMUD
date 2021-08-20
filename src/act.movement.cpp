@@ -51,6 +51,7 @@ extern int num_elevators;
 extern struct elevator_data *elevator;
 
 ACMD_DECLARE(do_prone);
+ACMD_DECLARE(do_look);
 
 #define GET_DOOR_NAME(ch, door) (EXIT(ch, (door))->keyword ? (*(fname(EXIT(ch, (door))->keyword)) ? fname(EXIT(ch, (door))->keyword) : "door") : "door")
 
@@ -1747,15 +1748,21 @@ ACMD(do_leave)
     return;
   }
   
-  // Leaving an elevator shaft is handled in the button panel's spec proc code. See transport.cpp.
+  struct room_data *in_room = get_ch_in_room(ch);
+  if (!in_room) {
+    send_to_char("Panic strikes you-- you're floating in a void!\r\n", ch);
+    mudlog("SYSERR: Char has no in_room!", ch, LOG_SYSLOG, TRUE);
+    return;
+  }
   
-  if (!ROOM_FLAGGED(get_ch_in_room(ch), ROOM_INDOORS)) {
+  // Leaving an elevator shaft is handled in the button panel's spec proc code. See transport.cpp.
+  if (!ROOM_FLAGGED(in_room, ROOM_INDOORS)) {
     send_to_char("You are outside.. where do you want to go?\r\n", ch);
     return;
   }
   
   // If you're in an apartment, you're able to leave to the atriun no matter what. Prevents lockin.
-  if (ROOM_FLAGGED(ch->in_room, ROOM_HOUSE)) {
+  if (ROOM_FLAGGED(in_room, ROOM_HOUSE)) {
     for (door = 0; door < NUM_OF_DIRS; door++) {
       if (EXIT(ch, door) && EXIT(ch, door)->to_room && ROOM_FLAGGED(EXIT(ch, door)->to_room, ROOM_ATRIUM)) {
         send_to_char(ch, "You make your way out of the residence through the door to %s, leaving it locked behind you.\r\n", thedirs[door]);
@@ -1793,6 +1800,24 @@ ACMD(do_leave)
                GET_CHAR_NAME(ch));
     }
     mudlog(buf, ch, LOG_SYSLOG, TRUE);
+  }
+  
+  // If you're in a PGHQ, you teleport to the first room of the PGHQ's zone.
+  if (in_room->zone >= 0 && zone_table[in_room->zone].is_pghq) {
+    rnum_t entrance_rnum = real_room(zone_table[in_room->zone].number * 100);
+    if (entrance_rnum) {
+      send_to_char("You glance around to get your bearings, then head for the entrance.\r\n\r\n", ch);
+      char_from_room(ch);
+      char_to_room(ch, &world[entrance_rnum]);
+    } else {
+      mudlog("SYSERR: Could not get player to PGHQ entrance, does it not exist?", ch, LOG_SYSLOG, TRUE);
+      send_to_char("The walls feel like they're closing in on you, and you panic! A few minutes of breathless flight later, you find yourself somewhere else...\r\n\r\n", ch);
+      char_from_room(ch);
+      char_to_room(ch, &world[real_room(RM_ENTRANCE_TO_DANTES)]);
+    }
+    strlcpy(buf, "", sizeof(buf));
+    do_look(ch, buf, 0, 0);
+    return;
   }
 
   // Standard leave from indoors to outdoors.

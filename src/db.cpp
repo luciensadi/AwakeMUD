@@ -2258,11 +2258,18 @@ void load_zones(File &fl)
   Z.name = str_dup(buf);
 
   fl.GetLine(buf, 256, FALSE);
-  if (sscanf(buf, " %d %d %d %d %d %d",
+  // Attempt to read the new PGHQ flag from the line.
+  if (sscanf(buf, " %d %d %d %d %d %d %d",
              &Z.top, &Z.lifespan, &Z.reset_mode,
-             &Z.security, &Z.connected, &Z.jurisdiction) < 5) {
-    fprintf(stderr, "FATAL ERROR: Format error in 5-constant line of %s: Expected six numbers like ' # # # # # #'.", fl.Filename());
-    shutdown();
+             &Z.security, &Z.connected, &Z.jurisdiction, &Z.is_pghq) < 6)
+  {
+    // Fallback: Instead, read out the old format. Assume we'll save PGHQ data later.
+    if (sscanf(buf, " %d %d %d %d %d %d",
+               &Z.top, &Z.lifespan, &Z.reset_mode,
+               &Z.security, &Z.connected, &Z.jurisdiction) < 5) {
+      fprintf(stderr, "FATAL ERROR: Format error in 6-constant line of %s: Expected six numbers like ' # # # # # #'.", fl.Filename());
+      shutdown();
+    }
   }
 
   fl.GetLine(buf, 256, FALSE);
