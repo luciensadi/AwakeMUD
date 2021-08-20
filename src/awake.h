@@ -408,8 +408,7 @@ enum {
 #define PRF_NOPSEUDOLANGUAGE             54
 #define PRF_NO_IDLE_NUYEN_REWARD_MESSAGE 55
 #define PRF_TOUCH_ME_DADDY               56 /* Allows player cyberdocs to operate on you. Don't @ me. */
-#define PRF_CLOSECOMBAT                  57
-#define PRF_MAX                          58
+#define PRF_MAX                          57
 
 /* log watch */
 
@@ -501,7 +500,9 @@ enum {
 #define AFF_SPELLDESIGN    47
 #define AFF_SURPRISE    48
 #define AFF_AMMOBUILD    49
-#define AFF_MAX       50
+#define AFF_CLOSECOMBAT  50
+#define AFF_SMART_ENOUGH_TO_TOGGLE_CLOSECOMBAT  51
+#define AFF_MAX       52
 // TODO: If you add another long-state action like building, designing, etc:
 // - Add it to the check_bioware exclusion in limits.cpp
 // - Add it to the IS_WORKING and STOP_WORKING macros in utils.h

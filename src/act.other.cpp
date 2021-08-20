@@ -4603,12 +4603,12 @@ ACMD(do_stop) {
 
 ACMD(do_closecombat) {
   if (IS_NPC(ch) || PLR_FLAGGED(ch, PLR_PAID_FOR_CLOSECOMBAT)) {
-    if (PRF_FLAGGED(ch, PRF_CLOSECOMBAT)) {
+    if (AFF_FLAGGED(ch, AFF_CLOSECOMBAT)) {
       send_to_char("You decide you won't try to get inside your opponents' reach anymore.\r\n", ch);
-      PRF_FLAGS(ch).RemoveBit(PRF_CLOSECOMBAT);
+      AFF_FLAGS(ch).RemoveBit(AFF_CLOSECOMBAT);
     } else {
       send_to_char("You decide to try to get inside your opponents' reach in fights.\r\n", ch);
-      PRF_FLAGS(ch).SetBit(PRF_CLOSECOMBAT);
+      AFF_FLAGS(ch).SetBit(AFF_CLOSECOMBAT);
     }
   } else {
     send_to_char("You haven't trained in close combat yet. Find an adept trainer or other martial artist to begin.\r\n", ch);

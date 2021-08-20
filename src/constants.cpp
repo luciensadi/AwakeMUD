@@ -651,7 +651,6 @@ const char *preference_bits[] =
     "!PSEUDOLANGUAGE",
     "!IDLE_NUYEN_REWARD_MESSAGE",
     "CYBERDOC_PERMITTED",
-    "TRY_FOR_CLOSECOMBAT",
     "\n"
   };
 
@@ -707,7 +706,9 @@ const char *affected_bits[] =
     "Binding",
     "Spell Design",
     "Surprised",
-    "Ammo Building"
+    "Ammo Building",
+    "Engaging in Close Combat",
+    "Tries for Close Combat"
   };
 
 /* CON_x */
