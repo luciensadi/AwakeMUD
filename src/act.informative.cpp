@@ -3943,6 +3943,7 @@ ACMD(do_who)
   int sort = LVL_MAX, num_can_see = 0, level = GET_LEVEL(ch);
   bool mortal = FALSE, hardcore = FALSE, quest = FALSE, pker = FALSE, immort = FALSE, ooc = FALSE, newbie = FALSE;
   int output_header;
+  int num_in_socialization_rooms = 0;
   
   skip_spaces(&argument);
   strlcpy(buf, argument, sizeof(buf));
@@ -4007,6 +4008,9 @@ ACMD(do_who)
       if (GET_INCOG_LEV(tch) > GET_LEVEL(ch))
         continue;
       num_can_see++;
+      
+      if (tch->in_room && !IS_SENATOR(tch) && CAN_SEE(ch, tch) && ROOM_FLAGGED(tch->in_room, ROOM_ENCOURAGE_CONGREGATION))
+        num_in_socialization_rooms++;
       
       if ( output_header ) {
         output_header = 0;
@@ -4131,12 +4135,26 @@ ACMD(do_who)
     }
   }
   
-  if (num_can_see == 0)
+  if (num_can_see == 0) {
     snprintf(buf2, sizeof(buf2), "%s\r\nNo-one at all!\r\n", buf);
-  else if (num_can_see == 1)
-    snprintf(buf2, sizeof(buf2), "%s\r\nOne lonely chummer displayed.\r\n", buf);
-  else
-    snprintf(buf2, sizeof(buf2), "%s\r\n%d chummers displayed.\r\n", buf, num_can_see);
+  } else if (num_can_see == 1) {
+    if (num_in_socialization_rooms > 0) {
+      snprintf(buf2, sizeof(buf2), "%s\r\nOne lonely chummer displayed and listed in ^WWHERE^n.\r\n", buf);
+    } else {
+      snprintf(buf2, sizeof(buf2), "%s\r\nOne lonely chummer displayed.\r\n", buf);
+    }
+  } else {
+    if (num_in_socialization_rooms > 0) {
+      snprintf(buf2, sizeof(buf2), "%s\r\n%d chummers displayed, of which %d %s listed in ^WWHERE^n.\r\n", 
+               buf, 
+               num_can_see, 
+               num_in_socialization_rooms, 
+               num_in_socialization_rooms == 1 ? "is" : "are");
+    } else {
+      snprintf(buf2, sizeof(buf2), "%s\r\n%d chummers displayed.\r\n", buf, num_can_see);
+    }
+  }
+  
   if (subcmd) {
     FILE *fl;
     static char buffer[MAX_STRING_LENGTH*4];
