@@ -241,6 +241,21 @@ ACMD(do_exclaim)
     }
   }
   
+  for (struct veh_data *veh = ch->in_room ? ch->in_room->vehicles : ch->in_veh->carriedvehs;
+       veh;
+       veh = veh->next_veh)
+  {
+    if (veh->rigger && veh->rigger->desc) {
+      // No need to check for act vailidity, just send it
+      snprintf(buf, sizeof(buf), "$z^n exclaims in %s, \"%s%s!^n\"", 
+               (IS_NPC(veh->rigger) || GET_SKILL(veh->rigger, language) > 0) ? skills[language].name : "an unknown language",
+               (PRF_FLAGGED(veh->rigger, PRF_NOHIGHLIGHT) || PRF_FLAGGED(veh->rigger, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch), 
+               capitalize(replace_too_long_words(veh->rigger, ch, argument, language, GET_CHAR_COLOR_HIGHLIGHT(ch))));
+      
+      store_message_to_history(veh->rigger->desc, COMM_CHANNEL_SAYS, perform_act(buf, ch, NULL, NULL, veh->rigger));
+    }
+  }
+  
   if (PRF_FLAGGED(ch, PRF_NOREPEAT))
     send_to_char(OK, ch);
   else {
@@ -404,6 +419,21 @@ ACMD(do_ask)
                
       // They're a valid target, so send the message with a raw perform_act() call.
       store_message_to_history(tmp->desc, COMM_CHANNEL_SAYS, perform_act(buf, ch, NULL, NULL, tmp));
+    }
+  }
+  
+  for (struct veh_data *veh = ch->in_room ? ch->in_room->vehicles : ch->in_veh->carriedvehs;
+       veh;
+       veh = veh->next_veh)
+  {
+    if (veh->rigger && veh->rigger->desc) {
+      // No need to check for act vailidity, just send it
+      snprintf(buf, sizeof(buf), "$z^n asks in %s, \"%s%s?^n\"", 
+               (IS_NPC(veh->rigger) || GET_SKILL(veh->rigger, language) > 0) ? skills[language].name : "an unknown language",
+               (PRF_FLAGGED(veh->rigger, PRF_NOHIGHLIGHT) || PRF_FLAGGED(veh->rigger, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch), 
+               capitalize(replace_too_long_words(veh->rigger, ch, argument, language, GET_CHAR_COLOR_HIGHLIGHT(ch))));
+      
+      store_message_to_history(veh->rigger->desc, COMM_CHANNEL_SAYS, perform_act(buf, ch, NULL, NULL, veh->rigger));
     }
   }
   
