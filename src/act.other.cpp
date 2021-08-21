@@ -352,7 +352,7 @@ ACMD(do_title)
     send_to_char(buf, ch);
   } else {
     skip_spaces(&argument);
-    strcat(argument, "^n");
+    strlcat(argument, "^n", sizeof(buf));
     set_title(ch, argument);
     send_to_char(ch, "Okay, you're now %s %s.\r\n", GET_CHAR_NAME(ch), GET_TITLE(ch));
     snprintf(buf, sizeof(buf), "UPDATE pfiles SET Title='%s' WHERE idnum=%ld;", prepare_quotes(buf2, GET_TITLE(ch), sizeof(buf2) / sizeof(buf2[0])), GET_IDNUM(ch));
@@ -1401,7 +1401,7 @@ ACMD(do_skills)
         
       if ((GET_SKILL(ch, i)) > 0) {
         snprintf(buf2, sizeof(buf2), "%-30s %s\r\n", skills[i].name, how_good(i, GET_SKILL(ch, i)));
-        strcat(buf, buf2);
+        strlcat(buf, buf2, sizeof(buf));
       }
     }
     
@@ -1420,7 +1420,7 @@ ACMD(do_skills)
       
       if ((GET_SKILL(ch, i)) > 0) {
         snprintf(buf2, sizeof(buf2), "%-30s %s\r\n", skills[i].name, how_good(i, GET_SKILL(ch, i)));
-        strcat(buf, buf2);
+        strlcat(buf, buf2, sizeof(buf));
       }
     }
   } else {
@@ -1438,26 +1438,28 @@ ACMD(do_skills)
         if (max_ability(i) > 1)
           switch (i) {
           case ADEPT_KILLING_HANDS:
-            snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " %-8s", wound_name[MIN(4, GET_POWER_TOTAL(ch, i))]);
+            snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " %-8s", wound_name[MIN(DEADLY, GET_POWER_TOTAL(ch, i))]);
             if (GET_POWER_ACT(ch, i))
-              snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " ^Y(%-8s)^n", wound_name[MIN(4, GET_POWER_ACT(ch, i))]);
-            strcat(buf2, "\r\n");
+              snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " ^Y(%-8s)^n", wound_name[MIN(DEADLY, GET_POWER_ACT(ch, i))]);
+            strlcat(buf2, "\r\n", sizeof(buf2));
             break;
           default:
             snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " +%d", GET_POWER_TOTAL(ch, i));
             if (GET_POWER_ACT(ch, i))
               snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " ^Y(%d)^n", GET_POWER_ACT(ch, i)); 
-            strcat(buf2, "\r\n");
+            strlcat(buf2, "\r\n", sizeof(buf2));
             break;
           }
+        else if (GET_POWER_ACT(ch, i))
+          strlcat(buf2, " ^Y(active)^n\r\n", sizeof(buf2));
         else
-          strcat(buf2, "\r\n");
-        strcat(buf, buf2);
+          strlcat(buf2, "\r\n", sizeof(buf2));
+        strlcat(buf, buf2, sizeof(buf));
       }
     }
     snprintf(buf2, sizeof(buf2), "You have %.2f powerpoints remaining and %.2f points of powers activated.\r\n", (float)GET_PP(ch) / 100, 
                   (float)GET_POWER_POINTS(ch) / 100);
-    strcat(buf, buf2);
+    strlcat(buf, buf2, sizeof(buf));
   }
   send_to_char(buf, ch);
 }
@@ -2775,11 +2777,11 @@ ACMD(do_photo)
             // Describe special-case wielded/held objects.
             if (j == WEAR_WIELD || j == WEAR_HOLD) {
               if (IS_OBJ_STAT(GET_EQ(i, j), ITEM_TWOHANDS))
-                strcat(buf, hands[2]);
+                strlcat(buf, hands[2], sizeof(buf));
               else if (j == WEAR_WIELD)
-                strcat(buf, hands[(int)i->char_specials.saved.left_handed]);
+                strlcat(buf, hands[(int)i->char_specials.saved.left_handed], sizeof(buf));
               else
-                strcat(buf, hands[!i->char_specials.saved.left_handed]);
+                strlcat(buf, hands[!i->char_specials.saved.left_handed], sizeof(buf));
               snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\t%s\r\n", GET_OBJ_NAME(GET_EQ(i, j)));
               continue;
             }
@@ -2851,31 +2853,31 @@ ACMD(do_photo)
       if (tch != ch && !(AFF_FLAGGED(tch, AFF_IMP_INVIS) || AFF_FLAGGED(tch, AFF_SPELLIMPINVIS)) && GET_INVIS_LEV(tch) < 2) {
         if (IS_NPC(tch) && tch->player.physical_text.room_desc &&
             GET_POS(tch) == GET_DEFAULT_POS(tch)) {
-          strcat(buf, tch->player.physical_text.room_desc);
+          strlcat(buf, tch->player.physical_text.room_desc, sizeof(buf));
           continue;
         }
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s", make_desc(ch, tch, buf3, 2, FALSE, sizeof(buf3)));
         if (CH_IN_COMBAT(tch)) {
-          strcat(buf, " is here, fighting ");
+          strlcat(buf, " is here, fighting ", sizeof(buf));
           if (FIGHTING(tch) == ch)
-            strcat(buf, "the photographer");
+            strlcat(buf, "the photographer", sizeof(buf));
           else if (FIGHTING_VEH(tch)) {
-            strcat(buf, GET_VEH_NAME(FIGHTING_VEH(tch)));
+            strlcat(buf, GET_VEH_NAME(FIGHTING_VEH(tch)), sizeof(buf));
           } else {
             if (tch->in_room == FIGHTING(tch)->in_room)
               if (AFF_FLAGGED(FIGHTING(tch), AFF_IMP_INVIS)) {
-                strcat(buf, "someone");
+                strlcat(buf, "someone", sizeof(buf));
               } else
-                strcat(buf, GET_NAME(FIGHTING(tch)));
+                strlcat(buf, GET_NAME(FIGHTING(tch)), sizeof(buf));
             else
-              strcat(buf, "someone in the distance");
+              strlcat(buf, "someone in the distance", sizeof(buf));
           }
-          strcat(buf, "!\r\n");
+          strlcat(buf, "!\r\n", sizeof(buf));
         } else {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s", positions[(int)GET_POS(tch)]);
           if (GET_DEFPOS(tch))
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", %s", GET_DEFPOS(tch));
-          strcat(buf, ".\r\n");
+          strlcat(buf, ".\r\n", sizeof(buf));
         }
       }
     struct obj_data *obj;
@@ -2894,36 +2896,36 @@ ACMD(do_photo)
 
     for (struct veh_data *vehicle = ch->in_room->vehicles; vehicle; vehicle = vehicle->next_veh) {
       if (ch->in_veh != vehicle) {
-        strcat(buf, "^y");
+        strlcat(buf, "^y", sizeof(buf));
         if (vehicle->damage >= VEH_DAM_THRESHOLD_DESTROYED) {
-          strcat(buf, GET_VEH_NAME(vehicle));
-          strcat(buf, " lies here wrecked.\r\n");
+          strlcat(buf, GET_VEH_NAME(vehicle), sizeof(buf));
+          strlcat(buf, " lies here wrecked.\r\n", sizeof(buf));
         } else {
           if (vehicle->type == VEH_BIKE && vehicle->people)
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s sitting on ", GET_NAME(vehicle->people));
           switch (vehicle->cspeed) {
           case SPEED_OFF:
             if (vehicle->type == VEH_BIKE && vehicle->people) {
-              strcat(buf, GET_VEH_NAME(vehicle));
-              strcat(buf, " waits here.\r\n");
+              strlcat(buf, GET_VEH_NAME(vehicle), sizeof(buf));
+              strlcat(buf, " waits here.\r\n", sizeof(buf));
             } else
-              strcat(buf, vehicle->description);
+              strlcat(buf, vehicle->description, sizeof(buf));
             break;
           case SPEED_IDLE:
-            strcat(buf, GET_VEH_NAME(vehicle));
-            strcat(buf, " idles here.\r\n");
+            strlcat(buf, GET_VEH_NAME(vehicle), sizeof(buf));
+            strlcat(buf, " idles here.\r\n", sizeof(buf));
             break;
           case SPEED_CRUISING:
-            strcat(buf, GET_VEH_NAME(vehicle));
-            strcat(buf, " cruises through here.\r\n");
+            strlcat(buf, GET_VEH_NAME(vehicle), sizeof(buf));
+            strlcat(buf, " cruises through here.\r\n", sizeof(buf));
             break;
           case SPEED_SPEEDING:
-            strcat(buf, GET_VEH_NAME(vehicle));
-            strcat(buf, " speeds past.\r\n");
+            strlcat(buf, GET_VEH_NAME(vehicle), sizeof(buf));
+            strlcat(buf, " speeds past.\r\n", sizeof(buf));
             break;
           case SPEED_MAX:
-            strcat(buf, GET_VEH_NAME(vehicle));
-            strcat(buf, " zooms by.\r\n");
+            strlcat(buf, GET_VEH_NAME(vehicle), sizeof(buf));
+            strlcat(buf, " zooms by.\r\n", sizeof(buf));
             break;
           }
         }
@@ -3117,15 +3119,15 @@ ACMD(do_assense)
               snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " cast at force %d", sus->force);
             else if (success > 3) {
               if (sus->force > GET_MAG(ch) / 100)
-                strcat(buf, " cast at a force higher than your magic");
+                strlcat(buf, " cast at a force higher than your magic", sizeof(buf));
               else if (sus->force == GET_MAG(ch) / 100)
-                strcat(buf, " cast at a force equal to your magic");
+                strlcat(buf, " cast at a force equal to your magic", sizeof(buf));
               else
-                strcat(buf, " cast at a force lower than your magic");
+                strlcat(buf, " cast at a force lower than your magic", sizeof(buf));
             }
             if (success >= 3) {
               if (GET_IDNUM(ch) == GET_IDNUM(sus->other))
-                strcat(buf, ". It was cast by you");
+                strlcat(buf, ". It was cast by you", sizeof(buf));
               else {
                 for (mem = GET_PLAYER_MEMORY(ch); mem; mem = mem->next)
                   if (mem->idnum == GET_IDNUM(sus->other))
@@ -3133,10 +3135,10 @@ ACMD(do_assense)
                 if (mem)
                   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ". It seems to have been cast by %s", mem->mem);
                 else
-                  strcat(buf, ". The astral signature is unfamiliar to you");
+                  strlcat(buf, ". The astral signature is unfamiliar to you", sizeof(buf));
               }
             }
-            strcat(buf, ".\r\n");
+            strlcat(buf, ".\r\n", sizeof(buf));
             if (success > 0)
               send_to_char(buf, ch);
             else
@@ -3170,9 +3172,9 @@ ACMD(do_assense)
       if (success < 3) {
         if (vict->cyberware) {
           if (GET_SEX(vict) != SEX_NEUTRAL || (IS_NPC(vict) && MOB_FLAGGED(vict, MOB_INANIMATE)))
-            strcat(buf, " has cyberware present and");
+            strlcat(buf, " has cyberware present and", sizeof(buf));
           else
-            strcat(buf, " have cyberware present and");
+            strlcat(buf, " have cyberware present and", sizeof(buf));
         }
         if (IS_NPC(vict)) {
           if (IS_SPIRIT(vict))
@@ -3180,42 +3182,42 @@ ACMD(do_assense)
           else if (IS_ELEMENTAL(vict))
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " is a %s elemental", elements[GET_SPARE1(vict)].name);
           else if (GET_MAG(vict) > 0)
-            strcat(buf, " is awakened");
+            strlcat(buf, " is awakened", sizeof(buf));
           else
-            strcat(buf, " is mundane");
+            strlcat(buf, " is mundane", sizeof(buf));
         } else if (GET_TRADITION(vict) != TRAD_MUNDANE && !comp)
-          strcat(buf, " is awakened");
+          strlcat(buf, " is awakened", sizeof(buf));
         else
-          strcat(buf, " is mundane");
-        strcat(buf, ".\r\n");
+          strlcat(buf, " is mundane", sizeof(buf));
+        strlcat(buf, ".\r\n", sizeof(buf));
       } else if (success < 5) {
         if (GET_ESS(vict) < GET_ESS(ch))
-          strcat(buf, " has less astral presence");
+          strlcat(buf, " has less astral presence", sizeof(buf));
         else if (GET_ESS(vict) == GET_ESS(ch))
-          strcat(buf, " has the same amount of astral presence");
+          strlcat(buf, " has the same amount of astral presence", sizeof(buf));
         else
-          strcat(buf, " has more astral presence");
-        strcat(buf, " and ");
+          strlcat(buf, " has more astral presence", sizeof(buf));
+        strlcat(buf, " and ", sizeof(buf));
         if (mag < GET_MAG(ch))
-          strcat(buf, "less magic than you. ");
+          strlcat(buf, "less magic than you. ", sizeof(buf));
         else if (mag == GET_MAG(ch))
-          strcat(buf, "the same amount of magic as you. ");
+          strlcat(buf, "the same amount of magic as you. ", sizeof(buf));
         else
-          strcat(buf, "more magic than you. ");
-        strcat(buf, CAP(HSSH(vict)));
+          strlcat(buf, "more magic than you. ", sizeof(buf));
+        strlcat(buf, CAP(HSSH(vict)), sizeof(buf));
         if (IS_NPC(vict)) {
           if (IS_SPIRIT(vict))
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " is a %s spirit", spirits[GET_SPARE1(vict)].name);
           else if (IS_ELEMENTAL(vict))
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " is a %s elemental", elements[GET_SPARE1(vict)].name);
           else if (GET_MAG(vict) > 0)
-            strcat(buf, " is awakened");
+            strlcat(buf, " is awakened", sizeof(buf));
           else
-            strcat(buf, " is mundane");
+            strlcat(buf, " is mundane", sizeof(buf));
         } else if (GET_TRADITION(vict) != TRAD_MUNDANE && !comp)
-          strcat(buf, " is awakened");
+          strlcat(buf, " is awakened", sizeof(buf));
         else
-          strcat(buf, " is mundane");
+          strlcat(buf, " is mundane", sizeof(buf));
         if (vict->cyberware) {
           int locs[] = { 0, 0, 0, 0}, numloc = 0;
           for (struct obj_data *cyber = vict->cyberware; cyber; cyber = cyber->next_content)
@@ -3284,36 +3286,36 @@ ACMD(do_assense)
             numloc++;
           if (locs[3])
             numloc++;
-          strcat(buf, " and has cyberware in ");
-          strcat(buf, HSHR(vict));
+          strlcat(buf, " and has cyberware in ", sizeof(buf));
+          strlcat(buf, HSHR(vict), sizeof(buf));
           if (locs[0]) {
             numloc--;
-            strcat(buf, " head");
+            strlcat(buf, " head", sizeof(buf));
             if (numloc == 1)
-              strcat(buf, " and");
+              strlcat(buf, " and", sizeof(buf));
             else if (numloc > 1) 
-              strcat(buf, ",");
+              strlcat(buf, ",", sizeof(buf));
           }
           if (locs[1]) {
-            strcat(buf, " arms");
+            strlcat(buf, " arms", sizeof(buf));
             numloc--;
             if (numloc == 1)
-              strcat(buf, " and");
+              strlcat(buf, " and", sizeof(buf));
             else if (numloc > 1) 
-              strcat(buf, ",");
+              strlcat(buf, ",", sizeof(buf));
           }
           if (locs[2]) {
-            strcat(buf, " torso");
+            strlcat(buf, " torso", sizeof(buf));
             if (locs[3])
-              strcat(buf, " and");
+              strlcat(buf, " and", sizeof(buf));
           }
           if (locs[3])
-            strcat(buf, " feet");
+            strlcat(buf, " feet", sizeof(buf));
         }
-        strcat(buf, ".\r\n");
+        strlcat(buf, ".\r\n", sizeof(buf));
       } else {
         snprintf(buf2, sizeof(buf2), " has %.2f essence and", ((float)GET_ESS(vict) / 100));
-        strcat(buf, buf2);
+        strlcat(buf, buf2, sizeof(buf));
         if (IS_NPC(vict)) {
           if (IS_SPIRIT(vict))
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " is a %s of force %d", spirits[GET_SPARE1(vict)].name, GET_LEVEL(vict));
@@ -3322,16 +3324,16 @@ ACMD(do_assense)
           else if (GET_MAG(vict) > 0)
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " has %d magic", (int)(GET_MAG(vict) / 100));
           else
-            strcat(buf, " is mundane");
+            strlcat(buf, " is mundane", sizeof(buf));
         } else if (GET_TRADITION(vict) != TRAD_MUNDANE && !comp)
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %d magic", (int)(mag / 100));
         else
-          strcat(buf, " is mundane");
+          strlcat(buf, " is mundane", sizeof(buf));
         if (vict->cyberware) {
-          strcat(buf, ". ");
-          strcat(buf, CAP(HSSH(vict)));
-          strcat(buf, " has cyberware in ");
-          strcat(buf, HSHR(vict));
+          strlcat(buf, ". ", sizeof(buf));
+          strlcat(buf, CAP(HSSH(vict)), sizeof(buf));
+          strlcat(buf, " has cyberware in ", sizeof(buf));
+          strlcat(buf, HSHR(vict), sizeof(buf));
           int numleft = 0;
           int locs[] = { 0, 0, 0, 0, 0, 0, 0 };
           for (struct obj_data *cyber = vict->cyberware; cyber; cyber = cyber->next_content)
@@ -3353,54 +3355,54 @@ ACMD(do_assense)
             if (locs[i])
               numleft++;
           if (locs[0]) {
-            strcat(buf, " head");
+            strlcat(buf, " head", sizeof(buf));
             numleft--;
             if (numleft == 1)
-              strcat(buf, " and");
+              strlcat(buf, " and", sizeof(buf));
             else if (numleft > 1) 
-              strcat(buf, ",");
+              strlcat(buf, ",", sizeof(buf));
           }
           if (locs[1]) {
-            strcat(buf, " eyes");
+            strlcat(buf, " eyes", sizeof(buf));
             numleft--;
             if (numleft == 1)
-              strcat(buf, " and");
+              strlcat(buf, " and", sizeof(buf));
             else if (numleft > 1) 
-              strcat(buf, ",");
+              strlcat(buf, ",", sizeof(buf));
           }
           if (locs[2]) {
-            strcat(buf, " hands");
+            strlcat(buf, " hands", sizeof(buf));
             numleft--;
             if (numleft == 1)
-              strcat(buf, " and");
+              strlcat(buf, " and", sizeof(buf));
             else if (numleft > 1) 
-              strcat(buf, ",");
+              strlcat(buf, ",", sizeof(buf));
           }
           if (locs[3]) {
-            strcat(buf, " body");
+            strlcat(buf, " body", sizeof(buf));
             numleft--;
             if (numleft == 1)
-              strcat(buf, " and");
+              strlcat(buf, " and", sizeof(buf));
             else if (numleft > 1) 
-              strcat(buf, ",");
+              strlcat(buf, ",", sizeof(buf));
           }
           if (locs[4]) {
-            strcat(buf, " skin");
+            strlcat(buf, " skin", sizeof(buf));
             numleft--;
             if (numleft == 1)
-              strcat(buf, " and");
+              strlcat(buf, " and", sizeof(buf));
             else if (numleft > 1) 
-              strcat(buf, ",");
+              strlcat(buf, ",", sizeof(buf));
           }
           if (locs[5]) {
-            strcat(buf, " bones");
+            strlcat(buf, " bones", sizeof(buf));
             if (locs[6])
-              strcat(buf, " and");
+              strlcat(buf, " and", sizeof(buf));
           }
           if (locs[6])
-            strcat(buf, " nervous system");
+            strlcat(buf, " nervous system", sizeof(buf));
         }
-        strcat(buf, ".\r\n");
+        strlcat(buf, ".\r\n", sizeof(buf));
       }
     }
   }
@@ -3430,15 +3432,15 @@ ACMD(do_assense)
         }
       } else if (success >= 3) {
         if (GET_OBJ_VAL(obj, 1) < GET_MAG(ch) / 100)
-          strcat(buf, ". It has less astral presence than you");
+          strlcat(buf, ". It has less astral presence than you", sizeof(buf));
         else if (GET_OBJ_VAL(obj, 1) == GET_MAG(ch) / 100)
-          strcat(buf, ". It has the same amount of astral presence as you");
+          strlcat(buf, ". It has the same amount of astral presence as you", sizeof(buf));
         else
-          strcat(buf, ". It has more astral presence than you");
+          strlcat(buf, ". It has more astral presence than you", sizeof(buf));
       }
       if (success >= 3) {
         if (GET_IDNUM(ch) == GET_OBJ_VAL(obj, 2))
-          strcat(buf, ", it is bonded to you");
+          strlcat(buf, ", it is bonded to you", sizeof(buf));
         else {
           for (mem = GET_PLAYER_MEMORY(ch); mem; mem = mem->next)
             if (mem->idnum == GET_OBJ_VAL(obj, 2))
@@ -3446,7 +3448,7 @@ ACMD(do_assense)
           if (mem)
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", it seems to have been bonded by %s", mem->mem);
           else
-            strcat(buf, ", though the astral signature is unfamiliar to you");
+            strlcat(buf, ", though the astral signature is unfamiliar to you", sizeof(buf));
         }
       }
 
@@ -3456,11 +3458,11 @@ ACMD(do_assense)
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ". It is of force %d", GET_OBJ_VAL(obj, 1));
       else if (success >= 3) {
         if (GET_OBJ_VAL(obj, 1) < GET_MAG(ch) / 100)
-          strcat(buf, ". It has less astral presence than you");
+          strlcat(buf, ". It has less astral presence than you", sizeof(buf));
         else if (GET_OBJ_VAL(obj, 1) == GET_MAG(ch) / 100)
-          strcat(buf, ". It has the same amount of astral presence as you");
+          strlcat(buf, ". It has the same amount of astral presence as you", sizeof(buf));
         else
-          strcat(buf, ". It has more astral presence than you");
+          strlcat(buf, ". It has more astral presence than you", sizeof(buf));
       }
       if (success >= 3) {
         for (mem = GET_PLAYER_MEMORY(ch); mem; mem = mem->next)
@@ -3475,11 +3477,11 @@ ACMD(do_assense)
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ". It is of force %d", GET_OBJ_VAL(obj, 1));
       else if (success >= 3) {
         if (GET_OBJ_VAL(obj, 1) < GET_MAG(ch) / 100)
-          strcat(buf, ". It has less astral presence than you");
+          strlcat(buf, ". It has less astral presence than you", sizeof(buf));
         else if (GET_OBJ_VAL(obj, 1) == GET_MAG(ch) / 100)
-          strcat(buf, ". It has the same amount of astral presence as you");
+          strlcat(buf, ". It has the same amount of astral presence as you", sizeof(buf));
         else
-          strcat(buf, ". It has more astral presence than you");
+          strlcat(buf, ". It has more astral presence than you", sizeof(buf));
       }
       if (success >= 3) {
         for (mem = GET_PLAYER_MEMORY(ch); mem; mem = mem->next)
@@ -3494,15 +3496,15 @@ ACMD(do_assense)
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ". It is of force %d", GET_WEAPON_FOCUS_RATING(obj));
       } else if (success >= 3) {
         if (GET_WEAPON_FOCUS_RATING(obj) < GET_MAG(ch) / 100)
-          strcat(buf, ". It has less astral presence than you");
+          strlcat(buf, ". It has less astral presence than you", sizeof(buf));
         else if (GET_WEAPON_FOCUS_RATING(obj) == GET_MAG(ch) / 100)
-          strcat(buf, ". It has the same amount of astral presence as you");
+          strlcat(buf, ". It has the same amount of astral presence as you", sizeof(buf));
         else
-          strcat(buf, ". It has more astral presence than you");
+          strlcat(buf, ". It has more astral presence than you", sizeof(buf));
       }
       if (success >= 3) {
         if (GET_IDNUM(ch) == GET_WEAPON_FOCUS_BONDED_BY(obj))
-          strcat(buf, ", it is bonded to you");
+          strlcat(buf, ", it is bonded to you", sizeof(buf));
         else {
           for (mem = GET_PLAYER_MEMORY(ch); mem; mem = mem->next)
             if (mem->idnum == GET_WEAPON_FOCUS_BONDED_BY(obj))
@@ -3510,12 +3512,12 @@ ACMD(do_assense)
           if (mem)
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", it seems to have been bonded by %s", mem->mem);
           else
-            strcat(buf, ", though the astral signature is unfamiliar to you");
+            strlcat(buf, ", though the astral signature is unfamiliar to you", sizeof(buf));
         }
       }
     } else
-      strcat(buf, "a mundane object");
-    strcat(buf, ".\r\n");
+      strlcat(buf, "a mundane object", sizeof(buf));
+    strlcat(buf, ".\r\n", sizeof(buf));
   }
   send_to_char(buf, ch);
 }
@@ -4005,7 +4007,7 @@ ACMD(do_dice)
   } else if (dice >= 100) {
     send_to_char("You can't roll that many dice.\r\n", ch); 
   } else {
-    strcat(buf, "and scores:");
+    strlcat(buf, "and scores:", sizeof(buf));
     for (;dice > 0; dice--) {
        roll = tot = number(1, 6);
        while (roll == 6) {
@@ -4014,11 +4016,11 @@ ACMD(do_dice)
        if (tn > 0)
          if (tot >= tn) {
            suc++;
-           strcat(buf, "^W");
+           strlcat(buf, "^W", sizeof(buf));
          }
        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %d^n", tot);
     }    
-    strcat(buf, ".");
+    strlcat(buf, ".", sizeof(buf));
     if (tn > 0)
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %d successes.", suc);
     act(buf, FALSE, ch, 0, 0, TO_ROOM);
@@ -4034,7 +4036,7 @@ ACMD(do_survey)
     strcpy(buf, "The room is ");
   else strcpy(buf, "The area is ");
   if (!room->x)
-    strcat(buf, "pretty big. ");
+    strlcat(buf, "pretty big. ", sizeof(buf));
   else {
     int x = room->x, y = room->y, t = room->y;
     if (y > x) {
@@ -4044,48 +4046,48 @@ ACMD(do_survey)
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "about %d meters long%s %d meters wide", x, ROOM_FLAGGED(room, ROOM_INDOORS) ? "," : " and", y);
     if (ROOM_FLAGGED(room, ROOM_INDOORS))
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " and the ceiling is %.1f meters high", room->z);
-    strcat(buf, ". ");
+    strlcat(buf, ". ", sizeof(buf));
   }
   switch (room->crowd) {
     case 10:
     case 9:
     case 8:
-      strcat(buf, "It's nearly impossible to move for people");
+      strlcat(buf, "It's nearly impossible to move for people", sizeof(buf));
       break;
     case 7:
     case 6:
     case 5:
     case 4:
-      strcat(buf, "There are a lot of people about");
+      strlcat(buf, "There are a lot of people about", sizeof(buf));
       break;
     case 3:
     case 2:
     case 1:
-      strcat(buf, "There are a few people about");
+      strlcat(buf, "There are a few people about", sizeof(buf));
       break;
   }
   if (room->crowd)
-    strcat(buf, " and t");
+    strlcat(buf, " and t", sizeof(buf));
   else
-    strcat(buf, "T");
+    strlcat(buf, "T", sizeof(buf));
   int cover = (room->cover + room->crowd) / 2;
   switch (cover) {
     case 10:
     case 9:
     case 8:
-      strcat(buf, "here is cover everywhere..");
+      strlcat(buf, "here is cover everywhere..", sizeof(buf));
       break;
     case 7:
     case 6:
     case 5:
     case 4:
-      strcat(buf, "here is a lot of cover.");
+      strlcat(buf, "here is a lot of cover.", sizeof(buf));
       break;
     case 3:
     case 2:
     case 1:
     case 0:
-      strcat(buf, "here is not much to take cover behind.");
+      strlcat(buf, "here is not much to take cover behind.", sizeof(buf));
       break;
   }
   switch (light_level(room)) {
@@ -4122,7 +4124,7 @@ ACMD(do_survey)
     default:
       strlcat(buf, " There is an ERRONEOUS light level here. Notify staff!", sizeof(buf));
   }
-  strcat(buf, "\r\n");
+  strlcat(buf, "\r\n", sizeof(buf));
   send_to_char(buf, ch);
 }
 
@@ -4203,7 +4205,7 @@ ACMD(do_spool)
   snprintf(buf, sizeof(buf), "Pools set as: Casting-%d Drain-%d Defense-%d", GET_CASTING(ch), GET_DRAIN(ch), GET_SDEFENSE(ch));
   if (GET_REFLECT(ch))
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " Reflect-%d", GET_REFLECT(ch));
-  strcat(buf, "\r\n");
+  strlcat(buf, "\r\n", sizeof(buf));
   send_to_char(buf, ch);
 }
 
