@@ -947,6 +947,9 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 // ITEM_DECK_ACCESSORY convenience defines
 #define GET_DECK_ACCESSORY_TYPE(accessory)               (GET_OBJ_VAL((accessory), 0))
 
+// ITEM_DECK_ACCESSORY TYPE_PARTS convenience defines
+#define GET_DECK_ACCESSORY_IS_CHIPS(accessory)           (GET_OBJ_VAL((accessory), 1))
+
 // ITEM_DECK_ACCESSORY TYPE_FILE convenience defines
 #define GET_DECK_ACCESSORY_FILE_CREATION_TIME(accessory) (GET_OBJ_VAL((accessory), 1))
 #define GET_DECK_ACCESSORY_FILE_SIZE(accessory)          (GET_OBJ_VAL((accessory), 2))

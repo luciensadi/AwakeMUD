@@ -278,6 +278,11 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
       strlcat(buf, " (Uncooked)", sizeof(buf));
     if (GET_OBJ_TYPE(object) == ITEM_FOCUS && GET_OBJ_VAL(object, 9) == GET_IDNUM(ch))
       strlcat(buf, " ^Y(Geas)^n", sizeof(buf));
+    if (GET_OBJ_TYPE(object) == ITEM_GUN_AMMO
+        || (GET_OBJ_TYPE(object) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(object) == TYPE_PARTS))
+      {
+        strlcat(buf, " (Combinable)", sizeof(buf));
+      }
   } 
   else if (GET_OBJ_NAME(object) && ((mode == 2) || (mode == 3) || (mode == 4) || (mode == 7))) {
     strlcpy(buf, GET_OBJ_NAME(object), sizeof(buf));

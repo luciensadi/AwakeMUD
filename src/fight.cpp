@@ -3927,6 +3927,8 @@ bool ranged_response(struct char_data *ch, struct char_data *vict)
             if (vict->in_room == ch->in_room) {
               act("$n arrives in a rush of fury, immediately attacking $N!", TRUE, vict, 0, ch, TO_NOTVICT);
               act("$n arrives in a rush of fury, rushing straight towards you!", TRUE, vict, 0, ch, TO_VICT);
+            } else {
+              act("$n arrives in a rush of fury, searching for $s attacker!!", TRUE, vict, 0, 0, TO_ROOM);
             }
           }
         }
@@ -4713,21 +4715,30 @@ void perform_violence(void)
     
     // Process melee charging.
     if (IS_AFFECTED(ch, AFF_APPROACH)) {
-      /* Automatic cancellation of charging state (causes success if in same room, failure otherwise):
+      /* Complete failure cases, with continue to prevent evaluation:
+         - Not in same room (terminate charging)
+      */
+      // Ideally, we should have the NPC chase to the room their attacker is in, but given the command delays from flee/retreat this would make combat inescapable.
+      if (ch->in_room != FIGHTING(ch)->in_room) {
+        AFF_FLAGS(ch).RemoveBit(AFF_APPROACH);
+        AFF_FLAGS(FIGHTING(ch)).RemoveBit(AFF_APPROACH);
+        stop_fighting(ch);
+        continue;
+      }
+      
+      /* Automatic success:
         - Opponent charging at you too (both stop charging; clash)
         - You're no longer in a fighting state (you'll be back in one soon enough; clash)
         - You both have melee weapons out (both stop charging; clash)
-        - Not in same room (terminate charges)
       */
       if (IS_AFFECTED(FIGHTING(ch), AFF_APPROACH) 
           || GET_POS(FIGHTING(ch)) < POS_FIGHTING 
-          || (item_should_be_treated_as_melee_weapon(GET_EQ(ch, WEAR_WIELD)) && item_should_be_treated_as_melee_weapon(GET_EQ(FIGHTING(ch), WEAR_WIELD)))
-          || ch->in_room != FIGHTING(ch)->in_room) {
+          || (item_should_be_treated_as_melee_weapon(GET_EQ(ch, WEAR_WIELD)) && item_should_be_treated_as_melee_weapon(GET_EQ(FIGHTING(ch), WEAR_WIELD)))) {
         AFF_FLAGS(ch).RemoveBit(AFF_APPROACH);
         AFF_FLAGS(FIGHTING(ch)).RemoveBit(AFF_APPROACH);
-      } 
+      }
       
-      // No need to charge if you're wielding a gun. Your opponent still charges, if they're doing so.
+      // No need to charge if you're wielding a loaded gun. Your opponent still charges, if they're doing so.
       if (item_should_be_treated_as_ranged_weapon(GET_EQ(ch, WEAR_WIELD)))
         AFF_FLAGS(ch).RemoveBit(AFF_APPROACH);
       

@@ -1512,15 +1512,16 @@ enum {
 #define TYPE_FACILITY   3
 
 // Kit/Workshop/Facility types.
-#define TYPE_GENERAL    0
+#define TYPE_GENERAL       0
 #define TYPE_ELECTRONIC    1
-#define TYPE_MICROTRONIC  2
-#define TYPE_CYBERWARE    3
-#define TYPE_VEHICLE    4
-#define TYPE_WEAPON    5
-#define TYPE_MEDICAL    6
-#define TYPE_AMMO    7
-#define NUM_WORKSHOP_TYPES 8
+#define TYPE_MICROTRONIC   2
+#define TYPE_CYBERWARE     3
+#define TYPE_VEHICLE       4
+#define TYPE_WEAPON        5
+#define TYPE_MEDICAL       6
+#define TYPE_AMMO          7
+#define TYPE_GUNSMITHING   8
+#define NUM_WORKSHOP_TYPES 9
 /* modifier constants used with obj affects ('A' fields) */
 
 #define APPLY_NONE               0      /* No effect                    */
@@ -2500,7 +2501,9 @@ enum {
 #define DIRTY_BIT_MEMORY      5
 #define DIRTY_BIT_DRUG        6
 #define DIRTY_BIT_ALIAS       7
-
 #define NUM_DIRTY_BITS        8
+
+#define DECK_ACCESSORY_TYPE_PARTS  0
+#define DECK_ACCESSORY_TYPE_CHIPS  1
 
 #endif

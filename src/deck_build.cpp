@@ -699,18 +699,18 @@ ACMD(do_build) {
                 }
                 struct obj_data *chips = NULL, *part = NULL, *find;
                 FOR_ITEMS_AROUND_CH(ch, find) {
-                    if (GET_OBJ_TYPE(find) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(find, 0) == TYPE_PARTS) {
-                        if (GET_OBJ_VAL(find, 1) && GET_OBJ_COST(find) >= GET_OBJ_VAL(obj, 9))
+                    if (GET_OBJ_TYPE(find) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(find) == TYPE_PARTS) {
+                        if (GET_DECK_ACCESSORY_IS_CHIPS(find) && GET_OBJ_COST(find) >= GET_OBJ_VAL(obj, 9))
                             chips = find;
-                        else if (!GET_OBJ_VAL(find, 1) && GET_OBJ_COST(find) >= GET_OBJ_VAL(obj, 8))
+                        else if (!GET_DECK_ACCESSORY_IS_CHIPS(find) && GET_OBJ_COST(find) >= GET_OBJ_VAL(obj, 8))
                             part = find;
                     }
                 }
                 for (struct obj_data *find = ch->carrying; find; find = find->next_content)
-                    if (GET_OBJ_TYPE(find) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(find, 0) == TYPE_PARTS) {
-                        if (GET_OBJ_VAL(find, 1) && GET_OBJ_COST(find) >= GET_OBJ_VAL(obj, 9))
+                    if (GET_OBJ_TYPE(find) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(find) == TYPE_PARTS) {
+                        if (GET_DECK_ACCESSORY_IS_CHIPS(find) && GET_OBJ_COST(find) >= GET_OBJ_VAL(obj, 9))
                             chips = find;
-                        else if (!GET_OBJ_VAL(find, 1) && GET_OBJ_COST(find) >= GET_OBJ_VAL(obj, 8))
+                        else if (!GET_DECK_ACCESSORY_IS_CHIPS(find) && GET_OBJ_COST(find) >= GET_OBJ_VAL(obj, 8))
                             part = find;
                     }
                 if (GET_OBJ_VAL(obj, 8)) {

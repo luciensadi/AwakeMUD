@@ -2463,7 +2463,8 @@ const char *workshops[] = {
   "Vehicle",
   "Weaponry",
   "Medical",
-  "Ammunition"
+  "Ammunition",
+  "Gunsmithing"
 };
 
 const char *kit_workshop_facility[] = {

@@ -2487,6 +2487,8 @@ bool attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data *w
 }
 
 struct obj_data *unattach_attachment_from_weapon(int location, struct obj_data *weapon, struct char_data *ch) {
+  struct obj_data *workshop;
+  
   if (!weapon) {
     if (ch)
       send_to_char(ch, "Sorry, something went wrong. Staff have been notified.\r\n");
@@ -2531,14 +2533,17 @@ struct obj_data *unattach_attachment_from_weapon(int location, struct obj_data *
   
   if (GET_ACCESSORY_TYPE(attachment) == ACCESS_GASVENT) {
     if (ch) {
-      // TODO: Update: You can now remove a gas vent, as long as you're in a room with a deployed weapons workshop and have some nuyen on hand to cover the new barrel's cost.
-      // TODO: Ensure workshop.
-      // TODO: Ensure nuyen.
-      // TODO: Remove and destroy vent, then return. This either requires code duplication or modification of below code to not return vents-- if the latter, verify that it's supposed to happen!
-      //     ex: destroying a vent rather than returning it, and the caller calls extract on the returned value.
-      send_to_char(ch, "%s is permanently attached to %s and can't be removed.\r\n",
-                   GET_OBJ_NAME(attachment), GET_OBJ_NAME(weapon));
-      return NULL;
+      int removal_cost = MAX(GET_OBJ_COST(weapon) / 10, MINIMUM_GAS_VENT_REMOVAL_COST);
+      
+      if (!(workshop = find_workshop(ch, TYPE_GUNSMITHING))) {
+        send_to_char(ch, "That's a complex task! You'll need a gunsmithing workshop and %d nuyen on hand to do that.\r\n", removal_cost);
+        return NULL;
+      }
+      
+      if (GET_NUYEN(ch) < removal_cost) {
+        send_to_char(ch, "You'll need at least %d nuyen on hand to cover the cost of the new barrel.\r\n", removal_cost);
+        return NULL;
+      }
     }
    // We assume the coder knows what they're doing when unattaching a gasvent. They may proceed.
   }
@@ -2613,8 +2618,15 @@ struct obj_data *unattach_attachment_from_weapon(int location, struct obj_data *
   
   // Send the success message, assuming there's a character.
   if (ch) {
-    act("You unattach $p from $P.", TRUE, ch, attachment, weapon, TO_CHAR);
-    act("$n unattaches $p from $P.", TRUE, ch, attachment, weapon, TO_ROOM);
+    if (GET_ACCESSORY_TYPE(attachment) == ACCESS_GASVENT) {
+      act("You remove the ported barrel from $p and discard it, installing a non-ported one in its place.", TRUE, ch, attachment, NULL, TO_CHAR);
+      act("$n removes the ported barrel from $p and discards it, installing a non-ported one in its place.", TRUE, ch, attachment, NULL, TO_ROOM);
+      extract_obj(attachment);
+      attachment = NULL;
+    } else {
+      act("You unattach $p from $P.", TRUE, ch, attachment, weapon, TO_CHAR);
+      act("$n unattaches $p from $P.", TRUE, ch, attachment, weapon, TO_ROOM);
+    }
   }
   
   // Hand back our attachment object.
@@ -3575,7 +3587,8 @@ bool item_should_be_treated_as_melee_weapon(struct obj_data *obj) {
   // It's a gun that has a magazine in it.
   if (IS_GUN(GET_WEAPON_ATTACK_TYPE(obj)) && obj->contains)
     return FALSE;
-    
+  
+  // It's a gun that has no magazine (it was EJECTed), or it's not a gun.
   return TRUE;
 }
 
@@ -3591,7 +3604,8 @@ bool item_should_be_treated_as_ranged_weapon(struct obj_data *obj) {
   // It's not a gun, or it doesn't have a magazine.
   if (!IS_GUN(GET_WEAPON_ATTACK_TYPE(obj)) || !obj->contains)
     return FALSE;
-    
+  
+  // It's a gun that has a magazine in it.
   return TRUE;
 }
 

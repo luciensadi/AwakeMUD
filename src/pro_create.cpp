@@ -11,6 +11,7 @@
 #include "constants.h"
 #include "olc.h"
 #include "newmagic.h"
+#include "config.h"
 
 #define CH d->character
 #define PEDIT_MENU 0
@@ -22,6 +23,7 @@
 extern void part_design(struct char_data *ch, struct obj_data *design);
 extern void spell_design(struct char_data *ch, struct obj_data *design);
 extern void ammo_test(struct char_data *ch, struct obj_data *obj);
+extern void weight_change_object(struct obj_data * obj, float weight);
 
 void pedit_disp_menu(struct descriptor_data *d)
 {
@@ -600,9 +602,12 @@ void update_buildrepair(void)
           send_to_char("You seem to have messed up the batch of ammo.\r\n", CH);
         else {
           send_to_char("You have completed a batch of ammo.\r\n", CH);
-          GET_AMMOBOX_QUANTITY(PROG) += 10;
+          GET_AMMOBOX_QUANTITY(PROG) += AMMOBUILD_BATCH_SIZE;
+          
+          // Add the weight of the completed ammo to the box.
+          weight_change_object(PROG, ammo_type[GET_AMMOBOX_TYPE(PROG)].weight * AMMOBUILD_BATCH_SIZE);
         }
-        GET_AMMOBOX_INTENDED_QUANTITY(PROG) -= 10;
+        GET_AMMOBOX_INTENDED_QUANTITY(PROG) -= AMMOBUILD_BATCH_SIZE;
         if (GET_AMMOBOX_INTENDED_QUANTITY(PROG) <= 0) {
           send_to_char(CH, "You have finished building %s.\r\n", GET_OBJ_NAME(PROG));
           STOP_WORKING(CH);
