@@ -124,6 +124,14 @@ ACMD(do_say)
         store_message_to_history(tmp->desc, COMM_CHANNEL_OSAYS, perform_act(buf, ch, NULL, NULL, tmp));
       }
     }
+    // Send it to anyone who's rigging a vehicle here.
+    for (struct veh_data *veh = ch->in_room ? ch->in_room->vehicles : ch->in_veh->carriedvehs;
+         veh;
+         veh = veh->next_veh)
+    {
+      if (veh->rigger && veh->rigger->desc)
+        store_message_to_history(veh->rigger->desc, COMM_CHANNEL_OSAYS, perform_act(buf, ch, NULL, NULL, veh->rigger));
+    }
   } else {
     for (tmp = ch->in_room ? ch->in_room->people : ch->in_veh->people; tmp; tmp = ch->in_room ? tmp->next_in_room : tmp->next_in_veh) {
       if (tmp == ch)
@@ -148,6 +156,28 @@ ACMD(do_say)
         
       // Note: includes act()
       store_message_to_history(tmp->desc, COMM_CHANNEL_SAYS, act(buf, FALSE, ch, NULL, tmp, TO_VICT));
+    }
+    // Send it to anyone who's rigging a vehicle here.
+    for (struct veh_data *veh = ch->in_room ? ch->in_room->vehicles : ch->in_veh->carriedvehs;
+         veh;
+         veh = veh->next_veh)
+    {
+      if (veh->rigger && veh->rigger->desc) {
+        // Generate prepend for sayto.
+        if (to) {
+          snprintf(buf2, MAX_STRING_LENGTH, " to %s^n", CAN_SEE(veh->rigger, to) ? (safe_found_mem(veh->rigger, to) ? CAP(safe_found_mem(veh->rigger, to)->mem)
+                   : GET_NAME(to)) : "someone");
+        }
+        
+        snprintf(buf, sizeof(buf), "$z^n says%s in %s, \"%s%s%s^n\"",
+                (to ? buf2 : ""), 
+                (IS_NPC(veh->rigger) || GET_SKILL(veh->rigger, language) > 0) ? skills[language].name : "an unknown language", 
+                (PRF_FLAGGED(veh->rigger, PRF_NOHIGHLIGHT) || PRF_FLAGGED(veh->rigger, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch), 
+                capitalize(replace_too_long_words(veh->rigger, ch, argument, language, GET_CHAR_COLOR_HIGHLIGHT(ch))),
+                ispunct(get_final_character_from_string(argument)) ? "" : "."
+              );
+        store_message_to_history(veh->rigger->desc, COMM_CHANNEL_SAYS, perform_act(buf, ch, NULL, NULL, veh->rigger));
+      }
     }
   }
   

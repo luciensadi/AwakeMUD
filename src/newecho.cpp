@@ -773,7 +773,8 @@ ACMD(do_new_echo) {
   // Iterate over the viewers in the room.
   for (struct char_data *viewer = ch->in_room ? ch->in_room->people : ch->in_veh->people; 
        viewer; 
-       viewer = ch->in_room ? viewer->next_in_room : viewer->next_in_veh) {
+       viewer = ch->in_room ? viewer->next_in_room : viewer->next_in_veh) 
+  {
     // If they've ignored you, no luck.
     if (!IS_NPC(viewer) && unsafe_found_mem(GET_IGNORE(viewer), ch))
       continue;
@@ -788,6 +789,15 @@ ACMD(do_new_echo) {
     
     // Since the viewer is a valid target, send it to them. Yes, ch is deliberately a possible viewer.
     send_echo_to_char(ch, viewer, (const char *) emote_buf, must_echo_with_name);
+  }
+  
+  // Send it to anyone who's rigging a vehicle here.
+  for (struct veh_data *veh = ch->in_room ? ch->in_room->vehicles : ch->in_veh->carriedvehs;
+       veh;
+       veh = veh->next_veh)
+  {
+    if (veh->rigger && veh->rigger->desc)
+      send_echo_to_char(ch, veh->rigger, (const char *) emote_buf, must_echo_with_name);
   }
 }
 
