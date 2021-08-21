@@ -3104,7 +3104,10 @@ ACMD(do_activate)
         total *= -1;
       if (total + GET_POWER_POINTS(ch) > ((int)(GET_REAL_MAG(ch) / 100) * 100))
         send_to_char("You have too many powers activated already.\r\n", ch);
-      else {
+      else if (GET_POWER_ACT(ch, i) == x) {
+        send_to_char(ch, "%s is already active at rank %d.", CAP(adept_powers[i]), x);
+        return;
+      } else {
         GET_POWER_ACT(ch, i) = x;
         GET_POWER_POINTS(ch) += total;
         if (i == ADEPT_BOOST_BOD || i == ADEPT_BOOST_QUI || i == ADEPT_BOOST_STR) {
