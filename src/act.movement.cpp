@@ -236,7 +236,7 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
       act(buf2, TRUE, ch, 0, tch, TO_VICT);
   }
     
-  // Vehicle occupants.
+  // Vehicle occupants, including riggers.
   for (tveh = ch->in_room->vehicles; tveh; tveh = tveh->next_veh) {
     for (tch = tveh->people; tch; tch = tch->next_in_veh) {
       if (should_tch_see_chs_movement_message(tch, ch))
@@ -244,7 +244,7 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
     }
       
     if (tveh->rigger && should_tch_see_chs_movement_message(tveh->rigger, ch))
-      act(buf2, TRUE, ch, 0, tch, TO_VICT & TO_SLEEP);
+      act(buf2, TRUE, ch, 0, tveh->rigger, TO_VICT | TO_REMOTE | TO_SLEEP);
   }
   
   // Watchers.
@@ -338,7 +338,7 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
     }
       
     if (tveh->rigger && should_tch_see_chs_movement_message(tveh->rigger, ch))
-      act(buf2, TRUE, ch, 0, tch, TO_VICT & TO_SLEEP);
+      act(buf2, TRUE, ch, 0, tveh->rigger, TO_VICT | TO_REMOTE | TO_SLEEP);
   }
   
   // Watchers.

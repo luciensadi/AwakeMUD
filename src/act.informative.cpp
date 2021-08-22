@@ -3152,7 +3152,7 @@ const char *get_plaintext_score_stats(struct char_data *ch) {
   }
   
   if (GET_REAL_REA(ch) != GET_REA(ch))
-    snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Effective reaction: %d (real reaction %d)\r\n", GET_REA(ch), GET_REAL_REA(ch));
+    snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Effective reaction: %d (base reaction %d)\r\n", GET_REA(ch), GET_REAL_REA(ch));
   else
     snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Reaction: %d\r\n", GET_REA(ch));
   

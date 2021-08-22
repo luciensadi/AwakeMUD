@@ -375,7 +375,7 @@ void House_save(struct house_control_rec *house, const char *file_name, long rnu
   }
   
   if (level != 0) {
-    log_vfprintf("Warning: Non-zero level at finish when saving %s.", file_name);
+    log_vfprintf("Warning: Non-zero level at finish when saving %s. [house_error_grep_string]", file_name);
   }
   
   fclose(fl);

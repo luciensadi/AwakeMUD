@@ -167,4 +167,11 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 // What is the minimum cost to remove a gas vent from a weapon?
 #define MINIMUM_GAS_VENT_REMOVAL_COST                          500
 
+// What is the minimum number of connections per 10 seconds that you want to engage rudimentary protections at?
+#define DOS_SLOW_NS_THRESHOLD                                  (8 * 10)
+// What is the "" that you want to deny new connections at?
+#define DOS_DENIAL_THRESHOLD                                   (15 * 10)
+// What is the number of seconds that you'd consider to be too long to pause the game for resolving a player's domain name?
+#define THRESHOLD_IN_SECONDS_FOR_SLOWNS_AUTOMATIC_ACTIVATION   1
+
 #endif

@@ -83,6 +83,7 @@ extern struct time_info_data time_info; /* In db.c */
 extern char help[];
 
 /* local globals */
+int connection_rapidity_tracker_for_dos = 0;
 struct descriptor_data *descriptor_list = NULL; /* master desc list */
 struct txt_block *bufpool = 0;  /* pool of large output buffers */
 int buf_largecount = 0;         /* # of large buffers which exist */
@@ -946,6 +947,9 @@ void game_loop(int mother_desc)
     // Every 10 IRL seconds
     if (!(pulse % (10 * PASSES_PER_SEC))) {
       check_idle_passwords();
+      
+      // Reset DOS tracker.
+      connection_rapidity_tracker_for_dos = 0;
     }
     
     // Every 30 IRL seconds
@@ -1597,16 +1601,35 @@ int new_descriptor(int s)
   /* keep it from blocking */
   nonblock(desc);
   
-  /* make sure we have room for it */
-  for (newd = descriptor_list; newd; newd = newd->next)
-    sockets_connected++;
+  // Calculate the long address.
+  addr = ntohl(peer.sin_addr.s_addr);
   
-  if (sockets_connected >= max_players)
-  {
-    if (write_to_descriptor(desc, "Sorry, Awakened Worlds is full right now... try again later!  :-)\r\n") >= 0)
+  // Block it if we're getting too many openings in a limited time window.
+  if (connection_rapidity_tracker_for_dos++ >= DOS_DENIAL_THRESHOLD) {
+    if (write_to_descriptor(desc, "Sorry, we're unable to service your request right now. Please try again in a few minutes.\r\n") >= 0)
       close(desc);
+    log_vfprintf("DOSLOG: ERROR: Denied incoming request from long-format address %ld - DOS protection.", addr);
     return 0;
   }
+  else if (connection_rapidity_tracker_for_dos >= DOS_SLOW_NS_THRESHOLD) {
+    if (!nameserver_is_slow) {
+      mudlog("^RDOSLOG: WARNING: Received too many connections in a short span of time. Engaging slow NS and skipping player count limit to mitigate potential DOS.^g", NULL, LOG_SYSLOG, TRUE);
+      nameserver_is_slow = TRUE;
+    }
+  }
+  else {
+    /* make sure we have room for it */
+    for (newd = descriptor_list; newd; newd = newd->next)
+      sockets_connected++;
+    
+    if (sockets_connected >= max_players)
+    {
+      if (write_to_descriptor(desc, "Sorry, Awakened Worlds is full right now... try again later!  :-)\r\n") >= 0)
+        close(desc);
+      return 0;
+    }
+  }  
+  
   /* create a new descriptor */
   newd = new descriptor_data;
   memset((char *) newd, 0, sizeof(struct descriptor_data));
@@ -1614,12 +1637,12 @@ int new_descriptor(int s)
   set_descriptor_canaries(newd);
   
   /* find the sitename */
+  time_t gethostbyaddr_timer = time(0);
   if (nameserver_is_slow || !(from = gethostbyaddr((char *) &peer.sin_addr,
                                                    sizeof(peer.sin_addr), AF_INET)))
   {
     if (!nameserver_is_slow)
       perror("gethostbyaddr");
-    addr = ntohl(peer.sin_addr.s_addr);
     snprintf(newd->host, sizeof(newd->host), "%03u.%03u.%03u.%03u", (int) ((addr & 0xFF000000) >> 24),
             (int) ((addr & 0x00FF0000) >> 16), (int) ((addr & 0x0000FF00) >> 8),
             (int) ((addr & 0x000000FF)));
@@ -1627,16 +1650,42 @@ int new_descriptor(int s)
   {
     strncpy(newd->host, from->h_name, HOST_LENGTH);
     *(newd->host + HOST_LENGTH) = '\0';
+    
+    time_t time_delta = time(0) - gethostbyaddr_timer;
+    if (time_delta > THRESHOLD_IN_SECONDS_FOR_SLOWNS_AUTOMATIC_ACTIVATION) {
+      snprintf(buf2, sizeof(buf2), "%03u.%03u.%03u.%03u", (int) ((addr & 0xFF000000) >> 24),
+              (int) ((addr & 0x00FF0000) >> 16), (int) ((addr & 0x0000FF00) >> 8),
+              (int) ((addr & 0x000000FF)));
+      snprintf(buf, sizeof(buf), "^YThe resolution of host '%s' [%s] took too long at %ld second(s). Automatically engaging slow NS defense.^g", newd->host, buf2, time_delta);
+      mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+      nameserver_is_slow = TRUE;
+    }
   }
   
   /* determine if the site is banned */
   if (isbanned(newd->host) == BAN_ALL)
   {
     close(desc);
-    snprintf(buf2, sizeof(buf2), "Connection attempt denied from [%s]", newd->host);
+    snprintf(buf2, sizeof(buf2), "Connection attempt denied from banned site [%s]", newd->host);
     mudlog(buf2, NULL, LOG_BANLOG, TRUE);
     DELETE_AND_NULL(newd);
     return 0;
+  } else {
+    if (nameserver_is_slow)
+      log_vfprintf("DOSLOG: Connection from [%03u.%03u.%03u.%03u] (slow nameserver mode).",
+                   (int) ((addr & 0xFF000000) >> 24),
+                   (int) ((addr & 0x00FF0000) >> 16), 
+                   (int) ((addr & 0x0000FF00) >> 8),
+                   (int) ((addr & 0x000000FF))
+                  );
+    else
+      log_vfprintf("DOSLOG: Connection from [%s (%03u.%03u.%03u.%03u)].", 
+                   newd->host,
+                   (int) ((addr & 0xFF000000) >> 24),
+                   (int) ((addr & 0x00FF0000) >> 16), 
+                   (int) ((addr & 0x0000FF00) >> 8),
+                   (int) ((addr & 0x000000FF))
+                  );
   }
   
   init_descriptor(newd, desc);
@@ -2863,12 +2912,13 @@ bool can_send_act_to_target(struct char_data *ch, bool hide_invisible, struct ob
   if ((remote = (type & TO_REMOTE)))
     type &= ~TO_REMOTE;
     
-  return SENDOK(to)
+  return (to 
+          && SENDOK(to)
           && !(hide_invisible && ch && !CAN_SEE(to, ch))
           && (to != ch) 
           && (remote || !PLR_FLAGGED(to, PLR_REMOTE)) 
           && !PLR_FLAGGED(to, PLR_MATRIX)
-          && (type == TO_ROOM || type == TO_ROLLS || (to != vict_obj));
+          && (type == TO_ROOM || type == TO_ROLLS || (to != vict_obj)));
   
 #undef SENDOK
 }
@@ -2878,9 +2928,10 @@ bool can_send_act_to_target(struct char_data *ch, bool hide_invisible, struct ob
 const char *act(const char *str, int hide_invisible, struct char_data * ch,
          struct obj_data * obj, void *vict_obj, int type)
 {
-  struct char_data *to, *next;
+  struct char_data *to, *next, *tch;
   int sleep;
   bool remote;
+  struct veh_data *rigger_check;
   
 #define SENDOK(ch) ((ch)->desc && (AWAKE(ch) || sleep) && !(PLR_FLAGGED((ch), PLR_WRITING) || PLR_FLAGGED((ch), PLR_EDITING) || PLR_FLAGGED((ch), PLR_MAILING) || PLR_FLAGGED((ch), PLR_CUSTOMIZE)) && (STATE(ch->desc) != CON_SPELL_CREATE))
   
@@ -2936,20 +2987,25 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
   /* ASSUMPTION: at this point we know type must be TO_NOTVICT
    or TO_ROOM or TO_ROLLS */
   
-  if (type == TO_VEH_ROOM)
-    if (ch && ch->in_veh && !ch->in_veh->in_veh)
+  if (type == TO_VEH_ROOM) {
+    if (ch && ch->in_veh && !ch->in_veh->in_veh) {
       to = ch->in_veh->in_room->people;
-    else
+      rigger_check = ch->in_veh->in_room->vehicles;
+    } else
       return NULL;
-  else if (ch && ch->in_room)
+  } else if (ch && ch->in_room) {
     to = ch->in_room->people;
-  else if (obj && obj->in_room)
+    rigger_check = ch->in_room->vehicles;
+  } else if (obj && obj->in_room) {
     to = obj->in_room->people;
-  else if (obj && obj->in_veh)
+    rigger_check = obj->in_room->vehicles;
+  } else if (obj && obj->in_veh) {
     to = obj->in_veh->people;
-  else if (ch && ch->in_veh)
+    rigger_check = obj->in_veh->carriedvehs;
+  } else if (ch && ch->in_veh) {
     to = ch->in_veh->people;
-  else
+    rigger_check = ch->in_veh->carriedvehs;
+  } else
   {
     mudlog("SYSERR: no valid target to act()!", NULL, LOG_SYSLOG, TRUE);
     snprintf(buf, sizeof(buf), "Invocation: act('%s', '%d', char_data, obj_data, vict_obj, '%d').", str, hide_invisible, type);
@@ -2985,6 +3041,24 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
                && !CAN_SEE(to, ch)))
         perform_act(str, ch, obj, vict_obj, to);
     }
+    
+    // Send rolls to riggers.
+    for (; rigger_check; rigger_check = rigger_check->next_veh) {
+      if ((tch = rigger_check->rigger) && tch->desc) {
+        // We currently treat all vehicles as having ultrasonic sensors.
+        // Since the check is done to the rigger, we have to apply det-invis to them directly, then remove it when done.
+        bool rigger_is_det_invis = AFF_FLAGGED(tch, AFF_DETECT_INVIS);
+        AFF_FLAGS(tch).SetBit(AFF_DETECT_INVIS);
+        if (SENDOK(tch)
+            && !(hide_invisible
+                 && ch
+                 && !CAN_SEE(tch, ch)))
+          perform_act(str, ch, obj, vict_obj, tch);
+        if (!rigger_is_det_invis)
+          AFF_FLAGS(tch).RemoveBit(AFF_DETECT_INVIS);
+      }
+    }
+    
     return NULL;
   }
   
@@ -3011,6 +3085,21 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
     if (can_send_act_to_target(ch, hide_invisible, obj, vict_obj, to, type))
       perform_act(str, ch, obj, vict_obj, to);
   }
+  
+  // Send to riggers.
+  for (; rigger_check; rigger_check = rigger_check->next_veh) {
+    if ((tch = rigger_check->rigger) && tch->desc) {
+      // We currently treat all vehicles as having ultrasonic sensors.
+      // Since the check is done to the rigger, we have to apply det-invis to them directly, then remove it when done.
+      bool rigger_is_det_invis = AFF_FLAGGED(tch, AFF_DETECT_INVIS);
+      AFF_FLAGS(tch).SetBit(AFF_DETECT_INVIS);
+      if (can_send_act_to_target(ch, hide_invisible, obj, vict_obj, tch, type | TO_REMOTE))
+        perform_act(str, ch, obj, vict_obj, tch);
+      if (!rigger_is_det_invis)
+        AFF_FLAGS(tch).RemoveBit(AFF_DETECT_INVIS);
+    }
+  }
+  
   return NULL;
 }
 #undef SENDOK
