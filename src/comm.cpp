@@ -3044,7 +3044,7 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
     
     // Send rolls to riggers.
     for (; rigger_check; rigger_check = rigger_check->next_veh) {
-      if ((tch = rigger_check->rigger) && tch->desc) {
+      if ((tch = rigger_check->rigger) && tch->desc && PRF_FLAGGED(to, PRF_ROLLS)) {
         // We currently treat all vehicles as having ultrasonic sensors.
         // Since the check is done to the rigger, we have to apply det-invis to them directly, then remove it when done.
         bool rigger_is_det_invis = AFF_FLAGGED(tch, AFF_DETECT_INVIS);
