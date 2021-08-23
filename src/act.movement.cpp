@@ -653,6 +653,7 @@ void move_vehicle(struct char_data *ch, int dir)
   snprintf(buf2, sizeof(buf2), "%s %s from %s.", GET_VEH_NAME(veh), veh->arrive, thedirs[rev_dir[dir]]);
   snprintf(buf1, sizeof(buf1), "%s %s to %s.", GET_VEH_NAME(veh), veh->leave, thedirs[dir]);
   
+  /* Known issue: If you are in a vehicle, and nobody is in the room, and another vehicle drives in, you won't see it. */
   if (veh->in_room->people)
   {
     act(buf1, FALSE, veh->in_room->people, 0, 0, TO_ROOM);
