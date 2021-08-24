@@ -2619,8 +2619,8 @@ struct obj_data *unattach_attachment_from_weapon(int location, struct obj_data *
   // Send the success message, assuming there's a character.
   if (ch) {
     if (GET_ACCESSORY_TYPE(attachment) == ACCESS_GASVENT) {
-      act("You remove the ported barrel from $p and discard it, installing a non-ported one in its place.", TRUE, ch, attachment, NULL, TO_CHAR);
-      act("$n removes the ported barrel from $p and discards it, installing a non-ported one in its place.", TRUE, ch, attachment, NULL, TO_ROOM);
+      act("You remove the ported barrel from $p and discard it, installing a non-ported one in its place.", TRUE, ch, weapon, NULL, TO_CHAR);
+      act("$n removes the ported barrel from $p and discards it, installing a non-ported one in its place.", TRUE, ch, weapon, NULL, TO_ROOM);
       extract_obj(attachment);
       attachment = NULL;
     } else {
