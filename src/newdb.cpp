@@ -1904,29 +1904,31 @@ void DeleteChar(long idx)
   char prepare_quotes_buf[MAX_STRING_LENGTH * 2 + 1];
   
   const char *table_names[] = {
-    "pfiles",
-    "pfiles_immortdata",
-    "pfiles_chargendata",
-    "pfiles_magic",
-    "pfiles_drugdata",
-    "pfiles_drugs",
-    "pfiles_skills",
-    "pfiles_adeptpowers",
-    "pfiles_metamagic",
-    "pfiles_quests",
-    "pfiles_spirits",
-    "pfiles_bioware",
-    "pfiles_cyberware",
-    "pfiles_inv",
-    "pfiles_ammo",
-    "pfiles_worn",
-    "pfiles_spells",
-    "pfiles_memory",
-    "pfiles_alias",
-    "pfiles_memory" // IF YOU CHANGE THIS< CHANGE PFILES_MEMORY_INDEX
+    "pfiles                 ", // 0
+    "pfiles_adeptpowers     ",
+    "pfiles_alias           ",
+    "pfiles_ammo            ",
+    "pfiles_bioware         ",
+    "pfiles_chargendata     ", // 5
+    "pfiles_cyberware       ",
+    "pfiles_drugdata        ",
+    "pfiles_drugs           ",
+    "pfiles_ignore          ", // IF YOU CHANGE THIS, CHANGE PFILES_IGNORE_INDEX
+    "pfiles_immortdata      ", // 10
+    "pfiles_inv             ",
+    "pfiles_magic           ",
+    "pfiles_mail            ",
+    "pfiles_memory          ", // IF YOU CHANGE THIS, CHANGE PFILES_MEMORY_INDEX
+    "pfiles_metamagic       ", // 15
+    "pfiles_quests          ",
+    "pfiles_skills          ",
+    "pfiles_spells          ",
+    "pfiles_spirits         ", 
+    "pfiles_worn            "  // 20
   };
-  #define NUM_SQL_TABLE_NAMES 20
-  #define PFILES_MEMORY_INDEX 19
+  #define NUM_SQL_TABLE_NAMES 21
+  #define PFILES_IGNORE_INDEX 9
+  #define PFILES_MEMORY_INDEX 14
   
   // Figure out the filename for this character.
   const char *name = get_player_name(idx);
@@ -1942,6 +1944,7 @@ void DeleteChar(long idx)
   // Prepend the file with the statement to remove this character's [Deleted] entry.
   fprintf(fl, "DELETE FROM pfiles WHERE idnum=%ld;\r\n", idx);
   
+  // Write the info for each section to the file, then delete the relevant DB info.
   for (int table_idx = 0; table_idx < NUM_SQL_TABLE_NAMES; table_idx++) {
     // Get the table schema.
     snprintf(buf, sizeof(buf), "DESCRIBE %s", table_names[table_idx]);
@@ -1985,13 +1988,16 @@ void DeleteChar(long idx)
     
     // Finally, delete the table entry, unless we're at index 0-- that's the pfile table.
     if (table_idx != 0) {
-      snprintf(buf, sizeof(buf), "DELETE FROM %s WHERE %s=%ld", table_names[table_idx], table_idx == PFILES_MEMORY_INDEX ? "remembered" : "idnum", idx);
+      if (table_idx == PFILES_IGNORE_INDEX || table_idx == PFILES_MEMORY_INDEX)
+        snprintf(buf, sizeof(buf), "DELETE FROM %s WHERE remembered=%ld", table_names[table_idx], idx);
+      else
+        snprintf(buf, sizeof(buf), "DELETE FROM %s WHERE idnum=%ld", table_names[table_idx], idx);
       mysql_wrapper(mysql, buf);
     }
   }
   fclose(fl);
   
-  // Update playergroup info.
+  // Update playergroup info, write a log, and delete their info and invitations.
   snprintf(buf, sizeof(buf), "SELECT `group` FROM pfiles_playergroups WHERE idnum=%ld", idx);
   mysql_wrapper(mysql, buf);
   res = mysql_use_result(mysql);
@@ -2009,6 +2015,7 @@ void DeleteChar(long idx)
   snprintf(buf, sizeof(buf), "DELETE FROM playergroup_invitations WHERE idnum=%ld", idx);
   mysql_wrapper(mysql, buf);
   
+  // Wipe out their name and password so they can't log in anymore.
   snprintf(buf, sizeof(buf), "UPDATE pfiles SET Name='%s', Password='', NoDelete=TRUE WHERE idnum=%ld", CHARACTER_DELETED_NAME_FOR_SQL, idx); 
 //  snprintf(buf, sizeof(buf), "DELETE FROM pfiles WHERE idnum=%ld", idx);
   mysql_wrapper(mysql, buf);

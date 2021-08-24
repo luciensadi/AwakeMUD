@@ -1627,7 +1627,7 @@ bool biocyber_compatibility(struct obj_data *obj1, struct obj_data *obj2, struct
               send_to_char("Bone lacings are incompatible with cybernetic replacements (limbs, skull, torso).\r\n", ch);
               return FALSE;
           }
-          return FALSE;
+          break;
       }
     if (IS_SET(GET_CYBERWARE_FLAGS(cyber1), EYE_DATAJACK) && GET_CYBERWARE_TYPE(cyber2) == CYB_DATAJACK) {
       send_to_char("You already have a datajack installed.\r\n", ch);

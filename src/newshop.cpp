@@ -316,7 +316,8 @@ bool install_ware_in_target_character(struct obj_data *ware, struct char_data *i
     default:
       snprintf(buf3, sizeof(buf3), "SYSERR: Non-ware object '%s' (%ld) passed to install_ware_in_target_character()!", GET_OBJ_NAME(ware), GET_OBJ_VNUM(ware));
       mudlog(buf3, installer, LOG_SYSLOG, TRUE);
-      send_to_char(installer, "An unexpected error occurred when trying to install %s.\r\n", GET_OBJ_NAME(ware));
+      send_to_char(installer, "An unexpected error occurred when trying to install %s (code 1.\r\n", GET_OBJ_NAME(ware));
+      send_to_char(recipient, "An unexpected error occurred when trying to install %s (code 1).\r\n", GET_OBJ_NAME(ware));
       return FALSE;
   }
   
@@ -324,7 +325,8 @@ bool install_ware_in_target_character(struct obj_data *ware, struct char_data *i
   if (ware->in_obj && GET_OBJ_TYPE(ware->in_obj) != ITEM_SHOPCONTAINER) {
     snprintf(buf3, sizeof(buf3), "SYSERR: '%s' (%ld) contained in something that's not a shopcontainer!", GET_OBJ_NAME(ware), GET_OBJ_VNUM(ware));
     mudlog(buf3, installer, LOG_SYSLOG, TRUE);
-    send_to_char(installer, "An unexpected error occurred when trying to install %s.\r\n", GET_OBJ_NAME(ware));
+    send_to_char(installer, "An unexpected error occurred when trying to install %s (code 2).\r\n", GET_OBJ_NAME(ware));
+    send_to_char(recipient, "An unexpected error occurred when trying to install %s (code 2).\r\n", GET_OBJ_NAME(ware));
     return FALSE;
   }
   
