@@ -3014,14 +3014,14 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
               GET_CHAR_NAME(ch), ch->in_room ? GET_ROOM_NAME(ch->in_room) : "n/a",
               ch->in_veh ? GET_VEH_NAME(ch->in_veh) : "n/a");
     } else {
-      strcat(buf, " ...No character.");
+      strlcat(buf, " ...No character.", sizeof(buf));
     }
     if (obj) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nobj: %s, in_room %s, in_veh %s",
               GET_OBJ_NAME(obj), obj->in_room ? GET_ROOM_NAME(obj->in_room) : "n/a",
               obj->in_veh ? GET_VEH_NAME(obj->in_veh) : "n/a");
     } else {
-      strcat(buf, " ...No obj.");
+      strlcat(buf, " ...No obj.", sizeof(buf));
     }
     mudlog(buf, NULL, LOG_SYSLOG, TRUE);
     return NULL;
@@ -3044,7 +3044,7 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
     
     // Send rolls to riggers.
     for (; rigger_check; rigger_check = rigger_check->next_veh) {
-      if ((tch = rigger_check->rigger) && tch->desc && PRF_FLAGGED(to, PRF_ROLLS)) {
+      if ((tch = rigger_check->rigger) && tch->desc && PRF_FLAGGED(tch, PRF_ROLLS)) {
         // We currently treat all vehicles as having ultrasonic sensors.
         // Since the check is done to the rigger, we have to apply det-invis to them directly, then remove it when done.
         bool rigger_is_det_invis = AFF_FLAGGED(tch, AFF_DETECT_INVIS);
