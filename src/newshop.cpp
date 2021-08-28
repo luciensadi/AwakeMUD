@@ -934,8 +934,7 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
     }
     
     // Prevent trying to pre-order something if you don't have the scratch. Calculated using the flat price, not the negotiated one.
-    int preorder_cost = GET_OBJ_COST(obj) / PREORDER_COST_DIVISOR;
-    preorder_cost *= buynum;
+    int preorder_cost_for_one_object = GET_OBJ_COST(obj) / PREORDER_COST_DIVISOR;
     
     if (!cred || shop_table[shop_nr].type == SHOP_BLACK) {
       cash = TRUE;
@@ -949,10 +948,10 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
       return;
     }
     
-    if ((cash && GET_NUYEN(ch) < preorder_cost)
-        || (cred && GET_ITEM_MONEY_VALUE(cred) < preorder_cost))
+    if ((cash && GET_NUYEN(ch) < preorder_cost_for_one_object * buynum)
+        || (cred && GET_ITEM_MONEY_VALUE(cred) < preorder_cost_for_one_object * buynum))
     {
-      snprintf(buf, sizeof(buf), "%s It'll cost you %d nuyen to place that order. Come back when you've got the funds.", GET_CHAR_NAME(ch), preorder_cost);
+      snprintf(buf, sizeof(buf), "%s It'll cost you %d nuyen to place that order. Come back when you've got the funds.", GET_CHAR_NAME(ch), preorder_cost_for_one_object * buynum);
       do_say(keeper, buf, cmd_say, SCMD_SAYTO);
       extract_obj(obj);
       return;
@@ -1037,11 +1036,11 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
     
     // Pay the preorder cost.
     if (cash) {
-      GET_NUYEN(ch) -= preorder_cost;
+      GET_NUYEN(ch) -= preorder_cost_for_one_object * buynum;
     } else {
-      GET_ITEM_MONEY_VALUE(cred) -= preorder_cost;
+      GET_ITEM_MONEY_VALUE(cred) -= preorder_cost_for_one_object * buynum;
     }
-    send_to_char(ch, "You put down a %d nuyen deposit on your order.\r\n", preorder_cost);
+    send_to_char(ch, "You put down a %d nuyen deposit on your order.\r\n", preorder_cost_for_one_object * buynum);
     
     if (totaltime < 1) {
       int hours = MAX(1, (int)(24 * totaltime));
@@ -1073,7 +1072,7 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
       order->next = shop_table[shop_nr].order;
       order->sent = FALSE;
       shop_table[shop_nr].order = order;
-      order->paid = preorder_cost;
+      order->paid = preorder_cost_for_one_object;
       order->expiration = order->timeavail + (60 * 60 * 24 * PREORDERS_ARE_GOOD_FOR_X_DAYS);
     }
     
