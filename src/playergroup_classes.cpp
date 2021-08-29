@@ -50,11 +50,11 @@ idnum(0), bank(0), tag(NULL), name(NULL), alias(NULL)
 /************* Destructor *************/
 Playergroup::~Playergroup() {
   if (tag)
-    delete tag;
+    delete [] tag;
   if (name)
-    delete name;
+    delete [] name;
   if (alias)
-    delete alias;
+    delete [] alias;
 }
 
 /************* Getters *************/
@@ -108,12 +108,34 @@ bool Playergroup::set_tag(const char *newtag, struct char_data *ch) {
         send_to_char("Sorry, tag strings can't end with the ^ character.\r\n", ch);
         return FALSE;
       }
+      // Print a single ^ character.
       else if (*(ptr+1) == '^') {
         ptr += 2;
         len += 1;
       }
+      // Print a color character.
       else {
-        ptr += 2;
+        // There are two types of color: Two-character tags (^g) and xterm tags (^[F123]). We must account for both.
+        if (*(ptr+1) == '[') {
+          // We know that ptr+1 was a valid character (see first check in this while), so at worst, +2 can be \0.
+          if (!*(ptr + 2) || !(*(ptr + 2) == 'F')) {
+            send_to_char("Sorry, xterm256 colors can only be specified in foreground mode (^^[F...]).\r\n", ch);
+            return FALSE;
+          }
+#define IS_CODE_DIGIT_VALID(chr) (*(chr) && (*(chr) == '0' || *(chr) == '1' || *(chr) == '2' || *(chr) == '3' || *(chr) == '4' || *(chr) == '5'))
+          if (!IS_CODE_DIGIT_VALID(ptr + 3) || !IS_CODE_DIGIT_VALID(ptr + 4) || !IS_CODE_DIGIT_VALID(ptr + 5)) {
+            send_to_char("Sorry, you've entered an invalid xterm256 color code.\r\n", ch);
+            return FALSE;
+          }
+#undef IS_CODE_DIGIT_VALID
+          if (!*(ptr + 6) || *(ptr + 6) != ']') {
+            send_to_char("You've forgotten to terminate an xterm256 color code.\r\n", ch);
+            return FALSE;
+          }
+          ptr += strlen("^[F123]");
+        } else {
+          ptr += 2;
+        }
       }
     } else {
       len += 1;

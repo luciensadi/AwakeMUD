@@ -758,9 +758,12 @@ void game_loop(int mother_desc)
         
         if ((--(d->wait) <= 0) && get_from_q(&d->input, comm, &aliased)) {
           if (d->character) {
+            d->character->char_specials.last_timer = d->character->char_specials.timer;
             d->character->char_specials.timer = 0;
-            if (d->original)
+            if (d->original) {
+              d->original->char_specials.last_timer = d->original->char_specials.timer;
               d->original->char_specials.timer = 0;
+            }
             if (!d->connected && GET_WAS_IN(d->character)) {
               if (d->character->in_room)
                 char_from_room(d->character);

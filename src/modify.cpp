@@ -176,27 +176,28 @@ void string_add(struct descriptor_data *d, char *str)
 
   if (!(*d->str))
   {
-    if (strlen(str) > (u_int)d->max_str) {
+    if (strlen(str) >= (u_int)d->max_str) {
       send_to_char("String too long - Truncated.\r\n", d->character);
-      *(str + d->max_str) = '\0';
+      *(str + d->max_str - 1) = '\0';
       terminator = 1;
     }
     *d->str = new char[strlen(str) + 3];
-    strcpy(*d->str, str);
+    strlcpy(*d->str, str, d->max_str);
   } else
   {
-    if (strlen(str) + strlen(*d->str) > (u_int)d->max_str) {
+    if (strlen(str) + strlen(*d->str) >= (u_int)d->max_str) {
       send_to_char("String too long.  Last line skipped.\r\n", d->character);
       terminator = 1;
     } else {
-      char *temp = new char[strlen(*d->str) + strlen(str) + 3];
+      int temp_size = strlen(*d->str) + strlen(str) + 3;
+      char *temp = new char[temp_size];
       if (!temp) {
         perror("string_add");
         shutdown();
         ;
       }
-      strcpy(temp, *d->str);
-      strcat(temp, str);
+      strlcpy(temp, *d->str, temp_size);
+      strlcat(temp, str, temp_size);
       delete [] *d->str;
       *d->str = temp;
     }
@@ -448,13 +449,15 @@ void string_add(struct descriptor_data *d, char *str)
         snprintf(tmp, sizeof(tmp), "\r\n--%s (%s/%s%d-%s%d-%s%d)\r\n",
                 GET_CHAR_NAME(d->character), time, month < 10 ? "0" : "", month,
                 day < 10 ? "0" : "", day, year < 10 ? "0" : "", year);
-      char *ptr = new char[strlen(*d->str) + strlen(tmp) + 1];
+      
+      int ptr_length = strlen(*d->str) + strlen(tmp) + 1;
+      char *ptr = new char[ptr_length];
       if (!ptr) {
         perror("string_add");
         shutdown();
       }
-      strcpy (ptr, *d->str);
-      strcat(ptr, tmp);
+      strlcpy (ptr, *d->str, ptr_length);
+      strlcat(ptr, tmp, ptr_length);
       delete [] *d->str;
       *d->str = ptr;
       Board_save_board(d->mail_to - BOARD_MAGIC);
@@ -467,7 +470,7 @@ void string_add(struct descriptor_data *d, char *str)
   } else {
     // Only add a newline if it's not just /**/ with nothing else in it.
     if (strcmp(*d->str, "/**/") != 0)
-      strcat(*d->str, "\r\n");
+      strlcat(*d->str, "\r\n", d->max_str);
   }
 }
 
@@ -486,13 +489,13 @@ ACMD(do_spellset)
 
   if (!*name) {                 /* no arguments. print an informative text */
     send_to_char("Syntax: spellset <name> '<spell>' <force>\r\n", ch);
-    strcpy(help, "Spell being one of the following:\r\n");
+    strlcpy(help, "Spell being one of the following:\r\n", sizeof(help));
     for ( i = 0; i < MAX_SPELLS; i++) {
       if (*spells[i].name == '!')
         continue;
       snprintf(ENDOF(help), sizeof(help) - strlen(help), "%18s", spells[i].name);
       if (i % 4 == 3) {
-        strcat(help, "\r\n");
+        strlcat(help, "\r\n", sizeof(help));
         send_to_char(help, ch);
         *help = '\0';
       }
@@ -540,7 +543,7 @@ ACMD(do_spellset)
     send_to_char("Spell must be enclosed in: ''\r\n", ch);
     return;
   }
-  strcpy(help, (argument + 1));
+  strlcpy(help, (argument + 1), sizeof(help));
   help[qend - 1] = '\0';
   if ((spelltoset = find_spell_num(help)) <= 0) {
     send_to_char("Unrecognized spell.\r\n", ch);
@@ -568,7 +571,7 @@ ACMD(do_spellset)
   }
   
   int subtype = 0;
-  strcpy(buf, spells[spelltoset].name);
+  strlcpy(buf, spells[spelltoset].name, sizeof(buf));
   // Require that the attribute spells have an attribute specified (see spell->subtype comment).
   if (spelltoset == SPELL_INCATTR || spelltoset == SPELL_INCCYATTR ||
       spelltoset == SPELL_DECATTR || spelltoset == SPELL_DECCYATTR)
@@ -693,13 +696,13 @@ ACMD(do_skillset)
 
   if (!*name) {                 /* no arguments. print an informative text */
     send_to_char("Syntax: skillset <name> '<skill>' <value>\r\n", ch);
-    strcpy(help, "Skill being one of the following:\r\n");
+    strlcpy(help, "Skill being one of the following:\r\n", sizeof(help));
     for (i = 0; i < MAX_SKILLS; i++) {
       if (*skills[i].name == '!')
         continue;
       snprintf(ENDOF(help), sizeof(help) - strlen(help), "%18s", skills[i].name);
       if (i % 4 == 3 || PRF_FLAGGED(ch, PRF_SCREENREADER)) {
-        strcat(help, "\r\n");
+        strlcat(help, "\r\n", sizeof(help));
         send_to_char(help, ch);
         *help = '\0';
       }
@@ -733,7 +736,7 @@ ACMD(do_skillset)
     send_to_char("Skill must be enclosed in: ''\r\n", ch);
     return;
   }
-  strcpy(help, (argument + 1));
+  strlcpy(help, (argument + 1), sizeof(help));
   help[qend - 1] = '\0';
   
   if (!strn_cmp(help, "orzet", strlen("orzet"))) {
@@ -788,7 +791,7 @@ ACMD(do_abilityset)
 
   if (!*name) {                 /* no arguments. print an informative text */
     send_to_char("Syntax: abilityset <name> '<skill>' <value>\r\n", ch);
-    strcpy(help, "Ability being one of the following:\r\n");
+    strlcpy(help, "Ability being one of the following:\r\n", sizeof(help));
     for (i = 1; i < ADEPT_NUMPOWER; i++) {
       snprintf(ENDOF(help), sizeof(help) - strlen(help), "%32s", adept_powers[i]);
       if (i % 3 == 2 || PRF_FLAGGED(ch, PRF_SCREENREADER)) {
@@ -832,7 +835,7 @@ ACMD(do_abilityset)
     send_to_char("Ability must be enclosed in single quotes (').\r\n", ch);
     return;
   }
-  strcpy(help, (argument + 1));
+  strlcpy(help, (argument + 1), sizeof(help));
   help[qend - 1] = '\0';
   if ((ability = find_ability_num(help)) <= 0) {
     send_to_char("Unrecognized ability.\r\n", ch);
@@ -924,8 +927,9 @@ void page_string(struct descriptor_data *d, char *str, int keep_internal)
   if (keep_internal)
   {
     DELETE_ARRAY_IF_EXTANT(d->showstr_head);
-    d->showstr_head = new char[strlen(str) + 1];
-    strcpy(d->showstr_head, str);
+    int showstr_head_len = strlen(str) + 1;
+    d->showstr_head = new char[showstr_head_len];
+    strlcpy(d->showstr_head, str, showstr_head_len);
     d->showstr_point = d->showstr_head;
   } else
     d->showstr_point = str;

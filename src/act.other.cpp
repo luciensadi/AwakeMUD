@@ -3581,6 +3581,11 @@ ACMD(do_unpack)
     }
   }
   
+  if (GET_OBJ_TYPE(shop) != ITEM_WORKSHOP || GET_WORKSHOP_GRADE(shop) != TYPE_WORKSHOP) {
+    send_to_char(ch, "You can't unpack %s.\r\n", GET_OBJ_NAME(shop));
+    return;
+  }
+  
   if (!shop) {
     send_to_char(ch, "There is no workshop here to set up.\r\n");
     return;

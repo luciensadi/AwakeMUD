@@ -591,6 +591,10 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
     else
       GET_NUYEN(ch) -= price;
       
+    // Log it.
+    snprintf(buf, sizeof(buf), "Purchased cyber/bio '%s' (%ld) for %d nuyen.", GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj), price);
+    mudlog(buf, ch, LOG_GRIDLOG, TRUE);
+      
     if (sell) {
       if (sell->type == SELL_BOUGHT && !--sell->stock) {
         struct shop_sell_data *temp;
@@ -799,6 +803,10 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
     snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " (x%d)", bought);
   send_to_char(buf2, ch);
   send_to_char("\r\n", ch);
+  
+  // Log it.
+  snprintf(buf, sizeof(buf), "Purchased %d of '%s' (%ld) for %d nuyen.", bought, GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj), price);
+  mudlog(buf, ch, LOG_GRIDLOG, TRUE);
   
   if (order) {
     order->number -= bought;

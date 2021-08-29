@@ -604,6 +604,27 @@ ACMD(do_build) {
         send_to_char(ch, "You don't have that deck.\r\n");
         return;
     }
+    
+    if(GET_OBJ_TYPE(obj) != ITEM_PART) {
+      send_to_char(ch, "You can't build a part out of %s.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
+      return;
+    }
+    
+    if (GET_OBJ_TYPE(deck) != ITEM_CUSTOM_DECK) {
+      send_to_char(ch, "%s isn't a custom deck; how exactly did you plan to build %s into it?\r\n", capitalize(GET_OBJ_NAME(deck)), decapitalize_a_an(GET_OBJ_NAME(obj)));
+      return;
+    }
+    
+    if (GET_PART_DESIGN_COMPLETION(obj)) {
+      send_to_char(ch, "You must make a design for %s first.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
+      return;
+    }
+    
+    if (GET_PART_BUILDER_IDNUM(obj) != GET_IDNUM(ch) && GET_PART_BUILDER_IDNUM(obj) > 0) {
+      send_to_char(ch, "Someone else has already started on %s.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
+      return;
+    }
+    
     if (GET_PART_TYPE(obj) == PART_MPCP && GET_CYBERDECK_MPCP(deck)) {
         struct obj_data *temp = deck->contains;
         if (GET_PART_TARGET_MPCP(obj) != GET_CYBERDECK_MPCP(deck))
@@ -615,21 +636,14 @@ ACMD(do_build) {
             return;
         }
     }
-    if (GET_OBJ_TYPE(obj) != ITEM_PART)
-        send_to_char(ch, "You can't build a part out of %s.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
-  else if (GET_OBJ_TYPE(deck) != ITEM_CUSTOM_DECK)
-    send_to_char(ch, "%s isn't a custom deck; how exactly did you plan to build %s into it?\r\n", capitalize(GET_OBJ_NAME(deck)), decapitalize_a_an(GET_OBJ_NAME(obj)));
-    else if (GET_PART_DESIGN_COMPLETION(obj))
-        send_to_char(ch, "You must make a design for %s first.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
-    else if (GET_PART_TYPE(obj) != PART_MPCP
+
+    if (GET_PART_TYPE(obj) != PART_MPCP
              && (GET_CYBERDECK_MPCP(deck) && GET_PART_TARGET_MPCP(obj) != GET_CYBERDECK_MPCP(deck))
              && (parts[GET_PART_TYPE(obj)].design >= 0
                  || GET_PART_TYPE(obj) == PART_ACTIVE
                  || GET_PART_TYPE(obj) == PART_STORAGE
                  || GET_PART_TYPE(obj) == PART_MATRIX_INTERFACE))
         send_to_char(ch, "%s is not designed for the same MPCP as %s.\r\n", capitalize(GET_OBJ_NAME(obj)), decapitalize_a_an(GET_OBJ_NAME(deck)));
-    else if (GET_PART_BUILDER_IDNUM(obj) != GET_IDNUM(ch) && GET_PART_BUILDER_IDNUM(obj) > 0)
-        send_to_char(ch, "Someone else has already started on %s.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
     else {
         struct obj_data *workshop = NULL;
         int kit_rating = 0, target = -GET_OBJ_VAL(obj, 5), duration = 0, skill = 0;

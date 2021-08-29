@@ -547,33 +547,7 @@ void set_attributes(struct char_data *ch, int magic)
   ch->aff_abils = ch->real_abils;
   
   // Set their natural vision.
-  switch (GET_RACE(ch)) {
-    case RACE_HUMAN:
-    case RACE_OGRE:
-      NATURAL_VISION(ch) = NORMAL;
-      break;
-    case RACE_DWARF:
-    case RACE_GNOME:
-    case RACE_MENEHUNE:
-    case RACE_KOBOROKURU:
-    case RACE_TROLL:
-    case RACE_CYCLOPS:
-    case RACE_FOMORI:
-    case RACE_GIANT:
-    case RACE_MINOTAUR:
-      NATURAL_VISION(ch) = THERMOGRAPHIC;
-      break;
-    case RACE_ORK:
-    case RACE_HOBGOBLIN:
-    case RACE_SATYR:
-    case RACE_ONI:
-    case RACE_ELF:
-    case RACE_WAKYAMBI:
-    case RACE_NIGHTONE:
-    case RACE_DRYAD:
-      NATURAL_VISION(ch) = LOWLIGHT;
-      break;
-  }
+  set_natural_vision_for_race(ch);
 }
 
 void init_create_vars(struct descriptor_data *d)
@@ -685,7 +659,7 @@ int parse_race(struct descriptor_data *d, const char *arg)
     default:
       return RACE_UNDEFINED;
     }
-    strcat(buf2, "\r\n Press [return] to continue");
+    strlcat(buf2, "\r\n Press [return] to continue", sizeof(buf2));
     SEND_TO_Q(buf2, d);
     d->ccr.temp = CCR_RACE;
     d->ccr.mode = CCR_AWAIT_CR;
@@ -709,7 +683,7 @@ bool valid_totem(struct char_data *ch, int i)
 int parse_totem(struct descriptor_data *d, const char *arg)
 {
   char parsebuf[MAX_STRING_LENGTH];
-  strcpy(parsebuf, arg);
+  strlcpy(parsebuf, arg, sizeof(parsebuf));
   char *temp = parsebuf;
   int i;
 
@@ -717,7 +691,7 @@ int parse_totem(struct descriptor_data *d, const char *arg)
   {
     i = atoi(++temp);
     display_help(buf2, MAX_STRING_LENGTH, totem_types[i], d->character);
-    strcat(buf2, "\r\n Press [return] to continue ");
+    strlcat(buf2, "\r\n Press [return] to continue ", sizeof(buf2));
     SEND_TO_Q(buf2, d);
     d->ccr.temp = CCR_TOTEM;
     d->ccr.mode = CCR_AWAIT_CR;
@@ -813,51 +787,51 @@ void priority_menu(struct descriptor_data *d)
       break;
     case PR_RACE:
       if (GET_RACE(d->character) == RACE_ELF)
-        strcat(buf2, "Elf         -            -         -\r\n");
+        strlcat(buf2, "Elf         -            -         -\r\n", sizeof(buf2));
       else if (GET_RACE(d->character) == RACE_DRAGON)
-        strcat(buf2, "Dragon     -            -        -\r\n");
+        strlcat(buf2, "Dragon     -            -        -\r\n", sizeof(buf2));
       else if (GET_RACE(d->character) == RACE_TROLL)
-        strcat(buf2, "Troll       -            -         -\r\n");
+        strlcat(buf2, "Troll       -            -         -\r\n", sizeof(buf2));
       else if (GET_RACE(d->character) == RACE_ORK)
-        strcat(buf2, "Ork         -            -         -\r\n");
+        strlcat(buf2, "Ork         -            -         -\r\n", sizeof(buf2));
       else if (GET_RACE(d->character) == RACE_DWARF)
-        strcat(buf2, "Dwarf       -            -         -\r\n");
+        strlcat(buf2, "Dwarf       -            -         -\r\n", sizeof(buf2));
       else if (GET_RACE(d->character) == RACE_CYCLOPS)
-        strcat(buf2, "Cyclops     -            -         -\r\n");
+        strlcat(buf2, "Cyclops     -            -         -\r\n", sizeof(buf2));
       else if (GET_RACE(d->character) == RACE_KOBOROKURU)
-        strcat(buf2, "Koborokuru  -            -         -\r\n");
+        strlcat(buf2, "Koborokuru  -            -         -\r\n", sizeof(buf2));
       else if (GET_RACE(d->character) == RACE_FOMORI)
-        strcat(buf2, "Fomori      -            -         -\r\n");
+        strlcat(buf2, "Fomori      -            -         -\r\n", sizeof(buf2));
       else if (GET_RACE(d->character) == RACE_MENEHUNE)
-        strcat(buf2, "Menehune    -            -         -\r\n");
+        strlcat(buf2, "Menehune    -            -         -\r\n", sizeof(buf2));
       else if (GET_RACE(d->character) == RACE_HOBGOBLIN)
-        strcat(buf2, "Hobgoblin   -            -         -\r\n");
+        strlcat(buf2, "Hobgoblin   -            -         -\r\n", sizeof(buf2));
       else if (GET_RACE(d->character) == RACE_GIANT)
-        strcat(buf2, "Giant       -            -         -\r\n");
+        strlcat(buf2, "Giant       -            -         -\r\n", sizeof(buf2));
       else if (GET_RACE(d->character) == RACE_GNOME)
-        strcat(buf2, "Gnome       -            -         -\r\n");
+        strlcat(buf2, "Gnome       -            -         -\r\n", sizeof(buf2));
       else if (GET_RACE(d->character) == RACE_ONI)
-        strcat(buf2, "Oni         -            -         -\r\n");
+        strlcat(buf2, "Oni         -            -         -\r\n", sizeof(buf2));
       else if (GET_RACE(d->character) == RACE_WAKYAMBI)
-        strcat(buf2, "Wakyambi    -            -         -\r\n");
+        strlcat(buf2, "Wakyambi    -            -         -\r\n", sizeof(buf2));
       else if (GET_RACE(d->character) == RACE_OGRE)
-        strcat(buf2, "Ogre        -            -         -\r\n");
+        strlcat(buf2, "Ogre        -            -         -\r\n", sizeof(buf2));
       else if (GET_RACE(d->character) == RACE_MINOTAUR)
-        strcat(buf2, "Minotaur    -            -         -\r\n");
+        strlcat(buf2, "Minotaur    -            -         -\r\n", sizeof(buf2));
       else if (GET_RACE(d->character) == RACE_SATYR)
-        strcat(buf2, "Satyr       -            -         -\r\n");
+        strlcat(buf2, "Satyr       -            -         -\r\n", sizeof(buf2));
       else if (GET_RACE(d->character) == RACE_NIGHTONE)
-        strcat(buf2, "Night-One   -            -         -\r\n");
+        strlcat(buf2, "Night-One   -            -         -\r\n", sizeof(buf2));
       else
-        strcat(buf2, "Human       -            -         -\r\n");
+        strlcat(buf2, "Human       -            -         -\r\n", sizeof(buf2));
       break;
     case PR_MAGIC:
       if ( i == 0 )
-        strcat(buf2, "Full Mage   -            -         -\r\n");
+        strlcat(buf2, "Full Mage   -            -         -\r\n", sizeof(buf2));
       else if ( i == 1 )
-        strcat(buf2, "Adept/Aspect-            -         -\r\n");
+        strlcat(buf2, "Adept/Aspect-            -         -\r\n", sizeof(buf2));
       else
-        strcat(buf2, "Mundane     -            -         -\r\n");
+        strlcat(buf2, "Mundane     -            -         -\r\n", sizeof(buf2));
       break;
     case PR_ATTRIB:
       snprintf(buf2, sizeof(buf2), "%sAttributes  %-2d           -         -\r\n", buf2,
@@ -957,7 +931,7 @@ void ccr_totem_menu(struct descriptor_data *d)
     if (++i < NUM_TOTEMS)
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s[%2d] %-20s^n", valid_totem(CH, i) ? "" : "^R", i, totem_types[i]);
   }
-  strcat(buf, "\r\n");
+  strlcat(buf, "\r\n", sizeof(buf));
   SEND_TO_Q(buf, d);
   SEND_TO_Q("\r\nTotem (?# for help): ", d);
   d->ccr.mode = CCR_TOTEM;
@@ -969,38 +943,38 @@ void ccr_totem_spirit_menu(struct descriptor_data *d)
   switch (GET_TOTEM(CH))
   {
   case TOTEM_GATOR:
-    strcat(buf, "  [1] Swamp\r\n  [2] Lake\r\n  [3] River\r\n  [4] City\r\n");
+    strlcat(buf, "  [1] Swamp\r\n  [2] Lake\r\n  [3] River\r\n  [4] City\r\n", sizeof(buf));
     break;
   case TOTEM_SNAKE:
   case TOTEM_FOX:
-    strcat(buf, "  [1] City\r\n  [2] Field\r\n  [3] Hearth\r\n  [4] Desert\r\n  [5] Forest\r\n  [6] Mountain\r\n  [7] Prairie\r\n");
+    strlcat(buf, "  [1] City\r\n  [2] Field\r\n  [3] Hearth\r\n  [4] Desert\r\n  [5] Forest\r\n  [6] Mountain\r\n  [7] Prairie\r\n", sizeof(buf));
     break;
   case TOTEM_WOLF:
-    strcat(buf, "  [1] Forest\r\n  [2] Prairie\r\n  [3] Mountain\r\n");
+    strlcat(buf, "  [1] Forest\r\n  [2] Prairie\r\n  [3] Mountain\r\n", sizeof(buf));
     break;
   case TOTEM_FISH:
   case TOTEM_TURTLE:
-    strcat(buf, "  [1] River\r\n  [2] Sea\r\n  [3] Lake\r\n  [4] Swamp\r\n");
+    strlcat(buf, "  [1] River\r\n  [2] Sea\r\n  [3] Lake\r\n  [4] Swamp\r\n", sizeof(buf));
     break;
   case TOTEM_GECKO:
-    strcat(buf, "  [1] Illusion\r\n  [2] Manipulation\r\n");
+    strlcat(buf, "  [1] Illusion\r\n  [2] Manipulation\r\n", sizeof(buf));
     break;
   case TOTEM_GOOSE:
-    strcat(buf, "  [ 1] Desert    [ 2] Forest\r\n"
+    strlcat(buf, "  [ 1] Desert    [ 2] Forest\r\n"
                 "  [ 3] Mountain  [ 4] Prairie\r\n"
                 "  [ 5] Mist      [ 6] Storm\r\n"
                 "  [ 7] River     [ 8] Sea\r\n"
                 "  [ 9] Wind      [10] Lake\r\n"
-                "  [11] Swamp\r\n");
+                "  [11] Swamp\r\n", sizeof(buf));
     break;
   case TOTEM_HORSE:
-    strcat(buf, "  [1] Combat\r\n  [2] Illusion\r\n");
+    strlcat(buf, "  [1] Combat\r\n  [2] Illusion\r\n", sizeof(buf));
     break;
   case TOTEM_LIZARD:
-    strcat(buf, "  [1] Desert\r\n  [2] Forest\r\n  [3] Mountain\r\n");
+    strlcat(buf, "  [1] Desert\r\n  [2] Forest\r\n  [3] Mountain\r\n", sizeof(buf));
     break;
   case TOTEM_OTTER:
-    strcat(buf, "  [1] River\r\n  [2] Sea\r\n");
+    strlcat(buf, "  [1] River\r\n  [2] Sea\r\n", sizeof(buf));
     break;
   }
 
@@ -1717,7 +1691,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
       break;
     case '?':
       display_help(buf2, MAX_STRING_LENGTH, "priorities", d->character);
-      strcat(buf2, "\r\n Press [return] to continue ");
+      strlcat(buf2, "\r\n Press [return] to continue ", sizeof(buf2));
       SEND_TO_Q(buf2, d);
       d->ccr.temp = CCR_PRIORITY;
       d->ccr.mode = CCR_AWAIT_CR;

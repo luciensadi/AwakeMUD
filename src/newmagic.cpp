@@ -12,6 +12,7 @@
 #include "screen.h"
 #include "constants.h"
 #include "olc.h"
+#include "config.h"
 
 #define POWER(name) void (name)(struct char_data *ch, struct char_data *spirit, struct spirit_data *spiritdata, char *arg)
 #define SPELLCASTING 0
@@ -1024,6 +1025,7 @@ void cast_combat_spell(struct char_data *ch, int spell, int force, char *arg)
       act("You can't affect $N with manabolt.", TRUE, ch, 0, vict, TO_CHAR);
       return;
     }
+    WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
     
     success = success_test(skill, GET_WIL(vict) + target_modifiers);
     if (success > 0 && GET_REFLECT(vict) && (reflected = reflect_spell(ch, vict, spell, force, 0, GET_WIL(ch), success))) {
@@ -1058,6 +1060,7 @@ void cast_combat_spell(struct char_data *ch, int spell, int force, char *arg)
       act("You can't affect $N with stunbolt.", TRUE, ch, 0, vict, TO_CHAR);
       return;
     }
+    WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
     
     success = success_test(skill, GET_WIL(vict) + target_modifiers);
     if (success > 0 && GET_REFLECT(vict) && (reflected = reflect_spell(ch, vict, spell, force, 0, GET_WIL(ch), success))) {
@@ -1092,6 +1095,7 @@ void cast_combat_spell(struct char_data *ch, int spell, int force, char *arg)
       act("You have the KILLER flag, so you can't affect $N with powerbolt.", TRUE, ch, 0, vict, TO_CHAR);
       return;
     }
+    WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
     
     success = success_test(skill, GET_BOD(vict) + target_modifiers);
     if (success > 0 && GET_REFLECT(vict) && (reflected = reflect_spell(ch, vict, spell, force, 0, GET_BOD(ch), success))) {
@@ -1146,6 +1150,7 @@ void cast_detection_spell(struct char_data *ch, int spell, int force, char *arg,
   switch (spell)
   {
   case SPELL_MINDLINK:
+    WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
     success = success_test(skill, 4 + target_modifiers);
     for (struct sustain_data *sust = GET_SUSTAINED(ch); sust; sust = sust->next)
       if (sust->spell == SPELL_MINDLINK) {
@@ -1166,6 +1171,7 @@ void cast_detection_spell(struct char_data *ch, int spell, int force, char *arg,
     spell_drain(ch, spell, force, 0);
     break;
   case SPELL_COMBATSENSE:
+    WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
     success = success_test(skill, 4 + target_modifiers);
     if (success > 0) {
       create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
@@ -1211,6 +1217,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
         send_to_char("They aren't affected by any drugs.\r\n", ch);
         return;
       }
+      WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
       success = success_test(skill, base_target + target_modifiers);
       if (success > 0 && !AFF_FLAGGED(vict, AFF_DETOX)) {
         create_sustained(ch, vict, spell, force, 0, success, spells[SPELL_STABILIZE].draindamage);
@@ -1221,6 +1228,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       spell_drain(ch, spell, force, 0);
       break;
     case SPELL_STABILIZE:
+      WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
       success = success_test(skill, 4 + ((GET_LAST_DAMAGETIME(vict) - time(0)) / SECS_PER_MUD_HOUR) + target_modifiers);
       if (success > 0 && force >= (GET_PHYSICAL(vict) <= 0 ? -(GET_PHYSICAL(vict) / 100) : 50)) {
         create_sustained(ch, vict, spell, force, 0, success, spells[SPELL_STABILIZE].draindamage);
@@ -1231,6 +1239,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       spell_drain(ch, spell, force, 0);
       break;
     case SPELL_RESISTPAIN:
+      WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
       success = success_test(skill, 4 + target_modifiers);
       if (GET_PHYSICAL(vict) <= 0)
         drain = DEADLY;
@@ -1248,6 +1257,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       spell_drain(ch, spell, force, 0);
       break;
     case SPELL_HEALTHYGLOW:
+      WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
       success = success_test(skill, 4 + target_modifiers);
       if (success > 0) {
         create_sustained(ch, vict, spell, force, 0, success, spells[SPELL_HEALTHYGLOW].draindamage);
@@ -1264,6 +1274,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       }
       // fall through
     case SPELL_HEAL:
+      WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
       success = MIN(force, success_test(skill, 10 - (int)(GET_ESS(vict) / 100) + target_modifiers + (int)(GET_INDEX(ch) / 200)));
       if (GET_PHYSICAL(vict) <= 0)
         drain = DEADLY;
@@ -1338,6 +1349,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
           return;
         }
       }
+      WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
       
       if ((success = success_test(skill, GET_REA(vict) + target_modifiers)) > 0) {
         create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
@@ -1389,6 +1401,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
         act(buf, TRUE, ch, 0, vict, TO_CHAR);
         return;
       }
+      WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
       int target = target_modifiers;
       if (spell == SPELL_INCREA)
         target += GET_REA(vict);
@@ -1441,6 +1454,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
         act("You have the KILLER flag, so you can't affect $N with a mind-altering spell.", TRUE, ch, 0, vict, TO_CHAR);
         return;
       }
+      WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
       
       success = success_test(skill, (spell == SPELL_CONFUSION ? GET_WIL(vict) : GET_INT(vict)) + target_modifiers);
       if (success > 0 && GET_REFLECT(vict) && (reflected = reflect_spell(ch, vict, spell, force, 0, (spell == SPELL_CONFUSION ? GET_WIL(ch) : GET_INT(ch)), success))) {
@@ -1460,6 +1474,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
     case SPELL_IMP_INVIS:
       if (!check_spell_victim(ch, vict, spell, arg))
         return;
+      WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
         
       success = success_test(skill, 4 + target_modifiers);
       if (success > 0) {
@@ -1473,6 +1488,8 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
     case SPELL_STEALTH:
       if (!check_spell_victim(ch, vict, spell, arg))
         return;
+      
+      WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
         
       success = success_test(skill, 4 + target_modifiers);
       if (success > 0) {
@@ -1484,6 +1501,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       spell_drain(ch, spell, force, 0);
       break;
     case SPELL_SILENCE:
+      WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
       success = success_test(skill, 4 + target_modifiers);
       if (success > 0) {
         act("The room falls silent.", FALSE, ch, 0, 0, TO_ROOM);
@@ -1570,6 +1588,8 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
   case SPELL_ARMOR:
     if (!check_spell_victim(ch, vict, spell, arg))
       return;
+      
+    WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
     success = success_test(skill, 6 + target_modifiers);
     if (success > 0) {
       create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
@@ -1580,6 +1600,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
     spell_drain(ch, spell, force, 0);
     break;
   case SPELL_POLTERGEIST:
+    WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
     success = success_test(skill, 4 + target_modifiers);
     if (success > 0) {
       create_sustained(ch, ch, spell, force, 0, success, spells[spell].draindamage);
@@ -1590,6 +1611,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
     spell_drain(ch, spell, force, 0);
     break;
   case SPELL_LIGHT:
+    WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
     success = success_test(skill, 4 + target_modifiers);
     if (success > 0) {
       create_sustained(ch, ch, spell, force, 0, success, spells[spell].draindamage);
@@ -1604,6 +1626,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       send_to_char("You can't create ice in here!\r\n", ch);
       return;
     }
+    WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
     success = success_test(skill, 4 + target_modifiers);
     if (success > 0) {
       ch->in_room->icesheet[0] = (int)(3.14 * ((GET_MAG(ch) * GET_MAG(ch)) / 10000));
@@ -1626,6 +1649,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       act("You have the KILLER flag, so you can't affect $N with ignite.", TRUE, ch, 0, vict, TO_CHAR);
       return;
     }
+    WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
     
     success = success_test(skill, 4 + target_modifiers); 
     if (success > 0 && GET_REFLECT(vict) && (reflected = reflect_spell(ch, vict, spell, force, 0, 4, success))) {
@@ -1650,6 +1674,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
     spell_drain(reflected ? vict : ch, spell, force, 0);
     break;
   case SPELL_SHADOW:
+    WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
     success = success_test(skill, 4 + target_modifiers);
     if (success > 0) {
       create_sustained(ch, ch, spell, force, 0, success, spells[spell].draindamage);
@@ -1675,6 +1700,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       act("You have the KILLER flag, so you can't affect $N with clout.", TRUE, ch, 0, vict, TO_CHAR);
       return;
     }
+    WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
       
     send_to_char("You feel a rush of air head towards you!\r\n", vict);
     
@@ -1722,6 +1748,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       act("You have the KILLER flag, so you can't affect $N with flamethrower.", TRUE, ch, 0, vict, TO_CHAR);
       return;
     }
+    WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
   
     act("$n's hands seem to spontaneously combust as $e directs a stream of flame at $N!", TRUE, ch, 0, vict, TO_ROOM);
     
@@ -1780,6 +1807,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       act("You have the KILLER flag, so you can't affect $N with acid stream.", TRUE, ch, 0, vict, TO_CHAR);
       return;
     }
+    WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
     act("Dark clouds form around $n moments before it condenses into a dark sludge and flies towards $N!", TRUE, ch, 0, vict, TO_ROOM);
     
     success += success_test(skill, 4 + target_modifiers);
@@ -1835,6 +1863,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       act("You have the KILLER flag, so you can't affect $N with lightning bolt.", TRUE, ch, 0, vict, TO_CHAR);
       return;
     }
+    WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
     act("Lightning bursts forth from $n and heads directly towards $N!", TRUE, ch, 0, vict, TO_ROOM);
     
     success += success_test(skill, 4 + target_modifiers);
@@ -1897,6 +1926,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       act("You have the KILLER flag, so you can't affect $N with your laser.", TRUE, ch, 0, vict, TO_CHAR);
       return;
     }
+    WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
     act("A thin laser beam is emitted from $n and heads directly towards $N!", TRUE, ch, 0, vict, TO_ROOM);
     
     success += success_test(skill, 4 + target_modifiers);
@@ -1955,6 +1985,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       act("You have the KILLER flag, so you can't affect $N with your steam cloud.", TRUE, ch, 0, vict, TO_CHAR);
       return;
     }
+    WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
       
     send_to_char("You see a cloud of steam vapours rush towards you!\r\n", vict);
     
@@ -2006,6 +2037,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       act("You have the KILLER flag, so you can't affect $N with thunderbolt.", TRUE, ch, 0, vict, TO_CHAR);
       return;
     }
+    WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
       
     send_to_char("The air around you explodes into a deafening roar!\r\n", vict);
     
@@ -2057,6 +2089,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       act("You have the KILLER flag, so you can't affect $N with waterbolt.", TRUE, ch, 0, vict, TO_CHAR);
       return;
     }
+    WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
       
     send_to_char("You see a bolt of water head towards you!\r\n", vict);
     

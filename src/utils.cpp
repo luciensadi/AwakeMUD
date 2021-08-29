@@ -3629,6 +3629,36 @@ void turn_hardcore_off_for_character(struct char_data *ch) {
   mysql_wrapper(mysql, buf);
 }
 
+void set_natural_vision_for_race(struct char_data *ch) {
+  switch (GET_RACE(ch)) {
+    case RACE_HUMAN:
+    case RACE_OGRE:
+      NATURAL_VISION(ch) = NORMAL;
+      break;
+    case RACE_DWARF:
+    case RACE_GNOME:
+    case RACE_MENEHUNE:
+    case RACE_KOBOROKURU:
+    case RACE_TROLL:
+    case RACE_CYCLOPS:
+    case RACE_FOMORI:
+    case RACE_GIANT:
+    case RACE_MINOTAUR:
+      NATURAL_VISION(ch) = THERMOGRAPHIC;
+      break;
+    case RACE_ORK:
+    case RACE_HOBGOBLIN:
+    case RACE_SATYR:
+    case RACE_ONI:
+    case RACE_ELF:
+    case RACE_WAKYAMBI:
+    case RACE_NIGHTONE:
+    case RACE_DRYAD:
+      NATURAL_VISION(ch) = LOWLIGHT;
+      break;
+  }
+}
+
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.
 // Great for swapping out old Classic weapons, cyberware, etc for the new guaranteed-canon versions.
 #define PAIR(classic, current) case (classic): return (current);
