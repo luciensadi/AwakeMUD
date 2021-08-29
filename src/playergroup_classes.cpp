@@ -132,6 +132,7 @@ bool Playergroup::set_tag(const char *newtag, struct char_data *ch) {
             send_to_char("You've forgotten to terminate an xterm256 color code.\r\n", ch);
             return FALSE;
           }
+          
           ptr += strlen("^[F123]");
         } else {
           ptr += 2;

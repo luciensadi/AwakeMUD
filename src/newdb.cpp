@@ -1988,10 +1988,11 @@ void DeleteChar(long idx)
     
     // Finally, delete the table entry, unless we're at index 0-- that's the pfile table.
     if (table_idx != 0) {
-      if (table_idx == PFILES_IGNORE_INDEX || table_idx == PFILES_MEMORY_INDEX)
+      if (table_idx == PFILES_IGNORE_INDEX || table_idx == PFILES_MEMORY_INDEX) {
         snprintf(buf, sizeof(buf), "DELETE FROM %s WHERE remembered=%ld", table_names[table_idx], idx);
-      else
-        snprintf(buf, sizeof(buf), "DELETE FROM %s WHERE idnum=%ld", table_names[table_idx], idx);
+        mysql_wrapper(mysql, buf);
+      }
+      snprintf(buf, sizeof(buf), "DELETE FROM %s WHERE idnum=%ld", table_names[table_idx], idx);
       mysql_wrapper(mysql, buf);
     }
   }

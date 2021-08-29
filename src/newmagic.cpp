@@ -19,6 +19,9 @@
 #define CONJURING 1
 #define FAILED_CAST "You fail to bind the mana to your will.\r\n"
 
+//  set_fighting(ch, vict); set_fighting(vict, ch);
+#define SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST {WAIT_STATE(ch, (int) (OFFENSIVE_SPELL_WAIT_STATE_TIME));}
+
 extern void die(struct char_data *ch);
 extern void damage_equip(struct char_data *ch, struct char_data *vict, int power, int type);
 extern void damage_obj(struct char_data *ch, struct obj_data *obj, int power, int type);
@@ -1025,7 +1028,7 @@ void cast_combat_spell(struct char_data *ch, int spell, int force, char *arg)
       act("You can't affect $N with manabolt.", TRUE, ch, 0, vict, TO_CHAR);
       return;
     }
-    WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
+    SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST;    
     
     success = success_test(skill, GET_WIL(vict) + target_modifiers);
     if (success > 0 && GET_REFLECT(vict) && (reflected = reflect_spell(ch, vict, spell, force, 0, GET_WIL(ch), success))) {
@@ -1060,7 +1063,7 @@ void cast_combat_spell(struct char_data *ch, int spell, int force, char *arg)
       act("You can't affect $N with stunbolt.", TRUE, ch, 0, vict, TO_CHAR);
       return;
     }
-    WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
+    SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST;
     
     success = success_test(skill, GET_WIL(vict) + target_modifiers);
     if (success > 0 && GET_REFLECT(vict) && (reflected = reflect_spell(ch, vict, spell, force, 0, GET_WIL(ch), success))) {
@@ -1095,7 +1098,7 @@ void cast_combat_spell(struct char_data *ch, int spell, int force, char *arg)
       act("You have the KILLER flag, so you can't affect $N with powerbolt.", TRUE, ch, 0, vict, TO_CHAR);
       return;
     }
-    WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
+    SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST;
     
     success = success_test(skill, GET_BOD(vict) + target_modifiers);
     if (success > 0 && GET_REFLECT(vict) && (reflected = reflect_spell(ch, vict, spell, force, 0, GET_BOD(ch), success))) {
@@ -1649,7 +1652,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       act("You have the KILLER flag, so you can't affect $N with ignite.", TRUE, ch, 0, vict, TO_CHAR);
       return;
     }
-    WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
+    SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST;
     
     success = success_test(skill, 4 + target_modifiers); 
     if (success > 0 && GET_REFLECT(vict) && (reflected = reflect_spell(ch, vict, spell, force, 0, 4, success))) {
@@ -1700,7 +1703,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       act("You have the KILLER flag, so you can't affect $N with clout.", TRUE, ch, 0, vict, TO_CHAR);
       return;
     }
-    WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
+    SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST;
       
     send_to_char("You feel a rush of air head towards you!\r\n", vict);
     
@@ -1748,7 +1751,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       act("You have the KILLER flag, so you can't affect $N with flamethrower.", TRUE, ch, 0, vict, TO_CHAR);
       return;
     }
-    WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
+    SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST;
   
     act("$n's hands seem to spontaneously combust as $e directs a stream of flame at $N!", TRUE, ch, 0, vict, TO_ROOM);
     
@@ -1807,7 +1810,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       act("You have the KILLER flag, so you can't affect $N with acid stream.", TRUE, ch, 0, vict, TO_CHAR);
       return;
     }
-    WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
+    SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST;
     act("Dark clouds form around $n moments before it condenses into a dark sludge and flies towards $N!", TRUE, ch, 0, vict, TO_ROOM);
     
     success += success_test(skill, 4 + target_modifiers);
@@ -1863,7 +1866,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       act("You have the KILLER flag, so you can't affect $N with lightning bolt.", TRUE, ch, 0, vict, TO_CHAR);
       return;
     }
-    WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
+    SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST;
     act("Lightning bursts forth from $n and heads directly towards $N!", TRUE, ch, 0, vict, TO_ROOM);
     
     success += success_test(skill, 4 + target_modifiers);
@@ -1926,7 +1929,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       act("You have the KILLER flag, so you can't affect $N with your laser.", TRUE, ch, 0, vict, TO_CHAR);
       return;
     }
-    WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
+    SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST;
     act("A thin laser beam is emitted from $n and heads directly towards $N!", TRUE, ch, 0, vict, TO_ROOM);
     
     success += success_test(skill, 4 + target_modifiers);
@@ -1985,7 +1988,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       act("You have the KILLER flag, so you can't affect $N with your steam cloud.", TRUE, ch, 0, vict, TO_CHAR);
       return;
     }
-    WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
+    SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST;
       
     send_to_char("You see a cloud of steam vapours rush towards you!\r\n", vict);
     
@@ -2037,7 +2040,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       act("You have the KILLER flag, so you can't affect $N with thunderbolt.", TRUE, ch, 0, vict, TO_CHAR);
       return;
     }
-    WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
+    SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST;
       
     send_to_char("The air around you explodes into a deafening roar!\r\n", vict);
     
@@ -2089,7 +2092,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       act("You have the KILLER flag, so you can't affect $N with waterbolt.", TRUE, ch, 0, vict, TO_CHAR);
       return;
     }
-    WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
+    SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST;
       
     send_to_char("You see a bolt of water head towards you!\r\n", vict);
     

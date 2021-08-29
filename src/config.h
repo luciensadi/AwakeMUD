@@ -176,4 +176,5 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 
 // How long do we put characters in a wait state when casting a spell?
 #define SPELL_WAIT_STATE_TIME                                  (0.2 RL_SEC)
+#define OFFENSIVE_SPELL_WAIT_STATE_TIME                        (0.2 RL_SEC)
 #endif
