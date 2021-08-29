@@ -1120,10 +1120,9 @@ ACMD(do_gen_comm)
     send_to_char(ch, "Yes, %s, fine, %s we must, but WHAT???\r\n", com_msgs[subcmd][1], com_msgs[subcmd][1]);
     return;
   }
-
-  if (PRF_FLAGGED(ch, PRF_NOREPEAT))
-    send_to_char(OK, ch);
-  else if (subcmd == SCMD_SHOUT) {
+    
+  // Returning command to handle shout.
+  if (subcmd == SCMD_SHOUT) {
     struct room_data *was_in = NULL;
     struct char_data *tmp;
     
@@ -1147,14 +1146,19 @@ ACMD(do_gen_comm)
       }
     }
 
-    snprintf(buf1, MAX_STRING_LENGTH,  "%sYou shout in %s, \"%s%s%s\"^n", 
-            com_msgs[subcmd][3], 
-            skills[language].name,
-            capitalize(argument), 
-            ispunct(get_final_character_from_string(argument)) ? "" : "!", 
-            com_msgs[subcmd][3]);
-    // Note that this line invokes act().
-    store_message_to_history(ch->desc, COMM_CHANNEL_SHOUTS, act(buf1, FALSE, ch, 0, 0, TO_CHAR));
+    if (PRF_FLAGGED(ch, PRF_NOREPEAT)) {
+      store_message_to_history(ch->desc, COMM_CHANNEL_SHOUTS, buf1);
+      send_to_char(OK, ch);
+    } else {
+      snprintf(buf1, MAX_STRING_LENGTH,  "%sYou shout in %s, \"%s%s%s\"^n", 
+              com_msgs[subcmd][3], 
+              skills[language].name,
+              capitalize(argument), 
+              ispunct(get_final_character_from_string(argument)) ? "" : "!", 
+              com_msgs[subcmd][3]);
+      // Note that this line invokes act().
+      store_message_to_history(ch->desc, COMM_CHANNEL_SHOUTS, act(buf1, FALSE, ch, 0, 0, TO_CHAR));
+    }
 
     was_in = ch->in_room;
     if (ch->in_veh) {
@@ -1210,33 +1214,48 @@ ACMD(do_gen_comm)
       ch->in_room = NULL;
 
     return;
-  } else if(subcmd == SCMD_OOC) {
+  }
+  
+  // Returning command to handle OOC.
+  if(subcmd == SCMD_OOC) {
     /* Check for non-switched mobs */
     if ( IS_NPC(ch) && ch->desc == NULL )
       return;
     delete_doubledollar(argument);
     for ( d = descriptor_list; d != NULL; d = d->next ) {
+      // Skip anyone without a descriptor, and any non-NPC that didn't ignore the speaker.
       if (!d->character || (!IS_NPC(d->character) && unsafe_found_mem(GET_IGNORE(d->character), ch)))
         continue;
+        
+      // Anyone who's not either staff or in specific playing states is skipped.
       if (!access_level(d->character, LVL_BUILDER) 
           && ((d->connected != CON_PLAYING && !PRF_FLAGGED(d->character, PRF_MENUGAG))
               || PLR_FLAGGED( d->character, PLR_WRITING) 
               || PRF_FLAGGED( d->character, PRF_NOOOC) 
               || PLR_FLAGGED(d->character, PLR_NOT_YET_AUTHED)))
         continue;
-      
+        
       // No autopunct for channels.
       if (!access_level(d->character, GET_INCOG_LEV(ch)))
-        snprintf(buf, sizeof(buf), "^m[^nSomeone^m]^n ^R(^nOOC^R)^n, \"%s^n\"\r\n", capitalize(argument));
+        snprintf(buf, sizeof(buf), "^m[^nA Staff Member^m]^n ^R(^nOOC^R)^n, \"%s^n\"\r\n", capitalize(argument));
       else
         snprintf(buf, sizeof(buf), "^m[^n%s^m]^n ^R(^nOOC^R)^n, \"%s^n\"\r\n", IS_NPC(ch) ? GET_NAME(ch) : GET_CHAR_NAME(ch), capitalize(argument));
       
       store_message_to_history(d, COMM_CHANNEL_OOC, buf);
-      send_to_char(buf, d->character);
+      
+      if (d->character == ch && PRF_FLAGGED(ch, PRF_NOREPEAT)) {
+        send_to_char(OK, ch);
+        continue;
+      } else {
+        send_to_char(buf, d->character);
+      }
     }
 
     return;
-  } else if (subcmd == SCMD_RPETALK) {
+  } 
+  
+  // The commands after this line don't return-- they just set things and follow the loop at the end.
+  if (subcmd == SCMD_RPETALK) {
     snprintf(buf, sizeof(buf), "%s%s ^W[^rRPE^W]^r %s^n\r\n", com_msgs[subcmd][3], GET_CHAR_NAME(ch), capitalize(argument));
     
     channel = COMM_CHANNEL_RPE;
@@ -1254,41 +1273,53 @@ ACMD(do_gen_comm)
     store_message_to_history(ch->desc, channel, buf);
   }
   
+  // The loop for the above channels.
   for (i = descriptor_list; i; i = i->next) {
     if (i == ch->desc || !i->character || IS_PROJECT(i->character))
       continue;
-      
+    
+    // Skip anyone who disabled the command.
     if (PRF_FLAGGED(i->character, channels[subcmd]))
       continue;
       
+    // Non-staff who don't meet specific criteria are skipped.
     if (!IS_SENATOR(i->character)) {
       if (i->connected || PLR_FLAGS(i->character).AreAnySet(PLR_WRITING, PLR_MAILING, PLR_EDITING, ENDBIT))
         continue;
     }
     
-    // Skip ignored people.
+    // Skip anyone who's ignored the speaker.
     if (unsafe_found_mem(GET_IGNORE(i->character), ch))
       continue;
       
     switch (subcmd) {
       case SCMD_SHOUT:
+        // Shouts don't propagate into soundproof rooms.
         if (ROOM_FLAGGED(get_ch_in_room(i->character), ROOM_SOUNDPROOF))
           continue;
         break;
       case SCMD_NEWBIE:
+        // Newbie can be disabled or muted.
         if (PRF_FLAGGED(i->character, PRF_NONEWBIE) || PLR_FLAGGED(i->character, PLR_NEWBIE_MUTED))
           continue;
         break;
       case SCMD_RPETALK:
+        // RPE talk only shows up to RPE members.
         if (!(PLR_FLAGGED(i->character, PLR_RPE) || IS_SENATOR(i->character)))
           continue;
         break;
       case SCMD_HIREDTALK:
+        // Hired talk only shows up to hired members.
         if (!(PRF_FLAGGED(i->character, PRF_QUEST) || IS_SENATOR(i->character)))
           continue;
         break;
     }
-    send_to_char(buf, i->character);
+    
+    if (i->character == ch && PRF_FLAGGED(ch, PRF_NOREPEAT))
+      send_to_char(OK, ch);
+    else
+      send_to_char(buf, i->character);
+      
     store_message_to_history(i, channel, buf);
   }
 

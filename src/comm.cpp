@@ -1202,10 +1202,10 @@ int make_prompt(struct descriptor_data * d)
                     default:
                       snprintf(str, sizeof(str), "NA");
                   }
-                else strcpy(str, "ML");
+                else strlcpy(str, "ML", sizeof(str));
                 
               } else
-                strcpy(str, "NA");
+                strlcpy(str, "NA", sizeof(str));
               break;
             case 'b':       // ballistic
               snprintf(str, sizeof(str), "%d", GET_BALLISTIC(d->character));
