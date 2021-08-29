@@ -3659,6 +3659,65 @@ void set_natural_vision_for_race(struct char_data *ch) {
   }
 }
 
+// Returns -1 on error, make sure you catch that!
+int get_string_length_after_color_code_removal(const char *str, struct char_data *ch_to_notify_of_failure_reason) {
+  if (!str) {
+    mudlog("SYSERR: Null string received to get_string_length_after_color_code_removal().", ch_to_notify_of_failure_reason, LOG_SYSLOG, TRUE);
+    return 0;
+  }
+    
+  const char *ptr = str;
+  int len = 0;
+  
+  while (*ptr) {
+    if (*ptr == '^') {
+      if (*(ptr+1) == '\0') {
+        if (ch_to_notify_of_failure_reason)
+          send_to_char("Sorry, tag strings can't end with the ^ character.\r\n", ch_to_notify_of_failure_reason);
+        return -1;
+      }
+      // Print a single ^ character.
+      else if (*(ptr+1) == '^') {
+        ptr += 2;
+        len += 1;
+      }
+      // Print a color character.
+      else {
+        // There are two types of color: Two-character tags (^g) and xterm tags (^[F123]). We must account for both.
+        if (*(ptr+1) == '[') {
+          // We know that ptr+1 was a valid character (see first check in this while), so at worst, +2 can be \0.
+          if (!*(ptr + 2) || !(*(ptr + 2) == 'F')) {
+            if (ch_to_notify_of_failure_reason)
+              send_to_char("Sorry, xterm256 colors can only be specified in foreground mode (^^[F...]).\r\n", ch_to_notify_of_failure_reason);
+            return -1;
+          }
+#define IS_CODE_DIGIT_VALID(chr) (*(chr) && (*(chr) == '0' || *(chr) == '1' || *(chr) == '2' || *(chr) == '3' || *(chr) == '4' || *(chr) == '5'))
+          if (!IS_CODE_DIGIT_VALID(ptr + 3) || !IS_CODE_DIGIT_VALID(ptr + 4) || !IS_CODE_DIGIT_VALID(ptr + 5)) {
+            if (ch_to_notify_of_failure_reason)
+              send_to_char("Sorry, you've entered an invalid xterm256 color code.\r\n", ch_to_notify_of_failure_reason);
+            return -1;
+          }
+#undef IS_CODE_DIGIT_VALID
+          if (!*(ptr + 6) || *(ptr + 6) != ']') {
+            if (ch_to_notify_of_failure_reason)
+              send_to_char("You've forgotten to terminate an xterm256 color code.\r\n", ch_to_notify_of_failure_reason);
+            return -1;
+          }
+          
+          ptr += strlen("^[F123]");
+        } else {
+          ptr += 2;
+        }
+      }
+    } else {
+      len += 1;
+      ptr += 1;
+    }
+  }
+  
+  return len;
+}
+
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.
 // Great for swapping out old Classic weapons, cyberware, etc for the new guaranteed-canon versions.
 #define PAIR(classic, current) case (classic): return (current);

@@ -5748,8 +5748,20 @@ bool restring_with_args(struct char_data *ch, char *argument, bool using_sysp) {
     send_to_char("No amount of cosmetic changes could hide the garishness of water wings.\r\n", ch);
     return FALSE;
   }
-  if (strlen(buf) >= LINE_LENGTH) {
-    send_to_char(ch, "That restring is too long, please shorten it. The maximum length is %d characters.\r\n", LINE_LENGTH - 1);
+  
+  int length_with_no_color = get_string_length_after_color_code_removal(buf, ch);
+  
+  // Silent failure: We already sent the error message in get_string_length_after_color_code_removal().
+  if (length_with_no_color == -1)
+    return FALSE;
+  
+  if (length_with_no_color >= LINE_LENGTH) {
+    send_to_char(ch, "That restring is too long, please shorten it. The maximum length after color code removal is %d characters.\r\n", LINE_LENGTH - 1);
+    return FALSE;
+  }
+  
+  if (strlen(buf) >= MAX_RESTRING_LENGTH) {
+    send_to_char(ch, "That restring is too long, please shorten it. The maximum length with color codes included is %d characters.\r\n", MAX_RESTRING_LENGTH - 1);
     return FALSE;
   }
   

@@ -2128,6 +2128,7 @@ enum {
 #define MAX_RAW_INPUT_LENGTH      4096     /* Max size of *raw* input */
 #define MAX_MESSAGES              100
 #define MAX_NAME_LENGTH           20  /* Used in char_file_u *DO*NOT*CHANGE* */
+#define MAX_RESTRING_LENGTH       256
 
 #define MAX_PWD_LENGTH            30  /* Relic of the past, do not change. Dictates max length of crypt() hashes. */
 #define MAX_TITLE_LENGTH          48  /* Used in char_file_u *DO*NOT*CHANGE* */

@@ -3891,7 +3891,6 @@ bool ranged_response(struct char_data *ch, struct char_data *vict)
       || (IS_NPC(vict) && (MOB_FLAGGED(vict, MOB_INANIMATE)))
       || CH_IN_COMBAT(vict)) 
   {
-    log("ranged_response precondition failure");
     return FALSE;
   }
   

@@ -100,49 +100,11 @@ bool Playergroup::set_tag(const char *newtag, struct char_data *ch) {
     return FALSE;
   }
   
-  const char *ptr = newtag;
-  int len = 0;
-  while (*ptr) {
-    if (*ptr == '^') {
-      if (*(ptr+1) == '\0') {
-        send_to_char("Sorry, tag strings can't end with the ^ character.\r\n", ch);
-        return FALSE;
-      }
-      // Print a single ^ character.
-      else if (*(ptr+1) == '^') {
-        ptr += 2;
-        len += 1;
-      }
-      // Print a color character.
-      else {
-        // There are two types of color: Two-character tags (^g) and xterm tags (^[F123]). We must account for both.
-        if (*(ptr+1) == '[') {
-          // We know that ptr+1 was a valid character (see first check in this while), so at worst, +2 can be \0.
-          if (!*(ptr + 2) || !(*(ptr + 2) == 'F')) {
-            send_to_char("Sorry, xterm256 colors can only be specified in foreground mode (^^[F...]).\r\n", ch);
-            return FALSE;
-          }
-#define IS_CODE_DIGIT_VALID(chr) (*(chr) && (*(chr) == '0' || *(chr) == '1' || *(chr) == '2' || *(chr) == '3' || *(chr) == '4' || *(chr) == '5'))
-          if (!IS_CODE_DIGIT_VALID(ptr + 3) || !IS_CODE_DIGIT_VALID(ptr + 4) || !IS_CODE_DIGIT_VALID(ptr + 5)) {
-            send_to_char("Sorry, you've entered an invalid xterm256 color code.\r\n", ch);
-            return FALSE;
-          }
-#undef IS_CODE_DIGIT_VALID
-          if (!*(ptr + 6) || *(ptr + 6) != ']') {
-            send_to_char("You've forgotten to terminate an xterm256 color code.\r\n", ch);
-            return FALSE;
-          }
-          
-          ptr += strlen("^[F123]");
-        } else {
-          ptr += 2;
-        }
-      }
-    } else {
-      len += 1;
-      ptr += 1;
-    }
-  }
+  int len = get_string_length_after_color_code_removal(newtag, ch);
+  
+  // Silent failure: We already sent the error message in get_string_length_after_color_code_removal().
+  if (len == -1)
+    return FALSE;
   
   if (len < 1) {
     send_to_char("Tags must contain at least one printable character.\r\n", ch);
