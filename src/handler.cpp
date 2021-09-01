@@ -1148,15 +1148,33 @@ void veh_to_veh(struct veh_data *veh, struct veh_data *dest)
     dest->usedload += calculate_vehicle_entry_load(veh);
   }
 }
-void icon_to_host(struct matrix_icon *icon, vnum_t to_host)
+void icon_to_host(struct matrix_icon *icon, rnum_t to_host)
 {
   extern void make_seen(struct matrix_icon *icon, int idnum);
   if (!icon || to_host < 0 || to_host > top_of_matrix)
     mudlog("SYSLOG: Illegal value(s) passed to icon_to_host", NULL, LOG_SYSLOG, TRUE);
   else
   {
-    if (icon->decker)
-      for (struct matrix_icon *icon2 = matrix[to_host].icons; icon2; icon2 = icon2->next_in_host)
+    if (icon->decker) {
+      // Populate this icon's values from saved memory. If none are found, we use the default (0).
+      if (icon->decker->ch) {
+        for (struct per_character_host_data *host_data = icon->decker->ch->player.saved_host_data; host_data; host_data = host_data->next) {
+          if (host_data->host_num == matrix[to_host].vnum) {
+            icon->decker->tally = host_data->tally;
+            icon->decker->last_trigger = 0; // host_data->last_trigger;
+            send_to_icon(icon, "Successfully loaded tally %d and trigger %d.\r\n", icon->decker->tally, icon->decker->last_trigger);
+            break;
+          }
+        }
+        if (icon->decker->tally == 0 && icon->decker->last_trigger == 0)
+          send_to_icon(icon, "Nothing loaded-- values are 0s.\r\n");
+      } else {
+        mudlog("SYSERR: i_t_h: Received icon with decker, but no character! That shouldn't have happened.", NULL, LOG_SYSLOG, TRUE);
+      }
+      
+      
+      // Notify the icons in the host that this icon has arrived.
+      for (struct matrix_icon *icon2 = matrix[to_host].icons; icon2; icon2 = icon2->next_in_host) {
         if (icon2->decker) {
           int target = icon->decker->masking;
           for (struct obj_data *soft = icon->decker->software; soft; soft = soft->next_content)
@@ -1167,6 +1185,8 @@ void icon_to_host(struct matrix_icon *icon, vnum_t to_host)
             send_to_icon(icon2, "%s enters the host.\r\n", icon->name);
           }
         }
+      }
+    }
     icon->next_in_host = matrix[to_host].icons;
     matrix[to_host].icons = icon;
     icon->in_host = to_host;
@@ -1178,9 +1198,10 @@ void icon_from_host(struct matrix_icon *icon)
   struct matrix_icon *temp;
   if (icon == NULL || icon->in_host == NOWHERE)
   {
-    log("If thats happens to much im going to make it intentionally segfault.\r\nPS. Don't you just love my pointless debugging messages :)");
+    mudlog("SYSERR: Received null icon or icon->in_host to icon_from_host().", NULL, LOG_SYSLOG, TRUE);
     return;
   }
+  
   REMOVE_FROM_LIST(icon, matrix[icon->in_host].icons, next_in_host);
   REMOVE_FROM_LIST(icon, matrix[icon->in_host].fighting, next_fighting);
   temp = NULL;
@@ -2316,7 +2337,7 @@ void extract_char(struct char_data * ch)
   if (!IS_NPC(ch)) {
     // Terminate the player's quest, if any. Realistically, we shouldn't ever trigger this code, but if it happens we're ready for it.
     if (GET_QUEST(ch)) {
-      mudlog("Warning: extract_char received PC with quest still active.", ch, LOG_SYSLOG, TRUE);
+      //mudlog("Warning: extract_char received PC with quest still active.", ch, LOG_SYSLOG, TRUE);
       end_quest(ch);
     }
     

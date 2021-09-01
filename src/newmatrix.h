@@ -183,6 +183,27 @@ struct matrix_icon {
   {}
 };
 
+/*
+struct per_character_located_data {
+  vnum_t jackpoint_room_vnum;
+  per_character_located_data *prev, *next;
+};
+*/
+
+struct per_character_host_data {
+  vnum_t host_num;
+  int tally;
+  int last_trigger;
+  int alert;
+  
+  // For the linked list of many such hosts.
+  struct per_character_host_data *prev, *next;
+  
+  per_character_host_data():
+    host_num(-1), tally(0), last_trigger(0), prev(NULL), next(NULL)
+  {}
+};
+
 extern bool has_spotted(struct matrix_icon *icons, struct matrix_icon *targ);
 
 bool display_cyberdeck_issues(struct char_data *ch, struct obj_data *cyberdeck);

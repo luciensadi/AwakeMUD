@@ -31,6 +31,7 @@ extern void create_spell(struct char_data *ch);
 extern void create_ammo(struct char_data *ch);
 
 struct matrix_icon *find_icon_by_id(vnum_t idnum);
+void save_host_data(struct deck_info *decker, struct host_data *host);
 
 void gain_matrix_karma(struct matrix_icon *icon, struct matrix_icon *targ);
 
@@ -167,6 +168,9 @@ void dumpshock(struct matrix_icon *icon)
         GET_DECK_ACCESSORY_FILE_REMAINING(file) = 0;
       }
     }
+    
+    // Save their persistent data.
+    save_host_data(icon->decker, &matrix[icon->decker->ch->persona->in_host]);
     
     int resist = -success_test(GET_WIL(icon->decker->ch), matrix[icon->in_host].security);
     int dam = convert_damage(stage(resist, matrix[icon->in_host].colour));
@@ -1475,9 +1479,14 @@ ACMD(do_logon)
   if (target_host > 0 && matrix[target_host].alert <= 2) {
     int success = system_test(target_host, ch, TEST_ACCESS, SOFT_DECEPTION, 0);
     if (success > 0) {
+      /*
       if (matrix[target_host].type == HOST_RTG && matrix[PERSONA->in_host].type == HOST_RTG)
         DECKER->tally = 0;
       DECKER->last_trigger = 0;
+      */
+      
+      save_host_data(DECKER, &matrix[DECKER->ch->persona->in_host]);
+      
       DECKER->located = FALSE;
       snprintf(buf, sizeof(buf), "%s connects to a different host and vanishes from this one.\r\n", PERSONA->name);
       send_to_host(PERSONA->in_host, buf, PERSONA, TRUE);
@@ -1548,6 +1557,9 @@ ACMD(do_logoff)
       GET_DECK_ACCESSORY_FILE_REMAINING(file) = 0;
     }
   }
+  
+  // Save their persistent data.
+  save_host_data(DECKER, &matrix[PERSONA->in_host]);
   
   extract_icon(PERSONA);
   PERSONA = NULL;
@@ -1818,6 +1830,10 @@ ACMD(do_connect)
   act(buf, FALSE, ch, 0, 0, TO_ROOM);
   act("You jack into the matrix.", FALSE, ch, 0, 0, TO_CHAR);
   PLR_FLAGS(ch).SetBit(PLR_MATRIX);
+  
+  // Load up their triggers.
+  check_trigger(host, ch);
+  
   do_matrix_look(ch, NULL, 0, 0);
 }
 
@@ -3256,3 +3272,46 @@ int get_paydata_market_minimum(int host_color) {
     default: return 0;
   }
 }
+
+void save_host_data(struct deck_info *decker, struct host_data *host_struct) {
+  // Save the values for this host. If none are found, we use the default (0).
+  if (decker->ch && (decker->tally || decker->last_trigger)) {
+    bool saved_data = FALSE;
+    for (struct per_character_host_data *host_data = decker->ch->player.saved_host_data; host_data; host_data = host_data->next) {
+      if (host_data->host_num == host_struct->vnum) {
+        host_data->tally = decker->tally;
+        host_data->last_trigger = decker->last_trigger;
+        send_to_icon(decker->ch->persona, "Successfully overwrote saved tally %d and trigger %d.\r\n", decker->tally, decker->last_trigger);
+        saved_data = TRUE;
+        break;
+      }
+    }
+    
+    if (!saved_data) {
+      struct per_character_host_data *host_data = new per_character_host_data;
+      // Compose our new struct.
+      host_data->host_num = host_struct->vnum;
+      host_data->tally = decker->tally;
+      host_data->last_trigger = decker->last_trigger;
+      host_data->alert = host_struct->alert;
+      
+      // Prepare for linking.
+      host_data->next = decker->ch->player.saved_host_data;
+      host_data->prev = NULL;
+      
+      // Reverse-link our new saved data.
+      if (decker->ch->player.saved_host_data) {
+        decker->ch->player.saved_host_data->prev = host_data;
+      }
+      
+      // Insert it as head.
+      decker->ch->player.saved_host_data = host_data;
+      
+      // Notify.
+      send_to_icon(decker->ch->persona, "Successfully saved new tally %d and trigger %d for host %ld.\r\n", decker->tally, decker->last_trigger, host_data->host_num);
+    }
+  }
+}
+
+asdf todo: the current system that just re-runs triggers is insufficient-- we need a way of marking certain IC as killed. Otherwise they'll fight through, get the paydata, and then get assfucked when they reconnect
+also, need to implement alerts-- I kinda barely started. Need both alert storage and cooldown

@@ -345,6 +345,8 @@ struct char_player_data
   const char *email;
   
   int multiplier;
+  
+  struct per_character_host_data *saved_host_data;
 
   byte sex;                  /* PC / NPC's sex                       */
   byte level;

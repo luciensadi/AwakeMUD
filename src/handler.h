@@ -81,7 +81,7 @@ void veh_to_room(struct veh_data *veh, struct room_data *room);
 void veh_to_veh(struct veh_data *veh, struct veh_data *dest);
 int veh_skill(struct char_data *ch, struct veh_data *veh);
 void	icon_from_host(struct matrix_icon *icon);
-void	icon_to_host(struct matrix_icon *icon, vnum_t to_host);
+void	icon_to_host(struct matrix_icon *icon, rnum_t to_host);
 
 /* find if character can see */
 struct char_data *get_char_room_vis(struct char_data *ch, char *name);

@@ -706,11 +706,17 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
           
           obj_to_char(obj, ch);
         }
+        // Log it.
+        snprintf(buf, sizeof(buf), "Purchased %d of '%s' (%ld) for %d nuyen.", bought, GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj), price);
+        mudlog(buf, ch, LOG_GRIDLOG, TRUE);
         // TODO: Handle decrementing shop amounts here (->stock). Currently, shop items are not decremented on sale for these item types.
       } 
       
       // Give them the item (it's parts or conjuring materials)
       else {
+        // Log it.
+        snprintf(buf, sizeof(buf), "Purchased %d of '%s' (%ld) for %d nuyen.", bought, GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj), price);
+        mudlog(buf, ch, LOG_GRIDLOG, TRUE);
         struct obj_data *orig = ch->carrying;
         for (; orig; orig = orig->next_content)
           if (GET_OBJ_TYPE(obj) == GET_OBJ_TYPE(orig) 
@@ -740,6 +746,8 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
         bought++;
         
         if (sell) {
+          // Log it.
+          snprintf(buf, sizeof(buf), "Purchased %d of '%s' (%ld) for %d nuyen.", bought, GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj), price);
           obj = NULL;
           switch (sell->type) {
             case SELL_BOUGHT:
@@ -761,6 +769,7 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
           }  
         } else {
           obj = read_object(obj->item_number, REAL);
+          snprintf(buf, sizeof(buf), "Purchased %d of '%s' (%ld) for %d nuyen.", bought, GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj), price);
         }
         
         // Deduct the cost.
@@ -773,6 +782,7 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
         // Obj was loaded but not given to the character.
         extract_obj(obj);
       }
+      mudlog(buf, ch, LOG_GRIDLOG, TRUE);
     }
     
     if (bought < buynum) {
@@ -803,10 +813,6 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
     snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " (x%d)", bought);
   send_to_char(buf2, ch);
   send_to_char("\r\n", ch);
-  
-  // Log it.
-  snprintf(buf, sizeof(buf), "Purchased %d of '%s' (%ld) for %d nuyen.", bought, GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj), price);
-  mudlog(buf, ch, LOG_GRIDLOG, TRUE);
   
   if (order) {
     order->number -= bought;
