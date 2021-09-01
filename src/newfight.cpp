@@ -1156,7 +1156,12 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
   }
   
   if (defender_died) {
-    def->ch = NULL;
+    // Fixes edge case where attacking quest NPC kills its hunter with a heavy weapon, is extracted, then tries to check recoil.
+    if (!IS_NPC(def->ch))
+      return;
+    // Clear out the defending character's pointer since it now points to a nulled character struct.
+    else
+      def->ch = NULL;
   } else if (!IS_NPC(att->ch) && IS_NPC(def->ch)) {
     GET_LASTHIT(def->ch) = GET_IDNUM(att->ch);
   }
