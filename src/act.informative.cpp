@@ -392,8 +392,9 @@ void show_veh_to_char(struct veh_data * vehicle, struct char_data * ch)
     strlcat(buf, ".", sizeof(buf));
   }
   
-  if (vehicle->rigger)
-    strlcat(buf, " (Rigged)", sizeof(buf));
+  if (vehicle->rigger) {
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (Rigged by %s)", GET_CHAR_NAME(vehicle->rigger));
+  }
   if (vehicle->owner && GET_IDNUM(ch) == vehicle->owner)
     strlcat(buf, " ^Y(Yours)", sizeof(buf));
   strlcat(buf, "^N\r\n", sizeof(buf));
