@@ -1434,6 +1434,22 @@ void do_raw_target(struct char_data *ch, struct veh_data *veh, struct veh_data *
   if (CH_IN_COMBAT(ch))
     stop_fighting(ch);
     
+  // Reject PvP.
+  if (vict) {
+    if (!IS_NPC(vict) && !IS_NPC(ch) && !(PRF_FLAGGED(ch, PRF_PKER) && PRF_FLAGGED(vict, PRF_PKER))) {
+      send_to_char("You and your opponent both need to be flagged PK for that.\r\n", ch);
+      return;
+    }
+  }
+  
+  if (tveh) {
+    // TODO: Write a check to allow PKers to attack PKer vehicles.
+    if (tveh->owner) {
+      send_to_char("That's a player-owned vehicle-- better leave it alone.\r\n", ch);
+      return;
+    }
+  }
+    
   // Modeall: fire everything at them.
   if (modeall) {
     for (obj = veh->mount; obj; obj = obj->next_content) {
