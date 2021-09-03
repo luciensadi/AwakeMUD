@@ -62,11 +62,8 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
 bool damage_without_message(struct char_data *ch, struct char_data *victim, int dam, int attacktype, bool is_physical);
 bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int attacktype, bool is_physical, bool send_message);
 
-SPECIAL(johnson);
 SPECIAL(weapon_dominator);
-SPECIAL(landlord_spec);
 SPECIAL(pocket_sec);
-SPECIAL(receptionist);
 WSPEC(monowhip);
 
 extern int success_test(int number, int target);
@@ -87,7 +84,6 @@ extern int can_wield_both(struct char_data *, struct obj_data *, struct obj_data
 extern void draw_weapon(struct char_data *);
 extern void crash_test(struct char_data *ch);
 extern int get_vehicle_modifier(struct veh_data *veh);
-extern SPECIAL(shop_keeper);
 extern void mob_magic(struct char_data *ch);
 extern void cast_spell(struct char_data *ch, int spell, int sub, int force, char *arg);
 extern char *get_player_name(vnum_t id);
@@ -2315,7 +2311,7 @@ bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype, bo
     
   if (IS_NPC(victim)) {
     // Nokill protection.
-    if (MOB_FLAGGED(victim,MOB_NOKILL))
+    if (MOB_FLAGGED(victim, MOB_NOKILL))
       return false;
       
     // Quest target protection.
@@ -2344,16 +2340,7 @@ bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype, bo
     }
       
     // Special NPC protection.
-    if (include_func_protections
-        && (mob_index[GET_MOB_RNUM(victim)].func == shop_keeper 
-            || mob_index[GET_MOB_RNUM(victim)].sfunc == shop_keeper
-            || mob_index[GET_MOB_RNUM(victim)].func == johnson 
-            || mob_index[GET_MOB_RNUM(victim)].sfunc == johnson
-            || mob_index[GET_MOB_RNUM(victim)].func == landlord_spec
-            || mob_index[GET_MOB_RNUM(victim)].sfunc == landlord_spec
-            || mob_index[GET_MOB_RNUM(victim)].func == receptionist
-            || mob_index[GET_MOB_RNUM(victim)].sfunc == receptionist))
-    {
+    if (include_func_protections && npc_is_protected_by_spec(victim)) {
       return false;
     }
       
@@ -4115,6 +4102,11 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
   
   if (GET_OBJ_TYPE(weapon) == ITEM_WEAPON && GET_WEAPON_ATTACK_TYPE(weapon) == TYPE_HAND_GRENADE)
   {
+    if (!IS_NPC(ch) && !PRF_FLAGGED(ch, PRF_PKER)) {
+      send_to_char("You must be toggled PK to use grenades.\r\n", ch);
+      return;
+    }
+    
     if (!nextroom) {
       send_to_char("There seems to be something in the way...\r\n", ch);
       return;
@@ -4190,17 +4182,26 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
     if (vict == FIGHTING(ch)) {
       send_to_char("You're doing the best you can!\r\n", ch);
       return;
-    } else if (vict->in_room->peaceful) {
+    } 
+    
+    if (vict->in_room->peaceful) {
       send_to_char("Nah - leave them in peace.\r\n", ch);
       return;
-    } else if (distance > range) {
+    } 
+    
+    if (distance > range) {
       act("$N seems to be out of $p's range.", FALSE, ch, weapon, vict, TO_CHAR);
       return;
-    } else if (mob_index[GET_MOB_RNUM(vict)].func == shop_keeper 
-               || mob_index[GET_MOB_RNUM(vict)].sfunc == shop_keeper
-               || mob_index[GET_MOB_RNUM(vict)].func == johnson 
-               || mob_index[GET_MOB_RNUM(vict)].sfunc == johnson) {
-      send_to_char("Maybe that's not such a good idea.\r\n", ch);
+    }
+    
+    if (!IS_NPC(vict)) {
+      if (!IS_NPC(ch) && !(PRF_FLAGGED(ch, PRF_PKER) && PRF_FLAGGED(vict, PRF_PKER))) {
+        send_to_char("You and your opponent must both be toggled PK for that.\r\n", ch);
+        return;
+      }
+    } 
+    else if (npc_is_protected_by_spec(vict)) {
+      send_to_char("You can't attack protected NPCs like that.\r\n", ch);
       return;
     }
     
