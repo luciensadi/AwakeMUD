@@ -58,6 +58,26 @@ extern const char *get_ammobox_default_restring(struct obj_data *ammobox);
 extern bool can_edit_zone(struct char_data *ch, int zone);
 extern int find_first_step(vnum_t src, vnum_t target, bool ignore_roads);
 
+extern SPECIAL(johnson);
+extern SPECIAL(landlord_spec);
+extern SPECIAL(receptionist);
+extern SPECIAL(shop_keeper);
+extern SPECIAL(postmaster);
+extern SPECIAL(generic_guard);
+extern SPECIAL(receptionist);
+extern SPECIAL(cryogenicist);
+extern SPECIAL(teacher);
+extern SPECIAL(metamagic_teacher);
+extern SPECIAL(trainer);
+extern SPECIAL(adept_trainer);
+extern SPECIAL(spell_trainer);
+extern SPECIAL(fixer);
+extern SPECIAL(hacker);
+extern SPECIAL(fence);
+extern SPECIAL(taxi);
+extern SPECIAL(painter);
+extern SPECIAL(nerp_skills_teacher);
+
 /* creates a random number in interval [from;to] */
 int number(int from, int to)
 {
@@ -3717,6 +3737,28 @@ int get_string_length_after_color_code_removal(const char *str, struct char_data
   
   return len;
 }
+
+#define CHECK_FUNC_AND_SFUNC_FOR(function) (mob_index[GET_MOB_RNUM(npc)].func == (function) || mob_index[GET_MOB_RNUM(npc)].sfunc == (function))
+// Returns TRUE if the NPC has a spec that should protect it from damage, FALSE otherwise.
+bool npc_is_protected_by_spec(struct char_data *npc) {
+  return (CHECK_FUNC_AND_SFUNC_FOR(shop_keeper)
+          || CHECK_FUNC_AND_SFUNC_FOR(johnson)
+          || CHECK_FUNC_AND_SFUNC_FOR(landlord_spec)
+          || CHECK_FUNC_AND_SFUNC_FOR(postmaster)
+          || CHECK_FUNC_AND_SFUNC_FOR(teacher)
+          || CHECK_FUNC_AND_SFUNC_FOR(metamagic_teacher)
+          || CHECK_FUNC_AND_SFUNC_FOR(trainer)
+          || CHECK_FUNC_AND_SFUNC_FOR(adept_trainer)
+          || CHECK_FUNC_AND_SFUNC_FOR(spell_trainer)
+          || CHECK_FUNC_AND_SFUNC_FOR(receptionist)
+          || CHECK_FUNC_AND_SFUNC_FOR(fixer)
+          || CHECK_FUNC_AND_SFUNC_FOR(fence)
+          || CHECK_FUNC_AND_SFUNC_FOR(taxi)
+          || CHECK_FUNC_AND_SFUNC_FOR(painter)
+          || CHECK_FUNC_AND_SFUNC_FOR(nerp_skills_teacher)
+          || CHECK_FUNC_AND_SFUNC_FOR(hacker));
+}
+#undef CHECK_FUNC_AND_SFUNC_FOR
 
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.
 // Great for swapping out old Classic weapons, cyberware, etc for the new guaranteed-canon versions.
