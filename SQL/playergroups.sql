@@ -8,7 +8,7 @@ CREATE TABLE `playergroups` (
   `idnum` mediumint(5) unsigned unique default '0',
   `Name` varchar(161) default 'An Unimaginative Player Group' NOT NULL,
   `Alias` varchar(41) default 'newgroup' NOT NULL,
-  `Tag` varchar(47) default '^R[^WEMPTY^R]^n' NOT NULL,
+  `Tag` varchar(200) default '^R[^WEMPTY^R]^n' NOT NULL,
   `Settings` varchar(128) default '0' NOT NULL,
   `bank` bigint(9) unsigned default '0' NOT NULL,
   PRIMARY KEY (`idnum`),

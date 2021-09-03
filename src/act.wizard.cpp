@@ -1047,10 +1047,10 @@ void do_stat_room(struct char_data * ch)
   {
     strcpy(buf, "Extra descs:^c");
     for (desc = rm->ex_description; desc; desc = desc->next) {
-      strcat(buf, " ");
-      strcat(buf, desc->keyword);
+      strlcat(buf, " ", sizeof(buf));
+      strlcat(buf, desc->keyword, sizeof(buf));
     }
-    send_to_char(strcat(buf, "^n\r\n"), ch);
+    send_to_char(ch, "%s^n\r\n", buf);
   }
   strcpy(buf, "Chars present:^y");
   for (found = 0, k = rm->people; k; k = k->next_in_room)
@@ -1059,18 +1059,21 @@ void do_stat_room(struct char_data * ch)
       continue;
     snprintf(buf2, sizeof(buf2), "%s %s(%s)", found++ ? "," : "", IS_NPC(k) ? GET_NAME(k) : GET_CHAR_NAME(k),
             (!IS_NPC(k) ? "PC" : (!IS_MOB(k) ? "NPC" : "MOB")));
-    strcat(buf, buf2);
+    strlcat(buf, buf2, sizeof(buf));
     if (strlen(buf) >= 62) {
       if (k->next_in_room)
-        send_to_char(strcat(buf, ",\r\n"), ch);
+        strlcat(buf, ",\r\n", sizeof(buf));
       else
-        send_to_char(strcat(buf, "\r\n"), ch);
+        strlcat(buf, "\r\n", sizeof(buf));
+      send_to_char(buf, ch);
       *buf = found = 0;
     }
   }
 
-  if (*buf)
-    send_to_char(strcat(buf, "\r\n"), ch);
+  if (*buf) {
+    strlcat(buf, "\r\n", sizeof(buf));
+    send_to_char(buf, ch);
+  }
 
   if (rm->contents)
   {
@@ -1079,18 +1082,21 @@ void do_stat_room(struct char_data * ch)
       if (!CAN_SEE_OBJ(ch, j))
         continue;
       snprintf(buf2, sizeof(buf2), "%s %s", found++ ? "," : "", GET_OBJ_NAME(j));
-      strcat(buf, buf2);
+      strlcat(buf, buf2, sizeof(buf));
       if (strlen(buf) >= 62) {
         if (j->next_content)
-          send_to_char(strcat(buf, ",\r\n"), ch);
+          strlcat(buf, ",\r\n", sizeof(buf));
         else
-          send_to_char(strcat(buf, "\r\n"), ch);
+          strlcat(buf, "\r\n", sizeof(buf));
+        send_to_char(buf, ch);
         *buf = found = 0;
       }
     }
 
-    if (*buf)
-      send_to_char(strcat(buf, "\r\n"), ch);
+    if (*buf) {
+      strlcat(buf, "\r\n", sizeof(buf));
+      send_to_char(buf, ch);
+    }
   }
 
   for (i = 0; i < NUM_OF_DIRS; i++)
@@ -1133,7 +1139,7 @@ void do_stat_host(struct char_data *ch, struct host_data *host)
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s%s (%d)", prev ? ", " : "", GET_CHAR_NAME(icon->decker->ch), icon->decker->tally);
       prev = TRUE;
     }
-  strcat(buf, "^n\r\n");
+  strlcat(buf, "^n\r\n", sizeof(buf));
   send_to_char(buf, ch);
 }
 
@@ -1183,12 +1189,12 @@ void do_stat_object(struct char_data * ch, struct obj_data * j)
 
   if (j->ex_description)
   {
-    strcat(buf, "Extra descs:^c");
+    strlcat(buf, "Extra descs:^c", sizeof(buf));
     for (desc = j->ex_description; desc; desc = desc->next) {
-      strcat(buf, " ");
-      strcat(buf, desc->keyword);
+      strlcat(buf, " ", sizeof(buf));
+      strlcat(buf, desc->keyword, sizeof(buf));
     }
-    strcat(buf, "\r\n");
+    strlcat(buf, "\r\n", sizeof(buf));
   }
 
   j->obj_flags.wear_flags.PrintBits(buf2, MAX_STRING_LENGTH,
@@ -1206,30 +1212,30 @@ void do_stat_object(struct char_data * ch, struct obj_data * j)
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Weight: %.2f, Value: %d, Timer: %d, Availability: %d/%.2f Days\r\n",
           GET_OBJ_WEIGHT(j), GET_OBJ_COST(j), GET_OBJ_TIMER(j), GET_OBJ_AVAILTN(j), GET_OBJ_AVAILDAY(j));
 
-  strcat(buf, "In room: ");
+  strlcat(buf, "In room: ", sizeof(buf));
   if (!j->in_room)
-    strcat(buf, "Nowhere");
+    strlcat(buf, "Nowhere", sizeof(buf));
   else
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld (IR %ld)", j->in_room->number, real_room(j->in_room->number));
-  strcat(buf, ", In object: ");
-  strcat(buf, j->in_obj ? j->in_obj->text.name : "None");
-  strcat(buf, ", Carried by: ");
+  strlcat(buf, ", In object: ", sizeof(buf));
+  strlcat(buf, j->in_obj ? j->in_obj->text.name : "None", sizeof(buf));
+  strlcat(buf, ", Carried by: ", sizeof(buf));
   if (j->carried_by)
-    strcat(buf, GET_CHAR_NAME(j->carried_by) ? GET_CHAR_NAME(j->carried_by): "BROKEN");
+    strlcat(buf, GET_CHAR_NAME(j->carried_by) ? GET_CHAR_NAME(j->carried_by): "BROKEN", sizeof(buf));
   else
-    strcat(buf, "Nobody");
-  strcat(buf, ", Worn by: ");
+    strlcat(buf, "Nobody", sizeof(buf));
+  strlcat(buf, ", Worn by: ", sizeof(buf));
   if (j->worn_by)
-    strcat(buf, GET_CHAR_NAME(j->worn_by) ? GET_CHAR_NAME(j->worn_by): "BROKEN");
+    strlcat(buf, GET_CHAR_NAME(j->worn_by) ? GET_CHAR_NAME(j->worn_by): "BROKEN", sizeof(buf));
   else
-    strcat(buf, "Nobody");
-  strcat(buf, ", In vehicle: ");
+    strlcat(buf, "Nobody", sizeof(buf));
+  strlcat(buf, ", In vehicle: ", sizeof(buf));
   if (j->in_veh)
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld", j->in_veh->veh_number);
   else
-    strcat(buf, "None");
+    strlcat(buf, "None", sizeof(buf));
 
-  strcat(buf, "\r\n");
+  strlcat(buf, "\r\n", sizeof(buf));
 
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Material: %s, Rating: %d, Condition: %d, Legality: %d%s-%s\r\n",
                material_names[(int)GET_OBJ_MATERIAL(j)], GET_OBJ_BARRIER(j),
@@ -1345,17 +1351,17 @@ void do_stat_object(struct char_data * ch, struct obj_data * j)
    */
   if (j->contains)
   {
-    strcat(buf, "\r\nContents:^g");
+    strlcat(buf, "\r\nContents:^g", sizeof(buf));
     for (found = 0, j2 = j->contains; j2; j2 = j2->next_content) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s %s", found++ ? "," : "", GET_OBJ_NAME(j2));
       if (strlen(buf) >= 62)
         if (j2->next_content)
-          strcat(buf, ",\r\n");
+          strlcat(buf, ",\r\n", sizeof(buf));
     }
   }
-  strcat(buf, "^n\r\n");
+  strlcat(buf, "^n\r\n", sizeof(buf));
   found = 0;
-  strcat(buf, "Affections:");
+  strlcat(buf, "Affections:", sizeof(buf));
   for (i = 0; i < MAX_OBJ_AFFECT; i++)
     if (j->affected[i].modifier)
     {
@@ -1367,8 +1373,8 @@ void do_stat_object(struct char_data * ch, struct obj_data * j)
               j->affected[i].modifier, buf2);
     }
   if (!found)
-    strcat(buf, " None");
-  strcat(buf, "\r\n");
+    strlcat(buf, " None", sizeof(buf));
+  strlcat(buf, "\r\n", sizeof(buf));
   send_to_char(buf, ch);
 }
 
@@ -1444,9 +1450,9 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
     break;
   }
 
-  strcat(buf, ", Race: ");
+  strlcat(buf, ", Race: ", sizeof(buf));
   sprinttype(k->player.race, pc_race_types, buf2, sizeof(buf2));
-  strcat(buf, buf2);
+  strlcat(buf, buf2, sizeof(buf));
 
   if (IS_SENATOR(k))
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", Status: %s\r\n", status_ratings[(int)GET_LEVEL(k)]);
@@ -1503,14 +1509,14 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
   if (k->desc)
   {
     sprinttype(k->desc->connected, connected_types, buf2, sizeof(buf2));
-    strcat(buf, ", Connected: ");
-    strcat(buf, buf2);
+    strlcat(buf, ", Connected: ", sizeof(buf));
+    strlcat(buf, buf2, sizeof(buf));
   }
-  strcat(buf, "\r\n");
+  strlcat(buf, "\r\n", sizeof(buf));
 
-  strcat(buf, "Default position: ");
+  strlcat(buf, "Default position: ", sizeof(buf));
   sprinttype((k->mob_specials.default_pos), position_types, buf2, sizeof(buf2));
-  strcat(buf, buf2);
+  strlcat(buf, buf2, sizeof(buf));
 
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", Idle Timer: [%d]\r\n", k->char_specials.timer);
 
@@ -1546,10 +1552,10 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s %s", found++ ? "," : "", GET_CHAR_NAME(fol->follower));
     if (strlen(buf) >= 62) {
       if (fol->next)
-        strcat(buf, ",\r\n");
+        strlcat(buf, ",\r\n", sizeof(buf));
     }
   }
-  strcat(buf, "\r\n");
+  strlcat(buf, "\r\n", sizeof(buf));
 
   /* Showing the bitvector */
   AFF_FLAGS(k).PrintBits(buf2, MAX_STRING_LENGTH, affected_bits, AFF_MAX);
@@ -1593,7 +1599,7 @@ void do_stat_mobile(struct char_data * ch, struct char_data * k)
     snprintf(buf2, sizeof(buf2), " %s '%s', In veh [%s]\r\n", (!IS_MOB(k) ? "NPC" : "MOB"), GET_NAME(k), GET_VEH_NAME(k->in_veh));
   else
     snprintf(buf2, sizeof(buf2), " %s '%s'\r\n", (!IS_MOB(k) ? "NPC" : "MOB"), GET_NAME(k));
-  strcat(buf, buf2);
+  strlcat(buf, buf2, sizeof(buf));
 
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Alias: %s, VNum: [%8ld], RNum: [%5ld]\r\n", GET_KEYWORDS(k),
           GET_MOB_VNUM(k), GET_MOB_RNUM(k));
@@ -1629,16 +1635,16 @@ void do_stat_mobile(struct char_data * ch, struct char_data * k)
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Position: %s, Fighting: %s", buf2,
           (FIGHTING(k) ? GET_NAME(FIGHTING(k)) : (FIGHTING_VEH(k) ? GET_VEH_NAME(FIGHTING_VEH(k)) : "Nobody")));
 
-  strcat(ENDOF(buf), ", Attack type: ");
+  strlcat(buf, ", Attack type: ", sizeof(buf));
   // gotta subtract TYPE_HIT for the array to work properly
-  strcat(buf, attack_hit_text[k->mob_specials.attack_type - TYPE_HIT].singular);
-  strcat(buf, "\r\n");
+  strlcat(buf, attack_hit_text[k->mob_specials.attack_type - TYPE_HIT].singular, sizeof(buf));
+  strlcat(buf, "\r\n", sizeof(buf));
 
 
-  strcat(buf, "Default position: ");
+  strlcat(buf, "Default position: ", sizeof(buf));
   sprinttype((k->mob_specials.default_pos), position_types, buf2, sizeof(buf2));
-  strcat(buf, buf2);
-  strcat(buf, "     Mob Spec-Proc: ");
+  strlcat(buf, buf2, sizeof(buf));
+  strlcat(buf, "     Mob Spec-Proc: ", sizeof(buf));
   if (mob_index[GET_MOB_RNUM(k)].func || mob_index[GET_MOB_RNUM(k)].sfunc)
   {
     int index;
@@ -1651,7 +1657,7 @@ void do_stat_mobile(struct char_data * ch, struct char_data * k)
       snprintf(buf2, sizeof(buf2), "%s\r\n", "^CExists^n");
   } else
     snprintf(buf2, sizeof(buf2), "None\r\n");
-  strcat(buf, buf2);
+  strlcat(buf, buf2, sizeof(buf));
 
   MOB_FLAGS(k).PrintBits(buf2, MAX_STRING_LENGTH, action_bits, MOB_MAX);
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "NPC flags: ^c%s^n\r\n", buf2);
@@ -1678,10 +1684,10 @@ void do_stat_mobile(struct char_data * ch, struct char_data * k)
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s %s", found++ ? "," : "", PERS(fol->follower, ch));
     if (strlen(buf) >= 62) {
       if (fol->next)
-        strcat(buf, ",\r\n");
+        strlcat(buf, ",\r\n", sizeof(buf));
     }
   }
-  strcat(buf, "\r\n");
+  strlcat(buf, "\r\n", sizeof(buf));
 
   /* Showing the bitvector */
   AFF_FLAGS(k).PrintBits(buf2, MAX_STRING_LENGTH, affected_bits, AFF_MAX);
@@ -3107,7 +3113,7 @@ ACMD(do_wizwho)
         snprintf(buf, sizeof(buf), " ^m(i%d)^n\r\n", GET_INVIS_LEV(d->character));
       else
         snprintf(buf, sizeof(buf), "\r\n");
-      strcat(line, buf);
+      strlcat(line, buf, sizeof(line));
       send_to_char(line, ch);
       immos++;
     }
@@ -3185,7 +3191,7 @@ ACMD(do_wiztitle)
     }
     skip_spaces(&argument);
     if (GET_LEVEL(ch) < LVL_BUILDER && *argument)
-      strcat(buf, "^n");
+      strlcat(buf, "^n", sizeof(buf));
     if (strstr((const char *)argument, "^l")) {
       send_to_char("Whotitles can't contain pure black.\r\n", ch);
     } else if (strlen(argument) > (MAX_TITLE_LENGTH -2)) {
@@ -3261,7 +3267,7 @@ ACMD(do_wizutil)
         snprintf(buf, sizeof(buf), "Notitle %s for %s by %s.", ONOFF(result),
                 GET_CHAR_NAME(vict), GET_CHAR_NAME(ch));
         mudlog(buf, ch, LOG_WIZLOG, TRUE);
-        strcat(buf, "\r\n");
+        strlcat(buf, "\r\n", sizeof(buf));
         send_to_char(buf, ch);
         break;
       case SCMD_SQUELCH:
@@ -3269,7 +3275,7 @@ ACMD(do_wizutil)
         snprintf(buf, sizeof(buf), "Squelch %s for %s by %s.", ONOFF(result),
                 GET_CHAR_NAME(vict), GET_CHAR_NAME(ch));
         mudlog(buf, ch, LOG_WIZLOG, TRUE);
-        strcat(buf, "\r\n");
+        strlcat(buf, "\r\n", sizeof(buf));
         send_to_char(buf, ch);
         break;
       case SCMD_SQUELCHOOC:
@@ -3277,7 +3283,7 @@ ACMD(do_wizutil)
         snprintf(buf, sizeof(buf), "Squelch(OOC) %s for %s by %s.", ONOFF(result),
                 GET_CHAR_NAME(vict), GET_CHAR_NAME(ch));
         mudlog(buf, ch, LOG_WIZLOG, TRUE);
-        strcat(buf, "\r\n");
+        strlcat(buf, "\r\n", sizeof(buf));
         send_to_char(buf, ch);
         break;
       case SCMD_SQUELCHTELLS:
@@ -3285,7 +3291,7 @@ ACMD(do_wizutil)
         snprintf(buf, sizeof(buf), "Squelch(tells) %s for %s by %s.", ONOFF(result),
                 GET_CHAR_NAME(vict), GET_CHAR_NAME(ch));
         mudlog(buf, ch, LOG_WIZLOG, TRUE);
-        strcat(buf, "\r\n");
+        strlcat(buf, "\r\n", sizeof(buf));
         send_to_char(buf, ch);
         break;
       case SCMD_RPE:
@@ -3343,7 +3349,7 @@ ACMD(do_wizutil)
         snprintf(buf, sizeof(buf), "Newbie muted %s for %s by %s.", ONOFF(result),
                 GET_CHAR_NAME(vict), GET_CHAR_NAME(ch));
         mudlog(buf, ch, LOG_WIZLOG, TRUE);
-        strcat(buf, "\r\n");
+        strlcat(buf, "\r\n", sizeof(buf));
         send_to_char(buf, ch);
         break;
       default:
@@ -3387,7 +3393,7 @@ void print_zone_to_buf(char *bufptr, int buf_size, int zone, int detailed)
     snprintf(bufptr, buf_size - strlen(bufptr), "%3d %-30.30s^n ", zone_table[zone].number,
             zone_table[zone].name);
     for (i = 0; i < color; i++)
-      strcat(bufptr, " ");
+      strlcat(bufptr, " ", buf_size);
     snprintf(ENDOF(bufptr), buf_size - strlen(bufptr), "%sAge: %3d; Res: %3d (%1d); Top: %5d; Sec: %2d\r\n",
             zone_table[zone].connected ? "* " : "  ",
             zone_table[zone].age, zone_table[zone].lifespan,
@@ -3428,14 +3434,14 @@ void print_zone_to_buf(char *bufptr, int buf_size, int zone, int detailed)
         if (first)
           first = 0;
         else
-          strcat(bufptr, ", ");
-        strcat(bufptr, CAP(name));
+          strlcat(bufptr, ", ");
+        strlcat(bufptr, CAP(name));
       }
     }
     if (first)
-      strcat(bufptr, "None.\r\n");
+      strlcat(bufptr, "None.\r\n");
     else
-      strcat(bufptr, ".\r\n");
+      strlcat(bufptr, ".\r\n");
 */
   }
 }
@@ -3526,7 +3532,7 @@ ACMD(do_show)
     for (j = 0, i = 1; fields[i].level; i++)
       if (access_level(ch, fields[i].level))
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-15s%s", fields[i].cmd, (!(++j % 5) ? "\r\n" : ""));
-    strcat(buf, "\r\n");
+    strlcat(buf, "\r\n", sizeof(buf));
     send_to_char(buf, ch);
     return;
   }
@@ -3697,7 +3703,7 @@ ACMD(do_show)
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%-20s%4d]", skills[i].name, GET_SKILL(vict, i));
         j++;
         if (!(j % 3))
-          strcat(buf, "\r\n");
+          strlcat(buf, "\r\n", sizeof(buf));
       }
     send_to_char(buf, ch);
     send_to_char("\r\n", ch);
@@ -3776,18 +3782,18 @@ ACMD(do_show)
             snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " %-8s", wound_name[MIN(4, GET_POWER_TOTAL(vict, i))]);
             if (GET_POWER_ACT(vict, i))
               snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " ^Y(%-8s)^n", wound_name[MIN(4, GET_POWER_ACT(vict, i))]);
-            strcat(buf2, "\r\n");
+            strlcat(buf2, "\r\n", sizeof(buf2));
             break;
           default:
             snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " +%d", GET_POWER_TOTAL(vict, i));
             if (GET_POWER_ACT(vict, i))
               snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " ^Y(%d)^n", GET_POWER_ACT(vict, i)); 
-            strcat(buf2, "\r\n");
+            strlcat(buf2, "\r\n", sizeof(buf2));
             break;
           }
         else
-          strcat(buf2, "\r\n");
-        strcat(buf, buf2);
+          strlcat(buf2, "\r\n", sizeof(buf2));
+        strlcat(buf, buf2, sizeof(buf));
       }
     }
     send_to_char(buf, ch);
@@ -4805,7 +4811,7 @@ ACMD(do_set)
   } else if (fields[l].type == NUMBER) {
     snprintf(buf, sizeof(buf), "%s's %s set to %d.\r\n", GET_NAME(vict), fields[l].cmd, value);
   } else
-    strcat(buf, "\r\n");
+    strlcat(buf, "\r\n", sizeof(buf));
   send_to_char(CAP(buf), ch);
 
   if (is_file) {
@@ -5681,7 +5687,7 @@ ACMD(do_tail)
   out=popen( arg, "r");
 
   while (fgets(buf, MAX_STRING_LENGTH-5, out) != NULL) {
-    strcat(buf,"\r");
+    strlcat(buf,"\r", sizeof(buf));
     send_to_char( buf, ch );
   }
   fclose( out );
@@ -5742,8 +5748,20 @@ bool restring_with_args(struct char_data *ch, char *argument, bool using_sysp) {
     send_to_char("No amount of cosmetic changes could hide the garishness of water wings.\r\n", ch);
     return FALSE;
   }
-  if (strlen(buf) >= LINE_LENGTH) {
-    send_to_char(ch, "That restring is too long, please shorten it. The maximum length is %d characters.\r\n", LINE_LENGTH - 1);
+  
+  int length_with_no_color = get_string_length_after_color_code_removal(buf, ch);
+  
+  // Silent failure: We already sent the error message in get_string_length_after_color_code_removal().
+  if (length_with_no_color == -1)
+    return FALSE;
+  
+  if (length_with_no_color >= LINE_LENGTH) {
+    send_to_char(ch, "That restring is too long, please shorten it. The maximum length after color code removal is %d characters.\r\n", LINE_LENGTH - 1);
+    return FALSE;
+  }
+  
+  if (strlen(buf) >= MAX_RESTRING_LENGTH) {
+    send_to_char(ch, "That restring is too long, please shorten it. The maximum length with color codes included is %d characters.\r\n", MAX_RESTRING_LENGTH - 1);
     return FALSE;
   }
   

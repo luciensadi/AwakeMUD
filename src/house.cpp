@@ -783,7 +783,7 @@ SPECIAL(landlord_spec)
       do_say(recep, "That room is currently available for lease.", 0, 0);
     else {
       if (room_record->date - time(0) < 0) {
-        strcpy(buf2, "Your rent has expired on that apartment.");
+        strlcpy(buf2, "Your rent has expired on that apartment.", sizeof(buf2));
         do_say(recep, buf2, 0, 0);
       } else {
         snprintf(buf2, sizeof(buf2), "You are paid for another %d days.", (int)((room_record->date - time(0)) / 86400));
@@ -916,8 +916,8 @@ void hcontrol_list_houses(struct char_data *ch)
 {
   char *own_name;
 
-  strcpy(buf, "Address  Atrium  Guests  Owner           Crap Count\r\n");
-  strcat(buf, "-------  ------  ------  --------------  -----------\r\n");
+  strlcpy(buf, "Address  Atrium  Guests  Owner           Crap Count\r\n", sizeof(buf));
+  strlcat(buf, "-------  ------  ------  --------------  -----------\r\n", sizeof(buf));
   send_to_char(buf, ch);
 
   for (struct landlord *llord = landlords; llord; llord = llord->next)
@@ -1153,7 +1153,7 @@ void House_list_guests(struct char_data *ch, struct house_control_rec *i, int qu
   int j;
   char buf[MAX_STRING_LENGTH], buf2[MAX_NAME_LENGTH + 2];
 
-  strcpy(buf, "  Guests: ");
+  strlcpy(buf, "  Guests: ", sizeof(buf));
   int x = 0;
   for (j = 0; j < MAX_GUESTS; j++)
   {
@@ -1166,13 +1166,13 @@ void House_list_guests(struct char_data *ch, struct house_control_rec *i, int qu
       continue;
 
     snprintf(buf2, sizeof(buf2), "%s, ", temp);
-    strcat(buf, CAP(buf2));
+    strlcat(buf, CAP(buf2), sizeof(buf));
     x++;
     DELETE_ARRAY_IF_EXTANT(temp);
   }
   if (!x)
-    strcat(buf, "None");
-  strcat(buf, "\r\n");
+    strlcat(buf, "None", sizeof(buf));
+  strlcat(buf, "\r\n", sizeof(buf));
   send_to_char(buf, ch);
 }
 

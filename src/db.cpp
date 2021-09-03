@@ -3030,6 +3030,8 @@ struct char_data *read_mobile(int nr, int type)
   mob->char_specials.saved.left_handed = (!number(0, 9) ? 1 : 0);
 
   mob_index[i].number++;
+  
+  set_natural_vision_for_race(mob);
 
   affect_total(mob);
 

@@ -469,6 +469,7 @@ struct char_special_data
   sh_int foci;
   sh_int last_healed;
   int timer;                  /* Timer for update                     */
+  int last_timer;             /* Last timer, which is restored on actions that don't block idle nuyen rewards */
   int actions;
   int coord[3];
   

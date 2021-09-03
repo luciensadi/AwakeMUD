@@ -58,6 +58,26 @@ extern const char *get_ammobox_default_restring(struct obj_data *ammobox);
 extern bool can_edit_zone(struct char_data *ch, int zone);
 extern int find_first_step(vnum_t src, vnum_t target, bool ignore_roads);
 
+extern SPECIAL(johnson);
+extern SPECIAL(landlord_spec);
+extern SPECIAL(receptionist);
+extern SPECIAL(shop_keeper);
+extern SPECIAL(postmaster);
+extern SPECIAL(generic_guard);
+extern SPECIAL(receptionist);
+extern SPECIAL(cryogenicist);
+extern SPECIAL(teacher);
+extern SPECIAL(metamagic_teacher);
+extern SPECIAL(trainer);
+extern SPECIAL(adept_trainer);
+extern SPECIAL(spell_trainer);
+extern SPECIAL(fixer);
+extern SPECIAL(hacker);
+extern SPECIAL(fence);
+extern SPECIAL(taxi);
+extern SPECIAL(painter);
+extern SPECIAL(nerp_skills_teacher);
+
 /* creates a random number in interval [from;to] */
 int number(int from, int to)
 {
@@ -3628,6 +3648,117 @@ void turn_hardcore_off_for_character(struct char_data *ch) {
   snprintf(buf, sizeof(buf), "UPDATE pfiles SET Hardcore=0, NoDelete=0 WHERE idnum=%ld;", GET_IDNUM(ch));
   mysql_wrapper(mysql, buf);
 }
+
+void set_natural_vision_for_race(struct char_data *ch) {
+  switch (GET_RACE(ch)) {
+    case RACE_HUMAN:
+    case RACE_OGRE:
+      NATURAL_VISION(ch) = NORMAL;
+      break;
+    case RACE_DWARF:
+    case RACE_GNOME:
+    case RACE_MENEHUNE:
+    case RACE_KOBOROKURU:
+    case RACE_TROLL:
+    case RACE_CYCLOPS:
+    case RACE_FOMORI:
+    case RACE_GIANT:
+    case RACE_MINOTAUR:
+      NATURAL_VISION(ch) = THERMOGRAPHIC;
+      break;
+    case RACE_ORK:
+    case RACE_HOBGOBLIN:
+    case RACE_SATYR:
+    case RACE_ONI:
+    case RACE_ELF:
+    case RACE_WAKYAMBI:
+    case RACE_NIGHTONE:
+    case RACE_DRYAD:
+      NATURAL_VISION(ch) = LOWLIGHT;
+      break;
+  }
+}
+
+// Returns -1 on error, make sure you catch that!
+int get_string_length_after_color_code_removal(const char *str, struct char_data *ch_to_notify_of_failure_reason) {
+  if (!str) {
+    mudlog("SYSERR: Null string received to get_string_length_after_color_code_removal().", ch_to_notify_of_failure_reason, LOG_SYSLOG, TRUE);
+    return 0;
+  }
+    
+  const char *ptr = str;
+  int len = 0;
+  
+  while (*ptr) {
+    if (*ptr == '^') {
+      if (*(ptr+1) == '\0') {
+        if (ch_to_notify_of_failure_reason)
+          send_to_char("Sorry, tag strings can't end with the ^ character.\r\n", ch_to_notify_of_failure_reason);
+        return -1;
+      }
+      // Print a single ^ character.
+      else if (*(ptr+1) == '^') {
+        ptr += 2;
+        len += 1;
+      }
+      // Print a color character.
+      else {
+        // There are two types of color: Two-character tags (^g) and xterm tags (^[F123]). We must account for both.
+        if (*(ptr+1) == '[') {
+          // We know that ptr+1 was a valid character (see first check in this while), so at worst, +2 can be \0.
+          if (!*(ptr + 2) || !(*(ptr + 2) == 'F')) {
+            if (ch_to_notify_of_failure_reason)
+              send_to_char("Sorry, xterm256 colors can only be specified in foreground mode (^^[F...]).\r\n", ch_to_notify_of_failure_reason);
+            return -1;
+          }
+#define IS_CODE_DIGIT_VALID(chr) (*(chr) && (*(chr) == '0' || *(chr) == '1' || *(chr) == '2' || *(chr) == '3' || *(chr) == '4' || *(chr) == '5'))
+          if (!IS_CODE_DIGIT_VALID(ptr + 3) || !IS_CODE_DIGIT_VALID(ptr + 4) || !IS_CODE_DIGIT_VALID(ptr + 5)) {
+            if (ch_to_notify_of_failure_reason)
+              send_to_char("Sorry, you've entered an invalid xterm256 color code.\r\n", ch_to_notify_of_failure_reason);
+            return -1;
+          }
+#undef IS_CODE_DIGIT_VALID
+          if (!*(ptr + 6) || *(ptr + 6) != ']') {
+            if (ch_to_notify_of_failure_reason)
+              send_to_char("You've forgotten to terminate an xterm256 color code.\r\n", ch_to_notify_of_failure_reason);
+            return -1;
+          }
+          
+          ptr += strlen("^[F123]");
+        } else {
+          ptr += 2;
+        }
+      }
+    } else {
+      len += 1;
+      ptr += 1;
+    }
+  }
+  
+  return len;
+}
+
+#define CHECK_FUNC_AND_SFUNC_FOR(function) (mob_index[GET_MOB_RNUM(npc)].func == (function) || mob_index[GET_MOB_RNUM(npc)].sfunc == (function))
+// Returns TRUE if the NPC has a spec that should protect it from damage, FALSE otherwise.
+bool npc_is_protected_by_spec(struct char_data *npc) {
+  return (CHECK_FUNC_AND_SFUNC_FOR(shop_keeper)
+          || CHECK_FUNC_AND_SFUNC_FOR(johnson)
+          || CHECK_FUNC_AND_SFUNC_FOR(landlord_spec)
+          || CHECK_FUNC_AND_SFUNC_FOR(postmaster)
+          || CHECK_FUNC_AND_SFUNC_FOR(teacher)
+          || CHECK_FUNC_AND_SFUNC_FOR(metamagic_teacher)
+          || CHECK_FUNC_AND_SFUNC_FOR(trainer)
+          || CHECK_FUNC_AND_SFUNC_FOR(adept_trainer)
+          || CHECK_FUNC_AND_SFUNC_FOR(spell_trainer)
+          || CHECK_FUNC_AND_SFUNC_FOR(receptionist)
+          || CHECK_FUNC_AND_SFUNC_FOR(fixer)
+          || CHECK_FUNC_AND_SFUNC_FOR(fence)
+          || CHECK_FUNC_AND_SFUNC_FOR(taxi)
+          || CHECK_FUNC_AND_SFUNC_FOR(painter)
+          || CHECK_FUNC_AND_SFUNC_FOR(nerp_skills_teacher)
+          || CHECK_FUNC_AND_SFUNC_FOR(hacker));
+}
+#undef CHECK_FUNC_AND_SFUNC_FOR
 
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.
 // Great for swapping out old Classic weapons, cyberware, etc for the new guaranteed-canon versions.

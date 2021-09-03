@@ -1555,7 +1555,7 @@ void qedit_list_obj_objectives(struct descriptor_data *d)
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%2d) ", i);
     switch (QUEST->obj[i].load) {
     case QUEST_NONE:
-      strcat(buf, "Load nothing");
+      strlcat(buf, "Load nothing", sizeof(buf));
       break;
     case QOL_JOHNSON:
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Give %ld to Johnson", QUEST->obj[i].vnum);
@@ -1569,8 +1569,8 @@ void qedit_list_obj_objectives(struct descriptor_data *d)
                 snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "(%s)", GET_NAME(mob_proto+rnum));
       }
       else
-        strcat(buf, "(null)");
-      strcat(buf, "(NOT A DELIVERY OBJECTIVE)");
+        strlcat(buf, "(null)", sizeof(buf));
+      strlcat(buf, "(NOT A DELIVERY OBJECTIVE)", sizeof(buf));
       break;
 
     case QOL_TARMOB_E:
@@ -1583,7 +1583,7 @@ void qedit_list_obj_objectives(struct descriptor_data *d)
                 GET_NAME(mob_proto+rnum));
       }
 
-      strcat(buf, "(null) ");
+      strlcat(buf, "(null) ", sizeof(buf));
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "with %ld at %s", QUEST->obj[i].vnum,
               wear_bits[QUEST->obj[i].l_data2]);
       break;
@@ -1598,7 +1598,7 @@ void qedit_list_obj_objectives(struct descriptor_data *d)
                 snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "(%s)", GET_NAME(mob_proto+rnum));
       }
       else
-        strcat(buf, "(null)");
+        strlcat(buf, "(null)", sizeof(buf));
 
       break;
     case QOL_HOST:
@@ -1613,10 +1613,10 @@ void qedit_list_obj_objectives(struct descriptor_data *d)
             QUEST->obj[i].nuyen, ((float)QUEST->obj[i].karma / 100));
     switch (QUEST->obj[i].objective) {
     case QUEST_NONE:
-      strcat(buf, "nothing\r\n");
+      strlcat(buf, "nothing\r\n", sizeof(buf));
       break;
     case QOO_JOHNSON:
-      strcat(buf, "returning item to Johnson\r\n");
+      strlcat(buf, "returning item to Johnson\r\n", sizeof(buf));
       break;
     case QOO_TAR_MOB:
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "delivering item %ld (%s) to M%d ",
@@ -1629,17 +1629,17 @@ void qedit_list_obj_objectives(struct descriptor_data *d)
                 snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "(%s)\r\n", GET_NAME(mob_proto+rnum));
       }
       else
-        strcat(buf, "(null)\r\n");
+        strlcat(buf, "(null)\r\n", sizeof(buf));
       break;
     case QOO_LOCATION:
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "delivering item to room %d\r\n",
               QUEST->obj[i].o_data);
       break;
     case QOO_DSTRY_ONE:
-      strcat(buf, "destroying item\r\n");
+      strlcat(buf, "destroying item\r\n", sizeof(buf));
       break;
     case QOO_DSTRY_MANY:
-      strcat(buf, "each item destroyed\r\n");
+      strlcat(buf, "each item destroyed\r\n", sizeof(buf));
       break;
     case QOO_UPLOAD:
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "uploading to host %d\n\n", QUEST->obj[i].o_data);
@@ -1665,7 +1665,7 @@ void qedit_list_mob_objectives(struct descriptor_data *d)
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%2d) ", i);
     switch (QUEST->mob[i].load) {
     case QUEST_NONE:
-      strcat(buf, "Not set");
+      strlcat(buf, "Not set", sizeof(buf));
       break;
     case QML_LOCATION:
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Load %ld (%s) at room %d",
@@ -1716,7 +1716,7 @@ void qedit_list_mob_objectives(struct descriptor_data *d)
           (rnum = real_mobile(QUEST->mob[QUEST->mob[i].o_data].vnum)) > -1) {
                 snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "(%s)\r\n", GET_NAME(mob_proto+rnum));
       } else
-        strcat(buf, "(null)\r\n");
+        strlcat(buf, "(null)\r\n", sizeof(buf));
       break;
     }
   }

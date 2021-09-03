@@ -398,12 +398,12 @@ void iedit_disp_val1_menu(struct descriptor_data * d)
         else
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%2d) %-20s ", c, skills[c].name);
         if (!(line % 3)) {
-          strcat(buf, "\r\n");
+          strlcat(buf, "\r\n", sizeof(buf));
           send_to_char(buf, CH);
         }
       }
       if ((line % 3) != 0) {
-        strcat(buf, "\r\nEnter a skill (0 to quit): ");
+        strlcat(buf, "\r\nEnter a skill (0 to quit): ", sizeof(buf));
         send_to_char(buf, CH);
       }
       break;

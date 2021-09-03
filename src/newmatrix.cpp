@@ -599,7 +599,6 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
   }
   success -= success_test(bod, power);
   dam = convert_damage(stage(success, dam));
-  targ->condition -= dam;
   if (icon->number) {
     if (icon->ic.type == IC_SCOUT)
     {
@@ -643,6 +642,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
       return;
     }
   }
+  targ->condition -= dam;
   switch(dam)
   {
   case 0:

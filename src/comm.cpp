@@ -758,9 +758,12 @@ void game_loop(int mother_desc)
         
         if ((--(d->wait) <= 0) && get_from_q(&d->input, comm, &aliased)) {
           if (d->character) {
+            d->character->char_specials.last_timer = d->character->char_specials.timer;
             d->character->char_specials.timer = 0;
-            if (d->original)
+            if (d->original) {
+              d->original->char_specials.last_timer = d->original->char_specials.timer;
               d->original->char_specials.timer = 0;
+            }
             if (!d->connected && GET_WAS_IN(d->character)) {
               if (d->character->in_room)
                 char_from_room(d->character);
@@ -1199,10 +1202,10 @@ int make_prompt(struct descriptor_data * d)
                     default:
                       snprintf(str, sizeof(str), "NA");
                   }
-                else strcpy(str, "ML");
+                else strlcpy(str, "ML", sizeof(str));
                 
               } else
-                strcpy(str, "NA");
+                strlcpy(str, "NA", sizeof(str));
               break;
             case 'b':       // ballistic
               snprintf(str, sizeof(str), "%d", GET_BALLISTIC(d->character));
@@ -3014,14 +3017,14 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
               GET_CHAR_NAME(ch), ch->in_room ? GET_ROOM_NAME(ch->in_room) : "n/a",
               ch->in_veh ? GET_VEH_NAME(ch->in_veh) : "n/a");
     } else {
-      strcat(buf, " ...No character.");
+      strlcat(buf, " ...No character.", sizeof(buf));
     }
     if (obj) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nobj: %s, in_room %s, in_veh %s",
               GET_OBJ_NAME(obj), obj->in_room ? GET_ROOM_NAME(obj->in_room) : "n/a",
               obj->in_veh ? GET_VEH_NAME(obj->in_veh) : "n/a");
     } else {
-      strcat(buf, " ...No obj.");
+      strlcat(buf, " ...No obj.", sizeof(buf));
     }
     mudlog(buf, NULL, LOG_SYSLOG, TRUE);
     return NULL;
@@ -3044,7 +3047,7 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
     
     // Send rolls to riggers.
     for (; rigger_check; rigger_check = rigger_check->next_veh) {
-      if ((tch = rigger_check->rigger) && tch->desc && PRF_FLAGGED(to, PRF_ROLLS)) {
+      if ((tch = rigger_check->rigger) && tch->desc && PRF_FLAGGED(tch, PRF_ROLLS)) {
         // We currently treat all vehicles as having ultrasonic sensors.
         // Since the check is done to the rigger, we have to apply det-invis to them directly, then remove it when done.
         bool rigger_is_det_invis = AFF_FLAGGED(tch, AFF_DETECT_INVIS);

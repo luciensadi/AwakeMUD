@@ -247,6 +247,7 @@ bool vict_is_valid_aggro_target(struct char_data *ch, struct char_data *vict) {
     return FALSE;
     
   if (MOB_FLAGS(ch).IsSet(MOB_AGGRESSIVE) 
+      || (MOB_FLAGGED(ch, MOB_GUARD) && GET_MOBALERT(ch) == MALERT_ALARM)
       || (mob_is_aggressive(ch, FALSE) 
           && (GET_MOBALERT(ch) == MALERT_ALARM 
               ||  (
@@ -272,8 +273,9 @@ bool vict_is_valid_aggro_target(struct char_data *ch, struct char_data *vict) {
     // Kick their ass.
   {
 #ifdef MOBACT_DEBUG
-    snprintf(buf3, sizeof(buf3), "vict_is_valid_aggro_target: Target found (conditions: %s/%s/%s/%s/%s/%s): %s.", 
+    snprintf(buf3, sizeof(buf3), "vict_is_valid_aggro_target: Target found (conditions: %s/%s/%s/%s/%s/%s/%s): %s.", 
              MOB_FLAGS(ch).IsSet(MOB_AGGRESSIVE) ? "base aggro" : "",
+             (MOB_FLAGGED(ch, MOB_GUARD) && GET_MOBALERT(ch) == MALERT_ALARM) ? "alarmed guard" : "",
              (MOB_FLAGGED(ch, MOB_AGGR_ELF)   && (GET_RACE(vict) == RACE_ELF || GET_RACE(vict) == RACE_WAKYAMBI || GET_RACE(vict) == RACE_NIGHTONE || GET_RACE(vict) == RACE_DRYAD)) ? "anti-elf" : "",
              (MOB_FLAGGED(ch, MOB_AGGR_DWARF) && (GET_RACE(vict) == RACE_DWARF || GET_RACE(vict) == RACE_GNOME || GET_RACE(vict) == RACE_MENEHUNE || GET_RACE(vict) == RACE_KOBOROKURU)) ? "anti-dwarf" : "",
              (MOB_FLAGGED(ch, MOB_AGGR_HUMAN) && GET_RACE(vict) == RACE_HUMAN) ? "anti-human" : "",
