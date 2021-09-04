@@ -1734,6 +1734,7 @@ void look_in_obj(struct char_data * ch, char *arg, bool exa)
     struct veh_data *curr_in_veh = ch->in_veh;
     bool curr_vfront = ch->vfront;
     
+    /* Disabled-- a check with no penalty that you can spam until success does not add to the fun.
     if (veh->cspeed > SPEED_IDLE) {
       if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 8)) {
         ch->in_veh = veh;
@@ -1750,6 +1751,13 @@ void look_in_obj(struct char_data * ch, char *arg, bool exa)
       ch->vfront = TRUE;
       look_in_veh(ch);
     }
+    */
+    // Notify the occupants, update character to be an occupant, look in the vehicle, then reset character's occupancy.
+    for (struct char_data *vict = veh->people; vict; vict = vict->next_in_veh)
+      act("$n peers inside.", FALSE, ch, 0, vict, TO_VICT);
+    ch->in_veh = veh;
+    ch->vfront = TRUE;
+    look_in_veh(ch);
     ch->in_veh = curr_in_veh;
     curr_vfront = ch->vfront;
     return;
