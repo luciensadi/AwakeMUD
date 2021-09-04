@@ -599,7 +599,7 @@ void update_buildrepair(void)
         STOP_WORKING(CH);
       } else if (AFF_FLAGGED(CH, AFF_AMMOBUILD) && --GET_AMMOBOX_TIME_TO_COMPLETION(PROG) < 1) {
         if (GET_AMMOBOX_TIME_TO_COMPLETION(PROG) <= -2) // --(-1) = -2; prevents penalizing people who ace the test.
-          (i = rand(1,9) {
+          (i = rand(1,9)) {
             switch(i) {
               case 1:
                 send_to_char("You seem to have messed up the batch of ammo.\r\n", CH);
