@@ -200,6 +200,7 @@ struct shop_sell_data *find_obj_shop(char *arg, vnum_t shop_nr, struct obj_data 
           continue;
         }
         extract_obj(temp_obj);
+        temp_obj = NULL;
         if (num <= 0)
           break;
       } else {
@@ -423,6 +424,7 @@ bool install_ware_in_target_character(struct obj_data *ware, struct char_data *i
       struct obj_data *container = ware->in_obj;
       obj_from_obj(ware);
       extract_obj(container);
+      container = NULL;
     }
     
     // Install it.
@@ -501,6 +503,7 @@ bool install_ware_in_target_character(struct obj_data *ware, struct char_data *i
       struct obj_data *container = ware->in_obj;
       obj_from_obj(ware);
       extract_obj(container);
+      container = NULL;
     }
     
     // Install it.
@@ -720,6 +723,7 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
         if (orig) {
           GET_OBJ_COST(orig) += GET_OBJ_COST(obj);
           extract_obj(obj);
+          obj = NULL;
         } else {
           obj_to_char(obj, ch);
         }
@@ -772,6 +776,7 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
       if (obj) {
         // Obj was loaded but not given to the character.
         extract_obj(obj);
+        obj = NULL;
       }
     }
     
@@ -804,9 +809,11 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
   send_to_char(buf2, ch);
   send_to_char("\r\n", ch);
   
-  // Log it.
-  snprintf(buf, sizeof(buf), "Purchased %d of '%s' (%ld) for %d nuyen.", bought, GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj), price);
-  mudlog(buf, ch, LOG_GRIDLOG, TRUE);
+  // Log it. Right now, this prints a null object most of the time.
+  if (bought >= 1) {
+    snprintf(buf, sizeof(buf), "Purchased %d of '%s' (%ld) for %d nuyen.", bought, GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj), price);
+    mudlog(buf, ch, LOG_GRIDLOG, TRUE);
+  }
   
   if (order) {
     order->number -= bought;
@@ -1086,6 +1093,7 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
     
     // Clean up.
     extract_obj(obj);
+    obj = NULL;
   } else
   {
     // Give them the thing without fanfare.
@@ -1172,6 +1180,7 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
       // Remove the container and junk it.
       obj_from_char(container);
       extract_obj(container);
+      container = NULL;
     } else {
       obj_from_char(obj);
     }
@@ -1225,6 +1234,7 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
     sell->stock++;
  
  extract_obj(obj);
+ obj = NULL;
 }
 
 void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t shop_nr)
@@ -1293,6 +1303,7 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
       
       // Clean up so we don't leak the object.
       extract_obj(obj);
+      obj = NULL;
     }
     page_string(ch->desc, buf, 1);
     return;
@@ -1351,6 +1362,7 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
                 GET_OBJ_TYPE(obj) == ITEM_CYBERWARE ? 'E' : 'I', buy_price(obj, shop_nr));
       }
       extract_obj(obj);
+      obj = NULL;
     }
   } else
   {
@@ -1398,6 +1410,7 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
         break;
       }
       extract_obj(obj);
+      obj = NULL;
     }
   }
   page_string(ch->desc, buf, 1);
@@ -2953,6 +2966,7 @@ void shop_uninstall(char *argument, struct char_data *ch, struct char_data *keep
       snprintf(buf, sizeof(buf), "%s Sorry, %s was too damaged to be worth reusing.", GET_CHAR_NAME(ch), GET_OBJ_NAME(obj));
       do_say(keeper, buf, cmd_say, SCMD_SAYTO);
       extract_obj(obj);
+      obj = NULL;
     }
   }
 }
