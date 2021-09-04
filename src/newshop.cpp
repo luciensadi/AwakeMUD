@@ -810,10 +810,12 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
   send_to_char("\r\n", ch);
   
   // Log it. Right now, this prints a null object most of the time.
-  if (bought >= 1) {
+  /*
+  if (bought >= 1 && obj) {
     snprintf(buf, sizeof(buf), "Purchased %d of '%s' (%ld) for %d nuyen.", bought, GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj), price);
     mudlog(buf, ch, LOG_GRIDLOG, TRUE);
   }
+  */
   
   if (order) {
     order->number -= bought;
