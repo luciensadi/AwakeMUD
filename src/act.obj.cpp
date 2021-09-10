@@ -1491,8 +1491,20 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
   
   if (GET_OBJ_VNUM(obj) == OBJ_NEOPHYTE_SUBSIDY_CARD && GET_OBJ_VAL(obj, 1) > 0) {
     // TODO: Make it so you can use partial amounts for rent payments- this will suck with 1 nuyen left.
-    send_to_char(ch, "You can't %s a subsidy card that still has nuyen on it!", sname);
+    send_to_char(ch, "You can't %s a subsidy card that still has nuyen on it!\r\n", sname);
     return 0;
+  }
+  
+  if (GET_OBJ_TYPE(obj) == ITEM_CUSTOM_DECK) {
+    if (mode == SCMD_DONATE) {
+      send_to_char("You can't donate custom decks!\r\n", ch);
+      return 0;
+    } 
+    
+    if (obj->contains) {
+      send_to_char("You can't junk a custom deck that has components installed!\r\n", ch);
+      return 0;
+    }
   }
   
   if (ch->in_veh)
