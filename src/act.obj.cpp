@@ -1495,14 +1495,14 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
     return 0;
   }
   
-  if (GET_OBJ_TYPE(obj) == ITEM_CUSTOM_DECK) {
+  if (GET_OBJ_TYPE(obj) == ITEM_CUSTOM_DECK || GET_OBJ_TYPE(obj) == ITEM_CYBERDECK) {
     if (mode == SCMD_DONATE) {
-      send_to_char("You can't donate custom decks!\r\n", ch);
+      send_to_char("You can't donate cyberdecks!\r\n", ch);
       return 0;
     } 
     
     if (obj->contains) {
-      send_to_char("You can't junk a custom deck that has components installed!\r\n", ch);
+      send_to_char("You can't junk a cyberdeck that has components installed!\r\n", ch);
       return 0;
     }
   }
