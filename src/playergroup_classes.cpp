@@ -376,7 +376,7 @@ bool Playergroup::load_pgroup_from_db(long load_idnum) {
     return TRUE;
   } else {
     snprintf(buf, MAX_STRING_LENGTH, "Error loading playergroup from DB-- group %ld does not seem to exist.", load_idnum);
-    log(buf);
+    mudlog(buf, NULL, LOG_PGROUPLOG, TRUE);
     mysql_free_result(res);
     return FALSE;
   }

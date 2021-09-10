@@ -161,7 +161,7 @@ ACMD(do_decline) {
   send_to_char(ch, "You don't seem to have any invitations from '%s'.\r\n", argument);
 }
 
-// Find or load the specified group.
+// Find or load the specified group. Note that Playergroup(idnum) makes a DB call!
 Playergroup *Playergroup::find_pgroup(long idnum) {
   Playergroup *pgr = loaded_playergroups;
   
@@ -177,6 +177,9 @@ Playergroup *Playergroup::find_pgroup(long idnum) {
     pgr = pgr->next_pgroup;
   }
   
+  char logbuf[1000];
+  snprintf(logbuf, sizeof(logbuf), "Info: No loaded instance of group %ld, creating new struct.", idnum);
+  mudlog(logbuf, NULL, LOG_PGROUPLOG, TRUE);
   return new Playergroup(idnum);
 }
 

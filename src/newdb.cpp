@@ -918,28 +918,10 @@ bool load_char(const char *name, char_data *ch, bool logon)
     GET_PGROUP_MEMBER_DATA(ch) = new Pgroup_data();
     GET_PGROUP_MEMBER_DATA(ch)->rank = atoi(row[2]);
     GET_PGROUP_MEMBER_DATA(ch)->privileges.FromString(row[3]);
+    
+    // You MUST free the result before using this call, otherwise it breaks.
     mysql_free_result(res);
-  
-    // TODO: Find the pgroup in the list. If it's not there, load it.
-    Playergroup *ptr = loaded_playergroups;
-    while (ptr) {
-      if (ptr->get_idnum() == pgroup_idnum)
-        break;
-      ptr = ptr->next_pgroup;
-    }
-    
-    if (ptr == NULL) {
-      // Load it from the DB and add it to the list.
-      log_vfprintf("Loading playergroup %ld.", pgroup_idnum);
-      ptr = new Playergroup(pgroup_idnum);
-      //*ptr->next_pgroup = loaded_playergroups;
-      //loaded_playergroups = *ptr;
-    } else {
-      log_vfprintf("Using loaded playergroup %ld.", pgroup_idnum);
-    }
-    
-    // Initialize character pgroup struct.
-    GET_PGROUP(ch) = ptr;
+    GET_PGROUP(ch) = Playergroup::find_pgroup(pgroup_idnum);
   } else {
     mysql_free_result(res);
     GET_PGROUP_MEMBER_DATA(ch) = NULL;
