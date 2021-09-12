@@ -300,29 +300,9 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
       return TRUE;
     }
     
-    if (veh->owner && GET_IDNUM(ch) != veh->owner) {
-      bool has_valid_vict = FALSE;
-      for (struct char_data *killer_check = veh->people; killer_check; killer_check = killer_check->next_in_veh) {
-        if ((PRF_FLAGGED(ch, PRF_PKER) && PRF_FLAGGED(killer_check, PRF_PKER)) || PLR_FLAGGED(killer_check, PLR_KILLER)) {
-          has_valid_vict = TRUE;
-          break;
-        }
-      }
-      
-      if (!has_valid_vict) {
-        if (!PRF_FLAGGED(ch, PRF_PKER) && !get_plr_flag_is_set_by_idnum(PLR_KILLER, veh->owner)) {
-          send_to_char("That's a player-owned vehicle. Better leave it alone.\r\n", ch);
-          return TRUE;
-        }
-        
-        if (!get_prf_flag_is_set_by_idnum(PRF_PKER, veh->owner)) {
-          send_to_char("The owner of that vehicle is not flagged PK. Better leave it alone.\r\n", ch);
-          return TRUE;
-        }
-      }
-      // PLR_FLAGS(ch).SetBit(PLR_KILLER);
-      // send_to_char(KILLER_FLAG_MESSAGE, ch);
-    }
+    // Abort for PvP damage failure.
+    if (!can_damage_vehicle(ch, veh))
+      return TRUE;
     
     if (!(GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD)))
       draw_weapon(ch);

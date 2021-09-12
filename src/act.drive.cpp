@@ -414,6 +414,11 @@ ACMD(do_ram)
     return;
   }
   
+  // Prevent PvP damage against vehicles.
+  if (tveh && !can_damage_vehicle(ch, tveh)) {
+    return;
+  }
+  
   do_raw_ram(ch, veh, tveh, vict);
 }
 

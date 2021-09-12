@@ -3760,6 +3760,35 @@ bool npc_is_protected_by_spec(struct char_data *npc) {
 }
 #undef CHECK_FUNC_AND_SFUNC_FOR
 
+bool can_damage_vehicle(struct char_data *ch, struct veh_data *veh) {
+  if (veh->owner && GET_IDNUM(ch) != veh->owner) {
+    bool has_valid_vict = FALSE;
+    for (struct char_data *killer_check = veh->people; killer_check; killer_check = killer_check->next_in_veh) {
+      if ((PRF_FLAGGED(ch, PRF_PKER) && PRF_FLAGGED(killer_check, PRF_PKER)) || PLR_FLAGGED(killer_check, PLR_KILLER)) {
+        has_valid_vict = TRUE;
+        break;
+      }
+    }
+    
+    if (!has_valid_vict) {
+      if (!PRF_FLAGGED(ch, PRF_PKER) && !get_plr_flag_is_set_by_idnum(PLR_KILLER, veh->owner)) {
+        send_to_char("That's a player-owned vehicle. Better leave it alone.\r\n", ch);
+        return FALSE;
+      }
+      
+      if (!get_prf_flag_is_set_by_idnum(PRF_PKER, veh->owner)) {
+        send_to_char("The owner of that vehicle is not flagged PK. Better leave it alone.\r\n", ch);
+        return FALSE;
+      }
+    }
+    // PLR_FLAGS(ch).SetBit(PLR_KILLER);
+    // send_to_char(KILLER_FLAG_MESSAGE, ch);
+  }
+  
+  // No failure conditions found.
+  return TRUE;
+}
+
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.
 // Great for swapping out old Classic weapons, cyberware, etc for the new guaranteed-canon versions.
 #define PAIR(classic, current) case (classic): return (current);
