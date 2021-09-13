@@ -4780,14 +4780,12 @@ void perform_violence(void)
          - Not in same room (terminate charging)
       */
       // Ideally, we should have the NPC chase to the room their attacker is in, but given the command delays from flee/retreat this would make combat inescapable.
-      /*
       if (ch->in_room != FIGHTING(ch)->in_room) {
         AFF_FLAGS(ch).RemoveBit(AFF_APPROACH);
         AFF_FLAGS(FIGHTING(ch)).RemoveBit(AFF_APPROACH);
-        stop_fighting(ch);
+        // stop_fighting(ch);
         continue;
       }
-      */
       
       /* Automatic success:
         - Opponent charging at you too (both stop charging; clash)
