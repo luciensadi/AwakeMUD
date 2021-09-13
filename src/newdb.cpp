@@ -1144,7 +1144,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
                "Dead=%d, Physical=%d, PhysicalLoss=%d, Mental=%d, MentalLoss=%d, "\
                "PermBodLoss=%d, WimpLevel=%d, Loadroom=%ld, LastRoom=%ld, LastD=%ld, Hunger=%d, Thirst=%d, Drunk=%d, " \
                "ShotsFired='%d', ShotsTriggered='%d', Tradition=%d, pgroup='%ld', "\
-               "Inveh=%ld, rank=%d, gender=%d, SysPoints=%d, socialbonus=%d, email='%s', highlight='%s',"
+               "Inveh=%ld, `rank`=%d, gender=%d, SysPoints=%d, socialbonus=%d, email='%s', highlight='%s',"
                "multiplier=%d WHERE idnum=%ld;",
                AFF_FLAGS(player).ToString(), PLR_FLAGS(player).ToString(), 
                PRF_FLAGS(player).ToString(), GET_REAL_BOD(player), GET_REAL_QUI(player),
@@ -2203,7 +2203,7 @@ void save_adept_powers_to_db(struct char_data *player) {
   if (GET_TRADITION(player) == TRAD_ADEPT) {
     snprintf(buf, sizeof(buf), "DELETE FROM pfiles_adeptpowers WHERE idnum=%ld", GET_IDNUM(player));
     mysql_wrapper(mysql, buf);
-    strcpy(buf, "INSERT INTO pfiles_adeptpowers (idnum, powernum, rank) VALUES (");
+    strcpy(buf, "INSERT INTO pfiles_adeptpowers (idnum, powernum, `rank`) VALUES (");
     
     // Iterate over all powers, adding them to the list if needed.
     int q = 0;
@@ -2246,7 +2246,7 @@ void save_metamagic_to_db(struct char_data *player) {
   if (GET_GRADE(player) > 0) {
     snprintf(buf, sizeof(buf), "DELETE FROM pfiles_metamagic WHERE idnum=%ld", GET_IDNUM(player));
     mysql_wrapper(mysql, buf);
-    strcpy(buf, "INSERT INTO pfiles_metamagic (idnum, metamagicnum, rank) VALUES (");
+    strcpy(buf, "INSERT INTO pfiles_metamagic (idnum, metamagicnum, `rank`) VALUES (");
     int q = 0;
     for (int i = 0; i < META_MAX; i++)
       if (GET_METAMAGIC(player, i)) {
@@ -2323,7 +2323,7 @@ void save_drug_data_to_db(struct char_data *player) {
 void save_skills_to_db(struct char_data *player) {
   snprintf(buf, sizeof(buf), "DELETE FROM pfiles_skills WHERE idnum=%ld", GET_IDNUM(player));
   mysql_wrapper(mysql, buf);
-  strcpy(buf, "INSERT INTO pfiles_skills (idnum, skillnum, rank) VALUES (");
+  strcpy(buf, "INSERT INTO pfiles_skills (idnum, skillnum, `rank`) VALUES (");
   int q = 0;
   for (int i = MIN_SKILLS; i < MAX_SKILLS; i++)
     if (GET_SKILL(player, i)) {

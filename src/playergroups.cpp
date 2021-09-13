@@ -352,7 +352,7 @@ void do_pgroup_abdicate(struct char_data *ch, char *argument) {
   
   {
     // Find all group members and add them to a list.
-    snprintf(buf2, sizeof(buf2), "SELECT idnum, rank FROM pfiles_playergroups WHERE `group` = %ld", pgr->get_idnum());
+    snprintf(buf2, sizeof(buf2), "SELECT idnum, `rank` FROM pfiles_playergroups WHERE `group` = %ld", pgr->get_idnum());
     mysql_wrapper(mysql, buf2);
     
     MYSQL_RES *res = mysql_use_result(mysql);
@@ -524,7 +524,7 @@ void do_pgroup_disband(struct char_data *ch, char *argument) {
   Playergroup *pgr = GET_PGROUP(ch);
   
   // Read out the people who are getting kicked (in case we want to manually restore later).
-  snprintf(query_buf, sizeof(query_buf), "SELECT idnum, Rank, Privileges FROM pfiles_playergroups WHERE `group` = %ld ORDER BY Rank ASC", pgr->get_idnum());
+  snprintf(query_buf, sizeof(query_buf), "SELECT idnum, `Rank`, Privileges FROM pfiles_playergroups WHERE `group` = %ld ORDER BY `Rank` ASC", pgr->get_idnum());
   mysql_wrapper(mysql, query_buf);
   MYSQL_RES *res = mysql_use_result(mysql);
   MYSQL_ROW row;
@@ -931,7 +931,7 @@ void do_pgroup_roster(struct char_data *ch, char *argument) {
   Playergroup *pgr = GET_PGROUP(ch);
   
   char query_buf[512];
-  snprintf(query_buf, sizeof(query_buf), "SELECT idnum, Rank, Privileges FROM pfiles_playergroups WHERE `group` = %ld ORDER BY Rank ASC", pgr->get_idnum());
+  snprintf(query_buf, sizeof(query_buf), "SELECT idnum, `Rank`, Privileges FROM pfiles_playergroups WHERE `group` = %ld ORDER BY `Rank` ASC", pgr->get_idnum());
   mysql_wrapper(mysql, query_buf);
   MYSQL_RES *res = mysql_use_result(mysql);
   MYSQL_ROW row;
