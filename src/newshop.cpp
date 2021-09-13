@@ -1626,7 +1626,7 @@ void shop_info(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
                 GET_WEAPON_REACH(obj), GET_WEAPON_REACH(obj) > 1 ? "s" : "");
       }
       
-      if (GET_WEAPON_FOCUS_RATING(obj)) {
+      if (GET_WEAPON_FOCUS_RATING(obj) > 0) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " It is a weapon focus of force %d.", GET_WEAPON_FOCUS_RATING(obj));
       }
       
