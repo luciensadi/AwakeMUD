@@ -3141,7 +3141,7 @@ ACMD(do_conjure)
         
         AFF_FLAGS(ch).SetBit(AFF_GROUP);
         AFF_FLAGS(mob).SetBit(AFF_GROUP);
-        GET_SPARE1(mob) = NUMBER_OF_IG_DAYS_FOR_SPIRIT_TO_LAST;
+        GET_SPARE2(mob) = NUMBER_OF_IG_DAYS_FOR_SPIRIT_TO_LAST;
       }
     }
   }

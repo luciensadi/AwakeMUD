@@ -1688,6 +1688,8 @@ void do_stat_mobile(struct char_data * ch, struct char_data * k)
     }
   }
   strlcat(buf, "\r\n", sizeof(buf));
+  
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Spare1: %ld, spare2: %ld\r\n", GET_SPARE1(k), GET_SPARE2(k));
 
   /* Showing the bitvector */
   AFF_FLAGS(k).PrintBits(buf2, MAX_STRING_LENGTH, affected_bits, AFF_MAX);
