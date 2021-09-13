@@ -4874,6 +4874,13 @@ void perform_violence(void)
           act("$n charges towards you, but you manage to keep some distance.", TRUE, ch, 0, FIGHTING(ch), TO_VICT);
           // TODO: Is it really supposed to cost an extra init pass?
           // GET_INIT_ROLL(ch) -= 10;
+          
+          // Set alert status if they can see you coming.
+          if (IS_NPC(FIGHTING(ch)) && CAN_SEE(FIGHTING(ch), ch)) {
+            GET_MOBALERTTIME(FIGHTING(ch)) = 30;
+            GET_MOBALERT(FIGHTING(ch)) = MALERT_ALARM;
+          }
+          
           continue;
         }
       }

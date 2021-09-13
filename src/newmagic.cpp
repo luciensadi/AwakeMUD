@@ -2180,7 +2180,7 @@ void cast_spell(struct char_data *ch, int spell, int sub, int force, char *arg)
   if (spells[spell].duration == SUSTAINED)
   {
     if (GET_SUSTAINED_NUM(ch) >= GET_SKILL(ch, SKILL_SORCERY)) {
-      send_to_char("You cannot sustain anymore spells.\r\n", ch);
+      send_to_char("You cannot sustain any more spells.\r\n", ch);
       return;
     }
   }
@@ -3141,6 +3141,7 @@ ACMD(do_conjure)
         
         AFF_FLAGS(ch).SetBit(AFF_GROUP);
         AFF_FLAGS(mob).SetBit(AFF_GROUP);
+        GET_SPARE1(mob) = NUMBER_OF_IG_DAYS_FOR_SPIRIT_TO_LAST;
       }
     }
   }

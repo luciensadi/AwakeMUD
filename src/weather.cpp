@@ -53,8 +53,12 @@ void another_hour(void)
     for (ch = character_list; ch; ch = next) {
       next = ch->next;
       if (IS_SPIRIT(ch)) {
-        act("$n abruptly fades from existance.", TRUE, ch, 0, 0, TO_ROOM);
-        end_spirit_existance(ch, FALSE);
+        if (--GET_SPARE1(ch) <= 0) {
+          act("$n abruptly fades from existance.", TRUE, ch, 0, 0, TO_ROOM);
+          end_spirit_existance(ch, FALSE);
+        } else {
+          act("$n weakens as the metaphysical power of sunrise ripples through it.\r\n", TRUE, ch, 0, 0, TO_ROOM);
+        }
       }
     }
     break;
