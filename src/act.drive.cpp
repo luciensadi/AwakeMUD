@@ -1094,7 +1094,9 @@ ACMD(do_repair)
     veh->damage = 0;
   } else
     send_to_char(ch, "You go to work and repair part of the damage.\r\n");
-  WAIT_STATE(ch, 2 * PULSE_VIOLENCE);
+    
+  if (!IS_SENATOR(ch))
+    WAIT_STATE(ch, 2 * PULSE_VIOLENCE);
 }
 
 ACMD(do_driveby)

@@ -189,7 +189,7 @@ struct ranged_combat_data {
       
       // Setup: If you're dual-wielding, take that penalty, otherwise you get your smartlink bonus.
       if (GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD))
-        modifiers[COMBAT_MOD_DUAL_WIELDING] += 2;
+        modifiers[COMBAT_MOD_DUAL_WIELDING] = 2;
       else
         modifiers[COMBAT_MOD_SMARTLINK] -= check_smartlink(ch, weapon);
     }
@@ -366,7 +366,7 @@ struct combat_data
 };
 
 #define SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER {act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS ); if (att->ch->in_room != def->ch->in_room) act( rbuf, 1, def->ch, NULL, NULL, TO_ROLLS );}
-void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *weap, struct obj_data *vict_weap, struct obj_data *weap_ammo)
+void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *victim, struct obj_data *weap, struct obj_data *vict_weap, struct obj_data *weap_ammo, bool multi_weapon_modifier)
 {
   int net_successes, successes_for_use_in_monowhip_test_check;
   assert(attacker != NULL);
@@ -542,6 +542,12 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
   
   // Setup: If the character is rigging a vehicle or is in a vehicle, set veh to that vehicle.
   RIG_VEH(att->ch, att->veh);
+  
+  // Setup: If the character is firing multiple rigged weapons, apply the dual-weapon penalty.
+  if (multi_weapon_modifier) {
+    att->ranged->modifiers[COMBAT_MOD_DUAL_WIELDING] = 2;
+    att->ranged->modifiers[COMBAT_MOD_SMARTLINK] = 0;
+  }
   
   if (att->veh && !att->weapon) {
     mudlog("SYSERR: Somehow, we ended up in a vehicle attacking someone with no weapon!", att->ch, LOG_SYSLOG, TRUE);
@@ -1195,6 +1201,10 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
   
 }
 #undef SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER
+
+void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *weap, struct obj_data *vict_weap, struct obj_data *weap_ammo) {
+  hit_with_multiweapon_toggle(attacker, victim, weap, vict_weap, weap_ammo, FALSE);
+}
 
 bool does_weapon_have_bayonet(struct obj_data *weapon) {
   // Precondition: Weapon must exist, must be a weapon-class item, and must be a gun.

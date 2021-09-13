@@ -100,6 +100,7 @@ extern bool item_should_be_treated_as_ranged_weapon(struct obj_data *obj);
 
 extern struct obj_data *generate_ammobox_from_pockets(struct char_data *ch, int weapontype, int ammotype, int quantity);
 extern void send_mob_aggression_warnings(struct char_data *pc, struct char_data *mob);
+extern void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *victim, struct obj_data *weap, struct obj_data *vict_weap, struct obj_data *weap_ammo, bool multi_weapon_modifier);
 
 /* Weapon attack texts */
 struct attack_hit_type attack_hit_text[] =
@@ -750,9 +751,11 @@ void raw_kill(struct char_data * ch)
       PLR_FLAGS(ch).SetBit(PLR_JUST_DIED);
       
       // Since they didn't get docwagon'd and are naked now, give them clothes.
-      struct obj_data *paper_gown = read_object(OBJ_DOCWAGON_PAPER_GOWN, VIRTUAL);
-      if (paper_gown) {
-        equip_char(ch, paper_gown, WEAR_BODY);
+      if (!PLR_FLAGGED(ch, PLR_NEWBIE)) {
+        struct obj_data *paper_gown = read_object(OBJ_DOCWAGON_PAPER_GOWN, VIRTUAL);
+        if (paper_gown) {
+          equip_char(ch, paper_gown, WEAR_BODY);
+        }
       }
     }
   }
@@ -5066,6 +5069,12 @@ void chkdmg(struct veh_data * veh)
       damage_tn = 4;
     }
     
+    if (veh->owner) {
+      mudlog("Writing player vehicle contents to purgelog-- destroyed via standard damage.", NULL, LOG_WRECKLOG, TRUE);
+      mudlog("Writing player vehicle contents to purgelog-- destroyed via standard damage.", NULL, LOG_PURGELOG, TRUE);
+      purgelog(veh);
+    }
+    
     if (veh->rigger) {
       send_to_char("Your mind is blasted with pain as your vehicle is wrecked.\r\n", veh->rigger);
       damage(veh->rigger, veh->rigger, convert_damage(stage(-success_test(GET_WIL(veh->rigger), 6), SERIOUS)), TYPE_CRASH, MENTAL);
@@ -5544,12 +5553,19 @@ void mount_fire(struct char_data *ch)
   }
   
   if (ch->char_specials.rigging || AFF_FLAGGED(ch, AFF_RIG)) {
+    int num_mounts = 0;
+    
+    // Count mounts.
+    for (mount = veh->mount; mount; mount = mount->next_content)
+      if (!mount->worn_by && (gun = get_mount_weapon(mount)))
+        num_mounts++;
+    
     for (mount = veh->mount; mount; mount = mount->next_content) {          
       // If nobody's manning it and it has a gun...
       if (!mount->worn_by && (gun = get_mount_weapon(mount))) {
         // Fire at the enemy, assuming we're fighting it.
         if (mount->targ && FIGHTING(ch) == mount->targ)
-          hit(ch, mount->targ, gun, NULL, get_mount_ammo(mount));
+          hit_with_multiweapon_toggle(ch, mount->targ, gun, NULL, get_mount_ammo(mount), num_mounts > 1);
         else if (mount->tveh && FIGHTING_VEH(ch) == mount->tveh)
           vcombat(ch, mount->tveh);
       }
