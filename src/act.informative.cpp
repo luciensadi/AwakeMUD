@@ -3693,16 +3693,30 @@ ACMD(do_time)
   pm = (time_info.hours >= 12);
   
   if (subcmd == SCMD_NORMAL)
-    snprintf(buf, sizeof(buf), "%d o'clock %s, %s, %s %d, %d.\r\n", hour, pm ? "PM" : "AM",
+    snprintf(buf, sizeof(buf), "Gameplay Time: %2d o'clock %s, %s, %s %d, %d.\r\n", hour, pm ? "PM" : "AM",
             weekdays[(int)time_info.weekday], month_name[month - 1], day, time_info.year);
   else
-    snprintf(buf, sizeof(buf), "%d:%s%d %s, %s, %s%d/%s%d/%d.\r\n", hour,
+    snprintf(buf, sizeof(buf), "Gameplay Time: %2d:%s%d %s, %s, %s%d/%s%d/%d.\r\n", hour,
             minute < 10 ? "0" : "", minute, pm ? "PM" : "AM",
             weekdays[(int)time_info.weekday], month < 10 ? "0" : "", month,
             day < 10 ? "0" : "", day, year);
   
-  
   send_to_char(buf, ch);
+  
+  // Add RP time.
+  {
+    time_t mytime = time(0);
+    struct tm *modifiable_time = localtime(&mytime);
+    
+    bool pm = modifiable_time->tm_hour >= 12;
+    hour = modifiable_time->tm_hour % 12;
+    if (hour == 0)
+      hour = 12;
+      
+    minute = modifiable_time->tm_min;
+    
+    send_to_char(ch, "Roleplay Time: %2d:%.2d %s\r\n", hour, minute, pm ? "PM" : "AM");
+  }
 }
 
 ACMD(do_weather)
