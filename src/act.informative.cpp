@@ -2208,7 +2208,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
                 has_smartlink = TRUE;
                 snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nA Smartlink%s attached to the %s provides ^c%d^n to target numbers (lower is better).",
                         GET_OBJ_VAL(access, 2) < 2 ? "" : "-II", gun_accessory_locations[mount_location],
-                        (GET_OBJ_VAL(j, 1) == 1 || GET_OBJ_VAL(access, 2) < 2) ? -2 : -4);
+                        (GET_OBJ_VAL(j, 1) == 1 || GET_OBJ_VAL(access, 2) < 2) ? -SMARTLINK_I_MODIFIER : -SMARTLINK_II_MODIFIER);
                 break;
               case ACCESS_SCOPE:
                 if (GET_OBJ_AFFECT(access).IsSet(AFF_LASER_SIGHT)) {
