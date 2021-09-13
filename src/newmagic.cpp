@@ -1093,7 +1093,7 @@ void cast_combat_spell(struct char_data *ch, int spell, int force, char *arg)
       if (IS_NPC(vict) && !IS_NPC(ch))
         GET_LASTHIT(vict) = GET_IDNUM(ch);
     } else
-      send_to_char(FAILED_CAST, ch);
+      send_to_char(FAILED_CAST, reflected ? vict : ch);
     spell_drain(reflected ? vict : ch, spell, force, basedamage);
     break;
   case SPELL_STUNBOLT:
@@ -1128,7 +1128,7 @@ void cast_combat_spell(struct char_data *ch, int spell, int force, char *arg)
       if (IS_NPC(vict) && !IS_NPC(ch))
         GET_LASTHIT(vict) = GET_IDNUM(ch);
     } else
-      send_to_char(FAILED_CAST, ch);
+      send_to_char(FAILED_CAST, reflected ? vict : ch);
     spell_drain(reflected ? vict : ch, spell, force, basedamage);
     break;
   case SPELL_POWERBOLT:
@@ -1163,7 +1163,7 @@ void cast_combat_spell(struct char_data *ch, int spell, int force, char *arg)
       if (IS_NPC(vict) && !IS_NPC(ch))
         GET_LASTHIT(vict) = GET_IDNUM(ch);
     } else
-      send_to_char(FAILED_CAST, ch);
+      send_to_char(FAILED_CAST, reflected ? vict : ch);
     spell_drain(reflected ? vict : ch, spell, force, basedamage);
     break;
   }
@@ -1508,7 +1508,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
         act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
         create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
       } else
-        send_to_char(FAILED_CAST, ch);
+        send_to_char(FAILED_CAST, reflected ? vict : ch);
       spell_drain(reflected ? vict : ch, spell, force, 0);
       break;
     case SPELL_INVIS:
@@ -1710,7 +1710,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
         GET_LASTHIT(vict) = GET_IDNUM(ch);
     } else {
       send_to_char("You feel your body heat slightly then return to normal.\r\n", vict);
-      send_to_char("You fail to generate enough heat in your target.\r\n", ch);
+      send_to_char("You fail to generate enough heat in your target.\r\n", reflected ? vict : ch);
     }
     spell_drain(reflected ? vict : ch, spell, force, 0);
     break;
@@ -1823,7 +1823,10 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
         act("The flames impact $n, but disperse on impact.", FALSE, vict, 0, ch, TO_ROOM);
         send_to_char("The flames rapidly disperse around you, causing only mild discomfort.\r\n", vict);
       }
-      damage_equip(ch, vict, force, TYPE_FIRE);
+      
+      if (IS_NPC(ch) || IS_NPC(vict)) {
+        damage_equip(ch, vict, force, TYPE_FIRE);
+      }
       if (!damage(ch, vict, dam, TYPE_MANIPULATION_SPELL, PHYSICAL) && number(0, 6) <= basedamage + 1) {
         act("^RThe flames continue to burn around $m!^N", TRUE, vict, 0, 0, TO_ROOM);
         send_to_char("^RYou continue to burn!\r\n", vict);
@@ -1882,7 +1885,10 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
         act("The acid splashes on $n, but $e doesn't seem to flinch.", FALSE, vict, 0, ch, TO_ROOM);
         send_to_char("You are splashed by the acid, but it causes nothing more than a moment's irritation.\r\n", vict);
       }
-      damage_equip(ch, vict, force, TYPE_ACID);
+      
+      if (IS_NPC(ch) || IS_NPC(vict)) {
+        damage_equip(ch, vict, force, TYPE_ACID);
+      }
       AFF_FLAGS(vict).SetBit(AFF_ACID);
       damage(ch, vict, dam, TYPE_MANIPULATION_SPELL, PHYSICAL);
       if (IS_NPC(vict) && !IS_NPC(ch))

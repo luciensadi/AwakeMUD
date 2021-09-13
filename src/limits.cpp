@@ -1508,7 +1508,9 @@ void misc_update(void)
         act("Flames continue to burn around $n!", FALSE, ch, 0, 0, TO_ROOM);
         act("^RYour body is surrounded in flames!", FALSE, ch, 0, 0, TO_CHAR);
       }
-      damage_equip(ch, ch, 6 + ch->points.fire[1], TYPE_FIRE);
+      // Restore this when it's possible to tell if your fire damage was caused by a PC or NPC.
+      // damage_equip(ch, ch, 6 + ch->points.fire[1], TYPE_FIRE);
+      
       int dam = convert_damage(stage(-success_test(GET_BOD(ch) + GET_POWER(ch, ADEPT_TEMPERATURE_TOLERANCE), 6 + ch->points.fire[1]++ - GET_IMPACT(ch)), MODERATE));
       ch->points.fire[1]++;
       damage(ch, ch, dam, TYPE_SUFFERING, PHYSICAL);
