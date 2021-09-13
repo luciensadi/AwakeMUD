@@ -219,7 +219,7 @@ enum {
   LVL_PRESIDENT,
 
   LVL_MAX = LVL_PRESIDENT,
-  LVL_FREEZE = LVL_EXECUTIVE
+  LVL_FREEZE = LVL_CONSPIRATOR
 };
 
 /* character equipment positions: used as index for char_data.equipment[] */
