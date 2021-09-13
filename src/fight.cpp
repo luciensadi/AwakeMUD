@@ -99,6 +99,7 @@ extern bool item_should_be_treated_as_melee_weapon(struct obj_data *obj);
 extern bool item_should_be_treated_as_ranged_weapon(struct obj_data *obj);
 
 extern struct obj_data *generate_ammobox_from_pockets(struct char_data *ch, int weapontype, int ammotype, int quantity);
+extern void send_mob_aggression_warnings(struct char_data *pc, struct char_data *mob);
 
 /* Weapon attack texts */
 struct attack_hit_type attack_hit_text[] =
@@ -705,29 +706,32 @@ void raw_kill(struct char_data * ch)
             break;
         }
       GET_DRUG_AFFECT(ch) = GET_DRUG_DURATION(ch) = GET_DRUG_STAGE(ch) = 0;
-      if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED))
+
+      if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
         i = real_room(RM_CHARGEN_START_ROOM);
-      else switch (GET_JURISDICTION(in_room)) {
-        case ZONE_SEATTLE:
-          i = real_room(RM_SEATTLE_DOCWAGON);
-          break;
-        case ZONE_PORTLAND:
-          i = real_room(RM_PORTLAND_DOCWAGON);
-          break;
-        case ZONE_CARIB:
-          i = real_room(RM_CARIB_DOCWAGON);
-          break;
-        case ZONE_OCEAN:
-          i = real_room(RM_OCEAN_DOCWAGON);
-          break;
-        default:
-          snprintf(buf, sizeof(buf), "SYSERR: Bad jurisdiction type %d in room %ld encountered in raw_kill() while transferring %s (%ld). Sending to Dante's entrance.",
-                  GET_JURISDICTION(in_room),
-                  in_room->number,
-                  GET_CHAR_NAME(ch), GET_IDNUM(ch));
-          mudlog(buf, ch, LOG_SYSLOG, TRUE);
-          i = real_room(RM_ENTRANCE_TO_DANTES);
-          break;
+      } else {
+        switch (GET_JURISDICTION(in_room)) {
+          case ZONE_SEATTLE:
+            i = real_room(RM_SEATTLE_DOCWAGON);
+            break;
+          case ZONE_PORTLAND:
+            i = real_room(RM_PORTLAND_DOCWAGON);
+            break;
+          case ZONE_CARIB:
+            i = real_room(RM_CARIB_DOCWAGON);
+            break;
+          case ZONE_OCEAN:
+            i = real_room(RM_OCEAN_DOCWAGON);
+            break;
+          default:
+            snprintf(buf, sizeof(buf), "SYSERR: Bad jurisdiction type %d in room %ld encountered in raw_kill() while transferring %s (%ld). Sending to Dante's entrance.",
+                    GET_JURISDICTION(in_room),
+                    in_room->number,
+                    GET_CHAR_NAME(ch), GET_IDNUM(ch));
+            mudlog(buf, ch, LOG_SYSLOG, TRUE);
+            i = real_room(RM_ENTRANCE_TO_DANTES);
+            break;
+        }
       }
       
       if ((ch->in_veh && AFF_FLAGGED(ch, AFF_PILOT)) || PLR_FLAGGED(ch, PLR_REMOTE)) {
@@ -744,6 +748,12 @@ void raw_kill(struct char_data * ch)
       char_from_room(ch);
       char_to_room(ch, &world[i]);
       PLR_FLAGS(ch).SetBit(PLR_JUST_DIED);
+      
+      // Since they didn't get docwagon'd and are naked now, give them clothes.
+      struct obj_data *paper_gown = read_object(OBJ_DOCWAGON_PAPER_GOWN, VIRTUAL);
+      if (paper_gown) {
+        equip_char(ch, paper_gown, WEAR_BODY);
+      }
     }
   }
   
@@ -3246,11 +3256,12 @@ void combat_message_process_ranged_response(struct char_data *ch, rnum_t rnum) {
       GET_MOBALERTTIME(tch) = 20;
       GET_MOBALERT(tch) = MALERT_ALERT;
       
+      // Only guards and helpers who are not in combat can participate.
+      if (CH_IN_COMBAT(tch) || !(MOB_FLAGGED(tch, MOB_GUARD) || MOB_FLAGGED(tch, MOB_HELPER)))
+        continue;
+      
       // Guards and helpers will actively try to fire on a player using a gun.
-      if (!IS_NPC(ch) && CH_IN_COMBAT(ch)
-          && (MOB_FLAGGED(tch, MOB_GUARD) || MOB_FLAGGED(tch, MOB_HELPER))
-          && !CH_IN_COMBAT(tch)
-          && !(FIGHTING(ch) ? (IS_NPC(FIGHTING(ch)) && MOB_FLAGGED(FIGHTING(ch), MOB_INANIMATE)) : TRUE)) {
+      if (!IS_NPC(ch) && (!FIGHTING(ch) || IS_NPC(FIGHTING(ch)))) {
         if (number(0, 6) >= 2) {
           GET_MOBALERTTIME(tch) = 30;
           GET_MOBALERT(tch) = MALERT_ALARM;
@@ -3258,6 +3269,56 @@ void combat_message_process_ranged_response(struct char_data *ch, rnum_t rnum) {
           if (ranged_response(ch, tch) && tch->in_room == was_in) {
             act("$n aims $s weapon at a distant threat!",
                 FALSE, tch, 0, ch, TO_ROOM);
+            send_mob_aggression_warnings(FIGHTING(ch), tch);
+          }
+        }
+      }
+      
+      // They also try to fire on the target of a gun-wielder.
+      if (IS_NPC(ch) && CH_IN_COMBAT(ch) && FIGHTING(ch)) {
+        if (number(0, 6) >= 2) {
+          bool found_target = FALSE;
+          
+          // Make sure they have line of sight to the target.
+          if (GET_EQ(tch, WEAR_WIELD)) {
+            for (int dir = NORTH; !found_target && dir <= NORTHWEST; dir++) {
+              struct room_data *curr_room = tch->in_room;
+              
+              // If there's no exit in this direction, stop immediately.
+              if (!curr_room->dir_option[dir] || IS_SET(curr_room->dir_option[dir]->exit_info, EX_CLOSED))
+                continue;
+                
+              // Otherwise, scan down that exit up to weapon range.
+              for (int range = 1; !found_target && range <= find_weapon_range(tch, GET_EQ(tch, WEAR_WIELD)); range++) {
+                curr_room = curr_room->dir_option[dir]->to_room;
+                
+                // Check for presence of target.
+                for (struct char_data *candidate = curr_room->people; candidate; candidate = candidate->next_in_room) {
+                  if (candidate == FIGHTING(ch)) {
+                    found_target = TRUE;
+                    break;
+                  }
+                }
+                
+                // Stop further iteration if there are no further exits.
+                if (!curr_room->dir_option[dir] || IS_SET(curr_room->dir_option[dir]->exit_info, EX_CLOSED))
+                  break;
+              }
+            }
+          }
+          
+          // No line of sight. Abort.
+          if (!found_target)
+            continue;
+          
+          // Line of sight established, fire.
+          GET_MOBALERTTIME(tch) = 30;
+          GET_MOBALERT(tch) = MALERT_ALARM;
+          struct room_data *was_in = tch->in_room;
+          if (ranged_response(FIGHTING(ch), tch) && tch->in_room == was_in) {
+            act("$n aims $s weapon at a distant threat!",
+                FALSE, tch, 0, FIGHTING(ch), TO_ROOM);
+            send_mob_aggression_warnings(FIGHTING(ch), tch);
           }
         }
       }

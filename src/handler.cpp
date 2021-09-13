@@ -1064,6 +1064,11 @@ void char_from_room(struct char_data * ch)
     shutdown();
   }
   
+  if (IS_WORKING(ch)) {
+    send_to_char("You stop working.\r\n", ch);
+    STOP_WORKING(ch);
+  }
+  
   if (CH_IN_COMBAT(ch))
     stop_fighting(ch);
   

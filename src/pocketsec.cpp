@@ -63,7 +63,7 @@ void wire_nuyen(struct char_data *ch, int amount, vnum_t character_id)
 {  
   // First, scan the game to see if the target character is online.
   struct char_data *targ = NULL;
-  char query_buf[1000];
+  char query_buf[1000], name_buf[500];
   
   for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
     targ = d->original ? d->original : d->character;
@@ -92,7 +92,8 @@ void wire_nuyen(struct char_data *ch, int amount, vnum_t character_id)
   // Mail it. We don't send mail for NPC shopkeepers refunding you.
   if (ch) {
     snprintf(query_buf, sizeof(query_buf), "%s has wired %d nuyen to your account.\r\n", ch ? GET_CHAR_NAME(ch) : "Someone", amount);
-    store_mail(character_id, ch, query_buf);
+    snprintf(name_buf, sizeof(name_buf), "%s (wire transfer)", ch ? GET_CHAR_NAME(ch) : "Someone");
+    raw_store_mail(character_id, GET_IDNUM(ch), name_buf, query_buf);
   }
   
   // Log it.

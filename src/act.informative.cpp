@@ -5012,7 +5012,7 @@ ACMD(do_scan)
                 }
                 
               }
-              snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "  %s\r\n", GET_NAME(list));
+              snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "  %s%s\r\n", GET_NAME(list), FIGHTING(list) == ch ? " (fighting you!)" : "");
               onethere = TRUE;
               anythere = TRUE;
             }
