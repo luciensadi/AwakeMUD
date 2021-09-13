@@ -743,25 +743,63 @@ bool spell_drain(struct char_data *ch, int type, int force, int damage)
   else if (type)
     damage += spells[type].draindamage + 3;
   magic_perception(ch, force, type);
-  snprintf(buf, sizeof(buf), "Drain Test: F:%d%s T:%d Sk: %d", force, wound_name[damage], target, GET_WIL(ch) + GET_DRAIN(ch)); 
+  snprintf(buf, sizeof(buf), "Drain Test: F:%d%s TN:%d Dice: %d", force, wound_name[damage], target, GET_WIL(ch) + GET_DRAIN(ch)); 
   success = success_test(GET_WIL(ch) + GET_DRAIN(ch), target);
   damage = convert_damage(stage(-success, damage));
-  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " S:%d S:%d", success, damage);
-  act(buf, FALSE, ch, NULL, NULL, TO_ROLLS); 
-  if (force > GET_MAG(ch) / 100 || IS_PROJECT(ch)) {
-    GET_PHYSICAL(ch) -= damage *100;
+  act(buf, FALSE, ch, NULL, NULL, TO_ROLLS);
+  
+  if (damage <= 0)
+    return FALSE;
+  
+  // Apply physical drain damage.
+  if (force > GET_MAG(ch) / 100 || IS_PROJECT(ch)) {    
+    // Iterate through bioware to find a platelet factory.
+    struct char_data *chptr = (IS_PROJECT(ch) ? ch->desc->original : ch);
+    for (struct obj_data *bio = chptr->bioware; bio && damage > 0; bio = bio->next_content) {
+      if (GET_OBJ_VAL(bio, 0) == BIO_PLATELETFACTORY && damage >= 3) {
+        damage--;
+      }
+      if (GET_OBJ_VAL(bio, 0) == BIO_TRAUMADAMPNER) {
+        damage--;
+        GET_MENTAL(chptr) -= 100;
+      }
+    }
+    
+    if (damage <= 0)
+      return FALSE;
+    
+    GET_PHYSICAL(ch) -= damage * 100;
     if (IS_PROJECT(ch)) {
       GET_PHYSICAL(ch->desc->original) -= damage * 100;
       AFF_FLAGS(ch->desc->original).SetBit(AFF_DAMAGED);
     }
-  } else
-  {
-    GET_MENTAL(ch) -= damage * 100;
-    if (GET_MENTAL(ch) < 0) {
-      GET_PHYSICAL(ch) += GET_MENTAL(ch);
-      GET_MENTAL(ch) = 0;
+  } 
+  
+  // Apply mental drain damage.
+  else {
+    // Iterate through cyberware to find a trauma damper.
+    for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content) {
+      if (GET_OBJ_VAL(bio, 0) == BIO_TRAUMADAMPNER) {
+        damage--;
+        break;
+      }
     }
+    
+    if (damage <= 0)
+      return FALSE;
+    
+    GET_MENTAL(ch) -= damage * 100;
   }
+  
+  // Roll over mental damage to physical.
+  if (GET_MENTAL(ch) < 0) {
+    GET_PHYSICAL(ch) += GET_MENTAL(ch);
+    GET_MENTAL(ch) = 0;
+  }
+  
+  snprintf(buf, sizeof(buf), "Successes: %d  Damage: %d", success, damage);
+  act(buf, FALSE, ch, NULL, NULL, TO_ROLLS); 
+  
   update_pos(ch);
   if ((GET_POS(ch) <= POS_STUNNED) && (GET_POS(ch) > POS_DEAD))
   {
