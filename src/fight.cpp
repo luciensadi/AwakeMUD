@@ -4808,6 +4808,10 @@ void perform_violence(void)
         int target = 8, quickness = GET_QUI(ch);
         bool footanchor = FALSE;
         
+        // Visibility penalty for defender, it's hard to avoid someone you can't see.
+        if (!CAN_SEE(FIGHTING(ch), ch))
+          target -= 4;
+        
         // Armor penalties.
         if (GET_TOTALBAL(ch) > GET_QUI(ch))
           quickness -= GET_TOTALBAL(ch) - GET_QUI(ch);
@@ -4861,13 +4865,13 @@ void perform_violence(void)
         // Strike.
         if (quickness > 0 && success_test(quickness, target) > 1) {
           send_to_char(ch, "You close the distance and strike!\r\n");
-          act("$n closes the distance and strikes.", FALSE, ch, 0, 0, TO_ROOM);
+          act("$n closes the distance and strikes.", TRUE, ch, 0, 0, TO_ROOM);
           AFF_FLAGS(ch).RemoveBit(AFF_APPROACH);
           AFF_FLAGS(FIGHTING(ch)).RemoveBit(AFF_APPROACH);
         } else {
           send_to_char(ch, "You attempt to close the distance!\r\n");
-          act("$n charges towards $N, but $N manages to keep some distance.", FALSE, ch, 0, FIGHTING(ch), TO_NOTVICT);
-          act("$n charges towards you, but you manage to keep some distance.", FALSE, ch, 0, FIGHTING(ch), TO_VICT);
+          act("$n charges towards $N, but $N manages to keep some distance.", TRUE, ch, 0, FIGHTING(ch), TO_NOTVICT);
+          act("$n charges towards you, but you manage to keep some distance.", TRUE, ch, 0, FIGHTING(ch), TO_VICT);
           // TODO: Is it really supposed to cost an extra init pass?
           // GET_INIT_ROLL(ch) -= 10;
           continue;
