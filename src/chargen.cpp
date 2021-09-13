@@ -854,7 +854,7 @@ void priority_menu(struct descriptor_data *d)
 void init_char_sql(struct char_data *ch)
 {
   char buf2[MAX_STRING_LENGTH];
-  snprintf(buf, sizeof(buf), "INSERT INTO pfiles (idnum, name, password, race, gender, Rank, Voice,"\
+  snprintf(buf, sizeof(buf), "INSERT INTO pfiles (idnum, name, password, race, gender, `Rank`, Voice,"\
                "Physical_Keywords, Physical_Name, Whotitle, Height, Weight, Host,"\
                "Tradition, Born, Background, Physical_LookDesc, Matrix_LookDesc, Astral_LookDesc, LastD, multiplier) VALUES ('%ld', '%s', '%s', %d, '%d',"\
                "'%d', '%s', '%s', '%s', '%s', '%d', '%d', '%s', '%d', '%ld', '%s', '%s', '%s', '%s', %ld, 100);", GET_IDNUM(ch),

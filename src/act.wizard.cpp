@@ -2928,7 +2928,7 @@ ACMD(do_last)
 
   if (!(vict = get_player_vis(ch, arg, FALSE))) {
     from_file = TRUE;
-    snprintf(buf, sizeof(buf), "SELECT Idnum, Rank, Host, LastD, Name FROM pfiles WHERE name='%s';", prepare_quotes(buf2, arg, sizeof(buf2) / sizeof(buf2[0])));
+    snprintf(buf, sizeof(buf), "SELECT Idnum, `Rank`, Host, LastD, Name FROM pfiles WHERE name='%s';", prepare_quotes(buf2, arg, sizeof(buf2) / sizeof(buf2[0])));
     if (mysql_wrapper(mysql, buf))
       return;
     if (!(res = mysql_use_result(mysql)))
