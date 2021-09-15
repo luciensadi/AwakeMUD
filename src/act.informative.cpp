@@ -256,8 +256,11 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
       } else if (GET_OBJ_TYPE(object) == ITEM_GUN_AMMO) {
         snprintf(buf, sizeof(buf), "^gA metal box of %s has been left here.^n", get_ammo_representation(GET_AMMOBOX_WEAPON(object), GET_AMMOBOX_TYPE(object), 0));
       } else {
-        if (GET_OBJ_TYPE(object) == ITEM_WORKSHOP && GET_WORKSHOP_GRADE(object) == TYPE_WORKSHOP && GET_WORKSHOP_IS_SETUP(object) && !GET_WORKSHOP_UNPACK_TICKS(object)) {
-          strlcat(buf, "^n(Deployed) ^g", sizeof(buf));
+        if (GET_OBJ_TYPE(object) == ITEM_WORKSHOP && GET_WORKSHOP_GRADE(object) == TYPE_WORKSHOP) {
+          if (GET_WORKSHOP_IS_SETUP(object) && !GET_WORKSHOP_UNPACK_TICKS(object))
+            strlcat(buf, "^n(Deployed) ^g", sizeof(buf));
+          else if (GET_WORKSHOP_UNPACK_TICKS(object))
+            strlcat(buf, "^n(Half-Packed) ^g", sizeof(buf));
         }
         strlcat(buf, object->text.room_desc, sizeof(buf));
       }
@@ -275,6 +278,11 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
       strlcat(buf, " (Uncooked)", sizeof(buf));
     if (GET_OBJ_TYPE(object) == ITEM_FOCUS && GET_OBJ_VAL(object, 9) == GET_IDNUM(ch))
       strlcat(buf, " ^Y(Geas)^n", sizeof(buf));
+    if (GET_OBJ_TYPE(object) == ITEM_GUN_AMMO
+        || (GET_OBJ_TYPE(object) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(object) == TYPE_PARTS))
+      {
+        strlcat(buf, " (Combinable)", sizeof(buf));
+      }
   } 
   else if (GET_OBJ_NAME(object) && ((mode == 2) || (mode == 3) || (mode == 4) || (mode == 7))) {
     strlcpy(buf, GET_OBJ_NAME(object), sizeof(buf));
@@ -384,6 +392,9 @@ void show_veh_to_char(struct veh_data * vehicle, struct char_data * ch)
     strlcat(buf, ".", sizeof(buf));
   }
   
+  if (vehicle->rigger) {
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (Rigged by %s)", GET_CHAR_NAME(vehicle->rigger));
+  }
   if (vehicle->owner && GET_IDNUM(ch) == vehicle->owner)
     strlcat(buf, " ^Y(Yours)", sizeof(buf));
   strlcat(buf, "^N\r\n", sizeof(buf));
@@ -933,6 +944,14 @@ void list_one_char(struct char_data * i, struct char_data * ch)
           // Adepts can't see adept trainers' abilities.
           if (GET_TRADITION(ch) == TRAD_ADEPT) {
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s willing to help you train your powers.%s^n\r\n", 
+                     HSSH(i), 
+                     already_printed ? " also" : "",
+                     HSSH_SHOULD_PLURAL(i) ? "looks" : "look",
+                     GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Use the ^YTRAIN^y command to begin." : "");
+            already_printed = TRUE;
+          }
+          else if (!PLR_FLAGGED(ch, PLR_PAID_FOR_CLOSECOMBAT)) {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s able to help you train in martial arts.%s^n\r\n", 
                      HSSH(i), 
                      already_printed ? " also" : "",
                      HSSH_SHOULD_PLURAL(i) ? "looks" : "look",
@@ -1715,6 +1734,7 @@ void look_in_obj(struct char_data * ch, char *arg, bool exa)
     struct veh_data *curr_in_veh = ch->in_veh;
     bool curr_vfront = ch->vfront;
     
+    /* Disabled-- a check with no penalty that you can spam until success does not add to the fun.
     if (veh->cspeed > SPEED_IDLE) {
       if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 8)) {
         ch->in_veh = veh;
@@ -1731,6 +1751,13 @@ void look_in_obj(struct char_data * ch, char *arg, bool exa)
       ch->vfront = TRUE;
       look_in_veh(ch);
     }
+    */
+    // Notify the occupants, update character to be an occupant, look in the vehicle, then reset character's occupancy.
+    for (struct char_data *vict = veh->people; vict; vict = vict->next_in_veh)
+      act("$n peers inside.", FALSE, ch, 0, vict, TO_VICT);
+    ch->in_veh = veh;
+    ch->vfront = TRUE;
+    look_in_veh(ch);
     ch->in_veh = curr_in_veh;
     curr_vfront = ch->vfront;
     return;
@@ -2181,7 +2208,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
                 has_smartlink = TRUE;
                 snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nA Smartlink%s attached to the %s provides ^c%d^n to target numbers (lower is better).",
                         GET_OBJ_VAL(access, 2) < 2 ? "" : "-II", gun_accessory_locations[mount_location],
-                        (GET_OBJ_VAL(j, 1) == 1 || GET_OBJ_VAL(access, 2) < 2) ? -2 : -4);
+                        (GET_OBJ_VAL(j, 1) == 1 || GET_OBJ_VAL(access, 2) < 2) ? -SMARTLINK_I_MODIFIER : -SMARTLINK_II_MODIFIER);
                 break;
               case ACCESS_SCOPE:
                 if (GET_OBJ_AFFECT(access).IsSet(AFF_LASER_SIGHT)) {
@@ -3136,7 +3163,7 @@ const char *get_plaintext_score_stats(struct char_data *ch) {
   }
   
   if (GET_REAL_REA(ch) != GET_REA(ch))
-    snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Effective reaction: %d (real reaction %d)\r\n", GET_REA(ch), GET_REAL_REA(ch));
+    snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Effective reaction: %d (base reaction %d)\r\n", GET_REA(ch), GET_REAL_REA(ch));
   else
     snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Reaction: %d\r\n", GET_REA(ch));
   
@@ -3666,16 +3693,30 @@ ACMD(do_time)
   pm = (time_info.hours >= 12);
   
   if (subcmd == SCMD_NORMAL)
-    snprintf(buf, sizeof(buf), "%d o'clock %s, %s, %s %d, %d.\r\n", hour, pm ? "PM" : "AM",
+    snprintf(buf, sizeof(buf), "Gameplay Time: %2d o'clock %s, %s, %s %d, %d.\r\n", hour, pm ? "PM" : "AM",
             weekdays[(int)time_info.weekday], month_name[month - 1], day, time_info.year);
   else
-    snprintf(buf, sizeof(buf), "%d:%s%d %s, %s, %s%d/%s%d/%d.\r\n", hour,
+    snprintf(buf, sizeof(buf), "Gameplay Time: %2d:%s%d %s, %s, %s%d/%s%d/%d.\r\n", hour,
             minute < 10 ? "0" : "", minute, pm ? "PM" : "AM",
             weekdays[(int)time_info.weekday], month < 10 ? "0" : "", month,
             day < 10 ? "0" : "", day, year);
   
-  
   send_to_char(buf, ch);
+  
+  // Add RP time.
+  {
+    time_t mytime = time(0);
+    struct tm *modifiable_time = localtime(&mytime);
+    
+    bool pm = modifiable_time->tm_hour >= 12;
+    hour = modifiable_time->tm_hour % 12;
+    if (hour == 0)
+      hour = 12;
+      
+    minute = modifiable_time->tm_min;
+    
+    send_to_char(ch, "Roleplay Time: %2d:%.2d %s\r\n", hour, minute, pm ? "PM" : "AM");
+  }
 }
 
 ACMD(do_weather)
@@ -3932,6 +3973,7 @@ ACMD(do_who)
   int sort = LVL_MAX, num_can_see = 0, level = GET_LEVEL(ch);
   bool mortal = FALSE, hardcore = FALSE, quest = FALSE, pker = FALSE, immort = FALSE, ooc = FALSE, newbie = FALSE;
   int output_header;
+  int num_in_socialization_rooms = 0;
   
   skip_spaces(&argument);
   strlcpy(buf, argument, sizeof(buf));
@@ -3996,6 +4038,9 @@ ACMD(do_who)
       if (GET_INCOG_LEV(tch) > GET_LEVEL(ch))
         continue;
       num_can_see++;
+      
+      if (tch->in_room && !IS_SENATOR(tch) && CAN_SEE(ch, tch) && ROOM_FLAGGED(tch->in_room, ROOM_ENCOURAGE_CONGREGATION))
+        num_in_socialization_rooms++;
       
       if ( output_header ) {
         output_header = 0;
@@ -4120,12 +4165,26 @@ ACMD(do_who)
     }
   }
   
-  if (num_can_see == 0)
+  if (num_can_see == 0) {
     snprintf(buf2, sizeof(buf2), "%s\r\nNo-one at all!\r\n", buf);
-  else if (num_can_see == 1)
-    snprintf(buf2, sizeof(buf2), "%s\r\nOne lonely chummer displayed.\r\n", buf);
-  else
-    snprintf(buf2, sizeof(buf2), "%s\r\n%d chummers displayed.\r\n", buf, num_can_see);
+  } else if (num_can_see == 1) {
+    if (num_in_socialization_rooms > 0) {
+      snprintf(buf2, sizeof(buf2), "%s\r\nOne lonely chummer displayed and listed in ^WWHERE^n.\r\n", buf);
+    } else {
+      snprintf(buf2, sizeof(buf2), "%s\r\nOne lonely chummer displayed.\r\n", buf);
+    }
+  } else {
+    if (num_in_socialization_rooms > 0) {
+      snprintf(buf2, sizeof(buf2), "%s\r\n%d chummers displayed, of which %d %s listed in ^WWHERE^n.\r\n", 
+               buf, 
+               num_can_see, 
+               num_in_socialization_rooms, 
+               num_in_socialization_rooms == 1 ? "is" : "are");
+    } else {
+      snprintf(buf2, sizeof(buf2), "%s\r\n%d chummers displayed.\r\n", buf, num_can_see);
+    }
+  }
+  
   if (subcmd) {
     FILE *fl;
     static char buffer[MAX_STRING_LENGTH*4];
@@ -4967,7 +5026,7 @@ ACMD(do_scan)
                 }
                 
               }
-              snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "  %s\r\n", GET_NAME(list));
+              snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "  %s%s\r\n", GET_NAME(list), FIGHTING(list) == ch ? " (fighting you!)" : "");
               onethere = TRUE;
               anythere = TRUE;
             }

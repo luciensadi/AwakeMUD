@@ -1511,8 +1511,20 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
   
   if (GET_OBJ_VNUM(obj) == OBJ_NEOPHYTE_SUBSIDY_CARD && GET_OBJ_VAL(obj, 1) > 0) {
     // TODO: Make it so you can use partial amounts for rent payments- this will suck with 1 nuyen left.
-    send_to_char(ch, "You can't %s a subsidy card that still has nuyen on it!", sname);
+    send_to_char(ch, "You can't %s a subsidy card that still has nuyen on it!\r\n", sname);
     return 0;
+  }
+  
+  if (GET_OBJ_TYPE(obj) == ITEM_CUSTOM_DECK || GET_OBJ_TYPE(obj) == ITEM_CYBERDECK) {
+    if (mode == SCMD_DONATE) {
+      send_to_char("You can't donate cyberdecks!\r\n", ch);
+      return 0;
+    } 
+    
+    if (obj->contains) {
+      send_to_char("You can't junk a cyberdeck that has components installed!\r\n", ch);
+      return 0;
+    }
   }
   
   if (ch->in_veh)
@@ -1765,17 +1777,20 @@ bool perform_give(struct char_data * ch, struct char_data * vict, struct obj_dat
     delete [] representation;
   }
   
-  // Group quest rewards.
-  if (AFF_FLAGGED(ch, AFF_GROUP) && ch->master && !IS_NPC(ch->master) && IS_NPC(vict) && GET_QUEST(ch->master)) {
-    if (check_quest_delivery(ch->master, vict, obj))
-      extract_obj(obj);
-  } 
-  // Individual quest rewards.
-  else if (!IS_NPC(ch) && IS_NPC(vict)) {
-    if (GET_QUEST(ch) && check_quest_delivery(ch, vict, obj)) {
+  if (!IS_NPC(ch) && IS_NPC(vict)) {
+    // Group quest reward.
+    if (AFF_FLAGGED(ch, AFF_GROUP) && ch->master && !IS_NPC(ch->master) && IS_NPC(vict) && GET_QUEST(ch->master)) {
+      if (check_quest_delivery(ch->master, vict, obj)) {
+        act("$n nods slightly to $N and tucks $p away.", TRUE, vict, obj, ch, TO_ROOM);
+        extract_obj(obj);
+      }
+    } 
+    // Individual quest reward.
+    else if (GET_QUEST(ch) && check_quest_delivery(ch, vict, obj)) {
       act("$n nods slightly to $N and tucks $p away.", TRUE, vict, obj, ch, TO_ROOM);
       extract_obj(obj);
     }
+    // No quest found.
     else {
       if (GET_MOB_SPEC(vict) || GET_MOB_SPEC2(vict)) {
         // These specs handle objects, so don't mess with them.
@@ -3123,13 +3138,18 @@ ACMD(do_activate)
         total *= -1;
       if (total + GET_POWER_POINTS(ch) > ((int)(GET_REAL_MAG(ch) / 100) * 100))
         send_to_char("You have too many powers activated already.\r\n", ch);
-      else {
+      else if (GET_POWER_ACT(ch, i) == x) {
+        send_to_char(ch, "%s is already active at rank %d.", CAP(adept_powers[i]), x);
+        return;
+      } else {
         GET_POWER_ACT(ch, i) = x;
         GET_POWER_POINTS(ch) += total;
         if (i == ADEPT_BOOST_BOD || i == ADEPT_BOOST_QUI || i == ADEPT_BOOST_STR) {
           send_to_char(ch, "You activate %s. You'll need to use the ^WBOOST^n command to engage it.\r\n", adept_powers[i]);
         } else if (i == ADEPT_NERVE_STRIKE) {
           send_to_char(ch, "You activate %s. You'll need to use the ^WNERVESTRIKE^n command to engage it.\r\n", adept_powers[i]);
+        } else if (i == ADEPT_LIVINGFOCUS) {
+          send_to_char(ch, "You activate %s. You'll need to use the ^WFOCUS^n command to engage it.\r\n", adept_powers[i]);
         } else {
           send_to_char(ch, "You activate %s.\r\n", adept_powers[i]);
         }

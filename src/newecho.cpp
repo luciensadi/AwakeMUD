@@ -107,7 +107,7 @@ const char *generate_display_string_for_character(struct char_data *actor, struc
   }
   
   // If the target is the viewer, we don't process their name into a desc, but we do highlight.
-  if (target_ch == viewer) {
+  if (target_ch == viewer) {    
     // Insert the color code sequence for the viewing character's speech color.
     if (IS_ASTRAL(viewer))
       snprintf(result_string, sizeof(result_string), "%s%s's reflection%s", 
@@ -175,6 +175,7 @@ const char *str_str_isolated(const char *string, const char *search_string) {
 char newecho_debug_buf[MAX_STRING_LENGTH];
 void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const char *echo_string, bool require_char_name) {
   int tag_index, i;
+  char scratch_space[500];
   struct char_data *target_ch = NULL;
   struct remem *mem_record = NULL;
   
@@ -299,7 +300,7 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
       tag_check_string[tag_index - i] = '\0';
       
       // Short names don't auto-match unless they're complete matches or explicit tags.
-      bool require_exact_match = !at_mode && (start_of_new_sentence || strlen(tag_check_string) < 5);
+      bool require_exact_match = !at_mode && (quote_mode || (start_of_new_sentence || strlen(tag_check_string) < 5));
       
       if (require_exact_match)
         NEW_EMOTE_DEBUG(actor, "\r\nUsing exact mode for this evaluation due to non-at and low string length %d.", strlen(tag_check_string));
@@ -435,8 +436,14 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
         const char *display_string;
         if (self_mode && viewer == target_ch && viewer == actor)
           display_string = GET_CHAR_NAME(actor);
-        else
-          display_string = generate_display_string_for_character(actor, viewer, target_ch, quote_mode);
+        else {
+          if (quote_mode) {
+            snprintf(scratch_space, sizeof(scratch_space), "%s%s%s", GET_CHAR_COLOR_HIGHLIGHT(viewer), tag_check_string, GET_CHAR_COLOR_HIGHLIGHT(actor));
+            display_string = scratch_space;
+          } else {
+            display_string = generate_display_string_for_character(actor, viewer, target_ch, FALSE);
+          }
+        }
         
         // Put it into the mutable echo string, replacing the tag, and then append the rest of the storage string.
         snprintf(mutable_echo_string + i - (at_mode ? 1 : 0), sizeof(mutable_echo_string), "%s%s", display_string, storage_string);
@@ -773,7 +780,8 @@ ACMD(do_new_echo) {
   // Iterate over the viewers in the room.
   for (struct char_data *viewer = ch->in_room ? ch->in_room->people : ch->in_veh->people; 
        viewer; 
-       viewer = ch->in_room ? viewer->next_in_room : viewer->next_in_veh) {
+       viewer = ch->in_room ? viewer->next_in_room : viewer->next_in_veh) 
+  {
     // If they've ignored you, no luck.
     if (!IS_NPC(viewer) && unsafe_found_mem(GET_IGNORE(viewer), ch))
       continue;
@@ -788,6 +796,15 @@ ACMD(do_new_echo) {
     
     // Since the viewer is a valid target, send it to them. Yes, ch is deliberately a possible viewer.
     send_echo_to_char(ch, viewer, (const char *) emote_buf, must_echo_with_name);
+  }
+  
+  // Send it to anyone who's rigging a vehicle here.
+  for (struct veh_data *veh = ch->in_room ? ch->in_room->vehicles : ch->in_veh->carriedvehs;
+       veh;
+       veh = veh->next_veh)
+  {
+    if (veh->rigger && veh->rigger->desc)
+      send_echo_to_char(ch, veh->rigger, (const char *) emote_buf, must_echo_with_name);
   }
 }
 

@@ -51,6 +51,7 @@ extern int num_elevators;
 extern struct elevator_data *elevator;
 
 ACMD_DECLARE(do_prone);
+ACMD_DECLARE(do_look);
 
 #define GET_DOOR_NAME(ch, door) (EXIT(ch, (door))->keyword ? (*(fname(EXIT(ch, (door))->keyword)) ? fname(EXIT(ch, (door))->keyword) : "door") : "door")
 
@@ -235,7 +236,7 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
       act(buf2, TRUE, ch, 0, tch, TO_VICT);
   }
     
-  // Vehicle occupants.
+  // Vehicle occupants, including riggers.
   for (tveh = ch->in_room->vehicles; tveh; tveh = tveh->next_veh) {
     for (tch = tveh->people; tch; tch = tch->next_in_veh) {
       if (should_tch_see_chs_movement_message(tch, ch))
@@ -243,7 +244,7 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
     }
       
     if (tveh->rigger && should_tch_see_chs_movement_message(tveh->rigger, ch))
-      act(buf2, TRUE, ch, 0, tch, TO_VICT & TO_SLEEP);
+      act(buf2, TRUE, ch, 0, tveh->rigger, TO_VICT | TO_REMOTE | TO_SLEEP);
   }
   
   // Watchers.
@@ -337,7 +338,7 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
     }
       
     if (tveh->rigger && should_tch_see_chs_movement_message(tveh->rigger, ch))
-      act(buf2, TRUE, ch, 0, tch, TO_VICT & TO_SLEEP);
+      act(buf2, TRUE, ch, 0, tveh->rigger, TO_VICT | TO_REMOTE | TO_SLEEP);
   }
   
   // Watchers.
@@ -652,6 +653,7 @@ void move_vehicle(struct char_data *ch, int dir)
   snprintf(buf2, sizeof(buf2), "%s %s from %s.", GET_VEH_NAME(veh), veh->arrive, thedirs[rev_dir[dir]]);
   snprintf(buf1, sizeof(buf1), "%s %s to %s.", GET_VEH_NAME(veh), veh->leave, thedirs[dir]);
   
+  /* Known issue: If you are in a vehicle, and nobody is in the room, and another vehicle drives in, you won't see it. */
   if (veh->in_room->people)
   {
     act(buf1, FALSE, veh->in_room->people, 0, 0, TO_ROOM);
@@ -1747,15 +1749,21 @@ ACMD(do_leave)
     return;
   }
   
-  // Leaving an elevator shaft is handled in the button panel's spec proc code. See transport.cpp.
+  struct room_data *in_room = get_ch_in_room(ch);
+  if (!in_room) {
+    send_to_char("Panic strikes you-- you're floating in a void!\r\n", ch);
+    mudlog("SYSERR: Char has no in_room!", ch, LOG_SYSLOG, TRUE);
+    return;
+  }
   
-  if (!ROOM_FLAGGED(get_ch_in_room(ch), ROOM_INDOORS)) {
+  // Leaving an elevator shaft is handled in the button panel's spec proc code. See transport.cpp.
+  if (!ROOM_FLAGGED(in_room, ROOM_INDOORS)) {
     send_to_char("You are outside.. where do you want to go?\r\n", ch);
     return;
   }
   
   // If you're in an apartment, you're able to leave to the atriun no matter what. Prevents lockin.
-  if (ROOM_FLAGGED(ch->in_room, ROOM_HOUSE)) {
+  if (ROOM_FLAGGED(in_room, ROOM_HOUSE)) {
     for (door = 0; door < NUM_OF_DIRS; door++) {
       if (EXIT(ch, door) && EXIT(ch, door)->to_room && ROOM_FLAGGED(EXIT(ch, door)->to_room, ROOM_ATRIUM)) {
         send_to_char(ch, "You make your way out of the residence through the door to %s, leaving it locked behind you.\r\n", thedirs[door]);
@@ -1793,6 +1801,24 @@ ACMD(do_leave)
                GET_CHAR_NAME(ch));
     }
     mudlog(buf, ch, LOG_SYSLOG, TRUE);
+  }
+  
+  // If you're in a PGHQ, you teleport to the first room of the PGHQ's zone.
+  if (in_room->zone >= 0 && zone_table[in_room->zone].is_pghq) {
+    rnum_t entrance_rnum = real_room(zone_table[in_room->zone].number * 100);
+    if (entrance_rnum) {
+      send_to_char("You glance around to get your bearings, then head for the entrance.\r\n\r\n", ch);
+      char_from_room(ch);
+      char_to_room(ch, &world[entrance_rnum]);
+    } else {
+      mudlog("SYSERR: Could not get player to PGHQ entrance, does it not exist?", ch, LOG_SYSLOG, TRUE);
+      send_to_char("The walls feel like they're closing in on you, and you panic! A few minutes of breathless flight later, you find yourself somewhere else...\r\n\r\n", ch);
+      char_from_room(ch);
+      char_to_room(ch, &world[real_room(RM_ENTRANCE_TO_DANTES)]);
+    }
+    strlcpy(buf, "", sizeof(buf));
+    do_look(ch, buf, 0, 0);
+    return;
   }
 
   // Standard leave from indoors to outdoors.

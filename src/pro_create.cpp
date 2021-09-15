@@ -11,6 +11,7 @@
 #include "constants.h"
 #include "olc.h"
 #include "newmagic.h"
+#include "config.h"
 
 #define CH d->character
 #define PEDIT_MENU 0
@@ -22,6 +23,7 @@
 extern void part_design(struct char_data *ch, struct obj_data *design);
 extern void spell_design(struct char_data *ch, struct obj_data *design);
 extern void ammo_test(struct char_data *ch, struct obj_data *obj);
+extern void weight_change_object(struct obj_data * obj, float weight);
 
 void pedit_disp_menu(struct descriptor_data *d)
 {
@@ -583,6 +585,7 @@ void update_buildrepair(void)
         spirit->called = TRUE;
         GET_SPIRIT(CH) = spirit;
         GET_NUM_SPIRITS(CH)++;
+        GET_ELEMENTALS_DIRTY_BIT(CH) = TRUE;
         GET_SPARE2(mob) = spirit->id;
       } else if (AFF_FLAGGED(CH, AFF_CIRCLE) && --GET_OBJ_VAL(PROG, 9) < 1) {
         send_to_char("You complete drawing the circle.\r\n", CH);
@@ -595,13 +598,44 @@ void update_buildrepair(void)
         CH->char_specials.timer = 0;
         STOP_WORKING(CH);
       } else if (AFF_FLAGGED(CH, AFF_AMMOBUILD) && --GET_AMMOBOX_TIME_TO_COMPLETION(PROG) < 1) {
-        if (GET_AMMOBOX_TIME_TO_COMPLETION(PROG) <= -2) // --(-1) = -2; prevents penalizing people who ace the test.
-          send_to_char("You seem to have messed up the batch of ammo.\r\n", CH);
+        if (GET_AMMOBOX_TIME_TO_COMPLETION(PROG) <= -2) { // --(-1) = -2; prevents penalizing people who ace the test.
+          switch(number(1,16)) {
+            case 1:
+              send_to_char("You swear loudly as a gunshot rings out because you accidentally fired the round.\r\n", CH);
+              break;
+            case 2:
+              send_to_char("The poor-quality metal shavings you're trying to turn into a bullet disintegrate and you curse the entire lineage of the fixer who gave you these materials.\r\n", CH);
+              break;
+            case 3:
+              send_to_char("Somehow, an ancient unknown language comes unbidden to your lips. You think you said something unspeakable about a dog - regardless, the bullet is now tainted. You discard it.\r\n", CH);
+              break;
+            case 4:
+              send_to_char("You grind and grind and grind and grind and grind and grind and then you realize you have nothing left to grind.\r\n", CH);
+              break;
+            case 5:
+              send_to_char("You drop a tool, causing a spark to light from your gunpowder to the casing you're trying to pack. There's a disappointing 'pop' noise as it bursts into flames.\r\n", CH);
+              break;
+            case 6:
+              send_to_char("You're pretty sure the bullet started talking to you. After several hours, things have started to blur together - better be safe, though. It might be a free spirit. You throw it away.\r\n", CH);
+              break;
+            case 7:
+              send_to_char("You were trying to craft APDS, weren't you? Poor bastard.\r\n", CH);
+              break;
+            case 8:
+              send_to_char("You stumble slightly, jamming your thumb in the vice. The process of ripping your hand out obliterates the shell casing.\r\n", CH);
+              break;
+            default:
+              send_to_char("You seem to have messed up this batch of ammo.\r\n", CH);
+          }
+        }
         else {
           send_to_char("You have completed a batch of ammo.\r\n", CH);
-          GET_AMMOBOX_QUANTITY(PROG) += 10;
+          GET_AMMOBOX_QUANTITY(PROG) += AMMOBUILD_BATCH_SIZE;
+          
+          // Add the weight of the completed ammo to the box.
+          weight_change_object(PROG, ammo_type[GET_AMMOBOX_TYPE(PROG)].weight * AMMOBUILD_BATCH_SIZE);
         }
-        GET_AMMOBOX_INTENDED_QUANTITY(PROG) -= 10;
+        GET_AMMOBOX_INTENDED_QUANTITY(PROG) -= AMMOBUILD_BATCH_SIZE;
         if (GET_AMMOBOX_INTENDED_QUANTITY(PROG) <= 0) {
           send_to_char(CH, "You have finished building %s.\r\n", GET_OBJ_NAME(PROG));
           STOP_WORKING(CH);

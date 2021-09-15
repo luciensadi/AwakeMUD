@@ -62,7 +62,7 @@ void write_zone_to_disk(int vnum)
   // write it out!
   fprintf(fp, "#%d\n", vnum);
   fprintf(fp, "%s~\n", ZONE.name);
-  fprintf(fp, "%d %d %d %d %d %d\n", ZONE.top, ZONE.lifespan, ZONE.reset_mode, ZONE.security, ZONE.connected, ZONE.jurisdiction);
+  fprintf(fp, "%d %d %d %d %d %d %d\n", ZONE.top, ZONE.lifespan, ZONE.reset_mode, ZONE.security, ZONE.connected, ZONE.jurisdiction, ZONE.is_pghq);
   fprintf(fp, "%d %d %d %d %d\n", ZONE.editor_ids[0], ZONE.editor_ids[1],
           ZONE.editor_ids[2], ZONE.editor_ids[3], ZONE.editor_ids[4]);
   for (i = 0; i < ZONE.num_cmds; ++i) {
@@ -212,6 +212,7 @@ void zedit_disp_data_menu(struct descriptor_data *d)
                  ZON->editor_ids[3], ZON->editor_ids[4]);
     send_to_char(CH, "^G8^Y) ^WConnected: ^c%d^n\r\n", ZON->connected);
   }
+  send_to_char(CH, "^G9^Y) ^WIs PGHQ: ^c%s^n\r\n", ZON->is_pghq ? "yes" : "no");
 
   send_to_char("^Gq^Y) ^WQuit\r\n^wEnter selection: ", CH);
 
@@ -729,6 +730,10 @@ void zedit_parse(struct descriptor_data *d, const char *arg)
       send_to_char("Zone is connected (1 - yes, 0 - no): ", CH);
       d->edit_mode = ZEDIT_CONNECTED;
       break;
+    case '9':
+      send_to_char("Zone is a PGHQ (1 - yes, 0 - no): ", CH);
+      d->edit_mode = ZEDIT_PGHQ;
+      break;
     default:
       send_to_char("That's not a valid choice.\r\n", CH);
       zedit_disp_data_menu(d);
@@ -1220,6 +1225,10 @@ void zedit_parse(struct descriptor_data *d, const char *arg)
       return;
     } else
       ZON->jurisdiction = number;
+    zedit_disp_data_menu(d);
+    break;
+  case ZEDIT_PGHQ:
+    ZON->is_pghq = (atoi(arg) == 0 ? 0 : 1);
     zedit_disp_data_menu(d);
     break;
   }

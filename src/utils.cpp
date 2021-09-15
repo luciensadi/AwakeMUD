@@ -58,6 +58,26 @@ extern const char *get_ammobox_default_restring(struct obj_data *ammobox);
 extern bool can_edit_zone(struct char_data *ch, int zone);
 extern int find_first_step(vnum_t src, vnum_t target, bool ignore_roads);
 
+extern SPECIAL(johnson);
+extern SPECIAL(landlord_spec);
+extern SPECIAL(receptionist);
+extern SPECIAL(shop_keeper);
+extern SPECIAL(postmaster);
+extern SPECIAL(generic_guard);
+extern SPECIAL(receptionist);
+extern SPECIAL(cryogenicist);
+extern SPECIAL(teacher);
+extern SPECIAL(metamagic_teacher);
+extern SPECIAL(trainer);
+extern SPECIAL(adept_trainer);
+extern SPECIAL(spell_trainer);
+extern SPECIAL(fixer);
+extern SPECIAL(hacker);
+extern SPECIAL(fence);
+extern SPECIAL(taxi);
+extern SPECIAL(painter);
+extern SPECIAL(nerp_skills_teacher);
+
 /* creates a random number in interval [from;to] */
 int number(int from, int to)
 {
@@ -1627,7 +1647,7 @@ bool biocyber_compatibility(struct obj_data *obj1, struct obj_data *obj2, struct
               send_to_char("Bone lacings are incompatible with cybernetic replacements (limbs, skull, torso).\r\n", ch);
               return FALSE;
           }
-          return FALSE;
+          break;
       }
     if (IS_SET(GET_CYBERWARE_FLAGS(cyber1), EYE_DATAJACK) && GET_CYBERWARE_TYPE(cyber2) == CYB_DATAJACK) {
       send_to_char("You already have a datajack installed.\r\n", ch);
@@ -1730,7 +1750,7 @@ void reduce_abilities(struct char_data *vict)
   for (i = 0; i < ADEPT_NUMPOWER; i++)
     if (GET_POWER_TOTAL(vict, i) > GET_MAG(vict) / 100) {
       GET_PP(vict) += ability_cost(i, GET_POWER_TOTAL(vict, i));
-      GET_POWER_TOTAL(vict, i)--;
+      SET_POWER_TOTAL(vict, i, GET_POWER_TOTAL(vict, i) - 1);
       send_to_char(vict, "Your loss in magic makes you feel less "
                    "skilled in %s.\r\n", adept_powers[i]);
     }
@@ -1743,7 +1763,7 @@ void reduce_abilities(struct char_data *vict)
   {
     if (GET_POWER_TOTAL(vict, i) > 0) {
       GET_PP(vict) += ability_cost(i, GET_POWER_TOTAL(vict, i));
-      GET_POWER_TOTAL(vict, i)--;
+      SET_POWER_TOTAL(vict, i, GET_POWER_TOTAL(vict, i) - 1);
       send_to_char(vict, "Your loss in magic makes you feel less "
                    "skilled in %s.\r\n", adept_powers[i]);
     }
@@ -2487,6 +2507,8 @@ bool attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data *w
 }
 
 struct obj_data *unattach_attachment_from_weapon(int location, struct obj_data *weapon, struct char_data *ch) {
+  struct obj_data *workshop;
+  
   if (!weapon) {
     if (ch)
       send_to_char(ch, "Sorry, something went wrong. Staff have been notified.\r\n");
@@ -2531,14 +2553,17 @@ struct obj_data *unattach_attachment_from_weapon(int location, struct obj_data *
   
   if (GET_ACCESSORY_TYPE(attachment) == ACCESS_GASVENT) {
     if (ch) {
-      // TODO: Update: You can now remove a gas vent, as long as you're in a room with a deployed weapons workshop and have some nuyen on hand to cover the new barrel's cost.
-      // TODO: Ensure workshop.
-      // TODO: Ensure nuyen.
-      // TODO: Remove and destroy vent, then return. This either requires code duplication or modification of below code to not return vents-- if the latter, verify that it's supposed to happen!
-      //     ex: destroying a vent rather than returning it, and the caller calls extract on the returned value.
-      send_to_char(ch, "%s is permanently attached to %s and can't be removed.\r\n",
-                   GET_OBJ_NAME(attachment), GET_OBJ_NAME(weapon));
-      return NULL;
+      int removal_cost = MAX(GET_OBJ_COST(weapon) / 10, MINIMUM_GAS_VENT_REMOVAL_COST);
+      
+      if (!(workshop = find_workshop(ch, TYPE_GUNSMITHING))) {
+        send_to_char(ch, "That's a complex task! You'll need a gunsmithing workshop and %d nuyen on hand to do that.\r\n", removal_cost);
+        return NULL;
+      }
+      
+      if (GET_NUYEN(ch) < removal_cost) {
+        send_to_char(ch, "You'll need at least %d nuyen on hand to cover the cost of the new barrel.\r\n", removal_cost);
+        return NULL;
+      }
     }
    // We assume the coder knows what they're doing when unattaching a gasvent. They may proceed.
   }
@@ -2613,8 +2638,15 @@ struct obj_data *unattach_attachment_from_weapon(int location, struct obj_data *
   
   // Send the success message, assuming there's a character.
   if (ch) {
-    act("You unattach $p from $P.", TRUE, ch, attachment, weapon, TO_CHAR);
-    act("$n unattaches $p from $P.", TRUE, ch, attachment, weapon, TO_ROOM);
+    if (GET_ACCESSORY_TYPE(attachment) == ACCESS_GASVENT) {
+      act("You remove the ported barrel from $p and discard it, installing a non-ported one in its place.", TRUE, ch, weapon, NULL, TO_CHAR);
+      act("$n removes the ported barrel from $p and discards it, installing a non-ported one in its place.", TRUE, ch, weapon, NULL, TO_ROOM);
+      extract_obj(attachment);
+      attachment = NULL;
+    } else {
+      act("You unattach $p from $P.", TRUE, ch, attachment, weapon, TO_CHAR);
+      act("$n unattaches $p from $P.", TRUE, ch, attachment, weapon, TO_ROOM);
+    }
   }
   
   // Hand back our attachment object.
@@ -3575,7 +3607,8 @@ bool item_should_be_treated_as_melee_weapon(struct obj_data *obj) {
   // It's a gun that has a magazine in it.
   if (IS_GUN(GET_WEAPON_ATTACK_TYPE(obj)) && obj->contains)
     return FALSE;
-    
+  
+  // It's a gun that has no magazine (it was EJECTed), or it's not a gun.
   return TRUE;
 }
 
@@ -3591,7 +3624,168 @@ bool item_should_be_treated_as_ranged_weapon(struct obj_data *obj) {
   // It's not a gun, or it doesn't have a magazine.
   if (!IS_GUN(GET_WEAPON_ATTACK_TYPE(obj)) || !obj->contains)
     return FALSE;
+  
+  // It's a gun that has a magazine in it.
+  return TRUE;
+}
+
+void turn_hardcore_on_for_character(struct char_data *ch) {
+  if (!ch || IS_NPC(ch))
+    return;
     
+  PRF_FLAGS(ch).SetBit(PRF_HARDCORE);
+  PLR_FLAGS(ch).SetBit(PLR_NODELETE);
+  snprintf(buf, sizeof(buf), "UPDATE pfiles SET Hardcore=1, NoDelete=1 WHERE idnum=%ld;", GET_IDNUM(ch));
+  mysql_wrapper(mysql, buf);
+}
+
+void turn_hardcore_off_for_character(struct char_data *ch) {
+  if (!ch || IS_NPC(ch))
+    return;
+    
+  PRF_FLAGS(ch).RemoveBit(PRF_HARDCORE);
+  PLR_FLAGS(ch).RemoveBit(PLR_NODELETE);
+  snprintf(buf, sizeof(buf), "UPDATE pfiles SET Hardcore=0, NoDelete=0 WHERE idnum=%ld;", GET_IDNUM(ch));
+  mysql_wrapper(mysql, buf);
+}
+
+void set_natural_vision_for_race(struct char_data *ch) {
+  switch (GET_RACE(ch)) {
+    case RACE_HUMAN:
+    case RACE_OGRE:
+      NATURAL_VISION(ch) = NORMAL;
+      break;
+    case RACE_DWARF:
+    case RACE_GNOME:
+    case RACE_MENEHUNE:
+    case RACE_KOBOROKURU:
+    case RACE_TROLL:
+    case RACE_CYCLOPS:
+    case RACE_FOMORI:
+    case RACE_GIANT:
+    case RACE_MINOTAUR:
+      NATURAL_VISION(ch) = THERMOGRAPHIC;
+      break;
+    case RACE_ORK:
+    case RACE_HOBGOBLIN:
+    case RACE_SATYR:
+    case RACE_ONI:
+    case RACE_ELF:
+    case RACE_WAKYAMBI:
+    case RACE_NIGHTONE:
+    case RACE_DRYAD:
+      NATURAL_VISION(ch) = LOWLIGHT;
+      break;
+  }
+}
+
+// Returns -1 on error, make sure you catch that!
+int get_string_length_after_color_code_removal(const char *str, struct char_data *ch_to_notify_of_failure_reason) {
+  if (!str) {
+    mudlog("SYSERR: Null string received to get_string_length_after_color_code_removal().", ch_to_notify_of_failure_reason, LOG_SYSLOG, TRUE);
+    return 0;
+  }
+    
+  const char *ptr = str;
+  int len = 0;
+  
+  while (*ptr) {
+    if (*ptr == '^') {
+      if (*(ptr+1) == '\0') {
+        if (ch_to_notify_of_failure_reason)
+          send_to_char("Sorry, tag strings can't end with the ^ character.\r\n", ch_to_notify_of_failure_reason);
+        return -1;
+      }
+      // Print a single ^ character.
+      else if (*(ptr+1) == '^') {
+        ptr += 2;
+        len += 1;
+      }
+      // Print a color character.
+      else {
+        // There are two types of color: Two-character tags (^g) and xterm tags (^[F123]). We must account for both.
+        if (*(ptr+1) == '[') {
+          // We know that ptr+1 was a valid character (see first check in this while), so at worst, +2 can be \0.
+          if (!*(ptr + 2) || !(*(ptr + 2) == 'F')) {
+            if (ch_to_notify_of_failure_reason)
+              send_to_char("Sorry, xterm256 colors can only be specified in foreground mode (^^[F...]).\r\n", ch_to_notify_of_failure_reason);
+            return -1;
+          }
+#define IS_CODE_DIGIT_VALID(chr) (*(chr) && (*(chr) == '0' || *(chr) == '1' || *(chr) == '2' || *(chr) == '3' || *(chr) == '4' || *(chr) == '5'))
+          if (!IS_CODE_DIGIT_VALID(ptr + 3) || !IS_CODE_DIGIT_VALID(ptr + 4) || !IS_CODE_DIGIT_VALID(ptr + 5)) {
+            if (ch_to_notify_of_failure_reason)
+              send_to_char("Sorry, you've entered an invalid xterm256 color code.\r\n", ch_to_notify_of_failure_reason);
+            return -1;
+          }
+#undef IS_CODE_DIGIT_VALID
+          if (!*(ptr + 6) || *(ptr + 6) != ']') {
+            if (ch_to_notify_of_failure_reason)
+              send_to_char("You've forgotten to terminate an xterm256 color code.\r\n", ch_to_notify_of_failure_reason);
+            return -1;
+          }
+          
+          ptr += strlen("^[F123]");
+        } else {
+          ptr += 2;
+        }
+      }
+    } else {
+      len += 1;
+      ptr += 1;
+    }
+  }
+  
+  return len;
+}
+
+#define CHECK_FUNC_AND_SFUNC_FOR(function) (mob_index[GET_MOB_RNUM(npc)].func == (function) || mob_index[GET_MOB_RNUM(npc)].sfunc == (function))
+// Returns TRUE if the NPC has a spec that should protect it from damage, FALSE otherwise.
+bool npc_is_protected_by_spec(struct char_data *npc) {
+  return (CHECK_FUNC_AND_SFUNC_FOR(shop_keeper)
+          || CHECK_FUNC_AND_SFUNC_FOR(johnson)
+          || CHECK_FUNC_AND_SFUNC_FOR(landlord_spec)
+          || CHECK_FUNC_AND_SFUNC_FOR(postmaster)
+          || CHECK_FUNC_AND_SFUNC_FOR(teacher)
+          || CHECK_FUNC_AND_SFUNC_FOR(metamagic_teacher)
+          || CHECK_FUNC_AND_SFUNC_FOR(trainer)
+          || CHECK_FUNC_AND_SFUNC_FOR(adept_trainer)
+          || CHECK_FUNC_AND_SFUNC_FOR(spell_trainer)
+          || CHECK_FUNC_AND_SFUNC_FOR(receptionist)
+          || CHECK_FUNC_AND_SFUNC_FOR(fixer)
+          || CHECK_FUNC_AND_SFUNC_FOR(fence)
+          || CHECK_FUNC_AND_SFUNC_FOR(taxi)
+          || CHECK_FUNC_AND_SFUNC_FOR(painter)
+          || CHECK_FUNC_AND_SFUNC_FOR(nerp_skills_teacher)
+          || CHECK_FUNC_AND_SFUNC_FOR(hacker));
+}
+#undef CHECK_FUNC_AND_SFUNC_FOR
+
+bool can_damage_vehicle(struct char_data *ch, struct veh_data *veh) {
+  if (veh->owner && GET_IDNUM(ch) != veh->owner) {
+    bool has_valid_vict = FALSE;
+    for (struct char_data *killer_check = veh->people; killer_check; killer_check = killer_check->next_in_veh) {
+      if ((PRF_FLAGGED(ch, PRF_PKER) && PRF_FLAGGED(killer_check, PRF_PKER)) || PLR_FLAGGED(killer_check, PLR_KILLER)) {
+        has_valid_vict = TRUE;
+        break;
+      }
+    }
+    
+    if (!has_valid_vict) {
+      if (!PRF_FLAGGED(ch, PRF_PKER) && !get_plr_flag_is_set_by_idnum(PLR_KILLER, veh->owner)) {
+        send_to_char("That's a player-owned vehicle. Better leave it alone.\r\n", ch);
+        return FALSE;
+      }
+      
+      if (!get_prf_flag_is_set_by_idnum(PRF_PKER, veh->owner)) {
+        send_to_char("The owner of that vehicle is not flagged PK. Better leave it alone.\r\n", ch);
+        return FALSE;
+      }
+    }
+    // PLR_FLAGS(ch).SetBit(PLR_KILLER);
+    // send_to_char(KILLER_FLAG_MESSAGE, ch);
+  }
+  
+  // No failure conditions found.
   return TRUE;
 }
 

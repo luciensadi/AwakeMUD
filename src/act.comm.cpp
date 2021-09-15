@@ -124,6 +124,14 @@ ACMD(do_say)
         store_message_to_history(tmp->desc, COMM_CHANNEL_OSAYS, perform_act(buf, ch, NULL, NULL, tmp));
       }
     }
+    // Send it to anyone who's rigging a vehicle here.
+    for (struct veh_data *veh = ch->in_room ? ch->in_room->vehicles : ch->in_veh->carriedvehs;
+         veh;
+         veh = veh->next_veh)
+    {
+      if (veh->rigger && veh->rigger->desc)
+        store_message_to_history(veh->rigger->desc, COMM_CHANNEL_OSAYS, perform_act(buf, ch, NULL, NULL, veh->rigger));
+    }
   } else {
     for (tmp = ch->in_room ? ch->in_room->people : ch->in_veh->people; tmp; tmp = ch->in_room ? tmp->next_in_room : tmp->next_in_veh) {
       if (tmp == ch)
@@ -148,6 +156,28 @@ ACMD(do_say)
         
       // Note: includes act()
       store_message_to_history(tmp->desc, COMM_CHANNEL_SAYS, act(buf, FALSE, ch, NULL, tmp, TO_VICT));
+    }
+    // Send it to anyone who's rigging a vehicle here.
+    for (struct veh_data *veh = ch->in_room ? ch->in_room->vehicles : ch->in_veh->carriedvehs;
+         veh;
+         veh = veh->next_veh)
+    {
+      if (veh->rigger && veh->rigger->desc) {
+        // Generate prepend for sayto.
+        if (to) {
+          snprintf(buf2, MAX_STRING_LENGTH, " to %s^n", CAN_SEE(veh->rigger, to) ? (safe_found_mem(veh->rigger, to) ? CAP(safe_found_mem(veh->rigger, to)->mem)
+                   : GET_NAME(to)) : "someone");
+        }
+        
+        snprintf(buf, sizeof(buf), "$z^n says%s in %s, \"%s%s%s^n\"",
+                (to ? buf2 : ""), 
+                (IS_NPC(veh->rigger) || GET_SKILL(veh->rigger, language) > 0) ? skills[language].name : "an unknown language", 
+                (PRF_FLAGGED(veh->rigger, PRF_NOHIGHLIGHT) || PRF_FLAGGED(veh->rigger, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch), 
+                capitalize(replace_too_long_words(veh->rigger, ch, argument, language, GET_CHAR_COLOR_HIGHLIGHT(ch))),
+                ispunct(get_final_character_from_string(argument)) ? "" : "."
+              );
+        store_message_to_history(veh->rigger->desc, COMM_CHANNEL_SAYS, perform_act(buf, ch, NULL, NULL, veh->rigger));
+      }
     }
   }
   
@@ -208,6 +238,21 @@ ACMD(do_exclaim)
       
       // They're a valid target, so send the message with a raw perform_act() call.
       store_message_to_history(tmp->desc, COMM_CHANNEL_SAYS, perform_act(buf, ch, NULL, NULL, tmp));
+    }
+  }
+  
+  for (struct veh_data *veh = ch->in_room ? ch->in_room->vehicles : ch->in_veh->carriedvehs;
+       veh;
+       veh = veh->next_veh)
+  {
+    if (veh->rigger && veh->rigger->desc) {
+      // No need to check for act vailidity, just send it
+      snprintf(buf, sizeof(buf), "$z^n exclaims in %s, \"%s%s!^n\"", 
+               (IS_NPC(veh->rigger) || GET_SKILL(veh->rigger, language) > 0) ? skills[language].name : "an unknown language",
+               (PRF_FLAGGED(veh->rigger, PRF_NOHIGHLIGHT) || PRF_FLAGGED(veh->rigger, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch), 
+               capitalize(replace_too_long_words(veh->rigger, ch, argument, language, GET_CHAR_COLOR_HIGHLIGHT(ch))));
+      
+      store_message_to_history(veh->rigger->desc, COMM_CHANNEL_SAYS, perform_act(buf, ch, NULL, NULL, veh->rigger));
     }
   }
   
@@ -374,6 +419,21 @@ ACMD(do_ask)
                
       // They're a valid target, so send the message with a raw perform_act() call.
       store_message_to_history(tmp->desc, COMM_CHANNEL_SAYS, perform_act(buf, ch, NULL, NULL, tmp));
+    }
+  }
+  
+  for (struct veh_data *veh = ch->in_room ? ch->in_room->vehicles : ch->in_veh->carriedvehs;
+       veh;
+       veh = veh->next_veh)
+  {
+    if (veh->rigger && veh->rigger->desc) {
+      // No need to check for act vailidity, just send it
+      snprintf(buf, sizeof(buf), "$z^n asks in %s, \"%s%s?^n\"", 
+               (IS_NPC(veh->rigger) || GET_SKILL(veh->rigger, language) > 0) ? skills[language].name : "an unknown language",
+               (PRF_FLAGGED(veh->rigger, PRF_NOHIGHLIGHT) || PRF_FLAGGED(veh->rigger, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch), 
+               capitalize(replace_too_long_words(veh->rigger, ch, argument, language, GET_CHAR_COLOR_HIGHLIGHT(ch))));
+      
+      store_message_to_history(veh->rigger->desc, COMM_CHANNEL_SAYS, perform_act(buf, ch, NULL, NULL, veh->rigger));
     }
   }
   
@@ -1060,10 +1120,9 @@ ACMD(do_gen_comm)
     send_to_char(ch, "Yes, %s, fine, %s we must, but WHAT???\r\n", com_msgs[subcmd][1], com_msgs[subcmd][1]);
     return;
   }
-
-  if (PRF_FLAGGED(ch, PRF_NOREPEAT))
-    send_to_char(OK, ch);
-  else if (subcmd == SCMD_SHOUT) {
+    
+  // Returning command to handle shout.
+  if (subcmd == SCMD_SHOUT) {
     struct room_data *was_in = NULL;
     struct char_data *tmp;
     
@@ -1087,14 +1146,19 @@ ACMD(do_gen_comm)
       }
     }
 
-    snprintf(buf1, MAX_STRING_LENGTH,  "%sYou shout in %s, \"%s%s%s\"^n", 
-            com_msgs[subcmd][3], 
-            skills[language].name,
-            capitalize(argument), 
-            ispunct(get_final_character_from_string(argument)) ? "" : "!", 
-            com_msgs[subcmd][3]);
-    // Note that this line invokes act().
-    store_message_to_history(ch->desc, COMM_CHANNEL_SHOUTS, act(buf1, FALSE, ch, 0, 0, TO_CHAR));
+    if (PRF_FLAGGED(ch, PRF_NOREPEAT)) {
+      store_message_to_history(ch->desc, COMM_CHANNEL_SHOUTS, buf1);
+      send_to_char(OK, ch);
+    } else {
+      snprintf(buf1, MAX_STRING_LENGTH,  "%sYou shout in %s, \"%s%s%s\"^n", 
+              com_msgs[subcmd][3], 
+              skills[language].name,
+              capitalize(argument), 
+              ispunct(get_final_character_from_string(argument)) ? "" : "!", 
+              com_msgs[subcmd][3]);
+      // Note that this line invokes act().
+      store_message_to_history(ch->desc, COMM_CHANNEL_SHOUTS, act(buf1, FALSE, ch, 0, 0, TO_CHAR));
+    }
 
     was_in = ch->in_room;
     if (ch->in_veh) {
@@ -1150,33 +1214,48 @@ ACMD(do_gen_comm)
       ch->in_room = NULL;
 
     return;
-  } else if(subcmd == SCMD_OOC) {
+  }
+  
+  // Returning command to handle OOC.
+  if(subcmd == SCMD_OOC) {
     /* Check for non-switched mobs */
     if ( IS_NPC(ch) && ch->desc == NULL )
       return;
     delete_doubledollar(argument);
     for ( d = descriptor_list; d != NULL; d = d->next ) {
+      // Skip anyone without a descriptor, and any non-NPC that didn't ignore the speaker.
       if (!d->character || (!IS_NPC(d->character) && unsafe_found_mem(GET_IGNORE(d->character), ch)))
         continue;
+        
+      // Anyone who's not either staff or in specific playing states is skipped.
       if (!access_level(d->character, LVL_BUILDER) 
           && ((d->connected != CON_PLAYING && !PRF_FLAGGED(d->character, PRF_MENUGAG))
               || PLR_FLAGGED( d->character, PLR_WRITING) 
               || PRF_FLAGGED( d->character, PRF_NOOOC) 
               || PLR_FLAGGED(d->character, PLR_NOT_YET_AUTHED)))
         continue;
-      
+        
       // No autopunct for channels.
       if (!access_level(d->character, GET_INCOG_LEV(ch)))
-        snprintf(buf, sizeof(buf), "^m[^nSomeone^m]^n ^R(^nOOC^R)^n, \"%s^n\"\r\n", capitalize(argument));
+        snprintf(buf, sizeof(buf), "^m[^nA Staff Member^m]^n ^R(^nOOC^R)^n, \"%s^n\"\r\n", capitalize(argument));
       else
         snprintf(buf, sizeof(buf), "^m[^n%s^m]^n ^R(^nOOC^R)^n, \"%s^n\"\r\n", IS_NPC(ch) ? GET_NAME(ch) : GET_CHAR_NAME(ch), capitalize(argument));
       
       store_message_to_history(d, COMM_CHANNEL_OOC, buf);
-      send_to_char(buf, d->character);
+      
+      if (d->character == ch && PRF_FLAGGED(ch, PRF_NOREPEAT)) {
+        send_to_char(OK, ch);
+        continue;
+      } else {
+        send_to_char(buf, d->character);
+      }
     }
 
     return;
-  } else if (subcmd == SCMD_RPETALK) {
+  } 
+  
+  // The commands after this line don't return-- they just set things and follow the loop at the end.
+  if (subcmd == SCMD_RPETALK) {
     snprintf(buf, sizeof(buf), "%s%s ^W[^rRPE^W]^r %s^n\r\n", com_msgs[subcmd][3], GET_CHAR_NAME(ch), capitalize(argument));
     
     channel = COMM_CHANNEL_RPE;
@@ -1194,41 +1273,53 @@ ACMD(do_gen_comm)
     store_message_to_history(ch->desc, channel, buf);
   }
   
+  // The loop for the above channels.
   for (i = descriptor_list; i; i = i->next) {
     if (i == ch->desc || !i->character || IS_PROJECT(i->character))
       continue;
-      
+    
+    // Skip anyone who disabled the command.
     if (PRF_FLAGGED(i->character, channels[subcmd]))
       continue;
       
+    // Non-staff who don't meet specific criteria are skipped.
     if (!IS_SENATOR(i->character)) {
       if (i->connected || PLR_FLAGS(i->character).AreAnySet(PLR_WRITING, PLR_MAILING, PLR_EDITING, ENDBIT))
         continue;
     }
     
-    // Skip ignored people.
+    // Skip anyone who's ignored the speaker.
     if (unsafe_found_mem(GET_IGNORE(i->character), ch))
       continue;
       
     switch (subcmd) {
       case SCMD_SHOUT:
+        // Shouts don't propagate into soundproof rooms.
         if (ROOM_FLAGGED(get_ch_in_room(i->character), ROOM_SOUNDPROOF))
           continue;
         break;
       case SCMD_NEWBIE:
+        // Newbie can be disabled or muted.
         if (PRF_FLAGGED(i->character, PRF_NONEWBIE) || PLR_FLAGGED(i->character, PLR_NEWBIE_MUTED))
           continue;
         break;
       case SCMD_RPETALK:
+        // RPE talk only shows up to RPE members.
         if (!(PLR_FLAGGED(i->character, PLR_RPE) || IS_SENATOR(i->character)))
           continue;
         break;
       case SCMD_HIREDTALK:
+        // Hired talk only shows up to hired members.
         if (!(PRF_FLAGGED(i->character, PRF_QUEST) || IS_SENATOR(i->character)))
           continue;
         break;
     }
-    send_to_char(buf, i->character);
+    
+    if (i->character == ch && PRF_FLAGGED(ch, PRF_NOREPEAT))
+      send_to_char(OK, ch);
+    else
+      send_to_char(buf, i->character);
+      
     store_message_to_history(i, channel, buf);
   }
 
@@ -1293,23 +1384,34 @@ ACMD(do_language)
 void add_phone_to_list(struct obj_data *obj)
 {
   struct phone_data *k;
-  bool found = FALSE, cyber = FALSE;
-  if (GET_OBJ_TYPE(obj) == ITEM_CYBERWARE)
-    cyber = TRUE;
+  bool cyber = GET_OBJ_TYPE(obj) == ITEM_CYBERWARE;
+  
+  // Compose the phone number string.
   snprintf(buf, sizeof(buf), "%04d%04d", GET_OBJ_VAL(obj, (cyber ? 3 : 0)), GET_OBJ_VAL(obj, (cyber ? 6 : 1)));
+  
+  // Search the phone list and see if it's already in there.
   for (struct phone_data *j = phone_list; j; j = j->next)
     if (j->number == atoi(buf)) {
-      found = TRUE;
-      break;
+      const char *phone_representation = generate_new_loggable_representation(j->phone);
+      const char *obj_representation = generate_new_loggable_representation(obj);
+      char logstring[MAX_STRING_LENGTH];
+      snprintf(logstring, sizeof(logstring), "SYSERR: Attempted to add phone number %s to the phone list, but it's already there! Refusing to replace '%s' with '%s'.", 
+             buf, 
+             phone_representation, 
+             obj_representation);
+      mudlog(logstring, NULL, LOG_SYSLOG, TRUE);
+      DELETE_ARRAY_IF_EXTANT(phone_representation);
+      DELETE_ARRAY_IF_EXTANT(obj_representation);
+      return;
     }
-  if (!found) {
-    k = new phone_data;
-    k->number = atoi(buf);
-    k->phone = obj;
-    if (phone_list)
-      k->next = phone_list;
-    phone_list = k;
-  }  
+    
+  // It wasn't, so we can add it freely.
+  k = new phone_data;
+  k->number = atoi(buf);
+  k->phone = obj;
+  if (phone_list)
+    k->next = phone_list;
+  phone_list = k;
 }
 
 ACMD(do_phone)
@@ -1337,6 +1439,8 @@ ACMD(do_phone)
     send_to_char("But you don't have a phone.\r\n", ch);
     return;
   }
+  
+  // If the phone is already on, this finds its phone_data record.
   for (phone = phone_list; phone; phone = phone->next)
     if (phone->phone == obj)
       break;

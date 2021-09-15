@@ -13,6 +13,7 @@
 #define _awake_h_
 
 #include <time.h>
+#include <iostream>
 
 #if (!defined(WIN32) || defined(__CYGWIN__)) && !defined(osx)
 using namespace std;
@@ -218,7 +219,7 @@ enum {
   LVL_PRESIDENT,
 
   LVL_MAX = LVL_PRESIDENT,
-  LVL_FREEZE = LVL_EXECUTIVE
+  LVL_FREEZE = LVL_CONSPIRATOR
 };
 
 /* character equipment positions: used as index for char_data.equipment[] */
@@ -267,45 +268,46 @@ enum {
 #define NUM_WEARS      39
 
 /* player flags: used by char_data.char_specials.act */
-#define PLR_KILLER              0  /* Player is a player-killer              */
-#define PLR_BLACKLIST           1  /* Player is banned from runs             */
-#define PLR_FROZEN              2  /* Player is frozen                       */
-#define PLR_DONTSET             3  /* Don't EVER set (ISNPC bit)             */
-#define PLR_NEWBIE              4  /* Player is a newbie still               */
-#define PLR_JUST_DIED           5  /* Player just died                       */
-#define PLR_VISA                6  /* Player needs to be crash-saved         */
-#define PLR_SITEOK              8  /* Player has been site-cleared           */
-#define PLR_NOSHOUT             9  /* Player not allowed to shout/goss       */
-#define PLR_NOTITLE             10 /* Player not allowed to set title        */
-#define PLR_DELETED             11 /* Player deleted - space reusable        */
-#define PLR_NODELETE            12 /* Player shouldn't be deleted            */
-#define PLR_NOSTAT              14 /* Player cannot be statted, etc          */
-#define PLR_LOADROOM            15 /* Player uses nonstandard loadroom       */
-#define PLR_INVSTART            16 /* Player should enter game wizinvis      */
-#define PLR_OLC                 19 /* Player has access to olc commands      */
-#define PLR_MATRIX              20 /* Player is in the Matrix                */
-#define PLR_PERCEIVE            21 /* player is astrally perceiving          */
-#define PLR_PROJECT             22 /* player is astrally projecting          */
-#define PLR_SWITCHED            23 /* player is switched to a mob            */
-#define PLR_WRITING             24 /* Player writing (board/mail/olc)        */
-#define PLR_MAILING             25 /* Player is writing mail                 */
-#define PLR_EDITING             26 /* Player is zone editing                 */
-#define PLR_SPELL_CREATE        27 /* Player is creating a spell             */
-#define PLR_CUSTOMIZE           28 /* Player is customizing persona          */
-#define PLR_NOSNOOP             29 /* Player is not snoopable                */
-#define PLR_WANTED              30 /* Player wanted by the law      */
-#define PLR_NOOOC               31 /* Player is muted from the OOC channel   */
-#define PLR_NOT_YET_AUTHED      32 /* Player needs Auth */
-#define PLR_EDCON               33
-#define PLR_REMOTE              34
-#define PLR_INITIATE            35
-#define PLR_DRIVEBY             36
-#define PLR_RPE                 37
-#define PLR_NO_IDLE_OUT         38 /* Player will not idle out (morts- for test chars) */
-#define PLR_TELLS_MUTED         39 /* Remove their ability to send tells. */
-#define PLR_NEWBIE_MUTED        40 /* Remove their ability to talk on the newbie channel. */
-#define PLR_CYBERDOC            41 /* Player may act as a cyberdoc. */
-#define PLR_MAX                 42
+#define PLR_KILLER               0  /* Player is a player-killer              */
+#define PLR_BLACKLIST            1  /* Player is banned from runs             */
+#define PLR_FROZEN               2  /* Player is frozen                       */
+#define PLR_DONTSET              3  /* Don't EVER set (ISNPC bit)             */
+#define PLR_NEWBIE               4  /* Player is a newbie still               */
+#define PLR_JUST_DIED            5  /* Player just died                       */
+#define PLR_VISA                 6  /* Player needs to be crash-saved         */
+#define PLR_SITEOK               8  /* Player has been site-cleared           */
+#define PLR_NOSHOUT              9  /* Player not allowed to shout/goss       */
+#define PLR_NOTITLE              10 /* Player not allowed to set title        */
+#define PLR_DELETED              11 /* Player deleted - space reusable        */
+#define PLR_NODELETE             12 /* Player shouldn't be deleted            */
+#define PLR_NOSTAT               14 /* Player cannot be statted, etc          */
+#define PLR_LOADROOM             15 /* Player uses nonstandard loadroom       */
+#define PLR_INVSTART             16 /* Player should enter game wizinvis      */
+#define PLR_OLC                  19 /* Player has access to olc commands      */
+#define PLR_MATRIX               20 /* Player is in the Matrix                */
+#define PLR_PERCEIVE             21 /* player is astrally perceiving          */
+#define PLR_PROJECT              22 /* player is astrally projecting          */
+#define PLR_SWITCHED             23 /* player is switched to a mob            */
+#define PLR_WRITING              24 /* Player writing (board/mail/olc)        */
+#define PLR_MAILING              25 /* Player is writing mail                 */
+#define PLR_EDITING              26 /* Player is zone editing                 */
+#define PLR_SPELL_CREATE         27 /* Player is creating a spell             */
+#define PLR_CUSTOMIZE            28 /* Player is customizing persona          */
+#define PLR_NOSNOOP              29 /* Player is not snoopable                */
+#define PLR_WANTED               30 /* Player wanted by the law      */
+#define PLR_NOOOC                31 /* Player is muted from the OOC channel   */
+#define PLR_NOT_YET_AUTHED       32 /* Player needs Auth */
+#define PLR_EDCON                33
+#define PLR_REMOTE               34
+#define PLR_INITIATE             35
+#define PLR_DRIVEBY              36
+#define PLR_RPE                  37
+#define PLR_NO_IDLE_OUT          38 /* Player will not idle out (morts- for test chars) */
+#define PLR_TELLS_MUTED          39 /* Remove their ability to send tells. */
+#define PLR_NEWBIE_MUTED         40 /* Remove their ability to talk on the newbie channel. */
+#define PLR_CYBERDOC             41 /* Player may act as a cyberdoc. */
+#define PLR_PAID_FOR_CLOSECOMBAT 42
+#define PLR_MAX                  43
 
 
 
@@ -498,7 +500,9 @@ enum {
 #define AFF_SPELLDESIGN    47
 #define AFF_SURPRISE    48
 #define AFF_AMMOBUILD    49
-#define AFF_MAX       50
+#define AFF_CLOSECOMBAT  50
+#define AFF_SMART_ENOUGH_TO_TOGGLE_CLOSECOMBAT  51
+#define AFF_MAX       52
 // TODO: If you add another long-state action like building, designing, etc:
 // - Add it to the check_bioware exclusion in limits.cpp
 // - Add it to the IS_WORKING and STOP_WORKING macros in utils.h
@@ -1508,15 +1512,16 @@ enum {
 #define TYPE_FACILITY   3
 
 // Kit/Workshop/Facility types.
-#define TYPE_GENERAL    0
+#define TYPE_GENERAL       0
 #define TYPE_ELECTRONIC    1
-#define TYPE_MICROTRONIC  2
-#define TYPE_CYBERWARE    3
-#define TYPE_VEHICLE    4
-#define TYPE_WEAPON    5
-#define TYPE_MEDICAL    6
-#define TYPE_AMMO    7
-#define NUM_WORKSHOP_TYPES 8
+#define TYPE_MICROTRONIC   2
+#define TYPE_CYBERWARE     3
+#define TYPE_VEHICLE       4
+#define TYPE_WEAPON        5
+#define TYPE_MEDICAL       6
+#define TYPE_AMMO          7
+#define TYPE_GUNSMITHING   8
+#define NUM_WORKSHOP_TYPES 9
 /* modifier constants used with obj affects ('A' fields) */
 
 #define APPLY_NONE               0      /* No effect                    */
@@ -2123,6 +2128,7 @@ enum {
 #define MAX_RAW_INPUT_LENGTH      4096     /* Max size of *raw* input */
 #define MAX_MESSAGES              100
 #define MAX_NAME_LENGTH           20  /* Used in char_file_u *DO*NOT*CHANGE* */
+#define MAX_RESTRING_LENGTH       256
 
 #define MAX_PWD_LENGTH            30  /* Relic of the past, do not change. Dictates max length of crypt() hashes. */
 #define MAX_TITLE_LENGTH          48  /* Used in char_file_u *DO*NOT*CHANGE* */
@@ -2330,6 +2336,8 @@ enum {
 
 #define OBJ_BLANK_MAGAZINE                 127
 
+#define OBJ_DOCWAGON_PAPER_GOWN            16201
+
 #define QST_MAGE_INTRO                     5743
 
 // Misc defines from spec_procs.cpp
@@ -2520,5 +2528,21 @@ enum {
 
 #define NI_IS_SINK   0
 #define NI_IS_FAUCET 1
+
+#define DIRTY_BIT_SKILLS      0
+#define DIRTY_BIT_POWERS      1
+#define DIRTY_BIT_SPELLS      2
+#define DIRTY_BIT_METAMAGIC   3
+#define DIRTY_BIT_ELEMENTALS  4
+#define DIRTY_BIT_MEMORY      5
+#define DIRTY_BIT_DRUG        6
+#define DIRTY_BIT_ALIAS       7
+#define NUM_DIRTY_BITS        8
+
+#define DECK_ACCESSORY_TYPE_PARTS  0
+#define DECK_ACCESSORY_TYPE_CHIPS  1
+
+#define SMARTLINK_II_MODIFIER 3
+#define SMARTLINK_I_MODIFIER  2
 
 #endif

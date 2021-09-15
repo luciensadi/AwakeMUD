@@ -116,6 +116,7 @@ struct obj_data *objList::FindObj(struct char_data *ch, char *name, int num)
 // for OLC so objects on the mud get updated with the correct values
 void objList::UpdateObjs(const struct obj_data *proto, int rnum)
 {
+  PERF_PROF_SCOPE(pr_, __func__);
   static nodeStruct<struct obj_data *> *temp;
   static struct obj_data old;
 
@@ -145,6 +146,7 @@ void objList::UpdateObjs(const struct obj_data *proto, int rnum)
 
 void objList::UpdateObjsIDelete(const struct obj_data *proto, int rnum, int new_rnum)
 {
+  PERF_PROF_SCOPE(pr_, __func__);
   static nodeStruct<struct obj_data *> *temp;
   static struct obj_data old;
   

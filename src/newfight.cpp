@@ -37,6 +37,7 @@ extern bool is_char_too_tall(struct char_data *ch);
 extern bool damage(struct char_data *ch, struct char_data *victim, int dam, int attacktype, bool is_physical);
 extern bool damage_without_message(struct char_data *ch, struct char_data *victim, int dam, int attacktype, bool is_physical);
 
+void engage_close_combat_if_appropriate(struct combat_data *att, struct combat_data *def, int net_reach);
 
 bool does_weapon_have_bayonet(struct obj_data *weapon);
 
@@ -188,7 +189,7 @@ struct ranged_combat_data {
       
       // Setup: If you're dual-wielding, take that penalty, otherwise you get your smartlink bonus.
       if (GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD))
-        modifiers[COMBAT_MOD_DUAL_WIELDING] += 2;
+        modifiers[COMBAT_MOD_DUAL_WIELDING] = 2;
       else
         modifiers[COMBAT_MOD_SMARTLINK] -= check_smartlink(ch, weapon);
     }
@@ -365,7 +366,7 @@ struct combat_data
 };
 
 #define SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER {act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS ); if (att->ch->in_room != def->ch->in_room) act( rbuf, 1, def->ch, NULL, NULL, TO_ROLLS );}
-void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *weap, struct obj_data *vict_weap, struct obj_data *weap_ammo)
+void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *victim, struct obj_data *weap, struct obj_data *vict_weap, struct obj_data *weap_ammo, bool multi_weapon_modifier)
 {
   int net_successes, successes_for_use_in_monowhip_test_check;
   assert(attacker != NULL);
@@ -541,6 +542,12 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
   
   // Setup: If the character is rigging a vehicle or is in a vehicle, set veh to that vehicle.
   RIG_VEH(att->ch, att->veh);
+  
+  // Setup: If the character is firing multiple rigged weapons, apply the dual-weapon penalty.
+  if (multi_weapon_modifier) {
+    att->ranged->modifiers[COMBAT_MOD_DUAL_WIELDING] = 2;
+    att->ranged->modifiers[COMBAT_MOD_SMARTLINK] = 0;
+  }
   
   if (att->veh && !att->weapon) {
     mudlog("SYSERR: Somehow, we ended up in a vehicle attacking someone with no weapon!", att->ch, LOG_SYSLOG, TRUE);
@@ -759,7 +766,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
       def->ranged->successes = MAX(success_test(def->ranged->dice, def->ranged->tn), 0);
       att->ranged->successes -= def->ranged->successes;
       
-      snprintf(buf3, sizeof(buf3), "Dodge: Dice %d, TN %d, Successes %d.  This means attacker's net successes = %d.", 
+      snprintf(rbuf, sizeof(rbuf), "Dodge: Dice %d, TN %d, Successes %d.  This means attacker's net successes = %d.", 
                def->ranged->dice, 
                def->ranged->tn,
                def->ranged->successes, 
@@ -899,9 +906,25 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     // Calculate the net reach.
     int net_reach = GET_REACH(att->ch) - GET_REACH(def->ch);
     
+    // Skilled NPCs get to switch to close combat mode at this time (those cheating bastards.)
+    engage_close_combat_if_appropriate(att, def, net_reach);
+    engage_close_combat_if_appropriate(def, att, -net_reach);    
+    
     if (!GET_POWER(att->ch, ADEPT_PENETRATINGSTRIKE) && GET_POWER(att->ch, ADEPT_DISTANCE_STRIKE)) {
       // MitS 149: Ignore reach modifiers.
       net_reach = 0;
+    }
+    
+    if (AFF_FLAGGED(att->ch, AFF_CLOSECOMBAT) || AFF_FLAGGED(def->ch, AFF_CLOSECOMBAT)) {
+      // CC p99: Ignore reach modifiers, decrease user's power by one.
+      net_reach = 0;
+      
+      if (AFF_FLAGGED(att->ch, AFF_CLOSECOMBAT)) {
+        att->melee->power -= 1;
+        act("Decreased melee power by 1 and negated net reach due to attacker's close combat toggle.", TRUE, att->ch, NULL, NULL, TO_ROLLS);
+      } else {
+        act("Negated net reach due to defender's close combat toggle.", TRUE, att->ch, NULL, NULL, TO_ROLLS);
+      }
     }
     
     // Reach is always used offensively. TODO: Add option to use it defensively instead.
@@ -1138,7 +1161,14 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     }
   }
   
-  if (!defender_died && !IS_NPC(att->ch) && IS_NPC(def->ch)) {
+  if (defender_died) {
+    // Fixes edge case where attacking quest NPC kills its hunter with a heavy weapon, is extracted, then tries to check recoil.
+    if (!IS_NPC(def->ch))
+      return;
+    // Clear out the defending character's pointer since it now points to a nulled character struct.
+    else
+      def->ch = NULL;
+  } else if (!IS_NPC(att->ch) && IS_NPC(def->ch)) {
     GET_LASTHIT(def->ch) = GET_IDNUM(att->ch);
   }
   
@@ -1154,7 +1184,8 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     int recoil_successes = success_test(GET_BOD(att->ch) + GET_BODY(att->ch), GET_WEAPON_POWER(att->weapon) / 2 + modify_target(att->ch) + att->ranged->burst_count);
     int staged_dam = stage(-recoil_successes, LIGHT);
     snprintf(rbuf, sizeof(rbuf), "Heavy Recoil: %d successes, L->%s wound.", recoil_successes, staged_dam == LIGHT ? "L" : "no");
-    SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
+    // SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
+    act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );
     
     // If the attacker dies from recoil, bail out.
     if (damage(att->ch, att->ch, convert_damage(staged_dam), TYPE_HIT, FALSE))
@@ -1171,6 +1202,10 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
 }
 #undef SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER
 
+void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *weap, struct obj_data *vict_weap, struct obj_data *weap_ammo) {
+  hit_with_multiweapon_toggle(attacker, victim, weap, vict_weap, weap_ammo, FALSE);
+}
+
 bool does_weapon_have_bayonet(struct obj_data *weapon) {
   // Precondition: Weapon must exist, must be a weapon-class item, and must be a gun.
   if (!(weapon && GET_OBJ_TYPE(weapon) == ITEM_WEAPON && IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon))))
@@ -1186,4 +1221,32 @@ bool does_weapon_have_bayonet(struct obj_data *weapon) {
   */
   
   return (attach_proto && GET_ACCESSORY_TYPE(attach_proto) == ACCESS_BAYONET);
+}
+
+void engage_close_combat_if_appropriate(struct combat_data *att, struct combat_data *def, int net_reach) {
+  if (IS_NPC(att->ch) && net_reach != 0 && AFF_FLAGGED(att->ch, AFF_SMART_ENOUGH_TO_TOGGLE_CLOSECOMBAT)) {
+    // If the net reach does not favor the NPC, switch on close combat.
+    if (net_reach < 0 && !AFF_FLAGGED(att->ch, AFF_CLOSECOMBAT)) {
+      AFF_FLAGS(att->ch).SetBit(AFF_CLOSECOMBAT);
+      if (att->weapon) {
+        act("$n shifts $s grip on $p, trying to get inside $N's guard!", TRUE, att->ch, att->weapon, def->ch, TO_NOTVICT);
+        act("$n shifts $s grip on $p, trying to get inside your guard!", TRUE, att->ch, att->weapon, def->ch, TO_VICT);
+      } else {
+        act("$n ducks in close, trying to get inside $N's guard!", TRUE, att->ch, NULL, def->ch, TO_NOTVICT);
+        act("$n ducks in close, trying to get inside your guard!", TRUE, att->ch, NULL, def->ch, TO_NOTVICT);
+      }
+    }
+    
+    // Otherwise, switch it off.
+    else if (net_reach > 0 && AFF_FLAGGED(att->ch, AFF_CLOSECOMBAT)) {
+      AFF_FLAGS(att->ch).RemoveBit(AFF_CLOSECOMBAT);
+      if (att->weapon) {
+        act("$n shifts $s grip on $p, trying to keep $N outside $s guard!", TRUE, att->ch, att->weapon, def->ch, TO_NOTVICT);
+        act("$n shifts $s grip on $p, trying to keep you outside $s guard!", TRUE, att->ch, att->weapon, def->ch, TO_VICT);
+      } else {
+        act("$n backs up, trying to keep $N outside $s guard!", TRUE, att->ch, NULL, def->ch, TO_NOTVICT);
+        act("$n backs up, trying to keep you outside $s guard!", TRUE, att->ch, NULL, def->ch, TO_VICT);
+      }
+    } 
+  }
 }

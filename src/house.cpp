@@ -340,14 +340,14 @@ void House_save(struct house_control_rec *house, const char *file_name, long rnu
       PRINT_TO_FILE_IF_CHANGED("\t\tCondition:\t%d\n", GET_OBJ_CONDITION(obj), GET_OBJ_CONDITION(prototype));
       PRINT_TO_FILE_IF_CHANGED("\t\tTimer:\t%d\n", GET_OBJ_TIMER(obj), GET_OBJ_TIMER(prototype));
       PRINT_TO_FILE_IF_CHANGED("\t\tAttempt:\t%d\n", GET_OBJ_ATTEMPT(obj), 0);
-      PRINT_TO_FILE_IF_CHANGED("\t\tCost:\t%d\n", GET_OBJ_COST(obj), GET_OBJ_COST(prototype));
+      fprintf(fl, "\t\tCost:\t%d\n", GET_OBJ_COST(obj));
       PRINT_TO_FILE_IF_CHANGED("\t\tExtraFlags:\t%s\n", GET_OBJ_EXTRA(obj).ToString(), GET_OBJ_EXTRA(prototype).ToString());
       if (obj->restring)
         fprintf(fl, "\t\tName:\t%s\n", obj->restring);
       if (obj->photo)
         fprintf(fl, "\t\tPhoto:$\n%s~\n", cleanup(buf2, obj->photo));
         
-      if (obj->contains && !IS_OBJ_STAT(obj, ITEM_NORENT) && !IS_OBJ_STAT(obj, ITEM_PART)) {
+      if (obj->contains && !IS_OBJ_STAT(obj, ITEM_NORENT) && GET_OBJ_TYPE(obj) != ITEM_PART) {
         obj = obj->contains;
         level++;
         continue;
@@ -375,7 +375,7 @@ void House_save(struct house_control_rec *house, const char *file_name, long rnu
   }
   
   if (level != 0) {
-    log_vfprintf("Warning: Non-zero level at finish when saving %s.", file_name);
+    log_vfprintf("Warning: Non-zero level at finish when saving %s. [house_error_grep_string]", file_name);
   }
   
   fclose(fl);
@@ -785,7 +785,7 @@ SPECIAL(landlord_spec)
       do_say(recep, "That room is currently available for lease.", 0, 0);
     else {
       if (room_record->date - time(0) < 0) {
-        strcpy(buf2, "Your rent has expired on that apartment.");
+        strlcpy(buf2, "Your rent has expired on that apartment.", sizeof(buf2));
         do_say(recep, buf2, 0, 0);
       } else {
         snprintf(buf2, sizeof(buf2), "You are paid for another %d days.", (int)((room_record->date - time(0)) / 86400));
@@ -918,8 +918,8 @@ void hcontrol_list_houses(struct char_data *ch)
 {
   char *own_name;
 
-  strcpy(buf, "Address  Atrium  Guests  Owner           Crap Count\r\n");
-  strcat(buf, "-------  ------  ------  --------------  -----------\r\n");
+  strlcpy(buf, "Address  Atrium  Guests  Owner           Crap Count\r\n", sizeof(buf));
+  strlcat(buf, "-------  ------  ------  --------------  -----------\r\n", sizeof(buf));
   send_to_char(buf, ch);
 
   for (struct landlord *llord = landlords; llord; llord = llord->next)
@@ -928,6 +928,8 @@ void hcontrol_list_houses(struct char_data *ch)
       {
         int house_rnum = real_room(house->vnum);
         int total = 0;
+        
+        // Count the crap in it, if it exists.
         if (house_rnum > -1) {
           for (struct obj_data *obj = world[house_rnum].contents; obj; obj = obj->next_content)
             total += count_objects(obj);
@@ -939,11 +941,21 @@ void hcontrol_list_houses(struct char_data *ch)
         } else
           total = -1;
           
+        // Get the number of objects in it.
         own_name = get_player_name(house->owner);
         if (!own_name)
           own_name = str_dup("<UNDEF>");
-        snprintf(buf, sizeof(buf), "%7ld %7ld    0     %-14s  %d\r\n",
-                house->vnum, world[house->atrium].number, CAP(own_name), total);
+          
+        // Get the number of guests in it.
+        int guest_num = 0;
+        for (int j = 0; j < MAX_GUESTS; j++) {
+          if (house->guests[j] != 0)
+            guest_num++;
+        }
+        
+        // Output the line.
+        snprintf(buf, sizeof(buf), "%7ld %7ld    %2d    %-14s  %d\r\n",
+                house->vnum, world[house->atrium].number, guest_num, CAP(own_name), total);
         send_to_char(buf, ch);
         DELETE_ARRAY_IF_EXTANT(own_name);
       }
@@ -1040,7 +1052,7 @@ ACMD(do_house)
     send_to_char("You must be in your house to set guests.\r\n", ch);
   else if ((i = find_house(GET_ROOM_VNUM(ch->in_room))) == NULL)
     send_to_char("Um.. this house seems to be screwed up.\r\n", ch);
-  else if (GET_IDNUM(ch) != i->owner)
+  else if (GET_IDNUM(ch) != i->owner && !access_level(ch, LVL_PRESIDENT))
     send_to_char("Only the primary owner can set guests.\r\n", ch);
   else if (!*arg)
     House_list_guests(ch, i, FALSE);
@@ -1143,7 +1155,7 @@ void House_list_guests(struct char_data *ch, struct house_control_rec *i, int qu
   int j;
   char buf[MAX_STRING_LENGTH], buf2[MAX_NAME_LENGTH + 2];
 
-  strcpy(buf, "  Guests: ");
+  strlcpy(buf, "  Guests: ", sizeof(buf));
   int x = 0;
   for (j = 0; j < MAX_GUESTS; j++)
   {
@@ -1156,13 +1168,13 @@ void House_list_guests(struct char_data *ch, struct house_control_rec *i, int qu
       continue;
 
     snprintf(buf2, sizeof(buf2), "%s, ", temp);
-    strcat(buf, CAP(buf2));
+    strlcat(buf, CAP(buf2), sizeof(buf));
     x++;
     DELETE_ARRAY_IF_EXTANT(temp);
   }
   if (!x)
-    strcat(buf, "None");
-  strcat(buf, "\r\n");
+    strlcat(buf, "None", sizeof(buf));
+  strlcat(buf, "\r\n", sizeof(buf));
   send_to_char(buf, ch);
 }
 

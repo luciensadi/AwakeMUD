@@ -287,7 +287,7 @@ void iedit_disp_val1_menu(struct descriptor_data * d)
       send_to_char(CH, "Drug Type: ");
       break;
     case ITEM_WORKSHOP:
-      send_to_char(CH, "0) General\r\n1) Electronic\r\n2) Microtronic\r\n3) Cyberware\r\n4) Vehicle\r\n5) Weaponry\r\n6) Medical\r\n7) Ammunition\r\nWorkshop Type: ");
+      send_to_char(CH, "0) General\r\n1) Electronic\r\n2) Microtronic\r\n3) Cyberware\r\n4) Vehicle\r\n5) Weaponry\r\n6) Medical\r\n7) Ammunition\r\n8) Gunsmithing\r\nWorkshop Type: ");
       break;
     case ITEM_CAMERA:
       send_to_char("0) Camera\r\n1) Photo\r\nObject Type: ", CH);
@@ -398,12 +398,12 @@ void iedit_disp_val1_menu(struct descriptor_data * d)
         else
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%2d) %-20s ", c, skills[c].name);
         if (!(line % 3)) {
-          strcat(buf, "\r\n");
+          strlcat(buf, "\r\n", sizeof(buf));
           send_to_char(buf, CH);
         }
       }
       if ((line % 3) != 0) {
-        strcat(buf, "\r\nEnter a skill (0 to quit): ");
+        strlcat(buf, "\r\nEnter a skill (0 to quit): ", sizeof(buf));
         send_to_char(buf, CH);
       }
       break;
@@ -1945,7 +1945,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
           }
           break;
         case ITEM_WORKSHOP:
-          if (number < 0 || number > 7) {
+          if (number < 0 || number > NUM_WORKSHOP_TYPES) {
             send_to_char(CH, "Invalid value. Enter Workshop Type: ");
             return;
           }

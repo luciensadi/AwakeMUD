@@ -4,6 +4,7 @@
 #include <ctype.h>
 #include <time.h>
 #include <math.h>
+#include <unistd.h>
 
 #include "structs.h"
 #include "awake.h"
@@ -199,6 +200,7 @@ struct shop_sell_data *find_obj_shop(char *arg, vnum_t shop_nr, struct obj_data 
           continue;
         }
         extract_obj(temp_obj);
+        temp_obj = NULL;
         if (num <= 0)
           break;
       } else {
@@ -315,7 +317,8 @@ bool install_ware_in_target_character(struct obj_data *ware, struct char_data *i
     default:
       snprintf(buf3, sizeof(buf3), "SYSERR: Non-ware object '%s' (%ld) passed to install_ware_in_target_character()!", GET_OBJ_NAME(ware), GET_OBJ_VNUM(ware));
       mudlog(buf3, installer, LOG_SYSLOG, TRUE);
-      send_to_char(installer, "An unexpected error occurred when trying to install %s.\r\n", GET_OBJ_NAME(ware));
+      send_to_char(installer, "An unexpected error occurred when trying to install %s (code 1.\r\n", GET_OBJ_NAME(ware));
+      send_to_char(recipient, "An unexpected error occurred when trying to install %s (code 1).\r\n", GET_OBJ_NAME(ware));
       return FALSE;
   }
   
@@ -323,7 +326,8 @@ bool install_ware_in_target_character(struct obj_data *ware, struct char_data *i
   if (ware->in_obj && GET_OBJ_TYPE(ware->in_obj) != ITEM_SHOPCONTAINER) {
     snprintf(buf3, sizeof(buf3), "SYSERR: '%s' (%ld) contained in something that's not a shopcontainer!", GET_OBJ_NAME(ware), GET_OBJ_VNUM(ware));
     mudlog(buf3, installer, LOG_SYSLOG, TRUE);
-    send_to_char(installer, "An unexpected error occurred when trying to install %s.\r\n", GET_OBJ_NAME(ware));
+    send_to_char(installer, "An unexpected error occurred when trying to install %s (code 2).\r\n", GET_OBJ_NAME(ware));
+    send_to_char(recipient, "An unexpected error occurred when trying to install %s (code 2).\r\n", GET_OBJ_NAME(ware));
     return FALSE;
   }
   
@@ -420,6 +424,7 @@ bool install_ware_in_target_character(struct obj_data *ware, struct char_data *i
       struct obj_data *container = ware->in_obj;
       obj_from_obj(ware);
       extract_obj(container);
+      container = NULL;
     }
     
     // Install it.
@@ -498,6 +503,7 @@ bool install_ware_in_target_character(struct obj_data *ware, struct char_data *i
       struct obj_data *container = ware->in_obj;
       obj_from_obj(ware);
       extract_obj(container);
+      container = NULL;
     }
     
     // Install it.
@@ -587,6 +593,10 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
       lose_nuyen_from_credstick(ch, cred, price, NUYEN_OUTFLOW_SHOP_PURCHASES);
     else
       lose_nuyen(ch, price, NUYEN_OUTFLOW_SHOP_PURCHASES);
+      
+    // Log it.
+    snprintf(buf, sizeof(buf), "Purchased cyber/bio '%s' (%ld) for %d nuyen.", GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj), price);
+    mudlog(buf, ch, LOG_GRIDLOG, TRUE);
       
     if (sell) {
       if (sell->type == SELL_BOUGHT && !--sell->stock) {
@@ -716,6 +726,7 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
         if (orig) {
           GET_OBJ_COST(orig) += GET_OBJ_COST(obj);
           extract_obj(obj);
+          obj = NULL;
         } else {
           obj_to_char(obj, ch);
         }
@@ -768,6 +779,7 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
       if (obj) {
         // Obj was loaded but not given to the character.
         extract_obj(obj);
+        obj = NULL;
       }
     }
     
@@ -799,6 +811,14 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
     snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " (x%d)", bought);
   send_to_char(buf2, ch);
   send_to_char("\r\n", ch);
+  
+  // Log it. Right now, this prints a null object most of the time.
+  /*
+  if (bought >= 1 && obj) {
+    snprintf(buf, sizeof(buf), "Purchased %d of '%s' (%ld) for %d nuyen.", bought, GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj), price);
+    mudlog(buf, ch, LOG_GRIDLOG, TRUE);
+  }
+  */
   
   if (order) {
     order->number -= bought;
@@ -934,9 +954,12 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
     }
     
     // Prevent trying to pre-order something if you don't have the scratch. Calculated using the flat price, not the negotiated one.
-    int preorder_cost = GET_OBJ_COST(obj) / PREORDER_COST_DIVISOR;
-    if (!cred)
+    int preorder_cost_for_one_object = GET_OBJ_COST(obj) / PREORDER_COST_DIVISOR;
+    
+    if (!cred || shop_table[shop_nr].type == SHOP_BLACK) {
       cash = TRUE;
+      cred = NULL;
+    }
       
     if (!cash && !cred) {
       mudlog("SYSERR: Ended up with !cash and !cred in shop purchasing!", ch, LOG_SYSLOG, TRUE);
@@ -945,10 +968,10 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
       return;
     }
     
-    if ((cash && GET_NUYEN(ch) < preorder_cost)
-        || (cred && GET_ITEM_MONEY_VALUE(cred) < preorder_cost))
+    if ((cash && GET_NUYEN(ch) < preorder_cost_for_one_object * buynum)
+        || (cred && GET_ITEM_MONEY_VALUE(cred) < preorder_cost_for_one_object * buynum))
     {
-      snprintf(buf, sizeof(buf), "%s It'll cost you %d nuyen to place that order. Come back when you've got the funds.", GET_CHAR_NAME(ch), preorder_cost);
+      snprintf(buf, sizeof(buf), "%s It'll cost you %d nuyen to place that order. Come back when you've got the funds.", GET_CHAR_NAME(ch), preorder_cost_for_one_object * buynum);
       do_say(keeper, buf, cmd_say, SCMD_SAYTO);
       extract_obj(obj);
       return;
@@ -1024,7 +1047,7 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
     act(buf, FALSE, ch, 0, keeper, TO_CHAR);
     
     // Placed order successfully. Order time is multiplied by 10% per availoffset tick, then multiplied again by quantity.
-    float totaltime = (GET_OBJ_AVAILDAY(obj) * (0.1 * GET_AVAIL_OFFSET(ch)) * buynum) / success;
+    float totaltime = (GET_OBJ_AVAILDAY(obj) * (GET_AVAIL_OFFSET(ch) ? 0.1 * GET_AVAIL_OFFSET(ch) : 1) * buynum) / success;
     
     if (access_level(ch, LVL_ADMIN)) {
       send_to_char(ch, "You use your staff powers to greatly accelerate the ordering process (was %.2f days).\r\n", totaltime);
@@ -1033,11 +1056,11 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
     
     // Pay the preorder cost.
     if (cash) {
-      lose_nuyen(ch, preorder_cost, NUYEN_OUTFLOW_SHOP_PURCHASES);
+      lose_nuyen(ch, preorder_cost_for_one_object * buynum, NUYEN_OUTFLOW_SHOP_PURCHASES);
     } else {
-      lose_nuyen_from_credstick(ch, cred, preorder_cost, NUYEN_OUTFLOW_SHOP_PURCHASES);
+      lose_nuyen_from_credstick(ch, cred, preorder_cost_for_one_object * buynum, NUYEN_OUTFLOW_SHOP_PURCHASES);
     }
-    send_to_char(ch, "You put down a %d nuyen deposit on your order.\r\n", preorder_cost);
+    send_to_char(ch, "You put down a %d nuyen deposit on your order.\r\n", preorder_cost_for_one_object * buynum);
     
     if (totaltime < 1) {
       int hours = MAX(1, (int)(24 * totaltime));
@@ -1069,12 +1092,13 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
       order->next = shop_table[shop_nr].order;
       order->sent = FALSE;
       shop_table[shop_nr].order = order;
-      order->paid = preorder_cost;
+      order->paid = preorder_cost_for_one_object;
       order->expiration = order->timeavail + (60 * 60 * 24 * PREORDERS_ARE_GOOD_FOR_X_DAYS);
     }
     
     // Clean up.
     extract_obj(obj);
+    obj = NULL;
   } else
   {
     // Give them the thing without fanfare.
@@ -1161,6 +1185,7 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
       // Remove the container and junk it.
       obj_from_char(container);
       extract_obj(container);
+      container = NULL;
     } else {
       obj_from_char(obj);
     }
@@ -1214,6 +1239,7 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
     sell->stock++;
  
  extract_obj(obj);
+ obj = NULL;
 }
 
 void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t shop_nr)
@@ -1282,6 +1308,7 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
       
       // Clean up so we don't leak the object.
       extract_obj(obj);
+      obj = NULL;
     }
     page_string(ch->desc, buf, 1);
     return;
@@ -1340,6 +1367,7 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
                 GET_OBJ_TYPE(obj) == ITEM_CYBERWARE ? 'E' : 'I', buy_price(obj, shop_nr));
       }
       extract_obj(obj);
+      obj = NULL;
     }
   } else
   {
@@ -1387,6 +1415,7 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
         break;
       }
       extract_obj(obj);
+      obj = NULL;
     }
   }
   page_string(ch->desc, buf, 1);
@@ -1600,7 +1629,7 @@ void shop_info(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
                 GET_WEAPON_REACH(obj), GET_WEAPON_REACH(obj) > 1 ? "s" : "");
       }
       
-      if (GET_WEAPON_FOCUS_RATING(obj)) {
+      if (GET_WEAPON_FOCUS_RATING(obj) > 0) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " It is a weapon focus of force %d.", GET_WEAPON_FOCUS_RATING(obj));
       }
       
@@ -2943,6 +2972,7 @@ void shop_uninstall(char *argument, struct char_data *ch, struct char_data *keep
       snprintf(buf, sizeof(buf), "%s Sorry, %s was too damaged to be worth reusing.", GET_CHAR_NAME(ch), GET_OBJ_NAME(obj));
       do_say(keeper, buf, cmd_say, SCMD_SAYTO);
       extract_obj(obj);
+      obj = NULL;
     }
   }
 }
@@ -2962,8 +2992,10 @@ struct obj_data *shop_package_up_ware(struct obj_data *obj) {
 }
 
 void save_shop_orders() {
+  PERF_PROF_SCOPE(pr_, __func__);
   FILE *fl;
   float totaltime = 0;
+  time_t curr_time = time(0);
   
   for (int shop_nr = 0; shop_nr <= top_of_shopt; shop_nr++) {
     // Wipe the existing shop order save files-- they're out of date.
@@ -2975,8 +3007,8 @@ void save_shop_orders() {
       struct shop_order_data *next_order, *temp;
       for (struct shop_order_data *order = shop_table[shop_nr].order; order; order = next_order) {
         next_order = order->next;
-        totaltime = order->expiration - time(0);
-        if (totaltime < 0) {
+        totaltime = order->expiration - curr_time;
+        if (totaltime <= 0) {
           // Notify them about the expiry, but only for orders with a prepay-- this prevents the 7-day spamstorm when this change is first launched.
           if (order->paid > 0) {
             int repayment_amount = order->paid - (order->paid / PREORDER_RESTOCKING_FEE_DIVISOR);

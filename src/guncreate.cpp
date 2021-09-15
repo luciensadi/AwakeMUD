@@ -10,6 +10,7 @@
 #include "olc.h"
 #include "newmagic.h"
 #include "bullet_pants.h"
+#include "config.h"
 
 #define CH d->character
 #define OBJ d->edit_obj
@@ -24,7 +25,7 @@ void aedit_disp_menu(struct descriptor_data *d)
   CLS(CH);
   send_to_char(CH, "1) Weapon: ^c%s^n\r\n", weapon_type[GET_AMMOBOX_WEAPON(OBJ)]);
   send_to_char(CH, "2) Type: ^c%s^n\r\n", ammo_type[GET_AMMOBOX_TYPE(OBJ)].name);
-  send_to_char(CH, "3) Amount: ^c%d^n\r\n", GET_AMMOBOX_INTENDED_QUANTITY(OBJ));
+  send_to_char(CH, "3) Amount: ^c%d^n  (^c%d^n nuyen)\r\n", GET_AMMOBOX_INTENDED_QUANTITY(OBJ), get_ammo_cost(GET_AMMOBOX_WEAPON(OBJ), GET_AMMOBOX_TYPE(OBJ)) * GET_AMMOBOX_INTENDED_QUANTITY(OBJ));
   send_to_char(CH, "q) Quit\r\nEnter your choice: ");
   d->edit_mode = AEDIT_MENU;
 }
@@ -34,7 +35,7 @@ void create_ammo(struct char_data *ch)
   struct obj_data *ammo = read_object(OBJ_BLANK_AMMOBOX, VIRTUAL);
   STATE(ch->desc) = CON_AMMO_CREATE;
   GET_AMMOBOX_WEAPON(ammo) = WEAP_HOLDOUT;
-  GET_AMMOBOX_INTENDED_QUANTITY(ammo) = 10;
+  GET_AMMOBOX_INTENDED_QUANTITY(ammo) = AMMOBUILD_BATCH_SIZE;
   GET_AMMOBOX_QUANTITY(ammo) = 0;
   ch->desc->edit_obj = ammo;
   aedit_disp_menu(ch->desc);
@@ -74,10 +75,16 @@ void aedit_parse(struct descriptor_data *d, const char *arg)
       aedit_disp_weapon_menu(d);
       break;
     case '2':
-      aedit_disp_type_menu(d);
+      if (GET_AMMOBOX_WEAPON(OBJ) == TYPE_TASER) {
+        send_to_char("Only normal taser darts are available.\r\n", CH);
+        GET_AMMOBOX_TYPE(OBJ) = AMMO_NORMAL;
+        aedit_disp_menu(d);
+      } else {
+        aedit_disp_type_menu(d);
+      }
       break;
     case '3':
-      send_to_char(CH,"Enter Quantity (In multiples of 10): ");
+      send_to_char(CH,"Enter Quantity (in multiples of %d): ", AMMOBUILD_BATCH_SIZE);
       d->edit_mode = AEDIT_QUANTITY;
       break;
     case 'q':
@@ -105,6 +112,7 @@ void aedit_parse(struct descriptor_data *d, const char *arg)
      send_to_char("Invalid selection.\r\nWeapon Type: ", CH);
    else {
      GET_AMMOBOX_WEAPON(OBJ) = number;
+     GET_AMMOBOX_TYPE(OBJ) = AMMO_NORMAL;
      aedit_disp_menu(d);
    }
    break; 
@@ -113,7 +121,7 @@ void aedit_parse(struct descriptor_data *d, const char *arg)
       number = 0;
     if (number > 1000)
       number = 1000;
-    GET_AMMOBOX_INTENDED_QUANTITY(OBJ) = number - (number % 10);
+    GET_AMMOBOX_INTENDED_QUANTITY(OBJ) = number - (number % AMMOBUILD_BATCH_SIZE);
     aedit_disp_menu(d);
     break;
   }
@@ -146,7 +154,7 @@ int gunsmith_skill(int weapon_type)
 
 bool ammo_test(struct char_data *ch, struct obj_data *obj)
 {
-  if (GET_NUYEN(ch) <= get_ammo_cost(GET_AMMOBOX_WEAPON(obj), GET_AMMOBOX_TYPE(obj)) * 10) {
+  if (GET_NUYEN(ch) <= get_ammo_cost(GET_AMMOBOX_WEAPON(obj), GET_AMMOBOX_TYPE(obj)) * AMMOBUILD_BATCH_SIZE) {
     send_to_char(ch, "You don't have enough nuyen for the materials to create %s.\r\n",
                  GET_OBJ_NAME(obj));
     if (IS_WORKING(ch))
@@ -169,7 +177,7 @@ bool ammo_test(struct char_data *ch, struct obj_data *obj)
     }
   } else
     GET_AMMOBOX_TIME_TO_COMPLETION(obj) = -1;
-  lose_nuyen(ch, (int)((get_ammo_cost(GET_AMMOBOX_WEAPON(obj), GET_AMMOBOX_TYPE(obj)) * 10) * (1 - (csuccess * .05))), NUYEN_OUTFLOW_AMMO_BUILDING);
+  lose_nuyen(ch, (int)((get_ammo_cost(GET_AMMOBOX_WEAPON(obj), GET_AMMOBOX_TYPE(obj)) * AMMOBUILD_BATCH_SIZE) * (1 - (csuccess * .05))), NUYEN_OUTFLOW_AMMO_BUILDING);
   GET_OBJ_VAL(obj, 10) = GET_AMMOBOX_TIME_TO_COMPLETION(obj);
   return TRUE;
 }

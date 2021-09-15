@@ -50,11 +50,11 @@ idnum(0), bank(0), tag(NULL), name(NULL), alias(NULL)
 /************* Destructor *************/
 Playergroup::~Playergroup() {
   if (tag)
-    delete tag;
+    delete [] tag;
   if (name)
-    delete name;
+    delete [] name;
   if (alias)
-    delete alias;
+    delete [] alias;
 }
 
 /************* Getters *************/
@@ -100,26 +100,11 @@ bool Playergroup::set_tag(const char *newtag, struct char_data *ch) {
     return FALSE;
   }
   
-  const char *ptr = newtag;
-  int len = 0;
-  while (*ptr) {
-    if (*ptr == '^') {
-      if (*(ptr+1) == '\0') {
-        send_to_char("Sorry, tag strings can't end with the ^ character.\r\n", ch);
-        return FALSE;
-      }
-      else if (*(ptr+1) == '^') {
-        ptr += 2;
-        len += 1;
-      }
-      else {
-        ptr += 2;
-      }
-    } else {
-      len += 1;
-      ptr += 1;
-    }
-  }
+  int len = get_string_length_after_color_code_removal(newtag, ch);
+  
+  // Silent failure: We already sent the error message in get_string_length_after_color_code_removal().
+  if (len == -1)
+    return FALSE;
   
   if (len < 1) {
     send_to_char("Tags must contain at least one printable character.\r\n", ch);
@@ -391,7 +376,7 @@ bool Playergroup::load_pgroup_from_db(long load_idnum) {
     return TRUE;
   } else {
     snprintf(buf, MAX_STRING_LENGTH, "Error loading playergroup from DB-- group %ld does not seem to exist.", load_idnum);
-    log(buf);
+    mudlog(buf, NULL, LOG_PGROUPLOG, TRUE);
     mysql_free_result(res);
     return FALSE;
   }

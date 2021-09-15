@@ -1064,6 +1064,11 @@ void char_from_room(struct char_data * ch)
     shutdown();
   }
   
+  if (IS_WORKING(ch)) {
+    send_to_char("You stop working.\r\n", ch);
+    STOP_WORKING(ch);
+  }
+  
   if (CH_IN_COMBAT(ch))
     stop_fighting(ch);
   
@@ -1301,7 +1306,7 @@ bool check_obj_to_x_preconditions(struct obj_data * object, struct char_data *ch
   
   // Fail if the object already has next_content. This implies that it's part of someone else's linked list-- never merge them!
   if (object->next_content) {
-    strcat(ENDOF(buf3), "- It's already part of a next_content linked list.\r\n");
+    strlcat(buf3, "- It's already part of a next_content linked list.\r\n", sizeof(buf3));
   }
   
   // Can't give away something that's worn by someone else.

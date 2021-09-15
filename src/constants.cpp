@@ -482,6 +482,7 @@ const char *player_bits[] =
     "TELLS_MUTED",
     "NEWBIE_MUTED",
     "IS_CYBERDOC",
+    "PAID_FOR_CLOSECOMBAT",
     "\n"
   };
 
@@ -579,13 +580,13 @@ struct preference_bit_struct preference_bits_v2[] = {
   { "Helplog"              , TRUE , TRUE  },
   { "Purgelog"             , TRUE , TRUE  },
   { "No Autokill"          , FALSE, TRUE  },
-  { "Voice Names"          , FALSE, TRUE  },
+  { "Voice Names"          , TRUE , TRUE  },
   { "FuckupLog"            , TRUE , TRUE  },
   { "EconLog"              , TRUE , TRUE  },
   { "Brief"                , TRUE , TRUE  },
   { "Highlights"           , TRUE , TRUE  },
   { "Pseudolanguage"       , TRUE , TRUE  },
-  { "No Idle Nuyen Message", FALSE, TRUE  },
+  { "No Idle Nuyen Line"   , FALSE, TRUE  },
   { "Cyberdocs Allowed"    , FALSE, TRUE  },
   { "\n"                   , 0    , 0     }
 };
@@ -705,7 +706,9 @@ const char *affected_bits[] =
     "Binding",
     "Spell Design",
     "Surprised",
-    "Ammo Building"
+    "Ammo Building",
+    "Engaging in Close Combat",
+    "Tries for Close Combat"
   };
 
 /* CON_x */
@@ -2460,7 +2463,8 @@ const char *workshops[] = {
   "Vehicle",
   "Weaponry",
   "Medical",
-  "Ammunition"
+  "Ammunition",
+  "Gunsmithing"
 };
 
 const char *kit_workshop_facility[] = {

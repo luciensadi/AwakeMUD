@@ -12,11 +12,15 @@
 #include "screen.h"
 #include "constants.h"
 #include "olc.h"
+#include "config.h"
 
 #define POWER(name) void (name)(struct char_data *ch, struct char_data *spirit, struct spirit_data *spiritdata, char *arg)
 #define SPELLCASTING 0
 #define CONJURING 1
 #define FAILED_CAST "You fail to bind the mana to your will.\r\n"
+
+//  set_fighting(ch, vict); set_fighting(vict, ch);
+#define SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST {WAIT_STATE(ch, (int) (OFFENSIVE_SPELL_WAIT_STATE_TIME));}
 
 extern void die(struct char_data *ch);
 extern void damage_equip(struct char_data *ch, struct char_data *vict, int power, int type);
@@ -36,26 +40,46 @@ struct char_data *find_spirit_by_id(int spiritid, long playerid)
   return NULL;
 }
 
-void adept_release_spell(struct char_data *ch)
+void adept_release_spell(struct char_data *ch, bool end_spell)
 {
-  struct sustain_data *spell = GET_SUSTAINED(ch);
+  struct sustain_data *spell = GET_SUSTAINED(ch), *ospell = NULL;
   for (; spell; spell = spell->next)
     if (spell->spirit == ch)
       break;
+  
+  if (!spell) {
+    mudlog("SYSERR: Could not find spell in adept_release_spell!", ch, LOG_SYSLOG, TRUE);
+    return;
+  }
+  
   GET_SUSTAINED_NUM(ch)--;
   GET_SUSTAINED_FOCI(spell->other)--;
   spell->spirit = NULL;
-  for (struct sustain_data *ospell = GET_SUSTAINED(spell->other); ospell; ospell = ospell->next)
+  for (ospell = GET_SUSTAINED(spell->other); ospell; ospell = ospell->next)
     if (ospell->idnum == spell->idnum && ospell->other == ch) {
       ospell->spirit = NULL;
       break;
     }
+    
+  if (!ospell) {
+    mudlog("SYSERR: Could not match spell with ospell in adept_release_spell!", ch, LOG_SYSLOG, TRUE);
+    return;
+  }
+  
   strcpy(buf, spells[spell->spell].name);
   if (spell->spell == SPELL_INCATTR || spell->spell == SPELL_INCCYATTR ||
       spell->spell == SPELL_DECATTR || spell->spell == SPELL_DECCYATTR)
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (%s)", attributes[spell->subtype]);
-  send_to_char(ch, "You stop sustaining %s.\r\n", buf);
-  send_to_char(spell->other, "You suddenly feel the burden of your %s spell fall back on to you.\r\n", buf);
+  
+  
+  if (end_spell) {
+    send_to_char(ch, "You deliberately misalign your powers and disrupt %s.\r\n", buf);
+    send_to_char(spell->other, "You briefly feel the burden of your tattered %s spell fall back on to you before it fizzles away.\r\n", buf);
+    end_sustained_spell(spell->other, ospell);
+  } else {
+    send_to_char(ch, "You stop sustaining %s.\r\n", buf);
+    send_to_char(spell->other, "You suddenly feel the burden of your %s spell fall back on to you.\r\n", buf);
+  }
 }
 
 void end_sustained_spell(struct char_data *ch, struct sustain_data *sust)
@@ -67,7 +91,7 @@ void end_sustained_spell(struct char_data *ch, struct sustain_data *sust)
       {
         if (vsust->spirit) {
           if (GET_TRADITION(vsust->spirit) == TRAD_ADEPT)
-            adept_release_spell(vsust->spirit);
+            adept_release_spell(vsust->spirit, FALSE);
           else {  
             GET_SUSTAINED_FOCI(sust->other)--;
             GET_SUSTAINED_NUM(vsust->spirit)--;
@@ -607,6 +631,8 @@ void end_spirit_existance(struct char_data *ch, bool message)
       GET_NUM_SPIRITS(tempc)--;
       if (message && d->character)
         send_to_char(d->character, "%s returns to the metaplanes, its existence in this world finished.\r\n", CAP(GET_NAME(ch)));
+        
+      GET_ELEMENTALS_DIRTY_BIT(tempc) = TRUE;
       break;
     }
   }
@@ -619,6 +645,7 @@ void elemental_fulfilled_services(struct char_data *ch, struct char_data *mob, s
   {
     send_to_char(ch, "Its services fulfilled, %s departs to the metaplanes.\r\n", CAP(GET_NAME(mob)));
     end_spirit_existance(mob, FALSE);
+    GET_ELEMENTALS_DIRTY_BIT(ch) = TRUE;
   }
 }
 
@@ -716,25 +743,63 @@ bool spell_drain(struct char_data *ch, int type, int force, int damage)
   else if (type)
     damage += spells[type].draindamage + 3;
   magic_perception(ch, force, type);
-  snprintf(buf, sizeof(buf), "Drain Test: F:%d%s T:%d Sk: %d", force, wound_name[damage], target, GET_WIL(ch) + GET_DRAIN(ch)); 
+  snprintf(buf, sizeof(buf), "Drain Test: F:%d%s TN:%d Dice: %d", force, wound_name[damage], target, GET_WIL(ch) + GET_DRAIN(ch)); 
   success = success_test(GET_WIL(ch) + GET_DRAIN(ch), target);
   damage = convert_damage(stage(-success, damage));
-  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " S:%d S:%d", success, damage);
-  act(buf, FALSE, ch, NULL, NULL, TO_ROLLS); 
-  if (force > GET_MAG(ch) / 100 || IS_PROJECT(ch)) {
-    GET_PHYSICAL(ch) -= damage *100;
+  act(buf, FALSE, ch, NULL, NULL, TO_ROLLS);
+  
+  if (damage <= 0)
+    return FALSE;
+  
+  // Apply physical drain damage.
+  if (force > GET_MAG(ch) / 100 || IS_PROJECT(ch)) {    
+    // Iterate through bioware to find a platelet factory.
+    struct char_data *chptr = (IS_PROJECT(ch) ? ch->desc->original : ch);
+    for (struct obj_data *bio = chptr->bioware; bio && damage > 0; bio = bio->next_content) {
+      if (GET_OBJ_VAL(bio, 0) == BIO_PLATELETFACTORY && damage >= 3) {
+        damage--;
+      }
+      if (GET_OBJ_VAL(bio, 0) == BIO_TRAUMADAMPNER) {
+        damage--;
+        GET_MENTAL(chptr) -= 100;
+      }
+    }
+    
+    if (damage <= 0)
+      return FALSE;
+    
+    GET_PHYSICAL(ch) -= damage * 100;
     if (IS_PROJECT(ch)) {
       GET_PHYSICAL(ch->desc->original) -= damage * 100;
       AFF_FLAGS(ch->desc->original).SetBit(AFF_DAMAGED);
     }
-  } else
-  {
-    GET_MENTAL(ch) -= damage * 100;
-    if (GET_MENTAL(ch) < 0) {
-      GET_PHYSICAL(ch) += GET_MENTAL(ch);
-      GET_MENTAL(ch) = 0;
+  } 
+  
+  // Apply mental drain damage.
+  else {
+    // Iterate through cyberware to find a trauma damper.
+    for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content) {
+      if (GET_OBJ_VAL(bio, 0) == BIO_TRAUMADAMPNER) {
+        damage--;
+        break;
+      }
     }
+    
+    if (damage <= 0)
+      return FALSE;
+    
+    GET_MENTAL(ch) -= damage * 100;
   }
+  
+  // Roll over mental damage to physical.
+  if (GET_MENTAL(ch) < 0) {
+    GET_PHYSICAL(ch) += GET_MENTAL(ch);
+    GET_MENTAL(ch) = 0;
+  }
+  
+  snprintf(buf, sizeof(buf), "Successes: %d  Damage: %d", success, damage);
+  act(buf, FALSE, ch, NULL, NULL, TO_ROLLS); 
+  
   update_pos(ch);
   if ((GET_POS(ch) <= POS_STUNNED) && (GET_POS(ch) > POS_DEAD))
   {
@@ -1001,6 +1066,7 @@ void cast_combat_spell(struct char_data *ch, int spell, int force, char *arg)
       act("You can't affect $N with manabolt.", TRUE, ch, 0, vict, TO_CHAR);
       return;
     }
+    SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST;    
     
     success = success_test(skill, GET_WIL(vict) + target_modifiers);
     if (success > 0 && GET_REFLECT(vict) && (reflected = reflect_spell(ch, vict, spell, force, 0, GET_WIL(ch), success))) {
@@ -1027,7 +1093,7 @@ void cast_combat_spell(struct char_data *ch, int spell, int force, char *arg)
       if (IS_NPC(vict) && !IS_NPC(ch))
         GET_LASTHIT(vict) = GET_IDNUM(ch);
     } else
-      send_to_char(FAILED_CAST, ch);
+      send_to_char(FAILED_CAST, reflected ? vict : ch);
     spell_drain(reflected ? vict : ch, spell, force, basedamage);
     break;
   case SPELL_STUNBOLT:
@@ -1035,6 +1101,7 @@ void cast_combat_spell(struct char_data *ch, int spell, int force, char *arg)
       act("You can't affect $N with stunbolt.", TRUE, ch, 0, vict, TO_CHAR);
       return;
     }
+    SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST;
     
     success = success_test(skill, GET_WIL(vict) + target_modifiers);
     if (success > 0 && GET_REFLECT(vict) && (reflected = reflect_spell(ch, vict, spell, force, 0, GET_WIL(ch), success))) {
@@ -1061,7 +1128,7 @@ void cast_combat_spell(struct char_data *ch, int spell, int force, char *arg)
       if (IS_NPC(vict) && !IS_NPC(ch))
         GET_LASTHIT(vict) = GET_IDNUM(ch);
     } else
-      send_to_char(FAILED_CAST, ch);
+      send_to_char(FAILED_CAST, reflected ? vict : ch);
     spell_drain(reflected ? vict : ch, spell, force, basedamage);
     break;
   case SPELL_POWERBOLT:
@@ -1069,6 +1136,7 @@ void cast_combat_spell(struct char_data *ch, int spell, int force, char *arg)
       act("You have the KILLER flag, so you can't affect $N with powerbolt.", TRUE, ch, 0, vict, TO_CHAR);
       return;
     }
+    SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST;
     
     success = success_test(skill, GET_BOD(vict) + target_modifiers);
     if (success > 0 && GET_REFLECT(vict) && (reflected = reflect_spell(ch, vict, spell, force, 0, GET_BOD(ch), success))) {
@@ -1095,7 +1163,7 @@ void cast_combat_spell(struct char_data *ch, int spell, int force, char *arg)
       if (IS_NPC(vict) && !IS_NPC(ch))
         GET_LASTHIT(vict) = GET_IDNUM(ch);
     } else
-      send_to_char(FAILED_CAST, ch);
+      send_to_char(FAILED_CAST, reflected ? vict : ch);
     spell_drain(reflected ? vict : ch, spell, force, basedamage);
     break;
   }
@@ -1123,6 +1191,7 @@ void cast_detection_spell(struct char_data *ch, int spell, int force, char *arg,
   switch (spell)
   {
   case SPELL_MINDLINK:
+    WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
     success = success_test(skill, 4 + target_modifiers);
     for (struct sustain_data *sust = GET_SUSTAINED(ch); sust; sust = sust->next)
       if (sust->spell == SPELL_MINDLINK) {
@@ -1143,6 +1212,7 @@ void cast_detection_spell(struct char_data *ch, int spell, int force, char *arg,
     spell_drain(ch, spell, force, 0);
     break;
   case SPELL_COMBATSENSE:
+    WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
     success = success_test(skill, 4 + target_modifiers);
     if (success > 0) {
       create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
@@ -1188,6 +1258,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
         send_to_char("They aren't affected by any drugs.\r\n", ch);
         return;
       }
+      WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
       success = success_test(skill, base_target + target_modifiers);
       if (success > 0 && !AFF_FLAGGED(vict, AFF_DETOX)) {
         create_sustained(ch, vict, spell, force, 0, success, spells[SPELL_STABILIZE].draindamage);
@@ -1198,6 +1269,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       spell_drain(ch, spell, force, 0);
       break;
     case SPELL_STABILIZE:
+      WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
       success = success_test(skill, 4 + ((GET_LAST_DAMAGETIME(vict) - time(0)) / SECS_PER_MUD_HOUR) + target_modifiers);
       if (success > 0 && force >= (GET_PHYSICAL(vict) <= 0 ? -(GET_PHYSICAL(vict) / 100) : 50)) {
         create_sustained(ch, vict, spell, force, 0, success, spells[SPELL_STABILIZE].draindamage);
@@ -1208,6 +1280,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       spell_drain(ch, spell, force, 0);
       break;
     case SPELL_RESISTPAIN:
+      WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
       success = success_test(skill, 4 + target_modifiers);
       if (GET_PHYSICAL(vict) <= 0)
         drain = DEADLY;
@@ -1225,6 +1298,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       spell_drain(ch, spell, force, 0);
       break;
     case SPELL_HEALTHYGLOW:
+      WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
       success = success_test(skill, 4 + target_modifiers);
       if (success > 0) {
         create_sustained(ch, vict, spell, force, 0, success, spells[SPELL_HEALTHYGLOW].draindamage);
@@ -1241,6 +1315,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       }
       // fall through
     case SPELL_HEAL:
+      WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
       success = MIN(force, success_test(skill, 10 - (int)(GET_ESS(vict) / 100) + target_modifiers + (int)(GET_INDEX(ch) / 200)));
       if (GET_PHYSICAL(vict) <= 0)
         drain = DEADLY;
@@ -1315,10 +1390,11 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
           return;
         }
       }
+      WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
       
       if ((success = success_test(skill, GET_REA(vict) + target_modifiers)) > 0) {
         create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
-        send_to_char("The world slows down around you.\r\n", ch);
+        send_to_char("The world slows down around you.\r\n", vict);
         act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
       } else
         send_to_char(FAILED_CAST, ch);
@@ -1366,6 +1442,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
         act(buf, TRUE, ch, 0, vict, TO_CHAR);
         return;
       }
+      WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
       int target = target_modifiers;
       if (spell == SPELL_INCREA)
         target += GET_REA(vict);
@@ -1418,6 +1495,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
         act("You have the KILLER flag, so you can't affect $N with a mind-altering spell.", TRUE, ch, 0, vict, TO_CHAR);
         return;
       }
+      WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
       
       success = success_test(skill, (spell == SPELL_CONFUSION ? GET_WIL(vict) : GET_INT(vict)) + target_modifiers);
       if (success > 0 && GET_REFLECT(vict) && (reflected = reflect_spell(ch, vict, spell, force, 0, (spell == SPELL_CONFUSION ? GET_WIL(ch) : GET_INT(ch)), success))) {
@@ -1430,13 +1508,14 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
         act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
         create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
       } else
-        send_to_char(FAILED_CAST, ch);
+        send_to_char(FAILED_CAST, reflected ? vict : ch);
       spell_drain(reflected ? vict : ch, spell, force, 0);
       break;
     case SPELL_INVIS:
     case SPELL_IMP_INVIS:
       if (!check_spell_victim(ch, vict, spell, arg))
         return;
+      WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
         
       success = success_test(skill, 4 + target_modifiers);
       if (success > 0) {
@@ -1450,6 +1529,8 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
     case SPELL_STEALTH:
       if (!check_spell_victim(ch, vict, spell, arg))
         return;
+      
+      WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
         
       success = success_test(skill, 4 + target_modifiers);
       if (success > 0) {
@@ -1461,6 +1542,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       spell_drain(ch, spell, force, 0);
       break;
     case SPELL_SILENCE:
+      WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
       success = success_test(skill, 4 + target_modifiers);
       if (success > 0) {
         act("The room falls silent.", FALSE, ch, 0, 0, TO_ROOM);
@@ -1547,6 +1629,8 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
   case SPELL_ARMOR:
     if (!check_spell_victim(ch, vict, spell, arg))
       return;
+      
+    WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
     success = success_test(skill, 6 + target_modifiers);
     if (success > 0) {
       create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
@@ -1557,6 +1641,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
     spell_drain(ch, spell, force, 0);
     break;
   case SPELL_POLTERGEIST:
+    WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
     success = success_test(skill, 4 + target_modifiers);
     if (success > 0) {
       create_sustained(ch, ch, spell, force, 0, success, spells[spell].draindamage);
@@ -1567,6 +1652,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
     spell_drain(ch, spell, force, 0);
     break;
   case SPELL_LIGHT:
+    WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
     success = success_test(skill, 4 + target_modifiers);
     if (success > 0) {
       create_sustained(ch, ch, spell, force, 0, success, spells[spell].draindamage);
@@ -1581,6 +1667,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       send_to_char("You can't create ice in here!\r\n", ch);
       return;
     }
+    WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
     success = success_test(skill, 4 + target_modifiers);
     if (success > 0) {
       ch->in_room->icesheet[0] = (int)(3.14 * ((GET_MAG(ch) * GET_MAG(ch)) / 10000));
@@ -1603,6 +1690,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       act("You have the KILLER flag, so you can't affect $N with ignite.", TRUE, ch, 0, vict, TO_CHAR);
       return;
     }
+    SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST;
     
     success = success_test(skill, 4 + target_modifiers); 
     if (success > 0 && GET_REFLECT(vict) && (reflected = reflect_spell(ch, vict, spell, force, 0, 4, success))) {
@@ -1622,11 +1710,12 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
         GET_LASTHIT(vict) = GET_IDNUM(ch);
     } else {
       send_to_char("You feel your body heat slightly then return to normal.\r\n", vict);
-      send_to_char("You fail to generate enough heat in your target.\r\n", ch);
+      send_to_char("You fail to generate enough heat in your target.\r\n", reflected ? vict : ch);
     }
     spell_drain(reflected ? vict : ch, spell, force, 0);
     break;
   case SPELL_SHADOW:
+    WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
     success = success_test(skill, 4 + target_modifiers);
     if (success > 0) {
       create_sustained(ch, ch, spell, force, 0, success, spells[spell].draindamage);
@@ -1652,6 +1741,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       act("You have the KILLER flag, so you can't affect $N with clout.", TRUE, ch, 0, vict, TO_CHAR);
       return;
     }
+    SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST;
       
     send_to_char("You feel a rush of air head towards you!\r\n", vict);
     
@@ -1699,6 +1789,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       act("You have the KILLER flag, so you can't affect $N with flamethrower.", TRUE, ch, 0, vict, TO_CHAR);
       return;
     }
+    SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST;
   
     act("$n's hands seem to spontaneously combust as $e directs a stream of flame at $N!", TRUE, ch, 0, vict, TO_ROOM);
     
@@ -1732,7 +1823,10 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
         act("The flames impact $n, but disperse on impact.", FALSE, vict, 0, ch, TO_ROOM);
         send_to_char("The flames rapidly disperse around you, causing only mild discomfort.\r\n", vict);
       }
-      damage_equip(ch, vict, force, TYPE_FIRE);
+      
+      if (IS_NPC(ch) || IS_NPC(vict)) {
+        damage_equip(ch, vict, force, TYPE_FIRE);
+      }
       if (!damage(ch, vict, dam, TYPE_MANIPULATION_SPELL, PHYSICAL) && number(0, 6) <= basedamage + 1) {
         act("^RThe flames continue to burn around $m!^N", TRUE, vict, 0, 0, TO_ROOM);
         send_to_char("^RYou continue to burn!\r\n", vict);
@@ -1757,6 +1851,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       act("You have the KILLER flag, so you can't affect $N with acid stream.", TRUE, ch, 0, vict, TO_CHAR);
       return;
     }
+    SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST;
     act("Dark clouds form around $n moments before it condenses into a dark sludge and flies towards $N!", TRUE, ch, 0, vict, TO_ROOM);
     
     success += success_test(skill, 4 + target_modifiers);
@@ -1790,7 +1885,10 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
         act("The acid splashes on $n, but $e doesn't seem to flinch.", FALSE, vict, 0, ch, TO_ROOM);
         send_to_char("You are splashed by the acid, but it causes nothing more than a moment's irritation.\r\n", vict);
       }
-      damage_equip(ch, vict, force, TYPE_ACID);
+      
+      if (IS_NPC(ch) || IS_NPC(vict)) {
+        damage_equip(ch, vict, force, TYPE_ACID);
+      }
       AFF_FLAGS(vict).SetBit(AFF_ACID);
       damage(ch, vict, dam, TYPE_MANIPULATION_SPELL, PHYSICAL);
       if (IS_NPC(vict) && !IS_NPC(ch))
@@ -1812,6 +1910,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       act("You have the KILLER flag, so you can't affect $N with lightning bolt.", TRUE, ch, 0, vict, TO_CHAR);
       return;
     }
+    SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST;
     act("Lightning bursts forth from $n and heads directly towards $N!", TRUE, ch, 0, vict, TO_ROOM);
     
     success += success_test(skill, 4 + target_modifiers);
@@ -1874,6 +1973,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       act("You have the KILLER flag, so you can't affect $N with your laser.", TRUE, ch, 0, vict, TO_CHAR);
       return;
     }
+    SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST;
     act("A thin laser beam is emitted from $n and heads directly towards $N!", TRUE, ch, 0, vict, TO_ROOM);
     
     success += success_test(skill, 4 + target_modifiers);
@@ -1932,6 +2032,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       act("You have the KILLER flag, so you can't affect $N with your steam cloud.", TRUE, ch, 0, vict, TO_CHAR);
       return;
     }
+    SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST;
       
     send_to_char("You see a cloud of steam vapours rush towards you!\r\n", vict);
     
@@ -1983,6 +2084,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       act("You have the KILLER flag, so you can't affect $N with thunderbolt.", TRUE, ch, 0, vict, TO_CHAR);
       return;
     }
+    SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST;
       
     send_to_char("The air around you explodes into a deafening roar!\r\n", vict);
     
@@ -2034,6 +2136,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       act("You have the KILLER flag, so you can't affect $N with waterbolt.", TRUE, ch, 0, vict, TO_CHAR);
       return;
     }
+    SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST;
       
     send_to_char("You see a bolt of water head towards you!\r\n", vict);
     
@@ -2077,7 +2180,7 @@ void cast_spell(struct char_data *ch, int spell, int sub, int force, char *arg)
   if (spells[spell].duration == SUSTAINED)
   {
     if (GET_SUSTAINED_NUM(ch) >= GET_SKILL(ch, SKILL_SORCERY)) {
-      send_to_char("You cannot sustain anymore spells.\r\n", ch);
+      send_to_char("You cannot sustain any more spells.\r\n", ch);
       return;
     }
   }
@@ -2442,6 +2545,7 @@ ACMD(do_contest)
         delete sdata;
         break;
       }
+    GET_ELEMENTALS_DIRTY_BIT(ch) = TRUE;
     if (GET_MOB_VNUM(mob) < 25 || GET_MOB_VNUM(mob) > 28) {
       act("$n senses an opportunity and vanishes!", TRUE, mob, 0, 0, TO_ROOM);
       extract_char(mob);
@@ -2464,6 +2568,8 @@ ACMD(do_contest)
         GET_SPIRIT(ch) = sdata->next;
         GET_NUM_SPIRITS(ch)++;
         GET_NUM_SPIRITS(caster)--;
+        GET_ELEMENTALS_DIRTY_BIT(ch) = TRUE;
+        GET_ELEMENTALS_DIRTY_BIT(caster) = TRUE;
         break;
       }
     GET_ACTIVE(mob) = GET_IDNUM(ch);
@@ -2751,7 +2857,8 @@ ACMD(do_release)
       return;
     }
     int real_mob;
-    for (struct spirit_data *spirit = GET_SPIRIT(ch); spirit; spirit = spirit->next)
+    GET_ELEMENTALS_DIRTY_BIT(ch) = TRUE;
+    for (struct spirit_data *spirit = GET_SPIRIT(ch); spirit; spirit = spirit->next) {
       if (--i == 0) {
         struct spirit_data *temp;
         if (GET_TRADITION(ch) == TRAD_HERMETIC) {
@@ -2773,6 +2880,7 @@ ACMD(do_release)
         GET_NUM_SPIRITS(ch)--;
         return;
       }
+    }
   } else if (is_abbrev(buf, "all")) {
     for (sust = GET_SUSTAINED(ch); sust; sust = next) {
       next = sust->next;
@@ -3028,12 +3136,14 @@ ACMD(do_conjure)
         spirdata->next = GET_SPIRIT(ch);
         GET_SPIRIT(ch) = spirdata;
         GET_NUM_SPIRITS(ch)++;
+        GET_ELEMENTALS_DIRTY_BIT(ch) = TRUE;
         struct char_data *mob = create_elemental(ch, spirit, force, spirdata->id, TRAD_SHAMANIC);
         send_to_char("The spirit hears your call and comes forth from the metaplanes.\r\n", ch);
         act("$n fades into existance on the astral plane.", TRUE, mob, 0, 0, TO_ROOM);
         
         AFF_FLAGS(ch).SetBit(AFF_GROUP);
         AFF_FLAGS(mob).SetBit(AFF_GROUP);
+        GET_SPARE2(mob) = NUMBER_OF_IG_DAYS_FOR_SPIRIT_TO_LAST;
       }
     }
   }
@@ -3088,6 +3198,8 @@ ACMD(do_forget)
 
      REMOVE_FROM_LIST(spell, GET_SPELLS(ch), next);
      delete spell;
+     
+     GET_SPELLS_DIRTY_BIT(ch) = TRUE;
      return;
    }
 }
@@ -3249,6 +3361,7 @@ ACMD(do_learn)
   GET_SPELLS(ch) = spell;
   send_to_char(ch, "You spend %d karma and learn %s.\r\n", force - oldforce, spell->name);
   extract_obj(obj);
+  GET_SPELLS_DIRTY_BIT(ch) = TRUE;
 }
 
 ACMD(do_elemental)
@@ -3894,6 +4007,10 @@ ACMD(do_order)
     send_to_char(ch, "Which %s do you wish to give an order to?\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
     return;
   }
+  
+  // It's not worth parsing this whole thing out for changes. If they use the command, just consider their spirits dirty.
+  GET_ELEMENTALS_DIRTY_BIT(ch) = TRUE;
+  
   for (spirit = GET_SPIRIT(ch); spirit; spirit = spirit->next)
     if (--i == 0)
       break;
@@ -4047,6 +4164,7 @@ ACMD(do_domain)
           REMOVE_FROM_LIST(spirit, GET_SPIRIT(ch), next);
           GET_NUM_SPIRITS(ch)--;
           delete spirit;
+          GET_ELEMENTALS_DIRTY_BIT(ch) = TRUE;
         }
       }
     }
@@ -4095,7 +4213,7 @@ void deactivate_power(struct char_data *ch, int power)
       break;
     case ADEPT_LIVINGFOCUS:
       if (GET_SUSTAINED_NUM(ch))
-        adept_release_spell(ch);
+        adept_release_spell(ch, FALSE);
       break;
   }
 }
@@ -4766,7 +4884,7 @@ void init_parse(struct descriptor_data *d, char *arg)
         send_to_char("Your tradition/apect/initiation combination isn't able to learn that metamagic technique. Select ability to learn: ", CH);
       } else {
         init_cost(CH, TRUE);
-        GET_METAMAGIC(CH, number)++;
+        SET_METAMAGIC(CH, number, GET_METAMAGIC(CH, number) + 1);
         GET_GRADE(CH)++;
         GET_REAL_MAG(CH) += 100;
         if (GET_TRADITION(CH) == TRAD_ADEPT)
@@ -4850,8 +4968,14 @@ ACMD(do_focus)
       send_to_char("You aren't sustaining any spells.\r\n", ch);
       return;
     }
-    adept_release_spell(ch);
-  } else send_to_char("You can only release sustained spells.\r\n", ch);
+    adept_release_spell(ch, FALSE);
+  } else if (!str_cmp(argument, "disrupt")) {
+    if (!GET_SUSTAINED_NUM(ch)) {
+      send_to_char("You aren't sustaining any spells.\r\n", ch);
+      return;
+    }
+    adept_release_spell(ch, TRUE);
+  } else send_to_char("Syntax: FOCUS RELEASE (to return spell to caster) or FOCUS DISRUPT (to end spell).\r\n", ch);
 }
 
 ACMD(do_metamagic)

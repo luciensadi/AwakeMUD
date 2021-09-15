@@ -458,7 +458,7 @@ void check_idling(void)
           } else {
             GET_WAS_IN(ch) = ch->in_room;
           }
-            
+          
           if (FIGHTING(ch))
             stop_fighting(FIGHTING(ch));
           if (CH_IN_COMBAT(ch))
@@ -909,6 +909,7 @@ void point_update(void)
         }
       }
     }
+    
     if (i->desc && IS_PROJECT(i)) {
       if (AFF_FLAGGED(i->desc->original, AFF_TRACKING) && HUNTING(i->desc->original) && !--HOURS_LEFT_TRACK(i->desc->original)) {
         act("The astral signature leads you to $N.", FALSE, i, 0, HUNTING(i->desc->original), TO_CHAR);
@@ -938,6 +939,7 @@ void point_update(void)
       } else if (GET_ESS(i) <= 100)
         send_to_char("You feel memories of your physical body slipping away.\r\n", i);
     }
+    
     if (is_npc || !PLR_FLAGGED(i, PLR_JUST_DIED)) {
       if (LAST_HEAL(i) > 0)
         LAST_HEAL(i)--;
@@ -1552,7 +1554,9 @@ void misc_update(void)
         act("Flames continue to burn around $n!", FALSE, ch, 0, 0, TO_ROOM);
         act("^RYour body is surrounded in flames!", FALSE, ch, 0, 0, TO_CHAR);
       }
-      damage_equip(ch, ch, 6 + ch->points.fire[1], TYPE_FIRE);
+      // Restore this when it's possible to tell if your fire damage was caused by a PC or NPC.
+      // damage_equip(ch, ch, 6 + ch->points.fire[1], TYPE_FIRE);
+      
       int dam = convert_damage(stage(-success_test(GET_BOD(ch) + GET_POWER(ch, ADEPT_TEMPERATURE_TOLERANCE), 6 + ch->points.fire[1]++ - GET_IMPACT(ch)), MODERATE));
       ch->points.fire[1]++;
       damage(ch, ch, dam, TYPE_SUFFERING, PHYSICAL);
