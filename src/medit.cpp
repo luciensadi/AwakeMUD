@@ -664,7 +664,7 @@ void medit_parse(struct descriptor_data *d, const char *arg)
       send_to_char("Value must range between 0 and 999999.\r\n", CH);
       send_to_char("Enter average nuyen: ", CH);
     } else {
-      GET_NUYEN(MOB) = number;
+      GET_NUYEN_RAW(MOB) = number;
       send_to_char("Enter average credstick value: ", CH);
       d->edit_mode = MEDIT_CREDSTICK;
     }
@@ -676,7 +676,7 @@ void medit_parse(struct descriptor_data *d, const char *arg)
       send_to_char("Value must range between 0 and 999999.\r\n", CH);
       send_to_char("Enter average credstick value: ", CH);
     } else {
-      GET_BANK(MOB) = number;
+      GET_BANK_RAW(MOB) = number;
       medit_disp_menu(d);
     }
     break;

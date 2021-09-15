@@ -274,6 +274,52 @@ int gain_karma(struct char_data * ch, int gain, bool rep, bool limits, bool mult
   return gain;
 }
 
+// While nuyen gain is not multiplied by the global value, we still want to centralize it here and track it.
+void _raw_gain_nuyen(struct char_data *ch, long amount, int category, bool bank, struct obj_data *credstick) {
+  // Log errors if needed.
+  if (category < 0 || category >= NUM_OF_TRACKED_NUYEN_INCOME_SOURCES) {
+    char errbuf[500];
+    snprintf(errbuf, sizeof(errbuf), "SYSERR: Invalid category %d sent to gain_nuyen! Still awarding the cash.", category);
+    mudlog(errbuf, ch, LOG_SYSLOG, TRUE);
+  }
+  
+  // Track the nuyen gain for metrics.
+  if (!IS_NPC(ch))
+    GET_NUYEN_INCOME_THIS_PLAY_SESSION(ch, category) += abs(amount);
+  
+  // Apply the change
+  if (credstick)
+    GET_ITEM_MONEY_VALUE(credstick) += amount;
+  else if (bank)
+    GET_BANK_RAW(ch) += amount;
+  else
+    GET_NUYEN_RAW(ch) += amount;
+}
+
+void gain_nuyen(struct char_data *ch, long amount, int category) {
+  _raw_gain_nuyen(ch, amount, category, FALSE, NULL);
+}
+
+void lose_nuyen(struct char_data *ch, long amount, int category) {
+  _raw_gain_nuyen(ch, -amount, category, FALSE, NULL);
+}
+
+void gain_bank(struct char_data *ch, long amount, int category) {
+  _raw_gain_nuyen(ch, amount, category, TRUE, NULL);
+}
+
+void lose_bank(struct char_data *ch, long amount, int category) {
+  _raw_gain_nuyen(ch, -amount, category, TRUE, NULL);
+}
+
+void gain_nuyen_on_credstick(struct char_data *ch, struct obj_data *credstick, long amount, int category) {
+  _raw_gain_nuyen(ch, amount, category, FALSE, credstick);
+}
+
+void lose_nuyen_from_credstick(struct char_data *ch, struct obj_data *credstick, long amount, int category) {
+  _raw_gain_nuyen(ch, -amount, category, FALSE, credstick);
+}
+
 // only the pcs should need to access this
 void gain_condition(struct char_data * ch, int condition, int value)
 {

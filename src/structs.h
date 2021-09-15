@@ -544,18 +544,20 @@ struct player_special_data
   ubyte perm_bod;
   struct room_data *watching;
   struct remem *ignored;
-  int nuyen_paid_for_wheres_my_car;
 
   player_special_data() :
       aliases(NULL), remem(NULL), last_tell(0), questnum(0), obj_complete(NULL), 
       mob_complete(NULL), watching(NULL), ignored(NULL)
   {
-    for (int i = 0; i < NUM_DRUGS+1; i++)
-      for (int j = 0; j < 7; j++)
+    for (int i = 0; i < NUM_DRUGS+1; i++) {
+      for (int j = 0; j < 7; j++) {
         drugs[i][j] = 0;
+      }
+    }
     
-    for (int i = 0; i < 5; i++)
+    for (int i = 0; i < 5; i++) {
       drug_affect[i] = 0;
+    }
   }
 }
 ;
@@ -843,6 +845,9 @@ struct descriptor_data
   struct ccreate_t ccr;
   int invalid_command_counter;
   
+  long nuyen_paid_for_wheres_my_car;
+  long nuyen_income_this_play_session[NUM_OF_TRACKED_NUYEN_INCOME_SOURCES];
+  
   listClass<const char *> message_history[NUM_COMMUNICATION_CHANNELS];
 
   // all this from here down is stuff for on-line creation
@@ -887,6 +892,11 @@ struct descriptor_data
     // Zero out the communication history for all channels.
     for (int channel = 0; channel < NUM_COMMUNICATION_CHANNELS; channel++)
       message_history[channel] = listClass<const char *>();
+      
+    // Zero out our metrics.
+    for (int i = 0; i < NUM_OF_TRACKED_NUYEN_INCOME_SOURCES; i++) {
+      nuyen_income_this_play_session[i] = 0;
+    }
   }
 }
 ;
@@ -1014,6 +1024,11 @@ struct drug_data {
 struct spirit_table {
   char name[50];
   vnum_t vnum;
+};
+
+struct nuyen_faucet_or_sink {
+  char name[100];
+  byte type;
 };
 
 struct spirit_data {

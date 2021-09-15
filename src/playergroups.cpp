@@ -628,8 +628,8 @@ void do_pgroup_donate(struct char_data *ch, char *argument) {
     return;
   }
   
-  // Execute the change.
-  GET_BANK(ch) -= amount;
+  // Execute the change. Not a faucet or sink.
+  GET_BANK_RAW(ch) -= amount;
   GET_PGROUP(ch)->set_bank(GET_PGROUP(ch)->get_bank() + amount);
   GET_PGROUP(ch)->save_pgroup_to_db();
   
@@ -684,7 +684,7 @@ void do_pgroup_found(struct char_data *ch, char *argument) {
   
   // Eventual TODO: Should this be done in a specific place or in the presence of a specific NPC for RP reasons?
   send_to_char(ch, "You pay %d nuyen to found '%s'.\r\n", COST_TO_FOUND_GROUP, GET_PGROUP(ch)->get_name());
-  GET_NUYEN(ch) -= COST_TO_FOUND_GROUP;
+  lose_nuyen(ch, COST_TO_FOUND_GROUP, NUYEN_OUTFLOW_PGROUP);
   playerDB.SaveChar(ch);
   
   GET_PGROUP(ch)->set_founded(TRUE);
@@ -1051,14 +1051,15 @@ void do_pgroup_wire(struct char_data *ch, char *argument) {
     }
   }
   
-  // Execute the change.
+  // Execute the change. Not a faucet or sink.
   GET_PGROUP(ch)->set_bank(GET_PGROUP(ch)->get_bank() - amount);
   GET_PGROUP(ch)->save_pgroup_to_db();
   if (isfile) {
     snprintf(buf, sizeof(buf), "UPDATE pfiles SET Bank=Bank+%lu WHERE idnum=%ld;", amount, isfile);
     mysql_wrapper(mysql, buf);
-  } else
-    GET_BANK(vict) += amount;
+  } else {
+    GET_BANK_RAW(vict) += amount;
+  }
   
   // Mail the recipient.
   snprintf(buf, sizeof(buf), "'%s' has wired %lu nuyen to your account.\r\n", GET_PGROUP(ch)->get_name(), amount);

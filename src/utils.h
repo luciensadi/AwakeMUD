@@ -418,8 +418,16 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define GET_GRADE(ch)   	((ch)->points.grade)
 #define GET_MENTAL(ch)          ((ch)->points.mental)
 #define GET_MAX_MENTAL(ch)      ((ch)->points.max_mental)
-#define GET_NUYEN(ch)           ((ch)->points.nuyen)
-#define GET_BANK(ch)            ((ch)->points.bank)
+
+// Changed to a non-assignable expression to cause all code that sets this value to not compile.
+// This makes it easier to find outliers when looking to track nuyen inflow / outflows.
+#define GET_NUYEN(ch)           ((ch)->points.nuyen != 0 ? (ch)->points.nuyen : 0)
+#define GET_NUYEN_RAW(ch)       ((ch)->points.nuyen)
+
+// Same deal here.
+#define GET_BANK(ch)            ((ch)->points.bank != 0 ? (ch)->points.bank : 0)
+#define GET_BANK_RAW(ch)        ((ch)->points.bank)
+
 #define GET_INIT_DICE(ch)       ((ch)->points.init_dice)
 #define GET_INIT_ROLL(ch)       ((ch)->points.init_roll)
 #define GET_SUSTAINED_NUM(ch)	((ch)->points.sustained[0])
@@ -579,24 +587,25 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define STOP_WORKING(ch)      {AFF_FLAGS((ch)).RemoveBits(AFF_PROGRAM, AFF_DESIGN, AFF_PART_BUILD, AFF_PART_DESIGN, AFF_BONDING, AFF_CONJURE, AFF_PACKING, AFF_LODGE, AFF_CIRCLE, AFF_SPELLDESIGN, AFF_AMMOBUILD, ENDBIT); \
                                GET_BUILDING((ch)) = NULL;}
 
-#define GET_TOTEM(ch)                        (ch->player_specials->saved.totem)
-#define GET_TOTEMSPIRIT(ch)                  (ch->player_specials->saved.totemspirit)
+#define GET_TOTEM(ch)                              (ch->player_specials->saved.totem)
+#define GET_TOTEMSPIRIT(ch)                        (ch->player_specials->saved.totemspirit)
 
-#define GET_DRUG_AFFECT(ch)                  (ch->player_specials->drug_affect[0])
-#define GET_DRUG_DURATION(ch)                (ch->player_specials->drug_affect[1])
-#define GET_DRUG_DOSE(ch)                    (ch->player_specials->drug_affect[2])
-#define GET_DRUG_STAGE(ch)                   (ch->player_specials->drug_affect[3])
-#define GET_DRUG_EDGE(ch, i)                 (ch->player_specials->drugs[i][0])
-#define GET_DRUG_ADDICT(ch, i)               (ch->player_specials->drugs[i][1])
-#define GET_DRUG_DOSES(ch, i)                (ch->player_specials->drugs[i][2])
-#define GET_DRUG_LASTFIX(ch, i)              (ch->player_specials->drugs[i][3])
-#define GET_DRUG_ADDTIME(ch, i)              (ch->player_specials->drugs[i][4])
-#define GET_DRUG_TOLERANT(ch, i)             (ch->player_specials->drugs[i][5])
-#define GET_DRUG_LASTWITH(ch, i)             (ch->player_specials->drugs[i][6])
-#define GET_MENTAL_LOSS(ch)                  (ch->player_specials->mental_loss)
-#define GET_PHYSICAL_LOSS(ch)                (ch->player_specials->physical_loss)
-#define GET_PERM_BOD_LOSS(ch)                (ch->player_specials->perm_bod)
-#define GET_NUYEN_PAID_FOR_WHERES_MY_CAR(ch) ((ch)->player_specials->nuyen_paid_for_wheres_my_car)
+#define GET_DRUG_AFFECT(ch)                        (ch->player_specials->drug_affect[0])
+#define GET_DRUG_DURATION(ch)                      (ch->player_specials->drug_affect[1])
+#define GET_DRUG_DOSE(ch)                          (ch->player_specials->drug_affect[2])
+#define GET_DRUG_STAGE(ch)                         (ch->player_specials->drug_affect[3])
+#define GET_DRUG_EDGE(ch, i)                       (ch->player_specials->drugs[i][0])
+#define GET_DRUG_ADDICT(ch, i)                     (ch->player_specials->drugs[i][1])
+#define GET_DRUG_DOSES(ch, i)                      (ch->player_specials->drugs[i][2])
+#define GET_DRUG_LASTFIX(ch, i)                    (ch->player_specials->drugs[i][3])
+#define GET_DRUG_ADDTIME(ch, i)                    (ch->player_specials->drugs[i][4])
+#define GET_DRUG_TOLERANT(ch, i)                   (ch->player_specials->drugs[i][5])
+#define GET_DRUG_LASTWITH(ch, i)                   (ch->player_specials->drugs[i][6])
+#define GET_MENTAL_LOSS(ch)                        (ch->player_specials->mental_loss)
+#define GET_PHYSICAL_LOSS(ch)                      (ch->player_specials->physical_loss)
+#define GET_PERM_BOD_LOSS(ch)                      (ch->player_specials->perm_bod)
+#define GET_NUYEN_PAID_FOR_WHERES_MY_CAR(ch)       (ch->desc->nuyen_paid_for_wheres_my_car)
+#define GET_NUYEN_INCOME_THIS_PLAY_SESSION(ch, i)  (ch->desc->nuyen_income_this_play_session[i])
 /* descriptor-based utils ************************************************/
 
 #define WAIT_STATE(ch, cycle) { \
@@ -878,6 +887,8 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 
 // ITEM_MONEY convenience defines
 #define GET_ITEM_MONEY_VALUE(money)               (GET_OBJ_VAL((money), 0))
+#define GET_ITEM_MONEY_IS_CREDSTICK(money)        (GET_OBJ_VAL((money), 1))
+#define GET_ITEM_MONEY_CREDSTICK_GRADE(money)     (GET_OBJ_VAL((money), 2))
 #define GET_ITEM_MONEY_CREDSTICK_ACTIVATED(money) (GET_OBJ_VAL((money), 4))
 
 // ITEM_PHONE convenience defines
@@ -1138,5 +1149,13 @@ char    *crypt(const char *key, const char *salt);
 }                                          \
 
 #define FOR_ITEMS_AROUND_CH(ch, item_ptr) for ((item_ptr) = (ch)->in_room ? (ch)->in_room->contents : (ch)->in_veh->contents; (item_ptr); (item_ptr) = (item_ptr)->next_content)
+
+// Nuyen tracking functions.
+void gain_nuyen(struct char_data *ch, long amount, int category);
+void lose_nuyen(struct char_data *ch, long amount, int category);
+void gain_bank(struct char_data *ch, long amount, int category);
+void lose_bank(struct char_data *ch, long amount, int category);
+void gain_nuyen_on_credstick(struct char_data *ch, struct obj_data *credstick, long amount, int category);
+void lose_nuyen_from_credstick(struct char_data *ch, struct obj_data *credstick, long amount, int category);
 
 #endif

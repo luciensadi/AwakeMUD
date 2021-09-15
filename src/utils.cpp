@@ -828,7 +828,7 @@ void log_vfprintf(const char *format, ...)
  */
 void mudlog(const char *str, struct char_data *ch, int log, bool file)
 {
-  char buf[MAX_STRING_LENGTH], buf2[MAX_STRING_LENGTH];
+  char buf[MAX_STRING_LENGTH * 2], buf2[MAX_STRING_LENGTH * 2];
   extern struct descriptor_data *descriptor_list;
   struct descriptor_data *i;
   struct char_data *tch;

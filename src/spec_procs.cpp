@@ -437,7 +437,7 @@ SPECIAL(metamagic_teacher)
     send_to_char(ch, "You don't have the %d nuyen required to learn %s.\r\n", cost, metamagic[i]);
     return TRUE;
   }
-  GET_NUYEN(ch) -= cost;
+  lose_nuyen(ch, cost, NUYEN_OUTFLOW_METAMAGIC_TRAINING);
   send_to_char(ch, "%s runs through how to use %s with you, you walk away knowing exactly how to use it.\r\n", GET_NAME(master), metamagic[i]);
   SET_METAMAGIC(ch, i, GET_METAMAGIC(ch, i) + 1);
   return TRUE;
@@ -582,7 +582,7 @@ SPECIAL(nerp_skills_teacher) {
       send_to_char(ch, "You can't afford the %d nuyen practice fee!\r\n", skill_nuyen_cost);
       return TRUE;
     }
-    GET_NUYEN(ch) -= skill_nuyen_cost;
+    lose_nuyen(ch, skill_nuyen_cost, NUYEN_OUTFLOW_SKILL_TRAINING);
   }    
     
   if (GET_SKILL_POINTS(ch) > 0)
@@ -858,7 +858,7 @@ SPECIAL(teacher)
       send_to_char(ch, "You can't afford the %d nuyen practice fee!\r\n", skill_nuyen_cost);
       return TRUE;
     }
-    GET_NUYEN(ch) -= skill_nuyen_cost;
+    lose_nuyen(ch, skill_nuyen_cost, NUYEN_OUTFLOW_SKILL_TRAINING);
   }
   if (GET_SKILL_POINTS(ch) > 0)
     GET_SKILL_POINTS(ch)--;
@@ -949,7 +949,7 @@ void train_attribute(struct char_data *ch, struct char_data *trainer, int ind, i
       return;
     }
     // Deduct nuyen cost.
-    GET_NUYEN(ch) -= nuyen_cost;
+    lose_nuyen(ch, nuyen_cost, NUYEN_OUTFLOW_SKILL_TRAINING);
   }
   
   // Deduct karma/attrpoint cost.
@@ -1143,7 +1143,8 @@ SPECIAL(spell_trainer)
           send_to_char("You don't have enough nuyen to buy an extra force point.\r\n", ch);
         else {
           send_to_char("You spend 25000 nuyen on an extra force point.\r\n", ch);
-          GET_NUYEN(ch) -= 25000;
+          // This is tracked as raw nuyen expenditure because we don't care about chargen spending.
+          GET_NUYEN_RAW(ch) -= 25000;
           GET_FORCE_POINTS(ch)++;
         }
         return TRUE;
@@ -1627,7 +1628,7 @@ SPECIAL(car_dealer)
       send_to_char("You can't afford that.\r\n", ch);
       return TRUE;
     }
-    GET_NUYEN(ch) -= veh->cost;
+    lose_nuyen(ch, veh->cost, NUYEN_OUTFLOW_VEHICLE_PURCHASES);
     newveh = read_vehicle(veh->veh_number, REAL);
     veh_to_room(newveh, ch->in_room);
     newveh->owner = GET_IDNUM(ch);
@@ -1698,8 +1699,8 @@ SPECIAL(pike) {
             do_gen_door(pike, "gate", 0, SCMD_OPEN);
             act("$n says, \"There ya go.\"", FALSE, pike, 0, 0, TO_ROOM);
             send_to_char(pike, "You say, \"There ya go.\"\r\n");
-            GET_NUYEN(pike) += amount;
-            GET_NUYEN(ch) -= amount;
+            GET_NUYEN_RAW(pike) += amount;
+            lose_nuyen(ch, amount, NUYEN_OUTFLOW_GENERIC_SPEC_PROC);
           } else {
             act("$n says, \"The gate isn't locked, so go on in.\"",
                 FALSE, pike, 0, 0, TO_ROOM);
@@ -1771,8 +1772,8 @@ SPECIAL(jeff) {
       } else {
         if (IS_SET(EXIT(jeff, EAST)->exit_info, EX_CLOSED)) {
           do_gen_door(jeff, "roadblock", 0, SCMD_OPEN);
-          GET_NUYEN(jeff) += amount;
-          GET_NUYEN(ch) -= amount;
+          GET_NUYEN_RAW(jeff) += amount;
+          lose_nuyen(ch, amount, NUYEN_OUTFLOW_GENERIC_SPEC_PROC);
           do_say(jeff, "Go ahead.", 0, 0);
         } else {
           do_say(jeff, "The roadblock is open, so go ahead.", 0, 0);
@@ -1935,8 +1936,8 @@ SPECIAL(mugger_park)
       act("$n deftly lifts some nuyen from $N!", FALSE, ch, 0, vict, TO_NOTVICT);
       act("$n deftly lifts some nuyen from your pocket!", FALSE, ch, 0, vict, TO_VICT);
       act("You deftly grab some nuyen from $N!", FALSE, ch, 0, vict, TO_CHAR);
-      GET_NUYEN(ch) += gold;
-      GET_NUYEN(vict) -= gold;
+      GET_NUYEN_RAW(ch) += gold;
+      lose_nuyen(vict, gold, NUYEN_OUTFLOW_GENERIC_SPEC_PROC);
       return TRUE;
     }
     return FALSE;
@@ -1947,7 +1948,7 @@ SPECIAL(mugger_park)
       if (GET_OBJ_TYPE(obj) == ITEM_MONEY) {
         act("$n grins as he picks up $p from the ground.", FALSE, ch, obj, 0, TO_ROOM);
         act("You grin slightly as you pick up $p.", FALSE, ch, obj, 0, TO_CHAR);
-        GET_NUYEN(ch) += GET_OBJ_VAL(obj, 0);
+        GET_NUYEN_RAW(ch) += GET_ITEM_MONEY_VALUE(obj);
         extract_obj(obj);
         return TRUE;
       }
@@ -2412,15 +2413,21 @@ SPECIAL(hacker)
       return TRUE;
 
     if (GET_OBJ_VAL(obj, 2) == 1)
-      amount = (int)(GET_OBJ_VAL(obj, 0) / 7);
+      amount = (int)(GET_ITEM_MONEY_VALUE(obj) / 7);
     else if (GET_OBJ_VAL(obj, 2) == 2)
-      amount = (int)(GET_OBJ_VAL(obj, 0) / 5);
+      amount = (int)(GET_ITEM_MONEY_VALUE(obj) / 5);
     else
-      amount = (int)(GET_OBJ_VAL(obj, 0) / 3);
+      amount = (int)(GET_ITEM_MONEY_VALUE(obj) / 3);
     // nuyen = negotiate(ch, hacker, 0, nuyen, 2, FALSE);
-    nuyen = GET_OBJ_VAL(obj, 0) - amount;
-    GET_BANK(hacker) += amount;
-    GET_BANK(ch) += nuyen;
+    nuyen = GET_ITEM_MONEY_VALUE(obj) - amount;
+    GET_BANK_RAW(hacker) += amount;
+    
+    // We use the raw value here because this was already counted as a faucet when picked up.
+    GET_BANK_RAW(ch) += GET_ITEM_MONEY_VALUE(obj);
+    
+    // In fact, since the amount was also part of the faucet, we have to decrease the farm amount by that.
+    lose_bank(ch, amount, NUYEN_OUTFLOW_CREDSTICK_CRACKER);
+    
     snprintf(buf1, sizeof(buf1), "%s Updated. %d nuyen transferred to your bank account, I took a cut of %d.",
             GET_CHAR_NAME(ch), nuyen, amount);
     do_say(hacker, buf1, 0, SCMD_SAYTO);
@@ -2465,7 +2472,7 @@ SPECIAL(fence)
     }
     int negotiated_value = negotiate(ch, fence, SKILL_DATA_BROKERAGE, market[GET_DECK_ACCESSORY_FILE_HOST_COLOR(obj)], 2, FALSE);             
     value = negotiated_value / MAX(1, (time(0) - GET_DECK_ACCESSORY_FILE_CREATION_TIME(obj)) / SECS_PER_MUD_DAY);
-    GET_NUYEN(ch) += value;
+    gain_nuyen(ch, value, NUYEN_INCOME_DECKING);
     
     snprintf(buf, sizeof(buf), "Paying %d nuyen for %s^g paydata (base %d, after roll %d, then time decay). Market going from %d to ",
              value, 
@@ -2564,7 +2571,7 @@ SPECIAL(fixer)
     }
     cost = (int)((GET_OBJ_COST(obj) / (2 * (GET_OBJ_BARRIER(obj) > 0 ? GET_OBJ_BARRIER(obj) : 1)) *
                  (GET_OBJ_BARRIER(obj) - GET_OBJ_CONDITION(obj))));
-    if ((credstick ? GET_OBJ_VAL(credstick, 0) : GET_NUYEN(ch)) < cost) {
+    if ((credstick ? GET_ITEM_MONEY_VALUE(credstick) : GET_NUYEN(ch)) < cost) {
       snprintf(arg, sizeof(arg), "%s You can't afford to repair that! It'll cost %d nuyen.", GET_CHAR_NAME(ch), cost);
       do_say(fixer, arg, 0, SCMD_SAYTO);
       return TRUE;
@@ -2572,9 +2579,9 @@ SPECIAL(fixer)
     if (!perform_give(ch, fixer, obj))
       return TRUE;
     if (credstick)
-      GET_OBJ_VAL(credstick, 0) -= cost;
+      lose_nuyen_from_credstick(ch, credstick, cost, NUYEN_OUTFLOW_REPAIRS);
     else
-      GET_NUYEN(ch) -= cost;
+      lose_nuyen(ch, cost, NUYEN_OUTFLOW_REPAIRS);
     extra = (int)((GET_OBJ_BARRIER(obj) - GET_OBJ_CONDITION(obj)) / 2);
     if (((GET_OBJ_BARRIER(obj) - GET_OBJ_CONDITION(obj)) % 2) > 0)
       extra++;
@@ -2879,7 +2886,7 @@ SPECIAL(vending_machine)
           act("You can't afford $p!", FALSE, ch, temp, 0, TO_CHAR);
           return TRUE;
         }
-        GET_NUYEN(ch) -= GET_OBJ_COST(temp);
+        lose_nuyen(ch, GET_OBJ_COST(temp), NUYEN_OUTFLOW_GENERIC_SPEC_PROC);
         temp = read_object(GET_OBJ_RNUM(temp), REAL);
         obj_to_char(temp, ch);
         act("$n buys $p from $P.", FALSE, ch, temp, obj, TO_ROOM);
@@ -3003,7 +3010,7 @@ SPECIAL(vendtix)
     }
 
     obj_to_char(tobj, ch);
-    GET_NUYEN(ch) -= tobj->obj_flags.cost;
+    lose_nuyen(ch, tobj->obj_flags.cost, NUYEN_OUTFLOW_GENERIC_SPEC_PROC);
     act("You receive $p.", FALSE, ch, tobj, 0, TO_CHAR);
     act("$n buys $p from the Vend-Tix machine.",
         TRUE, ch, tobj, 0, TO_ROOM);
@@ -3039,8 +3046,9 @@ SPECIAL(bank)
     if (!str_cmp(buf, "all") || GET_NUYEN(ch) < amount)
       amount = GET_NUYEN(ch);
       
-    GET_NUYEN(ch) -= amount;
-    GET_BANK(ch) += amount;
+    // Raw amounts-- we don't care about transfering money around like this.
+    GET_NUYEN_RAW(ch) -= amount;
+    GET_BANK_RAW(ch) += amount;
     send_to_char(ch, "You deposit %d nuyen.\r\n", amount);
     act("$n accesses the ATM.", TRUE, ch, 0, FALSE, TO_ROOM);
     return 1;
@@ -3054,8 +3062,9 @@ SPECIAL(bank)
     if (!str_cmp(buf, "all") || GET_BANK(ch) < amount)
       amount = GET_BANK(ch);
       
-    GET_NUYEN(ch) += amount;
-    GET_BANK(ch) -= amount;
+    // Raw amounts-- we don't care about transfering money around like this.
+    GET_NUYEN_RAW(ch) += amount;
+    GET_BANK_RAW(ch) -= amount;
     send_to_char(ch, "The ATM ejects %d nuyen and updates your bank account.\r\n", amount);
     act("$n accesses the ATM.", TRUE, ch, 0, FALSE, TO_ROOM);
     return 1;
@@ -3075,12 +3084,13 @@ SPECIAL(bank)
       if (!str_cmp(buf,"all") || GET_OBJ_VAL(credstick, 0) < amount) {
         amount = GET_OBJ_VAL(credstick, 0);
       }
-      if (GET_OBJ_VAL(credstick, 0) == 0) {
+      if (GET_ITEM_MONEY_VALUE(credstick) == 0) {
         send_to_char(ch, "%s is already empty.\r\n", capitalize(GET_OBJ_NAME(credstick)));
         return TRUE;
       }
-      GET_OBJ_VAL(credstick, 0) -= amount;
-      GET_BANK(ch) += amount;
+      // Just transfers, no faucet/sink.
+      GET_ITEM_MONEY_VALUE(credstick) -= amount;
+      GET_BANK_RAW(ch) += amount;
       snprintf(buf, sizeof(buf), "%d nuyen transferred from $p to your account.", amount);
     } else if (!str_cmp(buf1, "credstick")) {
       if (!str_cmp(buf,"all") || GET_BANK(ch) < amount) {
@@ -3090,8 +3100,9 @@ SPECIAL(bank)
         send_to_char("You don't have any nuyen in the bank.\r\n", ch);
         return TRUE;
       }
-      GET_OBJ_VAL(credstick, 0) += amount;
-      GET_BANK(ch) -= amount;
+      // Just transfers, no faucet / sink.
+      GET_ITEM_MONEY_VALUE(credstick) += amount;
+      GET_BANK_RAW(ch) -= amount;
       snprintf(buf, sizeof(buf), "%d nuyen transferred from your account to $p.", amount);
     } else {
       send_to_char("Transfer to what? (Type out \"credstick\" or \"account\", please.)\r\n", ch);
@@ -3677,7 +3688,8 @@ void make_newbie(struct obj_data *obj)
 
 void process_auth_room(struct char_data *ch) {
   PLR_FLAGS(ch).RemoveBit(PLR_NOT_YET_AUTHED);
-  GET_NUYEN(ch) = 0;
+  // Raw amount-- chargen money is meaningless.
+  GET_NUYEN_RAW(ch) = 0;
   make_newbie(ch->carrying);
   for (int i = 0; i < NUM_WEARS; i++)
     if (GET_EQ(ch, i))
@@ -3910,7 +3922,7 @@ SPECIAL(matchsticks)
 
       struct obj_data *obj = read_object(31714, VIRTUAL);
       obj_to_char(obj, ch);
-      GET_NUYEN(ch) -= amount;
+      lose_nuyen(ch, amount, NUYEN_OUTFLOW_GENERIC_SPEC_PROC);
       return TRUE;
     }
   }
@@ -4124,7 +4136,7 @@ SPECIAL(painter)
     ch->desc->edit_veh = veh;
     veh_from_room(veh);
     veh_to_room(veh, &world[real_room(painter->in_room->number + 1)]);
-    GET_NUYEN(ch) -= PAINTER_COST;
+    lose_nuyen(ch, PAINTER_COST, NUYEN_OUTFLOW_GENERIC_SPEC_PROC);
     snprintf(buf, sizeof(buf), "%s is wheeled into the painting booth.", GET_VEH_NAME(veh));
     act(buf, FALSE, painter, 0, 0, TO_ROOM);
     if (!veh->restring)
@@ -4432,7 +4444,7 @@ SPECIAL(locker)
           if (GET_NUYEN(ch) < cost)
             send_to_char(ch, "The system beeps loudly and the screen reads 'PLEASE INSERT %d NUYEN'.\r\n", cost);
           else {
-            GET_NUYEN(ch) -= cost;
+            lose_nuyen(ch, cost, NUYEN_OUTFLOW_GENERIC_SPEC_PROC);
             REMOVE_BIT(GET_OBJ_VAL(locker, 1), CONT_CLOSED);
             REMOVE_BIT(GET_OBJ_VAL(locker, 1), CONT_LOCKED);
             GET_OBJ_VAL(locker, 9) = GET_OBJ_VAL(locker, 8) = 0;
@@ -4507,7 +4519,8 @@ SPECIAL(newbie_housing)
       obj_to_char(card, ch);
     }
     GET_OBJ_VAL(card, 1) += 10000;
-    GET_NUYEN(ch) -= 10000;
+    // We should probably track this one as going out into the game world, but eh.
+    GET_NUYEN_RAW(ch) -= 10000;
     
     if (card->carried_by == ch)
       send_to_char("You place your card into the machine and add an extra 10,000 nuyen.", ch);

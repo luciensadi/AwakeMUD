@@ -296,7 +296,7 @@ ACMD(do_copyover)
     if (!PLR_FLAGGED(och, PLR_NEWBIE) && och->in_room && room_is_a_taxicab(GET_ROOM_VNUM(och->in_room))) {
       snprintf(buf, sizeof(buf), "You have been refunded %d nuyen to compensate for the extra cab fare.\r\n", MAX_CAB_FARE);
       write_to_descriptor(d->descriptor, buf);
-      GET_NUYEN(och) += MAX_CAB_FARE;
+      GET_NUYEN_RAW(och) += MAX_CAB_FARE;
     }
     
     fprintf (fp, "%d %s %s %s\n", d->descriptor, GET_CHAR_NAME(och), d->host, CopyoverGet(d));
@@ -4411,11 +4411,11 @@ ACMD(do_set)
     break;
   case 17:
     RANGE(0, 100000000);
-    GET_NUYEN(vict) = value;
+    GET_NUYEN_RAW(vict) = value;
     break;
   case 18:
     RANGE(0, 100000000);
-    GET_BANK(vict) = value;
+    GET_BANK_RAW(vict) = value;
     break;
   case 19:
     RANGE(0, 7500);

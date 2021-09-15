@@ -2090,7 +2090,7 @@ void close_socket(struct descriptor_data *d)
 {
   struct descriptor_data *temp;
   spell_data *one, *next;
-  char buf[128];
+  char buf[MAX_STRING_LENGTH];
   
   /* Forget snooping */
   if (d->snooping)
@@ -2103,6 +2103,78 @@ void close_socket(struct descriptor_data *d)
   }
   if (d->character)
   {
+    // Log our metrics.
+    {
+      time_t time_delta = time(0) - d->login_time;
+      bool printed = FALSE;
+      float per_hour_multiplier = (3600 / (time(0) - d->login_time));
+      
+      strlcpy(buf, "Over ", sizeof(buf));
+      
+      if (time_delta >= (60 * 60 * 24)) {
+        int days = time_delta / (60 * 60 * 24);
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%d day%s", days, days != 1 ? "s" : "");
+        time_delta %= (60 * 60 * 24);
+        printed = TRUE;
+      }
+      
+      if (time_delta >= (60 * 60)) {
+        int hours = time_delta / (60 * 60);
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s%d hour%s", printed ? ", " : "", hours, hours != 1 ? "s" : "");
+        time_delta %= (60 * 60);
+        printed = TRUE;
+      }
+      
+      if (time_delta >= 60) {
+        int minutes = time_delta / 60;
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s%d minute%s", printed ? ", " : "", minutes, minutes != 1 ? "s" : "");
+        time_delta %= 60;
+        printed = TRUE;
+      }
+      
+      if (time_delta > 0) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s%ld second%s", printed ? ", " : "", time_delta, time_delta != 1 ? "s" : "");
+      }
+      
+      long nuyen_earned = 0, nuyen_spent = 0;      
+      strlcpy(buf2, " FAUCETS:", sizeof(buf2));
+      strlcpy(buf3, " SINKS:", sizeof(buf3));
+      for (int i = 0; i < NUM_OF_TRACKED_NUYEN_INCOME_SOURCES; i++) {
+        if (d->nuyen_income_this_play_session[i] == 0)
+          continue;
+          
+        if (nuyen_faucets_and_sinks[i].type == NI_IS_FAUCET) {
+          // log_vfprintf("'%s' is a faucet, so adding %ld to earned.", nuyen_faucets_and_sinks[i].name, d->nuyen_income_this_play_session[i]);
+          nuyen_earned += d->nuyen_income_this_play_session[i];
+          snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "\r\n - %20s: %.2f / hr",
+                   nuyen_faucets_and_sinks[i].name,
+                   d->nuyen_income_this_play_session[i] * per_hour_multiplier
+                  );
+        } else {
+          // log_vfprintf("'%s' is a sink, so adding %ld to spent.", nuyen_faucets_and_sinks[i].name, d->nuyen_income_this_play_session[i]);
+          nuyen_spent += d->nuyen_income_this_play_session[i];
+          snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "\r\n - %20s: -%.2f / hr",
+                   nuyen_faucets_and_sinks[i].name,
+                   d->nuyen_income_this_play_session[i] * per_hour_multiplier
+                  );
+        }
+      }
+      long nuyen_net = nuyen_earned - nuyen_spent;
+      long nuyen_per_hour = nuyen_net * per_hour_multiplier;
+      
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " of playtime, %s earned %ld and spent %ld for a net total of %ld nuyen. That's approximately %ld per hour.\r\nBreakdown:\r\n\r\n%s\r\n\r\n%s", 
+               GET_CHAR_NAME(d->character),
+               nuyen_earned, 
+               nuyen_spent, 
+               nuyen_net,
+               nuyen_per_hour,
+               buf2,  // faucets
+               buf3   // sinks
+             );
+             
+      mudlog(buf, d->character, LOG_GRIDLOG, TRUE);
+    }
+    
     /* added to Free up temporary editing constructs */
     if (d->connected == CON_PLAYING 
         || d->connected == CON_PART_CREATE 
@@ -3270,7 +3342,7 @@ void send_nuyen_rewards_to_pcs() {
       if (ch->char_specials.timer > IDLE_NUYEN_REWARD_THRESHOLD_IN_MINUTES) {
         if (!PRF_FLAGGED(ch, PRF_NO_IDLE_NUYEN_REWARD_MESSAGE))
           send_to_char(ch, "[OOC message: You have been awarded the standard idling bonus of %d nuyen. You can TOGGLE NOIDLE to hide these messages while still getting the reward.]\r\n", IDLE_NUYEN_REWARD_AMOUNT);
-        GET_NUYEN(ch) += IDLE_NUYEN_REWARD_AMOUNT;
+        gain_nuyen(ch, IDLE_NUYEN_REWARD_AMOUNT, NUYEN_INCOME_IDLE_REWARD);
         
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s%s", already_printed ? ", " : "", GET_CHAR_NAME(ch));
         already_printed = TRUE;
@@ -3310,7 +3382,7 @@ void process_wheres_my_car() {
     int idnum_canary = GET_IDNUM(d->character);
     
     // Compose the beginning of our log string.
-    snprintf(buf, sizeof(buf), "%s paid %d",
+    snprintf(buf, sizeof(buf), "%s paid %ld",
              GET_CHAR_NAME(d->character), 
              GET_NUYEN_PAID_FOR_WHERES_MY_CAR(d->character));
              
@@ -3356,7 +3428,8 @@ void process_wheres_my_car() {
       send_to_char(d->character, "...It's just a blank piece of paper. You stare them down until they leave, then pocket the reward of %d.\r\n", 
                    reward_amount);
       // Credit it back.
-      GET_NUYEN(d->character) += reward_amount;
+      GET_NUYEN_RAW(d->character) += reward_amount;
+      GET_NUYEN_INCOME_THIS_PLAY_SESSION(d->character, NUYEN_OUTFLOW_WHERESMYCAR) -= reward_amount;
     }
     assert(idnum_canary == GET_IDNUM(d->character));
     
