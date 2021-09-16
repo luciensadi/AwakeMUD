@@ -3047,7 +3047,7 @@ ACMD(do_create)
   
   else if (is_abbrev(buf1, "part")) {
     if (!GET_SKILL(ch, SKILL_BR_COMPUTER)) {
-      send_to_char("You must learn computer B/R skills to create parts.\r\n", ch);
+      send_to_char("You must learn computer Build and Repair skills to create parts.\r\n", ch);
       return;
     }
     create_part(ch);

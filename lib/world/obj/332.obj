@@ -773,13 +773,13 @@ Material:	adv. plastics
 	Val2:	192
 BREAK
 #33228
-Keywords:	Activesoft computer b/r chip 6
-Name:	A Computer B/R 6 ActiveSoft
+Keywords:	Activesoft computer Build and Repair chip 6
+Name:	A Computer Build and Repair 6 ActiveSoft
 RoomDesc:$
 A little chip sits unused here.~
 LookDesc:$
 It looks to be an ActiveSoft chip, packed full of software to be used in
-conjunction with skillwires. It seems to be labeled: "Computer B/R - Rating
+conjunction with skillwires. It seems to be labeled: "Computer Build and Repair - Rating
 Six". 
 ~
 Type:	Skillsoft
@@ -802,13 +802,13 @@ Material:	adv. plastics
 	Val2:	108
 BREAK
 #33229
-Keywords:	Activesoft computer b/r chip 8
-Name:	A Computer B/R 8 ActiveSoft
+Keywords:	Activesoft computer Build and Repair chip 8
+Name:	A Computer Build and Repair 8 ActiveSoft
 RoomDesc:$
 A little chip sits unused here.~
 LookDesc:$
 It looks to be an ActiveSoft chip, packed full of software to be used in
-conjunction with skillwires. It seems to be labeled: "Computer B/R - Rating
+conjunction with skillwires. It seems to be labeled: "Computer Build and Repair - Rating
 Eight". 
 ~
 Type:	Skillsoft

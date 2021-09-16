@@ -270,7 +270,7 @@ void pbuild_parse(struct descriptor_data *d, const char *arg) {
         break;
     case DEDIT_MPCP:
         if (number > GET_SKILL(CH, SKILL_BR_COMPUTER))
-          send_to_char(CH, "You can't create a part for a deck with more MPCP than your Computer B/R Skill (%d). Enter Target MPCP: ", GET_SKILL(CH, SKILL_BR_COMPUTER));
+          send_to_char(CH, "You can't create a part for a deck with more MPCP than your Computer Build and Repair Skill (%d). Enter Target MPCP: ", GET_SKILL(CH, SKILL_BR_COMPUTER));
         else if (number < 1 || number > MAX_CUSTOM_MPCP_RATING)
           send_to_char(CH, "Target MPCP must be between 1 and %d. Enter Target MPCP: ", MAX_CUSTOM_MPCP_RATING);
         else {

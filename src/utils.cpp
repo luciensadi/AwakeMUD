@@ -1404,7 +1404,7 @@ int get_skill(struct char_data *ch, int skill, int &target)
       }
     }
     
-    /* Enhanced Articulation: Possessors roll an additional die when making Success Tests involving any Combat, Physical, Technical and B/R Skills.
+    /* Enhanced Articulation: Possessors roll an additional die when making Success Tests involving any Combat, Physical, Technical and Build and Repair Skills.
      Bonus also applies to physical use of Vehicle Skills. */
     if (enhan) {
       switch (skill) {
@@ -1458,7 +1458,7 @@ int get_skill(struct char_data *ch, int skill, int &target)
         case SKILL_BIOTECH:
         case SKILL_CHEMISTRY:
         case SKILL_DISGUISE:
-          // B/R skills
+          // Build and Repair skills
         case SKILL_CYBERTERM_DESIGN:
         case SKILL_BR_BIKE:
         case SKILL_BR_CAR:

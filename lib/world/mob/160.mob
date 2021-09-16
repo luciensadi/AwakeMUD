@@ -33,11 +33,11 @@ DefaultPos:	Standing
 	Bank:	999999
 	Karma:	10
 [SKILLS]
-	program design (Cyberterminal):	20
+	Program Design Cyberterminal:	20
 	computers:	50
-	computer B/R:	50
-	program design (Operational):	50
-	program design (Defensive):	50
+	computer Build and Repair:	50
+	Program Design Operational:	50
+	Program Design Defensive:	50
 BREAK
 #16001
 Keywords:	Back Room Benny

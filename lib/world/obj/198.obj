@@ -2364,13 +2364,13 @@ Material:	electronics
 	Val2:	108
 BREAK
 #19926
-Keywords:	chip activesoft Computer B/R 6
-Name:	A Computer B/R 6 ActiveSoft
+Keywords:	chip activesoft Computer Build and Repair 6
+Name:	A Computer Build and Repair 6 ActiveSoft
 RoomDesc:$
 A sturdy little chip sits on the floor here.~
 LookDesc:$
 This ActiveSoft is designated with a label on its side, which reads 'Computer
-B/R - VI', and contains the basics along with more advanced computer design
+Build and Repair - VI', and contains the basics along with more advanced computer design
 and programming knowledge and criteria. It is meant to be used in conjunction
 with a chipjack and skillwires. 
 ~
@@ -4115,12 +4115,12 @@ Material:	adv. plastics
 	Val2:	27
 BREAK
 #19986
-Keywords:	activesoft chip car b/r 3
-Name:	a Car B/R 3 ActiveSoft
+Keywords:	activesoft chip car Build and Repair 3
+Name:	a Car Build and Repair 3 ActiveSoft
 RoomDesc:$
 A flimsy little chip lies here, waiting to be stepped on.~
 LookDesc:$
-This activesoft is designated with a label on its side, which reads 'Car B/R
+This activesoft is designated with a label on its side, which reads 'Car Build and Repair
 III', and contains within its electronic structure the basics of standard car
 layouts, designs and knowledge. It is meant to be used in conjunction with a
 chipjack and skillwires. 
@@ -4145,12 +4145,12 @@ Material:	adv. plastics
 	Val2:	27
 BREAK
 #19987
-Keywords:	chip activesoft Bike B/R 3
-Name:	a Bike B/R 3 ActiveSoft
+Keywords:	chip activesoft Bike Build and Repair 3
+Name:	a Bike Build and Repair 3 ActiveSoft
 RoomDesc:$
 A slender little chip lies here.~
 LookDesc:$
-This activesoft is designated with a label on its side, which reads 'Bike B/R
+This activesoft is designated with a label on its side, which reads 'Bike Build and Repair
 III', and contains within its electronic structure the basics of standard bike
 layouts, designs and knowledge. It is meant to be used in conjunction with a
 chipjack and skillwires. 

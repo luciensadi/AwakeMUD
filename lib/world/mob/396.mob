@@ -71,7 +71,7 @@ DefaultPos:	Sitting
 	Weight:	80
 [SKILLS]
 	computers:	10
-	computer B/R:	10
+	computer Build and Repair:	10
 	negotiation:	10
 BREAK
 #39602
@@ -264,7 +264,7 @@ prominent nose has obviously seen some breaks and a few scars mar his good
 looks, but that just makes him seem more fierce. 
 ~
 ArriveMsg:	a loving couple
-LeaveMsg:	ÿD¢0Å£
+LeaveMsg:	ÔøΩDÔøΩ0ÔøΩÔøΩ
 MobFlags:	1000000000000000000000000001010
 AffFlags:	0
 Race:	Human
@@ -301,7 +301,7 @@ The Mafia Enforcer is mean, scarred and HUGE!  This isn't a cat that you'd
 cross deliberately.  Maybe he'll just let you pass.... 
 ~
 ArriveMsg:	f Lavazza espresso steams here.
-LeaveMsg:	®∆W	 ≥W	
+LeaveMsg:	ÔøΩÔøΩW	 ÔøΩW	
 MobFlags:	1000000000000000000000000001010
 AffFlags:	0
 Race:	Human
@@ -375,7 +375,7 @@ seems genuinely nice and welcoming as he waves you over for a drink from his
 bar. 
 ~
 ArriveMsg:	*shakes her head*
-LeaveMsg:	¯AX	ò÷}
+LeaveMsg:	ÔøΩAX	ÔøΩÔøΩ}
 MobFlags:	1000000000000000000000000001010
 AffFlags:	0
 Race:	Human
@@ -485,7 +485,7 @@ striking and beautiful creature in their own right.  It almost brings a tear
 to the eye... 
 ~
 ArriveMsg:	Employee Lounge 
-LeaveMsg:	0MX	(c£
+LeaveMsg:	0MX	(cÔøΩ
 MobFlags:	1000000000000000000000010001010
 AffFlags:	0
 Race:	Undefined
@@ -597,8 +597,8 @@ LookDesc:$
 The Yakuza boss' sister, Haiku and the Mafia Don's brother, DaVinci stand here
 before the judge to profess their love for each other. 
 ~
-ArriveMsg:	h¡\	ves from
-LeaveMsg:	 }es
+ArriveMsg:	hÔøΩ\	ves from
+LeaveMsg:	ÔøΩ}es
 MobFlags:	1000000000000000000000000001010
 AffFlags:	0
 Race:	Human
