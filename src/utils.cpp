@@ -2881,13 +2881,17 @@ const char *skill_rank_name(int rank, bool knowledge) {
     return "uh oh! you have a negative skill, please report!";
   
   RANK_MESSAGE(0, "not learned", "not learned");
-  RANK_MESSAGE(1 || 2, "Novice", "Scream-sheet level");
-  RANK_MESSAGE(3 || 4, "Competent", "Interested");
-  RANK_MESSAGE(5 || 6, "Proficient", "Dedicated");
-  RANK_MESSAGE(7 || 8, "Skilled", "Well-rounded");
-  RANK_MESSAGE(9 || 10, "Professional", "Educated");
-  RANK_MESSAGE(11, "Innate", "Mastered");
-  RANK_MESSAGE(12, "Expert", "Expert");
+  RANK_MESSAGE(1, "novice", "scream-sheet level");
+  RANK_MESSAGE(2, "novice", "interested");  
+  RANK_MESSAGE(3, "competent", "interested");
+  RANK_MESSAGE(4, "competent", "dedicated");
+  RANK_MESSAGE(5, "proficient", "well-rounded");
+  RANK_MESSAGE(6, "proficient", "educated");
+  RANK_MESSAGE(7, "skilled", "educated");
+  RANK_MESSAGE(8, "skilled", "intuitive");
+  RANK_MESSAGE(9, "professional", "expert");
+  RANK_MESSAGE(10, "professional", "expert");
+  RANK_MESSAGE(11, "expert", "specialist");
   
   if (rank < MAX_SKILL_LEVEL_FOR_IMMS) {
     if (knowledge) return "genius";
