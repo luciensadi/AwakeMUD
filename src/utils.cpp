@@ -2881,11 +2881,11 @@ const char *skill_rank_name(int rank, bool knowledge) {
     return "uh oh! you have a negative skill, please report!";
   
   RANK_MESSAGE(0, "not learned", "not learned");
-  RANK_MESSAGE(1||2, "Novice", "Scream-sheet level");
-  RANK_MESSAGE(3||4, "Competent", "Interested");
-  RANK_MESSAGE(5||6, "Proficient", "Dedicated");
-  RANK_MESSAGE(7||8, "Skilled", "Well-rounded");
-  RANK_MESSAGE(9||10, "Professional", "Educated");
+  RANK_MESSAGE(1 || 2, "Novice", "Scream-sheet level");
+  RANK_MESSAGE(3 || 4, "Competent", "Interested");
+  RANK_MESSAGE(5 || 6, "Proficient", "Dedicated");
+  RANK_MESSAGE(7 || 8, "Skilled", "Well-rounded");
+  RANK_MESSAGE(9 || 10, "Professional", "Educated");
   RANK_MESSAGE(11, "Innate", "Mastered");
   RANK_MESSAGE(12, "Expert", "Expert");
   
