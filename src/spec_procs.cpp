@@ -623,11 +623,11 @@ int get_max_skill_for_char(struct char_data *ch, int skill, int type) {
     return -1;
   }
   
-  // Override: All language skills can be learned to 10. 
+  // Override: All language skills can be learned to the maximum. 
   //  This does remove a tiny bit of flavor (no learning Japanese to level 2 max 
   //  from the guy in line at the shop), but it simplifies a lot of stuff.
   if (SKILL_IS_LANGUAGE(skill))
-    return 10;
+    return 12;
   
   // Override: Everyone can train negotiation to 12 since it's key in run payouts etc.  
   if (skill == SKILL_NEGOTIATION)
