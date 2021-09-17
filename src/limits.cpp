@@ -459,6 +459,7 @@ void check_idling(void)
             GET_WAS_IN(ch) = ch->in_room;
           }
           
+#ifdef VOID_IDLE_PCS
           if (FIGHTING(ch))
             stop_fighting(FIGHTING(ch));
           if (CH_IN_COMBAT(ch))
@@ -467,6 +468,7 @@ void check_idling(void)
           send_to_char("You have been idle, and are pulled into a void.\r\n", ch);
           char_from_room(ch);
           char_to_room(ch, &world[1]);
+#endif
         }
         /* Disabled-- I get protecting them by moving them to the void, but why DC them?
         else if (ch->char_specials.timer > 30) {
