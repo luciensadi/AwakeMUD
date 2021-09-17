@@ -4107,7 +4107,7 @@ ACMD(do_who)
       }
       
       if (AFF_FLAGS(tch).AreAnySet(AFF_DESIGN, AFF_PROGRAM, AFF_PART_DESIGN, AFF_PART_BUILD, AFF_SPELLDESIGN, AFF_AMMOBUILD, ENDBIT))
-        strlcat(buf1, " (Build and Repair)", sizeof(buf1));
+        strlcat(buf1, " (B/R)", sizeof(buf1));
       if (PRF_FLAGGED(tch, PRF_AFK))
         strlcat(buf1, " (AFK)", sizeof(buf1));
       if (PLR_FLAGGED(tch, PLR_RPE) && (level > LVL_MORTAL || PLR_FLAGGED(ch, PLR_RPE)))
