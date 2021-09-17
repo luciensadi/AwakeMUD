@@ -3279,8 +3279,8 @@ void combat_message_process_ranged_response(struct char_data *ch, rnum_t rnum) {
       }
       
       // They also try to fire on the target of a gun-wielder.
-      if (IS_NPC(ch) && CH_IN_COMBAT(ch) && FIGHTING(ch)) {
-        if (number(0, 6) >= 2) {
+      if (IS_NPC(ch) && CH_IN_COMBAT(ch) && FIGHTING(ch) && CAN_SEE(tch, FIGHTING(ch))) {
+        if (number(0, 8) == 1) {
           bool found_target = FALSE;
           
           // Make sure they have line of sight to the target.
