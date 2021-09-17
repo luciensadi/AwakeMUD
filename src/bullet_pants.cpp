@@ -360,9 +360,11 @@ void save_bullet_pants(struct char_data *ch) {
     return;
   }
   
+  char query_buf[5000];
+  
   // Delete their current entries from the DB.
-  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_ammo WHERE idnum = %ld;", GET_IDNUM(ch));
-  mysql_wrapper(mysql, buf);
+  snprintf(query_buf, sizeof(query_buf), "DELETE FROM pfiles_ammo WHERE idnum = %ld;", GET_IDNUM(ch));
+  mysql_wrapper(mysql, query_buf);
   
   // table design: idnum weapon normal apds explosive ex flechette gel
   
@@ -371,17 +373,17 @@ void save_bullet_pants(struct char_data *ch) {
     for (int am = AMMO_NORMAL; am < NUM_AMMOTYPES; am++) {
       // Do we need to save data for this particular weapon?
       if (GET_BULLETPANTS_AMMO_AMOUNT(ch, wp, am) > 0) {
-        snprintf(buf, sizeof(buf), "INSERT INTO pfiles_ammo (idnum, weapon, normal, apds, explosive, ex, flechette, gel) "
-                                   " VALUES (%ld, %d, %u, %u, %u, %u, %u, %u);", 
-                                   GET_IDNUM(ch),
-                                   wp,
-                                   GET_BULLETPANTS_AMMO_AMOUNT(ch, wp, AMMO_NORMAL),
-                                   GET_BULLETPANTS_AMMO_AMOUNT(ch, wp, AMMO_APDS),
-                                   GET_BULLETPANTS_AMMO_AMOUNT(ch, wp, AMMO_EXPLOSIVE),
-                                   GET_BULLETPANTS_AMMO_AMOUNT(ch, wp, AMMO_EX),
-                                   GET_BULLETPANTS_AMMO_AMOUNT(ch, wp, AMMO_FLECHETTE),
-                                   GET_BULLETPANTS_AMMO_AMOUNT(ch, wp, AMMO_GEL));
-        mysql_wrapper(mysql, buf);
+        snprintf(query_buf, sizeof(query_buf), "INSERT INTO pfiles_ammo (idnum, weapon, normal, apds, explosive, ex, flechette, gel) "
+                                               " VALUES (%ld, %d, %u, %u, %u, %u, %u, %u);", 
+                                               GET_IDNUM(ch),
+                                               wp,
+                                               GET_BULLETPANTS_AMMO_AMOUNT(ch, wp, AMMO_NORMAL),
+                                               GET_BULLETPANTS_AMMO_AMOUNT(ch, wp, AMMO_APDS),
+                                               GET_BULLETPANTS_AMMO_AMOUNT(ch, wp, AMMO_EXPLOSIVE),
+                                               GET_BULLETPANTS_AMMO_AMOUNT(ch, wp, AMMO_EX),
+                                               GET_BULLETPANTS_AMMO_AMOUNT(ch, wp, AMMO_FLECHETTE),
+                                               GET_BULLETPANTS_AMMO_AMOUNT(ch, wp, AMMO_GEL));
+        mysql_wrapper(mysql, query_buf);
         
         // Done saving all ammo types for this weapon.
         break;
@@ -394,6 +396,7 @@ void save_bullet_pants(struct char_data *ch) {
 void load_bullet_pants(struct char_data *ch) {
   MYSQL_RES *res;
   MYSQL_ROW row;
+  char query_buf[5000];
   
   int weapon;
   
@@ -403,8 +406,8 @@ void load_bullet_pants(struct char_data *ch) {
   }
   
   // For each weapon, read their ammo from the DB (if any).
-  snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_ammo WHERE idnum = %ld;", GET_IDNUM(ch));
-  mysql_wrapper(mysql, buf);
+  snprintf(query_buf, sizeof(query_buf), "SELECT * FROM pfiles_ammo WHERE idnum = %ld;", GET_IDNUM(ch));
+  mysql_wrapper(mysql, query_buf);
   
   // If they have no ammo at all, bail out.
   if (!(res = mysql_use_result(mysql))) {
