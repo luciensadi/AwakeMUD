@@ -2532,7 +2532,7 @@ ACMD(do_penalize)
     gain_karma(vict, k * -1, TRUE, FALSE, FALSE);
     
   // Since we subtracted rep for this, we need to re-add it.
-  GET_REP(vict) += k;
+  GET_REP(vict) += (int) (k / 100);
 
   send_to_char(vict, "You have been penalized %0.2f karma for %s.\r\n", (float)k*0.01, reason);
 
