@@ -2107,28 +2107,28 @@ void close_socket(struct descriptor_data *d)
     {
       time_t time_delta = time(0) - d->login_time;
       bool printed = FALSE;
-      float per_hour_multiplier = (3600 / (time(0) - d->login_time));
+      float per_hour_multiplier = 3600.0 / time_delta;
       
       strlcpy(buf, "Over ", sizeof(buf));
       
-      if (time_delta >= (60 * 60 * 24)) {
-        int days = time_delta / (60 * 60 * 24);
+      if (time_delta >= SECS_PER_REAL_DAY) {
+        int days = time_delta / SECS_PER_REAL_DAY;
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%d day%s", days, days != 1 ? "s" : "");
-        time_delta %= (60 * 60 * 24);
+        time_delta %= SECS_PER_REAL_DAY;
         printed = TRUE;
       }
       
-      if (time_delta >= (60 * 60)) {
-        int hours = time_delta / (60 * 60);
+      if (time_delta >= SECS_PER_REAL_HOUR) {
+        int hours = time_delta / SECS_PER_REAL_HOUR;
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s%d hour%s", printed ? ", " : "", hours, hours != 1 ? "s" : "");
-        time_delta %= (60 * 60);
+        time_delta %= SECS_PER_REAL_HOUR;
         printed = TRUE;
       }
       
-      if (time_delta >= 60) {
-        int minutes = time_delta / 60;
+      if (time_delta >= SECS_PER_REAL_MIN) {
+        int minutes = time_delta / SECS_PER_REAL_MIN;
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s%d minute%s", printed ? ", " : "", minutes, minutes != 1 ? "s" : "");
-        time_delta %= 60;
+        time_delta %= SECS_PER_REAL_MIN;
         printed = TRUE;
       }
       

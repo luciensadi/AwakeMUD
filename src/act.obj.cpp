@@ -641,45 +641,77 @@ bool can_take_obj(struct char_data * ch, struct obj_data * obj)
 void get_check_money(struct char_data * ch, struct obj_data * obj, struct obj_data *from_obj)
 {
   int zone;
+  
+  // Do nothing if it's not money.
+  if (GET_OBJ_TYPE(obj) != ITEM_MONEY)
+    return;
 
-  if (GET_OBJ_TYPE(obj) == ITEM_MONEY)
-  {
-    for (zone = 0; zone <= top_of_zone_table; zone++)
-      if (!zone_table[zone].connected && GET_OBJ_VNUM(obj) >= (zone_table[zone].number * 100) &&
-          GET_OBJ_VNUM(obj) <= zone_table[zone].top)
-        break;
-    if (zone <= top_of_zone_table)
-      act("$p dissolves in your hands!", FALSE, ch, obj, 0, TO_CHAR);
-    else if (GET_ITEM_MONEY_VALUE(obj) > (!GET_ITEM_MONEY_IS_CREDSTICK(obj) ? 0 : -1)) {
-      if (!GET_ITEM_MONEY_IS_CREDSTICK(obj)) {  //paper money
-        if (GET_ITEM_MONEY_VALUE(obj) > 1)
-          send_to_char(ch, "There were %d nuyen.\r\n", GET_ITEM_MONEY_VALUE(obj));
-        else
-          send_to_char(ch, "There was 1 nuyen.\r\n");
-        
-        // Income from an NPC corpse is always tracked.
-        if (from_obj && (GET_OBJ_VNUM(from_obj) != OBJ_SPECIAL_PC_CORPSE && IS_OBJ_STAT(from_obj, ITEM_CORPSE))) {
-          gain_nuyen(ch, GET_ITEM_MONEY_VALUE(obj), NUYEN_INCOME_LOOTED_FROM_NPCS);
-        }
-        
-        // Picking up money from a player corpse, or dropped money etc-- not a faucet, came from a PC.
-        else {
-          GET_NUYEN_RAW(ch) += GET_ITEM_MONEY_VALUE(obj);
-        }
-      } else {
-        // Income from an NPC corpse is always tracked. We don't add it to their cash level though-- credstick.
-        if (from_obj && (GET_OBJ_VNUM(from_obj) != OBJ_SPECIAL_PC_CORPSE && IS_OBJ_STAT(from_obj, ITEM_CORPSE))) {
-          GET_NUYEN_INCOME_THIS_PLAY_SESSION(ch, NUYEN_INCOME_LOOTED_FROM_NPCS) += GET_ITEM_MONEY_VALUE(obj);
-        }
-        
-        // Return so we don't extract the credstick.
-        return;
-      }
-    } else {
-      act("$p dissolves in your hands!", FALSE, ch, obj, 0, TO_CHAR);
-      mudlog("ERROR: Nuyen value < 1", ch, LOG_SYSLOG, TRUE);
-    }
+  // Find the zone it belongs to.
+  for (zone = 0; zone <= top_of_zone_table; zone++)
+    if (!zone_table[zone].connected && GET_OBJ_VNUM(obj) >= (zone_table[zone].number * 100) &&
+        GET_OBJ_VNUM(obj) <= zone_table[zone].top)
+      break;
+      
+  // Confirm that the zone is valid.
+  if (zone <= top_of_zone_table) {
+    act("$p dissolves in your hands!", FALSE, ch, obj, 0, TO_CHAR);
+    snprintf(buf3, sizeof(buf3), "ERROR: Non-zone-contained item %ld obtained by player.", GET_OBJ_VNUM(obj));
+    mudlog(buf3, ch, LOG_SYSLOG, TRUE);
+    
     extract_obj(obj);
+    return;
+  }
+  
+  // Confirm that it has money on it.
+  if (GET_ITEM_MONEY_VALUE(obj) <= (!GET_ITEM_MONEY_IS_CREDSTICK(obj) ? 0 : -1)) {
+    act("$p dissolves in your hands!", FALSE, ch, obj, 0, TO_CHAR);
+    snprintf(buf3, sizeof(buf3), "ERROR: Valueless money item %ld obtained by player.", GET_OBJ_VNUM(obj));
+    mudlog(buf3, ch, LOG_SYSLOG, TRUE);
+    
+    extract_obj(obj);
+    return;
+  }
+  
+  // If it's paper money, handle it here.
+  if (!GET_ITEM_MONEY_IS_CREDSTICK(obj)) {
+    if (GET_ITEM_MONEY_VALUE(obj) > 1)
+      send_to_char(ch, "There were %d nuyen.\r\n", GET_ITEM_MONEY_VALUE(obj));
+    else
+      send_to_char(ch, "There was 1 nuyen.\r\n");
+    
+    // Income from an NPC corpse is always tracked.
+    if (from_obj && (GET_OBJ_VNUM(from_obj) != OBJ_SPECIAL_PC_CORPSE && IS_OBJ_STAT(from_obj, ITEM_CORPSE))) {
+      if (IS_SENATOR(ch))
+        send_to_char("(nuyen from npc corpse)\r\n", ch);
+      gain_nuyen(ch, GET_ITEM_MONEY_VALUE(obj), NUYEN_INCOME_LOOTED_FROM_NPCS);
+    }
+    
+    // Picking up money from a player corpse, or dropped money etc-- not a faucet, came from a PC.
+    else {
+      if (IS_SENATOR(ch))
+        send_to_char("(nuyen from player corpse)\r\n", ch);
+      GET_NUYEN_RAW(ch) += GET_ITEM_MONEY_VALUE(obj);
+    }
+    
+    extract_obj(obj);
+    return;
+  } 
+  
+  // Credstick? Handle it here.
+  else {
+    // Income from an NPC corpse is always tracked. We don't add it to their cash level though-- credstick.
+    if (from_obj && (GET_OBJ_VNUM(from_obj) != OBJ_SPECIAL_PC_CORPSE && IS_OBJ_STAT(from_obj, ITEM_CORPSE))) {
+      if (IS_SENATOR(ch))
+        send_to_char("(credstick from npc corpse)\r\n", ch);
+      GET_NUYEN_INCOME_THIS_PLAY_SESSION(ch, NUYEN_INCOME_LOOTED_FROM_NPCS) += GET_ITEM_MONEY_VALUE(obj);
+    }
+    else {
+      if (IS_SENATOR(ch))
+        send_to_char("(credstick from pc corpse)\r\n", ch);
+    }
+    
+    // We don't extract the credstick.
+    return;
   }
 }
 
@@ -831,6 +863,7 @@ void perform_get_from_container(struct char_data * ch, struct obj_data * obj,
         obj_from_obj(obj);
         obj_to_char(obj, ch);
         get_check_money(ch, obj, was_in_obj);
+        obj = NULL;
       }
       
       if (cont->obj_flags.extra_flags.IsSet(ITEM_CORPSE) && GET_OBJ_VAL(cont, 4) && !cont->contains) {
