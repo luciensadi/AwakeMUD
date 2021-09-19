@@ -711,6 +711,16 @@ void send_mob_aggression_warnings(struct char_data *pc, struct char_data *mob) {
   int mob_stealth_dice = get_skill(mob, SKILL_STEALTH, mob_tn);
   int mob_stealth_successes = success_test(mob_stealth_dice, mob_tn);
   
+  if (!pc) {
+    mudlog("SYSERR: Received null PC to send_mob_aggression_warnings().", mob, LOG_SYSLOG, TRUE);
+    return;
+  }
+  
+  if (!mob) {
+    mudlog("SYSERR: Received null mob to send_mob_aggression_warnings().", pc, LOG_SYSLOG, TRUE);
+    return;
+  }
+  
   int pc_tn = 4;
   if (pc->in_room == mob->in_room)
     pc_tn = 2;
