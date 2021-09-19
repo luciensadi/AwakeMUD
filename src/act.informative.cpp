@@ -650,11 +650,11 @@ void look_at_char(struct char_data * i, struct char_data * ch)
       
       if (weight > 4) {
         snprintf(buf, sizeof(buf), "$e look%s to be about %0.1f meters tall and "
-                "appears to weigh about %d kg.", HSSH_SHOULD_PLURAL(i) ? "s" : "", height, weight);
+                "appear%s to weigh about %d kg.", HSSH_SHOULD_PLURAL(i) ? "s" : "", height, HSSH_SHOULD_PLURAL(i) ? "s" : "", weight);
         act(buf, FALSE, i, 0, ch, TO_VICT);
       } else {
         snprintf(buf, sizeof(buf), "$e look%s to be about %0.1f meters tall and "
-                "appears to barely weigh anything.", HSSH_SHOULD_PLURAL(i) ? "s" : "", height);
+                "appear%s to barely weigh anything.", HSSH_SHOULD_PLURAL(i) ? "s" : "", height, HSSH_SHOULD_PLURAL(i) ? "s" : "");
         act(buf, FALSE, i, 0, ch, TO_VICT);
       }
     }
