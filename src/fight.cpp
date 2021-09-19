@@ -3273,7 +3273,7 @@ void combat_message_process_ranged_response(struct char_data *ch, rnum_t rnum) {
           if (ranged_response(ch, tch) && tch->in_room == was_in) {
             act("$n aims $s weapon at a distant threat!",
                 FALSE, tch, 0, ch, TO_ROOM);
-            send_mob_aggression_warnings(FIGHTING(ch), tch);
+            send_mob_aggression_warnings(ch, tch);
           }
         }
       }
