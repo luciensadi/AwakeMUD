@@ -2323,6 +2323,10 @@ bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype, bo
   if (GET_POS(victim) <= POS_DEAD)
     return false;
     
+  // You can always hurt yourself. :dead-eyed stare:
+  if (ch == victim)
+    return TRUE;
+    
   if (IS_NPC(victim)) {
     // Nokill protection.
     if (MOB_FLAGGED(victim, MOB_NOKILL))
