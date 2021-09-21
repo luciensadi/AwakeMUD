@@ -20,6 +20,7 @@
 #include "screen.h"
 #include "olc.h"
 #include "newmatrix.h"
+#include "config.h"
 
 extern const char *dirs[];
 extern const char *short_where[];
@@ -205,11 +206,12 @@ void zedit_disp_data_menu(struct descriptor_data *d)
   send_to_char(CH, "^G4^Y) ^WReset mode: ^c%s^n\r\n", reset_mode[ZON->reset_mode] );
   send_to_char(CH, "^G5^Y) ^WSecurity level: ^c%d^n\r\n", ZON->security );
   send_to_char(CH, "^G6^Y) ^WJurisdiction: ^c%s^n\r\n", jurid[ZON->jurisdiction]);
-  if (access_level(CH, LVL_VICEPRES))
-  {
+  if (access_level(CH, LVL_FOR_SETTING_ZONE_EDITOR_ID_NUMBERS)) {
     send_to_char(CH, "^G7^Y) ^WEditor's ID Numbers: ^c%d^w, ^c%d^w, ^c%d^w, ^c%d^w, ^c%d^n\r\n",
                  ZON->editor_ids[0], ZON->editor_ids[1], ZON->editor_ids[2],
                  ZON->editor_ids[3], ZON->editor_ids[4]);
+  }
+  if (access_level(CH, LVL_FOR_SETTING_ZONE_CONNECTED_STATUS)) {
     send_to_char(CH, "^G8^Y) ^WConnected: ^c%d^n\r\n", ZON->connected);
   }
   send_to_char(CH, "^G9^Y) ^WIs PGHQ: ^c%s^n\r\n", ZON->is_pghq ? "yes" : "no");
@@ -715,7 +717,7 @@ void zedit_parse(struct descriptor_data *d, const char *arg)
       d->edit_mode = ZEDIT_JURID;
       break;
     case '7':
-      if (!access_level(CH, LVL_VICEPRES)) {
+      if (!access_level(CH, LVL_FOR_SETTING_ZONE_EDITOR_ID_NUMBERS)) {
         send_to_char("That's not a valid choice.\r\n", CH);
         return;
       }
@@ -723,7 +725,7 @@ void zedit_parse(struct descriptor_data *d, const char *arg)
       d->edit_mode = ZEDIT_ID_LIST;
       break;
     case '8':
-      if (!access_level(CH, LVL_VICEPRES)) {
+      if (!access_level(CH, LVL_FOR_SETTING_ZONE_CONNECTED_STATUS)) {
         send_to_char("That's not a valid choice.\r\n", CH);
         return;
       }
