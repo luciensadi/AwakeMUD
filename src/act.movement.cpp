@@ -987,6 +987,7 @@ int has_key(struct char_data *ch, int key_vnum)
 {
   struct obj_data *o, *key;
 
+  // Check carried items.
   for (o = ch->carrying; o; o = o->next_content) {
     if (GET_OBJ_VNUM(o) == key_vnum)
       return 1;
@@ -998,10 +999,25 @@ int has_key(struct char_data *ch, int key_vnum)
       }
     }
   }
-
-  if (GET_EQ(ch, WEAR_HOLD))
-    if (GET_OBJ_VNUM(GET_EQ(ch, WEAR_HOLD)) == key_vnum)
+  
+  // Check worn items.
+  for (int x = 0; x < NUM_WEARS; x++) {
+    // Must exist.
+    if (!GET_EQ(ch, x))
+      continue;
+      
+    // Direct match?
+    if (GET_OBJ_VNUM(GET_EQ(ch, x)) == key_vnum)
       return 1;
+      
+    // Keyring match?
+    if (GET_OBJ_TYPE(GET_EQ(ch, x)) == ITEM_KEYRING) {
+      for (key = GET_EQ(ch, x)->contains; key; key = key->next_content) {
+        if (GET_OBJ_VNUM(key) == key_vnum)
+          return 1;
+      }
+    }
+  }
 
   return 0;
 }
