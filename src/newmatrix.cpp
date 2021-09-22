@@ -356,6 +356,7 @@ void evade_detection(struct matrix_icon *icon)
 ACMD(do_evade)
 {
   evade_detection(PERSONA);
+  WAIT_STATE(ch, (int) (DECKING_WAIT_STATE_TIME));
 }
 
 void parry_attack(struct matrix_icon *icon)
@@ -375,6 +376,7 @@ void parry_attack(struct matrix_icon *icon)
 ACMD(do_parry)
 {
   parry_attack(PERSONA);
+  WAIT_STATE(ch, (int) (DECKING_WAIT_STATE_TIME));
 }
 
 void position_attack(struct matrix_icon *icon)
@@ -403,6 +405,7 @@ void position_attack(struct matrix_icon *icon)
 ACMD(do_matrix_position)
 {
   position_attack(PERSONA);
+  WAIT_STATE(ch, (int) (DECKING_WAIT_STATE_TIME));
 }
 
 void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
@@ -983,6 +986,7 @@ ACMD(do_locate)
     send_to_char(ch, "You can't do that while hitching.\r\n");
     return;
   }
+  WAIT_STATE(ch, (int) (DECKING_WAIT_STATE_TIME));
   two_arguments(argument, buf, arg);
   int success, i = 0;
   if (is_abbrev(buf, "hosts")) {
@@ -1302,6 +1306,7 @@ ACMD(do_analyze)
     send_to_icon(PERSONA, "Analyze What?\r\n");
     return;
   }
+  WAIT_STATE(ch, (int) (DECKING_WAIT_STATE_TIME));
   int success;
   one_argument(argument, arg);
   if (is_abbrev(arg, "host")) {
@@ -1444,6 +1449,7 @@ ACMD(do_logon)
   }
   skip_spaces(&argument);
   rnum_t target_host = 0;
+  WAIT_STATE(ch, (int) (DECKING_WAIT_STATE_TIME));
   if (!str_cmp(argument, "LTG")) {
     if (!(target_host = real_host(matrix[PERSONA->in_host].parent))
         && !(matrix[target_host].type == HOST_LTG || matrix[target_host].type == HOST_PLTG)) {
@@ -1507,6 +1513,7 @@ ACMD(do_logoff)
     return;
   }
   if (subcmd) {
+    WAIT_STATE(ch, (int) (3 RL_SEC));
     send_to_char(ch, "You yank the plug out and return to the real world.\r\n");
     for (struct matrix_icon *icon = matrix[PERSONA->in_host].icons; PERSONA && icon; icon = icon->next_in_host)
       if (icon->fighting == PERSONA && icon->ic.type >= IC_LETHAL_BLACK) {
@@ -1524,10 +1531,12 @@ ACMD(do_logoff)
       }
     int success = system_test(PERSONA->in_host, ch, TEST_ACCESS, SOFT_DECEPTION, 0);
     if (success <= 0) {
+      WAIT_STATE(ch, (int) (DECKING_WAIT_STATE_TIME));
       send_to_icon(PERSONA, "The matrix host's automated procedures detect and block your logoff attempt.\r\n");
       return;
     }
     send_to_icon(PERSONA, "You gracefully log off from the matrix and return to the real world.\r\n");
+    WAIT_STATE(ch, (int) (0.5 RL_SEC));
   }
   snprintf(buf, sizeof(buf), "%s depixelates and vanishes from the host.\r\n", PERSONA->name);
   send_to_host(PERSONA->in_host, buf, PERSONA, FALSE);
@@ -1569,7 +1578,8 @@ ACMD(do_connect)
     send_to_char(TOOBUSY, ch);
     return;
   }
-
+  
+  WAIT_STATE(ch, (int) (DECKING_WAIT_STATE_TIME));
   for (jack = ch->cyberware; jack; jack = jack->next_content)
     if (GET_OBJ_VAL(jack, 0) == CYB_DATAJACK || (GET_OBJ_VAL(jack, 0) == CYB_EYES && IS_SET(GET_OBJ_VAL(jack, 3), EYE_DATAJACK)))
       break;
@@ -1898,6 +1908,7 @@ ACMD(do_redirect)
     send_to_icon(PERSONA, "You can only perform this operation on an RTG.\r\n");
     return;
   }
+  WAIT_STATE(ch, (int) (DECKING_WAIT_STATE_TIME));
   int success = system_test(PERSONA->in_host, ch, TEST_CONTROL, SOFT_CAMO, 0);
   if (success > 0) {
     for (int x = 0; x < DECKER->redirect; x++)
@@ -1930,6 +1941,7 @@ ACMD(do_download)
     send_to_icon(PERSONA, "Download what?\r\n");
     return;
   }
+  WAIT_STATE(ch, (int) (DECKING_WAIT_STATE_TIME));
   struct obj_data *soft = NULL;
   skip_spaces(&argument);
   // TODO: This might cause conflicts if multiple deckers have paydata on the host.
@@ -2000,7 +2012,8 @@ ACMD(do_run)
   for (soft = DECKER->software; soft; soft = soft->next_content)
     if (isname(buf, soft->text.keywords) || isname(buf, soft->restring))
       break;
-  if (soft)
+  if (soft) {
+    WAIT_STATE(ch, (int) (DECKING_WAIT_STATE_TIME));
     switch (GET_OBJ_VAL(soft, 0)) {
     case SOFT_ATTACK:
       struct matrix_icon *icon;
@@ -2070,6 +2083,7 @@ ACMD(do_run)
       send_to_icon(PERSONA, "You don't need to manually run %s.\r\n", GET_OBJ_NAME(soft));
       break;
     }
+  }
   else
     send_to_icon(PERSONA, "You don't seem to have that program loaded.\r\n");
 }
@@ -2085,6 +2099,7 @@ ACMD(do_decrypt)
     send_to_char(ch, "%s what?\r\n", subcmd ? "Disarm" : "Decrypt");
     return;
   }
+  WAIT_STATE(ch, (int) (DECKING_WAIT_STATE_TIME));
   struct obj_data *obj = NULL;
   if ((obj = get_obj_in_list_vis(ch, argument, matrix[PERSONA->in_host].file)) && GET_OBJ_VAL(obj, 7) == PERSONA->idnum) {
     if (!GET_OBJ_VAL(obj, 5) || (GET_OBJ_VAL(obj, 5) == 1 && subcmd) || (GET_OBJ_VAL(obj, 5) > 1 && !subcmd) ||
@@ -2586,6 +2601,7 @@ ACMD(do_crash)
     send_to_icon(PERSONA, "Someone has already initiated a shutdown.\r\n");
     return;
   }
+  WAIT_STATE(ch, (int) (DECKING_WAIT_STATE_TIME));
   int success = system_test(PERSONA->in_host, ch, TEST_CONTROL, SOFT_CRASH, 0);
   if (success > 0) {
     matrix[PERSONA->in_host].shutdown_success = success;
@@ -2611,6 +2627,7 @@ ACMD(do_matrix_scan)
     send_to_icon(PERSONA, "What do you wish to scan?\r\n");
     return;
   }
+  WAIT_STATE(ch, (int) (DECKING_WAIT_STATE_TIME));
   for (struct matrix_icon *ic = matrix[PERSONA->in_host].icons; ic; ic = ic->next_in_host)
     if ((isname(argument, ic->look_desc) || isname(argument, ic->name)) && has_spotted(PERSONA, ic) &&
         ic->decker) {
@@ -2703,6 +2720,7 @@ ACMD(do_abort)
     send_to_icon(PERSONA, "There is no shutdown to abort.\r\n");
     return;
   }
+  WAIT_STATE(ch, (int) (DECKING_WAIT_STATE_TIME));
   int success = system_test(PERSONA->in_host, ch, TEST_CONTROL, SOFT_SWERVE, 0);
   success /= 2;
   if (success > matrix[PERSONA->in_host].shutdown_success) {
@@ -2899,6 +2917,7 @@ ACMD(do_restrict)
     send_to_icon(PERSONA, "You need to specify target and type of restriction.\r\n");
     return;
   }
+  WAIT_STATE(ch, (int) (DECKING_WAIT_STATE_TIME));
   int success, detect = 0;
   for (targ = matrix[PERSONA->in_host].icons; targ; targ = targ->next_in_host)
     if (targ->decker && isname(arg, targ->name) && has_spotted(PERSONA, targ))
@@ -2937,6 +2956,7 @@ ACMD(do_trace)
   else if (matrix[PERSONA->in_host].type != HOST_LTG)
     send_to_icon(PERSONA, "You can only perform this action on an LTG.\r\n");
   else {
+    WAIT_STATE(ch, (int) (DECKING_WAIT_STATE_TIME));
     int success = system_test(PERSONA->in_host, ch, TEST_INDEX, SOFT_BROWSE, 0);
     if (success > 0)
       for (struct matrix_icon *icon = icon_list; icon; icon = icon->next)

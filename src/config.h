@@ -181,6 +181,9 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 // How many sunrises (currently spans of 48 minutes) are spirits good for?
 #define NUMBER_OF_IG_DAYS_FOR_SPIRIT_TO_LAST                   4
 
+// How long is the decking command wait state?
+#define DECKING_WAIT_STATE_TIME                                (0.2 RL_SEC)
+
 /////////////// OLC permissions configuration /////////////////////////
 #define LVL_FOR_SETTING_ZONE_EDITOR_ID_NUMBERS                 LVL_VICEPRES
 #define LVL_FOR_SETTING_ZONE_CONNECTED_STATUS                  LVL_FIXER
