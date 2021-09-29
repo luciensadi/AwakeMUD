@@ -1613,7 +1613,7 @@ SPECIAL(car_dealer)
     return FALSE;
   }
 
-  int car_room = real_room(ch->in_room->number) - 1;
+  int car_room = real_room(ch->in_room->number - 1);
 
   if (CMD_IS("list")) {
     send_to_char("Available vehicles are:\r\n", ch);

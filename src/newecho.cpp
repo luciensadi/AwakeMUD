@@ -641,8 +641,10 @@ ACMD(do_new_echo) {
   }
   
   // Can't speak? No emote speech for you.
-  if (strchr(argument, '"') != NULL && !char_can_make_noise(ch))
+  if (strchr(argument, '"') != NULL && !char_can_make_noise(ch)) {
+    send_to_char("You can't seem to make any noise.\r\n", ch);
     return;
+  }
     
   // Double up percentages.
   char *pct_reader = argument;

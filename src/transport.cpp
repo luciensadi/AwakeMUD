@@ -914,7 +914,7 @@ SPECIAL(taxi)
 
   if (CMD_IS("say") || CMD_IS("'")) {
     // Failure condition: If you can't speak, the cabbie can't hear you.
-    if (!char_can_make_noise(ch))
+    if (!char_can_make_noise(ch, "You can't seem to make any noise.\r\n"))
       return FALSE;
     
     bool found = FALSE;
