@@ -607,7 +607,6 @@ bool load_char(const char *name, char_data *ch, bool logon)
       snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_spells WHERE idnum=%ld ORDER BY Category DESC, Name DESC;", GET_IDNUM(ch));
       mysql_wrapper(mysql, buf);
       res = mysql_use_result(mysql);
-      char name_buf[500];
       while ((row = mysql_fetch_row(res))) {
         spell_data *spell = new spell_data;
         // spell->name = str_dup(row[1]);
