@@ -764,12 +764,16 @@ void game_loop(int mother_desc)
               d->original->char_specials.last_timer = d->original->char_specials.timer;
               d->original->char_specials.timer = 0;
             }
-            if (!d->connected && GET_WAS_IN(d->character)) {
-              if (d->character->in_room)
-                char_from_room(d->character);
-              char_to_room(d->character, GET_WAS_IN(d->character));
+            if (d->connected == CON_PLAYING && GET_WAS_IN(d->character)) {
+              if (GET_WAS_IN(d->character) == get_ch_in_room(d->character)) {
+                mudlog("Debug: get_was_in == get_ch_in_room on return check, won't print.", d->character, LOG_SYSLOG, TRUE);
+              } else {
+                if (d->character->in_room)
+                  char_from_room(d->character);
+                char_to_room(d->character, GET_WAS_IN(d->character));
+                act("$n has returned.", TRUE, d->character, 0, 0, TO_ROOM);
+              }
               GET_WAS_IN(d->character) = NULL;
-              act("$n has returned.", TRUE, d->character, 0, 0, TO_ROOM);
             }
           }
           d->wait = 1;

@@ -408,7 +408,8 @@ enum {
 #define PRF_NOPSEUDOLANGUAGE             54
 #define PRF_NO_IDLE_NUYEN_REWARD_MESSAGE 55
 #define PRF_TOUCH_ME_DADDY               56 /* Allows player cyberdocs to operate on you. Don't @ me. */
-#define PRF_MAX                          57
+#define PRF_NO_VOID_ON_IDLE              57
+#define PRF_MAX                          58
 
 /* log watch */
 

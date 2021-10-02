@@ -445,8 +445,16 @@ void check_idling(void)
         do_return(ch, "", 0, 0);
     } else if (!IS_NPC(ch)) {
       ch->char_specials.timer++;
-      if (!(IS_SENATOR(ch) || IS_WORKING(ch) || PLR_FLAGGED(ch, PLR_NO_IDLE_OUT)) || !ch->desc) {
+      if (!(IS_SENATOR(ch) || IS_WORKING(ch) || PLR_FLAGGED(ch, PLR_NO_IDLE_OUT) || PRF_FLAGGED(ch, PRF_NO_VOID_ON_IDLE)) || !ch->desc) {
+#ifdef VOID_IDLE_PCS
         if (!GET_WAS_IN(ch) && ch->in_room && ch->char_specials.timer > 15) {
+          if (FIGHTING(ch))
+            stop_fighting(FIGHTING(ch));
+          if (CH_IN_COMBAT(ch))
+            stop_fighting(ch);
+          if (ch->master)
+            stop_follower(ch);
+            
           // No idling out in cabs.
           if (ROOM_VNUM_IS_CAB(GET_ROOM_VNUM(ch->in_room))) {
             send_to_char("The cabdriver stops off at Dante's long enough to kick you out.\r\n", ch);
@@ -458,20 +466,13 @@ void check_idling(void)
           } else {
             GET_WAS_IN(ch) = ch->in_room;
           }
-          
-#ifdef VOID_IDLE_PCS
-          if (FIGHTING(ch))
-            stop_fighting(FIGHTING(ch));
-          if (CH_IN_COMBAT(ch))
-            stop_fighting(ch);
-          if (ch->master)
-            stop_follower(ch);
+            
           act("$n disappears into the void.", TRUE, ch, 0, 0, TO_ROOM);
           send_to_char("You have been idle, and are pulled into a void.\r\n", ch);
           char_from_room(ch);
           char_to_room(ch, &world[1]);
-#endif
         }
+#endif
         /* Disabled-- I get protecting them by moving them to the void, but why DC them?
         else if (ch->char_specials.timer > 30) {
           if (ch->in_room)

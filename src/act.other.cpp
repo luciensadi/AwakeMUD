@@ -1140,7 +1140,9 @@ const char *tog_messages[][2] = {
                             {"You will now see the idle nuyen reward messages.\r\n",
                              "You will no longer see the idle nuyen reward messages.\r\n"},
                             {"Player cyberdocs are no longer able to operate on you.\r\n",
-                             "Player cyberdocs are now able to operate on you. This flag will be un-set after each operation.\r\n"}
+                             "Player cyberdocs are now able to operate on you. This flag will be un-set after each operation.\r\n"},
+                            {"You will no longer void on idle out. This means you are vulnerable, you have been warned.\r\n",
+                             "You will return to the void when idle.\r\n"}
                           };
 
 ACMD(do_toggle)
@@ -1352,6 +1354,9 @@ ACMD(do_toggle)
     } else if (is_abbrev(argument, "cyberdoc")) {
       result = PRF_TOG_CHK(ch, PRF_TOUCH_ME_DADDY);
       mode = 38;
+    } else if (is_abbrev(argument, "voiding") || is_abbrev(argument, "no void on idle")) {
+      result = PRF_TOG_CHK(ch, PRF_NO_VOID_ON_IDLE);
+      mode = 39;
     } else {
       send_to_char("That is not a valid toggle option.\r\n", ch);
       return;
