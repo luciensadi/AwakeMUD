@@ -1490,10 +1490,12 @@ ACMD(do_phone)
     }
     
     char parsed_number[MAX_INPUT_LENGTH];
-    for (size_t arg_idx = 0, parsed_idx = 0; arg_idx < strlen(arg); arg_idx++) {
+    int parsed_idx = 0;
+    for (size_t arg_idx = 0; arg_idx < strlen(arg); arg_idx++) {
       if (isdigit(arg[arg_idx]))
         parsed_number[parsed_idx++] = arg[arg_idx];
     }
+    parsed_number[parsed_idx] = 0;
     
     if (!(ring = atoi(parsed_number))) {
       send_to_char("That is not a valid number.\r\n", ch);

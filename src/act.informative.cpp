@@ -4379,8 +4379,8 @@ ACMD(do_users)
       return;
     }
   }                             /* end while (parser) */
-  strlcpy(line, "Num  Name           State           Idle Login@   Site\r\n", sizeof(line));
-  strlcat(line, "---- -------------- --------------- ---- -------- ---------------------------\r\n", sizeof(line));
+  strlcpy(line, "Num  Name           State           Idle  Login@   Site\r\n", sizeof(line));
+  strlcat(line, "---- -------------- --------------- ----- -------- ---------------------------\r\n", sizeof(line));
   send_to_char(line, ch);
   
   one_argument(argument, arg);
@@ -4421,11 +4421,11 @@ ACMD(do_users)
       strlcpy(state, connected_types[d->connected], sizeof(state));
     
     if (d->character && !d->connected)
-      snprintf(idletime, sizeof(idletime), "%4d", d->character->char_specials.timer);
+      snprintf(idletime, sizeof(idletime), "%5d", d->character->char_specials.timer);
     else
       strlcpy(idletime, "", sizeof(idletime));
     
-    format = "%-4d %-14s %-15s %-4s %-8s ";
+    format = "%-4d %-14s %-15s %-5s %-8s ";
     
     if (d->character && GET_CHAR_NAME(d->character)) {
       if (d->original)
