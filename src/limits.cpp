@@ -464,6 +464,8 @@ void check_idling(void)
             stop_fighting(FIGHTING(ch));
           if (CH_IN_COMBAT(ch))
             stop_fighting(ch);
+          if (ch->master)
+            stop_follower(ch);
           act("$n disappears into the void.", TRUE, ch, 0, 0, TO_ROOM);
           send_to_char("You have been idle, and are pulled into a void.\r\n", ch);
           char_from_room(ch);

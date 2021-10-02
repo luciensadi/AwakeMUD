@@ -1279,11 +1279,6 @@ SPECIAL(adept_trainer)
     send_to_char("NPCs can't train, go away.\r\n", ch);
     return TRUE;
   }
-  
-  if (access_level(ch, LVL_BUILDER) && PLR_FLAGGED(ch, PLR_PAID_FOR_CLOSECOMBAT)) {
-    send_to_char("DEBUG: Stripping your CC flag.\r\n", ch);
-    PLR_FLAGS(ch).RemoveBit(PLR_PAID_FOR_CLOSECOMBAT);
-  } 
 
   if (GET_TRADITION(ch) != TRAD_ADEPT) {
     if (PLR_FLAGGED(ch, PLR_PAID_FOR_CLOSECOMBAT)) {
@@ -1356,7 +1351,7 @@ SPECIAL(adept_trainer)
         num++;
     snprintf(buf, sizeof(buf), "You can learn the following abilit%s:\r\n", num == 1 ? "y" : "ies");
     for (i = 1; i < ADEPT_NUMPOWER; i++)
-      if (adepts[ind].skills[i] && GET_POWER_TOTAL(ch, i) < max_ability(i))
+      if (adepts[ind].skills[i] && GET_POWER_TOTAL(ch, i) < max_ability(i) && GET_POWER_TOTAL(ch, i) < adepts[ind].skills[i])
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%30s (%0.2f points)\r\n", adept_powers[i],
                 ((float) train_ability_cost(ch, i, GET_POWER_TOTAL(ch, i) + 1)/ 100));
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nYou have %0.2f power point%s to "

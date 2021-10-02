@@ -572,7 +572,7 @@ struct preference_bit_struct preference_bits_v2[] = {
   { "Menu Gag"             , FALSE, TRUE  },
   { "Longweapon"           , FALSE, FALSE },
   { "PGrouplog"            , TRUE , TRUE  },
-  { "ShowGroupTag"         , TRUE , FALSE },
+  { "ShowGroupTag"         , FALSE, FALSE },
   { "Keepalive"            , FALSE, TRUE  },
   { "Screenreader"         , FALSE, FALSE },
   { "No Color"             , FALSE, TRUE  },
