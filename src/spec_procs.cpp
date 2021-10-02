@@ -3734,18 +3734,21 @@ void process_auth_room(struct char_data *ch) {
 
 SPECIAL(chargen_points_check) {
   // Final check to make sure you're not wasting resources.
-  if (GET_FORCE_POINTS(ch) > 0) {
-    send_to_char(ch, "^YWarning:^n You still have %d force point%s remaining to spend! They will be lost on graduation. You should go back and spend them on spells and bonding foci.\r\n", GET_FORCE_POINTS(ch), GET_FORCE_POINTS(ch) > 1 ? "s" : "");
+  if (ch) {
+    if (GET_FORCE_POINTS(ch) > 0) {
+      send_to_char(ch, "^YWarning:^n You still have %d force point%s remaining to spend! They will be lost on graduation. You should go back and spend them on spells and bonding foci.\r\n", GET_FORCE_POINTS(ch), GET_FORCE_POINTS(ch) > 1 ? "s" : "");
+    }
+    if (GET_RESTRING_POINTS(ch) > 0) {
+      send_to_char(ch, "^YWarning:^n You still have %d restring point%s remaining to spend! They will be lost on graduation. See HELP RESTRING for details.\r\n", GET_FORCE_POINTS(ch), GET_RESTRING_POINTS(ch) > 1 ? "s" : "");
+    }
   }
-  if (GET_RESTRING_POINTS(ch) > 0) {
-    send_to_char(ch, "^YWarning:^n You still have %d restring point%s remaining to spend! They will be lost on graduation. See HELP RESTRING for details.\r\n", GET_FORCE_POINTS(ch), GET_RESTRING_POINTS(ch) > 1 ? "s" : "");
-  }
+  
   return FALSE;
 }
 
 SPECIAL(auth_room)
 {
-  if ((CMD_IS("say") || CMD_IS("'") || CMD_IS("sayto") || CMD_IS("\"")) && !IS_ASTRAL(ch)) {
+  if (ch && (CMD_IS("say") || CMD_IS("'") || CMD_IS("sayto") || CMD_IS("\"")) && !IS_ASTRAL(ch)) {
     /*
     skip_spaces(&argument);
     if (   !str_cmp("I have read the rules and policies, understand them, and agree to abide by them during my stay here.", argument)
