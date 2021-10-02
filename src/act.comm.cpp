@@ -108,6 +108,11 @@ ACMD(do_say)
       to = get_char_veh(ch, buf, ch->in_veh);
     else
       to = get_char_room_vis(ch, buf);
+      
+    if (to == ch) {
+      send_to_char("You probably shouldn't talk to yourself in public.\r\n", ch);
+      return;
+    }
   }
   
   // This is down here to handle speech after sayto. Note that matrix has no sayto, so we did it there as well.
