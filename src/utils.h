@@ -107,6 +107,7 @@ void    set_natural_vision_for_race(struct char_data *ch);
 int     get_string_length_after_color_code_removal(const char *str, struct char_data *ch_to_notify_of_failure_reason);
 bool    npc_is_protected_by_spec(struct char_data *npc);
 bool    can_damage_vehicle(struct char_data *ch, struct veh_data *veh);
+char *  compose_spell_name(int type, int subtype = -1);
 
 // Skill-related.
 char *how_good(int skill, int rank);
@@ -942,7 +943,12 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 #define GET_ACCESSORY_RATING(accessory)          (GET_OBJ_VAL((accessory), 2))
 
 // ITEM_SPELL_FORMULA convenience defines
+#define GET_SPELLFORMULA_FORCE(formula)          (GET_OBJ_VAL((formula), 0))
 #define GET_SPELLFORMULA_SPELL(formula)          (GET_OBJ_VAL((formula), 1))
+#define GET_SPELLFORMULA_TRADITION(formula)      (GET_OBJ_VAL((formula), 2))
+#define GET_SPELLFORMULA_SUBTYPE(formula)        (GET_OBJ_VAL((formula), 3))
+
+#define SPELL_HAS_SUBTYPE(spell_number)          (spell_number == SPELL_INCATTR || spell_number == SPELL_INCCYATTR || spell_number == SPELL_DECATTR || spell_number == SPELL_DECCYATTR)
 
 // ITEM_FOCUS convenience defines, search term GET_FOCI
 #define GET_FOCUS_TYPE(focus)                    (GET_OBJ_VAL((focus), 0))

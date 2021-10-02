@@ -607,12 +607,17 @@ bool load_char(const char *name, char_data *ch, bool logon)
       snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_spells WHERE idnum=%ld ORDER BY Category DESC, Name DESC;", GET_IDNUM(ch));
       mysql_wrapper(mysql, buf);
       res = mysql_use_result(mysql);
+      char name_buf[500];
       while ((row = mysql_fetch_row(res))) {
         spell_data *spell = new spell_data;
-        spell->name = str_dup(row[1]);
+        // spell->name = str_dup(row[1]);
         spell->type = atoi(row[2]);
         spell->subtype = atoi(row[3]);
         spell->force = atoi(row[4]);
+        
+        // Compose a new name. This column could probably be removed from the DB altogether.
+        spell->name = str_dup(compose_spell_name(spell->type, spell->subtype));
+        
         spell->next = ch->spells;
         ch->spells = spell;
       }

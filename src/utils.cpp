@@ -3789,6 +3789,19 @@ bool can_damage_vehicle(struct char_data *ch, struct veh_data *veh) {
   return TRUE;
 }
 
+// Precondition: You must pass in a valid type.
+char *compose_spell_name(int type, int subtype) {
+  static char name_buf[500];
+  
+  strlcpy(name_buf, spells[type].name, sizeof(name_buf));
+  
+  if (SPELL_HAS_SUBTYPE(type)) {
+    strlcat(name_buf, attributes[subtype], sizeof(name_buf));
+  }
+  
+  return name_buf;
+}
+
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.
 // Great for swapping out old Classic weapons, cyberware, etc for the new guaranteed-canon versions.
 #define PAIR(classic, current) case (classic): return (current);

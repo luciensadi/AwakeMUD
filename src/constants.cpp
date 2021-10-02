@@ -1883,14 +1883,14 @@ struct spell_types spells[] =
     { "Detect Magic", FALSE, DETECTION, AREA, -1, SUSTAINED, 0, LIGHT },
     { "Detect Object", TRUE, DETECTION, AREA, -1, SUSTAINED, 1, MODERATE },
     { "Mindlink", FALSE, DETECTION, SINGLE, -1, SUSTAINED, 0, SERIOUS },
-    { "Decrease Attribute", FALSE, HEALTH, SINGLE, -1, SUSTAINED, 1, SERIOUS },
-    { "Decrease Cybered Attribute", TRUE, HEALTH, SINGLE, -1, SUSTAINED, 2, SERIOUS },
+    { "Decrease ", FALSE, HEALTH, SINGLE, -1, SUSTAINED, 1, SERIOUS }, // Decrease Attribute
+    { "Decrease Cybered ", TRUE, HEALTH, SINGLE, -1, SUSTAINED, 2, SERIOUS }, // Decrease Cybered Attribute
     { "Detox", FALSE, HEALTH, SINGLE, -1, PERMANENT, -2, 0 },
     { "Heal", FALSE, HEALTH, SINGLE, -1, PERMANENT, 0, -3 },
     { "Treat", FALSE, HEALTH, SINGLE, -1, PERMANENT, -1, -3 },
     { "Healthy Glow", FALSE, HEALTH, SINGLE, -1, PERMANENT, 0, LIGHT },
-    { "Increase Attribute", FALSE, HEALTH, SINGLE, -1, SUSTAINED, 1, MODERATE },
-    { "Increase Cybered Attribute", TRUE, HEALTH, SINGLE, -1, SUSTAINED, 2, MODERATE },
+    { "Increase ", FALSE, HEALTH, SINGLE, -1, SUSTAINED, 1, MODERATE }, // Increase Attribute
+    { "Increase Cybered ", TRUE, HEALTH, SINGLE, -1, SUSTAINED, 2, MODERATE }, // Increase Cybered Attribute
     { "Increase Reaction", FALSE, HEALTH, SINGLE, ATT_REA, SUSTAINED, 1, SERIOUS },
     { "Increase Reflexes +1", FALSE, HEALTH, SINGLE, ATT_REA, SUSTAINED, 1, SERIOUS },
     { "Increase Reflexes +2", FALSE, HEALTH, SINGLE, ATT_REA, SUSTAINED, 1, DEADLY },
@@ -2468,6 +2468,7 @@ const char *workshops[] = {
 };
 
 const char *kit_workshop_facility[] = {
+  "ERROR",
   "kit",
   "workshop",
   "facility"

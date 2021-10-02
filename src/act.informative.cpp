@@ -2447,14 +2447,32 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       break;
     case ITEM_WORKSHOP:
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%s^n designed for ^c%s^n.",
-              GET_OBJ_VAL(j, 1) ? GET_OBJ_VAL(j, 1) == 3 ? "Facility": "Workshop" : "Kit", workshops[GET_OBJ_VAL(j, 0)]);
+              kit_workshop_facility[GET_WORKSHOP_GRADE(j)], 
+              workshops[GET_WORKSHOP_TYPE(j)]);
+      if (GET_WORKSHOP_TYPE(j) == TYPE_AMMO) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " It's specialized for ^c%s^n rounds.",
+                 ammo_type[GET_WORKSHOP_AMMOKIT_TYPE(j)].name);
+      }
       break;
     case ITEM_FOCUS:
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%s^n focus of force ^c%d^n.", foci_type[GET_OBJ_VAL(j, 0)], GET_OBJ_VAL(j, 1));
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%s^n focus of force ^c%d^n.", 
+               foci_type[GET_FOCUS_TYPE(j)], 
+               GET_FOCUS_FORCE(j));
       break;
     case ITEM_SPELL_FORMULA:
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^cforce-%d %s^n designed for ^c%s^n mages.", GET_OBJ_VAL(j, 0),
-              spells[GET_OBJ_VAL(j, 1)].name, GET_OBJ_VAL(j, 2) ? "Shamanic" : "Hermetic");
+      if (SPELL_HAS_SUBTYPE(GET_SPELLFORMULA_SPELL(j))) 
+      {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^cforce-%d %s (%s)^n designed for ^c%s^n mages.", 
+                 GET_SPELLFORMULA_FORCE(j),
+                 spells[GET_SPELLFORMULA_SPELL(j)].name,
+                 attributes[GET_SPELLFORMULA_SUBTYPE(j)],
+                 GET_SPELLFORMULA_TRADITION(j) ? "Shamanic" : "Hermetic");
+      } else {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^cforce-%d %s^n designed for ^c%s^n mages.", 
+                 GET_SPELLFORMULA_FORCE(j),
+                 spells[GET_SPELLFORMULA_SPELL(j)].name, 
+                 GET_SPELLFORMULA_TRADITION(j) ? "Shamanic" : "Hermetic");
+      }
       break;
     case ITEM_PART:
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is %s %s^c%s^n designed for MPCP ^c%d^n decks. It will cost %d nuyen in parts and %d nuyen in chips to build.", 
@@ -5227,8 +5245,7 @@ ACMD(do_status)
   for (struct sustain_data *sust = GET_SUSTAINED(targ); sust; sust = sust->next)
     if (!sust->caster) {
       strlcpy(buf, spells[sust->spell].name, sizeof(buf));
-      if (sust->spell == SPELL_INCATTR || sust->spell == SPELL_INCCYATTR ||
-          sust->spell == SPELL_DECATTR || sust->spell == SPELL_DECCYATTR)
+      if (SPELL_HAS_SUBTYPE(sust->spell))
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (%s)", attributes[sust->subtype]);
       send_to_char(buf, ch);
       send_to_char("\r\n", ch);
@@ -5241,8 +5258,7 @@ ACMD(do_status)
     for (struct sustain_data *sust = GET_SUSTAINED(targ); sust; sust = sust->next)
       if (sust->caster || sust->spirit == targ) {
         strlcpy(buf, spells[sust->spell].name, sizeof(buf));
-        if (sust->spell == SPELL_INCATTR || sust->spell == SPELL_INCCYATTR ||
-            sust->spell == SPELL_DECATTR || sust->spell == SPELL_DECCYATTR)
+        if (SPELL_HAS_SUBTYPE(sust->spell))
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (%s)", attributes[sust->subtype]);
         send_to_char(ch, "%d) %s (%d successes)", i, buf, sust->success);
         if (sust->focus)

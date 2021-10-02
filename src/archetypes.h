@@ -18,6 +18,7 @@ struct archetype_data {
   
   vnum_t start_room;
   vnum_t auth_room;
+  vnum_t warning_room;
   
   int magic;
   int tradition;

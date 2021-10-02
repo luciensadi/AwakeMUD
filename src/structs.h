@@ -290,7 +290,6 @@ struct spell_trainer
 {
   vnum_t teacher;
   int type;
-  char name[120];
   int subtype;
   int force;
 };

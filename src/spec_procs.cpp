@@ -1117,7 +1117,7 @@ SPECIAL(spell_trainer)
               continue;
           }
 
-          send_to_char(ch, "%-30s Force Max: %d\r\n", spelltrainers[i].name, spelltrainers[i].force);
+          send_to_char(ch, "%-30s Force Max: %d\r\n", compose_spell_name(spelltrainers[i].type, spelltrainers[i].subtype), spelltrainers[i].force);
         }
     if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
       if (GET_TRADITION(ch) == TRAD_HERMETIC && GET_ASPECT(ch) != ASPECT_SORCERER)
@@ -1187,7 +1187,7 @@ SPECIAL(spell_trainer)
         if (skill < 1)
           continue;
       }
-      if (is_abbrev(buf, spelltrainers[i].name))
+      if (is_abbrev(buf, compose_spell_name(spelltrainers[i].type, spelltrainers[i].subtype)))
         break;
     }
     if (!spelltrainers[i].teacher) {
@@ -1195,9 +1195,9 @@ SPECIAL(spell_trainer)
       return TRUE;
     }
     if (!(force = atoi(buf1)))
-      send_to_char(ch, "Syntax: ^Wlearn \"%s\" <force between 1-6>^n\r\n", buf);
+      send_to_char(ch, "Syntax: ^Wlearn \"<spell name>\" <force between 1-%d>^n\r\n", spelltrainers[i].force);
     else if (force > spelltrainers[i].force)
-      send_to_char(ch, "%s doesn't know the spell at that high a force to teach you.\r\n", GET_NAME(trainer));
+      send_to_char(ch, "%s can only teach %s up to force %d.\r\n", GET_NAME(trainer), compose_spell_name(spelltrainers[i].type, spelltrainers[i].subtype), spelltrainers[i].force);
     else {
       // TODO: Decrease force by amount already known.
       int cost = force;
@@ -1233,13 +1233,13 @@ SPECIAL(spell_trainer)
       else
         GET_KARMA(ch) -= cost * 100;
       
-      send_to_char(ch, "%s sits you down and teaches you the ins and outs of casting %s at force %d.\r\n", GET_NAME(trainer), spells[spelltrainers[i].type].name, force);
+      send_to_char(ch, "%s sits you down and teaches you the ins and outs of casting %s at force %d.\r\n", GET_NAME(trainer), compose_spell_name(spelltrainers[i].type, spelltrainers[i].subtype), force);
       
       if (spell) {
         spell->force = force;
       } else {
         spell = new spell_data;
-        spell->name = str_dup(spells[spelltrainers[i].type].name);
+        spell->name = str_dup(compose_spell_name(spelltrainers[i].type, spelltrainers[i].subtype));
         spell->type = spelltrainers[i].type;
         spell->subtype = spelltrainers[i].subtype;
         spell->force = force;
@@ -3735,6 +3735,17 @@ void process_auth_room(struct char_data *ch) {
   // Make them look.
   // if (!PRF_FLAGGED(ch, PRF_SCREENREADER))
   look_at_room(ch, 0, 0);
+}
+
+SPECIAL(chargen_points_check) {
+  // Final check to make sure you're not wasting resources.
+  if (GET_FORCE_POINTS(ch) > 0) {
+    send_to_char(ch, "^YWarning:^n You still have %d force point%s remaining to spend! They will be lost on graduation. You should go back and spend them on spells and bonding foci.\r\n", GET_FORCE_POINTS(ch), GET_FORCE_POINTS(ch) > 1 ? "s" : "");
+  }
+  if (GET_RESTRING_POINTS(ch) > 0) {
+    send_to_char(ch, "^YWarning:^n You still have %d restring point%s remaining to spend! They will be lost on graduation. See HELP RESTRING for details.\r\n", GET_FORCE_POINTS(ch), GET_RESTRING_POINTS(ch) > 1 ? "s" : "");
+  }
+  return FALSE;
 }
 
 SPECIAL(auth_room)

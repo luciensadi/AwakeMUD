@@ -3240,9 +3240,9 @@ ACMD(do_learn)
   else
     force = MIN(GET_OBJ_VAL(obj, 0), atoi(buf1));
   for (spell = GET_SPELLS(ch); spell; spell = spell->next)
-    if (spell->type == GET_OBJ_VAL(obj, 1) && spell->subtype == GET_OBJ_VAL(obj, 3)) {
+    if (spell->type == GET_SPELLFORMULA_SPELL(obj) && spell->subtype == GET_SPELLFORMULA_SUBTYPE(obj)) {
       if (spell->force >= force) {
-        send_to_char(ch, "You already know %s at an equal or higher force.\r\n", spells[GET_OBJ_VAL(obj, 1)].name);
+        send_to_char(ch, "You already know %s at an equal or higher force.\r\n", spells[GET_SPELLFORMULA_SPELL(obj)].name);
         return;
       } else {
         oldforce = spell->force;
@@ -3347,15 +3347,9 @@ ACMD(do_learn)
   }
   GET_KARMA(ch) -= (force - oldforce) * 100;
   spell = new spell_data;
-  if (GET_OBJ_VAL(obj, 1) == SPELL_INCATTR || GET_OBJ_VAL(obj, 1) == SPELL_INCCYATTR ||
-      GET_OBJ_VAL(obj, 1) == SPELL_DECATTR || GET_OBJ_VAL(obj, 1) == SPELL_DECCYATTR) {
-    strcpy(buf, spells[GET_OBJ_VAL(obj, 1)].name);
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (%s)", attributes[GET_OBJ_VAL(obj, 3)]);
-    spell->name = str_dup(buf);
-  } else
-    spell->name = str_dup(spells[GET_OBJ_VAL(obj, 1)].name);
-  spell->type = GET_OBJ_VAL(obj, 1);
-  spell->subtype = GET_OBJ_VAL(obj, 3);
+  spell->name = str_dup(compose_spell_name(GET_SPELLFORMULA_SPELL(obj), GET_SPELLFORMULA_SUBTYPE(obj)));
+  spell->type = GET_SPELLFORMULA_SPELL(obj);
+  spell->subtype = GET_SPELLFORMULA_SUBTYPE(obj);
   spell->force = force;
   spell->next = GET_SPELLS(ch);
   GET_SPELLS(ch) = spell;
