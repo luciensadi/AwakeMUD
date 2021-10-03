@@ -514,8 +514,33 @@ void update_buildrepair(void)
         }
       } else if (AFF_FLAGGED(desc->character, AFF_PROGRAM)) {
         if (--GET_OBJ_VAL(PROG, 5) < 1) {
-          if (GET_OBJ_VAL(PROG, 7))
-            send_to_char(desc->character, "You realise programming %s is a lost cause.\r\n", GET_OBJ_NAME(PROG));
+          if (GET_OBJ_VAL(PROG, 7)){
+            switch(number(1,11)) {
+              case 1:
+                send_to_char(desc->character, "It was about that time that you noticed you had typed up all of your code on the microwave keypad. You realise programming %s is a lost cause.\r\n", GET_OBJ_NAME(PROG));
+                break;
+              case 2:
+                send_to_char(desc->character, "There was a series of articles related to what you were doing, but you somehow ended up on a page about crabs. Why always crabs?!? You realise programming %s is a lost cause.\r\n", GET_OBJ_NAME(PROG));
+                break;
+              case 3:
+                send_to_char(desc->character, "You became distracted and lost hours of your life to a Penumbrawalk mud. You realise programming %s is a lost cause.\r\n", GET_OBJ_NAME(PROG));
+                break;
+              case 4:
+                send_to_char(desc->character, "You've finally done it! You've made an electric drum kit out of tin foil and pen parts! Programming %s failed though.\r\n", GET_OBJ_NAME(PROG));
+                break;
+              case 5:
+                send_to_char(desc->character, "You've been banned from the ShadowBoards. You realise programming %s is a lost cause.\r\n", GET_OBJ_NAME(PROG));
+                break;
+              case 6:
+                send_to_char(desc->character, "You have finished a spell formula for Stunbolt... wait, what the hell?! You realise programming %s is a lost cause.\r\n", GET_OBJ_NAME(PROG));
+                break;
+              case 7:
+                send_to_char(desc->character, "A distant, powerful matrix entity is disappointed in you. You realise programming %s is a lost cause.\r\n", GET_OBJ_NAME(PROG));
+                break;
+              default:
+                send_to_char(desc->character, "You realise programming %s is a lost cause.\r\n", GET_OBJ_NAME(PROG));
+              }
+            }
           else {
             send_to_char(desc->character, "You complete programming %s.\r\n", GET_OBJ_NAME(PROG));
             struct obj_data *newp = read_object(OBJ_BLANK_PROGRAM, VIRTUAL);
@@ -599,7 +624,7 @@ void update_buildrepair(void)
         STOP_WORKING(CH);
       } else if (AFF_FLAGGED(CH, AFF_AMMOBUILD) && --GET_AMMOBOX_TIME_TO_COMPLETION(PROG) < 1) {
         if (GET_AMMOBOX_TIME_TO_COMPLETION(PROG) <= -2) { // --(-1) = -2; prevents penalizing people who ace the test.
-          switch(number(1,16)) {
+          switch(number(1,18)) {
             case 1:
               send_to_char("You swear loudly as a gunshot rings out because you accidentally fired the round.\r\n", CH);
               break;
@@ -623,6 +648,9 @@ void update_buildrepair(void)
               break;
             case 8:
               send_to_char("You stumble slightly, jamming your thumb in the vice. The process of ripping your hand out obliterates the shell casing.\r\n", CH);
+              break;
+            case 9:
+              send_to_char("You decide to use a hammer to knock the back of the casing up onto the bullet... BAM! Now that wasn't very smart, was it?\r\n", CH);
               break;
             default:
               send_to_char("You seem to have messed up this batch of ammo.\r\n", CH);
