@@ -515,7 +515,7 @@ void update_buildrepair(void)
       } else if (AFF_FLAGGED(desc->character, AFF_PROGRAM)) {
         if (--GET_OBJ_VAL(PROG, 5) < 1) {
           if (GET_OBJ_VAL(PROG, 7)){
-            switch(number(1,11)) {
+            switch(number(1,8)) {
               case 1:
                 send_to_char(desc->character, "It was about that time that you noticed you had typed up all of your code on the microwave keypad. You realise programming %s is a lost cause.\r\n", GET_OBJ_NAME(PROG));
                 break;
