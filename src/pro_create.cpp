@@ -515,7 +515,7 @@ void update_buildrepair(void)
       } else if (AFF_FLAGGED(desc->character, AFF_PROGRAM)) {
         if (--GET_OBJ_VAL(PROG, 5) < 1) {
           if (GET_OBJ_VAL(PROG, 7)){
-            switch(number(1,8)) {
+            switch(number(1,10)) {
               case 1:
                 send_to_char(desc->character, "It was about that time that you noticed you had typed up all of your code on the microwave keypad. You realise programming %s is a lost cause.\r\n", GET_OBJ_NAME(PROG));
                 break;
@@ -536,6 +536,12 @@ void update_buildrepair(void)
                 break;
               case 7:
                 send_to_char(desc->character, "A distant, powerful matrix entity is disappointed in you. You realise programming %s is a lost cause.\r\n", GET_OBJ_NAME(PROG));
+                break;
+              case 8:
+              send_to_char(desc->character, "You tried to forge %s into an incredible program that would have pierced open the walls of flowing code. You're pretty sure you misplaces a parentheses somewhere so it all turned into gibberish about broccoli.\r\n", GET_OBJ_NAME
+                break;
+              case 9:
+              send_to_char(desc->character, "You tried to program %s only to realize many hours in you were coding on one of the spare half-assembled things you had littered around your current workspace, accomplishing nothing.\r\n", GET_OBJ_NAME
                 break;
               default:
                 send_to_char(desc->character, "You realise programming %s is a lost cause.\r\n", GET_OBJ_NAME(PROG));
@@ -670,7 +676,24 @@ void update_buildrepair(void)
         } else ammo_test(CH, PROG);
       } else if (AFF_FLAGGED(CH, AFF_SPELLDESIGN) && --GET_OBJ_VAL(PROG, 6) < 1) {
         if (GET_OBJ_TIMER(PROG) == -3) {
-          send_to_char("You realise you have lost your inspiration for this spell.\r\n", CH);
+          switch(number(1,8)) {
+            case 1:
+              send_to_char("The Dweller on the Threshold notices your attempts at spell creation and laughs.\r\n", CH);
+              break;
+            case 2:  
+              send_to_char("This spell would have been the profane bridge that brought the Horrors to the Sixth World. However, they were thoroughly unimpressed with your work.\r\n", CH);
+              break;
+            case 3:  
+              send_to_char("You draw the Magus of the Eternal Gods, Lord of the Wild and Fertile Lands, and the Ten of Spades. Go fish.\r\n", CH);
+              break;
+            case 4:  
+              send_to_char("You finished programming a Carrot Top reality filter for your cyberdeck - wait, what?!?\r\n", CH);
+              break;
+            case 5:  
+              send_to_char("You've spilt your ritual chalice of your favorite drink all over it! So much for that spell!\r\n", CH);
+            default:
+              send_to_char("You realise you have lost your inspiration for this spell.\r\n", CH);
+          }
           extract_obj(PROG);
         } else {
           send_to_char(CH, "You successfully finish designing %s.\r\n", GET_OBJ_NAME(PROG));
