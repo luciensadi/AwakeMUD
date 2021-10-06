@@ -2189,6 +2189,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
         int standing_recoil_comp = GET_WEAPON_INTEGRAL_RECOIL_COMP(j);
         int prone_recoil_comp = 0;
         int real_obj;
+        bool has_laser_sight_already = FALSE;
         for (int i = ACCESS_LOCATION_TOP; i <= ACCESS_LOCATION_UNDER; i++) {
           if (GET_OBJ_VAL(j, i) > 0
               && (real_obj = real_object(GET_OBJ_VAL(j, i))) > 0
@@ -2203,29 +2204,87 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
             }
             
             // parse and add the string for the accessory's special bonuses
-            switch (GET_OBJ_VAL(access, 1)) {
+            switch (GET_ACCESSORY_TYPE(access)) {
               case ACCESS_SMARTLINK:
+                if (has_smartlink) {
+                  strlcat(buf, "^Y\r\nYou have multiple smartlinks attached, and they do not stack. You should remove one and replace it with something else.^n", sizeof(buf));
+                } else {
+                  int cyberware_rating = 0;
+                  for (struct obj_data *cyber = ch->cyberware; cyber; cyber = cyber->next_content) {
+                    if (GET_CYBERWARE_TYPE(cyber) == CYB_SMARTLINK) {
+                      cyberware_rating = GET_CYBERWARE_RATING(cyber);
+                      break;
+                    }
+                  }
+                  
+                  // No cyberware?
+                  if (cyberware_rating == 0) {
+                    // Do they have goggles?
+                    if (GET_EQ(ch, WEAR_EYES) 
+                        && GET_OBJ_TYPE(GET_EQ(ch, WEAR_EYES)) == ITEM_GUN_ACCESSORY 
+                        && GET_ACCESSORY_TYPE(GET_EQ(ch, WEAR_EYES)) == ACCESS_SMARTGOGGLE)
+                    {
+                      // Goggles have special handling, so reflect that here.
+                      if (GET_ACCESSORY_RATING(access) == 1) {
+                        // SL-1 and goggles? Just fine.
+                        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nThe Smartlink attached to the %s provides ^c-1^n to target numbers (lower is better).",
+                                 gun_accessory_locations[mount_location]);
+                      } else {
+                        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nThe Smartlink-II attached to the %s ^yis limited by your goggles^n and only provides ^c-1^n to target numbers (lower is better).",
+                                 gun_accessory_locations[mount_location]);
+                      }
+                    } 
+                    // No goggles or cyberware.
+                    else {
+                      strlcat(buf, "\r\n^YYou have a smartlink installed, but have neither the cyberware nor goggles to use it.^n", sizeof(buf));
+                    }
+                  }
+                  
+                  // cyberware-1
+                  else if (cyberware_rating == 1) {
+                    if (GET_ACCESSORY_RATING(access) == 1) {
+                      // SL-1 and cyberware-1? Just fine.
+                      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nThe Smartlink attached to the %s provides ^c%d^n to target numbers (lower is better).",
+                               gun_accessory_locations[mount_location],
+                               -SMARTLINK_I_MODIFIER);
+                    } else {
+                      // SL-2 and cyberware-1? Limited.
+                      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nThe Smartlink-II attached to the %s ^yis limited by your cyberware^n and only provides ^c%d^n to target numbers (lower is better).",
+                               gun_accessory_locations[mount_location],
+                               -SMARTLINK_I_MODIFIER);
+                    }
+                  }
+                  
+                  // cyberware-2+
+                  else {
+                    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nThe Smartlink%s attached to the %s provides ^c%d^n to target numbers (lower is better).",
+                            GET_ACCESSORY_RATING(access) < 2 ? "" : "-II", gun_accessory_locations[mount_location],
+                            (GET_ACCESSORY_RATING(access) == 1 || GET_ACCESSORY_RATING(access) < 2) ? -SMARTLINK_I_MODIFIER : -SMARTLINK_II_MODIFIER);
+                  }                  
+                }
                 has_smartlink = TRUE;
-                snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nA Smartlink%s attached to the %s provides ^c%d^n to target numbers (lower is better).",
-                        GET_OBJ_VAL(access, 2) < 2 ? "" : "-II", gun_accessory_locations[mount_location],
-                        (GET_OBJ_VAL(j, 1) == 1 || GET_OBJ_VAL(access, 2) < 2) ? -SMARTLINK_I_MODIFIER : -SMARTLINK_II_MODIFIER);
                 break;
               case ACCESS_SCOPE:
                 if (GET_OBJ_AFFECT(access).IsSet(AFF_LASER_SIGHT)) {
-                  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nA laser sight attached to the %s provides ^c-1^n to target numbers (lower is better).",
-                          gun_accessory_locations[mount_location]);
+                  if (has_laser_sight_already) {
+                    strlcat(buf, "^Y\r\nYou have multiple laser sights attached, and they do not stack. You should remove one and replace it with something else.^n", sizeof(buf));
+                  } else {
+                    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nThe laser sight attached to the %s provides ^c-1^n to target numbers (lower is better).",
+                            gun_accessory_locations[mount_location]);
+                  }
+                  has_laser_sight_already = TRUE;
                 } else {
                   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nA scope has been attached to the %s.",
                           gun_accessory_locations[mount_location]);
                 }
                 break;
               case ACCESS_GASVENT:
-                snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nA gas vent installed in the %s provides ^c%d^n round%s worth of recoil compensation.",
-                        gun_accessory_locations[mount_location], -GET_OBJ_VAL(access, 2), -GET_OBJ_VAL(access, 2) > 1 ? "s'" : "'s");
-                standing_recoil_comp -= GET_OBJ_VAL(access, 2);
+                snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nThe gas vent installed in the %s provides ^c%d^n round%s worth of recoil compensation.",
+                        gun_accessory_locations[mount_location], -GET_ACCESSORY_RATING(access), GET_ACCESSORY_RATING(access) > 1 ? "s'" : "'s");
+                standing_recoil_comp -= GET_ACCESSORY_RATING(access);
                 break;
               case ACCESS_SHOCKPAD:
-                snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nA shock pad installed on the %s provides ^c1^n round's worth of recoil compensation.",
+                snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nThe attachment installed on the %s provides ^c1^n round's worth of recoil compensation.",
                         gun_accessory_locations[mount_location]);
                 standing_recoil_comp++;
                 break;
@@ -2241,12 +2300,12 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
                 strlcat(buf, "\r\n^RYou should never see this-- alert an imm.^n", sizeof(buf));
                 break;
               case ACCESS_BIPOD:
-                snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nA bipod installed on the %s provides ^c%d^n round%s worth of recoil compensation when fired from prone.",
+                snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nThe bipod installed on the %s provides ^c%d^n round%s worth of recoil compensation when fired from prone.",
                         gun_accessory_locations[mount_location], RECOIL_COMP_VALUE_BIPOD, RECOIL_COMP_VALUE_BIPOD > 1 ? "s'" : "'s");
                 prone_recoil_comp += RECOIL_COMP_VALUE_BIPOD;
                 break;
               case ACCESS_TRIPOD:
-                snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nA tripod installed on the %s provides ^c%d^n round%s worth of recoil compensation when fired from prone.",
+                snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nThe tripod installed on the %s provides ^c%d^n round%s worth of recoil compensation when fired from prone.",
                         gun_accessory_locations[mount_location], RECOIL_COMP_VALUE_TRIPOD, RECOIL_COMP_VALUE_TRIPOD > 1 ? "s'" : "'s");
                 prone_recoil_comp += RECOIL_COMP_VALUE_TRIPOD;
                 break;
@@ -2254,12 +2313,12 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
                 if (mount_location != ACCESS_ACCESSORY_LOCATION_UNDER) {
                   strlcat(buf, "\r\n^RYour bayonet has been mounted in the wrong location and is nonfunctional. Alert an imm.", sizeof(buf));
                 } else {
-                  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nA bayonet attached to the %s allows you to use the Pole Arms skill when defending from melee attacks.",
+                  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nThe bayonet attached to the %s allows you to use the Pole Arms skill when defending from melee attacks.",
                           gun_accessory_locations[mount_location]);
                 }
                 break;
               default:
-                snprintf(buf1, sizeof(buf1), "SYSERR: Unknown accessory type %d passed to do_probe_object()", GET_OBJ_VAL(access, 1));
+                snprintf(buf1, sizeof(buf1), "SYSERR: Unknown accessory type %d passed to do_probe_object()", GET_ACCESSORY_TYPE(access));
                 log(buf1);
                 break;
             }
