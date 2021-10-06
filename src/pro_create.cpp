@@ -538,10 +538,10 @@ void update_buildrepair(void)
                 send_to_char(desc->character, "A distant, powerful matrix entity is disappointed in you. You realise programming %s is a lost cause.\r\n", GET_OBJ_NAME(PROG));
                 break;
               case 8:
-              send_to_char(desc->character, "You tried to forge %s into an incredible program that would have pierced open the walls of flowing code. You're pretty sure you misplaces a parentheses somewhere so it all turned into gibberish about broccoli.\r\n", GET_OBJ_NAME
+                send_to_char(desc->character, "You tried to forge %s into an incredible program that would have pierced open the walls of flowing code. You're pretty sure you misplaces a parentheses somewhere so it all turned into gibberish about broccoli.\r\n", GET_OBJ_NAME(PROG));
                 break;
               case 9:
-              send_to_char(desc->character, "You tried to program %s only to realize many hours in you were coding on one of the spare half-assembled things you had littered around your current workspace, accomplishing nothing.\r\n", GET_OBJ_NAME
+                send_to_char(desc->character, "You tried to program %s only to realize many hours in you were coding on one of the spare half-assembled things you had littered around your current workspace, accomplishing nothing.\r\n", GET_OBJ_NAME(PROG));
                 break;
               default:
                 send_to_char(desc->character, "You realise programming %s is a lost cause.\r\n", GET_OBJ_NAME(PROG));
@@ -678,21 +678,21 @@ void update_buildrepair(void)
         if (GET_OBJ_TIMER(PROG) == -3) {
           switch(number(1,8)) {
             case 1:
-              send_to_char("The Dweller on the Threshold notices your attempts at spell creation and laughs.\r\n", CH);
+              send_to_char(CH, "The Dweller on the Threshold notices your attempts at spell creation and laughs. You failed to design %s.\r\n", GET_OBJ_NAME(PROG));
               break;
             case 2:  
-              send_to_char("This spell would have been the profane bridge that brought the Horrors to the Sixth World. However, they were thoroughly unimpressed with your work.\r\n", CH);
+              send_to_char(CH, "This spell would have been the profane bridge that brought the Horrors to the Sixth World. However, they were thoroughly unimpressed with your work. You failed to design %s.\r\n", GET_OBJ_NAME(PROG));
               break;
             case 3:  
-              send_to_char("You draw the Magus of the Eternal Gods, Lord of the Wild and Fertile Lands, and the Ten of Spades. Go fish.\r\n", CH);
+              send_to_char(CH, "You draw the Magus of the Eternal Gods, Lord of the Wild and Fertile Lands, and the Ten of Spades. Go fish. You failed to design %s.\r\n", GET_OBJ_NAME(PROG))
               break;
             case 4:  
-              send_to_char("You finished programming a Carrot Top reality filter for your cyberdeck - wait, what?!?\r\n", CH);
+              send_to_char(CH, "You finished programming a Carrot Top reality filter for your cyberdeck - wait, what?!? You realise you have lost your inspiration for %s\r\n", GET_OBJ_NAME(PROG));
               break;
             case 5:  
-              send_to_char("You've spilt your ritual chalice of your favorite drink all over it! So much for that spell!\r\n", CH);
+              send_to_char(CH, "You've spilt your ritual chalice of your favorite drink all over %s! So much for that spell!\r\n", GET_OBJ_NAME(PROG));
             default:
-              send_to_char("You realise you have lost your inspiration for this spell.\r\n", CH);
+              send_to_char(CH, "You realise you have lost your inspiration for %s.\r\n", GET_OBJ_NAME(PROG));
           }
           extract_obj(PROG);
         } else {
