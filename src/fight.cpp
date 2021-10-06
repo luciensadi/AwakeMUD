@@ -2952,7 +2952,7 @@ int check_smartlink(struct char_data *ch, struct obj_data *weapon)
       
       // Iterate through their cyberware and look for a matching smartlink.
       for (obj = ch->cyberware; obj; obj = obj->next_content) {
-        if (GET_OBJ_VAL(obj, 0) == CYB_SMARTLINK) {
+        if (GET_CYBERWARE_TYPE(obj) == CYB_SMARTLINK) {
           if (GET_CYBERWARE_RATING(obj) == 2 && GET_ACCESSORY_RATING(access) == 2) {
             // Smartlink II with compatible cyberware.
             return SMARTLINK_II_MODIFIER;
