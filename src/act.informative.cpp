@@ -2224,17 +2224,12 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
                         && GET_OBJ_TYPE(GET_EQ(ch, WEAR_EYES)) == ITEM_GUN_ACCESSORY 
                         && GET_ACCESSORY_TYPE(GET_EQ(ch, WEAR_EYES)) == ACCESS_SMARTGOGGLE)
                     {
-                      // Goggles have special handling, so reflect that here.
-                      if (GET_ACCESSORY_RATING(access) == 1) {
-                        // SL-1 and goggles? Just fine.
-                        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nThe Smartlink attached to the %s provides ^c-1^n to target numbers (lower is better).",
-                                 gun_accessory_locations[mount_location]);
-                      } else {
-                        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nThe Smartlink-II attached to the %s ^yis limited by your goggles^n and only provides ^c-1^n to target numbers (lower is better).",
-                                 gun_accessory_locations[mount_location]);
-                      }
+                      // Goggles limit you to 1/2 of the SL-1 rating.
+                      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nThe Smartlink%s attached to the %s ^yis limited by your use of goggles^n and only provides ^c-1^n to target numbers (lower is better).",
+                               GET_ACCESSORY_RATING(access) == 2 ? "-II" : "",
+                               gun_accessory_locations[mount_location]);
                     } 
-                    // No goggles or cyberware.
+                    // No goggles either.
                     else {
                       strlcat(buf, "\r\n^YYou have a smartlink installed, but have neither the cyberware nor goggles to use it.^n", sizeof(buf));
                     }
