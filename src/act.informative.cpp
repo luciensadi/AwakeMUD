@@ -125,16 +125,16 @@ char *make_desc(struct char_data *ch, struct char_data *i, char *buf, int act, b
   char buf2[MAX_STRING_LENGTH];
   if (!IS_NPC(i)
       && !IS_SENATOR(ch)
-      && ((GET_EQ(i, WEAR_HEAD) && GET_OBJ_VAL(GET_EQ(i, WEAR_HEAD), 7) > 1) 
-          || (GET_EQ(i, WEAR_FACE) && GET_OBJ_VAL(GET_EQ(i, WEAR_FACE), 7) > 1)) 
+      && ((GET_EQ(i, WEAR_HEAD) && GET_WORN_CONCEAL_RATING(GET_EQ(i, WEAR_HEAD)) > 1) 
+          || (GET_EQ(i, WEAR_FACE) && GET_WORN_CONCEAL_RATING(GET_EQ(i, WEAR_FACE)) > 1)) 
       && (act == 2 
           || success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT),
-                          (GET_EQ(i, WEAR_HEAD) ? GET_OBJ_VAL(GET_EQ(i, WEAR_HEAD), 7) : 0) +
-                          (GET_EQ(i, WEAR_FACE) ? GET_OBJ_VAL(GET_EQ(i, WEAR_FACE), 7) : 0)) < 1))
+                          (GET_EQ(i, WEAR_HEAD) ? GET_WORN_CONCEAL_RATING(GET_EQ(i, WEAR_HEAD)) : 0) +
+                          (GET_EQ(i, WEAR_FACE) ? GET_WORN_CONCEAL_RATING(GET_EQ(i, WEAR_FACE)) : 0)) < 1))
   {
-    int conceal = (GET_EQ(i, WEAR_ABOUT) ? GET_OBJ_VAL(GET_EQ(i, WEAR_ABOUT), 7) : 0) +
-    (GET_EQ(i, WEAR_BODY) ? GET_OBJ_VAL(GET_EQ(i, WEAR_BODY), 7) : 0) +
-    (GET_EQ(i, WEAR_UNDER) ? GET_OBJ_VAL(GET_EQ(i, WEAR_UNDER), 7) : 0);
+    int conceal = (GET_EQ(i, WEAR_ABOUT) ? GET_WORN_CONCEAL_RATING(GET_EQ(i, WEAR_ABOUT)) : 0) +
+    (GET_EQ(i, WEAR_BODY) ? GET_WORN_CONCEAL_RATING(GET_EQ(i, WEAR_BODY)) : 0) +
+    (GET_EQ(i, WEAR_UNDER) ? GET_WORN_CONCEAL_RATING(GET_EQ(i, WEAR_UNDER)) : 0);
     int perception_successes = act == 2 ? 4 : success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), conceal);
     snprintf(buf, buf_size, "%s", dont_capitalize_a_an ? "a" : "A");
     
@@ -2529,11 +2529,10 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       }
       break;
     case ITEM_PART:
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is %s %s^c%s^n designed for MPCP ^c%d^n decks. It will cost %d nuyen in parts and %d nuyen in chips to build.", 
-               AN(parts[GET_OBJ_VAL(j, 0)].name),
-               !GET_PART_DESIGN_COMPLETION(j) ? "not-yet-designed " : "",
-               parts[GET_OBJ_VAL(j, 0)].name, 
-               GET_OBJ_VAL(j, 2),
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is %s^c%s^n designed for MPCP ^c%d^n decks. It will cost %d nuyen in parts and %d nuyen in chips to build.", 
+               !GET_PART_DESIGN_COMPLETION(j) ? "a not-yet-designed " : AN(parts[GET_PART_TYPE(j)].name),
+               parts[GET_PART_TYPE(j)].name, 
+               GET_PART_TARGET_MPCP(j),
                GET_PART_PART_COST(j),
                GET_PART_CHIP_COST(j)
              );
@@ -4731,13 +4730,13 @@ ACMD(do_consider)
     return;
   }
   if (victim == ch) {
-    send_to_char("Easy!  Very easy indeed!  \r\n", ch);
+    send_to_char("You can't target yourself with this command.\r\n", ch);
     return;
   }
   
   if (IS_NPC(victim)) {
     if (!can_hurt(ch, victim, 0, TRUE)) {
-      send_to_char("This NPC has been made unkillable by staff.\r\n", ch);
+      send_to_char("You can't damage this character.\r\n", ch);
       return;
     }
     
@@ -4780,8 +4779,10 @@ ACMD(do_consider)
     diff += (GET_BOD(victim) - GET_BOD(ch));
     diff += (GET_QUI(victim) - GET_QUI(ch));
     diff += (GET_STR(victim) - GET_STR(ch));
-    diff += (GET_REA(victim) - GET_REA(ch));
-    diff += (GET_INIT_DICE(victim) - GET_INIT_DICE(ch));
+    
+    // Extra init passes are king, so account for that.
+    diff += 3 * (GET_REA(victim) - GET_REA(ch));
+    diff += 6 * (GET_INIT_DICE(victim) - GET_INIT_DICE(ch));
     
     if (GET_MAG(victim) >= 100) {
       diff += (int)((GET_MAG(victim) - GET_MAG(ch)) / 100);
@@ -4789,24 +4790,37 @@ ACMD(do_consider)
     }
     
     // Pool comparisons.
-    diff += (GET_COMBAT(victim) - GET_COMBAT(ch));
+    diff += 3 * (GET_COMBAT(victim) - GET_COMBAT(ch));
     
     // Skill comparisons.
     if (GET_MAG(ch) >= 100 && (IS_NPC(ch) || (GET_TRADITION(ch) == TRAD_HERMETIC ||
                                               GET_TRADITION(ch) == TRAD_SHAMANIC)))
       diff -= GET_SKILL(ch, SKILL_SORCERY);
     
-    if (GET_EQ(victim, WEAR_WIELD))
-      diff += GET_SKILL(victim, GET_OBJ_VAL(GET_EQ(victim, WEAR_WIELD), 4));
-    else if (use_cyber_implants)
-      diff += GET_SKILL(victim, SKILL_CYBER_IMPLANTS);
+    if (GET_EQ(victim, WEAR_WIELD)) {
+      // Account for NPC's skill.
+      diff += MAX(GET_SKILL(victim, GET_WEAPON_SKILL(GET_EQ(victim, WEAR_WIELD))), GET_SKILL(victim, SKILL_ARMED_COMBAT));
+      
+      // Account for PC's dice pool setting failures.
+      if (!IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(victim, WEAR_WIELD))))
+        diff += 3 * GET_DEFENSE(ch);
+    } else if (use_cyber_implants)
+      diff += MAX(GET_SKILL(victim, SKILL_CYBER_IMPLANTS), GET_SKILL(victim, SKILL_ARMED_COMBAT));
     else
       diff += GET_SKILL(victim, SKILL_UNARMED_COMBAT) + unarmed_dangerliciousness_boost;
       
-    if (GET_EQ(ch, WEAR_WIELD))
-      diff -= GET_SKILL(ch, GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 4));
-    else
+    if (GET_EQ(ch, WEAR_WIELD)) {
+      // Account for PC's skill.
+      diff -= GET_SKILL(ch, GET_WEAPON_SKILL(GET_EQ(ch, WEAR_WIELD)));
+      
+      // Account for NPC's dice pool setting failures.
+      if (!IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_WIELD))))
+        diff -= 3 * GET_DEFENSE(victim);
+    } else
       diff -= GET_SKILL(ch, SKILL_UNARMED_COMBAT);
+    
+    // Finally, throw in a multiplier for all the things we haven't accounted for yet.
+    diff += (int) (abs(diff) * 0.5);
     
     if (diff <= -25)
       send_to_char("Now where did that chicken go?\r\n", ch);
@@ -4831,17 +4845,17 @@ ACMD(do_consider)
     else
       send_to_char("You ARE mad!\r\n", ch);
   } else {
-    if (GET_REP(victim) < 26)
+    if (GET_REP(victim) < NEWBIE_KARMA_THRESHOLD)
       send_to_char("Total greenhorn.\r\n", ch);
-    else if (GET_REP(victim) < 50)
+    else if (GET_REP(victim) < 100)
       send_to_char("Still finding their feet.\r\n", ch);
-    else if (GET_REP(victim) < 101)
-      send_to_char("Innocence has been lost.\r\n", ch);
     else if (GET_REP(victim) < 200)
+      send_to_char("Innocence has been lost.\r\n", ch);
+    else if (GET_REP(victim) < 400)
       send_to_char("They can handle themselves.\r\n", ch);
-    else if (GET_REP(victim) < 300)
+    else if (GET_REP(victim) < 800)
       send_to_char("An accomplished runner.\r\n", ch);
-    else if (GET_REP(victim) < 500)
+    else if (GET_REP(victim) < 1200)
       send_to_char("Definite lifer.\r\n", ch);
     else
       send_to_char("A legend of the Sprawl.\r\n", ch);
@@ -5289,7 +5303,7 @@ ACMD(do_status)
   }
   
   for (struct obj_data *bio = targ->bioware; bio; bio = bio->next_content) {
-    if (GET_OBJ_VAL(bio, 0) == BIO_PAINEDITOR && GET_OBJ_VAL(bio, 3)) {
+    if (GET_BIOWARE_TYPE(bio) == BIO_PAINEDITOR && GET_BIOWARE_IS_ACTIVATED(bio)) {
       send_to_char("  An activated pain editor (+1 wil, -1 int)\r\n", ch);
       printed = TRUE;
       break;

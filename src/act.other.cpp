@@ -1405,7 +1405,7 @@ ACMD(do_skills)
         continue;
         
       if ((GET_SKILL(ch, i)) > 0) {
-        snprintf(buf2, sizeof(buf2), "%-30s %s\r\n", skills[i].name, how_good(i, GET_SKILL(ch, i)));
+        snprintf(buf2, sizeof(buf2), "%-40s %s\r\n", skills[i].name, how_good(i, GET_SKILL(ch, i)));
         strlcat(buf, buf2, sizeof(buf));
       }
     }
@@ -1424,7 +1424,7 @@ ACMD(do_skills)
         continue;
       
       if ((GET_SKILL(ch, i)) > 0) {
-        snprintf(buf2, sizeof(buf2), "%-30s %s\r\n", skills[i].name, how_good(i, GET_SKILL(ch, i)));
+        snprintf(buf2, sizeof(buf2), "%-40s %s\r\n", skills[i].name, how_good(i, GET_SKILL(ch, i)));
         strlcat(buf, buf2, sizeof(buf));
       }
     }
