@@ -4155,7 +4155,7 @@ ACMD(do_cpool)
   dodge = atoi(arg);
   
   if (dodge == 0 && *arg != '0') {
-    send_to_char("Syntax: ^WCPOOL <dodge> <body> <offense>^n, where each value is a number. Ex: CPOOL 1 5 4\r\n", ch);
+    send_to_char("Syntax: ^WCPOOL <bullet dodge> <body> <offense>^n, where each value is a number. Ex: CPOOL 1 5 4\r\n", ch);
     return;
   }
   
@@ -4177,10 +4177,10 @@ ACMD(do_cpool)
   total -= ch->real_abils.offense_pool = GET_OFFENSE(ch) = MIN(total, off);
   if (total > 0) {
     GET_DEFENSE(ch) += total;
-    send_to_char(ch, "Putting the %d remaining dice in your dodge pool.\r\n", total);
+    send_to_char(ch, "Putting the %d remaining dice in your bullet dodge pool.\r\n", total);
   }
   
-  send_to_char(ch, "Pools set as: Dodge-%d Body-%d Offense-%d\r\n", GET_DEFENSE(ch), GET_BODY(ch), GET_OFFENSE(ch));
+  send_to_char(ch, "Pools set as: Bullet Dodge-%d Body-%d Offense-%d\r\n", GET_DEFENSE(ch), GET_BODY(ch), GET_OFFENSE(ch));
 }
 
 ACMD(do_spool)
