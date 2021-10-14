@@ -706,7 +706,6 @@ struct command_info cmd_info[] =
     { "position"   , POS_DEAD    , do_position , 0, 0, TRUE },
     { "possess"    , POS_DEAD    , do_wizpossess, LVL_FIXER, 0, FALSE },
     { "powerdown"  , POS_DEAD    , do_powerdown, 0, 0, FALSE },
-    { "praise"     , POS_DEAD    , do_gen_write, 0, SCMD_PRAISE, TRUE },
     { "press"      , POS_SITTING , do_push     , 0, 0, FALSE },
     { "prompt"     , POS_DEAD    , do_display  , 0, 0, TRUE },
     { "project"    , POS_LYING   , do_astral   , 0, SCMD_PROJECT, FALSE },
@@ -716,6 +715,7 @@ struct command_info cmd_info[] =
     { "program"    , POS_RESTING , do_program  , 0, 0, FALSE },
     { "progress"   , POS_RESTING , do_progress , 0, 0, TRUE },
     { "prone"      , POS_FIGHTING, do_prone    , 0, 0, FALSE },
+    { "praise"     , POS_DEAD    , do_gen_write, 0, SCMD_PRAISE, TRUE },
     { "push"       , POS_SITTING , do_push     , 0, 0, FALSE },
   #ifdef IS_BUILDPORT
     { "purge"      , POS_DEAD    , do_purge    , LVL_BUILDER, 0, FALSE },
