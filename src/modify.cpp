@@ -64,7 +64,7 @@ void format_string(struct descriptor_data *d, int indent)
   if (strlen(*d->str) >= 1023)
     return;
    */
-  
+
   // if the editor is an implementor and begins with the sequence
   // /**/, then we know not to format this string
   if (*(*d->str) == '/' && *(*d->str + 1) == '*' && *(*d->str + 2) == '*' && *(*d->str + 3) == '/')
@@ -104,7 +104,7 @@ void format_string(struct descriptor_data *d, int indent)
         }
       }
     }
-  
+
   char *format = new char[d->max_str];
   memset(format, '\0', d->max_str * sizeof(char));
   snprintf(format, d->max_str, "%s%s\r\n", indent ? "   " : "", *d->str);
@@ -221,7 +221,7 @@ void string_add(struct descriptor_data *d, char *str)
     extern void vehcust_menu(struct descriptor_data *d);
     extern void pocketsec_mailmenu(struct descriptor_data *d);
     extern void pocketsec_notemenu(struct descriptor_data *d);
-    
+
 // REPLACE_STRING swaps target with d->str if d->str exists (otherwise leaves target alone).
 #define REPLACE_STRING_FORMAT_SPECIFIED(target, format_bit) { \
   if ((d->str)) {                                             \
@@ -231,7 +231,7 @@ void string_add(struct descriptor_data *d, char *str)
     DELETE_D_STR_IF_EXTANT(d);                                \
   }                                                           \
 }
-    
+
 #define REPLACE_STRING(target) (REPLACE_STRING_FORMAT_SPECIFIED(target, DONT_FORMAT_INDENT))
 #define REPLACE_STRING_WITH_INDENTED_FORMATTING(target) (REPLACE_STRING_FORMAT_SPECIFIED(target, DO_FORMAT_INDENT))
 
@@ -240,7 +240,7 @@ void string_add(struct descriptor_data *d, char *str)
       deckbuild_main_menu(d);
     } else if (STATE(d) == CON_VEHCUST) {
       REPLACE_STRING(d->edit_veh->restring_long);
-      vehcust_menu(d); 
+      vehcust_menu(d);
     } else if (STATE(d) == CON_TRIDEO) {
       (*d->str)[strlen(*d->str)-2] = '\0';
       snprintf(buf, sizeof(buf), "INSERT INTO trideo_broadcast (author, message) VALUES (%ld, '%s')", GET_IDNUM(d->character), prepare_quotes(buf2, *d->str, sizeof(buf2) / sizeof(buf2[0])));
@@ -380,7 +380,7 @@ void string_add(struct descriptor_data *d, char *str)
         PLR_FLAGS(d->character).RemoveBits(PLR_MAILING, PLR_WRITING, ENDBIT);
       if (STATE(d) == CON_POCKETSEC)
         pocketsec_mailmenu(d);
-    } 
+    }
     if (d->mail_to >= BOARD_MAGIC) {
       time_t now = time(0);
       char *tmstr = (char *) asctime(localtime(&now)), tmp[80], time[9];
@@ -449,7 +449,7 @@ void string_add(struct descriptor_data *d, char *str)
         snprintf(tmp, sizeof(tmp), "\r\n--%s (%s/%s%d-%s%d-%s%d)\r\n",
                 GET_CHAR_NAME(d->character), time, month < 10 ? "0" : "", month,
                 day < 10 ? "0" : "", day, year < 10 ? "0" : "", year);
-      
+
       int ptr_length = strlen(*d->str) + strlen(tmp) + 1;
       char *ptr = new char[ptr_length];
       if (!ptr) {
@@ -505,24 +505,24 @@ ACMD(do_spellset)
     send_to_char("\r\n", ch);
     return;
   }
-  
+
   if (!(vict = get_char_vis(ch, name))) {
     send_to_char(ch, "You don't see anyone named '%s' here.\r\n", name);
     return;
   }
-  
+
   // Moved this to the top for quicker precondition failure (we don't care about args if they can't set the person's values in the first place).
   if (IS_NPC(vict)) {
     send_to_char("You can't set NPC spells.\r\n", ch);
     return;
   }
-  
+
   // Added staff-level checking.
   if (GET_LEVEL(vict) > GET_LEVEL(ch)) {
     send_to_char("You can't modify the spells of someone more powerful than you.\r\n", ch);
     return;
   }
-  
+
   skip_spaces(&argument);
 
   /* If there is no chars in argument */
@@ -538,7 +538,7 @@ ACMD(do_spellset)
 
   for (qend = 1; *(argument + qend) && (*(argument + qend) != '\''); qend++)
     *(argument + qend) = LOWER(*(argument + qend));
-  
+
   if (*(argument + qend) != '\'') {
     send_to_char("Spell must be enclosed in: ''\r\n", ch);
     return;
@@ -550,7 +550,7 @@ ACMD(do_spellset)
     return;
   }
   argument += qend + 1;         /* skip to next parameter */
-  
+
   char force_arg[MAX_STRING_LENGTH];
   argument = one_argument(argument, force_arg);
 
@@ -559,17 +559,17 @@ ACMD(do_spellset)
     return;
   }
   force = atoi(force_arg);
-  
+
   if (force >= 1 && (GET_TRADITION(vict) == TRAD_ADEPT || GET_TRADITION(vict) == TRAD_MUNDANE || GET_ASPECT(vict) == ASPECT_CONJURER)) {
     send_to_char(ch, "%s can't learn spells. You can only delete them from them with Force = 0.\r\n", GET_CHAR_NAME(vict));
     return;
   }
-  // TODO Does the magic attribute or sorcery skill limit the force? 
+  // TODO Does the magic attribute or sorcery skill limit the force?
   if (force > 100) {
     send_to_char("Max value for force is 100.\r\n", ch);
     return;
   }
-  
+
   int subtype = 0;
   strlcpy(buf, spells[spelltoset].name, sizeof(buf));
   // Require that the attribute spells have an attribute specified (see spell->subtype comment).
@@ -581,7 +581,7 @@ ACMD(do_spellset)
       send_to_char("You must supply one of 'bod', 'qui', 'str', 'int', 'wil', 'cha', 'rea'.\r\n", ch);
       return;
     }
-    
+
     // Compare against the new short_attributes consts in constants.cpp and find the applicable one.
     for (subtype = 0; subtype < 6; subtype++) {
       if (!strncmp(argument, short_attributes[subtype], strlen(argument))) {
@@ -591,14 +591,14 @@ ACMD(do_spellset)
         break;
       }
     }
-    
+
     // If we hit 6, the argument did not match the list.
     if (subtype >= 6) {
       send_to_char("You must supply one of 'bod', 'qui', 'str', 'int', 'wil', 'cha', 'rea'.\r\n", ch);
       return;
     }
   }
-  
+
   // Checks for validity (if the character is unable to use the spell, don't set it).
   if (force > 0) {
     if ((GET_ASPECT(vict) == ASPECT_ELEMFIRE && spells[spelltoset].category != COMBAT) ||
@@ -608,7 +608,7 @@ ACMD(do_spellset)
       send_to_char("Spell is not compatible with character's aspect.\r\n", ch);
       return;
     }
-    
+
     if (GET_ASPECT(vict) == ASPECT_SHAMANIST) {
       int skill = 0, target = 0;
       totem_bonus(vict, 0, spelltoset, target, skill);
@@ -618,15 +618,15 @@ ACMD(do_spellset)
       }
     }
   }
-  
+
   struct spell_data *spell = NULL;
-  
+
   // Find the spell if they have it already.
   for (spell = GET_SPELLS(vict); spell; spell = spell->next) {
     if (spell->type == spelltoset && spell->subtype == subtype) {
       // Found it! Handle accordingly.
       int old_force = spell->force;
-      
+
       // Spell removal, or just set it?
       if (force <= 0) {
         struct spell_data *temp;
@@ -636,7 +636,7 @@ ACMD(do_spellset)
       } else {
         spell->force = force;
       }
-      
+
       send_to_char(ch, "%s's %s changed from force %d to %d.\r\n", GET_CHAR_NAME(vict), spells[spelltoset].name, old_force, force);
       snprintf(buf, sizeof(buf), "$n has set your '%s' spell to Force %d (from %d).", spells[spelltoset].name, force, old_force);
       act(buf, TRUE, ch, NULL, vict, TO_VICT);
@@ -652,28 +652,28 @@ ACMD(do_spellset)
     send_to_char(ch, "%s doesn't have the %s spell.\r\n", GET_CHAR_NAME(vict), spells[spelltoset].name);
     return;
   }
-  
+
   spell = new spell_data;
 
   /* spell->name is a pointer to a char, and other code (spell release etc) deletes what it points to
       on cleanup. Thus, you need to clone the spell_type's name into the spell_data to assign your
       new spell a name. */
   spell->name = str_dup(spells[spelltoset].name);
-  
+
   /* The index of the spells[] table is a 1:1 mapping of the SPELL_ type, so you can just set the
       spell->type field to your spelltoset value. */
   spell->type = spelltoset;
-  
+
   /* This one's the tricky one. Via newmagic.cpp's do_learn, we know that subtype is used for the attribute
       spells to decide which attribute is being increased/decreased. To find this, I've included an optional
       parameter in the command after force that specifies 'str', 'bod' etc. */
   spell->subtype = subtype;
-  
+
   spell->force = force;
   spell->next = GET_SPELLS(vict);
   GET_SPELLS(vict) = spell;
   GET_SPELLS_DIRTY_BIT(ch) = TRUE;
-  
+
   send_to_char("OK.\r\n", ch);
   snprintf(buf, sizeof(buf), "$n has given you the '%s' spell at Force %d.", spells[spelltoset].name, force);
   act(buf, TRUE, ch, NULL, vict, TO_VICT);
@@ -738,7 +738,7 @@ ACMD(do_skillset)
   }
   strlcpy(help, (argument + 1), sizeof(help));
   help[qend - 1] = '\0';
-  
+
   if (!strn_cmp(help, "orzet", strlen("orzet"))) {
     skill = SKILL_ORZET;
   } else if ((skill = find_skill_num(help)) <= 0) {
@@ -769,7 +769,7 @@ ACMD(do_skillset)
     send_to_char(ch, "%s's %s is already at %d.\r\n", capitalize(GET_CHAR_NAME(vict)), skills[skill].name, value);
     return;
   }
-  
+
   snprintf(buf2, sizeof(buf2), "%s changed %s's %s from %d to %d.",
           GET_CHAR_NAME(ch), GET_NAME(vict),
           skills[skill].name,
@@ -809,12 +809,12 @@ ACMD(do_abilityset)
     send_to_char(ch, "You don't see anyone named '%s' here.\r\n", name);
     return;
   }
-  
+
   if (GET_TRADITION(vict) != TRAD_ADEPT) {
     send_to_char(ch, "%s is not an Adept.\r\n", capitalize(GET_CHAR_NAME(vict)));
     return;
   }
-  
+
   skip_spaces(&argument);
 
   /* If there is no chars in argument */
@@ -865,16 +865,16 @@ ACMD(do_abilityset)
     send_to_char(ch, "%s's %s is already at %d.\r\n", capitalize(GET_CHAR_NAME(vict)), adept_powers[ability], value);
     return;
   }
-  
+
   snprintf(buf2, sizeof(buf2), "%s changed %s's %s from %d to %d.",
           GET_CHAR_NAME(ch), GET_NAME(vict),
           adept_powers[ability],
-          GET_POWER_TOTAL(vict, ability), 
+          GET_POWER_TOTAL(vict, ability),
           value);
   mudlog(buf2, ch, LOG_WIZLOG, TRUE);
-  
+
   send_to_char(ch, "You change %s's %s from %d to %d.\r\n", GET_NAME(vict), adept_powers[ability], GET_POWER_TOTAL(vict, ability), value);
-  send_to_char(vict, "Your abilities in %s has been altered by the game's administration (%d to %d).\r\n", 
+  send_to_char(vict, "Your abilities in %s has been altered by the game's administration (%d to %d).\r\n",
                adept_powers[ability], GET_POWER_TOTAL(vict, ability), value);
   SET_POWER_TOTAL(vict, ability, value);
 }
@@ -977,14 +977,14 @@ void show_string(struct descriptor_data *d, char *input)
 void format_tabs(struct descriptor_data *d) {
   if (!d || !d->str || !*d->str || !*(*d->str))
     return;
-  
+
   int tabcount = 0;
-  
+
   // Replace all instances of "\t" with '\t' (backslash-t to tab)
   for (unsigned long i = 0; i < strlen(*d->str) - 2; i++)
     if (*(*d->str + i) == '\\' && *(*d->str + i + 1) == 't')
       tabcount++;
-  
+
   // If there were an even number of tabs, we assume they didn't fuck up and go ahead and do a replacement.
   if (tabcount % 2 == 0) {
     for (unsigned long i = 0; i < strlen(*d->str) - 2; i++) {
