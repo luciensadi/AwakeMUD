@@ -125,9 +125,9 @@ char *make_desc(struct char_data *ch, struct char_data *i, char *buf, int act, b
   char buf2[MAX_STRING_LENGTH];
   if (!IS_NPC(i)
       && !IS_SENATOR(ch)
-      && ((GET_EQ(i, WEAR_HEAD) && GET_WORN_CONCEAL_RATING(GET_EQ(i, WEAR_HEAD)) > 1) 
-          || (GET_EQ(i, WEAR_FACE) && GET_WORN_CONCEAL_RATING(GET_EQ(i, WEAR_FACE)) > 1)) 
-      && (act == 2 
+      && ((GET_EQ(i, WEAR_HEAD) && GET_WORN_CONCEAL_RATING(GET_EQ(i, WEAR_HEAD)) > 1)
+          || (GET_EQ(i, WEAR_FACE) && GET_WORN_CONCEAL_RATING(GET_EQ(i, WEAR_FACE)) > 1))
+      && (act == 2
           || success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT),
                           (GET_EQ(i, WEAR_HEAD) ? GET_WORN_CONCEAL_RATING(GET_EQ(i, WEAR_HEAD)) : 0) +
                           (GET_EQ(i, WEAR_FACE) ? GET_WORN_CONCEAL_RATING(GET_EQ(i, WEAR_FACE)) : 0)) < 1))
@@ -137,7 +137,7 @@ char *make_desc(struct char_data *ch, struct char_data *i, char *buf, int act, b
     (GET_EQ(i, WEAR_UNDER) ? GET_WORN_CONCEAL_RATING(GET_EQ(i, WEAR_UNDER)) : 0);
     int perception_successes = act == 2 ? 4 : success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), conceal);
     snprintf(buf, buf_size, "%s", dont_capitalize_a_an ? "a" : "A");
-    
+
     // Size.
     if (perception_successes > 0) {
       if (GET_HEIGHT(i) < 130)
@@ -151,17 +151,17 @@ char *make_desc(struct char_data *ch, struct char_data *i, char *buf, int act, b
       else
         strlcat(buf, " huge", buf_size);
     }
-    
+
     // Sex.
     if (perception_successes > 2)
       snprintf(ENDOF(buf), buf_size - strlen(buf), " %s", genders[(int)GET_SEX(i)]);
-    
+
     // Race.
     if (perception_successes > 3)
       snprintf(ENDOF(buf), buf_size - strlen(buf), " %s", pc_race_types[(int)GET_RACE(i)]);
     else
       strlcat(buf, " person", buf_size);
-      
+
     if (GET_EQ(i, WEAR_ABOUT))
       snprintf(ENDOF(buf), buf_size - strlen(buf), " wearing %s", decapitalize_a_an(GET_OBJ_NAME(GET_EQ(i, WEAR_ABOUT))));
     else if (GET_EQ(i, WEAR_BODY))
@@ -171,7 +171,7 @@ char *make_desc(struct char_data *ch, struct char_data *i, char *buf, int act, b
     else
       strlcat(buf, " going nude", buf_size);
   }
-  
+
   else
   {
     struct remem *mem;
@@ -194,10 +194,10 @@ char *make_desc(struct char_data *ch, struct char_data *i, char *buf, int act, b
         break;
       }
   }
-  
+
   if (!IS_NPC(i) && PRF_FLAGGED(ch, PRF_LONGWEAPON) && GET_EQ(i, WEAR_WIELD))
     snprintf(ENDOF(buf), buf_size - strlen(buf), ", wielding %s", decapitalize_a_an(GET_OBJ_NAME(GET_EQ(i, WEAR_WIELD))));
-  
+
   if (AFF_FLAGGED(i, AFF_MANIFEST) && !(IS_ASTRAL(ch) || IS_DUAL(ch)))
   {
     snprintf(buf2, sizeof(buf2), "The ghostly image of %s", buf);
@@ -213,7 +213,7 @@ void get_obj_condition(struct char_data *ch, struct obj_data *obj)
     send_to_char("Examining it reveals that it really IS dead.\r\n", ch);
     return;
   }
-  
+
   int condition = GET_OBJ_CONDITION(obj) * 100 / MAX(1, GET_OBJ_BARRIER(obj));
   snprintf(buf2, sizeof(buf2), "%s is ", CAP(GET_OBJ_NAME(obj)));
   if (condition >= 100)
@@ -237,7 +237,7 @@ void get_obj_condition(struct char_data *ch, struct obj_data *obj)
 void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
 {
   SPECIAL(floor_usable_radio);
-  
+
   *buf = '\0';
   if ((mode == 0) && object->text.room_desc) {
     strlcpy(buf, CCHAR ? CCHAR : "", sizeof(buf));
@@ -269,7 +269,7 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
     if (GET_OBJ_SPEC(object) == floor_usable_radio) {
       strlcat(buf, "^y...It's free to use. See ^YHELP RADIO^y for more.^n", sizeof(buf));
     }
-  } 
+  }
   else if (GET_OBJ_NAME(object) && mode == 1) {
     strlcpy(buf, GET_OBJ_NAME(object), sizeof(buf));
     if (GET_OBJ_TYPE(object) == ITEM_DESIGN)
@@ -283,16 +283,16 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
       {
         strlcat(buf, " (Combinable)", sizeof(buf));
       }
-  } 
+  }
   else if (GET_OBJ_NAME(object) && ((mode == 2) || (mode == 3) || (mode == 4) || (mode == 7))) {
     strlcpy(buf, GET_OBJ_NAME(object), sizeof(buf));
-  } 
+  }
   else if (mode == 5) {
     if (GET_OBJ_DESC(object))
       strlcpy(buf, GET_OBJ_DESC(object), sizeof(buf));
     else
       strlcpy(buf, "You see nothing special..", sizeof(buf));
-  } 
+  }
   else if (mode == 8) {
     snprintf(buf, sizeof(buf), "\t\t\t\t%s", GET_OBJ_NAME(object));
   }
@@ -303,17 +303,17 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
       if (GET_OBJ_VAL(object, 3) == 1 && ((object->worn_by && object->worn_by == ch) ||
                                           (object->in_obj && object->in_obj->worn_by && object->in_obj->worn_by == ch)))
         strlcat(buf, " ^Y(Ready)", sizeof(buf));
-    } 
+    }
     else if (GET_OBJ_TYPE(object) == ITEM_WORN && object->contains && !PRF_FLAGGED(ch, PRF_COMPACT)) {
       strlcat(buf, " carrying:", sizeof(buf));
-    } 
+    }
     else if (GET_OBJ_TYPE(object) == ITEM_FOCUS) {
       if (GET_OBJ_VAL(object, 4))
         strlcat(buf, " ^m(Activated Focus)^n", sizeof(buf));
       if (GET_OBJ_VAL(object, 9) == GET_IDNUM(ch))
         strlcat(buf, " ^Y(Geas)^n", sizeof(buf));
     }
-    
+
     if (GET_OBJ_CONDITION(object) * 100 / MAX(1, GET_OBJ_BARRIER(object)) < 100)
       strlcat(buf, " (damaged)", sizeof(buf));
   }
@@ -321,20 +321,20 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
     if (IS_OBJ_STAT(object, ITEM_INVISIBLE)) {
       strlcat(buf, " ^B(invisible)", sizeof(buf));
     }
-    
+
     if ((GET_OBJ_TYPE(object) == ITEM_FOCUS || IS_OBJ_STAT(object, ITEM_MAGIC))
         && (IS_ASTRAL(ch) || IS_DUAL(ch))) {
       strlcat(buf, " ^Y(magic aura)", sizeof(buf));
     }
-    
+
     if (IS_OBJ_STAT(object, ITEM_GLOW)) {
       strlcat(buf, " ^W(glowing)", sizeof(buf));
     }
-    
+
     if (IS_OBJ_STAT(object, ITEM_HUM)) {
       strlcat(buf, " ^c(humming)", sizeof(buf));
     }
-    
+
     if (object->obj_flags.quest_id && object->obj_flags.quest_id == GET_IDNUM(ch)) {
       strlcat(buf, " ^Y(Yours)^n", sizeof(buf));
     }
@@ -347,20 +347,20 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
       for (struct obj_data *cont = object->contains; cont; cont = cont->next_content)
         show_obj_to_char(cont, ch, 8);
     }
-  
+
 }
 
 void show_veh_to_char(struct veh_data * vehicle, struct char_data * ch)
 {
   *buf = '\0';
-  
+
   strlcpy(buf, CCHAR ? CCHAR : "", sizeof(buf));
-  
+
   if (vehicle->damage >= VEH_DAM_THRESHOLD_DESTROYED)
   {
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s lies here wrecked.", GET_VEH_NAME(vehicle));
-  } 
-  
+  }
+
   else {
     if (vehicle->type == VEH_BIKE && vehicle->people && CAN_SEE(ch, vehicle->people))
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s sitting on ", CAP(safe_found_mem(ch, vehicle->people) ?
@@ -391,7 +391,7 @@ void show_veh_to_char(struct veh_data * vehicle, struct char_data * ch)
     }
     strlcat(buf, ".", sizeof(buf));
   }
-  
+
   if (vehicle->rigger) {
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (Rigged by %s)", GET_CHAR_NAME(vehicle->rigger));
   }
@@ -407,7 +407,7 @@ void list_veh_to_char(struct veh_data * list, struct char_data * ch)
   for (i = list; i; i = i->next_veh) {
     if (ch->in_veh != i && ch->char_specials.rigging != i)
       show_veh_to_char(i, ch);
-    
+
     if (i == i->next_veh) {
       char errbuf[1000];
       snprintf(errbuf, sizeof(errbuf), "SYSERR: Infinite loop in list_veh_to_char for %s (%ld) at %s (%ld). Breaking the list.",
@@ -429,36 +429,36 @@ bool items_are_visually_similar(struct obj_data *first, struct obj_data *second)
     mudlog("SYSERR: Received null object to items_are_visually_similar.", NULL, LOG_SYSLOG, TRUE);
     return FALSE;
   }
-  
+
   // Biggest litmus test: Are they even the same thing?
   if (first->item_number != second->item_number)
     return FALSE;
-    
+
   // Quest items don't visually stack.
   if (first->obj_flags.quest_id != second->obj_flags.quest_id)
     return FALSE;
-    
+
   // If the names don't match, they're not similar.
   if (strcmp(first->text.name, second->text.name))
     return FALSE;
-    
+
   // If their invis statuses don't match...
   if (IS_INVIS(first) != IS_INVIS(second))
     return FALSE;
-    
+
   // If their restrings don't match...
-  if ((first->restring && !second->restring) || 
+  if ((first->restring && !second->restring) ||
       (!first->restring && second->restring) ||
       (first->restring && second->restring && strcmp(first->restring, second->restring)))
     return FALSE;
-    
+
   // If they're magazines, their various bonded stats must match too.
   if (GET_OBJ_TYPE(first) == ITEM_GUN_MAGAZINE) {
     if (GET_MAGAZINE_BONDED_MAXAMMO(first) != GET_MAGAZINE_BONDED_MAXAMMO(second) ||
         GET_MAGAZINE_BONDED_ATTACKTYPE(first) != GET_MAGAZINE_BONDED_ATTACKTYPE(second))
       return FALSE;
   }
-  
+
   return TRUE;
 }
 
@@ -469,18 +469,18 @@ list_obj_to_char(struct obj_data * list, struct char_data * ch, int mode,
   struct obj_data *i;
   int num = 1;
   bool found;
-  
+
   found = FALSE;
-  
+
   for (i = list; i; i = i->next_content)
   {
     if ((i->in_veh && ch->in_veh) && i->vfront != ch->vfront)
       continue;
-      
+
     if (ch->char_specials.rigging) {
       if (ch->char_specials.rigging->cspeed > SPEED_IDLE) {
         int success_test_tn;
-        
+
         if (get_speed(ch->char_specials.rigging) >= 240) {
           success_test_tn = 6;
         } else if (get_speed(ch->char_specials.rigging) < 240 && get_speed(ch->char_specials.rigging) >= 180) {
@@ -490,14 +490,14 @@ list_obj_to_char(struct obj_data * list, struct char_data * ch, int mode,
         } else {
           success_test_tn = 3;
         }
-        
+
         if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), success_test_tn) <= 0)
           continue;
       }
     } else if (ch->in_veh && i->in_room && i->in_room == ch->in_veh->in_room) {
       if (ch->in_veh->cspeed > SPEED_IDLE) {
         int success_test_tn;
-        
+
         if (get_speed(ch->in_veh) >= 200) {
           success_test_tn = 7;
         } else if (get_speed(ch->in_veh) >= 120) {
@@ -507,22 +507,22 @@ list_obj_to_char(struct obj_data * list, struct char_data * ch, int mode,
         } else {
           success_test_tn = 4;
         }
-        
+
         if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), success_test_tn) <= 0)
           continue;
       }
     }
-    
+
     while (i->next_content) {
       if (!items_are_visually_similar(i, i->next_content))
         break;
-        
+
       if (CAN_SEE_OBJ(ch, i))
         num++;
-        
+
       i = i->next_content;
-    }    
-    
+    }
+
     if (CAN_SEE_OBJ(ch, i)) {
       if (corpse && IS_OBJ_STAT(i, ITEM_CORPSE)) {
         if (num > 1) {
@@ -545,7 +545,7 @@ list_obj_to_char(struct obj_data * list, struct char_data * ch, int mode,
       num = 1;
     }
   }
-  
+
   if (!found && show)
     send_to_char(" Nothing.\r\n", ch);
 }
@@ -553,20 +553,20 @@ list_obj_to_char(struct obj_data * list, struct char_data * ch, int mode,
 void diag_char_to_char(struct char_data * i, struct char_data * ch)
 {
   int ment, phys;
-  
+
   if (GET_MAX_PHYSICAL(i) >= 100)
     phys = (100 * GET_PHYSICAL(i)) / MAX(1, GET_MAX_PHYSICAL(i));
   else
     phys = -1;               /* How could MAX_PHYSICAL be < 1?? */
-  
+
   if (GET_MAX_MENTAL(i) >= 100)
     ment = (100 * GET_MENTAL(i)) / MAX(1, GET_MAX_MENTAL(i));
   else
     ment = -1;
-  
+
   make_desc(ch, i, buf, TRUE, FALSE, sizeof(buf));
   CAP(buf);
-  
+
   if (phys >= 100 || (GET_TRADITION(i) == TRAD_ADEPT && phys >= 0 &&
                       ((100 - phys) / 10) <= GET_POWER(i, ADEPT_PAIN_RESISTANCE)))
     strlcat(buf, " is in excellent physical condition", sizeof(buf));
@@ -584,7 +584,7 @@ void diag_char_to_char(struct char_data * i, struct char_data * ch)
     strlcat(buf, " is in awful condition", sizeof(buf));
   else
     strlcat(buf, " is bleeding awfully from big wounds", sizeof(buf));
-  
+
   if (phys <= 0)
     strlcat(buf, " and is unconscious.\r\n", sizeof(buf));
   else if (ment >= 100 || (GET_TRADITION(i) == TRAD_ADEPT && ment >= 0 &&
@@ -603,8 +603,8 @@ void diag_char_to_char(struct char_data * i, struct char_data * ch)
     strlcat(buf, " and is groggy.\r\n", sizeof(buf));
   else
     strlcat(buf, " and is completely unconscious.\r\n", sizeof(buf));
-  
-  
+
+
   send_to_char(buf, ch);
 }
 
@@ -613,8 +613,8 @@ void look_at_char(struct char_data * i, struct char_data * ch)
   int j, found, weight;
   float height;
   struct obj_data *tmp_obj;
-  
-  
+
+
   if (((GET_EQ(i, WEAR_HEAD) && GET_OBJ_VAL(GET_EQ(i, WEAR_HEAD), 7) > 1) ||
        (GET_EQ(i, WEAR_FACE) && GET_OBJ_VAL(GET_EQ(i, WEAR_FACE), 7) > 1)) &&
       success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT),
@@ -637,7 +637,7 @@ void look_at_char(struct char_data * i, struct char_data * ch)
       send_to_char(i->player.physical_text.look_desc, ch);
     else
       act("You see nothing special about $m.", FALSE, i, 0, ch, TO_VICT);
-    
+
     if (i != ch && GET_HEIGHT(i) > 0 && GET_WEIGHT(i) > 0) {
       if ((GET_HEIGHT(i) % 10) < 5)
         height = (float)(GET_HEIGHT(i) - (GET_HEIGHT(i) % 10)) / 100;
@@ -647,7 +647,7 @@ void look_at_char(struct char_data * i, struct char_data * ch)
         weight = GET_WEIGHT(i) - (GET_WEIGHT(i) % 10);
       else
         weight = GET_WEIGHT(i) - (GET_WEIGHT(i) % 10) + 10;
-      
+
       if (weight > 4) {
         snprintf(buf, sizeof(buf), "$e look%s to be about %0.1f meters tall and "
                 "appear%s to weigh about %d kg.", HSSH_SHOULD_PLURAL(i) ? "s" : "", height, HSSH_SHOULD_PLURAL(i) ? "s" : "", weight);
@@ -692,7 +692,7 @@ void look_at_char(struct char_data * i, struct char_data * ch)
   for (j = 0; !found && j < NUM_WEARS; j++)
     if (GET_EQ(i, j) && CAN_SEE_OBJ(ch, GET_EQ(i, j)))
       found = TRUE;
-  
+
   if (found)
   {
     if (ch == i)
@@ -743,7 +743,7 @@ void look_at_char(struct char_data * i, struct char_data * ch)
         }
       }
   }
-  
+
   found = FALSE;
   *buf = '\0';
   *buf2 = '\0';
@@ -760,13 +760,15 @@ void look_at_char(struct char_data * i, struct char_data * ch)
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s\r\n", GET_OBJ_NAME(tmp_obj));
         } else snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%s\r\n", cyber_types[GET_OBJ_VAL(tmp_obj, 0)]);
         break;
-      case CYB_TORSO:
-      case CYB_SKULL:
-        if (GET_OBJ_VAL(tmp_obj, 3)) {
-          found = TRUE;
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s\r\n", GET_OBJ_NAME(tmp_obj));
-        } else snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%s\r\n", cyber_types[GET_OBJ_VAL(tmp_obj, 0)]);
-        break;
+        /*  Code for the previous version of cyber skulls / torsos. - LS 2021
+          case CYB_TORSO:
+          case CYB_SKULL:
+            if (GET_OBJ_VAL(tmp_obj, 3)) {
+              found = TRUE;
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s\r\n", GET_OBJ_NAME(tmp_obj));
+            } else snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%s\r\n", cyber_types[GET_OBJ_VAL(tmp_obj, 0)]);
+            break;
+        */
       case CYB_DATAJACK:
         if (GET_EQ(i, WEAR_HEAD))
           continue;
@@ -792,6 +794,38 @@ void look_at_char(struct char_data * i, struct char_data * ch)
         if (IS_SET(GET_OBJ_VAL(tmp_obj, 3), EYE_COSMETIC))
           snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%s\r\n", GET_OBJ_NAME(tmp_obj));
         break;
+      case CYB_ARMS:
+        if (IS_SET(GET_CYBERWARE_FLAGS(tmp_obj), ARMS_MOD_OBVIOUS)) {
+          snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%s\r\n", GET_OBJ_NAME(tmp_obj));
+        } else {
+          found = TRUE;
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s\r\n", GET_OBJ_NAME(tmp_obj));
+        }
+        break;
+      case CYB_LEGS:
+        if (IS_SET(GET_CYBERWARE_FLAGS(tmp_obj), LEGS_MOD_OBVIOUS)) {
+          snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%s\r\n", GET_OBJ_NAME(tmp_obj));
+        } else {
+          found = TRUE;
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s\r\n", GET_OBJ_NAME(tmp_obj));
+        }
+        break;
+      case CYB_SKULL:
+        if (IS_SET(GET_CYBERWARE_FLAGS(tmp_obj), SKULL_MOD_OBVIOUS)) {
+          snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%s\r\n", GET_OBJ_NAME(tmp_obj));
+        } else {
+          found = TRUE;
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s\r\n", GET_OBJ_NAME(tmp_obj));
+        }
+        break;
+      case CYB_TORSO:
+        if (IS_SET(GET_CYBERWARE_FLAGS(tmp_obj), TORSO_MOD_OBVIOUS)) {
+          snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%s\r\n", GET_OBJ_NAME(tmp_obj));
+        } else {
+          found = TRUE;
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s\r\n", GET_OBJ_NAME(tmp_obj));
+        }
+        break;
       default:
         found = TRUE;
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s\r\n", GET_OBJ_NAME(tmp_obj));
@@ -801,7 +835,7 @@ void look_at_char(struct char_data * i, struct char_data * ch)
     send_to_char(ch, "\r\nVisible Cyberware:\r\n%s", buf2);
   if (found && GET_LEVEL(ch) > 1)
     send_to_char(ch, "\r\nInternal Cyberware:\r\n%s", buf);
-  
+
   for (tmp_obj = i->bioware; tmp_obj; tmp_obj = tmp_obj->next_content)
     if (GET_OBJ_VAL(tmp_obj, 0) == BIO_ORTHOSKIN) {
       int targ = 10;
@@ -815,13 +849,13 @@ void look_at_char(struct char_data * i, struct char_data * ch)
       if (success_test(GET_INT(ch), targ) > 0)
         send_to_char(ch, "\r\nVisible bioware:\r\n%s\r\n", bio_types[GET_OBJ_VAL(tmp_obj, 0)]);
     }
-  
+
   if (GET_LEVEL(ch) >= LVL_BUILDER && i->bioware) {
     send_to_char("\r\nInternal bioware:\r\n", ch);
     for (tmp_obj = i->bioware; tmp_obj; tmp_obj = tmp_obj->next_content)
       send_to_char(ch, "%s\r\n", GET_OBJ_NAME(tmp_obj));
   }
-  
+
   if (ch != i && (GET_REAL_LEVEL(ch) >= LVL_BUILDER || !AWAKE(i)))
   {
     found = FALSE;
@@ -832,7 +866,7 @@ void look_at_char(struct char_data * i, struct char_data * ch)
         found = TRUE;
       }
     }
-    
+
     if (!found)
       send_to_char("You can't see anything.\r\n", ch);
   }
@@ -848,7 +882,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
       strlcpy(buf, "*", sizeof(buf));
     else
       *buf = '\0';
-    
+
     // Note quest or nokill protection.
     if (i->mob_specials.quest_id) {
       if (i->mob_specials.quest_id == GET_IDNUM(ch)) {
@@ -869,7 +903,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
           break;
         }
       }
-    } 
+    }
 #ifdef USE_PRIVATE_CE_WORLD
     else if (
       mob_index[GET_MOB_RNUM(i)].func == marksmanship_first
@@ -891,7 +925,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
       }
     }
 #endif
-    
+
     if (IS_ASTRAL(ch) || IS_DUAL(ch)) {
       if (IS_ASTRAL(i))
         strlcat(buf, "(astral) ", sizeof(buf));
@@ -901,15 +935,15 @@ void list_one_char(struct char_data * i, struct char_data * ch)
     if (AFF_FLAGGED(i, AFF_MANIFEST) && !(IS_ASTRAL(ch) || IS_DUAL(ch)))
       strlcat(buf, "The ghostly image of ", sizeof(buf));
     strlcat(buf, i->player.physical_text.room_desc, sizeof(buf));
-    
+
 #define MOB_HAS_SPEC(rnum, spec) (mob_index[(rnum)].func == spec || mob_index[(rnum)].sfunc == spec)
 
     if (DISPLAY_HELPFUL_STRINGS_FOR_MOB_FUNCS) {
       bool already_printed = FALSE;
       if (mob_index[GET_MOB_RNUM(i)].func || mob_index[GET_MOB_RNUM(i)].sfunc) {
         if (MOB_HAS_SPEC(GET_MOB_RNUM(i), trainer)) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s willing to train you.%s^n\r\n", 
-                   HSSH(i), 
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s willing to train you.%s^n\r\n",
+                   HSSH(i),
                    already_printed ? " also" : "",
                    HSSH_SHOULD_PLURAL(i) ? "looks" : "look",
                    GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Use the ^YTRAIN^y command to begin." : "");
@@ -921,8 +955,8 @@ void list_one_char(struct char_data * i, struct char_data * ch)
                      already_printed ? " also" : "",
                      GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Use the ^YPRACTICE^y command to begin." : "");
           } else {
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s willing to help you practice your skills.%s^n\r\n", 
-                     HSSH(i), 
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s willing to help you practice your skills.%s^n\r\n",
+                     HSSH(i),
                      already_printed ? " also" : "",
                      HSSH_SHOULD_PLURAL(i) ? "looks" : "look",
                      GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Use the ^YPRACTICE^y command to begin." : "");
@@ -932,8 +966,8 @@ void list_one_char(struct char_data * i, struct char_data * ch)
         if (MOB_HAS_SPEC(GET_MOB_RNUM(i), metamagic_teacher)) {
           // Mundanes can't see metamagic teachers' abilities.
           if (GET_TRADITION(ch) != TRAD_MUNDANE) {
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s willing to help you train in metamagic techniques.%s^n\r\n", 
-                     HSSH(i), 
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s willing to help you train in metamagic techniques.%s^n\r\n",
+                     HSSH(i),
                      already_printed ? " also" : "",
                      HSSH_SHOULD_PLURAL(i) ? "looks" : "look",
                      GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Use the ^YTRAIN^y command to begin." : "");
@@ -943,16 +977,16 @@ void list_one_char(struct char_data * i, struct char_data * ch)
         if (MOB_HAS_SPEC(GET_MOB_RNUM(i), adept_trainer)) {
           // Adepts can't see adept trainers' abilities.
           if (GET_TRADITION(ch) == TRAD_ADEPT) {
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s willing to help you train your powers.%s^n\r\n", 
-                     HSSH(i), 
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s willing to help you train your powers.%s^n\r\n",
+                     HSSH(i),
                      already_printed ? " also" : "",
                      HSSH_SHOULD_PLURAL(i) ? "looks" : "look",
                      GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Use the ^YTRAIN^y command to begin." : "");
             already_printed = TRUE;
           }
           else if (!PLR_FLAGGED(ch, PLR_PAID_FOR_CLOSECOMBAT)) {
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s able to help you train in martial arts.%s^n\r\n", 
-                     HSSH(i), 
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s able to help you train in martial arts.%s^n\r\n",
+                     HSSH(i),
                      already_printed ? " also" : "",
                      HSSH_SHOULD_PLURAL(i) ? "looks" : "look",
                      GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Use the ^YTRAIN^y command to begin." : "");
@@ -962,8 +996,8 @@ void list_one_char(struct char_data * i, struct char_data * ch)
         if (MOB_HAS_SPEC(GET_MOB_RNUM(i), spell_trainer)) {
           // Mundanes and adepts can't see spell trainers' abilities.
           if (GET_TRADITION(ch) != TRAD_MUNDANE && GET_TRADITION(ch) != TRAD_ADEPT) {
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s willing to help you learn new spells.%s^n\r\n", 
-                     HSSH(i), 
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s willing to help you learn new spells.%s^n\r\n",
+                     HSSH(i),
                      already_printed ? " also" : "",
                      HSSH_SHOULD_PLURAL(i) ? "looks" : "look",
                      GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Use the ^YLEARN^y command to begin." : "");
@@ -971,52 +1005,52 @@ void list_one_char(struct char_data * i, struct char_data * ch)
           }
         }
         if (MOB_HAS_SPEC(GET_MOB_RNUM(i), johnson)) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might have a job for you.%s^n\r\n", 
-                   HSSH(i), 
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might have a job for you.%s^n\r\n",
+                   HSSH(i),
                    already_printed ? " also" : "",
                    GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " See ^YHELP JOB^y for instructions." : "");
           already_printed = TRUE;
         }
         if (MOB_HAS_SPEC(GET_MOB_RNUM(i), shop_keeper) || MOB_HAS_SPEC(GET_MOB_RNUM(i), terell_davis)) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s a few things for sale.%s^n\r\n", 
-                   HSSH(i), 
-                   already_printed ? " also" : "", 
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s a few things for sale.%s^n\r\n",
+                   HSSH(i),
+                   already_printed ? " also" : "",
                    HASHAVE(i),
                    GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Use the ^YLIST^y command to see them." : "");
           already_printed = TRUE;
         }
         if (MOB_HAS_SPEC(GET_MOB_RNUM(i), landlord_spec)) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might have some rooms for lease.%s^n\r\n", 
-                   HSSH(i), 
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might have some rooms for lease.%s^n\r\n",
+                   HSSH(i),
                    already_printed ? " also" : "",
                    GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " See ^YHELP APARTMENTS^y for details." : "");
           already_printed = TRUE;
         }
         if (MOB_HAS_SPEC(GET_MOB_RNUM(i), fence)) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might be willing to buy paydata from you.%s^n\r\n", 
-                   HSSH(i), 
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might be willing to buy paydata from you.%s^n\r\n",
+                   HSSH(i),
                    already_printed ? " also" : "",
                    GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " If you have paydata, ^YUNINSTALL^y it from your deck and then ^YSELL PAYDATA^y." : "");
           already_printed = TRUE;
         }
         if (MOB_HAS_SPEC(GET_MOB_RNUM(i), hacker)) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s cracks credsticks-- you can ^YGIVE^y them to %s.^n\r\n", 
-                   HSSH(i), 
-                   already_printed ? " also" : "", 
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s cracks credsticks-- you can ^YGIVE^y them to %s.^n\r\n",
+                   HSSH(i),
+                   already_printed ? " also" : "",
                    HMHR(i));
           already_printed = TRUE;
         }
         if (MOB_HAS_SPEC(GET_MOB_RNUM(i), receptionist)) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s bunks for rent.%s^n\r\n", 
-                   HSSH(i), 
-                   already_printed ? " also" : "", 
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s bunks for rent.%s^n\r\n",
+                   HSSH(i),
+                   already_printed ? " also" : "",
                    HASHAVE(i),
                    GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Renting is purely for flavor and is not required in AwakeMUD." : "");
           already_printed = TRUE;
         }
         if (MOB_HAS_SPEC(GET_MOB_RNUM(i), fixer)) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s can repair objects for you.%s^n\r\n",
-                   HSSH(i), 
+                   HSSH(i),
                    already_printed ? " also" : "",
                    GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Use the ^YREPAIR^y command to proceed." : "");
           already_printed = TRUE;
@@ -1034,7 +1068,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
             }
           }
         }
-        
+
 #ifdef USE_PRIVATE_CE_WORLD
         if (MOB_HAS_SPEC(GET_MOB_RNUM(i), marksmanship_master)) {
           if (SHOTS_FIRED(ch) >= MARKSMAN_QUEST_SHOTS_FIRED_REQUIREMENT && SHOTS_TRIGGERED(ch) != -1) {
@@ -1049,9 +1083,9 @@ void list_one_char(struct char_data * i, struct char_data * ch)
 #endif
       }
     }
-    
+
     send_to_char(buf, ch);
-    
+
     return;
   }
   make_desc(ch, i, buf, FALSE, FALSE, sizeof(buf));
@@ -1101,7 +1135,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
     strlcat(buf, " (projecting)", sizeof(buf));
   if (IS_NPC(i) && MOB_FLAGGED(i, MOB_FLAMEAURA))
     strlcat(buf, ", surrounded by flames,", sizeof(buf));
-  
+
   if (GET_QUI(i) <= 0)
     strlcat(buf, " is here, seemingly paralyzed.", sizeof(buf));
   else if (PLR_FLAGGED(i, PLR_MATRIX))
@@ -1171,9 +1205,9 @@ void list_one_char(struct char_data * i, struct char_data * ch)
     } else                      /* NIL fighting pointer */
       strlcat(buf, " is here struggling with thin air.", sizeof(buf));
   }
-  
+
   strlcat(buf, "\r\n", sizeof(buf));
-  
+
   send_to_char(buf, ch);
 }
 
@@ -1181,10 +1215,10 @@ void list_char_to_char(struct char_data * list, struct char_data * ch)
 {
   struct char_data *i;
   struct veh_data *veh;
-  
+
   if (!ch || !list)
     return;
-  
+
   // Show vehicle's contents to character.
   if (ch->in_veh && !ch->in_room) {
     for (i = list; i; i = i->next_in_veh) {
@@ -1193,7 +1227,7 @@ void list_char_to_char(struct char_data * list, struct char_data * ch)
       }
     }
   }
-  
+
   // Show room's characters to character. Done this way because list_char_to_char should have been split for vehicles but wasn't.
   for (i = list; i; i = i->next_in_room) {
     // Skip them if they're invisible to us, or if they're us and we're not rigging.
@@ -1201,10 +1235,10 @@ void list_char_to_char(struct char_data * list, struct char_data * ch)
     if (!CAN_SEE(ch, i) || !(ch != i || ch->char_specials.rigging) || (ch->in_veh && i->in_veh == ch->in_veh)) {
       continue;
     }
-    
+
     if ((ch->in_veh || (ch->char_specials.rigging))) {
       RIG_VEH(ch, veh);
-      
+
       bool failed = FALSE;
       if (veh->cspeed > SPEED_IDLE) {
         if (get_speed(veh) >= 200) {
@@ -1228,12 +1262,12 @@ void list_char_to_char(struct char_data * list, struct char_data * ch)
           }
         }
       }
-      
+
       if (failed) {
         continue;
       }
     }
-    
+
     list_one_char(i, ch);
   }
 }
@@ -1245,7 +1279,7 @@ void disp_long_exits(struct char_data *ch, bool autom)
   struct veh_data *veh;
   *buf = '\0';
   buf2[0] = '\0'; // so strlcats will start at the beginning
-  
+
   RIG_VEH(ch, veh);
   if (veh)
   {
@@ -1293,7 +1327,7 @@ void disp_long_exits(struct char_data *ch, bool autom)
       }
     }
   }
-  
+
   if (autom)
     send_to_char("^cObvious exits:\r\n", ch);
   else
@@ -1302,16 +1336,16 @@ void disp_long_exits(struct char_data *ch, bool autom)
     send_to_char(buf, ch);
   else
     send_to_char(" None.\r\n", ch);
-  
+
   if (veh)
     ch->in_room = wasin;
-  
+
 }
 
 void disp_short_exits(struct char_data *ch) {
   struct veh_data *veh;
   *buf = '\0';
-  
+
   for (int door = 0; door < NUM_OF_DIRS; door++)
     if (EXIT(ch, door) && EXIT(ch, door)->to_room && EXIT(ch, door)->to_room != &world[0]) {
       if (ch->in_veh || ch->char_specials.rigging) {
@@ -1337,10 +1371,10 @@ void disp_short_exits(struct char_data *ch) {
 }
 
 void do_auto_exits(struct char_data * ch)
-{  
+{
   if (PRF_FLAGGED(ch, PRF_LONGEXITS)) {
     disp_long_exits(ch, TRUE);
-  } 
+  }
   else {
     disp_short_exits(ch);
   }
@@ -1359,7 +1393,7 @@ void update_blood(void)
 {
   int i;
   extern rnum_t top_of_world;
-  
+
   for (i = 0; i < top_of_world; i++) {
     if (world[i].blood > 0) {
       world[i].blood--;
@@ -1460,19 +1494,19 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
     send_to_char("It is pitch black...\r\n", ch);
     return;
   }
-  
+
   if ((ch->in_veh && !ch->in_room) || PLR_FLAGGED(ch, PLR_REMOTE)) {
     look_in_veh(ch);
     return;
   }
-  
+
   if (!ch->in_room) {
     send_to_char("Your mind is blasted by the eldritch horrors of the unknown void you're drifting in.\r\n", ch);
     snprintf(buf, sizeof(buf), "SYSERR: %s tried to look at their room but is nowhere!", GET_CHAR_NAME(ch));
     mudlog(buf, ch, LOG_SYSLOG, TRUE);
     return;
   }
-  
+
   // Room title.
   if ((PRF_FLAGGED(ch, PRF_ROOMFLAGS) && GET_REAL_LEVEL(ch) >= LVL_BUILDER)) {
     ROOM_FLAGS(ch->in_room).PrintBits(buf, MAX_STRING_LENGTH, room_bits, ROOM_MAX);
@@ -1487,7 +1521,7 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
                  ch->in_room->matrix && real_host(ch->in_room->matrix) >= 1 ? " (Jackpoint)" : "",
                  ROOM_FLAGGED(ch->in_room, ROOM_ENCOURAGE_CONGREGATION) ? " ^W(Socialization Bonus)^n" : "");
   }
-  
+
   // TODO: Why is this code here? If you're in a vehicle, you do look_in_veh() above right?
   if (!(ch->in_veh && get_speed(ch->in_veh) > 200)) {
     if (!is_quicklook && (ignore_brief || !PRF_FLAGGED(ch, PRF_BRIEF))) {
@@ -1497,17 +1531,17 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
         send_to_char(ch->in_room->description, ch);
     }
   }
-  
+
   /* autoexits */
   if (PRF_FLAGGED(ch, PRF_AUTOEXIT))
     do_auto_exits(ch);
-  
+
   if (ch->in_room->blood > 0)
     send_to_char(blood_messages[(int) ch->in_room->blood], ch);
-    
+
   if (ch->in_room->debris > 0) {
     strncpy(buf, "^y", sizeof(buf));
-    
+
     if (ch->in_room->debris < 5) {
       strlcat(buf, "A few spent casings and empty mags are scattered here.", sizeof(buf));
     }
@@ -1532,7 +1566,7 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
     strlcat(buf, "^n\r\n", sizeof(buf));
     send_to_char(buf, ch);
   }
-  
+
   if (GET_BACKGROUND_COUNT(ch->in_room) && (IS_ASTRAL(ch) || IS_DUAL(ch))) {
     if (GET_BACKGROUND_AURA(ch->in_room) == AURA_POWERSITE) {
       switch (GET_BACKGROUND_COUNT(ch->in_room)) {
@@ -1617,7 +1651,7 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
     send_to_char("^cAn invisible force is whipping small objects around the area.^n\r\n", ch);
   if (ch->in_room->icesheet[0])
     send_to_char("^CIce covers the floor.^n\r\n", ch);
-  
+
   // Is there an elevator car here?
   if (ROOM_FLAGGED(ch->in_room, ROOM_ELEVATOR_SHAFT)) {
     // Iterate through elevators to find one that contains this shaft.
@@ -1630,21 +1664,21 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
         } else {
           send_to_char("^RThe massive bulk of an elevator car fills the hoistway, squeezing you aside.^n\r\n", ch);
         }
-        
+
         break;
       }
     }
   }
-  
+
   SPECIAL(car_dealer);
   if (ch->in_room->func) {
     if (ch->in_room->func == car_dealer) {
       send_to_char("^y...There are vehicles for sale here.^n\r\n", ch);
     }
-    
+
     // TODO: Add any other relevant funcs with room displays here.
   }
-  
+
   /* now list characters & objects */
   // what fun just to get a colorized listing
   CCHAR = "^g";
@@ -1671,25 +1705,25 @@ void look_in_direction(struct char_data * ch, int dir)
         send_to_char("You discover an exit...\r\n", ch);
       }
     }
-    
+
     if (EXIT(ch, dir)->general_description)
       send_to_char(EXIT(ch, dir)->general_description, ch);
     else
       send_to_char("You see nothing special.\r\n", ch);
-    
+
     if (IS_SET(EXIT(ch, dir)->exit_info, EX_DESTROYED) && EXIT(ch, dir)->keyword)
       send_to_char(ch, "The %s is destroyed.\r\n", fname(EXIT(ch, dir)->keyword), !strcmp(fname(EXIT(ch, dir)->keyword), "doors") ? "are" : "is");
     else if (IS_SET(EXIT(ch, dir)->exit_info, EX_CLOSED) && EXIT(ch, dir)->keyword)
       send_to_char(ch, "The %s %s closed.\r\n", fname(EXIT(ch, dir)->keyword), !strcmp(fname(EXIT(ch, dir)->keyword), "doors") ? "are" : "is");
     else if (IS_SET(EXIT(ch, dir)->exit_info, EX_ISDOOR) && EXIT(ch, dir)->keyword)
       send_to_char(ch, "The %s is open.\r\n", fname(EXIT(ch, dir)->keyword), !strcmp(fname(EXIT(ch, dir)->keyword), "doors") ? "are" : "is");
-    
+
     if (ROOM_FLAGGED(ch->in_room, ROOM_HOUSE)){
       /* Apartments have peepholes. */
       struct room_data *original_loc = ch->in_room;
       struct room_data *targ_loc = EXIT(ch, dir)->to_room;
       send_to_char("Through the peephole, you see:\r\n", ch);
-      
+
       char_from_room(ch);
       char_to_room(ch, targ_loc);
       look_at_room(ch, 1, 0);
@@ -1706,12 +1740,12 @@ void look_in_obj(struct char_data * ch, char *arg, bool exa)
   struct char_data *dummy = NULL;
   struct veh_data *veh = NULL;
   int amt, bits;
-  
+
   if (!*arg) {
     send_to_char("Look in what?\r\n", ch);
     return;
   }
-  
+
   // Find the specified thing. Vehicle will take priority over object.
   if (ch->in_veh) {
     bits = generic_find(arg, FIND_OBJ_INV | FIND_OBJ_ROOM | FIND_OBJ_EQUIP, ch, &dummy, &obj);
@@ -1720,7 +1754,7 @@ void look_in_obj(struct char_data * ch, char *arg, bool exa)
     bits = generic_find(arg, FIND_OBJ_INV | FIND_OBJ_ROOM | FIND_OBJ_EQUIP, ch, &dummy, &obj);
     veh = get_veh_list(arg, ch->in_room->vehicles, ch);
   }
-  
+
   if (!bits && !veh) {
     if (str_str("pockets", arg)) {
       send_to_char("Please see ^WHELP POCKETS^n for info on how to use your ammo pockets.\r\n", ch);
@@ -1729,11 +1763,11 @@ void look_in_obj(struct char_data * ch, char *arg, bool exa)
     }
     return;
   }
-  
+
   if (veh) {
     struct veh_data *curr_in_veh = ch->in_veh;
     bool curr_vfront = ch->vfront;
-    
+
     /* Disabled-- a check with no penalty that you can spam until success does not add to the fun.
     if (veh->cspeed > SPEED_IDLE) {
       if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 8)) {
@@ -1774,7 +1808,7 @@ void look_in_obj(struct char_data * ch, char *arg, bool exa)
   else
   {
     if (GET_OBJ_TYPE(obj) == ITEM_GUN_AMMO) {
-      send_to_char(ch, "It contains %d %s.\r\n", 
+      send_to_char(ch, "It contains %d %s.\r\n",
                    GET_AMMOBOX_QUANTITY(obj),
                    get_ammo_representation(GET_AMMOBOX_WEAPON(obj), GET_AMMOBOX_TYPE(obj), GET_AMMOBOX_QUANTITY(obj)));
       return;
@@ -1832,11 +1866,11 @@ void look_in_obj(struct char_data * ch, char *arg, bool exa)
 char *find_exdesc(char *word, struct extra_descr_data * list)
 {
   struct extra_descr_data *i;
-  
+
   for (i = list; i; i = i->next)
     if (isname(word, i->keyword))
       return (i->description);
-  
+
   return NULL;
 }
 
@@ -1853,7 +1887,7 @@ void look_at_target(struct char_data * ch, char *arg)
   struct obj_data *obj = NULL, *found_obj = NULL;
   struct veh_data *found_veh = NULL;
   char *desc;
-  
+
   if (!*arg)
   {
     send_to_char("Look at what?\r\n", ch);
@@ -1862,10 +1896,10 @@ void look_at_target(struct char_data * ch, char *arg)
   if (ch->char_specials.rigging)
     if (ch->char_specials.rigging->type == VEH_DRONE)
       ch->in_room = get_veh_in_room(ch->char_specials.rigging);
-  
+
   bits = generic_find(arg, FIND_OBJ_INV | FIND_OBJ_ROOM | FIND_OBJ_EQUIP |
                       FIND_CHAR_ROOM | FIND_OBJ_VEH_ROOM | FIND_CHAR_VEH_ROOM, ch, &found_char, &found_obj);
-  
+
   // Look at self.
   if ((!str_cmp(arg, "self") || !str_cmp(arg, "me") || !str_cmp(arg, "myself"))) {
     if (AFF_FLAGGED(ch, AFF_RIG))
@@ -1879,24 +1913,24 @@ void look_at_target(struct char_data * ch, char *arg)
       return;
     }
   }
-  
+
   // Look at vehicles, either in the back of a vehicle (look at inside ones) or outside of a vehicle.
   if (!ch->in_veh || (ch->in_veh && !ch->vfront)) {
     found_veh = get_veh_list(arg, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch);
   }
-  
+
   if (ch->in_veh) {
     // Look at outside vehicles from within a vehicle.
     found_veh = get_veh_list(arg, (get_ch_in_room(ch))->vehicles, ch);
   }
-  
+
   if (found_veh) {
     send_to_char(GET_VEH_DESC(found_veh), ch);
     if (PLR_FLAGGED(ch, PLR_REMOTE))
       ch->in_room = was_in;
     return;
   }
-  
+
   /* Is the target a character? */
   if (found_char != NULL)
   {
@@ -1959,7 +1993,7 @@ void look_at_target(struct char_data * ch, char *arg)
         found = 1;
       }
   }
-  
+
   /* Does the argument match an extra desc of an object in the room? */
   if (ch->in_room) {
     FOR_ITEMS_AROUND_CH(ch, obj) {
@@ -1985,9 +2019,9 @@ void look_at_target(struct char_data * ch, char *arg)
       send_to_char(ch, "You don't see anything named '%s' here.\r\n", arg);
     }
   }
-    
+
   ch->in_room = was_in;
-  
+
 }
 
 ACMD_CONST(do_look) {
@@ -2001,17 +2035,17 @@ ACMD(do_look)
 {
   static char arg2[MAX_INPUT_LENGTH];
   int look_type;
-  
+
   if (!ch->desc)
     return;
-  
+
   if (GET_POS(ch) < POS_SLEEPING)
     send_to_char("You can't see anything but stars!\r\n", ch);
   else if (!LIGHT_OK(ch)) {
     send_to_char("It is pitch black...\r\n", ch);
   } else {
     half_chop(argument, arg, arg2);
-    
+
     if (subcmd == SCMD_READ) {
       if (!*arg)
         send_to_char("Read what?\r\n", ch);
@@ -2079,17 +2113,17 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
   int i, found, mount_location, bal, imp;
   bool has_pockets = FALSE, added_extra_carriage_return = FALSE, has_smartlink = FALSE;
   struct obj_data *access = NULL;
-  
+
   if (j->restring) {
     snprintf(buf, sizeof(buf), "^MOOC^n statistics for '^y%s^n' (restrung from %s):\r\n", GET_OBJ_NAME(j), j->text.name);
   } else {
     snprintf(buf, sizeof(buf), "^MOOC^n statistics for '^y%s^n':\r\n", (GET_OBJ_NAME(j) ? GET_OBJ_NAME(j) : "<None>"));
   }
-  
+
   sprinttype(GET_OBJ_TYPE(j), item_types, buf1, sizeof(buf1));
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is %s ^c%s^n that weighs ^c%.2f^n kilos. It is made of ^c%s^n with a durability of ^c%d^n.\r\n",
           AN(buf1), buf1, GET_OBJ_WEIGHT(j), material_names[(int)GET_OBJ_MATERIAL(j)], GET_OBJ_BARRIER(j));
-  
+
   bool was_take = j->obj_flags.wear_flags.IsSet(ITEM_WEAR_TAKE);
   j->obj_flags.wear_flags.RemoveBit(ITEM_WEAR_TAKE);
   if (strcmp(j->obj_flags.wear_flags.ToString(), "0") != 0) {
@@ -2102,7 +2136,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
     j->obj_flags.wear_flags.SetBit(ITEM_WEAR_TAKE);
   else
     strlcat(buf, "^yIt cannot be picked up once dropped.^n\r\n", sizeof(buf));
-  
+
   switch (GET_OBJ_TYPE(j))
   {
     case ITEM_LIGHT:
@@ -2141,11 +2175,11 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
         // Damage code.
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " Its base damage code is ^c%d%s%s^n",
                  GET_OBJ_VAL(j, 0), wound_arr[GET_OBJ_VAL(j, 1)], !IS_DAMTYPE_PHYSICAL(get_weapon_damage_type(j)) ? " (stun)" : "");
-        
+
         // Burst fire?
         if (GET_WEAPON_FIREMODE(j) == MODE_BF || GET_WEAPON_FIREMODE(j) == MODE_FA) {
           burst_count = GET_WEAPON_FIREMODE(j) == MODE_BF ? 3 : GET_WEAPON_FULL_AUTO_COUNT(j);
-          
+
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", raised to ^c%d%s%s^n by its current fire mode.",
                    GET_WEAPON_POWER(j) + burst_count,
                    wound_arr[MIN(DEADLY, GET_WEAPON_DAMAGE_CODE(j) + (int)(burst_count / 3))],
@@ -2153,12 +2187,12 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
         } else {
           strlcat(buf, ".", sizeof(buf));
         }
-        
-        if (j->contains 
+
+        if (j->contains
             && GET_OBJ_TYPE(j->contains) == ITEM_GUN_MAGAZINE
             && GET_MAGAZINE_AMMO_COUNT(j->contains) > 0
             && GET_MAGAZINE_AMMO_TYPE(j->contains) != AMMO_NORMAL) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt is loaded with %s, which ", 
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt is loaded with %s, which ",
                    ammo_type[GET_MAGAZINE_AMMO_TYPE(j->contains)].name);
           switch (GET_MAGAZINE_AMMO_TYPE(j->contains)) {
             case AMMO_APDS:
@@ -2178,13 +2212,13 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
               break;
           }
         }
-        
+
         if (GET_WEAPON_INTEGRAL_RECOIL_COMP(j)) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt has ^c%d^n point%s of integral recoil compensation.",
                   GET_WEAPON_INTEGRAL_RECOIL_COMP(j),
                   GET_WEAPON_INTEGRAL_RECOIL_COMP(j) > 1 ? "s" : "");
         }
-        
+
         // Info about attachments, if any.
         int standing_recoil_comp = GET_WEAPON_INTEGRAL_RECOIL_COMP(j);
         int prone_recoil_comp = 0;
@@ -2196,13 +2230,13 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
               && (access = &obj_proto[real_obj])) {
             // mount_location: used for gun_accessory_locations[] lookup.
             mount_location = i - ACCESS_LOCATION_TOP;
-            
+
             // format flair
             if (!added_extra_carriage_return) {
               strlcat(buf, "\r\n", sizeof(buf));
               added_extra_carriage_return = TRUE;
             }
-            
+
             // parse and add the string for the accessory's special bonuses
             switch (GET_ACCESSORY_TYPE(access)) {
               case ACCESS_SMARTLINK:
@@ -2216,25 +2250,25 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
                       break;
                     }
                   }
-                  
+
                   // No cyberware?
                   if (cyberware_rating == 0) {
                     // Do they have goggles?
-                    if (GET_EQ(ch, WEAR_EYES) 
-                        && GET_OBJ_TYPE(GET_EQ(ch, WEAR_EYES)) == ITEM_GUN_ACCESSORY 
+                    if (GET_EQ(ch, WEAR_EYES)
+                        && GET_OBJ_TYPE(GET_EQ(ch, WEAR_EYES)) == ITEM_GUN_ACCESSORY
                         && GET_ACCESSORY_TYPE(GET_EQ(ch, WEAR_EYES)) == ACCESS_SMARTGOGGLE)
                     {
                       // Goggles limit you to 1/2 of the SL-1 rating.
                       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nThe Smartlink%s attached to the %s ^yis limited by your use of goggles^n and only provides ^c-1^n to target numbers (lower is better).",
                                GET_ACCESSORY_RATING(access) == 2 ? "-II" : "",
                                gun_accessory_locations[mount_location]);
-                    } 
+                    }
                     // No goggles either.
                     else {
                       strlcat(buf, "\r\n^YYou have a smartlink installed, but have neither the cyberware nor goggles to use it.^n", sizeof(buf));
                     }
                   }
-                  
+
                   // cyberware-1
                   else if (cyberware_rating == 1) {
                     if (GET_ACCESSORY_RATING(access) == 1) {
@@ -2249,13 +2283,13 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
                                -SMARTLINK_I_MODIFIER);
                     }
                   }
-                  
+
                   // cyberware-2+
                   else {
                     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nThe Smartlink%s attached to the %s provides ^c%d^n to target numbers (lower is better).",
                             GET_ACCESSORY_RATING(access) < 2 ? "" : "-II", gun_accessory_locations[mount_location],
                             (GET_ACCESSORY_RATING(access) == 1 || GET_ACCESSORY_RATING(access) < 2) ? -SMARTLINK_I_MODIFIER : -SMARTLINK_II_MODIFIER);
-                  }                  
+                  }
                 }
                 has_smartlink = TRUE;
                 break;
@@ -2322,14 +2356,14 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
               GET_OBJ_AFFECT(access).PrintBits(buf2, MAX_STRING_LENGTH, affected_bits, AFF_MAX);
               snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n ^- It provides the following flags: ^c%s^n", buf2);
             }
-            
+
             if (strcmp(GET_OBJ_EXTRA(access).ToString(), "0") != 0) {
               GET_OBJ_EXTRA(access).PrintBits(buf2, MAX_STRING_LENGTH, pc_readable_extra_bits, ITEM_EXTRA_MAX);
               snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n ^- It provides the following extra features: ^c%s^n", buf2);
             }
           }
         }
-        
+
         if (burst_count > 0 && burst_count - standing_recoil_comp > 0) {
           strlcat(buf, "\r\n\r\n^yIt doesn't have enough recoil compensation", sizeof(buf));
           if (burst_count - standing_recoil_comp - prone_recoil_comp <= 0) {
@@ -2391,24 +2425,24 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       break;
     case ITEM_WORN:
       strncpy(buf1, "It has space for ", sizeof(buf1));
-      
+
       if (GET_WORN_POCKETS_HOLSTERS(j) > 0) {
-        snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "%s^c%d^n holster%s", 
+        snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "%s^c%d^n holster%s",
                  (has_pockets?", ":""), GET_WORN_POCKETS_HOLSTERS(j), GET_WORN_POCKETS_HOLSTERS(j) > 1 ? "s":"");
         has_pockets = TRUE;
       }
       /*   Magazines aren't a thing anymore. -- LS
       if (GET_OBJ_VAL(j, 1) > 0) {
-        snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "%s^c%d^n magazine%s", 
+        snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "%s^c%d^n magazine%s",
                  (has_pockets?", ":""), GET_OBJ_VAL(j, 1), GET_OBJ_VAL(j, 1) > 1 ? "s":"");
         has_pockets = TRUE;
       } */
       if (GET_WORN_POCKETS_MISC(j) > 0) {
-        snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "%s^c%d^n miscellaneous small item%s", 
+        snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "%s^c%d^n miscellaneous small item%s",
                  (has_pockets?", ":""), GET_WORN_POCKETS_MISC(j), GET_WORN_POCKETS_MISC(j) > 1 ? "s":"");
         has_pockets = TRUE;
       }
-      
+
       if (has_pockets) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s.\r\n", buf1);
       } else {
@@ -2501,7 +2535,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       break;
     case ITEM_WORKSHOP:
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%s^n designed for ^c%s^n.",
-              kit_workshop_facility[GET_WORKSHOP_GRADE(j)], 
+              kit_workshop_facility[GET_WORKSHOP_GRADE(j)],
               workshops[GET_WORKSHOP_TYPE(j)]);
       if (GET_WORKSHOP_TYPE(j) == TYPE_AMMO) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " It's specialized for ^c%s^n rounds.",
@@ -2509,29 +2543,29 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       }
       break;
     case ITEM_FOCUS:
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%s^n focus of force ^c%d^n.", 
-               foci_type[GET_FOCUS_TYPE(j)], 
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%s^n focus of force ^c%d^n.",
+               foci_type[GET_FOCUS_TYPE(j)],
                GET_FOCUS_FORCE(j));
       break;
     case ITEM_SPELL_FORMULA:
-      if (SPELL_HAS_SUBTYPE(GET_SPELLFORMULA_SPELL(j))) 
+      if (SPELL_HAS_SUBTYPE(GET_SPELLFORMULA_SPELL(j)))
       {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^cforce-%d %s (%s)^n designed for ^c%s^n mages.", 
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^cforce-%d %s (%s)^n designed for ^c%s^n mages.",
                  GET_SPELLFORMULA_FORCE(j),
                  spells[GET_SPELLFORMULA_SPELL(j)].name,
                  attributes[GET_SPELLFORMULA_SUBTYPE(j)],
                  GET_SPELLFORMULA_TRADITION(j) ? "Shamanic" : "Hermetic");
       } else {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^cforce-%d %s^n designed for ^c%s^n mages.", 
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^cforce-%d %s^n designed for ^c%s^n mages.",
                  GET_SPELLFORMULA_FORCE(j),
-                 spells[GET_SPELLFORMULA_SPELL(j)].name, 
+                 spells[GET_SPELLFORMULA_SPELL(j)].name,
                  GET_SPELLFORMULA_TRADITION(j) ? "Shamanic" : "Hermetic");
       }
       break;
     case ITEM_PART:
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is %s^c%s^n designed for MPCP ^c%d^n decks. It will cost %d nuyen in parts and %d nuyen in chips to build.", 
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is %s^c%s^n designed for MPCP ^c%d^n decks. It will cost %d nuyen in parts and %d nuyen in chips to build.",
                !GET_PART_DESIGN_COMPLETION(j) ? "a not-yet-designed " : AN(parts[GET_PART_TYPE(j)].name),
-               parts[GET_PART_TYPE(j)].name, 
+               parts[GET_PART_TYPE(j)].name,
                GET_PART_TARGET_MPCP(j),
                GET_PART_PART_COST(j),
                GET_PART_CHIP_COST(j)
@@ -2559,7 +2593,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
                 AN(gun_accessory_types[GET_OBJ_VAL(j, 1)]), gun_accessory_types[GET_OBJ_VAL(j, 1)]
                 , gun_accessory_locations[GET_OBJ_VAL(j, 0)]);
       }
-      
+
       break;
     case ITEM_CLIMBING:
       if (GET_OBJ_VAL(j, 1) == CLIMBING_TYPE_WATER_WINGS) {
@@ -2606,14 +2640,14 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       break;
     case ITEM_MOD:
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is %s ^c%s^n upgrade", AN(mod_types[GET_OBJ_VAL(j, 0)].name), mod_types[GET_OBJ_VAL(j, 0)].name);
-      
+
       // Val 1
       if (GET_OBJ_VAL(j, 0) == TYPE_MOUNT) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " that adds %s ^c%s^n.", AN(mount_types[GET_OBJ_VAL(j, 1)]), mount_types[GET_OBJ_VAL(j, 1)]);
       } else {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " that takes up ^c%d^n load space.", GET_OBJ_VAL(j, 1));
       }
-      
+
       // Val 2
       if (GET_OBJ_VAL(j, 0) == MOD_ENGINE) {
         // engine type
@@ -2625,11 +2659,11 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       } else {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt functions at rating ^c%d^n.", GET_OBJ_VAL(j, 2));
       }
-      
+
       // Val 5
       sprintbit(GET_OBJ_VAL(j, 5), engine_type, buf2, sizeof(buf2));
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt is compatible with the following engine types:\r\n^c  %s^n", buf2);
-      
+
       // Vals 4 and 6
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt has been designed to fit ^c%s^n, and installs to the ^c%s^n.",
               GET_OBJ_VAL(j, 4) == 0 ? "vehicles" : GET_OBJ_VAL(j, 4) == 1 ? "drones" : "all types of vehicles",
@@ -2658,13 +2692,13 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       break;
     case ITEM_OTHER:
       if (GET_OBJ_VNUM(j) == OBJ_NEOPHYTE_SUBSIDY_CARD) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is bonded to %s and has %d nuyen remaining on it.\r\n", 
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is bonded to %s and has %d nuyen remaining on it.\r\n",
                 GET_IDNUM(ch) == GET_OBJ_VAL(j, 0) ? "you" : "someone else",
                 GET_OBJ_VAL(j, 1));
         break;
       }
       // fallthrough
-    
+
     // All info about these is displayed when you examine them.
     case ITEM_GUN_MAGAZINE:
     case ITEM_QUEST:
@@ -2681,7 +2715,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       strncpy(buf, "This item type has no probe string. Contact the staff to request one.", sizeof(buf) - strlen(buf));
       break;
   }
-  
+
   if (GET_OBJ_VNUM(j) == OBJ_MULTNOMAH_VISA || GET_OBJ_VNUM(j) == OBJ_CARIBBEAN_VISA) {
     if (GET_OBJ_VAL(j, 0) == GET_IDNUM(ch)) {
       strlcat(buf, "It has your picture on it.", sizeof(buf));
@@ -2689,33 +2723,33 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       strlcat(buf, "It has someone else's picture on it.", sizeof(buf));
     }
   }
-  
+
   if (GET_OBJ_AFFECT(j).IsSet(AFF_LASER_SIGHT) && has_smartlink) {
     strlcat(buf, "\r\n\r\n^yWARNING:^n Your smartlink overrides your laser sight-- the laser will not function.", sizeof(buf));
   }
-  
+
   strlcat(buf, "^n\r\n\r\n", sizeof(buf));
   found = 0;
-  
+
   if (strcmp(j->obj_flags.bitvector.ToString(), "0") != 0) {
     j->obj_flags.bitvector.PrintBits(buf2, MAX_STRING_LENGTH, affected_bits, AFF_MAX);
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "This object provides the following flags when used: ^c%s^n\r\n", buf2);
   }
-  
+
   // Remove the dont_touch bit for probe printing.
   bool is_dont_touch = IS_OBJ_STAT(j, ITEM_DONT_TOUCH);
   if (is_dont_touch)
     GET_OBJ_EXTRA(j).RemoveBit(ITEM_DONT_TOUCH);
-    
+
   if (strcmp(GET_OBJ_EXTRA(j).ToString(), "0") != 0) {
-    GET_OBJ_EXTRA(j).PrintBits(buf2, MAX_STRING_LENGTH, pc_readable_extra_bits, ITEM_EXTRA_MAX);  
+    GET_OBJ_EXTRA(j).PrintBits(buf2, MAX_STRING_LENGTH, pc_readable_extra_bits, ITEM_EXTRA_MAX);
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "This object has the following extra features: ^c%s^n\r\n", buf2);
   }
-  
+
   // Restore the dont_touch bit.
   if (is_dont_touch)
     GET_OBJ_EXTRA(j).SetBit(ITEM_DONT_TOUCH);
-  
+
   strncpy(buf1, "This object modifies your character in the following ways when used:\r\n  ^c", sizeof(buf1));
   for (i = 0; i < MAX_OBJ_AFFECT; i++)
     if (j->affected[i].modifier)
@@ -2730,15 +2764,15 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
   if (found) {
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s^n\r\n", buf1);
   }
-  
+
   if (IS_OBJ_STAT(j, ITEM_NERPS)) {
     strlcat(buf, "^YIt has been flagged NERPS, indicating it has no special coded effects.^n\r\n", sizeof(buf));
   }
-  
+
   if (j->source_info) {
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt references data from the following source book(s): %s^n\r\n", j->source_info);
   }
-  
+
   send_to_char(buf, ch);
 }
 
@@ -2749,20 +2783,20 @@ ACMD(do_examine)
   struct obj_data *tmp_object;
   struct veh_data *found_veh = NULL;
   one_argument(argument, arg);
-  
+
   if (!*arg) {
     send_to_char("Examine what?\r\n", ch);
     return;
   }
   if (subcmd == SCMD_EXAMINE)
     look_at_target(ch, arg);
-  
+
   if (!ch->in_veh || (ch->in_veh && !ch->vfront))
     found_veh = get_veh_list(arg, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch);
-    
+
   if (!found_veh && ch->in_veh)
     found_veh = get_veh_list(arg, (get_ch_in_room(ch))->vehicles, ch);
-      
+
   if (found_veh) {
       if (subcmd == SCMD_PROBE) {
         // If they don't own the vehicle and the hood isn't open, they can't view the stats.
@@ -2770,12 +2804,12 @@ ACMD(do_examine)
           send_to_char("You can only see the OOC stats for vehicles you own or vehicles that have popped hoods.\r\n", ch);
           return;
         }
-        
+
         // Display the vehicle's info.
         do_probe_veh(ch, found_veh);
         return;
       }
-      
+
       switch(found_veh->type) {
         case VEH_DRONE:
           skill = SKILL_BR_DRONE;
@@ -2800,7 +2834,7 @@ ACMD(do_examine)
       look_at_veh(ch, found_veh, i);
       return;
     }
-  
+
   // Look at self.
   if ((!str_cmp(arg, "self") || !str_cmp(arg, "me") || !str_cmp(arg, "myself"))) {
     struct veh_data *target_veh = NULL;
@@ -2808,7 +2842,7 @@ ACMD(do_examine)
       target_veh = ch->in_veh;
     else if (PLR_FLAGGED(ch, PLR_REMOTE))
       target_veh = ch->char_specials.rigging;
-    
+
     if (target_veh) {
       if (subcmd == SCMD_PROBE) {
         do_probe_veh(ch, target_veh);
@@ -2818,10 +2852,10 @@ ACMD(do_examine)
       return;
     }
   }
-  
+
   if (subcmd == SCMD_PROBE) {
     generic_find(arg, FIND_OBJ_INV | FIND_OBJ_EQUIP, ch, &tmp_char, &tmp_object);
-    
+
     if (tmp_object) {
       do_probe_object(ch, tmp_object);
     } else {
@@ -2832,32 +2866,32 @@ ACMD(do_examine)
     generic_find(arg, FIND_OBJ_INV | FIND_OBJ_ROOM | FIND_CHAR_ROOM |
                  FIND_OBJ_EQUIP | FIND_OBJ_VEH_ROOM | FIND_CHAR_VEH_ROOM, ch, &tmp_char, &tmp_object);
   }
-  
+
   if (tmp_object) {
     if (GET_OBJ_VNUM(tmp_object) == OBJ_NEOPHYTE_SUBSIDY_CARD) {
-      send_to_char(ch, "It is bonded to %s and has %d nuyen remaining on it.\r\n", 
+      send_to_char(ch, "It is bonded to %s and has %d nuyen remaining on it.\r\n",
               GET_IDNUM(ch) == GET_OBJ_VAL(tmp_object, 0) ? "you" : "someone else",
               GET_OBJ_VAL(tmp_object, 1));
     }
-    
+
 #ifdef USE_PRIVATE_CE_WORLD
     display_secret_info_about_object(ch, tmp_object);
 #endif
-    
+
     if (GET_OBJ_TYPE(tmp_object) == ITEM_CONTAINER ||
         (GET_OBJ_TYPE(tmp_object) == ITEM_WORN && tmp_object->contains)) {
       if (!tmp_object->contains)
         send_to_char("Looking inside reveals it to be empty.\r\n", ch);
       else {
         float weight_when_full =get_proto_weight(tmp_object) + GET_OBJ_VAL(tmp_object, 0);
-        
+
         if (GET_OBJ_WEIGHT(tmp_object) >= weight_when_full * .9)
           send_to_char("It is bursting at the seams.\r\n", ch);
         else if (GET_OBJ_WEIGHT(tmp_object) >= weight_when_full / 2)
           send_to_char("It is more than half full.\r\n", ch);
-        else 
+        else
           send_to_char("It is less than half full.\r\n", ch);
-        
+
         send_to_char("When you look inside, you see:\r\n", ch);
         look_in_obj(ch, arg, TRUE);
       }
@@ -2955,7 +2989,7 @@ ACMD(do_examine)
           if (GET_OBJ_VAL(tmp_object, 9) && GET_OBJ_VAL(tmp_object, 3) == GET_IDNUM(ch))
             send_to_char(ch, "It is about %d%% completed.\r\n", (int)(((float)((GET_OBJ_VAL(tmp_object, 1) * 60) -
                                                                                GET_OBJ_VAL(tmp_object, 9)) / (float)((GET_OBJ_VAL(tmp_object, 1) != 0 ? GET_OBJ_VAL(tmp_object, 1) : 1) * 60)) * 100));
-          
+
           break;
         case TYPE_LODGE:
           send_to_char(ch, "It has been dedicated to %s.\r\n", totem_types[GET_OBJ_VAL(tmp_object, 2)]);
@@ -2997,7 +3031,7 @@ ACMD(do_examine)
       }
     }
     if (GET_OBJ_VNUM(tmp_object) > 1) {
-      snprintf(buf, sizeof(buf), "You %s that %s ", 
+      snprintf(buf, sizeof(buf), "You %s that %s ",
                GET_SKILL(ch, SKILL_POLICE_PROCEDURES) <= 0 ? "have no training in Police Procedures, but you guess" : "think",
                GET_OBJ_NAME(tmp_object));
       int targ = GET_LEGAL_NUM(tmp_object);
@@ -3039,7 +3073,7 @@ ACMD(do_pool)
     snprintf(buf, sizeof(buf), "^R+%d^n", GET_POWER(ch, ADEPT_SIDESTEP));
   else
     strncpy(buf, "  ", sizeof(buf));
-  
+
   if (PRF_FLAGGED(ch, PRF_SCREENREADER)) {
     snprintf(pools, sizeof(pools), "  Ranged Dodge: %d%s\r\n  Damage Soak: %d\r\n  Offense: %d\r\n  Total Combat Dice: %d\r\n",
             GET_DEFENSE(ch), buf, GET_BODY(ch), GET_OFFENSE(ch), GET_COMBAT(ch));
@@ -3073,7 +3107,7 @@ ACMD(do_pool)
 
 const char *get_position_string(struct char_data *ch) {
   static char position_string[200];
-  
+
   if (AFF_FLAGGED(ch, AFF_PRONE))
     strlcpy(position_string, "laying prone.", sizeof(position_string));
   else switch (GET_POS(ch)) {
@@ -3116,7 +3150,7 @@ const char *get_position_string(struct char_data *ch) {
       strlcpy(position_string, "floating.", sizeof(position_string));
       break;
   }
-  
+
   return position_string;
 }
 
@@ -3127,7 +3161,7 @@ const char *get_vision_string(struct char_data *ch, bool ascii_friendly=FALSE) {
     else
       return "You are astrally perceiving.\r\n";
   }
-  
+
   if (ascii_friendly) {
     if (AFF_FLAGGED(ch, AFF_DETECT_INVIS) && get_ch_in_room(ch)->silence[0] <= 0)
         return "You have ultrasonic vision.";
@@ -3139,21 +3173,21 @@ const char *get_vision_string(struct char_data *ch, bool ascii_friendly=FALSE) {
         return "You have ultrasonic vision.\r\n";
     }
   }
-  
+
   if (CURRENT_VISION(ch) == THERMOGRAPHIC) {
     if (ascii_friendly)
       return "You have thermographic vision.";
     else
       return "You have thermographic vision.\r\n";
   }
-  
+
   if (CURRENT_VISION(ch) == LOWLIGHT) {
     if (ascii_friendly)
       return "You have low-light vision.";
     else
       return "You have low-light vision.\r\n";
   }
-  
+
   return "";
 }
 
@@ -3170,17 +3204,17 @@ const char *get_plaintext_score_health(struct char_data *ch) {
       physical = 1000;
       break;
     }
-  
+
   if (pain_editor)
     return "Your physical and mental status is masked by your pain editor.\r\n";
-  
+
   snprintf(buf2, sizeof(buf2), "Mental condition: %d / %d\r\n", (int)(mental / 100), (int)(GET_MAX_MENTAL(ch) / 100));
-  
+
   snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Physical condition: %d / %d\r\n", MAX((int)(physical / 100), 0), (int)(GET_MAX_PHYSICAL(ch) / 100));
-  
+
   if (physical < 0)
     snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Physical damage overflow: %d\r\n", (int)(physical / 100) * -1);
-  
+
   return buf2;
 }
 
@@ -3193,32 +3227,32 @@ const char *get_plaintext_score_stats(struct char_data *ch) {
     snprintf(buf2, sizeof(buf2), "Body: %d (base body %d)\r\n", GET_BOD(ch), GET_REAL_BOD(ch));
   else
     snprintf(buf2, sizeof(buf2), "Body: %d\r\n", GET_BOD(ch));
-  
+
   if (GET_QUI(ch) != GET_REAL_QUI(ch))
     snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Quickness: %d (base quickness %d)\r\n", GET_QUI(ch), GET_REAL_QUI(ch));
   else
     snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Quickness: %d\r\n", GET_QUI(ch));
-  
+
   if (GET_STR(ch) != GET_REAL_STR(ch))
     snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Strength: %d (base strength %d)\r\n", GET_STR(ch), GET_REAL_STR(ch));
   else
     snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Strength: %d\r\n", GET_STR(ch));
-  
+
   if (GET_CHA(ch) != GET_REAL_CHA(ch))
     snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Charisma: %d (base charisma %d)\r\n", GET_CHA(ch), GET_REAL_CHA(ch));
   else
     snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Charisma: %d\r\n", GET_CHA(ch));
-  
+
   if (GET_INT(ch) != GET_REAL_INT(ch))
     snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Intelligence: %d (base intelligence %d)\r\n", GET_INT(ch), GET_REAL_INT(ch));
   else
     snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Intelligence: %d\r\n", GET_INT(ch));
-  
+
   if (GET_WIL(ch) != GET_REAL_WIL(ch))
     snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Willpower: %d (base willpower %d)\r\n", GET_WIL(ch), GET_REAL_WIL(ch));
   else
     snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Willpower: %d\r\n", GET_WIL(ch));
-  
+
   if (GET_TRADITION(ch) == TRAD_MUNDANE)
     strlcat(ENDOF(buf2), "As a Mundane, you have no magic.\r\n", sizeof(buf2));
   else {
@@ -3226,20 +3260,20 @@ const char *get_plaintext_score_stats(struct char_data *ch) {
       snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Magic: %d (base magic %d)\r\n", (int)(GET_MAG(ch) / 100), MAX(0, (int)(ch->real_abils.mag / 100)));
     else
       snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Magic: %d\r\n", (int)(GET_MAG(ch) / 100));
-    
+
     if (GET_TRADITION(ch) == TRAD_SHAMANIC)
       snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "You follow %s.\r\n", totem_types[GET_TOTEM(ch)]);
-    
+
     snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Initiation grade: %d\r\n", GET_GRADE(ch));
   }
-  
+
   if (GET_REAL_REA(ch) != GET_REA(ch))
     snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Effective reaction: %d (base reaction %d)\r\n", GET_REA(ch), GET_REAL_REA(ch));
   else
     snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Reaction: %d\r\n", GET_REA(ch));
-  
+
   snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Initiative: %d + %dd6\r\n", GET_REA(ch), 1 + GET_INIT_DICE(ch));
-  
+
   return buf2;
 }
 
@@ -3267,7 +3301,7 @@ const char *get_plaintext_score_karma(struct char_data *ch) {
 
 const char *get_plaintext_score_misc(struct char_data *ch) {
   snprintf(buf2, sizeof(buf2), "You are %s\r\n", get_position_string(ch));
-  
+
   if (ch->desc != NULL && ch->desc->original != NULL ) {
     if (PLR_FLAGGED(ch->desc->original, PLR_MATRIX))
       snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "You are connected to the Matrix.\r\n");
@@ -3276,54 +3310,54 @@ const char *get_plaintext_score_misc(struct char_data *ch) {
     else
       snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "You are occupying the body of %s.\r\n", GET_NAME(ch));
   }
-  
+
   strlcat(buf2, get_vision_string(ch), sizeof(buf2));
-  
+
   if (IS_AFFECTED(ch, AFF_INVISIBLE) || IS_AFFECTED(ch, AFF_IMP_INVIS) || IS_AFFECTED(ch, AFF_SPELLINVIS) || IS_AFFECTED(ch, AFF_SPELLIMPINVIS))
     strlcat(buf2, "You are invisible.\r\n", sizeof(buf2));
-  
+
 #ifdef ENABLE_HUNGER
   if (GET_COND(ch, COND_FULL) == 0)
     strlcat(buf2, "You are hungry.\r\n", sizeof(buf2));
-  
+
   if (GET_COND(ch, COND_THIRST) == 0)
     strlcat(buf2, "You are thirsty.\r\n", sizeof(buf2));
 #endif
-  
+
   if (GET_COND(ch, COND_DRUNK) > 10)
     strlcat(buf2, "You are intoxicated.\r\n", sizeof(buf2));
-  
+
   if (AFF_FLAGGED(ch, AFF_SNEAK))
     snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "You are sneaking.\r\n");
-    
+
   snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "You have accrued %d out of a possible %d socialization bonus points.\r\n",
            GET_CONGREGATION_BONUS(ch), MAX_CONGREGATION_BONUS);
-  
+
   // Physical and misc attributes.
   snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Height: %.2f meters\r\n", ((float)GET_HEIGHT(ch) / 100));
   snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Weight: %d kilos\r\n", GET_WEIGHT(ch));
-  
-  
+
+
   struct time_info_data playing_time;
   struct time_info_data real_time_passed(time_t t2, time_t t1);
   playing_time = real_time_passed(time(0) + ch->player.time.played, ch->player.time.logon);
-  
+
   snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Current session length: %d days, %d hours.\r\n", playing_time.day, playing_time.hours);
-  
+
   return buf2;
 }
 
 const char *get_plaintext_score_combat(struct char_data *ch) {
   strlcpy(buf3, get_plaintext_score_health(ch), sizeof(buf3));
-  
+
   snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "Initiative: %d + %dd6\r\n", GET_REA(ch), 1 + GET_INIT_DICE(ch));
-  
+
   snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "Armor: %d ballistic, %d impact\r\n", GET_BALLISTIC(ch), GET_IMPACT(ch));
-  
+
   strlcat(buf3, get_vision_string(ch), sizeof(buf3));
-  
+
   snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "You are %s\r\n", get_position_string(ch));
-  
+
   return buf3;
 }
 
@@ -3358,10 +3392,10 @@ ACMD(do_score)
   struct time_info_data playing_time;
   struct time_info_data real_time_passed(time_t t2, time_t t1);
   char screenreader_buf[MAX_STRING_LENGTH];
-  
+
   if ( IS_NPC(ch) && ch->desc == NULL )
     return;
-  
+
   if (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE)) {
     struct veh_data *veh;
     RIG_VEH(ch, veh);
@@ -3405,14 +3439,14 @@ ACMD(do_score)
     // Switches for the specific score types.
     if (*argument) {
       int cmd_index;
-      
+
       skip_spaces(&argument);
-      
+
       // Find the index of the command the player wants.
       for (cmd_index = 0; *(score_switches[cmd_index].cmd) != '\n'; cmd_index++)
         if (!strncmp(argument, score_switches[cmd_index].cmd, strlen(argument)))
           break;
-      
+
       // Precondition: If the command was invalid, show help and exit.
       if (*(score_switches[cmd_index].cmd) == '\n') {
         send_to_char("Sorry, that's not a valid score type. Available score types are:\r\n", ch);
@@ -3421,18 +3455,18 @@ ACMD(do_score)
             send_to_char(ch, "  %s\r\n", score_switches[cmd_index].cmd);
         return;
       }
-      
+
       // Execute the selected command, return its output, and exit.
       send_to_char(((*score_switches[cmd_index].command_pointer) (ch)), ch);
       return;
     }
-    
+
     strncpy(buf, "^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//"
                  "^b//^L//^b//^L//^b//^L//^b//^L^L//^b//^L//^b//^L//^b//^L//^b//^L/\r\n"
                  "^b/^L/  ^L \\_\\                                 ^rcondition monitor           ^L/^b/\r\n", sizeof(buf));
-    
+
     snprintf(screenreader_buf, sizeof(screenreader_buf), "Score sheet for %s:\r\n", GET_CHAR_NAME(ch));
-    
+
     strlcat(buf, "^L/^b/^L `//-\\\\                      ^gMent: ", sizeof(buf));
     int mental = GET_MENTAL(ch), physical = GET_PHYSICAL(ch);
     bool pain_editor = FALSE;
@@ -3491,7 +3525,7 @@ ACMD(do_score)
         strlcat(buf, "^b[^RD^b]", sizeof(buf));
       strlcat(buf, "  ^b/^L/\r\n", sizeof(buf));
     }
-      
+
     strlcat(buf, "^b/^L/ ^L`\\\\-\\^wHADOWRUN 3rd Edition   ^rPhys: ", sizeof(buf));
     if (pain_editor) {
       strlcat(buf, " ^YMasked by pain editor.         ^L/^b/\r\n", sizeof(buf));
@@ -3538,7 +3572,7 @@ ACMD(do_score)
         strlcat(buf, "^L[^RD^L]", sizeof(buf));
       strlcat(buf, "  ^L/^b/\r\n", sizeof(buf));
     }
-    
+
     if (pain_editor) {
       strlcat(buf, "^L/^b/  ^L///-\\  ^wcharacter sheet                                           ^b/^L/\r\n", sizeof(buf));
     } else {
@@ -3548,11 +3582,11 @@ ACMD(do_score)
       else
         strlcat(buf, "^R[ 0]  ^b/^L/\r\n", sizeof(buf));
     }
-    
+
     /* Calculate the various bits of data that the score sheet needs. */
-    
+
     playing_time = real_time_passed(time(0) + ch->player.time.played, ch->player.time.logon);
-    
+
     char out_of_body_string[200];
     if (ch->desc != NULL && ch->desc->original != NULL ) {
       if (PLR_FLAGGED(ch->desc->original, PLR_MATRIX))
@@ -3564,26 +3598,26 @@ ACMD(do_score)
     } else {
       strlcpy(out_of_body_string, "", sizeof(out_of_body_string));
     }
-    
+
     static char invisibility_string[50];
     if (IS_AFFECTED(ch, AFF_INVISIBLE) || IS_AFFECTED(ch, AFF_IMP_INVIS) || IS_AFFECTED(ch, AFF_SPELLINVIS) || IS_AFFECTED(ch, AFF_SPELLIMPINVIS))
       strlcpy(invisibility_string, "You are invisible.", sizeof(invisibility_string));
     else
       strlcpy(invisibility_string, "", sizeof(invisibility_string));
-    
-    
+
+
     char shaman_string[50];
     if (GET_TRADITION(ch) == TRAD_SHAMANIC)
       snprintf(shaman_string, sizeof(shaman_string), "You follow %s.", totem_types[GET_TOTEM(ch)]);
     else
       strlcpy(shaman_string, "", sizeof(shaman_string));
-    
+
     static char grade_string[50];
     if (GET_TRADITION(ch) != TRAD_MUNDANE)
       snprintf(grade_string, sizeof(grade_string), "^nGrade: ^w[^W%2d^w]", GET_GRADE(ch));
     else
       strlcpy(grade_string, "", sizeof(grade_string));
-    
+
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^b/^L/  ^L\\\\@//                                                            ^L/^b/\r\n");
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^L/^b/   ^L`^^                                                              ^b/^L/\r\n");
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^b/^L/                                                                   ^L/^b/\r\n");
@@ -3626,24 +3660,24 @@ ACMD(do_score)
             "^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//"
             "^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//"
             "^b//^L^L//^b//^L//^b//^L//^b//^L//^b/\r\n", sizeof(buf));
-    
+
     // Compose the remainder of the screenreader score.
-    
+
     // Health:
     strlcat(screenreader_buf, get_plaintext_score_health(ch), sizeof(screenreader_buf));
-    
+
     // Attributes:
     strlcat(screenreader_buf, get_plaintext_score_stats(ch), sizeof(screenreader_buf));
-    
+
     // Derived stats:
     strlcat(screenreader_buf, get_plaintext_score_essence(ch), sizeof(screenreader_buf));
-    
+
     // Equipment attributes:
     strlcat(screenreader_buf, get_plaintext_score_equipment(ch), sizeof(screenreader_buf));
-    
+
     // Karma stats.
     strlcat(screenreader_buf, get_plaintext_score_karma(ch), sizeof(screenreader_buf));
-    
+
     // Condition and misc affects.
     strlcat(screenreader_buf, get_plaintext_score_misc(ch), sizeof(screenreader_buf));
   }
@@ -3657,7 +3691,7 @@ ACMD(do_inventory)
 {
   send_to_char("You are carrying:\r\n", ch);
   list_obj_to_char(ch->carrying, ch, 1, TRUE, FALSE);
-  
+
   float ammo_weight = get_bulletpants_weight(ch);
   if (ammo_weight > 0)
     send_to_char(ch, "\r\nAdditionally, you have %.2f kilos of ammo in your pockets.\r\n", ammo_weight);
@@ -3668,12 +3702,12 @@ ACMD(do_inventory)
 ACMD(do_cyberware)
 {
   struct obj_data *obj;
-  
+
   if (!ch->cyberware) {
     send_to_char("You have no cyberware.\r\n", ch);
     return;
   }
-  
+
   send_to_char("You have the following cyberware:\r\n", ch);
   for (obj = ch->cyberware; obj != NULL; obj = obj->next_content) {
     snprintf(buf, sizeof(buf), "%-40s Essence: %0.2f\r\n",
@@ -3685,12 +3719,12 @@ ACMD(do_cyberware)
 ACMD(do_bioware)
 {
   struct obj_data *obj;
-  
+
   if (!ch->bioware) {
     send_to_char("You have no bioware.\r\n", ch);
     return;
   }
-  
+
   send_to_char("You have the following bioware:\r\n", ch);
   for (obj = ch->bioware; obj != NULL; obj = obj->next_content) {
     snprintf(buf, sizeof(buf), "%-40s Rating: %-2d     Bioware Index: %0.2f\r\n",
@@ -3703,7 +3737,7 @@ ACMD(do_bioware)
 ACMD(do_equipment)
 {
   int i, found = 0;
-  
+
   send_to_char("You are using:\r\n", ch);
   for (i = 0; i < NUM_WEARS; i++) {
     if (GET_EQ(ch, i)) {
@@ -3749,20 +3783,20 @@ ACMD(do_time)
   extern const char *weekdays[];
   extern const char *month_name[];
   struct obj_data *check;
-  
+
   if (subcmd == SCMD_NORMAL && GET_REAL_LEVEL(ch) >= LVL_BUILDER)
     subcmd = SCMD_PRECISE;
   for (check = ch->cyberware; check; check = check->next_content)
     if (GET_OBJ_VAL(check, 0) == CYB_MATHSSPU || (GET_OBJ_VAL(check, 0) == CYB_EYES && IS_SET(GET_OBJ_VAL(check, 3), EYE_CLOCK)))
       subcmd = SCMD_PRECISE;
-  
+
   year = time_info.year % 100;
   month = time_info.month + 1;
   day = time_info.day + 1;
   hour = (time_info.hours % 12 == 0 ? 12 : time_info.hours % 12);
   minute = time_info.minute;
   pm = (time_info.hours >= 12);
-  
+
   if (subcmd == SCMD_NORMAL)
     snprintf(buf, sizeof(buf), "Gameplay Time: %2d o'clock %s, %s, %s %d, %d.\r\n", hour, pm ? "PM" : "AM",
             weekdays[(int)time_info.weekday], month_name[month - 1], day, time_info.year);
@@ -3771,21 +3805,21 @@ ACMD(do_time)
             minute < 10 ? "0" : "", minute, pm ? "PM" : "AM",
             weekdays[(int)time_info.weekday], month < 10 ? "0" : "", month,
             day < 10 ? "0" : "", day, year);
-  
+
   send_to_char(buf, ch);
-  
+
   // Add RP time.
   {
     time_t mytime = time(0);
     struct tm *modifiable_time = localtime(&mytime);
-    
+
     bool pm = modifiable_time->tm_hour >= 12;
     hour = modifiable_time->tm_hour % 12;
     if (hour == 0)
       hour = 12;
-      
+
     minute = modifiable_time->tm_min;
-    
+
     send_to_char(ch, "Roleplay Time: %2d:%.2d %s\r\n", hour, minute, pm ? "PM" : "AM");
   }
 }
@@ -3799,7 +3833,7 @@ ACMD(do_weather)
     "rainy",
     "lit by flashes of lightning"
   };
-  
+
   if (OUTSIDE(ch)) {
     snprintf(buf, sizeof(buf), "The sky is %s and %s.\r\n", sky_look[weather_info.sky],
             (weather_info.change >= 0 ? "you feel a warm wind from south" :
@@ -3818,9 +3852,9 @@ ACMD(do_index)
   char query[MAX_STRING_LENGTH];
   MYSQL_RES *res;
   MYSQL_ROW row;
-  
+
   skip_spaces(&temp);
-  
+
   if (!*temp) {
     snprintf(query, sizeof(query), "SELECT name FROM help_topic ORDER BY name ASC");
   } else {
@@ -3829,29 +3863,29 @@ ACMD(do_index)
       send_to_char("Only letters can be sent to the index command.\r\n", ch);
       return;
     }
-    
+
     letter = tolower(letter);
-    
+
     // No prepare_quotes since this is guaranteed to be a single alphanumeric character.
     snprintf(query, sizeof(query), "SELECT name FROM help_topic WHERE name LIKE '%c%%'", letter);
   }
-  
+
   // Execute the query and check for errors.
   if (mysql_wrapper(mysql, query)) {
     send_to_char("Apologies, but it seems the help system is currently offline.\r\n", ch);
     mudlog("WARNING: Failed to return all help topics with 'index' command.", ch, LOG_SYSLOG, TRUE);
     return;
   }
-  
+
   // Build the index and send it to the character.
   send_to_char("The following help topics are available:\r\n", ch);
   res = mysql_store_result(mysql);
   while ((row = mysql_fetch_row(res))) {
     send_to_char(ch, " %s\r\n", row[0]);
   }
-  
+
   send_to_char("You can see more about these with HELP <topic>.\r\n", ch);
-  
+
   // Clean up.
   mysql_free_result(res);
 }
@@ -3861,10 +3895,10 @@ void display_help(char *help, int help_len, const char *arg, struct char_data *c
   MYSQL_RES *res;
   MYSQL_ROW row;
   *help = '\0';
-  
+
   // Buf now holds the quoted version of arg.
   prepare_quotes(buf, arg, sizeof(buf) / sizeof(buf[0]));
-  
+
   // First strategy: Look for an exact match.
   snprintf(query, sizeof(query), "SELECT * FROM help_topic WHERE name='%s'", buf);
   if (mysql_wrapper(mysql, query)) {
@@ -3885,7 +3919,7 @@ void display_help(char *help, int help_len, const char *arg, struct char_data *c
       mysql_free_result(res);
     }
   }
-  
+
   // Second strategy: Search for possible like-matches.
   snprintf(query, sizeof(query), "SELECT * FROM help_topic WHERE name LIKE '%%%s%%' ORDER BY name ASC", buf);
   if (mysql_wrapper(mysql, query)) {
@@ -3895,7 +3929,7 @@ void display_help(char *help, int help_len, const char *arg, struct char_data *c
   }
   res = mysql_store_result(mysql);
   int x = mysql_num_rows(res);
-  
+
   // If we have no rows, fail.
   if (x < 1) {
     snprintf(help, help_len, "No such help file exists.\r\n");
@@ -3904,7 +3938,7 @@ void display_help(char *help, int help_len, const char *arg, struct char_data *c
     mysql_free_result(res);
     return;
   }
-  
+
   // If we have too many rows, try to refine the search to just files starting with the search string.
   else if (x > 5) {
     // Prepare a just-in-case response with the topics that were found in the overbroad search.
@@ -3913,7 +3947,7 @@ void display_help(char *help, int help_len, const char *arg, struct char_data *c
       snprintf(ENDOF(help), help_len - strlen(help), "^W%s^n\r\n", row[0]);
     }
     mysql_free_result(res);
-    
+
     // Try a lookup with just files that have the search string at the start of their title.
     snprintf(query, sizeof(query), "SELECT * FROM help_topic WHERE name LIKE '%s%%' ORDER BY name ASC", buf);
     if (mysql_wrapper(mysql, query)) {
@@ -3935,7 +3969,7 @@ void display_help(char *help, int help_len, const char *arg, struct char_data *c
     mysql_free_result(res);
     return;
   }
-  
+
   // We found 1-5 results. Chunk 'em together and return them.
   else {
     while ((row = mysql_fetch_row(res))) {
@@ -3951,12 +3985,12 @@ ACMD(do_help)
   extern char *help;
   char buf[MAX_STRING_LENGTH*2];
   skip_spaces(&argument);
-  
+
   if (!*argument) {
     page_string(ch->desc, help, 0);
     return;
   }
-  
+
   display_help(buf, MAX_STRING_LENGTH*2, argument, ch);
   send_to_char(buf, ch);
 }
@@ -3965,19 +3999,19 @@ ACMD(do_wizhelp)
 {
   struct char_data *vict = NULL;
   int no, cmd_num;
-  
+
   if (!ch->desc)
     return;
-  
+
   skip_spaces(&argument);
-  
+
   if (!*argument || ((vict = get_char_vis(ch, argument)) && !IS_NPC(vict) &&
                      access_level(vict, LVL_BUILDER))) {
     if (!vict)
       vict = ch;
     snprintf(buf, sizeof(buf), "The following privileged commands are available to %s:\r\n",
             vict == ch ? "you" : GET_CHAR_NAME(vict));
-    
+
     /* cmd_num starts at 1, not 0, to remove 'RESERVED' */
     for (no = 1, cmd_num = 1; *cmd_info[cmd_num].command != '\n'; cmd_num++)
       if (cmd_info[cmd_num].minimum_level >= LVL_BUILDER
@@ -3991,24 +4025,24 @@ ACMD(do_wizhelp)
     send_to_char(buf, ch);
     return;
   }
-  
+
   return;
   /*
    struct char_data *vict = NULL;
    int no, cmd_num;
-   
+
    if (!ch->desc)
    return;
-   
+
    skip_spaces(&argument);
-   
+
    if (!*argument || ((vict = get_char_vis(ch, argument)) && !IS_NPC(vict) &&
    access_level(vict, LVL_BUILDER))) {
    if (!vict)
    vict = ch;
    snprintf(buf, sizeof(buf), "The following privileged commands are available to %s:\r\n",
    vict == ch ? "you" : GET_CHAR_NAME(vict));
-   
+
    for (no = 1, cmd_num = 1; *cmd_info[cmd_num].command != '\n'; cmd_num++)
    if (cmd_info[cmd_num].minimum_level >= LVL_BUILDER
    && GET_LEVEL(vict) >= cmd_info[cmd_num].minimum_level) {
@@ -4045,14 +4079,14 @@ ACMD(do_who)
   bool mortal = FALSE, hardcore = FALSE, quest = FALSE, pker = FALSE, immort = FALSE, ooc = FALSE, newbie = FALSE;
   int output_header;
   int num_in_socialization_rooms = 0;
-  
+
   skip_spaces(&argument);
   strlcpy(buf, argument, sizeof(buf));
   if (subcmd)
     level = 1;
   while (*buf) {
     half_chop(buf, arg, buf1);
-    
+
     if (is_abbrev(arg, "sort"))
       sort = LVL_MAX;
     else if (is_abbrev(arg, "quest"))
@@ -4075,22 +4109,22 @@ ACMD(do_who)
     }
     strlcpy(buf, buf1, sizeof(buf));
   }                             /* end while (parser) */
-  
+
   *buf = '\0';
   output_header = 1;
-    
+
   for (; sort != 0; sort > 0 ? sort-- : sort++) {
     if ( sort == 1 )
       output_header = 1;
     for (d = descriptor_list; d; d = d->next) {
       if (DESCRIPTOR_CONN_STATE_NOT_PLAYING(d))
         continue;
-      
+
       if (d->original)
         tch = d->original;
       else if (!(tch = d->character))
         continue;
-      
+
       if ((mortal && IS_SENATOR(tch)) ||
           (immort && !IS_SENATOR(tch)))
         continue;
@@ -4109,10 +4143,10 @@ ACMD(do_who)
       if (GET_INCOG_LEV(tch) > GET_LEVEL(ch))
         continue;
       num_can_see++;
-      
+
       if (tch->in_room && !IS_SENATOR(tch) && CAN_SEE(ch, tch) && ROOM_FLAGGED(tch->in_room, ROOM_ENCOURAGE_CONGREGATION))
         num_in_socialization_rooms++;
-      
+
       if ( output_header ) {
         output_header = 0;
         if ( sort >= LVL_BUILDER )
@@ -4120,7 +4154,7 @@ ACMD(do_who)
         else
           strlcat(buf, "\r\n     ^W Race ^L: ^WVisible Players\r\n ^W---------------------------\r\n", sizeof(buf));
       }
-      
+
       switch (GET_LEVEL(tch)) {
         case LVL_BUILDER:
         case LVL_ARCHITECT:
@@ -4165,18 +4199,18 @@ ACMD(do_who)
                 GET_TITLE(tch));
       }
       strlcat(buf1, buf2, sizeof(buf1));
-      
-      if (GET_PGROUP_MEMBER_DATA(tch) 
+
+      if (GET_PGROUP_MEMBER_DATA(tch)
           && GET_PGROUP(tch)
-          && (access_level(ch, LVL_ADMIN) 
+          && (access_level(ch, LVL_ADMIN)
               || (!GET_PGROUP(tch)->is_secret()
-                  && GET_PGROUP_MEMBER_DATA(ch) 
-                  && GET_PGROUP(ch) == GET_PGROUP(tch)))) 
+                  && GET_PGROUP_MEMBER_DATA(ch)
+                  && GET_PGROUP(ch) == GET_PGROUP(tch))))
       {
         snprintf(buf2, sizeof(buf2), " ^G(^g%s^G)^n", GET_PGROUP(tch)->get_alias());
         strlcat(buf1, buf2, sizeof(buf1));
       }
-      
+
       if (AFF_FLAGS(tch).AreAnySet(AFF_DESIGN, AFF_PROGRAM, AFF_PART_DESIGN, AFF_PART_BUILD, AFF_SPELLDESIGN, AFF_AMMOBUILD, ENDBIT))
         strlcat(buf1, " (B/R)", sizeof(buf1));
       if (PRF_FLAGGED(tch, PRF_AFK))
@@ -4185,10 +4219,10 @@ ACMD(do_who)
         strlcat(buf1, " ^R(RPE)^n", sizeof(buf1));
       if (PLR_FLAGGED(tch, PLR_CYBERDOC) && GET_LEVEL(tch) <= LVL_MORTAL)
         strlcat(buf1, " ^c(Cyberdoc)^n", sizeof(buf1));
-      
+
       if (PRF_FLAGGED(tch, PRF_NEWBIEHELPER) && (level > LVL_MORTAL || PRF_FLAGGED(ch, PRF_NEWBIEHELPER)))
         strlcat(buf1, " ^G(Newbie Helper)^n", sizeof(buf1));
-      
+
       if (level > LVL_MORTAL) {
         if (GET_INVIS_LEV(tch) && level >= GET_INVIS_LEV(tch))
           snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), " (i%d)", GET_INVIS_LEV(tch));
@@ -4216,7 +4250,7 @@ ACMD(do_who)
             strlcat(buf1, " (switched)", sizeof(buf1));
         }
       }
-      
+
       if (!quest && PRF_FLAGGED(tch, PRF_QUEST))
         strlcat(buf1, " ^Y(hired)^n", sizeof(buf1));
       if (PRF_FLAGGED(tch, PRF_NOTELL))
@@ -4231,11 +4265,11 @@ ACMD(do_who)
         strlcat(buf1, " (editing)", sizeof(buf1));
       strlcat(buf1, "\r\n", sizeof(buf1));
       strlcat(buf, buf1, sizeof(buf));
-      
+
       CGLOB = KNRM;
     }
   }
-  
+
   if (num_can_see == 0) {
     snprintf(buf2, sizeof(buf2), "%s\r\nNo-one at all!\r\n", buf);
   } else if (num_can_see == 1) {
@@ -4246,16 +4280,16 @@ ACMD(do_who)
     }
   } else {
     if (num_in_socialization_rooms > 0) {
-      snprintf(buf2, sizeof(buf2), "%s\r\n%d chummers displayed, of which %d %s listed in ^WWHERE^n.\r\n", 
-               buf, 
-               num_can_see, 
-               num_in_socialization_rooms, 
+      snprintf(buf2, sizeof(buf2), "%s\r\n%d chummers displayed, of which %d %s listed in ^WWHERE^n.\r\n",
+               buf,
+               num_can_see,
+               num_in_socialization_rooms,
                num_in_socialization_rooms == 1 ? "is" : "are");
     } else {
       snprintf(buf2, sizeof(buf2), "%s\r\n%d chummers displayed.\r\n", buf, num_can_see);
     }
   }
-  
+
   if (subcmd) {
     FILE *fl;
     static char buffer[MAX_STRING_LENGTH*4];
@@ -4349,7 +4383,7 @@ ACMD(do_who)
           *temp++ = '^';
           *temp++ = *str++;
         }
-      } 
+      }
       else if (*str == '<') {
         str++;
         *temp++ = '&';
@@ -4381,7 +4415,7 @@ ACMD(do_who)
         *temp++ = 'a';
         *temp++ = 'r';
         *temp++ = ';';
-      } 
+      }
       else
         *temp++ = *str++;
     }
@@ -4409,9 +4443,9 @@ ACMD(do_users)
   struct descriptor_data *d;
   int num_can_see = 0;
   int outlaws = 0, playing = 0, deadweight = 0;
-  
+
   host_search[0] = name_search[0] = '\0';
-  
+
   strlcpy(buf, argument, sizeof(buf));
   while (*buf) {
     half_chop(buf, arg, buf1);
@@ -4444,7 +4478,7 @@ ACMD(do_users)
           send_to_char(USERS_FORMAT, ch);
           return;
       }                         /* end of switch */
-      
+
     } else {                    /* endif */
       send_to_char(USERS_FORMAT, ch);
       return;
@@ -4453,9 +4487,9 @@ ACMD(do_users)
   strlcpy(line, "Num  Name           State           Idle  Login@   Site\r\n", sizeof(line));
   strlcat(line, "---- -------------- --------------- ----- -------- ---------------------------\r\n", sizeof(line));
   send_to_char(line, ch);
-  
+
   one_argument(argument, arg);
-  
+
   for (d = descriptor_list; d; d = d->next) {
     if (d->connected && playing)
       continue;
@@ -4466,7 +4500,7 @@ ACMD(do_users)
         tch = d->original;
       else if (!(tch = d->character))
         continue;
-      
+
       if (*host_search && !strstr((const char *)d->host, host_search))
         continue;
       if (*name_search && isname(name_search, GET_KEYWORDS(tch)))
@@ -4481,23 +4515,23 @@ ACMD(do_users)
       if (GET_INCOG_LEV(tch) > GET_REAL_LEVEL(ch))
         continue;
     }
-    
+
     timeptr = asctime(localtime(&d->login_time));
     timeptr += 11;
     *(timeptr + 8) = '\0';
-    
+
     if (!d->connected && d->original)
       strlcpy(state, "Switched", sizeof(state));
     else
       strlcpy(state, connected_types[d->connected], sizeof(state));
-    
+
     if (d->character && !d->connected)
       snprintf(idletime, sizeof(idletime), "%5d", d->character->char_specials.timer);
     else
       strlcpy(idletime, "", sizeof(idletime));
-    
+
     format = "%-4d %-14s %-15s %-5s %-8s ";
-    
+
     if (d->character && GET_CHAR_NAME(d->character)) {
       if (d->original)
         snprintf(line, sizeof(line), format, d->desc_num, GET_CHAR_NAME(d->original),
@@ -4508,12 +4542,12 @@ ACMD(do_users)
     } else
       snprintf(line, sizeof(line), format, d->desc_num, "UNDEFINED",
               state, idletime, timeptr);
-    
+
     if (*d->host && GET_DESC_LEVEL(d) <= GET_LEVEL(ch))
       snprintf(ENDOF(line), sizeof(line) - strlen(line), "[%s]\r\n", d->host);
     else
       snprintf(line, sizeof(line), "[Hostname unknown]\r\n");
-    
+
     if (d->connected) {
       snprintf(line2, sizeof(line2), "^g%s^n", line);
       strlcpy(line, line2, sizeof(line));
@@ -4523,14 +4557,14 @@ ACMD(do_users)
       num_can_see++;
     }
   }
-  
+
   send_to_char(ch, "\r\n%d visible sockets connected.\r\n", num_can_see);
 }
 
 /* Generic page_string function for displaying text */
 ACMD(do_gen_ps)
 {
-  
+
   switch (subcmd) {
     case SCMD_CREDITS:
       page_string(ch->desc, credits, 0);
@@ -4603,7 +4637,7 @@ void print_object_location(int num, struct obj_data *obj, struct char_data *ch,
             GET_OBJ_NAME(obj));
   else
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%33s", " - ");
-  
+
   if (obj->in_room)
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%5ld] %s\r\n", GET_ROOM_VNUM(obj->in_room), GET_ROOM_NAME(obj->in_room));
   else if (obj->carried_by) {
@@ -4642,7 +4676,7 @@ void perform_immort_where(struct char_data * ch, char *arg)
   struct descriptor_data *d;
   int num = 0, found = 0;
   int found2 = FALSE;
-  
+
   if (!*arg)
   {
     strlcpy(buf, "Players\r\n-------\r\n", sizeof(buf));
@@ -4664,7 +4698,7 @@ void perform_immort_where(struct char_data * ch, char *arg)
                       GET_ROOM_VNUM(get_ch_in_room(d->character)),
                       GET_ROOM_NAME(get_ch_in_room(d->character)),
                       GET_VEH_NAME(d->character->in_veh));
-          
+
             else
               if (i->in_veh)
                 snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-20s - [%6ld] %s^n (in %s)\r\n",
@@ -4698,7 +4732,7 @@ void perform_immort_where(struct char_data * ch, char *arg)
         }
       }
     found2 = ObjList.PrintList(ch, arg);
-    
+
     if (!found && !found2)
       send_to_char("Couldn't find any such thing.\r\n", ch);
     else
@@ -4709,9 +4743,9 @@ void perform_immort_where(struct char_data * ch, char *arg)
 ACMD(do_where)
 {
   one_argument(argument, arg);
-  
+
   /* DISABLED FOR MORTALS */
-  
+
   if (GET_REAL_LEVEL(ch) >= LVL_PRESIDENT)
     perform_immort_where(ch, arg);
   else
@@ -4722,9 +4756,9 @@ ACMD(do_consider)
 {
   struct char_data *victim;
   int diff;
-  
+
   one_argument(argument, buf);
-  
+
   if (!(victim = get_char_room_vis(ch, buf))) {
     send_to_char("Consider killing who?\r\n", ch);
     return;
@@ -4733,13 +4767,13 @@ ACMD(do_consider)
     send_to_char("You can't target yourself with this command.\r\n", ch);
     return;
   }
-  
+
   if (IS_NPC(victim)) {
     if (!can_hurt(ch, victim, 0, TRUE)) {
       send_to_char("You can't damage this character.\r\n", ch);
       return;
     }
-    
+
     // Pick out the victim's cyberware, if any. TODO: Player cyberware.
     bool use_cyber_implants = FALSE;
     int unarmed_dangerliciousness_boost = 0;
@@ -4770,37 +4804,37 @@ ACMD(do_consider)
         }
       }
     }
-    
+
     // Armor comparisons.
     diff = (GET_BALLISTIC(victim) - GET_BALLISTIC(ch));
     diff += (GET_IMPACT(victim) - GET_IMPACT(ch));
-    
+
     // Stat comparisons.
     diff += (GET_BOD(victim) - GET_BOD(ch));
     diff += (GET_QUI(victim) - GET_QUI(ch));
     diff += (GET_STR(victim) - GET_STR(ch));
-    
+
     // Extra init passes are king, so account for that.
     diff += 3 * (GET_REA(victim) - GET_REA(ch));
     diff += 6 * (GET_INIT_DICE(victim) - GET_INIT_DICE(ch));
-    
+
     if (GET_MAG(victim) >= 100) {
       diff += (int)((GET_MAG(victim) - GET_MAG(ch)) / 100);
       diff += GET_SKILL(victim, SKILL_SORCERY);
     }
-    
+
     // Pool comparisons.
     diff += 3 * (GET_COMBAT(victim) - GET_COMBAT(ch));
-    
+
     // Skill comparisons.
     if (GET_MAG(ch) >= 100 && (IS_NPC(ch) || (GET_TRADITION(ch) == TRAD_HERMETIC ||
                                               GET_TRADITION(ch) == TRAD_SHAMANIC)))
       diff -= GET_SKILL(ch, SKILL_SORCERY);
-    
+
     if (GET_EQ(victim, WEAR_WIELD)) {
       // Account for NPC's skill.
       diff += MAX(GET_SKILL(victim, GET_WEAPON_SKILL(GET_EQ(victim, WEAR_WIELD))), GET_SKILL(victim, SKILL_ARMED_COMBAT));
-      
+
       // Account for PC's dice pool setting failures.
       if (!IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(victim, WEAR_WIELD))))
         diff += 3 * GET_DEFENSE(ch);
@@ -4808,20 +4842,20 @@ ACMD(do_consider)
       diff += MAX(GET_SKILL(victim, SKILL_CYBER_IMPLANTS), GET_SKILL(victim, SKILL_ARMED_COMBAT));
     else
       diff += GET_SKILL(victim, SKILL_UNARMED_COMBAT) + unarmed_dangerliciousness_boost;
-      
+
     if (GET_EQ(ch, WEAR_WIELD)) {
       // Account for PC's skill.
       diff -= GET_SKILL(ch, GET_WEAPON_SKILL(GET_EQ(ch, WEAR_WIELD)));
-      
+
       // Account for NPC's dice pool setting failures.
       if (!IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_WIELD))))
         diff -= 3 * GET_DEFENSE(victim);
     } else
       diff -= GET_SKILL(ch, SKILL_UNARMED_COMBAT);
-    
+
     // Finally, throw in a multiplier for all the things we haven't accounted for yet.
     diff += (int) (abs(diff) * 0.5);
-    
+
     if (diff <= -25)
       send_to_char("Now where did that chicken go?\r\n", ch);
     else if (diff <= -15)
@@ -4865,9 +4899,9 @@ ACMD(do_consider)
 ACMD(do_diagnose)
 {
   struct char_data *vict;
-  
+
   one_argument(argument, buf);
-  
+
   if (*buf) {
     if (!(vict = get_char_room_vis(ch, buf))) {
       send_to_char(ch, "You don't see anyone named '%s' here.\r\n", buf);
@@ -4894,30 +4928,30 @@ int num_of_cmds;
 void sort_commands(void)
 {
   int a, b, tmp;
-  
+
   ACMD_DECLARE(do_action);
-  
+
   num_of_cmds = 0;
-  
+
   /*
    * first, count commands (num_of_commands is actually one greater than the
    * number of commands; it inclues the '\n'.
    */
   while (*cmd_info[num_of_cmds].command != '\n')
     num_of_cmds++;
-  
+
   /* create data array */
   cmd_sort_info = new sort_struct[num_of_cmds];
-  
+
   /* initialize it */
   for (a = 1; a < num_of_cmds; a++) {
     cmd_sort_info[a].sort_pos = a;
     cmd_sort_info[a].is_social = (cmd_info[a].command_pointer == do_action);
   }
-  
+
   /* the infernal special case */
   cmd_sort_info[find_command("insult")].is_social = TRUE;
-  
+
   /* Sort.  'a' starts at 1, not 0, to remove 'RESERVED' */
   for (a = 1; a < num_of_cmds - 1; a++)
     for (b = a + 1; b < num_of_cmds; b++)
@@ -4935,15 +4969,15 @@ ACMD(do_commands)
   int socials = 0;
   struct char_data *vict;
   bool mode_all;
-  
+
   one_argument(argument, arg);
-  
+
   // Note: Providing an argument to COMMANDS used to list the commands available to someone else.
   // This seems rather pointless to me, so I'm changing the behavior to filter based on the prefix you provide. -LS
-  
+
   /*
   if (*arg) {
-     
+
     if (!(vict = get_char_vis(ch, arg)) || IS_NPC(vict)) {
       send_to_char("Who is that?\r\n", ch);
       return;
@@ -4954,10 +4988,10 @@ ACMD(do_commands)
     }
   } else */
     vict = ch;
-  
+
   if (subcmd == SCMD_SOCIALS)
     socials = 1;
-  
+
   if (!*arg && PRF_FLAGGED(ch, PRF_SCREENREADER)) {
     send_to_char(ch, "The full list of %s is several hundred lines long. We recommend filtering the list by typing %s <prefix>, which will return"
                  " all %s that begin with the specified prefix. If you wish to see all %s, type %s ALL.\r\n",
@@ -4970,7 +5004,7 @@ ACMD(do_commands)
                  );
     return;
   }
-  
+
   if (*arg && !str_cmp(arg, "all")) {
     snprintf(buf, sizeof(buf), "The following %s are available to you:\r\n",
             socials ? "socials" : "commands");
@@ -4980,7 +5014,7 @@ ACMD(do_commands)
             socials ? "socials" : "commands", arg);
     mode_all = FALSE;
   }
-  
+
   if (PLR_FLAGGED(ch, PLR_MATRIX)) {
     for (no = 1, cmd_num = 1; *mtx_info[cmd_num].command != '\n';cmd_num++) {
       // Skip any commands that don't match the prefix provided.
@@ -5002,7 +5036,7 @@ ACMD(do_commands)
       // Skip any commands that don't match the prefix provided.
       if (!mode_all && *arg && !is_abbrev(arg, rig_info[cmd_num].command))
         continue;
-      
+
       if (rig_info[cmd_num].minimum_level >= 0 &&
           ((!IS_NPC(vict) && GET_REAL_LEVEL(vict) >= rig_info[cmd_num].minimum_level) ||
            (IS_NPC(vict) && vict->desc->original && GET_REAL_LEVEL(vict->desc->original) >= rig_info[cmd_num].minimum_level))) {
@@ -5017,11 +5051,11 @@ ACMD(do_commands)
   } else {
     for (no = 1, cmd_num = 1; cmd_num < num_of_cmds; cmd_num++) {
       i = cmd_sort_info[cmd_num].sort_pos;
-      
+
       // Skip any commands that don't match the prefix provided.
       if (!mode_all && *arg && !is_abbrev(arg, cmd_info[i].command))
         continue;
-      
+
       if (cmd_info[i].minimum_level >= 0 &&
           ((!IS_NPC(vict) && GET_REAL_LEVEL(vict) >= cmd_info[i].minimum_level) ||
            (IS_NPC(vict) && vict->desc->original && GET_REAL_LEVEL(vict->desc->original) >= cmd_info[i].minimum_level)) &&
@@ -5046,13 +5080,13 @@ ACMD(do_scan)
   bool specific = FALSE, infra, lowlight, onethere, anythere = FALSE, done = FALSE;
   int i = 0, j, dist = 3;
   struct room_data *was_in = NULL, *x = NULL;
-  
+
   if (AFF_FLAGGED(ch, AFF_DETECT_INVIS) && !(PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_RIG))) {
     send_to_char(ch, "The ultrasound distorts your vision.\r\n");
     return;
   }
   argument = any_one_arg(argument, buf);
-  
+
   if (*buf) {
     if (is_abbrev(buf, "south")) {
       i = SCMD_SOUTH;
@@ -5069,12 +5103,12 @@ ACMD(do_scan)
       x = ch->in_room;
     ch->in_room = in_veh->in_room;
   }
-  
+
   infra = ((PRF_FLAGGED(ch, PRF_HOLYLIGHT) ||
             CURRENT_VISION(ch) == THERMOGRAPHIC) ? TRUE : FALSE);
   lowlight = ((PRF_FLAGGED(ch, PRF_HOLYLIGHT) ||
                CURRENT_VISION(ch) == LOWLIGHT) ? TRUE : FALSE);
-  
+
   if (!infra && IS_ASTRAL(ch))
     infra = TRUE;
   if (!specific) {
@@ -5085,7 +5119,7 @@ ACMD(do_scan)
           send_to_char(ch, "%s: More of the same.\r\n", dirs[i]);
           continue;
         }
-        
+
         onethere = FALSE;
         if (!((!infra && light_level(EXIT(ch, i)->to_room) == LIGHT_FULLDARK) ||
               ((!infra || !lowlight) && (light_level(EXIT(ch, i)->to_room) == LIGHT_MINLIGHT || light_level(EXIT(ch, i)->to_room) == LIGHT_PARTLIGHT)))) {
@@ -5110,7 +5144,7 @@ ACMD(do_scan)
                     }
                   }
                 }
-                
+
               }
               snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "  %s%s\r\n", GET_NAME(list), FIGHTING(list) == ch ? " (fighting you!)" : "");
               onethere = TRUE;
@@ -5157,9 +5191,9 @@ ACMD(do_scan)
     }
   } else {
     --i;
-    
+
     dist = find_sight(ch);
-    
+
     if (CAN_GO(ch, i)) {
       was_in = ch->in_room;
       anythere = FALSE;
@@ -5192,9 +5226,9 @@ ACMD(do_scan)
               onethere = TRUE;
               anythere = TRUE;
             }
-          
+
           ch->in_room = EXIT(ch, i)->to_room;
-          
+
           if (onethere) {
             snprintf(buf2, sizeof(buf2), "%s %s:\r\n%s\r\n", dirs[i], dist_name[j], buf1);
             CAP(buf2);
@@ -5203,9 +5237,9 @@ ACMD(do_scan)
         } else
           done = TRUE;
       }
-      
+
       ch->in_room = was_in;
-      
+
       if (!anythere) {
         if (in_veh) {
           ch->in_room = x;
@@ -5253,7 +5287,7 @@ ACMD(do_status)
 {
   struct char_data *targ = ch;
   bool printed = FALSE;
-  
+
   if (GET_LEVEL(ch) >= LVL_BUILDER && *argument) {
     skip_spaces(&argument);
     targ = get_char_room_vis(ch, argument);
@@ -5262,11 +5296,11 @@ ACMD(do_status)
     if (!targ)
       targ = ch;
   }
-  
+
   if (ch == targ)
     send_to_char("You are affected by:\r\n", ch);
   else send_to_char(ch, "%s is affected by:\r\n", GET_CHAR_NAME(targ));
-  
+
   if (targ->real_abils.esshole) {
     send_to_char(ch, "  Essence Hole (%.2f)\r\n", (float)targ->real_abils.esshole / 100);
     printed = TRUE;
@@ -5301,7 +5335,7 @@ ACMD(do_status)
     send_to_char(ch, "  %s (%s)\r\n", drug_types[GET_DRUG_AFFECT(targ)].name, GET_DRUG_STAGE(targ) == 1 ? "Up" : "Down");
     printed = TRUE;
   }
-  
+
   for (struct obj_data *bio = targ->bioware; bio; bio = bio->next_content) {
     if (GET_BIOWARE_TYPE(bio) == BIO_PAINEDITOR && GET_BIOWARE_IS_ACTIVATED(bio)) {
       send_to_char("  An activated pain editor (+1 wil, -1 int)\r\n", ch);
@@ -5309,7 +5343,7 @@ ACMD(do_status)
       break;
     }
   }
-  
+
   for (struct sustain_data *sust = GET_SUSTAINED(targ); sust; sust = sust->next)
     if (!sust->caster) {
       strlcpy(buf, spells[sust->spell].name, sizeof(buf));
@@ -5337,11 +5371,11 @@ ACMD(do_status)
         i++;
       }
   }
-  
+
   if (!printed) {
     send_to_char(ch, "Nothing.\r\n");
   }
-  
+
   if (GET_MAG(targ) > 0) {
     send_to_char("\r\n", ch);
     int force = 0, total = 0;
@@ -5349,12 +5383,12 @@ ACMD(do_status)
     for (int x = 0; x < NUM_WEARS; x++) {
       if (!(focus = GET_EQ(targ, x)))
         continue;
-        
+
       if (GET_OBJ_TYPE(focus) == ITEM_FOCUS && GET_FOCUS_BONDED_TO(focus) == GET_IDNUM(targ) && GET_FOCUS_ACTIVATED(focus)) {
         force += GET_FOCUS_FORCE(focus);
         total++;
       }
-      
+
       else if ((x == WEAR_WIELD || x == WEAR_HOLD) && GET_OBJ_TYPE(focus) == ITEM_WEAPON && WEAPON_IS_FOCUS(focus) && WEAPON_FOCUS_USABLE_BY(focus, targ)) {
         force += GET_WEAPON_FOCUS_RATING(focus);
         total++;
@@ -5363,12 +5397,12 @@ ACMD(do_status)
     if (force == 0) {
       if (ch == targ)
         send_to_char("You're not using any foci.\r\n", ch);
-      else 
+      else
         send_to_char(ch, "%s is not using any foci.\r\n", GET_CHAR_NAME(targ));
     } else if (force > (GET_REAL_MAG(targ) / 100) * 2) {
       if (ch == targ)
         send_to_char(ch, "^YYou are at risk of geas from using too many points of foci! You're using %d, and need to reduce to %d.^n\r\n", force, (GET_REAL_MAG(targ) / 100) * 2);
-      else 
+      else
         send_to_char(ch, "^Y%s is at risk of geas from using too many points of foci! They're using %d, and need to reduce to %d.^n\r\n", GET_CHAR_NAME(targ), force, (GET_REAL_MAG(targ) / 100) * 2);
     } else {
       if (ch == targ)
@@ -5405,12 +5439,12 @@ ACMD(do_mort_show)
     send_to_char("Show what to who?\r\n", ch);
     return;
   }
-  
+
   if (!(obj = get_obj_in_list_vis(ch, buf1, ch->carrying))) {
     send_to_char(ch, "You don't have %s '%s' in your inventory.\r\n", AN(buf1), buf1);
     return;
   }
-  
+
   if (!(vict = get_char_room_vis(ch, buf2))) {
     send_to_char(ch, "You don't see %s '%s' here.\r\n", AN(buf2), buf2);
     return;
@@ -5432,51 +5466,51 @@ ACMD(do_leaderboard) {
     send_to_char(LEADERBOARD_SYNTAX_STRING, ch);
     return;
   }
-  
+
   const char *display_string = NULL, *query_string = NULL;
-  
+
   if (!strncmp(argument, "tke", strlen(argument))) {
     display_string = "TKE";
     query_string = "tke";
   }
-  
+
   else if (!strncmp(argument, "reputation", strlen(argument))) {
     display_string = "reputation";
     query_string = "rep";
   }
-  
+
   else if (!strncmp(argument, "notoriety", strlen(argument))) {
     display_string = "notoriety";
     query_string = "notor";
   }
-  
+
   else if (!strncmp(argument, "nuyen", strlen(argument))) {
     display_string = "nuyen";
     query_string = "bank + cash";
   }
-  
+
   else if (!strncmp(argument, "syspoints", strlen(argument))) {
     display_string = "syspoints";
     query_string = "syspoints";
   }
-  
+
   else {
     send_to_char(LEADERBOARD_SYNTAX_STRING, ch);
     return;
   }
-  
+
   MYSQL_RES *res;
   MYSQL_ROW row;
-  
+
   // Sanitization not required here-- they're constant strings.
   snprintf(buf, sizeof(buf), "SELECT name, %s FROM pfiles "
                "  WHERE %s > 0 "
                "  AND rank = 1 "
                "  AND TKE > 0 "
                "  AND name != 'deleted' "
-               "ORDER BY %s DESC LIMIT 10;", 
+               "ORDER BY %s DESC LIMIT 10;",
                query_string, query_string, query_string);
-  
+
   mysql_wrapper(mysql, buf);
   if (!(res = mysql_use_result(mysql))) {
     snprintf(buf, sizeof(buf), "SYSERR: Failed to access %s leaderboard data!", display_string);
@@ -5484,7 +5518,7 @@ ACMD(do_leaderboard) {
     send_to_char(ch, "Sorry, the leaderboard system is offline at the moment.\r\n");
     return;
   }
-  
+
   send_to_char(ch, "^CTop 10 characters by %s:^n\r\n", display_string);
   int counter = 1;
   while ((row = mysql_fetch_row(res))) {
@@ -5498,9 +5532,9 @@ ACMD(do_leaderboard) {
 ACMD(do_search) {
   bool found_something = FALSE;
   bool has_secrets = FALSE;
-  
+
   act("$n searches the area.", TRUE, ch, 0, 0, TO_ROOM);
-  
+
   for (int dir = 0; dir < NUM_OF_DIRS; dir++) {
     if (EXIT(ch, dir) && IS_SET(EXIT(ch, dir)->exit_info, EX_HIDDEN)) {
       has_secrets = TRUE;
@@ -5513,42 +5547,42 @@ ACMD(do_search) {
       }
     }
   }
-  
+
   if (!found_something) {
     send_to_char("You search the area for secrets, but fail to turn anything up.\r\n", ch);
-    
+
     if (has_secrets && success_test(GET_INT(ch), 4))
       send_to_char("You feel like there's still something to uncover here...\r\n", ch);
   }
 }
 
-ACMD(do_wheresmycar) {  
+ACMD(do_wheresmycar) {
   /* wheresmycar <total amount to spend>
-  
-  Dispatches lunch-breaking wageslaves and street people to find your car. 
-  The distance they're willing to travel depends on how much you spend. 
+
+  Dispatches lunch-breaking wageslaves and street people to find your car.
+  The distance they're willing to travel depends on how much you spend.
   */
-  
+
   if (GET_NUYEN_PAID_FOR_WHERES_MY_CAR(ch) != 0) {
     send_to_char("You've got a group out searching already. You'll have to wait until they return.\r\n", ch);
     return;
   }
-  
+
   skip_spaces(&argument);
   int paid = atoi(argument);
   if (paid < WHERES_MY_CAR_MINIMUM_NUYEN_CHARGE) {
     send_to_char(ch, "Syntax: wheresmycar <nuyen amount to spend, minimum %d>", WHERES_MY_CAR_MINIMUM_NUYEN_CHARGE);
     return;
   }
-  
+
   if (GET_NUYEN(ch) < paid) {
     send_to_char("You don't have that much paper nuyen on hand.\r\n", ch);
     return;
   }
-  
+
   lose_nuyen(ch, paid, NUYEN_OUTFLOW_WHERESMYCAR);
   GET_NUYEN_PAID_FOR_WHERES_MY_CAR(ch) = paid;
-  
+
   send_to_char(ch, "You gather up a few bored-looking passersby and pay out %d nuyen"
                    " to have them search for your vehicles, reserving the other half as a"
                    " reward for whoever finds it. They set off, and you prepare for a wait...\r\n", paid / 2);
