@@ -796,7 +796,7 @@ void look_at_char(struct char_data * i, struct char_data * ch)
         break;
       case CYB_ARMS:
         if (IS_SET(GET_CYBERWARE_FLAGS(tmp_obj), ARMS_MOD_OBVIOUS)) {
-          snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%s\r\n", GET_OBJ_NAME(tmp_obj));
+          snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Obvious %s\r\n", cyber_types[GET_OBJ_VAL(tmp_obj, 0)]);
         } else {
           found = TRUE;
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s\r\n", GET_OBJ_NAME(tmp_obj));
@@ -804,7 +804,7 @@ void look_at_char(struct char_data * i, struct char_data * ch)
         break;
       case CYB_LEGS:
         if (IS_SET(GET_CYBERWARE_FLAGS(tmp_obj), LEGS_MOD_OBVIOUS)) {
-          snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%s\r\n", GET_OBJ_NAME(tmp_obj));
+          snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Obvious %s\r\n", cyber_types[GET_OBJ_VAL(tmp_obj, 0)]);
         } else {
           found = TRUE;
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s\r\n", GET_OBJ_NAME(tmp_obj));
@@ -812,7 +812,7 @@ void look_at_char(struct char_data * i, struct char_data * ch)
         break;
       case CYB_SKULL:
         if (IS_SET(GET_CYBERWARE_FLAGS(tmp_obj), SKULL_MOD_OBVIOUS)) {
-          snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%s\r\n", GET_OBJ_NAME(tmp_obj));
+          snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Obvious %s\r\n", cyber_types[GET_OBJ_VAL(tmp_obj, 0)]);
         } else {
           found = TRUE;
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s\r\n", GET_OBJ_NAME(tmp_obj));
@@ -820,7 +820,7 @@ void look_at_char(struct char_data * i, struct char_data * ch)
         break;
       case CYB_TORSO:
         if (IS_SET(GET_CYBERWARE_FLAGS(tmp_obj), TORSO_MOD_OBVIOUS)) {
-          snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%s\r\n", GET_OBJ_NAME(tmp_obj));
+          snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Obvious %s\r\n", cyber_types[GET_OBJ_VAL(tmp_obj, 0)]);
         } else {
           found = TRUE;
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s\r\n", GET_OBJ_NAME(tmp_obj));
