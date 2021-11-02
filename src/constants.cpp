@@ -524,10 +524,10 @@ const char *action_bits[] =
     "INANIMATE",
     "\n"
   };
-  
+
 /* PRF_x v2 */
 
-struct preference_bit_struct preference_bits_v2[] = { 
+struct preference_bit_struct preference_bits_v2[] = {
   // TODO: Add an 'inverted' flag for things like !OOC.
   // TODO: Is there a better way to name these? Or sort by channel / log / etc?
   // NAME                    STAFF  True: ON/OFF, False: YES/NO
@@ -985,7 +985,7 @@ const char *extra_bits[] =
     "MAGIC_INCOMPATIBLE",
     "\n"
   };
-  
+
 const char *pc_readable_extra_bits[] =
   {
     "Glowing",
@@ -1597,7 +1597,7 @@ struct mod_data mod_types[NUM_MODTYPES] =
     { "Tires", TYPE_KIT },
     { "Other", TYPE_KIT },
     { "Ammo Bin", TYPE_KIT }
-    
+
   };
 const char *mod_name[NUM_MODS] =
   {
@@ -2224,9 +2224,9 @@ const char *cyber_types[] = {
   "Auto Injector",
   "Balance Tail",
   "Body Compartment",
-  "CyberFin",
-  "CyberSkull",
-  "CyberTorso",
+  "Cyber Fin",
+  "Cyber Skull",
+  "Cyber Torso",
   "Dermal Sheathing",
   "Foot Anchor",
   "Hydraulic Jack",
@@ -2389,7 +2389,7 @@ const char *legality_codes[][2] = {
   { "Z", "Class C Controlled" }
 };
 
-const char *background_types[] = 
+const char *background_types[] =
 {
   "violence",
   "torture",
