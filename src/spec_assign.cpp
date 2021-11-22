@@ -39,7 +39,7 @@ struct teach_data metamagict[] = {
                        { 24806, { META_REFLECTING, 0, 0, 0, 0, 0, 0, 0 }, "", 0 },
                          { 4250, { META_CLEANSING, 0, 0, 0, 0, 0, 0, 0 }, "", 0 },
                          { 4251, { META_MASKING, 0, 0, 0, 0, 0, 0, 0 }, "", 0 },
-                         { 10010, { META_ANCHORING, META_CENTERING, 0, META_INVOKING, 0, META_POSSESSING, META_QUICKENING, 0, 0 }, "", 0},
+                         { 10010, { META_ANCHORING, META_CENTERING, META_CLEANSING, META_INVOKING, META_MASKING, META_POSSESSING, META_QUICKENING, META_REFLECTING, META_SHIELDING }, "", 0},
                          { 35538, { META_MASKING, 0 0, 0, 0, 0, 0, 0, 0, 0 }, "", 0},
                          { 27426, { META_SHIELDING, 0, 0, 0, 0, 0, 0, 0 }, "", 0},
                          { 0, { 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "", 0}
