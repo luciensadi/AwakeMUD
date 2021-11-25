@@ -96,6 +96,7 @@ int socket(int domain, int type, int protocol);
 #endif
 
 #if     defined(linux)
+#include <sys/time.h>
 int getpeername(int s, struct sockaddr * name, int *namelen);
 int getsockname(int s, struct sockaddr * name, int *namelen);
 int gettimeofday(struct timeval * tp, struct timezone * tzp);

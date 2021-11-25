@@ -22,6 +22,7 @@
 #include <new>
 #include <time.h>
 #include <iostream>
+#include <chrono>
 using namespace std;
 
 #if defined(WIN32) && !defined(__CYGWIN__)
@@ -175,13 +176,12 @@ void set_descriptor_canaries(struct descriptor_data *newd);
 void check_memory_canaries();
 #endif
 
-#if (defined(WIN32) && !defined(__CYGWIN__))
-void gettimeofday(struct timeval *t, struct timezone *dummy)
+#if (!defined(_AIX) && !defined(__hpux) && !defined(MIPS_OS) && !defined(NeXT) && !defined(sequent) && !defined(sun) && !defined(ultrix))
+int gettimeofday(struct timeval *t, struct timezone *dummy)
 {
-  DWORD millisec = GetTickCount();
-  
-  t->tv_sec = (int) (millisec / 1000);
-  t->tv_usec = (millisec % 1000) * 1000;
+  t->tv_usec =   std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+  t->tv_sec = (int) (t->tv_usec / 1000);
+  return 0;
 }
 #endif
 
