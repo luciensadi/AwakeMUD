@@ -176,14 +176,12 @@ void set_descriptor_canaries(struct descriptor_data *newd);
 void check_memory_canaries();
 #endif
 
-#if (!defined(_AIX) && !defined(__hpux) && !defined(MIPS_OS) && !defined(NeXT) && !defined(sequent) && !defined(sun) && !defined(ultrix))
 int gettimeofday(struct timeval *t, struct timezone *dummy)
 {
   t->tv_usec =   std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
   t->tv_sec = (int) (t->tv_usec / 1000);
   return 0;
 }
-#endif
 
 /* *********************************************************************
  *  main game loop and related stuff                                    *
@@ -2379,7 +2377,7 @@ void termsig(int Empty)
  // This code is ANCIENT and does not work on Ubuntu. -- LS.
 
 
-#if defined(NeXT) || defined(sun386) || (defined(WIN32) && !defined(__CYGWIN__))
+#if (defined(WIN32) && !defined(__CYGWIN__))
 #define my_signal(signo, func) signal(signo, func)
 #else
 sigfunc *my_signal(int signo, sigfunc * func)
@@ -2389,17 +2387,13 @@ sigfunc *my_signal(int signo, sigfunc * func)
   act.sa_handler = func;
   sigemptyset(&act.sa_mask);
   act.sa_flags = 0;
-#ifdef SA_INTERRUPT
-  
-  act.sa_flags |= SA_INTERRUPT; /* SunOS */
-#endif
   
   if (sigaction(signo, &act, &oact) < 0)
     return SIG_ERR;
   
   return oact.sa_handler;
 }
-#endif /* NeXT */
+#endif
 
 void signal_setup(void)
 {
