@@ -2795,19 +2795,19 @@ void set_character_skill(struct char_data *ch, int skill_num, int new_value, boo
         send_to_char(ch, "You completely forget your skills in %s.\r\n", skills[skill_num].name);
       } else if (new_value == 1) {
         send_to_char(ch, "^cYou have been introduced to the basics.^n\r\n");
-      } else if (new_value == 2) {
-        send_to_char(ch, "^cYou have gotten in some practice.^n\r\n");
       } else if (new_value == 3) {
-        send_to_char(ch, "^cYou have attained average proficiency.^n\r\n");
-      } else if (new_value == 4) {
-        send_to_char(ch, "^CYour skills are now above average.^n\r\n");
+        send_to_char(ch, "^cYou have gotten in some practice.^n\r\n");
       } else if (new_value == 5) {
-        send_to_char(ch, "^CYou are considered a professional at %s.^n\r\n", skills[skill_num].name);
-      } else if (new_value == 6) {
-        send_to_char(ch, "^gYou've practiced so much that you can act without thinking about it.^n\r\n");
+        send_to_char(ch, "^cYou have attained average proficiency.^n\r\n");
       } else if (new_value == 7) {
+        send_to_char(ch, "^CYour skills are now above average.^n\r\n");
+      } else if (new_value == 9) {
+        send_to_char(ch, "^CYou are considered a professional at %s.^n\r\n", skills[skill_num].name);
+      } else if (new_value == 10) {
+        send_to_char(ch, "^gYou've practiced so much that you can act without thinking about it.^n\r\n");
+      } else if (new_value == 11) {
         send_to_char(ch, "^gYou are considered an expert in your field.^n\r\n");
-      } else if (new_value == 8) {
+      } else if (new_value == 12) {
         send_to_char(ch, "^GYour talents at %s are considered world-class.^n\r\n", skills[skill_num].name);
       } else {
         send_to_char(ch, "^GYou further hone your talents towards perfection.^n\r\n");
@@ -2819,17 +2819,17 @@ void set_character_skill(struct char_data *ch, int skill_num, int new_value, boo
         send_to_char(ch, "You completely forget your skills in %s.\r\n", skills[skill_num].name);
       } else if (new_value == 1) {
         send_to_char(ch, "^cYou have been introduced to the basics.^n\r\n");
-      } else if (new_value <= 4) {
+      } else if (new_value <= 3) {
         send_to_char(ch, "^cYou have gotten in some practice.^n\r\n");
       } else if (new_value <= 5) {
         send_to_char(ch, "^cYou have attained average proficiency.^n\r\n");
-      } else if (new_value == 6) {
-        send_to_char(ch, "^CYou are now considered fluent at a high-school level.^n\r\n");
       } else if (new_value == 7) {
-        send_to_char(ch, "^CYou have achieved bachelor's-degree-level fluency.^n\r\n");
-      } else if (new_value == 8) {
-        send_to_char(ch, "^CYou have achieved master's-degree-level fluency.^n\r\n");
+        send_to_char(ch, "^CYou are now considered fluent at a high-school level.^n\r\n");
       } else if (new_value == 9) {
+        send_to_char(ch, "^CYou have achieved bachelor's-degree-level fluency.^n\r\n");
+      } else if (new_value == 10) {
+        send_to_char(ch, "^CYou have achieved a native-level fluency.^n\r\n");
+      } else if (new_value == 12) {
         send_to_char(ch, "^CYou have achieved doctorate-degree-level fluency.^n\r\n");
       } else {
         send_to_char(ch, "^GYou further hone your talents towards perfection.^n\r\n");
@@ -2841,19 +2841,19 @@ void set_character_skill(struct char_data *ch, int skill_num, int new_value, boo
         send_to_char(ch, "You completely forget your knowledge of %s.\r\n", skills[skill_num].name);
       } else if (new_value == 1) {
         send_to_char(ch, "^cYou've picked up a few things.^n\r\n");
-      } else if (new_value == 2) {
-        send_to_char(ch, "^cYou've developed an interest in %s.^n\r\n", skills[skill_num].name);
       } else if (new_value == 3) {
-        send_to_char(ch, "^cYou have a dedicated knowledge of that area.^n\r\n");
-      } else if (new_value == 4) {
-        send_to_char(ch, "^CYou are well-rounded in the field of %s.^n\r\n", skills[skill_num].name);
+        send_to_char(ch, "^cYou've developed an interest in %s.^n\r\n", skills[skill_num].name);
       } else if (new_value == 5) {
-        send_to_char(ch, "^CYou could earn a degree in %s.^n\r\n", skills[skill_num].name);
-      } else if (new_value == 6) {
-        send_to_char(ch, "^gYou have mastered the field of %s.^n\r\n", skills[skill_num].name);
+        send_to_char(ch, "^cYou have a dedicated knowledge of that area.^n\r\n");
       } else if (new_value == 7) {
+        send_to_char(ch, "^CYou are well-rounded in the field of %s.^n\r\n", skills[skill_num].name);
+      } else if (new_value == 9) {
+        send_to_char(ch, "^CYou could earn a degree in %s.^n\r\n", skills[skill_num].name);
+      } else if (new_value == 10) {
+        send_to_char(ch, "^gYou have mastered the field of %s.^n\r\n", skills[skill_num].name);
+      } else if (new_value == 11) {
         send_to_char(ch, "^gYou are considered an expert in your field.^n\r\n");
-      } else if (new_value == 8) {
+      } else if (new_value == 12) {
         send_to_char(ch, "^GYour knowledge of %s is genius-level.^n\r\n", skills[skill_num].name);
       } else {
         send_to_char(ch, "^GYou further hone your knowledge towards perfection.^n\r\n");
@@ -2882,12 +2882,16 @@ const char *skill_rank_name(int rank, bool knowledge) {
   
   RANK_MESSAGE(0, "not learned", "not learned");
   RANK_MESSAGE(1, "introduced", "scream-sheet level");
-  RANK_MESSAGE(2, "practiced", "interested");
-  RANK_MESSAGE(3, "proficient", "dedicated");
-  RANK_MESSAGE(4, "skilled", "well-rounded");
-  RANK_MESSAGE(5, "professional", "educated");
-  RANK_MESSAGE(6, "innate", "mastered");
-  RANK_MESSAGE(7, "expert", "expert");
+  RANK_MESSAGE(2, "practiced", "interested");  
+  RANK_MESSAGE(3, "novice", "interested");
+  RANK_MESSAGE(4, "competent", "dedicated");
+  RANK_MESSAGE(5, "proficient", "well-rounded");
+  RANK_MESSAGE(6, "proficient", "educated");
+  RANK_MESSAGE(7, "skilled", "educated");
+  RANK_MESSAGE(8, "professional", "mastered");
+  RANK_MESSAGE(9, "professional", "intuitive");
+  RANK_MESSAGE(10, "specialist", "specialist");
+  RANK_MESSAGE(11, "expert", "expert");
   
   if (rank < MAX_SKILL_LEVEL_FOR_IMMS) {
     if (knowledge) return "genius";
