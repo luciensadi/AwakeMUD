@@ -44,6 +44,15 @@ Tested on:
 - Note: You may have to manually import the SQL changes as gensql.sh may or may not work, use 127.0.0.1 as dbhost if running local db.
 - With Cygwin, you can also use Eclipse CPP IDE, just create a Cygwin-C++ project and point the directory to where your AwakeMUD is located, play around with build settings to ensure it is using your Makefile in src. Debugging/Running works.
 
+### OSX Installation Notes
+- Install mysql@5.7 and mysql-client@5.7
+    - `brew install mysql@5.7`
+    - `brew install mysql-client@5.7` 
+    - Follow the instructions to add mysql/mysql-client to your path, along with their `CPPFLAGS` export
+- Symlink mysql headers and libmysqlclient to your /usr/local directory (replace `<version>` with the version installed)
+    - `ln -s /usr/local/Cellar/mysql@5.7/<version>/include/mysql/ /usr/local/include/mysql`
+    - `ln -s /usr/local/Cellar/mysql-client@5.7/<version>/lib/libmysqlclient.dylib /usr/local/lib/libmysqlclient.dylib`
+
 ### Make / Compile Troubleshooting
 
 If you get an error like `newdb.cpp:11:10: fatal error: mysql/mysql.h: No such file or directory` while running `make`, you either haven't installed the MySQL development headers, or you haven't made them visible to your operating system. Since each OS is different, Google is your best bet for resolving this, but your goal / end state is to have the header inclusion path `mysql/mysql.h` resolve successfully.
