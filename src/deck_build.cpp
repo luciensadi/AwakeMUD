@@ -294,10 +294,25 @@ void pbuild_parse(struct descriptor_data *d, const char *arg) {
         }
         break;
     case DEDIT_NAME:
-        if (strlen(arg) >= LINE_LENGTH) {
+        int length_with_no_color = get_string_length_after_color_code_removal(arg, CH);
+      
+        // Silent failure: We already sent the error message in get_string_length_after_color_code_removal().
+        if (length_with_no_color == -1) {
+          partbuild_main_menu(d);
+          return;
+        }
+        if (length_with_no_color >= LINE_LENGTH) {
+            send_to_char(CH, "That name is too long, please shorten it. The maximum length after color code removal is %d characters.\r\n", LINE_LENGTH - 1);
             partbuild_main_menu(d);
             return;
         }
+  
+        if (strlen(arg) >= MAX_RESTRING_LENGTH) {
+            send_to_char(CH, "That restring is too long, please shorten it. The maximum length with color codes included is %d characters.\r\n", MAX_RESTRING_LENGTH - 1);
+            partbuild_main_menu(d);
+            return;
+        }
+
         DELETE_ARRAY_IF_EXTANT(PART->restring);
         PART->restring = str_dup(arg);
         partbuild_main_menu(d);
@@ -339,10 +354,25 @@ void dbuild_parse(struct descriptor_data *d, const char *arg) {
         }
         break;
     case DEDIT_NAME:
-        if (strlen(arg) >= LINE_LENGTH) {
+        int length_with_no_color = get_string_length_after_color_code_removal(arg, CH);
+      
+        // Silent failure: We already sent the error message in get_string_length_after_color_code_removal().
+        if (length_with_no_color == -1) {
+          deckbuild_main_menu(d);
+          return;
+        }
+        if (length_with_no_color >= LINE_LENGTH) {
+            send_to_char(CH, "That name is too long, please shorten it. The maximum length after color code removal is %d characters.\r\n", LINE_LENGTH - 1);
             deckbuild_main_menu(d);
             return;
         }
+  
+        if (strlen(arg) >= MAX_RESTRING_LENGTH) {
+            send_to_char(CH, "That restring is too long, please shorten it. The maximum length with color codes included is %d characters.\r\n", MAX_RESTRING_LENGTH - 1);
+            deckbuild_main_menu(d);
+            return;
+        }
+
         DELETE_ARRAY_IF_EXTANT(PART->restring);
         PART->restring = str_dup(arg);
         deckbuild_main_menu(d);
