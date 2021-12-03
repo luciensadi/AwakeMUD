@@ -6012,7 +6012,7 @@ void price_cyber(struct obj_data *obj)
   GET_CYBERWARE_ESSENCE_COST(obj) = (int) round(GET_CYBERWARE_ESSENCE_COST(obj) * grade_essence_modifier);
   // Finally, apply the cybereye package discount.
   if (GET_CYBERWARE_TYPE(obj) == CYB_EYES && IS_SET(GET_CYBERWARE_FLAGS(obj), EYE_CYBEREYES)) {
-    GET_CYBERWARE_ESSENCE_COST(obj) = MAX((int) round(0.2 * grade_essence_modifier),
+    GET_CYBERWARE_ESSENCE_COST(obj) = MAX((int) round(20 * grade_essence_modifier),
                                           GET_CYBERWARE_ESSENCE_COST(obj) - 50);
   }
 }
