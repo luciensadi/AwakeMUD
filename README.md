@@ -13,12 +13,16 @@ A fork of the [Awakened Worlds](http://awakenedworlds.net) MUD codebase. Issues 
 - A slew of bugfixes to everything from combat code to sound propagation
 
 ## OS Support
-Tested on:
-- OSX 10.15 (actively); 10.12 through 10.14 believed to work but not actively tested
-- Ubuntu 18 LTS (actively); 16 and 14 same as above
+Actively tested on:
+- Mac OS 12
+- Ubuntu 18 LTS
+
+Previously tested on:
 - Amazon Linux
-- Raspbian Jessie (no longer actively tested)
 - Cygwin (beta)
+- Mac OS 10.12-10.14
+- Raspbian Jessie
+- Ubuntu 14, 16
 
 ## Installation (Ubuntu commands in parentheses)
 - Install [MySQL 5](https://dev.mysql.com/doc/refman/5.7/en/installing.html), including its development headers (ensure `mysql/mysql.h` exists in your path).
