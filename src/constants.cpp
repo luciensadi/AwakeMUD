@@ -2096,7 +2096,7 @@ const char *cyber_grades[4] =
 
 const char *eyemods[] = {
   "Camera",
-  "Cyber Replacement",
+  "Cyber Replacement (MUST SET FOR PACKAGES)",
   "Display Link",
   "Flare Compensation",
   "Image Link",

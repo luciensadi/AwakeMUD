@@ -34,6 +34,7 @@ void    send_to_veh(const char *messg, struct veh_data *veh, struct char_data *c
 void    send_to_outdoor(const char *messg);
 void    free_editing_structs(descriptor_data *d, int state);
 void    close_socket(struct descriptor_data *d);
+int     gettimeofday(struct timeval *t, struct timezone *dummy);
 
 const char *perform_act(const char *orig, struct char_data *ch, struct obj_data *obj,
                     void *vict_obj, struct char_data *to);
@@ -68,7 +69,6 @@ int accept(int s, struct sockaddr * addr, int *addrlen);
 int bind(int s, struct sockaddr * name, int namelen);
 int getpeername(int s, struct sockaddr * name, int *namelen);
 int getsockname(int s, struct sockaddr * name, int *namelen);
-int gettimeofday(struct timeval * tp, struct timezone * tzp);
 int listen(int s, int backlog);
 int setsockopt(int s, int level, int optname, void *optval, int optlen);
 int socket(int domain, int type, int protocol);
@@ -79,7 +79,6 @@ int accept(int s, void *addr, int *addrlen);
 int bind(int s, const void *addr, int addrlen);
 int getpeername(int s, void *addr, int *addrlen);
 int getsockname(int s, void *name, int *addrlen);
-int gettimeofday(struct timeval * tp, struct timezone * tzp);
 int listen(int s, int backlog);
 int setsockopt(int s, int level, int optname,
                const void *optval, int optlen);
@@ -95,7 +94,6 @@ int socket(int domain, int type, int protocol);
 #include <sys/time.h>
 int getpeername(int s, struct sockaddr * name, int *namelen);
 int getsockname(int s, struct sockaddr * name, int *namelen);
-int gettimeofday(struct timeval * tp, struct timezone * tzp);
 int socket(int domain, int type, int protocol);
 #endif
 
@@ -111,7 +109,6 @@ int bind(int s, struct sockaddr * name, int namelen);
 int close(int fd);
 int getpeername(int s, struct sockaddr * name, int *namelen);
 int getsockname(int s, struct sockaddr * name, int *namelen);
-int gettimeofday(struct timeval * tp, struct timezone * tzp);
 int listen(int s, int backlog);
 int select(int width, fd_set * readfds, fd_set * writefds,
            fd_set * exceptfds, struct timeval * timeout);
