@@ -3744,17 +3744,24 @@ int get_string_length_after_color_code_removal(const char *str, struct char_data
 
 // Returns a string stripped of color for keyword matching or possibly other uses as well.
 // We don't need to check for color code validity because we call get_string_legth_after_color_code_removal() when the strings are initially written.
-char* get_string_after_color_code_removal(const char *str, struct char_data *ch_to_notify_of_failure_reason) {
+char* get_string_after_color_code_removal(const char *str, struct char_data *ch) {
   if (!str) {
-    mudlog("SYSERR: Null string received to get_string_after_color_code_removal().", ch_to_notify_of_failure_reason, LOG_SYSLOG, TRUE);
+    mudlog("SYSERR: Null string received to get_string_after_color_code_removal().", ch, LOG_SYSLOG, TRUE);
     return NULL;
   }
     
   const char *ptr = str;
   static char clearstr [MAX_STRING_LENGTH];
+  memset(clearstr, 0, sizeof(clearstr));
   int pos = 0;
   
   while (*ptr) {
+    // Buffer overflow failsafe.
+    if (pos == MAX_STRING_LENGTH) {
+      clearstr[pos] = '\0';
+      return clearstr;
+    }
+    
     if (*ptr == '^') {
       // Parse a single ^ character.
       if (*(ptr+1) == '^') {
