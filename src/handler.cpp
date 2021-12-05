@@ -2692,7 +2692,7 @@ struct obj_data *get_obj_in_list_vis(struct char_data * ch, char *name, struct o
   for (i = list; i && (j <= number); i = i->next_content) {
     if (ch->in_veh && i->in_veh && i->vfront != ch->vfront)
       continue;
-    if (isname(tmp, i->text.keywords) || isname(tmp, i->text.name) || (i->restring && isname(tmp, i->restring)))
+    if (isname(tmp, i->text.keywords) || isname(tmp, i->text.name) || (i->restring && isname(tmp, get_string_after_color_code_removal(i->restring, ch))))
       if (++j == number)
         return i;
   }
@@ -2733,18 +2733,18 @@ struct obj_data *get_object_in_equip_vis(struct char_data * ch,
   strcpy(tmp, arg);
   if (!(number = get_number(&tmp)))
     return NULL;
-  
+
   for ((*j) = 0; (*j) < NUM_WEARS && i <= number; (*j)++)
     if (equipment[(*j)])
     {
       if (isname(tmp, equipment[(*j)]->text.keywords) || isname(tmp, equipment[(*j)]->text.name)  ||
-          (equipment[(*j)]->restring && isname(tmp, equipment[(*j)]->restring)))
+          (equipment[(*j)]->restring && isname(tmp, get_string_after_color_code_removal(equipment[(*j)]->restring, ch))))
         if (++i == number)
           return (equipment[(*j)]);
       if (GET_OBJ_TYPE(equipment[(*j)]) == ITEM_WORN && equipment[(*j)]->contains)
         for (struct obj_data *obj = equipment[(*j)]->contains; obj; obj = obj->next_content)
           if (isname(tmp, obj->text.keywords) || isname(tmp, obj->text.name) ||
-              (obj->restring && isname(tmp, obj->restring)))
+              (obj->restring && isname(tmp, get_string_after_color_code_removal(obj->restring, ch))))
             if (++i == number)
               return (obj);
     }

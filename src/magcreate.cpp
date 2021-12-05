@@ -128,15 +128,31 @@ void spedit_parse(struct descriptor_data *d, const char *arg)
       GET_OBJ_VAL(SPELL, 3) = number;
       spedit_disp_menu(d);
       break;
-    case SPEDIT_NAME:
-      if (strlen(arg) >= LINE_LENGTH) {
+    case SPEDIT_NAME: {
+      int length_with_no_color = get_string_length_after_color_code_removal(arg, CH);
+      
+      // Silent failure: We already sent the error message in get_string_length_after_color_code_removal().
+      if (length_with_no_color == -1) {
         spedit_disp_menu(d);
         return;
       }
+      if (length_with_no_color >= LINE_LENGTH) {
+        send_to_char(CH, "That name is too long, please shorten it. The maximum length after color code removal is %d characters.\r\n", LINE_LENGTH - 1);
+        spedit_disp_menu(d);
+        return;
+      }
+  
+      if (strlen(arg) >= MAX_RESTRING_LENGTH) {
+        send_to_char(CH, "That restring is too long, please shorten it. The maximum length with color codes included is %d characters.\r\n", MAX_RESTRING_LENGTH - 1);
+        spedit_disp_menu(d);
+        return;
+      }
+
       DELETE_ARRAY_IF_EXTANT(SPELL->restring);
       SPELL->restring = str_dup(arg);
       spedit_disp_menu(d);
       break;
+    }
     case SPEDIT_FORCE: 
       x = MIN(d->edit_number2, GET_SKILL(CH, SKILL_SPELLDESIGN) ? GET_SKILL(CH, SKILL_SPELLDESIGN) : GET_SKILL(CH, SKILL_SORCERY));
       if (number > x || number < 1)

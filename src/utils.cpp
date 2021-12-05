@@ -3742,6 +3742,54 @@ int get_string_length_after_color_code_removal(const char *str, struct char_data
   return len;
 }
 
+// Returns a string stripped of color for keyword matching or possibly other uses as well.
+// We don't need to check for color code validity because we call get_string_legth_after_color_code_removal() when the strings are initially written.
+char* get_string_after_color_code_removal(const char *str, struct char_data *ch) {
+  if (!str) {
+    mudlog("SYSERR: Null string received to get_string_after_color_code_removal().", ch, LOG_SYSLOG, TRUE);
+    return NULL;
+  }
+    
+  const char *ptr = str;
+  static char clearstr [MAX_STRING_LENGTH];
+  memset(clearstr, 0, sizeof(clearstr));
+  int pos = 0;
+  
+  while (*ptr) {
+    // Buffer overflow failsafe.
+    if (pos == MAX_STRING_LENGTH) {
+      clearstr[pos] = '\0';
+      return clearstr;
+    }
+    
+    if (*ptr == '^') {
+      // Parse a single ^ character.
+      if (*(ptr+1) == '^') {
+        clearstr[pos] = *(ptr+1);
+        pos++;
+        ptr += 2;
+        continue;
+      }
+      // Skip color codes.
+      // There are two types of color: Two-character tags (^g) and xterm tags (^[F123]). We must account for both.
+      // 7 for xterm tags 2 for regular tags
+      else if (*(ptr+1) == '[') {
+          ptr  += 7;
+      }
+      else {
+        ptr += 2;
+      }
+    }
+    //Clear character, save it.
+    else {
+      clearstr[pos] = *ptr;
+      pos++;
+      ptr += 1;
+    }
+  }
+  return  clearstr;
+}
+
 #define CHECK_FUNC_AND_SFUNC_FOR(function) (mob_index[GET_MOB_RNUM(npc)].func == (function) || mob_index[GET_MOB_RNUM(npc)].sfunc == (function))
 // Returns TRUE if the NPC has a spec that should protect it from damage, FALSE otherwise.
 bool npc_is_protected_by_spec(struct char_data *npc) {
