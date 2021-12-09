@@ -2324,6 +2324,12 @@ int perform_dupe_check(struct descriptor_data *d)
     break;
   }
   
+  //This is required for autoconnecting clients like MUSHClient
+  //in order to do telnet protocol options renegotiation on
+  //reconnection states. Otherwise things like MXP and 256
+  //color support break. It doesn't affect other clients.
+  d->pProtocol->bRenegotiate = TRUE;
+  
   // KaVir's protocol snippet.
   MXPSendTag( d, "<VERSION>" );
 
