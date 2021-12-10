@@ -11,6 +11,8 @@
 #include <string.h>
 #include <ctype.h>
 #include <sys/types.h>
+#include <vector>
+#include <algorithm>
 
 #include "structs.h"
 #include "awake.h"
@@ -138,6 +140,17 @@ const char *smo[] =
     "kill one",
     "kill many",
     "hunt",
+    "\n"
+  };
+  
+  const char *higher_rep_needed[] =
+  {
+    "I might have something for you soon.",
+    "Come back later, omae.",
+    "Wet behind the ears, huh?",
+    "Go pick up a few new tricks.",
+    "Don't talk to me.",
+    "Who are you?",
     "\n"
   };
 
@@ -504,7 +517,11 @@ void end_quest(struct char_data *ch)
     return;
 
   extract_quest_targets(GET_IDNUM(ch));
-
+  // We mark the quest as completed here because if you fail...
+  //well you failed. Better luck next time chummer.
+  for (int i = QUEST_TIMER - 1; i > 0; i--)
+          GET_LQUEST(ch, i) = GET_LQUEST(ch, i - 1);
+        GET_LQUEST(ch, 0) = quest_table[GET_QUEST(ch)].vnum;
   GET_QUEST(ch) = 0;
 
   delete [] ch->player_specials->mob_complete;
@@ -669,11 +686,19 @@ void reward(struct char_data *ch, struct char_data *johnson)
   end_quest(ch);
 }
 
-// Specify force_assignation to ensure that the NPC has a quest to hand out.
-void new_quest(struct char_data *mob, bool force_assignation=FALSE)
+// New quest function builds a list of quests that exclude already
+//done, and outgrown, sorts it by reputation and returns the lowest
+//rep one first.
+int new_quest(struct char_data *mob, struct char_data *ch)
 {
   int i, num = 0;
-
+  struct quest_entry {
+      int index; 
+      int rep;
+  };
+  quest_entry temp_entry;
+  std::vector<quest_entry> qlist; 
+  
   for (i = 0; i <= top_of_questt; i++)
     if (quest_table[i].johnson == GET_MOB_VNUM(mob))
       num++;
@@ -686,31 +711,49 @@ void new_quest(struct char_data *mob, bool force_assignation=FALSE)
     snprintf(buf, sizeof(buf), "Stripping Johnson status from %s (%ld) due to mob not having any quests to assign.",
             GET_NAME(mob), GET_MOB_VNUM(mob));
     mudlog(buf, NULL, LOG_SYSLOG, true);
-    return;
+    return -1;
   }
-
-  for (i = 0;;)
-  {
-    bool allow_disconnected = vnum_from_non_connected_zone(quest_table[i].johnson);
-    if (quest_table[i].johnson == GET_MOB_VNUM(mob) &&
-        (force_assignation || (!number(0, num - 1) 
-                               && !(num > 1 
-                                    && GET_SPARE2(mob) == i 
-                                    && (allow_disconnected 
-                                        || !vnum_from_non_connected_zone(quest_table[i].vnum)))))) {
-      GET_SPARE2(mob) = i;
-      return;
+  
+  // Build array of quests for this johnson, excluding quests that are already
+  // done or max_rep is below character rep. We include those with min_rep
+  // higher than character rep because we want johnsons to hint to available
+  // runs at higher character rep.
+  for (i = 0;i < top_of_questt;i++) {
+          bool allow_disconnected = vnum_from_non_connected_zone(quest_table[i].johnson);
+          if (quest_table[i].johnson == GET_MOB_VNUM(mob)
+          && (allow_disconnected || !vnum_from_non_connected_zone(quest_table[i].vnum))) {
+            if (GET_REP(ch) > quest_table[i].max_rep) {
+                continue;
+            }
+            
+            bool found = FALSE;
+            for (int q = QUEST_TIMER - 1; q >= 0; q--) {
+              if (GET_LQUEST(ch, q) == quest_table[i].vnum) {
+                  found = TRUE;
+                  break;
+              }
+            }
+            if (found) {
+                continue;
+            } else {
+                temp_entry.index = i;
+                temp_entry.rep = quest_table[i].min_rep;
+                qlist.push_back(temp_entry);
+            }
     }
-    if ((i + 1) <= top_of_questt)
-      i++;
-    else
-      i = 0;
+}
+  // Sort vector by reputation and return a quest if vector is not empty.
+  if (!qlist.empty()) {
+    sort(qlist.begin(), qlist.end(), [] (const quest_entry &a, const quest_entry &b) { return a.rep < b.rep; });
+    return qlist[0].index;
   }
+  
+  return 0;
 }
 
-void handle_info(struct char_data *johnson)
+void handle_info(struct char_data *johnson, int num)
 {
-  int allowed, pos, num, i, speech_index = 0;
+  int allowed, pos, i, speech_index = 0;
   
   // Want to control how much the Johnson says per tick? Change this magic number.
   char speech[strlen(GET_NAME(johnson)) + 200];
@@ -725,9 +768,6 @@ void handle_info(struct char_data *johnson)
   if (pos > 0)
     for (int ellipses = 0; ellipses < 3; ellipses++)
       speech[speech_index++] = '.';
-  
-  // Num is the index of the quest the Johnson is reciting from.
-  num = GET_SPARE2(johnson);
   
   // i is the total length of the info string. We skip any newlines at the end.
   i = strlen(quest_table[num].info);
@@ -748,10 +788,8 @@ void handle_info(struct char_data *johnson)
   } 
   
   // Otherwise, we'll be done talking after this call-- wipe out their spare1 data 
-  //  (position in string) and potentially generate a new quest.
+  //  (position in string) .
   else {
-    if (!number(0, 9))
-      new_quest(johnson);
     GET_SPARE1(johnson) = -1;
     will_add_ellipses = FALSE;
   }
@@ -781,15 +819,10 @@ void handle_info(struct char_data *johnson)
 SPECIAL(johnson)
 {
   struct char_data *johnson = (struct char_data *) me, *temp = NULL;
-  int i, obj_complete = 0, mob_complete = 0, num, comm = CMD_JOB_NONE;
+  int i, obj_complete = 0, mob_complete = 0, num, new_q, comm = CMD_JOB_NONE;
 
   if (!IS_NPC(johnson))
     return FALSE;
-  
-  if (!GET_SPARE2(johnson)) {
-    new_quest(johnson, TRUE);
-    GET_SPARE1(johnson) = -1;
-  }
   
   if (!cmd) {
     if (GET_SPARE1(johnson) >= 0) {
@@ -797,15 +830,13 @@ SPECIAL(johnson)
         if (memory(johnson, temp))
           break;
       if (!temp) {
-        new_quest(johnson);
         GET_SPARE1(johnson) = -1;
       } else if (GET_QUEST(temp)) {
-        handle_info(johnson);
+        handle_info(johnson, GET_QUEST(temp));
       } else {
         // We're in the gap between someone asking for a job and accepting it. Do nothing.
       }
-    } else if (time_info.minute > 0 && time_info.minute <= 5)
-      new_quest(johnson);
+    }
     return FALSE;
   }
 
@@ -996,7 +1027,17 @@ SPECIAL(johnson)
         do_say(johnson, "You haven't completed any of your objectives yet.", 0, 0);
       
       return TRUE;
-    case CMD_JOB_START:
+    case CMD_JOB_START: {
+      new_q = new_quest(johnson, ch);
+      //Handle out of quests and broken johnsons.
+      if (new_q == 0) {
+          do_say(johnson, "I got nothing for you now. Come back later.", 0, 0);
+          return TRUE;
+      }
+      if (new_q == -1) {
+          return TRUE;
+      }
+      
       // Precondition: I cannot be talking right now.
       if (GET_SPARE1(johnson) == 0) {
         if (!memory(johnson, ch)) {
@@ -1023,45 +1064,38 @@ SPECIAL(johnson)
           forget(johnson, ch);
       }
       
-      // If you've done this quest recently, you can't do it again until you do more.
-      for (int i = QUEST_TIMER - 1; i >= 0; i--)
-        if (GET_LQUEST(ch, i) == quest_table[GET_SPARE2(johnson)].vnum) {
-          if (quest_table[GET_SPARE2(johnson)].done)
-            do_say(johnson, quest_table[GET_SPARE2(johnson)].done, 0, 0);
-          else {
-            snprintf(buf, sizeof(buf), "WARNING: Null string in quest %ld!", quest_table[GET_SPARE2(johnson)].vnum);
-            mudlog(buf, ch, LOG_SYSLOG, TRUE);
-            do_say(johnson, "I don't need help right now.", 0, 0);
-          }
-          if (memory(johnson, ch))
-            forget(johnson, ch);
-          return TRUE;
-        }
-      
       // Reject high-rep characters.
-      if (rep_too_high(ch, GET_SPARE2(johnson))) {
-        unsigned int johnson_max_rep = get_johnson_overall_max_rep(johnson);
-        if (johnson_max_rep < GET_REP(ch)) {
-          do_say(johnson, "My jobs aren't high-profile enough for someone with your rep!", 0, 0);
-          send_to_char(ch, "[OOC: This Johnson caps out at %d reputation, so you won't get any further work from them.]", johnson_max_rep);
-        } else {
-          do_say(johnson, "With rep as high as yours? I can't afford your rates for this one!", 0, 0);
-        }
+      unsigned int johnson_max_rep = get_johnson_overall_max_rep(johnson);
+      if (johnson_max_rep < GET_REP(ch)) {
+        do_say(johnson, "My jobs aren't high-profile enough for someone with your rep!", 0, 0);
+        send_to_char(ch, "[OOC: This Johnson caps out at %d reputation, so you won't get any further work from them.]", johnson_max_rep);
         
         GET_SPARE1(johnson) = -1;
         if (memory(johnson, ch))
-          forget(johnson, ch);
+        forget(johnson, ch);
         return TRUE;
       }
-      
+        
       // Reject low-rep characters.
-      if (rep_too_low(ch, GET_SPARE2(johnson))) {
+      if (rep_too_low(ch, new_q)) {
         unsigned int johnson_min_rep = get_johnson_overall_min_rep(johnson);
         if (johnson_min_rep > GET_REP(ch)) {
           do_say(johnson, "You're not even worth my time right now.", 0, 0);
           send_to_char(ch, "[OOC: This Johnson has a minimum reputation requirement of %d. Come back when you have at least that much rep.]", johnson_min_rep);
         } else {
-          do_say(johnson, "You don't have a good enough rep for this one.", 0, 0);
+            int rep_delta = quest_table[new_q].min_rep - GET_REP(ch);
+            if (rep_delta >= 1000)
+                do_say(johnson, higher_rep_needed[5], 0, 0);
+            else if  (rep_delta >= 500)
+                do_say(johnson, higher_rep_needed[4], 0, 0);
+            else if  (rep_delta >= 200)
+                do_say(johnson, higher_rep_needed[3], 0, 0);
+            else if  (rep_delta >= 100)
+                do_say(johnson, higher_rep_needed[2], 0, 0);
+            else if  (rep_delta >= 20)
+                do_say(johnson, higher_rep_needed[1], 0, 0);
+            else
+                do_say(johnson, higher_rep_needed[0], 0, 0);
         }
         
         GET_SPARE1(johnson) = -1;
@@ -1072,10 +1106,10 @@ SPECIAL(johnson)
       
       // Assign the quest.
       GET_SPARE1(johnson) = 0;
-      if (quest_table[GET_SPARE2(johnson)].intro)
-        do_say(johnson, quest_table[GET_SPARE2(johnson)].intro, 0, 0);
+      if (quest_table[new_q].intro)
+        do_say(johnson, quest_table[new_q].intro, 0, 0);
       else {
-        snprintf(buf, sizeof(buf), "WARNING: Null string in quest %ld!", quest_table[GET_SPARE2(johnson)].vnum);
+        snprintf(buf, sizeof(buf), "WARNING: Null string in quest %ld!", quest_table[new_q].vnum);
         mudlog(buf, ch, LOG_SYSLOG, TRUE);
         do_say(johnson, "I've got a job for you.", 0, 0);
       }
@@ -1084,6 +1118,7 @@ SPECIAL(johnson)
         remember(johnson, ch);
       
       return TRUE;
+    }
     case CMD_JOB_YES:
       // Precondition: If I'm not talking right now, don't react.
       if (GET_SPARE1(johnson) == -1) {
@@ -1095,11 +1130,20 @@ SPECIAL(johnson)
         do_say(johnson, "Hold on, I'm talking to someone else right now.", 0, 0);
         return TRUE;
       }
+      new_q = new_quest(johnson, ch);
+      //Handle out of quests and broken johnsons.
+      if (new_q == 0) {
+          do_say(johnson, "I got nothing for you now. Come back later.", 0, 0);
+          return TRUE;
+      }
+      if (new_q == -1) {
+          return TRUE;
+      }
       
       // Precondition: You may not have an active quest.
       if (GET_QUEST(ch)) {
         // If it's the same quest, just bail out without a message.
-        if (GET_QUEST(ch) == GET_SPARE2(johnson))
+        if (GET_QUEST(ch) == new_q)
           return TRUE;
           
         do_say(johnson, "Maybe when you've finished what you're doing.", 0, 0);
@@ -1108,7 +1152,7 @@ SPECIAL(johnson)
       }
       
       // Assign them the quest since they've accepted it.
-      GET_QUEST(ch) = GET_SPARE2(johnson);
+      GET_QUEST(ch) = new_q;
       ch->player_specials->obj_complete =
         new sh_int[quest_table[GET_QUEST(ch)].num_objs];
       ch->player_specials->mob_complete =
@@ -1122,7 +1166,7 @@ SPECIAL(johnson)
       load_quest_targets(johnson, ch);
       
       // Go into my spiel.
-      handle_info(johnson);
+      handle_info(johnson, new_q);
       
       return TRUE;
       
@@ -1138,22 +1182,33 @@ SPECIAL(johnson)
         return TRUE;
       }
       
+      new_q = new_quest(johnson, ch);
+      //Handle out of quests and broken johnsons.
+      if (new_q == 0) {
+          do_say(johnson, "I got nothing for you now. Come back later.", 0, 0);
+          return TRUE;
+      }
+      if (new_q == -1) {
+          return TRUE;
+      }
+      
       // Decline the quest.
       GET_SPARE1(johnson) = -1;
       GET_QUEST(ch) = 0;
       forget(johnson, ch);
-      if (quest_table[GET_SPARE2(johnson)].decline)
-        do_say(johnson, quest_table[GET_SPARE2(johnson)].decline, 0, 0);
+      if (quest_table[new_q].decline)
+        do_say(johnson, quest_table[new_q].decline, 0, 0);
       else {
-        snprintf(buf, sizeof(buf), "WARNING: Null string in quest %ld!", quest_table[GET_SPARE2(johnson)].vnum);
+        snprintf(buf, sizeof(buf), "WARNING: Null string in quest %ld!", quest_table[new_q].vnum);
         mudlog(buf, ch, LOG_SYSLOG, TRUE);
         do_say(johnson, "Fine.", 0, 0);
       }
       return TRUE;
     default:
+      new_q = new_quest(johnson, ch);
       do_say(johnson, "Ugh, drank too much last night. Talk to me later when I've sobered up.", 0, 0);
-      snprintf(buf, sizeof(buf), "WARNING: Failed to evaluate Johnson tree and return successful message for Johnson '%s' (%ld). Values: comm = %d, spare1 = %ld, spare2 = %ld (maps to %ld)",
-              GET_NAME(johnson), GET_MOB_VNUM(johnson), comm, GET_SPARE1(johnson), GET_SPARE2(johnson), quest_table[GET_SPARE2(johnson)].vnum);
+      snprintf(buf, sizeof(buf), "WARNING: Failed to evaluate Johnson tree and return successful message for Johnson '%s' (%ld). Values: comm = %d, spare1 = %ld, quest = %d (maps to %ld)",
+              GET_NAME(johnson), GET_MOB_VNUM(johnson), comm, GET_SPARE1(johnson), new_q, quest_table[new_q].vnum);
       mudlog(buf, ch, LOG_SYSLOG, TRUE);
       break;
   }
