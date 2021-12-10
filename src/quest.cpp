@@ -1072,7 +1072,7 @@ SPECIAL(johnson)
         
         GET_SPARE1(johnson) = -1;
         if (memory(johnson, ch))
-        forget(johnson, ch);
+            forget(johnson, ch);
         return TRUE;
       }
         
