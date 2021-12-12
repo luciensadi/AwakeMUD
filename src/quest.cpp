@@ -812,7 +812,7 @@ void handle_info(struct char_data *johnson, int num)
 SPECIAL(johnson)
 {
   struct char_data *johnson = (struct char_data *) me, *temp = NULL;
-  int i, obj_complete = 0, mob_complete = 0, num, new_q, comm = CMD_JOB_NONE;
+  int i, obj_complete = 0, mob_complete = 0, num, new_q, cached_new_q = -2, comm = CMD_JOB_NONE;
 
   if (!IS_NPC(johnson))
     return FALSE;
@@ -1035,6 +1035,11 @@ SPECIAL(johnson)
       }
       
       new_q = new_quest(johnson, ch);
+      //Clever hack to safely save us a call to new_quest() that compiler will be ok with.
+      //If we have a cached quest use that and reset the cache integer back to -2 when
+      //it is consumed.
+      cached_new_q = new_q;
+      
       //Handle out of quests and broken johnsons.
       //Calls to new_quest() return 0 when there's no quest left available and
       //-1 if the johnson is broken and has no quests.
@@ -1126,7 +1131,16 @@ SPECIAL(johnson)
         do_say(johnson, "Hold on, I'm talking to someone else right now.", 0, 0);
         return TRUE;
       }
-      new_q = new_quest(johnson, ch);
+      //Clever hack to safely save us a call to new_quest() that compiler will be ok with.
+      //If we have a cached quest use that and reset the cache integer back to -2 when
+      //it is consumed.
+      if (cached_new_q != -2) {
+        new_q = cached_new_q;
+        cached_new_q = -2;
+      } else {
+        new_q = new_quest(johnson, ch);
+      }
+      
       //Handle out of quests and broken johnsons.
       //Calls to new_quest() return 0 when there's no quest left available and
       //-1 if the johnson is broken and has no quests.
@@ -1183,7 +1197,16 @@ SPECIAL(johnson)
         return TRUE;
       }
       
-      new_q = new_quest(johnson, ch);
+      //Clever hack to safely save us a call to new_quest() that compiler will be ok with.
+      //If we have a cached quest use that and reset the cache integer back to -2 when
+      //it is consumed.
+      if (cached_new_q != -2) {
+        new_q = cached_new_q;
+        cached_new_q = -2;
+      } else {
+        new_q = new_quest(johnson, ch);
+      }
+      
       //Handle out of quests and broken johnsons.
       //Calls to new_quest() return 0 when there's no quest left available and
       //-1 if the johnson is broken and has no quests.
