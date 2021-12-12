@@ -5401,8 +5401,7 @@ SPECIAL(mageskill_hermes)
         do_say(mage, arg, 0, SCMD_SAYTO);
       } else {
         bool dq = FALSE;
-        int i = 0;
-        for (; i <= QUEST_TIMER; i++)
+        for (int i = 0; i < QUEST_TIMER; i++)
           if (GET_LQUEST(ch, i) == QST_MAGE_INTRO)
             dq = TRUE;
         if (dq) {
