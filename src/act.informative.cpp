@@ -1056,7 +1056,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
           already_printed = TRUE;
         }
         if (i->in_room && GET_ROOM_SPEC(i->in_room) == mageskill_hermes) {
-          for (int qidx = 0; qidx <= QUEST_TIMER; qidx++) {
+          for (int qidx = 0; qidx < QUEST_TIMER; qidx++) {
             if (GET_LQUEST(ch, qidx) == QST_MAGE_INTRO) {
               snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s is%s wearing some sweet bling. Harold said to ^YASK^y %s about %s chain.^n\r\n",
                        HSSH(i),
