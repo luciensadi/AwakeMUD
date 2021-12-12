@@ -142,17 +142,6 @@ const char *smo[] =
     "hunt",
     "\n"
   };
-  
-  const char *higher_rep_needed[] =
-  {
-    "I might have something for you soon.",
-    "Come back later, omae.",
-    "Wet behind the ears, huh?",
-    "Go pick up a few new tricks.",
-    "Don't talk to me.",
-    "Who are you?",
-    "\n"
-  };
 
 void end_quest(struct char_data *ch);
 
@@ -520,8 +509,9 @@ void end_quest(struct char_data *ch)
   // We mark the quest as completed here because if you fail...
   //well you failed. Better luck next time chummer.
   for (int i = QUEST_TIMER - 1; i > 0; i--)
-          GET_LQUEST(ch, i) = GET_LQUEST(ch, i - 1);
-        GET_LQUEST(ch, 0) = quest_table[GET_QUEST(ch)].vnum;
+    GET_LQUEST(ch, i) = GET_LQUEST(ch, i - 1);
+    
+  GET_LQUEST(ch, 0) = quest_table[GET_QUEST(ch)].vnum;
   GET_QUEST(ch) = 0;
 
   delete [] ch->player_specials->mob_complete;
@@ -688,7 +678,8 @@ void reward(struct char_data *ch, struct char_data *johnson)
 
 // New quest function builds a list of quests that exclude already
 //done, and outgrown, sorts it by reputation and returns the lowest
-//rep one first.
+//rep one first. It returns 0 if no more quests are available or -1 if
+//the johnson is broken.
 int new_quest(struct char_data *mob, struct char_data *ch)
 {
   int i, num = 0;
@@ -719,29 +710,31 @@ int new_quest(struct char_data *mob, struct char_data *ch)
   // higher than character rep because we want johnsons to hint to available
   // runs at higher character rep.
   for (i = 0;i < top_of_questt;i++) {
-          bool allow_disconnected = vnum_from_non_connected_zone(quest_table[i].johnson);
-          if (quest_table[i].johnson == GET_MOB_VNUM(mob)
-          && (allow_disconnected || !vnum_from_non_connected_zone(quest_table[i].vnum))) {
-            if (GET_REP(ch) > quest_table[i].max_rep) {
-                continue;
-            }
+    bool allow_disconnected = vnum_from_non_connected_zone(quest_table[i].johnson);
+    
+    if (quest_table[i].johnson == GET_MOB_VNUM(mob)
+      && (allow_disconnected || !vnum_from_non_connected_zone(quest_table[i].vnum)))
+    {
+        if (GET_REP(ch) > quest_table[i].max_rep) {
+          continue;
+        }
             
-            bool found = FALSE;
-            for (int q = QUEST_TIMER - 1; q >= 0; q--) {
-              if (GET_LQUEST(ch, q) == quest_table[i].vnum) {
-                  found = TRUE;
-                  break;
-              }
-            }
-            if (found) {
-                continue;
-            } else {
-                temp_entry.index = i;
-                temp_entry.rep = quest_table[i].min_rep;
-                qlist.push_back(temp_entry);
-            }
+        bool found = FALSE;
+        for (int q = QUEST_TIMER - 1; q >= 0; q--) {
+          if (GET_LQUEST(ch, q) == quest_table[i].vnum) {
+            found = TRUE;
+            break;
+          }
+        }
+        if (found) {
+          continue;
+        } else {
+          temp_entry.index = i;
+          temp_entry.rep = quest_table[i].min_rep;
+          qlist.push_back(temp_entry);
+        }
     }
-}
+  }
   // Sort vector by reputation and return a quest if vector is not empty.
   if (!qlist.empty()) {
     sort(qlist.begin(), qlist.end(), [] (const quest_entry &a, const quest_entry &b) { return a.rep < b.rep; });
@@ -1028,8 +1021,23 @@ SPECIAL(johnson)
       
       return TRUE;
     case CMD_JOB_START: {
+      
+      // Reject high-rep characters.
+      unsigned int johnson_max_rep = get_johnson_overall_max_rep(johnson);
+      if (johnson_max_rep < GET_REP(ch)) {
+        do_say(johnson, "My jobs aren't high-profile enough for someone with your rep!", 0, 0);
+        send_to_char(ch, "[OOC: This Johnson caps out at %d reputation, so you won't get any further work from them.]", johnson_max_rep);
+        
+        GET_SPARE1(johnson) = -1;
+        if (memory(johnson, ch))
+            forget(johnson, ch);
+        return TRUE;
+      }
+      
       new_q = new_quest(johnson, ch);
       //Handle out of quests and broken johnsons.
+      //Calls to new_quest() return 0 when there's no quest left available and
+      //-1 if the johnson is broken and has no quests.
       if (new_q == 0) {
           do_say(johnson, "I got nothing for you now. Come back later.", 0, 0);
           return TRUE;
@@ -1063,19 +1071,7 @@ SPECIAL(johnson)
         if (memory(johnson, ch))
           forget(johnson, ch);
       }
-      
-      // Reject high-rep characters.
-      unsigned int johnson_max_rep = get_johnson_overall_max_rep(johnson);
-      if (johnson_max_rep < GET_REP(ch)) {
-        do_say(johnson, "My jobs aren't high-profile enough for someone with your rep!", 0, 0);
-        send_to_char(ch, "[OOC: This Johnson caps out at %d reputation, so you won't get any further work from them.]", johnson_max_rep);
-        
-        GET_SPARE1(johnson) = -1;
-        if (memory(johnson, ch))
-            forget(johnson, ch);
-        return TRUE;
-      }
-        
+
       // Reject low-rep characters.
       if (rep_too_low(ch, new_q)) {
         unsigned int johnson_min_rep = get_johnson_overall_min_rep(johnson);
@@ -1085,17 +1081,17 @@ SPECIAL(johnson)
         } else {
             int rep_delta = quest_table[new_q].min_rep - GET_REP(ch);
             if (rep_delta >= 1000)
-                do_say(johnson, higher_rep_needed[5], 0, 0);
+                do_say(johnson, "Who are you?", 0, 0);
             else if  (rep_delta >= 500)
-                do_say(johnson, higher_rep_needed[4], 0, 0);
+                do_say(johnson, "Don't talk to me.", 0, 0);
             else if  (rep_delta >= 200)
-                do_say(johnson, higher_rep_needed[3], 0, 0);
+                do_say(johnson, "Go pick up a few new tricks.", 0, 0);
             else if  (rep_delta >= 100)
-                do_say(johnson, higher_rep_needed[2], 0, 0);
+                do_say(johnson, "Wet behind the ears, huh?", 0, 0);
             else if  (rep_delta >= 20)
-                do_say(johnson, higher_rep_needed[1], 0, 0);
+                do_say(johnson, "Come back later, omae.", 0, 0);
             else
-                do_say(johnson, higher_rep_needed[0], 0, 0);
+                do_say(johnson, "I might have something for you soon.", 0, 0);
         }
         
         GET_SPARE1(johnson) = -1;
@@ -1132,12 +1128,17 @@ SPECIAL(johnson)
       }
       new_q = new_quest(johnson, ch);
       //Handle out of quests and broken johnsons.
+      //Calls to new_quest() return 0 when there's no quest left available and
+      //-1 if the johnson is broken and has no quests.
       if (new_q == 0) {
-          do_say(johnson, "I got nothing for you now. Come back later.", 0, 0);
-          return TRUE;
+        //This is should never really happen but if it does let's log it.
+        snprintf(buf, sizeof(buf), "WARNING: Quest vanished between offered and accepted from %s (%ld) due.", GET_NAME(johnson), GET_MOB_VNUM(johnson));
+        mudlog(buf, NULL, LOG_SYSLOG, true);
+        do_say(johnson, "What are you talking about?", 0, 0);
+        return TRUE;
       }
       if (new_q == -1) {
-          return TRUE;
+        return TRUE;
       }
       
       // Precondition: You may not have an active quest.
@@ -1184,12 +1185,17 @@ SPECIAL(johnson)
       
       new_q = new_quest(johnson, ch);
       //Handle out of quests and broken johnsons.
+      //Calls to new_quest() return 0 when there's no quest left available and
+      //-1 if the johnson is broken and has no quests.
       if (new_q == 0) {
-          do_say(johnson, "I got nothing for you now. Come back later.", 0, 0);
-          return TRUE;
+        //This is should never really happen but if it does let's log it.
+        snprintf(buf, sizeof(buf), "WARNING: Quest vanished between offered and declined from %s (%ld) due.", GET_NAME(johnson), GET_MOB_VNUM(johnson));
+        mudlog(buf, NULL, LOG_SYSLOG, true);
+        do_say(johnson, "What are you talking about?", 0, 0);
+        return TRUE;
       }
       if (new_q == -1) {
-          return TRUE;
+        return TRUE;
       }
       
       // Decline the quest.
