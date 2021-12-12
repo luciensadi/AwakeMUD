@@ -447,7 +447,7 @@ const char *player_bits[] =
     "NEWBIE",
     "JUST_DIED",
     "VISA",
-    "!USED",
+    "CEYE_ESS_DONE",
     "SITEOK",
     "!SHOUT",
     "!TITLE",
