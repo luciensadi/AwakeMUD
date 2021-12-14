@@ -900,7 +900,6 @@ void assign_objects(void)
   ASSIGNOBJ(14859, trideo);
   ASSIGNOBJ(8498, trideo);
   ASSIGNOBJ(35532, trideo);
-  ASSIGNOBJ(31701, trideo);
   ASSIGNOBJ(61536, spraypaint);
   ASSIGNOBJ(39392, bank);
   ASSIGNOBJ(62129, bank);
@@ -912,6 +911,7 @@ void assign_objects(void)
   ASSIGNOBJ(60500, chargen_hopper);
   ASSIGNOBJ(10033, quest_debug_scanner);
 #ifdef USE_PRIVATE_CE_WORLD
+  ASSIGNOBJ(94331, trideo);
   ASSIGNOBJ(70605, desktop);
   // ASSIGNOBJ(10036, restoration_button);
   ASSIGNOBJ(39799, bank);
