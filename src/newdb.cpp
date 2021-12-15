@@ -333,7 +333,7 @@ void do_start(struct char_data * ch, bool wipe_skills)
   PRF_FLAGS(ch).Clear();
 
   // Set the appropriate flags.
-  PLR_FLAGS(ch).SetBits(PLR_NEWBIE, PLR_NOT_YET_AUTHED, ENDBIT);
+  PLR_FLAGS(ch).SetBits(PLR_NEWBIE, PLR_NOT_YET_AUTHED, PLR_RECEIVED_CYBEREYE_ESSENCE_DELTA, ENDBIT);
   PRF_FLAGS(ch).SetBits(PRF_AUTOEXIT, PRF_LONGEXITS, ENDBIT);
 
   // PLR_FLAGS(ch).SetBit(PLR_NOT_YET_AUTHED);
