@@ -13,9 +13,6 @@ int get_deprecated_cybereye_essence_cost(struct obj_data *obj) {
 
   int essence_cost = 0;
 
-  // DEBUG
-  essence_cost += 20;
-
   if (IS_SET(GET_OBJ_VAL(obj, 3), EYE_CAMERA)) {
     essence_cost = 40;
   }
