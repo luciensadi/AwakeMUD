@@ -676,6 +676,12 @@ void reward(struct char_data *ch, struct char_data *johnson)
   end_quest(ch);
 }
 
+//Comparator function for sorting quest
+bool compareRep(const quest_entry &a, const quest_entry &b)
+{
+  return (a.rep < b.rep);
+}
+
 // New quest function builds a list of quests that exclude already
 //done, and outgrown, sorts it by reputation and returns the lowest
 //rep one first. It returns 0 if no more quests are available or -1 if
@@ -683,10 +689,7 @@ void reward(struct char_data *ch, struct char_data *johnson)
 int new_quest(struct char_data *mob, struct char_data *ch)
 {
   int i, num = 0;
-  struct quest_entry {
-      int index; 
-      int rep;
-  };
+  
   quest_entry temp_entry;
   std::vector<quest_entry> qlist; 
   
@@ -737,7 +740,7 @@ int new_quest(struct char_data *mob, struct char_data *ch)
   }
   // Sort vector by reputation and return a quest if vector is not empty.
   if (!qlist.empty()) {
-    sort(qlist.begin(), qlist.end(), [] (const quest_entry &a, const quest_entry &b) { return a.rep < b.rep; });
+    sort(qlist.begin(), qlist.end(), compareRep);
     return qlist[0].index;
   }
   
