@@ -34,7 +34,7 @@ void    send_to_veh(const char *messg, struct veh_data *veh, struct char_data *c
 void    send_to_outdoor(const char *messg);
 void    free_editing_structs(descriptor_data *d, int state);
 void    close_socket(struct descriptor_data *d);
-int     gettimeofday(struct timeval *t, struct timezone *dummy);
+// int     gettimeofday(struct timeval *t, struct timezone *dummy);
 
 const char *perform_act(const char *orig, struct char_data *ch, struct obj_data *obj,
                     void *vict_obj, struct char_data *to);
