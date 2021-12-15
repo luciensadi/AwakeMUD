@@ -39,6 +39,7 @@ extern void save_bullet_pants(struct char_data *ch);
 extern void load_bullet_pants(struct char_data *ch);
 extern void handle_weapon_attachments(struct obj_data *obj);
 extern int get_deprecated_cybereye_essence_cost(struct obj_data *obj);
+extern void price_cyber(struct obj_data *obj);
 
 void auto_repair_obj(struct obj_data *obj, const char *source);
 
@@ -2438,7 +2439,7 @@ void save_cyberware_to_db(struct char_data *player) {
 
 /* Because we've changed the essence cost of cybereyes, we need to refund the difference to people. */
 void fix_character_essence_after_cybereye_migration(struct char_data *ch) {
-  int old_essence_cost, essence_delta;
+  int old_essence_cost, new_essence_cost, essence_delta;
 
   // First, check for the flag. If it's set, we already did this-- skip.
   if (PLR_FLAGGED(ch, PLR_RECEIVED_CYBEREYE_ESSENCE_DELTA))
@@ -2448,11 +2449,20 @@ void fix_character_essence_after_cybereye_migration(struct char_data *ch) {
   {
     int total_essence_delta = 0;
 
+    struct obj_data fake_cyber;
+
     // Total up all the expected changes.
     for (struct obj_data *obj = ch->cyberware; obj; obj = obj->next_content) {
       if (GET_CYBERWARE_TYPE(obj) == CYB_EYES) {
+        // Construct a fake cyberware item, then price it. This gives us an item that reflects the new values.
+        GET_CYBERWARE_TYPE(&fake_cyber) = GET_CYBERWARE_TYPE(obj);
+        GET_CYBERWARE_FLAGS(&fake_cyber) = GET_CYBERWARE_FLAGS(obj);
+        GET_CYBERWARE_GRADE(&fake_cyber) = GET_CYBERWARE_GRADE(obj);
+        price_cyber(&fake_cyber);
+
         old_essence_cost = get_deprecated_cybereye_essence_cost(obj);
-        essence_delta = GET_CYBERWARE_ESSENCE_COST(obj) - old_essence_cost;
+        new_essence_cost = fake_cyber.obj_flags.value[4];
+        essence_delta = old_essence_cost - new_essence_cost;
         total_essence_delta += essence_delta;
       }
     }
@@ -2462,12 +2472,19 @@ void fix_character_essence_after_cybereye_migration(struct char_data *ch) {
 
     // If there's a remainder after essence hole, ensure it won't kill them or wipe their magic.
     if (total_essence_delta > 0) {
-      if (GET_REAL_ESS(ch) - total_essence_delta <= 0) {
-        mudlog("Refusing to perform cybereye rectification: it would put me below 0 essence!", ch, LOG_SYSLOG, TRUE);
+      if (GET_REAL_ESS(ch) + total_essence_delta > 600) {
+        mudlog("Refusing to perform cybereye rectification: it would put me above 6 essence!", ch, LOG_SYSLOG, TRUE);
         return;
       }
-      if (GET_TRADITION(ch) != TRAD_MUNDANE && GET_REAL_MAG(ch) - total_essence_delta < 100) {
+    }
+    else if (total_essence_delta < 0) {
+      if (GET_TRADITION(ch) != TRAD_MUNDANE && GET_REAL_MAG(ch) + total_essence_delta < 100) {
         mudlog("Refusing to perform cybereye rectification: it would put me below 1 magic!", ch, LOG_SYSLOG, TRUE);
+        return;
+      }
+
+      if (GET_REAL_ESS(ch) + total_essence_delta <= 0) {
+        mudlog("Refusing to perform cybereye rectification: it would put me at or below 0 essence!", ch, LOG_SYSLOG, TRUE);
         return;
       }
     }
@@ -2479,19 +2496,26 @@ void fix_character_essence_after_cybereye_migration(struct char_data *ch) {
 
     for (struct obj_data *obj = ch->cyberware; obj; obj = obj->next_content) {
       if (GET_CYBERWARE_TYPE(obj) == CYB_EYES) {
+        // Update the item.
+        price_cyber(obj);
+
+        // Calculate the old values and delta.
         old_essence_cost = get_deprecated_cybereye_essence_cost(obj);
-        essence_delta = GET_CYBERWARE_ESSENCE_COST(obj) - old_essence_cost;
+        new_essence_cost = GET_CYBERWARE_ESSENCE_COST(obj);
+        essence_delta = old_essence_cost - new_essence_cost;
 
         // If there are changes to make, write a log entry so we can trace things later.
         if (essence_delta != 0) {
-          snprintf(buf, sizeof(buf), "Processing %s's cybereye migration for %s (%ld).", GET_CHAR_NAME(ch), GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj));
+          snprintf(buf, sizeof(buf), "Processing %s's cybereye migration for %s (%ld): Delta %d.", GET_CHAR_NAME(ch), GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj), essence_delta);
           mudlog(buf, ch, LOG_SYSLOG, TRUE);
         } else {
+          snprintf(buf, sizeof(buf), "Processing %s's cybereye migration for %s (%ld): No delta.", GET_CHAR_NAME(ch), GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj));
+          mudlog(buf, ch, LOG_SYSLOG, TRUE);
           // Otherwise, just skip this one.
           continue;
         }
 
-        if (essence_delta < 0) {
+        if (essence_delta > 0) {
           // The new one costs less than the old one did. Refund the essence.
           total_essence_delta += essence_delta;
           GET_REAL_ESS(ch) += essence_delta;
@@ -2503,9 +2527,12 @@ void fix_character_essence_after_cybereye_migration(struct char_data *ch) {
           }
         }
 
-        else if (essence_delta > 0) {
+        else if (essence_delta < 0) {
           // The new one costs more than the old one did. Whoops...
           int ess_cost_after_esshole = 0;
+
+          // Make the delta positive for better readability.
+          essence_delta *= -1;
 
           // If their essence hole can cover it, deduct from that alone.
           if (GET_ESSHOLE(ch) >= essence_delta) {
@@ -2531,9 +2558,6 @@ void fix_character_essence_after_cybereye_migration(struct char_data *ch) {
             }
           }
         }
-
-        // True up so that if they sell this later, they don't end up with even more.
-        GET_CYBERWARE_ESSENCE_COST(obj) = old_essence_cost;
       }
     } /* end for loop */
 
