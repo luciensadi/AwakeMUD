@@ -366,7 +366,7 @@ enum {
 #define PRF_PKER                         11 /* is able to pk/be pked        */
 #define PRF_QUEST                        12 /* On quest        */
 #define PRF_AFK                          13 /* Afk   */
-#define PRF_UNUSED1_PLS_REPLACE          14 /* EMPTY SPACE, FILL ME! */
+#define PRF_SUPPRESS_STAFF_RADIO         14 /* EMPTY SPACE, FILL ME! */
 #define PRF_UNUSED2_PLS_REPLACE          15 /* EMPTY SPACE, FILL ME!        15 */
 #define PRF_NOHASSLE                     16 /* Aggr mobs won't attack  */
 #define PRF_ROOMFLAGS                    17 /* Can see room flags (ROOM_x) */

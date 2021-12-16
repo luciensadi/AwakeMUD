@@ -1142,7 +1142,9 @@ const char *tog_messages[][2] = {
                             {"Player cyberdocs are no longer able to operate on you.\r\n",
                              "Player cyberdocs are now able to operate on you. This flag will be un-set after each operation.\r\n"},
                             {"You will no longer void on idle out. This means you are vulnerable, you have been warned.\r\n",
-                             "You will return to the void when idle.\r\n"}
+                             "You will return to the void when idle.\r\n"},
+                            {"You un-squelch your staff radio powers: You no longer require a radio to hear broadcasts, and will hear any language.\r\n",
+                             "You squelch your staff radio listening powers: You now require a radio, and your language skills are suppressed.\r\n"}
                           };
 
 ACMD(do_toggle)
@@ -1162,7 +1164,7 @@ ACMD(do_toggle)
       int printed = 0;
     for (int i = 0; i < PRF_MAX; i++) {
       // Skip the unused holes in our preferences.
-      if (i == PRF_UNUSED1_PLS_REPLACE || i == PRF_UNUSED2_PLS_REPLACE) {
+      if (i == PRF_UNUSED2_PLS_REPLACE) {
         continue;
       }
 
@@ -1357,6 +1359,9 @@ ACMD(do_toggle)
     } else if (is_abbrev(argument, "voiding") || is_abbrev(argument, "no void on idle")) {
       result = PRF_TOG_CHK(ch, PRF_NO_VOID_ON_IDLE);
       mode = 39;
+    } else if (IS_SENATOR(ch) && (is_abbrev(argument, "staffradio") || is_abbrev(argument, "suppress staff radio"))) {
+      result = PRF_TOG_CHK(ch, PRF_SUPPRESS_STAFF_RADIO);
+      mode = 40;
     } else {
       send_to_char("That is not a valid toggle option.\r\n", ch);
       return;

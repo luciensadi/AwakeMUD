@@ -2473,18 +2473,21 @@ void fix_character_essence_after_cybereye_migration(struct char_data *ch) {
     // If there's a remainder after essence hole, ensure it won't kill them or wipe their magic.
     if (total_essence_delta > 0) {
       if (GET_REAL_ESS(ch) + total_essence_delta > 600) {
-        mudlog("Refusing to perform cybereye rectification: it would put me above 6 essence!", ch, LOG_SYSLOG, TRUE);
+        snprintf(buf, sizeof(buf), "%s refusing to perform cybereye rectification: it would put me above 6 essence!", capitalize(GET_CHAR_NAME(ch)));
+        mudlog(buf, ch, LOG_SYSLOG, TRUE);
         return;
       }
     }
     else if (total_essence_delta < 0) {
       if (GET_TRADITION(ch) != TRAD_MUNDANE && GET_REAL_MAG(ch) + total_essence_delta < 100) {
-        mudlog("Refusing to perform cybereye rectification: it would put me below 1 magic!", ch, LOG_SYSLOG, TRUE);
+        snprintf(buf, sizeof(buf), "%s refusing to perform cybereye rectification: it would put me below 1 magic!", capitalize(GET_CHAR_NAME(ch)));
+        mudlog(buf, ch, LOG_SYSLOG, TRUE);
         return;
       }
 
       if (GET_REAL_ESS(ch) + total_essence_delta <= 0) {
-        mudlog("Refusing to perform cybereye rectification: it would put me at or below 0 essence!", ch, LOG_SYSLOG, TRUE);
+        snprintf(buf, sizeof(buf), "%s refusing to perform cybereye rectification: it would put me at or below 0 essence!", capitalize(GET_CHAR_NAME(ch)));
+        mudlog(buf, ch, LOG_SYSLOG, TRUE);
         return;
       }
     }
