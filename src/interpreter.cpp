@@ -3181,6 +3181,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("pick", "bypass");
   COMMAND_ALIAS("hack", "bypass");
   COMMAND_ALIAS("poen", "open");
+  COMMAND_ALIAS("oepn", "open");
 
   // Must be after 'pick'
   COMMAND_ALIAS("pickup", "get");
@@ -3220,6 +3221,8 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("powers", "abilities");
 
   COMMAND_ALIAS("scna", "scan");
+  COMMAND_ALIAS("sacn", "scan");
+  COMMAND_ALIAS("sya", "say");
 
   COMMAND_ALIAS("speak", "language");
 
