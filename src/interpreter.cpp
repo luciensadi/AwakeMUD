@@ -550,7 +550,7 @@ struct command_info cmd_info[] =
     { "eat"        , POS_RESTING , do_eat      , 0, SCMD_EAT, FALSE },
     { "echo"       , POS_SLEEPING, do_new_echo , 0, SCMD_ECHO, FALSE },
     { "eject"      , POS_RESTING , do_eject    , 0, 0, FALSE },
-    { "elemental"  , POS_DEAD    , do_elemental, 0, 0, FALSE },
+    { "elementals" , POS_DEAD    , do_elemental, 0, 0, FALSE },
     { "emote"      , POS_LYING   , do_new_echo , 0, SCMD_EMOTE, FALSE },
     { ":"          , POS_LYING   , do_new_echo , 0, SCMD_EMOTE, FALSE },
     { "enter"      , POS_SITTING , do_enter    , 0, 0, FALSE },
