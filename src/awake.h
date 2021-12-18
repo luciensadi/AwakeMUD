@@ -2101,7 +2101,7 @@ enum {
 #define SERIOUS         3
 #define DEADLY          4
 
-#define QUEST_TIMER  15
+#define QUEST_TIMER  25
 
 #define OPT_USEC                  100000  /* 10 passes per second */
 #define PASSES_PER_SEC            (1000000 / OPT_USEC)
