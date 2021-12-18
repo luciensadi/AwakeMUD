@@ -78,6 +78,11 @@ struct quest_data
 }
 ;
 
+struct quest_entry {
+      int index; 
+      int rep;
+  };
+
 #define CMD_JOB_NONE  0
 #define CMD_JOB_QUIT  1
 #define CMD_JOB_DONE  2

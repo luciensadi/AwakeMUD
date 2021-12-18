@@ -56,7 +56,7 @@ extern void restore_character(struct char_data *vict, bool reset_staff_stats);
 bool memory(struct char_data *ch, struct char_data *vict);
 extern void do_probe_veh(struct char_data *ch, struct veh_data * k);
 extern int get_paydata_market_minimum(int host_color);
-extern void new_quest(struct char_data *mob, bool force_assignation=FALSE);
+extern int new_quest(struct char_data *mob, struct char_data *ch);
 extern unsigned int get_johnson_overall_max_rep(struct char_data *johnson);
 extern unsigned int get_johnson_overall_min_rep(struct char_data *johnson);
 extern bool uninstall_ware_from_target_character(struct obj_data *obj, struct char_data *remover, struct char_data *victim, bool damage_on_operation);
@@ -3985,8 +3985,8 @@ SPECIAL(quest_debug_scanner)
       snprintf(buf, sizeof(buf), "NPC %s's quest-related information:\r\n", GET_CHAR_NAME(to));
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Overall max rep: %d, overall min rep: %d\r\n",
               get_johnson_overall_max_rep(to), get_johnson_overall_min_rep(to));
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "SPARE1: %ld, SPARE2: %ld (corresponds to quest vnum %ld)\r\n",
-              GET_SPARE1(to), GET_SPARE2(to), GET_SPARE2(to) ? quest_table[GET_SPARE2(to)].vnum : -1);
+     //Remember to add here a list of all quests assigned to this johnson -- Nodens
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "SPARE1: %ld\r\n", GET_SPARE1(to));
       strcat(buf, "NPC's mob memory records hold the following character IDs: \r\n");
       for (memory_rec *tmp = GET_MOB_MEMORY(to); tmp; tmp = tmp->next)
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %ld\r\n", tmp->id);
@@ -4042,7 +4042,8 @@ SPECIAL(quest_debug_scanner)
 
     return TRUE;
   }
-
+  // This is not needed currently. But keeping it in so that I remember to repurpose it -- Nodens
+  /*
   if (CMD_IS("reload")) {
     skip_spaces(&argument);
     if (!*argument) {
@@ -4068,9 +4069,9 @@ SPECIAL(quest_debug_scanner)
 
       act("You roughly slap $N and demand $E pick a new random quest to offer.", FALSE, ch, 0, to, TO_CHAR);
       act("$n roughly slaps $N and demands that $E pick a new random quest to offer.", FALSE, ch, 0, to, TO_ROOM);
-      new_quest(to);
+      //new_quest(to);
       GET_SPARE1(to) = -1;
-      send_to_char(ch, "Now offering quest %ld.", GET_SPARE2(to) ? quest_table[GET_SPARE2(to)].vnum : -1);
+      //send_to_char(ch, "Now offering quest %ld.", GET_SPARE2(to) ? quest_table[GET_SPARE2(to)].vnum : -1);
 
       return TRUE;
     }
@@ -4078,7 +4079,7 @@ SPECIAL(quest_debug_scanner)
     send_to_char(ch, "You can only do that on NPCs, and %s doesn't qualify.\r\n", GET_CHAR_NAME(to));
     return TRUE;
   }
-
+*/
   return FALSE;
 }
 
