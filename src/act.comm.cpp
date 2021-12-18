@@ -854,27 +854,34 @@ ACMD(do_broadcast)
   else
     crypt = 0;
 
-  char untouched_message[MAX_STRING_LENGTH];
+  char untouched_message[MAX_STRING_LENGTH], capitalized_and_punctuated[MAX_STRING_LENGTH];
+  snprintf(capitalized_and_punctuated, sizeof(capitalized_and_punctuated), "%s%s", capitalize(argument), ispunct(get_final_character_from_string(argument)) ? "" : ".");
   if (frequency > 0) {
     if (crypt)
-      snprintf(untouched_message, sizeof(untouched_message), "^y\\%s^y/[%d MHz, %s](CRYPTO-%d): %s%s^N", voice, frequency, skills[language].name, crypt, capitalize(argument), ispunct(get_final_character_from_string(argument)) ? "" : ".");
+      snprintf(untouched_message, sizeof(untouched_message), "^y\\%s^y/[%d MHz, %s](CRYPTO-%d): %s^N", voice, frequency, skills[language].name, crypt, capitalized_and_punctuated);
     else
-      snprintf(untouched_message, sizeof(untouched_message), "^y\\%s^y/[%d MHz, %s]: %s%s^N", voice, frequency, skills[language].name, capitalize(argument), ispunct(get_final_character_from_string(argument)) ? "" : ".");
+      snprintf(untouched_message, sizeof(untouched_message), "^y\\%s^y/[%d MHz, %s]: %s^N", voice, frequency, skills[language].name, capitalized_and_punctuated);
   } else {
     if (crypt)
-      snprintf(untouched_message, sizeof(untouched_message), "^y\\%s^y/[All Frequencies, %s](CRYPTO-%d): %s%s^N", voice, skills[language].name, crypt, capitalize(argument), ispunct(get_final_character_from_string(argument)) ? "" : ".");
+      snprintf(untouched_message, sizeof(untouched_message), "^y\\%s^y/[All Frequencies, %s](CRYPTO-%d): %s^N", voice, skills[language].name, crypt, capitalized_and_punctuated);
     else
-      snprintf(untouched_message, sizeof(untouched_message), "^y\\%s^y/[All Frequencies, %s]: %s%s^N",
-               voice,
-               skills[language].name,
-               capitalize(argument),
-               ispunct(get_final_character_from_string(argument)) ? "" : ".");
+      snprintf(untouched_message, sizeof(untouched_message), "^y\\%s^y/[All Frequencies, %s]: %s^N", voice, skills[language].name, capitalized_and_punctuated);
   }
 
   if (PRF_FLAGGED(ch, PRF_NOREPEAT))
     send_to_char(OK, ch);
   else
     store_message_to_history(ch->desc, COMM_CHANNEL_RADIO, act(untouched_message, FALSE, ch, 0, 0, TO_CHAR));
+
+  char radlog_string[MAX_STRING_LENGTH];
+  snprintf(radlog_string, sizeof(radlog_string), "%s (%d MHz, crypt %d, in %s): %s^N",
+           GET_CHAR_NAME(ch),
+           frequency,
+           crypt,
+           skills[language].name,
+           capitalized_and_punctuated
+          );
+  mudlog(radlog_string, NULL, LOG_RADLOG, TRUE);
 
   if (!ROOM_FLAGGED(get_ch_in_room(ch), ROOM_SOUNDPROOF)) {
     for (d = descriptor_list; d; d = d->next) {

@@ -589,6 +589,7 @@ struct preference_bit_struct preference_bits_v2[] = {
   { "No Idle Nuyen Line"   , FALSE, TRUE  },
   { "Cyberdocs Allowed"    , FALSE, TRUE  },
   { "No Void on Idle"      , FALSE, TRUE  },
+  { "RadLog"               , TRUE , TRUE  },
   { "\n"                   , 0    , 0     }
 };
 
@@ -652,6 +653,8 @@ const char *preference_bits[] =
     "!PSEUDOLANGUAGE",
     "!IDLE_NUYEN_REWARD_MESSAGE",
     "CYBERDOC_PERMITTED",
+    "NO_VOID",
+    "RADLOG",
     "\n"
   };
 
@@ -1152,6 +1155,7 @@ const char *log_types[] =
     "PURGELOG",
     "FUCKUPLOG",
     "ECONLOG",
+    "RADLOG",
     "\n"
   };
 

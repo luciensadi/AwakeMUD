@@ -410,7 +410,8 @@ enum {
 #define PRF_NO_IDLE_NUYEN_REWARD_MESSAGE 55
 #define PRF_TOUCH_ME_DADDY               56 /* Allows player cyberdocs to operate on you. Don't @ me. */
 #define PRF_NO_VOID_ON_IDLE              57
-#define PRF_MAX                          58
+#define PRF_RADLOG                       58
+#define PRF_MAX                          59
 
 /* log watch */
 
@@ -431,7 +432,8 @@ enum {
 #define LOG_PURGELOG       13
 #define LOG_FUCKUPLOG      14
 #define LOG_ECONLOG        15
-#define NUM_LOGS           16
+#define LOG_RADLOG         16
+#define NUM_LOGS           17
 
 /* player conditions */
 
