@@ -142,15 +142,15 @@ void pedit_parse(struct descriptor_data *d, const char *arg)
       return;
     }
     if (length_with_no_color >= LINE_LENGTH) {
-        send_to_char(CH, "That name is too long, please shorten it. The maximum length after color code removal is %d characters.\r\n", LINE_LENGTH - 1);
-        pedit_disp_menu(d);
-        return;
+      send_to_char(CH, "That name is too long, please shorten it. The maximum length after color code removal is %d characters.\r\n", LINE_LENGTH - 1);
+      pedit_disp_menu(d);
+      return;
     }
   
     if (strlen(arg) >= MAX_RESTRING_LENGTH) {
-        send_to_char(CH, "That restring is too long, please shorten it. The maximum length with color codes included is %d characters.\r\n", MAX_RESTRING_LENGTH - 1);
-        pedit_disp_menu(d);
-        return;
+      send_to_char(CH, "That restring is too long, please shorten it. The maximum length with color codes included is %d characters.\r\n", MAX_RESTRING_LENGTH - 1);
+      pedit_disp_menu(d);
+      return;
     }
 
     DELETE_ARRAY_IF_EXTANT(d->edit_obj->restring);
