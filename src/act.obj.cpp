@@ -48,6 +48,8 @@ void calc_weight(struct char_data *ch);
 
 SPECIAL(weapon_dominator);
 
+extern WSPEC(monowhip);
+
 int wear_bitvectors[] = {
                           ITEM_WEAR_TAKE, ITEM_WEAR_HEAD, ITEM_WEAR_EYES, ITEM_WEAR_EAR,
                           ITEM_WEAR_EAR, ITEM_WEAR_FACE, ITEM_WEAR_NECK, ITEM_WEAR_NECK,
@@ -3448,6 +3450,12 @@ int draw_weapon(struct char_data *ch)
 {
   struct obj_data *potential_holster, *obj;
   int i = 0;
+  
+  //Look in fingertip first to get it out of the way.
+  //At some point we need to write a mechanism to select what is drawn automatically -- Nodens
+  for (potential_holster = ch->cyberware; potential_holster; potential_holster = potential_holster->next_content)
+    if (GET_OBJ_VAL(potential_holster, 0) == CYB_FINGERTIP && GET_HOLSTER_READY_STATUS(potential_holster))
+      i += draw_from_readied_holster(ch, potential_holster);
 
   // Go through all the wearslots, provided that the character is not already wielding & holding things.
   for (int x = 0; x < NUM_WEARS && (!GET_EQ(ch, WEAR_WIELD) || !GET_EQ(ch, WEAR_HOLD)); x++) {
@@ -3496,6 +3504,13 @@ bool holster_can_fit(struct obj_data *holster, struct obj_data *weapon) {
 }
 
 struct obj_data *find_holster_that_fits_weapon(struct char_data *ch, struct obj_data *weapon) {
+  //If the weapon is a monowhip see if we have a fingertip compartment and it's not currently full
+  if (obj_index[GET_OBJ_RNUM(weapon)].wfunc == monowhip) {
+    struct obj_data *cont;
+    for (cont = ch->cyberware; cont; cont = cont->next_content)
+      if (GET_OBJ_VAL(cont, 0) == CYB_FINGERTIP && !cont->contains)
+        return cont;
+  }
   // Look at their worn items. We exclude inventory here.
   for (int x = 0; x < NUM_WEARS; x++) {
     // Is it a holster?
@@ -3584,7 +3599,7 @@ ACMD(do_holster)
     send_to_char(ch, "%s is not a holsterable weapon.\r\n", capitalize(GET_OBJ_NAME(obj)));
     return;
   }
-  if (GET_OBJ_TYPE(cont) != ITEM_HOLSTER) {
+  if (GET_OBJ_TYPE(cont) != ITEM_HOLSTER && (GET_OBJ_TYPE(cont) == ITEM_CYBERWARE && GET_OBJ_VAL(cont, 0) != CYB_FINGERTIP)) {
     send_to_char(ch, "%s is not a holster.\r\n", capitalize(GET_OBJ_NAME(cont)));
     return;
   }
@@ -3595,25 +3610,28 @@ ACMD(do_holster)
 
   const char *madefor = "<error, report to staff>";
   
-  if (!holster_can_fit(cont, obj))
-    dontfit++;
+  if (GET_OBJ_TYPE(cont) == ITEM_CYBERWARE && GET_OBJ_VAL(cont, 0) == CYB_FINGERTIP)
+    madefor = "monowhips";
+  else {
+    if (!holster_can_fit(cont, obj))
+      dontfit++;
     
-  switch (GET_HOLSTER_TYPE(cont)) {
-    case HOLSTER_TYPE_SMALL_GUNS:
-      madefor = "pistols and SMGs";
-      break;
-    case HOLSTER_TYPE_MELEE_WEAPONS:
-      madefor = "melee weapons";
-      break;
-    case HOLSTER_TYPE_LARGE_GUNS:
-      madefor = "rifles and other longarms";
-      break;
+    switch (GET_HOLSTER_TYPE(cont)) {
+      case HOLSTER_TYPE_SMALL_GUNS:
+        madefor = "pistols and SMGs";
+        break;
+      case HOLSTER_TYPE_MELEE_WEAPONS:
+        madefor = "melee weapons";
+        break;
+      case HOLSTER_TYPE_LARGE_GUNS:
+        madefor = "rifles and other longarms";
+        break;
+    }
+    if (dontfit) {
+      send_to_char(ch, "%s is made for %s, so %s won't fit in it.\r\n", capitalize(GET_OBJ_NAME(cont)), madefor, decapitalize_a_an(GET_OBJ_NAME(obj)));
+      return;
+    }
   }
-  if (dontfit) {
-    send_to_char(ch, "%s is made for %s, so %s won't fit in it.\r\n", capitalize(GET_OBJ_NAME(cont)), madefor, decapitalize_a_an(GET_OBJ_NAME(obj)));
-    return;
-  }
-  
   if (GET_OBJ_SPEC(obj) == weapon_dominator) {
     dominator_mode_switch(ch, obj, DOMINATOR_MODE_PARALYZER);
   }
@@ -3631,7 +3649,7 @@ ACMD(do_holster)
 
 ACMD(do_ready)
 {
-  struct obj_data *obj;
+  struct obj_data *obj, *finger;
   struct char_data *tmp_char;
   int num = 0;
 
@@ -3641,12 +3659,17 @@ ACMD(do_ready)
     send_to_char(ch, "You have to ready something.\r\n");
     return;
   }
-
-  if (!(generic_find(buf, FIND_OBJ_EQUIP, ch, &tmp_char, &obj))) {
-    send_to_char(ch, "You don't seem to be using %s %s.\r\n", AN(argument), argument);
-    return;
+  
+  //If we have a fingertip compartment that matches the argument, set our object to that.
+  if ((finger = get_obj_in_list_vis(ch, buf, ch->cyberware)) && GET_OBJ_VAL(finger, 0) == CYB_FINGERTIP)
+    obj = finger;
+  else {
+    if (!(generic_find(buf, FIND_OBJ_EQUIP, ch, &tmp_char, &obj))) {
+      send_to_char(ch, "You don't seem to be using %s %s.\r\n", AN(argument), argument);
+      return;
+    }
   }
-  if (GET_OBJ_TYPE(obj) != ITEM_HOLSTER) {
+  if (GET_OBJ_TYPE(obj) != ITEM_HOLSTER && (GET_OBJ_TYPE(obj) == ITEM_CYBERWARE && GET_OBJ_VAL(obj, 0) != CYB_FINGERTIP)) {
     send_to_char(ch, "%s is not a weapons holster.\r\n", capitalize(GET_OBJ_NAME(obj)));
     return;
   }
@@ -3659,6 +3682,11 @@ ACMD(do_ready)
     GET_HOLSTER_READY_STATUS(obj) = 0;
     return;
   } else {
+    //Check if we have any fingertip compartments that are readied
+    for (struct obj_data *cyber = ch->cyberware; cyber; cyber = cyber->next_content)
+      if (GET_OBJ_VAL(cyber, 0) == CYB_FINGERTIP && GET_HOLSTER_READY_STATUS(cyber))
+        num++;
+
     for (int i = 0; i < NUM_WEARS; i++)
       if (GET_EQ(ch, i)) {
         if (GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_HOLSTER && GET_HOLSTER_READY_STATUS(GET_EQ(ch, i)) > 0)
