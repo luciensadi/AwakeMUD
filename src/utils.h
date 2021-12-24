@@ -106,6 +106,7 @@ struct  obj_data *get_obj_proto_for_vnum(vnum_t vnum);
 void    set_natural_vision_for_race(struct char_data *ch);
 int     get_string_length_after_color_code_removal(const char *str, struct char_data *ch_to_notify_of_failure_reason);
 char *  get_string_after_color_code_removal(const char *str, struct char_data *ch);
+int count_color_codes_in_string(const char *str) ;
 bool    npc_is_protected_by_spec(struct char_data *npc);
 bool    can_damage_vehicle(struct char_data *ch, struct veh_data *veh);
 char *  compose_spell_name(int type, int subtype = -1);

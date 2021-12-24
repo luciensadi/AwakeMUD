@@ -922,9 +922,6 @@ void mudlog(const char *str, struct char_data *ch, int log, bool file)
         case LOG_ECONLOG:
           check_log = PRF_ECONLOG;
           break;
-        case LOG_RADLOG:
-          check_log = PRF_RADLOG;
-          break;
         default:
           char errbuf[500];
           snprintf(errbuf, sizeof(errbuf), "SYSERR: Attempting to display a message to log type %d, but that log type is not handled in utils.cpp's mudlog() function! Dumping to SYSLOG.", log);
@@ -3794,6 +3791,41 @@ char* get_string_after_color_code_removal(const char *str, struct char_data *ch)
     }
   }
   return  clearstr;
+}
+
+// Returns the amount of color codes in a string.
+int count_color_codes_in_string(const char *str) {
+  const char *ptr = str;
+  long ptr_max = strlen(str) - 1;
+
+  int sum = 0;
+  int pos = 0;
+
+  while (*ptr && (ptr - str) <= ptr_max) {
+    if (*ptr == '^') {
+      // Parse a single ^ character.
+      if (*(ptr+1) == '^') {
+        sum++;
+        ptr += 2;
+        continue;
+      }
+      // Count color codes.
+      // There are two types of color: Two-character tags (^g) and xterm tags (^[F123]). We must account for both.
+      // 7 for xterm tags 2 for regular tags
+      else if (*(ptr+1) == '[') {
+          ptr  += 7;
+          sum += 7;
+      }
+      else {
+        ptr += 2;
+        sum += 2;
+      }
+    }
+    //Clear character, save it.
+    else
+      ptr += 1;
+  }
+  return  sum;
 }
 
 #define CHECK_FUNC_AND_SFUNC_FOR(function) (mob_index[GET_MOB_RNUM(npc)].func == (function) || mob_index[GET_MOB_RNUM(npc)].sfunc == (function))
