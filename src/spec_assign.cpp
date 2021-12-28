@@ -916,6 +916,7 @@ void assign_objects(void)
   // ASSIGNOBJ(10036, restoration_button);
   ASSIGNOBJ(39799, bank);
   ASSIGNOBJ(60620, bank); // Neophyte ATM
+  ASSIGNOBJ(94329, bank); // NERPcropolis ATM
   ASSIGNOBJ(6997, nerpcorpolis_button);
   ASSIGNOBJ(16298, floor_usable_radio);
 #endif
