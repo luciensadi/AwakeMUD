@@ -1176,7 +1176,7 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
             // If the attacker dies from backlash, bail out.
             if (damage(attacker, attacker, dam_total, TYPE_RECOIL, PHYSICAL)) {
               
-              //Handle suprise attack/alertness here -- attacker didn't die.
+              //Handle suprise attack/alertness here -- attacker died.
               if (IS_NPC(def->ch) && AFF_FLAGGED(def->ch, AFF_SURPRISE))
                 AFF_FLAGS(def->ch).RemoveBit(AFF_SURPRISE);
               if (IS_NPC(def->ch)) {
