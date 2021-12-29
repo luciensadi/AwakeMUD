@@ -785,6 +785,13 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       
       combat_message(att->ch, def->ch, att->weapon, -1, att->ranged->burst_count);
       damage(att->ch, def->ch, -1, att->ranged->dam_type, 0);
+      
+      //Handle suprise attack/alertness here -- ranged attack failed.
+      if (AFF_FLAGGED(def->ch, AFF_SURPRISE))
+        AFF_FLAGS(def->ch).RemoveBit(AFF_SURPRISE);
+           
+      GET_MOBALERT(def->ch) = MALERT_ALERT;
+      GET_MOBALERTTIME(def->ch) = 20;
       return;
     }
     
@@ -834,6 +841,13 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     if (IS_SPIRIT(def->ch) || IS_ELEMENTAL(def->ch)) {
       if (att->ranged->power <= GET_LEVEL(def->ch) * 2) {
         damage(att->ch, def->ch, 0, att->ranged->dam_type, att->ranged->is_physical);
+        
+        //Handle suprise attack/alertness here -- spirits ranged.
+         if (AFF_FLAGGED(def->ch, AFF_SURPRISE))
+           AFF_FLAGS(def->ch).RemoveBit(AFF_SURPRISE);
+           
+        GET_MOBALERT(def->ch) = MALERT_ALERT;
+        GET_MOBALERTTIME(def->ch) = 20;
         return;
       } else
         att->ranged->power -= GET_LEVEL(def->ch) * 2;
@@ -1061,6 +1075,13 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     if (IS_SPIRIT(def->ch) || IS_ELEMENTAL(def->ch)) {
       if (att->melee->power <= GET_LEVEL(def->ch) * 2) {
         damage(att->ch, def->ch, 0, att->melee->dam_type, att->melee->is_physical);
+        
+        //Handle suprise attack/alertness here -- spirits melee.
+         if (AFF_FLAGGED(def->ch, AFF_SURPRISE))
+           AFF_FLAGS(def->ch).RemoveBit(AFF_SURPRISE);
+
+        GET_MOBALERT(def->ch) = MALERT_ALERT;
+        GET_MOBALERTTIME(def->ch) = 20;
         return;
       } else {
         att->melee->power -= GET_LEVEL(def->ch) * 2;
@@ -1153,10 +1174,26 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
             int dam_total = convert_damage(stage(-1 * success_test(GET_BOD(attacker) + (successes == 0 ? GET_DEFENSE(attacker) : 0), 10), SERIOUS));
             
             // If the attacker dies from backlash, bail out.
-            if (damage(attacker, attacker, dam_total, TYPE_RECOIL, PHYSICAL))
+            if (damage(attacker, attacker, dam_total, TYPE_RECOIL, PHYSICAL)) {
+              
+              //Handle suprise attack/alertness here -- attacker didn't die.
+              if (IS_NPC(def->ch) && AFF_FLAGGED(def->ch, AFF_SURPRISE))
+                AFF_FLAGS(def->ch).RemoveBit(AFF_SURPRISE);
+              if (IS_NPC(def->ch)) {
+                GET_MOBALERT(def->ch) = MALERT_CALM;
+                GET_MOBALERTTIME(def->ch) = 0;
+              }
               return;
+            }
           }
         }
+      }
+      //Handle suprise attack/alertness here -- defender didn't die.
+      if (IS_NPC(def->ch) && AFF_FLAGGED(def->ch, AFF_SURPRISE))
+        AFF_FLAGS(def->ch).RemoveBit(AFF_SURPRISE);
+      if (IS_NPC(def->ch)) {
+        GET_MOBALERT(def->ch) = MALERT_ALERT;
+        GET_MOBALERTTIME(def->ch) = 20;
       }
     }
   }
@@ -1188,8 +1225,17 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );
     
     // If the attacker dies from recoil, bail out.
-    if (damage(att->ch, att->ch, convert_damage(staged_dam), TYPE_HIT, FALSE))
+    if (damage(att->ch, att->ch, convert_damage(staged_dam), TYPE_HIT, FALSE)) {
+      
+      //Handle suprise attack/alertness here -- attacker died from recoil.
+      if (IS_NPC(def->ch) && AFF_FLAGGED(def->ch, AFF_SURPRISE))
+        AFF_FLAGS(def->ch).RemoveBit(AFF_SURPRISE);
+      if (IS_NPC(def->ch)) {
+        GET_MOBALERT(def->ch) = MALERT_CALM;
+        GET_MOBALERTTIME(def->ch) = 0;
+      }
       return;
+    }
   }
   
   // Set the violence background count.
