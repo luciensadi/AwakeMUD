@@ -304,7 +304,7 @@ void validate_in_obj_pointers(struct obj_data *obj, struct obj_data *in_obj) {
   }
 }
 
-#define PRINT_TO_FILE_IF_CHANGED(sectname, obj_val, proto_val) { \
+#define APPEND_IF_CHANGED(sectname, obj_val, proto_val) { \
   if (obj_val != proto_val)                                        \
     obj_string_buf << (sectname) << (obj_val) << "\n";                            \
 }
@@ -377,11 +377,11 @@ void House_save(struct house_control_rec *house, const char *file_name, long rnu
           if (GET_OBJ_VAL(obj, x) != GET_OBJ_VAL(prototype, x))
             obj_string_buf << "\t\tValue "<< x <<":\t" << GET_OBJ_VAL(obj, x) <<"\n";
             
-      PRINT_TO_FILE_IF_CHANGED("\t\tCondition:\t", GET_OBJ_CONDITION(obj), GET_OBJ_CONDITION(prototype));
-      PRINT_TO_FILE_IF_CHANGED("\t\tTimer:\t", GET_OBJ_TIMER(obj), GET_OBJ_TIMER(prototype));
-      PRINT_TO_FILE_IF_CHANGED("\t\tAttempt:\t", GET_OBJ_ATTEMPT(obj), 0);
+      APPEND_IF_CHANGED("\t\tCondition:\t", GET_OBJ_CONDITION(obj), GET_OBJ_CONDITION(prototype));
+      APPEND_IF_CHANGED("\t\tTimer:\t", GET_OBJ_TIMER(obj), GET_OBJ_TIMER(prototype));
+      APPEND_IF_CHANGED("\t\tAttempt:\t", GET_OBJ_ATTEMPT(obj), 0);
       obj_string_buf << "\t\tCost:\t"<< GET_OBJ_COST(obj) << "\n";
-      PRINT_TO_FILE_IF_CHANGED("\t\tExtraFlags:\t", GET_OBJ_EXTRA(obj).ToString(), GET_OBJ_EXTRA(prototype).ToString());
+      APPEND_IF_CHANGED("\t\tExtraFlags:\t", GET_OBJ_EXTRA(obj).ToString(), GET_OBJ_EXTRA(prototype).ToString());
       if (obj->restring)
         obj_string_buf << "\t\tName:\t" << obj->restring << "\n";
       if (obj->photo)
@@ -435,7 +435,7 @@ void House_save(struct house_control_rec *house, const char *file_name, long rnu
   fclose(fl);
 }
 #undef FILEBUF_SIZE
-#undef PRINT_TO_FILE_IF_CHANGED
+#undef APPEND_IF_CHANGED
 
 struct house_control_rec *find_house(vnum_t vnum)
 {
