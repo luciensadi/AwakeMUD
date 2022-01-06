@@ -8,6 +8,9 @@
 #include <string.h>
 #include <ctype.h>
 #include <time.h>
+#include <vector>
+#include <utility>
+#include <algorithm>
 #include <mysql/mysql.h>
 
 #include "structs.h"
@@ -54,6 +57,22 @@ void save_aliases_to_db(struct char_data *player);
 void save_bioware_to_db(struct char_data *player);
 void save_cyberware_to_db(struct char_data *player);
 void fix_character_essence_after_cybereye_migration(struct char_data *ch);
+
+// Struct for preserving order of objects.
+struct nested_obj {
+      int level; 
+      struct obj_data* obj;
+};
+// Comparator for preserving order of objects.
+struct find_level
+{
+    int level;
+    find_level(int level) : level(level) {}
+    bool operator () ( const nested_obj& o ) const
+    {
+        return o.level == level;
+    }
+};
 
 // ____________________________________________________________________________
 //
@@ -716,9 +735,11 @@ bool load_char(const char *name, char_data *ch, bool logon)
   mysql_free_result(res);
 
   {
-    struct obj_data *obj, *last_obj = NULL;
-    int vnum = 0, last_in = 0, inside = 0;
-    snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_cyberware WHERE idnum=%ld ORDER BY posi;", GET_IDNUM(ch));
+    struct obj_data *obj = NULL;
+    int vnum = 0, last_inside = 0, inside = 0;
+    std::vector<nested_obj> contained_obj;
+    struct nested_obj contained_obj_entry;
+    snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_cyberware WHERE idnum=%ld ORDER BY posi DESC;", GET_IDNUM(ch));
     mysql_wrapper(mysql, buf);
     snprintf(buf3, sizeof(buf3), "pfiles_cyberware load for %s (%ld)", GET_CHAR_NAME(ch), GET_IDNUM(ch));
     res = mysql_use_result(mysql);
@@ -740,27 +761,55 @@ bool load_char(const char *name, char_data *ch, bool logon)
 
         auto_repair_obj(obj, buf3);
 
-        if (inside > 0) {
-          if (inside == last_in)
-            last_obj = last_obj->in_obj;
-          else if (inside < last_in)
-            while (inside <= last_in && last_obj) {
-              last_obj = last_obj->in_obj;
-              last_in--;
+        // Since we're now reading rows from the db in reverse order, in order to fix the stupid reordering on
+        // every binary execution, the previous algorithm did not work, as it relied on getting the container obj
+        // first and place subsequent objects in it. Since we're now getting it last, and more importantly we get
+        // objects at deeper nesting level in between our list, we save all pointers to objects along with their
+        // nesting level in a vector container and once we found the next container (inside < last_inside) we
+        // move the objects with higher nesting level to container and proceed. This works for any nesting depth.
+        if (inside > 0 || (inside == 0 && inside < last_inside)) {
+          //Found our container?
+          if (inside < last_inside) {
+            if (inside == 0)
+              obj_to_cyberware(obj, ch);
+              
+            auto it = std::find_if(contained_obj.begin(), contained_obj.end(), find_level(inside+1));
+            while (it != contained_obj.end()) {
+              obj_to_obj(it->obj, obj);
+              contained_obj.erase(it);
             }
-          if (last_obj)
-            obj_to_obj(obj, last_obj);
-        } else obj_to_cyberware(obj, ch);
-        last_in = inside;
-        last_obj = obj;
+              
+            if (inside > 0) {
+              contained_obj_entry.level = inside;
+              contained_obj_entry.obj = obj;
+              contained_obj.push_back(contained_obj_entry);
+            }
+          }
+          else {
+            contained_obj_entry.level = inside;
+            contained_obj_entry.obj = obj;
+            contained_obj.push_back(contained_obj_entry);
+          }
+          last_inside = inside;
+        } else
+          obj_to_cyberware(obj, ch);
+          
+        last_inside = inside;
       }
+    }
+    //Failsafe. If something went wrong and we still have objects stored in the vector, dump them in inventory.
+    if (!contained_obj.empty()) {
+      for (auto it : contained_obj)
+        obj_to_char(it.obj, ch);
+      
+      contained_obj.clear();
     }
     mysql_free_result(res);
   }
   {
     struct obj_data *obj;
     int vnum = 0;
-    snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_bioware WHERE idnum=%ld;", GET_IDNUM(ch));
+    snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_bioware WHERE idnum=%ld ORDER BY Vnum;", GET_IDNUM(ch));
     mysql_wrapper(mysql, buf);
     res = mysql_use_result(mysql);
     while ((row = mysql_fetch_row(res))) {
@@ -777,10 +826,12 @@ bool load_char(const char *name, char_data *ch, bool logon)
   }
 
   {
-    struct obj_data *obj = NULL, *last_obj = NULL;
+    struct obj_data *obj = NULL;
     long vnum;
-    int inside = 0, last_in = 0;
-    snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_worn WHERE idnum=%ld ORDER BY posi;", GET_IDNUM(ch));
+    int inside = 0, last_inside = 0;
+    std::vector<nested_obj> contained_obj;
+    struct nested_obj contained_obj_entry;
+    snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_worn WHERE idnum=%ld ORDER BY posi DESC;", GET_IDNUM(ch));
     mysql_wrapper(mysql, buf);
     snprintf(buf3, sizeof(buf3), "pfiles_worn load for %s (%ld)", GET_CHAR_NAME(ch), GET_IDNUM(ch));
     res = mysql_use_result(mysql);
@@ -818,30 +869,59 @@ bool load_char(const char *name, char_data *ch, bool logon)
 
         auto_repair_obj(obj, buf3);
 
-        if (inside > 0) {
-          if (inside == last_in)
-            last_obj = last_obj->in_obj;
-          else if (inside < last_in)
-            while (inside <= last_in && last_obj) {
-              last_obj = last_obj->in_obj;
-              last_in--;
+        // Since we're now reading rows from the db in reverse order, in order to fix the stupid reordering on
+        // every binary execution, the previous algorithm did not work, as it relied on getting the container obj
+        // first and place subsequent objects in it. Since we're now getting it last, and more importantly we get
+        // objects at deeper nesting level in between our list, we save all pointers to objects along with their
+        // nesting level in a vector container and once we found the next container (inside < last_inside) we
+        // move the objects with higher nesting level to container and proceed. This works for any nesting depth.
+        if (inside > 0 || (inside == 0 && inside < last_inside)) {
+          //Found our container?
+          if (inside < last_inside) {
+            if (inside == 0)
+              equip_char(ch, obj, atoi(row[18]));
+              
+            auto it = std::find_if(contained_obj.begin(), contained_obj.end(), find_level(inside+1));
+            while (it != contained_obj.end()) {
+              obj_to_obj(it->obj, obj);
+              contained_obj.erase(it);
             }
-          if (last_obj)
-            obj_to_obj(obj, last_obj);
+              
+            if (inside > 0) {
+              contained_obj_entry.level = inside;
+              contained_obj_entry.obj = obj;
+              contained_obj.push_back(contained_obj_entry);
+            }
+          }
+          else {
+            contained_obj_entry.level = inside;
+            contained_obj_entry.obj = obj;
+            contained_obj.push_back(contained_obj_entry);
+          }
+          last_inside = inside;
         } else
-          equip_char(ch, obj, atoi(row[18]));
-        last_in = inside;
-        last_obj = obj;
+           equip_char(ch, obj, atoi(row[18]));
+          
+        last_inside = inside;
       }
+    }
+    //Failsafe. If something went wrong and we still have objects stored in the vector, dump them in inventory.
+    if (!contained_obj.empty()) {
+      for (auto it : contained_obj)
+        obj_to_char(it.obj, ch);
+      
+      contained_obj.clear();
     }
     mysql_free_result(res);
   }
 
   {
-    struct obj_data *last_obj = NULL, *obj;
+    struct obj_data *obj = NULL;
     int vnum = 0;
-    int inside = 0, last_in = 0;
-    snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_inv WHERE idnum=%ld ORDER BY posi;", GET_IDNUM(ch));
+    int inside = 0, last_inside = 0;
+    std::vector<nested_obj> contained_obj;
+    struct nested_obj contained_obj_entry;
+    snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_inv WHERE idnum=%ld ORDER BY posi DESC;", GET_IDNUM(ch));
     mysql_wrapper(mysql, buf);
     snprintf(buf3, sizeof(buf3), "pfiles_inv load for %s (%ld)", GET_CHAR_NAME(ch), GET_IDNUM(ch));
     res = mysql_use_result(mysql);
@@ -876,6 +956,10 @@ bool load_char(const char *name, char_data *ch, bool logon)
             GET_OBJ_WEIGHT(obj) = GET_AMMOBOX_QUANTITY(obj) * get_ammo_weight(GET_AMMOBOX_WEAPON(obj), GET_AMMOBOX_TYPE(obj));
             break;
         }
+        // This is badly named and at first reading it seems like it holds a vnum to parent container
+        // which made the algorithm below harder to read but it is in fact nesting level.  
+        // I am not refactoring it to nesting_level though as it then wouldn't match the database column.
+        // This serves as a reminder to do so if I push a db update and for others to figure out easier what it actually is. -- Nodens
         inside = atoi(row[17]);
         GET_OBJ_TIMER(obj) = atoi(row[18]);
 
@@ -891,24 +975,49 @@ bool load_char(const char *name, char_data *ch, bool logon)
         GET_OBJ_CONDITION(obj) = atoi(row[21]);
 
         auto_repair_obj(obj, buf3);
-
-        if (inside > 0) {
-          if (inside == last_in)
-            last_obj = last_obj->in_obj;
-          else if (inside < last_in)
-            while (inside <= last_in && last_obj) {
-              last_obj = last_obj->in_obj;
-              last_in--;
+        
+        // Since we're now reading rows from the db in reverse order, in order to fix the stupid reordering on
+        // every binary execution, the previous algorithm did not work, as it relied on getting the container obj
+        // first and place subsequent objects in it. Since we're now getting it last, and more importantly we get
+        // objects at deeper nesting level in between our list, we save all pointers to objects along with their
+        // nesting level in a vector container and once we found the next container (inside < last_inside) we
+        // move the objects with higher nesting level to container and proceed. This works for any nesting depth.
+        if (inside > 0 || (inside == 0 && inside < last_inside)) {
+          //Found our container?
+          if (inside < last_inside) {
+            if (inside == 0)
+              obj_to_char(obj, ch);
+              
+            auto it = std::find_if(contained_obj.begin(), contained_obj.end(), find_level(inside+1));
+            while (it != contained_obj.end()) {
+              obj_to_obj(it->obj, obj);
+              contained_obj.erase(it);
             }
-          if (last_obj)
-            obj_to_obj(obj, last_obj);
-          else
-            obj_to_char(obj, ch);
+              
+            if (inside > 0) {
+              contained_obj_entry.level = inside;
+              contained_obj_entry.obj = obj;
+              contained_obj.push_back(contained_obj_entry);
+            }
+          }
+          else {
+            contained_obj_entry.level = inside;
+            contained_obj_entry.obj = obj;
+            contained_obj.push_back(contained_obj_entry);
+          }
+          last_inside = inside;
         } else
           obj_to_char(obj, ch);
-        last_in = inside;
-        last_obj = obj;
+          
+        last_inside = inside;
       }
+    }
+    //Failsafe. If something went wrong and we still have objects stored in the vector, dump them in inventory.
+    if (!contained_obj.empty()) {
+      for (auto it : contained_obj)
+        obj_to_char(it.obj, ch);
+      
+      contained_obj.clear();
     }
     mysql_free_result(res);
   }

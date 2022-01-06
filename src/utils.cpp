@@ -936,7 +936,22 @@ void mudlog(const char *str, struct char_data *ch, int log, bool file)
         SEND_TO_Q(buf, i);
     }
 }
-
+// This is a function to reverse the order of an obj_data linked list.
+// I ended up not using it but I'm leaving it in because it may be handy at some point.
+void reverse_obj_list(struct obj_data **obj)
+{
+  struct obj_data *temp = NULL;
+  struct obj_data *prev = NULL;
+  struct obj_data *current = (*obj);
+  
+  while (current != NULL) {
+    temp = current->next_content;
+    current->next_content = prev;
+    prev = current;
+    current = temp;
+  }
+  (*obj) = prev;
+}
 void sprintbit(long vektor, const char *names[], char *result, size_t result_size)
 {
   long nr;

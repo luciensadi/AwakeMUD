@@ -161,6 +161,9 @@ int     do_simple_move(struct char_data *ch, int dir, int extra, struct
 int perform_move(struct char_data *ch, int dir, int extra, struct char_data
                  *vict);
 
+// Used in house.cpp to reverse object linked lists
+void  reverse_obj_list(struct obj_data **obj);
+
 void    mental_gain(struct char_data *ch);
 void    physical_gain(struct char_data *ch);
 void    advance_level(struct char_data *ch);
