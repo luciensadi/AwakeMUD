@@ -910,7 +910,7 @@ void game_loop(int mother_desc)
     
     // Every 59 MUD minutes
     if (!(pulse % (59 * SECS_PER_MUD_MINUTE * PASSES_PER_SEC))) {
-      save_vehicles();
+      save_vehicles(FALSE);
       update_paydata_market();
     }
     

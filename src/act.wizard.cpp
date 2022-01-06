@@ -321,7 +321,7 @@ ACMD(do_copyover)
 
   // Save vehicles.
   log("Saving vehicles.");
-  save_vehicles();
+  save_vehicles(TRUE);
 
   // Save shop orders.
   log("Saving shop orders.");

@@ -1634,7 +1634,7 @@ SPECIAL(car_dealer)
       send_to_char(ch, "You buy %s. It is brought out into the room.\r\n", GET_VEH_NAME(newveh));
     else
       send_to_char(ch, "You buy %s. It is wheeled out into the yard.\r\n", GET_VEH_NAME(newveh));
-    save_vehicles();
+    save_vehicles(FALSE);
     return TRUE;
   } else if (CMD_IS("probe") || CMD_IS("info")) {
     argument = one_argument(argument, buf);
@@ -3446,7 +3446,7 @@ SPECIAL(newbie_car)
     send_to_room(buf, ch->in_room);
     obj_from_char(obj);
     extract_obj(obj);
-    save_vehicles();
+    save_vehicles(FALSE);
     return TRUE;
   }
   return FALSE;
@@ -4119,7 +4119,7 @@ SPECIAL(painter)
         act(buf, FALSE, world[real_room(painter->in_room->number)].people, 0, 0, TO_ROOM);
         act(buf, FALSE, world[real_room(painter->in_room->number)].people, 0, 0, TO_CHAR);
       }
-      save_vehicles();
+      save_vehicles(FALSE);
     }
   if (!CMD_IS("paint"))
     return FALSE;

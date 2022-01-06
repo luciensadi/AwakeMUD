@@ -2550,3 +2550,8 @@ enum {
 #define SMARTLINK_I_MODIFIER  2
 
 #endif
+
+// This is to flag variables used eg in macros so that the compiler won't complain about unused variables
+// when they're actually used. Casting to void does nothing but the compiler will stop thinking it's
+//unused. This is the same way Q_UNUSED is used in Qt. -- Nodens
+#define UNUSED(expr) (void)(expr)

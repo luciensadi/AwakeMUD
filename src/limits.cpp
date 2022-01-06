@@ -1019,7 +1019,7 @@ bool should_save_this_vehicle(struct veh_data *veh) {
   return TRUE;
 }
 
-void save_vehicles(void)
+void save_vehicles(bool fromCopyover)
 {
   PERF_PROF_SCOPE(pr_, __func__);
   struct veh_data *veh;
@@ -1050,7 +1050,7 @@ void save_vehicles(void)
       continue;
 
     bool send_veh_to_junkyard = FALSE;
-    if (veh->damage >= VEH_DAM_THRESHOLD_DESTROYED && !(veh->in_veh || (veh->in_room && ROOM_FLAGGED(veh->in_room, ROOM_GARAGE)))) {
+    if (veh->damage >= VEH_DAM_THRESHOLD_DESTROYED && !(fromCopyover || veh->in_veh || (veh->in_room && ROOM_FLAGGED(veh->in_room, ROOM_GARAGE)))) {
       // If the vehicle is wrecked and is in neither a containing vehicle nor a garage...
       if (veh_is_in_junkyard(veh)) {
         // If it's already in the junkyard, we don't save it-- they should have come and fixed it.
@@ -1129,9 +1129,10 @@ void save_vehicles(void)
       }
 
       // Otherwise, derive the garage from its location.
-      else if (!ROOM_FLAGGED(temp_room, ROOM_GARAGE)
-               || (ROOM_FLAGGED(temp_room, ROOM_HOUSE)
-                   && !House_can_enter_by_idnum(veh->owner, temp_room->number))) {
+      else if (!fromCopyover
+              && (!ROOM_FLAGGED(temp_room, ROOM_GARAGE)
+              || (ROOM_FLAGGED(temp_room, ROOM_HOUSE)
+              && !House_can_enter_by_idnum(veh->owner, temp_room->number)))) {
        snprintf(buf, sizeof(buf), "Falling back to a garage for non-garage-room veh %s (in '%s' %ld).",
                 GET_VEH_NAME(veh), GET_ROOM_NAME(temp_room), GET_ROOM_VNUM(temp_room)
               );
@@ -1273,6 +1274,7 @@ void update_paydata_market() {
 
   strncpy(buf, "Updating paydata markets:", sizeof(buf) - 1);
   bool something_changed = FALSE;
+  UNUSED(something_changed);
 
   for (int m = 0; m < 5; m++) {
     int old_market = market[m];

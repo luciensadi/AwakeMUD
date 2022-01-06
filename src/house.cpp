@@ -1238,7 +1238,7 @@ void remove_vehicles_from_apartment(struct room_data *room) {
     veh_from_room(veh);
     veh_to_room(veh, &world[real_room(RM_SEATTLE_PARKING_GARAGE)]);
   }
-  save_vehicles();
+  save_vehicles(FALSE);
 }
 
 void warn_about_apartment_deletion() {
