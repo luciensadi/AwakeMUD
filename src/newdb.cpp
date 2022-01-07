@@ -2401,12 +2401,12 @@ void save_cyberware_to_db(struct char_data *player) {
         As such, we write each cyberware entry on its own now instead of batching them together. */
 
     for (struct obj_data *obj = player->cyberware; obj;) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "INSERT INTO pfiles_cyberware (idnum, Vnum, Cost, Restring, "
-                                                      "Photo, Value0, Value1, Value2, Value3, Value4, Value5, Value6,"
-                                                      "Value7, Value8, Value9, Value10, Value11, Level, posi) VALUES "
-                                                      "(%ld, %ld, %d, '%s', '%s'", GET_IDNUM(player), GET_OBJ_VNUM(obj), GET_OBJ_COST(obj),
-                                                      obj->restring ? prepare_quotes(buf3, obj->restring, sizeof(buf3) / sizeof(buf3[0])) : "",
-                                                      obj->photo ? prepare_quotes(buf2, obj->photo, sizeof(buf2) / sizeof(buf2[0])) : "");
+      snprintf(buf, sizeof(buf), "INSERT INTO pfiles_cyberware (idnum, Vnum, Cost, Restring, "
+                                 "Photo, Value0, Value1, Value2, Value3, Value4, Value5, Value6,"
+                                 "Value7, Value8, Value9, Value10, Value11, Level, posi) VALUES "
+                                 "(%ld, %ld, %d, '%s', '%s'", GET_IDNUM(player), GET_OBJ_VNUM(obj), GET_OBJ_COST(obj),
+                                 obj->restring ? prepare_quotes(buf3, obj->restring, sizeof(buf3) / sizeof(buf3[0])) : "",
+                                 obj->photo ? prepare_quotes(buf2, obj->photo, sizeof(buf2) / sizeof(buf2[0])) : "");
 
       // Obj val 2 for cyberware is grade, so I'm not sure what this code used to do, but now it probably chokes on things.
       // Maybe it was related to skillsoft chips or photos or something?
