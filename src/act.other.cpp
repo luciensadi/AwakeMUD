@@ -4317,7 +4317,7 @@ ACMD(do_tridlog)
   } else if (is_abbrev(arg, "delete")) {
     snprintf(buf, sizeof(buf), "DELETE FROM trideo_broadcast WHERE idnum=%d", atoi(buf2));
     mysql_wrapper(mysql, buf);
-    send_to_char("Deleted.\r\n", ch);
+    send_to_char(ch, "Deletion command processed for '%s' (%d).\r\n", buf2, atoi(buf2));
   }
 }
 
