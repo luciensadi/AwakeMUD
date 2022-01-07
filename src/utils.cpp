@@ -2177,7 +2177,7 @@ struct room_data *get_obj_in_room(struct obj_data *obj) {
     return get_ch_in_room(obj->carried_by);
 
   if (obj->worn_by)
-    return get_ch_in_room(obj->carried_by);
+    return get_ch_in_room(obj->worn_by);
 
   // All is lost. The object floats in an endless void.
   snprintf(errbuf, sizeof(errbuf), "SYSERR: get_obj_in_room called on obj %s, but it's not in a room or vehicle!", GET_OBJ_NAME(obj));
