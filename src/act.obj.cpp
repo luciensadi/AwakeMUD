@@ -363,7 +363,7 @@ ACMD(do_put)
   
   if (!str_cmp(arg2, "finger")) {
     for (cont = ch->cyberware; cont; cont = cont->next_content)
-      if (GET_OBJ_VAL(cont, 0) == CYB_FINGERTIP)
+      if (GET_CYBERWARE_TYPE(cont) == CYB_FINGERTIP)
         break;
     if (!cont) {
       send_to_char("You don't have a fingertip compartment.\r\n", ch);
@@ -1183,7 +1183,7 @@ ACMD(do_get)
     send_to_char(ch, "%s what?\r\n", (cyberdeck ? "Uninstall" : (download ? "Download" : "Get")));
   } else if (!str_cmp(arg1, "tooth")) {
     for (cont = ch->cyberware; cont; cont = cont->next_content)
-      if (GET_OBJ_VAL(cont, 0) == CYB_TOOTHCOMPARTMENT)
+      if (GET_CYBERWARE_TYPE(cont) == CYB_TOOTHCOMPARTMENT)
         break;
     if (!cont)
       send_to_char("You don't have a tooth compartment.\r\n", ch);
@@ -1200,7 +1200,7 @@ ACMD(do_get)
     }
   } else if (!str_cmp(arg1, "finger")) {
     for (cont = ch->cyberware; cont; cont = cont->next_content)
-      if (GET_OBJ_VAL(cont, 0) == CYB_FINGERTIP)
+      if (GET_CYBERWARE_TYPE(cont) == CYB_FINGERTIP)
         break;
     if (!cont)
       send_to_char("You don't have a fingertip compartment.\r\n", ch);
@@ -1215,7 +1215,7 @@ ACMD(do_get)
     }
   } else if (!str_cmp(arg1, "body")) {
     for (cont = ch->cyberware; cont; cont = cont->next_content)
-      if (GET_OBJ_VAL(cont, 0) == CYB_BODYCOMPART)
+      if (GET_CYBERWARE_TYPE(cont) == CYB_BODYCOMPART)
         break;
     if (!cont)
       send_to_char("You don't have a body compartment.\r\n", ch);
@@ -3454,7 +3454,7 @@ int draw_weapon(struct char_data *ch)
   //Look in fingertip first to get it out of the way.
   //At some point we need to write a mechanism to select what is drawn automatically -- Nodens
   for (potential_holster = ch->cyberware; potential_holster; potential_holster = potential_holster->next_content)
-    if (GET_OBJ_VAL(potential_holster, 0) == CYB_FINGERTIP && GET_HOLSTER_READY_STATUS(potential_holster))
+    if (GET_CYBERWARE_TYPE(potential_holster) == CYB_FINGERTIP && GET_HOLSTER_READY_STATUS(potential_holster))
       i += draw_from_readied_holster(ch, potential_holster);
 
   // Go through all the wearslots, provided that the character is not already wielding & holding things.
@@ -3508,7 +3508,7 @@ struct obj_data *find_holster_that_fits_weapon(struct char_data *ch, struct obj_
   if (obj_index[GET_OBJ_RNUM(weapon)].wfunc == monowhip) {
     struct obj_data *cont;
     for (cont = ch->cyberware; cont; cont = cont->next_content)
-      if (GET_OBJ_VAL(cont, 0) == CYB_FINGERTIP && !cont->contains)
+      if (GET_CYBERWARE_TYPE(cont) == CYB_FINGERTIP && !cont->contains)
         return cont;
   }
   // Look at their worn items. We exclude inventory here.
@@ -3659,7 +3659,7 @@ ACMD(do_ready)
   }
   
   //If we have a fingertip compartment that matches the argument, set our object to that.
-  if ((finger = get_obj_in_list_vis(ch, buf, ch->cyberware)) && GET_OBJ_VAL(finger, 0) == CYB_FINGERTIP)
+  if ((finger = get_obj_in_list_vis(ch, buf, ch->cyberware)) && GET_CYBERWARE_TYPE(finger) == CYB_FINGERTIP)
     obj = finger;
   else {
     if (!(generic_find(buf, FIND_OBJ_EQUIP, ch, &tmp_char, &obj))) {
@@ -3682,7 +3682,7 @@ ACMD(do_ready)
   } else {
     //Check if we have any fingertip compartments that are readied
     for (struct obj_data *cyber = ch->cyberware; cyber; cyber = cyber->next_content)
-      if (GET_OBJ_VAL(cyber, 0) == CYB_FINGERTIP && GET_HOLSTER_READY_STATUS(cyber))
+      if (GET_CYBERWARE_TYPE(cyber) == CYB_FINGERTIP && GET_HOLSTER_READY_STATUS(cyber))
         num++;
 
     for (int i = 0; i < NUM_WEARS; i++)
