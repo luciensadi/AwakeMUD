@@ -788,11 +788,13 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       target_died = damage(att->ch, def->ch, -1, att->ranged->dam_type, 0);
       
       //Handle suprise attack/alertness here -- ranged attack failed.
-      if (!target_died && AFF_FLAGGED(def->ch, AFF_SURPRISE))
-        AFF_FLAGS(def->ch).RemoveBit(AFF_SURPRISE);
+      if (!target_died && IS_NPC(def->ch)) {
+        if (AFF_FLAGGED(def->ch, AFF_SURPRISE))
+          AFF_FLAGS(def->ch).RemoveBit(AFF_SURPRISE);
            
-      GET_MOBALERT(def->ch) = MALERT_ALARM;
-      GET_MOBALERTTIME(def->ch) = 30;
+        GET_MOBALERT(def->ch) = MALERT_ALARM;
+        GET_MOBALERTTIME(def->ch) = 30;
+      }
       return;
     }
     
@@ -845,11 +847,13 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
         target_died = damage(att->ch, def->ch, 0, att->ranged->dam_type, att->ranged->is_physical);
         
         //Handle suprise attack/alertness here -- spirits ranged.
-         if (!target_died && AFF_FLAGGED(def->ch, AFF_SURPRISE))
-           AFF_FLAGS(def->ch).RemoveBit(AFF_SURPRISE);
+        if (!target_died && IS_NPC(def->ch)) {
+          if (AFF_FLAGGED(def->ch, AFF_SURPRISE))
+            AFF_FLAGS(def->ch).RemoveBit(AFF_SURPRISE);
            
-        GET_MOBALERT(def->ch) = MALERT_ALERT;
-        GET_MOBALERTTIME(def->ch) = 20;
+          GET_MOBALERT(def->ch) = MALERT_ALERT;
+          GET_MOBALERTTIME(def->ch) = 20;
+        }
         return;
       } else
         att->ranged->power -= GET_LEVEL(def->ch) * 2;
@@ -1087,11 +1091,13 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
         target_died = damage(att->ch, def->ch, 0, att->melee->dam_type, att->melee->is_physical);
         
         //Handle suprise attack/alertness here -- spirits melee.
-         if (!target_died && AFF_FLAGGED(def->ch, AFF_SURPRISE))
-           AFF_FLAGS(def->ch).RemoveBit(AFF_SURPRISE);
+        if (!target_died && IS_NPC(def->ch)) {
+          if (AFF_FLAGGED(def->ch, AFF_SURPRISE))
+            AFF_FLAGS(def->ch).RemoveBit(AFF_SURPRISE);
 
-        GET_MOBALERT(def->ch) = MALERT_ALARM;
-        GET_MOBALERTTIME(def->ch) = 30;
+          GET_MOBALERT(def->ch) = MALERT_ALARM;
+          GET_MOBALERTTIME(def->ch) = 30;
+        }
         return;
       } else {
         att->melee->power -= GET_LEVEL(def->ch) * 2;
@@ -1197,9 +1203,10 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
         }
       }
       //Handle suprise attack/alertness here -- defender didn't die.
-      if (IS_NPC(def->ch) && AFF_FLAGGED(def->ch, AFF_SURPRISE))
-        AFF_FLAGS(def->ch).RemoveBit(AFF_SURPRISE);
       if (IS_NPC(def->ch)) {
+        if (AFF_FLAGGED(def->ch, AFF_SURPRISE))
+          AFF_FLAGS(def->ch).RemoveBit(AFF_SURPRISE);
+
         GET_MOBALERT(def->ch) = MALERT_ALERT;
         GET_MOBALERTTIME(def->ch) = 20;
       }
