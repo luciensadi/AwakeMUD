@@ -835,6 +835,8 @@ ACMD(do_wimpy)
 ACMD(do_display)
 {
   struct char_data *tch;
+  char arg_with_prepared_quotes[LINE_LENGTH];
+
   if (IS_NPC(ch) && !ch->desc->original) {
     send_to_char("Monsters don't need displays.  Go away.\r\n", ch);
     return;
@@ -843,20 +845,20 @@ ACMD(do_display)
 
   skip_spaces(&argument);
   delete_doubledollar(argument);
-  prepare_quotes(buf, argument, sizeof(buf) / sizeof(buf[0]));
+  prepare_quotes(arg_with_prepared_quotes, argument, sizeof(arg_with_prepared_quotes) / sizeof(arg_with_prepared_quotes[0]));
 
-  if (!*buf) {
+  if (!*argument) {
     send_to_char(ch, "Current prompt:\r\n%s\r\n", GET_PROMPT(tch));
     return;
-  } else if (strlen(buf) > LINE_LENGTH - 1) {
+  } else if (strlen(arg_with_prepared_quotes) > LINE_LENGTH - 1) {
     send_to_char(ch, "Customized prompts are limited to %d characters.\r\n",
                  LINE_LENGTH - 1);
     return;
   } else {
     DELETE_ARRAY_IF_EXTANT(GET_PROMPT(tch));
-    GET_PROMPT(tch) = str_dup(buf);
+    GET_PROMPT(tch) = str_dup(argument);
     send_to_char(OK, ch);
-    snprintf(buf, sizeof(buf), "UPDATE pfiles SET%sPrompt='%s' WHERE idnum=%ld;", PLR_FLAGGED((ch), PLR_MATRIX) ? " Matrix" : " ", GET_PROMPT(ch), GET_IDNUM(ch));
+    snprintf(buf, sizeof(buf), "UPDATE pfiles SET%sPrompt='%s' WHERE idnum=%ld;", PLR_FLAGGED((ch), PLR_MATRIX) ? " Matrix" : " ", arg_with_prepared_quotes, GET_IDNUM(ch));
     mysql_wrapper(mysql, buf);
   }
 }
@@ -2450,9 +2452,9 @@ void cedit_parse(struct descriptor_data *d, char *arg)
       d->edit_mob = NULL;
       d->edit_mode = 0;
       STATE(d) = CON_PLAYING;
-      playerDB.SaveChar(CH);
       snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " WHERE idnum=%ld;", GET_IDNUM(CH));
       mysql_wrapper(mysql, buf2);
+      playerDB.SaveChar(CH);
       break;
 
     case 'n':
