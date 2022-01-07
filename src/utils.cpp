@@ -922,6 +922,9 @@ void mudlog(const char *str, struct char_data *ch, int log, bool file)
         case LOG_ECONLOG:
           check_log = PRF_ECONLOG;
           break;
+        case LOG_RADLOG:
+          check_log = PRF_RADLOG;
+          break;
         default:
           char errbuf[500];
           snprintf(errbuf, sizeof(errbuf), "SYSERR: Attempting to display a message to log type %d, but that log type is not handled in utils.cpp's mudlog() function! Dumping to SYSLOG.", log);
@@ -3799,7 +3802,6 @@ int count_color_codes_in_string(const char *str) {
   long ptr_max = strlen(str) - 1;
 
   int sum = 0;
-  int pos = 0;
 
   while (*ptr && (ptr - str) <= ptr_max) {
     if (*ptr == '^') {

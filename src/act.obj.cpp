@@ -3599,7 +3599,7 @@ ACMD(do_holster)
     send_to_char(ch, "%s is not a holsterable weapon.\r\n", capitalize(GET_OBJ_NAME(obj)));
     return;
   }
-  if (GET_OBJ_TYPE(cont) != ITEM_HOLSTER && (GET_OBJ_TYPE(cont) == ITEM_CYBERWARE && GET_OBJ_VAL(cont, 0) != CYB_FINGERTIP)) {
+  if (GET_OBJ_TYPE(cont) != ITEM_HOLSTER && (GET_OBJ_TYPE(cont) != ITEM_CYBERWARE || GET_CYBERWARE_TYPE(cont) != CYB_FINGERTIP)) {
     send_to_char(ch, "%s is not a holster.\r\n", capitalize(GET_OBJ_NAME(cont)));
     return;
   }
@@ -3610,11 +3610,8 @@ ACMD(do_holster)
 
   const char *madefor = "<error, report to staff>";
   
-  if (GET_OBJ_TYPE(cont) == ITEM_CYBERWARE && GET_OBJ_VAL(cont, 0) == CYB_FINGERTIP)
-    madefor = "monowhips";
-  else {
-    if (!holster_can_fit(cont, obj))
-      dontfit++;
+  if (GET_OBJ_TYPE(cont) == ITEM_HOLSTER && !holster_can_fit(cont, obj)) {
+    dontfit++;
     
     switch (GET_HOLSTER_TYPE(cont)) {
       case HOLSTER_TYPE_SMALL_GUNS:
@@ -3632,6 +3629,7 @@ ACMD(do_holster)
       return;
     }
   }
+
   if (GET_OBJ_SPEC(obj) == weapon_dominator) {
     dominator_mode_switch(ch, obj, DOMINATOR_MODE_PARALYZER);
   }
@@ -3669,7 +3667,7 @@ ACMD(do_ready)
       return;
     }
   }
-  if (GET_OBJ_TYPE(obj) != ITEM_HOLSTER && (GET_OBJ_TYPE(obj) == ITEM_CYBERWARE && GET_OBJ_VAL(obj, 0) != CYB_FINGERTIP)) {
+  if (GET_OBJ_TYPE(obj) != ITEM_HOLSTER && (GET_OBJ_TYPE(obj) != ITEM_CYBERWARE || GET_CYBERWARE_TYPE(obj) != CYB_FINGERTIP)) {
     send_to_char(ch, "%s is not a weapons holster.\r\n", capitalize(GET_OBJ_NAME(obj)));
     return;
   }

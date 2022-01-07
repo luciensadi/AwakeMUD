@@ -3710,24 +3710,24 @@ ACMD(do_cyberware)
 
   send_to_char("You have the following cyberware:\r\n", ch);
   for (obj = ch->cyberware; obj != NULL; obj = obj->next_content) {
-    if (GET_OBJ_VAL(obj, 0) == CYB_FINGERTIP) {
+    if (GET_CYBERWARE_TYPE(obj) == CYB_FINGERTIP) {
       if (obj->contains && GET_OBJ_TYPE(obj->contains) == ITEM_WEAPON && GET_HOLSTER_READY_STATUS(obj) ) {
-        snprintf(buf, sizeof(buf), "%-32s ^Y(W) (R)^n Essence: %0.2f\r\n", GET_OBJ_NAME(obj), ((float)GET_OBJ_VAL(obj, 4) / 100));
+        snprintf(buf, sizeof(buf), "%-32s ^Y(W) (R)^n Essence: %0.2f\r\n", GET_OBJ_NAME(obj), ((float)GET_CYBERWARE_ESSENCE_COST(obj) / 100));
         send_to_char(buf, ch);
         continue;
       }
       else if (obj->contains && GET_OBJ_TYPE(obj->contains) == ITEM_WEAPON && !GET_HOLSTER_READY_STATUS(obj)) {
-        snprintf(buf, sizeof(buf), "%-36s ^Y(W)^n Essence: %0.2f\r\n", GET_OBJ_NAME(obj), ((float)GET_OBJ_VAL(obj, 4) / 100));
+        snprintf(buf, sizeof(buf), "%-36s ^Y(W)^n Essence: %0.2f\r\n", GET_OBJ_NAME(obj), ((float)GET_CYBERWARE_ESSENCE_COST(obj) / 100));
         send_to_char(buf, ch);
         continue;
       }
       else if (obj->contains) {
-        snprintf(buf, sizeof(buf), "%-36s ^Y(F)^n Essence: %0.2f\r\n", GET_OBJ_NAME(obj), ((float)GET_OBJ_VAL(obj, 4) / 100));
+        snprintf(buf, sizeof(buf), "%-36s ^Y(F)^n Essence: %0.2f\r\n", GET_OBJ_NAME(obj), ((float)GET_CYBERWARE_ESSENCE_COST(obj) / 100));
         send_to_char(buf, ch);
         continue;
       }
     }
-    snprintf(buf, sizeof(buf), "%-40s Essence: %0.2f\r\n", GET_OBJ_NAME(obj), ((float)GET_OBJ_VAL(obj, 4) / 100));
+    snprintf(buf, sizeof(buf), "%-40s Essence: %0.2f\r\n", GET_OBJ_NAME(obj), ((float)GET_CYBERWARE_ESSENCE_COST(obj) / 100));
     send_to_char(buf, ch);
   }
 }
@@ -3745,7 +3745,7 @@ ACMD(do_bioware)
   for (obj = ch->bioware; obj != NULL; obj = obj->next_content) {
     snprintf(buf, sizeof(buf), "%-40s Rating: %-2d     Bioware Index: %0.2f\r\n",
             GET_OBJ_NAME(obj),
-            GET_OBJ_VAL(obj, 1), ((float)GET_OBJ_VAL(obj, 4) / 100));
+            GET_BIOWARE_RATING(obj), ((float)GET_BIOWARE_ESSENCE_COST(obj) / 100));
     send_to_char(buf, ch);
   }
 }
