@@ -784,7 +784,17 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
       
       combat_message(att->ch, def->ch, att->weapon, -1, att->ranged->burst_count);
-      damage(att->ch, def->ch, -1, att->ranged->dam_type, 0);
+      bool target_died = 0;
+      target_died = damage(att->ch, def->ch, -1, att->ranged->dam_type, 0);
+      
+      //Handle suprise attack/alertness here -- ranged attack failed.
+      if (!target_died && IS_NPC(def->ch)) {
+        if (AFF_FLAGGED(def->ch, AFF_SURPRISE))
+          AFF_FLAGS(def->ch).RemoveBit(AFF_SURPRISE);
+           
+        GET_MOBALERT(def->ch) = MALERT_ALARM;
+        GET_MOBALERTTIME(def->ch) = 30;
+      }
       return;
     }
     
@@ -833,7 +843,17 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     // If the attack's power is greater, subtract double the level from it.
     if (IS_SPIRIT(def->ch) || IS_ELEMENTAL(def->ch)) {
       if (att->ranged->power <= GET_LEVEL(def->ch) * 2) {
-        damage(att->ch, def->ch, 0, att->ranged->dam_type, att->ranged->is_physical);
+        bool target_died = 0;
+        target_died = damage(att->ch, def->ch, 0, att->ranged->dam_type, att->ranged->is_physical);
+        
+        //Handle suprise attack/alertness here -- spirits ranged.
+        if (!target_died && IS_NPC(def->ch)) {
+          if (AFF_FLAGGED(def->ch, AFF_SURPRISE))
+            AFF_FLAGS(def->ch).RemoveBit(AFF_SURPRISE);
+           
+          GET_MOBALERT(def->ch) = MALERT_ALERT;
+          GET_MOBALERTTIME(def->ch) = 20;
+        }
         return;
       } else
         att->ranged->power -= GET_LEVEL(def->ch) * 2;
@@ -1036,6 +1056,13 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
         
         att->melee->power -= GET_IMPACT(def->ch) / 2;
       }
+      // Because we swap att and def pointers if defender wins the clash we need to make sure attacker gets proper values
+      // if they're using a ranged weapon in clash instead of setting their melee power to the damage code of the ranged
+      // weapon as it was happening.
+      else if (IS_RANGED(att->weapon)) {
+        att->melee->power = GET_STR(att->ch);
+        att->melee->damage_level = MODERATE;
+      }
       // Non-monowhips behave normally.
       else {
         att->melee->power = GET_WEAPON_STR_BONUS(att->weapon) + GET_STR(att->ch);
@@ -1060,7 +1087,17 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     // If the attack's power is greater, subtract double the level from it.
     if (IS_SPIRIT(def->ch) || IS_ELEMENTAL(def->ch)) {
       if (att->melee->power <= GET_LEVEL(def->ch) * 2) {
-        damage(att->ch, def->ch, 0, att->melee->dam_type, att->melee->is_physical);
+        bool target_died = 0;
+        target_died = damage(att->ch, def->ch, 0, att->melee->dam_type, att->melee->is_physical);
+        
+        //Handle suprise attack/alertness here -- spirits melee.
+        if (!target_died && IS_NPC(def->ch)) {
+          if (AFF_FLAGGED(def->ch, AFF_SURPRISE))
+            AFF_FLAGS(def->ch).RemoveBit(AFF_SURPRISE);
+
+          GET_MOBALERT(def->ch) = MALERT_ALARM;
+          GET_MOBALERTTIME(def->ch) = 30;
+        }
         return;
       } else {
         att->melee->power -= GET_LEVEL(def->ch) * 2;
@@ -1152,11 +1189,26 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
             act("$n's monowhip completely misses and recoils to hit $m!", TRUE, attacker, 0, 0, TO_ROOM);
             int dam_total = convert_damage(stage(-1 * success_test(GET_BOD(attacker) + (successes == 0 ? GET_DEFENSE(attacker) : 0), 10), SERIOUS));
             
+            
+            //Handle suprise attack/alertness here -- attacker can die here, we remove the surprise flag anyhow
+            //prior to handling the damage and we don't alter alert state at all because if defender is a quest target
+            //they will be extracted. If the attacker actually dies and it's a normal mob, they won't be surprised anymore
+            //and alertness will trickle down on its own with update cycles.
+            if (IS_NPC(def->ch) && AFF_FLAGGED(def->ch, AFF_SURPRISE))
+              AFF_FLAGS(def->ch).RemoveBit(AFF_SURPRISE);
             // If the attacker dies from backlash, bail out.
             if (damage(attacker, attacker, dam_total, TYPE_RECOIL, PHYSICAL))
               return;
           }
         }
+      }
+      //Handle suprise attack/alertness here -- defender didn't die.
+      if (IS_NPC(def->ch)) {
+        if (AFF_FLAGGED(def->ch, AFF_SURPRISE))
+          AFF_FLAGS(def->ch).RemoveBit(AFF_SURPRISE);
+
+        GET_MOBALERT(def->ch) = MALERT_ALERT;
+        GET_MOBALERTTIME(def->ch) = 20;
       }
     }
   }
@@ -1186,6 +1238,13 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     snprintf(rbuf, sizeof(rbuf), "Heavy Recoil: %d successes, L->%s wound.", recoil_successes, staged_dam == LIGHT ? "L" : "no");
     // SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
     act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );
+    
+    //Handle suprise attack/alertness here -- attacker can die here, we remove the surprise flag anyhow
+    //prior to handling the damage and we don't alter alert state at all because if defender is a quest target
+    //they will be extracted. If the attacker actually dies and it's a normal mob, they won't be surprised anymore
+    //and alertness will trickle down on its own with update cycles.
+    if (IS_NPC(def->ch) && AFF_FLAGGED(def->ch, AFF_SURPRISE))
+      AFF_FLAGS(def->ch).RemoveBit(AFF_SURPRISE);
     
     // If the attacker dies from recoil, bail out.
     if (damage(att->ch, att->ch, convert_damage(staged_dam), TYPE_HIT, FALSE))

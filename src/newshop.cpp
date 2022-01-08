@@ -1245,6 +1245,8 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
 void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t shop_nr)
 {
   char buf[MAX_STRING_LENGTH];
+  char formatstr[MAX_STRING_LENGTH];
+  char paddingnumberstr[12];
   if (!is_open(keeper, shop_nr))
     return;
 
@@ -1317,8 +1319,8 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
 
 
   if (shop_table[shop_nr].flags.IsSet(SHOP_DOCTOR)) {
-    strlcpy(buf, " **   Availability     Item                              Rating  Ess/Index     Price\r\n"
-                 "------------------------------------------------------------------------------------\r\n", sizeof(buf));
+    strlcpy(buf, " **   Availability     Item                                                           Rating  Ess/Index     Price\r\n"
+                 "-----------------------------------------------------------------------------------------------------------------\r\n", sizeof(buf));
 
     for (struct shop_sell_data *sell = shop_table[shop_nr].selling; sell; sell = sell->next, i++) {
       obj = read_object(sell->vnum, VIRTUAL);
@@ -1359,11 +1361,19 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
       else strcpy(buf2, "-");
 
       if (IS_OBJ_STAT(obj, ITEM_NERPS)) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^Y(N)^n %-29s^n %-6s%2s   %0.2f%c  %9d\r\n", GET_OBJ_NAME(obj),
+        //Format string: "^Y(N)^n %-58s^n %-6s%2s   %0.2f%c  %9d\r\n"
+        //We apply padding for color codes here.
+        snprintf(paddingnumberstr, sizeof(paddingnumberstr), "%d", 58 + count_color_codes_in_string(GET_OBJ_NAME(obj)));
+        snprintf(formatstr, sizeof(formatstr), "%s%s%s", "^Y(N)^n %-", paddingnumberstr, "s^n %-6s%2s   %0.2f%c  %9d\r\n");
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), formatstr, GET_OBJ_NAME(obj),
                 GET_OBJ_TYPE(obj) == ITEM_CYBERWARE ? "Cyber" : "Bio", buf2, ((float)GET_OBJ_VAL(obj, 4) / 100),
                 GET_OBJ_TYPE(obj) == ITEM_CYBERWARE ? 'E' : 'I', buy_price(obj, shop_nr));
       } else {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-33s^n %-6s%2s   %0.2f%c  %9d\r\n", GET_OBJ_NAME(obj),
+        //Format string: "%-62s^n %-6s%2s   %0.2f%c  %9d\r\n"
+        //We apply padding for color codes here.
+        snprintf(paddingnumberstr, sizeof(paddingnumberstr), "%d", 62 + count_color_codes_in_string(GET_OBJ_NAME(obj)));
+        snprintf(formatstr, sizeof(formatstr), "%s%s%s", "%-", paddingnumberstr, "s^n %-6s%2s   %0.2f%c  %9d\r\n");
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), formatstr, GET_OBJ_NAME(obj),
                 GET_OBJ_TYPE(obj) == ITEM_CYBERWARE ? "Cyber" : "Bio", buf2, ((float)GET_OBJ_VAL(obj, 4) / 100),
                 GET_OBJ_TYPE(obj) == ITEM_CYBERWARE ? 'E' : 'I', buy_price(obj, shop_nr));
       }
@@ -1406,9 +1416,17 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
       }
 
       if (IS_OBJ_STAT(obj, ITEM_NERPS)) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^Y(N)^n %-44s^n %6d\r\n", GET_OBJ_NAME(obj), buy_price(obj, shop_nr));
+        //Format string for reference: "^Y(N)^n %-44s^n %6d\r\n"
+        //We apply padding for color codes here.
+        snprintf(paddingnumberstr, sizeof(paddingnumberstr), "%d", 46 + count_color_codes_in_string(GET_OBJ_NAME(obj)));
+        snprintf(formatstr, sizeof(formatstr), "%s%s%s", "^Y(N)^n %-", paddingnumberstr, "s^n %6d\r\n");
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), formatstr, GET_OBJ_NAME(obj), buy_price(obj, shop_nr));
       } else {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-48s^n %6d\r\n", GET_OBJ_NAME(obj),
+        //Format string for reference: "%-48s^n %6d\r\n"
+        //We apply padding for color codes here.
+        snprintf(paddingnumberstr, sizeof(paddingnumberstr), "%d", 50 + count_color_codes_in_string(GET_OBJ_NAME(obj)));
+        snprintf(formatstr, sizeof(formatstr), "%s%s%s", "%-", paddingnumberstr, "s^n %6d\r\n");
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), formatstr, GET_OBJ_NAME(obj),
                   buy_price(obj, shop_nr));
       }
       if (strlen(buf) >= MAX_STRING_LENGTH - 200) {
@@ -1898,6 +1916,9 @@ void shop_info(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
 void shop_check(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t shop_nr)
 {
   char buf[MAX_STRING_LENGTH];
+  char formatstr[MAX_STRING_LENGTH];
+  char paddingnumberstr[12];
+  
   if (!is_open(keeper, shop_nr))
     return;
   if (!is_ok_char(keeper, ch, shop_nr))
@@ -1911,8 +1932,13 @@ void shop_check(char *arg, struct char_data *ch, struct char_data *keeper, vnum_
       float totaltime = order->timeavail - time(0);
       totaltime = totaltime / SECS_PER_MUD_DAY;
       int real_obj = real_object(order->item);
-      if (real_obj >= 0)
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %d) %-30s (%d) - ", i, GET_OBJ_NAME(&obj_proto[real_obj]), order->number);
+      if (real_obj >= 0) {
+        //Format string: " %d) %-30s (%d) - "
+        //We apply padding for color codes here.
+        snprintf(paddingnumberstr, sizeof(paddingnumberstr), "%d", 30 + count_color_codes_in_string(GET_OBJ_NAME(&obj_proto[real_obj])));
+        snprintf(formatstr, sizeof(formatstr), "%s%s%s", "%d) %-", paddingnumberstr, "s (%d) - ");
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), formatstr, i, GET_OBJ_NAME(&obj_proto[real_obj]), order->number);
+      }
       else
         strlcat(buf, " ERROR\r\n", sizeof(buf));
       if (totaltime < 0) {
@@ -2139,6 +2165,9 @@ void randomize_shop_prices(void)
 
 void list_detailed_shop(struct char_data *ch, vnum_t shop_nr)
 {
+  char formatstr[MAX_STRING_LENGTH];
+  char paddingnumberstr[12];
+  
   snprintf(buf, sizeof(buf), "Vnum:       [%5ld], Rnum: [%5ld]\r\n", shop_table[shop_nr].vnum, shop_nr);
 
   int real_mob = real_mobile(shop_table[shop_nr].keeper);
@@ -2168,9 +2197,14 @@ void list_detailed_shop(struct char_data *ch, vnum_t shop_nr)
   strcat(buf, "Selling: \r\n");
   for (struct shop_sell_data *selling = shop_table[shop_nr].selling; selling; selling = selling->next) {
     int real_obj = real_object(selling->vnum);
-    if (real_obj)
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-50s (%5ld) Type: %s Amount: %d\r\n", obj_proto[real_obj].text.name,
+    if (real_obj) {
+      //Format string: "%-50s (%5ld) Type: %s Amount: %d\r\n"
+      //We apply padding for color codes here.
+      snprintf(paddingnumberstr, sizeof(paddingnumberstr), "%d", 50 + count_color_codes_in_string(obj_proto[real_obj].text.name));
+      snprintf(formatstr, sizeof(formatstr), "%s%s%s", "%-", paddingnumberstr, "s (%5ld) Type: %s Amount: %d\r\n");
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), formatstr, obj_proto[real_obj].text.name,
               selling->vnum, selling_type[selling->type], selling->stock);
+    }
   }
   page_string(ch->desc, buf, 0);
 }
@@ -2298,14 +2332,21 @@ void shedit_disp_selling_menu(struct descriptor_data *d)
 {
   CLS(CH);
   int i = 1;
+  char formatstr[MAX_STRING_LENGTH];
+  char paddingnumberstr[12];
   for (struct shop_sell_data *sell = SHOP->selling; sell; sell = sell->next, i++)
   {
     int real_obj = real_object(sell->vnum);
     if (real_obj < 0)
       snprintf(buf, sizeof(buf), "%d) INVALID OBJECT, DELETE IT  ", i);
-    else
-      snprintf(buf, sizeof(buf), "%d) ^c%-50s^n (^c%5ld^n) Type: ^c%6s^n", i, GET_OBJ_NAME(&obj_proto[real_obj]),
+    else {
+      //Format string: "%d) ^c%-50s^n (^c%5ld^n) Type: ^c%6s^n"
+      //We apply padding for color codes here.
+      snprintf(paddingnumberstr, sizeof(paddingnumberstr), "%d", 50 + count_color_codes_in_string(GET_OBJ_NAME(&obj_proto[real_obj])));
+      snprintf(formatstr, sizeof(formatstr), "%s%s%s", "%d) ^c%-", paddingnumberstr, "s^n (^c%5ld^n) Type: ^c%6s^n");
+      snprintf(buf, sizeof(buf), formatstr, i, GET_OBJ_NAME(&obj_proto[real_obj]),
               sell->vnum, selling_type[sell->type]);
+    }
     if (sell->type == SELL_STOCK)
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " Stock: ^c%d^n", sell->stock);
     strcat(buf, "\r\n");

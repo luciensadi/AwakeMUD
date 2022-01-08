@@ -3796,6 +3796,40 @@ char* get_string_after_color_code_removal(const char *str, struct char_data *ch)
   return  clearstr;
 }
 
+// Returns the amount of color codes in a string.
+int count_color_codes_in_string(const char *str) {
+  const char *ptr = str;
+  long ptr_max = strlen(str) - 1;
+
+  int sum = 0;
+
+  while (*ptr && (ptr - str) <= ptr_max) {
+    if (*ptr == '^') {
+      // Parse a single ^ character.
+      if (*(ptr+1) == '^') {
+        sum++;
+        ptr += 2;
+        continue;
+      }
+      // Count color codes.
+      // There are two types of color: Two-character tags (^g) and xterm tags (^[F123]). We must account for both.
+      // 7 for xterm tags 2 for regular tags
+      else if (*(ptr+1) == '[') {
+          ptr  += 7;
+          sum += 7;
+      }
+      else {
+        ptr += 2;
+        sum += 2;
+      }
+    }
+    //Clear character, save it.
+    else
+      ptr += 1;
+  }
+  return  sum;
+}
+
 #define CHECK_FUNC_AND_SFUNC_FOR(function) (mob_index[GET_MOB_RNUM(npc)].func == (function) || mob_index[GET_MOB_RNUM(npc)].sfunc == (function))
 // Returns TRUE if the NPC has a spec that should protect it from damage, FALSE otherwise.
 bool npc_is_protected_by_spec(struct char_data *npc) {
