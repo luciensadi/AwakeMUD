@@ -46,12 +46,12 @@ void adept_release_spell(struct char_data *ch, bool end_spell)
   for (; spell; spell = spell->next)
     if (spell->spirit == ch)
       break;
-  
+
   if (!spell) {
     mudlog("SYSERR: Could not find spell in adept_release_spell!", ch, LOG_SYSLOG, TRUE);
     return;
   }
-  
+
   GET_SUSTAINED_NUM(ch)--;
   GET_SUSTAINED_FOCI(spell->other)--;
   spell->spirit = NULL;
@@ -60,18 +60,18 @@ void adept_release_spell(struct char_data *ch, bool end_spell)
       ospell->spirit = NULL;
       break;
     }
-    
+
   if (!ospell) {
     mudlog("SYSERR: Could not match spell with ospell in adept_release_spell!", ch, LOG_SYSLOG, TRUE);
     return;
   }
-  
+
   strcpy(buf, spells[spell->spell].name);
   if (spell->spell == SPELL_INCATTR || spell->spell == SPELL_INCCYATTR ||
       spell->spell == SPELL_DECATTR || spell->spell == SPELL_DECCYATTR)
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (%s)", attributes[spell->subtype]);
-  
-  
+
+
   if (end_spell) {
     send_to_char(ch, "You deliberately misalign your powers and disrupt %s.\r\n", buf);
     send_to_char(spell->other, "You briefly feel the burden of your tattered %s spell fall back on to you before it fizzles away.\r\n", buf);
@@ -92,7 +92,7 @@ void end_sustained_spell(struct char_data *ch, struct sustain_data *sust)
         if (vsust->spirit) {
           if (GET_TRADITION(vsust->spirit) == TRAD_ADEPT)
             adept_release_spell(vsust->spirit, FALSE);
-          else {  
+          else {
             GET_SUSTAINED_FOCI(sust->other)--;
             GET_SUSTAINED_NUM(vsust->spirit)--;
             GET_SUSTAINED(vsust->spirit) = NULL;
@@ -173,7 +173,7 @@ void totem_bonus(struct char_data *ch, int action, int type, int &target, int &s
         break;
       case TOTEM_BEAR:
       case TOTEM_HORSE:
-      case TOTEM_LIZARD: 
+      case TOTEM_LIZARD:
       case TOTEM_PYTHON:
        if (type == HEALTH)
           skill += 2;
@@ -284,7 +284,7 @@ void totem_bonus(struct char_data *ch, int action, int type, int &target, int &s
       case TOTEM_BADGER:
         if (type == COMBAT)
           skill += 2;
-        break;    
+        break;
       case TOTEM_CHEETAH:
         if (type == COMBAT)
           skill += 2;
@@ -334,7 +334,7 @@ void totem_bonus(struct char_data *ch, int action, int type, int &target, int &s
       case TOTEM_POLECAT:
         if (type == COMBAT) {
           skill++;
-          if (time_info.hours < 6 || time_info.hours > 19)     
+          if (time_info.hours < 6 || time_info.hours > 19)
             skill++;
         } else if (type == HEALTH)
           skill--;
@@ -631,7 +631,7 @@ void end_spirit_existance(struct char_data *ch, bool message)
       GET_NUM_SPIRITS(tempc)--;
       if (message && d->character)
         send_to_char(d->character, "%s returns to the metaplanes, its existence in this world finished.\r\n", CAP(GET_NAME(ch)));
-        
+
       GET_ELEMENTALS_DIRTY_BIT(tempc) = TRUE;
       break;
     }
@@ -750,12 +750,12 @@ void magic_perception(struct char_data *ch, int force, int spell)
       if (IS_DUAL(vict) || IS_ASTRAL(vict))
         act("You notice $n manipulating the astral plane.", FALSE, ch, 0, vict, TO_VICT);
       else act("You notice $n performing magic.", TRUE, ch, 0, vict, TO_VICT);
-      
+
 #ifdef GUARDS_ATTACK_MAGES
       // Guards and fighters don't like people casting magic around them.
-      if (IS_NPC(vict) && (MOB_FLAGGED(vict, MOB_GUARD) 
+      if (IS_NPC(vict) && (MOB_FLAGGED(vict, MOB_GUARD)
                            || mob_is_aggressive(vict, TRUE)
-                           || GET_MOBALERT(vict) == MALERT_ALARM)) 
+                           || GET_MOBALERT(vict) == MALERT_ALARM))
       {
         send_mob_aggression_warnings(ch, vict);
         set_fighting(vict, ch);
@@ -777,16 +777,16 @@ bool spell_drain(struct char_data *ch, int type, int force, int damage)
   else if (type)
     damage += spells[type].draindamage + 3;
   magic_perception(ch, force, type);
-  snprintf(buf, sizeof(buf), "Drain Test: F:%d%s TN:%d Dice: %d", force, wound_name[damage], target, GET_WIL(ch) + GET_DRAIN(ch)); 
+  snprintf(buf, sizeof(buf), "Drain Test: F:%d%s TN:%d Dice: %d", force, wound_name[damage], target, GET_WIL(ch) + GET_DRAIN(ch));
   success = success_test(GET_WIL(ch) + GET_DRAIN(ch), target);
   damage = convert_damage(stage(-success, damage));
   act(buf, FALSE, ch, NULL, NULL, TO_ROLLS);
-  
+
   if (damage <= 0)
     return FALSE;
-  
+
   // Apply physical drain damage.
-  if (force > GET_MAG(ch) / 100 || IS_PROJECT(ch)) {    
+  if (force > GET_MAG(ch) / 100 || IS_PROJECT(ch)) {
     // Iterate through bioware to find a platelet factory.
     bool bPlat = FALSE;
     bool bTraum = FALSE;
@@ -803,17 +803,17 @@ bool spell_drain(struct char_data *ch, int type, int force, int damage)
       damage--;
       GET_MENTAL(chptr) -= 100;
     }
-    
+
     if (damage <= 0)
       return FALSE;
-    
+
     GET_PHYSICAL(ch) -= damage * 100;
     if (IS_PROJECT(ch)) {
       GET_PHYSICAL(ch->desc->original) -= damage * 100;
       AFF_FLAGS(ch->desc->original).SetBit(AFF_DAMAGED);
     }
-  } 
-  
+  }
+
   // Apply mental drain damage.
   else {
     // Iterate through cyberware to find a trauma damper.
@@ -823,22 +823,22 @@ bool spell_drain(struct char_data *ch, int type, int force, int damage)
         break;
       }
     }
-    
+
     if (damage <= 0)
       return FALSE;
-    
+
     GET_MENTAL(ch) -= damage * 100;
   }
-  
+
   // Roll over mental damage to physical.
   if (GET_MENTAL(ch) < 0) {
     GET_PHYSICAL(ch) += GET_MENTAL(ch);
     GET_MENTAL(ch) = 0;
   }
-  
+
   snprintf(buf, sizeof(buf), "Successes: %d  Damage: %d", success, damage);
-  act(buf, FALSE, ch, NULL, NULL, TO_ROLLS); 
-  
+  act(buf, FALSE, ch, NULL, NULL, TO_ROLLS);
+
   update_pos(ch);
   if ((GET_POS(ch) <= POS_STUNNED) && (GET_POS(ch) > POS_DEAD))
   {
@@ -874,12 +874,12 @@ void create_sustained(struct char_data *ch, struct char_data *vict, int spell, i
 {
   struct obj_data *focus = NULL;
   for (int i = 0; !focus && i < NUM_WEARS; i++)
-    if (GET_EQ(ch, i) 
+    if (GET_EQ(ch, i)
         && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_FOCUS
         && GET_FOCUS_TYPE(GET_EQ(ch, i)) == FOCI_SUSTAINED
-        && !GET_FOCUS_ACTIVATED(GET_EQ(ch, i)) 
-        && GET_FOCUS_BONDED_SPIRIT_OR_SPELL(GET_EQ(ch, i)) == spell 
-        && GET_FOCUS_FORCE(GET_EQ(ch, i)) >= force 
+        && !GET_FOCUS_ACTIVATED(GET_EQ(ch, i))
+        && GET_FOCUS_BONDED_SPIRIT_OR_SPELL(GET_EQ(ch, i)) == spell
+        && GET_FOCUS_FORCE(GET_EQ(ch, i)) >= force
         && focus_is_usable_by_ch(GET_EQ(ch, i), ch))
       focus = GET_EQ(ch, i);
   GET_SUSTAINED_NUM(ch)++;
@@ -1031,11 +1031,11 @@ int resist_spell(struct char_data *ch, int spell, int force, int sub)
       skill += GET_POWER(ch, ADEPT_SPELL_SHROUD);
     if (GET_POWER(ch, ADEPT_TRUE_SIGHT) && spells[spell].category == ILLUSION)
       skill += GET_POWER(ch, ADEPT_TRUE_SIGHT);
-    
+
     if (GET_FOCI(ch) > 0) {
       for (int i = 0; i < NUM_WEARS; i++) {
-        if (GET_EQ(ch, i) 
-            && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_FOCUS 
+        if (GET_EQ(ch, i)
+            && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_FOCUS
             && GET_FOCUS_TYPE(GET_EQ(ch, i)) == FOCI_SPELL_DEFENSE
             && focus_is_usable_by_ch(GET_EQ(ch, i), ch))
         {
@@ -1053,15 +1053,15 @@ void cast_combat_spell(struct char_data *ch, int spell, int force, char *arg)
   struct char_data *vict = NULL;
   bool reflected = FALSE;
   int basedamage = 0;
-  
+
   two_arguments(arg, buf, buf1);
-  
+
   if (!*buf)
   {
     send_to_char("What damage level do you wish to cast that spell at?\r\n", ch);
     return;
-  } 
-  
+  }
+
   for (basedamage = 0; *wound_name[basedamage] != '\n'; basedamage++)
     if (is_abbrev(buf, wound_name[basedamage]))
       break;
@@ -1069,35 +1069,35 @@ void cast_combat_spell(struct char_data *ch, int spell, int force, char *arg)
     send_to_char(ch, "'%s' is not a valid damage level, please choose between Light, Moderate, Serious and Deadly.\r\n", capitalize(buf));
     return;
   }
-  
+
   if (*buf1)
     vict = get_char_room_vis(ch, buf1);
-    
+
   if (!check_spell_victim(ch, vict, spell, buf1))
     return;
-    
+
   if (ch == vict) {
     send_to_char("You can't target yourself with a combat spell!\r\n", ch);
     return;
   }
-  
+
   if (get_ch_in_room(ch)->peaceful) {
     send_to_char("This room just has a peaceful, easy feeling...\r\n", ch);
     return;
   }
-  
+
   // Pre-calculate the modifiers to the target (standard modify_target(), altered by spell_bonus()).
   int target_modifiers = modify_target(ch);
   int skill = GET_SKILL(ch, SKILL_SORCERY) + MIN(GET_SKILL(ch, SKILL_SORCERY), GET_CASTING(ch));
   int success = 0;
   spell_bonus(ch, spell, skill, target_modifiers);
-  
+
   if (skill == -1)
     return;
-    
+
   check_killer(ch, vict);
   struct char_data *temp = vict;
-  
+
   switch (spell)
   {
   case SPELL_MANABOLT:
@@ -1105,12 +1105,12 @@ void cast_combat_spell(struct char_data *ch, int spell, int force, char *arg)
       act("You can't affect $N with manabolt.", TRUE, ch, 0, vict, TO_CHAR);
       return;
     }
-    SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST;    
-    
+    SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST;
+
     success = success_test(skill, GET_WIL(vict) + target_modifiers);
     if (success > 0 && GET_REFLECT(vict) && (reflected = reflect_spell(ch, vict, spell, force, 0, GET_WIL(ch), success))) {
       vict = ch;
-      ch = temp;      
+      ch = temp;
     }
     success -= resist_spell(vict, spell, force, 0);
     if (success > 0) {
@@ -1128,7 +1128,11 @@ void cast_combat_spell(struct char_data *ch, int spell, int force, char *arg)
         act("$n seems to flinch slightly as blood trickles from $s nose.", TRUE, vict, 0, 0, TO_ROOM);
         send_to_char("Slight pain fills your mind from an unknown source.\r\n", vict);
       }
-      damage(ch, vict, dam, TYPE_COMBAT_SPELL, PHYSICAL);
+      if (damage(ch, vict, dam, TYPE_COMBAT_SPELL, PHYSICAL) && reflected) {
+        // Vict was killed by their own reflected spell. Stop processing-- we don't want to calculate drain on a nulled struct.
+        return;
+      }
+
       if (IS_NPC(vict) && !IS_NPC(ch))
         GET_LASTHIT(vict) = GET_IDNUM(ch);
     } else
@@ -1141,11 +1145,11 @@ void cast_combat_spell(struct char_data *ch, int spell, int force, char *arg)
       return;
     }
     SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST;
-    
+
     success = success_test(skill, GET_WIL(vict) + target_modifiers);
     if (success > 0 && GET_REFLECT(vict) && (reflected = reflect_spell(ch, vict, spell, force, 0, GET_WIL(ch), success))) {
       vict = ch;
-      ch = temp;      
+      ch = temp;
     }
     success -= resist_spell(vict, spell, force, 0);
     if (success > 0) {
@@ -1163,7 +1167,10 @@ void cast_combat_spell(struct char_data *ch, int spell, int force, char *arg)
         act("$n recoils slightly as though hit by an invisible force.", TRUE, vict, 0, 0, TO_ROOM);
         send_to_char("You mind goes slightly hazy as though you had just been punched.\r\n", vict);
       }
-      damage(ch, vict, dam, TYPE_COMBAT_SPELL, MENTAL);
+      if (damage(ch, vict, dam, TYPE_COMBAT_SPELL, MENTAL) && reflected) {
+        // Vict was killed by their own reflected spell. Stop processing-- we don't want to calculate drain on a nulled struct.
+        return;
+      }
       if (IS_NPC(vict) && !IS_NPC(ch))
         GET_LASTHIT(vict) = GET_IDNUM(ch);
     } else
@@ -1176,11 +1183,11 @@ void cast_combat_spell(struct char_data *ch, int spell, int force, char *arg)
       return;
     }
     SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST;
-    
+
     success = success_test(skill, GET_BOD(vict) + target_modifiers);
     if (success > 0 && GET_REFLECT(vict) && (reflected = reflect_spell(ch, vict, spell, force, 0, GET_BOD(ch), success))) {
       vict = ch;
-      ch = temp;      
+      ch = temp;
     }
     success -= resist_spell(vict, spell, force, 0);
     if (success > 0) {
@@ -1198,7 +1205,10 @@ void cast_combat_spell(struct char_data *ch, int spell, int force, char *arg)
         act("$n grimaces, obviously afflicted with mild pain.", TRUE, vict, 0, 0, TO_ROOM);
         send_to_char("You feel a dull throb of pain flow through your body.\r\n", vict);
       }
-      damage(ch, vict, dam, TYPE_COMBAT_SPELL, PHYSICAL);
+      if (damage(ch, vict, dam, TYPE_COMBAT_SPELL, MENTAL) && reflected) {
+        // Vict was killed by their own reflected spell. Stop processing-- we don't want to calculate drain on a nulled struct.
+        return;
+      }
       if (IS_NPC(vict) && !IS_NPC(ch))
         GET_LASTHIT(vict) = GET_IDNUM(ch);
     } else
@@ -1219,7 +1229,7 @@ void cast_detection_spell(struct char_data *ch, int spell, int force, char *arg,
     return;
   if (find_duplicate_spell(ch, vict, spell, 0))
     return;
-    
+
   // Pre-calculate the modifiers to the target (standard modify_target(), altered by spell_bonus()).
   int target_modifiers = modify_target(ch);
   int skill = GET_SKILL(ch, SKILL_SORCERY) + MIN(GET_SKILL(ch, SKILL_SORCERY), GET_CASTING(ch));
@@ -1244,7 +1254,7 @@ void cast_detection_spell(struct char_data *ch, int spell, int force, char *arg,
       }
     if (success > 0) {
       create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
-      act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);    
+      act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
       vict->char_specials.mindlink = ch;
       ch->char_specials.mindlink = vict;
     } else send_to_char(FAILED_CAST, ch);
@@ -1276,7 +1286,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
     return;
   if (find_duplicate_spell(ch, vict, spell, sub))
     return;
-    
+
   // Pre-calculate the modifiers to the target (standard modify_target(), altered by spell_bonus()).
   int target_modifiers = modify_target(ch);
   int skill = GET_SKILL(ch, SKILL_SORCERY) + MIN(GET_SKILL(ch, SKILL_SORCERY), GET_CASTING(ch));
@@ -1284,7 +1294,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
   int drain = LIGHT;
   spell_bonus(ch, spell, skill, target_modifiers);
   int base_target;
-  
+
   if (skill == -1)
     return;
   bool cyber = TRUE;
@@ -1376,22 +1386,22 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
     case SPELL_INCREF1:
     case SPELL_INCREF2:
     case SPELL_INCREF3:
-      {  
+      {
         int int_with_just_bioware = GET_REAL_INT(vict);
         int qui_with_just_bioware = GET_REAL_QUI(vict);
         int rea_from_bioware = 0;
         int initiative_dice_with_just_bioware = 0;
-        
+
         for (struct obj_data *bioware = vict->bioware; bioware; bioware = bioware->next_content)
         {
           // Skip deactivated adrenal pumps.
           if (GET_BIOWARE_TYPE(bioware) == BIO_ADRENALPUMP && GET_OBJ_VAL(bioware, 5) <= 0)
             continue;
-            
+
           // Apply the int penalty from an activated pain editor.
           if (GET_BIOWARE_TYPE(bioware) == BIO_PAINEDITOR && GET_OBJ_VAL(bioware, 3))
             int_with_just_bioware -= 1;
-            
+
           // Add any miscellaneous affects to your int / qui / dice.
           for (int j = 0; j < MAX_OBJ_AFFECT; j++) {
             if (bioware->affected[j].location == APPLY_INT) {
@@ -1406,20 +1416,20 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
             else if (bioware->affected[j].location == APPLY_INITIATIVE_DICE) {
               initiative_dice_with_just_bioware += bioware->affected[j].modifier;
             }
-          }        
+          }
         }
-        
+
         /*
-        send_to_char(ch, "iwjb %d vs %d, qwjb %d vs %d, dwjb %d vs %d\r\n", 
+        send_to_char(ch, "iwjb %d vs %d, qwjb %d vs %d, dwjb %d vs %d\r\n",
                      int_with_just_bioware, GET_INT(vict),
                      qui_with_just_bioware, GET_QUI(vict),
                      initiative_dice_with_just_bioware, GET_INIT_DICE(vict)
                    );
         */
-        
+
         // If the numbers don't match exactly, refuse to cast.
         if (((((int_with_just_bioware + qui_with_just_bioware) / 2) + rea_from_bioware) != GET_REA(vict))
-            || (initiative_dice_with_just_bioware != GET_INIT_DICE(vict))) 
+            || (initiative_dice_with_just_bioware != GET_INIT_DICE(vict)))
         {
           if (ch == vict) {
             send_to_char(ch, "Your reflexes have already been modified, so the increased reflexes spell won't work for you.\r\n");
@@ -1430,7 +1440,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
         }
       }
       WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
-      
+
       if ((success = success_test(skill, GET_REA(vict) + target_modifiers)) > 0) {
         create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
         send_to_char("The world slows down around you.\r\n", vict);
@@ -1512,7 +1522,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       vict = get_char_room_vis(ch, arg);
     if (find_duplicate_spell(ch, vict, spell, 0))
       return;
-      
+
     // Pre-calculate the modifiers to the target (standard modify_target(), altered by spell_bonus()).
     int target_modifiers = modify_target(ch);
     int skill = GET_SKILL(ch, SKILL_SORCERY) + MIN(GET_SKILL(ch, SKILL_SORCERY), GET_CASTING(ch));
@@ -1527,15 +1537,15 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
     case SPELL_CHAOS:
       if (!check_spell_victim(ch, vict, spell, arg))
         return;
-        
+
       check_killer(ch, vict);
-      
+
       if (!IS_NPC(ch) && !IS_NPC(vict) && PLR_FLAGGED(ch, PLR_KILLER)) {
         act("You have the KILLER flag, so you can't affect $N with a mind-altering spell.", TRUE, ch, 0, vict, TO_CHAR);
         return;
       }
       WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
-      
+
       success = success_test(skill, (spell == SPELL_CONFUSION ? GET_WIL(vict) : GET_INT(vict)) + target_modifiers);
       if (success > 0 && GET_REFLECT(vict) && (reflected = reflect_spell(ch, vict, spell, force, 0, (spell == SPELL_CONFUSION ? GET_WIL(ch) : GET_INT(ch)), success))) {
         vict = ch;
@@ -1555,7 +1565,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       if (!check_spell_victim(ch, vict, spell, arg))
         return;
       WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
-        
+
       success = success_test(skill, 4 + target_modifiers);
       if (success > 0) {
         act("You blink and suddenly $n is gone!", TRUE, vict, 0, 0, TO_ROOM);
@@ -1568,9 +1578,9 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
     case SPELL_STEALTH:
       if (!check_spell_victim(ch, vict, spell, arg))
         return;
-      
+
       WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
-        
+
       success = success_test(skill, 4 + target_modifiers);
       if (success > 0) {
         act("You successfully sustain that spell on $n.", FALSE, vict, 0, ch, TO_VICT);
@@ -1648,7 +1658,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
   }
   if (find_duplicate_spell(ch, vict, spell, 0))
     return;
-    
+
   // Pre-calculate the modifiers to the target (standard modify_target(), altered by spell_bonus()).
   int target_modifiers = modify_target(ch);
   int success = 0;
@@ -1659,7 +1669,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
     skill = GET_SKILL(ch, SKILL_SORCERY) + MIN(GET_SKILL(ch, SKILL_SORCERY), GET_CASTING(ch));
     spell_bonus(ch, spell, skill, target_modifiers);
   }
-    
+
   if (skill == -1)
     return;
   struct char_data *temp = vict;
@@ -1668,7 +1678,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
   case SPELL_ARMOR:
     if (!check_spell_victim(ch, vict, spell, arg))
       return;
-      
+
     WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
     success = success_test(skill, 6 + target_modifiers);
     if (success > 0) {
@@ -1730,11 +1740,11 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       return;
     }
     SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST;
-    
-    success = success_test(skill, 4 + target_modifiers); 
+
+    success = success_test(skill, 4 + target_modifiers);
     if (success > 0 && GET_REFLECT(vict) && (reflected = reflect_spell(ch, vict, spell, force, 0, 4, success))) {
       vict = ch;
-      ch = temp;      
+      ch = temp;
     }
     success -= resist_spell(vict, spell, force, 0);
     success -= GET_BOD(vict) / 2;
@@ -1775,15 +1785,15 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       success -= success_test(GET_DEFENSE(vict) + GET_DEFENSE(vict) ? GET_POWER(vict, ADEPT_SIDESTEP) : 0, 4 + damage_modifier(vict, buf, sizeof(buf)));
     }
     success += success_test(skill, 4 + target_modifiers);
-      
+
     if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict)) {
       act("You have the KILLER flag, so you can't affect $N with clout.", TRUE, ch, 0, vict, TO_CHAR);
       return;
     }
     SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST;
-      
+
     send_to_char("You feel a rush of air head towards you!\r\n", vict);
-    
+
     if (success <= 0) {
       act("Your clout spell harmlessly disperses as $n dodges it.", FALSE, vict, 0, ch, TO_VICT);
       send_to_char("You easily dodge it!\r\n", vict);
@@ -1810,9 +1820,11 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
         send_to_char("It rushes past you, not causing any damage.\r\n", vict);
         act("$n doesn't seem hurt by your clout spell.", FALSE, vict, 0, ch, TO_VICT);
       }
-      damage(ch, vict, dam, TYPE_MANIPULATION_SPELL, MENTAL);
-      if (IS_NPC(vict) && !IS_NPC(ch))
-        GET_LASTHIT(vict) = GET_IDNUM(ch);
+      if (!damage(ch, vict, dam, TYPE_MANIPULATION_SPELL, MENTAL)) {
+        // We only care about updating last_hit for non-dead characters.
+        if (IS_NPC(vict) && !IS_NPC(ch))
+          GET_LASTHIT(vict) = GET_IDNUM(ch);
+      }
     }
     spell_drain(ch, spell, force, basedamage);
     break;
@@ -1829,13 +1841,13 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       return;
     }
     SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST;
-  
+
     act("$n's hands seem to spontaneously combust as $e directs a stream of flame at $N!", TRUE, ch, 0, vict, TO_ROOM);
-    
+
     success += success_test(skill, 4 + target_modifiers);
     if (success > 0 && GET_REFLECT(vict) && (reflected = reflect_spell(ch, vict, spell, force, 0, 4, success))) {
       vict = ch;
-      ch = temp;      
+      ch = temp;
     }
     if (success <= 0) {
       act("$n dodges the flames, which disperse as they past $m.", FALSE, vict, 0, 0, TO_ROOM);
@@ -1862,18 +1874,21 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
         act("The flames impact $n, but disperse on impact.", FALSE, vict, 0, ch, TO_ROOM);
         send_to_char("The flames rapidly disperse around you, causing only mild discomfort.\r\n", vict);
       }
-      
+
       if (IS_NPC(ch) || IS_NPC(vict)) {
         damage_equip(ch, vict, force, TYPE_FIRE);
       }
-      if (!damage(ch, vict, dam, TYPE_MANIPULATION_SPELL, PHYSICAL) && number(0, 6) <= basedamage + 1) {
-        act("^RThe flames continue to burn around $m!^N", TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("^RYou continue to burn!\r\n", vict);
-        vict->points.fire[0] = srdice();
-        vict->points.fire[1] = 0;
+      if (!damage(ch, vict, dam, TYPE_MANIPULATION_SPELL, PHYSICAL)) {
+        if (number(0, 6) <= basedamage + 1) {
+          act("^RThe flames continue to burn around $m!^N", TRUE, vict, 0, 0, TO_ROOM);
+          send_to_char("^RYou continue to burn!\r\n", vict);
+          vict->points.fire[0] = srdice();
+          vict->points.fire[1] = 0;
+        }
+
+        if (IS_NPC(vict) && !IS_NPC(ch))
+          GET_LASTHIT(vict) = GET_IDNUM(ch);
       }
-      if (IS_NPC(vict) && !IS_NPC(ch))
-        GET_LASTHIT(vict) = GET_IDNUM(ch);
     }
     spell_drain(reflected ? vict : ch, spell, force, basedamage);
     break;
@@ -1885,19 +1900,19 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       target_modifiers -= 2;
     else
       success -= success_test(GET_DEFENSE(vict) + GET_DEFENSE(vict) ? GET_POWER(vict, ADEPT_SIDESTEP) : 0, 4 + damage_modifier(vict, buf, sizeof(buf)));
-    
+
     if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict)) {
       act("You have the KILLER flag, so you can't affect $N with acid stream.", TRUE, ch, 0, vict, TO_CHAR);
       return;
     }
     SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST;
     act("Dark clouds form around $n moments before it condenses into a dark sludge and flies towards $N!", TRUE, ch, 0, vict, TO_ROOM);
-    
+
     success += success_test(skill, 4 + target_modifiers);
     // Known bug: Adept sidestep and the defense test don't reply to the reflected spell.
     if (success > 0 && GET_REFLECT(vict) && (reflected = reflect_spell(ch, vict, spell, force, 0, 4, success))) {
       vict = ch;
-      ch = temp;      
+      ch = temp;
     }
     if (success <= 0) {
       act("$n dodges the acid, which evaporates as it passes $m.", FALSE, vict, 0, 0, TO_ROOM);
@@ -1924,14 +1939,15 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
         act("The acid splashes on $n, but $e doesn't seem to flinch.", FALSE, vict, 0, ch, TO_ROOM);
         send_to_char("You are splashed by the acid, but it causes nothing more than a moment's irritation.\r\n", vict);
       }
-      
+
       if (IS_NPC(ch) || IS_NPC(vict)) {
         damage_equip(ch, vict, force, TYPE_ACID);
       }
       AFF_FLAGS(vict).SetBit(AFF_ACID);
-      damage(ch, vict, dam, TYPE_MANIPULATION_SPELL, PHYSICAL);
-      if (IS_NPC(vict) && !IS_NPC(ch))
-        GET_LASTHIT(vict) = GET_IDNUM(ch);
+      if (!damage(ch, vict, dam, TYPE_MANIPULATION_SPELL, PHYSICAL)) {
+        if (IS_NPC(vict) && !IS_NPC(ch))
+          GET_LASTHIT(vict) = GET_IDNUM(ch);
+      }
     }
     spell_drain(reflected ? vict : ch, spell, force, basedamage);
     break;
@@ -1951,12 +1967,12 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
     }
     SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST;
     act("Lightning bursts forth from $n and heads directly towards $N!", TRUE, ch, 0, vict, TO_ROOM);
-    
+
     success += success_test(skill, 4 + target_modifiers);
     // Known bug: Defense test does not apply to reflected spell.
     if (success > 0 && GET_REFLECT(vict) && (reflected = reflect_spell(ch, vict, spell, force, 0, 4, success))) {
       vict = ch;
-      ch = temp;      
+      ch = temp;
     }
     if (success <= 0) {
       act("$n easily dodges it, and it vanishes to nothing.", FALSE, vict, 0, 0, TO_ROOM);
@@ -1984,17 +2000,18 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
         send_to_char("Your body absorbs the lightning without harm.\r\n", vict);
       }
       for (int i = 0; i < NUM_WEARS; i++) {
-        if (number(0, 1) 
-            && GET_EQ(vict, i) 
-            && (GET_OBJ_MATERIAL(GET_EQ(vict, i)) == 10 
+        if (number(0, 1)
+            && GET_EQ(vict, i)
+            && (GET_OBJ_MATERIAL(GET_EQ(vict, i)) == 10
                 || GET_OBJ_MATERIAL(GET_EQ(vict, i)) == 11))
         {
           damage_obj(vict, GET_EQ(vict, i), force, DAMOBJ_LIGHTNING);
         }
       }
-      damage(ch, vict, dam, TYPE_MANIPULATION_SPELL, PHYSICAL);
-      if (IS_NPC(vict) && !IS_NPC(ch))
-        GET_LASTHIT(vict) = GET_IDNUM(ch);
+      if (!damage(ch, vict, dam, TYPE_MANIPULATION_SPELL, PHYSICAL)) {
+        if (IS_NPC(vict) && !IS_NPC(ch))
+          GET_LASTHIT(vict) = GET_IDNUM(ch);
+      }
     }
     spell_drain(reflected ? vict : ch, spell, force, basedamage);
     break;
@@ -2014,12 +2031,12 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
     }
     SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST;
     act("A thin laser beam is emitted from $n and heads directly towards $N!", TRUE, ch, 0, vict, TO_ROOM);
-    
+
     success += success_test(skill, 4 + target_modifiers);
     // Known bug: Defense test does not apply when reflected.
     if (success > 0 && GET_REFLECT(vict) && (reflected = reflect_spell(ch, vict, spell, force, 0, 4, success))) {
       vict = ch;
-      ch = temp;      
+      ch = temp;
     }
     if (success <= 0) {
       act("$n easily dodges it, and the beam flickers and vanishes.", FALSE, vict, 0, 0, TO_ROOM);
@@ -2049,9 +2066,10 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       for (int i = 0; i < NUM_WEARS; i++)
         if (!number(0, 50))
           damage_obj(vict, GET_EQ(vict, i), force, DAMOBJ_PIERCE);
-      damage(ch, vict, dam, TYPE_MANIPULATION_SPELL, PHYSICAL);
-      if (IS_NPC(vict) && !IS_NPC(ch))
-        GET_LASTHIT(vict) = GET_IDNUM(ch);
+      if (!damage(ch, vict, dam, TYPE_MANIPULATION_SPELL, PHYSICAL)) {
+        if (IS_NPC(vict) && !IS_NPC(ch))
+          GET_LASTHIT(vict) = GET_IDNUM(ch);
+      }
     }
     spell_drain(reflected ? vict : ch, spell, force, basedamage);
     break;
@@ -2066,15 +2084,15 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       success -= success_test(GET_DEFENSE(vict) + GET_DEFENSE(vict) ? GET_POWER(vict, ADEPT_SIDESTEP) : 0, 4 + damage_modifier(vict, buf, sizeof(buf)));
     }
     success += success_test(skill, 4 + target_modifiers);
-      
+
     if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict)) {
       act("You have the KILLER flag, so you can't affect $N with your steam cloud.", TRUE, ch, 0, vict, TO_CHAR);
       return;
     }
     SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST;
-      
+
     send_to_char("You see a cloud of steam vapours rush towards you!\r\n", vict);
-    
+
     if (success <= 0) {
       act("Your steam spell harmlessly evaporates as $n dodges it.", FALSE, vict, 0, ch, TO_VICT);
       send_to_char("You easily dodge it!\r\n", vict);
@@ -2101,9 +2119,10 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
         send_to_char("It rushes past you, not causing any damage.\r\n", vict);
         act("$n doesn't seem hurt by your steam spell.", FALSE, vict, 0, ch, TO_VICT);
       }
-      damage(ch, vict, dam, TYPE_MANIPULATION_SPELL, MENTAL);
-      if (IS_NPC(vict) && !IS_NPC(ch))
-        GET_LASTHIT(vict) = GET_IDNUM(ch);
+      if (!damage(ch, vict, dam, TYPE_MANIPULATION_SPELL, MENTAL)) {
+        if (IS_NPC(vict) && !IS_NPC(ch))
+          GET_LASTHIT(vict) = GET_IDNUM(ch);
+      }
     }
     spell_drain(ch, spell, force, basedamage);
     break;
@@ -2118,15 +2137,15 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       success -= success_test(GET_DEFENSE(vict) + GET_DEFENSE(vict) ? GET_POWER(vict, ADEPT_SIDESTEP) : 0, 4 + damage_modifier(vict, buf, sizeof(buf)));
     }
     success += success_test(skill, 4 + target_modifiers);
-      
+
     if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict)) {
       act("You have the KILLER flag, so you can't affect $N with thunderbolt.", TRUE, ch, 0, vict, TO_CHAR);
       return;
     }
     SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST;
-      
+
     send_to_char("The air around you explodes into a deafening roar!\r\n", vict);
-    
+
     if (success <= 0) {
       act("Your thunderbolt spell harmlessly echoes as $n dodges it.", FALSE, vict, 0, ch, TO_VICT);
       send_to_char("You easily dodge it!\r\n", vict);
@@ -2153,9 +2172,10 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
         send_to_char("It rolls past you, not causing any damage.\r\n", vict);
         act("$n doesn't seem hurt by your thunderbolt spell.", FALSE, vict, 0, ch, TO_VICT);
       }
-      damage(ch, vict, dam, TYPE_MANIPULATION_SPELL, MENTAL);
-      if (IS_NPC(vict) && !IS_NPC(ch))
-        GET_LASTHIT(vict) = GET_IDNUM(ch);
+      if (!damage(ch, vict, dam, TYPE_MANIPULATION_SPELL, MENTAL)) {
+        if (IS_NPC(vict) && !IS_NPC(ch))
+          GET_LASTHIT(vict) = GET_IDNUM(ch);
+      }
     }
     spell_drain(ch, spell, force, basedamage);
     break;
@@ -2170,15 +2190,15 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       success -= success_test(GET_DEFENSE(vict) + GET_DEFENSE(vict) ? GET_POWER(vict, ADEPT_SIDESTEP) : 0, 4 + damage_modifier(vict, buf, sizeof(buf)));
     }
     success += success_test(skill, 4 + target_modifiers);
-      
+
     if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict)) {
       act("You have the KILLER flag, so you can't affect $N with waterbolt.", TRUE, ch, 0, vict, TO_CHAR);
       return;
     }
     SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST;
-      
+
     send_to_char("You see a bolt of water head towards you!\r\n", vict);
-    
+
     if (success <= 0) {
       act("Your waterbolt spell harmlessly evaporates as $n dodges it.", FALSE, vict, 0, ch, TO_VICT);
       send_to_char("You easily dodge it!\r\n", vict);
@@ -2205,9 +2225,10 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
         send_to_char("It rushes past you, not causing any damage.\r\n", vict);
         act("$n doesn't seem hurt by your waterbolt spell.", FALSE, vict, 0, ch, TO_VICT);
       }
-      damage(ch, vict, dam, TYPE_MANIPULATION_SPELL, MENTAL);
-      if (IS_NPC(vict) && !IS_NPC(ch))
-        GET_LASTHIT(vict) = GET_IDNUM(ch);
+      if (!damage(ch, vict, dam, TYPE_MANIPULATION_SPELL, MENTAL)) {
+        if (IS_NPC(vict) && !IS_NPC(ch))
+          GET_LASTHIT(vict) = GET_IDNUM(ch);
+      }
     }
     spell_drain(ch, spell, force, basedamage);
     break;
@@ -2554,21 +2575,21 @@ ACMD(do_contest)
   }
   int chskill = GET_SKILL(ch, SKILL_CONJURING), caskill = GET_SKILL(ch, SKILL_CONJURING) + GET_CHA(ch);
   for (int i = 0; i < NUM_WEARS; i++)
-    if (GET_EQ(ch, i) 
-        && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_FOCUS 
+    if (GET_EQ(ch, i)
+        && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_FOCUS
         && GET_FOCUS_TYPE(GET_EQ(ch, i)) == FOCI_SPIRIT
         && focus_is_usable_by_ch(GET_EQ(ch, i), ch)
-        && GET_OBJ_VAL(GET_EQ(ch, i), 3) == GET_SPARE1(mob) 
+        && GET_OBJ_VAL(GET_EQ(ch, i), 3) == GET_SPARE1(mob)
         && GET_OBJ_VAL(GET_EQ(ch, i), 4)) {
       chskill += GET_OBJ_VAL(GET_EQ(ch, i), 1);
       break;
     }
   for (int i = 0; i < NUM_WEARS; i++)
-    if (GET_EQ(caster, i) 
-        && GET_OBJ_TYPE(GET_EQ(caster, i)) == ITEM_FOCUS 
+    if (GET_EQ(caster, i)
+        && GET_OBJ_TYPE(GET_EQ(caster, i)) == ITEM_FOCUS
         && GET_FOCUS_TYPE(GET_EQ(caster, i)) == FOCI_SPIRIT
         && focus_is_usable_by_ch(GET_EQ(caster, i), caster)
-        && GET_OBJ_VAL(GET_EQ(caster, i), 3) == GET_SPARE1(mob) 
+        && GET_OBJ_VAL(GET_EQ(caster, i), 3) == GET_SPARE1(mob)
         && GET_OBJ_VAL(GET_EQ(caster, i), 4)) {
       caskill += GET_OBJ_VAL(GET_EQ(caster, i), 1);
       break;
@@ -2643,7 +2664,7 @@ ACMD(do_unbond)
   } else if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && WEAPON_IS_FOCUS(obj) && WEAPON_FOCUS_USABLE_BY(obj, ch)) {
     send_to_char("You sever the weapon focus's bond with the astral plane.\r\n", ch);
     GET_WEAPON_FOCUS_BONDED_BY(obj) = GET_WEAPON_FOCUS_BOND_STATUS(obj) = 0;
-  } else 
+  } else
     send_to_char(ch, "You can't unbond %s.\r\n", GET_OBJ_NAME(obj));
 }
 
@@ -2657,7 +2678,7 @@ ACMD(do_bond)
   struct obj_data *obj;
   int karma = 0, spirit = 0;
   struct spell_data *spell = GET_SPELLS(ch);
-  
+
   if (!argument || !*argument) {
     send_to_char("You need to specify something to bond.\r\n", ch);
     return;
@@ -2666,13 +2687,13 @@ ACMD(do_bond)
   // Find the object in their inventory or equipment.
   struct char_data *found_char = NULL;
   generic_find(buf1, FIND_OBJ_INV | FIND_OBJ_EQUIP, ch, &found_char, &obj);
-        
+
   // No object-- failure case.
   if (!obj) {
     send_to_char(ch, "You don't have a '%s'.\r\n", buf1);
     return;
   }
-  
+
   if (GET_OBJ_TYPE(obj) == ITEM_DOCWAGON) {
     if (GET_DOCWAGON_BONDED_IDNUM(obj)) {
       if (GET_DOCWAGON_BONDED_IDNUM(obj) == GET_IDNUM(ch))
@@ -2686,18 +2707,18 @@ ACMD(do_bond)
         ch, obj, 0, TO_CHAR);
     return;
   }
-  
+
   else if (GET_OBJ_TYPE(obj) == ITEM_WEAPON
            && !IS_GUN(GET_WEAPON_ATTACK_TYPE(obj))
-           && GET_WEAPON_FOCUS_RATING(obj) > 0) 
+           && GET_WEAPON_FOCUS_RATING(obj) > 0)
   {
     if (GET_TRADITION(ch) == TRAD_MUNDANE) {
       send_to_char("Mundanes can't bond weapon foci.\r\n", ch);
       return;
     }
     if (GET_WEAPON_FOCUS_BONDED_BY(obj) > 0) {
-      send_to_char(ch, "%s is already bonded to %s.", 
-                   capitalize(GET_OBJ_NAME(obj)), 
+      send_to_char(ch, "%s is already bonded to %s.",
+                   capitalize(GET_OBJ_NAME(obj)),
                    GET_WEAPON_FOCUS_BONDED_BY(obj) == GET_IDNUM(ch) ? "you" : "someone else");
       return;
     }
@@ -2705,7 +2726,7 @@ ACMD(do_bond)
       send_to_char(ch, "%s is too powerful for you to bond! You need at least %d magic to bond it, and you have %d.\r\n", capitalize(GET_OBJ_NAME(obj)), (int) ((GET_WEAPON_FOCUS_RATING(obj) + 1) / 2));
       return;
     }
-    
+
     if (IS_WORKING(ch)) {
       send_to_char(TOOBUSY, ch);
       return;
@@ -2714,7 +2735,7 @@ ACMD(do_bond)
       send_to_char("You must be sitting to perform a bonding ritual.\r\n", ch);
       return;
     }
-    
+
     if (GET_WEAPON_FOCUS_BOND_STATUS(obj) > 0) {
       GET_WEAPON_FOCUS_BOND_STATUS(obj) = GET_WEAPON_FOCUS_RATING(obj) * 60;
       send_to_char(ch, "You restart the ritual to bond %s.\r\n", GET_OBJ_NAME(obj));
@@ -2723,9 +2744,9 @@ ACMD(do_bond)
       ch->char_specials.programming = obj;
       return;
     }
-    
+
     karma = (3 + GET_WEAPON_REACH(obj)) * GET_WEAPON_FOCUS_RATING(obj);
-    
+
     if (GET_KARMA(ch) < karma * 100) {
       send_to_char(ch, "You don't have enough karma to bond that (Need %d).\r\n", karma);
       return;
@@ -2733,19 +2754,19 @@ ACMD(do_bond)
     GET_KARMA(ch) -= karma * 100;
     GET_WEAPON_FOCUS_BOND_STATUS(obj) = GET_WEAPON_FOCUS_RATING(obj) * 60;
     GET_WEAPON_FOCUS_BONDED_BY(obj) = GET_IDNUM(ch);
-    
+
     if (access_level(ch, LVL_BUILDER)) {
       send_to_char(ch, "You use your staff powers to greatly accelerate the bonding ritual.\r\n");
       GET_WEAPON_FOCUS_BOND_STATUS(obj) = 1;
     }
-    
+
     send_to_char(ch, "You begin the ritual to bond %s.\r\n", GET_OBJ_NAME(obj));
     act("$n begins a ritual to bond $p.", TRUE, ch, obj, 0, TO_ROOM);
     AFF_FLAGS(ch).SetBit(AFF_BONDING);
     ch->char_specials.programming = obj;
     return;
   }
-  
+
   else if (GET_OBJ_TYPE(obj) == ITEM_FOCUS) {
     if (GET_TRADITION(ch) == TRAD_MUNDANE)
       send_to_char(ch, "You can't bond foci.\r\n");
@@ -2857,12 +2878,12 @@ ACMD(do_bond)
       GET_FOCUS_BONDED_TO(obj) = GET_IDNUM(ch);
       GET_FOCUS_BONDED_SPIRIT_OR_SPELL(obj) = spirit;
       GET_FOCUS_TRADITION(obj) = GET_TRADITION(ch) == TRAD_HERMETIC ? 1 : 0;
-      
+
       if (access_level(ch, LVL_BUILDER)) {
         send_to_char(ch, "You use your staff powers to greatly accelerate the bonding ritual.\r\n");
         GET_FOCUS_BOND_TIME_REMAINING(obj) = 1;
       }
-      
+
       send_to_char(ch, "You begin the ritual to bond %s.\r\n", GET_OBJ_NAME(obj));
       act("$n begins a ritual to bond $p.", TRUE, ch, obj, 0, TO_ROOM);
       AFF_FLAGS(ch).SetBit(AFF_BONDING);
@@ -2901,11 +2922,11 @@ ACMD(do_release)
       if (--i == 0) {
         struct spirit_data *temp;
         if (GET_TRADITION(ch) == TRAD_HERMETIC) {
-          send_to_char(ch, "You release %s from its obligations and it departs to the metaplanes.\r\n", 
+          send_to_char(ch, "You release %s from its obligations and it departs to the metaplanes.\r\n",
                        (real_mob = real_mobile(elements[spirit->type].vnum)) >= 0 ? GET_NAME(&mob_proto[real_mob]) : "an elemental");
         }
         else
-          send_to_char(ch, "You release %s from its obligations and it departs to the metaplanes.\r\n", 
+          send_to_char(ch, "You release %s from its obligations and it departs to the metaplanes.\r\n",
                        (real_mob = real_mobile(spirits[spirit->type].vnum)) >= 0 ? GET_NAME(&mob_proto[real_mob]) : "a spirit");
         if (spirit->called)
           for (struct char_data *mob = character_list; mob; mob = mob->next)
@@ -3008,7 +3029,7 @@ ACMD(do_cast)
     ch->squeue->force = force;
     ch->squeue->arg = str_dup(buf1);
   } else cast_spell(ch, spell->type, spell->subtype, force, buf1);
-  
+
 }
 
 ACMD(do_conjure)
@@ -3130,7 +3151,7 @@ ACMD(do_conjure)
       send_to_char("You aren't in the correct domain to conjure that spirit.\r\n", ch);
       return;
     }
-    
+
     // Calculate the skill and TN used.
     int skill = GET_SKILL(ch, SKILL_CONJURING), target = force;
     if (ch->in_room->background[CURRENT_BACKGROUND_TYPE] == AURA_POWERSITE)
@@ -3142,11 +3163,11 @@ ACMD(do_conjure)
       send_to_char("Your totem will not let you conjure that spirit!\r\n", ch);
       return;
     }
-    
+
     // Modify the skill rating by foci.
     for (int i = 0; i < NUM_WEARS; i++)
-      if (GET_EQ(ch, i) 
-          && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_FOCUS 
+      if (GET_EQ(ch, i)
+          && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_FOCUS
           && GET_OBJ_VAL(GET_EQ(ch, i), 0) == FOCI_SPIRIT
           && focus_is_usable_by_ch(GET_EQ(ch, i), ch)
           && GET_OBJ_VAL(GET_EQ(ch, i), 3) == ch->char_specials.conjure[0]
@@ -3154,13 +3175,13 @@ ACMD(do_conjure)
         skill += GET_OBJ_VAL(GET_EQ(ch, i), 1);
         break;
       }
-      
+
     // Modify the TN for wound penalties and sustains.
     strlcpy(buf3, "", sizeof(buf3)); strlcpy(buf2, "", sizeof(buf2));
     target += damage_modifier(ch, buf3, sizeof(buf3)) + sustain_modifier(ch, buf2, sizeof(buf2));
     snprintf(buf, sizeof(buf), "Sustain: %s\r\nWound modifiers: %s", buf3, buf2);
     act(buf, FALSE, ch, 0, 0, TO_ROLLS);
-    
+
     int success = success_test(skill, target);
     if (!conjuring_drain(ch, force) && AWAKE(ch)) {
       if (success < 1)
@@ -3179,7 +3200,7 @@ ACMD(do_conjure)
         struct char_data *mob = create_elemental(ch, spirit, force, spirdata->id, TRAD_SHAMANIC);
         send_to_char("The spirit hears your call and comes forth from the metaplanes.\r\n", ch);
         act("$n fades into existance on the astral plane.", TRUE, mob, 0, 0, TO_ROOM);
-        
+
         AFF_FLAGS(ch).SetBit(AFF_GROUP);
         AFF_FLAGS(mob).SetBit(AFF_GROUP);
         GET_SPARE2(mob) = NUMBER_OF_IG_DAYS_FOR_SPIRIT_TO_LAST;
@@ -3195,25 +3216,25 @@ ACMD(do_spells)
     send_to_char(ch, "%ss don't have the aptitude for spells.\r\n", aspect_names[GET_ASPECT(ch)]);
     return;
   }
-  
+
   // Adepts and Mundanes cannot cast spells.
   if (GET_TRADITION(ch) == TRAD_ADEPT || GET_TRADITION(ch) == TRAD_MUNDANE) {
     send_to_char(ch, "%ss don't have the aptitude for spells.\r\n", tradition_names[(int) GET_TRADITION(ch)]);
     return;
   }
-  
+
   // Character is of the right type to cast spells, but doesn't have the skill trained yet.
   if (!GET_SKILL(ch, SKILL_SORCERY)) {
     send_to_char(ch, "You need to learn the %s skill first.\r\n", skills[SKILL_SORCERY].name);
     return;
   }
-  
+
   // Character has no spells known.
   if (!GET_SPELLS(ch)) {
     send_to_char("You don't know any spells.\r\n", ch);
     return;
   }
-  
+
   // Character knows spells. List them.
   send_to_char("You know the following spells:\r\n", ch);
   for (struct spell_data *spell = GET_SPELLS(ch); spell; spell = spell->next)
@@ -3231,13 +3252,13 @@ ACMD(do_forget)
   for (struct spell_data *spell = GET_SPELLS(ch); spell; spell = spell->next)
    if (is_abbrev(argument, spell->name)) {
      struct spell_data *temp;
-  
+
      send_to_char(ch, "You forget %s.\r\n", spell->name);
      GET_FORCE_POINTS(ch) += spell->force;
 
      REMOVE_FROM_LIST(spell, GET_SPELLS(ch), next);
      delete spell;
-     
+
      GET_SPELLS_DIRTY_BIT(ch) = TRUE;
      return;
    }
@@ -3257,7 +3278,7 @@ ACMD(do_learn)
     send_to_char("What spell formula would you like to learn from?\r\n", ch);
     return;
   }
-    
+
   if (!(obj = get_obj_in_list_vis(ch, buf, ch->carrying))) {
     send_to_char(ch, "You're not carrying any '%s' to learn from.\r\n", buf);
     return;
@@ -3267,7 +3288,7 @@ ACMD(do_learn)
     return;
   }
   if (GET_OBJ_TIMER(obj) <= -2) {
-    send_to_char(ch, "The spell design on %s isn't complete.\r\n", GET_OBJ_NAME(obj)); 
+    send_to_char(ch, "The spell design on %s isn't complete.\r\n", GET_OBJ_NAME(obj));
     return;
   }
   if ((GET_TRADITION(ch) == TRAD_HERMETIC && GET_OBJ_VAL(obj, 2)) || (GET_TRADITION(ch) == TRAD_SHAMANIC && !GET_OBJ_VAL(obj, 2))) {
@@ -3312,7 +3333,7 @@ ACMD(do_learn)
   for (;library; library = library->next_content) {
     if (GET_OBJ_TYPE(library) == ITEM_MAGIC_TOOL
         && ((GET_TRADITION(ch) == TRAD_SHAMANIC
-            && GET_OBJ_VAL(library, 0) == TYPE_LODGE && GET_OBJ_VAL(library, 3) == GET_IDNUM(ch)) 
+            && GET_OBJ_VAL(library, 0) == TYPE_LODGE && GET_OBJ_VAL(library, 3) == GET_IDNUM(ch))
         || (GET_TRADITION(ch) == TRAD_HERMETIC && GET_OBJ_VAL(library, 0) == TYPE_LIBRARY_SPELL))) {
       if (GET_OBJ_VAL(library, 1) >= force) {
         break;
@@ -3411,13 +3432,13 @@ ACMD(do_elemental)
   snprintf(buf, sizeof(buf), "You currently have the following %s bound:\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elementals" : "spirits");
   for (struct spirit_data *elem = GET_SPIRIT(ch); elem; elem = elem->next, i++) {
     if (GET_TRADITION(ch) == TRAD_SHAMANIC)
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%d) %-30s (Force %d) Services %d\r\n", 
-               i, 
-               (real_mob = real_mobile(spirits[elem->type].vnum)) >= 0 ? GET_NAME(&mob_proto[real_mob]) : "a spirit", 
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%d) %-30s (Force %d) Services %d\r\n",
+               i,
+               (real_mob = real_mobile(spirits[elem->type].vnum)) >= 0 ? GET_NAME(&mob_proto[real_mob]) : "a spirit",
                elem->force, elem->services);
     else
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%d) %-30s (Force %d) Services: %d%10s\r\n", 
-               i, 
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%d) %-30s (Force %d) Services: %d%10s\r\n",
+               i,
                (real_mob = real_mobile(elements[elem->type].vnum)) >= 0 ? GET_NAME(&mob_proto[real_mob]) : "an elemental",
                elem->force, elem->services, elem->called ? " Present" : " ");
   }
@@ -3660,14 +3681,14 @@ POWER(spirit_sustain)
     for (sust = GET_SUSTAINED(ch); sust; sust = sust->next)
       if (sust->caster && --i == 0)
         break;
-    
+
     // Anti-crash.
     if (!sust) {
       mudlog("SYSERR: We would have crashed from a bad sustain!", ch, LOG_SYSLOG, TRUE);
       send_to_char("Your elemental can't sustain that spell.\r\n", ch);
       return;
     }
-    
+
     if (sust->focus || sust->spirit) {
       send_to_char("You aren't sustaining that spell yourself.\r\n", ch);
       return;
@@ -4040,10 +4061,10 @@ ACMD(do_order)
     send_to_char(ch, "Which %s do you wish to give an order to?\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
     return;
   }
-  
+
   // It's not worth parsing this whole thing out for changes. If they use the command, just consider their spirits dirty.
   GET_ELEMENTALS_DIRTY_BIT(ch) = TRUE;
-  
+
   for (spirit = GET_SPIRIT(ch); spirit; spirit = spirit->next)
     if (--i == 0)
       break;
@@ -4127,20 +4148,20 @@ ACMD(do_order)
       }
     }
     struct char_data *mob = find_spirit_by_id(spirit->id, GET_IDNUM(ch));
-    
+
     if (!mob) {
       if (order == SERV_LEAVE) {
         ((*services[order].func) (ch, mob, spirit, buf2));
         return;
       }
-      
+
       send_to_char(ch, "That %s has been ensnared by forces you cannot control. Your only option is to release it.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
       snprintf(buf, sizeof(buf), "SYSERR: %s belonging to %s (%ld) has disappeared unexpectedly-- did someone purge it?", GET_TRADITION(ch) == TRAD_HERMETIC ? "Elemental" : "Spirit",
               GET_CHAR_NAME(ch), GET_IDNUM(ch));
       mudlog(buf, ch, LOG_SYSLOG, TRUE);
       return;
     }
-    
+
     if (services[order].type == 1 && MOB_FLAGGED(mob, MOB_ASTRAL)) {
       send_to_char(ch, "That %s must materialize before it can use that power.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
       return;
@@ -4217,7 +4238,7 @@ void deactivate_power(struct char_data *ch, int power)
     case ADEPT_LOW_LIGHT:
     case ADEPT_THERMO:
       switch (GET_RACE(ch)) {
-        case RACE_HUMAN: 
+        case RACE_HUMAN:
         case RACE_OGRE:
           NATURAL_VISION(ch) = NORMAL;
           break;
@@ -4230,7 +4251,7 @@ void deactivate_power(struct char_data *ch, int power)
         case RACE_FOMORI:
         case RACE_GIANT:
         case RACE_MINOTAUR:
-          NATURAL_VISION(ch) = THERMOGRAPHIC;  
+          NATURAL_VISION(ch) = THERMOGRAPHIC;
           break;
         case RACE_ORK:
         case RACE_HOBGOBLIN:
@@ -4268,7 +4289,7 @@ ACMD(do_deactivate)
 {
   struct obj_data *obj;
   int i;
-  
+
   if (GET_TRADITION(ch) == TRAD_ADEPT && !str_str(argument, "pain editor") && !str_str(argument, "voice modulator")) {
     char name[120], tokens[MAX_STRING_LENGTH], *s;
     extern int ability_cost(int abil, int level);
@@ -4286,7 +4307,7 @@ ACMD(do_deactivate)
       skip_spaces(&argument);
       strncpy(name, argument, sizeof(name) - 1);
     }
-      
+
     // Find powers they have skill in first.
     for (i = 0; i < ADEPT_NUMPOWER; i++)
       if (GET_POWER_TOTAL(ch, i) && is_abbrev(name, adept_powers[i]))
@@ -4299,7 +4320,7 @@ ACMD(do_deactivate)
             send_to_char(ch, "You haven't learned the %s power yet.\r\n", adept_powers[i]);
             return;
           }
-          
+
     if (i < ADEPT_NUMPOWER) {
       if (!GET_POWER_ACT(ch, i))
         send_to_char(ch, "You don't have %s activated.\r\n", adept_powers[i]);
@@ -4316,11 +4337,11 @@ ACMD(do_deactivate)
     }
   }
   skip_spaces(&argument);
-  
+
   if (is_abbrev(argument, "pain editor")) {
     for (obj = ch->bioware; obj; obj = obj->next_content)
       if (GET_OBJ_VAL(obj, 0) == BIO_PAINEDITOR) {
-        if (!GET_OBJ_VAL(obj, 3))  
+        if (!GET_OBJ_VAL(obj, 3))
           send_to_char("Your Pain Editor isn't activated.\r\n", ch);
         else {
           GET_OBJ_VAL(obj, 3) = 0;
@@ -4330,7 +4351,7 @@ ACMD(do_deactivate)
         return;
       }
   }
-  
+
   if (is_abbrev(argument, "voice modulator")) {
     for (obj = ch->cyberware; obj; obj = obj->next_content)
       if (GET_OBJ_VAL(obj, 0) == CYB_VOICEMOD) {
@@ -4343,7 +4364,7 @@ ACMD(do_deactivate)
         return;
       }
   }
-  
+
   if (!(obj = get_object_in_equip_vis(ch, argument, ch->equipment, &i)) &&
       !(obj = get_obj_in_list_vis(ch, argument, ch->carrying))) {
     send_to_char("Deactivate which focus or power?\r\n", ch);
@@ -4462,8 +4483,8 @@ ACMD(do_track)
   }
   if (obj) {
     vict = NULL;
-    if (GET_OBJ_TYPE(obj) != ITEM_FOCUS 
-        && !(GET_OBJ_TYPE(obj) == ITEM_MAGIC_TOOL 
+    if (GET_OBJ_TYPE(obj) != ITEM_FOCUS
+        && !(GET_OBJ_TYPE(obj) == ITEM_MAGIC_TOOL
         && (GET_OBJ_VAL(obj, 0) == TYPE_CIRCLE || GET_OBJ_VAL(obj, 0) == TYPE_LODGE))) {
       send_to_char(ch, "There is no astral signature present on %s.\r\n", GET_OBJ_NAME(obj));
       return;
@@ -4701,7 +4722,7 @@ void disp_init_menu(struct descriptor_data *d)
   d->edit_mode = INIT_MAIN;
 }
 
-bool can_metamagic(struct char_data *ch, int i) 
+bool can_metamagic(struct char_data *ch, int i)
 {
   if (GET_TRADITION(ch) == TRAD_ADEPT) {
     if (i != META_CENTERING && i != META_MASKING)
@@ -4723,8 +4744,8 @@ void disp_geas_menu(struct descriptor_data *d)
   CLS(CH);
   int x = 0;
   for (int i = 0; i < NUM_WEARS; i++)
-    if (GET_EQ(CH, i) 
-        && GET_OBJ_TYPE(GET_EQ(CH, i)) == ITEM_FOCUS 
+    if (GET_EQ(CH, i)
+        && GET_OBJ_TYPE(GET_EQ(CH, i)) == ITEM_FOCUS
         && GET_OBJ_VAL(GET_EQ(CH, i), 9) == GET_IDNUM(CH))
       send_to_char(CH, "%d) %s\r\n", x++, GET_OBJ_NAME(GET_EQ(CH, i)));
   send_to_char("q) Quit Initiation\r\nSelect geas to shed: ", CH);
@@ -4743,20 +4764,20 @@ void disp_meta_menu(struct descriptor_data *d)
 bool init_cost(struct char_data *ch, bool spend)
 {
   int desired_grade = GET_GRADE(ch) + 1;
-  long karmacost = (desired_grade + 5) * 300;  
+  long karmacost = (desired_grade + 5) * 300;
   long nuyencost;
-  
+
   if (desired_grade >= 6)
     nuyencost = 825000;
   else
     nuyencost = 25000 + (25000 * (1 << GET_GRADE(ch)));
-    
+
   if (karmacost < 0) {
     send_to_char("You broke it! You can't initiate until the code is fixed to allow someone at your rank to do so.\r\n", ch);
     mudlog("lol init capped, karma overflowed... this game was not designed for that init level", ch, LOG_SYSLOG, TRUE);
     return FALSE;
   }
-    
+
   long tke = 0;
   if (karmacost > GET_KARMA(ch) || (GET_KARMA(ch) - karmacost) > GET_KARMA(ch)) {
     send_to_char(ch, "You do not have enough karma to initiate. It will cost you %d karma.\r\n", (int) (karmacost / 100));
@@ -4766,7 +4787,7 @@ bool init_cost(struct char_data *ch, bool spend)
     send_to_char(ch, "You do not have enough nuyen to initiate. It will cost you %d nuyen.\r\n", nuyencost);
     return FALSE;
   }
-  
+
   switch (desired_grade) {
     case 1:
       tke = 0;
@@ -4814,24 +4835,24 @@ ACMD(do_initiate)
     nonsensical_reply(ch, NULL, "standard");
   else if (subcmd == SCMD_INITIATE && init_cost(ch, FALSE)) {
     STATE(ch->desc) = CON_INITIATE;
-    PLR_FLAGS(ch).SetBit(PLR_INITIATE);  
+    PLR_FLAGS(ch).SetBit(PLR_INITIATE);
     disp_init_menu(ch->desc);
   } else if (subcmd == SCMD_POWERPOINT) {
     if (GET_TRADITION(ch) != TRAD_ADEPT) {
       nonsensical_reply(ch, NULL, "standard");
       return;
     }
-    
+
     if (GET_KARMA(ch) < 2000) {
       send_to_char("You do not have enough karma to purchase a powerpoint. It costs 20 karma.\r\n", ch);
       return;
     }
-    
+
     if (ch->points.extrapp > (int)(GET_TKE(ch) / 50)) {
       send_to_char(ch, "You haven't earned enough TKE to purchase %s powerpoint yet. You need at least %d.\r\n", ch->points.extrapp ? "another" : "a", 50 * ch->points.extrapp);
       return;
     }
-    
+
     GET_KARMA(ch) -= 2000;
     GET_PP(ch) += 100;
     ch->points.extrapp++;
@@ -4843,7 +4864,7 @@ void init_parse(struct descriptor_data *d, char *arg)
   struct obj_data *obj = NULL;
   int number, i;
   switch (d->edit_mode)
-  { 
+  {
     case INIT_MAIN:
       switch (*arg)
       {
@@ -4884,9 +4905,9 @@ void init_parse(struct descriptor_data *d, char *arg)
         send_to_char("Invalid Response. Select geas to shed: ", CH);
       } else {
         for (i = 0; i < NUM_WEARS; i++)
-          if (GET_EQ(CH, i) 
-              && GET_OBJ_TYPE(GET_EQ(CH, i)) == ITEM_FOCUS 
-              && GET_OBJ_VAL(GET_EQ(CH, i), 9) == GET_IDNUM(CH) 
+          if (GET_EQ(CH, i)
+              && GET_OBJ_TYPE(GET_EQ(CH, i)) == ITEM_FOCUS
+              && GET_OBJ_VAL(GET_EQ(CH, i), 9) == GET_IDNUM(CH)
               && --number < 0) {
             obj = GET_EQ(CH, i);
             break;
@@ -4927,7 +4948,7 @@ void init_parse(struct descriptor_data *d, char *arg)
         PLR_FLAGS(CH).RemoveBit(PLR_INITIATE);
       }
       break;
-    
+
   }
 }
 
@@ -4990,7 +5011,7 @@ ACMD(do_focus)
         ospell->spirit = ch;
         break;
       }
-    strcpy(buf, spells[spell->spell].name);                                                                                      
+    strcpy(buf, spells[spell->spell].name);
     if (spell->spell == SPELL_INCATTR || spell->spell == SPELL_INCCYATTR ||
         spell->spell == SPELL_DECATTR || spell->spell == SPELL_DECCYATTR)
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (%s)", attributes[spell->subtype]);
@@ -5031,7 +5052,7 @@ ACMD(do_metamagic)
 
 ACMD(do_cleanse)
 {
-  if (GET_METAMAGIC(ch, META_CLEANSING) < 2) {  
+  if (GET_METAMAGIC(ch, META_CLEANSING) < 2) {
     nonsensical_reply(ch, NULL, "standard");
     return;
   }
@@ -5089,11 +5110,11 @@ int get_spell_affected_successes(struct char_data * ch, int type)
 {
   if (!GET_SUSTAINED(ch))
     return 0;
-    
+
   for (struct sustain_data *hjp = GET_SUSTAINED(ch); hjp; hjp = hjp->next)
     if ((hjp->spell == type) && (hjp->caster == FALSE))
       return MIN(hjp->success, hjp->force);
-  
+
   return FALSE;
 }
 
@@ -5101,22 +5122,22 @@ bool focus_is_usable_by_ch(struct obj_data *focus, struct char_data *ch) {
   // Focus or character does not exist.
   if (!focus || !ch)
     return FALSE;
-    
+
   // Focus is not a focus.
   if (GET_OBJ_TYPE(focus) != ITEM_FOCUS)
     return FALSE;
-    
+
   // NPCs get the advantage of the foci they're wearing without having to bond them.
   if (IS_NPC(ch))
     return TRUE;
-    
+
   // Focus not bonded to character.
   if (GET_FOCUS_BONDED_TO(focus) != GET_IDNUM(ch))
     return FALSE;
-    
+
   // Focus still being bonded.
   if (GET_FOCUS_BOND_TIME_REMAINING(focus))
     return FALSE;
-    
+
   return TRUE;
 }

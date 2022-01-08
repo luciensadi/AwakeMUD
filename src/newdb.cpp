@@ -2395,26 +2395,33 @@ void save_cyberware_to_db(struct char_data *player) {
   snprintf(buf, sizeof(buf), "DELETE FROM pfiles_cyberware WHERE idnum=%ld", GET_IDNUM(player));
   mysql_wrapper(mysql, buf);
   int level = 0, posi = 0;
-  int q = 0;
   if (player->cyberware) {
-    strcpy(buf, "INSERT INTO pfiles_cyberware (idnum, Vnum, Cost, Restring, Photo, Value0, Value1, Value2, Value3, Value4, Value5, Value6,"\
-           "Value7, Value8, Value9, Value10, Value11, Level, posi) VALUES ");
-    bool first_pass = TRUE;
-    for (struct obj_data *obj = player->cyberware; obj;) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s(%ld, %ld, %d, '%s', '%s'", first_pass ? "" : ", ", GET_IDNUM(player), GET_OBJ_VNUM(obj), GET_OBJ_COST(obj),
-                          obj->restring ? prepare_quotes(buf3, obj->restring, sizeof(buf3) / sizeof(buf3[0])) : "",
-                          obj->photo ? prepare_quotes(buf2, obj->photo, sizeof(buf2) / sizeof(buf2[0])) : "");
-      first_pass = FALSE;
-      q = 1;
+    /* Ran into a weird edge case where people would fill their headware memory with photos of people, and their memory would no longer save in the DB.
+        This was caused by the total length of the concatenated query string exceeding buf's length.
+        As such, we write each cyberware entry on its own now instead of batching them together. */
 
-      if (GET_OBJ_VAL(obj, 2) == 4) {
+    for (struct obj_data *obj = player->cyberware; obj;) {
+      snprintf(buf, sizeof(buf), "INSERT INTO pfiles_cyberware (idnum, Vnum, Cost, Restring, "
+                                 "Photo, Value0, Value1, Value2, Value3, Value4, Value5, Value6,"
+                                 "Value7, Value8, Value9, Value10, Value11, Level, posi) VALUES "
+                                 "(%ld, %ld, %d, '%s', '%s'", GET_IDNUM(player), GET_OBJ_VNUM(obj), GET_OBJ_COST(obj),
+                                 obj->restring ? prepare_quotes(buf3, obj->restring, sizeof(buf3) / sizeof(buf3[0])) : "",
+                                 obj->photo ? prepare_quotes(buf2, obj->photo, sizeof(buf2) / sizeof(buf2[0])) : "");
+
+      // Obj val 2 for cyberware is grade, so I'm not sure what this code used to do, but now it probably chokes on things.
+      // Maybe it was related to skillsoft chips or photos or something?
+      /* if (GET_OBJ_VAL(obj, 2) == 4) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "0, 0, 0, %d, 0, 0, %d, %d, %d, 0, 0, 0", GET_OBJ_VAL(obj, 3), GET_OBJ_VAL(obj, 6),
                            GET_OBJ_VAL(obj, 7), GET_OBJ_VAL(obj, 8));
       } else
-        for (int x = 0; x < NUM_VALUES; x++)
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", %d", GET_OBJ_VAL(obj, x));
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", %d, %d)", level, posi++);
+        <for loop to iterate over values>
+      */
+      for (int x = 0; x < NUM_VALUES; x++)
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", %d", GET_OBJ_VAL(obj, x));
 
+      // Add our level and position information here, then execute.
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", %d, %d);", level, posi++);
+      mysql_wrapper(mysql, buf);
 
       if (obj->contains) {
         obj = obj->contains;
@@ -2427,12 +2434,6 @@ void save_cyberware_to_db(struct char_data *player) {
         }
       if (obj)
         obj = obj->next_content;
-    }
-
-    if (q) {
-      strcat(buf, ";");
-      mysql_wrapper(mysql, buf);
-      q = 0;
     }
   }
 }
