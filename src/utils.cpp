@@ -2567,6 +2567,8 @@ struct obj_data *unattach_attachment_from_weapon(int location, struct obj_data *
         send_to_char(ch, "You'll need at least %d nuyen on hand to cover the cost of the new barrel.\r\n", removal_cost);
         return NULL;
       }
+
+      lose_nuyen(ch, removal_cost, NUYEN_OUTFLOW_REPAIRS);
     }
    // We assume the coder knows what they're doing when unattaching a gasvent. They may proceed.
   }
