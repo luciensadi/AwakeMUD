@@ -3011,6 +3011,10 @@ ACMD(do_conjure)
     send_to_char("You cannot conjure while projecting.\r\n", ch);
     return;
   }
+  if (ROOM_FLAGGED(ch->in_room, ROOM_PEACEFUL) || ROOM_FLAGGED(ch->in_room, ROOM_NOMAGIC)) {
+    send_to_char("You can't conjure here.\r\n", ch);
+    return;
+  }
   int force, spirit = 0;
   two_arguments(argument, buf, buf1);
   if (!(force = atoi(buf))) {
@@ -3705,6 +3709,8 @@ POWER(spirit_binding)
     send_to_char("Use binding against which target?\r\n", ch);
   else if (tch == spirit || tch == ch)
     send_to_char(ch, "The %s refuses to perform that service.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
+  else if (ROOM_FLAGGED(get_ch_in_room(spirit), ROOM_PEACEFUL))
+    send_to_char("It's too peaceful here...\r\n", ch);
   else {
     act("$N suddenly becomes incapable of movement!", FALSE, spirit, 0, ch, TO_VICT);
     send_to_char("You suddenly notice you are stuck fast to the ground!\r\n", tch);
@@ -3745,10 +3751,12 @@ POWER(spirit_confusion)
   if (!tch)
     send_to_char("Use confusion against which target?\r\n", ch);
   else if (tch == spirit || tch == ch || affected_by_power(tch, CONFUSION))
-    send_to_char(ch, "The %s refuses to perform that service.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
+    send_to_char(ch, "The %s refuses to harm itself.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
+  else if (ROOM_FLAGGED(get_ch_in_room(spirit), ROOM_PEACEFUL))
+    send_to_char("It's too peaceful here...\r\n", ch);
   else {
-    act("$n vanishes from sight.", FALSE, spirit, 0, ch, TO_VICT);
-    send_to_char("The terrain seems to cover your tracks.\r\n", tch);
+    act("$n winces and clutches at $s head.", FALSE, spirit, 0, ch, TO_VICT);
+    send_to_char("The world shifts and warps unnaturally around you.\r\n", tch);
     make_spirit_power(spirit, tch, CONFUSION);
     spiritdata->services--;
   }
@@ -3765,7 +3773,9 @@ POWER(spirit_engulf)
   if (!tch)
     send_to_char("Use movement against which target?\r\n", ch);
   else if (tch == spirit || tch == ch || affected_by_power(tch, ENGULF))
-    send_to_char(ch, "The %s refuses to perform that service.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
+    send_to_char(ch, "The %s refuses to harm itself.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
+  else if (ROOM_FLAGGED(get_ch_in_room(spirit), ROOM_PEACEFUL))
+    send_to_char("It's too peaceful here...\r\n", ch);
   else {
     act("$n rushes towards $N and attempts to engulf them!", FALSE, spirit, 0, tch, TO_ROOM);
     int target = GET_QUI(spirit), targskill = get_skill(tch, SKILL_UNARMED_COMBAT, target);
@@ -3810,7 +3820,9 @@ POWER(spirit_fear)
   else if (tch == ch)
     send_to_char("You cannot target yourself with that power.\r\n", ch);
   else if (tch == spirit)
-    send_to_char(ch, "The %s refuses to perform that service.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
+    send_to_char(ch, "The %s refuses to harm itself.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
+  else if (ROOM_FLAGGED(get_ch_in_room(spirit), ROOM_PEACEFUL))
+    send_to_char("It's too peaceful here...\r\n", ch);
   else {
     int success = success_test(GET_SPARE2(spirit), GET_WIL(tch)) - success_test(GET_WIL(tch), GET_SPARE2(spirit));
     if (success < 1) {
@@ -3847,7 +3859,9 @@ POWER(spirit_flamethrower)
   else if (tch == ch)
     send_to_char("You cannot target yourself with that power.\r\n", ch);
   else if (tch == spirit)
-    send_to_char(ch, "The %s refuses to perform that service.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
+    send_to_char(ch, "The %s refuses to harm itself.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
+  else if (ROOM_FLAGGED(get_ch_in_room(spirit), ROOM_PEACEFUL))
+    send_to_char("It's too peaceful here...\r\n", ch);
   else {
     snprintf(buf, sizeof(buf), "moderate %s", arg);
     cast_spell(spirit, SPELL_FLAMETHROWER, 0, GET_LEVEL(spirit), buf);
@@ -3905,6 +3919,10 @@ POWER(spirit_movement)
     stop_spirit_power(spirit, MOVEMENTDOWN);
     return;
   }
+  if (ROOM_FLAGGED(get_ch_in_room(spirit), ROOM_PEACEFUL)) {
+    send_to_char("It's too peaceful here...\r\n", ch);
+    return;
+  }
   two_arguments(arg, buf, buf1);
   if (!(*buf1 || *buf)) {
     send_to_char("Do you want to increase or decrease the movement of the target?\r\n", ch);
@@ -3942,7 +3960,9 @@ POWER(spirit_breath)
   else if (tch == ch)
     send_to_char("You cannot target yourself with that power.\r\n", ch);
   else if (tch == spirit)
-    send_to_char(ch, "The %s refuses to perform that service.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
+    send_to_char(ch, "The %s refuses to harm itself.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
+  else if (ROOM_FLAGGED(get_ch_in_room(spirit), ROOM_PEACEFUL))
+    send_to_char("It's too peaceful here...\r\n", ch);
   else {
     act("$n turns towards $N as a cloud of noxious fumes forms around $S.", TRUE, spirit, 0, tch, TO_NOTVICT);
     act("$n lets forth a stream of noxious fumes in your direction.", FALSE, spirit, 0, tch, TO_VICT);
@@ -3967,7 +3987,9 @@ POWER(spirit_attack)
   else if (tch == ch)
     send_to_char(ch, "Ordering your own %s to attack you is not a good idea.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
   else if (tch == spirit)
-    send_to_char(ch, "The %s refuses to perform that service.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
+    send_to_char(ch, "The %s refuses to attack itself.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
+  else if (ROOM_FLAGGED(get_ch_in_room(spirit), ROOM_PEACEFUL))
+    send_to_char("It's too peaceful here...\r\n", ch);
   else {
     check_killer(ch, tch);
     set_fighting(spirit, tch);
@@ -3990,23 +4012,23 @@ struct order_data services[] =
     {"Sorcery", spirit_sorcery, 0},
     {"Study", spirit_study, 0},
     {"Sustain", spirit_sustain, 0},
-    {"Accident", spirit_accident, 1},
-    {"Binding", spirit_binding, 1},
+    {"Accident", spirit_accident, 1}, // hostile
+    {"Binding", spirit_binding, 1},  // hostile?
     {"Concealment", spirit_conceal, 1},
-    {"Confusion", spirit_confusion, 0},
+    {"Confusion", spirit_confusion, 0}, // hostile?
     {"Dematerialize", spirit_dematerialize, 1},
-    {"Engulf", spirit_engulf, 1},
-    {"Fear", spirit_fear, 0},
-    {"Flame Aura", spirit_flameaura, 1},
-    {"Flamethrower", spirit_flamethrower, 1},
+    {"Engulf", spirit_engulf, 1}, // hostile
+    {"Fear", spirit_fear, 0}, // hostile
+    {"Flame Aura", spirit_flameaura, 1}, // hostile
+    {"Flamethrower", spirit_flamethrower, 1}, // hostile
     {"Guard", spirit_guard, 1},
     {"Leave", spirit_leave, 0},
     {"Materialize", spirit_materialize, 0},
     {"Movement", spirit_movement, 1},
-    {"Breath", spirit_breath, 1},
-    {"Psychokinesis", spirit_psychokinesis, 1},
+    {"Breath", spirit_breath, 1}, // hostile
+    {"Psychokinesis", spirit_psychokinesis, 1}, // hostile?
     {"Search", spirit_search, 1},
-    {"Attack", spirit_attack, 1}
+    {"Attack", spirit_attack, 1} // hostile
   };
 
 ACMD(do_order)

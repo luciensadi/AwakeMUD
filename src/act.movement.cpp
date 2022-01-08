@@ -124,11 +124,11 @@ int can_move(struct char_data *ch, int dir, int extra)
   */
 
   if (ch->in_room && IS_WATER(ch->in_room) && !IS_NPC(ch) && !IS_SENATOR(ch))
-  {    
+  {
     int swimming_successes = calculate_swim_successes(ch);
     int target = MAX(2, ch->in_room->rating) + modify_target(ch) - swimming_successes;
     int test = success_test(GET_WIL(ch), target);
-    
+
     if (swimming_successes < 0) {
       dam = convert_damage(stage(-test, SERIOUS));
       send_to_char(ch, "You struggle to retain consciousness as the current resists your every move.\r\n");
@@ -155,37 +155,37 @@ bool should_tch_see_chs_movement_message(struct char_data *tch, struct char_data
     mudlog("SYSERR: Received null tch to s_v_o_s_m_m!", tch, LOG_SYSLOG, TRUE);
     return FALSE;
   }
-  
+
   if (!ch) {
     mudlog("SYSERR: Received null ch to s_v_o_s_m_m!", tch, LOG_SYSLOG, TRUE);
     return FALSE;
   }
-  
+
   // Absolutely can't see for whatever reason.
   if (tch == ch || PRF_FLAGGED(tch, PRF_MOVEGAG) || !AWAKE(tch) || !CAN_SEE(tch, ch))
     return FALSE;
-  
+
   // Failed to see from vehicle.
   if (tch->in_veh && (tch->in_veh->cspeed > SPEED_IDLE && success_test(GET_INT(tch), 4) <= 0)) {
     return FALSE;
   }
-  
+
   // Check for stealth and other person-to-person modifiers.
   if (IS_AFFECTED(ch, AFF_SNEAK)) {
     int target = GET_SKILL(ch, SKILL_STEALTH) ? 0 : 4;
     int skill = get_skill(ch, SKILL_STEALTH, target);
     int tchtarg = skill;
-    
+
     if (affected_by_spell(ch, SPELL_STEALTH))
       tchtarg += 4;
     if (ch->in_room->silence[0])
       tchtarg += ch->in_room->silence[1];
-    
+
     if (resisted_test(GET_INT(tch), tchtarg, skill, (GET_INT(tch) + target)) <= 0)
       return FALSE;
   }
-  
-  // If we got here, we can see it.  
+
+  // If we got here, we can see it.
   return TRUE;
 }
 
@@ -226,7 +226,7 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
     snprintf(buf2, sizeof(buf2), "$n %s %s.", ch->char_specials.leave, fulldirs[dir]);
   else
     snprintf(buf2, sizeof(buf2), "$n %s %s.", (IS_WATER(ch->in_room) ? "swims" : "leaves"), fulldirs[dir]);
-  
+
   if (ch->in_room->dir_option[dir]->go_into_secondperson)
     send_to_char(ch, "%s\r\n", ch->in_room->dir_option[dir]->go_into_secondperson);
 
@@ -235,18 +235,18 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
     if (should_tch_see_chs_movement_message(tch, ch))
       act(buf2, TRUE, ch, 0, tch, TO_VICT);
   }
-    
+
   // Vehicle occupants, including riggers.
   for (tveh = ch->in_room->vehicles; tveh; tveh = tveh->next_veh) {
     for (tch = tveh->people; tch; tch = tch->next_in_veh) {
       if (should_tch_see_chs_movement_message(tch, ch))
         act(buf2, TRUE, ch, 0, tch, TO_VICT);
     }
-      
+
     if (tveh->rigger && should_tch_see_chs_movement_message(tveh->rigger, ch))
       act(buf2, TRUE, ch, 0, tveh->rigger, TO_VICT | TO_REMOTE | TO_SLEEP);
   }
-  
+
   // Watchers.
   if (ch->in_room->watching) {
     for (struct char_data *tch = ch->in_room->watching; tch; tch = tch->next_watching)
@@ -287,7 +287,7 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
 #endif
   if (ch->desc != NULL)
     look_at_room(ch, 0, 0);
-    
+
   if (room_is_a_taxicab(was_in->number))
     snprintf(buf2, sizeof(buf2), "$n gets out of the taxi.");
   else if (vict)
@@ -304,21 +304,21 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
     snprintf(buf2, sizeof(buf2), "$n %s %s.", (IS_WATER(ch->in_room) ?
                                 "swims in from" : "arrives from"), thedirs[rev_dir[dir]]);
 
-  
+
   // People in the room.
   for (tch = ch->in_room->people; tch; tch = tch->next_in_room) {
     if (should_tch_see_chs_movement_message(tch, ch)) {
       act(buf2, TRUE, ch, 0, tch, TO_VICT);
-      
+
       if (IS_NPC(tch) && !FIGHTING(tch)) {
         if (hunting_escortee(tch, ch)) {
           set_fighting(tch, ch);
         } else {
-          if ((!IS_NPC(ch) || IS_PROJECT(ch) || is_escortee(ch)) 
-              && !PRF_FLAGGED(ch, PRF_NOHASSLE) 
-              && MOB_FLAGGED(tch, MOB_AGGRESSIVE) 
+          if ((!IS_NPC(ch) || IS_PROJECT(ch) || is_escortee(ch))
+              && !PRF_FLAGGED(ch, PRF_NOHASSLE)
+              && MOB_FLAGGED(tch, MOB_AGGRESSIVE)
               && !FIGHTING(tch)
-              && IS_SET(extra, LEADER)) 
+              && IS_SET(extra, LEADER))
           {
             GET_MOBALERT(tch) = MALERT_ALERT;
             GET_MOBALERTTIME(tch) = 20;
@@ -329,18 +329,18 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
       }
     }
   }
-    
+
   // Vehicle occupants.
   for (tveh = ch->in_room->vehicles; tveh; tveh = tveh->next_veh) {
     for (tch = tveh->people; tch; tch = tch->next_in_veh) {
       if (should_tch_see_chs_movement_message(tch, ch))
         act(buf2, TRUE, ch, 0, tch, TO_VICT);
     }
-      
+
     if (tveh->rigger && should_tch_see_chs_movement_message(tveh->rigger, ch))
       act(buf2, TRUE, ch, 0, tveh->rigger, TO_VICT | TO_REMOTE | TO_SLEEP);
   }
-  
+
   // Watchers.
   if (ch->in_room->watching) {
     for (struct char_data *tch = ch->in_room->watching; tch; tch = tch->next_watching)
@@ -376,12 +376,12 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
    return 1;
   }
 #endif
-    
+
   if (ROOM_FLAGGED(ch->in_room, ROOM_FALL) && !IS_ASTRAL(ch) && !IS_PROJECT(ch) && !(IS_SENATOR(ch) && PRF_FLAGGED(ch, PRF_NOHASSLE))) {
     perform_fall(ch);
     return 1;
   }
-  
+
   if (IS_NPC(ch) && ch->master && !IS_NPC(ch->master) && GET_QUEST(ch->master) && ch->in_room == ch->master->in_room) {
     check_quest_destination(ch->master, ch);
     return 1;
@@ -423,17 +423,17 @@ bool check_fall(struct char_data *ch, int modifier, const char *fall_message)
   // They've succeeded in stopping themselves, but we still need to send a fall message before the recovery message.
   if (fall_message) {
     send_to_char(fall_message, ch);
-    
+
     send_to_char("You manage to catch a handhold mid-fall, jerking yourself painfully to a stop.\r\n", ch);
     act("$n scrabbles for a handhold and manages to arrest $s fall!", TRUE, ch, NULL, NULL, TO_ROOM);
-    
+
     if (!PRF_FLAGGED(ch, PRF_SCREENREADER))
       look_at_room(ch, 0, 0);
   } else {
     send_to_char("You grab on to the wall and keep yourself from falling!\r\n", ch);
     act("$n grabs onto the wall and keeps $mself from falling!", TRUE, ch, NULL, NULL, TO_ROOM);
   }
-  
+
   return FALSE;
 }
 
@@ -444,11 +444,11 @@ void perform_fall(struct char_data *ch)
   bool sent_fall_message = FALSE;
   const char *fall_message = NULL;
   struct room_data *tmp_room = NULL, *was_in = NULL;
-  
+
   char impact_noise[50];
   char splat_msg[150];
   char long_fall_message[150];
-  
+
   snprintf(long_fall_message, sizeof(long_fall_message), "\r\n^RYour fingers slip, sending your stomach rising into your throat as you plummet towards the %s!^n\r\n\r\n",
           ROOM_FLAGGED(ch->in_room, ROOM_ELEVATOR_SHAFT) ? "bottom of the shaft" : (ROOM_FLAGGED(ch->in_room, ROOM_INDOORS) ? "floor" : "ground"));
 
@@ -464,12 +464,12 @@ void perform_fall(struct char_data *ch)
     } else if (levels > 1 && !sent_fall_message) {
       fall_message = long_fall_message;
     }
-    
+
     // check_fall has them make a test to not fall / stop falling.
     // If they succeed their check, precede their success message with a fall message proportional to the distance they fell.
     if (!check_fall(ch, levels * 4, fall_message))
       return;
-    
+
     levels++;
     meters += ch->in_room->z;
     was_in = ch->in_room;
@@ -518,7 +518,7 @@ void perform_fall(struct char_data *ch)
     // Make a note of their current room, for use if they hit hard enough to make noise.
     struct room_data *in_room = ch->in_room;
     tmp_room = ch->in_room;
-    
+
     // Send the fall message if we haven't already.
     if (!sent_fall_message) {
       if (levels == 1) {
@@ -527,10 +527,10 @@ void perform_fall(struct char_data *ch)
         send_to_char(long_fall_message, ch);
       }
     }
-    
+
     if (!PRF_FLAGGED(ch, PRF_SCREENREADER))
       look_at_room(ch, 0, 0);
-    
+
     if (GET_TRADITION(ch) == TRAD_ADEPT)
       meters -= GET_POWER(ch, ADEPT_FREEFALL) * 2;
     if (meters <= 0) {
@@ -558,7 +558,7 @@ void perform_fall(struct char_data *ch)
     int success = success_test(GET_BOD(ch), MAX(2, power) + modify_target(ch));
     int dam = convert_damage(stage(-success, MIN(levels + 1, 4)));
     damage(ch, ch, dam, TYPE_FALL, TRUE);
-    
+
     // Message everyone in the fall rooms above, just because flavor is great.
     if (dam > 0) {
       if (GET_POS(ch) == POS_DEAD) {
@@ -576,11 +576,11 @@ void perform_fall(struct char_data *ch)
         }
       }
       snprintf(splat_msg, sizeof(splat_msg), "^rA %sthud %s from below.^n\r\n", impact_noise, tmp_room->room_flags.IsSet(ROOM_ELEVATOR_SHAFT) ? "echoes" : "emanates");
-      
+
       while (in_room) {
         if (in_room != ch->in_room)
           send_to_room(splat_msg, in_room);
-        
+
         if (EXIT2(in_room, UP)) {
           in_room = EXIT2(in_room, UP)->to_room;
         } else
@@ -632,15 +632,15 @@ void move_vehicle(struct char_data *ch, int dir)
     send_to_char(CANNOT_GO_THAT_WAY, ch);
     return;
   }
-  
+
   if (special(ch, convert_dir[dir], &empty_argument))
     return;
-  
+
   if (ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_HOUSE) && !House_can_enter(ch, EXIT(veh, dir)->to_room->number)) {
     send_to_char("You can't use other people's garages without permission.\r\n", ch);
     return;
   }
-  
+
   if (ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_STAFF_ONLY)) {
     for (struct char_data *tch = veh->people; tch; tch = tch->next_in_veh) {
       if (!IS_NPC(tch) && !access_level(tch, LVL_BUILDER)) {
@@ -652,21 +652,21 @@ void move_vehicle(struct char_data *ch, int dir)
 
   snprintf(buf2, sizeof(buf2), "%s %s from %s.", GET_VEH_NAME(veh), veh->arrive, thedirs[rev_dir[dir]]);
   snprintf(buf1, sizeof(buf1), "%s %s to %s.", GET_VEH_NAME(veh), veh->leave, thedirs[dir]);
-  
+
   /* Known issue: If you are in a vehicle, and nobody is in the room, and another vehicle drives in, you won't see it. */
   if (veh->in_room->people)
   {
     act(buf1, FALSE, veh->in_room->people, 0, 0, TO_ROOM);
     act(buf1, FALSE, veh->in_room->people, 0, 0, TO_CHAR);
   }
-  
+
   for (struct char_data *tch = veh->in_room->watching; tch; tch = tch->next_watching)
     act(buf2, FALSE, ch, 0, 0, TO_CHAR);
   // for (int r = 1; r >= 0; r--)        <-- Why.
   //  veh->lastin[r+1] = veh->lastin[r];
   veh->lastin[2] = veh->lastin[1];
   veh->lastin[1] = veh->lastin[0];
-  
+
   was_in = EXIT(veh, dir)->to_room;
   veh_from_room(veh);
   veh_to_room(veh, was_in);
@@ -771,21 +771,21 @@ int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vic
   }
   if (ch == NULL || dir < 0 || dir >= NUM_OF_DIRS)
     return 0;
-  
+
   if (ch->in_veh || ch->char_specials.rigging) {
     move_vehicle(ch, dir);
     return 0;
   }
-  
+
   if (GET_POS(ch) < POS_FIGHTING || AFF_FLAGGED(ch, AFF_PRONE)) {
     send_to_char("Maybe you should get on your feet first?\r\n", ch);
     return 0;
   }
-  
+
   if (GET_POS(ch) >= POS_FIGHTING && FIGHTING(ch)) {
     WAIT_STATE(ch, PULSE_VIOLENCE * 2);
-    if (passed_flee_success_check(ch) 
-        && (CAN_GO(ch, dir) 
+    if (passed_flee_success_check(ch)
+        && (CAN_GO(ch, dir)
             && (!IS_NPC(ch) || !ROOM_FLAGGED(ch->in_room->dir_option[dir]->to_room, ROOM_NOMOB)))) {
       act("$n searches for a quick escape!", TRUE, ch, 0, 0, TO_ROOM);
       send_to_char("You start moving away for a clever escape.\r\n", ch);
@@ -795,7 +795,7 @@ int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vic
       return 0;
     }
   }
-  
+
   if (!EXIT(ch, dir) || !EXIT(ch, dir)->to_room || EXIT(ch, dir)->to_room == &world[0])
   {
     if (!LIGHT_OK(ch))
@@ -804,7 +804,7 @@ int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vic
       send_to_char("You cannot go that way...\r\n", ch);
     return 0;
   }
-  
+
   if (IS_SET(EXIT(ch, dir)->exit_info, EX_CLOSED) &&
             !(((IS_ASTRAL(ch) || IS_PROJECT(ch)) && !IS_SET(EXIT(ch, dir)->exit_info, EX_ASTRALLY_WARDED)) /* door is astrally passable and char ia astral */
               || GET_REAL_LEVEL(ch) >= LVL_BUILDER)) /* char is staff */
@@ -825,12 +825,12 @@ int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vic
     }
     return 0;
   }
-  
+
   if (ROOM_FLAGGED(EXIT(ch, dir)->to_room, ROOM_STAFF_ONLY) && GET_REAL_LEVEL(ch) < LVL_BUILDER) {
     send_to_char("Sorry, that area is for game administration only.\r\n", ch);
     return 0;
   }
-  
+
   if (EXIT(ch, dir)->to_room->staff_level_lock > GET_REAL_LEVEL(ch)) {
     if (GET_REAL_LEVEL(ch) == 0) {
       send_to_char("NPCs aren't allowed in there.\r\n", ch);
@@ -841,7 +841,7 @@ int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vic
     }
     return 0;
   }
-  
+
   // Don't let people move past elevator cars.
   if (!IS_ASTRAL(ch) && ROOM_FLAGGED(EXIT(ch, dir)->to_room, ROOM_ELEVATOR_SHAFT)) {
     bool to_room_found = FALSE, in_room_found = FALSE;
@@ -856,7 +856,7 @@ int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vic
           // We found the shaft room and it's okay.
           in_room_found = TRUE;
         }
-      } 
+      }
       // Check to see if they're moving into a moving elevator car's room.
       if (!to_room_found && elevator[index].floor[car_rating].shaft_vnum == EXIT(ch, dir)->to_room->number) {
         // Check for the car being at this floor.
@@ -954,7 +954,7 @@ int find_door(struct char_data *ch, const char *type, char *dir, const char *cmd
       send_to_char(ch, "What is it you want to %s?\r\n", cmdname);
       return -1;
     }
-    
+
     // Check for directionals.
     char non_const_type[MAX_INPUT_LENGTH];
     strncpy(non_const_type, type, sizeof(non_const_type));
@@ -971,9 +971,9 @@ int find_door(struct char_data *ch, const char *type, char *dir, const char *cmd
       send_to_char(ch, "There doesn't seem to be %s %s here.\r\n", AN(type), type);
       return -1;
     }
-    
+
     door = convert_look[door];
-    
+
     if (EXIT(ch, door) && !IS_SET(EXIT(ch, door)->exit_info, EX_DESTROYED) && !IS_SET(EXIT(ch, door)->exit_info, EX_HIDDEN)) {
       return door;
     } else {
@@ -991,7 +991,7 @@ int has_key(struct char_data *ch, int key_vnum)
   for (o = ch->carrying; o; o = o->next_content) {
     if (GET_OBJ_VNUM(o) == key_vnum)
       return 1;
-    
+
     if (GET_OBJ_TYPE(o) == ITEM_KEYRING) {
       for (key = o->contains; key; key = key->next_content) {
         if (GET_OBJ_VNUM(key) == key_vnum)
@@ -999,17 +999,17 @@ int has_key(struct char_data *ch, int key_vnum)
       }
     }
   }
-  
+
   // Check worn items.
   for (int x = 0; x < NUM_WEARS; x++) {
     // Must exist.
     if (!GET_EQ(ch, x))
       continue;
-      
+
     // Direct match?
     if (GET_OBJ_VNUM(GET_EQ(ch, x)) == key_vnum)
       return 1;
-      
+
     // Keyring match?
     if (GET_OBJ_TYPE(GET_EQ(ch, x)) == ITEM_KEYRING) {
       for (key = GET_EQ(ch, x)->contains; key; key = key->next_content) {
@@ -1064,14 +1064,14 @@ void do_doorcmd(struct char_data *ch, struct obj_data *obj, int door, int scmd, 
 {
   struct room_data *other_room = NULL;
   struct room_direction_data *back = NULL;
-  
+
 
   snprintf(buf, sizeof(buf), "$n %ss ", cmd_door[scmd]);
   if (!obj && ((other_room = EXIT(ch, door)->to_room)))
     if ((back = other_room->dir_option[rev_dir[door]]))
       if (back->to_room != ch->in_room)
         back = 0;
-        
+
   // Hidden value goes away if it's a door. Hard to keep it hidden when shit's happening.
   if (door >= 0) {
     REMOVE_BIT(EXITN(ch->in_room, door)->exit_info, EX_HIDDEN);
@@ -1132,11 +1132,11 @@ void do_doorcmd(struct char_data *ch, struct obj_data *obj, int door, int scmd, 
   if (obj) {
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "$p.");
   } else {
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "the %s to %s.", 
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "the %s to %s.",
             EXIT(ch, door)->keyword ? "$F" : "door",
             thedirs[door]);
   }
-  
+
   if (!(obj) || (obj->in_room))
     act(buf, FALSE, ch, obj, obj ? 0 : EXIT(ch, door)->keyword, TO_ROOM);
 
@@ -1144,7 +1144,7 @@ void do_doorcmd(struct char_data *ch, struct obj_data *obj, int door, int scmd, 
   if (((scmd == SCMD_OPEN) || (scmd == SCMD_CLOSE) || (scmd == SCMD_KNOCK)) && (back))
   {
     snprintf(buf, sizeof(buf), "The %s to %s is %s%s from the other side.\r\n",
-            (back->keyword ? fname(back->keyword) : "door"), 
+            (back->keyword ? fname(back->keyword) : "door"),
             thedirs[rev_dir[door]],
             cmd_door[scmd],
             (scmd == SCMD_CLOSE) ? "d" : "ed");
@@ -1197,7 +1197,7 @@ ACMD(do_gen_door)
   struct obj_data *obj = NULL;
   struct char_data *victim = NULL;
   struct veh_data *veh = NULL;
-  
+
   if (IS_ASTRAL(ch)) {
     send_to_char("Astral projections tend to have a hard time interacting with doors.\r\n", ch);
     return;
@@ -1213,7 +1213,7 @@ ACMD(do_gen_door)
   }
   two_arguments(argument, type, dir);
   RIG_VEH(ch, veh);
-  
+
   // 'unlock 1' etc for subscribed vehs
   if (*type && is_number(type)) {
     num = atoi(type);
@@ -1233,12 +1233,12 @@ ACMD(do_gen_door)
           break;
     }
   }
-  
+
   // Check for an object or vehicle nearby that matches the keyword.
   if (!generic_find(type, FIND_OBJ_EQUIP | FIND_OBJ_INV | FIND_OBJ_ROOM, ch, &victim, &obj) && !veh &&
            !(veh = get_veh_list(type, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch)))
     door = find_door(ch, type, dir, cmd_door[subcmd]);
-  
+
   // Lock / unlock a vehicle. Can't open / close them.
   if (veh && subcmd != SCMD_OPEN && subcmd != SCMD_CLOSE) {
     if (GET_IDNUM(ch) != veh->owner) {
@@ -1279,13 +1279,18 @@ ACMD(do_gen_door)
         send_to_veh("The doors click locked.\r\n", veh, NULL, FALSE);
       send_to_char(buf, ch);
       return;
+    } else {
+      snprintf(buf, sizeof(buf), "Unknown subcmd %d received to veh section of do_gen_door.", subcmd);
+      mudlog(buf, ch, LOG_SYSLOG, TRUE);
+      send_to_char("Sorry, that action is not supported.\r\n", ch);
+      return;
     }
   }
 
   // You're doing an object or a door.
   if ((obj) || (door >= 0)) {
     keynum = DOOR_KEY(ch, obj, door);
-    
+
     // Trying to do some fuckery with a door that doesn't exist?
     if (door >= 0) {
       if (!IS_SET(EXIT(ch, door)->exit_info, EX_ISDOOR)) {
@@ -1297,7 +1302,7 @@ ACMD(do_gen_door)
           return;
         }
       }
-      
+
       if (IS_SET(EXIT(ch, door)->exit_info, EX_HIDDEN)) {
         if (!(access_level(ch, LVL_BUILDER) || success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), EXIT(ch, door)->hidden))) {
           if (!*dir) {
@@ -1310,7 +1315,7 @@ ACMD(do_gen_door)
         }
       }
     }
-    
+
     // Can't open it? Give a proper message.
     if (!(DOOR_IS_OPENABLE(ch, obj, door))) {
       char temp[50];
@@ -1322,7 +1327,7 @@ ACMD(do_gen_door)
       act(temp, FALSE, ch, obj, 0, TO_CHAR);
       return;
     }
-    
+
     // Trying to close it when it's already closed.
     if (!DOOR_IS_OPEN(ch, obj, door) && IS_SET(flags_door[subcmd], NEED_OPEN)) {
       if (obj)
@@ -1331,7 +1336,7 @@ ACMD(do_gen_door)
         send_to_char(ch, "The %s to %s is already closed!\r\n", GET_DOOR_NAME(ch, door), thedirs[door]);
       return;
     }
-    
+
     // Almost anything you can do to a door (except close it) fails if it's open.
     if (!DOOR_IS_CLOSED(ch, obj, door) && IS_SET(flags_door[subcmd], NEED_CLOSED)) {
       if (obj)
@@ -1340,7 +1345,7 @@ ACMD(do_gen_door)
         send_to_char(ch, "But the %s to %s is already open...\r\n", GET_DOOR_NAME(ch, door), thedirs[door]);
       return;
     }
-    
+
     if (!(DOOR_IS_LOCKED(ch, obj, door)) && IS_SET(flags_door[subcmd], NEED_LOCKED)) {
       if (obj)
         send_to_char(ch, "%s isn't locked.\r\n", capitalize(GET_OBJ_NAME(obj)));
@@ -1348,7 +1353,7 @@ ACMD(do_gen_door)
         send_to_char(ch, "The %s to %s isn't locked.\r\n", GET_DOOR_NAME(ch, door), thedirs[door]);
       return;
     }
-    
+
     if (!(DOOR_IS_UNLOCKED(ch, obj, door)) && IS_SET(flags_door[subcmd], NEED_UNLOCKED)) {
       if (subcmd == SCMD_OPEN) {
         // Trying to open a locked thing without the key.
@@ -1377,17 +1382,17 @@ ACMD(do_gen_door)
         return;
       }
     }
-    
+
     if (!has_key(ch, keynum) && !access_level(ch, LVL_ADMIN)
              && ((subcmd == SCMD_LOCK) || (subcmd == SCMD_UNLOCK))) {
       send_to_char("You don't seem to have the proper key.\r\n", ch);
       return;
     }
-    
+
     if (ok_pick(ch, keynum, DOOR_IS_PICKPROOF(ch, obj, door), subcmd, LOCK_LEVEL(ch, obj, door)))
       do_doorcmd(ch, obj, door, subcmd, TRUE);
   }
-  
+
   return;
 }
 
@@ -1400,7 +1405,7 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
   struct follow_type *k, *next;
   if (*argument && is_abbrev(argument, "rear"))
     front = FALSE;
-  
+
   // Too damaged? Can't (unless admin).
   if (found_veh->damage >= VEH_DAM_THRESHOLD_DESTROYED) {
     if (access_level(ch, LVL_ADMIN)) {
@@ -1410,7 +1415,7 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
       return;
     }
   }
-  
+
   // Too fast? Can't (unless admin).
   if (found_veh->cspeed > SPEED_IDLE) {
     if (access_level(ch, LVL_ADMIN)) {
@@ -1423,7 +1428,7 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
       return;
     }
   }
-  
+
   // Locked? Can't (unless admin)
   if (found_veh->type != VEH_BIKE && found_veh->locked) {
     if (access_level(ch, LVL_ADMIN)) {
@@ -1435,9 +1440,9 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
       return;
     }
   }
-  
+
   if (inveh && (AFF_FLAGGED(ch, AFF_PILOT) || PLR_FLAGGED(ch, PLR_REMOTE))) {
-    
+
     if (inveh->in_veh)
       send_to_char("You are already inside a vehicle.\r\n", ch);
     else if (inveh == found_veh)
@@ -1455,7 +1460,7 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
     }
     return;
   }
-  
+
   // No space? Can't (unless admin)
   if (!found_veh->seating[front]) {
     if (access_level(ch, LVL_ADMIN)) {
@@ -1465,7 +1470,7 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
       return;
     }
   }
-  
+
   if (inveh && ch->vfront) {
     send_to_char("You have to be in the back to get into that.\r\n", ch);
     return;
@@ -1521,7 +1526,7 @@ ACMD(do_drag)
     send_to_char("Who do you want to drag where?\r\n", ch);
     return;
   }
-  
+
   if (IS_ASTRAL(ch)) {
     send_to_char("Astral projections aren't really known for their ability to drag things.\r\n", ch);
     return;
@@ -1558,7 +1563,7 @@ ACMD(do_drag)
   }
   if (!veh)
     dir = convert_look[dir];
-  
+
   if (IS_NPC(vict) && vict->master != ch) {
     // You may only drag friendly NPCs. This prevents a whole lot of abuse options.
     send_to_char("You may only drag NPCs who are following you already.\r\n", ch);
@@ -1578,7 +1583,7 @@ ACMD(do_drag)
 
   if (veh) {
     enter_veh(ch, veh, "rear", FALSE);
-    enter_veh(vict, veh, "rear", TRUE);    
+    enter_veh(vict, veh, "rear", TRUE);
   } else {
     perform_move(ch, dir, LEADER, vict);
     char_from_room(vict);
@@ -1600,7 +1605,7 @@ ACMD(do_enter)
       send_to_char("There is not enough room to maneuver in here.\r\n", ch);
       return;
     }
-    
+
     if (ch->in_veh && !AFF_FLAGGED(ch, AFF_PILOT)) {
       // We are in a vehicle-in-a-room, but not driving it. Look for vehicles to enter.
       found_veh = get_veh_list(buf, ch->in_veh->carriedvehs, ch);
@@ -1625,8 +1630,8 @@ ACMD(do_enter)
 
     send_to_char(ch, "There is no '%s' here.\r\n", buf);
     return;
-  } 
-  
+  }
+
   // Is there an elevator car here?
   if (ROOM_FLAGGED(ch->in_room, ROOM_ELEVATOR_SHAFT)) {
     // Iterate through elevators to find one that contains this shaft.
@@ -1644,7 +1649,7 @@ ACMD(do_enter)
             send_to_char("You can't enter a moving elevator car!\r\n", ch);
             return;
           }
-          
+
           send_to_char("You jimmy open the access hatch and drop into the elevator car. The hatch locks closed behind you.\r\n", ch);
           char_from_room(ch);
           char_to_room(ch, &world[real_room(elevator[index].room)]);
@@ -1654,7 +1659,7 @@ ACMD(do_enter)
       }
     }
   }
-  
+
   if (ROOM_FLAGGED(get_ch_in_room(ch), ROOM_INDOORS)) {
     send_to_char("You are already indoors.\r\n", ch);
     return;
@@ -1678,14 +1683,14 @@ void leave_veh(struct char_data *ch)
   struct veh_data *veh = NULL;
   struct obj_data *mount = NULL;
   struct room_data *door = NULL;
-  
+
   if (AFF_FLAGGED(ch, AFF_RIG)) {
     send_to_char(ch, "Try returning to your senses first.\r\n");
     return;
   }
-  
+
   RIG_VEH(ch, veh);
-  
+
   if ((AFF_FLAGGED(ch, AFF_PILOT) || PLR_FLAGGED(ch, PLR_REMOTE)) && veh->in_veh) {
     if (veh->in_veh->in_veh) {
       send_to_char("There is not enough room to drive out of here.\r\n", ch);
@@ -1715,7 +1720,7 @@ void leave_veh(struct char_data *ch)
       return;
     }
   }
-  
+
   if (AFF_FLAGGED(ch, AFF_PILOT)) {
     act("$n climbs out of the drivers seat and into the street.", FALSE, ch, 0, 0, TO_VEH);
     AFF_FLAGS(ch).ToggleBit(AFF_PILOT);
@@ -1725,7 +1730,7 @@ void leave_veh(struct char_data *ch)
     act("$n stops manning $p and climbs out into the street.", FALSE, ch, mount, 0, TO_ROOM);
   } else
     act("$n climbs out into the street.", FALSE, ch, 0, 0, TO_VEH);
-  
+
   door = get_veh_in_room(veh);
   char_from_room(ch);
   if (IS_WORKING(ch))
@@ -1764,36 +1769,36 @@ ACMD(do_leave)
     send_to_char("Maybe you should get on your feet first?\r\n", ch);
     return;
   }
-  
+
   struct room_data *in_room = get_ch_in_room(ch);
   if (!in_room) {
     send_to_char("Panic strikes you-- you're floating in a void!\r\n", ch);
     mudlog("SYSERR: Char has no in_room!", ch, LOG_SYSLOG, TRUE);
     return;
   }
-  
+
   // Leaving an elevator shaft is handled in the button panel's spec proc code. See transport.cpp.
   if (!ROOM_FLAGGED(in_room, ROOM_INDOORS)) {
     send_to_char("You are outside.. where do you want to go?\r\n", ch);
     return;
   }
-  
+
   // If you're in an apartment, you're able to leave to the atriun no matter what. Prevents lockin.
   if (ROOM_FLAGGED(in_room, ROOM_HOUSE)) {
     for (door = 0; door < NUM_OF_DIRS; door++) {
       if (EXIT(ch, door) && EXIT(ch, door)->to_room && ROOM_FLAGGED(EXIT(ch, door)->to_room, ROOM_ATRIUM)) {
         send_to_char(ch, "You make your way out of the residence through the door to %s, leaving it locked behind you.\r\n", thedirs[door]);
         act("$n leaves the residence.", TRUE, ch, 0, 0, TO_ROOM);
-        
+
         // Transfer the char.
         struct room_data *target_room = EXIT(ch, door)->to_room;
         char_from_room(ch);
         char_to_room(ch, target_room);
-        
+
         // Message the room.
         snprintf(buf, sizeof(buf), "$n enters from %s.", thedirs[door]);
         act(buf, TRUE, ch, 0, 0, TO_ROOM);
-        
+
         // If not screenreader, look.
         if (!PRF_FLAGGED(ch, PRF_SCREENREADER))
           look_at_room(ch, 0, 0);
@@ -1803,7 +1808,7 @@ ACMD(do_leave)
     // If we got here, there was no valid exit. Error condition.
     snprintf(buf, sizeof(buf), "WARNING: %s attempted to leave apartment, but there was no valid exit! Rescuing to Dante's.",
              GET_CHAR_NAME(ch));
-    
+
     struct room_data *room = &world[real_room(RM_DANTES_GARAGE)];
     if (room) {
       act("$n leaves the residence.", TRUE, ch, 0, 0, TO_ROOM);
@@ -1818,7 +1823,7 @@ ACMD(do_leave)
     }
     mudlog(buf, ch, LOG_SYSLOG, TRUE);
   }
-  
+
   // If you're in a PGHQ, you teleport to the first room of the PGHQ's zone.
   if (in_room->zone >= 0 && zone_table[in_room->zone].is_pghq) {
     rnum_t entrance_rnum = real_room(zone_table[in_room->zone].number * 100);
@@ -1845,7 +1850,7 @@ ACMD(do_leave)
         return;
       }
     }
-  
+
   send_to_char("You see no obvious exits to the outside.\r\n", ch);
 }
 
