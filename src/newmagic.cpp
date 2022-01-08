@@ -663,11 +663,45 @@ bool conjuring_drain(struct char_data *ch, int force)
   else
     drain = SERIOUS;
   drain = convert_damage(stage(-success_test(GET_CHA(ch), force), drain));
-  if (force > GET_MAG(ch) / 100)
+  
+  // Physical drain.
+  if (force > GET_MAG(ch) / 100) {
+    // Iterate through bioware to find relevant bioware.
+    bool bPlat = FALSE;
+    bool bTraum = FALSE;
+    for (struct obj_data *bio = ch->bioware; bio && drain > 0; bio = bio->next_content) {
+      if (GET_OBJ_VAL(bio, 0) == BIO_PLATELETFACTORY && drain >= 3)
+        bPlat = TRUE;
+      
+      if (GET_OBJ_VAL(bio, 0) == BIO_TRAUMADAMPNER)
+        bTraum = TRUE;
+    }
+    if (bPlat)
+      drain--;
+    if (bTraum) {
+      drain--;
+      GET_MENTAL(ch) -= 100;
+    }
+      
+    if (drain <= 0)
+    return FALSE;
+      
     GET_PHYSICAL(ch) -= drain *100;
-  else
-  {
+  }
+  // Mental drain.
+  else {
+    // Iterate through bioware to find a trauma damper.
+    for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content) {
+      if (GET_OBJ_VAL(bio, 0) == BIO_TRAUMADAMPNER) {
+        drain--;
+        break;
+      }
+    }
+    if (drain <= 0)
+      return FALSE;
+      
     GET_MENTAL(ch) -= drain * 100;
+    // Mental overflow to physical
     if (GET_MENTAL(ch) < 0) {
       GET_PHYSICAL(ch) += GET_MENTAL(ch);
       GET_MENTAL(ch) = 0;
@@ -754,15 +788,20 @@ bool spell_drain(struct char_data *ch, int type, int force, int damage)
   // Apply physical drain damage.
   if (force > GET_MAG(ch) / 100 || IS_PROJECT(ch)) {
     // Iterate through bioware to find a platelet factory.
+    bool bPlat = FALSE;
+    bool bTraum = FALSE;
     struct char_data *chptr = (IS_PROJECT(ch) ? ch->desc->original : ch);
     for (struct obj_data *bio = chptr->bioware; bio && damage > 0; bio = bio->next_content) {
-      if (GET_OBJ_VAL(bio, 0) == BIO_PLATELETFACTORY && damage >= 3) {
-        damage--;
-      }
-      if (GET_OBJ_VAL(bio, 0) == BIO_TRAUMADAMPNER) {
-        damage--;
-        GET_MENTAL(chptr) -= 100;
-      }
+      if (GET_OBJ_VAL(bio, 0) == BIO_PLATELETFACTORY && damage >= 3)
+        bPlat = TRUE;
+      if (GET_OBJ_VAL(bio, 0) == BIO_TRAUMADAMPNER)
+        bTraum = TRUE;
+    }
+    if (bPlat)
+      damage--;
+    if (bTraum) {
+      damage--;
+      GET_MENTAL(chptr) -= 100;
     }
 
     if (damage <= 0)
