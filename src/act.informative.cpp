@@ -337,7 +337,7 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
 
     if (object->obj_flags.quest_id) {
       if (object->obj_flags.quest_id == GET_IDNUM(ch))
-        strlcat(buf, " ^Y(Yours)^n", sizeof(buf));
+        strlcat(buf, " ^Y(Quest)^n", sizeof(buf));
       else
         strlcat(buf, " ^m(Protected)^n", sizeof(buf));
     }
@@ -890,6 +890,8 @@ void list_one_char(struct char_data * i, struct char_data * ch)
     if (i->mob_specials.quest_id) {
       if (i->mob_specials.quest_id == GET_IDNUM(ch)) {
         strlcat(buf, "^Y(Quest)^n ", sizeof(buf));
+      } else {
+        strlcat(buf, "^m(Protected)^n ", sizeof(buf));
       }
     } else if (
       (i->in_room && (GET_ROOM_SPEC(i->in_room) == mageskill_moore || GET_ROOM_SPEC(i->in_room) == mageskill_hermes))
