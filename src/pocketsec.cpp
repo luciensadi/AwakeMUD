@@ -60,26 +60,26 @@ void initialize_pocket_secretary(struct obj_data *sec) {
 }
 
 void wire_nuyen(struct char_data *ch, int amount, vnum_t character_id)
-{  
+{
   // First, scan the game to see if the target character is online.
   struct char_data *targ = NULL;
   char query_buf[1000], name_buf[500];
-  
+
   for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
     targ = d->original ? d->original : d->character;
-    
+
     if (targ && GET_IDNUM(targ) == character_id)
       break;
-    
+
     targ = NULL;
   }
-  
+
   // Deduct from the sender (if any). Not a faucet or sink, unless coming from a shop.
   if (ch) {
     GET_BANK_RAW(ch) -= amount;
     playerDB.SaveChar(ch);
   }
-  
+
   // Add to the receiver. Not a faucet or sink, unless coming from a shop.
   if (targ) {
     GET_BANK_RAW(targ) += amount;
@@ -88,14 +88,14 @@ void wire_nuyen(struct char_data *ch, int amount, vnum_t character_id)
     snprintf(query_buf, sizeof(query_buf), "UPDATE pfiles SET Bank=Bank+%d WHERE idnum=%ld;", amount, character_id);
     mysql_wrapper(mysql, query_buf);
   }
-  
+
   // Mail it. We don't send mail for NPC shopkeepers refunding you.
   if (ch) {
     snprintf(query_buf, sizeof(query_buf), "%s has wired %d nuyen to your account.\r\n", ch ? GET_CHAR_NAME(ch) : "Someone", amount);
     snprintf(name_buf, sizeof(name_buf), "%s (wire transfer)", ch ? GET_CHAR_NAME(ch) : "Someone");
     raw_store_mail(character_id, GET_IDNUM(ch), name_buf, query_buf);
   }
-  
+
   // Log it.
   char *player_name = targ ? NULL : get_player_name(character_id);
   snprintf(query_buf, sizeof(query_buf), "%s wired %d nuyen to %s.", ch ? GET_CHAR_NAME(ch) : "An NPC", amount, targ ? GET_CHAR_NAME(targ) : player_name);
@@ -133,7 +133,7 @@ void pocketsec_notemenu(struct descriptor_data *d)
   for (; folder; folder = folder->next_content)
     if (!strcmp(folder->restring, POCSEC_FOLDER_NOTES))
       break;
-      
+
   if (!folder) {
     mudlog("Prevented missing-notes crash. This player has lost their notes.", d->character, LOG_SYSLOG, TRUE);
     folder = generate_pocket_secretary_folder(SEC, POCSEC_FOLDER_NOTES);
@@ -156,16 +156,16 @@ void pocketsec_menu(struct descriptor_data *d)
     send_to_char("This pocket secretary has not been initialized yet. Initialize? [Y/N]\r\n", CH);
     d->edit_mode = SEC_INIT;
   } else {
-    send_to_char(CH, "^cMain Menu^n\r\n" 
+    send_to_char(CH, "^cMain Menu^n\r\n"
                  "   [^c1^n]^c%sMail%s^n\r\n"
                  "   [^c2^n] ^cNotes^n\r\n"
                  "   [^c3^n] ^cPhonebook^n\r\n"
                  "   [^c4^n] ^cFiles^n\r\n"
                  "   [^c5^n] ^cBanking^n\r\n"
                  "   [^c6^n] ^c%sock^n\r\n"
-                 "   [^c0^n] ^cQuit^n\r\n", 
-                 amount_of_mail_waiting(CH) > 0 ? " ^R" : " ", 
-                 amount_of_mail_waiting(CH) > 0 ? " (unread messages)" : "",
+                 "   [^c0^n] ^cQuit^n\r\n",
+                 amount_of_mail_waiting(CH) > 0 ? " ^R" : " ",
+                 amount_of_mail_waiting(CH) > 0 ? " (new messages)" : "",
                  GET_OBJ_VAL(SEC, 1) ? "Unl" : "L");
     d->edit_mode = SEC_MENU;
   }
@@ -180,16 +180,16 @@ void pocketsec_mailmenu(struct descriptor_data *d)
   for (; folder; folder = folder->next_content)
     if (!strcmp(folder->restring, POCSEC_FOLDER_MAIL))
       break;
-      
+
   if (!folder) {
     mudlog("Prevented missing-mail crash. This player has lost their mail.", d->character, LOG_SYSLOG, TRUE);
     folder = generate_pocket_secretary_folder(SEC, POCSEC_FOLDER_MAIL);
   }
-  
+
   while (amount_of_mail_waiting(CH) > 0) {
     mail = read_object(OBJ_PIECE_OF_MAIL, VIRTUAL);
     mail->photo = str_dup(get_and_delete_one_message(CH, sender));
-    
+
     if (*sender)
       mail->restring = str_dup(CAP(sender));
     else mail->restring = str_dup("Alert");
@@ -204,20 +204,20 @@ void pocketsec_mailmenu(struct descriptor_data *d)
   int expiry_ticks, days, hours, minutes;
   for (mail = folder->contains; mail; mail = mail->next_content) {
     i++;
-    
+
     // Compose our status string.
     snprintf(buf, sizeof(buf), " %2d > %s%s^n",
                   i,
                   !GET_OBJ_VAL(mail, 0) ? "(unread) ^R" : "",
                   GET_OBJ_NAME(mail)
                 );
-    
+
     if (GET_OBJ_TIMER(mail) >= 0) {
       expiry_ticks = MAIL_EXPIRATION_TICKS - GET_OBJ_TIMER(mail);
       minutes = expiry_ticks % 60;
       hours = expiry_ticks % (60 * 24);
       days = expiry_ticks / (60 * 24);
-      
+
       if (days > 0)
         snprintf(buf2, sizeof(buf2), "%s\r\n", buf);
       else if (hours > 0 || minutes > 0)
@@ -246,7 +246,7 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
   int i;
   long x;
   const char *name;
-  
+
   switch (d->edit_mode) {
     case SEC_MENU:
       switch (atoi(arg)) {
@@ -299,12 +299,12 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
       for (folder = SEC->contains; folder; folder = folder->next_content)
         if (!strcmp(folder->restring, POCSEC_FOLDER_PHONEBOOK))
           break;
-          
+
       if (!folder) {
         mudlog("Prevented missing-phonebook crash. This player has lost their contacts list.", d->character, LOG_SYSLOG, TRUE);
         folder = generate_pocket_secretary_folder(SEC, POCSEC_FOLDER_PHONEBOOK);
       }
-      
+
       i = atoi(arg);
       for (file = folder->contains; file && i > 1; file = file->next_content)
         i--;
@@ -312,7 +312,7 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
         STATE(d) = CON_PLAYING;
         act("$n looks up from $s $p.", TRUE, CH, SEC, 0, TO_ROOM);
         d->edit_obj = NULL;
-        do_phone(CH, GET_OBJ_DESC(file), 0, SCMD_RING); 
+        do_phone(CH, GET_OBJ_DESC(file), 0, SCMD_RING);
       } else {
         pocketsec_phonemenu(d);
         send_to_char("That entry does not exist.\r\n", CH);
@@ -322,13 +322,13 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
       for (folder = SEC->contains; folder; folder = folder->next_content)
         if (!strcmp(folder->restring, POCSEC_FOLDER_PHONEBOOK))
           break;
-          
+
       if (!folder) {
         mudlog("Prevented missing-phonebook crash. This player has lost their contacts list.", d->character, LOG_SYSLOG, TRUE);
         folder = generate_pocket_secretary_folder(SEC, POCSEC_FOLDER_PHONEBOOK);
       }
-        
-      file = read_object(OBJ_POCKET_SECRETARY_FOLDER, VIRTUAL);       
+
+      file = read_object(OBJ_POCKET_SECRETARY_FOLDER, VIRTUAL);
       obj_to_obj(file, folder);
       file->restring = str_dup(arg);
       send_to_char("Enter Number: ", CH);
@@ -349,12 +349,12 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
       for (folder = SEC->contains; folder; folder = folder->next_content)
         if (!strcmp(folder->restring, POCSEC_FOLDER_PHONEBOOK))
           break;
-      
+
       if (!folder) {
         mudlog("Prevented missing-phonebook crash. This player has lost their contacts list.", d->character, LOG_SYSLOG, TRUE);
         folder = generate_pocket_secretary_folder(SEC, POCSEC_FOLDER_PHONEBOOK);
       }
-          
+
       if (arg && *arg == '*') {
         struct obj_data *next;
         for (file = folder->contains; file; file = next) {
@@ -395,12 +395,12 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
       for (folder = SEC->contains; folder; folder = folder->next_content)
         if (!strcmp(folder->restring, POCSEC_FOLDER_NOTES))
           break;
-          
+
       if (!folder) {
         mudlog("Prevented missing-notes crash. This player has lost their notes.", d->character, LOG_SYSLOG, TRUE);
         folder = generate_pocket_secretary_folder(SEC, POCSEC_FOLDER_NOTES);
       }
-      
+
       i = atoi(arg);
       for (file = folder->contains; file && i > 1; file = file->next_content)
         i--;
@@ -422,13 +422,13 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
       for (folder = SEC->contains; folder; folder = folder->next_content)
         if (!strcmp(folder->restring, POCSEC_FOLDER_NOTES))
           break;
-          
+
       if (!folder) {
         mudlog("Prevented missing-notes crash. This player has lost their notes.", d->character, LOG_SYSLOG, TRUE);
         folder = generate_pocket_secretary_folder(SEC, POCSEC_FOLDER_NOTES);
       }
-      
-      file = read_object(OBJ_POCKET_SECRETARY_FOLDER, VIRTUAL);       
+
+      file = read_object(OBJ_POCKET_SECRETARY_FOLDER, VIRTUAL);
       obj_to_obj(file, folder);
       file->restring = str_dup(arg);
       send_to_char("Write note body. Use @ on a new line to finish.\r\n", CH);
@@ -442,12 +442,12 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
       for (folder = SEC->contains; folder; folder = folder->next_content)
         if (!strcmp(folder->restring, POCSEC_FOLDER_NOTES))
           break;
-          
+
       if (!folder) {
         mudlog("Prevented missing-notes crash. This player has lost their notes.", d->character, LOG_SYSLOG, TRUE);
         folder = generate_pocket_secretary_folder(SEC, POCSEC_FOLDER_NOTES);
       }
-      
+
       if (arg && *arg == '*') {
         struct obj_data *next;
         for (file = folder->contains; file; file = next) {
@@ -456,13 +456,13 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
         }
         folder->contains = NULL;
       } else {
-        i = atoi(arg);  
+        i = atoi(arg);
         for (file = folder->contains; file && i > 1; file = file->next_content)
           i--;
         if (file)
           extract_obj(file);
       }
-      
+
       pocketsec_notemenu(d);
       break;
 
@@ -478,7 +478,7 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
       }
       break;
     case SEC_WIRE1:
-      GET_EXTRA(CH) = FALSE;     
+      GET_EXTRA(CH) = FALSE;
       if ((GET_EXTRA(CH) = get_player_id(arg)) == -1) {
         send_to_char("The bank refuses to let you wire to that account.\r\n", CH);
           pocketsec_bankmenu(d);
@@ -535,12 +535,12 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
       for (folder = SEC->contains; folder; folder = folder->next_content)
         if (!strcmp(folder->restring, POCSEC_FOLDER_MAIL))
           break;
-          
+
       if (!folder) {
         mudlog("Prevented missing-mail crash. This player has lost their mail.", d->character, LOG_SYSLOG, TRUE);
         folder = generate_pocket_secretary_folder(SEC, POCSEC_FOLDER_MAIL);
       }
-      
+
       if (arg) {
         if (d->edit_mode != SEC_KEEPMAIL && *arg == '*') {
           struct obj_data *next;
@@ -550,7 +550,7 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
           }
           folder->contains = NULL;
         } else {
-          i = atoi(arg);  
+          i = atoi(arg);
           for (file = folder->contains; file && i > 1; file = file->next_content)
             i--;
           if (file) {
@@ -565,11 +565,11 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
           }
         }
       }
-      
+
       pocketsec_mailmenu(d);
       break;
     case SEC_SENDMAIL:
-      one_argument(arg, buf); 
+      one_argument(arg, buf);
       if ((x = get_player_id(buf)) < 0) {
         send_to_char("There is no such player.\r\n", CH);
         pocketsec_mailmenu(d);
@@ -586,12 +586,12 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
       for (folder = SEC->contains; folder; folder = folder->next_content)
         if (!strcmp(folder->restring, POCSEC_FOLDER_MAIL))
           break;
-          
+
       if (!folder) {
         mudlog("Prevented missing-mail crash. This player has lost their mail.", d->character, LOG_SYSLOG, TRUE);
         folder = generate_pocket_secretary_folder(SEC, POCSEC_FOLDER_MAIL);
       }
-          
+
       i = atoi(arg);
       for (file = folder->contains; file && i > 1; file = file->next_content)
         i--;

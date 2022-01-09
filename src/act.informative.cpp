@@ -39,6 +39,7 @@ using namespace std;
 #include "newdb.h"
 #include "bullet_pants.h"
 #include "config.h"
+#include "newmail.h"
 
 const char *CCHAR;
 
@@ -237,6 +238,7 @@ void get_obj_condition(struct char_data *ch, struct obj_data *obj)
 void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
 {
   SPECIAL(floor_usable_radio);
+  SPECIAL(pocket_sec);
 
   *buf = '\0';
   if ((mode == 0) && object->text.room_desc) {
@@ -283,6 +285,9 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
       {
         strlcat(buf, " (Combinable)", sizeof(buf));
       }
+    if (GET_OBJ_SPEC(object) == pocket_sec && amount_of_mail_waiting(ch) > 0) {
+      strlcat(buf, " ^y(Mail Waiting)^n", sizeof(buf));
+    }
   }
   else if (GET_OBJ_NAME(object) && ((mode == 2) || (mode == 3) || (mode == 4) || (mode == 7))) {
     strlcpy(buf, GET_OBJ_NAME(object), sizeof(buf));
@@ -1466,7 +1471,15 @@ void look_in_veh(struct char_data * ch)
       list_char_to_char(veh->in_veh->people, ch);
       ch->vfront = ov;
     } else {
-      send_to_char(ch, "\r\n^CAround you is %s\r\n", veh->in_room->name);
+      send_to_char(ch, "\r\n^CAround you is %s^n%s%s%s%s%s%s%s\r\n", GET_ROOM_NAME(veh->in_room),
+                   ROOM_FLAGGED(veh->in_room, ROOM_GARAGE) ? " (Garage)" : "",
+                   ROOM_FLAGGED(veh->in_room, ROOM_STORAGE) && !ROOM_FLAGGED(veh->in_room, ROOM_CORPSE_SAVE_HACK) ? " (Storage)" : "",
+                   ROOM_FLAGGED(veh->in_room, ROOM_HOUSE) ? " (Apartment)" : "",
+                   ROOM_FLAGGED(veh->in_room, ROOM_STERILE) ? " (Sterile)" : "",
+                   ROOM_FLAGGED(veh->in_room, ROOM_ARENA) ? " ^y(Arena)^n" : "",
+                   veh->in_room->matrix && real_host(veh->in_room->matrix) >= 1 ? " (Jackpoint)" : "",
+                   ROOM_FLAGGED(veh->in_room, ROOM_ENCOURAGE_CONGREGATION) ? " ^W(Socialization Bonus)^n" : "");
+
       if (get_speed(veh) <= 200) {
         if (veh->in_room->night_desc && weather_info.sunlight == SUN_DARK)
           send_to_char(veh->in_room->night_desc, ch);
