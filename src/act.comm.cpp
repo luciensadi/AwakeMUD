@@ -734,7 +734,7 @@ ACMD(do_radio)
     send_to_char("That's not a valid option.\r\n", ch);
 }
 
-struct obj_data *find_radio(struct char_data *ch, bool *is_cyberware, bool *is_vehicular) {
+struct obj_data *find_radio(struct char_data *ch, bool *is_cyberware, bool *is_vehicular, bool must_be_on=FALSE) {
   struct obj_data *obj;
 
   if (!ch)
@@ -751,30 +751,30 @@ struct obj_data *find_radio(struct char_data *ch, bool *is_cyberware, bool *is_v
 
   // Check your inventory.
   for (obj = ch->carrying; obj; obj = obj->next_content)
-    if (GET_OBJ_TYPE(obj) == ITEM_RADIO)
+    if (GET_OBJ_TYPE(obj) == ITEM_RADIO && (must_be_on ? GET_OBJ_VAL(obj, 0) != 0 : TRUE))
       return obj;
 
   // Check your gear.
   for (int i = 0; i < NUM_WEARS; i++)
     if (GET_EQ(ch, i)) {
-      if (GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_RADIO) {
+      if (GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_RADIO && (must_be_on ? GET_OBJ_VAL(obj, 0) != 0 : TRUE)) {
         return GET_EQ(ch, i);
       } else if (GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_WORN && GET_EQ(ch, i)->contains) {
         for (struct obj_data *obj = GET_EQ(ch, i)->contains; obj; obj = obj->next_content)
-          if (GET_OBJ_TYPE(obj) == ITEM_RADIO)
+          if (GET_OBJ_TYPE(obj) == ITEM_RADIO && (must_be_on ? GET_OBJ_VAL(obj, 0) != 0 : TRUE))
             return obj;
       }
     }
 
   for (obj = ch->cyberware; obj; obj = obj->next_content)
-    if (GET_OBJ_VAL(obj, 0) == CYB_RADIO) {
+    if (GET_CYBERWARE_TYPE(obj) == CYB_RADIO && (must_be_on ? GET_CYBERWARE_FLAGS(obj) != 0 : TRUE)) {
       *is_cyberware = TRUE;
       return obj;
     }
 
   if (ch->in_room)
     for (obj = ch->in_room->contents; obj; obj = obj->next_content)
-      if (GET_OBJ_TYPE(obj) == ITEM_RADIO)
+      if (GET_OBJ_TYPE(obj) == ITEM_RADIO && (must_be_on ? GET_OBJ_VAL(obj, 0) != 0 : TRUE))
         return obj;
 
   return NULL;
@@ -888,7 +888,7 @@ ACMD(do_broadcast)
           !ROOM_FLAGGED(get_ch_in_room(d->character), ROOM_SENT))
       {
         if (!IS_NPC(d->character) && (!access_level(d->character, LVL_FIXER) || PRF_FLAGGED(d->character, PRF_SUPPRESS_STAFF_RADIO))) {
-          if (!(radio = find_radio(d->character, &cyberware, &vehicle)))
+          if (!(radio = find_radio(d->character, &cyberware, &vehicle, TRUE)))
             continue;
 
           /*
