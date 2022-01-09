@@ -347,11 +347,6 @@ ACMD(do_tell)
     return;
   }
 
-  if (PLR_FLAGGED(vict, PLR_WRITING) || PLR_FLAGGED(vict, PLR_MAILING)) {
-    act("$E's writing a message right now; try again later.", FALSE, ch, 0, vict, TO_CHAR);
-    return;
-  }
-
   else if (PLR_FLAGGED(vict, PLR_EDITING)) {
     act("$E's editing right now, try again later.", FALSE, ch, 0, vict, TO_CHAR);
     return;
@@ -886,9 +881,7 @@ ACMD(do_broadcast)
   if (!ROOM_FLAGGED(get_ch_in_room(ch), ROOM_SOUNDPROOF)) {
     for (d = descriptor_list; d; d = d->next) {
       if (!d->connected && d != ch->desc && d->character &&
-          !PLR_FLAGS(d->character).AreAnySet(PLR_WRITING,
-                                             PLR_MAILING,
-                                             PLR_EDITING,
+          !PLR_FLAGS(d->character).AreAnySet(PLR_EDITING,
                                              PLR_MATRIX, ENDBIT)
           && !IS_PROJECT(d->character) &&
           !ROOM_FLAGGED(get_ch_in_room(d->character), ROOM_SOUNDPROOF) &&
@@ -1242,7 +1235,6 @@ ACMD(do_gen_comm)
       // Anyone who's not either staff or in specific playing states is skipped.
       if (!access_level(d->character, LVL_BUILDER)
           && ((d->connected != CON_PLAYING && !PRF_FLAGGED(d->character, PRF_MENUGAG))
-              || PLR_FLAGGED( d->character, PLR_WRITING)
               || PRF_FLAGGED( d->character, PRF_NOOOC)
               || PLR_FLAGGED(d->character, PLR_NOT_YET_AUTHED)))
         continue;
@@ -1296,7 +1288,7 @@ ACMD(do_gen_comm)
 
     // Non-staff who don't meet specific criteria are skipped.
     if (!IS_SENATOR(i->character)) {
-      if (i->connected || PLR_FLAGS(i->character).AreAnySet(PLR_WRITING, PLR_MAILING, PLR_EDITING, ENDBIT))
+      if (i->connected || PLR_FLAGS(i->character).AreAnySet(PLR_EDITING, ENDBIT))
         continue;
     }
 
@@ -1339,9 +1331,7 @@ ACMD(do_gen_comm)
   for (i = descriptor_list; i; i = i->next)
     if (!i->connected && i != ch->desc && i->character &&
         !PRF_FLAGGED(i->character, channels[subcmd]) &&
-        !PLR_FLAGS(i->character).AreAnySet(PLR_WRITING,
-                                           PLR_MAILING,
-                                           PLR_EDITING, ENDBIT) &&
+        !PLR_FLAGS(i->character).AreAnySet(PLR_EDITING, ENDBIT) &&
         !IS_PROJECT(i->character) &&
         !(ROOM_FLAGGED(get_ch_in_room(i->character), ROOM_SOUNDPROOF) && subcmd == SCMD_SHOUT)) {
       if (subcmd == SCMD_NEWBIE && !(PLR_FLAGGED(i->character, PLR_NEWBIE) ||

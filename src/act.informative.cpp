@@ -4253,10 +4253,10 @@ ACMD(do_who)
           strlcat(buf1, " (mailing)", sizeof(buf1));
         else if (PLR_FLAGGED(tch, PLR_WRITING))
           strlcat(buf1, " (writing)", sizeof(buf1));
-        if (PLR_FLAGGED(tch, PLR_EDITING))
-          strlcat(buf1, " (editing)", sizeof(buf1));
         if (PRF_FLAGGED(tch, PRF_QUESTOR))
           strlcat(buf1, " ^Y(questor)^n", sizeof(buf1));
+        if (PLR_FLAGGED(tch, PLR_EDITING) || d->connected)
+          strlcat(buf1, " (editing)", sizeof(buf1));
         if (PLR_FLAGGED(tch, PLR_NOT_YET_AUTHED))
           strlcat(buf1, " ^G(unauthed)^n", sizeof(buf1));
         if (PLR_FLAGGED(tch, PLR_MATRIX))
@@ -4282,8 +4282,8 @@ ACMD(do_who)
         strlcat(buf1, " ^L(BLACKLISTED)^N", sizeof(buf1));
       if (PLR_FLAGGED(tch, PLR_WANTED))
         strlcat(buf1, " ^R(WANTED)^N", sizeof(buf1));
-      if (d->connected)
-        strlcat(buf1, " (editing)", sizeof(buf1));
+      if (level >= LVL_VICEPRES && tch->char_specials.timer > 10)
+        snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "(idle: %d)", tch->char_specials.timer);
       strlcat(buf1, "\r\n", sizeof(buf1));
       strlcat(buf, buf1, sizeof(buf));
 
