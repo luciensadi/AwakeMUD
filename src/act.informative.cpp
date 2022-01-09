@@ -335,8 +335,11 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
       strlcat(buf, " ^c(humming)", sizeof(buf));
     }
 
-    if (object->obj_flags.quest_id && object->obj_flags.quest_id == GET_IDNUM(ch)) {
-      strlcat(buf, " ^Y(Yours)^n", sizeof(buf));
+    if (object->obj_flags.quest_id) {
+      if (object->obj_flags.quest_id == GET_IDNUM(ch))
+        strlcat(buf, " ^Y(Yours)^n", sizeof(buf));
+      else
+        strlcat(buf, " ^m(Protected)^n", sizeof(buf));
     }
   }
   strlcat(buf, "^N\r\n", sizeof(buf));
