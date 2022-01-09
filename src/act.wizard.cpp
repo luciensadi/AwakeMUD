@@ -6297,17 +6297,24 @@ int audit_zone_rooms_(struct char_data *ch, int zone_num, bool verbose) {
             issues++;
             printed = TRUE;
           }
-          else if (room->dir_option[k]->to_room->dir_option[rev_dir[k]]->exit_info != room->dir_option[k]->exit_info) {
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - %s exit has flags that don't match the return direction's flags (%s from here: %s, %s from %ld: %s).\r\n",
-                    dirs[k],
-                    dirs[k],
-                    render_door_type_string(room->dir_option[k]),
-                    dirs[rev_dir[k]],
-                    GET_ROOM_VNUM(room->dir_option[k]->to_room),
-                    render_door_type_string(room->dir_option[k]->to_room->dir_option[rev_dir[k]])
-                  );
-            issues++;
-            printed = TRUE;
+          else {
+            int outbound = room->dir_option[k]->to_room->dir_option[rev_dir[k]]->exit_info;
+            int inbound = room->dir_option[k]->exit_info;
+            REMOVE_BIT(outbound, EX_HIDDEN);
+            REMOVE_BIT(inbound, EX_HIDDEN);
+
+            if (outbound != inbound) {
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - %s exit has flags that don't match the return direction's flags (%s from here: %s, %s from %ld: %s).\r\n",
+                      dirs[k],
+                      dirs[k],
+                      render_door_type_string(room->dir_option[k]),
+                      dirs[rev_dir[k]],
+                      GET_ROOM_VNUM(room->dir_option[k]->to_room),
+                      render_door_type_string(room->dir_option[k]->to_room->dir_option[rev_dir[k]])
+                    );
+              issues++;
+              printed = TRUE;
+            }
           }
         }
       }
@@ -6422,7 +6429,7 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
       printed = TRUE;
       issues++;
     } else {
-      if (ispunct((candidate = get_final_character_from_string(mob->player.physical_text.name)))) {
+      if (ispunct((candidate = get_final_character_from_string(mob->player.physical_text.name))) && candidate != '"' && candidate != '\'') {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - name ending in punctuation (%c)^n.\r\n", candidate);
         printed = TRUE;
         issues++;
