@@ -1918,7 +1918,7 @@ void shop_check(char *arg, struct char_data *ch, struct char_data *keeper, vnum_
   char buf[MAX_STRING_LENGTH];
   char formatstr[MAX_STRING_LENGTH];
   char paddingnumberstr[12];
-  
+
   if (!is_open(keeper, shop_nr))
     return;
   if (!is_ok_char(keeper, ch, shop_nr))
@@ -2167,7 +2167,7 @@ void list_detailed_shop(struct char_data *ch, vnum_t shop_nr)
 {
   char formatstr[MAX_STRING_LENGTH];
   char paddingnumberstr[12];
-  
+
   snprintf(buf, sizeof(buf), "Vnum:       [%5ld], Rnum: [%5ld]\r\n", shop_table[shop_nr].vnum, shop_nr);
 
   int real_mob = real_mobile(shop_table[shop_nr].keeper);

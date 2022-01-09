@@ -3812,7 +3812,7 @@ SPECIAL(terell_davis)
     return FALSE;
   else if (cmd) {
     if (CMD_IS("buy") || CMD_IS("sell") || CMD_IS("value") || CMD_IS("list") || CMD_IS("check")
-        || CMD_IS("cancel") || CMD_IS("receive") || CMD_IS("info")) {
+        || CMD_IS("cancel") || CMD_IS("receive") || CMD_IS("info") || CMD_IS("probe")) {
       shop_keeper(ch, me, cmd, argument);
       return TRUE;
     }
