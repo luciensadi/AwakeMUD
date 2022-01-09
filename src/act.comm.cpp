@@ -920,7 +920,7 @@ ACMD(do_broadcast)
 
           // Copy in the message body, mangling it as needed for language skill issues.
           snprintf(message, sizeof(message), "%s%s",
-                   capitalize(replace_too_long_words(d->character, ch, argument, language, "^y", TRUE)),
+                   capitalize(replace_too_long_words(d->character, ch, argument, language, "^y", PRF_FLAGGED(d->character, PRF_SUPPRESS_STAFF_RADIO))),
                    ispunct(get_final_character_from_string(argument)) ? "" : ".");
 
           // Add in interference if there is any.
