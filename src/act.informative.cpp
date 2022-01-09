@@ -2231,10 +2231,15 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
           }
         }
 
-        if (GET_WEAPON_INTEGRAL_RECOIL_COMP(j)) {
+        if (GET_WEAPON_INTEGRAL_RECOIL_COMP(j) > 0) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt has ^c%d^n point%s of integral recoil compensation.",
                   GET_WEAPON_INTEGRAL_RECOIL_COMP(j),
-                  GET_WEAPON_INTEGRAL_RECOIL_COMP(j) > 1 ? "s" : "");
+                  GET_WEAPON_INTEGRAL_RECOIL_COMP(j) != 1 ? "s" : "");
+        }
+        else if (GET_WEAPON_INTEGRAL_RECOIL_COMP(j) < 0) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt adds ^c%d^n point%s of recoil per shot.",
+                  -GET_WEAPON_INTEGRAL_RECOIL_COMP(j),
+                  -GET_WEAPON_INTEGRAL_RECOIL_COMP(j) != 1 ? "s" : "");
         }
 
         // Info about attachments, if any.
