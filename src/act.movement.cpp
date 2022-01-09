@@ -777,7 +777,7 @@ int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vic
     return 0;
   }
 
-  if (GET_POS(ch) < POS_FIGHTING || AFF_FLAGGED(ch, AFF_PRONE)) {
+  if (GET_POS(ch) < POS_FIGHTING || (AFF_FLAGGED(ch, AFF_PRONE) && !IS_NPC(ch))) {
     send_to_char("Maybe you should get on your feet first?\r\n", ch);
     return 0;
   }
