@@ -127,6 +127,23 @@ struct obj_data
       carried_by(NULL), worn_by(NULL), in_obj(NULL), contains(NULL), next_content(NULL), in_host(NULL), targ(NULL), tveh(NULL)
   {}
 };
+
+// Struct for preserving order of objects.
+struct nested_obj {
+      int level; 
+      struct obj_data* obj;
+};
+
+// Comparator for preserving order of objects.
+struct find_level
+{
+    int level;
+    find_level(int level) : level(level) {}
+    bool operator () ( const nested_obj& o ) const
+    {
+        return o.level == level;
+    }
+};
 /* ======================================================================= */
 
 /* room-related structures ************************************************/

@@ -341,12 +341,28 @@ void copyover_recover()
       reset_char(d->character);
       d->character->next = character_list;
       character_list = d->character;
-      if (real_room(GET_LAST_IN(d->character)) > 0)
-        load_room = real_room(GET_LAST_IN(d->character));
-      else
-        load_room = real_room(GET_LOADROOM(d->character));
-      char_to_room(d->character, &world[load_room]);
-      //look_at_room(d->character, 0, 0);
+      // Since we're coming from copyover if the char is in a vehicle and is the owner throw him at the front seat
+      // otherwise throw him at the back. Because we don't save frontness and we'll assume the owner is driving
+      // anyway.
+      if (d->character->player_specials->saved.last_veh) {
+        for (struct veh_data *veh = veh_list; veh; veh = veh->next)
+          if (veh->idnum == d->character->player_specials->saved.last_veh && veh->damage < VEH_DAM_THRESHOLD_DESTROYED) {
+            if (veh->owner == GET_IDNUM(d->character))
+              d->character->vfront = TRUE;
+            else
+              d->character->vfront = FALSE;
+              
+            char_to_veh(veh, d->character);
+          }
+      }
+      else {
+        if (real_room(GET_LAST_IN(d->character)) > 0)
+          load_room = real_room(GET_LAST_IN(d->character));
+        else
+          load_room = real_room(GET_LOADROOM(d->character));
+        char_to_room(d->character, &world[load_room]);
+        //look_at_room(d->character, 0, 0);
+      }
     }
   }
   fclose (fp);

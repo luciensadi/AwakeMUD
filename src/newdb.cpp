@@ -58,22 +58,6 @@ void save_bioware_to_db(struct char_data *player);
 void save_cyberware_to_db(struct char_data *player);
 void fix_character_essence_after_cybereye_migration(struct char_data *ch);
 
-// Struct for preserving order of objects.
-struct nested_obj {
-      int level; 
-      struct obj_data* obj;
-};
-// Comparator for preserving order of objects.
-struct find_level
-{
-    int level;
-    find_level(int level) : level(level) {}
-    bool operator () ( const nested_obj& o ) const
-    {
-        return o.level == level;
-    }
-};
-
 // ____________________________________________________________________________
 //
 // global variables
@@ -803,6 +787,8 @@ bool load_char(const char *name, char_data *ch, bool logon)
         obj_to_char(it.obj, ch);
       
       contained_obj.clear();
+      snprintf(buf2, sizeof(buf2), "Load error:  Objects in ware containers found with invalid containers for Char ID: %ld. Dumped in inventory.", GET_IDNUM(ch));
+      mudlog(buf2, NULL, LOG_SYSLOG, TRUE);
     }
     mysql_free_result(res);
   }
@@ -911,6 +897,8 @@ bool load_char(const char *name, char_data *ch, bool logon)
         obj_to_char(it.obj, ch);
       
       contained_obj.clear();
+      snprintf(buf2, sizeof(buf2), "Load error: Worn objects found with invalid containers for Char ID: %ld. Dumped in inventory.", GET_IDNUM(ch));
+      mudlog(buf2, NULL, LOG_SYSLOG, TRUE);
     }
     mysql_free_result(res);
   }
@@ -1018,6 +1006,8 @@ bool load_char(const char *name, char_data *ch, bool logon)
         obj_to_char(it.obj, ch);
       
       contained_obj.clear();
+      snprintf(buf2, sizeof(buf2), "Load error: Inventory objects found with invalid containers for Char ID: %ld. Dumped in inventory.", GET_IDNUM(ch));
+      mudlog(buf2, NULL, LOG_SYSLOG, TRUE);
     }
     mysql_free_result(res);
   }
@@ -1163,7 +1153,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
   }                                                              \
 }
 
-static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
+static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopyover = FALSE)
 {
   PERF_PROF_SCOPE(pr_, __func__);
   char buf[MAX_STRING_LENGTH*4], buf2[MAX_STRING_LENGTH*4], buf3[MAX_STRING_LENGTH*4];
@@ -1243,8 +1233,10 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
     }
   }
 
-  /* Figure out their vehicle-- they can only load in it if they own it. */
-  if (player->in_veh && player->in_veh->owner == GET_IDNUM(player))
+  /* Figure out their vehicle-- they can only load in it if they own it.  Unless we're calling from copyover.*/
+  if (player->in_veh && fromCopyover)
+     inveh = player->in_veh->idnum;
+  else if (player->in_veh && player->in_veh->owner == GET_IDNUM(player))
     inveh = player->in_veh->idnum;
 
   /* Figure out their pgroup num-- we only want to access this if the group is valid. */
@@ -1721,12 +1713,12 @@ char_data *PCIndex::LoadChar(const char *name, bool logon)
   return ch;
 }
 
-bool PCIndex::SaveChar(char_data *ch, vnum_t loadroom)
+bool PCIndex::SaveChar(char_data *ch, vnum_t loadroom, bool fromCopyover)
 {
   if (IS_NPC(ch))
     return false;
 
-  bool ret = save_char(ch, loadroom);
+  bool ret = save_char(ch, loadroom, fromCopyover);
 
   return ret;
 }

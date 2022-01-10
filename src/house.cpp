@@ -60,22 +60,6 @@ struct life_data lifestyle[] =
     { "Luxury", 25 }
   };
 
-// Struct for preserving order of objects.
-struct nested_obj {
-      int level; 
-      struct obj_data* obj;
-};
-// Comparator for preserving order of objects.
-struct find_level
-{
-    int level;
-    find_level(int level) : level(level) {}
-    bool operator () ( const nested_obj& o ) const
-    {
-        return o.level == level;
-    }
-};
-
 /* First, the basics: finding the filename; loading/saving objects */
 
 /* Return a filename given a house vnum */
@@ -105,9 +89,10 @@ bool House_load(struct house_control_rec *house)
   File fl;
   char fname[MAX_STRING_LENGTH];
   rnum_t rnum;
-  struct obj_data *obj = NULL;
+  struct obj_data *obj = NULL, *last_obj = NULL;
   long vnum;
   int inside = 0, last_inside = 0;
+  int house_version = 0;
   std::vector<nested_obj> contained_obj;
   struct nested_obj contained_obj_entry;
 
@@ -123,6 +108,8 @@ bool House_load(struct house_control_rec *house)
   data.Parse(&fl);
   fl.Close();
   snprintf(buf3, sizeof(buf3), "house-load %s", fname);
+  house_version = data.GetInt("METADATA/Version", 0);
+  
   for (int i = 0; i < MAX_GUESTS; i++)
   {
     snprintf(buf, sizeof(buf), "GUESTS/Guest%d", i);
@@ -131,6 +118,7 @@ bool House_load(struct house_control_rec *house)
       p = 0;
     house->guests[i] = p;
   }
+  
   int num_objs = data.NumSubsections("HOUSE");
   int x;
   for (int i = 0; i < num_objs; i++)
@@ -201,40 +189,77 @@ bool House_load(struct house_control_rec *house)
         auto_repair_obj(obj, buf3);
       
       inside = data.GetInt(buf, 0);
-      // Since we're now saved the obj linked lists  in reverse order, in order to fix the stupid reordering on
-      // every binary execution, the previous algorithm did not work, as it relied on getting the container obj
-      // first and place subsequent objects in it. Since we're now getting it last, and more importantly we get
-      // objects at deeper nesting level in between our list, we save all pointers to objects along with their
-      // nesting level in a vector container and once we found the next container (inside < last_inside) we
-      // move the objects with higher nesting level to container and proceed. This works for any nesting depth.
-      if (inside > 0 || (inside == 0 && inside < last_inside)) {
-        //Found our container?
-        if (inside < last_inside) {
-          if (inside == 0)
-            obj_to_room(obj, &world[rnum]);
-            
-          auto it = std::find_if(contained_obj.begin(), contained_obj.end(), find_level(inside+1));
-          while (it != contained_obj.end()) {
-            obj_to_obj(it->obj, obj);
-            contained_obj.erase(it);
-          }
+      if (house_version == VERSION_HOUSE_FILE) {
+        // Since we're now saved the obj linked lists  in reverse order, in order to fix the stupid reordering on
+        // every binary execution, the previous algorithm did not work, as it relied on getting the container obj
+        // first and place subsequent objects in it. Since we're now getting it last, and more importantly we get
+        // objects at deeper nesting level in between our list, we save all pointers to objects along with their
+        // nesting level in a vector container and once we found the next container (inside < last_inside) we
+        // move the objects with higher nesting level to container and proceed. This works for any nesting depth.
+        if (inside > 0 || (inside == 0 && inside < last_inside)) {
+          //Found our container?
+          if (inside < last_inside) {
+            if (inside == 0)
+              obj_to_room(obj, &world[rnum]);
               
-          if (inside > 0) {
+            auto it = std::find_if(contained_obj.begin(), contained_obj.end(), find_level(inside+1));
+            while (it != contained_obj.end()) {
+              obj_to_obj(it->obj, obj);
+              contained_obj.erase(it);
+            }
+                
+            if (inside > 0) {
+              contained_obj_entry.level = inside;
+              contained_obj_entry.obj = obj;
+              contained_obj.push_back(contained_obj_entry);
+            }
+          }
+          else {
             contained_obj_entry.level = inside;
             contained_obj_entry.obj = obj;
             contained_obj.push_back(contained_obj_entry);
           }
+          last_inside = inside;
         }
-        else {
-          contained_obj_entry.level = inside;
-          contained_obj_entry.obj = obj;
-          contained_obj.push_back(contained_obj_entry);
-        }
+        else
+          obj_to_room(obj, &world[rnum]);
+            
         last_inside = inside;
-      } else
+      }
+      // This handles loading old house file format prior to introduction of version number in the file.
+      // Version number will always be 0 for this format.
+      else if (!house_version) {
+        if (inside > 0) {
+          if (inside == last_inside)
+            last_obj = last_obj->in_obj;
+          else if (inside < last_inside) {
+            while (inside <= last_inside) {
+              if (!last_obj) {
+                snprintf(buf2, sizeof(buf2), "Load error: Nested-item load failed for %s. Disgorging to room.", GET_OBJ_NAME(obj));
+                mudlog(buf2, NULL, LOG_SYSLOG, TRUE);
+                break;
+              }
+              last_obj = last_obj->in_obj;
+              last_inside--;
+            }
+          }
+            
+          if (last_obj)
+            obj_to_obj(obj, last_obj);
+          else
+            obj_to_room(obj, &world[rnum]);
+        }
+        else
+          obj_to_room(obj, &world[rnum]);
+
+        last_inside = inside;
+        last_obj = obj;
+      }
+      else {
+        snprintf(buf2, sizeof(buf2), "Load ERROR: Unknown file format for house Rnum %ld. Dumping valid objects to room.", rnum);
+        mudlog(buf2, NULL, LOG_SYSLOG, TRUE);
         obj_to_room(obj, &world[rnum]);
-          
-      last_inside = inside;
+      }
     } else {
       snprintf(buf2, sizeof(buf2), "Losing object %ld (%s / %s; )- it's not a valid object.", 
                vnum,
@@ -243,12 +268,14 @@ bool House_load(struct house_control_rec *house)
       mudlog(buf2, NULL, LOG_SYSLOG, TRUE);
     }
   }
-  // Failsafe. If something went wrong and we still have objects stored in the vector, dump them in the room.
-  if (!contained_obj.empty()) {
-    for (auto it : contained_obj)
-      obj_to_room(it.obj, &world[rnum]);
-      
-    contained_obj.clear();
+  if (house_version == VERSION_HOUSE_FILE) {
+    // Failsafe. If something went wrong and we still have objects stored in the vector, dump them in the room.
+    if (!contained_obj.empty()) {
+      for (auto it : contained_obj)
+        obj_to_room(it.obj, &world[rnum]);
+        
+      contained_obj.clear();
+    }
   }
   return TRUE;
 }
@@ -329,6 +356,9 @@ void House_save(struct house_control_rec *house, const char *file_name, long rnu
   memset(print_buffer, 0, sizeof(print_buffer));
   setvbuf(fl, print_buffer, _IOFBF, FILEBUF_SIZE);
   
+  fprintf(fl, "[METADATA]\n");
+  fprintf(fl, "\tVersion:\t%d\n", VERSION_HOUSE_FILE);
+  
   // Are we saving an apartment? If so, store guest list.
   if (house) {    
     fprintf(fl, "[GUESTS]\n");
@@ -344,7 +374,7 @@ void House_save(struct house_control_rec *house, const char *file_name, long rnu
   for (struct obj_data *tmp_obj = obj; tmp_obj; tmp_obj = tmp_obj->next_content) {
     validate_in_obj_pointers(tmp_obj, NULL);
   }
-
+  
   fprintf(fl, "[HOUSE]\n");
   
   struct obj_data *prototype = NULL;
