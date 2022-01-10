@@ -4193,7 +4193,7 @@ ACMD(do_set)
                { "multiplier", LVL_PRESIDENT, PC, NUMBER }, //75
                { "shotsfired", LVL_PRESIDENT, PC, NUMBER },
                { "shotstriggered", LVL_PRESIDENT, PC, NUMBER },
-               { "powerpoints", LVL_PRESIDENT, PC, NUMBER },
+               { "powerpoints", LVL_VICEPRES, PC, NUMBER },
                { "cyberdoc", LVL_CONSPIRATOR, PC, BINARY },
                { "hardcore", LVL_PRESIDENT, PC, BINARY }, //80
                { "esshole",  LVL_ADMIN, BOTH,   NUMBER },

@@ -1979,15 +1979,22 @@ struct obj_data *get_mount_ammo(struct obj_data *mount) {
 // Cleans up after a character who was manning a mount.
 struct obj_data *stop_manning_weapon_mounts(struct char_data *ch, bool send_message) {
   if (AFF_FLAGGED(ch, AFF_MANNING)) {
-    struct obj_data *mount;
+    // Find the mount in use, if any.
+    struct obj_data *mount = get_mount_manned_by_ch(ch);
 
-    // Find the mount in-use, if any.
-    mount = get_mount_manned_by_ch(ch);
+    // If we found one, clean it up and print a message.
+    if (mount) {
+      // Clean up the mount's data (stop it from pointing to character; remove targets)
+      mount->worn_by = NULL;
+      mount->targ = NULL;
+      mount->tveh = NULL;
 
-    // Clean up the mount's data (stop it from pointing to character; remove targets)
-    mount->worn_by = NULL;
-    mount->targ = NULL;
-    mount->tveh = NULL;
+      // Let them / the room know that they've stopped manning.
+      if (send_message) {
+        act("$n stops manning $p.", FALSE, ch, mount, 0, TO_ROOM);
+        act("You stop manning $p.", FALSE, ch, mount, 0, TO_CHAR);
+      }
+    }
 
     // Clean up their character flags.
     AFF_FLAGS(ch).RemoveBit(AFF_MANNING);
@@ -1995,12 +2002,6 @@ struct obj_data *stop_manning_weapon_mounts(struct char_data *ch, bool send_mess
     // Take them out of fight mode if they're in it.
     if (CH_IN_COMBAT(ch))
       stop_fighting(ch);
-
-    // Let them / the room know that they've stopped manning.
-    if (send_message) {
-      act("$n stops manning $p.", FALSE, ch, mount, 0, TO_ROOM);
-      act("You stop manning $p.", FALSE, ch, mount, 0, TO_CHAR);
-    }
 
     return mount;
   }
