@@ -39,6 +39,7 @@ using namespace std;
 #include "newdb.h"
 #include "bullet_pants.h"
 #include "config.h"
+#include "newmail.h"
 
 const char *CCHAR;
 
@@ -237,6 +238,7 @@ void get_obj_condition(struct char_data *ch, struct obj_data *obj)
 void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
 {
   SPECIAL(floor_usable_radio);
+  SPECIAL(pocket_sec);
 
   *buf = '\0';
   if ((mode == 0) && object->text.room_desc) {
@@ -283,6 +285,9 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
       {
         strlcat(buf, " (Combinable)", sizeof(buf));
       }
+    if (GET_OBJ_SPEC(object) == pocket_sec && amount_of_mail_waiting(ch) > 0) {
+      strlcat(buf, " ^y(Mail Waiting)^n", sizeof(buf));
+    }
   }
   else if (GET_OBJ_NAME(object) && ((mode == 2) || (mode == 3) || (mode == 4) || (mode == 7))) {
     strlcpy(buf, GET_OBJ_NAME(object), sizeof(buf));
@@ -335,8 +340,11 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
       strlcat(buf, " ^c(humming)", sizeof(buf));
     }
 
-    if (object->obj_flags.quest_id && object->obj_flags.quest_id == GET_IDNUM(ch)) {
-      strlcat(buf, " ^Y(Yours)^n", sizeof(buf));
+    if (object->obj_flags.quest_id) {
+      if (object->obj_flags.quest_id == GET_IDNUM(ch))
+        strlcat(buf, " ^Y(Quest)^n", sizeof(buf));
+      else
+        strlcat(buf, " ^m(Protected)^n", sizeof(buf));
     }
   }
   strlcat(buf, "^N\r\n", sizeof(buf));
@@ -887,6 +895,8 @@ void list_one_char(struct char_data * i, struct char_data * ch)
     if (i->mob_specials.quest_id) {
       if (i->mob_specials.quest_id == GET_IDNUM(ch)) {
         strlcat(buf, "^Y(Quest)^n ", sizeof(buf));
+      } else {
+        strlcat(buf, "^m(Protected)^n ", sizeof(buf));
       }
     } else if (
       (i->in_room && (GET_ROOM_SPEC(i->in_room) == mageskill_moore || GET_ROOM_SPEC(i->in_room) == mageskill_hermes))
@@ -1095,8 +1105,14 @@ void list_one_char(struct char_data * i, struct char_data * ch)
     strlcat(buf, " (switched)", sizeof(buf));
   if (IS_AFFECTED(i, AFF_INVISIBLE) || IS_AFFECTED(i, AFF_IMP_INVIS) || IS_AFFECTED(i, AFF_SPELLINVIS) || IS_AFFECTED(i, AFF_SPELLIMPINVIS))
     strlcat(buf, " (invisible)", sizeof(buf));
-  if (PLR_FLAGGED(ch, PLR_NEWBIE) && !IS_NPC(i))
-    strlcat(buf, " (player)", sizeof(buf));
+  if (!IS_NPC(i)) {
+    // Always display the Staff identifier.
+    if (IS_SENATOR(i))
+      strlcat(buf, " (staff)", sizeof(buf));
+    // Display the Player identifier for newbies.
+    else if (PLR_FLAGGED(ch, PLR_NEWBIE))
+      strlcat(buf, " (player)", sizeof(buf));
+  }
   if (IS_AFFECTED(i, AFF_HIDE))
     strlcat(buf, " (hidden)", sizeof(buf));
   if (!IS_NPC(i) && !i->desc &&
@@ -1461,7 +1477,15 @@ void look_in_veh(struct char_data * ch)
       list_char_to_char(veh->in_veh->people, ch);
       ch->vfront = ov;
     } else {
-      send_to_char(ch, "\r\n^CAround you is %s\r\n", veh->in_room->name);
+      send_to_char(ch, "\r\n^CAround you is %s^n%s%s%s%s%s%s%s\r\n", GET_ROOM_NAME(veh->in_room),
+                   ROOM_FLAGGED(veh->in_room, ROOM_GARAGE) ? " (Garage)" : "",
+                   ROOM_FLAGGED(veh->in_room, ROOM_STORAGE) && !ROOM_FLAGGED(veh->in_room, ROOM_CORPSE_SAVE_HACK) ? " (Storage)" : "",
+                   ROOM_FLAGGED(veh->in_room, ROOM_HOUSE) ? " (Apartment)" : "",
+                   ROOM_FLAGGED(veh->in_room, ROOM_STERILE) ? " (Sterile)" : "",
+                   ROOM_FLAGGED(veh->in_room, ROOM_ARENA) ? " ^y(Arena)^n" : "",
+                   veh->in_room->matrix && real_host(veh->in_room->matrix) >= 1 ? " (Jackpoint)" : "",
+                   ROOM_FLAGGED(veh->in_room, ROOM_ENCOURAGE_CONGREGATION) ? " ^W(Socialization Bonus)^n" : "");
+
       if (get_speed(veh) <= 200) {
         if (veh->in_room->night_desc && weather_info.sunlight == SUN_DARK)
           send_to_char(veh->in_room->night_desc, ch);
@@ -2213,10 +2237,15 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
           }
         }
 
-        if (GET_WEAPON_INTEGRAL_RECOIL_COMP(j)) {
+        if (GET_WEAPON_INTEGRAL_RECOIL_COMP(j) > 0) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt has ^c%d^n point%s of integral recoil compensation.",
                   GET_WEAPON_INTEGRAL_RECOIL_COMP(j),
-                  GET_WEAPON_INTEGRAL_RECOIL_COMP(j) > 1 ? "s" : "");
+                  GET_WEAPON_INTEGRAL_RECOIL_COMP(j) != 1 ? "s" : "");
+        }
+        else if (GET_WEAPON_INTEGRAL_RECOIL_COMP(j) < 0) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt adds ^c%d^n point%s of recoil per shot.",
+                  -GET_WEAPON_INTEGRAL_RECOIL_COMP(j),
+                  -GET_WEAPON_INTEGRAL_RECOIL_COMP(j) != 1 ? "s" : "");
         }
 
         // Info about attachments, if any.
@@ -4248,10 +4277,10 @@ ACMD(do_who)
           strlcat(buf1, " (mailing)", sizeof(buf1));
         else if (PLR_FLAGGED(tch, PLR_WRITING))
           strlcat(buf1, " (writing)", sizeof(buf1));
-        if (PLR_FLAGGED(tch, PLR_EDITING))
-          strlcat(buf1, " (editing)", sizeof(buf1));
         if (PRF_FLAGGED(tch, PRF_QUESTOR))
           strlcat(buf1, " ^Y(questor)^n", sizeof(buf1));
+        if (PLR_FLAGGED(tch, PLR_EDITING) || d->connected)
+          strlcat(buf1, " (editing)", sizeof(buf1));
         if (PLR_FLAGGED(tch, PLR_NOT_YET_AUTHED))
           strlcat(buf1, " ^G(unauthed)^n", sizeof(buf1));
         if (PLR_FLAGGED(tch, PLR_MATRIX))
@@ -4277,8 +4306,10 @@ ACMD(do_who)
         strlcat(buf1, " ^L(BLACKLISTED)^N", sizeof(buf1));
       if (PLR_FLAGGED(tch, PLR_WANTED))
         strlcat(buf1, " ^R(WANTED)^N", sizeof(buf1));
-      if (d->connected)
-        strlcat(buf1, " (editing)", sizeof(buf1));
+      /*
+      if (level >= LVL_VICEPRES && tch->char_specials.timer > 10)
+        snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), " (idle: %d)", tch->char_specials.timer);
+      */
       strlcat(buf1, "\r\n", sizeof(buf1));
       strlcat(buf, buf1, sizeof(buf));
 

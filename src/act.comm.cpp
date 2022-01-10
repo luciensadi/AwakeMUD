@@ -347,11 +347,6 @@ ACMD(do_tell)
     return;
   }
 
-  if (PLR_FLAGGED(vict, PLR_WRITING) || PLR_FLAGGED(vict, PLR_MAILING)) {
-    act("$E's writing a message right now; try again later.", FALSE, ch, 0, vict, TO_CHAR);
-    return;
-  }
-
   else if (PLR_FLAGGED(vict, PLR_EDITING)) {
     act("$E's editing right now, try again later.", FALSE, ch, 0, vict, TO_CHAR);
     return;
@@ -739,7 +734,7 @@ ACMD(do_radio)
     send_to_char("That's not a valid option.\r\n", ch);
 }
 
-struct obj_data *find_radio(struct char_data *ch, bool *is_cyberware, bool *is_vehicular) {
+struct obj_data *find_radio(struct char_data *ch, bool *is_cyberware, bool *is_vehicular, bool must_be_on=FALSE) {
   struct obj_data *obj;
 
   if (!ch)
@@ -756,30 +751,30 @@ struct obj_data *find_radio(struct char_data *ch, bool *is_cyberware, bool *is_v
 
   // Check your inventory.
   for (obj = ch->carrying; obj; obj = obj->next_content)
-    if (GET_OBJ_TYPE(obj) == ITEM_RADIO)
+    if (GET_OBJ_TYPE(obj) == ITEM_RADIO && (must_be_on ? GET_OBJ_VAL(obj, 0) != 0 : TRUE))
       return obj;
 
   // Check your gear.
   for (int i = 0; i < NUM_WEARS; i++)
     if (GET_EQ(ch, i)) {
-      if (GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_RADIO) {
+      if (GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_RADIO && (must_be_on ? GET_OBJ_VAL(GET_EQ(ch, i), 0) != 0 : TRUE)) {
         return GET_EQ(ch, i);
       } else if (GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_WORN && GET_EQ(ch, i)->contains) {
         for (struct obj_data *obj = GET_EQ(ch, i)->contains; obj; obj = obj->next_content)
-          if (GET_OBJ_TYPE(obj) == ITEM_RADIO)
+          if (GET_OBJ_TYPE(obj) == ITEM_RADIO && (must_be_on ? GET_OBJ_VAL(obj, 0) != 0 : TRUE))
             return obj;
       }
     }
 
   for (obj = ch->cyberware; obj; obj = obj->next_content)
-    if (GET_OBJ_VAL(obj, 0) == CYB_RADIO) {
+    if (GET_CYBERWARE_TYPE(obj) == CYB_RADIO && (must_be_on ? GET_CYBERWARE_FLAGS(obj) != 0 : TRUE)) {
       *is_cyberware = TRUE;
       return obj;
     }
 
   if (ch->in_room)
     for (obj = ch->in_room->contents; obj; obj = obj->next_content)
-      if (GET_OBJ_TYPE(obj) == ITEM_RADIO)
+      if (GET_OBJ_TYPE(obj) == ITEM_RADIO && (must_be_on ? GET_OBJ_VAL(obj, 0) != 0 : TRUE))
         return obj;
 
   return NULL;
@@ -886,16 +881,14 @@ ACMD(do_broadcast)
   if (!ROOM_FLAGGED(get_ch_in_room(ch), ROOM_SOUNDPROOF)) {
     for (d = descriptor_list; d; d = d->next) {
       if (!d->connected && d != ch->desc && d->character &&
-          !PLR_FLAGS(d->character).AreAnySet(PLR_WRITING,
-                                             PLR_MAILING,
-                                             PLR_EDITING,
+          !PLR_FLAGS(d->character).AreAnySet(PLR_EDITING,
                                              PLR_MATRIX, ENDBIT)
           && !IS_PROJECT(d->character) &&
           !ROOM_FLAGGED(get_ch_in_room(d->character), ROOM_SOUNDPROOF) &&
           !ROOM_FLAGGED(get_ch_in_room(d->character), ROOM_SENT))
       {
         if (!IS_NPC(d->character) && (!access_level(d->character, LVL_FIXER) || PRF_FLAGGED(d->character, PRF_SUPPRESS_STAFF_RADIO))) {
-          if (!(radio = find_radio(d->character, &cyberware, &vehicle)))
+          if (!(radio = find_radio(d->character, &cyberware, &vehicle, TRUE)))
             continue;
 
           /*
@@ -927,7 +920,7 @@ ACMD(do_broadcast)
 
           // Copy in the message body, mangling it as needed for language skill issues.
           snprintf(message, sizeof(message), "%s%s",
-                   capitalize(replace_too_long_words(d->character, ch, argument, language, "^y", TRUE)),
+                   capitalize(replace_too_long_words(d->character, ch, argument, language, "^y", PRF_FLAGGED(d->character, PRF_SUPPRESS_STAFF_RADIO))),
                    ispunct(get_final_character_from_string(argument)) ? "" : ".");
 
           // Add in interference if there is any.
@@ -1242,7 +1235,6 @@ ACMD(do_gen_comm)
       // Anyone who's not either staff or in specific playing states is skipped.
       if (!access_level(d->character, LVL_BUILDER)
           && ((d->connected != CON_PLAYING && !PRF_FLAGGED(d->character, PRF_MENUGAG))
-              || PLR_FLAGGED( d->character, PLR_WRITING)
               || PRF_FLAGGED( d->character, PRF_NOOOC)
               || PLR_FLAGGED(d->character, PLR_NOT_YET_AUTHED)))
         continue;
@@ -1296,7 +1288,7 @@ ACMD(do_gen_comm)
 
     // Non-staff who don't meet specific criteria are skipped.
     if (!IS_SENATOR(i->character)) {
-      if (i->connected || PLR_FLAGS(i->character).AreAnySet(PLR_WRITING, PLR_MAILING, PLR_EDITING, ENDBIT))
+      if (i->connected || PLR_FLAGS(i->character).AreAnySet(PLR_EDITING, ENDBIT))
         continue;
     }
 
@@ -1339,9 +1331,7 @@ ACMD(do_gen_comm)
   for (i = descriptor_list; i; i = i->next)
     if (!i->connected && i != ch->desc && i->character &&
         !PRF_FLAGGED(i->character, channels[subcmd]) &&
-        !PLR_FLAGS(i->character).AreAnySet(PLR_WRITING,
-                                           PLR_MAILING,
-                                           PLR_EDITING, ENDBIT) &&
+        !PLR_FLAGS(i->character).AreAnySet(PLR_EDITING, ENDBIT) &&
         !IS_PROJECT(i->character) &&
         !(ROOM_FLAGGED(get_ch_in_room(i->character), ROOM_SOUNDPROOF) && subcmd == SCMD_SHOUT)) {
       if (subcmd == SCMD_NEWBIE && !(PLR_FLAGGED(i->character, PLR_NEWBIE) ||

@@ -1455,10 +1455,15 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
   strlcat(buf, buf2, sizeof(buf));
 
   if (IS_SENATOR(k))
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", Status: %s\r\n", status_ratings[(int)GET_LEVEL(k)]);
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", Status: %s\r\n^WSysP^n: [^y%3d^n]\r\n",
+             status_ratings[(int)GET_LEVEL(k)],
+             GET_SYSTEM_POINTS(k));
   else
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", Status: Mortal \r\nRep: [^y%3d^n] Not: [^y%3d^n] TKE: [^y%3d^n]\r\n",
-            GET_REP(k), GET_NOT(k), GET_TKE(k));
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", Status: Mortal \r\nRep: [^y%3d^n] Not: [^y%3d^n] TKE: [^y%3d^n] ^WSysP^n: [^y%3d^n]\r\n",
+             GET_REP(k),
+             GET_NOT(k),
+             GET_TKE(k),
+             GET_SYSTEM_POINTS(k));
 
   strcpy(buf1, (const char *) asctime(localtime(&(k->player.time.birth))));
   strcpy(buf2, (const char *) asctime(localtime(&(k->player.time.lastdisc))));
@@ -4188,7 +4193,7 @@ ACMD(do_set)
                { "multiplier", LVL_PRESIDENT, PC, NUMBER }, //75
                { "shotsfired", LVL_PRESIDENT, PC, NUMBER },
                { "shotstriggered", LVL_PRESIDENT, PC, NUMBER },
-               { "powerpoints", LVL_PRESIDENT, PC, NUMBER },
+               { "powerpoints", LVL_VICEPRES, PC, NUMBER },
                { "cyberdoc", LVL_CONSPIRATOR, PC, BINARY },
                { "hardcore", LVL_PRESIDENT, PC, BINARY }, //80
                { "esshole",  LVL_ADMIN, BOTH,   NUMBER },
@@ -6297,17 +6302,24 @@ int audit_zone_rooms_(struct char_data *ch, int zone_num, bool verbose) {
             issues++;
             printed = TRUE;
           }
-          else if (room->dir_option[k]->to_room->dir_option[rev_dir[k]]->exit_info != room->dir_option[k]->exit_info) {
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - %s exit has flags that don't match the return direction's flags (%s from here: %s, %s from %ld: %s).\r\n",
-                    dirs[k],
-                    dirs[k],
-                    render_door_type_string(room->dir_option[k]),
-                    dirs[rev_dir[k]],
-                    GET_ROOM_VNUM(room->dir_option[k]->to_room),
-                    render_door_type_string(room->dir_option[k]->to_room->dir_option[rev_dir[k]])
-                  );
-            issues++;
-            printed = TRUE;
+          else {
+            int outbound = room->dir_option[k]->to_room->dir_option[rev_dir[k]]->exit_info;
+            int inbound = room->dir_option[k]->exit_info;
+            REMOVE_BIT(outbound, EX_HIDDEN);
+            REMOVE_BIT(inbound, EX_HIDDEN);
+
+            if (outbound != inbound) {
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - %s exit has flags that don't match the return direction's flags (%s from here: %s, %s from %ld: %s).\r\n",
+                      dirs[k],
+                      dirs[k],
+                      render_door_type_string(room->dir_option[k]),
+                      dirs[rev_dir[k]],
+                      GET_ROOM_VNUM(room->dir_option[k]->to_room),
+                      render_door_type_string(room->dir_option[k]->to_room->dir_option[rev_dir[k]])
+                    );
+              issues++;
+              printed = TRUE;
+            }
           }
         }
       }
@@ -6422,7 +6434,7 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
       printed = TRUE;
       issues++;
     } else {
-      if (ispunct((candidate = get_final_character_from_string(mob->player.physical_text.name)))) {
+      if (ispunct((candidate = get_final_character_from_string(mob->player.physical_text.name))) && candidate != '"' && candidate != '\'') {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - name ending in punctuation (%c)^n.\r\n", candidate);
         printed = TRUE;
         issues++;

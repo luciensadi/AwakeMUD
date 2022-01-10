@@ -663,7 +663,7 @@ bool conjuring_drain(struct char_data *ch, int force)
   else
     drain = SERIOUS;
   drain = convert_damage(stage(-success_test(GET_CHA(ch), force), drain));
-  
+
   // Physical drain.
   if (force > GET_MAG(ch) / 100) {
     // Iterate through bioware to find relevant bioware.
@@ -672,7 +672,7 @@ bool conjuring_drain(struct char_data *ch, int force)
     for (struct obj_data *bio = ch->bioware; bio && drain > 0; bio = bio->next_content) {
       if (GET_OBJ_VAL(bio, 0) == BIO_PLATELETFACTORY && drain >= 3)
         bPlat = TRUE;
-      
+
       if (GET_OBJ_VAL(bio, 0) == BIO_TRAUMADAMPNER)
         bTraum = TRUE;
     }
@@ -682,10 +682,10 @@ bool conjuring_drain(struct char_data *ch, int force)
       drain--;
       GET_MENTAL(ch) -= 100;
     }
-      
+
     if (drain <= 0)
     return FALSE;
-      
+
     GET_PHYSICAL(ch) -= drain *100;
   }
   // Mental drain.
@@ -699,7 +699,7 @@ bool conjuring_drain(struct char_data *ch, int force)
     }
     if (drain <= 0)
       return FALSE;
-      
+
     GET_MENTAL(ch) -= drain * 100;
     // Mental overflow to physical
     if (GET_MENTAL(ch) < 0) {
@@ -1053,6 +1053,7 @@ void cast_combat_spell(struct char_data *ch, int spell, int force, char *arg)
   struct char_data *vict = NULL;
   bool reflected = FALSE;
   int basedamage = 0;
+  bool cast_by_npc = IS_NPC(ch);
 
   two_arguments(arg, buf, buf1);
 
@@ -1128,8 +1129,9 @@ void cast_combat_spell(struct char_data *ch, int spell, int force, char *arg)
         act("$n seems to flinch slightly as blood trickles from $s nose.", TRUE, vict, 0, 0, TO_ROOM);
         send_to_char("Slight pain fills your mind from an unknown source.\r\n", vict);
       }
-      if (damage(ch, vict, dam, TYPE_COMBAT_SPELL, PHYSICAL) && reflected) {
+      if (damage(ch, vict, dam, TYPE_COMBAT_SPELL, PHYSICAL) && (reflected || cast_by_npc)) {
         // Vict was killed by their own reflected spell. Stop processing-- we don't want to calculate drain on a nulled struct.
+        // Alternatively, we as an NPC just killed someone: bail out in case we're their quest target. Janky fix.
         return;
       }
 
@@ -1167,7 +1169,7 @@ void cast_combat_spell(struct char_data *ch, int spell, int force, char *arg)
         act("$n recoils slightly as though hit by an invisible force.", TRUE, vict, 0, 0, TO_ROOM);
         send_to_char("You mind goes slightly hazy as though you had just been punched.\r\n", vict);
       }
-      if (damage(ch, vict, dam, TYPE_COMBAT_SPELL, MENTAL) && reflected) {
+      if (damage(ch, vict, dam, TYPE_COMBAT_SPELL, MENTAL) && (reflected || cast_by_npc)) {
         // Vict was killed by their own reflected spell. Stop processing-- we don't want to calculate drain on a nulled struct.
         return;
       }
@@ -1205,7 +1207,7 @@ void cast_combat_spell(struct char_data *ch, int spell, int force, char *arg)
         act("$n grimaces, obviously afflicted with mild pain.", TRUE, vict, 0, 0, TO_ROOM);
         send_to_char("You feel a dull throb of pain flow through your body.\r\n", vict);
       }
-      if (damage(ch, vict, dam, TYPE_COMBAT_SPELL, MENTAL) && reflected) {
+      if (damage(ch, vict, dam, TYPE_COMBAT_SPELL, MENTAL) && (reflected || cast_by_npc)) {
         // Vict was killed by their own reflected spell. Stop processing-- we don't want to calculate drain on a nulled struct.
         return;
       }
@@ -1609,6 +1611,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
   struct char_data *vict = NULL;
   bool reflected = FALSE;
   int basedamage = 0;
+  bool cast_by_npc = IS_NPC(ch);
   switch (spell)
   {
   case SPELL_LASER:
@@ -1825,6 +1828,10 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
         if (IS_NPC(vict) && !IS_NPC(ch))
           GET_LASTHIT(vict) = GET_IDNUM(ch);
       }
+      else if (cast_by_npc) {
+        // Janky crash avoidance: If we killed our target and we're an NPC, bail out immediately.
+        return;
+      }
     }
     spell_drain(ch, spell, force, basedamage);
     break;
@@ -1889,6 +1896,10 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
         if (IS_NPC(vict) && !IS_NPC(ch))
           GET_LASTHIT(vict) = GET_IDNUM(ch);
       }
+      else if (cast_by_npc) {
+        // Janky crash avoidance: If we killed our target and we're an NPC, bail out immediately.
+        return;
+      }
     }
     spell_drain(reflected ? vict : ch, spell, force, basedamage);
     break;
@@ -1947,6 +1958,10 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       if (!damage(ch, vict, dam, TYPE_MANIPULATION_SPELL, PHYSICAL)) {
         if (IS_NPC(vict) && !IS_NPC(ch))
           GET_LASTHIT(vict) = GET_IDNUM(ch);
+      }
+      else if (cast_by_npc) {
+        // Janky crash avoidance: If we killed our target and we're an NPC, bail out immediately.
+        return;
       }
     }
     spell_drain(reflected ? vict : ch, spell, force, basedamage);
@@ -2012,6 +2027,10 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
         if (IS_NPC(vict) && !IS_NPC(ch))
           GET_LASTHIT(vict) = GET_IDNUM(ch);
       }
+      else if (cast_by_npc) {
+        // Janky crash avoidance: If we killed our target and we're an NPC, bail out immediately.
+        return;
+      }
     }
     spell_drain(reflected ? vict : ch, spell, force, basedamage);
     break;
@@ -2070,6 +2089,10 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
         if (IS_NPC(vict) && !IS_NPC(ch))
           GET_LASTHIT(vict) = GET_IDNUM(ch);
       }
+      else if (cast_by_npc) {
+        // Janky crash avoidance: If we killed our target and we're an NPC, bail out immediately.
+        return;
+      }
     }
     spell_drain(reflected ? vict : ch, spell, force, basedamage);
     break;
@@ -2122,6 +2145,10 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       if (!damage(ch, vict, dam, TYPE_MANIPULATION_SPELL, MENTAL)) {
         if (IS_NPC(vict) && !IS_NPC(ch))
           GET_LASTHIT(vict) = GET_IDNUM(ch);
+      }
+      else if (cast_by_npc) {
+        // Janky crash avoidance: If we killed our target and we're an NPC, bail out immediately.
+        return;
       }
     }
     spell_drain(ch, spell, force, basedamage);
@@ -2176,6 +2203,10 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
         if (IS_NPC(vict) && !IS_NPC(ch))
           GET_LASTHIT(vict) = GET_IDNUM(ch);
       }
+      else if (cast_by_npc) {
+        // Janky crash avoidance: If we killed our target and we're an NPC, bail out immediately.
+        return;
+      }
     }
     spell_drain(ch, spell, force, basedamage);
     break;
@@ -2228,6 +2259,10 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       if (!damage(ch, vict, dam, TYPE_MANIPULATION_SPELL, MENTAL)) {
         if (IS_NPC(vict) && !IS_NPC(ch))
           GET_LASTHIT(vict) = GET_IDNUM(ch);
+      }
+      else if (cast_by_npc) {
+        // Janky crash avoidance: If we killed our target and we're an NPC, bail out immediately.
+        return;
       }
     }
     spell_drain(ch, spell, force, basedamage);

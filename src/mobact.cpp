@@ -337,46 +337,101 @@ void mobact_change_firemode(struct char_data *ch) {
   if (!(weapon = GET_EQ(ch, WEAR_WIELD)) || !IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon)))
     return;
 
-  // Set up info.
-  int prev_value = GET_WEAPON_FIREMODE(weapon);
-  int mode_count = 0;
-
   // Reload the weapon if possible. If not, swap weapons.
   if (!weapon->contains && GET_WEAPON_MAX_AMMO(weapon) > 0 && !attempt_reload(ch, WEAR_WIELD)) {
     switch_weapons(ch, WEAR_WIELD);
     return;
   }
 
-  // Lowest-priority mode is single-shot.
-  if (IS_SET(GET_OBJ_VAL(weapon, 10), 1 << MODE_SS)) {
-    mode_count += 1;
-    GET_WEAPON_FIREMODE(weapon) = MODE_SS;
+  // Otherwise, set up info: We're now checking for firemode changes.
+  int prev_value = GET_WEAPON_FIREMODE(weapon);
+  int standing_recoil_comp = GET_WEAPON_INTEGRAL_RECOIL_COMP(weapon);
+  int prone_recoil_comp = 0, total_recoil_comp = 0;
+  int real_obj;
+  struct obj_data *access;
+
+  // Total up their recoil compensation.
+  for (int i = ACCESS_LOCATION_TOP; i <= ACCESS_LOCATION_UNDER; i++) {
+    if (GET_OBJ_VAL(weapon, i) > 0
+        && (real_obj = real_object(GET_OBJ_VAL(weapon, i))) > 0
+        && (access = &obj_proto[real_obj])) {
+
+      switch (GET_ACCESSORY_TYPE(access)) {
+        case ACCESS_GASVENT:
+          standing_recoil_comp -= GET_ACCESSORY_RATING(access);
+          break;
+        case ACCESS_SHOCKPAD:
+          standing_recoil_comp++;
+          break;
+        case ACCESS_BIPOD:
+          prone_recoil_comp += RECOIL_COMP_VALUE_BIPOD;
+          break;
+        case ACCESS_TRIPOD:
+          prone_recoil_comp += RECOIL_COMP_VALUE_TRIPOD;
+          break;
+      }
+    }
   }
 
-  // Semi-automatic is superior to single shot, so set that if we can.
-  if (IS_SET(GET_OBJ_VAL(weapon, 10), 1 << MODE_SA)) {
-    mode_count += 1;
-    GET_WEAPON_FIREMODE(weapon) = MODE_SA;
+  total_recoil_comp = standing_recoil_comp + prone_recoil_comp;
+
+  // Don't @ me about this, if I didn't take this shortcut then this would be a giant block of if-statements.
+  int mode = GET_WEAPON_POSSIBLE_FIREMODES(weapon);
+  bool has_multiple_modes = (mode != 2 && mode != 4 && mode != 8 && mode != 16);
+
+  // If our weapon is FA-capable, let's set ourselves up for success by configuring it to the maximum value it can handle.
+  if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(weapon), 1 << MODE_FA)) {
+    if (total_recoil_comp >= 3) {
+      GET_WEAPON_FIREMODE(weapon) = MODE_FA;
+
+      // If we get additional recoil comp from going prone, let's do that now.
+      if (prone_recoil_comp > 0 && !AFF_FLAGGED(ch, AFF_PRONE) && !ch->in_veh) {
+        ACMD_DECLARE(do_prone);
+        strncpy(buf3, "", sizeof(buf3));
+        do_prone(ch, buf3, 0, 0);
+      }
+
+      GET_OBJ_TIMER(weapon) = total_recoil_comp;
+    } else {
+      // We don't have enough recoil comp for a multi-shot burst. Set to a single if we can.
+      if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(weapon), 1 << MODE_SA)) {
+        GET_WEAPON_FIREMODE(weapon) = MODE_SA;
+      }
+
+      else if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(weapon), 1 << MODE_SS)) {
+        GET_WEAPON_FIREMODE(weapon) = MODE_SS;
+      }
+
+      // We couldn't... at least minimize the harm to us by setting it to FA-3.
+      else {
+        GET_WEAPON_FIREMODE(weapon) = MODE_FA;
+        GET_OBJ_TIMER(weapon) = 3;
+      }
+    }
   }
 
-  // Full automatic with a 10-round spray deals more damage than the others.
-  if (IS_SET(GET_OBJ_VAL(weapon, 10), 1 << MODE_FA)) {
-    mode_count += 1;
-    GET_WEAPON_FIREMODE(weapon) = MODE_FA;
-
-    // Set the rounds-to-fire count to 10.
-    GET_OBJ_TIMER(weapon) = 10;
-  }
-
-  // For some reason, NPCs were set to prefer burst fire above all other modes. Preserving this logic for now.
-  if (IS_SET(GET_OBJ_VAL(weapon, 10), 1 << MODE_BF)) {
-    mode_count += 1;
+  // Next up, we want burst fire if possible-- even if we don't have enough recoil comp to completely cover it.
+  else if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(weapon), 1 << MODE_BF) && standing_recoil_comp >= 3) {
     GET_WEAPON_FIREMODE(weapon) = MODE_BF;
   }
 
+  // Semi-automatic is superior to single shot, so set that if we can.
+  else if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(weapon), 1 << MODE_SA)) {
+    GET_WEAPON_FIREMODE(weapon) = MODE_SA;
+  }
+
+  // Lowest-priority mode is single-shot.
+  if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(weapon), 1 << MODE_SS)) {
+    GET_WEAPON_FIREMODE(weapon) = MODE_SS;
+  }
+
   // Send a message to the room, but only if the weapon has received a new fire selection mode and has more than one available.
-  if (prev_value != GET_WEAPON_FIREMODE(weapon) && mode_count > 1) {
+  if (prev_value != GET_WEAPON_FIREMODE(weapon) && has_multiple_modes) {
     act("$n flicks the fire selector switch on $p.", TRUE, ch, weapon, 0, TO_ROOM);
+    #ifdef MOBACT_DEBUG
+      snprintf(buf3, sizeof(buf3), "Changed firemode to %s. I have recoil comp %d standing + %d prone.", fire_mode[GET_WEAPON_FIREMODE(weapon)], standing_recoil_comp, prone_recoil_comp);
+      do_say(ch, buf3, 0, 0);
+    #endif
   }
 }
 

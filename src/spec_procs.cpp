@@ -3812,7 +3812,7 @@ SPECIAL(terell_davis)
     return FALSE;
   else if (cmd) {
     if (CMD_IS("buy") || CMD_IS("sell") || CMD_IS("value") || CMD_IS("list") || CMD_IS("check")
-        || CMD_IS("cancel") || CMD_IS("receive") || CMD_IS("info")) {
+        || CMD_IS("cancel") || CMD_IS("receive") || CMD_IS("info") || CMD_IS("probe")) {
       shop_keeper(ch, me, cmd, argument);
       return TRUE;
     }
@@ -4012,6 +4012,37 @@ SPECIAL(quest_debug_scanner)
     }
 
     send_to_char(buf, ch);
+    return TRUE;
+  }
+
+  // Cleanse command to remove quest history info. This allows re-doing a quest.
+  if (CMD_IS("cleanse")) {
+    skip_spaces(&argument);
+    if (!*argument) {
+      send_to_char(ch, "Cleanse the quest history of which player?\r\n");
+      return TRUE;
+    }
+
+    if (ch->in_veh)
+      to = get_char_veh(ch, argument, ch->in_veh);
+    else
+      to = get_char_room_vis(ch, argument);
+
+    if (!to) {
+      send_to_char(ch, "You don't see any '%s' that you can quest-debug here.\r\n", argument);
+      return TRUE;
+    }
+
+    if (IS_NPC(to)) {
+      send_to_char("Not on NPCs.\r\n", ch);
+      return TRUE;
+    }
+
+    for (int i = 0; i < QUEST_TIMER; i++) {
+      GET_LQUEST(to, i) = 0;
+    }
+
+    send_to_char(ch, "OK, wiped out quest history for %s.\r\n", GET_CHAR_NAME(to));
     return TRUE;
   }
 
