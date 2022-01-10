@@ -757,7 +757,7 @@ struct obj_data *find_radio(struct char_data *ch, bool *is_cyberware, bool *is_v
   // Check your gear.
   for (int i = 0; i < NUM_WEARS; i++)
     if (GET_EQ(ch, i)) {
-      if (GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_RADIO && (must_be_on ? GET_OBJ_VAL(obj, 0) != 0 : TRUE)) {
+      if (GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_RADIO && (must_be_on ? GET_OBJ_VAL(GET_EQ(ch, i), 0) != 0 : TRUE)) {
         return GET_EQ(ch, i);
       } else if (GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_WORN && GET_EQ(ch, i)->contains) {
         for (struct obj_data *obj = GET_EQ(ch, i)->contains; obj; obj = obj->next_content)
