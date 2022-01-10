@@ -1455,10 +1455,15 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
   strlcat(buf, buf2, sizeof(buf));
 
   if (IS_SENATOR(k))
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", Status: %s\r\n", status_ratings[(int)GET_LEVEL(k)]);
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", Status: %s\r\n^WSysP^n: [^y%3d^n]\r\n",
+             status_ratings[(int)GET_LEVEL(k)],
+             GET_SYSTEM_POINTS(k));
   else
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", Status: Mortal \r\nRep: [^y%3d^n] Not: [^y%3d^n] TKE: [^y%3d^n]\r\n",
-            GET_REP(k), GET_NOT(k), GET_TKE(k));
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", Status: Mortal \r\nRep: [^y%3d^n] Not: [^y%3d^n] TKE: [^y%3d^n] ^WSysP^n: [^y%3d^n]\r\n",
+             GET_REP(k),
+             GET_NOT(k),
+             GET_TKE(k),
+             GET_SYSTEM_POINTS(k));
 
   strcpy(buf1, (const char *) asctime(localtime(&(k->player.time.birth))));
   strcpy(buf2, (const char *) asctime(localtime(&(k->player.time.lastdisc))));
