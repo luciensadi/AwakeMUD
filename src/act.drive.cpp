@@ -1424,15 +1424,32 @@ ACMD(do_target)
     }
   }
 
-  if (!(vict = get_char_room(arg, veh->in_room)) &&
-      !((tveh = get_veh_list(arg, veh->in_room->vehicles, ch)) && (vict && !CAN_SEE(ch, vict)))) {
-    send_to_char(ch, "You don't see %s there.\r\n", arg);
-    return;
+  // We know that the vehicle must be in a room to have gotten here.
+  // Find vict and tveh (requiring that vict is visible if found).
+  vict = get_char_room(arg, veh->in_room);
+  if (vict && !CAN_SEE(ch, vict))
+    vict = NULL;
+
+  tveh = get_veh_list(arg, veh->in_room->vehicles, ch);
+
+  // No targets? Bail out.
+  if (!vict) {
+    if (!tveh) {
+      send_to_char(ch, "You don't see anything named '%s' here.\r\n", arg);
+      return;
+    }
+
+    if (tveh == veh) {
+      send_to_char("Why would you want to target yourself?\r\n", ch);
+      return;
+    }
+
+    if (tveh->damage >= 10) {
+      send_to_char("It's already wrecked... no point in shooting it more.\r\n", ch);
+      return;
+    }
   }
-  if (tveh == veh) {
-    send_to_char("Why would you want to target yourself?\r\n", ch);
-    return;
-  }
+
 
   do_raw_target(ch, veh, tveh, vict, modeall, obj);
 }
