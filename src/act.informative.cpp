@@ -1105,8 +1105,14 @@ void list_one_char(struct char_data * i, struct char_data * ch)
     strlcat(buf, " (switched)", sizeof(buf));
   if (IS_AFFECTED(i, AFF_INVISIBLE) || IS_AFFECTED(i, AFF_IMP_INVIS) || IS_AFFECTED(i, AFF_SPELLINVIS) || IS_AFFECTED(i, AFF_SPELLIMPINVIS))
     strlcat(buf, " (invisible)", sizeof(buf));
-  if (PLR_FLAGGED(ch, PLR_NEWBIE) && !IS_NPC(i))
-    strlcat(buf, " (player)", sizeof(buf));
+  if (!IS_NPC(i)) {
+    // Always display the Staff identifier.
+    if (IS_SENATOR(i))
+      strlcat(buf, " (staff)", sizeof(buf));
+    // Display the Player identifier for newbies.
+    else if (PLR_FLAGGED(ch, PLR_NEWBIE))
+      strlcat(buf, " (player)", sizeof(buf));
+  }
   if (IS_AFFECTED(i, AFF_HIDE))
     strlcat(buf, " (hidden)", sizeof(buf));
   if (!IS_NPC(i) && !i->desc &&
@@ -4300,8 +4306,10 @@ ACMD(do_who)
         strlcat(buf1, " ^L(BLACKLISTED)^N", sizeof(buf1));
       if (PLR_FLAGGED(tch, PLR_WANTED))
         strlcat(buf1, " ^R(WANTED)^N", sizeof(buf1));
+      /*
       if (level >= LVL_VICEPRES && tch->char_specials.timer > 10)
-        snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "(idle: %d)", tch->char_specials.timer);
+        snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), " (idle: %d)", tch->char_specials.timer);
+      */
       strlcat(buf1, "\r\n", sizeof(buf1));
       strlcat(buf, buf1, sizeof(buf));
 
