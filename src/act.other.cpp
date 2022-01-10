@@ -1811,6 +1811,10 @@ ACMD(do_attach)
       send_to_char("There is already a weapon mounted on it.\r\n", ch);
       return;
     }
+    if (veh->locked && GET_IDNUM(ch) != veh->owner) {
+      send_to_char("The mount is locked.\r\n", ch);
+      return;
+    }
     if (!IS_GUN(GET_OBJ_VAL(item, 3)) || veh->usedload + GET_OBJ_WEIGHT(item) > veh->load) {
       send_to_char("You can't seem to fit it on.\r\n", ch);
       return;
@@ -1898,6 +1902,11 @@ ACMD(do_unattach)
     else if (!((gun = get_mount_weapon(item)) || (gun = item->contains)))
       send_to_char("There isn't anything mounted on it.\r\n", ch);
     else {
+      if (veh->locked && GET_IDNUM(ch) != veh->owner) {
+        send_to_char(ch, "%s is locked in place.\r\n", capitalize(GET_OBJ_NAME(gun)));
+        return;
+      }
+
       if (can_take_obj(ch, gun)) {
         obj_from_obj(gun);
         obj_to_char(gun, ch);
