@@ -1,0 +1,23 @@
+#
+# Systemd unit file for AwakeMUD
+#
+[Unit]
+Description=AwakeMUD
+Requires=network.target network-online.target
+After=network.target network-online.target
+
+[Service]
+Type=simple
+User=%i
+WorkingDirectory=/home/%i/AwakeMUD
+StandardOutput=append:/home/%i/AwakeMUD/syslog.txt
+StandardError=append:/home/%i/AwakeMUD/syslog.txt
+ExecStartPre=/bin/bash scripts/ExecStartPre.sh
+ExecStart=/usr/bin/gdb -batch -ex "run" -ex "bt" -ex "quit" -ex "yes" bin/awake
+ExecStartPost=/usr/bin/chown %i: syslog.txt
+ExecStopPost=/bin/bash scripts/ExecStopPost.sh
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
