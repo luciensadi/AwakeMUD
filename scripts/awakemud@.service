@@ -16,7 +16,7 @@ ExecStartPre=/bin/bash scripts/ExecStartPre.sh
 ExecStart=/usr/bin/gdb -batch -ex "run" -ex "bt" -ex "quit" -ex "yes" bin/awake
 ExecStartPost=/usr/bin/chown %i: syslog.txt
 ExecStopPost=/bin/bash scripts/ExecStopPost.sh
-Restart=on-failure
+Restart=always
 RestartSec=10
 
 [Install]
