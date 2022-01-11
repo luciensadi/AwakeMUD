@@ -1167,10 +1167,17 @@ void do_stat_object(struct char_data * ch, struct obj_data * j)
   struct extra_descr_data *desc;
 
   virt = GET_OBJ_VNUM(j);
-  snprintf(buf, sizeof(buf), "Name: '^y%s^n', Aliases: %s\r\nSource Book: %s\r\n",
+  snprintf(buf, sizeof(buf), "Name: '^y%s^n', Aliases: %s\r\n",
           ((j->text.name) ? j->text.name : "<None>"),
-          j->text.keywords,
-          j->source_info ? j->source_info : "<None>");
+          j->text.keywords);
+
+  if (j->restring) {
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Restring: '%s'\r\n", j->restring);
+  }
+
+  if (j->source_info) {
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Source Book: '%s'\r\n", j->source_info);
+  }
 
   sprinttype(GET_OBJ_TYPE(j), item_types, buf1, sizeof(buf1));
 

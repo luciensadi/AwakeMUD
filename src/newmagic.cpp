@@ -873,15 +873,34 @@ struct char_data *find_target_at_range(struct char_data *ch, char *name, char *d
 void create_sustained(struct char_data *ch, struct char_data *vict, int spell, int force, int sub, int success, int drain)
 {
   struct obj_data *focus = NULL;
-  for (int i = 0; !focus && i < NUM_WEARS; i++)
-    if (GET_EQ(ch, i)
-        && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_FOCUS
-        && GET_FOCUS_TYPE(GET_EQ(ch, i)) == FOCI_SUSTAINED
-        && !GET_FOCUS_ACTIVATED(GET_EQ(ch, i))
-        && GET_FOCUS_BONDED_SPIRIT_OR_SPELL(GET_EQ(ch, i)) == spell
-        && GET_FOCUS_FORCE(GET_EQ(ch, i)) >= force
-        && focus_is_usable_by_ch(GET_EQ(ch, i), ch))
-      focus = GET_EQ(ch, i);
+  char focus_selection_rolls_msg[MAX_STRING_LENGTH];
+  for (int i = 0; !focus && i < NUM_WEARS; i++) {
+    if (GET_EQ(ch, i) && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_FOCUS && GET_FOCUS_TYPE(GET_EQ(ch, i)) == FOCI_SUSTAINED) {
+      if (!GET_FOCUS_ACTIVATED(GET_EQ(ch, i))
+          && GET_FOCUS_BONDED_SPIRIT_OR_SPELL(GET_EQ(ch, i)) == spell
+          && GET_FOCUS_FORCE(GET_EQ(ch, i)) >= force
+          && focus_is_usable_by_ch(GET_EQ(ch, i), ch))
+      {
+        focus = GET_EQ(ch, i);
+        snprintf(focus_selection_rolls_msg, sizeof(focus_selection_rolls_msg), "Using sustaining focus %s (%ld).",
+                 GET_OBJ_NAME(GET_EQ(ch, i)),
+                 GET_OBJ_VNUM(GET_EQ(ch, i))
+                );
+        act(focus_selection_rolls_msg, 0, ch, 0, 0, TO_ROLLS);
+      } else {
+        snprintf(focus_selection_rolls_msg, sizeof(focus_selection_rolls_msg), "Skipping sustaining focus %s (%ld): %s, %s, %s, %s",
+                 GET_OBJ_NAME(GET_EQ(ch, i)),
+                 GET_OBJ_VNUM(GET_EQ(ch, i)),
+                 GET_FOCUS_ACTIVATED(GET_EQ(ch, i)) ? "^ralready in use^n" : "not already activated",
+                 GET_FOCUS_BONDED_SPIRIT_OR_SPELL(GET_EQ(ch, i)) != spell ? "^rwrong spell^n" : "right spell",
+                 GET_FOCUS_FORCE(GET_EQ(ch, i)) < force ? "^rlow force^n" : "adequate force",
+                 !focus_is_usable_by_ch(GET_EQ(ch, i), ch) ? "^runusable^n" : "usable"
+                );
+        act(focus_selection_rolls_msg, 0, ch, 0, 0, TO_ROLLS);
+      }
+    }
+  }
+
   GET_SUSTAINED_NUM(ch)++;
   if (focus)
   {
@@ -2821,7 +2840,7 @@ ACMD(do_bond)
         AFF_FLAGS(ch).SetBit(AFF_BONDING);
         ch->char_specials.programming = obj;
       } else
-        send_to_char("You have already bonded this focus.\r\n", ch);
+        send_to_char(ch, "You have already bonded %s.\r\n", GET_OBJ_NAME(obj));
     } else {
       switch (GET_FOCUS_TYPE(obj)) {
         case FOCI_SPEC_SPELL:

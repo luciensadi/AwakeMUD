@@ -3442,7 +3442,11 @@ ACMD(do_assense)
             break;
           case FOCI_SPEC_SPELL:
           case FOCI_SUSTAINED:
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ". It has been bonded to help a %s spell", spell_category[spells[GET_OBJ_VAL(obj, 3)].category]);
+            if (GET_IDNUM(ch) == GET_FOCUS_BONDED_TO(obj)) {
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ". You bonded it to help with the spell '%s'", spells[GET_OBJ_VAL(obj, 3)].name);
+            } else {
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ". It has been bonded to help a %s spell", spell_category[spells[GET_OBJ_VAL(obj, 3)].category]);
+            }
             break;
           case FOCI_SPIRIT:
             if (GET_OBJ_VAL(obj, 5))
@@ -3461,11 +3465,11 @@ ACMD(do_assense)
           strlcat(buf, ". It has more astral presence than you", sizeof(buf));
       }
       if (success >= 3) {
-        if (GET_IDNUM(ch) == GET_OBJ_VAL(obj, 2))
+        if (GET_IDNUM(ch) == GET_FOCUS_BONDED_TO(obj))
           strlcat(buf, ", it is bonded to you", sizeof(buf));
         else {
           for (mem = GET_PLAYER_MEMORY(ch); mem; mem = mem->next)
-            if (mem->idnum == GET_OBJ_VAL(obj, 2))
+            if (mem->idnum == GET_FOCUS_BONDED_TO(obj))
               break;
           if (mem)
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", it seems to have been bonded by %s", mem->mem);
