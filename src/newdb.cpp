@@ -1234,9 +1234,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
   }
 
   /* Figure out their vehicle-- they can only load in it if they own it.  Unless we're calling from copyover.*/
-  if (player->in_veh && fromCopyover)
-     inveh = player->in_veh->idnum;
-  else if (player->in_veh && player->in_veh->owner == GET_IDNUM(player))
+  if (player->in_veh && (fromCopyover || player->in_veh->owner == GET_IDNUM(player)))
     inveh = player->in_veh->idnum;
 
   /* Figure out their pgroup num-- we only want to access this if the group is valid. */

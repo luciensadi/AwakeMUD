@@ -335,7 +335,7 @@ void copyover_recover()
       close_socket (d);
     } else /* ok! */
     {
-      long load_room;
+      long load_room, last_room;
       write_to_descriptor (desc, "\n\rCopyover recovery complete. If you were driving, your car is likely now at the Seattle Garage.\n\r");
       d->connected = CON_PLAYING;
       reset_char(d->character);
@@ -344,16 +344,21 @@ void copyover_recover()
       // Since we're coming from copyover if the char is in a vehicle and is the owner throw him at the front seat
       // otherwise throw him at the back. Because we don't save frontness and we'll assume the owner is driving
       // anyway.
-      if (d->character->player_specials->saved.last_veh) {
-        for (struct veh_data *veh = veh_list; veh; veh = veh->next)
-          if (veh->idnum == d->character->player_specials->saved.last_veh && veh->damage < VEH_DAM_THRESHOLD_DESTROYED) {
-            if (veh->owner == GET_IDNUM(d->character))
-              d->character->vfront = TRUE;
-            else
-              d->character->vfront = FALSE;
-              
-            char_to_veh(veh, d->character);
+      last_room = real_room(GET_LAST_IN(d->character)) ?  real_room(GET_LAST_IN(d->character))  : 0;
+      if (d->character->player_specials->saved.last_veh && last_room) {
+        for (struct veh_data *veh = world[last_room].vehicles; veh; veh = veh->next) {
+          if (veh->idnum == d->character->player_specials->saved.last_veh) {
+            if (veh->damage < VEH_DAM_THRESHOLD_DESTROYED) {
+              if (veh->owner == GET_IDNUM(d->character))
+                d->character->vfront = TRUE;
+              else
+                d->character->vfront = FALSE;
+
+              char_to_veh(veh, d->character);
+            }
+            break;
           }
+        }
       }
       else {
         if (real_room(GET_LAST_IN(d->character)) > 0)
