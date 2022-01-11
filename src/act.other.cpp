@@ -33,6 +33,7 @@
 #include "constants.h"
 #include "bullet_pants.h"
 #include "config.h"
+#include "newmail.h"
 
 #ifdef GITHUB_INTEGRATION
 #include <curl/curl.h>
@@ -4426,6 +4427,9 @@ ACMD(do_syspoints) {
   char amt[MAX_STRING_LENGTH];
   char reason[MAX_STRING_LENGTH];
 
+  MYSQL_RES *res;
+  MYSQL_ROW row;
+
   if (IS_NPC(ch)) {
     send_to_char(ch, "NPCs don't get system points, go away.\r\n");
     return;
@@ -4470,19 +4474,34 @@ ACMD(do_syspoints) {
       return;
     }
 
-    // Target specified?
-    if (!(vict = get_char_vis(ch, buf))) {
-      send_to_char(ch, "You don't see '%s' here.\r\n", buf);
-      return;
-    }
+    // Otherwise, if the target was specified, look them up.
+    if (!(vict = get_player_vis(ch, buf, FALSE))) {
+      snprintf(buf3, sizeof(buf3), "SELECT Name, SysPoints FROM pfiles WHERE name='%s';", prepare_quotes(buf2, buf, sizeof(buf2) / sizeof(buf2[0])));
+      if (mysql_wrapper(mysql, buf3)) {
+        send_to_char("An unexpected error occurred (query failed).\r\n", ch);
+        return;
+      }
+      if (!(res = mysql_use_result(mysql))) {
+        send_to_char("An unexpected error occurred (use_result failed).\r\n", ch);
+        return;
+      }
+      row = mysql_fetch_row(res);
+      if (!row && mysql_field_count(mysql)) {
+        mysql_free_result(res);
+        send_to_char("There is no such player.\r\n", ch);
+        return;
+      }
+      send_to_char(ch, "%s has %s system points.\r\n", row[0], row[1]);
+      mysql_free_result(res);
+    } else {
+      // Target cannot be NPC. We don't expect to ever hit this case using get_player_vis though.
+      if (IS_NPC(vict)) {
+        send_to_char(ch, "Not on NPCs.\r\n");
+        return;
+      }
 
-    // Target cannot be NPC.
-    if (IS_NPC(vict)) {
-      send_to_char(ch, "Not on NPCs.\r\n");
-      return;
+      send_to_char(ch, "%s has %d system points.\r\n", GET_CHAR_NAME(vict), GET_SYSTEM_POINTS(vict));
     }
-
-    send_to_char(ch, "%s has %d system points.\r\n", GET_CHAR_NAME(vict), GET_SYSTEM_POINTS(vict));
     return;
   }
 
@@ -4494,7 +4513,7 @@ ACMD(do_syspoints) {
 
   // Require all arguments.
   if (!*arg || !*target || !*amt || !*reason || k <= 0 ) {
-    send_to_char("Syntax: syspoints <award|penalize> <player> <amount> <Reason for award>.\r\n", ch);
+    send_to_char(ch, "Syntax: syspoints <award|penalize> <player> <%samount> <Reason for award>.\r\n", k < 0 ? "POSITIVE " : "");
     return;
   }
 
@@ -4510,50 +4529,103 @@ ACMD(do_syspoints) {
     return;
   }
 
-  // Find the target.
-  if (!(vict = get_char_vis(ch, target))) {
-    send_to_char(ch, "You don't see '%s' here.\r\n", target);
+  // Look up the player and execute the change.
+  if (!(vict = get_player_vis(ch, target, FALSE))) {
+    snprintf(buf, sizeof(buf), "SELECT idnum, syspoints FROM pfiles WHERE name='%s';", prepare_quotes(buf2, target, sizeof(buf2) / sizeof(buf2[0])));
+    if (mysql_wrapper(mysql, buf)) {
+      send_to_char("An unexpected error occurred (query failed).\r\n", ch);
+      return;
+    }
+    if (!(res = mysql_use_result(mysql))) {
+      send_to_char("An unexpected error occurred (use_result failed).\r\n", ch);
+      return;
+    }
+    row = mysql_fetch_row(res);
+    if (!row && mysql_field_count(mysql)) {
+      mysql_free_result(res);
+      send_to_char("There is no such player.\r\n", ch);
+      return;
+    }
+    long idnum = atol(row[0]);
+    int old_syspoints = atoi(row[1]);
+    mysql_free_result(res);
+
+    // Now that we've confirmed the player exists, update them.
+    snprintf(buf, sizeof(buf), "UPDATE pfiles SET SysPoints = SysPoints + %d WHERE idnum='%ld';", k, idnum);
+    if (mysql_wrapper(mysql, buf)) {
+      send_to_char("An unexpected error occurred on update (query failed).\r\n", ch);
+      return;
+    }
+
+    // Mail the victim.
+    snprintf(buf, sizeof(buf), "You have been %s %d system points for %s.\r\n",
+            (award_mode ? "awarded" : "penalized"),
+            k,
+            reason);
+    store_mail(idnum, ch, buf);
+
+    // Notify the actor.
+    send_to_char(ch, "You %s %d system points %s %s for %s.\r\n",
+                (award_mode ? "awarded" : "penalized"),
+                k,
+                (award_mode ? "to" : "from"),
+                capitalize(target),
+                reason);
+
+    // Log it.
+    snprintf(buf, sizeof(buf), "%s %s %d system points %s %s for %s (%d to %d).",
+            GET_CHAR_NAME(ch),
+            (award_mode ? "awarded" : "penalized"),
+            k,
+            (award_mode ? "to" : "from"),
+            target,
+            reason,
+            old_syspoints,
+            old_syspoints + k);
+    mudlog(buf, ch, LOG_WIZLOG, TRUE);
+    return;
+  } else {
+    // Target cannot be NPC. We don't expect to ever hit this case using get_player_vis though.
+    if (IS_NPC(vict)) {
+      send_to_char(ch, "Not on NPCs.\r\n");
+      return;
+    }
+
+    // Perform the awarding / penalizing.
+    if (vict->desc && vict->desc->original)
+      vict = vict->desc->original;
+
+    // Penalizing? It was inverted earlier, so no worries.
+    GET_SYSTEM_POINTS(vict) += k;
+
+    // Notify the actor and the victim, then log it.
+    send_to_char(vict, "You have been %s %d system points for %s.\r\n",
+                 (award_mode ? "awarded" : "penalized"),
+                 k,
+                 reason);
+
+    send_to_char(ch, "You %s %d system points %s %s for %s.\r\n",
+                (award_mode ? "awarded" : "penalized"),
+                k,
+                (award_mode ? "to" : "from"),
+                GET_CHAR_NAME(vict),
+                reason);
+
+    snprintf(buf, sizeof(buf), "%s %s %d system points %s %s for %s (%d to %d).",
+            GET_CHAR_NAME(ch),
+            (award_mode ? "awarded" : "penalized"),
+            k,
+            (award_mode ? "to" : "from"),
+            GET_CHAR_NAME(vict),
+            reason,
+            GET_SYSTEM_POINTS(vict) - k,
+            GET_SYSTEM_POINTS(vict));
+    mudlog(buf, ch, LOG_WIZLOG, TRUE);
+
+    // Finally, save.
+    playerDB.SaveChar(vict);
     return;
   }
-
-  // Perform the awarding / penalizing.
-  if (vict->desc && vict->desc->original)
-    vict = vict->desc->original;
-
-  if (IS_NPC(vict)) {
-    send_to_char("Not on NPCs.\r\n", ch);
-    return;
-  }
-
-  // Penalizing? It was inverted earlier, so no worries.
-  GET_SYSTEM_POINTS(vict) += k;
-
-  snprintf(buf, sizeof(buf), "You have been %s %d system points for %s.\r\n",
-          (award_mode ? "awarded" : "penalized"),
-          k,
-          reason);
-  send_to_char(buf, vict);
-
-  snprintf(buf, sizeof(buf), "You %s %d system points %s %s for %s.\r\n",
-          (award_mode ? "awarded" : "penalized"),
-          k,
-          (award_mode ? "to" : "from"),
-          GET_CHAR_NAME(vict),
-          reason);
-  send_to_char(buf, ch);
-
-  snprintf(buf, sizeof(buf), "%s %s %d system points %s %s for %s (%d to %d).",
-          GET_CHAR_NAME(ch),
-          (award_mode ? "awarded" : "penalized"),
-          k,
-          (award_mode ? "to" : "from"),
-          GET_CHAR_NAME(vict),
-          reason,
-          GET_SYSTEM_POINTS(vict) - k,
-          GET_SYSTEM_POINTS(vict));
-  mudlog(buf, ch, LOG_WIZLOG, TRUE);
-
-  playerDB.SaveChar(vict);
 }
 
 bool is_reloadable_weapon(struct obj_data *weapon, int ammotype) {
