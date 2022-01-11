@@ -491,14 +491,16 @@ int init_socket(int port)
   }
 #endif
   
-#if defined(SO_REUSEPORT)
+// This allows to bind on the same port. Commenting it out as it shouldn't be here
+// in the first place. 
+/*#if defined(SO_REUSEPORT)
   opt = 1;
   if (setsockopt(s, SOL_SOCKET, SO_REUSEPORT, (char *) &opt, sizeof(opt)) < 0) {
     perror("setsockopt REUSEPORT");
     exit(1);
   }
 #endif
-  
+*/
 #if defined(SO_LINGER)
   {
     struct linger ld;
