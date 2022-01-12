@@ -1801,6 +1801,10 @@ ACMD(do_attach)
       send_to_char(ch, "%s is not a weapon you can attach to %s.\r\n", capitalize(GET_OBJ_NAME(item)), GET_VEH_NAME(veh));
       return;
     }
+    if (IS_OBJ_STAT(item, ITEM_GODONLY)) {
+      send_to_char(ch, "You're not able to use %s- it's been restricted by staff.\r\n", GET_OBJ_NAME(item));
+      return;
+    }
     for (item2 = veh->mount; item2; item2 = item2->next_content)
       if (--j < 0)
         break;
@@ -1938,6 +1942,11 @@ ACMD(do_unattach)
 
   if (GET_OBJ_TYPE(gun) != ITEM_WEAPON) {
     send_to_char("You can only unattach accessories from weapons.\r\n", ch);
+    return;
+  }
+
+  if (IS_OBJ_STAT(gun, ITEM_GODONLY) || gun->obj_flags.quest_id) {
+    send_to_char(ch, "You're not able to modify %s.\r\n", GET_OBJ_NAME(gun));
     return;
   }
 
