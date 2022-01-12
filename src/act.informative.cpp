@@ -2225,18 +2225,24 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       break;
     case ITEM_WEAPON:
       // Ranged weapons first.
-      if (IS_GUN(GET_OBJ_VAL((j), 3))) {
+      if (IS_GUN(GET_WEAPON_ATTACK_TYPE(j))) {
         int burst_count = 0;
-        if (GET_OBJ_VAL(j, 5) > 0) {
+        if (GET_WEAPON_MAX_AMMO(j) > 0) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%d-round %s^n that uses the ^c%s^n skill to fire.",
-                  GET_OBJ_VAL(j, 5), weapon_type[GET_OBJ_VAL(j, 3)], skills[GET_OBJ_VAL(j, 4)].name);
+                  GET_WEAPON_MAX_AMMO(j),
+                  weapon_type[GET_WEAPON_ATTACK_TYPE(j)],
+                  skills[GET_WEAPON_SKILL(j)].name);
         } else {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is %s ^c%s^n that uses the ^c%s^n skill to fire.",
-                  AN(weapon_type[GET_OBJ_VAL(j, 3)]), weapon_type[GET_OBJ_VAL(j, 3)], skills[GET_OBJ_VAL(j, 4)].name);
+                  AN(weapon_type[GET_WEAPON_ATTACK_TYPE(j)]),
+                  weapon_type[GET_WEAPON_ATTACK_TYPE(j)],
+                  skills[GET_WEAPON_SKILL(j)].name);
         }
         // Damage code.
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " Its base damage code is ^c%d%s%s^n",
-                 GET_OBJ_VAL(j, 0), wound_arr[GET_OBJ_VAL(j, 1)], !IS_DAMTYPE_PHYSICAL(get_weapon_damage_type(j)) ? " (stun)" : "");
+                 GET_WEAPON_POWER(j),
+                 wound_arr[GET_WEAPON_DAMAGE_CODE(j)],
+                 !IS_DAMTYPE_PHYSICAL(get_weapon_damage_type(j)) ? " (stun)" : "");
 
         // Burst fire?
         if (GET_WEAPON_FIREMODE(j) == MODE_BF || GET_WEAPON_FIREMODE(j) == MODE_FA) {
@@ -2249,6 +2255,14 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
         } else {
           strlcat(buf, ".", sizeof(buf));
         }
+
+        strlcat(buf, "\r\nIt has the following available firemodes:", sizeof(buf));
+        bool first_mode = TRUE;
+        for (int mode = MODE_SS; mode <= MODE_FA; mode++)
+          if (WEAPON_CAN_USE_FIREMODE(j, mode)) {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s ^c%s^n", first_mode ? "" : ",", fire_mode[mode]);
+            first_mode = FALSE;
+          }
 
         if (j->contains
             && GET_OBJ_TYPE(j->contains) == ITEM_GUN_MAGAZINE
