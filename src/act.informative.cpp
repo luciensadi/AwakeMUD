@@ -5431,11 +5431,17 @@ ACMD(do_status)
 
   for (struct sustain_data *sust = GET_SUSTAINED(targ); sust; sust = sust->next)
     if (!sust->caster) {
-      strlcpy(buf, spells[sust->spell].name, sizeof(buf));
-      if (SPELL_HAS_SUBTYPE(sust->spell))
+      snprintf(buf, sizeof(buf), "  %s", spells[sust->spell].name);
+      if (sust->spell == SPELL_INCATTR
+          || sust->spell == SPELL_INCCYATTR
+          || sust->spell == SPELL_DECATTR
+          || sust->spell == SPELL_DECCYATTR)
+      {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s", attributes[sust->subtype]);
+      } else if (SPELL_HAS_SUBTYPE(sust->spell)) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (%s)", attributes[sust->subtype]);
-      send_to_char(buf, ch);
-      send_to_char("\r\n", ch);
+      }
+      send_to_char(ch, "%s\r\n", buf);
       printed = TRUE;
     }
   if (GET_SUSTAINED_NUM(targ)) {
