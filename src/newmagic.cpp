@@ -3308,8 +3308,18 @@ ACMD(do_spells)
 
   // Character knows spells. List them.
   send_to_char("You know the following spells:\r\n", ch);
-  for (struct spell_data *spell = GET_SPELLS(ch); spell; spell = spell->next)
+  for (struct spell_data *spell = GET_SPELLS(ch); spell; spell = spell->next) {
+    strlcpy(buf, spell->name, sizeof(buf));
+    if (spell->type == SPELL_INCATTR
+        || spell->type == SPELL_INCCYATTR
+        || spell->type == SPELL_DECATTR
+        || spell->type == SPELL_DECCYATTR)
+    {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s", attributes[spell->subtype]);
+    }
+
     send_to_char(ch, "%-50s Category: %12s Force: %d\r\n", spell->name, spell_category[spells[spell->type].category], spell->force);
+  }
 }
 
 ACMD(do_forget)
