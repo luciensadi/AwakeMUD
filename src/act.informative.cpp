@@ -575,43 +575,81 @@ void diag_char_to_char(struct char_data * i, struct char_data * ch)
   make_desc(ch, i, buf, TRUE, FALSE, sizeof(buf));
   CAP(buf);
 
-  if (phys >= 100 || (GET_TRADITION(i) == TRAD_ADEPT && phys >= 0 &&
-                      ((100 - phys) / 10) <= GET_POWER(i, ADEPT_PAIN_RESISTANCE)))
-    strlcat(buf, " is in excellent physical condition", sizeof(buf));
-  else if (phys >= 90)
-    strlcat(buf, " has a few scratches", sizeof(buf));
-  else if (phys >= 75)
-    strlcat(buf, " has some small wounds and bruises", sizeof(buf));
-  else if (phys >= 50)
-    strlcat(buf, " has quite a few wounds", sizeof(buf));
-  else if (phys >= 30)
-    strlcat(buf, " has some big nasty wounds and scratches", sizeof(buf));
-  else if (phys >= 15)
-    strlcat(buf, " looks pretty hurt", sizeof(buf));
-  else if (phys >= 0)
-    strlcat(buf, " is in awful condition", sizeof(buf));
-  else
-    strlcat(buf, " is bleeding awfully from big wounds", sizeof(buf));
+  if (IS_NPC(i) && MOB_FLAGGED(i, MOB_INANIMATE)) {
+    if (phys >= 100 || (GET_TRADITION(i) == TRAD_ADEPT && phys >= 0 &&
+                        ((100 - phys) / 10) <= GET_POWER(i, ADEPT_PAIN_RESISTANCE)))
+      strlcat(buf, " is in excellent physical condition", sizeof(buf));
+    else if (phys >= 90)
+      strlcat(buf, " has a few scratches", sizeof(buf));
+    else if (phys >= 75)
+      strlcat(buf, " has some small dents and scrapes", sizeof(buf));
+    else if (phys >= 50)
+      strlcat(buf, " has quite a few dents", sizeof(buf));
+    else if (phys >= 30)
+      strlcat(buf, " has some big nasty dents and rents", sizeof(buf));
+    else if (phys >= 15)
+      strlcat(buf, " looks pretty damaged", sizeof(buf));
+    else if (phys >= 0)
+      strlcat(buf, " is in awful condition", sizeof(buf));
+    else
+      strlcat(buf, " is critically damaged", sizeof(buf));
 
-  if (phys <= 0)
-    strlcat(buf, " and is unconscious.\r\n", sizeof(buf));
-  else if (ment >= 100 || (GET_TRADITION(i) == TRAD_ADEPT && ment >= 0 &&
-                           ((100 - ment) / 10) <= (GET_POWER(i, ADEPT_PAIN_RESISTANCE) -
-                                                   (int)((GET_MAX_PHYSICAL(i) - GET_PHYSICAL(i)) / 100))))
-    strlcat(buf, " and is alert.\r\n", sizeof(buf));
-  else if (ment >= 90)
-    strlcat(buf, " and is barely tired.\r\n", sizeof(buf));
-  else if (ment >= 75)
-    strlcat(buf, " and is slightly worn out.\r\n", sizeof(buf));
-  else if (ment >= 50)
-    strlcat(buf, " and is fatigued.\r\n", sizeof(buf));
-  else if (ment >= 30)
-    strlcat(buf, " and is weary.\r\n", sizeof(buf));
-  else if (ment >= 10)
-    strlcat(buf, " and is groggy.\r\n", sizeof(buf));
-  else
-    strlcat(buf, " and is completely unconscious.\r\n", sizeof(buf));
+    if (phys <= 0)
+      strlcat(buf, " and is rebooting.\r\n", sizeof(buf));
+    else if (ment >= 100 || (GET_TRADITION(i) == TRAD_ADEPT && ment >= 0 &&
+                             ((100 - ment) / 10) <= (GET_POWER(i, ADEPT_PAIN_RESISTANCE) -
+                                                     (int)((GET_MAX_PHYSICAL(i) - GET_PHYSICAL(i)) / 100))))
+      strlcat(buf, " and is online.\r\n", sizeof(buf));
+    else if (ment >= 90)
+      strlcat(buf, " and is barely malfunctioning.\r\n", sizeof(buf));
+    else if (ment >= 75)
+      strlcat(buf, " and is showing minor issues.\r\n", sizeof(buf));
+    else if (ment >= 50)
+      strlcat(buf, " and is behaving erratically.\r\n", sizeof(buf));
+    else if (ment >= 30)
+      strlcat(buf, " and is glitching out.\r\n", sizeof(buf));
+    else if (ment >= 10)
+      strlcat(buf, " and is on the edge of a hard shutdown.\r\n", sizeof(buf));
+    else
+      strlcat(buf, " and is rebooting.\r\n", sizeof(buf));
+  } else {
+    if (phys >= 100 || (GET_TRADITION(i) == TRAD_ADEPT && phys >= 0 &&
+                        ((100 - phys) / 10) <= GET_POWER(i, ADEPT_PAIN_RESISTANCE)))
+      strlcat(buf, " is in excellent physical condition", sizeof(buf));
+    else if (phys >= 90)
+      strlcat(buf, " has a few scratches", sizeof(buf));
+    else if (phys >= 75)
+      strlcat(buf, " has some small wounds and bruises", sizeof(buf));
+    else if (phys >= 50)
+      strlcat(buf, " has quite a few wounds", sizeof(buf));
+    else if (phys >= 30)
+      strlcat(buf, " has some big nasty wounds and scratches", sizeof(buf));
+    else if (phys >= 15)
+      strlcat(buf, " looks pretty hurt", sizeof(buf));
+    else if (phys >= 0)
+      strlcat(buf, " is in awful condition", sizeof(buf));
+    else
+      strlcat(buf, " is bleeding awfully from big wounds", sizeof(buf));
 
+    if (phys <= 0)
+      strlcat(buf, " and is unconscious.\r\n", sizeof(buf));
+    else if (ment >= 100 || (GET_TRADITION(i) == TRAD_ADEPT && ment >= 0 &&
+                             ((100 - ment) / 10) <= (GET_POWER(i, ADEPT_PAIN_RESISTANCE) -
+                                                     (int)((GET_MAX_PHYSICAL(i) - GET_PHYSICAL(i)) / 100))))
+      strlcat(buf, " and is alert.\r\n", sizeof(buf));
+    else if (ment >= 90)
+      strlcat(buf, " and is barely tired.\r\n", sizeof(buf));
+    else if (ment >= 75)
+      strlcat(buf, " and is slightly worn out.\r\n", sizeof(buf));
+    else if (ment >= 50)
+      strlcat(buf, " and is fatigued.\r\n", sizeof(buf));
+    else if (ment >= 30)
+      strlcat(buf, " and is weary.\r\n", sizeof(buf));
+    else if (ment >= 10)
+      strlcat(buf, " and is groggy.\r\n", sizeof(buf));
+    else
+      strlcat(buf, " and is completely unconscious.\r\n", sizeof(buf));
+  }
 
   send_to_char(buf, ch);
 }

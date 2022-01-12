@@ -433,10 +433,17 @@ void make_corpse(struct char_data * ch)
 
   if (IS_NPC(ch))
   {
-    snprintf(buf, sizeof(buf), "corpse %s", ch->player.physical_text.keywords);
-    snprintf(buf1, sizeof(buf1), "^rThe corpse of %s is lying here.^n", decapitalize_a_an(GET_NAME(ch)));
-    snprintf(buf2, sizeof(buf2), "^rthe corpse of %s^n", decapitalize_a_an(GET_NAME(ch)));
-    strlcpy(buf3, "What once was living is no longer. Poor sap.\r\n", sizeof(buf3));
+    if (MOB_FLAGGED(ch, MOB_INANIMATE)) {
+      snprintf(buf, sizeof(buf), "remains corpse %s", ch->player.physical_text.keywords);
+      snprintf(buf1, sizeof(buf1), "^rThe remains of %s is lying here.^n", decapitalize_a_an(GET_NAME(ch)));
+      snprintf(buf2, sizeof(buf2), "^rthe remains of %s^n", decapitalize_a_an(GET_NAME(ch)));
+      strlcpy(buf3, "It's been powered down permanently.\r\n", sizeof(buf3));
+    } else {
+      snprintf(buf, sizeof(buf), "corpse %s", ch->player.physical_text.keywords);
+      snprintf(buf1, sizeof(buf1), "^rThe corpse of %s is lying here.^n", decapitalize_a_an(GET_NAME(ch)));
+      snprintf(buf2, sizeof(buf2), "^rthe corpse of %s^n", decapitalize_a_an(GET_NAME(ch)));
+      strlcpy(buf3, "What once was living is no longer. Poor sap.\r\n", sizeof(buf3));
+    }
   } else
   {
     snprintf(buf, sizeof(buf), "belongings %s", ch->player.physical_text.keywords);
@@ -2661,8 +2668,13 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
   switch (GET_POS(victim))
   {
     case POS_MORTALLYW:
-      act("$n is mortally wounded, and will die soon, if not aided.",
-          TRUE, victim, 0, 0, TO_ROOM);
+      if (IS_NPC(victim) && MOB_FLAGGED(victim, MOB_INANIMATE)) {
+        act("$n is critically damaged, and will fail soon, if not aided.",
+            TRUE, victim, 0, 0, TO_ROOM);
+      } else {
+        act("$n is mortally wounded, and will die soon, if not aided.",
+            TRUE, victim, 0, 0, TO_ROOM);
+      }
       if (!PLR_FLAGGED(victim, PLR_MATRIX)) {
         send_to_char("You are mortally wounded, and will die soon, if not "
                      "aided.\r\n", victim);
@@ -2671,17 +2683,27 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
         docwagon(victim);
       break;
     case POS_STUNNED:
-      act("$n is stunned, but will probably regain consciousness again.",
-          TRUE, victim, 0, 0, TO_ROOM);
+      if (IS_NPC(victim) && MOB_FLAGGED(victim, MOB_INANIMATE)) {
+        act("$n is rebooting from heavy damage.",
+            TRUE, victim, 0, 0, TO_ROOM);
+      } else {
+        act("$n is stunned, but will probably regain consciousness again.",
+            TRUE, victim, 0, 0, TO_ROOM);
+      }
       if (!PLR_FLAGGED(victim, PLR_MATRIX)) {
         send_to_char("You're stunned, but will probably regain consciousness "
                      "again.\r\n", victim);
       }
       break;
     case POS_DEAD:
-      if (IS_NPC(victim))
-        act("$n is dead!  R.I.P.", FALSE, victim, 0, 0, TO_ROOM);
-      else
+      if (IS_NPC(victim)) {
+        if (MOB_FLAGGED(victim, MOB_INANIMATE)) {
+          act("$n terminally fails in a shower of sparks!", FALSE, victim, 0, 0, TO_ROOM);
+        } else {
+          act("$n is dead!  R.I.P.", FALSE, victim, 0, 0, TO_ROOM);
+        }
+
+      } else
         act("$n slumps in a pile. You hear sirens as a DocWagon rushes in and grabs $m.", FALSE, victim, 0, 0, TO_ROOM);
 
       for (int i = 0; i < NUM_WEARS && !docwagon_biomonitor; i++) {
