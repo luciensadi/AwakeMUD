@@ -90,4 +90,7 @@ struct quest_entry {
 #define CMD_JOB_YES  4
 #define CMD_JOB_NO  5
 
+void load_quest_targets(struct char_data *johnson, struct char_data *ch);
+void handle_info(struct char_data *johnson, int num);
+
 #endif

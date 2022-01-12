@@ -3985,7 +3985,14 @@ SPECIAL(quest_debug_scanner)
       snprintf(buf, sizeof(buf), "NPC %s's quest-related information:\r\n", GET_CHAR_NAME(to));
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Overall max rep: %d, overall min rep: %d\r\n",
               get_johnson_overall_max_rep(to), get_johnson_overall_min_rep(to));
-     //Remember to add here a list of all quests assigned to this johnson -- Nodens
+              
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Quests: ");
+      for (int i = 0; i <= top_of_questt; i++)
+        if (quest_table[i].johnson == GET_MOB_VNUM(to))
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld ", quest_table[i].vnum);
+          
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n");
+      
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "SPARE1: %ld\r\n", GET_SPARE1(to));
       strcat(buf, "NPC's mob memory records hold the following character IDs: \r\n");
       for (memory_rec *tmp = GET_MOB_MEMORY(to); tmp; tmp = tmp->next)
@@ -4073,44 +4080,81 @@ SPECIAL(quest_debug_scanner)
 
     return TRUE;
   }
-  // This is not needed currently. But keeping it in so that I remember to repurpose it -- Nodens
-  /*
+  
   if (CMD_IS("reload")) {
     skip_spaces(&argument);
     if (!*argument) {
-      send_to_char(ch, "Reload quest information on which NPC?\r\n");
+      send_to_char(ch, "Which run do you want to start?\r\n");
       return TRUE;
     }
 
-    if (ch->in_veh)
-      to = get_char_veh(ch, argument, ch->in_veh);
-    else
-      to = get_char_room_vis(ch, argument);
-
-    if (!to) {
-      send_to_char(ch, "You don't see any '%s' that you can quest-debug here.\r\n", argument);
-      return TRUE;
-    }
-
-    if (IS_NPC(to)) {
-      if (!(mob_index[GET_MOB_RNUM(to)].func == johnson || mob_index[GET_MOB_RNUM(to)].sfunc == johnson)) {
-        send_to_char(ch, "That NPC doesn't have any quest-related information available.\r\n");
+    if (GET_QUEST(ch)) {          
+        send_to_char(ch, "End your current run first.\r\n");
         return TRUE;
+    }
+      
+    bool found = FALSE;
+
+    for (to = ch->in_room->people; to; to = to->next_in_room) {
+      if (IS_NPC(to) && mob_index[GET_MOB_RNUM(to)].func == johnson) {
+        found = TRUE;
+        break;
       }
-
-      act("You roughly slap $N and demand $E pick a new random quest to offer.", FALSE, ch, 0, to, TO_CHAR);
-      act("$n roughly slaps $N and demands that $E pick a new random quest to offer.", FALSE, ch, 0, to, TO_ROOM);
-      //new_quest(to);
-      GET_SPARE1(to) = -1;
-      //send_to_char(ch, "Now offering quest %ld.", GET_SPARE2(to) ? quest_table[GET_SPARE2(to)].vnum : -1);
-
+    }
+    if(!found) {
+      send_to_char(ch, "There is no johnson here.\r\n");
       return TRUE;
     }
+    
+    int quest = atoi(argument);
+    if (!quest) {
+      send_to_char(ch, "That's not a quest number.\r\n");
+      return TRUE;
+    }
+    
+    found = FALSE;
+    int i = 0;
+    for (; i <= top_of_questt; i++) {
+      if (quest_table[i].vnum == quest  && quest_table[i].johnson == GET_MOB_VNUM(to)) {
+        found = TRUE;
+        break;
+      }
+    }
 
-    send_to_char(ch, "You can only do that on NPCs, and %s doesn't qualify.\r\n", GET_CHAR_NAME(to));
-    return TRUE;
+    if (!found) {
+      send_to_char(ch, "Johnson is not offering this quest.\r\n");
+      return TRUE;
+    }
+    else {
+      GET_SPARE1(to) = 0;
+      if (quest_table[i].intro)
+        do_say(to, quest_table[i].intro, 0, 0);
+      else {
+        snprintf(buf, sizeof(buf), "WARNING: Null intro string in quest %ld!", quest_table[i].vnum);
+        mudlog(buf, ch, LOG_SYSLOG, TRUE);
+        send_to_char(ch, "Warning: Null intro string in this quest.\r\n");
+      }
+          
+      if (!memory(to, ch))
+        remember(to, ch);
+            
+      // Assign them the quest.
+      int num;
+      GET_QUEST(ch) = i;
+      ch->player_specials->obj_complete = new sh_int[quest_table[GET_QUEST(ch)].num_objs];
+      ch->player_specials->mob_complete = new sh_int[quest_table[GET_QUEST(ch)].num_mobs];
+      for (num = 0; num < quest_table[GET_QUEST(ch)].num_objs; num++)
+        ch->player_specials->obj_complete[num] = 0;
+      for (num = 0; num < quest_table[GET_QUEST(ch)].num_mobs; num++)
+        ch->player_specials->mob_complete[num] = 0;
+          
+      //Load targets and give the details.
+      load_quest_targets(to, ch);
+      handle_info(to, i);
+      
+      return TRUE;
+    }
   }
-*/
   return FALSE;
 }
 
