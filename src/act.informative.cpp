@@ -5445,8 +5445,15 @@ ACMD(do_status)
     for (struct sustain_data *sust = GET_SUSTAINED(targ); sust; sust = sust->next)
       if (sust->caster || sust->spirit == targ) {
         strlcpy(buf, spells[sust->spell].name, sizeof(buf));
-        if (SPELL_HAS_SUBTYPE(sust->spell))
+        if (sust->spell == SPELL_INCATTR
+            || sust->spell == SPELL_INCCYATTR
+            || sust->spell == SPELL_DECATTR
+            || sust->spell == SPELL_DECCYATTR)
+        {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s", attributes[sust->subtype]);
+        } else if (SPELL_HAS_SUBTYPE(sust->spell)) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (%s)", attributes[sust->subtype]);
+        }
         send_to_char(ch, "%d) %s (%d successes)", i, buf, sust->success);
         if (sust->focus)
           send_to_char(ch, "(Sustained by %s)", GET_OBJ_NAME(sust->focus));

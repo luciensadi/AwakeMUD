@@ -67,10 +67,13 @@ void adept_release_spell(struct char_data *ch, bool end_spell)
   }
 
   strcpy(buf, spells[spell->spell].name);
-  if (spell->spell == SPELL_INCATTR || spell->spell == SPELL_INCCYATTR ||
-      spell->spell == SPELL_DECATTR || spell->spell == SPELL_DECCYATTR)
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (%s)", attributes[spell->subtype]);
-
+  if (spell->spell == SPELL_INCATTR
+      || spell->spell == SPELL_INCCYATTR
+      || spell->spell == SPELL_DECATTR
+      || spell->spell == SPELL_DECCYATTR)
+  {
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s", attributes[spell->subtype]);
+  }
 
   if (end_spell) {
     send_to_char(ch, "You deliberately misalign your powers and disrupt %s.\r\n", buf);
@@ -120,7 +123,17 @@ void end_sustained_spell(struct char_data *ch, struct sustain_data *sust)
     GET_SUSTAINED(sust->spirit) = NULL;
   }
   GET_SUSTAINED_NUM(sust->caster ? ch : sust->other)--;
-  send_to_char(sust->caster ? ch : sust->other, "You stop sustaining %s.\r\n", spells[sust->spell].name);
+
+  strcpy(buf, spells[sust->spell].name);
+  if (sust->spell == SPELL_INCATTR
+      || sust->spell == SPELL_INCCYATTR
+      || sust->spell == SPELL_DECATTR
+      || sust->spell == SPELL_DECCYATTR)
+  {
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s", attributes[sust->subtype]);
+  }
+
+  send_to_char(sust->caster ? ch : sust->other, "You stop sustaining %s.\r\n", buf);
   delete sust;
 }
 
