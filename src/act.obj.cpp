@@ -1891,9 +1891,9 @@ void perform_give_gold(struct char_data *ch, struct char_data *vict, int amount)
     send_to_char("You don't have that much!\r\n", ch);
     return;
   }
-  if (IS_SENATOR(ch) && !access_level(ch, LVL_VICEPRES) && !IS_SENATOR(vict))
+  if (IS_SENATOR(ch) && !access_level(ch, LVL_FREEZE) && !IS_SENATOR(vict))
   {
-    send_to_char("Maybe that's not such a good idea...\r\n", ch);
+    send_to_char("You're not a high-enough level of staffer to do that.\r\n", ch);
     return;
   }
   send_to_char(OK, ch);
@@ -3456,7 +3456,7 @@ int draw_weapon(struct char_data *ch)
 {
   struct obj_data *potential_holster, *obj;
   int i = 0;
-  
+
   //Look in fingertip first to get it out of the way.
   //At some point we need to write a mechanism to select what is drawn automatically -- Nodens
   for (potential_holster = ch->cyberware; potential_holster; potential_holster = potential_holster->next_content)
@@ -3615,10 +3615,10 @@ ACMD(do_holster)
   }
 
   const char *madefor = "<error, report to staff>";
-  
+
   if (GET_OBJ_TYPE(cont) == ITEM_HOLSTER && !holster_can_fit(cont, obj)) {
     dontfit++;
-    
+
     switch (GET_HOLSTER_TYPE(cont)) {
       case HOLSTER_TYPE_SMALL_GUNS:
         madefor = "pistols and SMGs";
@@ -3663,7 +3663,7 @@ ACMD(do_ready)
     send_to_char(ch, "You have to ready something.\r\n");
     return;
   }
-  
+
   //If we have a fingertip compartment that matches the argument, set our object to that.
   if ((finger = get_obj_in_list_vis(ch, buf, ch->cyberware)) && GET_CYBERWARE_TYPE(finger) == CYB_FINGERTIP)
     obj = finger;
