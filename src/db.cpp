@@ -358,38 +358,67 @@ void require_that_sql_table_exists(const char *table_name, const char *migration
   }
 }
 
-void require_that_field_exists_in_table(const char *field_name, const char *table_name, const char *migration_path_from_root_directory) {
+// Combines the logic of field_exists_in_table with more constraints-- for things you've recently updated but already existed.
+void require_that_field_meets_constraints(const char *field_name, const char *table_name, const char *migration_path_from_root_directory, int flength=0, const char *ftype=NULL) {
   bool have_column = FALSE;
+  char migration_string[3000];
 
   MYSQL_RES *res;
   MYSQL_ROW row;
 
   char query_buf[1000];
+
+  snprintf(migration_string, sizeof(migration_string),
+           "ERROR: You need to run the %s migration from the SQL directory. "
+           "Probable syntax from root directory: `mysql -u YOUR_USERNAME -p AwakeMUD < %s`.",
+           table_name,
+           migration_path_from_root_directory);
+
   snprintf(query_buf, sizeof(query_buf), "SHOW COLUMNS FROM %s LIKE '%s';",
            prepare_quotes(buf, table_name, sizeof(buf)),
            prepare_quotes(buf2, field_name, sizeof(buf2)));
   mysql_wrapper(mysql, query_buf);
 
   if (!(res = mysql_use_result(mysql))) {
-    log_vfprintf("ERROR: You need to run the %s migration from the SQL directory. "
-                 "Probable syntax from root directory: `mysql -u YOUR_USERNAME -p AwakeMUD < %s`.",
-                 table_name,
-                 migration_path_from_root_directory);
+    log(migration_string);
     exit(ERROR_DB_COLUMN_REQUIRED);
   }
 
-  if ((row = mysql_fetch_row(res)) && mysql_field_count(mysql))
+  if ((row = mysql_fetch_row(res)) && mysql_field_count(mysql)) {
     have_column = TRUE;
+
+    // Length constraint.
+    if (flength) {
+      if (ftype == NULL || !*ftype) {
+        log("ERROR: You need to include the field type in require_that_field_meets_constraints when using the length parameter.");
+        exit(1);
+      }
+
+      char field_type[500];
+      snprintf(field_type, sizeof(field_type), "%s(%d)", ftype, flength);
+      if (strcmp(field_type, row[1])) {
+        log_vfprintf("%s\r\n%s.%s's type '%s' did not match expected type '%s'.",
+                     migration_string,
+                     table_name,
+                     field_name,
+                     row[1],
+                     field_type);
+        mysql_free_result(res);
+        exit(ERROR_DB_COLUMN_REQUIRED);
+      }
+    }
+  }
 
   mysql_free_result(res);
 
   if (!have_column) {
-    log_vfprintf("ERROR: You need to run the %s migration from the SQL directory! "
-                 "Probable syntax from root directory: `mysql -u YOUR_USERNAME -p AwakeMUD < %s`.",
-                 table_name,
-                 migration_path_from_root_directory);
+    log(migration_string);
     exit(ERROR_DB_COLUMN_REQUIRED);
   }
+}
+
+void require_that_field_exists_in_table(const char *field_name, const char *table_name, const char *migration_path_from_root_directory) {
+  require_that_field_meets_constraints(field_name, table_name, migration_path_from_root_directory);
 }
 
 void boot_world(void)
@@ -433,6 +462,8 @@ void boot_world(void)
   log("Verifying DB compatibility with extended-length passwords.");
   verify_db_password_column_size();
 
+  // Search terms below because it always takes me forever to ctrl-f this block -LS
+  // ensure table, ensure row, ensure field, database, limits, restrictions
   log("Verifying that DB has expected migrations. Note that not all migrations are checked here.");
   require_that_sql_table_exists("pfiles_ammo", "SQL/bullet_pants.sql");
   require_that_sql_table_exists("command_fuckups", "SQL/fuckups.sql");
@@ -442,6 +473,8 @@ void boot_world(void)
   require_that_field_exists_in_table("highlight", "pfiles", "SQL/Migrations/rp_upgrade.sql");
   require_that_field_exists_in_table("email", "pfiles", "SQL/Migrations/rp_upgrade.sql");
   require_that_field_exists_in_table("multiplier", "pfiles", "SQL/Migrations/multipliers.sql");
+  require_that_field_meets_constraints("Prompt", "pfiles", "SQL/Migrations/prompt_expansion.sql", 2001, "varchar");
+  require_that_field_meets_constraints("MatrixPrompt", "pfiles", "SQL/Migrations/prompt_expansion.sql", 2001, "varchar");
 
   log("Calculating lexicon data.");
   populate_lexicon_size_table();
@@ -4862,7 +4895,7 @@ void load_saved_veh()
         // Don't auto-repair cyberdecks until they're fully loaded.
         if (GET_OBJ_TYPE(obj) != ITEM_CYBERDECK)
           auto_repair_obj(obj, buf3);
-        
+
         if (veh_version == VERSION_VEH_FILE) {
           // Since we're now saved the obj linked lists  in reverse order, in order to fix the stupid reordering on
           // every binary execution, the previous algorithm did not work, as it relied on getting the container obj
@@ -4875,13 +4908,13 @@ void load_saved_veh()
             if (inside < last_inside) {
               if (inside == 0)
                 obj_to_veh(obj, veh);
-              
+
               auto it = std::find_if(contained_obj.begin(), contained_obj.end(), find_level(inside+1));
               while (it != contained_obj.end()) {
                 obj_to_obj(it->obj, obj);
                 contained_obj.erase(it);
               }
-                
+
               if (inside > 0) {
                 contained_obj_entry.level = inside;
                 contained_obj_entry.obj = obj;
@@ -4896,8 +4929,8 @@ void load_saved_veh()
             last_inside = inside;
           } else
             obj_to_veh(obj, veh);
-            
-          last_inside = inside;        
+
+          last_inside = inside;
         }
         // This handles loading old house file format prior to introduction of version number in the file.
         // Version number will always be 0 for this format.
@@ -4916,7 +4949,7 @@ void load_saved_veh()
                 last_inside--;
               }
             }
-            
+
             if (last_obj)
               obj_to_obj(obj, last_obj);
             else
@@ -4924,7 +4957,7 @@ void load_saved_veh()
           } else
             obj_to_veh(obj, veh);
           last_inside = inside;
-          last_obj = obj; 
+          last_obj = obj;
         }
         else {
           snprintf(buf2, sizeof(buf2), "Load ERROR: Unknown file format for vehicle ID: %ld. Dumping valid objects to vehicle.", veh->idnum);
@@ -4933,17 +4966,17 @@ void load_saved_veh()
         }
       }
     }
-    
+
     if (veh_version == VERSION_VEH_FILE) {
       // Failsafe. If something went wrong and we still have objects stored in the vector, dump them in the room.
       if (!contained_obj.empty()) {
         for (auto it : contained_obj)
           obj_to_veh(it.obj, veh);
-        
+
         contained_obj.clear();
       }
     }
-    
+
     int num_mods = data.NumFields("MODIS");
     for (int i = 0; i < num_mods; i++) {
       snprintf(buf, sizeof(buf), "MODIS/Mod%d", i);
@@ -5070,12 +5103,12 @@ void load_consist(void)
         VTable data;
         data.Parse(&file);
         file.Close();
-        
+
         int house_version = data.GetInt("METADATA/Version", 0);
         struct obj_data *obj = NULL, *last_obj = NULL;
         std::vector<nested_obj> contained_obj;
         struct nested_obj contained_obj_entry;
-        
+
         int inside = 0, last_inside = 0, num_objs = data.NumSubsections("HOUSE");
         long vnum;
         for (int i = 0; i < num_objs; i++) {
@@ -5155,13 +5188,13 @@ void load_consist(void)
                 if (inside < last_inside) {
                   if (inside == 0)
                     obj_to_room(obj, &world[nr]);
-                    
+
                   auto it = std::find_if(contained_obj.begin(), contained_obj.end(), find_level(inside+1));
                   while (it != contained_obj.end()) {
                     obj_to_obj(it->obj, obj);
                     contained_obj.erase(it);
                   }
-                      
+
                   if (inside > 0) {
                     contained_obj_entry.level = inside;
                     contained_obj_entry.obj = obj;
@@ -5177,7 +5210,7 @@ void load_consist(void)
               }
               else
                 obj_to_room(obj, &world[nr]);
-                  
+
               last_inside = inside;
             }
             // This handles loading old house file format prior to introduction of version number in the file.
@@ -5197,7 +5230,7 @@ void load_consist(void)
                     last_inside--;
                   }
                 }
-                
+
                 if (last_obj)
                   obj_to_obj(obj, last_obj);
                 else
@@ -5226,7 +5259,7 @@ void load_consist(void)
           if (!contained_obj.empty()) {
             for (auto it : contained_obj)
               obj_to_room(it.obj, &world[nr]);
-              
+
             contained_obj.clear();
           }
         }

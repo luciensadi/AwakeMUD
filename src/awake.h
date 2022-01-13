@@ -2122,7 +2122,7 @@ enum {
 #define MAX_SOCK_BUF              (12 * 1024) /* Size of kernel's sock buf   */
 #endif
 
-#define MAX_PROMPT_LENGTH         96          /* Max length of prompt        */
+#define MAX_PROMPT_LENGTH         1000          /* Max length of prompt        */
 #define GARBAGE_SPACE             32
 #define SMALL_BUFSIZE             1024
 #define LARGE_BUFSIZE             (MAX_SOCK_BUF - GARBAGE_SPACE - MAX_PROMPT_LENGTH)

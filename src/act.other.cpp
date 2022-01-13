@@ -836,7 +836,7 @@ ACMD(do_wimpy)
 ACMD(do_display)
 {
   struct char_data *tch;
-  char arg_with_prepared_quotes[LINE_LENGTH];
+  char arg_with_prepared_quotes[MAX_PROMPT_LENGTH * 2];
 
   if (IS_NPC(ch) && !ch->desc->original) {
     send_to_char("Monsters don't need displays.  Go away.\r\n", ch);
@@ -846,22 +846,24 @@ ACMD(do_display)
 
   skip_spaces(&argument);
   delete_doubledollar(argument);
-  prepare_quotes(arg_with_prepared_quotes, argument, sizeof(arg_with_prepared_quotes) / sizeof(arg_with_prepared_quotes[0]));
 
   if (!*argument) {
     send_to_char(ch, "Current prompt:\r\n%s\r\n", GET_PROMPT(tch));
     return;
-  } else if (strlen(arg_with_prepared_quotes) > LINE_LENGTH - 1) {
-    send_to_char(ch, "Customized prompts are limited to %d characters.\r\n",
-                 LINE_LENGTH - 1);
-    return;
-  } else {
-    DELETE_ARRAY_IF_EXTANT(GET_PROMPT(tch));
-    GET_PROMPT(tch) = str_dup(argument);
-    send_to_char(OK, ch);
-    snprintf(buf, sizeof(buf), "UPDATE pfiles SET%sPrompt='%s' WHERE idnum=%ld;", PLR_FLAGGED((ch), PLR_MATRIX) ? " Matrix" : " ", arg_with_prepared_quotes, GET_IDNUM(ch));
-    mysql_wrapper(mysql, buf);
   }
+
+  if (strlen(argument) > MAX_PROMPT_LENGTH) {
+    send_to_char(ch, "Customized prompts are limited to %d characters.\r\n", MAX_PROMPT_LENGTH);
+    return;
+  }
+
+  prepare_quotes(arg_with_prepared_quotes, argument, sizeof(arg_with_prepared_quotes) / sizeof(arg_with_prepared_quotes[0]));
+
+  DELETE_ARRAY_IF_EXTANT(GET_PROMPT(tch));
+  GET_PROMPT(tch) = str_dup(argument);
+  send_to_char(OK, ch);
+  snprintf(buf, sizeof(buf), "UPDATE pfiles SET%sPrompt='%s' WHERE idnum=%ld;", PLR_FLAGGED((ch), PLR_MATRIX) ? " Matrix" : " ", arg_with_prepared_quotes, GET_IDNUM(ch));
+  mysql_wrapper(mysql, buf);
 }
 
 ACMD(do_gen_write)
