@@ -3,6 +3,6 @@
 
 // This file is woefully incomplete. If you see a function in limits.cpp you want in here, add it!
 
-void save_vehicles(void);
+void save_vehicles(bool fromCopyover);
 
 #endif

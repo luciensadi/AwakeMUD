@@ -20,6 +20,8 @@
 #include <errno.h>
 #include <time.h>
 #include <math.h>
+#include <vector>
+#include <algorithm>
 #include <mysql/mysql.h>
 #if defined(WIN32) && !defined(__CYGWIN__)
 #include <process.h>
@@ -4745,6 +4747,9 @@ void load_saved_veh()
   long vnum, owner;
   struct obj_data *obj, *last_obj = NULL;
   long veh_room = 0;
+  int veh_version = 0;
+  std::vector<nested_obj> contained_obj;
+  struct nested_obj contained_obj_entry;
 
   if (!(fl = fopen("veh/vfile", "r"))) {
     log("SYSERR: Could not open vfile for reading.");
@@ -4770,6 +4775,7 @@ void load_saved_veh()
     data.Parse(&file);
     file.Close();
 
+    veh_version = data.GetInt("METADATA/Version", 0);
     owner = data.GetLong("VEHICLE/Owner", 0);
 
     if ((vnum = data.GetLong("VEHICLE/Vnum", 0)))
@@ -4789,7 +4795,7 @@ void load_saved_veh()
       veh_to_room(veh, &world[real_room(veh_room)]);
     veh->restring = str_dup(data.GetString("VEHICLE/VRestring", NULL));
     veh->restring_long = str_dup(data.GetString("VEHICLE/VRestringLong", NULL));
-    int inside = 0, last_in = 0;
+    int inside = 0, last_inside = 0;
     int num_objs = data.NumSubsections("CONTENTS");
 
     snprintf(buf3, sizeof(buf3), "veh-load %ld owned by %ld", veh->idnum, veh->owner);
@@ -4856,25 +4862,88 @@ void load_saved_veh()
         // Don't auto-repair cyberdecks until they're fully loaded.
         if (GET_OBJ_TYPE(obj) != ITEM_CYBERDECK)
           auto_repair_obj(obj, buf3);
-
-        if (inside > 0) {
-          if (inside == last_in)
-            last_obj = last_obj->in_obj;
-          else if (inside < last_in)
-            while (inside <= last_in && last_obj) {
-              last_obj = last_obj->in_obj;
-              last_in--;
+        
+        if (veh_version == VERSION_VEH_FILE) {
+          // Since we're now saved the obj linked lists  in reverse order, in order to fix the stupid reordering on
+          // every binary execution, the previous algorithm did not work, as it relied on getting the container obj
+          // first and place subsequent objects in it. Since we're now getting it last, and more importantly we get
+          // objects at deeper nesting level in between our list, we save all pointers to objects along with their
+          // nesting level in a vector container and once we found the next container (inside < last_inside) we
+          // move the objects with higher nesting level to container and proceed. This works for any nesting depth.
+          if (inside > 0 || (inside == 0 && inside < last_inside)) {
+            //Found our container?
+            if (inside < last_inside) {
+              if (inside == 0)
+                obj_to_veh(obj, veh);
+              
+              auto it = std::find_if(contained_obj.begin(), contained_obj.end(), find_level(inside+1));
+              while (it != contained_obj.end()) {
+                obj_to_obj(it->obj, obj);
+                contained_obj.erase(it);
+              }
+                
+              if (inside > 0) {
+                contained_obj_entry.level = inside;
+                contained_obj_entry.obj = obj;
+                contained_obj.push_back(contained_obj_entry);
+              }
             }
-          if (last_obj)
-            obj_to_obj(obj, last_obj);
-          else
+            else {
+              contained_obj_entry.level = inside;
+              contained_obj_entry.obj = obj;
+              contained_obj.push_back(contained_obj_entry);
+            }
+            last_inside = inside;
+          } else
             obj_to_veh(obj, veh);
-        } else
+            
+          last_inside = inside;        
+        }
+        // This handles loading old house file format prior to introduction of version number in the file.
+        // Version number will always be 0 for this format.
+        else if (!veh_version) {
+          if (inside > 0) {
+            if (inside == last_inside)
+              last_obj = last_obj->in_obj;
+            else if (inside < last_inside) {
+              while (inside <= last_inside && last_obj) {
+                if (!last_obj) {
+                  snprintf(buf2, sizeof(buf2), "Load error: Nested-item load failed for %s. Disgorging to vehicle.", GET_OBJ_NAME(obj));
+                  mudlog(buf2, NULL, LOG_SYSLOG, TRUE);
+                  break;
+                }
+                last_obj = last_obj->in_obj;
+                last_inside--;
+              }
+            }
+            
+            if (last_obj)
+              obj_to_obj(obj, last_obj);
+            else
+              obj_to_veh(obj, veh);
+          } else
+            obj_to_veh(obj, veh);
+          last_inside = inside;
+          last_obj = obj; 
+        }
+        else {
+          snprintf(buf2, sizeof(buf2), "Load ERROR: Unknown file format for vehicle ID: %ld. Dumping valid objects to vehicle.", veh->idnum);
+          mudlog(buf2, NULL, LOG_SYSLOG, TRUE);
           obj_to_veh(obj, veh);
-        last_in = inside;
-        last_obj = obj;
+        }
       }
     }
+    
+    if (veh_version == VERSION_VEH_FILE) {
+      // Failsafe. If something went wrong and we still have objects stored in the vector, dump them in the room.
+      if (!contained_obj.empty()) {
+        for (auto it : contained_obj)
+          obj_to_veh(it.obj, veh);
+        
+        contained_obj.clear();
+      }
+    }
+    
     int num_mods = data.NumFields("MODIS");
     for (int i = 0; i < num_mods; i++) {
       snprintf(buf, sizeof(buf), "MODIS/Mod%d", i);
@@ -5001,8 +5070,13 @@ void load_consist(void)
         VTable data;
         data.Parse(&file);
         file.Close();
+        
+        int house_version = data.GetInt("METADATA/Version", 0);
         struct obj_data *obj = NULL, *last_obj = NULL;
-        int inside = 0, last_in = 0, num_objs = data.NumSubsections("HOUSE");
+        std::vector<nested_obj> contained_obj;
+        struct nested_obj contained_obj_entry;
+        
+        int inside = 0, last_inside = 0, num_objs = data.NumSubsections("HOUSE");
         long vnum;
         for (int i = 0; i < num_objs; i++) {
           const char *sect_name = data.GetIndexSection("HOUSE", i);
@@ -5069,34 +5143,91 @@ void load_consist(void)
               auto_repair_obj(obj, buf3);
 
             inside = data.GetInt(buf, 0);
-            if (inside > 0) {
-              if (inside == last_in)
-                last_obj = last_obj->in_obj;
-              else if (inside < last_in)
-                while (inside <= last_in) {
-                  if (!last_obj) {
-                    snprintf(buf2, sizeof(buf2), "Load error: Nested-item save failed for %s. Disgorging to room.", GET_OBJ_NAME(obj));
-                    mudlog(buf2, NULL, LOG_SYSLOG, TRUE);
-                    break;
+            if (house_version == VERSION_HOUSE_FILE) {
+              // Since we're now saved the obj linked lists  in reverse order, in order to fix the stupid reordering on
+              // every binary execution, the previous algorithm did not work, as it relied on getting the container obj
+              // first and place subsequent objects in it. Since we're now getting it last, and more importantly we get
+              // objects at deeper nesting level in between our list, we save all pointers to objects along with their
+              // nesting level in a vector container and once we found the next container (inside < last_inside) we
+              // move the objects with higher nesting level to container and proceed. This works for any nesting depth.
+              if (inside > 0 || (inside == 0 && inside < last_inside)) {
+                //Found our container?
+                if (inside < last_inside) {
+                  if (inside == 0)
+                    obj_to_room(obj, &world[nr]);
+                    
+                  auto it = std::find_if(contained_obj.begin(), contained_obj.end(), find_level(inside+1));
+                  while (it != contained_obj.end()) {
+                    obj_to_obj(it->obj, obj);
+                    contained_obj.erase(it);
                   }
-                  last_obj = last_obj->in_obj;
-                  last_in--;
+                      
+                  if (inside > 0) {
+                    contained_obj_entry.level = inside;
+                    contained_obj_entry.obj = obj;
+                    contained_obj.push_back(contained_obj_entry);
+                  }
                 }
-              if (last_obj)
-                obj_to_obj(obj, last_obj);
+                else {
+                  contained_obj_entry.level = inside;
+                  contained_obj_entry.obj = obj;
+                  contained_obj.push_back(contained_obj_entry);
+                }
+                last_inside = inside;
+              }
               else
                 obj_to_room(obj, &world[nr]);
-            } else
-              obj_to_room(obj, &world[nr]);
+                  
+              last_inside = inside;
+            }
+            // This handles loading old house file format prior to introduction of version number in the file.
+            // Version number will always be 0 for this format.
+            else if (!house_version) {
+              if (inside > 0) {
+                if (inside == last_inside)
+                  last_obj = last_obj->in_obj;
+                else if (inside < last_inside) {
+                  while (inside <= last_inside) {
+                    if (!last_obj) {
+                      snprintf(buf2, sizeof(buf2), "Load error: Nested-item save failed for %s. Disgorging to room.", GET_OBJ_NAME(obj));
+                      mudlog(buf2, NULL, LOG_SYSLOG, TRUE);
+                      break;
+                    }
+                    last_obj = last_obj->in_obj;
+                    last_inside--;
+                  }
+                }
+                
+                if (last_obj)
+                  obj_to_obj(obj, last_obj);
+                else
+                  obj_to_room(obj, &world[nr]);
+              } else
+                obj_to_room(obj, &world[nr]);
 
-            last_in = inside;
-            last_obj = obj;
+              last_inside = inside;
+              last_obj = obj;
+            }
+            else {
+              snprintf(buf2, sizeof(buf2), "Load ERROR: Unknown file format for storage Rnum %d. Dumping valid objects to room.", nr);
+              mudlog(buf2, NULL, LOG_SYSLOG, TRUE);
+              obj_to_room(obj, &world[nr]);
+            }
           } else {
             snprintf(buf2, sizeof(buf2), "Losing object %ld (%s / %s; )- it's not a valid object.",
                      vnum,
                      data.GetString("HOUSE/Name", "no restring"),
                      data.GetString("HOUSE/Photo", "no photo"));
             mudlog(buf2, NULL, LOG_SYSLOG, TRUE);
+          }
+        }
+        if (house_version == VERSION_HOUSE_FILE) {
+          // Failsafe. If something went wrong and we still have objects stored in the vector, dump them in the room.
+          if (!contained_obj.empty()) {
+            for (auto it : contained_obj)
+              obj_to_room(it.obj, &world[nr]);
+              
+            contained_obj.clear();
           }
         }
       }

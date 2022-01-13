@@ -14,6 +14,9 @@
 #include <assert.h>
 #include <string.h>
 #include <sys/time.h>
+#include <vector>
+#include <sstream>
+#include <algorithm>
 
 #if defined(WIN32) && !defined(__CYGWIN__)
 #include <process.h>
@@ -1019,7 +1022,7 @@ bool should_save_this_vehicle(struct veh_data *veh) {
   return TRUE;
 }
 
-void save_vehicles(void)
+void save_vehicles(bool fromCopyover)
 {
   PERF_PROF_SCOPE(pr_, __func__);
   struct veh_data *veh;
@@ -1050,7 +1053,7 @@ void save_vehicles(void)
       continue;
 
     bool send_veh_to_junkyard = FALSE;
-    if (veh->damage >= VEH_DAM_THRESHOLD_DESTROYED && !(veh->in_veh || (veh->in_room && ROOM_FLAGGED(veh->in_room, ROOM_GARAGE)))) {
+    if (veh->damage >= VEH_DAM_THRESHOLD_DESTROYED && !(fromCopyover || veh->in_veh || (veh->in_room && ROOM_FLAGGED(veh->in_room, ROOM_GARAGE)))) {
       // If the vehicle is wrecked and is in neither a containing vehicle nor a garage...
       if (veh_is_in_junkyard(veh)) {
         // If it's already in the junkyard, we don't save it-- they should have come and fixed it.
@@ -1129,9 +1132,10 @@ void save_vehicles(void)
       }
 
       // Otherwise, derive the garage from its location.
-      else if (!ROOM_FLAGGED(temp_room, ROOM_GARAGE)
-               || (ROOM_FLAGGED(temp_room, ROOM_HOUSE)
-                   && !House_can_enter_by_idnum(veh->owner, temp_room->number))) {
+      else if (!fromCopyover
+              && (!ROOM_FLAGGED(temp_room, ROOM_GARAGE)
+              || (ROOM_FLAGGED(temp_room, ROOM_HOUSE)
+              && !House_can_enter_by_idnum(veh->owner, temp_room->number)))) {
        snprintf(buf, sizeof(buf), "Falling back to a garage for non-garage-room veh %s (in '%s' %ld).",
                 GET_VEH_NAME(veh), GET_ROOM_NAME(temp_room), GET_ROOM_VNUM(temp_room)
               );
@@ -1162,7 +1166,8 @@ void save_vehicles(void)
         }
       }
     }
-
+    fprintf(fl, "[METADATA]\n");
+    fprintf(fl, "\tVersion:\t%d\n", VERSION_VEH_FILE);
     fprintf(fl, "[VEHICLE]\n");
     fprintf(fl, "\tVnum:\t%ld\n", veh_index[veh->veh_number].vnum);
     fprintf(fl, "\tOwner:\t%ld\n", veh->owner);
@@ -1179,28 +1184,32 @@ void save_vehicles(void)
       fprintf(fl, "\tVRestringLong:$\n%s~\n", cleanup(buf2, veh->restring_long));
     fprintf(fl, "[CONTENTS]\n");
     int o = 0, level = 0;
+    std::vector<std::string> obj_strings;
+    std::stringstream obj_string_buf;
     for (obj = veh->contents;obj;) {
       if (!IS_OBJ_STAT(obj, ITEM_NORENT)) {
-        fprintf(fl, "\t[Object %d]\n", o);
-        o++;
-        fprintf(fl, "\t\tVnum:\t%ld\n", GET_OBJ_VNUM(obj));
-        fprintf(fl, "\t\tInside:\t%d\n", level);
+        obj_string_buf << "\t\tVnum:\t" << GET_OBJ_VNUM(obj) << "\n";
+        obj_string_buf << "\t\tInside:\t" << level << "\n";
         if (GET_OBJ_TYPE(obj) == ITEM_PHONE)
           for (int x = 0; x < 4; x++)
-            fprintf(fl, "\t\tValue %d:\t%d\n", x, GET_OBJ_VAL(obj, x));
+            obj_string_buf << "\t\tValue " << x << ":\t" << GET_OBJ_VAL(obj, x) <<"\n";
         else if (GET_OBJ_TYPE(obj) != ITEM_WORN)
           for (int x = 0; x < NUM_VALUES; x++)
-            fprintf(fl, "\t\tValue %d:\t%d\n", x, GET_OBJ_VAL(obj, x));
-        fprintf(fl, "\t\tCondition:\t%d\n", GET_OBJ_CONDITION(obj));
-        fprintf(fl, "\t\tCost:\t%d\n", GET_OBJ_COST(obj));
-        fprintf(fl, "\t\tTimer:\t%d\n", GET_OBJ_TIMER(obj));
-        fprintf(fl, "\t\tAttempt:\t%d\n", GET_OBJ_ATTEMPT(obj));
-        fprintf(fl, "\t\tExtraFlags:\t%s\n", GET_OBJ_EXTRA(obj).ToString());
-        fprintf(fl, "\t\tFront:\t%d\n", obj->vfront);
+            obj_string_buf << "\t\tValue " << x << ":\t" << GET_OBJ_VAL(obj, x) << "\n";
+            
+        obj_string_buf << "\t\tCondition:\t" << (int) GET_OBJ_CONDITION(obj) << "\n";
+        obj_string_buf << "\t\tCost:\t" << GET_OBJ_COST(obj) << "\n";
+        obj_string_buf << "\t\tTimer:\t" << GET_OBJ_TIMER(obj) << "\n";
+        obj_string_buf << "\t\tAttempt:\t" << GET_OBJ_ATTEMPT(obj) << "\n";
+        obj_string_buf << "\t\tExtraFlags:\t" << GET_OBJ_EXTRA(obj).ToString() << "\n";
+        obj_string_buf <<  "\t\tFront:\t" << obj->vfront << "\n";
         if (obj->restring)
-          fprintf(fl, "\t\tName:\t%s\n", obj->restring);
+          obj_string_buf << "\t\tName:\t" << obj->restring << "\n";
         if (obj->photo)
-          fprintf(fl, "\t\tPhoto:$\n%s~\n", cleanup(buf2, obj->photo));
+          obj_string_buf << "\t\tPhoto:$\n" << cleanup(buf2, obj->photo) << "~\n";
+          
+        obj_strings.push_back(obj_string_buf.str());
+        obj_string_buf.str(std::string());
       }
 
       if (obj->contains && !IS_OBJ_STAT(obj, ITEM_NORENT) && GET_OBJ_TYPE(obj) != ITEM_PART) {
@@ -1216,7 +1225,16 @@ void save_vehicles(void)
       if (obj)
         obj = obj->next_content;
     }
-
+    
+    if (!obj_strings.empty()) {
+      int i = 0;
+      for(vector<std::string>::reverse_iterator rit = obj_strings.rbegin(); rit != obj_strings.rend(); rit++ ) {
+        fprintf(fl, "\t[Object %d]\n", i);
+        fprintf(fl, "%s", rit->c_str());
+        i++;
+      }
+      obj_strings.clear();
+    }
 
     fprintf(fl, "[MODIS]\n");
     for (int x = 0, v = 0; x < NUM_MODS - 1; x++)
@@ -1273,6 +1291,7 @@ void update_paydata_market() {
 
   strncpy(buf, "Updating paydata markets:", sizeof(buf) - 1);
   bool something_changed = FALSE;
+  UNUSED(something_changed);
 
   for (int m = 0; m < 5; m++) {
     int old_market = market[m];

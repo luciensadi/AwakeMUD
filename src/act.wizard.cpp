@@ -308,7 +308,7 @@ ACMD(do_copyover)
       mudlog(buf, och, LOG_SYSLOG, TRUE);
       GET_LAST_IN(och) = RM_ENTRANCE_TO_DANTES;
     }
-    playerDB.SaveChar(och, GET_LOADROOM(och));
+    playerDB.SaveChar(och, GET_LOADROOM(och), TRUE);
     write_to_descriptor(d->descriptor, messages[mesnum]);
   }
 
@@ -321,7 +321,7 @@ ACMD(do_copyover)
 
   // Save vehicles.
   log("Saving vehicles.");
-  save_vehicles();
+  save_vehicles(TRUE);
 
   // Save shop orders.
   log("Saving shop orders.");

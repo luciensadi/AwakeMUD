@@ -588,6 +588,7 @@ void reward(struct char_data *ch, struct char_data *johnson)
   struct follow_type *f;
   struct obj_data *obj;
   int i, nuyen = 0, karma = 0, num, all = 1, old;
+  UNUSED(old);
 
   for (i = 0; i < quest_table[GET_QUEST(ch)].num_objs; i++)
     if (ch->player_specials->obj_complete[i])
@@ -1004,9 +1005,6 @@ SPECIAL(johnson)
           return TRUE;
         }
         
-        for (int i = QUEST_TIMER - 1; i > 0; i--)
-          GET_LQUEST(ch, i) = GET_LQUEST(ch, i - 1);
-        GET_LQUEST(ch, 0) = quest_table[GET_QUEST(ch)].vnum;
         if (quest_table[GET_QUEST(ch)].finish)
           do_say(johnson, quest_table[GET_QUEST(ch)].finish, 0, 0);
         else {

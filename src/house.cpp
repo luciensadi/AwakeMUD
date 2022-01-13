@@ -4,6 +4,9 @@
 #include <string.h>
 #include <time.h>
 #include <errno.h>
+#include <vector>
+#include <sstream>
+#include <algorithm>
 
 
 #if defined(WIN32) && !defined(__CYGWIN__)
@@ -88,7 +91,10 @@ bool House_load(struct house_control_rec *house)
   rnum_t rnum;
   struct obj_data *obj = NULL, *last_obj = NULL;
   long vnum;
-  int inside = 0, last_in = 0;
+  int inside = 0, last_inside = 0;
+  int house_version = 0;
+  std::vector<nested_obj> contained_obj;
+  struct nested_obj contained_obj_entry;
 
   room = house->vnum;
   if ((rnum = real_room(room)) == NOWHERE)
@@ -102,6 +108,8 @@ bool House_load(struct house_control_rec *house)
   data.Parse(&fl);
   fl.Close();
   snprintf(buf3, sizeof(buf3), "house-load %s", fname);
+  house_version = data.GetInt("METADATA/Version", 0);
+  
   for (int i = 0; i < MAX_GUESTS; i++)
   {
     snprintf(buf, sizeof(buf), "GUESTS/Guest%d", i);
@@ -110,6 +118,7 @@ bool House_load(struct house_control_rec *house)
       p = 0;
     house->guests[i] = p;
   }
+  
   int num_objs = data.NumSubsections("HOUSE");
   int x;
   for (int i = 0; i < num_objs; i++)
@@ -180,28 +189,77 @@ bool House_load(struct house_control_rec *house)
         auto_repair_obj(obj, buf3);
       
       inside = data.GetInt(buf, 0);
-      if (inside > 0) {
-        if (inside == last_in)
-          last_obj = last_obj->in_obj;
-        else if (inside < last_in)
-          while (inside <= last_in) {
-            if (!last_obj) {
-              snprintf(buf2, sizeof(buf2), "Load error: Nested-item save failed for %s. Disgorging to room.", GET_OBJ_NAME(obj));
-              mudlog(buf2, NULL, LOG_SYSLOG, TRUE);
-              break;
+      if (house_version == VERSION_HOUSE_FILE) {
+        // Since we're now saved the obj linked lists  in reverse order, in order to fix the stupid reordering on
+        // every binary execution, the previous algorithm did not work, as it relied on getting the container obj
+        // first and place subsequent objects in it. Since we're now getting it last, and more importantly we get
+        // objects at deeper nesting level in between our list, we save all pointers to objects along with their
+        // nesting level in a vector container and once we found the next container (inside < last_inside) we
+        // move the objects with higher nesting level to container and proceed. This works for any nesting depth.
+        if (inside > 0 || (inside == 0 && inside < last_inside)) {
+          //Found our container?
+          if (inside < last_inside) {
+            if (inside == 0)
+              obj_to_room(obj, &world[rnum]);
+              
+            auto it = std::find_if(contained_obj.begin(), contained_obj.end(), find_level(inside+1));
+            while (it != contained_obj.end()) {
+              obj_to_obj(it->obj, obj);
+              contained_obj.erase(it);
             }
-            last_obj = last_obj->in_obj;
-            last_in--;
+                
+            if (inside > 0) {
+              contained_obj_entry.level = inside;
+              contained_obj_entry.obj = obj;
+              contained_obj.push_back(contained_obj_entry);
+            }
           }
-        if (last_obj)
-          obj_to_obj(obj, last_obj);
+          else {
+            contained_obj_entry.level = inside;
+            contained_obj_entry.obj = obj;
+            contained_obj.push_back(contained_obj_entry);
+          }
+          last_inside = inside;
+        }
         else
           obj_to_room(obj, &world[rnum]);
-      } else
-        obj_to_room(obj, &world[rnum]);
+            
+        last_inside = inside;
+      }
+      // This handles loading old house file format prior to introduction of version number in the file.
+      // Version number will always be 0 for this format.
+      else if (!house_version) {
+        if (inside > 0) {
+          if (inside == last_inside)
+            last_obj = last_obj->in_obj;
+          else if (inside < last_inside) {
+            while (inside <= last_inside) {
+              if (!last_obj) {
+                snprintf(buf2, sizeof(buf2), "Load error: Nested-item load failed for %s. Disgorging to room.", GET_OBJ_NAME(obj));
+                mudlog(buf2, NULL, LOG_SYSLOG, TRUE);
+                break;
+              }
+              last_obj = last_obj->in_obj;
+              last_inside--;
+            }
+          }
+            
+          if (last_obj)
+            obj_to_obj(obj, last_obj);
+          else
+            obj_to_room(obj, &world[rnum]);
+        }
+        else
+          obj_to_room(obj, &world[rnum]);
 
-      last_in = inside;
-      last_obj = obj;
+        last_inside = inside;
+        last_obj = obj;
+      }
+      else {
+        snprintf(buf2, sizeof(buf2), "Load ERROR: Unknown file format for house Rnum %ld. Dumping valid objects to room.", rnum);
+        mudlog(buf2, NULL, LOG_SYSLOG, TRUE);
+        obj_to_room(obj, &world[rnum]);
+      }
     } else {
       snprintf(buf2, sizeof(buf2), "Losing object %ld (%s / %s; )- it's not a valid object.", 
                vnum,
@@ -210,7 +268,15 @@ bool House_load(struct house_control_rec *house)
       mudlog(buf2, NULL, LOG_SYSLOG, TRUE);
     }
   }
-  
+  if (house_version == VERSION_HOUSE_FILE) {
+    // Failsafe. If something went wrong and we still have objects stored in the vector, dump them in the room.
+    if (!contained_obj.empty()) {
+      for (auto it : contained_obj)
+        obj_to_room(it.obj, &world[rnum]);
+        
+      contained_obj.clear();
+    }
+  }
   return TRUE;
 }
 
@@ -265,9 +331,9 @@ void validate_in_obj_pointers(struct obj_data *obj, struct obj_data *in_obj) {
   }
 }
 
-#define PRINT_TO_FILE_IF_CHANGED(sectname, obj_val, proto_val) { \
+#define APPEND_IF_CHANGED(sectname, obj_val, proto_val) { \
   if (obj_val != proto_val)                                        \
-    fprintf(fl, (sectname), (obj_val));                            \
+    obj_string_buf << (sectname) << (obj_val) << "\n";                            \
 }
 #define FILEBUF_SIZE 8192
 
@@ -290,6 +356,9 @@ void House_save(struct house_control_rec *house, const char *file_name, long rnu
   memset(print_buffer, 0, sizeof(print_buffer));
   setvbuf(fl, print_buffer, _IOFBF, FILEBUF_SIZE);
   
+  fprintf(fl, "[METADATA]\n");
+  fprintf(fl, "\tVersion:\t%d\n", VERSION_HOUSE_FILE);
+  
   // Are we saving an apartment? If so, store guest list.
   if (house) {    
     fprintf(fl, "[GUESTS]\n");
@@ -310,8 +379,10 @@ void House_save(struct house_control_rec *house, const char *file_name, long rnu
   
   struct obj_data *prototype = NULL;
   int real_obj;
+  std::vector<std::string> obj_strings;
+  std::stringstream obj_string_buf;
   
-  for (int o = 0; obj;)
+  for (;obj;)
   {
     if ((real_obj = real_object(GET_OBJ_VNUM(obj))) == -1) {
       log_vfprintf("Warning: Will lose house item %s from %s (%ld) due to nonexistent rnum. [house_error_grep_string]", 
@@ -324,32 +395,35 @@ void House_save(struct house_control_rec *house, const char *file_name, long rnu
       
     prototype = &obj_proto[real_obj];
     if (!IS_OBJ_STAT(obj, ITEM_NORENT)) {
-      fprintf(fl, "\t[Object %d]\n", o);
-      o++;
-      fprintf(fl, "\t\tVnum:\t%ld\n", GET_OBJ_VNUM(obj));
-      fprintf(fl, "\t\tInside:\t%d\n", level);
+      obj_string_buf << "\t\tVnum:\t" << GET_OBJ_VNUM(obj) << "\n";
+      obj_string_buf << "\t\tInside:\t" << level << "\n";
       if (GET_OBJ_TYPE(obj) == ITEM_PHONE) {
         for (int x = 0; x < 4; x++)
           if (GET_OBJ_VAL(obj, x) != GET_OBJ_VAL(prototype, x))
-            fprintf(fl, "\t\tValue %d:\t%d\n", x, GET_OBJ_VAL(obj, x));
+            obj_string_buf << "\t\tValue " << x << ":\t" << GET_OBJ_VAL(obj, x) << "\n";
       }
       else if (GET_OBJ_TYPE(obj) != ITEM_WORN)
         for (int x = 0; x < NUM_VALUES; x++)
           if (GET_OBJ_VAL(obj, x) != GET_OBJ_VAL(prototype, x))
-            fprintf(fl, "\t\tValue %d:\t%d\n", x, GET_OBJ_VAL(obj, x));
-      PRINT_TO_FILE_IF_CHANGED("\t\tCondition:\t%d\n", GET_OBJ_CONDITION(obj), GET_OBJ_CONDITION(prototype));
-      PRINT_TO_FILE_IF_CHANGED("\t\tTimer:\t%d\n", GET_OBJ_TIMER(obj), GET_OBJ_TIMER(prototype));
-      PRINT_TO_FILE_IF_CHANGED("\t\tAttempt:\t%d\n", GET_OBJ_ATTEMPT(obj), 0);
-      fprintf(fl, "\t\tCost:\t%d\n", GET_OBJ_COST(obj));
-      PRINT_TO_FILE_IF_CHANGED("\t\tExtraFlags:\t%s\n", GET_OBJ_EXTRA(obj).ToString(), GET_OBJ_EXTRA(prototype).ToString());
+            obj_string_buf << "\t\tValue "<< x <<":\t" << GET_OBJ_VAL(obj, x) <<"\n";
+            
+      APPEND_IF_CHANGED("\t\tCondition:\t", GET_OBJ_CONDITION(obj), GET_OBJ_CONDITION(prototype));
+      APPEND_IF_CHANGED("\t\tTimer:\t", GET_OBJ_TIMER(obj), GET_OBJ_TIMER(prototype));
+      APPEND_IF_CHANGED("\t\tAttempt:\t", GET_OBJ_ATTEMPT(obj), 0);
+      obj_string_buf << "\t\tCost:\t"<< GET_OBJ_COST(obj) << "\n";
+      APPEND_IF_CHANGED("\t\tExtraFlags:\t", GET_OBJ_EXTRA(obj).ToString(), GET_OBJ_EXTRA(prototype).ToString());
       if (obj->restring)
-        fprintf(fl, "\t\tName:\t%s\n", obj->restring);
+        obj_string_buf << "\t\tName:\t" << obj->restring << "\n";
       if (obj->photo)
-        fprintf(fl, "\t\tPhoto:$\n%s~\n", cleanup(buf2, obj->photo));
+        obj_string_buf << "\t\tPhoto:$\n" << cleanup(buf2, obj->photo) << "~\n";
+      
+      obj_strings.push_back(obj_string_buf.str());
+      obj_string_buf.str(std::string());
         
       if (obj->contains && !IS_OBJ_STAT(obj, ITEM_NORENT) && GET_OBJ_TYPE(obj) != ITEM_PART) {
         obj = obj->contains;
         level++;
+        
         continue;
       }
     } else {
@@ -378,10 +452,20 @@ void House_save(struct house_control_rec *house, const char *file_name, long rnu
     log_vfprintf("Warning: Non-zero level at finish when saving %s. [house_error_grep_string]", file_name);
   }
   
+  if (!obj_strings.empty()) {
+    int i = 0;
+    for(vector<std::string>::reverse_iterator rit = obj_strings.rbegin(); rit != obj_strings.rend(); rit++ ) {
+      fprintf(fl, "\t[Object %d]\n", i);
+      fprintf(fl, "%s", rit->c_str());
+      i++;
+    }
+    obj_strings.clear();
+  }
+  
   fclose(fl);
 }
 #undef FILEBUF_SIZE
-#undef PRINT_TO_FILE_IF_CHANGED
+#undef APPEND_IF_CHANGED
 
 struct house_control_rec *find_house(vnum_t vnum)
 {
@@ -1184,7 +1268,7 @@ void remove_vehicles_from_apartment(struct room_data *room) {
     veh_from_room(veh);
     veh_to_room(veh, &world[real_room(RM_SEATTLE_PARKING_GARAGE)]);
   }
-  save_vehicles();
+  save_vehicles(FALSE);
 }
 
 void warn_about_apartment_deletion() {

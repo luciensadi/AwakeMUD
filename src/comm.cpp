@@ -335,18 +335,39 @@ void copyover_recover()
       close_socket (d);
     } else /* ok! */
     {
-      long load_room;
+      long load_room, last_room;
       write_to_descriptor (desc, "\n\rCopyover recovery complete. If you were driving, your car is likely now at the Seattle Garage.\n\r");
       d->connected = CON_PLAYING;
       reset_char(d->character);
       d->character->next = character_list;
       character_list = d->character;
-      if (real_room(GET_LAST_IN(d->character)) > 0)
-        load_room = real_room(GET_LAST_IN(d->character));
-      else
-        load_room = real_room(GET_LOADROOM(d->character));
-      char_to_room(d->character, &world[load_room]);
-      //look_at_room(d->character, 0, 0);
+      // Since we're coming from copyover if the char is in a vehicle and is the owner throw him at the front seat
+      // otherwise throw him at the back. Because we don't save frontness and we'll assume the owner is driving
+      // anyway.
+      last_room = real_room(GET_LAST_IN(d->character)) ?  real_room(GET_LAST_IN(d->character))  : 0;
+      if (d->character->player_specials->saved.last_veh && last_room) {
+        for (struct veh_data *veh = world[last_room].vehicles; veh; veh = veh->next) {
+          if (veh->idnum == d->character->player_specials->saved.last_veh) {
+            if (veh->damage < VEH_DAM_THRESHOLD_DESTROYED) {
+              if (veh->owner == GET_IDNUM(d->character))
+                d->character->vfront = TRUE;
+              else
+                d->character->vfront = FALSE;
+
+              char_to_veh(veh, d->character);
+            }
+            break;
+          }
+        }
+      }
+      else {
+        if (real_room(GET_LAST_IN(d->character)) > 0)
+          load_room = real_room(GET_LAST_IN(d->character));
+        else
+          load_room = real_room(GET_LOADROOM(d->character));
+        char_to_room(d->character, &world[load_room]);
+        //look_at_room(d->character, 0, 0);
+      }
     }
   }
   fclose (fp);
@@ -470,14 +491,16 @@ int init_socket(int port)
   }
 #endif
   
-#if defined(SO_REUSEPORT)
+// This allows to bind on the same port. Commenting it out as it shouldn't be here
+// in the first place. 
+/*#if defined(SO_REUSEPORT)
   opt = 1;
   if (setsockopt(s, SOL_SOCKET, SO_REUSEPORT, (char *) &opt, sizeof(opt)) < 0) {
     perror("setsockopt REUSEPORT");
     exit(1);
   }
 #endif
-  
+*/
 #if defined(SO_LINGER)
   {
     struct linger ld;
@@ -910,7 +933,7 @@ void game_loop(int mother_desc)
     
     // Every 59 MUD minutes
     if (!(pulse % (59 * SECS_PER_MUD_MINUTE * PASSES_PER_SEC))) {
-      save_vehicles();
+      save_vehicles(FALSE);
       update_paydata_market();
     }
     
