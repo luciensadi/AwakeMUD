@@ -191,7 +191,7 @@ int game_main(int argc, char **argv)
 #else
 int main(int argc, char **argv)
 #endif
-{  
+{
   int pos = 1;
   char *dir;
   port = DFLT_PORT;
@@ -230,7 +230,7 @@ int main(int argc, char **argv)
     }
     pos++;
   }
-  
+
   if (pos < argc) {
     if (!isdigit(*argv[pos])) {
       fprintf(stderr, "Usage: %s [-c] [-m] [-q] [-r] [-s] [-d pathname] [port #]\n", argv[0]);
@@ -240,14 +240,14 @@ int main(int argc, char **argv)
       exit(1);
     }
   }
-  
+
   if (chdir(dir) < 0) {
     perror("Fatal error changing to data directory");
     exit(1);
   }
-  
+
   log_vfprintf("Using %s as data directory.", dir);
-  
+
   if (scheck) {
     boot_world();
     log("Done.");
@@ -256,7 +256,7 @@ int main(int argc, char **argv)
     log_vfprintf("Running game on port %d.", port);
     init_game(port);
   }
-  
+
   return 0;
 }
 /* Reload players after a copyover */
@@ -270,56 +270,56 @@ void copyover_recover()
   bool fOld;
   char name[MAX_INPUT_LENGTH];
   int desc;
-  
+
   log ("Copyover recovery initiated");
-  
+
   fp = fopen (COPYOVER_FILE, "r");
-  
+
   if (!fp) // there are some descriptors open which will hang forever then?
-    
+
   {
     perror ("copyover_recover:fopen");
     log ("Copyover file not found. Exiting.\n\r");
     exit (1);
   }
-  
+
   unlink (COPYOVER_FILE); // In case something crashes - doesn't prevent reading
-  
+
   for (;;) {
     fOld = TRUE;
     fscanf (fp, "%d %s %s %s\n", &desc, name, host, copyover_get);
     if (desc == -1)
       break;
-    
+
     /* Write something, and check if it goes error-free */
     if (write_to_descriptor (desc, "\n\rJust kidding. Restoring from copyover...\n\r") < 0) {
       close (desc); /* nope */
       continue;
     }
-    
+
     /* create a new descriptor */
     CREATE(d, struct descriptor_data, 1);
     memset ((char *) d, 0, sizeof (struct descriptor_data));
     init_descriptor (d,desc); /* set up various stuff */
-    
+
     strcpy(d->host, host);
     d->next = descriptor_list;
     descriptor_list = d;
-    
+
     // Restore KaVir protocol data.
     CopyoverSet(d, copyover_get);
-    
-    
+
+
     d->connected = CON_CLOSE;
-    
+
     /* Now, find the pfile */
-    
+
     /* Why would you create a new character, then immediately discard it and load a new one from the DB? */
     //CREATE(d->character, struct char_data, 1);
     //clear_char(d->character);
     //CREATE(d->character->player_specials, struct player_special_data, 1);
     //d->character->desc = d;
-    
+
     if ((d->character = playerDB.LoadChar(name, FALSE))) {
       d->character->desc = d;
       if (!PLR_FLAGGED(d->character, PLR_DELETED))
@@ -328,7 +328,7 @@ void copyover_recover()
         fOld = FALSE;
     } else
       fOld = FALSE;
-    
+
     if (!fOld) /* Player file not found?! */
     {
       write_to_descriptor (desc, "\n\rSomehow, your character was lost in the copyover. Sorry.\n\r");
@@ -371,35 +371,35 @@ void copyover_recover()
     }
   }
   fclose (fp);
-  
+
   // Regenerate everyone's subscriber lists.
   for (struct veh_data *veh = veh_list; veh; veh = veh->next) {
     if (!veh->sub)
       continue;
-    
+
     for (struct char_data *i = character_list; i; i = i->next) {
       if (GET_IDNUM(i) != veh->owner)
         continue;
-        
+
       struct veh_data *f = NULL;
       for (f = i->char_specials.subscribe; f; f = f->next_sub)
         if (f == veh)
           break;
-          
+
       if (!f) {
         veh->next_sub = i->char_specials.subscribe;
-        
+
         // Doubly link it into the list.
         if (i->char_specials.subscribe)
           i->char_specials.subscribe->prev_sub = veh;
-          
+
         i->char_specials.subscribe = veh;
       }
-      
+
       break;
     }
   }
-  
+
   // Force all player characters to look now that everyone's properly loaded.
   struct char_data *plr = character_list;
   while (plr) {
@@ -414,36 +414,36 @@ void copyover_recover()
 void init_game(int port)
 {
   srandom(time(0));
-  
+
   max_players = get_max_players();
   if (!fCopyOver) /* If copyover mother_desc is already set up */
   {
     log ("Opening mother connection.");
     mother_desc = init_socket (port);
   }
-  
+
   DBInit();
-  
+
   log("Signal trapping.");
   signal_setup();
-  
+
   if (fCopyOver) /* reload players */
     copyover_recover();
-  
+
   log("Entering game loop.");
   game_loop(mother_desc);
-  
+
   log("Saving all players.");
   House_save_all();
-  
+
   log("Closing all sockets.");
   while (descriptor_list)
     close_socket(descriptor_list);
-  
+
   close(mother_desc);
-  
+
   DBFinalize();
-  
+
   if (circle_reboot) {
     log("Rebooting.");
     exit(52);                   /* what's so great about HHGTTG, anyhow? */
@@ -459,7 +459,7 @@ int init_socket(int port)
 {
   int s, opt;
   struct sockaddr_in sa;
-  
+
   /*
    * Should the first argument to socket() be AF_INET or PF_INET?  I don't
    * know, take your pick.  PF_INET seems to be more widely adopted, and
@@ -470,7 +470,7 @@ int init_socket(int port)
    * All implementations I've seen define AF_INET and PF_INET to be the same
    * number anyway, so ths point is (hopefully) moot.
    */
-  
+
   if ((s = socket(PF_INET, SOCK_STREAM, 0)) < 0) {
     perror("Create socket");
     exit(1);
@@ -482,7 +482,7 @@ int init_socket(int port)
     exit(1);
   }
 #endif
-  
+
 #if defined(SO_REUSEADDR)
   opt = 1;
   if (setsockopt(s, SOL_SOCKET, SO_REUSEADDR, (char *) &opt, sizeof(opt)) < 0) {
@@ -490,9 +490,9 @@ int init_socket(int port)
     exit(1);
   }
 #endif
-  
+
 // This allows to bind on the same port. Commenting it out as it shouldn't be here
-// in the first place. 
+// in the first place.
 /*#if defined(SO_REUSEPORT)
   opt = 1;
   if (setsockopt(s, SOL_SOCKET, SO_REUSEPORT, (char *) &opt, sizeof(opt)) < 0) {
@@ -504,7 +504,7 @@ int init_socket(int port)
 #if defined(SO_LINGER)
   {
     struct linger ld;
-    
+
     ld.l_onoff = 0;
     ld.l_linger = 0;
     if (setsockopt(s, SOL_SOCKET, SO_LINGER, (char *)&ld, sizeof(ld)) < 0) {
@@ -513,11 +513,11 @@ int init_socket(int port)
     }
   }
 #endif
-  
+
   sa.sin_family = AF_INET;
   sa.sin_port = htons(port);
   sa.sin_addr.s_addr = htonl(INADDR_ANY);
-  
+
   if (bind(s, (struct sockaddr *) & sa, sizeof(sa)) < 0) {
     perror("bind");
     close(s);
@@ -532,7 +532,7 @@ int get_max_players(void)
 {
   int max_descs = 0;
   const char *method;
-  
+
   /*
    * First, we'll try using getrlimit/setrlimit.  This will probably work
    * on most systems.
@@ -541,10 +541,10 @@ int get_max_players(void)
 #if !defined(RLIMIT_NOFILE)
 #define RLIMIT_NOFILE RLIMIT_OFILE
 #endif
-  
+
   {
     struct rlimit limit;
-    
+
     method = "rlimit";
     if (getrlimit(RLIMIT_NOFILE, &limit) < 0)
     {
@@ -555,7 +555,7 @@ int get_max_players(void)
       max_descs = MAX_PLAYERS + NUM_RESERVED_DESCS;
     else
       max_descs = MIN((unsigned)MAX_PLAYERS + NUM_RESERVED_DESCS, (unsigned)limit.rlim_max);
-    
+
     limit.rlim_cur = max_descs;
     setrlimit(RLIMIT_NOFILE, &limit);
   }
@@ -583,19 +583,19 @@ int get_max_players(void)
     }
   }
 #endif
-  
+
   /* now calculate max _players_ based on max descs */
   max_descs = MIN(MAX_PLAYERS, max_descs - NUM_RESERVED_DESCS);
-  
+
   if (max_descs <= 0) {
     log_vfprintf("Non-positive max player limit!  (Set at %d using %s).",
         max_descs, method);
-    
+
     exit(1);
   }
-  
+
   log_vfprintf("Setting player limit to %d using %s.", max_descs, method);
-  
+
   return max_descs;
 }
 
@@ -623,7 +623,7 @@ void game_loop(int mother_desc)
   struct descriptor_data *d, *next_d;
   int pulse = 0, maxdesc, aliased;
   int i;
-  
+
   /* initialize various time values */
   zero_time.tv_sec = 0;
   zero_time.tv_usec = 0;
@@ -631,21 +631,21 @@ void game_loop(int mother_desc)
   opt_time.tv_sec = 0;
   gettimeofday(&last_time, (struct timezone *) 0);
   PERF_prof_reset();
-  
+
   // Register our alarm handler.
   signal(SIGALRM, alarm_handler);
-  
+
   /* The Main Loop.  The Big Cheese.  The Top Dog.  The Head Honcho.  The.. */
   while (!circle_shutdown) {
-    
+
     /* Reset the timer on our alarm. If this amount of time in seconds elapses without this being called again, invoke alarm_handler() and die. */
     alarm(SECONDS_TO_WAIT_FOR_HUNG_MUD_TO_RECOVER_BEFORE_KILLING_IT);
-    
+
     /* Sleep if we don't have any connections */
     if (descriptor_list == NULL) {
       // Clear our alarm handler.
       signal(SIGALRM, SIG_IGN);
-      
+
       FD_ZERO(&input_set);
       FD_SET(mother_desc, &input_set);
       if ((select(mother_desc + 1, &input_set, (fd_set *) 0, (fd_set *) 0, NULL) < 0)) {
@@ -656,7 +656,7 @@ void game_loop(int mother_desc)
           perror("Select coma");
       } // else log("New connection.  Waking up.");
       gettimeofday(&last_time, (struct timezone *) 0);
-      
+
       // Re-register our alarm handler.
       signal(SIGALRM, alarm_handler);
     }
@@ -674,7 +674,7 @@ void game_loop(int mother_desc)
       FD_SET(d->descriptor, &output_set);
       FD_SET(d->descriptor, &exc_set);
     }
-    
+
     /*
      * At this point, the original Diku code set up a signal mask to avoid
      * block all signals from being delivered.  I believe this was done in
@@ -686,7 +686,7 @@ void game_loop(int mother_desc)
 #ifndef GOTTAGOFAST
     do {
       errno = 0;                /* clear error condition */
-      
+
       /* figure out for how long we have to sleep */
       gettimeofday(&now, (struct timezone *) 0);
       timespent = timediff(&now, &last_time);
@@ -710,24 +710,24 @@ void game_loop(int mother_desc)
       gettimeofday(&now, (struct timezone *) 0);
       timespent = timediff(&now, &last_time);
       timeout = timediff(&opt_time, &timespent);
-      
+
       /* sleep until the next 0.1 second mark */
       if (select(0, (fd_set *) 0, (fd_set *) 0, (fd_set *) 0, &timeout) < 0)
         if (errno != EINTR) {
           perror("Select sleep");
           exit(1);
         }
-      
+
       // Reset our alarm timer.
       alarm(SECONDS_TO_WAIT_FOR_HUNG_MUD_TO_RECOVER_BEFORE_KILLING_IT);
     } while (errno);
 #endif
-    
+
     /* record the time for the next pass */
     gettimeofday(&last_time, (struct timezone *) 0);
     PERF_prof_reset();
     PERF_PROF_SCOPE( pr_main_loop_, "main loop");
-    
+
     // I added this for Linux, because &zero_time gets modified to become
     // time not slept.  This could possibly change the amount of time the
     // mud decides to sit on select(), not a good thing being that it should
@@ -746,7 +746,7 @@ void game_loop(int mother_desc)
       if (FD_ISSET(mother_desc, &input_set))
         new_descriptor(mother_desc);
     }
-    
+
     /* kick out the freaky folks in the exception set */
     {
       PERF_PROF_SCOPE( pr_exc_conn, "exc conns")
@@ -759,7 +759,7 @@ void game_loop(int mother_desc)
         }
       }
     }
-    
+
     /* process descriptors with input pending */
     {
       PERF_PROF_SCOPE( pr_inp_conn_, "input conns")
@@ -770,13 +770,13 @@ void game_loop(int mother_desc)
             close_socket(d);
       }
     }
-    
+
     /* process commands we just read from process_input */
     {
       PERF_PROF_SCOPE( pr_commands_, "process commands");
       for (d = descriptor_list; d; d = next_d) {
         next_d = d->next;
-        
+
         if ((--(d->wait) <= 0) && get_from_q(&d->input, comm, &aliased)) {
           if (d->character) {
             d->character->char_specials.last_timer = d->character->char_specials.timer;
@@ -799,7 +799,7 @@ void game_loop(int mother_desc)
           }
           d->wait = 1;
           d->prompt_mode = 1;
-          
+
           if (d->str)                     /* writing boards, mail, etc.   */
             string_add(d, comm);
           else if (d->showstr_point)      /* reading something w/ pager   */
@@ -818,7 +818,7 @@ void game_loop(int mother_desc)
         }
       }
     }
-    
+
     /* send queued output out to the operating system (ultimately to user) */
     {
       PERF_PROF_SCOPE(pr_send_output, "send output");
@@ -832,7 +832,7 @@ void game_loop(int mother_desc)
         }
       }
     }
-    
+
     /* kick out folks in the CON_CLOSE state */
     {
       PERF_PROF_SCOPE(pr_con_close, "handle CON_CLOSE");
@@ -842,17 +842,17 @@ void game_loop(int mother_desc)
           close_socket(d);
       }
     }
-    
+
     /* give each descriptor an appropriate prompt */
     {
       PERF_PROF_SCOPE(pr_send_prompt_, "send prompts");
       for (d = descriptor_list; d; d = next_d) {
         next_d = d->next;
-        
+
         /* KaVir's protocol snippet. The last sent data was OOB, so do NOT draw the prompt */
         if (d->pProtocol->WriteOOB)
           continue;
-        
+
         if (d->prompt_mode) {
           if (make_prompt(d)) {
             close_socket(d);
@@ -862,36 +862,36 @@ void game_loop(int mother_desc)
         }
       }
     }
-    
+
     /* handle heartbeat stuff */
     /* Note: pulse now changes every 0.10 seconds  */
-    
+
     pulse++;
-    
+
     if (!(pulse % PULSE_ZONE)) {
       zone_update();
       phone_check();
       process_autonav();
     }
-    
+
     if (!(pulse % PULSE_SPECIAL)) {
       spec_update();
     }
-    
+
     if (!(pulse % PULSE_MONORAIL)) {
       MonorailProcess();
     }
-    
+
     if (!(pulse % PULSE_MOBILE)) {
       mobile_activity();
     }
-    
+
     if (!(pulse % ViolencePulse)) {
       decide_combat_pool();
       perform_violence();
       matrix_violence();
     }
-    
+
     // Every MUD minute
     if (!(pulse % (SECS_PER_MUD_MINUTE * PASSES_PER_SEC))) {
       update_buildrepair();
@@ -902,7 +902,7 @@ void game_loop(int mother_desc)
       check_memory_canaries();
 #endif
     }
-    
+
     // Every 5 MUD minutes
     if (!(pulse % (5 * SECS_PER_MUD_MINUTE * PASSES_PER_SEC))) {
       if (!(pulse % (SECS_PER_MUD_HOUR * PASSES_PER_SEC)))
@@ -912,14 +912,14 @@ void game_loop(int mother_desc)
       taxi_leaves();
       process_wheres_my_car();
     }
-    
+
     // Every 29 MUD minutes
     if (!(pulse % (29 * SECS_PER_MUD_MINUTE * PASSES_PER_SEC))) {
       // Run through vehicles and rectify their occupancy.
       for (struct veh_data *veh = veh_list; veh; veh = veh->next) {
         if (!veh->people)
           continue;
-          
+
         struct char_data *last_tch = veh->people;
         for (struct char_data *tch = last_tch->next_in_veh; tch; tch = tch->next_in_veh) {
           if (tch->in_veh != veh) {
@@ -930,13 +930,13 @@ void game_loop(int mother_desc)
         }
       }
     }
-    
+
     // Every 59 MUD minutes
     if (!(pulse % (59 * SECS_PER_MUD_MINUTE * PASSES_PER_SEC))) {
       save_vehicles(FALSE);
       update_paydata_market();
     }
-    
+
     // Every MUD hour
     if (!(pulse % (SECS_PER_MUD_HOUR * PASSES_PER_SEC))) {
       point_update();
@@ -956,35 +956,35 @@ void game_loop(int mother_desc)
         }
       }
     }
-    
+
     // Every 70 MUD minutes
     if (!(pulse % (70 * SECS_PER_MUD_MINUTE * PASSES_PER_SEC)))
       House_save_all();
-    
+
     // Every MUD day
     if (!(pulse % (24 * SECS_PER_MUD_HOUR * PASSES_PER_SEC)))
       randomize_shop_prices();
-    
+
     // Every IRL second
     if (!(pulse % PASSES_PER_SEC)) {
       EscalatorProcess();
       ElevatorProcess();
       msdp_update();
     }
-    
+
     // Every 10 IRL seconds
     if (!(pulse % (10 * PASSES_PER_SEC))) {
       check_idle_passwords();
-      
+
       // Reset DOS tracker.
       connection_rapidity_tracker_for_dos = 0;
     }
-    
+
     // Every 30 IRL seconds
     if (!(pulse % (SECONDS_BETWEEN_CONGREGATION_POOL_GAINS * PASSES_PER_SEC))) {
       increase_congregation_bonus_pools();
     }
-    
+
     // Every IRL minute
     if (!(pulse % (60 * PASSES_PER_SEC))) {
       check_idling();
@@ -992,16 +992,16 @@ void game_loop(int mother_desc)
       // johnson_update();
       process_boost();
     }
-    
+
     // By default, every IRL hour, but configurable in config.h.
     if (!(pulse % (60 * PASSES_PER_SEC * IDLE_NUYEN_MINUTES_BETWEEN_AWARDS))) {
       send_nuyen_rewards_to_pcs();
     }
-    
+
     // Every IRL day
     if (!(pulse % (60 * PASSES_PER_SEC * 60 * 24))) {
       warn_about_apartment_deletion();
-      
+
       /* Check if the MySQL connection is active, and if not, recreate it. */
 #ifdef DEBUG
       unsigned long oldthread = mysql_thread_id(mysql);
@@ -1018,7 +1018,7 @@ void game_loop(int mother_desc)
 #endif
       /* End MySQL keepalive ping section. */
     }
-    
+
     tics++;                     /* tics since last checkpoint signal */
   }
 }
@@ -1041,7 +1041,7 @@ void game_loop(int mother_desc)
 struct timeval timediff(struct timeval * a, struct timeval * b)
 {
   struct timeval rslt;
-  
+
   if (a->tv_sec < b->tv_sec)
     return zero_time;
   else if (a->tv_sec == b->tv_sec)
@@ -1069,27 +1069,27 @@ void record_usage(void)
 {
   int sockets_connected = 0, sockets_playing = 0;
   struct descriptor_data *d;
-  
+
   for (d = descriptor_list; d; d = d->next) {
     sockets_connected++;
     if (!d->connected)
       sockets_playing++;
   }
-  
+
   log_vfprintf("usage: %-3d sockets connected, %-3d sockets playing",
       sockets_connected, sockets_playing);
-  
+
 #ifdef RUSAGE
-  
+
   {
     struct rusage ru;
-    
+
     getrusage(0, &ru);
     log("rusage: user time: %ld sec, system time: %ld sec, max res size: %ld",
         ru.ru_utime.tv_sec, ru.ru_stime.tv_sec, ru.ru_maxrss);
   }
 #endif
-  
+
 }
 
 /*
@@ -1098,7 +1098,7 @@ void record_usage(void)
 void echo_off(struct descriptor_data *d)
 {
   ProtocolNoEcho( d, true );
-  
+
   /*
   char off_string[] =
   {
@@ -1107,7 +1107,7 @@ void echo_off(struct descriptor_data *d)
     (char) TELOPT_ECHO,
     (char) 0,
   };
-  
+
   SEND_TO_Q(off_string, d);
    */
 }
@@ -1118,7 +1118,7 @@ void echo_off(struct descriptor_data *d)
 void echo_on(struct descriptor_data *d)
 {
   ProtocolNoEcho( d, false );
-  
+
   /*
   char on_string[] =
   {
@@ -1129,7 +1129,7 @@ void echo_on(struct descriptor_data *d)
     (char) TELOPT_NAOCRD,
     (char) 0,
   };
-  
+
   SEND_TO_Q(on_string, d);
    */
 }
@@ -1141,7 +1141,7 @@ void keepalive(struct descriptor_data *d) {
     (char) NOP,
     (char) 0
   };
-  
+
   if (write_to_descriptor(d->descriptor, keepalive) < 0) {
     mudlog("SYSERR: Failed to write keepalive data to descriptor.", d->character, LOG_SYSLOG, TRUE);
   }
@@ -1153,7 +1153,7 @@ void send_keepalives() {
   for (struct descriptor_data *d = descriptor_list; d; d = d->next)
     if (d->character && PRF_FLAGGED(d->character, PRF_KEEPALIVE)) {
       keepalive(d);
-      
+
       // Set the OOB flag so that we don't re-draw the prompt.
       d->pProtocol->WriteOOB = TRUE;
     }
@@ -1162,9 +1162,9 @@ void send_keepalives() {
 int make_prompt(struct descriptor_data * d)
 {
   char *prompt;
-  
+
   const char *data = NULL;
-  
+
   if (d->str) {
     if (D_PRF_FLAGGED(d, PRF_SCREENREADER)) {
       data = "Compose mode, write the at symbol on new line to quit. ";
@@ -1180,11 +1180,11 @@ int make_prompt(struct descriptor_data * d)
   }
   else if (STATE(d) == CON_POCKETSEC)
     data = " > ";
-  
+
   else if (!d->connected)
   {
     struct char_data *ch;
-    
+
     if (d->original) {
       prompt = GET_PROMPT(d->original);
       ch = d->original;
@@ -1199,7 +1199,7 @@ int make_prompt(struct descriptor_data * d)
     } else {
       char temp[MAX_INPUT_LENGTH], str[11];
       int i = 0, j, physical;
-      
+
       for (; *prompt; prompt++) {
         if (*prompt == '@' && *(prompt+1)) {
           prompt++;
@@ -1209,7 +1209,7 @@ int make_prompt(struct descriptor_data * d)
               break;
             case 'A':
               if (GET_EQ(d->character, WEAR_WIELD)) {
-                
+
                 if (IS_GUN(GET_OBJ_VAL(GET_EQ(d->character, WEAR_WIELD), 3)))
                   switch (GET_OBJ_VAL(GET_EQ(d->character, WEAR_WIELD), 11)) {
                     case MODE_SS:
@@ -1228,7 +1228,7 @@ int make_prompt(struct descriptor_data * d)
                       snprintf(str, sizeof(str), "NA");
                   }
                 else strlcpy(str, "ML", sizeof(str));
-                
+
               } else
                 strlcpy(str, "NA", sizeof(str));
               break;
@@ -1429,7 +1429,7 @@ int make_prompt(struct descriptor_data * d)
       data = final_str;
     }
   }
-  
+
   if (data) {
     // We let our caller handle the error here.
     if (write_to_descriptor(d->descriptor, data) < 0) {
@@ -1437,7 +1437,7 @@ int make_prompt(struct descriptor_data * d)
       return -1;
     }
   }
-  
+
   return 0;
 }
 
@@ -1447,7 +1447,7 @@ void write_to_q(const char *txt, struct txt_q * queue, int aliased)
   temp->text = new char[strlen(txt) + 1];
   strcpy(temp->text, txt);
   temp->aliased = aliased;
-  
+
   /* queue empty? */
   if (!queue->head)
   {
@@ -1464,21 +1464,21 @@ void write_to_q(const char *txt, struct txt_q * queue, int aliased)
 int get_from_q(struct txt_q * queue, char *dest, int *aliased)
 {
   struct txt_block *tmp;
-  
+
   /* queue empty? */
   if (!queue->head)
     return 0;
-  
+
   tmp = queue->head;
   strcpy(dest, queue->head->text);
   *aliased = queue->head->aliased;
   queue->head = queue->head->next;
-  
+
   if (tmp) {
     DELETE_AND_NULL_ARRAY(tmp->text);
     DELETE_AND_NULL(tmp);
   }
-  
+
   return 1;
 }
 
@@ -1486,7 +1486,7 @@ int get_from_q(struct txt_q * queue, char *dest, int *aliased)
 void flush_queues(struct descriptor_data * d)
 {
   int dummy;
-  
+
   if (d->large_outbuf)
   {
     d->large_outbuf->next = bufpool;
@@ -1500,21 +1500,21 @@ void flush_queues(struct descriptor_data * d)
 void write_to_output(const char *unmodified_txt, struct descriptor_data *t)
 {
   int size = strlen(unmodified_txt);
-  
+
   if (t == NULL)
     return;
-  
+
   // Process text per KaVir's protocol snippet.
   const char *txt = ProtocolOutput(t, unmodified_txt, &size);
   if (t->pProtocol->WriteOOB > 0)
     --t->pProtocol->WriteOOB;
-  
+
   // txt = colorize(t, (char *)txt);
-  
+
   /* if we're in the overflow state already, ignore this new output */
   if (t->bufptr < 0)
     return;
-  
+
   /* if we have enough space, just write to buffer and that's it! */
   if (t->bufspace >= size)
   {
@@ -1525,7 +1525,7 @@ void write_to_output(const char *unmodified_txt, struct descriptor_data *t)
     t->bufptr += size;
     return;
   }
-  
+
   /*
    * If we're already using the large buffer, or if even the large buffer
    * is too small to handle this new text, chuck the text and switch to the
@@ -1537,9 +1537,9 @@ void write_to_output(const char *unmodified_txt, struct descriptor_data *t)
     buf_overflows++;
     return;
   }
-  
+
   buf_switches++;
-  
+
   /* if the pool has a buffer in it, grab it */
   if (bufpool != NULL)
   {
@@ -1551,15 +1551,15 @@ void write_to_output(const char *unmodified_txt, struct descriptor_data *t)
     t->large_outbuf->text = new char[LARGE_BUFSIZE];
     buf_largecount++;
   }
-  
+
   strlcpy(t->large_outbuf->text, t->output, LARGE_BUFSIZE);     /* copy to big buffer */
   t->output = t->large_outbuf->text;    /* make big buffer primary */
   strlcat(t->output, txt, LARGE_BUFSIZE);       /* now add new text */
   assert(t->small_outbuf_canary == 31337);
-  
+
   /* calculate how much space is left in the buffer */
   t->bufspace = LARGE_BUFSIZE - 1 - strlen(t->output);
-  
+
   /* set the pointer for the next write */
   t->bufptr = strlen(t->output);
 }
@@ -1567,7 +1567,7 @@ void write_to_output(const char *unmodified_txt, struct descriptor_data *t)
 /* ******************************************************************
  *  socket handling                                                  *
  ****************************************************************** */
- 
+
 void set_descriptor_canaries(struct descriptor_data *newd) {
   newd->canary = 31337;
   newd->small_outbuf_canary = 31337;
@@ -1580,9 +1580,9 @@ void set_descriptor_canaries(struct descriptor_data *newd) {
 void init_descriptor (struct descriptor_data *newd, int desc)
 {
   static int last_desc = 0;  /* last descriptor number */
-  
+
   set_descriptor_canaries(newd);
-  
+
   newd->descriptor = desc;
   newd->connected = CON_GET_NAME;
   newd->idle_tics = 0;
@@ -1591,10 +1591,10 @@ void init_descriptor (struct descriptor_data *newd, int desc)
   newd->bufspace = SMALL_BUFSIZE - 1;
   newd->next = descriptor_list;
   newd->login_time = time (0);
-  
+
   // Initialize the protocol data when a new descriptor structure is allocated.
   newd->pProtocol = ProtocolCreate();
-  
+
   if (++last_desc == 10000)
     last_desc = 1;
   newd->desc_num = last_desc;
@@ -1608,30 +1608,30 @@ int new_descriptor(int s)
   struct descriptor_data *newd;
   struct sockaddr_in peer;
   struct hostent *from;
-  
+
   /* accept the new connection */
   i = sizeof(peer);
 #if defined(__CYGWIN__) || defined(WIN32)
-  
+
   if ((desc = accept(s, (struct sockaddr *) &peer, &i)) < 0) {
     perror("accept");
     return -1;
   }
 #else
-    
+
   if ((desc = accept(s, (struct sockaddr *) &peer, (unsigned *) &i)) < 0)
   {
     perror("accept");
     return -1;
   }
 #endif
-  
+
   /* keep it from blocking */
   nonblock(desc);
-  
+
   // Calculate the long address.
   addr = ntohl(peer.sin_addr.s_addr);
-  
+
   // Block it if we're getting too many openings in a limited time window.
   if (connection_rapidity_tracker_for_dos++ >= DOS_DENIAL_THRESHOLD) {
     if (write_to_descriptor(desc, "Sorry, we're unable to service your request right now. Please try again in a few minutes.\r\n") >= 0)
@@ -1649,21 +1649,21 @@ int new_descriptor(int s)
     /* make sure we have room for it */
     for (newd = descriptor_list; newd; newd = newd->next)
       sockets_connected++;
-    
+
     if (sockets_connected >= max_players)
     {
       if (write_to_descriptor(desc, "Sorry, Awakened Worlds is full right now... try again later!  :-)\r\n") >= 0)
         close(desc);
       return 0;
     }
-  }  
-  
+  }
+
   /* create a new descriptor */
   newd = new descriptor_data;
   memset((char *) newd, 0, sizeof(struct descriptor_data));
   // Set our canaries.
   set_descriptor_canaries(newd);
-  
+
   /* find the sitename */
   time_t gethostbyaddr_timer = time(0);
   if (nameserver_is_slow || !(from = gethostbyaddr((char *) &peer.sin_addr,
@@ -1678,7 +1678,7 @@ int new_descriptor(int s)
   {
     strncpy(newd->host, from->h_name, HOST_LENGTH);
     *(newd->host + HOST_LENGTH) = '\0';
-    
+
     time_t time_delta = time(0) - gethostbyaddr_timer;
     if (time_delta > THRESHOLD_IN_SECONDS_FOR_SLOWNS_AUTOMATIC_ACTIVATION) {
       snprintf(buf2, sizeof(buf2), "%03u.%03u.%03u.%03u", (int) ((addr & 0xFF000000) >> 24),
@@ -1689,7 +1689,7 @@ int new_descriptor(int s)
       nameserver_is_slow = TRUE;
     }
   }
-  
+
   /* determine if the site is banned */
   if (isbanned(newd->host) == BAN_ALL)
   {
@@ -1702,56 +1702,56 @@ int new_descriptor(int s)
     if (nameserver_is_slow)
       log_vfprintf("DOSLOG: Connection from [%03u.%03u.%03u.%03u] (slow nameserver mode).",
                    (int) ((addr & 0xFF000000) >> 24),
-                   (int) ((addr & 0x00FF0000) >> 16), 
+                   (int) ((addr & 0x00FF0000) >> 16),
                    (int) ((addr & 0x0000FF00) >> 8),
                    (int) ((addr & 0x000000FF))
                   );
     else
-      log_vfprintf("DOSLOG: Connection from [%s (%03u.%03u.%03u.%03u)].", 
+      log_vfprintf("DOSLOG: Connection from [%s (%03u.%03u.%03u.%03u)].",
                    newd->host,
                    (int) ((addr & 0xFF000000) >> 24),
-                   (int) ((addr & 0x00FF0000) >> 16), 
+                   (int) ((addr & 0x00FF0000) >> 16),
                    (int) ((addr & 0x0000FF00) >> 8),
                    (int) ((addr & 0x000000FF))
                   );
   }
-  
+
   init_descriptor(newd, desc);
-  
+
   /* prepend to list */
   descriptor_list = newd;
-  
+
   // Ensure all the canaries are functional before negotiating the protocol.
   assert(newd->small_outbuf_canary == 31337);
   assert(newd->output_canary == 31337);
   assert(newd->input_and_character_canary == 31337);
   assert(newd->inbuf_canary == 31337);
-  
+
   // Once the descriptor has been fully created and added to any lists, it's time to negotiate:
   ProtocolNegotiate(newd);
-  
+
   int size = strlen(GREETINGS);
   SEND_TO_Q(ProtocolOutput(newd, GREETINGS, &size), newd);
   return 0;
 }
-  
+
 int process_output(struct descriptor_data *t) {
   static char i[LARGE_BUFSIZE + GARBAGE_SPACE];
   static int result;
-  
+
   /* If the descriptor is NULL, just return */
   if ( !t )
     return 0;
-    
+
   memset(i, 0, sizeof(i));
-    
+
   // Write out a newline, the contents of the output buffer, and the overflow warning if needed.
   // Add an extra CRLF if the person isn't in compact mode.
-  snprintf(i, sizeof(i), "\r\n%s%s%s", 
-           t->output, 
+  snprintf(i, sizeof(i), "\r\n%s%s%s",
+           t->output,
            t->bufptr < 0 ? "**OVERFLOW**" : "",            // <- overflow mode check: bufptr < 0
            !t->connected && t->character ? "\r\n" : "");   // <- 'compact mode' check
-  
+
   /*
    * now, send the output.  If this is an 'interruption', use the prepended
    * CRLF, otherwise send the straight output sans CRLF.
@@ -1761,7 +1761,7 @@ int process_output(struct descriptor_data *t) {
     result = write_to_descriptor(t->descriptor, i);
   else
     result = write_to_descriptor(t->descriptor, i + 2);
-  
+
   /* handle snooping: prepend "% " and send to snooper */
   if (t->snoop_by)
   {
@@ -1784,17 +1784,17 @@ int process_output(struct descriptor_data *t) {
   t->bufptr = 0;
   t->output = t->small_outbuf;
   *(t->output) = '\0';
-  
+
   return result;
 }
 
 int write_to_descriptor(int desc, const char *txt) {
   int total, bytes_written;
-  
+
   assert(txt != NULL);
-  
+
   total = strlen(txt);
-  
+
   do {
 #ifdef __APPLE__
     if ((bytes_written = write(desc, txt, total)) < 0) {
@@ -1805,19 +1805,19 @@ int write_to_descriptor(int desc, const char *txt) {
       if (errno == EWOULDBLOCK)
         errno = EAGAIN;
 #endif
-      
+
       if (errno == EAGAIN)
         log("process_output: socket write would block, about to close");
       else
         perror("Write to socket");
-      
+
       return -1;
     } else {
       txt += bytes_written;
       total -= bytes_written;
     }
   } while (total > 0);
-  
+
   return 0;
 }
 
@@ -1829,18 +1829,18 @@ int process_input(struct descriptor_data *t) {
   int buf_length, bytes_read, space_left, failed_subst;
   char *ptr, *read_point, *write_point, *nl_pos = NULL;
   char tmp[MAX_INPUT_LENGTH + 8];
-  
+
   // Initialize our temporary buffer, which is used by KaVir protocol code for reading out their crap.
   static char temporary_buffer[MAX_PROTOCOL_BUFFER];
   temporary_buffer[0] = '\0';
-    
+
   /* End of KaVir protocol kludge. */
-  
+
   /* first, find the point where we left off reading data */
   buf_length = strlen(t->inbuf);
   read_point = t->inbuf + buf_length;
   space_left = MAX_RAW_INPUT_LENGTH - buf_length - 1;
-    
+
   do {
     if (space_left <= 0) {
       if (t->character)
@@ -1848,14 +1848,14 @@ int process_input(struct descriptor_data *t) {
       log("process_input: about to close connection: input overflow");
       return -1;
     }
-    
+
     if ((bytes_read = read(t->descriptor, &temporary_buffer, MAX_PROTOCOL_BUFFER - 1)) < 0) {
-      
+
 #ifdef EWOULDBLOCK
       if (errno == EWOULDBLOCK)
         errno = EAGAIN;
 #endif
-      
+
       if (errno != EAGAIN) {
         perror("process_input: about to lose connection");
         return -1;              /* some error condition was encountered on
@@ -1868,9 +1868,9 @@ int process_input(struct descriptor_data *t) {
       return -1;
     }
     /* at this point, we know we got some data from the read */
-    
+
     temporary_buffer[bytes_read] = '\0';  /* terminate the string */
-    
+
     // Push the data for processing through KaVir's protocol code. Resize bytes_read to account for the stripped control chars.
     ProtocolInput(t, temporary_buffer, bytes_read, t->inbuf, MAX_RAW_INPUT_LENGTH);
     assert(t->inbuf_canary == 31337);
@@ -1879,20 +1879,20 @@ int process_input(struct descriptor_data *t) {
                  temporary_buffer, t->inbuf + buf_length, bytes_read, strlen(t->inbuf + buf_length));
 #endif
     bytes_read = strlen(t->inbuf + buf_length);
-    
+
     // We parsed out all the data-- must have been pure control codes. Break out.
     if (bytes_read == 0)
       return 0;
-    
+
     /* search for a newline in the data we just read */
     for (ptr = read_point; *ptr && !nl_pos; ptr++)
       if (ISNEWL(*ptr))
         nl_pos = ptr;
-    
+
     read_point += bytes_read;
     space_left -= bytes_read;
     assert(t->inbuf_canary == 31337);
-    
+
     /*
      * on some systems such as AIX, POSIX-standard nonblocking I/O is broken,
      * causing the MUD to hang when it encounters input not terminated by a
@@ -1906,13 +1906,13 @@ int process_input(struct descriptor_data *t) {
 #ifdef SOMETHING_THAT_DOESNT_EXIST_JUST_SO_XCODE_WONT_CHOKE_ON_SEEING_TWO_END_BRACKETS_WHILE_NOT_UNDERSTANDING_THE_IFDEFS_THAT_SHIELD_THEM
     {
 #endif
-      
+
 #if !defined(POSIX_NONBLOCK_BROKEN)
   // note: if you define the above, you'll have to figure out protocol handling yourself-- see below.
-    
+
   } while (nl_pos == NULL);
 #else
-  
+
   } while (0);
 
   if (nl_pos == NULL)
@@ -1929,7 +1929,7 @@ int process_input(struct descriptor_data *t) {
   while (nl_pos != NULL) {
     write_point = tmp;
     space_left = MAX_INPUT_LENGTH - 1;
-    
+
     for (ptr = read_point; (space_left > 0) && (ptr < nl_pos); ptr++) {
       if (*ptr == '\b') {       /* handle backspacing */
         if (write_point > tmp) {
@@ -1948,12 +1948,12 @@ int process_input(struct descriptor_data *t) {
       }
     }
     *write_point = '\0';
-    
+
     if ((space_left <= 0) && (ptr < nl_pos)) {
       char buffer[MAX_INPUT_LENGTH + 64];
-      
+
       snprintf(buffer, sizeof(buffer), "Line too long.  Truncated to:\r\n%s\r\n", tmp);
-      
+
       // The calling function can handle this.
       if (write_to_descriptor(t->descriptor, buffer) < 0)
         return -1;
@@ -1964,7 +1964,7 @@ int process_input(struct descriptor_data *t) {
       SEND_TO_Q("\r\n", t->snoop_by);
     }
     failed_subst = 0;
-    
+
     if (*tmp == '!' && t->connected != CON_CNFPASSWD )
       strcpy(tmp, t->last_input);
 /*    else if (*tmp == '|' && t->connected != CON_CNFPASSWD ) {
@@ -1973,14 +1973,14 @@ int process_input(struct descriptor_data *t) {
     else
       strlcpy(t->last_input, tmp, MAX_INPUT_LENGTH);
     assert(t->last_input_canary == 31337);
-    
+
     if (!failed_subst)
       write_to_q(tmp, &t->input, 0);
-    
+
     /* find the end of this line */
     while (ISNEWL(*nl_pos))
       nl_pos++;
-    
+
     /* see if there's another newline in the input buffer */
     read_point = ptr = nl_pos;
     for (nl_pos = NULL; *ptr && !nl_pos; ptr++)
@@ -1993,7 +1993,7 @@ int process_input(struct descriptor_data *t) {
   while (*read_point)
     *(write_point++) = *(read_point++);
   *write_point = '\0';
-  
+
   assert(t->inbuf_canary == 31337);
 
   return 1;
@@ -2007,51 +2007,51 @@ int process_input(struct descriptor_data *t) {
 int perform_subst(struct descriptor_data *t, char *orig, char *subst)
 {
   char New[MAX_INPUT_LENGTH + 5];
-  
+
   char *first, *second, *strpos;
-  
+
   /*
    * first is the position of the beginning of the first string (the one
    * to be replaced
    */
   first = subst + 1;
-  
+
   /* now find the second '^' */
   if (!(second = strchr(first, '^')))
   {
     SEND_TO_Q("Invalid substitution.\r\n", t);
     return 1;
   }
-  
+
   /* terminate "first" at the position of the '^' and make 'second' point
    * to the beginning of the second string */
   *(second++) = '\0';
-  
+
   /* now, see if the contents of the first string appear in the original */
   if (!(strpos = strstr(orig, first)))
   {
     SEND_TO_Q("Invalid substitution.\r\n", t);
     return 1;
   }
-  
+
   /* now, we construct the new string for output. */
-  
+
   /* first, everything in the original, up to the string to be replaced */
   strncpy(New, orig, (strpos - orig));
   New[(strpos - orig)] = '\0';
-  
+
   /* now, the replacement string */
   strlcat(New, second, MAX_INPUT_LENGTH);
-  
+
   /* now, if there's anything left in the original after the string to
    * replaced, copy that too. */
   if (((strpos - orig) + strlen(first)) < strlen(orig))
     strlcat(New, strpos + strlen(first), MAX_INPUT_LENGTH);
-  
+
   /* terminate the string in case of an overflow from strncat  -- useless code now -LS */
   New[MAX_INPUT_LENGTH-1] = '\0';
   strcpy(subst, New);
-  
+
   return 0;
 }
 
@@ -2065,34 +2065,34 @@ void free_editing_structs(descriptor_data *d, int state)
       Mem->DeleteObject(d->edit_obj);
     d->edit_obj = NULL;
   }
-  
+
   if (d->edit_room) {
     Mem->DeleteRoom(d->edit_room);
     d->edit_room = NULL;
   }
-  
+
   if (d->edit_mob) {
     Mem->DeleteCh(d->edit_mob);
     d->edit_mob = NULL;
   }
-  
+
   if (d->edit_quest) {
     free_quest(d->edit_quest);
     DELETE_AND_NULL(d->edit_quest);
   }
-  
+
   if (d->edit_shop) {
     free_shop(d->edit_shop);
     DELETE_AND_NULL(d->edit_shop);
   }
-  
+
   if (d->edit_zon) {
     DELETE_ARRAY_IF_EXTANT(d->edit_zon->name);
     DELETE_AND_NULL_ARRAY(d->edit_zon);
   }
-  
+
   DELETE_IF_EXTANT(d->edit_cmd);
-  
+
   if (d->edit_veh) {
     Mem->DeleteVehicle(d->edit_veh);
     d->edit_veh = NULL;
@@ -2116,11 +2116,11 @@ void close_socket(struct descriptor_data *d)
   struct descriptor_data *temp;
   spell_data *one, *next;
   char buf[MAX_STRING_LENGTH];
-  
+
   /* Forget snooping */
   if (d->snooping)
     d->snooping->snoop_by = NULL;
-  
+
   if (d->snoop_by)
   {
     SEND_TO_Q("Your victim is no longer among us.\r\n", d->snoop_by);
@@ -2133,41 +2133,41 @@ void close_socket(struct descriptor_data *d)
       time_t time_delta = time(0) - d->login_time;
       bool printed = FALSE;
       float per_hour_multiplier = 3600.0 / time_delta;
-      
+
       strlcpy(buf, "Over ", sizeof(buf));
-      
+
       if (time_delta >= SECS_PER_REAL_DAY) {
         int days = time_delta / SECS_PER_REAL_DAY;
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%d day%s", days, days != 1 ? "s" : "");
         time_delta %= SECS_PER_REAL_DAY;
         printed = TRUE;
       }
-      
+
       if (time_delta >= SECS_PER_REAL_HOUR) {
         int hours = time_delta / SECS_PER_REAL_HOUR;
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s%d hour%s", printed ? ", " : "", hours, hours != 1 ? "s" : "");
         time_delta %= SECS_PER_REAL_HOUR;
         printed = TRUE;
       }
-      
+
       if (time_delta >= SECS_PER_REAL_MIN) {
         int minutes = time_delta / SECS_PER_REAL_MIN;
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s%d minute%s", printed ? ", " : "", minutes, minutes != 1 ? "s" : "");
         time_delta %= SECS_PER_REAL_MIN;
         printed = TRUE;
       }
-      
+
       if (time_delta > 0) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s%ld second%s", printed ? ", " : "", time_delta, time_delta != 1 ? "s" : "");
       }
-      
-      long nuyen_earned = 0, nuyen_spent = 0;      
+
+      long nuyen_earned = 0, nuyen_spent = 0;
       strlcpy(buf2, " FAUCETS:", sizeof(buf2));
       strlcpy(buf3, " SINKS:", sizeof(buf3));
       for (int i = 0; i < NUM_OF_TRACKED_NUYEN_INCOME_SOURCES; i++) {
         if (d->nuyen_income_this_play_session[i] == 0)
           continue;
-          
+
         if (nuyen_faucets_and_sinks[i].type == NI_IS_FAUCET) {
           // log_vfprintf("'%s' is a faucet, so adding %ld to earned.", nuyen_faucets_and_sinks[i].name, d->nuyen_income_this_play_session[i]);
           nuyen_earned += d->nuyen_income_this_play_session[i];
@@ -2186,24 +2186,24 @@ void close_socket(struct descriptor_data *d)
       }
       long nuyen_net = nuyen_earned - nuyen_spent;
       long nuyen_per_hour = nuyen_net * per_hour_multiplier;
-      
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " of playtime, %s earned %ld and spent %ld for a net total of %ld nuyen. That's approximately %ld per hour.\r\nBreakdown:\r\n\r\n%s\r\n\r\n%s", 
+
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " of playtime, %s earned %ld and spent %ld for a net total of %ld nuyen. That's approximately %ld per hour.\r\nBreakdown:\r\n\r\n%s\r\n\r\n%s",
                GET_CHAR_NAME(d->character),
-               nuyen_earned, 
-               nuyen_spent, 
+               nuyen_earned,
+               nuyen_spent,
                nuyen_net,
                nuyen_per_hour,
                buf2,  // faucets
                buf3   // sinks
              );
-             
+
       mudlog(buf, d->character, LOG_GRIDLOG, TRUE);
     }
-    
+
     /* added to Free up temporary editing constructs */
-    if (d->connected == CON_PLAYING 
-        || d->connected == CON_PART_CREATE 
-        || (d->connected >= CON_SPELL_CREATE && d->connected <= CON_HELPEDIT && d->connected != CON_ASKNAME)) 
+    if (d->connected == CON_PLAYING
+        || d->connected == CON_PART_CREATE
+        || (d->connected >= CON_SPELL_CREATE && d->connected <= CON_HELPEDIT && d->connected != CON_ASKNAME))
     {
       if (d->connected == CON_VEHCUST)
         d->edit_veh = NULL;
@@ -2240,28 +2240,28 @@ void close_socket(struct descriptor_data *d)
           DELETE_AND_NULL(one);
         }
       d->character->spells = NULL;
-      
+
       Mem->DeleteCh(d->character);
     }
   }
-  
+
   // Free the protocol data when a socket is closed.
   ProtocolDestroy( d->pProtocol );
-  
+
   close(d->descriptor);
   flush_queues(d);
-  
+
   /* JE 2/22/95 -- part of my enending quest to make switch stable */
   if (d->original && d->original->desc)
     d->original->desc = NULL;
-  
+
   REMOVE_FROM_LIST(d, descriptor_list, next);
-  
+
   DELETE_ARRAY_IF_EXTANT(d->showstr_head);
-  
+
   // Clean up message history lists.
   delete_message_history(d);
-  
+
   delete d;
 }
 
@@ -2269,16 +2269,16 @@ void check_idle_passwords(void)
 {
   PERF_PROF_SCOPE(pr_, __func__);
   struct descriptor_data *d;
-  
+
   for (d = descriptor_list; d; d = d->next) {
     if (STATE(d) != CON_PASSWORD && STATE(d) != CON_GET_NAME)
       continue;
-    
+
     if (++d->idle_tics >= 12 ) {
       /* 120 seconds RL, or 2 minutes */
       if (STATE(d) == CON_PASSWORD)
         echo_on(d);
-      
+
       SEND_TO_Q("\r\nTimed out... goodbye.\r\n", d);
       STATE(d) = CON_CLOSE;
     }
@@ -2308,7 +2308,7 @@ void nonblock(socket_t s)
 void nonblock(int s)
 {
   int flags;
-  
+
   flags = fcntl(s, F_GETFL, 0);
   flags |= O_NONBLOCK;
   if (fcntl(s, F_SETFL, flags) < 0) {
@@ -2343,7 +2343,7 @@ void checkpointing(int Empty)
 void unrestrict_game(int Empty)
 {
   extern struct ban_list_element *ban_list;
-  
+
   mudlog("Received SIGUSR2 - completely unrestricting game (emergency)",
          NULL, LOG_SYSLOG, TRUE);
   ban_list = NULL;
@@ -2396,7 +2396,7 @@ void termsig(int Empty)
  *
  * SunOS Release 4.0.2 (sun386) needs this too, according to Tim Aldric.
  */
- 
+
  // This code is ANCIENT and does not work on Ubuntu. -- LS.
 
 
@@ -2406,14 +2406,14 @@ void termsig(int Empty)
 sigfunc *my_signal(int signo, sigfunc * func)
 {
   struct sigaction act, oact;
-  
+
   act.sa_handler = func;
   sigemptyset(&act.sa_mask);
   act.sa_flags = 0;
-  
+
   if (sigaction(signo, &act, &oact) < 0)
     return SIG_ERR;
-  
+
   return oact.sa_handler;
 }
 #endif
@@ -2422,10 +2422,10 @@ void signal_setup(void)
 {
   my_signal(SIGINT, hupsig);
   my_signal(SIGTERM, hupsig);
-  
+
   signal(SIGPIPE, SIG_IGN); // If this is causing you compilation errors, comment it out and uncomment the below version.
 #if !defined(WIN32) || defined(__CYGWIN__)
-  
+
   // my_signal(SIGPIPE, SIG_IGN);
 #endif
 }
@@ -2439,7 +2439,7 @@ void signal_setup(void)
 int is_color (char c)
 {
   int i = 0;
-  
+
   switch (LOWER(c)) {
     case 'b':
     case 'c':
@@ -2456,7 +2456,7 @@ int is_color (char c)
   }
   if (i && c < 'a')
     i--;
-  
+
   return i;
 }
 
@@ -2467,12 +2467,12 @@ char *colorize(struct descriptor_data *d, const char *str, bool skip_check)
   static char buffer[MAX_STRING_LENGTH * 8 + 1];
   //char *temp = &buffer[0];
   //const char *color;
-  
+
   // KaVir's protocol snippet handles this, so...
   strcpy(buffer, str);
   return &buffer[0];
   /*
-  
+
   if (!str || !*str) {
     // Declare our own error buf so we don't clobber anyone's strings.
     char colorize_error_buf[200];
@@ -2482,7 +2482,7 @@ char *colorize(struct descriptor_data *d, const char *str, bool skip_check)
     strcpy(buffer, "(null)");
     return buffer;
   }
-  
+
   if (!D_PRF_FLAGGED(d, PRF_NOCOLOR) && (skip_check || d->character)) // ok but why do we care if they have a character?
   {
     while(*str) {
@@ -2626,7 +2626,7 @@ char *colorize(struct descriptor_data *d, const char *str, bool skip_check)
   }
   // and terminate it with NULL properly
   *temp = '\0';
-  
+
   return &buffer[0];
   */
 }
@@ -2635,10 +2635,10 @@ void send_to_char(struct char_data * ch, const char * const messg, ...)
 {
   if (!ch->desc || !messg)
     return;
-  
+
   char internal_buffer[MAX_STRING_LENGTH];
   memset(internal_buffer, 0, sizeof(internal_buffer));
-  
+
   va_list argptr;
   va_start(argptr, messg);
   vsnprintf(internal_buffer, sizeof(internal_buffer), messg, argptr);
@@ -2656,9 +2656,9 @@ void send_to_icon(struct matrix_icon * icon, const char * const messg, ...)
 {
   if (!icon || !icon->decker || !icon->decker->ch || !icon->decker->ch->desc || !messg)
     return;
-  
+
   char internal_buffer[MAX_STRING_LENGTH];
-  
+
   va_list argptr;
   va_start(argptr, messg);
   vsnprintf(internal_buffer, sizeof(internal_buffer), messg, argptr);
@@ -2672,7 +2672,7 @@ void send_to_icon(struct matrix_icon * icon, const char * const messg, ...)
 void send_to_all(const char *messg)
 {
   struct descriptor_data *i;
-  
+
   if (messg)
     for (i = descriptor_list;i; i = i->next)
       if (!i->connected) {
@@ -2683,10 +2683,10 @@ void send_to_all(const char *messg)
 void send_to_outdoor(const char *messg)
 {
   struct descriptor_data *i;
-  
+
   if (!messg || !*messg)
     return;
-  
+
   for (i = descriptor_list; i; i = i->next)
     if (!i->connected && i->character && AWAKE(i->character) &&
         !(PLR_FLAGGED(i->character, PLR_WRITING) ||
@@ -2702,7 +2702,7 @@ void send_to_outdoor(const char *messg)
 void send_to_driver(char *messg, struct veh_data *veh)
 {
   struct char_data *i;
-  
+
   if (messg)
     for (i = veh->people; i; i = i->next_in_veh)
       if (AFF_FLAGGED(i, AFF_PILOT) && i->desc)
@@ -2721,7 +2721,7 @@ void send_to_host(vnum_t room, const char *messg, struct matrix_icon *icon, bool
 void send_to_veh(const char *messg, struct veh_data *veh, struct char_data *ch, bool torig, ...)
 {
   struct char_data *i;
-  
+
   if (messg)
   {
     for (i = veh->people; i; i = i->next_in_veh)
@@ -2737,7 +2737,7 @@ void send_to_veh(const char *messg, struct veh_data *veh, struct char_data *ch, 
 void send_to_veh(const char *messg, struct veh_data *veh, struct char_data *ch, struct char_data *cha, bool torig)
 {
   struct char_data *i;
-  
+
   if (messg)
   {
     for (i = veh->people; i; i = i->next_in_veh)
@@ -2762,7 +2762,7 @@ void send_to_room(const char *messg, struct room_data *room)
     for (v = room->vehicles; v; v = v->next_veh)
       if (v->people)
         send_to_veh(messg, v, NULL, TRUE);
-    
+
   }
 }
 
@@ -2774,28 +2774,28 @@ const char *ACTNULL = "<NULL>";
 char* strip_ending_punctuation_new(const char* orig) {
   int len = strlen(orig);
   char* stripped = new char[len + 1];
-  
+
   strlcpy(stripped, orig, len + 1);
-  
+
   char* c = stripped + len - 1;
-  
+
   if (*c == '.' || *c == '!' || *c == '?')
     *c = '\0';
-  
+
   return stripped;
 }
 
 const char *get_voice_perceived_by(struct char_data *speaker, struct char_data *listener, bool invis_staff_should_be_identified) {
   static char voice_buf[500];
   struct remem *mem = NULL;
-  
+
   if (IS_NPC(speaker))
     return GET_NAME(speaker);
   else {
     // $z mode: Identify staff members.
     if (invis_staff_should_be_identified && IS_SENATOR(speaker) && !CAN_SEE(listener, speaker))
       strlcpy(voice_buf, "an invisible staff member", sizeof(voice_buf));
-      
+
     // Otherwise, compose a voice as usual-- start off with their normal voice, then replace with mask if modulated.
     else {
       strlcpy(voice_buf, speaker->player.physical_text.room_desc, sizeof(voice_buf));
@@ -2806,15 +2806,15 @@ const char *get_voice_perceived_by(struct char_data *speaker, struct char_data *
         }
       }
     }
-    
+
     // No radio names mode means just give the voice desc. Otherwise, staff see speaker's name.
     if (IS_SENATOR(listener) && !PRF_FLAGGED(listener, PRF_NO_RADIO_NAMES))
       snprintf(ENDOF(voice_buf), sizeof(voice_buf) - strlen(voice_buf), "(%s)", GET_CHAR_NAME(speaker));
-    
+
     // Non-staff, but remembered the speaker? You see their remembered name.
     else if ((mem = safe_found_mem(listener, speaker)))
       snprintf(ENDOF(voice_buf), sizeof(voice_buf) - strlen(voice_buf), "(%s)", CAP(mem->mem));
-    
+
     // Return our string. If no checks were passed, it just gives their voice desc with no special frills.
     return voice_buf;
   }
@@ -2833,15 +2833,15 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
   char temp_buf[MAX_STRING_LENGTH];
   buf = lbuf;
   vict = (struct char_data *) vict_obj;
-  
+
   // No need to go through all this junk if the to-char has no descriptor.
   if (!to || !to->desc)
     return NULL;
-    
+
   // Prep for error case catching.
   strlcpy(lbuf, "An erroneous voice (alert staff!)", sizeof(lbuf));
   i = lbuf;
-  
+
   for (;;)
   {
     if (*orig == '$') {
@@ -2954,7 +2954,7 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
           if (to == ch) {
             i = "you";
           }
-          
+
           // Staff ignore visibility checks.
           else if (IS_SENATOR(to)) {
             if (!IS_NPC(ch)) {
@@ -2963,11 +2963,11 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
               i = make_desc(to, ch, temp_buf, TRUE, TRUE, sizeof(temp_buf));
             }
           }
-          
+
           // If they're visible, it's simple.
           else if (CAN_SEE(to, ch))
             i = make_desc(to, ch, temp_buf, TRUE, TRUE, sizeof(temp_buf));
-          
+
           // If we've gotten here, the speaker is an invisible player or staff member.
           else {
             // Since $z is only used for speech, and since NPCs can't be remembered, we display their name when NPCs speak.
@@ -2984,18 +2984,18 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
           i = "$";
           break;
       }
-      
+
       while ((*buf = *(i++)))
         buf++;
       orig++;
     } else if (!(*(buf++) = *(orig++)))
       break;
   }
-  
+
   *(--buf) = '\r';
   *(++buf) = '\n';
   *(++buf) = '\0';
-  
+
   SEND_TO_Q(CAP(lbuf), to->desc);
   return lbuf;
 }
@@ -3004,18 +3004,18 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
 bool can_send_act_to_target(struct char_data *ch, bool hide_invisible, struct obj_data * obj, void *vict_obj, struct char_data *to, int type) {
 #define SENDOK(ch) ((ch)->desc && AWAKE(ch) && !(PLR_FLAGGED((ch), PLR_WRITING) || PLR_FLAGGED((ch), PLR_EDITING) || PLR_FLAGGED((ch), PLR_MAILING) || PLR_FLAGGED((ch), PLR_CUSTOMIZE)) && (STATE(ch->desc) != CON_SPELL_CREATE))
   bool remote;
-  
+
   if ((remote = (type & TO_REMOTE)))
     type &= ~TO_REMOTE;
-    
-  return (to 
+
+  return (to
           && SENDOK(to)
           && !(hide_invisible && ch && !CAN_SEE(to, ch))
-          && (to != ch) 
-          && (remote || !PLR_FLAGGED(to, PLR_REMOTE)) 
+          && (to != ch)
+          && (remote || !PLR_FLAGGED(to, PLR_REMOTE))
           && !PLR_FLAGGED(to, PLR_MATRIX)
           && (type == TO_ROOM || type == TO_ROLLS || (to != vict_obj)));
-  
+
 #undef SENDOK
 }
 
@@ -3028,12 +3028,12 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
   int sleep;
   bool remote;
   struct veh_data *rigger_check;
-  
+
 #define SENDOK(ch) ((ch)->desc && (AWAKE(ch) || sleep) && !(PLR_FLAGGED((ch), PLR_WRITING) || PLR_FLAGGED((ch), PLR_EDITING) || PLR_FLAGGED((ch), PLR_MAILING) || PLR_FLAGGED((ch), PLR_CUSTOMIZE)) && (STATE(ch->desc) != CON_SPELL_CREATE))
-  
+
   if (!str || !*str)
     return NULL;
-  
+
   /*
    * Warning: the following TO_SLEEP code is a hack.
    *
@@ -3042,17 +3042,17 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
    * high up).  It's ONLY legal to combine TO_SLEEP with one other TO_x
    * command.  It's not legal to combine TO_x's with each other otherwise.
    */
-  
+
   /* check if TO_SLEEP is there, and remove it if it is. */
   if ((sleep = (type & TO_SLEEP)))
     type &= ~TO_SLEEP;
-    
+
   if ((remote = (type & TO_REMOTE)))
     type &= ~TO_REMOTE;
-  
+
   if ( type == TO_ROLLS )
     sleep = 1;
-  
+
   if (type == TO_CHAR)
   {
     if (ch && SENDOK(ch) && (remote || !PLR_FLAGGED(ch, PLR_REMOTE)) && !PLR_FLAGGED(ch, PLR_MATRIX))
@@ -3062,16 +3062,16 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
   if (type == TO_VICT)
   {
     to = (struct char_data *) vict_obj;
-    
+
     if (!to || !SENDOK(to))
       return NULL;
-    
+
     if (((!remote && PLR_FLAGGED(to, PLR_REMOTE)) || PLR_FLAGGED(to, PLR_MATRIX)) && !sleep)
       return NULL;
-      
+
     if (hide_invisible && ch && !CAN_SEE(to, ch))
       return NULL;
-    
+
     return perform_act(str, ch, obj, vict_obj, to);
   }
   if (type == TO_DECK)
@@ -3082,7 +3082,7 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
   }
   /* ASSUMPTION: at this point we know type must be TO_NOTVICT
    or TO_ROOM or TO_ROLLS */
-  
+
   if (type == TO_VEH_ROOM) {
     if (ch && ch->in_veh && !ch->in_veh->in_veh) {
       to = ch->in_veh->in_room->people;
@@ -3122,14 +3122,14 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
     mudlog(buf, NULL, LOG_SYSLOG, TRUE);
     return NULL;
   }
-  
+
   if (ch && IS_ASTRAL(ch) && !hide_invisible)
     hide_invisible = TRUE;
-  
+
   if ( type == TO_ROLLS )
   {
     for (; to; to = to->next_in_room) {
-      if (!IS_NPC(to) && !PRF_FLAGGED(to, PRF_ROLLS))
+      if (IS_NPC(to) || !PRF_FLAGGED(to, PRF_ROLLS))
         continue;
       if (SENDOK(to)
           && !(hide_invisible
@@ -3137,7 +3137,7 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
                && !CAN_SEE(to, ch)))
         perform_act(str, ch, obj, vict_obj, to);
     }
-    
+
     // Send rolls to riggers.
     for (; rigger_check; rigger_check = rigger_check->next_veh) {
       if ((tch = rigger_check->rigger) && tch->desc && PRF_FLAGGED(tch, PRF_ROLLS)) {
@@ -3154,10 +3154,10 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
           AFF_FLAGS(tch).RemoveBit(AFF_DETECT_INVIS);
       }
     }
-    
+
     return NULL;
   }
-  
+
   for (; to; to = next)
   {
     if (to->in_veh)
@@ -3166,8 +3166,8 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
       next = to->next_in_room;
     if (to == next) {
       snprintf(buf, sizeof(buf), "SYSERR: Encountered to=next infinite loop while looping over act string ''%s' for %s. Setting their next to NULL, this may break someone. Debug info: %s, type %d",
-              str, 
-              GET_CHAR_NAME(ch), 
+              str,
+              GET_CHAR_NAME(ch),
               to->in_veh ? "in veh" : "in room",
               type);
       mudlog(buf, ch, LOG_SYSLOG, TRUE);
@@ -3175,13 +3175,13 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
         to->next_in_veh = NULL;
       else
         to->next_in_room = NULL;
-        
+
       return NULL;
     }
     if (can_send_act_to_target(ch, hide_invisible, obj, vict_obj, to, type))
       perform_act(str, ch, obj, vict_obj, to);
   }
-  
+
   // Send to riggers.
   for (; rigger_check; rigger_check = rigger_check->next_veh) {
     if ((tch = rigger_check->rigger) && tch->desc) {
@@ -3195,7 +3195,7 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
         AFF_FLAGS(tch).RemoveBit(AFF_DETECT_INVIS);
     }
   }
-  
+
   return NULL;
 }
 #undef SENDOK
@@ -3212,7 +3212,7 @@ void check_memory_canaries() {
     // Check the room itself.
     assert(world[world_index].canary == CANARY_VALUE);
   }
-  
+
   // Check every object in the game.
   for (int obj_index = 0; obj_index < top_of_objt; obj_index++) {
     assert(obj_proto[obj_index].canary == CANARY_VALUE);
@@ -3225,28 +3225,28 @@ void msdp_update() {
   struct descriptor_data *d = NULL;
   struct char_data *ch = NULL;
   int PlayerCount = 0;
-  
+
   for (d = descriptor_list; d; d = d->next) {
     if (!(ch = d->character))
       continue;
-    
+
     ++PlayerCount;
     // General info
     MSDPSetString(d, eMSDP_CHARACTER_NAME, GET_CHAR_NAME(ch));
     MSDPSetString(d, eMSDP_SERVER_ID, "AwakeMUD CE");
-    
+
     // Character info
     MSDPSetNumber(d, eMSDP_HEALTH, GET_PHYSICAL(ch));
     MSDPSetNumber(d, eMSDP_HEALTH_MAX, GET_MAX_PHYSICAL(ch));
     MSDPSetNumber(d, eMSDP_MANA, GET_MENTAL(ch));
     MSDPSetNumber(d, eMSDP_MANA_MAX, GET_MAX_MENTAL(ch));
     MSDPSetNumber(d, eMSDP_MONEY, GET_NUYEN(ch));
-    
+
     // TODO: Many more things can be added here.
-    
+
     MSDPUpdate(d); /* Flush all the dirty variables */
   }
-  
+
   /* Ideally this should be called once at startup, and again whenever
    * someone leaves or joins the mud.  But this works, and it keeps the
    * snippet simple.  Optimise as you see fit.
@@ -3258,19 +3258,19 @@ bool ch_is_eligible_to_receive_socialization_bonus(struct char_data *ch) {
   // NPCs don't get social bonuses.
   if (IS_NPC(ch))
     return FALSE;
-    
+
   // You're invisible? You can't get the bonus. Too easy to just idle in a bar watching Netflix for karma.
   // And to anyone reading the code and thinking "Oh, it'd be a great prank to make my rival invis while they RP so they don't get the bonus!" -- no, that's abusing the system and will be punished.
   if (IS_AFFECTED(ch, AFF_IMP_INVIS)
        || IS_AFFECTED(ch, AFF_SPELLIMPINVIS)
        || IS_AFFECTED(ch, AFF_INVISIBLE)
-       || IS_AFFECTED(ch, AFF_SPELLINVIS)) 
+       || IS_AFFECTED(ch, AFF_SPELLINVIS))
     return FALSE;
-  
+
   // You must be present.
   if (!ch->desc || ch->char_specials.timer >= 10)
     return FALSE;
-    
+
   return TRUE;
 }
 
@@ -3280,27 +3280,27 @@ void increase_congregation_bonus_pools() {
   for (struct char_data *i = character_list; i; i = i->next) {
     if (!ch_is_eligible_to_receive_socialization_bonus(i))
       continue;
-      
+
     // Not in a social room? This doesn't apply to you.
     if (!i->in_room || !ROOM_FLAGGED(i->in_room, ROOM_ENCOURAGE_CONGREGATION))
       continue;
-    
+
     // You can't be maxed out.
     if (GET_CONGREGATION_BONUS(i) == MAX_CONGREGATION_BONUS) {
       snprintf(buf, sizeof(buf), "Socialization: Skipping %s's opportunity to earn social points-- already maximized.", GET_CHAR_NAME(i));
       act(buf, FALSE, i, 0, 0, TO_ROLLS);
       continue;
     }
-    
+
     int occupants = 1, total_occupants = 1;
-         
+
     // Two iterations over the room. First, if you're not an NPC and not idle, you proceed to second check.
     for (struct char_data *tempch = i->in_room->people; tempch; tempch = tempch->next_in_room) {
       if (tempch == i || !ch_is_eligible_to_receive_socialization_bonus(tempch))
         continue;
-        
+
       total_occupants++;
-        
+
       // Second, if your host does not match anyone else's host, you count as an occupant.
       // Disabled this code for now since grapevine is a thing. It's still against the rules, we just don't check it here.
       /*
@@ -3308,7 +3308,7 @@ void increase_congregation_bonus_pools() {
       for (struct char_data *descch = i->in_room->people; descch; descch = descch->next_in_room) {
         if (descch == tempch || IS_NPC(descch) || !descch->desc || descch->char_specials.timer >= 10)
           continue;
-          
+
         if (!strcmp(descch->desc->host, tempch->desc->host)) {
           snprintf(buf, sizeof(buf), "Socialization: Skipping %s in occupant count-- multichar of %s.", GET_CHAR_NAME(descch), GET_CHAR_NAME(tempch));
           act(buf, FALSE, i, 0, 0, TO_ROLLS);
@@ -3319,12 +3319,12 @@ void increase_congregation_bonus_pools() {
       if (is_multichar)
         continue;
       */
-      
+
       snprintf(buf, sizeof(buf), "Socialization: Counting %s as an occupant.", GET_CHAR_NAME(tempch));
       act(buf, FALSE, i, 0, 0, TO_ROLLS);
       occupants++;
     }
-    
+
     int point_gain = 1;
     if (occupants >= 10)
       point_gain = 4;
@@ -3332,9 +3332,9 @@ void increase_congregation_bonus_pools() {
       point_gain = 3;
     else if (occupants >= 3)
       point_gain = 2;
-    
-    snprintf(buf, sizeof(buf), "Socialization: %s gets %d (valid PC occupants: %d of %d).", 
-             GET_CHAR_NAME(i), 
+
+    snprintf(buf, sizeof(buf), "Socialization: %s gets %d (valid PC occupants: %d of %d).",
+             GET_CHAR_NAME(i),
              MIN(GET_CONGREGATION_BONUS(i) + point_gain, MAX_CONGREGATION_BONUS) - GET_CONGREGATION_BONUS(i),
              occupants,
              total_occupants);
@@ -3347,30 +3347,30 @@ void send_nuyen_rewards_to_pcs() {
   struct char_data *ch;
   bool already_printed = FALSE;
   snprintf(buf, sizeof(buf), "Standard idle bonus of %d nuyen awarded to: ", IDLE_NUYEN_REWARD_AMOUNT);
-  
+
   for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
     if (d->connected == CON_PLAYING
         || d->connected == CON_PART_CREATE
-        || (d->connected >= CON_SPELL_CREATE 
-            && d->connected <= CON_HELPEDIT 
+        || (d->connected >= CON_SPELL_CREATE
+            && d->connected <= CON_HELPEDIT
             && d->connected != CON_ASKNAME))
     {
       ch = (d->original ? d->original : d->character);
       // Staff and chargen characters don't get the idle bonus.
       if (IS_SENATOR(ch) || PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED))
         continue;
-        
+
       if (ch->char_specials.timer > IDLE_NUYEN_REWARD_THRESHOLD_IN_MINUTES) {
         if (!PRF_FLAGGED(ch, PRF_NO_IDLE_NUYEN_REWARD_MESSAGE))
           send_to_char(ch, "[OOC message: You have been awarded the standard idling bonus of %d nuyen. You can TOGGLE NOIDLE to hide these messages while still getting the reward.]\r\n", IDLE_NUYEN_REWARD_AMOUNT);
         gain_nuyen(ch, IDLE_NUYEN_REWARD_AMOUNT, NUYEN_INCOME_IDLE_REWARD);
-        
+
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s%s", already_printed ? ", " : "", GET_CHAR_NAME(ch));
         already_printed = TRUE;
       }
     }
   }
-  
+
   if (already_printed)
     mudlog(buf, NULL, LOG_SYSLOG, TRUE);
 }
@@ -3378,87 +3378,87 @@ void send_nuyen_rewards_to_pcs() {
 void process_wheres_my_car() {
   PERF_PROF_SCOPE( pr_wheres_my_car_, "where's my car");
   struct room_data *ch_in_room = NULL, *veh_in_room = NULL;
-  
+
   // Iterate through all connected PCs in the game, looking for ones who are searching for cars.
-  for (struct descriptor_data *d = descriptor_list; d; d = d->next) {   
+  for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
     // Skip anyone not in the playing state.
     if (d->connected)
       continue;
-      
+
     // Skip anyone who's projecting or doesn't have a character.
     if (!d->character || d->original)
       continue;
-      
+
     // Skip anyone who hasn't paid for a search.
     if (GET_NUYEN_PAID_FOR_WHERES_MY_CAR(d->character) <= 0)
       continue;
-      
+
     // Skip anyone not in a room.
     if (!(ch_in_room = get_ch_in_room(d->character)))
       continue;
-      
+
     int num_vehicles_found = 0, total_vehicles = 0;
     int reward_amount = GET_NUYEN_PAID_FOR_WHERES_MY_CAR(d->character) - (GET_NUYEN_PAID_FOR_WHERES_MY_CAR(d->character) / 2);
     int max_distance_searched = GET_NUYEN_PAID_FOR_WHERES_MY_CAR(d->character) / WHERES_MY_CAR_NUYEN_PER_ROOM;
     int idnum_canary = GET_IDNUM(d->character);
-    
+
     // Compose the beginning of our log string.
     snprintf(buf, sizeof(buf), "%s paid %ld",
-             GET_CHAR_NAME(d->character), 
+             GET_CHAR_NAME(d->character),
              GET_NUYEN_PAID_FOR_WHERES_MY_CAR(d->character));
-             
+
     // Clear paid amount.
     GET_NUYEN_PAID_FOR_WHERES_MY_CAR(d->character) = 0;
     assert(idnum_canary == GET_IDNUM(d->character));
-             
+
     send_to_char("After a bit of waiting, your searchers straggle back in. They"
                  " confer amongst themselves, then give you a report:\r\n", d->character);
-    
+
     // Iterate through all the vehicles in the game, looking for ones owned by this character.
     for (struct veh_data *veh = veh_list; veh; veh = veh->next) {
       if (veh->owner == GET_IDNUM(d->character) && (veh_in_room = get_veh_in_room(veh))) {
         total_vehicles++;
-        
+
         // Hard limit of 5 vehicles-- otherwise BFS lags us out.
         if (total_vehicles > 5)
           break;
-        
+
         // If they didn't pay enough to find this one, skip it.
         int distance = calculate_distance_between_rooms(veh_in_room->number, ch_in_room->number, TRUE);
         if (distance < 0 || distance > max_distance_searched) {
           log_vfprintf("Refusing to find vehicle %s: Distance is %d, vs max %d.", GET_VEH_NAME(veh), distance, max_distance_searched);
           continue;
         }
-          
+
         struct room_data *room = get_veh_in_room(veh);
-        send_to_char(d->character, "%2d) %-30s (At %s^n) [%2d/10] Damage\r\n", 
-                     ++num_vehicles_found, 
+        send_to_char(d->character, "%2d) %-30s (At %s^n) [%2d/10] Damage\r\n",
+                     ++num_vehicles_found,
                      GET_VEH_NAME(veh),
-                     room ? room->name : "someone's tow rig, probably", 
+                     room ? room->name : "someone's tow rig, probably",
                      veh->damage);
       }
     }
     assert(idnum_canary == GET_IDNUM(d->character));
-    
+
     // Either note to the player that they've paid the full amount, or refund the unpaid half.
     if (num_vehicles_found > 0) {
-      send_to_char(d->character, "\r\nYou %s pay out the promised reward of %d.\r\n", 
-                   num_vehicles_found == total_vehicles ? "nod and" : "begrudgingly", 
+      send_to_char(d->character, "\r\nYou %s pay out the promised reward of %d.\r\n",
+                   num_vehicles_found == total_vehicles ? "nod and" : "begrudgingly",
                    reward_amount);
     } else {
-      send_to_char(d->character, "...It's just a blank piece of paper. You stare them down until they leave, then pocket the reward of %d.\r\n", 
+      send_to_char(d->character, "...It's just a blank piece of paper. You stare them down until they leave, then pocket the reward of %d.\r\n",
                    reward_amount);
       // Credit it back.
       GET_NUYEN_RAW(d->character) += reward_amount;
       GET_NUYEN_INCOME_THIS_PLAY_SESSION(d->character, NUYEN_OUTFLOW_WHERESMYCAR) -= reward_amount;
     }
     assert(idnum_canary == GET_IDNUM(d->character));
-    
+
     // Finish up our log string and write it to logs.
-    snprintf(buf2, sizeof(buf2), "%s to find %d/%d vehicles (max dist %d).", 
+    snprintf(buf2, sizeof(buf2), "%s to find %d/%d vehicles (max dist %d).",
              buf,
-             num_vehicles_found, 
-             total_vehicles, 
+             num_vehicles_found,
+             total_vehicles,
              max_distance_searched);
     mudlog(buf2, d->character, LOG_SYSLOG, TRUE);
   }
