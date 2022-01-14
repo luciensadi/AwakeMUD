@@ -2037,7 +2037,8 @@ void shop_cancel(char *arg, struct char_data *ch, struct char_data *keeper, vnum
 
         // Refund the prepayment, minus the usual fee.
         if (order->paid > 0) {
-          int repayment_amount = order->paid - (order->paid / PREORDER_RESTOCKING_FEE_DIVISOR);
+          int total_prepayment = order->paid * order->number;
+          int repayment_amount = total_prepayment - (total_prepayment / PREORDER_RESTOCKING_FEE_DIVISOR);
           if (repayment_amount > 0) {
             // In this instance, we do a raw refund, then decrement the shop purchase amount.
             GET_NUYEN_RAW(ch) += repayment_amount;
@@ -3057,13 +3058,19 @@ void save_shop_orders() {
         if (totaltime <= 0) {
           // Notify them about the expiry, but only for orders with a prepay-- this prevents the 7-day spamstorm when this change is first launched.
           if (order->paid > 0) {
-            int repayment_amount = order->paid - (order->paid / PREORDER_RESTOCKING_FEE_DIVISOR);
+            // Calculate the amount.
+            int total_prepayment = order->paid * order->number;
+            int repayment_amount = total_prepayment - (total_prepayment / PREORDER_RESTOCKING_FEE_DIVISOR);
+
+            // Look up the item (we need its name for the mail).
             int real_obj = real_object(order->item);
             snprintf(buf2, sizeof(buf2), "%s can't be held for you any longer at %s. %d nuyen will be refunded to your account.\r\n",
                      real_obj > 0 ? CAP(obj_proto[real_obj].text.name) : "Something",
                      shop_table[shop_nr].shopname,
                      repayment_amount
                     );
+
+            // Look up the shopkeeper, then send the mail with their name attached.
             int real_mob = real_mobile(shop_table[shop_nr].keeper);
             if (real_mob > 0)
               raw_store_mail(order->player, 0, mob_proto[real_mob].player.physical_text.name, (const char *) buf2);
