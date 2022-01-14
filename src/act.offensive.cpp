@@ -798,6 +798,7 @@ ACMD(do_mode)
         GET_WEAPON_FULL_AUTO_COUNT(weapon) = 10;
         send_to_char("Using default FA value of 10. You can change this with 'mode FA X' where X is the number of bullets to fire.\r\n", ch);
       }
+      GET_WEAPON_FIREMODE(weapon) = MODE_FA;
     }
 
     // Message them about the change.
