@@ -2333,7 +2333,8 @@ void cast_spell(struct char_data *ch, int spell, int sub, int force, char *arg)
 
 void mob_magic(struct char_data *ch)
 {
-  if (!FIGHTING(ch))
+  // Elementals don't get to cast: it breaks the game.
+  if (!FIGHTING(ch) || IS_ELEMENTAL(ch))
     return;
   char buf[MAX_STRING_LENGTH];
   int spell = 0, sub = 0, force, magic = GET_MAG(ch) / 100;

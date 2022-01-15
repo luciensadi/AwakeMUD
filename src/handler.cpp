@@ -51,18 +51,18 @@ char *fname(char *namelist)
 {
   static char holder[50];
   char *point;
-  
+
   if (!namelist || !*namelist) {
     mudlog("SYSERR: fname received null namelist!", NULL, LOG_SYSLOG, TRUE);
     strcpy(holder, "error-report-this-to-staff");
     return holder;
   }
-  
+
   for (point = holder; isalpha(*namelist); namelist++, point++)
     *point = *namelist;
-  
+
   *point = '\0';
-  
+
   return (holder);
 }
 
@@ -70,12 +70,12 @@ char *fname_allchars(char *namelist)
 {
   static char holder[50];
   char *point;
-  
+
   for (point = holder; *namelist && *namelist != ' ' && *namelist != '\r' && *namelist != '\n' && *namelist != '\t'; namelist++, point++)
     *point = *namelist;
-  
+
   *point = '\0';
-  
+
   return (holder);
 }
 
@@ -88,28 +88,28 @@ int isname(const char *str, const char *namelist)
     return 0;
   if (namelist[0] == '\0')
     return 0;
-  
+
   const char *curname, *curstr;
-  
+
   curname = namelist;
   for (;;) {
     for (curstr = str;; curstr++, curname++) {
       if ((!*curstr && !isalpha(*curname)) || is_abbrev(curstr, curname))
       // if (!*curstr && !isalpha(*curname))
         return (1);
-      
+
       if (!*curname)
         return (0);
-      
+
       if (!*curstr || *curname == ' ')
         break;
-      
+
       if (LOWER(*curstr) != LOWER(*curname))
         break;
     }
-    
+
     // skip to next name
-    
+
     for (; isalpha(*curname); curname++)
       ;
     if (!*curname)
@@ -133,11 +133,11 @@ void affect_modify(struct char_data * ch,
     AFF_FLAGS(ch).RemoveAll(bitv);
     mod = -mod;
   }
-  
+
   switch (loc) {
     case APPLY_NONE:
       break;
-      
+
     case APPLY_STR:
       GET_STR(ch) += mod;
       break;
@@ -165,59 +165,59 @@ void affect_modify(struct char_data * ch,
     case APPLY_REA:
       GET_REA(ch) += mod;
       break;
-      
+
     case APPLY_AGE:
       ch->player.time.birth -= (mod * SECS_PER_MUD_YEAR);
       break;
-      
+
     case APPLY_CHAR_WEIGHT:
       GET_WEIGHT(ch) += mod;
       break;
-      
+
     case APPLY_CHAR_HEIGHT:
       GET_HEIGHT(ch) += mod;
       break;
-      
+
     case APPLY_MENTAL:
       GET_MAX_MENTAL(ch) += mod * 100;
       break;
-      
+
     case APPLY_PHYSICAL:
       GET_MAX_PHYSICAL(ch) += mod * 100;
       break;
-      
+
     case APPLY_BALLISTIC:
       GET_BALLISTIC(ch) += mod;
       break;
-      
+
     case APPLY_IMPACT:
       GET_IMPACT(ch) += mod;
       break;
-      
+
     case APPLY_ASTRAL_POOL:
       GET_ASTRAL(ch) += mod;
       break;
-      
+
     case APPLY_COMBAT_POOL:
       GET_COMBAT(ch) += mod;
       break;
-      
+
     case APPLY_HACKING_POOL:
       GET_HACKING(ch) += mod;
       break;
-      
+
     case APPLY_CONTROL_POOL:
       GET_CONTROL(ch) += mod;
       break;
-      
+
     case APPLY_MAGIC_POOL:
       GET_MAGIC(ch) += mod;   /* GET_MAGIC gets their magic pool, GET_MAG is for attribute*/
       break;
-      
+
     case APPLY_INITIATIVE_DICE:
       GET_INIT_DICE(ch) += mod;
       break;
-      
+
     case APPLY_TARGET:
       GET_TARGET_MOD(ch) += mod;
       break;
@@ -272,7 +272,7 @@ void remove_focus_effect( struct char_data *ch, struct obj_data *object )
     GET_MAG(ch) -= GET_OBJ_VAL(object, 1) * 100;
     GET_MAGIC(ch) -= GET_OBJ_VAL(object, 1);
   }
-  
+
 }
 
 void affect_veh(struct veh_data *veh, byte loc, sbyte mod)
@@ -320,8 +320,8 @@ void affect_veh(struct veh_data *veh, byte loc, sbyte mod)
     default:
       log_vfprintf("SYSLOG: Unknown apply adjust: %s/%d.", veh->short_description, loc);
       break;
-      
-      
+
+
   }
 }
 void spell_modify(struct char_data *ch, struct sustain_data *sust, bool add)
@@ -346,10 +346,10 @@ void spell_modify(struct char_data *ch, struct sustain_data *sust, bool add)
         tmp = MIN(sust->force, sust->success) * 100;
         // Further restrict max HP change to the character's max_physical value.
         tmp = MIN(tmp, GET_MAX_PHYSICAL(ch));
-      
+
         // Now that we meet 0 ≤ hp change ≤ max_phys, apply the add/subtract multiplier.
         mod *= tmp;
-      
+
         // Finally, apply it to character, capping at their max physical. No negative cap is applied.
         GET_PHYSICAL(ch) = MIN(GET_MAX_PHYSICAL(ch), GET_PHYSICAL(ch) + mod);
       break;
@@ -471,14 +471,14 @@ void affect_total(struct char_data * ch)
   sh_int i, j, skill_dice;
   int has_rig = 0, has_trigger = -1, has_wired = 0, has_mbw = 0;
   bool wearing = FALSE;
-  
+
   if (IS_PROJECT(ch))
     return;
-    
+
   int old_max_hacking = GET_MAX_HACKING(ch);
   int old_rem_hacking = GET_REM_HACKING(ch);
-  
-  
+
+
   /* remove the effects of used equipment */
   for (i = 0; i < (NUM_WEARS - 1); i++)
   {
@@ -495,12 +495,12 @@ void affect_total(struct char_data * ch)
                         GET_EQ(ch, i)->obj_flags.bitvector, FALSE);
     }
   }
-  
+
   // remove the effects of foci
   for (obj = ch->carrying; obj; obj = obj->next_content)
     if (GET_OBJ_TYPE(obj) == ITEM_FOCUS)
       remove_focus_effect(ch, obj);
-  
+
   /* remove the effects of cyberware */
   for (cyber = ch->cyberware; cyber; cyber = cyber->next_content)
   {
@@ -510,7 +510,7 @@ void affect_total(struct char_data * ch)
                     cyber->affected[j].modifier,
                     cyber->obj_flags.bitvector, FALSE);
   }
-  
+
   /* remove the effects of bioware */
   for (cyber = ch->bioware; cyber; cyber = cyber->next_content)
   {
@@ -522,26 +522,26 @@ void affect_total(struct char_data * ch)
                       cyber->affected[j].modifier,
                       cyber->obj_flags.bitvector, FALSE);
   }
-  
+
   // remove the effects of spells
   AFF_FLAGS(ch).RemoveBit(AFF_INVISIBLE);
   for (sust = GET_SUSTAINED(ch); sust; sust = sust->next)
     if (!sust->caster)
       spell_modify(ch, sust, FALSE);
-  
+
   // reset the affected ability scores
   ch->aff_abils = ch->real_abils;
-  
+
   /* calculate reaction before you add eq, cyberware, etc so that things *
    * such as wired reflexes work properly (as they only modify reaction  *
    * and not intelligence and quickness).            -cjd                */
   GET_REAL_REA(ch) = (GET_REAL_INT(ch) + GET_REAL_QUI(ch)) / 2;
   GET_REA(ch) = 0;
-  
+
   // Apply newbie flag removal.
   if (PLR_FLAGGED(ch, PLR_NEWBIE) && GET_TKE(ch) > NEWBIE_KARMA_THRESHOLD)
     PLR_FLAGS(ch).RemoveBit(PLR_NEWBIE);
-  
+
   /* set the dice pools before equip so that they can be affected */
   /* combat pool is equal to quickness, wil, and int divided by 2 */
   GET_COMBAT(ch) = 0;
@@ -549,7 +549,7 @@ void affect_total(struct char_data * ch)
   GET_ASTRAL(ch) = 0;
   GET_MAGIC(ch) = 0;
   GET_CONTROL(ch) = 0;
-  
+
   // Set reach, depending on race. Stripped out the 'you only get it at X height' thing since it's not canon and a newbie trap.
   if ((GET_RACE(ch) == RACE_TROLL || GET_RACE(ch) == RACE_CYCLOPS || GET_RACE(ch) == RACE_FOMORI ||
        GET_RACE(ch) == RACE_GIANT || GET_RACE(ch) == RACE_MINOTAUR) /* && GET_HEIGHT(ch) > 260 */)
@@ -559,7 +559,7 @@ void affect_total(struct char_data * ch)
   // reset initiative dice
   GET_INIT_DICE(ch) = 0;
   /* reset # of foci char has */
-  
+
   // Reset armor-related stats.
   {
     if (IS_SPIRIT(ch) || IS_ELEMENTAL(ch)) {
@@ -570,15 +570,15 @@ void affect_total(struct char_data * ch)
     } else {
       GET_BALLISTIC(ch) = GET_IMPACT(ch) = 0;
     }
-    
+
     GET_TOTALBAL(ch) = GET_TOTALIMP(ch) = 0;
   }
-  
+
   for (obj = ch->carrying; obj; obj = obj->next_content) {
     if (GET_OBJ_TYPE(obj) == ITEM_FOCUS)
       apply_focus_effect(ch, obj);
   }
-      
+
   /* effects of equipment */
   {
     struct obj_data *worn_item = NULL;
@@ -590,11 +590,11 @@ void affect_total(struct char_data * ch)
     int totalbal = 0, totalimp = 0;
     // Track the total for formfit.
     int formfitbal = 0, formfitimp = 0;
-    
+
     for (i = 0; i < (NUM_WEARS - 1); i++) {
       if ((worn_item = GET_EQ(ch, i))) {
         wearing = TRUE;
-        
+
         // Foci don't do aff_modify for some reason?
         if (GET_OBJ_TYPE(worn_item) == ITEM_FOCUS) {
           apply_focus_effect(ch, worn_item);
@@ -605,7 +605,7 @@ void affect_total(struct char_data * ch)
                           worn_item->affected[j].modifier,
                           worn_item->obj_flags.bitvector, TRUE);
         }
-        
+
         if (GET_OBJ_TYPE(worn_item) == ITEM_WORN) {
           // If it's part of an armor set we're already wearing, add it directly.
           // KNOWN ISSUE: If it finds your single Vashon item, it will check for Vashon only, even if you're wearing a full suit of Trog Moxie as well.
@@ -614,11 +614,11 @@ void affect_total(struct char_data * ch)
             suitimp += GET_WORN_IMPACT(worn_item);
             suittype = GET_WORN_MATCHED_SET(worn_item);
           }
-          
+
           // Otherwise, if it has an armor rating, handle that.
           else if (GET_WORN_BALLISTIC(worn_item) || GET_WORN_IMPACT(worn_item)) {
             int bal = 0, imp = 0;
-            
+
             // Remember that matched set items are 100x their expected value-- compensate for this.
             if (GET_WORN_MATCHED_SET(worn_item)) {
               bal = (int)(GET_WORN_BALLISTIC(worn_item) / 100);
@@ -627,17 +627,17 @@ void affect_total(struct char_data * ch)
               bal = GET_WORN_BALLISTIC(worn_item);
               imp = GET_WORN_IMPACT(worn_item);
             }
-            
+
             // Keep track of which worn item provides the highest total value.
             if (bal + imp > highestbal + highestimp) {
               highestbal = bal;
               highestimp = imp;
             }
-            
+
             // Add the value to the current worn armor total.
             totalbal += bal;
             totalimp += imp;
-            
+
             // If it's formfit, track it there for later math.
             if (IS_OBJ_STAT(worn_item, ITEM_FORMFIT)) {
               formfitbal += bal;
@@ -647,38 +647,38 @@ void affect_total(struct char_data * ch)
         }
       }
     }
-    
+
     // Add armor clothing set, if any.
     // KNOWN ISSUE: If the sum of bal or imp is x.5, the .5 is dropped here.
     if (suitbal || suitimp) {
       suitbal /= 100;
       suitimp /= 100;
-      
+
       if (suitbal + suitimp > highestbal + highestimp) {
         highestbal = suitbal;
         highestimp = suitimp;
       }
-      
+
       totalbal += suitbal;
       totalimp += suitimp;
     }
-    
+
     GET_IMPACT(ch) += highestimp + (int)((totalimp - highestimp) / 2);
     GET_BALLISTIC(ch) += highestbal + (int)((totalbal - highestbal) / 2);
-    
+
     GET_TOTALIMP(ch) += totalimp - formfitimp;
     GET_TOTALBAL(ch) += totalbal - formfitbal;
-    
+
     // CC p45: If the only thing you're wearing that gives armor is your matched set, it doesn't apply penalties.
     /*  Still under discussion, so not enabled yet.
     if ((suitimp || suitbal) && GET_TOTALIMP(ch) == suitimp && GET_TOTALBAL(ch) == suitbal)
       GET_TOTALIMP(ch) = GET_TOTALBAL(ch) = 0;
     */
   }
-  
+
   if (GET_RACE(ch) == RACE_TROLL || GET_RACE(ch) == RACE_MINOTAUR)
     GET_IMPACT(ch)++;
-  
+
   /* effects of cyberware */
   for (cyber = ch->cyberware; cyber; cyber = cyber->next_content)
   {
@@ -719,14 +719,14 @@ void affect_total(struct char_data * ch)
                       cyber->affected[j].modifier,
                       cyber->obj_flags.bitvector, TRUE);
   }
-  
+
   for (sust = GET_SUSTAINED(ch); sust; sust = sust->next)
     if (!sust->caster)
       spell_modify(ch, sust, TRUE);
-      
+
   if (GET_TEMP_QUI_LOSS(ch))
     GET_QUI(ch) = MAX(0, GET_QUI(ch) - (GET_TEMP_QUI_LOSS(ch) / 4));
-    
+
   for (cyber = ch->bioware; cyber; cyber = cyber->next_content) {
     if (GET_OBJ_VAL(cyber, 0) == BIO_PAINEDITOR && GET_OBJ_VAL(cyber, 3)) {
       GET_WIL(ch) += 1;
@@ -734,7 +734,7 @@ void affect_total(struct char_data * ch)
       break;
     }
   }
-    
+
   i = ((IS_NPC(ch) || (GET_LEVEL(ch) >= LVL_ADMIN)) ? 50 : 20);
   GET_REA(ch) += (GET_INT(ch) + GET_QUI(ch)) >> 1;
   GET_QUI(ch) = MAX(0, MIN(GET_QUI(ch), i));
@@ -753,7 +753,7 @@ void affect_total(struct char_data * ch)
   GET_TARGET_MOD(ch) = 0;
   GET_MAX_MENTAL(ch) -= GET_MENTAL_LOSS(ch) * 100;
   GET_MAX_PHYSICAL(ch) -= GET_PHYSICAL_LOSS(ch) * 100;
-  
+
   if (GET_TRADITION(ch) == TRAD_ADEPT)
   {
     if (GET_INIT_DICE(ch) == 0)
@@ -850,9 +850,9 @@ void affect_total(struct char_data * ch)
   {
     GET_TARGET_MOD(ch) += 4;
   }
-  
+
   skill_dice = get_skill_dice_in_use_for_weapons(ch);
-  
+
   GET_COMBAT(ch) += (GET_QUI(ch) + GET_WIL(ch) + GET_INT(ch)) / 2;
   if (GET_TOTALBAL(ch) > GET_QUI(ch))
     GET_COMBAT(ch) -= (GET_TOTALBAL(ch) - GET_QUI(ch)) / 2;
@@ -862,11 +862,11 @@ void affect_total(struct char_data * ch)
     GET_COMBAT(ch) = 0;
   if (GET_TRADITION(ch) == TRAD_ADEPT)
     GET_IMPACT(ch) += GET_POWER(ch, ADEPT_MYSTIC_ARMOR);
-    
-  // Apply gyromount penalties, but only if you're wielding a gun. 
+
+  // Apply gyromount penalties, but only if you're wielding a gun.
   // TODO: Ideally, this would only apply if you have uncompensated recoil, but that's a looot of code.
-  if (GET_EQ(ch, WEAR_WIELD) 
-      && GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_WEAPON) 
+  if (GET_EQ(ch, WEAR_WIELD)
+      && GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_WEAPON)
   {
     if (IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_WIELD)))) {
       bool added_gyro_penalty = FALSE;
@@ -875,7 +875,7 @@ void affect_total(struct char_data * ch)
           added_gyro_penalty = TRUE;
           GET_COMBAT(ch) /= 2;
         }
-        
+
       /*
       if (!added_gyro_penalty) {
         for (struct obj_data *cyb = ch->cyberware; !added_gyro_penalty && cyb; cyb = cyb->next_content) {
@@ -888,7 +888,7 @@ void affect_total(struct char_data * ch)
       */
     }
   }
-  
+
   GET_DEFENSE(ch) = MIN(GET_DEFENSE(ch), GET_COMBAT(ch));
   GET_BODY(ch) = MIN(GET_BODY(ch), GET_COMBAT(ch) - GET_DEFENSE(ch));
   GET_OFFENSE(ch) = GET_COMBAT(ch) - GET_DEFENSE(ch) - GET_BODY(ch);
@@ -897,7 +897,7 @@ void affect_total(struct char_data * ch)
     GET_DEFENSE(ch) += GET_OFFENSE(ch) - skill_dice;
     GET_OFFENSE(ch) = skill_dice;
   }
-  
+
   // Set up magic pool info correctly.
   if (IS_NPC(ch) && (IS_SPIRIT(ch) || IS_ELEMENTAL(ch))) {
     GET_ASTRAL(ch) = 1.5 * GET_LEVEL(ch);
@@ -913,7 +913,7 @@ void affect_total(struct char_data * ch)
     }
     GET_CASTING(ch) = MAX(0, GET_MAGIC(ch) - GET_DRAIN(ch) - GET_REFLECT(ch) - GET_SDEFENSE(ch));
   }
-  
+
   if (REAL_SKILL(ch, SKILL_COMPUTER) > 0)
   {
     int mpcp = 0;
@@ -929,7 +929,7 @@ void affect_total(struct char_data * ch)
       GET_HACKING(ch) += (int)(mpcp / 3);
     }
   }
-  
+
   if (has_rig)
   {
     int reaction = GET_REAL_INT(ch) + GET_REAL_QUI(ch);
@@ -941,17 +941,17 @@ void affect_total(struct char_data * ch)
     if (GET_HACKING(ch) < 0)
       GET_HACKING(ch) = 0;
   }
-  
+
   // Restore their max_hacking and rem_hacking, which were wiped out in the earlier aff_abils = real_abils.
   GET_REM_HACKING(ch) = MIN(old_rem_hacking, GET_HACKING(ch));
   GET_MAX_HACKING(ch) = MIN(old_max_hacking, GET_HACKING(ch));
-  
+
   if (has_mbw) {
     GET_QUI(ch) += has_mbw;
     GET_REA(ch) += has_mbw * 2;
     GET_INIT_DICE(ch) += has_mbw;
   }
-  
+
   // Update current vision to match what's being worn.
   if (AFF_FLAGGED(ch, AFF_INFRAVISION))
     CURRENT_VISION(ch) = THERMOGRAPHIC;
@@ -959,24 +959,24 @@ void affect_total(struct char_data * ch)
     CURRENT_VISION(ch) = LOWLIGHT;
   else
     CURRENT_VISION(ch) = NATURAL_VISION(ch);
-    
+
   // Strip invisibility from ruthenium etc if you're wearing about or body items that aren't also ruthenium.
   if (AFF_FLAGGED(ch, AFF_INVISIBLE) || AFF_FLAGGED(ch, AFF_IMP_INVIS))
   {
     if (GET_EQ(ch, WEAR_ABOUT)) {
-      if (!(GET_OBJ_AFFECT(GET_EQ(ch, WEAR_ABOUT)).IsSet(AFF_INVISIBLE) 
+      if (!(GET_OBJ_AFFECT(GET_EQ(ch, WEAR_ABOUT)).IsSet(AFF_INVISIBLE)
             || GET_OBJ_AFFECT(GET_EQ(ch, WEAR_ABOUT)).IsSet(AFF_IMP_INVIS))) {
         AFF_FLAGS(ch).RemoveBits(AFF_INVISIBLE, AFF_IMP_INVIS, ENDBIT);
       }
     }
-    else if (GET_EQ(ch, WEAR_BODY) 
-             && (!(GET_OBJ_AFFECT(GET_EQ(ch, WEAR_BODY)).IsSet(AFF_INVISIBLE) 
-                   || GET_OBJ_AFFECT(GET_EQ(ch, WEAR_BODY)).IsSet(AFF_IMP_INVIS)))) 
+    else if (GET_EQ(ch, WEAR_BODY)
+             && (!(GET_OBJ_AFFECT(GET_EQ(ch, WEAR_BODY)).IsSet(AFF_INVISIBLE)
+                   || GET_OBJ_AFFECT(GET_EQ(ch, WEAR_BODY)).IsSet(AFF_IMP_INVIS))))
     {
-      AFF_FLAGS(ch).RemoveBits(AFF_INVISIBLE, AFF_IMP_INVIS, ENDBIT);                 
+      AFF_FLAGS(ch).RemoveBits(AFF_INVISIBLE, AFF_IMP_INVIS, ENDBIT);
     }
   }
-  
+
   // Apply reach from weapon, if any.
   struct obj_data *weapon = GET_EQ(ch, WEAR_WIELD);
   if (weapon && GET_OBJ_TYPE(weapon) == ITEM_WEAPON) {
@@ -984,7 +984,7 @@ void affect_total(struct char_data * ch)
     if (!IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon))) {
       if (GET_WEAPON_REACH(weapon) > 0)
         GET_REACH(ch) += GET_WEAPON_REACH(weapon);
-    } 
+    }
     // Ranged weapons grant 0 reach if pistol, 2 reach if anything else with a bayonet, 1 reach for all other categories.
     else {
       if (GET_WEAPON_SKILL(weapon) != SKILL_PISTOLS)
@@ -1004,11 +1004,11 @@ bool affected_by_spell(struct char_data * ch, int type)
 {
   if (!GET_SUSTAINED(ch))
     return FALSE;
-    
+
   for (struct sustain_data *hjp = GET_SUSTAINED(ch); hjp; hjp = hjp->next)
     if ((hjp->spell == type) && (hjp->caster == FALSE))
       return TRUE;
-  
+
   return FALSE;
 }
 
@@ -1058,20 +1058,20 @@ void veh_from_room(struct veh_data * veh)
 void char_from_room(struct char_data * ch)
 {
   struct char_data *temp;
-  
+
   if (ch == NULL || (!ch->in_room && !ch->in_veh)) {
     log("SYSERR: NULL in handler.c, char_from_room");
     shutdown();
   }
-  
+
   if (IS_WORKING(ch)) {
     send_to_char("You stop working.\r\n", ch);
     STOP_WORKING(ch);
   }
-  
+
   if (CH_IN_COMBAT(ch))
     stop_fighting(ch);
-  
+
   if (ch->in_room) {
     // Character is in a room. Clean up room effects sourced by character.
     if (GET_EQ(ch, WEAR_LIGHT) != NULL)
@@ -1088,14 +1088,14 @@ void char_from_room(struct char_data * ch)
       ch->in_room->silence[1] = 0;
     if (IS_SENATOR(ch) && PRF_FLAGGED(ch, PRF_PACIFY) && ch->in_room->peaceful > 0)
       ch->in_room->peaceful--;
-    
+
     // Remove them from the room.
     REMOVE_FROM_LIST(ch, ch->in_room->people, next_in_room);
     ch->in_room = NULL;
     ch->next_in_room = NULL;
     CHAR_X(ch) = CHAR_Y(ch) = 0;
   }
-  
+
   if (ch->in_veh) {
     // Character is in a vehicle. Remove them from it.
     REMOVE_FROM_LIST(ch, ch->in_veh->people, next_in_veh);
@@ -1114,7 +1114,7 @@ void char_to_veh(struct veh_data * veh, struct char_data * ch)
   else {
     if (ch->in_room || ch->in_veh)
       char_from_room(ch);
-    
+
     ch->next_in_veh = veh->people;
     veh->people = ch;
     ch->in_veh = veh;
@@ -1131,7 +1131,7 @@ void veh_to_room(struct veh_data * veh, struct room_data *room)
   {
     if (veh->in_veh || veh->in_room)
       veh_from_room(veh);
-    
+
     veh->next_veh = room->vehicles;
     room->vehicles = veh;
     veh->in_room = room;
@@ -1146,7 +1146,7 @@ void veh_to_veh(struct veh_data *veh, struct veh_data *dest)
   else {
     if (veh->in_veh || veh->in_room)
       veh_from_room(veh);
-    
+
     veh->next_veh = dest->carriedvehs;
     veh->in_veh = dest;
     dest->carriedvehs = veh;
@@ -1208,19 +1208,19 @@ void char_to_room(struct char_data * ch, struct room_data *room)
     log("SYSLOG: Illegal value(s) passed to char_to_room");
     room = &world[0];
   }
-  
+
   // Warn on exceeding privileges, but don't fail.
   if (builder_cant_go_there(ch, room)) {
     mudlog("Warning: Builder exceeding allowed bounds. Make sure their loadroom etc is set properly.", ch, LOG_WIZLOG, TRUE);
   }
-  
+
   ch->next_in_room = room->people;
   room->people = ch;
   ch->in_room = room;
   room->dirty_bit = TRUE;
   if (IS_SENATOR(ch) && PRF_FLAGGED(ch, PRF_PACIFY))
     room->peaceful++;
-  
+
   if (GET_EQ(ch, WEAR_LIGHT))
     if (GET_OBJ_TYPE(GET_EQ(ch, WEAR_LIGHT)) == ITEM_LIGHT)
       if (GET_OBJ_VAL(GET_EQ(ch, WEAR_LIGHT), 2))     /* Light ON */
@@ -1274,7 +1274,7 @@ bool check_obj_to_x_preconditions(struct obj_data * object, struct char_data *ch
     mudlog("ERROR: Null object passed to check_obj_to_x_preconditions().", NULL, LOG_SYSLOG, TRUE);
     return FALSE;
   }
-  
+
   // Pre-compose our message header.
   snprintf(buf3, sizeof(buf3), "ERROR: check_obj_to_x_preconditions() failure for %s (%ld): \r\n", GET_OBJ_NAME(object), GET_OBJ_VNUM(object));
   size_t starting_strlen = strlen(buf3);
@@ -1283,37 +1283,37 @@ bool check_obj_to_x_preconditions(struct obj_data * object, struct char_data *ch
   if (object->carried_by) {
     snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "- Object already carried by %s.\r\n", GET_CHAR_NAME(object->carried_by));
   }
-  
+
   // We can't give an object away if it's sitting in a room.
   if (object->in_room) {
     snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "- Object is already in room %ld.\r\n", object->in_room->number);
   }
-  
+
   // We can't give an object away if it's in a vehicle.
   if (object->in_veh) {
     snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "- Object is already in vehicle %s.\r\n", GET_VEH_NAME(object->in_veh));
   }
-  
+
   // We can't give an object away if it's in another object.
   if (object->in_obj) {
     snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "- Object is already in object %s.\r\n", GET_OBJ_NAME(object->in_obj));
   }
-  
+
   // We can't give an object away if it's in a host.
   if (object->in_host) {
     snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "- Object is already in host %ld.\r\n", object->in_host->vnum);
   }
-  
+
   // Fail if the object already has next_content. This implies that it's part of someone else's linked list-- never merge them!
   if (object->next_content) {
     strlcat(buf3, "- It's already part of a next_content linked list.\r\n", sizeof(buf3));
   }
-  
+
   // Can't give away something that's worn by someone else.
   if (object->worn_by) {
     snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "- Object already carried by %s.\r\n", GET_CHAR_NAME(object->carried_by));
   }
-  
+
   // If we added anything, log it.
   if (starting_strlen != strlen(buf3)) {
     const char *representation = generate_new_loggable_representation(object);
@@ -1321,7 +1321,7 @@ bool check_obj_to_x_preconditions(struct obj_data * object, struct char_data *ch
     mudlog(buf3, ch, LOG_SYSLOG, TRUE);
     return FALSE;
   }
-  
+
   strcpy(buf3, "");
   return TRUE;
 }
@@ -1330,18 +1330,18 @@ bool check_obj_to_x_preconditions(struct obj_data * object, struct char_data *ch
 void obj_to_char(struct obj_data * object, struct char_data * ch)
 {
   struct obj_data *i = NULL, *op = NULL;
-  
+
   // Check our object-related preconditions. All error logging is done there.
   if (!check_obj_to_x_preconditions(object, ch)) {
     return;
   }
-  
+
   // Precondition: The character in question must exist.
   if (!ch) {
     mudlog("SYSLOG: NULL char passed to obj_to_char", NULL, LOG_SYSLOG, TRUE);
     return;
   }
-  
+
   // Iterate over the objects that the character already has.
   for (i = ch->carrying; i; i = i->next_content) {
     // Attempt at additional error detection.
@@ -1349,7 +1349,7 @@ void obj_to_char(struct obj_data * object, struct char_data * ch)
       mudlog("ERROR: i == object in obj_to_char(). How we even got here, I don't know.", ch, LOG_SYSLOG, TRUE);
       return;
     }
-    
+
     // If their inventory list has turned into an infinite loop due to a bug, warn about it and bail out here instead of hanging the MUD.
     if (i == i->next_content) {
       snprintf(buf3, sizeof(buf3), "ERROR: Infinite loop detected in obj_to_char. Looping object is %s (%ld). Bailing out, %s is not getting %s %s (%ld).",
@@ -1365,7 +1365,7 @@ void obj_to_char(struct obj_data * object, struct char_data * ch)
     }
     op = i;
   }
-  
+
   // If i exists (e.g. we broke out of the loop early by finding a match to this item we're trying to give the character)...
   if (i) {
     // Set our to-give object's next_content to the matching item i.
@@ -1384,12 +1384,12 @@ void obj_to_char(struct obj_data * object, struct char_data * ch)
     object->next_content = ch->carrying;
     ch->carrying = object;
   }
-  
+
   // Set the object as being carried by this character, and increase their carry weight and carry number accordingly.
   object->carried_by = ch;
   IS_CARRYING_W(ch) += GET_OBJ_WEIGHT(object);
   IS_CARRYING_N(ch)++;
-  
+
   // Apply focus effects as needed.
   if (GET_OBJ_TYPE(object) == ITEM_FOCUS) {
     apply_focus_effect(ch, object);
@@ -1401,19 +1401,19 @@ void obj_to_cyberware(struct obj_data * object, struct char_data * ch)
   // Check our object-related preconditions. All error logging is done there.
   if (!check_obj_to_x_preconditions(object, ch))
     return;
-  
+
   // Precondition: The character in question must exist.
   if (!ch) {
     mudlog("SYSLOG: NULL char passed to obj_to_cyberware", NULL, LOG_SYSLOG, TRUE);
     return;
   }
-  
+
   // It's gotta be cyberware in order to be a valid obj_to_cyberware target.
   if (GET_OBJ_TYPE(object) != ITEM_CYBERWARE) {
     log("Non-cyberware object type passed to obj_to_cyberware.");
     return;
   }
-  
+
   object->next_content = ch->cyberware;
   ch->cyberware = object;
   object->carried_by = ch;
@@ -1424,35 +1424,35 @@ void obj_to_cyberware(struct obj_data * object, struct char_data * ch)
 void obj_to_bioware(struct obj_data * object, struct char_data * ch)
 {
   int temp;
-  
+
   // Check our object-related preconditions. All error logging is done there.
   if (!check_obj_to_x_preconditions(object, ch))
     return;
-  
+
   // Precondition: The character in question must exist.
   if (!ch) {
     mudlog("SYSLOG: NULL char passed to obj_to_bioware", NULL, LOG_SYSLOG, TRUE);
     return;
   }
-  
+
   // It's gotta be bioware to be a valid obj_to_bioware target.
   if (GET_OBJ_TYPE(object) != ITEM_BIOWARE) {
     log("Non-bioware object type passed to obj_to_bioware.");
     return;
   }
-  
+
   object->next_content = ch->bioware;
   ch->bioware = object;
   object->carried_by = ch;
   object->in_room = NULL;
-  
+
   if (GET_OBJ_VAL(object, 0) != BIO_ADRENALPUMP || GET_OBJ_VAL(object, 5) > 0)
     for (temp = 0; temp < MAX_OBJ_AFFECT; temp++)
       affect_modify(ch,
                     object->affected[temp].location,
                     object->affected[temp].modifier,
                     object->obj_flags.bitvector, TRUE);
-  
+
   affect_total(ch);
 }
 
@@ -1460,7 +1460,7 @@ void obj_from_bioware(struct obj_data *bio)
 {
   struct obj_data *temp;
   int i;
-  
+
   if (bio == NULL)
   {
     log("SYSLOG: NULL object passed to obj_from_bioware");
@@ -1472,9 +1472,9 @@ void obj_from_bioware(struct obj_data *bio)
                     bio->affected[i].location,
                     bio->affected[i].modifier,
                     bio->obj_flags.bitvector, FALSE);
-  
+
   affect_total(bio->carried_by);
-  
+
   REMOVE_FROM_LIST(bio, bio->carried_by->bioware, next_content);
   bio->carried_by = NULL;
   bio->next_content = NULL;
@@ -1484,7 +1484,7 @@ void obj_from_bioware(struct obj_data *bio)
 void obj_from_char(struct obj_data * object)
 {
   struct obj_data *temp = NULL;
-  
+
   if (object == NULL)
   {
     mudlog("ERROR: NULL object passed to obj_from_char", NULL, LOG_SYSLOG, TRUE);
@@ -1503,7 +1503,7 @@ void obj_from_char(struct obj_data * object)
     obj_from_obj(object);
   }
   REMOVE_FROM_LIST(object, object->carried_by->carrying, next_content);
-  
+
   IS_CARRYING_W(object->carried_by) -= GET_OBJ_WEIGHT(object);
   IS_CARRYING_N(object->carried_by)--;
   object->carried_by = NULL;
@@ -1527,17 +1527,17 @@ void obj_from_cyberware(struct obj_data * cyber)
 bool equip_char(struct char_data * ch, struct obj_data * obj, int pos)
 {
   int j;
-  
+
   if (!obj) {
     mudlog("SYSERR: Null object passed to equip_char.", ch, LOG_SYSLOG, TRUE);
     return FALSE;
   }
-  
+
   if (!ch) {
     mudlog("SYSERR: Null character passed to equip_char.", ch, LOG_SYSLOG, TRUE);
     return FALSE;
   }
-  
+
   if (GET_EQ(ch, pos))
   {
     char errbuf[1000];
@@ -1564,24 +1564,24 @@ bool equip_char(struct char_data * ch, struct obj_data * obj, int pos)
                                * ground */  // and now I've changed it back, who wants morts running around with god-only keys
     return FALSE;
   }
-  
+
   GET_EQ(ch, pos) = obj;
   obj->worn_by = ch;
   obj->worn_on = pos;
-  
+
   if (ch->in_room)
   {
     if (pos == WEAR_LIGHT && GET_OBJ_TYPE(obj) == ITEM_LIGHT)
       if (GET_OBJ_VAL(obj, 2))  /* if light is ON */
         ch->in_room->light[0]++;
   }
-  
+
   for (j = 0; j < MAX_OBJ_AFFECT; j++)
     affect_modify(ch,
                   obj->affected[j].location,
                   obj->affected[j].modifier,
                   obj->obj_flags.bitvector, TRUE);
-  
+
   affect_total(ch);
   calc_weight(ch);
   return TRUE;
@@ -1591,46 +1591,46 @@ struct obj_data *unequip_char(struct char_data * ch, int pos, bool focus)
 {
   int j;
   struct obj_data *obj;
-  
+
   if (pos < 0 || pos >= NUM_WEARS) {
     char errbuf[1000];
     snprintf(errbuf, sizeof(errbuf), "SYSERR: pos < 0 || pos >= NUM_WEARS, %s - %d", GET_NAME(ch), pos);
     mudlog(errbuf, ch, LOG_SYSLOG, TRUE);
     return NULL;
   }
-  
+
   if (!GET_EQ(ch, pos)) {
     char errbuf[1000];
     snprintf(errbuf, sizeof(errbuf), "SYSERR: Trying to remove non-existent item from %s at %d", GET_NAME(ch), pos);
     mudlog(errbuf, ch, LOG_SYSLOG, TRUE);
     return NULL;
   }
-  
+
   obj = GET_EQ(ch, pos);
   obj->worn_by = NULL;
   obj->worn_on = -1;
-  
+
   if (ch->in_room)
   {
     if (pos == WEAR_LIGHT && GET_OBJ_TYPE(obj) == ITEM_LIGHT)
       if (GET_OBJ_VAL(obj, 2))  /* if light is ON */
         ch->in_room->light[0]--;
   }
-  
+
   if (pos == WEAR_HOLD || pos == WEAR_WIELD)
   {
     if (FIGHTING(ch))
       AFF_FLAGS(ch).SetBit(AFF_APPROACH);
   }
-  
+
   GET_EQ(ch, pos) = NULL;
-  
+
   for (j = 0; j < MAX_OBJ_AFFECT; j++)
     affect_modify(ch,
                   obj->affected[j].location,
                   obj->affected[j].modifier,
                   obj->obj_flags.bitvector, FALSE);
-  
+
   if (GET_OBJ_TYPE(obj) == ITEM_FOCUS && GET_OBJ_VAL(obj, 4) && focus)
   {
     remove_focus_effect(ch, obj);
@@ -1654,18 +1654,18 @@ int get_number(char **name)
   int i;
   char *ppos;
   char number[MAX_INPUT_LENGTH];
-  
+
   *number = '\0';
-  
+
   if ((ppos = strchr(*name, '.'))) {
     *ppos++ = '\0';
     strcpy(number, *name);
     strcpy(*name, ppos);
-    
+
     for (i = 0; *(number + i); i++)
       if (!isdigit(*(number + i)))
         return 0;
-    
+
     return (atoi(number));
   }
   return 1;
@@ -1678,7 +1678,7 @@ struct veh_data *get_veh_list(char *name, struct veh_data *list, struct char_dat
   bool mine = FALSE;
   char tmpname[MAX_INPUT_LENGTH];
   char *tmp = tmpname;
-  
+
   if (!list)
     return NULL;
   strcpy(tmp, name);
@@ -1702,11 +1702,11 @@ struct veh_data *get_veh_list(char *name, struct veh_data *list, struct char_dat
 struct obj_data *get_obj_in_list_num(int num, struct obj_data * list)
 {
   struct obj_data *i;
-  
+
   for (i = list; i; i = i->next_content)
     if (GET_OBJ_RNUM(i) == num)
       return i;
-  
+
   return NULL;
 }
 
@@ -1717,12 +1717,12 @@ int vnum_from_non_connected_zone(int vnum)
     return 0;
   else if (vnum < 0 || vnum > (zone_table[top_of_zone_table].top))
     return 1;
-  
+
   for (counter = 0; counter <= top_of_zone_table; counter++)
     if (!(zone_table[counter].connected) && vnum >= (zone_table[counter].number * 100) &&
         vnum <= zone_table[counter].top)
       return 1;
-  
+
   return 0;
 }
 
@@ -1733,48 +1733,48 @@ struct char_data *get_char_room(const char *name, struct room_data *room)
   int j = 0, number;
   char tmpname[MAX_INPUT_LENGTH];
   char *tmp = tmpname;
-  
+
   if (!room || !name) {
     log("SYSLOG: Illegal value(s) passed get_char_room");
     return NULL;
   }
-  
+
   strcpy(tmp, name);
   if (!(number = get_number(&tmp)))
     return NULL;
-  
+
   for (i = room->people; i && (j <= number); i = i->next_in_room)
     if (isname(tmp, GET_KEYWORDS(i)) ||
         isname(tmp, GET_NAME(i)) || isname(tmp, GET_CHAR_NAME(i)))
       if (++j == number)
         return i;
-  
+
   return NULL;
 }
 
 void obj_to_veh(struct obj_data * object, struct veh_data * veh)
 {
   struct obj_data *i = NULL, *op = NULL;
-  
+
   // Check our object-related preconditions. All error logging is done there.
   if (!check_obj_to_x_preconditions(object, NULL))
     return;
-  
+
   // Precondition: The vehicle in question must exist.
   if (!veh) {
     mudlog("SYSLOG: NULL vehicle passed to obj_to_veh.", NULL, LOG_SYSLOG, TRUE);
     return;
   }
-  
+
   for (i = veh->contents; i; i = i->next_content) {
     if (i->item_number == object->item_number &&
         !strcmp(i->text.room_desc, object->text.room_desc) &&
         IS_INVIS(i) == IS_INVIS(object))
       break;
-    
+
     op = i;
   }
-  
+
   if (i) {
     object->next_content = i;
     if (op)
@@ -1785,7 +1785,7 @@ void obj_to_veh(struct obj_data * object, struct veh_data * veh)
     object->next_content = veh->contents;
     veh->contents = object;
   }
-  
+
   veh->usedload += GET_OBJ_WEIGHT(object);
   object->in_veh = veh;
   object->in_room = NULL;
@@ -1795,28 +1795,28 @@ void obj_to_veh(struct obj_data * object, struct veh_data * veh)
 void obj_to_room(struct obj_data * object, struct room_data *room)
 {
   struct obj_data *i = NULL, *op = NULL;
-  
+
   // Check our object-related preconditions. All error logging is done there.
   if (!check_obj_to_x_preconditions(object, NULL))
     return;
-  
+
   // Precondition: The room in question must exist.
   if (!room) {
     mudlog("SYSLOG: NULL room passed to obj_to_room.", NULL, LOG_SYSLOG, TRUE);
     return;
   }
-  
+
   room->dirty_bit = TRUE;
-  
+
   for (i = room->contents; i; i = i->next_content) {
     if (i->item_number == object->item_number &&
         !strcmp(i->text.room_desc, object->text.room_desc) &&
         IS_INVIS(i) == IS_INVIS(object))
       break;
-    
+
     op = i;
   }
-  
+
   if (op == object) {
     log("SYSLOG: WTF? ^.^");
     return;
@@ -1831,10 +1831,10 @@ void obj_to_room(struct obj_data * object, struct room_data *room)
     object->next_content = room->contents;
     room->contents = object;
   }
-  
+
   object->in_room = room;
   object->carried_by = NULL;
-  
+
   // If it's a workshop, make sure the room's workshops[] table reflects this.
   if (GET_OBJ_TYPE(object) == ITEM_WORKSHOP)
     add_workshop_to_room(object);
@@ -1860,10 +1860,10 @@ void obj_from_room(struct obj_data * object)
       remove_workshop_from_room(object);
     REMOVE_FROM_LIST(object, object->in_room->contents, next_content);
   }
-  
+
   if (object->in_room)
     object->in_room->dirty_bit = TRUE;
-  
+
   object->in_veh = NULL;
   object->in_room = NULL;
   object->next_content = NULL;
@@ -1875,11 +1875,11 @@ void obj_to_host(struct obj_data *obj, struct host_data *host) {
     mudlog("SYSERR: Null host given to obj_to_host!", NULL, LOG_SYSLOG, TRUE);
     return;
   }
-  
+
   // Check our object-related preconditions. All error logging is done there.
   if (!check_obj_to_x_preconditions(obj, NULL))
     return;
-  
+
   obj->in_host = host;
   obj->next_content = host->file;
   host->file = obj;
@@ -1891,12 +1891,12 @@ void obj_from_host(struct obj_data *obj) {
     mudlog("SYSERR: Null obj given to obj_from_host!", NULL, LOG_SYSLOG, TRUE);
     return;
   }
-  
+
   if (!obj->in_host) {
     mudlog("SYSERR: Non-hosted obj given to obj_from_host!", NULL, LOG_SYSLOG, TRUE);
     return;
   }
-  
+
   struct obj_data *temp;
   REMOVE_FROM_LIST(obj, obj->in_host->file, next_content);
   obj->in_host = NULL;
@@ -1907,23 +1907,23 @@ void obj_to_obj(struct obj_data * obj, struct obj_data * obj_to)
 {
   struct obj_data *tmp_obj = NULL;
   struct obj_data *i = NULL, *op = NULL;
-  
+
   // Check our object-related preconditions. All error logging is done there.
   if (!check_obj_to_x_preconditions(obj, NULL))
     return;
-  
+
   // Precondition: The object we're putting it in must exist.
   if (!obj_to) {
     mudlog("SYSLOG: NULL obj_to passed to obj_to_obj", NULL, LOG_SYSLOG, TRUE);
     return;
   }
-  
+
   // Precondition: We can't fold it in on itself.
   if (obj == obj_to) {
     mudlog("ERROR: Attempting to put an object inside of itself in obj_to_obj().", NULL, LOG_SYSLOG, TRUE);
     return;
   }
-  
+
   // Scan through the contents for something that matches this item. If we find it, that's where we can nest this item.
   for (i = obj_to->contains; i; i = i->next_content)
   {
@@ -1934,16 +1934,16 @@ void obj_to_obj(struct obj_data * obj, struct obj_data * obj_to)
     // op points to the last thing we saw-- if a match is found, op is the thing immediately before it. Otherwise, op is the last thing in the list.
     op=i;
   }
-  
+
   if (i)
   {
     // i points to a similar object to obj.
     obj->next_content = i;
-    
+
     // with i existing, op must point to the object immediately before i in the list.
     if (op)
       op->next_content = obj;
-    
+
     // op will be null if the very first object in the list was a match for obj.
     else
       obj_to->contains = obj;
@@ -1953,24 +1953,24 @@ void obj_to_obj(struct obj_data * obj, struct obj_data * obj_to)
     obj->next_content = obj_to->contains;
     obj_to->contains = obj;
   }
-  
+
   obj->in_obj = obj_to;
-  
+
   // Cascade the weight change all the way up to the second-highest containing object (handles bag-in-bag-in-bag situations).
   for (tmp_obj = obj->in_obj; tmp_obj->in_obj; tmp_obj = tmp_obj->in_obj)
     GET_OBJ_WEIGHT(tmp_obj) += GET_OBJ_WEIGHT(obj);
-  
+
   // Update the highest container's weight as well, provided it's not a deck or a computer.
   if (GET_OBJ_TYPE(tmp_obj) != ITEM_CYBERDECK || GET_OBJ_TYPE(tmp_obj) != ITEM_CUSTOM_DECK || GET_OBJ_TYPE(tmp_obj) != ITEM_DECK_ACCESSORY) {
     GET_OBJ_WEIGHT(tmp_obj) += GET_OBJ_WEIGHT(obj);
-    
+
     // If someone's carrying or wearing the highest container, increment their carry weight by the weight of the obj we just put in.
     if (tmp_obj->carried_by)
       IS_CARRYING_W(tmp_obj->carried_by) += GET_OBJ_WEIGHT(obj);
     if (tmp_obj->worn_by)
       IS_CARRYING_W(tmp_obj->worn_by) += GET_OBJ_WEIGHT(obj);
   }
-  
+
   if (tmp_obj && tmp_obj->in_room)
     tmp_obj->in_room->dirty_bit = TRUE;
 }
@@ -1980,7 +1980,7 @@ void obj_to_obj(struct obj_data * obj, struct obj_data * obj_to)
 void obj_from_obj(struct obj_data * obj)
 {
   struct obj_data *temp, *obj_from;
-  
+
   if (obj->in_obj == NULL)
   {
     log("error (handler.c): trying to illegally extract obj from obj");
@@ -1988,30 +1988,30 @@ void obj_from_obj(struct obj_data * obj)
   }
   obj_from = obj->in_obj;
   REMOVE_FROM_LIST(obj, obj_from->contains, next_content);
-  
+
   // Unready the holster it's in.
   if (GET_OBJ_TYPE(obj_from) == ITEM_HOLSTER && GET_OBJ_VAL(obj_from, 3))
     GET_OBJ_VAL(obj_from, 3) = 0;
-  
+
   // Remove weight from whatever's containing this (and its container, and its container...)
   // temp->in_obj as the check is required here, we keep processing after this!
   for (temp = obj->in_obj; temp->in_obj; temp = temp->in_obj)
     GET_OBJ_WEIGHT(temp) -= GET_OBJ_WEIGHT(obj);
-    
+
   // Decks don't get their weight deducted from.
   if (GET_OBJ_TYPE(temp) != ITEM_CYBERDECK || GET_OBJ_TYPE(temp) != ITEM_DECK_ACCESSORY || GET_OBJ_TYPE(temp) != ITEM_CUSTOM_DECK) {
     GET_OBJ_WEIGHT(temp) -= GET_OBJ_WEIGHT(obj);
-    
+
     // Recalculate the bearer's weight.
     if (temp->carried_by)
       IS_CARRYING_W(temp->carried_by) -= GET_OBJ_WEIGHT(obj);
     if (temp->worn_by)
       IS_CARRYING_W(temp->worn_by) -= GET_OBJ_WEIGHT(obj);
   }
-  
+
   obj->in_obj = NULL;
   obj->next_content = NULL;
-    
+
   if (temp && temp->in_room)
     temp->in_room->dirty_bit = TRUE;
 }
@@ -2048,7 +2048,7 @@ void extract_icon(struct matrix_icon * icon)
       delete k;
       break;
     }
-  
+
   if (icon->in_host)
   {
     if (icon->fighting) {
@@ -2096,10 +2096,10 @@ void extract_veh(struct veh_data * veh)
       mudlog(buf, NULL, LOG_SYSLOG, TRUE);
     }
   }
-  
+
   // Find the online owner of the vehicle for future modifications and notifications.
-  
-  
+
+
   if (veh->prev_sub) {
     // If there is a prior entry in the subscriber doubly-linked list, just strip us out.
     veh->prev_sub->next_sub = veh->next_sub;
@@ -2112,11 +2112,11 @@ void extract_veh(struct veh_data * veh)
       }
     }
   }
-  
+
   // If there's a vehicle after us in the list, make sure its prev reflects our prev.
   if (veh->next_sub)
     veh->next_sub->prev_sub = veh->prev_sub;
-  
+
   // If any vehicles are inside, drop them where the vehicle is.
   struct veh_data *temp = NULL;
   while ((temp = veh->carriedvehs)) {
@@ -2133,7 +2133,7 @@ void extract_veh(struct veh_data * veh)
       veh_to_room(temp, &world[real_room(RM_DANTES_GARAGE)]);
     }
   }
-  
+
   // If any players are inside, drop them where the vehicle is.
   struct char_data *ch = NULL;
   while ((ch = veh->people)) {
@@ -2150,7 +2150,7 @@ void extract_veh(struct veh_data * veh)
       char_to_room(ch, &world[real_room(RM_DANTES_GARAGE)]);
     }
   }
-  
+
   // Unhitch its tows.
   if (veh->towing) {
     strcpy(buf3, GET_VEH_NAME(veh));
@@ -2170,7 +2170,7 @@ void extract_veh(struct veh_data * veh)
     }
     veh->towing = NULL;
   }
-  
+
   // Disgorge its contents.
   struct obj_data *nextobj;
   for (struct obj_data *obj = veh->contents; obj; obj = nextobj) {
@@ -2188,7 +2188,7 @@ void extract_veh(struct veh_data * veh)
       extract_obj(obj);
     }
   }
-  
+
   // Remove its gridguide info.
   while (veh->grid) {
     struct grid_data *grid = veh->grid;
@@ -2196,7 +2196,7 @@ void extract_veh(struct veh_data * veh)
     DELETE_ARRAY_IF_EXTANT(grid->name);
     delete grid;
   }
-  
+
   // Perform actual vehicle extraction.
   REMOVE_FROM_LIST(veh, veh_list, next);
   if (veh->in_room || veh->in_veh)
@@ -2210,15 +2210,15 @@ void extract_obj(struct obj_data * obj)
 {
   struct phone_data *phone, *temp;
   bool set = FALSE;
-  
+
   if (obj->in_room)
     obj->in_room->dirty_bit = TRUE;
-  
+
   if (obj->worn_by != NULL)
     if (unequip_char(obj->worn_by, obj->worn_on, TRUE) != obj)
       log("SYSLOG: Inconsistent worn_by and worn_on pointers!!");
   if (GET_OBJ_TYPE(obj) == ITEM_PHONE ||
-      (GET_OBJ_TYPE(obj) == ITEM_CYBERWARE && GET_OBJ_VAL(obj, 0) == CYB_PHONE)) 
+      (GET_OBJ_TYPE(obj) == ITEM_CYBERWARE && GET_OBJ_VAL(obj, 0) == CYB_PHONE))
   {
     for (phone = phone_list; phone; phone = phone->next) {
       if (phone->phone == obj) {
@@ -2243,7 +2243,7 @@ void extract_obj(struct obj_data * obj)
                 }
               }
             }
-            
+
           }
         }
         REMOVE_FROM_LIST(phone, phone_list, next);
@@ -2252,41 +2252,41 @@ void extract_obj(struct obj_data * obj)
       }
     }
   }
-  
+
   if (obj->in_room || obj->in_veh != NULL) {
     obj_from_room(obj);
     set = TRUE;
   }
-  
+
   if (obj->in_host) {
     obj_from_host(obj);
     set = TRUE;
   }
-  
+
   if (obj->carried_by) {
     obj_from_char(obj);
     if (set)
       log("SYSLOG: More than one list pointer set!");
     set = TRUE;
   }
-  
+
   if (obj->in_obj) {
     obj_from_obj(obj);
     if (set)
       log("SYSLOG: More than one list pointer set!");
     set = TRUE;
   }
-  
+
   /* Get rid of the contents of the object, as well. */
   while (obj->contains && GET_OBJ_TYPE(obj) != ITEM_PART)
     extract_obj(obj->contains);
-  
+
   if (!ObjList.Remove(obj))
     log_vfprintf("ObjList.Remove returned FALSE!  (%d)", GET_OBJ_VNUM(obj));
-  
+
   if (GET_OBJ_RNUM(obj) >= 0)
     (obj_index[GET_OBJ_RNUM(obj)].number)--;
-  
+
   Mem->DeleteObject(obj);
 }
 
@@ -2298,37 +2298,37 @@ void extract_char(struct char_data * ch)
   struct obj_data *obj, *next;
   int i;
   struct veh_data *veh;
-  
+
   extern struct char_data *combat_list;
-  
+
   void die_follower(struct char_data * ch);
-  
+
   ACMD_CONST(do_return);
-  
+
   if (ch->in_room)
     ch->in_room->dirty_bit = TRUE;
-  
+
   if ((ch->in_veh && AFF_FLAGGED(ch, AFF_PILOT)) || PLR_FLAGGED(ch, PLR_REMOTE)) {
     RIG_VEH(ch, veh);
-    
+
     send_to_veh("Now driverless, the vehicle slows to a stop.\r\n", veh, ch, FALSE);
     AFF_FLAGS(ch).RemoveBits(AFF_PILOT, AFF_RIG, ENDBIT);
     stop_chase(veh);
     if (!veh->dest)
       veh->cspeed = SPEED_OFF;
   }
-  
+
   if (!IS_NPC(ch)) {
     // Terminate the player's quest, if any. Realistically, we shouldn't ever trigger this code, but if it happens we're ready for it.
     if (GET_QUEST(ch)) {
       mudlog("Warning: extract_char received PC with quest still active.", ch, LOG_SYSLOG, TRUE);
       end_quest(ch);
     }
-    
+
     // Save the player.
     playerDB.SaveChar(ch, GET_LOADROOM(ch));
   }
-  
+
   if (!IS_NPC(ch) && !ch->desc)
   {
     for (t_desc = descriptor_list; t_desc; t_desc = t_desc->next)
@@ -2346,7 +2346,7 @@ void extract_char(struct char_data * ch)
   }
   if (ch->followers || ch->master)
     die_follower(ch);
-  
+
   /* Forget snooping, if applicable */
   if (ch->desc)
   {
@@ -2360,7 +2360,7 @@ void extract_char(struct char_data * ch)
       ch->desc->snoop_by = NULL;
     }
   }
-  
+
   /* transfer objects to room, if any */
   while (ch->carrying)
   {
@@ -2368,7 +2368,7 @@ void extract_char(struct char_data * ch)
     obj_from_char(obj);
     extract_obj(obj);
   }
-  
+
   /* extract all cyberware from NPC's since it can't be reused */
   for (obj = ch->cyberware; obj; obj = next)
   {
@@ -2382,16 +2382,16 @@ void extract_char(struct char_data * ch)
     obj_from_bioware(obj);
     extract_obj(obj);
   }
-  
+
   /* transfer equipment to room, if any */
   for (i = 0; i < NUM_WEARS; i++)
     if (GET_EQ(ch, i))
       extract_obj(unequip_char(ch, i, TRUE));
-  
+
   /* stop this char from fighting anyone else */
   if (CH_IN_COMBAT(ch))
     stop_fighting(ch);
-  
+
   /* stop everyone else from fighting this char */
   for (k = combat_list; k; k = temp)
   {
@@ -2399,7 +2399,7 @@ void extract_char(struct char_data * ch)
     if (FIGHTING(k) == ch)
       stop_fighting(k);
   }
-  
+
   /* handle vehicle cases */
   if (ch->in_veh) {
     if (AFF_FLAGGED(ch, AFF_PILOT)) {
@@ -2408,14 +2408,14 @@ void extract_char(struct char_data * ch)
     }
     stop_manning_weapon_mounts(ch, TRUE);
   }
-  
+
   /* untarget char from vehicles */
   if (ch->in_room)
     for (veh = ch->in_room->vehicles; veh; veh = veh->next_veh)
       for (obj = veh->mount; obj; obj = obj->next_content)
         if (obj->targ == ch)
           obj->targ = NULL;
-  
+
   /* clear spirit sustained spells */
   {
     struct spirit_sustained *next;
@@ -2434,7 +2434,7 @@ void extract_char(struct char_data * ch)
       }
     }
   }
-  
+
   /* continue clearing spirit sustained spells */
   if (IS_ELEMENTAL(ch) && GET_SUSTAINED_NUM(ch))
   {
@@ -2448,7 +2448,7 @@ void extract_char(struct char_data * ch)
         break;
       }
   }
-  
+
   /* clear any sustained spells */
   else if (GET_SUSTAINED(ch))
   {
@@ -2460,7 +2460,7 @@ void extract_char(struct char_data * ch)
       end_sustained_spell(ch, sust);
     }
   }
-  
+
   /* wipe out matrix info */
   if (ch->persona)
   {
@@ -2474,7 +2474,7 @@ void extract_char(struct char_data * ch)
       if (PLR_FLAGGED(temp, PLR_MATRIX))
         temp->persona->decker->hitcher = NULL;
   }
-  
+
   /* end astral tracking */
   if (AFF_FLAGGED(ch, AFF_TRACKED))
     for (struct descriptor_data *d = descriptor_list; d; d = d->next)
@@ -2484,7 +2484,7 @@ void extract_char(struct char_data * ch)
         AFF_FLAGS(d->original).RemoveBit(AFF_TRACKING);
         send_to_char("You suddenly lose the trail.\r\n", d->character);
       }
-  
+
   /* end rigging */
   if (PLR_FLAGGED(ch, PLR_REMOTE))
   {
@@ -2495,28 +2495,28 @@ void extract_char(struct char_data * ch)
     ch->char_specials.rigging = NULL;
     PLR_FLAGS(ch).RemoveBit(PLR_REMOTE);
   }
-  
+
   // Clean up playergroup info.
   if (GET_PGROUP_MEMBER_DATA(ch)) {
     delete GET_PGROUP_MEMBER_DATA(ch);
     GET_PGROUP_MEMBER_DATA(ch) = NULL;
   }
-  
+
   /* pull the char from the list */
   REMOVE_FROM_LIST(ch, character_list, next);
-  
+
   /* return people who were possessing or projecting */
   if (ch->desc && ch->desc->original)
     do_return(ch, "", 0, 0);
-  
+
   /* remove the character from their room (use in_room to reference ch->in_room after this) */
   struct room_data *in_room = ch->in_room;
   if (ch->in_room || ch->in_veh)
     char_from_room(ch);
-    
+
   /* wipe out their memory struct since PCs can have memory as well now */
   clearMemory(ch);
-  
+
   if (!IS_NPC(ch))
   {
     /* clean up their flags */
@@ -2524,10 +2524,10 @@ void extract_char(struct char_data * ch)
                              PLR_WRITING, PLR_MAILING, PLR_EDITING,
                              PLR_SPELL_CREATE, PLR_PROJECT, PLR_CUSTOMIZE,
                              PLR_REMOTE, ENDBIT);
-    
+
     /* restore them to their room, because corpses love rooms */
     ch->in_room = in_room;
-    
+
     /* throw them back in the menus */
     if (ch->desc) {
       if (STATE(ch->desc) == CON_QMENU)
@@ -2555,37 +2555,37 @@ void extract_char(struct char_data * ch)
 struct char_data *get_player_vis(struct char_data * ch, char *name, int inroom)
 {
   struct char_data *i;
-  
+
   // Check for name matches (by memory or by actual name)
   for (i = character_list; i; i = i->next) {
     if (IS_NPC(i) || (inroom && i->in_room != ch->in_room) || GET_LEVEL(ch) < GET_INCOG_LEV(i))
       continue;
-      
+
     if (isname(name, GET_CHAR_NAME(i)) || recog(ch, i, name))
       return i;
   }
-  
+
   // Check for loose matches by keywords.
   for (i = character_list; i; i = i->next) {
     if (IS_NPC(i) || (inroom && i->in_room != ch->in_room) || GET_LEVEL(ch) < GET_INCOG_LEV(i))
       continue;
-      
+
     if (isname(name, GET_KEYWORDS(i)))
       return i;
   }
-  
+
   return NULL;
 }
 
 struct char_data *get_char_veh(struct char_data * ch, char *name, struct veh_data * veh)
 {
   struct char_data *i;
-  
+
   for (i = veh->people; i; i = i->next_in_veh)
     if ((isname(name, GET_KEYWORDS(i)) || isname(name, GET_CHAR_NAME(i)) || recog(ch, i, name))
         && CAN_SEE(ch, i))
       return i;
-  
+
   return NULL;
 }
 
@@ -2595,31 +2595,31 @@ struct char_data *get_char_room_vis(struct char_data * ch, char *name)
   int j = 0, number;
   char tmpname[MAX_INPUT_LENGTH];
   char *tmp = tmpname;
-  
+
   /* JE 7/18/94 :-) :-) */
   if (!str_cmp(name, "self") || !str_cmp(name, "me") || !str_cmp(name, "myself"))
     return ch;
-  
+
   /* 0.<name> means PC with name */
   strcpy(tmp, name);
   if (!(number = get_number(&tmp)))
     return get_player_vis(ch, tmp, 1);
-  
+
   if (ch->in_veh)
     if ((i = get_char_veh(ch, name, ch->in_veh)))
       return i;
-  
+
   for (i = ch->in_veh ? ch->in_veh->people : ch->in_room->people; i && j <= number; i = ch->in_veh ? i->next_in_veh : i->next_in_room) {
-    if ((isname(tmp, GET_KEYWORDS(i)) 
-          || isname(tmp, GET_NAME(i)) 
-          || recog(ch, i, name)) 
+    if ((isname(tmp, GET_KEYWORDS(i))
+          || isname(tmp, GET_NAME(i))
+          || recog(ch, i, name))
         && CAN_SEE(ch, i))
     {
       if (++j == number)
         return i;
     }
   }
-  
+
   return NULL;
 }
 
@@ -2628,22 +2628,22 @@ struct char_data *get_char_in_list_vis(struct char_data * ch, char *name, struct
   int j = 0, number;
   char tmpname[MAX_INPUT_LENGTH];
   char *tmp = tmpname;
-  
+
   if (!str_cmp(name, "self") || !str_cmp(name, "me") || !str_cmp(name, "myself"))
     return ch;
-  
+
   /* 0.<name> means PC with name */
   strcpy(tmp, name);
   if (!(number = get_number(&tmp)))
     return get_player_vis(ch, tmp, 1);
-  
+
   for (; list && j <= number; list = list->next_in_room)
     if ((isname(tmp, GET_KEYWORDS(list)) ||
          isname(tmp, GET_NAME(list)) || recog(ch, list, name)) &&
         CAN_SEE(ch, list))
       if (++j == number)
         return list;
-  
+
   return NULL;
 }
 
@@ -2653,28 +2653,28 @@ struct char_data *get_char_vis(struct char_data * ch, char *name)
   int j = 0, number;
   char tmpname[MAX_INPUT_LENGTH];
   char *tmp = tmpname;
-  
+
   // Short circuit: If you're looking for yourself, we don't have to search very hard.
   if (!str_cmp(name, "self") || !str_cmp(name, "me") || !str_cmp(name, "myself"))
     return ch;
-  
+
   /* check the room first */
   if (ch->in_veh)
     if ((i = get_char_veh(ch, name, ch->in_veh)))
       return i;
   if ((i = get_char_room_vis(ch, name)) != NULL)
     return i;
-  
+
   strcpy(tmp, name);
   if (!(number = get_number(&tmp)))
     return get_player_vis(ch, tmp, 0);
-  
+
   for (i = character_list; i && (j <= number); i = i->next)
     if ((isname(tmp, GET_KEYWORDS(i)) || recog(ch, i, name)) &&
         CAN_SEE(ch, i))
       if (++j == number)
         return i;
-  
+
   return NULL;
 }
 
@@ -2684,11 +2684,11 @@ struct obj_data *get_obj_in_list_vis(struct char_data * ch, char *name, struct o
   int j = 0, number;
   char tmpname[MAX_INPUT_LENGTH];
   char *tmp = tmpname;
-  
+
   strcpy(tmp, name);
   if (!(number = get_number(&tmp)))
     return NULL;
-  
+
   for (i = list; i && (j <= number); i = i->next_content) {
     if (ch->in_veh && i->in_veh && i->vfront != ch->vfront)
       continue;
@@ -2706,19 +2706,19 @@ struct obj_data *get_obj_vis(struct char_data * ch, char *name)
   int number;
   char tmpname[MAX_INPUT_LENGTH];
   char *tmp = tmpname;
-  
+
   /* scan items carried */
   if ((i = get_obj_in_list_vis(ch, name, ch->carrying)))
     return i;
-  
+
   /* scan room */
   if (ch->in_room && (i = get_obj_in_list_vis(ch, name, ch->in_room->contents)))
     return i;
-  
+
   strcpy(tmp, name);
   if (!(number = get_number(&tmp)))
     return NULL;
-  
+
   //  return find_obj(ch, tmp, number);
   return ObjList.FindObj(ch, tmp, number);
 }
@@ -2729,7 +2729,7 @@ struct obj_data *get_object_in_equip_vis(struct char_data * ch,
   char tmpname[MAX_INPUT_LENGTH];
   char *tmp = tmpname;
   int i = 0, number;
-  
+
   strcpy(tmp, arg);
   if (!(number = get_number(&tmp)))
     return NULL;
@@ -2748,7 +2748,7 @@ struct obj_data *get_object_in_equip_vis(struct char_data * ch,
             if (++i == number)
               return (obj);
     }
-  
+
   return NULL;
 }
 
@@ -2766,16 +2766,16 @@ struct obj_data *get_first_credstick(struct char_data *ch, const char *arg)
 {
   struct obj_data *obj;
   int i;
-  
+
   for (obj = ch->carrying; obj; obj = obj->next_content)
     if (belongs_to(ch, obj) && isname(arg, obj->text.keywords))
       return obj;
-      
+
   for (i = 0; i < NUM_WEARS - 1; i++)
     if (GET_EQ(ch, i) && belongs_to(ch, GET_EQ(ch, i)) &&
         isname(arg, GET_EQ(ch, i)->text.keywords))
       return GET_EQ(ch, i);
-  
+
   return NULL;
 }
 
@@ -2783,7 +2783,7 @@ struct obj_data *create_credstick(struct char_data *ch, int amount)
 {
   struct obj_data *obj;
   int num;
-  
+
   if (amount <= 0)
   {
     log("SYSLOG: Try to create negative or 0 nuyen.");
@@ -2793,7 +2793,7 @@ struct obj_data *create_credstick(struct char_data *ch, int amount)
     log("SYSLOG: Creating a credstick for a PC corpse.");
     return NULL;
   }
-  
+
   if (amount < 2500)
     num = 100;     // plastic credstick
   else if (amount < 10000)
@@ -2806,9 +2806,9 @@ struct obj_data *create_credstick(struct char_data *ch, int amount)
     num = 104;     // platinum credstick
   else
     num = 105;  // emerald credstick
-  
+
   obj = read_object(num, VIRTUAL);
-  
+
   GET_OBJ_VAL(obj, 0) = amount;
   GET_OBJ_VAL(obj, 3) = 0;
   GET_OBJ_VAL(obj, 4) = ch->nr;
@@ -2816,23 +2816,23 @@ struct obj_data *create_credstick(struct char_data *ch, int amount)
     GET_OBJ_VAL(obj, 5) = (number(1, 9) * 100000) + (number(0, 9) * 10000) +
     (number(0, 9) * 1000) + (number(0, 9) * 100) +
     (number(0, 9) * 10) + number(0, 9);
-  
+
   return obj;
 }
 
 struct obj_data *create_nuyen(int amount)
 {
   struct obj_data *obj;
-  
+
   if (amount <= 0)
   {
     log("SYSLOG: Try to create negative or 0 nuyen.");
     return NULL;
   }
   obj = read_object(110, VIRTUAL);
-  
+
   GET_OBJ_VAL(obj, 0) = amount;
-  
+
   return obj;
 }
 
@@ -2840,21 +2840,21 @@ int find_skill_num(char *name)
 {
   char *rest_of_name;
   char word_to_evaluate[256];
-    
+
   for (int index = 1; index < MAX_SKILLS; index++) {
     if (is_abbrev(name, skills[index].name))
       return index;
-    
+
     // Go through the individual words of the skill's name and try to match them. Ex: "Assault Cannons" -> "assault", "cannons"
     rest_of_name = any_one_arg(skills[index].name, word_to_evaluate);
     while (*word_to_evaluate) {
       if (is_abbrev(name, word_to_evaluate))
         return index;
-        
+
       rest_of_name = any_one_arg(rest_of_name, word_to_evaluate);
     }
   }
-  
+
   return -1;
 }
 
@@ -2863,11 +2863,11 @@ int find_spell_num(char *name)
   int index = 0, ok;
   const char *temp, *temp2;
   char first[256], first2[256];
-  
+
   while (++index < MAX_SPELLS) {
     if (is_abbrev(name, spells[index].name))
       return index;
-    
+
     ok = 1;
     temp = any_one_arg_const(spells[index].name, first);
     temp2 = any_one_arg(name, first2);
@@ -2877,11 +2877,11 @@ int find_spell_num(char *name)
       temp = any_one_arg_const(temp, first);
       temp2 = any_one_arg_const(temp2, first2);
     }
-    
+
     if (ok && !*first2)
       return index;
   }
-  
+
   return -1;
 }
 
@@ -2890,13 +2890,13 @@ int find_ability_num(char *name)
   int index = 0, ok;
   char *temp, *temp2;
   char first[256], first2[256], powername[256];
-  
+
   strlcpy(powername, adept_powers[index], sizeof(powername));
-  
+
   while (++index < ADEPT_NUMPOWER) {
     if (is_abbrev(name, adept_powers[index]))
       return index;
-    
+
     ok = 1;
     temp = any_one_arg(powername, first);
     temp2 = any_one_arg(name, first2);
@@ -2906,11 +2906,11 @@ int find_ability_num(char *name)
       temp = any_one_arg(temp, first);
       temp2 = any_one_arg(temp2, first2);
     }
-    
+
     if (ok && !*first2)
       return index;
   }
-  
+
   return -1;
 }
 
@@ -2934,15 +2934,15 @@ int generic_find(char *arg, int bitvector, struct char_data * ch,
 {
   int i;
   char name[256];
-  
+
   one_argument(arg, name);
-  
+
   if (!*name)
     return (0);
-  
+
   *tar_ch = NULL;
   *tar_obj = NULL;
-  
+
   /* Technically, this is intended to find characters outside of vehicles... but this is broken.
      Fixing it lets you do stupid shit like manabolting from inside a car. -- LS */
   if (IS_SET(bitvector, FIND_CHAR_ROOM))
@@ -2969,11 +2969,11 @@ int generic_find(char *arg, int bitvector, struct char_data * ch,
     int j = 0, number;
     char tmpname[MAX_INPUT_LENGTH];
     char *tmp = tmpname;
-    
+
     /* 0.<name> means PC with name-- except here we're overriding that because I cannot be bothered right now. TODO. --LS */
     strcpy(tmp, name);
     number = MAX(1, get_number(&tmp));
-    
+
     for (i = get_ch_in_room(ch)->people; i && j <= number; i = i->next_in_room)
       if ((isname(tmp, GET_KEYWORDS(i)) ||
            isname(tmp, GET_NAME(i)) || recog(ch, i, name)) &&
@@ -3038,7 +3038,7 @@ int find_all_dots(char *arg)
 int veh_skill(struct char_data *ch, struct veh_data *veh)
 {
   int skill = 0;
-  
+
   switch (veh->type)
   {
     case VEH_CAR:
@@ -3065,18 +3065,18 @@ int veh_skill(struct char_data *ch, struct veh_data *veh)
   }
   if (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE))
     skill += GET_CONTROL(ch);
-  
+
   // Assume any NPC with a vehicle and no skill has a minimum skill of 4 and that the builder just forgot to set it.
   if (IS_NPC(ch) && skill == 0)
     skill = MAX(skill, 4);
-  
+
   return skill;
 }
 
 int get_skill_num_in_use_for_weapons(struct char_data *ch) {
   struct obj_data *one, *two;
   int skill_num;
-  
+
   if (AFF_FLAGGED(ch, AFF_MANNING) || AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE)) {
     skill_num = SKILL_GUNNERY;
   } else {
@@ -3084,44 +3084,44 @@ int get_skill_num_in_use_for_weapons(struct char_data *ch) {
            (struct obj_data *) NULL;
     two = (GET_EQ(ch, WEAR_HOLD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_HOLD)) == ITEM_WEAPON) ? GET_EQ(ch, WEAR_HOLD) :
            (struct obj_data *) NULL;
-           
+
     if (!one && !two) {
       if(has_cyberweapon(ch))
         skill_num = SKILL_CYBER_IMPLANTS;
-      else 
+      else
         skill_num = SKILL_UNARMED_COMBAT;
-    } 
-    
+    }
+
     else if (one) {
       if (!GET_SKILL(ch, GET_OBJ_VAL(one, 4)))
         skill_num = return_general(GET_OBJ_VAL(one, 4));
-      else 
+      else
         skill_num = GET_OBJ_VAL(one, 4);
-    } 
-    
+    }
+
     else if (two) {
       if (!GET_SKILL(ch, GET_OBJ_VAL(two, 4)))
         skill_num = return_general(GET_OBJ_VAL(two, 4));
-      else 
+      else
         skill_num = GET_OBJ_VAL(two, 4);
-    } 
-    
+    }
+
     // This broken-ass code never worked. "If neither one or two, or if one, or if two, or..." no, that's a full logical stop.
     else {
       if (GET_SKILL(ch, GET_OBJ_VAL(one, 4)) <= GET_SKILL(ch, GET_OBJ_VAL(two, 4))) {
         if (!GET_SKILL(ch, GET_OBJ_VAL(one, 4)))
           skill_num = return_general(GET_OBJ_VAL(one, 4));
-        else 
+        else
           skill_num = GET_OBJ_VAL(one, 4);
       } else {
         if (!GET_SKILL(ch, GET_OBJ_VAL(two, 4)))
           skill_num = return_general(GET_OBJ_VAL(two, 4));
-        else 
+        else
           skill_num = GET_OBJ_VAL(two, 4);
       }
     }
   }
-  
+
   return skill_num;
 }
 
@@ -3129,10 +3129,10 @@ int get_skill_dice_in_use_for_weapons(struct char_data *ch) {
   int skill_num = get_skill_num_in_use_for_weapons(ch);
   int skill_dice = GET_SKILL(ch, skill_num);
   struct obj_data *weapon = GET_EQ(ch, WEAR_WIELD);
-  
+
   if (weapon && GET_OBJ_TYPE(weapon) == ITEM_WEAPON && WEAPON_IS_FOCUS(weapon) && WEAPON_FOCUS_USABLE_BY(weapon, ch)) {
     skill_dice += GET_WEAPON_FOCUS_RATING(GET_EQ(ch, WEAR_WIELD));
   }
-  
+
   return skill_dice;
 }

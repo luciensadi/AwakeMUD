@@ -6472,6 +6472,12 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
       }
     }
 
+    if (IS_ELEMENTAL(mob) && GET_SKILL(mob, SKILL_SORCERY) > 0) {
+      strlcat(buf, "  - is an Elemental with Sorcery, but is restricted from casting by its race.\r\n", sizeof(buf));
+      printed = TRUE;
+      issues++;
+    }
+
     if (printed) {
       send_to_char(ch, "%s\r\n", buf);
     }
