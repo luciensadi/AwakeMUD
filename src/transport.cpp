@@ -135,7 +135,7 @@ struct dest_data seattle_taxi_destinations[] =
     { "nerp", "", "The NERPcorpolis", 6901, TAXI_DEST_TYPE_OOC, TRUE },
     { "glenn", "quiet", "Quiet Glenn Apartments", 32713, TAXI_DEST_TYPE_ACCOMMODATIONS, TRUE },
     { "triple", "inn", "Triple Tree Inn", 12401, TAXI_DEST_TYPE_ACCOMMODATIONS, TRUE },
-    { "rokhalla", "hooligans", "Rokhalla", 32759, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS },
+    { "rokhalla", "hooligans", "Rokhalla", 32759, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
 #endif
     { "\n", "", "", 0, 0, 0 } // this MUST be last
   };
