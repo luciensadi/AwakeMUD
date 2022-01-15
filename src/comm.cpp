@@ -2703,7 +2703,7 @@ void send_to_driver(char *messg, struct veh_data *veh)
 {
   struct char_data *i;
 
-  if (messg)
+  if (messg && veh)
     for (i = veh->people; i; i = i->next_in_veh)
       if (AFF_FLAGGED(i, AFF_PILOT) && i->desc)
         SEND_TO_Q(messg, i->desc);
@@ -2712,6 +2712,10 @@ void send_to_driver(char *messg, struct veh_data *veh)
 void send_to_host(vnum_t room, const char *messg, struct matrix_icon *icon, bool needsee)
 {
   struct matrix_icon *i;
+  if (!icon) {
+    mudlog("SYSERR: Received null icon to send_to_host!", NULL, LOG_SYSLOG, TRUE);
+    return;
+  }
   if (messg)
     for (i = matrix[room].icons; i; i = i->next_in_host)
       if (icon != i && i->decker)
@@ -2721,6 +2725,11 @@ void send_to_host(vnum_t room, const char *messg, struct matrix_icon *icon, bool
 void send_to_veh(const char *messg, struct veh_data *veh, struct char_data *ch, bool torig, ...)
 {
   struct char_data *i;
+
+  if (!ch || !veh) {
+    mudlog("SYSERR: Received null vehicle or character to send_to_host!", NULL, LOG_SYSLOG, TRUE);
+    return;
+  }
 
   if (messg)
   {
