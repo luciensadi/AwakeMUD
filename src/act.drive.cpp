@@ -319,7 +319,6 @@ ACMD(do_rig)
     AFF_FLAGS(ch).SetBits(AFF_PILOT, AFF_RIG, ENDBIT);
     VEH->cspeed = SPEED_IDLE;
     VEH->lastin[0] = VEH->in_room;
-    send_to_veh(buf1, VEH, ch, TRUE);
     stop_manning_weapon_mounts(ch, TRUE);
     send_to_char("As you jack in, your perception shifts.\r\n", ch);
     snprintf(buf1, sizeof(buf1), "%s jacks into the vehicle control system.\r\n", capitalize(GET_NAME(ch)));

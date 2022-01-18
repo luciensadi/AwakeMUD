@@ -587,12 +587,12 @@ char *capitalize(const char *source)
     return dest;
   }
 
-  int len = strlen(source);
+  int len = strlen(dest);
   int index = 0;
 
-  while (index < len-2 && *(source + index) == '^')
+  while (index < len-2 && *(dest + index) == '^')
     index += 2;
-  *(dest + index) = UPPER(*(source + index));
+  *(dest + index) = UPPER(*(dest + index));
 
   return dest;
 }
@@ -943,7 +943,7 @@ void reverse_obj_list(struct obj_data **obj)
   struct obj_data *temp = NULL;
   struct obj_data *prev = NULL;
   struct obj_data *current = (*obj);
-  
+
   while (current != NULL) {
     temp = current->next_content;
     current->next_content = prev;

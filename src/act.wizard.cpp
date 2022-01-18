@@ -1334,8 +1334,9 @@ void do_stat_object(struct char_data * ch, struct obj_data * j)
             GET_OBJ_VAL(j, 4), cyber_types[GET_OBJ_VAL(j, 0)], cyber_grades[GET_OBJ_VAL(j, 2)]);
     break;
   case ITEM_WORKSHOP:
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Type: %s, For: %s", GET_OBJ_VAL(j, 1) ? GET_OBJ_VAL(j, 1) == 3 ? "Facility": "Workshop" : "Kit",
-            workshops[GET_OBJ_VAL(j, 0)]);
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Type: %s, For: %s",
+             GET_WORKSHOP_GRADE(j) ? (GET_WORKSHOP_GRADE(j) == TYPE_FACILITY ? "Facility": "Workshop") : "Kit",
+             workshops[GET_WORKSHOP_TYPE(j)]);
     break;
   case ITEM_FOCUS:
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Type: %s Force: %d", foci_type[GET_OBJ_VAL(j, 0)], GET_OBJ_VAL(j, 1));
