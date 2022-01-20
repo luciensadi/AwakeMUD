@@ -982,12 +982,15 @@ void spell_bonus(struct char_data *ch, int spell, int &skill, int &target)
               extract_obj(GET_EQ(ch, i));
               used_expendable = TRUE;
             }
+            break;
           case FOCI_SPEC_SPELL:
             if (spell == GET_FOCUS_BONDED_SPIRIT_OR_SPELL(GET_EQ(ch, i)))
               max_specific_spell = MAX(max_specific_spell, GET_FOCUS_FORCE(GET_EQ(ch, i)));
+            break;
           case FOCI_SPELL_CAT:
             if (spells[spell].category == GET_FOCUS_BONDED_SPIRIT_OR_SPELL(GET_EQ(ch, i)))
               max_spell_category = MAX(max_spell_category, GET_FOCUS_FORCE(GET_EQ(ch, i)));
+            break;
         }
   }
   skill += max_spell_category + max_specific_spell;
