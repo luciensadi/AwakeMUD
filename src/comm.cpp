@@ -2713,7 +2713,9 @@ void send_to_host(vnum_t room, const char *messg, struct matrix_icon *icon, bool
 {
   struct matrix_icon *i;
   if (!icon) {
-    mudlog("SYSERR: Received null icon to send_to_host!", NULL, LOG_SYSLOG, TRUE);
+    char errbuf[MAX_STRING_LENGTH];
+    snprintf(errbuf, sizeof(errbuf), "SYSERR: Received null icon to send_to_host! (Message: %s)", messg);
+    mudlog(errbuf, NULL, LOG_SYSLOG, TRUE);
     return;
   }
   if (messg)
@@ -2726,8 +2728,10 @@ void send_to_veh(const char *messg, struct veh_data *veh, struct char_data *ch, 
 {
   struct char_data *i;
 
-  if (!ch || !veh) {
-    mudlog("SYSERR: Received null vehicle or character to send_to_host!", NULL, LOG_SYSLOG, TRUE);
+  if (!veh) {
+    char errbuf[MAX_STRING_LENGTH];
+    snprintf(errbuf, sizeof(errbuf), "SYSERR: Received null vehicle in send_to_veh type one! (Message: %s)", messg);
+    mudlog(errbuf, NULL, LOG_SYSLOG, TRUE);
     return;
   }
 
@@ -2746,6 +2750,13 @@ void send_to_veh(const char *messg, struct veh_data *veh, struct char_data *ch, 
 void send_to_veh(const char *messg, struct veh_data *veh, struct char_data *ch, struct char_data *cha, bool torig)
 {
   struct char_data *i;
+
+  if (!veh) {
+    char errbuf[MAX_STRING_LENGTH];
+    snprintf(errbuf, sizeof(errbuf), "SYSERR: Received null vehicle in send_to_veh type two! (Message: %s)", messg);
+    mudlog(errbuf, NULL, LOG_SYSLOG, TRUE);
+    return;
+  }
 
   if (messg)
   {
