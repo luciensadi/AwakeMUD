@@ -1063,6 +1063,7 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       else if (IS_RANGED(att->weapon)) {
         att->melee->power = GET_STR(att->ch);
         att->melee->damage_level = MODERATE;
+        att->melee->power -= GET_IMPACT(def->ch);
       }
       // Non-monowhips behave normally.
       else {
