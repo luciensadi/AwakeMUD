@@ -1099,6 +1099,20 @@ void do_stat_room(struct char_data * ch)
     }
   }
 
+  {
+    bool printed_workshop_yet = FALSE;
+    send_to_char("Workshops: ", ch);
+    for (int i = 0; i < NUM_WORKSHOP_TYPES; i++) {
+      if (rm->best_workshop[i]) {
+        send_to_char(ch, "%s^c%s (%s)^n", printed_workshop_yet ? ", " : "", GET_OBJ_NAME(rm->best_workshop[i]), workshops[i]);
+        printed_workshop_yet = TRUE;
+      }
+    }
+    if (!printed_workshop_yet)
+      send_to_char("^cNone.^n", ch);
+    send_to_char("\r\n", ch);
+  }
+
   for (i = 0; i < NUM_OF_DIRS; i++)
   {
     if (rm->dir_option[i]) {

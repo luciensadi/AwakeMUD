@@ -1845,25 +1845,29 @@ void obj_to_room(struct obj_data * object, struct room_data *room)
 void obj_from_room(struct obj_data * object)
 {
   struct obj_data *temp;
-  if (!object || (!object->in_room && !object->in_veh))
-  {
+  if (!object || (!object->in_room && !object->in_veh)) {
     log("SYSLOG: NULL object or obj not in a room passed to obj_from_room");
     return;
   }
-  if (object->in_veh)
-  {
+
+  if (object->in_veh) {
     object->in_veh->usedload -= GET_OBJ_WEIGHT(object);
     REMOVE_FROM_LIST(object, object->in_veh->contents, next_content);
-  } else {
+  }
+
+  if (object->in_room) {
+    // Set the room's dirty bit.
+    object->in_room->dirty_bit = TRUE;
+
     // Handle workshop removal.
     if (GET_OBJ_TYPE(object) == ITEM_WORKSHOP)
       remove_workshop_from_room(object);
+
+    // Strip it out of the room's contents.
     REMOVE_FROM_LIST(object, object->in_room->contents, next_content);
   }
 
-  if (object->in_room)
-    object->in_room->dirty_bit = TRUE;
-
+  // Clear its pointers.
   object->in_veh = NULL;
   object->in_room = NULL;
   object->next_content = NULL;
