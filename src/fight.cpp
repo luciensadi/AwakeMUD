@@ -5073,9 +5073,14 @@ void chkdmg(struct veh_data * veh)
 
 
     if (veh->cspeed >= SPEED_IDLE) {
-      send_to_veh("You are hurled into the street as your ride is wrecked!\r\n", veh, NULL, FALSE);
-      snprintf(buf, sizeof(buf), "%s careens off the road, its occupants hurled to the street!\r\n", GET_VEH_NAME(veh));
-      send_to_room(buf, veh->in_room);
+      if (veh->people) {
+        send_to_veh("You are hurled into the street as your ride is wrecked!\r\n", veh, NULL, FALSE);
+        snprintf(buf, sizeof(buf), "%s careens off the road, its occupants hurled into the street!\r\n", GET_VEH_NAME(veh));
+        act(buf, FALSE, veh->people, NULL, NULL, TO_VEH_ROOM);
+      } else {
+        snprintf(buf, sizeof(buf), "%s careens off the road!\r\n", GET_VEH_NAME(veh));
+        send_to_room(buf, get_veh_in_room(veh));
+      }
 
       damage_rating = SERIOUS;
       damage_tn = 8;

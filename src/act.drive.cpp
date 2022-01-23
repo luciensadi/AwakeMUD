@@ -146,25 +146,29 @@ void crash_test(struct char_data *ch)
   int power, attack_resist = 0, damage_total = SERIOUS;
   struct veh_data *veh;
   struct char_data *tch, *next;
+  char crash_buf[500];
 
   RIG_VEH(ch, veh);
   target = veh->handling + get_vehicle_modifier(veh) + modify_target(ch);
   power = (int)(ceilf(get_speed(veh) / 10));
 
-  snprintf(buf, sizeof(buf), "%s begins to lose control!\r\n", GET_VEH_NAME(veh));
-  send_to_room(buf, veh->in_room);
+  snprintf(buf, sizeof(buf), "%s begins to lose control!\r\n", capitalize(GET_VEH_NAME(veh)));
+  act(buf, FALSE, ch, NULL, NULL, TO_VEH_ROOM);
 
-  send_to_char("You begin to lose control!\r\n", ch);
   skill = veh_skill(ch, veh) + veh->autonav;
 
   if (success_test(skill, target))
   {
-    send_to_char("You get your ride under control.\r\n", ch);
+    snprintf(crash_buf, sizeof(crash_buf), "^y%s shimmies sickeningly under you, but you manage to keep control.^n\r\n", capitalize(GET_VEH_NAME(veh)));
+    send_to_veh(crash_buf, veh, NULL, TRUE);
+    if (!number(0, 10))
+      send_to_char("^YYou don't have the skills to be driving like this!^n\r\n", ch);
     return;
   }
-  send_to_veh("You careen off the road!\r\n", veh, NULL, TRUE);
-  snprintf(buf, sizeof(buf), "A %s careens off the road!\r\n", GET_VEH_NAME(veh));
-  send_to_room(buf, veh->in_room);
+  snprintf(crash_buf, sizeof(crash_buf), "^r%s shimmies sickeningly under you, then bounces hard before careening off the road!^n\r\n", capitalize(GET_VEH_NAME(veh)));
+  send_to_veh(crash_buf, veh, NULL, TRUE);
+  snprintf(buf, sizeof(buf), "%s careens off the road!\r\n", capitalize(GET_VEH_NAME(veh)));
+  act(buf, FALSE, ch, NULL, NULL, TO_VEH_ROOM);
 
   attack_resist = success_test(veh->body, power) * -1;
 
