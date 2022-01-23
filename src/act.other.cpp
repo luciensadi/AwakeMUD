@@ -288,7 +288,7 @@ ACMD(do_steal)
             obj_to_char(obj, ch);
             send_to_char(ch, "You filch %s from %s!\r\n", GET_OBJ_NAME(obj), GET_NAME(vict));
             if (GET_LEVEL(ch) < LVL_BUILDER)
-              act("$n steals $p from $o's unconscious body.", TRUE, ch, obj, vict, TO_ROOM);
+              act("$n steals $p from $N's unconscious body.", TRUE, ch, obj, vict, TO_ROOM);
           }
         } else
           send_to_char(ch, "%s weighs too much!\r\n", GET_OBJ_NAME(obj));
@@ -4353,6 +4353,20 @@ ACMD(do_spray)
     send_to_char("What do you want to spray?\r\n", ch);
     return;
   }
+
+  {
+    int existing_graffiti_count = 0;
+    struct obj_data *obj;
+    FOR_ITEMS_AROUND_CH(ch, obj) {
+      if (GET_OBJ_VNUM(obj) == OBJ_GRAFFITI)
+        existing_graffiti_count++;
+    }
+    if (existing_graffiti_count >= MAXIMUM_GRAFFITI_IN_ROOM) {
+      send_to_char("There's too much graffiti here, you can't find a spare place to paint!\r\n(OOC: You'll have to ^WCLEANUP GRAFFITI^n before you can paint here.)\r\n", ch);
+      return;
+    }
+  }
+
   for (struct obj_data *obj = ch->carrying; obj; obj = obj->next_content)
     if (GET_OBJ_SPEC(obj) && GET_OBJ_SPEC(obj) == spraypaint) {
       if (strlen(argument) >= LINE_LENGTH) {
@@ -4360,11 +4374,16 @@ ACMD(do_spray)
         return;
       }
       struct obj_data *paint = read_object(OBJ_GRAFFITI, VIRTUAL);
-      snprintf(buf, sizeof(buf), "Someone has sprayed \"%s^g\" here.", argument);
+      snprintf(buf, sizeof(buf), "a piece of graffiti that says \"%s^n\"", argument);
       paint->restring = str_dup(buf);
+      snprintf(buf, sizeof(buf), "Someone has sprayed \"%s^g\" here.", argument);
       paint->graffiti = str_dup(buf);
       obj_to_room(paint, ch->in_room);
-      if (++GET_OBJ_TIMER(obj) == 3) {
+
+      snprintf(buf, sizeof(buf), "%s sprayed graffiti: %s.", GET_CHAR_NAME(ch), GET_OBJ_NAME(paint));
+      mudlog(buf, ch, LOG_GRIDLOG, TRUE);
+
+      if (++GET_OBJ_TIMER(obj) >= 3) {
         send_to_char("The spray can is now empty, so you throw it away.\r\n", ch);
         extract_obj(obj);
       }
@@ -4373,6 +4392,37 @@ ACMD(do_spray)
 
 
   send_to_char("You don't have anything to spray with.\r\n", ch);
+}
+
+ACMD(do_cleanup)
+{
+  skip_spaces(&argument);
+  if (!*argument) {
+    send_to_char("What do you want to clean up?\r\n", ch);
+    return;
+  }
+
+  struct char_data *tmp_char = NULL;
+  struct obj_data *target_obj = NULL;
+
+  generic_find(argument, FIND_OBJ_ROOM, ch, &tmp_char, &target_obj);
+
+  if (!target_obj) {
+    send_to_char(ch, "You don't see anything called '%s' here.", argument);
+    return;
+  }
+
+  if (GET_OBJ_VNUM(target_obj) != OBJ_GRAFFITI) {
+    send_to_char(ch, "%s is not graffiti.", capitalize(GET_OBJ_NAME(target_obj)));
+    return;
+  }
+
+  send_to_char(ch, "You spend a few moments scrubbing away %s. Community service, good for you!\r\n", GET_OBJ_NAME(target_obj));
+  act("$n spends a few moments scrubbing away $p.", TRUE, ch, target_obj, NULL, TO_ROOM);
+
+  snprintf(buf, sizeof(buf), "%s cleaned up graffiti: ^n%s^g.", GET_CHAR_NAME(ch), GET_OBJ_NAME(target_obj));
+  mudlog(buf, ch, LOG_GRIDLOG, TRUE);
+  extract_obj(target_obj);
 }
 
 ACMD(do_costtime)

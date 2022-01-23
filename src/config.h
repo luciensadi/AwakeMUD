@@ -184,6 +184,9 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 // How long is the decking command wait state?
 #define DECKING_WAIT_STATE_TIME                                (0.2 RL_SEC)
 
+// Spam prevention: What's the maximum amount of graffiti in a room?
+#define MAXIMUM_GRAFFITI_IN_ROOM                               3
+
 /////////////// OLC permissions configuration /////////////////////////
 #define LVL_FOR_SETTING_ZONE_EDITOR_ID_NUMBERS                 LVL_VICEPRES
 #define LVL_FOR_SETTING_ZONE_CONNECTED_STATUS                  LVL_FIXER

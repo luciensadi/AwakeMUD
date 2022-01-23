@@ -126,6 +126,7 @@ ACMD_DECLARE(do_broadcast);
 ACMD_DECLARE(do_build);
 ACMD_DECLARE(do_cast);
 ACMD_DECLARE(do_chipload);
+ACMD_DECLARE(do_cleanup);
 ACMD_DECLARE(do_cleanse);
 ACMD_DECLARE(do_closecombat);
 ACMD_DECLARE(do_commands);
@@ -490,6 +491,7 @@ struct command_info cmd_info[] =
     { "call"       , POS_LYING   , do_phone    , 0, SCMD_RING, FALSE },
     { "chase"      , POS_SITTING , do_chase    , 0, 0, FALSE },
     { "cleanse"    , POS_LYING   , do_cleanse  , 0, 0, FALSE },
+    { "cleanup"    , POS_SITTING , do_cleanup  , 0, 0, FALSE },
     { "clear"      , POS_DEAD    , do_gen_ps   , 0, SCMD_CLEAR, TRUE },
     { "close"      , POS_SITTING , do_gen_door , 0, SCMD_CLOSE, FALSE },
     { "closecombat", POS_LYING   , do_closecombat, 0, 0, FALSE },

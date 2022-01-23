@@ -35,6 +35,7 @@ extern struct skill_data skills[];
 extern void respond(struct char_data *ch, struct char_data *mob, char *str);
 extern bool can_send_act_to_target(struct char_data *ch, bool hide_invisible, struct obj_data * obj, void *vict_obj, struct char_data *to, int type);
 extern char *how_good(int skill, int percent);
+extern const char *get_voice_perceived_by(struct char_data *speaker, struct char_data *listener, bool invis_staff_should_be_identified);
 int find_skill_num(char *name);
 void ring_phone(struct phone_data *k);
 
@@ -1589,9 +1590,9 @@ ACMD(do_phone)
       return;
 
     #define VOICE_BUF_SIZE 20
-    char voice[VOICE_BUF_SIZE] = "$v";
+    char voice[VOICE_BUF_SIZE] = {"$v"};
     for (struct obj_data *obj = ch->cyberware; obj; obj = obj->next_content)
-      if (GET_OBJ_VAL(obj, 0) == CYB_VOICEMOD && GET_OBJ_VAL(obj, 3))
+      if (GET_CYBERWARE_TYPE(obj) == CYB_VOICEMOD && GET_CYBERWARE_FLAGS(obj))
         snprintf(voice, VOICE_BUF_SIZE, "A masked voice");
 
     snprintf(buf3, MAX_STRING_LENGTH, "^YYou say into your phone, \"%s%s^Y\"\r\n",
@@ -1602,20 +1603,31 @@ ACMD(do_phone)
 
     store_message_to_history(ch->desc, COMM_CHANNEL_PHONE, buf3);
 
-    if (phone->dest->persona && phone->dest->persona->decker && phone->dest->persona->decker->ch)
-      store_message_to_history(ch->desc, COMM_CHANNEL_PHONE, act(buf, FALSE, ch, 0, phone->dest->persona->decker->ch, TO_DECK));
-    else {
+    bool tch_is_matrix = FALSE;
+
+    if (phone->dest->persona && phone->dest->persona->decker && phone->dest->persona->decker->ch) {
+      tch = phone->dest->persona->decker->ch;
+      tch_is_matrix = TRUE;
+    } else {
       tch = get_obj_possessor(phone->dest->phone);
     }
+
     if (tch) {
       snprintf(buf, sizeof(buf), "^Y%s^Y on the other end of the line says in %s, \"%s%s^Y\"",
-              voice,
+              tch_is_matrix ? get_voice_perceived_by(ch, tch, FALSE) : voice,
               (IS_NPC(tch) || GET_SKILL(tch, language) > 0) ? skills[language].name : "an unknown language",
               capitalize(replace_too_long_words(tch, ch, argument, language, "^Y")),
               ispunct(get_final_character_from_string(argument)) ? "" : ".");
 
-      store_message_to_history(tch->desc, COMM_CHANNEL_PHONE, act(buf, FALSE, ch, 0, tch, TO_VICT));
+      if (tch_is_matrix) {
+        // Re-send it to the Matrix folks.
+        store_message_to_history(tch->desc, COMM_CHANNEL_PHONE, buf);
+        send_to_char(buf, tch);
+      } else {
+        store_message_to_history(tch->desc, COMM_CHANNEL_PHONE, act(buf, FALSE, ch, 0, tch, TO_VICT));
+      }
     }
+    // Send to nearby people.
     if (!cyber) {
       for (tch = ch->in_veh ? ch->in_veh->people : ch->in_room->people; tch; tch = ch->in_veh ? tch->next_in_veh : tch->next_in_room) {
         if (tch != ch) {

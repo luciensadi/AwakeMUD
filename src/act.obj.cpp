@@ -1417,7 +1417,7 @@ ACMD(do_get)
                                   ITEM_WORN)) || (cyberdeck && !(GET_OBJ_TYPE(cont) == ITEM_CYBERDECK ||
                                                                  GET_OBJ_TYPE(cont) == ITEM_CUSTOM_DECK ||
                                                                  GET_OBJ_TYPE(cont) == ITEM_DECK_ACCESSORY))) {
-        snprintf(buf, sizeof(buf), "$p is not a %s", (!cyberdeck ? "container" : "cyberdeck"));
+        snprintf(buf, sizeof(buf), "$p is not a %s.", (!cyberdeck ? "container" : "cyberdeck"));
         act(buf, FALSE, ch, cont, 0, TO_CHAR);
 
         if (access_level(ch, LVL_ADMIN) && !str_cmp(arg1, "force-all")) {
@@ -1556,7 +1556,7 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
       return 0;
     }
 
-    if (obj->contains) {
+    if (obj->contains && mode == SCMD_JUNK) {
       send_to_char("You can't junk a cyberdeck that has components installed!\r\n", ch);
       return 0;
     }

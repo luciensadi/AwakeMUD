@@ -2654,8 +2654,12 @@ void send_to_char(const char *messg, struct char_data *ch)
 
 void send_to_icon(struct matrix_icon * icon, const char * const messg, ...)
 {
-  if (!icon || !icon->decker || !icon->decker->ch || !icon->decker->ch->desc || !messg)
+  if (!icon || !icon->decker || !icon->decker->ch || !icon->decker->ch->desc || !messg) {
+#ifdef DEBUG_SEND_TO_ICON
+    log_vfprintf("send_to_icon '%s' failing: no valid target or messg", messg);
+#endif
     return;
+  }
 
   char internal_buffer[MAX_STRING_LENGTH];
 
