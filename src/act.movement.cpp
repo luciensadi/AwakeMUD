@@ -1591,6 +1591,33 @@ ACMD(do_drag)
   }
 }
 
+void try_to_enter_elevator_car(struct char_data *ch) {
+  // Iterate through elevators to find one that contains this shaft.
+  for (int index = 0; index < num_elevators; index++) {
+    int car_rating = world[real_room(elevator[index].room)].rating;
+    // Check for the car being at this floor.
+    if (elevator[index].floor[car_rating].shaft_vnum == ch->in_room->number) {
+      if (IS_ASTRAL(ch)) {
+        send_to_char(ch, "You phase into the %selevator car.\r\n", elevator[index].is_moving ? "moving " : "");
+        char_from_room(ch);
+        char_to_room(ch, &world[real_room(elevator[index].room)]);
+        act("$n phases in through the wall.\r\n", TRUE, ch, NULL, NULL, TO_ROOM);
+      } else {
+        if (elevator[index].is_moving) {
+          send_to_char("You can't enter a moving elevator car!\r\n", ch);
+          return;
+        }
+
+        send_to_char("You jimmy open the access hatch and drop into the elevator car. The hatch locks closed behind you.\r\n", ch);
+        char_from_room(ch);
+        char_to_room(ch, &world[real_room(elevator[index].room)]);
+        act("The access hatch in the ceiling squeaks briefly open and $n drops into the car.", FALSE, ch, NULL, NULL, TO_ROOM);
+      }
+      return;
+    }
+  }
+}
+
 ACMD(do_enter)
 {
   int door;
@@ -1627,37 +1654,18 @@ ACMD(do_enter)
             return;
           }
 
-
-    send_to_char(ch, "There is no '%s' here.\r\n", buf);
+    if (ROOM_FLAGGED(ch->in_room, ROOM_ELEVATOR_SHAFT) && (!str_cmp("elevator", buf) || !str_cmp("car", buf))) {
+      try_to_enter_elevator_car(ch);
+    } else {
+      send_to_char(ch, "There is no '%s' here.\r\n", buf);
+    }
     return;
   }
 
   // Is there an elevator car here?
   if (ROOM_FLAGGED(ch->in_room, ROOM_ELEVATOR_SHAFT)) {
-    // Iterate through elevators to find one that contains this shaft.
-    for (int index = 0; index < num_elevators; index++) {
-      int car_rating = world[real_room(elevator[index].room)].rating;
-      // Check for the car being at this floor.
-      if (elevator[index].floor[car_rating].shaft_vnum == ch->in_room->number) {
-        if (IS_ASTRAL(ch)) {
-          send_to_char(ch, "You phase into the %selevator car.\r\n", elevator[index].is_moving ? "moving " : "");
-          char_from_room(ch);
-          char_to_room(ch, &world[real_room(elevator[index].room)]);
-          act("$n phases in through the wall.\r\n", TRUE, ch, NULL, NULL, TO_ROOM);
-        } else {
-          if (elevator[index].is_moving) {
-            send_to_char("You can't enter a moving elevator car!\r\n", ch);
-            return;
-          }
-
-          send_to_char("You jimmy open the access hatch and drop into the elevator car. The hatch locks closed behind you.\r\n", ch);
-          char_from_room(ch);
-          char_to_room(ch, &world[real_room(elevator[index].room)]);
-          act("The access hatch in the ceiling squeaks briefly open and $n drops into the car.", FALSE, ch, NULL, NULL, TO_ROOM);
-        }
-        return;
-      }
-    }
+    try_to_enter_elevator_car(ch);
+    return;
   }
 
   if (ROOM_FLAGGED(get_ch_in_room(ch), ROOM_INDOORS)) {
