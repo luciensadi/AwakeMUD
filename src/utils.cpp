@@ -1836,16 +1836,15 @@ void magic_loss(struct char_data *ch, int magic, bool msg)
 }
 
 // Return true if the character has a kit of the given type, false otherwise.
+#define IS_KIT(obj, type) (GET_OBJ_TYPE((obj)) == ITEM_WORKSHOP && GET_WORKSHOP_TYPE((obj)) == type && GET_WORKSHOP_GRADE((obj)) == TYPE_KIT)
 bool has_kit(struct char_data * ch, int type)
 {
   for (struct obj_data *o = ch->carrying; o; o = o->next_content)
-    if (GET_OBJ_TYPE(o) == ITEM_WORKSHOP && GET_OBJ_VAL(o, 0) == type && GET_OBJ_VAL(o, 1) == TYPE_KIT)
+    if (IS_KIT(o, type))
       return TRUE;
 
-  if (GET_EQ(ch, WEAR_HOLD))
-    if (GET_OBJ_TYPE(GET_EQ(ch, WEAR_HOLD)) == ITEM_WORKSHOP &&
-        GET_OBJ_VAL(GET_EQ(ch, WEAR_HOLD), 0) == type && GET_OBJ_VAL(GET_EQ(ch, WEAR_HOLD), 1) == TYPE_KIT)
-      return TRUE;
+  if (GET_EQ(ch, WEAR_HOLD) && IS_KIT(GET_EQ(ch, WEAR_HOLD), type))
+    return TRUE;
 
   return FALSE;
 }
@@ -1870,12 +1869,14 @@ struct obj_data *find_workshop(struct char_data * ch, int type)
         return o;
       } else if (GET_WORKSHOP_GRADE(o) == TYPE_WORKSHOP && GET_WORKSHOP_IS_SETUP(o))
         workshop = o;
+      // If we got here, it's either a kit, or a workshop that's not set up.
     }
   }
 
   // Return workshop (which is NULL if no workshop was found).
   return workshop;
 }
+#undef IS_KIT
 
 // Preconditions checking for add_ and remove_ workshop functions.
 bool _is_workshop_valid(struct obj_data *obj) {
@@ -1895,23 +1896,23 @@ bool _is_workshop_valid(struct obj_data *obj) {
     return FALSE;
   }
 
-  // Precondition: The item must be a deployed workshop or a facility.
-  if (!(GET_WORKSHOP_GRADE(obj) == TYPE_WORKSHOP && GET_WORKSHOP_IS_SETUP(obj)) && GET_WORKSHOP_GRADE(obj) != TYPE_FACILITY) {
-    // For this to be true, the item is a kit. We're not going to throw an error over that, but it's not a valid workshop.
-    return FALSE;
-  }
-
   return TRUE;
 }
 
 void add_workshop_to_room(struct obj_data *obj) {
+  // If it's not a workshop, skip.
   if (!_is_workshop_valid(obj))
     return;
 
+  // If it's not in a room, skip.
   if (!obj->in_room)
     return;
 
-  struct obj_data *current = obj->in_room->best_workshop[GET_OBJ_VAL(obj, 0)];
+  // If it's not a deployed workshop or a facility, skip.
+  if (!(GET_WORKSHOP_GRADE(obj) == TYPE_WORKSHOP && GET_WORKSHOP_IS_SETUP(obj)) && GET_WORKSHOP_GRADE(obj) != TYPE_FACILITY)
+    return;
+
+  struct obj_data *current = obj->in_room->best_workshop[GET_WORKSHOP_TYPE(obj)];
 
   if (current && GET_WORKSHOP_GRADE(current) > GET_WORKSHOP_GRADE(obj))
     return;
