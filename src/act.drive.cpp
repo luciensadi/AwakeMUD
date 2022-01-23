@@ -423,6 +423,7 @@ ACMD(do_ram)
   }
 
   do_raw_ram(ch, veh, tveh, vict);
+  WAIT_STATE(ch, (int) RAM_WAIT_STATE_TIME);
 }
 
 void do_raw_ram(struct char_data *ch, struct veh_data *veh, struct veh_data *tveh, struct char_data *vict) {

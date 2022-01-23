@@ -44,7 +44,7 @@ ACMD(do_highlight) {
     return;
   }
 
-  if (*argument != '^' || !isalpha(*(argument + 1))) {
+  if (*argument != '^' || (!isalpha(*(argument + 1)) && *(argument + 1) != '[')) {
     send_to_char("You need to specify a color code. Example: 'highlight ^^r'. Use '^^n' for neutral / no highlight.\r\n", ch);
     return;
   }

@@ -184,6 +184,9 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 // How long is the decking command wait state?
 #define DECKING_WAIT_STATE_TIME                                (0.2 RL_SEC)
 
+// How long is the ram command wait state?
+#define RAM_WAIT_STATE_TIME                                    (0.4 RL_SEC)
+
 // Spam prevention: What's the maximum amount of graffiti in a room?
 #define MAXIMUM_GRAFFITI_IN_ROOM                               3
 
