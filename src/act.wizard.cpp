@@ -6619,8 +6619,8 @@ int audit_zone_quests_(struct char_data *ch, int zone_num, bool verbose) {
   if (verbose)
     send_to_char(ch, "\r\n^WAuditing quests for zone %d...^n\r\n", zone_table[zone_num].number);
 
-  for (int i = zone_table[zone_num].number * 100; i <= zone_table[zone_num].top; i++) {
-    if ((real_qst = real_quest(i)) < 0)
+  for (int zone_vnum = zone_table[zone_num].number * 100; zone_vnum <= zone_table[zone_num].top; zone_vnum++) {
+    if ((real_qst = real_quest(zone_vnum)) < 0)
       continue;
 
     quest = &quest_table[real_qst];
@@ -6718,7 +6718,7 @@ int audit_zone_quests_(struct char_data *ch, int zone_num, bool verbose) {
           break;
       }
 
-      switch (quest->mob[i].objective) {
+      switch (quest->mob[mob_idx].objective) {
         case QMO_LOCATION:
           if (real_room(quest->mob[mob_idx].o_data) <= -1) {
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - mob objective #%d: invalid destination room %d^n.\r\n", mob_idx, quest->mob[mob_idx].o_data);
