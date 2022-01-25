@@ -219,6 +219,8 @@ ACMD_DECLARE(do_insult);
 ACMD_DECLARE(do_inventory);
 ACMD_DECLARE(do_invis);
 ACMD_DECLARE(do_jack);
+ACMD_DECLARE(do_keep);
+ACMD_DECLARE(do_keepalive);
 ACMD_DECLARE(do_kick);
 ACMD_DECLARE(do_kil);
 ACMD_DECLARE(do_kill);
@@ -632,6 +634,8 @@ struct command_info cmd_info[] =
     { "jobs"       , POS_DEAD    , do_recap    , 0, 0, FALSE },
     { "junk"       , POS_RESTING , do_drop     , 0, SCMD_JUNK, FALSE },
 
+    { "keep"       , POS_LYING   , do_keep     , 0, 0, FALSE },
+    { "keepalive"  , POS_DEAD    , do_keepalive, 0, 0, FALSE },
     { "kil"        , POS_FIGHTING, do_kil      , 0, 0, FALSE },
     { "kill"       , POS_FIGHTING, do_kill     , 0, SCMD_KILL, FALSE },
     { "kick"       , POS_STANDING, do_kick     , 0, 0, FALSE },
@@ -1669,6 +1673,10 @@ void free_alias(struct alias *a)
   DELETE_ARRAY_IF_EXTANT(a->command);
   DELETE_ARRAY_IF_EXTANT(a->replacement);
   DELETE_AND_NULL(a);
+}
+
+ACMD(do_keepalive) {
+  // no-op command to give you something to send without generating server load
 }
 
 /* The interface to the outside world: do_alias */

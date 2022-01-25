@@ -756,13 +756,13 @@ bool load_char(const char *name, char_data *ch, bool logon)
           if (inside < last_inside) {
             if (inside == 0)
               obj_to_cyberware(obj, ch);
-              
+
             auto it = std::find_if(contained_obj.begin(), contained_obj.end(), find_level(inside+1));
             while (it != contained_obj.end()) {
               obj_to_obj(it->obj, obj);
               contained_obj.erase(it);
             }
-              
+
             if (inside > 0) {
               contained_obj_entry.level = inside;
               contained_obj_entry.obj = obj;
@@ -777,7 +777,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
           last_inside = inside;
         } else
           obj_to_cyberware(obj, ch);
-          
+
         last_inside = inside;
       }
     }
@@ -785,7 +785,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
     if (!contained_obj.empty()) {
       for (auto it : contained_obj)
         obj_to_char(it.obj, ch);
-      
+
       contained_obj.clear();
       snprintf(buf2, sizeof(buf2), "Load error:  Objects in ware containers found with invalid containers for Char ID: %ld. Dumped in inventory.", GET_IDNUM(ch));
       mudlog(buf2, NULL, LOG_SYSLOG, TRUE);
@@ -866,13 +866,13 @@ bool load_char(const char *name, char_data *ch, bool logon)
           if (inside < last_inside) {
             if (inside == 0)
               equip_char(ch, obj, atoi(row[18]));
-              
+
             auto it = std::find_if(contained_obj.begin(), contained_obj.end(), find_level(inside+1));
             while (it != contained_obj.end()) {
               obj_to_obj(it->obj, obj);
               contained_obj.erase(it);
             }
-              
+
             if (inside > 0) {
               contained_obj_entry.level = inside;
               contained_obj_entry.obj = obj;
@@ -887,7 +887,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
           last_inside = inside;
         } else
            equip_char(ch, obj, atoi(row[18]));
-          
+
         last_inside = inside;
       }
     }
@@ -895,7 +895,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
     if (!contained_obj.empty()) {
       for (auto it : contained_obj)
         obj_to_char(it.obj, ch);
-      
+
       contained_obj.clear();
       snprintf(buf2, sizeof(buf2), "Load error: Worn objects found with invalid containers for Char ID: %ld. Dumped in inventory.", GET_IDNUM(ch));
       mudlog(buf2, NULL, LOG_SYSLOG, TRUE);
@@ -945,25 +945,27 @@ bool load_char(const char *name, char_data *ch, bool logon)
             break;
         }
         // This is badly named and at first reading it seems like it holds a vnum to parent container
-        // which made the algorithm below harder to read but it is in fact nesting level.  
+        // which made the algorithm below harder to read but it is in fact nesting level.
         // I am not refactoring it to nesting_level though as it then wouldn't match the database column.
         // This serves as a reminder to do so if I push a db update and for others to figure out easier what it actually is. -- Nodens
         inside = atoi(row[17]);
         GET_OBJ_TIMER(obj) = atoi(row[18]);
 
-        // row 19: extra flags. We want to retain the proto's flags but also persist anti-cheat flags.
+        // row 19: extra flags. We want to retain the proto's flags but also persist anti-cheat flags and other necessary ones.
         Bitfield temp_extra_flags;
         temp_extra_flags.FromString(row[19]);
         if (temp_extra_flags.IsSet(ITEM_WIZLOAD))
           GET_OBJ_EXTRA(obj).SetBit(ITEM_WIZLOAD);
         if (temp_extra_flags.IsSet(ITEM_IMMLOAD))
           GET_OBJ_EXTRA(obj).SetBit(ITEM_IMMLOAD);
+        if (temp_extra_flags.IsSet(ITEM_KEPT))
+          GET_OBJ_EXTRA(obj).SetBit(ITEM_KEPT);
 
         GET_OBJ_ATTEMPT(obj) = atoi(row[20]);
         GET_OBJ_CONDITION(obj) = atoi(row[21]);
 
         auto_repair_obj(obj, buf3);
-        
+
         // Since we're now reading rows from the db in reverse order, in order to fix the stupid reordering on
         // every binary execution, the previous algorithm did not work, as it relied on getting the container obj
         // first and place subsequent objects in it. Since we're now getting it last, and more importantly we get
@@ -975,13 +977,13 @@ bool load_char(const char *name, char_data *ch, bool logon)
           if (inside < last_inside) {
             if (inside == 0)
               obj_to_char(obj, ch);
-              
+
             auto it = std::find_if(contained_obj.begin(), contained_obj.end(), find_level(inside+1));
             while (it != contained_obj.end()) {
               obj_to_obj(it->obj, obj);
               contained_obj.erase(it);
             }
-              
+
             if (inside > 0) {
               contained_obj_entry.level = inside;
               contained_obj_entry.obj = obj;
@@ -996,7 +998,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
           last_inside = inside;
         } else
           obj_to_char(obj, ch);
-          
+
         last_inside = inside;
       }
     }
@@ -1004,7 +1006,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
     if (!contained_obj.empty()) {
       for (auto it : contained_obj)
         obj_to_char(it.obj, ch);
-      
+
       contained_obj.clear();
       snprintf(buf2, sizeof(buf2), "Load error: Inventory objects found with invalid containers for Char ID: %ld. Dumped in inventory.", GET_IDNUM(ch));
       mudlog(buf2, NULL, LOG_SYSLOG, TRUE);

@@ -3913,6 +3913,30 @@ char *compose_spell_name(int type, int subtype) {
   return name_buf;
 }
 
+bool obj_contains_kept_items(struct obj_data *obj) {
+  if (!obj) {
+    mudlog("SYSERR: Received null object to obj_contains_kept_items().", NULL, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+  
+  if (!obj->contains) {
+    return FALSE;
+  }
+
+  // Iterate over each item in the content list.
+  for (struct obj_data *tmp = obj->contains; tmp; tmp = tmp->next_content) {
+    // If this item is kept, return true.
+    if (IS_OBJ_STAT(tmp, ITEM_KEPT))
+      return TRUE;
+
+    // If this item contains kept items, return true.
+    if (tmp->contains && obj_contains_kept_items(tmp))
+      return TRUE;
+  }
+  // We found no kept items- return false.
+  return FALSE;
+}
+
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.
 // Great for swapping out old Classic weapons, cyberware, etc for the new guaranteed-canon versions.
 #define PAIR(classic, current) case (classic): return (current);

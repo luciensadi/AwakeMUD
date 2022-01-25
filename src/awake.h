@@ -1192,7 +1192,8 @@ enum {
 #define ITEM_HARDENED_ARMOR     25    // Applies hardened armor rules (deflect attacks with power <= armor rating) CC p51
 #define ITEM_DONT_TOUCH         26    // Warns strenuously on editing.
 #define ITEM_MAGIC_INCOMPATIBLE 27    // Incompatible with magic. Used for cyberware and bioware.
-#define ITEM_EXTRA_MAX          28
+#define ITEM_KEPT               28    // Kept by the keep command.
+#define ITEM_EXTRA_MAX          29
 
 /* Ammo types */
 #define AMMO_NORMAL     0

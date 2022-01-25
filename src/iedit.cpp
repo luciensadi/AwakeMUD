@@ -1853,6 +1853,9 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
       } else if (number == ITEM_DONT_TOUCH + 1) {
         send_to_char("You can't set the Don't Touch flag here. Do it in the world files.\r\n", d->character);
         iedit_disp_extra_menu(d);
+      } else if (number == ITEM_KEPT + 1) {
+        send_to_char("You can't set the Kept flag, it's only settable by code.\r\n", d->character);
+        iedit_disp_extra_menu(d);
       } else {
         /* if 0, quit */
         if (number == 0)

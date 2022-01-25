@@ -346,6 +346,10 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
       else
         strlcat(buf, " ^m(Protected)^n", sizeof(buf));
     }
+
+    if (IS_OBJ_STAT(object, ITEM_KEPT)) {
+      strlcat(buf, " ^c(kept)^n", sizeof(buf));
+    }
   }
   strlcat(buf, "^N\r\n", sizeof(buf));
   send_to_char(buf, ch);

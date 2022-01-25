@@ -110,6 +110,7 @@ int     count_color_codes_in_string(const char *str);
 bool    npc_is_protected_by_spec(struct char_data *npc);
 bool    can_damage_vehicle(struct char_data *ch, struct veh_data *veh);
 char *  compose_spell_name(int type, int subtype = -1);
+bool    obj_contains_kept_items(struct obj_data *obj);
 
 // Skill-related.
 char *how_good(int skill, int rank);
@@ -137,7 +138,7 @@ bool invis_ok(struct char_data *ch, struct char_data *vict);
 #undef MIN
 #endif
 
-#ifdef __GNUG__ 
+#ifdef __GNUG__
 #define MIN(x, y) (x < y ? x : y)
 #define MAX(x, y) (x > y ? x : y)
 #else
@@ -380,7 +381,7 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 
 #define GET_ATT(ch, i)        ((ch)->aff_abils.attributes[(i)])
 #define GET_REAL_ATT(ch, i)   ((ch)->real_abils.attributes[(i)])
-#define GET_STR(ch)           (GET_ATT((ch), STR))      
+#define GET_STR(ch)           (GET_ATT((ch), STR))
 #define GET_QUI(ch)           (GET_ATT((ch), QUI))
 #define GET_INT(ch)           (GET_ATT((ch), INT))
 #define GET_WIL(ch)           (GET_ATT((ch), WIL))
@@ -397,12 +398,12 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define GET_TEMP_ESSLOSS(ch)	((ch)->points.ess_loss)
 
 #define GET_REAL_ATT(ch, i)        ((ch)->real_abils.attributes[(i)])
-#define GET_REAL_STR(ch)           (GET_REAL_ATT((ch), STR))  
-#define GET_REAL_QUI(ch)           (GET_REAL_ATT((ch), QUI))  
+#define GET_REAL_STR(ch)           (GET_REAL_ATT((ch), STR))
+#define GET_REAL_QUI(ch)           (GET_REAL_ATT((ch), QUI))
 #define GET_REAL_INT(ch)           (GET_REAL_ATT((ch), INT))
-#define GET_REAL_WIL(ch)           (GET_REAL_ATT((ch), WIL))  
-#define GET_REAL_BOD(ch)           (GET_REAL_ATT((ch), BOD))  
-#define GET_REAL_CHA(ch)           (GET_REAL_ATT((ch), CHA))  
+#define GET_REAL_WIL(ch)           (GET_REAL_ATT((ch), WIL))
+#define GET_REAL_BOD(ch)           (GET_REAL_ATT((ch), BOD))
+#define GET_REAL_CHA(ch)           (GET_REAL_ATT((ch), CHA))
 #define GET_REAL_REA(ch)           (GET_REAL_ATT((ch), REA))
 #define GET_REAL_MAG(ch)           ((ch)->real_abils.mag)
 #define GET_REAL_ESS(ch)           ((ch)->real_abils.ess)
@@ -535,7 +536,7 @@ int get_armor_penalty_grade(struct char_data *ch);
 
 #define GET_POWER(ch, i)	((ch)->char_specials.saved.powers[i][1] ? \
                                  MIN((ch)->char_specials.saved.powers[i][1], (ch)->char_specials.saved.powers[i][0]) : 0)
-                                 
+
 #define GET_POWER_TOTAL(ch, i)	    ((ch)->char_specials.saved.powers[i][0] != 0 ? (ch)->char_specials.saved.powers[i][0] : 0)
 #define SET_POWER_TOTAL(ch, i, amt)	{(ch)->char_specials.saved.powers[i][0] = amt; GET_ADEPT_POWER_DIRTY_BIT(ch) = TRUE;}
 
@@ -690,7 +691,7 @@ float get_proto_weight(struct obj_data *obj);
 
 #define HOLYLIGHT_OK(sub)      (GET_REAL_LEVEL(sub) >= LVL_BUILDER && \
    PRF_FLAGGED((sub), PRF_HOLYLIGHT))
-   
+
 bool LIGHT_OK_ROOM_SPECIFIED(struct char_data *sub, struct room_data *room);
 #define LIGHT_OK(sub)          LIGHT_OK_ROOM_SPECIFIED(sub, get_ch_in_room(sub))
 #define SELF(sub, obj)         ((sub) == (obj))
@@ -845,7 +846,7 @@ bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struc
 #define GET_WEAPON_FULL_AUTO_COUNT(weapon)     (GET_OBJ_TIMER((weapon)))
 #define GET_WEAPON_ATTACH_LOC(weapon, loc)     (((loc) >= ACCESS_LOCATION_TOP && (loc) <= ACCESS_LOCATION_UNDER) ? \
                                                     GET_OBJ_VAL((weapon), (loc)) : 0)
-                                                    
+
 #define WEAPON_IS_FOCUS(obj)                   (GET_OBJ_TYPE((obj)) == ITEM_WEAPON && !IS_GUN(GET_WEAPON_ATTACK_TYPE((obj))) && GET_WEAPON_FOCUS_RATING((obj)) > 0)
 bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 

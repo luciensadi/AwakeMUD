@@ -22,9 +22,11 @@
 #include "awake.h"
 #include "constants.h"
 #include "newmatrix.h"
+#include "newdb.h"
 
 /* extern variables */
 extern int drink_aff[][3];
+extern PCIndex playerDB;
 
 // extern funcs
 extern char *get_token(char *, char*);
@@ -1538,9 +1540,19 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
     act(buf, FALSE, ch, obj, 0, TO_CHAR);
     return 0;
   }
+  if (IS_OBJ_STAT(obj, ITEM_KEPT)) {
+    snprintf(buf, sizeof(buf), "You'll have to use the KEEP command on $p before you can %s it.", sname);
+    act(buf, FALSE, ch, obj, 0, TO_CHAR);
+    return 0;
+  }
   if (obj == ch->char_specials.programming)
   {
     send_to_char(ch, "You can't %s something you are working on.\r\n", sname);
+    return 0;
+  }
+
+  if (obj_contains_kept_items(obj)) {
+    act("Action blocked: $p contains at least one kept item.", FALSE, ch, obj, 0, TO_CHAR);
     return 0;
   }
 
@@ -1773,6 +1785,14 @@ bool perform_give(struct char_data * ch, struct char_data * vict, struct obj_dat
   if (IS_OBJ_STAT(obj, ITEM_NODROP))
   {
     act("You can't let go of $p!!  Yeech!", FALSE, ch, obj, 0, TO_CHAR);
+    return 0;
+  }
+  if (IS_OBJ_STAT(obj, ITEM_KEPT)) {
+    act("You'll have to use the KEEP command on $p before you can give it away.", FALSE, ch, obj, 0, TO_CHAR);
+    return 0;
+  }
+  if (obj_contains_kept_items(obj)) {
+    act("Action blocked: $p contains at least one kept item.", FALSE, ch, obj, 0, TO_CHAR);
     return 0;
   }
 
@@ -3740,4 +3760,31 @@ ACMD(do_break)
     do_drug_take(ch, contents);
     extract_obj(obj);
   }
+}
+
+ACMD(do_keep) {
+  if (!argument || !*argument) {
+    send_to_char("What do you want to flag as undroppable?\r\n", ch);
+    return;
+  }
+
+  struct obj_data  *obj      = NULL;
+  struct char_data *tmp_char = NULL;
+
+  generic_find(argument, FIND_OBJ_EQUIP | FIND_OBJ_INV, ch, &tmp_char, &obj);
+
+  if (!obj) {
+    send_to_char(ch, "You're not carrying or wearing anything named '%s'.", argument);
+    return;
+  }
+
+  if (IS_OBJ_STAT(obj, ITEM_KEPT)) {
+    send_to_char(ch, "You un-keep %s.", decapitalize_a_an(GET_OBJ_NAME(obj)));
+    GET_OBJ_EXTRA(obj).RemoveBit(ITEM_KEPT);
+  } else {
+    send_to_char(ch, "You set %s as kept. You will be unable to drop, junk, or give it away until you use this command on it again.", decapitalize_a_an(GET_OBJ_NAME(obj)));
+    GET_OBJ_EXTRA(obj).SetBit(ITEM_KEPT);
+  }
+
+  playerDB.SaveChar(ch);
 }

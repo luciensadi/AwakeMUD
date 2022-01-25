@@ -2215,6 +2215,13 @@ void extract_obj(struct obj_data * obj)
   struct phone_data *phone, *temp;
   bool set = FALSE;
 
+  if (IS_OBJ_STAT(obj, ITEM_KEPT)) {
+    const char *representation = generate_new_loggable_representation(obj);
+    snprintf(buf, sizeof(buf), "extract_obj: Destroying KEPT item: %s", representation);
+    delete [] representation;
+    mudlog(buf, NULL, LOG_PURGELOG, TRUE);
+  }
+
   if (obj->in_room)
     obj->in_room->dirty_bit = TRUE;
 

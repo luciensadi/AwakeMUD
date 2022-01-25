@@ -986,6 +986,7 @@ const char *extra_bits[] =
     "HARDENED_ARMOR",
     "DONT_TOUCH",
     "MAGIC_INCOMPATIBLE",
+    "KEPT",
     "\n"
   };
 
@@ -1019,6 +1020,7 @@ const char *pc_readable_extra_bits[] =
     "Hardened Armor (NERP)",
     "Derived from Template Item",
     "Incompatible with Magic",
+    "Kept",
     "\n"
   };
 
