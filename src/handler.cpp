@@ -2939,13 +2939,13 @@ int generic_find(char *arg, int bitvector, struct char_data * ch,
   int i;
   char name[256];
 
+  *tar_ch = NULL;
+  *tar_obj = NULL;
+
   one_argument(arg, name);
 
   if (!*name)
     return (0);
-
-  *tar_ch = NULL;
-  *tar_obj = NULL;
 
   /* Technically, this is intended to find characters outside of vehicles... but this is broken.
      Fixing it lets you do stupid shit like manabolting from inside a car. -- LS */

@@ -1958,6 +1958,8 @@ char *one_argument(char *argument, char *first_arg)
 /* same as one_argument except that it doesn't ignore fill words */
 char *any_one_arg(char *argument, char *first_arg)
 {
+  *first_arg = '\0';
+
   if (!argument)
     return NULL;
 
@@ -1976,6 +1978,8 @@ char *any_one_arg(char *argument, char *first_arg)
 // Same as above, but without skip_spaces.
 const char *any_one_arg_const(const char *argument, char *first_arg)
 {
+  *first_arg = '\0';
+
   if (!argument)
     return NULL;
 

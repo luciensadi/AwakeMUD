@@ -234,6 +234,8 @@ bool vict_is_valid_target(struct char_data *ch, struct char_data *vict) {
     }
   }
 
+  // TODO: Return false if I am astral and they are not perceiving-- I cannot hurt them.
+
   // They're a valid target, but I don't feel like fighting.
 #ifdef MOBACT_DEBUG
   snprintf(buf3, sizeof(buf3), "vict_is_valid_target: %s is a valid target, provided I am aggressive.", GET_CHAR_NAME(vict));
