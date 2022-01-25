@@ -4376,7 +4376,7 @@ ACMD(do_spray)
       struct obj_data *paint = read_object(OBJ_GRAFFITI, VIRTUAL);
       snprintf(buf, sizeof(buf), "a piece of graffiti that says \"%s^n\"", argument);
       paint->restring = str_dup(buf);
-      snprintf(buf, sizeof(buf), "Someone has sprayed \"%s^g\" here.", argument);
+      snprintf(buf, sizeof(buf), "\"%s^g\" is sprayed here.", argument);
       paint->graffiti = str_dup(buf);
       obj_to_room(paint, ch->in_room);
 
