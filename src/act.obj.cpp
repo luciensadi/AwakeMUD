@@ -1562,7 +1562,7 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
     return 0;
   }
 
-  if (GET_OBJ_TYPE(obj) == ITEM_CUSTOM_DECK || GET_OBJ_TYPE(obj) == ITEM_CYBERDECK) {
+  else if (GET_OBJ_TYPE(obj) == ITEM_CUSTOM_DECK || GET_OBJ_TYPE(obj) == ITEM_CYBERDECK) {
     if (mode == SCMD_DONATE) {
       send_to_char("You can't donate cyberdecks!\r\n", ch);
       return 0;
@@ -1572,6 +1572,11 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
       send_to_char("You can't junk a cyberdeck that has components installed!\r\n", ch);
       return 0;
     }
+  }
+
+  else if ((mode == SCMD_DONATE || mode == SCMD_JUNK) && GET_OBJ_TYPE(obj) == ITEM_CONTAINER && obj->contains) {
+    send_to_char(ch, "You'll have to empty %s before you can %s it.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)), sname);
+    return 0;
   }
 
   if (ch->in_veh)
