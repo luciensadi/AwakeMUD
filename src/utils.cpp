@@ -3918,7 +3918,7 @@ bool obj_contains_kept_items(struct obj_data *obj) {
     mudlog("SYSERR: Received null object to obj_contains_kept_items().", NULL, LOG_SYSLOG, TRUE);
     return FALSE;
   }
-  
+
   if (!obj->contains) {
     return FALSE;
   }
@@ -3935,6 +3935,23 @@ bool obj_contains_kept_items(struct obj_data *obj) {
   }
   // We found no kept items- return false.
   return FALSE;
+}
+
+// Just a little helper function to message everyone.
+void send_gamewide_annoucement(const char *msg, bool prepend_announcement_string) {
+  if (!msg || !*msg) {
+    mudlog("SYSERR: Received null or empty message to send_gamewide_annoucement().", NULL, LOG_SYSLOG, TRUE);
+    return;
+  }
+
+  char announcement[MAX_STRING_LENGTH];
+  snprintf(announcement, sizeof(announcement), "%s%s\r\n", prepend_announcement_string ? "^WGamewide Announcement:^n " : "", msg);
+
+  for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
+    if (!d->connected && d->character) {
+      send_to_char(d->character, announcement);
+    }
+  }
 }
 
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.

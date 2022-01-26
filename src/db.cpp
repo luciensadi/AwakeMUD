@@ -84,6 +84,8 @@ extern void auto_repair_obj(struct obj_data *obj, const char *source);
 *  declarations of most of the 'global' variables                         *
 ************************************************************************ */
 
+bool _OVERRIDE_ALLOW_PLAYERS_TO_USE_ROLLS_ = FALSE;
+
 // beginning of mud time
 unsigned long beginning_of_time = 2157880000U;
 long mud_boot_time = 0;
