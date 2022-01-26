@@ -1313,8 +1313,17 @@ int negotiate(struct char_data *ch, struct char_data *tch, int comp, int baseval
            tchnego, tskill, tchtn, GET_INT(ch), mod, tmod);
   if (comp)
   {
-    int ch_delta = success_test(GET_SKILL(ch, comp), GET_INT(tch)+mod+cmod) / 2;
-    int tch_delta = success_test(GET_SKILL(tch, comp), GET_INT(ch)+mod+tmod) / 2;
+    chtn = GET_INT(tch)+mod+cmod;
+    tchtn = GET_INT(ch)+mod+tmod;
+
+    act("Getting additional skill for PC...", FALSE, ch, NULL, NULL, TO_ROLLS);
+    cskill = get_skill(ch, comp, chtn);
+    act("Getting additional skill for NPC...", FALSE, tch, NULL, NULL, TO_ROLLS);
+    tskill = get_skill(tch, comp, tchtn);
+
+    int ch_delta = success_test(GET_SKILL(ch, comp), chtn) / 2;
+    int tch_delta = success_test(GET_SKILL(tch, comp), tchtn) / 2;
+
     chnego += ch_delta;
     tchnego += tch_delta;
     snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "\r\nAdded additional rolls for %s, so we got an additional %d PC and %d successes.", skills[comp].name, ch_delta, tch_delta);
@@ -1322,14 +1331,15 @@ int negotiate(struct char_data *ch, struct char_data *tch, int comp, int baseval
   int num = chnego - tchnego;
   if (num > 0)
   {
-    snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "\r\nPC got more successes, so basevalue goes from %d", basevalue);
+    snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "\r\nPC got %d net successes, so basevalue goes from %d", num, basevalue);
     if (buy)
       basevalue = MAX((int)(basevalue * 3/4), basevalue - (num * (basevalue / 20)));
     else
       basevalue = MIN((int)(basevalue * 5/4), basevalue + (num * (basevalue / 15)));
   } else
   {
-    snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "\r\nNPC got more successes, so basevalue goes from %d", basevalue);
+    num *= -1;
+    snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "\r\nNPC got %d net successes, so basevalue goes from %d", num, basevalue);
     if (buy)
       basevalue = MIN((int)(basevalue * 5/4), basevalue + (num * (basevalue / 15)));
     else
