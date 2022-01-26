@@ -6074,7 +6074,7 @@ SPECIAL(troll_barrier) {
     return FALSE;
 
   if (CMD_IS("west") || CMD_IS("w")) {
-    if (!(GET_RACE(ch) == RACE_TROLL || GET_RACE(ch) == RACE_GIANT || GET_RACE(ch) == RACE_FOMORI || GET_RACE(ch) == RACE_CYCLOPS)) {
+    if (!(GET_RACE(ch) == RACE_TROLL || GET_RACE(ch) == RACE_GIANT || GET_RACE(ch) == RACE_FOMORI || GET_RACE(ch) == RACE_CYCLOPS || GET_RACE(ch) == RACE_MINOTAUR)) {
       send_to_char("A massive troll blocks the way and keeps you from going any further.\r\n", ch);
       act("$n stumbles into the immovable brick wall of a troll guard with an oof.", FALSE, ch, 0, 0, TO_ROOM);
       return TRUE;
