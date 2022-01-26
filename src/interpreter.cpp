@@ -252,6 +252,7 @@ ACMD_DECLARE(do_patch);
 ACMD_DECLARE(do_perfmon);
 ACMD_DECLARE(do_pgroup);
 ACMD_DECLARE(do_photo);
+ACMD_DECLARE(do_playerrolls);
 ACMD_DECLARE(do_pockets);
 ACMD_DECLARE(do_poofset);
 ACMD_DECLARE(do_pour);
@@ -723,6 +724,7 @@ struct command_info cmd_info[] =
     { "prone"      , POS_FIGHTING, do_prone    , 0, 0, FALSE },
     { "praise"     , POS_DEAD    , do_gen_write, 0, SCMD_PRAISE, TRUE },
     { "push"       , POS_SITTING , do_push     , 0, 0, FALSE },
+    { "playerrolls", POS_DEAD    , do_playerrolls, LVL_PRESIDENT, 0, FALSE },
   #ifdef IS_BUILDPORT
     { "purge"      , POS_DEAD    , do_purge    , LVL_BUILDER, 0, FALSE },
   #else

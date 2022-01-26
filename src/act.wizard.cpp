@@ -379,6 +379,19 @@ ACMD(do_oocdisable)
   mudlog(buf, ch, LOG_WIZLOG, TRUE);
 }
 
+extern bool _OVERRIDE_ALLOW_PLAYERS_TO_USE_ROLLS_;
+
+ACMD(do_playerrolls)
+{
+  if (_OVERRIDE_ALLOW_PLAYERS_TO_USE_ROLLS_) {
+    _OVERRIDE_ALLOW_PLAYERS_TO_USE_ROLLS_ = FALSE;
+    send_gamewide_annoucement("We hope you enjoyed being able to see the debug information! This ability has now been disabled.", TRUE);
+  } else {
+    _OVERRIDE_ALLOW_PLAYERS_TO_USE_ROLLS_ = TRUE;
+    send_gamewide_annoucement("Players can now see the details on rolls by using the ^WTOGGLE ROLLS^n command.", TRUE);
+  }
+}
+
 // Code for zecho (Neo)
 ACMD(do_zecho)
 {

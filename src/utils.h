@@ -111,6 +111,7 @@ bool    npc_is_protected_by_spec(struct char_data *npc);
 bool    can_damage_vehicle(struct char_data *ch, struct veh_data *veh);
 char *  compose_spell_name(int type, int subtype = -1);
 bool    obj_contains_kept_items(struct obj_data *obj);
+void    send_gamewide_annoucement(const char *msg, bool prepend_announcement_string);
 
 // Skill-related.
 char *how_good(int skill, int rank);

@@ -79,6 +79,7 @@ extern int DFLT_PORT;
 extern char *DFLT_DIR;
 extern int MAX_PLAYERS;
 extern int MAX_DESCRIPTORS_AVAILABLE;
+extern bool _OVERRIDE_ALLOW_PLAYERS_TO_USE_ROLLS_;
 
 extern struct time_info_data time_info; /* In db.c */
 extern char help[];
@@ -3153,7 +3154,7 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
   if ( type == TO_ROLLS )
   {
     for (; to; to = to->next_in_room) {
-      if (IS_NPC(to) || !PRF_FLAGGED(to, PRF_ROLLS))
+      if (IS_NPC(to) || !PRF_FLAGGED(to, PRF_ROLLS) || !(IS_SENATOR(to) || _OVERRIDE_ALLOW_PLAYERS_TO_USE_ROLLS_))
         continue;
       if (SENDOK(to)
           && !(hide_invisible

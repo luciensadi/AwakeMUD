@@ -46,6 +46,7 @@ bool is_reloadable_weapon(struct obj_data *weapon, int ammotype);
 extern const char *ctypes[];
 extern int ident;
 extern class memoryClass *Mem;
+extern bool _OVERRIDE_ALLOW_PLAYERS_TO_USE_ROLLS_;
 
 /* extern procedures */
 ACMD_CONST(do_say);
@@ -1267,11 +1268,7 @@ ACMD(do_toggle)
     } else if (is_abbrev(argument, "hired")) {
       result = PRF_TOG_CHK(ch, PRF_QUEST);
       mode = 14;
-#ifndef MORTS_CAN_SEE_ROLLS
-    } else if (IS_SENATOR(ch) && is_abbrev(argument, "rolls")) {
-#else
-    } else if (is_abbrev(argument, "rolls")) {
-#endif
+    } else if (is_abbrev(argument, "rolls") && (IS_SENATOR(ch) || _OVERRIDE_ALLOW_PLAYERS_TO_USE_ROLLS_)) {
       result = PRF_TOG_CHK(ch, PRF_ROLLS);
       mode = 17;
     } else if (is_abbrev(argument, "roomflags") && IS_SENATOR(ch)) {
