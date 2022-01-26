@@ -1,0 +1,14 @@
+Systemd unit file and dependent pre/post scripts.
+
+The unit file assumes that Awake is under the user's home directory in AwakeMUD
+(eg /home/user/AwakeMUD), If that is not the case then edit the unit file with
+correct path.
+
+Copy awakemud@.service to /etc/systemd/system
+"systemctl daemon-reload" to reload configuration
+"systemctl enable --now awakemud@user_name" to enable the service to start on boot and start.
+
+For more info on starting and stopping systemd units etc look in systemd manual.
+
+Service is configured to autorestart 10 seconds always as gdb handling the crash exits cleanly
+so on-failure won't do.

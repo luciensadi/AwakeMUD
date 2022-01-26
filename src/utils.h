@@ -57,6 +57,7 @@ int     modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, i
 int     modify_target_rbuf(struct char_data *ch, char *rbuf, int rbuf_len);
 int     modify_target(struct char_data *ch);
 int     damage_modifier(struct char_data *ch, char *rbuf, int rbuf_len);
+int     sustain_modifier(struct char_data *ch, char *rbuf, size_t rbuf_len);
 char *  capitalize(const char *source);
 char *  decapitalize_a_an(const char *source);
 char *  string_to_uppercase(const char *source);
@@ -102,6 +103,14 @@ bool    builder_cant_go_there(struct char_data *ch, struct room_data *room);
 bool    get_and_deduct_one_deckbuilding_token_from_char(struct char_data *ch);
 bool    program_can_be_copied(struct obj_data *prog);
 struct  obj_data *get_obj_proto_for_vnum(vnum_t vnum);
+void    set_natural_vision_for_race(struct char_data *ch);
+int     get_string_length_after_color_code_removal(const char *str, struct char_data *ch_to_notify_of_failure_reason);
+char *  get_string_after_color_code_removal(const char *str, struct char_data *ch);
+int     count_color_codes_in_string(const char *str);
+bool    npc_is_protected_by_spec(struct char_data *npc);
+bool    can_damage_vehicle(struct char_data *ch, struct veh_data *veh);
+char *  compose_spell_name(int type, int subtype = -1);
+bool    obj_contains_kept_items(struct obj_data *obj);
 
 // Skill-related.
 char *how_good(int skill, int rank);
@@ -129,7 +138,7 @@ bool invis_ok(struct char_data *ch, struct char_data *vict);
 #undef MIN
 #endif
 
-#ifdef __GNUG__ 
+#ifdef __GNUG__
 #define MIN(x, y) (x < y ? x : y)
 #define MAX(x, y) (x > y ? x : y)
 #else
@@ -145,13 +154,16 @@ int MIN(long a, long b);
 bool    circle_follow(struct char_data *ch, struct char_data * victim);
 
 /* in act.informative.c */
-void    look_at_room(struct char_data *ch, int mode);
+void    look_at_room(struct char_data *ch, int mode, int is_quicklook);
 
 /* in act.movmement.c */
 int     do_simple_move(struct char_data *ch, int dir, int extra, struct
                        char_data *vict);
 int perform_move(struct char_data *ch, int dir, int extra, struct char_data
                  *vict);
+
+// Currently not used anywhere.
+void    reverse_obj_list(struct obj_data **obj);
 
 void    mental_gain(struct char_data *ch);
 void    physical_gain(struct char_data *ch);
@@ -224,17 +236,17 @@ void    update_pos(struct char_data *victim);
  * a great application for C++ templates but, alas, this is not C++.  Maybe
  * CircleMUD 4.0 will be...
  */
-#define REMOVE_FROM_LIST(item, head, next)      \
-{  if ((item) == (head))                        \
-      head = (item)->next;                      \
-   else {                                       \
-      temp = head;                              \
-      while (temp && (temp->next != (item)))    \
-         temp = temp->next;                     \
-      if (temp)                                 \
-         temp->next = (item)->next;             \
-   }                                            \
-   (item)->next = NULL;                         \
+#define REMOVE_FROM_LIST(item, head, nextc)      \
+{  if ((item) == (head))                         \
+      head = (item)->nextc;                      \
+   else {                                        \
+      temp = head;                               \
+      while (temp && (temp->nextc != (item)))    \
+         temp = temp->nextc;                     \
+      if (temp)                                  \
+         temp->nextc = (item)->nextc;            \
+   }                                             \
+   (item)->nextc = NULL;                         \
 }
 
 
@@ -329,7 +341,7 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 
 #define GET_WAS_IN(ch)  ((ch)->was_in_room)
 
-#define GET_VEH_NAME(veh) (decapitalize_a_an((veh)->restring ? (veh)->restring : (veh)->short_description))
+#define GET_VEH_NAME(veh) (decapitalize_a_an((veh)->restring ? (veh)->restring : ((veh)->short_description ? (veh)->short_description : "an ERRONEOUS VEHICLE")))
 #define GET_VEH_DESC(veh) ((veh)->restring_long ? (veh)->restring_long : (veh)->long_description)
 #define GET_VEH_RNUM(veh) ((veh)->veh_number)
 #define GET_VEH_VNUM(veh) (GET_VEH_RNUM(veh) >= 0 ? veh_index[GET_VEH_RNUM(veh)].vnum : -1)
@@ -369,7 +381,7 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 
 #define GET_ATT(ch, i)        ((ch)->aff_abils.attributes[(i)])
 #define GET_REAL_ATT(ch, i)   ((ch)->real_abils.attributes[(i)])
-#define GET_STR(ch)           (GET_ATT((ch), STR))      
+#define GET_STR(ch)           (GET_ATT((ch), STR))
 #define GET_QUI(ch)           (GET_ATT((ch), QUI))
 #define GET_INT(ch)           (GET_ATT((ch), INT))
 #define GET_WIL(ch)           (GET_ATT((ch), WIL))
@@ -386,12 +398,12 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define GET_TEMP_ESSLOSS(ch)	((ch)->points.ess_loss)
 
 #define GET_REAL_ATT(ch, i)        ((ch)->real_abils.attributes[(i)])
-#define GET_REAL_STR(ch)           (GET_REAL_ATT((ch), STR))  
-#define GET_REAL_QUI(ch)           (GET_REAL_ATT((ch), QUI))  
+#define GET_REAL_STR(ch)           (GET_REAL_ATT((ch), STR))
+#define GET_REAL_QUI(ch)           (GET_REAL_ATT((ch), QUI))
 #define GET_REAL_INT(ch)           (GET_REAL_ATT((ch), INT))
-#define GET_REAL_WIL(ch)           (GET_REAL_ATT((ch), WIL))  
-#define GET_REAL_BOD(ch)           (GET_REAL_ATT((ch), BOD))  
-#define GET_REAL_CHA(ch)           (GET_REAL_ATT((ch), CHA))  
+#define GET_REAL_WIL(ch)           (GET_REAL_ATT((ch), WIL))
+#define GET_REAL_BOD(ch)           (GET_REAL_ATT((ch), BOD))
+#define GET_REAL_CHA(ch)           (GET_REAL_ATT((ch), CHA))
 #define GET_REAL_REA(ch)           (GET_REAL_ATT((ch), REA))
 #define GET_REAL_MAG(ch)           ((ch)->real_abils.mag)
 #define GET_REAL_ESS(ch)           ((ch)->real_abils.ess)
@@ -413,8 +425,16 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define GET_GRADE(ch)   	((ch)->points.grade)
 #define GET_MENTAL(ch)          ((ch)->points.mental)
 #define GET_MAX_MENTAL(ch)      ((ch)->points.max_mental)
-#define GET_NUYEN(ch)           ((ch)->points.nuyen)
-#define GET_BANK(ch)            ((ch)->points.bank)
+
+// Changed to a non-assignable expression to cause all code that sets this value to not compile.
+// This makes it easier to find outliers when looking to track nuyen inflow / outflows.
+#define GET_NUYEN(ch)           ((ch)->points.nuyen != 0 ? (ch)->points.nuyen : 0)
+#define GET_NUYEN_RAW(ch)       ((ch)->points.nuyen)
+
+// Same deal here.
+#define GET_BANK(ch)            ((ch)->points.bank != 0 ? (ch)->points.bank : 0)
+#define GET_BANK_RAW(ch)        ((ch)->points.bank)
+
 #define GET_INIT_DICE(ch)       ((ch)->points.init_dice)
 #define GET_INIT_ROLL(ch)       ((ch)->points.init_roll)
 #define GET_SUSTAINED_NUM(ch)	((ch)->points.sustained[0])
@@ -513,12 +533,19 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define REAL_SKILL(ch, i)       ((ch)->char_specials.saved.skills[i][1] > 0 ? 0 : (ch)->char_specials.saved.skills[i][0])
 // SET_SKILL is used only in medit.cpp for NPCs. Set char skills with utils.cpp's set_character_skill().
 #define SET_SKILL(ch, i, pct)   {(ch)->char_specials.saved.skills[i][0] = pct; GET_SKILL_DIRTY_BIT((ch)) = TRUE;}
+
 #define GET_POWER(ch, i)	((ch)->char_specials.saved.powers[i][1] ? \
                                  MIN((ch)->char_specials.saved.powers[i][1], (ch)->char_specials.saved.powers[i][0]) : 0)
-#define GET_POWER_TOTAL(ch, i)	((ch)->char_specials.saved.powers[i][0])
+
+#define GET_POWER_TOTAL(ch, i)	    ((ch)->char_specials.saved.powers[i][0] != 0 ? (ch)->char_specials.saved.powers[i][0] : 0)
+#define SET_POWER_TOTAL(ch, i, amt)	{(ch)->char_specials.saved.powers[i][0] = amt; GET_ADEPT_POWER_DIRTY_BIT(ch) = TRUE;}
+
 #define GET_POWER_ACT(ch, i)	((ch)->char_specials.saved.powers[i][1])
 #define GET_POWER_POINTS(ch)    ((ch)->char_specials.saved.points)
-#define GET_METAMAGIC(ch, i)    ((ch)->char_specials.saved.metamagic[i])
+
+#define GET_METAMAGIC(ch, i)    ((ch)->char_specials.saved.metamagic[i] != 0 ? (ch)->char_specials.saved.metamagic[i] : 0)
+#define SET_METAMAGIC(ch, i, amt)    {(ch)->char_specials.saved.metamagic[i] = amt; GET_METAMAGIC_DIRTY_BIT(ch) = TRUE;}
+
 #define GET_MASKING(ch)		((ch)->char_specials.saved.masking)
 #define GET_CENTERINGSKILL(ch)	((ch)->char_specials.saved.centeringskill)
 #define GET_PP(ch)		((ch)->char_specials.saved.powerpoints)
@@ -527,7 +554,15 @@ int get_armor_penalty_grade(struct char_data *ch);
 
 #define SKILL_IS_LANGUAGE(skill) (((skill) >= SKILL_ENGLISH && (skill) <= SKILL_FRENCH) || ((skill) >= SKILL_HEBREW && (skill) <= SKILL_IROQUOIS))
 
-#define GET_SKILL_DIRTY_BIT(ch)  ((ch)->char_specials.saved.dirty)
+#define GET_SKILL_DIRTY_BIT(ch)         ((ch)->char_specials.dirty_bits[DIRTY_BIT_SKILLS])
+#define GET_ADEPT_POWER_DIRTY_BIT(ch)   ((ch)->char_specials.dirty_bits[DIRTY_BIT_POWERS])
+#define GET_SPELLS_DIRTY_BIT(ch)        ((ch)->char_specials.dirty_bits[DIRTY_BIT_SPELLS])
+#define GET_METAMAGIC_DIRTY_BIT(ch)     ((ch)->char_specials.dirty_bits[DIRTY_BIT_METAMAGIC])
+#define GET_ELEMENTALS_DIRTY_BIT(ch)    ((ch)->char_specials.dirty_bits[DIRTY_BIT_ELEMENTALS])
+#define GET_MEMORY_DIRTY_BIT(ch)        ((ch)->char_specials.dirty_bits[DIRTY_BIT_MEMORY])
+// #define GET_DRUG_DIRTY_BIT(ch)          ((ch)->char_specials.dirty_bits[DIRTY_BIT_DRUG])
+#define GET_ALIAS_DIRTY_BIT(ch)         ((ch)->char_specials.dirty_bits[DIRTY_BIT_ALIAS])
+
 #define GET_CONGREGATION_BONUS(ch) ((ch)->congregation_bonus_pool)
 
 #define GET_MOB_SPEC(ch)       (IS_MOB(ch) ? (mob_index[(ch->nr)].func) : NULL)
@@ -559,23 +594,25 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define STOP_WORKING(ch)      {AFF_FLAGS((ch)).RemoveBits(AFF_PROGRAM, AFF_DESIGN, AFF_PART_BUILD, AFF_PART_DESIGN, AFF_BONDING, AFF_CONJURE, AFF_PACKING, AFF_LODGE, AFF_CIRCLE, AFF_SPELLDESIGN, AFF_AMMOBUILD, ENDBIT); \
                                GET_BUILDING((ch)) = NULL;}
 
-#define GET_TOTEM(ch)            (ch->player_specials->saved.totem)
-#define GET_TOTEMSPIRIT(ch)      (ch->player_specials->saved.totemspirit)
+#define GET_TOTEM(ch)                              (ch->player_specials->saved.totem)
+#define GET_TOTEMSPIRIT(ch)                        (ch->player_specials->saved.totemspirit)
 
-#define GET_DRUG_AFFECT(ch)      (ch->player_specials->drug_affect[0])
-#define GET_DRUG_DURATION(ch)    (ch->player_specials->drug_affect[1])
-#define GET_DRUG_DOSE(ch)        (ch->player_specials->drug_affect[2])
-#define GET_DRUG_STAGE(ch)       (ch->player_specials->drug_affect[3])
-#define GET_DRUG_EDGE(ch, i)     (ch->player_specials->drugs[i][0])
-#define GET_DRUG_ADDICT(ch, i)   (ch->player_specials->drugs[i][1])
-#define GET_DRUG_DOSES(ch, i)    (ch->player_specials->drugs[i][2])
-#define GET_DRUG_LASTFIX(ch, i)  (ch->player_specials->drugs[i][3])
-#define GET_DRUG_ADDTIME(ch, i)  (ch->player_specials->drugs[i][4])
-#define GET_DRUG_TOLERANT(ch, i) (ch->player_specials->drugs[i][5])
-#define GET_DRUG_LASTWITH(ch, i) (ch->player_specials->drugs[i][6])
-#define GET_MENTAL_LOSS(ch)      (ch->player_specials->mental_loss)
-#define GET_PHYSICAL_LOSS(ch)    (ch->player_specials->physical_loss)
-#define GET_PERM_BOD_LOSS(ch)    (ch->player_specials->perm_bod)
+#define GET_DRUG_AFFECT(ch)                        (ch->player_specials->drug_affect[0])
+#define GET_DRUG_DURATION(ch)                      (ch->player_specials->drug_affect[1])
+#define GET_DRUG_DOSE(ch)                          (ch->player_specials->drug_affect[2])
+#define GET_DRUG_STAGE(ch)                         (ch->player_specials->drug_affect[3])
+#define GET_DRUG_EDGE(ch, i)                       (ch->player_specials->drugs[i][0])
+#define GET_DRUG_ADDICT(ch, i)                     (ch->player_specials->drugs[i][1])
+#define GET_DRUG_DOSES(ch, i)                      (ch->player_specials->drugs[i][2])
+#define GET_DRUG_LASTFIX(ch, i)                    (ch->player_specials->drugs[i][3])
+#define GET_DRUG_ADDTIME(ch, i)                    (ch->player_specials->drugs[i][4])
+#define GET_DRUG_TOLERANT(ch, i)                   (ch->player_specials->drugs[i][5])
+#define GET_DRUG_LASTWITH(ch, i)                   (ch->player_specials->drugs[i][6])
+#define GET_MENTAL_LOSS(ch)                        (ch->player_specials->mental_loss)
+#define GET_PHYSICAL_LOSS(ch)                      (ch->player_specials->physical_loss)
+#define GET_PERM_BOD_LOSS(ch)                      (ch->player_specials->perm_bod)
+#define GET_NUYEN_PAID_FOR_WHERES_MY_CAR(ch)       (ch->desc->nuyen_paid_for_wheres_my_car)
+#define GET_NUYEN_INCOME_THIS_PLAY_SESSION(ch, i)  (ch->desc->nuyen_income_this_play_session[i])
 /* descriptor-based utils ************************************************/
 
 #define WAIT_STATE(ch, cycle) { \
@@ -584,6 +621,8 @@ int get_armor_penalty_grade(struct char_data *ch);
 
 #define CHECK_WAIT(ch)        (((ch)->desc) ? ((ch)->desc->wait > 1) : 0)
 #define STATE(d)                    ((d)->connected)
+
+#define DESCRIPTOR_CONN_STATE_NOT_PLAYING(x) (((x)->connected >= CON_CLOSE && (x)->connected <= CON_MENU) || ((x)->connected >= CON_CHPWD_GETOLD && (x)->connected <= CON_QDELCONF2) || (x)->connected == CON_ASKNAME)
 
 /* object utils **********************************************************/
 
@@ -653,13 +692,8 @@ float get_proto_weight(struct obj_data *obj);
 #define HOLYLIGHT_OK(sub)      (GET_REAL_LEVEL(sub) >= LVL_BUILDER && \
    PRF_FLAGGED((sub), PRF_HOLYLIGHT))
 
-#define LIGHT_OK_ROOM_SPECIFIED(sub, provided_room) \
-(IS_ASTRAL(sub) || IS_DUAL(sub) || CURRENT_VISION((sub)) == THERMOGRAPHIC || HOLYLIGHT_OK(sub) || IS_LIGHT(provided_room) || \
-!((light_level(provided_room) == LIGHT_MINLIGHT || light_level(provided_room) == LIGHT_FULLDARK) && CURRENT_VISION((sub)) == NORMAL))
-
-#define LIGHT_OK(sub)          ((IS_ASTRAL(sub) || IS_DUAL(sub) || CURRENT_VISION(sub) == THERMOGRAPHIC || HOLYLIGHT_OK(sub) || IS_LIGHT(get_ch_in_room(sub))) || \
-                    !((light_level(get_ch_in_room(sub)) == LIGHT_MINLIGHT || light_level(get_ch_in_room(sub)) == LIGHT_FULLDARK) && CURRENT_VISION(sub) == NORMAL))
-
+bool LIGHT_OK_ROOM_SPECIFIED(struct char_data *sub, struct room_data *room);
+#define LIGHT_OK(sub)          LIGHT_OK_ROOM_SPECIFIED(sub, get_ch_in_room(sub))
 #define SELF(sub, obj)         ((sub) == (obj))
 
 #define SEE_ASTRAL(sub, obj)   (!IS_ASTRAL(obj) || IS_ASTRAL(sub) || \
@@ -813,6 +847,9 @@ bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struc
 #define GET_WEAPON_ATTACH_LOC(weapon, loc)     (((loc) >= ACCESS_LOCATION_TOP && (loc) <= ACCESS_LOCATION_UNDER) ? \
                                                     GET_OBJ_VAL((weapon), (loc)) : 0)
 
+#define WEAPON_IS_FOCUS(obj)                   (GET_OBJ_TYPE((obj)) == ITEM_WEAPON && !IS_GUN(GET_WEAPON_ATTACK_TYPE((obj))) && GET_WEAPON_FOCUS_RATING((obj)) > 0)
+bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
+
 #define WEAPON_CAN_USE_FIREMODE(weapon, mode)  (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(weapon), 1 << (mode)))
 #define WEAPON_IS_SS(eq)  (GET_OBJ_TYPE(eq) == ITEM_WEAPON && GET_OBJ_VAL(eq, 11) == MODE_SS)
 #define WEAPON_IS_SA(eq)    (GET_OBJ_TYPE(eq) == ITEM_WEAPON && GET_OBJ_VAL(eq, 11) == MODE_SA)
@@ -857,6 +894,8 @@ bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struc
 
 // ITEM_MONEY convenience defines
 #define GET_ITEM_MONEY_VALUE(money)               (GET_OBJ_VAL((money), 0))
+#define GET_ITEM_MONEY_IS_CREDSTICK(money)        (GET_OBJ_VAL((money), 1))
+#define GET_ITEM_MONEY_CREDSTICK_GRADE(money)     (GET_OBJ_VAL((money), 2))
 #define GET_ITEM_MONEY_CREDSTICK_ACTIVATED(money) (GET_OBJ_VAL((money), 4))
 
 // ITEM_PHONE convenience defines
@@ -868,13 +907,18 @@ bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struc
 
 // ITEM_BIOWARE convenience defines
 
-#define GET_BIOWARE_TYPE(bioware)          (GET_OBJ_VAL((bioware), 0))
+#define GET_BIOWARE_TYPE(bioware)              (GET_OBJ_VAL((bioware), 0))
+#define GET_BIOWARE_RATING(bioware)            (GET_OBJ_VAL((bioware), 1))
+#define GET_BIOWARE_IS_CULTURED(bioware)       (GET_OBJ_VAL((bioware), 2) || GET_BIOWARE_TYPE((bioware)) >= BIO_CEREBRALBOOSTER)
+#define GET_BIOWARE_IS_ACTIVATED(bioware)      (GET_OBJ_VAL((bioware), 3))
+#define GET_BIOWARE_ESSENCE_COST(bioware)      (GET_OBJ_VAL((bioware), 4))
 
 // ITEM_FOUNTAIN convenience defines
 
 // ITEM_CYBERWARE convenience defines
 #define GET_CYBERWARE_TYPE(cyberware)          (GET_OBJ_VAL((cyberware), 0))
 #define GET_CYBERWARE_RATING(cyberware)        (GET_OBJ_VAL((cyberware), 1))
+#define GET_CYBERWARE_GRADE(cyberware)         (GET_OBJ_VAL((cyberware), 2))
 #define GET_CYBERWARE_FLAGS(cyberware)         (GET_OBJ_VAL((cyberware), 3)) // CYBERWEAPON_RETRACTABLE, CYBERWEAPON_IMPROVED
 #define GET_CYBERWARE_LACING_TYPE(cyberware)   (GET_OBJ_VAL((cyberware), 3)) // Yes, this is also value 3. Great design here.
 #define GET_CYBERWARE_ESSENCE_COST(cyberware)  (GET_OBJ_VAL((cyberware), 4))
@@ -906,7 +950,12 @@ bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struc
 #define GET_ACCESSORY_RATING(accessory)          (GET_OBJ_VAL((accessory), 2))
 
 // ITEM_SPELL_FORMULA convenience defines
+#define GET_SPELLFORMULA_FORCE(formula)          (GET_OBJ_VAL((formula), 0))
 #define GET_SPELLFORMULA_SPELL(formula)          (GET_OBJ_VAL((formula), 1))
+#define GET_SPELLFORMULA_TRADITION(formula)      (GET_OBJ_VAL((formula), 2))
+#define GET_SPELLFORMULA_SUBTYPE(formula)        (GET_OBJ_VAL((formula), 3))
+
+#define SPELL_HAS_SUBTYPE(spell_number)          (spell_number == SPELL_INCATTR || spell_number == SPELL_INCCYATTR || spell_number == SPELL_DECATTR || spell_number == SPELL_DECCYATTR)
 
 // ITEM_FOCUS convenience defines, search term GET_FOCI
 #define GET_FOCUS_TYPE(focus)                    (GET_OBJ_VAL((focus), 0))
@@ -925,6 +974,9 @@ bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struc
 
 // ITEM_DECK_ACCESSORY convenience defines
 #define GET_DECK_ACCESSORY_TYPE(accessory)               (GET_OBJ_VAL((accessory), 0))
+
+// ITEM_DECK_ACCESSORY TYPE_PARTS convenience defines
+#define GET_DECK_ACCESSORY_IS_CHIPS(accessory)           (GET_OBJ_VAL((accessory), 1))
 
 // ITEM_DECK_ACCESSORY TYPE_FILE convenience defines
 #define GET_DECK_ACCESSORY_FILE_CREATION_TIME(accessory) (GET_OBJ_VAL((accessory), 1))
@@ -956,6 +1008,7 @@ bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struc
 #define GET_VEHICLE_MOD_MOUNT_TYPE(mod)      (GET_OBJ_VAL((mod), 1))
 
 // ITEM_HOLSTER convenience defines
+#define GET_HOLSTER_TYPE(holster)            (GET_OBJ_VAL((holster), 0))
 #define GET_HOLSTER_READY_STATUS(holster)    (GET_OBJ_VAL((holster), 3))
 
 // ITEM_DESIGN convenience defines
@@ -1109,5 +1162,13 @@ char    *crypt(const char *key, const char *salt);
 }                                          \
 
 #define FOR_ITEMS_AROUND_CH(ch, item_ptr) for ((item_ptr) = (ch)->in_room ? (ch)->in_room->contents : (ch)->in_veh->contents; (item_ptr); (item_ptr) = (item_ptr)->next_content)
+
+// Nuyen tracking functions.
+void gain_nuyen(struct char_data *ch, long amount, int category);
+void lose_nuyen(struct char_data *ch, long amount, int category);
+void gain_bank(struct char_data *ch, long amount, int category);
+void lose_bank(struct char_data *ch, long amount, int category);
+void gain_nuyen_on_credstick(struct char_data *ch, struct obj_data *credstick, long amount, int category);
+void lose_nuyen_from_credstick(struct char_data *ch, struct obj_data *credstick, long amount, int category);
 
 #endif

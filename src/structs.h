@@ -113,6 +113,7 @@ struct obj_data
   struct obj_data *in_obj;        /* In what object NULL when none    */
   struct obj_data *contains;      /* Contains objects                 */
   struct obj_data *next_content;  /* For 'contains' lists             */
+  struct host_data *in_host;      /* For tracking if the object is in a Matrix host. */
   
   struct char_data *targ;	  /* Data for mounts */
   struct veh_data *tveh;
@@ -123,8 +124,25 @@ struct obj_data
 #endif
   obj_data() :
       in_room(NULL), in_veh(NULL), ex_description(NULL), restring(NULL), photo(NULL), graffiti(NULL), source_info(NULL),
-      carried_by(NULL), worn_by(NULL), in_obj(NULL), contains(NULL), next_content(NULL), targ(NULL), tveh(NULL)
+      carried_by(NULL), worn_by(NULL), in_obj(NULL), contains(NULL), next_content(NULL), in_host(NULL), targ(NULL), tveh(NULL)
   {}
+};
+
+// Struct for preserving order of objects.
+struct nested_obj {
+      int level; 
+      struct obj_data* obj;
+};
+
+// Comparator for preserving order of objects.
+struct find_level
+{
+    int level;
+    find_level(int level) : level(level) {}
+    bool operator () ( const nested_obj& o ) const
+    {
+        return o.level == level;
+    }
 };
 /* ======================================================================= */
 
@@ -289,7 +307,6 @@ struct spell_trainer
 {
   vnum_t teacher;
   int type;
-  char name[120];
   int subtype;
   int force;
 };
@@ -440,12 +457,6 @@ struct char_special_data_saved
   ush_int boosted[3][2];           /* str/qui/bod timeleft/amount		*/
   ubyte masking;
   int points;
-  
-  bool dirty;
-  
-  char_special_data_saved() :
-      dirty(FALSE)
-  {}
 };
 
 struct char_special_data
@@ -474,8 +485,11 @@ struct char_special_data
   sh_int foci;
   sh_int last_healed;
   int timer;                  /* Timer for update                     */
+  int last_timer;             /* Last timer, which is restored on actions that don't block idle nuyen rewards */
   int actions;
   int coord[3];
+  
+  bool dirty_bits[NUM_DIRTY_BITS];
 
   struct veh_data *subscribe;   /* subscriber list */
   struct veh_data *rigging;     /* Vehicle char is controlling remotely */
@@ -494,6 +508,9 @@ struct char_special_data
     
     for (int i = 0; i < 3; i++)
       coord[i] = 0;
+      
+    for (int i = 0; i < NUM_DIRTY_BITS; i++)
+      dirty_bits[i] = 0;
   }
 };
 
@@ -548,12 +565,15 @@ struct player_special_data
       aliases(NULL), remem(NULL), last_tell(0), questnum(0), obj_complete(NULL), 
       mob_complete(NULL), watching(NULL), ignored(NULL)
   {
-    for (int i = 0; i < NUM_DRUGS+1; i++)
-      for (int j = 0; j < 7; j++)
+    for (int i = 0; i < NUM_DRUGS+1; i++) {
+      for (int j = 0; j < 7; j++) {
         drugs[i][j] = 0;
+      }
+    }
     
-    for (int i = 0; i < 5; i++)
+    for (int i = 0; i < 5; i++) {
       drug_affect[i] = 0;
+    }
   }
 }
 ;
@@ -827,10 +847,12 @@ struct descriptor_data
   char small_outbuf[SMALL_BUFSIZE];  /* standard output buffer          */
   int small_outbuf_canary;
   char *output;                 /* ptr to the current output buffer     */
+  int output_canary;
   int bufptr;                     /* ptr to end of current output               */
   int bufspace;                 /* space left in the output buffer      */
   struct txt_block *large_outbuf; /* ptr to large buffer, if we need it */
   struct txt_q input;             /* q of unprocessed input             */
+  int input_and_character_canary;
   struct char_data *character;  /* linked to char                       */
   struct char_data *original;   /* original char if switched            */
   struct descriptor_data *snooping; /* Who is this char snooping        */
@@ -838,6 +860,9 @@ struct descriptor_data
   struct descriptor_data *next; /* link to next descriptor              */
   struct ccreate_t ccr;
   int invalid_command_counter;
+  
+  long nuyen_paid_for_wheres_my_car;
+  long nuyen_income_this_play_session[NUM_OF_TRACKED_NUYEN_INCOME_SOURCES];
   
   listClass<const char *> message_history[NUM_COMMUNICATION_CHANNELS];
 
@@ -870,10 +895,12 @@ struct descriptor_data
   
   // this is for spell creation
 
+  // This is mostly a just-in-case section. Descriptors are zeroed out when created in comm.cpp's new_descriptor().
   descriptor_data() :
       showstr_head(NULL), showstr_point(NULL), str(NULL),
-      output(NULL), large_outbuf(NULL), character(NULL), original(NULL), snooping(NULL),
-      snoop_by(NULL), next(NULL), invalid_command_counter(0), iedit_limit_edits(0), misc_data(NULL),
+      output(NULL), output_canary(31337), large_outbuf(NULL), input_and_character_canary(31337),
+      character(NULL), original(NULL), snooping(NULL), snoop_by(NULL), next(NULL), 
+      invalid_command_counter(0), iedit_limit_edits(0), misc_data(NULL),
       edit_obj(NULL), edit_room(NULL), edit_mob(NULL), edit_quest(NULL), edit_shop(NULL),
       edit_zon(NULL), edit_cmd(NULL), edit_veh(NULL), edit_host(NULL), edit_icon(NULL),
       edit_helpfile(NULL), edit_pgroup(NULL), canary(31337), pProtocol(NULL)
@@ -881,6 +908,11 @@ struct descriptor_data
     // Zero out the communication history for all channels.
     for (int channel = 0; channel < NUM_COMMUNICATION_CHANNELS; channel++)
       message_history[channel] = listClass<const char *>();
+      
+    // Zero out our metrics.
+    for (int i = 0; i < NUM_OF_TRACKED_NUYEN_INCOME_SOURCES; i++) {
+      nuyen_income_this_play_session[i] = 0;
+    }
   }
 }
 ;
@@ -1008,6 +1040,11 @@ struct drug_data {
 struct spirit_table {
   char name[50];
   vnum_t vnum;
+};
+
+struct nuyen_faucet_or_sink {
+  char name[100];
+  byte type;
 };
 
 struct spirit_data {

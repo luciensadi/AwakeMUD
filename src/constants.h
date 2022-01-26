@@ -122,6 +122,7 @@ extern const char *deck_accessory_upgrade_types[];
 extern const char *message_history_channels[];
 extern const char *pgroup_settings[];
 extern int acceptable_weapon_attachment_affects[];
+extern struct nuyen_faucet_or_sink nuyen_faucets_and_sinks[NUM_OF_TRACKED_NUYEN_INCOME_SOURCES];
 
 extern const char *aspect_names[];
 extern const char *tradition_names[];

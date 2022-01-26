@@ -62,6 +62,7 @@ struct command_info
   (struct char_data *ch, char * argument, int cmd, int subcmd);
   sh_int minimum_level;
   int  subcmd;
+  bool should_not_block_idle_reward;
 };
 
 #ifndef __INTERPRETER_CC__

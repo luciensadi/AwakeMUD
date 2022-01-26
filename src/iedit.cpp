@@ -93,7 +93,7 @@ void iedit_disp_extradesc_menu(struct descriptor_data * d)
 {
   struct extra_descr_data *extra_desc =
   (struct extra_descr_data *) * d->misc_data;
-  
+
   send_to_char(CH, "Extra desc menu\r\n"
                "0) Quit\r\n"
                "1) Keyword: %s%s%s\r\n"
@@ -110,7 +110,7 @@ void iedit_disp_extradesc_menu(struct descriptor_data * d)
 void iedit_disp_prompt_apply_menu(struct descriptor_data * d)
 {
   int             counter;
-  
+
   CLS(CH);
   for (counter = 0; counter < MAX_OBJ_AFFECT; counter++)
   {
@@ -187,7 +187,7 @@ void iedit_disp_weapon_menu(struct descriptor_data * d)
     send_to_char(CH, "%2d) %-18s %2d) %-18s\r\n",
                  counter, weapon_type[counter],
                  counter + 1, counter + 1 < MAX_WEAP ? weapon_type[counter + 1] : "");
-  
+
   send_to_char("Enter weapon type:\r\n", CH);
 }
 
@@ -200,7 +200,7 @@ void iedit_disp_spells_menu(struct descriptor_data * d)
                  counter, spells[counter].name,
                  counter + 1, counter + 1 < MAX_SPELLS ? spells[counter + 1].name : "",
                  counter + 2, counter + 2 < MAX_SPELLS ? spells[counter + 2].name : "");
-  
+
   send_to_char("Enter spell:\r\n", CH);
 }
 
@@ -287,7 +287,7 @@ void iedit_disp_val1_menu(struct descriptor_data * d)
       send_to_char(CH, "Drug Type: ");
       break;
     case ITEM_WORKSHOP:
-      send_to_char(CH, "0) General\r\n1) Electronic\r\n2) Microtronic\r\n3) Cyberware\r\n4) Vehicle\r\n5) Weaponry\r\n6) Medical\r\n7) Ammunition\r\nWorkshop Type: ");
+      send_to_char(CH, "0) General\r\n1) Electronic\r\n2) Microtronic\r\n3) Cyberware\r\n4) Vehicle\r\n5) Weaponry\r\n6) Medical\r\n7) Ammunition\r\n8) Gunsmithing\r\nWorkshop Type: ");
       break;
     case ITEM_CAMERA:
       send_to_char("0) Camera\r\n1) Photo\r\nObject Type: ", CH);
@@ -398,12 +398,12 @@ void iedit_disp_val1_menu(struct descriptor_data * d)
         else
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%2d) %-20s ", c, skills[c].name);
         if (!(line % 3)) {
-          strcat(buf, "\r\n");
+          strlcat(buf, "\r\n", sizeof(buf));
           send_to_char(buf, CH);
         }
       }
       if ((line % 3) != 0) {
-        strcat(buf, "\r\nEnter a skill (0 to quit): ");
+        strlcat(buf, "\r\nEnter a skill (0 to quit): ", sizeof(buf));
         send_to_char(buf, CH);
       }
       break;
@@ -573,7 +573,7 @@ void iedit_disp_val3_menu(struct descriptor_data * d)
           send_to_char(CH, "%d) %s\r\n", c, ammo_type[c].name);
         send_to_char("Select ammunition type: ", CH);
       } else iedit_disp_menu(d);
-      
+
       break;
     case ITEM_LIGHT:
       send_to_char("Number of hours (0 = burnt, -1 is infinite): ", d->character);
@@ -1108,7 +1108,7 @@ void iedit_disp_val12_menu(struct descriptor_data * d)
   switch (GET_OBJ_TYPE(d->edit_obj))
   {
     case ITEM_WEAPON:
-      send_to_char("Enter the amount of built-in recoil compensation this weapon has: ", CH);
+      send_to_char("Enter the amount of built-in recoil compensation this weapon has (negative numbers add recoil): ", CH);
       break;
     default:
       iedit_disp_menu(d);
@@ -1119,7 +1119,7 @@ void iedit_disp_val12_menu(struct descriptor_data * d)
 void iedit_disp_type_menu(struct descriptor_data * d)
 {
   int counter;
-  
+
   CLS(CH);
   for (counter = 1; counter < NUM_ITEMS; counter += 2)
   {
@@ -1134,7 +1134,7 @@ void iedit_disp_type_menu(struct descriptor_data * d)
 void iedit_disp_drinktype_menu(struct descriptor_data *d)
 {
   int counter;
-  
+
   CLS(CH);
   for (counter = 0; counter < NUM_DRINK_TYPES; ++counter)
     send_to_char(CH, "%2d) %s\r\n", counter + 1, drinks[counter]);
@@ -1144,7 +1144,7 @@ void iedit_disp_drinktype_menu(struct descriptor_data *d)
 void iedit_disp_material_menu(struct descriptor_data *d)
 {
   CLS(CH);
-  
+
   for (int counter = 0; counter < NUM_MATERIALS; ++counter)
     send_to_char(CH, "%2d) %s\r\n", counter + 1, material_names[counter]);
   send_to_char("Enter material type, 0 to return: ", CH);
@@ -1153,7 +1153,7 @@ void iedit_disp_material_menu(struct descriptor_data *d)
 void iedit_disp_patch_menu(struct descriptor_data *d)
 {
   CLS(CH);
-  
+
   for (int counter = 0; counter < NUM_PATCHES; ++counter)
     send_to_char(CH, "%2d) %s\r\n", counter + 1, patch_names[counter]);
   send_to_char("Enter patch type, 0 to return: ", CH);
@@ -1201,7 +1201,7 @@ void iedit_disp_biotype_menu(struct descriptor_data *d)
 void iedit_program_types_menu(struct descriptor_data *d)
 {
   int counter;
-  
+
   CLS(CH);
   for (counter = 1; counter < NUM_PROGRAMS; counter += 3)
   {
@@ -1217,7 +1217,7 @@ void iedit_program_types_menu(struct descriptor_data *d)
 void iedit_disp_rating_menu(struct descriptor_data *d)
 {
   CLS(CH);
-  
+
   for (int counter = 0; counter < NUM_BARRIERS; ++counter)
     send_to_char(CH, "%2d) %s\r\n", counter + 1, barrier_names[counter]);
   send_to_char("Enter construction category, 0 to return: ", CH);
@@ -1227,14 +1227,14 @@ void iedit_disp_rating_menu(struct descriptor_data *d)
 void iedit_disp_extra_menu(struct descriptor_data * d)
 {
   int             counter;
-  
+
   CLS(CH);
   for (counter = 0; counter < ITEM_EXTRA_MAX; counter += 2)
     send_to_char(CH, "%2d) %-20s %2d) %-20s\r\n",
                  counter + 1, extra_bits[counter],
                  counter + 2, counter + 1 < ITEM_EXTRA_MAX ?
                  extra_bits[counter + 1] : "");
-  
+
   GET_OBJ_EXTRA(d->edit_obj).PrintBits(buf1, MAX_STRING_LENGTH,
                                        extra_bits, ITEM_EXTRA_MAX);
   send_to_char(CH, "Object flags: %s%s%s\r\n"
@@ -1249,7 +1249,7 @@ void iedit_disp_aff_menu(struct descriptor_data *d)
     send_to_char(CH, "%2d) %-20s %2d) %-20s\r\n", counter + 1,
                  affected_bits[counter], counter + 2, counter + 1 < AFF_MAX ?
                  affected_bits[counter + 1] : "");
-  
+
   OBJ->obj_flags.bitvector.PrintBits(buf1, MAX_STRING_LENGTH,
                                      affected_bits, AFF_MAX);
   send_to_char(CH, "Object flags: %s%s%s\r\n"
@@ -1266,7 +1266,7 @@ void iedit_disp_wear_menu(struct descriptor_data * d)
                  counter + 1, wear_bits[counter],
                  counter + 2, counter + 1 < ITEM_WEAR_MAX ? wear_bits[counter + 1] : "");
   }
-  
+
   GET_OBJ_WEAR(d->edit_obj).PrintBits(buf1, MAX_STRING_LENGTH,
                                       wear_bits, ITEM_WEAR_MAX);
   send_to_char(CH, "Wear flags: %s%s%s\r\n"
@@ -1396,7 +1396,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
   bool modified = FALSE;
   switch (d->edit_mode)
   {
-      
+
     case IEDIT_CONFIRM_EDIT:
       /* if player hits 'Y' then edit obj */
       switch (*arg) {
@@ -1420,7 +1420,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
           break;
       }
       break;                      /* end of IEDIT_CONFIRM_EDIT */
-      
+
     case IEDIT_CONFIRM_SAVESTRING:
       switch (*arg) {
         case 'y':
@@ -1431,13 +1431,13 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
                     GET_CHAR_NAME(d->character), d->edit_number);
             mudlog(buf, d->character, LOG_WIZLOG, TRUE);
           }
-          
+
           obj_number = real_object(d->edit_number);
           if (obj_number > 0) {
             /* we need to run through each and every object currently in the
              * game to see which ones are pointing to this prototype */
             struct extra_descr_data *This, *next_one;
-            
+
             /* if object is pointing to this prototype, then we need to replace
              * with the new one */
             // this function updates pointers to the active list of objects
@@ -1448,7 +1448,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
             DELETE_ARRAY_IF_EXTANT(obj_proto[obj_number].text.name);
             DELETE_ARRAY_IF_EXTANT(obj_proto[obj_number].text.room_desc);
             DELETE_ARRAY_IF_EXTANT(obj_proto[obj_number].text.look_desc);
-            
+
             if (obj_proto[obj_number].ex_description) {
               for (This = obj_proto[obj_number].ex_description; This; This = next_one) {
                 next_one = This->next;
@@ -1458,17 +1458,17 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
               }
               obj_proto[obj_number].ex_description = NULL;
             }
-            
+
             obj_proto[obj_number] = *d->edit_obj;
             obj_proto[obj_number].item_number = obj_number;
           } else {
             /* uhoh.. need to make a new place in the object prototype table */
             long             counter;
             int             found = FALSE;
-            
+
             struct obj_data *new_obj_proto;
             struct index_data *new_obj_index;
-            
+
             /* + 2.. strange but true */
             new_obj_index = new struct index_data[top_of_objt + 2];
             new_obj_proto = new struct obj_data[top_of_objt + 2];
@@ -1514,7 +1514,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
               new_obj_index[top_of_objt + 1].vnum = d->edit_number;
               new_obj_index[top_of_objt + 1].number = 0;
               new_obj_index[top_of_objt + 1].func = NULL;
-              
+
               clear_object(new_obj_proto + top_of_objt + 1);
               new_obj_proto[top_of_objt + 1] = *(d->edit_obj);
               new_obj_proto[top_of_objt + 1].in_room = NULL;
@@ -1524,20 +1524,20 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
               d->edit_obj->item_number = top_of_objt + 1;
             }
             top_of_objt++;
-            
-            
+
+
             /* we also have to renumber all the objects currently
              existing in the world. This is because when I start
              extracting objects, bad things will happen! */
-            
+
             ObjList.UpdateNums(d->edit_obj->item_number);
-            
+
             /* free and replace old tables */
             DELETE_AND_NULL_ARRAY(obj_proto);
             DELETE_AND_NULL_ARRAY(obj_index);
             obj_proto = new_obj_proto;
             obj_index = new_obj_index;
-            
+
             /* RENUMBER ZONE TABLES HERE, only
              because I ADDED an object!
              This code shamelessly ripped off from db.c */
@@ -1587,7 +1587,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
              BOARD_RNUM (counter) = BOARD_RNUM (counter) + 1;
              } */
           }  /* end of obj insertion */
-          
+
           send_to_char("Writing object to disk..", d->character);
           write_objs_to_disk(d->character->player_specials->saved.zonenum);
           // do not wanna nuke the strings, so we use ClearObject
@@ -1617,7 +1617,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
           break;
       }
       break;                      /* end of IEDIT_CONFIRM_SAVESTRING */
-      
+
     case IEDIT_MAIN_MENU:
       /* throw us out to whichever edit mode based on user input */
       switch (*arg) {
@@ -1779,7 +1779,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
           break;
       }
       break;                      /* end of IEDIT_MAIN_MENU */
-      
+
     case IEDIT_EDIT_NAMELIST:
       DELETE_ARRAY_IF_EXTANT(d->edit_obj->text.keywords);
       d->edit_obj->text.keywords = str_dup(arg);
@@ -1808,20 +1808,41 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
       break;
     case IEDIT_TYPE:
       number = atoi(arg);
-      if ((number < 1) || (number > NUM_ITEMS) || (number == ITEM_CYBERWARE && !access_level(CH, LVL_ADMIN)) ||
-          (number == ITEM_BIOWARE && !access_level(CH, LVL_ADMIN))) {
-        send_to_char("That's not a valid choice!\r\n", d->character);
+      if (number < 1 || number > NUM_ITEMS) {
+        send_to_char(d->character, "That's not a valid choice! You must choose something between 1 and %d.\r\n", NUM_ITEMS);
         iedit_disp_type_menu(d);
-      } else if (number != 0 && GET_OBJ_TYPE(d->edit_obj) != number) {
+        return;
+      }
+
+      switch (number) {
+        case ITEM_CYBERWARE:
+        case ITEM_BIOWARE:
+          if (!access_level(CH, LVL_ADMIN)) {
+            send_to_char("Sorry, only Admin and higher staff members can create those.\r\n", d->character);
+            iedit_disp_type_menu(d);
+            return;
+          }
+          break;
+        case ITEM_SHOPCONTAINER:
+          if (!access_level(CH, LVL_PRESIDENT)) {
+            send_to_char("Sorry, shopcontainers are for code use only and can't be created.\r\n", d->character);
+            iedit_disp_type_menu(d);
+            return;
+          }
+          send_to_char("WARNING: Shopcontainers are for code use only! Hope you know what you're doing...\r\n", d->character);
+          break;
+        case ITEM_GUN_MAGAZINE:
+          send_to_char("Sorry, gun magazines are for code use only and can't be created.\r\n", d->character);
+          iedit_disp_type_menu(d);
+          return;
+      }
+
+      if (number != 0 && GET_OBJ_TYPE(d->edit_obj) != number) {
         GET_OBJ_TYPE(d->edit_obj) = number;
         for (int index = 0; index < NUM_VALUES; index++)
           GET_OBJ_VAL(d->edit_obj, index) = 0;
       }
-      
-      if (number == ITEM_GUN_MAGAZINE) {
-        send_to_char("NOTICE: Gun magazines were deprecated with the creation of the new ammo system. You probably don't need to make one.\r\n", d->character);
-      }
-      
+
       iedit_disp_menu(d);
       break;
     case IEDIT_EXTRAS:
@@ -1831,6 +1852,9 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
         iedit_disp_extra_menu(d);
       } else if (number == ITEM_DONT_TOUCH + 1) {
         send_to_char("You can't set the Don't Touch flag here. Do it in the world files.\r\n", d->character);
+        iedit_disp_extra_menu(d);
+      } else if (number == ITEM_KEPT + 1) {
+        send_to_char("You can't set the Kept flag, it's only settable by code.\r\n", d->character);
         iedit_disp_extra_menu(d);
       } else {
         /* if 0, quit */
@@ -1852,7 +1876,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
         return;
       }
       iedit_disp_aff_menu(d);
-      
+
       break;
     case IEDIT_WEAR:
       number = atoi(arg);
@@ -1924,7 +1948,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
           }
           break;
         case ITEM_WORKSHOP:
-          if (number < 0 || number > 7) {
+          if (number < 0 || number > NUM_WORKSHOP_TYPES) {
             send_to_char(CH, "Invalid value. Enter Workshop Type: ");
             return;
           }
@@ -2051,7 +2075,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
       /* proceed to menu 2 */
       iedit_disp_val2_menu(d);
       break;
-      
+
     case IEDIT_VALUE_2:
       /* here, I do need to check for outofrange values */
       number = atoi(arg);
@@ -2212,7 +2236,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
       GET_OBJ_VAL(d->edit_obj, 1) = number;
       iedit_disp_val3_menu(d);
       break;
-      
+
     case IEDIT_VALUE_3:
       number = atoi(arg);
       switch (GET_OBJ_TYPE(d->edit_obj)) {
@@ -2349,14 +2373,14 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
             return;
           }
           break;
-          
+
         default:
           break;
       }
       GET_OBJ_VAL(d->edit_obj, 2) = number;
       iedit_disp_val4_menu(d);
       break;
-      
+
     case IEDIT_VALUE_4:
       number = atoi(arg);
       switch (GET_OBJ_TYPE(d->edit_obj)) {
@@ -2581,7 +2605,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
       GET_OBJ_VAL(d->edit_obj, 3) = number;
       iedit_disp_val5_menu(d);
       break;
-      
+
     case IEDIT_VALUE_5:
       number = atoi(arg);
       switch (GET_OBJ_TYPE(d->edit_obj)) {
@@ -2615,7 +2639,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
       GET_OBJ_VAL(d->edit_obj, 4) = number;
       iedit_disp_val6_menu(d);
       break;
-      
+
     case IEDIT_VALUE_6:
       number = atoi(arg);
       switch (GET_OBJ_TYPE(d->edit_obj)) {
@@ -2666,7 +2690,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
       GET_OBJ_VAL(d->edit_obj, 6) = number;
       iedit_disp_val8_menu(d);
       break;
-      
+
     case IEDIT_VALUE_8:
       number = atoi(arg);
       switch (GET_OBJ_TYPE(d->edit_obj)) {
@@ -2705,7 +2729,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
       GET_OBJ_VAL(d->edit_obj, 7) = number;
       iedit_disp_val9_menu(d);
       break;
-      
+
     case IEDIT_VALUE_9:
       number = atoi(arg);
       switch (GET_OBJ_TYPE(d->edit_obj)) {
@@ -2736,7 +2760,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
       GET_OBJ_VAL(d->edit_obj, 8) = number;
       iedit_disp_val10_menu(d);
       break;
-      
+
     case IEDIT_VALUE_10:
       number = atoi(arg);
       switch (GET_OBJ_TYPE(d->edit_obj)) {
@@ -2767,7 +2791,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
       GET_OBJ_VAL(d->edit_obj, 9) = number;
       iedit_disp_val11_menu(d);
       break;
-      
+
     case IEDIT_VALUE_11:
       number = atoi(arg);
       switch (GET_OBJ_TYPE(d->edit_obj)) {
@@ -2790,7 +2814,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
       GET_OBJ_VAL(d->edit_obj, 10) = number;
       iedit_disp_val12_menu(d);
       break;
-      
+
     case IEDIT_VALUE_12:
       number = atoi(arg);
       switch (GET_OBJ_TYPE(d->edit_obj)) {
@@ -2798,14 +2822,14 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
         case ITEM_WEAPON:
           // NOTE: This does NOT actually modify value '12' (GET_OBJ_VAL(obj, 11)). It changes the attempts field instead.
           // For weapons, value '12' is currently the selected firemode of the weapon.
-          if (number < 0 || number > 4) {
-            send_to_char("Integral recoil compensation must be between 0 and 4 (inclusive). Enter recoil comp: ", CH);
+          if (number < -2 || number > 4) {
+            send_to_char("Integral recoil compensation must be between -2 and 4 (inclusive). Enter recoil comp: ", CH);
             return;
           }
-          
+
           // Set the recoil comp here.
           GET_WEAPON_INTEGRAL_RECOIL_COMP(d->edit_obj) = number;
-          
+
           iedit_disp_menu(d);
           return;
         default:
@@ -2814,7 +2838,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
       GET_OBJ_VAL(d->edit_obj, 11) = number;
       iedit_disp_menu(d);
       break;
-      
+
     case IEDIT_PROMPT_APPLY:
       number = atoi(arg);
       if (number == 0) {
@@ -2894,7 +2918,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
           if (!MISCDATA->keyword || !MISCDATA->description) {
             DELETE_ARRAY_IF_EXTANT(MISCDATA->keyword);
             DELETE_ARRAY_IF_EXTANT(MISCDATA->description);
-            
+
             /* Null out the ex_description linked list pointer to this object. */
             struct extra_descr_data *temp = d->edit_obj->ex_description, *next = NULL;
             if (temp == MISCDATA) {
@@ -2912,12 +2936,12 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
                 }
               }
             }
-            
+
             delete MISCDATA;
             *d->misc_data = NULL;
           }
 #undef MISCDATA
-          
+
           iedit_disp_menu(d);
         }
           break;
@@ -2943,23 +2967,23 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
             iedit_disp_extradesc_menu(d);
           } else {
             struct extra_descr_data *new_extra;
-            
+
             if (((struct extra_descr_data *) * d->misc_data)->next)
               d->misc_data = (void **) &((struct extra_descr_data *) * d->misc_data)->next;
             else {
               /* make new extra, attach at end */
               new_extra = new extra_descr_data;
               memset((char *) new_extra, 0, sizeof(extra_descr_data));
-              
+
               ((struct extra_descr_data *) * d->misc_data)->next = new_extra;
               /* edit new extra, we NEED double pointer because i will set
                * *d->misc_data to NULL later */
               d->misc_data =
               (void **) &((struct extra_descr_data *) * d->misc_data)->next;
-              
+
             }
             iedit_disp_extradesc_menu(d);
-            
+
           }
           break;
         default:
@@ -2987,33 +3011,33 @@ void write_objs_to_disk(int zone)
   FILE *fp;
   struct obj_data *obj;
   struct extra_descr_data *ex_desc;
-  
+
   zone = real_zone(zone);
-  
+
   // ideally, this would just fill a VTable with vals...maybe one day
-  
+
   snprintf(buf, sizeof(buf), "%s/%d.obj", OBJ_PREFIX, zone_table[zone].number);
   fp = fopen(buf, "w+");
-  
+
   bool wrote_something = FALSE;
-  
+
   /* start running through all objects in this zone */
   for (counter = zone_table[zone].number * 100;
        counter <= zone_table[zone].top;
        counter++) {
     /* write object to disk */
     realcounter = real_object(counter);
-    
+
     if (realcounter >= 0) {
       obj = obj_proto+realcounter;
-      
+
       if (!strcmp("an unfinished object", obj->text.name))
         continue;
-        
+
       wrote_something = TRUE;
-      
+
       fprintf(fp, "#%ld\n", GET_OBJ_VNUM(obj));
-      
+
       fprintf(fp,
               "Keywords:\t%s\n"
               "Name:\t%s\n"
@@ -3025,28 +3049,28 @@ void write_objs_to_disk(int zone)
               : "An unnamed object sits here",
               obj->text.look_desc? cleanup(buf2, obj->text.look_desc)
               : "You see an uncreative object.\n");
-      
+
       fprintf(fp, "Type:\t%s\n", item_types[(int)GET_OBJ_TYPE(obj)]);
-              
+
       WRITE_IF_CHANGED_STR("WearFlags:\t%s\n", GET_OBJ_WEAR(obj).ToString(), "0");
       WRITE_IF_CHANGED_STR("ExtraFlags:\t%s\n", GET_OBJ_EXTRA(obj).ToString(), "0");
       WRITE_IF_CHANGED_STR("AffFlags:\t%s\n", obj->obj_flags.bitvector.ToString(), "0");
       WRITE_IF_CHANGED_STR("Material:\t%s\n", material_names[(int)GET_OBJ_MATERIAL(obj)], material_names[5]);
-      
+
       fprintf(fp, "[POINTS]\n");
       WRITE_IF_CHANGED("\tWeight:\t%.2f\n", GET_OBJ_WEIGHT(obj), 0);
       WRITE_IF_CHANGED("\tBarrier:\t%d\n", GET_OBJ_BARRIER(obj), 3);
       WRITE_IF_CHANGED("\tCost:\t%d\n", GET_OBJ_COST(obj), 0);
-      WRITE_IF_CHANGED("\tAvailTN:\t%d\n", GET_OBJ_AVAILTN(obj), 0);  
+      WRITE_IF_CHANGED("\tAvailTN:\t%d\n", GET_OBJ_AVAILTN(obj), 0);
       WRITE_IF_CHANGED("\tAvailDay:\t%.2f\n", GET_OBJ_AVAILDAY(obj), 0);
       WRITE_IF_CHANGED("\tLegalNum:\t%d\n", GET_LEGAL_NUM(obj), 0);
       WRITE_IF_CHANGED("\tLegalCode:\t%d\n", GET_LEGAL_CODE(obj), 0);
       WRITE_IF_CHANGED("\tLegalPermit:\t%d\n", GET_LEGAL_PERMIT(obj), 0);
       WRITE_IF_CHANGED("\tStreetIndex:\t%.2f\n", GET_OBJ_STREET_INDEX(obj), 0.0);
-      
+
       if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && GET_WEAPON_INTEGRAL_RECOIL_COMP(obj))
         fprintf(fp, "\tInnateRecoilComp:\t%d\n", GET_WEAPON_INTEGRAL_RECOIL_COMP(obj));
-      
+
       bool print_vals = false;
       int i;
       for (i = 0; i < NUM_VALUES; i++)
@@ -3054,14 +3078,14 @@ void write_objs_to_disk(int zone)
           print_vals = true;
           break;
         }
-      
+
       if (print_vals) {
         fprintf(fp, "[VALUES]\n");
         for (i = 0; i < NUM_VALUES; i++)
           if (GET_OBJ_VAL(obj, i) != 0)
             fprintf(fp, "\tVal%d:\t%d\n", i, GET_OBJ_VAL(obj, i));
       }
-      
+
       /* do we have extra descriptions? */
       count = 0;
       if (obj->ex_description)
@@ -3075,11 +3099,11 @@ void write_objs_to_disk(int zone)
             count++;
           }
         }
-      
+
       /* do we have affects? */
       for (counter2 = 0; counter2 < MAX_OBJ_AFFECT; counter2++) {
         obj_affected_type *af = obj->affected+counter2;
-        
+
         if (af->location != APPLY_NONE && af->modifier != 0) {
           fprintf(fp,
                   "[AFFECT %d]\n"
@@ -3088,19 +3112,19 @@ void write_objs_to_disk(int zone)
                   apply_types[(int)af->location], af->modifier);
         }
       }
-      
+
       /* do we have source book info? */
       if (obj->source_info) {
         fprintf(fp, "SourceBook:\t%s\n", obj->source_info);
       }
-      
+
       fprintf(fp, "BREAK\n");
     }
   }
   /* write final line, close */
   fprintf(fp, "END\n");
   fclose(fp);
-  
+
   if (wrote_something)
     write_index_file("obj");
   else

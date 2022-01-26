@@ -42,6 +42,7 @@ extern void perform_get_from_container(struct char_data *, struct obj_data *, st
 extern int can_wield_both(struct char_data *, struct obj_data *, struct obj_data *);
 extern void draw_weapon(struct char_data *);
 extern bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype, bool include_func_protections);
+extern bool does_weapon_have_bayonet(struct obj_data *weapon);
 
 
 ACMD(do_assist)
@@ -142,22 +143,22 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
     send_to_char(ch, "You can only drive by or use mounts inside a vehicle.\r\n");
     return TRUE;
   }
-  
+
   // If you're wielding a non-weapon, give an error message and bail.
   struct obj_data *weapon = GET_EQ(ch, WEAR_WIELD) ? GET_EQ(ch, WEAR_WIELD) : GET_EQ(ch, WEAR_HOLD);
   if (weapon && (GET_OBJ_TYPE(weapon) != ITEM_WEAPON && GET_OBJ_TYPE(weapon) != ITEM_FIREWEAPON)) {
     send_to_char(ch, "You can't figure out how to attack while using %s as a weapon.\r\n", decapitalize_a_an(GET_OBJ_NAME(weapon)));
     return TRUE;
   }
-  
+
   if (!*arg) {
     send_to_char(ch, "%s what?\r\n", capitalize(cmdname));
     return TRUE;
   }
-  
+
   vict = get_char_room_vis(ch, arg);
   veh = get_veh_list(arg, ch->in_room->vehicles, ch);
-  
+
   if (!vict && !veh) {
     if ((dir = messageless_find_door(ch, arg, buf2, cmdname)) < 0)
       return FALSE;
@@ -196,7 +197,7 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
     }
     if (wielded) {
       if (GET_OBJ_TYPE(wielded) == ITEM_FIREWEAPON) {
-        if (!has_ammo(ch, wielded)) 
+        if (!has_ammo(ch, wielded))
           return TRUE;
         WAIT_STATE(ch, PULSE_VIOLENCE * 2);
         if (EXIT(ch, dir)->keyword) {
@@ -283,7 +284,7 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
       send_to_char(ch, "%s is already destroyed, better find something else to %s.\r\n", GET_VEH_NAME(veh), cmdname);
       return TRUE;
     }
-    
+
     if (FIGHTING_VEH(ch)) {
       if (FIGHTING_VEH(ch) == veh) {
         send_to_char(ch, "But you're already attacking it.\r\n");
@@ -293,39 +294,19 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
         stop_fighting(ch);
       }
     }
-    
+
     if (FIGHTING(ch)) {
       send_to_char("You're already in combat!\r\n", ch);
       return TRUE;
     }
-    
-    if (veh->owner && GET_IDNUM(ch) != veh->owner) {
-      bool has_valid_vict = FALSE;
-      for (struct char_data *killer_check = veh->people; killer_check; killer_check = killer_check->next_in_veh) {
-        if ((PRF_FLAGGED(ch, PRF_PKER) && PRF_FLAGGED(killer_check, PRF_PKER)) || PLR_FLAGGED(killer_check, PLR_KILLER)) {
-          has_valid_vict = TRUE;
-          break;
-        }
-      }
-      
-      if (!has_valid_vict) {
-        if (!PRF_FLAGGED(ch, PRF_PKER) && !get_plr_flag_is_set_by_idnum(PLR_KILLER, veh->owner)) {
-          send_to_char("That's a player-owned vehicle. Better leave it alone.\r\n", ch);
-          return TRUE;
-        }
-        
-        if (!get_prf_flag_is_set_by_idnum(PRF_PKER, veh->owner)) {
-          send_to_char("The owner of that vehicle is not flagged PK. Better leave it alone.\r\n", ch);
-          return TRUE;
-        }
-      }
-      // PLR_FLAGS(ch).SetBit(PLR_KILLER);
-      // send_to_char(KILLER_FLAG_MESSAGE, ch);
-    }
-    
+
+    // Abort for PvP damage failure.
+    if (!can_damage_vehicle(ch, veh))
+      return TRUE;
+
     if (!(GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD)))
       draw_weapon(ch);
-    
+
     if (GET_EQ(ch, WEAR_WIELD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_WEAPON) {
       send_to_char(ch, "You aim %s at %s!\r\n", GET_OBJ_NAME(GET_EQ(ch, WEAR_WIELD)), GET_VEH_NAME(veh));
       snprintf(buf, sizeof(buf), "%s aims %s right at your ride!\r\n", GET_NAME(ch), GET_OBJ_NAME(GET_EQ(ch, WEAR_WIELD)));
@@ -342,7 +323,7 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
         snprintf(buf, sizeof(buf), "%s winds up to take a swing at your ride!\r\n", GET_NAME(ch));
       send_to_veh(buf, veh, NULL, TRUE);
     }
-    
+
     set_fighting(ch, veh);
     return TRUE;
   }
@@ -376,11 +357,23 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
       WAIT_STATE(ch, PULSE_VIOLENCE + 2);
       act("$n attacks $N.", TRUE, ch, 0, vict, TO_NOTVICT);
       if (GET_EQ(ch, WEAR_WIELD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_WEAPON) {
-        act("You aim $p at $N!", FALSE, ch, GET_EQ(ch, WEAR_WIELD), vict, TO_CHAR);
-        act("$n aims $p straight at you!", FALSE, ch, GET_EQ(ch, WEAR_WIELD), vict, TO_VICT);
+        if (!GET_EQ(ch, WEAR_WIELD)->contains && does_weapon_have_bayonet(GET_EQ(ch, WEAR_WIELD))) {
+          act("With your weapon empty, you aim the bayonet on $p at $N!", FALSE, ch, GET_EQ(ch, WEAR_WIELD), vict, TO_CHAR);
+          act("$n aims the bayonet on $p straight at you!", FALSE, ch, GET_EQ(ch, WEAR_WIELD), vict, TO_VICT);
+        }
+        else {
+          act("You aim $p at $N!", FALSE, ch, GET_EQ(ch, WEAR_WIELD), vict, TO_CHAR);
+          act("$n aims $p straight at you!", FALSE, ch, GET_EQ(ch, WEAR_WIELD), vict, TO_VICT);
+        }
       } else if (GET_EQ(ch, WEAR_HOLD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_HOLD)) == ITEM_WEAPON) {
-        act("You aim $p at $N!", FALSE, ch, GET_EQ(ch, WEAR_HOLD), vict, TO_CHAR);
-        act("$n aims $p straight at you!", FALSE, ch, GET_EQ(ch, WEAR_HOLD), vict, TO_VICT);
+        if (!GET_EQ(ch, WEAR_HOLD)->contains && does_weapon_have_bayonet(GET_EQ(ch, WEAR_HOLD))) {
+          act("With your weapon empty, you aim the bayonet on $p at $N!", FALSE, ch, GET_EQ(ch, WEAR_HOLD), vict, TO_CHAR);
+          act("$n aims the bayonet on $p straight at you!", FALSE, ch, GET_EQ(ch, WEAR_HOLD), vict, TO_VICT);
+        }
+        else {
+          act("You aim $p at $N!", FALSE, ch, GET_EQ(ch, WEAR_HOLD), vict, TO_CHAR);
+          act("$n aims $p straight at you!", FALSE, ch, GET_EQ(ch, WEAR_HOLD), vict, TO_VICT);
+        }
       } else {
         act("You take a swing at $N!", FALSE, ch, 0, vict, TO_CHAR);
         act("$n prepares to take a swing at you!", FALSE, ch, 0, vict, TO_VICT);
@@ -457,7 +450,7 @@ ACMD(do_shoot)
   char target[MAX_INPUT_LENGTH];
   int dir, i, pos = 0, range = -1;
 
-  if (!(GET_EQ(ch, WEAR_WIELD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_WEAPON) && 
+  if (!(GET_EQ(ch, WEAR_WIELD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_WEAPON) &&
       !(GET_EQ(ch, WEAR_HOLD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_HOLD)) == ITEM_WEAPON)) {
     send_to_char("Wielding a weapon generally helps.\r\n", ch);
     return;
@@ -481,6 +474,11 @@ ACMD(do_shoot)
 
   if (!pos) {
     send_to_char("Normally guns or bows are used to do that.\r\n", ch);
+    return;
+  }
+
+  if (((weapon = GET_EQ(ch, WEAR_WIELD)) || (weapon = GET_EQ(ch, WEAR_HOLD))) && GET_OBJ_TYPE(weapon) == ITEM_WEAPON && !weapon->contains) {
+    send_to_char("You should probably load it first.\r\n", ch);
     return;
   }
 
@@ -523,7 +521,7 @@ ACMD(do_throw)
   char arg1[MAX_INPUT_LENGTH];
   two_arguments(argument, arg1, arg2);
 
-  if (!(GET_EQ(ch, WEAR_WIELD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_WEAPON) && 
+  if (!(GET_EQ(ch, WEAR_WIELD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_WEAPON) &&
       !(GET_EQ(ch, WEAR_HOLD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_HOLD)) == ITEM_WEAPON)) {
     send_to_char("You're not wielding anything!\r\n", ch);
     return;
@@ -587,19 +585,19 @@ ACMD_CONST(do_flee) {
 bool passed_flee_success_check(struct char_data *ch) {
   if (GET_POS(ch) < POS_FIGHTING)
     return TRUE;
-  
+
   if (!FIGHTING(ch))
     return TRUE;
-  
+
   if (ch->in_room != FIGHTING(ch)->in_room)
     return TRUE;
-    
+
   if (AFF_FLAGGED(ch, AFF_APPROACH) || AFF_FLAGGED(FIGHTING(ch), AFF_APPROACH))
     return TRUE;
-    
+
   if (!can_hurt(ch, FIGHTING(ch), TRUE, 0))
     return TRUE;
-  
+
   return success_test(GET_QUI(ch), GET_QUI(FIGHTING(ch))) > 0;
 }
 
@@ -609,16 +607,16 @@ ACMD(do_flee)
     send_to_char("It's a struggle to flee while prone!\r\n", ch);
     return;
   }
-  
+
   for (int dir = 0; dir <= DOWN; dir++) {
-    if (CAN_GO(ch, dir) 
+    if (CAN_GO(ch, dir)
         && (!IS_NPC(ch) || !ROOM_FLAGGED(ch->in_room->dir_option[dir]->to_room, ROOM_NOMOB))
-        && (!ROOM_FLAGGED(ch->in_room->dir_option[dir]->to_room, ROOM_FALL))) 
+        && (!ROOM_FLAGGED(ch->in_room->dir_option[dir]->to_room, ROOM_FALL)))
     {
       // Supply messaging and put the character into a wait state to match wait state in perform_move.
       act("$n panics, and attempts to flee!", TRUE, ch, 0, 0, TO_ROOM);
       WAIT_STATE(ch, PULSE_VIOLENCE * 2);
-      
+
       // If the character is fighting in melee combat with someone they can hurt, they must pass a test to escape.
       if (!passed_flee_success_check(ch)) {
         act("$N cuts you off as you try to escape!", TRUE, ch, 0, FIGHTING(ch), TO_CHAR);
@@ -626,7 +624,7 @@ ACMD(do_flee)
         act("$N lunges forward and blocks $n's escape.", TRUE, ch, 0, FIGHTING(ch), TO_NOTVICT);
         return;
       }
-      
+
       // Attempt to move through the selected exit.
       if (do_simple_move(ch, dir, CHECK_SPECIAL | LEADER, NULL)) {
         send_to_char("You flee head over heels.\r\n", ch);
@@ -636,13 +634,13 @@ ACMD(do_flee)
         snprintf(buf, sizeof(buf), "Error case in do_flee: do_simple_move failure for %s exit.", dirs[dir]);
         mudlog(buf, ch, LOG_SYSLOG, TRUE);
       }
-      
+
       return;
     }
   }
-  
+
   send_to_char("PANIC! There's nowhere you can flee to!\r\n", ch);
-  WAIT_STATE(ch, PULSE_VIOLENCE * 2);  
+  WAIT_STATE(ch, PULSE_VIOLENCE * 2);
 }
 
 ACMD(do_kick)
@@ -656,7 +654,7 @@ ACMD(do_kick)
     send_to_char("Kick who or what?\r\n", ch);
     return;
   }
-  
+
   if ((dir = messageless_find_door(ch, arg, buf2, "do_kick")) < 0) {
     if (!(vict = get_char_room_vis(ch, arg)))
       send_to_char("They aren't here.\r\n", ch);
@@ -705,31 +703,31 @@ ACMD(do_kick)
 ACMD(do_retract)
 {
   skip_spaces(&argument);
-  struct obj_data *cyber = NULL;  
+  struct obj_data *cyber = NULL;
   if (*argument)
     cyber = get_obj_in_list_vis(ch, argument, ch->cyberware);
   else {
     for (struct obj_data *obj = ch->cyberware; obj; obj = obj->next_content)
       switch (GET_CYBERWARE_TYPE(obj)) {
-        case CYB_HANDRAZOR:  
-        case CYB_HANDBLADE:  
-        case CYB_HANDSPUR:   
-          if (!IS_SET(GET_OBJ_VAL(obj, 3), CYBERWEAPON_RETRACTABLE))  
+        case CYB_HANDRAZOR:
+        case CYB_HANDBLADE:
+        case CYB_HANDSPUR:
+          if (!IS_SET(GET_OBJ_VAL(obj, 3), CYBERWEAPON_RETRACTABLE))
             continue;
           // fall through
         case CYB_CLIMBINGCLAWS:
-        case CYB_FOOTANCHOR:  
-        case CYB_FIN:  
+        case CYB_FOOTANCHOR:
+        case CYB_FIN:
           cyber = obj;
-          break;     
+          break;
       }
-  }  
+  }
   if (!cyber) {
-    if (!*argument) 
+    if (!*argument)
       send_to_char("You don't have any retractable cyberware.\r\n", ch);
     else send_to_char("You don't have that cyberware.\r\n", ch);
   } else if (!(GET_CYBERWARE_TYPE(cyber) == CYB_HANDRAZOR || GET_CYBERWARE_TYPE(cyber) == CYB_HANDSPUR || GET_CYBERWARE_TYPE(cyber) == CYB_HANDBLADE || GET_CYBERWARE_TYPE(cyber) == CYB_FOOTANCHOR || GET_CYBERWARE_TYPE(cyber) == CYB_FIN))
-    send_to_char("That cyberware isn't retractable.\r\n",ch ); 
+    send_to_char("That cyberware isn't retractable.\r\n",ch );
   else if ((GET_CYBERWARE_TYPE(cyber) == CYB_HANDRAZOR || GET_CYBERWARE_TYPE(cyber) == CYB_HANDSPUR || GET_CYBERWARE_TYPE(cyber) == CYB_HANDBLADE) && !IS_SET(GET_CYBERWARE_FLAGS(cyber), CYBERWEAPON_RETRACTABLE))
     send_to_char("That cyberweapon isn't retractable.\r\n",ch );
   else {
@@ -751,8 +749,7 @@ ACMD(do_retract)
 ACMD(do_mode)
 {
   struct obj_data *weapon = NULL;
-  int mode = 0;
-  
+
   if (!(weapon = GET_EQ(ch, WEAR_WIELD)) || GET_OBJ_TYPE(weapon) != ITEM_WEAPON || !IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon)))
     send_to_char("You aren't wielding a firearm.\r\n", ch);
   else if (!*argument) {
@@ -768,31 +765,48 @@ ACMD(do_mode)
   } else {
     skip_spaces(&argument);
     two_arguments(argument, arg, buf1);
-    if ((!str_cmp(arg, "SS") || str_str(fire_mode[MODE_SS], arg)) && WEAPON_CAN_USE_FIREMODE(weapon, MODE_SS))
-      mode = MODE_SS;
-    else if ((!str_cmp(arg, "SA") || str_str(fire_mode[MODE_SA], arg)) && WEAPON_CAN_USE_FIREMODE(weapon, MODE_SA))
-      mode = MODE_SA;
-    else if ((!str_cmp(arg, "BF") || str_str(fire_mode[MODE_BF], arg)) && WEAPON_CAN_USE_FIREMODE(weapon, MODE_BF))
-      mode = MODE_BF;
-    else if ((!str_cmp(arg, "FA") || str_str(fire_mode[MODE_FA], arg)) && WEAPON_CAN_USE_FIREMODE(weapon, MODE_FA)) {
-      mode = MODE_FA;
+    if ((!str_cmp(arg, "SS") || str_str(fire_mode[MODE_SS], arg))) {
+      if (!WEAPON_CAN_USE_FIREMODE(weapon, MODE_SS)) {
+        send_to_char(ch, "%s is more advanced than that! Single Shot is for revolvers, bolt-action rifles, etc.\r\n", capitalize(GET_OBJ_NAME(weapon)));
+        return;
+      }
+      GET_WEAPON_FIREMODE(weapon) = MODE_SS;
+    }
+    else if ((!str_cmp(arg, "SA") || str_str(fire_mode[MODE_SA], arg))) {
+      if (!WEAPON_CAN_USE_FIREMODE(weapon, MODE_SA)) {
+        send_to_char(ch, "%s isn't capable of semi-automatic fire.\r\n", capitalize(GET_OBJ_NAME(weapon)));
+        return;
+      }
+      GET_WEAPON_FIREMODE(weapon) = MODE_SA;
+    }
+    else if ((!str_cmp(arg, "BF") || str_str(fire_mode[MODE_BF], arg))) {
+      if (!WEAPON_CAN_USE_FIREMODE(weapon, MODE_BF)) {
+        send_to_char(ch, "%s isn't capable of burst fire.\r\n", capitalize(GET_OBJ_NAME(weapon)));
+        return;
+      }
+      GET_WEAPON_FIREMODE(weapon) = MODE_BF;
+    }
+    else if ((!str_cmp(arg, "FA") || str_str(fire_mode[MODE_FA], arg))) {
+      if (!WEAPON_CAN_USE_FIREMODE(weapon, MODE_FA)) {
+        send_to_char(ch, "%s isn't capable of full auto.\r\n", capitalize(GET_OBJ_NAME(weapon)));
+        return;
+      }
+
       if (*buf1)
         GET_WEAPON_FULL_AUTO_COUNT(weapon) = MIN(10, MAX(3, atoi(buf1)));
       else {
         GET_WEAPON_FULL_AUTO_COUNT(weapon) = 10;
         send_to_char("Using default FA value of 10. You can change this with 'mode FA X' where X is the number of bullets to fire.\r\n", ch);
       }
+      GET_WEAPON_FIREMODE(weapon) = MODE_FA;
     }
-    if (!mode)
-      send_to_char(ch, "You can't set %s to that firing mode. Try mode abbreviations like 'SS' or 'FA 10'.\r\n", GET_OBJ_NAME(weapon));
-    else {
-      if (mode == MODE_FA)
-        send_to_char(ch, "You set %s to %s (%d rounds per firing).\r\n", GET_OBJ_NAME(weapon), fire_mode[mode], GET_WEAPON_FULL_AUTO_COUNT(weapon));
-      else
-        send_to_char(ch, "You set %s to %s.\r\n", GET_OBJ_NAME(weapon), fire_mode[mode]);
-      GET_WEAPON_FIREMODE(weapon) = mode;
-      act("$n flicks the fire selector switch on $p.", TRUE, ch, weapon, 0, TO_ROOM);
-    }
+
+    // Message them about the change.
+    if (GET_WEAPON_FIREMODE(weapon) == MODE_FA)
+      send_to_char(ch, "You set %s to %s (%d rounds per firing).\r\n", GET_OBJ_NAME(weapon), fire_mode[MODE_FA], GET_WEAPON_FULL_AUTO_COUNT(weapon));
+    else
+      send_to_char(ch, "You set %s to %s.\r\n", GET_OBJ_NAME(weapon), fire_mode[GET_WEAPON_FIREMODE(weapon)]);
+    act("$n flicks the fire selector switch on $p.", TRUE, ch, weapon, 0, TO_ROOM);
   }
 }
 
@@ -804,7 +818,7 @@ ACMD(do_prone)
     send_to_char("You get to your feet.\r\n", ch);
   } else {
     act("$n drops into a prone position.", TRUE, ch, 0, 0, TO_ROOM);
-    send_to_char("You drop prone.\r\n", ch);   
+    send_to_char("You drop prone.\r\n", ch);
   }
   AFF_FLAGS(ch).ToggleBit(AFF_PRONE);
 }

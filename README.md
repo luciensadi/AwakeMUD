@@ -13,17 +13,22 @@ A fork of the [Awakened Worlds](http://awakenedworlds.net) MUD codebase. Issues 
 - A slew of bugfixes to everything from combat code to sound propagation
 
 ## OS Support
-Tested on:
-- OSX 10.15 (actively); 10.12 through 10.14 believed to work but not actively tested
-- Ubuntu 18 LTS (actively); 16 and 14 same as above
+Actively tested on:
+- Mac OS 12
+- Ubuntu 18 LTS
+
+Previously tested on:
 - Amazon Linux
-- Raspbian Jessie (no longer actively tested)
 - Cygwin (beta)
+- Mac OS 10.12-10.14
+- Raspbian Jessie
+- Ubuntu 14, 16
 
 ## Installation (Ubuntu commands in parentheses)
 - Install [MySQL 5](https://dev.mysql.com/doc/refman/5.7/en/installing.html), including its development headers (ensure `mysql/mysql.h` exists in your path).
 - Install automake, make, gcc, g++, clang, libtool, autoconf, zlib1g-dev, libcurl4-openssl-dev, and libmysqlclient-dev if they're not already present (`sudo apt-get install automake make gcc g++ clang libtool autoconf zlib1g-dev libcurl4-openssl-dev libmysqlclient-dev`)
 - Install [libsodium](https://github.com/jedisct1/libsodium/releases) per their [installation instructions](https://download.libsodium.org/doc/installation). Version 1.0.16 is known to work, but higher versions should work as well.
+- Set your server's timezone to the West Coast to enable RP time to work correctly (`sudo timedatectl set-timezone America/Los_Angeles`)
 - Clone this repository to your machine. (`git clone https://github.com/luciensadi/AwakeMUD.git`)
 - Change to the repository's SQL directory (`cd AwakeMUD/SQL`)
 - Run `./gensql.sh` (or do the steps manually if it doesn't support your OS). If you plan on running this with MariaDB, use the `--skip-checks` command-line flag.
@@ -42,6 +47,15 @@ Tested on:
 - Run by doing `./bin/awake`.
 - Note: You may have to manually import the SQL changes as gensql.sh may or may not work, use 127.0.0.1 as dbhost if running local db.
 - With Cygwin, you can also use Eclipse CPP IDE, just create a Cygwin-C++ project and point the directory to where your AwakeMUD is located, play around with build settings to ensure it is using your Makefile in src. Debugging/Running works.
+
+### OSX Installation Notes
+- Install mysql@5.7 and mysql-client@5.7
+    - `brew install mysql@5.7`
+    - `brew install mysql-client@5.7` 
+    - Follow the instructions to add mysql/mysql-client to your path, along with their `CPPFLAGS` export
+- Symlink mysql headers and libmysqlclient to your /usr/local directory (replace `<version>` with the version installed)
+    - `ln -s /usr/local/Cellar/mysql@5.7/<version>/include/mysql/ /usr/local/include/mysql`
+    - `ln -s /usr/local/Cellar/mysql-client@5.7/<version>/lib/libmysqlclient.dylib /usr/local/lib/libmysqlclient.dylib`
 
 ### Make / Compile Troubleshooting
 

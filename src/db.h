@@ -14,6 +14,11 @@
 #include <stdio.h>
 #include "bitfield.h"
 
+// Versioning for flat file formats. Gonna start adding these as it will make updating formats a lot
+// easier to handle in code.
+#define VERSION_HOUSE_FILE 1
+#define VERSION_VEH_FILE 1
+
 /* names of various files and directories */
 #define INDEX_FILE      "index"         /* index of world files         */
 #define MINDEX_FILE     "index.mini"    /* ... and for mini-mud-mode    */
@@ -145,6 +150,7 @@ struct zone_data
   int num_cmds;         // number of commands in the table
   int editor_ids[NUM_ZONE_EDITOR_IDS];       // array of zone editors
   int jurisdiction;       // Abstract zone this zone belongs to
+  int is_pghq;
   struct reset_com *cmd;   /* command table for reset            */
 
   /*

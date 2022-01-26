@@ -27,6 +27,7 @@ struct archetype_data *generate_street_samurai() {
   // correct for street sam
   arch->start_room = 90500;
   arch->auth_room = 90529;
+  arch->warning_room = 90526;
   
   // Set attributes.
   arch->attributes[BOD] = 6;
@@ -117,6 +118,7 @@ struct archetype_data *generate_adept() {
   
   arch->start_room = 90600;
   arch->auth_room = 90629;
+  arch->warning_room = 90626;
   
   // Set attributes.
   arch->attributes[BOD] = 6;
@@ -134,7 +136,7 @@ struct archetype_data *generate_adept() {
   // Set adept powers.
   i = 0;
   ARCH_ADEPT_POWER(ADEPT_COUNTERSTRIKE, 2);
-  ARCH_ADEPT_POWER(ADEPT_IMPROVED_QUI, 2);
+  ARCH_ADEPT_POWER(ADEPT_HEALING, 2);
   ARCH_ADEPT_POWER(ADEPT_IMPROVED_BOD, 2);
   ARCH_ADEPT_POWER(ADEPT_MYSTIC_ARMOR, 2);
   ARCH_ADEPT_POWER(ADEPT_SIDESTEP, 2);
@@ -203,8 +205,10 @@ struct archetype_data *generate_shaman() {
   arch->race = RACE_ELF;
   arch->difficulty_rating = str_dup("moderate");
   
+  // checked for shamanic mage
   arch->start_room = 90700;
   arch->auth_room = 90738;
+  arch->warning_room = 90735;
   
   // Set attributes.
   arch->attributes[BOD] = 4;
@@ -282,6 +286,7 @@ struct archetype_data *generate_street_mage() {
   // kosher for hermetic mage
   arch->start_room = 90700;
   arch->auth_room = 90738;
+  arch->warning_room = 90735;
   
   // Set attributes.
   arch->attributes[BOD] = 3;
@@ -361,6 +366,7 @@ struct archetype_data *generate_decker() {
   // correct for decker
   arch->start_room = 91000;
   arch->auth_room = 91032;
+  arch->warning_room = 91029;
   
   // Set attributes.
   arch->attributes[BOD] = 3;
@@ -466,6 +472,7 @@ struct archetype_data *generate_rigger() {
   // correct for rigger
   arch->start_room = 90900;
   arch->auth_room = 90933;
+  arch->warning_room = 90930;
   
   // Set attributes.
   arch->attributes[BOD] = 6;

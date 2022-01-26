@@ -125,7 +125,7 @@ void redit_disp_extradesc_menu(struct descriptor_data * d)
 const char *render_door_type_string(struct room_direction_data *door) {
   if (!IS_SET(door->exit_info, EX_ISDOOR))
     return "No door";
-  
+
   if (IS_SET(door->exit_info, EX_PICKPROOF)) {
     if (IS_SET(door->exit_info, EX_ASTRALLY_WARDED))
       return "Pickproof, astrally-warded door";
@@ -163,8 +163,8 @@ void redit_disp_exit_menu(struct descriptor_data * d)
                CCCYN(CH, C_CMP), (DOOR->keyword ? DOOR->keyword : "(none)"),
                CCNRM(CH, C_CMP), CCCYN(CH, C_CMP), DOOR->key, CCNRM(CH, C_CMP),
                CCCYN(CH, C_CMP), render_door_type_string(DOOR), CCNRM(CH, C_CMP));
-  
-  
+
+
 
   send_to_char(CH,        "6) Lock level: %s%d%s\r\n"
                "7) Material Type: %s%s%s\r\n"
@@ -409,7 +409,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
              as a temporary measure */
           d->edit_room->contents = world[room_num].contents;
           d->edit_room->people = world[room_num].people;
-          
+
           // Update the peace values.
           bool edit_room_peaceful = d->edit_room->room_flags.IsSet(ROOM_PEACEFUL);
           bool world_room_peaceful = world[room_num].room_flags.IsSet(ROOM_PEACEFUL);
@@ -426,7 +426,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
               d->edit_room->peaceful = 0;
             }
           }
-          
+
           // we use free_room here because we are not ready to turn it over
           // to the stack just yet as we are gonna use it immediately
           free_room(world + room_num);
@@ -761,19 +761,19 @@ void redit_parse(struct descriptor_data * d, const char *arg)
       d->edit_mode = REDIT_HOST;
       break;
     case '1':
-      send_to_char(CH, "Enter Access Modifier: ");
+      send_to_char(CH, "Enter Access Modifier (may not be implemented?): ");
       d->edit_mode = REDIT_ACCESS;
       break;
     case '2':
-      send_to_char(CH, "Enter Trace Modifier: ");
+      send_to_char(CH, "Enter Trace Modifier (higher values make it harder to trace the player): ");
       d->edit_mode = REDIT_TRACE;
       break;
     case '3':
-      send_to_char(CH, "Enter I/O Speed (-1 For Tap, 0 For Unlimited): ");
+      send_to_char(CH, "Enter I/O Speed Limit (-1 For Tap, 0 For Unlimited): ");
       d->edit_mode = REDIT_IO;
       break;
     case '4':
-      send_to_char(CH, "Enter Base Bandwidth (-1 For Tap, 0 For Unlimited): ");
+      send_to_char(CH, "Enter Base Bandwidth (-1 For Tap, 0 For Unlimited) (not implemented?): ");
       d->edit_mode = REDIT_BASE;
       break;
     case '5':
@@ -891,15 +891,26 @@ void redit_parse(struct descriptor_data * d, const char *arg)
         redit_disp_menu(d);
       else {
         /* toggle bits */
-        
+
         if (number-1 == ROOM_NO_TRAFFIC) {
           send_to_char("!TRAFFIC changes will only take effect on copyover.\r\n", d->character);
         }
 
         if (ROOM->room_flags.IsSet(number-1)) {
           ROOM->room_flags.RemoveBit(number-1);
-        } else
+          if (number-1 == ROOM_STERILE) {
+            send_to_char("Automatically removing sterile aura.\r\n", d->character);
+            d->edit_room->background[CURRENT_BACKGROUND_COUNT] = d->edit_room->background[PERMANENT_BACKGROUND_COUNT] = 0;
+            d->edit_room->background[CURRENT_BACKGROUND_TYPE] = d->edit_room->background[PERMANENT_BACKGROUND_TYPE] = 0;
+          }
+        } else {
           ROOM->room_flags.SetBit(number-1);
+          if (number-1 == ROOM_STERILE) {
+            send_to_char("Automatically setting sterile aura.\r\n", d->character);
+            d->edit_room->background[CURRENT_BACKGROUND_COUNT] = d->edit_room->background[PERMANENT_BACKGROUND_COUNT] = 1;
+            d->edit_room->background[CURRENT_BACKGROUND_TYPE] = d->edit_room->background[PERMANENT_BACKGROUND_TYPE] = AURA_STERILITY;
+          }
+        }
         redit_disp_flag_menu(d);
       }
     }
@@ -1165,7 +1176,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
       redit_disp_menu(d);
     }
     break;
-  
+
   case REDIT_STAFF_LOCK_LEVEL:
     number = atoi(arg);
     if ((number < 0) || (number > 10)) {
@@ -1178,7 +1189,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
       redit_disp_menu(d);
     }
     break;
-  
+
   case REDIT_EXIT_DOORFLAGS:
     number = atoi(arg);
     if ((number < 0) || (number > 4)) {
@@ -1234,7 +1245,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
               }
             }
           }
-          
+
           delete MISCDATA;
           *d->misc_data = NULL;
         }
@@ -1305,7 +1316,7 @@ void write_world_to_disk(int vnum)
     if (realcounter >= 0) {
       if (!strcmp(STRING_ROOM_TITLE_UNFINISHED, RM.name))
         continue;
-        
+
       wrote_something = TRUE;
       fprintf(fp, "#%ld\n", counter);
 
@@ -1318,10 +1329,10 @@ void write_world_to_disk(int vnum)
         fprintf(fp, "NightDesc:$\n%s~\n", cleanup(buf2, RM.night_desc));
 
       fprintf(fp, "Flags:\t%s\n", RM.room_flags.ToString());
-              
+
       if (RM.sector_type != DEFAULT_SECTOR_TYPE)
         fprintf(fp, "SecType:\t%s\n", spirit_name[RM.sector_type]);
-              
+
       PRINT_TO_FILE_IF_TRUE("MatrixExit:\t%ld\n", RM.matrix);
 
       if (real_host(RM.matrix) > 0)
@@ -1333,35 +1344,35 @@ void write_world_to_disk(int vnum)
                 "JackID:\t%d\n"
                 "Address:\t%s\n",
                 RM.io, RM.bandwidth, RM.access, RM.trace, RM.rtg, RM.jacknumber, RM.address);
-                  
+
       PRINT_TO_FILE_IF_TRUE("Crowd:\t%d\n", RM.crowd);
       PRINT_TO_FILE_IF_TRUE("Cover:\t%d\n", RM.cover);
-      
+
       if (RM.x != DEFAULT_DIMENSIONS_X)
         fprintf(fp, "X:\t%d\n", RM.x);
-        
+
       if (RM.y != DEFAULT_DIMENSIONS_Y)
         fprintf(fp, "Y:\t%d\n", RM.y);
-      
+
       if (RM.z != DEFAULT_DIMENSIONS_Z)
         fprintf(fp, "Z:\t%.2f\n", RM.z);
-        
+
       PRINT_TO_FILE_IF_TRUE("RoomType:\t%d\n",  RM.type);
 
       fprintf(fp, "[POINTS]\n");
-      
+
       PRINT_TO_FILE_IF_TRUE("\tRating:\t%d\n", RM.rating);
       PRINT_TO_FILE_IF_TRUE("\tSpecIdx:\t%d\n", RM.spec);
       PRINT_TO_FILE_IF_TRUE("\tLight:\t%d\n", RM.vision[0]);
       PRINT_TO_FILE_IF_TRUE("\tSmoke:\t%d\n", RM.vision[1]);
-      
+
       if (RM.background[PERMANENT_BACKGROUND_COUNT] > 0) {
         fprintf(fp, "\tBackground:\t%d\n"
                     "\tBackgroundType:\t%d\n",
                     RM.background[PERMANENT_BACKGROUND_COUNT],
                     RM.background[PERMANENT_BACKGROUND_TYPE]);
       }
-      
+
       PRINT_TO_FILE_IF_TRUE("\tStaffLockLevel:\t%d\n", RM.staff_level_lock);
 
       for (counter2 = 0; counter2 < NUM_OF_DIRS; counter2++) {
@@ -1373,7 +1384,7 @@ void write_world_to_disk(int vnum)
           fprintf(fp, "[EXIT %s]\n", fulldirs[counter2]);
 
           PRINT_TO_FILE_IF_TRUE("\tKeywords:\t%s\n", ptr->keyword);
-          
+
           if (ptr->general_description)
             fprintf(fp, "\tDesc:$\n%s~\n",
                     cleanup(buf2, ptr->general_description));
@@ -1395,12 +1406,12 @@ void write_world_to_disk(int vnum)
             temp_door_flag = 0;
 
           fprintf(fp, "\tToVnum:\t%ld\n", ptr->to_room_vnum);
-          
+
           PRINT_TO_FILE_IF_TRUE("\tFlags:\t%d\n", temp_door_flag);
-                  
+
           if (ptr->material != DEFAULT_EXIT_MATERIAL)
             fprintf(fp, "\tMaterial:\t%s\n", material_names[(int)ptr->material]);
-                  
+
           if (ptr->barrier != DEFAULT_EXIT_BARRIER_RATING)
             fprintf(fp, "\tBarrier:\t%d\n", ptr->barrier);
 
@@ -1412,7 +1423,7 @@ void write_world_to_disk(int vnum)
 
           if (ptr->hidden > 0)
             fprintf(fp, "\tHiddenRating:\t%d\n", MIN(ptr->hidden, MAX_EXIT_HIDDEN_RATING));
-          
+
           // Add the new custom entry / exit strings.
           PRINT_TO_FILE_IF_TRUE("\tGoIntoSecondPerson:$\n%s~\n", ptr->go_into_secondperson);
           PRINT_TO_FILE_IF_TRUE("\tGoIntoThirdPerson:$\n%s~\n", ptr->go_into_thirdperson);

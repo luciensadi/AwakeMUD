@@ -96,8 +96,8 @@ ACMD(do_action)
       act("$N is not in a proper position for that.",
           FALSE, ch, 0, vict, TO_CHAR | TO_SLEEP);
     else {
-      act(action->char_found, 0, ch, 0, vict, TO_CHAR | TO_SLEEP);
-      act(action->others_found, action->hide, ch, 0, vict, TO_NOTVICT);
+      act(action->char_found, 0, ch, 0, vict, TO_CHAR | TO_SLEEP | TO_REMOTE);
+      act(action->others_found, action->hide, ch, 0, vict, TO_NOTVICT | TO_REMOTE);
       act(action->vict_found, action->hide, ch, 0, vict, TO_VICT);
     }
   }

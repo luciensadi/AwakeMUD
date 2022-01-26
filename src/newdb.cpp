@@ -8,6 +8,9 @@
 #include <string.h>
 #include <ctype.h>
 #include <time.h>
+#include <vector>
+#include <utility>
+#include <algorithm>
 #include <mysql/mysql.h>
 
 #include "structs.h"
@@ -38,8 +41,22 @@ extern Playergroup *loaded_playergroups;
 extern void save_bullet_pants(struct char_data *ch);
 extern void load_bullet_pants(struct char_data *ch);
 extern void handle_weapon_attachments(struct obj_data *obj);
+extern int get_deprecated_cybereye_essence_cost(struct obj_data *obj);
+extern void price_cyber(struct obj_data *obj);
 
 void auto_repair_obj(struct obj_data *obj, const char *source);
+
+void save_adept_powers_to_db(struct char_data *player);
+void save_spells_to_db(struct char_data *player);
+void save_metamagic_to_db(struct char_data *player);
+void save_elementals_to_db(struct char_data *player);
+void save_pc_memory_to_db(struct char_data *player);
+void save_drug_data_to_db(struct char_data *player);
+void save_skills_to_db(struct char_data *player);
+void save_aliases_to_db(struct char_data *player);
+void save_bioware_to_db(struct char_data *player);
+void save_cyberware_to_db(struct char_data *player);
+void fix_character_essence_after_cybereye_migration(struct char_data *ch);
 
 // ____________________________________________________________________________
 //
@@ -60,9 +77,9 @@ int mysql_wrapper(MYSQL *mysql, const char *query)
   snprintf(buf, sizeof(buf), "Executing query: %s", query);
   log(buf);
 #endif
-  
+
   int result = mysql_query(mysql, query);
-  
+
   if (mysql_errno(mysql)) {
     snprintf(buf, sizeof(buf), "MYSQLERROR: %s", mysql_error(mysql));
     log(buf);
@@ -175,7 +192,7 @@ static void init_char_strings(char_data *ch)
     snprintf(temp, sizeof(temp), "A %s %s voice", genders[(int)GET_SEX(ch)], pc_race_types[(int)GET_RACE(ch)]);
     ch->player.physical_text.room_desc = str_dup(temp);
 
-    ch->player.physical_text.look_desc = str_dup("A fairly nondescript thing.\n");    
+    ch->player.physical_text.look_desc = str_dup("A fairly nondescript thing.\n");
     ch->player.background = str_dup("A boring character.\n");
   }
 
@@ -276,7 +293,7 @@ char *prepare_quotes(char *dest, const char *str, size_t size_of_dest, bool incl
         continue;
       }
     }
-    
+
     if (*str == '\'' || *str == '`' || *str == '"' || *str == '\\' || *str == '%') {
       *temp++ = '\\';
     }
@@ -284,7 +301,7 @@ char *prepare_quotes(char *dest, const char *str, size_t size_of_dest, bool incl
   }
   *temp = '\0';
   dest[size_of_dest - 1] = '\0';
-  return dest; 
+  return dest;
 }
 
 /* Some initializations for characters, including initial skills */
@@ -297,7 +314,7 @@ void do_start(struct char_data * ch, bool wipe_skills)
   GET_REP(ch) = 0;
   GET_NOT(ch) = 0;
   GET_TKE(ch) = 0;
-  
+
   GET_INVIS_LEV(ch) = 0;
 
   ch->points.max_physical = 1000;
@@ -312,16 +329,16 @@ void do_start(struct char_data * ch, bool wipe_skills)
   GET_COND(ch, COND_FULL) = FOOD_DRINK_MAX;
   GET_COND(ch, COND_DRUNK) = 0;
   GET_LOADROOM(ch) = RM_NEWBIE_LOADROOM;
-  
+
   // Wipe out their flags, if they have any.
   AFF_FLAGS(ch).Clear();
   PLR_FLAGS(ch).Clear();
   PRF_FLAGS(ch).Clear();
-  
+
   // Set the appropriate flags.
-  PLR_FLAGS(ch).SetBits(PLR_NEWBIE, PLR_NOT_YET_AUTHED, ENDBIT);
+  PLR_FLAGS(ch).SetBits(PLR_NEWBIE, PLR_NOT_YET_AUTHED, PLR_RECEIVED_CYBEREYE_ESSENCE_DELTA, ENDBIT);
   PRF_FLAGS(ch).SetBits(PRF_AUTOEXIT, PRF_LONGEXITS, ENDBIT);
-  
+
   // PLR_FLAGS(ch).SetBit(PLR_NOT_YET_AUTHED);
   ch->player.time.played = 0;
   ch->player.time.lastdisc = time(0);
@@ -335,7 +352,7 @@ void do_start(struct char_data * ch, bool wipe_skills)
         set_character_skill(ch, i, 0, FALSE);
     }
   }
-  
+
   // For morts, this just saves them and prints a message about their new level.
   advance_level(ch);
 }
@@ -380,8 +397,8 @@ bool load_char(const char *name, char_data *ch, bool logon)
   ch->points.sustained[0] = 0;
   GET_LAST_TELL(ch) = NOBODY;
   MYSQL_RES *res;
-  MYSQL_ROW row;  
-  
+  MYSQL_ROW row;
+
   snprintf(buf, sizeof(buf), "SELECT * FROM pfiles WHERE Name='%s';", prepare_quotes(buf3, name, sizeof(buf3) / sizeof(buf3[0])));
   mysql_wrapper(mysql, buf);
   if (!(res = mysql_use_result(mysql))) {
@@ -401,6 +418,9 @@ bool load_char(const char *name, char_data *ch, bool logon)
   AFF_FLAGS(ch).FromString(row[6]);
   PLR_FLAGS(ch).FromString(row[7]);
   PRF_FLAGS(ch).FromString(row[8]);
+
+  // Unset the cyberdoc flag on load.
+  PRF_FLAGS(ch).RemoveBit(PRF_TOUCH_ME_DADDY);
 
   ch->player.physical_text.room_desc = str_dup(row[9]);
   ch->player.background = str_dup(row[10]);
@@ -443,8 +463,8 @@ bool load_char(const char *name, char_data *ch, bool logon)
   GET_HEIGHT(ch) = atoi(row[43]);
   GET_WEIGHT(ch) = atoi(row[44]);
   GET_TRADITION(ch) = atoi(row[45]);
-  GET_NUYEN(ch) = atoi(row[46]);
-  GET_BANK(ch) = atoi(row[47]);
+  GET_NUYEN_RAW(ch) = atoi(row[46]);
+  GET_BANK_RAW(ch) = atoi(row[47]);
   GET_KARMA(ch) = atoi(row[48]);
   GET_REP(ch) = atoi(row[49]);
   GET_NOT(ch) = atoi(row[50]);
@@ -479,18 +499,18 @@ bool load_char(const char *name, char_data *ch, bool logon)
   SETTABLE_EMAIL(ch) = str_dup(row[80]);
   GET_CHAR_MULTIPLIER(ch) = atoi(row[81]);
   mysql_free_result(res);
-  
+
   if (GET_LEVEL(ch) <= 1) {
     for (int i = 0; i <= WIL; i++) {
       bool exceeding_limits = FALSE;
       if (i == BOD && (GET_REAL_BOD(ch) + GET_PERM_BOD_LOSS(ch)) > racial_limits[(int)GET_RACE(ch)][0][i]) {
         exceeding_limits = TRUE;
       }
-      
+
       else if (GET_REAL_ATT(ch, i) > racial_limits[(int)GET_RACE(ch)][0][i]) {
         exceeding_limits = TRUE;
       }
-      
+
       if (exceeding_limits){
         snprintf(buf, sizeof(buf), "^YSomehow, %s's %s is %d (racial max is %d.) Resetting to racial max.^n",
                  GET_CHAR_NAME(ch),
@@ -498,7 +518,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
                  GET_REAL_ATT(ch, i),
                  racial_limits[(int)GET_RACE(ch)][0][i]);
         mudlog(buf, ch, LOG_SYSLOG, TRUE);
-        
+
         GET_REAL_ATT(ch, i) = racial_limits[(int)GET_RACE(ch)][0][i];
         if (i == BOD)
           GET_REAL_ATT(ch, i) -= GET_PERM_BOD_LOSS(ch);
@@ -568,23 +588,25 @@ bool load_char(const char *name, char_data *ch, bool logon)
       ch->points.extrapp = atoi(row[10]);
       GET_PP(ch) = atoi(row[11]);
       GET_SIG(ch) = atoi(row[12]);
-      GET_MASKING(ch) = atoi(row[13]);       
+      GET_MASKING(ch) = atoi(row[13]);
     }
     mysql_free_result(res);
     if (GET_TRADITION(ch) == TRAD_ADEPT) {
       snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_adeptpowers WHERE idnum=%ld;", GET_IDNUM(ch));
       mysql_wrapper(mysql, buf);
       res = mysql_use_result(mysql);
-      while ((row = mysql_fetch_row(res)))
-        GET_POWER_TOTAL(ch, atoi(row[1])) = atoi(row[2]);
+      while ((row = mysql_fetch_row(res))) {
+        SET_POWER_TOTAL(ch, atoi(row[1]), atoi(row[2]));
+      }
       mysql_free_result(res);
     }
     if (GET_GRADE(ch) > 0) {
       snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_metamagic WHERE idnum=%ld;", GET_IDNUM(ch));
       mysql_wrapper(mysql, buf);
       res = mysql_use_result(mysql);
-      while ((row = mysql_fetch_row(res)))
-        GET_METAMAGIC(ch, atoi(row[1])) = atoi(row[2]);
+      while ((row = mysql_fetch_row(res))) {
+        SET_METAMAGIC(ch, atoi(row[1]), atoi(row[2]));
+      }
       mysql_free_result(res);
     }
     if (GET_TRADITION(ch) != TRAD_ADEPT) {
@@ -593,16 +615,20 @@ bool load_char(const char *name, char_data *ch, bool logon)
       res = mysql_use_result(mysql);
       while ((row = mysql_fetch_row(res))) {
         spell_data *spell = new spell_data;
-        spell->name = str_dup(row[1]);
+        // spell->name = str_dup(row[1]);
         spell->type = atoi(row[2]);
         spell->subtype = atoi(row[3]);
         spell->force = atoi(row[4]);
+
+        // Compose a new name. This column could probably be removed from the DB altogether.
+        spell->name = str_dup(compose_spell_name(spell->type, spell->subtype));
+
         spell->next = ch->spells;
         ch->spells = spell;
       }
       mysql_free_result(res);
     }
-  
+
     if (GET_TRADITION(ch) == TRAD_HERMETIC) {
       snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_spirits WHERE idnum=%ld;", GET_IDNUM(ch));
       mysql_wrapper(mysql, buf);
@@ -693,9 +719,11 @@ bool load_char(const char *name, char_data *ch, bool logon)
   mysql_free_result(res);
 
   {
-    struct obj_data *obj, *last_obj = NULL;
-    int vnum = 0, last_in = 0, inside = 0;
-    snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_cyberware WHERE idnum=%ld ORDER BY posi;", GET_IDNUM(ch));
+    struct obj_data *obj = NULL;
+    int vnum = 0, last_inside = 0, inside = 0;
+    std::vector<nested_obj> contained_obj;
+    struct nested_obj contained_obj_entry;
+    snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_cyberware WHERE idnum=%ld ORDER BY posi DESC;", GET_IDNUM(ch));
     mysql_wrapper(mysql, buf);
     snprintf(buf3, sizeof(buf3), "pfiles_cyberware load for %s (%ld)", GET_CHAR_NAME(ch), GET_IDNUM(ch));
     res = mysql_use_result(mysql);
@@ -714,30 +742,60 @@ bool load_char(const char *name, char_data *ch, bool logon)
         else if (GET_OBJ_VAL(obj, 2) == 4 && GET_OBJ_VAL(obj, 7))
           GET_OBJ_VAL(obj, 9) = 1;
         inside = atoi(row[17]);
-        
+
         auto_repair_obj(obj, buf3);
-        
-        if (inside > 0) {
-          if (inside == last_in)
-            last_obj = last_obj->in_obj;
-          else if (inside < last_in)
-            while (inside <= last_in && last_obj) {
-              last_obj = last_obj->in_obj;
-              last_in--;
+
+        // Since we're now reading rows from the db in reverse order, in order to fix the stupid reordering on
+        // every binary execution, the previous algorithm did not work, as it relied on getting the container obj
+        // first and place subsequent objects in it. Since we're now getting it last, and more importantly we get
+        // objects at deeper nesting level in between our list, we save all pointers to objects along with their
+        // nesting level in a vector container and once we found the next container (inside < last_inside) we
+        // move the objects with higher nesting level to container and proceed. This works for any nesting depth.
+        if (inside > 0 || (inside == 0 && inside < last_inside)) {
+          //Found our container?
+          if (inside < last_inside) {
+            if (inside == 0)
+              obj_to_cyberware(obj, ch);
+
+            auto it = std::find_if(contained_obj.begin(), contained_obj.end(), find_level(inside+1));
+            while (it != contained_obj.end()) {
+              obj_to_obj(it->obj, obj);
+              contained_obj.erase(it);
             }
-          if (last_obj)
-            obj_to_obj(obj, last_obj);
-        } else obj_to_cyberware(obj, ch);
-        last_in = inside;
-        last_obj = obj;
+
+            if (inside > 0) {
+              contained_obj_entry.level = inside;
+              contained_obj_entry.obj = obj;
+              contained_obj.push_back(contained_obj_entry);
+            }
+          }
+          else {
+            contained_obj_entry.level = inside;
+            contained_obj_entry.obj = obj;
+            contained_obj.push_back(contained_obj_entry);
+          }
+          last_inside = inside;
+        } else
+          obj_to_cyberware(obj, ch);
+
+        last_inside = inside;
       }
+    }
+    //Failsafe. If something went wrong and we still have objects stored in the vector, dump them in inventory.
+    if (!contained_obj.empty()) {
+      for (auto it : contained_obj)
+        obj_to_char(it.obj, ch);
+
+      contained_obj.clear();
+      snprintf(buf2, sizeof(buf2), "Load error:  Objects in ware containers found with invalid containers for Char ID: %ld. Dumped in inventory.", GET_IDNUM(ch));
+      mudlog(buf2, NULL, LOG_SYSLOG, TRUE);
     }
     mysql_free_result(res);
   }
   {
     struct obj_data *obj;
     int vnum = 0;
-    snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_bioware WHERE idnum=%ld;", GET_IDNUM(ch));
+    snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_bioware WHERE idnum=%ld ORDER BY Vnum;", GET_IDNUM(ch));
     mysql_wrapper(mysql, buf);
     res = mysql_use_result(mysql);
     while ((row = mysql_fetch_row(res))) {
@@ -754,10 +812,12 @@ bool load_char(const char *name, char_data *ch, bool logon)
   }
 
   {
-    struct obj_data *obj = NULL, *last_obj = NULL;
+    struct obj_data *obj = NULL;
     long vnum;
-    int inside = 0, last_in = 0;
-    snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_worn WHERE idnum=%ld ORDER BY posi;", GET_IDNUM(ch));
+    int inside = 0, last_inside = 0;
+    std::vector<nested_obj> contained_obj;
+    struct nested_obj contained_obj_entry;
+    snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_worn WHERE idnum=%ld ORDER BY posi DESC;", GET_IDNUM(ch));
     mysql_wrapper(mysql, buf);
     snprintf(buf3, sizeof(buf3), "pfiles_worn load for %s (%ld)", GET_CHAR_NAME(ch), GET_IDNUM(ch));
     res = mysql_use_result(mysql);
@@ -781,7 +841,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
           handle_weapon_attachments(obj);
         inside = atoi(row[17]);
         GET_OBJ_TIMER(obj) = atoi(row[19]);
-        
+
         // row 20: extra flags. We want to retain the proto's flags but also persist anti-cheat flags.
         Bitfield temp_extra_flags;
         temp_extra_flags.FromString(row[20]);
@@ -789,36 +849,67 @@ bool load_char(const char *name, char_data *ch, bool logon)
           GET_OBJ_EXTRA(obj).SetBit(ITEM_WIZLOAD);
         if (temp_extra_flags.IsSet(ITEM_IMMLOAD))
           GET_OBJ_EXTRA(obj).SetBit(ITEM_IMMLOAD);
-        
+
         GET_OBJ_ATTEMPT(obj) = atoi(row[21]);
         GET_OBJ_CONDITION(obj) = atoi(row[22]);
-        
+
         auto_repair_obj(obj, buf3);
-        
-        if (inside > 0) {
-          if (inside == last_in)
-            last_obj = last_obj->in_obj;
-          else if (inside < last_in)
-            while (inside <= last_in && last_obj) {
-              last_obj = last_obj->in_obj;
-              last_in--;
+
+        // Since we're now reading rows from the db in reverse order, in order to fix the stupid reordering on
+        // every binary execution, the previous algorithm did not work, as it relied on getting the container obj
+        // first and place subsequent objects in it. Since we're now getting it last, and more importantly we get
+        // objects at deeper nesting level in between our list, we save all pointers to objects along with their
+        // nesting level in a vector container and once we found the next container (inside < last_inside) we
+        // move the objects with higher nesting level to container and proceed. This works for any nesting depth.
+        if (inside > 0 || (inside == 0 && inside < last_inside)) {
+          //Found our container?
+          if (inside < last_inside) {
+            if (inside == 0)
+              equip_char(ch, obj, atoi(row[18]));
+
+            auto it = std::find_if(contained_obj.begin(), contained_obj.end(), find_level(inside+1));
+            while (it != contained_obj.end()) {
+              obj_to_obj(it->obj, obj);
+              contained_obj.erase(it);
             }
-          if (last_obj)
-            obj_to_obj(obj, last_obj);
+
+            if (inside > 0) {
+              contained_obj_entry.level = inside;
+              contained_obj_entry.obj = obj;
+              contained_obj.push_back(contained_obj_entry);
+            }
+          }
+          else {
+            contained_obj_entry.level = inside;
+            contained_obj_entry.obj = obj;
+            contained_obj.push_back(contained_obj_entry);
+          }
+          last_inside = inside;
         } else
-          equip_char(ch, obj, atoi(row[18]));
-        last_in = inside;
-        last_obj = obj;
+           equip_char(ch, obj, atoi(row[18]));
+
+        last_inside = inside;
       }
+    }
+    //Failsafe. If something went wrong and we still have objects stored in the vector, dump them in inventory.
+    if (!contained_obj.empty()) {
+      for (auto it : contained_obj)
+        obj_to_char(it.obj, ch);
+
+      contained_obj.clear();
+      snprintf(buf2, sizeof(buf2), "Load error: Worn objects found with invalid containers for Char ID: %ld. Dumped in inventory.", GET_IDNUM(ch));
+      mudlog(buf2, NULL, LOG_SYSLOG, TRUE);
     }
     mysql_free_result(res);
   }
 
   {
-    struct obj_data *last_obj = NULL, *obj;
+    struct obj_data *obj = NULL;
     int vnum = 0;
-    int inside = 0, last_in = 0;
-    snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_inv WHERE idnum=%ld ORDER BY posi;", GET_IDNUM(ch));
+    int inside = 0, last_inside = 0;
+    std::vector<nested_obj> contained_obj;
+    struct nested_obj contained_obj_entry;
+    snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_inv WHERE idnum=%ld ORDER BY posi DESC;", GET_IDNUM(ch));
     mysql_wrapper(mysql, buf);
     snprintf(buf3, sizeof(buf3), "pfiles_inv load for %s (%ld)", GET_CHAR_NAME(ch), GET_IDNUM(ch));
     res = mysql_use_result(mysql);
@@ -832,7 +923,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
           obj->photo = str_dup(row[4]);
         for (int x = 0, y = 5; x < NUM_VALUES; x++, y++)
           GET_OBJ_VAL(obj, x) = atoi(row[y]);
-          
+
         switch (GET_OBJ_TYPE(obj)) {
           case ITEM_PHONE:
             if (GET_ITEM_PHONE_SWITCHED_ON(obj))
@@ -853,46 +944,79 @@ bool load_char(const char *name, char_data *ch, bool logon)
             GET_OBJ_WEIGHT(obj) = GET_AMMOBOX_QUANTITY(obj) * get_ammo_weight(GET_AMMOBOX_WEAPON(obj), GET_AMMOBOX_TYPE(obj));
             break;
         }
+        // This is badly named and at first reading it seems like it holds a vnum to parent container
+        // which made the algorithm below harder to read but it is in fact nesting level.
+        // I am not refactoring it to nesting_level though as it then wouldn't match the database column.
+        // This serves as a reminder to do so if I push a db update and for others to figure out easier what it actually is. -- Nodens
         inside = atoi(row[17]);
         GET_OBJ_TIMER(obj) = atoi(row[18]);
-        
-        // row 19: extra flags. We want to retain the proto's flags but also persist anti-cheat flags.
+
+        // row 19: extra flags. We want to retain the proto's flags but also persist anti-cheat flags and other necessary ones.
         Bitfield temp_extra_flags;
         temp_extra_flags.FromString(row[19]);
         if (temp_extra_flags.IsSet(ITEM_WIZLOAD))
           GET_OBJ_EXTRA(obj).SetBit(ITEM_WIZLOAD);
         if (temp_extra_flags.IsSet(ITEM_IMMLOAD))
           GET_OBJ_EXTRA(obj).SetBit(ITEM_IMMLOAD);
-        
+        if (temp_extra_flags.IsSet(ITEM_KEPT))
+          GET_OBJ_EXTRA(obj).SetBit(ITEM_KEPT);
+
         GET_OBJ_ATTEMPT(obj) = atoi(row[20]);
         GET_OBJ_CONDITION(obj) = atoi(row[21]);
-        
+
         auto_repair_obj(obj, buf3);
-        
-        if (inside > 0) {
-          if (inside == last_in)
-            last_obj = last_obj->in_obj;
-          else if (inside < last_in)
-            while (inside <= last_in && last_obj) {
-              last_obj = last_obj->in_obj;
-              last_in--;
+
+        // Since we're now reading rows from the db in reverse order, in order to fix the stupid reordering on
+        // every binary execution, the previous algorithm did not work, as it relied on getting the container obj
+        // first and place subsequent objects in it. Since we're now getting it last, and more importantly we get
+        // objects at deeper nesting level in between our list, we save all pointers to objects along with their
+        // nesting level in a vector container and once we found the next container (inside < last_inside) we
+        // move the objects with higher nesting level to container and proceed. This works for any nesting depth.
+        if (inside > 0 || (inside == 0 && inside < last_inside)) {
+          //Found our container?
+          if (inside < last_inside) {
+            if (inside == 0)
+              obj_to_char(obj, ch);
+
+            auto it = std::find_if(contained_obj.begin(), contained_obj.end(), find_level(inside+1));
+            while (it != contained_obj.end()) {
+              obj_to_obj(it->obj, obj);
+              contained_obj.erase(it);
             }
-          if (last_obj)
-            obj_to_obj(obj, last_obj);
-          else
-            obj_to_char(obj, ch);
+
+            if (inside > 0) {
+              contained_obj_entry.level = inside;
+              contained_obj_entry.obj = obj;
+              contained_obj.push_back(contained_obj_entry);
+            }
+          }
+          else {
+            contained_obj_entry.level = inside;
+            contained_obj_entry.obj = obj;
+            contained_obj.push_back(contained_obj_entry);
+          }
+          last_inside = inside;
         } else
           obj_to_char(obj, ch);
-        last_in = inside;
-        last_obj = obj;
+
+        last_inside = inside;
       }
+    }
+    //Failsafe. If something went wrong and we still have objects stored in the vector, dump them in inventory.
+    if (!contained_obj.empty()) {
+      for (auto it : contained_obj)
+        obj_to_char(it.obj, ch);
+
+      contained_obj.clear();
+      snprintf(buf2, sizeof(buf2), "Load error: Inventory objects found with invalid containers for Char ID: %ld. Dumped in inventory.", GET_IDNUM(ch));
+      mudlog(buf2, NULL, LOG_SYSLOG, TRUE);
     }
     mysql_free_result(res);
   }
-  
+
   // Load bullet pants.
   load_bullet_pants(ch);
-  
+
   // Load pgroup membership data.
   snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_playergroups WHERE idnum=%ld;", GET_IDNUM(ch));
   mysql_wrapper(mysql, buf);
@@ -902,33 +1026,15 @@ bool load_char(const char *name, char_data *ch, bool logon)
     GET_PGROUP_MEMBER_DATA(ch) = new Pgroup_data();
     GET_PGROUP_MEMBER_DATA(ch)->rank = atoi(row[2]);
     GET_PGROUP_MEMBER_DATA(ch)->privileges.FromString(row[3]);
+
+    // You MUST free the result before using this call, otherwise it breaks.
     mysql_free_result(res);
-  
-    // TODO: Find the pgroup in the list. If it's not there, load it.
-    Playergroup *ptr = loaded_playergroups;
-    while (ptr) {
-      if (ptr->get_idnum() == pgroup_idnum)
-        break;
-      ptr = ptr->next_pgroup;
-    }
-    
-    if (ptr == NULL) {
-      // Load it from the DB and add it to the list.
-      log_vfprintf("Loading playergroup %ld.", pgroup_idnum);
-      ptr = new Playergroup(pgroup_idnum);
-      //*ptr->next_pgroup = loaded_playergroups;
-      //loaded_playergroups = *ptr;
-    } else {
-      log_vfprintf("Using loaded playergroup %ld.", pgroup_idnum);
-    }
-    
-    // Initialize character pgroup struct.
-    GET_PGROUP(ch) = ptr;
+    GET_PGROUP(ch) = Playergroup::find_pgroup(pgroup_idnum);
   } else {
     mysql_free_result(res);
     GET_PGROUP_MEMBER_DATA(ch) = NULL;
   }
-  
+
   // Load pgroup invitation data.
   snprintf(buf, sizeof(buf), "SELECT * FROM `playergroup_invitations` WHERE `idnum`=%ld;", GET_IDNUM(ch));
   mysql_wrapper(mysql, buf);
@@ -954,8 +1060,8 @@ bool load_char(const char *name, char_data *ch, bool logon)
   for (struct obj_data *jack = ch->cyberware; jack; jack = jack->next_content)
     if (GET_OBJ_VAL(jack, 0) == CYB_CHIPJACK) {
       int max = 0;
-      for (struct obj_data *wire = ch->cyberware; wire; wire = wire->next_content) 
-        if (GET_OBJ_VAL(wire, 0) == CYB_SKILLWIRE) 
+      for (struct obj_data *wire = ch->cyberware; wire; wire = wire->next_content)
+        if (GET_OBJ_VAL(wire, 0) == CYB_SKILLWIRE)
           max = GET_OBJ_VAL(wire, 1);
       for (struct obj_data *chip = jack->contains; chip; chip = chip->next_content)
         ch->char_specials.saved.skills[GET_OBJ_VAL(chip, 0)][1] = skills[GET_OBJ_VAL(chip, 0)].type ? GET_CHIP_RATING(chip)
@@ -963,10 +1069,10 @@ bool load_char(const char *name, char_data *ch, bool logon)
     } else if (GET_OBJ_VAL(jack, 0) == CYB_MEMORY) {
       int max = 0;
       for (struct obj_data *wire = ch->cyberware; wire; wire = wire->next_content) {
-        if (GET_OBJ_VAL(wire, 0) == CYB_SKILLWIRE) 
+        if (GET_OBJ_VAL(wire, 0) == CYB_SKILLWIRE)
           max = GET_OBJ_VAL(wire, 1);
       }
-      
+
       GET_OBJ_VAL(jack, 5) = 0;
       for (struct obj_data *chip = jack->contains; chip; chip = chip->next_content) {
         ch->char_specials.saved.skills[GET_CHIP_SKILL(chip)][1] = skills[GET_CHIP_SKILL(chip)].type ? GET_CHIP_RATING(chip)
@@ -974,13 +1080,13 @@ bool load_char(const char *name, char_data *ch, bool logon)
         GET_OBJ_VAL(jack, 5) += GET_CHIP_SIZE(chip) - GET_CHIP_COMPRESSION_FACTOR(chip);
       }
     }
-    
+
   // Self-repair their gear. Don't worry about contents- it's recursive.
   snprintf(buf3, sizeof(buf3), "post-pfiles-inv-load for %s (%ld)", GET_CHAR_NAME(ch), GET_IDNUM(ch));
   for (struct obj_data *obj = ch->carrying; obj; obj = obj->next_content) {
     auto_repair_obj(obj, buf3);
   }
-  
+
   snprintf(buf3, sizeof(buf3), "post-pfiles-eq-load for %s (%ld)", GET_CHAR_NAME(ch), GET_IDNUM(ch));
   for (int i = 0; i < NUM_WEARS; i++) {
     if (GET_EQ(ch, i))
@@ -1042,10 +1148,18 @@ bool load_char(const char *name, char_data *ch, bool logon)
   return true;
 }
 
-static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
+#define SAVE_IF_DIRTY_BIT_SET(dirty_bit_accessor, save_method) { \
+  if (dirty_bit_accessor(player)) {                              \
+    save_method(player);                                         \
+    dirty_bit_accessor(player) = FALSE;                          \
+  }                                                              \
+}
+
+static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopyover = FALSE)
 {
+  PERF_PROF_SCOPE(pr_, __func__);
   char buf[MAX_STRING_LENGTH*4], buf2[MAX_STRING_LENGTH*4], buf3[MAX_STRING_LENGTH*4];
-  int i, q = 0;
+  int i, q, level, posi = 0;
   long inveh = 0;
   struct obj_data *char_eq[NUM_WEARS];
   struct obj_data *temp, *next_obj;
@@ -1064,35 +1178,39 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
     mysql_free_result(res);
   }
 
-  /* worn eq */
+  /* Remove their worn equipment to inventory. */
   for (i = 0; i < NUM_WEARS; i++) {
     if (player->equipment[i])
       char_eq[i] = unequip_char(player, i, FALSE);
     else
       char_eq[i] = NULL;
   }
-  /* cyberware */
+
+  /* Remove their cyberware to inventory. */
   for (temp = player->cyberware; temp; temp = next_obj) {
     next_obj = temp->next_content;
     obj_from_cyberware(temp);
     obj_to_char(temp, player);
   }
 
-  /* bioware */
+  /* Remove their bioware to inventory. */
   for (temp = player->bioware; temp; temp = next_obj) {
     next_obj = temp->next_content;
     obj_from_bioware(temp);
     obj_to_char(temp, player);
   }
 
+  /* Strip off any spell affects. */
   for (struct sustain_data *sust = GET_SUSTAINED(player); sust; sust = sust->next)
     if (!sust->caster)
       spell_modify(player, sust, FALSE);
 
   /**************************************************/
+  /* Default their loadroom if it wasn't provided specially. */
   if (loadroom == NOWHERE)
     loadroom = GET_LOADROOM(player);
 
+  /* Figure out what room to load them in. */
   if (player->in_room) {
     if (player->in_room->number <= 1) {
       // If their current room is invalid for save/load:
@@ -1117,13 +1235,16 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
     }
   }
 
-  if (player->in_veh && player->in_veh->owner == GET_IDNUM(player))
+  /* Figure out their vehicle-- they can only load in it if they own it.  Unless we're calling from copyover.*/
+  if (player->in_veh && (fromCopyover || player->in_veh->owner == GET_IDNUM(player)))
     inveh = player->in_veh->idnum;
-  
+
+  /* Figure out their pgroup num-- we only want to access this if the group is valid. */
   long pgroup_num = 0;
   if (GET_PGROUP_MEMBER_DATA(player) && GET_PGROUP(player))
     pgroup_num = GET_PGROUP(player)->get_idnum();
-  
+
+  /* Compose the initial giant update. */
   snprintf(buf, sizeof(buf), "UPDATE pfiles SET AffFlags='%s', PlrFlags='%s', PrfFlags='%s', Bod=%d, "\
                "Qui=%d, Str=%d, Cha=%d, Intel=%d, Wil=%d, EssenceTotal=%d, EssenceHole=%d, "\
                "BiowareIndex=%d, HighestIndex=%d, Pool_MaxHacking=%d, Pool_Body=%d, "\
@@ -1131,12 +1252,12 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
                "Dead=%d, Physical=%d, PhysicalLoss=%d, Mental=%d, MentalLoss=%d, "\
                "PermBodLoss=%d, WimpLevel=%d, Loadroom=%ld, LastRoom=%ld, LastD=%ld, Hunger=%d, Thirst=%d, Drunk=%d, " \
                "ShotsFired='%d', ShotsTriggered='%d', Tradition=%d, pgroup='%ld', "\
-               "Inveh=%ld, rank=%d, gender=%d, SysPoints=%d, socialbonus=%d, email='%s', highlight='%s',"
+               "Inveh=%ld, `rank`=%d, gender=%d, SysPoints=%d, socialbonus=%d, email='%s', highlight='%s',"
                "multiplier=%d WHERE idnum=%ld;",
-               AFF_FLAGS(player).ToString(), PLR_FLAGS(player).ToString(), 
+               AFF_FLAGS(player).ToString(), PLR_FLAGS(player).ToString(),
                PRF_FLAGS(player).ToString(), GET_REAL_BOD(player), GET_REAL_QUI(player),
                GET_REAL_STR(player), GET_REAL_CHA(player), GET_REAL_INT(player), GET_REAL_WIL(player),
-               GET_REAL_ESS(player), player->real_abils.esshole, GET_INDEX(player), 
+               GET_REAL_ESS(player), player->real_abils.esshole, GET_INDEX(player),
                player->real_abils.highestindex, GET_MAX_HACKING(player), GET_BODY(player),
                GET_DEFENSE(player), GET_NUYEN(player), GET_BANK(player), GET_KARMA(player),
                GET_REP(player), GET_NOT(player), GET_TKE(player),
@@ -1145,12 +1266,14 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
                GET_LOADROOM(player), GET_LAST_IN(player), time(0), GET_COND(player, COND_FULL),
                GET_COND(player, COND_THIRST), GET_COND(player, COND_DRUNK),
                SHOTS_FIRED(player), SHOTS_TRIGGERED(player), GET_TRADITION(player), pgroup_num,
-               inveh, GET_LEVEL(player), GET_SEX(player), GET_SYSTEM_POINTS(player), 
-               MIN(GET_CONGREGATION_BONUS(player), MAX_CONGREGATION_BONUS), 
+               inveh, GET_LEVEL(player), GET_SEX(player), GET_SYSTEM_POINTS(player),
+               MIN(GET_CONGREGATION_BONUS(player), MAX_CONGREGATION_BONUS),
                prepare_quotes(buf1, GET_EMAIL(player), sizeof(buf1) / sizeof(char)),
                prepare_quotes(buf2, GET_CHAR_COLOR_HIGHLIGHT(player), sizeof(buf2) / sizeof(char)),
                GET_CHAR_MULTIPLIER(player), GET_IDNUM(player));
   mysql_wrapper(mysql, buf);
+
+  /* Re-equip cyberware and bioware. */
   for (temp = player->carrying; temp; temp = next_obj) {
     next_obj = temp->next_content;
     if (GET_OBJ_TYPE(temp) == ITEM_CYBERWARE) {
@@ -1162,135 +1285,58 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
       obj_to_bioware(temp, player);
     }
   }
+
+  /* Re-apply spells. */
   for (struct sustain_data *sust = GET_SUSTAINED(player); sust; sust = sust->next)
     if (!sust->caster)
       spell_modify(player, sust, TRUE);
+
+  /* Re-equip equipment. */
   for (i = 0; i < NUM_WEARS; i++) {
     if (char_eq[i])
       equip_char(player, char_eq[i], i);
   }
+
+  /* Re-calculate affects. */
   affect_total(player);
+
+  /* Save chargen data.*/
   if (PLR_FLAGGED(player, PLR_NOT_YET_AUTHED)) {
     snprintf(buf, sizeof(buf), "UPDATE pfiles_chargendata SET AttPoints=%d, SkillPoints=%d, ForcePoints=%d, RestringPoints=%d WHERE idnum=%ld;",
                  GET_ATT_POINTS(player), GET_SKILL_POINTS(player), GET_FORCE_POINTS(player), GET_RESTRING_POINTS(player),
                  GET_IDNUM(player));
     mysql_wrapper(mysql, buf);
   }
-  if (GET_SKILL_DIRTY_BIT(player)) {
-    snprintf(buf, sizeof(buf), "DELETE FROM pfiles_skills WHERE idnum=%ld", GET_IDNUM(player));
-    mysql_wrapper(mysql, buf);
-    strcpy(buf, "INSERT INTO pfiles_skills (idnum, skillnum, rank) VALUES (");
-    for (i = MIN_SKILLS; i < MAX_SKILLS; i++)
-      if (GET_SKILL(player, i)) {
-        if (q)
-          strcat(buf, "), (");
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %d, %d", GET_IDNUM(player), i, REAL_SKILL(player, i));
-        q = 1;
-      }
-    if (q) {
-      strcat(buf, ");");
-      mysql_wrapper(mysql, buf);
-    }
-    GET_SKILL_DIRTY_BIT(player) = FALSE;
-  }
-  snprintf(buf, sizeof(buf), "UPDATE pfiles_drugdata SET Affect=%d, Stage=%d, Duration=%d, Dose=%d WHERE idnum=%ld;", 
+
+  /* Save skills, if they've changed their skills since last save. */
+  SAVE_IF_DIRTY_BIT_SET(GET_SKILL_DIRTY_BIT, save_skills_to_db);
+
+  /* Save drug info. */
+  snprintf(buf, sizeof(buf), "UPDATE pfiles_drugdata SET Affect=%d, Stage=%d, Duration=%d, Dose=%d WHERE idnum=%ld;",
                GET_DRUG_AFFECT(player), GET_DRUG_STAGE(player), GET_DRUG_DURATION(player), GET_DRUG_DOSE(player),
                GET_IDNUM(player));
   mysql_wrapper(mysql, buf);
-  
-  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_drugs WHERE idnum=%ld", GET_IDNUM(player));
-  mysql_wrapper(mysql, buf);
-  strcpy(buf, "INSERT INTO pfiles_drugs (idnum, DrugType, Addict, Doses, Edge, LastFix, Addtime, Tolerant, LastWith) VALUES (");
-  for (i = 1, q = 0; i < NUM_DRUGS; i++) {    
-    if (GET_DRUG_DOSES(player, i) || GET_DRUG_EDGE(player, i) || GET_DRUG_ADDICT(player, i) || GET_DRUG_LASTFIX(player, i) || 
-        GET_DRUG_ADDTIME(player, i) || GET_DRUG_TOLERANT(player, i) || GET_DRUG_LASTWITH(player, i)) {
-      if (q)
-        strcat(buf, "), (");
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %d, %d, %d, %d, %d, %d, %d, %d", GET_IDNUM(player), i, GET_DRUG_ADDICT(player, i), 
-                          GET_DRUG_DOSES(player, i), GET_DRUG_EDGE(player, i), GET_DRUG_LASTFIX(player, i),
-                          GET_DRUG_ADDTIME(player, i), GET_DRUG_TOLERANT(player, i), GET_DRUG_LASTWITH(player, i));
-      q = 1;
-    }
-  }
-  if (q) {
-    strcat(buf, ");");
-    mysql_wrapper(mysql, buf);
-  }
-  
+
+  // SAVE_IF_DIRTY_BIT_SET(GET_DRUG_DIRTY_BIT, save_drug_data_to_db);
+  save_drug_data_to_db(player);
+
+  /* Save magic info. */
   if (GET_TRADITION(player) != TRAD_MUNDANE) {
     snprintf(buf, sizeof(buf), "UPDATE pfiles_magic SET Mag=%d, Pool_Casting=%d, Pool_SpellDefense=%d, Pool_Drain=%d, Pool_Reflecting=%d,"\
                  "UsedGrade=%d, ExtraPower=%d, PowerPoints=%d, Sig=%d, Masking=%d, Totem=%d, TotemSpirit=%d, Aspect=%d WHERE idnum=%ld;", GET_REAL_MAG(player), GET_CASTING(player),
-                 GET_SDEFENSE(player), GET_DRAIN(player), GET_REFLECT(player), GET_GRADE(player), player->points.extrapp, 
+                 GET_SDEFENSE(player), GET_DRAIN(player), GET_REFLECT(player), GET_GRADE(player), player->points.extrapp,
                  GET_PP(player), GET_SIG(player), GET_MASKING(player), GET_TOTEM(player), GET_TOTEMSPIRIT(player), GET_ASPECT(player),
                  GET_IDNUM(player));
     mysql_wrapper(mysql, buf);
-    if (GET_TRADITION(player) == TRAD_ADEPT) {
-      snprintf(buf, sizeof(buf), "DELETE FROM pfiles_adeptpowers WHERE idnum=%ld", GET_IDNUM(player));
-      mysql_wrapper(mysql, buf);
-      strcpy(buf, "INSERT INTO pfiles_adeptpowers (idnum, powernum, rank) VALUES (");
-      for (i = 0, q = 0; i < ADEPT_NUMPOWER; i++)
-        if (GET_POWER_TOTAL(player, i)) {
-          if (q)
-            strcat(buf, "), (");
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %d, %d", GET_IDNUM(player), i, GET_POWER_TOTAL(player, i));
-          q = 1;
-        }
-      if (q) {
-        strcat(buf, ");");
-        mysql_wrapper(mysql, buf);
-      }
-    }
 
-    if (player->spells) {
-      snprintf(buf, sizeof(buf), "DELETE FROM pfiles_spells WHERE idnum=%ld", GET_IDNUM(player));
-      mysql_wrapper(mysql, buf);
-      strcpy(buf, "INSERT INTO pfiles_spells (idnum, Name, Type, SubType, Rating, Category) VALUES (");
-      q = 0;
-      for (struct spell_data *temp = player->spells; temp; temp = temp->next) {
-        if (q)
-          strcat(buf, "), (");
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, '%s', %d, %d, %d, %d", GET_IDNUM(player), temp->name, temp->type, temp->subtype, temp->force, spells[temp->type].category);
-        q = 1;
-      }
-      if (q) {
-        strcat(buf, ");");
-        mysql_wrapper(mysql, buf);
-      }
-    }
-
-    if (GET_GRADE(player) > 0) {
-      snprintf(buf, sizeof(buf), "DELETE FROM pfiles_metamagic WHERE idnum=%ld", GET_IDNUM(player));
-      mysql_wrapper(mysql, buf);
-      strcpy(buf, "INSERT INTO pfiles_metamagic (idnum, metamagicnum, rank) VALUES (");
-      for (i = 0, q = 0; i < META_MAX; i++)
-        if (GET_METAMAGIC(player, i)) {
-          if (q)
-            strcat(buf, "), (");
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %d, %d", GET_IDNUM(player), i, GET_METAMAGIC(player, i));
-          q = 1;
-       }
-      if (q) {
-        strcat(buf, ");");
-        mysql_wrapper(mysql, buf);
-      }
-    }
-    if (GET_SPIRIT(player) && GET_TRADITION(player) == TRAD_HERMETIC) {
-      snprintf(buf, sizeof(buf), "DELETE FROM pfiles_spirits WHERE idnum=%ld", GET_IDNUM(player));
-      mysql_wrapper(mysql, buf);
-      strcpy(buf, "INSERT INTO pfiles_spirits (idnum, Type, Rating, Services, SpiritID) VALUES (");
-      q = 0;
-      for (struct spirit_data *spirit = GET_SPIRIT(player); spirit; spirit = spirit->next, q++) {
-        if (q)
-          strcat(buf, "), (");
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %d, %d, %d, %d", GET_IDNUM(player), spirit->type, spirit->force, spirit->services, spirit->id);
-        q = 1;
-      }
-      if (q) {
-        strcat(buf, ");");
-        mysql_wrapper(mysql, buf);
-      }
-    }
+    /* Save various magic-related things. */
+    SAVE_IF_DIRTY_BIT_SET(GET_ADEPT_POWER_DIRTY_BIT, save_adept_powers_to_db);
+    SAVE_IF_DIRTY_BIT_SET(GET_SPELLS_DIRTY_BIT, save_spells_to_db);
+    SAVE_IF_DIRTY_BIT_SET(GET_METAMAGIC_DIRTY_BIT, save_metamagic_to_db);
+    SAVE_IF_DIRTY_BIT_SET(GET_ELEMENTALS_DIRTY_BIT, save_elementals_to_db);
   }
+
+  /* Save data for quests the player has run. */
   snprintf(buf, sizeof(buf), "DELETE FROM pfiles_quests WHERE idnum=%ld", GET_IDNUM(player));
   mysql_wrapper(mysql, buf);
   strcpy(buf, "INSERT INTO pfiles_quests (idnum, number, questnum) VALUES (");
@@ -1307,20 +1353,8 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
     mysql_wrapper(mysql, buf);
   }
 
-  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_memory WHERE idnum=%ld", GET_IDNUM(player));
-  mysql_wrapper(mysql, buf);
-  strcpy(buf, "INSERT INTO pfiles_memory (idnum, remembered, asname) VALUES (");
-  q = 0;
-  for (struct remem *b = GET_PLAYER_MEMORY(player); b; b = b->next) {
-    if (q)
-      strcat(buf, "), (");
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %ld, '%s'", GET_IDNUM(player), b->idnum, prepare_quotes(buf3, b->mem, sizeof(buf3) / sizeof(buf3[0])));
-    q = 1;
-  }
-  if (q) {
-    strcat(buf, ");");
-    mysql_wrapper(mysql, buf);
-  }
+  /* Wipe out their memory, then re-write it. */
+  SAVE_IF_DIRTY_BIT_SET(GET_MEMORY_DIRTY_BIT, save_pc_memory_to_db);
 
   snprintf(buf, sizeof(buf), "DELETE FROM pfiles_ignore WHERE idnum=%ld", GET_IDNUM(player));
   mysql_wrapper(mysql, buf);
@@ -1337,91 +1371,11 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
     mysql_wrapper(mysql, buf);
   }
 
-  if (player->alias_dirty_bit) {
-    player->alias_dirty_bit = FALSE;
-    
-    snprintf(buf, sizeof(buf), "DELETE FROM pfiles_alias WHERE idnum=%ld", GET_IDNUM(player));
-    mysql_wrapper(mysql, buf);
-    strcpy(buf, "INSERT INTO pfiles_alias (idnum, command, replacement) VALUES (");
-    q = 0;
-    for (struct alias *a = GET_ALIASES(player); a; a = a->next) {
-      if (q)
-        strcat(buf, "), (");
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, '%s', '%s'", GET_IDNUM(player), a->command, prepare_quotes(buf3, a->replacement, sizeof(buf3) / sizeof(buf3[0])));
-      q = 1;
-    }
-    if (q) {
-      strcat(buf, ");");
-      mysql_wrapper(mysql, buf);
-    }
-  }
+  SAVE_IF_DIRTY_BIT_SET(GET_ALIAS_DIRTY_BIT, save_aliases_to_db);
 
-  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_bioware WHERE idnum=%ld", GET_IDNUM(player));
-  mysql_wrapper(mysql, buf);
-  if (player->bioware) {
-    strcpy(buf, "INSERT INTO pfiles_bioware (idnum, Vnum, Cost, Value0, Value1, Value2, Value3, Value4, Value5, Value6,"\
-                "Value7, Value8, Value9, Value10, Value11) VALUES (");
-    q = 0;
-    for (struct obj_data *obj = player->bioware; obj; obj = obj->next_content) {
-      if (!IS_OBJ_STAT(obj, ITEM_NORENT)) {
-        if (q)
-          strcat(buf, "), (");
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %ld, %d", GET_IDNUM(player), GET_OBJ_VNUM(obj), GET_OBJ_COST(obj));
-
-        for (int x = 0; x < NUM_VALUES; x++)
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", %d", GET_OBJ_VAL(obj, x));
-        q = 1;;
-      }
-    }
-    if (q) {
-      strcat(buf, ");");
-      mysql_wrapper(mysql, buf);
-    }
-  }
-
-  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_cyberware WHERE idnum=%ld", GET_IDNUM(player));
-  mysql_wrapper(mysql, buf);
-  int level = 0, posi = 0;
-  q = 0;
-  if (player->cyberware) {
-    strcpy(buf, "INSERT INTO pfiles_cyberware (idnum, Vnum, Cost, Restring, Photo, Value0, Value1, Value2, Value3, Value4, Value5, Value6,"\
-           "Value7, Value8, Value9, Value10, Value11, Level, posi) VALUES ");
-    bool first_pass = TRUE;
-    for (struct obj_data *obj = player->cyberware; obj;) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s(%ld, %ld, %d, '%s', '%s'", first_pass ? "" : ", ", GET_IDNUM(player), GET_OBJ_VNUM(obj), GET_OBJ_COST(obj),
-                          obj->restring ? prepare_quotes(buf3, obj->restring, sizeof(buf3) / sizeof(buf3[0])) : "",
-                          obj->photo ? prepare_quotes(buf2, obj->photo, sizeof(buf2) / sizeof(buf2[0])) : "");
-      first_pass = FALSE;
-      q = 1;
-      
-      if (GET_OBJ_VAL(obj, 2) == 4) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "0, 0, 0, %d, 0, 0, %d, %d, %d, 0, 0, 0", GET_OBJ_VAL(obj, 3), GET_OBJ_VAL(obj, 6), 
-                           GET_OBJ_VAL(obj, 7), GET_OBJ_VAL(obj, 8));
-      } else
-        for (int x = 0; x < NUM_VALUES; x++)
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", %d", GET_OBJ_VAL(obj, x));
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", %d, %d)", level, posi++);
-      
-      
-      if (obj->contains) {
-        obj = obj->contains;
-        level++;
-        continue;
-      } else if (!obj->next_content && obj->in_obj)
-        while (obj && !obj->next_content && level >= 0) {
-          obj = obj->in_obj;
-          level--;
-        }
-      if (obj)
-        obj = obj->next_content;
-    }
-    
-    if (q) {
-      strcat(buf, ";");
-      mysql_wrapper(mysql, buf);
-      q = 0;
-    }
-  }
+  // Save bioware and cyberware.
+  save_bioware_to_db(player);
+  save_cyberware_to_db(player);
 
   snprintf(buf, sizeof(buf), "DELETE FROM pfiles_worn WHERE idnum=%ld", GET_IDNUM(player));
   mysql_wrapper(mysql, buf);
@@ -1439,7 +1393,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
                           obj->photo ? prepare_quotes(buf2, obj->photo, sizeof(buf2) / sizeof(buf2[0])) : "");
       for (int x = 0; x < NUM_VALUES; x++)
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", %d", GET_OBJ_VAL(obj, x));
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", %d, %d, %d, '%s', %d, %d, %d);", level, i, GET_OBJ_TIMER(obj), GET_OBJ_EXTRA(obj).ToString(), 
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", %d, %d, %d, '%s', %d, %d, %d);", level, i, GET_OBJ_TIMER(obj), GET_OBJ_EXTRA(obj).ToString(),
                           GET_OBJ_ATTEMPT(obj), GET_OBJ_CONDITION(obj), posi++);
       mysql_wrapper(mysql, buf);
     }
@@ -1465,7 +1419,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
     else
       obj = obj->next_content;
   }
-  
+
   snprintf(buf, sizeof(buf), "DELETE FROM pfiles_inv WHERE idnum=%ld", GET_IDNUM(player));
   mysql_wrapper(mysql, buf);
   level = posi = 0;
@@ -1478,7 +1432,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
                           obj->photo ? prepare_quotes(buf2, obj->photo, sizeof(buf2) / sizeof(buf2[0])) : "");
       for (int x = 0; x < NUM_VALUES; x++)
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", %d", GET_OBJ_VAL(obj, x));
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", %d, %d, '%s', %d, %d, %d);", level, GET_OBJ_TIMER(obj), GET_OBJ_EXTRA(obj).ToString(), 
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", %d, %d, '%s', %d, %d, %d);", level, GET_OBJ_TIMER(obj), GET_OBJ_EXTRA(obj).ToString(),
                           GET_OBJ_ATTEMPT(obj), GET_OBJ_CONDITION(obj), posi++);
       mysql_wrapper(mysql, buf);
     }
@@ -1496,10 +1450,10 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
     if (obj)
       obj = obj->next_content;
   }
-  
+
   // Save bullet pants.
   save_bullet_pants(player);
-  
+
   if (GET_LEVEL(player) > 1) {
     snprintf(buf, sizeof(buf),  "INSERT INTO pfiles_immortdata (idnum, InvisLevel, IncogLevel, Zonenumber) VALUES (%ld, %d, %d, %d)"
                   " ON DUPLICATE KEY UPDATE"
@@ -1509,7 +1463,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
                  GET_IDNUM(player), GET_INVIS_LEV(player), GET_INCOG_LEV(player), player->player_specials->saved.zonenum);
     mysql_wrapper(mysql, buf);
   }
-  
+
   // Save pgroup membership data.
   if (GET_PGROUP_MEMBER_DATA(player) && GET_PGROUP(player)) {
     snprintf(buf, sizeof(buf), "INSERT INTO pfiles_playergroups (`idnum`, `group`, `Rank`, `Privileges`) VALUES ('%ld', '%ld', '%d', '%s')"
@@ -1530,6 +1484,8 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
 
   return TRUE;
 }
+
+#undef SAVE_IF_DIRTY_BIT_SET
 
 PCIndex::PCIndex()
 {
@@ -1586,7 +1542,7 @@ bool PCIndex::Save()
 // Only used for idnums right now, so -1 is the error code.
 vnum_t get_one_number_from_query(const char *query) {
   vnum_t value = -1;
-  
+
   char buf[MAX_STRING_LENGTH];
   strcpy(buf, query);
   mysql_wrapper(mysql, buf);
@@ -1596,13 +1552,13 @@ vnum_t get_one_number_from_query(const char *query) {
     value = atol(row[0]);
   }
   mysql_free_result(res);
-  
+
   return value;
 }
 
 vnum_t get_highest_idnum_in_use() {
   char buf[MAX_STRING_LENGTH];
-  
+
   const char *tables[] = {
     "pfiles_adeptpowers",
     "pfiles_alias",
@@ -1626,27 +1582,28 @@ vnum_t get_highest_idnum_in_use() {
     "pfiles_spirits",
     "pfiles_worn",
   };
-  
+
   #define NUM_IDNUM_TABLES 21
-  
+
   vnum_t highest_pfiles_idnum = get_one_number_from_query("SELECT idnum FROM pfiles ORDER BY idnum DESC LIMIT 1;");
-  
+
   for (int i = 0; i < NUM_IDNUM_TABLES; i++) {
     snprintf(buf, sizeof(buf), "SELECT idnum FROM %s ORDER BY idnum DESC LIMIT 1;", tables[i]);
     vnum_t new_number = get_one_number_from_query(buf);
     if (highest_pfiles_idnum < new_number) {
-      mudlog("^RSYSERR: SQL database corruption (pfiles idnum lower than supporting table idnum). Will attempt to recover.^g", NULL, LOG_SYSLOG, TRUE);
+      snprintf(buf3, sizeof(buf3), "^RSYSERR: SQL database corruption (pfiles idnum %ld lower than '%s' idnum %ld). Auto-correcting.^g", highest_pfiles_idnum, tables[i], new_number);
+      mudlog(buf3, NULL, LOG_SYSLOG, TRUE);
       highest_pfiles_idnum = new_number;
     }
   }
-  
+
   return highest_pfiles_idnum;
 }
 
 char_data *CreateChar(char_data *ch)
 {
   vnum_t highest_idnum_in_use = get_highest_idnum_in_use();
-  
+
   if (highest_idnum_in_use <= -1) {
     log_vfprintf("%s promoted to %s by virtue of first-come, first-serve.",
         GET_CHAR_NAME(ch), status_ratings[LVL_MAX]);
@@ -1694,7 +1651,7 @@ char_data *PCIndex::CreateChar(char_data *ch)
   if (entry_cnt < 1) {
     log_vfprintf("%s promoted to %s, by virtue of first-come, first-serve.",
         status_ratings[LVL_MAX], GET_CHAR_NAME(ch));
-    
+
     // TODO: this is a duplicate of the other president code, can they be consolidated?
 
     for (int i = 0; i < 3; i++)
@@ -1751,15 +1708,17 @@ char_data *PCIndex::LoadChar(const char *name, bool logon)
 
   load_char(name, ch, logon);
 
+  fix_character_essence_after_cybereye_migration(ch);
+
   return ch;
 }
 
-bool PCIndex::SaveChar(char_data *ch, vnum_t loadroom)
+bool PCIndex::SaveChar(char_data *ch, vnum_t loadroom, bool fromCopyover)
 {
   if (IS_NPC(ch))
     return false;
 
-  bool ret = save_char(ch, loadroom);
+  bool ret = save_char(ch, loadroom, fromCopyover);
 
   return ret;
 }
@@ -1993,14 +1952,14 @@ char *get_player_name(vnum_t id)
 
 bool _get_flag_is_set_by_idnum(int flag, vnum_t id, int mode) {
   char buf[MAX_STRING_LENGTH];
-  
+
   switch (mode) {
     case 0: snprintf(buf, sizeof(buf), "SELECT PlrFlags FROM pfiles WHERE idnum=%ld;", id); break;
     case 1: snprintf(buf, sizeof(buf), "SELECT PrfFlags FROM pfiles WHERE idnum=%ld;", id); break;
     case 2: snprintf(buf, sizeof(buf), "SELECT AffFlags FROM pfiles WHERE idnum=%ld;", id); break;
     default: return FALSE;
   }
-  
+
   mysql_wrapper(mysql, buf);
   MYSQL_RES *res = mysql_use_result(mysql);
   MYSQL_ROW row = mysql_fetch_row(res);
@@ -2008,12 +1967,12 @@ bool _get_flag_is_set_by_idnum(int flag, vnum_t id, int mode) {
     mysql_free_result(res);
     return FALSE;
   }
-  
+
   Bitfield flags;
   flags.FromString(row[0]);
-  
+
   mysql_free_result(res);
-  
+
   return flags.IsSet(flag);
 }
 
@@ -2035,52 +1994,55 @@ void DeleteChar(long idx)
   MYSQL_ROW row;
   FILE *fl;
   char prepare_quotes_buf[MAX_STRING_LENGTH * 2 + 1];
-  
+
   const char *table_names[] = {
-    "pfiles",
-    "pfiles_immortdata",
-    "pfiles_chargendata",
-    "pfiles_magic",
-    "pfiles_drugdata",
-    "pfiles_drugs",
-    "pfiles_skills",
-    "pfiles_adeptpowers",
-    "pfiles_metamagic",
-    "pfiles_quests",
-    "pfiles_spirits",
-    "pfiles_bioware",
-    "pfiles_cyberware",
-    "pfiles_inv",
-    "pfiles_ammo",
-    "pfiles_worn",
-    "pfiles_spells",
-    "pfiles_memory",
-    "pfiles_alias",
-    "pfiles_memory" // IF YOU CHANGE THIS< CHANGE PFILES_MEMORY_INDEX
+    "pfiles                 ", // 0
+    "pfiles_adeptpowers     ",
+    "pfiles_alias           ",
+    "pfiles_ammo            ",
+    "pfiles_bioware         ",
+    "pfiles_chargendata     ", // 5
+    "pfiles_cyberware       ",
+    "pfiles_drugdata        ",
+    "pfiles_drugs           ",
+    "pfiles_ignore          ", // IF YOU CHANGE THIS, CHANGE PFILES_IGNORE_INDEX
+    "pfiles_immortdata      ", // 10
+    "pfiles_inv             ",
+    "pfiles_magic           ",
+    "pfiles_mail            ",
+    "pfiles_memory          ", // IF YOU CHANGE THIS, CHANGE PFILES_MEMORY_INDEX
+    "pfiles_metamagic       ", // 15
+    "pfiles_quests          ",
+    "pfiles_skills          ",
+    "pfiles_spells          ",
+    "pfiles_spirits         ",
+    "pfiles_worn            "  // 20
   };
-  #define NUM_SQL_TABLE_NAMES 20
-  #define PFILES_MEMORY_INDEX 19
-  
+  #define NUM_SQL_TABLE_NAMES 21
+  #define PFILES_IGNORE_INDEX 9
+  #define PFILES_MEMORY_INDEX 14
+
   // Figure out the filename for this character.
   const char *name = get_player_name(idx);
   snprintf(buf, sizeof(buf), "idledeleted/%s", name);
   delete[] name;
-  
+
   // Ensure we can open the file.
   if (!(fl = fopen(buf, "w"))) {
     perror(buf);
     return;
   }
-  
+
   // Prepend the file with the statement to remove this character's [Deleted] entry.
   fprintf(fl, "DELETE FROM pfiles WHERE idnum=%ld;\r\n", idx);
-  
+
+  // Write the info for each section to the file, then delete the relevant DB info.
   for (int table_idx = 0; table_idx < NUM_SQL_TABLE_NAMES; table_idx++) {
     // Get the table schema.
     snprintf(buf, sizeof(buf), "DESCRIBE %s", table_names[table_idx]);
     mysql_wrapper(mysql, buf);
     res = mysql_use_result(mysql);
-    
+
     // Compose our table schema string.
     snprintf(buf2, sizeof(buf2), "INSERT INTO %s (", table_names[table_idx]);
     bool first_pass_of_table_description = TRUE;
@@ -2091,13 +2053,13 @@ void DeleteChar(long idx)
       first_pass_of_table_description = FALSE;
     }
     mysql_free_result(res);
-    
+
     if (first_pass_of_table_description) {
       log_vfprintf("SYSERR: Failed to describe table %s! This puts us in a fucky state, %ld is only partially deleted.", table_names[table_idx], idx);
       return;
     }
     strlcat(buf2, ") VALUES (", sizeof(buf2));
-    
+
     // Get the values.
     snprintf(buf, sizeof(buf), "SELECT * FROM %s WHERE idnum=%ld", table_names[table_idx], idx);
     mysql_wrapper(mysql, buf);
@@ -2105,7 +2067,7 @@ void DeleteChar(long idx)
     while ((row = mysql_fetch_row(res))) {
       // Populate buf3 with the table schema.
       strlcpy(buf3, buf2, sizeof(buf3));
-      
+
       // Fill out data in buf3.
       for (unsigned int row_idx = 0; row_idx < mysql_num_fields(res); row_idx++) {
         prepare_quotes(prepare_quotes_buf, row[row_idx], sizeof(prepare_quotes_buf), TRUE);
@@ -2115,16 +2077,20 @@ void DeleteChar(long idx)
       fprintf(fl, "%s;\r\n", buf3);
     }
     mysql_free_result(res);
-    
+
     // Finally, delete the table entry, unless we're at index 0-- that's the pfile table.
     if (table_idx != 0) {
-      snprintf(buf, sizeof(buf), "DELETE FROM %s WHERE %s=%ld", table_names[table_idx], table_idx == PFILES_MEMORY_INDEX ? "remembered" : "idnum", idx);
+      if (table_idx == PFILES_IGNORE_INDEX || table_idx == PFILES_MEMORY_INDEX) {
+        snprintf(buf, sizeof(buf), "DELETE FROM %s WHERE remembered=%ld", table_names[table_idx], idx);
+        mysql_wrapper(mysql, buf);
+      }
+      snprintf(buf, sizeof(buf), "DELETE FROM %s WHERE idnum=%ld", table_names[table_idx], idx);
       mysql_wrapper(mysql, buf);
     }
   }
   fclose(fl);
-  
-  // Update playergroup info.
+
+  // Update playergroup info, write a log, and delete their info and invitations.
   snprintf(buf, sizeof(buf), "SELECT `group` FROM pfiles_playergroups WHERE idnum=%ld", idx);
   mysql_wrapper(mysql, buf);
   res = mysql_use_result(mysql);
@@ -2141,17 +2107,18 @@ void DeleteChar(long idx)
   }
   snprintf(buf, sizeof(buf), "DELETE FROM playergroup_invitations WHERE idnum=%ld", idx);
   mysql_wrapper(mysql, buf);
-  
-  snprintf(buf, sizeof(buf), "UPDATE pfiles SET Name='%s', Password='', NoDelete=TRUE WHERE idnum=%ld", CHARACTER_DELETED_NAME_FOR_SQL, idx); 
+
+  // Wipe out their name and password so they can't log in anymore.
+  snprintf(buf, sizeof(buf), "UPDATE pfiles SET Name='%s', Password='', NoDelete=TRUE WHERE idnum=%ld", CHARACTER_DELETED_NAME_FOR_SQL, idx);
 //  snprintf(buf, sizeof(buf), "DELETE FROM pfiles WHERE idnum=%ld", idx);
   mysql_wrapper(mysql, buf);
 }
 
-void idle_delete() 
+void idle_delete()
 {
   int deleted = 0;
   char buf[MAX_STRING_LENGTH];
-  
+
   MYSQL *mysqlextra = mysql_init(NULL);
   if (!mysql_real_connect(mysqlextra, mysql_host, mysql_user, mysql_password, mysql_db, 0, NULL, 0)) {
     log("IDLEDELETE- Could not open extra socket, aborting");
@@ -2201,9 +2168,9 @@ void auto_repair_obj(struct obj_data *obj, const char *source) {
   for (struct obj_data *contents = obj->contains; contents; contents = contents->next_content) {
     auto_repair_obj(contents, source_extd);
   }
-  
+
   int rnum, old_storage;
-  
+
   // Now that any changes have bubbled up, rectify this object too.
   switch(GET_OBJ_TYPE(obj)) {
     case ITEM_CYBERDECK:
@@ -2221,7 +2188,7 @@ void auto_repair_obj(struct obj_data *obj, const char *source) {
               break;
           }
         }
-        
+
       }
       if (old_storage != GET_CYBERDECK_USED_STORAGE(obj)) {
         snprintf(buf, sizeof(buf), "INFO: System self-healed mismatching cyberdeck used storage for %s (was %d, should have been %d)",
@@ -2235,7 +2202,7 @@ void auto_repair_obj(struct obj_data *obj, const char *source) {
     case ITEM_WEAPON:
       {
         int prior_data;
-        
+
         // We perform extensive clamping and checks on weapons due to prior issues with corrupted weapon data.
         #define CLAMP_WEAPON_VALUE(field, minv, maxv, fieldname)                                                        \
         prior_data = (field);                                                                                           \
@@ -2245,7 +2212,7 @@ void auto_repair_obj(struct obj_data *obj, const char *source) {
                    GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj), prior_data, field);                                            \
           mudlog(buf, obj->carried_by, LOG_SYSLOG, TRUE);                                                               \
         }
-        
+
         #define FORCE_PROTO_VALUE(value, proto_value)                                                                   \
         if (proto_value != value) {                                                                                     \
           snprintf(buf, sizeof(buf), "INFO: System self-healed weapon %s (%ld), whose " #value  " was %d (becomes %d)", \
@@ -2253,44 +2220,44 @@ void auto_repair_obj(struct obj_data *obj, const char *source) {
           mudlog(buf, obj->carried_by, LOG_SYSLOG, TRUE);                                                               \
           value = proto_value;                                                                                          \
         }
-        
+
         rnum = real_object(GET_OBJ_VNUM(obj));
-        
+
         if (rnum < 0) {
           mudlog("SYSERR: Received INVALID rnum when loading object!", NULL, LOG_SYSLOG, TRUE);
           return;
         }
-        
+
         FORCE_PROTO_VALUE(GET_WEAPON_POWER(obj), GET_WEAPON_POWER(&obj_proto[rnum]));
         FORCE_PROTO_VALUE(GET_WEAPON_DAMAGE_CODE(obj), GET_WEAPON_DAMAGE_CODE(&obj_proto[rnum]));
         FORCE_PROTO_VALUE(GET_WEAPON_STR_BONUS(obj), GET_WEAPON_STR_BONUS(&obj_proto[rnum]));
         FORCE_PROTO_VALUE(GET_WEAPON_ATTACK_TYPE(obj), GET_WEAPON_ATTACK_TYPE(&obj_proto[rnum]));
         FORCE_PROTO_VALUE(GET_WEAPON_SKILL(obj), GET_WEAPON_SKILL(&obj_proto[rnum]));
-        
+
         if (IS_GUN(GET_WEAPON_ATTACK_TYPE(obj))) {
           FORCE_PROTO_VALUE(GET_WEAPON_MAX_AMMO(obj), GET_WEAPON_MAX_AMMO(&obj_proto[rnum]));
           FORCE_PROTO_VALUE(GET_WEAPON_POSSIBLE_FIREMODES(obj), GET_WEAPON_POSSIBLE_FIREMODES(&obj_proto[rnum]));
           FORCE_PROTO_VALUE(GET_WEAPON_INTEGRAL_RECOIL_COMP(obj), GET_WEAPON_INTEGRAL_RECOIL_COMP(&obj_proto[rnum]));
-          
+
           CLAMP_WEAPON_VALUE(GET_WEAPON_FIREMODE(obj), MODE_SS, MODE_FA, "firemode");
           CLAMP_WEAPON_VALUE(GET_WEAPON_FULL_AUTO_COUNT(obj), 0, 10, "full auto count");
-          
+
           int attach_rnum;
-          
+
           if (GET_WEAPON_ATTACH_TOP_VNUM(obj) != 0) {
             attach_rnum = real_object(GET_WEAPON_ATTACH_TOP_VNUM(obj));
             if (attach_rnum < 0 || GET_OBJ_TYPE(&obj_proto[attach_rnum]) != ITEM_GUN_ACCESSORY) {
               FORCE_PROTO_VALUE(GET_WEAPON_ATTACH_TOP_VNUM(obj), GET_WEAPON_ATTACH_TOP_VNUM(&obj_proto[rnum]));
             }
           }
-          
+
           if (GET_WEAPON_ATTACH_BARREL_VNUM(obj) != 0) {
             attach_rnum = real_object(GET_WEAPON_ATTACH_BARREL_VNUM(obj));
             if (attach_rnum < 0 || GET_OBJ_TYPE(&obj_proto[attach_rnum]) != ITEM_GUN_ACCESSORY) {
               FORCE_PROTO_VALUE(GET_WEAPON_ATTACH_BARREL_VNUM(obj), GET_WEAPON_ATTACH_BARREL_VNUM(&obj_proto[rnum]));
             }
           }
-          
+
           if (GET_WEAPON_ATTACH_UNDER_VNUM(obj) != 0) {
             attach_rnum = real_object(GET_WEAPON_ATTACH_UNDER_VNUM(obj));
             if (attach_rnum < 0 || GET_OBJ_TYPE(&obj_proto[attach_rnum]) != ITEM_GUN_ACCESSORY) {
@@ -2300,13 +2267,13 @@ void auto_repair_obj(struct obj_data *obj, const char *source) {
         } else {
           FORCE_PROTO_VALUE(GET_WEAPON_REACH(obj), GET_WEAPON_REACH(&obj_proto[rnum]));
         }
-        
+
         // Warn on any non-magazine items. I would dump them out, but the weapon is currently in the void waiting to be placed somewhere.
         struct obj_data *next;
         for (struct obj_data *contents = obj->contains; contents; contents = next) {
           next = contents->next_content;
           if (GET_OBJ_TYPE(contents) != ITEM_GUN_MAGAZINE) {
-            snprintf(buf, sizeof(buf), "^RSYSERR^g: While loading weapon %s in %s, came across non-magazine object contained by it.", GET_OBJ_NAME(obj), source);
+            snprintf(buf, sizeof(buf), "^RSYSERR^g: While loading weapon %s in %s, came across non-magazine object contained by it. [OBJ_LOAD_ERROR_GREP_STRING]", GET_OBJ_NAME(obj), source);
             mudlog(buf, NULL, LOG_SYSLOG, TRUE);
             const char *representation = generate_new_loggable_representation(obj);
             mudlog(representation, NULL, LOG_SYSLOG, TRUE);
@@ -2315,7 +2282,7 @@ void auto_repair_obj(struct obj_data *obj, const char *source) {
           }
         }
       }
-      
+
       break;
   }
 }
@@ -2326,18 +2293,395 @@ ACMD(do_register) {
     send_to_char(ch, "Syntax: register <email address>. Your current email is %s.\r\n", GET_EMAIL(ch));
     return;
   }
-  
+
   skip_spaces(&argument);
-  
+
   if (!*argument) {
     send_to_char(ch, "Syntax: register <email address>. Your current email is %s.\r\n", GET_EMAIL(ch));
     return;
   }
-  
+
   DELETE_ARRAY_IF_EXTANT(SETTABLE_EMAIL(ch));
   SETTABLE_EMAIL(ch) = str_dup(prepare_quotes(buf, argument, sizeof(buf) * sizeof(buf[0])));
-  
+
   send_to_char(ch, "OK, your email address has been set to '%s'.", GET_EMAIL(ch));
-  
+
   playerDB.SaveChar(ch);
+}
+
+void save_adept_powers_to_db(struct char_data *player) {
+  if (GET_TRADITION(player) == TRAD_ADEPT) {
+    snprintf(buf, sizeof(buf), "DELETE FROM pfiles_adeptpowers WHERE idnum=%ld", GET_IDNUM(player));
+    mysql_wrapper(mysql, buf);
+    strcpy(buf, "INSERT INTO pfiles_adeptpowers (idnum, powernum, `rank`) VALUES (");
+
+    // Iterate over all powers, adding them to the list if needed.
+    int q = 0;
+    for (int i = 0; i < ADEPT_NUMPOWER; i++)
+      if (GET_POWER_TOTAL(player, i)) {
+        if (q)
+          strcat(buf, "), (");
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %d, %d", GET_IDNUM(player), i, GET_POWER_TOTAL(player, i));
+        q = 1;
+      }
+    if (q) {
+      strcat(buf, ");");
+      mysql_wrapper(mysql, buf);
+    }
+  }
+}
+
+/* Save spells. */
+void save_spells_to_db(struct char_data *player) {
+  if (player->spells) {
+    snprintf(buf, sizeof(buf), "DELETE FROM pfiles_spells WHERE idnum=%ld", GET_IDNUM(player));
+    mysql_wrapper(mysql, buf);
+    strcpy(buf, "INSERT INTO pfiles_spells (idnum, Name, Type, SubType, Rating, Category) VALUES (");
+    int q = 0;
+    for (struct spell_data *temp = player->spells; temp; temp = temp->next) {
+      if (q)
+        strcat(buf, "), (");
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, '%s', %d, %d, %d, %d", GET_IDNUM(player), temp->name, temp->type, temp->subtype, temp->force, spells[temp->type].category);
+      q = 1;
+    }
+    if (q) {
+      strcat(buf, ");");
+      mysql_wrapper(mysql, buf);
+    }
+  }
+}
+
+/* Save metamagic. */
+void save_metamagic_to_db(struct char_data *player) {
+  if (GET_GRADE(player) > 0) {
+    snprintf(buf, sizeof(buf), "DELETE FROM pfiles_metamagic WHERE idnum=%ld", GET_IDNUM(player));
+    mysql_wrapper(mysql, buf);
+    strcpy(buf, "INSERT INTO pfiles_metamagic (idnum, metamagicnum, `rank`) VALUES (");
+    int q = 0;
+    for (int i = 0; i < META_MAX; i++)
+      if (GET_METAMAGIC(player, i)) {
+        if (q)
+          strcat(buf, "), (");
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %d, %d", GET_IDNUM(player), i, GET_METAMAGIC(player, i));
+        q = 1;
+     }
+    if (q) {
+      strcat(buf, ");");
+      mysql_wrapper(mysql, buf);
+    }
+  }
+}
+
+void save_elementals_to_db(struct char_data *player) {
+  if (GET_SPIRIT(player) && GET_TRADITION(player) == TRAD_HERMETIC) {
+    snprintf(buf, sizeof(buf), "DELETE FROM pfiles_spirits WHERE idnum=%ld", GET_IDNUM(player));
+    mysql_wrapper(mysql, buf);
+    strcpy(buf, "INSERT INTO pfiles_spirits (idnum, Type, Rating, Services, SpiritID) VALUES (");
+    int q = 0;
+    for (struct spirit_data *spirit = GET_SPIRIT(player); spirit; spirit = spirit->next, q++) {
+      if (q)
+        strcat(buf, "), (");
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %d, %d, %d, %d", GET_IDNUM(player), spirit->type, spirit->force, spirit->services, spirit->id);
+      q = 1;
+    }
+    if (q) {
+      strcat(buf, ");");
+      mysql_wrapper(mysql, buf);
+    }
+  }
+}
+
+void save_pc_memory_to_db(struct char_data *player) {
+  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_memory WHERE idnum=%ld", GET_IDNUM(player));
+  mysql_wrapper(mysql, buf);
+  strcpy(buf, "INSERT INTO pfiles_memory (idnum, remembered, asname) VALUES (");
+  int q = 0;
+  for (struct remem *b = GET_PLAYER_MEMORY(player); b; b = b->next) {
+    if (q)
+      strcat(buf, "), (");
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %ld, '%s'", GET_IDNUM(player), b->idnum, prepare_quotes(buf3, b->mem, sizeof(buf3) / sizeof(buf3[0])));
+    q = 1;
+  }
+  if (q) {
+    strcat(buf, ");");
+    mysql_wrapper(mysql, buf);
+  }
+}
+
+void save_drug_data_to_db(struct char_data *player) {
+  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_drugs WHERE idnum=%ld", GET_IDNUM(player));
+  mysql_wrapper(mysql, buf);
+  strcpy(buf, "INSERT INTO pfiles_drugs (idnum, DrugType, Addict, Doses, Edge, LastFix, Addtime, Tolerant, LastWith) VALUES (");
+  int q = 0;
+  for (int i = 1; i < NUM_DRUGS; i++) {
+    if (GET_DRUG_DOSES(player, i) || GET_DRUG_EDGE(player, i) || GET_DRUG_ADDICT(player, i) || GET_DRUG_LASTFIX(player, i) ||
+        GET_DRUG_ADDTIME(player, i) || GET_DRUG_TOLERANT(player, i) || GET_DRUG_LASTWITH(player, i)) {
+      if (q)
+        strcat(buf, "), (");
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %d, %d, %d, %d, %d, %d, %d, %d", GET_IDNUM(player), i, GET_DRUG_ADDICT(player, i),
+                          GET_DRUG_DOSES(player, i), GET_DRUG_EDGE(player, i), GET_DRUG_LASTFIX(player, i),
+                          GET_DRUG_ADDTIME(player, i), GET_DRUG_TOLERANT(player, i), GET_DRUG_LASTWITH(player, i));
+      q = 1;
+    }
+  }
+  if (q) {
+    strcat(buf, ");");
+    mysql_wrapper(mysql, buf);
+  }
+}
+
+void save_skills_to_db(struct char_data *player) {
+  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_skills WHERE idnum=%ld", GET_IDNUM(player));
+  mysql_wrapper(mysql, buf);
+  strcpy(buf, "INSERT INTO pfiles_skills (idnum, skillnum, `rank`) VALUES (");
+  int q = 0;
+  for (int i = MIN_SKILLS; i < MAX_SKILLS; i++)
+    if (GET_SKILL(player, i)) {
+      if (q)
+        strcat(buf, "), (");
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %d, %d", GET_IDNUM(player), i, REAL_SKILL(player, i));
+      q = 1;
+    }
+  if (q) {
+    strcat(buf, ");");
+    mysql_wrapper(mysql, buf);
+  }
+}
+
+void save_aliases_to_db(struct char_data *player) {
+  player->alias_dirty_bit = FALSE;
+
+  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_alias WHERE idnum=%ld", GET_IDNUM(player));
+  mysql_wrapper(mysql, buf);
+  strcpy(buf, "INSERT INTO pfiles_alias (idnum, command, replacement) VALUES (");
+  int q = 0;
+  for (struct alias *a = GET_ALIASES(player); a; a = a->next) {
+    if (q)
+      strcat(buf, "), (");
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, '%s', '%s'", GET_IDNUM(player), a->command, prepare_quotes(buf3, a->replacement, sizeof(buf3) / sizeof(buf3[0])));
+    q = 1;
+  }
+  if (q) {
+    strcat(buf, ");");
+    mysql_wrapper(mysql, buf);
+  }
+}
+
+void save_bioware_to_db(struct char_data *player) {
+  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_bioware WHERE idnum=%ld", GET_IDNUM(player));
+  mysql_wrapper(mysql, buf);
+  if (player->bioware) {
+    strcpy(buf, "INSERT INTO pfiles_bioware (idnum, Vnum, Cost, Value0, Value1, Value2, Value3, Value4, Value5, Value6,"\
+                "Value7, Value8, Value9, Value10, Value11) VALUES (");
+    int q = 0;
+    for (struct obj_data *obj = player->bioware; obj; obj = obj->next_content) {
+      if (!IS_OBJ_STAT(obj, ITEM_NORENT)) {
+        if (q)
+          strcat(buf, "), (");
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %ld, %d", GET_IDNUM(player), GET_OBJ_VNUM(obj), GET_OBJ_COST(obj));
+
+        for (int x = 0; x < NUM_VALUES; x++)
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", %d", GET_OBJ_VAL(obj, x));
+        q = 1;;
+      }
+    }
+    if (q) {
+      strcat(buf, ");");
+      mysql_wrapper(mysql, buf);
+    }
+  }
+}
+
+void save_cyberware_to_db(struct char_data *player) {
+  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_cyberware WHERE idnum=%ld", GET_IDNUM(player));
+  mysql_wrapper(mysql, buf);
+  int level = 0, posi = 0;
+  if (player->cyberware) {
+    /* Ran into a weird edge case where people would fill their headware memory with photos of people, and their memory would no longer save in the DB.
+        This was caused by the total length of the concatenated query string exceeding buf's length.
+        As such, we write each cyberware entry on its own now instead of batching them together. */
+
+    for (struct obj_data *obj = player->cyberware; obj;) {
+      snprintf(buf, sizeof(buf), "INSERT INTO pfiles_cyberware (idnum, Vnum, Cost, Restring, "
+                                 "Photo, Value0, Value1, Value2, Value3, Value4, Value5, Value6,"
+                                 "Value7, Value8, Value9, Value10, Value11, Level, posi) VALUES "
+                                 "(%ld, %ld, %d, '%s', '%s'", GET_IDNUM(player), GET_OBJ_VNUM(obj), GET_OBJ_COST(obj),
+                                 obj->restring ? prepare_quotes(buf3, obj->restring, sizeof(buf3) / sizeof(buf3[0])) : "",
+                                 obj->photo ? prepare_quotes(buf2, obj->photo, sizeof(buf2) / sizeof(buf2[0])) : "");
+
+      // Obj val 2 for cyberware is grade, so I'm not sure what this code used to do, but now it probably chokes on things.
+      // Maybe it was related to skillsoft chips or photos or something?
+      /* if (GET_OBJ_VAL(obj, 2) == 4) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "0, 0, 0, %d, 0, 0, %d, %d, %d, 0, 0, 0", GET_OBJ_VAL(obj, 3), GET_OBJ_VAL(obj, 6),
+                           GET_OBJ_VAL(obj, 7), GET_OBJ_VAL(obj, 8));
+      } else
+        <for loop to iterate over values>
+      */
+      for (int x = 0; x < NUM_VALUES; x++)
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", %d", GET_OBJ_VAL(obj, x));
+
+      // Add our level and position information here, then execute.
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", %d, %d);", level, posi++);
+      mysql_wrapper(mysql, buf);
+
+      if (obj->contains) {
+        obj = obj->contains;
+        level++;
+        continue;
+      } else if (!obj->next_content && obj->in_obj)
+        while (obj && !obj->next_content && level >= 0) {
+          obj = obj->in_obj;
+          level--;
+        }
+      if (obj)
+        obj = obj->next_content;
+    }
+  }
+}
+
+/* Because we've changed the essence cost of cybereyes, we need to refund the difference to people. */
+void fix_character_essence_after_cybereye_migration(struct char_data *ch) {
+  int old_essence_cost, new_essence_cost, essence_delta;
+
+  // First, check for the flag. If it's set, we already did this-- skip.
+  if (PLR_FLAGGED(ch, PLR_RECEIVED_CYBEREYE_ESSENCE_DELTA))
+    return;
+
+  // Next, ensure that we won't be sending them below 0 essence. If we would, log and abort.
+  {
+    int total_essence_delta = 0;
+
+    struct obj_data fake_cyber;
+
+    // Total up all the expected changes.
+    for (struct obj_data *obj = ch->cyberware; obj; obj = obj->next_content) {
+      if (GET_CYBERWARE_TYPE(obj) == CYB_EYES) {
+        // Construct a fake cyberware item, then price it. This gives us an item that reflects the new values.
+        GET_CYBERWARE_TYPE(&fake_cyber) = GET_CYBERWARE_TYPE(obj);
+        GET_CYBERWARE_FLAGS(&fake_cyber) = GET_CYBERWARE_FLAGS(obj);
+        GET_CYBERWARE_GRADE(&fake_cyber) = GET_CYBERWARE_GRADE(obj);
+        price_cyber(&fake_cyber);
+
+        old_essence_cost = get_deprecated_cybereye_essence_cost(obj);
+        new_essence_cost = fake_cyber.obj_flags.value[4];
+        essence_delta = old_essence_cost - new_essence_cost;
+        total_essence_delta += essence_delta;
+      }
+    }
+
+    // Deduct their essence hole from the total.
+    total_essence_delta -= GET_ESSHOLE(ch);
+
+    // If there's a remainder after essence hole, ensure it won't kill them or wipe their magic.
+    if (total_essence_delta > 0) {
+      if (GET_REAL_ESS(ch) + total_essence_delta > 600) {
+        snprintf(buf, sizeof(buf), "%s refusing to perform cybereye rectification: it would put me above 6 essence!", capitalize(GET_CHAR_NAME(ch)));
+        mudlog(buf, ch, LOG_SYSLOG, TRUE);
+        return;
+      }
+    }
+    else if (total_essence_delta < 0) {
+      if (GET_TRADITION(ch) != TRAD_MUNDANE && GET_REAL_MAG(ch) + total_essence_delta < 100) {
+        snprintf(buf, sizeof(buf), "%s refusing to perform cybereye rectification: it would put me below 1 magic!", capitalize(GET_CHAR_NAME(ch)));
+        mudlog(buf, ch, LOG_SYSLOG, TRUE);
+        return;
+      }
+
+      if (GET_REAL_ESS(ch) + total_essence_delta <= 0) {
+        snprintf(buf, sizeof(buf), "%s refusing to perform cybereye rectification: it would put me at or below 0 essence!", capitalize(GET_CHAR_NAME(ch)));
+        mudlog(buf, ch, LOG_SYSLOG, TRUE);
+        return;
+      }
+    }
+  }
+
+  // Otherwise, perform all the expected changes.
+  {
+    int total_magic_delta = 0, total_essence_delta = 0, total_esshole_delta = 0;
+
+    for (struct obj_data *obj = ch->cyberware; obj; obj = obj->next_content) {
+      if (GET_CYBERWARE_TYPE(obj) == CYB_EYES) {
+        // Update the item.
+        price_cyber(obj);
+
+        // Calculate the old values and delta.
+        old_essence_cost = get_deprecated_cybereye_essence_cost(obj);
+        new_essence_cost = GET_CYBERWARE_ESSENCE_COST(obj);
+        essence_delta = old_essence_cost - new_essence_cost;
+
+        // If there are changes to make, write a log entry so we can trace things later.
+        if (essence_delta != 0) {
+          snprintf(buf, sizeof(buf), "Processing %s's cybereye migration for %s (%ld): Delta %d.", GET_CHAR_NAME(ch), GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj), essence_delta);
+          mudlog(buf, ch, LOG_SYSLOG, TRUE);
+        } else {
+          snprintf(buf, sizeof(buf), "Processing %s's cybereye migration for %s (%ld): No delta.", GET_CHAR_NAME(ch), GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj));
+          mudlog(buf, ch, LOG_SYSLOG, TRUE);
+          // Otherwise, just skip this one.
+          continue;
+        }
+
+        if (essence_delta > 0) {
+          // The new one costs less than the old one did. Refund the essence.
+          total_essence_delta += essence_delta;
+          GET_REAL_ESS(ch) += essence_delta;
+
+          // Next, handle magic restoration if needed.
+          if (GET_TRADITION(ch) != TRAD_MUNDANE) {
+            total_magic_delta += essence_delta;
+            GET_REAL_MAG(ch) += essence_delta;
+          }
+        }
+
+        else if (essence_delta < 0) {
+          // The new one costs more than the old one did. Whoops...
+          int ess_cost_after_esshole = 0;
+
+          // Make the delta positive for better readability.
+          essence_delta *= -1;
+
+          // If their essence hole can cover it, deduct from that alone.
+          if (GET_ESSHOLE(ch) >= essence_delta) {
+            total_esshole_delta -= essence_delta;
+            GET_ESSHOLE(ch) -= essence_delta;
+          }
+          // Otherwise, we have to pull from real essence too. Now we're dealing with magic loss.
+          else {
+            ess_cost_after_esshole = essence_delta - GET_ESSHOLE(ch);
+
+            // Wipe their esshole for them. We here at Awakened Worlds use only the finest 2-ply code for this process.
+            total_esshole_delta -= GET_ESSHOLE(ch);
+            GET_ESSHOLE(ch) = 0;
+
+            // Deduct the remaining cost from their essence.
+            total_essence_delta -= essence_delta;
+            GET_REAL_ESS(ch) -= essence_delta;
+
+            // Cause magic loss, BUT not in the standard way. Instead of stripping powers etc, we just reduce their magic stat.
+            if (GET_TRADITION(ch) != TRAD_MUNDANE) {
+              total_magic_delta -= ess_cost_after_esshole;
+              GET_REAL_MAG(ch) -= ess_cost_after_esshole;
+            }
+          }
+        }
+      }
+    } /* end for loop */
+
+    // Message them if they had a change.
+    if (total_magic_delta != 0 || total_essence_delta != 0 || total_esshole_delta != 0) {
+      send_to_char(ch, "^WSYSTEM NOTICE:^n Cybereye essence costs were fixed, and your character was included in the cleanup process. The following changes have been automatically made to your character to true things up:\r\n"
+                       "^W- Essence Hole:^c %d^n\r\n"
+                       "^W- Essence:^c %d^n\r\n"
+                       "^W- Magic:^c %d^n\r\n", total_esshole_delta, total_essence_delta, total_magic_delta);
+
+      // Write a log, too.
+      snprintf(buf, sizeof(buf), "Post-trueup deltas for %s: EH %d, ES %d, MG %d.", GET_CHAR_NAME(ch), total_esshole_delta, total_essence_delta, total_magic_delta);
+      mudlog(buf, ch, LOG_SYSLOG, TRUE);
+    }
+  }
+
+  // Flag them so they won't go through this again.
+  PLR_FLAGS(ch).SetBit(PLR_RECEIVED_CYBEREYE_ESSENCE_DELTA);
+
+  // Finally, save them. TODO: Does saving them in the middle of the load process break things?
+  save_char(ch, GET_LOADROOM(ch));
 }

@@ -128,15 +128,31 @@ void spedit_parse(struct descriptor_data *d, const char *arg)
       GET_OBJ_VAL(SPELL, 3) = number;
       spedit_disp_menu(d);
       break;
-    case SPEDIT_NAME:
-      if (strlen(arg) >= LINE_LENGTH) {
+    case SPEDIT_NAME: {
+      int length_with_no_color = get_string_length_after_color_code_removal(arg, CH);
+      
+      // Silent failure: We already sent the error message in get_string_length_after_color_code_removal().
+      if (length_with_no_color == -1) {
         spedit_disp_menu(d);
         return;
       }
+      if (length_with_no_color >= LINE_LENGTH) {
+        send_to_char(CH, "That name is too long, please shorten it. The maximum length after color code removal is %d characters.\r\n", LINE_LENGTH - 1);
+        spedit_disp_menu(d);
+        return;
+      }
+  
+      if (strlen(arg) >= MAX_RESTRING_LENGTH) {
+        send_to_char(CH, "That restring is too long, please shorten it. The maximum length with color codes included is %d characters.\r\n", MAX_RESTRING_LENGTH - 1);
+        spedit_disp_menu(d);
+        return;
+      }
+
       DELETE_ARRAY_IF_EXTANT(SPELL->restring);
       SPELL->restring = str_dup(arg);
       spedit_disp_menu(d);
       break;
+    }
     case SPEDIT_FORCE: 
       x = MIN(d->edit_number2, GET_SKILL(CH, SKILL_SPELLDESIGN) ? GET_SKILL(CH, SKILL_SPELLDESIGN) : GET_SKILL(CH, SKILL_SORCERY));
       if (number > x || number < 1)
@@ -210,7 +226,8 @@ void spell_design(struct char_data *ch, struct obj_data *formula)
     send_to_char("That spell is already complete.\r\n", ch);
   else {
     int skill = GET_SKILL(ch, SKILL_SPELLDESIGN), target = 0, x = 0;
-    if (!skill || skill < GET_OBJ_VAL(formula, 0)) {
+    if (skill < GET_OBJ_VAL(formula, 0) && GET_SKILL(ch, SKILL_SORCERY) >= GET_OBJ_VAL(formula, 0)) {
+      send_to_char("Finding your spell design knowledge insufficient for this task, you fall back on your general grounding in sorcery.\r\n", ch);
       skill = GET_SKILL(ch, SKILL_SORCERY);
       target = 2;
     }
@@ -287,6 +304,11 @@ void spell_design(struct char_data *ch, struct obj_data *formula)
       GET_OBJ_TIMER(formula) = -3;
     } else
       GET_OBJ_VAL(formula, 6) = GET_OBJ_VAL(formula, 7) = drain / success;
+      
+    if (access_level(ch, LVL_ADMIN)) {
+      send_to_char("You use your staff privileges to greatly accelerate the design process.\r\n", ch);
+      GET_OBJ_VAL(formula, 6) = GET_OBJ_VAL(formula, 7) = 1;
+    }
     send_to_char(ch, "You start designing %s.\r\n", GET_OBJ_NAME(formula));
   }
   act("$n sits down and begins to design a spell.", TRUE, ch, 0, 0, TO_ROOM);

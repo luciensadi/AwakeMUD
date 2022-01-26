@@ -56,6 +56,27 @@ extern void weight_change_object(struct obj_data * obj, float weight);
 extern void calc_weight(struct char_data *ch);
 extern const char *get_ammobox_default_restring(struct obj_data *ammobox);
 extern bool can_edit_zone(struct char_data *ch, int zone);
+extern int find_first_step(vnum_t src, vnum_t target, bool ignore_roads);
+
+extern SPECIAL(johnson);
+extern SPECIAL(landlord_spec);
+extern SPECIAL(receptionist);
+extern SPECIAL(shop_keeper);
+extern SPECIAL(postmaster);
+extern SPECIAL(generic_guard);
+extern SPECIAL(receptionist);
+extern SPECIAL(cryogenicist);
+extern SPECIAL(teacher);
+extern SPECIAL(metamagic_teacher);
+extern SPECIAL(trainer);
+extern SPECIAL(adept_trainer);
+extern SPECIAL(spell_trainer);
+extern SPECIAL(fixer);
+extern SPECIAL(hacker);
+extern SPECIAL(fence);
+extern SPECIAL(taxi);
+extern SPECIAL(painter);
+extern SPECIAL(nerp_skills_teacher);
 
 /* creates a random number in interval [from;to] */
 int number(int from, int to)
@@ -68,13 +89,13 @@ int number(int from, int to)
     to = from;
     from = temp;
   }
-  
+
   if (to > RAND_MAX) {
     char errbuf[150];
     snprintf(errbuf, sizeof(errbuf), "WARNING: Attempting to generate random number between %d and %d, but RAND_MAX is %d!", from, to, RAND_MAX);
     mudlog(errbuf, NULL, LOG_SYSLOG, TRUE);
   }
-  
+
   return ((random() % (to - from + 1)) + from);
 }
 
@@ -82,13 +103,13 @@ int number(int from, int to)
 int dice(int number, int size)
 {
   int sum = 0;
-  
+
   if (size <= 0 || number <= 0)
     return 0;
-  
+
   while (number-- > 0)
     sum += ((random() % size) + 1);
-  
+
   return sum;
 }
 
@@ -110,7 +131,7 @@ int srdice(void)
   static int roll;
   int sum = 0, num = 1;
   int i;
-  
+
   for (i = 1; i <= num; i++) {
     roll = ((random() % 6) + 1);
     if (roll == 6)
@@ -124,19 +145,19 @@ int success_test(int number, int target)
 {
   if (number < 1)
     return -1;
-  
+
   int total = 0, roll, one = 0;
   int i;
-  
+
   target = MAX(target, 2);
-  
+
   for (i = 1; i <= number; i++) {
     if ((roll = srdice()) == 1)
       one++;
     else if (roll >= target)
       total++;
   }
-  
+
   if (one == number)
     return -1;
   return total;
@@ -168,7 +189,7 @@ int convert_damage(int damage)
     damage = 0;
   else
     damage = damage_array[MIN(DEADLY, damage)];
-  
+
   return damage;
 }
 
@@ -178,40 +199,40 @@ int light_level(struct room_data *room)
     mudlog("SYSERR: light_level() called on null room.", NULL, LOG_SYSLOG, TRUE);
     return LIGHT_NORMAL;
   }
-  
+
   int artificial_light_level = -1;
-  
+
   // Flashlights. More flashlights, more light.
   if (room->light[0])
     artificial_light_level = room->light[0] == 1 ? LIGHT_MINLIGHT : LIGHT_PARTLIGHT;
-    
+
   // Light spell.
   if (room->light[1])
-    artificial_light_level = LIGHT_NORMAL;  
-    
+    artificial_light_level = LIGHT_NORMAL;
+
   int candidate_light_level = room->vision[0];
-  
+
   switch (artificial_light_level) {
     case LIGHT_MINLIGHT:
-      if (room->vision[0] == LIGHT_FULLDARK) 
+      if (room->vision[0] == LIGHT_FULLDARK)
         candidate_light_level = LIGHT_MINLIGHT;
       else
         candidate_light_level = room->vision[0];
       break;
     case LIGHT_PARTLIGHT:
-      if (room->vision[0] == LIGHT_FULLDARK || room->vision[0] == LIGHT_MINLIGHT) 
+      if (room->vision[0] == LIGHT_FULLDARK || room->vision[0] == LIGHT_MINLIGHT)
         candidate_light_level = LIGHT_PARTLIGHT;
       else
         candidate_light_level = room->vision[0];
       break;
     case LIGHT_NORMAL:
-      if (room->vision[0] == LIGHT_FULLDARK || room->vision[0] == LIGHT_MINLIGHT || room->vision[0] == LIGHT_NORMALNOLIT) 
+      if (room->vision[0] == LIGHT_FULLDARK || room->vision[0] == LIGHT_MINLIGHT || room->vision[0] == LIGHT_NORMALNOLIT)
         candidate_light_level = LIGHT_NORMAL;
       else
         candidate_light_level = room->vision[0];
       break;
   }
-  
+
   if (room->sector_type == SPIRIT_HEARTH)
     return candidate_light_level;
   if (room->sector_type == SPIRIT_CITY) {
@@ -250,7 +271,7 @@ int damage_modifier(struct char_data *ch, char *rbuf, int rbuf_size)
       physical += GET_POWER(ch, ADEPT_PAIN_RESISTANCE) * 100;
       mental += GET_POWER(ch, ADEPT_PAIN_RESISTANCE) * 100;
     }
-    
+
     if (ch->player_specials && GET_DRUG_STAGE(ch) == 1)
       switch (GET_DRUG_AFFECT(ch)) {
         case DRUG_NITRO:
@@ -271,7 +292,7 @@ int damage_modifier(struct char_data *ch, char *rbuf, int rbuf_size)
           break;
       }
   }
-  
+
   // first apply physical damage modifiers
   if (physical <= 400)
   {
@@ -302,25 +323,33 @@ int damage_modifier(struct char_data *ch, char *rbuf, int rbuf_size)
   return base_target;
 }
 
+int sustain_modifier(struct char_data *ch, char *rbuf, size_t rbuf_len) {
+  int base_target = 0;
+
+  if (GET_SUSTAINED_NUM(ch) > 0) {
+    base_target += ((GET_SUSTAINED_NUM(ch) - GET_SUSTAINED_FOCI(ch)) * 2);
+    buf_mod(rbuf, rbuf_len, "Sustain", (GET_SUSTAINED_NUM(ch) - GET_SUSTAINED_FOCI(ch)) * 2);
+  }
+
+  return base_target;
+}
+
 // Adds the combat_mode toggle
 int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int current_visibility_penalty) {
   extern time_info_data time_info;
   int base_target = 0, light_target = 0;
+  // get damage modifier
   base_target += damage_modifier(ch, rbuf, rbuf_len);
   // then apply modifiers for sustained spells
-  if (GET_SUSTAINED_NUM(ch) > 0)
-  {
-    base_target += ((GET_SUSTAINED_NUM(ch) - GET_SUSTAINED_FOCI(ch)) * 2);
-    buf_mod(rbuf, rbuf_len, "Sustain", (GET_SUSTAINED_NUM(ch) - GET_SUSTAINED_FOCI(ch)) * 2);
-  }
-  
+  base_target += sustain_modifier(ch, rbuf, rbuf_len);
+
   struct room_data *temp_room = get_ch_in_room(ch);
-  
+
   if (!temp_room) {
     mudlog("SYSERR: modify_target_rbuf_raw received char with NO room!", ch, LOG_SYSLOG, TRUE);
     return 100;
   }
-  
+
   if (PLR_FLAGGED(ch, PLR_PERCEIVE))
   {
     base_target += 2;
@@ -401,7 +430,7 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int c
       buf_mod(rbuf, rbuf_len, "ShadowSpell", temp_room->shadow[1]);
     }
     int smoke_target = 0;
-    
+
     if (temp_room->vision[1] == LIGHT_MIST)
       if (CURRENT_VISION(ch) == NORMAL || (CURRENT_VISION(ch) == LOWLIGHT && NATURAL_VISION(ch) == LOWLIGHT)) {
         smoke_target += 2;
@@ -557,20 +586,20 @@ char *capitalize(const char *source)
     mudlog("SYSERR: Received NULL string to capitalize().", NULL, LOG_SYSLOG, TRUE);
     return dest;
   }
-  
-  int len = strlen(source);
+
+  int len = strlen(dest);
   int index = 0;
-  
-  while (index < len-2 && *(source + index) == '^')
+
+  while (index < len-2 && *(dest + index) == '^')
     index += 2;
-  *(dest + index) = UPPER(*(source + index));
-  
+  *(dest + index) = UPPER(*(dest + index));
+
   return dest;
 }
 
 char *string_to_uppercase(const char *source) {
   static char dest[MAX_STRING_LENGTH];
-  
+
   int i, x = strlen(source);
   for (i = 0; i < x; i++){
     if (isalpha(source[i])){
@@ -580,13 +609,13 @@ char *string_to_uppercase(const char *source) {
     }
   }
   dest[i] = '\0';
-  
+
   return dest;
 }
 
 char *string_to_lowercase(const char *source) {
   static char dest[MAX_STRING_LENGTH];
-  
+
   int i = 0, x = strlen(source);
   for (i = 0; i < x; i++){
     if (isalpha(source[i])){
@@ -596,7 +625,7 @@ char *string_to_lowercase(const char *source) {
     }
   }
   dest[i] = '\0';
-  
+
   return dest;
 }
 
@@ -606,10 +635,10 @@ char *decapitalize_a_an(const char *source)
 {
   static char dest[MAX_STRING_LENGTH];
   strcpy(dest, source);
-  
+
   int len = strlen(source);
   int index = 0;
-  
+
   while (*(source + index) == '^')
     index += 2;
   if (*(source + index) == 'A') {
@@ -621,7 +650,7 @@ char *decapitalize_a_an(const char *source)
     if (index < len-3 && *(source + index + 1) == 'h' && *(source + index + 2) == 'e' && *(source + index + 3) == ' ')
       *(dest + index) = 't';
   }
-  
+
   return dest;
 }
 
@@ -630,12 +659,12 @@ char *str_dup(const char *source)
 {
   if (!source)
     return NULL;
-  
+
   char *New = new char[strlen(source) + 2];
-  
+
   // This shouldn't be needed, but just in case.
   // memset(New, 0, sizeof(char) * (strlen(source) + 1));
-  
+
   strncpy(New, source, strlen(source) + 1);
   return New;
 }
@@ -647,21 +676,21 @@ char *get_token(char *str, char *token)
 {
   if (!str)
     return NULL;
-  
+
   char *temp = str;
   char *temp1 = token;
-  
+
   // first eat up any white space
   while (isspace(*temp))
     temp++;
-  
+
   // now loop through the string and copy each char till we find a space
   while (*temp && !isspace(*temp))
     *temp1++ = *temp++;
-  
+
   // terminate the string properly
   *temp1 = '\0';
-  
+
   return temp;
 }
 
@@ -670,13 +699,13 @@ char *cleanup(char *dest, const char *src)
 {
   if (!src) // this is because sometimes a null gets sent to src
     return NULL;
-  
+
   char *temp = &dest[0];
-  
+
   for (; *src; src++)
     if (*src != '\r')
       *temp++ = *src;
-  
+
   *temp = '\0';
   return dest;
 }
@@ -690,11 +719,11 @@ int str_cmp(const char *one, const char *two)
     return 1;
   for (; *one; one++, two++) {
     int diff = LOWER(*one) - LOWER(*two);
-    
+
     if (diff!= 0)
       return diff;
   }
-  
+
   return (LOWER(*one) - LOWER(*two));
 }
 
@@ -706,19 +735,19 @@ char *str_str( const char *str1, const char *str2 )
 {
   int i;
   char temp1[MAX_INPUT_LENGTH], temp2[MAX_INPUT_LENGTH];
-  
+
   for ( i = 0; *(str1 + i); i++ ) {
     temp1[i] = LOWER(*(str1 + i));
   }
-  
+
   temp1[i] = '\0';
-  
+
   for ( i = 0; *(str2 + i); i++ ) {
     temp2[i] = LOWER(*(str2 + i));
   }
-  
+
   temp2[i] = '\0';
-  
+
   return (strstr(temp1, temp2));
 }
 
@@ -729,16 +758,16 @@ char *str_str( const char *str1, const char *str2 )
 int strn_cmp(const char *arg1, const char *arg2, int n)
 {
   int chk, i;
-  
+
   if (arg1 == NULL || arg2 == NULL) {
     log_vfprintf("SYSERR: strn_cmp() passed a NULL pointer, %p or %p.", arg1, arg2);
     return (0);
   }
-  
+
   for (i = 0; (arg1[i] || arg2[i]) && (n > 0); i++, n--)
     if ((chk = LOWER(arg1[i]) - LOWER(arg2[i])) != 0)
       return (chk); /* not equal */
-  
+
   return (0);
 }
 
@@ -761,7 +790,7 @@ void log_death_trap(struct char_data * ch)
 {
   char buf[150];
   extern struct room_data *world;
-  
+
   snprintf(buf, sizeof(buf), "%s hit DeathTrap #%ld (%s)", GET_CHAR_NAME(ch),
           ch->in_room->number, ch->in_room->name);
   mudlog(buf, ch, LOG_DEATHLOG, TRUE);
@@ -770,7 +799,7 @@ void log_death_trap(struct char_data * ch)
 void log(const char *str) {
   time_t ct = time(0);
   char *tmstr;
-  
+
   tmstr = asctime(localtime(&ct));
   *(tmstr + strlen(tmstr) - 1) = '\0';
   fprintf(stderr, "%-15.15s :: %s\n", tmstr + 4, str);
@@ -781,15 +810,15 @@ void log_vfprintf(const char *format, ...)
   va_list args;
   time_t ct = time(0);
   char *tmstr;
-  
+
   tmstr = asctime(localtime(&ct));
   *(tmstr + strlen(tmstr) - 1) = '\0';
   fprintf(stderr, "%-15.15s :: ", tmstr + 4);
-  
+
   va_start(args, format);
   vfprintf(stderr, format, args);
   va_end(args);
-  
+
   fprintf(stderr, "\n");
 }
 
@@ -799,20 +828,20 @@ void log_vfprintf(const char *format, ...)
  */
 void mudlog(const char *str, struct char_data *ch, int log, bool file)
 {
-  char buf[MAX_STRING_LENGTH], buf2[MAX_STRING_LENGTH];
+  char buf[MAX_STRING_LENGTH * 2], buf2[MAX_STRING_LENGTH * 2];
   extern struct descriptor_data *descriptor_list;
   struct descriptor_data *i;
   struct char_data *tch;
   char *tmp;
   time_t ct;
   int check_log = 0;
-  
+
   ct = time(0);
   tmp = asctime(localtime(&ct));
-  
+
   // Fallback-- it's blank if we find no useful conditions.
   strcpy(buf2, "");
-  
+
   if (ch && (ch->in_room || ch->in_veh)) {
     if (ch->desc)
       snprintf(buf2, sizeof(buf2), "[%5ld] (%s) ",
@@ -821,12 +850,12 @@ void mudlog(const char *str, struct char_data *ch, int log, bool file)
     else
       snprintf(buf2, sizeof(buf2), "[%5ld] ", get_ch_in_room(ch)->number);
   }
-  
+
   if (file)
     fprintf(stderr, "%-19.19s :: %s: %s%s\n", tmp, log_types[log], buf2, str);
-  
+
   snprintf(buf, sizeof(buf), "^g[%s: %s%s^g]^n\r\n", log_types[log], buf2, str);
-  
+
   for (i = descriptor_list; i; i = i->next)
     if (!i->connected)
     {
@@ -838,7 +867,7 @@ void mudlog(const char *str, struct char_data *ch, int log, bool file)
           PLR_FLAGS(tch).AreAnySet(PLR_WRITING, PLR_MAILING,
                                    PLR_EDITING, ENDBIT))
         continue;
-      
+
       // We don't show log messages from imms who are invis at a level higher than you, unless you're a high enough level that that doesn't matter.
       if (ch
           && ((IS_NPC(ch) || !ch->player_specials) ? FALSE : !access_level(tch, GET_INVIS_LEV(ch)))
@@ -893,6 +922,9 @@ void mudlog(const char *str, struct char_data *ch, int log, bool file)
         case LOG_ECONLOG:
           check_log = PRF_ECONLOG;
           break;
+        case LOG_RADLOG:
+          check_log = PRF_RADLOG;
+          break;
         default:
           char errbuf[500];
           snprintf(errbuf, sizeof(errbuf), "SYSERR: Attempting to display a message to log type %d, but that log type is not handled in utils.cpp's mudlog() function! Dumping to SYSLOG.", log);
@@ -904,18 +936,33 @@ void mudlog(const char *str, struct char_data *ch, int log, bool file)
         SEND_TO_Q(buf, i);
     }
 }
+// This is a function to reverse the order of an obj_data linked list.
+// I ended up not using it but I'm leaving it in because it may be handy at some point.
+void reverse_obj_list(struct obj_data **obj)
+{
+  struct obj_data *temp = NULL;
+  struct obj_data *prev = NULL;
+  struct obj_data *current = (*obj);
 
+  while (current != NULL) {
+    temp = current->next_content;
+    current->next_content = prev;
+    prev = current;
+    current = temp;
+  }
+  (*obj) = prev;
+}
 void sprintbit(long vektor, const char *names[], char *result, size_t result_size)
 {
   long nr;
-  
+
   *result = '\0';
-  
+
   if (vektor < 0) {
     strcpy(result, "SPRINTBIT ERROR!");
     return;
   }
-  
+
   bool have_printed = FALSE;
   for (nr = 0; vektor; vektor >>= 1) {
     if (IS_SET(1, vektor)) {
@@ -933,7 +980,7 @@ void sprintbit(long vektor, const char *names[], char *result, size_t result_siz
     if (*names[nr] != '\n')
       nr++;
   }
-  
+
   if (!*result)
     strlcat(result, "None ", result_size);
 }
@@ -941,7 +988,7 @@ void sprintbit(long vektor, const char *names[], char *result, size_t result_siz
 void sprinttype(int type, const char *names[], char *result, size_t result_size)
 {
   snprintf(result, result_size, "%s", names[type]);
-  
+
   if (str_cmp(result, "(null)") == 0) {
     strcpy(result, "UNDEFINED");
   }
@@ -956,7 +1003,7 @@ void sprint_obj_mods(struct obj_data *obj, char *result, size_t result_size)
     obj->obj_flags.bitvector.PrintBits(xbuf, MAX_STRING_LENGTH, affected_bits, AFF_MAX);
     strlcpy(result, xbuf, result_size);
   }
-  
+
   for (int i = 0; i < MAX_OBJ_AFFECT; i++)
     if (obj->affected[i].modifier != 0)
     {
@@ -973,18 +1020,18 @@ struct time_info_data real_time_passed(time_t t2, time_t t1)
 {
   long secs;
   struct time_info_data now;
-  
+
   secs = (long) (t2 - t1);
-  
+
   now.hours = (secs / SECS_PER_REAL_HOUR) % 24; /* 0..23 hours */
   secs -= SECS_PER_REAL_HOUR * now.hours;
-  
+
   now.day = (secs / SECS_PER_REAL_DAY); /* 0..34 days  */
   secs -= SECS_PER_REAL_DAY * now.day;
-  
+
   now.month = 0;
   now.year = 0;
-  
+
   return now;
 }
 
@@ -993,27 +1040,27 @@ struct time_info_data mud_time_passed(time_t t2, time_t t1)
 {
   long secs;
   struct time_info_data now;
-  
+
   secs = (long) (t2 - t1);
-  
+
   now.hours = (secs / SECS_PER_MUD_HOUR) % 24;  /* 0..23 hours */
   secs -= SECS_PER_MUD_HOUR * now.hours;
-  
+
   now.day = (secs / SECS_PER_MUD_DAY) % 30;     /* 0..34 days  */
   secs -= SECS_PER_MUD_DAY * now.day;
-  
+
   now.month = (secs / SECS_PER_MUD_MONTH) % 12; /* 0..16 months */
   secs -= SECS_PER_MUD_MONTH * now.month;
-  
+
   now.year = (secs / SECS_PER_MUD_YEAR);        /* 0..XX? years */
-  
+
   return now;
 }
 
 bool access_level(struct char_data *ch, int level)
 {
   ch = ch->desc && ch->desc->original ? ch->desc->original : ch;
-  
+
   return (!IS_NPC(ch)
           && (GET_LEVEL(ch) >= level ));
 }
@@ -1023,13 +1070,13 @@ bool access_level(struct char_data *ch, int level)
 bool circle_follow(struct char_data * ch, struct char_data * victim)
 {
   struct char_data *k;
-  
+
   for (k = victim; k; k = k->master)
   {
     if (k == ch)
       return TRUE;
   }
-  
+
   return FALSE;
 }
 
@@ -1038,7 +1085,7 @@ bool circle_follow(struct char_data * ch, struct char_data * victim)
 void stop_follower(struct char_data * ch)
 {
   struct follow_type *j, *k;
-  
+
   if (ch->master->followers->follower == ch)
   {  /* Head of follower-list? */
     k = ch->master->followers;
@@ -1048,12 +1095,12 @@ void stop_follower(struct char_data * ch)
   {                      /* locate follower who is not head of list */
     for (k = ch->master->followers; k->next->follower != ch; k = k->next)
       ;
-    
+
     j = k->next;
     k->next = j->next;
     delete j;
   }
-  
+
   AFF_FLAGS(ch).RemoveBits(AFF_CHARM, AFF_GROUP, ENDBIT);
   act("You stop following $N.", FALSE, ch, 0, ch->master, TO_CHAR);
   act("$n stops following $N.", TRUE, ch, 0, ch->master, TO_NOTVICT);
@@ -1065,10 +1112,10 @@ void stop_follower(struct char_data * ch)
 void die_follower(struct char_data * ch)
 {
   struct follow_type *j, *k;
-  
+
   if (ch->master)
     stop_follower(ch);
-  
+
   for (k = ch->followers; k; k = j)
   {
     j = k->next;
@@ -1081,11 +1128,11 @@ void die_follower(struct char_data * ch)
 void add_follower(struct char_data * ch, struct char_data * leader)
 {
   struct follow_type *k;
-  
+
   ch->master = leader;
-  
+
   k = new follow_type;
-  
+
   k->follower = ch;
   k->next = leader->followers;
   leader->followers = k;
@@ -1109,14 +1156,14 @@ int get_line(FILE * fl, char *buf)
 {
   char temp[256];
   int lines = 0;
-  
+
   do {
     lines++;
     fgets(temp, 256, fl);
     if (*temp)
       temp[strlen(temp) - 1] = '\0';
   } while (!feof(fl) && (*temp == '*' || !*temp));
-  
+
   if (feof(fl))
     return 0;
   else {
@@ -1128,14 +1175,14 @@ int get_line(FILE * fl, char *buf)
 bool PRF_TOG_CHK(char_data *ch, dword offset)
 {
   PRF_FLAGS(ch).ToggleBit(offset);
-  
+
   return PRF_FLAGS(ch).IsSet(offset);
 }
 
 bool PLR_TOG_CHK(char_data *ch, dword offset)
 {
   PLR_FLAGS(ch).ToggleBit(offset);
-  
+
   return PLR_FLAGS(ch).IsSet(offset);
 }
 
@@ -1145,10 +1192,10 @@ char * buf_mod(char *rbuf, int rbuf_len, const char *name, int bonus)
     return rbuf;
   if ( bonus == 0 )
     return rbuf;
-    
+
   rbuf_len -= strlen(rbuf);
   rbuf += strlen(rbuf);
-  
+
   if ( bonus > 0 )
     snprintf(rbuf, rbuf_len, "%s +%d, ", name, bonus);
   else
@@ -1230,15 +1277,15 @@ int negotiate(struct char_data *ch, struct char_data *tch, int comp, int baseval
         break;
     }
   }
-  
+
   int chtn = GET_INT(tch)+mod+cmod;
   int tchtn = GET_INT(ch)+mod+tmod;
-  
+
   act("Getting skill for PC...", FALSE, ch, NULL, NULL, TO_ROLLS);
   int cskill = get_skill(ch, SKILL_NEGOTIATION, chtn);
   act("Getting skill for NPC...", FALSE, tch, NULL, NULL, TO_ROLLS);
   int tskill = get_skill(tch, SKILL_NEGOTIATION, tchtn);
-  
+
   for (bio = ch->bioware; bio; bio = bio->next_content)
     if (GET_OBJ_VAL(bio, 0) == BIO_TAILOREDPHEREMONES)
     {
@@ -1247,7 +1294,7 @@ int negotiate(struct char_data *ch, struct char_data *tch, int comp, int baseval
       snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), " Pheremone skill buff of %d for PC.", delta);
       break;
     }
-  
+
   for (bio = tch->bioware; bio; bio = bio->next_content)
     if (GET_OBJ_VAL(bio, 0) == BIO_TAILOREDPHEREMONES)
     {
@@ -1256,13 +1303,13 @@ int negotiate(struct char_data *ch, struct char_data *tch, int comp, int baseval
       snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), " Pheremone skill buff of %d for NPC.", delta);
       break;
     }
-  
+
   int tchnego = success_test(tskill, tchtn);
   int chnego = success_test(cskill, chtn);
-  
+
   snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "\r\nPC negotiation test gave %d successes on %d dice with TN %d (calculated from opponent int (%d) + global mod (%d) + our mod (%d)).",
            chnego, cskill, chtn, GET_INT(tch), mod, cmod);
-  snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "\r\nNPC negotiation test gave %d successes on %d dice with TN %d (calculated from opponent int (%d) + global mod (%d) + our mod (%d)).", 
+  snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "\r\nNPC negotiation test gave %d successes on %d dice with TN %d (calculated from opponent int (%d) + global mod (%d) + our mod (%d)).",
            tchnego, tskill, tchtn, GET_INT(ch), mod, tmod);
   if (comp)
   {
@@ -1281,7 +1328,7 @@ int negotiate(struct char_data *ch, struct char_data *tch, int comp, int baseval
     else
       basevalue = MIN((int)(basevalue * 5/4), basevalue + (num * (basevalue / 15)));
   } else
-  { 
+  {
     snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "\r\nNPC got more successes, so basevalue goes from %d", basevalue);
     if (buy)
       basevalue = MIN((int)(basevalue * 5/4), basevalue + (num * (basevalue / 15)));
@@ -1291,7 +1338,7 @@ int negotiate(struct char_data *ch, struct char_data *tch, int comp, int baseval
   snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), " to %d.", basevalue);
   act(buf3, FALSE, ch, NULL, NULL, TO_ROLLS);
   return basevalue;
-  
+
 }
 
 // I hate this name. This isn't just a getter, it's a setter as well. -LS
@@ -1300,7 +1347,7 @@ int get_skill(struct char_data *ch, int skill, int &target)
   char gskbuf[MAX_STRING_LENGTH];
   gskbuf[0] = '\0';
   int increase = 0;
-  
+
   // Wearing too much armor? That'll hurt.
   if (skills[skill].attribute == QUI) {
     if (GET_TOTALIMP(ch) > GET_QUI(ch)) {
@@ -1315,27 +1362,27 @@ int get_skill(struct char_data *ch, int skill, int &target)
     }
   }
   act(gskbuf, 1, ch, NULL, NULL, TO_ROLLS);
-  
+
   // Core p38
   if (target < 2)
     target = 2;
-  
+
   // TODO: Adept power Improved Ability. This ability is not currently in the game, but would be factored in here. See Core p169 for details.
-  
+
   // Convert NPCs so that they use the correct base skill for fighting.
   if (IS_NPC(ch))
     skill = GET_SKILL(ch, skill) > GET_SKILL(ch, return_general(skill)) ? skill : return_general(skill);
-  
+
   if (GET_SKILL(ch, skill))
   {
     int mbw = 0, enhan = 0, synth = 0;
     int totalskill = GET_SKILL(ch, skill);
     bool should_gain_physical_boosts = !PLR_FLAGGED(ch, PLR_MATRIX) && !PLR_FLAGGED(ch, PLR_REMOTE);
-    
+
     // If their skill in this area has not been boosted, they get to add their task pool up to the skill's learned level.
     if (REAL_SKILL(ch, skill) == GET_SKILL(ch, skill))
       totalskill += MIN(REAL_SKILL(ch, skill), GET_TASK_POOL(ch, skills[skill].attribute));
-    
+
     // Iterate through their cyberware, looking for anything important.
     if (ch->cyberware) {
       int expert = 0;
@@ -1352,7 +1399,7 @@ int get_skill(struct char_data *ch, int skill, int &target)
               chip = TRUE;
           }
         }
-      
+
       // If they have both a chipjack with the correct chip loaded and a Chipjack Expert, add the rating to their skill as task pool dice (up to skill max).
       if (chip && expert) {
         increase = MIN(REAL_SKILL(ch, skill), expert);
@@ -1361,7 +1408,7 @@ int get_skill(struct char_data *ch, int skill, int &target)
         act(gskbuf, 1, ch, NULL, NULL, TO_ROLLS);
       }
     }
-    
+
     // Iterate through their bioware, looking for anything important.
     if (should_gain_physical_boosts && ch->bioware) {
       for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content) {
@@ -1374,7 +1421,7 @@ int get_skill(struct char_data *ch, int skill, int &target)
           synth = GET_OBJ_VAL(bio, 1);
       }
     }
-    
+
     /* Enhanced Articulation: Possessors roll an additional die when making Success Tests involving any Combat, Physical, Technical and B/R Skills.
      Bonus also applies to physical use of Vehicle Skills. */
     if (enhan) {
@@ -1465,21 +1512,21 @@ int get_skill(struct char_data *ch, int skill, int &target)
           break;
       }
     }
-    
+
     // Move-by-wire.
     if ((skill == SKILL_STEALTH || skill == SKILL_ATHLETICS) && mbw) {
       snprintf(gskbuf, sizeof(gskbuf), "Move-By-Wire Skill Increase: %d", mbw);
       act(gskbuf, 1, ch, NULL, NULL, TO_ROLLS);
       totalskill += mbw;
     }
-    
+
     // Synthacardium.
     if (skill == SKILL_ATHLETICS && synth) {
       snprintf(gskbuf, sizeof(gskbuf), "Synthacardium Skill Increase: %d", synth);
       act(gskbuf, 1, ch, NULL, NULL, TO_ROLLS);
       totalskill += synth;
     }
-    
+
     return totalskill;
   }
   else {
@@ -1592,12 +1639,12 @@ bool biocyber_compatibility(struct obj_data *obj1, struct obj_data *obj2, struct
               send_to_char("Cybernetic replacements (limbs, skull, torso) are incompatible with muscle replacements.\r\n", ch);
               return FALSE;
           }
-          
+
           if (GET_CYBERWARE_TYPE(cyber1) == GET_CYBERWARE_TYPE(cyber2)) {
             send_to_char("You already have a cybernetic replacement of that type installed.\r\n", ch);
             return FALSE;
           }
-            
+
           break;
         case CYB_MUSCLEREP:
           switch (GET_CYBERWARE_TYPE(cyber2)) {
@@ -1618,7 +1665,7 @@ bool biocyber_compatibility(struct obj_data *obj1, struct obj_data *obj2, struct
               send_to_char("Bone lacings are incompatible with cybernetic replacements (limbs, skull, torso).\r\n", ch);
               return FALSE;
           }
-          return FALSE;
+          break;
       }
     if (IS_SET(GET_CYBERWARE_FLAGS(cyber1), EYE_DATAJACK) && GET_CYBERWARE_TYPE(cyber2) == CYB_DATAJACK) {
       send_to_char("You already have a datajack installed.\r\n", ch);
@@ -1699,7 +1746,7 @@ bool biocyber_compatibility(struct obj_data *obj1, struct obj_data *obj2, struct
         if (GET_BIOWARE_TYPE(bio1) == BIO_MUSCLEAUG) {
           send_to_char("Cybernetic replacements (limbs, skull, torso) are incompatible with Muscle Augmentations.\r\n", ch);
           return FALSE;
-        } 
+        }
         if (GET_BIOWARE_TYPE(bio1) == BIO_MUSCLETONER) {
           send_to_char("Cybernetic replacements (limbs, skull, torso) are incompatible with Muscle Toners.\r\n", ch);
           return FALSE;
@@ -1717,24 +1764,24 @@ bool biocyber_compatibility(struct obj_data *obj1, struct obj_data *obj2, struct
 void reduce_abilities(struct char_data *vict)
 {
   int i;
-  
+
   for (i = 0; i < ADEPT_NUMPOWER; i++)
     if (GET_POWER_TOTAL(vict, i) > GET_MAG(vict) / 100) {
       GET_PP(vict) += ability_cost(i, GET_POWER_TOTAL(vict, i));
-      GET_POWER_TOTAL(vict, i)--;
+      SET_POWER_TOTAL(vict, i, GET_POWER_TOTAL(vict, i) - 1);
       send_to_char(vict, "Your loss in magic makes you feel less "
                    "skilled in %s.\r\n", adept_powers[i]);
     }
-  
+
   if (GET_PP(vict) >= 0)
     return;
-  
+
   for (i = number(1, ADEPT_NUMPOWER - 1); GET_PP(vict) < 0;
        i = number(1, ADEPT_NUMPOWER - 1))
   {
     if (GET_POWER_TOTAL(vict, i) > 0) {
       GET_PP(vict) += ability_cost(i, GET_POWER_TOTAL(vict, i));
-      GET_POWER_TOTAL(vict, i)--;
+      SET_POWER_TOTAL(vict, i, GET_POWER_TOTAL(vict, i) - 1);
       send_to_char(vict, "Your loss in magic makes you feel less "
                    "skilled in %s.\r\n", adept_powers[i]);
     }
@@ -1752,9 +1799,9 @@ void magic_loss(struct char_data *ch, int magic, bool msg)
   log_vfprintf("Subtracting %d magic from %s.", magic, GET_CHAR_NAME(ch));
   if (GET_TRADITION(ch) == TRAD_MUNDANE)
     return;
-    
+
   GET_REAL_MAG(ch) = MAX(0, GET_REAL_MAG(ch) - magic);
-  
+
   if (GET_REAL_MAG(ch) < 100) {
     send_to_char(ch, "You feel the last of your magic leave your body.\r\n", ch);
     PLR_FLAGS(ch).RemoveBit(PLR_PERCEIVE);
@@ -1763,21 +1810,21 @@ void magic_loss(struct char_data *ch, int magic, bool msg)
     mysql_wrapper(mysql, buf);
     snprintf(buf, sizeof(buf), "UPDATE pfiles SET Tradition=%d WHERE idnum=%ld;", TRAD_MUNDANE, GET_IDNUM(ch));
     mysql_wrapper(mysql, buf);
-    
+
     for (int i = 0; i < NUM_WEARS; i++)
       if (GET_EQ(ch, i) && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_FOCUS && GET_OBJ_VAL(GET_EQ(ch, i), 2) == GET_IDNUM(ch))
         GET_OBJ_VAL(GET_EQ(ch, i), 2) = GET_OBJ_VAL(GET_EQ(ch, i), 4) =  GET_OBJ_VAL(GET_EQ(ch, i), 9) = 0;
-        
+
     struct sustain_data *nextsust;
-    
+
     for (struct sustain_data *sust = GET_SUSTAINED(ch); sust; sust = nextsust) {
       nextsust = sust->next;
       if (sust->caster)
         end_sustained_spell(ch, sust);
     }
-    
+
     // TODO: Deactivate adept powers.
-    
+
     return;
   }
   if (msg)
@@ -1789,17 +1836,16 @@ void magic_loss(struct char_data *ch, int magic, bool msg)
 }
 
 // Return true if the character has a kit of the given type, false otherwise.
+#define IS_KIT(obj, type) (GET_OBJ_TYPE((obj)) == ITEM_WORKSHOP && GET_WORKSHOP_TYPE((obj)) == type && GET_WORKSHOP_GRADE((obj)) == TYPE_KIT)
 bool has_kit(struct char_data * ch, int type)
 {
   for (struct obj_data *o = ch->carrying; o; o = o->next_content)
-    if (GET_OBJ_TYPE(o) == ITEM_WORKSHOP && GET_OBJ_VAL(o, 0) == type && GET_OBJ_VAL(o, 1) == TYPE_KIT)
+    if (IS_KIT(o, type))
       return TRUE;
-  
-  if (GET_EQ(ch, WEAR_HOLD))
-    if (GET_OBJ_TYPE(GET_EQ(ch, WEAR_HOLD)) == ITEM_WORKSHOP &&
-        GET_OBJ_VAL(GET_EQ(ch, WEAR_HOLD), 0) == type && GET_OBJ_VAL(GET_EQ(ch, WEAR_HOLD), 1) == TYPE_KIT)
-      return TRUE;
-  
+
+  if (GET_EQ(ch, WEAR_HOLD) && IS_KIT(GET_EQ(ch, WEAR_HOLD), type))
+    return TRUE;
+
   return FALSE;
 }
 
@@ -1807,14 +1853,14 @@ bool has_kit(struct char_data * ch, int type)
 struct obj_data *find_workshop(struct char_data * ch, int type)
 {
   struct obj_data *workshop = NULL;
-  
+
   if (!ch->in_veh && !ch->in_room)
     return NULL;
-  
+
   // If they're in a valid room, return the room's workshop field for MAXIMUM EFFICIENCY.
   if (ch->in_room)
     return ch->in_room->best_workshop[type];
-  
+
   // If we've gotten here, they must be in a vehicle. Iterate through and find the best candidate.
   for (struct obj_data *o = ch->in_veh->contents; o; o = o->next_content) {
     if (GET_OBJ_TYPE(o) == ITEM_WORKSHOP && GET_WORKSHOP_TYPE(o) == type) {
@@ -1823,12 +1869,14 @@ struct obj_data *find_workshop(struct char_data * ch, int type)
         return o;
       } else if (GET_WORKSHOP_GRADE(o) == TYPE_WORKSHOP && GET_WORKSHOP_IS_SETUP(o))
         workshop = o;
+      // If we got here, it's either a kit, or a workshop that's not set up.
     }
   }
-  
+
   // Return workshop (which is NULL if no workshop was found).
   return workshop;
 }
+#undef IS_KIT
 
 // Preconditions checking for add_ and remove_ workshop functions.
 bool _is_workshop_valid(struct obj_data *obj) {
@@ -1839,7 +1887,7 @@ bool _is_workshop_valid(struct obj_data *obj) {
     mudlog(buf, NULL, LOG_SYSLOG, TRUE);
     return FALSE;
   }
-  
+
   // Don't allow it to crash the MUD via out-of-bounds world table access.
   if (!obj->in_room) {
     snprintf(buf, sizeof(buf), "SYSERR: Workshop '%s' (%ld) has NULL room.",
@@ -1847,45 +1895,45 @@ bool _is_workshop_valid(struct obj_data *obj) {
     mudlog(buf, NULL, LOG_SYSLOG, TRUE);
     return FALSE;
   }
-  
-  // Precondition: The item must be a deployed workshop or a facility.
-  if (!(GET_WORKSHOP_GRADE(obj) == TYPE_WORKSHOP && GET_WORKSHOP_IS_SETUP(obj)) && GET_WORKSHOP_GRADE(obj) != TYPE_FACILITY) {
-    // For this to be true, the item is a kit. We're not going to throw an error over that, but it's not a valid workshop.
-    return FALSE;
-  }
-  
+
   return TRUE;
 }
 
 void add_workshop_to_room(struct obj_data *obj) {
+  // If it's not a workshop, skip.
   if (!_is_workshop_valid(obj))
     return;
-  
+
+  // If it's not in a room, skip.
   if (!obj->in_room)
     return;
-  
-  struct obj_data *current = obj->in_room->best_workshop[GET_OBJ_VAL(obj, 0)];
-  
+
+  // If it's not a deployed workshop or a facility, skip.
+  if (!(GET_WORKSHOP_GRADE(obj) == TYPE_WORKSHOP && GET_WORKSHOP_IS_SETUP(obj)) && GET_WORKSHOP_GRADE(obj) != TYPE_FACILITY)
+    return;
+
+  struct obj_data *current = obj->in_room->best_workshop[GET_WORKSHOP_TYPE(obj)];
+
   if (current && GET_WORKSHOP_GRADE(current) > GET_WORKSHOP_GRADE(obj))
     return;
-  
+
   obj->in_room->best_workshop[GET_WORKSHOP_TYPE(obj)] = obj;
 }
 
 void remove_workshop_from_room(struct obj_data *obj) {
   if (!_is_workshop_valid(obj))
     return;
-  
+
   if (!obj->in_room)
     return;
-  
+
   // If this wasn't the best workshop in the first place, who cares?
   if (obj->in_room->best_workshop[GET_WORKSHOP_TYPE(obj)] != obj)
     return;
-  
+
   // Clear out our current best_workshop pointer (previously pointed to obj).
   obj->in_room->best_workshop[GET_WORKSHOP_TYPE(obj)] = NULL;
-  
+
   // Iterate through all items in the room, looking for other valid workshops/facilities of this type.
   for (struct obj_data *o = obj->in_room->contents; o; o = o->next_content) {
     if (o != obj && GET_OBJ_TYPE(o) == ITEM_WORKSHOP && GET_WORKSHOP_TYPE(o) == GET_WORKSHOP_TYPE(obj)) {
@@ -1920,12 +1968,12 @@ struct obj_data *get_mount_weapon(struct obj_data *mount) {
     mudlog("SYSERR: Attempting to retrieve weapon for nonexistent mount.", NULL, LOG_SYSLOG, TRUE);
     return NULL;
   }
-  
+
   for (struct obj_data *contains = mount->contains; contains; contains = contains->next_content) {
     if (GET_OBJ_TYPE(contains) == ITEM_WEAPON)
       return contains;
   }
-  
+
   return NULL;
 }
 
@@ -1935,41 +1983,42 @@ struct obj_data *get_mount_ammo(struct obj_data *mount) {
     mudlog("SYSERR: Attempting to retrieve ammo for nonexistent mount.", NULL, LOG_SYSLOG, TRUE);
     return NULL;
   }
-  
+
   for (struct obj_data *contains = mount->contains; contains; contains = contains->next_content) {
     if (GET_OBJ_TYPE(contains) == ITEM_GUN_AMMO)
       return contains;
   }
-  
+
   return NULL;
 }
 
 // Cleans up after a character who was manning a mount.
 struct obj_data *stop_manning_weapon_mounts(struct char_data *ch, bool send_message) {
   if (AFF_FLAGGED(ch, AFF_MANNING)) {
-    struct obj_data *mount;
-    
-    // Find the mount in-use, if any.
-    mount = get_mount_manned_by_ch(ch);
-    
-    // Clean up the mount's data (stop it from pointing to character; remove targets)
-    mount->worn_by = NULL;
-    mount->targ = NULL;
-    mount->tveh = NULL;
-    
+    // Find the mount in use, if any.
+    struct obj_data *mount = get_mount_manned_by_ch(ch);
+
+    // If we found one, clean it up and print a message.
+    if (mount) {
+      // Clean up the mount's data (stop it from pointing to character; remove targets)
+      mount->worn_by = NULL;
+      mount->targ = NULL;
+      mount->tveh = NULL;
+
+      // Let them / the room know that they've stopped manning.
+      if (send_message) {
+        act("$n stops manning $p.", FALSE, ch, mount, 0, TO_ROOM);
+        act("You stop manning $p.", FALSE, ch, mount, 0, TO_CHAR);
+      }
+    }
+
     // Clean up their character flags.
     AFF_FLAGS(ch).RemoveBit(AFF_MANNING);
-    
+
     // Take them out of fight mode if they're in it.
     if (CH_IN_COMBAT(ch))
       stop_fighting(ch);
-    
-    // Let them / the room know that they've stopped manning.
-    if (send_message) {
-      act("$n stops manning $p.", FALSE, ch, mount, 0, TO_ROOM);
-      act("You stop manning $p.", FALSE, ch, mount, 0, TO_CHAR);
-    }
-    
+
     return mount;
   }
   return NULL;
@@ -1983,26 +2032,26 @@ struct obj_data *get_mount_manned_by_ch(struct char_data *ch) {
     // No mount returned.
     return NULL;
   }
-  
+
   // Not an error, silently return null.
   if (!AFF_FLAGGED(ch, AFF_MANNING)) {
     return NULL;
   }
-  
+
   // Require that they be in a vehicle. Error and clear their flag if they're not.
   if (!ch->in_veh) {
     snprintf(buf, sizeof(buf), "SYSERR: Attempting to get mount manned by %s, but %s is not in any vehicle.", GET_CHAR_NAME(ch), HSHR(ch));
     mudlog(buf, ch, LOG_SYSLOG, TRUE);
-    
+
     // Clean up their mount info. We don't use stop_manning..() because it calls this function itself.
     AFF_FLAGS(ch).RemoveBit(AFF_MANNING);
     if (CH_IN_COMBAT(ch))
       stop_fighting(ch);
-    
+
     // No mount returned.
     return NULL;
   }
-  
+
   // Find and return their mount.
   for (struct obj_data *mount = ch->in_veh->mount; mount; mount = mount->next_content) {
     if (mount->worn_by == ch) {
@@ -2010,16 +2059,16 @@ struct obj_data *get_mount_manned_by_ch(struct char_data *ch) {
       return mount;
     }
   }
-  
+
   // No mount? Error and clear their flag.
   snprintf(buf, sizeof(buf), "SYSERR: Attempting to get mount manned by %s, but the mount does not exist in %s vehicle.", GET_CHAR_NAME(ch), HSHR(ch));
   mudlog(buf, ch, LOG_SYSLOG, TRUE);
-  
+
   // Clean up their mount info.
   AFF_FLAGS(ch).RemoveBit(AFF_MANNING);
   if (CH_IN_COMBAT(ch))
     stop_fighting(ch);
-  
+
   // No mount returned.
   return NULL;
 }
@@ -2027,23 +2076,23 @@ struct obj_data *get_mount_manned_by_ch(struct char_data *ch) {
 void store_message_to_history(struct descriptor_data *d, int channel, const char *message) {
   // We use our very own message buffer to ensure we'll never overwrite whatever buffer the caller is using.
   static char log_message[MAX_INPUT];
-  
+
   // Precondition: No screwy pointers. Removed warning since we can be passed NPC descriptors (which we ignore).
   if (d == NULL || !message || !*message) {
     // mudlog("SYSERR: Null descriptor or message passed to store_message_to_history.", NULL, LOG_SYSLOG, TRUE);
     return;
   }
-  
+
   // Precondition: Channel must be a valid index (0 ≤ channel < number of channels defined in awake.h).
   if (channel < 0 || channel >= NUM_COMMUNICATION_CHANNELS) {
     snprintf(log_message, sizeof(log_message), "SYSERR: Channel %d is not within bounds 0 <= channel < %d.", channel, NUM_COMMUNICATION_CHANNELS);
     mudlog(log_message, NULL, LOG_SYSLOG, TRUE);
     return;
   }
-  
+
   // Add a clone of the message to the descriptor's channel history.
   d->message_history[channel].AddItem(NULL, str_dup(message));
-  
+
   // Constrain message history to the specified amount.
   if (d->message_history[channel].NumItems() > NUM_MESSAGES_TO_RETAIN) {
     // We're over the amount. Remove the tail, making sure we delete the contents.
@@ -2060,13 +2109,13 @@ void delete_message_history(struct descriptor_data *d) {
     mudlog("SYSERR: Null descriptor passed to delete_message_history.", NULL, LOG_SYSLOG, TRUE);
     return;
   }
-  
+
   nodeStruct<const char*> *temp = NULL;
   // For each channel in history, delete all messages (just keep nuking head until it's NULL).
   for (int channel = 0; channel < NUM_COMMUNICATION_CHANNELS; channel++) {
     while ((temp = d->message_history[channel].Head())) {
       DELETE_ARRAY_IF_EXTANT(temp->data);
-      
+
       d->message_history[channel].RemoveItem(temp);
     }
   }
@@ -2086,40 +2135,40 @@ struct room_data *get_veh_in_room(struct veh_data *veh) {
     mudlog("SYSERR: get_veh_in_room was passed a NULL vehicle!", NULL, LOG_SYSLOG, TRUE);
     return NULL;
   }
-  
+
   while (veh->in_veh)
     veh = veh->in_veh;
-  
-  /*  This is not precisely an error case-- it just means the vehicle is being towed. -- LS. 
+
+  /*  This is not precisely an error case-- it just means the vehicle is being towed. -- LS.
   if (!veh->in_room) {
     char errbuf[500];
     snprintf(errbuf, sizeof(errbuf), "SYSERR: get_veh_in_room called on veh %s, but it's not in a room or vehicle!", GET_VEH_NAME(veh));
-    mudlog(errbuf, NULL, LOG_SYSLOG, TRUE); 
-    
+    mudlog(errbuf, NULL, LOG_SYSLOG, TRUE);
+
   }
   */
-  
+
   return veh->in_room;
 }
 
-struct room_data *get_ch_in_room(struct char_data *ch) {  
+struct room_data *get_ch_in_room(struct char_data *ch) {
   char errbuf[500];
   if (!ch) {
     snprintf(errbuf, sizeof(errbuf), "SYSERR: get_ch_in_room was passed a NULL character!");
     mudlog(errbuf, NULL, LOG_SYSLOG, TRUE);
     return &world[0];
   }
-  
+
   if (ch->in_room)
     return ch->in_room;
-  
+
   if (ch->in_veh) {
     return get_veh_in_room(ch->in_veh);
   }
-  
+
   snprintf(errbuf, sizeof(errbuf), "SYSERR: get_ch_in_room called on char %s, but they're not in a room or vehicle!", GET_CHAR_NAME(ch));
   mudlog(errbuf, ch, LOG_SYSLOG, TRUE);
-  
+
   return &world[0];
 }
 
@@ -2130,27 +2179,27 @@ struct room_data *get_obj_in_room(struct obj_data *obj) {
     mudlog(errbuf, NULL, LOG_SYSLOG, TRUE);
     return &world[0];
   }
-  
+
   if (obj->in_room)
     return obj->in_room;
-  
+
   if (obj->in_veh)
     return get_veh_in_room(obj->in_veh);
-  
+
   // Below this line is frantic flailing to avoid passing back NULL (which tends to crash the game).
   if (obj->in_obj)
     return get_obj_in_room(obj->in_obj);
-  
+
   if (obj->carried_by)
     return get_ch_in_room(obj->carried_by);
-  
+
   if (obj->worn_by)
-    return get_ch_in_room(obj->carried_by);
-  
+    return get_ch_in_room(obj->worn_by);
+
   // All is lost. The object floats in an endless void.
   snprintf(errbuf, sizeof(errbuf), "SYSERR: get_obj_in_room called on obj %s, but it's not in a room or vehicle!", GET_OBJ_NAME(obj));
   mudlog(errbuf, NULL, LOG_SYSLOG, TRUE);
-  
+
   return &world[0];
 }
 
@@ -2160,41 +2209,41 @@ bool invis_ok(struct char_data *ch, struct char_data *vict) {
     mudlog("invis_ok() received char with NO room!", ch, LOG_SYSLOG, TRUE);
     return FALSE;
   }
-  
+
   if (!vict || !get_ch_in_room(vict)) {
     mudlog("invis_ok() received vict with NO room!", ch, LOG_SYSLOG, TRUE);
     return FALSE;
   }
-  
+
   // If they're in an invis staffer above your level, no.
   if (!IS_NPC(vict) && (IS_NPC(ch) ? GET_INVIS_LEV(vict) > 0 : !access_level(ch, GET_INVIS_LEV(vict))))
     return FALSE;
-  
+
   // Staff members see almost everything.
   if (IS_SENATOR(ch))
     return TRUE;
-  
+
   // Totalinvis blocks mort sight.
   if (IS_NPC(vict) && MOB_FLAGGED(vict, MOB_TOTALINVIS))
     return FALSE;
-  
+
   // Astral perception sees most things.
   if (IS_ASTRAL(ch) || IS_DUAL(ch))
     return TRUE;
-  
+
   // Ultrasound pierces all invis as long as it's not blocked by silence or stealth.
   if (AFF_FLAGGED(ch, AFF_DETECT_INVIS) && (get_ch_in_room(ch)->silence[0] <= 0 && !affected_by_spell(vict, SPELL_STEALTH)))
     return TRUE;
-  
+
   // Improved invis defeats all other detection measures.
   if (IS_AFFECTED(vict, AFF_IMP_INVIS) || IS_AFFECTED(vict, AFF_SPELLIMPINVIS))
     return FALSE;
-  
+
   // Standard invis is pierced by thermographic vision, which is default on vehicles.
   if (IS_AFFECTED(vict, AFF_INVISIBLE)) {
     return CURRENT_VISION(ch) == THERMOGRAPHIC || AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE);
   }
-  
+
   // If we've gotten here, they're not invisible.
   return TRUE;
 }
@@ -2205,41 +2254,41 @@ bool char_can_make_noise(struct char_data *ch, const char *message) {
     // Can't make noise.
     if (message)
       send_to_char(message, ch);
-    
+
     return FALSE;
   }
-  
+
   return TRUE;
 }
 
 struct char_data *get_driver(struct veh_data *veh) {
   if (veh->rigger)
     return veh->rigger;
-    
+
   for (struct char_data *i = veh->people; i; i = i->next_in_veh)
     if (AFF_FLAGGED(i, AFF_PILOT) || AFF_FLAGGED(i, AFF_RIG))
       return i;
-  
+
   return NULL;
 }
 
 // Given a vnum, searches all objects and nested containers in the given container for the first match and returns it.
 struct obj_data *find_matching_obj_in_container(struct obj_data *container, vnum_t vnum) {
   struct obj_data *result = NULL;
-  
+
   // Nothing given to us? Nothing to find.
   if (container == NULL)
     return NULL;
-  
+
   // Check each item in this container. If it's a match, return it; otherwise, check its contents.
   for (struct obj_data *contents = container->contains; contents; contents = contents->next_content) {
     if (GET_OBJ_VNUM(contents) == vnum)
       return contents;
-    
+
     if ((result = find_matching_obj_in_container(contents, vnum)))
       return result;
   }
-  
+
   // If we got here, the item wasn't found anywhere.
   return NULL;
 }
@@ -2251,7 +2300,7 @@ bool attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data *w
     mudlog("SYSERR: NULL weapon or attachment passed to attach_attachment_to_weapon().", NULL, LOG_SYSLOG, TRUE);
     return FALSE;
   }
-  
+
   if (location < ACCESS_ACCESSORY_LOCATION_TOP
       || location > ACCESS_ACCESSORY_LOCATION_UNDER) {
     if (ch)
@@ -2261,7 +2310,7 @@ bool attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data *w
     mudlog(buf, ch, LOG_SYSLOG, TRUE);
     return FALSE;
   }
-  
+
   if (GET_OBJ_TYPE(attachment) != ITEM_GUN_ACCESSORY) {
     if (ch)
       send_to_char(ch, "%s is not a gun accessory.\r\n", CAP(GET_OBJ_NAME(attachment)));
@@ -2272,7 +2321,7 @@ bool attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data *w
     }
     return FALSE;
   }
-  
+
   if (GET_OBJ_TYPE(weapon) != ITEM_WEAPON || !IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon))) {
     if (ch)
       send_to_char(ch, "%s is not a gun.\r\n", CAP(GET_OBJ_NAME(weapon)));
@@ -2283,7 +2332,7 @@ bool attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data *w
     }
     return FALSE;
   }
-  
+
   if (GET_ACCESSORY_TYPE(attachment) == ACCESS_SMARTGOGGLE) {
     if (ch)
       send_to_char(ch, "%s are for your eyes, not your gun.\r\n", CAP(GET_OBJ_NAME(attachment)));
@@ -2294,7 +2343,7 @@ bool attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data *w
     }
     return FALSE;
   }
-  
+
   if (   ((location == ACCESS_ACCESSORY_LOCATION_TOP) && (GET_WEAPON_ATTACH_TOP_VNUM(weapon)    > 0))
       || ((location == ACCESS_ACCESSORY_LOCATION_BARREL) && (GET_WEAPON_ATTACH_BARREL_VNUM(weapon) > 0))
       || ((location == ACCESS_ACCESSORY_LOCATION_UNDER) && (GET_WEAPON_ATTACH_UNDER_VNUM(weapon)  > 0))) {
@@ -2313,7 +2362,7 @@ bool attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data *w
     }
     return FALSE;
   }
-  
+
   if (   ((location == ACCESS_ACCESSORY_LOCATION_TOP) && (GET_WEAPON_ATTACH_TOP_VNUM(weapon)    < 0))
       || ((location == ACCESS_ACCESSORY_LOCATION_BARREL) && (GET_WEAPON_ATTACH_BARREL_VNUM(weapon) < 0))
       || ((location == ACCESS_ACCESSORY_LOCATION_UNDER) && (GET_WEAPON_ATTACH_UNDER_VNUM(weapon)  < 0))) {
@@ -2332,7 +2381,7 @@ bool attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data *w
     }
     return FALSE;
   }
-  
+
   // Handling for silencer and suppressor restrictions.
   if (GET_ACCESSORY_TYPE(attachment) == ACCESS_SILENCER || GET_ACCESSORY_TYPE(attachment) == ACCESS_SOUNDSUPP) {
     // Weapon cannot be a revolver or shotgun.
@@ -2350,7 +2399,7 @@ bool attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data *w
       }
       return FALSE;
     }
-    
+
     // Silencers.
     if (GET_ACCESSORY_TYPE(attachment) == ACCESS_SILENCER) {
       // Weapon cannot have BF or FA modes.
@@ -2368,7 +2417,7 @@ bool attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data *w
         return FALSE;
       }
     }
-    
+
     // Sound suppressors.
     if (GET_ACCESSORY_TYPE(attachment) == ACCESS_SOUNDSUPP) {
       // Weapon must have BF or FA mode available.
@@ -2386,21 +2435,21 @@ bool attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data *w
         return FALSE;
       }
     }
-    
+
     // Vents on weapons with integral recoil.
     if (GET_ACCESSORY_TYPE(attachment) == ACCESS_GASVENT) {
       if (GET_ACCESSORY_RATING(attachment) < GET_WEAPON_INTEGRAL_RECOIL_COMP(weapon)) {
         send_to_char(ch, "That would make it perform worse! The integral recoil comp is already better than the vent's rating.\r\n");
         return FALSE;
       }
-      
+
       if (GET_ACCESSORY_RATING(attachment) == GET_WEAPON_INTEGRAL_RECOIL_COMP(weapon)) {
         send_to_char(ch, "That wouldn't provide any benefit. The integral recoil comp is already equal to the vent's rating.\r\n");
         return FALSE;
       }
     }
   }
-  
+
   // Transfer the first (and only the first) applies-affect from the attachment to the weapon.
   if (attachment->affected[0].modifier != 0) {
     bool successfully_modified = FALSE;
@@ -2412,14 +2461,14 @@ bool attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data *w
         break;
       }
     }
-    
+
     if (!successfully_modified) {
       if (ch) {
         snprintf(buf, sizeof(buf), "You seem unable to attach %s to %s.\r\n",
                 GET_OBJ_NAME(attachment), GET_OBJ_NAME(weapon));
         send_to_char(buf, ch);
       }
-      
+
       snprintf(buf, sizeof(buf), "WARNING: '%s' (%ld) attempted to attach '%s' (%ld) to '%s' (%ld), but the gun was full up on affects. Something needs revising."
               " Gun's current top/barrel/bottom attachment vnums are %d / %d / %d.",
               ch ? GET_CHAR_NAME(ch) : "An automated process", ch ? GET_IDNUM(ch) : -1,
@@ -2432,33 +2481,33 @@ bool attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data *w
       return FALSE;
     }
   }
-  
+
   // Add the attachment's weight to the weapon's weight, but only if a player attached it.
   if (ch)
     weight_change_object(weapon, GET_OBJ_WEIGHT(attachment));
-  
+
   // Add the attachment's cost to the weapon's cost, but only if a player attached it.
   if (ch)
     GET_OBJ_COST(weapon) = MAX(0, GET_OBJ_COST(weapon) + GET_OBJ_COST(attachment));
-  
+
   // Update the weapon's aff flags.
   for (int waff_index = 0; acceptable_weapon_attachment_affects[waff_index] != -1; waff_index++) {
     if (attachment->obj_flags.bitvector.IsSet(acceptable_weapon_attachment_affects[waff_index])) {
       weapon->obj_flags.bitvector.SetBit(acceptable_weapon_attachment_affects[waff_index]);
     }
   }
-  
+
   // Update the weapon's attach location to reflect this item.
   GET_OBJ_VAL(weapon, location + ACCESS_ACCESSORY_LOCATION_DELTA) = GET_OBJ_VNUM(attachment);
-  
+
   // Send the success message, assuming there's a character.
   if (ch) {
     int where = location;
-    
+
     snprintf(buf, sizeof(buf), "You attach $p to the %s of $P.",
             (where == 0 ? "top" : (where == 1 ? "barrel" : "underside")));
     act(buf, TRUE, ch, attachment, weapon, TO_CHAR);
-    
+
     snprintf(buf, sizeof(buf), "$n attaches $p to the %s of $P.",
             (where == 0 ? "top" : (where == 1 ? "barrel" : "underside")));
     act(buf, TRUE, ch, attachment, weapon, TO_ROOM);
@@ -2471,20 +2520,22 @@ bool attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data *w
     mudlog(buf, ch, LOG_SYSLOG, TRUE);
 #endif
   }
-  
+
   // Let the caller handle trashing the object (assuming they didn't just pass us a proto reference).
 
   return TRUE;
 }
 
 struct obj_data *unattach_attachment_from_weapon(int location, struct obj_data *weapon, struct char_data *ch) {
+  struct obj_data *workshop;
+
   if (!weapon) {
     if (ch)
       send_to_char(ch, "Sorry, something went wrong. Staff have been notified.\r\n");
     mudlog("SYSERR: NULL weapon passed to unattach_attachment_from_weapon().", NULL, LOG_SYSLOG, TRUE);
     return NULL;
   }
-  
+
   if (location < ACCESS_LOCATION_TOP || location > ACCESS_LOCATION_UNDER) {
     if (ch)
       send_to_char(ch, "Sorry, something went wrong. Staff have been notified.\r\n");
@@ -2492,7 +2543,7 @@ struct obj_data *unattach_attachment_from_weapon(int location, struct obj_data *
             location, GET_OBJ_NAME(weapon), GET_OBJ_VNUM(weapon));
     return NULL;
   }
-  
+
   if (GET_OBJ_TYPE(weapon) != ITEM_WEAPON) {
     if (ch)
       send_to_char("You can only unattach accessories from weapons.\r\n", ch);
@@ -2503,10 +2554,10 @@ struct obj_data *unattach_attachment_from_weapon(int location, struct obj_data *
     }
     return NULL;
   }
-  
+
   // Get a pointer to the attachment so that we can reference it.
   struct obj_data *attachment = read_object(GET_WEAPON_ATTACH_LOC(weapon, location), VIRTUAL);
-  
+
   // If the attachment was un-loadable, bail out.
   if (!attachment) {
     if (ch)
@@ -2514,26 +2565,31 @@ struct obj_data *unattach_attachment_from_weapon(int location, struct obj_data *
     snprintf(buf, sizeof(buf), "SYSERR: Attempting to unattach invalid vnum %d from %s of weapon '%s' (%ld).",
             GET_WEAPON_ATTACH_LOC(weapon, location), gun_accessory_locations[location - ACCESS_ACCESSORY_LOCATION_DELTA], GET_OBJ_NAME(weapon), GET_OBJ_VNUM(weapon));
     mudlog(buf, ch, LOG_SYSLOG, TRUE);
-    
+
     // We use a raw get_obj_val here so we can set it.
     GET_OBJ_VAL(weapon, location) = 0;
     return NULL;
   }
-  
+
   if (GET_ACCESSORY_TYPE(attachment) == ACCESS_GASVENT) {
     if (ch) {
-      // TODO: Update: You can now remove a gas vent, as long as you're in a room with a deployed weapons workshop and have some nuyen on hand to cover the new barrel's cost.
-      // TODO: Ensure workshop.
-      // TODO: Ensure nuyen.
-      // TODO: Remove and destroy vent, then return. This either requires code duplication or modification of below code to not return vents-- if the latter, verify that it's supposed to happen!
-      //     ex: destroying a vent rather than returning it, and the caller calls extract on the returned value.
-      send_to_char(ch, "%s is permanently attached to %s and can't be removed.\r\n",
-                   GET_OBJ_NAME(attachment), GET_OBJ_NAME(weapon));
-      return NULL;
+      int removal_cost = MAX(GET_OBJ_COST(weapon) / 10, MINIMUM_GAS_VENT_REMOVAL_COST);
+
+      if (!(workshop = find_workshop(ch, TYPE_GUNSMITHING))) {
+        send_to_char(ch, "That's a complex task! You'll need a gunsmithing workshop and %d nuyen on hand to do that.\r\n", removal_cost);
+        return NULL;
+      }
+
+      if (GET_NUYEN(ch) < removal_cost) {
+        send_to_char(ch, "You'll need at least %d nuyen on hand to cover the cost of the new barrel.\r\n", removal_cost);
+        return NULL;
+      }
+
+      lose_nuyen(ch, removal_cost, NUYEN_OUTFLOW_REPAIRS);
     }
    // We assume the coder knows what they're doing when unattaching a gasvent. They may proceed.
   }
-  
+
   // Remove the first (and only the first) affect of the attachment from the weapon.
   if (attachment->affected[0].modifier != 0) {
     bool successfully_modified = FALSE;
@@ -2546,7 +2602,7 @@ struct obj_data *unattach_attachment_from_weapon(int location, struct obj_data *
         break;
       }
     }
-    
+
     if (!successfully_modified) {
       snprintf(buf, sizeof(buf), "WARNING: '%s' (%ld) unattached '%s' (%ld) from '%s' (%ld), but the gun was missing the attachment's affect. Something needs revising.",
               ch ? GET_CHAR_NAME(ch) : "An automated process", ch ? GET_IDNUM(ch) : -1,
@@ -2555,10 +2611,10 @@ struct obj_data *unattach_attachment_from_weapon(int location, struct obj_data *
       mudlog(buf, ch, LOG_SYSLOG, TRUE);
     }
   }
-  
+
   // Subtract the attachment's weight from the weapon's weight.
   weight_change_object(weapon, -GET_OBJ_WEIGHT(attachment));
-  
+
   // Subtract the attachment's cost from the weapon's cost.
   if (GET_OBJ_COST(attachment) > GET_OBJ_COST(weapon)) {
     GET_OBJ_COST(attachment) = GET_OBJ_COST(weapon);
@@ -2566,7 +2622,7 @@ struct obj_data *unattach_attachment_from_weapon(int location, struct obj_data *
   } else {
     GET_OBJ_COST(weapon) -= GET_OBJ_COST(attachment);
   }
-  
+
   // Cycle through all the viable attachment affect flags.
   for (int waff_index = 0; acceptable_weapon_attachment_affects[waff_index] != -1; waff_index++) {
     // If we would remove one, first look at the other attachments (if any) and make sure they don't have it too.
@@ -2576,38 +2632,45 @@ struct obj_data *unattach_attachment_from_weapon(int location, struct obj_data *
         // Don't compare against ourselves.
         if (attach_loc == location)
           continue;
-        
+
         // Skip if nothing's attached there.
         if (GET_WEAPON_ATTACH_LOC(weapon, attach_loc) <= 0)
           continue;
-        
+
         // Resolve the thing into a vnum and skip if it's not kosher.
         long rnum = real_object(GET_WEAPON_ATTACH_LOC(weapon, attach_loc));
         if (rnum < 0)
           continue;
-        
+
         // Grab the thing's prototype and check it for this flag.
         if ((&obj_proto[rnum])->obj_flags.bitvector.IsSet(acceptable_weapon_attachment_affects[waff_index])) {
           found_duplicate = TRUE;
           break;
         }
       }
-      
+
       // Didn't find another item with this flag, so un-set it.
       if (!found_duplicate)
         weapon->obj_flags.bitvector.RemoveBit(acceptable_weapon_attachment_affects[waff_index]);
     }
   }
-  
+
   // Update the weapon's attach location to reflect this item.
   GET_OBJ_VAL(weapon, location) = 0;
-  
+
   // Send the success message, assuming there's a character.
   if (ch) {
-    act("You unattach $p from $P.", TRUE, ch, attachment, weapon, TO_CHAR);
-    act("$n unattaches $p from $P.", TRUE, ch, attachment, weapon, TO_ROOM);
+    if (GET_ACCESSORY_TYPE(attachment) == ACCESS_GASVENT) {
+      act("You remove the ported barrel from $p and discard it, installing a non-ported one in its place.", TRUE, ch, weapon, NULL, TO_CHAR);
+      act("$n removes the ported barrel from $p and discards it, installing a non-ported one in its place.", TRUE, ch, weapon, NULL, TO_ROOM);
+      extract_obj(attachment);
+      attachment = NULL;
+    } else {
+      act("You unattach $p from $P.", TRUE, ch, attachment, weapon, TO_CHAR);
+      act("$n unattaches $p from $P.", TRUE, ch, attachment, weapon, TO_ROOM);
+    }
   }
-  
+
   // Hand back our attachment object.
   return attachment;
 }
@@ -2618,26 +2681,26 @@ void copy_over_necessary_info(struct char_data *original, struct char_data *clon
   REPLICATE(in_room);
   REPLICATE(was_in_room);
   REPLICATE(in_veh);
-  
+
   // PC specials (null for NPCs)
   REPLICATE(player_specials);
-  
+
   // Matrix info (null for NPCs)
   REPLICATE(persona);
-  
+
   // Spell info.
   REPLICATE(squeue);
   REPLICATE(sustained);
   REPLICATE(ssust);
   REPLICATE(spells);
-  
+
   // Equipment info.
   for (int pos = 0; pos < NUM_WEARS; pos++)
     REPLICATE(equipment[pos]);
   REPLICATE(carrying);
   REPLICATE(cyberware);
   REPLICATE(bioware);
-  
+
   // Linked lists.
   REPLICATE(next_in_room);
   REPLICATE(next);
@@ -2645,15 +2708,15 @@ void copy_over_necessary_info(struct char_data *original, struct char_data *clon
   REPLICATE(next_in_zone);
   REPLICATE(next_in_veh);
   REPLICATE(next_watching);
-  
+
   // Follower / master data.
   REPLICATE(followers);
   REPLICATE(master);
-  
+
   // Pgroup data (null for NPCs)
   REPLICATE(pgroup);
   REPLICATE(pgroup_invitations);
-  
+
   // Nested data (pointers from included structs)
   REPLICATE(char_specials.fighting);
   REPLICATE(char_specials.fight_veh);
@@ -2681,20 +2744,20 @@ void copy_over_necessary_info(struct char_data *original, struct char_data *clon
 // Uses static, so don't use it more than once per call (to snprintf, etc)
 char *double_up_color_codes(const char *string) {
   static char doubledbuf[MAX_STRING_LENGTH];
-  
+
   // This will happen for night descs that haven't been set, etc.
   if (!string)
     return NULL;
-  
+
   if (strlen(string) * 2 + 1 > sizeof(doubledbuf)) {
     mudlog("SYSERR: Size of string passed to double_up_color_codes exceeds max size; aborting process.", NULL, LOG_SYSLOG, TRUE);
     return NULL;
   }
-  
-  
+
+
   const char *read_ptr = string;
   char *write_ptr = doubledbuf;
-  
+
   while (*read_ptr) {
     if (*read_ptr == '^')
       *(write_ptr++) = '^';
@@ -2710,7 +2773,7 @@ void clear_editing_data(struct descriptor_data *d) {
   d->edit_number = 0;
   PLR_FLAGS(d->character).RemoveBit(PLR_EDITING);
   d->edit_convert_color_codes = FALSE;
-  
+
   // We're setting things to NULL here. If you don't want to leak memory, clean it up beforehand.
   d->edit_room = NULL;
 }
@@ -2718,55 +2781,55 @@ void clear_editing_data(struct descriptor_data *d) {
 // Sets a character's skill, with bounds. Assumes that you've already deducted the appropriate cost.
 void set_character_skill(struct char_data *ch, int skill_num, int new_value, bool send_message) {
   char msgbuf[500];
-  
+
   if (!ch) {
     mudlog("SYSERR: NULL character passed to set_character_skill.", ch, LOG_SYSLOG, TRUE);
     return;
   }
-  
+
   if (IS_NPC(ch)) {
     mudlog("SYSERR: NPC passed to set_character_skill.", ch, LOG_SYSLOG, TRUE);
     return;
   }
-  
+
   if (skill_num < MIN_SKILLS || skill_num >= MAX_SKILLS) {
     snprintf(msgbuf, sizeof(msgbuf), "SYSERR: Invalid skill number %d passed to set_character_skill.", skill_num);
     mudlog(msgbuf, ch, LOG_SYSLOG, TRUE);
     return;
   }
-  
+
   if (new_value < 0 || (!access_level(ch, LVL_BUILDER) && new_value > MAX_SKILL_LEVEL_FOR_MORTS)) {
     snprintf(msgbuf, sizeof(msgbuf), "SYSERR: Attempting to assign skill level %d to %s, which exceeds range 0 <= x <= %d.",
             new_value, GET_CHAR_NAME(ch), access_level(ch, LVL_BUILDER) ? MAX_SKILL_LEVEL_FOR_IMMS : MAX_SKILL_LEVEL_FOR_MORTS);
     mudlog(msgbuf, ch, LOG_SYSLOG, TRUE);
     return;
   }
-  
+
   if (new_value == REAL_SKILL(ch, skill_num)) {
     // This is not an error condition (think restoring an imm and skillsetting everything); just silently fail.
     return;
   }
-  
-  if (send_message) {    
+
+  if (send_message) {
     // Active skill messaging.
     if (skills[skill_num].type == SKILL_TYPE_ACTIVE) {
       if (new_value == 0) {
         send_to_char(ch, "You completely forget your skills in %s.\r\n", skills[skill_num].name);
       } else if (new_value == 1) {
         send_to_char(ch, "^cYou have been introduced to the basics.^n\r\n");
-      } else if (new_value == 2) {
-        send_to_char(ch, "^cYou have gotten in some practice.^n\r\n");
       } else if (new_value == 3) {
-        send_to_char(ch, "^cYou have attained average proficiency.^n\r\n");
-      } else if (new_value == 4) {
-        send_to_char(ch, "^CYour skills are now above average.^n\r\n");
+        send_to_char(ch, "^cYou have gotten in some practice.^n\r\n");
       } else if (new_value == 5) {
-        send_to_char(ch, "^CYou are considered a professional at %s.^n\r\n", skills[skill_num].name);
-      } else if (new_value == 6) {
-        send_to_char(ch, "^gYou've practiced so much that you can act without thinking about it.^n\r\n");
+        send_to_char(ch, "^cYou have attained average proficiency.^n\r\n");
       } else if (new_value == 7) {
+        send_to_char(ch, "^CYour skills are now above average.^n\r\n");
+      } else if (new_value == 9) {
+        send_to_char(ch, "^CYou are considered a professional at %s.^n\r\n", skills[skill_num].name);
+      } else if (new_value == 10) {
+        send_to_char(ch, "^gYou've practiced so much that you can act without thinking about it.^n\r\n");
+      } else if (new_value == 11) {
         send_to_char(ch, "^gYou are considered an expert in your field.^n\r\n");
-      } else if (new_value == 8) {
+      } else if (new_value == 12) {
         send_to_char(ch, "^GYour talents at %s are considered world-class.^n\r\n", skills[skill_num].name);
       } else {
         send_to_char(ch, "^GYou further hone your talents towards perfection.^n\r\n");
@@ -2778,17 +2841,17 @@ void set_character_skill(struct char_data *ch, int skill_num, int new_value, boo
         send_to_char(ch, "You completely forget your skills in %s.\r\n", skills[skill_num].name);
       } else if (new_value == 1) {
         send_to_char(ch, "^cYou have been introduced to the basics.^n\r\n");
-      } else if (new_value <= 4) {
+      } else if (new_value <= 3) {
         send_to_char(ch, "^cYou have gotten in some practice.^n\r\n");
       } else if (new_value <= 5) {
         send_to_char(ch, "^cYou have attained average proficiency.^n\r\n");
-      } else if (new_value == 6) {
-        send_to_char(ch, "^CYou are now considered fluent at a high-school level.^n\r\n");
       } else if (new_value == 7) {
-        send_to_char(ch, "^CYou have achieved bachelor's-degree-level fluency.^n\r\n");
-      } else if (new_value == 8) {
-        send_to_char(ch, "^CYou have achieved master's-degree-level fluency.^n\r\n");
+        send_to_char(ch, "^CYou are now considered fluent at a high-school level.^n\r\n");
       } else if (new_value == 9) {
+        send_to_char(ch, "^CYou have achieved bachelor's-degree-level fluency.^n\r\n");
+      } else if (new_value == 10) {
+        send_to_char(ch, "^CYou have achieved a native-level fluency.^n\r\n");
+      } else if (new_value == 12) {
         send_to_char(ch, "^CYou have achieved doctorate-degree-level fluency.^n\r\n");
       } else {
         send_to_char(ch, "^GYou further hone your talents towards perfection.^n\r\n");
@@ -2800,29 +2863,29 @@ void set_character_skill(struct char_data *ch, int skill_num, int new_value, boo
         send_to_char(ch, "You completely forget your knowledge of %s.\r\n", skills[skill_num].name);
       } else if (new_value == 1) {
         send_to_char(ch, "^cYou've picked up a few things.^n\r\n");
-      } else if (new_value == 2) {
-        send_to_char(ch, "^cYou've developed an interest in %s.^n\r\n", skills[skill_num].name);
       } else if (new_value == 3) {
-        send_to_char(ch, "^cYou have a dedicated knowledge of that area.^n\r\n");
-      } else if (new_value == 4) {
-        send_to_char(ch, "^CYou are well-rounded in the field of %s.^n\r\n", skills[skill_num].name);
+        send_to_char(ch, "^cYou've developed an interest in %s.^n\r\n", skills[skill_num].name);
       } else if (new_value == 5) {
-        send_to_char(ch, "^CYou could earn a degree in %s.^n\r\n", skills[skill_num].name);
-      } else if (new_value == 6) {
-        send_to_char(ch, "^gYou have mastered the field of %s.^n\r\n", skills[skill_num].name);
+        send_to_char(ch, "^cYou have a dedicated knowledge of that area.^n\r\n");
       } else if (new_value == 7) {
+        send_to_char(ch, "^CYou are well-rounded in the field of %s.^n\r\n", skills[skill_num].name);
+      } else if (new_value == 9) {
+        send_to_char(ch, "^CYou could earn a degree in %s.^n\r\n", skills[skill_num].name);
+      } else if (new_value == 10) {
+        send_to_char(ch, "^gYou have mastered the field of %s.^n\r\n", skills[skill_num].name);
+      } else if (new_value == 11) {
         send_to_char(ch, "^gYou are considered an expert in your field.^n\r\n");
-      } else if (new_value == 8) {
+      } else if (new_value == 12) {
         send_to_char(ch, "^GYour knowledge of %s is genius-level.^n\r\n", skills[skill_num].name);
       } else {
         send_to_char(ch, "^GYou further hone your knowledge towards perfection.^n\r\n");
       }
     }
   }
-  
+
   // Update their skill.
   (ch)->char_specials.saved.skills[skill_num][0] = new_value;
-  
+
   // Set the dirty bit so we know we need to save their skills.
   GET_SKILL_DIRTY_BIT((ch)) = TRUE;
 }
@@ -2835,24 +2898,28 @@ const char *skill_rank_name(int rank, bool knowledge) {
       else return active_name; \
    } \
 }
-  
+
   if (rank < 0)
     return "uh oh! you have a negative skill, please report!";
-  
+
   RANK_MESSAGE(0, "not learned", "not learned");
   RANK_MESSAGE(1, "introduced", "scream-sheet level");
   RANK_MESSAGE(2, "practiced", "interested");
-  RANK_MESSAGE(3, "proficient", "dedicated");
-  RANK_MESSAGE(4, "skilled", "well-rounded");
-  RANK_MESSAGE(5, "professional", "educated");
-  RANK_MESSAGE(6, "innate", "mastered");
-  RANK_MESSAGE(7, "expert", "expert");
-  
+  RANK_MESSAGE(3, "novice", "interested");
+  RANK_MESSAGE(4, "competent", "dedicated");
+  RANK_MESSAGE(5, "proficient", "well-rounded");
+  RANK_MESSAGE(6, "proficient", "educated");
+  RANK_MESSAGE(7, "skilled", "educated");
+  RANK_MESSAGE(8, "professional", "mastered");
+  RANK_MESSAGE(9, "professional", "intuitive");
+  RANK_MESSAGE(10, "specialist", "specialist");
+  RANK_MESSAGE(11, "expert", "expert");
+
   if (rank < MAX_SKILL_LEVEL_FOR_IMMS) {
     if (knowledge) return "genius";
     else return "world-class";
   }
-  
+
   return "godly";
 #undef RANK_MESSAGE
 }
@@ -2874,7 +2941,7 @@ size_t strlcpy(char *buf, const char *src, size_t bufsz)
 
     if (bufsz > 0)
     {
-        if (src_len >= bufsz) 
+        if (src_len >= bufsz)
         {
             src_len = bufsz - 1;
         }
@@ -2911,13 +2978,13 @@ size_t strlcat(char *buf, const char *src, size_t bufsz)
 struct char_data *get_obj_carried_by_recursive(struct obj_data *obj) {
   if (!obj)
     return NULL;
-  
+
   if (obj->carried_by)
     return obj->carried_by;
-  
+
   if (obj->in_obj)
     return get_obj_carried_by_recursive(obj->in_obj);
-  
+
   return NULL;
 }
 
@@ -2925,23 +2992,23 @@ struct char_data *get_obj_carried_by_recursive(struct obj_data *obj) {
 struct char_data *get_obj_worn_by_recursive(struct obj_data *obj) {
   if (!obj)
     return NULL;
-  
+
   if (obj->worn_by)
     return obj->worn_by;
-  
+
   if (obj->in_obj)
     return get_obj_worn_by_recursive(obj->in_obj);
-  
+
   return NULL;
 }
 
 // Finds the object's holder (either carrying or wearing it or its parent object recursively).
 struct char_data *get_obj_possessor(struct obj_data *obj) {
   struct char_data *owner;
-  
+
   if ((owner = get_obj_carried_by_recursive(obj)))
     return owner;
-  
+
   return get_obj_worn_by_recursive(obj);
 }
 
@@ -2949,21 +3016,21 @@ struct char_data *get_obj_possessor(struct obj_data *obj) {
 char *generate_new_loggable_representation(struct obj_data *obj) {
   char log_string[MAX_STRING_LENGTH];
   memset(log_string, 0, sizeof(char) * MAX_STRING_LENGTH);
-  
+
   if (!obj) {
     strcpy(log_string, "SYSERR: Null object passed to generate_loggable_representation().");
     mudlog(log_string, NULL, LOG_SYSLOG, TRUE);
     return str_dup(log_string);
   }
-  
+
   snprintf(log_string, sizeof(log_string), "(obj %ld) %s^g%s",
           GET_OBJ_VNUM(obj),
           obj->text.name,
           IS_OBJ_STAT(obj, ITEM_WIZLOAD) ? " [wizloaded]" : "");
-    
+
   if (obj->restring)
     snprintf(ENDOF(log_string), sizeof(log_string) - strlen(log_string), " [restring: %s^g]", obj->restring);
-  
+
   if (obj->contains) {
     snprintf(ENDOF(log_string), sizeof(log_string) - strlen(log_string), ", containing: [");
     for (struct obj_data *temp = obj->contains; temp; temp = temp->next_content) {
@@ -2977,7 +3044,7 @@ char *generate_new_loggable_representation(struct obj_data *obj) {
     }
     strlcat(log_string, " ]", MAX_STRING_LENGTH);
   }
-  
+
   switch(GET_OBJ_TYPE(obj)) {
     case ITEM_MONEY:
       // The only time we'll ever hit perform_give with money is if it's a credstick.
@@ -2997,28 +3064,28 @@ char *generate_new_loggable_representation(struct obj_data *obj) {
       break;
     case ITEM_GUN_AMMO:
       // A box of ammunition.
-      snprintf(ENDOF(log_string), sizeof(log_string) - strlen(log_string), ", containing %d %s", 
-               GET_AMMOBOX_QUANTITY(obj), 
+      snprintf(ENDOF(log_string), sizeof(log_string) - strlen(log_string), ", containing %d %s",
+               GET_AMMOBOX_QUANTITY(obj),
                get_ammo_representation(GET_AMMOBOX_WEAPON(obj), GET_AMMOBOX_TYPE(obj), GET_AMMOBOX_QUANTITY(obj)));
       break;
     case ITEM_GUN_MAGAZINE:
       // A magazine.
-      snprintf(ENDOF(log_string), sizeof(log_string) - strlen(log_string), ", containing %d %s", 
-               GET_MAGAZINE_AMMO_COUNT(obj), 
+      snprintf(ENDOF(log_string), sizeof(log_string) - strlen(log_string), ", containing %d %s",
+               GET_MAGAZINE_AMMO_COUNT(obj),
                get_ammo_representation(GET_MAGAZINE_BONDED_ATTACKTYPE(obj), GET_MAGAZINE_AMMO_TYPE(obj), GET_MAGAZINE_AMMO_COUNT(obj)));
     default:
       break;
   }
-  
+
   if (GET_OBJ_VNUM(obj) == OBJ_NEOPHYTE_SUBSIDY_CARD) {
     const char *name = get_player_name(GET_OBJ_VAL(obj, 0));
-    snprintf(ENDOF(log_string), sizeof(log_string) - strlen(log_string), ", bonded to character %s (%d) with %d nuyen on it", 
+    snprintf(ENDOF(log_string), sizeof(log_string) - strlen(log_string), ", bonded to character %s (%d) with %d nuyen on it",
              name,
              GET_OBJ_VAL(obj, 0),
              GET_OBJ_VAL(obj, 1));
     DELETE_ARRAY_IF_EXTANT(name);
   }
-  
+
   return str_dup(log_string);
 }
 
@@ -3026,14 +3093,14 @@ char *generate_new_loggable_representation(struct obj_data *obj) {
 void purgelog(struct veh_data *veh) {
   char internal_buffer[MAX_STRING_LENGTH];
   const char *representation = NULL;
-  
+
   // Begin the purgelog entry.
-  snprintf(internal_buffer, sizeof(internal_buffer), "- Writing purgelog for vehicle %s (vnum %ld, idnum %ld, owned by %ld).", 
-           GET_VEH_NAME(veh), 
-           veh_index[GET_VEH_RNUM(veh)].vnum, 
+  snprintf(internal_buffer, sizeof(internal_buffer), "- Writing purgelog for vehicle %s (vnum %ld, idnum %ld, owned by %ld).",
+           GET_VEH_NAME(veh),
+           veh_index[GET_VEH_RNUM(veh)].vnum,
            veh->idnum, veh->owner);
   mudlog(internal_buffer, NULL, LOG_PURGELOG, TRUE);
-  
+
   // Log its mounts.
   for (struct obj_data *mount = veh->mount; mount; mount = mount->next_content) {
     representation = generate_new_loggable_representation(mount);
@@ -3041,18 +3108,18 @@ void purgelog(struct veh_data *veh) {
     mudlog(internal_buffer, NULL, LOG_PURGELOG, TRUE);
     delete [] representation;
   }
-  
+
   // Log its mods.
   for (int x = 0; x < NUM_MODS; x++) {
     if (!GET_MOD(veh, x))
       continue;
-    
+
     representation = generate_new_loggable_representation(GET_MOD(veh, x));
     snprintf(internal_buffer, sizeof(internal_buffer), "- Mod attached to the %s: %s", mod_name[x], representation);
     mudlog(internal_buffer, NULL, LOG_PURGELOG, TRUE);
     delete [] representation;
   }
-  
+
   // Log its contained objects.
   for (struct obj_data *obj = veh->contents; obj; obj = obj->next_content) {
     representation = generate_new_loggable_representation(obj);
@@ -3060,7 +3127,7 @@ void purgelog(struct veh_data *veh) {
     mudlog(internal_buffer, NULL, LOG_PURGELOG, TRUE);
     delete [] representation;
   }
-  
+
   // End the purgelog entry.
   snprintf(internal_buffer, sizeof(internal_buffer), "- End purgelog for %s.", GET_VEH_NAME(veh));
   mudlog(internal_buffer, NULL, LOG_PURGELOG, TRUE);
@@ -3071,9 +3138,9 @@ void purgelog(struct veh_data *veh) {
 char *replace_substring(char *source, char *dest, const char *replace_target, const char *replacement) {
   const char *replace_target_ptr = replace_target;
   char *dest_ptr = dest;
-  
+
   *dest = '\0';
-  
+
   for (unsigned long i = 0; i < strlen(source); i++) {
     // Compare the source to our replacement target pointer and increment RTP.
     if (source[i] == *(replace_target_ptr)) {
@@ -3091,54 +3158,54 @@ char *replace_substring(char *source, char *dest, const char *replace_target, co
       for (unsigned long diff = replace_target_ptr - replace_target; diff > 0; diff--) {
         *(dest_ptr++) = source[i-diff];
       }
-        
+
       // Now, reset RTP and copy the most recent character directly.
       replace_target_ptr = replace_target;
       *(dest_ptr++) = source[i];
     }
   }
-  
+
   // Finally, null-termanate dest.
   *dest_ptr = '\0';
-  
+
   // Return the dest they gave us.
   return dest;
 }
 
-// Adds the amount to the ammobox, then processes its weight etc. 
+// Adds the amount to the ammobox, then processes its weight etc.
 void update_ammobox_ammo_quantity(struct obj_data *ammobox, int amount) {
   if (!ammobox) {
     mudlog("SYSERR: Null ammobox passed to update_ammobox_ammo_quantity.", ammobox->carried_by, LOG_SYSLOG, TRUE);
     return;
   }
-  
+
   if (amount == 0) {
     mudlog("SYSERR: Zero-quantity ammobox passed to update_ammobox_ammo_quantity.", ammobox->carried_by, LOG_SYSLOG, TRUE);
     return;
   }
-  
+
   if (GET_OBJ_TYPE(ammobox) != ITEM_GUN_AMMO) {
     mudlog("SYSERR: Non-ammobox passed to update_ammobox_ammo_quantity.", ammobox->carried_by, LOG_SYSLOG, TRUE);
   }
-  
+
   // Calculate what the new amount of ammo will be.
   GET_AMMOBOX_QUANTITY(ammobox) = GET_AMMOBOX_QUANTITY(ammobox) + amount;
-  
+
   if (GET_AMMOBOX_QUANTITY(ammobox) < 0) {
     mudlog("SYSERR: Updated ammobox to have negative ammo count! Restoring...", NULL, LOG_SYSLOG, TRUE);
     GET_AMMOBOX_QUANTITY(ammobox) = 0;
   }
-  
+
   // Update the box's weight.
   weight_change_object(ammobox, ammo_type[GET_AMMOBOX_TYPE(ammobox)].weight * amount);
-  
+
   // Calculate cost as count * multiplier (multiplier is per round)
   GET_OBJ_COST(ammobox) = GET_AMMOBOX_QUANTITY(ammobox) * get_ammo_cost(GET_AMMOBOX_WEAPON(ammobox), GET_AMMOBOX_TYPE(ammobox));
-  
+
   // Update the carrier's carry weight.
   if (ammobox->carried_by) {
     calc_weight(ammobox->carried_by);
-  }  
+  }
 }
 
 
@@ -3147,39 +3214,39 @@ bool combine_ammo_boxes(struct char_data *ch, struct obj_data *from, struct obj_
     mudlog("SYSERR: combine_ammo_boxes received a null value.", ch, LOG_SYSLOG, TRUE);
     return FALSE;
   }
-  
+
   if (GET_AMMOBOX_INTENDED_QUANTITY(from) > 0 || GET_AMMOBOX_INTENDED_QUANTITY(into) > 0) {
     mudlog("SYSERR: combine_ammo_boxes received a box that was not yet completed.", ch, LOG_SYSLOG, TRUE);
     return FALSE;
   }
-  
+
   // If the weapons don't match, no good.
   if (GET_AMMOBOX_WEAPON(from) != GET_AMMOBOX_WEAPON(into)) {
     mudlog("SYSERR: combine_ammo_boxes received boxes with non-matching weapon types.", ch, LOG_SYSLOG, TRUE);
     return FALSE;
   }
-  
+
   // If the ammo types don't match, no good.
   if (GET_AMMOBOX_TYPE(from) != GET_AMMOBOX_TYPE(into)) {
     mudlog("SYSERR: combine_ammo_boxes received boxes with non-matching ammo types.", ch, LOG_SYSLOG, TRUE);
     return FALSE;
   }
-  
+
   if (GET_AMMOBOX_QUANTITY(from) == 0) {
     if (print_messages)
       send_to_char(ch, "But %s is empty...\r\n", GET_OBJ_NAME(from));
     return FALSE;
   }
-  
+
   update_ammobox_ammo_quantity(into, GET_AMMOBOX_QUANTITY(from));
   update_ammobox_ammo_quantity(from, -GET_AMMOBOX_QUANTITY(from));
-  
+
   // Notify the owner, then destroy the empty.
   if (!from->restring || strcmp(from->restring, get_ammobox_default_restring(from)) == 0) {
     if (print_messages) {
       send_to_char(ch, "You dump the ammo into %s and throw away the empty box.\r\n", GET_OBJ_NAME(into) );
     }
-    
+
     extract_obj(from);
   } else {
     if (print_messages) {
@@ -3189,27 +3256,27 @@ bool combine_ammo_boxes(struct char_data *ch, struct obj_data *from, struct obj_
       );
     }
   }
-  
+
   // Restring it, as long as it's not already restrung. Use n_s_b so we don't accidentally donk someone's buf.
   if (!into->restring) {
     char notification_string_buf[500];
-    
+
     // Compose the new name.
     const char *restring = get_ammobox_default_restring(into);
-    
+
     // Compose the notification string.
     snprintf(notification_string_buf, sizeof(notification_string_buf), "The name '%s' probably doesn't fit anymore, so we'll call it '%s'.\r\n",
       GET_OBJ_NAME(into),
       restring
     );
-    
+
     // Commit the change and notify the player.
     into->restring = str_dup(restring);
-    
+
     if (print_messages)
       send_to_char(notification_string_buf, ch);
   }
-  
+
   // Everything succeeded.
   return TRUE;
 }
@@ -3217,7 +3284,7 @@ bool combine_ammo_boxes(struct char_data *ch, struct obj_data *from, struct obj_
 void destroy_door(struct room_data *room, int dir) {
   if (!room || dir < NORTH || dir > DOWN)
     return;
-    
+
   room->dir_option[dir]->condition = 0;
   REMOVE_BIT(room->dir_option[dir]->exit_info, EX_CLOSED);
   REMOVE_BIT(room->dir_option[dir]->exit_info, EX_LOCKED);
@@ -3256,7 +3323,7 @@ bool spell_is_nerp(int spell_num) {
     case SPELL_SPLASH:
       return TRUE;
   }
-  
+
   return FALSE;
 }
 
@@ -3264,41 +3331,89 @@ bool spell_is_nerp(int spell_num) {
 char get_final_character_from_string(const char *str) {
   if (!str || !*str)
     return 0;
-    
+
   for (int i = strlen(str) - 1; i >= 0; i--)
     if (str[i] != '\r' && str[i] != '\n' && str[i] != ' ')
       return str[i];
-  
+
   return 0;
 }
 
 bool CAN_SEE(struct char_data *subj, struct char_data *obj) {
   if (get_ch_in_room(subj) == NULL)
     return FALSE;
-    
+
   return CAN_SEE_ROOM_SPECIFIED(subj, obj, get_ch_in_room(subj));
 }
 
 bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struct room_data *room_specified) {
   if (!subj || !obj)
     return FALSE;
-    
+
   if (subj == obj)
     return TRUE;
-    
+
   // Does the viewee have an astral state that makes them invisible to subj?
   if (!SEE_ASTRAL(subj, obj))
     return FALSE;
-    
+
   // If your vision can't see in the ambient light, fail.
   if (!LIGHT_OK_ROOM_SPECIFIED(subj, room_specified))
     return FALSE;
-    
+
   // If they're in an invis state (spell or setting) you can't handle, fail.
   if (!invis_ok(subj, obj))
     return FALSE;
-    
+
   return TRUE;
+}
+
+bool LIGHT_OK_ROOM_SPECIFIED(struct char_data *sub, struct room_data *provided_room) {
+  struct obj_data *light;
+  struct room_data *in_room;
+
+  // Fix the ruh-rohs.
+  if (!sub || !provided_room)
+    return FALSE;
+
+  // If you can see on the astral plane, light means nothing to you.
+  if (IS_ASTRAL(sub) || IS_DUAL(sub))
+    return TRUE;
+
+  // If you have thermographic vision or holy light, you're good.
+  if (CURRENT_VISION((sub)) == THERMOGRAPHIC || HOLYLIGHT_OK(sub))
+    return TRUE;
+
+  // Check room light levels.
+  if (IS_LIGHT(provided_room) || (CURRENT_VISION(sub) == NORMAL && (light_level(provided_room) != LIGHT_MINLIGHT && light_level(provided_room) != LIGHT_FULLDARK)))
+    return TRUE;
+
+  // If you're in a vehicle, we assume you have headlights and interior lights.
+  if (sub->in_veh)
+    return TRUE;
+
+  // We also give allowances for people in rooms with player-occupied cars.
+  for (struct veh_data *veh = provided_room->vehicles; veh; veh = veh->next_veh) {
+    for (struct char_data *tch = veh->people; tch; tch = tch->next_in_veh)
+      if (!IS_NPC(tch))
+        return TRUE;
+  }
+
+  // If anyone in the room has a flashlight equipped, you're good. Note that this requires further checks in combat modifiers-- this is really just partlight.
+  if ((in_room = get_ch_in_room(sub))) {
+    for (struct char_data *tch = in_room->people; tch; tch = tch->next_in_room) {
+      // Have a flashlight?
+      if ((light = GET_EQ(tch, WEAR_LIGHT)) && GET_OBJ_TYPE(light) == ITEM_LIGHT && GET_OBJ_VAL(light, 2) != 0)
+        return TRUE;
+
+      // TODO: Have the light spell on them?
+
+      // TODO: Have the shadow spell on them?
+    }
+  }
+
+  // No saving grace, you get darkness.
+  return FALSE;
 }
 
 float get_proto_weight(struct obj_data *obj) {
@@ -3311,7 +3426,7 @@ float get_proto_weight(struct obj_data *obj) {
 
 int get_armor_penalty_grade(struct char_data *ch) {
   int total = 0;
-  
+
   if (GET_TOTALBAL(ch) > GET_QUI(ch))
     total += GET_TOTALBAL(ch) - GET_QUI(ch);
   if (GET_TOTALIMP(ch) > GET_QUI(ch))
@@ -3326,19 +3441,19 @@ int get_armor_penalty_grade(struct char_data *ch) {
     else
       return ARMOR_PENALTY_LIGHT;
   }
-  
+
   return ARMOR_PENALTY_NONE;
 }
 
-void handle_weapon_attachments(struct obj_data *obj) {  
+void handle_weapon_attachments(struct obj_data *obj) {
   if (GET_OBJ_TYPE(obj) != ITEM_WEAPON)
     return;
-    
+
   if (!IS_GUN(GET_WEAPON_ATTACK_TYPE(obj)))
     return;
-  
+
   int real_obj;
-  
+
   for (int i = ACCESS_LOCATION_TOP; i <= ACCESS_LOCATION_UNDER; i++)
     if (GET_OBJ_VAL(obj, i) > 0 && (real_obj = real_object(GET_OBJ_VAL(obj, i))) > 0) {
       struct obj_data *mod = &obj_proto[real_obj];
@@ -3346,7 +3461,7 @@ void handle_weapon_attachments(struct obj_data *obj) {
       GET_OBJ_VAL(obj, i) = 0;
       attach_attachment_to_weapon(mod, obj, NULL, i - ACCESS_ACCESSORY_LOCATION_DELTA);
     }
-    
+
   if (!GET_WEAPON_FIREMODE(obj)) {
     if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(obj), 1 << MODE_SS))
       GET_WEAPON_FIREMODE(obj) = MODE_SS;
@@ -3367,18 +3482,18 @@ bool builder_cant_go_there(struct char_data *ch, struct room_data *room) {
     // We assume all builders can go to staff-locked rooms, which are staff-only.
     if (room->staff_level_lock > 1)
       return FALSE;
-    
+
     // Otherwise, iterate and find the zone for the room. We allow them to go there if they have edit access.
     for (int counter = 0; counter <= top_of_zone_table; counter++) {
-      if (GET_ROOM_VNUM(room) >= (zone_table[counter].number * 100) 
-          && GET_ROOM_VNUM(room) <= zone_table[counter].top) 
+      if (GET_ROOM_VNUM(room) >= (zone_table[counter].number * 100)
+          && GET_ROOM_VNUM(room) <= zone_table[counter].top)
       {
         if (can_edit_zone(ch, counter))
           return FALSE;
-        
+
         if (zone_table[counter].number == 100)
           return FALSE;
-          
+
         return TRUE;
       }
     }
@@ -3395,7 +3510,7 @@ bool get_and_deduct_one_deckbuilding_token_from_char(struct char_data *ch) {
       return TRUE;
     }
   }
-  
+
   return FALSE;
 }
 
@@ -3403,14 +3518,14 @@ bool get_and_deduct_one_deckbuilding_token_from_char(struct char_data *ch) {
 bool program_can_be_copied(struct obj_data *prog) {
   if (!prog)
     return FALSE;
-    
+
   switch (GET_OBJ_VAL(prog, 0)) {
     case SOFT_ASIST_COLD:
     case SOFT_ASIST_HOT:
     case SOFT_HARDENING:
     case SOFT_ICCM:
     case SOFT_ICON:
-    case SOFT_MPCP: 
+    case SOFT_MPCP:
     case SOFT_REALITY:
     case SOFT_RESPONSE:
     case SOFT_BOD:
@@ -3420,7 +3535,7 @@ bool program_can_be_copied(struct obj_data *prog) {
     case SOFT_SUITE:
       return FALSE;
   }
-  
+
   return TRUE;
 }
 
@@ -3431,10 +3546,396 @@ struct obj_data *get_obj_proto_for_vnum(vnum_t vnum) {
   int rnum = real_object(vnum);
   if (rnum < 0)
     return NULL;
-    
+
   return &obj_proto[rnum];
 }
 
+bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch) {
+  // Nonexistant and non-weapons can't be used as foci.
+  if (!focus || !WEAPON_IS_FOCUS(focus))
+    return FALSE;
+
+  // Weapons in the middle of bonding can't be used.
+  if (GET_WEAPON_FOCUS_BOND_STATUS(focus) != 0)
+    return FALSE;
+
+  // Astral projection? We want to check your original character.
+  if (IS_PROJECT(ch)) {
+    if (ch->desc && ch->desc->original)
+      return GET_WEAPON_FOCUS_BONDED_BY(focus) == GET_IDNUM(ch->desc->original);
+  }
+
+  // Non-projection NPC? You get to use it.
+  if (IS_NPC(ch))
+    return TRUE;
+
+  // Otherwise, yes but only if you bonded it.
+  return GET_WEAPON_FOCUS_BONDED_BY(focus) == GET_IDNUM(ch);
+}
+
+// Cribbed from taxi code. Eventually, we should replace the taxi distance calculation with this.
+// Returns -1 for not found or error.
+int calculate_distance_between_rooms(vnum_t start_room_vnum, vnum_t target_room_vnum, bool ignore_roads) {
+  struct room_data *temp_room = NULL;
+  int dist = 0, x = 0;
+  rnum_t start_room_rnum, target_room_rnum;
+
+  // Ensure the vnums are valid.
+  start_room_rnum = real_room(start_room_vnum);
+  if (start_room_rnum < 0) {
+    mudlog("SYSERR: Invalid start room vnum passed to calculate_distance_between_rooms().", NULL, LOG_SYSLOG, TRUE);
+    return -1;
+  }
+
+  target_room_rnum = real_room(target_room_vnum);
+  if (target_room_rnum < 0) {
+    mudlog("SYSERR: Invalid target room vnum passed to calculate_distance_between_rooms().", NULL, LOG_SYSLOG, TRUE);
+    return -1;
+  }
+
+  temp_room = &world[start_room_rnum];
+
+  // Remember that temp room starts as null, so if no exit was found then this is skipped.
+  while (temp_room) {
+    x = find_first_step(real_room(temp_room->number), target_room_rnum, ignore_roads);
+
+    // Arrived at target.
+    if (x == BFS_ALREADY_THERE)
+      break;
+
+    // Could not find target, and ran out of options.
+    if (x == BFS_ERROR || x == BFS_NO_PATH) {
+      temp_room = NULL;
+      break;
+    }
+
+    // Continue.
+    temp_room = temp_room->dir_option[x]->to_room;
+    dist++;
+  }
+
+  // Not found or error: -1.
+  if (!temp_room)
+    return -1;
+  else
+    return dist;
+}
+
+bool item_should_be_treated_as_melee_weapon(struct obj_data *obj) {
+  // Doesn't exist-- fists are melee weapons.
+  if (!obj)
+    return TRUE;
+
+  // Not a weapon.
+  if (GET_OBJ_TYPE(obj) != ITEM_WEAPON)
+    return FALSE;
+
+  // It's a gun that has a magazine in it.
+  if (IS_GUN(GET_WEAPON_ATTACK_TYPE(obj)) && obj->contains)
+    return FALSE;
+
+  // It's a gun that has no magazine (it was EJECTed), or it's not a gun.
+  return TRUE;
+}
+
+bool item_should_be_treated_as_ranged_weapon(struct obj_data *obj) {
+  // Doesn't exist.
+  if (!obj)
+    return FALSE;
+
+  // Not a weapon.
+  if (GET_OBJ_TYPE(obj) != ITEM_WEAPON)
+    return FALSE;
+
+  // It's not a gun, or it doesn't have a magazine.
+  if (!IS_GUN(GET_WEAPON_ATTACK_TYPE(obj)) || !obj->contains)
+    return FALSE;
+
+  // It's a gun that has a magazine in it.
+  return TRUE;
+}
+
+void turn_hardcore_on_for_character(struct char_data *ch) {
+  if (!ch || IS_NPC(ch))
+    return;
+
+  PRF_FLAGS(ch).SetBit(PRF_HARDCORE);
+  PLR_FLAGS(ch).SetBit(PLR_NODELETE);
+  snprintf(buf, sizeof(buf), "UPDATE pfiles SET Hardcore=1, NoDelete=1 WHERE idnum=%ld;", GET_IDNUM(ch));
+  mysql_wrapper(mysql, buf);
+}
+
+void turn_hardcore_off_for_character(struct char_data *ch) {
+  if (!ch || IS_NPC(ch))
+    return;
+
+  PRF_FLAGS(ch).RemoveBit(PRF_HARDCORE);
+  PLR_FLAGS(ch).RemoveBit(PLR_NODELETE);
+  snprintf(buf, sizeof(buf), "UPDATE pfiles SET Hardcore=0, NoDelete=0 WHERE idnum=%ld;", GET_IDNUM(ch));
+  mysql_wrapper(mysql, buf);
+}
+
+void set_natural_vision_for_race(struct char_data *ch) {
+  switch (GET_RACE(ch)) {
+    case RACE_HUMAN:
+    case RACE_OGRE:
+      NATURAL_VISION(ch) = NORMAL;
+      break;
+    case RACE_DWARF:
+    case RACE_GNOME:
+    case RACE_MENEHUNE:
+    case RACE_KOBOROKURU:
+    case RACE_TROLL:
+    case RACE_CYCLOPS:
+    case RACE_FOMORI:
+    case RACE_GIANT:
+    case RACE_MINOTAUR:
+      NATURAL_VISION(ch) = THERMOGRAPHIC;
+      break;
+    case RACE_ORK:
+    case RACE_HOBGOBLIN:
+    case RACE_SATYR:
+    case RACE_ONI:
+    case RACE_ELF:
+    case RACE_WAKYAMBI:
+    case RACE_NIGHTONE:
+    case RACE_DRYAD:
+      NATURAL_VISION(ch) = LOWLIGHT;
+      break;
+  }
+}
+
+// Returns -1 on error, make sure you catch that!
+int get_string_length_after_color_code_removal(const char *str, struct char_data *ch_to_notify_of_failure_reason) {
+  if (!str) {
+    mudlog("SYSERR: Null string received to get_string_length_after_color_code_removal().", ch_to_notify_of_failure_reason, LOG_SYSLOG, TRUE);
+    return 0;
+  }
+
+  const char *ptr = str;
+  long ptr_max = strlen(str) - 1;
+  int len = 0;
+
+  while (*ptr && (ptr - str) <= ptr_max) {
+    if (*ptr == '^') {
+      if (*(ptr+1) == '\0') {
+        if (ch_to_notify_of_failure_reason)
+          send_to_char("Sorry, tag strings can't end with the ^ character.\r\n", ch_to_notify_of_failure_reason);
+        return -1;
+      }
+      // Print a single ^ character.
+      else if (*(ptr+1) == '^') {
+        ptr += 2;
+        len += 1;
+      }
+      // Print a color character.
+      else {
+        // There are two types of color: Two-character tags (^g) and xterm tags (^[F123]). We must account for both.
+        if (*(ptr+1) == '[') {
+          // We know that ptr+1 was a valid character (see first check in this while), so at worst, +2 can be \0.
+          if (!*(ptr + 2) || !(*(ptr + 2) == 'F')) {
+            if (ch_to_notify_of_failure_reason)
+              send_to_char("Sorry, xterm256 colors can only be specified in foreground mode (^^[F...]).\r\n", ch_to_notify_of_failure_reason);
+            return -1;
+          }
+#define IS_CODE_DIGIT_VALID(chr) (*(chr) && (*(chr) == '0' || *(chr) == '1' || *(chr) == '2' || *(chr) == '3' || *(chr) == '4' || *(chr) == '5'))
+          if (!IS_CODE_DIGIT_VALID(ptr + 3) || !IS_CODE_DIGIT_VALID(ptr + 4) || !IS_CODE_DIGIT_VALID(ptr + 5)) {
+            if (ch_to_notify_of_failure_reason)
+              send_to_char("Sorry, you've entered an invalid xterm256 color code.\r\n", ch_to_notify_of_failure_reason);
+            return -1;
+          }
+#undef IS_CODE_DIGIT_VALID
+          if (!*(ptr + 6) || *(ptr + 6) != ']') {
+            if (ch_to_notify_of_failure_reason)
+              send_to_char("You've forgotten to terminate an xterm256 color code.\r\n", ch_to_notify_of_failure_reason);
+            return -1;
+          }
+
+          ptr += strlen("^[F123]");
+        } else {
+          ptr += 2;
+        }
+      }
+    } else {
+      len += 1;
+      ptr += 1;
+    }
+  }
+
+  return len;
+}
+
+// Returns a string stripped of color for keyword matching or possibly other uses as well.
+// We don't need to check for color code validity because we call get_string_legth_after_color_code_removal() when the strings are initially written.
+char* get_string_after_color_code_removal(const char *str, struct char_data *ch) {
+  if (!str) {
+    mudlog("SYSERR: Null string received to get_string_after_color_code_removal().", ch, LOG_SYSLOG, TRUE);
+    return NULL;
+  }
+
+  const char *ptr = str;
+  long ptr_max = strlen(str) - 1;
+
+  static char clearstr [MAX_STRING_LENGTH];
+  memset(clearstr, 0, sizeof(clearstr));
+  int pos = 0;
+
+  while (*ptr && (ptr - str) <= ptr_max) {
+    // Buffer overflow failsafe.
+    if (pos == MAX_STRING_LENGTH - 1) {
+      clearstr[pos] = '\0';
+      return clearstr;
+    }
+
+    if (*ptr == '^') {
+      // Parse a single ^ character.
+      if (*(ptr+1) == '^') {
+        clearstr[pos] = *(ptr+1);
+        pos++;
+        ptr += 2;
+        continue;
+      }
+      // Skip color codes.
+      // There are two types of color: Two-character tags (^g) and xterm tags (^[F123]). We must account for both.
+      // 7 for xterm tags 2 for regular tags
+      else if (*(ptr+1) == '[') {
+          ptr  += 7;
+      }
+      else {
+        ptr += 2;
+      }
+    }
+    //Clear character, save it.
+    else {
+      clearstr[pos] = *ptr;
+      pos++;
+      ptr += 1;
+    }
+  }
+  return  clearstr;
+}
+
+// Returns the amount of color codes in a string.
+int count_color_codes_in_string(const char *str) {
+  const char *ptr = str;
+  long ptr_max = strlen(str) - 1;
+
+  int sum = 0;
+
+  while (*ptr && (ptr - str) <= ptr_max) {
+    if (*ptr == '^') {
+      // Parse a single ^ character.
+      if (*(ptr+1) == '^') {
+        sum++;
+        ptr += 2;
+        continue;
+      }
+      // Count color codes.
+      // There are two types of color: Two-character tags (^g) and xterm tags (^[F123]). We must account for both.
+      // 7 for xterm tags 2 for regular tags
+      else if (*(ptr+1) == '[') {
+          ptr  += 7;
+          sum += 7;
+      }
+      else {
+        ptr += 2;
+        sum += 2;
+      }
+    }
+    //Clear character, save it.
+    else
+      ptr += 1;
+  }
+  return  sum;
+}
+
+#define CHECK_FUNC_AND_SFUNC_FOR(function) (mob_index[GET_MOB_RNUM(npc)].func == (function) || mob_index[GET_MOB_RNUM(npc)].sfunc == (function))
+// Returns TRUE if the NPC has a spec that should protect it from damage, FALSE otherwise.
+bool npc_is_protected_by_spec(struct char_data *npc) {
+  return (CHECK_FUNC_AND_SFUNC_FOR(shop_keeper)
+          || CHECK_FUNC_AND_SFUNC_FOR(johnson)
+          || CHECK_FUNC_AND_SFUNC_FOR(landlord_spec)
+          || CHECK_FUNC_AND_SFUNC_FOR(postmaster)
+          || CHECK_FUNC_AND_SFUNC_FOR(teacher)
+          || CHECK_FUNC_AND_SFUNC_FOR(metamagic_teacher)
+          || CHECK_FUNC_AND_SFUNC_FOR(trainer)
+          || CHECK_FUNC_AND_SFUNC_FOR(adept_trainer)
+          || CHECK_FUNC_AND_SFUNC_FOR(spell_trainer)
+          || CHECK_FUNC_AND_SFUNC_FOR(receptionist)
+          || CHECK_FUNC_AND_SFUNC_FOR(fixer)
+          || CHECK_FUNC_AND_SFUNC_FOR(fence)
+          || CHECK_FUNC_AND_SFUNC_FOR(taxi)
+          || CHECK_FUNC_AND_SFUNC_FOR(painter)
+          || CHECK_FUNC_AND_SFUNC_FOR(nerp_skills_teacher)
+          || CHECK_FUNC_AND_SFUNC_FOR(hacker));
+}
+#undef CHECK_FUNC_AND_SFUNC_FOR
+
+bool can_damage_vehicle(struct char_data *ch, struct veh_data *veh) {
+  if (veh->owner && GET_IDNUM(ch) != veh->owner) {
+    bool has_valid_vict = FALSE;
+    for (struct char_data *killer_check = veh->people; killer_check; killer_check = killer_check->next_in_veh) {
+      if ((PRF_FLAGGED(ch, PRF_PKER) && PRF_FLAGGED(killer_check, PRF_PKER)) || PLR_FLAGGED(killer_check, PLR_KILLER)) {
+        has_valid_vict = TRUE;
+        break;
+      }
+    }
+
+    if (!has_valid_vict) {
+      if (!PRF_FLAGGED(ch, PRF_PKER) && !get_plr_flag_is_set_by_idnum(PLR_KILLER, veh->owner)) {
+        send_to_char("That's a player-owned vehicle. Better leave it alone.\r\n", ch);
+        return FALSE;
+      }
+
+      if (!get_prf_flag_is_set_by_idnum(PRF_PKER, veh->owner)) {
+        send_to_char("The owner of that vehicle is not flagged PK. Better leave it alone.\r\n", ch);
+        return FALSE;
+      }
+    }
+    // PLR_FLAGS(ch).SetBit(PLR_KILLER);
+    // send_to_char(KILLER_FLAG_MESSAGE, ch);
+  }
+
+  // No failure conditions found.
+  return TRUE;
+}
+
+// Precondition: You must pass in a valid type.
+char *compose_spell_name(int type, int subtype) {
+  static char name_buf[500];
+
+  strlcpy(name_buf, spells[type].name, sizeof(name_buf));
+
+  if (SPELL_HAS_SUBTYPE(type)) {
+    strlcat(name_buf, attributes[subtype], sizeof(name_buf));
+  }
+
+  return name_buf;
+}
+
+bool obj_contains_kept_items(struct obj_data *obj) {
+  if (!obj) {
+    mudlog("SYSERR: Received null object to obj_contains_kept_items().", NULL, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+  
+  if (!obj->contains) {
+    return FALSE;
+  }
+
+  // Iterate over each item in the content list.
+  for (struct obj_data *tmp = obj->contains; tmp; tmp = tmp->next_content) {
+    // If this item is kept, return true.
+    if (IS_OBJ_STAT(tmp, ITEM_KEPT))
+      return TRUE;
+
+    // If this item contains kept items, return true.
+    if (tmp->contains && obj_contains_kept_items(tmp))
+      return TRUE;
+  }
+  // We found no kept items- return false.
+  return FALSE;
+}
 
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.
 // Great for swapping out old Classic weapons, cyberware, etc for the new guaranteed-canon versions.
@@ -3447,12 +3948,12 @@ vnum_t get_authoritative_vnum_for_item(vnum_t vnum) {
     PAIR(1916,   80003);
     PAIR(29005,  80004);
     PAIR(7418,   80005);
-    
+
     // Melee weapons.
     PAIR(632, 80100);
     PAIR(652, 80101);
     // More to do here, it's just difficult to sort through the wall of items.
-    
+
     // Ranged weapons.
     PAIR(728,   80200);
     PAIR(731,   80201);
@@ -3486,9 +3987,9 @@ vnum_t get_authoritative_vnum_for_item(vnum_t vnum) {
     PAIR(881,   80225);
     PAIR(880,   80226);
     PAIR(883,   80227);
-    
+
     // TODO: Pair things before this with mismatched names, have pairing only overwrite stats.
-    
+
     // Weapon attachable accessories.
     PAIR(654,   80400);
     PAIR(650,   80401);
@@ -3517,13 +4018,13 @@ vnum_t get_authoritative_vnum_for_item(vnum_t vnum) {
     PAIR(60553, 80411);
     PAIR(2325,  80413);
     PAIR(28702, 80415);
-    
+
     // Weapon other accessories (holsters, gyros, etc)
     PAIR(64963, 80502);
     PAIR(64964, 80501);
-    
+
     // Armor (80700-80799) TODO, I don't have the patience to deal with this right now.
-    
+
     // Cyberware. All 125 items of it, hand-compared with other cyberware. I hope y'all realize just how much dedication this takes.
     PAIR(325,   85000);
     PAIR(487,   85001);
@@ -3613,14 +4114,14 @@ vnum_t get_authoritative_vnum_for_item(vnum_t vnum) {
     PAIR(565,   85250);
     PAIR(510,   85052);
     PAIR(39371, 85252);
-    
+
     // Bioware.
     PAIR(1461, 85802); // cats eyes
     PAIR(60344, 85802);
     PAIR(33254, 85902);
     // WIP
   }
-  
+
   // No match.
   return vnum;
 }

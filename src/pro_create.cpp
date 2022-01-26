@@ -11,6 +11,7 @@
 #include "constants.h"
 #include "olc.h"
 #include "newmagic.h"
+#include "config.h"
 
 #define CH d->character
 #define PEDIT_MENU 0
@@ -22,6 +23,7 @@
 extern void part_design(struct char_data *ch, struct obj_data *design);
 extern void spell_design(struct char_data *ch, struct obj_data *design);
 extern void ammo_test(struct char_data *ch, struct obj_data *obj);
+extern void weight_change_object(struct obj_data * obj, float weight);
 
 void pedit_disp_menu(struct descriptor_data *d)
 {
@@ -131,14 +133,31 @@ void pedit_parse(struct descriptor_data *d, const char *arg)
     }
     break;
   case PEDIT_NAME:
-    if (strlen(arg) >= LINE_LENGTH) {
+  {
+    int length_with_no_color = get_string_length_after_color_code_removal(arg, CH);
+      
+    // Silent failure: We already sent the error message in get_string_length_after_color_code_removal().
+    if (length_with_no_color == -1) {
       pedit_disp_menu(d);
       return;
     }
+    if (length_with_no_color >= LINE_LENGTH) {
+      send_to_char(CH, "That name is too long, please shorten it. The maximum length after color code removal is %d characters.\r\n", LINE_LENGTH - 1);
+      pedit_disp_menu(d);
+      return;
+    }
+  
+    if (strlen(arg) >= MAX_RESTRING_LENGTH) {
+      send_to_char(CH, "That restring is too long, please shorten it. The maximum length with color codes included is %d characters.\r\n", MAX_RESTRING_LENGTH - 1);
+      pedit_disp_menu(d);
+      return;
+    }
+
     DELETE_ARRAY_IF_EXTANT(d->edit_obj->restring);
     d->edit_obj->restring = str_dup(arg);
     pedit_disp_menu(d);
     break;
+  }
   case PEDIT_WOUND:
     if (number < 1 || number > 4)
       send_to_char(CH, "Not a valid option!\r\nEnter your choice: ");
@@ -310,13 +329,13 @@ ACMD(do_design)
   if (GET_OBJ_TIMER(prog) == GET_OBJ_VAL(prog, 4)) {
     if (get_and_deduct_one_deckbuilding_token_from_char(ch)) {
       send_to_char("A deckbuilding token fuzzes into digital static, greatly accelerating the design time.\r\n", ch);
-      GET_OBJ_TIMER(prog) = 0;
       GET_OBJ_VAL(prog, 8) = 10;
+      GET_OBJ_VAL(prog, 4) = 1;
     }
     else if (access_level(ch, LVL_ADMIN)) {
       send_to_char(ch, "You use your admin powers to greatly accelerate the design time of %s.\r\n", prog->restring);
-      GET_OBJ_TIMER(prog) = 0;
       GET_OBJ_VAL(prog, 8) = 10;
+      GET_OBJ_VAL(prog, 4) = 1;
     } else {
       send_to_char(ch, "You begin designing %s.\r\n", prog->restring);
       GET_OBJ_VAL(prog, 8) = success_test(skill, target);
@@ -512,8 +531,39 @@ void update_buildrepair(void)
         }
       } else if (AFF_FLAGGED(desc->character, AFF_PROGRAM)) {
         if (--GET_OBJ_VAL(PROG, 5) < 1) {
-          if (GET_OBJ_VAL(PROG, 7))
-            send_to_char(desc->character, "You realise programming %s is a lost cause.\r\n", GET_OBJ_NAME(PROG));
+          if (GET_OBJ_VAL(PROG, 7)){
+            switch(number(1,10)) {
+              case 1:
+                send_to_char(desc->character, "It was about that time that you noticed you had typed up all of your code on the microwave keypad. You realise programming %s is a lost cause.\r\n", GET_OBJ_NAME(PROG));
+                break;
+              case 2:
+                send_to_char(desc->character, "There was a series of articles related to what you were doing, but you somehow ended up on a page about crabs. Why always crabs?!? You realise programming %s is a lost cause.\r\n", GET_OBJ_NAME(PROG));
+                break;
+              case 3:
+                send_to_char(desc->character, "You became distracted and lost hours of your life to a Penumbrawalk mud. You realise programming %s is a lost cause.\r\n", GET_OBJ_NAME(PROG));
+                break;
+              case 4:
+                send_to_char(desc->character, "You've finally done it! You've made an electric drum kit out of tin foil and pen parts! Programming %s failed though.\r\n", GET_OBJ_NAME(PROG));
+                break;
+              case 5:
+                send_to_char(desc->character, "You've been banned from the ShadowBoards. You realise programming %s is a lost cause.\r\n", GET_OBJ_NAME(PROG));
+                break;
+              case 6:
+                send_to_char(desc->character, "You have finished a spell formula for Stunbolt... wait, what the hell?! You realise programming %s is a lost cause.\r\n", GET_OBJ_NAME(PROG));
+                break;
+              case 7:
+                send_to_char(desc->character, "A distant, powerful matrix entity is disappointed in you. You realise programming %s is a lost cause.\r\n", GET_OBJ_NAME(PROG));
+                break;
+              case 8:
+                send_to_char(desc->character, "You tried to forge %s into an incredible program that would have pierced open the walls of flowing code. You're pretty sure you misplaces a parentheses somewhere so it all turned into gibberish about broccoli.\r\n", GET_OBJ_NAME(PROG));
+                break;
+              case 9:
+                send_to_char(desc->character, "You tried to program %s only to realize many hours in you were coding on one of the spare half-assembled things you had littered around your current workspace, accomplishing nothing.\r\n", GET_OBJ_NAME(PROG));
+                break;
+              default:
+                send_to_char(desc->character, "You realise programming %s is a lost cause.\r\n", GET_OBJ_NAME(PROG));
+              }
+            }
           else {
             send_to_char(desc->character, "You complete programming %s.\r\n", GET_OBJ_NAME(PROG));
             struct obj_data *newp = read_object(OBJ_BLANK_PROGRAM, VIRTUAL);
@@ -583,6 +633,7 @@ void update_buildrepair(void)
         spirit->called = TRUE;
         GET_SPIRIT(CH) = spirit;
         GET_NUM_SPIRITS(CH)++;
+        GET_ELEMENTALS_DIRTY_BIT(CH) = TRUE;
         GET_SPARE2(mob) = spirit->id;
       } else if (AFF_FLAGGED(CH, AFF_CIRCLE) && --GET_OBJ_VAL(PROG, 9) < 1) {
         send_to_char("You complete drawing the circle.\r\n", CH);
@@ -595,20 +646,71 @@ void update_buildrepair(void)
         CH->char_specials.timer = 0;
         STOP_WORKING(CH);
       } else if (AFF_FLAGGED(CH, AFF_AMMOBUILD) && --GET_AMMOBOX_TIME_TO_COMPLETION(PROG) < 1) {
-        if (GET_AMMOBOX_TIME_TO_COMPLETION(PROG) <= -2) // --(-1) = -2; prevents penalizing people who ace the test.
-          send_to_char("You seem to have messed up the batch of ammo.\r\n", CH);
+        if (GET_AMMOBOX_TIME_TO_COMPLETION(PROG) <= -2) { // --(-1) = -2; prevents penalizing people who ace the test.
+          switch(number(1,18)) {
+            case 1:
+              send_to_char("You swear loudly as a gunshot rings out because you accidentally fired the round.\r\n", CH);
+              break;
+            case 2:
+              send_to_char("The poor-quality metal shavings you're trying to turn into a bullet disintegrate and you curse the entire lineage of the fixer who gave you these materials.\r\n", CH);
+              break;
+            case 3:
+              send_to_char("Somehow, an ancient unknown language comes unbidden to your lips. You think you said something unspeakable about a dog - regardless, the bullet is now tainted. You discard it.\r\n", CH);
+              break;
+            case 4:
+              send_to_char("You grind and grind and grind and grind and grind and grind and then you realize you have nothing left to grind.\r\n", CH);
+              break;
+            case 5:
+              send_to_char("You drop a tool, causing a spark to light from your gunpowder to the casing you're trying to pack. There's a disappointing 'pop' noise as it bursts into flames.\r\n", CH);
+              break;
+            case 6:
+              send_to_char("You're pretty sure the bullet started talking to you. After several hours, things have started to blur together - better be safe, though. It might be a free spirit. You throw it away.\r\n", CH);
+              break;
+            case 7:
+              send_to_char("You were trying to craft APDS, weren't you? Poor bastard.\r\n", CH);
+              break;
+            case 8:
+              send_to_char("You stumble slightly, jamming your thumb in the vice. The process of ripping your hand out obliterates the shell casing.\r\n", CH);
+              break;
+            case 9:
+              send_to_char("You decide to use a hammer to knock the back of the casing up onto the bullet... BAM! Now that wasn't very smart, was it?\r\n", CH);
+              break;
+            default:
+              send_to_char("You seem to have messed up this batch of ammo.\r\n", CH);
+          }
+        }
         else {
           send_to_char("You have completed a batch of ammo.\r\n", CH);
-          GET_AMMOBOX_QUANTITY(PROG) += 10;
+          GET_AMMOBOX_QUANTITY(PROG) += AMMOBUILD_BATCH_SIZE;
+          
+          // Add the weight of the completed ammo to the box.
+          weight_change_object(PROG, ammo_type[GET_AMMOBOX_TYPE(PROG)].weight * AMMOBUILD_BATCH_SIZE);
         }
-        GET_AMMOBOX_INTENDED_QUANTITY(PROG) -= 10;
+        GET_AMMOBOX_INTENDED_QUANTITY(PROG) -= AMMOBUILD_BATCH_SIZE;
         if (GET_AMMOBOX_INTENDED_QUANTITY(PROG) <= 0) {
           send_to_char(CH, "You have finished building %s.\r\n", GET_OBJ_NAME(PROG));
           STOP_WORKING(CH);
         } else ammo_test(CH, PROG);
       } else if (AFF_FLAGGED(CH, AFF_SPELLDESIGN) && --GET_OBJ_VAL(PROG, 6) < 1) {
         if (GET_OBJ_TIMER(PROG) == -3) {
-          send_to_char("You realise you have lost your inspiration for this spell.\r\n", CH);
+          switch(number(1,8)) {
+            case 1:
+              send_to_char(CH, "The Dweller on the Threshold notices your attempts at spell creation and laughs. You failed to design %s.\r\n", GET_OBJ_NAME(PROG));
+              break;
+            case 2:  
+              send_to_char(CH, "This spell would have been the profane bridge that brought the Horrors to the Sixth World. However, they were thoroughly unimpressed with your work. You failed to design %s.\r\n", GET_OBJ_NAME(PROG));
+              break;
+            case 3:  
+              send_to_char(CH, "You draw the Magus of the Eternal Gods, Lord of the Wild and Fertile Lands, and the Ten of Spades. Go fish. You failed to design %s.\r\n", GET_OBJ_NAME(PROG));
+              break;
+            case 4:  
+              send_to_char(CH, "You finished programming a Carrot Top reality filter for your cyberdeck - wait, what?!? You realise you have lost your inspiration for %s\r\n", GET_OBJ_NAME(PROG));
+              break;
+            case 5:  
+              send_to_char(CH, "You've spilt your ritual chalice of your favorite drink all over %s! So much for that spell!\r\n", GET_OBJ_NAME(PROG));
+            default:
+              send_to_char(CH, "You realise you have lost your inspiration for %s.\r\n", GET_OBJ_NAME(PROG));
+          }
           extract_obj(PROG);
         } else {
           send_to_char(CH, "You successfully finish designing %s.\r\n", GET_OBJ_NAME(PROG));

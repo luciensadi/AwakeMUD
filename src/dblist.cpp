@@ -20,6 +20,7 @@
 #include "newdb.h"
 #include "perfmon.h"
 #include "config.h"
+#include "newmatrix.h"
 
 // extern vars
 extern class helpList Help;
@@ -115,6 +116,7 @@ struct obj_data *objList::FindObj(struct char_data *ch, char *name, int num)
 // for OLC so objects on the mud get updated with the correct values
 void objList::UpdateObjs(const struct obj_data *proto, int rnum)
 {
+  PERF_PROF_SCOPE(pr_, __func__);
   static nodeStruct<struct obj_data *> *temp;
   static struct obj_data old;
 
@@ -144,6 +146,7 @@ void objList::UpdateObjs(const struct obj_data *proto, int rnum)
 
 void objList::UpdateObjsIDelete(const struct obj_data *proto, int rnum, int new_rnum)
 {
+  PERF_PROF_SCOPE(pr_, __func__);
   static nodeStruct<struct obj_data *> *temp;
   static struct obj_data old;
   
@@ -273,7 +276,7 @@ void objList::UpdateCounters(void)
           snprintf(buf, sizeof(buf), "A passerby rolls %s eyes and quickly re-%spacks the half-packed $p.",
                   number(0, 1) == 0 ? "his" : "her",
                   GET_WORKSHOP_IS_SETUP(OBJ) ? "un" : "");
-          act(buf, FALSE, OBJ->in_room->people, NULL, OBJ, TO_ROOM);
+          act(buf, FALSE, OBJ->in_room->people, OBJ, NULL, TO_ROOM);
         }
         GET_WORKSHOP_UNPACK_TICKS(OBJ) = 0;
       }
@@ -283,7 +286,8 @@ void objList::UpdateCounters(void)
     if (GET_OBJ_TYPE(OBJ) == ITEM_DECK_ACCESSORY 
         && GET_OBJ_VAL(OBJ, 0) == TYPE_COOKER 
         && OBJ->contains 
-        && GET_DECK_ACCESSORY_COOKER_TIME_REMAINING(OBJ) > 0) {
+        && GET_DECK_ACCESSORY_COOKER_TIME_REMAINING(OBJ) > 0) 
+    {
       if (--GET_DECK_ACCESSORY_COOKER_TIME_REMAINING(OBJ) < 1) {
         struct obj_data *chip = OBJ->contains;
         act("$p beeps loudly, signaling completion.", FALSE, 0, OBJ, 0, TO_ROOM);
@@ -294,6 +298,16 @@ void objList::UpdateCounters(void)
           GET_OBJ_TIMER(chip) = 1;
       }
       continue;
+    }
+    
+    // Decay mail.
+    if (GET_OBJ_VNUM(OBJ) == OBJ_PIECE_OF_MAIL) {
+      if (GET_OBJ_TIMER(OBJ) != -1 && GET_OBJ_TIMER(OBJ) > MAIL_EXPIRATION_TICKS) {
+        snprintf(buf, sizeof(buf), "Extracting expired mail '%s'.", GET_OBJ_NAME(OBJ));
+        mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+        extract_obj(OBJ);
+        continue;
+      }
     }
 
     // In-game this is a UCAS dress shirt. I suspect the files haven't been updated.
@@ -444,6 +458,11 @@ void objList::RemoveQuestObjs(int id)
       else if (temp->data->in_room && temp->data->in_room->people) {
         act("$p disintegrates.", TRUE, temp->data->in_room->people, temp->data, 0, TO_ROOM);
         act("$p disintegrates.", TRUE, temp->data->in_room->people, temp->data, 0, TO_CHAR);
+      }
+      else if (temp->data->in_host) {
+        snprintf(buf3, sizeof(buf3), "%s depixelates and vanishes from the host.\r\n", capitalize(GET_OBJ_NAME(temp->data)));
+        send_to_host(temp->data->in_host->rnum, buf3, NULL, TRUE);
+        obj_from_host(temp->data);
       }
       extract_obj(temp->data);
     }

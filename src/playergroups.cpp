@@ -24,6 +24,7 @@
 
 // Externs from other files.
 extern void store_mail(long to, struct char_data *from, const char *message_pointer);
+extern void raw_store_mail(long to, long from_id, const char *from_name, const char *message_pointer);
 
 // Prototypes from this file.
 void perform_pgroup_grant_revoke(struct char_data *ch, char *argument, bool revoke);
@@ -97,7 +98,7 @@ ACMD(do_accept) {
         if (!IS_NPC(i) && GET_PGROUP_MEMBER_DATA(i) && GET_PGROUP(i)->get_idnum() == pgr->get_idnum()) {
           // Notify the character.
           if (!pgr->is_secret() || !GET_PGROUP_MEMBER_DATA(i)->privileges.AreAnySet(PRIV_COCONSPIRATOR, PRIV_LEADER, ENDBIT)) {
-            send_to_char(i, "%s has joined '%s'.\r\n", GET_CHAR_NAME(ch), pgr->get_name());
+            send_to_char(i, "^G%s has joined '%s'.\r\n^n", GET_CHAR_NAME(ch), pgr->get_name());
           }
         }
       }
@@ -160,7 +161,7 @@ ACMD(do_decline) {
   send_to_char(ch, "You don't seem to have any invitations from '%s'.\r\n", argument);
 }
 
-// Find or load the specified group.
+// Find or load the specified group. Note that Playergroup(idnum) makes a DB call!
 Playergroup *Playergroup::find_pgroup(long idnum) {
   Playergroup *pgr = loaded_playergroups;
   
@@ -176,6 +177,9 @@ Playergroup *Playergroup::find_pgroup(long idnum) {
     pgr = pgr->next_pgroup;
   }
   
+  char logbuf[1000];
+  snprintf(logbuf, sizeof(logbuf), "Info: No loaded instance of group %ld, creating new struct.", idnum);
+  mudlog(logbuf, NULL, LOG_PGROUPLOG, TRUE);
   return new Playergroup(idnum);
 }
 
@@ -202,18 +206,18 @@ struct pgroup_cmd_struct {
   { "disband"    , PRIV_LEADER        , do_pgroup_disband     , TRUE    , TRUE    , TRUE    , FALSE   , FALSE   , FALSE   , "Disband the group. All resources are lost." },
   { "edit"       , PRIV_LEADER        , do_pgroup_edit        , TRUE    , TRUE    , TRUE    , FALSE   , FALSE   , FALSE   , "Edit the group using the same menu as when it was founded." },
   { "found"      , PRIV_LEADER        , do_pgroup_found       , TRUE    , FALSE   , TRUE    , FALSE   , FALSE   , FALSE   , "You should not see this message." },
-  { "grant"      , PRIV_ADMINISTRATOR , do_pgroup_grant       , FALSE   , TRUE    , TRUE    , FALSE   , TRUE    , FALSE   , "Grant a privilege you have to another member. Use PGROUP PRIVILEGES FULL to see your privs and their effects." },
-  { "help"       , PRIV_NONE          , do_pgroup_help        , TRUE    , TRUE    , FALSE   , FALSE   , FALSE   , FALSE   , "The help system. PGROUP HELP for general info, PGROUP HELP [command] for command-specific info." },
+  { "grant"      , PRIV_ADMINISTRATOR , do_pgroup_grant       , FALSE   , TRUE    , TRUE    , FALSE   , TRUE    , FALSE   , "Grant a privilege you have to another member. Use ^WPGROUP PRIVILEGES FULL^n to see your privs and their effects." },
+  { "help"       , PRIV_NONE          , do_pgroup_help        , TRUE    , TRUE    , FALSE   , FALSE   , FALSE   , FALSE   , "The help system. ^WPGROUP HELP^n for general info, ^WPGROUP HELP [command]^n for command-specific info." },
   { "invite"     , PRIV_RECRUITER     , do_pgroup_invite      , TRUE    , TRUE    , TRUE    , FALSE   , FALSE   , FALSE   , "Send an invite to someone. This enables them to join your group for the next seven days." },
   { "invitations", PRIV_RECRUITER     , do_pgroup_invitations , TRUE    , TRUE    , TRUE    , FALSE   , TRUE    , TRUE    , "tbd" },
   { "lease"      , PRIV_LANDLORD      , do_pgroup_lease       , FALSE   , TRUE    , TRUE    , FALSE   , FALSE   , TRUE    , "tbd" },
-  { "logs"       , PRIV_AUDITOR       , do_pgroup_logs        , TRUE    , TRUE    , TRUE    , FALSE   , FALSE   , FALSE   , "Show the group's logs. Note that if the group is secret, you won't get the full logs without being a Co-Conspirator." },
+  { "logs"       , PRIV_AUDITOR       , do_pgroup_logs        , TRUE    , TRUE    , TRUE    , FALSE   , FALSE   , FALSE   , "Show the group's logs. You can change the number of days shown with ^WPGROUP LOGS [number of days]^n. Note that if the group is secret, you won't get the full logs without being a Co-Conspirator." },
   { "note"       , PRIV_NONE          , do_pgroup_note        , TRUE    , TRUE    , TRUE    , FALSE   , FALSE   , FALSE   , "Leave a note in the logs. Spamming or abusing this command will incur staff displeasure." },
   { "outcast"    , PRIV_ADMINISTRATOR , do_pgroup_outcast     , TRUE    , TRUE    , TRUE    , FALSE   , TRUE    , FALSE   , "Eject someone from the group." },
-  { "privileges" , PRIV_NONE          , do_pgroup_privileges  , TRUE    , TRUE    , TRUE    , FALSE   , FALSE   , FALSE   , "List the privileges you have. Use PGROUP PRIVILEGES FULL to list the effects of the privileges." },
+  { "privileges" , PRIV_NONE          , do_pgroup_privileges  , TRUE    , TRUE    , TRUE    , FALSE   , FALSE   , FALSE   , "List the privileges you have. Use ^WPGROUP PRIVILEGES FULL^n to list the effects of the privileges." },
   { "promote"    , PRIV_ADMINISTRATOR , do_pgroup_promote     , FALSE   , TRUE    , TRUE    , FALSE   , TRUE    , FALSE   , "Promote someone up to the rank below yourself." },
   { "resign"     , PRIV_NONE          , do_pgroup_resign      , TRUE    , TRUE    , FALSE   , TRUE    , FALSE   , FALSE   , "Resign from the group." },
-  { "revoke"     , PRIV_ADMINISTRATOR , do_pgroup_revoke      , FALSE   , TRUE    , TRUE    , FALSE   , TRUE    , FALSE   , "Revoke someone's granted privileges. Use PGROUP PRIVILEGES FULL to see your privs and their effects." },
+  { "revoke"     , PRIV_ADMINISTRATOR , do_pgroup_revoke      , FALSE   , TRUE    , TRUE    , FALSE   , TRUE    , FALSE   , "Revoke someone's granted privileges. Use ^WPGROUP PRIVILEGES FULL^n to see your privs and their effects." },
   { "roster"     , PRIV_NONE          , do_pgroup_roster      , TRUE    , TRUE    , TRUE    , FALSE   , TRUE    , FALSE   , "Show the current membership. If the group is secret, this also requires the Co-Conspirator privilege." },
   { "status"     , PRIV_NONE          , do_pgroup_status      , TRUE    , TRUE    , TRUE    , TRUE    , FALSE   , FALSE   , "Show an overview of the group." },
   { "transfer"   , PRIV_PROCURER      , do_pgroup_transfer    , FALSE   , TRUE    , TRUE    , FALSE   , FALSE   , TRUE    , "tbd" },
@@ -348,7 +352,7 @@ void do_pgroup_abdicate(struct char_data *ch, char *argument) {
   
   {
     // Find all group members and add them to a list.
-    snprintf(buf2, sizeof(buf2), "SELECT idnum, rank FROM pfiles_playergroups WHERE `group` = %ld", pgr->get_idnum());
+    snprintf(buf2, sizeof(buf2), "SELECT idnum, `rank` FROM pfiles_playergroups WHERE `group` = %ld", pgr->get_idnum());
     mysql_wrapper(mysql, buf2);
     
     MYSQL_RES *res = mysql_use_result(mysql);
@@ -520,7 +524,7 @@ void do_pgroup_disband(struct char_data *ch, char *argument) {
   Playergroup *pgr = GET_PGROUP(ch);
   
   // Read out the people who are getting kicked (in case we want to manually restore later).
-  snprintf(query_buf, sizeof(query_buf), "SELECT idnum, Rank, Privileges FROM pfiles_playergroups WHERE `group` = %ld ORDER BY Rank ASC", pgr->get_idnum());
+  snprintf(query_buf, sizeof(query_buf), "SELECT idnum, `Rank`, Privileges FROM pfiles_playergroups WHERE `group` = %ld ORDER BY `Rank` ASC", pgr->get_idnum());
   mysql_wrapper(mysql, query_buf);
   MYSQL_RES *res = mysql_use_result(mysql);
   MYSQL_ROW row;
@@ -575,7 +579,7 @@ void do_pgroup_disband(struct char_data *ch, char *argument) {
     if (!IS_NPC(i) && GET_PGROUP_MEMBER_DATA(i) && GET_PGROUP(i)->get_idnum() == pgr->get_idnum()) {
       // Notify the character, unless they're the person doing the disbanding.
       if (i != ch) {
-        send_to_char(i, "The playergroup '%s' has been disbanded.\r\n", pgr->get_name());
+        send_to_char(i, "^RThe playergroup '%s' has been disbanded.^n\r\n", pgr->get_name());
       }
       
       // Wipe out the data and null the pointer.
@@ -624,8 +628,8 @@ void do_pgroup_donate(struct char_data *ch, char *argument) {
     return;
   }
   
-  // Execute the change.
-  GET_BANK(ch) -= amount;
+  // Execute the change. Not a faucet or sink.
+  GET_BANK_RAW(ch) -= amount;
   GET_PGROUP(ch)->set_bank(GET_PGROUP(ch)->get_bank() + amount);
   GET_PGROUP(ch)->save_pgroup_to_db();
   
@@ -680,7 +684,7 @@ void do_pgroup_found(struct char_data *ch, char *argument) {
   
   // Eventual TODO: Should this be done in a specific place or in the presence of a specific NPC for RP reasons?
   send_to_char(ch, "You pay %d nuyen to found '%s'.\r\n", COST_TO_FOUND_GROUP, GET_PGROUP(ch)->get_name());
-  GET_NUYEN(ch) -= COST_TO_FOUND_GROUP;
+  lose_nuyen(ch, COST_TO_FOUND_GROUP, NUYEN_OUTFLOW_PGROUP);
   playerDB.SaveChar(ch);
   
   GET_PGROUP(ch)->set_founded(TRUE);
@@ -872,11 +876,12 @@ void do_pgroup_outcast(struct char_data *ch, char *argument) {
   
   // Notify the character.
   send_to_char(ch, "You outcast %s from '%s'.\r\n", GET_CHAR_NAME(vict), GET_PGROUP(ch)->get_name());
-  snprintf(buf, sizeof(buf), "You have been outcasted from '%s' (reason: %s).\r\n", GET_PGROUP(ch)->get_name(), reason);
-  store_mail(GET_IDNUM(vict), ch, buf);
+  snprintf(buf, sizeof(buf), "^RYou have been outcast from '%s' (reason: %s).^n\r\n", GET_PGROUP(ch)->get_name(), reason);
+  raw_store_mail(GET_IDNUM(vict), GET_IDNUM(ch), GET_PGROUP(ch)->is_secret() ? "a shadowy figure" : GET_CHAR_NAME(ch), buf);
   
   // Save the character.
   if (vict_is_logged_in) {
+    send_to_char(buf, vict);
     // Online characters are saved to the DB without unloading.
     playerDB.SaveChar(vict, GET_LOADROOM(vict));
   } else {
@@ -926,7 +931,7 @@ void do_pgroup_roster(struct char_data *ch, char *argument) {
   Playergroup *pgr = GET_PGROUP(ch);
   
   char query_buf[512];
-  snprintf(query_buf, sizeof(query_buf), "SELECT idnum, Rank, Privileges FROM pfiles_playergroups WHERE `group` = %ld ORDER BY Rank ASC", pgr->get_idnum());
+  snprintf(query_buf, sizeof(query_buf), "SELECT idnum, `Rank`, Privileges FROM pfiles_playergroups WHERE `group` = %ld ORDER BY `Rank` ASC", pgr->get_idnum());
   mysql_wrapper(mysql, query_buf);
   MYSQL_RES *res = mysql_use_result(mysql);
   MYSQL_ROW row;
@@ -1046,14 +1051,15 @@ void do_pgroup_wire(struct char_data *ch, char *argument) {
     }
   }
   
-  // Execute the change.
+  // Execute the change. Not a faucet or sink.
   GET_PGROUP(ch)->set_bank(GET_PGROUP(ch)->get_bank() - amount);
   GET_PGROUP(ch)->save_pgroup_to_db();
   if (isfile) {
     snprintf(buf, sizeof(buf), "UPDATE pfiles SET Bank=Bank+%lu WHERE idnum=%ld;", amount, isfile);
     mysql_wrapper(mysql, buf);
-  } else
-    GET_BANK(vict) += amount;
+  } else {
+    GET_BANK_RAW(vict) += amount;
+  }
   
   // Mail the recipient.
   snprintf(buf, sizeof(buf), "'%s' has wired %lu nuyen to your account.\r\n", GET_PGROUP(ch)->get_name(), amount);
@@ -1492,7 +1498,7 @@ void perform_pgroup_grant_revoke(struct char_data *ch, char *argument, bool revo
     
     // Write to the relevant characters' screens.
     send_to_char(ch, "You grant %s the %s privilege in '%s'.\r\n", GET_CHAR_NAME(vict), pgroup_privileges[priv].name, GET_PGROUP(ch)->get_name());
-    snprintf(buf, sizeof(buf), "You have been granted the %s privilege in '%s'.\r\n", pgroup_privileges[priv].name, GET_PGROUP(ch)->get_name());
+    snprintf(buf, sizeof(buf), "^GYou have been granted the %s privilege in '%s'.^n\r\n", pgroup_privileges[priv].name, GET_PGROUP(ch)->get_name());
   }
   
   // Save the character.
@@ -1598,7 +1604,7 @@ void do_pgroup_promote_demote(struct char_data *ch, char *argument, bool promote
   
   // Notify the character.
   send_to_char(ch, "You %s %s to rank %d.\r\n", promote ? "promote" : "demote", GET_CHAR_NAME(vict), rank);
-  snprintf(buf, sizeof(buf), "You have been %s to rank %d in '%s'.\r\n", promote ? "promoted" : "demoted", rank, GET_PGROUP(ch)->get_name());
+  snprintf(buf, sizeof(buf), "^GYou have been %s to rank %d in '%s'.^n\r\n", promote ? "promoted" : "demoted", rank, GET_PGROUP(ch)->get_name());
   
   // Save the character.
   if (vict_is_logged_in) {

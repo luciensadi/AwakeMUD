@@ -13,6 +13,7 @@
 #define _awake_h_
 
 #include <time.h>
+#include <iostream>
 
 #if (!defined(WIN32) || defined(__CYGWIN__)) && !defined(osx)
 using namespace std;
@@ -137,7 +138,7 @@ using namespace std;
 #define TOTEM_JACKAL       34
 #define TOTEM_JAGUAR       35
 #define TOTEM_LEOPARD      36
-#define TOTEM_LIZARD       37  
+#define TOTEM_LIZARD       37
 #define TOTEM_MONKEY       38
 #define TOTEM_OTTER        39
 #define TOTEM_PARROT       40
@@ -218,7 +219,7 @@ enum {
   LVL_PRESIDENT,
 
   LVL_MAX = LVL_PRESIDENT,
-  LVL_FREEZE = LVL_EXECUTIVE
+  LVL_FREEZE = LVL_CONSPIRATOR
 };
 
 /* character equipment positions: used as index for char_data.equipment[] */
@@ -267,44 +268,47 @@ enum {
 #define NUM_WEARS      39
 
 /* player flags: used by char_data.char_specials.act */
-#define PLR_KILLER              0  /* Player is a player-killer              */
-#define PLR_BLACKLIST           1  /* Player is banned from runs             */
-#define PLR_FROZEN              2  /* Player is frozen                       */
-#define PLR_DONTSET             3  /* Don't EVER set (ISNPC bit)             */
-#define PLR_NEWBIE              4  /* Player is a newbie still               */
-#define PLR_JUST_DIED           5  /* Player just died                       */
-#define PLR_VISA                6  /* Player needs to be crash-saved         */
-#define PLR_SITEOK              8  /* Player has been site-cleared           */
-#define PLR_NOSHOUT             9  /* Player not allowed to shout/goss       */
-#define PLR_NOTITLE             10 /* Player not allowed to set title        */
-#define PLR_DELETED             11 /* Player deleted - space reusable        */
-#define PLR_NODELETE            12 /* Player shouldn't be deleted            */
-#define PLR_NOSTAT              14 /* Player cannot be statted, etc          */
-#define PLR_LOADROOM            15 /* Player uses nonstandard loadroom       */
-#define PLR_INVSTART            16 /* Player should enter game wizinvis      */
-#define PLR_OLC                 19 /* Player has access to olc commands      */
-#define PLR_MATRIX              20 /* Player is in the Matrix                */
-#define PLR_PERCEIVE            21 /* player is astrally perceiving          */
-#define PLR_PROJECT             22 /* player is astrally projecting          */
-#define PLR_SWITCHED            23 /* player is switched to a mob            */
-#define PLR_WRITING             24 /* Player writing (board/mail/olc)        */
-#define PLR_MAILING             25 /* Player is writing mail                 */
-#define PLR_EDITING             26 /* Player is zone editing                 */
-#define PLR_SPELL_CREATE        27 /* Player is creating a spell             */
-#define PLR_CUSTOMIZE           28 /* Player is customizing persona          */
-#define PLR_NOSNOOP             29 /* Player is not snoopable                */
-#define PLR_WANTED              30 /* Player wanted by the law      */
-#define PLR_NOOOC               31 /* Player is muted from the OOC channel   */
-#define PLR_NOT_YET_AUTHED      32 /* Player needs Auth */
-#define PLR_EDCON               33
-#define PLR_REMOTE              34
-#define PLR_INITIATE            35
-#define PLR_DRIVEBY             36
-#define PLR_RPE                 37
-#define PLR_NO_IDLE_OUT         38 /* Player will not idle out (morts- for test chars) */
-#define PLR_TELLS_MUTED         39 /* Remove their ability to send tells. */
-#define PLR_NEWBIE_MUTED        40 /* Remove their ability to talk on the newbie channel. */
-#define PLR_MAX                 41
+#define PLR_KILLER                          0  /* Player is a player-killer              */
+#define PLR_BLACKLIST                       1  /* Player is banned from runs             */
+#define PLR_FROZEN                          2  /* Player is frozen                       */
+#define PLR_DONTSET                         3  /* Don't EVER set (ISNPC bit)             */
+#define PLR_NEWBIE                          4  /* Player is a newbie still               */
+#define PLR_JUST_DIED                       5  /* Player just died                       */
+#define PLR_VISA                            6  /* Player needs to be crash-saved         */
+#define PLR_RECEIVED_CYBEREYE_ESSENCE_DELTA 7  /* Player has had their cybereye essence cost reset */
+#define PLR_SITEOK                          8  /* Player has been site-cleared           */
+#define PLR_NOSHOUT                         9  /* Player not allowed to shout/goss       */
+#define PLR_NOTITLE                         10 /* Player not allowed to set title        */
+#define PLR_DELETED                         11 /* Player deleted - space reusable        */
+#define PLR_NODELETE                        12 /* Player shouldn't be deleted            */
+#define PLR_NOSTAT                          14 /* Player cannot be statted, etc          */
+#define PLR_LOADROOM                        15 /* Player uses nonstandard loadroom       */
+#define PLR_INVSTART                        16 /* Player should enter game wizinvis      */
+#define PLR_OLC                             19 /* Player has access to olc commands      */
+#define PLR_MATRIX                          20 /* Player is in the Matrix                */
+#define PLR_PERCEIVE                        21 /* player is astrally perceiving          */
+#define PLR_PROJECT                         22 /* player is astrally projecting          */
+#define PLR_SWITCHED                        23 /* player is switched to a mob            */
+#define PLR_WRITING                         24 /* Player writing (board/mail/olc)        */
+#define PLR_MAILING                         25 /* Player is writing mail                 */
+#define PLR_EDITING                         26 /* Player is zone editing                 */
+#define PLR_SPELL_CREATE                    27 /* Player is creating a spell             */
+#define PLR_CUSTOMIZE                       28 /* Player is customizing persona          */
+#define PLR_NOSNOOP                         29 /* Player is not snoopable                */
+#define PLR_WANTED                          30 /* Player wanted by the law      */
+#define PLR_NOOOC                           31 /* Player is muted from the OOC channel   */
+#define PLR_NOT_YET_AUTHED                  32 /* Player needs Auth */
+#define PLR_EDCON                           33
+#define PLR_REMOTE                          34
+#define PLR_INITIATE                        35
+#define PLR_DRIVEBY                         36
+#define PLR_RPE                             37
+#define PLR_NO_IDLE_OUT                     38 /* Player will not idle out (morts- for test chars) */
+#define PLR_TELLS_MUTED                     39 /* Remove their ability to send tells. */
+#define PLR_NEWBIE_MUTED                    40 /* Remove their ability to talk on the newbie channel. */
+#define PLR_CYBERDOC                        41 /* Player may act as a cyberdoc. */
+#define PLR_PAID_FOR_CLOSECOMBAT            42
+#define PLR_MAX                             43
 
 
 
@@ -349,7 +353,7 @@ enum {
 
 // If you add to this list, also add to constant.cpp's preference_bits[].
 #define PRF_PACIFY                       0
-#define PRF_COMPACT                      1 
+#define PRF_COMPACT                      1
 #define PRF_AUTOEXIT                     2  /* Display exits in a room       */
 #define PRF_FIGHTGAG                     3  /* Gag extra fight messages  */
 #define PRF_MOVEGAG                      4  /* Gag extra movement messages    */
@@ -362,7 +366,7 @@ enum {
 #define PRF_PKER                         11 /* is able to pk/be pked        */
 #define PRF_QUEST                        12 /* On quest        */
 #define PRF_AFK                          13 /* Afk   */
-#define PRF_UNUSED1_PLS_REPLACE          14 /* EMPTY SPACE, FILL ME! */
+#define PRF_SUPPRESS_STAFF_RADIO         14 /* EMPTY SPACE, FILL ME! */
 #define PRF_UNUSED2_PLS_REPLACE          15 /* EMPTY SPACE, FILL ME!        15 */
 #define PRF_NOHASSLE                     16 /* Aggr mobs won't attack  */
 #define PRF_ROOMFLAGS                    17 /* Can see room flags (ROOM_x) */
@@ -404,7 +408,10 @@ enum {
 #define PRF_NOHIGHLIGHT                  53
 #define PRF_NOPSEUDOLANGUAGE             54
 #define PRF_NO_IDLE_NUYEN_REWARD_MESSAGE 55
-#define PRF_MAX                          56
+#define PRF_TOUCH_ME_DADDY               56 /* Allows player cyberdocs to operate on you. Don't @ me. */
+#define PRF_NO_VOID_ON_IDLE              57
+#define PRF_RADLOG                       58
+#define PRF_MAX                          59
 
 /* log watch */
 
@@ -425,7 +432,8 @@ enum {
 #define LOG_PURGELOG       13
 #define LOG_FUCKUPLOG      14
 #define LOG_ECONLOG        15
-#define NUM_LOGS           16
+#define LOG_RADLOG         16
+#define NUM_LOGS           17
 
 /* player conditions */
 
@@ -448,11 +456,11 @@ enum {
 /* WARNING: In the world files, NEVER set the bits marked "R" ("Reserved") */
 
 #define AFF_INVISIBLE     1  /* Char is invisible        */
-#define AFF_BANISH    2 
+#define AFF_BANISH    2
 #define AFF_DETECT_INVIS  3  /* Char can see invis chars    */
-#define AFF_PRONE               4  
-#define AFF_MANIFEST    5 
-#define AFF_HEALED    6 
+#define AFF_PRONE               4
+#define AFF_MANIFEST    5
+#define AFF_HEALED    6
 #define AFF_GROUP               7  /* (R) Char is grouped       */
 #define AFF_DAMAGED    8
 #define AFF_INFRAVISION      9  /* Char can see in dark        */
@@ -496,7 +504,9 @@ enum {
 #define AFF_SPELLDESIGN    47
 #define AFF_SURPRISE    48
 #define AFF_AMMOBUILD    49
-#define AFF_MAX       50
+#define AFF_CLOSECOMBAT  50
+#define AFF_SMART_ENOUGH_TO_TOGGLE_CLOSECOMBAT  51
+#define AFF_MAX       52
 // TODO: If you add another long-state action like building, designing, etc:
 // - Add it to the check_bioware exclusion in limits.cpp
 // - Add it to the IS_WORKING and STOP_WORKING macros in utils.h
@@ -561,7 +571,8 @@ enum {
 #define ROOM_ELEVATOR_SHAFT         31 // Don't set this manually
 #define ROOM_ENCOURAGE_CONGREGATION 32
 #define ROOM_CORPSE_SAVE_HACK       33
-#define ROOM_MAX                    34
+#define ROOM_STERILE                34 // Gives a bonus to medical actions.
+#define ROOM_MAX                    35
 
 #define NORMAL    0
 #define LOWLIGHT  1
@@ -735,17 +746,17 @@ enum {
 #define TYPE_SUMMONING    4
 
 #define SPIRIT_HEARTH           0
-#define SPIRIT_CITY             1 
-#define SPIRIT_FIELD            2 
+#define SPIRIT_CITY             1
+#define SPIRIT_FIELD            2
 #define SPIRIT_FOREST           3
-#define SPIRIT_DESERT           4 
-#define SPIRIT_MOUNTAIN         5 
+#define SPIRIT_DESERT           4
+#define SPIRIT_MOUNTAIN         5
 #define SPIRIT_RIVER            6
 #define SPIRIT_SEA              7
 #define SPIRIT_PRAIRIE          8
 #define SPIRIT_SKY    9
-#define SPIRIT_MIST             9 
-#define SPIRIT_STORM            10 
+#define SPIRIT_MIST             9
+#define SPIRIT_STORM            10
 #define SPIRIT_WIND             11
 #define SPIRIT_LAKE             12
 #define SPIRIT_SWAMP            13
@@ -835,7 +846,7 @@ enum {
 #define SKILL_STEALTH               56
 #define SKILL_STEAL                 57
 #define SKILL_TRACK                 58
-#define SKILL_UNUSED_WAS_CLIMBING   59 
+#define SKILL_UNUSED_WAS_CLIMBING   59
 #define SKILL_PILOT_BIKE    60
 #define SKILL_UNUSED_WAS_PILOT_FIXED_WING   61
 #define SKILL_PILOT_CAR     62
@@ -892,13 +903,13 @@ enum {
 #define SKILL_OFFHAND_WHIP        110
 #define SKILL_SURVIVAL            111
 #define SKILL_NAVI_LAND           112
-#define SKILL_NAVI_WATER          113 
-#define SKILL_NAVI_AIR            114 
+#define SKILL_NAVI_WATER          113
+#define SKILL_NAVI_AIR            114
 #define SKILL_SMALL_UNIT_TACTICS  115
-#define SKILL_CHEMISTRY           116 
+#define SKILL_CHEMISTRY           116
 #define SKILL_DIVING              117
-#define SKILL_PARACHUTING         118 
-#define SKILL_UNDERWATER_COMBAT   119 
+#define SKILL_PARACHUTING         118
+#define SKILL_UNDERWATER_COMBAT   119
 #define SKILL_PILOT_ROTORCRAFT    120
 #define SKILL_PILOT_FIXEDWING     121
 #define SKILL_PILOT_VECTORTHRUST  122
@@ -906,16 +917,17 @@ enum {
 #define SKILL_DISGUISE            124
 #define SKILL_LOCK_PICKING        125
 #define SKILL_RIDING              126
-#define SKILL_SPRAY_WEAPONS       127 
+#define SKILL_SPRAY_WEAPONS       127
 #define SKILL_INTIMIDATION        128
-#define SKILL_GUNCANE             129 
+#define SKILL_GUNCANE             129
 #define SKILL_BRACERGUN           130
 #define SKILL_BLOWGUN             131
 #define SKILL_PHARMA              132
 #define SKILL_HEBREW              133
 #define SKILL_IROQUOIS            134
+#define SKILL_MEDICINE            135
 
-#define MAX_SKILLS      135
+#define MAX_SKILLS                136
 
 // Skill type definitions.
 #define SKILL_TYPE_ACTIVE         0
@@ -928,7 +940,7 @@ enum {
 */
 
 // Defines the size of the teach_t array. Changing this means you have to change every teacher too.
-#define NUM_TEACHER_SKILLS 20
+#define NUM_TEACHER_SKILLS 25
 
 #define ADEPT_PERCEPTION  1
 #define ADEPT_COMBAT_SENSE  2
@@ -1030,6 +1042,7 @@ enum {
 #define TYPE_ACID             411
 #define TYPE_POLTERGEIST      412
 #define TYPE_ELEVATOR         413
+#define TYPE_MEDICAL_MISHAP   414
 
 #define WEAP_EDGED          0
 #define WEAP_CLUB           1
@@ -1115,7 +1128,8 @@ enum {
 #define ITEM_QUEST              41
 #define ITEM_GUN_AMMO           42
 #define ITEM_KEYRING            43
-#define NUM_ITEMS               44
+#define ITEM_SHOPCONTAINER      44
+#define NUM_ITEMS               45
 
 
 /* take/wear flags: used by obj_data.obj_flags.wear_flags */
@@ -1178,9 +1192,10 @@ enum {
 #define ITEM_HARDENED_ARMOR     25    // Applies hardened armor rules (deflect attacks with power <= armor rating) CC p51
 #define ITEM_DONT_TOUCH         26    // Warns strenuously on editing.
 #define ITEM_MAGIC_INCOMPATIBLE 27    // Incompatible with magic. Used for cyberware and bioware.
-#define ITEM_EXTRA_MAX          28
+#define ITEM_KEPT               28    // Kept by the keep command.
+#define ITEM_EXTRA_MAX          29
 
-/* Ammo types */ 
+/* Ammo types */
 #define AMMO_NORMAL     0
 #define AMMO_APDS       1
 #define AMMO_EXPLOSIVE  2
@@ -1502,15 +1517,16 @@ enum {
 #define TYPE_FACILITY   3
 
 // Kit/Workshop/Facility types.
-#define TYPE_GENERAL    0
+#define TYPE_GENERAL       0
 #define TYPE_ELECTRONIC    1
-#define TYPE_MICROTRONIC  2
-#define TYPE_CYBERWARE    3
-#define TYPE_VEHICLE    4
-#define TYPE_WEAPON    5
-#define TYPE_MEDICAL    6
-#define TYPE_AMMO    7
-#define NUM_WORKSHOP_TYPES 8
+#define TYPE_MICROTRONIC   2
+#define TYPE_CYBERWARE     3
+#define TYPE_VEHICLE       4
+#define TYPE_WEAPON        5
+#define TYPE_MEDICAL       6
+#define TYPE_AMMO          7
+#define TYPE_GUNSMITHING   8
+#define NUM_WORKSHOP_TYPES 9
 /* modifier constants used with obj affects ('A' fields) */
 
 #define APPLY_NONE               0      /* No effect                    */
@@ -1542,7 +1558,7 @@ enum {
 #define APPLY_TASK_BOD    26
 #define APPLY_TASK_QUI    27
 #define APPLY_TASK_STR    28
-#define APPLY_TASK_CHA    29  
+#define APPLY_TASK_CHA    29
 #define APPLY_TASK_INT    30
 #define APPLY_TASK_WIL    31
 #define APPLY_TASK_REA    32
@@ -1727,6 +1743,10 @@ enum {
 
 /* Subcommands section: Originally from interpreter.h */
 
+/* do_exits */
+#define SCMD_LONGEXITS  0
+#define SCMD_SHORTEXITS 1
+
 /* do_dig */
 #define SCMD_DIG        0
 #define SCMD_UNDIG      1
@@ -1829,6 +1849,7 @@ enum {
 /* do_look */
 #define SCMD_LOOK       0
 #define SCMD_READ       1
+#define SCMD_QUICKLOOK  2
 
 /* do_examine */
 #define SCMD_EXAMINE    0
@@ -2102,7 +2123,7 @@ enum {
 #define MAX_SOCK_BUF              (12 * 1024) /* Size of kernel's sock buf   */
 #endif
 
-#define MAX_PROMPT_LENGTH         96          /* Max length of prompt        */
+#define MAX_PROMPT_LENGTH         1000          /* Max length of prompt        */
 #define GARBAGE_SPACE             32
 #define SMALL_BUFSIZE             1024
 #define LARGE_BUFSIZE             (MAX_SOCK_BUF - GARBAGE_SPACE - MAX_PROMPT_LENGTH)
@@ -2112,9 +2133,10 @@ enum {
 #define MAX_RAW_INPUT_LENGTH      4096     /* Max size of *raw* input */
 #define MAX_MESSAGES              100
 #define MAX_NAME_LENGTH           20  /* Used in char_file_u *DO*NOT*CHANGE* */
+#define MAX_RESTRING_LENGTH       256
 
 #define MAX_PWD_LENGTH            30  /* Relic of the past, do not change. Dictates max length of crypt() hashes. */
-#define MAX_TITLE_LENGTH          50  /* Used in char_file_u *DO*NOT*CHANGE* */
+#define MAX_TITLE_LENGTH          48  /* Used in char_file_u *DO*NOT*CHANGE* */
 #define MAX_WHOTITLE_LENGTH       10  /* Used in char_file_u *DO*NOT*CHANGE* */
 #define HOST_LENGTH               50
 #define LINE_LENGTH               80  /* Used in char_file_u *DO*NOT*CHANGE* */
@@ -2124,20 +2146,21 @@ enum {
 #define IDENT_LENGTH              8
 
 // New combat modifiers used in the rework of hit().
-#define COMBAT_MOD_RECOIL          0
-#define COMBAT_MOD_MOVEMENT        1
-#define COMBAT_MOD_DUAL_WIELDING   2
-#define COMBAT_MOD_SMARTLINK       3
-#define COMBAT_MOD_DISTANCE        4
-#define COMBAT_MOD_VISIBILITY      5
-#define COMBAT_MOD_POSITION        6
-#define COMBAT_MOD_GYRO            7
-#define COMBAT_MOD_REACH           8
-#define COMBAT_MOD_VEHICLE_DAMAGE  9
-#define COMBAT_MOD_DEFENDER_MOVING 10
-#define COMBAT_MOD_IN_MELEE_COMBAT 11
-
-#define NUM_COMBAT_MODIFIERS       12
+#define COMBAT_MOD_RECOIL                0
+#define COMBAT_MOD_MOVEMENT              1
+#define COMBAT_MOD_DUAL_WIELDING         2
+#define COMBAT_MOD_SMARTLINK             3
+#define COMBAT_MOD_DISTANCE              4
+#define COMBAT_MOD_VISIBILITY            5
+#define COMBAT_MOD_POSITION              6
+#define COMBAT_MOD_GYRO                  7
+#define COMBAT_MOD_REACH                 8
+#define COMBAT_MOD_VEHICLE_DAMAGE        9
+#define COMBAT_MOD_DEFENDER_MOVING       10
+#define COMBAT_MOD_IN_MELEE_COMBAT       11
+#define COMBAT_MOD_OPPONENT_BURST_COUNT  12
+#define COMBAT_MOD_FOOTANCHORS           13
+#define NUM_COMBAT_MODIFIERS             14
 // End new combat modifiers.
 
 // Locations, to remove the magic numbers from the code.
@@ -2148,7 +2171,7 @@ enum {
 #define RM_DANTES_GARAGE             35693
 #define RM_DANTES_GARAGE_RANDOM      (35693 + number(0,4))
 #define RM_DANTES_DESCENT            35502
-#ifdef USE_PRIVATE_CE_WORLD 
+#ifdef USE_PRIVATE_CE_WORLD
 #define RM_TEMPORARY_DOCWAGON        10097
 #define RM_SEATTLE_DOCWAGON          RM_TEMPORARY_DOCWAGON
 #define RM_PORTLAND_DOCWAGON         RM_TEMPORARY_DOCWAGON
@@ -2163,7 +2186,7 @@ enum {
 #define RM_OCEAN_DOCWAGON            RM_ENTRANCE_TO_DANTES
 #define RM_NERPCORPOLIS_RECEPTIONIST RM_ENTRANCE_TO_DANTES
 #define RM_NERPCORPOLIS_LOBBY        RM_ENTRANCE_TO_DANTES
-#endif 
+#endif
 #define RM_SEATTLE_PARKING_GARAGE    RM_DANTES_GARAGE
 #define RM_CARIB_PARKING_GARAGE      RM_DANTES_GARAGE
 #define RM_OCEAN_PARKING_GARAGE      RM_DANTES_GARAGE
@@ -2295,6 +2318,8 @@ enum {
 
 #define OBJ_OLD_BLANK_MAGAZINE_FROM_CLASSIC 601
 
+#define OBJ_SHOPCONTAINER                  83
+
 #define BOTTOM_OF_TEMPLATE_ITEMS           106
 #define OBJ_BLANK_OPTICAL_CHIP             106
 #define OBJ_BLANK_PROGRAM_DESIGN           107
@@ -2315,6 +2340,8 @@ enum {
 #define TOP_OF_TEMPLATE_ITEMS              121
 
 #define OBJ_BLANK_MAGAZINE                 127
+
+#define OBJ_DOCWAGON_PAPER_GOWN            16201
 
 #define QST_MAGE_INTRO                     5743
 
@@ -2352,18 +2379,19 @@ enum {
 
 
 /* Error codes. */
-#define ERROR_BITFIELD_SIZE_EXCEEDED           10
-#define ERROR_LIBSODIUM_INIT_FAILED            11
-#define ERROR_UNKNOWN_SUBCOMMAND_TO_INDEX_BOOT 12
-#define ERROR_OPENING_INDEX_FILE               13
-#define ERROR_BOOT_ZERO_RECORDS_COUNTED        14
-#define ERROR_ZONEREAD_PREMATURE_EOF           15
-#define ERROR_ZONEREAD_FORMAT_ERROR            16
-#define ERROR_MYSQL_DATABASE_NOT_FOUND         17
-#define ERROR_ARRAY_OUT_OF_BOUNDS              18
-#define ERROR_CANNOT_RESOLVE_VNUM              19
-#define ERROR_DB_TABLE_REQUIRED                20
-#define ERROR_DB_COLUMN_REQUIRED               21
+#define ERROR_BITFIELD_SIZE_EXCEEDED               10
+#define ERROR_LIBSODIUM_INIT_FAILED                11
+#define ERROR_UNKNOWN_SUBCOMMAND_TO_INDEX_BOOT     12
+#define ERROR_OPENING_INDEX_FILE                   13
+#define ERROR_BOOT_ZERO_RECORDS_COUNTED            14
+#define ERROR_ZONEREAD_PREMATURE_EOF               15
+#define ERROR_ZONEREAD_FORMAT_ERROR                16
+#define ERROR_MYSQL_DATABASE_NOT_FOUND             17
+#define ERROR_ARRAY_OUT_OF_BOUNDS                  18
+#define ERROR_CANNOT_RESOLVE_VNUM                  19
+#define ERROR_DB_TABLE_REQUIRED                    20
+#define ERROR_DB_COLUMN_REQUIRED                   21
+#define ERROR_PROTOCOL_BUFFER_EXCEEDS_INPUT_LENGTH 22
 
 // Materials.
 #define MATERIAL_PAPER        0
@@ -2469,4 +2497,62 @@ enum {
 #define CLIMBING_TYPE_JUST_CLIMBING 0
 #define CLIMBING_TYPE_WATER_WINGS   1
 
+#define HOLSTER_TYPE_SMALL_GUNS     0
+#define HOLSTER_TYPE_MELEE_WEAPONS  1
+#define HOLSTER_TYPE_LARGE_GUNS     2
+
+// For nuyen gain metrics.
+#define NUYEN_INCOME_DECKING                0
+#define NUYEN_INCOME_SHOP_SALES             1
+#define NUYEN_INCOME_AUTORUNS               2
+#define NUYEN_INCOME_LOOTED_FROM_NPCS       3
+#define NUYEN_OUTFLOW_SHOP_PURCHASES        4
+#define NUYEN_OUTFLOW_GENERIC_SPEC_PROC     5
+#define NUYEN_OUTFLOW_VEHICLE_PURCHASES     6
+#define NUYEN_OUTFLOW_CYBERWARE_INSTALL     7
+#define NUYEN_OUTFLOW_INITIATION            8
+#define NUYEN_OUTFLOW_HOUSING               9
+#define NUYEN_OUTFLOW_METAMAGIC_TRAINING    10
+#define NUYEN_OUTFLOW_STAT_TRAINING         11
+#define NUYEN_OUTFLOW_SKILL_TRAINING        12
+#define NUYEN_OUTFLOW_SPELL_TRAINING        13
+#define NUYEN_OUTFLOW_AMMO_BUILDING         14
+#define NUYEN_OUTFLOW_REPAIRS               15
+#define NUYEN_OUTFLOW_WHERESMYCAR           16
+#define NUYEN_INCOME_JUNKING                17
+#define NUYEN_INCOME_TRADE_COMMAND          18
+#define NUYEN_INCOME_IDLE_REWARD            19
+#define NUYEN_OUTFLOW_DOCWAGON              20
+#define NUYEN_OUTFLOW_LODGE_AND_CIRCLE      21
+#define NUYEN_OUTFLOW_TAXIS                 22
+#define NUYEN_OUTFLOW_PGROUP                23
+#define NUYEN_OUTFLOW_TRADE_COMMAND         24
+#define NUYEN_OUTFLOW_CREDSTICK_CRACKER     25
+
+#define NUM_OF_TRACKED_NUYEN_INCOME_SOURCES 26
+
+#define NI_IS_SINK   0
+#define NI_IS_FAUCET 1
+
+#define DIRTY_BIT_SKILLS      0
+#define DIRTY_BIT_POWERS      1
+#define DIRTY_BIT_SPELLS      2
+#define DIRTY_BIT_METAMAGIC   3
+#define DIRTY_BIT_ELEMENTALS  4
+#define DIRTY_BIT_MEMORY      5
+#define DIRTY_BIT_DRUG        6
+#define DIRTY_BIT_ALIAS       7
+#define NUM_DIRTY_BITS        8
+
+#define DECK_ACCESSORY_TYPE_PARTS  0
+#define DECK_ACCESSORY_TYPE_CHIPS  1
+
+#define SMARTLINK_II_MODIFIER 3
+#define SMARTLINK_I_MODIFIER  2
+
 #endif
+
+// This is to flag variables used eg in macros so that the compiler won't complain about unused variables
+// when they're actually used. Casting to void does nothing but the compiler will stop thinking it's
+// unused. This is the same way Q_UNUSED is used in Qt. -- Nodens
+#define UNUSED(expr) (void)(expr)

@@ -24,6 +24,8 @@
 // The linked list of loaded playergroups.
 extern Playergroup *loaded_playergroups;
 
+extern void raw_store_mail(long to, long from_id, const char *from_name, const char *message_pointer);
+
 /************* Constructors *************/
 Playergroup::Playergroup() :
 idnum(0), bank(0), tag(NULL), name(NULL), alias(NULL)
@@ -48,11 +50,11 @@ idnum(0), bank(0), tag(NULL), name(NULL), alias(NULL)
 /************* Destructor *************/
 Playergroup::~Playergroup() {
   if (tag)
-    delete tag;
+    delete [] tag;
   if (name)
-    delete name;
+    delete [] name;
   if (alias)
-    delete alias;
+    delete [] alias;
 }
 
 /************* Getters *************/
@@ -98,26 +100,11 @@ bool Playergroup::set_tag(const char *newtag, struct char_data *ch) {
     return FALSE;
   }
   
-  const char *ptr = newtag;
-  int len = 0;
-  while (*ptr) {
-    if (*ptr == '^') {
-      if (*(ptr+1) == '\0') {
-        send_to_char("Sorry, tag strings can't end with the ^ character.\r\n", ch);
-        return FALSE;
-      }
-      else if (*(ptr+1) == '^') {
-        ptr += 2;
-        len += 1;
-      }
-      else {
-        ptr += 2;
-      }
-    } else {
-      len += 1;
-      ptr += 1;
-    }
-  }
+  int len = get_string_length_after_color_code_removal(newtag, ch);
+  
+  // Silent failure: We already sent the error message in get_string_length_after_color_code_removal().
+  if (len == -1)
+    return FALSE;
   
   if (len < 1) {
     send_to_char("Tags must contain at least one printable character.\r\n", ch);
@@ -389,7 +376,7 @@ bool Playergroup::load_pgroup_from_db(long load_idnum) {
     return TRUE;
   } else {
     snprintf(buf, MAX_STRING_LENGTH, "Error loading playergroup from DB-- group %ld does not seem to exist.", load_idnum);
-    log(buf);
+    mudlog(buf, NULL, LOG_PGROUPLOG, TRUE);
     mysql_free_result(res);
     return FALSE;
   }
@@ -431,7 +418,10 @@ void Playergroup::invite(struct char_data *ch, char *argument) {
   } else if (GET_TKE(target) < 100) {
     send_to_char(ch, "%s isn't experienced enough to be a valuable addition to your group yet.\r\n", capitalize(GET_CHAR_NAME(target)));
   } else if (GET_PGROUP_MEMBER_DATA(target) && GET_PGROUP(target) && GET_PGROUP(target) == GET_PGROUP(ch)) {
-    send_to_char("They're already part of your group!\r\n", ch);
+    if (is_secret())
+      send_to_char("They can't hear you.\r\n", ch);
+    else
+      send_to_char("They're already part of your group!\r\n", ch);
     // TODO: If the group is secret, this is info disclosure.
   } else if (FALSE) {
     // TODO: The ability to auto-decline invitations / block people / not be harassed by invitation spam.
@@ -441,7 +431,10 @@ void Playergroup::invite(struct char_data *ch, char *argument) {
     
     while (temp) {
       if (temp->pg_idnum == idnum) {
-        send_to_char("They've already been invited to your group.\r\n", ch);
+        if (is_secret())
+          send_to_char("They can't hear you.\r\n", ch);
+        else
+          send_to_char("They've already been invited to your group.\r\n", ch);
         return;
       }
       temp = temp->next;
@@ -449,11 +442,16 @@ void Playergroup::invite(struct char_data *ch, char *argument) {
     
     strcpy(buf, "You invite $N to join your group.");
     act(buf, FALSE, ch, NULL, target, TO_CHAR);
-    snprintf(buf, MAX_STRING_LENGTH, "$n has invited you to join their playergroup, '%s'. You can ACCEPT or DECLINE this at any time in the next %d days.", get_name(), PGROUP_INVITATION_LIFETIME_IN_DAYS);
+    if (is_secret())
+      snprintf(buf, MAX_STRING_LENGTH, "^GSomeone has invited you to join their playergroup, '%s'. You can ACCEPT or DECLINE this at any time in the next %d days.^n", get_name(), PGROUP_INVITATION_LIFETIME_IN_DAYS);
+    else
+      snprintf(buf, MAX_STRING_LENGTH, "^G$n has invited you to join their playergroup, '%s'. You can ACCEPT or DECLINE this at any time in the next %d days.^n", get_name(), PGROUP_INVITATION_LIFETIME_IN_DAYS);
     act(buf, FALSE, ch, NULL, target, TO_VICT);
+    snprintf(buf, sizeof(buf), "You have been invited to join the playergroup %s.\r\n", get_name());
+    raw_store_mail(GET_IDNUM(target), GET_IDNUM(ch), is_secret() ? "a shadowy figure" : GET_CHAR_NAME(ch), buf);
     
-    // TODO: What if the group is secret? Is this okay?
-    audit_log_vfprintf("%s has invited %s to join the group.", GET_CHAR_NAME(ch), GET_CHAR_NAME(target));
+    if (!is_secret())
+      audit_log_vfprintf("%s has invited %s to join the group.", GET_CHAR_NAME(ch), GET_CHAR_NAME(target));
     
     // Create a new invitation.
     temp = new Pgroup_invitation(GET_PGROUP(ch)->get_idnum());

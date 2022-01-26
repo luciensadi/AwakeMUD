@@ -141,8 +141,10 @@ bool stackClass<T>::ResizeStack()
   Items = NewItems;
 
   max_size += STACK_SIZE_INCREASE;
-
-  mudlog("Resizing Stack...", NULL, LOG_SYSLOG, TRUE);
+  
+  char log_buf[1000];
+  snprintf(log_buf, sizeof(log_buf), "Resizing Stack (%d to %d)...", max_size - STACK_SIZE_INCREASE, max_size);
+  mudlog(log_buf, NULL, LOG_SYSLOG, TRUE);
   return TRUE;
 }
 

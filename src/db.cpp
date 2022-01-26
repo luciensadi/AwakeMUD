@@ -20,6 +20,8 @@
 #include <errno.h>
 #include <time.h>
 #include <math.h>
+#include <vector>
+#include <algorithm>
 #include <mysql/mysql.h>
 #if defined(WIN32) && !defined(__CYGWIN__)
 #include <process.h>
@@ -267,11 +269,11 @@ ACMD(do_reboot)
 void initialize_and_connect_to_mysql() {
   // Set up our mysql client object.
   mysql = mysql_init(NULL);
-  
+
   // Configure the client to attempt auto-reconnection.
   bool reconnect = 1;
   mysql_options(mysql, MYSQL_OPT_RECONNECT, &reconnect);
-  
+
   // Perform the actual connection.
   if (!mysql_real_connect(mysql, mysql_host, mysql_user, mysql_password, mysql_db, 0, NULL, 0)) {
     snprintf(buf, sizeof(buf), "FATAL ERROR: %s\r\n", mysql_error(mysql));
@@ -286,36 +288,36 @@ void check_for_common_fuckups() {
   for (int i = 0; i < 10000; i++) {
     if (seattle_taxi_destinations[i].vnum <= 0)
       break;
-    
+
     if (real_room(seattle_taxi_destinations[i].vnum) == NOWHERE) {
-      snprintf(buf, sizeof(buf), "ERROR: Seattle taxi destination '%s' (%ld) does not exist.", 
-               seattle_taxi_destinations[i].keyword, 
+      snprintf(buf, sizeof(buf), "ERROR: Seattle taxi destination '%s' (%ld) does not exist.",
+               seattle_taxi_destinations[i].keyword,
                seattle_taxi_destinations[i].vnum);
       log(buf);
       seattle_taxi_destinations[i].enabled = FALSE;
     }
   }
-  
+
   for (int i = 0; i < 10000; i++) {
     if (portland_taxi_destinations[i].vnum <= 0)
       break;
-    
+
     if (real_room(portland_taxi_destinations[i].vnum) == NOWHERE) {
-      snprintf(buf, sizeof(buf), "ERROR: Portland taxi destination '%s' (%ld) does not exist.", 
-               portland_taxi_destinations[i].keyword, 
+      snprintf(buf, sizeof(buf), "ERROR: Portland taxi destination '%s' (%ld) does not exist.",
+               portland_taxi_destinations[i].keyword,
                portland_taxi_destinations[i].vnum);
       log(buf);
       portland_taxi_destinations[i].enabled = FALSE;
     }
   }
-  
+
   for (int i = 0; i < 10000; i++) {
     if (caribbean_taxi_destinations[i].vnum <= 0)
       break;
-    
+
     if (real_room(caribbean_taxi_destinations[i].vnum) == NOWHERE) {
-      snprintf(buf, sizeof(buf), "ERROR: Caribbean taxi destination '%s' (%ld) does not exist.", 
-               caribbean_taxi_destinations[i].keyword, 
+      snprintf(buf, sizeof(buf), "ERROR: Caribbean taxi destination '%s' (%ld) does not exist.",
+               caribbean_taxi_destinations[i].keyword,
                caribbean_taxi_destinations[i].vnum);
       log(buf);
       caribbean_taxi_destinations[i].enabled = FALSE;
@@ -326,14 +328,14 @@ void check_for_common_fuckups() {
 // Kills the game if the table of the given name does not exist.
 void require_that_sql_table_exists(const char *table_name, const char *migration_path_from_root_directory) {
   bool have_table = FALSE;
-  
+
   MYSQL_RES *res;
   MYSQL_ROW row;
-  
+
   char query_buf[1000];
   snprintf(query_buf, sizeof(query_buf), "SHOW TABLES LIKE '%s';", prepare_quotes(buf, table_name, sizeof(buf)));
   mysql_wrapper(mysql, query_buf);
-  
+
   if (!(res = mysql_use_result(mysql))) {
     log_vfprintf("ERROR: You need to run the %s migration from the SQL directory. "
                  "Probable syntax from root directory: `mysql -u YOUR_USERNAME -p AwakeMUD < %s`.",
@@ -344,9 +346,9 @@ void require_that_sql_table_exists(const char *table_name, const char *migration
 
   if ((row = mysql_fetch_row(res)) && mysql_field_count(mysql))
     have_table = TRUE;
-    
+
   mysql_free_result(res);
-  
+
   if (!have_table) {
     log_vfprintf("ERROR: You need to run the %s migration from the SQL directory. "
                  "Probable syntax from root directory: `mysql -u YOUR_USERNAME -p AwakeMUD < %s`.",
@@ -356,76 +358,112 @@ void require_that_sql_table_exists(const char *table_name, const char *migration
   }
 }
 
-void require_that_field_exists_in_table(const char *field_name, const char *table_name, const char *migration_path_from_root_directory) {
+// Combines the logic of field_exists_in_table with more constraints-- for things you've recently updated but already existed.
+void require_that_field_meets_constraints(const char *field_name, const char *table_name, const char *migration_path_from_root_directory, int flength=0, const char *ftype=NULL) {
   bool have_column = FALSE;
-  
+  char migration_string[3000];
+
   MYSQL_RES *res;
   MYSQL_ROW row;
-  
+
   char query_buf[1000];
-  snprintf(query_buf, sizeof(query_buf), "SHOW COLUMNS FROM %s LIKE '%s';", 
+
+  snprintf(migration_string, sizeof(migration_string),
+           "ERROR: You need to run the %s migration from the SQL directory. "
+           "Probable syntax from root directory: `mysql -u YOUR_USERNAME -p AwakeMUD < %s`.",
+           table_name,
+           migration_path_from_root_directory);
+
+  snprintf(query_buf, sizeof(query_buf), "SHOW COLUMNS FROM %s LIKE '%s';",
            prepare_quotes(buf, table_name, sizeof(buf)),
            prepare_quotes(buf2, field_name, sizeof(buf2)));
   mysql_wrapper(mysql, query_buf);
-  
+
   if (!(res = mysql_use_result(mysql))) {
-    log_vfprintf("ERROR: You need to run the %s migration from the SQL directory. "
-                 "Probable syntax from root directory: `mysql -u YOUR_USERNAME -p AwakeMUD < %s`.",
-                 table_name,
-                 migration_path_from_root_directory);
+    log(migration_string);
     exit(ERROR_DB_COLUMN_REQUIRED);
   }
 
-  if ((row = mysql_fetch_row(res)) && mysql_field_count(mysql))
+  if ((row = mysql_fetch_row(res)) && mysql_field_count(mysql)) {
     have_column = TRUE;
-    
+
+    // Length constraint.
+    if (flength) {
+      if (ftype == NULL || !*ftype) {
+        log("ERROR: You need to include the field type in require_that_field_meets_constraints when using the length parameter.");
+        exit(1);
+      }
+
+      char field_type[500];
+      snprintf(field_type, sizeof(field_type), "%s(%d)", ftype, flength);
+      if (strcmp(field_type, row[1])) {
+        log_vfprintf("%s\r\n%s.%s's type '%s' did not match expected type '%s'.",
+                     migration_string,
+                     table_name,
+                     field_name,
+                     row[1],
+                     field_type);
+        mysql_free_result(res);
+        exit(ERROR_DB_COLUMN_REQUIRED);
+      }
+    }
+  }
+
   mysql_free_result(res);
-  
+
   if (!have_column) {
-    log_vfprintf("ERROR: You need to run the %s migration from the SQL directory! "
-                 "Probable syntax from root directory: `mysql -u YOUR_USERNAME -p AwakeMUD < %s`.",
-                 table_name,
-                 migration_path_from_root_directory);
+    log(migration_string);
     exit(ERROR_DB_COLUMN_REQUIRED);
   }
 }
 
+void require_that_field_exists_in_table(const char *field_name, const char *table_name, const char *migration_path_from_root_directory) {
+  require_that_field_meets_constraints(field_name, table_name, migration_path_from_root_directory);
+}
+
 void boot_world(void)
-{  
+{
   // Sanity check to ensure we haven't added more bits than our bitfield can hold.
   if (Bitfield::TotalWidth() < PRF_MAX) {
     log("Error: You have more PRF flags defined than bitfield space. You'll need to either expand the size of bitfields or reduce your flag count.");
     exit(ERROR_BITFIELD_SIZE_EXCEEDED);
   }
-  
+
   if (Bitfield::TotalWidth() < PLR_MAX) {
     log("Error: You have more PLR flags defined than bitfield space. You'll need to either expand the size of bitfields or reduce your flag count.");
     exit(ERROR_BITFIELD_SIZE_EXCEEDED);
   }
-  
+
   if (Bitfield::TotalWidth() < AFF_MAX) {
     log("Error: You have more AFF flags defined than bitfield space. You'll need to either expand the size of bitfields or reduce your flag count.");
     exit(ERROR_BITFIELD_SIZE_EXCEEDED);
   }
-  
+
+  if (MAX_PROTOCOL_BUFFER > MAX_RAW_INPUT_LENGTH) {
+    log("Error: Your maximum protocol buffer exceeds your input length buffer, so there's a risk of overflow.");
+    exit(ERROR_PROTOCOL_BUFFER_EXCEEDS_INPUT_LENGTH);
+  }
+
   log("Initializing libsodium for crypto functions.");
   if (sodium_init() < 0) {
     // The library could not be initialized. Fail.
     log("ERROR: Libsodium initialization failed. Terminating program.");
     exit(ERROR_LIBSODIUM_INIT_FAILED);
   }
-  
+
 #ifdef CRYPTO_DEBUG
   log("Performing crypto performance and validation tests.");
   run_crypto_tests();
 #endif
-  
+
   log("Booting MYSQL database.");
   initialize_and_connect_to_mysql();
-  
+
   log("Verifying DB compatibility with extended-length passwords.");
   verify_db_password_column_size();
-  
+
+  // Search terms below because it always takes me forever to ctrl-f this block -LS
+  // ensure table, ensure row, ensure field, database, limits, restrictions
   log("Verifying that DB has expected migrations. Note that not all migrations are checked here.");
   require_that_sql_table_exists("pfiles_ammo", "SQL/bullet_pants.sql");
   require_that_sql_table_exists("command_fuckups", "SQL/fuckups.sql");
@@ -435,10 +473,12 @@ void boot_world(void)
   require_that_field_exists_in_table("highlight", "pfiles", "SQL/Migrations/rp_upgrade.sql");
   require_that_field_exists_in_table("email", "pfiles", "SQL/Migrations/rp_upgrade.sql");
   require_that_field_exists_in_table("multiplier", "pfiles", "SQL/Migrations/multipliers.sql");
-  
+  require_that_field_meets_constraints("Prompt", "pfiles", "SQL/Migrations/prompt_expansion.sql", 2001, "varchar");
+  require_that_field_meets_constraints("MatrixPrompt", "pfiles", "SQL/Migrations/prompt_expansion.sql", 2001, "varchar");
+
   log("Calculating lexicon data.");
   populate_lexicon_size_table();
-  
+
   log("Handling idle deletion.");
   idle_delete();
 
@@ -477,10 +517,10 @@ void boot_world(void)
 
   log("Converting zone table vnums to rnums.");
   renum_zone_table();
-  
+
   // log("Creating Help Indexes.");
   // TODO: Is this supposed to actually do anything?
-  
+
   log("Performing final validation checks.");
   check_for_common_fuckups();
 }
@@ -518,7 +558,7 @@ void DBInit()
 
   log("Loading player index.");
   playerDB.Load();
-  
+
   log("Generating character creation archetypes.");
   generate_archetypes();
 
@@ -542,7 +582,7 @@ void DBInit()
 
   log("Initializing board system:");
   BoardInit();
-  
+
   log("Reading banned site list.");
   load_banned();
   log("Reloading consistency files.");
@@ -560,23 +600,23 @@ void DBInit()
     write_zone_to_disk(zone_table[i].number);
     // log("Written.");
   }
-  
+
   log("Loading saved vehicles.");
   load_saved_veh();
-  
+
   log("Purging unowned vehicles.");
   purge_unowned_vehs();
 
   log("Booting houses.");
   House_boot();
   boot_time = time(0);
-  
+
   log("Loading shop orders.");
   boot_shop_orders();
 
   log("Setting up mobact aggression octets.");
   populate_mobact_aggression_octets();
-  
+
   log("DBInit -- DONE.");
 }
 
@@ -773,7 +813,7 @@ void index_boot(int mode)
     obj_proto = new struct obj_data[rec_count + obj_chunk_size];
     memset((char *) obj_proto, 0, (sizeof(struct obj_data) *
                                    (rec_count + obj_chunk_size)));
-                                   
+
 #ifdef USE_DEBUG_CANARIES
     for (int i = 0; i < rec_count + obj_chunk_size; i++)
       obj_proto[i].canary = CANARY_VALUE;
@@ -973,7 +1013,7 @@ void parse_host(File &fl, long nr)
     log(buf);
     shutdown();
   }
-  
+
   static DBIndex::rnum_t rnum = 0, zone = 0;
   char field[64];
   if (nr <= (zone ? zone_table[zone - 1].top : -1)) {
@@ -1093,7 +1133,7 @@ void parse_ic(File &fl, long nr)
     log(buf);
     shutdown();
   }
-  
+
   static DBIndex::rnum_t rnum = 0, zone = 0;
   ic_index[rnum].vnum = nr;
   ic_index[rnum].number = 0;
@@ -1138,7 +1178,7 @@ void parse_room(File &fl, long nr)
     log(buf);
     shutdown();
   }
-  
+
   static DBIndex::rnum_t rnum = 0, zone = 0;
 
   if (nr <= (zone ? zone_table[zone - 1].top : -1)) {
@@ -1152,7 +1192,7 @@ void parse_room(File &fl, long nr)
     }
 
   room_data *room = world+rnum;
-  
+
 #ifdef USE_DEBUG_CANARIES
   room->canary = CANARY_VALUE;
 #endif
@@ -1200,7 +1240,7 @@ void parse_room(File &fl, long nr)
   room->y = data.GetInt("Y", DEFAULT_DIMENSIONS_Y);
   room->z = data.GetFloat("Z", DEFAULT_DIMENSIONS_Z);
   room->type = data.GetInt("RoomType", 0);
-  
+
   // read in directions, but only if we're not a cab.
   if (!((GET_ROOM_VNUM(room) >= FIRST_SEATTLE_CAB && GET_ROOM_VNUM(room) <= LAST_SEATTLE_CAB)
          || (GET_ROOM_VNUM(room) >= FIRST_PORTLAND_CAB && GET_ROOM_VNUM(room) <= LAST_PORTLAND_CAB)
@@ -1221,7 +1261,7 @@ void parse_room(File &fl, long nr)
       if (to_vnum < 0
           || (to_vnum >= FIRST_SEATTLE_CAB && to_vnum <= LAST_SEATTLE_CAB)
           || (to_vnum >= FIRST_PORTLAND_CAB && to_vnum <= LAST_PORTLAND_CAB)
-          || (to_vnum >= FIRST_CARIBBEAN_CAB && to_vnum <= LAST_CARIBBEAN_CAB)) 
+          || (to_vnum >= FIRST_CARIBBEAN_CAB && to_vnum <= LAST_CARIBBEAN_CAB))
       {
         log_vfprintf("Room #%d's %s exit had invalid destination -- skipping",
             nr, fulldirs[i]);
@@ -1273,16 +1313,16 @@ void parse_room(File &fl, long nr)
       if (dir->hidden > MAX_EXIT_HIDDEN_RATING) {
         dir->hidden = MAX_EXIT_HIDDEN_RATING;
       }
-      
+
       snprintf(field, sizeof(field), "%s/GoIntoSecondPerson", sect);
       dir->go_into_secondperson = str_dup(data.GetString(field, NULL));
-      
+
       snprintf(field, sizeof(field), "%s/GoIntoThirdPerson", sect);
       dir->go_into_thirdperson = str_dup(data.GetString(field, NULL));
-      
+
       snprintf(field, sizeof(field), "%s/ComeOutOfThirdPerson", sect);
       dir->come_out_of_thirdperson = str_dup(data.GetString(field, NULL));
-      
+
 #ifdef USE_DEBUG_CANARIES
       dir->canary = CANARY_VALUE;
 #endif
@@ -1529,7 +1569,7 @@ void parse_mobile(File &in, long nr)
     log(buf);
     shutdown();
   }
-  
+
   static DBIndex::rnum_t rnum = 0;
 
   char_data *mob = mob_proto+rnum;
@@ -1595,8 +1635,8 @@ void parse_mobile(File &in, long nr)
   GET_MAX_MENTAL(mob) = data.GetInt("POINTS/MaxMent", 10*100);
   GET_BALLISTIC(mob) = data.GetInt("POINTS/Ballistic", 0);
   GET_IMPACT(mob) = data.GetInt("POINTS/Impact", 0);
-  GET_NUYEN(mob) = data.GetInt("POINTS/Cash", 0);
-  GET_BANK(mob) = data.GetInt("POINTS/Bank", 0);
+  GET_NUYEN_RAW(mob) = data.GetInt("POINTS/Cash", 0);
+  GET_BANK_RAW(mob) = data.GetInt("POINTS/Bank", 0);
   GET_KARMA(mob) = data.GetInt("POINTS/Karma", 0);
 
   GET_PHYSICAL(mob) = GET_MAX_PHYSICAL(mob);
@@ -1651,7 +1691,7 @@ void parse_mobile(File &in, long nr)
 
     GET_KARMA(mob) = MIN(old, calc_karma(NULL, mob));
   }
-  
+
   // Load ammo.
   for (int wp = START_OF_AMMO_USING_WEAPONS; wp <= END_OF_AMMO_USING_WEAPONS; wp++)
     for (int am = AMMO_NORMAL; am < NUM_AMMOTYPES; am++) {
@@ -1672,7 +1712,7 @@ void parse_object(File &fl, long nr)
     log(buf);
     shutdown();
   }
-  
+
   static DBIndex::rnum_t rnum = 0;
 
   OBJ_VNUM_RNUM(rnum) = nr;
@@ -1685,7 +1725,7 @@ void parse_object(File &fl, long nr)
 
   obj->in_room = NULL;
   obj->item_number = rnum;
-  
+
 #ifdef USE_DEBUG_CANARIES
   obj->canary = CANARY_VALUE;
 #endif
@@ -1730,13 +1770,13 @@ void parse_object(File &fl, long nr)
 
     GET_OBJ_VAL(obj, i) = data.GetInt(field, 0);
   }
-  
+
   // Set the do-not-touch flags for known templated items.
   if ((BOTTOM_OF_TEMPLATE_ITEMS <= nr && nr <= TOP_OF_TEMPLATE_ITEMS)
       || nr == OBJ_BLANK_MAGAZINE) {
     GET_OBJ_EXTRA(obj).SetBit(ITEM_DONT_TOUCH);
   }
-  
+
   { // Per-type modifications and settings.
     int mult;
     const char *type_as_string = NULL;
@@ -1813,41 +1853,41 @@ void parse_object(File &fl, long nr)
         // Magic number skip: We don't touch item 121, which is a template.
         if (GET_OBJ_VNUM(obj) == OBJ_BLANK_AMMOBOX)
           break;
-      
+
         if (GET_AMMOBOX_WEAPON(obj) == WEAP_CANNON) {
           // Assault cannons have special ammo and special rules that aren't reflected in our normal table.
-          
+
           // Max size 500-- otherwise it's too heavy to carry.
           GET_AMMOBOX_QUANTITY(obj) = MAX(MIN(GET_AMMOBOX_QUANTITY(obj), 500), 10);
-          
+
           // Set values according to Assault Cannon ammo (SR3 p281).
           GET_OBJ_WEIGHT(obj) = (((float) GET_AMMOBOX_QUANTITY(obj)) * 1.25) / 10;
           GET_OBJ_COST(obj) = GET_AMMOBOX_QUANTITY(obj) * 45;
           GET_OBJ_AVAILDAY(obj) = 3;
           GET_OBJ_AVAILTN(obj) = 5;
           GET_OBJ_STREET_INDEX(obj) = 2;
-          
+
           // They also may only be explosive (SR3 p279).
           GET_AMMOBOX_TYPE(obj) = AMMO_EXPLOSIVE;
         } else {
           // Max size 1000-- otherwise it's too heavy to carry.
           GET_AMMOBOX_QUANTITY(obj) = MAX(MIN(GET_AMMOBOX_QUANTITY(obj), 1000), 10);
-          
+
           // Update weight and cost.
           GET_OBJ_WEIGHT(obj) = GET_AMMOBOX_QUANTITY(obj) * ammo_type[GET_AMMOBOX_TYPE(obj)].weight;
           GET_OBJ_COST(obj) = GET_AMMOBOX_QUANTITY(obj) * ammo_type[GET_AMMOBOX_TYPE(obj)].cost;
-          
+
           // Set the TNs for this ammo per the default values.
           GET_OBJ_AVAILDAY(obj) = ammo_type[GET_AMMOBOX_TYPE(obj)].time;
           GET_OBJ_AVAILTN(obj) = ammo_type[GET_AMMOBOX_TYPE(obj)].tn;
-          
+
           // Set the street index.
           GET_OBJ_STREET_INDEX(obj) = ammo_type[GET_AMMOBOX_TYPE(obj)].street_index;
         }
-        
+
         // Set the strings-- we want all these things to match for simplicity's sake.
         type_as_string = get_weapon_ammo_name_as_string(GET_AMMOBOX_WEAPON(obj));
-        
+
         if (GET_AMMOBOX_WEAPON(obj)) {
           snprintf(buf, sizeof(buf), "metal ammo ammunition box %s %s %d-%s %s%s",
                   GET_AMMOBOX_WEAPON(obj) == WEAP_CANNON ? "normal" : ammo_type[GET_AMMOBOX_TYPE(obj)].name,
@@ -1862,7 +1902,7 @@ void parse_object(File &fl, long nr)
         // log_vfprintf("Changing %s to %s for %ld.", obj->text.keywords, buf, nr);
         DELETE_ARRAY_IF_EXTANT(obj->text.keywords);
         obj->text.keywords = str_dup(buf);
-        
+
         if (GET_AMMOBOX_WEAPON(obj)) {
           snprintf(buf, sizeof(buf), "a %d-%s box of %s %s ammunition",
                   GET_AMMOBOX_QUANTITY(obj),
@@ -1875,8 +1915,8 @@ void parse_object(File &fl, long nr)
         // log_vfprintf("Changing %s to %s for %ld.", obj->text.name, buf, nr);
         DELETE_ARRAY_IF_EXTANT(obj->text.name);
         obj->text.name = str_dup(buf);
-        
-        
+
+
         if (GET_AMMOBOX_WEAPON(obj)) {
           snprintf(buf, sizeof(buf), "A metal box of %s %s %s%s has been left here.",
                   GET_AMMOBOX_WEAPON(obj) == WEAP_CANNON ? "normal" : ammo_type[GET_AMMOBOX_TYPE(obj)].name,
@@ -1889,7 +1929,7 @@ void parse_object(File &fl, long nr)
         // log_vfprintf("Changing %s to %s for %ld.", obj->text.room_desc, buf, nr);
         DELETE_ARRAY_IF_EXTANT(obj->text.room_desc);
         obj->text.room_desc = str_dup(buf);
-        
+
         strcpy(buf, "A hefty box of ammunition, banded in metal and secured with flip-down hasps for transportation and storage.");
         // log_vfprintf("Changing %s to %s for %ld.", obj->text.look_desc, buf, nr);
         DELETE_ARRAY_IF_EXTANT(obj->text.look_desc);
@@ -1953,10 +1993,10 @@ void parse_object(File &fl, long nr)
           }
         if (GET_WEAPON_SKILL(obj) > 100)
           GET_WEAPON_SKILL(obj) -= 100;
-          
+
         if (is_melee)
           GET_WEAPON_REACH(obj) = MAX(0, GET_WEAPON_REACH(obj));
-          
+
         break;
     }
   } // End per-type modifications.
@@ -1986,7 +2026,7 @@ void parse_object(File &fl, long nr)
       obj->affected[i].modifier = data.GetInt(field, 0);
     }
   }
-  
+
   // Read in source book data, if any.
   if (data.DoesFieldExist("SourceBook")) {
     obj->source_info = str_dup(data.GetString("SourceBook", "(none)"));
@@ -2020,7 +2060,7 @@ void parse_object(File &fl, long nr)
     } else
       break;
   }
-  
+
   top_of_objt = rnum++;
 }
 
@@ -2105,13 +2145,13 @@ void parse_quest(File &fl, long virtual_nr)
   quest_table[quest_nr].s_string = fl.ReadString("s_string");
   quest_table[quest_nr].e_string = fl.ReadString("e_string");
   quest_table[quest_nr].done = fl.ReadString("done");
-  
-  /* Alright, here's the situation. I was going to add in a location field for 
+
+  /* Alright, here's the situation. I was going to add in a location field for
      the quests, which would show up in the recap and help newbies out... BUT.
      Turns out we use a shit-tacular file format that's literally just 'crap out
      strings into a file and require that they exist, no defaulting allowed, or
      you can't load any quests and the game dies'. Gotta love that jank-ass code.
-     
+
      This feature is disabled until someone transitions all the quests into an
      actually sensible file format. -- LS */
 #ifdef USE_QUEST_LOCATION_CODE
@@ -2131,7 +2171,7 @@ void parse_shop(File &fl, long virtual_nr)
     log(buf);
     shutdown();
   }
-  
+
   static DBIndex::rnum_t rnum = 0, zone = 0;
   char field[64];
   if (virtual_nr <= (zone ? zone_table[zone - 1].top : -1)) {
@@ -2168,6 +2208,21 @@ void parse_shop(File &fl, long virtual_nr)
   shop->ettiquete = data.GetInt("Etiquette", SKILL_STREET_ETIQUETTE);
   int num_fields = data.NumSubsections("SELLING"), vnum;
   struct shop_sell_data *templist = NULL;
+
+  // Cap the shop multipliers.
+  if (shop->flags.IsSet(SHOP_CHARGEN)) {
+    shop->profit_buy = 1.0;
+    shop->profit_sell = 1.0;
+  } else {
+    // It should be impossible to set a buy price lower than 1.0.
+    shop->profit_buy = MAX(1.0, shop->profit_buy);
+
+    // Standardize doc cyberware buy prices.
+    if (shop->flags.IsSet(SHOP_DOCTOR)) {
+      shop->profit_sell = CYBERDOC_MAXIMUM_SELL_TO_SHOPKEEP_MULTIPLIER;
+    }
+  }
+
   // snprintf(buf3, sizeof(buf3), "Parsing shop items for shop %ld (%d found).", virtual_nr, num_fields);
   for (int x = 0; x < num_fields; x++) {
     const char *name = data.GetIndexSection("SELLING", x);
@@ -2238,11 +2293,18 @@ void load_zones(File &fl)
   Z.name = str_dup(buf);
 
   fl.GetLine(buf, 256, FALSE);
-  if (sscanf(buf, " %d %d %d %d %d %d",
+  // Attempt to read the new PGHQ flag from the line.
+  if (sscanf(buf, " %d %d %d %d %d %d %d",
              &Z.top, &Z.lifespan, &Z.reset_mode,
-             &Z.security, &Z.connected, &Z.jurisdiction) < 5) {
-    fprintf(stderr, "FATAL ERROR: Format error in 5-constant line of %s: Expected six numbers like ' # # # # # #'.", fl.Filename());
-    shutdown();
+             &Z.security, &Z.connected, &Z.jurisdiction, &Z.is_pghq) < 6)
+  {
+    // Fallback: Instead, read out the old format. Assume we'll save PGHQ data later.
+    if (sscanf(buf, " %d %d %d %d %d %d",
+               &Z.top, &Z.lifespan, &Z.reset_mode,
+               &Z.security, &Z.connected, &Z.jurisdiction) < 5) {
+      fprintf(stderr, "FATAL ERROR: Format error in 6-constant line of %s: Expected six numbers like ' # # # # # #'.", fl.Filename());
+      shutdown();
+    }
   }
 
   fl.GetLine(buf, 256, FALSE);
@@ -2674,18 +2736,18 @@ int vnum_object_armors(char *searchname, struct char_data * ch)
   char buf[MAX_STRING_LENGTH*8];
   char xbuf[MAX_STRING_LENGTH];
   int nr, found = 0;
-  
+
   buf[0] = 0;
-  
+
   // List everything above 20 combined ballistic and impact.
   for (nr = 0; nr <= top_of_objt; nr++) {
     if (GET_OBJ_TYPE(&obj_proto[nr]) != ITEM_WORN)
       continue;
     if (GET_OBJ_VAL(&obj_proto[nr],0) + GET_OBJ_VAL(&obj_proto[nr],1) <= 20)
       continue;
-    
+
     sprint_obj_mods( &obj_proto[nr], xbuf, sizeof(xbuf));
-    
+
     ++found;
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%5ld -%2d] ^c%3db %3di^n %s^n^y%s^n%s\r\n",
             OBJ_VNUM_RNUM(nr),
@@ -2696,7 +2758,7 @@ int vnum_object_armors(char *searchname, struct char_data * ch)
             xbuf,
             obj_proto[nr].source_info ? "  ^g(canon)^n" : "");
   }
-  
+
   // List everything with 20 or less combined ballistic and impact, descending.
   for (int total = 20; total >= 0; total--) {
     for (nr = 0; nr <= top_of_objt; nr++) {
@@ -2704,9 +2766,9 @@ int vnum_object_armors(char *searchname, struct char_data * ch)
         continue;
       if (GET_OBJ_VAL(&obj_proto[nr],0) + GET_OBJ_VAL(&obj_proto[nr],1) != total)
         continue;
-      
+
       sprint_obj_mods( &obj_proto[nr], xbuf, sizeof(xbuf) );
-      
+
       ++found;
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%5ld -%2d] ^c%3db %3di^n %s^n^y%s^n%s\r\n",
               OBJ_VNUM_RNUM(nr),
@@ -2718,9 +2780,9 @@ int vnum_object_armors(char *searchname, struct char_data * ch)
               obj_proto[nr].source_info ? "  ^g(canon)^n" : "");
     }
   }
-  
+
   page_string(ch->desc, buf, 1);
-  
+
   return (found);
 }
 
@@ -2790,7 +2852,7 @@ int vnum_object_type(int type, struct char_data * ch)
 {
   char buf[MAX_STRING_LENGTH * 8];
   int nr, found = 0;
-  
+
   buf[0] = 0;
 
   for (nr = 0; nr <= top_of_objt; nr++)
@@ -2849,26 +2911,26 @@ int vnum_object_affects(struct char_data *ch) {
   char buf[MAX_STRING_LENGTH * 8];
   char xbuf[MAX_STRING_LENGTH];
   int nr, found = 0;
-  
+
   buf[0] = 0;
-  
+
   for (nr = 0; nr <= top_of_objt; nr++) {
     if (IS_OBJ_STAT(&obj_proto[nr], ITEM_GODONLY))
       continue;
     if (vnum_from_non_connected_zone(OBJ_VNUM_RNUM(nr)))
       continue;
-      
+
     // If it can't be used in the first place, skip it.
     if (GET_OBJ_TYPE(&obj_proto[nr]) != ITEM_GUN_ACCESSORY
         && GET_OBJ_TYPE(&obj_proto[nr]) != ITEM_CYBERWARE
         && GET_OBJ_TYPE(&obj_proto[nr]) != ITEM_BIOWARE
         && !str_cmp(obj_proto[nr].obj_flags.wear_flags.ToString(), "1"))
       continue;
-    
-    for (int i = 0; i < MAX_OBJ_AFFECT; i++) {        
+
+    for (int i = 0; i < MAX_OBJ_AFFECT; i++) {
       if (obj_proto[nr].affected[i].modifier != 0 ) {
         sprint_obj_mods( &obj_proto[nr], xbuf, sizeof(xbuf));
-        
+
         ++found;
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%5ld -%2d] %s^n%s%s\r\n",
                 OBJ_VNUM_RNUM(nr),
@@ -2927,13 +2989,13 @@ int vnum_object(char *searchname, struct char_data * ch)
     return vnum_object_affects(ch);
   if (!strcmp(arg1,"affflag"))
     return vnum_object_affflag(atoi(arg2),ch);
-  
+
   // Make it easier for people to find specific types of things.
   for (int index = ITEM_LIGHT; index < NUM_ITEMS; index++) {
     if (!str_cmp(searchname, item_types[index]))
       return vnum_object_type(index, ch);
   }
-  
+
   for (nr = 0; nr <= top_of_objt; nr++)
   {
     if (isname(searchname, obj_proto[nr].text.keywords) ||
@@ -2964,7 +3026,7 @@ struct veh_data *read_vehicle(int nr, int type)
     }
   } else
     i = nr;
-  
+
   veh = Mem->GetVehicle();
   *veh = veh_proto[i];
   veh->next = veh_list;
@@ -3003,6 +3065,8 @@ struct char_data *read_mobile(int nr, int type)
   mob->char_specials.saved.left_handed = (!number(0, 9) ? 1 : 0);
 
   mob_index[i].number++;
+
+  set_natural_vision_for_race(mob);
 
   affect_total(mob);
 
@@ -3112,7 +3176,7 @@ struct obj_data *read_object(int nr, int type)
     GET_OBJ_VAL(obj, 9) = GET_OBJ_VAL(obj, 0);
   } else if (GET_OBJ_TYPE(obj) == ITEM_WEAPON)
     handle_weapon_attachments(obj);
-  
+
   return obj;
 }
 
@@ -3122,7 +3186,7 @@ void spec_update(void)
   PERF_PROF_SCOPE(pr_, __func__);
   int i;
   char empty_argument = '\0';
-  
+
   // Instead of calculating the random number for every traffic room, just calc once.
   bool will_traffic = (number(0, 6) == 1);
 
@@ -3177,7 +3241,7 @@ void log_zone_error(int zone, int cmd_no, const char *message)
 
 void zcmd_close_door(struct room_data *room, int dir, bool set_locked) {
   struct room_direction_data *door_struct = room->dir_option[dir];
-  
+
   // Display a message if the door is neither hidden nor closed.
   if (!IS_SET(door_struct->exit_info, EX_HIDDEN) && !IS_SET(door_struct->exit_info, EX_CLOSED)) {
     snprintf(buf, sizeof(buf), "The %s to the %s closes.\r\n",
@@ -3185,25 +3249,25 @@ void zcmd_close_door(struct room_data *room, int dir, bool set_locked) {
             fulldirs[dir]);
     send_to_room(buf, room);
   }
-  
+
   SET_BIT(door_struct->exit_info, EX_CLOSED);
   if (set_locked)
     SET_BIT(door_struct->exit_info, EX_LOCKED);
 }
 
-void zcmd_open_door(struct room_data *room, int dir) {  
+void zcmd_open_door(struct room_data *room, int dir) {
   if (!room) {
     mudlog("SYSERR: zcmd_open_door received invalid room.", NULL, LOG_SYSLOG, TRUE);
     return;
   }
-  
+
   struct room_direction_data *door_struct = room->dir_option[dir];
-  
+
   if (!door_struct) {
     mudlog("SYSERR: zcmd_open_door received invalid dir.", NULL, LOG_SYSLOG, TRUE);
     return;
   }
-  
+
   // Display a message if the door is not hidden but is closed.
   if (!IS_SET(door_struct->exit_info, EX_HIDDEN) && IS_SET(door_struct->exit_info, EX_CLOSED)) {
     snprintf(buf, sizeof(buf), "The %s to the %s opens.\r\n",
@@ -3211,14 +3275,14 @@ void zcmd_open_door(struct room_data *room, int dir) {
             fulldirs[dir]);
     send_to_room(buf, room);
   }
-  
+
   REMOVE_BIT(door_struct->exit_info, EX_CLOSED);
   REMOVE_BIT(door_struct->exit_info, EX_LOCKED);
 }
 
 void zcmd_repair_door(struct room_data *room, int dir) {
   struct room_direction_data *door_struct = room->dir_option[dir];
-  
+
   if (IS_SET(door_struct->exit_info, EX_DESTROYED)) {
     snprintf(buf, sizeof(buf), "A po-faced passerby installs a new %s to the %s.\r\n",
              door_struct->keyword,
@@ -3280,21 +3344,21 @@ void reset_zone(int zone, int reboot)
       if ((mob_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1) ||
           (ZCMD.arg2 == 0 && reboot)) {
         mob = read_mobile(ZCMD.arg1, REAL);
-        
+
         bool is_driver = !(veh->people);
-        
+
         char_to_veh(veh, mob);
-        
+
         if (is_driver) {
           // If the vehicle is empty, make the mob the driver.
           AFF_FLAGS(mob).SetBit(AFF_PILOT);
           mob->vfront = TRUE;
-          
+
           veh->cspeed = SPEED_CRUISING;
         } else {
           // Look for hardpoints with weapons and man them.
           struct obj_data *mount = NULL;
-          
+
           // Find an unmanned mount.
           for (mount = veh->mount; mount; mount = mount->next_content) {
             // Man the first unmanned mount we find, as long as it has a weapon in it.
@@ -3304,11 +3368,11 @@ void reset_zone(int zone, int reboot)
               break;
             }
           }
-          
+
           // Mount-users are all back of the bus.
           mob->vfront = FALSE;
         }
-        
+
         last_cmd = 1;
       } else {
         if (ZCMD.arg2 == 0 && !reboot)
@@ -3324,7 +3388,7 @@ void reset_zone(int zone, int reboot)
         break;
       if ((obj_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1) || (ZCMD.arg2 == 0 && reboot)) {
         obj = read_object(ZCMD.arg1, REAL);
-        
+
         // Special case: Weapon mounts.
         if (GET_OBJ_VAL(obj, 0) == TYPE_MOUNT) {
           switch (GET_OBJ_VAL(obj, 1)) {
@@ -3355,23 +3419,23 @@ void reset_zone(int zone, int reboot)
           obj->next_content = veh->mount;
           veh->mount = obj;
         }
-        
+
         // Special case: Weapons for mounts. Note that this ignores current vehicle load, mount size, etc.
         else if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && IS_GUN(GET_WEAPON_ATTACK_TYPE(obj))) {
           struct obj_data *mount = NULL;
-          
+
           // Iterate through every mount on the vehicle.
           for (mount = veh->mount; mount; mount = mount->next_content) {
             // If we've found a weaponless mount, break out of loop.
             if (!mount_has_weapon(mount))
               break;
           }
-          
+
           if (mount) {
             // We found a valid mount; attach the weapon.
             obj_to_obj(obj, mount);
             veh->usedload += GET_OBJ_WEIGHT(obj);
-            
+
             // Set the obj's firemode to the optimal one.
             if (IS_SET(GET_OBJ_VAL(obj, 10), 1 << MODE_BF))
               GET_OBJ_VAL(obj, 11) = MODE_BF;
@@ -3400,16 +3464,16 @@ void reset_zone(int zone, int reboot)
               affect_veh(veh, GET_MOD(veh, GET_OBJ_VAL(obj, 0))->affected[j].location, -GET_MOD(veh, GET_OBJ_VAL(obj, 0))->affected[j].modifier);
             extract_obj(GET_MOD(veh, GET_OBJ_VAL(obj, 0)));
           }
-          
+
           GET_MOD(veh, GET_OBJ_VAL(obj, 0)) = obj;
           veh->usedload += GET_OBJ_VAL(obj, 1);
           for (int j = 0; j < MAX_OBJ_AFFECT; j++)
             affect_veh(veh, obj->affected[j].location, obj->affected[j].modifier);
         }
-        
+
         last_cmd = 1;
-        
-        
+
+
       } else
         last_cmd = 0;
       break;
@@ -3425,7 +3489,7 @@ void reset_zone(int zone, int reboot)
         last_cmd = 0;
       break;
     case 'V':                 /* loads a vehicle */
-      if ((veh_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1) || (ZCMD.arg2 == 0 && reboot)) {        
+      if ((veh_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1) || (ZCMD.arg2 == 0 && reboot)) {
         veh = read_vehicle(ZCMD.arg1, REAL);
         veh_to_room(veh, &world[ZCMD.arg3]);
         snprintf(buf, sizeof(buf), "%s has arrived.\r\n", capitalize(GET_VEH_NAME(veh)));
@@ -3437,9 +3501,7 @@ void reset_zone(int zone, int reboot)
     case 'H':                 /* loads a Matrix file into a host */
       if ((obj_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1) ||
           (ZCMD.arg2 == 0 && reboot)) {
-        obj = read_object(ZCMD.arg1, REAL);
-        obj->next_content = matrix[ZCMD.arg3].file;
-        matrix[ZCMD.arg3].file = obj;
+        obj_to_host(read_object(ZCMD.arg1, REAL), &matrix[ZCMD.arg3]);
         last_cmd = 1;
       } else
         last_cmd = 0;
@@ -3448,18 +3510,18 @@ void reset_zone(int zone, int reboot)
       if ((obj_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1) || (ZCMD.arg2 == 0 && reboot)) {
         obj = read_object(ZCMD.arg1, REAL);
         obj_to_room(obj, &world[ZCMD.arg3]);
-        
+
         act("You blink and realize that $p must have been here the whole time.", TRUE, 0, obj, 0, TO_ROOM);
-        
+
         if (GET_OBJ_TYPE(obj) == ITEM_WORKSHOP && GET_WORKSHOP_GRADE(obj) == TYPE_WORKSHOP) {
           if (GET_WORKSHOP_TYPE(obj) == TYPE_VEHICLE && !ROOM_FLAGGED(obj->in_room, ROOM_GARAGE)) {
             // Warn the builder that they're breaking the game's rules (let it continue since it doesn't harm anything though).
             ZONE_ERROR("Zoneloading a pre-set-up vehicle workshop in a non-GARAGE room violates game convention about vehicle workshop locations. Flag the room as GARAGE.");
           }
-          
+
           // It's a workshop, set it as unpacked already.
           GET_WORKSHOP_IS_SETUP(obj) = 1;
-          
+
           // Handle the room's workshop[] array.
           if (obj->in_room)
             add_workshop_to_room(obj);
@@ -3480,15 +3542,15 @@ void reset_zone(int zone, int reboot)
           obj_to_obj(obj, obj_to);
         if (GET_OBJ_TYPE(obj_to) == ITEM_HOLSTER) {
           GET_HOLSTER_READY_STATUS(obj_to) = 1;
-          
-          if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && IS_GUN(GET_WEAPON_ATTACK_TYPE(obj))) {       
-            // If it's carried by an NPC, make sure it's loaded.     
+
+          if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && IS_GUN(GET_WEAPON_ATTACK_TYPE(obj))) {
+            // If it's carried by an NPC, make sure it's loaded.
             if (GET_WEAPON_MAX_AMMO(obj) > 0) {
               struct obj_data *outermost = obj;
               while (outermost && outermost->in_obj) {
                 outermost = outermost->in_obj;
               }
-                
+
               struct char_data *temp_ch = NULL;
               if ((temp_ch = outermost->carried_by) || (temp_ch = outermost->worn_by)) {
                 // Reload from their ammo.
@@ -3498,18 +3560,18 @@ void reset_zone(int zone, int reboot)
                     break;
                   }
                 }
-                
+
                 // If they failed to reload, they have no ammo. Give them some normal and reload with it.
                 if (!obj->contains || GET_MAGAZINE_AMMO_COUNT(obj->contains) == 0) {
                   GET_BULLETPANTS_AMMO_AMOUNT(temp_ch, GET_WEAPON_ATTACK_TYPE(obj), AMMO_NORMAL) = GET_WEAPON_MAX_AMMO(obj) * NUMBER_OF_MAGAZINES_TO_GIVE_TO_UNEQUIPPED_MOBS;
                   reload_weapon_from_bulletpants(temp_ch, obj, AMMO_NORMAL);
-                  
+
                   // Decrement their debris-- we want this reload to not create clutter.
                   get_ch_in_room(temp_ch)->debris--;
                 }
               }
             }
-            
+
             // Set the firemode.
             if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(obj), 1 << MODE_BF)) {
               GET_WEAPON_FIREMODE(obj) = MODE_BF;
@@ -3567,12 +3629,12 @@ void reset_zone(int zone, int reboot)
             if (!vnum_from_non_connected_zone(GET_OBJ_VNUM(obj)) && !zone_table[zone].connected)
               GET_OBJ_EXTRA(obj).SetBit(ITEM_VOLATILE);
             last_cmd = 1;
-            
+
             // If it's a weapon, reload it.
             if (GET_OBJ_TYPE(obj) == ITEM_WEAPON
                 && IS_GUN(GET_WEAPON_ATTACK_TYPE(obj))
                 && GET_WEAPON_MAX_AMMO(obj) != -1) {
-                               
+
               // Reload from their ammo.
               for (int index = 0; index < NUM_AMMOTYPES; index++) {
                 if (GET_BULLETPANTS_AMMO_AMOUNT(mob, GET_WEAPON_ATTACK_TYPE(obj), npc_ammo_usage_preferences[index]) > 0) {
@@ -3580,12 +3642,12 @@ void reset_zone(int zone, int reboot)
                   break;
                 }
               }
-              
+
               // If they failed to reload, they have no ammo. Give them some normal and reload with it.
               if (!obj->contains || GET_MAGAZINE_AMMO_COUNT(obj->contains) == 0) {
                 GET_BULLETPANTS_AMMO_AMOUNT(mob, GET_WEAPON_ATTACK_TYPE(obj), AMMO_NORMAL) = GET_WEAPON_MAX_AMMO(obj) * NUMBER_OF_MAGAZINES_TO_GIVE_TO_UNEQUIPPED_MOBS;
                 reload_weapon_from_bulletpants(mob, obj, AMMO_NORMAL);
-                
+
                 // Decrement their debris-- we want this reload to not create clutter.
                 get_ch_in_room(mob)->debris--;
               }
@@ -3684,15 +3746,15 @@ void reset_zone(int zone, int reboot)
           ZONE_ERROR("Invalid direction specified.");
           break;
         }
-        
+
         if (DOOR_STRUCT == NULL) {
           snprintf(buf, sizeof(buf), "%s exit from %ld does not exist.", capitalize(dirs[ZCMD.arg2]), world[ZCMD.arg1].number);
           ZONE_ERROR(buf);
           break;
         }
-        
+
         struct room_data *opposite_room = DOOR_STRUCT->to_room;
-        
+
         if (!IS_SET(DOOR_STRUCT->exit_info, EX_ISDOOR)) {
           snprintf(buf, sizeof(buf), "%s exit from %ld exists but is not set to be a door.", capitalize(dirs[ZCMD.arg2]), world[ZCMD.arg1].number);
           ZONE_ERROR(buf);
@@ -3701,9 +3763,9 @@ void reset_zone(int zone, int reboot)
             zcmd_open_door(opposite_room, rev_dir[ZCMD.arg2]);
           break;
         }
-        
+
         bool ok = FALSE;
-        
+
         if (!opposite_room || !REV_DOOR_STRUCT || (&world[ZCMD.arg1] != REV_DOOR_STRUCT->to_room)) {
           snprintf(buf, sizeof(buf), "Note: %s exit from %ld to %ld has no back-linked exit, so zone command to toggle its door will only work on one side. (zone %d, line %d, cmd %d)",
                   capitalize(dirs[ZCMD.arg2]), world[ZCMD.arg1].number, opposite_room->number, zone_table[zone].number,
@@ -3711,33 +3773,33 @@ void reset_zone(int zone, int reboot)
           mudlog(buf, NULL, LOG_ZONELOG, FALSE);
         } else
           ok = TRUE;
-          
+
         if (ok && !IS_SET(REV_DOOR_STRUCT->exit_info, EX_ISDOOR)) {
           snprintf(buf, sizeof(buf), "Note: %s exit from %ld to %ld: Reverse exit is not a door. Overriding reverse exit to be a door. (zone %d, line %d, cmd %d)",
                   capitalize(dirs[ZCMD.arg2]), world[ZCMD.arg1].number, opposite_room->number, zone_table[zone].number,
                   ZCMD.line, cmd_no);
           mudlog(buf, NULL, LOG_ZONELOG, FALSE);
           REV_DOOR_STRUCT->exit_info = DOOR_STRUCT->exit_info;
-        } 
-          
+        }
+
         // here I set the hidden flag for the door if hidden > 0
         if (DOOR_STRUCT->hidden)
           SET_BIT(DOOR_STRUCT->exit_info, EX_HIDDEN);
         if (ok && REV_DOOR_STRUCT->hidden)
           SET_BIT(REV_DOOR_STRUCT->exit_info, EX_HIDDEN);
-          
+
         // repair all damage
         zcmd_repair_door(&world[ZCMD.arg1], ZCMD.arg2);
         if (ok)
           zcmd_repair_door(opposite_room, rev_dir[ZCMD.arg2]);
-        
+
         // Clone the exit info across to the other side, if it exists.
         if (ok) {
           REV_DOOR_STRUCT->material = DOOR_STRUCT->material;
           REV_DOOR_STRUCT->barrier = DOOR_STRUCT->barrier;
           REV_DOOR_STRUCT->condition = DOOR_STRUCT->condition;
         }
-        
+
         switch (ZCMD.arg3) {
           // you now only have to set one side of a door
           case 0: // Door is open.
@@ -3750,7 +3812,7 @@ void reset_zone(int zone, int reboot)
             zcmd_close_door(&world[ZCMD.arg1], ZCMD.arg2, (ZCMD.arg3 == 2));
             if (ok)
               zcmd_close_door(opposite_room, rev_dir[ZCMD.arg2], (ZCMD.arg3 == 2));
-              
+
             break;
         }
       }
@@ -3822,7 +3884,7 @@ bool resize_world_array()
   // remember that top_of_world is the actual rnum in the array
   for (counter = 0; counter <= top_of_world; counter++)
     new_world[counter] = world[counter];
-    
+
   // TODO: Update EVERY SINGLE ROOM POINTER IN THE GAME to match the new array.
   mudlog("The MUD will crash now, since required work is not done.", NULL, LOG_SYSLOG, TRUE);
 
@@ -3929,7 +3991,7 @@ void free_char(struct char_data * ch)
   struct alias *a, *temp, *next;
   struct remem *b, *nextr;
   extern void free_alias(struct alias * a);
-  
+
   /* clean up spells */
   {
     struct spell_data *next = NULL, *temp = GET_SPELLS(ch);
@@ -3941,13 +4003,13 @@ void free_char(struct char_data * ch)
     }
     GET_SPELLS(ch) = NULL;
   }
-  
+
   /* Not sure if enabling this code is a good idea yet, so I'm leaving it off. -LS
   // clean up matrix data
   if (ch->persona) {
     DELETE_ARRAY_IF_EXTANT(ch->persona->long_desc);
     DELETE_ARRAY_IF_EXTANT(ch->persona->look_desc);
-    
+
     // BWAAAAAAAAAAAAAAAAA (inception horn)
     if (ch->persona->decker) {
       struct seen_data *next = NULL, *temp = ch->persona->decker->seen;
@@ -3956,11 +4018,11 @@ void free_char(struct char_data * ch)
         delete temp;
       }
     }
-    
+
     // All kinds of things are being ignored here (what happens to your phone? hitcher? etc?),
     //  but if you've called the delete-this-character-and-everything-associated-in-it-from-memory
     //  method without first handling that stuff, that's on you. Try calling extract_char() first.
-    
+
     delete ch->persona;
     ch->persona = NULL;
   } */
@@ -3979,10 +4041,10 @@ void free_char(struct char_data * ch)
       DELETE_ARRAY_IF_EXTANT(b->mem);
       DELETE_AND_NULL(b);
     }
-    
+
     DELETE_ARRAY_IF_EXTANT(ch->player_specials->obj_complete);
     DELETE_ARRAY_IF_EXTANT(ch->player_specials->mob_complete);
-    
+
     DELETE_IF_EXTANT(ch->player_specials);
 
     if (IS_NPC(ch))
@@ -4003,7 +4065,7 @@ void free_char(struct char_data * ch)
     DELETE_ARRAY_IF_EXTANT(ch->char_specials.leave);
     DELETE_ARRAY_IF_EXTANT(ch->player.highlight_color_code);
     DELETE_ARRAY_IF_EXTANT(ch->player.email);
-    
+
     if(!IS_NPC(ch))
       DELETE_ARRAY_IF_EXTANT(ch->player.host);
 
@@ -4023,7 +4085,7 @@ void free_char(struct char_data * ch)
         DELETE_ARRAY_IF_EXTANT(ptr->look_desc);
       }
     }
-    
+
   } else if ((i = GET_MOB_RNUM(ch)) > -1 &&
              GET_MOB_VNUM(ch) != 20 && GET_MOB_VNUM(ch) != 22)
   {
@@ -4062,18 +4124,18 @@ void free_char(struct char_data * ch)
         DELETE_AND_NULL_ARRAY(ptr->look_desc);
       }
     }
-    
+
     if (ch->char_specials.arrive && ch->char_specials.arrive != proto->char_specials.arrive) {
       DELETE_AND_NULL_ARRAY(ch->char_specials.arrive);
     }
-    
+
     if (ch->char_specials.leave && ch->char_specials.leave != proto->char_specials.leave) {
       DELETE_AND_NULL_ARRAY(ch->char_specials.leave);
     }
   }
-  
-  clearMemory(ch);    
-  
+
+  clearMemory(ch);
+
   clear_char(ch);
 }
 
@@ -4124,7 +4186,7 @@ void free_host(struct host_data * host)
   DELETE_ARRAY_IF_EXTANT(host->desc);
   DELETE_ARRAY_IF_EXTANT(host->shutdown_start);
   DELETE_ARRAY_IF_EXTANT(host->shutdown_stop);
-  
+
   { // Clean up the trigger steps.
     struct trigger_step *trigger = NULL, *next = NULL;
     for (trigger = host->trigger; trigger; trigger = next) {
@@ -4133,7 +4195,7 @@ void free_host(struct host_data * host)
     }
     host->trigger = NULL;
   }
-  
+
   { // Clean up the exits.
     struct exit_data *exit = NULL, *next = NULL;
     for (exit = host->exit; exit; exit = next) {
@@ -4144,7 +4206,7 @@ void free_host(struct host_data * host)
     }
     host->exit = NULL;
   }
-  
+
   clear_host(host);
 }
 
@@ -4341,7 +4403,7 @@ void clear_room(struct room_data *room)
 
 void clear_vehicle(struct veh_data *veh)
 {
-  /* TODO: We are leaking more memory here from mods etc, but it's suuuuuuuuuper 
+  /* TODO: We are leaking more memory here from mods etc, but it's suuuuuuuuuper
       rare that we ever actually extract a vehicle from the game, so the effort
       to fix it is currently not warranted. -- LS */
   DELETE_ARRAY_IF_EXTANT(veh->restring);
@@ -4363,7 +4425,7 @@ void clear_icon(struct matrix_icon *icon)
 
 /* returns the real number of the room with given virtual number */
 long real_room(long virt)
-{  
+{
   long bot, top, mid;
 
   bot = 0;
@@ -4390,7 +4452,7 @@ long real_room(long virt)
 
 /* returns the real number of the monster with given virtual number */
 long real_mobile(long virt)
-{  
+{
   int bot, top, mid;
 
   bot = 0;
@@ -4562,8 +4624,8 @@ char *short_object(int virt, int what)
     snprintf(error, sizeof(error), "ERROR");
     mudlog("SYSERR: short_object received negative virt!", NULL, LOG_SYSLOG, TRUE);
     return error;
-  } 
-  
+  }
+
   int bot, top, mid;
 
   bot = 0;
@@ -4614,7 +4676,7 @@ void kill_ems(char *str)
  If they contain vehicles, those vehicles must be disgorged into the veh or room this one is in. */
 void purge_unowned_vehs() {
   struct veh_data *prior_veh = NULL, *veh = NULL, *vict_veh = NULL;
-  
+
   /*
   log("Player-owned vehicles currently in veh list:");
   int counter = 0;
@@ -4628,20 +4690,20 @@ void purge_unowned_vehs() {
   snprintf(buf, sizeof(buf), "End of veh list. %d player-owned vehicles counted.", counter);
   log(buf);
   */
-  
+
   prior_veh = veh_list;
-  while (prior_veh) {    
+  while (prior_veh) {
     // If we've hit the end of the list, evaluate for the head of the list.
     if (!(veh = prior_veh->next)) {
       veh = veh_list;
       prior_veh = NULL;
     }
-    
+
     // This vehicle is owned by an NPC (zoneloaded): Do not delete.
     if (veh->owner == 0) {
       // snprintf(buf, sizeof(buf), "Skipping vehicle '%s' (%ld) since it's owned by nobody.", veh->description, veh->idnum);
       // log(buf);
-      
+
       if (!prior_veh) {
         break;
       } else {
@@ -4649,12 +4711,12 @@ void purge_unowned_vehs() {
         continue;
       }
     }
-    
+
     // This vehicle is owned by a valid player: Do not delete.
     if (does_player_exist(veh->owner)) {
       //snprintf(buf, sizeof(buf), "Skipping vehicle '%s' (%ld) since its owner is a valid player.", veh->short_description, veh->idnum);
       //log(buf);
-      
+
       if (!prior_veh) {
         break;
       } else {
@@ -4662,16 +4724,16 @@ void purge_unowned_vehs() {
         continue;
       }
     }
-    
+
     // This vehicle is owned by an invalid player. Delete.
-    
+
     // Step 1: Dump its contents.
     snprintf(buf, sizeof(buf), "Purging contents of vehicle '%s' (%ld), owner %ld (nonexistant).", veh->short_description, veh->idnum, veh->owner);
     log(buf);
-    
+
     while ((vict_veh = veh->carriedvehs)) {
       snprintf(buf, sizeof(buf), "- Found '%s' (%ld) owned by %ld.", vict_veh->short_description, vict_veh->idnum, vict_veh->owner);
-      
+
       // If the vehicle is in a room, disgorge there.
       if (veh->in_room) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " Transferring to room %ld.", veh->in_room->number);
@@ -4679,7 +4741,7 @@ void purge_unowned_vehs() {
         veh_to_room(vict_veh, veh->in_room);
         continue;
       }
-      
+
       // If the vehicle is in another vehicle instead, disgorge there.
       else if (veh->in_veh) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " Transferring to vehicle '%s' (%ld).",
@@ -4688,7 +4750,7 @@ void purge_unowned_vehs() {
         veh_to_veh(vict_veh, veh->in_veh);
         continue;
       }
-      
+
       // Failure case: Vehicle was in neither a room nor another vehicle.
       else {
         log(buf);
@@ -4702,10 +4764,10 @@ void purge_unowned_vehs() {
         continue;
       }
     }
-    
+
     // Step 2: Purge the vehicle itself. `veh` now points to garbage.
     extract_veh(veh);
-    
+
     // Critically, we don't iterate prior_veh if we removed veh-- that would skip the next veh in the list.
   }
 }
@@ -4718,12 +4780,15 @@ void load_saved_veh()
   long vnum, owner;
   struct obj_data *obj, *last_obj = NULL;
   long veh_room = 0;
+  int veh_version = 0;
+  std::vector<nested_obj> contained_obj;
+  struct nested_obj contained_obj_entry;
 
   if (!(fl = fopen("veh/vfile", "r"))) {
     log("SYSERR: Could not open vfile for reading.");
     return;
   }
-  
+
   if (!get_line(fl, buf)) {
     log("SYSERR: Invalid Entry In Vfile.");
     return;
@@ -4743,13 +4808,14 @@ void load_saved_veh()
     data.Parse(&file);
     file.Close();
 
+    veh_version = data.GetInt("METADATA/Version", 0);
     owner = data.GetLong("VEHICLE/Owner", 0);
 
     if ((vnum = data.GetLong("VEHICLE/Vnum", 0)))
       veh = read_vehicle(vnum, VIRTUAL);
     else
       continue;
-      
+
     veh->damage = data.GetInt("VEHICLE/Damage", 0);
     veh->owner = owner;
     veh->idnum = data.GetLong("VEHICLE/Idnum", number(0, INT_MAX));
@@ -4762,9 +4828,9 @@ void load_saved_veh()
       veh_to_room(veh, &world[real_room(veh_room)]);
     veh->restring = str_dup(data.GetString("VEHICLE/VRestring", NULL));
     veh->restring_long = str_dup(data.GetString("VEHICLE/VRestringLong", NULL));
-    int inside = 0, last_in = 0;
+    int inside = 0, last_inside = 0;
     int num_objs = data.NumSubsections("CONTENTS");
-    
+
     snprintf(buf3, sizeof(buf3), "veh-load %ld owned by %ld", veh->idnum, veh->owner);
     for (int i = 0; i < num_objs; i++) {
       const char *sect_name = data.GetIndexSection("CONTENTS", i);
@@ -4794,21 +4860,21 @@ void load_saved_veh()
         obj->vfront = data.GetInt(buf, TRUE);
         snprintf(buf, sizeof(buf), "%s/Timer", sect_name);
         GET_OBJ_TIMER(obj) = data.GetInt(buf, TRUE);
-        
+
         if (GET_OBJ_VNUM(obj) == OBJ_SPECIAL_PC_CORPSE) {
           // Invalid belongings.
           if (GET_OBJ_VAL(obj, 5) <= 0) {
             extract_obj(obj);
             continue;
           }
-          
+
           const char *player_name = get_player_name(GET_OBJ_VAL(obj, 5));
           if (!player_name || !str_cmp(player_name, "deleted")) {
             // Whoops, it belongs to a deleted character. RIP.
             extract_obj(obj);
             continue;
           }
-            
+
           // Set up special corpse values. This will probably cause a memory leak. We use name instead of desc.
           snprintf(buf, sizeof(buf), "belongings %s", player_name);
           snprintf(buf1, sizeof(buf1), "^rThe belongings of %s are lying here.^n", decapitalize_a_an(player_name));
@@ -4818,36 +4884,99 @@ void load_saved_veh()
           obj->text.room_desc = str_dup(buf1);
           obj->text.name = str_dup(buf2);
           obj->text.look_desc = str_dup(buf3);
-          
+
           GET_OBJ_VAL(obj, 4) = 1;
           GET_OBJ_BARRIER(obj) = PC_CORPSE_BARRIER;
           GET_OBJ_CONDITION(obj) = 100;
-          
+
           delete [] player_name;
         }
-        
+
         // Don't auto-repair cyberdecks until they're fully loaded.
         if (GET_OBJ_TYPE(obj) != ITEM_CYBERDECK)
           auto_repair_obj(obj, buf3);
-        
-        if (inside > 0) {
-          if (inside == last_in)
-            last_obj = last_obj->in_obj;
-          else if (inside < last_in)
-            while (inside <= last_in && last_obj) {
-              last_obj = last_obj->in_obj;
-              last_in--;
+
+        if (veh_version == VERSION_VEH_FILE) {
+          // Since we're now saved the obj linked lists  in reverse order, in order to fix the stupid reordering on
+          // every binary execution, the previous algorithm did not work, as it relied on getting the container obj
+          // first and place subsequent objects in it. Since we're now getting it last, and more importantly we get
+          // objects at deeper nesting level in between our list, we save all pointers to objects along with their
+          // nesting level in a vector container and once we found the next container (inside < last_inside) we
+          // move the objects with higher nesting level to container and proceed. This works for any nesting depth.
+          if (inside > 0 || (inside == 0 && inside < last_inside)) {
+            //Found our container?
+            if (inside < last_inside) {
+              if (inside == 0)
+                obj_to_veh(obj, veh);
+
+              auto it = std::find_if(contained_obj.begin(), contained_obj.end(), find_level(inside+1));
+              while (it != contained_obj.end()) {
+                obj_to_obj(it->obj, obj);
+                contained_obj.erase(it);
+              }
+
+              if (inside > 0) {
+                contained_obj_entry.level = inside;
+                contained_obj_entry.obj = obj;
+                contained_obj.push_back(contained_obj_entry);
+              }
             }
-          if (last_obj)
-            obj_to_obj(obj, last_obj);
-          else
+            else {
+              contained_obj_entry.level = inside;
+              contained_obj_entry.obj = obj;
+              contained_obj.push_back(contained_obj_entry);
+            }
+            last_inside = inside;
+          } else
             obj_to_veh(obj, veh);
-        } else
+
+          last_inside = inside;
+        }
+        // This handles loading old house file format prior to introduction of version number in the file.
+        // Version number will always be 0 for this format.
+        else if (!veh_version) {
+          if (inside > 0) {
+            if (inside == last_inside)
+              last_obj = last_obj->in_obj;
+            else if (inside < last_inside) {
+              while (inside <= last_inside && last_obj) {
+                if (!last_obj) {
+                  snprintf(buf2, sizeof(buf2), "Load error: Nested-item load failed for %s. Disgorging to vehicle.", GET_OBJ_NAME(obj));
+                  mudlog(buf2, NULL, LOG_SYSLOG, TRUE);
+                  break;
+                }
+                last_obj = last_obj->in_obj;
+                last_inside--;
+              }
+            }
+
+            if (last_obj)
+              obj_to_obj(obj, last_obj);
+            else
+              obj_to_veh(obj, veh);
+          } else
+            obj_to_veh(obj, veh);
+          last_inside = inside;
+          last_obj = obj;
+        }
+        else {
+          snprintf(buf2, sizeof(buf2), "Load ERROR: Unknown file format for vehicle ID: %ld. Dumping valid objects to vehicle.", veh->idnum);
+          mudlog(buf2, NULL, LOG_SYSLOG, TRUE);
           obj_to_veh(obj, veh);
-        last_in = inside;
-        last_obj = obj;
+        }
       }
     }
+
+    if (veh_version == VERSION_VEH_FILE) {
+      // Failsafe. If something went wrong and we still have objects stored in the vector, dump them in the room.
+      if (!contained_obj.empty()) {
+        for (auto it : contained_obj)
+          obj_to_veh(it.obj, veh);
+
+        contained_obj.clear();
+      }
+    }
+
     int num_mods = data.NumFields("MODIS");
     for (int i = 0; i < num_mods; i++) {
       snprintf(buf, sizeof(buf), "MODIS/Mod%d", i);
@@ -4958,13 +5087,13 @@ void load_saved_veh()
         veh_to_room(veh, &world[real_room(veh_room)]);
       }
     }
-        
+
 }
 
 void load_consist(void)
 {
   File file;
-  
+
   for (int nr = 0; nr <= top_of_world; nr++) {
     if (ROOM_FLAGGED(&world[nr], ROOM_STORAGE)) {
       snprintf(buf, sizeof(buf), "storage/%ld", world[nr].number);
@@ -4974,8 +5103,13 @@ void load_consist(void)
         VTable data;
         data.Parse(&file);
         file.Close();
+
+        int house_version = data.GetInt("METADATA/Version", 0);
         struct obj_data *obj = NULL, *last_obj = NULL;
-        int inside = 0, last_in = 0, num_objs = data.NumSubsections("HOUSE");
+        std::vector<nested_obj> contained_obj;
+        struct nested_obj contained_obj_entry;
+
+        int inside = 0, last_inside = 0, num_objs = data.NumSubsections("HOUSE");
         long vnum;
         for (int i = 0; i < num_objs; i++) {
           const char *sect_name = data.GetIndexSection("HOUSE", i);
@@ -5001,25 +5135,25 @@ void load_consist(void)
             snprintf(buf, sizeof(buf), "%s/Cost", sect_name);
             GET_OBJ_COST(obj) = data.GetInt(buf, GET_OBJ_COST(obj));
             snprintf(buf, sizeof(buf), "%s/Inside", sect_name);
-            
+
             // Handle weapon attachments.
             if (GET_OBJ_TYPE(obj) == ITEM_WEAPON)
               handle_weapon_attachments(obj);
-            
+
             else if (GET_OBJ_VNUM(obj) == OBJ_SPECIAL_PC_CORPSE) {
               // Invalid belongings.
               if (GET_OBJ_VAL(obj, 5) <= 0) {
                 extract_obj(obj);
                 continue;
               }
-              
+
               const char *player_name = get_player_name(GET_OBJ_VAL(obj, 5));
               if (!player_name || !str_cmp(player_name, "deleted")) {
                 // Whoops, it belongs to a deleted character. RIP.
                 extract_obj(obj);
                 continue;
               }
-                
+
               // Set up special corpse values. This will probably cause a memory leak. We use name instead of desc.
               snprintf(buf, sizeof(buf), "belongings %s", player_name);
               snprintf(buf1, sizeof(buf1), "^rThe belongings of %s are lying here.^n", decapitalize_a_an(player_name));
@@ -5029,66 +5163,123 @@ void load_consist(void)
               obj->text.room_desc = str_dup(buf1);
               obj->text.name = str_dup(buf2);
               obj->text.look_desc = str_dup(buf3);
-              
+
               GET_OBJ_VAL(obj, 4) = 1;
               GET_OBJ_BARRIER(obj) = PC_CORPSE_BARRIER;
               GET_OBJ_CONDITION(obj) = 100;
-              
+
               delete [] player_name;
             }
-            
+
             // Don't auto-repair cyberdecks until they're fully loaded.
             if (GET_OBJ_TYPE(obj) != ITEM_CYBERDECK)
               auto_repair_obj(obj, buf3);
-            
+
             inside = data.GetInt(buf, 0);
-            if (inside > 0) {
-              if (inside == last_in)
-                last_obj = last_obj->in_obj;
-              else if (inside < last_in)
-                while (inside <= last_in) {
-                  if (!last_obj) {
-                    snprintf(buf2, sizeof(buf2), "Load error: Nested-item save failed for %s. Disgorging to room.", GET_OBJ_NAME(obj));
-                    mudlog(buf2, NULL, LOG_SYSLOG, TRUE);
-                    break;
+            if (house_version == VERSION_HOUSE_FILE) {
+              // Since we're now saved the obj linked lists  in reverse order, in order to fix the stupid reordering on
+              // every binary execution, the previous algorithm did not work, as it relied on getting the container obj
+              // first and place subsequent objects in it. Since we're now getting it last, and more importantly we get
+              // objects at deeper nesting level in between our list, we save all pointers to objects along with their
+              // nesting level in a vector container and once we found the next container (inside < last_inside) we
+              // move the objects with higher nesting level to container and proceed. This works for any nesting depth.
+              if (inside > 0 || (inside == 0 && inside < last_inside)) {
+                //Found our container?
+                if (inside < last_inside) {
+                  if (inside == 0)
+                    obj_to_room(obj, &world[nr]);
+
+                  auto it = std::find_if(contained_obj.begin(), contained_obj.end(), find_level(inside+1));
+                  while (it != contained_obj.end()) {
+                    obj_to_obj(it->obj, obj);
+                    contained_obj.erase(it);
                   }
-                  last_obj = last_obj->in_obj;
-                  last_in--;
+
+                  if (inside > 0) {
+                    contained_obj_entry.level = inside;
+                    contained_obj_entry.obj = obj;
+                    contained_obj.push_back(contained_obj_entry);
+                  }
                 }
-              if (last_obj)
-                obj_to_obj(obj, last_obj);
+                else {
+                  contained_obj_entry.level = inside;
+                  contained_obj_entry.obj = obj;
+                  contained_obj.push_back(contained_obj_entry);
+                }
+                last_inside = inside;
+              }
               else
                 obj_to_room(obj, &world[nr]);
-            } else
-              obj_to_room(obj, &world[nr]);
 
-            last_in = inside;
-            last_obj = obj;
+              last_inside = inside;
+            }
+            // This handles loading old house file format prior to introduction of version number in the file.
+            // Version number will always be 0 for this format.
+            else if (!house_version) {
+              if (inside > 0) {
+                if (inside == last_inside)
+                  last_obj = last_obj->in_obj;
+                else if (inside < last_inside) {
+                  while (inside <= last_inside) {
+                    if (!last_obj) {
+                      snprintf(buf2, sizeof(buf2), "Load error: Nested-item save failed for %s. Disgorging to room.", GET_OBJ_NAME(obj));
+                      mudlog(buf2, NULL, LOG_SYSLOG, TRUE);
+                      break;
+                    }
+                    last_obj = last_obj->in_obj;
+                    last_inside--;
+                  }
+                }
+
+                if (last_obj)
+                  obj_to_obj(obj, last_obj);
+                else
+                  obj_to_room(obj, &world[nr]);
+              } else
+                obj_to_room(obj, &world[nr]);
+
+              last_inside = inside;
+              last_obj = obj;
+            }
+            else {
+              snprintf(buf2, sizeof(buf2), "Load ERROR: Unknown file format for storage Rnum %d. Dumping valid objects to room.", nr);
+              mudlog(buf2, NULL, LOG_SYSLOG, TRUE);
+              obj_to_room(obj, &world[nr]);
+            }
           } else {
-            snprintf(buf2, sizeof(buf2), "Losing object %ld (%s / %s; )- it's not a valid object.", 
+            snprintf(buf2, sizeof(buf2), "Losing object %ld (%s / %s; )- it's not a valid object.",
                      vnum,
                      data.GetString("HOUSE/Name", "no restring"),
                      data.GetString("HOUSE/Photo", "no photo"));
             mudlog(buf2, NULL, LOG_SYSLOG, TRUE);
           }
         }
+        if (house_version == VERSION_HOUSE_FILE) {
+          // Failsafe. If something went wrong and we still have objects stored in the vector, dump them in the room.
+          if (!contained_obj.empty()) {
+            for (auto it : contained_obj)
+              obj_to_room(it.obj, &world[nr]);
+
+            contained_obj.clear();
+          }
+        }
       }
     }
-    
+
     // Verify that any hack-flagged room has a PC corpse in it. If not, remove the flag and save it.
     if (ROOM_FLAGGED(&world[nr], ROOM_CORPSE_SAVE_HACK)) {
       bool keep_flag = FALSE;
       for (struct obj_data *tmp_obj = world[nr].contents; tmp_obj; tmp_obj = tmp_obj->next_content)
         if ((keep_flag = (GET_OBJ_VNUM(tmp_obj) == OBJ_SPECIAL_PC_CORPSE)))
           break;
-          
+
       if (!keep_flag) {
         world[nr].room_flags.RemoveBit(ROOM_CORPSE_SAVE_HACK);
         world[nr].room_flags.RemoveBit(ROOM_STORAGE);
-        
+
         for (int counter = 0; counter <= top_of_zone_table; counter++) {
-          if ((GET_ROOM_VNUM(&world[nr]) >= (zone_table[counter].number * 100)) 
-              && (GET_ROOM_VNUM(&world[nr]) <= (zone_table[counter].top))) 
+          if ((GET_ROOM_VNUM(&world[nr]) >= (zone_table[counter].number * 100))
+              && (GET_ROOM_VNUM(&world[nr]) <= (zone_table[counter].top)))
           {
             write_world_to_disk(zone_table[counter].number);
             break;
@@ -5097,7 +5288,7 @@ void load_consist(void)
       }
     }
   }
-  
+
   if (!(file.Open("etc/consist", "r"))) {
     log("PAYDATA CONSISTENCY FILE NOT FOUND");
     return;
@@ -5147,6 +5338,10 @@ void boot_shop_orders(void)
       order->number = data.GetInt(buf, 0);
       snprintf(buf, sizeof(buf), "%s/Sent", sect_name);
       order->sent = data.GetInt(buf, 0);
+      snprintf(buf, sizeof(buf), "%s/Paid", sect_name);
+      order->paid = data.GetInt(buf, 0);
+      snprintf(buf, sizeof(buf), "%s/Expiration", sect_name);
+      order->expiration = data.GetLong(buf, MAX(time(0), order->timeavail) + (60 * 60 * 24 * PREORDERS_ARE_GOOD_FOR_X_DAYS));
 
       if (order->item && order->player && order->timeavail && order->price && order->number) {
         order->next = list;
@@ -5160,8 +5355,8 @@ void boot_shop_orders(void)
 void price_cyber(struct obj_data *obj)
 {
   bool has_strength = FALSE, has_qui = FALSE;
-  
-  switch (GET_OBJ_VAL(obj, 0)) {
+
+  switch (GET_CYBERWARE_TYPE(obj)) {
     case CYB_CHIPJACK:
       GET_OBJ_VAL(obj, 1) = 0;
       GET_OBJ_COST(obj) = GET_OBJ_VAL(obj, 3) * 1000;
@@ -5181,7 +5376,7 @@ void price_cyber(struct obj_data *obj)
         GET_OBJ_AVAILTN(obj) = 5;
         GET_OBJ_AVAILDAY(obj) = 4;
       }
-      break;      
+      break;
     case CYB_DATALOCK:
       GET_CYBERWARE_ESSENCE_COST(obj) = 20;
       GET_OBJ_AVAILTN(obj) = 6;
@@ -5239,7 +5434,7 @@ void price_cyber(struct obj_data *obj)
        GET_CYBERWARE_ESSENCE_COST(obj) = 50;
        GET_OBJ_COST(obj) = 3700;
        GET_OBJ_AVAILTN(obj) = 3;
-       GET_OBJ_AVAILDAY(obj) = 1; 
+       GET_OBJ_AVAILDAY(obj) = 1;
        break;
      case CYB_RADIO:
        GET_CYBERWARE_ESSENCE_COST(obj) = 75;
@@ -5333,7 +5528,7 @@ void price_cyber(struct obj_data *obj)
         GET_CYBERWARE_ESSENCE_COST(obj) = 10;
         GET_OBJ_AVAILTN(obj) = 3;
       }
-      GET_OBJ_AVAILDAY(obj) = 3;      
+      GET_OBJ_AVAILDAY(obj) = 3;
       break;
     case CYB_VOICEMOD:
       GET_OBJ_VAL(obj, 1) = 0;
@@ -5531,7 +5726,7 @@ void price_cyber(struct obj_data *obj)
       GET_OBJ_AVAILDAY(obj) = 4;
       GET_CYBERWARE_ESSENCE_COST(obj) = 75;
       obj->obj_flags.extra_flags.SetBit(ITEM_MAGIC_INCOMPATIBLE);
-      
+
       if (IS_SET(GET_CYBERWARE_FLAGS(obj), SKULL_MOD_OBVIOUS)) {
         GET_OBJ_COST(obj) = 35000;
       } else if (IS_SET(GET_CYBERWARE_FLAGS(obj), SKULL_MOD_SYNTHETIC)) {
@@ -5541,7 +5736,7 @@ void price_cyber(struct obj_data *obj)
         GET_OBJ_COST(obj) = 99999999;
         GET_CYBERWARE_ESSENCE_COST(obj) = 999;
       }
-      
+
       if (IS_SET(GET_CYBERWARE_FLAGS(obj), SKULL_MOD_ARMOR_MOD1)) {
         GET_OBJ_COST(obj) += 6500;
         GET_OBJ_AVAILTN(obj) = MAX(GET_OBJ_AVAILTN(obj), 8);
@@ -5553,7 +5748,7 @@ void price_cyber(struct obj_data *obj)
       GET_OBJ_AVAILDAY(obj) = 4;
       GET_CYBERWARE_ESSENCE_COST(obj) = 150;
       obj->obj_flags.extra_flags.SetBit(ITEM_MAGIC_INCOMPATIBLE);
-      
+
       if (IS_SET(GET_CYBERWARE_FLAGS(obj), TORSO_MOD_OBVIOUS)) {
         GET_OBJ_COST(obj) = 90000;
       } else if (IS_SET(GET_CYBERWARE_FLAGS(obj), TORSO_MOD_SYNTHETIC)) {
@@ -5563,7 +5758,7 @@ void price_cyber(struct obj_data *obj)
         GET_OBJ_COST(obj) = 99999999;
         GET_CYBERWARE_ESSENCE_COST(obj) = 999;
       }
-      
+
       if (IS_SET(GET_CYBERWARE_FLAGS(obj), TORSO_MOD_ARMOR_MOD1)) {
         GET_OBJ_COST(obj) += 6500;
         GET_OBJ_AVAILTN(obj) = MAX(GET_OBJ_AVAILTN(obj), 8);
@@ -5580,12 +5775,12 @@ void price_cyber(struct obj_data *obj)
         GET_OBJ_AVAILDAY(obj) = MAX(GET_OBJ_AVAILDAY(obj), 14);
       }
       break;
-    case CYB_LEGS:      
+    case CYB_LEGS:
       GET_OBJ_AVAILTN(obj) = 4;
       GET_OBJ_AVAILDAY(obj) = 4;
       GET_CYBERWARE_ESSENCE_COST(obj) = 200;
       obj->obj_flags.extra_flags.SetBit(ITEM_MAGIC_INCOMPATIBLE);
-      
+
       if (IS_SET(GET_CYBERWARE_FLAGS(obj), LEGS_MOD_OBVIOUS)) {
         GET_OBJ_COST(obj) = 150000;
       } else if (IS_SET(GET_CYBERWARE_FLAGS(obj), LEGS_MOD_SYNTHETIC)) {
@@ -5595,13 +5790,13 @@ void price_cyber(struct obj_data *obj)
         GET_OBJ_COST(obj) = 99999999;
         GET_CYBERWARE_ESSENCE_COST(obj) = 999;
       }
-      
+
       if (IS_SET(GET_CYBERWARE_FLAGS(obj), LEGS_MOD_ARMOR_MOD1)) {
         GET_OBJ_COST(obj) += 6500;
         GET_OBJ_AVAILTN(obj) = MAX(GET_OBJ_AVAILTN(obj), 8);
         GET_OBJ_AVAILDAY(obj) = MAX(GET_OBJ_AVAILDAY(obj), 14);
       }
-      
+
       if (IS_SET(GET_CYBERWARE_FLAGS(obj), LEGS_MOD_STRENGTH_MOD1)) {
         GET_OBJ_COST(obj) += 20000;
         has_strength = TRUE;
@@ -5614,7 +5809,7 @@ void price_cyber(struct obj_data *obj)
         GET_OBJ_COST(obj) += 60000;
         has_strength = TRUE;
       }
-      
+
       if (IS_SET(GET_CYBERWARE_FLAGS(obj), LEGS_MOD_QUICKNESS_MOD1)) {
         GET_OBJ_COST(obj) += 30000 * (has_strength ? 1.1 : 1);
         has_qui = TRUE;
@@ -5627,7 +5822,7 @@ void price_cyber(struct obj_data *obj)
         GET_OBJ_COST(obj) += 90000 * (has_strength ? 1.1 : 1);
         has_qui = TRUE;
       }
-      
+
       if (has_strength || has_qui) {
         GET_OBJ_AVAILTN(obj) = MAX(GET_OBJ_AVAILTN(obj), 8);
         GET_OBJ_AVAILDAY(obj) = MAX(GET_OBJ_AVAILDAY(obj), 28);
@@ -5635,12 +5830,12 @@ void price_cyber(struct obj_data *obj)
       break;
     case CYB_ARMS:
       GET_OBJ_AVAILDAY(obj) = GET_OBJ_AVAILTN(obj) = GET_CYBERWARE_ESSENCE_COST(obj) = GET_OBJ_COST(obj) = 0;
-      
+
       GET_OBJ_AVAILTN(obj) = 4;
       GET_OBJ_AVAILDAY(obj) = 4;
       GET_CYBERWARE_ESSENCE_COST(obj) = 200;
       obj->obj_flags.extra_flags.SetBit(ITEM_MAGIC_INCOMPATIBLE);
-      
+
       if (IS_SET(GET_CYBERWARE_FLAGS(obj), ARMS_MOD_OBVIOUS)) {
         GET_OBJ_COST(obj) = 75000;
       } else if (IS_SET(GET_CYBERWARE_FLAGS(obj), ARMS_MOD_SYNTHETIC)) {
@@ -5650,13 +5845,13 @@ void price_cyber(struct obj_data *obj)
         GET_OBJ_COST(obj) = 99999999;
         GET_CYBERWARE_ESSENCE_COST(obj) = 999;
       }
-      
+
       if (!IS_SET(GET_CYBERWARE_FLAGS(obj), ARMS_MOD_ARMOR_MOD1)) {
         GET_OBJ_COST(obj) += 6500;
         GET_OBJ_AVAILTN(obj) = MAX(GET_OBJ_AVAILTN(obj), 8);
         GET_OBJ_AVAILDAY(obj) = MAX(GET_OBJ_AVAILDAY(obj), 14);
       }
-      
+
       if (IS_SET(GET_CYBERWARE_FLAGS(obj), ARMS_MOD_STRENGTH_MOD1)) {
         GET_OBJ_COST(obj) += 20000;
         has_strength = TRUE;
@@ -5667,7 +5862,7 @@ void price_cyber(struct obj_data *obj)
         GET_OBJ_COST(obj) += 60000;
         has_strength = TRUE;
       }
-      
+
       if (IS_SET(GET_CYBERWARE_FLAGS(obj), ARMS_MOD_QUICKNESS_MOD1)) {
         GET_OBJ_COST(obj) += 30000 * (has_strength ? 1.1 : 1);
         has_qui = TRUE;
@@ -5678,12 +5873,12 @@ void price_cyber(struct obj_data *obj)
         GET_OBJ_COST(obj) += 90000 * (has_strength ? 1.1 : 1);
         has_qui = TRUE;
       }
-      
+
       if (has_strength || has_qui) {
         GET_OBJ_AVAILTN(obj) = MAX(GET_OBJ_AVAILTN(obj), 8);
         GET_OBJ_AVAILDAY(obj) = MAX(GET_OBJ_AVAILDAY(obj), 28);
       }
-      
+
       if (IS_SET(GET_CYBERWARE_FLAGS(obj), ARMS_MOD_GYROMOUNT)) {
         GET_OBJ_COST(obj) += 40000;
         GET_OBJ_AVAILTN(obj) = MAX(GET_OBJ_AVAILTN(obj), 10);
@@ -5776,7 +5971,7 @@ void price_cyber(struct obj_data *obj)
       GET_OBJ_COST(obj) = GET_OBJ_VAL(obj, 1) * 20000;
       GET_CYBERWARE_ESSENCE_COST(obj) = GET_OBJ_VAL(obj, 1) * 100;
       GET_OBJ_AVAILTN(obj) = 4;
-      GET_OBJ_AVAILDAY(obj) = 4;     
+      GET_OBJ_AVAILDAY(obj) = 4;
       break;
     case CYB_EYES:
       GET_OBJ_AVAILDAY(obj) = GET_OBJ_AVAILTN(obj) = GET_CYBERWARE_ESSENCE_COST(obj) = GET_OBJ_COST(obj) = 0;
@@ -5786,24 +5981,30 @@ void price_cyber(struct obj_data *obj)
         GET_OBJ_AVAILDAY(obj) = 1;
         GET_CYBERWARE_ESSENCE_COST(obj) = 40;
       }
-      if (IS_SET(GET_OBJ_VAL(obj, 3), EYE_DISPLAYLINK)) {
-        GET_OBJ_COST(obj) += 1000;
-        GET_OBJ_AVAILTN(obj) = MAX(GET_OBJ_AVAILTN(obj), 4);
-        GET_OBJ_AVAILDAY(obj) = MAX(GET_OBJ_AVAILDAY(obj), 1.5);
-        GET_CYBERWARE_ESSENCE_COST(obj) += 10;
+
+      // These are redundant items, so if both are set we take the better.
+      if (IS_SET(GET_OBJ_VAL(obj, 3), EYE_IMAGELINK) || IS_SET(GET_OBJ_VAL(obj, 3), EYE_DISPLAYLINK)){
+        if (IS_SET(GET_OBJ_VAL(obj, 3), EYE_IMAGELINK)) {
+          GET_OBJ_COST(obj) += 1600;
+          GET_OBJ_AVAILTN(obj) = MAX(GET_OBJ_AVAILTN(obj), 4);
+          GET_OBJ_AVAILDAY(obj) = MAX(GET_OBJ_AVAILDAY(obj), 2);
+          GET_CYBERWARE_ESSENCE_COST(obj) += 20;
+        }
+        else if (IS_SET(GET_OBJ_VAL(obj, 3), EYE_DISPLAYLINK)) {
+          GET_OBJ_COST(obj) += 1000;
+          GET_OBJ_AVAILTN(obj) = MAX(GET_OBJ_AVAILTN(obj), 4);
+          GET_OBJ_AVAILDAY(obj) = MAX(GET_OBJ_AVAILDAY(obj), 1.5);
+          GET_CYBERWARE_ESSENCE_COST(obj) += 10;
+        }
       }
+
       if (IS_SET(GET_OBJ_VAL(obj, 3), EYE_FLARECOMP)) {
         GET_OBJ_COST(obj) += 2000;
         GET_OBJ_AVAILTN(obj) = MAX(GET_OBJ_AVAILTN(obj), 5);
         GET_OBJ_AVAILDAY(obj) = MAX(GET_OBJ_AVAILDAY(obj), 2);
         GET_CYBERWARE_ESSENCE_COST(obj) += 10;
       }
-      if (IS_SET(GET_OBJ_VAL(obj, 3), EYE_IMAGELINK)) {
-        GET_OBJ_COST(obj) += 1600;
-        GET_OBJ_AVAILTN(obj) = MAX(GET_OBJ_AVAILTN(obj), 4);
-        GET_OBJ_AVAILDAY(obj) = MAX(GET_OBJ_AVAILDAY(obj), 2);
-        GET_CYBERWARE_ESSENCE_COST(obj) += 20;
-      }
+
       if (IS_SET(GET_OBJ_VAL(obj, 3), EYE_LOWLIGHT)) {
         GET_OBJ_COST(obj) += 3000;
         GET_OBJ_AVAILTN(obj) = MAX(GET_OBJ_AVAILTN(obj), 4);
@@ -5925,7 +6126,7 @@ void price_cyber(struct obj_data *obj)
         GET_OBJ_COST(obj) += 4000;
         GET_OBJ_AVAILTN(obj) = MAX(GET_OBJ_AVAILTN(obj), 2);
         GET_OBJ_AVAILDAY(obj) = MAX(GET_OBJ_AVAILDAY(obj), 1);
-        GET_CYBERWARE_ESSENCE_COST(obj) = 20 + MAX(0, GET_CYBERWARE_ESSENCE_COST(obj) - 50);
+        GET_CYBERWARE_ESSENCE_COST(obj) += 20;
       }
       if (IS_SET(GET_OBJ_VAL(obj, 3), EYE_COSMETIC)) {
         GET_OBJ_COST(obj) += 1000;
@@ -5953,25 +6154,31 @@ void price_cyber(struct obj_data *obj)
       }
       break;
   }
-  switch (GET_OBJ_VAL(obj, 2)) {
+  float grade_essence_modifier = 1.0;
+  switch (GET_CYBERWARE_GRADE(obj)) {
     case GRADE_ALPHA:
+      grade_essence_modifier = 0.8;
       GET_OBJ_COST(obj) *= 2;
-      GET_CYBERWARE_ESSENCE_COST(obj) = (int) round(GET_CYBERWARE_ESSENCE_COST(obj) * .8);
       break;
     case GRADE_BETA:
+      grade_essence_modifier = 0.6;
       GET_OBJ_COST(obj) *= 4;
-      GET_CYBERWARE_ESSENCE_COST(obj) = (int) round(GET_CYBERWARE_ESSENCE_COST(obj) * .6);
       GET_OBJ_AVAILTN(obj) += 5;
       GET_OBJ_AVAILDAY(obj) = (int) round(GET_OBJ_AVAILDAY(obj) * 1.5);
       break;
     case GRADE_DELTA:
+      grade_essence_modifier = 0.5;
       GET_OBJ_COST(obj) *= 8;
-      GET_CYBERWARE_ESSENCE_COST(obj) = (int) round(GET_CYBERWARE_ESSENCE_COST(obj) * .5);
       GET_OBJ_AVAILTN(obj) += 9;
       GET_OBJ_AVAILDAY(obj) *= 3;
       break;
   }
-
+  GET_CYBERWARE_ESSENCE_COST(obj) = (int) round(GET_CYBERWARE_ESSENCE_COST(obj) * grade_essence_modifier);
+  // Finally, apply the cybereye package discount.
+  if (GET_CYBERWARE_TYPE(obj) == CYB_EYES && IS_SET(GET_CYBERWARE_FLAGS(obj), EYE_CYBEREYES)) {
+    GET_CYBERWARE_ESSENCE_COST(obj) = MAX((int) round(20 * grade_essence_modifier),
+                                          GET_CYBERWARE_ESSENCE_COST(obj) - 50);
+  }
 }
 
 void price_bio(struct obj_data *obj)
@@ -6154,7 +6361,7 @@ void price_bio(struct obj_data *obj)
           GET_OBJ_COST(obj) = 200000;
           GET_OBJ_VAL(obj, 4) = 100;
       }
-      GET_OBJ_AVAILTN(obj) = 6; 
+      GET_OBJ_AVAILTN(obj) = 6;
       GET_OBJ_AVAILDAY(obj) = 12;
       break;
     case BIO_THERMOSENSEORGAN:

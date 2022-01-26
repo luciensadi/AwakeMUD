@@ -95,7 +95,7 @@ public:
   char_data *LoadChar(const char *name, bool logon);
 
   // just saves the character
-  bool SaveChar(char_data *ch, vnum_t loadroom = NOWHERE);
+  bool SaveChar(char_data *ch, vnum_t loadroom = NOWHERE, bool fromCopyover = FALSE);
 
   // saves and puts character into storage
   // WARNING: this makes ch INVALID! (cause it returns the memory)

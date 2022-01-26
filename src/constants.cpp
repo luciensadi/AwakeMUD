@@ -271,6 +271,7 @@ const char *room_bits[] =
     "ELEVATOR_SHAFT",
     "SOCIALIZE!",
     "CORPSE_SAVE_HACK",
+    "STERILE",
     "\n"
   };
 
@@ -446,7 +447,7 @@ const char *player_bits[] =
     "NEWBIE",
     "JUST_DIED",
     "VISA",
-    "!USED",
+    "CEYE_ESS_DONE",
     "SITEOK",
     "!SHOUT",
     "!TITLE",
@@ -480,6 +481,8 @@ const char *player_bits[] =
     "NOIDLEOUT",
     "TELLS_MUTED",
     "NEWBIE_MUTED",
+    "IS_CYBERDOC",
+    "PAID_FOR_CLOSECOMBAT",
     "\n"
   };
 
@@ -521,10 +524,10 @@ const char *action_bits[] =
     "INANIMATE",
     "\n"
   };
-  
+
 /* PRF_x v2 */
 
-struct preference_bit_struct preference_bits_v2[] = { 
+struct preference_bit_struct preference_bits_v2[] = {
   // TODO: Add an 'inverted' flag for things like !OOC.
   // TODO: Is there a better way to name these? Or sort by channel / log / etc?
   // NAME                    STAFF  True: ON/OFF, False: YES/NO
@@ -542,7 +545,7 @@ struct preference_bit_struct preference_bits_v2[] = {
   { "PKer"                 , FALSE, FALSE },
   { "On Quest"             , FALSE, FALSE },
   { "AFK"                  , FALSE, TRUE  },
-  { "UNUSED-14"            , FALSE, TRUE  },
+  { "Suppress Staff Radio" , TRUE , TRUE  },
   { "UNUSED-15"            , FALSE, TRUE  },
   { "No Hassle"            , TRUE , TRUE  },
   { "Roomflags"            , TRUE , TRUE  },
@@ -569,7 +572,7 @@ struct preference_bit_struct preference_bits_v2[] = {
   { "Menu Gag"             , FALSE, TRUE  },
   { "Longweapon"           , FALSE, FALSE },
   { "PGrouplog"            , TRUE , TRUE  },
-  { "ShowGroupTag"         , TRUE , FALSE },
+  { "ShowGroupTag"         , FALSE, FALSE },
   { "Keepalive"            , FALSE, TRUE  },
   { "Screenreader"         , FALSE, FALSE },
   { "No Color"             , FALSE, TRUE  },
@@ -577,13 +580,16 @@ struct preference_bit_struct preference_bits_v2[] = {
   { "Helplog"              , TRUE , TRUE  },
   { "Purgelog"             , TRUE , TRUE  },
   { "No Autokill"          , FALSE, TRUE  },
-  { "Voice Names"          , FALSE, TRUE  },
+  { "Voice Names"          , TRUE , TRUE  },
   { "FuckupLog"            , TRUE , TRUE  },
   { "EconLog"              , TRUE , TRUE  },
   { "Brief"                , TRUE , TRUE  },
   { "Highlights"           , TRUE , TRUE  },
   { "Pseudolanguage"       , TRUE , TRUE  },
-  { "No Idle Nuyen Message", FALSE, TRUE  },
+  { "No Idle Nuyen Line"   , FALSE, TRUE  },
+  { "Cyberdocs Allowed"    , FALSE, TRUE  },
+  { "No Void on Idle"      , FALSE, TRUE  },
+  { "RadLog"               , TRUE , TRUE  },
   { "\n"                   , 0    , 0     }
 };
 
@@ -604,7 +610,7 @@ const char *preference_bits[] =
     "PKER",
     "QUEST",
     "AFK",
-    "UNUSED-14",
+    "STAFF_RADSUPPRESS",
     "UNUSED-15",
     "NOHASSLE",
     "ROOMFLAGS",
@@ -645,6 +651,10 @@ const char *preference_bits[] =
     "BRIEF",
     "!HIGHLIGHTS",
     "!PSEUDOLANGUAGE",
+    "!IDLE_NUYEN_REWARD_MESSAGE",
+    "CYBERDOC_PERMITTED",
+    "NO_VOID",
+    "RADLOG",
     "\n"
   };
 
@@ -700,7 +710,9 @@ const char *affected_bits[] =
     "Binding",
     "Spell Design",
     "Surprised",
-    "Ammo Building"
+    "Ammo Building",
+    "Engaging in Close Combat",
+    "Tries for Close Combat"
   };
 
 /* CON_x */
@@ -907,6 +919,7 @@ const char *item_types[] =
     "Quest Item",
     "Ammo Box",
     "Keyring",
+    "Shop Container",
     "\n"
   };
 
@@ -973,9 +986,10 @@ const char *extra_bits[] =
     "HARDENED_ARMOR",
     "DONT_TOUCH",
     "MAGIC_INCOMPATIBLE",
+    "KEPT",
     "\n"
   };
-  
+
 const char *pc_readable_extra_bits[] =
   {
     "Glowing",
@@ -1006,6 +1020,7 @@ const char *pc_readable_extra_bits[] =
     "Hardened Armor (NERP)",
     "Derived from Template Item",
     "Incompatible with Magic",
+    "Kept",
     "\n"
   };
 
@@ -1142,6 +1157,7 @@ const char *log_types[] =
     "PURGELOG",
     "FUCKUPLOG",
     "ECONLOG",
+    "RADLOG",
     "\n"
   };
 
@@ -1374,7 +1390,7 @@ struct skill_data skills[] =
     {"Armed Combat", STR, SKILL_TYPE_ACTIVE, FALSE},
     {"Edged Weapons", STR, SKILL_TYPE_ACTIVE, FALSE},
     {"Pole Arms", STR, SKILL_TYPE_ACTIVE, FALSE},
-    {"Whips & Flails", QUI, SKILL_TYPE_ACTIVE, FALSE},
+    {"Whips and Flails", QUI, SKILL_TYPE_ACTIVE, FALSE},
     {"Clubs", STR, SKILL_TYPE_ACTIVE, FALSE},
     {"Brawling", STR, SKILL_TYPE_ACTIVE, FALSE},
     {"Centering", WIL, SKILL_TYPE_ACTIVE, TRUE},
@@ -1384,7 +1400,7 @@ struct skill_data skills[] =
     {"Rifles", QUI, SKILL_TYPE_ACTIVE, FALSE},
     {"Shotguns", QUI, SKILL_TYPE_ACTIVE, FALSE},
     {"Assault Rifles", QUI, SKILL_TYPE_ACTIVE, FALSE},
-    {"Sub-Machine Guns", QUI, SKILL_TYPE_ACTIVE, FALSE},
+    {"Submachine Guns", QUI, SKILL_TYPE_ACTIVE, FALSE},
     {"Grenade Launchers", INT, SKILL_TYPE_ACTIVE, FALSE},
     {"Tasers", QUI, SKILL_TYPE_ACTIVE, FALSE},
     {"Mounted Gunnery", INT, SKILL_TYPE_ACTIVE, FALSE},
@@ -1401,9 +1417,9 @@ struct skill_data skills[] =
     {"Demolitions", INT, SKILL_TYPE_ACTIVE, FALSE},
     {"Computers", INT, SKILL_TYPE_ACTIVE, FALSE},
     {"Electronics", INT, SKILL_TYPE_ACTIVE, FALSE},
-    {"Computer B/R", INT, SKILL_TYPE_ACTIVE, FALSE},
+    {"Computer Building and Repair", INT, SKILL_TYPE_ACTIVE, FALSE},
     {"Biotech", INT, SKILL_TYPE_ACTIVE, FALSE},
-    {"Electronics B/R", INT, SKILL_TYPE_ACTIVE, FALSE},
+    {"Electronics Building and Repair", INT, SKILL_TYPE_ACTIVE, FALSE},
     {"Talismongering", INT, SKILL_TYPE_KNOWLEDGE, TRUE},
     {"Police Procedures", INT, SKILL_TYPE_KNOWLEDGE, FALSE},
     {"Leadership", CHA, SKILL_TYPE_ACTIVE, FALSE},
@@ -1418,25 +1434,25 @@ struct skill_data skills[] =
     {"Street Etiquette", CHA, SKILL_TYPE_ACTIVE, FALSE},
     {"Tribal Etiquette", CHA, SKILL_TYPE_ACTIVE, FALSE},
     {"Elf Etiquette", CHA, SKILL_TYPE_ACTIVE, FALSE},
-    {"Program Design (Combat)", INT, SKILL_TYPE_KNOWLEDGE, FALSE},
-    {"Program Design (Defensive)", INT, SKILL_TYPE_KNOWLEDGE, FALSE},
-    {"Program Design (Operational)", INT, SKILL_TYPE_KNOWLEDGE, FALSE},
-    {"Program Design (Special)", INT, SKILL_TYPE_KNOWLEDGE, FALSE},
-    {"Program Design (Cyberterminal)", INT, SKILL_TYPE_KNOWLEDGE, FALSE},
+    {"Combat Program Design", INT, SKILL_TYPE_KNOWLEDGE, FALSE},
+    {"Defensive Program Design", INT, SKILL_TYPE_KNOWLEDGE, FALSE},
+    {"Operational Program Design", INT, SKILL_TYPE_KNOWLEDGE, FALSE},
+    {"Special Program Design", INT, SKILL_TYPE_KNOWLEDGE, FALSE},
+    {"Cyberterminal Program Design", INT, SKILL_TYPE_KNOWLEDGE, FALSE},
     {"Data Brokerage", INT, SKILL_TYPE_KNOWLEDGE, FALSE},
     {"Aura Reading", INT, SKILL_TYPE_ACTIVE, TRUE},
     {"Stealth", QUI, SKILL_TYPE_ACTIVE, FALSE},
-    {"Steal", 0, SKILL_TYPE_ACTIVE, FALSE}, // TODO: Why do these use BOD?
-    {"Track", 0, SKILL_TYPE_ACTIVE, FALSE},
-    {"Climbing", 0, SKILL_TYPE_ACTIVE, FALSE},
-    {"Driving/Bike", REA, SKILL_TYPE_ACTIVE, FALSE},
-    {"Driving/Nothing", REA, SKILL_TYPE_ACTIVE, FALSE},
-    {"Driving/Car", REA, SKILL_TYPE_ACTIVE, FALSE},
-    {"Driving/Truck", REA, SKILL_TYPE_ACTIVE, FALSE},
-    {"BR/Bike", INT, SKILL_TYPE_ACTIVE, FALSE},
-    {"BR/Car", INT, SKILL_TYPE_ACTIVE, FALSE},
-    {"BR/Drone", INT, SKILL_TYPE_ACTIVE, FALSE},
-    {"BR/Truck", INT, SKILL_TYPE_ACTIVE, FALSE},
+    {"Steal", QUI, SKILL_TYPE_ACTIVE, FALSE},
+    {"Track", INT, SKILL_TYPE_ACTIVE, FALSE},
+    {"Climbing", BOD, SKILL_TYPE_ACTIVE, FALSE},
+    {"Driving Motorcycles", REA, SKILL_TYPE_ACTIVE, FALSE},
+    {"zzzzzzzzzzzzzz", REA, SKILL_TYPE_ACTIVE, FALSE}, // unused skill
+    {"Driving Cars", REA, SKILL_TYPE_ACTIVE, FALSE},
+    {"Driving Trucks", REA, SKILL_TYPE_ACTIVE, FALSE},
+    {"Repairing Motorcycles", INT, SKILL_TYPE_ACTIVE, FALSE},
+    {"Repairing Cars", INT, SKILL_TYPE_ACTIVE, FALSE},
+    {"Repairing Drones", INT, SKILL_TYPE_ACTIVE, FALSE},
+    {"Repairing Trucks", INT, SKILL_TYPE_ACTIVE, FALSE},
     {"Dancing", QUI, SKILL_TYPE_ACTIVE, FALSE},
     {"Singing", INT, SKILL_TYPE_ACTIVE, FALSE},
     {"Instrument", INT, SKILL_TYPE_ACTIVE, FALSE},
@@ -1464,34 +1480,34 @@ struct skill_data skills[] =
     {"French", INT, SKILL_TYPE_KNOWLEDGE, FALSE},
     {"Animal Handling", CHA, SKILL_TYPE_ACTIVE, FALSE},
     {"Animal Taming", CHA, SKILL_TYPE_ACTIVE, FALSE},
-    {"Edged Weapons B/R", INT, SKILL_TYPE_ACTIVE, FALSE},
-    {"Polearms B/R", INT, SKILL_TYPE_ACTIVE, FALSE},
-    {"Clubs B/R", INT, SKILL_TYPE_ACTIVE, FALSE},
-    {"Throwing Weapons B/R", INT, SKILL_TYPE_ACTIVE, FALSE},
-    {"Whips/Flails B/R", INT, SKILL_TYPE_ACTIVE, FALSE},
-    {"Projectiles B/R", INT, SKILL_TYPE_ACTIVE, FALSE},
-    {"Pistols B/R", INT, SKILL_TYPE_ACTIVE, FALSE},
-    {"Shotguns B/R", INT, SKILL_TYPE_ACTIVE, FALSE},
-    {"Rifles B/R", INT, SKILL_TYPE_ACTIVE, FALSE},
-    {"Heavy Weapons B/R", INT, SKILL_TYPE_ACTIVE, FALSE},
-    {"Submachine Guns B/R", INT, SKILL_TYPE_ACTIVE, FALSE},
-    {"Armor B/R", INT, SKILL_TYPE_ACTIVE, FALSE},
+    {"Edged Weapon Repair", INT, SKILL_TYPE_ACTIVE, FALSE},
+    {"Polearm Repair", INT, SKILL_TYPE_ACTIVE, FALSE},
+    {"Club Repair", INT, SKILL_TYPE_ACTIVE, FALSE},
+    {"Throwing Weapon Repair", INT, SKILL_TYPE_ACTIVE, FALSE},
+    {"Whips/Flail Repair", INT, SKILL_TYPE_ACTIVE, FALSE},
+    {"Projectile Repair", INT, SKILL_TYPE_ACTIVE, FALSE},
+    {"Pistol Repair and Ammo Crafting", INT, SKILL_TYPE_ACTIVE, FALSE},
+    {"Shotgun Repair and Ammo Crafting", INT, SKILL_TYPE_ACTIVE, FALSE},
+    {"Rifle Repair and Ammo Crafting", INT, SKILL_TYPE_ACTIVE, FALSE},
+    {"Heavy Weapon Repair and Ammo Crafting", INT, SKILL_TYPE_ACTIVE, FALSE},
+    {"Submachine Gun Repair and Ammo Crafting", INT, SKILL_TYPE_ACTIVE, FALSE},
+    {"Armor Repair", INT, SKILL_TYPE_ACTIVE, FALSE},
     {"Off-hand Edged Weapons", STR, SKILL_TYPE_ACTIVE, FALSE},
     {"Off-hand Clubs", STR, SKILL_TYPE_ACTIVE, FALSE},
     {"Off-hand Cyber Implants", STR, SKILL_TYPE_ACTIVE, FALSE},
     {"Off-hand Whips/Flails", QUI, SKILL_TYPE_ACTIVE, FALSE},
     {"Survival", INT, SKILL_TYPE_ACTIVE, FALSE},
-    {"Navigation (Land)", INT, SKILL_TYPE_ACTIVE, FALSE},
-    {"Navigation (Water)", INT, SKILL_TYPE_ACTIVE, FALSE},
-    {"Navigation (Air)", INT, SKILL_TYPE_ACTIVE, FALSE},
+    {"Land Navigation", INT, SKILL_TYPE_ACTIVE, FALSE},
+    {"Water Navigation", INT, SKILL_TYPE_ACTIVE, FALSE},
+    {"Air Navigation", INT, SKILL_TYPE_ACTIVE, FALSE},
     {"Small Unit Tactics", INT, SKILL_TYPE_ACTIVE, FALSE},
     {"Chemistry", INT, SKILL_TYPE_ACTIVE, FALSE},
     {"Diving", BOD, SKILL_TYPE_ACTIVE, FALSE},
     {"Parachuting", BOD, SKILL_TYPE_ACTIVE, FALSE},
     {"Underwater Combat", STR, SKILL_TYPE_ACTIVE, FALSE},
-    {"Driving/Rotorcraft", REA, SKILL_TYPE_ACTIVE, FALSE},
-    {"Driving/Fixed Wing", REA, SKILL_TYPE_ACTIVE, FALSE},
-    {"Driving/Vector Thrust", REA, SKILL_TYPE_ACTIVE, FALSE},
+    {"Piloting Rotorcraft", REA, SKILL_TYPE_ACTIVE, FALSE},
+    {"Piloting Fixed Wing Aircraft", REA, SKILL_TYPE_ACTIVE, FALSE},
+    {"Piloting Vector Thrust Aircraft", REA, SKILL_TYPE_ACTIVE, FALSE},
     {"Acting", CHA, SKILL_TYPE_ACTIVE, FALSE},
     {"Disguise", INT, SKILL_TYPE_ACTIVE, FALSE},
     {"Lock Picking", QUI, SKILL_TYPE_ACTIVE, FALSE},
@@ -1503,7 +1519,8 @@ struct skill_data skills[] =
     {"Blowgun", QUI, SKILL_TYPE_ACTIVE, FALSE},
     {"Pharmaceuticals", INT, SKILL_TYPE_ACTIVE, FALSE},
     {"Hebrew", INT, SKILL_TYPE_KNOWLEDGE, FALSE},
-    {"Iroquois", INT, SKILL_TYPE_KNOWLEDGE, FALSE}
+    {"Iroquois", INT, SKILL_TYPE_KNOWLEDGE, FALSE},
+    {"Medicine", INT, SKILL_TYPE_KNOWLEDGE, FALSE}
   };
 
 int rev_dir[] =
@@ -1586,7 +1603,7 @@ struct mod_data mod_types[NUM_MODTYPES] =
     { "Tires", TYPE_KIT },
     { "Other", TYPE_KIT },
     { "Ammo Bin", TYPE_KIT }
-    
+
   };
 const char *mod_name[NUM_MODS] =
   {
@@ -1804,7 +1821,7 @@ int racial_attribute_modifiers[][6] = {
   {  2,  0,  1,  0,  0,  1  }, // menehune
   {  2,  0,  2, -1,  0,  0  }, // hobgoblin
   {  5, -1,  5, -2, -2,  0  }, // giant
-  {  1,  1,  0,  0,  0,  2  }, // gnome
+  {  1,  0,  1,  0,  0,  2  }, // gnome
   {  2,  0,  2, -1, -1,  1  }, // oni
   {  0,  0,  0,  2,  0,  1  }, // wakyambi
   {  3,  0,  2,  0, -1,  0  }, // ogre
@@ -1854,6 +1871,7 @@ struct drug_data drug_types[] =
 
 struct spell_types spells[] =
   {
+    // name, category, vector, target, duration, drainpower, draindamage
     { "UNDEF", 0, 0, 0, 0, 0, 0, 0 },
     { "Death Touch", FALSE, COMBAT, TOUCH, ATT_WIL, INSTANT, 0, -4 },
     { "Manabolt", FALSE, COMBAT, SINGLE, ATT_WIL, INSTANT, 0, -3 },
@@ -1872,14 +1890,14 @@ struct spell_types spells[] =
     { "Detect Magic", FALSE, DETECTION, AREA, -1, SUSTAINED, 0, LIGHT },
     { "Detect Object", TRUE, DETECTION, AREA, -1, SUSTAINED, 1, MODERATE },
     { "Mindlink", FALSE, DETECTION, SINGLE, -1, SUSTAINED, 0, SERIOUS },
-    { "Decrease Attribute", FALSE, HEALTH, SINGLE, -1, SUSTAINED, 1, SERIOUS },
-    { "Decrease Cybered Attribute", TRUE, HEALTH, SINGLE, -1, SUSTAINED, 2, SERIOUS },
+    { "Decrease ", FALSE, HEALTH, SINGLE, -1, SUSTAINED, 1, SERIOUS }, // Decrease Attribute
+    { "Decrease Cybered ", TRUE, HEALTH, SINGLE, -1, SUSTAINED, 2, SERIOUS }, // Decrease Cybered Attribute
     { "Detox", FALSE, HEALTH, SINGLE, -1, PERMANENT, -2, 0 },
     { "Heal", FALSE, HEALTH, SINGLE, -1, PERMANENT, 0, -3 },
     { "Treat", FALSE, HEALTH, SINGLE, -1, PERMANENT, -1, -3 },
     { "Healthy Glow", FALSE, HEALTH, SINGLE, -1, PERMANENT, 0, LIGHT },
-    { "Increase Attribute", FALSE, HEALTH, SINGLE, -1, SUSTAINED, 1, MODERATE },
-    { "Increase Cybered Attribute", TRUE, HEALTH, SINGLE, -1, SUSTAINED, 2, MODERATE },
+    { "Increase ", FALSE, HEALTH, SINGLE, -1, SUSTAINED, 1, MODERATE }, // Increase Attribute
+    { "Increase Cybered ", TRUE, HEALTH, SINGLE, -1, SUSTAINED, 2, MODERATE }, // Increase Cybered Attribute
     { "Increase Reaction", FALSE, HEALTH, SINGLE, ATT_REA, SUSTAINED, 1, SERIOUS },
     { "Increase Reflexes +1", FALSE, HEALTH, SINGLE, ATT_REA, SUSTAINED, 1, SERIOUS },
     { "Increase Reflexes +2", FALSE, HEALTH, SINGLE, ATT_REA, SUSTAINED, 1, DEADLY },
@@ -2084,7 +2102,7 @@ const char *cyber_grades[4] =
 
 const char *eyemods[] = {
   "Camera",
-  "Cyber Replacement",
+  "Cyber Replacement (MUST SET FOR PACKAGES)",
   "Display Link",
   "Flare Compensation",
   "Image Link",
@@ -2212,9 +2230,9 @@ const char *cyber_types[] = {
   "Auto Injector",
   "Balance Tail",
   "Body Compartment",
-  "CyberFin",
-  "CyberSkull",
-  "CyberTorso",
+  "Cyber Fin",
+  "Cyber Skull",
+  "Cyber Torso",
   "Dermal Sheathing",
   "Foot Anchor",
   "Hydraulic Jack",
@@ -2377,7 +2395,7 @@ const char *legality_codes[][2] = {
   { "Z", "Class C Controlled" }
 };
 
-const char *background_types[] = 
+const char *background_types[] =
 {
   "violence",
   "torture",
@@ -2395,7 +2413,8 @@ const char *background_types[] =
   "power site",
   "blood magic",
   "violence",                   // 15
-  "death"
+  "death",
+  "ERROR"
 };
 
 const char *fire_mode[] =
@@ -2404,7 +2423,8 @@ const char *fire_mode[] =
   "Single Shot",
   "Semi-Automatic",
   "Burst Fire",
-  "Full Automatic"
+  "Full Automatic",
+  "ERROR"
 };
 
 const char *combat_modifiers[] =
@@ -2420,7 +2440,10 @@ const char *combat_modifiers[] =
   "Net Reach",
   "VehDamaged",
   "Defender Moving",
-  "In Melee Combat"
+  "In Melee Combat",
+  "Opponent Burst",
+  "Foot Anchors",
+  "ERROR"
 };
 
 struct pgroup_priv_struct pgroup_privileges[] =
@@ -2447,10 +2470,12 @@ const char *workshops[] = {
   "Vehicle",
   "Weaponry",
   "Medical",
-  "Ammunition"
+  "Ammunition",
+  "Gunsmithing"
 };
 
 const char *kit_workshop_facility[] = {
+  "ERROR",
   "kit",
   "workshop",
   "facility"
@@ -2638,4 +2663,33 @@ const char *pc_race_types[] =
     "Spirit",
     "\n"
   };
-  
+
+struct nuyen_faucet_or_sink nuyen_faucets_and_sinks[NUM_OF_TRACKED_NUYEN_INCOME_SOURCES] =
+  {
+    {"Decking (paydata)", NI_IS_FAUCET},
+    {"Shop Sales", NI_IS_FAUCET},
+    {"Autoruns", NI_IS_FAUCET},
+    {"NPC Loot", NI_IS_FAUCET},
+    {"Shop Purchases", NI_IS_SINK},
+    {"Spec Proc (generic)", NI_IS_SINK},
+    {"Vehicle Purchase", NI_IS_SINK},
+    {"'Ware Install'", NI_IS_SINK},
+    {"Initiation", NI_IS_SINK},
+    {"Housing", NI_IS_SINK},
+    {"Training (metamagic)", NI_IS_SINK},
+    {"Training (stat)", NI_IS_SINK},
+    {"Training (skill)", NI_IS_SINK},
+    {"Training (spell)", NI_IS_SINK},
+    {"Ammo Building", NI_IS_SINK},
+    {"Repairs", NI_IS_SINK},
+    {"Where's My Car", NI_IS_SINK},
+    {"Junking", NI_IS_FAUCET},
+    {"Trade Command (k->n)", NI_IS_FAUCET},
+    {"Idle Reward", NI_IS_FAUCET},
+    {"Docwagon", NI_IS_SINK},
+    {"Lodge/Circle Cost", NI_IS_SINK},
+    {"Taxis", NI_IS_SINK},
+    {"Playergroups", NI_IS_SINK},
+    {"Trade Command (n->k)", NI_IS_SINK},
+    {"Credstick Cracker", NI_IS_SINK}
+  };

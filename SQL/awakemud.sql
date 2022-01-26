@@ -1,74 +1,74 @@
-CREATE TABLE `pfiles` ( 
-  `idnum` mediumint(5) unsigned unique default '0', 
-  `Name` varchar(21) default '', 
-  `Password` varchar(200), 
-  `Race` tinyint(2) default '0', 
-  `Gender` tinyint(2) default '0', 
-  `Rank` tinyint(2) default '1', 
-  `AffFlags` varchar(128) default '0', 
-  `PlrFlags` varchar(128) default '0', 
-  `PrfFlags` varchar(128) default '0', 
-  `Voice` varchar(200) default '', 
-  `Background` text NOT NULL, 
-  `Physical_Keywords` varchar(200) default '', 
-  `Physical_Name` varchar(200) default '', 
-  `Physical_LookDesc` text NOT NULL, 
-  `Matrix_Keywords` varchar(200) default 'Icon', 
-  `Matrix_Name` varchar(200) default 'An Icon', 
-  `Matrix_RoomDesc` varchar(200) default 'An Icon is here.', 
-  `Matrix_LookDesc` text NOT NULL, 
-  `Astral_Keywords` varchar(200) default 'reflection', 
-  `Astral_Name` varchar(200) default 'A reflection', 
-  `Astral_RoomDesc` varchar(200) default 'A reflection hovers here.', 
-  `Astral_LookDesc` text NOT NULL, 
-  `LeaveMsg` varchar(200) default 'leaves', 
-  `EnterMsg` varchar(200) default 'enters', 
-  `Title` varchar(48) default '^y(Newbie)^n', 
-  `Pretitle` varchar(48) default '', 
-  `Whotitle` varchar(10), 
-  `Prompt` varchar(79) default '<@pP @mM> ', 
-  `MatrixPrompt` varchar(79) default '<@pP @mM> ', 
-  `Host` varchar(72), 
-  `Bod` tinyint(2) default '0', 
-  `Qui` tinyint(2) default '0', 
-  `Str` tinyint(2) default '0', 
-  `Cha` tinyint(2) default '0', 
-  `Intel` tinyint(2) default '0', 
-  `Wil` tinyint(2) default '0', 
-  `EssenceTotal` smallint(3) unsigned default '0', 
-  `EssenceHole` smallint(3) unsigned default '0', 
-  `BiowareIndex` smallint(3) unsigned default '0', 
-  `HighestIndex` smallint(3) unsigned default '0', 
-  `Pool_MaxHacking` tinyint(2) default '0', 
-  `Pool_Body` tinyint(2) default '0', 
-  `Pool_Dodge` tinyint(2) default '0', 
-  `Height` int(3) default '0', 
-  `Weight` int(3) default '0', 
-  `Tradition` tinyint(2) default '2', 
-  `Cash` int(8) unsigned default '0', 
-  `Bank` int(8) unsigned default '0', 
-  `Karma` mediumint(6) unsigned default '0', 
-  `Rep` mediumint(6) unsigned default '0', 
-  `Notor` mediumint(6) unsigned default '0', 
-  `TKE` mediumint(6) unsigned default '0', 
-  `Hardcore` bool default FALSE, 
-  `Dead` bool default FALSE, 
-  `Physical` smallint(3) unsigned default '1000', 
-  `PhysicalLoss` smallint(3) unsigned default '0', 
-  `Mental` smallint(3) unsigned default '1000', 
-  `MentalLoss` smallint(3) unsigned default '0', 
-  `PermBodLoss` tinyint(1) default '0', 
-  `Lefthanded` bool default FALSE, 
-  `Curlang` smallint(3) default '73', 
-  `Wimplevel` tinyint(2) default '10', 
-  `LoadRoom` mediumint(5) unsigned default '0', 
-  `LastRoom` mediumint(5) unsigned default '0', 
-  `LastD` int unsigned default '0', 
-  `Born` int unsigned default '0', 
-  `Played` int unsigned default '0', 
-  `Hunger` tinyint(2) default 0, 
-  `Thirst` tinyint(2) default 0, 
-  `Drunk` tinyint(2) default 0, 
+CREATE TABLE `pfiles` (
+  `idnum` mediumint(5) unsigned unique default '0',
+  `Name` varchar(21) default '',
+  `Password` varchar(200),
+  `Race` tinyint(2) default '0',
+  `Gender` tinyint(2) default '0',
+  `Rank` tinyint(2) default '1',
+  `AffFlags` varchar(128) default '0',
+  `PlrFlags` varchar(128) default '0',
+  `PrfFlags` varchar(128) default '0',
+  `Voice` varchar(200) default '',
+  `Background` text NOT NULL,
+  `Physical_Keywords` varchar(200) default '',
+  `Physical_Name` varchar(200) default '',
+  `Physical_LookDesc` text NOT NULL,
+  `Matrix_Keywords` varchar(200) default 'Icon',
+  `Matrix_Name` varchar(200) default 'An Icon',
+  `Matrix_RoomDesc` varchar(200) default 'An Icon is here.',
+  `Matrix_LookDesc` text NOT NULL,
+  `Astral_Keywords` varchar(200) default 'reflection',
+  `Astral_Name` varchar(200) default 'A reflection',
+  `Astral_RoomDesc` varchar(200) default 'A reflection hovers here.',
+  `Astral_LookDesc` text NOT NULL,
+  `LeaveMsg` varchar(200) default 'leaves',
+  `EnterMsg` varchar(200) default 'enters',
+  `Title` varchar(48) default '^y(Newbie)^n',
+  `Pretitle` varchar(48) default '',
+  `Whotitle` varchar(10),
+  `Prompt` varchar(1000) default '<@pP @mM> ', 
+  `MatrixPrompt` varchar(1000) default '<@pP @mM> ',
+  `Host` varchar(72),
+  `Bod` tinyint(2) default '0',
+  `Qui` tinyint(2) default '0',
+  `Str` tinyint(2) default '0',
+  `Cha` tinyint(2) default '0',
+  `Intel` tinyint(2) default '0',
+  `Wil` tinyint(2) default '0',
+  `EssenceTotal` smallint(3) unsigned default '0',
+  `EssenceHole` smallint(3) unsigned default '0',
+  `BiowareIndex` smallint(3) unsigned default '0',
+  `HighestIndex` smallint(3) unsigned default '0',
+  `Pool_MaxHacking` tinyint(2) default '0',
+  `Pool_Body` tinyint(2) default '0',
+  `Pool_Dodge` tinyint(2) default '0',
+  `Height` int(3) default '0',
+  `Weight` int(3) default '0',
+  `Tradition` tinyint(2) default '2',
+  `Cash` int(8) unsigned default '0',
+  `Bank` int(8) unsigned default '0',
+  `Karma` mediumint(6) unsigned default '0',
+  `Rep` mediumint(6) unsigned default '0',
+  `Notor` mediumint(6) unsigned default '0',
+  `TKE` mediumint(6) unsigned default '0',
+  `Hardcore` bool default FALSE,
+  `Dead` bool default FALSE,
+  `Physical` smallint(3) unsigned default '1000',
+  `PhysicalLoss` smallint(3) unsigned default '0',
+  `Mental` smallint(3) unsigned default '1000',
+  `MentalLoss` smallint(3) unsigned default '0',
+  `PermBodLoss` tinyint(1) default '0',
+  `Lefthanded` bool default FALSE,
+  `Curlang` smallint(3) default '73',
+  `Wimplevel` tinyint(2) default '10',
+  `LoadRoom` mediumint(5) unsigned default '0',
+  `LastRoom` mediumint(5) unsigned default '0',
+  `LastD` int unsigned default '0',
+  `Born` int unsigned default '0',
+  `Played` int unsigned default '0',
+  `Hunger` tinyint(2) default 0,
+  `Thirst` tinyint(2) default 0,
+  `Drunk` tinyint(2) default 0,
   `ShotsFired` int(8) default 0,
   `ShotsTriggered` int(8) default 0,
   `NoDelete` tinyint(1) default 0,
@@ -81,244 +81,244 @@ CREATE TABLE `pfiles` (
   `highlight` varchar(15) default '^n',
   `email` varchar(200),
   `multiplier` smallint(5) unsigned default 100,
-  PRIMARY KEY (`idnum`), 
-  KEY (`name`) 
-); 
+  PRIMARY KEY (`idnum`),
+  KEY (`name`)
+);
 
-CREATE TABLE `pfiles_immortdata` ( 
-  `idnum` mediumint(5) unsigned unique default '0', 
-  `InvisLevel` tinyint(1) default '0', 
-  `IncogLevel` tinyint(1) default '0', 
-  `Zonenumber` mediumint(3) default '1', 
-  `PoofIn` varchar(200) default 'Someone appears from nowhere.', 
-  `PoofOut` varchar(200) default 'You blink and someone is gone.', 
-  PRIMARY KEY (`idnum`) 
-); 
+CREATE TABLE `pfiles_immortdata` (
+  `idnum` mediumint(5) unsigned unique default '0',
+  `InvisLevel` tinyint(1) default '0',
+  `IncogLevel` tinyint(1) default '0',
+  `Zonenumber` mediumint(3) default '1',
+  `PoofIn` varchar(200) default 'Someone appears from nowhere.',
+  `PoofOut` varchar(200) default 'You blink and someone is gone.',
+  PRIMARY KEY (`idnum`)
+);
 
 
-CREATE TABLE `pfiles_chargendata` ( 
-  `idnum` mediumint(5) unsigned unique default '0',  
-  `AttPoints` tinyint(2) unsigned default '0', 
-  `SkillPoints` tinyint(2) unsigned default '0', 
-  `ForcePoints` tinyint(2) unsigned default '0', 
-  `RestringPoints` tinyint(2) unsigned default '5', 
+CREATE TABLE `pfiles_chargendata` (
+  `idnum` mediumint(5) unsigned unique default '0',
+  `AttPoints` tinyint(2) unsigned default '0',
+  `SkillPoints` tinyint(2) unsigned default '0',
+  `ForcePoints` tinyint(2) unsigned default '0',
+  `RestringPoints` tinyint(2) unsigned default '5',
   `archetypal` tinyint(2) unsigned default '0',
   `archetype` tinyint(2) unsigned default '0',
-  PRIMARY KEY (`idnum`) 
-); 
+  PRIMARY KEY (`idnum`)
+);
 
 
-CREATE TABLE `pfiles_magic` ( 
-  `idnum` mediumint(5) unsigned unique default '0',  
-  `Mag` smallint(3) unsigned default '600', 
-  `Pool_Casting` tinyint(2) default '0', 
-  `Pool_SpellDefense` tinyint(2) default '0', 
-  `Pool_Drain` tinyint(2) default '0', 
-  `Pool_Reflecting` tinyint(2) default '0', 
-  `Totem` tinyint(2) default '0', 
-  `TotemSpirit` tinyint(2) default '0', 
-  `Aspect` tinyint(2) default '0', 
-  `UsedGrade` tinyint(2) unsigned default '0', 
-  `ExtraPower` tinyint(2) unsigned default '0', 
-  `PowerPoints` smallint(3) unsigned default '600', 
-  `Sig` tinyint(2) unsigned default '0', 
-  `Masking` tinyint(1) unsigned default '0', 
-  PRIMARY KEY (`idnum`) 
-); 
+CREATE TABLE `pfiles_magic` (
+  `idnum` mediumint(5) unsigned unique default '0',
+  `Mag` smallint(3) unsigned default '600',
+  `Pool_Casting` tinyint(2) default '0',
+  `Pool_SpellDefense` tinyint(2) default '0',
+  `Pool_Drain` tinyint(2) default '0',
+  `Pool_Reflecting` tinyint(2) default '0',
+  `Totem` tinyint(2) default '0',
+  `TotemSpirit` tinyint(2) default '0',
+  `Aspect` tinyint(2) default '0',
+  `UsedGrade` tinyint(2) unsigned default '0',
+  `ExtraPower` tinyint(2) unsigned default '0',
+  `PowerPoints` smallint(3) unsigned default '600',
+  `Sig` tinyint(2) unsigned default '0',
+  `Masking` tinyint(1) unsigned default '0',
+  PRIMARY KEY (`idnum`)
+);
 
-CREATE TABLE `pfiles_drugdata` ( 
-  `idnum` mediumint(5) unsigned unique default '0', 
-  `Affect` tinyint(2) unsigned default '0', 
-  `Stage` tinyint(2) unsigned default '0', 
-  `Duration` smallint(2) unsigned default '0', 
-  `Dose` tinyint(2) unsigned default '0', 
-  PRIMARY KEY(`idnum`) 
-); 
+CREATE TABLE `pfiles_drugdata` (
+  `idnum` mediumint(5) unsigned unique default '0',
+  `Affect` tinyint(2) unsigned default '0',
+  `Stage` tinyint(2) unsigned default '0',
+  `Duration` smallint(2) unsigned default '0',
+  `Dose` tinyint(2) unsigned default '0',
+  PRIMARY KEY(`idnum`)
+);
 
-CREATE TABLE `pfiles_drugs` ( 
-  `idnum` mediumint(5) unsigned default '0', 
-  `DrugType` smallint(2) unsigned default '0', 
-  `Addict` smallint(2) unsigned default '0', 
-  `Doses` smallint(2) unsigned default '0', 
-  `Edge` smallint(2) unsigned default '0', 
-  `LastFix` mediumint(2) unsigned default '0', 
-  `Addtime` smallint(2) unsigned default '0', 
-  `Tolerant` smallint(2) unsigned default '0', 
-  `LastWith` smallint(2) unsigned default '0', 
-  KEY(`idnum`) 
-); 
+CREATE TABLE `pfiles_drugs` (
+  `idnum` mediumint(5) unsigned default '0',
+  `DrugType` smallint(2) unsigned default '0',
+  `Addict` smallint(2) unsigned default '0',
+  `Doses` smallint(2) unsigned default '0',
+  `Edge` smallint(2) unsigned default '0',
+  `LastFix` mediumint(2) unsigned default '0',
+  `Addtime` smallint(2) unsigned default '0',
+  `Tolerant` smallint(2) unsigned default '0',
+  `LastWith` smallint(2) unsigned default '0',
+  KEY(`idnum`)
+);
 
-CREATE TABLE `pfiles_skills` ( 
-  `idnum` mediumint(5) unsigned default '0', 
-  `skillnum` smallint(3) unsigned default '0', 
-  `rank` tinyint(2) unsigned default '0', 
-  KEY(`idnum`) 
-); 
+CREATE TABLE `pfiles_skills` (
+  `idnum` mediumint(5) unsigned default '0',
+  `skillnum` smallint(3) unsigned default '0',
+  `rank` tinyint(2) unsigned default '0',
+  KEY(`idnum`)
+);
 
-CREATE TABLE `pfiles_adeptpowers` ( 
-  `idnum` mediumint(5) unsigned default '0', 
-  `powernum` smallint(3) unsigned default '0', 
-  `rank` smallint(3) unsigned default '0',  
-  KEY(`idnum`) 
-); 
+CREATE TABLE `pfiles_adeptpowers` (
+  `idnum` mediumint(5) unsigned default '0',
+  `powernum` smallint(3) unsigned default '0',
+  `rank` smallint(3) unsigned default '0',
+  KEY(`idnum`)
+);
 
-CREATE TABLE `pfiles_metamagic` ( 
-  `idnum` mediumint(5) unsigned default '0', 
-  `metamagicnum` smallint(3) unsigned default '0', 
-  `rank` smallint(3) unsigned default '0', 
-  KEY(`idnum`) 
-); 
+CREATE TABLE `pfiles_metamagic` (
+  `idnum` mediumint(5) unsigned default '0',
+  `metamagicnum` smallint(3) unsigned default '0',
+  `rank` smallint(3) unsigned default '0',
+  KEY(`idnum`)
+);
 
-CREATE TABLE `pfiles_quests` ( 
-  `idnum` mediumint(5) unsigned default '0', 
-  `number` smallint(3) unsigned default '0', 
-  `questnum` mediumint(3) unsigned default '0', 
-  KEY(`idnum`) 
-); 
+CREATE TABLE `pfiles_quests` (
+  `idnum` mediumint(5) unsigned default '0',
+  `number` smallint(3) unsigned default '0',
+  `questnum` mediumint(3) unsigned default '0',
+  KEY(`idnum`)
+);
 
-CREATE TABLE `pfiles_spirits` ( 
-  `idnum` mediumint(5) unsigned default '0', 
-  `Type` smallint(3) unsigned default '0', 
-  `Rating` smallint(3) unsigned default '0', 
-  `Services` smallint(3) unsigned default '0', 
-  `spiritID` smallint(4) unsigned default '0', 
-  KEY(`idnum`) 
-); 
+CREATE TABLE `pfiles_spirits` (
+  `idnum` mediumint(5) unsigned default '0',
+  `Type` smallint(3) unsigned default '0',
+  `Rating` smallint(3) unsigned default '0',
+  `Services` smallint(3) unsigned default '0',
+  `spiritID` smallint(4) unsigned default '0',
+  KEY(`idnum`)
+);
 
-CREATE TABLE `pfiles_bioware` ( 
-  `idnum` mediumint(5) unsigned default '0', 
-  `Vnum` mediumint(5) unsigned default '0', 
-  `Cost` int(5) unsigned default '0', 
-  `Value0` int(2) default '0', 
-  `Value1` int(2) default '0', 
-  `Value2` int(2) default '0', 
-  `Value3` int(2) default '0', 
-  `Value4` int(2) default '0', 
-  `Value5` int(2) default '0', 
-  `Value6` int(2) default '0', 
-  `Value7` int(2) default '0', 
-  `Value8` int(2) default '0', 
-  `Value9` int(2) default '0', 
-  `Value10` int(2) default '0', 
-  `Value11` int(2) default '0', 
-  KEY(`idnum`) 
-); 
+CREATE TABLE `pfiles_bioware` (
+  `idnum` mediumint(5) unsigned default '0',
+  `Vnum` mediumint(5) unsigned default '0',
+  `Cost` int(5) unsigned default '0',
+  `Value0` int(2) default '0',
+  `Value1` int(2) default '0',
+  `Value2` int(2) default '0',
+  `Value3` int(2) default '0',
+  `Value4` int(2) default '0',
+  `Value5` int(2) default '0',
+  `Value6` int(2) default '0',
+  `Value7` int(2) default '0',
+  `Value8` int(2) default '0',
+  `Value9` int(2) default '0',
+  `Value10` int(2) default '0',
+  `Value11` int(2) default '0',
+  KEY(`idnum`)
+);
 
-CREATE TABLE `pfiles_cyberware` ( 
-  `idnum` mediumint(5) unsigned default '0', 
-  `Vnum` mediumint(5) unsigned default '0', 
-  `Cost` int(5) unsigned default '0', 
-  `Restring` varchar(256), 
-  `Photo` text, 
-  `Value0` int(2) default '0', 
-  `Value1` int(2) default '0', 
-  `Value2` int(2) default '0', 
-  `Value3` int(2) default '0', 
-  `Value4` int(2) default '0', 
-  `Value5` int(2) default '0', 
-  `Value6` int(2) default '0', 
-  `Value7` int(2) default '0', 
-  `Value8` int(2) default '0', 
-  `Value9` int(2) default '0', 
-  `Value10` int(2) default '0', 
-  `Value11` int(2) default '0', 
-  `Level` tinyint(1) unsigned default '0', 
-  `posi` smallint(1) unsigned default '0', 
-  KEY(`idnum`) 
-); 
+CREATE TABLE `pfiles_cyberware` (
+  `idnum` mediumint(5) unsigned default '0',
+  `Vnum` mediumint(5) unsigned default '0',
+  `Cost` int(5) unsigned default '0',
+  `Restring` varchar(256),
+  `Photo` text,
+  `Value0` int(2) default '0',
+  `Value1` int(2) default '0',
+  `Value2` int(2) default '0',
+  `Value3` int(2) default '0',
+  `Value4` int(2) default '0',
+  `Value5` int(2) default '0',
+  `Value6` int(2) default '0',
+  `Value7` int(2) default '0',
+  `Value8` int(2) default '0',
+  `Value9` int(2) default '0',
+  `Value10` int(2) default '0',
+  `Value11` int(2) default '0',
+  `Level` tinyint(1) unsigned default '0',
+  `posi` smallint(1) unsigned default '0',
+  KEY(`idnum`)
+);
 
-CREATE TABLE `pfiles_inv` ( 
-  `idnum` mediumint(5) unsigned default '0', 
-  `Vnum` mediumint(5) unsigned default '0', 
-  `Cost` int(5) unsigned default '0', 
-  `Restring` varchar(256), 
-  `Photo` text, 
-  `Value0` int(2) default '0', 
-  `Value1` int(2) default '0', 
-  `Value2` int(2) default '0', 
-  `Value3` int(2) default '0', 
-  `Value4` int(2) default '0', 
-  `Value5` int(2) default '0', 
-  `Value6` int(2) default '0', 
-  `Value7` int(2) default '0', 
-  `Value8` int(2) default '0', 
-  `Value9` int(2) default '0', 
-  `Value10` int(2) default '0', 
-  `Value11` int(2) default '0', 
-  `Inside` tinyint(1) unsigned default '0', 
-  `Timer` mediumint(1) default '0', 
-  `ExtraFlags` varchar(128) default '0', 
-  `Attempt` tinyint(1) unsigned default '0', 
-  `Cond` tinyint(1) unsigned default '0', 
-  `posi` smallint(1) unsigned default '0', 
-  KEY(`idnum`) 
-); 
+CREATE TABLE `pfiles_inv` (
+  `idnum` mediumint(5) unsigned default '0',
+  `Vnum` mediumint(5) unsigned default '0',
+  `Cost` int(5) unsigned default '0',
+  `Restring` varchar(256),
+  `Photo` text,
+  `Value0` int(2) default '0',
+  `Value1` int(2) default '0',
+  `Value2` int(2) default '0',
+  `Value3` int(2) default '0',
+  `Value4` int(2) default '0',
+  `Value5` int(2) default '0',
+  `Value6` int(2) default '0',
+  `Value7` int(2) default '0',
+  `Value8` int(2) default '0',
+  `Value9` int(2) default '0',
+  `Value10` int(2) default '0',
+  `Value11` int(2) default '0',
+  `Inside` tinyint(1) unsigned default '0',
+  `Timer` mediumint(1) default '0',
+  `ExtraFlags` varchar(128) default '0',
+  `Attempt` tinyint(1) unsigned default '0',
+  `Cond` tinyint(1) unsigned default '0',
+  `posi` smallint(1) unsigned default '0',
+  KEY(`idnum`)
+);
 
-CREATE TABLE `pfiles_worn` ( 
-  `idnum` mediumint(5) unsigned default '0', 
-  `Vnum` mediumint(5) unsigned default '0', 
-  `Cost` int(5) unsigned default '0', 
-  `Restring` varchar(256), 
-  `Photo` text, 
-  `Value0` int(2) default '0', 
-  `Value1` int(2) default '0', 
-  `Value2` int(2) default '0', 
-  `Value3` int(2) default '0', 
-  `Value4` int(2) default '0', 
-  `Value5` int(2) default '0', 
-  `Value6` int(2) default '0', 
-  `Value7` int(2) default '0', 
-  `Value8` int(2) default '0', 
-  `Value9` int(2) default '0', 
-  `Value10` int(2) default '0', 
-  `Value11` int(2) default '0', 
-  `Inside` tinyint(1) unsigned default '0', 
-  `Position` tinyint(1) unsigned default '0', 
-  `Timer` mediumint(1) default '0', 
-  `ExtraFlags` varchar(128) default '0', 
-  `Attempt` tinyint(1) unsigned default '0', 
-  `Cond` tinyint(1) unsigned default '0', 
-  `posi` smallint(1) unsigned default '0', 
-  KEY(`idnum`) 
-); 
+CREATE TABLE `pfiles_worn` (
+  `idnum` mediumint(5) unsigned default '0',
+  `Vnum` mediumint(5) unsigned default '0',
+  `Cost` int(5) unsigned default '0',
+  `Restring` varchar(256),
+  `Photo` text,
+  `Value0` int(2) default '0',
+  `Value1` int(2) default '0',
+  `Value2` int(2) default '0',
+  `Value3` int(2) default '0',
+  `Value4` int(2) default '0',
+  `Value5` int(2) default '0',
+  `Value6` int(2) default '0',
+  `Value7` int(2) default '0',
+  `Value8` int(2) default '0',
+  `Value9` int(2) default '0',
+  `Value10` int(2) default '0',
+  `Value11` int(2) default '0',
+  `Inside` tinyint(1) unsigned default '0',
+  `Position` tinyint(1) unsigned default '0',
+  `Timer` mediumint(1) default '0',
+  `ExtraFlags` varchar(128) default '0',
+  `Attempt` tinyint(1) unsigned default '0',
+  `Cond` tinyint(1) unsigned default '0',
+  `posi` smallint(1) unsigned default '0',
+  KEY(`idnum`)
+);
 
-CREATE TABLE `pfiles_spells` ( 
-  `idnum` mediumint(5) unsigned default '0', 
-  `Name` varchar(255) NOT NULL, 
-  `Type` tinyint(2) unsigned default '0', 
-  `Subtype` tinyint(2) unsigned default '0', 
-  `Rating` tinyint(2) unsigned default '0', 
-  `Category` tinyint(2) unsigned default '0', 
-  KEY(`idnum`) 
-); 
+CREATE TABLE `pfiles_spells` (
+  `idnum` mediumint(5) unsigned default '0',
+  `Name` varchar(255) NOT NULL,
+  `Type` tinyint(2) unsigned default '0',
+  `Subtype` tinyint(2) unsigned default '0',
+  `Rating` tinyint(2) unsigned default '0',
+  `Category` tinyint(2) unsigned default '0',
+  KEY(`idnum`)
+);
 
-CREATE TABLE `pfiles_memory` ( 
-  `idnum` mediumint(5) unsigned default '0', 
-  `remembered` mediumint(5) unsigned default '0', 
-  `asname` varchar(80) NOT NULL, 
-  KEY(`idnum`) 
-); 
+CREATE TABLE `pfiles_memory` (
+  `idnum` mediumint(5) unsigned default '0',
+  `remembered` mediumint(5) unsigned default '0',
+  `asname` varchar(80) NOT NULL,
+  KEY(`idnum`)
+);
 
-CREATE TABLE `pfiles_alias` ( 
-  `idnum` mediumint(5) unsigned default '0', 
-  `command` varchar(40) NOT NULL, 
-  `replacement` varchar(255) NOT NULL, 
-  KEY(`idnum`) 
-); 
+CREATE TABLE `pfiles_alias` (
+  `idnum` mediumint(5) unsigned default '0',
+  `command` varchar(40) NOT NULL,
+  `replacement` varchar(255) NOT NULL,
+  KEY(`idnum`)
+);
 
-CREATE TABLE `trideo_broadcast` ( 
-  `idnum` int unsigned auto_increment, 
-  `author` mediumint(5) unsigned default '0', 
-  `message` text, 
-  PRIMARY KEY(`idnum`) 
-); 
+CREATE TABLE `trideo_broadcast` (
+  `idnum` int unsigned auto_increment,
+  `author` mediumint(5) unsigned default '0',
+  `message` text,
+  PRIMARY KEY(`idnum`)
+);
 
 INSERT INTO `trideo_broadcast` (author, message) VALUES (1, "Fund your local broadcasting station so we can afford to make better programming!");
 
-CREATE TABLE `pfiles_ignore` ( 
-  `idnum` mediumint(5) unsigned default '0', 
-  `remembered` mediumint(5) unsigned default '0', 
-  KEY(`idnum`) 
+CREATE TABLE `pfiles_ignore` (
+  `idnum` mediumint(5) unsigned default '0',
+  `remembered` mediumint(5) unsigned default '0',
+  KEY(`idnum`)
 );
 
 CREATE TABLE `help_category` (

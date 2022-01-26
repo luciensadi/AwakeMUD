@@ -4,6 +4,9 @@
 #include <string.h>
 #include <time.h>
 #include <errno.h>
+#include <vector>
+#include <sstream>
+#include <algorithm>
 
 
 #if defined(WIN32) && !defined(__CYGWIN__)
@@ -72,7 +75,7 @@ bool House_get_filename(vnum_t vnum, char *filename, int filename_size)
 // Same, but for storage.
 bool Storage_get_filename(vnum_t vnum, char *filename, int filename_size)
 {
-  if (vnum == NOWHERE) 
+  if (vnum == NOWHERE)
     return FALSE;
 
   snprintf(filename, filename_size, "storage/%ld", vnum);
@@ -88,7 +91,10 @@ bool House_load(struct house_control_rec *house)
   rnum_t rnum;
   struct obj_data *obj = NULL, *last_obj = NULL;
   long vnum;
-  int inside = 0, last_in = 0;
+  int inside = 0, last_inside = 0;
+  int house_version = 0;
+  std::vector<nested_obj> contained_obj;
+  struct nested_obj contained_obj_entry;
 
   room = house->vnum;
   if ((rnum = real_room(room)) == NOWHERE)
@@ -102,6 +108,8 @@ bool House_load(struct house_control_rec *house)
   data.Parse(&fl);
   fl.Close();
   snprintf(buf3, sizeof(buf3), "house-load %s", fname);
+  house_version = data.GetInt("METADATA/Version", 0);
+
   for (int i = 0; i < MAX_GUESTS; i++)
   {
     snprintf(buf, sizeof(buf), "GUESTS/Guest%d", i);
@@ -110,6 +118,7 @@ bool House_load(struct house_control_rec *house)
       p = 0;
     house->guests[i] = p;
   }
+
   int num_objs = data.NumSubsections("HOUSE");
   int x;
   for (int i = 0; i < num_objs; i++)
@@ -120,7 +129,7 @@ bool House_load(struct house_control_rec *house)
     if ((obj = read_object(vnum, VIRTUAL))) {
       // Wipe its cost-- we're restoring from the saved value.
       GET_OBJ_COST(obj) = 0;
-      
+
       snprintf(buf, sizeof(buf), "%s/Name", sect_name);
       obj->restring = str_dup(data.GetString(buf, NULL));
       snprintf(buf, sizeof(buf), "%s/Photo", sect_name);
@@ -143,21 +152,21 @@ bool House_load(struct house_control_rec *house)
       // At this point, the cost is restored to a positive value. MAX() guards against edge case of attachment being edited after it was attached.
       GET_OBJ_COST(obj) += MAX(0, data.GetInt(buf, GET_OBJ_COST(obj)));
       snprintf(buf, sizeof(buf), "%s/Inside", sect_name);
-      
+
       if (GET_OBJ_VNUM(obj) == OBJ_SPECIAL_PC_CORPSE) {
         // Invalid belongings.
         if (GET_OBJ_VAL(obj, 5) <= 0) {
           extract_obj(obj);
           continue;
         }
-        
+
         const char *player_name = get_player_name(GET_OBJ_VAL(obj, 5));
         if (!player_name || !str_cmp(player_name, "deleted")) {
           // Whoops, it belongs to a deleted character. RIP.
           extract_obj(obj);
           continue;
         }
-          
+
         // Set up special corpse values. This will probably cause a memory leak. We use name instead of desc.
         snprintf(buf, sizeof(buf), "belongings %s", player_name);
         snprintf(buf1, sizeof(buf1), "^rThe belongings of %s are lying here.^n", decapitalize_a_an(player_name));
@@ -167,50 +176,107 @@ bool House_load(struct house_control_rec *house)
         obj->text.room_desc = str_dup(buf1);
         obj->text.name = str_dup(buf2);
         obj->text.look_desc = str_dup(buf3);
-        
+
         GET_OBJ_VAL(obj, 4) = 1;
         GET_OBJ_BARRIER(obj) = PC_CORPSE_BARRIER;
         GET_OBJ_CONDITION(obj) = 100;
-        
+
         delete [] player_name;
       }
-      
+
       // Don't auto-repair cyberdecks until they're fully loaded.
       if (GET_OBJ_TYPE(obj) != ITEM_CYBERDECK)
         auto_repair_obj(obj, buf3);
-      
+
       inside = data.GetInt(buf, 0);
-      if (inside > 0) {
-        if (inside == last_in)
-          last_obj = last_obj->in_obj;
-        else if (inside < last_in)
-          while (inside <= last_in) {
-            if (!last_obj) {
-              snprintf(buf2, sizeof(buf2), "Load error: Nested-item save failed for %s. Disgorging to room.", GET_OBJ_NAME(obj));
-              mudlog(buf2, NULL, LOG_SYSLOG, TRUE);
-              break;
+      if (house_version == VERSION_HOUSE_FILE) {
+        // Since we're now saved the obj linked lists  in reverse order, in order to fix the stupid reordering on
+        // every binary execution, the previous algorithm did not work, as it relied on getting the container obj
+        // first and place subsequent objects in it. Since we're now getting it last, and more importantly we get
+        // objects at deeper nesting level in between our list, we save all pointers to objects along with their
+        // nesting level in a vector container and once we found the next container (inside < last_inside) we
+        // move the objects with higher nesting level to container and proceed. This works for any nesting depth.
+        if (inside > 0 || (inside == 0 && inside < last_inside)) {
+          //Found our container?
+          if (inside < last_inside) {
+            if (inside == 0)
+              obj_to_room(obj, &world[rnum]);
+
+            auto it = std::find_if(contained_obj.begin(), contained_obj.end(), find_level(inside+1));
+            while (it != contained_obj.end()) {
+              obj_to_obj(it->obj, obj);
+              contained_obj.erase(it);
             }
-            last_obj = last_obj->in_obj;
-            last_in--;
+
+            if (inside > 0) {
+              contained_obj_entry.level = inside;
+              contained_obj_entry.obj = obj;
+              contained_obj.push_back(contained_obj_entry);
+            }
           }
-        if (last_obj)
-          obj_to_obj(obj, last_obj);
+          else {
+            contained_obj_entry.level = inside;
+            contained_obj_entry.obj = obj;
+            contained_obj.push_back(contained_obj_entry);
+          }
+          last_inside = inside;
+        }
         else
           obj_to_room(obj, &world[rnum]);
-      } else
-        obj_to_room(obj, &world[rnum]);
 
-      last_in = inside;
-      last_obj = obj;
+        last_inside = inside;
+      }
+      // This handles loading old house file format prior to introduction of version number in the file.
+      // Version number will always be 0 for this format.
+      else if (!house_version) {
+        if (inside > 0) {
+          if (inside == last_inside)
+            last_obj = last_obj->in_obj;
+          else if (inside < last_inside) {
+            while (inside <= last_inside) {
+              if (!last_obj) {
+                snprintf(buf2, sizeof(buf2), "Load error: Nested-item load failed for %s. Disgorging to room.", GET_OBJ_NAME(obj));
+                mudlog(buf2, NULL, LOG_SYSLOG, TRUE);
+                break;
+              }
+              last_obj = last_obj->in_obj;
+              last_inside--;
+            }
+          }
+
+          if (last_obj)
+            obj_to_obj(obj, last_obj);
+          else
+            obj_to_room(obj, &world[rnum]);
+        }
+        else
+          obj_to_room(obj, &world[rnum]);
+
+        last_inside = inside;
+        last_obj = obj;
+      }
+      else {
+        snprintf(buf2, sizeof(buf2), "Load ERROR: Unknown file format for house Rnum %ld. Dumping valid objects to room.", rnum);
+        mudlog(buf2, NULL, LOG_SYSLOG, TRUE);
+        obj_to_room(obj, &world[rnum]);
+      }
     } else {
-      snprintf(buf2, sizeof(buf2), "Losing object %ld (%s / %s; )- it's not a valid object.", 
+      snprintf(buf2, sizeof(buf2), "Losing object %ld (%s / %s; )- it's not a valid object.",
                vnum,
                data.GetString("HOUSE/Name", "no restring"),
                data.GetString("HOUSE/Photo", "no photo"));
       mudlog(buf2, NULL, LOG_SYSLOG, TRUE);
     }
   }
-  
+  if (house_version == VERSION_HOUSE_FILE) {
+    // Failsafe. If something went wrong and we still have objects stored in the vector, dump them in the room.
+    if (!contained_obj.empty()) {
+      for (auto it : contained_obj)
+        obj_to_room(it.obj, &world[rnum]);
+
+      contained_obj.clear();
+    }
+  }
   return TRUE;
 }
 
@@ -218,29 +284,44 @@ bool House_load(struct house_control_rec *house)
 void validate_in_obj_pointers(struct obj_data *obj, struct obj_data *in_obj) {
   if (!obj)
     return;
-    
+
   if (obj == in_obj) {
-    mudlog("SYSERR: Received duplicate items to validate_in_obj_pointers! [OBJ_NESTING_ERROR_GREP_STRING]", NULL, LOG_SYSLOG, TRUE);
+    const char *representation = generate_new_loggable_representation(obj);
+    snprintf(buf3, sizeof(buf3), "SYSERR: Received duplicate items to validate_in_obj_pointers! Offending obj: '%s' in room %ld [OBJ_NESTING_ERROR_GREP_STRING]",
+             representation,
+             get_obj_in_room(obj) ? GET_ROOM_VNUM(get_obj_in_room(obj)) : -1
+           );
+    mudlog(buf3, NULL, LOG_SYSLOG, TRUE);
+    delete [] representation;
     return;
   }
-  
+
   // Cyberdeck parts do some WEIRD shit with in_obj. Best to leave it alone.
   if ((in_obj && GET_OBJ_TYPE(in_obj) == ITEM_PART) || (obj->in_obj && GET_OBJ_TYPE(obj->in_obj) == ITEM_PART))
     return;
-    
+
   if (in_obj && obj->in_obj != in_obj) {
-    snprintf(buf3, sizeof(buf3), "^YSYSERR: in_obj mismatch for %s (%ld) in %ld! Rectifying... [OBJ_NESTING_ERROR_GREP_STRING]", 
-             GET_OBJ_NAME(obj),
-             GET_OBJ_VNUM(obj),
-             get_obj_in_room(obj) ? GET_ROOM_VNUM(get_obj_in_room(obj)) : -1);
+    const char *representation = generate_new_loggable_representation(obj);
+    snprintf(buf3, sizeof(buf3), "^YSYSERR: in_obj mismatch for '%s' in room %ld! Sticking it back in '%s'... [OBJ_NESTING_ERROR_GREP_STRING]",
+             representation,
+             get_obj_in_room(obj) ? GET_ROOM_VNUM(get_obj_in_room(obj)) : -1,
+             GET_OBJ_NAME(in_obj)
+           );
     mudlog(buf3, NULL, LOG_SYSLOG, TRUE);
+    delete [] representation;
     obj->in_obj = in_obj;
   }
-  
+
   struct obj_data *previous = NULL;
   for (struct obj_data *tmp_obj = obj->contains; tmp_obj; tmp_obj = tmp_obj->next_content) {
     if (tmp_obj == obj) {
-      mudlog("^RSYSERR: Detected duplicate items to validate_in_obj_pointers! There's no way to un-fuck this programmatically, so we're losing items. [OBJ_NESTING_ERROR_GREP_STRING]^n", NULL, LOG_SYSLOG, TRUE);
+      // We don't use a loggable representation here since I can't guarantee how it would behave when given a bugged object like this.
+      snprintf(buf3, sizeof(buf3), "^RSYSERR: Detected self-containing item '%s' (vnum %ld, room %ld) in validate_in_obj_pointers! There's no way to un-fuck this programmatically, so we're losing items. [OBJ_NESTING_ERROR_GREP_STRING]^n",
+               GET_OBJ_NAME(obj),
+               GET_OBJ_VNUM(obj),
+               get_obj_in_room(obj) ? GET_ROOM_VNUM(get_obj_in_room(obj)) : -1
+             );
+      mudlog(buf3, NULL, LOG_SYSLOG, TRUE);
       if (previous)
         previous->next_content = NULL;
       obj->contains = NULL;
@@ -250,9 +331,9 @@ void validate_in_obj_pointers(struct obj_data *obj, struct obj_data *in_obj) {
   }
 }
 
-#define PRINT_TO_FILE_IF_CHANGED(sectname, obj_val, proto_val) { \
+#define APPEND_IF_CHANGED(sectname, obj_val, proto_val) { \
   if (obj_val != proto_val)                                        \
-    fprintf(fl, (sectname), (obj_val));                            \
+    obj_string_buf << (sectname) << (obj_val) << "\n";                            \
 }
 #define FILEBUF_SIZE 8192
 
@@ -260,9 +341,9 @@ void House_save(struct house_control_rec *house, const char *file_name, long rnu
 {
   int level = 0;
   struct obj_data *obj = NULL;
-  
+
   FILE *fl;
-  
+
   // Can't open the house file? Oof.
   if (!file_name || !*file_name || !(fl = fopen(file_name, "wb"))) {
     perror("SYSERR: Error saving house file");
@@ -270,71 +351,79 @@ void House_save(struct house_control_rec *house, const char *file_name, long rnu
   } else {
     // log_vfprintf("Saving house %s.", file_name);
   }
-  
+
   char print_buffer[FILEBUF_SIZE];
   memset(print_buffer, 0, sizeof(print_buffer));
   setvbuf(fl, print_buffer, _IOFBF, FILEBUF_SIZE);
-  
+
+  fprintf(fl, "[METADATA]\n");
+  fprintf(fl, "\tVersion:\t%d\n", VERSION_HOUSE_FILE);
+
   // Are we saving an apartment? If so, store guest list.
-  if (house) {    
+  if (house) {
     fprintf(fl, "[GUESTS]\n");
     for (int o = 0; o < MAX_GUESTS; o++) {
       // Don't write out empty guest slots.
       if (house->guests[o])
         fprintf(fl, "\tGuest%d:\t%ld\n", o, house->guests[o]);
     }
-  } 
+  }
 
   obj = world[rnum].contents;
-  
+
   for (struct obj_data *tmp_obj = obj; tmp_obj; tmp_obj = tmp_obj->next_content) {
     validate_in_obj_pointers(tmp_obj, NULL);
   }
-  
+
   fprintf(fl, "[HOUSE]\n");
-  
+
   struct obj_data *prototype = NULL;
   int real_obj;
-  
-  for (int o = 0; obj;)
+  std::vector<std::string> obj_strings;
+  std::stringstream obj_string_buf;
+
+  for (;obj;)
   {
     if ((real_obj = real_object(GET_OBJ_VNUM(obj))) == -1) {
-      log_vfprintf("Warning: Will lose house item %s from %s (%ld) due to nonexistent rnum. [house_error_grep_string]", 
+      log_vfprintf("Warning: Will lose house item %s from %s (%ld) due to nonexistent rnum. [house_error_grep_string]",
                GET_OBJ_NAME(obj),
                GET_ROOM_NAME(obj->in_room),
                GET_ROOM_VNUM(obj->in_room));
       obj = obj->next_content;
       continue;
     }
-      
+
     prototype = &obj_proto[real_obj];
     if (!IS_OBJ_STAT(obj, ITEM_NORENT)) {
-      fprintf(fl, "\t[Object %d]\n", o);
-      o++;
-      fprintf(fl, "\t\tVnum:\t%ld\n", GET_OBJ_VNUM(obj));
-      fprintf(fl, "\t\tInside:\t%d\n", level);
+      obj_string_buf << "\t\tVnum:\t" << GET_OBJ_VNUM(obj) << "\n";
+      obj_string_buf << "\t\tInside:\t" << level << "\n";
       if (GET_OBJ_TYPE(obj) == ITEM_PHONE) {
         for (int x = 0; x < 4; x++)
           if (GET_OBJ_VAL(obj, x) != GET_OBJ_VAL(prototype, x))
-            fprintf(fl, "\t\tValue %d:\t%d\n", x, GET_OBJ_VAL(obj, x));
+            obj_string_buf << "\t\tValue " << x << ":\t" << GET_OBJ_VAL(obj, x) << "\n";
       }
       else if (GET_OBJ_TYPE(obj) != ITEM_WORN)
         for (int x = 0; x < NUM_VALUES; x++)
           if (GET_OBJ_VAL(obj, x) != GET_OBJ_VAL(prototype, x))
-            fprintf(fl, "\t\tValue %d:\t%d\n", x, GET_OBJ_VAL(obj, x));
-      PRINT_TO_FILE_IF_CHANGED("\t\tCondition:\t%d\n", GET_OBJ_CONDITION(obj), GET_OBJ_CONDITION(prototype));
-      PRINT_TO_FILE_IF_CHANGED("\t\tTimer:\t%d\n", GET_OBJ_TIMER(obj), GET_OBJ_TIMER(prototype));
-      PRINT_TO_FILE_IF_CHANGED("\t\tAttempt:\t%d\n", GET_OBJ_ATTEMPT(obj), 0);
-      PRINT_TO_FILE_IF_CHANGED("\t\tCost:\t%d\n", GET_OBJ_COST(obj), GET_OBJ_COST(prototype));
-      PRINT_TO_FILE_IF_CHANGED("\t\tExtraFlags:\t%s\n", GET_OBJ_EXTRA(obj).ToString(), GET_OBJ_EXTRA(prototype).ToString());
+            obj_string_buf << "\t\tValue "<< x <<":\t" << GET_OBJ_VAL(obj, x) <<"\n";
+
+      APPEND_IF_CHANGED("\t\tCondition:\t", GET_OBJ_CONDITION(obj), GET_OBJ_CONDITION(prototype));
+      APPEND_IF_CHANGED("\t\tTimer:\t", GET_OBJ_TIMER(obj), GET_OBJ_TIMER(prototype));
+      APPEND_IF_CHANGED("\t\tAttempt:\t", GET_OBJ_ATTEMPT(obj), 0);
+      obj_string_buf << "\t\tCost:\t"<< GET_OBJ_COST(obj) << "\n";
+      APPEND_IF_CHANGED("\t\tExtraFlags:\t", GET_OBJ_EXTRA(obj).ToString(), GET_OBJ_EXTRA(prototype).ToString());
       if (obj->restring)
-        fprintf(fl, "\t\tName:\t%s\n", obj->restring);
+        obj_string_buf << "\t\tName:\t" << obj->restring << "\n";
       if (obj->photo)
-        fprintf(fl, "\t\tPhoto:$\n%s~\n", cleanup(buf2, obj->photo));
-        
-      if (obj->contains && !IS_OBJ_STAT(obj, ITEM_NORENT) && !IS_OBJ_STAT(obj, ITEM_PART)) {
+        obj_string_buf << "\t\tPhoto:$\n" << cleanup(buf2, obj->photo) << "~\n";
+
+      obj_strings.push_back(obj_string_buf.str());
+      obj_string_buf.str(std::string());
+
+      if (obj->contains && !IS_OBJ_STAT(obj, ITEM_NORENT) && GET_OBJ_TYPE(obj) != ITEM_PART) {
         obj = obj->contains;
         level++;
+
         continue;
       }
     } else {
@@ -343,7 +432,7 @@ void House_save(struct house_control_rec *house, const char *file_name, long rnu
                    GET_OBJ_VNUM(obj),
                    file_name);
     }
-    
+
     if (obj->next_content) {
       obj = obj->next_content;
       continue;
@@ -358,15 +447,25 @@ void House_save(struct house_control_rec *house, const char *file_name, long rnu
     if (obj)
       obj = obj->next_content;
   }
-  
+
   if (level != 0) {
-    log_vfprintf("Warning: Non-zero level at finish when saving %s.", file_name);
+    log_vfprintf("Warning: Non-zero level at finish when saving %s. [house_error_grep_string]", file_name);
   }
-  
+
+  if (!obj_strings.empty()) {
+    int i = 0;
+    for(vector<std::string>::reverse_iterator rit = obj_strings.rbegin(); rit != obj_strings.rend(); rit++ ) {
+      fprintf(fl, "\t[Object %d]\n", i);
+      fprintf(fl, "%s", rit->c_str());
+      i++;
+    }
+    obj_strings.clear();
+  }
+
   fclose(fl);
 }
 #undef FILEBUF_SIZE
-#undef PRINT_TO_FILE_IF_CHANGED
+#undef APPEND_IF_CHANGED
 
 struct house_control_rec *find_house(vnum_t vnum)
 {
@@ -392,7 +491,7 @@ void House_crashsave(vnum_t vnum)
   // House does not exist? Skip.
   if ((rnum = real_room(vnum)) == NOWHERE)
     return;
-    
+
   // If the dirty bit is not set, we don't save the room-- it means nobody was here.
   // YES, this does induce bugs, like evaluate programs not decaying if nobody is around to see it happen--
   // but fuck it, if someone exploits it we'll just ban them. Easy enough.
@@ -403,15 +502,15 @@ void House_crashsave(vnum_t vnum)
     // Clear the dirty bit now that we've processed it.
     world[rnum].dirty_bit = FALSE;
   }
-    
+
   // Calculate whether or not we should keep this house.
   bool should_we_keep_this_file = FALSE;
   house = find_house(vnum);
-  
+
   // Figure out if the house has any guests/items.
   if (house) {
     obj = world[real_room(house->vnum)].contents;
-    
+
     for (int o = 0; o < MAX_GUESTS; o++) {
       // Don't write out empty guest slots.
       if (house->guests[o]) {
@@ -423,10 +522,10 @@ void House_crashsave(vnum_t vnum)
     // Storage room- just check for items.
     obj = world[rnum].contents;
   }
-  
+
   // Finalize decision for keeping.
   should_we_keep_this_file |= (obj != NULL);
-  
+
   // House filename is not kosher? Skip. Otherwise, populate buf with filename.
   if (house) {
     if (!House_get_filename(vnum, buf, sizeof(buf)))
@@ -435,13 +534,13 @@ void House_crashsave(vnum_t vnum)
     if (!Storage_get_filename(vnum, buf, sizeof(buf)))
       return;
   }
-  
+
   // If it has no guests and no objects, why save it?
   if (!should_we_keep_this_file) {
     House_delete_file(vnum, buf);
     return;
   }
-    
+
   // Save it.
   House_save(find_house(vnum), buf, rnum);
 }
@@ -510,46 +609,58 @@ bool ch_already_rents_here(struct house_control_rec *room, struct char_data *ch)
   for (; room; room = room->next)
     if (room->owner == GET_IDNUM(ch))
       return TRUE;
-  
+
   return FALSE;
 }
 
 void display_room_list_to_character(struct char_data *ch, struct landlord *lord) {
-  send_to_char(ch, "The following rooms are free: \r\n");
-  send_to_char(ch, "Name     Class     Price      Name     Class     Price\r\n");
-  send_to_char(ch, "-----    ------    ------     -----    ------    -----\r\n");
-  
-  bool found_any = FALSE;
-  bool on_first_entry_in_column = TRUE;
-  for (struct house_control_rec *room_record = lord->rooms; room_record; room_record = room_record->next) {
-    if (!room_record->owner) {
-      found_any = TRUE;
-      if (on_first_entry_in_column) {
-        snprintf(buf, sizeof(buf), "%-5s    %-6s    %-8d",
-                room_record->name,
-                lifestyle[room_record->mode].name,
-                lord->basecost * lifestyle[room_record->mode].cost);
-        on_first_entry_in_column = FALSE;
-      } else {
-        snprintf(buf2, sizeof(buf2), "   %-5s    %-6s    %-8d\r\n",
-                room_record->name,
-                lifestyle[room_record->mode].name,
-                lord->basecost * lifestyle[room_record->mode].cost);
-        strcat(buf, buf2);
-        send_to_char(buf, ch);
-        on_first_entry_in_column = TRUE;
+  bool printed_message_yet = FALSE;
+
+  if (PRF_FLAGGED(ch, PRF_SCREENREADER)) {
+    for (struct house_control_rec *room_record = lord->rooms; room_record; room_record = room_record->next) {
+      if (!room_record->owner) {
+        if (!printed_message_yet)
+          send_to_char(ch, "The following rooms are free: \r\n");
+
+        printed_message_yet = TRUE;
+        send_to_char(ch, "Room %s (lifestyle %s): %d nuyen.\r\n",
+                     room_record->name,
+                     lifestyle[room_record->mode].name,
+                     lord->basecost * lifestyle[room_record->mode].cost);
       }
     }
+
+    if (!printed_message_yet) {
+      send_to_char(ch, "It looks like all the rooms here have been claimed.\r\n");
+    }
+    return;
   }
-  if (!on_first_entry_in_column)
-    strcat(buf, "\r\n\n");
-  else
-    strcpy(buf, "\r\n");
-    
-  if (!found_any) {
+
+  // Non-screenreader display.
+  bool on_first_entry_in_column = TRUE;
+  strlcpy(buf, "", sizeof(buf));
+  for (struct house_control_rec *room_record = lord->rooms; room_record; room_record = room_record->next) {
+    if (!room_record->owner) {
+      if (!printed_message_yet) {
+        send_to_char(ch, "The following rooms are free: \r\n");
+        send_to_char(ch, "Name     Class     Price      Name     Class     Price\r\n");
+        send_to_char(ch, "-----    ------    ------     -----    ------    -----\r\n");
+      }
+
+      printed_message_yet = TRUE;
+
+      send_to_char(ch, "%s%-5s    %-6s    %-8d%s",
+              on_first_entry_in_column ? "" : "   ",
+              room_record->name,
+              lifestyle[room_record->mode].name,
+              lord->basecost * lifestyle[room_record->mode].cost,
+              on_first_entry_in_column ? "" : "\r\n");
+      on_first_entry_in_column = !on_first_entry_in_column;
+    }
+  }
+
+  if (!printed_message_yet) {
     send_to_char("It looks like all the rooms here have been claimed.\r\n", ch);
-  } else {
-    send_to_char(buf, ch);
   }
 }
 
@@ -598,9 +709,9 @@ SPECIAL(landlord_spec)
   } else if (CMD_IS("lease")) {
     if (!*arg) {
       do_say(recep, "Which room would you like to lease?", 0, 0);
-      
+
       display_room_list_to_character(ch, lord);
-      
+
       return TRUE;
     }
     room_record = find_room(arg, lord->rooms, recep);
@@ -629,13 +740,13 @@ SPECIAL(landlord_spec)
     if (GET_NUYEN(ch) < cost) {
       if (GET_BANK(ch) >= cost) {
         do_say(recep, "You don't have the money on you, so I'll transfer it from your bank account.", 0, 0);
-        GET_BANK(ch) -= cost;
+        lose_bank(ch, cost, NUYEN_OUTFLOW_HOUSING);
       } else {
         do_say(recep, "Sorry, you don't have the required funds.", 0, 0);
         return TRUE;
       }
     } else {
-      GET_NUYEN(ch) -= cost;
+      lose_nuyen(ch, cost, NUYEN_OUTFLOW_HOUSING);
       send_to_char(ch, "You hand over the cash.\r\n");
     }
     if (obj) {
@@ -653,20 +764,21 @@ SPECIAL(landlord_spec)
               room_record->vnum, room_record->key, GET_CHAR_NAME(ch), GET_IDNUM(ch), HSHR(ch));
       mudlog(buf, ch, LOG_SYSLOG, TRUE);
       do_say(recep, "I seem to have misplaced your key. I've refunded you the nuyen in cash.", 0, 0);
-      GET_NUYEN(ch) += cost;
+      GET_NUYEN_RAW(ch) += cost;
+      GET_NUYEN_INCOME_THIS_PLAY_SESSION(ch, NUYEN_OUTFLOW_HOUSING) -= cost;
     } else {
       do_say(recep, "Thank you, here is your key.", 0, 0);
       obj_to_char(key, ch);
       room_record->owner = GET_IDNUM(ch);
       room_record->date = time(0) + (SECS_PER_REAL_DAY*30);
-      
+
       int rnum = real_room(room_record->vnum);
       ROOM_FLAGS(&world[rnum]).SetBit(ROOM_HOUSE);
       ROOM_FLAGS(&world[room_record->atrium]).SetBit(ROOM_ATRIUM);
-      
+
       // Shift all the vehicles out of it.
       remove_vehicles_from_apartment(&world[rnum]);
-      
+
       House_crashsave(room_record->vnum);
       House_save_control();
     }
@@ -686,8 +798,21 @@ SPECIAL(landlord_spec)
       int rnum = real_room(room_record->vnum);
       ROOM_FLAGS(&world[rnum]).RemoveBit(ROOM_HOUSE);
       remove_vehicles_from_apartment(&world[rnum]);
-      // TODO: What if there are multiple houses connected to this atrium? This would induce a bug.
-      ROOM_FLAGS(&world[room_record->atrium]).RemoveBit(ROOM_ATRIUM);
+
+      // Check to see if there are any other houses associated with this atrium. If not, disassociate it.
+      {
+        struct room_data *atrium = &world[room_record->atrium];
+        bool have_other_houses = FALSE;
+
+        for (int i = NORTH; i <= DOWN && !have_other_houses; i++) {
+          if (atrium->dir_option[i] && atrium->dir_option[i]->to_room && ROOM_FLAGGED(atrium->dir_option[i]->to_room, ROOM_HOUSE))
+            have_other_houses = TRUE;
+        }
+
+        if (!have_other_houses)
+          ROOM_FLAGS(atrium).RemoveBit(ROOM_ATRIUM);
+      }
+
       House_save_control();
       House_get_filename(room_record->vnum, buf2, MAX_STRING_LENGTH);
       House_delete_file(room_record->vnum, buf2);
@@ -719,13 +844,13 @@ SPECIAL(landlord_spec)
       if (GET_NUYEN(ch) < cost) {
         if (GET_BANK(ch) >= cost) {
           do_say(recep, "You don't have the money on you, so I'll transfer it from your bank account.", 0, 0);
-          GET_BANK(ch) -= cost;
+          lose_bank(ch, cost, NUYEN_OUTFLOW_HOUSING);
         } else {
           do_say(recep, "Sorry, you don't have the required funds.", 0, 0);
           return TRUE;
         }
       } else {
-        GET_NUYEN(ch) -= cost;
+        lose_nuyen(ch, cost, NUYEN_OUTFLOW_HOUSING);
         send_to_char(ch, "You hand over the cash.\r\n");
       }
       if (obj) {
@@ -734,6 +859,7 @@ SPECIAL(landlord_spec)
           extract_obj(obj);
         } else {
           GET_OBJ_VAL(obj, 1) -= origcost;
+          GET_NUYEN_INCOME_THIS_PLAY_SESSION(ch, NUYEN_OUTFLOW_HOUSING) += cost;
           send_to_char(ch, "Your housing card has %d nuyen left on it.\r\n", GET_OBJ_VAL(obj, 1));
         }
       }
@@ -755,10 +881,15 @@ SPECIAL(landlord_spec)
     else if (!room_record->owner)
       do_say(recep, "That room is currently available for lease.", 0, 0);
     else {
-      if (room_record->date - time(0) < 0)
-        strcpy(buf2, "Your rent has expired on that apartment.");
-      else snprintf(buf2, sizeof(buf2), "You are paid for another %d days.", (int)((room_record->date - time(0)) / 86400));
-      do_say(recep, buf2, 0, 0);
+      if (room_record->date - time(0) < 0) {
+        strlcpy(buf2, "Your rent has expired on that apartment.", sizeof(buf2));
+        do_say(recep, buf2, 0, 0);
+      } else {
+        snprintf(buf2, sizeof(buf2), "You are paid for another %d days.", (int)((room_record->date - time(0)) / 86400));
+        do_say(recep, buf2, 0, 0);
+        strlcpy(buf2, "Note: Those are real-world days.", sizeof(buf2));
+        do_say(recep, buf2, 0, SCMD_OSAY);
+      }
     }
     return TRUE;
   }
@@ -813,7 +944,7 @@ void House_boot(void)
         log_vfprintf("SYSERR: House vnum %ld does not match up with a real room. Terminating.\r\n", landlord_vnum);
         exit(ERROR_CANNOT_RESOLVE_VNUM);
       }
-      
+
       temp = new struct house_control_rec;
       temp->vnum = house_vnum;
       temp->key = key_vnum;
@@ -836,7 +967,7 @@ void House_boot(void)
           temp->owner = 0;
           House_get_filename(temp->vnum, buf2, MAX_STRING_LENGTH);
           House_delete_file(temp->vnum, buf2);
-          
+
           // Move all vehicles from this apartment to a public garage.
           remove_vehicles_from_apartment(&world[real_room(temp->vnum)]);
         }
@@ -859,7 +990,7 @@ void House_boot(void)
 
   fclose(fl);
   House_save_control();
-  
+
   warn_about_apartment_deletion();
 }
 
@@ -868,12 +999,12 @@ void House_boot(void)
 int count_objects(struct obj_data *obj) {
   if (!obj)
     return 0;
-    
+
   int total = 1; // self
-  
+
   for (struct obj_data *contents = obj->contains; contents; contents = contents->next_content)
     total += count_objects(contents);
-    
+
   return total;
 }
 
@@ -884,8 +1015,8 @@ void hcontrol_list_houses(struct char_data *ch)
 {
   char *own_name;
 
-  strcpy(buf, "Address  Atrium  Guests  Owner           Crap Count\r\n");
-  strcat(buf, "-------  ------  ------  --------------  -----------\r\n");
+  strlcpy(buf, "Address  Atrium  Guests  Owner           Crap Count\r\n", sizeof(buf));
+  strlcat(buf, "-------  ------  ------  --------------  -----------\r\n", sizeof(buf));
   send_to_char(buf, ch);
 
   for (struct landlord *llord = landlords; llord; llord = llord->next)
@@ -894,6 +1025,8 @@ void hcontrol_list_houses(struct char_data *ch)
       {
         int house_rnum = real_room(house->vnum);
         int total = 0;
+
+        // Count the crap in it, if it exists.
         if (house_rnum > -1) {
           for (struct obj_data *obj = world[house_rnum].contents; obj; obj = obj->next_content)
             total += count_objects(obj);
@@ -904,12 +1037,22 @@ void hcontrol_list_houses(struct char_data *ch)
           }
         } else
           total = -1;
-          
+
+        // Get the number of objects in it.
         own_name = get_player_name(house->owner);
         if (!own_name)
           own_name = str_dup("<UNDEF>");
-        snprintf(buf, sizeof(buf), "%7ld %7ld    0     %-14s  %d\r\n",
-                house->vnum, world[house->atrium].number, CAP(own_name), total);
+
+        // Get the number of guests in it.
+        int guest_num = 0;
+        for (int j = 0; j < MAX_GUESTS; j++) {
+          if (house->guests[j] != 0)
+            guest_num++;
+        }
+
+        // Output the line.
+        snprintf(buf, sizeof(buf), "%7ld %7ld    %2d    %-14s  %d\r\n",
+                house->vnum, world[house->atrium].number, guest_num, CAP(own_name), total);
         send_to_char(buf, ch);
         DELETE_ARRAY_IF_EXTANT(own_name);
       }
@@ -1006,7 +1149,7 @@ ACMD(do_house)
     send_to_char("You must be in your house to set guests.\r\n", ch);
   else if ((i = find_house(GET_ROOM_VNUM(ch->in_room))) == NULL)
     send_to_char("Um.. this house seems to be screwed up.\r\n", ch);
-  else if (GET_IDNUM(ch) != i->owner)
+  else if (GET_IDNUM(ch) != i->owner && !access_level(ch, LVL_PRESIDENT))
     send_to_char("Only the primary owner can set guests.\r\n", ch);
   else if (!*arg)
     House_list_guests(ch, i, FALSE);
@@ -1063,17 +1206,17 @@ void House_save_all(void)
 
 bool House_can_enter_by_idnum(long idnum, vnum_t house) {
   struct house_control_rec *room = find_house(house);
-  
+
   if (idnum <= 0 || !room)
     return FALSE;
-  
+
   if (idnum == room->owner)
     return TRUE;
-  
+
   for (int guest = 0; guest < MAX_GUESTS; guest++)
     if (idnum == room->guests[guest])
       return TRUE;
-  
+
   return FALSE;
 }
 
@@ -1087,15 +1230,15 @@ bool House_can_enter(struct char_data *ch, vnum_t house)
   // No room? No entry.
   if (!room)
     return FALSE;
-  
+
   // NPC, but not a spirit or elemental? No entry.
   if (IS_NPC(ch) && !(IS_SPIRIT(ch) || IS_ELEMENTAL(ch)))
     return FALSE;
-  
+
   // Admins, astral projections, and owners can enter any room.
   if (GET_LEVEL(ch) >= LVL_ADMIN || GET_IDNUM(ch) == room->owner || IS_ASTRAL(ch))
     return TRUE;
-  
+
   // Guests can enter any room.
   for (j = 0; j < MAX_GUESTS; j++)
     if (GET_IDNUM(ch) == room->guests[j])
@@ -1109,26 +1252,26 @@ void House_list_guests(struct char_data *ch, struct house_control_rec *i, int qu
   int j;
   char buf[MAX_STRING_LENGTH], buf2[MAX_NAME_LENGTH + 2];
 
-  strcpy(buf, "  Guests: ");
+  strlcpy(buf, "  Guests: ", sizeof(buf));
   int x = 0;
   for (j = 0; j < MAX_GUESTS; j++)
   {
     if (i->guests[j] == 0)
       continue;
-    
+
     const char *temp = get_player_name(i->guests[j]);
 
     if (!temp)
       continue;
 
     snprintf(buf2, sizeof(buf2), "%s, ", temp);
-    strcat(buf, CAP(buf2));
+    strlcat(buf, CAP(buf2), sizeof(buf));
     x++;
     DELETE_ARRAY_IF_EXTANT(temp);
   }
   if (!x)
-    strcat(buf, "None");
-  strcat(buf, "\r\n");
+    strlcat(buf, "None", sizeof(buf));
+  strlcat(buf, "\r\n", sizeof(buf));
   send_to_char(buf, ch);
 }
 
@@ -1138,20 +1281,20 @@ void remove_vehicles_from_apartment(struct room_data *room) {
     veh_from_room(veh);
     veh_to_room(veh, &world[real_room(RM_SEATTLE_PARKING_GARAGE)]);
   }
-  save_vehicles();
+  save_vehicles(FALSE);
 }
 
 void warn_about_apartment_deletion() {
   //log("Beginning apartment deletion warning cycle.");
   for (struct landlord *llord = landlords; llord; llord = llord->next) {
-    for (struct house_control_rec *house = llord->rooms; house; house = house->next) {      
+    for (struct house_control_rec *house = llord->rooms; house; house = house->next) {
       if (!house->owner) {
         //log_vfprintf("No owner for %s.", house->name);
         continue;
       }
-        
+
       int days_until_deletion = (house->date - time(0)) / (60 * 60 * 24);
-      
+
       if (days_until_deletion <= 5 && days_until_deletion > 0) {
         snprintf(buf, sizeof(buf), "Remember to pay your rent for apartment %s. It will be deemed abandoned and its contents reclaimed in %d days.\r\n", house->name, days_until_deletion);
         raw_store_mail(house->owner, 0, "Your landlord", buf);

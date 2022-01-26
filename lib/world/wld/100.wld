@@ -469,7 +469,7 @@ Name:	^W(^cIMMHQ^W)^C An Extreme-Range Target
 Desc:$
    The firing range stretches westward, with the shooting stands to the east.
 ~
-Flags:	1000000000000000000001000
+Flags:	1000100001000000000000000000001000
 SecType:	Inside
 Z:	20.00
 [POINTS]
