@@ -3038,8 +3038,8 @@ int check_recoil(struct char_data *ch, struct obj_data *gun)
     }
   }
 
-  // Add in integral recoil compensation.
-  if (!gasvent && GET_WEAPON_INTEGRAL_RECOIL_COMP(gun))
+  // Add in integral recoil compensation. Previously, this was blocked by gas vents, but that's not RAW as far as I can tell.
+  if (GET_WEAPON_INTEGRAL_RECOIL_COMP(gun))
     comp += GET_WEAPON_INTEGRAL_RECOIL_COMP(gun);
 
   for (obj = ch->cyberware; obj; obj = obj->next_content)
