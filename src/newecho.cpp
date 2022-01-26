@@ -44,14 +44,31 @@ ACMD(do_highlight) {
     return;
   }
 
-  if (*argument != '^' || (!isalpha(*(argument + 1)) && *(argument + 1) != '[')) {
+  if (*argument != '^') {
     send_to_char("You need to specify a color code. Example: 'highlight ^^r'. Use '^^n' for neutral / no highlight.\r\n", ch);
     return;
   }
 
-  if (*(argument + 1) == 'l') {
-    send_to_char("Sorry, you can't use ^^l as a highlight. It's too dark for many people to read easily.\r\n", ch);
-    return;
+  if (isalpha(*(argument + 1))) {
+    // Single-character color code: Must be exactly two characters.
+    if (strlen(argument) != 2) {
+      send_to_char("You need to specify a color code. Example: 'highlight ^^r'. Use '^^n' for neutral / no highlight.\r\n", ch);
+      return;
+    }
+
+    // No dark black.
+    if (*(argument + 1) == 'l') {
+      send_to_char("Sorry, you can't use ^^l as a highlight. It's too dark for many people to read easily.\r\n", ch);
+      return;
+    }
+  }
+
+  else if (*(argument + 1) == '[') {
+    // XTERM256 color code.
+    if (strlen(argument) != 7) {
+      send_to_char("You need to specify a color code. Example: 'highlight ^^[F123]'. Use '^^n' for neutral / no highlight.\r\n", ch);
+      return;
+    }
   }
 
   DELETE_ARRAY_IF_EXTANT(SETTABLE_CHAR_COLOR_HIGHLIGHT(ch));
