@@ -449,6 +449,10 @@ bool items_are_visually_similar(struct obj_data *first, struct obj_data *second)
   if (first->obj_flags.quest_id != second->obj_flags.quest_id)
     return FALSE;
 
+  // Kept state must match.
+  if (IS_OBJ_STAT(first, ITEM_KEPT) != IS_OBJ_STAT(second, ITEM_KEPT))
+    return FALSE;
+
   // If the names don't match, they're not similar.
   if (strcmp(first->text.name, second->text.name))
     return FALSE;
