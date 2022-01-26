@@ -3005,7 +3005,7 @@ int check_smartlink(struct char_data *ch, struct obj_data *weapon)
 int check_recoil(struct char_data *ch, struct obj_data *gun)
 {
   struct obj_data *obj;
-  int i, rnum, comp = 0;
+  int rnum, comp = 0;
   bool gasvent = FALSE;
 
   bool can_use_bipods_and_tripods = !(PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_RIG) || AFF_FLAGGED(ch, AFF_MANNING));
@@ -3013,26 +3013,27 @@ int check_recoil(struct char_data *ch, struct obj_data *gun)
   if (!gun || GET_OBJ_TYPE(gun) != ITEM_WEAPON)
     return 0;
 
-  for (i = 7; i < 10; i++)
+  for (int i = ACCESS_LOCATION_TOP; i <= ACCESS_LOCATION_UNDER; i++)
   {
     obj = NULL;
 
-    if (GET_OBJ_VAL(gun, i) > 0
-        && (rnum = real_object(GET_OBJ_VAL(gun, i))) > -1
-        && (obj = &obj_proto[rnum]) && GET_OBJ_TYPE(obj) == ITEM_GUN_ACCESSORY)
+    if (GET_WEAPON_ATTACH_LOC(gun, i) > 0
+        && (rnum = real_object(GET_WEAPON_ATTACH_LOC(gun, i))) > -1
+        && (obj = &obj_proto[rnum])
+        && GET_OBJ_TYPE(obj) == ITEM_GUN_ACCESSORY)
     {
-      if (GET_OBJ_VAL(obj, 1) == ACCESS_GASVENT) {
+      if (GET_ACCESSORY_TYPE(obj) == ACCESS_GASVENT) {
         // Gas vent values are negative when built, so we need to flip them.
-        comp += 0 - GET_OBJ_VAL(obj, 2);
+        comp += 0 - GET_ACCESSORY_RATING(obj);
         gasvent = TRUE;
       }
-      else if (GET_OBJ_VAL(obj, 1) == ACCESS_SHOCKPAD)
+      else if (GET_ACCESSORY_TYPE(obj) == ACCESS_SHOCKPAD)
         comp++;
       else if (can_use_bipods_and_tripods && AFF_FLAGGED(ch, AFF_PRONE))
       {
-        if (GET_OBJ_VAL(obj, 1) == ACCESS_BIPOD)
+        if (GET_ACCESSORY_TYPE(obj) == ACCESS_BIPOD)
           comp += RECOIL_COMP_VALUE_BIPOD;
-        else if (GET_OBJ_VAL(obj, 1) == ACCESS_TRIPOD)
+        else if (GET_ACCESSORY_TYPE(obj) == ACCESS_TRIPOD)
           comp += RECOIL_COMP_VALUE_TRIPOD;
       }
     }
@@ -3043,7 +3044,7 @@ int check_recoil(struct char_data *ch, struct obj_data *gun)
     comp += GET_WEAPON_INTEGRAL_RECOIL_COMP(gun);
 
   for (obj = ch->cyberware; obj; obj = obj->next_content)
-    if (GET_OBJ_VAL(obj, 0) == CYB_FOOTANCHOR && !GET_OBJ_VAL(obj, 9)) {
+    if (GET_CYBERWARE_TYPE(obj) == CYB_FOOTANCHOR && !GET_CYBERWARE_IS_DISABLED(obj)) {
       comp++;
       break;
     }
