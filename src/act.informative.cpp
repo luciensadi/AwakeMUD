@@ -288,6 +288,9 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
     if (GET_OBJ_SPEC(object) == pocket_sec && amount_of_mail_waiting(ch) > 0) {
       strlcat(buf, " ^y(Mail Waiting)^n", sizeof(buf));
     }
+    if (IS_OBJ_STAT(object, ITEM_KEPT)) {
+      strlcat(buf, " ^c(kept)^n", sizeof(buf));
+    }
   }
   else if (GET_OBJ_NAME(object) && ((mode == 2) || (mode == 3) || (mode == 4) || (mode == 7))) {
     strlcpy(buf, GET_OBJ_NAME(object), sizeof(buf));
@@ -345,10 +348,6 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
         strlcat(buf, " ^Y(Quest)^n", sizeof(buf));
       else
         strlcat(buf, " ^m(Protected)^n", sizeof(buf));
-    }
-
-    if (IS_OBJ_STAT(object, ITEM_KEPT)) {
-      strlcat(buf, " ^c(kept)^n", sizeof(buf));
     }
   }
   strlcat(buf, "^N\r\n", sizeof(buf));
