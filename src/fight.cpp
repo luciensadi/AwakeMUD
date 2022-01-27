@@ -217,7 +217,7 @@ void update_pos(struct char_data * victim)
   if ((GET_MENTAL(victim) < 100) && (GET_PHYSICAL(victim) >= 100))
   {
     for (struct obj_data *bio = victim->bioware; bio; bio = bio->next_content)
-      if (GET_OBJ_VAL(bio, 0) == BIO_PAINEDITOR && GET_OBJ_VAL(bio, 3))
+      if (GET_BIOWARE_TYPE(bio) == BIO_PAINEDITOR && GET_BIOWARE_IS_ACTIVATED(bio))
         return;
     GET_POS(victim) = POS_STUNNED;
     GET_INIT_ROLL(victim) = 0;
@@ -699,7 +699,7 @@ void raw_kill(struct char_data * ch)
 
     if (!IS_NPC(ch)) {
       for (bio = ch->bioware; bio; bio = bio->next_content)
-        switch (GET_OBJ_VAL(bio, 0)) {
+        switch (GET_BIOWARE_TYPE(bio)) {
           case BIO_ADRENALPUMP:
             if (GET_OBJ_VAL(bio, 5) > 0) {
               for (i = 0; i < MAX_OBJ_AFFECT; i++)
@@ -711,7 +711,7 @@ void raw_kill(struct char_data * ch)
             }
             break;
           case BIO_PAINEDITOR:
-            GET_OBJ_VAL(bio, 3) = 0;
+            GET_BIOWARE_IS_ACTIVATED(bio) = 0;
             break;
         }
       GET_DRUG_AFFECT(ch) = GET_DRUG_DURATION(ch) = GET_DRUG_STAGE(ch) = 0;
@@ -1982,7 +1982,7 @@ void docwagon(struct char_data *ch)
     GET_MENTAL(ch) = 0;
     GET_POS(ch) = POS_STUNNED;
     for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content)
-      switch (GET_OBJ_VAL(bio, 0)) {
+      switch (GET_BIOWARE_TYPE(bio)) {
         case BIO_ADRENALPUMP:
           if (GET_OBJ_VAL(bio, 5) > 0) {
             for (i = 0; i < MAX_OBJ_AFFECT; i++)
@@ -1994,7 +1994,7 @@ void docwagon(struct char_data *ch)
           }
           break;
         case BIO_PAINEDITOR:
-          GET_OBJ_VAL(bio, 3) = 0;
+          GET_BIOWARE_IS_ACTIVATED(bio) = 0;
           break;
       }
     ch->points.fire[0] = 0;

@@ -3283,10 +3283,7 @@ const char *get_plaintext_score_health(struct char_data *ch) {
   int mental = GET_MENTAL(ch), physical = GET_PHYSICAL(ch);
   bool pain_editor = FALSE;
   for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content)
-    if (GET_OBJ_VAL(bio, 0) == BIO_DAMAGECOMPENSATOR) {
-      mental += GET_OBJ_VAL(bio, 1) * 100;
-      physical += GET_OBJ_VAL(bio, 1) * 100;
-    } else if (GET_OBJ_VAL(bio, 0) == BIO_PAINEDITOR && GET_OBJ_VAL(bio, 3)) {
+    if (GET_BIOWARE_TYPE(bio) == BIO_PAINEDITOR && GET_BIOWARE_RATING(bio)) {
       pain_editor = TRUE;
       mental = 1000;
       physical = 1000;
@@ -3559,10 +3556,7 @@ ACMD(do_score)
     int mental = GET_MENTAL(ch), physical = GET_PHYSICAL(ch);
     bool pain_editor = FALSE;
     for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content)
-      if (GET_OBJ_VAL(bio, 0) == BIO_DAMAGECOMPENSATOR) {
-        mental += GET_OBJ_VAL(bio, 1) * 100;
-        physical += GET_OBJ_VAL(bio, 1) * 100;
-      } else if (GET_OBJ_VAL(bio, 0) == BIO_PAINEDITOR && GET_OBJ_VAL(bio, 3)) {
+      if (GET_BIOWARE_TYPE(bio) == BIO_PAINEDITOR && GET_BIOWARE_RATING(bio)) {
         pain_editor = TRUE;
         mental = 1000;
         physical = 1000;

@@ -3223,11 +3223,11 @@ ACMD(do_activate)
 
   if (is_abbrev(arg, "pain editor")) {
     for (obj = ch->bioware; obj; obj = obj->next_content)
-      if (GET_OBJ_VAL(obj, 0) == BIO_PAINEDITOR) {
-        if (GET_OBJ_VAL(obj, 3))
+      if (GET_BIOWARE_TYPE(obj) == BIO_PAINEDITOR) {
+        if (GET_BIOWARE_IS_ACTIVATED(obj))
           send_to_char("You have already activated your Pain Editor.\r\n", ch);
         else {
-          GET_OBJ_VAL(obj, 3) = 1;
+          GET_BIOWARE_IS_ACTIVATED(obj) = 1;
           send_to_char("You lose all tactile perception.\r\n", ch);
         }
         return;
@@ -3235,11 +3235,11 @@ ACMD(do_activate)
   }
   if (is_abbrev(arg, "voice modulator")) {
     for (obj = ch->cyberware; obj; obj = obj->next_content)
-      if (GET_OBJ_VAL(obj, 0) == CYB_VOICEMOD) {
-        if (GET_OBJ_VAL(obj, 3))
+      if (GET_CYBERWARE_TYPE(obj) == CYB_VOICEMOD) {
+        if (GET_CYBERWARE_FLAGS(obj))
           send_to_char("You have already activated your Voice Modulator.\r\n", ch);
         else {
-          GET_OBJ_VAL(obj, 3) = 1;
+          GET_CYBERWARE_FLAGS(obj) = 1;
           send_to_char("You begin to speak like Stephen Hawking.\r\n", ch);
         }
         return;

@@ -1311,9 +1311,7 @@ int make_prompt(struct descriptor_data * d)
             case 'm':       // current mental
               physical = (int)(GET_MENTAL(d->character) / 100);
               for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content)
-                if (GET_OBJ_VAL(bio, 0) == BIO_DAMAGECOMPENSATOR)
-                  physical = MIN(10, physical + GET_OBJ_VAL(bio, 1));
-                else if (GET_OBJ_VAL(bio, 0) == BIO_PAINEDITOR && GET_OBJ_VAL(bio, 3)) {
+                if (GET_BIOWARE_TYPE(bio) == BIO_PAINEDITOR && GET_BIOWARE_IS_ACTIVATED(bio)) {
                   physical = 10;
                   break;
                 }
@@ -1331,9 +1329,7 @@ int make_prompt(struct descriptor_data * d)
             case 'p':       // current physical
               physical = (int)(GET_PHYSICAL(d->character) / 100);
               for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content)
-                if (GET_OBJ_VAL(bio, 0) == BIO_DAMAGECOMPENSATOR)
-                  physical = MIN(10, physical + GET_OBJ_VAL(bio, 1));
-                else if (GET_OBJ_VAL(bio, 0) == BIO_PAINEDITOR && GET_OBJ_VAL(bio, 3)) {
+                if (GET_BIOWARE_TYPE(bio) == BIO_PAINEDITOR && GET_BIOWARE_IS_ACTIVATED(bio)) {
                   physical = 10;
                   break;
                 }
