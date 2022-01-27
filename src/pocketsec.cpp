@@ -546,7 +546,9 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
           struct obj_data *next;
           for (file = folder->contains; file; file = next) {
             next = file->next_content;
-            extract_obj(file);
+            // Only extract mail that has not been kept.
+            if (GET_OBJ_TIMER(file) >= 0)
+              extract_obj(file);
           }
           folder->contains = NULL;
         } else {
@@ -560,7 +562,10 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
               else
                 GET_OBJ_TIMER(file) = -1;
             } else {
-              extract_obj(file);
+              if (GET_OBJ_TIMER(file) < 0)
+                send_to_char(d->character, "%s has been marked as 'keep' and can't be deleted.\r\n", GET_OBJ_NAME(file));
+              else
+                extract_obj(file);
             }
           }
         }
