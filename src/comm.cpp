@@ -2710,20 +2710,20 @@ void send_to_driver(char *messg, struct veh_data *veh)
         SEND_TO_Q(messg, i->desc);
 }
 
-void send_to_host(vnum_t room, const char *messg, struct matrix_icon *icon, bool needsee)
-{
-  struct matrix_icon *i;
-  if (!icon) {
-    char errbuf[MAX_STRING_LENGTH];
-    snprintf(errbuf, sizeof(errbuf), "SYSERR: Received null icon to send_to_host! (Message: %s)", messg);
-    mudlog(errbuf, NULL, LOG_SYSLOG, TRUE);
+void send_to_host(vnum_t room, const char *messg, struct matrix_icon *icon, bool needsee) {
+  // Bail out on no or empty message.
+  if (!messg || !*messg)
     return;
+
+  for (struct matrix_icon *i = matrix[room].icons; i; i = i->next_in_host) {
+    // Skip icons that don't have connections to send to.
+    if (!i->decker)
+      continue;
+
+    // If we pass visibility checks (or don't need to run them at all), send the message.
+    if (!icon || !needsee || (icon != i && has_spotted(i, icon)))
+      send_to_icon(i, messg);
   }
-  if (messg)
-    for (i = matrix[room].icons; i; i = i->next_in_host)
-      if (icon != i && i->decker)
-        if (!needsee || (needsee && has_spotted(i, icon)))
-          send_to_icon(i, messg);
 }
 void send_to_veh(const char *messg, struct veh_data *veh, struct char_data *ch, bool torig, ...)
 {
