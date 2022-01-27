@@ -151,7 +151,6 @@ bool House_load(struct house_control_rec *house)
       snprintf(buf, sizeof(buf), "%s/Cost", sect_name);
       // At this point, the cost is restored to a positive value. MAX() guards against edge case of attachment being edited after it was attached.
       GET_OBJ_COST(obj) += MAX(0, data.GetInt(buf, GET_OBJ_COST(obj)));
-      snprintf(buf, sizeof(buf), "%s/Inside", sect_name);
 
       if (GET_OBJ_VNUM(obj) == OBJ_SPECIAL_PC_CORPSE) {
         // Invalid belongings.
@@ -187,7 +186,8 @@ bool House_load(struct house_control_rec *house)
       // Don't auto-repair cyberdecks until they're fully loaded.
       if (GET_OBJ_TYPE(obj) != ITEM_CYBERDECK)
         auto_repair_obj(obj, buf3);
-
+        
+      snprintf(buf, sizeof(buf), "%s/Inside", sect_name);
       inside = data.GetInt(buf, 0);
       if (house_version == VERSION_HOUSE_FILE) {
         // Since we're now saved the obj linked lists  in reverse order, in order to fix the stupid reordering on
