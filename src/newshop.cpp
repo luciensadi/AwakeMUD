@@ -1535,8 +1535,6 @@ bool shop_probe(char *arg, struct char_data *ch, struct char_data *keeper, vnum_
   send_to_char(ch, "^yProbing shopkeeper's ^n%s^y...^n\r\n", GET_OBJ_NAME(obj));
   do_probe_object(ch, obj);
   return TRUE;
-
-  return FALSE;
 }
 
 void shop_info(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t shop_nr)

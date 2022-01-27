@@ -2130,15 +2130,23 @@ int special(struct char_data * ch, int cmd, char *arg)
     if (ch->in_room)
     {
       for (struct char_data *k = ch->in_room->people; k; k = k->next_in_room) {
-        if (GET_MOB_SPEC(k) != NULL)
-          if (GET_MOB_SPEC(k) (ch, k, cmd, arg))
+        if (GET_MOB_SPEC(k) != NULL) {
+          bool spec_returned_true = GET_MOB_SPEC(k) (ch, k, cmd, arg);
+          if (IS_SENATOR(ch) && PRF_FLAGGED(ch, PRF_ROLLS))
+            send_to_char(ch, "Evaluation of spec for %s returned %s.\r\n", GET_CHAR_NAME(k), spec_returned_true ? "TRUE" : "FALSE");
+          if (spec_returned_true)
             return 1;
-        if (mob_index[GET_MOB_RNUM(k)].sfunc != NULL)
+        }
+        if (mob_index[GET_MOB_RNUM(k)].sfunc != NULL) {
+          bool spec_returned_true = GET_MOB_SPEC(k) (ch, k, cmd, arg);
+          if (IS_SENATOR(ch) && PRF_FLAGGED(ch, PRF_ROLLS))
+            send_to_char(ch, "Evaluation of secondary spec for %s returned %s.\r\n", GET_CHAR_NAME(k), spec_returned_true ? "TRUE" : "FALSE");
           if ((mob_index[GET_MOB_RNUM(k)].sfunc) (ch, k, cmd, arg))
             return 1;
+        }
       }
     }
-}
+  }
   return 0;
 }
 
