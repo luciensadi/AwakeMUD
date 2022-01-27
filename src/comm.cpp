@@ -2725,6 +2725,7 @@ void send_to_host(vnum_t room, const char *messg, struct matrix_icon *icon, bool
       send_to_icon(i, messg);
   }
 }
+
 void send_to_veh(const char *messg, struct veh_data *veh, struct char_data *ch, bool torig, ...)
 {
   struct char_data *i;

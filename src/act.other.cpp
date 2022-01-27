@@ -2673,16 +2673,28 @@ ACMD(do_remember)
   else if (ch == vict)
     send_to_char(ch, "You should have no problem remembering who you are.\r\n");
   else if (IS_SENATOR(vict))
-    send_to_char(ch, "Try as you might, you can't seem to remember them.\r\n");
+    send_to_char(ch, "You can't use the remember command on staff characters.\r\n");
   else {
     for (temp = GET_PLAYER_MEMORY(ch); temp; temp = temp->next)
       if (GET_IDNUM(vict) == temp->idnum) {
+        // Block abusive case.
+        if (is_abbrev(buf1, GET_CHAR_NAME(vict)) && !is_abbrev(buf1, temp->mem)) {
+          send_to_char(ch, "You don't see anyone named '%s' here.\r\n", buf1);
+          return;
+        }
+
         DELETE_AND_NULL_ARRAY(temp->mem);
         temp->mem = str_dup(buf2);
         send_to_char(ch, "Remembered %s as %s\r\n", GET_NAME(vict), buf2);
         GET_MEMORY_DIRTY_BIT(ch) = TRUE;
         return;
       }
+
+    // Block the twinky case of 'remem <name> <name>' to force-identify new people.
+    if (is_abbrev(buf1, GET_CHAR_NAME(vict))) {
+      send_to_char(ch, "You don't see anyone named '%s' here.\r\n", buf1);
+      return;
+    }
 
     m = new remem;
     m->mem = str_dup(buf2);
