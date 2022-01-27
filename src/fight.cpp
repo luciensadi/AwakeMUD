@@ -2538,56 +2538,79 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
   }
   int comp = 0;
   bool trauma = FALSE, pain = FALSE;
+
+  // We want to pull bioware from their real body-- if they're projecting, find their original.
+  struct char_data *real_body = victim;
+  if (IS_PROJECT(victim) && victim->desc && victim->desc->original)
+    real_body = victim->desc->original;
+
   if (attacktype != TYPE_BIOWARE) {
-    for (bio = victim->bioware; bio; bio = bio->next_content) {
-      if (GET_OBJ_VAL(bio, 0) == BIO_PLATELETFACTORY && dam >= 3 && is_physical)
+    for (bio = real_body->bioware; bio; bio = bio->next_content) {
+      if (GET_BIOWARE_TYPE(bio) == BIO_PLATELETFACTORY && dam >= 3 && is_physical)
         dam--;
-      else if (GET_OBJ_VAL(bio, 0) == BIO_DAMAGECOMPENSATOR)
-        comp = GET_OBJ_VAL(bio, 1) * 100;
-      else if (GET_OBJ_VAL(bio, 0) == BIO_TRAUMADAMPNER && GET_MENTAL(victim) >= 100)
+      else if (GET_BIOWARE_TYPE(bio) == BIO_DAMAGECOMPENSATOR)
+        comp = GET_BIOWARE_RATING(bio) * 100;
+      else if (GET_BIOWARE_TYPE(bio) == BIO_TRAUMADAMPNER && GET_MENTAL(real_body) >= 100)
         trauma = TRUE;
-      else if (GET_OBJ_VAL(bio, 0) == BIO_PAINEDITOR && GET_OBJ_VAL(bio, 3))
+      else if (GET_BIOWARE_TYPE(bio) == BIO_PAINEDITOR && GET_BIOWARE_IS_ACTIVATED(bio))
         pain = TRUE;
     }
   }
 
+  // Pain editors disable trauma dampers (M&M p75).
+  if (pain)
+    trauma = FALSE;
+
+  // Damage compensators disable trauma dampers unless the character is damaged past the DC's ability to compensate.
+  if (comp && (1000 - GET_PHYSICAL(real_body) <= comp && 1000 - GET_PHYSICAL(real_body) <= comp))
+    trauma = FALSE;
+
   if (GET_PHYSICAL(victim) > 0)
     awake = FALSE;
-  if (dam > 0) {
-    if (is_physical) {
-      GET_PHYSICAL(victim) -= MAX(dam * 100, 0);
-      if (!pain && trauma && (!comp || (comp && GET_MENTAL(victim) > 0 && 1000 - GET_PHYSICAL(victim) > comp))) {
-        GET_PHYSICAL(victim) += 100;
-        GET_MENTAL(victim) -= 100;
-      }
-      AFF_FLAGS(victim).SetBit(AFF_DAMAGED);
-      if (IS_PROJECT(victim)) {
-        GET_PHYSICAL(victim->desc->original) -= MAX(dam * 100, 0);
-        AFF_FLAGS(victim->desc->original).SetBit(AFF_DAMAGED);
-      }
-    } else if (((int)(GET_MENTAL(victim) / 100) - dam) < 0 ) {
-      int physdam = dam - (int)(GET_MENTAL(victim) / 100);
-      GET_MENTAL(victim) = 0;
-      GET_PHYSICAL(victim) -= MAX(physdam * 100, 0);
-      AFF_FLAGS(victim).SetBit(AFF_DAMAGED);
-      if (IS_PROJECT(victim)) {
-        GET_MENTAL(victim->desc->original) = 0;
-        GET_PHYSICAL(victim->desc->original) -= MAX(physdam * 100, 0);
-        AFF_FLAGS(victim->desc->original).SetBit(AFF_DAMAGED);
-      }
-    } else {
-      GET_MENTAL(victim) -= MAX(dam * 100, 0);
 
-      // Astral projections apply their originator's bioware to the originator, not the projection.
-      if (IS_PROJECT(victim)) {
-        GET_MENTAL(victim->desc->original) -= MAX(dam * 100, 0);
-        if (!pain && trauma && (!comp || (comp && GET_MENTAL(victim->desc->original) > 0 && 1000 - GET_MENTAL(victim->desc->original) > comp)))
-          GET_MENTAL(victim) += 100;
+  if (dam > 0) {
+    // Physical damage. This one's simple-- no overflow to deal with.
+    if (is_physical) {
+      GET_PHYSICAL(real_body) -= MAX(dam * 100, 0);
+      AFF_FLAGS(real_body).SetBit(AFF_DAMAGED);
+      if (trauma) {
+        GET_PHYSICAL(real_body) += 100;
+        GET_MENTAL(real_body) -= 100;
       }
-      // Non-projections have easier rules.
-      else {
-        if (!pain && trauma && (!comp || (comp && GET_MENTAL(victim) > 0 && 1000 - GET_MENTAL(victim) > comp)))
-          GET_MENTAL(victim) += 100;
+      AFF_FLAGS(real_body).SetBit(AFF_DAMAGED);
+
+      if (real_body != victim) {
+        GET_PHYSICAL(victim) -= MAX(dam * 100, 0);
+        AFF_FLAGS(victim).SetBit(AFF_DAMAGED);
+      }
+    }
+
+    // Mental damage. We need to calculate overflow here.
+    else {
+      GET_MENTAL(real_body) -= MAX(dam * 100, 0);
+      AFF_FLAGS(real_body).SetBit(AFF_DAMAGED);
+      if (trauma) {
+        GET_MENTAL(real_body) += 100;
+      }
+      AFF_FLAGS(real_body).SetBit(AFF_DAMAGED);
+
+      // Handle overflow for the physical body.
+      if (GET_MENTAL(real_body) < 0) {
+        int overflow = -GET_MENTAL(real_body);
+        GET_MENTAL(real_body) = 0;
+        GET_PHYSICAL(real_body) -= overflow;
+      }
+
+      if (real_body != victim) {
+        GET_MENTAL(victim) -= MAX(dam * 100, 0);
+        AFF_FLAGS(victim).SetBit(AFF_DAMAGED);
+
+        // Handle overflow for the projection.
+        if (GET_MENTAL(victim) < 0) {
+          int overflow = -GET_MENTAL(victim);
+          GET_MENTAL(victim) = 0;
+          GET_PHYSICAL(victim) -= overflow;
+        }
       }
     }
   }
