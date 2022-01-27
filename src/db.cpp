@@ -3522,7 +3522,7 @@ void reset_zone(int zone, int reboot)
           }
 
           // It's a workshop, set it as unpacked already.
-          GET_WORKSHOP_IS_SETUP(obj) = 1;
+          GET_SETTABLE_WORKSHOP_IS_SETUP(obj) = 1;
 
           // Handle the room's workshop[] array.
           if (obj->in_room)

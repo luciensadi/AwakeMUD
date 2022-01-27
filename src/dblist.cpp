@@ -70,10 +70,10 @@ int objList::CountPlayerCorpses()
   int counter = 0;
   nodeStruct<struct obj_data *> *temp;
   for (temp = head; temp; temp = temp->next)
-    if (GET_OBJ_TYPE(temp->data) == ITEM_CONTAINER 
+    if (GET_OBJ_TYPE(temp->data) == ITEM_CONTAINER
         && temp->data->contains
-        && GET_OBJ_VAL(temp->data, 4) 
-        && IS_OBJ_STAT(temp->data, ITEM_CORPSE) 
+        && GET_OBJ_VAL(temp->data, 4)
+        && IS_OBJ_STAT(temp->data, ITEM_CORPSE)
     )
       counter++;
 
@@ -149,7 +149,7 @@ void objList::UpdateObjsIDelete(const struct obj_data *proto, int rnum, int new_
   PERF_PROF_SCOPE(pr_, __func__);
   static nodeStruct<struct obj_data *> *temp;
   static struct obj_data old;
-  
+
   for (temp = head; temp; temp = temp->next)
   {
     if (temp->data->item_number == rnum) {
@@ -170,7 +170,7 @@ void objList::UpdateObjsIDelete(const struct obj_data *proto, int rnum, int new_
         affect_total(temp->data->carried_by);
       else if (temp->data->worn_by)
         affect_total(temp->data->worn_by);
-      
+
       temp->data->item_number = new_rnum;
     }
   }
@@ -186,7 +186,7 @@ void objList::UpdateCounters(void)
   MYSQL_ROW row;
   char *trid = NULL;
   static nodeStruct<struct obj_data *> *temp, *next;
-  
+
   bool trideo_plays = (trideo_ticks++ % TRIDEO_TICK_DELAY == 0);
 
   if (trideo_plays) {
@@ -197,17 +197,17 @@ void objList::UpdateCounters(void)
     trid = str_dup(row[0]);
     mysql_free_result(res);
   }
-  
+
   // Iterate through the list.
   for (temp = head; temp; temp = next) {
     next = temp->next;
-    
+
     // Precondition: The object being examined must exist.
     if (!OBJ) {
       mudlog("SYSERR: UpdateCounters encountered a non-existent object.", NULL, LOG_SYSLOG, TRUE);
       continue;
     }
-    
+
     // Decay evaluate programs.
     if (GET_OBJ_TYPE(OBJ) == ITEM_PROGRAM && GET_OBJ_VAL(OBJ, 0) == SOFT_EVALUATE) {
       if (!GET_OBJ_VAL(OBJ, 5)) {
@@ -221,7 +221,7 @@ void objList::UpdateCounters(void)
       }
       continue;
     }
-    
+
     // Decrement the attempt counter for credsticks.
     if (GET_OBJ_TYPE(OBJ) == ITEM_MONEY && GET_OBJ_ATTEMPT(OBJ) > 0)
       GET_OBJ_ATTEMPT(OBJ)--;
@@ -232,7 +232,7 @@ void objList::UpdateCounters(void)
       act(buf, TRUE, 0, OBJ, 0, TO_ROOM);
       continue;
     }
-    
+
     // Packing / unpacking of workshops.
     if (GET_OBJ_TYPE(OBJ) == ITEM_WORKSHOP && GET_WORKSHOP_UNPACK_TICKS(OBJ)) {
       struct char_data *ch;
@@ -240,7 +240,7 @@ void objList::UpdateCounters(void)
         // It's being carried by a character (or is in a container, etc).
         continue;
       }
-      
+
       for (ch = OBJ->in_veh ? OBJ->in_veh->people : OBJ->in_room->people;
             ch;
            ch = OBJ->in_veh ? ch->next_in_veh : ch->next_in_room) {
@@ -249,16 +249,16 @@ void objList::UpdateCounters(void)
             if (GET_WORKSHOP_IS_SETUP(OBJ)) {
               send_to_char(ch, "You finish packing up %s.\r\n", GET_OBJ_NAME(OBJ));
               act("$n finishes packing up $P.", FALSE, ch, 0, OBJ, TO_ROOM);
-              GET_WORKSHOP_IS_SETUP(OBJ) = 0;
-              
+              GET_SETTABLE_WORKSHOP_IS_SETUP(OBJ) = 0;
+
               // Handle the room's workshop[] array.
               if (OBJ->in_room)
                 remove_workshop_from_room(OBJ);
             } else {
               send_to_char(ch, "You finish setting up %s.\r\n", GET_OBJ_NAME(OBJ));
               act("$n finishes setting up $P.", FALSE, ch, 0, OBJ, TO_ROOM);
-              GET_WORKSHOP_IS_SETUP(OBJ) = 1;
-              
+              GET_SETTABLE_WORKSHOP_IS_SETUP(OBJ) = 1;
+
               // Handle the room's workshop[] array.
               if (OBJ->in_room)
                 add_workshop_to_room(OBJ);
@@ -268,7 +268,7 @@ void objList::UpdateCounters(void)
           break;
         }
       }
-      
+
       // If there were no characters in the room working on it, clear its pack/unpack counter.
       if (!ch) {
         // Only send a message if someone is there.
@@ -281,12 +281,12 @@ void objList::UpdateCounters(void)
         GET_WORKSHOP_UNPACK_TICKS(OBJ) = 0;
       }
     }
-    
+
     // Cook chips.
-    if (GET_OBJ_TYPE(OBJ) == ITEM_DECK_ACCESSORY 
-        && GET_OBJ_VAL(OBJ, 0) == TYPE_COOKER 
-        && OBJ->contains 
-        && GET_DECK_ACCESSORY_COOKER_TIME_REMAINING(OBJ) > 0) 
+    if (GET_OBJ_TYPE(OBJ) == ITEM_DECK_ACCESSORY
+        && GET_OBJ_VAL(OBJ, 0) == TYPE_COOKER
+        && OBJ->contains
+        && GET_DECK_ACCESSORY_COOKER_TIME_REMAINING(OBJ) > 0)
     {
       if (--GET_DECK_ACCESSORY_COOKER_TIME_REMAINING(OBJ) < 1) {
         struct obj_data *chip = OBJ->contains;
@@ -299,7 +299,7 @@ void objList::UpdateCounters(void)
       }
       continue;
     }
-    
+
     // Decay mail.
     if (GET_OBJ_VNUM(OBJ) == OBJ_PIECE_OF_MAIL) {
       if (GET_OBJ_TIMER(OBJ) != -1 && GET_OBJ_TIMER(OBJ) > MAIL_EXPIRATION_TICKS) {
@@ -321,7 +321,7 @@ void objList::UpdateCounters(void)
 
     // Time out objects that end up on the floor a lot (magazines, cash, etc).
     if (OBJ->in_room && !OBJ->in_obj && !OBJ->carried_by && !OBJ->obj_flags.quest_id &&
-       ((GET_OBJ_TYPE(OBJ) == ITEM_GUN_MAGAZINE && !GET_MAGAZINE_AMMO_COUNT(OBJ)) || (GET_OBJ_TYPE(OBJ) == ITEM_MONEY && !GET_OBJ_VAL(OBJ, 0))) 
+       ((GET_OBJ_TYPE(OBJ) == ITEM_GUN_MAGAZINE && !GET_MAGAZINE_AMMO_COUNT(OBJ)) || (GET_OBJ_TYPE(OBJ) == ITEM_MONEY && !GET_OBJ_VAL(OBJ, 0)))
         && ++GET_OBJ_TIMER(OBJ) == 3) {
         act("$p is lost on the ground.", TRUE, temp->data->in_room->people,
                 OBJ, 0, TO_CHAR);
@@ -329,7 +329,7 @@ void objList::UpdateCounters(void)
       extract_obj(OBJ);
       continue;
     }
-    
+
     /* anti-twink measure...no decay until there's no eq in it */
     if ( IS_OBJ_STAT(OBJ, ITEM_CORPSE) && GET_OBJ_VAL(OBJ, 4) && OBJ->contains != NULL )
       continue;
@@ -346,10 +346,10 @@ void objList::UpdateCounters(void)
         else if (temp->data->in_room && temp->data->in_room->people) {
           act("$p is taken away by the coroner.", TRUE, temp->data->in_room->people, temp->data, 0, TO_ROOM);
           act("$p is taken away by the coroner.", TRUE, temp->data->in_room->people, temp->data, 0, TO_CHAR);
-          
+
           if (ROOM_FLAGGED(temp->data->in_room, ROOM_CORPSE_SAVE_HACK)) {
             bool should_clear_flag = TRUE;
-            
+
             // Iterate through items in room, making sure there are no other corpses.
             for (struct obj_data *tmp_obj = temp->data->in_room->contents; tmp_obj; tmp_obj = tmp_obj->next_content) {
               if (tmp_obj != temp->data && IS_OBJ_STAT(tmp_obj, ITEM_CORPSE) && GET_OBJ_BARRIER(tmp_obj) == PC_CORPSE_BARRIER) {
@@ -357,21 +357,21 @@ void objList::UpdateCounters(void)
                 break;
               }
             }
-            
+
             if (should_clear_flag) {
               snprintf(buf, sizeof(buf), "Cleanup: Auto-removing storage flag from %s (%ld) due to no more player corpses being in it.",
                        GET_ROOM_NAME(temp->data->in_room),
                        GET_ROOM_VNUM(temp->data->in_room));
               mudlog(buf, NULL, LOG_SYSLOG, TRUE);
-              
+
               // No more? Remove storage flag and save.
               temp->data->in_room->room_flags.RemoveBit(ROOM_CORPSE_SAVE_HACK);
               temp->data->in_room->room_flags.RemoveBit(ROOM_STORAGE);
-              
+
               // Save the change.
               for (int counter = 0; counter <= top_of_zone_table; counter++) {
-                if ((GET_ROOM_VNUM(temp->data->in_room) >= (zone_table[counter].number * 100)) 
-                    && (GET_ROOM_VNUM(temp->data->in_room) <= (zone_table[counter].top))) 
+                if ((GET_ROOM_VNUM(temp->data->in_room) >= (zone_table[counter].number * 100))
+                    && (GET_ROOM_VNUM(temp->data->in_room) <= (zone_table[counter].top)))
                 {
                   write_world_to_disk(zone_table[counter].number);
                   return;

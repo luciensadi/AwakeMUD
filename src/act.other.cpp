@@ -3576,7 +3576,7 @@ ACMD(do_unpack)
       continue;
 
     if (GET_WORKSHOP_IS_SETUP(shop) || GET_WORKSHOP_UNPACK_TICKS(shop)) {
-      send_to_char("There is already a workshop set up here.\r\n", ch);
+      send_to_char(ch, "There is already a workshop set up here; you'll have to pack up %s first.\r\n", decapitalize_a_an(GET_OBJ_NAME(shop)));
       return;
     }
   }

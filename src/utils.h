@@ -810,11 +810,12 @@ bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struc
 // ITEM_LIGHT convenience defines
 
 // ITEM_WORKSHOP convenience defines
-#define GET_WORKSHOP_TYPE(workshop)            (GET_OBJ_VAL((workshop), 0))
-#define GET_WORKSHOP_GRADE(workshop)           (GET_OBJ_VAL((workshop), 1))
-#define GET_WORKSHOP_IS_SETUP(workshop)        (GET_OBJ_VAL((workshop), 2))
-#define GET_WORKSHOP_AMMOKIT_TYPE(workshop)    (GET_OBJ_VAL((workshop), 2))
-#define GET_WORKSHOP_UNPACK_TICKS(workshop)    (GET_OBJ_VAL((workshop), 3))
+#define GET_WORKSHOP_TYPE(workshop)              (GET_OBJ_VAL((workshop), 0))
+#define GET_WORKSHOP_GRADE(workshop)             (GET_OBJ_VAL((workshop), 1))
+#define GET_WORKSHOP_IS_SETUP(workshop)          (GET_WORKSHOP_GRADE(workshop) == TYPE_WORKSHOP && GET_OBJ_VAL((workshop), 2))
+#define GET_SETTABLE_WORKSHOP_IS_SETUP(workshop) (GET_OBJ_VAL((workshop), 2))
+#define GET_WORKSHOP_AMMOKIT_TYPE(workshop)      (GET_OBJ_VAL((workshop), 2))
+#define GET_WORKSHOP_UNPACK_TICKS(workshop)      (GET_OBJ_VAL((workshop), 3))
 
 // ITEM_CAMERA convenience defines
 
