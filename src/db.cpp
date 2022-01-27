@@ -5136,7 +5136,6 @@ void load_consist(void)
             GET_OBJ_ATTEMPT(obj) = data.GetInt(buf, 0);
             snprintf(buf, sizeof(buf), "%s/Cost", sect_name);
             GET_OBJ_COST(obj) = data.GetInt(buf, GET_OBJ_COST(obj));
-            snprintf(buf, sizeof(buf), "%s/Inside", sect_name);
 
             // Handle weapon attachments.
             if (GET_OBJ_TYPE(obj) == ITEM_WEAPON)
@@ -5177,6 +5176,7 @@ void load_consist(void)
             if (GET_OBJ_TYPE(obj) != ITEM_CYBERDECK)
               auto_repair_obj(obj, buf3);
 
+            snprintf(buf, sizeof(buf), "%s/Inside", sect_name);
             inside = data.GetInt(buf, 0);
             if (house_version == VERSION_HOUSE_FILE) {
               // Since we're now saved the obj linked lists  in reverse order, in order to fix the stupid reordering on
