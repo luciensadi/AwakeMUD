@@ -2132,14 +2132,14 @@ int special(struct char_data * ch, int cmd, char *arg)
       for (struct char_data *k = ch->in_room->people; k; k = k->next_in_room) {
         if (GET_MOB_SPEC(k) != NULL) {
           bool spec_returned_true = GET_MOB_SPEC(k) (ch, k, cmd, arg);
-          if (IS_SENATOR(ch) && PRF_FLAGGED(ch, PRF_ROLLS))
+          if (IS_SENATOR(ch) && PRF_FLAGGED(ch, PRF_ROLLS) && !PRF_FLAGGED(ch, PRF_NOHASSLE))
             send_to_char(ch, "^LEvaluation of spec for %s returned %s.^n\r\n", GET_CHAR_NAME(k), spec_returned_true ? "TRUE" : "FALSE");
           if (spec_returned_true)
             return 1;
         }
         if (mob_index[GET_MOB_RNUM(k)].sfunc != NULL) {
           bool spec_returned_true = GET_MOB_SPEC(k) (ch, k, cmd, arg);
-          if (IS_SENATOR(ch) && PRF_FLAGGED(ch, PRF_ROLLS))
+          if (IS_SENATOR(ch) && PRF_FLAGGED(ch, PRF_ROLLS) && !PRF_FLAGGED(ch, PRF_NOHASSLE))
             send_to_char(ch, "^LEvaluation of secondary spec for %s returned %s.^n\r\n", GET_CHAR_NAME(k), spec_returned_true ? "TRUE" : "FALSE");
           if ((mob_index[GET_MOB_RNUM(k)].sfunc) (ch, k, cmd, arg))
             return 1;
