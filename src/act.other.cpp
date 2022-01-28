@@ -3696,15 +3696,18 @@ ACMD(do_packup)
 
   if (!shop) {
     FOR_ITEMS_AROUND_CH(ch, shop) {
-      if (GET_OBJ_TYPE(shop) == ITEM_WORKSHOP && GET_OBJ_VAL(shop, 1) > 1) {
-        if (GET_OBJ_VAL(shop, 2))
-          break;
-      }
+      if (GET_OBJ_TYPE(shop) == ITEM_WORKSHOP && GET_WORKSHOP_GRADE(shop) == TYPE_WORKSHOP && GET_WORKSHOP_IS_SETUP(shop))
+        break;
     }
   }
 
   if (!shop) {
     send_to_char(ch, "There is no workshop here to pack up.\r\n");
+    return;
+  }
+
+  if (GET_OBJ_TYPE(shop) != ITEM_WORKSHOP || GET_WORKSHOP_GRADE(shop) != TYPE_WORKSHOP) {
+    send_to_char(ch, "%s isn't a workshop.\r\n", capitalize(GET_OBJ_NAME(shop)));
     return;
   }
 

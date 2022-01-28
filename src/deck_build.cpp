@@ -623,9 +623,9 @@ ACMD(do_build) {
               send_to_char(ch, "You continue working on %s.\r\n", GET_OBJ_NAME(obj));
               act("$n continues to draw the hermetic circle.", FALSE, ch, 0, 0, TO_ROOM);
           } else
-              send_to_char("You can't build that!\r\n", ch);
+              send_to_char(ch, "There's nothing about %s that strikes you as buildable.\r\n", GET_OBJ_NAME(obj));
       } else
-          send_to_char("You can't build that!\r\n", ch);
+          send_to_char(ch, "There's nothing about %s that strikes you as buildable.\r\n", GET_OBJ_NAME(obj));
       return;
 
     } else if (GET_OBJ_TYPE(obj) == ITEM_GUN_AMMO) {
@@ -637,7 +637,7 @@ ACMD(do_build) {
     }
 
     if(GET_OBJ_TYPE(obj) != ITEM_PART) {
-      send_to_char(ch, "You can't build a part out of %s.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
+      send_to_char(ch, "You can't build a cyberdeck part out of %s.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
       return;
     }
 
