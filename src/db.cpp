@@ -3327,6 +3327,14 @@ void reset_zone(int zone, int reboot)
     case 'M':                 /* read a mobile */
       if ((mob_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1) ||
           (ZCMD.arg2 == 0 && reboot)) {
+        if (mob_index[ZCMD.arg1].vnum >= 20 && mob_index[ZCMD.arg1].vnum <= 22) {
+          // Refuse to zoneload projections and matrix personas.
+          char errbuf[1000];
+          snprintf(errbuf, sizeof(errbuf), "Refusing to zoneload mob #%ld for zone %d-- illegal loading vnum.\r\n", mob_index[ZCMD.arg1].vnum, zone_table[zone].number);
+          mudlog(errbuf, NULL, LOG_SYSLOG, TRUE);
+          continue;
+        }
+
         mob = read_mobile(ZCMD.arg1, REAL);
         char_to_room(mob, &world[ZCMD.arg3]);
         act("$n has arrived.", TRUE, mob, 0, 0, TO_ROOM);
@@ -4376,7 +4384,7 @@ void reset_char(struct char_data * ch)
 /* clear ALL the working variables of a char; do NOT free any space alloc'ed */
 void clear_char(struct char_data * ch)
 {
-  memset((char *) ch, 0, sizeof(struct char_data));
+  memset(ch, 0, sizeof(struct char_data));
 
   ch->in_veh = NULL;
   ch->in_room = NULL;

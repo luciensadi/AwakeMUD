@@ -300,7 +300,7 @@ struct melee_combat_data {
         is_physical = FALSE;
       }
 
-      // Add +2 to melee power for having cyberarms, per M&M p32.
+      // Add +2 to unarmed attack power for having cyberarms, per M&M p32.
       if (cyber->cyberarms) {
         power += 2;
       }
@@ -1174,7 +1174,7 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
           (att->ranged_combat_mode ? att->ranged->is_physical : att->melee->is_physical) ? 'P' : 'M');
   SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
 
-  bool defender_died;
+  bool defender_died, defender_was_npc = IS_NPC(def->ch);
   if (att->ranged_combat_mode) {
     combat_message(att->ch, def->ch, att->weapon, MAX(0, damage_total), att->ranged->burst_count);
     defender_died = damage_without_message(att->ch, def->ch, damage_total, att->ranged->dam_type, att->ranged->is_physical);
@@ -1224,7 +1224,7 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
 
   if (defender_died) {
     // Fixes edge case where attacking quest NPC kills its hunter with a heavy weapon, is extracted, then tries to check recoil.
-    if (!IS_NPC(def->ch))
+    if (!defender_was_npc)
       return;
     // Clear out the defending character's pointer since it now points to a nulled character struct.
     else
@@ -1252,7 +1252,7 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     //prior to handling the damage and we don't alter alert state at all because if defender is a quest target
     //they will be extracted. If the attacker actually dies and it's a normal mob, they won't be surprised anymore
     //and alertness will trickle down on its own with update cycles.
-    if (IS_NPC(def->ch) && AFF_FLAGGED(def->ch, AFF_SURPRISE))
+    if (!defender_died && IS_NPC(def->ch) && AFF_FLAGGED(def->ch, AFF_SURPRISE))
       AFF_FLAGS(def->ch).RemoveBit(AFF_SURPRISE);
 
     // If the attacker dies from recoil, bail out.
