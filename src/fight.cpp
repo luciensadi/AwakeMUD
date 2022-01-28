@@ -4867,6 +4867,32 @@ void perform_violence(void)
         if (!CAN_SEE(FIGHTING(ch), ch))
           target -= 4;
 
+        // House rule: Satyrs get -1 TN in their favor for closing the distance due to their speed. Dwarves and related metatypes get +1 against them.
+        switch (GET_RACE(ch)) {
+          case RACE_SATYR:
+            target--;
+            break;
+          case RACE_DWARF:
+          case RACE_MENEHUNE:
+          case RACE_KOBOROKURU:
+          case RACE_GNOME:
+            target++;
+            break;
+        }
+
+        // Same house rule as above, but applied on your opponent.
+        switch (GET_RACE(FIGHTING(ch))) {
+          case RACE_SATYR:
+            target++;
+            break;
+          case RACE_DWARF:
+          case RACE_MENEHUNE:
+          case RACE_KOBOROKURU:
+          case RACE_GNOME:
+            target--;
+            break;
+        }
+
         // Armor penalties.
         if (GET_TOTALBAL(ch) > GET_QUI(ch))
           quickness -= GET_TOTALBAL(ch) - GET_QUI(ch);
@@ -4876,15 +4902,14 @@ void perform_violence(void)
         // Distance Strike (only works unarmed)
         if (GET_TRADITION(ch) == TRAD_ADEPT
             && GET_POWER(ch, ADEPT_DISTANCE_STRIKE)
-            && !(GET_EQ(ch, WEAR_WIELD)
-                 || GET_EQ(ch, WEAR_HOLD)))
+            && !(GET_EQ(ch, WEAR_WIELD) || GET_EQ(ch, WEAR_HOLD)))
           target -= (int)GET_REAL_MAG(ch) / 150;
 
         // Hydraulic jack and foot anchor.
         for (struct obj_data *cyber = ch->cyberware; cyber; cyber = cyber->next_content) {
-          if (GET_OBJ_VAL(cyber, 0) == CYB_HYDRAULICJACK)
-            quickness += GET_OBJ_VAL(cyber, 1);
-          else if (GET_OBJ_VAL(cyber, 0) == CYB_FOOTANCHOR && !GET_OBJ_VAL(cyber, 9))
+          if (GET_CYBERWARE_TYPE(cyber) == CYB_HYDRAULICJACK)
+            quickness += GET_CYBERWARE_RATING(cyber);
+          else if (GET_CYBERWARE_TYPE(cyber) == CYB_FOOTANCHOR && !GET_CYBERWARE_IS_DISABLED(cyber))
             footanchor = TRUE;
         }
 
