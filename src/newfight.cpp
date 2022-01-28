@@ -56,13 +56,14 @@ struct cyberware_data {
   int improved_handrazors;
   int handspurs;
   int footanchors;
+  bool cyberarms;
   int bone_lacing_power;
   int num_cyberweapons;
   bool cyberarm_gyromount;
 
   cyberware_data(struct char_data *ch) :
     climbingclaws(0), fins(0), handblades(0), handrazors(0), improved_handrazors(0),
-    handspurs(0), footanchors(0), bone_lacing_power(0), num_cyberweapons(0),
+    handspurs(0), footanchors(0), cyberarms(FALSE), bone_lacing_power(0), num_cyberweapons(0),
     cyberarm_gyromount(FALSE)
   {
     assert(ch != NULL);
@@ -83,6 +84,7 @@ struct cyberware_data {
             break;
         }
       } else if (GET_CYBERWARE_TYPE(obj) == CYB_ARMS) {
+        cyberarms = TRUE;
         if (IS_SET(GET_CYBERWARE_FLAGS(obj), ARMS_MOD_GYROMOUNT)) {
           cyberarm_gyromount = TRUE;
         }
@@ -296,6 +298,11 @@ struct melee_combat_data {
         power += cyber->bone_lacing_power;
         damage_level = MODERATE;
         is_physical = FALSE;
+      }
+
+      // Add +2 to melee power for having cyberarms, per M&M p32.
+      if (cyber->cyberarms) {
+        power += 2;
       }
 
       // Check for Adept powers.
