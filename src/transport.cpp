@@ -653,7 +653,7 @@ ACMD(do_hail)
         dest_data_list = seattle_taxi_destinations;
       } else {
         /* Cab doesn't service the area */
-        send_to_char("There don't seem to be any cabs in the area.\r\n",ch);
+        send_to_char("There don't seem to be any cabs active in the area.\r\n",ch);
         snprintf(buf, sizeof(buf), "Cab expansion opportunity: Called in '%s' (%ld) of zone '%s' (%d), which is not supported in cab switch.",
                  GET_ROOM_NAME(ch->in_room), GET_ROOM_VNUM(ch->in_room),
                  zone_table[ch->in_room->zone].name, zone_table[ch->in_room->zone].number);
