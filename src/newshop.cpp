@@ -1319,8 +1319,8 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
 
 
   if (shop_table[shop_nr].flags.IsSet(SHOP_DOCTOR)) {
-    strlcpy(buf, " **   Availability     Item                                                           Rating  Ess/Index     Price\r\n"
-                 "-----------------------------------------------------------------------------------------------------------------\r\n", sizeof(buf));
+    strlcpy(buf, " **   Avail    Item                                                      Rating  Ess/Index     Price\r\n"
+                 "----------------------------------------------------------------------------------------------------\r\n", sizeof(buf));
 
     for (struct shop_sell_data *sell = shop_table[shop_nr].selling; sell; sell = sell->next, i++) {
       obj = read_object(sell->vnum, VIRTUAL);
@@ -1330,19 +1330,21 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
       }
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %2d)  ", i);
       if (sell->type == SELL_ALWAYS)
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Yes              ");
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Yes      ");
       else if (sell->type == SELL_AVAIL) {
         int arbitrary_difficulty = GET_OBJ_AVAILTN(obj);
         if (arbitrary_difficulty <= 2) {
-          strlcat(buf, "Sp. Ord (triv)   ", sizeof(buf));
+          strlcat(buf, "Trivial  ", sizeof(buf));
         } else if (arbitrary_difficulty <= 4) {
-          strlcat(buf, "Sp. Ord (easy)   ", sizeof(buf));
+          strlcat(buf, "Easy     ", sizeof(buf));
         } else if (arbitrary_difficulty <= 7) {
-          strlcat(buf, "Sp. Ord (med)    ", sizeof(buf));
+          strlcat(buf, "Medium   ", sizeof(buf));
         } else if (arbitrary_difficulty <= 10) {
-          strlcat(buf, "Sp. Ord (hard)   ", sizeof(buf));
+          strlcat(buf, "Hard     ", sizeof(buf));
+        } else if (arbitrary_difficulty <= 14) {
+          strlcat(buf, "Harder   ", sizeof(buf));
         } else {
-          strlcat(buf, "Sp. Ord (fixer)  ", sizeof(buf));
+          strlcat(buf, "Fixer    ", sizeof(buf));
         }
         /*
         if (GET_OBJ_AVAILDAY(obj) < 1)
@@ -1352,9 +1354,9 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
         */
       } else {
         if (sell->stock <= 0)
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "(Out Of Stock) ");
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "SoldOut  ");
         else
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-3d            ", sell->stock);
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-3d     ", sell->stock);
       }
       if (GET_OBJ_VAL(obj, 1) > 0)
         snprintf(buf2, sizeof(buf2), "%d", GET_OBJ_VAL(obj, 1));
@@ -1363,7 +1365,7 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
       if (IS_OBJ_STAT(obj, ITEM_NERPS)) {
         //Format string: "^Y(N)^n %-58s^n %-6s%2s   %0.2f%c  %9d\r\n"
         //We apply padding for color codes here.
-        snprintf(paddingnumberstr, sizeof(paddingnumberstr), "%d", 58 + count_color_codes_in_string(GET_OBJ_NAME(obj)));
+        snprintf(paddingnumberstr, sizeof(paddingnumberstr), "%d", 53 + count_color_codes_in_string(GET_OBJ_NAME(obj)));
         snprintf(formatstr, sizeof(formatstr), "%s%s%s", "^Y(N)^n %-", paddingnumberstr, "s^n %-6s%2s   %0.2f%c  %9d\r\n");
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), formatstr, GET_OBJ_NAME(obj),
                 GET_OBJ_TYPE(obj) == ITEM_CYBERWARE ? "Cyber" : "Bio", buf2, ((float)GET_OBJ_VAL(obj, 4) / 100),
@@ -1371,7 +1373,7 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
       } else {
         //Format string: "%-62s^n %-6s%2s   %0.2f%c  %9d\r\n"
         //We apply padding for color codes here.
-        snprintf(paddingnumberstr, sizeof(paddingnumberstr), "%d", 62 + count_color_codes_in_string(GET_OBJ_NAME(obj)));
+        snprintf(paddingnumberstr, sizeof(paddingnumberstr), "%d", 57 + count_color_codes_in_string(GET_OBJ_NAME(obj)));
         snprintf(formatstr, sizeof(formatstr), "%s%s%s", "%-", paddingnumberstr, "s^n %-6s%2s   %0.2f%c  %9d\r\n");
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), formatstr, GET_OBJ_NAME(obj),
                 GET_OBJ_TYPE(obj) == ITEM_CYBERWARE ? "Cyber" : "Bio", buf2, ((float)GET_OBJ_VAL(obj, 4) / 100),
@@ -1382,8 +1384,8 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
     }
   } else
   {
-    strcpy(buf, " **   Availability     Item                                              Price\r\n"
-                "--------------------------------------------------------------------------------\r\n");
+    strcpy(buf, " **   Avail    Item                                                                          Price\r\n"
+                "----------------------------------------------------------------------------------------------------\r\n");
     for (struct shop_sell_data *sell = shop_table[shop_nr].selling; sell; sell = sell->next, i++) {
       obj = read_object(sell->vnum, VIRTUAL);
       if (!can_sell_object(obj, keeper, shop_nr)) {
@@ -1391,41 +1393,41 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
         continue;
       }
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %2d)  ", i);
-      if (sell->type == SELL_ALWAYS || (sell->type == SELL_AVAIL && GET_OBJ_AVAILDAY(obj) == 0))
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Yes            ");
+      if (sell->type == SELL_ALWAYS)
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Yes      ");
       else if (sell->type == SELL_AVAIL) {
         int arbitrary_difficulty = GET_OBJ_AVAILTN(obj);
-        if (arbitrary_difficulty < 3) {
-          strlcat(buf, "Sp. Ord (triv)   ", sizeof(buf));
-        } else if (arbitrary_difficulty < 5) {
-          strlcat(buf, "Sp. Ord (easy)   ", sizeof(buf));
-        } else if (arbitrary_difficulty < 8) {
-          strlcat(buf, "Sp. Ord (med)    ", sizeof(buf));
-        } else if (arbitrary_difficulty < 10) {
-          strlcat(buf, "Sp. Ord (hard)   ", sizeof(buf));
-        } else if (arbitrary_difficulty < 14) {
-          strlcat(buf, "Sp. Ord (hard+)  ", sizeof(buf));
+        if (arbitrary_difficulty <= 2) {
+          strlcat(buf, "Trivial  ", sizeof(buf));
+        } else if (arbitrary_difficulty <= 4) {
+          strlcat(buf, "Easy     ", sizeof(buf));
+        } else if (arbitrary_difficulty <= 7) {
+          strlcat(buf, "Medium   ", sizeof(buf));
+        } else if (arbitrary_difficulty <= 10) {
+          strlcat(buf, "Hard     ", sizeof(buf));
+        } else if (arbitrary_difficulty <= 14) {
+          strlcat(buf, "Harder   ", sizeof(buf));
         } else {
-          strlcat(buf, "Sp. Ord (fixer)  ", sizeof(buf));
+          strlcat(buf, "Fixer    ", sizeof(buf));
         }
       } else {
         if (sell->stock <= 0)
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "(Out Of Stock) ");
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "SoldOut  ");
         else
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-3d            ", sell->stock);
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-3d     ", sell->stock);
       }
 
       if (IS_OBJ_STAT(obj, ITEM_NERPS)) {
         //Format string for reference: "^Y(N)^n %-44s^n %6d\r\n"
         //We apply padding for color codes here.
-        snprintf(paddingnumberstr, sizeof(paddingnumberstr), "%d", 46 + count_color_codes_in_string(GET_OBJ_NAME(obj)));
-        snprintf(formatstr, sizeof(formatstr), "%s%s%s", "^Y(N)^n %-", paddingnumberstr, "s^n %6d\r\n");
+        snprintf(paddingnumberstr, sizeof(paddingnumberstr), "%d", 67 + count_color_codes_in_string(GET_OBJ_NAME(obj)));
+        snprintf(formatstr, sizeof(formatstr), "%s%s%s", "^Y(N)^n %-", paddingnumberstr, "s^n %7d\r\n");
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), formatstr, GET_OBJ_NAME(obj), buy_price(obj, shop_nr));
       } else {
         //Format string for reference: "%-48s^n %6d\r\n"
         //We apply padding for color codes here.
-        snprintf(paddingnumberstr, sizeof(paddingnumberstr), "%d", 50 + count_color_codes_in_string(GET_OBJ_NAME(obj)));
-        snprintf(formatstr, sizeof(formatstr), "%s%s%s", "%-", paddingnumberstr, "s^n %6d\r\n");
+        snprintf(paddingnumberstr, sizeof(paddingnumberstr), "%d", 75 + count_color_codes_in_string(GET_OBJ_NAME(obj)));
+        snprintf(formatstr, sizeof(formatstr), "%s%s%s", "%-", paddingnumberstr, "s^n %7d\r\n");
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), formatstr, GET_OBJ_NAME(obj),
                   buy_price(obj, shop_nr));
       }
