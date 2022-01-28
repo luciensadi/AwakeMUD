@@ -1920,8 +1920,8 @@ bool does_player_exist(long id)
 
 vnum_t get_player_id(char *name)
 {
-  char buf[MAX_STRING_LENGTH];
-  snprintf(buf, sizeof(buf), "SELECT idnum FROM pfiles WHERE name=\"%s\";", name);
+  char buf[MAX_STRING_LENGTH], sanitized_buf[strlen(name) * 2 + 2];
+  snprintf(buf, sizeof(buf), "SELECT idnum FROM pfiles WHERE name=\"%s\";", prepare_quotes(sanitized_buf, name, sizeof(sanitized_buf)));
   mysql_wrapper(mysql, buf);
   MYSQL_RES *res = mysql_use_result(mysql);
   MYSQL_ROW row = mysql_fetch_row(res);
