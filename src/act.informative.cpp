@@ -5456,7 +5456,10 @@ ACMD(do_status)
       } else if (SPELL_HAS_SUBTYPE(sust->spell)) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (%s)", attributes[sust->subtype]);
       }
-      send_to_char(ch, "%s\r\n", buf);
+      if (IS_SENATOR(ch) && sust->other && sust->other != targ)
+        send_to_char(ch, "%s (cast by ^c%s^n)\r\n", buf, GET_CHAR_NAME(sust->other));
+      else
+        send_to_char(ch, "%s\r\n", buf);
       printed = TRUE;
     }
   if (GET_SUSTAINED_NUM(targ)) {

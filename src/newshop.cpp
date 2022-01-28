@@ -1329,8 +1329,8 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
         continue;
       }
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %2d)  ", i);
-      if (sell->type == SELL_ALWAYS || (sell->type == SELL_AVAIL && GET_OBJ_AVAILDAY(obj) == 0))
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Yes            ");
+      if (sell->type == SELL_ALWAYS)
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Yes              ");
       else if (sell->type == SELL_AVAIL) {
         int arbitrary_difficulty = GET_OBJ_AVAILTN(obj);
         if (arbitrary_difficulty <= 2) {
