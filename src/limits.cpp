@@ -1196,7 +1196,7 @@ void save_vehicles(bool fromCopyover)
         else if (GET_OBJ_TYPE(obj) != ITEM_WORN)
           for (int x = 0; x < NUM_VALUES; x++)
             obj_string_buf << "\t\tValue " << x << ":\t" << GET_OBJ_VAL(obj, x) << "\n";
-            
+
         obj_string_buf << "\t\tCondition:\t" << (int) GET_OBJ_CONDITION(obj) << "\n";
         obj_string_buf << "\t\tCost:\t" << GET_OBJ_COST(obj) << "\n";
         obj_string_buf << "\t\tTimer:\t" << GET_OBJ_TIMER(obj) << "\n";
@@ -1207,7 +1207,7 @@ void save_vehicles(bool fromCopyover)
           obj_string_buf << "\t\tName:\t" << obj->restring << "\n";
         if (obj->photo)
           obj_string_buf << "\t\tPhoto:$\n" << cleanup(buf2, obj->photo) << "~\n";
-          
+
         obj_strings.push_back(obj_string_buf.str());
         obj_string_buf.str(std::string());
       }
@@ -1225,7 +1225,7 @@ void save_vehicles(bool fromCopyover)
       if (obj)
         obj = obj->next_content;
     }
-    
+
     if (!obj_strings.empty()) {
       int i = 0;
       for(vector<std::string>::reverse_iterator rit = obj_strings.rbegin(); rit != obj_strings.rend(); rit++ ) {
@@ -1554,14 +1554,17 @@ void misc_update(void)
         }
         GET_PLAYER_MEMORY(ch) = NULL;
         extract_char(ch);
+        continue;
       }
       else if (!ch->desc && GET_MOB_VNUM(ch) >= 50 && GET_MOB_VNUM(ch) < 70) {
         extract_char(ch);
+        continue;
       }
       else if (IS_SPIRIT(ch)) {
         if (!check_spirit_sector(ch->in_room, GET_SPARE1(ch))) {
           act("Being away from its environment, $n suddenly ceases to exist.", TRUE, ch, 0, 0, TO_ROOM);
           end_spirit_existance(ch, FALSE);
+          continue;
         }
       }
     }
