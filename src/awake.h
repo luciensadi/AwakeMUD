@@ -2138,7 +2138,7 @@ enum {
 #define MAX_PWD_LENGTH            30  /* Relic of the past, do not change. Dictates max length of crypt() hashes. */
 #define MAX_TITLE_LENGTH          48  /* Used in char_file_u *DO*NOT*CHANGE* */
 #define MAX_WHOTITLE_LENGTH       10  /* Used in char_file_u *DO*NOT*CHANGE* */
-#define HOST_LENGTH               50
+#define HOST_LENGTH               500
 #define LINE_LENGTH               80  /* Used in char_file_u *DO*NOT*CHANGE* */
 #define EXDSCR_LENGTH             2040/* Used in char_file_u *DO*NOT*CHANGE* */
 #define MAX_AFFECT                32  /* Used in char_file_u *DO*NOT*CHANGE* */

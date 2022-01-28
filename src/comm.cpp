@@ -1673,7 +1673,7 @@ int new_descriptor(int s)
             (int) ((addr & 0x000000FF)));
   } else
   {
-    strncpy(newd->host, from->h_name, HOST_LENGTH);
+    strlcpy(newd->host, from->h_name, HOST_LENGTH);
     *(newd->host + HOST_LENGTH) = '\0';
 
     time_t time_delta = time(0) - gethostbyaddr_timer;
@@ -2034,7 +2034,7 @@ int perform_subst(struct descriptor_data *t, char *orig, char *subst)
   /* now, we construct the new string for output. */
 
   /* first, everything in the original, up to the string to be replaced */
-  strncpy(New, orig, (strpos - orig));
+  strlcpy(New, orig, (strpos - orig));
   New[(strpos - orig)] = '\0';
 
   /* now, the replacement string */
