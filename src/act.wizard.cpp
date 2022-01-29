@@ -2672,7 +2672,7 @@ ACMD(do_restore)
   if (*buf == '*') {
     for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
       restore_character(d->character, FALSE);
-      act("You have been fully healed by $N!", FALSE, d->character, 0, ch, TO_CHAR);
+      act("A wave of healing ripples over all online characters.\r\nYou have been fully healed by $N!", FALSE, d->character, 0, ch, TO_CHAR);
     }
     snprintf(buf2, sizeof(buf2), "%s restored all players.", GET_CHAR_NAME(ch));
     mudlog(buf2, ch, LOG_WIZLOG, TRUE);
