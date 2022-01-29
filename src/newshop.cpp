@@ -841,7 +841,7 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
     return;
   if (!is_ok_char(keeper, ch, shop_nr))
     return;
-  struct obj_data *obj, *cred = get_first_credstick(ch, "credstick");
+  struct obj_data *obj = NULL, *cred = get_first_credstick(ch, "credstick");
   struct shop_sell_data *sell;
   int price, buynum;
   bool cash = FALSE;
@@ -882,6 +882,8 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
       } else {
         snprintf(buf, sizeof(buf), "%s No Credstick, No Sale.", GET_CHAR_NAME(ch));
         do_say(keeper, buf, cmd_say, SCMD_SAYTO);
+        if (obj)
+          extract_obj(obj);
         return;
       }
     }
@@ -901,6 +903,8 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
       } else {
         snprintf(buf, sizeof(buf), "%s No Credstick, No Sale.", GET_CHAR_NAME(ch));
         do_say(keeper, buf, cmd_say, SCMD_SAYTO);
+        if (obj)
+          extract_obj(obj);
         return;
       }
     }
@@ -920,6 +924,8 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
   {
     snprintf(buf, sizeof(buf), "%s What do you want to buy?", GET_CHAR_NAME(ch));
     do_say(keeper, buf, cmd_say, SCMD_SAYTO);
+    if (obj)
+      extract_obj(obj);
     return;
   }
 
@@ -1326,6 +1332,7 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
       obj = read_object(sell->vnum, VIRTUAL);
       if (!can_sell_object(obj, keeper, shop_nr)) {
         i--;
+        extract_obj(obj);
         continue;
       }
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %2d)  ", i);
