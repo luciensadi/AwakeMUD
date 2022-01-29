@@ -3826,9 +3826,14 @@ ACMD(do_bioware)
 
   send_to_char("You have the following bioware:\r\n", ch);
   for (obj = ch->bioware; obj != NULL; obj = obj->next_content) {
-    snprintf(buf, sizeof(buf), "%-40s Rating: %-2d     Bioware Index: %0.2f\r\n",
-            GET_OBJ_NAME(obj),
-            GET_BIOWARE_RATING(obj), ((float)GET_BIOWARE_ESSENCE_COST(obj) / 100));
+    if (GET_BIOWARE_TYPE(obj) == BIO_ADRENALPUMP && GET_BIOWARE_PUMP_ADRENALINE(obj) != 0)
+      snprintf(buf, sizeof(buf), "%-33s (%4d) Rating: %-2d     Bioware Index: %0.2f\r\n",
+              GET_OBJ_NAME(obj), GET_BIOWARE_PUMP_ADRENALINE(obj) *2,
+              GET_BIOWARE_RATING(obj), ((float)GET_BIOWARE_ESSENCE_COST(obj) / 100));
+    else
+      snprintf(buf, sizeof(buf), "%-40s Rating: %-2d     Bioware Index: %0.2f\r\n",
+              GET_OBJ_NAME(obj),
+              GET_BIOWARE_RATING(obj), ((float)GET_BIOWARE_ESSENCE_COST(obj) / 100));
     send_to_char(buf, ch);
   }
 }
