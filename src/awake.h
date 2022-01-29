@@ -1281,8 +1281,8 @@ enum {
 
 /* vehicle load table */
 #define LOAD_NORMAL     0   /* Load normal */
-#define LOAD_HEAVY      1   /* Load within * 1.5 max load  - 1 stress damage/hour | half speed | +2 TN pull test */
-#define LOAD_MAX        2   /* Load above *1.5 max load - 1 stress damage/minute | quarted speed | + 5TN pull test*/
+#define LOAD_HEAVY      1   /* Load within * 1.5 max load  - stress damage pull tests on autonav destination reached and every hour | half speed | +2 TN pull test */
+#define LOAD_MAX        2   /* Load above *1.5 max load -  stress damage pull tests on every room, push and every hour | quarted speed | + 5TN pull test*/
 
 /* cyberware */
 

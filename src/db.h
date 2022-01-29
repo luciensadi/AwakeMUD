@@ -23,7 +23,7 @@
  */
  
 #define VERSION_HOUSE_FILE    VERSION_HOUSE_FILEV1
-#define VERSION_VEH_FILE           VERSION_VEH_FILEV1
+#define VERSION_VEH_FILE      VERSION_VEH_FILEV1
 
 // Saves the objects in reverse with the container last. Then reads objects in turn, saves
 // anything with a higher nesting level than 0 in a vector, then once a container is found
@@ -36,10 +36,10 @@
 // Saves the objects in reverse with the container last. Then reads objects in turn, saves
 // anything with a higher nesting level than 0 in a vector, then once a container is found
 // places all objects with nesting level +1 into it.
-#define VERSION_VEH_FILEV1    1
+#define VERSION_VEH_FILEV1      1
 // Original logic, saves containers last and reads them first, then places subsequent objects
 // with nesting level +1 into them. No version number written in file so this defaults to 0.
-#define VERSION_VEH_FILEV0    0
+#define VERSION_VEH_FILEV0      0
 
 /* names of various files and directories */
 #define INDEX_FILE      "index"         /* index of world files         */
