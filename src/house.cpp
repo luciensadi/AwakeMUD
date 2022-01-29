@@ -333,7 +333,7 @@ void validate_in_obj_pointers(struct obj_data *obj, struct obj_data *in_obj) {
 
 #define APPEND_IF_CHANGED(sectname, obj_val, proto_val) { \
   if (obj_val != proto_val)                                        \
-    obj_string_buf << (sectname) << (obj_val) << "\n";                            \
+    obj_string_buf << (sectname) << ((int) obj_val) << "\n";                            \
 }
 #define FILEBUF_SIZE 8192
 
@@ -411,7 +411,9 @@ void House_save(struct house_control_rec *house, const char *file_name, long rnu
       APPEND_IF_CHANGED("\t\tTimer:\t", GET_OBJ_TIMER(obj), GET_OBJ_TIMER(prototype));
       APPEND_IF_CHANGED("\t\tAttempt:\t", GET_OBJ_ATTEMPT(obj), 0);
       obj_string_buf << "\t\tCost:\t"<< GET_OBJ_COST(obj) << "\n";
-      APPEND_IF_CHANGED("\t\tExtraFlags:\t", GET_OBJ_EXTRA(obj).ToString(), GET_OBJ_EXTRA(prototype).ToString());
+
+      if (GET_OBJ_EXTRA(obj).ToString() != GET_OBJ_EXTRA(prototype).ToString())
+        obj_string_buf << "\t\tExtraFlags:\t"<< GET_OBJ_EXTRA(obj).ToString() << "\n";
       if (obj->restring)
         obj_string_buf << "\t\tName:\t" << obj->restring << "\n";
       if (obj->photo)

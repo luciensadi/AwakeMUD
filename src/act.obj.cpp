@@ -626,19 +626,31 @@ bool can_take_obj(struct char_data * ch, struct obj_data * obj)
   {
     act("$p: you can't carry that many items.", FALSE, ch, obj, 0, TO_CHAR);
     return 0;
-  } else if ((IS_CARRYING_W(ch) + GET_OBJ_WEIGHT(obj)) >
-             CAN_CARRY_W(ch))
-  {
+  }
+
+  if ((IS_CARRYING_W(ch) + GET_OBJ_WEIGHT(obj)) > CAN_CARRY_W(ch)) {
     act("$p: you can't carry that much weight.", FALSE, ch, obj, 0, TO_CHAR);
     return 0;
-  } else if (!(CAN_WEAR(obj, ITEM_WEAR_TAKE)) && !ch->in_veh)
-  {
-    act("$p: you can't take that!", FALSE, ch, obj, 0, TO_CHAR);
-    return 0;
-  } else if (obj->obj_flags.quest_id && obj->obj_flags.quest_id != GET_IDNUM(ch)) {
-    act("$p is someone else's quest item.", FALSE, ch, obj, 0, TO_CHAR);
-    return 0;
   }
+
+  if (!(CAN_WEAR(obj, ITEM_WEAR_TAKE)) && !ch->in_veh) {
+    if (access_level(ch, LVL_PRESIDENT)) {
+      act("You bypass the !TAKE flag on $p.", FALSE, ch, obj, 0, TO_CHAR);
+    } else {
+      act("$p: you can't take that!", FALSE, ch, obj, 0, TO_CHAR);
+      return 0;
+    }
+  }
+
+  if (obj->obj_flags.quest_id && obj->obj_flags.quest_id != GET_IDNUM(ch)) {
+    if (access_level(ch, LVL_PRESIDENT)) {
+      act("You bypass the quest flag on $p.", FALSE, ch, obj, 0, TO_CHAR);
+    } else {
+      act("$p is someone else's quest item.", FALSE, ch, obj, 0, TO_CHAR);
+      return 0;
+    }
+  }
+
   return 1;
 }
 
