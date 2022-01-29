@@ -604,17 +604,6 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define GET_TOTEM(ch)                              (ch->player_specials->saved.totem)
 #define GET_TOTEMSPIRIT(ch)                        (ch->player_specials->saved.totemspirit)
 
-#define GET_DRUG_AFFECT(ch)                        (ch->player_specials->drug_affect[0])
-#define GET_DRUG_DURATION(ch)                      (ch->player_specials->drug_affect[1])
-#define GET_DRUG_DOSE(ch)                          (ch->player_specials->drug_affect[2])
-#define GET_DRUG_STAGE(ch)                         (ch->player_specials->drug_affect[3])
-#define GET_DRUG_EDGE(ch, i)                       (ch->player_specials->drugs[i][0])
-#define GET_DRUG_ADDICT(ch, i)                     (ch->player_specials->drugs[i][1])
-#define GET_DRUG_DOSES(ch, i)                      (ch->player_specials->drugs[i][2])
-#define GET_DRUG_LASTFIX(ch, i)                    (ch->player_specials->drugs[i][3])
-#define GET_DRUG_ADDTIME(ch, i)                    (ch->player_specials->drugs[i][4])
-#define GET_DRUG_TOLERANT(ch, i)                   (ch->player_specials->drugs[i][5])
-#define GET_DRUG_LASTWITH(ch, i)                   (ch->player_specials->drugs[i][6])
 #define GET_MENTAL_LOSS(ch)                        (ch->player_specials->mental_loss)
 #define GET_PHYSICAL_LOSS(ch)                      (ch->player_specials->physical_loss)
 #define GET_PERM_BOD_LOSS(ch)                      (ch->player_specials->perm_bod)
@@ -873,6 +862,20 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 // ITEM_GYRO convenience defines
 
 // ITEM_DRUG convenience defines
+
+#define GET_DRUG_TYPE(part)                        (GET_OBJ_VAL((part), 0))
+
+#define GET_DRUG_AFFECT(ch)                        (ch->player_specials->drug_affect[0])
+#define GET_DRUG_DURATION(ch)                      (ch->player_specials->drug_affect[1])
+#define GET_DRUG_DOSE(ch)                          (ch->player_specials->drug_affect[2])
+#define GET_DRUG_STAGE(ch)                         (ch->player_specials->drug_affect[3])
+#define GET_DRUG_EDGE(ch, i)                       (ch->player_specials->drugs[i][0])
+#define GET_DRUG_ADDICT(ch, i)                     (ch->player_specials->drugs[i][1])
+#define GET_DRUG_DOSES(ch, i)                      (ch->player_specials->drugs[i][2])
+#define GET_DRUG_LASTFIX(ch, i)                    (ch->player_specials->drugs[i][3])
+#define GET_DRUG_ADDTIME(ch, i)                    (ch->player_specials->drugs[i][4])
+#define GET_DRUG_TOLERANT(ch, i)                   (ch->player_specials->drugs[i][5])
+#define GET_DRUG_LASTWITH(ch, i)                   (ch->player_specials->drugs[i][6])
 
 // ITEM_WORN convenience defines
 #define GET_WORN_POCKETS_HOLSTERS(worn)        (GET_OBJ_VAL((worn), 0))

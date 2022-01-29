@@ -1219,13 +1219,14 @@ int get_speed(struct veh_data *veh)
 {
   int speed = 0, maxspeed = veh->speed;
   if (GET_VEH_ISOVERLOADED(veh) == LOAD_MAX)
-    maxspeed = veh->speed / 4;
+    maxspeed = (int)(maxspeed * 0.25);
   else if (GET_VEH_ISOVERLOADED(veh) == LOAD_HEAVY)
+    maxspeed = (int)(maxspeed * 0.5);
     
   if (veh->damage >= VEH_DAM_THRESHOLD_SEVERE )
-    maxspeed *= 0.5;
+    maxspeed = (int)(maxspeed * 0.5);
   else if (veh->damage >= VEH_DAM_THRESHOLD_MODERATE)
-    maxspeed *= 0.75;
+    maxspeed = (int)(maxspeed * 0.75);
 
   struct room_data *in_room = get_veh_in_room(veh);
   switch (veh->cspeed)

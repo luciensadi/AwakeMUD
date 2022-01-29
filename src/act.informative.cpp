@@ -5433,7 +5433,7 @@ ACMD(do_status)
     printed = TRUE;
   }
   if (GET_DRUG_AFFECT(targ) && GET_DRUG_STAGE(targ) > 0) {
-    send_to_char(ch, "  %s (%s)\r\n", drug_types[GET_DRUG_AFFECT(targ)].name, GET_DRUG_STAGE(targ) == 1 ? "Up" : "Down");
+    send_to_char(ch, "  %s (%s) - %ds \r\n", drug_types[GET_DRUG_AFFECT(targ)].name, GET_DRUG_STAGE(targ) == 1 ? "Onset" : "Comedown", GET_DRUG_DURATION(targ)*2);
     printed = TRUE;
   }
 

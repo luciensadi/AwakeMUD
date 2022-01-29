@@ -2049,8 +2049,8 @@ void check_adrenaline(struct char_data *ch, int mode)
       
     // We want to increase the pump duration without increasing the TN test so we're doing the duration roll in the
     // TN value directly and multiply that. Previous possible duration was 2-12 seconds per pump level and there was
-    // a bug decreasing it twice. Multiplying the roll x10 and we'll see how that pans out.
-    GET_BIOWARE_PUMP_TEST_TN(pump) = dice(GET_BIOWARE_RATING(pump), 6);
+    // a bug decreasing it twice too. Multiplying the roll x10 and we'll see how that pans out.
+    GET_BIOWARE_PUMP_TEST_TN(pump) = GET_BIOWARE_RATING(pump) == 2 ? srdice() + srdice() : srdice();
     GET_BIOWARE_PUMP_ADRENALINE(pump)  = GET_BIOWARE_PUMP_TEST_TN(pump) * 10;
     // Reactivation before the adrenaline sack is completely full?
     if (early_activation)

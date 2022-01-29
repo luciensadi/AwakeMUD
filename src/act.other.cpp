@@ -654,7 +654,10 @@ ACMD(do_patch)
 
 void do_drug_take(struct char_data *ch, struct obj_data *obj)
 {
-    int drugval = GET_OBJ_VAL(obj, 0);
+    int drugval = GET_DRUG_TYPE(obj);
+    // The next two lines are for resetting states when debugging drug logic.
+    //GET_DRUG_AFFECT(ch) = GET_DRUG_DOSE(ch) = GET_DRUG_DURATION(ch) = 0;
+    //GET_DRUG_STAGE(ch) = -1;
     if ((GET_DRUG_AFFECT(ch) && GET_DRUG_DOSE(ch) > GET_DRUG_TOLERANT(ch, drugval)) || GET_DRUG_STAGE(ch) > 1) {
       send_to_char(ch, "Maybe you should wait.\r\n");
       return;
@@ -699,23 +702,9 @@ void do_drug_take(struct char_data *ch, struct obj_data *obj)
         GET_DRUG_EDGE(ch, drugval)++;
         AFF_FLAGS(ch).RemoveBits(AFF_WITHDRAWAL, AFF_WITHDRAWAL_FORCE, ENDBIT);
       }
-      // Drug tick is every 2 seconds (a MUD minute), so most of these were over in a flash. Let's crank it up so that these values are in IRL minutes instead.
-      switch (drugval) {
-      case DRUG_PSYCHE:
-      case DRUG_CRAM:
-      case DRUG_BURN:
-        GET_DRUG_DURATION(ch) = 50 * (60 / SECS_PER_MUD_MINUTE);
-        break;
-      case DRUG_ZEN:
-        GET_DRUG_DURATION(ch) = 25 * srdice() * (60 / SECS_PER_MUD_MINUTE);
-        break;
-      default:
-        GET_DRUG_DURATION(ch) = 0;
-        break;
-      }
     } else {
       GET_DRUG_STAGE(ch) = -1;
-      GET_DRUG_DURATION(ch) = 20;
+      send_to_char("But it doesn't kick in. Perhaps you need a higher dose?\r\n", ch);
     }
     extract_obj(obj);
 }
@@ -1499,7 +1488,7 @@ struct obj_data * find_magazine(struct obj_data *gun, struct obj_data *i)
 ACMD(do_reload)
 {
   struct obj_data *i, *gun = NULL, *m = NULL, *ammo = NULL; /* Appears unused:  *bin = NULL; */
-  int n, def = 0, mount = 0;
+  int n, mount = 0;
   struct veh_data *veh = NULL;
   int ammotype = -1;
 
@@ -1675,7 +1664,6 @@ ACMD(do_reload)
       send_to_char("No weapons in need of reloading found.\r\n", ch);
       return;
     }
-    def = 1;
   }
 
   else if (!(gun = get_object_in_equip_vis(ch, buf, ch->equipment, &n)))

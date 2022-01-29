@@ -1480,8 +1480,7 @@ void misc_update(void)
     }
 
     if (!IS_NPC(ch)) {
-      if (!CH_IN_COMBAT(ch))
-        check_adrenaline(ch, 0);
+      check_adrenaline(ch, 0);
       if (GET_DRUG_DOSE(ch) && --GET_DRUG_DURATION(ch) < 0 && !GET_DRUG_STAGE(ch)) {
         bool physical = TRUE;
         if (GET_DRUG_AFFECT(ch) == DRUG_HYPER || GET_DRUG_AFFECT(ch) == DRUG_BURN)
@@ -1545,11 +1544,11 @@ void misc_update(void)
         }
         send_to_char(buf, ch);
       }
-      else if (GET_DRUG_STAGE(ch) == 1) {
+      else if (GET_DRUG_STAGE(ch) == 1 && !GET_DRUG_DURATION(ch)) {
         int toxin = 0;
         for (struct obj_data *obj = ch->bioware; obj && !toxin; obj = obj->next_content)
-          if (GET_OBJ_VAL(obj, 0) == BIO_TOXINEXTRACTOR)
-            toxin = GET_OBJ_VAL(obj, 1);
+          if (GET_BIOWARE_TYPE(obj) == BIO_TOXINEXTRACTOR)
+            toxin = GET_BIOWARE_RATING(obj);
         if (GET_DRUG_AFFECT(ch) > 0)
           send_to_char(ch, "You begin to feel drained as the %s wears off.\r\n", drug_types[GET_DRUG_AFFECT(ch)].name);
         GET_DRUG_STAGE(ch) = 2;
@@ -1585,9 +1584,10 @@ void misc_update(void)
               success_test(GET_REAL_BOD(ch), drug_types[GET_DRUG_AFFECT(ch)].tolerance + GET_DRUG_EDGE(ch, GET_DRUG_AFFECT(ch))))
             GET_DRUG_TOLERANT(ch, GET_DRUG_AFFECT(ch))++;
         }
-      } else if (GET_DRUG_STAGE(ch) == 2) {
+      } else if (GET_DRUG_STAGE(ch) == 2 && !GET_DRUG_DURATION(ch)) {
         send_to_char(ch, "The aftereffects of the %s begin to wear off.\r\n", drug_types[GET_DRUG_AFFECT(ch)].name);
-        GET_DRUG_STAGE(ch) = GET_DRUG_DOSE(ch) = GET_DRUG_AFFECT(ch) = 0;
+        GET_DRUG_STAGE(ch) = -1;
+        GET_DRUG_DOSE(ch) = GET_DRUG_AFFECT(ch) = 0;
         if (AFF_FLAGGED(ch, AFF_DETOX))
           AFF_FLAGS(ch).RemoveBit(AFF_DETOX);
       }
