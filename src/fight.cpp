@@ -2030,20 +2030,31 @@ void docwagon(struct char_data *ch)
   return;
 }
 
-
+// M&M p.63-64
+// Mode 1 for activation, mode 0 for reducing duration in turns.
 void check_adrenaline(struct char_data *ch, int mode)
 {
   int i, dam;
   struct obj_data *pump = NULL;
+  bool early_activation = FALSE;
 
-  for (pump = ch->bioware; pump && GET_OBJ_VAL(pump, 0) != BIO_ADRENALPUMP; pump = pump->next_content)
+  for (pump = ch->bioware; pump && GET_BIOWARE_TYPE(pump) != BIO_ADRENALPUMP; pump = pump->next_content)
     ;
   if (!pump)
     return;
-  if (GET_OBJ_VAL(pump, 5) == 0 && mode == 1)
+  if (mode && GET_BIOWARE_PUMP_ADRENALINE(pump) <= 0)
   {
-    GET_OBJ_VAL(pump, 5) = dice(GET_OBJ_VAL(pump, 1), 6);
-    GET_OBJ_VAL(pump, 6) = GET_OBJ_VAL(pump, 5);
+    if (GET_BIOWARE_PUMP_ADRENALINE(pump) < 0)
+      early_activation = TRUE;
+      
+    // We want to increase the pump duration without increasing the TN test so we're doing the duration roll in the
+    // TN value directly and multiply that. Previous possible duration was 2-12 seconds per pump level and there was
+    // a bug decreasing it twice. Multiplying the roll x10 and we'll see how that pans out.
+    GET_BIOWARE_PUMP_TEST_TN(pump) = dice(GET_BIOWARE_RATING(pump), 6);
+    GET_BIOWARE_PUMP_ADRENALINE(pump)  = GET_BIOWARE_PUMP_TEST_TN(pump) * 10;
+    // Reactivation before the adrenaline sack is completely full?
+    if (early_activation)
+      GET_BIOWARE_PUMP_ADRENALINE(pump) /= 2;
     send_to_char("Your body is wracked with renewed vitality as adrenaline pumps into your\r\n"
                  "bloodstream.\r\n", ch);
     for (i = 0; i < MAX_OBJ_AFFECT; i++)
@@ -2051,24 +2062,29 @@ void check_adrenaline(struct char_data *ch, int mode)
                     pump->affected[i].location,
                     pump->affected[i].modifier,
                     pump->obj_flags.bitvector, TRUE);
-  } else if (GET_OBJ_VAL(pump, 5) > 0 && !mode)
+  } 
+  else if (!mode && GET_BIOWARE_PUMP_ADRENALINE(pump) > 0)
   {
-    GET_OBJ_VAL(pump, 5)--;
-    if (GET_OBJ_VAL(pump, 5) == 0) {
+    GET_BIOWARE_PUMP_ADRENALINE(pump)--;
+    if (GET_BIOWARE_PUMP_ADRENALINE(pump) == 0) {
       for (i = 0; i < MAX_OBJ_AFFECT; i++)
         affect_modify(ch,
                       pump->affected[i].location,
                       pump->affected[i].modifier,
                       pump->obj_flags.bitvector, FALSE);
-      GET_OBJ_VAL(pump, 5) = -number(80, 100);
+      GET_BIOWARE_PUMP_ADRENALINE(pump) = -number(60, 90);
       send_to_char("Your body softens and relaxes as the adrenaline wears off.\r\n", ch);
       dam = convert_damage(stage(-success_test(GET_BOD(ch) + GET_BODY(ch),
-                                               (int)(GET_OBJ_VAL(pump, 6) / 2)), DEADLY));
-      GET_OBJ_VAL(pump, 6) = 0;
+                                               (int)(GET_BIOWARE_PUMP_TEST_TN(pump) / 2)), DEADLY));
+      GET_BIOWARE_PUMP_TEST_TN(pump) = 0;
       damage(ch, ch, dam, TYPE_BIOWARE, FALSE);
     }
-  } else if (GET_OBJ_VAL(pump, 5) < 0 && !mode)
-    GET_OBJ_VAL(pump, 5)++;
+  }
+  else if (!mode && GET_BIOWARE_PUMP_ADRENALINE(pump) < 0) {
+    GET_BIOWARE_PUMP_ADRENALINE(pump)++;
+    if (GET_BIOWARE_PUMP_ADRENALINE(pump) == 0)
+      send_to_char("Your feel your adrenaline pump is full.\r\n", ch);
+  }
 }
 
 #define WRITE_DEATH_MESSAGE(format_string) \
@@ -3030,6 +3046,7 @@ int check_recoil(struct char_data *ch, struct obj_data *gun)
   struct obj_data *obj;
   int rnum, comp = 0;
   bool gasvent = FALSE;
+  UNUSED(gasvent);
 
   bool can_use_bipods_and_tripods = !(PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_RIG) || AFF_FLAGGED(ch, AFF_MANNING));
 
@@ -3392,6 +3409,7 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
   struct obj_data *obj = NULL;
   struct room_data *ch_room = NULL, *vict_room = NULL;
   rnum_t room1 = 0, room2 = 0, rnum = 0;
+  UNUSED(vict_room);
 
   if (weapon == NULL) {
     mudlog("SYSERR: Null weapon in combat_message()!", ch, LOG_SYSLOG, TRUE);
@@ -4559,8 +4577,6 @@ void decide_combat_pool(void)
   struct char_data *ch;
 
   for (ch = combat_list; ch; ch = ch->next_fighting) {
-    if (ch->bioware)
-      check_adrenaline(ch, 0);
 
     if (IS_NPC(ch) && !IS_PROJECT(ch) && FIGHTING(ch)) {
       if (GET_INIT_ROLL(ch) == GET_INIT_ROLL(FIGHTING(ch)))

@@ -915,11 +915,14 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 
 // ITEM_BIOWARE convenience defines
 
-#define GET_BIOWARE_TYPE(bioware)              (GET_OBJ_VAL((bioware), 0))
-#define GET_BIOWARE_RATING(bioware)            (GET_OBJ_VAL((bioware), 1))
-#define GET_BIOWARE_IS_CULTURED(bioware)       (GET_OBJ_VAL((bioware), 2) || GET_BIOWARE_TYPE((bioware)) >= BIO_CEREBRALBOOSTER)
-#define GET_BIOWARE_IS_ACTIVATED(bioware)      (GET_OBJ_VAL((bioware), 3))
-#define GET_BIOWARE_ESSENCE_COST(bioware)      (GET_OBJ_VAL((bioware), 4))
+#define GET_BIOWARE_TYPE(bioware)                 (GET_OBJ_VAL((bioware), 0))
+#define GET_BIOWARE_RATING(bioware)               (GET_OBJ_VAL((bioware), 1))
+#define GET_BIOWARE_IS_CULTURED(bioware)          (GET_OBJ_VAL((bioware), 2) || GET_BIOWARE_TYPE((bioware)) >= BIO_CEREBRALBOOSTER)
+#define GET_BIOWARE_IS_ACTIVATED(bioware)         (GET_OBJ_VAL((bioware), 3))
+#define GET_BIOWARE_ESSENCE_COST(bioware)         (GET_OBJ_VAL((bioware), 4))
+#define GET_BIOWARE_PUMP_ADRENALINE(bioware)      (GET_OBJ_VAL((bioware), 6)) //Adrenaline in the Adrenaline Pump sack. Controls duration.
+#define GET_BIOWARE_PUMP_TEST_TN(bioware)         (GET_OBJ_VAL((bioware), 6)) // TN for Adrenaline Pump crash test, set when activating the pump the the value of GET_BIOWARE_PUMP_ADRENALINE()
+
 
 // ITEM_FOUNTAIN convenience defines
 
