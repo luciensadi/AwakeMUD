@@ -1115,6 +1115,7 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
   int bod_success = 0;
   int bod = GET_BOD(def->ch) + (def->too_tall ? 0 : GET_BODY(def->ch));
   int bod_dice = 0;
+  UNUSED(bod_dice);
 
   // If you're a spirit attacking someone who has the conjuring skill, they can opt to use that instead of their body if it's higher.
   if (IS_SPIRIT(att->ch) && GET_MAG(def->ch) > 0 && GET_SKILL(def->ch, SKILL_CONJURING))
