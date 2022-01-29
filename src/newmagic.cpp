@@ -4146,8 +4146,8 @@ struct order_data services[] =
     {"Materialize", spirit_materialize, 0},
     {"Movement", spirit_movement, 1},
     {"Breath", spirit_breath, 1}, // hostile
-    {"Psychokinesis", spirit_psychokinesis, 1}, // hostile?
-    {"Search", spirit_search, 1},
+    // {"Psychokinesis", spirit_psychokinesis, 1}, // hostile?
+    // {"Search", spirit_search, 1},
     {"Attack", spirit_attack, 1} // hostile
   };
 

@@ -1125,7 +1125,7 @@ SPECIAL(spell_trainer)
       send_to_char("Extra Force Point             25000 nuyen\r\n", ch);
       send_to_char(ch, "%d Force Point%s Remaining.\r\n", GET_FORCE_POINTS(ch), GET_FORCE_POINTS(ch) > 1 ? "s" : "");
     } else
-      send_to_char(ch, "%.2f Karma Available.\r\n", (float) GET_KARMA(ch) / 100);
+      send_to_char(ch, "%.2f Karma Available.\r\n", ((float) GET_KARMA(ch)) / 100);
 
     send_to_char("\r\nLearning syntax:\r\n    ^WLEARN \"<spell name>\" <force between 1 and 6>^n\r\n    ^WLEARN FORCE^n\r\n    ^WLEARN CONJURING^n\r\n", ch);
   } else {
