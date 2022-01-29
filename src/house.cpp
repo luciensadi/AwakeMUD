@@ -1261,9 +1261,11 @@ ACMD(do_house)
 
   if (!ROOM_FLAGGED(ch->in_room, ROOM_HOUSE))
     send_to_char("You must be in your house to set guests.\r\n", ch);
-  else if ((i = find_house(GET_ROOM_VNUM(ch->in_room))) == NULL)
+  else if ((i = find_house(GET_ROOM_VNUM(ch->in_room))) == NULL) {
     send_to_char("Um.. this house seems to be screwed up.\r\n", ch);
-  else if (GET_IDNUM(ch) != i->owner && !access_level(ch, LVL_PRESIDENT))
+    snprintf(buf, sizeof(buf), "SYSERR: Failed to find_house() on %s (%ld)!", GET_ROOM_NAME(ch->in_room), GET_ROOM_VNUM(ch->in_room));
+    mudlog(buf, ch, LOG_SYSLOG, TRUE);
+  } else if (GET_IDNUM(ch) != i->owner && !access_level(ch, LVL_PRESIDENT))
     send_to_char("Only the primary owner can set guests.\r\n", ch);
   else if (!*arg)
     House_list_guests(ch, i, FALSE);
