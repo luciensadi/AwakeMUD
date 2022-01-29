@@ -14,10 +14,32 @@
 #include <stdio.h>
 #include "bitfield.h"
 
-// Versioning for flat file formats. Gonna start adding these as it will make updating formats a lot
-// easier to handle in code.
-#define VERSION_HOUSE_FILE 1
-#define VERSION_VEH_FILE 1
+/*
+ * Current versions are defined in VERSION_HOUSE_FILE and VERSION_VEH_FILE
+ * Making changes to the formats you need to change the current version macro
+ * to the new version, which is what is written to file,  add a new macro for the new
+ * version, link current macro to it, document the format changes here and handle
+ * them accordingly in code.
+ */
+ 
+#define VERSION_HOUSE_FILE    VERSION_HOUSE_FILEV1
+#define VERSION_VEH_FILE           VERSION_VEH_FILEV1
+
+// Saves the objects in reverse with the container last. Then reads objects in turn, saves
+// anything with a higher nesting level than 0 in a vector, then once a container is found
+// places all objects with nesting level +1 into it.
+#define VERSION_HOUSE_FILEV1    1
+// Original logic, saves containers last and reads them first, then places subsequent objects
+// with nesting level +1 into them. No version number written in file so this defaults to 0.
+#define VERSION_HOUSE_FILEV0    0
+
+// Saves the objects in reverse with the container last. Then reads objects in turn, saves
+// anything with a higher nesting level than 0 in a vector, then once a container is found
+// places all objects with nesting level +1 into it.
+#define VERSION_VEH_FILEV1    1
+// Original logic, saves containers last and reads them first, then places subsequent objects
+// with nesting level +1 into them. No version number written in file so this defaults to 0.
+#define VERSION_VEH_FILEV0    0
 
 /* names of various files and directories */
 #define INDEX_FILE      "index"         /* index of world files         */

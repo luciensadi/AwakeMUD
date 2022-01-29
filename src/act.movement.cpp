@@ -37,7 +37,7 @@ extern bool is_escortee(struct char_data *mob);
 extern bool hunting_escortee(struct char_data *ch, struct char_data *vict);
 extern void death_penalty(struct char_data *ch);
 extern int get_vehicle_modifier(struct veh_data *veh);
-extern int calculate_vehicle_entry_load(struct veh_data *veh);
+extern int calculate_vehicle_weight(struct veh_data *veh);
 extern bool passed_flee_success_check(struct char_data *ch);
 extern int calculate_swim_successes(struct char_data *ch);
 extern bool can_edit_zone(struct char_data *ch, int zone);
@@ -751,8 +751,9 @@ void move_vehicle(struct char_data *ch, int dir)
     ch->in_room = was_in;
   else
     ch->in_room = NULL;
-
-  if ((get_speed(veh) > 80 && SECT(veh->in_room) == SPIRIT_CITY) || veh->in_room->icesheet[0])
+    
+  // Don't do crash tests on autonav.
+  if (veh->cspeed != SPEED_AUTONAV && ((get_speed(veh) > 80 && SECT(veh->in_room) == SPIRIT_CITY) || veh->in_room->icesheet[0]))
   {
     crash_test(ch);
     chkdmg(veh);
@@ -1447,7 +1448,7 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
       send_to_char("You are already inside a vehicle.\r\n", ch);
     else if (inveh == found_veh)
       send_to_char("It'll take a smarter mind than yours to figure out how to park your vehicle inside itself.\r\n", ch);
-    else if (found_veh->load - found_veh->usedload < calculate_vehicle_entry_load(inveh))
+    else if (GET_VEH_MAXOVERLOAD(found_veh) - found_veh->usedload < calculate_vehicle_weight(inveh))
       send_to_char("There is not enough room in there for that.\r\n", ch);
     else {
       strcpy(buf3, GET_VEH_NAME(inveh));
@@ -1457,6 +1458,25 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
         act(buf, 0, inveh->in_room->people, 0, 0, TO_ROOM);
       send_to_veh(buf2, inveh, NULL, TRUE);
       veh_to_veh(inveh, found_veh);
+      if (GET_VEH_ISOVERLOADED(found_veh) == LOAD_MAX) {
+        send_to_char(ch, "%s is VERY overloaded causing SIGNIFICANT strain! Damage will most likely occur with time or driving!\r\n", buf2, GET_VEH_NAME(found_veh));
+        // Pull test Rigger 3 p.64-65 && Shadowrun 3 p.145-147
+        int tn = 8;
+        if (found_veh->damage) {
+          if (found_veh->damage >= VEH_DAM_THRESHOLD_SEVERE)
+            tn += 3;
+          else if (found_veh->damage >= VEH_DAM_THRESHOLD_MODERATE)
+            tn += 2;
+          else if (found_veh->damage >= VEH_DAM_THRESHOLD_LIGHT)
+            tn++;
+        }
+        if (success_test(found_veh->body, tn) < 1) {
+          send_to_char(ch, "%s has taken structural damage from overloading it!\r\n", buf2, GET_VEH_NAME(found_veh));
+          found_veh->damage++;
+        }
+      }
+      else if (GET_VEH_ISOVERLOADED(found_veh) == LOAD_HEAVY)
+        send_to_char(ch, "%s is loaded above maximum safe capacity. Damage may occur with time or during.\r\n", buf2, GET_VEH_NAME(found_veh));
     }
     return;
   }
@@ -1467,6 +1487,16 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
       send_to_char("You use your staff powers to force your way in despite the lack of seating.\r\n", ch);
     } else {
       send_to_char(ch, "There is no room in the %s of that vehicle.\r\n", front ? "front" : "rear");
+      return;
+    }
+  }
+  
+  // Check if using the seat would throw the vehicle beyond max overload.
+  if ((!drag && found_veh->usedload + 100 > GET_VEH_MAXOVERLOAD(found_veh)) || (drag && found_veh->usedload + 200 > GET_VEH_MAXOVERLOAD(found_veh))){
+     if (access_level(ch, LVL_ADMIN)) {
+      send_to_char("You use your staff powers to force your way in despite the vehicle being overloaded.\r\n", ch);
+    } else {
+      send_to_char(ch, "The vehicle is too overloaded.\r\n");
       return;
     }
   }
@@ -1485,6 +1515,26 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
   act(buf2, FALSE, ch, 0, 0, TO_ROOM);
   ch->vfront = front;
   char_to_veh(found_veh, ch);
+  if (GET_VEH_ISOVERLOADED(found_veh) == LOAD_MAX) {
+    send_to_char(ch, "%s is VERY overloaded causing SIGNIFICANT strain! Damage will most likely occur with time or driving!\r\n", buf2, GET_VEH_NAME(found_veh));
+    // Pull test Rigger 3 p.64-65 & Shadowrun 3 p.145-147
+    int tn = 8;
+    if (found_veh->damage) {
+      if (found_veh->damage >= VEH_DAM_THRESHOLD_SEVERE)
+        tn += 3;
+      else if (found_veh->damage >= VEH_DAM_THRESHOLD_MODERATE)
+        tn += 2;
+      else if (found_veh->damage >= VEH_DAM_THRESHOLD_LIGHT)
+        tn++;
+    }
+    if (success_test(found_veh->body, tn) < 1) {
+      send_to_char(ch, "%s has taken structural damage from overloading it!\r\n", buf2, GET_VEH_NAME(found_veh));
+      found_veh->damage++;
+    }
+  }
+  else if (GET_VEH_ISOVERLOADED(found_veh) == LOAD_HEAVY)
+    send_to_char(ch, "%s is loaded above maximum safe capacity. Damage may occur with time or during.\r\n", buf2, GET_VEH_NAME(found_veh));
+    
   if (drag)
     act("$n is dragged in.", FALSE, ch, 0, 0, TO_VEH);
   else {

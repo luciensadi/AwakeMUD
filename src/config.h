@@ -106,8 +106,9 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 // How infrequently do you want your trideo units to display something?
 #define TRIDEO_TICK_DELAY                                      3
 
-// How many rooms can gridguide go at max speed? Too high, and vehicles will teleport.
-#define MAX_GRIDGUIDE_ROOMS_PER_PULSE                          10
+// Autonav multiplier is a limiter applied to all speed vehicles to prevent instant relocation but keep the difference between speeds meaningful.
+// 0.1 is a decent value according to testing (8-9 seconds on Saab, 13-14s on Bison, Seattle Center<->Evergreen route) . Higher values are faster, lower are slower.
+#define AUTONAV_MULTIPLIER                                     0.1
 
 // How often do NPCs press elevator buttons? 1:x ratio, where X is the number you put here.
 #define ELEVATOR_BUTTON_PRESS_CHANCE                           20

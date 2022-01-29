@@ -338,14 +338,20 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define GET_JURISDICTION(room) (zone_table[(room)->zone].jurisdiction)
 #define GET_SECURITY_LEVEL(room) (zone_table[(room)->zone].security)
 
-/* char utils ************************************************************/
-
-#define GET_WAS_IN(ch)  ((ch)->was_in_room)
+/* veh utils  ************************************************************/
 
 #define GET_VEH_NAME(veh) (decapitalize_a_an((veh)->restring ? (veh)->restring : ((veh)->short_description ? (veh)->short_description : "an ERRONEOUS VEHICLE")))
 #define GET_VEH_DESC(veh) ((veh)->restring_long ? (veh)->restring_long : (veh)->long_description)
 #define GET_VEH_RNUM(veh) ((veh)->veh_number)
 #define GET_VEH_VNUM(veh) (GET_VEH_RNUM(veh) >= 0 ? veh_index[GET_VEH_RNUM(veh)].vnum : -1)
+// Shadowrun 3 p.133 & Rigger 3 p.63 (Will fix details such as bench seats later on as the system fleshes out -- Nodens)
+#define GET_VEH_MAXLOAD(veh) ((veh)->load + MAX(0,((veh)->seating[0] + (veh)->seating[1])) * 100)
+#define GET_VEH_MAXOVERLOAD(veh) ((veh)->load * 2 + MAX(0, ((veh)->seating[0] + (veh)->seating[1])) * 100)
+#define GET_VEH_ISOVERLOADED(veh) ((veh)->usedload > GET_VEH_MAXLOAD((veh)) * 1.5 ? 2 : (veh)->usedload > GET_VEH_MAXLOAD((veh)) ? 1 : 0)
+
+/* char utils ************************************************************/
+
+#define GET_WAS_IN(ch)  ((ch)->was_in_room)
 #define GET_OBJ_NAME(obj) ((obj)->restring ? (obj)->restring : (obj)->text.name)
 #define GET_OBJ_DESC(obj) ((obj)->photo ? (obj)->photo : (obj)->text.look_desc)
 #define GET_KEYWORDS(ch)  ((ch)->player.physical_text.keywords)

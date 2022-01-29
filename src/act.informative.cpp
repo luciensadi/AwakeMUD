@@ -56,7 +56,7 @@ extern const char *dist_name[];
 extern int same_obj(struct obj_data * obj1, struct obj_data * obj2);
 extern int find_sight(struct char_data *ch);
 extern int belongs_to(struct char_data *ch, struct obj_data *obj);
-extern int calculate_vehicle_entry_load(struct veh_data *veh);
+extern int calculate_vehicle_weight(struct veh_data *veh);
 
 extern int get_weapon_damage_type(struct obj_data* weapon);
 
@@ -1836,6 +1836,7 @@ void look_in_obj(struct char_data * ch, char *arg, bool exa)
   if (veh) {
     struct veh_data *curr_in_veh = ch->in_veh;
     bool curr_vfront = ch->vfront;
+    UNUSED(curr_vfront);
 
     /* Disabled-- a check with no penalty that you can spam until success does not add to the fun.
     if (veh->cspeed > SPEED_IDLE) {
@@ -2171,10 +2172,10 @@ void do_probe_veh(struct char_data *ch, struct veh_data * k)
           k->body, k->armor, k->seating[1], k->seating[0]);
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Its signature rating is ^c%d^n, and its NERP pilot rating is ^c%d^n.\r\n",
           k->sig, k->pilot);
-  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It has ^c%d^n slots in its autonav and carrying capacity of ^c%d^n (%d in use).\r\n",
-          k->autonav, (int)k->load, (int)k->usedload);
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It has rating ^c%d^n autonav and stock capacity of ^c%d^n, ^c%d^n w/ current empty seats (^y%d^n load in use).\r\n",
+          k->autonav, (int)k->load, (int)GET_VEH_MAXLOAD(k), (int)k->usedload);
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Its engine is adapted for ^c%s^n. If loaded into another vehicle, it takes up ^c%d^n load.\r\n",
-                  engine_type[k->engine], calculate_vehicle_entry_load(k));
+                  engine_type[k->engine], calculate_vehicle_weight(k));
   send_to_char(buf, ch);
 }
 

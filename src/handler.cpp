@@ -39,7 +39,7 @@ extern int skill_web(struct char_data *, int);
 extern int return_general(int skill_num);
 extern int can_wield_both(struct char_data *, struct obj_data *, struct obj_data *);
 extern int max_ability(int i);
-extern int calculate_vehicle_entry_load(struct veh_data *veh);
+extern int calculate_vehicle_weight(struct veh_data *veh);
 extern void end_quest(struct char_data *ch);
 
 int get_skill_num_in_use_for_weapons(struct char_data *ch);
@@ -1032,19 +1032,7 @@ void veh_from_room(struct veh_data * veh)
   }
   if (veh->in_veh) {
     REMOVE_FROM_LIST(veh, veh->in_veh->carriedvehs, next_veh);
-    int mult;
-    switch (veh->type) {
-      case VEH_DRONE:
-        mult = 100;
-        break;
-      case VEH_TRUCK:
-        mult = 1500;
-        break;
-      default:
-        mult = 500;
-        break;
-    }
-    veh->in_veh->usedload -= veh->body * mult;
+    veh->in_veh->usedload -= calculate_vehicle_weight(veh);
   } else {
     REMOVE_FROM_LIST(veh, veh->in_room->vehicles, next_veh);
     veh->in_room->light[0]--;
@@ -1150,7 +1138,7 @@ void veh_to_veh(struct veh_data *veh, struct veh_data *dest)
     veh->next_veh = dest->carriedvehs;
     veh->in_veh = dest;
     dest->carriedvehs = veh;
-    dest->usedload += calculate_vehicle_entry_load(veh);
+    dest->usedload += calculate_vehicle_weight(veh);
   }
 }
 void icon_to_host(struct matrix_icon *icon, vnum_t to_host)

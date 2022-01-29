@@ -69,6 +69,7 @@ extern vnum_t newbie_start_room;
 extern int frozen_start_room;
 extern int last;
 extern int max_ability(int i);
+extern int calculate_vehicle_weight(struct veh_data *veh);
 
 extern const char *wound_arr[];
 extern const char *material_names[];
@@ -1181,8 +1182,8 @@ void do_stat_veh(struct char_data *ch, struct veh_data * k)
           virt, k->veh_number, veh_type[k->type], k->idnum, k->owner);
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Han: [^B%d^n]  Spe: [^B%d^n]  Acc: [^B%d^n]  Bod: [^B%d^n]  Arm: [^B%d^n]\r\n",
           k->handling, k->speed, k->accel, k->body, k->armor);
-  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Sig: [^B%d^n]  Aut: [^B%d^n]  Pil: [^B%d^n]  Sea: [^B%d/%d^n]  Loa: [^B%d/%d^n]  Cos: [^B%d^n]\r\n",
-          k->sig, k->autonav, k->pilot, k->seating[1], k->seating[0], (int)k->usedload, (int)k->load, k->cost);
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Sig: [^B%d^n]  Aut: [^B%d^n]  Pil: [^B%d^n]  Sea: [^B%d/%d^n]  Loa: [^B%d/%d(%d)^n]  Cos: [^B%d^n]\r\n",
+          k->sig, k->autonav, k->pilot, k->seating[1], k->seating[0], (int)k->usedload, (int)k->load, (int)GET_VEH_MAXLOAD(k), k->cost);
   send_to_char(buf, ch);
 }
 

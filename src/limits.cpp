@@ -51,6 +51,7 @@ extern void check_adrenaline(struct char_data *, int);
 extern bool House_can_enter_by_idnum(long idnum, vnum_t house);
 extern int get_paydata_market_maximum(int host_color);
 extern int get_paydata_market_minimum(int host_color);
+extern int calculate_vehicle_weight(struct veh_data *veh);
 extern void wire_nuyen(struct char_data *ch, int amount, vnum_t character_id);
 extern void save_shop_orders();
 
@@ -1033,9 +1034,60 @@ void save_vehicles(bool fromCopyover)
   struct obj_data *obj;
   int num_veh = 0;
 
-  for (veh = veh_list; veh; veh = veh->next)
+  for (veh = veh_list; veh; veh = veh->next) {
+    // Pull tests Rigger 3 p.64-65 & Shadowrun 3 p.145-147
+    if (veh->damage < VEH_DAM_THRESHOLD_DESTROYED && GET_VEH_ISOVERLOADED(veh) == LOAD_MAX) {
+      int tn = 8;
+      if (veh->damage) {
+        if (veh->damage >= VEH_DAM_THRESHOLD_SEVERE)
+          tn += 3;
+        else if (veh->damage >= VEH_DAM_THRESHOLD_MODERATE)
+          tn += 2;
+        else if (veh->damage >= VEH_DAM_THRESHOLD_LIGHT)
+          tn++;
+      }
+      if (success_test(veh->body, tn) < 1) {
+        veh->damage++;
+        if (veh->in_room->people) {
+          snprintf(buf2, sizeof(buf2), "%s got damaged by the stress of being immensely overloaded.\r\n", GET_VEH_NAME(veh));
+          act(buf2, FALSE, veh->people, 0, 0, TO_VEH_ROOM);
+        }
+      }
+    }
+    else if (veh->damage < VEH_DAM_THRESHOLD_DESTROYED && GET_VEH_ISOVERLOADED(veh) == LOAD_HEAVY) {
+      int tn = 5;
+      if (veh->damage) {
+        if (veh->damage >= VEH_DAM_THRESHOLD_SEVERE)
+          tn += 3;
+        else if (veh->damage >= VEH_DAM_THRESHOLD_MODERATE)
+          tn += 2;
+        else if (veh->damage >= VEH_DAM_THRESHOLD_LIGHT)
+          tn++;
+      }
+      if (success_test(veh->body, tn) < 1) {
+        veh->damage++;
+        if (veh->in_room->people) {
+          snprintf(buf2, sizeof(buf2), "%s got damaged by the stress of being overloaded.\r\n", GET_VEH_NAME(veh));
+          act(buf2, FALSE, veh->people, 0, 0, TO_VEH_ROOM);
+        }
+      }
+    }
+    if (veh->damage > VEH_DAM_THRESHOLD_DESTROYED && veh->people) {
+      veh->cspeed = SPEED_OFF;
+      veh->dest = NULL;
+      stop_chase(veh);
+      struct char_data *tch = NULL, *next = NULL;
+      for (tch = veh->people; tch; tch = next) {
+        next = tch->next_in_veh;
+        char_from_room(tch);
+        char_to_room(tch, veh->in_room);
+        AFF_FLAGS(tch).RemoveBits(AFF_PILOT, AFF_RIG, ENDBIT);
+        send_to_char("Your vehicle collapses under load strain and you get out!\r\n", tch);
+      }
+    }
     if (should_save_this_vehicle(veh))
       num_veh++;
+  }
 
   // log_vfprintf("We have %d vehicles to save.", num_veh);
 

@@ -32,6 +32,7 @@ extern PCIndex playerDB;
 extern char *get_token(char *, char*);
 extern int modify_target(struct char_data *ch);
 extern int return_general(int skill_num);
+extern int calculate_vehicle_weight(struct veh_data *veh);
 extern bool check_quest_delivery(struct char_data *ch, struct char_data *mob, struct obj_data *obj);
 extern void check_quest_delivery(struct char_data *ch, struct obj_data *obj);
 extern void check_quest_destroy(struct char_data *ch, struct obj_data *obj);
@@ -1581,11 +1582,11 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
 
   if (ch->in_veh)
   {
-    if (ch->in_veh->usedload + GET_OBJ_WEIGHT(obj) > ch->in_veh->load) {
+    if (ch->in_veh->usedload + GET_OBJ_WEIGHT(obj) > GET_VEH_MAXOVERLOAD(ch->in_veh)) {
       send_to_char("There is too much in the vehicle already!\r\n", ch);
       return 0;
     }
-    if (ch->vfront && ch->in_veh->seating[0] && ch->in_veh->usedload + GET_OBJ_WEIGHT(obj) > ch->in_veh->load / 10) {
+    if (ch->vfront && ch->in_veh->seating[0] && ch->in_veh->usedload + GET_OBJ_WEIGHT(obj) > GET_VEH_MAXOVERLOAD(ch->in_veh) / 10) {
       send_to_char("There is too much in the front of the vehicle!\r\n", ch);
       return 0;
     }
@@ -1625,6 +1626,10 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
     if (ch->in_veh) {
       obj_to_veh(obj, ch->in_veh);
       obj->vfront = ch->vfront;
+      if (GET_VEH_ISOVERLOADED(ch->in_veh) == LOAD_MAX)
+        send_to_char(ch, "%s is VERY overloaded. Driving will put SIGNIFICANT strain on the vehicle!\r\n", buf2, GET_VEH_NAME(ch->in_veh));
+      else if (GET_VEH_ISOVERLOADED(ch->in_veh) == LOAD_HEAVY)
+        send_to_char(ch, "%s is loaded above maximum safe capacity. Driving will put strain on the vehicle!\r\n", buf2, GET_VEH_NAME(ch->in_veh));
     } else
       obj_to_room(obj, ch->in_room);
     if (!IS_NPC(ch) && GET_QUEST(ch))

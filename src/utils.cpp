@@ -57,6 +57,7 @@ extern void calc_weight(struct char_data *ch);
 extern const char *get_ammobox_default_restring(struct obj_data *ammobox);
 extern bool can_edit_zone(struct char_data *ch, int zone);
 extern int find_first_step(vnum_t src, vnum_t target, bool ignore_roads);
+extern int calculate_vehicle_weight(struct veh_data *veh);
 
 extern SPECIAL(johnson);
 extern SPECIAL(landlord_spec);
@@ -1213,9 +1214,19 @@ char * buf_roll(char *rbuf, const char *name, int bonus)
   return rbuf;
 }
 
+// Shadowrun 3 p. 130-131, 145-147 & Rigger 3 p.64-65 
 int get_speed(struct veh_data *veh)
 {
-  int speed = 0, maxspeed = (int)(veh->speed * ((veh->load - veh->usedload) / (veh->load != 0 ? veh->load : 1)));
+  int speed = 0, maxspeed = veh->speed;
+  if (GET_VEH_ISOVERLOADED(veh) == LOAD_MAX)
+    maxspeed = veh->speed / 4;
+  else if (GET_VEH_ISOVERLOADED(veh) == LOAD_HEAVY)
+    
+  if (veh->damage >= VEH_DAM_THRESHOLD_SEVERE )
+    maxspeed *= 0.5;
+  else if (veh->damage >= VEH_DAM_THRESHOLD_MODERATE)
+    maxspeed *= 0.75;
+
   struct room_data *in_room = get_veh_in_room(veh);
   switch (veh->cspeed)
   {
@@ -1224,22 +1235,20 @@ int get_speed(struct veh_data *veh)
       speed = 0;
       break;
     case SPEED_CRUISING:
+      speed = MIN(maxspeed, (int)(veh->speed * .3));
       if (ROOM_FLAGGED(in_room, ROOM_INDOORS))
-        speed = MIN(maxspeed, 3);
-      else
-        speed = MIN(maxspeed, 55);
+        speed /= 2;
       break;
     case SPEED_SPEEDING:
+      speed = MIN(maxspeed, (int)(veh->speed * .7));
       if (ROOM_FLAGGED(in_room, ROOM_INDOORS))
-        speed = MIN(maxspeed, MAX(5, (int)(maxspeed * .7)));
-      else
-        speed = MIN(maxspeed, MAX(55, (int)(maxspeed * .7)));
+        speed /= 2;
       break;
     case SPEED_MAX:
+    case SPEED_AUTONAV:
+      speed = MIN(maxspeed, veh->speed);
       if (ROOM_FLAGGED(in_room, ROOM_INDOORS))
-        speed = MIN(maxspeed, 8);
-      else
-        speed = maxspeed;
+        speed /= 2;
       break;
   }
   return (speed);

@@ -1270,12 +1270,19 @@ enum {
 #define VFLAG_NEWBIE     4
 #define VFLAG_ULTRASOUND 5
 #define NUM_VFLAGS       6
+
 /* vehicle speed table */
 #define SPEED_OFF 0
 #define SPEED_IDLE 1
 #define SPEED_CRUISING 2
 #define SPEED_SPEEDING 3
 #define SPEED_MAX 4
+#define SPEED_AUTONAV 5
+
+/* vehicle load table */
+#define LOAD_NORMAL     0   /* Load normal */
+#define LOAD_HEAVY      1   /* Load within * 1.5 max load  - 1 stress damage/hour | half speed | +2 TN pull test */
+#define LOAD_MAX        2   /* Load above *1.5 max load - 1 stress damage/minute | quarted speed | + 5TN pull test*/
 
 /* cyberware */
 
@@ -2452,11 +2459,11 @@ enum {
 #define PERMANENT_BACKGROUND_COUNT 2
 #define PERMANENT_BACKGROUND_TYPE  3
 
-#define VEH_DAM_THRESHOLD_LIGHT     1
-#define VEH_DAM_THRESHOLD_MODERATE  3
-#define VEH_DAM_THRESHOLD_SEVERE    6
-#define VEH_DAM_THRESHOLD_DESTROYED 10
-#define VEH_DAMAGE_NEEDS_WORKSHOP   7
+#define VEH_DAM_THRESHOLD_LIGHT            1
+#define VEH_DAM_THRESHOLD_MODERATE         3
+#define VEH_DAM_THRESHOLD_SEVERE           6
+#define VEH_DAM_THRESHOLD_NEEDS_WORKSHOP   7
+#define VEH_DAM_THRESHOLD_DESTROYED        10
 
 // Don't change these.
 #define STRING_ROOM_TITLE_UNFINISHED "An unfinished room"

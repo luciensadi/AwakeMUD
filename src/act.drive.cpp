@@ -1070,7 +1070,7 @@ ACMD(do_repair)
         mod = TYPE_KIT;
     shop = find_workshop(ch, TYPE_VEHICLE);
     if (!shop) {
-      if (veh->damage >= VEH_DAMAGE_NEEDS_WORKSHOP) {
+      if (veh->damage >= VEH_DAM_THRESHOLD_NEEDS_WORKSHOP) {
         send_to_char("You'll need a garage with a vehicle workshop unpacked in it to fix this much damage.\r\n", ch);
         return;
       }
@@ -1173,6 +1173,7 @@ ACMD(do_driveby)
   }
 
   bool has_people = FALSE;
+  UNUSED(has_people);
   for (pass = ch->in_veh->people; pass; pass = pass->next_in_veh) {
     if (pass != ch) {
       has_people = TRUE;
@@ -1717,7 +1718,7 @@ ACMD(do_gridguide)
     }
 
     veh->dest = &world[real_room(grid->room)];
-    veh->cspeed = SPEED_CRUISING;
+    veh->cspeed = SPEED_AUTONAV;
 
     if (AFF_FLAGGED(ch, AFF_PILOT))
       AFF_FLAGS(ch).RemoveBits(AFF_PILOT, AFF_RIG, ENDBIT);
@@ -1804,9 +1805,9 @@ void process_autonav(void)
 {
   PERF_PROF_SCOPE(pr_, __func__);
   for (struct veh_data *veh = veh_list; veh; veh = veh->next) {
-    bool veh_moved = FALSE;
+    bool veh_moved = FALSE, veh_collapsed = FALSE;
 
-    if (veh->in_room && veh->dest && veh->cspeed > SPEED_IDLE && veh->damage < VEH_DAM_THRESHOLD_DESTROYED) {
+    if (veh->in_room && veh->dest && veh->cspeed == SPEED_AUTONAV && veh->damage < VEH_DAM_THRESHOLD_DESTROYED) {
       struct char_data *ch = NULL;
 
       if (!(ch = veh->rigger))
@@ -1815,27 +1816,87 @@ void process_autonav(void)
       if (!ch) {
         veh->dest = NULL;
         veh->cspeed = SPEED_OFF;
-        return;
+        continue;
       }
 
       int dir = 0;
-      for (int x = MIN(MAX((int)get_speed(veh) / 10, 1), MAX_GRIDGUIDE_ROOMS_PER_PULSE); x && dir >= 0 && veh->dest; x--) {
+      // The main problem here that doesn't allow us to implement this perfectly is that we process this
+      // in the main loop every 3 seconds so depending on how far we are from the next execution we have
+      // a 0-3s discrepancy (assuming the loop doesn't lag) and no ability to get finer granularity so we can
+      // apply our own independent wait states.
+      // This will have to do until we untie autonav from the main loop. -- Nodens
+      for (int x = MAX((int)get_speed(veh) * AUTONAV_MULTIPLIER, 1); x && dir >= 0 && veh->dest; x--) {
         dir = find_first_step(real_room(veh->in_room->number), real_room(veh->dest->number), FALSE);
         if (dir >= 0) {
           veh_moved = TRUE;
           move_vehicle(ch, dir);
+          
+          //Pull test for vehicles above * 1.5 load for stress damage happens on every room move and every 59 MUD minutes in save_vehicles().
+          // Rigger 3 p.64-65 & Shadowrun 3 p.145-147
+          if (veh->damage < VEH_DAM_THRESHOLD_DESTROYED && GET_VEH_ISOVERLOADED(veh) == LOAD_MAX) {
+            int tn = 8;
+            if (veh->damage) {
+              if (veh->damage >= VEH_DAM_THRESHOLD_SEVERE)
+                tn += 3;
+              else if (veh->damage >= VEH_DAM_THRESHOLD_MODERATE)
+                tn += 2;
+              else if (veh->damage >= VEH_DAM_THRESHOLD_LIGHT)
+                tn++;
+            }
+
+            if (success_test(veh->body, tn) < 1) {
+              veh->damage++;
+              send_to_char(ch, "%s got damaged by the stress of being immensely overloaded.\r\n", GET_VEH_NAME(veh));
+            }
+          }
+          if (veh->damage >= VEH_DAM_THRESHOLD_DESTROYED) {
+            veh_collapsed = TRUE;
+            break;
+          }
         }
       }
       if (!veh_moved) {
         send_to_veh("The autonav beeps and flashes a red 'ERROR' message before shutting off.\r\n", veh, 0, TRUE);
         veh->cspeed = SPEED_OFF;
         veh->dest = NULL;
-        return;
+        continue;
       }
       if (veh->in_room == veh->dest) {
         send_to_veh("Having reached its destination, the autonav shuts off.\r\n", veh, 0, TRUE);
         veh->cspeed = SPEED_OFF;
         veh->dest = NULL;
+        //Pull test for vehicles between * 1.0 and * 1.5 load for stress damage happens upon reaching destination and every 59 MUD minutes in save_vehicles().
+        // Rigger 3 p.64-65 & Shadowrun 3 p. 145-147
+        if (veh->damage < VEH_DAM_THRESHOLD_DESTROYED && GET_VEH_ISOVERLOADED(veh) == LOAD_HEAVY) {
+          int tn = 5;
+          if (veh->damage) {
+            if (veh->damage >= VEH_DAM_THRESHOLD_SEVERE)
+              tn += 3;
+            else if (veh->damage >= VEH_DAM_THRESHOLD_MODERATE)
+              tn += 2;
+            else if (veh->damage >= VEH_DAM_THRESHOLD_LIGHT)
+              tn++;
+          }
+            
+          if (success_test(veh->body, tn) < 1) {
+            veh->damage++;
+            send_to_char(ch, "%s got damaged by the stress of being immensely overloaded.\r\n", GET_VEH_NAME(veh));
+          }
+        }
+        if (veh->damage >= VEH_DAM_THRESHOLD_DESTROYED)
+          veh_collapsed = TRUE;
+      }
+    }
+    if (veh_collapsed) {
+      veh->cspeed = SPEED_OFF;
+      veh->dest = NULL;
+      struct char_data *tch = NULL, *next = NULL;
+      for (tch = veh->people; tch; tch = next) {
+        next = tch->next_in_veh;
+        char_from_room(tch);
+        char_to_room(tch, veh->in_room);
+        AFF_FLAGS(tch).RemoveBits(AFF_PILOT, AFF_RIG, ENDBIT);
+        send_to_char("Your vehicle collapses under load strain and you get out!\r\n", tch);
       }
     }
   }
@@ -1981,10 +2042,8 @@ ACMD(do_tow)
     send_to_char("Towing a car full of people isn't very safe.\r\n", ch);
   else if (tveh->cspeed > SPEED_OFF)
     send_to_char("The vehicle has to be off for you to tow it.\r\n", ch);
-  else if (veh->type == VEH_DRONE && tveh->type != VEH_DRONE)
-    send_to_char("Drones can only tow other drones.\r\n", ch);
-  else if (veh->type == VEH_DRONE && veh->load <= tveh->load)
-    send_to_char("Drones can only tow drones that are lighter than them.\r\n", ch);
+  else if (calculate_vehicle_weight(tveh) > GET_VEH_MAXOVERLOAD(veh))
+    send_to_char(ch, "%s is too heavy to be towed by %s.\r\n", GET_VEH_NAME(tveh), GET_VEH_NAME(veh));
   else if (veh->towing)
     send_to_char("Towing a vehicle that's towing another vehicle isn't very safe!\r\n", ch);
   else {
@@ -2002,8 +2061,14 @@ ACMD(do_tow)
       snprintf(buf, sizeof(buf), "SYSERR: Veh %s (%ld) has neither in_room nor in_veh!", GET_VEH_NAME(veh), veh->idnum);
       mudlog(buf, ch, LOG_SYSLOG, TRUE);
     }
+
     veh->towing = tveh;
     veh_from_room(tveh);
+    
+    if (GET_VEH_ISOVERLOADED(veh) == LOAD_MAX)
+      send_to_char(ch, "%s is VERY overloaded causing SIGNIFICANT strain! Damage will most likely occur with time or driving!\r\n", buf2, GET_VEH_NAME(veh));
+    else if (GET_VEH_ISOVERLOADED(veh) == LOAD_HEAVY)
+      send_to_char(ch, "%s is loaded above maximum safe capacity. Damage may occur with time or during.\r\n", buf2, GET_VEH_NAME(veh));
   }
 }
 
@@ -2104,21 +2169,12 @@ ACMD(do_push)
       send_to_char("You don't see that vehicle here.\r\n", ch);
       return;
     }
-    int mult;
-    switch (veh->type) {
-      case VEH_DRONE:
-        mult = 100;
-        break;
-      case VEH_TRUCK:
-        mult = 1500;
-        break;
-      default:
-        mult = 500;
-        break;
-    }
+
     if (found_veh == veh)
       send_to_char("You can't push it into itself.\r\n", ch);
-    else if (found_veh->load - found_veh->usedload < veh->body * mult)
+    else if (veh->damage < VEH_DAM_THRESHOLD_DESTROYED && found_veh->body == veh->body)
+      send_to_char(ch, "%s is the same size as %s. Its mass could only fit if it was wrecked.\r\n", GET_VEH_NAME(veh), GET_VEH_NAME(found_veh));
+    else if (GET_VEH_MAXOVERLOAD(found_veh) - found_veh->usedload < calculate_vehicle_weight(veh))
       send_to_char("There is not enough room in there for that.\r\n", ch);
     else if (found_veh->locked)
       send_to_char("You can't push it into a locked vehicle.\r\n", ch);
@@ -2132,6 +2188,39 @@ ACMD(do_push)
       snprintf(buf2, sizeof(buf2), "You are pushed into %s.\r\n", GET_VEH_NAME(found_veh));
       send_to_veh(buf2, veh, NULL, TRUE);
       veh_to_veh(veh, found_veh);
+      if (GET_VEH_ISOVERLOADED(found_veh) == LOAD_MAX) {
+        send_to_char(ch, "%s is VERY overloaded causing SIGNIFICANT strain! Damage will most likely occur with time or driving!\r\n", buf2, GET_VEH_NAME(found_veh));
+        // Pull tests Rigger 3 p.64-65 & Shadowrun 3 p.145-147 -- Assuming vehicle is braced when loading.
+        if (found_veh->damage < VEH_DAM_THRESHOLD_DESTROYED) {
+          int tn = 6;
+          if (found_veh->damage) {
+            if (found_veh->damage >= VEH_DAM_THRESHOLD_SEVERE)
+              tn += 3;
+            else if (found_veh->damage >= VEH_DAM_THRESHOLD_MODERATE)
+              tn += 2;
+            else if (found_veh->damage >= VEH_DAM_THRESHOLD_LIGHT)
+              tn++;
+          }
+          if (success_test(found_veh->body, tn) < 1) {
+            send_to_char(ch, "%s has taken structural damage from overloading it!\r\n", buf2, GET_VEH_NAME(found_veh));
+            found_veh->damage++;
+            if (found_veh->damage > VEH_DAM_THRESHOLD_DESTROYED && found_veh->people) {
+              struct char_data *tch = NULL, *next = NULL;
+              for (tch = found_veh->people; tch; tch = next) {
+                next = tch->next_in_veh;
+                char_from_room(tch);
+                char_to_room(tch, found_veh->in_room);
+                AFF_FLAGS(tch).RemoveBits(AFF_PILOT, AFF_RIG, ENDBIT);
+                send_to_char("Your vehicle collapses under load strain and you get out!\r\n", tch);
+              }
+            }
+            else if (found_veh->damage > VEH_DAM_THRESHOLD_DESTROYED)
+              send_to_char("Your vehicle collapsed under load strain!\r\n", ch);
+          }
+        }
+      }
+      else if (GET_VEH_ISOVERLOADED(found_veh) == LOAD_HEAVY)
+        send_to_char(ch, "%s is loaded above maximum safe capacity. Damage may occur with time or during.\r\n", buf2, GET_VEH_NAME(found_veh));
     }
   }
 }
@@ -2164,19 +2253,50 @@ ACMD(do_transfer)
   }
 }
 
-int calculate_vehicle_entry_load(struct veh_data *veh) {
-  int mult;
-  switch (veh->type) {
-    case VEH_DRONE:
-      mult = 100;
+// Rigger 3 p.61-62
+int calculate_vehicle_weight(struct veh_data *veh) {
+  int load;
+
+  switch (veh->body) {
+    case 0:
+      load = 2;
       break;
-    case VEH_TRUCK:
-      mult = 1500;
+    case 1:
+      load = 20;
+      break;
+    case 2:
+      load = 150;
+      break;
+    case 3:
+      load = 500;
+      break;
+    case 4:
+      load = 1500;
+      break;
+    case 5:
+      load = 4000;
+      break;
+    case 6:
+      load = 12000;
+      break;
+    case 7:
+      load = 25000;
+      break;
+    case 8:
+      load = 35000;
+      break;
+    case 9:
+      load = 50000;
+      break;
+    case 10:
+      load = 75000;
       break;
     default:
-      mult = 500;
+      load = 500;
       break;
   }
-
-  return veh->body * mult;
+  load += veh->usedload;
+  
+  return load;
 }
+

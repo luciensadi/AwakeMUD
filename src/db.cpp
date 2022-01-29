@@ -4898,13 +4898,8 @@ void load_saved_veh()
         if (GET_OBJ_TYPE(obj) != ITEM_CYBERDECK)
           auto_repair_obj(obj, buf3);
 
+        //Lookup macro definition
         if (veh_version == VERSION_VEH_FILE) {
-          // Since we're now saved the obj linked lists  in reverse order, in order to fix the stupid reordering on
-          // every binary execution, the previous algorithm did not work, as it relied on getting the container obj
-          // first and place subsequent objects in it. Since we're now getting it last, and more importantly we get
-          // objects at deeper nesting level in between our list, we save all pointers to objects along with their
-          // nesting level in a vector container and once we found the next container (inside < last_inside) we
-          // move the objects with higher nesting level to container and proceed. This works for any nesting depth.
           if (inside > 0 || (inside == 0 && inside < last_inside)) {
             //Found our container?
             if (inside < last_inside) {
@@ -4934,9 +4929,8 @@ void load_saved_veh()
 
           last_inside = inside;
         }
-        // This handles loading old house file format prior to introduction of version number in the file.
-        // Version number will always be 0 for this format.
-        else if (!veh_version) {
+        //Lookup macro definition
+        else if (veh_version == VERSION_VEH_FILEV0) {
           if (inside > 0) {
             if (inside == last_inside)
               last_obj = last_obj->in_obj;
@@ -5178,13 +5172,8 @@ void load_consist(void)
 
             snprintf(buf, sizeof(buf), "%s/Inside", sect_name);
             inside = data.GetInt(buf, 0);
+            // Lookup macro definition
             if (house_version == VERSION_HOUSE_FILE) {
-              // Since we're now saved the obj linked lists  in reverse order, in order to fix the stupid reordering on
-              // every binary execution, the previous algorithm did not work, as it relied on getting the container obj
-              // first and place subsequent objects in it. Since we're now getting it last, and more importantly we get
-              // objects at deeper nesting level in between our list, we save all pointers to objects along with their
-              // nesting level in a vector container and once we found the next container (inside < last_inside) we
-              // move the objects with higher nesting level to container and proceed. This works for any nesting depth.
               if (inside > 0 || (inside == 0 && inside < last_inside)) {
                 //Found our container?
                 if (inside < last_inside) {
@@ -5215,9 +5204,8 @@ void load_consist(void)
 
               last_inside = inside;
             }
-            // This handles loading old house file format prior to introduction of version number in the file.
-            // Version number will always be 0 for this format.
-            else if (!house_version) {
+            // Lookup macro definition
+            else if (house_version == VERSION_HOUSE_FILEV0) {
               if (inside > 0) {
                 if (inside == last_inside)
                   last_obj = last_obj->in_obj;
