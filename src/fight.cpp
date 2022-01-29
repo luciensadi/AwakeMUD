@@ -2416,6 +2416,8 @@ bool damage_without_message(struct char_data *ch, struct char_data *victim, int 
 bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int attacktype, bool is_physical, bool send_message)
 {
   char rbuf[MAX_STRING_LENGTH];
+  memset(rbuf, 0, sizeof(rbuf));
+  
   int exp;
   bool total_miss = FALSE, awake = TRUE;
   struct obj_data *bio;
