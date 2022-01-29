@@ -33,7 +33,7 @@ extern char *cleanup(char *dest, const char *src);
 extern void ASSIGNMOB(long mob, SPECIAL(fname));
 extern void add_phone_to_list(struct obj_data *obj);
 extern void weight_change_object(struct obj_data * obj, float weight);
-extern void auto_repair_obj(struct obj_data *obj, const char *source);
+extern void auto_repair_obj(struct obj_data *obj);
 extern void handle_weapon_attachments(struct obj_data *obj);
 extern void raw_store_mail(long to, long from_id, const char *from_name, const char *message_pointer);
 
@@ -185,7 +185,7 @@ bool House_load(struct house_control_rec *house)
 
       // Don't auto-repair cyberdecks until they're fully loaded.
       if (GET_OBJ_TYPE(obj) != ITEM_CYBERDECK)
-        auto_repair_obj(obj, buf3);
+        auto_repair_obj(obj);
 
       snprintf(buf, sizeof(buf), "%s/Inside", sect_name);
       inside = data.GetInt(buf, 0);
