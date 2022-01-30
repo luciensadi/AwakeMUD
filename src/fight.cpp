@@ -4542,7 +4542,11 @@ void roll_individual_initiative(struct char_data *ch)
     // init state and either the flag was getting stripped or the mob became alert before we ever tried to hit it.
     // Also the no defense condition happens in the hit_with_multi_weapon_toggle() and we can't remove surprise
     // flag until we process all that.
-    if (FIGHTING(ch) && IS_NPC(FIGHTING(ch)) && GET_MOBALERT(FIGHTING(ch)) == MALERT_CALM && success_test(GET_REA(ch), 4) > success_test(GET_REA(FIGHTING(ch)), 4)) {
+    if (FIGHTING(ch)
+        && IS_NPC(FIGHTING(ch))
+        && !MOB_FLAGGED(FIGHTING(ch), MOB_INANIMATE)
+        && GET_MOBALERT(FIGHTING(ch)) == MALERT_CALM
+        && success_test(GET_REA(ch), 4) > success_test(GET_REA(FIGHTING(ch)), 4)) {
       GET_INIT_ROLL(FIGHTING(ch)) = 0;
       act("You surprise $n!", TRUE, FIGHTING(ch), 0, ch, TO_VICT);
       AFF_FLAGS(FIGHTING(ch)).SetBit(AFF_SURPRISE);
