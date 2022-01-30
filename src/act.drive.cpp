@@ -404,22 +404,34 @@ ACMD(do_ram)
     send_to_char("You can't seem to find the target you're looking for.\r\n", ch);
     return;
   }
-  if (vict && !invis_ok(ch, vict)) {
-    send_to_char("You can't seem to find the target you're looking for.\r\n", ch);
-    return;
-  }
-  if (vict && !IS_NPC(vict) && !(IS_NPC(ch) || (PRF_FLAGGED(ch, PRF_PKER) && PRF_FLAGGED(vict, PRF_PKER)))) {
-    send_to_char(ch, "You have to be flagged PK to attack another player.\r\n");
-    return;
-  }
-  if (tveh == veh) {
-    send_to_char("You can't ram yourself!\r\n", ch);
-    return;
+
+  if (vict) {
+    if (!invis_ok(ch, vict)) {
+      send_to_char("You can't seem to find the target you're looking for.\r\n", ch);
+      return;
+    }
+
+    if (!IS_NPC(vict) && !(IS_NPC(ch) || (PRF_FLAGGED(ch, PRF_PKER) && PRF_FLAGGED(vict, PRF_PKER)))) {
+      send_to_char("You have to be flagged PK to attack another player.\r\n", ch);
+      return;
+    }
+
+    if (IS_ASTRAL(vict)) {
+      send_to_char("Your car's not nearly cool enough to be able to ram astral beings.\r\n", ch);
+      return;
+    }
   }
 
-  // Prevent PvP damage against vehicles.
-  if (tveh && !can_damage_vehicle(ch, tveh)) {
-    return;
+  if (tveh) {
+    if (tveh == veh) {
+      send_to_char("You can't ram yourself!\r\n", ch);
+      return;
+    }
+
+    // Prevent PvP damage against vehicles.
+    if (!can_damage_vehicle(ch, tveh)) {
+      return;
+    }
   }
 
   do_raw_ram(ch, veh, tveh, vict);
