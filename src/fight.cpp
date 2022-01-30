@@ -625,12 +625,19 @@ void make_corpse(struct char_data * ch)
 
 void death_cry(struct char_data * ch)
 {
+  bool should_make_mechanical_noise_instead_of_scream = IS_NPC(ch) && MOB_FLAGGED(ch, MOB_INANIMATE);
 
-  snprintf(buf3, sizeof(buf3), "$n cries out $s last breath as $e die%s!", HSSH_SHOULD_PLURAL(ch) ? "s" : "");
-  act(buf3, FALSE, ch, 0, 0, TO_ROOM);
+  if (should_make_mechanical_noise_instead_of_scream) {
+    act("A horrible grinding buzz reverberates from $n as it shuts down!", FALSE, ch, 0, 0, TO_ROOM);
+  } else {
+    snprintf(buf3, sizeof(buf3), "$n cries out $s last breath as $e die%s!", HSSH_SHOULD_PLURAL(ch) ? "s" : "");
+    act(buf3, FALSE, ch, 0, 0, TO_ROOM);
+  }
 
   if (ch->in_veh) {
-    snprintf(buf3, sizeof(buf3), "A cry of agony comes from within %s!\r\n", GET_VEH_NAME(ch->in_veh));
+    snprintf(buf3, sizeof(buf3), "A %s comes from within %s!\r\n",
+             should_make_mechanical_noise_instead_of_scream ? "horrible grinding buzz" : "cry of agony",
+             GET_VEH_NAME(ch->in_veh));
     send_to_room(buf3, get_ch_in_room(ch));
     return;
   }
@@ -646,7 +653,11 @@ void death_cry(struct char_data * ch)
   {
     if (CAN_GO(ch, door)) {
       ch->in_room = was_in->dir_option[door]->to_room;
-      act("Somewhere close, you hear someone's death cry!", FALSE, ch, 0, 0, TO_ROOM);
+      if (should_make_mechanical_noise_instead_of_scream) {
+        act("Somewhere close, you hear a horrible grinding buzz!", FALSE, ch, 0, 0, TO_ROOM);
+      } else {
+        act("Somewhere close, you hear someone's death cry!", FALSE, ch, 0, 0, TO_ROOM);
+      }
       for (struct char_data *listener = ch->in_room->people; listener; listener = listener->next_in_room)
         if (IS_NPC(listener)) {
           GET_MOBALERTTIME(listener) = 30;
