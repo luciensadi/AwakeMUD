@@ -4592,7 +4592,7 @@ ACMD(do_syspoints) {
 
   // Require all arguments.
   if (!*arg || !*target || !*amt || !*reason || k <= 0 ) {
-    send_to_char(ch, "Syntax: syspoints <award|penalize> <player> <%samount> <Reason for award>.\r\n", k < 0 ? "POSITIVE " : "");
+    send_to_char(ch, "Syntax: syspoints <award|penalize> <player> <%samount> [for] <Reason for award>.\r\n", k < 0 ? "POSITIVE " : "");
     return;
   }
 
@@ -4604,7 +4604,7 @@ ACMD(do_syspoints) {
     award_mode = FALSE;
     k *= -1;
   } else {
-    send_to_char("Syntax: syspoints <award|penalize> <player> <amount> <Reason for award>.\r\n", ch);
+    send_to_char("Syntax: syspoints <award|penalize> <player> <amount> [for] <Reason for award>\r\n", ch);
     return;
   }
 
@@ -4637,14 +4637,14 @@ ACMD(do_syspoints) {
     }
 
     // Mail the victim.
-    snprintf(buf, sizeof(buf), "You have been %s %d system points for %s.\r\n",
+    snprintf(buf, sizeof(buf), "You have been %s %d system points for%s\r\n",
             (award_mode ? "awarded" : "penalized"),
             k,
             reason);
     store_mail(idnum, ch, buf);
 
     // Notify the actor.
-    send_to_char(ch, "You %s %d system points %s %s for %s.\r\n",
+    send_to_char(ch, "You %s %d system points %s %s for %s\r\n",
                 (award_mode ? "awarded" : "penalized"),
                 k,
                 (award_mode ? "to" : "from"),
@@ -4652,7 +4652,7 @@ ACMD(do_syspoints) {
                 reason);
 
     // Log it.
-    snprintf(buf, sizeof(buf), "%s %s %d system points %s %s for %s (%d to %d).",
+    snprintf(buf, sizeof(buf), "%s %s %d system points %s %s for %s (%d to %d)",
             GET_CHAR_NAME(ch),
             (award_mode ? "awarded" : "penalized"),
             k,
