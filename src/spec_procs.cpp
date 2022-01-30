@@ -201,6 +201,8 @@ int ability_cost(int abil, int level)
       return 100;
     case 3:
       return 200;
+    default:
+      return 0;
     }
   case ADEPT_KILLING_HANDS:
     if (level < 3)

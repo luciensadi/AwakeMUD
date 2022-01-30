@@ -149,7 +149,8 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
     char helpbuf[100];
     char non_const_arg[MAX_INPUT_LENGTH];
     strncpy(non_const_arg, arg, sizeof(non_const_arg) - 1);
-    char *line = any_one_arg(non_const_arg, helpbuf);
+    char line[MAX_INPUT_LENGTH];
+    strncpy(line, any_one_arg(non_const_arg, helpbuf), MAX_INPUT_LENGTH- 1);
     if (!*line) {
       strncpy(helpbuf, " archetypes", sizeof(helpbuf) - 1);
       do_help(d->character, helpbuf, 0, 0);
@@ -1048,7 +1049,7 @@ int get_minimum_attribute_points_for_race(int race) {
 int get_maximum_attribute_points_for_race(int race) {
   int amount = 0;
   for (int attr = BOD; attr <= WIL; attr++) {
-    amount += racial_limits[race][0][attr] - (max(1, racial_attribute_modifiers[race][attr] + 1));
+    amount += racial_limits[race][0][attr] - (std::max(1, racial_attribute_modifiers[race][attr] + 1));
   }
   return amount;
 }

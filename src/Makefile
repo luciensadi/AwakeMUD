@@ -39,6 +39,13 @@ MYFLAGS = -DUSE_MEMORY_CANARIES -DDEBUG -DSELFADVANCE -DGITHUB_INTEGRATION -Dosx
 #LIBS = -L/usr/local/lib $(COMMON_FLAGS) -lcrypt
 #MYFLAGS = -DDEBUG -DSELFADVANCE -DIDLEDELETE_DRYRUN -DWIN32 -I /usr/local/include/ -Wall -Wextra -Wno-unused-parameter
 
+# These are currently required on GCC because we have strn type function calls which feed a buffer onto itself which is
+# unsafe due to null termination and because we have others that can cause truncation of the string. They need rewriting
+# eventually but currently they work fine or we would have noticed truncated strings.
+ifeq ($(CXX), g++)
+MYFLAGS += -Wno-format-truncation -Wno-restrict
+endif
+
 CPPFLAGS = $(MYFLAGS) $(PROFILE)
 
 sourcefiles = $(wildcard *.cpp)

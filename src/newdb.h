@@ -109,7 +109,7 @@ private:
   bool load();
   int  count_entries(File *index);
   void sort_by_id();
-  void resize_table(int empty_slots = 100);
+  // void resize_table(int empty_slots = 100);
   void sorted_insert(const entry *info);
 
   void clear_by_time();

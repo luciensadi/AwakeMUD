@@ -597,7 +597,10 @@ void totem_bonus(struct char_data *ch, int action, int type, int &target, int &s
         skill += 2;
       break;
     case TOTEM_HORNEDMAN:
-      if (type == SPIRIT_DESERT || type == SPIRIT_FOREST || type == SPIRIT_MOUNTAIN || type == SPIRIT_PRAIRIE)
+      if (type == SPIRIT_DESERT || type == SPIRIT_FOREST || type == SPIRIT_MOUNTAIN || type == SPIRIT_PRAIRIE) {
+      // Not sure if a skill value is missing here but as this is written it can fall through to TOTEM_LOVER and I'm sure that's not
+      // intended. Braces fix it for now. -- Nodens
+      }
       break;
     case TOTEM_LOVER:
       if (type == SPIRIT_SEA || type == SPIRIT_LAKE || type == SPIRIT_RIVER || type == SPIRIT_SWAMP)

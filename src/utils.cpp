@@ -18,7 +18,7 @@
 #include <stdarg.h>
 #include <iostream>
 
-using namespace std;
+//using namespace std;
 
 #if defined(WIN32) && !defined(__CYGWIN__)
 #include <winsock.h>
@@ -790,7 +790,6 @@ bool has_cyberweapon(struct char_data * ch)
 void log_death_trap(struct char_data * ch)
 {
   char buf[150];
-  extern struct room_data *world;
 
   snprintf(buf, sizeof(buf), "%s hit DeathTrap #%ld (%s)", GET_CHAR_NAME(ch),
           ch->in_room->number, ch->in_room->name);
@@ -1205,6 +1204,7 @@ char * buf_mod(char *rbuf, int rbuf_len, const char *name, int bonus)
   return rbuf;
 }
 
+/* This is unused.
 char * buf_roll(char *rbuf, const char *name, int bonus)
 {
   if ( !rbuf )
@@ -1213,6 +1213,7 @@ char * buf_roll(char *rbuf, const char *name, int bonus)
   snprintf(rbuf, sizeof(rbuf), " [%s %d]", name, bonus);
   return rbuf;
 }
+*/
 
 // Shadowrun 3 p. 130-131, 145-147 & Rigger 3 p.64-65 
 int get_speed(struct veh_data *veh)

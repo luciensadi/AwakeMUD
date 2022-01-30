@@ -233,19 +233,30 @@ struct room_data
   struct obj_data *best_workshop[NUM_WORKSHOP_TYPES];
   
 #ifdef USE_DEBUG_CANARIES
-  // No sense in initializing the value since it's memset to 0 in most invocations.
   int canary;
 #endif
   room_data() :
-      name(NULL), description(NULL), night_desc(NULL), ex_description(NULL),
-      matrix(0), access(0), io(0), trace(0), bandwidth(0), jacknumber(0), 
-      address(NULL), peaceful(0), func(NULL), dirty_bit(FALSE),
-      staff_level_lock(0), contents(NULL), people(NULL), vehicles(NULL), watching(NULL)
+      number(0), zone(0), sector_type(0), name(NULL), description(NULL), night_desc(NULL), ex_description(NULL),
+      matrix(0), access(0), io(0), trace(0), bandwidth(0), rtg(0), jacknumber(0), address(NULL), room_flags(0),
+      blood(0), debris(0), spec(0), rating(0), cover(0), crowd(0), type(0), x(0), y(0), z(0), peaceful(0), func(NULL),
+      dirty_bit(FALSE), staff_level_lock(0), elevator_number(0), contents(NULL), people(NULL), vehicles(NULL),
+#ifdef USE_DEBUG_CANARIES
+      canary(0),
+#endif
+      watching(NULL)
   {
     for (int i = 0; i < NUM_OF_DIRS; i++) {
       dir_option[i] = NULL;
       temporary_stored_exit[i] = NULL;
     }
+    
+    memset(vision, 0, 3 * sizeof(int));
+    memset(background, 0, 4 * sizeof(int));
+    memset(light, 0, 3 * sizeof(byte));
+    memset(poltergeist, 0, 2 * sizeof(byte));
+    memset(icesheet, 0, 2 * sizeof(byte));
+    memset(shadow, 0, 2 * sizeof(byte));
+    memset(silence, 0, 2 * sizeof(byte));
     
     for (int i = 0; i < NUM_WORKSHOP_TYPES; i++)
       best_workshop[i] = NULL;
@@ -540,6 +551,14 @@ struct player_special_data_saved
   bool archetypal;
 
   int system_points;
+  
+  player_special_data_saved() :
+      wimp_level(0), freeze_level(0), invis_level(0), incog_level(0), load_room(0), last_in(0), last_veh(0),
+      pref(0), bad_pws(0), totem(0), totemspirit(0), att_points(0), skill_points(0), force_points(0),
+      restring_points(0), zonenum(0), archetype(0), archetypal(0), system_points(0)
+  {
+    memset(conditions, 0, 3 * sizeof(sbyte));
+  }
 };
 
 struct player_special_data
@@ -562,9 +581,11 @@ struct player_special_data
   struct remem *ignored;
 
   player_special_data() :
-      aliases(NULL), remem(NULL), last_tell(0), questnum(0), obj_complete(NULL), 
-      mob_complete(NULL), watching(NULL), ignored(NULL)
+      saved(), aliases(NULL), remem(NULL), last_tell(0), questnum(0), obj_complete(NULL), 
+      mob_complete(NULL), mental_loss(0), physical_loss(0), perm_bod(0), watching(NULL), ignored(NULL)
   {
+    memset(last_quest, 0, QUEST_TIMER * sizeof(long));
+    
     for (int i = 0; i < NUM_DRUGS+1; i++) {
       for (int j = 0; j < 7; j++) {
         drugs[i][j] = 0;
@@ -635,7 +656,7 @@ struct grid_data
   struct grid_data *next;
 
   grid_data() :
-      name(NULL), next(NULL)
+      name(NULL), room(0), next(NULL)
   {}
 };
 struct veh_data

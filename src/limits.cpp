@@ -586,7 +586,6 @@ int calculate_swim_successes(struct char_data *ch) {
 }
 
 void analyze_swim_successes(struct char_data *temp_char) {
-  extern class memoryClass *Mem;
 
   struct room_data *room = temp_char->in_room;
   int old_sector_type = room->sector_type;
@@ -753,7 +752,6 @@ void point_update(void)
   PERF_PROF_SCOPE(pr_, __func__);
   ACMD_DECLARE(do_use);
   struct char_data *i, *next_char;
-  extern struct time_info_data time_info;
 
   // Generate the wholist file.
   ACMD_CONST(do_who);
@@ -1280,7 +1278,7 @@ void save_vehicles(bool fromCopyover)
     
     if (!obj_strings.empty()) {
       int i = 0;
-      for(vector<std::string>::reverse_iterator rit = obj_strings.rbegin(); rit != obj_strings.rend(); rit++ ) {
+      for(std::vector<std::string>::reverse_iterator rit = obj_strings.rbegin(); rit != obj_strings.rend(); rit++ ) {
         fprintf(fl, "\t[Object %d]\n", i);
         fprintf(fl, "%s", rit->c_str());
         i++;

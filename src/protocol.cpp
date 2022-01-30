@@ -1637,7 +1637,7 @@ void SoundSend( descriptor_t *apDescriptor, const char *apTrigger )
          {
             /* Use an old MSP-style trigger */
             char *pBuffer = new char[MaxTriggerLength+10];
-            snprintf( pBuffer, sizeof(pBuffer), "\t!SOUND(%s)", apTrigger );
+            snprintf( pBuffer, MaxTriggerLength+10, "\t!SOUND(%s)", apTrigger );
             Write(apDescriptor, pBuffer);
             delete [] pBuffer;
          }

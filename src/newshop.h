@@ -42,8 +42,10 @@ struct shop_sell_data {
   struct shop_sell_data *next;
   
   shop_sell_data() :
-    next(NULL)
-  {}
+    vnum(0), type(0), stock(0), next(NULL)
+  {
+    memset(lastidnum, 0, SHOP_LAST_IDNUM_LIST_SIZE * sizeof(int));
+  }
 };
 
 struct shop_order_data {
@@ -58,7 +60,7 @@ struct shop_order_data {
   struct shop_order_data *next;
 
   shop_order_data() :
-    next(NULL)
+    item(0), player(0), timeavail(0), number(0), price(0), sent(0), paid(0), expiration(0), next(NULL)
   {}
 };
 

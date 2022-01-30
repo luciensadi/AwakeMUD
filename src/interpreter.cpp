@@ -2494,9 +2494,6 @@ void nanny(struct descriptor_data * d, char *arg)
           d->character = Mem->GetCh();
           DELETE_IF_EXTANT(d->character->player_specials);
           d->character->player_specials = new player_special_data;
-          // make sure to clear it up here
-          memset(d->character->player_specials, 0,
-                 sizeof(player_special_data));
 
           d->character->desc = d;
         }

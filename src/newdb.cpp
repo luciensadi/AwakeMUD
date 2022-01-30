@@ -1704,7 +1704,6 @@ char_data *PCIndex::LoadChar(const char *name, bool logon)
   char_data *ch = Mem->GetCh();
 
   ch->player_specials = new player_special_data;
-  memset(ch->player_specials, 0, sizeof(player_special_data));
 
   load_char(name, ch, logon);
 
@@ -1818,6 +1817,7 @@ void PCIndex::sort_by_id()
   qsort(tab, entry_cnt, sizeof(entry), entry_compare);
 }
 
+/* This is not used anywhere so commenting it instead of fixing the memset related problem.
 void PCIndex::resize_table(int empty_slots)
 {
   entry_size = entry_cnt + empty_slots;
@@ -1840,7 +1840,7 @@ void PCIndex::resize_table(int empty_slots)
   // finally, update the pointer
   tab = new_tab;
 }
-
+*/
 void PCIndex::sorted_insert(const entry *info)
 {
   int i;

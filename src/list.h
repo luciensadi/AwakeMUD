@@ -19,7 +19,7 @@
 
 #include <assert.h>
 #include <iostream>
-using namespace std;
+//using namespace std;
 
 #define ADD(a)  Add(a, __FILE__, __LINE__)
 
@@ -66,6 +66,9 @@ public:
   // Destructor.
   virtual ~listClass();
 
+  // Operator: Copy assignnment default
+  listClass& operator=(const listClass & L) = default;
+  
   // AddItem adds an item after the specified node (if none, add at head).
   bool AddItem(nodeStruct<T> *node, T item);
   
@@ -260,11 +263,11 @@ bool List<T>::Add(T item, const char *filename, int lineno) {
 
 #ifdef DEBUG
   if (item == NULL) {
-    cerr << "SYSERR: Attempt to add null to list in file " << filename << ", line: " << lineno << endl;
+    std::cerr << "SYSERR: Attempt to add null to list in file " << filename << ", line: " << lineno << std::endl;
   }
   
   if (this->FindItem(item)) {
-    cerr << "SYSERR: Attempt to add duplicate item to list in file " << filename << ", line: " << lineno << endl;
+    std::cerr << "SYSERR: Attempt to add duplicate item to list in file " << filename << ", line: " << lineno << std::endl;
     abort();
   }
 #endif

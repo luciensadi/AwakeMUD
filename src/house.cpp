@@ -448,7 +448,7 @@ void House_save(struct house_control_rec *house, const char *file_name, long rnu
 
   if (!obj_strings.empty()) {
     int i = 0;
-    for(vector<std::string>::reverse_iterator rit = obj_strings.rbegin(); rit != obj_strings.rend(); rit++ ) {
+    for(std::vector<std::string>::reverse_iterator rit = obj_strings.rbegin(); rit != obj_strings.rend(); rit++ ) {
       fprintf(fl, "\t[Object %d]\n", i);
       fprintf(fl, "%s", rit->c_str());
       i++;

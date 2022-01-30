@@ -1546,9 +1546,19 @@ ACMD(do_mdelete)
       }
     }
   }
+//We should really not be doing this. memset should not be used on structures that contain anything
+//other than than simple types as it can result in undefined behavior and can end up overwritting stuff
+//that we don't want overwritten specially with C++ compilers. I have removed all of the memset calls
+//used for initialization and fixed the constructors to do it properly. Here we're not doing initialization
+//though and we should add a function that handles this. For now I'm disabling the warning on this one
+//and leaving this comment that I can search on, to eventually sort it out. -- Nodens
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunknown-warning-option"
+#pragma GCC diagnostic ignored "-Wclass-memaccess"
   // Wipe out the top entry of the table (it's not needed), then shrink the table.
   memset(&mob_proto[top_of_mobt], 0, sizeof(struct char_data));
   memset(&mob_index[top_of_mobt], 0, sizeof(struct index_data));
+#pragma GCC diagnostic pop
   top_of_mobt--;
 
   // update the zones by decrementing numbers if >= number deleted

@@ -23,7 +23,7 @@
 #include <time.h>
 #include <iostream>
 #include <chrono>
-using namespace std;
+//using namespace std;
 
 #if defined(WIN32) && !defined(__CYGWIN__)
 #include <windows.h>
@@ -2351,7 +2351,7 @@ void free_up_memory(int Empty)
 {
   mudlog("Warning: Received signal, Freeing up Memory", NULL, LOG_SYSLOG, TRUE);
   if (!Mem->ClearStacks()) {
-    cerr << "SYSERR: Unable to free enough memory, shutting down...\n";
+    std::cerr << "SYSERR: Unable to free enough memory, shutting down...\n";
     House_save_all();
     exit(0);
   }

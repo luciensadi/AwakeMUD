@@ -4769,6 +4769,7 @@ ACMD(do_set)
   case 71:
     RANGE(-10000, 10000);
     GET_SYSTEM_POINTS(vict) = value;
+    break;
   case 72:
     RANGE(0, MAX_CONGREGATION_BONUS);
     GET_CONGREGATION_BONUS(vict) = value;
@@ -5746,7 +5747,7 @@ ACMD(do_tail)
     strlcat(buf,"\r", sizeof(buf));
     send_to_char( buf, ch );
   }
-  fclose( out );
+  pclose( out );
   return;
 }
 

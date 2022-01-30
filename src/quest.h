@@ -65,15 +65,15 @@ struct quest_data
 #endif
 
   quest_data() :
-      johnson(-1), time(0), num_objs(0), num_mobs(0),
+      vnum(0), johnson(-1), time(0), num_objs(0), num_mobs(0),
       s_time(0), e_time(0), s_room(0), min_rep(0), max_rep(0),
       nuyen(0), karma(0), reward(-1), obj(NULL), mob(NULL), intro(NULL),
       decline(NULL), quit(NULL), finish(NULL), info(NULL),
+      s_string(NULL), e_string(NULL), 
 #ifdef USE_QUEST_LOCATION_CODE
-      s_string(NULL), e_string(NULL), done(NULL), location(NULL)
-#else
-      s_string(NULL), e_string(NULL), done(NULL)
+      location(NULL),
 #endif
+      done(NULL)
   {}
 }
 ;

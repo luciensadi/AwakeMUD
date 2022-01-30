@@ -239,7 +239,7 @@ struct melee_combat_data {
 
         // Weapon foci. NPC use them implicitly.
         if (IS_NPC(ch) || WEAPON_FOCUS_USABLE_BY(weapon, ch)) {
-          skill_bonus = min(4, GET_WEAPON_FOCUS_RATING(weapon));
+          skill_bonus = std::min(4, GET_WEAPON_FOCUS_RATING(weapon));
         }
       }
     } else if (cyber->num_cyberweapons > 0) {
@@ -1162,7 +1162,7 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
           att->ranged_combat_mode ? att->ranged->power : att->melee->power,
           bod_success,
           att->ranged_combat_mode ? att->ranged->successes : att->melee->successes,
-          wound_name[MIN(DEADLY, MAX(0,att->ranged_combat_mode ? att->ranged->damage_level : att->melee->damage_level))],
+          wound_name[MIN(DEADLY, MAX(0, (att->ranged_combat_mode ? att->ranged->damage_level : att->melee->damage_level)))],
           wound_name[MIN(DEADLY, MAX(0, staged_damage))],
           damage_total,
           (att->ranged_combat_mode ? att->ranged->is_physical : att->melee->is_physical) ? 'P' : 'M');
