@@ -19,7 +19,6 @@
 
 #include <assert.h>
 #include <iostream>
-//using namespace std;
 
 #define ADD(a)  Add(a, __FILE__, __LINE__)
 

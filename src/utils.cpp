@@ -18,8 +18,6 @@
 #include <stdarg.h>
 #include <iostream>
 
-//using namespace std;
-
 #if defined(WIN32) && !defined(__CYGWIN__)
 #include <winsock.h>
 #define random() rand()

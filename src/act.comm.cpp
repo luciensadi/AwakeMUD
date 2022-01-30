@@ -14,8 +14,6 @@
 #include <ctype.h>
 #include <iostream>
 
-//using namespace std;
-
 #include "structs.h"
 #include "utils.h"
 #include "comm.h"

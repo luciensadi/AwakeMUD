@@ -15,10 +15,6 @@
 #include <time.h>
 #include <iostream>
 
-#if (!defined(WIN32) || defined(__CYGWIN__)) && !defined(osx)
-//using namespace std;
-#endif
-
 #define NUM_RESERVED_DESCS      8
 #define NUM_VALUES    12
 # ifdef DEBUG

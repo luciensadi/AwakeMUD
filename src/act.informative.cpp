@@ -17,8 +17,6 @@
 #include <iostream>
 #include <fstream>
 
-//using namespace std;
-
 #if !defined(WIN32) || defined(__CYGWIN__)
 #include <sys/time.h>
 #endif
