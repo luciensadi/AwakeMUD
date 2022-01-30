@@ -1473,6 +1473,17 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
         if (success_test(found_veh->body, tn) < 1) {
           send_to_char(ch, "%s has taken structural damage from overloading it!\r\n", buf2, GET_VEH_NAME(found_veh));
           found_veh->damage++;
+          
+          if (found_veh->damage > VEH_DAM_THRESHOLD_DESTROYED && found_veh->people) {
+            struct char_data *tch = NULL, *next = NULL;
+            for (tch = found_veh->people; tch; tch = next) {
+              next = tch->next_in_veh;
+              char_from_room(tch);
+              char_to_room(tch, found_veh->in_room);
+              AFF_FLAGS(tch).RemoveBits(AFF_PILOT, AFF_RIG, ENDBIT);
+              send_to_char("Your vehicle collapses under load strain and you get out!\r\n", tch);
+            }
+          }
         }
       }
       else if (GET_VEH_ISOVERLOADED(found_veh) == LOAD_HEAVY)
@@ -1530,6 +1541,17 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
     if (success_test(found_veh->body, tn) < 1) {
       send_to_char(ch, "%s has taken structural damage from overloading it!\r\n", buf2, GET_VEH_NAME(found_veh));
       found_veh->damage++;
+      
+      if (found_veh->damage > VEH_DAM_THRESHOLD_DESTROYED && found_veh->people) {
+        struct char_data *tch = NULL, *next = NULL;
+        for (tch = found_veh->people; tch; tch = next) {
+          next = tch->next_in_veh;
+          char_from_room(tch);
+          char_to_room(tch, found_veh->in_room);
+          AFF_FLAGS(tch).RemoveBits(AFF_PILOT, AFF_RIG, ENDBIT);
+          send_to_char("Your vehicle collapses under load strain and you get out!\r\n", tch);
+        }
+      }
     }
   }
   else if (GET_VEH_ISOVERLOADED(found_veh) == LOAD_HEAVY)
