@@ -435,7 +435,7 @@ void make_corpse(struct char_data * ch)
   {
     if (MOB_FLAGGED(ch, MOB_INANIMATE)) {
       snprintf(buf, sizeof(buf), "remains corpse %s", ch->player.physical_text.keywords);
-      snprintf(buf1, sizeof(buf1), "^rThe remains of %s is lying here.^n", decapitalize_a_an(GET_NAME(ch)));
+      snprintf(buf1, sizeof(buf1), "^rThe remains of %s are lying here.^n", decapitalize_a_an(GET_NAME(ch)));
       snprintf(buf2, sizeof(buf2), "^rthe remains of %s^n", decapitalize_a_an(GET_NAME(ch)));
       strlcpy(buf3, "It's been powered down permanently.\r\n", sizeof(buf3));
     } else {
@@ -2417,7 +2417,7 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
 {
   char rbuf[MAX_STRING_LENGTH];
   memset(rbuf, 0, sizeof(rbuf));
-  
+
   int exp;
   bool total_miss = FALSE, awake = TRUE;
   struct obj_data *bio;
