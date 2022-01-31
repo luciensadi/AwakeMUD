@@ -3404,9 +3404,8 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
   char buf[MAX_MESSAGE_LENGTH], buf1[MAX_MESSAGE_LENGTH], buf2[MAX_MESSAGE_LENGTH], buf3[MAX_MESSAGE_LENGTH], buf4[MAX_MESSAGE_LENGTH],
   been_heard[MAX_STRING_LENGTH], temp[20];
   struct obj_data *obj = NULL;
-  struct room_data *ch_room = NULL, *vict_room = NULL;
+  struct room_data *ch_room = NULL;
   rnum_t room1 = 0, room2 = 0, rnum = 0;
-  UNUSED(vict_room);
 
   if (weapon == NULL) {
     mudlog("SYSERR: Null weapon in combat_message()!", ch, LOG_SYSLOG, TRUE);
@@ -3425,8 +3424,9 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
   } else {
     strcpy(buf, "long burst from $p");
   }
+  
   ch_room = get_ch_in_room(ch);
-  vict_room = get_ch_in_room(victim);
+  
   if (ch->in_room == victim->in_room) {
     // Same-room messaging.
     static char vehicle_message[1000];

@@ -587,8 +587,7 @@ void reward(struct char_data *ch, struct char_data *johnson)
 
   struct follow_type *f;
   struct obj_data *obj;
-  int i, nuyen = 0, karma = 0, num, all = 1, old;
-  UNUSED(old);
+  int i, nuyen = 0, karma = 0, num, all = 1;
 
   for (i = 0; i < quest_table[GET_QUEST(ch)].num_objs; i++)
     if (ch->player_specials->obj_complete[i])
@@ -651,7 +650,6 @@ void reward(struct char_data *ch, struct char_data *johnson)
           snprintf(buf, sizeof(buf), "^YGroup room mismatch for %s and %s.", GET_CHAR_NAME(ch), GET_CHAR_NAME(f->follower));
           mudlog(buf, ch, LOG_SYSLOG, TRUE);
         } else {
-          old = (int)(GET_KARMA(f->follower) / 100);
           gain_nuyen(f->follower, nuyen, NUYEN_INCOME_AUTORUNS);
           int gained = gain_karma(f->follower, karma, TRUE, FALSE, TRUE);
           send_to_char(f->follower, "You gain %0.2f karma and %d nuyen for being in %s's group.\r\n", (float) gained * 0.01, nuyen, GET_CHAR_NAME(ch));
