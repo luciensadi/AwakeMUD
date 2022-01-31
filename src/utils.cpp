@@ -1245,8 +1245,11 @@ int get_speed(struct veh_data *veh)
         speed /= 2;
       break;
     case SPEED_MAX:
-    case SPEED_AUTONAV:
       speed = MIN(maxspeed, veh->speed);
+      if (ROOM_FLAGGED(in_room, ROOM_INDOORS))
+        speed /= 2;
+    case SPEED_AUTONAV:
+      speed = MIN(MIN(maxspeed, veh->speed), 200);
       if (ROOM_FLAGGED(in_room, ROOM_INDOORS))
         speed /= 2;
       break;

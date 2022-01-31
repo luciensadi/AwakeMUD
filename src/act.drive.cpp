@@ -1805,7 +1805,8 @@ void process_autonav(void)
 {
   PERF_PROF_SCOPE(pr_, __func__);
   for (struct veh_data *veh = veh_list; veh; veh = veh->next) {
-    bool veh_moved = FALSE, veh_collapsed = FALSE;
+    bool veh_moved = FALSE;
+    int veh_collapsed = 0;
 
     if (veh->in_room && veh->dest && veh->cspeed == SPEED_AUTONAV && veh->damage < VEH_DAM_THRESHOLD_DESTROYED) {
       struct char_data *ch = NULL;
@@ -1850,7 +1851,7 @@ void process_autonav(void)
             }
           }
           if (veh->damage >= VEH_DAM_THRESHOLD_DESTROYED) {
-            veh_collapsed = TRUE;
+            veh_collapsed = 1;
             break;
           }
         }
@@ -1884,7 +1885,7 @@ void process_autonav(void)
           }
         }
         if (veh->damage >= VEH_DAM_THRESHOLD_DESTROYED)
-          veh_collapsed = TRUE;
+          veh_collapsed = 2;
       }
     }
     if (veh_collapsed) {
@@ -1897,7 +1898,15 @@ void process_autonav(void)
         char_to_room(tch, veh->in_room);
         AFF_FLAGS(tch).RemoveBits(AFF_PILOT, AFF_RIG, ENDBIT);
         send_to_char("Your vehicle collapses under load strain and you get out!\r\n", tch);
+        
+        if (veh_collapsed == 1) {
+          int power = (int)(ceilf(get_speed(veh) / 10));
+          int damage_total = convert_damage(stage(0 - success_test(GET_BOD(tch), power), MODERATE));
+          damage(tch, tch, damage_total, TYPE_CRASH, PHYSICAL);
+        }
       }
+      snprintf(buf, sizeof(buf), "%s collapses under load stress and the occupants scramble out!\r\n", capitalize(GET_VEH_NAME(veh)));
+      act(buf, FALSE, veh->in_room->people, NULL, NULL, TO_ROOM);
     }
   }
 }

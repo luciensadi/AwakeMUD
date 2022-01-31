@@ -3045,8 +3045,6 @@ int check_recoil(struct char_data *ch, struct obj_data *gun)
 {
   struct obj_data *obj;
   int rnum, comp = 0;
-  bool gasvent = FALSE;
-  UNUSED(gasvent);
 
   bool can_use_bipods_and_tripods = !(PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_RIG) || AFF_FLAGGED(ch, AFF_MANNING));
 
@@ -3065,7 +3063,6 @@ int check_recoil(struct char_data *ch, struct obj_data *gun)
       if (GET_ACCESSORY_TYPE(obj) == ACCESS_GASVENT) {
         // Gas vent values are negative when built, so we need to flip them.
         comp += 0 - GET_ACCESSORY_RATING(obj);
-        gasvent = TRUE;
       }
       else if (GET_ACCESSORY_TYPE(obj) == ACCESS_SHOCKPAD)
         comp++;

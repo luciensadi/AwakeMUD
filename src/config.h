@@ -108,7 +108,7 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 
 // Autonav multiplier is a limiter applied to all speed vehicles to prevent instant relocation but keep the difference between speeds meaningful.
 // 0.1 is a decent value according to testing (8-9 seconds on Saab, 13-14s on Bison, Seattle Center<->Evergreen route) . Higher values are faster, lower are slower.
-#define AUTONAV_MULTIPLIER                                     0.1
+#define AUTONAV_MULTIPLIER                                     0.05
 
 // How often do NPCs press elevator buttons? 1:x ratio, where X is the number you put here.
 #define ELEVATOR_BUTTON_PRESS_CHANCE                           20
