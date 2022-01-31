@@ -99,10 +99,13 @@ int can_move(struct char_data *ch, int dir, int extra)
       send_to_char("That's private property -- no trespassing!\r\n", ch);
       return 0;
     }
-  if (ROOM_FLAGGED(EXIT(ch, dir)->to_room, ROOM_TUNNEL) && !IS_ASTRAL(ch) && !IS_PROJECT(ch))
-    if (EXIT(ch, dir)->to_room->people &&
-        EXIT(ch, dir)->to_room->people->next_in_room)
-    {
+  if (ROOM_FLAGGED(EXIT(ch, dir)->to_room, ROOM_TUNNEL) && !IS_ASTRAL(ch) && !IS_PROJECT(ch)) {
+    int num_occupants = 0;
+    for (struct char_data *in_room_ptr = EXIT(ch, dir)->to_room->people; in_room_ptr && num_occupants < 2; in_room_ptr = in_room_ptr->next_in_room) {
+      if (!IS_ASTRAL(in_room_ptr) && !IS_PROJECT(in_room_ptr) && !access_level(in_room_ptr, LVL_BUILDER))
+        num_occupants++;
+    }
+    if (num_occupants >= 2) {
       if (access_level(ch, LVL_BUILDER)) {
         send_to_char("You use your staff powers to bypass the tunnel restriction.\r\n", ch);
       } else {
@@ -110,6 +113,15 @@ int can_move(struct char_data *ch, int dir, int extra)
         return 0;
       }
     }
+  }
+  if (ROOM_FLAGGED(EXIT(ch, dir)->to_room, ROOM_TOO_CRAMPED_FOR_CHARACTERS) && !IS_ASTRAL(ch) && !IS_PROJECT(ch)) {
+    if (access_level(ch, LVL_BUILDER)) {
+      send_to_char("You use your staff powers to bypass the cramped-space restriction.\r\n", ch);
+    } else {
+      send_to_char("Try as you might, you can't fit in there!\r\n", ch);
+      return 0;
+    }
+  }
 
   /*
   if (ch->in_room && ch->in_room->func && ch->in_room->func == escalator)
@@ -535,7 +547,9 @@ void perform_fall(struct char_data *ch)
       meters -= GET_POWER(ch, ADEPT_FREEFALL) * 2;
     if (meters <= 0) {
       send_to_char(ch, "You manage to land on your feet.\r\n");
-      act("$e manages to land on $s feet.", FALSE, ch, 0, 0, TO_ROOM);
+      char fall_str[250];
+      snprintf(fall_str, sizeof(fall_str), "$e manage%s to land on $s feet.", HSSH_SHOULD_PLURAL(ch) ? "s" : "");
+      act(fall_str, FALSE, ch, 0, 0, TO_ROOM);
       return;
     }
     int power = (int)(meters / 2); // then divide by two to find power of damage
@@ -638,6 +652,11 @@ void move_vehicle(struct char_data *ch, int dir)
 
   if (ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_HOUSE) && !House_can_enter(ch, EXIT(veh, dir)->to_room->number)) {
     send_to_char("You can't use other people's garages without permission.\r\n", ch);
+    return;
+  }
+
+  if (ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_TOO_CRAMPED_FOR_CHARACTERS) && (veh->body > 1 || veh->type != VEH_DRONE)) {
+    send_to_char("Your vehicle is too big to fit in there, but a small drone might make it in.\r\n", ch);
     return;
   }
 

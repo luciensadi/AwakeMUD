@@ -272,6 +272,7 @@ const char *room_bits[] =
     "SOCIALIZE!",
     "CORPSE_SAVE_HACK",
     "STERILE",
+    "CRAMPED",
     "\n"
   };
 
