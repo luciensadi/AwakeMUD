@@ -407,15 +407,20 @@ bool check_fall(struct char_data *ch, int modifier, const char *fall_message)
 {
   int base_target = ch->in_room->rating + modify_target(ch);
   int i, autosucc = 0, dice, success;
+  char roll_buf[10000];
+
+  snprintf(roll_buf, sizeof(roll_buf), "Computing fall test for %s vs initial TN %d and modifier %d.\r\n", GET_CHAR_NAME(ch), base_target, modifier);
 
   for (i = WEAR_LIGHT; i < NUM_WEARS; i++)
-    if (GET_EQ(ch, i) && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_CLIMBING && GET_OBJ_VAL(GET_EQ(ch, i), 1) == CLIMBING_TYPE_JUST_CLIMBING)
+    if (GET_EQ(ch, i) && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_CLIMBING && GET_OBJ_VAL(GET_EQ(ch, i), 1) == CLIMBING_TYPE_JUST_CLIMBING) {
+      snprintf(ENDOF(roll_buf), sizeof(roll_buf) - strlen(roll_buf), " - %s lowers TN by %d.\r\n", GET_OBJ_NAME(GET_EQ(ch, i)), GET_OBJ_VAL(GET_EQ(ch, i), 0));
       base_target -= GET_OBJ_VAL(GET_EQ(ch, i), 0);
+    }
   for (struct obj_data *cyber = ch->cyberware; cyber; cyber = cyber->next_content)
-    if (GET_OBJ_VAL(cyber, 0) == CYB_BALANCETAIL)
+    if (GET_CYBERWARE_TYPE(cyber) == CYB_BALANCETAIL || GET_CYBERWARE_TYPE(cyber) == CYB_BALANCEAUG) {
+      snprintf(ENDOF(roll_buf), sizeof(roll_buf) - strlen(roll_buf), " - %s lowers TN by 2.\r\n", GET_OBJ_NAME(cyber));
       base_target -= 2;
-    else if (GET_OBJ_VAL(cyber, 0) == CYB_BALANCEAUG)
-      base_target -= 2;
+    }
 
   base_target += modifier;
   base_target = MIN(base_target, 52);
@@ -426,8 +431,11 @@ bool check_fall(struct char_data *ch, int modifier, const char *fall_message)
   }
 
   dice = get_skill(ch, SKILL_ATHLETICS, base_target);
+  snprintf(ENDOF(roll_buf), sizeof(roll_buf) - strlen(roll_buf), "Athletics check: Rolling %d + %d dice against a final TN of %d results in ", dice, GET_REA(ch), base_target);
   dice += GET_REA(ch);
-  success = success_test(dice + autosucc, base_target);
+  success = success_test(dice, base_target) + autosucc;
+  snprintf(ENDOF(roll_buf), sizeof(roll_buf) - strlen(roll_buf), "^c%d^n success%s.", success, success == 1 ? "" : "es");
+  act(roll_buf, FALSE, ch, 0, 0, TO_ROLLS);
 
   if (success < 1)
     return TRUE;
@@ -479,6 +487,7 @@ void perform_fall(struct char_data *ch)
 
     // check_fall has them make a test to not fall / stop falling.
     // If they succeed their check, precede their success message with a fall message proportional to the distance they fell.
+    // Note that they don't take damage unless they actually hit the ground. This makes elevator shafts a lot less dangerous than originally expected.
     if (!check_fall(ch, levels * 4, fall_message))
       return;
 
