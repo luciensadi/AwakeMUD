@@ -381,8 +381,9 @@ ACMD(do_put)
       send_to_char(ch, "You aren't carrying %s %s.\r\n", AN(arg1), arg1);
       return;
     }
-    if ((GET_OBJ_TYPE(obj) != ITEM_PROGRAM && (GET_OBJ_TYPE(obj) == ITEM_DRUG &&
-        GET_OBJ_VAL(obj, 0) != DRUG_CRAM && GET_OBJ_VAL(obj, 0) != DRUG_PSYCHE) && GET_OBJ_VNUM(obj) != 660)) {
+    if (GET_OBJ_TYPE(obj) != ITEM_PROGRAM
+        && (GET_OBJ_TYPE(obj) != ITEM_DRUG || (GET_OBJ_VAL(obj, 0) != DRUG_CRAM && GET_OBJ_VAL(obj, 0) != DRUG_PSYCHE))
+        && !(IS_MONOWHIP(obj))) {
       send_to_char(ch, "%s doesn't fit in your fingertip compartment.\r\n", GET_OBJ_NAME(obj));
       return;
     }
@@ -1199,6 +1200,10 @@ void get_from_room(struct char_data * ch, char *arg, bool download)
         GET_OBJ_VAL(container, 1) = GET_VEH_VNUM(veh);
         GET_OBJ_VAL(container, 2) = veh->idnum;
         GET_OBJ_VAL(container, 3) = veh->owner;
+
+        // To avoid having to add another field to the pfiles_inv table, I've done something horrifyingly hacky and co-opted a value.
+        // For vehicle containers, value 11 is the weight of the container.
+        GET_OBJ_VAL(container, 11) = GET_OBJ_WEIGHT(container);
 
         snprintf(buf, sizeof(buf), "^y%s^n (carried vehicle)", decapitalize_a_an(GET_VEH_NAME(veh)));
         container->restring = str_dup(buf);

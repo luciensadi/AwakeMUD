@@ -946,6 +946,11 @@ bool load_char(const char *name, char_data *ch, bool logon)
             // Process weight.
             GET_OBJ_WEIGHT(obj) = GET_AMMOBOX_QUANTITY(obj) * get_ammo_weight(GET_AMMOBOX_WEAPON(obj), GET_AMMOBOX_TYPE(obj));
             break;
+          case ITEM_OTHER:
+            // We did some hacky shit and force-saved the weight of the container to value 11. Pull it back out.
+            if (GET_OBJ_VNUM(obj) == OBJ_VEHCONTAINER)
+              GET_OBJ_WEIGHT(obj) = GET_OBJ_VAL(obj, 11);
+            break;
         }
         // This is badly named and at first reading it seems like it holds a vnum to parent container
         // which made the algorithm below harder to read but it is in fact nesting level.
