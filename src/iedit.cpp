@@ -1824,12 +1824,13 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
           }
           break;
         case ITEM_SHOPCONTAINER:
+        case ITEM_VEHCONTAINER:
           if (!access_level(CH, LVL_PRESIDENT)) {
-            send_to_char("Sorry, shopcontainers are for code use only and can't be created.\r\n", d->character);
+            send_to_char("Sorry, shop and vehicle containers are for code use only and can't be created.\r\n", d->character);
             iedit_disp_type_menu(d);
             return;
           }
-          send_to_char("WARNING: Shopcontainers are for code use only! Hope you know what you're doing...\r\n", d->character);
+          send_to_char("WARNING: Shop and vehicle containers are for code use only! Hope you know what you're doing...\r\n", d->character);
           break;
         case ITEM_GUN_MAGAZINE:
           send_to_char("Sorry, gun magazines are for code use only and can't be created.\r\n", d->character);

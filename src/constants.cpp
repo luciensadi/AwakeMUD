@@ -921,6 +921,7 @@ const char *item_types[] =
     "Ammo Box",
     "Keyring",
     "Shop Container",
+    "Vehicle Container",
     "\n"
   };
 
