@@ -2511,7 +2511,7 @@ ACMD(do_award)
   k = atoi(amt);
 
   if (!*arg || !*amt || !*reason || k <= 0 ) {
-    send_to_char("Syntax: award <player> <karma x 100> [for] <Reason for award>\r\n", ch);
+    send_to_char("Syntax: award <player> <karma x 100> for <Reason for award>\r\n", ch);
     return;
   }
   if (!(vict = get_char_vis(ch, arg))) {
@@ -2535,11 +2535,11 @@ ACMD(do_award)
   else
     gain_karma(vict, k, TRUE, FALSE, FALSE);
 
-  send_to_char(vict, "You have been awarded %0.2f karma for %s\r\n", (float)k*0.01, reason);
+  send_to_char(vict, "You have been awarded %0.2f karma for %s%s^n\r\n", (float)k*0.01, reason, ispunct(get_final_character_from_string(reason)) ? "" : ".");
 
   send_to_char(ch, "You awarded %0.2f karma to %s for %s%s^n\r\n", (float)k*0.01, GET_CHAR_NAME(vict), reason, ispunct(get_final_character_from_string(reason)) ? "" : ".");
 
-  snprintf(buf2, sizeof(buf2), "%s awarded %0.2f karma to %s for %s (%d to %d).",
+  snprintf(buf2, sizeof(buf2), "%s awarded %0.2f karma to %s for %s^g (%d to %d).",
           GET_CHAR_NAME(ch), (float)k*0.01,
           GET_CHAR_NAME(vict), reason, GET_KARMA(vict) - k, GET_KARMA(vict));
   mudlog(buf2, ch, LOG_WIZLOG, TRUE);
@@ -2558,7 +2558,7 @@ ACMD(do_penalize)
   k = atoi(amt);
 
   if (!*arg || !*amt || !*reason || k <= 0 ) {
-    send_to_char("Syntax: penalize <player> <karma x 100> <Reason for penalty>.\r\n", ch);
+    send_to_char("Syntax: penalize <player> <karma x 100> for <Reason for penalty>\r\n", ch);
     return;
   }
   if (!(vict = get_char_vis(ch, arg))) {
@@ -2574,12 +2574,12 @@ ACMD(do_penalize)
   // Since we subtracted rep for this, we need to re-add it.
   GET_REP(vict) += (int) (k / 100);
 
-  send_to_char(vict, "You have been penalized %0.2f karma for %s.\r\n", (float)k*0.01, reason);
+  send_to_char(vict, "You have been penalized %0.2f karma for %s%s^n\r\n", (float)k*0.01, reason, ispunct(get_final_character_from_string(reason)) ? "" : ".");
 
-  send_to_char(ch, "You penalized %0.2f karma from %s for %s.\r\n", (float)k*0.01,
-          GET_NAME(vict), reason);
+  send_to_char(ch, "You penalized %0.2f karma from %s for %s%s^n\r\n", (float)k*0.01,
+          GET_NAME(vict), reason, ispunct(get_final_character_from_string(reason)) ? "" : ".");
 
-  snprintf(buf2, sizeof(buf2), "%s penalized %0.2f karma from %s for %s (%d to %d).",
+  snprintf(buf2, sizeof(buf2), "%s penalized %0.2f karma from %s for %s^g (%d to %d).",
           GET_CHAR_NAME(ch), (float)k*0.01,
           GET_CHAR_NAME(vict), reason, GET_KARMA(vict) + k, GET_KARMA(vict));
   mudlog(buf2, ch, LOG_WIZLOG, TRUE);
