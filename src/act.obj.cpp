@@ -1749,7 +1749,8 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
         mudlog(buf, ch, LOG_CHEATLOG, TRUE);
         DELETE_ARRAY_IF_EXTANT(owner);
 
-        // Remove the object from inventory.
+        // Clear the values to prevent bug logging, then remove the object from inventory.
+        GET_VEHCONTAINER_VEH_VNUM(obj) = GET_VEHCONTAINER_VEH_IDNUM(obj) = GET_VEHCONTAINER_VEH_OWNER(obj) = 0;
         extract_obj(obj);
 
         playerDB.SaveChar(ch);
@@ -2032,7 +2033,7 @@ bool perform_give(struct char_data * ch, struct char_data * vict, struct obj_dat
 
     else {
       const char *owner = get_player_name(GET_VEHCONTAINER_VEH_OWNER(obj));
-      snprintf(buf, sizeof(buf), "%s (%ld) gave veh-container %s (%ld, idnum %ld), belonging to %s (%ld), to %s (%ld).",
+      snprintf(buf, sizeof(buf), "%s (%ld) gave veh-container %s (%d, idnum %d), belonging to %s (%d), to %s (%ld).",
                GET_CHAR_NAME(ch),
                GET_IDNUM(ch),
                GET_OBJ_NAME(obj),

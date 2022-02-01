@@ -2222,6 +2222,20 @@ void extract_obj(struct obj_data * obj)
     mudlog(buf, NULL, LOG_PURGELOG, TRUE);
   }
 
+  if (GET_OBJ_VNUM(obj) == OBJ_VEHCONTAINER && (GET_VEHCONTAINER_VEH_VNUM(obj) || GET_VEHCONTAINER_VEH_IDNUM(obj) || GET_VEHCONTAINER_VEH_OWNER(obj))) {
+    const char *owner = get_player_name(GET_VEHCONTAINER_VEH_OWNER(obj));
+    snprintf(buf, sizeof(buf), "extract_obj: Destroying NON-ZEROED vehicle container %s (%d, idnum %d) for vehicle belonging to %s (%d).",
+             GET_OBJ_NAME(obj),
+             GET_VEHCONTAINER_VEH_VNUM(obj),
+             GET_VEHCONTAINER_VEH_IDNUM(obj),
+             owner,
+             GET_VEHCONTAINER_VEH_OWNER(obj)
+            );
+    DELETE_ARRAY_IF_EXTANT(owner);
+    mudlog(buf, NULL, LOG_CHEATLOG, TRUE);
+    mudlog(buf, NULL, LOG_PURGELOG, TRUE);
+  }
+
   if (obj->in_room)
     obj->in_room->dirty_bit = TRUE;
 
