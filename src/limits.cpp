@@ -1135,11 +1135,11 @@ void save_vehicles(bool fromCopyover)
       else if (!fromCopyover
               && (!ROOM_FLAGGED(temp_room, ROOM_GARAGE)
               || (ROOM_FLAGGED(temp_room, ROOM_HOUSE)
-              && !House_can_enter_by_idnum(veh->owner, temp_room->number)))) {
-       snprintf(buf, sizeof(buf), "Falling back to a garage for non-garage-room veh %s (in '%s' %ld).",
-                GET_VEH_NAME(veh), GET_ROOM_NAME(temp_room), GET_ROOM_VNUM(temp_room)
-              );
-       log(buf);
+              && !House_can_enter_by_idnum(veh->owner, temp_room->number))))
+      {
+       /* snprintf(buf, sizeof(buf), "Falling back to a garage for non-garage-room veh %s (in '%s' %ld).",
+                   GET_VEH_NAME(veh), GET_ROOM_NAME(temp_room), GET_ROOM_VNUM(temp_room));
+       log(buf); */
         switch (GET_JURISDICTION(temp_room)) {
           case ZONE_PORTLAND:
             switch (number(0, 2)) {

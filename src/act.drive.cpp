@@ -886,6 +886,12 @@ ACMD(do_control)
     mudlog(buf, ch, LOG_SYSLOG, TRUE);
     return;
   }
+
+  if (veh->in_room && GET_ROOM_VNUM(veh->in_room) == RM_PORTABLE_VEHICLE_STORAGE) {
+    send_to_char("The automated safety systems won't let you control a vehicle that's being carried around.\r\n", ch);
+    return;
+  }
+
   if (PLR_FLAGGED(ch, PLR_REMOTE))
     do_return(ch, NULL, 0, 0);
 

@@ -23,6 +23,7 @@
 #include "constants.h"
 #include "newmatrix.h"
 #include "newdb.h"
+#include "limits.h"
 
 /* extern variables */
 extern int drink_aff[][3];
@@ -37,6 +38,7 @@ extern void check_quest_delivery(struct char_data *ch, struct obj_data *obj);
 extern void check_quest_destroy(struct char_data *ch, struct obj_data *obj);
 extern void dominator_mode_switch(struct char_data *ch, struct obj_data *obj, int mode);
 extern float get_bulletpants_weight(struct char_data *ch);
+extern int calculate_vehicle_weight(struct veh_data *veh);
 
 // Corpse saving externs.
 extern void write_world_to_disk(int vnum);
@@ -552,6 +554,11 @@ ACMD(do_put)
       return;
     }
 
+    if (GET_OBJ_VNUM(obj) == OBJ_VEHCONTAINER) {
+      send_to_char(ch, "You'd better drop %s if you want to free up your hands.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
+      return;
+    }
+
     if ((obj == cont) && !cyberdeck) {
       send_to_char("You attempt to fold it into itself, but fail.\r\n", ch);
       return;
@@ -599,6 +606,8 @@ ACMD(do_put)
   } else {
     for (obj = ch->carrying; obj; obj = next_obj) {
       next_obj = obj->next_content;
+      if (GET_OBJ_VNUM(obj) == OBJ_VEHCONTAINER)
+        continue;
       if (obj != cont && CAN_SEE_OBJ(ch, obj) &&
           (obj_dotmode == FIND_ALL || isname(arg1, obj->text.keywords))) {
         found = 1;
@@ -1121,6 +1130,106 @@ void get_from_room(struct char_data * ch, char *arg, bool download)
     else
       obj = get_obj_in_list_vis(ch, arg, ch->in_room->contents);
     if (!obj) {
+      // Attempt to pick up a vehicle.
+      struct veh_data *veh;
+      if ((veh = get_veh_list(arg, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch))) {
+        int vehicle_weight = calculate_vehicle_weight(veh);
+        rnum_t vehicle_storage_rnum = real_room(RM_PORTABLE_VEHICLE_STORAGE);
+
+        if (vehicle_storage_rnum < 0) {
+          send_to_char("Whoops-- looks like this system is offline!\r\n", ch);
+          mudlog("SYSERR: Got negative rnum when looking up RM_PORTABLE_VEHICLE_STORAGE!", ch, LOG_SYSLOG, TRUE);
+          return;
+        }
+
+        // No taking vehicles you can't carry.
+        if (vehicle_weight + IS_CARRYING_W(ch) > CAN_CARRY_W(ch)) {
+          send_to_char(ch, "%s is too heavy for you to carry.\r\n", capitalize(GET_VEH_NAME(veh)));
+          return;
+        }
+
+        // No taking vehicles that are moving.
+        if (veh->cspeed != SPEED_OFF) {
+          send_to_char(ch, "%s needs to be completely powered off before you can lift it.\r\n", capitalize(GET_VEH_NAME(veh)));
+          return;
+        }
+
+        // No taking vehicles that are actively rigged.
+        if (veh->rigger) {
+          send_to_char(ch, "%s has someone in control of it, you'd better not.\r\n", capitalize(GET_VEH_NAME(veh)));
+          return;
+        }
+
+        // No taking vehicles with people inside.
+        if (veh->people) {
+          send_to_char(ch, "%s has people inside it, you'd better not.\r\n", capitalize(GET_VEH_NAME(veh)));
+          return;
+        }
+
+        // No taking vehicles with other vehicles inside.
+        if (veh->carriedvehs) {
+          send_to_char(ch, "%s has another vehicle inside it, there's no way you can carry that much!\r\n", capitalize(GET_VEH_NAME(veh)));
+          return;
+        }
+
+        // No taking NPC vehicles or locked, non-destroyed vehicles that belong to someone else.
+        if (!veh->owner || (veh->owner != GET_IDNUM(ch) && (veh->locked && veh->damage < VEH_DAM_THRESHOLD_DESTROYED))) {
+          snprintf(buf, sizeof(buf), "%s's anti-theft measures beep loudly.\r\n", capitalize(GET_VEH_NAME(veh)));
+          act(buf, FALSE, ch, 0, 0, TO_ROOM);
+          send_to_char(buf, ch);
+          return;
+        }
+
+        // You can carry it. Now comes the REAL bullshit. We bundle the vehicle up by transferring it to
+        // a special room and giving you an item with enough values to point to it conclusively.
+
+        // Initialize the vehicle container.
+        struct obj_data *container = read_object(OBJ_VEHCONTAINER, VIRTUAL);
+
+        if (!container) {
+          send_to_char("Something went wrong! Don't worry, the vehicle is untouched. Please use the BUG command and tell us about what happened here.\r\n", ch);
+          mudlog("SYSERR: Unable to read_object() on OBJ_VEHCONTAINER, did it not get built?", ch, LOG_SYSLOG, TRUE);
+          return;
+        }
+
+        // Set the container's weight to match the vehicle.
+        GET_OBJ_WEIGHT(container) = vehicle_weight;
+
+        // Set the container's values to help us positively ID the vehicle.
+        GET_OBJ_VAL(container, 1) = GET_VEH_VNUM(veh);
+        GET_OBJ_VAL(container, 2) = veh->idnum;
+        GET_OBJ_VAL(container, 3) = veh->owner;
+
+        snprintf(buf, sizeof(buf), "^y%s^n (carried vehicle)", decapitalize_a_an(GET_VEH_NAME(veh)));
+        container->restring = str_dup(buf);
+
+        // Give the object to the character.
+        obj_to_char(container, ch);
+
+        // Sanity check: If they're not carrying it for whatever reason, abort.
+        if (container->carried_by != ch) {
+          send_to_char("Whoops, something went wrong. Don't worry, the vehicle is untouched. Please use the BUG command and tell us what happened here.\r\n", ch);
+          mudlog("SYSERR: Unable to give container object to character when picking up vehicle-- aborted!", ch, LOG_SYSLOG, TRUE);
+
+          extract_obj(container);
+          return;
+        }
+
+        // Move the vehicle to the storage room.
+        veh_from_room(veh);
+        veh_to_room(veh, &world[vehicle_storage_rnum]);
+
+        // Finally, message the room.
+        send_to_char(ch, "With a grunt, you lift %s.\r\n", decapitalize_a_an(GET_VEH_NAME(veh)));
+        snprintf(buf, sizeof(buf), "With a grunt, $n picks up %s.", decapitalize_a_an(GET_VEH_NAME(veh)));
+        act(buf, FALSE, ch, 0, 0, TO_ROOM);
+
+        playerDB.SaveChar(ch);
+        save_vehicles(FALSE);
+        return;
+      }
+
+      // Didn't find a vehicle, either.
       send_to_char(ch, "You don't see %s %s here.\r\n", AN(arg), arg);
     } else {
       if ( CAN_SEE_OBJ(ch, obj) ) {
@@ -1253,7 +1362,7 @@ ACMD(do_get)
       if (cyberdeck && veh) {
         cont = NULL;
         if (veh->owner != GET_IDNUM(ch) && veh->locked) {
-          snprintf(buf, sizeof(buf), "%s anti-theft measures beep loudly.\r\n", GET_VEH_NAME(veh));
+          snprintf(buf, sizeof(buf), "%s's anti-theft measures beep loudly.\r\n", capitalize(GET_VEH_NAME(veh)));
           act(buf, FALSE, ch, 0, 0, TO_ROOM);
           send_to_char(buf, ch);
           return;
@@ -1568,6 +1677,74 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
     return 0;
   }
 
+  // Special handling: Vehicle containers.
+  if (GET_OBJ_VNUM(obj) == OBJ_VEHCONTAINER) {
+    if (mode != SCMD_DROP) {
+      send_to_char(ch, "You can't %s vehicles.\r\n", sname);
+      return 0;
+    }
+
+    if (ch->in_veh) {
+      send_to_char("You'll have to step out of your current vehicle to do that.\r\n", ch);
+      return 0;
+    }
+
+    // It'd be great if we could allow drones and bikes to be dropped anywhere not flagged !BIKE, but this
+    // would cause issues with the current world-- the !bike flag is placed at entrances to zones, not
+    // spread throughout the whole thing. People would just carry their bikes in, drop them, and do drivebys.
+    if (!(ROOM_FLAGGED(ch->in_room, ROOM_ROAD) || ROOM_FLAGGED(ch->in_room, ROOM_GARAGE))) {
+      send_to_char("You can only drop vehicles on roads or in garages.\r\n", ch);
+      return 0;
+    }
+
+    // Find the veh storage room.
+    rnum_t vehicle_storage_rnum = real_room(RM_PORTABLE_VEHICLE_STORAGE);
+    if (vehicle_storage_rnum < 0) {
+      send_to_char("Whoops-- looks like this system is offline!\r\n", ch);
+      mudlog("SYSERR: Got negative rnum when looking up RM_PORTABLE_VEHICLE_STORAGE!", ch, LOG_SYSLOG, TRUE);
+      return 0;
+    }
+
+    // Search it for our vehicle.
+    for (struct veh_data *veh = world[vehicle_storage_rnum].vehicles; veh; veh = veh->next_veh) {
+      if (GET_VEH_VNUM(veh) == GET_OBJ_VAL(obj, 1)
+          && veh->idnum == GET_OBJ_VAL(obj, 2)
+          && veh->owner == GET_OBJ_VAL(obj, 3))
+      {
+        // Found it! Proceed to drop.
+        veh_from_room(veh);
+        veh_to_room(veh, ch->in_room);
+        send_to_char(ch, "You set %s down with a sigh of relief.\r\n", decapitalize_a_an(GET_VEH_NAME(veh)));
+        snprintf(buf, sizeof(buf), "$n sets %s down with a sigh of relief.", decapitalize_a_an(GET_VEH_NAME(veh)));
+        act(buf, FALSE, ch, 0, 0, TO_ROOM);
+
+        // Remove the object from inventory.
+        extract_obj(obj);
+
+        // Log if the vehicle is being dropped in a private garage.
+        if (veh->owner > 0 && ROOM_FLAGGED(ch->in_room, ROOM_HOUSE)) {
+          const char *owner = get_player_name(veh->owner);
+          snprintf(buf, sizeof(buf), "Anti-Grief: %s dropped %s owned by %s in house %ld.",
+                   GET_CHAR_NAME(ch),
+                   GET_VEH_NAME(veh),
+                   owner,
+                   GET_ROOM_VNUM(ch->in_room)
+                  );
+          DELETE_ARRAY_IF_EXTANT(owner);
+        }
+
+        playerDB.SaveChar(ch);
+        save_vehicles(FALSE);
+        return 0;
+      }
+    }
+
+    send_to_char(ch, "Error: we couldn't find a matching vehicle for %s! Please alert staff.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
+    snprintf(buf, sizeof(buf), "SYSERR: Failed to find matching vehicle for container %s!", decapitalize_a_an(GET_OBJ_NAME(obj)));
+    mudlog(buf, ch, LOG_SYSLOG, TRUE);
+    return 0;
+  }
+
   if (GET_OBJ_VNUM(obj) == OBJ_NEOPHYTE_SUBSIDY_CARD && GET_OBJ_VAL(obj, 1) > 0) {
     // TODO: Make it so you can use partial amounts for rent payments- this will suck with 1 nuyen left.
     send_to_char(ch, "You can't %s a subsidy card that still has nuyen on it!\r\n", sname);
@@ -1828,6 +2005,11 @@ bool perform_give(struct char_data * ch, struct char_data * vict, struct obj_dat
     send_to_char(ch, "You cannot give away something you are working on.\r\n");
     return 0;
   }
+  if (GET_OBJ_VNUM(obj) == OBJ_VEHCONTAINER && IS_NPC(vict)) {
+    send_to_char("You can't give NPCs vehicles.\r\n", ch);
+    return 0;
+  }
+
   obj_from_char(obj);
   obj_to_char(obj, vict);
   act("You give $p to $N.", FALSE, ch, obj, vict, TO_CHAR);

@@ -1130,7 +1130,8 @@ enum {
 #define ITEM_GUN_AMMO           42
 #define ITEM_KEYRING            43
 #define ITEM_SHOPCONTAINER      44
-#define NUM_ITEMS               45
+#define ITEM_VEHCONTAINER       45
+#define NUM_ITEMS               46
 
 
 /* take/wear flags: used by obj_data.obj_flags.wear_flags */
@@ -2197,6 +2198,7 @@ enum {
 #define RM_MULTNOMAH_GATE_SOUTH      17599
 #define RM_MAGE_TRAINER              778
 #define RM_GUN_TRAINER               781
+#define RM_PORTABLE_VEHICLE_STORAGE  10097
 
 // Chargen room defines
 #define RM_CHARGEN_PATH_OF_THE_MAGICIAN_SHAMANIC  60520
@@ -2320,6 +2322,7 @@ enum {
 #define OBJ_OLD_BLANK_MAGAZINE_FROM_CLASSIC 601
 
 #define OBJ_SHOPCONTAINER                  83
+#define OBJ_VEHCONTAINER                   13
 
 #define BOTTOM_OF_TEMPLATE_ITEMS           106
 #define OBJ_BLANK_OPTICAL_CHIP             106

@@ -2785,6 +2785,14 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
                 GET_OBJ_VAL(j, 1));
         break;
       }
+      if (GET_OBJ_VNUM(j) == OBJ_VEHCONTAINER) {
+        strlcat(buf, "\r\nIt's a carried vehicle. You can DROP it on any road or garage.", sizeof(buf));
+        break;
+      }
+      if (GET_OBJ_VNUM(j) == OBJ_SHOPCONTAINER) {
+        strlcat(buf, "\r\nIt's a packaged-up bit of cyberware or bioware. See HELP CYBERDOC for what you can do with it.", sizeof(buf));
+        break;
+      }
       // fallthrough
 
     // All info about these is displayed when you examine them.

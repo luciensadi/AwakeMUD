@@ -1779,7 +1779,7 @@ void parse_object(File &fl, long nr)
 
   // Set the do-not-touch flags for known templated items.
   if ((BOTTOM_OF_TEMPLATE_ITEMS <= nr && nr <= TOP_OF_TEMPLATE_ITEMS)
-      || nr == OBJ_BLANK_MAGAZINE) {
+      || nr == OBJ_BLANK_MAGAZINE || nr ==  OBJ_VEHCONTAINER || nr == OBJ_SHOPCONTAINER) {
     GET_OBJ_EXTRA(obj).SetBit(ITEM_DONT_TOUCH);
   }
 
