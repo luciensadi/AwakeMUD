@@ -4653,7 +4653,7 @@ ACMD(do_syspoints) {
                 ispunct(get_final_character_from_string(reason)) ? "" : ".");
 
     // Log it.
-    snprintf(buf, sizeof(buf), "%s %s %d system points %s %s for %s%s (%d to %d).",
+    snprintf(buf, sizeof(buf), "%s %s %d system points %s %s for %s (%d to %d).",
             GET_CHAR_NAME(ch),
             (award_mode ? "awarded" : "penalized"),
             k,
