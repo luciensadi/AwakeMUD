@@ -879,6 +879,10 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 #define GET_WORN_MATCHED_SET(worn)                (GET_OBJ_VAL((worn), 8))
 
 // ITEM_OTHER convenience defines
+#define GET_VEHCONTAINER_VEH_VNUM(cont)           (GET_OBJ_VAL((cont), 1))
+#define GET_VEHCONTAINER_VEH_IDNUM(cont)          (GET_OBJ_VAL((cont), 2))
+#define GET_VEHCONTAINER_VEH_OWNER(cont)          (GET_OBJ_VAL((cont), 3))
+#define GET_VEHCONTAINER_WEIGHT(cont)             (GET_OBJ_VAL((cont), 11))
 
 // ITEM_MAGIC_TOOL convenience defines
 

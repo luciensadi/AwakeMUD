@@ -1197,13 +1197,13 @@ void get_from_room(struct char_data * ch, char *arg, bool download)
         GET_OBJ_WEIGHT(container) = vehicle_weight;
 
         // Set the container's values to help us positively ID the vehicle.
-        GET_OBJ_VAL(container, 1) = GET_VEH_VNUM(veh);
-        GET_OBJ_VAL(container, 2) = veh->idnum;
-        GET_OBJ_VAL(container, 3) = veh->owner;
+        GET_VEHCONTAINER_VEH_VNUM(container)  = GET_VEH_VNUM(veh);
+        GET_VEHCONTAINER_VEH_IDNUM(container) = veh->idnum;
+        GET_VEHCONTAINER_VEH_OWNER(container) = veh->owner;
 
         // To avoid having to add another field to the pfiles_inv table, I've done something horrifyingly hacky and co-opted a value.
         // For vehicle containers, value 11 is the weight of the container.
-        GET_OBJ_VAL(container, 11) = GET_OBJ_WEIGHT(container);
+        GET_VEHCONTAINER_WEIGHT(container) = GET_OBJ_WEIGHT(container);
 
         snprintf(buf, sizeof(buf), "^y%s^n (carried vehicle)", decapitalize_a_an(GET_VEH_NAME(veh)));
         container->restring = str_dup(buf);
@@ -1228,6 +1228,19 @@ void get_from_room(struct char_data * ch, char *arg, bool download)
         send_to_char(ch, "With a grunt, you lift %s.\r\n", decapitalize_a_an(GET_VEH_NAME(veh)));
         snprintf(buf, sizeof(buf), "With a grunt, $n picks up %s.", decapitalize_a_an(GET_VEH_NAME(veh)));
         act(buf, FALSE, ch, 0, 0, TO_ROOM);
+
+        const char *owner = get_player_name(veh->owner);
+        snprintf(buf, sizeof(buf), "%s (%ld) picked up vehicle %s (%ld, idnum %ld) belonging to %s (%ld).",
+                 GET_CHAR_NAME(ch),
+                 GET_IDNUM(ch),
+                 GET_VEH_NAME(veh),
+                 GET_VEH_VNUM(veh),
+                 veh->idnum,
+                 owner,
+                 veh->owner
+                );
+        mudlog(buf, ch, LOG_CHEATLOG, TRUE);
+        DELETE_ARRAY_IF_EXTANT(owner);
 
         playerDB.SaveChar(ch);
         save_vehicles(FALSE);
@@ -1712,9 +1725,9 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
 
     // Search it for our vehicle.
     for (struct veh_data *veh = world[vehicle_storage_rnum].vehicles; veh; veh = veh->next_veh) {
-      if (GET_VEH_VNUM(veh) == GET_OBJ_VAL(obj, 1)
-          && veh->idnum == GET_OBJ_VAL(obj, 2)
-          && veh->owner == GET_OBJ_VAL(obj, 3))
+      if (GET_VEH_VNUM(veh) == GET_VEHCONTAINER_VEH_VNUM(obj)
+          && veh->idnum == GET_VEHCONTAINER_VEH_IDNUM(obj)
+          && veh->owner == GET_VEHCONTAINER_VEH_OWNER(obj))
       {
         // Found it! Proceed to drop.
         veh_from_room(veh);
@@ -1723,20 +1736,21 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
         snprintf(buf, sizeof(buf), "$n sets %s down with a sigh of relief.", decapitalize_a_an(GET_VEH_NAME(veh)));
         act(buf, FALSE, ch, 0, 0, TO_ROOM);
 
+        const char *owner = get_player_name(veh->owner);
+        snprintf(buf, sizeof(buf), "%s (%ld) dropped vehicle %s (%ld, idnum %ld) belonging to %s (%ld).",
+                 GET_CHAR_NAME(ch),
+                 GET_IDNUM(ch),
+                 GET_VEH_NAME(veh),
+                 GET_VEH_VNUM(veh),
+                 veh->idnum,
+                 owner,
+                 veh->owner
+                );
+        mudlog(buf, ch, LOG_CHEATLOG, TRUE);
+        DELETE_ARRAY_IF_EXTANT(owner);
+
         // Remove the object from inventory.
         extract_obj(obj);
-
-        // Log if the vehicle is being dropped in a private garage.
-        if (veh->owner > 0 && ROOM_FLAGGED(ch->in_room, ROOM_HOUSE)) {
-          const char *owner = get_player_name(veh->owner);
-          snprintf(buf, sizeof(buf), "Anti-Grief: %s dropped %s owned by %s in house %ld.",
-                   GET_CHAR_NAME(ch),
-                   GET_VEH_NAME(veh),
-                   owner,
-                   GET_ROOM_VNUM(ch->in_room)
-                  );
-          DELETE_ARRAY_IF_EXTANT(owner);
-        }
 
         playerDB.SaveChar(ch);
         save_vehicles(FALSE);
@@ -2010,9 +2024,28 @@ bool perform_give(struct char_data * ch, struct char_data * vict, struct obj_dat
     send_to_char(ch, "You cannot give away something you are working on.\r\n");
     return 0;
   }
-  if (GET_OBJ_VNUM(obj) == OBJ_VEHCONTAINER && IS_NPC(vict)) {
-    send_to_char("You can't give NPCs vehicles.\r\n", ch);
-    return 0;
+  if (GET_OBJ_VNUM(obj) == OBJ_VEHCONTAINER) {
+    if (IS_NPC(vict)) {
+      send_to_char("You can't give NPCs vehicles.\r\n", ch);
+      return 0;
+    }
+
+    else {
+      const char *owner = get_player_name(GET_VEHCONTAINER_VEH_OWNER(obj));
+      snprintf(buf, sizeof(buf), "%s (%ld) gave veh-container %s (%ld, idnum %ld), belonging to %s (%ld), to %s (%ld).",
+               GET_CHAR_NAME(ch),
+               GET_IDNUM(ch),
+               GET_OBJ_NAME(obj),
+               GET_VEHCONTAINER_VEH_VNUM(obj),
+               GET_VEHCONTAINER_VEH_IDNUM(obj),
+               owner,
+               GET_VEHCONTAINER_VEH_OWNER(obj),
+               GET_CHAR_NAME(vict),
+               GET_IDNUM(vict)
+              );
+      mudlog(buf, ch, LOG_CHEATLOG, TRUE);
+      DELETE_ARRAY_IF_EXTANT(owner);
+    }
   }
 
   obj_from_char(obj);

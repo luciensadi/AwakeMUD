@@ -949,7 +949,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
           case ITEM_OTHER:
             // We did some hacky shit and force-saved the weight of the container to value 11. Pull it back out.
             if (GET_OBJ_VNUM(obj) == OBJ_VEHCONTAINER)
-              GET_OBJ_WEIGHT(obj) = GET_OBJ_VAL(obj, 11);
+              GET_OBJ_WEIGHT(obj) = GET_VEHCONTAINER_WEIGHT(obj);
             break;
         }
         // This is badly named and at first reading it seems like it holds a vnum to parent container
