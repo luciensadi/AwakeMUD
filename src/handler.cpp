@@ -2391,6 +2391,15 @@ void extract_char(struct char_data * ch)
   {
     obj = ch->carrying;
     obj_from_char(obj);
+
+    // Zero out veh containers so we don't get nagged about destroyed vehicles every time someone quits.
+    if (GET_OBJ_VNUM(obj) == OBJ_VEHCONTAINER)
+      GET_VEHCONTAINER_VEH_VNUM(obj) = GET_VEHCONTAINER_VEH_IDNUM(obj) = GET_VEHCONTAINER_VEH_OWNER(obj) = 0;
+
+    // Un-keep items for the same reason.
+    if (IS_OBJ_STAT(obj, ITEM_KEPT))
+      GET_OBJ_EXTRA(obj).RemoveBit(ITEM_KEPT);
+
     extract_obj(obj);
   }
 
