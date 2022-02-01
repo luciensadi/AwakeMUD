@@ -937,7 +937,7 @@ void assign_objects(void)
   ASSIGNOBJ(16242, medical_workshop);
   ASSIGNOBJ(70611, medical_workshop);
 #ifdef USE_PRIVATE_CE_WORLD
-  ASSIGNOBJ(10039, medical_workshop);  
+  ASSIGNOBJ(10039, medical_workshop);
 #endif
 
   WSPEC(monowhip);
@@ -991,6 +991,7 @@ void assign_rooms(void)
   SPECIAL(nerpcorpolis_lobby);
   SPECIAL(troll_barrier);
   SPECIAL(chargen_points_check);
+  SPECIAL(purge_prevented);
 
   /* Limbo/God Rooms */
   ASSIGNROOM(8, oceansounds);
@@ -1095,6 +1096,9 @@ void assign_rooms(void)
 
   // Junkyard
   ASSIGNROOM(70504, floor_has_glass_shards);
+
+  // Purge prevention for the veh storage room.
+  ASSIGNROOM(RM_PORTABLE_VEHICLE_STORAGE, purge_prevented);
 
 #ifdef USE_PRIVATE_CE_WORLD
   // Nerpcorpolis

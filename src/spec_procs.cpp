@@ -6513,6 +6513,14 @@ SPECIAL(medical_workshop) {
   return TRUE;
 }
 
+SPECIAL(purge_prevented) {
+  if (CMD_IS("purge")) {
+    send_to_char(ch, "You can't purge here.\r\n");
+    return TRUE;
+  }
+  return FALSE;
+}
+
 /*
 SPECIAL(business_card_printer) {
   struct obj_data *printer = (struct obj_data *) me;
