@@ -1014,14 +1014,11 @@ bool mobact_process_self_buff(struct char_data *ch) {
 
   // Buff self, but only act one out of every 16 ticks (on average), and only if we're not going to put ourselves in a drain death loop.
   if (number(0, 15) == 0 && GET_MENTAL(ch) >= 1000 && GET_PHYSICAL(ch) >= 1000) {
-    // Apply armor to self.
-    if (!affected_by_spell(ch, SPELL_ARMOR)) {
-      cast_manipulation_spell(ch, SPELL_ARMOR, number(1, GET_MAG(ch)/100), NULL, ch);
-      return TRUE;
-    }
+    bool imp_invis = IS_AFFECTED(ch, AFF_SPELLIMPINVIS) || affected_by_spell(ch, SPELL_IMP_INVIS);
+    bool std_invis = IS_AFFECTED(ch, AFF_SPELLINVIS) || affected_by_spell(ch, SPELL_INVIS);
 
     // If not invisible already, apply an invisibility spell based on my magic rating and sorcery skill.
-    if (!affected_by_spell(ch, SPELL_INVIS) && !affected_by_spell(ch, SPELL_IMP_INVIS)) {
+    if (!imp_invis && !std_invis) {
       // Changed cast ratings to 1-- if PCs are going to cheese with rating 1, NPCs should too. -- LS
       if (MIN(GET_SKILL(ch, SKILL_SORCERY), GET_MAG(ch)/100) <= 5) {
         // Lower skill means standard invisibility. Gotta make thermographic vision useful somehow.
@@ -1035,27 +1032,40 @@ bool mobact_process_self_buff(struct char_data *ch) {
       return TRUE;
     }
 
-    // Apply combat sense to self.
-    if (!affected_by_spell(ch, SPELL_COMBATSENSE)) {
-      cast_detection_spell(ch, SPELL_COMBATSENSE, number(1, GET_MAG(ch)/100), NULL, ch);
+    // If we've got Improved Invis on, we want to go completely stealth if we can.
+    // Gating this behind Improved Invis means that only powerful mage characters (Sorcery and Magic both 6+) will do this.
+    if (imp_invis && !affected_by_spell(ch, SPELL_STEALTH)) {
+      cast_illusion_spell(ch, SPELL_STEALTH, number(1, MIN(4, GET_MAG(ch)/100)), NULL, ch);
       return TRUE;
     }
 
-    // We're dead-set on casting a spell, so try to boost attributes.
-    switch (number(1, 3)) {
-      case 1:
-        cast_health_spell(ch, SPELL_INCATTR, STR, number(1, GET_MAG(ch)/100), NULL, ch);
-        break;
-      case 2:
-        cast_health_spell(ch, SPELL_INCATTR, QUI, number(1, GET_MAG(ch)/100), NULL, ch);
-        break;
-      case 3:
-        cast_health_spell(ch, SPELL_INCATTR, BOD, number(1, GET_MAG(ch)/100), NULL, ch);
-        break;
-    }
+    // If we've already got invis and stealth on, adding more sustains is risky-- we're driving up our TNs for no good reason. Only do it if we're really bored.
+    if (number(0, 20) == 0) {
+      // Apply armor to self.
+      if (!affected_by_spell(ch, SPELL_ARMOR)) {
+        cast_manipulation_spell(ch, SPELL_ARMOR, number(1, GET_MAG(ch)/100), NULL, ch);
+        return TRUE;
+      }
 
-    // We've spent our action casting a spell, so time to stop acting.
-    return TRUE;
+      // Apply combat sense to self.
+      if (!affected_by_spell(ch, SPELL_COMBATSENSE)) {
+        cast_detection_spell(ch, SPELL_COMBATSENSE, number(1, GET_MAG(ch)/100), NULL, ch);
+        return TRUE;
+      }
+
+      // We're dead-set on casting a spell, so try to boost attributes.
+      switch (number(1, 3)) {
+        case 1:
+          cast_health_spell(ch, SPELL_INCATTR, STR, number(1, GET_MAG(ch)/100), NULL, ch);
+          return TRUE;
+        case 2:
+          cast_health_spell(ch, SPELL_INCATTR, QUI, number(1, GET_MAG(ch)/100), NULL, ch);
+          return TRUE;
+        case 3:
+          cast_health_spell(ch, SPELL_INCATTR, BOD, number(1, GET_MAG(ch)/100), NULL, ch);
+          return TRUE;
+      }
+    }
   }
 
   return FALSE;
