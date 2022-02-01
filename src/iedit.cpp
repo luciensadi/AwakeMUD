@@ -1118,15 +1118,15 @@ void iedit_disp_val12_menu(struct descriptor_data * d)
 /* object type */
 void iedit_disp_type_menu(struct descriptor_data * d)
 {
-  int counter;
-
   CLS(CH);
-  for (counter = 1; counter < NUM_ITEMS; counter += 2)
+  for (int counter = 1; counter < NUM_ITEMS; counter++)
   {
-    send_to_char(CH, "%2d) %-20s %2d) %-20s\r\n",
-                 counter, item_types[counter],
-                 counter + 1, counter + 1 <= NUM_ITEMS ?
-                 item_types[counter + 1] : "");
+    send_to_char(CH, "%s%2d) %-20s%s",
+                 counter % 2 == 0 ? " " : "",
+                 counter,
+                 item_types[counter],
+                 (counter % 2 == 0 || counter == NUM_ITEMS - 1) ? "\r\n" : ""
+                );
   }
   send_to_char("Enter object type (0 to quit): ", d->character);
 }
@@ -1808,8 +1808,13 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
       break;
     case IEDIT_TYPE:
       number = atoi(arg);
-      if (number < 1 || number > NUM_ITEMS) {
-        send_to_char(d->character, "That's not a valid choice! You must choose something between 1 and %d.\r\n", NUM_ITEMS);
+      if (number == 0) {
+        // Back out.
+        iedit_disp_menu(d);
+        return;
+      }
+      if (number < 1 || number >= NUM_ITEMS) {
+        send_to_char(d->character, "That's not a valid choice! You must choose something between 1 and %d.\r\n", NUM_ITEMS - 1);
         iedit_disp_type_menu(d);
         return;
       }

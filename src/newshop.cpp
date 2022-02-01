@@ -2310,12 +2310,14 @@ void shedit_disp_flag_menu(struct descriptor_data *d)
 void shedit_disp_buytypes_menu(struct descriptor_data *d)
 {
   CLS(CH);
-  for (int counter = 1; counter < NUM_ITEMS; counter += 2)
+  for (int counter = 1; counter < NUM_ITEMS; counter++)
   {
-    send_to_char(CH, "%2d) %-20s %2d) %-20s\r\n",
-                 counter, item_types[counter],
-                 counter + 1, counter + 1 <= NUM_ITEMS ?
-                 item_types[counter + 1] : "");
+    send_to_char(CH, "%s%2d) %-20s%s",
+                 counter % 2 == 0 ? " " : "",
+                 counter,
+                 item_types[counter],
+                 (counter % 2 == 0 || counter == NUM_ITEMS - 1) ? "\r\n" : ""
+                );
   }
   SHOP->buytypes.PrintBits(buf, MAX_STRING_LENGTH, item_types, NUM_ITEMS);
   send_to_char(CH, "Will Buy: ^c%s^n\r\nSelect Buytypes (0 to quit): ", buf);
