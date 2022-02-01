@@ -4637,22 +4637,23 @@ ACMD(do_syspoints) {
     }
 
     // Mail the victim.
-    snprintf(buf, sizeof(buf), "You have been %s %d system points for%s\r\n",
+    snprintf(buf, sizeof(buf), "You have been %s %d system points for %s\r\n",
             (award_mode ? "awarded" : "penalized"),
             k,
             reason);
     store_mail(idnum, ch, buf);
 
     // Notify the actor.
-    send_to_char(ch, "You %s %d system points %s %s for %s\r\n",
+    send_to_char(ch, "You %s %d system points %s %s for %s%s^n\r\n",
                 (award_mode ? "awarded" : "penalized"),
                 k,
                 (award_mode ? "to" : "from"),
                 capitalize(target),
-                reason);
+                reason,
+                ispunct(get_final_character_from_string(reason)) ? "" : ".");
 
     // Log it.
-    snprintf(buf, sizeof(buf), "%s %s %d system points %s %s for %s (%d to %d)",
+    snprintf(buf, sizeof(buf), "%s %s %d system points %s %s for %s%s (%d to %d).",
             GET_CHAR_NAME(ch),
             (award_mode ? "awarded" : "penalized"),
             k,

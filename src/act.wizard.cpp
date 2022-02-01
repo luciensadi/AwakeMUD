@@ -2537,9 +2537,9 @@ ACMD(do_award)
 
   send_to_char(vict, "You have been awarded %0.2f karma for %s\r\n", (float)k*0.01, reason);
 
-  send_to_char(ch, "You awarded %0.2f karma to %s for %s\r\n", (float)k*0.01, GET_CHAR_NAME(vict), reason);
+  send_to_char(ch, "You awarded %0.2f karma to %s for %s%s^n\r\n", (float)k*0.01, GET_CHAR_NAME(vict), reason, ispunct(get_final_character_from_string(reason)) ? "" : ".");
 
-  snprintf(buf2, sizeof(buf2), "%s awarded %0.2f karma to %s for %s (%d to %d)",
+  snprintf(buf2, sizeof(buf2), "%s awarded %0.2f karma to %s for %s (%d to %d).",
           GET_CHAR_NAME(ch), (float)k*0.01,
           GET_CHAR_NAME(vict), reason, GET_KARMA(vict) - k, GET_KARMA(vict));
   mudlog(buf2, ch, LOG_WIZLOG, TRUE);

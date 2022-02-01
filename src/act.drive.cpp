@@ -356,12 +356,12 @@ ACMD(do_vemote)
     return;
   }
   RIG_VEH(ch, veh)
-  snprintf(buf, sizeof(buf), "%s%s\r\n", capitalize(GET_VEH_NAME(veh)), argument);
+  snprintf(buf, sizeof(buf), "%s%s%s^n\r\n", capitalize(GET_VEH_NAME(veh)), argument, ispunct(get_final_character_from_string(argument)) ? "" : ".");
   if (veh->in_room)
     send_to_room(buf, veh->in_room);
   else
     send_to_veh(buf, veh->in_veh, ch, TRUE);
-  snprintf(buf, sizeof(buf), "Your vehicle%s\r\n", argument);
+  snprintf(buf, sizeof(buf), "Your vehicle%s%s^n\r\n", argument, ispunct(get_final_character_from_string(argument)) ? "" : ".");
   send_to_veh(buf, veh, NULL, TRUE);
   return;
 }
