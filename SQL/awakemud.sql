@@ -248,7 +248,7 @@ CREATE TABLE `pfiles_inv` (
   `Inside` tinyint(1) unsigned default '0',
   `Timer` mediumint(1) default '0',
   `ExtraFlags` varchar(128) default '0',
-  `Attempt` smallint(1) default '0',
+  `Attempt` mediumint(6) default '0',
   `Cond` tinyint(1) unsigned default '0',
   `posi` smallint(1) unsigned default '0',
   KEY(`idnum`)
@@ -276,7 +276,7 @@ CREATE TABLE `pfiles_worn` (
   `Position` tinyint(1) unsigned default '0',
   `Timer` mediumint(1) default '0',
   `ExtraFlags` varchar(128) default '0',
-  `Attempt` smallint(1) default '0',
+  `Attempt` mediumint(6) default '0',
   `Cond` tinyint(1) unsigned default '0',
   `posi` smallint(1) unsigned default '0',
   KEY(`idnum`)
