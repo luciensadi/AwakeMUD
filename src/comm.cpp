@@ -85,7 +85,7 @@ extern struct time_info_data time_info; /* In db.c */
 extern char help[];
 
 #ifdef USE_PRIVATE_CE_WORLD
-extern do_secret_ticks(int pulse);
+extern void do_secret_ticks(int pulse);
 #endif
 
 /* local globals */
