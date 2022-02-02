@@ -2783,6 +2783,26 @@ ACMD(do_comcall)
     send_to_char(ch, "You can't do that while hitching.\r\n");
     return;
   }
+
+  if (!DECKER->phone) {
+    send_to_char("You don't have a phone available.\r\n", ch);
+    return;
+  }
+
+  if (!subcmd) {
+    if (DECKER->phone->dest) {
+      if (DECKER->phone->dest->connected && DECKER->phone->connected)
+        send_to_char(ch, "Connected to: %d\r\n", DECKER->phone->dest->number);
+      else if (!DECKER->phone->dest->connected)
+        send_to_char(ch, "Calling: %d\r\n", DECKER->phone->dest->number);
+      else
+        send_to_char(ch, "Incoming call from: %08d\r\n", DECKER->phone->dest->number);
+    } else {
+      send_to_char("You're not calling anyone right now.\r\n", ch);
+    }
+    return;
+  }
+
   if (subcmd == SCMD_ANSWER) {
     if (DECKER->phone->connected) {
       send_to_icon(PERSONA, "But you already have a call connected!\r\n");
@@ -2836,7 +2856,7 @@ ACMD(do_comcall)
     DECKER->phone->dest->connected = FALSE;
     DECKER->phone->dest = NULL;
     send_to_icon(PERSONA, "You cut the connection.\r\n");
-  } else {
+  } else if (subcmd == SCMD_RING) {
     if (DECKER->phone->dest) {
       send_to_icon(PERSONA, "You already have a call connected.\r\n");
       return;

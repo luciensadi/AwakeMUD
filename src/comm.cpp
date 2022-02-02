@@ -2728,7 +2728,7 @@ void send_to_host(vnum_t room, const char *messg, struct matrix_icon *icon, bool
       continue;
 
     // If we pass visibility checks (or don't need to run them at all), send the message.
-    if (!icon || !needsee || (icon != i && has_spotted(i, icon)))
+    if (!icon || (icon != i && (!needsee || has_spotted(i, icon))))
       send_to_icon(i, messg);
   }
 }

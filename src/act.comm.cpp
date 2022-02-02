@@ -1550,10 +1550,13 @@ ACMD(do_phone)
       if (!tch && phone->phone->in_obj)
         tch = phone->dest->phone->in_obj->worn_by;
       if (tch) {
-        if (phone->dest->connected)
-          send_to_char(tch, "The phone is hung up from the other side. A mechanical voice notes, \"Call ended: %.4d-%.4d\".\r\n", (int) phone->number / 10000, (int) phone->number % 10000);
-        else {
-          send_to_char(tch, "Your phone stops ringing, and \"Missed Call: %.4d-%.4d\" flashes briefly on its display.\r\n", (int) phone->number / 10000, (int) phone->number % 10000);
+        char ended_call_buf[1000];
+        if (phone->dest->connected) {
+          snprintf(ended_call_buf, sizeof(ended_call_buf), "The phone is hung up from the other side. A mechanical voice notes, \"Call ended: %.4d-%.4d\".\r\n", (int) phone->number / 10000, (int) phone->number % 10000);
+          act(ended_call_buf, FALSE, tch, 0, 0, TO_CHAR);
+        } else {
+          snprintf(ended_call_buf, sizeof(ended_call_buf), "Your phone stops ringing, and \"Missed Call: %.4d-%.4d\" flashes briefly on its display.\r\n", (int) phone->number / 10000, (int) phone->number % 10000);
+          act(ended_call_buf, FALSE, tch, 0, 0, TO_CHAR);
         }
       }
     }
@@ -1622,7 +1625,7 @@ ACMD(do_phone)
       if (tch_is_matrix) {
         // Re-send it to the Matrix folks.
         store_message_to_history(tch->desc, COMM_CHANNEL_PHONE, buf);
-        send_to_char(buf, tch);
+        send_to_char(tch, "%s\r\n", buf);
       } else {
         store_message_to_history(tch->desc, COMM_CHANNEL_PHONE, act(buf, FALSE, ch, 0, tch, TO_VICT));
       }
