@@ -908,7 +908,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
 
   {
     struct obj_data *obj = NULL;
-    int vnum = 0;
+    vnum_t vnum = 0;
     int inside = 0, last_inside = 0;
     std::vector<nested_obj> contained_obj;
     struct nested_obj contained_obj_entry;
