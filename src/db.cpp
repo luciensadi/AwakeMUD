@@ -361,7 +361,7 @@ void require_that_sql_table_exists(const char *table_name, const char *migration
 }
 
 // Combines the logic of field_exists_in_table with more constraints-- for things you've recently updated but already existed.
-void require_that_field_meets_constraints(const char *field_name, const char *table_name, const char *migration_path_from_root_directory, int flength=0, const char *ftype=NULL) {
+void require_that_field_meets_constraints(const char *field_name, const char *table_name, const char *migration_path_from_root_directory, int flength=0, const char *ftype=NULL, bool is_unsigned=FALSE) {
   bool have_column = FALSE;
   char migration_string[3000];
 
@@ -397,7 +397,7 @@ void require_that_field_meets_constraints(const char *field_name, const char *ta
       }
 
       char field_type[500];
-      snprintf(field_type, sizeof(field_type), "%s(%d)", ftype, flength);
+      snprintf(field_type, sizeof(field_type), "%s(%d)%s", ftype, flength, is_unsigned ? " unsigned" : "");
       if (strcmp(field_type, row[1])) {
         log_vfprintf("%s\r\n%s.%s's type '%s' did not match expected type '%s'.",
                      migration_string,
@@ -481,6 +481,8 @@ void boot_world(void)
   require_that_field_exists_in_table("multiplier", "pfiles", "SQL/Migrations/multipliers.sql");
   require_that_field_meets_constraints("Prompt", "pfiles", "SQL/Migrations/prompt_expansion.sql", 2001, "varchar");
   require_that_field_meets_constraints("MatrixPrompt", "pfiles", "SQL/Migrations/prompt_expansion.sql", 2001, "varchar");
+  require_that_field_meets_constraints("Attempt", "pfiles_inv", "SQL/Migrations/attempt_value_fix.sql", 1, "smallint");
+  require_that_field_meets_constraints("Attempt", "pfiles_worn", "SQL/Migrations/attempt_value_fix.sql", 1, "smallint");
 
   log("Calculating lexicon data.");
   populate_lexicon_size_table();

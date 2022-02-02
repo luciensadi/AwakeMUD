@@ -946,10 +946,9 @@ bool load_char(const char *name, char_data *ch, bool logon)
             // Process weight.
             GET_OBJ_WEIGHT(obj) = GET_AMMOBOX_QUANTITY(obj) * get_ammo_weight(GET_AMMOBOX_WEAPON(obj), GET_AMMOBOX_TYPE(obj));
             break;
-          case ITEM_OTHER:
+          case ITEM_VEHCONTAINER:
             // We did some hacky shit and force-saved the weight of the container to value 11. Pull it back out.
-            if (GET_OBJ_VNUM(obj) == OBJ_VEHCONTAINER)
-              GET_OBJ_WEIGHT(obj) = GET_VEHCONTAINER_WEIGHT(obj);
+            GET_OBJ_WEIGHT(obj) = GET_VEHCONTAINER_WEIGHT(obj);
             break;
         }
         // This is badly named and at first reading it seems like it holds a vnum to parent container
@@ -1008,6 +1007,9 @@ bool load_char(const char *name, char_data *ch, bool logon)
           obj_to_char(obj, ch);
 
         last_inside = inside;
+      } else {
+        snprintf(buf, sizeof(buf), "SYSERR: Could not load object %ld when restoring %s (%ld)!", vnum, GET_CHAR_NAME(ch), GET_IDNUM(ch));
+        mudlog(buf, ch, LOG_SYSLOG, TRUE);
       }
     }
     //Failsafe. If something went wrong and we still have objects stored in the vector, dump them in inventory.
@@ -1441,17 +1443,22 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", %d, %d, '%s', %d, %d, %d);", level, GET_OBJ_TIMER(obj), GET_OBJ_EXTRA(obj).ToString(),
                           GET_OBJ_ATTEMPT(obj), GET_OBJ_CONDITION(obj), posi++);
       mysql_wrapper(mysql, buf);
+
+      // Continue down into nested objects. Don't continue into parts though, since those use the contains variable weirdly.
+      if (obj->contains && GET_OBJ_TYPE(obj) != ITEM_PART) {
+        obj = obj->contains;
+        level++;
+        continue;
+      }
     }
 
-    if (obj->contains && !IS_OBJ_STAT(obj, ITEM_NORENT) && GET_OBJ_TYPE(obj) != ITEM_PART) {
-      obj = obj->contains;
-      level++;
-      continue;
-    } else if (!obj->next_content && obj->in_obj)
+    // If we've hit the end of this object's linked list, and it's in an object, back out until we hit the top.
+    if (!obj->next_content && obj->in_obj) {
       while (obj && !obj->next_content && level >= 0) {
         obj = obj->in_obj;
         level--;
       }
+    }
 
     if (obj)
       obj = obj->next_content;
