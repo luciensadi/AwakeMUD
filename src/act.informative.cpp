@@ -2329,7 +2329,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
             switch (GET_ACCESSORY_TYPE(access)) {
               case ACCESS_SMARTLINK:
                 if (has_smartlink) {
-                  strlcat(buf, "^Y\r\nYou have multiple smartlinks attached, and they do not stack. You should remove one and replace it with something else.^n", sizeof(buf));
+                  strlcat(buf, "^Y\r\nIt has multiple smartlinks attached, and they do not stack. You should remove one and replace it with something else.^n", sizeof(buf));
                 } else {
                   int cyberware_rating = 0;
                   for (struct obj_data *cyber = ch->cyberware; cyber; cyber = cyber->next_content) {
@@ -2353,7 +2353,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
                     }
                     // No goggles either.
                     else {
-                      strlcat(buf, "\r\n^YYou have a smartlink installed, but have neither the cyberware nor goggles to use it.^n", sizeof(buf));
+                      strlcat(buf, "\r\n^YIt has a smartlink installed, but you have neither the cyberware nor goggles to use it.^n", sizeof(buf));
                     }
                   }
 
@@ -2384,7 +2384,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
               case ACCESS_SCOPE:
                 if (GET_OBJ_AFFECT(access).IsSet(AFF_LASER_SIGHT)) {
                   if (has_laser_sight_already) {
-                    strlcat(buf, "^Y\r\nYou have multiple laser sights attached, and they do not stack. You should remove one and replace it with something else.^n", sizeof(buf));
+                    strlcat(buf, "^Y\r\nIt has multiple laser sights attached, and they do not stack. You should remove one and replace it with something else.^n", sizeof(buf));
                   } else {
                     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nThe laser sight attached to the %s provides ^c-1^n to target numbers (lower is better).",
                             gun_accessory_locations[mount_location]);
@@ -2428,7 +2428,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
                 break;
               case ACCESS_BAYONET:
                 if (mount_location != ACCESS_ACCESSORY_LOCATION_UNDER) {
-                  strlcat(buf, "\r\n^RYour bayonet has been mounted in the wrong location and is nonfunctional. Alert an imm.", sizeof(buf));
+                  strlcat(buf, "\r\n^RThe bayonet has been mounted in the wrong location and is nonfunctional. Alert an imm.", sizeof(buf));
                 } else {
                   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nThe bayonet attached to the %s allows you to use the Pole Arms skill when defending from melee attacks.",
                           gun_accessory_locations[mount_location]);
