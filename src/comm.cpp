@@ -84,6 +84,10 @@ extern bool _OVERRIDE_ALLOW_PLAYERS_TO_USE_ROLLS_;
 extern struct time_info_data time_info; /* In db.c */
 extern char help[];
 
+#ifdef USE_PRIVATE_CE_WORLD
+extern do_secret_ticks(int pulse);
+#endif
+
 /* local globals */
 int connection_rapidity_tracker_for_dos = 0;
 struct descriptor_data *descriptor_list = NULL; /* master desc list */
@@ -901,6 +905,9 @@ void game_loop(int mother_desc)
       matrix_update();
 #ifdef USE_DEBUG_CANARIES
       check_memory_canaries();
+#endif
+#ifdef USE_PRIVATE_CE_WORLD
+      do_secret_ticks(pulse);
 #endif
     }
 
