@@ -2511,7 +2511,7 @@ ACMD(do_award)
   k = atoi(amt);
 
   if (!*arg || !*amt || !*reason || k <= 0 ) {
-    send_to_char("Syntax: award <player> <karma x 100> for <Reason for award>\r\n", ch);
+    send_to_char("Syntax: award <player> <karma x 100> <Reason for award>\r\n", ch);
     return;
   }
   if (!(vict = get_char_vis(ch, arg))) {
@@ -2558,7 +2558,7 @@ ACMD(do_penalize)
   k = atoi(amt);
 
   if (!*arg || !*amt || !*reason || k <= 0 ) {
-    send_to_char("Syntax: penalize <player> <karma x 100> for <Reason for penalty>\r\n", ch);
+    send_to_char("Syntax: penalize <player> <karma x 100> <Reason for penalty>\r\n", ch);
     return;
   }
   if (!(vict = get_char_vis(ch, arg))) {

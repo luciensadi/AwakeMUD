@@ -4592,7 +4592,7 @@ ACMD(do_syspoints) {
 
   // Require all arguments.
   if (!*arg || !*target || !*amt || !*reason || k <= 0 ) {
-    send_to_char(ch, "Syntax: syspoints <award|penalize> <player> <%samount> for <Reason for award>\r\n", k < 0 ? "POSITIVE " : "");
+    send_to_char(ch, "Syntax: syspoints <award|penalize> <player> <%samount> <Reason for award>\r\n", k < 0 ? "POSITIVE " : "");
     return;
   }
 
@@ -4604,7 +4604,7 @@ ACMD(do_syspoints) {
     award_mode = FALSE;
     k *= -1;
   } else {
-    send_to_char("Syntax: syspoints <award|penalize> <player> <amount> for <Reason for award>\r\n", ch);
+    send_to_char("Syntax: syspoints <award|penalize> <player> <amount> <Reason for award>\r\n", ch);
     return;
   }
 
