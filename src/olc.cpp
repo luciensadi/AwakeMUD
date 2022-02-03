@@ -78,7 +78,7 @@ bool is_olc_available(struct char_data *ch) {
       send_to_char("OLC has been disabled. Ask a higher-level staff member to re-enable it with their OLC command.\r\n", ch);
     }
   }
-  
+
   return olc_state;
 }
 
@@ -217,9 +217,9 @@ ACMD (do_redit)
     send_to_char ("Sorry, that number is not part of any zone!\r\n", ch);
     return;
   }
-  
+
   REQUIRE_ZONE_EDIT_ACCESS(counter);
-  
+
   ch->desc->edit_zone = counter;
   ch->player_specials->saved.zonenum = zone_table[counter].number;
 
@@ -338,7 +338,7 @@ ACMD(do_rclone)
     send_to_char("That number is not part of any zone.\r\n", ch);
     return;
   }
-  
+
   REQUIRE_ZONE_EDIT_ACCESS(zone2);
 
   num1 = real_room(arg1);
@@ -461,7 +461,7 @@ ACMD(do_dig)
     }
 
     room = real_room(atoi_buf);
-    
+
     // TODO: This allows creation of rooms in a zone you can't edit.
     if (room == -1) {
       // Make sure the room is part of a valid zone.
@@ -476,16 +476,16 @@ ACMD(do_dig)
         send_to_char ("Sorry, that number is not part of any zone.\r\n", ch);
         return;
       }
-      
+
       // Check if they can edit this zone.
       REQUIRE_ZONE_EDIT_ACCESS(counter);
-      
+
       // Boilerplate things required by redit.
       PLR_FLAGS(ch).SetBit(PLR_EDITING);
       STATE(ch->desc) = CON_REDIT;
       GET_WAS_IN(ch) = ch->in_room;
       char_from_room(ch);
-      
+
       // Create the new room in their editing struct.
       ch->desc->edit_number = atoi_buf;
       ch->desc->edit_room = Mem->GetRoom();
@@ -497,14 +497,14 @@ ACMD(do_dig)
         ++i;
       if (i <= top_of_zone_table)
         ch->desc->edit_room->zone = i;
-        
+
       // Then save it right away. This undoes the boilerplate above.
       ch->desc->edit_mode = REDIT_CONFIRM_SAVESTRING;
       redit_parse(ch->desc, "y");
-      
+
       // And update the room variable to point to the room's index.
       room = real_room(atoi_buf);
-      
+
       // Sanity check: Is the room now kosher?
       if (room == -1) {
         send_to_char("Sorry, we encountered an error while creating your room.\r\n", ch);
@@ -530,11 +530,11 @@ ACMD(do_dig)
         world[room].number <= zone_table[counter].top)
       zone2 = counter;
   }
-  
+
   // Dig is one of the only two-zone commands that requires edit access to both zones.
   REQUIRE_ZONE_EDIT_ACCESS(zone1);
   REQUIRE_ZONE_EDIT_ACCESS(zone2);
-  
+
   /* send_to_char(ch, "DEBUG: Digging %s from %d (z %d) to %d (z %d): preexisting exit %d and %d.",
     dirs[dir],
     ch->in_room->number,
@@ -549,7 +549,7 @@ ACMD(do_dig)
     send_to_char("You can't dig over an existing exit.\r\n", ch);
     return;
   }
-  
+
   if (subcmd == SCMD_UNDIG && !in_room->dir_option[dir]){
     send_to_char("There's no exit in that direction to undig.\r\n", ch);
     return;
@@ -585,7 +585,7 @@ ACMD(do_dig)
       delete in_room->dir_option[dir]->to_room->dir_option[rev_dir[dir]];
       in_room->dir_option[dir]->to_room->dir_option[rev_dir[dir]] = NULL;
     }
-    
+
     // Delete this room's exit.
     DELETE_IF_EXTANT(in_room->dir_option[dir]->keyword);
     DELETE_IF_EXTANT(in_room->dir_option[dir]->general_description);
@@ -634,7 +634,7 @@ ACMD(do_rdelete)
     send_to_char ("Sorry, that number is not part of any zone.\r\n", ch);
     return;
   }
-  
+
   REQUIRE_ZONE_EDIT_ACCESS(counter);
 
   ch->player_specials->saved.zonenum = zone_table[counter].number;
@@ -646,7 +646,7 @@ ACMD(do_rdelete)
     send_to_char("The room must be empty before you delete it.\r\n", ch);
     return;
   }
-  
+
   snprintf(buf, sizeof(buf), "%s deleted room %ld (%s).", GET_CHAR_NAME(ch), GET_ROOM_VNUM(&world[num]), GET_ROOM_NAME(&world[num]));
   mudlog(buf, ch, LOG_WIZLOG, TRUE);
 
@@ -676,7 +676,7 @@ ACMD(do_rdelete)
         delete [] This->description;
       delete This;
     }
-  
+
   int dir;
   // go through the world and fix the exits; do this before copying everything down to preserve nums
   for (counter = 0; counter <= top_of_world; counter++)
@@ -850,7 +850,7 @@ ACMD (do_vedit)
       veh->arrive = str_dup(veh_proto[veh_num].arrive);
     if (veh_proto[veh_num].leave)
       veh->leave = str_dup(veh_proto[veh_num].leave);
-    
+
     d->edit_veh = veh;
 #ifdef CONFIRM_EXISTING
 
@@ -925,7 +925,7 @@ ACMD (do_iedit)
   }
 
   REQUIRE_ZONE_EDIT_ACCESS(counter);
-  
+
   ch->desc->edit_zone = counter;
   ch->player_specials->saved.zonenum = zone_table[counter].number;
 
@@ -1146,19 +1146,19 @@ ACMD(do_idelete)
     send_to_char ("Sorry, that number is not part of any zone.\r\n", ch);
     return;
   }
-  
+
   REQUIRE_ZONE_EDIT_ACCESS(counter);
 
   num = real_object(num);
-  
+
   if (num < 0) {
     send_to_char("No object was found with that vnum.\r\n", ch);
     return;
   }
-  
+
   snprintf(buf, sizeof(buf), "%s deleted obj %ld (%s).", GET_CHAR_NAME(ch), GET_OBJ_VNUM(&obj_proto[num]), GET_OBJ_NAME(&obj_proto[num]));
   mudlog(buf, ch, LOG_WIZLOG, TRUE);
-    
+
   // Wipe it from saved database tables.
   snprintf(buf, sizeof(buf), "DELETE FROM pfiles_cyberware WHERE Vnum=%ld", obj_proto[num].item_number);
   mysql_wrapper(mysql, buf);
@@ -1303,7 +1303,7 @@ ACMD(do_medit)
   }
   // only allow them to edit their zone
   REQUIRE_ZONE_EDIT_ACCESS(counter);
-  
+
   ch->desc->edit_zone = counter;
   ch->player_specials->saved.zonenum = zone_table[counter].number;
 
@@ -1509,7 +1509,7 @@ ACMD(do_mdelete)
 
   ch->player_specials->saved.zonenum = zone_table[counter].number;
   num = real_mobile(num);
-  
+
   if (num < 0) {
     send_to_char("No such mob.\r\n", ch);
     return;
@@ -1534,7 +1534,7 @@ ACMD(do_mdelete)
     mob_index[counter] = mob_index[counter + 1];
     mob_proto[counter] = mob_proto[counter + 1];
     mob_proto[counter].nr = counter;
-    
+
     for (j = character_list; j; j = j->next) {
       if (IS_NPC(j) && j->nr == counter) {
         temp = Mem->GetCh();
@@ -1633,7 +1633,7 @@ ACMD(do_qedit)
   }
 
   REQUIRE_ZONE_EDIT_ACCESS(counter);
-  
+
   ch->desc->edit_zone = counter;
   ch->player_specials->saved.zonenum = zone_table[counter].number;
 
@@ -2037,7 +2037,7 @@ ACMD(do_hedit)
   }
 
   REQUIRE_ZONE_EDIT_ACCESS(counter);
-  
+
   ch->desc->edit_zone = counter;
   ch->player_specials->saved.zonenum = zone_table[counter].number;
 
@@ -2113,6 +2113,11 @@ ACMD(do_hedit)
     d->edit_host->desc = str_dup("This host is unfinished.");
     d->edit_host->shutdown_start = str_dup("A deep echoing voice announces a host shutdown.\r\n");
     d->edit_host->shutdown_stop = str_dup("A deep echoing voice announces the shutdown has been aborted.\r\n");
+
+    // Clamp stats to minimums.
+    for (int i = ACCESS; i <= SLAVE; i++)
+      d->edit_host->stats[i][0] = 8;
+
     d->edit_mode = HEDIT_CONFIRM_EDIT;
     return;
   }
@@ -2161,7 +2166,7 @@ ACMD(do_icedit)
   }
 
   REQUIRE_ZONE_EDIT_ACCESS(counter);
-  
+
   ch->desc->edit_zone = counter;
   ch->player_specials->saved.zonenum = zone_table[counter].number;
 

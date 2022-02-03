@@ -28,6 +28,16 @@
 #define IC_NON_LETHAL_BLACK 12 // Deals nonlethal damage to decker. Damages deck?
 #define NUM_OF_IC_TYPES     13
 
+#define MTX_SECURITY_NOTSET     0
+#define MTX_SECURITY_EASY       1
+#define MTX_SECURITY_AVERAGE    2
+#define MTX_SECURITY_HARD       3
+#define NUM_MTX_SECURITY_RTGS   4
+
+#define IDX_MTX_ACCEPTABLE_RATING_MINIMUM 0
+#define IDX_MTX_ACCEPTABLE_RATING_MAXIMUM 1
+
+
 struct host_data {
   vnum_t vnum;
   rnum_t rnum;
@@ -61,7 +71,7 @@ struct host_data {
   struct obj_data *file;
   host_data():
     name(NULL), keywords(NULL), desc(NULL), shutdown_start(NULL), shutdown_stop(NULL),
-    type(0), reset(0), found(0), alert(0), pass(0), shutdown(0), shutdown_success(0), shutdown_mpcp(0), 
+    type(0), reset(0), found(0), alert(0), pass(0), shutdown(0), shutdown_success(0), shutdown_mpcp(0),
     payreset(TRUE), trigger(NULL), icons(NULL), fighting(NULL), exit(NULL), file(NULL)
   {}
 };
@@ -102,7 +112,7 @@ struct ic_info {
   long target;
   bool supressed;
   Bitfield options;
-  long trap; 
+  long trap;
   int expert;
   int cascade;
   int targ_evasion;
@@ -145,7 +155,7 @@ struct deck_info {
   struct char_data *ch;
   struct phone_data *phone;
   deck_info():
-    mpcp(0), bod(0), sensor(0), evasion(0), masking(0), hardening(0), active(0), 
+    mpcp(0), bod(0), sensor(0), evasion(0), masking(0), hardening(0), active(0),
     storage(0), response(0), io(0), res_det(0), res_test(0), ras(0), reality(0), iccm(0),
     tally(0), last_trigger(0), scout(0), located(FALSE),
     redirect(0), redirectedon(NULL), mxp(0), hitcher(NULL), software(NULL), deck(NULL),
@@ -153,7 +163,7 @@ struct deck_info {
    {
      asist[0] = 0;
      asist[1] = 0;
-   } 
+   }
 };
 
 struct matrix_icon {

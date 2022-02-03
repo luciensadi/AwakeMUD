@@ -65,6 +65,7 @@ extern const char *jurid[];
 extern const char *host_type[];
 extern const char *host_sec[5];
 extern const char *intrusion[3];
+extern int host_subsystem_acceptable_ratings[4][2];
 extern const char *alerts[3];
 extern const char *ic_type[];
 extern const char *ic_option[];
