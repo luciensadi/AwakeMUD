@@ -1066,12 +1066,14 @@ bool mobact_process_self_buff(struct char_data *ch) {
       return TRUE;
     }
 
+#ifdef INVIS_SPELL_RESIST_IS_IMPLEMENTED
     // If we've got Improved Invis on, we want to go completely stealth if we can.
     // Gating this behind Improved Invis means that only powerful mage characters (Sorcery and Magic both 6+) will do this.
     if (imp_invis && !affected_by_spell(ch, SPELL_STEALTH)) {
       cast_illusion_spell(ch, SPELL_STEALTH, number(1, MIN(4, GET_MAG(ch)/100)), NULL, ch);
       return TRUE;
     }
+#endif
 
     // If we've already got invis and stealth on, adding more sustains is risky-- we're driving up our TNs for no good reason. Only do it if we're really bored.
     if (number(0, 20) == 0) {

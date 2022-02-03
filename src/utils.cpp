@@ -2241,15 +2241,9 @@ bool invis_ok(struct char_data *ch, struct char_data *vict) {
   if (IS_ASTRAL(ch) || IS_DUAL(ch))
     return TRUE;
 
-#ifdef ULTRASOUND_LESS_AFFECTED_BY_STEALTH
-  // Ultrasound is blocked by silence, but not stealth (stealth does apply a TN penalty in combat though).
-  if (AFF_FLAGGED(ch, AFF_DETECT_INVIS) && get_ch_in_room(ch)->silence[0] <= 0)
-    return TRUE;
-#else
   // Ultrasound pierces all invis as long as it's not blocked by silence or stealth.
   if (AFF_FLAGGED(ch, AFF_DETECT_INVIS) && (get_ch_in_room(ch)->silence[0] <= 0 && !affected_by_spell(vict, SPELL_STEALTH)))
     return TRUE;
-#endif
 
   // Improved invis defeats all other detection measures.
   if (IS_AFFECTED(vict, AFF_IMP_INVIS) || IS_AFFECTED(vict, AFF_SPELLIMPINVIS))

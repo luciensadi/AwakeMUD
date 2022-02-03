@@ -1016,16 +1016,40 @@ bool find_duplicate_spell(struct char_data *ch, struct char_data *vict, int spel
 
 bool check_spell_victim(struct char_data *ch, struct char_data *vict, int spell, char *buf)
 {
-  if (!vict)
+  // If there's no victim, bail out.
+  if (!vict) {
     send_to_char(ch, "You don't see anyone named '%s' here.\r\n", buf);
-  else if (((IS_PROJECT(ch) || IS_ASTRAL(ch)) && !(IS_DUAL(vict) || IS_ASTRAL(vict) || IS_PROJECT(vict))) ||
-           ((IS_PROJECT(vict) || IS_ASTRAL(vict)) && !(IS_DUAL(ch) || IS_ASTRAL(ch) || IS_PROJECT(ch))))
-    send_to_char("They aren't accessible from this plane.\r\n", ch);
-  else if (spells[spell].physical && IS_ASTRAL(vict))
-    send_to_char("That spell can't affect beings with no physical form.\r\n", ch);
-  else
-    return TRUE;
-  return FALSE;
+    return FALSE;
+  }
+
+  bool char_is_astral = IS_PROJECT(ch) || IS_ASTRAL(ch);
+
+  // Don't allow astral characters to cast on beings with no astral presence.
+  if (char_is_astral && !(IS_DUAL(vict) || IS_ASTRAL(vict) || IS_PROJECT(vict))) {
+    send_to_char(ch, "%s isn't accessible from the astral plane.\r\n", capitalize(GET_CHAR_NAME(vict)));
+    return FALSE;
+  }
+
+  // Sanity check: If the victim is astral and the character cannot perceive astral, bail out and log the error.
+  if (((IS_PROJECT(vict) || IS_ASTRAL(vict)) && !(IS_DUAL(ch) || IS_ASTRAL(ch) || IS_PROJECT(ch)))) {
+    mudlog("SYSERR: check_spell_victim received a projecting/astral vict from a char who could not see them!", ch, LOG_SYSLOG, TRUE);
+    send_to_char(ch, "You don't see anyone named '%s' here.\r\n", buf);
+    return FALSE;
+  }
+
+  // Physical spells will have no effect on astral beings, so don't let them cast.
+  if (spells[spell].physical && IS_ASTRAL(vict)) {
+    send_to_char(ch, "%s has no physical form for that spell to affect.\r\n", capitalize(GET_CHAR_NAME(vict)));
+    return FALSE;
+  }
+
+  // If you can only see your victim through ultrasound, you can't cast on them (M&M p18).
+  if (!IS_DUAL(ch) && !char_is_astral && (IS_AFFECTED(vict, AFF_IMP_INVIS) || IS_AFFECTED(vict, AFF_SPELLIMPINVIS))) {
+    send_to_char("Ultrasound systems don't provide direct viewing-- your magic has nothing to lock on to!\r\n", ch);
+    return FALSE;
+  }
+
+  return TRUE;
 }
 
 int reflect_spell(struct char_data *ch, struct char_data *vict, int spell, int force, int sub, int target, int &success)
