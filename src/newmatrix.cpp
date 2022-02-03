@@ -2790,6 +2790,8 @@ ACMD(do_comcall)
   }
 
   if (!subcmd) {
+    send_to_char(ch, "Your commlink phone number is %08d.\r\n", DECKER->phone->number);
+
     if (DECKER->phone->dest) {
       if (DECKER->phone->dest->connected && DECKER->phone->connected)
         send_to_char(ch, "Connected to: %d\r\n", DECKER->phone->dest->number);
@@ -2797,8 +2799,6 @@ ACMD(do_comcall)
         send_to_char(ch, "Calling: %d\r\n", DECKER->phone->dest->number);
       else
         send_to_char(ch, "Incoming call from: %08d\r\n", DECKER->phone->dest->number);
-    } else {
-      send_to_char("You're not calling anyone right now.\r\n", ch);
     }
     return;
   }
