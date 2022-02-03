@@ -1716,22 +1716,35 @@ ACMD(do_phone)
 
 ACMD(do_phonelist)
 {
-  struct phone_data *k;
   struct char_data *tch = NULL;
+  char identifier[1000];
   int i = 0;
 
   if (!phone_list)
     send_to_char(ch, "The phone list is empty.\r\n");
 
-  for (k = phone_list; k; k = k->next) {
+  for (struct phone_data *k = phone_list; k; k = k->next) {
     if (k->persona && k->persona->decker) {
       tch = k->persona->decker->ch;
     } else if (k->phone) {
       tch = get_obj_possessor(k->phone);
     }
-    send_to_char(ch, "%2d) %d (%s) (%s)\r\n", i, k->number, (k->dest ? "Busy" : "Free"),
-            (tch ? (IS_NPC(tch) ? GET_NAME(tch) : GET_CHAR_NAME(tch)) : "no one"));
-    i++;
+
+    if (tch) {
+      if (IS_NPC(tch))
+        strlcpy(identifier, GET_NAME(tch), sizeof(identifier));
+      else
+        strlcpy(identifier, GET_CHAR_NAME(tch), sizeof(identifier));
+    } else {
+      struct room_data *in_room = get_obj_in_room(k->phone);
+      if (in_room) {
+        snprintf(identifier, sizeof(identifier), "in room %s (%ld)", GET_ROOM_NAME(in_room), GET_ROOM_VNUM(in_room));
+      } else {
+        strlcpy(identifier, "nowhere!", sizeof(identifier));
+      }
+    }
+
+    send_to_char(ch, "%2d) %d (%s) (%s)\r\n", i++, k->number, (k->dest ? "Busy" : "Free"), identifier);
   }
 }
 
