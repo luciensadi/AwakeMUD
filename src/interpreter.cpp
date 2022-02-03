@@ -2471,8 +2471,7 @@ void nanny(struct descriptor_data * d, char *arg)
         if (d->invalid_name > 3)
           close_socket(d);
         else {
-          snprintf(buf, sizeof(buf), "Invalid name '%s', please try another. Names must be standard letters with no spaces, numbers, or punctuation, and cannot be a reserved word.\r\nName: ", arg);
-          SEND_TO_Q(buf, d);
+          SEND_TO_Q("Names must be standard letters with no spaces, numbers, or punctuation, and cannot be a reserved word.\r\nName: ", d);
         }
 
 
