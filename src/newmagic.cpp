@@ -1022,16 +1022,17 @@ bool check_spell_victim(struct char_data *ch, struct char_data *vict, int spell,
     return FALSE;
   }
 
-  bool char_is_astral = IS_PROJECT(ch) || IS_ASTRAL(ch);
+  bool ch_is_astral = IS_PROJECT(ch) || IS_ASTRAL(ch);
+  bool vict_is_astral = IS_ASTRAL(vict) || IS_PROJECT(vict);
 
   // Don't allow astral characters to cast on beings with no astral presence.
-  if (char_is_astral && !(IS_DUAL(vict) || IS_ASTRAL(vict) || IS_PROJECT(vict))) {
+  if (ch_is_astral && !IS_DUAL(vict) && !vict_is_astral) {
     send_to_char(ch, "%s isn't accessible from the astral plane.\r\n", capitalize(GET_CHAR_NAME(vict)));
     return FALSE;
   }
 
   // Sanity check: If the victim is astral and the character cannot perceive astral, bail out and log the error.
-  if (((IS_PROJECT(vict) || IS_ASTRAL(vict)) && !(IS_DUAL(ch) || IS_ASTRAL(ch) || IS_PROJECT(ch)))) {
+  if (vict_is_astral && !IS_DUAL(ch) && !ch_is_astral) {
     mudlog("SYSERR: check_spell_victim received a projecting/astral vict from a char who could not see them!", ch, LOG_SYSLOG, TRUE);
     send_to_char(ch, "You don't see anyone named '%s' here.\r\n", buf);
     return FALSE;
@@ -1044,7 +1045,7 @@ bool check_spell_victim(struct char_data *ch, struct char_data *vict, int spell,
   }
 
   // If you can only see your victim through ultrasound, you can't cast on them (M&M p18).
-  if (!IS_DUAL(ch) && !char_is_astral && (IS_AFFECTED(vict, AFF_IMP_INVIS) || IS_AFFECTED(vict, AFF_SPELLIMPINVIS))) {
+  if (CHAR_ONLY_SEES_VICT_WITH_ULTRASOUND(ch, vict)) {
     send_to_char("Ultrasound systems don't provide direct viewing-- your magic has nothing to lock on to!\r\n", ch);
     return FALSE;
   }
