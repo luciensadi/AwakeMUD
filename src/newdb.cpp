@@ -2306,11 +2306,15 @@ void auto_repair_obj(struct obj_data *obj) {
     case ITEM_WORKSHOP:
       FORCE_PROTO_VALUE("workshop", GET_WORKSHOP_TYPE(obj), GET_WORKSHOP_TYPE(&obj_proto[rnum]));
       FORCE_PROTO_VALUE("workshop", GET_WORKSHOP_GRADE(obj), GET_WORKSHOP_GRADE(&obj_proto[rnum]));
-      FORCE_PROTO_VALUE("workshop", GET_WORKSHOP_AMMOKIT_TYPE(obj), GET_WORKSHOP_AMMOKIT_TYPE(&obj_proto[rnum]));
+      // Repair ammo kit values to fix the ones that were "unpacked"
+      if (GET_WORKSHOP_TYPE(obj) == TYPE_GUNSMITHING && GET_WORKSHOP_GRADE(obj) == TYPE_KIT)
+        FORCE_PROTO_VALUE("ammo kit", GET_WORKSHOP_AMMOKIT_TYPE(obj), GET_WORKSHOP_AMMOKIT_TYPE(&obj_proto[rnum]));
       break;
     case ITEM_WORN:
+    /*  // Edit: Don't do this, you end up giving people infinite pockets.
       FORCE_PROTO_VALUE("worn", GET_WORN_POCKETS_HOLSTERS(obj), GET_WORN_POCKETS_HOLSTERS(&obj_proto[rnum]));
       FORCE_PROTO_VALUE("worn", GET_WORN_POCKETS_MISC(obj), GET_WORN_POCKETS_MISC(&obj_proto[rnum]));
+    */
       FORCE_PROTO_VALUE("worn", GET_WORN_BALLISTIC(obj), GET_WORN_BALLISTIC(&obj_proto[rnum]));
       FORCE_PROTO_VALUE("worn", GET_WORN_IMPACT(obj), GET_WORN_IMPACT(&obj_proto[rnum]));
       FORCE_PROTO_VALUE("worn", GET_WORN_CONCEAL_RATING(obj), GET_WORN_CONCEAL_RATING(&obj_proto[rnum]));

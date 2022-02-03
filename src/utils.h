@@ -706,7 +706,7 @@ bool LIGHT_OK_ROOM_SPECIFIED(struct char_data *sub, struct room_data *room);
 bool CAN_SEE(struct char_data *subj, struct char_data *obj);
 bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struct room_data *room_specified);
 
-#define CHAR_ONLY_SEES_VICT_WITH_ULTRASOUND(ch, vict) (IS_AFFECTED((vict), AFF_IMP_INVIS) || IS_AFFECTED((vict), AFF_SPELLIMPINVIS)) && !(IS_DUAL((ch)) || IS_PROJECT((ch)) || IS_ASTRAL((ch)))
+#define CHAR_ONLY_SEES_VICT_WITH_ULTRASOUND(ch, vict) (ch != vict && (IS_AFFECTED((vict), AFF_IMP_INVIS) || IS_AFFECTED((vict), AFF_SPELLIMPINVIS)) && !(IS_DUAL((ch)) || IS_PROJECT((ch)) || IS_ASTRAL((ch))))
 
 #define INVIS_OK_OBJ(sub, obj) (!IS_OBJ_STAT((obj), ITEM_INVISIBLE) || \
    IS_AFFECTED((sub), AFF_DETECT_INVIS) || IS_ASTRAL(sub) || \
