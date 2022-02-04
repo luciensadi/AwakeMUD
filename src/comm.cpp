@@ -1513,6 +1513,9 @@ void write_to_output(const char *unmodified_txt, struct descriptor_data *t)
   if (t->pProtocol->WriteOOB > 0)
     --t->pProtocol->WriteOOB;
 
+  // Now, re-calculate the size of the written content, since ProtocolOutput produces different content.
+  size = strlen(txt);
+
   // txt = colorize(t, (char *)txt);
 
   /* if we're in the overflow state already, ignore this new output */
