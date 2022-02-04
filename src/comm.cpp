@@ -1508,28 +1508,51 @@ void write_to_output(const char *unmodified_txt, struct descriptor_data *t)
   if (t == NULL)
     return;
 
+  #ifdef PROTO_DEBUG
+  log_vfprintf("Entering write_to_output with unmodified_txt ''%s'' with size %d.", unmodified_txt, size);
+  #endif
+
   // Process text per KaVir's protocol snippet.
   const char *txt = ProtocolOutput(t, unmodified_txt, &size);
-  if (t->pProtocol->WriteOOB > 0)
+  if (t->pProtocol->WriteOOB > 0) {
+    #ifdef PROTO_DEBUG
+    log_vfprintf("Decrementing WriteOOB (%d to %d).", t->pProtocol->WriteOOB, --t->pProtocol->WriteOOB);
+    #else
     --t->pProtocol->WriteOOB;
+    #endif
+  }
 
   // Now, re-calculate the size of the written content, since ProtocolOutput produces different content.
   size = strlen(txt);
 
+  #ifdef PROTO_DEBUG
+  log_vfprintf("Got cooked content ''%s'' with size=%d.", txt, size);
+  #endif
+
   // txt = colorize(t, (char *)txt);
 
   /* if we're in the overflow state already, ignore this new output */
-  if (t->bufptr < 0)
+  if (t->bufptr < 0) {
+    #ifdef PROTO_DEBUG
+    log_vfprintf("Ignoring cooked content: t->bufptr = %d, so we're in the overflow state. Aborting.", t->bufptr);
+    #endif
     return;
+  }
 
   /* if we have enough space, just write to buffer and that's it! */
-  if (t->bufspace >= size)
+  if (t->bufspace > size)
   {
+    #ifdef PROTO_DEBUG
+    log_vfprintf("Have enough space in t->bufspace (%d >= %d). Writing cooked content into t->output, which is starting at ''%s''.", t->bufspace, size, txt, t->output);
+    #endif
     strlcpy(t->output + t->bufptr, txt, t->bufspace);
     assert(t->small_outbuf_canary == 31337);
     assert(t->output_canary == 31337);
     t->bufspace -= size;
     t->bufptr += size;
+    #ifdef PROTO_DEBUG
+    log_vfprintf("After operations, t->output is now ''%s'', with bufspace=%d. Successfully completed run.", t->output, t->bufspace);
+    #endif
     return;
   }
 
@@ -1542,6 +1565,9 @@ void write_to_output(const char *unmodified_txt, struct descriptor_data *t)
   {
     t->bufptr = -1;
     buf_overflows++;
+    #ifdef PROTO_DEBUG
+    log_vfprintf("Whoops, not enough space. Going to overflow state and discarding cooked content. t->large_outbuf=%d, total size = %d. t->bufptr becomes -1, and buf_overflows is now %d.", t->large_outbuf, size + strlen(t->output), buf_overflows);
+    #endif
     return;
   }
 
@@ -1569,6 +1595,10 @@ void write_to_output(const char *unmodified_txt, struct descriptor_data *t)
 
   /* set the pointer for the next write */
   t->bufptr = strlen(t->output);
+
+  #ifdef PROTO_DEBUG
+  log_vfprintf("That was lengthy, I had to switch to a large buffer. t->output is now ''%s'' (len %d, which leaves %d space remaining out of %d).", t->output, t->bufptr, t->bufspace, LARGE_BUFSIZE);
+  #endif
 }
 
 /* ******************************************************************
@@ -1801,6 +1831,20 @@ int write_to_descriptor(int desc, const char *txt) {
   assert(txt != NULL);
 
   total = strlen(txt);
+
+  #ifdef PROTO_DEBUG
+  log_vfprintf("Before conversion: '''%s'''", txt);
+  // We're gonna do some real weird shit and deliberately convert all non-printing chars to printing ones.
+  char the_bullshit_buf[total * 10];
+  for (int txt_idx = 0; txt[txt_idx]; txt_idx++) {
+    if ((txt[txt_idx] < ' ' || txt[txt_idx] > '~')) {
+      snprintf(ENDOF(the_bullshit_buf), sizeof(the_bullshit_buf), "@%d", txt[txt_idx]);
+    } else {
+      snprintf(ENDOF(the_bullshit_buf), sizeof(the_bullshit_buf), "%c", txt[txt_idx]);
+    }
+  }
+  log_vfprintf("After conversion: '''%s'''", the_bullshit_buf);
+  #endif
 
   do {
 #ifdef __APPLE__
