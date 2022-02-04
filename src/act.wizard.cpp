@@ -3799,8 +3799,8 @@ ACMD(do_show)
     strcpy(buf, "Jackpoints\r\n---------\r\n");
     for (i = 0, j = 0; i <= top_of_world; i++)
       if (world[i].matrix > 0)
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%2d: [%8ld] %s^n (%ld/%ld)\r\n", ++j,
-                world[i].number, world[i].name, world[i].matrix, world[i].rtg);
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%2d: [%8ld] %s^n (host %ld, rtg %ld, %sI/O %d^n)\r\n", ++j,
+                world[i].number, world[i].name, world[i].matrix, world[i].rtg, (world[i].io > 0 && world[i].io < 100) ? "^y" : "", world[i].io);
     send_to_char(buf, ch);
     break;
   case 14:

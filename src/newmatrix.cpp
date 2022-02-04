@@ -974,7 +974,11 @@ ACMD(do_matrix_score)
             PERSONA->condition, (int)(GET_PHYSICAL(ch) / 100), (int)(GET_MAX_PHYSICAL(ch) / 100),
             detect, MAX(0, GET_REM_HACKING(ch)), GET_HACKING(ch), GET_MAX_HACKING(ch),
             DECKER->bod, DECKER->evasion, DECKER->masking, DECKER->sensor,
-            DECKER->hardening, DECKER->mpcp, DECKER->deck ? GET_OBJ_VAL(DECKER->deck, 4) : 0, DECKER->response);
+            DECKER->hardening, DECKER->mpcp, DECKER->deck ? GET_CYBERDECK_IO_RATING(DECKER->deck) : 0, DECKER->response);
+  }
+
+  if (DECKER->io < GET_CYBERDECK_IO_RATING(DECKER->deck)) {
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^yYour I/O rating is restricted to %d by your jackpoint.^n\r\n", DECKER->io);
   }
 
   send_to_icon(PERSONA, buf);
@@ -1705,13 +1709,24 @@ ACMD(do_connect)
   affect_total(ch);
   GET_REM_HACKING(ch) = GET_HACKING(ch);
   GET_MAX_HACKING(ch) = (int)(GET_HACKING(ch) / 3);
-  if (ch->in_room->io == 0)
-    DECKER->io = GET_OBJ_VAL(cyberdeck, 4);
-  else if (ch->in_room->io == -1)
-    DECKER->io = MIN(DECKER->mpcp * 50, GET_OBJ_VAL(cyberdeck, 4));
-  else
-    DECKER->io = MIN(ch->in_room->io, GET_OBJ_VAL(cyberdeck, 4));
-  DECKER->io = (int)(DECKER->io / 10);
+
+  // Cap the IO speed based on the room's I/O rating. 0 is uncapped, -1 is capped by MPCP * 50, all other ratings cap to that rating.
+  if (ch->in_room->io == 0) {
+    DECKER->io = GET_CYBERDECK_IO_RATING(cyberdeck);
+  } else if (ch->in_room->io == -1) {
+    DECKER->io = MIN(DECKER->mpcp * 50, GET_CYBERDECK_IO_RATING(cyberdeck));
+  } else {
+    if (ch->in_room->io <= 100) {
+      char warnbuf[1000];
+      snprintf(warnbuf, sizeof(warnbuf), "Warning: I/O speed in %s (%ld) is low at %d.", GET_ROOM_NAME(ch->in_room), GET_ROOM_VNUM(ch->in_room), ch->in_room->io);
+      mudlog(warnbuf, ch, LOG_SYSLOG, TRUE);
+    }
+    DECKER->io = MIN(ch->in_room->io, GET_CYBERDECK_IO_RATING(cyberdeck));
+  }
+
+  // IO is then divided by 10. I've set it to be a minimum of 1 here.
+  DECKER->io = MAX(1, (int)(DECKER->io / 10));
+
   if (GET_OBJ_VNUM(cyberdeck) != OBJ_CUSTOM_CYBERDECK_SHELL) {
     DECKER->asist[1] = 0;
     DECKER->asist[0] = 0;
