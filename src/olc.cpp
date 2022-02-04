@@ -2118,6 +2118,8 @@ ACMD(do_hedit)
     for (int i = ACCESS; i <= SLAVE; i++)
       d->edit_host->stats[i][0] = 8;
 
+    d->edit_host->security = MTX_SECURITY_EASY;
+
     d->edit_mode = HEDIT_CONFIRM_EDIT;
     return;
   }

@@ -50,7 +50,7 @@ struct host_data {
   char *shutdown_stop;
 
   sh_int colour;
-  sh_int security;
+  int security;
   sh_int intrusion;
   long stats[5][6];
 

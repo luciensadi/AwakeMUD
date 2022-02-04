@@ -357,11 +357,14 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
     break;
   case HEDIT_RATINGS:
     {
+      // Clamp security rating.
+      d->edit_host->intrusion = MAX(MIN(MTX_SECURITY_EASY, d->edit_host->intrusion), MTX_SECURITY_HARD);
+
       char hedit_rating_buf[200];
       snprintf(hedit_rating_buf, sizeof(hedit_rating_buf), "(for %s hosts: min %d, max %d)",
-               intrusion[d->edit_host->security],
-               host_subsystem_acceptable_ratings[d->edit_host->security][IDX_MTX_ACCEPTABLE_RATING_MINIMUM],
-               host_subsystem_acceptable_ratings[d->edit_host->security][IDX_MTX_ACCEPTABLE_RATING_MAXIMUM]);
+               intrusion[d->edit_host->intrusion],
+               host_subsystem_acceptable_ratings[d->edit_host->intrusion][IDX_MTX_ACCEPTABLE_RATING_MINIMUM],
+               host_subsystem_acceptable_ratings[d->edit_host->intrusion][IDX_MTX_ACCEPTABLE_RATING_MAXIMUM]);
 
       switch (LOWER(*arg)) {
         case 'q':
@@ -576,10 +579,10 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
     break;
   case HEDIT_RATINGS_ACCESS:
     number = atoi(arg);
-    if (number < host_subsystem_acceptable_ratings[d->edit_host->security][IDX_MTX_ACCEPTABLE_RATING_MINIMUM]) {
-      send_to_char(CH, "The minimum rating for this system in %s hosts is %d. Enter Access rating: ", intrusion[d->edit_host->security], host_subsystem_acceptable_ratings[d->edit_host->security][IDX_MTX_ACCEPTABLE_RATING_MINIMUM]);
-    } else if (number > host_subsystem_acceptable_ratings[d->edit_host->security][IDX_MTX_ACCEPTABLE_RATING_MAXIMUM]) {
-      send_to_char(CH, "The maximum rating for this system in %s hosts is %d. Enter Access rating: ", intrusion[d->edit_host->security], host_subsystem_acceptable_ratings[d->edit_host->security][IDX_MTX_ACCEPTABLE_RATING_MAXIMUM]);
+    if (number < host_subsystem_acceptable_ratings[d->edit_host->intrusion][IDX_MTX_ACCEPTABLE_RATING_MINIMUM]) {
+      send_to_char(CH, "The minimum rating for this system in %s hosts is %d. Enter Access rating: ", intrusion[d->edit_host->intrusion], host_subsystem_acceptable_ratings[d->edit_host->intrusion][IDX_MTX_ACCEPTABLE_RATING_MINIMUM]);
+    } else if (number > host_subsystem_acceptable_ratings[d->edit_host->intrusion][IDX_MTX_ACCEPTABLE_RATING_MAXIMUM]) {
+      send_to_char(CH, "The maximum rating for this system in %s hosts is %d. Enter Access rating: ", intrusion[d->edit_host->intrusion], host_subsystem_acceptable_ratings[d->edit_host->intrusion][IDX_MTX_ACCEPTABLE_RATING_MAXIMUM]);
     } else {
       d->edit_host->stats[ACCESS][0] = number;
       hedit_disp_rating_menu(d);
@@ -587,10 +590,10 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
     break;
   case HEDIT_RATINGS_CONTROL:
     number = atoi(arg);
-    if (number < host_subsystem_acceptable_ratings[d->edit_host->security][IDX_MTX_ACCEPTABLE_RATING_MINIMUM]) {
-      send_to_char(CH, "The minimum rating for this system in %s hosts is %d. Enter Control rating: ", intrusion[d->edit_host->security], host_subsystem_acceptable_ratings[d->edit_host->security][IDX_MTX_ACCEPTABLE_RATING_MINIMUM]);
-    } else if (number > host_subsystem_acceptable_ratings[d->edit_host->security][IDX_MTX_ACCEPTABLE_RATING_MAXIMUM]) {
-      send_to_char(CH, "The maximum rating for this system in %s hosts is %d. Enter Control rating: ", intrusion[d->edit_host->security], host_subsystem_acceptable_ratings[d->edit_host->security][IDX_MTX_ACCEPTABLE_RATING_MAXIMUM]);
+    if (number < host_subsystem_acceptable_ratings[d->edit_host->intrusion][IDX_MTX_ACCEPTABLE_RATING_MINIMUM]) {
+      send_to_char(CH, "The minimum rating for this system in %s hosts is %d. Enter Control rating: ", intrusion[d->edit_host->intrusion], host_subsystem_acceptable_ratings[d->edit_host->intrusion][IDX_MTX_ACCEPTABLE_RATING_MINIMUM]);
+    } else if (number > host_subsystem_acceptable_ratings[d->edit_host->intrusion][IDX_MTX_ACCEPTABLE_RATING_MAXIMUM]) {
+      send_to_char(CH, "The maximum rating for this system in %s hosts is %d. Enter Control rating: ", intrusion[d->edit_host->intrusion], host_subsystem_acceptable_ratings[d->edit_host->intrusion][IDX_MTX_ACCEPTABLE_RATING_MAXIMUM]);
     } else {
       d->edit_host->stats[CONTROL][0] = number;
       hedit_disp_rating_menu(d);
@@ -598,10 +601,10 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
     break;
   case HEDIT_RATINGS_INDEX:
     number = atoi(arg);
-    if (number < host_subsystem_acceptable_ratings[d->edit_host->security][IDX_MTX_ACCEPTABLE_RATING_MINIMUM]) {
-      send_to_char(CH, "The minimum rating for this system in %s hosts is %d. Enter Index rating: ", intrusion[d->edit_host->security], host_subsystem_acceptable_ratings[d->edit_host->security][IDX_MTX_ACCEPTABLE_RATING_MINIMUM]);
-    } else if (number > host_subsystem_acceptable_ratings[d->edit_host->security][IDX_MTX_ACCEPTABLE_RATING_MAXIMUM]) {
-      send_to_char(CH, "The maximum rating for this system in %s hosts is %d. Enter Index rating: ", intrusion[d->edit_host->security], host_subsystem_acceptable_ratings[d->edit_host->security][IDX_MTX_ACCEPTABLE_RATING_MAXIMUM]);
+    if (number < host_subsystem_acceptable_ratings[d->edit_host->intrusion][IDX_MTX_ACCEPTABLE_RATING_MINIMUM]) {
+      send_to_char(CH, "The minimum rating for this system in %s hosts is %d. Enter Index rating: ", intrusion[d->edit_host->intrusion], host_subsystem_acceptable_ratings[d->edit_host->intrusion][IDX_MTX_ACCEPTABLE_RATING_MINIMUM]);
+    } else if (number > host_subsystem_acceptable_ratings[d->edit_host->intrusion][IDX_MTX_ACCEPTABLE_RATING_MAXIMUM]) {
+      send_to_char(CH, "The maximum rating for this system in %s hosts is %d. Enter Index rating: ", intrusion[d->edit_host->intrusion], host_subsystem_acceptable_ratings[d->edit_host->intrusion][IDX_MTX_ACCEPTABLE_RATING_MAXIMUM]);
     } else {
       d->edit_host->stats[INDEX][0] = number;
       hedit_disp_rating_menu(d);
@@ -609,10 +612,10 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
     break;
   case HEDIT_RATINGS_FILES:
     number = atoi(arg);
-    if (number < host_subsystem_acceptable_ratings[d->edit_host->security][IDX_MTX_ACCEPTABLE_RATING_MINIMUM]) {
-      send_to_char(CH, "The minimum rating for this system in %s hosts is %d. Enter Files rating: ", intrusion[d->edit_host->security], host_subsystem_acceptable_ratings[d->edit_host->security][IDX_MTX_ACCEPTABLE_RATING_MINIMUM]);
-    } else if (number > host_subsystem_acceptable_ratings[d->edit_host->security][IDX_MTX_ACCEPTABLE_RATING_MAXIMUM]) {
-      send_to_char(CH, "The maximum rating for this system in %s hosts is %d. Enter Files rating: ", intrusion[d->edit_host->security], host_subsystem_acceptable_ratings[d->edit_host->security][IDX_MTX_ACCEPTABLE_RATING_MAXIMUM]);
+    if (number < host_subsystem_acceptable_ratings[d->edit_host->intrusion][IDX_MTX_ACCEPTABLE_RATING_MINIMUM]) {
+      send_to_char(CH, "The minimum rating for this system in %s hosts is %d. Enter Files rating: ", intrusion[d->edit_host->intrusion], host_subsystem_acceptable_ratings[d->edit_host->intrusion][IDX_MTX_ACCEPTABLE_RATING_MINIMUM]);
+    } else if (number > host_subsystem_acceptable_ratings[d->edit_host->intrusion][IDX_MTX_ACCEPTABLE_RATING_MAXIMUM]) {
+      send_to_char(CH, "The maximum rating for this system in %s hosts is %d. Enter Files rating: ", intrusion[d->edit_host->intrusion], host_subsystem_acceptable_ratings[d->edit_host->intrusion][IDX_MTX_ACCEPTABLE_RATING_MAXIMUM]);
     } else {
       d->edit_host->stats[FILES][0] = number;
       hedit_disp_rating_menu(d);
@@ -620,10 +623,10 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
     break;
   case HEDIT_RATINGS_SLAVE:
     number = atoi(arg);
-    if (number < host_subsystem_acceptable_ratings[d->edit_host->security][IDX_MTX_ACCEPTABLE_RATING_MINIMUM]) {
-      send_to_char(CH, "The minimum rating for this system in %s hosts is %d. Enter Slave rating: ", intrusion[d->edit_host->security], host_subsystem_acceptable_ratings[d->edit_host->security][IDX_MTX_ACCEPTABLE_RATING_MINIMUM]);
-    } else if (number > host_subsystem_acceptable_ratings[d->edit_host->security][IDX_MTX_ACCEPTABLE_RATING_MAXIMUM]) {
-      send_to_char(CH, "The maximum rating for this system in %s hosts is %d. Enter Slave rating: ", intrusion[d->edit_host->security], host_subsystem_acceptable_ratings[d->edit_host->security][IDX_MTX_ACCEPTABLE_RATING_MAXIMUM]);
+    if (number < host_subsystem_acceptable_ratings[d->edit_host->intrusion][IDX_MTX_ACCEPTABLE_RATING_MINIMUM]) {
+      send_to_char(CH, "The minimum rating for this system in %s hosts is %d. Enter Slave rating: ", intrusion[d->edit_host->intrusion], host_subsystem_acceptable_ratings[d->edit_host->intrusion][IDX_MTX_ACCEPTABLE_RATING_MINIMUM]);
+    } else if (number > host_subsystem_acceptable_ratings[d->edit_host->intrusion][IDX_MTX_ACCEPTABLE_RATING_MAXIMUM]) {
+      send_to_char(CH, "The maximum rating for this system in %s hosts is %d. Enter Slave rating: ", intrusion[d->edit_host->intrusion], host_subsystem_acceptable_ratings[d->edit_host->intrusion][IDX_MTX_ACCEPTABLE_RATING_MAXIMUM]);
     } else {
       d->edit_host->stats[SLAVE][0] = number;
       hedit_disp_rating_menu(d);
