@@ -3796,12 +3796,34 @@ ACMD(do_show)
     send_to_char(ch, "%s's prompt:\r\n%s\r\n", GET_NAME(vict), GET_PROMPT(vict));
     break;
   case 13:
-    strcpy(buf, "Jackpoints\r\n---------\r\n");
-    for (i = 0, j = 0; i <= top_of_world; i++)
-      if (world[i].matrix > 0)
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%2d: [%8ld] %s^n (host %ld, rtg %ld, %sI/O %d^n)\r\n", ++j,
-                world[i].number, world[i].name, world[i].matrix, world[i].rtg, (world[i].io > 0 && world[i].io < 100) ? "^y" : "", world[i].io);
-    send_to_char(buf, ch);
+    {
+      strcpy(buf, "Jackpoints\r\n---------\r\n");
+
+      char io_color[3];
+      for (i = 0, j = 0; i <= top_of_world; i++) {
+        if (world[i].matrix > 0) {
+          if (world[i].io > 0) {
+            if (world[i].io < 50)
+              strlcpy(io_color, "^R", sizeof(io_color));
+            else if (world[i].io < 150)
+              strlcpy(io_color, "^Y", sizeof(io_color));
+            else if (world[i].io < 300)
+              strlcpy(io_color, "^y", sizeof(io_color));
+            else
+              strlcpy(io_color, "^c", sizeof(io_color));
+          } else if (world[i].io == -1) {
+            strlcpy(io_color, "^m", sizeof(io_color));
+          } else {
+            strlcpy(io_color, "", sizeof(io_color));
+          }
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%2d: [%8ld] %s^n (host %ld, rtg %ld, %sI/O %d^n)\r\n", ++j,
+                  world[i].number, world[i].name, world[i].matrix, world[i].rtg, io_color, world[i].io);
+        }
+      }
+
+      send_to_char(buf, ch);
+    }
+
     break;
   case 14:
     if (!*value) {
