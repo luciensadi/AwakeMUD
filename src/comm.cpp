@@ -1410,6 +1410,9 @@ int make_prompt(struct descriptor_data * d)
               else
                 strcpy(str, "@v");
               break;
+            case 'V':       // Vision penalties in theory
+              sprintf(str, sizeof(str), "%d", calculate_vision_penalty(d->character));
+              break;
             case '@':
               strcpy(str, "@");
               break;
