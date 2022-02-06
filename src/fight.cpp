@@ -4903,7 +4903,6 @@ void perform_violence(void)
             break;
           case RACE_DWARF:
           case RACE_MENEHUNE:
-          case RACE_KOBOROKURU:
           case RACE_GNOME:
             target--;
             break;

@@ -598,8 +598,8 @@ bool passed_flee_success_check(struct char_data *ch) {
   if (!can_hurt(ch, FIGHTING(ch), TRUE, 0))
     return TRUE;
 
-  return success_test(GET_QUI(ch), GET_QUI(FIGHTING(ch)) + racial_flee_modifier) > 0;
-    switch (GET_RACE(ch) {
+  if success_test(GET_QUI(ch), GET_QUI(FIGHTING(ch)) + racial_flee_modifier) > 0
+    switch (GET_RACE(ch)) {
       case RACE_SATYR:
        racial_flee_modifier--;
        break;
@@ -608,7 +608,9 @@ bool passed_flee_success_check(struct char_data *ch) {
       case RACE_MENEHUNE:
         racial_flee_modifier++;
         break;
-  }
+        }
+    return TRUE;    
+      
 }
 
 ACMD(do_flee)
