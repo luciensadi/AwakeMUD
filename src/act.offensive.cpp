@@ -609,8 +609,8 @@ bool passed_flee_success_check(struct char_data *ch) {
         racial_flee_modifier++;
         break;
         }
-    return TRUE;    
-      
+    return TRUE;
+ 
 }
 
 ACMD(do_flee)
