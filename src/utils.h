@@ -275,9 +275,8 @@ void    update_pos(struct char_data *victim);
   GET_MOB_VNUM(ch) == 22)
 #define IS_SPIRIT(ch) (IS_NPC(ch) && GET_RACE(ch) == RACE_SPIRIT)
 #define IS_ELEMENTAL(ch) (IS_NPC(ch) && GET_RACE(ch) == RACE_ELEMENTAL)
-#define IS_ASTRAL(ch) (IS_NPC(ch) && MOB_FLAGS(ch).IsSet(MOB_ASTRAL))
-#define IS_DUAL(ch)   ((IS_NPC(ch) && MOB_FLAGS(ch).IsSet(MOB_DUAL_NATURE)) || \
-               (!IS_NPC(ch) && (PLR_FLAGS(ch).IsSet(PLR_PERCEIVE) || access_level(ch, LVL_ADMIN))))
+#define IS_ASTRAL(ch) (MOB_FLAGGED(ch, MOB_ASTRAL))
+#define IS_DUAL(ch)   (MOB_FLAGGED(ch, MOB_DUAL_NATURE) || PLR_FLAGGED(ch, PLR_PERCEIVE) || access_level(ch, LVL_ADMIN))
 #define IS_SENATOR(ch) (access_level((ch), LVL_BUILDER))
 
 // ONLY for use on non-Bitfield bitvectors:
