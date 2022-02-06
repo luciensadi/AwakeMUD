@@ -1024,7 +1024,7 @@ void veh_from_room(struct veh_data * veh)
   struct veh_data *temp;
   if (veh == NULL) {
     log("SYSERR: Null vehicle passed to veh_from_room. Terminating.");
-    exit(1);
+    exit(ERROR_NULL_VEHICLE_VEH_FROM_ROOM);
   }
   if (!veh->in_room && !veh->in_veh) {
     log("SYSERR: veh->in_room and veh->in_veh are both null; did you call veh_from_room twice?");

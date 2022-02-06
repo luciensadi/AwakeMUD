@@ -1641,8 +1641,8 @@ void do_stat_mobile(struct char_data * ch, struct char_data * k)
     snprintf(buf2, sizeof(buf2), " %s '%s'\r\n", (!IS_MOB(k) ? "NPC" : "MOB"), GET_NAME(k));
   strlcat(buf, buf2, sizeof(buf));
 
-  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Alias: %s, VNum: [%8ld], RNum: [%5ld]\r\n", GET_KEYWORDS(k),
-          GET_MOB_VNUM(k), GET_MOB_RNUM(k));
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Alias: %s, VNum: [^c%8ld^n], RNum: [%5ld], Unique ID [%s]\r\n", GET_KEYWORDS(k),
+          GET_MOB_VNUM(k), GET_MOB_RNUM(k), get_printable_mob_unique_id(k));
 
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "L-Des: %s",
           (k->player.physical_text.look_desc ?
@@ -1659,9 +1659,12 @@ void do_stat_mobile(struct char_data * ch, struct char_data * k)
           GET_REAL_BOD(k), GET_REAL_QUI(k), GET_REAL_STR(k), GET_REAL_CHA(k), GET_REAL_INT(k),
           GET_REAL_WIL(k), ((int)GET_REAL_MAG(k) / 100), GET_REAL_REA(k), ((float)GET_REAL_ESS(k) / 100));
 
-  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Physical p.:[^G%d/%d^n]  Mental p.:[^G%d/%d^n]\r\n",
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Physical p.:[^G%d/%d^n]  Mental p.:[^G%d/%d^n]; Ballistic / Impact [%d/%d]\r\n",
           (int)(GET_PHYSICAL(k) / 100), (int)(GET_MAX_PHYSICAL(k) / 100),
-          (int)(GET_MENTAL(k) / 100), (int)(GET_MAX_MENTAL(k) / 100));
+          (int)(GET_MENTAL(k) / 100), (int)(GET_MAX_MENTAL(k) / 100),
+          GET_BALLISTIC(k),
+          GET_IMPACT(k)
+        );
 
   base = calc_karma(NULL, k);
 

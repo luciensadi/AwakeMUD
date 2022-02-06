@@ -2169,7 +2169,7 @@ void verify_db_password_column_size() {
   if (strncmp(row[1], "varchar(200)", sizeof("varchar(200)")) != 0) {
     log("FATAL ERROR: Your pfiles table's password column needs to be reconfigured.");
     log("Execute this command on your database:  ALTER TABLE `pfiles` MODIFY `Password` VARCHAR(200);");
-    exit(1);
+    exit(ERROR_DATABASE_CHANGES_NEEDED);
   }
   mysql_free_result(res);
 }

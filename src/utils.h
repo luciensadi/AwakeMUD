@@ -112,6 +112,9 @@ bool    can_damage_vehicle(struct char_data *ch, struct veh_data *veh);
 char *  compose_spell_name(int type, int subtype = -1);
 bool    obj_contains_kept_items(struct obj_data *obj);
 void    send_gamewide_annoucement(const char *msg, bool prepend_announcement_string);
+char *  get_printable_mob_unique_id(struct char_data *ch);
+bool    mob_unique_id_matches(mob_unique_id_t id1, mob_unique_id_t id2);
+void    set_new_mobile_unique_id(struct char_data *ch);
 
 // Skill-related.
 char *how_good(int skill, int rank);
@@ -226,7 +229,7 @@ void    update_pos(struct char_data *victim);
  if ((number) * sizeof(type) <= 0) \
   log_vfprintf("SYSERR: Zero bytes or less requested at %s:%d.", __FILE__, __LINE__); \
  if (!((result) = (type *) calloc ((number), sizeof(type)))) \
-  { perror("SYSERR: malloc failure"); exit(1); } } while(0)
+  { perror("SYSERR: malloc failure"); exit(ERROR_MALLOC_FAILED_IN_CREATE_MACRO); } } while(0)
 
 /*
  * the source previously used the same code in many places to remove an item
@@ -572,6 +575,7 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define GET_MOB_RNUM(mob)       ((mob)->nr)
 #define GET_MOB_VNUM(mob)       (IS_MOB(mob) ? mob_index[GET_MOB_RNUM(mob)].vnum : -1)
 #define MOB_VNUM_RNUM(rnum) ((mob_index[rnum]).vnum)
+#define GET_MOB_UNIQUE_ID(mob)  ((mob)->unique_id)
 
 #define GET_MOB_WAIT(ch)      ((ch)->mob_specials.wait_state)
 #define GET_DEFAULT_POS(ch)   ((ch)->mob_specials.default_pos)

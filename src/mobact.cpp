@@ -1155,7 +1155,7 @@ int get_push_command_index() {
 
   if (global_push_command_index == -1) {
     mudlog("FATAL ERROR: Unable to find index of PUSH command for NPC elevator usage. Put it back.", NULL, LOG_SYSLOG, TRUE);
-    exit(1);
+    exit(ERROR_UNABLE_TO_FIND_PUSH_COMMAND);
   }
 
   return global_push_command_index;

@@ -210,7 +210,7 @@ int main(int argc, char **argv)
           dir = argv[pos];
         else {
           log("Directory arg expected after option -d.");
-          exit(1);
+          exit(ERROR_INVALID_ARGUMENTS_TO_BINARY);
         }
         break;
       case 'c':
@@ -239,16 +239,16 @@ int main(int argc, char **argv)
   if (pos < argc) {
     if (!isdigit(*argv[pos])) {
       fprintf(stderr, "Usage: %s [-c] [-m] [-q] [-r] [-s] [-d pathname] [port #]\n", argv[0]);
-      exit(1);
+      exit(ERROR_INVALID_ARGUMENTS_TO_BINARY);
     } else if ((port = atoi(argv[pos])) <= 1024) {
       fprintf(stderr, "Illegal port number. Port must be higher than 1024.\n");
-      exit(1);
+      exit(ERROR_INVALID_ARGUMENTS_TO_BINARY);
     }
   }
 
   if (chdir(dir) < 0) {
     perror("Fatal error changing to data directory");
-    exit(1);
+    exit(ERROR_INVALID_DATA_DIRECTORY);
   }
 
   log_vfprintf("Using %s as data directory.", dir);
@@ -256,7 +256,7 @@ int main(int argc, char **argv)
   if (scheck) {
     boot_world();
     log("Done.");
-    exit(0);
+    exit(EXIT_CODE_ZERO_ALL_IS_WELL);
   } else {
     log_vfprintf("Running game on port %d.", port);
     init_game(port);
@@ -451,7 +451,7 @@ void init_game(int port)
 
   if (circle_reboot) {
     log("Rebooting.");
-    exit(52);                   /* what's so great about HHGTTG, anyhow? */
+    exit(EXIT_CODE_REBOOTING);
   }
   log("Normal termination of game.");
 }
@@ -478,13 +478,13 @@ int init_socket(int port)
 
   if ((s = socket(PF_INET, SOCK_STREAM, 0)) < 0) {
     perror("Create socket");
-    exit(1);
+    exit(ERROR_COULD_NOT_CREATE_SOCKET);
   }
 #if defined(SO_SNDBUF)
   opt = LARGE_BUFSIZE + GARBAGE_SPACE;
   if (setsockopt(s, SOL_SOCKET, SO_SNDBUF, (char *) &opt, sizeof(opt)) < 0) {
     perror("setsockopt SNDBUF");
-    exit(1);
+    exit(ERROR_COULD_NOT_SET_SOCKET_OPTIONS);
   }
 #endif
 
@@ -492,7 +492,7 @@ int init_socket(int port)
   opt = 1;
   if (setsockopt(s, SOL_SOCKET, SO_REUSEADDR, (char *) &opt, sizeof(opt)) < 0) {
     perror("setsockopt REUSEADDR");
-    exit(1);
+    exit(ERROR_COULD_NOT_REUSE_ADDRESS);
   }
 #endif
 
@@ -502,7 +502,7 @@ int init_socket(int port)
   opt = 1;
   if (setsockopt(s, SOL_SOCKET, SO_REUSEPORT, (char *) &opt, sizeof(opt)) < 0) {
     perror("setsockopt REUSEPORT");
-    exit(1);
+    exit(ERROR_COULD_NOT_REUSE_PORT);
   }
 #endif
 */
@@ -514,7 +514,7 @@ int init_socket(int port)
     ld.l_linger = 0;
     if (setsockopt(s, SOL_SOCKET, SO_LINGER, (char *)&ld, sizeof(ld)) < 0) {
       perror("setsockopt LINGER");
-      exit(1);
+      exit(ERROR_COULD_NOT_SET_LINGER);
     }
   }
 #endif
@@ -526,7 +526,7 @@ int init_socket(int port)
   if (bind(s, (struct sockaddr *) & sa, sizeof(sa)) < 0) {
     perror("bind");
     close(s);
-    exit(1);
+    exit(ERROR_COULD_NOT_BIND_SOCKET);
   }
   nonblock(s);
   listen(s, 5);
@@ -554,7 +554,7 @@ int get_max_players(void)
     if (getrlimit(RLIMIT_NOFILE, &limit) < 0)
     {
       perror("calling getrlimit");
-      exit(1);
+      exit(ERROR_GETRLIMIT_FAILED);
     }
     if (limit.rlim_max == RLIM_INFINITY)
       max_descs = MAX_PLAYERS + NUM_RESERVED_DESCS;
@@ -584,7 +584,7 @@ int get_max_players(void)
       max_descs = MAX_PLAYERS + NUM_RESERVED_DESCS;
     else {
       perror("Error calling sysconf");
-      exit(1);
+      exit(ERROR_SYSCONF_FAILED);
     }
   }
 #endif
@@ -596,7 +596,7 @@ int get_max_players(void)
     log_vfprintf("Non-positive max player limit!  (Set at %d using %s).",
         max_descs, method);
 
-    exit(1);
+    exit(ERROR_YOU_SET_AN_IMPOSSIBLE_PLAYER_LIMIT);
   }
 
   log_vfprintf("Setting player limit to %d using %s.", max_descs, method);
@@ -720,7 +720,7 @@ void game_loop(int mother_desc)
       if (select(0, (fd_set *) 0, (fd_set *) 0, (fd_set *) 0, &timeout) < 0)
         if (errno != EINTR) {
           perror("Select sleep");
-          exit(1);
+          exit(ERROR_COULD_NOT_RECOVER_FROM_SELECT_SLEEP);
         }
 
       // Reset our alarm timer.
@@ -2364,7 +2364,7 @@ void nonblock(int s)
   flags |= O_NONBLOCK;
   if (fcntl(s, F_SETFL, flags) < 0) {
     perror("Fatal error executing nonblock (comm.c)");
-    exit(1);
+    exit(ERROR_FNCTL_ENCOUNTERED_ERROR);
   }
 }
 #endif
@@ -2407,7 +2407,7 @@ void free_up_memory(int Empty)
   if (!Mem->ClearStacks()) {
     cerr << "SYSERR: Unable to free enough memory, shutting down...\n";
     House_save_all();
-    exit(0);
+    exit(ERROR_UNABLE_TO_FREE_MEMORY_IN_CLEARSTACKS);
   }
 }
 
@@ -2415,21 +2415,21 @@ void hupsig(int Empty)
 {
   mudlog("Received SIGHUP.  Shutting down...", NULL, LOG_SYSLOG, TRUE);
   House_save_all();
-  exit(0);
+  exit(EXIT_CODE_ZERO_ALL_IS_WELL);
 }
 
 void intsig(int Empty)
 {
   mudlog("Received SIGINT.  Shutting down...", NULL, LOG_SYSLOG, TRUE);
   House_save_all();
-  exit(0);
+  exit(EXIT_CODE_ZERO_ALL_IS_WELL);
 }
 
 void termsig(int Empty)
 {
   mudlog("Received SIGTERM.  Shutting down...", NULL, LOG_SYSLOG, TRUE);
   House_save_all();
-  exit(0);
+  exit(EXIT_CODE_ZERO_ALL_IS_WELL);
 }
 
 
