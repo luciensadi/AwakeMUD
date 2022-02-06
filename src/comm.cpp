@@ -3219,15 +3219,15 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
       if ((tch = rigger_check->rigger) && tch->desc && PRF_FLAGGED(tch, PRF_ROLLS)) {
         // We currently treat all vehicles as having ultrasonic sensors.
         // Since the check is done to the rigger, we have to apply det-invis to them directly, then remove it when done.
-        bool rigger_is_det_invis = AFF_FLAGGED(tch, AFF_DETECT_INVIS);
-        AFF_FLAGS(tch).SetBit(AFF_DETECT_INVIS);
+        bool rigger_is_det_invis = AFF_FLAGGED(tch, AFF_ULTRASOUND);
+        AFF_FLAGS(tch).SetBit(AFF_ULTRASOUND);
         if (SENDOK(tch)
             && !(hide_invisible
                  && ch
                  && !CAN_SEE(tch, ch)))
           perform_act(str, ch, obj, vict_obj, tch);
         if (!rigger_is_det_invis)
-          AFF_FLAGS(tch).RemoveBit(AFF_DETECT_INVIS);
+          AFF_FLAGS(tch).RemoveBit(AFF_ULTRASOUND);
       }
     }
 
@@ -3263,12 +3263,12 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
     if ((tch = rigger_check->rigger) && tch->desc) {
       // We currently treat all vehicles as having ultrasonic sensors.
       // Since the check is done to the rigger, we have to apply det-invis to them directly, then remove it when done.
-      bool rigger_is_det_invis = AFF_FLAGGED(tch, AFF_DETECT_INVIS);
-      AFF_FLAGS(tch).SetBit(AFF_DETECT_INVIS);
+      bool rigger_is_det_invis = AFF_FLAGGED(tch, AFF_ULTRASOUND);
+      AFF_FLAGS(tch).SetBit(AFF_ULTRASOUND);
       if (can_send_act_to_target(ch, hide_invisible, obj, vict_obj, tch, type | TO_REMOTE))
         perform_act(str, ch, obj, vict_obj, tch);
       if (!rigger_is_det_invis)
-        AFF_FLAGS(tch).RemoveBit(AFF_DETECT_INVIS);
+        AFF_FLAGS(tch).RemoveBit(AFF_ULTRASOUND);
     }
   }
 

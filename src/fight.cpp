@@ -3747,7 +3747,7 @@ bool vehicle_has_ultrasound_sensors(struct veh_data *veh) {
     return TRUE;
 
   for (int i = 0; i < NUM_MODS; i++)
-    if (GET_MOD(veh, i) && GET_MOD(veh, i)->obj_flags.bitvector.IsSet(AFF_DETECT_INVIS))
+    if (GET_MOD(veh, i) && GET_MOD(veh, i)->obj_flags.bitvector.IsSet(AFF_ULTRASOUND))
       return TRUE;
 
   return FALSE;
@@ -3778,7 +3778,7 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
   }
 
   // Pre-calculate the things we care about here. First, character vision info.
-  bool ch_has_ultrasound = AFF_FLAGGED(ch, AFF_DETECT_INVIS);
+  bool ch_has_ultrasound = AFF_FLAGGED(ch, AFF_ULTRASOUND);
   bool ch_has_thermographic = AFF_FLAGGED(ch, AFF_INFRAVISION) || CURRENT_VISION(ch) == THERMOGRAPHIC;
   bool ch_sees_astral = IS_ASTRAL(ch) || IS_DUAL(ch);
 

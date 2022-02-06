@@ -457,7 +457,7 @@ enum {
 
 #define AFF_INVISIBLE     1  /* Char is invisible        */
 #define AFF_BANISH    2
-#define AFF_DETECT_INVIS  3  /* Char can see invis chars    */
+#define AFF_ULTRASOUND  3  /* Char can see invis chars    */
 #define AFF_PRONE               4
 #define AFF_MANIFEST    5
 #define AFF_HEALED    6

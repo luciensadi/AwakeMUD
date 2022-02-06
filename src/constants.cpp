@@ -665,7 +665,7 @@ const char *affected_bits[] =
     "NOTHING",
     "Ruthenium",
     "Banishing",
-    "Det-invis",
+    "Ultrasound",
     "Prone",
     "Manifest",
     "Healed",
@@ -2587,7 +2587,7 @@ int acceptable_weapon_attachment_affects[] = {
   AFF_VISION_MAG_3,
   AFF_INFRAVISION,
   AFF_LOW_LIGHT,
-  AFF_DETECT_INVIS,
+  AFF_ULTRASOUND,
   -1
 };
 
