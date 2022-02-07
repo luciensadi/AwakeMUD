@@ -23,29 +23,28 @@
 #include <time.h>
 #include <iostream>
 #include <chrono>
-using namespace std;
 
 #if defined(WIN32) && !defined(__CYGWIN__)
-#include <windows.h>
-#include <winsock.h>
-#include <io.h>
-#include <direct.h>
-#include <mmsystem.h>
-typedef SOCKET  socket_t;
+  #include <windows.h>
+  #include <winsock.h>
+  #include <io.h>
+  #include <direct.h>
+  #include <mmsystem.h>
+  typedef SOCKET  socket_t;
 
-#define chdir(x) _chdir(x)
-#define random() rand()
-#define srandom(x) srand(x)
-#define close(x) _close(x)
-#define write(x, y, z) _write(x, y, z)
-#define read(x, y, z) _read(x, y, z)
+  #define chdir(x) _chdir(x)
+  #define random() rand()
+  #define srandom(x) srand(x)
+  #define close(x) _close(x)
+  #define write(x, y, z) _write(x, y, z)
+  #define read(x, y, z) _read(x, y, z)
 #else
-#include <netinet/in.h>
-#include <sys/resource.h>
-#include <sys/socket.h>
-#include <sys/wait.h>
-#include <sys/time.h>
-#include <netdb.h>
+  #include <netinet/in.h>
+  #include <sys/resource.h>
+  #include <sys/socket.h>
+  #include <sys/wait.h>
+  #include <sys/time.h>
+  #include <netdb.h>
 #endif
 
 #include "telnet.h"
@@ -523,7 +522,7 @@ int init_socket(int port)
   sa.sin_port = htons(port);
   sa.sin_addr.s_addr = htonl(INADDR_ANY);
 
-  if (bind(s, (struct sockaddr *) & sa, sizeof(sa)) < 0) {
+  if (::bind(s, (struct sockaddr *) & sa, sizeof(sa)) < 0) {
     perror("bind");
     close(s);
     exit(ERROR_COULD_NOT_BIND_SOCKET);
@@ -2405,7 +2404,7 @@ void free_up_memory(int Empty)
 {
   mudlog("Warning: Received signal, Freeing up Memory", NULL, LOG_SYSLOG, TRUE);
   if (!Mem->ClearStacks()) {
-    cerr << "SYSERR: Unable to free enough memory, shutting down...\n";
+    std::cerr << "SYSERR: Unable to free enough memory, shutting down...\n";
     House_save_all();
     exit(ERROR_UNABLE_TO_FREE_MEMORY_IN_CLEARSTACKS);
   }

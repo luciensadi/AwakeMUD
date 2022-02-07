@@ -241,7 +241,7 @@ struct melee_combat_data {
 
         // Weapon foci. NPC use them implicitly.
         if (IS_NPC(ch) || WEAPON_FOCUS_USABLE_BY(weapon, ch)) {
-          skill_bonus = min(4, GET_WEAPON_FOCUS_RATING(weapon));
+          skill_bonus = MIN(4, GET_WEAPON_FOCUS_RATING(weapon));
         }
       }
     } else if (cyber->num_cyberweapons > 0) {

@@ -89,16 +89,16 @@ void ccr_race_menu(struct descriptor_data *d) {
 void ccr_archetype_selection_menu(struct descriptor_data *d) {
   SEND_TO_Q("\r\nThe following archetypes are available:"
             "\r\n", d);
-  
+
   for (int i = 0; i < NUM_CCR_ARCHETYPES; i++) {
     snprintf(buf, sizeof(buf), "\r\n%d) %-15s (%s)", i + 1, archetypes[i]->name, archetypes[i]->difficulty_rating);
     SEND_TO_Q(buf, d);
   }
-  
+
   SEND_TO_Q("\r\n\r\nC) Advanced (custom) creation for experienced players\r\n", d);
-  
+
   SEND_TO_Q("\r\n\r\nEnter the number of the archetype you'd like to play, or 'help' for more info: ", d);
-  
+
   d->ccr.mode = CCR_ARCHETYPE_SELECTION_MODE;
 }
 
@@ -134,12 +134,12 @@ if ((vnum) > 0) { \
   } \
 }
 
-void archetype_selection_parse(struct descriptor_data *d, const char *arg) {  
+void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
   if (!*arg) {
     ccr_archetype_selection_menu(d);
     return;
   }
-  
+
   // Help mode.
   if (*arg == '?') {
     SEND_TO_Q("\r\nYou can get help on any archetype by typing HELP <archetype>. If you have more questions, feel free to ask in our Discord channel, linked from https://awakemud.com!", d);
@@ -174,52 +174,52 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
             break;
         }
       }
-      
+
       do_help(d->character, line, 0, 0);
     }
     SEND_TO_Q("\r\n\r\nYou can use 'HELP <topic>' to get more info on a topic, or hit return to see the list of archetypes again.\r\n", d);
     return;
   }
-  
+
   // Custom creation mode.
   if (*arg == 'c' || *arg == 'C') {
     ccr_confirm_switch_to_custom(d);
     return;
   }
-  
+
   // Account for the incrementing we did when presenting the options.
   int i = atoi(arg) - 1;
-  
+
   // Selection mode.
   if (i < 0 || i >= NUM_CCR_ARCHETYPES) {
     SEND_TO_Q("\r\nThat's not a valid archetype. Enter the number of the archetype you'd like to play as: ", d);
     return;
   }
-  
+
   // Valid archetype number was input, so set them up with it. First, declare temp vars.
   struct obj_data *temp_obj = NULL;
-  
+
   // Set race.
   GET_RACE(CH) = archetypes[i]->race;
-  
+
   // Set attributes.
   for (int attr = BOD; attr <= WIL; attr++)
     GET_REAL_ATT(CH, attr) = archetypes[i]->attributes[attr];
-      
+
   // Set magic data.
   GET_TRADITION(CH) = archetypes[i]->tradition;
   GET_REAL_MAG(CH) = archetypes[i]->magic;
   GET_ASPECT(CH) = archetypes[i]->aspect;
-  
+
   if (GET_TRADITION(CH) == TRAD_SHAMANIC) {
     GET_TOTEM(CH) = archetypes[i]->totem;
     GET_TOTEMSPIRIT(CH) = archetypes[i]->totemspirit;
   }
-    
-  
+
+
   // Grant forcepoints for bonding purposes.
   GET_FORCE_POINTS(CH) = archetypes[i]->forcepoints;
-  
+
   // Set spells, if any.
   for (int spell_idx = 0; spell_idx < NUM_ARCHETYPE_SPELLS; spell_idx++)
     if (archetypes[i]->spells[spell_idx][0]) {
@@ -234,14 +234,14 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
     } else {
       break;
     }
-  
+
   // Assign adept abilities.
   for (int power = 0; power < NUM_ARCHETYPE_ABILITIES; power++)
     if (archetypes[i]->powers[power][0]) {
       SET_POWER_TOTAL(CH, archetypes[i]->powers[power][0], archetypes[i]->powers[power][1]);
     } else
       break;
-  
+
   // Equip weapon.
   if (archetypes[i]->weapon > 0) {
     // snprintf(buf, sizeof(buf), "Attempting to attach %lu %lu %lu...", archetypes[i]->weapon_top, archetypes[i]->weapon_barrel, archetypes[i]->weapon_under);
@@ -255,11 +255,11 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
     // Fill pockets.
     if (archetypes[i]->ammo_q)
       update_bulletpants_ammo_quantity(CH, GET_WEAPON_ATTACK_TYPE(weapon), AMMO_NORMAL, archetypes[i]->ammo_q);
-    
+
     // Put the weapon in their inventory.
     obj_to_char(weapon, CH);
   }
-  
+
   // Grant modulator (unbonded, unworn).
   if (archetypes[i]->modulator > 0) {
     if ((temp_obj = read_object(archetypes[i]->modulator, VIRTUAL))) {
@@ -269,20 +269,20 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
       mudlog(buf, CH, LOG_SYSLOG, TRUE);
     }
   }
-    
-  
+
+
   // Equip worn items.
   for (int wearloc = 0; wearloc < NUM_WEARS; wearloc++)
     if (archetypes[i]->worn[wearloc] > 0) {
       if ((temp_obj = read_object(archetypes[i]->worn[wearloc], VIRTUAL))) {
         equip_char(CH, temp_obj, wearloc);
       } else {
-        snprintf(buf, sizeof(buf), "SYSERR: Invalid worn item %ld specified for archetype %s's wearloc %s (%d).", 
+        snprintf(buf, sizeof(buf), "SYSERR: Invalid worn item %ld specified for archetype %s's wearloc %s (%d).",
                  archetypes[i]->worn[wearloc], archetypes[i]->name, where[wearloc], wearloc);
         mudlog(buf, CH, LOG_SYSLOG, TRUE);
       }
     }
-  
+
   // Give carried items.
   for (int carried = 0; carried < NUM_ARCHETYPE_CARRIED; carried++)
     if (archetypes[i]->carried[carried] > 0) {
@@ -290,20 +290,20 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
         // Set up carried items, if needed.
         if (GET_OBJ_SPEC(temp_obj) == pocket_sec)
           initialize_pocket_secretary(temp_obj);
-          
+
         if (GET_OBJ_TYPE(temp_obj) == ITEM_PHONE) {
           GET_OBJ_VAL(temp_obj, 2) = 1;
           add_phone_to_list(temp_obj);
         }
-          
+
         obj_to_char(temp_obj, CH);
       } else {
-        snprintf(buf, sizeof(buf), "SYSERR: Invalid carried item %ld specified for archetype %s.", 
+        snprintf(buf, sizeof(buf), "SYSERR: Invalid carried item %ld specified for archetype %s.",
                  archetypes[i]->carried[carried], archetypes[i]->name);
         mudlog(buf, CH, LOG_SYSLOG, TRUE);
       }
     }
-  
+
   // Give cyberdeck with software installed.
   if (archetypes[i]->cyberdeck > 0) {
     if ((temp_obj = read_object(archetypes[i]->cyberdeck, VIRTUAL))) {
@@ -327,11 +327,11 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
           default:
             GET_OBJ_VAL(program, 4)++;
             break;
-        }  
-        
+        }
+
         // Install it to the deck.
         obj_to_obj(program, temp_obj);
-        
+
         // Take up space on the deck.
         GET_CYBERDECK_USED_STORAGE(temp_obj) += GET_DECK_ACCESSORY_FILE_SIZE(program);
       } else {
@@ -347,73 +347,73 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
       mudlog(buf, CH, LOG_SYSLOG, TRUE);
     }
   }
-  
+
   // Give them a map.
   if ((temp_obj = read_object(OBJ_MAP_OF_SEATTLE, VIRTUAL)))
     obj_to_char(temp_obj, CH);
   else {
-    snprintf(buf, sizeof(buf), "SYSERR: Invalid map %d specified for archetype %s.", 
+    snprintf(buf, sizeof(buf), "SYSERR: Invalid map %d specified for archetype %s.",
              OBJ_MAP_OF_SEATTLE, archetypes[i]->name);
     mudlog(buf, CH, LOG_SYSLOG, TRUE);
   }
-      
+
   // Set their index and essence. Everyone starts with 0 bioware index and 6.00 essence.
   GET_INDEX(CH) = 0;
   GET_REAL_ESS(CH) = 600;
-  
+
   // Equip cyberware (deduct essence and modify stats as appropriate)
   for (int cyb = 0; cyb < NUM_ARCHETYPE_CYBERWARE; cyb++) {
     if (archetypes[i]->cyberware[cyb]) {
       if (!(temp_obj = read_object(archetypes[i]->cyberware[cyb], VIRTUAL))) {
-        snprintf(buf, sizeof(buf), "SYSERR: Invalid cyberware item %ld specified for archetype %s.", 
+        snprintf(buf, sizeof(buf), "SYSERR: Invalid cyberware item %ld specified for archetype %s.",
                  archetypes[i]->cyberware[cyb], archetypes[i]->name);
         mudlog(buf, CH, LOG_SYSLOG, TRUE);
         continue;
       }
-      
+
       int esscost = GET_CYBERWARE_ESSENCE_COST(temp_obj);
-      
+
       if (GET_TRADITION(CH) != TRAD_MUNDANE) {
         if (GET_TOTEM(CH) == TOTEM_EAGLE)
           esscost *= 2;
         magic_loss(CH, esscost, TRUE);
       }
-      
+
       GET_REAL_ESS(CH) -= esscost;
-      
+
       obj_to_cyberware(temp_obj, CH);
     }
   }
-  
+
   // Equip bioware (deduct essence and modify stats as appropriate)
   for (int bio = 0; bio < NUM_ARCHETYPE_BIOWARE; bio++) {
     if (archetypes[i]->bioware[bio]) {
       if (!(temp_obj = read_object(archetypes[i]->bioware[bio], VIRTUAL))) {
-        snprintf(buf, sizeof(buf), "SYSERR: Invalid bioware item %ld specified for archetype %s.", 
+        snprintf(buf, sizeof(buf), "SYSERR: Invalid bioware item %ld specified for archetype %s.",
                  archetypes[i]->bioware[bio], archetypes[i]->name);
         mudlog(buf, CH, LOG_SYSLOG, TRUE);
         continue;
       }
-      
-      int esscost = GET_OBJ_VAL(temp_obj, 4); 
-      
+
+      int esscost = GET_OBJ_VAL(temp_obj, 4);
+
       GET_INDEX(CH) += esscost;
       if (GET_TRADITION(CH) != TRAD_MUNDANE) {
         magic_loss(CH, esscost / 2, TRUE);
       }
-      
+
       GET_HIGHEST_INDEX(CH) = GET_INDEX(CH);
       obj_to_bioware(temp_obj, CH);
     }
   }
-  
+
   /*
      The code below is a mangled version of start_game(); we must CreateChar before setting certain things.
   */
-  
+
   // Sets up the character's idnum, wipes out their skills, etc.
   CreateChar(d->character);
-  
+
   d->character->player.host = str_dup(d->host);
 
   set_character_skill(d->character, SKILL_ENGLISH, STARTING_LANGUAGE_SKILL_LEVEL, FALSE);
@@ -429,18 +429,18 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
   SEND_TO_Q(motd, d);
   SEND_TO_Q("\r\n\n*** PRESS RETURN: ", d);
   STATE(d) = CON_RMOTD;
-  
+
   // Set skills. Has to be after CreateChar so they don't get wiped.
   for (int skill = 0; skill < MAX_SKILLS; skill++)
     if (archetypes[i]->skills[skill])
       set_character_skill(CH, skill, archetypes[i]->skills[skill], FALSE);
-      
+
   // Grant subsidy card (bonded to ID). Has to be after CreateChar so the idnum doesn't change.
   temp_obj = read_object(OBJ_NEOPHYTE_SUBSIDY_CARD, VIRTUAL);
   GET_OBJ_VAL(temp_obj, 0) = GET_IDNUM(CH);
   GET_OBJ_VAL(temp_obj, 1) = archetypes[i]->subsidy_card;
   obj_to_char(temp_obj, CH);
-  
+
   // Bond and equip foci. Has to be after CreateChar so the idnum doesn't change.
   for (int focus = 0; focus < NUM_ARCHETYPE_FOCI; focus++) {
     if (archetypes[i]->foci[focus][0] > 0) {
@@ -450,29 +450,29 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
         GET_OBJ_VAL(temp_obj, 5) = GET_TRADITION(CH) == TRAD_HERMETIC ? 1 : 0;
         GET_OBJ_VAL(temp_obj, 9) = 0;
         obj_to_char(temp_obj, CH);
-        
+
         int wearloc;
         if ((wearloc = find_eq_pos(CH, temp_obj, NULL)) > -1)
           perform_wear(CH, temp_obj, wearloc, FALSE);
         else {
-          snprintf(buf, sizeof(buf), "SYSERR: Focus %ld specified for archetype %s's foci slot #%d cannot be worn in default position: No slot available.", 
+          snprintf(buf, sizeof(buf), "SYSERR: Focus %ld specified for archetype %s's foci slot #%d cannot be worn in default position: No slot available.",
                    archetypes[i]->foci[focus][0], archetypes[i]->name, focus);
           mudlog(buf, CH, LOG_SYSLOG, TRUE);
         }
       } else {
-        snprintf(buf, sizeof(buf), "SYSERR: Invalid focus %ld specified for archetype %s's foci slot #%d.", 
+        snprintf(buf, sizeof(buf), "SYSERR: Invalid focus %ld specified for archetype %s's foci slot #%d.",
                  archetypes[i]->foci[focus][0], archetypes[i]->name, focus);
         mudlog(buf, CH, LOG_SYSLOG, TRUE);
       }
     }
   }
-  
+
   GET_ARCHETYPAL_MODE(CH) = TRUE;
   GET_ARCHETYPAL_TYPE(CH) = i;
 
   // Wipe their remaining ccr data.
   init_create_vars(d);
-  
+
   // Set up the character and save them.
   do_start(CH, FALSE);
   playerDB.SaveChar(d->character, archetypes[i]->start_room);
@@ -523,21 +523,21 @@ void set_attributes(struct char_data *ch, int magic)
   } else {
     GET_REAL_MAG(ch) = 0;
   }
-  
+
   // Everyone starts with 0 bioware index and 6.00 essence.
   GET_INDEX(ch) = 0;
   GET_REAL_ESS(ch) = 600;
-  
+
   // Set all of the character's stats to their racial minimums (1 + racial modifier, min 1)
   for (int attr = BOD; attr <= WIL; attr++) {
     GET_REAL_ATT(ch, attr) = MAX(1, racial_attribute_modifiers[(int)GET_RACE(ch)][attr] + 1);
   }
-  
+
   // Subtract the cost of making all stats 1 from the character's available attribute-training points.
   int attribute_point_cost = get_minimum_attribute_points_for_race(GET_RACE(ch));
   GET_ATT_POINTS(ch) -= attribute_point_cost;
   send_to_char(ch, "You spend %d attribute points to raise your attributes to their minimums.\r\n", attribute_point_cost);
-  
+
   if (GET_ATT_POINTS(ch) > 1000) {
     snprintf(buf, sizeof(buf), "Somehow, %s managed to get %d attribute points in chargen. Resetting to 0.", GET_CHAR_NAME(ch), GET_ATT_POINTS(ch));
     mudlog(buf, ch, LOG_SYSLOG, TRUE);
@@ -545,7 +545,7 @@ void set_attributes(struct char_data *ch, int magic)
   }
 
   ch->aff_abils = ch->real_abils;
-  
+
   // Set their natural vision.
   set_natural_vision_for_race(ch);
 }
@@ -706,16 +706,16 @@ int parse_totem(struct descriptor_data *d, const char *arg)
 int parse_assign(struct descriptor_data *d, const char *arg)
 {
   int i;
-  
+
   // Magic is only okay if placed in 0, 1, or l_k_m_s.
   int lowest_kosher_magic_slot = 4;
   if (d->ccr.pr[lowest_kosher_magic_slot] == PR_RACE)
     lowest_kosher_magic_slot--;
-  
+
   if (*arg == '2' && (d->ccr.temp > 1 && d->ccr.temp != lowest_kosher_magic_slot)) {
     char kosher_slot = 'A' + lowest_kosher_magic_slot;
-    snprintf(buf2, sizeof(buf2), "Magic can only fit in slots A, B, or %c for %s characters.", 
-            kosher_slot, 
+    snprintf(buf2, sizeof(buf2), "Magic can only fit in slots A, B, or %c for %s characters.",
+            kosher_slot,
             pc_race_types[(int)GET_RACE(d->character)]);
     SEND_TO_Q(buf2, d);
     return 0;
@@ -988,7 +988,7 @@ void ccr_aspect_menu(struct descriptor_data *d)
   strncpy(buf,   "As an aspected mage, you must select your aspect: \r\n"
                  "  [1] Conjurer\r\n"
                  "  [2] Sorcerer\r\n", sizeof(buf) - strlen(buf) - 1);
-                 
+
   if (GET_TRADITION(d->character) == TRAD_SHAMANIC)
     strlcat(buf, "  [3] Shamanist\r\n", sizeof(buf));
   else
@@ -996,7 +996,7 @@ void ccr_aspect_menu(struct descriptor_data *d)
                  "  [4] Elementalist (Air)\r\n"
                  "  [5] Elementalist (Fire)\r\n"
                  "  [6] Elementalist (water)\r\n", sizeof(buf));
-                 
+
   strlcat(buf,   "  [?] Help\r\n\r\nAspect: ", sizeof(buf));
   SEND_TO_Q(buf, d);
   d->ccr.mode = CCR_ASPECT;
@@ -1021,8 +1021,8 @@ void points_menu(struct descriptor_data *d)
                "     Race      : ^c%14s^n (^c%3d^n Points)\r\n"
                "  Points Remaining: ^c%d^n\r\n"
                "Choose an area to change points on(p to continue): ", d->ccr.pr[PO_ATTR]/2, d->ccr.pr[PO_ATTR],
-               d->ccr.pr[PO_SKILL], d->ccr.pr[PO_SKILL], resource_table[0][d->ccr.pr[PO_RESOURCES]], 
-               resource_table[1][d->ccr.pr[PO_RESOURCES]], magic_table[d->ccr.pr[PO_MAGIC]], 
+               d->ccr.pr[PO_SKILL], d->ccr.pr[PO_SKILL], resource_table[0][d->ccr.pr[PO_RESOURCES]],
+               resource_table[1][d->ccr.pr[PO_RESOURCES]], magic_table[d->ccr.pr[PO_MAGIC]],
                magic_cost[d->ccr.pr[PO_MAGIC]], pc_race_types[(int)GET_RACE(d->character)], d->ccr.pr[PO_RACE], d->ccr.points);
   SEND_TO_Q(buf, d);
 }
@@ -1031,7 +1031,7 @@ void points_menu(struct descriptor_data *d)
 int get_minimum_attribute_points_for_race(int race) {
   // Initialize the returned value to 6, which is the minimum the player must spend to raise all from 0 to 1.
   int minimum_attribute_points = 6;
-  
+
   // Cycle through all attributes.
   for (int attr = BOD; attr <= WIL; attr++) {
     if (racial_attribute_modifiers[race][attr] < 0) {
@@ -1039,7 +1039,7 @@ int get_minimum_attribute_points_for_race(int race) {
       minimum_attribute_points += -racial_attribute_modifiers[race][attr];
     }
   }
-  
+
   // Return our calculated number.
   return minimum_attribute_points;
 }
@@ -1048,7 +1048,7 @@ int get_minimum_attribute_points_for_race(int race) {
 int get_maximum_attribute_points_for_race(int race) {
   int amount = 0;
   for (int attr = BOD; attr <= WIL; attr++) {
-    amount += racial_limits[race][0][attr] - (max(1, racial_attribute_modifiers[race][attr] + 1));
+    amount += racial_limits[race][0][attr] - (MAX(1, racial_attribute_modifiers[race][attr] + 1));
   }
   return amount;
 }
@@ -1068,24 +1068,24 @@ void create_parse(struct descriptor_data *d, const char *arg)
       minimum_attribute_points = get_minimum_attribute_points_for_race(GET_RACE(CH));
       maximum_attribute_points = get_maximum_attribute_points_for_race(GET_RACE(CH)) + minimum_attribute_points;
       available_attribute_points = MIN((int) (d->ccr.points / 2), get_maximum_attribute_points_for_race(GET_RACE(CH)));
-      
+
     if (i < minimum_attribute_points) {
       send_to_char(CH, "The minimum of attribute points for your race is %d.\r\n", minimum_attribute_points);
       i = minimum_attribute_points;
     }
-    
+
     else if (i > maximum_attribute_points) {
       send_to_char(CH, "The maximum number of attribute points for your race is %d.\r\n", maximum_attribute_points);
       i = maximum_attribute_points;
     }
-    
+
     if (i * 2 > d->ccr.points) {
       send_to_char(CH, "You do not have enough points for that.\r\n"
                    "Enter desired number of attribute points (^c%d^n available, minimum %d, maximum %d):",
                    available_attribute_points, minimum_attribute_points, maximum_attribute_points);
       break;
     }
-  
+
     d->ccr.points -= d->ccr.pr[PO_ATTR] = i * 2;
     points_menu(d);
     break;
@@ -1128,12 +1128,12 @@ void create_parse(struct descriptor_data *d, const char *arg)
       case '1':
         // Unset their previous attribute investment.
         d->ccr.points += d->ccr.pr[PO_ATTR];
-        
+
         // Calculate their available stat points and minimum/maximums.
         minimum_attribute_points = get_minimum_attribute_points_for_race(GET_RACE(CH));
         maximum_attribute_points = get_maximum_attribute_points_for_race(GET_RACE(CH)) + minimum_attribute_points;
         available_attribute_points = (int) (d->ccr.points / 2);
-        
+
         send_to_char(CH, "Enter desired number of attribute points (^c%d^n available, minimum %d, maximum %d): ",
                      available_attribute_points, minimum_attribute_points, maximum_attribute_points);
         d->ccr.mode = CCR_PO_ATTR;
@@ -1169,7 +1169,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
           points_menu(d);
           break;
         }
-        
+
         // Defense: You can't continue if you have negative points.
         if (d->ccr.points < 0) {
           send_to_char("You cannot finish creation with a negative point balance. Please lower one of your selections first.\r\n\r\n", CH);
@@ -1178,7 +1178,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
           points_menu(d);
           break;
         }
-        
+
         GET_NUYEN_RAW(CH) = resource_table[0][d->ccr.pr[PO_RESOURCES]];
         GET_SKILL_POINTS(CH) = d->ccr.pr[PO_SKILL];
         GET_ATT_POINTS(CH) = d->ccr.pr[PO_ATTR]/2;
@@ -1217,15 +1217,15 @@ void create_parse(struct descriptor_data *d, const char *arg)
         break;
       case '2':
         d->ccr.points = 120;
-        
+
         // Assign racial minimums and subtract them from the point value.
         d->ccr.pr[PO_ATTR] = get_minimum_attribute_points_for_race(GET_RACE(CH)) * 2;
         d->ccr.points -= d->ccr.pr[PO_ATTR];
-        
+
         d->ccr.pr[PO_SKILL] = 0;
         d->ccr.pr[PO_RESOURCES] = 1;
         d->ccr.pr[PO_MAGIC] = 0;
-        
+
         // Assign racial costs and subtract them from the point value.
         switch (GET_RACE(CH)) {
           case RACE_HUMAN:
@@ -1257,7 +1257,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
         }
         d->ccr.points -= d->ccr.pr[PO_RACE];
         d->ccr.pr[5] = -1;
-        
+
         points_menu(d);
         break;
       default:
@@ -1336,7 +1336,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
       d->ccr.pr[2] = PR_RACE;
     else if (GET_RACE(d->character) == RACE_NIGHTONE)
       d->ccr.pr[2] = PR_RACE;
-    
+
     if (real_object(OBJ_MAP_OF_SEATTLE) > -1)
       obj_to_char(read_object(OBJ_MAP_OF_SEATTLE, VIRTUAL), d->character);
     GET_EQ(d->character, WEAR_BODY) = read_object(shirts[number(0, 4)], VIRTUAL);

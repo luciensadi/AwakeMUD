@@ -1639,8 +1639,8 @@ SPECIAL(car_dealer)
   } else if (CMD_IS("probe") || CMD_IS("info")) {
     argument = one_argument(argument, buf);
     if (!(veh = get_veh_list(buf, world[car_room].vehicles, ch))) {
-      send_to_char("There is no such vehicle for sale.\r\n", ch);
-      return TRUE;
+      // Bail out so standard probe can kick in.
+      return FALSE;
     }
     send_to_char(ch, "^yProbing shopkeeper's ^n%s^y...^n\r\n", GET_VEH_NAME(veh));
     do_probe_veh(ch, veh);
