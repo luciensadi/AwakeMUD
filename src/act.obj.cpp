@@ -1145,7 +1145,7 @@ void get_from_room(struct char_data * ch, char *arg, bool download)
 
         // No taking vehicles you can't carry.
         if (vehicle_weight + IS_CARRYING_W(ch) > CAN_CARRY_W(ch)) {
-          send_to_char(ch, "%s is too heavy for you to carry.\r\n", capitalize(GET_VEH_NAME(veh)));
+          send_to_char(ch, "Seeing as how it weighs %dkg, %s is too heavy for you to carry.\r\n", vehicle_weight, decapitalize_a_an(GET_VEH_NAME(veh)));
           return;
         }
 
