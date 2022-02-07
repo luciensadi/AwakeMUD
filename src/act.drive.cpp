@@ -597,7 +597,9 @@ ACMD(do_upgrade)
       send_to_char("You don't have any tools here for working on vehicles.\r\n", ch);
       return;
     }
-    if (kit < mod_types[GET_VEHICLE_MOD_TYPE(mod)].tools) {
+
+    // Artificially capping tool type to WORKSHOP, as many upgrades need facilities but they're not in game.
+    if (kit < MIN(TYPE_WORKSHOP, mod_types[GET_VEHICLE_MOD_TYPE(mod)].tools)) {
       send_to_char(ch, "You don't have the right tools for that job.\r\n");
       return;
     }
