@@ -1387,6 +1387,7 @@ const char *adept_powers[] =
 
 struct skill_data skills[] =
   {
+    // name, linked attribute, active/knowledge, requires magic
     {"OMGWTFBBQ", BOD, SKILL_TYPE_ACTIVE, FALSE},
     {"Athletics", BOD, SKILL_TYPE_ACTIVE, FALSE},
     {"Armed Combat", STR, SKILL_TYPE_ACTIVE, FALSE},
