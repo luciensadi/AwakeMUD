@@ -4877,7 +4877,7 @@ void perform_violence(void)
 
       // Otherwise, process the charge.
       else {
-        int target = 8, quickness = GET_QUI(ch);
+        int target = GET_REA(FIGHTING(ch)), quickness = GET_QUI(ch);
         bool footanchor = FALSE;
 
         // Visibility penalty for defender, it's hard to avoid someone you can't see.

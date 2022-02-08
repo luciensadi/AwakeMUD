@@ -609,7 +609,7 @@ bool passed_flee_success_check(struct char_data *ch) {
       racial_flee_modifier++;
       break;
       }
-  return success_test(GET_QUI(ch), (GET_QUI(FIGHTING(ch)) + racial_flee_modifier)) > 0;
+  return success_test(GET_QUI(ch), (GET_REA(FIGHTING(ch)) + racial_flee_modifier)) > 0;
 
   }
 
