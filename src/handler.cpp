@@ -471,6 +471,7 @@ void affect_total(struct char_data * ch)
   sh_int i, j, skill_dice;
   int has_rig = 0, has_trigger = -1, has_wired = 0, has_mbw = 0;
   bool wearing = FALSE;
+  bool ch_is_npc = IS_NPC(ch);
 
   if (IS_PROJECT(ch))
     return;
@@ -564,7 +565,7 @@ void affect_total(struct char_data * ch)
   {
     if (IS_SPIRIT(ch) || IS_ELEMENTAL(ch)) {
       GET_IMPACT(ch) = GET_BALLISTIC(ch) = GET_SPARE1(ch) * 2;
-    } else if (IS_NPC(ch)) {
+    } else if (ch_is_npc) {
       GET_BALLISTIC(ch) = mob_proto[GET_MOB_RNUM(ch)].points.ballistic[0];
       GET_IMPACT(ch) = mob_proto[GET_MOB_RNUM(ch)].points.impact[0];
     } else {
@@ -735,7 +736,7 @@ void affect_total(struct char_data * ch)
     }
   }
 
-  i = ((IS_NPC(ch) || (GET_LEVEL(ch) >= LVL_ADMIN)) ? 50 : 20);
+  i = ((ch_is_npc || (GET_LEVEL(ch) >= LVL_ADMIN)) ? 50 : 20);
   GET_REA(ch) += (GET_INT(ch) + GET_QUI(ch)) >> 1;
   GET_QUI(ch) = MAX(0, MIN(GET_QUI(ch), i));
   GET_CHA(ch) = MAX(1, MIN(GET_CHA(ch), i));
@@ -898,14 +899,26 @@ void affect_total(struct char_data * ch)
     GET_OFFENSE(ch) = skill_dice;
   }
 
+  // NPCs specialize their defenses: unless they've got crazy dodge dice, they'll want to just soak.
+  // AKA, 'your average wage slave is not going to try to do the Matrix bullet dodge when he sees a gun.'
+  if (ch_is_npc) {
+    if (GET_DEFENSE(ch) < 10) {
+      GET_BODY(ch) += GET_DEFENSE(ch);
+      GET_DEFENSE(ch) = 0;
+    }
+  }
+
   // Set up magic pool info correctly.
-  if (IS_NPC(ch) && (IS_SPIRIT(ch) || IS_ELEMENTAL(ch))) {
+  if (ch_is_npc && (IS_SPIRIT(ch) || IS_ELEMENTAL(ch))) {
     GET_ASTRAL(ch) = 1.5 * GET_LEVEL(ch);
-  } else if ((IS_NPC(ch) && GET_MAG(ch) > 0) || (GET_TRADITION(ch) == TRAD_SHAMANIC || GET_TRADITION(ch) == TRAD_HERMETIC)) {
+  } else if ((ch_is_npc && GET_MAG(ch) > 0) || (GET_TRADITION(ch) == TRAD_SHAMANIC || GET_TRADITION(ch) == TRAD_HERMETIC)) {
     GET_ASTRAL(ch) += GET_GRADE(ch);
     GET_MAGIC(ch) += (GET_INT(ch) + GET_WIL(ch) + (int)(GET_MAG(ch) / 100))/3;
-    if (IS_NPC(ch)) {
-      GET_DRAIN(ch) = GET_SDEFENSE(ch) = GET_MAGIC(ch) / 3;
+    if (ch_is_npc) {
+      if (GET_SKILL(ch, SKILL_SORCERY))
+        GET_DRAIN(ch) = GET_SDEFENSE(ch) = GET_MAGIC(ch) / 3;
+      else
+        GET_SDEFENSE(ch) = GET_MAGIC(ch);
     } else {
       GET_SDEFENSE(ch) = MIN(GET_MAGIC(ch), GET_SDEFENSE(ch));
       GET_DRAIN(ch) = MIN(GET_MAGIC(ch), GET_DRAIN(ch));

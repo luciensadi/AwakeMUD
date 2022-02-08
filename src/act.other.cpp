@@ -549,6 +549,11 @@ ACMD(do_patch)
     send_to_char(ch, "There doesn't seem to be a '%s' here.\r\n", buf);
     return;
   }
+  if (IS_ASTRAL(vict)) {
+    send_to_char(ch, "You're going to have a hard time patching an astral being.\r\n");
+    return;
+  }
+
   if (GET_EQ(vict, WEAR_PATCH)) {
     act("$N already has a patch applied.", FALSE, ch, 0, vict, TO_CHAR);
     return;
@@ -1476,25 +1481,6 @@ ACMD(do_skills)
   send_to_char(buf, ch);
 }
 
-struct obj_data * find_magazine(struct obj_data *gun, struct obj_data *i)
-{
-  for (; i; i = i->next_content)
-  {
-    if (GET_OBJ_TYPE(i) == ITEM_GUN_MAGAZINE) {
-      if (GET_MAGAZINE_BONDED_MAXAMMO(i) == GET_WEAPON_MAX_AMMO(gun) &&
-          GET_MAGAZINE_BONDED_ATTACKTYPE(i) == GET_WEAPON_ATTACK_TYPE(gun))
-        return i;
-    }
-    if (i->contains && GET_OBJ_TYPE(i) == ITEM_WORN) {
-      struct obj_data *found;
-      found = find_magazine(gun, i->contains);
-      if ( found )
-        return found;
-    }
-  }
-  return NULL;
-}
-
 
 ACMD(do_reload)
 {
@@ -2306,10 +2292,10 @@ void cedit_disp_menu(struct descriptor_data *d, int mode)
     {
       send_to_char(CH, "5) Arriving Text: ^c%s^n\r\n", d->edit_mob->char_specials.arrive);
       send_to_char(CH, "6) Leaving Text:  ^c%s^n\r\n", d->edit_mob->char_specials.leave);
-      
+
       send_to_char(CH, "Examples:\r\n  %s %s the north.\r\n", d->edit_mob->player.physical_text.name, d->edit_mob->char_specials.arrive);
       send_to_char(CH, "  %s %s north.\r\n", d->edit_mob->player.physical_text.name, d->edit_mob->char_specials.leave);
-      
+
       send_to_char(CH, "7) Change Height: ^c%dcm^n\r\n", GET_HEIGHT(CH));
       send_to_char(CH, "8) Change Weight: ^c%dkg^n\r\n", GET_WEIGHT(CH));
     }

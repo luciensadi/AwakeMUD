@@ -115,6 +115,7 @@ void    send_gamewide_annoucement(const char *msg, bool prepend_announcement_str
 char *  get_printable_mob_unique_id(struct char_data *ch);
 bool    mob_unique_id_matches(mob_unique_id_t id1, mob_unique_id_t id2);
 void    set_new_mobile_unique_id(struct char_data *ch);
+int     return_general(int skill_num);
 
 // Skill-related.
 char *how_good(int skill, int rank);
