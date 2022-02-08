@@ -1409,6 +1409,9 @@ int make_prompt(struct descriptor_data * d)
               else
                 strcpy(str, "@v");
               break;
+            case 'V':       // Current vision penalties of player
+              snprintf(str, sizeof(str), "%d", calculate_vision_penalty(d->character));
+              break;
             case '@':
               strcpy(str, "@");
               break;
