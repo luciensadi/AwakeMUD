@@ -51,6 +51,7 @@ extern bool is_escortee(struct char_data *mob);
 extern bool hunting_escortee(struct char_data *ch, struct char_data *vict);
 
 extern bool ranged_response(struct char_data *ch, struct char_data *vict);
+extern bool does_weapon_have_bayonet(struct obj_data *weapon);
 
 SPECIAL(elevator_spec);
 SPECIAL(call_elevator);
@@ -1373,10 +1374,16 @@ void mobile_activity(void)
 
     // Confirm we have the skills to wield our current weapon, otherwise ditch it.
     if (GET_EQ(ch, WEAR_WIELD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_WEAPON) {
+      char build_err_msg[2000];
+
       int weapon_skill = GET_WEAPON_SKILL(GET_EQ(ch, WEAR_WIELD));
-      if (GET_SKILL(ch, weapon_skill) <= 0 && GET_SKILL(ch, return_general(weapon_skill)) <= 0) {
-        char build_err_msg[2000];
-        snprintf(build_err_msg, sizeof(build_err_msg), "CONTENT ERROR: %s (%ld) is wielding %s %s, but has no skill in %s!",
+      int melee_skill = does_weapon_have_bayonet(GET_EQ(ch, WEAR_WIELD)) ? SKILL_POLE_ARMS : SKILL_CLUBS;
+
+      int weapon_skill_dice = GET_SKILL(ch, weapon_skill) ? GET_SKILL(ch, weapon_skill) : GET_SKILL(ch, return_general(weapon_skill));
+      int melee_skill_dice = GET_SKILL(ch, melee_skill) ? GET_SKILL(ch, melee_skill) : GET_SKILL(ch, return_general(melee_skill));
+
+      if (weapon_skill_dice <= 0) {
+        snprintf(build_err_msg, sizeof(build_err_msg), "CONTENT ERROR: %s (%ld) is wielding %s %s, but has no weapon skill in %s!",
                  GET_CHAR_NAME(ch),
                  GET_MOB_VNUM(ch),
                  AN(weapon_type[GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_WIELD))]),
@@ -1384,7 +1391,19 @@ void mobile_activity(void)
                  skills[GET_WEAPON_SKILL(GET_EQ(ch, WEAR_WIELD))].name
                );
         mudlog(build_err_msg, ch, LOG_MISCLOG, TRUE);
-        
+
+        switch_weapons(ch, WEAR_WIELD);
+      } else if (melee_skill_dice <= 0 && weapon_skill_dice >= 5) {
+        snprintf(build_err_msg, sizeof(build_err_msg), "CONTENT ERROR: Skilled mob %s (%ld) is wielding %s %s%s, but has no melee skill in %s!",
+                 GET_CHAR_NAME(ch),
+                 GET_MOB_VNUM(ch),
+                 AN(weapon_type[GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_WIELD))]),
+                 weapon_type[GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_WIELD))],
+                 melee_skill == SKILL_POLE_ARMS ? " (with bayonet)" : "",
+                 skills[melee_skill].name
+               );
+        mudlog(build_err_msg, ch, LOG_MISCLOG, TRUE);
+
         switch_weapons(ch, WEAR_WIELD);
       }
     }
