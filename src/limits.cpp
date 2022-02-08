@@ -509,6 +509,7 @@ void check_bioware(struct char_data *ch)
 {
   if (!ch->desc
       || (ch->desc && ch->desc->connected)
+      || ch->char_specials.timer >= 10
       || PLR_FLAGGED(ch, PLR_NEWBIE)
       || PRF_FLAGGED(ch, PRF_AFK)
       || AFF_FLAGS(ch).AreAnySet(BR_TASK_AFF_FLAGS, ENDBIT) // See awake.h for the definition of these aff flags.
