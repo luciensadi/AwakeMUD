@@ -6,7 +6,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sodium.h> // for crypto_pwhash_STRBYTES
-#include <uuid/uuid.h> // for NPC UUIDs
 
 #include "types.h"
 #include "awake.h"
