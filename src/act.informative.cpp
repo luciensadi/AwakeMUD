@@ -4317,7 +4317,7 @@ ACMD(do_who)
         strlcat(buf1, buf2, sizeof(buf1));
       }
 
-      if (AFF_FLAGS(tch).AreAnySet(AFF_DESIGN, AFF_PROGRAM, AFF_PART_DESIGN, AFF_PART_BUILD, AFF_SPELLDESIGN, AFF_AMMOBUILD, ENDBIT))
+      if (AFF_FLAGS(tch).AreAnySet(BR_TASK_AFF_FLAGS, ENDBIT))
         strlcat(buf1, " (B/R)", sizeof(buf1));
       if (PRF_FLAGGED(tch, PRF_AFK))
         strlcat(buf1, " (AFK)", sizeof(buf1));

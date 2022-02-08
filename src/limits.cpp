@@ -510,7 +510,8 @@ void check_bioware(struct char_data *ch)
   if (!ch->desc
       || (ch->desc && ch->desc->connected)
       || PLR_FLAGGED(ch, PLR_NEWBIE)
-      || AFF_FLAGS(ch).AreAnySet(AFF_PROGRAM, AFF_DESIGN, AFF_PART_BUILD, AFF_PART_DESIGN, AFF_SPELLDESIGN, AFF_AMMOBUILD, ENDBIT)
+      || PRF_FLAGGED(ch, PRF_AFK)
+      || AFF_FLAGS(ch).AreAnySet(BR_TASK_AFF_FLAGS, ENDBIT) // See awake.h for the definition of these aff flags.
   ) {
     return;
   }
@@ -525,11 +526,19 @@ void check_bioware(struct char_data *ch)
           send_to_char("Your blood seems to erupt.\r\n", ch);
           act("$n collapses to the floor, twitching.", TRUE, ch, 0, 0, TO_ROOM);
           damage(ch, ch, 10, TYPE_BIOWARE, PHYSICAL);
+        } else {
+          send_to_char("Your heart strains, and you have a feeling of impending doom. Your need for blood thinners is dire!\r\n", ch);
         }
         GET_OBJ_VAL(bio, 6)++;
       }
-      if (GET_OBJ_VAL(bio, 5) <= 4 && number(0, 4))
-        send_to_char("You feel like you should be taking your medication.\r\n", ch);
+      if (GET_OBJ_VAL(bio, 5) == 4)
+        send_to_char("You kinda feel like you should be taking some aspirin.\r\n", ch);
+      else if (GET_OBJ_VAL(bio, 5) == 3)
+        send_to_char("You could definitely go for some aspirin right now.\r\n", ch);
+      else if (GET_OBJ_VAL(bio, 5) <= 2)
+        send_to_char("You really feel like you need to take some aspirin.\r\n", ch);
+      else if (GET_OBJ_VAL(bio, 5) == 1)
+        send_to_char("Your heart strains, and you have a feeling of impending doom. Your need for blood thinners is dire!\r\n", ch);
       break;
     }
 }

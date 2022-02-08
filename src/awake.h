@@ -508,9 +508,10 @@ enum {
 #define AFF_SMART_ENOUGH_TO_TOGGLE_CLOSECOMBAT  51
 #define AFF_MAX       52
 // TODO: If you add another long-state action like building, designing, etc:
-// - Add it to the check_bioware exclusion in limits.cpp
+// - Add it to the BR_TASK_AFF_FLAGS section below, which affects bioware_check and the B/R flag in the wholist
 // - Add it to the IS_WORKING and STOP_WORKING macros in utils.h
 // - Check for anywhere I've missed in this comment
+#define BR_TASK_AFF_FLAGS AFF_DESIGN, AFF_PROGRAM, AFF_PART_DESIGN, AFF_PART_BUILD, AFF_SPELLDESIGN, AFF_AMMOBUILD
 
 
 /* room-related defines */
