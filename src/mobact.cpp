@@ -1393,7 +1393,7 @@ void mobile_activity(void)
         mudlog(build_err_msg, ch, LOG_MISCLOG, TRUE);
 
         switch_weapons(ch, WEAR_WIELD);
-      } else if (melee_skill_dice <= 0 && weapon_skill_dice >= 5) {
+      } else if (IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_WIELD))) && melee_skill_dice <= 0 && weapon_skill_dice >= 5) {
         snprintf(build_err_msg, sizeof(build_err_msg), "CONTENT ERROR: Skilled mob %s (%ld) is wielding %s %s%s, but has no melee skill in %s!",
                  GET_CHAR_NAME(ch),
                  GET_MOB_VNUM(ch),
