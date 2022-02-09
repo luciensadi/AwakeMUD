@@ -1163,13 +1163,17 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
 
   int damage_total = convert_damage(staged_damage);
 
-  snprintf(rbuf, sizeof(rbuf), "^CBod dice %d, attack power after armor %d, BodSuc %d, ResSuc %d: Dam %s->%s. %d%c.^n",
+  snprintf(rbuf, sizeof(rbuf), "^CDefender rolls %d bod dice vs TN %d, getting %d success%s; attacker now has %d net success%s. Damage stages from %s(%d) to %s(%d). %d%c.^n",
           bod,
           att->ranged_combat_mode ? att->ranged->power : att->melee->power,
           bod_success,
+          bod_success == 1 ? "" : "es",
           att->ranged_combat_mode ? att->ranged->successes : att->melee->successes,
-          wound_name[MIN(DEADLY, MAX(0,att->ranged_combat_mode ? att->ranged->damage_level : att->melee->damage_level))],
+          (att->ranged_combat_mode ? att->ranged->successes : att->melee->successes) == 1 ? "" : "es",
+          wound_name[MIN(DEADLY, MAX(0, att->ranged_combat_mode ? att->ranged->damage_level : att->melee->damage_level))],
+          att->ranged_combat_mode ? att->ranged->damage_level : att->melee->damage_level,
           wound_name[MIN(DEADLY, MAX(0, staged_damage))],
+          staged_damage,
           damage_total,
           (att->ranged_combat_mode ? att->ranged->is_physical : att->melee->is_physical) ? 'P' : 'M');
   SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
