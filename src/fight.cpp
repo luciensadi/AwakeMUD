@@ -4866,23 +4866,39 @@ void perform_violence(void)
       */
       if (IS_AFFECTED(FIGHTING(ch), AFF_APPROACH)
           || GET_POS(FIGHTING(ch)) < POS_FIGHTING
-          || (item_should_be_treated_as_melee_weapon(GET_EQ(ch, WEAR_WIELD)) && item_should_be_treated_as_melee_weapon(GET_EQ(FIGHTING(ch), WEAR_WIELD)))) {
+          || (item_should_be_treated_as_melee_weapon(GET_EQ(ch, WEAR_WIELD)) && item_should_be_treated_as_melee_weapon(GET_EQ(FIGHTING(ch), WEAR_WIELD))))
+      {
         AFF_FLAGS(ch).RemoveBit(AFF_APPROACH);
         AFF_FLAGS(FIGHTING(ch)).RemoveBit(AFF_APPROACH);
       }
 
       // No need to charge if you're wielding a loaded gun. Your opponent still charges, if they're doing so.
-      if (item_should_be_treated_as_ranged_weapon(GET_EQ(ch, WEAR_WIELD)))
+      if (item_should_be_treated_as_ranged_weapon(GET_EQ(ch, WEAR_WIELD))) {
         AFF_FLAGS(ch).RemoveBit(AFF_APPROACH);
+      }
 
       // Otherwise, process the charge.
       else {
-        int target = 8, quickness = GET_QUI(ch);
+        // This whole section is houseruled around the fact that we don't want to roll tons of opposed athletics checks.
+        //  1) that would mean that every built mob would need ath, which is a pain to add to old mobs
+        //  2) players would get shafted due to mobs having high stats
+        // The current iteration instead sets a TN based on opponent's stats and doesn't include athletics in either side of the roll.
+
+        // Take the better of the defender's QUI and REA.
+        int defender_attribute = MAX(GET_QUI(FIGHTING(ch)), GET_REA(FIGHTING(ch)));
+        // Set the target from the defender's attribute.
+        int target = defender_attribute;
+        // Set the dice pool to be the character's quickness.
+        int quickness = GET_QUI(ch);
+        // Extended foot anchors suck for running.
         bool footanchor = FALSE;
 
         // Visibility penalty for defender, it's hard to avoid someone you can't see.
         if (!CAN_SEE(FIGHTING(ch), ch))
           target -= 4;
+        // Visibility penalty for attacker, it's hard to gap-close with someone you can't see.
+        if (!CAN_SEE(ch, FIGHTING(ch)))
+          target += 4;
 
         // House rule: Satyrs get -1 TN in their favor for closing the distance due to their speed. Dwarves and related metatypes get +1 against them.
         switch (GET_RACE(ch)) {
@@ -4958,6 +4974,9 @@ void perform_violence(void)
           }
         }
 #endif
+
+        // Lock the target to a range. Nobody enjoys rolling TN 14 to close with high-level invis mages.
+        target = MIN(MINIMUM_TN_FOR_CLOSING_CHECK, MAX(target, MAXIMUM_TN_FOR_CLOSING_CHECK));
 
         // Strike.
         if (quickness > 0 && success_test(quickness, target) > 1) {

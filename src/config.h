@@ -190,6 +190,11 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 // Spam prevention: What's the maximum amount of graffiti in a room?
 #define MAXIMUM_GRAFFITI_IN_ROOM                               3
 
+// What's the maximum difficulty allowable for a closing-the-distance check?
+// Repo default is 10, which is a 20% chance of success at 10 dice. Most high-level PCs have 18+, giving ~45% success.
+#define MAXIMUM_TN_FOR_CLOSING_CHECK                   10
+#define MINIMUM_TN_FOR_CLOSING_CHECK                   4
+
 /////////////// OLC permissions configuration /////////////////////////
 #define LVL_FOR_SETTING_ZONE_EDITOR_ID_NUMBERS                 LVL_VICEPRES
 #define LVL_FOR_SETTING_ZONE_CONNECTED_STATUS                  LVL_FIXER
