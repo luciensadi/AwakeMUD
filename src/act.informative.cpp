@@ -17,7 +17,7 @@
 #include <iostream>
 #include <fstream>
 
-using namespace std;
+// using namespace std;
 
 #if !defined(WIN32) || defined(__CYGWIN__)
 #include <sys/time.h>
@@ -3259,10 +3259,10 @@ const char *get_vision_string(struct char_data *ch, bool ascii_friendly=FALSE) {
   }
 
   if (ascii_friendly) {
-    if (AFF_FLAGGED(ch, AFF_DETECT_INVIS) && get_ch_in_room(ch)->silence[0] <= 0)
+    if (AFF_FLAGGED(ch, AFF_ULTRASOUND) && get_ch_in_room(ch)->silence[0] <= 0)
         return "You have ultrasonic vision.";
   } else {
-    if (AFF_FLAGGED(ch, AFF_DETECT_INVIS)) {
+    if (AFF_FLAGGED(ch, AFF_ULTRASOUND)) {
       if (get_ch_in_room(ch)->silence[0] > 0)
         return "Your ultrasonic vision is being suppressed by a field of silence here.\r\n";
       else
@@ -4317,7 +4317,7 @@ ACMD(do_who)
         strlcat(buf1, buf2, sizeof(buf1));
       }
 
-      if (AFF_FLAGS(tch).AreAnySet(AFF_DESIGN, AFF_PROGRAM, AFF_PART_DESIGN, AFF_PART_BUILD, AFF_SPELLDESIGN, AFF_AMMOBUILD, ENDBIT))
+      if (AFF_FLAGS(tch).AreAnySet(BR_TASK_AFF_FLAGS, ENDBIT))
         strlcat(buf1, " (B/R)", sizeof(buf1));
       if (PRF_FLAGGED(tch, PRF_AFK))
         strlcat(buf1, " (AFK)", sizeof(buf1));
@@ -5189,7 +5189,7 @@ ACMD(do_scan)
   int i = 0, j, dist = 3;
   struct room_data *was_in = NULL, *x = NULL;
 
-  if (AFF_FLAGGED(ch, AFF_DETECT_INVIS) && !(PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_RIG))) {
+  if (AFF_FLAGGED(ch, AFF_ULTRASOUND) && !(PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_RIG))) {
     send_to_char(ch, "The ultrasound distorts your vision.\r\n");
     return;
   }

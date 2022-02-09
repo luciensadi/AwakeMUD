@@ -112,6 +112,10 @@ bool    can_damage_vehicle(struct char_data *ch, struct veh_data *veh);
 char *  compose_spell_name(int type, int subtype = -1);
 bool    obj_contains_kept_items(struct obj_data *obj);
 void    send_gamewide_annoucement(const char *msg, bool prepend_announcement_string);
+char *  get_printable_mob_unique_id(struct char_data *ch);
+bool    mob_unique_id_matches(mob_unique_id_t id1, mob_unique_id_t id2);
+void    set_new_mobile_unique_id(struct char_data *ch);
+int     return_general(int skill_num);
 
 // Skill-related.
 char *how_good(int skill, int rank);
@@ -226,7 +230,7 @@ void    update_pos(struct char_data *victim);
  if ((number) * sizeof(type) <= 0) \
   log_vfprintf("SYSERR: Zero bytes or less requested at %s:%d.", __FILE__, __LINE__); \
  if (!((result) = (type *) calloc ((number), sizeof(type)))) \
-  { perror("SYSERR: malloc failure"); exit(1); } } while(0)
+  { perror("SYSERR: malloc failure"); exit(ERROR_MALLOC_FAILED_IN_CREATE_MACRO); } } while(0)
 
 /*
  * the source previously used the same code in many places to remove an item
@@ -272,9 +276,8 @@ void    update_pos(struct char_data *victim);
   GET_MOB_VNUM(ch) == 22)
 #define IS_SPIRIT(ch) (IS_NPC(ch) && GET_RACE(ch) == RACE_SPIRIT)
 #define IS_ELEMENTAL(ch) (IS_NPC(ch) && GET_RACE(ch) == RACE_ELEMENTAL)
-#define IS_ASTRAL(ch) (IS_NPC(ch) && MOB_FLAGS(ch).IsSet(MOB_ASTRAL))
-#define IS_DUAL(ch)   ((IS_NPC(ch) && MOB_FLAGS(ch).IsSet(MOB_DUAL_NATURE)) || \
-               (!IS_NPC(ch) && (PLR_FLAGS(ch).IsSet(PLR_PERCEIVE) || access_level(ch, LVL_ADMIN))))
+#define IS_ASTRAL(ch) (MOB_FLAGGED(ch, MOB_ASTRAL))
+#define IS_DUAL(ch)   (MOB_FLAGGED(ch, MOB_DUAL_NATURE) || PLR_FLAGGED(ch, PLR_PERCEIVE) || access_level(ch, LVL_ADMIN))
 #define IS_SENATOR(ch) (access_level((ch), LVL_BUILDER))
 
 // ONLY for use on non-Bitfield bitvectors:
@@ -572,6 +575,7 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define GET_MOB_RNUM(mob)       ((mob)->nr)
 #define GET_MOB_VNUM(mob)       (IS_MOB(mob) ? mob_index[GET_MOB_RNUM(mob)].vnum : -1)
 #define MOB_VNUM_RNUM(rnum) ((mob_index[rnum]).vnum)
+#define GET_MOB_UNIQUE_ID(mob)  ((mob)->unique_id)
 
 #define GET_MOB_WAIT(ch)      ((ch)->mob_specials.wait_state)
 #define GET_DEFAULT_POS(ch)   ((ch)->mob_specials.default_pos)
@@ -709,7 +713,7 @@ bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struc
 #define CHAR_ONLY_SEES_VICT_WITH_ULTRASOUND(ch, vict) (ch != vict && (IS_AFFECTED((vict), AFF_IMP_INVIS) || IS_AFFECTED((vict), AFF_SPELLIMPINVIS)) && !(IS_DUAL((ch)) || IS_PROJECT((ch)) || IS_ASTRAL((ch))))
 
 #define INVIS_OK_OBJ(sub, obj) (!IS_OBJ_STAT((obj), ITEM_INVISIBLE) || \
-   IS_AFFECTED((sub), AFF_DETECT_INVIS) || IS_ASTRAL(sub) || \
+   IS_AFFECTED((sub), AFF_ULTRASOUND) || IS_ASTRAL(sub) || \
    IS_DUAL(sub) || HOLYLIGHT_OK(sub))
 
 #define CAN_SEE_CARRIER(sub, obj) \
@@ -984,21 +988,21 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 // ITEM_QUIVER convenience defines
 
 // ITEM_DECK_ACCESSORY convenience defines
-#define GET_DECK_ACCESSORY_TYPE(accessory)               (GET_OBJ_VAL((accessory), 0))
+#define GET_DECK_ACCESSORY_TYPE(accessory)                  (GET_OBJ_VAL((accessory), 0))
 
 // ITEM_DECK_ACCESSORY TYPE_PARTS convenience defines
-#define GET_DECK_ACCESSORY_IS_CHIPS(accessory)           (GET_OBJ_VAL((accessory), 1))
+#define GET_DECK_ACCESSORY_IS_CHIPS(accessory)              (GET_OBJ_VAL((accessory), 1))
 
 // ITEM_DECK_ACCESSORY TYPE_FILE convenience defines
-#define GET_DECK_ACCESSORY_FILE_CREATION_TIME(accessory) (GET_OBJ_VAL((accessory), 1))
-#define GET_DECK_ACCESSORY_FILE_SIZE(accessory)          (GET_OBJ_VAL((accessory), 2))
-#define GET_DECK_ACCESSORY_FILE_HOST_VNUM(accessory)     (GET_OBJ_VAL((accessory), 3))
-#define GET_DECK_ACCESSORY_FILE_HOST_COLOR(accessory)    (GET_OBJ_VAL((accessory), 4))
-#define GET_DECK_ACCESSORY_FILE_PROTECTION(accessory)    (GET_OBJ_VAL((accessory), 5))
-#define GET_DECK_ACCESSORY_FILE_RATING(accessory)        (GET_OBJ_VAL((accessory), 6))
-#define GET_DECK_ACCESSORY_FILE_FOUND_BY(accessory)      (GET_OBJ_VAL((accessory), 7))
-#define GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(accessory)  (GET_OBJ_VAL((accessory), 8))
-#define GET_DECK_ACCESSORY_FILE_REMAINING(accessory)     (GET_OBJ_VAL((accessory), 9))
+#define GET_DECK_ACCESSORY_FILE_CREATION_TIME(accessory)    (GET_OBJ_VAL((accessory), 1))
+#define GET_DECK_ACCESSORY_FILE_SIZE(accessory)             (GET_OBJ_VAL((accessory), 2))
+#define GET_DECK_ACCESSORY_FILE_HOST_VNUM(accessory)        (GET_OBJ_VAL((accessory), 3))
+#define GET_DECK_ACCESSORY_FILE_HOST_COLOR(accessory)       (GET_OBJ_VAL((accessory), 4))
+#define GET_DECK_ACCESSORY_FILE_PROTECTION(accessory)       (GET_OBJ_VAL((accessory), 5))
+#define GET_DECK_ACCESSORY_FILE_RATING(accessory)           (GET_OBJ_VAL((accessory), 6))
+#define GET_DECK_ACCESSORY_FILE_FOUND_BY(accessory)         (GET_OBJ_VAL((accessory), 7))
+#define GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(accessory)     (GET_OBJ_VAL((accessory), 8))
+#define GET_DECK_ACCESSORY_FILE_REMAINING(accessory)        (GET_OBJ_VAL((accessory), 9))
 
 // ITEM_DECK_ACCESSORY TYPE_COOKER convenience defines
 #define GET_DECK_ACCESSORY_COOKER_RATING(accessory)         (GET_OBJ_VAL((accessory), 1))
@@ -1008,31 +1012,37 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 // ITEM_RCDECK convenience defines
 
 // ITEM_CHIP convenience defines
-#define GET_CHIP_SKILL(chip)                 (GET_OBJ_VAL((chip), 0))
-#define GET_CHIP_RATING(chip)                (GET_OBJ_VAL((chip), 1))
-#define GET_CHIP_SIZE(chip)                  (GET_OBJ_VAL((chip), 2))
-#define GET_CHIP_COMPRESSION_FACTOR(chip)    (GET_OBJ_VAL((chip), 8))
-#define GET_CHIP_LINKED(chip)                (GET_OBJ_VAL((chip), 9))
+#define GET_CHIP_SKILL(chip)                                (GET_OBJ_VAL((chip), 0))
+#define GET_CHIP_RATING(chip)                               (GET_OBJ_VAL((chip), 1))
+#define GET_CHIP_SIZE(chip)                                 (GET_OBJ_VAL((chip), 2))
+#define GET_CHIP_COMPRESSION_FACTOR(chip)                   (GET_OBJ_VAL((chip), 8))
+#define GET_CHIP_LINKED(chip)                               (GET_OBJ_VAL((chip), 9))
 
 // ITEM_MOD convenience defines
-#define GET_VEHICLE_MOD_TYPE(mod)            (GET_OBJ_VAL((mod), 0))
-#define GET_VEHICLE_MOD_MOUNT_TYPE(mod)      (GET_OBJ_VAL((mod), 1))
+#define GET_VEHICLE_MOD_TYPE(mod)                           (GET_OBJ_VAL((mod), 0))
+#define GET_VEHICLE_MOD_MOUNT_TYPE(mod)                     (GET_OBJ_VAL((mod), 1))
+#define GET_VEHICLE_MOD_LOAD_SPACE_REQUIRED(mod)            (GET_OBJ_VAL((mod), 1)) // Yes, this is also value 1.
+#define GET_VEHICLE_MOD_RATING(mod)                         (GET_OBJ_VAL((mod), 2))
+// what's 3?
+#define GET_VEHICLE_MOD_DESIGNED_FOR_DRONE(mod)             (GET_OBJ_VAL((mod), 4)) // 0=veh, 1=drone, 2=both
+#define GET_VEHICLE_MOD_ENGINE_BITS(mod)                    (GET_OBJ_VAL((mod), 5))
+#define GET_VEHICLE_MOD_LOCATION(mod)                       (GET_OBJ_VAL((mod), 6))
 
 // ITEM_HOLSTER convenience defines
-#define GET_HOLSTER_TYPE(holster)            (GET_OBJ_VAL((holster), 0))
-#define GET_HOLSTER_READY_STATUS(holster)    (GET_OBJ_VAL((holster), 3))
+#define GET_HOLSTER_TYPE(holster)                           (GET_OBJ_VAL((holster), 0))
+#define GET_HOLSTER_READY_STATUS(holster)                   (GET_OBJ_VAL((holster), 3))
 
 // ITEM_DESIGN convenience defines
 
 // ITEM_QUEST convenience defines
 
 // ITEM_GUN_AMMO convenience defines
-#define GET_AMMOBOX_QUANTITY(box)            (GET_OBJ_VAL((box), 0))
-#define GET_AMMOBOX_WEAPON(box)              (GET_OBJ_VAL((box), 1))
-#define GET_AMMOBOX_TYPE(box)                (GET_OBJ_VAL((box), 2))
-#define GET_AMMOBOX_INTENDED_QUANTITY(box)   (GET_OBJ_VAL((box), 3))
-#define GET_AMMOBOX_TIME_TO_COMPLETION(box)  (GET_OBJ_VAL((box), 4))
-#define GET_AMMOBOX_CREATOR(box)             (GET_OBJ_VAL((box), 9))
+#define GET_AMMOBOX_QUANTITY(box)                           (GET_OBJ_VAL((box), 0))
+#define GET_AMMOBOX_WEAPON(box)                             (GET_OBJ_VAL((box), 1))
+#define GET_AMMOBOX_TYPE(box)                               (GET_OBJ_VAL((box), 2))
+#define GET_AMMOBOX_INTENDED_QUANTITY(box)                  (GET_OBJ_VAL((box), 3))
+#define GET_AMMOBOX_TIME_TO_COMPLETION(box)                 (GET_OBJ_VAL((box), 4))
+#define GET_AMMOBOX_CREATOR(box)                            (GET_OBJ_VAL((box), 9))
 
 // ITEM_KEYRING convenience defines
 

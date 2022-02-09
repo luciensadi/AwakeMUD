@@ -665,7 +665,7 @@ const char *affected_bits[] =
     "NOTHING",
     "Ruthenium",
     "Banishing",
-    "Det-invis",
+    "Ultrasound",
     "Prone",
     "Manifest",
     "Healed",
@@ -1387,6 +1387,7 @@ const char *adept_powers[] =
 
 struct skill_data skills[] =
   {
+    // name, linked attribute, active/knowledge, requires magic
     {"OMGWTFBBQ", BOD, SKILL_TYPE_ACTIVE, FALSE},
     {"Athletics", BOD, SKILL_TYPE_ACTIVE, FALSE},
     {"Armed Combat", STR, SKILL_TYPE_ACTIVE, FALSE},
@@ -2587,7 +2588,7 @@ int acceptable_weapon_attachment_affects[] = {
   AFF_VISION_MAG_3,
   AFF_INFRAVISION,
   AFF_LOW_LIGHT,
-  AFF_DETECT_INVIS,
+  AFF_ULTRASOUND,
   -1
 };
 

@@ -51,8 +51,7 @@ extern bool is_escortee(struct char_data *mob);
 extern bool hunting_escortee(struct char_data *ch, struct char_data *vict);
 
 extern bool ranged_response(struct char_data *ch, struct char_data *vict);
-
-extern struct obj_data * find_magazine(struct obj_data *gun, struct obj_data *i);
+extern bool does_weapon_have_bayonet(struct obj_data *weapon);
 
 SPECIAL(elevator_spec);
 SPECIAL(call_elevator);
@@ -1155,7 +1154,7 @@ int get_push_command_index() {
 
   if (global_push_command_index == -1) {
     mudlog("FATAL ERROR: Unable to find index of PUSH command for NPC elevator usage. Put it back.", NULL, LOG_SYSLOG, TRUE);
-    exit(1);
+    exit(ERROR_UNABLE_TO_FIND_PUSH_COMMAND);
   }
 
   return global_push_command_index;
@@ -1277,15 +1276,27 @@ bool mobact_process_movement(struct char_data *ch) {
       return TRUE;
     }
   } /* End NPC movement outside a vehicle. */
-  return false;
+  return FALSE;
+}
+
+bool mob_has_ammo_for_weapon(struct char_data *ch, struct obj_data *weapon) {
+  for (int am = 0; am < NUM_AMMOTYPES; am++)
+    if (GET_BULLETPANTS_AMMO_AMOUNT(ch, GET_WEAPON_ATTACK_TYPE(weapon), am) > 0) {
+      return TRUE;
+    }
+
+  return FALSE;
 }
 
 // Precondition: ch and weapon exist, and weapon is a firearm.
 void ensure_mob_has_ammo_for_weapon(struct char_data *ch, struct obj_data *weapon) {
-  // Check all ammotypes for this weapon. If we have any, return.
+  // Check all ammotypes for this weapon. If we have any, refill it to full, then return.
   for (int am = 0; am < NUM_AMMOTYPES; am++)
-    if (GET_BULLETPANTS_AMMO_AMOUNT(ch, GET_WEAPON_ATTACK_TYPE(weapon), am) > 0)
+    if (GET_BULLETPANTS_AMMO_AMOUNT(ch, GET_WEAPON_ATTACK_TYPE(weapon), am) > 0) {
+      GET_BULLETPANTS_AMMO_AMOUNT(ch, GET_WEAPON_ATTACK_TYPE(weapon), am) = MAX(GET_BULLETPANTS_AMMO_AMOUNT(ch, GET_WEAPON_ATTACK_TYPE(weapon), am),
+                                                                                GET_WEAPON_MAX_AMMO(weapon) * NUMBER_OF_MAGAZINES_TO_GIVE_TO_UNEQUIPPED_MOBS);
       return;
+    }
 
   // If we had none, give them normal.
   GET_BULLETPANTS_AMMO_AMOUNT(ch, GET_WEAPON_ATTACK_TYPE(weapon), AMMO_NORMAL) = GET_WEAPON_MAX_AMMO(weapon) * NUMBER_OF_MAGAZINES_TO_GIVE_TO_UNEQUIPPED_MOBS;
@@ -1359,6 +1370,44 @@ void mobile_activity(void)
             && IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, index)))
             && GET_WEAPON_MAX_AMMO(GET_EQ(ch, index)) > 0)
           ensure_mob_has_ammo_for_weapon(ch, GET_EQ(ch, index));
+    }
+
+    // Confirm we have the skills to wield our current weapon, otherwise ditch it.
+    if (GET_EQ(ch, WEAR_WIELD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_WEAPON) {
+      char build_err_msg[2000];
+
+      int weapon_skill = GET_WEAPON_SKILL(GET_EQ(ch, WEAR_WIELD));
+      int melee_skill = does_weapon_have_bayonet(GET_EQ(ch, WEAR_WIELD)) ? SKILL_POLE_ARMS : SKILL_CLUBS;
+
+      int weapon_skill_dice = GET_SKILL(ch, weapon_skill) ? GET_SKILL(ch, weapon_skill) : GET_SKILL(ch, return_general(weapon_skill));
+      int melee_skill_dice = GET_SKILL(ch, melee_skill) ? GET_SKILL(ch, melee_skill) : GET_SKILL(ch, return_general(melee_skill));
+
+      if (weapon_skill_dice <= 0) {
+        #ifndef SUPPRESS_BUILD_ERROR_MESSAGES
+        snprintf(build_err_msg, sizeof(build_err_msg), "CONTENT ERROR: %s (%ld) is wielding %s %s, but has no weapon skill in %s!",
+                 GET_CHAR_NAME(ch),
+                 GET_MOB_VNUM(ch),
+                 AN(weapon_type[GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_WIELD))]),
+                 weapon_type[GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_WIELD))],
+                 skills[GET_WEAPON_SKILL(GET_EQ(ch, WEAR_WIELD))].name
+               );
+        mudlog(build_err_msg, ch, LOG_MISCLOG, TRUE);
+        #endif
+
+        switch_weapons(ch, WEAR_WIELD);
+      } else if (IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_WIELD))) && melee_skill_dice <= 0 && weapon_skill_dice >= 5) {
+        #ifndef SUPPRESS_BUILD_ERROR_MESSAGES
+        snprintf(build_err_msg, sizeof(build_err_msg), "CONTENT ERROR: Skilled mob %s (%ld) is wielding %s %s%s, but has no melee skill in %s!",
+                 GET_CHAR_NAME(ch),
+                 GET_MOB_VNUM(ch),
+                 AN(weapon_type[GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_WIELD))]),
+                 weapon_type[GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_WIELD))],
+                 melee_skill == SKILL_POLE_ARMS ? " (with bayonet)" : "",
+                 skills[melee_skill].name
+               );
+        mudlog(build_err_msg, ch, LOG_MISCLOG, TRUE);
+        #endif
+      }
     }
 
     // Manipulate wielded weapon (reload, set fire mode, etc).
@@ -1646,11 +1695,6 @@ void switch_weapons(struct char_data *mob, int pos)
     return;
   }
 
-  if (GET_OBJ_TYPE(GET_EQ(mob, pos)) != ITEM_WEAPON) {
-    act("$n won't switch weapons- currently-equipped $o is not a weapon.", TRUE, mob, GET_EQ(mob, pos), NULL, TO_ROLLS);
-    return;
-  }
-
   for (i = mob->carrying; i; i = i->next_content)
   {
     /* No idea what these used to be, but now they're max ammo and reach.
@@ -1664,8 +1708,8 @@ void switch_weapons(struct char_data *mob, int pos)
     */
 
 
-    // We like using weapons that have unlimited ammo.
-    if (GET_OBJ_TYPE(i) == ITEM_WEAPON) {
+    // Classify our weapons by ammo usage and type. Only allow weapons we can actually use, though.
+    if (GET_OBJ_TYPE(i) == ITEM_WEAPON && (GET_SKILL(mob, GET_WEAPON_SKILL(i)) > 0 || GET_SKILL(mob, return_general(GET_WEAPON_SKILL(i))) > 0)) {
       if (IS_GUN(GET_WEAPON_ATTACK_TYPE(i))) {
         // Check for an unlimited-ammo weapon.
         if (GET_WEAPON_MAX_AMMO(i) == -1) {
@@ -1676,7 +1720,7 @@ void switch_weapons(struct char_data *mob, int pos)
 
         // It's a limited-ammo weapon. Check to see if we have ammo for it.
         if ((i->contains && GET_MAGAZINE_AMMO_COUNT(i->contains) > 0)
-            || find_magazine(i, mob->carrying)) {
+            || mob_has_ammo_for_weapon(mob, i)) {
               // TODO: Check if it's a better weapon.
               limited_ammo_weapon = i;
               break;

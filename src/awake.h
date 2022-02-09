@@ -16,7 +16,7 @@
 #include <iostream>
 
 #if (!defined(WIN32) || defined(__CYGWIN__)) && !defined(osx)
-using namespace std;
+// using namespace std;
 #endif
 
 #define NUM_RESERVED_DESCS      8
@@ -457,7 +457,7 @@ enum {
 
 #define AFF_INVISIBLE     1  /* Char is invisible        */
 #define AFF_BANISH    2
-#define AFF_DETECT_INVIS  3  /* Char can see invis chars    */
+#define AFF_ULTRASOUND  3  /* Char can see invis chars    */
 #define AFF_PRONE               4
 #define AFF_MANIFEST    5
 #define AFF_HEALED    6
@@ -508,9 +508,10 @@ enum {
 #define AFF_SMART_ENOUGH_TO_TOGGLE_CLOSECOMBAT  51
 #define AFF_MAX       52
 // TODO: If you add another long-state action like building, designing, etc:
-// - Add it to the check_bioware exclusion in limits.cpp
+// - Add it to the BR_TASK_AFF_FLAGS section below, which affects bioware_check and the B/R flag in the wholist
 // - Add it to the IS_WORKING and STOP_WORKING macros in utils.h
 // - Check for anywhere I've missed in this comment
+#define BR_TASK_AFF_FLAGS AFF_DESIGN, AFF_PROGRAM, AFF_PART_DESIGN, AFF_PART_BUILD, AFF_SPELLDESIGN, AFF_AMMOBUILD
 
 
 /* room-related defines */
@@ -2382,20 +2383,50 @@ enum {
 #define NUM_COMMUNICATION_CHANNELS 13
 
 
-/* Error codes. */
-#define ERROR_BITFIELD_SIZE_EXCEEDED               10
-#define ERROR_LIBSODIUM_INIT_FAILED                11
-#define ERROR_UNKNOWN_SUBCOMMAND_TO_INDEX_BOOT     12
-#define ERROR_OPENING_INDEX_FILE                   13
-#define ERROR_BOOT_ZERO_RECORDS_COUNTED            14
-#define ERROR_ZONEREAD_PREMATURE_EOF               15
-#define ERROR_ZONEREAD_FORMAT_ERROR                16
-#define ERROR_MYSQL_DATABASE_NOT_FOUND             17
-#define ERROR_ARRAY_OUT_OF_BOUNDS                  18
-#define ERROR_CANNOT_RESOLVE_VNUM                  19
-#define ERROR_DB_TABLE_REQUIRED                    20
-#define ERROR_DB_COLUMN_REQUIRED                   21
-#define ERROR_PROTOCOL_BUFFER_EXCEEDS_INPUT_LENGTH 22
+/* Exit / error codes. */
+#define EXIT_CODE_ZERO_ALL_IS_WELL                    0
+#define ERROR_BITFIELD_SIZE_EXCEEDED                  10
+#define ERROR_LIBSODIUM_INIT_FAILED                   11
+#define ERROR_UNKNOWN_SUBCOMMAND_TO_INDEX_BOOT        12
+#define ERROR_OPENING_INDEX_FILE                      13
+#define ERROR_BOOT_ZERO_RECORDS_COUNTED               14
+#define ERROR_ZONEREAD_PREMATURE_EOF                  15
+#define ERROR_ZONEREAD_FORMAT_ERROR                   16
+#define ERROR_MYSQL_DATABASE_NOT_FOUND                17
+#define ERROR_ARRAY_OUT_OF_BOUNDS                     18
+#define ERROR_CANNOT_RESOLVE_VNUM                     19
+#define ERROR_DB_TABLE_REQUIRED                       20
+#define ERROR_DB_COLUMN_REQUIRED                      21
+#define ERROR_PROTOCOL_BUFFER_EXCEEDS_INPUT_LENGTH    22
+#define ERROR_FAILED_TO_VALIDATE_ARGON2_TEST_PASSWORD 23
+#define ERROR_HASHING_TOOK_TOO_LONG                   24
+#define ERROR_FAILED_TO_MATCH_CRYPT_PASSWORD          25
+#define ERROR_FAILED_TO_VALIDATE_CRYPT_PASSWORD       26
+#define ERROR_FAILED_TO_CONVERT_CRYPT_TO_ARGON2       27
+#define ERROR_FAILED_TO_MATCH_ARGON2                  28
+#define ERROR_FAILED_TO_VALIDATE_ARGON2_PASSWORD      29
+#define ERROR_OUT_OF_MEMORY_WHILE_HASHING             30
+#define ERROR_CODER_DIDNT_SPECIFY_FIELD_TYPE          31
+#define ERROR_INVALID_ARGUMENTS_TO_BINARY             32
+#define ERROR_INVALID_DATA_DIRECTORY                  33
+#define ERROR_COULD_NOT_CREATE_SOCKET                 34
+#define ERROR_COULD_NOT_SET_SOCKET_OPTIONS            35
+#define ERROR_COULD_NOT_REUSE_ADDRESS                 36
+#define ERROR_COULD_NOT_REUSE_PORT                    37
+#define ERROR_COULD_NOT_SET_LINGER                    38
+#define ERROR_COULD_NOT_BIND_SOCKET                   39
+#define ERROR_GETRLIMIT_FAILED                        40
+#define ERROR_SYSCONF_FAILED                          41
+#define ERROR_YOU_SET_AN_IMPOSSIBLE_PLAYER_LIMIT      42
+#define ERROR_COULD_NOT_RECOVER_FROM_SELECT_SLEEP     43
+#define ERROR_FNCTL_ENCOUNTERED_ERROR                 44
+#define ERROR_UNABLE_TO_FREE_MEMORY_IN_CLEARSTACKS    45
+#define ERROR_MALLOC_FAILED_IN_CREATE_MACRO           46
+#define ERROR_UNABLE_TO_FIND_PUSH_COMMAND             47
+#define ERROR_UNABLE_TO_CREATE_STR_IN_MAIL            48
+#define ERROR_DATABASE_CHANGES_NEEDED                 49
+#define ERROR_NULL_VEHICLE_VEH_FROM_ROOM              50
+#define EXIT_CODE_REBOOTING                           52   /* what's so great about HHGTTG, anyhow? */
 
 // Materials.
 #define MATERIAL_PAPER        0

@@ -393,7 +393,7 @@ void require_that_field_meets_constraints(const char *field_name, const char *ta
     if (flength) {
       if (ftype == NULL || !*ftype) {
         log("ERROR: You need to include the field type in require_that_field_meets_constraints when using the length parameter.");
-        exit(1);
+        exit(ERROR_CODER_DIDNT_SPECIFY_FIELD_TYPE);
       }
 
       char field_type[500];
@@ -427,7 +427,7 @@ void boot_world(void)
 {
   // Pre-boot tests and other things you'd like to run in the context of the game.
   //   Write your tests here, then uncomment the exit statement if all you want are those results.
-  // exit(0);
+  // exit(EXIT_CODE_ZERO_ALL_IS_WELL);
 
   // Sanity check to ensure we haven't added more bits than our bitfield can hold.
   if (Bitfield::TotalWidth() < PRF_MAX) {
@@ -3070,9 +3070,13 @@ struct char_data *read_mobile(int nr, int type)
   mob->player.time.birth = time(0);
   mob->player.time.played = 0;
   mob->player.time.logon = time(0);
+  mob->player.tradition = mob->player.aspect = 0;
   mob->char_specials.saved.left_handed = (!number(0, 9) ? 1 : 0);
 
   mob_index[i].number++;
+
+  // See utils.cpp for this.
+  set_new_mobile_unique_id(mob);
 
   set_natural_vision_for_race(mob);
 

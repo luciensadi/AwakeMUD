@@ -18,8 +18,6 @@
 #include <stdarg.h>
 #include <iostream>
 
-using namespace std;
-
 #if defined(WIN32) && !defined(__CYGWIN__)
 #include <winsock.h>
 #define random() rand()
@@ -2242,7 +2240,7 @@ bool invis_ok(struct char_data *ch, struct char_data *vict) {
     return TRUE;
 
   // Ultrasound pierces all invis as long as it's not blocked by silence or stealth.
-  if (AFF_FLAGGED(ch, AFF_DETECT_INVIS) && (get_ch_in_room(ch)->silence[0] <= 0 && !affected_by_spell(vict, SPELL_STEALTH)))
+  if (AFF_FLAGGED(ch, AFF_ULTRASOUND) && (get_ch_in_room(ch)->silence[0] <= 0 && !affected_by_spell(vict, SPELL_STEALTH)))
     return TRUE;
 
   // Improved invis defeats all other detection measures.
@@ -3962,6 +3960,30 @@ void send_gamewide_annoucement(const char *msg, bool prepend_announcement_string
       send_to_char(d->character, announcement);
     }
   }
+}
+
+// Given an NPC, reads out the unique-on-this-boot-only ID number associated with this character.
+char *get_printable_mob_unique_id(struct char_data *ch) {
+  static char result_buf[1000];
+  // If you're using UUIDs here, you need something like this:
+  // uuid_unparse(GET_MOB_UNIQUE_ID(ch), result_buf);
+  // Buuut since we're just using unsigned longs...
+  snprintf(result_buf, sizeof(result_buf), "%lu", GET_MOB_UNIQUE_ID(ch));
+  return result_buf;
+}
+
+// This sort of function is dead stupid for comparing two unsigned longs... but if you change to UUIDs, you'll appreciate being able to change this.
+bool mob_unique_id_matches(mob_unique_id_t id1, mob_unique_id_t id2) {
+  // return uuid_compare(id1, id2) == 0;
+  return id1 == id2;
+}
+
+// Don't @ me about having a global declared here, it's only used in this one function. -LS
+unsigned long global_mob_unique_id_number = 0;
+void set_new_mobile_unique_id(struct char_data *ch) {
+  // Eventually, you'll swap this out for UUIDs, assuming we find a use case for that.
+  // uuid_generate(GET_MOB_UNIQUE_ID(ch));
+  GET_MOB_UNIQUE_ID(ch) = global_mob_unique_id_number++;
 }
 
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.

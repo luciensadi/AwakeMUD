@@ -357,9 +357,6 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
     break;
   case HEDIT_RATINGS:
     {
-      // Clamp security rating.
-      d->edit_host->intrusion = MAX(MIN(MTX_SECURITY_EASY, d->edit_host->intrusion), MTX_SECURITY_HARD);
-
       char hedit_rating_buf[200];
       snprintf(hedit_rating_buf, sizeof(hedit_rating_buf), "(for %s hosts: min %d, max %d)",
                intrusion[d->edit_host->intrusion],
