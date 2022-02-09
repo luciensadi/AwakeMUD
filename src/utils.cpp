@@ -168,6 +168,10 @@ int resisted_test(int num4ch, int tar4ch, int num4vict, int tar4vict)
 
 int stage(int successes, int wound)
 {
+  // This is just a little bit faster than what was below.
+  return wound + (successes / 2);
+
+  /*
   if (successes >= 0)
     while (successes >= 2) {
       wound++;
@@ -178,7 +182,9 @@ int stage(int successes, int wound)
       wound--;
       successes += 2;
     }
+
   return wound;
+  */
 }
 
 int convert_damage(int damage)

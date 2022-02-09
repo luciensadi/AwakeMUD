@@ -1163,20 +1163,29 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
 
   int damage_total = convert_damage(staged_damage);
 
-  snprintf(rbuf, sizeof(rbuf), "^CDefender rolls %d bod dice vs TN %d, getting %d success%s; attacker now has %d net success%s. Damage stages from %s(%d) to %s(%d). %d%c.^n",
-          bod,
-          att->ranged_combat_mode ? att->ranged->power : att->melee->power,
-          bod_success,
-          bod_success == 1 ? "" : "es",
-          att->ranged_combat_mode ? att->ranged->successes : att->melee->successes,
-          (att->ranged_combat_mode ? att->ranged->successes : att->melee->successes) == 1 ? "" : "es",
-          wound_name[MIN(DEADLY, MAX(0, att->ranged_combat_mode ? att->ranged->damage_level : att->melee->damage_level))],
-          att->ranged_combat_mode ? att->ranged->damage_level : att->melee->damage_level,
-          wound_name[MIN(DEADLY, MAX(0, staged_damage))],
-          staged_damage,
-          damage_total,
-          (att->ranged_combat_mode ? att->ranged->is_physical : att->melee->is_physical) ? 'P' : 'M');
-  SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
+  {
+    int net_attack_power = att->ranged_combat_mode ? att->ranged->power : att->melee->power;
+    int net_successes = att->ranged_combat_mode ? att->ranged->successes : att->melee->successes;
+    int damage_level = att->ranged_combat_mode ? att->ranged->damage_level : att->melee->damage_level;
+    bool damage_is_physical = att->ranged_combat_mode ? att->ranged->is_physical : att->melee->is_physical;
+
+    snprintf(rbuf, sizeof(rbuf), "^cDefender rolls %d bod dice vs TN %d, getting %d success%s; attacker now has %d net success%s.\r\n^CDamage stages from %s(%d) to %s(%d), aka %d boxes of %c.^n",
+             bod,  // bod dice
+             net_attack_power,  // TN
+             bod_success, // success
+             bod_success == 1 ? "" : "es", // success plural
+             net_successes, // net success
+             net_successes == 1 ? "" : "es", // net success plural
+             wound_name[MIN(DEADLY, MAX(0, damage_level))], // damage stage from (word)
+             damage_level, // damage stage from (int)
+             wound_name[MIN(DEADLY, MAX(0, staged_damage))], // damage stage to (word)
+             staged_damage, // damage stage to (int)
+             damage_total, // actual boxes of damage done
+             damage_is_physical ? 'P' : 'M' // mental or physical
+            );
+    SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
+  }
+
 
   bool defender_died, defender_was_npc = IS_NPC(def->ch);
   if (att->ranged_combat_mode) {
