@@ -1120,14 +1120,18 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
     return;
   if (!is_ok_char(keeper, ch, shop_nr))
     return;
+
   struct obj_data *obj = NULL, *cred = get_first_credstick(ch, "credstick");
   struct shop_sell_data *sell = shop_table[shop_nr].selling;
+
   if (!*arg)
   {
     send_to_char("What item do you want to sell?\r\n", ch);
     return;
   }
+
   strcpy(buf, GET_CHAR_NAME(ch));
+
   if (shop_table[shop_nr].flags.IsSet(SHOP_DOCTOR))
   {
     if (!(obj = get_obj_in_list_vis(ch, arg, ch->carrying))
@@ -1137,13 +1141,19 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
       do_say(keeper, buf, cmd_say, SCMD_SAYTO);
       return;
     }
-  } else
-  {
+  }
+
+  else {
     if (!(obj = get_obj_in_list_vis(ch, arg, ch->carrying))) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %s", shop_table[shop_nr].no_such_itemp);
       do_say(keeper, buf, cmd_say, SCMD_SAYTO);
       return;
     }
+  }
+
+  if (IS_OBJ_STAT(obj, ITEM_KEPT)) {
+    act("You'll have to use the KEEP command on $p before you can sell it.", FALSE, ch, obj, 0, TO_CHAR);
+    return;
   }
 
   if (GET_OBJ_TYPE(obj) == ITEM_SHOPCONTAINER) {

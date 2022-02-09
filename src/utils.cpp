@@ -1330,7 +1330,14 @@ int negotiate(struct char_data *ch, struct char_data *tch, int comp, int baseval
 
     chnego += ch_delta;
     tchnego += tch_delta;
-    snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "\r\nAdded additional rolls for %s, so we got an additional %d PC and %d successes.", skills[comp].name, ch_delta, tch_delta);
+    snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "\r\nAdded additional rolls for %s (%d dice at TN %d vs %d dice at TN %d), so we got an additional %d PC and %d NPC successes.",
+             skills[comp].name,
+             cskill,
+             chtn,
+             tskill,
+             tchtn,
+             ch_delta,
+             tch_delta);
   }
   int num = chnego - tchnego;
   if (num > 0)
