@@ -119,6 +119,41 @@ ACMD(do_debug) {
     send_to_char(ch, "Done.\r\n");
   }
 
+  if (strn_cmp(arg1, "dice", strlen(arg1)) == 0) {
+    skip_spaces(&rest_of_argument);
+    rest_of_argument = any_one_arg(rest_of_argument, arg2);
+
+    int dice_to_roll = atoi(arg2);
+    int tn = atoi(rest_of_argument);
+
+    if (dice_to_roll == 0 || tn == 0) {
+      send_to_char(ch, "Got dice=%d and tn=%d. Syntax: debug dice <number of d6 to roll> <tn>.\r\n", dice_to_roll, tn);
+      return;
+    }
+
+    /*
+    int successes[dice_to_roll + 1];
+    memset(successes, 0, sizeof(successes));
+    */
+
+    int successes = 0;
+
+    int botches = 0;
+    int number_of_rolls_to_do = 1000000;
+    int required_hits_to_pass = 2;
+
+    for (int i = 0; i < number_of_rolls_to_do; i++) {
+      int rolled = success_test(dice_to_roll, tn);
+      if (rolled < 0)
+        botches++;
+      else if (rolled >= required_hits_to_pass)
+        successes++;
+    }
+
+    send_to_char(ch, "Rolled %d successes and %d botches. Success rate for %dd6 at TN %d is %.02f%%.\r\n", successes, botches, dice_to_roll, tn, (((float) successes) /number_of_rolls_to_do) * 100);
+    return;
+  }
+
   if (access_level(ch, LVL_PRESIDENT) && strn_cmp(arg1, "void", strlen(arg1)) == 0) {
     skip_spaces(&rest_of_argument);
     struct obj_data *obj = get_obj_in_list_vis(ch, rest_of_argument, ch->carrying);
