@@ -1571,6 +1571,7 @@ vnum_t get_one_number_from_query(const char *query) {
 
 vnum_t get_highest_idnum_in_use() {
   char buf[MAX_STRING_LENGTH];
+  vnum_t new_number = 0;
 
   const char *tables[] = {
     "pfiles_adeptpowers",
@@ -1585,7 +1586,6 @@ vnum_t get_highest_idnum_in_use() {
     "pfiles_immortdata",
     "pfiles_inv",
     "pfiles_magic",
-    "pfiles_mail",
     "pfiles_memory",
     "pfiles_metamagic",
     "pfiles_playergroups",
@@ -1602,12 +1602,28 @@ vnum_t get_highest_idnum_in_use() {
 
   for (int i = 0; i < NUM_IDNUM_TABLES; i++) {
     snprintf(buf, sizeof(buf), "SELECT idnum FROM %s ORDER BY idnum DESC LIMIT 1;", tables[i]);
-    vnum_t new_number = get_one_number_from_query(buf);
+    new_number = get_one_number_from_query(buf);
     if (highest_pfiles_idnum < new_number) {
       snprintf(buf3, sizeof(buf3), "^RSYSERR: SQL database corruption (pfiles idnum %ld lower than '%s' idnum %ld). Auto-correcting.^g", highest_pfiles_idnum, tables[i], new_number);
       mudlog(buf3, NULL, LOG_SYSLOG, TRUE);
       highest_pfiles_idnum = new_number;
     }
+  }
+
+  strlcpy(buf, "SELECT sender_id FROM pfiles_mail ORDER BY idnum DESC LIMIT 1;", sizeof(buf));
+  new_number = get_one_number_from_query(buf);
+  if (highest_pfiles_idnum < new_number) {
+    snprintf(buf3, sizeof(buf3), "^RSYSERR: SQL database corruption (pfiles idnum %ld lower than pfiles_mail sender_id %ld). Auto-correcting.^g", highest_pfiles_idnum, new_number);
+    mudlog(buf3, NULL, LOG_SYSLOG, TRUE);
+    highest_pfiles_idnum = new_number;
+  }
+
+  strlcpy(buf, "SELECT recipient FROM pfiles_mail ORDER BY idnum DESC LIMIT 1;", sizeof(buf));
+  new_number = get_one_number_from_query(buf);
+  if (highest_pfiles_idnum < new_number) {
+    snprintf(buf3, sizeof(buf3), "^RSYSERR: SQL database corruption (pfiles idnum %ld lower than pfiles_mail recipient %ld). Auto-correcting.^g", highest_pfiles_idnum, new_number);
+    mudlog(buf3, NULL, LOG_SYSLOG, TRUE);
+    highest_pfiles_idnum = new_number;
   }
 
   return highest_pfiles_idnum;
