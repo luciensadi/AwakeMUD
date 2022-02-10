@@ -796,6 +796,8 @@ ACMD(do_new_echo) {
   char emote_buf[strlen(storage_buf) + 1];
   strlcpy(emote_buf, storage_buf, sizeof(emote_buf));
 
+  ch->char_specials.last_emote = 0;
+
   // Iterate over the viewers in the room.
   for (struct char_data *viewer = ch->in_room ? ch->in_room->people : ch->in_veh->people;
        viewer;

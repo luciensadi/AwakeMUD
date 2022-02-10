@@ -448,6 +448,7 @@ void check_idling(void)
         do_return(ch, "", 0, 0);
     } else if (!IS_NPC(ch)) {
       ch->char_specials.timer++;
+      ch->char_specials.last_emote++;
       if (!(IS_SENATOR(ch) || IS_WORKING(ch) || PLR_FLAGGED(ch, PLR_NO_IDLE_OUT) || PRF_FLAGGED(ch, PRF_NO_VOID_ON_IDLE)) || !ch->desc) {
 #ifdef VOID_IDLE_PCS
         if (!GET_WAS_IN(ch) && ch->in_room && ch->char_specials.timer > 15) {

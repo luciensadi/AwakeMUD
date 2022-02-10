@@ -1558,7 +1558,7 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
   sprinttype((k->mob_specials.default_pos), position_types, buf2, sizeof(buf2));
   strlcat(buf, buf2, sizeof(buf));
 
-  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", Idle Timer: [%d]\r\n", k->char_specials.timer);
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", Idle Timer: [%d], Emote Timer: [%d]\r\n", k->char_specials.timer, k->char_specials.last_emote);
 
   PLR_FLAGS(k).PrintBits(buf2, MAX_STRING_LENGTH, player_bits, PLR_MAX);
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "PLR: ^c%s^n\r\n", buf2);

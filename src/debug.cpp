@@ -137,20 +137,30 @@ ACMD(do_debug) {
     */
 
     int successes = 0;
+    int hits = 0;
 
     int botches = 0;
     int number_of_rolls_to_do = 1000000;
-    int required_hits_to_pass = 2;
+    int required_hits_to_pass = 1;
 
     for (int i = 0; i < number_of_rolls_to_do; i++) {
       int rolled = success_test(dice_to_roll, tn);
       if (rolled < 0)
         botches++;
-      else if (rolled >= required_hits_to_pass)
+      else if (rolled >= required_hits_to_pass) {
         successes++;
+        hits += rolled;
+      }
     }
 
-    send_to_char(ch, "Rolled %d successes and %d botches. Success rate for %dd6 at TN %d is %.02f%%.\r\n", successes, botches, dice_to_roll, tn, (((float) successes) /number_of_rolls_to_do) * 100);
+    send_to_char(ch, "Rolled %d successes and %d botches. Roll success rate for %dd6 at TN %d is %.02f%%. Average successes per roll: %.03f.\r\n",
+                 successes,
+                 botches,
+                 dice_to_roll,
+                 tn,
+                 (((float) successes) / number_of_rolls_to_do) * 100,
+                 ((float) hits / (dice_to_roll * number_of_rolls_to_do)) * dice_to_roll
+               );
     return;
   }
 

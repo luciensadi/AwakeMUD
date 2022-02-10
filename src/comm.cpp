@@ -3334,6 +3334,10 @@ bool ch_is_eligible_to_receive_socialization_bonus(struct char_data *ch) {
   if (IS_NPC(ch))
     return FALSE;
 
+  // Not in a social room? Can't receive the bonus.
+  if (!ch->in_room || !ROOM_FLAGGED(ch->in_room, ROOM_ENCOURAGE_CONGREGATION))
+    return FALSE;
+
   // You're invisible? You can't get the bonus. Too easy to just idle in a bar watching Netflix for karma.
   // And to anyone reading the code and thinking "Oh, it'd be a great prank to make my rival invis while they RP so they don't get the bonus!" -- no, that's abusing the system and will be punished.
   if (IS_AFFECTED(ch, AFF_IMP_INVIS)
@@ -3354,10 +3358,6 @@ void increase_congregation_bonus_pools() {
   // because that encourages breaking off from RP to go burn it down again. Let them chill.
   for (struct char_data *i = character_list; i; i = i->next) {
     if (!ch_is_eligible_to_receive_socialization_bonus(i))
-      continue;
-
-    // Not in a social room? This doesn't apply to you.
-    if (!i->in_room || !ROOM_FLAGGED(i->in_room, ROOM_ENCOURAGE_CONGREGATION))
       continue;
 
     // You can't be maxed out.
@@ -3398,6 +3398,13 @@ void increase_congregation_bonus_pools() {
       snprintf(buf, sizeof(buf), "Socialization: Counting %s as an occupant.", GET_CHAR_NAME(tempch));
       act(buf, FALSE, i, 0, 0, TO_ROLLS);
       occupants++;
+    }
+
+    // Skip people who haven't emoted in a while, but only if they're not alone there.
+    if (occupants > 1 && i->char_specials.last_emote > LAST_EMOTE_REQUIREMENT_FOR_CONGREGATION_BONUS) {
+      snprintf(buf, sizeof(buf), "Socialization: Skipping %s's opportunity to earn social points-- they've not emoted to their partner.", GET_CHAR_NAME(i));
+      act(buf, FALSE, i, 0, 0, TO_ROLLS);
+      continue;
     }
 
     int point_gain = 1;

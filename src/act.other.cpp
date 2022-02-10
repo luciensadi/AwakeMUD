@@ -2687,7 +2687,7 @@ ACMD(do_remember)
     m->idnum = GET_IDNUM(vict);
     m->next = GET_PLAYER_MEMORY(ch);
     GET_PLAYER_MEMORY(ch) = m;
-    send_to_char(ch, "Remembered %s as %s\r\n", GET_NAME(vict), buf2);
+    send_to_char(ch, "Remembered %s as %s\r\n", GET_NAME(vict), m->mem);
     GET_MEMORY_DIRTY_BIT(ch) = TRUE;
   }
 }

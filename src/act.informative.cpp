@@ -16,6 +16,7 @@
 #include <errno.h>
 #include <iostream>
 #include <fstream>
+#include <unordered_map>
 
 // using namespace std;
 
@@ -4716,23 +4717,35 @@ extern void nonsensical_reply(struct char_data *ch, const char *arg, const char 
 
 void perform_mortal_where(struct char_data * ch, char *arg)
 {
-  strlcpy(buf, "Players in socialization rooms\r\n-------\r\n", sizeof(buf));
-  bool found_someone = FALSE;
+  std::unordered_map<vnum_t, int> occupied_rooms = {};
+  std::unordered_map<vnum_t, int>::iterator room_iterator;
+
   for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
     if (!d->connected) {
       struct char_data *i = (d->original ? d->original : d->character);
-      if (i && i->in_room && ROOM_FLAGGED(i->in_room, ROOM_ENCOURAGE_CONGREGATION) && CAN_SEE(ch, i)) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-20s - %s^n\r\n",
-                GET_CHAR_NAME(i),
-                GET_ROOM_NAME(i->in_room));
-        found_someone = TRUE;
+      if (i && i->in_room && ROOM_FLAGGED(i->in_room, ROOM_ENCOURAGE_CONGREGATION) && CAN_SEE(ch, i) && i->char_specials.last_emote <= LAST_EMOTE_REQUIREMENT_FOR_CONGREGATION_BONUS) {
+        if ((room_iterator = occupied_rooms.find(GET_ROOM_VNUM(i->in_room))) != occupied_rooms.end()) {
+          ((*room_iterator).second)++;
+        } else {
+          occupied_rooms.emplace(GET_ROOM_VNUM(i->in_room), 1);
+        }
       }
     }
   }
-  if (!found_someone) {
-    strlcat(buf, "Nobody :(\r\n", sizeof(buf));
+
+  if (occupied_rooms.empty()) {
+    send_to_char("Nobody's in a socialization room right now. Why not go find one?\r\n", ch);
+    return;
+  } else {
+    send_to_char("There are people RPing in these rooms:\r\n", ch);
+    for (auto it = occupied_rooms.begin(); it != occupied_rooms.end(); ++it) {
+      if ((*it).second == 1) {
+        send_to_char(ch, "%s^n (one person looking for RP)\r\n", world[real_room((*it).first)].name);
+      } else {
+        send_to_char(ch, "%s^n (%d characters RPing)\r\n", world[real_room((*it).first)].name, (*it).second);
+      }
+    }
   }
-  page_string(ch->desc, buf, 1);
 }
 
 void print_object_location(int num, struct obj_data *obj, struct char_data *ch,
@@ -4780,8 +4793,9 @@ void print_object_location(int num, struct obj_data *obj, struct char_data *ch,
 
 void perform_immort_where(struct char_data * ch, char *arg)
 {
-  struct char_data *i;
+  struct char_data *primary_char;
   struct descriptor_data *d;
+  struct room_data *room;
   int num = 0, found = 0;
   int found2 = FALSE;
 
@@ -4790,62 +4804,60 @@ void perform_immort_where(struct char_data * ch, char *arg)
     strlcpy(buf, "Players\r\n-------\r\n", sizeof(buf));
     for (d = descriptor_list; d; d = d->next)
       if (!d->connected) {
-        i = (d->original ? d->original : d->character);
-        if (i && CAN_SEE(ch, i) && (i->in_room || i->in_veh)) {
-          if (d->original)
-            if (d->character->in_veh)
-              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-20s - [%6ld] %s^n (switched as %s) (in %s)\r\n",
-                      GET_CHAR_NAME(i),
-                      GET_ROOM_VNUM(get_ch_in_room(d->character)),
-                      GET_ROOM_NAME(get_ch_in_room(d->character)),
-                      GET_NAME(d->character),
-                      GET_VEH_NAME(d->character->in_veh));
-            else
-              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-20s - [%6ld] %s^n (in %s)\r\n",
-                      GET_CHAR_NAME(i),
-                      GET_ROOM_VNUM(get_ch_in_room(d->character)),
-                      GET_ROOM_NAME(get_ch_in_room(d->character)),
-                      GET_VEH_NAME(d->character->in_veh));
+        // Always points to the main body.
+        primary_char = (d->original ? d->original : d->character);
 
-            else
-              if (i->in_veh)
-                snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-20s - [%6ld] %s^n (in %s)\r\n",
-                        GET_CHAR_NAME(i),
-                        GET_ROOM_VNUM(get_ch_in_room(i)),
-                        GET_ROOM_NAME(get_ch_in_room(i)),
-                        GET_VEH_NAME(i->in_veh));
-              else
-                snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-20s - [%6ld] %s^n\r\n",
-                        GET_CHAR_NAME(i),
-                        GET_ROOM_VNUM(get_ch_in_room(i)),
-                        GET_ROOM_NAME(get_ch_in_room(i)));
-        }
-      }
-    page_string(ch->desc, buf, 1);
-  } else
-  {
-    *buf = '\0';
-    for (i = character_list; i; i = i->next)
-      if (CAN_SEE(ch, i) && (i->in_room || i->in_veh) &&
-          isname(arg, GET_KEYWORDS(i))) {
-        found = 1;
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "M%3d. %-25s - [%5ld] %s^n", ++num,
-                GET_NAME(i),
-                GET_ROOM_VNUM(get_ch_in_room(i)),
-                GET_ROOM_NAME(get_ch_in_room(i)));
-        if (i->in_veh) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (in %s^n)\r\n", GET_VEH_NAME(i->in_veh));
-        } else {
+        if (primary_char && CAN_SEE(ch, primary_char) && (primary_char->in_room || primary_char->in_veh)) {
+          // The room of the character they're currently inhabiting- either main body or projection.
+          room = get_ch_in_room(d->character);
+
+          snprintf(buf1, sizeof(buf1), "%-20s - [%6ld] %s^n%s",
+                    GET_CHAR_NAME(primary_char),
+                    GET_ROOM_VNUM(room),
+                    GET_ROOM_NAME(room),
+                    ROOM_FLAGGED(room, ROOM_ENCOURAGE_CONGREGATION) ? " (social room)" : ""
+                  );
+
+          if (d->character->in_veh) {
+            snprintf(ENDOF(buf1), sizeof(buf1), " (in vehicle %s)", GET_VEH_NAME(d->character->in_veh));
+          }
+
+          if (d->original) {
+            snprintf(ENDOF(buf1), sizeof(buf1), " (switched as %s)", GET_NAME(d->character));
+          }
+
+          strlcat(buf, buf1, sizeof(buf));
           strlcat(buf, "\r\n", sizeof(buf));
         }
       }
-    found2 = ObjList.PrintList(ch, arg);
-
-    if (!found && !found2)
-      send_to_char("Couldn't find any such thing.\r\n", ch);
-    else
-      page_string(ch->desc, buf, 1);
+    page_string(ch->desc, buf, 1);
+    return;
   }
+
+  // Location version of the command (where <keyword>)
+  *buf = '\0';
+  for (struct char_data *i = character_list; i; i = i->next)
+    if (CAN_SEE(ch, i) && (i->in_room || i->in_veh) &&
+        isname(arg, GET_KEYWORDS(i))) {
+      found = 1;
+      room = get_ch_in_room(i);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "M%3d. %-25s - [%5ld] %s^n", ++num,
+                GET_NAME(i),
+                GET_ROOM_VNUM(room),
+                GET_ROOM_NAME(room)
+              );
+      if (i->in_veh) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (in %s^n)\r\n", GET_VEH_NAME(i->in_veh));
+      } else {
+        strlcat(buf, "\r\n", sizeof(buf));
+      }
+    }
+  found2 = ObjList.PrintList(ch, arg);
+
+  if (!found && !found2)
+    send_to_char("Couldn't find any such thing.\r\n", ch);
+  else
+    page_string(ch->desc, buf, 1);
 }
 
 ACMD(do_where)

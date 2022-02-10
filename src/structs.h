@@ -486,6 +486,7 @@ struct char_special_data
   sh_int last_healed;
   int timer;                  /* Timer for update                     */
   int last_timer;             /* Last timer, which is restored on actions that don't block idle nuyen rewards */
+  int last_emote;             /* Set whenever you emote. Used to check that people in social rooms aren't just hanging out idle and ignoring each other. */
   int actions;
   int coord[3];
 

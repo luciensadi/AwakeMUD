@@ -1249,37 +1249,42 @@ int get_speed(struct veh_data *veh)
   return (speed);
 }
 
-int negotiate(struct char_data *ch, struct char_data *tch, int comp, int basevalue, int mod, bool buy)
+int negotiate(struct char_data *ch, struct char_data *tch, int comp, int basevalue, int mod, bool buy, bool include_metavariant_penalty)
 {
   struct obj_data *bio;
   int cmod = -GET_POWER(ch, ADEPT_KINESICS);
   int tmod = -GET_POWER(tch, ADEPT_KINESICS);
   snprintf(buf3, sizeof(buf3), "ALRIGHT BOIS HERE WE GO. Base global mod is %d. After application of Kinesics bonuses (if any), base modifiers for PC and NPC are %d and %d.", mod, cmod, tmod);
-  if (GET_RACE(ch) != GET_RACE(tch)) {
-    switch (GET_RACE(ch)) {
-      case RACE_HUMAN:
-      case RACE_ELF:
-      case RACE_ORK:
-      case RACE_TROLL:
-      case RACE_DWARF:
-        break;
-      default:
-        cmod += 4;
-        snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), " Metavariant TN penalty +4 for PC.");
-        break;
+
+  if (include_metavariant_penalty) {
+    if (GET_RACE(ch) != GET_RACE(tch)) {
+      switch (GET_RACE(ch)) {
+        case RACE_HUMAN:
+        case RACE_ELF:
+        case RACE_ORK:
+        case RACE_TROLL:
+        case RACE_DWARF:
+          break;
+        default:
+          cmod += 4;
+          snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), " Metavariant TN penalty +4 for PC.");
+          break;
+      }
+      switch (GET_RACE(tch)) {
+        case RACE_HUMAN:
+        case RACE_ELF:
+        case RACE_ORK:
+        case RACE_TROLL:
+        case RACE_DWARF:
+          break;
+        default:
+          tmod += 4;
+          snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), " Metavariant TN penalty +4 for NPC.");
+          break;
+      }
     }
-    switch (GET_RACE(tch)) {
-      case RACE_HUMAN:
-      case RACE_ELF:
-      case RACE_ORK:
-      case RACE_TROLL:
-      case RACE_DWARF:
-        break;
-      default:
-        tmod += 4;
-        snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), " Metavariant TN penalty +4 for NPC.");
-        break;
-    }
+  } else {
+    snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), " Skipping any potential metavariant penalties.");
   }
 
   int chtn = GET_INT(tch)+mod+cmod;
@@ -1325,8 +1330,8 @@ int negotiate(struct char_data *ch, struct char_data *tch, int comp, int baseval
     act("Getting additional skill for NPC...", FALSE, tch, NULL, NULL, TO_ROLLS);
     tskill = get_skill(tch, comp, tchtn);
 
-    int ch_delta = success_test(GET_SKILL(ch, comp), chtn) / 2;
-    int tch_delta = success_test(GET_SKILL(tch, comp), tchtn) / 2;
+    int ch_delta = success_test(cskill, chtn) / 2;
+    int tch_delta = success_test(tskill, tchtn) / 2;
 
     chnego += ch_delta;
     tchnego += tch_delta;

@@ -63,7 +63,7 @@ char *  decapitalize_a_an(const char *source);
 char *  string_to_uppercase(const char *source);
 char *  string_to_lowercase(const char *source);
 int     get_speed(struct veh_data *veh);
-int     negotiate(struct char_data *ch, struct char_data *tch, int comp, int basevalue, int mod, bool buy);
+int     negotiate(struct char_data *ch, struct char_data *tch, int comp, int basevalue, int mod, bool buy, bool include_metavariant_penalty=1);
 float   gen_size(int race, bool height, int size, int sex);
 int     get_skill(struct char_data *ch, int skill, int &target);
 void    add_follower(struct char_data *ch, struct char_data *leader);

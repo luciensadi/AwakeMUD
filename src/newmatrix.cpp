@@ -2422,17 +2422,17 @@ void matrix_update()
     if (time_info.hours == 0) {
       if (!host.type && !host.found && !host.payreset) {
         switch (host.colour) {
-        case 0:
+        case HOST_SECURITY_BLUE:
           host.found = number(1, 6) - 1;
           break;
-        case 1:
+        case HOST_SECURITY_GREEN:
           host.found = number(1, 6) + number(1, 6) - 2;
           break;
-        case 2:
+        case HOST_SECURITY_ORANGE:
           host.found = number(1, 6) + number(1, 6);
           break;
-        case 3:
-        case 4:
+        case HOST_SECURITY_RED:
+        case HOST_SECURITY_BLACK:
           host.found = number(1, 6) + number(1, 6) + 2;
           break;
         }
