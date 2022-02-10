@@ -1714,10 +1714,10 @@ const char *intrusion[] =
 
 int host_subsystem_acceptable_ratings[][2] =
   {
-    {8, 10},  // These not-assigned ratings are the same as the easy ones.
     {8, 10},  // Easy
     {10, 15}, // Average
-    {13, 18}  // Hard
+    {13, 18}, // Hard
+    {-1, -1}  // Error case
   };
 
 const char *alerts[] =

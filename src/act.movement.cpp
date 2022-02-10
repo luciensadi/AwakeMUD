@@ -1193,14 +1193,22 @@ int ok_pick(struct char_data *ch, int keynum, int pickproof, int scmd, int lock_
       return 0;
     } else {
       WAIT_STATE(ch, PULSE_VIOLENCE);
+
+      // Require a kit.
       if (!has_kit(ch, TYPE_ELECTRONIC)) {
         send_to_char("You need an electronic kit to bypass electronic locks.\r\n", ch);
         return 0;
       }
+
+      // Don't allow bypassing pickproof doors.
+      if (pickproof) {
+        send_to_char("This lock's far too well shielded- it doesn't look like you'll ever be able to bypass it.\r\n", ch);
+        return 0;
+      }
+
       int skill = get_skill(ch, SKILL_ELECTRONICS, lock_level);
-      if (pickproof)
-        send_to_char("You can't seem to bypass the electronic lock.\r\n", ch);
-      else if (success_test(skill, lock_level) < 1) {
+
+      if (success_test(skill, lock_level) < 1) {
         act("$n attempts to bypass the electronic lock.", TRUE, ch, 0, 0, TO_ROOM);
         send_to_char("You fail to bypass the electronic lock.\r\n", ch);
       } else
