@@ -3505,10 +3505,23 @@ ACMD(do_learn)
         }
       }
   }
-  if (success_test(skill, force * 2) < 1) {
+
+  // Roll to see if you succeed.
+  int successes = success_test(skill, force * 2);
+  if (successes == 0) {
+    // Standard failure.
     send_to_char("You can't get your head around how to cast that spell.\r\n", ch);
+    WAIT_STATE(ch, FAILED_SPELL_LEARNING_WAIT_STATE);
+    return;
+  } else if (successes < 0) {
+    // Botched it!
+    send_to_char("You attempt to form mana into the proper shape to practice the spell, but it feeds back and lashes out at your psyche.\r\n", ch);
+    damage(ch, ch, 1, TYPE_SUFFERING, MENTAL);
+    WAIT_STATE(ch, FAILED_SPELL_LEARNING_WAIT_STATE * 3);
     return;
   }
+
+  // Success! Learn the spell.
   if (spell) {
     struct spell_data *temp;
     REMOVE_FROM_LIST(spell, GET_SPELLS(ch), next);
