@@ -4891,6 +4891,7 @@ void perform_violence(void)
         // Set the dice pool to be the character's quickness.
         int quickness = GET_QUI(ch);
         // Extended foot anchors suck for running.
+
         bool footanchor = FALSE;
 
         // Visibility penalty for defender, it's hard to avoid someone you can't see.
@@ -4907,7 +4908,6 @@ void perform_violence(void)
             break;
           case RACE_DWARF:
           case RACE_MENEHUNE:
-          case RACE_KOBOROKURU:
           case RACE_GNOME:
             target++;
             break;
@@ -4920,7 +4920,6 @@ void perform_violence(void)
             break;
           case RACE_DWARF:
           case RACE_MENEHUNE:
-          case RACE_KOBOROKURU:
           case RACE_GNOME:
             target--;
             break;
