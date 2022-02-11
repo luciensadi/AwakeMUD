@@ -7,6 +7,7 @@
 #include "newdb.h"
 #include "lexicons.h"
 #include "newecho.h"
+#include "db.h"
 
 char mutable_echo_string[MAX_STRING_LENGTH];
 char tag_check_string[MAX_STRING_LENGTH];

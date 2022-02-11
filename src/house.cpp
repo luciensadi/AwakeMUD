@@ -718,7 +718,8 @@ SPECIAL(landlord_spec)
     }
     room_record = find_room(arg, lord->rooms, recep);
     if (!room_record) {
-      do_say(recep, "Which room is that?", 0, 0);
+      // this is already handled in find_room
+      // do_say(recep, "Which room is that?", 0, 0);
       return TRUE;
     } else if (room_record->owner) {
       do_say(recep, "Sorry, I'm afraid that room is already taken.", 0, 0);

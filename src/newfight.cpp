@@ -388,6 +388,7 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
   struct combat_data *def = &defender_data;
 
   char rbuf[MAX_STRING_LENGTH];
+  memset(rbuf, 0, sizeof(rbuf));
 
   // Short-circuit: If you're wielding an activated Dominator, you don't care about all these pesky rules.
   if (att->weapon && GET_OBJ_SPEC(att->weapon) == weapon_dominator) {

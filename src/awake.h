@@ -693,6 +693,8 @@ enum {
 #define SPELL_SPLASH    65
 #define MAX_SPELLS    66
 
+#define SPELL_DESIGN_FAILED_CODE -3
+
 #define META_ANCHORING    0
 #define META_CENTERING    1
 #define META_CLEANSING    2

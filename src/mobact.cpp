@@ -794,7 +794,10 @@ void send_mob_aggression_warnings(struct char_data *pc, struct char_data *mob) {
   if (pc->in_room == mob->in_room)
     pc_tn = 2;
 
+  strlcpy(buf, "send_mob_aggression_warnings rbuf: ", sizeof(buf));
   pc_tn += modify_target_rbuf(pc, buf, sizeof(buf));
+  act(buf, FALSE, pc, NULL, NULL, TO_ROLLS);
+
   int pc_dice = GET_INT(pc) + GET_POWER(pc, ADEPT_IMPROVED_PERCEPT);
   int pc_percept_successes = success_test(pc_dice, pc_tn);
 

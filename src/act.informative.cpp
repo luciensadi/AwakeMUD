@@ -3080,37 +3080,49 @@ ACMD(do_examine)
         }
       }
     } else if (GET_OBJ_TYPE(tmp_object) == ITEM_MAGIC_TOOL) {
-      switch (GET_OBJ_VAL(tmp_object, 0)) {
+      switch (GET_MAGIC_TOOL_TYPE(tmp_object)) {
         case TYPE_CIRCLE:
-          send_to_char(ch, "It has been dedicated to %s.\r\n", elements[GET_OBJ_VAL(tmp_object, 2)].name);
-          if (GET_OBJ_VAL(tmp_object, 9) && GET_OBJ_VAL(tmp_object, 3) == GET_IDNUM(ch))
-            send_to_char(ch, "It is about %d%% completed.\r\n", (int)(((float)((GET_OBJ_VAL(tmp_object, 1) * 60) -
-                                                                               GET_OBJ_VAL(tmp_object, 9)) / (float)((GET_OBJ_VAL(tmp_object, 1) != 0 ? GET_OBJ_VAL(tmp_object, 1) : 1) * 60)) * 100));
+          {
+            int initial_build_time = MAX(1, GET_MAGIC_TOOL_RATING(tmp_object) * 60);
+            float completion_percentage = ((float)(initial_build_time - GET_MAGIC_TOOL_BUILD_TIME_LEFT(tmp_object)) / initial_build_time) * 100;
 
+            send_to_char(ch, "It is built around the element of %s.\r\n", elements[GET_MAGIC_TOOL_TOTEM_OR_ELEMENT(tmp_object)].name);
+
+            if (GET_MAGIC_TOOL_BUILD_TIME_LEFT(tmp_object) && GET_MAGIC_TOOL_OWNER(tmp_object) == GET_IDNUM(ch)) {
+              send_to_char(ch, "It looks like you've completed around %.02f%% of it.\r\n", completion_percentage);
+            }
+          }
           break;
         case TYPE_LODGE:
-          send_to_char(ch, "It has been dedicated to %s.\r\n", totem_types[GET_OBJ_VAL(tmp_object, 2)]);
-          if (GET_OBJ_VAL(tmp_object, 9) && GET_OBJ_VAL(tmp_object, 3) == GET_IDNUM(ch))
-            send_to_char(ch, "It is about %d%% completed.\r\n", (int)(((float)((GET_OBJ_VAL(tmp_object, 1) * 300) -
-                                                                               GET_OBJ_VAL(tmp_object, 9)) / (float)((GET_OBJ_VAL(tmp_object, 1) != 0 ? GET_OBJ_VAL(tmp_object, 1) : 1) * 300)) * 100));
+          {
+            int initial_build_time = MAX(1, GET_MAGIC_TOOL_RATING(tmp_object) * 300);
+            float completion_percentage = ((float)(initial_build_time - GET_MAGIC_TOOL_BUILD_TIME_LEFT(tmp_object)) / initial_build_time) * 100;
+
+            send_to_char(ch, "It has been dedicated to %s.\r\n", totem_types[GET_MAGIC_TOOL_TOTEM_OR_ELEMENT(tmp_object)]);
+
+            if (GET_MAGIC_TOOL_BUILD_TIME_LEFT(tmp_object) && GET_MAGIC_TOOL_OWNER(tmp_object) == GET_IDNUM(ch)) {
+              send_to_char(ch, "It looks like you've completed around %.02f%% of it.\r\n", completion_percentage);
+            }
+          }
           break;
         case TYPE_SUMMONING:
           send_to_char(ch, "There seems to be about %d nuyen worth.\r\n", GET_OBJ_COST(tmp_object));
           break;
         case TYPE_LIBRARY_CONJURE:
         case TYPE_LIBRARY_SPELL:
-          send_to_char(ch, "It seems to have enough material to be classified as rating %d.\r\n", GET_OBJ_VAL(tmp_object, 1));
+          send_to_char(ch, "It seems to have enough material to be classified as rating %d.\r\n", GET_MAGIC_TOOL_RATING(tmp_object));
           break;
       }
     } else if (GET_OBJ_TYPE(tmp_object) == ITEM_SPELL_FORMULA) {
       if (GET_OBJ_TIMER(tmp_object) < 0) {
         if (GET_OBJ_VAL(tmp_object, 8) == GET_IDNUM(ch)) {
-          int timeleft = GET_OBJ_VAL(tmp_object, 6);
-          if (GET_OBJ_TIMER(tmp_object) == -3)
+          int timeleft = GET_SPELLFORMULA_TIME_LEFT(tmp_object);
+          if (GET_OBJ_TIMER(tmp_object) == SPELL_DESIGN_FAILED_CODE)
             timeleft *= 2;
-          if (GET_OBJ_VAL(tmp_object, 6))
-            send_to_char(ch, "You are about %d%% done.\r\n", (int)(((float)timeleft / (float)GET_OBJ_VAL(tmp_object, 7)) * -100 + 100));
-          else send_to_char("You haven't started designing this spell yet.\r\n", ch);
+          if (GET_SPELLFORMULA_TIME_LEFT(tmp_object))
+            send_to_char(ch, "You are about %d%% done.\r\n", (int)(((float)timeleft / (float)GET_SPELLFORMULA_INITIAL_TIME(tmp_object)) * -100 + 100));
+          else
+            send_to_char("You haven't started designing this spell yet.\r\n", ch);
         } else send_to_char(ch, "It doesn't seem to be completed.\r\n");
       } else if (GET_SKILL(ch, SKILL_SORCERY)) {
         send_to_char(ch, "It is a rating %d spell formula describing %s. It is designed for use by %s mages.\r\n",

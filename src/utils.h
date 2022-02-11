@@ -276,7 +276,7 @@ void    update_pos(struct char_data *victim);
   GET_MOB_VNUM(ch) == 22)
 #define IS_SPIRIT(ch) (IS_NPC(ch) && GET_RACE(ch) == RACE_SPIRIT)
 #define IS_ELEMENTAL(ch) (IS_NPC(ch) && GET_RACE(ch) == RACE_ELEMENTAL)
-#define IS_ASTRAL(ch) (MOB_FLAGGED(ch, MOB_ASTRAL))
+#define IS_ASTRAL(ch) (MOB_FLAGGED(ch, MOB_ASTRAL) || IS_PROJECT(ch))
 #define IS_DUAL(ch)   (MOB_FLAGGED(ch, MOB_DUAL_NATURE) || PLR_FLAGGED(ch, PLR_PERCEIVE) || access_level(ch, LVL_ADMIN))
 #define IS_SENATOR(ch) (access_level((ch), LVL_BUILDER))
 
@@ -891,6 +891,11 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 #define GET_VEHCONTAINER_WEIGHT(cont)             (GET_OBJ_VAL((cont), 11))
 
 // ITEM_MAGIC_TOOL convenience defines
+#define GET_MAGIC_TOOL_TYPE(tool)                 (GET_OBJ_VAL((tool), 0))
+#define GET_MAGIC_TOOL_RATING(tool)               (GET_OBJ_VAL((tool), 1))
+#define GET_MAGIC_TOOL_TOTEM_OR_ELEMENT(tool)     (GET_OBJ_VAL((tool), 2))
+#define GET_MAGIC_TOOL_OWNER(tool)                (GET_OBJ_VAL((tool), 3))
+#define GET_MAGIC_TOOL_BUILD_TIME_LEFT(tool)      (GET_OBJ_VAL((tool), 9))
 
 // ITEM_DOCWAGON convenience defines
 #define GET_DOCWAGON_CONTRACT_GRADE(modulator)    (GET_OBJ_VAL((modulator), 0))
@@ -969,6 +974,10 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 #define GET_SPELLFORMULA_SPELL(formula)           (GET_OBJ_VAL((formula), 1))
 #define GET_SPELLFORMULA_TRADITION(formula)       (GET_OBJ_VAL((formula), 2))
 #define GET_SPELLFORMULA_SUBTYPE(formula)         (GET_OBJ_VAL((formula), 3))
+#define GET_SPELLFORMULA_TIME_LEFT(formula)       (GET_OBJ_VAL((formula), 6))
+#define GET_SPELLFORMULA_INITIAL_TIME(formula)    (GET_OBJ_VAL((formula), 7))
+#define GET_SPELLFORMULA_CREATOR_IDNUM(formula)   (GET_OBJ_VAL((formula), 8))
+#define GET_SPELLFORMULA_CATEGORY(formula)        (GET_OBJ_VAL((formula), 9))
 
 #define SPELL_HAS_SUBTYPE(spell_number)           (spell_number == SPELL_INCATTR || spell_number == SPELL_INCCYATTR || spell_number == SPELL_DECATTR || spell_number == SPELL_DECCYATTR)
 

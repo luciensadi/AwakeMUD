@@ -637,7 +637,7 @@ ACMD(do_build) {
           }
 
           FOR_ITEMS_AROUND_CH(ch, obj) {
-            if (GET_OBJ_TYPE(obj) == ITEM_MAGIC_TOOL && (GET_OBJ_VAL(obj, 0) == TYPE_CIRCLE || GET_OBJ_VAL(obj, 0) == TYPE_LODGE)) {
+            if (GET_OBJ_TYPE(obj) == ITEM_MAGIC_TOOL && (GET_MAGIC_TOOL_TYPE(obj) == TYPE_CIRCLE || GET_MAGIC_TOOL_TYPE(obj) == TYPE_LODGE)) {
               send_to_char("There is already a lodge or a hermetic circle here.\r\n", ch);
               return;
             }
@@ -673,12 +673,12 @@ ACMD(do_build) {
               send_to_char("It has already been completed!\r\n", ch);
           else if (GET_OBJ_VAL(obj, 3) != GET_IDNUM(ch))
               send_to_char("That's not yours!\r\n", ch);
-          else if (GET_OBJ_VAL(obj, 0) == TYPE_LODGE) {
+          else if (GET_MAGIC_TOOL_TYPE(obj) == TYPE_LODGE) {
               AFF_FLAGS(ch).SetBit(AFF_LODGE);
               GET_BUILDING(ch) = obj;
               send_to_char(ch, "You continue working on your lodge.\r\n");
               act("$n continues to build $s lodge.", FALSE, ch, 0, 0, TO_ROOM);
-          } else if (GET_OBJ_VAL(obj, 0) == TYPE_CIRCLE) {
+          } else if (GET_MAGIC_TOOL_TYPE(obj) == TYPE_CIRCLE) {
               AFF_FLAGS(ch).SetBit(AFF_CIRCLE);
               GET_BUILDING(ch) = obj;
               send_to_char(ch, "You continue working on %s.\r\n", GET_OBJ_NAME(obj));
@@ -979,16 +979,13 @@ ACMD(do_progress)
 {
   int amount_left, amount_needed;
 
-  if (AFF_FLAGS(ch).IsSet(AFF_CIRCLE)) {
-    send_to_char(ch, "The hermetic circle you are working on is about %d%% completed.\r\n",
-                       (int)(((float)((GET_OBJ_VAL(ch->char_specials.programming, 1) * 60) -
-                                      GET_OBJ_VAL(ch->char_specials.programming, 9)) / (float)((GET_OBJ_VAL(ch->char_specials.programming, 1) != 0 ? GET_OBJ_VAL(ch->char_specials.programming, 1) : 1) * 60)) * 100));
-    return;
-  }
+  if (AFF_FLAGS(ch).IsSet(AFF_LODGE) || AFF_FLAGS(ch).IsSet(AFF_CIRCLE)) {
+    int initial_build_time = MAX(1, GET_MAGIC_TOOL_RATING(GET_BUILDING(ch)) * (AFF_FLAGS(ch).IsSet(AFF_CIRCLE) ? 60 : 300));
+    float completion_percentage = ((float)(initial_build_time - GET_MAGIC_TOOL_BUILD_TIME_LEFT(GET_BUILDING(ch))) / initial_build_time) * 100;
 
-  if (AFF_FLAGS(ch).IsSet(AFF_LODGE)) {
-    send_to_char(ch, "The lodge you are working on is about %d%% completed.\r\n", (int)(((float)(((GET_OBJ_VAL(ch->char_specials.programming, 1) != 0 ? GET_OBJ_VAL(ch->char_specials.programming, 1) : 1) * 300) -
-                     GET_OBJ_VAL(ch->char_specials.programming, 9)) / (float)(GET_OBJ_VAL(ch->char_specials.programming, 1) * 300)) * 100));
+    if (GET_MAGIC_TOOL_BUILD_TIME_LEFT(GET_BUILDING(ch)) && GET_MAGIC_TOOL_OWNER(GET_BUILDING(ch)) == GET_IDNUM(ch)) {
+      send_to_char(ch, "It looks like you've completed around %.02f%% of your %s.\r\n", completion_percentage, AFF_FLAGS(ch).IsSet(AFF_CIRCLE) ? "hermetic circle" : "lodge");
+    }
     return;
   }
 
@@ -1006,9 +1003,14 @@ ACMD(do_progress)
   }
 
   if (AFF_FLAGS(ch).IsSet(AFF_BONDING)) {
-    send_to_char(ch, "There are %d ticks remaining until you finish bonding %s.\r\n", GET_OBJ_VAL(GET_BUILDING(ch), 9), GET_OBJ_NAME(GET_BUILDING(ch)));
-/*                 (int)(((float)(GET_OBJ_VAL(GET_BUILDING(ch), 1) - GET_OBJ_VAL(GET_BUILDING(ch), 9)) / (GET_OBJ_VAL(GET_BUILDING(ch), 1) != 0 ? GET_OBJ_VAL(GET_BUILDING(ch), 1) : 1) * 60)*100),
-                 GET_OBJ_NAME(GET_BUILDING(ch))); */
+    if (GET_OBJ_TYPE(GET_BUILDING(ch)) == ITEM_WEAPON) {
+      int initial_bond_time = MAX(1, GET_WEAPON_FOCUS_RATING(GET_BUILDING(ch)) * 60);
+      float completion_percentage = ((float)(initial_bond_time - GET_WEAPON_FOCUS_BOND_STATUS(GET_BUILDING(ch))) / initial_bond_time) * 100;
+
+      send_to_char(ch, "You are about %.02f%% of the way through bonding %s.\r\n", completion_percentage, GET_OBJ_NAME(GET_BUILDING(ch)));
+    } else {
+      send_to_char(ch, "There are %d ticks remaining until you finish bonding %s.\r\n", GET_OBJ_VAL(GET_BUILDING(ch), 9), GET_OBJ_NAME(GET_BUILDING(ch)));
+    }
     return;
   }
 
@@ -1048,10 +1050,10 @@ ACMD(do_progress)
   }
 
   if (AFF_FLAGS(ch).IsSet(AFF_SPELLDESIGN)) {
-    int timeleft = GET_OBJ_VAL(ch->char_specials.programming, 6);
-    if (GET_OBJ_TIMER(ch->char_specials.programming) == -3)
+    int timeleft = GET_SPELLFORMULA_TIME_LEFT(ch->char_specials.programming);
+    if (GET_OBJ_TIMER(ch->char_specials.programming) == SPELL_DESIGN_FAILED_CODE)
       timeleft *= 2;
-    send_to_char(ch, "You are about %d%% done designing %s.\r\n", (int)(((float)timeleft / (float)GET_OBJ_VAL(ch->char_specials.programming, 7)) *-100 + 100), GET_OBJ_NAME(ch->char_specials.programming));
+    send_to_char(ch, "You are about %d%% done designing %s.\r\n", (int)(((float)timeleft / (float)GET_SPELLFORMULA_INITIAL_TIME(ch->char_specials.programming)) *-100 + 100), GET_OBJ_NAME(ch->char_specials.programming));
     return;
   }
 

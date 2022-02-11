@@ -15,8 +15,6 @@
 #include "config.h"
 
 #define POWER(name) void (name)(struct char_data *ch, struct char_data *spirit, struct spirit_data *spiritdata, char *arg)
-#define SPELLCASTING 0
-#define CONJURING 1
 #define FAILED_CAST "You fail to bind the mana to your will.\r\n"
 
 //  set_fighting(ch, vict); set_fighting(vict, ch);
@@ -778,21 +776,70 @@ void magic_perception(struct char_data *ch, int force, int spell)
   }
 }
 
-bool spell_drain(struct char_data *ch, int type, int force, int damage)
-{
+bool spell_drain(struct char_data *ch, int spell_idx, int force, int damage) {
+  /*
+    deals drain damage to a caster
+
+    params:
+      ch: the character who's soaking the drain
+      type: the index of the spell that's being cast (SPELL_MANABOLT etc)
+      force: the force it's cast at
+      damage: the damage code (1=Light, etc)
+
+    returns TRUE on ch's death, FALSE otherwise
+  */
   char buf[MAX_STRING_LENGTH];
-  int target = (int)(force / 2), success = 0;
-  target += spells[type].drainpower;
+
+  int target = (int)(force / 2);
+  int success = 0;
+
+  char rbuf[MAX_STRING_LENGTH];
+  strlcpy(rbuf, "Spell drain modify_target results: ", sizeof(rbuf));
+  target += modify_target_rbuf(ch, ENDOF(rbuf), sizeof(rbuf));
+  act(rbuf, FALSE, ch, NULL, NULL, TO_ROLLS);
+
+  // Target then adds the drain modifier of the spell.
+  target += spells[spell_idx].drainpower;
+
+  // If we're in a non-powersite background aura room, add half its rating to the TN.
   if (GET_BACKGROUND_AURA(get_ch_in_room(ch)) != AURA_POWERSITE)
     target += (GET_BACKGROUND_COUNT(get_ch_in_room(ch)) / 2);
-  if (!damage)
-    damage = spells[type].draindamage;
-  else if (type)
-    damage += spells[type].draindamage + 3;
-  magic_perception(ch, force, type);
-  snprintf(buf, sizeof(buf), "Drain Test: F:%d%s TN:%d Dice: %d", force, wound_name[damage], target, GET_WIL(ch) + GET_DRAIN(ch));
-  success = success_test(GET_WIL(ch) + GET_DRAIN(ch), target);
+
+  // Set our drain damage values.
+  {
+    // If this spell has no damage value set, it's not a combat spell-- this will be stuff like Combat Sense with drain code S=3.
+    if (!damage) {
+      damage = spells[spell_idx].draindamage;
+    }
+
+    // Otherwise, if the spell has a damage value set, then we tack on the draindamage value in addition to this.
+    else if (spell_idx) {
+      damage += UNPACK_VARIABLE_DRAIN_DAMAGE(spells[spell_idx].draindamage);
+    }
+
+    // Otherwise, we got a spell with both no spell idx and no damage code. Log it.
+    else {
+      snprintf(buf, sizeof(buf), "SYSERR: Received invalid spell index %d to spell_drain().", spell_idx);
+      mudlog(buf, ch, LOG_SYSLOG, TRUE);
+    }
+  }
+
+  // Allow others to see that you're casting.
+  magic_perception(ch, force, spell_idx);
+
+  // Write our rolls info.
+  int dice = GET_WIL(ch) + GET_DRAIN(ch);
+  success = success_test(dice, target);
   damage = convert_damage(stage(-success, damage));
+  snprintf(buf, sizeof(buf), "Drain Test: F:%d%s TN:%d Dice: %d. Rolled %d successes, damage before resists is now %s (%d).",
+           force,
+           wound_name[damage],
+           target,
+           dice,
+           success,
+           wound_name[MIN(DEADLY, MAX(0, damage))],
+           damage
+          );
   act(buf, FALSE, ch, NULL, NULL, TO_ROLLS);
 
   if (damage <= 0)
@@ -849,7 +896,7 @@ bool spell_drain(struct char_data *ch, int type, int force, int damage)
     GET_MENTAL(ch) = 0;
   }
 
-  snprintf(buf, sizeof(buf), "Successes: %d  Damage: %d", success, damage);
+  snprintf(buf, sizeof(buf), "After resists, damage is %s (%d).", wound_name[MIN(DEADLY, MAX(0, damage))], damage);
   act(buf, FALSE, ch, NULL, NULL, TO_ROLLS);
 
   update_pos(ch);
@@ -1148,7 +1195,11 @@ void cast_combat_spell(struct char_data *ch, int spell, int force, char *arg)
   }
 
   // Pre-calculate the modifiers to the target (standard modify_target(), altered by spell_bonus()).
-  int target_modifiers = modify_target(ch);
+  char rbuf[MAX_STRING_LENGTH];
+  strlcpy(rbuf, "cast_combat_spell modify_target_rbuf: ", sizeof(rbuf));
+  int target_modifiers = modify_target_rbuf(ch, rbuf, sizeof(rbuf));
+  act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
+
   int skill = GET_SKILL(ch, SKILL_SORCERY) + MIN(GET_SKILL(ch, SKILL_SORCERY), GET_CASTING(ch));
   int success = 0;
   spell_bonus(ch, spell, skill, target_modifiers);
@@ -1293,7 +1344,11 @@ void cast_detection_spell(struct char_data *ch, int spell, int force, char *arg,
     return;
 
   // Pre-calculate the modifiers to the target (standard modify_target(), altered by spell_bonus()).
-  int target_modifiers = modify_target(ch);
+  char rbuf[MAX_STRING_LENGTH];
+  strlcpy(rbuf, "cast_detection_spell modify_target_rbuf: ", sizeof(rbuf));
+  int target_modifiers = modify_target_rbuf(ch, rbuf, sizeof(rbuf));
+  act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
+
   int skill = GET_SKILL(ch, SKILL_SORCERY) + MIN(GET_SKILL(ch, SKILL_SORCERY), GET_CASTING(ch));
   int success = 0;
   spell_bonus(ch, spell, skill, target_modifiers);
@@ -1350,7 +1405,11 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
     return;
 
   // Pre-calculate the modifiers to the target (standard modify_target(), altered by spell_bonus()).
-  int target_modifiers = modify_target(ch);
+  char rbuf[MAX_STRING_LENGTH];
+  strlcpy(rbuf, "cast_health_spell modify_target_rbuf: ", sizeof(rbuf));
+  int target_modifiers = modify_target_rbuf(ch, rbuf, sizeof(rbuf));
+  act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
+
   int skill = GET_SKILL(ch, SKILL_SORCERY) + MIN(GET_SKILL(ch, SKILL_SORCERY), GET_CASTING(ch));
   int success = 0;
   int drain = LIGHT;
@@ -1586,7 +1645,11 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       return;
 
     // Pre-calculate the modifiers to the target (standard modify_target(), altered by spell_bonus()).
-    int target_modifiers = modify_target(ch);
+    char rbuf[MAX_STRING_LENGTH];
+    strlcpy(rbuf, "cast_illusion_spell modify_target_rbuf: ", sizeof(rbuf));
+    int target_modifiers = modify_target_rbuf(ch, rbuf, sizeof(rbuf));
+    act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
+
     int skill = GET_SKILL(ch, SKILL_SORCERY) + MIN(GET_SKILL(ch, SKILL_SORCERY), GET_CASTING(ch));
     int success = 0;
     spell_bonus(ch, spell, skill, target_modifiers);
@@ -1723,7 +1786,11 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
     return;
 
   // Pre-calculate the modifiers to the target (standard modify_target(), altered by spell_bonus()).
-  int target_modifiers = modify_target(ch);
+  char rbuf[MAX_STRING_LENGTH];
+  strlcpy(rbuf, "cast_manipulation_spell modify_target_rbuf: ", sizeof(rbuf));
+  int target_modifiers = modify_target_rbuf(ch, rbuf, sizeof(rbuf));
+  act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
+
   int success = 0;
   int skill;
   if (IS_ELEMENTAL(ch) || IS_SPIRIT(ch)) {
@@ -2494,14 +2561,14 @@ void circle_build(struct char_data *ch, char *type, int force)
   }
   lose_nuyen(ch, cost, NUYEN_OUTFLOW_LODGE_AND_CIRCLE);
   struct obj_data *obj = read_object(OBJ_HERMETIC_CIRCLE, VIRTUAL);
-  GET_OBJ_VAL(obj, 1) = force;
-  GET_OBJ_VAL(obj, 2) = element;
-  GET_OBJ_VAL(obj, 3) = GET_IDNUM(ch);
+  GET_MAGIC_TOOL_RATING(obj) = force;
+  GET_MAGIC_TOOL_TOTEM_OR_ELEMENT(obj) = element;
+  GET_MAGIC_TOOL_OWNER(obj) = GET_IDNUM(ch);
   if (GET_LEVEL(ch) > 1) {
     send_to_char("You use your staff powers to greatly accelerate the artistic process.\r\n", ch);
-    GET_OBJ_VAL(obj, 9) = 1;
+    GET_MAGIC_TOOL_BUILD_TIME_LEFT(obj) = 1;
   } else
-    GET_OBJ_VAL(obj, 9) = force * 60;
+    GET_MAGIC_TOOL_BUILD_TIME_LEFT(obj) = force * 60;
   AFF_FLAGS(ch).SetBit(AFF_CIRCLE);
   GET_BUILDING(ch) = obj;
   obj_to_room(obj, ch->in_room);
@@ -2534,14 +2601,14 @@ void lodge_build(struct char_data *ch, int force)
   }
   lose_nuyen(ch, cost, NUYEN_OUTFLOW_LODGE_AND_CIRCLE);
   struct obj_data *obj = read_object(OBJ_SHAMANIC_LODGE, VIRTUAL);
-  GET_OBJ_VAL(obj, 1) = force;
-  GET_OBJ_VAL(obj, 2) = GET_TOTEM(ch);
-  GET_OBJ_VAL(obj, 3) = GET_IDNUM(ch);
+  GET_MAGIC_TOOL_RATING(obj) = force;
+  GET_MAGIC_TOOL_TOTEM_OR_ELEMENT(obj) = GET_TOTEM(ch);
+  GET_MAGIC_TOOL_OWNER(obj) = GET_IDNUM(ch);
   if (GET_LEVEL(ch) > 1) {
     send_to_char("You use your staff powers to greatly accelerate the construction process.\r\n", ch);
-    GET_OBJ_VAL(obj, 9) = 1;
+    GET_MAGIC_TOOL_BUILD_TIME_LEFT(obj) = 1;
   } else
-    GET_OBJ_VAL(obj, 9) = force * 60 * 5;
+    GET_MAGIC_TOOL_BUILD_TIME_LEFT(obj) = force * 60 * 5;
   AFF_FLAGS(ch).SetBit(AFF_LODGE);
   GET_BUILDING(ch) = obj;
   obj_to_room(obj, ch->in_room);
@@ -2691,8 +2758,9 @@ ACMD(do_contest)
       break;
     }
 
-  int chsuc = success_test(chskill, GET_LEVEL(mob));
-  int casuc = success_test(caskill, GET_LEVEL(mob));
+  int tn = GET_LEVEL(mob) + modify_target(ch);
+  int chsuc = success_test(chskill, tn);
+  int casuc = success_test(caskill, tn);
   struct spirit_data *temp;
   if (chsuc < 1 && casuc < 1) {
     for (struct spirit_data *sdata = GET_SPIRIT(caster); sdata; sdata = sdata->next)
@@ -3253,7 +3321,8 @@ ACMD(do_conjure)
     }
 
     // Calculate the skill and TN used.
-    int skill = GET_SKILL(ch, SKILL_CONJURING), target = force;
+    int skill = GET_SKILL(ch, SKILL_CONJURING);
+    int target = force;
     if (ch->in_room->background[CURRENT_BACKGROUND_TYPE] == AURA_POWERSITE)
       skill += GET_BACKGROUND_COUNT(ch->in_room);
     else
@@ -3432,7 +3501,7 @@ ACMD(do_learn)
   }
   if (GET_ASPECT(ch) == ASPECT_SHAMANIST) {
     int skill = 0, target = 0;
-    totem_bonus(ch, 0, GET_OBJ_VAL(obj, 1), target, skill);
+    totem_bonus(ch, SPELLCASTING, GET_SPELLFORMULA_SPELL(obj), target, skill);
     if (skill < 1) {
       send_to_char(ch, "%s forbids you from learning this spell.\r\n", totem_types[GET_TOTEM(ch)]);
       return;
@@ -3468,7 +3537,7 @@ ACMD(do_learn)
   int skill = GET_SKILL(ch, SKILL_SORCERY);
   if (GET_TRADITION(ch) == TRAD_SHAMANIC) {
     int target = 0;
-    totem_bonus(ch, 0, GET_OBJ_VAL(obj, 1), target, skill);
+    totem_bonus(ch, SPELLCASTING, GET_SPELLFORMULA_SPELL(obj), target, skill);
   } else if (GET_TRADITION(ch) == TRAD_HERMETIC && GET_SPIRIT(ch)) {
     for (struct spirit_data *spir = GET_SPIRIT(ch); spir && skill == GET_SKILL(ch, SKILL_SORCERY); spir = spir->next)
       if (spir->called) {
@@ -3507,7 +3576,7 @@ ACMD(do_learn)
   }
 
   // Roll to see if you succeed.
-  int successes = success_test(skill, force * 2);
+  int successes = success_test(skill, force * 2 + modify_target(ch));
   if (successes == 0) {
     // Standard failure.
     send_to_char("You can't get your head around how to cast that spell.\r\n", ch);
@@ -3845,7 +3914,7 @@ POWER(spirit_accident)
     for (struct char_data *mob = spirit->in_room->people; mob; mob = mob->next)
       if (IS_NPC(mob) && (GET_RACE(mob) == RACE_SPIRIT || GET_RACE(mob) == RACE_ELEMENTAL) &&
           MOB_FLAGGED(mob, MOB_SPIRITGUARD)) {
-        success = -1;
+        success = 10;
         break;
       }
     if (success < 1) {
@@ -4570,7 +4639,7 @@ ACMD(do_track)
   skip_spaces(&argument);
   if (!*argument) {
     if (HUNTING(ch->desc->original)) {
-      success = success_test(MAX(GET_INT(ch), GET_MAG(ch)/100), HOURS_SINCE_TRACK(ch->desc->original));
+      success = success_test(MAX(GET_INT(ch), GET_MAG(ch)/100), HOURS_SINCE_TRACK(ch->desc->original) + modify_target(ch));
       if (success > 0) {
         AFF_FLAGS(ch->desc->original).SetBit(AFF_TRACKING);
         send_to_char("You pick up the trail and continue tracking the astral signature.\r\n", ch);
@@ -4646,7 +4715,7 @@ ACMD(do_track)
         break;
       }
   }
-  success = success_test(GET_INT(ch), 4);
+  success = success_test(GET_INT(ch), 4 + modify_target(ch));
   if (vict && success > 0) {
     if (get_ch_in_room(vict) == get_ch_in_room(ch)) {
       send_to_char("They're right here!\r\n", ch);
@@ -4710,7 +4779,7 @@ ACMD(do_dispell)
     send_to_char("They don't have that many spells cast on them.\r\n", ch);
     return;
   }
-  int success = success_test(GET_SKILL(ch, SKILL_SORCERY) + MIN(GET_SKILL(ch, SKILL_SORCERY), GET_CASTING(ch)), sust->force);
+  int success = success_test(GET_SKILL(ch, SKILL_SORCERY) + MIN(GET_SKILL(ch, SKILL_SORCERY), GET_CASTING(ch)), sust->force + modify_target(ch));
   int type = sust->spell, force = sust->force;
   snprintf(buf, sizeof(buf), "Dispell $N's %s (force %d) using skill %d vs TN %d: %d successes.",
           spells[sust->spell].name,
@@ -4772,7 +4841,7 @@ ACMD(do_heal)
       send_to_char(ch, "'%s' is not a valid damage level, please choose between Light, Moderate, Serious and Deadly.\r\n", capitalize(buf));
       return;
     }
-    int success = success_test(GET_MAG(ch) / 100, 10 - (GET_ESS(vict) / 100));
+    int success = success_test(GET_MAG(ch) / 100, 10 - (GET_ESS(vict) / 100) + modify_target(ch));
     if (success < 1) {
       send_to_char("You fail to channel your energy into that pursuit.\r\n", ch);
       return;
@@ -4811,7 +4880,7 @@ ACMD(do_relieve)
   else if (GET_POS(vict) > POS_LYING)
     send_to_char("They have to be lying down to receive your help.\r\n", ch);
   else {
-    int success = success_test(GET_MAG(ch) / 100, 10 - (GET_ESS(vict) / 100));
+    int success = success_test(GET_MAG(ch) / 100, 10 - (GET_ESS(vict) / 100) + modify_target(ch));
     if (success < 1) {
       send_to_char("You fail to channel your energy into that pursuit.\r\n", ch);
       return;
@@ -5210,7 +5279,7 @@ ACMD(do_cleanse)
   else if (GET_BACKGROUND_AURA(ch->in_room) == AURA_POWERSITE)
     send_to_char("You cannot cleanse a power site.\r\n", ch);
   else {
-    int success = success_test(GET_SKILL(ch, SKILL_SORCERY), GET_BACKGROUND_COUNT(ch->in_room) * 2), background = GET_BACKGROUND_COUNT(ch->in_room);
+    int success = success_test(GET_SKILL(ch, SKILL_SORCERY), GET_BACKGROUND_COUNT(ch->in_room) * 2 + modify_target(ch)), background = GET_BACKGROUND_COUNT(ch->in_room);
     success /= 2;
     if (success <= 0)
       send_to_char("You fail to reduce the astral disturbances in this area.\r\n", ch);
