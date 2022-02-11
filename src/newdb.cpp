@@ -1594,9 +1594,10 @@ vnum_t get_highest_idnum_in_use() {
     "pfiles_spells",
     "pfiles_spirits",
     "pfiles_worn",
+    "you-deleted-something-and-didn't-change-the-table-length-dumbass" // must be last for obvious reasons
   };
 
-  #define NUM_IDNUM_TABLES 21
+  #define NUM_IDNUM_TABLES 20
 
   vnum_t highest_pfiles_idnum = get_one_number_from_query("SELECT idnum FROM pfiles ORDER BY idnum DESC LIMIT 1;");
 

@@ -428,7 +428,9 @@ void mobact_change_firemode(struct char_data *ch) {
 
   // Send a message to the room, but only if the weapon has received a new fire selection mode and has more than one available.
   if (prev_value != GET_WEAPON_FIREMODE(weapon) && has_multiple_modes) {
-    act("$n flicks the fire selector switch on $p.", TRUE, ch, weapon, 0, TO_ROOM);
+    if (!MOB_FLAGGED(ch, MOB_INANIMATE))
+      act("$n flicks the fire selector switch on $p.", TRUE, ch, weapon, 0, TO_ROOM);
+      
     #ifdef MOBACT_DEBUG
       snprintf(buf3, sizeof(buf3), "Changed firemode to %s. I have recoil comp %d standing + %d prone.", fire_mode[GET_WEAPON_FIREMODE(weapon)], standing_recoil_comp, prone_recoil_comp);
       do_say(ch, buf3, 0, 0);
