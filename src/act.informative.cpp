@@ -4717,13 +4717,14 @@ extern void nonsensical_reply(struct char_data *ch, const char *arg, const char 
 
 void perform_mortal_where(struct char_data * ch, char *arg)
 {
+  // array slot 0 is total PCs, array slot 1 is active PCs
   std::unordered_map<vnum_t, int> occupied_rooms = {};
   std::unordered_map<vnum_t, int>::iterator room_iterator;
 
   for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
     if (!d->connected) {
       struct char_data *i = (d->original ? d->original : d->character);
-      if (i && i->in_room && ROOM_FLAGGED(i->in_room, ROOM_ENCOURAGE_CONGREGATION) && CAN_SEE(ch, i) && i->char_specials.last_emote <= LAST_EMOTE_REQUIREMENT_FOR_CONGREGATION_BONUS) {
+      if (i && i->in_room && ROOM_FLAGGED(i->in_room, ROOM_ENCOURAGE_CONGREGATION) && CAN_SEE(ch, i)) {
         if ((room_iterator = occupied_rooms.find(GET_ROOM_VNUM(i->in_room))) != occupied_rooms.end()) {
           ((*room_iterator).second)++;
         } else {
