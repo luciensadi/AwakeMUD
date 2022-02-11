@@ -1173,7 +1173,7 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
     obj = obj->contains;
   }
 
-  if (!shop_table[shop_nr].buytypes.IsSet(GET_OBJ_TYPE(obj)) || IS_OBJ_STAT(obj, ITEM_NOSELL) || GET_OBJ_COST(obj) < 1)
+  if (!shop_table[shop_nr].buytypes.IsSet(GET_OBJ_TYPE(obj)) || IS_OBJ_STAT(obj, ITEM_NOSELL) || IS_OBJ_STAT(obj, ITEM_KEPT) || GET_OBJ_COST(obj) < 1)
   {
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %s", shop_table[shop_nr].doesnt_buy);
     do_say(keeper, buf, cmd_say, SCMD_SAYTO);
@@ -1517,7 +1517,7 @@ void shop_value(char *arg, struct char_data *ch, struct char_data *keeper, vnum_
     strcpy(buf, GET_CHAR_NAME(ch));
   }
 
-  if (!shop_table[shop_nr].buytypes.IsSet(GET_OBJ_TYPE(obj)) || IS_OBJ_STAT(obj, ITEM_NOSELL))
+  if (!shop_table[shop_nr].buytypes.IsSet(GET_OBJ_TYPE(obj)) || IS_OBJ_STAT(obj, ITEM_NOSELL) || IS_OBJ_STAT(obj, ITEM_KEPT))
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " I wouldn't buy %s off of you.", GET_OBJ_NAME(obj));
   else
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " I would be able to give you around %d nuyen for %s.", sell_price(obj, shop_nr), GET_OBJ_NAME(obj));
