@@ -430,7 +430,7 @@ void mobact_change_firemode(struct char_data *ch) {
   if (prev_value != GET_WEAPON_FIREMODE(weapon) && has_multiple_modes) {
     if (!MOB_FLAGGED(ch, MOB_INANIMATE))
       act("$n flicks the fire selector switch on $p.", TRUE, ch, weapon, 0, TO_ROOM);
-      
+
     #ifdef MOBACT_DEBUG
       snprintf(buf3, sizeof(buf3), "Changed firemode to %s. I have recoil comp %d standing + %d prone.", fire_mode[GET_WEAPON_FIREMODE(weapon)], standing_recoil_comp, prone_recoil_comp);
       do_say(ch, buf3, 0, 0);
@@ -1375,6 +1375,7 @@ void mobile_activity(void)
     }
 
     // Confirm we have the skills to wield our current weapon, otherwise ditch it.
+#ifdef MOBS_REFUSE_TO_USE_WEAPONS_THAT_THEY_HAVE_NO_SKILL_FOR
     if (GET_EQ(ch, WEAR_WIELD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_WEAPON) {
       char build_err_msg[2000];
 
@@ -1411,6 +1412,7 @@ void mobile_activity(void)
         #endif
       }
     }
+#endif
 
     // Manipulate wielded weapon (reload, set fire mode, etc).
     mobact_change_firemode(ch);
