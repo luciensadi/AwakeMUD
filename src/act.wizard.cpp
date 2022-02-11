@@ -5820,10 +5820,12 @@ bool restring_with_args(struct char_data *ch, char *argument, bool using_sysp) {
     send_to_char("You're not carrying that item.\r\n", ch);
     return FALSE;
   }
-  if (GET_OBJ_TYPE(obj) == ITEM_GUN_ACCESSORY || GET_OBJ_TYPE(obj) == ITEM_MOD) {
-    send_to_char("Sorry, gun attachments and vehicle mods can't be restrung.\r\n", ch);
+
+  if (GET_OBJ_TYPE(obj) == ITEM_GUN_ACCESSORY || GET_OBJ_TYPE(obj) == ITEM_MOD || GET_OBJ_TYPE(obj) == ITEM_GUN_AMMO) {
+    send_to_char("Sorry, gun attachments, vehicle mods, and ammo containers can't be restrung.\r\n", ch);
     return FALSE;
   }
+
   if (GET_OBJ_TYPE(obj) == ITEM_CLIMBING && GET_OBJ_VAL(obj, 1) == CLIMBING_TYPE_WATER_WINGS) {
     send_to_char("No amount of cosmetic changes could hide the garishness of water wings.\r\n", ch);
     return FALSE;
