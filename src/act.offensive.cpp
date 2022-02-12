@@ -597,9 +597,21 @@ bool passed_flee_success_check(struct char_data *ch) {
 
   if (!can_hurt(ch, FIGHTING(ch), TRUE, 0))
     return TRUE;
+    
+  int racial_flee_modifier = 0; // Satyrs have a x4 run multiplier and smaller races have x2, so we're houseruling a +1/-1 TN here.
+  switch (GET_RACE(ch)) {
+    case RACE_SATYR:
+      racial_flee_modifier--;
+      break;
+    case RACE_DWARF:
+    case RACE_GNOME:
+    case RACE_MENEHUNE:
+      racial_flee_modifier++;
+      break;
+      }
+  return success_test(GET_QUI(ch), (GET_REA(FIGHTING(ch)) + racial_flee_modifier)) > 0;
 
-  return success_test(GET_QUI(ch), GET_QUI(FIGHTING(ch))) > 0;
-}
+  }
 
 ACMD(do_flee)
 {
