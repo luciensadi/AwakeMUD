@@ -5041,13 +5041,29 @@ ACMD(do_subpoint)
 
 ACMD(do_initiate)
 {
-  if (GET_TRADITION(ch) == TRAD_MUNDANE)
+  if (GET_TRADITION(ch) == TRAD_MUNDANE) {
     nonsensical_reply(ch, NULL, "standard");
-  else if (subcmd == SCMD_INITIATE && init_cost(ch, FALSE)) {
+    return;
+  }
+
+  if (subcmd == SCMD_INITIATE && init_cost(ch, FALSE)) {
+    // Enforce grade restrictions. We can't do this init_cost since it's used elsewhere.
+    if ((GET_GRADE(ch) + 1) > INITIATION_CAP) {
+      send_to_char("Congratulations, you've reached the initiation cap! You're not able to advance further.\r\n", ch);
+      return;
+    }
+
+    // Check to see that they can afford it. This sends its own message.
+    if (!init_cost(ch, FALSE)) {
+      return;
+    }
     STATE(ch->desc) = CON_INITIATE;
     PLR_FLAGS(ch).SetBit(PLR_INITIATE);
     disp_init_menu(ch->desc);
-  } else if (subcmd == SCMD_POWERPOINT) {
+    return;
+  }
+
+  if (subcmd == SCMD_POWERPOINT) {
     if (GET_TRADITION(ch) != TRAD_ADEPT) {
       nonsensical_reply(ch, NULL, "standard");
       return;
@@ -5067,6 +5083,7 @@ ACMD(do_initiate)
     GET_PP(ch) += 100;
     ch->points.extrapp++;
     send_to_char(ch, "You have purchased an additional powerpoint.\r\n");
+    return;
   }
 }
 void init_parse(struct descriptor_data *d, char *arg)
