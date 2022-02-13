@@ -411,7 +411,8 @@ enum {
 #define PRF_TOUCH_ME_DADDY               56 /* Allows player cyberdocs to operate on you. Don't @ me. */
 #define PRF_NO_VOID_ON_IDLE              57
 #define PRF_RADLOG                       58
-#define PRF_MAX                          59
+#define PRF_ANONYMOUS_ON_WHERE           59
+#define PRF_MAX                          60
 
 /* log watch */
 
