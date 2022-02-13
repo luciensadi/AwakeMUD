@@ -3135,6 +3135,11 @@ ACMD(do_cast)
     return;
   }
 
+  if (ROOM_FLAGGED(get_ch_in_room(ch), ROOM_NOMAGIC)) {
+    send_to_char("The mana here refuses to heed your call.\r\n", ch);
+    return;
+  }
+
   int force = 0;
   char spell_name[120], tokens[MAX_STRING_LENGTH], *s;
   struct spell_data *spell = GET_SPELLS(ch);
