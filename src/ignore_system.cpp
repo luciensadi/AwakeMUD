@@ -1,17 +1,20 @@
+#include <mysql/mysql.h>
+
 #include "interpreter.h"
 #include "newdb.h"
 #include "comm.h"
+#include "db.h" // for descriptor_list
 #include "ignore_system.h"
 
 extern void stop_follower(struct char_data *ch);
 extern void end_sustained_spell(struct char_data *ch, struct sustain_data *sust);
 
-void send_ignore_usage_to_character(struct char_data *ch) {
-  send_to_char("Syntax: ^Wignore <target character> [mode]^n, where [mode] is any of:\r\n", ch);
-  for (int i = 0; i < NUM_IGNORE_BITS; i++)
-    send_to_char(ch, " - %s\r\n", ignored_bits_in_english[i]);
-  send_to_char("\r\nYou may also view your current ignored list with ^Wignore^n on its own, or view the ignores set on a specific character with ^Wignore <character>^n.\r\n", ch);
-}
+// Prototypes for this file.
+void send_ignore_bits_to_character(struct char_data *ch);
+void send_ignore_usage_to_character(struct char_data *ch);
+void display_characters_ignore_entries(struct char_data *viewer, struct char_data *target);
+
+// TODO: test if ignore works for projections etc
 
 typedef void (IgnoreData::*method_function)(long, const char *, int);
 method_function ignore_function_sorted_by_bit[NUM_IGNORE_BITS] {
@@ -34,28 +37,15 @@ ACMD(do_ignore) {
 
   // ignore with no arguments: display all currently-ignored characters
   if (!*argument) {
-    if (GET_IGNORE_DATA(ch)->ignored_map.empty()) {
-      send_to_char(ch, "You aren't ignoring anyone.\r\n");
-      return;
-    }
-
-    send_to_char("You are ignoring:\r\n", ch);
-
-    for (auto iter : GET_IGNORE_DATA(ch)->ignored_map) {
-      iter.second.PrintBits(ignored_bits_str, sizeof(ignored_bits_str), ignored_bits_in_english, NUM_IGNORE_BITS);
-
-      const char *ignored_name = get_player_name(iter.first);
-      send_to_char(ch, " - ^c%s^n: %s\r\n", ignored_name, ignored_bits_str);
-      delete [] ignored_name;
-    }
-
+    display_characters_ignore_entries(ch, ch);
+    send_ignore_bits_to_character(ch);
     return;
   }
 
   // An argument has been supplied; split it up into its constituent parts.
   char first_argument[MAX_INPUT_LENGTH], second_argument[MAX_INPUT_LENGTH];
   char *remainder = any_one_arg(argument, first_argument);
-  remainder = any_one_arg(argument, second_argument);
+  remainder = any_one_arg(remainder, second_argument);
 
   // We require at least one argument.
   if (!*first_argument) {
@@ -67,6 +57,8 @@ ACMD(do_ignore) {
   long vict_idnum = get_player_id(first_argument);
 
   if (vict_idnum <= 0) {
+    // TODO: Check people in the room and see if we can find a player that matches their description.
+
     send_to_char(ch, "Couldn't find any player named '%s'.\r\n", first_argument);
     return;
   }
@@ -77,36 +69,46 @@ ACMD(do_ignore) {
     return;
   }
 
+  if (vict_idnum == GET_IDNUM(ch)) {
+    send_to_char("You can't ignore yourself. You'll have to live with the demons in your head a while longer.\r\n", ch);
+    return;
+  }
+
   // Without a second argument, we display the ignores for the selected character.
   if (!*second_argument) {
     std::unordered_map<long, Bitfield>::iterator results_iterator;
 
     if ((results_iterator = GET_IGNORE_DATA(ch)->ignored_map.find(vict_idnum)) != GET_IGNORE_DATA(ch)->ignored_map.end()) {
-      results_iterator->second.PrintBits(ignored_bits_str, sizeof(ignored_bits_str), ignored_bits_in_english, NUM_IGNORE_BITS);
-      send_to_char(ch, "You've set the following ignore flags on %s: %s\r\n", capitalize(second_argument), ignored_bits_str);
+      results_iterator->second.PrintBitsColorized(ignored_bits_str, sizeof(ignored_bits_str), ignored_bits_in_english, NUM_IGNORE_BITS, "^c", "^n");
+      send_to_char(ch, "You've set the following ignore flags on %s: %s\r\n", capitalize(first_argument), ignored_bits_str);
     } else {
-      send_to_char(ch, "You're not currently ignoring %s.", capitalize(second_argument));
+      send_to_char(ch, "You're not currently ignoring %s.\r\n", capitalize(first_argument));
     }
 
+    send_ignore_bits_to_character(ch);
     return;
   }
 
-  // We have both a first and second argument, so treat this as 'ignore <name> <mode>.'
+  // We have both a first and second argument, so treat this as 'ignore <name> <mode>.' We do this in a loop so you can specify many bits at once.
 
-  // Parse out the selected bit.
-  int chosen_bit;
-  for (chosen_bit = 0; chosen_bit < NUM_IGNORE_BITS; chosen_bit++) {
-    if (is_abbrev(second_argument, ignored_bits_in_english[chosen_bit]))
-      break;
-  }
-  if (chosen_bit >= NUM_IGNORE_BITS) {
-    send_ignore_usage_to_character(ch);
-    return;
-  }
+  while (*second_argument) {
+    // Parse out the selected bit.
+    int chosen_bit;
+    for (chosen_bit = 0; chosen_bit < NUM_IGNORE_BITS; chosen_bit++) {
+      if (is_abbrev(second_argument, ignored_bits_in_english[chosen_bit]))
+        break;
+    }
+    if (chosen_bit >= NUM_IGNORE_BITS) {
+      send_to_char(ch, "Sorry, I don't recognize the ignore bit '%s'.\r\n", second_argument);
+    } else {
+      // Finally, toggle the selected bit.
+      method_function func = ignore_function_sorted_by_bit[chosen_bit];
+      (GET_IGNORE_DATA(ch)->*func) (vict_idnum, capitalize(first_argument), MODE_NOT_SILENT);
+    }
 
-  // Finally, toggle the selected bit.
-  method_function func = ignore_function_sorted_by_bit[chosen_bit];
-  (GET_IGNORE_DATA(ch)->*func) (vict_idnum, capitalize(second_argument), MODE_NOT_SILENT);
+    // Did you set a remainder? Great, we'll cycle through that as well.
+    remainder = any_one_arg(remainder, second_argument);
+  }
 }
 
 ////////////// Implementation of primary manipulation functions. ///////////////
@@ -313,13 +315,93 @@ void IgnoreData::_remove_ignore_bit_for(int ignore_bit, long vict_idnum) {
 }
 
 void IgnoreData::_save_entry_to_db(long vict_idnum, Bitfield bitfield) {
-  // todo
+  char query_buf[5000];
+  snprintf(query_buf, sizeof(query_buf), "INSERT INTO pfiles_ignore_v2 (`idnum`, `vict_idnum`, `bitfield_str`) VALUES ('%ld', '%ld', '%s')"
+               " ON DUPLICATE KEY UPDATE"
+               "   `bitfield_str` = VALUES(`bitfield_str`)",
+               GET_IDNUM_EVEN_IF_PROJECTING(ch),
+               vict_idnum,
+               bitfield.ToString());
+  mysql_wrapper(mysql, query_buf);
 }
 
 void IgnoreData::_delete_entry_from_db(long vict_idnum) {
-  // todo
+  char query_buf[5000];
+  snprintf(query_buf, sizeof(query_buf), "DELETE FROM pfiles_ignore_v2 WHERE idnum=%ld AND vict_idnum=%ld", GET_IDNUM_EVEN_IF_PROJECTING(ch), vict_idnum);
+  mysql_wrapper(mysql, query_buf);
 }
 
 void IgnoreData::load_from_db() {
-  // todo
+  // Blow away our current map, just in case.
+  if (!ignored_map.empty()) {
+    mudlog("SYSERR: load_from_db() called on IgnoreData that had elements! Wiping them out and starting fresh.", ch, LOG_SYSLOG, TRUE);
+    ignored_map.clear();
+  }
+
+  char query_buf[5000];
+  snprintf(query_buf, sizeof(query_buf), "SELECT * FROM pfiles_ignore_v2 WHERE idnum=%ld", GET_IDNUM_EVEN_IF_PROJECTING(ch));
+  mysql_wrapper(mysql, query_buf);
+
+  MYSQL_RES *res = mysql_use_result(mysql);
+  if (!res) {
+    // They had no entries.
+    return;
+  }
+
+  MYSQL_ROW row;
+  while ((row = mysql_fetch_row(res))) {
+    // Read out our bitfield and construct it.
+    Bitfield *bitfield_ptr = new Bitfield;
+    bitfield_ptr->FromString(row[2]);
+
+    // Insert it into the map.
+    ignored_map.emplace(atol(row[1]), *bitfield_ptr);
+  }
+
+  // Finally, clean up.
+  mysql_free_result(res);
+}
+
+//////////////////////////// Non-class functions. //////////////////////////////
+
+// This is called from DeleteChar, so we don't need to bother with cleaning up the DB etc.
+void globally_remove_vict_id_from_logged_in_ignore_lists(long vict_idnum) {
+  for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
+    struct char_data *ch = d->original ? d->original : d->character;
+    if (GET_IGNORE_DATA(ch))
+      GET_IGNORE_DATA(ch)->ignored_map.erase(vict_idnum);
+  }
+}
+
+void send_ignore_bits_to_character(struct char_data *ch) {
+  send_to_char("\r\nYou can set the following ignore bits: ", ch);
+
+  for (int i = 0; i < NUM_IGNORE_BITS; i++)
+    send_to_char(ch, "%s^c%s^n%s", i == 0 ? "" : ", ", ignored_bits_in_english[i], i == NUM_IGNORE_BITS - 1 ? "\r\n" : "");
+}
+
+void send_ignore_usage_to_character(struct char_data *ch) {
+  send_to_char("Syntax: ^Wignore <target character> [ignore bit]^n.\r\n", ch);
+  send_ignore_bits_to_character(ch);
+  send_to_char("\r\nYou may also view your current ignored list with ^Wignore^n on its own, or view the ignores set on a specific character with ^Wignore <character>^n.\r\n", ch);
+}
+
+void display_characters_ignore_entries(struct char_data *viewer, struct char_data *target) {
+  char ignored_bits_str[5000];
+  bool self = (viewer == target);
+
+  if (GET_IGNORE_DATA(target)->ignored_map.empty()) {
+    send_to_char(viewer, "%s %s ignoring anyone.\r\n", self ? "You" : GET_CHAR_NAME(target), self ? "aren't" : "isn't");
+    return;
+  }
+
+  send_to_char(viewer, "%s %s ignoring:\r\n", self ? "You" : GET_CHAR_NAME(target), self ? "are" : "is");
+
+  for (auto iter : GET_IGNORE_DATA(target)->ignored_map) {
+    iter.second.PrintBitsColorized(ignored_bits_str, sizeof(ignored_bits_str), ignored_bits_in_english, NUM_IGNORE_BITS, "^c", "^n");
+
+    const char *ignored_name = get_player_name(iter.first);
+    send_to_char(viewer, " - %s: %s\r\n", ignored_name, ignored_bits_str);
+    delete [] ignored_name;
+  }
 }

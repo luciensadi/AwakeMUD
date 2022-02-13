@@ -79,6 +79,8 @@ if (occupied_rooms.empty()) {
 
 extern const char *ignored_bits_in_english[];
 
+void globally_remove_vict_id_from_logged_in_ignore_lists(long vict_idnum);
+
 // The main IgnoreData class definition.
 class IgnoreData {
   // The character who owns this block of data. Used primarily for saving.

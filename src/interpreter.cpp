@@ -2591,7 +2591,7 @@ void nanny(struct descriptor_data * d, char *arg)
         snprintf(buf, sizeof(buf), "Bad PW: %s [%s]", GET_CHAR_NAME(d->character), d->host);
         mudlog(buf, d->character, LOG_CONNLOG, TRUE);
         GET_BAD_PWS(d->character)++;
-        d->character->in_room = &world[real_room(GET_LAST_IN(d->character))];
+        d->character->in_room = &world[MAX(0, real_room(GET_LAST_IN(d->character)))];
         playerDB.SaveChar(d->character, GET_LOADROOM(d->character));
         if (++(d->bad_pws) >= max_bad_pws) {    /* 3 strikes and you're out. */
           SEND_TO_Q("Wrong password... disconnecting.\r\n", d);
@@ -2620,8 +2620,10 @@ void nanny(struct descriptor_data * d, char *arg)
       load_result = GET_BAD_PWS(d->character);
       GET_BAD_PWS(d->character) = 0;
 
-      d->character->in_room = &world[real_room(GET_LAST_IN(d->character))];
+      d->character->in_room = &world[MAX(0, real_room(GET_LAST_IN(d->character)))];
       playerDB.SaveChar(d->character, GET_LOADROOM(d->character));
+
+      // TODO: Don't these returns leak memory by not cleaning up d->character?
       if (isbanned(d->host) == BAN_SELECT &&
           !PLR_FLAGGED(d->character, PLR_SITEOK)) {
         SEND_TO_Q("Sorry, this char has not been cleared for login from your site!\r\n", d);
@@ -3011,8 +3013,9 @@ void nanny(struct descriptor_data * d, char *arg)
         STATE(d) = CON_CLOSE;
         return;
       }
-
+      
       DeleteChar(GET_IDNUM(d->character));
+
       snprintf(buf, sizeof(buf), "Character '%s' deleted!\r\nGoodbye.\r\n",
               GET_CHAR_NAME(d->character));
       SEND_TO_Q(buf, d);
