@@ -2705,3 +2705,17 @@ struct nuyen_faucet_or_sink nuyen_faucets_and_sinks[NUM_OF_TRACKED_NUYEN_INCOME_
     {"Trade Command (n->k)", NI_IS_SINK},
     {"Credstick Cracker", NI_IS_SINK}
   };
+
+const char *ignored_bits_in_english[] =
+  {
+    "where",
+    "oocs",
+    "radio",
+    "mindlinks",
+    "tells",
+    "osays",
+    "interaction",
+    "following",
+    "calls",
+    "ERROR: Coder forgot to add their new bit to ignored_bits_in_english!"
+  };

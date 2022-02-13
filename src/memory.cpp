@@ -18,6 +18,7 @@
 #include "db.h"
 #include "utils.h"
 #include "newmatrix.h"
+#include "ignore_system.h"
 
 memoryClass::memoryClass()
 {
@@ -125,7 +126,7 @@ void memoryClass::DeleteCh(struct char_data *ch)
 {
   extern struct char_data *combat_list;
   extern void stop_fighting(struct char_data * ch);
-  
+
   // Verify that we don't have a nulled-out character in the player list. This might add a lot of lag.
   struct char_data *prev = character_list, *next = NULL;
   if (prev && prev == ch) {
@@ -142,7 +143,7 @@ void memoryClass::DeleteCh(struct char_data *ch)
       prev = i;
     }
   }
-  
+
   prev = combat_list;
   if (prev) {
     for (struct char_data *i = combat_list; i; i = next) {
@@ -158,7 +159,11 @@ void memoryClass::DeleteCh(struct char_data *ch)
       prev = i;
     }
   }
-  
+
+  // Delete their ignore data. This deconstructs it as expected.
+  if (ch->ignore_data)
+    delete ch->ignore_data;
+
   free_char(ch);
   delete ch;
   // Ch->Push(ch);
@@ -184,7 +189,7 @@ void memoryClass::DeleteIcon(struct matrix_icon *icon)
 
 
 void memoryClass::DeleteVehicle(struct veh_data *veh)
-{  
+{
   free_veh(veh);
   Veh->Push(veh);
 }

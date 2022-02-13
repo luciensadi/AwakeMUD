@@ -30,6 +30,8 @@
 #define NOTHING (-1)
 #define NOBODY  (-1)
 
+class IgnoreData;
+
 /* Extra description: used in objects, mobiles, and rooms */
 struct extra_descr_data
 {
@@ -560,11 +562,10 @@ struct player_special_data
   ubyte physical_loss;
   ubyte perm_bod;
   struct room_data *watching;
-  struct remem *ignored;
 
   player_special_data() :
       aliases(NULL), remem(NULL), last_tell(0), questnum(0), obj_complete(NULL),
-      mob_complete(NULL), watching(NULL), ignored(NULL)
+      mob_complete(NULL), watching(NULL)
   {
     for (int i = 0; i < NUM_DRUGS+1; i++) {
       for (int j = 0; j < 7; j++) {
@@ -761,6 +762,8 @@ struct char_data
   struct char_data *master;             /* Who is char following?        */
   struct spell_data *spells;                     /* linked list of spells          */
 
+  IgnoreData *ignore_data;
+
   Pgroup_data *pgroup;                   /* Data concerning the player group this char is part of. */
   Pgroup_invitation *pgroup_invitations; /* The list of open group invitations associated with this player. */
 
@@ -777,7 +780,8 @@ struct char_data
       in_room(NULL), was_in_room(NULL), player_specials(NULL), in_veh(NULL), persona(NULL), squeue(NULL), sustained(NULL),
       ssust(NULL), carrying(NULL), desc(NULL), cyberware(NULL), bioware(NULL), next_in_room(NULL), next(NULL),
       next_fighting(NULL), next_in_zone(NULL), next_in_veh(NULL), next_watching(NULL), followers(NULL),
-      master(NULL), spells(NULL), pgroup(NULL), pgroup_invitations(NULL), congregation_bonus_pool(0), alias_dirty_bit(FALSE)
+      master(NULL), spells(NULL), ignore_data(NULL), pgroup(NULL), pgroup_invitations(NULL), congregation_bonus_pool(0),
+      alias_dirty_bit(FALSE)
   {
     for (int i = 0; i < NUM_WEARS; i++) {
       equipment[i] = NULL;

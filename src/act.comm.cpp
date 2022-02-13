@@ -28,6 +28,7 @@
 #include "newdb.h"
 #include "constants.h"
 #include "newecho.h"
+#include "ignore_system.h"
 
 /* extern variables */
 extern struct skill_data skills[];
@@ -306,7 +307,6 @@ void perform_tell(struct char_data *ch, struct char_data *vict, char *arg)
 ACMD(do_tell)
 {
   struct char_data *vict = NULL;
-  struct char_data *source = ch->desc && ch->desc->original ? ch->desc->original : ch;
   SPECIAL(johnson);
 
   half_chop(argument, buf, buf2);
@@ -343,7 +343,7 @@ ACMD(do_tell)
   }
 
   // Enable blocking of tells from everyone except staff.
-  if ((!access_level(ch, LVL_BUILDER) && PRF_FLAGGED(vict, PRF_NOTELL)) || (!IS_NPC(vict) && unsafe_found_mem(GET_IGNORE(vict), source))) {
+  if ((!access_level(ch, LVL_BUILDER) && PRF_FLAGGED(vict, PRF_NOTELL)) || (!IS_NPC(vict) && GET_IGNORE_DATA(vict)->is_blocking_tells_from(ch))) {
     act("$E has disabled tells.", FALSE, ch, 0, vict, TO_CHAR);
     return;
   }
@@ -385,7 +385,7 @@ ACMD(do_reply)
       return;
     }
 
-    if (PRF_FLAGGED(tch, PRF_NOTELL) || (!IS_NPC(tch) && unsafe_found_mem(GET_IGNORE(tch), ch->desc && ch->desc->original ? ch->desc->original : ch))) {
+    if (PRF_FLAGGED(tch, PRF_NOTELL) || (!IS_NPC(tch) && GET_IGNORE_DATA(tch)->is_blocking_tells_from(ch))) {
       act("$E has disabled tells.", FALSE, ch, 0, tch, TO_CHAR);
       return;
     }
@@ -1138,7 +1138,7 @@ ACMD(do_gen_comm)
 
     // Same room shout.
     for (tmp = ch->in_veh ? ch->in_veh->people : ch->in_room->people; tmp; tmp = (ch->in_veh ? tmp->next_in_veh : tmp->next_in_room)) {
-      if (tmp != ch) {
+      if (tmp != ch && (IS_NPC(tmp) || !GET_IGNORE_DATA(tmp)->is_blocking_ic_interaction_from(ch))) {
         snprintf(buf, sizeof(buf), "%s$z%s shouts in %s, \"%s%s%s\"^n",
                  com_msgs[subcmd][3],
                  com_msgs[subcmd][3],
@@ -1170,18 +1170,20 @@ ACMD(do_gen_comm)
     if (ch->in_veh) {
       ch->in_room = get_ch_in_room(ch);
       for (tmp = ch->in_room->people; tmp; tmp = tmp->next_in_room) {
-        snprintf(buf1, sizeof(buf1), "%sFrom inside %s^n, $z^n shouts in %s, \"%s%s%s\"^n",
-                 com_msgs[subcmd][3],
-                 decapitalize_a_an(GET_VEH_NAME(ch->in_veh)),
-                 (IS_NPC(tmp) || GET_SKILL(tmp, language) > 0) ? skills[language].name : "an unknown language",
-                 capitalize(replace_too_long_words(tmp, ch, argument, language, com_msgs[subcmd][3])),
-                 ispunct(get_final_character_from_string(argument)) ? "" : "!",
-                 com_msgs[subcmd][3]);
+        if (IS_NPC(tmp) || !GET_IGNORE_DATA(tmp)->is_blocking_ic_interaction_from(ch)) {
+          snprintf(buf1, sizeof(buf1), "%sFrom inside %s^n, $z^n shouts in %s, \"%s%s%s\"^n",
+                   com_msgs[subcmd][3],
+                   decapitalize_a_an(GET_VEH_NAME(ch->in_veh)),
+                   (IS_NPC(tmp) || GET_SKILL(tmp, language) > 0) ? skills[language].name : "an unknown language",
+                   capitalize(replace_too_long_words(tmp, ch, argument, language, com_msgs[subcmd][3])),
+                   ispunct(get_final_character_from_string(argument)) ? "" : "!",
+                   com_msgs[subcmd][3]);
 
-        // Replicate act() in a way that lets us capture the message.
-        if (can_send_act_to_target(ch, FALSE, NULL, NULL, tmp, TO_ROOM)) {
-          // They're a valid target, so send the message with a raw perform_act() call.
-          store_message_to_history(tmp->desc, COMM_CHANNEL_SHOUTS, perform_act(buf1, ch, NULL, NULL, tmp));
+          // Replicate act() in a way that lets us capture the message.
+          if (can_send_act_to_target(ch, FALSE, NULL, NULL, tmp, TO_ROOM)) {
+            // They're a valid target, so send the message with a raw perform_act() call.
+            store_message_to_history(tmp->desc, COMM_CHANNEL_SHOUTS, perform_act(buf1, ch, NULL, NULL, tmp));
+          }
         }
       }
     } else {
@@ -1189,7 +1191,7 @@ ACMD(do_gen_comm)
         ch->in_veh = veh;
         for (tmp = ch->in_veh->people; tmp; tmp = tmp->next_in_veh) {
           // Replicate act() in a way that lets us capture the message.
-          if (can_send_act_to_target(ch, FALSE, NULL, NULL, tmp, TO_ROOM)) {
+          if (can_send_act_to_target(ch, FALSE, NULL, NULL, tmp, TO_ROOM) && (IS_NPC(tmp) || !GET_IGNORE_DATA(tmp)->is_blocking_ic_interaction_from(ch))) {
             // They're a valid target, so send the message with a raw perform_act() call.
             store_message_to_history(tmp->desc, COMM_CHANNEL_SHOUTS, perform_act(buf, ch, NULL, NULL, tmp));
           }
@@ -1202,7 +1204,7 @@ ACMD(do_gen_comm)
       if (CAN_GO(ch, door)) {
         ch->in_room = ch->in_room->dir_option[door]->to_room;
         for (tmp = get_ch_in_room(ch)->people; tmp; tmp = tmp->next_in_room)
-          if (tmp != ch) {
+          if (tmp != ch && (IS_NPC(tmp) || !GET_IGNORE_DATA(tmp)->is_blocking_ic_interaction_from(ch))) {
             snprintf(buf, sizeof(buf), "%s$v%s shouts in %s, \"%s%s%s\"^n",
                      com_msgs[subcmd][3],
                      com_msgs[subcmd][3],
@@ -1229,8 +1231,8 @@ ACMD(do_gen_comm)
       return;
     delete_doubledollar(argument);
     for ( d = descriptor_list; d != NULL; d = d->next ) {
-      // Skip anyone without a descriptor, and any non-NPC that didn't ignore the speaker.
-      if (!d->character || (!IS_NPC(d->character) && unsafe_found_mem(GET_IGNORE(d->character), ch)))
+      // Skip anyone without a descriptor, and any non-NPC that ignored the speaker.
+      if (!d->character || (!IS_NPC(d->character) && GET_IGNORE_DATA(d->character)->is_blocking_oocs_from(ch)))
         continue;
 
       // Anyone who's not either staff or in specific playing states is skipped.
@@ -1293,30 +1295,46 @@ ACMD(do_gen_comm)
         continue;
     }
 
-    // Skip anyone who's ignored the speaker.
-    if (unsafe_found_mem(GET_IGNORE(i->character), ch))
-      continue;
-
     switch (subcmd) {
       case SCMD_SHOUT:
         // Shouts don't propagate into soundproof rooms.
         if (ROOM_FLAGGED(get_ch_in_room(i->character), ROOM_SOUNDPROOF))
           continue;
+
+        // Skip anyone who's ignored the speaker.
+        if (GET_IGNORE_DATA(i->character)->is_blocking_ic_interaction_from(ch))
+          continue;
+
         break;
       case SCMD_NEWBIE:
         // Newbie can be disabled or muted.
         if (PRF_FLAGGED(i->character, PRF_NONEWBIE) || PLR_FLAGGED(i->character, PLR_NEWBIE_MUTED))
           continue;
+
+        // Skip anyone who's ignored the speaker.
+        if (GET_IGNORE_DATA(i->character)->is_blocking_oocs_from(ch))
+          continue;
+
         break;
       case SCMD_RPETALK:
         // RPE talk only shows up to RPE members.
         if (!(PLR_FLAGGED(i->character, PLR_RPE) || IS_SENATOR(i->character)))
           continue;
+
+        // Skip anyone who's ignored the speaker.
+        if (GET_IGNORE_DATA(i->character)->is_blocking_oocs_from(ch))
+          continue;
+
         break;
       case SCMD_HIREDTALK:
         // Hired talk only shows up to hired members.
         if (!(PRF_FLAGGED(i->character, PRF_QUEST) || IS_SENATOR(i->character)))
           continue;
+
+        // Skip anyone who's ignored the speaker.
+        if (GET_IGNORE_DATA(i->character)->is_blocking_oocs_from(ch))
+          continue;
+
         break;
     }
 
@@ -1801,39 +1819,6 @@ void phone_check()
       if (k->dest->phone && (originator = get_obj_possessor(k->dest->phone)))
         send_to_char("The other end continues to ring.\r\n", originator);
     }
-  }
-}
-
-ACMD(do_ignore)
-{
-  if (!*argument) {
-    send_to_char("You are currently ignoring: \r\n", ch);
-    for (struct remem *a = GET_IGNORE(ch); a; a = a->next) {
-      char *name = get_player_name(a->idnum);
-      if (name) {
-        send_to_char(ch, "%s\r\n", name);
-        DELETE_AND_NULL_ARRAY(name);
-      }
-    }
-  } else {
-    struct remem *list;
-    skip_spaces(&argument);
-    if (struct char_data *tch = get_player_vis(ch, argument, FALSE)) {
-      if (GET_LEVEL(tch) > LVL_MORTAL)
-        send_to_char("You can't ignore staff members.\r\n", ch);
-      else if ((list = (!IS_NPC(ch) ? unsafe_found_mem(GET_IGNORE(ch), tch) : NULL))) {
-        struct remem *temp;
-        REMOVE_FROM_LIST(list, GET_IGNORE(ch), next);
-        DELETE_AND_NULL(list);
-        send_to_char(ch, "You can now hear %s on OOC and over tells, and you can see their emotes again.\r\n", GET_CHAR_NAME(tch));
-      } else {
-        list = new remem;
-        list->idnum = GET_IDNUM(tch);
-        list->next = GET_IGNORE(ch);
-        GET_IGNORE(ch) = list;
-        send_to_char(ch, "You will no longer hear %s on OOC or over tells, and you won't see their emotes.\r\n", GET_CHAR_NAME(tch));
-      }
-    } else send_to_char("That character is not logged on.\r\n", ch);
   }
 }
 
