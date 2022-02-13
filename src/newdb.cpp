@@ -162,6 +162,8 @@ static void init_char(struct char_data * ch)
     }
 
   ch->char_specials.saved.affected_by.Clear();
+
+  GET_IGNORE_DATA(ch) = new IgnoreData(ch);
 }
 
 static void init_char_strings(char_data *ch)
@@ -653,13 +655,13 @@ bool load_char(const char *name, char_data *ch, bool logon)
       mysql_free_result(res);
     }
   }
+
   snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_skills WHERE idnum=%ld;", GET_IDNUM(ch));
   mysql_wrapper(mysql, buf);
   res = mysql_use_result(mysql);
   while ((row = mysql_fetch_row(res)))
     GET_SKILL(ch, atoi(row[1])) = atoi(row[2]);
   mysql_free_result(res);
-
 
   snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_alias WHERE idnum=%ld;", GET_IDNUM(ch));
   mysql_wrapper(mysql, buf);
@@ -784,6 +786,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
     }
     mysql_free_result(res);
   }
+
   {
     struct obj_data *obj;
     int vnum = 0;
@@ -1928,6 +1931,9 @@ bool does_player_exist(long id)
 
 vnum_t get_player_id(char *name)
 {
+  if (!name || !*name || !str_cmp(name, CHARACTER_DELETED_NAME_FOR_SQL))
+    return -1;
+
   char buf[MAX_STRING_LENGTH], sanitized_buf[strlen(name) * 2 + 2];
   snprintf(buf, sizeof(buf), "SELECT idnum FROM pfiles WHERE name=\"%s\";", prepare_quotes(sanitized_buf, name, sizeof(sanitized_buf)));
   mysql_wrapper(mysql, buf);
@@ -2013,41 +2019,45 @@ bool get_aff_flag_is_set_by_idnum(int flag, vnum_t id) {
 
 void DeleteChar(long idx)
 {
+  /* Delete a character in such a way that it can be restored if desired. */
   MYSQL_RES *res;
   MYSQL_ROW row;
   FILE *fl;
   char prepare_quotes_buf[MAX_STRING_LENGTH * 2 + 1];
 
   const char *table_names[] = {
-    "pfiles                 ", // 0
-    "pfiles_adeptpowers     ",
-    "pfiles_alias           ",
-    "pfiles_ammo            ",
-    "pfiles_bioware         ",
-    "pfiles_chargendata     ", // 5
-    "pfiles_cyberware       ",
-    "pfiles_drugdata        ",
-    "pfiles_drugs           ",
-    "pfiles_ignore          ", // IF YOU CHANGE THIS, CHANGE PFILES_IGNORE_INDEX
-    "pfiles_immortdata      ", // 10
-    "pfiles_inv             ",
-    "pfiles_magic           ",
-    "pfiles_mail            ",
-    "pfiles_memory          ", // IF YOU CHANGE THIS, CHANGE PFILES_MEMORY_INDEX
-    "pfiles_metamagic       ", // 15
-    "pfiles_quests          ",
-    "pfiles_skills          ",
-    "pfiles_spells          ",
-    "pfiles_spirits         ",
-    "pfiles_worn            "  // 20
+    "pfiles             ", // IF YOU CHANGE THIS, CHANGE PFILES_INDEX
+    "pfiles_adeptpowers ",
+    "pfiles_alias       ",
+    "pfiles_ammo        ",
+    "pfiles_bioware     ",
+    "pfiles_chargendata ", // 5
+    "pfiles_cyberware   ",
+    "pfiles_drugdata    ",
+    "pfiles_drugs       ",
+    "pfiles_ignore      ", // IF YOU CHANGE THIS, CHANGE PFILES_IGNORE_INDEX
+    "pfiles_immortdata  ", // 10
+    "pfiles_inv         ",
+    "pfiles_magic       ",
+    "pfiles_mail        ",
+    "pfiles_memory      ", // IF YOU CHANGE THIS, CHANGE PFILES_MEMORY_INDEX
+    "pfiles_metamagic   ", // 15
+    "pfiles_quests      ",
+    "pfiles_skills      ",
+    "pfiles_spells      ",
+    "pfiles_spirits     ",
+    "pfiles_worn        ",  // 20
+    "pfiles_ignore_v2   "   // IF YOU CHANGE THIS, CHANGE PFILES_IGNORE_V2_INDEX
   };
-  #define NUM_SQL_TABLE_NAMES 21
-  #define PFILES_IGNORE_INDEX 9
-  #define PFILES_MEMORY_INDEX 14
+  #define NUM_SQL_TABLE_NAMES     22
+  #define PFILES_INDEX            0
+  #define PFILES_IGNORE_INDEX     9
+  #define PFILES_MEMORY_INDEX     14
+  #define PFILES_IGNORE_V2_INDEX  21
 
   // Figure out the filename for this character.
   const char *name = get_player_name(idx);
-  snprintf(buf, sizeof(buf), "idledeleted/%s", name);
+  snprintf(buf, sizeof(buf), "idledeleted/%s-%ld", name, idx);
   delete[] name;
 
   // Ensure we can open the file.
@@ -2084,30 +2094,45 @@ void DeleteChar(long idx)
     strlcat(buf2, ") VALUES (", sizeof(buf2));
 
     // Get the values.
-    snprintf(buf, sizeof(buf), "SELECT * FROM %s WHERE idnum=%ld", table_names[table_idx], idx);
-    mysql_wrapper(mysql, buf);
-    res = mysql_use_result(mysql);
-    while ((row = mysql_fetch_row(res))) {
-      // Populate buf3 with the table schema.
-      strlcpy(buf3, buf2, sizeof(buf3));
-
-      // Fill out data in buf3.
-      for (unsigned int row_idx = 0; row_idx < mysql_num_fields(res); row_idx++) {
-        prepare_quotes(prepare_quotes_buf, row[row_idx], sizeof(prepare_quotes_buf), TRUE);
-        snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "'%s'%s", prepare_quotes_buf, row_idx == mysql_num_fields(res) - 1 ? ")" : ", ");
-      }
-      // Write the values to the file, assuming there are values to write here.
-      fprintf(fl, "%s;\r\n", buf3);
+    if (table_idx == PFILES_IGNORE_INDEX || table_idx == PFILES_MEMORY_INDEX) {
+      snprintf(buf, sizeof(buf), "SELECT * FROM %s WHERE idnum=%ld OR remembered=%ld", table_names[table_idx], idx, idx);
     }
-    mysql_free_result(res);
+    else if (table_idx == PFILES_IGNORE_V2_INDEX) {
+      snprintf(buf, sizeof(buf), "SELECT * FROM %s WHERE idnum=%ld OR vict_idnum=%ld", table_names[table_idx], idx, idx);
+    }
+    else {
+      snprintf(buf, sizeof(buf), "SELECT * FROM %s WHERE idnum=%ld", table_names[table_idx], idx);
+    }
+
+    mysql_wrapper(mysql, buf);
+
+    if ((res = mysql_use_result(mysql))) {
+      while ((row = mysql_fetch_row(res))) {
+        // Populate buf3 with the table schema.
+        strlcpy(buf3, buf2, sizeof(buf3));
+
+        // Fill out data in buf3.
+        for (unsigned int row_idx = 0; row_idx < mysql_num_fields(res); row_idx++) {
+          prepare_quotes(prepare_quotes_buf, row[row_idx], sizeof(prepare_quotes_buf), TRUE);
+          snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "'%s'%s", prepare_quotes_buf, row_idx == mysql_num_fields(res) - 1 ? ")" : ", ");
+        }
+        // Write the values to the file, assuming there are values to write here.
+        fprintf(fl, "%s;\r\n", buf3);
+      }
+      mysql_free_result(res);
+    }
 
     // Finally, delete the table entry, unless we're at index 0-- that's the pfile table.
-    if (table_idx != 0) {
+    if (table_idx != PFILES_INDEX) {
       if (table_idx == PFILES_IGNORE_INDEX || table_idx == PFILES_MEMORY_INDEX) {
-        snprintf(buf, sizeof(buf), "DELETE FROM %s WHERE remembered=%ld", table_names[table_idx], idx);
-        mysql_wrapper(mysql, buf);
+        snprintf(buf, sizeof(buf), "DELETE FROM %s WHERE idnum=%ld OR remembered=%ld", table_names[table_idx], idx, idx);
       }
-      snprintf(buf, sizeof(buf), "DELETE FROM %s WHERE idnum=%ld", table_names[table_idx], idx);
+      else if (table_idx == PFILES_IGNORE_V2_INDEX) {
+        snprintf(buf, sizeof(buf), "DELETE FROM %s WHERE idnum=%ld OR vict_idnum=%ld", table_names[table_idx], idx, idx);
+      }
+      else {
+        snprintf(buf, sizeof(buf), "DELETE FROM %s WHERE idnum=%ld", table_names[table_idx], idx);
+      }
       mysql_wrapper(mysql, buf);
     }
   }
@@ -2116,18 +2141,20 @@ void DeleteChar(long idx)
   // Update playergroup info, write a log, and delete their info and invitations.
   snprintf(buf, sizeof(buf), "SELECT `group` FROM pfiles_playergroups WHERE idnum=%ld", idx);
   mysql_wrapper(mysql, buf);
-  res = mysql_use_result(mysql);
-  if ((row = mysql_fetch_row(res))) {
-    mysql_free_result(res);
-    char *cname = get_player_name(idx);
-    snprintf(buf, sizeof(buf), "INSERT INTO pgroup_logs (idnum, message) VALUES (%ld, \"%s has left the group. (Reason: deletion)\")", atol(row[0]), cname);
-    delete [] cname;
-    mysql_wrapper(mysql, buf);
-    snprintf(buf, sizeof(buf), "DELETE FROM pfiles_playergroups WHERE idnum=%ld", idx);
-    mysql_wrapper(mysql, buf);
-  } else {
-    mysql_free_result(res);
+  if ((res = mysql_use_result(mysql))) {
+    if ((row = mysql_fetch_row(res))) {
+      mysql_free_result(res);
+      char *cname = get_player_name(idx);
+      snprintf(buf, sizeof(buf), "INSERT INTO pgroup_logs (idnum, message) VALUES (%ld, \"%s has left the group. (Reason: deletion)\")", atol(row[0]), cname);
+      delete [] cname;
+      mysql_wrapper(mysql, buf);
+      snprintf(buf, sizeof(buf), "DELETE FROM pfiles_playergroups WHERE idnum=%ld", idx);
+      mysql_wrapper(mysql, buf);
+    } else {
+      mysql_free_result(res);
+    }
   }
+
   snprintf(buf, sizeof(buf), "DELETE FROM playergroup_invitations WHERE idnum=%ld", idx);
   mysql_wrapper(mysql, buf);
 
@@ -2135,6 +2162,9 @@ void DeleteChar(long idx)
   snprintf(buf, sizeof(buf), "UPDATE pfiles SET Name='%s', Password='', NoDelete=TRUE WHERE idnum=%ld", CHARACTER_DELETED_NAME_FOR_SQL, idx);
 //  snprintf(buf, sizeof(buf), "DELETE FROM pfiles WHERE idnum=%ld", idx);
   mysql_wrapper(mysql, buf);
+
+  // Drop them from the ignore lists of in-game players.
+  globally_remove_vict_id_from_logged_in_ignore_lists(idx);
 }
 
 void idle_delete()
@@ -2149,22 +2179,25 @@ void idle_delete()
   }
   snprintf(buf, sizeof(buf), "SELECT idnum, lastd, tke FROM pfiles WHERE lastd <= %ld AND nodelete = 0 AND name != '%s' ORDER BY lastd ASC;", time(0) - (SECS_PER_REAL_DAY * 50), CHARACTER_DELETED_NAME_FOR_SQL);
   mysql_wrapper(mysqlextra, buf);
-  MYSQL_RES *res = mysql_use_result(mysqlextra);
+  MYSQL_RES *res;
   MYSQL_ROW row;
-  while ((row = mysql_fetch_row(res))) {
+
+  if ((res = mysql_use_result(mysqlextra))) {
+    while ((row = mysql_fetch_row(res))) {
 #ifndef IDLEDELETE_DRYRUN
-		// TODO: Increase idle deletion leniency time by their TKE.
-    int tke = atoi(row[2]);
-    time_t lastd = atoi(row[1]);
-    if (lastd < (time(0) - (SECS_PER_REAL_DAY * (50 + (tke / 5))))) {
-      DeleteChar(atol(row[0]));
-      deleted++;
-    }
+      int tke = atoi(row[2]);
+      time_t lastd = atoi(row[1]);
+      if (lastd < (time(0) - (SECS_PER_REAL_DAY * (50 + (tke / NUMBER_OF_TKE_POINTS_PER_REAL_DAY_OF_EXTRA_IDLE_DELETE_GRACE_PERIOD))))) {
+        DeleteChar(atol(row[0]));
+        deleted++;
+      }
 #else
-    log_vfprintf("IDLEDELETE- Would delete %s, but IDLEDELETE_DRYRUN is enabled.", row[0]);
+      log_vfprintf("IDLEDELETE- Would delete %s, but IDLEDELETE_DRYRUN is enabled.", row[0]);
 #endif
+    }
+    mysql_free_result(res);
   }
-  mysql_free_result(res);
+
   mysql_close(mysqlextra);
   snprintf(buf, sizeof(buf), "IDLEDELETE- %d Deleted.", deleted);
   log(buf);

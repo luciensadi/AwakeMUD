@@ -99,6 +99,8 @@ extern void turn_hardcore_off_for_character(struct char_data *ch);
 
 extern void DBFinalize();
 
+extern void display_characters_ignore_entries(struct char_data *viewer, struct char_data *target);
+
 ACMD_DECLARE(do_goto);
 
 SPECIAL(fixer);
@@ -3567,6 +3569,7 @@ ACMD(do_show)
                { "roomflag",       LVL_BUILDER },
                { "markets",        LVL_VICEPRES},
                { "weight",         LVL_PRESIDENT},
+               { "ignore",         LVL_VICEPRES},
                { "\n", 0 }
              };
 
@@ -4079,6 +4082,17 @@ ACMD(do_show)
     }
     if (j == 0)
       send_to_char("...None.\r\n", ch);
+    return;
+  case 25:
+    if (!*value) {
+      send_to_char("A name would help.\r\n", ch);
+      return;
+    }
+    if (!(vict = get_char_vis(ch, value))) {
+      send_to_char(ch, "You can't see anyone named '%s'.\r\n", value);
+      return;
+    }
+    display_characters_ignore_entries(ch, vict);
     return;
   default:
     send_to_char("Sorry, I don't understand that.\r\n", ch);
