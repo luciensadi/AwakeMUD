@@ -13,6 +13,7 @@
 #include "constants.h"
 #include "olc.h"
 #include "config.h"
+#include "ignore_system.h"
 
 #define POWER(name) void (name)(struct char_data *ch, struct char_data *spirit, struct spirit_data *spiritdata, char *arg)
 #define FAILED_CAST "You fail to bind the mana to your will.\r\n"
@@ -1357,6 +1358,12 @@ void cast_detection_spell(struct char_data *ch, int spell, int force, char *arg,
   switch (spell)
   {
   case SPELL_MINDLINK:
+    // Block mindlinks from ignoring characters without divulging information.
+    if (IS_IGNORING(vict, is_blocking_mindlinks_from, ch)) {
+      send_to_char("They are already under the influence of a mindlink.\r\n", ch);
+      return;
+    }
+
     WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
     success = success_test(skill, 4 + target_modifiers);
     for (struct sustain_data *sust = GET_SUSTAINED(ch); sust; sust = sust->next)
