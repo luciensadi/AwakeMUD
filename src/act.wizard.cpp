@@ -6877,7 +6877,9 @@ int audit_zone_shops_(struct char_data *ch, int zone_num, bool verbose) {
 
     printed = FALSE;
 
-    if (real_mobile(shop->keeper) <= -1) {
+    rnum_t shopkeeper_rnum = real_mobile(shop->keeper);
+
+    if (shopkeeper_rnum <= -1) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - invalid shopkeeper.\r\n");
       printed = TRUE;
       issues++;
@@ -6901,6 +6903,14 @@ int audit_zone_shops_(struct char_data *ch, int zone_num, bool verbose) {
           printed = TRUE;
           issues++;
         }
+      }
+
+      // Flag the shopkeeper having wonky int values.
+      int intelligence = GET_INT(&mob_proto[shopkeeper_rnum]);
+      if (intelligence < 4 || intelligence > 10) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - out-of-range shopkeeper intelligence ^c%d^n (expecting between 4 and 10)^n.\r\n", intelligence);
+        printed = TRUE;
+        issues++;
       }
     }
 

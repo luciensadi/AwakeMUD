@@ -119,7 +119,8 @@ void memoryClass::DeleteObject(struct obj_data *obj)
 {
   // we want to do this so that when we pop em off, they are usable
   free_obj(obj);
-  Obj->Push(obj);
+  delete obj;
+  // Obj->Push(obj);
 }
 
 void memoryClass::DeleteCh(struct char_data *ch)
@@ -197,7 +198,8 @@ void memoryClass::DeleteVehicle(struct veh_data *veh)
 void memoryClass::ClearObject(struct obj_data *obj)
 {
   clear_object(obj);
-  Obj->Push(obj);
+  delete obj;
+  // Obj->Push(obj);
 }
 
 void memoryClass::ClearVehicle(struct veh_data *veh)
