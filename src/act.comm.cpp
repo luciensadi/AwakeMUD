@@ -343,7 +343,7 @@ ACMD(do_tell)
   }
 
   // Enable blocking of tells from everyone except staff.
-  if ((!access_level(ch, LVL_BUILDER) && PRF_FLAGGED(vict, PRF_NOTELL)) || (!IS_NPC(vict) && GET_IGNORE_DATA(vict)->is_blocking_tells_from(ch))) {
+  if ((!access_level(ch, LVL_BUILDER) && PRF_FLAGGED(vict, PRF_NOTELL)) || IS_IGNORING(vict, is_blocking_tells_from, ch)) {
     act("$E has disabled tells.", FALSE, ch, 0, vict, TO_CHAR);
     return;
   }
@@ -385,7 +385,7 @@ ACMD(do_reply)
       return;
     }
 
-    if (PRF_FLAGGED(tch, PRF_NOTELL) || (!IS_NPC(tch) && GET_IGNORE_DATA(tch)->is_blocking_tells_from(ch))) {
+    if (PRF_FLAGGED(tch, PRF_NOTELL) || IS_IGNORING(tch, is_blocking_tells_from, ch)) {
       act("$E has disabled tells.", FALSE, ch, 0, tch, TO_CHAR);
       return;
     }
@@ -905,6 +905,10 @@ ACMD(do_broadcast)
           if (i == 0 || ((i != -1 && frequency != -1) && !(frequency >= (i - j) && frequency <= (i + j))))
             continue;
 
+          // Skip message-send for anyone who's blocked you.
+          if (IS_IGNORING(d->character, is_blocking_radios_from, ch))
+            continue;
+
           char message[MAX_STRING_LENGTH];
           char radio_string[1000];
 
@@ -1138,7 +1142,7 @@ ACMD(do_gen_comm)
 
     // Same room shout.
     for (tmp = ch->in_veh ? ch->in_veh->people : ch->in_room->people; tmp; tmp = (ch->in_veh ? tmp->next_in_veh : tmp->next_in_room)) {
-      if (tmp != ch && (IS_NPC(tmp) || !GET_IGNORE_DATA(tmp)->is_blocking_ic_interaction_from(ch))) {
+      if (tmp != ch && !IS_IGNORING(tmp, is_blocking_ic_interaction_from, ch)) {
         snprintf(buf, sizeof(buf), "%s$z%s shouts in %s, \"%s%s%s\"^n",
                  com_msgs[subcmd][3],
                  com_msgs[subcmd][3],
@@ -1170,7 +1174,7 @@ ACMD(do_gen_comm)
     if (ch->in_veh) {
       ch->in_room = get_ch_in_room(ch);
       for (tmp = ch->in_room->people; tmp; tmp = tmp->next_in_room) {
-        if (IS_NPC(tmp) || !GET_IGNORE_DATA(tmp)->is_blocking_ic_interaction_from(ch)) {
+        if (!IS_IGNORING(tmp, is_blocking_ic_interaction_from, ch)) {
           snprintf(buf1, sizeof(buf1), "%sFrom inside %s^n, $z^n shouts in %s, \"%s%s%s\"^n",
                    com_msgs[subcmd][3],
                    decapitalize_a_an(GET_VEH_NAME(ch->in_veh)),
@@ -1191,7 +1195,7 @@ ACMD(do_gen_comm)
         ch->in_veh = veh;
         for (tmp = ch->in_veh->people; tmp; tmp = tmp->next_in_veh) {
           // Replicate act() in a way that lets us capture the message.
-          if (can_send_act_to_target(ch, FALSE, NULL, NULL, tmp, TO_ROOM) && (IS_NPC(tmp) || !GET_IGNORE_DATA(tmp)->is_blocking_ic_interaction_from(ch))) {
+          if (can_send_act_to_target(ch, FALSE, NULL, NULL, tmp, TO_ROOM) && !IS_IGNORING(tmp, is_blocking_ic_interaction_from, ch)) {
             // They're a valid target, so send the message with a raw perform_act() call.
             store_message_to_history(tmp->desc, COMM_CHANNEL_SHOUTS, perform_act(buf, ch, NULL, NULL, tmp));
           }
@@ -1204,7 +1208,7 @@ ACMD(do_gen_comm)
       if (CAN_GO(ch, door)) {
         ch->in_room = ch->in_room->dir_option[door]->to_room;
         for (tmp = get_ch_in_room(ch)->people; tmp; tmp = tmp->next_in_room)
-          if (tmp != ch && (IS_NPC(tmp) || !GET_IGNORE_DATA(tmp)->is_blocking_ic_interaction_from(ch))) {
+          if (tmp != ch && !IS_IGNORING(tmp, is_blocking_ic_interaction_from, ch)) {
             snprintf(buf, sizeof(buf), "%s$v%s shouts in %s, \"%s%s%s\"^n",
                      com_msgs[subcmd][3],
                      com_msgs[subcmd][3],
@@ -1232,7 +1236,7 @@ ACMD(do_gen_comm)
     delete_doubledollar(argument);
     for ( d = descriptor_list; d != NULL; d = d->next ) {
       // Skip anyone without a descriptor, and any non-NPC that ignored the speaker.
-      if (!d->character || (!IS_NPC(d->character) && GET_IGNORE_DATA(d->character)->is_blocking_oocs_from(ch)))
+      if (!d->character || IS_IGNORING(d->character, is_blocking_oocs_from, ch))
         continue;
 
       // Anyone who's not either staff or in specific playing states is skipped.
@@ -1302,7 +1306,7 @@ ACMD(do_gen_comm)
           continue;
 
         // Skip anyone who's ignored the speaker.
-        if (GET_IGNORE_DATA(i->character)->is_blocking_ic_interaction_from(ch))
+        if (IS_IGNORING(i->character, is_blocking_ic_interaction_from, ch))
           continue;
 
         break;
@@ -1312,7 +1316,7 @@ ACMD(do_gen_comm)
           continue;
 
         // Skip anyone who's ignored the speaker.
-        if (GET_IGNORE_DATA(i->character)->is_blocking_oocs_from(ch))
+        if (IS_IGNORING(i->character, is_blocking_oocs_from, ch))
           continue;
 
         break;
@@ -1322,7 +1326,7 @@ ACMD(do_gen_comm)
           continue;
 
         // Skip anyone who's ignored the speaker.
-        if (GET_IGNORE_DATA(i->character)->is_blocking_oocs_from(ch))
+        if (IS_IGNORING(i->character, is_blocking_oocs_from, ch))
           continue;
 
         break;
@@ -1332,7 +1336,7 @@ ACMD(do_gen_comm)
           continue;
 
         // Skip anyone who's ignored the speaker.
-        if (GET_IGNORE_DATA(i->character)->is_blocking_oocs_from(ch))
+        if (IS_IGNORING(i->character, is_blocking_oocs_from, ch))
           continue;
 
         break;

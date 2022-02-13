@@ -28,40 +28,9 @@
 
 */
 
-/*
-std::unordered_map<vnum_t, int> occupied_rooms = {};
-std::unordered_map<vnum_t, int>::iterator room_iterator;
-
-for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
-  if (!d->connected) {
-    struct char_data *i = (d->original ? d->original : d->character);
-    if (i && i->in_room && ROOM_FLAGGED(i->in_room, ROOM_ENCOURAGE_CONGREGATION) && CAN_SEE(ch, i)) {
-      if ((room_iterator = occupied_rooms.find(GET_ROOM_VNUM(i->in_room))) != occupied_rooms.end()) {
-        ((*room_iterator).second)++;
-      } else {
-        occupied_rooms.emplace(GET_ROOM_VNUM(i->in_room), 1);
-      }
-    }
-  }
-}
-
-if (occupied_rooms.empty()) {
-  send_to_char("Nobody's in a socialization room right now. Why not go find one?\r\n", ch);
-  return;
-} else {
-  send_to_char("There are people RPing in these rooms:\r\n", ch);
-  for (auto it = occupied_rooms.begin(); it != occupied_rooms.end(); ++it) {
-    if ((*it).second == 1) {
-      send_to_char(ch, "%s^n (one person looking for RP)\r\n", world[real_room((*it).first)].name);
-    } else {
-      send_to_char(ch, "%s^n (%d characters RPing)\r\n", world[real_room((*it).first)].name, (*it).second);
-    }
-  }
-}
-}
-*/
-
 #define GET_IGNORE_DATA(ch)  (ch->ignore_data)
+
+#define IS_IGNORING(ch, mode, vict) (GET_IGNORE_DATA((ch)) ? GET_IGNORE_DATA((ch))->mode((vict)) : FALSE)
 
 #define MODE_NOT_SILENT            0
 #define MODE_SILENT                1
