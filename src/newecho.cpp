@@ -806,7 +806,7 @@ ACMD(do_new_echo) {
        viewer = ch->in_room ? viewer->next_in_room : viewer->next_in_veh)
   {
     // If they've ignored you, no luck.
-    if (!IS_NPC(viewer) && GET_IGNORE_DATA(viewer)->is_blocking_ic_interaction_from(ch))
+    if (IS_IGNORING(viewer, is_blocking_ic_interaction_from, ch))
       continue;
 
     // If it's aecho, only send to people who see astral.
