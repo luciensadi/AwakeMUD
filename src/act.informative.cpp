@@ -4742,7 +4742,7 @@ void perform_mortal_where(struct char_data * ch, char *arg)
         continue;
 
       // Skip them if you can't see them for various reasons.
-      if ((GET_IGNORE_DATA(i) && GET_IGNORE_DATA(i)->is_blocking_where_visibility_for(ch)) || !CAN_SEE(ch, i))
+      if (IS_IGNORING(i, is_blocking_where_visibility_for, ch) || !CAN_SEE(ch, i))
         continue;
 
       // They're a valid target-- emplace them.
