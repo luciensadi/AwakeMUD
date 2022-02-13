@@ -118,14 +118,15 @@ void memoryClass::DeleteObject(struct obj_data *obj)
 {
   // we want to do this so that when we pop em off, they are usable
   free_obj(obj);
-  Obj->Push(obj);
+  delete obj;
+  // Obj->Push(obj);
 }
 
 void memoryClass::DeleteCh(struct char_data *ch)
 {
   extern struct char_data *combat_list;
   extern void stop_fighting(struct char_data * ch);
-  
+
   // Verify that we don't have a nulled-out character in the player list. This might add a lot of lag.
   struct char_data *prev = character_list, *next = NULL;
   if (prev && prev == ch) {
@@ -142,7 +143,7 @@ void memoryClass::DeleteCh(struct char_data *ch)
       prev = i;
     }
   }
-  
+
   prev = combat_list;
   if (prev) {
     for (struct char_data *i = combat_list; i; i = next) {
@@ -158,7 +159,7 @@ void memoryClass::DeleteCh(struct char_data *ch)
       prev = i;
     }
   }
-  
+
   free_char(ch);
   delete ch;
   // Ch->Push(ch);
@@ -184,7 +185,7 @@ void memoryClass::DeleteIcon(struct matrix_icon *icon)
 
 
 void memoryClass::DeleteVehicle(struct veh_data *veh)
-{  
+{
   free_veh(veh);
   Veh->Push(veh);
 }
@@ -192,7 +193,8 @@ void memoryClass::DeleteVehicle(struct veh_data *veh)
 void memoryClass::ClearObject(struct obj_data *obj)
 {
   clear_object(obj);
-  Obj->Push(obj);
+  delete obj;
+  // Obj->Push(obj);
 }
 
 void memoryClass::ClearVehicle(struct veh_data *veh)
