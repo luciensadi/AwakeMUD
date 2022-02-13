@@ -37,6 +37,7 @@
 #include "newdb.h"
 #include "helpedit.h"
 #include "archetypes.h"
+#include "ignore_system.h"
 
 #if defined(__CYGWIN__)
 #include <crypt.h>
@@ -2500,11 +2501,14 @@ void nanny(struct descriptor_data * d, char *arg)
           }
         if (d->character == NULL) {
           d->character = Mem->GetCh();
+
+          // Create and zero out their player_specials.
           DELETE_IF_EXTANT(d->character->player_specials);
           d->character->player_specials = new player_special_data;
-          // make sure to clear it up here
-          memset(d->character->player_specials, 0,
-                 sizeof(player_special_data));
+          memset(d->character->player_specials, 0, sizeof(player_special_data));
+
+          // Initialize their ignore data structure, which all PCs have.
+          GET_IGNORE_DATA(d->character) = new IgnoreData(d->character);
 
           d->character->desc = d;
         }

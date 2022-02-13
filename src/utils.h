@@ -452,6 +452,7 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define GET_POS(ch)             ((ch)->char_specials.position)
 #define GET_DEFPOS(ch)          ((ch)->char_specials.defined_position)
 #define GET_IDNUM(ch)           ((ch)->char_specials.idnum)
+#define GET_IDNUM_EVEN_IF_PROJECTING(ch)  ((((ch) && (ch)->desc && (ch)->desc->original) ? (ch)->desc->original : (ch))->char_specials.idnum)
 #define IS_CARRYING_W(ch)       ((ch)->char_specials.carry_weight)
 #define IS_CARRYING_N(ch)       ((ch)->char_specials.carry_items)
 #define FIGHTING(ch)            ((ch)->char_specials.fighting)
@@ -518,7 +519,6 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define GET_PROMPT(ch)          ((PLR_FLAGGED((ch), PLR_MATRIX) ? (ch)->player.matrixprompt : (ch)->player.prompt))
 #define GET_ALIASES(ch)         ((ch)->desc && (ch)->desc->original ? (ch)->desc->original->player_specials->aliases : (ch)->player_specials->aliases)
 #define GET_PLAYER_MEMORY(ch)   ((ch)->player_specials->remem)
-#define GET_IGNORE(ch)		((ch)->player_specials->ignored)
 #define GET_LAST_TELL(ch)	((ch)->player_specials->last_tell)
 #define GET_LAST_DAMAGETIME(ch)	((ch)->points.lastdamage)
 #define HOURS_LEFT_TRACK(ch)	((ch)->points.track[0])
@@ -718,11 +718,9 @@ bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struc
    IS_DUAL(sub) || HOLYLIGHT_OK(sub))
 
 #define CAN_SEE_CARRIER(sub, obj) \
-   ((!(obj)->carried_by || CAN_SEE((sub), (obj)->carried_by)) && \
-    (!(obj)->worn_by || CAN_SEE((sub), (obj)->worn_by)))
+   ((!(obj)->carried_by || CAN_SEE((sub), (obj)->carried_by)) || (!(obj)->worn_by || CAN_SEE((sub), (obj)->worn_by)))
 
-#define CAN_SEE_OBJ(sub, obj) (LIGHT_OK(sub) && \
-   INVIS_OK_OBJ((sub), (obj)) && CAN_SEE_CARRIER((sub), (obj)))
+#define CAN_SEE_OBJ(sub, obj) (LIGHT_OK(sub) && INVIS_OK_OBJ((sub), (obj)) && CAN_SEE_CARRIER((sub), (obj)))
 
 #define CAN_CARRY_OBJ(ch,obj)  \
    (((IS_CARRYING_W(ch) + GET_OBJ_WEIGHT(obj)) <= CAN_CARRY_W(ch)) &&   \

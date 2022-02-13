@@ -26,6 +26,7 @@
 #include "interpreter.h" // for alias
 #include "config.h"
 #include "bullet_pants.h"
+#include "ignore_system.h"
 
 /* mysql_config.h must be filled out with your own connection info. */
 /* For obvious reasons, DO NOT ADD THIS FILE TO SOURCE CONTROL AFTER CUSTOMIZATION. */
@@ -411,7 +412,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
     mysql_free_result(res);
     return FALSE;
   }
-  GET_IDNUM(ch) = atoi(row[0]);
+  GET_IDNUM(ch) = atol(row[0]);
   ch->player.char_name = str_dup(row[1]);
   strcpy(GET_PASSWD(ch), row[2]);
   GET_RACE(ch) = atoi(row[3]);
@@ -688,17 +689,6 @@ bool load_char(const char *name, char_data *ch, bool logon)
     a->mem = str_dup(row[2]);
     a->next = GET_PLAYER_MEMORY(ch);
     GET_PLAYER_MEMORY(ch) = a;
-  }
-  mysql_free_result(res);
-
-  snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_ignore WHERE idnum=%ld;", GET_IDNUM(ch));
-  mysql_wrapper(mysql, buf);
-  res = mysql_use_result(mysql);
-  while ((row = mysql_fetch_row(res))) {
-    remem *a = new remem;
-    a->idnum = atol(row[1]);
-    a->next = GET_IGNORE(ch);
-    GET_IGNORE(ch) = a;
   }
   mysql_free_result(res);
 
@@ -1063,6 +1053,9 @@ bool load_char(const char *name, char_data *ch, bool logon)
   }
   mysql_free_result(res);
 
+  // Load their ignore data (the structure was already initialized in init_char().)
+  GET_IGNORE_DATA(ch)->load_from_db();
+
   STOP_WORKING(ch);
   AFF_FLAGS(ch).RemoveBits(AFF_MANNING, AFF_RIG, AFF_PILOT, AFF_BANISH, AFF_FEAR, AFF_STABILIZE, AFF_SPELLINVIS, AFF_SPELLIMPINVIS, AFF_DETOX, AFF_RESISTPAIN, AFF_TRACKING, AFF_TRACKED, AFF_PRONE, ENDBIT);
   PLR_FLAGS(ch).RemoveBits(PLR_REMOTE, PLR_SWITCHED, PLR_MATRIX, PLR_PROJECT, PLR_EDITING, PLR_WRITING, PLR_PERCEIVE, PLR_VISA, ENDBIT);
@@ -1363,21 +1356,6 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
 
   /* Wipe out their memory, then re-write it. */
   SAVE_IF_DIRTY_BIT_SET(GET_MEMORY_DIRTY_BIT, save_pc_memory_to_db);
-
-  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_ignore WHERE idnum=%ld", GET_IDNUM(player));
-  mysql_wrapper(mysql, buf);
-  strcpy(buf, "INSERT INTO pfiles_ignore (idnum, remembered) VALUES (");
-  q = 0;
-  for (struct remem *b = GET_IGNORE(player); b; b = b->next) {
-    if (q)
-      strcat(buf, "), (");
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %ld", GET_IDNUM(player), b->idnum);
-    q = 1;
-  }
-  if (q) {
-    strcat(buf, ");");
-    mysql_wrapper(mysql, buf);
-  }
 
   SAVE_IF_DIRTY_BIT_SET(GET_ALIAS_DIRTY_BIT, save_aliases_to_db);
 
@@ -1960,6 +1938,21 @@ vnum_t get_player_id(char *name)
     return -1;
   }
   long x = atol(row[0]);
+  mysql_free_result(res);
+  return x;
+}
+
+int get_player_rank(long idnum) {
+  char buf[MAX_STRING_LENGTH];
+  snprintf(buf, sizeof(buf), "SELECT rank FROM pfiles WHERE idnum=%ld;", idnum);
+  mysql_wrapper(mysql, buf);
+  MYSQL_RES *res = mysql_use_result(mysql);
+  MYSQL_ROW row = mysql_fetch_row(res);
+  if (!row && mysql_field_count(mysql)) {
+    mysql_free_result(res);
+    return -1;
+  }
+  int x = atoi(row[0]);
   mysql_free_result(res);
   return x;
 }
