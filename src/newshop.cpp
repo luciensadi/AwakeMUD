@@ -3048,7 +3048,8 @@ struct obj_data *shop_package_up_ware(struct obj_data *obj) {
   GET_OBJ_BARRIER(shop_container) = 32;
   GET_OBJ_MATERIAL(shop_container) = MATERIAL_ADV_PLASTICS;
   GET_OBJ_COST(shop_container) = 0;
-
+  GET_OBJ_EXTRA(shop_container).SetBit(ITEM_KEPT)
+  
   snprintf(buf3, sizeof(buf3), "a packaged-up '%s'", GET_OBJ_NAME(obj));
   DELETE_ARRAY_IF_EXTANT(shop_container->restring);
   shop_container->restring = str_dup(buf3);
