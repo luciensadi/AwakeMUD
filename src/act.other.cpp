@@ -1152,10 +1152,12 @@ const char *tog_messages[][2] = {
                              "You will no longer see the idle nuyen reward messages.\r\n"},
                             {"Player cyberdocs are no longer able to operate on you.\r\n",
                              "Player cyberdocs are now able to operate on you. This flag will be un-set after each operation.\r\n"},
-                            {"You will no longer void on idle out. This means you are vulnerable, you have been warned.\r\n",
-                             "You will return to the void when idle.\r\n"},
+                            {"You will return to the void when idle.\r\n",
+                             "You will no longer void on idle out. This means you are vulnerable, you have been warned.\r\n"},
                             {"You un-squelch your staff radio powers: You no longer require a radio to hear broadcasts, and will hear any language.\r\n",
-                             "You squelch your staff radio listening powers: You now require a radio, and your language skills are suppressed.\r\n"}
+                             "You squelch your staff radio listening powers: You now require a radio, and your language skills are suppressed.\r\n"},
+                            {"You will now show up by name on the where-list.\r\n",
+                             "You will no longer show up by name on the where-list.\r\n"}
                           };
 
 ACMD(do_toggle)
@@ -1193,10 +1195,10 @@ ACMD(do_toggle)
 
       // Compose and append our line.
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf),
-              "%18s: %-3s%s",
+              "%20s: %-3s%s",
               preference_bits_v2[i].name,
               buf2,
-              printed%3 == 2 ? "\r\n" : "");
+              printed%3 == 2 || PRF_FLAGGED(ch, PRF_SCREENREADER) ? "\r\n" : "");
 
       // Increment our spacer.
       printed++;
@@ -1369,6 +1371,9 @@ ACMD(do_toggle)
     } else if (IS_SENATOR(ch) && (is_abbrev(argument, "staffradio") || is_abbrev(argument, "suppress staff radio"))) {
       result = PRF_TOG_CHK(ch, PRF_SUPPRESS_STAFF_RADIO);
       mode = 40;
+    } else if (is_abbrev(argument, "nowhere") || is_abbrev(argument, "where") || is_abbrev(argument, "anonymous on where")) {
+      result = PRF_TOG_CHK(ch, PRF_ANONYMOUS_ON_WHERE);
+      mode = 41;
     } else {
       send_to_char("That is not a valid toggle option.\r\n", ch);
       return;

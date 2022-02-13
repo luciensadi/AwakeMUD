@@ -592,6 +592,7 @@ struct preference_bit_struct preference_bits_v2[] = {
   { "Cyberdocs Allowed"    , FALSE, TRUE  },
   { "No Void on Idle"      , FALSE, TRUE  },
   { "RadLog"               , TRUE , TRUE  },
+  { "Anonymous on Where"   , FALSE, TRUE  },
   { "\n"                   , 0    , 0     }
 };
 
@@ -657,6 +658,7 @@ const char *preference_bits[] =
     "CYBERDOC_PERMITTED",
     "NO_VOID",
     "RADLOG",
+    "ANONYMOUS_ON_WHERE",
     "\n"
   };
 

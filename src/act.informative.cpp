@@ -17,6 +17,7 @@
 #include <iostream>
 #include <fstream>
 #include <unordered_map>
+#include <vector>
 
 // using namespace std;
 
@@ -41,6 +42,7 @@
 #include "bullet_pants.h"
 #include "config.h"
 #include "newmail.h"
+#include "ignore_system.h"
 
 const char *CCHAR;
 
@@ -4728,18 +4730,27 @@ extern void nonsensical_reply(struct char_data *ch, const char *arg, const char 
 void perform_mortal_where(struct char_data * ch, char *arg)
 {
   // array slot 0 is total PCs, array slot 1 is active PCs
-  std::unordered_map<vnum_t, int> occupied_rooms = {};
-  std::unordered_map<vnum_t, int>::iterator room_iterator;
+  std::unordered_map<vnum_t, std::vector<struct char_data *>> occupied_rooms = {};
+  std::unordered_map<vnum_t, std::vector<struct char_data *>>::iterator room_iterator;
 
   for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
     if (!d->connected) {
       struct char_data *i = (d->original ? d->original : d->character);
-      if (i && i->in_room && ROOM_FLAGGED(i->in_room, ROOM_ENCOURAGE_CONGREGATION) && CAN_SEE(ch, i)) {
-        if ((room_iterator = occupied_rooms.find(GET_ROOM_VNUM(i->in_room))) != occupied_rooms.end()) {
-          ((*room_iterator).second)++;
-        } else {
-          occupied_rooms.emplace(GET_ROOM_VNUM(i->in_room), 1);
-        }
+
+      // Skip them if they aren't in a social-bonus room.
+      if (!i || !i->in_room || !ROOM_FLAGGED(i->in_room, ROOM_ENCOURAGE_CONGREGATION))
+        continue;
+
+      // Skip them if you can't see them for various reasons.
+      if ((GET_IGNORE_DATA(i) && GET_IGNORE_DATA(i)->is_blocking_where_visibility_for(ch)) || !CAN_SEE(ch, i))
+        continue;
+
+      // They're a valid target-- emplace them.
+      if ((room_iterator = occupied_rooms.find(GET_ROOM_VNUM(i->in_room))) != occupied_rooms.end()) {
+        (room_iterator->second).push_back(i);
+      } else {
+        std::vector<struct char_data *> tmp_vec = { i };
+        occupied_rooms.emplace(GET_ROOM_VNUM(i->in_room), tmp_vec);
       }
     }
   }
@@ -4750,11 +4761,25 @@ void perform_mortal_where(struct char_data * ch, char *arg)
   } else {
     send_to_char("There are people RPing in these rooms:\r\n", ch);
     for (auto it = occupied_rooms.begin(); it != occupied_rooms.end(); ++it) {
-      if ((*it).second == 1) {
-        send_to_char(ch, "%s^n (one person looking for RP)\r\n", world[real_room((*it).first)].name);
-      } else {
-        send_to_char(ch, "%s^n (%d characters RPing)\r\n", world[real_room((*it).first)].name, (*it).second);
+      bool printed_something = FALSE;
+      int num_masked_people = 0;
+
+      send_to_char(ch, "%s^n (", world[real_room(it->first)].name);
+
+      for (size_t i = 0; i < (it->second).size(); i++) {
+        if (PRF_FLAGGED((it->second)[i], PRF_ANONYMOUS_ON_WHERE)) {
+          num_masked_people++;
+        } else {
+          send_to_char(ch, "%s%s", printed_something ? ", " : "", GET_CHAR_NAME((it->second)[i]));
+          printed_something = TRUE;
+        }
       }
+
+      if (num_masked_people > 0) {
+        send_to_char(ch, "%s%d anonymous character%s", printed_something ? " and " : "", num_masked_people, num_masked_people > 1 ? "s" : "");
+      }
+
+      send_to_char(")\r\n", ch);
     }
   }
 }
