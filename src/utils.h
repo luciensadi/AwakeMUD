@@ -270,7 +270,7 @@ void    update_pos(struct char_data *victim);
 #define ROOM_FLAGS(loc) ((loc)->room_flags)
 
 #define IS_NPC(ch)  (MOB_FLAGS(ch).IsSet(MOB_ISNPC))
-#define IS_MOB(ch)  (IS_NPC(ch) && ((ch)->nr >-1))
+#define IS_MOB(ch)  (IS_NPC(ch) && (GET_MOB_RNUM((ch)) >-1))
 #define IS_PROJECT(ch) (IS_NPC(ch) && ch->desc && ch->desc->original && \
   PLR_FLAGS(ch->desc->original).IsSet(PLR_PROJECT) && \
   GET_MOB_VNUM(ch) == 22)
@@ -569,13 +569,14 @@ int get_armor_penalty_grade(struct char_data *ch);
 
 #define GET_CONGREGATION_BONUS(ch) ((ch)->congregation_bonus_pool)
 
-#define GET_MOB_SPEC(ch)       (IS_MOB(ch) ? (mob_index[(ch->nr)].func) : NULL)
-#define GET_MOB_SPEC2(ch)      (IS_MOB(ch) ? (mob_index[(ch->nr)].sfunc) : NULL)
-
 #define GET_MOB_RNUM(mob)       ((mob)->nr)
 #define GET_MOB_VNUM(mob)       (IS_MOB(mob) ? mob_index[GET_MOB_RNUM(mob)].vnum : -1)
 #define MOB_VNUM_RNUM(rnum) ((mob_index[rnum]).vnum)
 #define GET_MOB_UNIQUE_ID(mob)  ((mob)->unique_id)
+
+#define GET_MOB_SPEC(ch)       (IS_MOB(ch) ? (mob_index[GET_MOB_RNUM((ch))].func) : NULL)
+#define GET_MOB_SPEC2(ch)      (IS_MOB(ch) ? (mob_index[GET_MOB_RNUM((ch))].sfunc) : NULL)
+#define MOB_HAS_SPEC(ch, spec) (mob_index[GET_MOB_RNUM((ch))].func == spec || mob_index[GET_MOB_RNUM((ch))].sfunc == spec)
 
 #define GET_MOB_WAIT(ch)      ((ch)->mob_specials.wait_state)
 #define GET_DEFAULT_POS(ch)   ((ch)->mob_specials.default_pos)
