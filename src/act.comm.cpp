@@ -1542,10 +1542,13 @@ ACMD(do_phone)
       return;
     }
 
-    if (k->dest) {
+    struct char_data *possessor = get_obj_possessor(k->phone);
+
+    if (k->dest || (possessor && IS_IGNORING(possessor, is_blocking_calls_from, ch))) {
       send_to_char("You hear the busy signal.\r\n", ch);
       return;
     }
+    
     phone->dest = k;
     phone->connected = TRUE;
     k->dest = phone;
@@ -1564,13 +1567,7 @@ ACMD(do_phone)
     if (phone->dest->persona)
       send_to_icon(phone->dest->persona, "The flashing phone icon fades from view, and \"Missed Call: %.4d-%.4d\" flashes briefly.\r\n", (int) phone->number / 10000, (int) phone->number % 10000);
     else {
-      tch = phone->dest->phone->carried_by;
-      if (!tch)
-        tch = phone->dest->phone->worn_by;
-      if (!tch && phone->dest->phone->in_obj)
-        tch = phone->dest->phone->in_obj->carried_by;
-      if (!tch && phone->phone->in_obj)
-        tch = phone->dest->phone->in_obj->worn_by;
+      tch = get_obj_possessor(phone->dest->phone);
       if (tch) {
         char ended_call_buf[1000];
         if (phone->dest->connected) {

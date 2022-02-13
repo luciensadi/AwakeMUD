@@ -23,6 +23,7 @@
 #include "constants.h"
 #include "newmagic.h"
 #include "config.h"
+#include "ignore_system.h"
 
 /* external functs */
 int special(struct char_data * ch, int cmd, char *arg);
@@ -2231,6 +2232,12 @@ ACMD(do_follow)
         act("Sorry, but following in loops is not allowed.", FALSE, ch, 0, 0, TO_CHAR);
         return;
       }
+
+      if (IS_IGNORING(leader, is_blocking_following_from, ch)) {
+        send_to_char("You can't do that.\r\n", ch);
+        return;
+      }
+
       if (ch->master)
         stop_follower(ch);
       AFF_FLAGS(ch).RemoveBit(AFF_GROUP);
