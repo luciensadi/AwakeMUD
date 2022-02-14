@@ -28,7 +28,7 @@
 
 */
 
-#define GET_IGNORE_DATA(ch)  (ch->ignore_data)
+#define GET_IGNORE_DATA(ch)  (((ch)->desc && (ch)->desc->original) ? (ch)->desc->original->ignore_data : (ch)->ignore_data)
 
 #define IS_IGNORING(ch, mode, vict) (((ch) && GET_IGNORE_DATA((ch))) ? GET_IGNORE_DATA((ch))->mode((vict)) : FALSE)
 
