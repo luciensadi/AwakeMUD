@@ -1722,7 +1722,7 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
           else send_to_char(ch, "^cRain splashes into the puddles around your feet.^n\r\n");
         }
         else if (weather_info.lastrain < 5) {
-        send_to_char(ch, "^cThe ground is wet, it must have rained recently.^n\r\n");
+          send_to_char(ch, "^cThe ground is wet, it must have rained recently.^n\r\n");
       }
     }
   }
