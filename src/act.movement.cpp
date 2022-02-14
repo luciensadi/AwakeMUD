@@ -1569,7 +1569,7 @@ ACMD(do_drag)
     return;
   }
 
-  if (!(vict = get_char_room_vis(ch, buf1))) {
+  if (!(vict = get_char_room_vis(ch, buf1)) || IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)) {
     send_to_char(ch, "You don't see anyone named '%s' here.\r\n", buf1);
     return;
   }

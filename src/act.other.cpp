@@ -34,6 +34,7 @@
 #include "bullet_pants.h"
 #include "config.h"
 #include "newmail.h"
+#include "ignore_system.h"
 
 #ifdef GITHUB_INTEGRATION
 #include <curl/curl.h>
@@ -245,7 +246,7 @@ ACMD(do_steal)
   else if (!IS_SENATOR(ch) && IS_NPC(vict) && (mob_index[GET_MOB_RNUM(vict)].func == shop_keeper
                                                || mob_index[GET_MOB_RNUM(vict)].sfunc == shop_keeper))
     send_to_char(ch, "%s slaps your hand away.\r\n", CAP(GET_NAME(vict)));
-  else if (!IS_SENATOR(ch) && AWAKE(vict))
+  else if (!IS_SENATOR(ch) && (AWAKE(vict) || IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)))
     send_to_char("That would be quite a feat.\r\n", ch);
   else if (!IS_SENATOR(ch) && !IS_NPC(vict) && (!PRF_FLAGGED(ch, PRF_PKER) || !PRF_FLAGGED(vict, PRF_PKER)))
     send_to_char(ch, "Both you and %s need to be toggled PK for that.\r\n", GET_NAME(vict));

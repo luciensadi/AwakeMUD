@@ -24,6 +24,7 @@
 #include "newmatrix.h"
 #include "newdb.h"
 #include "limits.h"
+#include "ignore_system.h"
 
 /* extern variables */
 extern int drink_aff[][3];
@@ -2204,18 +2205,23 @@ ACMD(do_give)
     argument = one_argument(argument, arg);
     if (!str_cmp("nuyen", arg)) {
       argument = one_argument(argument, arg);
+
       if (ch->in_veh) {
-        vict = get_char_veh(ch, arg, ch->in_veh);
-        if (vict) {
+        if (!(vict = get_char_veh(ch, arg, ch->in_veh)) || IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)) {
+          send_to_char(ch, "You don't see anyone named '%s' here.\r\n", arg);
+        } else {
           perform_give_gold(ch, vict, amount);
-          return;
         }
-        send_to_char(ch, "You don't see anyone named '%s' here.\r\n", arg);
         return;
       }
-      if ((vict = give_find_vict(ch, arg)))
+
+      if (!(vict = give_find_vict(ch, arg)) || IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)) {
+        send_to_char(ch, "You don't see anyone named '%s' here.\r\n", arg);
+      } else {
         perform_give_gold(ch, vict, amount);
+      }
       return;
+
     } else {
       /* code to give multiple items.  anyone want to write it? -je */
       send_to_char("You can't give more than one item at a time.\r\n", ch);
@@ -2224,13 +2230,18 @@ ACMD(do_give)
   } else {
     one_argument(argument, buf1);
     if (ch->in_veh) {
-      vict = get_char_veh(ch, buf1, ch->in_veh);
-      if (!vict) {
+      if (!(vict = get_char_veh(ch, buf1, ch->in_veh))) {
         send_to_char(ch, "You don't see anyone named '%s' here.\r\n", buf1);
         return;
       }
     } else if (!(vict = give_find_vict(ch, buf1)))
       return;
+
+    if (IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)) {
+      send_to_char(ch, "You don't see anyone named '%s' here.\r\n", buf1);
+      return;
+    }
+
     dotmode = find_all_dots(arg);
     if (dotmode == FIND_INDIV) {
       if (!(obj = get_obj_in_list_vis(ch, arg, ch->carrying))) {
