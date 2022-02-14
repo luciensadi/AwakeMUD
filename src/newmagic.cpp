@@ -1608,6 +1608,29 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       if (!check_spell_victim(ch, vict, spell, arg))
         return;
 
+      if (GET_SUSTAINED(vict)) {
+      for (struct sustain_data *sus = GET_SUSTAINED(vict); sus; sus = sus->next) {
+        /*  Q: Can you cast Decrease Attribute, followed by Increase Attribute (which is easier because the attribute TN is smaller),
+               then un-sustain the Decrease Attribute, allowing you to have a higher Attribute than you’d have without having
+               Decreased it? How about changing your Reaction after an Increased Reflexes spell?
+            A: No. Only one attribute-affecting health spell can be used to modify an attribute at a time.
+
+            Sources:
+            - https://www.shadowrunrpg.com/resources/sr3faq.html
+            - http://www.shadowruntabletop.com/game-resources/shadowrun-third-edition-faq/
+        */
+        if (sus->subtype == sub && (sus->spell == SPELL_INCATTR || sus->spell == SPELL_INCCYATTR || sus->spell == SPELL_DECATTR || sus->spell == SPELL_DECCYATTR || sus->spell == SPELL_INCREA)) {
+          send_to_char(ch, "%s is already affected by a similar spell.\r\n", GET_CHAR_NAME(vict));
+          return;
+        }
+
+        if (spell == SPELL_INCREA && (sus->spell == SPELL_INCREF1 || sus->spell == SPELL_INCREF2 || sus->spell == SPELL_INCREF3)) {
+          send_to_char(ch, "%s's reflexes have already been modified, so this spell can't take effect.\r\n", GET_CHAR_NAME(vict));
+          return;
+        }
+      }
+    }
+
       if (GET_ATT(vict, sub) != GET_REAL_ATT(vict, sub)) {
         if (GET_TRADITION(vict) == TRAD_ADEPT && sub < CHA) {
           switch (sub) {
@@ -1624,14 +1647,8 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
               cyber = false;
             break;
           }
-        } else if (GET_SUSTAINED(vict)) {
-          for (struct sustain_data *sus = GET_SUSTAINED(vict); sus; sus = sus->next) {
-            if (sus->caster == FALSE && (sus->spell == SPELL_INCATTR || sus->spell == SPELL_DECATTR) && sus->subtype == sub) {
-              cyber = false;
-              break;
-            }
-          }
         }
+
         if (cyber && (spell == SPELL_DECATTR || spell == SPELL_INCATTR || spell == SPELL_INCREA)) {
           snprintf(buf, sizeof(buf), "$N's %s has been modified by technological means and is immune to this spell.\r\n", attributes[sub]);
           act(buf, TRUE, ch, 0, vict, TO_CHAR);
