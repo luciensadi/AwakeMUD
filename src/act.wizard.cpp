@@ -6873,17 +6873,16 @@ int audit_zone_shops_(struct char_data *ch, int zone_num, bool verbose) {
 
     shop = &shop_table[real_shp];
 
-    snprintf(buf, sizeof(buf), "^c[%8ld]^n:\r\n", shop->vnum);
+    rnum_t shopkeeper_rnum = real_mobile(shop->keeper);
 
     printed = FALSE;
 
-    rnum_t shopkeeper_rnum = real_mobile(shop->keeper);
-
     if (shopkeeper_rnum <= -1) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - invalid shopkeeper.\r\n");
+      snprintf(buf, sizeof(buf), "^c[%8ld]^n:\r\n  - invalid shopkeeper.\r\n", shop->vnum);
       printed = TRUE;
       issues++;
     } else {
+      snprintf(buf, sizeof(buf), "^c[%8ld]^n: %s (%ld)\r\n", shop->vnum, GET_NAME(&mob_proto[shopkeeper_rnum]), shop->keeper);
       // Flag invalid sell multipliers
       if (shop->profit_buy < 1.0) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - too-low buy profit ^c%0.2f^n < 1.0^n.\r\n", shop->profit_buy);

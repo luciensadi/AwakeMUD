@@ -829,12 +829,13 @@ bool spell_drain(struct char_data *ch, int spell_idx, int force, int damage) {
   magic_perception(ch, force, spell_idx);
 
   // Write our rolls info.
+  int original_damage = damage;
   int dice = GET_WIL(ch) + GET_DRAIN(ch);
   success = success_test(dice, target);
   damage = convert_damage(stage(-success, damage));
   snprintf(buf, sizeof(buf), "Drain Test: F:%d%s TN:%d Dice: %d. Rolled %d successes, damage before resists is now %s (%d).",
            force,
-           wound_name[damage],
+           wound_name[MIN(DEADLY, MAX(0, original_damage))],
            target,
            dice,
            success,
