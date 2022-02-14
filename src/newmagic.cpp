@@ -3751,6 +3751,7 @@ ACMD(do_banish)
     send_to_char("You can only banish a nature spirit or elemental.\r\n", ch);
     return;
   }
+  WAIT_STATE(ch, OFFENSIVE_SPELL_WAIT_STATE_TIME);
   stop_fighting(ch);
   stop_fighting(mob);
   set_fighting(ch, mob);
@@ -4865,6 +4866,7 @@ ACMD(do_dispell)
     send_to_char("They don't have that many spells cast on them.\r\n", ch);
     return;
   }
+  WAIT_STATE(ch, OFFENSIVE_SPELL_WAIT_STATE_TIME);
   int success = success_test(GET_SKILL(ch, SKILL_SORCERY) + MIN(GET_SKILL(ch, SKILL_SORCERY), GET_CASTING(ch)), sust->force + modify_target(ch));
   int type = sust->spell, force = sust->force;
   snprintf(buf, sizeof(buf), "Dispell $N's %s (force %d) using skill %d vs TN %d: %d successes.",
