@@ -356,6 +356,10 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
       send_to_char("They are nothing but a figment of your imagination.\r\n", ch);
       return TRUE;
     }
+    if (!IS_NPC(ch) && !IS_NPC(vict) && (!PRF_FLAGGED(ch, PRF_PKER) || !PRF_FLAGGED(vict, PRF_PKER))) {
+      send_to_char("You and your opponent must both be toggled PK for that.\r\n", ch);
+      return TRUE;
+    }
 
 #ifdef IGNORING_IC_ALSO_IGNORES_COMBAT
     if (IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)) {
