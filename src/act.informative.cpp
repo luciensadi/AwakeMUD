@@ -282,7 +282,7 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
       strlcat(buf, " (Plan)", sizeof(buf));
     if (GET_OBJ_VNUM(object) == 108 && !GET_OBJ_TIMER(object))
       strlcat(buf, " (Uncooked)", sizeof(buf));
-    if (GET_OBJ_TYPE(object) == ITEM_FOCUS && GET_OBJ_VAL(object, 9) == GET_IDNUM(ch))
+    if (GET_OBJ_TYPE(object) == ITEM_FOCUS && GET_FOCUS_BOND_TIME_REMAINING(object) == GET_IDNUM(ch))
       strlcat(buf, " ^Y(Geas)^n", sizeof(buf));
     if (GET_OBJ_TYPE(object) == ITEM_GUN_AMMO
         || (GET_OBJ_TYPE(object) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(object) == TYPE_PARTS))

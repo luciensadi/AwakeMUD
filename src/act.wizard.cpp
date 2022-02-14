@@ -4685,7 +4685,7 @@ ACMD(do_set)
     if (IS_NPC(vict) || (IS_SENATOR(vict) && access_level(vict, LVL_ADMIN)))
       RANGE(0, 5000);
     else
-      RANGE(0, 1500);
+      RANGE(0, 3000);
     vict->real_abils.mag = value;
     affect_total(vict);
     break;
