@@ -75,6 +75,11 @@ ACMD(do_ignore) {
     return;
   }
 
+  if (!GET_IGNORE_DATA(ch)) {
+    mudlog("SYSERR: Using the ignore command without ignore data! Self-recovering.", ch, LOG_SYSLOG, TRUE);
+    GET_IGNORE_DATA(ch) = new IgnoreData(ch);
+  }
+
   // Without a second argument, we display the ignores for the selected character.
   if (!*second_argument) {
     std::unordered_map<long, Bitfield>::iterator results_iterator;
@@ -443,7 +448,7 @@ void display_characters_ignore_entries(struct char_data *viewer, struct char_dat
   char ignored_bits_str[5000];
   bool self = (viewer == target);
 
-  if (GET_IGNORE_DATA(target)->ignored_map.empty()) {
+  if (!GET_IGNORE_DATA(target) || GET_IGNORE_DATA(target)->ignored_map.empty()) {
     send_to_char(viewer, "%s %s ignoring anyone.\r\n", self ? "You" : GET_CHAR_NAME(target), self ? "aren't" : "isn't");
     return;
   }
