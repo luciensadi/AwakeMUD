@@ -2597,7 +2597,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^crating-%d %s^n program, ^c%d^n units in size.",
               GET_OBJ_VAL(j, 1), programs[GET_OBJ_VAL(j, 0)].name, GET_OBJ_VAL(j, 2));
       if (GET_OBJ_VAL(j, 0) == SOFT_ATTACK)
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " Its damage code is ^c%s^n.", wound_name[GET_OBJ_VAL(j, 3)]);
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " Its damage code is ^c%s^n.", GET_WOUND_NAME(GET_OBJ_VAL(j, 3)));
       break;
     case ITEM_BIOWARE:
       if (GET_BIOWARE_RATING(j) > 0) {
@@ -2763,7 +2763,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
     case ITEM_DESIGN:
       if (GET_OBJ_VAL(j, 0) == 5) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "This design is for a ^crating-%d %s (%s)^n program. It requires ^c%d^n units of storage.\r\n",
-                GET_OBJ_VAL(j, 1), programs[GET_OBJ_VAL(j, 0)].name, wound_name[GET_OBJ_VAL(j, 2)],
+                GET_OBJ_VAL(j, 1), programs[GET_OBJ_VAL(j, 0)].name, GET_WOUND_NAME(GET_OBJ_VAL(j, 2)),
                 (GET_OBJ_VAL(j, 1) * GET_OBJ_VAL(j, 1)) * attack_multiplier[GET_OBJ_VAL(j, 2)]);
       } else {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "This design is for a ^crating-%d %s^n program. It requires ^c%d^n units of storage.\r\n",

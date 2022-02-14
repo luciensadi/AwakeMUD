@@ -2477,10 +2477,10 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
 
   if (attacktype <= TYPE_BLACKIC)
     snprintf(rbuf, sizeof(rbuf),"Damage (%s vs %s, %s %s): ", GET_CHAR_NAME(ch), GET_CHAR_NAME(victim),
-            wound_name[MIN(DEADLY, MAX(0, dam))], damage_type_names_must_subtract_300_first_and_must_not_be_greater_than_blackic[attacktype - 300]);
+            GET_WOUND_NAME(dam), damage_type_names_must_subtract_300_first_and_must_not_be_greater_than_blackic[attacktype - 300]);
   else
     snprintf(rbuf, sizeof(rbuf),"Damage (%s vs %s, %s %d): ", GET_CHAR_NAME(ch), GET_CHAR_NAME(victim),
-            wound_name[MIN(DEADLY, MAX(0, dam))], attacktype);
+            GET_WOUND_NAME(dam), attacktype);
 
   if (victim != ch)
   {

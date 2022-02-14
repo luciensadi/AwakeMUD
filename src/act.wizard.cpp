@@ -72,7 +72,6 @@ extern int max_ability(int i);
 
 extern const char *wound_arr[];
 extern const char *material_names[];
-extern const char *wound_name[];
 extern int ViolencePulse;
 
 extern void list_detailed_shop(struct char_data *ch, long shop_nr);
@@ -1348,7 +1347,7 @@ void do_stat_object(struct char_data * ch, struct obj_data * j)
     break;
   case ITEM_PROGRAM:
     if (GET_OBJ_VAL(j, 0) == SOFT_ATTACK)
-      snprintf(buf2, sizeof(buf2), ", DamType: %s", wound_name[GET_OBJ_VAL(j, 3)]);
+      snprintf(buf2, sizeof(buf2), ", DamType: %s", GET_WOUND_NAME(GET_OBJ_VAL(j, 3)));
     else
       snprintf(buf2, sizeof(buf2), " ");
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Type: %s, Rating: %d, Size: %d%s",
@@ -3849,9 +3848,9 @@ ACMD(do_show)
         if (max_ability(i) > 1)
           switch (i) {
           case ADEPT_KILLING_HANDS:
-            snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " %-8s", wound_name[MIN(4, GET_POWER_TOTAL(vict, i))]);
+            snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " %-8s", GET_WOUND_NAME(GET_POWER_TOTAL(vict, i)));
             if (GET_POWER_ACT(vict, i))
-              snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " ^Y(%-8s)^n", wound_name[MIN(4, GET_POWER_ACT(vict, i))]);
+              snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " ^Y(%-8s)^n", GET_WOUND_NAME(GET_POWER_ACT(vict, i)));
             strlcat(buf2, "\r\n", sizeof(buf2));
             break;
           default:

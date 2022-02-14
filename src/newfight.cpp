@@ -1177,9 +1177,9 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
              bod_success == 1 ? "" : "es", // success plural
              net_successes, // net success
              net_successes == 1 ? "" : "es", // net success plural
-             wound_name[MIN(DEADLY, MAX(0, damage_level))], // damage stage from (word)
+             GET_WOUND_NAME(damage_level), // damage stage from (word)
              damage_level, // damage stage from (int)
-             wound_name[MIN(DEADLY, MAX(0, staged_damage))], // damage stage to (word)
+             GET_WOUND_NAME(staged_damage), // damage stage to (word)
              staged_damage, // damage stage to (int)
              damage_total, // actual boxes of damage done
              damage_is_physical ? 'P' : 'M' // mental or physical

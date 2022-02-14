@@ -835,11 +835,11 @@ bool spell_drain(struct char_data *ch, int spell_idx, int force, int damage) {
   damage = convert_damage(stage(-success, damage));
   snprintf(buf, sizeof(buf), "Drain Test: F:%d%s TN:%d Dice: %d. Rolled %d successes, damage before resists is now %s (%d).",
            force,
-           wound_name[MIN(DEADLY, MAX(0, original_damage))],
+           GET_WOUND_NAME(original_damage),
            target,
            dice,
            success,
-           wound_name[MIN(DEADLY, MAX(0, damage))],
+           GET_WOUND_NAME(damage),
            damage
           );
   act(buf, FALSE, ch, NULL, NULL, TO_ROLLS);
@@ -898,7 +898,7 @@ bool spell_drain(struct char_data *ch, int spell_idx, int force, int damage) {
     GET_MENTAL(ch) = 0;
   }
 
-  snprintf(buf, sizeof(buf), "After resists, damage is %s (%d).", wound_name[MIN(DEADLY, MAX(0, damage))], damage);
+  snprintf(buf, sizeof(buf), "After resists, damage is %s (%d).", GET_WOUND_NAME(damage), damage);
   act(buf, FALSE, ch, NULL, NULL, TO_ROLLS);
 
   update_pos(ch);
