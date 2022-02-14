@@ -161,6 +161,7 @@ void memoryClass::DeleteCh(struct char_data *ch)
     }
   }
 
+  // Delete their ignore data. This deconstructs it as expected.
   if (ch->ignore_data)
     delete ch->ignore_data;
 
