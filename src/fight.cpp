@@ -21,6 +21,7 @@
 #include "newmatrix.h"
 #include "newmagic.h"
 #include "bullet_pants.h"
+#include "ignore_system.h"
 
 /* Structures */
 struct char_data *combat_list = NULL;   /* head of l-list of fighting chars */
@@ -295,6 +296,21 @@ void set_fighting(struct char_data * ch, struct char_data * vict, ...)
 
   if (CH_IN_COMBAT(ch))
     return;
+
+#ifdef IGNORING_IC_ALSO_IGNORES_COMBAT
+  char warnbuf[5000];
+  if (IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)) {
+    snprintf(warnbuf, sizeof(warnbuf), "WARNING: Entered set_fighting with vict %s ignoring attacker %s!", GET_CHAR_NAME(vict), GET_CHAR_NAME(ch));
+    mudlog(warnbuf, ch, LOG_SYSLOG, TRUE);
+    return;
+  }
+
+  if (IS_IGNORING(ch, is_blocking_ic_interaction_from, vict)) {
+    snprintf(warnbuf, sizeof(warnbuf), "WARNING: Entered set_fighting with attacker %s ignoring victim %s!", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict));
+    mudlog(warnbuf, ch, LOG_SYSLOG, TRUE);
+    return;
+  }
+#endif
 
   ch->next_fighting = combat_list;
   combat_list = ch;
@@ -2319,7 +2335,7 @@ bool would_become_killer(struct char_data * ch, struct char_data * vict)
   char_data *attacker;
 
   if (IS_NPC(ch) && (ch->desc == NULL || ch->desc->original == NULL))
-    return false;
+    return FALSE;
 
   if (!IS_NPC(ch))
     attacker = ch;
@@ -2332,16 +2348,16 @@ bool would_become_killer(struct char_data * ch, struct char_data * vict)
       (!PRF_FLAGGED(attacker, PRF_PKER) || !PRF_FLAGGED(vict, PRF_PKER)) &&
       !PLR_FLAGGED(attacker, PLR_KILLER) && attacker != vict && !IS_SENATOR(attacker))
   {
-    return true;
+    return TRUE;
   }
-  return false;
+  return FALSE;
 }
 
 // Basically ripped the logic from damage(). Used to adjust combat messages for edge cases.
 bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype, bool include_func_protections) {
   // Corpse protection.
   if (GET_POS(victim) <= POS_DEAD)
-    return false;
+    return FALSE;
 
   // You can always hurt yourself. :dead-eyed stare:
   if (ch == victim)
@@ -2403,16 +2419,24 @@ bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype, bo
       return false;
 
   } else {
+#ifdef IGNORING_IC_ALSO_IGNORES_COMBAT
+  if (IS_IGNORING(victim, is_blocking_ic_interaction_from, ch))
+    return FALSE;
+
+  if (IS_IGNORING(ch, is_blocking_ic_interaction_from, victim))
+    return FALSE;
+#endif
+
     // Known ignored edge case: if the player is not a killer but would become a killer because of this action.
     if (ch != victim && would_become_killer(ch, victim))
-      return false;
+      return FALSE;
 
     if (PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(victim))
-      return false;
+      return FALSE;
   }
 
   // Looks like ch can hurt vict after all.
-  return true;
+  return TRUE;
 }
 
 bool damage(struct char_data *ch, struct char_data *victim, int dam, int attacktype, bool is_physical) {
@@ -4329,6 +4353,18 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
         send_to_char("You and your opponent must both be toggled PK for that.\r\n", ch);
         return;
       }
+
+#ifdef IGNORING_IC_ALSO_IGNORES_COMBAT
+      if (IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)) {
+        send_to_char("You and your opponent must both be toggled PK for that.\r\n", ch);
+        return;
+      }
+
+      if (IS_IGNORING(ch, is_blocking_ic_interaction_from, vict)) {
+        send_to_char("You can't attack someone you're ignoring.\r\n", ch);
+        return;
+      }
+#endif
     }
     else if (npc_is_protected_by_spec(vict)) {
       send_to_char("You can't attack protected NPCs like that.\r\n", ch);
