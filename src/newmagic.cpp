@@ -806,6 +806,25 @@ bool spell_drain(struct char_data *ch, int spell_idx, int force, int damage) {
   if (GET_BACKGROUND_AURA(get_ch_in_room(ch)) != AURA_POWERSITE)
     target += (GET_BACKGROUND_COUNT(get_ch_in_room(ch)) / 2);
 
+  // SR3 p162: Add +2 to drain power for each sustained spell that's not being sustained by a focus.
+  {
+    int sustained_spells = 0;
+    for (struct sustain_data *sust = GET_SUSTAINED(ch); sust; sust = sust->next) {
+      if (sust->caster && !sust->focus && !sust->spirit)
+        sustained_spells++;
+    }
+    if (sustained_spells) {
+      snprintf(buf, sizeof(buf), "Sustaining %d spells, so +%d TN.",
+               sustained_spells,
+               sustained_spells * 2
+              );
+      act(buf, FALSE, ch, NULL, NULL, TO_ROLLS);
+
+      target += sustained_spells * 2;
+    }
+  }
+
+
   // Set our drain damage values.
   {
     // If this spell has no damage value set, it's not a combat spell-- this will be stuff like Combat Sense with drain code S=3.
