@@ -81,14 +81,18 @@ ACMD(do_say)
       // send_to_host(ch->persona->in_host, buf, ch->persona, TRUE);
       for (struct matrix_icon *i = matrix[ch->persona->in_host].icons; i; i = i->next_in_host) {
         if (ch->persona != i && i->decker && has_spotted(i, ch->persona)) {
-          send_to_icon(i, buf);
-          if (i->decker && i->decker->ch)
-            store_message_to_history(i->decker->ch->desc, COMM_CHANNEL_SAYS, buf);
+          // We don't need an if (i->decker->ch) here-- it's implied by IS_IGNORING.
+          if (!IS_IGNORING(i->decker->ch, is_blocking_ic_interaction_from, ch)) {
+            send_to_icon(i, buf);
+
+            if (i->decker->ch)
+              store_message_to_history(i->decker->ch->desc, COMM_CHANNEL_SAYS, buf);
+          }
         }
       }
     } else {
       for (struct char_data *targ = get_ch_in_room(ch)->people; targ; targ = targ->next_in_room)
-        if (targ != ch && PLR_FLAGGED(targ, PLR_MATRIX)) {
+        if (targ != ch && PLR_FLAGGED(targ, PLR_MATRIX) && !IS_IGNORING(targ, is_blocking_ic_interaction_from, ch)) {
           // Send and store.
           snprintf(buf, sizeof(buf), "Your hitcher says, \"%s^n\"\r\n", capitalize(argument));
           send_to_char(buf, targ);
@@ -126,7 +130,7 @@ ACMD(do_say)
     snprintf(buf, sizeof(buf), "$n^n says ^mOOCly^n, \"%s^n\"", capitalize(argument));
     for (tmp = ch->in_room ? ch->in_room->people : ch->in_veh->people; tmp; tmp = ch->in_room ? tmp->next_in_room : tmp->next_in_veh) {
       // Replicate act() in a way that lets us capture the message.
-      if (can_send_act_to_target(ch, FALSE, NULL, NULL, tmp, TO_ROOM)) {
+      if (can_send_act_to_target(ch, FALSE, NULL, NULL, tmp, TO_ROOM) && !IS_IGNORING(tmp, is_blocking_osays_from, ch)) {
         // They're a valid target, so send the message with a raw perform_act() call.
         store_message_to_history(tmp->desc, COMM_CHANNEL_OSAYS, perform_act(buf, ch, NULL, NULL, tmp));
       }
@@ -136,12 +140,12 @@ ACMD(do_say)
          veh;
          veh = veh->next_veh)
     {
-      if (veh->rigger && veh->rigger->desc)
+      if (veh->rigger && veh->rigger->desc && !IS_IGNORING(veh->rigger, is_blocking_osays_from, ch))
         store_message_to_history(veh->rigger->desc, COMM_CHANNEL_OSAYS, perform_act(buf, ch, NULL, NULL, veh->rigger));
     }
   } else {
     for (tmp = ch->in_room ? ch->in_room->people : ch->in_veh->people; tmp; tmp = ch->in_room ? tmp->next_in_room : tmp->next_in_veh) {
-      if (tmp == ch)
+      if (tmp == ch || IS_IGNORING(tmp, is_blocking_ic_interaction_from, ch))
         continue;
 
       // Generate prepend for sayto.
@@ -169,7 +173,7 @@ ACMD(do_say)
          veh;
          veh = veh->next_veh)
     {
-      if (veh->rigger && veh->rigger->desc) {
+      if (veh->rigger && veh->rigger->desc && !IS_IGNORING(veh->rigger, is_blocking_ic_interaction_from, ch)) {
         // Generate prepend for sayto.
         if (to) {
           snprintf(buf2, MAX_STRING_LENGTH, " to %s^n", CAN_SEE(veh->rigger, to) ? (safe_found_mem(veh->rigger, to) ? CAP(safe_found_mem(veh->rigger, to)->mem)
@@ -237,7 +241,7 @@ ACMD(do_exclaim)
        tmp = (ch->in_veh ? tmp->next_in_veh : tmp->next_in_room))
   {
     // Replicate act() in a way that lets us capture the message.
-    if (can_send_act_to_target(ch, FALSE, NULL, NULL, tmp, TO_ROOM)) {
+    if (can_send_act_to_target(ch, FALSE, NULL, NULL, tmp, TO_ROOM) && !IS_IGNORING(tmp, is_blocking_ic_interaction_from, ch)) {
       snprintf(buf, sizeof(buf), "$z^n exclaims in %s, \"%s%s!^n\"",
                (IS_NPC(tmp) || GET_SKILL(tmp, language) > 0) ? skills[language].name : "an unknown language",
                (PRF_FLAGGED(tmp, PRF_NOHIGHLIGHT) || PRF_FLAGGED(tmp, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch),
@@ -252,7 +256,7 @@ ACMD(do_exclaim)
        veh;
        veh = veh->next_veh)
   {
-    if (veh->rigger && veh->rigger->desc) {
+    if (veh->rigger && veh->rigger->desc && !IS_IGNORING(veh->rigger, is_blocking_ic_interaction_from, ch)) {
       // No need to check for act vailidity, just send it
       snprintf(buf, sizeof(buf), "$z^n exclaims in %s, \"%s%s!^n\"",
                (IS_NPC(veh->rigger) || GET_SKILL(veh->rigger, language) > 0) ? skills[language].name : "an unknown language",
@@ -342,6 +346,12 @@ ACMD(do_tell)
     return;
   }
 
+  if (IS_IGNORING(ch, is_blocking_tells_from, vict)) {
+    send_to_char("You can't send tells to someone you're blocking tells from.\r\n"
+                 "(Please note that disabling your block, sending a tell, and immediately re-enabling it will be considered abuse.)\r\n", ch);
+    return;
+  }
+
   // Enable blocking of tells from everyone except staff.
   if ((!access_level(ch, LVL_BUILDER) && PRF_FLAGGED(vict, PRF_NOTELL)) || IS_IGNORING(vict, is_blocking_tells_from, ch)) {
     act("$E has disabled tells.", FALSE, ch, 0, vict, TO_CHAR);
@@ -412,7 +422,7 @@ ACMD(do_ask)
 
   for (struct char_data *tmp = (ch->in_veh ? ch->in_veh->people : ch->in_room->people); tmp; tmp = (ch->in_veh ? tmp->next_in_veh : tmp->next_in_room)) {
     // Replicate act() in a way that lets us capture the message.
-    if (can_send_act_to_target(ch, FALSE, NULL, NULL, tmp, TO_ROOM)) {
+    if (can_send_act_to_target(ch, FALSE, NULL, NULL, tmp, TO_ROOM) && !IS_IGNORING(tmp, is_blocking_ic_interaction_from, ch)) {
       snprintf(buf, sizeof(buf), "$z^n asks in %s, \"%s%s?^n\"",
                (IS_NPC(tmp) || GET_SKILL(tmp, language) > 0) ? skills[language].name : "an unknown language",
                (PRF_FLAGGED(tmp, PRF_NOHIGHLIGHT) || PRF_FLAGGED(tmp, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch),
@@ -511,15 +521,18 @@ ACMD(do_spec_comm)
 
     store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, act(buf, FALSE, ch, NULL, vict, TO_CHAR));
 
-    // Message the whisper-ee.
-    snprintf(buf, sizeof(buf), "From within %s^n, $z^n says to you in %s, \"%s%s%s^n\"\r\n",
-            GET_VEH_NAME(last_veh),
-            (IS_NPC(vict) || GET_SKILL(vict, language) > 0) ? skills[language].name : "an unknown language",
-            (PRF_FLAGGED(vict, PRF_NOHIGHLIGHT) || PRF_FLAGGED(vict, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch),
-            capitalize(replace_too_long_words(vict, ch, buf2, language, GET_CHAR_COLOR_HIGHLIGHT(ch))),
-            ispunct(get_final_character_from_string(buf2)) ? "" : ".");
+    if (!IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)) {
+      // Message the whisper-ee.
+      snprintf(buf, sizeof(buf), "From within %s^n, $z^n says to you in %s, \"%s%s%s^n\"\r\n",
+              GET_VEH_NAME(last_veh),
+              (IS_NPC(vict) || GET_SKILL(vict, language) > 0) ? skills[language].name : "an unknown language",
+              (PRF_FLAGGED(vict, PRF_NOHIGHLIGHT) || PRF_FLAGGED(vict, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch),
+              capitalize(replace_too_long_words(vict, ch, buf2, language, GET_CHAR_COLOR_HIGHLIGHT(ch))),
+              ispunct(get_final_character_from_string(buf2)) ? "" : ".");
 
-    store_message_to_history(vict->desc, COMM_CHANNEL_SAYS, act(buf, FALSE, ch, NULL, vict, TO_VICT));
+      store_message_to_history(vict->desc, COMM_CHANNEL_SAYS, act(buf, FALSE, ch, NULL, vict, TO_VICT));
+    }
+
 
     ch->in_room = NULL;
     ch->in_veh = last_veh;
@@ -559,26 +572,31 @@ ACMD(do_spec_comm)
              ispunct(get_final_character_from_string(buf2)) ? "" : ".");
     send_to_char(buf, ch);
     store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, buf);
-    for (vict = veh->people; vict; vict = vict->next_in_veh) {
-      snprintf(buf, sizeof(buf), "From outside, $z^n says into the vehicle in %s, \"%s%s%s^n\"\r\n",
-               (IS_NPC(vict) || GET_SKILL(vict, language) > 0) ? skills[language].name : "an unknown language",
-               (PRF_FLAGGED(vict, PRF_NOHIGHLIGHT) || PRF_FLAGGED(vict, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch),
-               capitalize(replace_too_long_words(vict, ch, buf2, language, GET_CHAR_COLOR_HIGHLIGHT(ch))),
-               ispunct(get_final_character_from_string(buf2)) ? "" : ".");
 
-      store_message_to_history(vict->desc, COMM_CHANNEL_SAYS, act(buf, FALSE, ch, NULL, vict, TO_VICT));
+    for (vict = veh->people; vict; vict = vict->next_in_veh) {
+      if (!IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)) {
+        snprintf(buf, sizeof(buf), "From outside, $z^n says into the vehicle in %s, \"%s%s%s^n\"\r\n",
+                 (IS_NPC(vict) || GET_SKILL(vict, language) > 0) ? skills[language].name : "an unknown language",
+                 (PRF_FLAGGED(vict, PRF_NOHIGHLIGHT) || PRF_FLAGGED(vict, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch),
+                 capitalize(replace_too_long_words(vict, ch, buf2, language, GET_CHAR_COLOR_HIGHLIGHT(ch))),
+                 ispunct(get_final_character_from_string(buf2)) ? "" : ".");
+
+        store_message_to_history(vict->desc, COMM_CHANNEL_SAYS, act(buf, FALSE, ch, NULL, vict, TO_VICT));
+      }
     }
     return;
   }
 
-  snprintf(buf, sizeof(buf), "$z^n %s you in %s, \"%s%s%s^n\"\r\n",
-           action_plur,
-           (IS_NPC(vict) || GET_SKILL(vict, language) > 0) ? skills[language].name : "an unknown language",
-           (PRF_FLAGGED(vict, PRF_NOHIGHLIGHT) || PRF_FLAGGED(vict, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch),
-           capitalize(replace_too_long_words(vict, ch, buf2, language, GET_CHAR_COLOR_HIGHLIGHT(ch))),
-           ispunct(get_final_character_from_string(buf2)) ? "" : ".");
+  if (!IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)) {
+    snprintf(buf, sizeof(buf), "$z^n %s you in %s, \"%s%s%s^n\"\r\n",
+             action_plur,
+             (IS_NPC(vict) || GET_SKILL(vict, language) > 0) ? skills[language].name : "an unknown language",
+             (PRF_FLAGGED(vict, PRF_NOHIGHLIGHT) || PRF_FLAGGED(vict, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch),
+             capitalize(replace_too_long_words(vict, ch, buf2, language, GET_CHAR_COLOR_HIGHLIGHT(ch))),
+             ispunct(get_final_character_from_string(buf2)) ? "" : ".");
 
-  store_message_to_history(vict->desc, COMM_CHANNEL_SAYS, act(buf, FALSE, ch, 0, vict, TO_VICT));
+    store_message_to_history(vict->desc, COMM_CHANNEL_SAYS, act(buf, FALSE, ch, 0, vict, TO_VICT));
+  }
 
   if (PRF_FLAGGED(ch, PRF_NOREPEAT))
     send_to_char(OK, ch);
@@ -593,6 +611,7 @@ ACMD(do_spec_comm)
   }
 
   // TODO: Should this be stored to message history? It's super nondescript.
+  // TODO: How can we prevent blocking people from seeing this?
   act(action_others, FALSE, ch, 0, vict, TO_NOTVICT);
 }
 
@@ -1548,7 +1567,7 @@ ACMD(do_phone)
       send_to_char("You hear the busy signal.\r\n", ch);
       return;
     }
-    
+
     phone->dest = k;
     phone->connected = TRUE;
     k->dest = phone;

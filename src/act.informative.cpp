@@ -43,6 +43,7 @@
 #include "config.h"
 #include "newmail.h"
 #include "ignore_system.h"
+#include "mysql_config.h"
 
 const char *CCHAR;
 
@@ -5621,17 +5622,26 @@ ACMD(do_mort_show)
     send_to_char(ch, "You don't see %s '%s' here.\r\n", AN(buf2), buf2);
     return;
   }
-  act("$n shows $p to $N.", TRUE, ch, obj, vict, TO_ROOM);
+
   act("You show $p to $N.", TRUE, ch, obj, vict, TO_CHAR);
-  show_obj_to_char(obj, vict, 5);
+
+  if (IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)) {
+    act("$n shows $p to $N.", TRUE, ch, obj, vict, TO_NOTVICT);
+  } else {
+    act("$n shows $p to $N.", TRUE, ch, obj, vict, TO_ROOM);
+    show_obj_to_char(obj, vict, 5);
+  }
 }
 
 ACMD(do_tke){
   send_to_char(ch, "Your current TKE is %d.\r\n", GET_TKE(ch));
 }
 
-#define LEADERBOARD_SYNTAX_STRING "Syntax: leaderboard <option>, where option is one of: tke, reputation, notoriety, nuyen, syspoints\r\n"
+#define LEADERBOARD_SYNTAX_STRING "Syntax: leaderboard <option>, where option is one of: tke, reputation, notoriety, nuyen, syspoints, blocks\r\n"
 ACMD(do_leaderboard) {
+  MYSQL_RES *res;
+  MYSQL_ROW row;
+
   // leaderboard <tke|rep|notor|nuyen|sysp>
   skip_spaces(&argument);
   if (!*argument) {
@@ -5666,13 +5676,40 @@ ACMD(do_leaderboard) {
     query_string = "syspoints";
   }
 
+  else if (!strncmp(argument, "blocks", strlen(argument))) {
+    // Open the second DB connection for concurrent lookups.
+    MYSQL *mysqlextra = mysql_init(NULL);
+    if (!mysql_real_connect(mysqlextra, mysql_host, mysql_user, mysql_password, mysql_db, 0, NULL, 0)) {
+      send_to_char("Couldn't open extra DB connection-- aborting.\r\n", ch);
+      return;
+    }
+
+    mysql_wrapper(mysqlextra, "SELECT vict_idnum, COUNT(vict_idnum) AS `value_occurrence` FROM pfiles_ignore_v2 GROUP BY vict_idnum ORDER BY `value_occurrence` DESC LIMIT 10");
+    if (!(res = mysql_use_result(mysqlextra))) {
+      send_to_char(ch, "Sorry, the leaderboard system is offline at the moment.\r\n");
+      return;
+    }
+
+    send_to_char(ch, "^CTop 10 most-blocked characters:^n\r\n");
+    int counter = 1;
+    while ((row = mysql_fetch_row(res))) {
+      long idnum = atol(row[0]);
+      int blocks = atoi(row[1]);
+
+      const char *name = get_player_name(idnum);
+      send_to_char(ch, "%2d) %-20s: %d block%s.\r\n", counter++, name, blocks, blocks != 1 ? "s" : "");
+      delete [] name;
+    }
+
+    mysql_free_result(res);
+    mysql_close(mysqlextra);
+    return;
+  }
+
   else {
     send_to_char(LEADERBOARD_SYNTAX_STRING, ch);
     return;
   }
-
-  MYSQL_RES *res;
-  MYSQL_ROW row;
 
   // Sanitization not required here-- they're constant strings.
   snprintf(buf, sizeof(buf), "SELECT name, %s FROM pfiles "

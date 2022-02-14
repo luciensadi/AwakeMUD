@@ -10,13 +10,13 @@ extern void stop_follower(struct char_data *ch);
 extern void end_sustained_spell(struct char_data *ch, struct sustain_data *sust);
 
 // Prototypes for this file.
-void send_ignore_bits_to_character(struct char_data *ch);
+void send_ignore_bits_to_character(struct char_data *ch, Bitfield *already_set);
 void send_ignore_usage_to_character(struct char_data *ch);
 void display_characters_ignore_entries(struct char_data *viewer, struct char_data *target);
 
 // TODO: test if ignore works for projections etc
 
-typedef void (IgnoreData::*method_function)(long, const char *, int);
+typedef bool (IgnoreData::*method_function)(long, const char *, int);
 method_function ignore_function_sorted_by_bit[NUM_IGNORE_BITS] {
   &IgnoreData::toggle_blocking_where_visibility,
   &IgnoreData::toggle_blocking_oocs,
@@ -38,7 +38,8 @@ ACMD(do_ignore) {
   // ignore with no arguments: display all currently-ignored characters
   if (!*argument) {
     display_characters_ignore_entries(ch, ch);
-    send_ignore_bits_to_character(ch);
+    send_ignore_bits_to_character(ch, NULL);
+    send_to_char("\r\nSee ^WHELP IGNORE^n for more details.\r\n", ch);
     return;
   }
 
@@ -81,15 +82,20 @@ ACMD(do_ignore) {
     if ((results_iterator = GET_IGNORE_DATA(ch)->ignored_map.find(vict_idnum)) != GET_IGNORE_DATA(ch)->ignored_map.end()) {
       results_iterator->second.PrintBitsColorized(ignored_bits_str, sizeof(ignored_bits_str), ignored_bits_in_english, NUM_IGNORE_BITS, "^c", "^n");
       send_to_char(ch, "You've set the following ignore flags on %s: %s\r\n", capitalize(first_argument), ignored_bits_str);
+      send_ignore_bits_to_character(ch, &(results_iterator->second));
     } else {
       send_to_char(ch, "You're not currently ignoring %s.\r\n", capitalize(first_argument));
+      send_ignore_bits_to_character(ch, NULL);
     }
 
-    send_ignore_bits_to_character(ch);
+
     return;
   }
 
   // We have both a first and second argument, so treat this as 'ignore <name> <mode>.' We do this in a loop so you can specify many bits at once.
+  char blocks_applied[MAX_STRING_LENGTH];
+  snprintf(blocks_applied, sizeof(blocks_applied), "%s modified block bits for %s: ", GET_CHAR_NAME(ch), capitalize(first_argument));
+  bool wrote_applied_block = FALSE;
 
   while (*second_argument) {
     // Parse out the selected bit.
@@ -103,43 +109,60 @@ ACMD(do_ignore) {
     } else {
       // Finally, toggle the selected bit.
       method_function func = ignore_function_sorted_by_bit[chosen_bit];
-      (GET_IGNORE_DATA(ch)->*func) (vict_idnum, capitalize(first_argument), MODE_NOT_SILENT);
+      bool result = (GET_IGNORE_DATA(ch)->*func) (vict_idnum, capitalize(first_argument), MODE_NOT_SILENT);
+
+      snprintf(ENDOF(blocks_applied), sizeof(blocks_applied) - strlen(blocks_applied), "%s%s (%s)", wrote_applied_block ? ", " : "", ignored_bits_in_english[chosen_bit], result ? "^YON^g" : "OFF");
+      wrote_applied_block = TRUE;
     }
 
     // Did you set a remainder? Great, we'll cycle through that as well.
     remainder = any_one_arg(remainder, second_argument);
+  }
+
+  if (wrote_applied_block) {
+    mudlog(blocks_applied, ch, LOG_MISCLOG, TRUE);
   }
 }
 
 ////////////// Implementation of primary manipulation functions. ///////////////
 #define SEND_TO_CH_IF_NOT_SILENT(ch, message, ...)   if (mode != MODE_SILENT) { send_to_char((ch), message, ##__VA_ARGS__); }
 
-void IgnoreData::toggle_blocking_oocs(long vict_idnum, const char *vict_name, int mode) {
+bool IgnoreData::toggle_blocking_oocs(long vict_idnum, const char *vict_name, int mode) {
   if (is_blocking_oocs_from(vict_idnum)) {
     SEND_TO_CH_IF_NOT_SILENT(ch, "You will now see OOC channel messages from %s.\r\n", vict_name);
     _remove_ignore_bit_for(IGNORE_BIT_OOC_CHANNELS, vict_idnum);
+    return FALSE;
   } else {
-    SEND_TO_CH_IF_NOT_SILENT(ch, "You will no longer see OOC channel messages (ex: ooc, newbie, etc) from %s. If you also want to block perception of their OSAYs, use 'ignore %s osays'.\r\n", vict_name, vict_name);
+    SEND_TO_CH_IF_NOT_SILENT(ch, "You will no longer see OOC channel messages (ex: ooc, newbie, etc) from %s.", vict_name);
+    if (!is_blocking_osays_from(vict_idnum)) {
+      SEND_TO_CH_IF_NOT_SILENT(ch, " If you also want to block perception of their OSAYs, use 'ignore %s osays'.", vict_name);
+    }
+    SEND_TO_CH_IF_NOT_SILENT(ch, "\r\n");
+
     _set_ignore_bit_for(IGNORE_BIT_OOC_CHANNELS, vict_idnum);
+    return TRUE;
   }
 }
 
 // Don't display messages from the targeted character on your radio output.
-void IgnoreData::toggle_blocking_radios(long vict_idnum, const char *vict_name, int mode) {
+bool IgnoreData::toggle_blocking_radios(long vict_idnum, const char *vict_name, int mode) {
   if (is_blocking_radios_from(vict_idnum)) {
     SEND_TO_CH_IF_NOT_SILENT(ch, "You will now see radio messages from %s.\r\n", vict_name);
     _remove_ignore_bit_for(IGNORE_BIT_RADIO, vict_idnum);
+    return FALSE;
   } else {
     SEND_TO_CH_IF_NOT_SILENT(ch, "You will no longer see radio messages from %s.\r\n", vict_name);
     _set_ignore_bit_for(IGNORE_BIT_RADIO, vict_idnum);
+    return TRUE;
   }
 }
 
 // Prevent the target from sending you mindlinks, and breaks the mindlink if it's set.
-void IgnoreData::toggle_blocking_mindlinks(long vict_idnum, const char *vict_name, int mode) {
+bool IgnoreData::toggle_blocking_mindlinks(long vict_idnum, const char *vict_name, int mode) {
   if (is_blocking_mindlinks_from(vict_idnum)) {
     SEND_TO_CH_IF_NOT_SILENT(ch, "You will now accept mindlinks from %s.\r\n", vict_name);
     _remove_ignore_bit_for(IGNORE_BIT_MINDLINK, vict_idnum);
+    return FALSE;
   } else {
     SEND_TO_CH_IF_NOT_SILENT(ch, "You will no longer accept mindlinks from %s.\r\n", vict_name);
     _set_ignore_bit_for(IGNORE_BIT_MINDLINK, vict_idnum);
@@ -152,37 +175,49 @@ void IgnoreData::toggle_blocking_mindlinks(long vict_idnum, const char *vict_nam
         end_sustained_spell(ch, spell);
       }
     }
+
+    return TRUE;
   }
 }
 
 // Prevent the target from sending you tells.
-void IgnoreData::toggle_blocking_tells(long vict_idnum, const char *vict_name, int mode) {
+bool IgnoreData::toggle_blocking_tells(long vict_idnum, const char *vict_name, int mode) {
   if (is_blocking_tells_from(vict_idnum)) {
     SEND_TO_CH_IF_NOT_SILENT(ch, "You will now see OOC tells from %s.\r\n", vict_name);
     _remove_ignore_bit_for(IGNORE_BIT_TELLS, vict_idnum);
+    return FALSE;
   } else {
     SEND_TO_CH_IF_NOT_SILENT(ch, "You will no longer see OOC tells from %s.\r\n", vict_name);
     _set_ignore_bit_for(IGNORE_BIT_TELLS, vict_idnum);
+    return TRUE;
   }
 }
 
 // Don't display the target's osays.
-void IgnoreData::toggle_blocking_osays(long vict_idnum, const char *vict_name, int mode) {
+bool IgnoreData::toggle_blocking_osays(long vict_idnum, const char *vict_name, int mode) {
   if (is_blocking_osays_from(vict_idnum)) {
     SEND_TO_CH_IF_NOT_SILENT(ch, "You will now see osays from %s.\r\n", vict_name);
     _remove_ignore_bit_for(IGNORE_BIT_OSAYS, vict_idnum);
+    return FALSE;
   } else {
-    SEND_TO_CH_IF_NOT_SILENT(ch, "You will no longer see osays from %s. If you also want to block their OOC channel messages, use 'ignore %s oocs'.\r\n", vict_name, vict_name);
+    SEND_TO_CH_IF_NOT_SILENT(ch, "You will no longer see osays from %s.", vict_name);
+    if (!is_blocking_osays_from(vict_idnum)) {
+      SEND_TO_CH_IF_NOT_SILENT(ch, " If you also want to block their OOC channel messages, use 'ignore %s oocs'.", vict_name);
+    }
+    SEND_TO_CH_IF_NOT_SILENT(ch, "\r\n");
+
     _set_ignore_bit_for(IGNORE_BIT_OSAYS, vict_idnum);
+    return TRUE;
   }
 }
 
 // Prevent the target from interacting with you ICly (forces on several other toggles). Includes socials, emotes/echoes, vemotes, says.
 #define SEND_WITH_PRECURSOR(message, ch)  if (!printed_initial_message) { send_to_char(ch, "To ensure this change is effective, we also enabled the following ignore modes for %s:\r\n", vict_name); printed_initial_message = TRUE;} send_to_char(message, ch);
-void IgnoreData::toggle_blocking_ic_interaction(long vict_idnum, const char *vict_name, int mode) {
+bool IgnoreData::toggle_blocking_ic_interaction(long vict_idnum, const char *vict_name, int mode) {
   if (is_blocking_ic_interaction_from(vict_idnum)) {
     SEND_TO_CH_IF_NOT_SILENT(ch, "You will now see the character %s in the game world.\r\n", vict_name);
     _remove_ignore_bit_for(IGNORE_BIT_IC_INTERACTION, vict_idnum);
+    return FALSE;
   } else {
     SEND_TO_CH_IF_NOT_SILENT(ch, "You will no longer see %s in the game world.\r\n", vict_name);
     _set_ignore_bit_for(IGNORE_BIT_IC_INTERACTION, vict_idnum);
@@ -208,15 +243,17 @@ void IgnoreData::toggle_blocking_ic_interaction(long vict_idnum, const char *vic
       toggle_blocking_calls(vict_idnum, vict_name, MODE_SILENT);
       SEND_WITH_PRECURSOR(" - Calls\r\n", ch);
     }
+    return TRUE;
   }
 }
 #undef SEND_WITH_PRECURSOR
 
 // Prevent the target from following you, and unfollow them if they are. (Abusable in PvP)
-void IgnoreData::toggle_blocking_following(long vict_idnum, const char *vict_name, int mode) {
+bool IgnoreData::toggle_blocking_following(long vict_idnum, const char *vict_name, int mode) {
   if (is_blocking_following_from(vict_idnum)) {
     SEND_TO_CH_IF_NOT_SILENT(ch, "You now allow %s to follow you.\r\n", vict_name);
     _remove_ignore_bit_for(IGNORE_BIT_FOLLOWING, vict_idnum);
+    return FALSE;
   } else {
     SEND_TO_CH_IF_NOT_SILENT(ch, "You will no longer allow %s to follow you.\r\n", vict_name);
     _set_ignore_bit_for(IGNORE_BIT_FOLLOWING, vict_idnum);
@@ -228,28 +265,34 @@ void IgnoreData::toggle_blocking_following(long vict_idnum, const char *vict_nam
       if (GET_IDNUM_EVEN_IF_PROJECTING(follower->follower) == vict_idnum)
         stop_follower(follower->follower);
     }
+
+    return TRUE;
   }
 }
 
 // Used to block the target from seeing you with the WHERE command.
-void IgnoreData::toggle_blocking_where_visibility(long vict_idnum, const char *vict_name, int mode) {
+bool IgnoreData::toggle_blocking_where_visibility(long vict_idnum, const char *vict_name, int mode) {
   if (is_blocking_where_visibility_for(vict_idnum)) {
     SEND_TO_CH_IF_NOT_SILENT(ch, "You will now allow %s to perceive you on the WHERE list.\r\n", vict_name);
     _remove_ignore_bit_for(IGNORE_BIT_WHERE, vict_idnum);
+    return FALSE;
   } else {
     SEND_TO_CH_IF_NOT_SILENT(ch, "You no longer allow %s to perceive you on the WHERE list.\r\n", vict_name);
     _set_ignore_bit_for(IGNORE_BIT_WHERE, vict_idnum);
+    return TRUE;
   }
 }
 
 // Block calls from the targeted person.
-void IgnoreData::toggle_blocking_calls(long vict_idnum, const char *vict_name, int mode) {
+bool IgnoreData::toggle_blocking_calls(long vict_idnum, const char *vict_name, int mode) {
   if (is_blocking_calls_from(vict_idnum)) {
     SEND_TO_CH_IF_NOT_SILENT(ch, "You will now allow %s to call you.\r\n", vict_name);
     _remove_ignore_bit_for(IGNORE_BIT_CALLS, vict_idnum);
+    return FALSE;
   } else {
     SEND_TO_CH_IF_NOT_SILENT(ch, "You no longer allow %s to call you.\r\n", vict_name);
     _set_ignore_bit_for(IGNORE_BIT_CALLS, vict_idnum);
+    return TRUE;
   }
 }
 
@@ -373,16 +416,26 @@ void globally_remove_vict_id_from_logged_in_ignore_lists(long vict_idnum) {
   }
 }
 
-void send_ignore_bits_to_character(struct char_data *ch) {
-  send_to_char("\r\nYou can set the following ignore bits: ", ch);
+void send_ignore_bits_to_character(struct char_data *ch, Bitfield *already_set) {
+  send_to_char(ch, "\r\nYou can set the following %signore bits: ", already_set ? "additional " : "");
 
-  for (int i = 0; i < NUM_IGNORE_BITS; i++)
-    send_to_char(ch, "%s^c%s^n%s", i == 0 ? "" : ", ", ignored_bits_in_english[i], i == NUM_IGNORE_BITS - 1 ? "\r\n" : "");
+  bool found_something = FALSE;
+  for (int i = 0; i < NUM_IGNORE_BITS; i++) {
+    if (!already_set || !already_set->IsSet(i)) {
+      send_to_char(ch, "%s^c%s^n", !found_something ? "" : ", ", ignored_bits_in_english[i]);
+      found_something = TRUE;
+    }
+  }
+
+  if (!found_something)
+    send_to_char("...none!\r\n", ch);
+  else
+    send_to_char("\r\n", ch);
 }
 
 void send_ignore_usage_to_character(struct char_data *ch) {
   send_to_char("Syntax: ^Wignore <target character> [ignore bit]^n.\r\n", ch);
-  send_ignore_bits_to_character(ch);
+  send_ignore_bits_to_character(ch, NULL);
   send_to_char("\r\nYou may also view your current ignored list with ^Wignore^n on its own, or view the ignores set on a specific character with ^Wignore <character>^n.\r\n", ch);
 }
 
