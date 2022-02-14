@@ -55,11 +55,6 @@ class IgnoreData {
   // The character who owns this block of data. Used primarily for saving.
   struct char_data *ch;
 
-  // Private helper functions.
-  bool _ignore_bit_is_set_for(int ignore_bit, long vict_idnum);
-  void _set_ignore_bit_for(int ignore_bit, long vict_idnum);
-  void _remove_ignore_bit_for(int ignore_bit, long vict_idnum);
-
   // Private DB-manipulation functions.
   void _save_entry_to_db(long vict_idnum, Bitfield bitfield);
   void _delete_entry_from_db(long vict_idnum);
@@ -119,6 +114,11 @@ public:
   bool toggle_blocking_where_visibility(long vict_idnum, const char *vict_name, int mode);
   bool is_blocking_where_visibility_for(long vict_idnum) { return _ignore_bit_is_set_for(IGNORE_BIT_WHERE, vict_idnum); }
   bool is_blocking_where_visibility_for(struct char_data *vict) { return is_blocking_where_visibility_for(GET_IDNUM_EVEN_IF_PROJECTING(vict)); }
+
+  // Internal-use helper functions. I can almost guarantee you want to be using one of the above functions instead.
+  bool _ignore_bit_is_set_for(int ignore_bit, long vict_idnum);
+  void _set_ignore_bit_for(int ignore_bit, long vict_idnum);
+  void _remove_ignore_bit_for(int ignore_bit, long vict_idnum);
 };
 
 #endif

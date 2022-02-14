@@ -98,6 +98,20 @@ ACMD(do_ignore) {
   }
 
   // We have both a first and second argument, so treat this as 'ignore <name> <mode>.' We do this in a loop so you can specify many bits at once.
+  // Special case: '*' applies all blocks.
+  if (*second_argument == '*') {
+    send_to_char(ch, "Setting all ignore bits for %s.\r\n", capitalize(first_argument));
+    for (int bit_idx = 0; bit_idx < NUM_IGNORE_BITS; bit_idx++) {
+      // If not all bits are set, set all bits.
+      if (!(GET_IGNORE_DATA(ch)->_ignore_bit_is_set_for(bit_idx, vict_idnum))) {
+        method_function func = ignore_function_sorted_by_bit[bit_idx];
+        (GET_IGNORE_DATA(ch)->*func) (vict_idnum, capitalize(first_argument), MODE_NOT_SILENT);
+      }
+    }
+    send_to_char("All ignore bits set.\r\n", ch);
+    return;
+  }
+
   char blocks_applied[MAX_STRING_LENGTH];
   snprintf(blocks_applied, sizeof(blocks_applied), "%s modified block bits for %s: ", GET_CHAR_NAME(ch), capitalize(first_argument));
   bool wrote_applied_block = FALSE;
