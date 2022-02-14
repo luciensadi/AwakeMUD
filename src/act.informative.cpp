@@ -1717,7 +1717,7 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
             send_to_char(ch, "^cRain glides down the windows, wipers brushing it clear with patient motion.^n\r\n");
         }
           if(ch->in_room->vehicle == VEH_BIKE) {
-            send_to_char(ch, "^cRain richotchets off your shoulders and splashes about your bike.^n\r\n");
+            send_to_char(ch, "^cRain richotchets off your shoulders and splashes about the bike.^n\r\n");
         }
           else send_to_char(ch, "^cRain splashes into the puddles around your feet.^n\r\n");
         }
