@@ -3569,7 +3569,7 @@ ACMD(do_show)
                { "roomflag",       LVL_BUILDER },
                { "markets",        LVL_VICEPRES},
                { "weight",         LVL_PRESIDENT},
-               { "ignore",         LVL_VICEPRES},
+               { "ignore",         LVL_FIXER},
                { "\n", 0 }
              };
 

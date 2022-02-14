@@ -623,7 +623,7 @@ struct command_info cmd_info[] =
     //{ "idelete"  , POS_DEAD    , do_idelete  , LVL_PRESIDENT, 0, FALSE },
     { "iedit"      , POS_DEAD    , do_iedit    , LVL_BUILDER, 0, FALSE },
 #ifdef ALLOW_IGNORE_USE
-    { "ignore"     , POS_DEAD    , do_ignore   , LVL_PRESIDENT, 0, TRUE },
+    { "ignore"     , POS_DEAD    , do_ignore   , 0, 0, TRUE },
 #endif
     { "ilist"      , POS_DEAD    , do_ilist    , LVL_BUILDER, 0, FALSE },
     { "iload"      , POS_DEAD    , do_iload    , LVL_BUILDER, 0, FALSE },
