@@ -592,6 +592,7 @@ struct preference_bit_struct preference_bits_v2[] = {
   { "Cyberdocs Allowed"    , FALSE, TRUE  },
   { "No Void on Idle"      , FALSE, TRUE  },
   { "RadLog"               , TRUE , TRUE  },
+  { "Anonymous on Where"   , FALSE, TRUE  },
   { "\n"                   , 0    , 0     }
 };
 
@@ -657,6 +658,7 @@ const char *preference_bits[] =
     "CYBERDOC_PERMITTED",
     "NO_VOID",
     "RADLOG",
+    "ANONYMOUS_ON_WHERE",
     "\n"
   };
 
@@ -2704,4 +2706,18 @@ struct nuyen_faucet_or_sink nuyen_faucets_and_sinks[NUM_OF_TRACKED_NUYEN_INCOME_
     {"Playergroups", NI_IS_SINK},
     {"Trade Command (n->k)", NI_IS_SINK},
     {"Credstick Cracker", NI_IS_SINK}
+  };
+
+const char *ignored_bits_in_english[] =
+  {
+    "where",
+    "oocs",
+    "radio",
+    "mindlinks",
+    "tells",
+    "osays",
+    "interaction",
+    "following",
+    "calls",
+    "ERROR: Coder forgot to add their new bit to ignored_bits_in_english!"
   };

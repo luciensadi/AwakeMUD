@@ -17,6 +17,7 @@
 #include <iostream>
 #include <fstream>
 #include <unordered_map>
+#include <vector>
 
 // using namespace std;
 
@@ -41,6 +42,8 @@
 #include "bullet_pants.h"
 #include "config.h"
 #include "newmail.h"
+#include "ignore_system.h"
+#include "mysql_config.h"
 
 const char *CCHAR;
 
@@ -1282,7 +1285,7 @@ void list_char_to_char(struct char_data * list, struct char_data * ch)
   // Show vehicle's contents to character.
   if (ch->in_veh && !ch->in_room) {
     for (i = list; i; i = i->next_in_veh) {
-      if (CAN_SEE(ch, i) && ch != i && ch->vfront == i->vfront) {
+      if (CAN_SEE(ch, i) && ch != i && ch->vfront == i->vfront && !IS_IGNORING(ch, is_blocking_ic_interaction_from, i)) {
         list_one_char(i, ch);
       }
     }
@@ -1328,7 +1331,8 @@ void list_char_to_char(struct char_data * list, struct char_data * ch)
       }
     }
 
-    list_one_char(i, ch);
+    if (!IS_IGNORING(ch, is_blocking_ic_interaction_from, i))
+      list_one_char(i, ch);
   }
 }
 
@@ -4728,18 +4732,27 @@ extern void nonsensical_reply(struct char_data *ch, const char *arg, const char 
 void perform_mortal_where(struct char_data * ch, char *arg)
 {
   // array slot 0 is total PCs, array slot 1 is active PCs
-  std::unordered_map<vnum_t, int> occupied_rooms = {};
-  std::unordered_map<vnum_t, int>::iterator room_iterator;
+  std::unordered_map<vnum_t, std::vector<struct char_data *>> occupied_rooms = {};
+  std::unordered_map<vnum_t, std::vector<struct char_data *>>::iterator room_iterator;
 
   for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
     if (!d->connected) {
       struct char_data *i = (d->original ? d->original : d->character);
-      if (i && i->in_room && ROOM_FLAGGED(i->in_room, ROOM_ENCOURAGE_CONGREGATION) && CAN_SEE(ch, i)) {
-        if ((room_iterator = occupied_rooms.find(GET_ROOM_VNUM(i->in_room))) != occupied_rooms.end()) {
-          ((*room_iterator).second)++;
-        } else {
-          occupied_rooms.emplace(GET_ROOM_VNUM(i->in_room), 1);
-        }
+
+      // Skip them if they aren't in a social-bonus room.
+      if (!i || !i->in_room || !ROOM_FLAGGED(i->in_room, ROOM_ENCOURAGE_CONGREGATION))
+        continue;
+
+      // Skip them if you can't see them for various reasons.
+      if (IS_IGNORING(i, is_blocking_where_visibility_for, ch) || !CAN_SEE(ch, i))
+        continue;
+
+      // They're a valid target-- emplace them.
+      if ((room_iterator = occupied_rooms.find(GET_ROOM_VNUM(i->in_room))) != occupied_rooms.end()) {
+        (room_iterator->second).push_back(i);
+      } else {
+        std::vector<struct char_data *> tmp_vec = { i };
+        occupied_rooms.emplace(GET_ROOM_VNUM(i->in_room), tmp_vec);
       }
     }
   }
@@ -4750,11 +4763,25 @@ void perform_mortal_where(struct char_data * ch, char *arg)
   } else {
     send_to_char("There are people RPing in these rooms:\r\n", ch);
     for (auto it = occupied_rooms.begin(); it != occupied_rooms.end(); ++it) {
-      if ((*it).second == 1) {
-        send_to_char(ch, "%s^n (one person looking for RP)\r\n", world[real_room((*it).first)].name);
-      } else {
-        send_to_char(ch, "%s^n (%d characters RPing)\r\n", world[real_room((*it).first)].name, (*it).second);
+      bool printed_something = FALSE;
+      int num_masked_people = 0;
+
+      send_to_char(ch, "%s^n (", world[real_room(it->first)].name);
+
+      for (size_t i = 0; i < (it->second).size(); i++) {
+        if (PRF_FLAGGED((it->second)[i], PRF_ANONYMOUS_ON_WHERE)) {
+          num_masked_people++;
+        } else {
+          send_to_char(ch, "%s%s", printed_something ? ", " : "", GET_CHAR_NAME((it->second)[i]));
+          printed_something = TRUE;
+        }
       }
+
+      if (num_masked_people > 0) {
+        send_to_char(ch, "%s%d anonymous character%s", printed_something ? " and " : "", num_masked_people, num_masked_people > 1 ? "s" : "");
+      }
+
+      send_to_char(")\r\n", ch);
     }
   }
 }
@@ -5596,17 +5623,26 @@ ACMD(do_mort_show)
     send_to_char(ch, "You don't see %s '%s' here.\r\n", AN(buf2), buf2);
     return;
   }
-  act("$n shows $p to $N.", TRUE, ch, obj, vict, TO_ROOM);
+
   act("You show $p to $N.", TRUE, ch, obj, vict, TO_CHAR);
-  show_obj_to_char(obj, vict, 5);
+
+  if (IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)) {
+    act("$n shows $p to $N.", TRUE, ch, obj, vict, TO_NOTVICT);
+  } else {
+    act("$n shows $p to $N.", TRUE, ch, obj, vict, TO_ROOM);
+    show_obj_to_char(obj, vict, 5);
+  }
 }
 
 ACMD(do_tke){
   send_to_char(ch, "Your current TKE is %d.\r\n", GET_TKE(ch));
 }
 
-#define LEADERBOARD_SYNTAX_STRING "Syntax: leaderboard <option>, where option is one of: tke, reputation, notoriety, nuyen, syspoints\r\n"
+#define LEADERBOARD_SYNTAX_STRING "Syntax: leaderboard <option>, where option is one of: tke, reputation, notoriety, nuyen, syspoints, blocks\r\n"
 ACMD(do_leaderboard) {
+  MYSQL_RES *res;
+  MYSQL_ROW row;
+
   // leaderboard <tke|rep|notor|nuyen|sysp>
   skip_spaces(&argument);
   if (!*argument) {
@@ -5641,13 +5677,40 @@ ACMD(do_leaderboard) {
     query_string = "syspoints";
   }
 
+  else if (!strncmp(argument, "blocks", strlen(argument))) {
+    // Open the second DB connection for concurrent lookups.
+    MYSQL *mysqlextra = mysql_init(NULL);
+    if (!mysql_real_connect(mysqlextra, mysql_host, mysql_user, mysql_password, mysql_db, 0, NULL, 0)) {
+      send_to_char("Couldn't open extra DB connection-- aborting.\r\n", ch);
+      return;
+    }
+
+    mysql_wrapper(mysqlextra, "SELECT vict_idnum, COUNT(vict_idnum) AS `value_occurrence` FROM pfiles_ignore_v2 GROUP BY vict_idnum ORDER BY `value_occurrence` DESC LIMIT 10");
+    if (!(res = mysql_use_result(mysqlextra))) {
+      send_to_char(ch, "Sorry, the leaderboard system is offline at the moment.\r\n");
+      return;
+    }
+
+    send_to_char(ch, "^CTop 10 most-blocked characters:^n\r\n");
+    int counter = 1;
+    while ((row = mysql_fetch_row(res))) {
+      long idnum = atol(row[0]);
+      int blocks = atoi(row[1]);
+
+      const char *name = get_player_name(idnum);
+      send_to_char(ch, "%2d) %-20s: %d block%s.\r\n", counter++, name, blocks, blocks != 1 ? "s" : "");
+      delete [] name;
+    }
+
+    mysql_free_result(res);
+    mysql_close(mysqlextra);
+    return;
+  }
+
   else {
     send_to_char(LEADERBOARD_SYNTAX_STRING, ch);
     return;
   }
-
-  MYSQL_RES *res;
-  MYSQL_ROW row;
 
   // Sanitization not required here-- they're constant strings.
   snprintf(buf, sizeof(buf), "SELECT name, %s FROM pfiles "

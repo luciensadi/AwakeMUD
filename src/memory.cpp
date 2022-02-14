@@ -18,6 +18,7 @@
 #include "db.h"
 #include "utils.h"
 #include "newmatrix.h"
+#include "ignore_system.h"
 
 memoryClass::memoryClass()
 {
@@ -159,6 +160,10 @@ void memoryClass::DeleteCh(struct char_data *ch)
       prev = i;
     }
   }
+
+  // Delete their ignore data. This deconstructs it as expected.
+  if (ch->ignore_data)
+    delete ch->ignore_data;
 
   free_char(ch);
   delete ch;

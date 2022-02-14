@@ -16,6 +16,7 @@
 #include "limits.h"
 #include "act.drive.h"
 #include "config.h"
+#include "ignore_system.h"
 
 void die_follower(struct char_data *ch);
 void roll_individual_initiative(struct char_data *ch);
@@ -400,7 +401,8 @@ ACMD(do_ram)
   }
 
   if (!(vict = get_char_room(arg, veh->in_room)) &&
-      !(tveh = get_veh_list(arg, veh->in_room->vehicles, ch))) {
+      !(tveh = get_veh_list(arg, veh->in_room->vehicles, ch)))
+  {
     send_to_char("You can't seem to find the target you're looking for.\r\n", ch);
     return;
   }
@@ -415,6 +417,18 @@ ACMD(do_ram)
       send_to_char("You have to be flagged PK to attack another player.\r\n", ch);
       return;
     }
+
+#ifdef IGNORING_IC_ALSO_IGNORES_COMBAT
+    if (IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)) {
+      send_to_char("You can't seem to find the target you're looking for.\r\n", ch);
+      return;
+    }
+
+    if (IS_IGNORING(ch, is_blocking_ic_interaction_from, vict)) {
+      send_to_char("You can't attack someone you've blocked IC interaction with.\r\n", ch);
+      return;
+    }
+#endif
 
     if (IS_ASTRAL(vict)) {
       send_to_char("Your car's not nearly cool enough to be able to ram astral beings.\r\n", ch);
@@ -1482,7 +1496,19 @@ ACMD(do_target)
       return;
     }
   }
+#ifdef IGNORING_IC_ALSO_IGNORES_COMBAT
+  else {
+    if (IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)) {
+      send_to_char(ch, "You don't see anything named '%s' here.\r\n", arg);
+      return;
+    }
 
+    if (IS_IGNORING(ch, is_blocking_ic_interaction_from, vict)) {
+      send_to_char("You can't attack someone you've blocked IC interaction with.\r\n", ch);
+      return;
+    }
+  }
+#endif
 
   do_raw_target(ch, veh, tveh, vict, modeall, obj);
 }

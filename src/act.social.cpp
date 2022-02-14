@@ -20,6 +20,7 @@
 #include "handler.h"
 #include "db.h"
 #include "awake.h"
+#include "ignore_system.h"
 
 /* extern variables */
 extern struct room_data *world;
@@ -98,7 +99,10 @@ ACMD(do_action)
     else {
       act(action->char_found, 0, ch, 0, vict, TO_CHAR | TO_SLEEP | TO_REMOTE);
       act(action->others_found, action->hide, ch, 0, vict, TO_NOTVICT | TO_REMOTE);
-      act(action->vict_found, action->hide, ch, 0, vict, TO_VICT);
+
+      if (!IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)) {
+        act(action->vict_found, action->hide, ch, 0, vict, TO_VICT);
+      }
     }
   }
 }
@@ -375,7 +379,7 @@ void boot_social_messages(void)
   /* close file & set top */
   fclose(fl);
   list_top = curr_soc;
-  
+
   // Why tho? --LS
   // soc_mess_list[0] = soc_mess_list[1];
 }
