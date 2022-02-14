@@ -816,6 +816,12 @@ bool spell_drain(struct char_data *ch, int spell_idx, int force, int damage) {
     // Otherwise, if the spell has a damage value set, then we tack on the draindamage value in addition to this.
     else if (spell_idx) {
       damage += UNPACK_VARIABLE_DRAIN_DAMAGE(spells[spell_idx].draindamage);
+
+      // MitS p54
+      while (damage > DEADLY) {
+        damage--;
+        target += 2;
+      }
     }
 
     // Otherwise, we got a spell with both no spell idx and no damage code. Log it.
