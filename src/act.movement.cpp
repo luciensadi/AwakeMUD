@@ -175,7 +175,7 @@ bool should_tch_see_chs_movement_message(struct char_data *tch, struct char_data
   }
 
   // Absolutely can't see for whatever reason.
-  if (tch == ch || PRF_FLAGGED(tch, PRF_MOVEGAG) || !AWAKE(tch) || !CAN_SEE(tch, ch))
+  if (tch == ch || PRF_FLAGGED(tch, PRF_MOVEGAG) || !AWAKE(tch) || !CAN_SEE(tch, ch) || IS_IGNORING(tch, is_blocking_ic_interaction_from, ch))
     return FALSE;
 
   // Failed to see from vehicle.

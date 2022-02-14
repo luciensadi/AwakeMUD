@@ -1285,7 +1285,7 @@ void list_char_to_char(struct char_data * list, struct char_data * ch)
   // Show vehicle's contents to character.
   if (ch->in_veh && !ch->in_room) {
     for (i = list; i; i = i->next_in_veh) {
-      if (CAN_SEE(ch, i) && ch != i && ch->vfront == i->vfront) {
+      if (CAN_SEE(ch, i) && ch != i && ch->vfront == i->vfront && !IS_IGNORING(ch, is_blocking_ic_interaction_from, i)) {
         list_one_char(i, ch);
       }
     }
@@ -1331,7 +1331,8 @@ void list_char_to_char(struct char_data * list, struct char_data * ch)
       }
     }
 
-    list_one_char(i, ch);
+    if (!IS_IGNORING(ch, is_blocking_ic_interaction_from, i))
+      list_one_char(i, ch);
   }
 }
 
