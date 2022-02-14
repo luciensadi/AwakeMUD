@@ -839,7 +839,7 @@ void point_update(void)
           }
         }
         if (GET_REAL_MAG(i) * 2 < 0) {
-          mudlog("^RSYSERR: Multiplying magic for focus addiction check gave a NEGATIVE number! Increase the size of the variable!^n", ch, LOG_SYSLOG, TRUE);
+          mudlog("^RSYSERR: Multiplying magic for focus addiction check gave a NEGATIVE number! Increase the size of the variable!^n", i, LOG_SYSLOG, TRUE);
         } else {
           if (force * 100 > GET_REAL_MAG(i) * 2 && success_test(GET_REAL_MAG(i) / 100, force / 2) < 1) {
             int num = number(1, total);
