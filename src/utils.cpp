@@ -1292,6 +1292,12 @@ int negotiate(struct char_data *ch, struct char_data *tch, int comp, int baseval
   int ch_int = (negotiation_is_with_data_fence ? GET_REAL_INT(ch) : GET_INT(ch));
   int tch_int = (negotiation_is_with_data_fence ? GET_REAL_INT(tch) : GET_INT(tch));
 
+  // Plenty of NPCs have no int, so we set these to an average value if found.
+  if (IS_NPC(tch) && tch_int <= 0)
+    tch_int = MAX(tch_int, 3);
+  if (IS_NPC(ch) && ch_int <= 0)
+    ch_int = MAX(ch_int, 3);
+
   int chtn = mod + cmod + tch_int;
   int tchtn = mod + tmod + ch_int;
 

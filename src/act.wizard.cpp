@@ -6889,8 +6889,8 @@ int audit_zone_shops_(struct char_data *ch, int zone_num, bool verbose) {
         issues++;
       }
 
-      // Flag invalid strings
-      if (shop->profit_sell > 0.100001) {
+      if (shop->flags.IsSet(SHOP_CHARGEN) ? shop->profit_sell > (1.0000001) : (shop->flags.IsSet(SHOP_DOCTOR) ? shop->profit_sell > (0.3000001) : shop->profit_sell > 0.1000001))
+      {
         bool buys_anything = FALSE;
         for (int type = 1; type < NUM_ITEMS && !buys_anything; type++)
           if (shop->buytypes.IsSet(type))
@@ -6905,11 +6905,19 @@ int audit_zone_shops_(struct char_data *ch, int zone_num, bool verbose) {
 
       // Flag the shopkeeper having wonky int values.
       int intelligence = GET_INT(&mob_proto[shopkeeper_rnum]);
-      if (intelligence < 4 || intelligence > 10) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - out-of-range shopkeeper intelligence ^c%d^n (expecting between 4 and 10)^n.\r\n", intelligence);
+#ifdef BE_STRICTER_ABOUT_SHOPKEEPER_INTELLIGENCE
+      if (intelligence < 3 || intelligence > 12) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - out-of-range shopkeeper intelligence ^c%d^n (expecting between 3 and 12)^n.\r\n", intelligence);
         printed = TRUE;
         issues++;
       }
+#else
+      if (intelligence <= 0) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - shopkeeper intelligence not set.\r\n");
+        printed = TRUE;
+        issues++;
+      }
+#endif
     }
 
     if (printed) {
