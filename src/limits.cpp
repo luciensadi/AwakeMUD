@@ -838,16 +838,20 @@ void point_update(void)
             total++;
           }
         }
-        if (force * 100 > GET_REAL_MAG(i) * 2 && success_test(GET_REAL_MAG(i) / 100, force / 2) < 1) {
-          int num = number(1, total);
-          struct obj_data *foci = NULL;
-          for (int x = 0; x < NUM_WEARS && !foci; x++)
-            if (GET_EQ(i, x) && GET_OBJ_TYPE(GET_EQ(i, x)) == ITEM_FOCUS && GET_OBJ_VAL(GET_EQ(i, x), 2) == GET_IDNUM(i) && GET_OBJ_VAL(GET_EQ(i, x), 4) && !--num)
-              foci = GET_EQ(i, x);
-          if (foci) {
-            send_to_char(i, "You feel some of your magic becoming locked in %s.\r\n", GET_OBJ_NAME(foci));
-            GET_OBJ_VAL(foci, 9) = GET_IDNUM(i);
-            magic_loss(i, 100, FALSE);
+        if (GET_REAL_MAG(i) * 2 < 0) {
+          mudlog("^RSYSERR: Multiplying magic for focus addiction check gave a NEGATIVE number! Increase the size of the variable!^n", i, LOG_SYSLOG, TRUE);
+        } else {
+          if (force * 100 > GET_REAL_MAG(i) * 2 && success_test(GET_REAL_MAG(i) / 100, force / 2) < 1) {
+            int num = number(1, total);
+            struct obj_data *foci = NULL;
+            for (int x = 0; x < NUM_WEARS && !foci; x++)
+              if (GET_EQ(i, x) && GET_OBJ_TYPE(GET_EQ(i, x)) == ITEM_FOCUS && GET_FOCUS_BONDED_TO(GET_EQ(i, x)) == GET_IDNUM(i) && GET_FOCUS_ACTIVATED(GET_EQ(i, x)) && !GET_FOCUS_BOND_TIME_REMAINING(GET_EQ(i, x)) && !--num)
+                foci = GET_EQ(i, x);
+            if (foci) {
+              send_to_char(i, "^RYou feel some of your magic becoming locked in %s!^n Quick, take off all your foci before it happens again!\r\n", GET_OBJ_NAME(foci));
+              GET_OBJ_VAL(foci, 9) = GET_IDNUM(i);
+              magic_loss(i, 100, FALSE);
+            }
           }
         }
       }

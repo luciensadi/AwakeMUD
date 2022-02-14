@@ -37,6 +37,7 @@
 #include "newdb.h"
 #include "helpedit.h"
 #include "archetypes.h"
+#include "ignore_system.h"
 
 #if defined(__CYGWIN__)
 #include <crypt.h>
@@ -482,6 +483,9 @@ struct command_info cmd_info[] =
     { "banish"     , POS_STANDING, do_banish   , 0, 0, FALSE },
     { "balance"    , POS_LYING   , do_gold     , 0, 0, TRUE },
     { "bioware"    , POS_DEAD    , do_bioware  , 0, 0, TRUE },
+#ifdef ALLOW_IGNORE_USE
+    { "block"      , POS_DEAD    , do_ignore   , 0, 0, TRUE },
+#endif
     { "boost"      , POS_LYING   , do_boost    , 0, 0, FALSE },
     { "break"      , POS_LYING   , do_break    , 0, 0, FALSE },
     { "broadcast"  , POS_LYING   , do_broadcast, 0, 0, TRUE },
@@ -618,7 +622,9 @@ struct command_info cmd_info[] =
     { "idea"       , POS_DEAD    , do_gen_write, 0, SCMD_IDEA, TRUE },
     //{ "idelete"  , POS_DEAD    , do_idelete  , LVL_PRESIDENT, 0, FALSE },
     { "iedit"      , POS_DEAD    , do_iedit    , LVL_BUILDER, 0, FALSE },
+#ifdef ALLOW_IGNORE_USE
     { "ignore"     , POS_DEAD    , do_ignore   , 0, 0, TRUE },
+#endif
     { "ilist"      , POS_DEAD    , do_ilist    , LVL_BUILDER, 0, FALSE },
     { "iload"      , POS_DEAD    , do_iload    , LVL_BUILDER, 0, FALSE },
     { "imotd"      , POS_DEAD    , do_gen_ps   , LVL_BUILDER, SCMD_IMOTD, FALSE },
@@ -2500,11 +2506,14 @@ void nanny(struct descriptor_data * d, char *arg)
           }
         if (d->character == NULL) {
           d->character = Mem->GetCh();
+
+          // Create and zero out their player_specials.
           DELETE_IF_EXTANT(d->character->player_specials);
           d->character->player_specials = new player_special_data;
-          // make sure to clear it up here
-          memset(d->character->player_specials, 0,
-                 sizeof(player_special_data));
+          memset(d->character->player_specials, 0, sizeof(player_special_data));
+
+          // Initialize their ignore data structure, which all PCs have.
+          GET_IGNORE_DATA(d->character) = new IgnoreData(d->character);
 
           d->character->desc = d;
         }
@@ -2587,7 +2596,7 @@ void nanny(struct descriptor_data * d, char *arg)
         snprintf(buf, sizeof(buf), "Bad PW: %s [%s]", GET_CHAR_NAME(d->character), d->host);
         mudlog(buf, d->character, LOG_CONNLOG, TRUE);
         GET_BAD_PWS(d->character)++;
-        d->character->in_room = &world[real_room(GET_LAST_IN(d->character))];
+        d->character->in_room = &world[MAX(0, real_room(GET_LAST_IN(d->character)))];
         playerDB.SaveChar(d->character, GET_LOADROOM(d->character));
         if (++(d->bad_pws) >= max_bad_pws) {    /* 3 strikes and you're out. */
           SEND_TO_Q("Wrong password... disconnecting.\r\n", d);
@@ -2616,8 +2625,10 @@ void nanny(struct descriptor_data * d, char *arg)
       load_result = GET_BAD_PWS(d->character);
       GET_BAD_PWS(d->character) = 0;
 
-      d->character->in_room = &world[real_room(GET_LAST_IN(d->character))];
+      d->character->in_room = &world[MAX(0, real_room(GET_LAST_IN(d->character)))];
       playerDB.SaveChar(d->character, GET_LOADROOM(d->character));
+
+      // TODO: Don't these returns leak memory by not cleaning up d->character?
       if (isbanned(d->host) == BAN_SELECT &&
           !PLR_FLAGGED(d->character, PLR_SITEOK)) {
         SEND_TO_Q("Sorry, this char has not been cleared for login from your site!\r\n", d);
@@ -3009,6 +3020,7 @@ void nanny(struct descriptor_data * d, char *arg)
       }
 
       DeleteChar(GET_IDNUM(d->character));
+
       snprintf(buf, sizeof(buf), "Character '%s' deleted!\r\nGoodbye.\r\n",
               GET_CHAR_NAME(d->character));
       SEND_TO_Q(buf, d);

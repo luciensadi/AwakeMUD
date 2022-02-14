@@ -34,6 +34,7 @@
 #include "bullet_pants.h"
 #include "config.h"
 #include "newmail.h"
+#include "ignore_system.h"
 
 #ifdef GITHUB_INTEGRATION
 #include <curl/curl.h>
@@ -245,7 +246,7 @@ ACMD(do_steal)
   else if (!IS_SENATOR(ch) && IS_NPC(vict) && (mob_index[GET_MOB_RNUM(vict)].func == shop_keeper
                                                || mob_index[GET_MOB_RNUM(vict)].sfunc == shop_keeper))
     send_to_char(ch, "%s slaps your hand away.\r\n", CAP(GET_NAME(vict)));
-  else if (!IS_SENATOR(ch) && AWAKE(vict))
+  else if (!IS_SENATOR(ch) && (AWAKE(vict) || IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)))
     send_to_char("That would be quite a feat.\r\n", ch);
   else if (!IS_SENATOR(ch) && !IS_NPC(vict) && (!PRF_FLAGGED(ch, PRF_PKER) || !PRF_FLAGGED(vict, PRF_PKER)))
     send_to_char(ch, "Both you and %s need to be toggled PK for that.\r\n", GET_NAME(vict));
@@ -1152,10 +1153,12 @@ const char *tog_messages[][2] = {
                              "You will no longer see the idle nuyen reward messages.\r\n"},
                             {"Player cyberdocs are no longer able to operate on you.\r\n",
                              "Player cyberdocs are now able to operate on you. This flag will be un-set after each operation.\r\n"},
-                            {"You will no longer void on idle out. This means you are vulnerable, you have been warned.\r\n",
-                             "You will return to the void when idle.\r\n"},
+                            {"You will return to the void when idle.\r\n",
+                             "You will no longer void on idle out. This means you are vulnerable, you have been warned.\r\n"},
                             {"You un-squelch your staff radio powers: You no longer require a radio to hear broadcasts, and will hear any language.\r\n",
-                             "You squelch your staff radio listening powers: You now require a radio, and your language skills are suppressed.\r\n"}
+                             "You squelch your staff radio listening powers: You now require a radio, and your language skills are suppressed.\r\n"},
+                            {"You will now show up by name on the where-list.\r\n",
+                             "You will no longer show up by name on the where-list.\r\n"}
                           };
 
 ACMD(do_toggle)
@@ -1193,10 +1196,10 @@ ACMD(do_toggle)
 
       // Compose and append our line.
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf),
-              "%18s: %-3s%s",
+              "%20s: %-3s%s",
               preference_bits_v2[i].name,
               buf2,
-              printed%3 == 2 ? "\r\n" : "");
+              printed%3 == 2 || PRF_FLAGGED(ch, PRF_SCREENREADER) ? "\r\n" : "");
 
       // Increment our spacer.
       printed++;
@@ -1369,6 +1372,9 @@ ACMD(do_toggle)
     } else if (IS_SENATOR(ch) && (is_abbrev(argument, "staffradio") || is_abbrev(argument, "suppress staff radio"))) {
       result = PRF_TOG_CHK(ch, PRF_SUPPRESS_STAFF_RADIO);
       mode = 40;
+    } else if (is_abbrev(argument, "nowhere") || is_abbrev(argument, "where") || is_abbrev(argument, "anonymous on where")) {
+      result = PRF_TOG_CHK(ch, PRF_ANONYMOUS_ON_WHERE);
+      mode = 41;
     } else {
       send_to_char("That is not a valid toggle option.\r\n", ch);
       return;
@@ -1455,9 +1461,9 @@ ACMD(do_skills)
         if (max_ability(i) > 1)
           switch (i) {
           case ADEPT_KILLING_HANDS:
-            snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " %-8s", wound_name[MIN(DEADLY, GET_POWER_TOTAL(ch, i))]);
+            snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " %-8s", GET_WOUND_NAME(GET_POWER_TOTAL(ch, i)));
             if (GET_POWER_ACT(ch, i))
-              snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " ^Y(%-8s)^n", wound_name[MIN(DEADLY, GET_POWER_ACT(ch, i))]);
+              snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " ^Y(%-8s)^n", GET_WOUND_NAME(GET_POWER_ACT(ch, i)));
             strlcat(buf2, "\r\n", sizeof(buf2));
             break;
           default:

@@ -483,6 +483,7 @@ void boot_world(void)
   require_that_field_meets_constraints("MatrixPrompt", "pfiles", "SQL/Migrations/prompt_expansion.sql", 2001, "varchar");
   require_that_field_meets_constraints("Attempt", "pfiles_inv", "SQL/Migrations/attempt_value_fix.sql", 6, "mediumint");
   require_that_field_meets_constraints("Attempt", "pfiles_worn", "SQL/Migrations/attempt_value_fix.sql", 6, "mediumint");
+  require_that_sql_table_exists("pfiles_ignore_v2", "SQL/ignore_system_v2.sql");
 
   log("Calculating lexicon data.");
   populate_lexicon_size_table();

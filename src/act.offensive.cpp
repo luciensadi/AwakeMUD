@@ -21,6 +21,7 @@
 #include "awake.h"
 #include "constants.h"
 #include "newdb.h"
+#include "ignore_system.h"
 
 /* extern variables */
 extern struct room_data *world;
@@ -73,6 +74,17 @@ ACMD(do_assist)
     else if (!CAN_SEE(ch, opponent))
       act("You can't see who is fighting $M!", FALSE, ch, 0, helpee, TO_CHAR);
     else {
+#ifdef IGNORING_IC_ALSO_IGNORES_COMBAT
+      if (IS_IGNORING(opponent, is_blocking_ic_interaction_from, ch)) {
+        act("You can't see who is fighting $M!", FALSE, ch, 0, helpee, TO_CHAR);
+        return;
+      }
+
+      if (IS_IGNORING(ch, is_blocking_ic_interaction_from, opponent)) {
+        send_to_char("You can't attack someone you've blocked IC interaction with.\r\n", ch);
+        return;
+      }
+#endif
       send_to_char("You join the fight!\r\n", ch);
       act("$N assists you!", FALSE, helpee, 0, ch, TO_CHAR);
       act("$n assists $N.", FALSE, ch, 0, helpee, TO_NOTVICT);
@@ -344,6 +356,22 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
       send_to_char("They are nothing but a figment of your imagination.\r\n", ch);
       return TRUE;
     }
+    if (!IS_NPC(ch) && !IS_NPC(vict) && (!PRF_FLAGGED(ch, PRF_PKER) || !PRF_FLAGGED(vict, PRF_PKER))) {
+      send_to_char("You and your opponent must both be toggled PK for that.\r\n", ch);
+      return TRUE;
+    }
+
+#ifdef IGNORING_IC_ALSO_IGNORES_COMBAT
+    if (IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)) {
+      send_to_char("They are nothing but a figment of your imagination.\r\n", ch);
+      return TRUE;
+    }
+
+    if (IS_IGNORING(ch, is_blocking_ic_interaction_from, vict)) {
+      send_to_char("You can't attack someone you've blocked IC interaction with.\r\n", ch);
+      return TRUE;
+    }
+#endif
 
     if (!(GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD)))
       draw_weapon(ch);
@@ -597,7 +625,7 @@ bool passed_flee_success_check(struct char_data *ch) {
 
   if (!can_hurt(ch, FIGHTING(ch), TRUE, 0))
     return TRUE;
-    
+
   int racial_flee_modifier = 0; // Satyrs have a x4 run multiplier and smaller races have x2, so we're houseruling a +1/-1 TN here.
   switch (GET_RACE(ch)) {
     case RACE_SATYR:
@@ -677,8 +705,10 @@ ACMD(do_kick)
     } else {
       act("You sneak up behind $N and kick $M straight in the ass!",
           FALSE, ch, 0, vict, TO_CHAR);
-      act("$n sneaks up behind you and kicks you in the ass!\r\n"
-          "That's gonna leave a mark...", FALSE, ch, 0, vict, TO_VICT);
+      if (!IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)) {
+        act("$n sneaks up behind you and kicks you in the ass!\r\n"
+            "That's gonna leave a mark...", FALSE, ch, 0, vict, TO_VICT);
+      }
       act("$n sneaks up behind $N and gives $M a swift kick in the ass!",
           TRUE, ch, 0, vict, TO_NOTVICT);
     }

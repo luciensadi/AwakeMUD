@@ -13,6 +13,7 @@
 #include "constants.h"
 #include "olc.h"
 #include "config.h"
+#include "ignore_system.h"
 
 #define POWER(name) void (name)(struct char_data *ch, struct char_data *spirit, struct spirit_data *spiritdata, char *arg)
 #define FAILED_CAST "You fail to bind the mana to your will.\r\n"
@@ -23,7 +24,7 @@
 extern void die(struct char_data *ch);
 extern void damage_equip(struct char_data *ch, struct char_data *vict, int power, int type);
 extern void damage_obj(struct char_data *ch, struct obj_data *obj, int power, int type);
-extern void check_killer(struct char_data * ch, struct char_data * vict);
+extern bool would_become_killer(struct char_data * ch, struct char_data * vict);
 extern void nonsensical_reply(struct char_data *ch, const char *arg, const char *mode);
 extern void send_mob_aggression_warnings(struct char_data *pc, struct char_data *mob);
 extern bool mob_is_aggressive(struct char_data *ch, bool include_base_aggression);
@@ -815,6 +816,12 @@ bool spell_drain(struct char_data *ch, int spell_idx, int force, int damage) {
     // Otherwise, if the spell has a damage value set, then we tack on the draindamage value in addition to this.
     else if (spell_idx) {
       damage += UNPACK_VARIABLE_DRAIN_DAMAGE(spells[spell_idx].draindamage);
+
+      // MitS p54
+      while (damage > DEADLY) {
+        damage--;
+        target += 2;
+      }
     }
 
     // Otherwise, we got a spell with both no spell idx and no damage code. Log it.
@@ -828,16 +835,17 @@ bool spell_drain(struct char_data *ch, int spell_idx, int force, int damage) {
   magic_perception(ch, force, spell_idx);
 
   // Write our rolls info.
+  int original_damage = damage;
   int dice = GET_WIL(ch) + GET_DRAIN(ch);
   success = success_test(dice, target);
   damage = convert_damage(stage(-success, damage));
   snprintf(buf, sizeof(buf), "Drain Test: F:%d%s TN:%d Dice: %d. Rolled %d successes, damage before resists is now %s (%d).",
            force,
-           wound_name[damage],
+           GET_WOUND_NAME(original_damage),
            target,
            dice,
            success,
-           wound_name[MIN(DEADLY, MAX(0, damage))],
+           GET_WOUND_NAME(damage),
            damage
           );
   act(buf, FALSE, ch, NULL, NULL, TO_ROLLS);
@@ -896,7 +904,7 @@ bool spell_drain(struct char_data *ch, int spell_idx, int force, int damage) {
     GET_MENTAL(ch) = 0;
   }
 
-  snprintf(buf, sizeof(buf), "After resists, damage is %s (%d).", wound_name[MIN(DEADLY, MAX(0, damage))], damage);
+  snprintf(buf, sizeof(buf), "After resists, damage is %s (%d).", GET_WOUND_NAME(damage), damage);
   act(buf, FALSE, ch, NULL, NULL, TO_ROLLS);
 
   update_pos(ch);
@@ -1069,6 +1077,13 @@ bool check_spell_victim(struct char_data *ch, struct char_data *vict, int spell,
     return FALSE;
   }
 
+#ifdef IGNORING_IC_ALSO_IGNORES_COMBAT
+  if (IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)) {
+    send_to_char(ch, "You don't see anyone named '%s' here.\r\n", buf);
+    return FALSE;
+  }
+#endif
+
   bool ch_is_astral = IS_PROJECT(ch) || IS_ASTRAL(ch);
   bool vict_is_astral = IS_ASTRAL(vict) || IS_PROJECT(vict);
 
@@ -1207,7 +1222,11 @@ void cast_combat_spell(struct char_data *ch, int spell, int force, char *arg)
   if (skill == -1)
     return;
 
-  check_killer(ch, vict);
+  if (would_become_killer(ch, vict)) {
+    send_to_char("That would make you a PLAYER KILLER! Both you and your opponent must `toggle PK` to do that.\r\n", ch);
+    return;
+  }
+
   struct char_data *temp = vict;
 
   switch (spell)
@@ -1357,6 +1376,12 @@ void cast_detection_spell(struct char_data *ch, int spell, int force, char *arg,
   switch (spell)
   {
   case SPELL_MINDLINK:
+    // Block mindlinks from ignoring characters without divulging information.
+    if (IS_IGNORING(vict, is_blocking_mindlinks_from, ch)) {
+      send_to_char("They are already under the influence of a mindlink.\r\n", ch);
+      return;
+    }
+
     WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
     success = success_test(skill, 4 + target_modifiers);
     for (struct sustain_data *sust = GET_SUSTAINED(ch); sust; sust = sust->next)
@@ -1513,6 +1538,9 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
         int rea_from_bioware = 0;
         int initiative_dice_with_just_bioware = 0;
 
+        if (!check_spell_victim(ch, vict, spell, arg))
+          return;
+
         for (struct obj_data *bioware = vict->bioware; bioware; bioware = bioware->next_content)
         {
           // Skip deactivated adrenal pumps.
@@ -1577,6 +1605,9 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
     case SPELL_DECCYATTR:
     case SPELL_INCATTR:
     case SPELL_INCCYATTR:
+      if (!check_spell_victim(ch, vict, spell, arg))
+        return;
+
       if (GET_ATT(vict, sub) != GET_REAL_ATT(vict, sub)) {
         if (GET_TRADITION(vict) == TRAD_ADEPT && sub < CHA) {
           switch (sub) {
@@ -1663,7 +1694,10 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       if (!check_spell_victim(ch, vict, spell, arg))
         return;
 
-      check_killer(ch, vict);
+      if (would_become_killer(ch, vict)) {
+        send_to_char("That would make you a PLAYER KILLER! Both you and your opponent must `toggle PK` to do that.\r\n", ch);
+        return;
+      }
 
       if (!IS_NPC(ch) && !IS_NPC(vict) && PLR_FLAGGED(ch, PLR_KILLER)) {
         act("You have the KILLER flag, so you can't affect $N with a mind-altering spell.", TRUE, ch, 0, vict, TO_CHAR);
@@ -1689,6 +1723,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
     case SPELL_IMP_INVIS:
       if (!check_spell_victim(ch, vict, spell, arg))
         return;
+
       WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
 
       success = success_test(skill, 4 + target_modifiers);
@@ -1737,50 +1772,54 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
   bool cast_by_npc = IS_NPC(ch);
   switch (spell)
   {
-  case SPELL_LASER:
-  case SPELL_NOVA:
-  case SPELL_STEAM:
-  case SPELL_SMOKECLOUD:
-  case SPELL_THUNDERBOLT:
-  case SPELL_THUNDERCLAP:
-  case SPELL_WATERBOLT:
-  case SPELL_SPLASH:
-  case SPELL_ACIDSTREAM:
-  case SPELL_TOXICWAVE:
-  case SPELL_FLAMETHROWER:
-  case SPELL_FIREBALL:
-  case SPELL_LIGHTNINGBOLT:
-  case SPELL_BALLLIGHTNING:
-  case SPELL_CLOUT:
-    two_arguments(arg, buf, buf1);
-    if (get_ch_in_room(ch)->peaceful) {
-      send_to_char("This room just has a peaceful, easy feeling...\r\n", ch);
-      return;
-    }
-    if (!*buf) {
-      send_to_char("What damage level do you wish to cast that spell at?\r\n", ch);
-      return;
-    } else {
-      for (basedamage = 0; *wound_name[basedamage] != '\n'; basedamage++)
-        if (is_abbrev(buf, wound_name[basedamage]))
-          break;
-      if (basedamage > 4 || basedamage == 0) {
-        send_to_char(ch, "'%s' is not a valid damage level, please choose between Light, Moderate, Serious and Deadly.\r\n", capitalize(buf));
+    case SPELL_LASER:
+    case SPELL_NOVA:
+    case SPELL_STEAM:
+    case SPELL_SMOKECLOUD:
+    case SPELL_THUNDERBOLT:
+    case SPELL_THUNDERCLAP:
+    case SPELL_WATERBOLT:
+    case SPELL_SPLASH:
+    case SPELL_ACIDSTREAM:
+    case SPELL_TOXICWAVE:
+    case SPELL_FLAMETHROWER:
+    case SPELL_FIREBALL:
+    case SPELL_LIGHTNINGBOLT:
+    case SPELL_BALLLIGHTNING:
+    case SPELL_CLOUT:
+      two_arguments(arg, buf, buf1);
+      if (get_ch_in_room(ch)->peaceful) {
+        send_to_char("This room just has a peaceful, easy feeling...\r\n", ch);
         return;
       }
-    }
-    if (*buf1)
-      vict = get_char_room_vis(ch, buf1);
-    if (ch == vict) {
-      send_to_char("You can't target yourself with a combat spell!\r\n", ch);
-      return;
-    }
-    break;
-  default:
-    if (mob)
-      vict = mob;
-    else if (*arg)
-      vict = get_char_room_vis(ch, arg);
+      if (!*buf) {
+        send_to_char("What damage level do you wish to cast that spell at?\r\n", ch);
+        return;
+      } else {
+        for (basedamage = 0; *wound_name[basedamage] != '\n'; basedamage++)
+          if (is_abbrev(buf, wound_name[basedamage]))
+            break;
+        if (basedamage > 4 || basedamage == 0) {
+          send_to_char(ch, "'%s' is not a valid damage level, please choose between Light, Moderate, Serious and Deadly.\r\n", capitalize(buf));
+          return;
+        }
+      }
+      if (*buf1)
+        vict = get_char_room_vis(ch, buf1);
+      if (ch == vict) {
+        send_to_char("You can't target yourself with a combat spell!\r\n", ch);
+        return;
+      }
+
+      if (!check_spell_victim(ch, vict, spell, arg))
+        return;
+
+      break;
+    default:
+      if (mob)
+        vict = mob;
+      else if (*arg)
+        vict = get_char_room_vis(ch, arg);
   }
   if (find_duplicate_spell(ch, vict, spell, 0))
     return;
@@ -1860,7 +1899,12 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
   case SPELL_IGNITE:
     if (!check_spell_victim(ch, vict, spell, arg))
       return;
-    check_killer(ch, vict);
+
+    if (would_become_killer(ch, vict)) {
+      send_to_char("That would make you a PLAYER KILLER! Both you and your opponent must `toggle PK` to do that.\r\n", ch);
+      return;
+    }
+
     if (ch == vict) {
       send_to_char("You can't target yourself with a combat spell!\r\n", ch);
       return;
@@ -1907,7 +1951,12 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
   case SPELL_CLOUT:
     if (!check_spell_victim(ch, vict, spell, arg))
       return;
-    check_killer(ch, vict);
+
+    if (would_become_killer(ch, vict)) {
+      send_to_char("That would make you a PLAYER KILLER! Both you and your opponent must `toggle PK` to do that.\r\n", ch);
+      return;
+    }
+
     if (!AWAKE(vict))
       target_modifiers -= 2;
     else {
@@ -1965,7 +2014,12 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
   case SPELL_FLAMETHROWER:
     if (!check_spell_victim(ch, vict, spell, arg))
       return;
-    check_killer(ch, vict);
+
+    if (would_become_killer(ch, vict)) {
+      send_to_char("That would make you a PLAYER KILLER! Both you and your opponent must `toggle PK` to do that.\r\n", ch);
+      return;
+    }
+
     if (!AWAKE(vict))
       target_modifiers -= 2;
     else
@@ -2033,7 +2087,12 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
   case SPELL_ACIDSTREAM:
     if (!check_spell_victim(ch, vict, spell, arg))
       return;
-    check_killer(ch, vict);
+
+    if (would_become_killer(ch, vict)) {
+      send_to_char("That would make you a PLAYER KILLER! Both you and your opponent must `toggle PK` to do that.\r\n", ch);
+      return;
+    }
+
     if (!AWAKE(vict))
       target_modifiers -= 2;
     else
@@ -2096,7 +2155,12 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
   case SPELL_LIGHTNINGBOLT:
     if (!check_spell_victim(ch, vict, spell, arg))
       return;
-    check_killer(ch, vict);
+
+    if (would_become_killer(ch, vict)) {
+      send_to_char("That would make you a PLAYER KILLER! Both you and your opponent must `toggle PK` to do that.\r\n", ch);
+      return;
+    }
+
     if (!AWAKE(vict))
       target_modifiers -= 2;
     else {
@@ -2164,7 +2228,12 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
   case SPELL_LASER:
     if (!check_spell_victim(ch, vict, spell, arg))
       return;
-    check_killer(ch, vict);
+
+    if (would_become_killer(ch, vict)) {
+      send_to_char("That would make you a PLAYER KILLER! Both you and your opponent must `toggle PK` to do that.\r\n", ch);
+      return;
+    }
+
     if (!AWAKE(vict))
       target_modifiers -= 2;
     else {
@@ -2226,7 +2295,12 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
   case SPELL_STEAM:
     if (!check_spell_victim(ch, vict, spell, arg))
       return;
-    check_killer(ch, vict);
+
+    if (would_become_killer(ch, vict)) {
+      send_to_char("That would make you a PLAYER KILLER! Both you and your opponent must `toggle PK` to do that.\r\n", ch);
+      return;
+    }
+
     if (!AWAKE(vict))
       target_modifiers -= 2;
     else {
@@ -2283,7 +2357,12 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
   case SPELL_THUNDERBOLT:
     if (!check_spell_victim(ch, vict, spell, arg))
       return;
-    check_killer(ch, vict);
+
+    if (would_become_killer(ch, vict)) {
+      send_to_char("That would make you a PLAYER KILLER! Both you and your opponent must `toggle PK` to do that.\r\n", ch);
+      return;
+    }
+
     if (!AWAKE(vict))
       target_modifiers -= 2;
     else {
@@ -2340,7 +2419,12 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
   case SPELL_WATERBOLT:
     if (!check_spell_victim(ch, vict, spell, arg))
       return;
-    check_killer(ch, vict);
+
+    if (would_become_killer(ch, vict)) {
+      send_to_char("That would make you a PLAYER KILLER! Both you and your opponent must `toggle PK` to do that.\r\n", ch);
+      return;
+    }
+
     if (!AWAKE(vict))
       target_modifiers -= 2;
     else {
@@ -3135,6 +3219,11 @@ ACMD(do_cast)
     return;
   }
 
+  if (ROOM_FLAGGED(get_ch_in_room(ch), ROOM_NOMAGIC)) {
+    send_to_char("The mana here refuses to heed your call.\r\n", ch);
+    return;
+  }
+
   int force = 0;
   char spell_name[120], tokens[MAX_STRING_LENGTH], *s;
   struct spell_data *spell = GET_SPELLS(ch);
@@ -3669,6 +3758,7 @@ ACMD(do_banish)
     send_to_char("You can only banish a nature spirit or elemental.\r\n", ch);
     return;
   }
+  WAIT_STATE(ch, OFFENSIVE_SPELL_WAIT_STATE_TIME);
   stop_fighting(ch);
   stop_fighting(mob);
   set_fighting(ch, mob);
@@ -4218,7 +4308,11 @@ POWER(spirit_attack)
   else if (ROOM_FLAGGED(get_ch_in_room(spirit), ROOM_PEACEFUL))
     send_to_char("It's too peaceful here...\r\n", ch);
   else {
-    check_killer(ch, tch);
+    if (would_become_killer(ch, tch)) {
+      send_to_char("That would make you a PLAYER KILLER! Both you and your opponent must `toggle PK` to do that.\r\n", ch);
+      return;
+    }
+
     set_fighting(spirit, tch);
     if (!FIGHTING(tch) && CAN_SEE(tch, spirit))
       set_fighting(tch, spirit);
@@ -4779,6 +4873,7 @@ ACMD(do_dispell)
     send_to_char("They don't have that many spells cast on them.\r\n", ch);
     return;
   }
+  WAIT_STATE(ch, OFFENSIVE_SPELL_WAIT_STATE_TIME);
   int success = success_test(GET_SKILL(ch, SKILL_SORCERY) + MIN(GET_SKILL(ch, SKILL_SORCERY), GET_CASTING(ch)), sust->force + modify_target(ch));
   int type = sust->spell, force = sust->force;
   snprintf(buf, sizeof(buf), "Dispell $N's %s (force %d) using skill %d vs TN %d: %d successes.",

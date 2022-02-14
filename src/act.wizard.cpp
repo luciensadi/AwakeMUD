@@ -72,7 +72,6 @@ extern int max_ability(int i);
 
 extern const char *wound_arr[];
 extern const char *material_names[];
-extern const char *wound_name[];
 extern int ViolencePulse;
 
 extern void list_detailed_shop(struct char_data *ch, long shop_nr);
@@ -98,6 +97,8 @@ extern void turn_hardcore_on_for_character(struct char_data *ch);
 extern void turn_hardcore_off_for_character(struct char_data *ch);
 
 extern void DBFinalize();
+
+extern void display_characters_ignore_entries(struct char_data *viewer, struct char_data *target);
 
 ACMD_DECLARE(do_goto);
 
@@ -1346,7 +1347,7 @@ void do_stat_object(struct char_data * ch, struct obj_data * j)
     break;
   case ITEM_PROGRAM:
     if (GET_OBJ_VAL(j, 0) == SOFT_ATTACK)
-      snprintf(buf2, sizeof(buf2), ", DamType: %s", wound_name[GET_OBJ_VAL(j, 3)]);
+      snprintf(buf2, sizeof(buf2), ", DamType: %s", GET_WOUND_NAME(GET_OBJ_VAL(j, 3)));
     else
       snprintf(buf2, sizeof(buf2), " ");
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Type: %s, Rating: %d, Size: %d%s",
@@ -3567,6 +3568,7 @@ ACMD(do_show)
                { "roomflag",       LVL_BUILDER },
                { "markets",        LVL_VICEPRES},
                { "weight",         LVL_PRESIDENT},
+               { "ignore",         LVL_FIXER},
                { "\n", 0 }
              };
 
@@ -3846,9 +3848,9 @@ ACMD(do_show)
         if (max_ability(i) > 1)
           switch (i) {
           case ADEPT_KILLING_HANDS:
-            snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " %-8s", wound_name[MIN(4, GET_POWER_TOTAL(vict, i))]);
+            snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " %-8s", GET_WOUND_NAME(GET_POWER_TOTAL(vict, i)));
             if (GET_POWER_ACT(vict, i))
-              snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " ^Y(%-8s)^n", wound_name[MIN(4, GET_POWER_ACT(vict, i))]);
+              snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " ^Y(%-8s)^n", GET_WOUND_NAME(GET_POWER_ACT(vict, i)));
             strlcat(buf2, "\r\n", sizeof(buf2));
             break;
           default:
@@ -4079,6 +4081,17 @@ ACMD(do_show)
     }
     if (j == 0)
       send_to_char("...None.\r\n", ch);
+    return;
+  case 25:
+    if (!*value) {
+      send_to_char("A name would help.\r\n", ch);
+      return;
+    }
+    if (!(vict = get_char_vis(ch, value))) {
+      send_to_char(ch, "You can't see anyone named '%s'.\r\n", value);
+      return;
+    }
+    display_characters_ignore_entries(ch, vict);
     return;
   default:
     send_to_char("Sorry, I don't understand that.\r\n", ch);
@@ -4671,7 +4684,7 @@ ACMD(do_set)
     if (IS_NPC(vict) || (IS_SENATOR(vict) && access_level(vict, LVL_ADMIN)))
       RANGE(0, 5000);
     else
-      RANGE(0, 1500);
+      RANGE(0, 3000);
     vict->real_abils.mag = value;
     affect_total(vict);
     break;
@@ -6859,15 +6872,16 @@ int audit_zone_shops_(struct char_data *ch, int zone_num, bool verbose) {
 
     shop = &shop_table[real_shp];
 
-    snprintf(buf, sizeof(buf), "^c[%8ld]^n:\r\n", shop->vnum);
+    rnum_t shopkeeper_rnum = real_mobile(shop->keeper);
 
     printed = FALSE;
 
-    if (real_mobile(shop->keeper) <= -1) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - invalid shopkeeper.\r\n");
+    if (shopkeeper_rnum <= -1) {
+      snprintf(buf, sizeof(buf), "^c[%8ld]^n:\r\n  - invalid shopkeeper.\r\n", shop->vnum);
       printed = TRUE;
       issues++;
     } else {
+      snprintf(buf, sizeof(buf), "^c[%8ld]^n: %s (%ld)\r\n", shop->vnum, GET_NAME(&mob_proto[shopkeeper_rnum]), shop->keeper);
       // Flag invalid sell multipliers
       if (shop->profit_buy < 1.0) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - too-low buy profit ^c%0.2f^n < 1.0^n.\r\n", shop->profit_buy);
@@ -6875,8 +6889,8 @@ int audit_zone_shops_(struct char_data *ch, int zone_num, bool verbose) {
         issues++;
       }
 
-      // Flag invalid strings
-      if (shop->profit_sell > 0.100001) {
+      if (shop->flags.IsSet(SHOP_CHARGEN) ? shop->profit_sell > (1.0000001) : (shop->flags.IsSet(SHOP_DOCTOR) ? shop->profit_sell > (0.3000001) : shop->profit_sell > 0.1000001))
+      {
         bool buys_anything = FALSE;
         for (int type = 1; type < NUM_ITEMS && !buys_anything; type++)
           if (shop->buytypes.IsSet(type))
@@ -6888,6 +6902,22 @@ int audit_zone_shops_(struct char_data *ch, int zone_num, bool verbose) {
           issues++;
         }
       }
+
+      // Flag the shopkeeper having wonky int values.
+      int intelligence = GET_INT(&mob_proto[shopkeeper_rnum]);
+#ifdef BE_STRICTER_ABOUT_SHOPKEEPER_INTELLIGENCE
+      if (intelligence < 3 || intelligence > 12) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - out-of-range shopkeeper intelligence ^c%d^n (expecting between 3 and 12)^n.\r\n", intelligence);
+        printed = TRUE;
+        issues++;
+      }
+#else
+      if (intelligence <= 0) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - shopkeeper intelligence not set.\r\n");
+        printed = TRUE;
+        issues++;
+      }
+#endif
     }
 
     if (printed) {

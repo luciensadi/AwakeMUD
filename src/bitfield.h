@@ -60,8 +60,10 @@ public:
   // assumes leading '0's if length < expected
 
   // prints a comma-separated list of names
-  void PrintBits(char *dest, size_t dest_size,
-                 const char *names[], size_t name_cnt);
+  void PrintBits(char *dest, size_t dest_size, const char *names[], size_t name_cnt);
+  // Same as above, but adds color to each bit
+  void PrintBitsColorized(char *dest, size_t dest_size, const char *names[], size_t name_cnt, const char *color_on, const char *color_off);
+
 
   // static TotalWidth() - total number of bits contained
   static int TotalWidth()

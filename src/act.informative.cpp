@@ -17,6 +17,7 @@
 #include <iostream>
 #include <fstream>
 #include <unordered_map>
+#include <vector>
 
 // using namespace std;
 
@@ -41,6 +42,8 @@
 #include "bullet_pants.h"
 #include "config.h"
 #include "newmail.h"
+#include "ignore_system.h"
+#include "mysql_config.h"
 
 const char *CCHAR;
 
@@ -279,7 +282,7 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
       strlcat(buf, " (Plan)", sizeof(buf));
     if (GET_OBJ_VNUM(object) == 108 && !GET_OBJ_TIMER(object))
       strlcat(buf, " (Uncooked)", sizeof(buf));
-    if (GET_OBJ_TYPE(object) == ITEM_FOCUS && GET_OBJ_VAL(object, 9) == GET_IDNUM(ch))
+    if (GET_OBJ_TYPE(object) == ITEM_FOCUS && GET_FOCUS_BOND_TIME_REMAINING(object) == GET_IDNUM(ch))
       strlcat(buf, " ^Y(Geas)^n", sizeof(buf));
     if (GET_OBJ_TYPE(object) == ITEM_GUN_AMMO
         || (GET_OBJ_TYPE(object) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(object) == TYPE_PARTS))
@@ -992,12 +995,10 @@ void list_one_char(struct char_data * i, struct char_data * ch)
       strlcat(buf, "The ghostly image of ", sizeof(buf));
     strlcat(buf, i->player.physical_text.room_desc, sizeof(buf));
 
-#define MOB_HAS_SPEC(rnum, spec) (mob_index[(rnum)].func == spec || mob_index[(rnum)].sfunc == spec)
-
     if (DISPLAY_HELPFUL_STRINGS_FOR_MOB_FUNCS) {
       bool already_printed = FALSE;
       if (mob_index[GET_MOB_RNUM(i)].func || mob_index[GET_MOB_RNUM(i)].sfunc) {
-        if (MOB_HAS_SPEC(GET_MOB_RNUM(i), trainer)) {
+        if (MOB_HAS_SPEC(i, trainer)) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s willing to train you.%s^n\r\n",
                    HSSH(i),
                    already_printed ? " also" : "",
@@ -1005,7 +1006,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
                    GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Use the ^YTRAIN^y command to begin." : "");
           already_printed = TRUE;
         }
-        if (MOB_HAS_SPEC(GET_MOB_RNUM(i), teacher)) {
+        if (MOB_HAS_SPEC(i, teacher)) {
           if (MOB_FLAGGED(i, MOB_INANIMATE)) {
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...it%s can be used to help you practice your skills.%s^n\r\n",
                      already_printed ? " also" : "",
@@ -1019,7 +1020,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
           }
           already_printed = TRUE;
         }
-        if (MOB_HAS_SPEC(GET_MOB_RNUM(i), metamagic_teacher)) {
+        if (MOB_HAS_SPEC(i, metamagic_teacher)) {
           // Mundanes can't see metamagic teachers' abilities.
           if (GET_TRADITION(ch) != TRAD_MUNDANE) {
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s willing to help you train in metamagic techniques.%s^n\r\n",
@@ -1030,7 +1031,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
             already_printed = TRUE;
           }
         }
-        if (MOB_HAS_SPEC(GET_MOB_RNUM(i), adept_trainer)) {
+        if (MOB_HAS_SPEC(i, adept_trainer)) {
           // Adepts can't see adept trainers' abilities.
           if (GET_TRADITION(ch) == TRAD_ADEPT) {
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s willing to help you train your powers.%s^n\r\n",
@@ -1049,7 +1050,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
             already_printed = TRUE;
           }
         }
-        if (MOB_HAS_SPEC(GET_MOB_RNUM(i), spell_trainer)) {
+        if (MOB_HAS_SPEC(i, spell_trainer)) {
           // Mundanes and adepts can't see spell trainers' abilities.
           if (GET_TRADITION(ch) != TRAD_MUNDANE && GET_TRADITION(ch) != TRAD_ADEPT) {
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s willing to help you learn new spells.%s^n\r\n",
@@ -1060,14 +1061,14 @@ void list_one_char(struct char_data * i, struct char_data * ch)
             already_printed = TRUE;
           }
         }
-        if (MOB_HAS_SPEC(GET_MOB_RNUM(i), johnson)) {
+        if (MOB_HAS_SPEC(i, johnson)) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might have a job for you.%s^n\r\n",
                    HSSH(i),
                    already_printed ? " also" : "",
                    GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " See ^YHELP JOB^y for instructions." : "");
           already_printed = TRUE;
         }
-        if (MOB_HAS_SPEC(GET_MOB_RNUM(i), shop_keeper) || MOB_HAS_SPEC(GET_MOB_RNUM(i), terell_davis)) {
+        if (MOB_HAS_SPEC(i, shop_keeper) || MOB_HAS_SPEC(i, terell_davis)) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s a few things for sale.%s^n\r\n",
                    HSSH(i),
                    already_printed ? " also" : "",
@@ -1075,28 +1076,28 @@ void list_one_char(struct char_data * i, struct char_data * ch)
                    GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Use the ^YLIST^y command to see them." : "");
           already_printed = TRUE;
         }
-        if (MOB_HAS_SPEC(GET_MOB_RNUM(i), landlord_spec)) {
+        if (MOB_HAS_SPEC(i, landlord_spec)) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might have some rooms for lease.%s^n\r\n",
                    HSSH(i),
                    already_printed ? " also" : "",
                    GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " See ^YHELP APARTMENTS^y for details." : "");
           already_printed = TRUE;
         }
-        if (MOB_HAS_SPEC(GET_MOB_RNUM(i), fence)) {
+        if (MOB_HAS_SPEC(i, fence)) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might be willing to buy paydata from you.%s^n\r\n",
                    HSSH(i),
                    already_printed ? " also" : "",
                    GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " If you have paydata, ^YUNINSTALL^y it from your deck and then ^YSELL PAYDATA^y." : "");
           already_printed = TRUE;
         }
-        if (MOB_HAS_SPEC(GET_MOB_RNUM(i), hacker)) {
+        if (MOB_HAS_SPEC(i, hacker)) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s cracks credsticks-- you can ^YGIVE^y them to %s.^n\r\n",
                    HSSH(i),
                    already_printed ? " also" : "",
                    HMHR(i));
           already_printed = TRUE;
         }
-        if (MOB_HAS_SPEC(GET_MOB_RNUM(i), receptionist)) {
+        if (MOB_HAS_SPEC(i, receptionist)) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s bunks for rent.%s^n\r\n",
                    HSSH(i),
                    already_printed ? " also" : "",
@@ -1104,7 +1105,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
                    GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Renting is purely for flavor and is not required in AwakeMUD." : "");
           already_printed = TRUE;
         }
-        if (MOB_HAS_SPEC(GET_MOB_RNUM(i), fixer)) {
+        if (MOB_HAS_SPEC(i, fixer)) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s can repair objects for you.%s^n\r\n",
                    HSSH(i),
                    already_printed ? " also" : "",
@@ -1126,7 +1127,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
         }
 
 #ifdef USE_PRIVATE_CE_WORLD
-        if (MOB_HAS_SPEC(GET_MOB_RNUM(i), marksmanship_master)) {
+        if (MOB_HAS_SPEC(i, marksmanship_master)) {
           if (SHOTS_FIRED(ch) >= MARKSMAN_QUEST_SHOTS_FIRED_REQUIREMENT && SHOTS_TRIGGERED(ch) != -1) {
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s looks like %s can teach you a few things. You should ^YASK^y %s about getting some training.^n\r\n",
                      HSSH(i),
@@ -1284,7 +1285,7 @@ void list_char_to_char(struct char_data * list, struct char_data * ch)
   // Show vehicle's contents to character.
   if (ch->in_veh && !ch->in_room) {
     for (i = list; i; i = i->next_in_veh) {
-      if (CAN_SEE(ch, i) && ch != i && ch->vfront == i->vfront) {
+      if (CAN_SEE(ch, i) && ch != i && ch->vfront == i->vfront && !IS_IGNORING(ch, is_blocking_ic_interaction_from, i)) {
         list_one_char(i, ch);
       }
     }
@@ -1330,7 +1331,8 @@ void list_char_to_char(struct char_data * list, struct char_data * ch)
       }
     }
 
-    list_one_char(i, ch);
+    if (!IS_IGNORING(ch, is_blocking_ic_interaction_from, i))
+      list_one_char(i, ch);
   }
 }
 
@@ -2595,7 +2597,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^crating-%d %s^n program, ^c%d^n units in size.",
               GET_OBJ_VAL(j, 1), programs[GET_OBJ_VAL(j, 0)].name, GET_OBJ_VAL(j, 2));
       if (GET_OBJ_VAL(j, 0) == SOFT_ATTACK)
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " Its damage code is ^c%s^n.", wound_name[GET_OBJ_VAL(j, 3)]);
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " Its damage code is ^c%s^n.", GET_WOUND_NAME(GET_OBJ_VAL(j, 3)));
       break;
     case ITEM_BIOWARE:
       if (GET_BIOWARE_RATING(j) > 0) {
@@ -2761,7 +2763,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
     case ITEM_DESIGN:
       if (GET_OBJ_VAL(j, 0) == 5) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "This design is for a ^crating-%d %s (%s)^n program. It requires ^c%d^n units of storage.\r\n",
-                GET_OBJ_VAL(j, 1), programs[GET_OBJ_VAL(j, 0)].name, wound_name[GET_OBJ_VAL(j, 2)],
+                GET_OBJ_VAL(j, 1), programs[GET_OBJ_VAL(j, 0)].name, GET_WOUND_NAME(GET_OBJ_VAL(j, 2)),
                 (GET_OBJ_VAL(j, 1) * GET_OBJ_VAL(j, 1)) * attack_multiplier[GET_OBJ_VAL(j, 2)]);
       } else {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "This design is for a ^crating-%d %s^n program. It requires ^c%d^n units of storage.\r\n",
@@ -4730,18 +4732,27 @@ extern void nonsensical_reply(struct char_data *ch, const char *arg, const char 
 void perform_mortal_where(struct char_data * ch, char *arg)
 {
   // array slot 0 is total PCs, array slot 1 is active PCs
-  std::unordered_map<vnum_t, int> occupied_rooms = {};
-  std::unordered_map<vnum_t, int>::iterator room_iterator;
+  std::unordered_map<vnum_t, std::vector<struct char_data *>> occupied_rooms = {};
+  std::unordered_map<vnum_t, std::vector<struct char_data *>>::iterator room_iterator;
 
   for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
     if (!d->connected) {
       struct char_data *i = (d->original ? d->original : d->character);
-      if (i && i->in_room && ROOM_FLAGGED(i->in_room, ROOM_ENCOURAGE_CONGREGATION) && CAN_SEE(ch, i)) {
-        if ((room_iterator = occupied_rooms.find(GET_ROOM_VNUM(i->in_room))) != occupied_rooms.end()) {
-          ((*room_iterator).second)++;
-        } else {
-          occupied_rooms.emplace(GET_ROOM_VNUM(i->in_room), 1);
-        }
+
+      // Skip them if they aren't in a social-bonus room.
+      if (!i || !i->in_room || !ROOM_FLAGGED(i->in_room, ROOM_ENCOURAGE_CONGREGATION))
+        continue;
+
+      // Skip them if you can't see them for various reasons.
+      if (IS_IGNORING(i, is_blocking_where_visibility_for, ch) || !CAN_SEE(ch, i))
+        continue;
+
+      // They're a valid target-- emplace them.
+      if ((room_iterator = occupied_rooms.find(GET_ROOM_VNUM(i->in_room))) != occupied_rooms.end()) {
+        (room_iterator->second).push_back(i);
+      } else {
+        std::vector<struct char_data *> tmp_vec = { i };
+        occupied_rooms.emplace(GET_ROOM_VNUM(i->in_room), tmp_vec);
       }
     }
   }
@@ -4752,11 +4763,25 @@ void perform_mortal_where(struct char_data * ch, char *arg)
   } else {
     send_to_char("There are people RPing in these rooms:\r\n", ch);
     for (auto it = occupied_rooms.begin(); it != occupied_rooms.end(); ++it) {
-      if ((*it).second == 1) {
-        send_to_char(ch, "%s^n (one person looking for RP)\r\n", world[real_room((*it).first)].name);
-      } else {
-        send_to_char(ch, "%s^n (%d characters RPing)\r\n", world[real_room((*it).first)].name, (*it).second);
+      bool printed_something = FALSE;
+      int num_masked_people = 0;
+
+      send_to_char(ch, "%s^n (", world[real_room(it->first)].name);
+
+      for (size_t i = 0; i < (it->second).size(); i++) {
+        if (PRF_FLAGGED((it->second)[i], PRF_ANONYMOUS_ON_WHERE)) {
+          num_masked_people++;
+        } else {
+          send_to_char(ch, "%s%s", printed_something ? ", " : "", GET_CHAR_NAME((it->second)[i]));
+          printed_something = TRUE;
+        }
       }
+
+      if (num_masked_people > 0) {
+        send_to_char(ch, "%s%d anonymous character%s", printed_something ? " and " : "", num_masked_people, num_masked_people > 1 ? "s" : "");
+      }
+
+      send_to_char(")\r\n", ch);
     }
   }
 }
@@ -5598,17 +5623,26 @@ ACMD(do_mort_show)
     send_to_char(ch, "You don't see %s '%s' here.\r\n", AN(buf2), buf2);
     return;
   }
-  act("$n shows $p to $N.", TRUE, ch, obj, vict, TO_ROOM);
+
   act("You show $p to $N.", TRUE, ch, obj, vict, TO_CHAR);
-  show_obj_to_char(obj, vict, 5);
+
+  if (IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)) {
+    act("$n shows $p to $N.", TRUE, ch, obj, vict, TO_NOTVICT);
+  } else {
+    act("$n shows $p to $N.", TRUE, ch, obj, vict, TO_ROOM);
+    show_obj_to_char(obj, vict, 5);
+  }
 }
 
 ACMD(do_tke){
   send_to_char(ch, "Your current TKE is %d.\r\n", GET_TKE(ch));
 }
 
-#define LEADERBOARD_SYNTAX_STRING "Syntax: leaderboard <option>, where option is one of: tke, reputation, notoriety, nuyen, syspoints\r\n"
+#define LEADERBOARD_SYNTAX_STRING "Syntax: leaderboard <option>, where option is one of: tke, reputation, notoriety, nuyen, syspoints, blocks\r\n"
 ACMD(do_leaderboard) {
+  MYSQL_RES *res;
+  MYSQL_ROW row;
+
   // leaderboard <tke|rep|notor|nuyen|sysp>
   skip_spaces(&argument);
   if (!*argument) {
@@ -5643,13 +5677,40 @@ ACMD(do_leaderboard) {
     query_string = "syspoints";
   }
 
+  else if (!strncmp(argument, "blocks", strlen(argument))) {
+    // Open the second DB connection for concurrent lookups.
+    MYSQL *mysqlextra = mysql_init(NULL);
+    if (!mysql_real_connect(mysqlextra, mysql_host, mysql_user, mysql_password, mysql_db, 0, NULL, 0)) {
+      send_to_char("Couldn't open extra DB connection-- aborting.\r\n", ch);
+      return;
+    }
+
+    mysql_wrapper(mysqlextra, "SELECT vict_idnum, COUNT(vict_idnum) AS `value_occurrence` FROM pfiles_ignore_v2 GROUP BY vict_idnum ORDER BY `value_occurrence` DESC LIMIT 10");
+    if (!(res = mysql_use_result(mysqlextra))) {
+      send_to_char(ch, "Sorry, the leaderboard system is offline at the moment.\r\n");
+      return;
+    }
+
+    send_to_char(ch, "^CTop 10 most-blocked characters:^n\r\n");
+    int counter = 1;
+    while ((row = mysql_fetch_row(res))) {
+      long idnum = atol(row[0]);
+      int blocks = atoi(row[1]);
+
+      const char *name = get_player_name(idnum);
+      send_to_char(ch, "%2d) %-20s: %d block%s.\r\n", counter++, name, blocks, blocks != 1 ? "s" : "");
+      delete [] name;
+    }
+
+    mysql_free_result(res);
+    mysql_close(mysqlextra);
+    return;
+  }
+
   else {
     send_to_char(LEADERBOARD_SYNTAX_STRING, ch);
     return;
   }
-
-  MYSQL_RES *res;
-  MYSQL_ROW row;
 
   // Sanitization not required here-- they're constant strings.
   snprintf(buf, sizeof(buf), "SELECT name, %s FROM pfiles "

@@ -270,7 +270,7 @@ void    update_pos(struct char_data *victim);
 #define ROOM_FLAGS(loc) ((loc)->room_flags)
 
 #define IS_NPC(ch)  (MOB_FLAGS(ch).IsSet(MOB_ISNPC))
-#define IS_MOB(ch)  (IS_NPC(ch) && ((ch)->nr >-1))
+#define IS_MOB(ch)  (IS_NPC(ch) && (GET_MOB_RNUM((ch)) >-1))
 #define IS_PROJECT(ch) (IS_NPC(ch) && ch->desc && ch->desc->original && \
   PLR_FLAGS(ch->desc->original).IsSet(PLR_PROJECT) && \
   GET_MOB_VNUM(ch) == 22)
@@ -452,6 +452,7 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define GET_POS(ch)             ((ch)->char_specials.position)
 #define GET_DEFPOS(ch)          ((ch)->char_specials.defined_position)
 #define GET_IDNUM(ch)           ((ch)->char_specials.idnum)
+#define GET_IDNUM_EVEN_IF_PROJECTING(ch)  ((((ch) && (ch)->desc && (ch)->desc->original) ? (ch)->desc->original : (ch))->char_specials.idnum)
 #define IS_CARRYING_W(ch)       ((ch)->char_specials.carry_weight)
 #define IS_CARRYING_N(ch)       ((ch)->char_specials.carry_items)
 #define FIGHTING(ch)            ((ch)->char_specials.fighting)
@@ -518,7 +519,6 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define GET_PROMPT(ch)          ((PLR_FLAGGED((ch), PLR_MATRIX) ? (ch)->player.matrixprompt : (ch)->player.prompt))
 #define GET_ALIASES(ch)         ((ch)->desc && (ch)->desc->original ? (ch)->desc->original->player_specials->aliases : (ch)->player_specials->aliases)
 #define GET_PLAYER_MEMORY(ch)   ((ch)->player_specials->remem)
-#define GET_IGNORE(ch)		((ch)->player_specials->ignored)
 #define GET_LAST_TELL(ch)	((ch)->player_specials->last_tell)
 #define GET_LAST_DAMAGETIME(ch)	((ch)->points.lastdamage)
 #define HOURS_LEFT_TRACK(ch)	((ch)->points.track[0])
@@ -569,13 +569,14 @@ int get_armor_penalty_grade(struct char_data *ch);
 
 #define GET_CONGREGATION_BONUS(ch) ((ch)->congregation_bonus_pool)
 
-#define GET_MOB_SPEC(ch)       (IS_MOB(ch) ? (mob_index[(ch->nr)].func) : NULL)
-#define GET_MOB_SPEC2(ch)      (IS_MOB(ch) ? (mob_index[(ch->nr)].sfunc) : NULL)
-
 #define GET_MOB_RNUM(mob)       ((mob)->nr)
 #define GET_MOB_VNUM(mob)       (IS_MOB(mob) ? mob_index[GET_MOB_RNUM(mob)].vnum : -1)
 #define MOB_VNUM_RNUM(rnum) ((mob_index[rnum]).vnum)
 #define GET_MOB_UNIQUE_ID(mob)  ((mob)->unique_id)
+
+#define GET_MOB_SPEC(ch)       (IS_MOB(ch) ? (mob_index[GET_MOB_RNUM((ch))].func) : NULL)
+#define GET_MOB_SPEC2(ch)      (IS_MOB(ch) ? (mob_index[GET_MOB_RNUM((ch))].sfunc) : NULL)
+#define MOB_HAS_SPEC(ch, spec) (mob_index[GET_MOB_RNUM((ch))].func == spec || mob_index[GET_MOB_RNUM((ch))].sfunc == spec)
 
 #define GET_MOB_WAIT(ch)      ((ch)->mob_specials.wait_state)
 #define GET_DEFAULT_POS(ch)   ((ch)->mob_specials.default_pos)
@@ -717,11 +718,9 @@ bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struc
    IS_DUAL(sub) || HOLYLIGHT_OK(sub))
 
 #define CAN_SEE_CARRIER(sub, obj) \
-   ((!(obj)->carried_by || CAN_SEE((sub), (obj)->carried_by)) && \
-    (!(obj)->worn_by || CAN_SEE((sub), (obj)->worn_by)))
+   ((!(obj)->carried_by || CAN_SEE((sub), (obj)->carried_by)) || (!(obj)->worn_by || CAN_SEE((sub), (obj)->worn_by)))
 
-#define CAN_SEE_OBJ(sub, obj) (LIGHT_OK(sub) && \
-   INVIS_OK_OBJ((sub), (obj)) && CAN_SEE_CARRIER((sub), (obj)))
+#define CAN_SEE_OBJ(sub, obj) (LIGHT_OK(sub) && INVIS_OK_OBJ((sub), (obj)) && CAN_SEE_CARRIER((sub), (obj)))
 
 #define CAN_CARRY_OBJ(ch,obj)  \
    (((IS_CARRYING_W(ch) + GET_OBJ_WEIGHT(obj)) <= CAN_CARRY_W(ch)) &&   \
@@ -1200,5 +1199,7 @@ void gain_bank(struct char_data *ch, long amount, int category);
 void lose_bank(struct char_data *ch, long amount, int category);
 void gain_nuyen_on_credstick(struct char_data *ch, struct obj_data *credstick, long amount, int category);
 void lose_nuyen_from_credstick(struct char_data *ch, struct obj_data *credstick, long amount, int category);
+
+#define GET_WOUND_NAME(damage_level) (wound_name[MIN(DEADLY, MAX(0, damage_level))])
 
 #endif

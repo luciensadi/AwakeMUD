@@ -1286,9 +1286,20 @@ int negotiate(struct char_data *ch, struct char_data *tch, int comp, int baseval
   } else {
     snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), " Skipping any potential metavariant penalties.");
   }
+  // House rule: Data fence negotiations use raw int in order to make them a little easier to balance.
+  bool negotiation_is_with_data_fence = (IS_NPC(ch) && MOB_HAS_SPEC(ch, fence)) || (IS_NPC(tch) && MOB_HAS_SPEC(ch, fence));
 
-  int chtn = GET_INT(tch)+mod+cmod;
-  int tchtn = GET_INT(ch)+mod+tmod;
+  int ch_int = (negotiation_is_with_data_fence ? GET_REAL_INT(ch) : GET_INT(ch));
+  int tch_int = (negotiation_is_with_data_fence ? GET_REAL_INT(tch) : GET_INT(tch));
+
+  // Plenty of NPCs have no int, so we set these to an average value if found.
+  if (IS_NPC(tch) && tch_int <= 0)
+    tch_int = MAX(tch_int, 3);
+  if (IS_NPC(ch) && ch_int <= 0)
+    ch_int = MAX(ch_int, 3);
+
+  int chtn = mod + cmod + tch_int;
+  int tchtn = mod + tmod + ch_int;
 
   act("Getting skill for PC...", FALSE, ch, NULL, NULL, TO_ROLLS);
   int cskill = get_skill(ch, SKILL_NEGOTIATION, chtn);
@@ -1317,9 +1328,9 @@ int negotiate(struct char_data *ch, struct char_data *tch, int comp, int baseval
   int chnego = success_test(cskill, chtn);
 
   snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "\r\nPC negotiation test gave %d successes on %d dice with TN %d (calculated from opponent int (%d) + global mod (%d) + our mod (%d)).",
-           chnego, cskill, chtn, GET_INT(tch), mod, cmod);
+           chnego, cskill, chtn, tch_int, mod, cmod);
   snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "\r\nNPC negotiation test gave %d successes on %d dice with TN %d (calculated from opponent int (%d) + global mod (%d) + our mod (%d)).",
-           tchnego, tskill, tchtn, GET_INT(ch), mod, tmod);
+           tchnego, tskill, tchtn, ch_int, mod, tmod);
   if (comp)
   {
     chtn = GET_INT(tch)+mod+cmod;

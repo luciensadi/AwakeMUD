@@ -33,7 +33,7 @@ void pedit_disp_menu(struct descriptor_data *d)
   send_to_char(CH, "3) Rating: ^c%d^n\r\n", GET_OBJ_VAL(d->edit_obj, 1));
   if (GET_OBJ_VAL(d->edit_obj, 0) == 5)
   {
-    send_to_char(CH, "4) Damage: ^c%s^n\r\n", wound_name[GET_OBJ_VAL(d->edit_obj, 2)]);
+    send_to_char(CH, "4) Damage: ^c%s^n\r\n", GET_WOUND_NAME(GET_OBJ_VAL(d->edit_obj, 2)));
     send_to_char(CH, "Size: ^c%d^n\r\n", (GET_OBJ_VAL(d->edit_obj, 1) * GET_OBJ_VAL(d->edit_obj, 1)) * attack_multiplier[GET_OBJ_VAL(d->edit_obj, 2)]);
   } else
     send_to_char(CH, "Size: ^c%d^n\r\n", (GET_OBJ_VAL(d->edit_obj, 1) * GET_OBJ_VAL(d->edit_obj, 1)) * programs[GET_OBJ_VAL(d->edit_obj, 0)].multiplier);
