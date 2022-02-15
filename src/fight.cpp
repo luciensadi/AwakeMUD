@@ -241,10 +241,10 @@ void update_pos(struct char_data * victim)
   // SR3 p178
   if (GET_POS(victim) <= POS_SLEEPING) {
     struct sustain_data *next;
-    for (struct sustain_data *sust = GET_SUSTAINED(ch); sust; sust = next) {
+    for (struct sustain_data *sust = GET_SUSTAINED(victim); sust; sust = next) {
       next = sust->next;
       if (sust->caster && !sust->focus && !sust->spirit)
-        end_sustained_spell(ch, sust);
+        end_sustained_spell(victim, sust);
     }
   }
 }
