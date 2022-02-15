@@ -9,6 +9,10 @@
 
 #include <mysql/mysql.h>
 
+#include "awake.h"
+#include "structs.h"
+#include "utils.h"
+
 class File;
 
 class DBIndex
@@ -123,6 +127,7 @@ extern char_data *CreateChar(struct char_data *ch);
 extern void DeleteChar(vnum_t idnum);
 extern bool load_char(const char *name, struct char_data *ch, bool logon);
 extern vnum_t get_player_id(char *name);
+extern int get_player_rank(long idnum);
 extern char *get_player_name(vnum_t id);
 extern char *prepare_quotes(char *dest, const char *str, size_t size_of_dest, bool include_newline_processing=FALSE);
 extern bool get_plr_flag_is_set_by_idnum(int flag, vnum_t id);

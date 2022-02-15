@@ -55,3 +55,6 @@ syslog
 
 # Development reference materials
 references/
+
+# Secrets that only the game server should know about
+src/secrets*

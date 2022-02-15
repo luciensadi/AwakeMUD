@@ -31,4 +31,7 @@ typedef unsigned int  dword;
 
 typedef signed char dir_t;
 
+// I had to do this just to make an eventual future change to uuid_t bearable.
+typedef unsigned long mob_unique_id_t;
+
 #endif // ifndef __types_h__

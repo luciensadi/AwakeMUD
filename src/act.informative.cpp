@@ -16,6 +16,8 @@
 #include <errno.h>
 #include <iostream>
 #include <fstream>
+#include <unordered_map>
+#include <vector>
 
 #if !defined(WIN32) || defined(__CYGWIN__)
 #include <sys/time.h>
@@ -38,6 +40,8 @@
 #include "bullet_pants.h"
 #include "config.h"
 #include "newmail.h"
+#include "ignore_system.h"
+#include "mysql_config.h"
 
 const char *CCHAR;
 
@@ -276,7 +280,7 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
       strlcat(buf, " (Plan)", sizeof(buf));
     if (GET_OBJ_VNUM(object) == 108 && !GET_OBJ_TIMER(object))
       strlcat(buf, " (Uncooked)", sizeof(buf));
-    if (GET_OBJ_TYPE(object) == ITEM_FOCUS && GET_OBJ_VAL(object, 9) == GET_IDNUM(ch))
+    if (GET_OBJ_TYPE(object) == ITEM_FOCUS && GET_FOCUS_BOND_TIME_REMAINING(object) == GET_IDNUM(ch))
       strlcat(buf, " ^Y(Geas)^n", sizeof(buf));
     if (GET_OBJ_TYPE(object) == ITEM_GUN_AMMO
         || (GET_OBJ_TYPE(object) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(object) == TYPE_PARTS))
@@ -989,12 +993,10 @@ void list_one_char(struct char_data * i, struct char_data * ch)
       strlcat(buf, "The ghostly image of ", sizeof(buf));
     strlcat(buf, i->player.physical_text.room_desc, sizeof(buf));
 
-#define MOB_HAS_SPEC(rnum, spec) (mob_index[(rnum)].func == spec || mob_index[(rnum)].sfunc == spec)
-
     if (DISPLAY_HELPFUL_STRINGS_FOR_MOB_FUNCS) {
       bool already_printed = FALSE;
       if (mob_index[GET_MOB_RNUM(i)].func || mob_index[GET_MOB_RNUM(i)].sfunc) {
-        if (MOB_HAS_SPEC(GET_MOB_RNUM(i), trainer)) {
+        if (MOB_HAS_SPEC(i, trainer)) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s willing to train you.%s^n\r\n",
                    HSSH(i),
                    already_printed ? " also" : "",
@@ -1002,7 +1004,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
                    GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Use the ^YTRAIN^y command to begin." : "");
           already_printed = TRUE;
         }
-        if (MOB_HAS_SPEC(GET_MOB_RNUM(i), teacher)) {
+        if (MOB_HAS_SPEC(i, teacher)) {
           if (MOB_FLAGGED(i, MOB_INANIMATE)) {
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...it%s can be used to help you practice your skills.%s^n\r\n",
                      already_printed ? " also" : "",
@@ -1016,7 +1018,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
           }
           already_printed = TRUE;
         }
-        if (MOB_HAS_SPEC(GET_MOB_RNUM(i), metamagic_teacher)) {
+        if (MOB_HAS_SPEC(i, metamagic_teacher)) {
           // Mundanes can't see metamagic teachers' abilities.
           if (GET_TRADITION(ch) != TRAD_MUNDANE) {
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s willing to help you train in metamagic techniques.%s^n\r\n",
@@ -1027,7 +1029,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
             already_printed = TRUE;
           }
         }
-        if (MOB_HAS_SPEC(GET_MOB_RNUM(i), adept_trainer)) {
+        if (MOB_HAS_SPEC(i, adept_trainer)) {
           // Adepts can't see adept trainers' abilities.
           if (GET_TRADITION(ch) == TRAD_ADEPT) {
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s willing to help you train your powers.%s^n\r\n",
@@ -1046,7 +1048,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
             already_printed = TRUE;
           }
         }
-        if (MOB_HAS_SPEC(GET_MOB_RNUM(i), spell_trainer)) {
+        if (MOB_HAS_SPEC(i, spell_trainer)) {
           // Mundanes and adepts can't see spell trainers' abilities.
           if (GET_TRADITION(ch) != TRAD_MUNDANE && GET_TRADITION(ch) != TRAD_ADEPT) {
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s willing to help you learn new spells.%s^n\r\n",
@@ -1057,14 +1059,14 @@ void list_one_char(struct char_data * i, struct char_data * ch)
             already_printed = TRUE;
           }
         }
-        if (MOB_HAS_SPEC(GET_MOB_RNUM(i), johnson)) {
+        if (MOB_HAS_SPEC(i, johnson)) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might have a job for you.%s^n\r\n",
                    HSSH(i),
                    already_printed ? " also" : "",
                    GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " See ^YHELP JOB^y for instructions." : "");
           already_printed = TRUE;
         }
-        if (MOB_HAS_SPEC(GET_MOB_RNUM(i), shop_keeper) || MOB_HAS_SPEC(GET_MOB_RNUM(i), terell_davis)) {
+        if (MOB_HAS_SPEC(i, shop_keeper) || MOB_HAS_SPEC(i, terell_davis)) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s a few things for sale.%s^n\r\n",
                    HSSH(i),
                    already_printed ? " also" : "",
@@ -1072,28 +1074,28 @@ void list_one_char(struct char_data * i, struct char_data * ch)
                    GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Use the ^YLIST^y command to see them." : "");
           already_printed = TRUE;
         }
-        if (MOB_HAS_SPEC(GET_MOB_RNUM(i), landlord_spec)) {
+        if (MOB_HAS_SPEC(i, landlord_spec)) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might have some rooms for lease.%s^n\r\n",
                    HSSH(i),
                    already_printed ? " also" : "",
                    GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " See ^YHELP APARTMENTS^y for details." : "");
           already_printed = TRUE;
         }
-        if (MOB_HAS_SPEC(GET_MOB_RNUM(i), fence)) {
+        if (MOB_HAS_SPEC(i, fence)) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might be willing to buy paydata from you.%s^n\r\n",
                    HSSH(i),
                    already_printed ? " also" : "",
                    GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " If you have paydata, ^YUNINSTALL^y it from your deck and then ^YSELL PAYDATA^y." : "");
           already_printed = TRUE;
         }
-        if (MOB_HAS_SPEC(GET_MOB_RNUM(i), hacker)) {
+        if (MOB_HAS_SPEC(i, hacker)) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s cracks credsticks-- you can ^YGIVE^y them to %s.^n\r\n",
                    HSSH(i),
                    already_printed ? " also" : "",
                    HMHR(i));
           already_printed = TRUE;
         }
-        if (MOB_HAS_SPEC(GET_MOB_RNUM(i), receptionist)) {
+        if (MOB_HAS_SPEC(i, receptionist)) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s bunks for rent.%s^n\r\n",
                    HSSH(i),
                    already_printed ? " also" : "",
@@ -1101,7 +1103,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
                    GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Renting is purely for flavor and is not required in AwakeMUD." : "");
           already_printed = TRUE;
         }
-        if (MOB_HAS_SPEC(GET_MOB_RNUM(i), fixer)) {
+        if (MOB_HAS_SPEC(i, fixer)) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s can repair objects for you.%s^n\r\n",
                    HSSH(i),
                    already_printed ? " also" : "",
@@ -1123,7 +1125,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
         }
 
 #ifdef USE_PRIVATE_CE_WORLD
-        if (MOB_HAS_SPEC(GET_MOB_RNUM(i), marksmanship_master)) {
+        if (MOB_HAS_SPEC(i, marksmanship_master)) {
           if (SHOTS_FIRED(ch) >= MARKSMAN_QUEST_SHOTS_FIRED_REQUIREMENT && SHOTS_TRIGGERED(ch) != -1) {
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s looks like %s can teach you a few things. You should ^YASK^y %s about getting some training.^n\r\n",
                      HSSH(i),
@@ -1281,7 +1283,7 @@ void list_char_to_char(struct char_data * list, struct char_data * ch)
   // Show vehicle's contents to character.
   if (ch->in_veh && !ch->in_room) {
     for (i = list; i; i = i->next_in_veh) {
-      if (CAN_SEE(ch, i) && ch != i && ch->vfront == i->vfront) {
+      if (CAN_SEE(ch, i) && ch != i && ch->vfront == i->vfront && !IS_IGNORING(ch, is_blocking_ic_interaction_from, i)) {
         list_one_char(i, ch);
       }
     }
@@ -1327,7 +1329,8 @@ void list_char_to_char(struct char_data * list, struct char_data * ch)
       }
     }
 
-    list_one_char(i, ch);
+    if (!IS_IGNORING(ch, is_blocking_ic_interaction_from, i))
+      list_one_char(i, ch);
   }
 }
 
@@ -2325,7 +2328,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
             switch (GET_ACCESSORY_TYPE(access)) {
               case ACCESS_SMARTLINK:
                 if (has_smartlink) {
-                  strlcat(buf, "^Y\r\nYou have multiple smartlinks attached, and they do not stack. You should remove one and replace it with something else.^n", sizeof(buf));
+                  strlcat(buf, "^Y\r\nIt has multiple smartlinks attached, and they do not stack. You should remove one and replace it with something else.^n", sizeof(buf));
                 } else {
                   int cyberware_rating = 0;
                   for (struct obj_data *cyber = ch->cyberware; cyber; cyber = cyber->next_content) {
@@ -2349,7 +2352,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
                     }
                     // No goggles either.
                     else {
-                      strlcat(buf, "\r\n^YYou have a smartlink installed, but have neither the cyberware nor goggles to use it.^n", sizeof(buf));
+                      strlcat(buf, "\r\n^YIt has a smartlink installed, but you have neither the cyberware nor goggles to use it.^n", sizeof(buf));
                     }
                   }
 
@@ -2380,7 +2383,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
               case ACCESS_SCOPE:
                 if (GET_OBJ_AFFECT(access).IsSet(AFF_LASER_SIGHT)) {
                   if (has_laser_sight_already) {
-                    strlcat(buf, "^Y\r\nYou have multiple laser sights attached, and they do not stack. You should remove one and replace it with something else.^n", sizeof(buf));
+                    strlcat(buf, "^Y\r\nIt has multiple laser sights attached, and they do not stack. You should remove one and replace it with something else.^n", sizeof(buf));
                   } else {
                     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nThe laser sight attached to the %s provides ^c-1^n to target numbers (lower is better).",
                             gun_accessory_locations[mount_location]);
@@ -2424,7 +2427,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
                 break;
               case ACCESS_BAYONET:
                 if (mount_location != ACCESS_ACCESSORY_LOCATION_UNDER) {
-                  strlcat(buf, "\r\n^RYour bayonet has been mounted in the wrong location and is nonfunctional. Alert an imm.", sizeof(buf));
+                  strlcat(buf, "\r\n^RThe bayonet has been mounted in the wrong location and is nonfunctional. Alert an imm.", sizeof(buf));
                 } else {
                   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nThe bayonet attached to the %s allows you to use the Pole Arms skill when defending from melee attacks.",
                           gun_accessory_locations[mount_location]);
@@ -2590,7 +2593,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^crating-%d %s^n program, ^c%d^n units in size.",
               GET_OBJ_VAL(j, 1), programs[GET_OBJ_VAL(j, 0)].name, GET_OBJ_VAL(j, 2));
       if (GET_OBJ_VAL(j, 0) == SOFT_ATTACK)
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " Its damage code is ^c%s^n.", wound_name[GET_OBJ_VAL(j, 3)]);
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " Its damage code is ^c%s^n.", GET_WOUND_NAME(GET_OBJ_VAL(j, 3)));
       break;
     case ITEM_BIOWARE:
       if (GET_BIOWARE_RATING(j) > 0) {
@@ -2756,7 +2759,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
     case ITEM_DESIGN:
       if (GET_OBJ_VAL(j, 0) == 5) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "This design is for a ^crating-%d %s (%s)^n program. It requires ^c%d^n units of storage.\r\n",
-                GET_OBJ_VAL(j, 1), programs[GET_OBJ_VAL(j, 0)].name, wound_name[GET_OBJ_VAL(j, 2)],
+                GET_OBJ_VAL(j, 1), programs[GET_OBJ_VAL(j, 0)].name, GET_WOUND_NAME(GET_OBJ_VAL(j, 2)),
                 (GET_OBJ_VAL(j, 1) * GET_OBJ_VAL(j, 1)) * attack_multiplier[GET_OBJ_VAL(j, 2)]);
       } else {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "This design is for a ^crating-%d %s^n program. It requires ^c%d^n units of storage.\r\n",
@@ -2779,6 +2782,14 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is bonded to %s and has %d nuyen remaining on it.\r\n",
                 GET_IDNUM(ch) == GET_OBJ_VAL(j, 0) ? "you" : "someone else",
                 GET_OBJ_VAL(j, 1));
+        break;
+      }
+      if (GET_OBJ_VNUM(j) == OBJ_VEHCONTAINER) {
+        strlcat(buf, "\r\nIt's a carried vehicle. You can DROP it on any road or garage.", sizeof(buf));
+        break;
+      }
+      if (GET_OBJ_VNUM(j) == OBJ_SHOPCONTAINER) {
+        strlcat(buf, "\r\nIt's a packaged-up bit of cyberware or bioware. See HELP CYBERDOC for what you can do with it.", sizeof(buf));
         break;
       }
       // fallthrough
@@ -3067,37 +3078,49 @@ ACMD(do_examine)
         }
       }
     } else if (GET_OBJ_TYPE(tmp_object) == ITEM_MAGIC_TOOL) {
-      switch (GET_OBJ_VAL(tmp_object, 0)) {
+      switch (GET_MAGIC_TOOL_TYPE(tmp_object)) {
         case TYPE_CIRCLE:
-          send_to_char(ch, "It has been dedicated to %s.\r\n", elements[GET_OBJ_VAL(tmp_object, 2)].name);
-          if (GET_OBJ_VAL(tmp_object, 9) && GET_OBJ_VAL(tmp_object, 3) == GET_IDNUM(ch))
-            send_to_char(ch, "It is about %d%% completed.\r\n", (int)(((float)((GET_OBJ_VAL(tmp_object, 1) * 60) -
-                                                                               GET_OBJ_VAL(tmp_object, 9)) / (float)((GET_OBJ_VAL(tmp_object, 1) != 0 ? GET_OBJ_VAL(tmp_object, 1) : 1) * 60)) * 100));
+          {
+            int initial_build_time = MAX(1, GET_MAGIC_TOOL_RATING(tmp_object) * 60);
+            float completion_percentage = ((float)(initial_build_time - GET_MAGIC_TOOL_BUILD_TIME_LEFT(tmp_object)) / initial_build_time) * 100;
 
+            send_to_char(ch, "It is built around the element of %s.\r\n", elements[GET_MAGIC_TOOL_TOTEM_OR_ELEMENT(tmp_object)].name);
+
+            if (GET_MAGIC_TOOL_BUILD_TIME_LEFT(tmp_object) && GET_MAGIC_TOOL_OWNER(tmp_object) == GET_IDNUM(ch)) {
+              send_to_char(ch, "It looks like you've completed around %.02f%% of it.\r\n", completion_percentage);
+            }
+          }
           break;
         case TYPE_LODGE:
-          send_to_char(ch, "It has been dedicated to %s.\r\n", totem_types[GET_OBJ_VAL(tmp_object, 2)]);
-          if (GET_OBJ_VAL(tmp_object, 9) && GET_OBJ_VAL(tmp_object, 3) == GET_IDNUM(ch))
-            send_to_char(ch, "It is about %d%% completed.\r\n", (int)(((float)((GET_OBJ_VAL(tmp_object, 1) * 300) -
-                                                                               GET_OBJ_VAL(tmp_object, 9)) / (float)((GET_OBJ_VAL(tmp_object, 1) != 0 ? GET_OBJ_VAL(tmp_object, 1) : 1) * 300)) * 100));
+          {
+            int initial_build_time = MAX(1, GET_MAGIC_TOOL_RATING(tmp_object) * 300);
+            float completion_percentage = ((float)(initial_build_time - GET_MAGIC_TOOL_BUILD_TIME_LEFT(tmp_object)) / initial_build_time) * 100;
+
+            send_to_char(ch, "It has been dedicated to %s.\r\n", totem_types[GET_MAGIC_TOOL_TOTEM_OR_ELEMENT(tmp_object)]);
+
+            if (GET_MAGIC_TOOL_BUILD_TIME_LEFT(tmp_object) && GET_MAGIC_TOOL_OWNER(tmp_object) == GET_IDNUM(ch)) {
+              send_to_char(ch, "It looks like you've completed around %.02f%% of it.\r\n", completion_percentage);
+            }
+          }
           break;
         case TYPE_SUMMONING:
           send_to_char(ch, "There seems to be about %d nuyen worth.\r\n", GET_OBJ_COST(tmp_object));
           break;
         case TYPE_LIBRARY_CONJURE:
         case TYPE_LIBRARY_SPELL:
-          send_to_char(ch, "It seems to have enough material to be classified as rating %d.\r\n", GET_OBJ_VAL(tmp_object, 1));
+          send_to_char(ch, "It seems to have enough material to be classified as rating %d.\r\n", GET_MAGIC_TOOL_RATING(tmp_object));
           break;
       }
     } else if (GET_OBJ_TYPE(tmp_object) == ITEM_SPELL_FORMULA) {
       if (GET_OBJ_TIMER(tmp_object) < 0) {
         if (GET_OBJ_VAL(tmp_object, 8) == GET_IDNUM(ch)) {
-          int timeleft = GET_OBJ_VAL(tmp_object, 6);
-          if (GET_OBJ_TIMER(tmp_object) == -3)
+          int timeleft = GET_SPELLFORMULA_TIME_LEFT(tmp_object);
+          if (GET_OBJ_TIMER(tmp_object) == SPELL_DESIGN_FAILED_CODE)
             timeleft *= 2;
-          if (GET_OBJ_VAL(tmp_object, 6))
-            send_to_char(ch, "You are about %d%% done.\r\n", (int)(((float)timeleft / (float)GET_OBJ_VAL(tmp_object, 7)) * -100 + 100));
-          else send_to_char("You haven't started designing this spell yet.\r\n", ch);
+          if (GET_SPELLFORMULA_TIME_LEFT(tmp_object))
+            send_to_char(ch, "You are about %d%% done.\r\n", (int)(((float)timeleft / (float)GET_SPELLFORMULA_INITIAL_TIME(tmp_object)) * -100 + 100));
+          else
+            send_to_char("You haven't started designing this spell yet.\r\n", ch);
         } else send_to_char(ch, "It doesn't seem to be completed.\r\n");
       } else if (GET_SKILL(ch, SKILL_SORCERY)) {
         send_to_char(ch, "It is a rating %d spell formula describing %s. It is designed for use by %s mages.\r\n",
@@ -3247,10 +3270,10 @@ const char *get_vision_string(struct char_data *ch, bool ascii_friendly=FALSE) {
   }
 
   if (ascii_friendly) {
-    if (AFF_FLAGGED(ch, AFF_DETECT_INVIS) && get_ch_in_room(ch)->silence[0] <= 0)
+    if (AFF_FLAGGED(ch, AFF_ULTRASOUND) && get_ch_in_room(ch)->silence[0] <= 0)
         return "You have ultrasonic vision.";
   } else {
-    if (AFF_FLAGGED(ch, AFF_DETECT_INVIS)) {
+    if (AFF_FLAGGED(ch, AFF_ULTRASOUND)) {
       if (get_ch_in_room(ch)->silence[0] > 0)
         return "Your ultrasonic vision is being suppressed by a field of silence here.\r\n";
       else
@@ -4310,7 +4333,7 @@ ACMD(do_who)
         strlcat(buf1, buf2, sizeof(buf1));
       }
 
-      if (AFF_FLAGS(tch).AreAnySet(AFF_DESIGN, AFF_PROGRAM, AFF_PART_DESIGN, AFF_PART_BUILD, AFF_SPELLDESIGN, AFF_AMMOBUILD, ENDBIT))
+      if (AFF_FLAGS(tch).AreAnySet(BR_TASK_AFF_FLAGS, ENDBIT))
         strlcat(buf1, " (B/R)", sizeof(buf1));
       if (PRF_FLAGGED(tch, PRF_AFK))
         strlcat(buf1, " (AFK)", sizeof(buf1));
@@ -4709,23 +4732,59 @@ extern void nonsensical_reply(struct char_data *ch, const char *arg, const char 
 
 void perform_mortal_where(struct char_data * ch, char *arg)
 {
-  strlcpy(buf, "Players in socialization rooms\r\n-------\r\n", sizeof(buf));
-  bool found_someone = FALSE;
+  // array slot 0 is total PCs, array slot 1 is active PCs
+  std::unordered_map<vnum_t, std::vector<struct char_data *>> occupied_rooms = {};
+  std::unordered_map<vnum_t, std::vector<struct char_data *>>::iterator room_iterator;
+
   for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
     if (!d->connected) {
       struct char_data *i = (d->original ? d->original : d->character);
-      if (i && i->in_room && ROOM_FLAGGED(i->in_room, ROOM_ENCOURAGE_CONGREGATION) && CAN_SEE(ch, i)) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-20s - %s^n\r\n",
-                GET_CHAR_NAME(i),
-                GET_ROOM_NAME(i->in_room));
-        found_someone = TRUE;
+
+      // Skip them if they aren't in a social-bonus room.
+      if (!i || !i->in_room || !ROOM_FLAGGED(i->in_room, ROOM_ENCOURAGE_CONGREGATION))
+        continue;
+
+      // Skip them if you can't see them for various reasons.
+      if (IS_IGNORING(i, is_blocking_where_visibility_for, ch) || !CAN_SEE(ch, i))
+        continue;
+
+      // They're a valid target-- emplace them.
+      if ((room_iterator = occupied_rooms.find(GET_ROOM_VNUM(i->in_room))) != occupied_rooms.end()) {
+        (room_iterator->second).push_back(i);
+      } else {
+        std::vector<struct char_data *> tmp_vec = { i };
+        occupied_rooms.emplace(GET_ROOM_VNUM(i->in_room), tmp_vec);
       }
     }
   }
-  if (!found_someone) {
-    strlcat(buf, "Nobody :(\r\n", sizeof(buf));
+
+  if (occupied_rooms.empty()) {
+    send_to_char("Nobody's in a socialization room right now. Why not go find one?\r\n", ch);
+    return;
+  } else {
+    send_to_char("There are people RPing in these rooms:\r\n", ch);
+    for (auto it = occupied_rooms.begin(); it != occupied_rooms.end(); ++it) {
+      bool printed_something = FALSE;
+      int num_masked_people = 0;
+
+      send_to_char(ch, "%s^n (", world[real_room(it->first)].name);
+
+      for (size_t i = 0; i < (it->second).size(); i++) {
+        if (PRF_FLAGGED((it->second)[i], PRF_ANONYMOUS_ON_WHERE)) {
+          num_masked_people++;
+        } else {
+          send_to_char(ch, "%s%s", printed_something ? ", " : "", GET_CHAR_NAME((it->second)[i]));
+          printed_something = TRUE;
+        }
+      }
+
+      if (num_masked_people > 0) {
+        send_to_char(ch, "%s%d anonymous character%s", printed_something ? " and " : "", num_masked_people, num_masked_people > 1 ? "s" : "");
+      }
+
+      send_to_char(")\r\n", ch);
+    }
   }
-  page_string(ch->desc, buf, 1);
 }
 
 void print_object_location(int num, struct obj_data *obj, struct char_data *ch,
@@ -4773,8 +4832,9 @@ void print_object_location(int num, struct obj_data *obj, struct char_data *ch,
 
 void perform_immort_where(struct char_data * ch, char *arg)
 {
-  struct char_data *i;
+  struct char_data *primary_char;
   struct descriptor_data *d;
+  struct room_data *room;
   int num = 0, found = 0;
   int found2 = FALSE;
 
@@ -4783,62 +4843,60 @@ void perform_immort_where(struct char_data * ch, char *arg)
     strlcpy(buf, "Players\r\n-------\r\n", sizeof(buf));
     for (d = descriptor_list; d; d = d->next)
       if (!d->connected) {
-        i = (d->original ? d->original : d->character);
-        if (i && CAN_SEE(ch, i) && (i->in_room || i->in_veh)) {
-          if (d->original)
-            if (d->character->in_veh)
-              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-20s - [%6ld] %s^n (switched as %s) (in %s)\r\n",
-                      GET_CHAR_NAME(i),
-                      GET_ROOM_VNUM(get_ch_in_room(d->character)),
-                      GET_ROOM_NAME(get_ch_in_room(d->character)),
-                      GET_NAME(d->character),
-                      GET_VEH_NAME(d->character->in_veh));
-            else
-              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-20s - [%6ld] %s^n (in %s)\r\n",
-                      GET_CHAR_NAME(i),
-                      GET_ROOM_VNUM(get_ch_in_room(d->character)),
-                      GET_ROOM_NAME(get_ch_in_room(d->character)),
-                      GET_VEH_NAME(d->character->in_veh));
+        // Always points to the main body.
+        primary_char = (d->original ? d->original : d->character);
 
-            else
-              if (i->in_veh)
-                snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-20s - [%6ld] %s^n (in %s)\r\n",
-                        GET_CHAR_NAME(i),
-                        GET_ROOM_VNUM(get_ch_in_room(i)),
-                        GET_ROOM_NAME(get_ch_in_room(i)),
-                        GET_VEH_NAME(i->in_veh));
-              else
-                snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-20s - [%6ld] %s^n\r\n",
-                        GET_CHAR_NAME(i),
-                        GET_ROOM_VNUM(get_ch_in_room(i)),
-                        GET_ROOM_NAME(get_ch_in_room(i)));
-        }
-      }
-    page_string(ch->desc, buf, 1);
-  } else
-  {
-    *buf = '\0';
-    for (i = character_list; i; i = i->next)
-      if (CAN_SEE(ch, i) && (i->in_room || i->in_veh) &&
-          isname(arg, GET_KEYWORDS(i))) {
-        found = 1;
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "M%3d. %-25s - [%5ld] %s^n", ++num,
-                GET_NAME(i),
-                GET_ROOM_VNUM(get_ch_in_room(i)),
-                GET_ROOM_NAME(get_ch_in_room(i)));
-        if (i->in_veh) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (in %s^n)\r\n", GET_VEH_NAME(i->in_veh));
-        } else {
+        if (primary_char && CAN_SEE(ch, primary_char) && (primary_char->in_room || primary_char->in_veh)) {
+          // The room of the character they're currently inhabiting- either main body or projection.
+          room = get_ch_in_room(d->character);
+
+          snprintf(buf1, sizeof(buf1), "%-20s - [%6ld] %s^n%s",
+                    GET_CHAR_NAME(primary_char),
+                    GET_ROOM_VNUM(room),
+                    GET_ROOM_NAME(room),
+                    ROOM_FLAGGED(room, ROOM_ENCOURAGE_CONGREGATION) ? " (social room)" : ""
+                  );
+
+          if (d->character->in_veh) {
+            snprintf(ENDOF(buf1), sizeof(buf1), " (in vehicle %s)", GET_VEH_NAME(d->character->in_veh));
+          }
+
+          if (d->original) {
+            snprintf(ENDOF(buf1), sizeof(buf1), " (switched as %s)", GET_NAME(d->character));
+          }
+
+          strlcat(buf, buf1, sizeof(buf));
           strlcat(buf, "\r\n", sizeof(buf));
         }
       }
-    found2 = ObjList.PrintList(ch, arg);
-
-    if (!found && !found2)
-      send_to_char("Couldn't find any such thing.\r\n", ch);
-    else
-      page_string(ch->desc, buf, 1);
+    page_string(ch->desc, buf, 1);
+    return;
   }
+
+  // Location version of the command (where <keyword>)
+  *buf = '\0';
+  for (struct char_data *i = character_list; i; i = i->next)
+    if (CAN_SEE(ch, i) && (i->in_room || i->in_veh) &&
+        isname(arg, GET_KEYWORDS(i))) {
+      found = 1;
+      room = get_ch_in_room(i);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "M%3d. %-25s - [%5ld] %s^n", ++num,
+                GET_NAME(i),
+                GET_ROOM_VNUM(room),
+                GET_ROOM_NAME(room)
+              );
+      if (i->in_veh) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (in %s^n)\r\n", GET_VEH_NAME(i->in_veh));
+      } else {
+        strlcat(buf, "\r\n", sizeof(buf));
+      }
+    }
+  found2 = ObjList.PrintList(ch, arg);
+
+  if (!found && !found2)
+    send_to_char("Couldn't find any such thing.\r\n", ch);
+  else
+    page_string(ch->desc, buf, 1);
 }
 
 ACMD(do_where)
@@ -5182,7 +5240,7 @@ ACMD(do_scan)
   int i = 0, j, dist = 3;
   struct room_data *was_in = NULL, *x = NULL;
 
-  if (AFF_FLAGGED(ch, AFF_DETECT_INVIS) && !(PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_RIG))) {
+  if (AFF_FLAGGED(ch, AFF_ULTRASOUND) && !(PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_RIG))) {
     send_to_char(ch, "The ultrasound distorts your vision.\r\n");
     return;
   }
@@ -5457,7 +5515,10 @@ ACMD(do_status)
       } else if (SPELL_HAS_SUBTYPE(sust->spell)) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (%s)", attributes[sust->subtype]);
       }
-      send_to_char(ch, "%s\r\n", buf);
+      if (IS_SENATOR(ch) && sust->other && sust->other != targ)
+        send_to_char(ch, "%s (cast by ^c%s^n)\r\n", buf, GET_CHAR_NAME(sust->other));
+      else
+        send_to_char(ch, "%s\r\n", buf);
       printed = TRUE;
     }
   if (GET_SUSTAINED_NUM(targ)) {
@@ -5563,17 +5624,26 @@ ACMD(do_mort_show)
     send_to_char(ch, "You don't see %s '%s' here.\r\n", AN(buf2), buf2);
     return;
   }
-  act("$n shows $p to $N.", TRUE, ch, obj, vict, TO_ROOM);
+
   act("You show $p to $N.", TRUE, ch, obj, vict, TO_CHAR);
-  show_obj_to_char(obj, vict, 5);
+
+  if (IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)) {
+    act("$n shows $p to $N.", TRUE, ch, obj, vict, TO_NOTVICT);
+  } else {
+    act("$n shows $p to $N.", TRUE, ch, obj, vict, TO_ROOM);
+    show_obj_to_char(obj, vict, 5);
+  }
 }
 
 ACMD(do_tke){
   send_to_char(ch, "Your current TKE is %d.\r\n", GET_TKE(ch));
 }
 
-#define LEADERBOARD_SYNTAX_STRING "Syntax: leaderboard <option>, where option is one of: tke, reputation, notoriety, nuyen, syspoints\r\n"
+#define LEADERBOARD_SYNTAX_STRING "Syntax: leaderboard <option>, where option is one of: tke, reputation, notoriety, nuyen, syspoints, blocks\r\n"
 ACMD(do_leaderboard) {
+  MYSQL_RES *res;
+  MYSQL_ROW row;
+
   // leaderboard <tke|rep|notor|nuyen|sysp>
   skip_spaces(&argument);
   if (!*argument) {
@@ -5608,13 +5678,40 @@ ACMD(do_leaderboard) {
     query_string = "syspoints";
   }
 
+  else if (!strncmp(argument, "blocks", strlen(argument))) {
+    // Open the second DB connection for concurrent lookups.
+    MYSQL *mysqlextra = mysql_init(NULL);
+    if (!mysql_real_connect(mysqlextra, mysql_host, mysql_user, mysql_password, mysql_db, 0, NULL, 0)) {
+      send_to_char("Couldn't open extra DB connection-- aborting.\r\n", ch);
+      return;
+    }
+
+    mysql_wrapper(mysqlextra, "SELECT vict_idnum, COUNT(vict_idnum) AS `value_occurrence` FROM pfiles_ignore_v2 GROUP BY vict_idnum ORDER BY `value_occurrence` DESC LIMIT 10");
+    if (!(res = mysql_use_result(mysqlextra))) {
+      send_to_char(ch, "Sorry, the leaderboard system is offline at the moment.\r\n");
+      return;
+    }
+
+    send_to_char(ch, "^CTop 10 most-blocked characters:^n\r\n");
+    int counter = 1;
+    while ((row = mysql_fetch_row(res))) {
+      long idnum = atol(row[0]);
+      int blocks = atoi(row[1]);
+
+      const char *name = get_player_name(idnum);
+      send_to_char(ch, "%2d) %-20s: %d block%s.\r\n", counter++, name, blocks, blocks != 1 ? "s" : "");
+      delete [] name;
+    }
+
+    mysql_free_result(res);
+    mysql_close(mysqlextra);
+    return;
+  }
+
   else {
     send_to_char(LEADERBOARD_SYNTAX_STRING, ch);
     return;
   }
-
-  MYSQL_RES *res;
-  MYSQL_ROW row;
 
   // Sanitization not required here-- they're constant strings.
   snprintf(buf, sizeof(buf), "SELECT name, %s FROM pfiles "

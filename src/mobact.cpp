@@ -51,8 +51,7 @@ extern bool is_escortee(struct char_data *mob);
 extern bool hunting_escortee(struct char_data *ch, struct char_data *vict);
 
 extern bool ranged_response(struct char_data *ch, struct char_data *vict);
-
-extern struct obj_data * find_magazine(struct obj_data *gun, struct obj_data *i);
+extern bool does_weapon_have_bayonet(struct obj_data *weapon);
 
 SPECIAL(elevator_spec);
 SPECIAL(call_elevator);
@@ -429,7 +428,9 @@ void mobact_change_firemode(struct char_data *ch) {
 
   // Send a message to the room, but only if the weapon has received a new fire selection mode and has more than one available.
   if (prev_value != GET_WEAPON_FIREMODE(weapon) && has_multiple_modes) {
-    act("$n flicks the fire selector switch on $p.", TRUE, ch, weapon, 0, TO_ROOM);
+    if (!MOB_FLAGGED(ch, MOB_INANIMATE))
+      act("$n flicks the fire selector switch on $p.", TRUE, ch, weapon, 0, TO_ROOM);
+
     #ifdef MOBACT_DEBUG
       snprintf(buf3, sizeof(buf3), "Changed firemode to %s. I have recoil comp %d standing + %d prone.", fire_mode[GET_WEAPON_FIREMODE(weapon)], standing_recoil_comp, prone_recoil_comp);
       do_say(ch, buf3, 0, 0);
@@ -738,12 +739,23 @@ bool mobact_process_aggro(struct char_data *ch, struct room_data *room) {
         // Aggros don't care about road/garage status, so they act as if always alarmed.
         if (vehicle_is_valid_mob_target(veh, TRUE)) {
           stop_fighting(ch);
-          snprintf(buf, sizeof(buf), "%s$n glares at %s, preparing to attack it!", GET_MOBALERT(ch) == MALERT_ALARM ? "Searching for more aggressors, " : "", GET_VEH_NAME(veh));
+
+          if (MOB_FLAGGED(ch, MOB_INANIMATE)) {
+            snprintf(buf, sizeof(buf), "%s$n swivels aggressively towards %s!", GET_MOBALERT(ch) == MALERT_ALARM ? "Searching for more aggressors, " : "", GET_VEH_NAME(veh));
+            snprintf(buf2, sizeof(buf2), "%s%s swivels aggressively towards your vehicle!\r\n", GET_MOBALERT(ch) == MALERT_ALARM ? "Searching for more aggressors, " : "" , GET_CHAR_NAME(ch));
+            send_to_char(ch, "You prepare to attack %s!", GET_VEH_NAME(veh));
+          } else {
+            snprintf(buf, sizeof(buf), "%s$n glares at %s, preparing to attack it!", GET_MOBALERT(ch) == MALERT_ALARM ? "Searching for more aggressors, " : "", GET_VEH_NAME(veh));
+            snprintf(buf2, sizeof(buf2), "%s%s glares at your vehicle, preparing to attack!\r\n", GET_MOBALERT(ch) == MALERT_ALARM ? "Searching for more aggressors, " : "" , GET_CHAR_NAME(ch));
+            send_to_char(ch, "You prepare to attack %s!", GET_VEH_NAME(veh));
+          }
+
+
           act(buf, TRUE, ch, NULL, NULL, TO_ROOM);
-          send_to_char(ch, "You prepare to attack %s!", GET_VEH_NAME(veh));
-          snprintf(buf, sizeof(buf), "%s%s glares at your vehicle, preparing to attack!\r\n", GET_MOBALERT(ch) == MALERT_ALARM ? "Searching for more aggressors, " : "" , GET_CHAR_NAME(ch));
-          send_to_veh(buf, veh, NULL, TRUE);
+          send_to_veh(buf2, veh, NULL, TRUE);
+
           set_fighting(ch, veh);
+
           return TRUE;
         }
       }
@@ -782,7 +794,10 @@ void send_mob_aggression_warnings(struct char_data *pc, struct char_data *mob) {
   if (pc->in_room == mob->in_room)
     pc_tn = 2;
 
+  strlcpy(buf, "send_mob_aggression_warnings rbuf: ", sizeof(buf));
   pc_tn += modify_target_rbuf(pc, buf, sizeof(buf));
+  act(buf, FALSE, pc, NULL, NULL, TO_ROLLS);
+
   int pc_dice = GET_INT(pc) + GET_POWER(pc, ADEPT_IMPROVED_PERCEPT);
   int pc_percept_successes = success_test(pc_dice, pc_tn);
 
@@ -805,7 +820,11 @@ void send_mob_aggression_warnings(struct char_data *pc, struct char_data *mob) {
   // Message the PC.
   if (net_succ > 0) {
     if (pc->in_room == mob->in_room) {
-      snprintf(buf, sizeof(buf), "^y%s$n glares at you, preparing to attack!^n", GET_MOBALERT(mob) == MALERT_ALARM ? "Searching for more aggressors, " : "");
+      if (MOB_FLAGGED(mob, MOB_INANIMATE)) {
+        snprintf(buf, sizeof(buf), "^y%s$n swivels towards you threateningly!^n", GET_MOBALERT(mob) == MALERT_ALARM ? "Searching for more aggressors, " : "");
+      } else {
+        snprintf(buf, sizeof(buf), "^y%s$n glares at you, preparing to attack!^n", GET_MOBALERT(mob) == MALERT_ALARM ? "Searching for more aggressors, " : "");
+      }
       act(buf, TRUE, mob, NULL, pc, TO_VICT);
     } else {
       if (GET_EQ(mob, WEAR_WIELD) && GET_OBJ_TYPE(GET_EQ(mob, WEAR_WIELD)) == ITEM_WEAPON && IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(mob, WEAR_WIELD)))) {
@@ -825,10 +844,20 @@ void send_mob_aggression_warnings(struct char_data *pc, struct char_data *mob) {
   send_to_char(mob, "You prepare to attack %s!\r\n", GET_CHAR_NAME(pc));
 
   // Message bystanders.
-  if (pc->in_room == mob->in_room)
-    act("$n glares at $N, preparing to attack!", TRUE, mob, NULL, pc, TO_NOTVICT);
-  else
-    act("$n glares off into the distance, preparing to attack an intruder!", TRUE, mob, NULL, NULL, TO_ROOM);
+  if (pc->in_room == mob->in_room) {
+    if (MOB_FLAGGED(mob, MOB_INANIMATE)) {
+      act("$n swivels threateningly towards $N!", TRUE, mob, NULL, pc, TO_NOTVICT);
+    } else {
+      act("$n glares at $N, preparing to attack!", TRUE, mob, NULL, pc, TO_NOTVICT);
+    }
+  }
+  else {
+    if (MOB_FLAGGED(mob, MOB_INANIMATE)) {
+      act("$n swivels aggressively to point at a distant threat!", TRUE, mob, NULL, NULL, TO_ROOM);
+    } else {
+      act("$n glares off into the distance, preparing to attack an intruder!", TRUE, mob, NULL, NULL, TO_ROOM);
+    }
+  }
 }
 
 bool mobact_process_memory(struct char_data *ch, struct room_data *room) {
@@ -971,11 +1000,20 @@ bool mobact_process_guard(struct char_data *ch, struct room_data *room) {
       // If the room we're in is neither a road nor a garage, attack any vehicles we see. Never attack vehicles in a garage.
       if (vehicle_is_valid_mob_target(veh, GET_MOBALERT(ch) == MALERT_ALARM && !ROOM_FLAGGED(room, ROOM_GARAGE))) {
         stop_fighting(ch);
-        snprintf(buf, sizeof(buf), "%s$n glares at %s, preparing to attack it for security infractions!", GET_MOBALERT(ch) == MALERT_ALARM ? "Searching for more aggressors, " : "", GET_VEH_NAME(veh));
+
+        if (MOB_FLAGGED(ch, MOB_INANIMATE)) {
+          snprintf(buf, sizeof(buf), "%s$n swivels threateningly towards %s, preparing to attack it for security infractions!", GET_MOBALERT(ch) == MALERT_ALARM ? "Searching for more aggressors, " : "", GET_VEH_NAME(veh));
+          snprintf(buf, sizeof(buf), "%s%s swivels threateningly towards your vehicle, preparing to attack over security infractions!\r\n", GET_MOBALERT(ch) == MALERT_ALARM ? "Searching for more aggressors, " : "", GET_CHAR_NAME(ch));
+          send_to_char(ch, "You prepare to attack %s for security infractions!", GET_VEH_NAME(veh));
+        } else {
+          snprintf(buf, sizeof(buf), "%s$n glares at %s, preparing to attack it for security infractions!", GET_MOBALERT(ch) == MALERT_ALARM ? "Searching for more aggressors, " : "", GET_VEH_NAME(veh));
+          snprintf(buf, sizeof(buf), "%s%s glares at your vehicle, preparing to attack over security infractions!\r\n", GET_MOBALERT(ch) == MALERT_ALARM ? "Searching for more aggressors, " : "", GET_CHAR_NAME(ch));
+          send_to_char(ch, "You prepare to attack %s for security infractions!", GET_VEH_NAME(veh));
+        }
+
         act(buf, TRUE, ch, NULL, NULL, TO_ROOM);
-        send_to_char(ch, "You prepare to attack %s for security infractions!", GET_VEH_NAME(veh));
-        snprintf(buf, sizeof(buf), "%s%s glares at your vehicle, preparing to attack over security infractions!\r\n", GET_MOBALERT(ch) == MALERT_ALARM ? "Searching for more aggressors, " : "", GET_CHAR_NAME(ch));
-        send_to_veh(buf, veh, NULL, TRUE);
+        send_to_veh(buf2, veh, NULL, TRUE);
+
         set_fighting(ch, veh);
         return TRUE;
       }
@@ -1014,14 +1052,11 @@ bool mobact_process_self_buff(struct char_data *ch) {
 
   // Buff self, but only act one out of every 16 ticks (on average), and only if we're not going to put ourselves in a drain death loop.
   if (number(0, 15) == 0 && GET_MENTAL(ch) >= 1000 && GET_PHYSICAL(ch) >= 1000) {
-    // Apply armor to self.
-    if (!affected_by_spell(ch, SPELL_ARMOR)) {
-      cast_manipulation_spell(ch, SPELL_ARMOR, number(1, GET_MAG(ch)/100), NULL, ch);
-      return TRUE;
-    }
+    bool imp_invis = IS_AFFECTED(ch, AFF_SPELLIMPINVIS) || affected_by_spell(ch, SPELL_IMP_INVIS);
+    bool std_invis = IS_AFFECTED(ch, AFF_SPELLINVIS) || affected_by_spell(ch, SPELL_INVIS);
 
     // If not invisible already, apply an invisibility spell based on my magic rating and sorcery skill.
-    if (!affected_by_spell(ch, SPELL_INVIS) && !affected_by_spell(ch, SPELL_IMP_INVIS)) {
+    if (!imp_invis && !std_invis) {
       // Changed cast ratings to 1-- if PCs are going to cheese with rating 1, NPCs should too. -- LS
       if (MIN(GET_SKILL(ch, SKILL_SORCERY), GET_MAG(ch)/100) <= 5) {
         // Lower skill means standard invisibility. Gotta make thermographic vision useful somehow.
@@ -1035,27 +1070,42 @@ bool mobact_process_self_buff(struct char_data *ch) {
       return TRUE;
     }
 
-    // Apply combat sense to self.
-    if (!affected_by_spell(ch, SPELL_COMBATSENSE)) {
-      cast_detection_spell(ch, SPELL_COMBATSENSE, number(1, GET_MAG(ch)/100), NULL, ch);
+#ifdef INVIS_SPELL_RESIST_IS_IMPLEMENTED
+    // If we've got Improved Invis on, we want to go completely stealth if we can.
+    // Gating this behind Improved Invis means that only powerful mage characters (Sorcery and Magic both 6+) will do this.
+    if (imp_invis && !affected_by_spell(ch, SPELL_STEALTH)) {
+      cast_illusion_spell(ch, SPELL_STEALTH, number(1, MIN(4, GET_MAG(ch)/100)), NULL, ch);
       return TRUE;
     }
+#endif
 
-    // We're dead-set on casting a spell, so try to boost attributes.
-    switch (number(1, 3)) {
-      case 1:
-        cast_health_spell(ch, SPELL_INCATTR, STR, number(1, GET_MAG(ch)/100), NULL, ch);
-        break;
-      case 2:
-        cast_health_spell(ch, SPELL_INCATTR, QUI, number(1, GET_MAG(ch)/100), NULL, ch);
-        break;
-      case 3:
-        cast_health_spell(ch, SPELL_INCATTR, BOD, number(1, GET_MAG(ch)/100), NULL, ch);
-        break;
+    // If we've already got invis and stealth on, adding more sustains is risky-- we're driving up our TNs for no good reason. Only do it if we're really bored.
+    if (number(0, 20) == 0) {
+      // Apply armor to self.
+      if (!affected_by_spell(ch, SPELL_ARMOR)) {
+        cast_manipulation_spell(ch, SPELL_ARMOR, number(1, GET_MAG(ch)/100), NULL, ch);
+        return TRUE;
+      }
+
+      // Apply combat sense to self.
+      if (!affected_by_spell(ch, SPELL_COMBATSENSE)) {
+        cast_detection_spell(ch, SPELL_COMBATSENSE, number(1, GET_MAG(ch)/100), NULL, ch);
+        return TRUE;
+      }
+
+      // We're dead-set on casting a spell, so try to boost attributes.
+      switch (number(1, 3)) {
+        case 1:
+          cast_health_spell(ch, SPELL_INCATTR, STR, number(1, GET_MAG(ch)/100), NULL, ch);
+          return TRUE;
+        case 2:
+          cast_health_spell(ch, SPELL_INCATTR, QUI, number(1, GET_MAG(ch)/100), NULL, ch);
+          return TRUE;
+        case 3:
+          cast_health_spell(ch, SPELL_INCATTR, BOD, number(1, GET_MAG(ch)/100), NULL, ch);
+          return TRUE;
+      }
     }
-
-    // We've spent our action casting a spell, so time to stop acting.
-    return TRUE;
   }
 
   return FALSE;
@@ -1109,7 +1159,7 @@ int get_push_command_index() {
 
   if (global_push_command_index == -1) {
     mudlog("FATAL ERROR: Unable to find index of PUSH command for NPC elevator usage. Put it back.", NULL, LOG_SYSLOG, TRUE);
-    exit(1);
+    exit(ERROR_UNABLE_TO_FIND_PUSH_COMMAND);
   }
 
   return global_push_command_index;
@@ -1231,15 +1281,27 @@ bool mobact_process_movement(struct char_data *ch) {
       return TRUE;
     }
   } /* End NPC movement outside a vehicle. */
-  return false;
+  return FALSE;
+}
+
+bool mob_has_ammo_for_weapon(struct char_data *ch, struct obj_data *weapon) {
+  for (int am = 0; am < NUM_AMMOTYPES; am++)
+    if (GET_BULLETPANTS_AMMO_AMOUNT(ch, GET_WEAPON_ATTACK_TYPE(weapon), am) > 0) {
+      return TRUE;
+    }
+
+  return FALSE;
 }
 
 // Precondition: ch and weapon exist, and weapon is a firearm.
 void ensure_mob_has_ammo_for_weapon(struct char_data *ch, struct obj_data *weapon) {
-  // Check all ammotypes for this weapon. If we have any, return.
+  // Check all ammotypes for this weapon. If we have any, refill it to full, then return.
   for (int am = 0; am < NUM_AMMOTYPES; am++)
-    if (GET_BULLETPANTS_AMMO_AMOUNT(ch, GET_WEAPON_ATTACK_TYPE(weapon), am) > 0)
+    if (GET_BULLETPANTS_AMMO_AMOUNT(ch, GET_WEAPON_ATTACK_TYPE(weapon), am) > 0) {
+      GET_BULLETPANTS_AMMO_AMOUNT(ch, GET_WEAPON_ATTACK_TYPE(weapon), am) = MAX(GET_BULLETPANTS_AMMO_AMOUNT(ch, GET_WEAPON_ATTACK_TYPE(weapon), am),
+                                                                                GET_WEAPON_MAX_AMMO(weapon) * NUMBER_OF_MAGAZINES_TO_GIVE_TO_UNEQUIPPED_MOBS);
       return;
+    }
 
   // If we had none, give them normal.
   GET_BULLETPANTS_AMMO_AMOUNT(ch, GET_WEAPON_ATTACK_TYPE(weapon), AMMO_NORMAL) = GET_WEAPON_MAX_AMMO(weapon) * NUMBER_OF_MAGAZINES_TO_GIVE_TO_UNEQUIPPED_MOBS;
@@ -1314,6 +1376,46 @@ void mobile_activity(void)
             && GET_WEAPON_MAX_AMMO(GET_EQ(ch, index)) > 0)
           ensure_mob_has_ammo_for_weapon(ch, GET_EQ(ch, index));
     }
+
+    // Confirm we have the skills to wield our current weapon, otherwise ditch it.
+#ifdef MOBS_REFUSE_TO_USE_WEAPONS_THAT_THEY_HAVE_NO_SKILL_FOR
+    if (GET_EQ(ch, WEAR_WIELD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_WEAPON) {
+      char build_err_msg[2000];
+
+      int weapon_skill = GET_WEAPON_SKILL(GET_EQ(ch, WEAR_WIELD));
+      int melee_skill = does_weapon_have_bayonet(GET_EQ(ch, WEAR_WIELD)) ? SKILL_POLE_ARMS : SKILL_CLUBS;
+
+      int weapon_skill_dice = GET_SKILL(ch, weapon_skill) ? GET_SKILL(ch, weapon_skill) : GET_SKILL(ch, return_general(weapon_skill));
+      int melee_skill_dice = GET_SKILL(ch, melee_skill) ? GET_SKILL(ch, melee_skill) : GET_SKILL(ch, return_general(melee_skill));
+
+      if (weapon_skill_dice <= 0) {
+        #ifndef SUPPRESS_BUILD_ERROR_MESSAGES
+        snprintf(build_err_msg, sizeof(build_err_msg), "CONTENT ERROR: %s (%ld) is wielding %s %s, but has no weapon skill in %s!",
+                 GET_CHAR_NAME(ch),
+                 GET_MOB_VNUM(ch),
+                 AN(weapon_type[GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_WIELD))]),
+                 weapon_type[GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_WIELD))],
+                 skills[GET_WEAPON_SKILL(GET_EQ(ch, WEAR_WIELD))].name
+               );
+        mudlog(build_err_msg, ch, LOG_MISCLOG, TRUE);
+        #endif
+
+        switch_weapons(ch, WEAR_WIELD);
+      } else if (IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_WIELD))) && melee_skill_dice <= 0 && weapon_skill_dice >= 5) {
+        #ifndef SUPPRESS_BUILD_ERROR_MESSAGES
+        snprintf(build_err_msg, sizeof(build_err_msg), "CONTENT ERROR: Skilled mob %s (%ld) is wielding %s %s%s, but has no melee skill in %s!",
+                 GET_CHAR_NAME(ch),
+                 GET_MOB_VNUM(ch),
+                 AN(weapon_type[GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_WIELD))]),
+                 weapon_type[GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_WIELD))],
+                 melee_skill == SKILL_POLE_ARMS ? " (with bayonet)" : "",
+                 skills[melee_skill].name
+               );
+        mudlog(build_err_msg, ch, LOG_MISCLOG, TRUE);
+        #endif
+      }
+    }
+#endif
 
     // Manipulate wielded weapon (reload, set fire mode, etc).
     mobact_change_firemode(ch);
@@ -1600,11 +1702,6 @@ void switch_weapons(struct char_data *mob, int pos)
     return;
   }
 
-  if (GET_OBJ_TYPE(GET_EQ(mob, pos)) != ITEM_WEAPON) {
-    act("$n won't switch weapons- currently-equipped $o is not a weapon.", TRUE, mob, GET_EQ(mob, pos), NULL, TO_ROLLS);
-    return;
-  }
-
   for (i = mob->carrying; i; i = i->next_content)
   {
     /* No idea what these used to be, but now they're max ammo and reach.
@@ -1618,8 +1715,8 @@ void switch_weapons(struct char_data *mob, int pos)
     */
 
 
-    // We like using weapons that have unlimited ammo.
-    if (GET_OBJ_TYPE(i) == ITEM_WEAPON) {
+    // Classify our weapons by ammo usage and type. Only allow weapons we can actually use, though.
+    if (GET_OBJ_TYPE(i) == ITEM_WEAPON && (GET_SKILL(mob, GET_WEAPON_SKILL(i)) > 0 || GET_SKILL(mob, return_general(GET_WEAPON_SKILL(i))) > 0)) {
       if (IS_GUN(GET_WEAPON_ATTACK_TYPE(i))) {
         // Check for an unlimited-ammo weapon.
         if (GET_WEAPON_MAX_AMMO(i) == -1) {
@@ -1630,7 +1727,7 @@ void switch_weapons(struct char_data *mob, int pos)
 
         // It's a limited-ammo weapon. Check to see if we have ammo for it.
         if ((i->contains && GET_MAGAZINE_AMMO_COUNT(i->contains) > 0)
-            || find_magazine(i, mob->carrying)) {
+            || mob_has_ammo_for_weapon(mob, i)) {
               // TODO: Check if it's a better weapon.
               limited_ammo_weapon = i;
               break;

@@ -77,7 +77,7 @@ extern void populate_mobact_aggression_octets();
 extern void write_world_to_disk(int vnum);
 extern void handle_weapon_attachments(struct obj_data *obj);
 
-extern void auto_repair_obj(struct obj_data *obj, const char *source);
+extern void auto_repair_obj(struct obj_data *obj);
 
 
 /**************************************************************************
@@ -361,7 +361,7 @@ void require_that_sql_table_exists(const char *table_name, const char *migration
 }
 
 // Combines the logic of field_exists_in_table with more constraints-- for things you've recently updated but already existed.
-void require_that_field_meets_constraints(const char *field_name, const char *table_name, const char *migration_path_from_root_directory, int flength=0, const char *ftype=NULL) {
+void require_that_field_meets_constraints(const char *field_name, const char *table_name, const char *migration_path_from_root_directory, int flength=0, const char *ftype=NULL, bool is_unsigned=FALSE) {
   bool have_column = FALSE;
   char migration_string[3000];
 
@@ -393,11 +393,11 @@ void require_that_field_meets_constraints(const char *field_name, const char *ta
     if (flength) {
       if (ftype == NULL || !*ftype) {
         log("ERROR: You need to include the field type in require_that_field_meets_constraints when using the length parameter.");
-        exit(1);
+        exit(ERROR_CODER_DIDNT_SPECIFY_FIELD_TYPE);
       }
 
       char field_type[500];
-      snprintf(field_type, sizeof(field_type), "%s(%d)", ftype, flength);
+      snprintf(field_type, sizeof(field_type), "%s(%d)%s", ftype, flength, is_unsigned ? " unsigned" : "");
       if (strcmp(field_type, row[1])) {
         log_vfprintf("%s\r\n%s.%s's type '%s' did not match expected type '%s'.",
                      migration_string,
@@ -425,6 +425,10 @@ void require_that_field_exists_in_table(const char *field_name, const char *tabl
 
 void boot_world(void)
 {
+  // Pre-boot tests and other things you'd like to run in the context of the game.
+  //   Write your tests here, then uncomment the exit statement if all you want are those results.
+  // exit(EXIT_CODE_ZERO_ALL_IS_WELL);
+
   // Sanity check to ensure we haven't added more bits than our bitfield can hold.
   if (Bitfield::TotalWidth() < PRF_MAX) {
     log("Error: You have more PRF flags defined than bitfield space. You'll need to either expand the size of bitfields or reduce your flag count.");
@@ -477,6 +481,9 @@ void boot_world(void)
   require_that_field_exists_in_table("multiplier", "pfiles", "SQL/Migrations/multipliers.sql");
   require_that_field_meets_constraints("Prompt", "pfiles", "SQL/Migrations/prompt_expansion.sql", 2001, "varchar");
   require_that_field_meets_constraints("MatrixPrompt", "pfiles", "SQL/Migrations/prompt_expansion.sql", 2001, "varchar");
+  require_that_field_meets_constraints("Attempt", "pfiles_inv", "SQL/Migrations/attempt_value_fix.sql", 6, "mediumint");
+  require_that_field_meets_constraints("Attempt", "pfiles_worn", "SQL/Migrations/attempt_value_fix.sql", 6, "mediumint");
+  require_that_sql_table_exists("pfiles_ignore_v2", "SQL/ignore_system_v2.sql");
 
   log("Calculating lexicon data.");
   populate_lexicon_size_table();
@@ -1770,7 +1777,7 @@ void parse_object(File &fl, long nr)
 
   // Set the do-not-touch flags for known templated items.
   if ((BOTTOM_OF_TEMPLATE_ITEMS <= nr && nr <= TOP_OF_TEMPLATE_ITEMS)
-      || nr == OBJ_BLANK_MAGAZINE) {
+      || nr == OBJ_BLANK_MAGAZINE || nr ==  OBJ_VEHCONTAINER || nr == OBJ_SHOPCONTAINER) {
     GET_OBJ_EXTRA(obj).SetBit(ITEM_DONT_TOUCH);
   }
 
@@ -3057,9 +3064,13 @@ struct char_data *read_mobile(int nr, int type)
   mob->player.time.birth = time(0);
   mob->player.time.played = 0;
   mob->player.time.logon = time(0);
+  mob->player.tradition = mob->player.aspect = 0;
   mob->char_specials.saved.left_handed = (!number(0, 9) ? 1 : 0);
 
   mob_index[i].number++;
+
+  // See utils.cpp for this.
+  set_new_mobile_unique_id(mob);
 
   set_natural_vision_for_race(mob);
 
@@ -3320,6 +3331,14 @@ void reset_zone(int zone, int reboot)
     case 'M':                 /* read a mobile */
       if ((mob_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1) ||
           (ZCMD.arg2 == 0 && reboot)) {
+        if (mob_index[ZCMD.arg1].vnum >= 20 && mob_index[ZCMD.arg1].vnum <= 22) {
+          // Refuse to zoneload projections and matrix personas.
+          char errbuf[1000];
+          snprintf(errbuf, sizeof(errbuf), "Refusing to zoneload mob #%ld for zone %d-- illegal loading vnum.\r\n", mob_index[ZCMD.arg1].vnum, zone_table[zone].number);
+          mudlog(errbuf, NULL, LOG_SYSLOG, TRUE);
+          continue;
+        }
+
         mob = read_mobile(ZCMD.arg1, REAL);
         char_to_room(mob, &world[ZCMD.arg3]);
         act("$n has arrived.", TRUE, mob, 0, 0, TO_ROOM);
@@ -4367,7 +4386,7 @@ void reset_char(struct char_data * ch)
 /* clear ALL the working variables of a char; do NOT free any space alloc'ed */
 void clear_char(struct char_data * ch)
 {
-  memset((char *) ch, 0, sizeof(struct char_data));
+  memset(ch, 0, sizeof(struct char_data));
 
   ch->in_veh = NULL;
   ch->in_room = NULL;
@@ -4887,7 +4906,7 @@ void load_saved_veh()
 
         // Don't auto-repair cyberdecks until they're fully loaded.
         if (GET_OBJ_TYPE(obj) != ITEM_CYBERDECK)
-          auto_repair_obj(obj, buf3);
+          auto_repair_obj(obj);
 
         //Lookup macro definition
         // Since we're now saved the obj linked lists in reverse order, in order to fix the stupid reordering on
@@ -5009,7 +5028,7 @@ void load_saved_veh()
         snprintf(buf, sizeof(buf), "%s/AmmoWeap", sect_name);
         GET_AMMOBOX_WEAPON(ammo) = data.GetInt(buf, 0);
         ammo->restring = str_dup(get_ammobox_default_restring(ammo));
-        auto_repair_obj(ammo, buf3);
+        auto_repair_obj(ammo);
         obj_to_obj(ammo, obj);
       }
       snprintf(buf, sizeof(buf), "%s/Vnum", sect_name);
@@ -5024,7 +5043,7 @@ void load_saved_veh()
           snprintf(buf, sizeof(buf), "%s/Value %d", sect_name, x);
           GET_OBJ_VAL(weapon, x) = data.GetInt(buf, GET_OBJ_VAL(weapon, x));
         }
-        auto_repair_obj(weapon, buf3);
+        auto_repair_obj(weapon);
         obj_to_obj(weapon, obj);
         veh->usedload += GET_OBJ_WEIGHT(weapon);
       }
@@ -5166,7 +5185,7 @@ void load_consist(void)
 
             // Don't auto-repair cyberdecks until they're fully loaded.
             if (GET_OBJ_TYPE(obj) != ITEM_CYBERDECK)
-              auto_repair_obj(obj, buf3);
+              auto_repair_obj(obj);
 
             snprintf(buf, sizeof(buf), "%s/Inside", sect_name);
             inside = data.GetInt(buf, 0);

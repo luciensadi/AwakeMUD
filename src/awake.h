@@ -407,7 +407,8 @@ enum {
 #define PRF_TOUCH_ME_DADDY               56 /* Allows player cyberdocs to operate on you. Don't @ me. */
 #define PRF_NO_VOID_ON_IDLE              57
 #define PRF_RADLOG                       58
-#define PRF_MAX                          59
+#define PRF_ANONYMOUS_ON_WHERE           59
+#define PRF_MAX                          60
 
 /* log watch */
 
@@ -453,7 +454,7 @@ enum {
 
 #define AFF_INVISIBLE     1  /* Char is invisible        */
 #define AFF_BANISH    2
-#define AFF_DETECT_INVIS  3  /* Char can see invis chars    */
+#define AFF_ULTRASOUND  3  /* Char can see invis chars    */
 #define AFF_PRONE               4
 #define AFF_MANIFEST    5
 #define AFF_HEALED    6
@@ -504,9 +505,10 @@ enum {
 #define AFF_SMART_ENOUGH_TO_TOGGLE_CLOSECOMBAT  51
 #define AFF_MAX       52
 // TODO: If you add another long-state action like building, designing, etc:
-// - Add it to the check_bioware exclusion in limits.cpp
+// - Add it to the BR_TASK_AFF_FLAGS section below, which affects bioware_check and the B/R flag in the wholist
 // - Add it to the IS_WORKING and STOP_WORKING macros in utils.h
 // - Check for anywhere I've missed in this comment
+#define BR_TASK_AFF_FLAGS AFF_DESIGN, AFF_PROGRAM, AFF_PART_DESIGN, AFF_PART_BUILD, AFF_SPELLDESIGN, AFF_AMMOBUILD
 
 
 /* room-related defines */
@@ -534,41 +536,42 @@ enum {
 /* Room flags: used in room_data.room_flags */
 
 /* WARNING: In the world files, NEVER set the bits marked "R" ("Reserved") */
-#define ROOM_DARK                   0   /* Dark                      */
-#define ROOM_DEATH                  1   /* Death trap                */
-#define ROOM_NOMOB                  2   /* MOBs not allowed          */
-#define ROOM_INDOORS                3   /* Indoors                   */
-#define ROOM_PEACEFUL               4   /* Violence not allowed      */
-#define ROOM_SOUNDPROOF             5   /* Shouts, gossip blocked    */
-#define ROOM_NOTRACK                6   /* Track won't go through    */
-#define ROOM_NOMAGIC                7   /* Magic not allowed         */
-#define ROOM_TUNNEL                 8   /* room for only 1 pers      */
-#define ROOM_ARENA                  9   /* Can't teleport in         */
-#define ROOM_STREETLIGHTS           10  /* Room has a streetlight    */
-#define ROOM_HOUSE                  11  /* (R) Room is a house       */
-#define ROOM_HOUSE_CRASH            12  /* (R) House needs saving    */
-#define ROOM_ATRIUM                 13  /* (R) The door to a house   */
-#define ROOM_OLC                    14  /* (R) Modifyable/!compress  */
-#define ROOM_BFS_MARK               15  /* (R) breath-first srch mrk */
-#define ROOM_LOW_LIGHT              16  /* Room viewable with ll-eyes */
-#define ROOM_NO_RADIO               18  /* Radio is sketchy and phones dont work */
-#define ROOM_NOBIKE                  19  // Room blocks bikes from passing through it.
-#define ROOM_FREEWAY                20  /* Room cannot be walked across. */
-#define ROOM_FALL                   21  // room is a 'fall' room
-#define ROOM_ROAD                   22  // Room is compatible with cars.
-#define ROOM_GARAGE                 23  // Room stores cars.
-#define ROOM_STAFF_ONLY             24  // Room does not allow mortals to walk into it.
-#define ROOM_NOQUIT                 25  // Room does not allow quitting in it.
-#define ROOM_SENT                   26
-#define ROOM_ASTRAL                  27 // Astral room
-#define ROOM_NOGRID                   28 // Room blocks gridguide.
-#define ROOM_STORAGE                29 // Room stores items dropped in it.
-#define ROOM_NO_TRAFFIC             30 // Prevents display of traffic atmospheric messages.
-#define ROOM_ELEVATOR_SHAFT         31 // Don't set this manually
-#define ROOM_ENCOURAGE_CONGREGATION 32
-#define ROOM_CORPSE_SAVE_HACK       33
-#define ROOM_STERILE                34 // Gives a bonus to medical actions.
-#define ROOM_MAX                    35
+#define ROOM_DARK                       0   /* Dark                      */
+#define ROOM_DEATH                      1   /* Death trap                */
+#define ROOM_NOMOB                      2   /* MOBs not allowed          */
+#define ROOM_INDOORS                    3   /* Indoors                   */
+#define ROOM_PEACEFUL                   4   /* Violence not allowed      */
+#define ROOM_SOUNDPROOF                 5   /* Shouts, gossip blocked    */
+#define ROOM_NOTRACK                    6   /* Track won't go through    */
+#define ROOM_NOMAGIC                    7   /* Magic not allowed         */
+#define ROOM_TUNNEL                     8   /* room for only 1 pers      */
+#define ROOM_ARENA                      9   /* Can't teleport in         */
+#define ROOM_STREETLIGHTS               10  /* Room has a streetlight    */
+#define ROOM_HOUSE                      11  /* (R) Room is a house       */
+#define ROOM_HOUSE_CRASH                12  /* (R) House needs saving    */
+#define ROOM_ATRIUM                     13  /* (R) The door to a house   */
+#define ROOM_OLC                        14  /* (R) Modifyable/!compress  */
+#define ROOM_BFS_MARK                   15  /* (R) breath-first srch mrk */
+#define ROOM_LOW_LIGHT                  16  /* Room viewable with ll-eyes */
+#define ROOM_NO_RADIO                   18  /* Radio is sketchy and phones dont work */
+#define ROOM_NOBIKE                     19  // Room blocks bikes from passing through it.
+#define ROOM_FREEWAY                    20  /* Room cannot be walked across. */
+#define ROOM_FALL                       21  // room is a 'fall' room
+#define ROOM_ROAD                       22  // Room is compatible with cars.
+#define ROOM_GARAGE                     23  // Room stores cars.
+#define ROOM_STAFF_ONLY                 24  // Room does not allow mortals to walk into it.
+#define ROOM_NOQUIT                     25  // Room does not allow quitting in it.
+#define ROOM_SENT                       26
+#define ROOM_ASTRAL                     27 // Astral room
+#define ROOM_NOGRID                     28 // Room blocks gridguide.
+#define ROOM_STORAGE                    29 // Room stores items dropped in it.
+#define ROOM_NO_TRAFFIC                 30 // Prevents display of traffic atmospheric messages.
+#define ROOM_ELEVATOR_SHAFT             31 // Don't set this manually
+#define ROOM_ENCOURAGE_CONGREGATION     32
+#define ROOM_CORPSE_SAVE_HACK           33
+#define ROOM_STERILE                    34 // Gives a bonus to medical actions.
+#define ROOM_TOO_CRAMPED_FOR_CHARACTERS 35 // Prevents you from entering if you're not a projection or tiny drone.
+#define ROOM_MAX                        36
 
 #define NORMAL    0
 #define LOWLIGHT  1
@@ -686,6 +689,8 @@ enum {
 #define SPELL_WATERBOLT    64
 #define SPELL_SPLASH    65
 #define MAX_SPELLS    66
+
+#define SPELL_DESIGN_FAILED_CODE -3
 
 #define META_ANCHORING    0
 #define META_CENTERING    1
@@ -1125,7 +1130,8 @@ enum {
 #define ITEM_GUN_AMMO           42
 #define ITEM_KEYRING            43
 #define ITEM_SHOPCONTAINER      44
-#define NUM_ITEMS               45
+#define ITEM_VEHCONTAINER       45
+#define NUM_ITEMS               46
 
 
 /* take/wear flags: used by obj_data.obj_flags.wear_flags */
@@ -2141,7 +2147,7 @@ enum {
 #define MAX_PWD_LENGTH            30  /* Relic of the past, do not change. Dictates max length of crypt() hashes. */
 #define MAX_TITLE_LENGTH          48  /* Used in char_file_u *DO*NOT*CHANGE* */
 #define MAX_WHOTITLE_LENGTH       10  /* Used in char_file_u *DO*NOT*CHANGE* */
-#define HOST_LENGTH               50
+#define HOST_LENGTH               500
 #define LINE_LENGTH               80  /* Used in char_file_u *DO*NOT*CHANGE* */
 #define EXDSCR_LENGTH             2040/* Used in char_file_u *DO*NOT*CHANGE* */
 #define MAX_AFFECT                32  /* Used in char_file_u *DO*NOT*CHANGE* */
@@ -2199,6 +2205,7 @@ enum {
 #define RM_MULTNOMAH_GATE_SOUTH      17599
 #define RM_MAGE_TRAINER              778
 #define RM_GUN_TRAINER               781
+#define RM_PORTABLE_VEHICLE_STORAGE  10097
 
 // Chargen room defines
 #define RM_CHARGEN_PATH_OF_THE_MAGICIAN_SHAMANIC  60520
@@ -2322,6 +2329,7 @@ enum {
 #define OBJ_OLD_BLANK_MAGAZINE_FROM_CLASSIC 601
 
 #define OBJ_SHOPCONTAINER                  83
+#define OBJ_VEHCONTAINER                   13
 
 #define BOTTOM_OF_TEMPLATE_ITEMS           106
 #define OBJ_BLANK_OPTICAL_CHIP             106
@@ -2381,20 +2389,50 @@ enum {
 #define NUM_COMMUNICATION_CHANNELS 13
 
 
-/* Error codes. */
-#define ERROR_BITFIELD_SIZE_EXCEEDED               10
-#define ERROR_LIBSODIUM_INIT_FAILED                11
-#define ERROR_UNKNOWN_SUBCOMMAND_TO_INDEX_BOOT     12
-#define ERROR_OPENING_INDEX_FILE                   13
-#define ERROR_BOOT_ZERO_RECORDS_COUNTED            14
-#define ERROR_ZONEREAD_PREMATURE_EOF               15
-#define ERROR_ZONEREAD_FORMAT_ERROR                16
-#define ERROR_MYSQL_DATABASE_NOT_FOUND             17
-#define ERROR_ARRAY_OUT_OF_BOUNDS                  18
-#define ERROR_CANNOT_RESOLVE_VNUM                  19
-#define ERROR_DB_TABLE_REQUIRED                    20
-#define ERROR_DB_COLUMN_REQUIRED                   21
-#define ERROR_PROTOCOL_BUFFER_EXCEEDS_INPUT_LENGTH 22
+/* Exit / error codes. */
+#define EXIT_CODE_ZERO_ALL_IS_WELL                    0
+#define ERROR_BITFIELD_SIZE_EXCEEDED                  10
+#define ERROR_LIBSODIUM_INIT_FAILED                   11
+#define ERROR_UNKNOWN_SUBCOMMAND_TO_INDEX_BOOT        12
+#define ERROR_OPENING_INDEX_FILE                      13
+#define ERROR_BOOT_ZERO_RECORDS_COUNTED               14
+#define ERROR_ZONEREAD_PREMATURE_EOF                  15
+#define ERROR_ZONEREAD_FORMAT_ERROR                   16
+#define ERROR_MYSQL_DATABASE_NOT_FOUND                17
+#define ERROR_ARRAY_OUT_OF_BOUNDS                     18
+#define ERROR_CANNOT_RESOLVE_VNUM                     19
+#define ERROR_DB_TABLE_REQUIRED                       20
+#define ERROR_DB_COLUMN_REQUIRED                      21
+#define ERROR_PROTOCOL_BUFFER_EXCEEDS_INPUT_LENGTH    22
+#define ERROR_FAILED_TO_VALIDATE_ARGON2_TEST_PASSWORD 23
+#define ERROR_HASHING_TOOK_TOO_LONG                   24
+#define ERROR_FAILED_TO_MATCH_CRYPT_PASSWORD          25
+#define ERROR_FAILED_TO_VALIDATE_CRYPT_PASSWORD       26
+#define ERROR_FAILED_TO_CONVERT_CRYPT_TO_ARGON2       27
+#define ERROR_FAILED_TO_MATCH_ARGON2                  28
+#define ERROR_FAILED_TO_VALIDATE_ARGON2_PASSWORD      29
+#define ERROR_OUT_OF_MEMORY_WHILE_HASHING             30
+#define ERROR_CODER_DIDNT_SPECIFY_FIELD_TYPE          31
+#define ERROR_INVALID_ARGUMENTS_TO_BINARY             32
+#define ERROR_INVALID_DATA_DIRECTORY                  33
+#define ERROR_COULD_NOT_CREATE_SOCKET                 34
+#define ERROR_COULD_NOT_SET_SOCKET_OPTIONS            35
+#define ERROR_COULD_NOT_REUSE_ADDRESS                 36
+#define ERROR_COULD_NOT_REUSE_PORT                    37
+#define ERROR_COULD_NOT_SET_LINGER                    38
+#define ERROR_COULD_NOT_BIND_SOCKET                   39
+#define ERROR_GETRLIMIT_FAILED                        40
+#define ERROR_SYSCONF_FAILED                          41
+#define ERROR_YOU_SET_AN_IMPOSSIBLE_PLAYER_LIMIT      42
+#define ERROR_COULD_NOT_RECOVER_FROM_SELECT_SLEEP     43
+#define ERROR_FNCTL_ENCOUNTERED_ERROR                 44
+#define ERROR_UNABLE_TO_FREE_MEMORY_IN_CLEARSTACKS    45
+#define ERROR_MALLOC_FAILED_IN_CREATE_MACRO           46
+#define ERROR_UNABLE_TO_FIND_PUSH_COMMAND             47
+#define ERROR_UNABLE_TO_CREATE_STR_IN_MAIL            48
+#define ERROR_DATABASE_CHANGES_NEEDED                 49
+#define ERROR_NULL_VEHICLE_VEH_FROM_ROOM              50
+#define EXIT_CODE_REBOOTING                           52   /* what's so great about HHGTTG, anyhow? */
 
 // Materials.
 #define MATERIAL_PAPER        0

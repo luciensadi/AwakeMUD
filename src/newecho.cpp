@@ -7,6 +7,8 @@
 #include "newdb.h"
 #include "lexicons.h"
 #include "newecho.h"
+#include "db.h"
+#include "ignore_system.h"
 
 char mutable_echo_string[MAX_STRING_LENGTH];
 char tag_check_string[MAX_STRING_LENGTH];
@@ -802,13 +804,15 @@ ACMD(do_new_echo) {
   char emote_buf[strlen(storage_buf) + 1];
   strlcpy(emote_buf, storage_buf, sizeof(emote_buf));
 
+  ch->char_specials.last_emote = 0;
+
   // Iterate over the viewers in the room.
   for (struct char_data *viewer = ch->in_room ? ch->in_room->people : ch->in_veh->people;
        viewer;
        viewer = ch->in_room ? viewer->next_in_room : viewer->next_in_veh)
   {
     // If they've ignored you, no luck.
-    if (!IS_NPC(viewer) && unsafe_found_mem(GET_IGNORE(viewer), ch))
+    if (IS_IGNORING(viewer, is_blocking_ic_interaction_from, ch))
       continue;
 
     // If it's aecho, only send to people who see astral.

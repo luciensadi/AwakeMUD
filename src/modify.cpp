@@ -223,15 +223,14 @@ void string_add(struct descriptor_data *d, char *str)
     extern void pocketsec_notemenu(struct descriptor_data *d);
 
 // REPLACE_STRING swaps target with d->str if d->str exists (otherwise leaves target alone).
-#define REPLACE_STRING_FORMAT_SPECIFIED_INNER(target, format_bit) \
+#define REPLACE_STRING_FORMAT_SPECIFIED(target, format_bit) ({ \
   if ((d->str)) {                                             \
     DELETE_ARRAY_IF_EXTANT((target));                         \
     format_string(d, (format_bit));                           \
     (target) = str_dup(*d->str);                              \
     DELETE_D_STR_IF_EXTANT(d);                                \
-  }                                                           \
-
-#define REPLACE_STRING_FORMAT_SPECIFIED(target, format_bit) ({ REPLACE_STRING_FORMAT_SPECIFIED_INNER(target, format_bit) })
+  }        
+})
 
 #define REPLACE_STRING(target) (REPLACE_STRING_FORMAT_SPECIFIED(target, DONT_FORMAT_INDENT))
 #define REPLACE_STRING_WITH_INDENTED_FORMATTING(target) (REPLACE_STRING_FORMAT_SPECIFIED(target, DO_FORMAT_INDENT))

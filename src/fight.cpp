@@ -21,6 +21,7 @@
 #include "newmatrix.h"
 #include "newmagic.h"
 #include "bullet_pants.h"
+#include "ignore_system.h"
 
 /* Structures */
 struct char_data *combat_list = NULL;   /* head of l-list of fighting chars */
@@ -296,6 +297,21 @@ void set_fighting(struct char_data * ch, struct char_data * vict, ...)
   if (CH_IN_COMBAT(ch))
     return;
 
+#ifdef IGNORING_IC_ALSO_IGNORES_COMBAT
+  char warnbuf[5000];
+  if (IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)) {
+    snprintf(warnbuf, sizeof(warnbuf), "WARNING: Entered set_fighting with vict %s ignoring attacker %s!", GET_CHAR_NAME(vict), GET_CHAR_NAME(ch));
+    mudlog(warnbuf, ch, LOG_SYSLOG, TRUE);
+    return;
+  }
+
+  if (IS_IGNORING(ch, is_blocking_ic_interaction_from, vict)) {
+    snprintf(warnbuf, sizeof(warnbuf), "WARNING: Entered set_fighting with attacker %s ignoring victim %s!", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict));
+    mudlog(warnbuf, ch, LOG_SYSLOG, TRUE);
+    return;
+  }
+#endif
+
   ch->next_fighting = combat_list;
   combat_list = ch;
   // We set fighting before we call roll_individual_initiative() because we need the fighting target there.
@@ -435,7 +451,7 @@ void make_corpse(struct char_data * ch)
   {
     if (MOB_FLAGGED(ch, MOB_INANIMATE)) {
       snprintf(buf, sizeof(buf), "remains corpse %s", ch->player.physical_text.keywords);
-      snprintf(buf1, sizeof(buf1), "^rThe remains of %s is lying here.^n", decapitalize_a_an(GET_NAME(ch)));
+      snprintf(buf1, sizeof(buf1), "^rThe remains of %s are lying here.^n", decapitalize_a_an(GET_NAME(ch)));
       snprintf(buf2, sizeof(buf2), "^rthe remains of %s^n", decapitalize_a_an(GET_NAME(ch)));
       strlcpy(buf3, "It's been powered down permanently.\r\n", sizeof(buf3));
     } else {
@@ -625,12 +641,19 @@ void make_corpse(struct char_data * ch)
 
 void death_cry(struct char_data * ch)
 {
+  bool should_make_mechanical_noise_instead_of_scream = IS_NPC(ch) && MOB_FLAGGED(ch, MOB_INANIMATE);
 
-  snprintf(buf3, sizeof(buf3), "$n cries out $s last breath as $e die%s!", HSSH_SHOULD_PLURAL(ch) ? "s" : "");
-  act(buf3, FALSE, ch, 0, 0, TO_ROOM);
+  if (should_make_mechanical_noise_instead_of_scream) {
+    act("A horrible grinding buzz reverberates from $n as it shuts down!", FALSE, ch, 0, 0, TO_ROOM);
+  } else {
+    snprintf(buf3, sizeof(buf3), "$n cries out $s last breath as $e die%s!", HSSH_SHOULD_PLURAL(ch) ? "s" : "");
+    act(buf3, FALSE, ch, 0, 0, TO_ROOM);
+  }
 
   if (ch->in_veh) {
-    snprintf(buf3, sizeof(buf3), "A cry of agony comes from within %s!\r\n", GET_VEH_NAME(ch->in_veh));
+    snprintf(buf3, sizeof(buf3), "A %s comes from within %s!\r\n",
+             should_make_mechanical_noise_instead_of_scream ? "horrible grinding buzz" : "cry of agony",
+             GET_VEH_NAME(ch->in_veh));
     send_to_room(buf3, get_ch_in_room(ch));
     return;
   }
@@ -646,7 +669,11 @@ void death_cry(struct char_data * ch)
   {
     if (CAN_GO(ch, door)) {
       ch->in_room = was_in->dir_option[door]->to_room;
-      act("Somewhere close, you hear someone's death cry!", FALSE, ch, 0, 0, TO_ROOM);
+      if (should_make_mechanical_noise_instead_of_scream) {
+        act("Somewhere close, you hear a horrible grinding buzz!", FALSE, ch, 0, 0, TO_ROOM);
+      } else {
+        act("Somewhere close, you hear someone's death cry!", FALSE, ch, 0, 0, TO_ROOM);
+      }
       for (struct char_data *listener = ch->in_room->people; listener; listener = listener->next_in_room)
         if (IS_NPC(listener)) {
           GET_MOBALERTTIME(listener) = 30;
@@ -2324,7 +2351,7 @@ bool would_become_killer(struct char_data * ch, struct char_data * vict)
   char_data *attacker;
 
   if (IS_NPC(ch) && (ch->desc == NULL || ch->desc->original == NULL))
-    return false;
+    return FALSE;
 
   if (!IS_NPC(ch))
     attacker = ch;
@@ -2337,16 +2364,16 @@ bool would_become_killer(struct char_data * ch, struct char_data * vict)
       (!PRF_FLAGGED(attacker, PRF_PKER) || !PRF_FLAGGED(vict, PRF_PKER)) &&
       !PLR_FLAGGED(attacker, PLR_KILLER) && attacker != vict && !IS_SENATOR(attacker))
   {
-    return true;
+    return TRUE;
   }
-  return false;
+  return FALSE;
 }
 
 // Basically ripped the logic from damage(). Used to adjust combat messages for edge cases.
 bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype, bool include_func_protections) {
   // Corpse protection.
   if (GET_POS(victim) <= POS_DEAD)
-    return false;
+    return FALSE;
 
   // You can always hurt yourself. :dead-eyed stare:
   if (ch == victim)
@@ -2408,16 +2435,24 @@ bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype, bo
       return false;
 
   } else {
+#ifdef IGNORING_IC_ALSO_IGNORES_COMBAT
+  if (IS_IGNORING(victim, is_blocking_ic_interaction_from, ch))
+    return FALSE;
+
+  if (IS_IGNORING(ch, is_blocking_ic_interaction_from, victim))
+    return FALSE;
+#endif
+
     // Known ignored edge case: if the player is not a killer but would become a killer because of this action.
     if (ch != victim && would_become_killer(ch, victim))
-      return false;
+      return FALSE;
 
     if (PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(victim))
-      return false;
+      return FALSE;
   }
 
   // Looks like ch can hurt vict after all.
-  return true;
+  return TRUE;
 }
 
 bool damage(struct char_data *ch, struct char_data *victim, int dam, int attacktype, bool is_physical) {
@@ -2432,6 +2467,8 @@ bool damage_without_message(struct char_data *ch, struct char_data *victim, int 
 bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int attacktype, bool is_physical, bool send_message)
 {
   char rbuf[MAX_STRING_LENGTH];
+  memset(rbuf, 0, sizeof(rbuf));
+
   int exp;
   bool total_miss = FALSE, awake = TRUE;
   struct obj_data *bio;
@@ -2456,10 +2493,10 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
 
   if (attacktype <= TYPE_BLACKIC)
     snprintf(rbuf, sizeof(rbuf),"Damage (%s vs %s, %s %s): ", GET_CHAR_NAME(ch), GET_CHAR_NAME(victim),
-            wound_name[MIN(DEADLY, MAX(0, dam))], damage_type_names_must_subtract_300_first_and_must_not_be_greater_than_blackic[attacktype - 300]);
+            GET_WOUND_NAME(dam), damage_type_names_must_subtract_300_first_and_must_not_be_greater_than_blackic[attacktype - 300]);
   else
     snprintf(rbuf, sizeof(rbuf),"Damage (%s vs %s, %s %d): ", GET_CHAR_NAME(ch), GET_CHAR_NAME(victim),
-            wound_name[MIN(DEADLY, MAX(0, dam))], attacktype);
+            GET_WOUND_NAME(dam), attacktype);
 
   if (victim != ch)
   {
@@ -3749,7 +3786,7 @@ bool vehicle_has_ultrasound_sensors(struct veh_data *veh) {
     return TRUE;
 
   for (int i = 0; i < NUM_MODS; i++)
-    if (GET_MOD(veh, i) && GET_MOD(veh, i)->obj_flags.bitvector.IsSet(AFF_DETECT_INVIS))
+    if (GET_MOD(veh, i) && GET_MOD(veh, i)->obj_flags.bitvector.IsSet(AFF_ULTRASOUND))
       return TRUE;
 
   return FALSE;
@@ -3780,7 +3817,7 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
   }
 
   // Pre-calculate the things we care about here. First, character vision info.
-  bool ch_has_ultrasound = AFF_FLAGGED(ch, AFF_DETECT_INVIS);
+  bool ch_has_ultrasound = AFF_FLAGGED(ch, AFF_ULTRASOUND);
   bool ch_has_thermographic = AFF_FLAGGED(ch, AFF_INFRAVISION) || CURRENT_VISION(ch) == THERMOGRAPHIC;
   bool ch_sees_astral = IS_ASTRAL(ch) || IS_DUAL(ch);
 
@@ -4331,6 +4368,18 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
         send_to_char("You and your opponent must both be toggled PK for that.\r\n", ch);
         return;
       }
+
+#ifdef IGNORING_IC_ALSO_IGNORES_COMBAT
+      if (IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)) {
+        send_to_char("You and your opponent must both be toggled PK for that.\r\n", ch);
+        return;
+      }
+
+      if (IS_IGNORING(ch, is_blocking_ic_interaction_from, vict)) {
+        send_to_char("You can't attack someone you're ignoring.\r\n", ch);
+        return;
+      }
+#endif
     }
     else if (npc_is_protected_by_spec(vict)) {
       send_to_char("You can't attack protected NPCs like that.\r\n", ch);
@@ -4555,7 +4604,11 @@ void roll_individual_initiative(struct char_data *ch)
     // init state and either the flag was getting stripped or the mob became alert before we ever tried to hit it.
     // Also the no defense condition happens in the hit_with_multi_weapon_toggle() and we can't remove surprise
     // flag until we process all that.
-    if (FIGHTING(ch) && IS_NPC(FIGHTING(ch)) && GET_MOBALERT(FIGHTING(ch)) == MALERT_CALM && success_test(GET_REA(ch), 4) > success_test(GET_REA(FIGHTING(ch)), 4)) {
+    if (FIGHTING(ch)
+        && IS_NPC(FIGHTING(ch))
+        && !MOB_FLAGGED(FIGHTING(ch), MOB_INANIMATE)
+        && GET_MOBALERT(FIGHTING(ch)) == MALERT_CALM
+        && success_test(GET_REA(ch), 4) > success_test(GET_REA(FIGHTING(ch)), 4)) {
       GET_INIT_ROLL(FIGHTING(ch)) = 0;
       act("You surprise $n!", TRUE, FIGHTING(ch), 0, ch, TO_VICT);
       AFF_FLAGS(FIGHTING(ch)).SetBit(AFF_SURPRISE);
@@ -4862,23 +4915,64 @@ void perform_violence(void)
       */
       if (IS_AFFECTED(FIGHTING(ch), AFF_APPROACH)
           || GET_POS(FIGHTING(ch)) < POS_FIGHTING
-          || (item_should_be_treated_as_melee_weapon(GET_EQ(ch, WEAR_WIELD)) && item_should_be_treated_as_melee_weapon(GET_EQ(FIGHTING(ch), WEAR_WIELD)))) {
+          || (item_should_be_treated_as_melee_weapon(GET_EQ(ch, WEAR_WIELD)) && item_should_be_treated_as_melee_weapon(GET_EQ(FIGHTING(ch), WEAR_WIELD))))
+      {
         AFF_FLAGS(ch).RemoveBit(AFF_APPROACH);
         AFF_FLAGS(FIGHTING(ch)).RemoveBit(AFF_APPROACH);
       }
 
       // No need to charge if you're wielding a loaded gun. Your opponent still charges, if they're doing so.
-      if (item_should_be_treated_as_ranged_weapon(GET_EQ(ch, WEAR_WIELD)))
+      if (item_should_be_treated_as_ranged_weapon(GET_EQ(ch, WEAR_WIELD))) {
         AFF_FLAGS(ch).RemoveBit(AFF_APPROACH);
+      }
 
       // Otherwise, process the charge.
       else {
-        int target = 8, quickness = GET_QUI(ch);
+        // This whole section is houseruled around the fact that we don't want to roll tons of opposed athletics checks.
+        //  1) that would mean that every built mob would need ath, which is a pain to add to old mobs
+        //  2) players would get shafted due to mobs having high stats
+        // The current iteration instead sets a TN based on opponent's stats and doesn't include athletics in either side of the roll.
+
+        // Take the better of the defender's QUI and REA.
+        int defender_attribute = MAX(GET_QUI(FIGHTING(ch)), GET_REA(FIGHTING(ch)));
+        // Set the target from the defender's attribute.
+        int target = defender_attribute;
+        // Set the dice pool to be the character's quickness.
+        int quickness = GET_QUI(ch);
+        // Extended foot anchors suck for running.
+
         bool footanchor = FALSE;
 
         // Visibility penalty for defender, it's hard to avoid someone you can't see.
         if (!CAN_SEE(FIGHTING(ch), ch))
           target -= 4;
+        // Visibility penalty for attacker, it's hard to gap-close with someone you can't see.
+        if (!CAN_SEE(ch, FIGHTING(ch)))
+          target += 4;
+
+        // House rule: Satyrs get -1 TN in their favor for closing the distance due to their speed. Dwarves and related metatypes get +1 against them.
+        switch (GET_RACE(ch)) {
+          case RACE_SATYR:
+            target--;
+            break;
+          case RACE_DWARF:
+          case RACE_MENEHUNE:
+          case RACE_GNOME:
+            target++;
+            break;
+        }
+
+        // Same house rule as above, but applied on your opponent.
+        switch (GET_RACE(FIGHTING(ch))) {
+          case RACE_SATYR:
+            target++;
+            break;
+          case RACE_DWARF:
+          case RACE_MENEHUNE:
+          case RACE_GNOME:
+            target--;
+            break;
+        }
 
         // Armor penalties.
         if (GET_TOTALBAL(ch) > GET_QUI(ch))
@@ -4889,15 +4983,14 @@ void perform_violence(void)
         // Distance Strike (only works unarmed)
         if (GET_TRADITION(ch) == TRAD_ADEPT
             && GET_POWER(ch, ADEPT_DISTANCE_STRIKE)
-            && !(GET_EQ(ch, WEAR_WIELD)
-                 || GET_EQ(ch, WEAR_HOLD)))
+            && !(GET_EQ(ch, WEAR_WIELD) || GET_EQ(ch, WEAR_HOLD)))
           target -= (int)GET_REAL_MAG(ch) / 150;
 
         // Hydraulic jack and foot anchor.
         for (struct obj_data *cyber = ch->cyberware; cyber; cyber = cyber->next_content) {
-          if (GET_OBJ_VAL(cyber, 0) == CYB_HYDRAULICJACK)
-            quickness += GET_OBJ_VAL(cyber, 1);
-          else if (GET_OBJ_VAL(cyber, 0) == CYB_FOOTANCHOR && !GET_OBJ_VAL(cyber, 9))
+          if (GET_CYBERWARE_TYPE(cyber) == CYB_HYDRAULICJACK)
+            quickness += GET_CYBERWARE_RATING(cyber);
+          else if (GET_CYBERWARE_TYPE(cyber) == CYB_FOOTANCHOR && !GET_CYBERWARE_IS_DISABLED(cyber))
             footanchor = TRUE;
         }
 
@@ -4929,6 +5022,9 @@ void perform_violence(void)
           }
         }
 #endif
+
+        // Lock the target to a range. Nobody enjoys rolling TN 14 to close with high-level invis mages.
+        target = MIN(MINIMUM_TN_FOR_CLOSING_CHECK, MAX(target, MAXIMUM_TN_FOR_CLOSING_CHECK));
 
         // Strike.
         if (quickness > 0 && success_test(quickness, target) > 1) {

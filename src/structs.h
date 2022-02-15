@@ -30,6 +30,8 @@
 #define NOTHING (-1)
 #define NOBODY  (-1)
 
+class IgnoreData;
+
 /* Extra description: used in objects, mobiles, and rooms */
 struct extra_descr_data
 {
@@ -103,9 +105,9 @@ struct obj_data
   char *restring;
   char *photo;
   char *graffiti;
-  
+
   char *source_info; // Where in the source books did this come from?
-  
+
   struct char_data *carried_by;   /* Carried by :NULL in room/conta   */
   struct char_data *worn_by;      /* Worn by?                         */
   sh_int worn_on;                 /* Worn where?                      */
@@ -114,10 +116,10 @@ struct obj_data
   struct obj_data *contains;      /* Contains objects                 */
   struct obj_data *next_content;  /* For 'contains' lists             */
   struct host_data *in_host;      /* For tracking if the object is in a Matrix host. */
-  
+
   struct char_data *targ;	  /* Data for mounts */
   struct veh_data *tveh;
-  
+
 #ifdef USE_DEBUG_CANARIES
   // No sense in initializing the value since it's memset to 0 in most invocations.
   int canary;
@@ -130,7 +132,7 @@ struct obj_data
 
 // Struct for preserving order of objects.
 struct nested_obj {
-      int level; 
+      int level;
       struct obj_data* obj;
 };
 
@@ -165,11 +167,11 @@ struct room_direction_data
   byte barrier;                /* barrier rating                       */
   byte condition;      // current barrier rating
   vnum_t to_room_vnum;       /* the vnum of the room. Used for OLC   */
-  
+
   const char *go_into_secondperson;
   const char *go_into_thirdperson;
   const char *come_out_of_thirdperson;
-  
+
 #ifdef USE_DEBUG_CANARIES
   // No sense in initializing the value since it's memset to 0 in most invocations.
   int canary;
@@ -219,9 +221,9 @@ struct room_data
   byte shadow[2];
   byte silence[2];
   SPECIAL(*func);
-  
+
   bool dirty_bit;
-  
+
   int staff_level_lock;
   int elevator_number;
 
@@ -229,9 +231,9 @@ struct room_data
   struct char_data *people;    /* List of NPC / PC in room           */
   struct veh_data *vehicles;
   struct char_data *watching;
-  
+
   struct obj_data *best_workshop[NUM_WORKSHOP_TYPES];
-  
+
 #ifdef USE_DEBUG_CANARIES
   int canary;
 #endif
@@ -239,11 +241,10 @@ struct room_data
       number(0), zone(0), sector_type(0), name(NULL), description(NULL), night_desc(NULL), ex_description(NULL),
       matrix(0), access(0), io(0), trace(0), bandwidth(0), rtg(0), jacknumber(0), address(NULL), room_flags(0),
       blood(0), debris(0), spec(0), rating(0), cover(0), crowd(0), type(0), x(0), y(0), z(0), peaceful(0), func(NULL),
-      dirty_bit(FALSE), staff_level_lock(0), elevator_number(0), contents(NULL), people(NULL), vehicles(NULL),
+      dirty_bit(FALSE), staff_level_lock(0), elevator_number(0), contents(NULL), people(NULL), vehicles(NULL), watching(NULL),
 #ifdef USE_DEBUG_CANARIES
-      canary(0),
+      canary(0)
 #endif
-      watching(NULL)
   {
     for (int i = 0; i < NUM_OF_DIRS; i++) {
       dir_option[i] = NULL;
@@ -367,10 +368,10 @@ struct char_player_data
   char *pretitle, *whotitle; /* PC's pre/whotitles                   */
   char *prompt, *matrixprompt;              /* PC's customized prompt               */
   char *poofin, *poofout;    /* PC's poofin/poofout                  */
-  
+
   const char *highlight_color_code;
   const char *email;
-  
+
   int multiplier;
 
   byte sex;                  /* PC / NPC's sex                       */
@@ -410,7 +411,7 @@ struct char_ability_data
   sh_int casting_pool;
   sh_int drain_pool;
   sh_int spell_defense_pool;
-  sh_int reflection_pool;  
+  sh_int reflection_pool;
   sh_int offense_pool;
   sh_int defense_pool;
   sh_int body_pool;
@@ -497,16 +498,17 @@ struct char_special_data
   sh_int last_healed;
   int timer;                  /* Timer for update                     */
   int last_timer;             /* Last timer, which is restored on actions that don't block idle nuyen rewards */
+  int last_emote;             /* Set whenever you emote. Used to check that people in social rooms aren't just hanging out idle and ignoring each other. */
   int actions;
   int coord[3];
-  
+
   bool dirty_bits[NUM_DIRTY_BITS];
 
   struct veh_data *subscribe;   /* subscriber list */
   struct veh_data *rigging;     /* Vehicle char is controlling remotely */
   struct char_data *mindlink;
   struct spirit_data *spirits;
-  
+
   struct char_special_data_saved saved; /* constants saved in plrfile  */
 
   char_special_data() :
@@ -516,10 +518,10 @@ struct char_special_data
   {
     for (int i = 0; i < 3; i++)
       conjure[i] = 0;
-    
+
     for (int i = 0; i < 3; i++)
       coord[i] = 0;
-      
+
     for (int i = 0; i < NUM_DIRTY_BITS; i++)
       dirty_bits[i] = 0;
   }
@@ -545,8 +547,8 @@ struct player_special_data_saved
   unsigned char force_points;
   unsigned char restring_points;
   int zonenum;
-  
-  // Chargen data for archetypes.  
+
+  // Chargen data for archetypes.
   sh_int archetype;
   bool archetypal;
 
@@ -578,11 +580,10 @@ struct player_special_data
   ubyte physical_loss;
   ubyte perm_bod;
   struct room_data *watching;
-  struct remem *ignored;
 
   player_special_data() :
       saved(), aliases(NULL), remem(NULL), last_tell(0), questnum(0), obj_complete(NULL), 
-      mob_complete(NULL), mental_loss(0), physical_loss(0), perm_bod(0), watching(NULL), ignored(NULL)
+      mob_complete(NULL), mental_loss(0), physical_loss(0), perm_bod(0), watching(NULL)
   {
     memset(last_quest, 0, QUEST_TIMER * sizeof(long));
     
@@ -591,7 +592,7 @@ struct player_special_data
         drugs[i][j] = 0;
       }
     }
-    
+
     for (int i = 0; i < 5; i++) {
       drug_affect[i] = 0;
     }
@@ -649,7 +650,7 @@ struct follow_type
   {}
 };
 
-struct grid_data 
+struct grid_data
 {
   char *name;
   vnum_t room;
@@ -722,7 +723,7 @@ struct veh_data
   char *leave;
   char *arrive;
   struct veh_data *next;
-  
+
 
   veh_data() :
       in_room(NULL), name(NULL), description(NULL), short_description(NULL), restring(NULL),
@@ -730,7 +731,7 @@ struct veh_data
       followers(NULL), following(NULL), followch(NULL), mount(NULL),
       idnum(0), owner(0), spare(0), spare2(0), dest(NULL),
       contents(NULL), people(NULL), rigger(NULL), fighting(NULL), fight_veh(NULL), next_veh(NULL),
-      next_sub(NULL), prev_sub(NULL), carriedvehs(NULL), in_veh(NULL), towing(NULL), grid(NULL), 
+      next_sub(NULL), prev_sub(NULL), carriedvehs(NULL), in_veh(NULL), towing(NULL), grid(NULL),
       leave(NULL), arrive(NULL), next(NULL)
   {
     for (int i = 0; i < NUM_MODS; i++)
@@ -743,6 +744,7 @@ struct veh_data
 struct char_data
 {
   long nr;                            /* Mob's rnum                    */
+  mob_unique_id_t unique_id;
   // the previous will be DEFUNCT once MobIndex is written
   struct room_data *in_room;                     /* Location */
   struct room_data *was_in_room;                 /* location for linkdead people  */
@@ -761,7 +763,7 @@ struct char_data
   struct spell_queue *squeue;
   struct sustain_data *sustained;
   struct spirit_sustained *ssust;
- 
+
   struct obj_data *equipment[NUM_WEARS];/* Equipment array               */
 
   struct obj_data *carrying;            /* Head of list                  */
@@ -779,32 +781,37 @@ struct char_data
   struct follow_type *followers;        /* List of chars followers       */
   struct char_data *master;             /* Who is char following?        */
   struct spell_data *spells;                     /* linked list of spells          */
-  
+
+  IgnoreData *ignore_data;
+
   Pgroup_data *pgroup;                   /* Data concerning the player group this char is part of. */
   Pgroup_invitation *pgroup_invitations; /* The list of open group invitations associated with this player. */
-  
+
   int congregation_bonus_pool;         /* Bonuses accrued from spending time in a congregation room */
-  
+
   bool alias_dirty_bit;
-  
+
   /* Named after 'magic bullet pants', the 'technology' in FPS games that allows you to never have to worry about which mag has how much ammo in it. */
   unsigned short bullet_pants[(END_OF_AMMO_USING_WEAPONS + 1) - START_OF_AMMO_USING_WEAPONS][NUM_AMMOTYPES];
-  
+
   /* Adding a field here? If it's a pointer, add it to utils.cpp's copy_over_necessary_info() to avoid breaking mdelete etc. */
 
   char_data() :
       in_room(NULL), was_in_room(NULL), player_specials(NULL), in_veh(NULL), persona(NULL), squeue(NULL), sustained(NULL),
       ssust(NULL), carrying(NULL), desc(NULL), cyberware(NULL), bioware(NULL), next_in_room(NULL), next(NULL),
       next_fighting(NULL), next_in_zone(NULL), next_in_veh(NULL), next_watching(NULL), followers(NULL),
-      master(NULL), spells(NULL), pgroup(NULL), pgroup_invitations(NULL), congregation_bonus_pool(0), alias_dirty_bit(FALSE)
+      master(NULL), spells(NULL), ignore_data(NULL), pgroup(NULL), pgroup_invitations(NULL), congregation_bonus_pool(0),
+      alias_dirty_bit(FALSE)
   {
-    for (int i = 0; i < NUM_WEARS; i++)
+    for (int i = 0; i < NUM_WEARS; i++) {
       equipment[i] = NULL;
-    
+    }
+
     // Initialize our bullet pants. Note that we index from 0 here.
-    for (int wp = 0; wp <= END_OF_AMMO_USING_WEAPONS - START_OF_AMMO_USING_WEAPONS; wp++)
+    for (int wp = 0; wp <= END_OF_AMMO_USING_WEAPONS - START_OF_AMMO_USING_WEAPONS; wp++) {
       for (int am = AMMO_NORMAL; am < NUM_AMMOTYPES; am++)
         bullet_pants[wp][am] = 0;
+    }
   }
 };
 /* ====================================================================== */
@@ -881,10 +888,10 @@ struct descriptor_data
   struct descriptor_data *next; /* link to next descriptor              */
   struct ccreate_t ccr;
   int invalid_command_counter;
-  
+
   long nuyen_paid_for_wheres_my_car;
   long nuyen_income_this_play_session[NUM_OF_TRACKED_NUYEN_INCOME_SOURCES];
-  
+
   listClass<const char *> message_history[NUM_COMMUNICATION_CHANNELS];
 
   // all this from here down is stuff for on-line creation
@@ -908,19 +915,19 @@ struct descriptor_data
   struct matrix_icon *edit_icon; /* icedit */
   struct help_data *edit_helpfile;
   // If you add more of these edit_whatevers, touch comm.cpp's free_editing_structs and add them!
-  
+
   Playergroup *edit_pgroup; /* playergroups */
-  
+
   int canary;
   protocol_t *pProtocol;
-  
+
   // this is for spell creation
 
   // This is mostly a just-in-case section. Descriptors are zeroed out when created in comm.cpp's new_descriptor().
   descriptor_data() :
       showstr_head(NULL), showstr_point(NULL), str(NULL),
       output(NULL), output_canary(31337), large_outbuf(NULL), input_and_character_canary(31337),
-      character(NULL), original(NULL), snooping(NULL), snoop_by(NULL), next(NULL), 
+      character(NULL), original(NULL), snooping(NULL), snoop_by(NULL), next(NULL),
       invalid_command_counter(0), iedit_limit_edits(0), misc_data(NULL),
       edit_obj(NULL), edit_room(NULL), edit_mob(NULL), edit_quest(NULL), edit_shop(NULL),
       edit_zon(NULL), edit_cmd(NULL), edit_veh(NULL), edit_host(NULL), edit_icon(NULL),
@@ -929,7 +936,7 @@ struct descriptor_data
     // Zero out the communication history for all channels.
     for (int channel = 0; channel < NUM_COMMUNICATION_CHANNELS; channel++)
       message_history[channel] = listClass<const char *>();
-      
+
     // Zero out our metrics.
     for (int i = 0; i < NUM_OF_TRACKED_NUYEN_INCOME_SOURCES; i++) {
       nuyen_income_this_play_session[i] = 0;
@@ -960,7 +967,7 @@ struct message_type
   struct msg_type hit_msg;       /* messages when hit                    */
   struct msg_type god_msg;       /* messages when hit on god             */
   struct message_type *next;     /* to next messages of this kind.       */
-  
+
   message_type():
     next(NULL)
   {}
@@ -971,7 +978,7 @@ struct message_list
   int a_type;                    /* Attack type                          */
   int number_of_attacks;         /* How many attack messages to chose from. */
   struct message_type *msg;      /* List of messages.                    */
-  
+
   message_list() :
     msg(NULL)
   {}
@@ -1018,7 +1025,7 @@ struct phone_data
   int number;
   bool connected;
   vnum_t rtg;
-  struct phone_data *dest;  
+  struct phone_data *dest;
   struct obj_data *phone;
   struct matrix_icon *persona;
   struct phone_data *next;
@@ -1162,20 +1169,20 @@ struct combat_data
   int tn;
   int dice;
   int successes;
-  
+
   // Weapon / unarmed damage data.
   int dam_type;
   bool is_physical;
   int power;
   int damage_level; // Light/Med/etc
-  
+
   // Gun data.
   bool weapon_is_gun;
   bool weapon_has_bayonet;
   int burst_count;
   int recoil_comp;
   int weapon_skill;
-  
+
   // Cyberware data.
   int climbingclaws;
   int fins;
@@ -1186,14 +1193,14 @@ struct combat_data
   int footanchors;
   int bone_lacing_power;
   int num_cyberweapons;
-  
+
   // Pointers.
   struct char_data *ch;
   struct veh_data *veh;
   struct obj_data *weapon;
   struct obj_data *magazine;
   struct obj_data *gyro;
-  
+
   combat_data(struct char_data *character, struct obj_data *weap) :
     too_tall(FALSE), skill(0), tn(0), dice(0), successes(0), dam_type(0), is_physical(FALSE), power(0), damage_level(0),
     weapon_is_gun(FALSE), weapon_has_bayonet(FALSE), burst_count(0), recoil_comp(0), climbingclaws(0), fins(0),
@@ -1202,26 +1209,26 @@ struct combat_data
   {
     for (int i = 0; i < NUM_COMBAT_MODIFIERS; i++)
       modifiers[i] = 0;
-    
+
     ch = character;
     weapon = weap;
-    
-    weapon_is_gun = (weapon 
-                     && IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon)) 
+
+    weapon_is_gun = (weapon
+                     && IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon))
                      && (GET_WEAPON_SKILL(weapon) >= SKILL_PISTOLS
                          && GET_WEAPON_SKILL(weapon) <= SKILL_ASSAULT_CANNON));
-                         
+
     if (weapon_is_gun) {
       /* if (PLR_FLAGGED(att->ch, PLR_REMOTE) || AFF_FLAGGED(att->ch, AFF_RIG) || AFF_FLAGGED(att->ch, AFF_MANNING))
         magazine = get_mount_ammo(get_mount_manned_by_ch(att->ch));
-        
+
         // TODO asdf this needs to be fixed, it has no way to handle a rigged veh with multiple mounts in it
         */
-      
+
       if (!magazine)
         magazine = weapon->contains;
     }
-    
+
     if (AFF_FLAGGED(ch, AFF_MANNING) || AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE))
       weapon_skill = SKILL_GUNNERY;
     else if (weapon)
@@ -1241,7 +1248,7 @@ struct help_data {
   int category; // currently unused
   // links: varchar 200
   char *links; // currently unused
-  
+
   // Set title_to_keep to NULL for a new helpfile.
   help_data(const char *title_to_keep_for_sql) :
     original_title(NULL), title(NULL), body(NULL), category(0), links(NULL)

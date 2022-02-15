@@ -25,26 +25,26 @@
 #include <chrono>
 
 #if defined(WIN32) && !defined(__CYGWIN__)
-#include <windows.h>
-#include <winsock.h>
-#include <io.h>
-#include <direct.h>
-#include <mmsystem.h>
-typedef SOCKET  socket_t;
+  #include <windows.h>
+  #include <winsock.h>
+  #include <io.h>
+  #include <direct.h>
+  #include <mmsystem.h>
+  typedef SOCKET  socket_t;
 
-#define chdir(x) _chdir(x)
-#define random() rand()
-#define srandom(x) srand(x)
-#define close(x) _close(x)
-#define write(x, y, z) _write(x, y, z)
-#define read(x, y, z) _read(x, y, z)
+  #define chdir(x) _chdir(x)
+  #define random() rand()
+  #define srandom(x) srand(x)
+  #define close(x) _close(x)
+  #define write(x, y, z) _write(x, y, z)
+  #define read(x, y, z) _read(x, y, z)
 #else
-#include <netinet/in.h>
-#include <sys/resource.h>
-#include <sys/socket.h>
-#include <sys/wait.h>
-#include <sys/time.h>
-#include <netdb.h>
+  #include <netinet/in.h>
+  #include <sys/resource.h>
+  #include <sys/socket.h>
+  #include <sys/wait.h>
+  #include <sys/time.h>
+  #include <netdb.h>
 #endif
 
 #include "telnet.h"
@@ -82,6 +82,10 @@ extern bool _OVERRIDE_ALLOW_PLAYERS_TO_USE_ROLLS_;
 
 extern struct time_info_data time_info; /* In db.c */
 extern char help[];
+
+#ifdef USE_PRIVATE_CE_WORLD
+extern void do_secret_ticks(int pulse);
+#endif
 
 /* local globals */
 int connection_rapidity_tracker_for_dos = 0;
@@ -205,7 +209,7 @@ int main(int argc, char **argv)
           dir = argv[pos];
         else {
           log("Directory arg expected after option -d.");
-          exit(1);
+          exit(ERROR_INVALID_ARGUMENTS_TO_BINARY);
         }
         break;
       case 'c':
@@ -234,16 +238,16 @@ int main(int argc, char **argv)
   if (pos < argc) {
     if (!isdigit(*argv[pos])) {
       fprintf(stderr, "Usage: %s [-c] [-m] [-q] [-r] [-s] [-d pathname] [port #]\n", argv[0]);
-      exit(1);
+      exit(ERROR_INVALID_ARGUMENTS_TO_BINARY);
     } else if ((port = atoi(argv[pos])) <= 1024) {
       fprintf(stderr, "Illegal port number. Port must be higher than 1024.\n");
-      exit(1);
+      exit(ERROR_INVALID_ARGUMENTS_TO_BINARY);
     }
   }
 
   if (chdir(dir) < 0) {
     perror("Fatal error changing to data directory");
-    exit(1);
+    exit(ERROR_INVALID_DATA_DIRECTORY);
   }
 
   log_vfprintf("Using %s as data directory.", dir);
@@ -251,7 +255,7 @@ int main(int argc, char **argv)
   if (scheck) {
     boot_world();
     log("Done.");
-    exit(0);
+    exit(EXIT_CODE_ZERO_ALL_IS_WELL);
   } else {
     log_vfprintf("Running game on port %d.", port);
     init_game(port);
@@ -446,7 +450,7 @@ void init_game(int port)
 
   if (circle_reboot) {
     log("Rebooting.");
-    exit(52);                   /* what's so great about HHGTTG, anyhow? */
+    exit(EXIT_CODE_REBOOTING);
   }
   log("Normal termination of game.");
 }
@@ -473,13 +477,13 @@ int init_socket(int port)
 
   if ((s = socket(PF_INET, SOCK_STREAM, 0)) < 0) {
     perror("Create socket");
-    exit(1);
+    exit(ERROR_COULD_NOT_CREATE_SOCKET);
   }
 #if defined(SO_SNDBUF)
   opt = LARGE_BUFSIZE + GARBAGE_SPACE;
   if (setsockopt(s, SOL_SOCKET, SO_SNDBUF, (char *) &opt, sizeof(opt)) < 0) {
     perror("setsockopt SNDBUF");
-    exit(1);
+    exit(ERROR_COULD_NOT_SET_SOCKET_OPTIONS);
   }
 #endif
 
@@ -487,7 +491,7 @@ int init_socket(int port)
   opt = 1;
   if (setsockopt(s, SOL_SOCKET, SO_REUSEADDR, (char *) &opt, sizeof(opt)) < 0) {
     perror("setsockopt REUSEADDR");
-    exit(1);
+    exit(ERROR_COULD_NOT_REUSE_ADDRESS);
   }
 #endif
 
@@ -497,7 +501,7 @@ int init_socket(int port)
   opt = 1;
   if (setsockopt(s, SOL_SOCKET, SO_REUSEPORT, (char *) &opt, sizeof(opt)) < 0) {
     perror("setsockopt REUSEPORT");
-    exit(1);
+    exit(ERROR_COULD_NOT_REUSE_PORT);
   }
 #endif
 */
@@ -509,7 +513,7 @@ int init_socket(int port)
     ld.l_linger = 0;
     if (setsockopt(s, SOL_SOCKET, SO_LINGER, (char *)&ld, sizeof(ld)) < 0) {
       perror("setsockopt LINGER");
-      exit(1);
+      exit(ERROR_COULD_NOT_SET_LINGER);
     }
   }
 #endif
@@ -518,10 +522,10 @@ int init_socket(int port)
   sa.sin_port = htons(port);
   sa.sin_addr.s_addr = htonl(INADDR_ANY);
 
-  if (bind(s, (struct sockaddr *) & sa, sizeof(sa)) < 0) {
+  if (::bind(s, (struct sockaddr *) & sa, sizeof(sa)) < 0) {
     perror("bind");
     close(s);
-    exit(1);
+    exit(ERROR_COULD_NOT_BIND_SOCKET);
   }
   nonblock(s);
   listen(s, 5);
@@ -549,7 +553,7 @@ int get_max_players(void)
     if (getrlimit(RLIMIT_NOFILE, &limit) < 0)
     {
       perror("calling getrlimit");
-      exit(1);
+      exit(ERROR_GETRLIMIT_FAILED);
     }
     if (limit.rlim_max == RLIM_INFINITY)
       max_descs = MAX_PLAYERS + NUM_RESERVED_DESCS;
@@ -579,7 +583,7 @@ int get_max_players(void)
       max_descs = MAX_PLAYERS + NUM_RESERVED_DESCS;
     else {
       perror("Error calling sysconf");
-      exit(1);
+      exit(ERROR_SYSCONF_FAILED);
     }
   }
 #endif
@@ -591,7 +595,7 @@ int get_max_players(void)
     log_vfprintf("Non-positive max player limit!  (Set at %d using %s).",
         max_descs, method);
 
-    exit(1);
+    exit(ERROR_YOU_SET_AN_IMPOSSIBLE_PLAYER_LIMIT);
   }
 
   log_vfprintf("Setting player limit to %d using %s.", max_descs, method);
@@ -715,7 +719,7 @@ void game_loop(int mother_desc)
       if (select(0, (fd_set *) 0, (fd_set *) 0, (fd_set *) 0, &timeout) < 0)
         if (errno != EINTR) {
           perror("Select sleep");
-          exit(1);
+          exit(ERROR_COULD_NOT_RECOVER_FROM_SELECT_SLEEP);
         }
 
       // Reset our alarm timer.
@@ -900,6 +904,9 @@ void game_loop(int mother_desc)
       matrix_update();
 #ifdef USE_DEBUG_CANARIES
       check_memory_canaries();
+#endif
+#ifdef USE_PRIVATE_CE_WORLD
+      do_secret_ticks(pulse);
 #endif
     }
 
@@ -1500,25 +1507,51 @@ void write_to_output(const char *unmodified_txt, struct descriptor_data *t)
   if (t == NULL)
     return;
 
+  #ifdef PROTO_DEBUG
+  log_vfprintf("Entering write_to_output with unmodified_txt ''%s'' with size %d.", unmodified_txt, size);
+  #endif
+
   // Process text per KaVir's protocol snippet.
   const char *txt = ProtocolOutput(t, unmodified_txt, &size);
-  if (t->pProtocol->WriteOOB > 0)
+  if (t->pProtocol->WriteOOB > 0) {
+    #ifdef PROTO_DEBUG
+    log_vfprintf("Decrementing WriteOOB (%d to %d).", t->pProtocol->WriteOOB, --t->pProtocol->WriteOOB);
+    #else
     --t->pProtocol->WriteOOB;
+    #endif
+  }
+
+  // Now, re-calculate the size of the written content, since ProtocolOutput produces different content.
+  size = strlen(txt);
+
+  #ifdef PROTO_DEBUG
+  log_vfprintf("Got cooked content ''%s'' with size=%d.", txt, size);
+  #endif
 
   // txt = colorize(t, (char *)txt);
 
   /* if we're in the overflow state already, ignore this new output */
-  if (t->bufptr < 0)
+  if (t->bufptr < 0) {
+    #ifdef PROTO_DEBUG
+    log_vfprintf("Ignoring cooked content: t->bufptr = %d, so we're in the overflow state. Aborting.", t->bufptr);
+    #endif
     return;
+  }
 
   /* if we have enough space, just write to buffer and that's it! */
-  if (t->bufspace >= size)
+  if (t->bufspace > size)
   {
+    #ifdef PROTO_DEBUG
+    log_vfprintf("Have enough space in t->bufspace (%d >= %d). Writing cooked content into t->output, which is starting at ''%s''.", t->bufspace, size, txt, t->output);
+    #endif
     strlcpy(t->output + t->bufptr, txt, t->bufspace);
     assert(t->small_outbuf_canary == 31337);
     assert(t->output_canary == 31337);
     t->bufspace -= size;
     t->bufptr += size;
+    #ifdef PROTO_DEBUG
+    log_vfprintf("After operations, t->output is now ''%s'', with bufspace=%d. Successfully completed run.", t->output, t->bufspace);
+    #endif
     return;
   }
 
@@ -1531,6 +1564,9 @@ void write_to_output(const char *unmodified_txt, struct descriptor_data *t)
   {
     t->bufptr = -1;
     buf_overflows++;
+    #ifdef PROTO_DEBUG
+    log_vfprintf("Whoops, not enough space. Going to overflow state and discarding cooked content. t->large_outbuf=%d, total size = %d. t->bufptr becomes -1, and buf_overflows is now %d.", t->large_outbuf, size + strlen(t->output), buf_overflows);
+    #endif
     return;
   }
 
@@ -1558,6 +1594,10 @@ void write_to_output(const char *unmodified_txt, struct descriptor_data *t)
 
   /* set the pointer for the next write */
   t->bufptr = strlen(t->output);
+
+  #ifdef PROTO_DEBUG
+  log_vfprintf("That was lengthy, I had to switch to a large buffer. t->output is now ''%s'' (len %d, which leaves %d space remaining out of %d).", t->output, t->bufptr, t->bufspace, LARGE_BUFSIZE);
+  #endif
 }
 
 /* ******************************************************************
@@ -1672,7 +1712,7 @@ int new_descriptor(int s)
             (int) ((addr & 0x000000FF)));
   } else
   {
-    strncpy(newd->host, from->h_name, HOST_LENGTH);
+    strlcpy(newd->host, from->h_name, HOST_LENGTH);
     *(newd->host + HOST_LENGTH) = '\0';
 
     time_t time_delta = time(0) - gethostbyaddr_timer;
@@ -1790,6 +1830,20 @@ int write_to_descriptor(int desc, const char *txt) {
   assert(txt != NULL);
 
   total = strlen(txt);
+
+  #ifdef PROTO_DEBUG
+  log_vfprintf("Before conversion: '''%s'''", txt);
+  // We're gonna do some real weird shit and deliberately convert all non-printing chars to printing ones.
+  char the_bullshit_buf[total * 10];
+  for (int txt_idx = 0; txt[txt_idx]; txt_idx++) {
+    if ((txt[txt_idx] < ' ' || txt[txt_idx] > '~')) {
+      snprintf(ENDOF(the_bullshit_buf), sizeof(the_bullshit_buf), "@%d", txt[txt_idx]);
+    } else {
+      snprintf(ENDOF(the_bullshit_buf), sizeof(the_bullshit_buf), "%c", txt[txt_idx]);
+    }
+  }
+  log_vfprintf("After conversion: '''%s'''", the_bullshit_buf);
+  #endif
 
   do {
 #ifdef __APPLE__
@@ -2033,7 +2087,7 @@ int perform_subst(struct descriptor_data *t, char *orig, char *subst)
   /* now, we construct the new string for output. */
 
   /* first, everything in the original, up to the string to be replaced */
-  strncpy(New, orig, (strpos - orig));
+  strlcpy(New, orig, (strpos - orig));
   New[(strpos - orig)] = '\0';
 
   /* now, the replacement string */
@@ -2309,7 +2363,7 @@ void nonblock(int s)
   flags |= O_NONBLOCK;
   if (fcntl(s, F_SETFL, flags) < 0) {
     perror("Fatal error executing nonblock (comm.c)");
-    exit(1);
+    exit(ERROR_FNCTL_ENCOUNTERED_ERROR);
   }
 }
 #endif
@@ -2352,7 +2406,7 @@ void free_up_memory(int Empty)
   if (!Mem->ClearStacks()) {
     std::cerr << "SYSERR: Unable to free enough memory, shutting down...\n";
     House_save_all();
-    exit(0);
+    exit(ERROR_UNABLE_TO_FREE_MEMORY_IN_CLEARSTACKS);
   }
 }
 
@@ -2360,21 +2414,21 @@ void hupsig(int Empty)
 {
   mudlog("Received SIGHUP.  Shutting down...", NULL, LOG_SYSLOG, TRUE);
   House_save_all();
-  exit(0);
+  exit(EXIT_CODE_ZERO_ALL_IS_WELL);
 }
 
 void intsig(int Empty)
 {
   mudlog("Received SIGINT.  Shutting down...", NULL, LOG_SYSLOG, TRUE);
   House_save_all();
-  exit(0);
+  exit(EXIT_CODE_ZERO_ALL_IS_WELL);
 }
 
 void termsig(int Empty)
 {
   mudlog("Received SIGTERM.  Shutting down...", NULL, LOG_SYSLOG, TRUE);
   House_save_all();
-  exit(0);
+  exit(EXIT_CODE_ZERO_ALL_IS_WELL);
 }
 
 
@@ -2709,21 +2763,22 @@ void send_to_driver(char *messg, struct veh_data *veh)
         SEND_TO_Q(messg, i->desc);
 }
 
-void send_to_host(vnum_t room, const char *messg, struct matrix_icon *icon, bool needsee)
-{
-  struct matrix_icon *i;
-  if (!icon) {
-    char errbuf[MAX_STRING_LENGTH];
-    snprintf(errbuf, sizeof(errbuf), "SYSERR: Received null icon to send_to_host! (Message: %s)", messg);
-    mudlog(errbuf, NULL, LOG_SYSLOG, TRUE);
+void send_to_host(vnum_t room, const char *messg, struct matrix_icon *icon, bool needsee) {
+  // Bail out on no or empty message.
+  if (!messg || !*messg)
     return;
+
+  for (struct matrix_icon *i = matrix[room].icons; i; i = i->next_in_host) {
+    // Skip icons that don't have connections to send to.
+    if (!i->decker)
+      continue;
+
+    // If we pass visibility checks (or don't need to run them at all), send the message.
+    if (!icon || (icon != i && (!needsee || has_spotted(i, icon))))
+      send_to_icon(i, messg);
   }
-  if (messg)
-    for (i = matrix[room].icons; i; i = i->next_in_host)
-      if (icon != i && i->decker)
-        if (!needsee || (needsee && has_spotted(i, icon)))
-          send_to_icon(i, messg);
 }
+
 void send_to_veh(const char *messg, struct veh_data *veh, struct char_data *ch, bool torig, ...)
 {
   struct char_data *i;
@@ -3163,15 +3218,15 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
       if ((tch = rigger_check->rigger) && tch->desc && PRF_FLAGGED(tch, PRF_ROLLS)) {
         // We currently treat all vehicles as having ultrasonic sensors.
         // Since the check is done to the rigger, we have to apply det-invis to them directly, then remove it when done.
-        bool rigger_is_det_invis = AFF_FLAGGED(tch, AFF_DETECT_INVIS);
-        AFF_FLAGS(tch).SetBit(AFF_DETECT_INVIS);
+        bool rigger_is_det_invis = AFF_FLAGGED(tch, AFF_ULTRASOUND);
+        AFF_FLAGS(tch).SetBit(AFF_ULTRASOUND);
         if (SENDOK(tch)
             && !(hide_invisible
                  && ch
                  && !CAN_SEE(tch, ch)))
           perform_act(str, ch, obj, vict_obj, tch);
         if (!rigger_is_det_invis)
-          AFF_FLAGS(tch).RemoveBit(AFF_DETECT_INVIS);
+          AFF_FLAGS(tch).RemoveBit(AFF_ULTRASOUND);
       }
     }
 
@@ -3207,12 +3262,12 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
     if ((tch = rigger_check->rigger) && tch->desc) {
       // We currently treat all vehicles as having ultrasonic sensors.
       // Since the check is done to the rigger, we have to apply det-invis to them directly, then remove it when done.
-      bool rigger_is_det_invis = AFF_FLAGGED(tch, AFF_DETECT_INVIS);
-      AFF_FLAGS(tch).SetBit(AFF_DETECT_INVIS);
+      bool rigger_is_det_invis = AFF_FLAGGED(tch, AFF_ULTRASOUND);
+      AFF_FLAGS(tch).SetBit(AFF_ULTRASOUND);
       if (can_send_act_to_target(ch, hide_invisible, obj, vict_obj, tch, type | TO_REMOTE))
         perform_act(str, ch, obj, vict_obj, tch);
       if (!rigger_is_det_invis)
-        AFF_FLAGS(tch).RemoveBit(AFF_DETECT_INVIS);
+        AFF_FLAGS(tch).RemoveBit(AFF_ULTRASOUND);
     }
   }
 
@@ -3279,6 +3334,10 @@ bool ch_is_eligible_to_receive_socialization_bonus(struct char_data *ch) {
   if (IS_NPC(ch))
     return FALSE;
 
+  // Not in a social room? Can't receive the bonus.
+  if (!ch->in_room || !ROOM_FLAGGED(ch->in_room, ROOM_ENCOURAGE_CONGREGATION))
+    return FALSE;
+
   // You're invisible? You can't get the bonus. Too easy to just idle in a bar watching Netflix for karma.
   // And to anyone reading the code and thinking "Oh, it'd be a great prank to make my rival invis while they RP so they don't get the bonus!" -- no, that's abusing the system and will be punished.
   if (IS_AFFECTED(ch, AFF_IMP_INVIS)
@@ -3299,10 +3358,6 @@ void increase_congregation_bonus_pools() {
   // because that encourages breaking off from RP to go burn it down again. Let them chill.
   for (struct char_data *i = character_list; i; i = i->next) {
     if (!ch_is_eligible_to_receive_socialization_bonus(i))
-      continue;
-
-    // Not in a social room? This doesn't apply to you.
-    if (!i->in_room || !ROOM_FLAGGED(i->in_room, ROOM_ENCOURAGE_CONGREGATION))
       continue;
 
     // You can't be maxed out.
@@ -3343,6 +3398,13 @@ void increase_congregation_bonus_pools() {
       snprintf(buf, sizeof(buf), "Socialization: Counting %s as an occupant.", GET_CHAR_NAME(tempch));
       act(buf, FALSE, i, 0, 0, TO_ROLLS);
       occupants++;
+    }
+
+    // Skip people who haven't emoted in a while, but only if they're not alone there.
+    if (occupants > 1 && i->char_specials.last_emote > LAST_EMOTE_REQUIREMENT_FOR_CONGREGATION_BONUS) {
+      snprintf(buf, sizeof(buf), "Socialization: Skipping %s's opportunity to earn social points-- they've not emoted to their partner.", GET_CHAR_NAME(i));
+      act(buf, FALSE, i, 0, 0, TO_ROLLS);
+      continue;
     }
 
     int point_gain = 1;

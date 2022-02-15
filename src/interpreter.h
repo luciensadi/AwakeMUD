@@ -11,6 +11,7 @@
 #ifndef _interpreter_h_
 #define _interpreter_h_
 
+#include "types.h"
 #include "perfmon.h"
 /*
 #define ACMD(name)  \
@@ -77,7 +78,7 @@ struct alias
   char *replacement;
   int type;
   struct alias *next;
-  alias(): 
+  alias():
     command(NULL), replacement(NULL), next(NULL)
   {}
 };

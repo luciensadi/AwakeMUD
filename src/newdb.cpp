@@ -26,6 +26,7 @@
 #include "interpreter.h" // for alias
 #include "config.h"
 #include "bullet_pants.h"
+#include "ignore_system.h"
 
 /* mysql_config.h must be filled out with your own connection info. */
 /* For obvious reasons, DO NOT ADD THIS FILE TO SOURCE CONTROL AFTER CUSTOMIZATION. */
@@ -44,7 +45,7 @@ extern void handle_weapon_attachments(struct obj_data *obj);
 extern int get_deprecated_cybereye_essence_cost(struct obj_data *obj);
 extern void price_cyber(struct obj_data *obj);
 
-void auto_repair_obj(struct obj_data *obj, const char *source);
+void auto_repair_obj(struct obj_data *obj);
 
 void save_adept_powers_to_db(struct char_data *player);
 void save_spells_to_db(struct char_data *player);
@@ -57,6 +58,8 @@ void save_aliases_to_db(struct char_data *player);
 void save_bioware_to_db(struct char_data *player);
 void save_cyberware_to_db(struct char_data *player);
 void fix_character_essence_after_cybereye_migration(struct char_data *ch);
+
+SPECIAL(weapon_dominator);
 
 // ____________________________________________________________________________
 //
@@ -159,6 +162,8 @@ static void init_char(struct char_data * ch)
     }
 
   ch->char_specials.saved.affected_by.Clear();
+
+  GET_IGNORE_DATA(ch) = new IgnoreData(ch);
 }
 
 static void init_char_strings(char_data *ch)
@@ -409,7 +414,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
     mysql_free_result(res);
     return FALSE;
   }
-  GET_IDNUM(ch) = atoi(row[0]);
+  GET_IDNUM(ch) = atol(row[0]);
   ch->player.char_name = str_dup(row[1]);
   strcpy(GET_PASSWD(ch), row[2]);
   GET_RACE(ch) = atoi(row[3]);
@@ -650,13 +655,13 @@ bool load_char(const char *name, char_data *ch, bool logon)
       mysql_free_result(res);
     }
   }
+
   snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_skills WHERE idnum=%ld;", GET_IDNUM(ch));
   mysql_wrapper(mysql, buf);
   res = mysql_use_result(mysql);
   while ((row = mysql_fetch_row(res)))
     GET_SKILL(ch, atoi(row[1])) = atoi(row[2]);
   mysql_free_result(res);
-
 
   snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_alias WHERE idnum=%ld;", GET_IDNUM(ch));
   mysql_wrapper(mysql, buf);
@@ -686,17 +691,6 @@ bool load_char(const char *name, char_data *ch, bool logon)
     a->mem = str_dup(row[2]);
     a->next = GET_PLAYER_MEMORY(ch);
     GET_PLAYER_MEMORY(ch) = a;
-  }
-  mysql_free_result(res);
-
-  snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_ignore WHERE idnum=%ld;", GET_IDNUM(ch));
-  mysql_wrapper(mysql, buf);
-  res = mysql_use_result(mysql);
-  while ((row = mysql_fetch_row(res))) {
-    remem *a = new remem;
-    a->idnum = atol(row[1]);
-    a->next = GET_IGNORE(ch);
-    GET_IGNORE(ch) = a;
   }
   mysql_free_result(res);
 
@@ -743,7 +737,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
           GET_OBJ_VAL(obj, 9) = 1;
         inside = atoi(row[17]);
 
-        auto_repair_obj(obj, buf3);
+        auto_repair_obj(obj);
 
         // Since we're now reading rows from the db in reverse order, in order to fix the stupid reordering on
         // every binary execution, the previous algorithm did not work, as it relied on getting the container obj
@@ -792,6 +786,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
     }
     mysql_free_result(res);
   }
+
   {
     struct obj_data *obj;
     int vnum = 0;
@@ -805,6 +800,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
         for (int x = 0, y = 3; x < NUM_VALUES; x++, y++) {
           GET_OBJ_VAL(obj, x) = atoi(row[y]);
         }
+        auto_repair_obj(obj);
         obj_to_bioware(obj, ch);
       }
     }
@@ -853,7 +849,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
         GET_OBJ_ATTEMPT(obj) = atoi(row[21]);
         GET_OBJ_CONDITION(obj) = atoi(row[22]);
 
-        auto_repair_obj(obj, buf3);
+        auto_repair_obj(obj);
 
         // Since we're now reading rows from the db in reverse order, in order to fix the stupid reordering on
         // every binary execution, the previous algorithm did not work, as it relied on getting the container obj
@@ -905,7 +901,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
 
   {
     struct obj_data *obj = NULL;
-    int vnum = 0;
+    vnum_t vnum = 0;
     int inside = 0, last_inside = 0;
     std::vector<nested_obj> contained_obj;
     struct nested_obj contained_obj_entry;
@@ -943,6 +939,10 @@ bool load_char(const char *name, char_data *ch, bool logon)
             // Process weight.
             GET_OBJ_WEIGHT(obj) = GET_AMMOBOX_QUANTITY(obj) * get_ammo_weight(GET_AMMOBOX_WEAPON(obj), GET_AMMOBOX_TYPE(obj));
             break;
+          case ITEM_VEHCONTAINER:
+            // We did some hacky shit and force-saved the weight of the container to value 11. Pull it back out.
+            GET_OBJ_WEIGHT(obj) = GET_VEHCONTAINER_WEIGHT(obj);
+            break;
         }
         // This is badly named and at first reading it seems like it holds a vnum to parent container
         // which made the algorithm below harder to read but it is in fact nesting level.
@@ -964,7 +964,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
         GET_OBJ_ATTEMPT(obj) = atoi(row[20]);
         GET_OBJ_CONDITION(obj) = atoi(row[21]);
 
-        auto_repair_obj(obj, buf3);
+        auto_repair_obj(obj);
 
         // Since we're now reading rows from the db in reverse order, in order to fix the stupid reordering on
         // every binary execution, the previous algorithm did not work, as it relied on getting the container obj
@@ -1000,6 +1000,9 @@ bool load_char(const char *name, char_data *ch, bool logon)
           obj_to_char(obj, ch);
 
         last_inside = inside;
+      } else {
+        snprintf(buf, sizeof(buf), "SYSERR: Could not load object %ld when restoring %s (%ld)!", vnum, GET_CHAR_NAME(ch), GET_IDNUM(ch));
+        mudlog(buf, ch, LOG_SYSLOG, TRUE);
       }
     }
     //Failsafe. If something went wrong and we still have objects stored in the vector, dump them in inventory.
@@ -1053,6 +1056,9 @@ bool load_char(const char *name, char_data *ch, bool logon)
   }
   mysql_free_result(res);
 
+  // Load their ignore data (the structure was already initialized in init_char().)
+  GET_IGNORE_DATA(ch)->load_from_db();
+
   STOP_WORKING(ch);
   AFF_FLAGS(ch).RemoveBits(AFF_MANNING, AFF_RIG, AFF_PILOT, AFF_BANISH, AFF_FEAR, AFF_STABILIZE, AFF_SPELLINVIS, AFF_SPELLIMPINVIS, AFF_DETOX, AFF_RESISTPAIN, AFF_TRACKING, AFF_TRACKED, AFF_PRONE, ENDBIT);
   PLR_FLAGS(ch).RemoveBits(PLR_REMOTE, PLR_SWITCHED, PLR_MATRIX, PLR_PROJECT, PLR_EDITING, PLR_WRITING, PLR_PERCEIVE, PLR_VISA, ENDBIT);
@@ -1082,15 +1088,13 @@ bool load_char(const char *name, char_data *ch, bool logon)
     }
 
   // Self-repair their gear. Don't worry about contents- it's recursive.
-  snprintf(buf3, sizeof(buf3), "post-pfiles-inv-load for %s (%ld)", GET_CHAR_NAME(ch), GET_IDNUM(ch));
   for (struct obj_data *obj = ch->carrying; obj; obj = obj->next_content) {
-    auto_repair_obj(obj, buf3);
+    auto_repair_obj(obj);
   }
 
-  snprintf(buf3, sizeof(buf3), "post-pfiles-eq-load for %s (%ld)", GET_CHAR_NAME(ch), GET_IDNUM(ch));
   for (int i = 0; i < NUM_WEARS; i++) {
     if (GET_EQ(ch, i))
-      auto_repair_obj(GET_EQ(ch, i), buf3);
+      auto_repair_obj(GET_EQ(ch, i));
   }
 
   affect_total(ch);
@@ -1356,21 +1360,6 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
   /* Wipe out their memory, then re-write it. */
   SAVE_IF_DIRTY_BIT_SET(GET_MEMORY_DIRTY_BIT, save_pc_memory_to_db);
 
-  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_ignore WHERE idnum=%ld", GET_IDNUM(player));
-  mysql_wrapper(mysql, buf);
-  strcpy(buf, "INSERT INTO pfiles_ignore (idnum, remembered) VALUES (");
-  q = 0;
-  for (struct remem *b = GET_IGNORE(player); b; b = b->next) {
-    if (q)
-      strcat(buf, "), (");
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %ld", GET_IDNUM(player), b->idnum);
-    q = 1;
-  }
-  if (q) {
-    strcat(buf, ");");
-    mysql_wrapper(mysql, buf);
-  }
-
   SAVE_IF_DIRTY_BIT_SET(GET_ALIAS_DIRTY_BIT, save_aliases_to_db);
 
   // Save bioware and cyberware.
@@ -1435,17 +1424,22 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", %d, %d, '%s', %d, %d, %d);", level, GET_OBJ_TIMER(obj), GET_OBJ_EXTRA(obj).ToString(),
                           GET_OBJ_ATTEMPT(obj), GET_OBJ_CONDITION(obj), posi++);
       mysql_wrapper(mysql, buf);
+
+      // Continue down into nested objects. Don't continue into parts though, since those use the contains variable weirdly.
+      if (obj->contains && GET_OBJ_TYPE(obj) != ITEM_PART) {
+        obj = obj->contains;
+        level++;
+        continue;
+      }
     }
 
-    if (obj->contains && !IS_OBJ_STAT(obj, ITEM_NORENT) && GET_OBJ_TYPE(obj) != ITEM_PART) {
-      obj = obj->contains;
-      level++;
-      continue;
-    } else if (!obj->next_content && obj->in_obj)
+    // If we've hit the end of this object's linked list, and it's in an object, back out until we hit the top.
+    if (!obj->next_content && obj->in_obj) {
       while (obj && !obj->next_content && level >= 0) {
         obj = obj->in_obj;
         level--;
       }
+    }
 
     if (obj)
       obj = obj->next_content;
@@ -1558,6 +1552,7 @@ vnum_t get_one_number_from_query(const char *query) {
 
 vnum_t get_highest_idnum_in_use() {
   char buf[MAX_STRING_LENGTH];
+  vnum_t new_number = 0;
 
   const char *tables[] = {
     "pfiles_adeptpowers",
@@ -1572,7 +1567,6 @@ vnum_t get_highest_idnum_in_use() {
     "pfiles_immortdata",
     "pfiles_inv",
     "pfiles_magic",
-    "pfiles_mail",
     "pfiles_memory",
     "pfiles_metamagic",
     "pfiles_playergroups",
@@ -1581,20 +1575,37 @@ vnum_t get_highest_idnum_in_use() {
     "pfiles_spells",
     "pfiles_spirits",
     "pfiles_worn",
+    "you-deleted-something-and-didn't-change-the-table-length-dumbass" // must be last for obvious reasons
   };
 
-  #define NUM_IDNUM_TABLES 21
+  #define NUM_IDNUM_TABLES 20
 
   vnum_t highest_pfiles_idnum = get_one_number_from_query("SELECT idnum FROM pfiles ORDER BY idnum DESC LIMIT 1;");
 
   for (int i = 0; i < NUM_IDNUM_TABLES; i++) {
     snprintf(buf, sizeof(buf), "SELECT idnum FROM %s ORDER BY idnum DESC LIMIT 1;", tables[i]);
-    vnum_t new_number = get_one_number_from_query(buf);
+    new_number = get_one_number_from_query(buf);
     if (highest_pfiles_idnum < new_number) {
       snprintf(buf3, sizeof(buf3), "^RSYSERR: SQL database corruption (pfiles idnum %ld lower than '%s' idnum %ld). Auto-correcting.^g", highest_pfiles_idnum, tables[i], new_number);
       mudlog(buf3, NULL, LOG_SYSLOG, TRUE);
       highest_pfiles_idnum = new_number;
     }
+  }
+
+  strlcpy(buf, "SELECT sender_id FROM pfiles_mail ORDER BY idnum DESC LIMIT 1;", sizeof(buf));
+  new_number = get_one_number_from_query(buf);
+  if (highest_pfiles_idnum < new_number) {
+    snprintf(buf3, sizeof(buf3), "^RSYSERR: SQL database corruption (pfiles idnum %ld lower than pfiles_mail sender_id %ld). Auto-correcting.^g", highest_pfiles_idnum, new_number);
+    mudlog(buf3, NULL, LOG_SYSLOG, TRUE);
+    highest_pfiles_idnum = new_number;
+  }
+
+  strlcpy(buf, "SELECT recipient FROM pfiles_mail ORDER BY idnum DESC LIMIT 1;", sizeof(buf));
+  new_number = get_one_number_from_query(buf);
+  if (highest_pfiles_idnum < new_number) {
+    snprintf(buf3, sizeof(buf3), "^RSYSERR: SQL database corruption (pfiles idnum %ld lower than pfiles_mail recipient %ld). Auto-correcting.^g", highest_pfiles_idnum, new_number);
+    mudlog(buf3, NULL, LOG_SYSLOG, TRUE);
+    highest_pfiles_idnum = new_number;
   }
 
   return highest_pfiles_idnum;
@@ -1920,8 +1931,11 @@ bool does_player_exist(long id)
 
 vnum_t get_player_id(char *name)
 {
-  char buf[MAX_STRING_LENGTH];
-  snprintf(buf, sizeof(buf), "SELECT idnum FROM pfiles WHERE name=\"%s\";", name);
+  if (!name || !*name || !str_cmp(name, CHARACTER_DELETED_NAME_FOR_SQL))
+    return -1;
+
+  char buf[MAX_STRING_LENGTH], sanitized_buf[strlen(name) * 2 + 2];
+  snprintf(buf, sizeof(buf), "SELECT idnum FROM pfiles WHERE name=\"%s\";", prepare_quotes(sanitized_buf, name, sizeof(sanitized_buf)));
   mysql_wrapper(mysql, buf);
   MYSQL_RES *res = mysql_use_result(mysql);
   MYSQL_ROW row = mysql_fetch_row(res);
@@ -1930,6 +1944,21 @@ vnum_t get_player_id(char *name)
     return -1;
   }
   long x = atol(row[0]);
+  mysql_free_result(res);
+  return x;
+}
+
+int get_player_rank(long idnum) {
+  char buf[MAX_STRING_LENGTH];
+  snprintf(buf, sizeof(buf), "SELECT rank FROM pfiles WHERE idnum=%ld;", idnum);
+  mysql_wrapper(mysql, buf);
+  MYSQL_RES *res = mysql_use_result(mysql);
+  MYSQL_ROW row = mysql_fetch_row(res);
+  if (!row && mysql_field_count(mysql)) {
+    mysql_free_result(res);
+    return -1;
+  }
+  int x = atoi(row[0]);
   mysql_free_result(res);
   return x;
 }
@@ -1990,41 +2019,45 @@ bool get_aff_flag_is_set_by_idnum(int flag, vnum_t id) {
 
 void DeleteChar(long idx)
 {
+  /* Delete a character in such a way that it can be restored if desired. */
   MYSQL_RES *res;
   MYSQL_ROW row;
   FILE *fl;
   char prepare_quotes_buf[MAX_STRING_LENGTH * 2 + 1];
 
   const char *table_names[] = {
-    "pfiles                 ", // 0
-    "pfiles_adeptpowers     ",
-    "pfiles_alias           ",
-    "pfiles_ammo            ",
-    "pfiles_bioware         ",
-    "pfiles_chargendata     ", // 5
-    "pfiles_cyberware       ",
-    "pfiles_drugdata        ",
-    "pfiles_drugs           ",
-    "pfiles_ignore          ", // IF YOU CHANGE THIS, CHANGE PFILES_IGNORE_INDEX
-    "pfiles_immortdata      ", // 10
-    "pfiles_inv             ",
-    "pfiles_magic           ",
-    "pfiles_mail            ",
-    "pfiles_memory          ", // IF YOU CHANGE THIS, CHANGE PFILES_MEMORY_INDEX
-    "pfiles_metamagic       ", // 15
-    "pfiles_quests          ",
-    "pfiles_skills          ",
-    "pfiles_spells          ",
-    "pfiles_spirits         ",
-    "pfiles_worn            "  // 20
+    "pfiles             ", // IF YOU CHANGE THIS, CHANGE PFILES_INDEX
+    "pfiles_adeptpowers ",
+    "pfiles_alias       ",
+    "pfiles_ammo        ",
+    "pfiles_bioware     ",
+    "pfiles_chargendata ", // 5
+    "pfiles_cyberware   ",
+    "pfiles_drugdata    ",
+    "pfiles_drugs       ",
+    "pfiles_ignore      ", // IF YOU CHANGE THIS, CHANGE PFILES_IGNORE_INDEX
+    "pfiles_immortdata  ", // 10
+    "pfiles_inv         ",
+    "pfiles_magic       ",
+    "pfiles_mail        ",
+    "pfiles_memory      ", // IF YOU CHANGE THIS, CHANGE PFILES_MEMORY_INDEX
+    "pfiles_metamagic   ", // 15
+    "pfiles_quests      ",
+    "pfiles_skills      ",
+    "pfiles_spells      ",
+    "pfiles_spirits     ",
+    "pfiles_worn        ",  // 20
+    "pfiles_ignore_v2   "   // IF YOU CHANGE THIS, CHANGE PFILES_IGNORE_V2_INDEX
   };
-  #define NUM_SQL_TABLE_NAMES 21
-  #define PFILES_IGNORE_INDEX 9
-  #define PFILES_MEMORY_INDEX 14
+  #define NUM_SQL_TABLE_NAMES     22
+  #define PFILES_INDEX            0
+  #define PFILES_IGNORE_INDEX     9
+  #define PFILES_MEMORY_INDEX     14
+  #define PFILES_IGNORE_V2_INDEX  21
 
   // Figure out the filename for this character.
   const char *name = get_player_name(idx);
-  snprintf(buf, sizeof(buf), "idledeleted/%s", name);
+  snprintf(buf, sizeof(buf), "idledeleted/%s-%ld", name, idx);
   delete[] name;
 
   // Ensure we can open the file.
@@ -2061,30 +2094,45 @@ void DeleteChar(long idx)
     strlcat(buf2, ") VALUES (", sizeof(buf2));
 
     // Get the values.
-    snprintf(buf, sizeof(buf), "SELECT * FROM %s WHERE idnum=%ld", table_names[table_idx], idx);
-    mysql_wrapper(mysql, buf);
-    res = mysql_use_result(mysql);
-    while ((row = mysql_fetch_row(res))) {
-      // Populate buf3 with the table schema.
-      strlcpy(buf3, buf2, sizeof(buf3));
-
-      // Fill out data in buf3.
-      for (unsigned int row_idx = 0; row_idx < mysql_num_fields(res); row_idx++) {
-        prepare_quotes(prepare_quotes_buf, row[row_idx], sizeof(prepare_quotes_buf), TRUE);
-        snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "'%s'%s", prepare_quotes_buf, row_idx == mysql_num_fields(res) - 1 ? ")" : ", ");
-      }
-      // Write the values to the file, assuming there are values to write here.
-      fprintf(fl, "%s;\r\n", buf3);
+    if (table_idx == PFILES_IGNORE_INDEX || table_idx == PFILES_MEMORY_INDEX) {
+      snprintf(buf, sizeof(buf), "SELECT * FROM %s WHERE idnum=%ld OR remembered=%ld", table_names[table_idx], idx, idx);
     }
-    mysql_free_result(res);
+    else if (table_idx == PFILES_IGNORE_V2_INDEX) {
+      snprintf(buf, sizeof(buf), "SELECT * FROM %s WHERE idnum=%ld OR vict_idnum=%ld", table_names[table_idx], idx, idx);
+    }
+    else {
+      snprintf(buf, sizeof(buf), "SELECT * FROM %s WHERE idnum=%ld", table_names[table_idx], idx);
+    }
+
+    mysql_wrapper(mysql, buf);
+
+    if ((res = mysql_use_result(mysql))) {
+      while ((row = mysql_fetch_row(res))) {
+        // Populate buf3 with the table schema.
+        strlcpy(buf3, buf2, sizeof(buf3));
+
+        // Fill out data in buf3.
+        for (unsigned int row_idx = 0; row_idx < mysql_num_fields(res); row_idx++) {
+          prepare_quotes(prepare_quotes_buf, row[row_idx], sizeof(prepare_quotes_buf), TRUE);
+          snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "'%s'%s", prepare_quotes_buf, row_idx == mysql_num_fields(res) - 1 ? ")" : ", ");
+        }
+        // Write the values to the file, assuming there are values to write here.
+        fprintf(fl, "%s;\r\n", buf3);
+      }
+      mysql_free_result(res);
+    }
 
     // Finally, delete the table entry, unless we're at index 0-- that's the pfile table.
-    if (table_idx != 0) {
+    if (table_idx != PFILES_INDEX) {
       if (table_idx == PFILES_IGNORE_INDEX || table_idx == PFILES_MEMORY_INDEX) {
-        snprintf(buf, sizeof(buf), "DELETE FROM %s WHERE remembered=%ld", table_names[table_idx], idx);
-        mysql_wrapper(mysql, buf);
+        snprintf(buf, sizeof(buf), "DELETE FROM %s WHERE idnum=%ld OR remembered=%ld", table_names[table_idx], idx, idx);
       }
-      snprintf(buf, sizeof(buf), "DELETE FROM %s WHERE idnum=%ld", table_names[table_idx], idx);
+      else if (table_idx == PFILES_IGNORE_V2_INDEX) {
+        snprintf(buf, sizeof(buf), "DELETE FROM %s WHERE idnum=%ld OR vict_idnum=%ld", table_names[table_idx], idx, idx);
+      }
+      else {
+        snprintf(buf, sizeof(buf), "DELETE FROM %s WHERE idnum=%ld", table_names[table_idx], idx);
+      }
       mysql_wrapper(mysql, buf);
     }
   }
@@ -2093,18 +2141,20 @@ void DeleteChar(long idx)
   // Update playergroup info, write a log, and delete their info and invitations.
   snprintf(buf, sizeof(buf), "SELECT `group` FROM pfiles_playergroups WHERE idnum=%ld", idx);
   mysql_wrapper(mysql, buf);
-  res = mysql_use_result(mysql);
-  if ((row = mysql_fetch_row(res))) {
-    mysql_free_result(res);
-    char *cname = get_player_name(idx);
-    snprintf(buf, sizeof(buf), "INSERT INTO pgroup_logs (idnum, message) VALUES (%ld, \"%s has left the group. (Reason: deletion)\")", atol(row[0]), cname);
-    delete [] cname;
-    mysql_wrapper(mysql, buf);
-    snprintf(buf, sizeof(buf), "DELETE FROM pfiles_playergroups WHERE idnum=%ld", idx);
-    mysql_wrapper(mysql, buf);
-  } else {
-    mysql_free_result(res);
+  if ((res = mysql_use_result(mysql))) {
+    if ((row = mysql_fetch_row(res))) {
+      mysql_free_result(res);
+      char *cname = get_player_name(idx);
+      snprintf(buf, sizeof(buf), "INSERT INTO pgroup_logs (idnum, message) VALUES (%ld, \"%s has left the group. (Reason: deletion)\")", atol(row[0]), cname);
+      delete [] cname;
+      mysql_wrapper(mysql, buf);
+      snprintf(buf, sizeof(buf), "DELETE FROM pfiles_playergroups WHERE idnum=%ld", idx);
+      mysql_wrapper(mysql, buf);
+    } else {
+      mysql_free_result(res);
+    }
   }
+
   snprintf(buf, sizeof(buf), "DELETE FROM playergroup_invitations WHERE idnum=%ld", idx);
   mysql_wrapper(mysql, buf);
 
@@ -2112,6 +2162,9 @@ void DeleteChar(long idx)
   snprintf(buf, sizeof(buf), "UPDATE pfiles SET Name='%s', Password='', NoDelete=TRUE WHERE idnum=%ld", CHARACTER_DELETED_NAME_FOR_SQL, idx);
 //  snprintf(buf, sizeof(buf), "DELETE FROM pfiles WHERE idnum=%ld", idx);
   mysql_wrapper(mysql, buf);
+
+  // Drop them from the ignore lists of in-game players.
+  globally_remove_vict_id_from_logged_in_ignore_lists(idx);
 }
 
 void idle_delete()
@@ -2126,22 +2179,25 @@ void idle_delete()
   }
   snprintf(buf, sizeof(buf), "SELECT idnum, lastd, tke FROM pfiles WHERE lastd <= %ld AND nodelete = 0 AND name != '%s' ORDER BY lastd ASC;", time(0) - (SECS_PER_REAL_DAY * 50), CHARACTER_DELETED_NAME_FOR_SQL);
   mysql_wrapper(mysqlextra, buf);
-  MYSQL_RES *res = mysql_use_result(mysqlextra);
+  MYSQL_RES *res;
   MYSQL_ROW row;
-  while ((row = mysql_fetch_row(res))) {
+
+  if ((res = mysql_use_result(mysqlextra))) {
+    while ((row = mysql_fetch_row(res))) {
 #ifndef IDLEDELETE_DRYRUN
-		// TODO: Increase idle deletion leniency time by their TKE.
-    int tke = atoi(row[2]);
-    time_t lastd = atoi(row[1]);
-    if (lastd < (time(0) - (SECS_PER_REAL_DAY * (50 + (tke / 5))))) {
-      DeleteChar(atol(row[0]));
-      deleted++;
-    }
+      int tke = atoi(row[2]);
+      time_t lastd = atoi(row[1]);
+      if (lastd < (time(0) - (SECS_PER_REAL_DAY * (50 + (tke / NUMBER_OF_TKE_POINTS_PER_REAL_DAY_OF_EXTRA_IDLE_DELETE_GRACE_PERIOD))))) {
+        DeleteChar(atol(row[0]));
+        deleted++;
+      }
 #else
-    log_vfprintf("IDLEDELETE- Would delete %s, but IDLEDELETE_DRYRUN is enabled.", row[0]);
+      log_vfprintf("IDLEDELETE- Would delete %s, but IDLEDELETE_DRYRUN is enabled.", row[0]);
 #endif
+    }
+    mysql_free_result(res);
   }
-  mysql_free_result(res);
+
   mysql_close(mysqlextra);
   snprintf(buf, sizeof(buf), "IDLEDELETE- %d Deleted.", deleted);
   log(buf);
@@ -2156,23 +2212,48 @@ void verify_db_password_column_size() {
   if (strncmp(row[1], "varchar(200)", sizeof("varchar(200)")) != 0) {
     log("FATAL ERROR: Your pfiles table's password column needs to be reconfigured.");
     log("Execute this command on your database:  ALTER TABLE `pfiles` MODIFY `Password` VARCHAR(200);");
-    exit(1);
+    exit(ERROR_DATABASE_CHANGES_NEEDED);
   }
   mysql_free_result(res);
 }
 
-void auto_repair_obj(struct obj_data *obj, const char *source) {
+#define CLAMP_VALUE(itemtype, field, minv, maxv, fieldname)                                                            \
+prior_data = (field);                                                                                                  \
+(field) = MIN((maxv), MAX((minv), (field)));                                                                           \
+if (prior_data != (field)) {                                                                                           \
+  snprintf(buf, sizeof(buf), "INFO: System self-healed " #itemtype " %s (%ld), whose " #fieldname " was %d (now %d).", \
+           GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj), prior_data, field);                                                   \
+  mudlog(buf, obj->carried_by, LOG_SYSLOG, TRUE);                                                                      \
+}
+
+#define FORCE_PROTO_VALUE(itemtype, value, proto_value)                                                                \
+if (proto_value != value) {                                                                                            \
+  snprintf(buf, sizeof(buf), "INFO: System self-healed " #itemtype " %s (%ld), whose " #value  " was %d (becomes %d)", \
+           GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj), value, proto_value);                                                  \
+  mudlog(buf, obj->carried_by, LOG_SYSLOG, TRUE);                                                                      \
+  value = proto_value;                                                                                                 \
+}
+
+void auto_repair_obj(struct obj_data *obj) {
   // Go through its contents first and rectify them.
-  char source_extd[1000];
-  snprintf(source_extd, sizeof(source_extd), "%s (nested)", source);
   for (struct obj_data *contents = obj->contains; contents; contents = contents->next_content) {
-    auto_repair_obj(contents, source_extd);
+    auto_repair_obj(contents);
   }
 
-  int rnum, old_storage;
+  int old_storage;
+  int rnum = real_object(GET_OBJ_VNUM(obj));
+
+  if (rnum < 0) {
+    mudlog("SYSERR: Received INVALID rnum when loading object!", NULL, LOG_SYSLOG, TRUE);
+    return;
+  }
+
+  // We rely on the object type being set correctly for further code, so we must force-rectify it.
+  if (GET_OBJ_SPEC(obj) != weapon_dominator)
+    FORCE_PROTO_VALUE("all", GET_OBJ_TYPE(obj), GET_OBJ_TYPE(&obj_proto[rnum]));
 
   // Now that any changes have bubbled up, rectify this object too.
-  switch(GET_OBJ_TYPE(obj)) {
+  switch (GET_OBJ_TYPE(obj)) {
     case ITEM_CYBERDECK:
       // Rectify the memory.
       old_storage = GET_CYBERDECK_USED_STORAGE(obj);
@@ -2199,73 +2280,54 @@ void auto_repair_obj(struct obj_data *obj, const char *source) {
         mudlog(buf, obj->carried_by, LOG_SYSLOG, TRUE);
       }
       break;
+    case ITEM_FOCUS:
+      FORCE_PROTO_VALUE("focus", GET_FOCUS_TYPE(obj), GET_FOCUS_TYPE(&obj_proto[rnum]));
+      FORCE_PROTO_VALUE("focus", GET_FOCUS_FORCE(obj), GET_FOCUS_FORCE(&obj_proto[rnum]));
+      break;
     case ITEM_WEAPON:
       {
+        // We perform extensive clamping and checks on weapons due to prior issues with corrupted weapon data.
         int prior_data;
 
-        // We perform extensive clamping and checks on weapons due to prior issues with corrupted weapon data.
-        #define CLAMP_WEAPON_VALUE(field, minv, maxv, fieldname)                                                        \
-        prior_data = (field);                                                                                           \
-        (field) = MIN((maxv), MAX((minv), (field)));                                                                    \
-        if (prior_data != (field)) {                                                                                    \
-          snprintf(buf, sizeof(buf), "INFO: System self-healed weapon %s (%ld), whose " #fieldname " was %d (now %d).", \
-                   GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj), prior_data, field);                                            \
-          mudlog(buf, obj->carried_by, LOG_SYSLOG, TRUE);                                                               \
-        }
-
-        #define FORCE_PROTO_VALUE(value, proto_value)                                                                   \
-        if (proto_value != value) {                                                                                     \
-          snprintf(buf, sizeof(buf), "INFO: System self-healed weapon %s (%ld), whose " #value  " was %d (becomes %d)", \
-                   GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj), value, proto_value);                                           \
-          mudlog(buf, obj->carried_by, LOG_SYSLOG, TRUE);                                                               \
-          value = proto_value;                                                                                          \
-        }
-
-        rnum = real_object(GET_OBJ_VNUM(obj));
-
-        if (rnum < 0) {
-          mudlog("SYSERR: Received INVALID rnum when loading object!", NULL, LOG_SYSLOG, TRUE);
-          return;
-        }
-
-        FORCE_PROTO_VALUE(GET_WEAPON_POWER(obj), GET_WEAPON_POWER(&obj_proto[rnum]));
-        FORCE_PROTO_VALUE(GET_WEAPON_DAMAGE_CODE(obj), GET_WEAPON_DAMAGE_CODE(&obj_proto[rnum]));
-        FORCE_PROTO_VALUE(GET_WEAPON_STR_BONUS(obj), GET_WEAPON_STR_BONUS(&obj_proto[rnum]));
-        FORCE_PROTO_VALUE(GET_WEAPON_ATTACK_TYPE(obj), GET_WEAPON_ATTACK_TYPE(&obj_proto[rnum]));
-        FORCE_PROTO_VALUE(GET_WEAPON_SKILL(obj), GET_WEAPON_SKILL(&obj_proto[rnum]));
+        FORCE_PROTO_VALUE("weapon", GET_WEAPON_POWER(obj), GET_WEAPON_POWER(&obj_proto[rnum]));
+        FORCE_PROTO_VALUE("weapon", GET_WEAPON_DAMAGE_CODE(obj), GET_WEAPON_DAMAGE_CODE(&obj_proto[rnum]));
+        FORCE_PROTO_VALUE("weapon", GET_WEAPON_STR_BONUS(obj), GET_WEAPON_STR_BONUS(&obj_proto[rnum]));
+        FORCE_PROTO_VALUE("weapon", GET_WEAPON_ATTACK_TYPE(obj), GET_WEAPON_ATTACK_TYPE(&obj_proto[rnum]));
+        FORCE_PROTO_VALUE("weapon", GET_WEAPON_SKILL(obj), GET_WEAPON_SKILL(&obj_proto[rnum]));
 
         if (IS_GUN(GET_WEAPON_ATTACK_TYPE(obj))) {
-          FORCE_PROTO_VALUE(GET_WEAPON_MAX_AMMO(obj), GET_WEAPON_MAX_AMMO(&obj_proto[rnum]));
-          FORCE_PROTO_VALUE(GET_WEAPON_POSSIBLE_FIREMODES(obj), GET_WEAPON_POSSIBLE_FIREMODES(&obj_proto[rnum]));
-          FORCE_PROTO_VALUE(GET_WEAPON_INTEGRAL_RECOIL_COMP(obj), GET_WEAPON_INTEGRAL_RECOIL_COMP(&obj_proto[rnum]));
+          FORCE_PROTO_VALUE("weapon", GET_WEAPON_MAX_AMMO(obj), GET_WEAPON_MAX_AMMO(&obj_proto[rnum]));
+          FORCE_PROTO_VALUE("weapon", GET_WEAPON_POSSIBLE_FIREMODES(obj), GET_WEAPON_POSSIBLE_FIREMODES(&obj_proto[rnum]));
+          FORCE_PROTO_VALUE("weapon", GET_WEAPON_INTEGRAL_RECOIL_COMP(obj), GET_WEAPON_INTEGRAL_RECOIL_COMP(&obj_proto[rnum]));
 
-          CLAMP_WEAPON_VALUE(GET_WEAPON_FIREMODE(obj), MODE_SS, MODE_FA, "firemode");
-          CLAMP_WEAPON_VALUE(GET_WEAPON_FULL_AUTO_COUNT(obj), 0, 10, "full auto count");
+          CLAMP_VALUE("weapon", GET_WEAPON_FIREMODE(obj), MODE_SS, MODE_FA, "firemode");
+          CLAMP_VALUE("weapon", GET_WEAPON_FULL_AUTO_COUNT(obj), 0, 10, "full auto count");
 
           int attach_rnum;
 
           if (GET_WEAPON_ATTACH_TOP_VNUM(obj) != 0) {
             attach_rnum = real_object(GET_WEAPON_ATTACH_TOP_VNUM(obj));
             if (attach_rnum < 0 || GET_OBJ_TYPE(&obj_proto[attach_rnum]) != ITEM_GUN_ACCESSORY) {
-              FORCE_PROTO_VALUE(GET_WEAPON_ATTACH_TOP_VNUM(obj), GET_WEAPON_ATTACH_TOP_VNUM(&obj_proto[rnum]));
+              FORCE_PROTO_VALUE("weapon", GET_WEAPON_ATTACH_TOP_VNUM(obj), GET_WEAPON_ATTACH_TOP_VNUM(&obj_proto[rnum]));
             }
           }
 
           if (GET_WEAPON_ATTACH_BARREL_VNUM(obj) != 0) {
             attach_rnum = real_object(GET_WEAPON_ATTACH_BARREL_VNUM(obj));
             if (attach_rnum < 0 || GET_OBJ_TYPE(&obj_proto[attach_rnum]) != ITEM_GUN_ACCESSORY) {
-              FORCE_PROTO_VALUE(GET_WEAPON_ATTACH_BARREL_VNUM(obj), GET_WEAPON_ATTACH_BARREL_VNUM(&obj_proto[rnum]));
+              FORCE_PROTO_VALUE("weapon", GET_WEAPON_ATTACH_BARREL_VNUM(obj), GET_WEAPON_ATTACH_BARREL_VNUM(&obj_proto[rnum]));
             }
           }
 
           if (GET_WEAPON_ATTACH_UNDER_VNUM(obj) != 0) {
             attach_rnum = real_object(GET_WEAPON_ATTACH_UNDER_VNUM(obj));
             if (attach_rnum < 0 || GET_OBJ_TYPE(&obj_proto[attach_rnum]) != ITEM_GUN_ACCESSORY) {
-              FORCE_PROTO_VALUE(GET_WEAPON_ATTACH_UNDER_VNUM(obj), GET_WEAPON_ATTACH_UNDER_VNUM(&obj_proto[rnum]));
+              FORCE_PROTO_VALUE("weapon", GET_WEAPON_ATTACH_UNDER_VNUM(obj), GET_WEAPON_ATTACH_UNDER_VNUM(&obj_proto[rnum]));
             }
           }
         } else {
-          FORCE_PROTO_VALUE(GET_WEAPON_REACH(obj), GET_WEAPON_REACH(&obj_proto[rnum]));
+          FORCE_PROTO_VALUE("weapon", GET_WEAPON_REACH(obj), GET_WEAPON_REACH(&obj_proto[rnum]));
+          FORCE_PROTO_VALUE("weapon", GET_WEAPON_FOCUS_RATING(obj), GET_WEAPON_FOCUS_RATING(&obj_proto[rnum]));
         }
 
         // Warn on any non-magazine items. I would dump them out, but the weapon is currently in the void waiting to be placed somewhere.
@@ -2273,7 +2335,7 @@ void auto_repair_obj(struct obj_data *obj, const char *source) {
         for (struct obj_data *contents = obj->contains; contents; contents = next) {
           next = contents->next_content;
           if (GET_OBJ_TYPE(contents) != ITEM_GUN_MAGAZINE) {
-            snprintf(buf, sizeof(buf), "^RSYSERR^g: While loading weapon %s in %s, came across non-magazine object contained by it. [OBJ_LOAD_ERROR_GREP_STRING]", GET_OBJ_NAME(obj), source);
+            snprintf(buf, sizeof(buf), "^RSYSERR^g: While loading weapon %s, came across non-magazine object contained by it. [OBJ_LOAD_ERROR_GREP_STRING]", GET_OBJ_NAME(obj));
             mudlog(buf, NULL, LOG_SYSLOG, TRUE);
             const char *representation = generate_new_loggable_representation(obj);
             mudlog(representation, NULL, LOG_SYSLOG, TRUE);
@@ -2284,8 +2346,47 @@ void auto_repair_obj(struct obj_data *obj, const char *source) {
       }
 
       break;
+    case ITEM_WORKSHOP:
+      FORCE_PROTO_VALUE("workshop", GET_WORKSHOP_TYPE(obj), GET_WORKSHOP_TYPE(&obj_proto[rnum]));
+      FORCE_PROTO_VALUE("workshop", GET_WORKSHOP_GRADE(obj), GET_WORKSHOP_GRADE(&obj_proto[rnum]));
+      // Repair ammo kit values to fix the ones that were "unpacked"
+      if (GET_WORKSHOP_TYPE(obj) == TYPE_GUNSMITHING && GET_WORKSHOP_GRADE(obj) == TYPE_KIT)
+        FORCE_PROTO_VALUE("ammo kit", GET_WORKSHOP_AMMOKIT_TYPE(obj), GET_WORKSHOP_AMMOKIT_TYPE(&obj_proto[rnum]));
+      break;
+    case ITEM_WORN:
+    /*  // Edit: Don't do this, you end up giving people infinite pockets.
+      FORCE_PROTO_VALUE("worn", GET_WORN_POCKETS_HOLSTERS(obj), GET_WORN_POCKETS_HOLSTERS(&obj_proto[rnum]));
+      FORCE_PROTO_VALUE("worn", GET_WORN_POCKETS_MISC(obj), GET_WORN_POCKETS_MISC(&obj_proto[rnum]));
+    */
+      FORCE_PROTO_VALUE("worn", GET_WORN_BALLISTIC(obj), GET_WORN_BALLISTIC(&obj_proto[rnum]));
+      FORCE_PROTO_VALUE("worn", GET_WORN_IMPACT(obj), GET_WORN_IMPACT(&obj_proto[rnum]));
+      FORCE_PROTO_VALUE("worn", GET_WORN_CONCEAL_RATING(obj), GET_WORN_CONCEAL_RATING(&obj_proto[rnum]));
+      FORCE_PROTO_VALUE("worn", GET_WORN_MATCHED_SET(obj), GET_WORN_MATCHED_SET(&obj_proto[rnum]));
+      break;
+    case ITEM_DOCWAGON:
+      FORCE_PROTO_VALUE("docwagon modulator", GET_DOCWAGON_CONTRACT_GRADE(obj), GET_DOCWAGON_CONTRACT_GRADE(&obj_proto[rnum]));
+      break;
+    case ITEM_BIOWARE:
+      FORCE_PROTO_VALUE("bioware", GET_BIOWARE_TYPE(obj), GET_BIOWARE_TYPE(&obj_proto[rnum]));
+      FORCE_PROTO_VALUE("bioware", GET_BIOWARE_RATING(obj), GET_BIOWARE_RATING(&obj_proto[rnum]));
+      FORCE_PROTO_VALUE("bioware", GET_SETTABLE_BIOWARE_IS_CULTURED(obj), GET_SETTABLE_BIOWARE_IS_CULTURED(&obj_proto[rnum]));
+      FORCE_PROTO_VALUE("bioware", GET_BIOWARE_ESSENCE_COST(obj), GET_BIOWARE_ESSENCE_COST(&obj_proto[rnum]));
+      break;
+    case ITEM_CYBERWARE:
+      FORCE_PROTO_VALUE("cyberware", GET_CYBERWARE_TYPE(obj), GET_CYBERWARE_TYPE(&obj_proto[rnum]));
+      FORCE_PROTO_VALUE("cyberware", GET_CYBERWARE_RATING(obj), GET_CYBERWARE_RATING(&obj_proto[rnum]));
+      FORCE_PROTO_VALUE("cyberware", GET_CYBERWARE_GRADE(obj), GET_CYBERWARE_GRADE(&obj_proto[rnum]));
+      FORCE_PROTO_VALUE("cyberware", GET_CYBERWARE_ESSENCE_COST(obj), GET_CYBERWARE_ESSENCE_COST(&obj_proto[rnum]));
+      break;
+    case ITEM_GUN_ACCESSORY:
+      FORCE_PROTO_VALUE("gun accessory", GET_ACCESSORY_ATTACH_LOCATION(obj), GET_ACCESSORY_ATTACH_LOCATION(&obj_proto[rnum]));
+      FORCE_PROTO_VALUE("gun accessory", GET_ACCESSORY_TYPE(obj), GET_ACCESSORY_TYPE(&obj_proto[rnum]));
+      FORCE_PROTO_VALUE("gun accessory", GET_ACCESSORY_RATING(obj), GET_ACCESSORY_RATING(&obj_proto[rnum]));
+      break;
   }
 }
+#undef CLAMP_VALUE
+#undef FORCE_PROTO_VALUE
 
 // Allows you to supply an email address.
 ACMD(do_register) {

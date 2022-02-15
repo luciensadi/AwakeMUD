@@ -56,13 +56,14 @@ struct cyberware_data {
   int improved_handrazors;
   int handspurs;
   int footanchors;
+  bool cyberarms;
   int bone_lacing_power;
   int num_cyberweapons;
   bool cyberarm_gyromount;
 
   cyberware_data(struct char_data *ch) :
     climbingclaws(0), fins(0), handblades(0), handrazors(0), improved_handrazors(0),
-    handspurs(0), footanchors(0), bone_lacing_power(0), num_cyberweapons(0),
+    handspurs(0), footanchors(0), cyberarms(FALSE), bone_lacing_power(0), num_cyberweapons(0),
     cyberarm_gyromount(FALSE)
   {
     assert(ch != NULL);
@@ -83,6 +84,7 @@ struct cyberware_data {
             break;
         }
       } else if (GET_CYBERWARE_TYPE(obj) == CYB_ARMS) {
+        cyberarms = TRUE;
         if (IS_SET(GET_CYBERWARE_FLAGS(obj), ARMS_MOD_GYROMOUNT)) {
           cyberarm_gyromount = TRUE;
         }
@@ -239,7 +241,7 @@ struct melee_combat_data {
 
         // Weapon foci. NPC use them implicitly.
         if (IS_NPC(ch) || WEAPON_FOCUS_USABLE_BY(weapon, ch)) {
-          skill_bonus = std::min(4, GET_WEAPON_FOCUS_RATING(weapon));
+          skill_bonus = MIN(4, GET_WEAPON_FOCUS_RATING(weapon));
         }
       }
     } else if (cyber->num_cyberweapons > 0) {
@@ -296,6 +298,11 @@ struct melee_combat_data {
         power += cyber->bone_lacing_power;
         damage_level = MODERATE;
         is_physical = FALSE;
+      }
+
+      // Add +2 to unarmed attack power for having cyberarms, per M&M p32.
+      if (cyber->cyberarms) {
+        power += 2;
       }
 
       // Check for Adept powers.
@@ -381,6 +388,7 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
   struct combat_data *def = &defender_data;
 
   char rbuf[MAX_STRING_LENGTH];
+  memset(rbuf, 0, sizeof(rbuf));
 
   // Short-circuit: If you're wielding an activated Dominator, you don't care about all these pesky rules.
   if (att->weapon && GET_OBJ_SPEC(att->weapon) == weapon_dominator) {
@@ -1147,18 +1155,31 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
 
   int damage_total = convert_damage(staged_damage);
 
-  snprintf(rbuf, sizeof(rbuf), "^CBod dice %d, attack power after armor %d, BodSuc %d, ResSuc %d: Dam %s->%s. %d%c.^n",
-          bod,
-          att->ranged_combat_mode ? att->ranged->power : att->melee->power,
-          bod_success,
-          att->ranged_combat_mode ? att->ranged->successes : att->melee->successes,
-          wound_name[MIN(DEADLY, MAX(0, (att->ranged_combat_mode ? att->ranged->damage_level : att->melee->damage_level)))],
-          wound_name[MIN(DEADLY, MAX(0, staged_damage))],
-          damage_total,
-          (att->ranged_combat_mode ? att->ranged->is_physical : att->melee->is_physical) ? 'P' : 'M');
-  SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
+  {
+    int net_attack_power = att->ranged_combat_mode ? att->ranged->power : att->melee->power;
+    int net_successes = att->ranged_combat_mode ? att->ranged->successes : att->melee->successes;
+    int damage_level = att->ranged_combat_mode ? att->ranged->damage_level : att->melee->damage_level;
+    bool damage_is_physical = att->ranged_combat_mode ? att->ranged->is_physical : att->melee->is_physical;
 
-  bool defender_died;
+    snprintf(rbuf, sizeof(rbuf), "^cDefender rolls %d bod dice vs TN %d, getting %d success%s; attacker now has %d net success%s.\r\n^CDamage stages from %s(%d) to %s(%d), aka %d boxes of %c.^n",
+             bod,  // bod dice
+             net_attack_power,  // TN
+             bod_success, // success
+             bod_success == 1 ? "" : "es", // success plural
+             net_successes, // net success
+             net_successes == 1 ? "" : "es", // net success plural
+             GET_WOUND_NAME(damage_level), // damage stage from (word)
+             damage_level, // damage stage from (int)
+             GET_WOUND_NAME(staged_damage), // damage stage to (word)
+             staged_damage, // damage stage to (int)
+             damage_total, // actual boxes of damage done
+             damage_is_physical ? 'P' : 'M' // mental or physical
+            );
+    SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
+  }
+
+
+  bool defender_died, defender_was_npc = IS_NPC(def->ch);
   if (att->ranged_combat_mode) {
     combat_message(att->ch, def->ch, att->weapon, MAX(0, damage_total), att->ranged->burst_count);
     defender_died = damage_without_message(att->ch, def->ch, damage_total, att->ranged->dam_type, att->ranged->is_physical);
@@ -1208,7 +1229,7 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
 
   if (defender_died) {
     // Fixes edge case where attacking quest NPC kills its hunter with a heavy weapon, is extracted, then tries to check recoil.
-    if (!IS_NPC(def->ch))
+    if (!defender_was_npc)
       return;
     // Clear out the defending character's pointer since it now points to a nulled character struct.
     else
@@ -1236,7 +1257,7 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     //prior to handling the damage and we don't alter alert state at all because if defender is a quest target
     //they will be extracted. If the attacker actually dies and it's a normal mob, they won't be surprised anymore
     //and alertness will trickle down on its own with update cycles.
-    if (IS_NPC(def->ch) && AFF_FLAGGED(def->ch, AFF_SURPRISE))
+    if (!defender_died && IS_NPC(def->ch) && AFF_FLAGGED(def->ch, AFF_SURPRISE))
       AFF_FLAGS(def->ch).RemoveBit(AFF_SURPRISE);
 
     // If the attacker dies from recoil, bail out.

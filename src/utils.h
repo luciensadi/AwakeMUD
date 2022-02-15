@@ -63,7 +63,7 @@ char *  decapitalize_a_an(const char *source);
 char *  string_to_uppercase(const char *source);
 char *  string_to_lowercase(const char *source);
 int     get_speed(struct veh_data *veh);
-int     negotiate(struct char_data *ch, struct char_data *tch, int comp, int basevalue, int mod, bool buy);
+int     negotiate(struct char_data *ch, struct char_data *tch, int comp, int basevalue, int mod, bool buy, bool include_metavariant_penalty=1);
 float   gen_size(int race, bool height, int size, int sex);
 int     get_skill(struct char_data *ch, int skill, int &target);
 void    add_follower(struct char_data *ch, struct char_data *leader);
@@ -112,6 +112,10 @@ bool    can_damage_vehicle(struct char_data *ch, struct veh_data *veh);
 char *  compose_spell_name(int type, int subtype = -1);
 bool    obj_contains_kept_items(struct obj_data *obj);
 void    send_gamewide_annoucement(const char *msg, bool prepend_announcement_string);
+char *  get_printable_mob_unique_id(struct char_data *ch);
+bool    mob_unique_id_matches(mob_unique_id_t id1, mob_unique_id_t id2);
+void    set_new_mobile_unique_id(struct char_data *ch);
+int     return_general(int skill_num);
 
 // Skill-related.
 char *how_good(int skill, int rank);
@@ -226,7 +230,7 @@ void    update_pos(struct char_data *victim);
  if ((number) * sizeof(type) <= 0) \
   log_vfprintf("SYSERR: Zero bytes or less requested at %s:%d.", __FILE__, __LINE__); \
  if (!((result) = (type *) calloc ((number), sizeof(type)))) \
-  { perror("SYSERR: malloc failure"); exit(1); } } while(0)
+  { perror("SYSERR: malloc failure"); exit(ERROR_MALLOC_FAILED_IN_CREATE_MACRO); } } while(0)
 
 /*
  * the source previously used the same code in many places to remove an item
@@ -266,15 +270,14 @@ void    update_pos(struct char_data *victim);
 #define ROOM_FLAGS(loc) ((loc)->room_flags)
 
 #define IS_NPC(ch)  (MOB_FLAGS(ch).IsSet(MOB_ISNPC))
-#define IS_MOB(ch)  (IS_NPC(ch) && ((ch)->nr >-1))
+#define IS_MOB(ch)  (IS_NPC(ch) && (GET_MOB_RNUM((ch)) >-1))
 #define IS_PROJECT(ch) (IS_NPC(ch) && ch->desc && ch->desc->original && \
   PLR_FLAGS(ch->desc->original).IsSet(PLR_PROJECT) && \
   GET_MOB_VNUM(ch) == 22)
 #define IS_SPIRIT(ch) (IS_NPC(ch) && GET_RACE(ch) == RACE_SPIRIT)
 #define IS_ELEMENTAL(ch) (IS_NPC(ch) && GET_RACE(ch) == RACE_ELEMENTAL)
-#define IS_ASTRAL(ch) (IS_NPC(ch) && MOB_FLAGS(ch).IsSet(MOB_ASTRAL))
-#define IS_DUAL(ch)   ((IS_NPC(ch) && MOB_FLAGS(ch).IsSet(MOB_DUAL_NATURE)) || \
-               (!IS_NPC(ch) && (PLR_FLAGS(ch).IsSet(PLR_PERCEIVE) || access_level(ch, LVL_ADMIN))))
+#define IS_ASTRAL(ch) (MOB_FLAGGED(ch, MOB_ASTRAL) || IS_PROJECT(ch))
+#define IS_DUAL(ch)   (MOB_FLAGGED(ch, MOB_DUAL_NATURE) || PLR_FLAGGED(ch, PLR_PERCEIVE) || access_level(ch, LVL_ADMIN))
 #define IS_SENATOR(ch) (access_level((ch), LVL_BUILDER))
 
 // ONLY for use on non-Bitfield bitvectors:
@@ -455,6 +458,7 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define GET_POS(ch)             ((ch)->char_specials.position)
 #define GET_DEFPOS(ch)          ((ch)->char_specials.defined_position)
 #define GET_IDNUM(ch)           ((ch)->char_specials.idnum)
+#define GET_IDNUM_EVEN_IF_PROJECTING(ch)  ((((ch) && (ch)->desc && (ch)->desc->original) ? (ch)->desc->original : (ch))->char_specials.idnum)
 #define IS_CARRYING_W(ch)       ((ch)->char_specials.carry_weight)
 #define IS_CARRYING_N(ch)       ((ch)->char_specials.carry_items)
 #define FIGHTING(ch)            ((ch)->char_specials.fighting)
@@ -521,7 +525,6 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define GET_PROMPT(ch)          ((PLR_FLAGGED((ch), PLR_MATRIX) ? (ch)->player.matrixprompt : (ch)->player.prompt))
 #define GET_ALIASES(ch)         ((ch)->desc && (ch)->desc->original ? (ch)->desc->original->player_specials->aliases : (ch)->player_specials->aliases)
 #define GET_PLAYER_MEMORY(ch)   ((ch)->player_specials->remem)
-#define GET_IGNORE(ch)		((ch)->player_specials->ignored)
 #define GET_LAST_TELL(ch)	((ch)->player_specials->last_tell)
 #define GET_LAST_DAMAGETIME(ch)	((ch)->points.lastdamage)
 #define HOURS_LEFT_TRACK(ch)	((ch)->points.track[0])
@@ -572,12 +575,14 @@ int get_armor_penalty_grade(struct char_data *ch);
 
 #define GET_CONGREGATION_BONUS(ch) ((ch)->congregation_bonus_pool)
 
-#define GET_MOB_SPEC(ch)       (IS_MOB(ch) ? (mob_index[(ch->nr)].func) : NULL)
-#define GET_MOB_SPEC2(ch)      (IS_MOB(ch) ? (mob_index[(ch->nr)].sfunc) : NULL)
-
 #define GET_MOB_RNUM(mob)       ((mob)->nr)
 #define GET_MOB_VNUM(mob)       (IS_MOB(mob) ? mob_index[GET_MOB_RNUM(mob)].vnum : -1)
 #define MOB_VNUM_RNUM(rnum) ((mob_index[rnum]).vnum)
+#define GET_MOB_UNIQUE_ID(mob)  ((mob)->unique_id)
+
+#define GET_MOB_SPEC(ch)       (IS_MOB(ch) ? (mob_index[GET_MOB_RNUM((ch))].func) : NULL)
+#define GET_MOB_SPEC2(ch)      (IS_MOB(ch) ? (mob_index[GET_MOB_RNUM((ch))].sfunc) : NULL)
+#define MOB_HAS_SPEC(ch, spec) (mob_index[GET_MOB_RNUM((ch))].func == spec || mob_index[GET_MOB_RNUM((ch))].sfunc == spec)
 
 #define GET_MOB_WAIT(ch)      ((ch)->mob_specials.wait_state)
 #define GET_DEFAULT_POS(ch)   ((ch)->mob_specials.default_pos)
@@ -678,6 +683,8 @@ float get_proto_weight(struct obj_data *obj);
 #define IS_WEAPON(type) (((type) >= TYPE_HIT) && ((type) < TYPE_SUFFERING))
 #define IS_GUN(type) ((((type) >= WEAP_HOLDOUT) && ((type) < WEAP_GREN_LAUNCHER)) || (type) == WEAP_REVOLVER)
 
+#define IS_MONOWHIP(obj) (GET_OBJ_RNUM((obj)) >= 0 && obj_index[GET_OBJ_RNUM((obj))].wfunc == monowhip)
+
 // Give this a weapon type straight from the weapon-- ex WEAP_SMG. It will convert it for you.
 #define GET_BULLETPANTS_AMMO_AMOUNT(ch, weapon_type, ammo_type) ((ch)->bullet_pants[(weapon_type) - START_OF_AMMO_USING_WEAPONS][(ammo_type)])
 
@@ -710,16 +717,16 @@ bool LIGHT_OK_ROOM_SPECIFIED(struct char_data *sub, struct room_data *room);
 bool CAN_SEE(struct char_data *subj, struct char_data *obj);
 bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struct room_data *room_specified);
 
+#define CHAR_ONLY_SEES_VICT_WITH_ULTRASOUND(ch, vict) (ch != vict && (IS_AFFECTED((vict), AFF_IMP_INVIS) || IS_AFFECTED((vict), AFF_SPELLIMPINVIS)) && !(IS_DUAL((ch)) || IS_PROJECT((ch)) || IS_ASTRAL((ch))))
+
 #define INVIS_OK_OBJ(sub, obj) (!IS_OBJ_STAT((obj), ITEM_INVISIBLE) || \
-   IS_AFFECTED((sub), AFF_DETECT_INVIS) || IS_ASTRAL(sub) || \
+   IS_AFFECTED((sub), AFF_ULTRASOUND) || IS_ASTRAL(sub) || \
    IS_DUAL(sub) || HOLYLIGHT_OK(sub))
 
 #define CAN_SEE_CARRIER(sub, obj) \
-   ((!(obj)->carried_by || CAN_SEE((sub), (obj)->carried_by)) && \
-    (!(obj)->worn_by || CAN_SEE((sub), (obj)->worn_by)))
+   ((!(obj)->carried_by || CAN_SEE((sub), (obj)->carried_by)) || (!(obj)->worn_by || CAN_SEE((sub), (obj)->worn_by)))
 
-#define CAN_SEE_OBJ(sub, obj) (LIGHT_OK(sub) && \
-   INVIS_OK_OBJ((sub), (obj)) && CAN_SEE_CARRIER((sub), (obj)))
+#define CAN_SEE_OBJ(sub, obj) (LIGHT_OK(sub) && INVIS_OK_OBJ((sub), (obj)) && CAN_SEE_CARRIER((sub), (obj)))
 
 #define CAN_CARRY_OBJ(ch,obj)  \
    (((IS_CARRYING_W(ch) + GET_OBJ_WEIGHT(obj)) <= CAN_CARRY_W(ch)) &&   \
@@ -877,20 +884,29 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 #define GET_DRUG_TYPE(part)                        (GET_OBJ_VAL((part), 0))
 
 // ITEM_WORN convenience defines
-#define GET_WORN_POCKETS_HOLSTERS(worn)        (GET_OBJ_VAL((worn), 0))
-#define GET_WORN_POCKETS_MISC(worn)            (GET_OBJ_VAL((worn), 4))
-#define GET_WORN_BALLISTIC(worn)               (GET_OBJ_VAL((worn), 5))
-#define GET_WORN_IMPACT(worn)                  (GET_OBJ_VAL((worn), 6))
-#define GET_WORN_CONCEAL_RATING(worn)          (GET_OBJ_VAL((worn), 7))
-#define GET_WORN_MATCHED_SET(worn)             (GET_OBJ_VAL((worn), 8))
+#define GET_WORN_POCKETS_HOLSTERS(worn)           (GET_OBJ_VAL((worn), 0))
+#define GET_WORN_POCKETS_MISC(worn)               (GET_OBJ_VAL((worn), 4))
+#define GET_WORN_BALLISTIC(worn)                  (GET_OBJ_VAL((worn), 5))
+#define GET_WORN_IMPACT(worn)                     (GET_OBJ_VAL((worn), 6))
+#define GET_WORN_CONCEAL_RATING(worn)             (GET_OBJ_VAL((worn), 7))
+#define GET_WORN_MATCHED_SET(worn)                (GET_OBJ_VAL((worn), 8))
 
 // ITEM_OTHER convenience defines
+#define GET_VEHCONTAINER_VEH_VNUM(cont)           (GET_OBJ_VAL((cont), 1))
+#define GET_VEHCONTAINER_VEH_IDNUM(cont)          (GET_OBJ_VAL((cont), 2))
+#define GET_VEHCONTAINER_VEH_OWNER(cont)          (GET_OBJ_VAL((cont), 3))
+#define GET_VEHCONTAINER_WEIGHT(cont)             (GET_OBJ_VAL((cont), 11))
 
 // ITEM_MAGIC_TOOL convenience defines
+#define GET_MAGIC_TOOL_TYPE(tool)                 (GET_OBJ_VAL((tool), 0))
+#define GET_MAGIC_TOOL_RATING(tool)               (GET_OBJ_VAL((tool), 1))
+#define GET_MAGIC_TOOL_TOTEM_OR_ELEMENT(tool)     (GET_OBJ_VAL((tool), 2))
+#define GET_MAGIC_TOOL_OWNER(tool)                (GET_OBJ_VAL((tool), 3))
+#define GET_MAGIC_TOOL_BUILD_TIME_LEFT(tool)      (GET_OBJ_VAL((tool), 9))
 
 // ITEM_DOCWAGON convenience defines
-#define GET_DOCWAGON_CONTRACT_GRADE(modulator) (GET_OBJ_VAL((modulator), 0))
-#define GET_DOCWAGON_BONDED_IDNUM(modulator)   (GET_OBJ_VAL((modulator), 1))
+#define GET_DOCWAGON_CONTRACT_GRADE(modulator)    (GET_OBJ_VAL((modulator), 0))
+#define GET_DOCWAGON_BONDED_IDNUM(modulator)      (GET_OBJ_VAL((modulator), 1))
 
 // ITEM_CONTAINER convenience defines
 
@@ -909,17 +925,18 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 #define GET_ITEM_MONEY_CREDSTICK_ACTIVATED(money) (GET_OBJ_VAL((money), 4))
 
 // ITEM_PHONE convenience defines
-#define GET_ITEM_PHONE_NUMBER_PART_ONE(phone)  (GET_OBJ_VAL((phone), 0))
-#define GET_ITEM_PHONE_NUMBER_PART_TWO(phone)  (GET_OBJ_VAL((phone), 1))
-#define GET_ITEM_PHONE_SWITCHED_ON(phone)      (GET_OBJ_VAL((phone), 2))
-#define GET_ITEM_PHONE_RINGER_ON(phone)        (GET_OBJ_VAL((phone), 3))
+#define GET_ITEM_PHONE_NUMBER_PART_ONE(phone)     (GET_OBJ_VAL((phone), 0))
+#define GET_ITEM_PHONE_NUMBER_PART_TWO(phone)     (GET_OBJ_VAL((phone), 1))
+#define GET_ITEM_PHONE_SWITCHED_ON(phone)         (GET_OBJ_VAL((phone), 2))
+#define GET_ITEM_PHONE_RINGER_ON(phone)           (GET_OBJ_VAL((phone), 3))
 
 
 // ITEM_BIOWARE convenience defines
 
 #define GET_BIOWARE_TYPE(bioware)                 (GET_OBJ_VAL((bioware), 0))
 #define GET_BIOWARE_RATING(bioware)               (GET_OBJ_VAL((bioware), 1))
-#define GET_BIOWARE_IS_CULTURED(bioware)          (GET_OBJ_VAL((bioware), 2) || GET_BIOWARE_TYPE((bioware)) >= BIO_CEREBRALBOOSTER)
+#define GET_BIOWARE_IS_CULTURED(bioware)          (GET_OBJ_VAL((bioware), 2) || (GET_BIOWARE_TYPE((bioware)) >= BIO_CEREBRALBOOSTER && GET_BIOWARE_TYPE(bioware) <= BIO_TRAUMADAMPNER))
+#define GET_SETTABLE_BIOWARE_IS_CULTURED(bioware) (GET_OBJ_VAL((bioware), 2))
 #define GET_BIOWARE_IS_ACTIVATED(bioware)         (GET_OBJ_VAL((bioware), 3))
 #define GET_BIOWARE_ESSENCE_COST(bioware)         (GET_OBJ_VAL((bioware), 4))
 #define GET_BIOWARE_PUMP_ADRENALINE(bioware)      (GET_OBJ_VAL((bioware), 5)) //Adrenaline in the Adrenaline Pump sack. Controls duration.
@@ -929,55 +946,59 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 // ITEM_FOUNTAIN convenience defines
 
 // ITEM_CYBERWARE convenience defines
-#define GET_CYBERWARE_TYPE(cyberware)          (GET_OBJ_VAL((cyberware), 0))
-#define GET_CYBERWARE_RATING(cyberware)        (GET_OBJ_VAL((cyberware), 1))
-#define GET_CYBERWARE_GRADE(cyberware)         (GET_OBJ_VAL((cyberware), 2))
-#define GET_CYBERWARE_FLAGS(cyberware)         (GET_OBJ_VAL((cyberware), 3)) // CYBERWEAPON_RETRACTABLE, CYBERWEAPON_IMPROVED
-#define GET_CYBERWARE_LACING_TYPE(cyberware)   (GET_OBJ_VAL((cyberware), 3)) // Yes, this is also value 3. Great design here.
-#define GET_CYBERWARE_ESSENCE_COST(cyberware)  (GET_OBJ_VAL((cyberware), 4))
-#define GET_CYBERWARE_IS_DISABLED(cyberware)   (GET_OBJ_VAL((cyberware), 9))
+#define GET_CYBERWARE_TYPE(cyberware)             (GET_OBJ_VAL((cyberware), 0))
+#define GET_CYBERWARE_RATING(cyberware)           (GET_OBJ_VAL((cyberware), 1))
+#define GET_CYBERWARE_GRADE(cyberware)            (GET_OBJ_VAL((cyberware), 2))
+#define GET_CYBERWARE_FLAGS(cyberware)            (GET_OBJ_VAL((cyberware), 3)) // CYBERWEAPON_RETRACTABLE, CYBERWEAPON_IMPROVED
+#define GET_CYBERWARE_LACING_TYPE(cyberware)      (GET_OBJ_VAL((cyberware), 3)) // Yes, this is also value 3. Great design here.
+#define GET_CYBERWARE_ESSENCE_COST(cyberware)     (GET_OBJ_VAL((cyberware), 4))
+#define GET_CYBERWARE_IS_DISABLED(cyberware)      (GET_OBJ_VAL((cyberware), 9))
 
 // ITEM_CYBERDECK convenience defines
-#define GET_CYBERDECK_MPCP(deck)               (GET_OBJ_VAL((deck), 0))
-#define GET_CYBERDECK_HARDENING(deck)          (GET_OBJ_VAL((deck), 1))
-#define GET_CYBERDECK_ACTIVE_MEMORY(deck)      (GET_OBJ_VAL((deck), 2))
-#define GET_CYBERDECK_TOTAL_STORAGE(deck)      (GET_OBJ_VAL((deck), 3))
-#define GET_CYBERDECK_IO_RATING(deck)          (GET_OBJ_VAL((deck), 4))
-#define GET_CYBERDECK_USED_STORAGE(deck)       (GET_OBJ_VAL((deck), 5))
-#define GET_CYBERDECK_RESPONSE_INCREASE(deck)  (GET_OBJ_VAL((deck), 6))
-#define GET_CYBERDECK_IS_INCOMPLETE(deck)      (GET_OBJ_VAL((deck), 9))
-#define GET_CYBERDECK_FREE_STORAGE(deck)       (GET_CYBERDECK_TOTAL_STORAGE((deck)) -GET_CYBERDECK_USED_STORAGE((deck)))
+#define GET_CYBERDECK_MPCP(deck)                  (GET_OBJ_VAL((deck), 0))
+#define GET_CYBERDECK_HARDENING(deck)             (GET_OBJ_VAL((deck), 1))
+#define GET_CYBERDECK_ACTIVE_MEMORY(deck)         (GET_OBJ_VAL((deck), 2))
+#define GET_CYBERDECK_TOTAL_STORAGE(deck)         (GET_OBJ_VAL((deck), 3))
+#define GET_CYBERDECK_IO_RATING(deck)             (GET_OBJ_VAL((deck), 4))
+#define GET_CYBERDECK_USED_STORAGE(deck)          (GET_OBJ_VAL((deck), 5))
+#define GET_CYBERDECK_RESPONSE_INCREASE(deck)     (GET_OBJ_VAL((deck), 6))
+#define GET_CYBERDECK_IS_INCOMPLETE(deck)         (GET_OBJ_VAL((deck), 9))
+#define GET_CYBERDECK_FREE_STORAGE(deck)          (GET_CYBERDECK_TOTAL_STORAGE((deck)) -GET_CYBERDECK_USED_STORAGE((deck)))
 
 // ITEM_PROGRAM convenience defines
 
 // ITEM_GUN_MAGAZINE convenience defines
-#define GET_MAGAZINE_BONDED_MAXAMMO(magazine)    (GET_OBJ_VAL((magazine), 0))
-#define GET_MAGAZINE_BONDED_ATTACKTYPE(magazine) (GET_OBJ_VAL((magazine), 1))
-#define GET_MAGAZINE_AMMO_TYPE(magazine)         (GET_OBJ_VAL((magazine), 2))
-// #define GET_MAGAZINE_AMMO_MAX(magazine)          (GET_OBJ_VAL((magazine), 5))
-#define GET_MAGAZINE_AMMO_COUNT(magazine)        (GET_OBJ_VAL((magazine), 9))
+#define GET_MAGAZINE_BONDED_MAXAMMO(magazine)     (GET_OBJ_VAL((magazine), 0))
+#define GET_MAGAZINE_BONDED_ATTACKTYPE(magazine)  (GET_OBJ_VAL((magazine), 1))
+#define GET_MAGAZINE_AMMO_TYPE(magazine)          (GET_OBJ_VAL((magazine), 2))
+// #define GET_MAGAZINE_AMMO_MAX(magazine)        (GET_OBJ_VAL((magazine), 5))
+#define GET_MAGAZINE_AMMO_COUNT(magazine)         (GET_OBJ_VAL((magazine), 9))
 
 // ITEM_GUN_ACCESSORY convenience defines
-#define GET_ACCESSORY_ATTACH_LOCATION(accessory) (GET_OBJ_VAL((accessory), 0))
-#define GET_ACCESSORY_TYPE(accessory)            (GET_OBJ_VAL((accessory), 1))
-#define GET_ACCESSORY_RATING(accessory)          (GET_OBJ_VAL((accessory), 2))
+#define GET_ACCESSORY_ATTACH_LOCATION(accessory)  (GET_OBJ_VAL((accessory), 0))
+#define GET_ACCESSORY_TYPE(accessory)             (GET_OBJ_VAL((accessory), 1))
+#define GET_ACCESSORY_RATING(accessory)           (GET_OBJ_VAL((accessory), 2))
 
 // ITEM_SPELL_FORMULA convenience defines
-#define GET_SPELLFORMULA_FORCE(formula)          (GET_OBJ_VAL((formula), 0))
-#define GET_SPELLFORMULA_SPELL(formula)          (GET_OBJ_VAL((formula), 1))
-#define GET_SPELLFORMULA_TRADITION(formula)      (GET_OBJ_VAL((formula), 2))
-#define GET_SPELLFORMULA_SUBTYPE(formula)        (GET_OBJ_VAL((formula), 3))
+#define GET_SPELLFORMULA_FORCE(formula)           (GET_OBJ_VAL((formula), 0))
+#define GET_SPELLFORMULA_SPELL(formula)           (GET_OBJ_VAL((formula), 1))
+#define GET_SPELLFORMULA_TRADITION(formula)       (GET_OBJ_VAL((formula), 2))
+#define GET_SPELLFORMULA_SUBTYPE(formula)         (GET_OBJ_VAL((formula), 3))
+#define GET_SPELLFORMULA_TIME_LEFT(formula)       (GET_OBJ_VAL((formula), 6))
+#define GET_SPELLFORMULA_INITIAL_TIME(formula)    (GET_OBJ_VAL((formula), 7))
+#define GET_SPELLFORMULA_CREATOR_IDNUM(formula)   (GET_OBJ_VAL((formula), 8))
+#define GET_SPELLFORMULA_CATEGORY(formula)        (GET_OBJ_VAL((formula), 9))
 
-#define SPELL_HAS_SUBTYPE(spell_number)          (spell_number == SPELL_INCATTR || spell_number == SPELL_INCCYATTR || spell_number == SPELL_DECATTR || spell_number == SPELL_DECCYATTR)
+#define SPELL_HAS_SUBTYPE(spell_number)           (spell_number == SPELL_INCATTR || spell_number == SPELL_INCCYATTR || spell_number == SPELL_DECATTR || spell_number == SPELL_DECCYATTR)
 
 // ITEM_FOCUS convenience defines, search term GET_FOCI
-#define GET_FOCUS_TYPE(focus)                    (GET_OBJ_VAL((focus), 0))
-#define GET_FOCUS_FORCE(focus)                   (GET_OBJ_VAL((focus), 1))
-#define GET_FOCUS_BONDED_TO(focus)               (GET_OBJ_VAL((focus), 2))
-#define GET_FOCUS_BONDED_SPIRIT_OR_SPELL(focus)  (GET_OBJ_VAL((focus), 3))
-#define GET_FOCUS_ACTIVATED(focus)               (GET_OBJ_VAL((focus), 4))
-#define GET_FOCUS_TRADITION(focus)               (GET_OBJ_VAL((focus), 5))
-#define GET_FOCUS_BOND_TIME_REMAINING(focus)     (GET_OBJ_VAL((focus), 9))
+#define GET_FOCUS_TYPE(focus)                     (GET_OBJ_VAL((focus), 0))
+#define GET_FOCUS_FORCE(focus)                    (GET_OBJ_VAL((focus), 1))
+#define GET_FOCUS_BONDED_TO(focus)                (GET_OBJ_VAL((focus), 2))
+#define GET_FOCUS_BONDED_SPIRIT_OR_SPELL(focus)   (GET_OBJ_VAL((focus), 3))
+#define GET_FOCUS_ACTIVATED(focus)                (GET_OBJ_VAL((focus), 4))
+#define GET_FOCUS_TRADITION(focus)                (GET_OBJ_VAL((focus), 5))
+#define GET_FOCUS_BOND_TIME_REMAINING(focus)      (GET_OBJ_VAL((focus), 9))
 
 // ITEM_PATCH convenience defines
 
@@ -986,21 +1007,21 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 // ITEM_QUIVER convenience defines
 
 // ITEM_DECK_ACCESSORY convenience defines
-#define GET_DECK_ACCESSORY_TYPE(accessory)               (GET_OBJ_VAL((accessory), 0))
+#define GET_DECK_ACCESSORY_TYPE(accessory)                  (GET_OBJ_VAL((accessory), 0))
 
 // ITEM_DECK_ACCESSORY TYPE_PARTS convenience defines
-#define GET_DECK_ACCESSORY_IS_CHIPS(accessory)           (GET_OBJ_VAL((accessory), 1))
+#define GET_DECK_ACCESSORY_IS_CHIPS(accessory)              (GET_OBJ_VAL((accessory), 1))
 
 // ITEM_DECK_ACCESSORY TYPE_FILE convenience defines
-#define GET_DECK_ACCESSORY_FILE_CREATION_TIME(accessory) (GET_OBJ_VAL((accessory), 1))
-#define GET_DECK_ACCESSORY_FILE_SIZE(accessory)          (GET_OBJ_VAL((accessory), 2))
-#define GET_DECK_ACCESSORY_FILE_HOST_VNUM(accessory)     (GET_OBJ_VAL((accessory), 3))
-#define GET_DECK_ACCESSORY_FILE_HOST_COLOR(accessory)    (GET_OBJ_VAL((accessory), 4))
-#define GET_DECK_ACCESSORY_FILE_PROTECTION(accessory)    (GET_OBJ_VAL((accessory), 5))
-#define GET_DECK_ACCESSORY_FILE_RATING(accessory)        (GET_OBJ_VAL((accessory), 6))
-#define GET_DECK_ACCESSORY_FILE_FOUND_BY(accessory)      (GET_OBJ_VAL((accessory), 7))
-#define GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(accessory)  (GET_OBJ_VAL((accessory), 8))
-#define GET_DECK_ACCESSORY_FILE_REMAINING(accessory)     (GET_OBJ_VAL((accessory), 9))
+#define GET_DECK_ACCESSORY_FILE_CREATION_TIME(accessory)    (GET_OBJ_VAL((accessory), 1))
+#define GET_DECK_ACCESSORY_FILE_SIZE(accessory)             (GET_OBJ_VAL((accessory), 2))
+#define GET_DECK_ACCESSORY_FILE_HOST_VNUM(accessory)        (GET_OBJ_VAL((accessory), 3))
+#define GET_DECK_ACCESSORY_FILE_HOST_COLOR(accessory)       (GET_OBJ_VAL((accessory), 4))
+#define GET_DECK_ACCESSORY_FILE_PROTECTION(accessory)       (GET_OBJ_VAL((accessory), 5))
+#define GET_DECK_ACCESSORY_FILE_RATING(accessory)           (GET_OBJ_VAL((accessory), 6))
+#define GET_DECK_ACCESSORY_FILE_FOUND_BY(accessory)         (GET_OBJ_VAL((accessory), 7))
+#define GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(accessory)     (GET_OBJ_VAL((accessory), 8))
+#define GET_DECK_ACCESSORY_FILE_REMAINING(accessory)        (GET_OBJ_VAL((accessory), 9))
 
 // ITEM_DECK_ACCESSORY TYPE_COOKER convenience defines
 #define GET_DECK_ACCESSORY_COOKER_RATING(accessory)         (GET_OBJ_VAL((accessory), 1))
@@ -1010,31 +1031,37 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 // ITEM_RCDECK convenience defines
 
 // ITEM_CHIP convenience defines
-#define GET_CHIP_SKILL(chip)                 (GET_OBJ_VAL((chip), 0))
-#define GET_CHIP_RATING(chip)                (GET_OBJ_VAL((chip), 1))
-#define GET_CHIP_SIZE(chip)                  (GET_OBJ_VAL((chip), 2))
-#define GET_CHIP_COMPRESSION_FACTOR(chip)    (GET_OBJ_VAL((chip), 8))
-#define GET_CHIP_LINKED(chip)                (GET_OBJ_VAL((chip), 9))
+#define GET_CHIP_SKILL(chip)                                (GET_OBJ_VAL((chip), 0))
+#define GET_CHIP_RATING(chip)                               (GET_OBJ_VAL((chip), 1))
+#define GET_CHIP_SIZE(chip)                                 (GET_OBJ_VAL((chip), 2))
+#define GET_CHIP_COMPRESSION_FACTOR(chip)                   (GET_OBJ_VAL((chip), 8))
+#define GET_CHIP_LINKED(chip)                               (GET_OBJ_VAL((chip), 9))
 
 // ITEM_MOD convenience defines
-#define GET_VEHICLE_MOD_TYPE(mod)            (GET_OBJ_VAL((mod), 0))
-#define GET_VEHICLE_MOD_MOUNT_TYPE(mod)      (GET_OBJ_VAL((mod), 1))
+#define GET_VEHICLE_MOD_TYPE(mod)                           (GET_OBJ_VAL((mod), 0))
+#define GET_VEHICLE_MOD_MOUNT_TYPE(mod)                     (GET_OBJ_VAL((mod), 1))
+#define GET_VEHICLE_MOD_LOAD_SPACE_REQUIRED(mod)            (GET_OBJ_VAL((mod), 1)) // Yes, this is also value 1.
+#define GET_VEHICLE_MOD_RATING(mod)                         (GET_OBJ_VAL((mod), 2))
+// what's 3?
+#define GET_VEHICLE_MOD_DESIGNED_FOR_DRONE(mod)             (GET_OBJ_VAL((mod), 4)) // 0=veh, 1=drone, 2=both
+#define GET_VEHICLE_MOD_ENGINE_BITS(mod)                    (GET_OBJ_VAL((mod), 5))
+#define GET_VEHICLE_MOD_LOCATION(mod)                       (GET_OBJ_VAL((mod), 6))
 
 // ITEM_HOLSTER convenience defines
-#define GET_HOLSTER_TYPE(holster)            (GET_OBJ_VAL((holster), 0))
-#define GET_HOLSTER_READY_STATUS(holster)    (GET_OBJ_VAL((holster), 3))
+#define GET_HOLSTER_TYPE(holster)                           (GET_OBJ_VAL((holster), 0))
+#define GET_HOLSTER_READY_STATUS(holster)                   (GET_OBJ_VAL((holster), 3))
 
 // ITEM_DESIGN convenience defines
 
 // ITEM_QUEST convenience defines
 
 // ITEM_GUN_AMMO convenience defines
-#define GET_AMMOBOX_QUANTITY(box)            (GET_OBJ_VAL((box), 0))
-#define GET_AMMOBOX_WEAPON(box)              (GET_OBJ_VAL((box), 1))
-#define GET_AMMOBOX_TYPE(box)                (GET_OBJ_VAL((box), 2))
-#define GET_AMMOBOX_INTENDED_QUANTITY(box)   (GET_OBJ_VAL((box), 3))
-#define GET_AMMOBOX_TIME_TO_COMPLETION(box)  (GET_OBJ_VAL((box), 4))
-#define GET_AMMOBOX_CREATOR(box)             (GET_OBJ_VAL((box), 9))
+#define GET_AMMOBOX_QUANTITY(box)                           (GET_OBJ_VAL((box), 0))
+#define GET_AMMOBOX_WEAPON(box)                             (GET_OBJ_VAL((box), 1))
+#define GET_AMMOBOX_TYPE(box)                               (GET_OBJ_VAL((box), 2))
+#define GET_AMMOBOX_INTENDED_QUANTITY(box)                  (GET_OBJ_VAL((box), 3))
+#define GET_AMMOBOX_TIME_TO_COMPLETION(box)                 (GET_OBJ_VAL((box), 4))
+#define GET_AMMOBOX_CREATOR(box)                            (GET_OBJ_VAL((box), 9))
 
 // ITEM_KEYRING convenience defines
 
@@ -1183,5 +1210,7 @@ void gain_bank(struct char_data *ch, long amount, int category);
 void lose_bank(struct char_data *ch, long amount, int category);
 void gain_nuyen_on_credstick(struct char_data *ch, struct obj_data *credstick, long amount, int category);
 void lose_nuyen_from_credstick(struct char_data *ch, struct obj_data *credstick, long amount, int category);
+
+#define GET_WOUND_NAME(damage_level) (wound_name[MIN(DEADLY, MAX(0, damage_level))])
 
 #endif

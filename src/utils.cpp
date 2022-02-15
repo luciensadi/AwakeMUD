@@ -169,6 +169,10 @@ int resisted_test(int num4ch, int tar4ch, int num4vict, int tar4vict)
 
 int stage(int successes, int wound)
 {
+  // This is just a little bit faster than what was below.
+  return wound + (successes / 2);
+
+  /*
   if (successes >= 0)
     while (successes >= 2) {
       wound++;
@@ -179,7 +183,9 @@ int stage(int successes, int wound)
       wound--;
       successes += 2;
     }
+
   return wound;
+  */
 }
 
 int convert_damage(int damage)
@@ -1257,41 +1263,57 @@ int get_speed(struct veh_data *veh)
   return (speed);
 }
 
-int negotiate(struct char_data *ch, struct char_data *tch, int comp, int basevalue, int mod, bool buy)
+int negotiate(struct char_data *ch, struct char_data *tch, int comp, int basevalue, int mod, bool buy, bool include_metavariant_penalty)
 {
   struct obj_data *bio;
   int cmod = -GET_POWER(ch, ADEPT_KINESICS);
   int tmod = -GET_POWER(tch, ADEPT_KINESICS);
   snprintf(buf3, sizeof(buf3), "ALRIGHT BOIS HERE WE GO. Base global mod is %d. After application of Kinesics bonuses (if any), base modifiers for PC and NPC are %d and %d.", mod, cmod, tmod);
-  if (GET_RACE(ch) != GET_RACE(tch)) {
-    switch (GET_RACE(ch)) {
-      case RACE_HUMAN:
-      case RACE_ELF:
-      case RACE_ORK:
-      case RACE_TROLL:
-      case RACE_DWARF:
-        break;
-      default:
-        cmod += 4;
-        snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), " Metavariant TN penalty +4 for PC.");
-        break;
-    }
-    switch (GET_RACE(tch)) {
-      case RACE_HUMAN:
-      case RACE_ELF:
-      case RACE_ORK:
-      case RACE_TROLL:
-      case RACE_DWARF:
-        break;
-      default:
-        tmod += 4;
-        snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), " Metavariant TN penalty +4 for NPC.");
-        break;
-    }
-  }
 
-  int chtn = GET_INT(tch)+mod+cmod;
-  int tchtn = GET_INT(ch)+mod+tmod;
+  if (include_metavariant_penalty) {
+    if (GET_RACE(ch) != GET_RACE(tch)) {
+      switch (GET_RACE(ch)) {
+        case RACE_HUMAN:
+        case RACE_ELF:
+        case RACE_ORK:
+        case RACE_TROLL:
+        case RACE_DWARF:
+          break;
+        default:
+          cmod += 4;
+          snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), " Metavariant TN penalty +4 for PC.");
+          break;
+      }
+      switch (GET_RACE(tch)) {
+        case RACE_HUMAN:
+        case RACE_ELF:
+        case RACE_ORK:
+        case RACE_TROLL:
+        case RACE_DWARF:
+          break;
+        default:
+          tmod += 4;
+          snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), " Metavariant TN penalty +4 for NPC.");
+          break;
+      }
+    }
+  } else {
+    snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), " Skipping any potential metavariant penalties.");
+  }
+  // House rule: Data fence negotiations use raw int in order to make them a little easier to balance.
+  bool negotiation_is_with_data_fence = (IS_NPC(ch) && MOB_HAS_SPEC(ch, fence)) || (IS_NPC(tch) && MOB_HAS_SPEC(ch, fence));
+
+  int ch_int = (negotiation_is_with_data_fence ? GET_REAL_INT(ch) : GET_INT(ch));
+  int tch_int = (negotiation_is_with_data_fence ? GET_REAL_INT(tch) : GET_INT(tch));
+
+  // Plenty of NPCs have no int, so we set these to an average value if found.
+  if (IS_NPC(tch) && tch_int <= 0)
+    tch_int = MAX(tch_int, 3);
+  if (IS_NPC(ch) && ch_int <= 0)
+    ch_int = MAX(ch_int, 3);
+
+  int chtn = mod + cmod + tch_int;
+  int tchtn = mod + tmod + ch_int;
 
   act("Getting skill for PC...", FALSE, ch, NULL, NULL, TO_ROLLS);
   int cskill = get_skill(ch, SKILL_NEGOTIATION, chtn);
@@ -1320,9 +1342,9 @@ int negotiate(struct char_data *ch, struct char_data *tch, int comp, int baseval
   int chnego = success_test(cskill, chtn);
 
   snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "\r\nPC negotiation test gave %d successes on %d dice with TN %d (calculated from opponent int (%d) + global mod (%d) + our mod (%d)).",
-           chnego, cskill, chtn, GET_INT(tch), mod, cmod);
+           chnego, cskill, chtn, tch_int, mod, cmod);
   snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "\r\nNPC negotiation test gave %d successes on %d dice with TN %d (calculated from opponent int (%d) + global mod (%d) + our mod (%d)).",
-           tchnego, tskill, tchtn, GET_INT(ch), mod, tmod);
+           tchnego, tskill, tchtn, ch_int, mod, tmod);
   if (comp)
   {
     chtn = GET_INT(tch)+mod+cmod;
@@ -1333,12 +1355,19 @@ int negotiate(struct char_data *ch, struct char_data *tch, int comp, int baseval
     act("Getting additional skill for NPC...", FALSE, tch, NULL, NULL, TO_ROLLS);
     tskill = get_skill(tch, comp, tchtn);
 
-    int ch_delta = success_test(GET_SKILL(ch, comp), chtn) / 2;
-    int tch_delta = success_test(GET_SKILL(tch, comp), tchtn) / 2;
+    int ch_delta = success_test(cskill, chtn) / 2;
+    int tch_delta = success_test(tskill, tchtn) / 2;
 
     chnego += ch_delta;
     tchnego += tch_delta;
-    snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "\r\nAdded additional rolls for %s, so we got an additional %d PC and %d successes.", skills[comp].name, ch_delta, tch_delta);
+    snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "\r\nAdded additional rolls for %s (%d dice at TN %d vs %d dice at TN %d), so we got an additional %d PC and %d NPC successes.",
+             skills[comp].name,
+             cskill,
+             chtn,
+             tskill,
+             tchtn,
+             ch_delta,
+             tch_delta);
   }
   int num = chnego - tchnego;
   if (num > 0)
@@ -2254,7 +2283,7 @@ bool invis_ok(struct char_data *ch, struct char_data *vict) {
     return TRUE;
 
   // Ultrasound pierces all invis as long as it's not blocked by silence or stealth.
-  if (AFF_FLAGGED(ch, AFF_DETECT_INVIS) && (get_ch_in_room(ch)->silence[0] <= 0 && !affected_by_spell(vict, SPELL_STEALTH)))
+  if (AFF_FLAGGED(ch, AFF_ULTRASOUND) && (get_ch_in_room(ch)->silence[0] <= 0 && !affected_by_spell(vict, SPELL_STEALTH)))
     return TRUE;
 
   // Improved invis defeats all other detection measures.
@@ -3974,6 +4003,30 @@ void send_gamewide_annoucement(const char *msg, bool prepend_announcement_string
       send_to_char(d->character, announcement);
     }
   }
+}
+
+// Given an NPC, reads out the unique-on-this-boot-only ID number associated with this character.
+char *get_printable_mob_unique_id(struct char_data *ch) {
+  static char result_buf[1000];
+  // If you're using UUIDs here, you need something like this:
+  // uuid_unparse(GET_MOB_UNIQUE_ID(ch), result_buf);
+  // Buuut since we're just using unsigned longs...
+  snprintf(result_buf, sizeof(result_buf), "%lu", GET_MOB_UNIQUE_ID(ch));
+  return result_buf;
+}
+
+// This sort of function is dead stupid for comparing two unsigned longs... but if you change to UUIDs, you'll appreciate being able to change this.
+bool mob_unique_id_matches(mob_unique_id_t id1, mob_unique_id_t id2) {
+  // return uuid_compare(id1, id2) == 0;
+  return id1 == id2;
+}
+
+// Don't @ me about having a global declared here, it's only used in this one function. -LS
+unsigned long global_mob_unique_id_number = 0;
+void set_new_mobile_unique_id(struct char_data *ch) {
+  // Eventually, you'll swap this out for UUIDs, assuming we find a use case for that.
+  // uuid_generate(GET_MOB_UNIQUE_ID(ch));
+  GET_MOB_UNIQUE_ID(ch) = global_mob_unique_id_number++;
 }
 
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.

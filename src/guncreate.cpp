@@ -61,7 +61,7 @@ void aedit_disp_type_menu(struct descriptor_data *d)
   for (int counter = 0; counter <= AMMO_GEL; counter++)
     send_to_char(CH, "  %2d) %s\r\n", counter, ammo_type[counter].name);
   send_to_char("Ammo type: ", d->character);
-  d->edit_mode = AEDIT_TYPE;  
+  d->edit_mode = AEDIT_TYPE;
 }
 
 void aedit_parse(struct descriptor_data *d, const char *arg)
@@ -105,7 +105,7 @@ void aedit_parse(struct descriptor_data *d, const char *arg)
      GET_AMMOBOX_TYPE(OBJ) = number;
      aedit_disp_menu(d);
    }
-   break; 
+   break;
   case AEDIT_WEAPON:
    number += WEAP_HOLDOUT;
    if (number >= WEAP_CANNON || number < WEAP_HOLDOUT)
@@ -115,7 +115,7 @@ void aedit_parse(struct descriptor_data *d, const char *arg)
      GET_AMMOBOX_TYPE(OBJ) = AMMO_NORMAL;
      aedit_disp_menu(d);
    }
-   break; 
+   break;
   case AEDIT_QUANTITY:
     if (number < 0)
       number = 0;
@@ -202,7 +202,7 @@ void ammo_build(struct char_data *ch, struct obj_data *obj)
           else
             kitwarn = TRUE;
         }
-        
+
       }
     }
 
@@ -212,11 +212,11 @@ void ammo_build(struct char_data *ch, struct obj_data *obj)
                      ammo_type[GET_AMMOBOX_TYPE(obj)].name);
       } else {
         if (GET_AMMOBOX_TYPE(obj) != AMMO_NORMAL) {
-          send_to_char(ch, "You need an ammunition workshop or %s %s ammunition kit.\r\n",
-                       strchr((const char *)"aeiouyAEIOUY", *ammo_type[GET_AMMOBOX_TYPE(obj)].name) ? "an" : "a",
+          send_to_char(ch, "You need to be standing next to an unpacked ammunition workshop or to be carrying %s %s ammunition kit.\r\n",
+                       AN(ammo_type[GET_AMMOBOX_TYPE(obj)].name),
                        ammo_type[GET_AMMOBOX_TYPE(obj)].name);
         } else {
-          send_to_char("You need an ammunition workshop or kit.\r\n", ch);
+          send_to_char("You need to be standing next to an unpacked ammunition workshop or to be carrying an ammunition kit.\r\n", ch);
         }
       }
       return;
@@ -230,6 +230,6 @@ void ammo_build(struct char_data *ch, struct obj_data *obj)
         return;
     }
     AFF_FLAGS(ch).SetBit(AFF_AMMOBUILD);
-    GET_BUILDING(ch) = obj;  
+    GET_BUILDING(ch) = obj;
   }
 }

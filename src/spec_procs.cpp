@@ -1127,7 +1127,7 @@ SPECIAL(spell_trainer)
       send_to_char("Extra Force Point             25000 nuyen\r\n", ch);
       send_to_char(ch, "%d Force Point%s Remaining.\r\n", GET_FORCE_POINTS(ch), GET_FORCE_POINTS(ch) > 1 ? "s" : "");
     } else
-      send_to_char(ch, "%.2f Karma Available.\r\n", GET_KARMA(ch) / 100);
+      send_to_char(ch, "%.2f Karma Available.\r\n", ((float) GET_KARMA(ch)) / 100);
 
     send_to_char("\r\nLearning syntax:\r\n    ^WLEARN \"<spell name>\" <force between 1 and 6>^n\r\n    ^WLEARN FORCE^n\r\n    ^WLEARN CONJURING^n\r\n", ch);
   } else {
@@ -1641,8 +1641,8 @@ SPECIAL(car_dealer)
   } else if (CMD_IS("probe") || CMD_IS("info")) {
     argument = one_argument(argument, buf);
     if (!(veh = get_veh_list(buf, world[car_room].vehicles, ch))) {
-      send_to_char("There is no such vehicle for sale.\r\n", ch);
-      return TRUE;
+      // Bail out so standard probe can kick in.
+      return FALSE;
     }
     send_to_char(ch, "^yProbing shopkeeper's ^n%s^y...^n\r\n", GET_VEH_NAME(veh));
     do_probe_veh(ch, veh);
@@ -3815,8 +3815,7 @@ SPECIAL(terell_davis)
   else if (cmd) {
     if (CMD_IS("buy") || CMD_IS("sell") || CMD_IS("value") || CMD_IS("list") || CMD_IS("check")
         || CMD_IS("cancel") || CMD_IS("receive") || CMD_IS("info") || CMD_IS("probe")) {
-      shop_keeper(ch, me, cmd, argument);
-      return TRUE;
+      return shop_keeper(ch, me, cmd, argument);
     }
     return FALSE;
   } else if (time_info.hours == 7) {
@@ -3987,14 +3986,14 @@ SPECIAL(quest_debug_scanner)
       snprintf(buf, sizeof(buf), "NPC %s's quest-related information:\r\n", GET_CHAR_NAME(to));
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Overall max rep: %d, overall min rep: %d\r\n",
               get_johnson_overall_max_rep(to), get_johnson_overall_min_rep(to));
-              
+
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Quests: ");
       for (int i = 0; i <= top_of_questt; i++)
         if (quest_table[i].johnson == GET_MOB_VNUM(to))
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld ", quest_table[i].vnum);
-          
+
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n");
-      
+
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "SPARE1: %ld\r\n", GET_SPARE1(to));
       strcat(buf, "NPC's mob memory records hold the following character IDs: \r\n");
       for (memory_rec *tmp = GET_MOB_MEMORY(to); tmp; tmp = tmp->next)
@@ -4082,7 +4081,7 @@ SPECIAL(quest_debug_scanner)
 
     return TRUE;
   }
-  
+
   if (CMD_IS("reload")) {
     skip_spaces(&argument);
     if (!*argument) {
@@ -4090,11 +4089,11 @@ SPECIAL(quest_debug_scanner)
       return TRUE;
     }
 
-    if (GET_QUEST(ch)) {          
+    if (GET_QUEST(ch)) {
         send_to_char(ch, "End your current run first.\r\n");
         return TRUE;
     }
-      
+
     bool found = FALSE;
 
     for (to = ch->in_room->people; to; to = to->next_in_room) {
@@ -4107,13 +4106,13 @@ SPECIAL(quest_debug_scanner)
       send_to_char(ch, "There is no johnson here.\r\n");
       return TRUE;
     }
-    
+
     int quest = atoi(argument);
     if (!quest) {
       send_to_char(ch, "That's not a quest number.\r\n");
       return TRUE;
     }
-    
+
     found = FALSE;
     int i = 0;
     for (; i <= top_of_questt; i++) {
@@ -4136,10 +4135,10 @@ SPECIAL(quest_debug_scanner)
         mudlog(buf, ch, LOG_SYSLOG, TRUE);
         send_to_char(ch, "Warning: Null intro string in this quest.\r\n");
       }
-          
+
       if (!memory(to, ch))
         remember(to, ch);
-            
+
       // Assign them the quest.
       int num;
       GET_QUEST(ch) = i;
@@ -4149,11 +4148,11 @@ SPECIAL(quest_debug_scanner)
         ch->player_specials->obj_complete[num] = 0;
       for (num = 0; num < quest_table[GET_QUEST(ch)].num_mobs; num++)
         ch->player_specials->mob_complete[num] = 0;
-          
+
       //Load targets and give the details.
       load_quest_targets(to, ch);
       handle_info(to, i);
-      
+
       return TRUE;
     }
   }
@@ -6514,6 +6513,14 @@ SPECIAL(medical_workshop) {
   PRF_FLAGS(found_char).RemoveBit(PRF_TOUCH_ME_DADDY);
 
   return TRUE;
+}
+
+SPECIAL(purge_prevented) {
+  if (CMD_IS("purge")) {
+    send_to_char(ch, "You can't purge here.\r\n");
+    return TRUE;
+  }
+  return FALSE;
 }
 
 /*

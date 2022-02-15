@@ -73,7 +73,6 @@ extern int calculate_vehicle_weight(struct veh_data *veh);
 
 extern const char *wound_arr[];
 extern const char *material_names[];
-extern const char *wound_name[];
 extern int ViolencePulse;
 
 extern void list_detailed_shop(struct char_data *ch, long shop_nr);
@@ -99,6 +98,8 @@ extern void turn_hardcore_on_for_character(struct char_data *ch);
 extern void turn_hardcore_off_for_character(struct char_data *ch);
 
 extern void DBFinalize();
+
+extern void display_characters_ignore_entries(struct char_data *viewer, struct char_data *target);
 
 ACMD_DECLARE(do_goto);
 
@@ -1347,7 +1348,7 @@ void do_stat_object(struct char_data * ch, struct obj_data * j)
     break;
   case ITEM_PROGRAM:
     if (GET_OBJ_VAL(j, 0) == SOFT_ATTACK)
-      snprintf(buf2, sizeof(buf2), ", DamType: %s", wound_name[GET_OBJ_VAL(j, 3)]);
+      snprintf(buf2, sizeof(buf2), ", DamType: %s", GET_WOUND_NAME(GET_OBJ_VAL(j, 3)));
     else
       snprintf(buf2, sizeof(buf2), " ");
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Type: %s, Rating: %d, Size: %d%s",
@@ -1559,7 +1560,7 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
   sprinttype((k->mob_specials.default_pos), position_types, buf2, sizeof(buf2));
   strlcat(buf, buf2, sizeof(buf));
 
-  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", Idle Timer: [%d]\r\n", k->char_specials.timer);
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", Idle Timer: [%d], Emote Timer: [%d]\r\n", k->char_specials.timer, k->char_specials.last_emote);
 
   PLR_FLAGS(k).PrintBits(buf2, MAX_STRING_LENGTH, player_bits, PLR_MAX);
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "PLR: ^c%s^n\r\n", buf2);
@@ -1642,8 +1643,8 @@ void do_stat_mobile(struct char_data * ch, struct char_data * k)
     snprintf(buf2, sizeof(buf2), " %s '%s'\r\n", (!IS_MOB(k) ? "NPC" : "MOB"), GET_NAME(k));
   strlcat(buf, buf2, sizeof(buf));
 
-  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Alias: %s, VNum: [%8ld], RNum: [%5ld]\r\n", GET_KEYWORDS(k),
-          GET_MOB_VNUM(k), GET_MOB_RNUM(k));
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Alias: %s, VNum: [^c%8ld^n], RNum: [%5ld], Unique ID [%s]\r\n", GET_KEYWORDS(k),
+          GET_MOB_VNUM(k), GET_MOB_RNUM(k), get_printable_mob_unique_id(k));
 
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "L-Des: %s",
           (k->player.physical_text.look_desc ?
@@ -1660,9 +1661,12 @@ void do_stat_mobile(struct char_data * ch, struct char_data * k)
           GET_REAL_BOD(k), GET_REAL_QUI(k), GET_REAL_STR(k), GET_REAL_CHA(k), GET_REAL_INT(k),
           GET_REAL_WIL(k), ((int)GET_REAL_MAG(k) / 100), GET_REAL_REA(k), ((float)GET_REAL_ESS(k) / 100));
 
-  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Physical p.:[^G%d/%d^n]  Mental p.:[^G%d/%d^n]\r\n",
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Physical p.:[^G%d/%d^n]  Mental p.:[^G%d/%d^n]; Ballistic / Impact [%d/%d]\r\n",
           (int)(GET_PHYSICAL(k) / 100), (int)(GET_MAX_PHYSICAL(k) / 100),
-          (int)(GET_MENTAL(k) / 100), (int)(GET_MAX_MENTAL(k) / 100));
+          (int)(GET_MENTAL(k) / 100), (int)(GET_MAX_MENTAL(k) / 100),
+          GET_BALLISTIC(k),
+          GET_IMPACT(k)
+        );
 
   base = calc_karma(NULL, k);
 
@@ -2512,7 +2516,7 @@ ACMD(do_award)
   k = atoi(amt);
 
   if (!*arg || !*amt || !*reason || k <= 0 ) {
-    send_to_char("Syntax: award <player> <karma x 100> <Reason for award>.\r\n", ch);
+    send_to_char("Syntax: award <player> <karma x 100> <Reason for award>\r\n", ch);
     return;
   }
   if (!(vict = get_char_vis(ch, arg))) {
@@ -2536,11 +2540,11 @@ ACMD(do_award)
   else
     gain_karma(vict, k, TRUE, FALSE, FALSE);
 
-  send_to_char(vict, "You have been awarded %0.2f karma for %s.\r\n", (float)k*0.01, reason);
+  send_to_char(vict, "You have been awarded %0.2f karma for %s%s^n\r\n", (float)k*0.01, reason, ispunct(get_final_character_from_string(reason)) ? "" : ".");
 
-  send_to_char(ch, "You awarded %0.2f karma to %s for %s.\r\n", (float)k*0.01, GET_CHAR_NAME(vict), reason);
+  send_to_char(ch, "You awarded %0.2f karma to %s for %s%s^n\r\n", (float)k*0.01, GET_CHAR_NAME(vict), reason, ispunct(get_final_character_from_string(reason)) ? "" : ".");
 
-  snprintf(buf2, sizeof(buf2), "%s awarded %0.2f karma to %s for %s (%d to %d).",
+  snprintf(buf2, sizeof(buf2), "%s awarded %0.2f karma to %s for %s^g (%d to %d).",
           GET_CHAR_NAME(ch), (float)k*0.01,
           GET_CHAR_NAME(vict), reason, GET_KARMA(vict) - k, GET_KARMA(vict));
   mudlog(buf2, ch, LOG_WIZLOG, TRUE);
@@ -2559,7 +2563,7 @@ ACMD(do_penalize)
   k = atoi(amt);
 
   if (!*arg || !*amt || !*reason || k <= 0 ) {
-    send_to_char("Syntax: penalize <player> <karma x 100> <Reason for penalty>.\r\n", ch);
+    send_to_char("Syntax: penalize <player> <karma x 100> <Reason for penalty>\r\n", ch);
     return;
   }
   if (!(vict = get_char_vis(ch, arg))) {
@@ -2575,12 +2579,12 @@ ACMD(do_penalize)
   // Since we subtracted rep for this, we need to re-add it.
   GET_REP(vict) += (int) (k / 100);
 
-  send_to_char(vict, "You have been penalized %0.2f karma for %s.\r\n", (float)k*0.01, reason);
+  send_to_char(vict, "You have been penalized %0.2f karma for %s%s^n\r\n", (float)k*0.01, reason, ispunct(get_final_character_from_string(reason)) ? "" : ".");
 
-  send_to_char(ch, "You penalized %0.2f karma from %s for %s.\r\n", (float)k*0.01,
-          GET_NAME(vict), reason);
+  send_to_char(ch, "You penalized %0.2f karma from %s for %s%s^n\r\n", (float)k*0.01,
+          GET_NAME(vict), reason, ispunct(get_final_character_from_string(reason)) ? "" : ".");
 
-  snprintf(buf2, sizeof(buf2), "%s penalized %0.2f karma from %s for %s (%d to %d).",
+  snprintf(buf2, sizeof(buf2), "%s penalized %0.2f karma from %s for %s^g (%d to %d).",
           GET_CHAR_NAME(ch), (float)k*0.01,
           GET_CHAR_NAME(vict), reason, GET_KARMA(vict) + k, GET_KARMA(vict));
   mudlog(buf2, ch, LOG_WIZLOG, TRUE);
@@ -2673,7 +2677,7 @@ ACMD(do_restore)
   if (*buf == '*') {
     for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
       restore_character(d->character, FALSE);
-      act("You have been fully healed by $N!", FALSE, d->character, 0, ch, TO_CHAR);
+      act("A wave of healing ripples over all online characters.\r\nYou have been fully healed by $N!", FALSE, d->character, 0, ch, TO_CHAR);
     }
     snprintf(buf2, sizeof(buf2), "%s restored all players.", GET_CHAR_NAME(ch));
     mudlog(buf2, ch, LOG_WIZLOG, TRUE);
@@ -3565,6 +3569,7 @@ ACMD(do_show)
                { "roomflag",       LVL_BUILDER },
                { "markets",        LVL_VICEPRES},
                { "weight",         LVL_PRESIDENT},
+               { "ignore",         LVL_FIXER},
                { "\n", 0 }
              };
 
@@ -3797,12 +3802,34 @@ ACMD(do_show)
     send_to_char(ch, "%s's prompt:\r\n%s\r\n", GET_NAME(vict), GET_PROMPT(vict));
     break;
   case 13:
-    strcpy(buf, "Jackpoints\r\n---------\r\n");
-    for (i = 0, j = 0; i <= top_of_world; i++)
-      if (world[i].matrix > 0)
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%2d: [%8ld] %s^n (%ld/%ld)\r\n", ++j,
-                world[i].number, world[i].name, world[i].matrix, world[i].rtg);
-    send_to_char(buf, ch);
+    {
+      strcpy(buf, "Jackpoints\r\n---------\r\n");
+
+      char io_color[3];
+      for (i = 0, j = 0; i <= top_of_world; i++) {
+        if (world[i].matrix > 0) {
+          if (world[i].io > 0) {
+            if (world[i].io < 50)
+              strlcpy(io_color, "^R", sizeof(io_color));
+            else if (world[i].io < 150)
+              strlcpy(io_color, "^Y", sizeof(io_color));
+            else if (world[i].io < 300)
+              strlcpy(io_color, "^y", sizeof(io_color));
+            else
+              strlcpy(io_color, "^c", sizeof(io_color));
+          } else if (world[i].io == -1) {
+            strlcpy(io_color, "^m", sizeof(io_color));
+          } else {
+            strlcpy(io_color, "", sizeof(io_color));
+          }
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%2d: [%8ld] %s^n (host %ld, rtg %ld, %sI/O %d^n)\r\n", ++j,
+                  world[i].number, world[i].name, world[i].matrix, world[i].rtg, io_color, world[i].io);
+        }
+      }
+
+      send_to_char(buf, ch);
+    }
+
     break;
   case 14:
     if (!*value) {
@@ -3822,9 +3849,9 @@ ACMD(do_show)
         if (max_ability(i) > 1)
           switch (i) {
           case ADEPT_KILLING_HANDS:
-            snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " %-8s", wound_name[MIN(4, GET_POWER_TOTAL(vict, i))]);
+            snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " %-8s", GET_WOUND_NAME(GET_POWER_TOTAL(vict, i)));
             if (GET_POWER_ACT(vict, i))
-              snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " ^Y(%-8s)^n", wound_name[MIN(4, GET_POWER_ACT(vict, i))]);
+              snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " ^Y(%-8s)^n", GET_WOUND_NAME(GET_POWER_ACT(vict, i)));
             strlcat(buf2, "\r\n", sizeof(buf2));
             break;
           default:
@@ -4055,6 +4082,17 @@ ACMD(do_show)
     }
     if (j == 0)
       send_to_char("...None.\r\n", ch);
+    return;
+  case 25:
+    if (!*value) {
+      send_to_char("A name would help.\r\n", ch);
+      return;
+    }
+    if (!(vict = get_char_vis(ch, value))) {
+      send_to_char(ch, "You can't see anyone named '%s'.\r\n", value);
+      return;
+    }
+    display_characters_ignore_entries(ch, vict);
     return;
   default:
     send_to_char("Sorry, I don't understand that.\r\n", ch);
@@ -4647,7 +4685,7 @@ ACMD(do_set)
     if (IS_NPC(vict) || (IS_SENATOR(vict) && access_level(vict, LVL_ADMIN)))
       RANGE(0, 5000);
     else
-      RANGE(0, 1500);
+      RANGE(0, 3000);
     vict->real_abils.mag = value;
     affect_total(vict);
     break;
@@ -5797,10 +5835,12 @@ bool restring_with_args(struct char_data *ch, char *argument, bool using_sysp) {
     send_to_char("You're not carrying that item.\r\n", ch);
     return FALSE;
   }
-  if (GET_OBJ_TYPE(obj) == ITEM_GUN_ACCESSORY || GET_OBJ_TYPE(obj) == ITEM_MOD) {
-    send_to_char("Sorry, gun attachments and vehicle mods can't be restrung.\r\n", ch);
+
+  if (GET_OBJ_TYPE(obj) == ITEM_GUN_ACCESSORY || GET_OBJ_TYPE(obj) == ITEM_MOD || GET_OBJ_TYPE(obj) == ITEM_GUN_AMMO) {
+    send_to_char("Sorry, gun attachments, vehicle mods, and ammo containers can't be restrung.\r\n", ch);
     return FALSE;
   }
+
   if (GET_OBJ_TYPE(obj) == ITEM_CLIMBING && GET_OBJ_VAL(obj, 1) == CLIMBING_TYPE_WATER_WINGS) {
     send_to_char("No amount of cosmetic changes could hide the garishness of water wings.\r\n", ch);
     return FALSE;
@@ -6834,15 +6874,16 @@ int audit_zone_shops_(struct char_data *ch, int zone_num, bool verbose) {
 
     shop = &shop_table[real_shp];
 
-    snprintf(buf, sizeof(buf), "^c[%8ld]^n:\r\n", shop->vnum);
+    rnum_t shopkeeper_rnum = real_mobile(shop->keeper);
 
     printed = FALSE;
 
-    if (real_mobile(shop->keeper) <= -1) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - invalid shopkeeper.\r\n");
+    if (shopkeeper_rnum <= -1) {
+      snprintf(buf, sizeof(buf), "^c[%8ld]^n:\r\n  - invalid shopkeeper.\r\n", shop->vnum);
       printed = TRUE;
       issues++;
     } else {
+      snprintf(buf, sizeof(buf), "^c[%8ld]^n: %s (%ld)\r\n", shop->vnum, GET_NAME(&mob_proto[shopkeeper_rnum]), shop->keeper);
       // Flag invalid sell multipliers
       if (shop->profit_buy < 1.0) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - too-low buy profit ^c%0.2f^n < 1.0^n.\r\n", shop->profit_buy);
@@ -6850,8 +6891,8 @@ int audit_zone_shops_(struct char_data *ch, int zone_num, bool verbose) {
         issues++;
       }
 
-      // Flag invalid strings
-      if (shop->profit_sell > 0.100001) {
+      if (shop->flags.IsSet(SHOP_CHARGEN) ? shop->profit_sell > (1.0000001) : (shop->flags.IsSet(SHOP_DOCTOR) ? shop->profit_sell > (0.3000001) : shop->profit_sell > 0.1000001))
+      {
         bool buys_anything = FALSE;
         for (int type = 1; type < NUM_ITEMS && !buys_anything; type++)
           if (shop->buytypes.IsSet(type))
@@ -6863,6 +6904,22 @@ int audit_zone_shops_(struct char_data *ch, int zone_num, bool verbose) {
           issues++;
         }
       }
+
+      // Flag the shopkeeper having wonky int values.
+      int intelligence = GET_INT(&mob_proto[shopkeeper_rnum]);
+#ifdef BE_STRICTER_ABOUT_SHOPKEEPER_INTELLIGENCE
+      if (intelligence < 3 || intelligence > 12) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - out-of-range shopkeeper intelligence ^c%d^n (expecting between 3 and 12)^n.\r\n", intelligence);
+        printed = TRUE;
+        issues++;
+      }
+#else
+      if (intelligence <= 0) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - shopkeeper intelligence not set.\r\n");
+        printed = TRUE;
+        issues++;
+      }
+#endif
     }
 
     if (printed) {

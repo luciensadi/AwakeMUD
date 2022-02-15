@@ -175,9 +175,10 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 // What is the number of seconds that you'd consider to be too long to pause the game for resolving a player's domain name?
 #define THRESHOLD_IN_SECONDS_FOR_SLOWNS_AUTOMATIC_ACTIVATION   1
 
-// How long do we put characters in a wait state when casting a spell?
-#define SPELL_WAIT_STATE_TIME                                  (0.2 RL_SEC)
-#define OFFENSIVE_SPELL_WAIT_STATE_TIME                        (0.2 RL_SEC)
+// How long do we put characters in a wait state when performing various magical activities?
+#define SPELL_WAIT_STATE_TIME                                  (0.2  RL_SEC)
+#define OFFENSIVE_SPELL_WAIT_STATE_TIME                        (0.2  RL_SEC)
+#define FAILED_SPELL_LEARNING_WAIT_STATE                       (0.25 RL_SEC)
 
 // How many sunrises (currently spans of 48 minutes) are spirits good for?
 #define NUMBER_OF_IG_DAYS_FOR_SPIRIT_TO_LAST                   4
@@ -190,6 +191,17 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 
 // Spam prevention: What's the maximum amount of graffiti in a room?
 #define MAXIMUM_GRAFFITI_IN_ROOM                               3
+
+// What's the maximum difficulty allowable for a closing-the-distance check?
+// Repo default is 10, which is a 20% chance of success at 10 dice. Most high-level PCs have 18+, giving ~45% success.
+#define MAXIMUM_TN_FOR_CLOSING_CHECK                           10
+#define MINIMUM_TN_FOR_CLOSING_CHECK                           4
+
+// At what point do we consider someone to be too idle in a scene to get socialization bonuses?
+#define LAST_EMOTE_REQUIREMENT_FOR_CONGREGATION_BONUS          15
+
+// Don't @ me about how long this name is, this is what we call self-documenting code.
+#define NUMBER_OF_TKE_POINTS_PER_REAL_DAY_OF_EXTRA_IDLE_DELETE_GRACE_PERIOD  5
 
 /////////////// OLC permissions configuration /////////////////////////
 #define LVL_FOR_SETTING_ZONE_EDITOR_ID_NUMBERS                 LVL_VICEPRES
