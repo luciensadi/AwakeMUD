@@ -4920,12 +4920,17 @@ ACMD(do_dispell)
   act(buf, 0, ch, 0, vict, TO_ROLLS);
   if (success > 0) {
     spell_modify(vict, sust, FALSE);
-    sust->success = MAX(sust->success - success, 0); // Since it's unsigned, we have to do shit like this.
+
+    int prior_succ = sust->success;
+
+    sust->success = MAX(((int) sust->success) - success, 0); // Since it's unsigned, we have to do shit like this.
     snprintf(buf, sizeof(buf), "Remaining successes on spell: %d.", sust->success);
     act(buf, 0, ch, 0, vict, TO_ROLLS);
     if (sust->success < 1) {
       send_to_char("You succeed in completely dispelling that spell.\r\n", ch);
-      sust->success += success;
+
+      // Restore the prior successes so that spell_modify removes the correct amount from the target.
+      sust->success = prior_succ;
       spell_modify(vict, sust, TRUE);
       end_sustained_spell(vict, sust);
     } else {
