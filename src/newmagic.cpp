@@ -1140,10 +1140,22 @@ bool check_spell_victim(struct char_data *ch, struct char_data *vict, int spell,
 
 int reflect_spell(struct char_data *ch, struct char_data *vict, int spell, int force, int sub, int target, int &success)
 {
-  success -= success_test(GET_REFLECT(vict), force);
+  char rolls_buf[5000];
+  int successes = success_test(GET_REFLECT(vict), force);
+  success -= successes;
+
+  snprintf(rolls_buf, sizeof(rolls_buf), "Spell reflect: Rolling %d dice vs TN %d gave %d successes (net %d)%s\r\n",
+           GET_REFLECT(vict), force, successes, success, success < 0 ? "; reflect succeeded!" : "reflect failed.");
+
   if (success < 0) {
     success *= -1;
-    success = success_test(success, target + modify_target(vict));
+
+    strlcat(rolls_buf, "Reflection cast roll modifiers: ", sizeof(rolls_buf));
+    int tn = target + modify_target_rbuf_magical(vict, rolls_buf, sizeof(rolls_buf));
+    success = success_test(success, tn);
+    snprintf(ENDOF(rolls_buf), sizeof(rolls_buf) - strlen(rolls_buf), "\r\nGot %d successes on reflection cast.", success);
+    act(rolls_buf, TRUE, ch, NULL, NULL, TO_ROLLS);
+
     send_to_char("You reflect the spell back!\r\n", vict);
     send_to_char("Your spell is reflected back at you!\r\n", ch);
     return TRUE;
