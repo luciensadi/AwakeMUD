@@ -492,7 +492,7 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
              GET_CHAR_NAME(def->ch),
              GET_IMPACT(def->ch));
 
-    att->melee->tn += GET_IMPACT(def->ch) + modify_target_rbuf_raw(att->ch, rbuf, sizeof(rbuf), att->melee->modifiers[COMBAT_MOD_VISIBILITY]);
+    att->melee->tn += GET_IMPACT(def->ch) + modify_target_rbuf_raw(att->ch, rbuf, sizeof(rbuf), att->melee->modifiers[COMBAT_MOD_VISIBILITY], FALSE);
 
     for (int mod_index = 0; mod_index < NUM_COMBAT_MODIFIERS; mod_index++) {
       buf_mod(rbuf, sizeof(rbuf), combat_modifiers[mod_index], att->melee->modifiers[mod_index]);
@@ -722,7 +722,7 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
              att->ranged->burst_count,
              att->ranged->recoil_comp);
 
-    att->ranged->tn += modify_target_rbuf_raw(att->ch, rbuf, sizeof(rbuf), att->ranged->modifiers[COMBAT_MOD_VISIBILITY]);
+    att->ranged->tn += modify_target_rbuf_raw(att->ch, rbuf, sizeof(rbuf), att->ranged->modifiers[COMBAT_MOD_VISIBILITY], FALSE);
     for (int mod_index = 0; mod_index < NUM_COMBAT_MODIFIERS; mod_index++) {
       // Ranged-specific modifiers.
       buf_mod(rbuf, sizeof(rbuf), combat_modifiers[mod_index], att->ranged->modifiers[mod_index]);
@@ -763,7 +763,7 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
 
       // Set up the defender's TN. Apply their modifiers.
       strlcpy(rbuf, "Defender's dodge roll modifiers: ", sizeof(rbuf));
-      def->ranged->tn += modify_target_rbuf_raw(def->ch, rbuf, sizeof(rbuf), def->ranged->modifiers[COMBAT_MOD_VISIBILITY]);
+      def->ranged->tn += modify_target_rbuf_raw(def->ch, rbuf, sizeof(rbuf), def->ranged->modifiers[COMBAT_MOD_VISIBILITY], FALSE);
       for (int mod_index = 0; mod_index < NUM_COMBAT_MODIFIERS; mod_index++) {
         buf_mod(rbuf, sizeof(rbuf), combat_modifiers[mod_index], def->ranged->modifiers[mod_index]);
         def->ranged->tn += att->ranged->modifiers[mod_index];
@@ -966,7 +966,7 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     // Calculate and display pre-success-test information.
     snprintf(rbuf, sizeof(rbuf), "^cCalculating melee combat modifiers. %s's TN modifiers: ", GET_CHAR_NAME(att->ch) );
     // This feels a little shitty, but we know that if we're in melee mode, the TN has not been touched yet, and if we're not then it's already been calculated.
-    att->melee->tn += modify_target_rbuf_raw(att->ch, rbuf, sizeof(rbuf), att->melee->modifiers[COMBAT_MOD_VISIBILITY]);
+    att->melee->tn += modify_target_rbuf_raw(att->ch, rbuf, sizeof(rbuf), att->melee->modifiers[COMBAT_MOD_VISIBILITY], FALSE);
     for (int mod_index = 0; mod_index < NUM_COMBAT_MODIFIERS; mod_index++) {
       buf_mod(rbuf, sizeof(rbuf), combat_modifiers[mod_index], att->melee->modifiers[mod_index]);
       att->melee->tn += att->melee->modifiers[mod_index];
@@ -975,7 +975,7 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
 
     snprintf(rbuf, sizeof(rbuf), "^c%s%s's TN modifiers: ", GET_CHAR_NAME( def->ch ),
             (GET_PHYSICAL(def->ch) <= 0 || GET_MENTAL(def->ch) <= 0) ? " (incap)" : "" );
-    def->melee->tn += modify_target_rbuf_raw(def->ch, rbuf, sizeof(rbuf), def->melee->modifiers[COMBAT_MOD_VISIBILITY]);
+    def->melee->tn += modify_target_rbuf_raw(def->ch, rbuf, sizeof(rbuf), def->melee->modifiers[COMBAT_MOD_VISIBILITY], FALSE);
     for (int mod_index = 0; mod_index < NUM_COMBAT_MODIFIERS; mod_index++) {
       buf_mod(rbuf, sizeof(rbuf), combat_modifiers[mod_index], def->melee->modifiers[mod_index]);
       def->melee->tn += def->melee->modifiers[mod_index];

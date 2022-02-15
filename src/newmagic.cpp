@@ -28,6 +28,9 @@ extern bool would_become_killer(struct char_data * ch, struct char_data * vict);
 extern void nonsensical_reply(struct char_data *ch, const char *arg, const char *mode);
 extern void send_mob_aggression_warnings(struct char_data *pc, struct char_data *mob);
 extern bool mob_is_aggressive(struct char_data *ch, bool include_base_aggression);
+extern int modify_target_rbuf_magical(struct char_data *ch, char *rbuf, int rbuf_len);
+
+char modify_target_rbuf_for_newmagic[MAX_STRING_LENGTH];
 
 bool focus_is_usable_by_ch(struct obj_data *focus, struct char_data *ch);
 
@@ -796,7 +799,7 @@ bool spell_drain(struct char_data *ch, int spell_idx, int force, int damage) {
 
   char rbuf[MAX_STRING_LENGTH];
   strlcpy(rbuf, "Spell drain modify_target results: ", sizeof(rbuf));
-  target += modify_target_rbuf(ch, ENDOF(rbuf), sizeof(rbuf));
+  target += modify_target_rbuf_magical(ch, ENDOF(rbuf), sizeof(rbuf));
   act(rbuf, FALSE, ch, NULL, NULL, TO_ROLLS);
 
   // Target then adds the drain modifier of the spell.
@@ -1231,7 +1234,7 @@ void cast_combat_spell(struct char_data *ch, int spell, int force, char *arg)
   // Pre-calculate the modifiers to the target (standard modify_target(), altered by spell_bonus()).
   char rbuf[MAX_STRING_LENGTH];
   strlcpy(rbuf, "cast_combat_spell modify_target_rbuf: ", sizeof(rbuf));
-  int target_modifiers = modify_target_rbuf(ch, rbuf, sizeof(rbuf));
+  int target_modifiers = modify_target_rbuf_magical(ch, rbuf, sizeof(rbuf));
   act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
 
   int skill = GET_SKILL(ch, SKILL_SORCERY) + MIN(GET_SKILL(ch, SKILL_SORCERY), GET_CASTING(ch));
@@ -1384,7 +1387,7 @@ void cast_detection_spell(struct char_data *ch, int spell, int force, char *arg,
   // Pre-calculate the modifiers to the target (standard modify_target(), altered by spell_bonus()).
   char rbuf[MAX_STRING_LENGTH];
   strlcpy(rbuf, "cast_detection_spell modify_target_rbuf: ", sizeof(rbuf));
-  int target_modifiers = modify_target_rbuf(ch, rbuf, sizeof(rbuf));
+  int target_modifiers = modify_target_rbuf_magical(ch, rbuf, sizeof(rbuf));
   act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
 
   int skill = GET_SKILL(ch, SKILL_SORCERY) + MIN(GET_SKILL(ch, SKILL_SORCERY), GET_CASTING(ch));
@@ -1451,7 +1454,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
   // Pre-calculate the modifiers to the target (standard modify_target(), altered by spell_bonus()).
   char rbuf[MAX_STRING_LENGTH];
   strlcpy(rbuf, "cast_health_spell modify_target_rbuf: ", sizeof(rbuf));
-  int target_modifiers = modify_target_rbuf(ch, rbuf, sizeof(rbuf));
+  int target_modifiers = modify_target_rbuf_magical(ch, rbuf, sizeof(rbuf));
   act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
 
   int skill = GET_SKILL(ch, SKILL_SORCERY) + MIN(GET_SKILL(ch, SKILL_SORCERY), GET_CASTING(ch));
@@ -1697,7 +1700,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
     // Pre-calculate the modifiers to the target (standard modify_target(), altered by spell_bonus()).
     char rbuf[MAX_STRING_LENGTH];
     strlcpy(rbuf, "cast_illusion_spell modify_target_rbuf: ", sizeof(rbuf));
-    int target_modifiers = modify_target_rbuf(ch, rbuf, sizeof(rbuf));
+    int target_modifiers = modify_target_rbuf_magical(ch, rbuf, sizeof(rbuf));
     act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
 
     int skill = GET_SKILL(ch, SKILL_SORCERY) + MIN(GET_SKILL(ch, SKILL_SORCERY), GET_CASTING(ch));
@@ -1846,7 +1849,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
   // Pre-calculate the modifiers to the target (standard modify_target(), altered by spell_bonus()).
   char rbuf[MAX_STRING_LENGTH];
   strlcpy(rbuf, "cast_manipulation_spell modify_target_rbuf: ", sizeof(rbuf));
-  int target_modifiers = modify_target_rbuf(ch, rbuf, sizeof(rbuf));
+  int target_modifiers = modify_target_rbuf_magical(ch, rbuf, sizeof(rbuf));
   act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
 
   int success = 0;

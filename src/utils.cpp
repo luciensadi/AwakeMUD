@@ -339,7 +339,7 @@ int sustain_modifier(struct char_data *ch, char *rbuf, size_t rbuf_len) {
 }
 
 // Adds the combat_mode toggle
-int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int current_visibility_penalty) {
+int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int current_visibility_penalty, bool skill_is_magic) {
   extern time_info_data time_info;
   int base_target = 0, light_target = 0;
   // get damage modifier
@@ -356,8 +356,10 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int c
 
   if (PLR_FLAGGED(ch, PLR_PERCEIVE))
   {
-    base_target += 2;
-    buf_mod(rbuf, rbuf_len, "AstralPercep", 2);
+    if (!skill_is_magic) {
+      base_target += 2;
+      buf_mod(rbuf, rbuf_len, "AstralPercep", 2);
+    }
   } else if (current_visibility_penalty < 8) {
     switch (light_level(temp_room)) {
       case LIGHT_FULLDARK:
@@ -540,14 +542,19 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int c
 
 int modify_target_rbuf(struct char_data *ch, char *rbuf, int rbuf_len)
 {
-  return modify_target_rbuf_raw(ch, rbuf, rbuf_len, 0);
+  return modify_target_rbuf_raw(ch, rbuf, rbuf_len, 0, FALSE);
+}
+
+int modify_target_rbuf_magical(struct char_data *ch, char *rbuf, int rbuf_len)
+{
+  return modify_target_rbuf_raw(ch, rbuf, rbuf_len, 0, TRUE);
 }
 
 int modify_target(struct char_data *ch)
 {
   char fake_rbuf[5000];
   memset(fake_rbuf, 0, sizeof(fake_rbuf));
-  return modify_target_rbuf_raw(ch, fake_rbuf, sizeof(fake_rbuf), 0);
+  return modify_target_rbuf_raw(ch, fake_rbuf, sizeof(fake_rbuf), 0, FALSE);
 }
 
 // this returns the general skill
