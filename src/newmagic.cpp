@@ -798,8 +798,9 @@ bool spell_drain(struct char_data *ch, int spell_idx, int force, int damage) {
   int success = 0;
 
   char rbuf[MAX_STRING_LENGTH];
-  strlcpy(rbuf, "Spell drain modify_target results: ", sizeof(rbuf));
-  target += modify_target_rbuf_magical(ch, ENDOF(rbuf), sizeof(rbuf));
+  //  We don't use modify_target here since wound penalties don't apply to damage resistance tests. -LS
+  // strlcpy(rbuf, "Spell drain modify_target results: ", sizeof(rbuf));
+  // target += modify_target_rbuf_magical(ch, ENDOF(rbuf), sizeof(rbuf));
   act(rbuf, FALSE, ch, NULL, NULL, TO_ROLLS);
 
   // Target then adds the drain modifier of the spell.
