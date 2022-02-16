@@ -77,6 +77,7 @@ ACMD(do_assist)
 #ifdef IGNORING_IC_ALSO_IGNORES_COMBAT
       if (IS_IGNORING(opponent, is_blocking_ic_interaction_from, ch)) {
         act("You can't see who is fighting $M!", FALSE, ch, 0, helpee, TO_CHAR);
+        log_attempt_to_bypass_ic_ignore(ch, opponent, "do_assist");
         return;
       }
 
@@ -364,6 +365,7 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
 #ifdef IGNORING_IC_ALSO_IGNORES_COMBAT
     if (IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)) {
       send_to_char("They are nothing but a figment of your imagination.\r\n", ch);
+      log_attempt_to_bypass_ic_ignore(ch, vict, "perform_hit");
       return TRUE;
     }
 
@@ -708,6 +710,7 @@ ACMD(do_kick)
       if (!IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)) {
         act("$n sneaks up behind you and kicks you in the ass!\r\n"
             "That's gonna leave a mark...", FALSE, ch, 0, vict, TO_VICT);
+        log_attempt_to_bypass_ic_ignore(ch, vict, "kick");
       }
       act("$n sneaks up behind $N and gives $M a swift kick in the ass!",
           TRUE, ch, 0, vict, TO_NOTVICT);

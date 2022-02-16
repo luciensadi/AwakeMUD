@@ -29,6 +29,7 @@ extern void nonsensical_reply(struct char_data *ch, const char *arg, const char 
 extern void send_mob_aggression_warnings(struct char_data *pc, struct char_data *mob);
 extern bool mob_is_aggressive(struct char_data *ch, bool include_base_aggression);
 extern int modify_target_rbuf_magical(struct char_data *ch, char *rbuf, int rbuf_len);
+extern bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype, bool include_func_protections);
 
 char modify_target_rbuf_for_newmagic[MAX_STRING_LENGTH];
 
@@ -3991,10 +3992,16 @@ POWER(spirit_sustain)
     send_to_char(ch, "That %s is already sustaining a spell.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
   else {
     int i = atoi(arg);
-    if (i <= 0 || i > GET_SUSTAINED_NUM(ch)) {
-      send_to_char("You aren't sustaining that many spells.\r\n", ch);
+    if (i <= 0) {
+      send_to_char(ch, "Syntax: 'order <%s> sustain <spell number from the AFFECT command>\r\n'", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
       return;
     }
+
+    if (i > GET_SUSTAINED_NUM(ch)) {
+      send_to_char(ch, "You're only sustaining %d spell%s.\r\n", GET_SUSTAINED_NUM(ch), GET_SUSTAINED_NUM(ch) != 1 ? "s" : "");
+      return;
+    }
+
     for (sust = GET_SUSTAINED(ch); sust; sust = sust->next)
       if (sust->caster && --i == 0)
         break;
@@ -4028,13 +4035,19 @@ POWER(spirit_sustain)
 POWER(spirit_accident)
 {
   struct char_data *tch = get_char_room_vis(spirit, arg);
+  bool ignoring = FALSE;
+
   if (!tch)
     send_to_char("Use accident against which target?\r\n", ch);
   else if (tch == ch)
     send_to_char("You cannot target yourself with that power.\r\n", ch);
   else if (tch == spirit)
     send_to_char(ch, "The %s refuses to perform that service.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
-  else {
+  else if (!can_hurt(ch, tch, TYPE_HIT, TRUE) || (ignoring = IS_IGNORING(tch, is_blocking_ic_interaction_from, ch)) || would_become_killer(ch, tch)) {
+    send_to_char(ch, "The %s refuses to perform that service.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
+    if (ignoring)
+      log_attempt_to_bypass_ic_ignore(ch, tch, "spirit_accident");
+  } else {
     int success = success_test(MAX(GET_INT(tch), GET_QUI(tch)), GET_SPARE2(spirit));
     for (struct char_data *mob = spirit->in_room->people; mob; mob = mob->next)
       if (IS_NPC(mob) && (GET_RACE(mob) == RACE_SPIRIT || GET_RACE(mob) == RACE_ELEMENTAL) &&
@@ -4056,12 +4069,18 @@ POWER(spirit_accident)
 
 POWER(spirit_binding)
 {
+  bool ignoring = FALSE;
   struct char_data *tch = get_char_room_vis(spirit, arg);
+
   if (!tch)
     send_to_char("Use binding against which target?\r\n", ch);
   else if (tch == spirit || tch == ch)
     send_to_char(ch, "The %s refuses to perform that service.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
-  else if (ROOM_FLAGGED(get_ch_in_room(spirit), ROOM_PEACEFUL))
+  else if (!can_hurt(ch, tch, TYPE_HIT, TRUE) || (ignoring = IS_IGNORING(tch, is_blocking_ic_interaction_from, ch)) || would_become_killer(ch, tch)) {
+    send_to_char(ch, "The %s refuses to perform that service.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
+    if (ignoring)
+      log_attempt_to_bypass_ic_ignore(ch, tch, "spirit_binding");
+  } else if (ROOM_FLAGGED(get_ch_in_room(spirit), ROOM_PEACEFUL))
     send_to_char("It's too peaceful here...\r\n", ch);
   else {
     act("$N suddenly becomes incapable of movement!", FALSE, spirit, 0, ch, TO_VICT);
@@ -4074,9 +4093,10 @@ POWER(spirit_binding)
 
 POWER(spirit_conceal)
 {
+  bool ignoring = FALSE;
   struct char_data *tch = get_char_room_vis(spirit, arg);
   if (affected_by_power(spirit, CONCEAL)) {
-    act("$N stops providing that services.", FALSE, ch, 0, spirit, TO_CHAR);
+    act("$N stops providing that service.", FALSE, ch, 0, spirit, TO_CHAR);
     stop_spirit_power(spirit, CONCEAL);
     return;
   }
@@ -4084,7 +4104,11 @@ POWER(spirit_conceal)
     send_to_char("Use conceal against which target?\r\n", ch);
   else if (tch == spirit || affected_by_power(tch, CONCEAL))
     send_to_char(ch, "The %s refuses to perform that service.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
-  else {
+  else if (!can_hurt(ch, tch, TYPE_HIT, TRUE) || (ignoring = IS_IGNORING(tch, is_blocking_ic_interaction_from, ch)) || would_become_killer(ch, tch)) {
+    send_to_char(ch, "The %s refuses to perform that service.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
+    if (ignoring)
+      log_attempt_to_bypass_ic_ignore(ch, tch, "spirit_conceal");
+  } else {
     act("$n vanishes from sight.", FALSE, spirit, 0, ch, TO_VICT);
     send_to_char("The terrain seems to cover your tracks.\r\n", tch);
     make_spirit_power(spirit, tch, CONCEAL);
@@ -4094,19 +4118,24 @@ POWER(spirit_conceal)
 
 POWER(spirit_confusion)
 {
+  bool ignoring = FALSE;
   struct char_data *tch = get_char_room_vis(spirit, arg);
   if (affected_by_power(spirit, CONFUSION)) {
-    act("$N stops providing that services.", FALSE, ch, 0, spirit, TO_CHAR);
+    act("$N stops providing that service.", FALSE, ch, 0, spirit, TO_CHAR);
     stop_spirit_power(spirit, CONFUSION);
     return;
   }
   if (!tch)
     send_to_char("Use confusion against which target?\r\n", ch);
   else if (tch == spirit || tch == ch || affected_by_power(tch, CONFUSION))
-    send_to_char(ch, "The %s refuses to harm itself.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
+    send_to_char(ch, "The %s refuses to perform that service.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
   else if (ROOM_FLAGGED(get_ch_in_room(spirit), ROOM_PEACEFUL))
     send_to_char("It's too peaceful here...\r\n", ch);
-  else {
+  else if (!can_hurt(ch, tch, TYPE_HIT, TRUE) || (ignoring = IS_IGNORING(tch, is_blocking_ic_interaction_from, ch)) || would_become_killer(ch, tch)) {
+    send_to_char(ch, "The %s refuses to perform that service.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
+    if (ignoring)
+      log_attempt_to_bypass_ic_ignore(ch, tch, "spirit_conceal");
+  } else {
     act("$n winces and clutches at $s head.", FALSE, spirit, 0, ch, TO_VICT);
     send_to_char("The world shifts and warps unnaturally around you.\r\n", tch);
     make_spirit_power(spirit, tch, CONFUSION);
@@ -4116,18 +4145,24 @@ POWER(spirit_confusion)
 
 POWER(spirit_engulf)
 {
+  bool ignoring = FALSE;
   struct char_data *tch = get_char_room_vis(spirit, arg);
   if (affected_by_power(spirit, ENGULF)) {
-    act("$N stops providing that services.", FALSE, ch, 0, spirit, TO_CHAR);
+    act("$N stops providing that service.", FALSE, ch, 0, spirit, TO_CHAR);
     stop_spirit_power(spirit, ENGULF);
     return;
   }
   if (!tch)
     send_to_char("Use movement against which target?\r\n", ch);
   else if (tch == spirit || tch == ch || affected_by_power(tch, ENGULF))
-    send_to_char(ch, "The %s refuses to harm itself.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
+    send_to_char(ch, "The %s refuses to perform that service.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
   else if (ROOM_FLAGGED(get_ch_in_room(spirit), ROOM_PEACEFUL))
     send_to_char("It's too peaceful here...\r\n", ch);
+  else if (!can_hurt(ch, tch, TYPE_HIT, TRUE) || (ignoring = IS_IGNORING(tch, is_blocking_ic_interaction_from, ch)) || would_become_killer(ch, tch)) {
+    send_to_char(ch, "The %s refuses to perform that service.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
+    if (ignoring)
+      log_attempt_to_bypass_ic_ignore(ch, tch, "spirit_conceal");
+  }
   else {
     act("$n rushes towards $N and attempts to engulf them!", FALSE, spirit, 0, tch, TO_ROOM);
     int target = GET_QUI(spirit), targskill = get_skill(tch, SKILL_UNARMED_COMBAT, target);
@@ -4166,6 +4201,7 @@ POWER(spirit_engulf)
 
 POWER(spirit_fear)
 {
+  bool ignoring = FALSE;
   struct char_data *tch = get_char_room_vis(spirit, arg);
   if (!tch)
     send_to_char("Use fear against which target?\r\n", ch);
@@ -4175,6 +4211,11 @@ POWER(spirit_fear)
     send_to_char(ch, "The %s refuses to harm itself.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
   else if (ROOM_FLAGGED(get_ch_in_room(spirit), ROOM_PEACEFUL))
     send_to_char("It's too peaceful here...\r\n", ch);
+  else if (!can_hurt(ch, tch, TYPE_HIT, TRUE) || (ignoring = IS_IGNORING(tch, is_blocking_ic_interaction_from, ch)) || would_become_killer(ch, tch)) {
+    send_to_char(ch, "The %s refuses to perform that service.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
+    if (ignoring)
+      log_attempt_to_bypass_ic_ignore(ch, tch, "spirit_conceal");
+  }
   else {
     int success = success_test(GET_SPARE2(spirit), GET_WIL(tch)) - success_test(GET_WIL(tch), GET_SPARE2(spirit));
     if (success < 1) {
@@ -4205,15 +4246,21 @@ POWER(spirit_flameaura)
 
 POWER(spirit_flamethrower)
 {
+  bool ignoring = FALSE;
   struct char_data *tch = get_char_room_vis(spirit, arg);
   if (!tch)
     send_to_char("Use flamethrower against which target?\r\n", ch);
   else if (tch == ch)
     send_to_char("You cannot target yourself with that power.\r\n", ch);
   else if (tch == spirit)
-    send_to_char(ch, "The %s refuses to harm itself.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
+    send_to_char(ch, "The %s refuses to perform that service.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
   else if (ROOM_FLAGGED(get_ch_in_room(spirit), ROOM_PEACEFUL))
     send_to_char("It's too peaceful here...\r\n", ch);
+  else if (!can_hurt(ch, tch, TYPE_HIT, TRUE) || (ignoring = IS_IGNORING(tch, is_blocking_ic_interaction_from, ch)) || would_become_killer(ch, tch)) {
+    send_to_char(ch, "The %s refuses to perform that service.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
+    if (ignoring)
+      log_attempt_to_bypass_ic_ignore(ch, tch, "spirit_conceal");
+  }
   else {
     snprintf(buf, sizeof(buf), "moderate %s", arg);
     cast_spell(spirit, SPELL_FLAMETHROWER, 0, GET_LEVEL(spirit), buf);
@@ -4260,6 +4307,7 @@ POWER(spirit_materialize)
 
 POWER(spirit_movement)
 {
+  bool ignoring = FALSE;
   int increase = 0;
   if (affected_by_power(spirit, MOVEMENTUP)) {
     act("$N stops providing that service.", FALSE, ch, 0, spirit, TO_CHAR);
@@ -4293,6 +4341,11 @@ POWER(spirit_movement)
     send_to_char("Use movement against which target?\r\n", ch);
   else if (tch == spirit || affected_by_power(tch, increase > 0 ? MOVEMENTUP : MOVEMENTDOWN))
     send_to_char(ch, "The %s refuses to perform that service.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
+  else if (!can_hurt(ch, tch, TYPE_HIT, TRUE) || (ignoring = IS_IGNORING(tch, is_blocking_ic_interaction_from, ch)) || (increase < 0 && would_become_killer(ch, tch))) {
+    send_to_char(ch, "The %s refuses to perform that service.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
+    if (ignoring)
+      log_attempt_to_bypass_ic_ignore(ch, tch, "spirit_conceal");
+  }
   else {
     act("$n performs that service for you.", FALSE, spirit, 0, ch, TO_VICT);
     if (increase > 0)
@@ -4306,15 +4359,21 @@ POWER(spirit_movement)
 
 POWER(spirit_breath)
 {
+  bool ignoring = FALSE;
   struct char_data *tch = get_char_room_vis(spirit, arg);
   if (!tch)
     send_to_char("Use noxious breath against which target?\r\n", ch);
   else if (tch == ch)
     send_to_char("You cannot target yourself with that power.\r\n", ch);
   else if (tch == spirit)
-    send_to_char(ch, "The %s refuses to harm itself.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
+    send_to_char(ch, "The %s refuses to perform that service.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
   else if (ROOM_FLAGGED(get_ch_in_room(spirit), ROOM_PEACEFUL))
     send_to_char("It's too peaceful here...\r\n", ch);
+  else if (!can_hurt(ch, tch, TYPE_HIT, TRUE) || (ignoring = IS_IGNORING(tch, is_blocking_ic_interaction_from, ch)) || would_become_killer(ch, tch)) {
+    send_to_char(ch, "The %s refuses to perform that service.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
+    if (ignoring)
+      log_attempt_to_bypass_ic_ignore(ch, tch, "spirit_conceal");
+  }
   else {
     act("$n turns towards $N as a cloud of noxious fumes forms around $S.", TRUE, spirit, 0, tch, TO_NOTVICT);
     act("$n lets forth a stream of noxious fumes in your direction.", FALSE, spirit, 0, tch, TO_VICT);
@@ -4333,6 +4392,7 @@ POWER(spirit_breath)
 
 POWER(spirit_attack)
 {
+  bool ignoring = FALSE;
   struct char_data *tch = get_char_room_vis(spirit, arg);
   if (!tch)
     send_to_char("Use attack which target?\r\n", ch);
@@ -4342,6 +4402,11 @@ POWER(spirit_attack)
     send_to_char(ch, "The %s refuses to attack itself.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
   else if (ROOM_FLAGGED(get_ch_in_room(spirit), ROOM_PEACEFUL))
     send_to_char("It's too peaceful here...\r\n", ch);
+  else if (!can_hurt(ch, tch, TYPE_HIT, TRUE) || (ignoring = IS_IGNORING(tch, is_blocking_ic_interaction_from, ch)) || would_become_killer(ch, tch)) {
+    send_to_char(ch, "The %s refuses to perform that service.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
+    if (ignoring)
+      log_attempt_to_bypass_ic_ignore(ch, tch, "spirit_conceal");
+  }
   else {
     if (would_become_killer(ch, tch)) {
       send_to_char("That would make you a PLAYER KILLER! Both you and your opponent must `toggle PK` to do that.\r\n", ch);
@@ -4431,8 +4496,8 @@ ACMD(do_order)
           break;
         case ELEM_AIR:
           send_to_char("  ^WMovement^n\r\n"
-                       "  Noxious ^WBreath^n\r\n"
-                       "  ^WPsychokinesis^n\r\n", ch);
+                       "  Noxious ^WBreath^n\r\n", ch);
+                       /* "  ^WPsychokinesis^n\r\n" */
           break;
         }
       }
@@ -4457,10 +4522,12 @@ ACMD(do_order)
         send_to_char("  ^WMovement^n\r\n", ch);
       if (spirit_can_perform(spirit->type, SERV_BREATH, TRAD_SHAMANIC))
         send_to_char("  Noxious ^WBreath^n\r\n", ch);
+      /* Not implemented yet. -LS
       if (spirit_can_perform(spirit->type, SERV_PSYCHOKINESIS, TRAD_SHAMANIC))
         send_to_char("  ^WPsychokinesis^n\r\n", ch);
       if (spirit_can_perform(spirit->type, SERV_SEARCH, TRAD_SHAMANIC))
         send_to_char("  ^WSearch^n\r\n", ch);
+      */
     }
     send_to_char("  Attack\r\n", ch);
   } else {
@@ -5362,13 +5429,13 @@ ACMD(do_focus)
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (%s)", attributes[spell->subtype]);
     send_to_char(ch, "You begin to concentrate on sustaining %s.\r\n", buf);
     send_to_char(spell->other, "You feel a weight lifted from you as someone takes over sustaining your %s spell.\r\n", buf);
-  } else if (!str_cmp(argument, "release")) {
+  } else if (is_abbrev(argument, "release")) {
     if (!GET_SUSTAINED_NUM(ch)) {
       send_to_char("You aren't sustaining any spells.\r\n", ch);
       return;
     }
     adept_release_spell(ch, FALSE);
-  } else if (!str_cmp(argument, "disrupt")) {
+  } else if (is_abbrev(argument, "disrupt")) {
     if (!GET_SUSTAINED_NUM(ch)) {
       send_to_char("You aren't sustaining any spells.\r\n", ch);
       return;
@@ -5447,7 +5514,8 @@ ACMD(do_think)
   }
   skip_spaces(&argument);
   snprintf(buf, sizeof(buf), "^rYou hear $v in your mind say, \"%s\"", argument);
-  act(buf, FALSE, ch, 0, ch->char_specials.mindlink, TO_VICT);
+  if (!IS_IGNORING(ch->char_specials.mindlink, is_blocking_mindlinks_from, ch))
+    act(buf, FALSE, ch, 0, ch->char_specials.mindlink, TO_VICT);
   send_to_char(ch, "You think, \"%s\"\r\n", argument);
 }
 

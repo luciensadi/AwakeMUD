@@ -1187,6 +1187,16 @@ ACMD(do_toggle)
         continue;
       }
 
+      // Skip log bits.
+      if ((i >= PRF_CONNLOG && i <= PRF_ZONELOG) || i == PRF_CHEATLOG || i == PRF_BANLOG || i == PRF_GRIDLOG || i == PRF_WRECKLOG
+          || i == PRF_PGROUPLOG || i == PRF_HELPLOG || i == PRF_PURGELOG || i == PRF_FUCKUPLOG || i == PRF_ECONLOG || i == PRF_RADLOG
+          || i == PRF_IGNORELOG)
+        continue;
+
+      // Skip pgroup tag pref for non-grouped.
+      if (i == PRF_SHOWGROUPTAG && (!GET_PGROUP_MEMBER_DATA(ch) || !GET_PGROUP(ch)))
+        continue;
+
       // Select ONOFF or YESNO display type based on field 2.
       if (preference_bits_v2[i].on_off) {
         strcpy(buf2, ONOFF(PRF_FLAGGED(ch, i)));
@@ -1196,7 +1206,7 @@ ACMD(do_toggle)
 
       // Compose and append our line.
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf),
-              "%20s: %-3s%s",
+              "%22s: %-3s%s",
               preference_bits_v2[i].name,
               buf2,
               printed%3 == 2 || PRF_FLAGGED(ch, PRF_SCREENREADER) ? "\r\n" : "");
@@ -4531,7 +4541,7 @@ ACMD(do_syspoints) {
         send_to_char("Hardcore characters are nodelete by default.\r\n", ch);
         return;
       }
-      
+
       // Already set.
       if (PLR_FLAGGED(ch, PLR_NODELETE)) {
         send_to_char("You're already set to never idle-delete. Thanks for your contributions!\r\n", ch);

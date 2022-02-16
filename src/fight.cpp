@@ -4367,6 +4367,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
 #ifdef IGNORING_IC_ALSO_IGNORES_COMBAT
       if (IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)) {
         send_to_char("You and your opponent must both be toggled PK for that.\r\n", ch);
+        log_attempt_to_bypass_ic_ignore(ch, vict, "range_combat");
         return;
       }
 
