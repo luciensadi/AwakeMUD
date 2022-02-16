@@ -2512,7 +2512,7 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
       char oopsbuf[5000];
       snprintf(oopsbuf, sizeof(oopsbuf), "SUPER SYSERR: Somehow, we made it all the way to damage() with the victim ignoring the attacker! "
                                          "%s ch, %s victim, %d dam, %d attacktype, %d is_physical, %d send_message.",
-                                         ch, victim, dam, attacktype, is_physical, send_message
+                                         GET_CHAR_NAME(ch), GET_CHAR_NAME(victim), dam, attacktype, is_physical, send_message
                                        );
       mudlog(oopsbuf, ch, LOG_SYSLOG, TRUE);
       return 0;
@@ -2522,7 +2522,7 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
       char oopsbuf[5000];
       snprintf(oopsbuf, sizeof(oopsbuf), "SUPER SYSERR: Somehow, we made it all the way to damage() with the attacker ignoring the victim! "
                                          "%s ch, %s victim, %d dam, %d attacktype, %d is_physical, %d send_message.",
-                                         ch, victim, dam, attacktype, is_physical, send_message
+                                         GET_CHAR_NAME(ch), GET_CHAR_NAME(victim), dam, attacktype, is_physical, send_message
                                        );
       mudlog(oopsbuf, ch, LOG_SYSLOG, TRUE);
       return 0;
