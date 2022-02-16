@@ -2654,6 +2654,8 @@ SPECIAL(fixer)
       do_say(fixer, arg, 0, SCMD_SAYTO);
       return TRUE;
     }
+    // Wipe out the timer. This prevents things like guns getting crazy FA values.
+    GET_OBJ_TIMER(obj) = 0;
     if (!perform_give(fixer, ch, obj)) {
       snprintf(arg, sizeof(arg), "%s That's odd...I can't let go of it.", GET_CHAR_NAME(ch));
       do_say(fixer, arg, 0, SCMD_SAYTO);

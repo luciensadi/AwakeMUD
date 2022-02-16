@@ -97,7 +97,7 @@ void medit_disp_menu(struct descriptor_data *d)
   send_to_char(CH, "h) Default Position: %s%s%s\r\n", CCCYN(CH, C_CMP), buf1,
                CCNRM(CH, C_CMP));
                */
-               
+
   send_to_char(CH, "h) Ammunition\r\n");
   sprinttype(GET_SEX(MOB), genders, buf1, sizeof(buf1));
   //  strcpy(buf1, genders[GET_SEX(d->edit_mob)]);
@@ -420,7 +420,7 @@ void medit_parse(struct descriptor_data *d, const char *arg)
         for (temp_mob = character_list; temp_mob; temp_mob = temp_mob->next)
           if (GET_MOB_RNUM (temp_mob) >= d->edit_mob->nr)
             GET_MOB_RNUM (temp_mob)++;
-            
+
         /* RENUMBER ZONE TABLES HERE, only              *
         *   because I ADDED a mobile!                   *
         *   This code shamelessly ripped off from db.c */
@@ -1137,7 +1137,7 @@ void medit_parse(struct descriptor_data *d, const char *arg)
         break;
     }
     break;
-  
+
   case MEDIT_AMMO_SELECT_WEAPON:
     number = (atoi(arg) - 1) + START_OF_AMMO_USING_WEAPONS;
     if (number < START_OF_AMMO_USING_WEAPONS || number > END_OF_AMMO_USING_WEAPONS)
@@ -1150,7 +1150,7 @@ void medit_parse(struct descriptor_data *d, const char *arg)
       d->edit_mode = MEDIT_AMMO_SELECT_AMMO;
     }
     break;
-  
+
   case MEDIT_AMMO_SELECT_AMMO:
     number = atoi(arg) - 1;
     if (number < AMMO_NORMAL || number >= NUM_AMMOTYPES)
@@ -1161,7 +1161,7 @@ void medit_parse(struct descriptor_data *d, const char *arg)
       d->edit_mode = MEDIT_AMMO_SELECT_QUANTITY;
     }
     break;
-    
+
   case MEDIT_AMMO_SELECT_QUANTITY:
     number = atoi(arg);
     if (number < 0 || number > MAX_NUMBER_OF_BULLETS_IN_PANTS) {
@@ -1171,7 +1171,7 @@ void medit_parse(struct descriptor_data *d, const char *arg)
       medit_disp_ammo_menu(d);
     }
     break;
-      
+
   case MEDIT_POSITION:
     number = atoi(arg);
     if ((number < POS_MORTALLYW) || (number > POS_STANDING)) {
@@ -1322,10 +1322,10 @@ void write_mobs_to_disk(int zone)
       for (int wp = START_OF_AMMO_USING_WEAPONS; wp <= END_OF_AMMO_USING_WEAPONS; wp++)
         for (int am = AMMO_NORMAL; am < NUM_AMMOTYPES; am++)
           if (GET_BULLETPANTS_AMMO_AMOUNT(mob, wp, am) > 0)
-            fprintf(fp, "\t%s:\t%u\n", 
+            fprintf(fp, "\t%s:\t%u\n",
                         get_ammo_representation(wp, am, 0),
                         GET_BULLETPANTS_AMMO_AMOUNT(mob, wp, am));
-            
+
       fprintf(fp, "BREAK\n");
     } // close if statement
   } // close for loop
