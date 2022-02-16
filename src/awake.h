@@ -1051,6 +1051,7 @@ enum {
 #define TYPE_POLTERGEIST      412
 #define TYPE_ELEVATOR         413
 #define TYPE_MEDICAL_MISHAP   414
+#define TYPE_SPELL_DRAIN      415
 
 #define WEAP_EDGED          0
 #define WEAP_CLUB           1
@@ -1447,7 +1448,7 @@ enum {
 #define BIO_REFLEXRECORDER  22
 #define BIO_SYNAPTICACCELERATOR  23
 #define BIO_THERMOSENSEORGAN  24
-#define BIO_TRAUMADAMPNER  25
+#define BIO_TRAUMADAMPER  25
 #define NUM_BIOWARE    26
 
 #define BIOWARE_STANDARD 0

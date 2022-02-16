@@ -680,72 +680,7 @@ bool conjuring_drain(struct char_data *ch, int force)
     drain = SERIOUS;
   drain = convert_damage(stage(-success_test(GET_CHA(ch), force), drain));
 
-  // Physical drain.
-  if (force > GET_MAG(ch) / 100) {
-    // Iterate through bioware to find relevant bioware.
-    bool bPlat = FALSE;
-    bool bTraum = FALSE;
-    for (struct obj_data *bio = ch->bioware; bio && drain > 0; bio = bio->next_content) {
-      if (GET_OBJ_VAL(bio, 0) == BIO_PLATELETFACTORY && drain >= 3)
-        bPlat = TRUE;
-
-      if (GET_OBJ_VAL(bio, 0) == BIO_TRAUMADAMPNER)
-        bTraum = TRUE;
-    }
-    if (bPlat)
-      drain--;
-    if (bTraum) {
-      drain--;
-      GET_MENTAL(ch) -= 100;
-    }
-
-    if (drain <= 0)
-    return FALSE;
-
-    GET_PHYSICAL(ch) -= drain *100;
-  }
-  // Mental drain.
-  else {
-    // Iterate through bioware to find a trauma damper.
-    for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content) {
-      if (GET_OBJ_VAL(bio, 0) == BIO_TRAUMADAMPNER) {
-        drain--;
-        break;
-      }
-    }
-    if (drain <= 0)
-      return FALSE;
-
-    GET_MENTAL(ch) -= drain * 100;
-    // Mental overflow to physical
-    if (GET_MENTAL(ch) < 0) {
-      GET_PHYSICAL(ch) += GET_MENTAL(ch);
-      GET_MENTAL(ch) = 0;
-    }
-  }
-  update_pos(ch);
-  if ((GET_POS(ch) <= POS_STUNNED) && (GET_POS(ch) > POS_DEAD))
-  {
-    if (CH_IN_COMBAT(ch))
-      stop_fighting(ch);
-    send_to_char("You are unable to resist the drain from conjuring and fall unconscious!\r\n", ch);
-    act("$n collapses unconscious!", FALSE, ch, 0, 0, TO_ROOM);
-    struct sustain_data *next;
-    for (struct sustain_data *sust = GET_SUSTAINED(ch); sust; sust = next) {
-      next = sust->next;
-      if (sust->caster && !sust->focus && !sust->spirit)
-        end_sustained_spell(ch, sust);
-    }
-  } else if (GET_POS(ch) == POS_DEAD)
-  {
-    if (CH_IN_COMBAT(ch))
-      stop_fighting(ch);
-    send_to_char("The energy from the conjuring ritual overloads your body with energy, killing you...\r\n", ch);
-    act("$n suddenly collapses, dead!", FALSE, ch, 0, 0, TO_ROOM);
-    die(ch);
-    return TRUE;
-  }
-  return FALSE;
+  return damage(ch, ch, drain, TYPE_SPELL_DRAIN, (force > GET_MAG(ch) / 100));
 }
 
 void magic_perception(struct char_data *ch, int force, int spell)
@@ -781,7 +716,7 @@ void magic_perception(struct char_data *ch, int force, int spell)
   }
 }
 
-bool spell_drain(struct char_data *ch, int spell_idx, int force, int damage) {
+bool spell_drain(struct char_data *ch, int spell_idx, int force, int drain_damage) {
   /*
     deals drain damage to a caster
 
@@ -833,17 +768,17 @@ bool spell_drain(struct char_data *ch, int spell_idx, int force, int damage) {
   // Set our drain damage values.
   {
     // If this spell has no damage value set, it's not a combat spell-- this will be stuff like Combat Sense with drain code S=3.
-    if (!damage) {
-      damage = spells[spell_idx].draindamage;
+    if (!drain_damage) {
+      drain_damage = spells[spell_idx].draindamage;
     }
 
     // Otherwise, if the spell has a damage value set, then we tack on the draindamage value in addition to this.
     else if (spell_idx) {
-      damage += UNPACK_VARIABLE_DRAIN_DAMAGE(spells[spell_idx].draindamage);
+      drain_damage += UNPACK_VARIABLE_DRAIN_DAMAGE(spells[spell_idx].draindamage);
 
       // MitS p54
-      while (damage > DEADLY) {
-        damage--;
+      while (drain_damage > DEADLY) {
+        drain_damage--;
         target += 2;
       }
     }
@@ -859,103 +794,26 @@ bool spell_drain(struct char_data *ch, int spell_idx, int force, int damage) {
   magic_perception(ch, force, spell_idx);
 
   // Write our rolls info.
-  int original_damage = damage;
+  int original_damage = drain_damage;
   int dice = GET_WIL(ch) + GET_DRAIN(ch);
   success = success_test(dice, target);
-  damage = convert_damage(stage(-success, damage));
-  snprintf(buf, sizeof(buf), "Drain Test: F:%d%s TN:%d Dice: %d. Rolled %d successes, damage before resists is now %s (%d).",
+  int staged_damage = stage(-success, drain_damage);
+  drain_damage = convert_damage(staged_damage);
+  snprintf(buf, sizeof(buf), "Drain Test: F:%d%s TN:%d Dice: %d. Rolled %d successes, staged damage is %s (%d boxes).",
            force,
            GET_WOUND_NAME(original_damage),
            target,
            dice,
            success,
-           GET_WOUND_NAME(damage),
-           damage
+           GET_WOUND_NAME(staged_damage),
+           drain_damage
           );
   act(buf, FALSE, ch, NULL, NULL, TO_ROLLS);
 
-  if (damage <= 0)
+  if (drain_damage <= 0)
     return FALSE;
 
-  // Apply physical drain damage.
-  if (force > GET_MAG(ch) / 100 || IS_PROJECT(ch)) {
-    // Iterate through bioware to find a platelet factory.
-    bool bPlat = FALSE;
-    bool bTraum = FALSE;
-    struct char_data *chptr = (IS_PROJECT(ch) ? ch->desc->original : ch);
-    for (struct obj_data *bio = chptr->bioware; bio && damage > 0; bio = bio->next_content) {
-      if (GET_OBJ_VAL(bio, 0) == BIO_PLATELETFACTORY && damage >= 3)
-        bPlat = TRUE;
-      if (GET_OBJ_VAL(bio, 0) == BIO_TRAUMADAMPNER)
-        bTraum = TRUE;
-    }
-    if (bPlat)
-      damage--;
-    if (bTraum) {
-      damage--;
-      GET_MENTAL(chptr) -= 100;
-    }
-
-    if (damage <= 0)
-      return FALSE;
-
-    GET_PHYSICAL(ch) -= damage * 100;
-    if (IS_PROJECT(ch)) {
-      GET_PHYSICAL(ch->desc->original) -= damage * 100;
-      AFF_FLAGS(ch->desc->original).SetBit(AFF_DAMAGED);
-    }
-  }
-
-  // Apply mental drain damage.
-  else {
-    // Iterate through cyberware to find a trauma damper.
-    for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content) {
-      if (GET_OBJ_VAL(bio, 0) == BIO_TRAUMADAMPNER) {
-        damage--;
-        break;
-      }
-    }
-
-    if (damage <= 0)
-      return FALSE;
-
-    GET_MENTAL(ch) -= damage * 100;
-  }
-
-  // Roll over mental damage to physical.
-  if (GET_MENTAL(ch) < 0) {
-    GET_PHYSICAL(ch) += GET_MENTAL(ch);
-    GET_MENTAL(ch) = 0;
-  }
-
-  snprintf(buf, sizeof(buf), "After resists, damage is %s (%d).", GET_WOUND_NAME(damage), damage);
-  act(buf, FALSE, ch, NULL, NULL, TO_ROLLS);
-
-  update_pos(ch);
-  if ((GET_POS(ch) <= POS_STUNNED) && (GET_POS(ch) > POS_DEAD))
-  {
-    if (CH_IN_COMBAT(ch))
-      stop_fighting(ch);
-    send_to_char("You are unable to resist the drain from spell casting and fall unconscious!\r\n", ch);
-    act("$n collapses unconscious!", FALSE, ch, 0, 0, TO_ROOM);
-    struct sustain_data *next = NULL;
-    for (struct sustain_data *sust = GET_SUSTAINED(ch); sust; sust = next) {
-      next = sust->next;
-      if (sust->caster && !sust->focus && !sust->spirit)
-        end_sustained_spell(ch, sust);
-    }
-  } else if (GET_POS(ch) == POS_DEAD)
-  {
-    if (CH_IN_COMBAT(ch))
-      stop_fighting(ch);
-    send_to_char("The feedback from spell casting floods your body, killing you...\r\n", ch);
-    act("$n suddenly collapses, dead!", FALSE, ch, 0, 0, TO_ROOM);
-    die(ch);
-    return TRUE;
-  }
-  return FALSE;
-
-
+  return damage(ch, ch, drain_damage, TYPE_SPELL_DRAIN, (force > GET_MAG(ch) / 100 || IS_PROJECT(ch)));
 }
 
 struct char_data *find_target_at_range(struct char_data *ch, char *name, char *direction)
