@@ -330,9 +330,22 @@ int damage_modifier(struct char_data *ch, char *rbuf, int rbuf_size)
 int sustain_modifier(struct char_data *ch, char *rbuf, size_t rbuf_len) {
   int base_target = 0;
 
+  // Since NPCs don't have sustain foci available to them at the moment, we don't throw these penalties on them.
+  if (IS_NPC(ch) && !IS_PROJECT(ch))
+    return 0;
+
   if (GET_SUSTAINED_NUM(ch) > 0) {
-    base_target += ((GET_SUSTAINED_NUM(ch) - GET_SUSTAINED_FOCI(ch)) * 2);
-    buf_mod(rbuf, rbuf_len, "Sustain", (GET_SUSTAINED_NUM(ch) - GET_SUSTAINED_FOCI(ch)) * 2);
+    int delta = (GET_SUSTAINED_NUM(ch) - GET_SUSTAINED_FOCI(ch)) * 2;
+    base_target += delta;
+    buf_mod(rbuf, rbuf_len, "Sustain", delta);
+  }
+
+  if (IS_PROJECT(ch) && ch->desc && ch->desc->original) {
+    if (GET_SUSTAINED_NUM(ch->desc->original) > 0) {
+      int delta = (GET_SUSTAINED_NUM(ch->desc->original) - GET_SUSTAINED_FOCI(ch->desc->original)) * 2;
+      base_target += delta;
+      buf_mod(rbuf, rbuf_len, "Sustain", delta);
+    }
   }
 
   return base_target;
