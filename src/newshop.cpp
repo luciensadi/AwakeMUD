@@ -1346,7 +1346,7 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
         continue;
       }
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %2d)  ", i);
-      if (sell->type == SELL_ALWAYS)
+      if (sell->type == SELL_ALWAYS || (sell->type == SELL_AVAIL && GET_OBJ_AVAILTN(obj) == 0))
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Yes      ");
       else if (sell->type == SELL_AVAIL) {
         int arbitrary_difficulty = GET_OBJ_AVAILTN(obj);
@@ -1410,8 +1410,8 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
         continue;
       }
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %2d)  ", i);
-      if (sell->type == SELL_ALWAYS)
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Yes      ");
+      if (sell->type == SELL_ALWAYS || (sell->type == SELL_AVAIL && GET_OBJ_AVAILTN(obj) == 0))
+        strlcat(buf, "Yes      ", sizeof(buf));
       else if (sell->type == SELL_AVAIL) {
         int arbitrary_difficulty = GET_OBJ_AVAILTN(obj);
         if (arbitrary_difficulty <= 2) {
@@ -3049,7 +3049,7 @@ struct obj_data *shop_package_up_ware(struct obj_data *obj) {
   GET_OBJ_MATERIAL(shop_container) = MATERIAL_ADV_PLASTICS;
   GET_OBJ_COST(shop_container) = 0;
   GET_OBJ_EXTRA(shop_container).SetBit(ITEM_KEPT);
-  
+
   snprintf(buf3, sizeof(buf3), "a packaged-up '%s'", GET_OBJ_NAME(obj));
   DELETE_ARRAY_IF_EXTANT(shop_container->restring);
   shop_container->restring = str_dup(buf3);

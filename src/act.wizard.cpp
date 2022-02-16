@@ -6923,6 +6923,16 @@ int audit_zone_shops_(struct char_data *ch, int zone_num, bool verbose) {
 #endif
     }
 
+    for (struct shop_sell_data *sell = shop_table[real_shp].selling; sell; sell = sell->next) {
+      rnum_t obj_rnum = real_object(sell->vnum);
+      if (obj_rnum < 0) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - item ^c%ld^n is listed as for sale, but does not exist.\r\n", obj_rnum);
+      }
+      else if (sell->type == SELL_AVAIL && GET_OBJ_AVAILTN(&obj_proto[obj_rnum]) == 0) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - avail-listed item ^c%s ^n(^c%ld^n)^n has no TN.\r\n", GET_OBJ_NAME(&obj_proto[obj_rnum]), GET_OBJ_VNUM(&obj_proto[obj_rnum]));
+      }
+    }
+
     if (printed) {
       send_to_char(ch, "%s\r\n", buf);
     }
