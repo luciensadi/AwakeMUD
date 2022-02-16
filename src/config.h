@@ -60,8 +60,9 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 // What do you want the newbie karma threshold to be? Above this, you lose the newbie flag.
 #define NEWBIE_KARMA_THRESHOLD                                 50
 
-// How many syspoints should someone spend to restring an item?
+// How many syspoints do the various options cost?
 #define SYSP_RESTRING_COST                                     2
+#define SYSP_NODELETE_COST                                     100
 
 // How long should the MUD wait for recovery before killing itself? Note that it
 // considers itself to be stuck during copyover too, so if you have a large world,

@@ -4509,14 +4509,14 @@ ACMD(do_syspoints) {
   // Morts can only view their own system points.
   if (!access_level(ch, LVL_CONSPIRATOR)) {
     if (!*argument) {
-      send_to_char(ch, "You have %d system points.\r\n", GET_SYSTEM_POINTS(ch));
+      send_to_char(ch, "You have %d system points. See ^WHELP SYSPOINTS^n for how to use them.\r\n", GET_SYSTEM_POINTS(ch));
       return;
     }
 
     half_chop(argument, arg, buf);
 
     if (!*arg) {
-      send_to_char("Syntax: syspoints restring <item> <string>\r\n", ch);
+      send_to_char("See ^WHELP SYSPOINTS^n for command syntax.\r\n", ch);
       return;
     }
 
@@ -4526,7 +4526,41 @@ ACMD(do_syspoints) {
       return;
     }
 
-    send_to_char("Syntax: syspoints restring <item> <string>\r\n", ch);
+    if (is_abbrev(arg, "nodelete")) {
+      if (PRF_FLAGGED(ch, PRF_HARDCORE)) {
+        send_to_char("Hardcore characters are nodelete by default.\r\n", ch);
+        return;
+      }
+      
+      // Already set.
+      if (PLR_FLAGGED(ch, PLR_NODELETE)) {
+        send_to_char("You're already set to never idle-delete. Thanks for your contributions!\r\n", ch);
+        return;
+      }
+
+      // Can they afford it?
+      if (GET_SYSTEM_POINTS(ch) >= SYSP_NODELETE_COST) {
+        // Have they entered the confirmation command?
+        if (is_abbrev(buf, "confirm")) {
+          GET_SYSTEM_POINTS(ch) -= SYSP_NODELETE_COST;
+          send_to_char(ch, "Congratulations, your character will never idle-delete! %d syspoints have been deducted from your total.\r\n", SYSP_NODELETE_COST);
+          PLR_FLAGS(ch).SetBit(PLR_NODELETE);
+          mudlog("Purchased nodelete with syspoints.", ch, LOG_SYSLOG, TRUE);
+          playerDB.SaveChar(ch);
+          return;
+        }
+
+        // They can afford it, but didn't use the confirm form.
+        send_to_char(ch, "You can spend %d syspoints to purchase a character that never idle-deletes. Type ^WSYSPOINTS NODELETE CONFIRM^n to do so.\r\n", SYSP_NODELETE_COST);
+        return;
+      }
+
+      // Too broke.
+      send_to_char(ch, "That costs %d syspoints, and you only have %d.", SYSP_NODELETE_COST, GET_SYSTEM_POINTS(ch));
+      return;
+    }
+
+    send_to_char(ch, "'%s' is not a valid mode. See ^WHELP SYSPOINTS^n for command syntax.\r\n", arg);
     return;
   }
 
