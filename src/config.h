@@ -201,7 +201,7 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 #define LAST_EMOTE_REQUIREMENT_FOR_CONGREGATION_BONUS          15
 
 // Don't @ me about how long this name is, this is what we call self-documenting code.
-#define NUMBER_OF_TKE_POINTS_PER_REAL_DAY_OF_EXTRA_IDLE_DELETE_GRACE_PERIOD  5
+#define NUMBER_OF_TKE_POINTS_PER_REAL_DAY_OF_EXTRA_IDLE_DELETE_GRACE_PERIOD  10
 
 /////////////// OLC permissions configuration /////////////////////////
 #define LVL_FOR_SETTING_ZONE_EDITOR_ID_NUMBERS                 LVL_VICEPRES
