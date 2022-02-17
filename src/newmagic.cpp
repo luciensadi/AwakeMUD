@@ -850,7 +850,7 @@ void create_sustained(struct char_data *ch, struct char_data *vict, int spell, i
   sust->spell = spell;
   sust->subtype = sub;
   sust->force = force;
-  sust->success = MIN(success, force);
+  sust->success = success;
   sust->other = vict;
   sust->caster = TRUE;
   sust->drain = drain;

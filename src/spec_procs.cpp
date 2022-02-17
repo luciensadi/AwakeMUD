@@ -653,12 +653,16 @@ int get_max_skill_for_char(struct char_data *ch, int skill, int type) {
         case SKILL_ARCANELANGUAGE:
         case SKILL_CENTERING:
         case SKILL_ENCHANTING:
+#ifdef DIES_IRAE
           // Full mages get full magic skills.
           if (GET_ASPECT(ch) == ASPECT_FULL)
             return MIN(max, 12);
 
           // Aspected mages get 10 magic skills to compensate for their 10 mundane skills.
           return MIN(max, 10);
+#else
+          return MIN(max, 12);
+#endif
         default:
           // Full mages get their non-magic skills capped to 8 to compensate for their 12 magic.
           if (GET_ASPECT(ch) == ASPECT_FULL)
