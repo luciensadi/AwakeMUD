@@ -19,6 +19,7 @@
 #include "utils.h"
 #include "newmatrix.h"
 #include "ignore_system.h"
+#include "perception_tests.h"
 
 memoryClass::memoryClass()
 {
@@ -164,6 +165,10 @@ void memoryClass::DeleteCh(struct char_data *ch)
   // Delete their ignore data. This deconstructs it as expected.
   if (ch->ignore_data)
     delete ch->ignore_data;
+
+  // Delete their perception data, then remove them from all other PC's perception records.
+  purge_invis_perception_records(ch);
+  remove_ch_from_pc_perception_records(ch);
 
   free_char(ch);
   delete ch;

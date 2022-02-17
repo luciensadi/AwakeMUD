@@ -16,6 +16,7 @@
 #include "playergroups.h"
 #include "structs.h"
 #include "handler.h"
+#include "perception_tests.h"
 
 // The linked list of loaded playergroups.
 extern Playergroup *loaded_playergroups;
@@ -103,6 +104,11 @@ ACMD(do_debug) {
 
   if (strn_cmp(arg1, "pgroups", strlen(arg1)) == 0) {
     do_pgroup_debug(ch, rest_of_argument);
+  }
+
+  if (access_level(ch, LVL_PRESIDENT) && is_abbrev(arg1, "invis")) {
+    can_see_through_invis(ch, ch);
+    return;
   }
 
   if (access_level(ch, LVL_PRESIDENT) && strn_cmp(arg1, "swimcheck", strlen(arg1)) == 0) {

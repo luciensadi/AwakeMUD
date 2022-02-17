@@ -14,6 +14,7 @@
 #include "olc.h"
 #include "config.h"
 #include "ignore_system.h"
+#include "perception_tests.h"
 
 #define POWER(name) void (name)(struct char_data *ch, struct char_data *spirit, struct spirit_data *spiritdata, char *arg)
 #define FAILED_CAST "You fail to bind the mana to your will.\r\n"
@@ -108,8 +109,10 @@ void end_sustained_spell(struct char_data *ch, struct sustain_data *sust)
         delete vsust;
         break;
       }
-    if (sust->spell == SPELL_INVIS || sust->spell == SPELL_IMP_INVIS)
+    if (sust->spell == SPELL_INVIS || sust->spell == SPELL_IMP_INVIS) {
       act("You blink and suddenly $n appears!", TRUE, sust->caster ? sust->other : ch, 0, 0, TO_ROOM);
+      purge_invis_perception_records(sust->caster ? sust->other : ch);
+    }
   }
   spell_modify(sust->caster ? sust->other : ch, sust, FALSE);
   REMOVE_FROM_LIST(sust, GET_SUSTAINED(ch), next);
@@ -1498,6 +1501,10 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
             - https://www.shadowrunrpg.com/resources/sr3faq.html
             - http://www.shadowruntabletop.com/game-resources/shadowrun-third-edition-faq/
         */
+        // Skip over caster records.
+        if (sus->caster)
+          continue;
+
         if (sus->subtype == sub && (sus->spell == SPELL_INCATTR || sus->spell == SPELL_INCCYATTR || sus->spell == SPELL_DECATTR || sus->spell == SPELL_DECCYATTR || sus->spell == SPELL_INCREA)) {
           send_to_char(ch, "%s is already affected by a similar spell.\r\n", GET_CHAR_NAME(vict));
           return;
@@ -1619,6 +1626,14 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
     case SPELL_IMP_INVIS:
       if (!check_spell_victim(ch, vict, spell, arg))
         return;
+
+      // Anti-cheese: No having a baller spell on yourself, then casting and releasing a weak one to reset your perception table.
+      for (struct sustain_data *sust = GET_SUSTAINED(vict); sust; sust = sust->next) {
+        if (!sust->caster && (sust->spell == SPELL_IMP_INVIS || sust->spell == SPELL_INVIS)) {
+          send_to_char("They're already invisible.\r\n", ch);
+          return;
+        }
+      }
 
       WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
 
@@ -3797,12 +3812,14 @@ void make_spirit_power(struct char_data *spirit, struct char_data *tch, int type
   ssust->type = type;
   ssust->caster = TRUE;
   ssust->target = tch;
+  ssust->force = GET_LEVEL(spirit);
   ssust->next = SPIRIT_SUST(spirit);
   SPIRIT_SUST(spirit) = ssust;
   ssust = new spirit_sustained;
   ssust->type = type;
   ssust->caster = FALSE;
   ssust->target = spirit;
+  ssust->force = GET_LEVEL(spirit);
   ssust->next = SPIRIT_SUST(tch);
   SPIRIT_SUST(tch) = ssust;
 }
