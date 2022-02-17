@@ -311,9 +311,13 @@ bool vict_is_valid_guard_target(struct char_data *ch, struct char_data *vict) {
     "%s Bringing %s in here was the last mistake you'll ever make.",
     "%s %s? Brave of you.",
     "%s Call the DocWagon. Maybe they can use %s to scrape you off the ground.",
-    "%s You think %s is going to save you?"
+    "%s You think %s is going to save you?",
+    "%s I hope %s was worth all this pain.",
+    "%s %s won't save you from me.",
+    "%s Who told you you could have %s here??",
+    "%s I'm keeping %s for myself, just watch."
   };
-  #define NUM_GUARD_MESSAGES 10
+  #define NUM_GUARD_MESSAGES 14
 
   if (!vict_is_valid_target(ch, vict))
     return FALSE;
@@ -920,7 +924,7 @@ bool mobact_process_helper(struct char_data *ch) {
           }
         }
 
-        return true;
+        return TRUE;
       }
 
       // If the victim is a player who is fighting an NPC, and I can see the player, assist the NPC.

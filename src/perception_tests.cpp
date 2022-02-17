@@ -65,6 +65,17 @@ void purge_invis_perception_records(struct char_data *ch) {
   ch->pc_perception_test_results = NULL;
 }
 
+void process_spotted_invis(struct char_data *ch, struct char_data *vict) {
+  // Higher-security zones have NPCs who are more on edge.
+  if (number(0, 20) <= GET_SECURITY_LEVEL(get_ch_in_room(ch))) {
+    GET_MOBALERT(ch) = MALERT_ALARM;
+    GET_MOBALERTTIME(ch) = 10;
+  } else {
+    GET_MOBALERT(ch) = MALERT_ALERT;
+    GET_MOBALERTTIME(ch) = 20;
+  }
+}
+
 // Checks if you've seen through their invis, and does the perception check if you haven't done it yet.
 bool can_see_through_invis(struct char_data *ch, struct char_data *vict) {
   std::unordered_map<idnum_t, bool> *map_to_operate_on = NULL;
@@ -86,6 +97,11 @@ bool can_see_through_invis(struct char_data *ch, struct char_data *vict) {
 
   // If they're already in the map, return their prior result-- they already tested.
   if ((found = map_to_operate_on->find(idnum)) != map_to_operate_on->end()) {
+    // Anti-cheese: As long as you're invis, guard NPCs etc are going to continue to be alarmed by you if they see you.
+    // Prevents someone running in and out again, waiting for them to lose sight of us, and then going in while they're calm.
+    if (IS_NPC(ch))
+      process_spotted_invis(ch, vict);
+
     return found->second;
   }
 
@@ -157,6 +173,11 @@ bool can_see_through_invis(struct char_data *ch, struct char_data *vict) {
   // Message the character if they can suddenly see their opponent.
   if (test_result && ch != vict) {
     send_to_char(ch, "You squint at a hazy patch of air, and suddenly %s pops into view!\r\n", decapitalize_a_an(GET_CHAR_NAME(vict)));
+
+    // Spotting an invisible person alarms NPCs.
+    if (IS_NPC(ch)) {
+      process_spotted_invis(ch, vict);
+    }
   }
 
   // Return the result.
