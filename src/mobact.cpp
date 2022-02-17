@@ -1050,8 +1050,8 @@ bool mobact_process_self_buff(struct char_data *ch) {
     return TRUE;
   }
 
-  // Buff self, but only act one out of every 16 ticks (on average), and only if we're not going to put ourselves in a drain death loop.
-  if (number(0, 15) == 0 && GET_MENTAL(ch) >= 1000 && GET_PHYSICAL(ch) >= 1000) {
+  // Buff self, but only act one out of every 11 ticks (on average), and only if we're not going to put ourselves in a drain death loop.
+  if (number(0, 10) == 0 && GET_MENTAL(ch) >= 1000 && GET_PHYSICAL(ch) >= 1000) {
     bool imp_invis = IS_AFFECTED(ch, AFF_SPELLIMPINVIS) || affected_by_spell(ch, SPELL_IMP_INVIS);
     bool std_invis = IS_AFFECTED(ch, AFF_SPELLINVIS) || affected_by_spell(ch, SPELL_INVIS);
 
@@ -1070,7 +1070,7 @@ bool mobact_process_self_buff(struct char_data *ch) {
       return TRUE;
     }
 
-#ifdef INVIS_SPELL_RESIST_IS_IMPLEMENTED
+#ifdef DIES_IRAE
     // If we've got Improved Invis on, we want to go completely stealth if we can.
     // Gating this behind Improved Invis means that only powerful mage characters (Sorcery and Magic both 6+) will do this.
     if (imp_invis && !affected_by_spell(ch, SPELL_STEALTH)) {
@@ -1079,14 +1079,13 @@ bool mobact_process_self_buff(struct char_data *ch) {
     }
 #endif
 
-    // If we've already got invis and stealth on, adding more sustains is risky-- we're driving up our TNs for no good reason. Only do it if we're really bored.
-    if (number(0, 20) == 0) {
-      // Apply armor to self.
-      if (!affected_by_spell(ch, SPELL_ARMOR)) {
-        cast_manipulation_spell(ch, SPELL_ARMOR, number(1, GET_MAG(ch)/100), NULL, ch);
-        return TRUE;
-      }
+    // Apply armor to self.
+    if (!affected_by_spell(ch, SPELL_ARMOR)) {
+      cast_manipulation_spell(ch, SPELL_ARMOR, number(1, GET_MAG(ch)/100), NULL, ch);
+      return TRUE;
+    }
 
+    if (number(0, 5) == 0) {
       // Apply combat sense to self.
       if (!affected_by_spell(ch, SPELL_COMBATSENSE)) {
         cast_detection_spell(ch, SPELL_COMBATSENSE, number(1, GET_MAG(ch)/100), NULL, ch);
@@ -1094,15 +1093,21 @@ bool mobact_process_self_buff(struct char_data *ch) {
       }
 
       // We're dead-set on casting a spell, so try to boost attributes.
-      switch (number(1, 3)) {
+      switch (number(1, 5)) {
         case 1:
-          cast_health_spell(ch, SPELL_INCATTR, STR, number(1, GET_MAG(ch)/100), NULL, ch);
+          cast_health_spell(ch, ch->cyberware || ch->bioware ? SPELL_INCCYATTR : SPELL_INCATTR, STR, number(1, GET_MAG(ch)/100), NULL, ch);
           return TRUE;
         case 2:
-          cast_health_spell(ch, SPELL_INCATTR, QUI, number(1, GET_MAG(ch)/100), NULL, ch);
+          cast_health_spell(ch, ch->cyberware || ch->bioware ? SPELL_INCCYATTR : SPELL_INCATTR, QUI, number(1, GET_MAG(ch)/100), NULL, ch);
           return TRUE;
         case 3:
-          cast_health_spell(ch, SPELL_INCATTR, BOD, number(1, GET_MAG(ch)/100), NULL, ch);
+          cast_health_spell(ch, ch->cyberware || ch->bioware ? SPELL_INCCYATTR : SPELL_INCATTR, BOD, number(1, GET_MAG(ch)/100), NULL, ch);
+          return TRUE;
+        case 4:
+          cast_health_spell(ch, ch->cyberware || ch->bioware ? SPELL_INCCYATTR : SPELL_INCATTR, INT, number(1, GET_MAG(ch)/100), NULL, ch);
+          return TRUE;
+        case 5:
+          cast_health_spell(ch, ch->cyberware || ch->bioware ? SPELL_INCCYATTR : SPELL_INCATTR, WIL, number(1, GET_MAG(ch)/100), NULL, ch);
           return TRUE;
       }
     }

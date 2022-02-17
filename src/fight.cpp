@@ -2509,7 +2509,7 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
     snprintf(rbuf, sizeof(rbuf), "Damage (%s vs %s: ", GET_CHAR_NAME(ch), GET_CHAR_NAME(victim));
   }
 
-  if (attacktype <= TYPE_BLACKIC)
+  if (attacktype >= TYPE_HIT && attacktype <= TYPE_BLACKIC)
     snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "%d %s boxes from %s): ",
             dam, is_physical ? "physical" : "mental", damage_type_names_must_subtract_300_first_and_must_not_be_greater_than_blackic[attacktype - 300]);
   else

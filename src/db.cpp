@@ -6159,6 +6159,10 @@ void price_cyber(struct obj_data *obj)
       GET_CYBERWARE_ESSENCE_COST(obj) = 130 + (GET_OBJ_VAL(obj, 1) * 20);
       GET_OBJ_AVAILTN(obj) = 12;
       GET_OBJ_AVAILDAY(obj) = 60;
+#ifdef DIES_IRAE
+      // Houserule: Tactical computers are mundane-only items.
+      obj->obj_flags.extra_flags.SetBit(ITEM_MAGIC_INCOMPATIBLE);
+#endif
       switch (GET_OBJ_VAL(obj, 1)) {
         case 1:
           GET_OBJ_COST(obj) = 400000;

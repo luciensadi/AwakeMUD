@@ -5536,7 +5536,7 @@ ACMD(do_status)
         } else if (SPELL_HAS_SUBTYPE(sust->spell)) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (%s)", attributes[sust->subtype]);
         }
-        send_to_char(ch, "%d) %s (%d successes)", i, buf, sust->success);
+        send_to_char(ch, "%d) %s (force %d, %d successes)", i, buf, sust->force, sust->success);
         if (sust->focus)
           send_to_char(ch, "(Sustained by %s)", GET_OBJ_NAME(sust->focus));
         if (sust->spirit && sust->spirit != ch)

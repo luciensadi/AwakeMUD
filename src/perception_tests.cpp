@@ -124,12 +124,14 @@ bool can_see_through_invis(struct char_data *ch, struct char_data *vict) {
   int dice = GET_INT(ch) + GET_TASK_POOL(ch, INT);
   snprintf(ENDOF(perception_test_rbuf), sizeof(perception_test_rbuf) - strlen(perception_test_rbuf), "\r\nDice: %d (int) + %d (task pool)", GET_INT(ch), GET_TASK_POOL(ch, INT));
 
-  // Add tactical computer's rating as perception dice.
-  for (struct obj_data *cyber = ch->cyberware; cyber; cyber = cyber->next_content) {
-    if (GET_CYBERWARE_TYPE(cyber) == CYB_TACTICALCOMPUTER) {
-      dice += GET_CYBERWARE_RATING(cyber);
-      buf_mod(perception_test_rbuf, sizeof(perception_test_rbuf), ", TacComp", GET_CYBERWARE_RATING(cyber));
-      break;
+  // House rule: Add tactical computer's rating as perception dice, but only for mundanes.
+  if (GET_MAG(ch) <= 0) {
+    for (struct obj_data *cyber = ch->cyberware; cyber; cyber = cyber->next_content) {
+      if (GET_CYBERWARE_TYPE(cyber) == CYB_TACTICALCOMPUTER) {
+        dice += GET_CYBERWARE_RATING(cyber);
+        buf_mod(perception_test_rbuf, sizeof(perception_test_rbuf), ", TacComp", GET_CYBERWARE_RATING(cyber));
+        break;
+      }
     }
   }
 
