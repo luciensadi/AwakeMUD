@@ -1078,8 +1078,9 @@ void cast_combat_spell(struct char_data *ch, int spell, int force, char *arg)
   if (*buf1)
     vict = get_char_room_vis(ch, buf1);
 
-  if (!check_spell_victim(ch, vict, spell, buf1))
+  if (!check_spell_victim(ch, vict, spell, buf1)) {
     return;
+  }
 
   if (ch == vict) {
     send_to_char("You can't target yourself with a combat spell!\r\n", ch);
@@ -2425,12 +2426,12 @@ void cast_spell(struct char_data *ch, int spell, int sub, int force, char *arg)
   }
 }
 
-void mob_magic(struct char_data *ch)
+bool mob_magic(struct char_data *ch)
 {
   // Elementals don't get to cast: it breaks the game.
   if (!FIGHTING(ch) || IS_ELEMENTAL(ch))
-    return;
-  char buf[MAX_STRING_LENGTH];
+    return FALSE;
+  char buf[MAX_STRING_LENGTH], rbuf[5000];
   int spell = 0, sub = 0, force, magic = GET_MAG(ch) / 100;
   if (GET_WIL(ch) <= 2)
     force = magic;
@@ -2438,60 +2439,74 @@ void mob_magic(struct char_data *ch)
   while (!spell) {
     switch (number (0, 12)) {
       case 0:
+      case 1:
         spell = SPELL_POWERBOLT;
         break;
-      case 1:
+      case 2:
+      case 3:
+      case 4:
         spell = SPELL_MANABOLT;
         break;
-      case 2:
+      case 5:
+      case 6:
+      case 7:
         spell = SPELL_STUNBOLT;
         break;
-      case 3:
-        spell = SPELL_DECCYATTR;
-        sub = number(0, 2);
+      case 8:
+        if (ch->cyberware || ch->bioware) {
+          spell = SPELL_DECCYATTR;
+          sub = number(0, 2);
+        }
         break;
-      case 4:
-        spell = SPELL_DECATTR;
-        sub = number(0, 2);
+      case 9:
+        if (!ch->cyberware && !ch->bioware) {
+          spell = SPELL_DECATTR;
+          sub = number(0, 2);
+        }
         break;
-      case 5:
+      case 10:
+      case 11:
+      case 12:
         if (!affected_by_spell(FIGHTING(ch), SPELL_CONFUSION))
           spell = SPELL_CONFUSION;
         break;
-      case 6:
+      case 13:
+      case 14:
         spell = SPELL_FLAMETHROWER;
         break;
-      case 7:
+      case 15:
         spell = SPELL_ACIDSTREAM;
         break;
-      case 8:
+      case 16:
+      case 17:
         spell = SPELL_LIGHTNINGBOLT;
         break;
-      case 9:
+      case 18:
         spell = SPELL_CLOUT;
         break;
-      case 10:
+      case 19:
 /*        if (!affected_by_spell(ch, SPELL_POLTERGEIST))
         spell = SPELL_POLTERGEIST;
-        break;
-*/      case 11:
+        break;*/
         if (!get_ch_in_room(ch)->icesheet[1])
           spell = SPELL_ICESHEET;
         break;
-      case 12:
+      case 20:
+      case 21:
+      case 22:
         if (!affected_by_spell(FIGHTING(ch), SPELL_IGNITE) && !ch->points.fire[0])
           spell = SPELL_IGNITE;
         break;
-      case 13:
+      case 23:
         spell = SPELL_LASER;
         break;
-      case 14:
+      case 24:
         spell = SPELL_STEAM;
         break;
-      case 15:
+      case 25:
         spell = SPELL_THUNDERBOLT;
         break;
-      case 16:
+      case 26:
         spell = SPELL_WATERBOLT;
         break;
     }
@@ -2513,7 +2528,10 @@ void mob_magic(struct char_data *ch)
     default:
       strcpy(buf, GET_CHAR_NAME(FIGHTING(ch)));
   }
+  snprintf(rbuf, sizeof(rbuf), "mob_magic: force is %d, spell is %d (%s), invocation is '%s'", force, spell, spells[spell].name, buf);
+  act(rbuf, FALSE, ch, 0, 0, TO_ROLLS);
   cast_spell(ch, spell, sub, force, buf);
+  return TRUE;
 }
 
 

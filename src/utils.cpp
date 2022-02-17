@@ -368,7 +368,7 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int c
     return 100;
   }
 
-  if (PLR_FLAGGED(ch, PLR_PERCEIVE))
+  if (PLR_FLAGGED(ch, PLR_PERCEIVE) || MOB_FLAGGED(ch, MOB_DUAL_NATURE))
   {
     if (!skill_is_magic) {
       base_target += 2;

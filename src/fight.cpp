@@ -85,7 +85,7 @@ extern int can_wield_both(struct char_data *, struct obj_data *, struct obj_data
 extern void draw_weapon(struct char_data *);
 extern void crash_test(struct char_data *ch);
 extern int get_vehicle_modifier(struct veh_data *veh);
-extern void mob_magic(struct char_data *ch);
+extern bool mob_magic(struct char_data *ch);
 extern void cast_spell(struct char_data *ch, int spell, int sub, int force, char *arg);
 extern char *get_player_name(vnum_t id);
 extern bool mob_is_aggressive(struct char_data *ch, bool include_base_aggression);
@@ -322,8 +322,19 @@ void set_fighting(struct char_data * ch, struct char_data * vict, ...)
   }
 #endif
 
-  ch->next_fighting = combat_list;
-  combat_list = ch;
+  // Check to see if they're already in the combat list.
+  bool already_there = FALSE;
+  for (struct char_data *tmp = combat_list; tmp; tmp = tmp->next_fighting) {
+    if (tmp == ch) {
+      mudlog("SYSERR: Attempted to re-add character to combat list!", ch, LOG_SYSLOG, TRUE);
+      already_there = TRUE;
+    }
+  }
+  if (!already_there) {
+    ch->next_fighting = combat_list;
+    combat_list = ch;
+  }
+
   // We set fighting before we call roll_individual_initiative() because we need the fighting target there.
   FIGHTING(ch) = vict;
   GET_POS(ch) = POS_FIGHTING;
@@ -3867,17 +3878,17 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
 
   // If they're in an invis staffer above your level, you done goofed by fighting them. Return special code so we know what caused this in rolls.
   if (!IS_NPC(victim) && !IS_NPC(ch) && GET_INVIS_LEV(victim) > 0 && !access_level(ch, GET_INVIS_LEV(victim))) {
-    act("Maximum penalty- fighting invis staff.", 0, ch, 0, 0, TO_ROLLS);
+    act("$n: Maximum penalty- fighting invis staff.", 0, ch, 0, 0, TO_ROLLS);
     if (ch->in_room != victim->in_room)
-      act("Maximum penalty- fighting invis staff.", 0, victim, 0, 0, TO_ROLLS);
+      act("$N: Maximum penalty- fighting invis staff.", 0, victim, 0, ch, TO_ROLLS);
     return INVIS_CODE_STAFF;
   }
 
   // If they're flagged totalinvis (library mobs etc), you shouldn't be fighting them anyways.
   if (IS_NPC(victim) && MOB_FLAGGED(victim, MOB_TOTALINVIS)) {
-    act("Maximum penalty- fighting total-invis mob.", 0, ch, 0, 0, TO_ROLLS);
+    act("$n: Maximum penalty- fighting total-invis mob.", 0, ch, 0, 0, TO_ROLLS);
     if (ch->in_room != victim->in_room)
-      act("Maximum penalty- fighting total-invis mob.", 0, victim, 0, 0, TO_ROLLS);
+      act("$N: Maximum penalty- fighting total-invis mob.", 0, victim, 0, ch, TO_ROLLS);
     return INVIS_CODE_TOTALINVIS;
   }
 
@@ -3909,10 +3920,10 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
     // You're not astrally perceiving, and your victim is a non-manifested astral being. Blind fire.
     if (GET_POWER(ch, ADEPT_BLIND_FIGHTING)) {
       modifier = BLIND_FIGHTING_MAX;
-      snprintf(rbuf, sizeof(rbuf), "Non-perceiving character fighting non-manifested astral: %d after Blind Fighting", modifier);
+      snprintf(rbuf, sizeof(rbuf), "%s: Non-perceiving character fighting non-manifested astral: %d after Blind Fighting", GET_CHAR_NAME(ch), modifier);
     } else {
       modifier = BLIND_FIRE_PENALTY;
-      snprintf(rbuf, sizeof(rbuf), "Non-perceiving character fighting non-manifested astral: %d", modifier);
+      snprintf(rbuf, sizeof(rbuf), "%s: Non-perceiving character fighting non-manifested astral: %d", GET_CHAR_NAME(ch), modifier);
     }
 
     act(rbuf, 0, ch, 0, 0, TO_ROLLS);
@@ -3932,9 +3943,9 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
       // Invisibility penalty, we're at the full +8 from not being able to see them. This overwrites weather effects etc.
       // We don't apply the Adept blind fighting max here, as that's calculated later on.
       modifier = BLIND_FIRE_PENALTY;
-      snprintf(rbuf, sizeof(rbuf), "Ultrasound-using character fighting improved invis: %d", modifier);
+      snprintf(rbuf, sizeof(rbuf), "%s: Ultrasound-using character fighting improved invis: %d", GET_CHAR_NAME(ch), modifier);
     } else {
-      strlcpy(rbuf, "Ultrasound-using character", sizeof(rbuf));
+      snprintf(rbuf, sizeof(rbuf), "%s: Ultrasound-using character", GET_CHAR_NAME(ch));
     }
 
     // Silence level is the highest of the room's silence or the victim's stealth. Stealth in AwakeMUD is a hybrid of
@@ -3965,7 +3976,7 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
     // Improved invis? You can't see them.
     if (vict_is_imp_invis) {
       modifier = BLIND_FIRE_PENALTY;
-      snprintf(rbuf, sizeof(rbuf), "Thermographic-using character fighting improved invis: %d", modifier);
+      snprintf(rbuf, sizeof(rbuf), "%s: Thermographic-using character fighting improved invis: %d", GET_CHAR_NAME(ch), modifier);
     }
 
     // Standard invis? (This includes ruthenium, which currently has no rating and is just treated like the invis spell.)
@@ -3973,7 +3984,7 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
     // This deviates from canon, where thermographic can see through standard invis.
     else if (vict_is_just_invis) {
       modifier = 2;
-      snprintf(rbuf, sizeof(rbuf), "Thermographic-using character fighting invis: %d", modifier);
+      snprintf(rbuf, sizeof(rbuf), "%s: Thermographic-using character fighting invis: %d", GET_CHAR_NAME(ch), modifier);
     }
 
     if (modifier > 0) {
@@ -3988,7 +3999,7 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
     if (vict_is_imp_invis || vict_is_just_invis) {
       modifier = BLIND_FIRE_PENALTY;
 
-      snprintf(rbuf, sizeof(rbuf), "Low-light or standard vision fighting invis: %d", modifier);
+      snprintf(rbuf, sizeof(rbuf), "%s: Low-light or standard vision fighting invis: %d", GET_CHAR_NAME(ch), modifier);
 
       act(rbuf, 0, ch, 0, 0, TO_ROLLS);
       if (ch->in_room != victim->in_room)
@@ -4001,7 +4012,7 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
     if (modifier > BLIND_FIGHTING_MAX) {
       modifier = BLIND_FIGHTING_MAX;
 
-      snprintf(rbuf, sizeof(rbuf), "Capped to %d by Blind Fighting", modifier);
+      snprintf(rbuf, sizeof(rbuf), "%s: Capped to %d by Blind Fighting", GET_CHAR_NAME(ch), modifier);
 
       act(rbuf, 0, ch, 0, 0, TO_ROLLS);
       if (ch->in_room != victim->in_room)
@@ -4011,7 +4022,7 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
     if (modifier > BLIND_FIRE_PENALTY) {
       modifier = BLIND_FIRE_PENALTY;
 
-      snprintf(rbuf, sizeof(rbuf), "Capped to %d", modifier);
+      snprintf(rbuf, sizeof(rbuf), "%s: Capped to %d", GET_CHAR_NAME(ch), modifier);
 
       act(rbuf, 0, ch, 0, 0, TO_ROLLS);
       if (ch->in_room != victim->in_room)
@@ -4879,7 +4890,10 @@ void perform_violence(void)
     // On fire and panicking, or engulfed? Lose your action.
     if ((ch->points.fire[0] > 0 && success_test(GET_WIL(ch), 6) < 0)
         || engulfed)
+    {
+      act("$n skipping turn- on fire or engulfed.", FALSE, ch, 0, 0, TO_ROLLS);
       continue;
+    }
 
     // Process banishment actions.
     if (IS_AFFECTED(ch, AFF_BANISH)
@@ -4951,8 +4965,9 @@ void perform_violence(void)
           && ch->in_room == FIGHTING(ch)->in_room
           && success_test(1, 8 - GET_SKILL(ch, SKILL_SORCERY)))
       {
-        mob_magic(ch);
-        continue;
+        // Only continue if we successfully cast.
+        if (mob_magic(ch))
+          continue;
       }
 
       if (ch->squeue) {
