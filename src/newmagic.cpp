@@ -847,7 +847,7 @@ void create_sustained(struct char_data *ch, struct char_data *vict, int spell, i
   sust->spell = spell;
   sust->subtype = sub;
   sust->force = force;
-  sust->success = success;
+  sust->success = MIN(success, force);
   sust->other = vict;
   sust->caster = TRUE;
   sust->drain = drain;
@@ -2864,7 +2864,17 @@ ACMD(do_bond)
     }
 
     if (GET_WEAPON_FOCUS_BOND_STATUS(obj) > 0) {
+#ifdef ACCELERATE_FOR_TESTING
+      GET_WEAPON_FOCUS_BOND_STATUS(obj) = GET_WEAPON_FOCUS_RATING(obj);
+#else
       GET_WEAPON_FOCUS_BOND_STATUS(obj) = GET_WEAPON_FOCUS_RATING(obj) * 60;
+#endif
+
+      if (access_level(ch, LVL_ADMIN)) {
+        send_to_char(ch, "You use your staff powers to greatly accelerate the bonding process.\r\n");
+        GET_WEAPON_FOCUS_BOND_STATUS(obj) = 1;
+      }
+
       send_to_char(ch, "You restart the ritual to bond %s.\r\n", GET_OBJ_NAME(obj));
       act("$n begins a ritual to bond $p.", TRUE, ch, obj, 0, TO_ROOM);
       AFF_FLAGS(ch).SetBit(AFF_BONDING);
@@ -2879,7 +2889,11 @@ ACMD(do_bond)
       return;
     }
     GET_KARMA(ch) -= karma * 100;
+#ifdef ACCELERATE_FOR_TESTING
+    GET_WEAPON_FOCUS_BOND_STATUS(obj) = GET_WEAPON_FOCUS_RATING(obj);
+#else
     GET_WEAPON_FOCUS_BOND_STATUS(obj) = GET_WEAPON_FOCUS_RATING(obj) * 60;
+#endif
     GET_WEAPON_FOCUS_BONDED_BY(obj) = GET_IDNUM(ch);
 
     if (access_level(ch, LVL_BUILDER)) {
@@ -2907,7 +2921,18 @@ ACMD(do_bond)
       send_to_char("You must be sitting to perform a bonding ritual.\r\n", ch);
     else if (GET_FOCUS_BONDED_TO(obj) == GET_IDNUM(ch)) {
       if (GET_FOCUS_BOND_TIME_REMAINING(obj)) {
+
+#ifdef ACCELERATE_FOR_TESTING
+        GET_FOCUS_BOND_TIME_REMAINING(obj) = GET_FOCUS_FORCE(obj);
+#else
         GET_FOCUS_BOND_TIME_REMAINING(obj) = GET_FOCUS_FORCE(obj) * 60;
+#endif
+
+        if (access_level(ch, LVL_BUILDER)) {
+          send_to_char(ch, "You use your staff powers to greatly accelerate the bonding ritual.\r\n");
+          GET_FOCUS_BOND_TIME_REMAINING(obj) = 1;
+        }
+
         send_to_char(ch, "You restart the ritual to bond %s.\r\n", GET_OBJ_NAME(obj));
         act("$n begins a ritual to bond $p.", TRUE, ch, obj, 0, TO_ROOM);
         AFF_FLAGS(ch).SetBit(AFF_BONDING);
@@ -3006,10 +3031,15 @@ ACMD(do_bond)
       GET_FOCUS_BONDED_SPIRIT_OR_SPELL(obj) = spirit;
       GET_FOCUS_TRADITION(obj) = GET_TRADITION(ch) == TRAD_HERMETIC ? 1 : 0;
 
+#ifdef ACCELERATE_FOR_TESTING
+      GET_FOCUS_BOND_TIME_REMAINING(obj) = GET_FOCUS_FORCE(obj);
+#endif
+
       if (access_level(ch, LVL_BUILDER)) {
         send_to_char(ch, "You use your staff powers to greatly accelerate the bonding ritual.\r\n");
         GET_FOCUS_BOND_TIME_REMAINING(obj) = 1;
       }
+
 
       send_to_char(ch, "You begin the ritual to bond %s.\r\n", GET_OBJ_NAME(obj));
       act("$n begins a ritual to bond $p.", TRUE, ch, obj, 0, TO_ROOM);
@@ -3227,7 +3257,7 @@ ACMD(do_conjure)
           library = TRUE;
         } else if (GET_OBJ_VAL(obj, 0) == TYPE_CIRCLE && !GET_OBJ_VAL(obj, 9)) {
           if (GET_OBJ_VAL(obj, 1) < force) {
-            send_to_char("Your hermetic circle isn't of a high enough rating to conjure that elemental.\r\n", ch);
+            send_to_char(ch, "Your hermetic circle isn't of a high enough rating to conjure that elemental. The maximum you can conjure with it is %d.\r\n", GET_OBJ_VAL(obj, 1));
             return;
           } else if (GET_OBJ_VAL(obj, 2) != spirit) {
             send_to_char("That circle is for a different type of elemental.\r\n", ch);
@@ -3258,8 +3288,13 @@ ACMD(do_conjure)
     if (GET_LEVEL(ch) > 1) {
       send_to_char(ch, "You use your staff powers to greatly accelerate the conjuring process.\r\n");
       ch->char_specials.conjure[2] = 1;
-    } else
+    } else {
+#ifdef ACCELERATE_FOR_TESTING
+      ch->char_specials.conjure[2] = force;
+#else
       ch->char_specials.conjure[2] = force * 30;
+#endif
+    }
     // Max tracking for PROGRESS command.
     ch->char_specials.conjure[3] = ch->char_specials.conjure[2];
     ch->char_specials.programming = obj;
