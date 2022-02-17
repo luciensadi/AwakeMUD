@@ -21,24 +21,27 @@
 void _remove_ch_from_pc_perception_records(struct char_data *ch, struct char_data *vict) {
   std::unordered_map<idnum_t, bool> *map_to_operate_on = NULL;
   std::unordered_map<idnum_t, bool>::const_iterator found;
+  idnum_t idnum;
 
   // Find the map they belong to, bailing out if the map doesn't exist.
   if (IS_NPC(ch)) {
     if (!vict->mob_perception_test_results)
       return;
     map_to_operate_on = vict->mob_perception_test_results;
+    idnum = GET_MOB_UNIQUE_ID(ch);
   } else {
     if (!vict->pc_perception_test_results)
       return;
     map_to_operate_on = vict->pc_perception_test_results;
+    idnum = GET_IDNUM(ch);
   }
 
   // If they're not already in the map, bail out.
-  if (map_to_operate_on->find(GET_IDNUM(ch)) == map_to_operate_on->end())
+  if (map_to_operate_on->find(idnum) == map_to_operate_on->end())
     return;
 
   // They were there-- erase them from it.
-  vict->pc_perception_test_results->erase(GET_IDNUM(ch));
+  vict->pc_perception_test_results->erase(idnum);
 }
 
 // Remove the given character from all PC's perception test results. Used when ch is destroyed (death, quit, etc).
@@ -55,45 +58,38 @@ void remove_ch_from_pc_perception_records(struct char_data *ch) {
 
 // Blow away the invis perception records. Used when ch is about to be deleted.
 void purge_invis_perception_records(struct char_data *ch) {
-  if (ch->mob_perception_test_results) {
-    ch->mob_perception_test_results->clear();
-    delete ch->mob_perception_test_results;
-  }
+  delete ch->mob_perception_test_results;
+  ch->mob_perception_test_results = NULL;
 
-  if (ch->pc_perception_test_results) {
-    ch->pc_perception_test_results->clear();
-    delete ch->pc_perception_test_results;
-  }
+  delete ch->pc_perception_test_results;
+  ch->pc_perception_test_results = NULL;
 }
 
 // Checks if you've seen through their invis, and does the perception check if you haven't done it yet.
 bool can_see_through_invis(struct char_data *ch, struct char_data *vict) {
   std::unordered_map<idnum_t, bool> *map_to_operate_on = NULL;
   std::unordered_map<idnum_t, bool>::const_iterator found;
-  char perception_test_rbuf[5000];
+  idnum_t idnum;
 
   // NPCs and PCs have their own separate maps.
   if (IS_NPC(ch)) {
     if (!vict->mob_perception_test_results)
       vict->mob_perception_test_results = new std::unordered_map<idnum_t, bool>;
     map_to_operate_on = vict->mob_perception_test_results;
+    idnum = GET_MOB_UNIQUE_ID(ch);
   } else {
     if (!vict->pc_perception_test_results)
       vict->pc_perception_test_results = new std::unordered_map<idnum_t, bool>;
     map_to_operate_on = vict->pc_perception_test_results;
+    idnum = GET_IDNUM(ch);
   }
 
   // If they're already in the map, return their prior result-- they already tested.
-  if ((found = map_to_operate_on->find(GET_IDNUM(ch))) != map_to_operate_on->end()) {
-    snprintf(perception_test_rbuf, sizeof(perception_test_rbuf), "Using cached result: %s.", found->second ? "true" : "false");
-    act(perception_test_rbuf, FALSE, ch, NULL, NULL, TO_ROLLS);
+  if ((found = map_to_operate_on->find(idnum)) != map_to_operate_on->end()) {
     return found->second;
   }
 
   // They weren't in the map yet-- add them to it with their perception test results.
-  // First, figure out the TN- iterate over target's spells to find the invis, and if there is none, give them the standard TN 4.
-  snprintf(perception_test_rbuf, sizeof(perception_test_rbuf), "Perception test %s vs %s: ", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict));
-
   struct sustain_data *invis_spell_sust = NULL;
 
   // Scan through their spells and find the invis spell on them, if any.
@@ -105,9 +101,12 @@ bool can_see_through_invis(struct char_data *ch, struct char_data *vict) {
 
   // You don't get to use a perception test to see through ruthenium etc-- just bail out.
   if (!invis_spell_sust) {
-    act("Skipping perception test: No spell.", FALSE, ch, NULL, NULL, TO_ROLLS);
     return FALSE;
   }
+
+  // Looks like we're going to need to process a check.
+  char perception_test_rbuf[5000];
+  snprintf(perception_test_rbuf, sizeof(perception_test_rbuf), "Perception test %s vs %s: ", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict));
 
   // Calculate the TN.
   int tn = invis_spell_sust->force;
@@ -148,10 +147,15 @@ bool can_see_through_invis(struct char_data *ch, struct char_data *vict) {
          );
 
   // Store the result.
-  map_to_operate_on->emplace(GET_IDNUM(ch), test_result);
+  map_to_operate_on->emplace(idnum, test_result);
 
   // Write the rolls for debugging.
   act(perception_test_rbuf, FALSE, ch, NULL, NULL, TO_ROLLS);
+
+  // Message the character if they can suddenly see their opponent.
+  if (test_result && ch != vict) {
+    send_to_char(ch, "You squint at a hazy patch of air, and suddenly %s pops into view!\r\n", decapitalize_a_an(GET_CHAR_NAME(vict)));
+  }
 
   // Return the result.
   return test_result;

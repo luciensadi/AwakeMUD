@@ -4027,7 +4027,7 @@ char *get_printable_mob_unique_id(struct char_data *ch) {
   // If you're using UUIDs here, you need something like this:
   // uuid_unparse(GET_MOB_UNIQUE_ID(ch), result_buf);
   // Buuut since we're just using unsigned longs...
-  snprintf(result_buf, sizeof(result_buf), "%lu", GET_MOB_UNIQUE_ID(ch));
+  snprintf(result_buf, sizeof(result_buf), "%ld", GET_MOB_UNIQUE_ID(ch));
   return result_buf;
 }
 

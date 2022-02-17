@@ -110,7 +110,7 @@ void end_sustained_spell(struct char_data *ch, struct sustain_data *sust)
         break;
       }
     if (sust->spell == SPELL_INVIS || sust->spell == SPELL_IMP_INVIS) {
-      act("You blink and suddenly $n appears!", TRUE, sust->caster ? sust->other : ch, 0, 0, TO_ROOM);
+      act("You blink and suddenly $n appears!", FALSE, sust->caster ? sust->other : ch, 0, 0, TO_ROOM);
       purge_invis_perception_records(sust->caster ? sust->other : ch);
     }
   }
@@ -1642,6 +1642,10 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
         act("You blink and suddenly $n is gone!", TRUE, vict, 0, 0, TO_ROOM);
         send_to_char("You feel your body tingle.\r\n", vict);
         create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
+        for (struct char_data *viewer = ch->in_veh ? ch->in_veh->people : ch->in_room->people; viewer; viewer = (ch->in_veh ? viewer->next_in_veh : viewer->next_in_room)) {
+          // You get to immediately try to break the invis.
+          can_see_through_invis(viewer, vict);
+        }
       } else
         send_to_char(FAILED_CAST, ch);
       spell_drain(ch, spell, force, 0);
@@ -2430,7 +2434,7 @@ void mob_magic(struct char_data *ch)
   int spell = 0, sub = 0, force, magic = GET_MAG(ch) / 100;
   if (GET_WIL(ch) <= 2)
     force = magic;
-  else force = MIN(magic, number(1, 8));
+  else force = MIN(magic, number(2, 8));
   while (!spell) {
     switch (number (0, 12)) {
       case 0:
@@ -2504,7 +2508,7 @@ void mob_magic(struct char_data *ch)
     case SPELL_STEAM:
     case SPELL_THUNDERBOLT:
     case SPELL_WATERBOLT:
-      snprintf(buf, sizeof(buf), "%s %s", wound_name[number(1, 4)], GET_CHAR_NAME(FIGHTING(ch)));
+      snprintf(buf, sizeof(buf), "%s %s", wound_name[number(2, 4)], GET_CHAR_NAME(FIGHTING(ch)));
       break;
     default:
       strcpy(buf, GET_CHAR_NAME(FIGHTING(ch)));

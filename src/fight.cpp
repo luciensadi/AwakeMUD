@@ -3861,6 +3861,10 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
   int modifier = 0;
   char rbuf[2048];
 
+  // Shortcut: If they're not invisible, you can see them. Ezpz.
+  if (CAN_SEE(ch, victim))
+    return 0;
+
   // If they're in an invis staffer above your level, you done goofed by fighting them. Return special code so we know what caused this in rolls.
   if (!IS_NPC(victim) && !IS_NPC(ch) && GET_INVIS_LEV(victim) > 0 && !access_level(ch, GET_INVIS_LEV(victim))) {
     act("Maximum penalty- fighting invis staff.", 0, ch, 0, 0, TO_ROLLS);
