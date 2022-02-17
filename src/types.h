@@ -25,6 +25,7 @@ typedef unsigned char uint8_t;
 
 typedef signed long rnum_t;
 typedef signed long vnum_t;
+typedef signed long idnum_t;
 
 typedef unsigned short  word;
 typedef unsigned int  dword;

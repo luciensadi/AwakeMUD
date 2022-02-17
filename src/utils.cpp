@@ -42,6 +42,7 @@
 #include "newdb.h"
 #include "config.h"
 #include "bullet_pants.h"
+#include "perception_tests.h"
 
 extern class memoryClass *Mem;
 extern struct time_info_data time_info;
@@ -2292,13 +2293,22 @@ bool invis_ok(struct char_data *ch, struct char_data *vict) {
   if (AFF_FLAGGED(ch, AFF_ULTRASOUND) && (get_ch_in_room(ch)->silence[0] <= 0 && !affected_by_spell(vict, SPELL_STEALTH)))
     return TRUE;
 
-  // Improved invis defeats all other detection measures.
-  if (IS_AFFECTED(vict, AFF_IMP_INVIS) || IS_AFFECTED(vict, AFF_SPELLIMPINVIS))
+  // Allow perception test VS invis.
+  if (IS_AFFECTED(vict, AFF_SPELLIMPINVIS))
+    return can_see_through_invis(ch, vict);
+
+  // Thermoptic, etc.
+  if (IS_AFFECTED(vict, AFF_IMP_INVIS))
     return FALSE;
 
   // Standard invis is pierced by thermographic vision, which is default on vehicles.
-  if (IS_AFFECTED(vict, AFF_INVISIBLE)) {
+  if (IS_AFFECTED(vict, AFF_INVISIBLE) || IS_AFFECTED(vict, AFF_SPELLINVIS)) {
     return CURRENT_VISION(ch) == THERMOGRAPHIC || AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE);
+  }
+
+  // Allow perception test VS invis.
+  if (IS_AFFECTED(vict, AFF_SPELLINVIS)) {
+    return can_see_through_invis(ch, vict);
   }
 
   // If we've gotten here, they're not invisible.

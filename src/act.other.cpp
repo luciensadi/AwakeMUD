@@ -4253,6 +4253,8 @@ ACMD(do_spool)
   def = atoi(argument);
   reflect = atoi(buf);
 
+  // TODO: SR3 p182: No more Spell Pool dice can be added to the test than the Sorcery dice allocated.
+
   total -= ch->real_abils.casting_pool = GET_CASTING(ch) = MIN(cast, total);
   total -= ch->real_abils.drain_pool = GET_DRAIN(ch) = MIN(drain, total);
   total -= ch->real_abils.spell_defense_pool = GET_SDEFENSE(ch) = MIN(def, total);

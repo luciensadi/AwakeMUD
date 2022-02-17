@@ -179,6 +179,7 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 #define SPELL_WAIT_STATE_TIME                                  (0.2  RL_SEC)
 #define OFFENSIVE_SPELL_WAIT_STATE_TIME                        (0.2  RL_SEC)
 #define FAILED_SPELL_LEARNING_WAIT_STATE                       (0.25 RL_SEC)
+#define INITIATION_CAP                                         50
 
 // How many sunrises (currently spans of 48 minutes) are spirits good for?
 #define NUMBER_OF_IG_DAYS_FOR_SPIRIT_TO_LAST                   4

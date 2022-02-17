@@ -1025,11 +1025,11 @@ bool affected_by_spell(struct char_data * ch, int type)
   return FALSE;
 }
 
-bool affected_by_power(struct char_data *ch, int type)
+int affected_by_power(struct char_data *ch, int type)
 {
   for (struct spirit_sustained *sust = SPIRIT_SUST(ch); sust ; sust = sust->next)
     if (sust->type == type)
-      return TRUE;
+      return MAX(1, sust->force); // MAX here guarantees this matches the previous bool return.
   return FALSE;
 }
 void veh_from_room(struct veh_data * veh)

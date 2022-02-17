@@ -14,6 +14,7 @@
 #include "olc.h"
 #include "config.h"
 #include "ignore_system.h"
+#include "perception_tests.h"
 
 #define POWER(name) void (name)(struct char_data *ch, struct char_data *spirit, struct spirit_data *spiritdata, char *arg)
 #define FAILED_CAST "You fail to bind the mana to your will.\r\n"
@@ -108,8 +109,10 @@ void end_sustained_spell(struct char_data *ch, struct sustain_data *sust)
         delete vsust;
         break;
       }
-    if (sust->spell == SPELL_INVIS || sust->spell == SPELL_IMP_INVIS)
+    if (sust->spell == SPELL_INVIS || sust->spell == SPELL_IMP_INVIS) {
       act("You blink and suddenly $n appears!", TRUE, sust->caster ? sust->other : ch, 0, 0, TO_ROOM);
+      purge_invis_perception_records(sust->caster ? sust->other : ch);
+    }
   }
   spell_modify(sust->caster ? sust->other : ch, sust, FALSE);
   REMOVE_FROM_LIST(sust, GET_SUSTAINED(ch), next);
@@ -1487,6 +1490,33 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       if (!check_spell_victim(ch, vict, spell, arg))
         return;
 
+      if (GET_SUSTAINED(vict)) {
+      for (struct sustain_data *sus = GET_SUSTAINED(vict); sus; sus = sus->next) {
+        /*  Q: Can you cast Decrease Attribute, followed by Increase Attribute (which is easier because the attribute TN is smaller),
+               then un-sustain the Decrease Attribute, allowing you to have a higher Attribute than you’d have without having
+               Decreased it? How about changing your Reaction after an Increased Reflexes spell?
+            A: No. Only one attribute-affecting health spell can be used to modify an attribute at a time.
+
+            Sources:
+            - https://www.shadowrunrpg.com/resources/sr3faq.html
+            - http://www.shadowruntabletop.com/game-resources/shadowrun-third-edition-faq/
+        */
+        // Skip over caster records.
+        if (sus->caster)
+          continue;
+
+        if (sus->subtype == sub && (sus->spell == SPELL_INCATTR || sus->spell == SPELL_INCCYATTR || sus->spell == SPELL_DECATTR || sus->spell == SPELL_DECCYATTR || sus->spell == SPELL_INCREA)) {
+          send_to_char(ch, "%s is already affected by a similar spell.\r\n", GET_CHAR_NAME(vict));
+          return;
+        }
+
+        if (spell == SPELL_INCREA && (sus->spell == SPELL_INCREF1 || sus->spell == SPELL_INCREF2 || sus->spell == SPELL_INCREF3)) {
+          send_to_char(ch, "%s's reflexes have already been modified, so this spell can't take effect.\r\n", GET_CHAR_NAME(vict));
+          return;
+        }
+      }
+    }
+
       if (GET_ATT(vict, sub) != GET_REAL_ATT(vict, sub)) {
         if (GET_TRADITION(vict) == TRAD_ADEPT && sub < CHA) {
           switch (sub) {
@@ -1503,14 +1533,8 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
               cyber = false;
             break;
           }
-        } else if (GET_SUSTAINED(vict)) {
-          for (struct sustain_data *sus = GET_SUSTAINED(vict); sus; sus = sus->next) {
-            if (sus->caster == FALSE && (sus->spell == SPELL_INCATTR || sus->spell == SPELL_DECATTR) && sus->subtype == sub) {
-              cyber = false;
-              break;
-            }
-          }
         }
+
         if (cyber && (spell == SPELL_DECATTR || spell == SPELL_INCATTR || spell == SPELL_INCREA)) {
           snprintf(buf, sizeof(buf), "$N's %s has been modified by technological means and is immune to this spell.\r\n", attributes[sub]);
           act(buf, TRUE, ch, 0, vict, TO_CHAR);
@@ -1602,6 +1626,14 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
     case SPELL_IMP_INVIS:
       if (!check_spell_victim(ch, vict, spell, arg))
         return;
+
+      // Anti-cheese: No having a baller spell on yourself, then casting and releasing a weak one to reset your perception table.
+      for (struct sustain_data *sust = GET_SUSTAINED(vict); sust; sust = sust->next) {
+        if (!sust->caster && (sust->spell == SPELL_IMP_INVIS || sust->spell == SPELL_INVIS)) {
+          send_to_char("They're already invisible.\r\n", ch);
+          return;
+        }
+      }
 
       WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
 
@@ -2864,7 +2896,17 @@ ACMD(do_bond)
     }
 
     if (GET_WEAPON_FOCUS_BOND_STATUS(obj) > 0) {
+#ifdef ACCELERATE_FOR_TESTING
+      GET_WEAPON_FOCUS_BOND_STATUS(obj) = GET_WEAPON_FOCUS_RATING(obj);
+#else
       GET_WEAPON_FOCUS_BOND_STATUS(obj) = GET_WEAPON_FOCUS_RATING(obj) * 60;
+#endif
+
+      if (access_level(ch, LVL_ADMIN)) {
+        send_to_char(ch, "You use your staff powers to greatly accelerate the bonding process.\r\n");
+        GET_WEAPON_FOCUS_BOND_STATUS(obj) = 1;
+      }
+
       send_to_char(ch, "You restart the ritual to bond %s.\r\n", GET_OBJ_NAME(obj));
       act("$n begins a ritual to bond $p.", TRUE, ch, obj, 0, TO_ROOM);
       AFF_FLAGS(ch).SetBit(AFF_BONDING);
@@ -2879,7 +2921,11 @@ ACMD(do_bond)
       return;
     }
     GET_KARMA(ch) -= karma * 100;
+#ifdef ACCELERATE_FOR_TESTING
+    GET_WEAPON_FOCUS_BOND_STATUS(obj) = GET_WEAPON_FOCUS_RATING(obj);
+#else
     GET_WEAPON_FOCUS_BOND_STATUS(obj) = GET_WEAPON_FOCUS_RATING(obj) * 60;
+#endif
     GET_WEAPON_FOCUS_BONDED_BY(obj) = GET_IDNUM(ch);
 
     if (access_level(ch, LVL_BUILDER)) {
@@ -2907,7 +2953,18 @@ ACMD(do_bond)
       send_to_char("You must be sitting to perform a bonding ritual.\r\n", ch);
     else if (GET_FOCUS_BONDED_TO(obj) == GET_IDNUM(ch)) {
       if (GET_FOCUS_BOND_TIME_REMAINING(obj)) {
+
+#ifdef ACCELERATE_FOR_TESTING
+        GET_FOCUS_BOND_TIME_REMAINING(obj) = GET_FOCUS_FORCE(obj);
+#else
         GET_FOCUS_BOND_TIME_REMAINING(obj) = GET_FOCUS_FORCE(obj) * 60;
+#endif
+
+        if (access_level(ch, LVL_BUILDER)) {
+          send_to_char(ch, "You use your staff powers to greatly accelerate the bonding ritual.\r\n");
+          GET_FOCUS_BOND_TIME_REMAINING(obj) = 1;
+        }
+
         send_to_char(ch, "You restart the ritual to bond %s.\r\n", GET_OBJ_NAME(obj));
         act("$n begins a ritual to bond $p.", TRUE, ch, obj, 0, TO_ROOM);
         AFF_FLAGS(ch).SetBit(AFF_BONDING);
@@ -3006,10 +3063,15 @@ ACMD(do_bond)
       GET_FOCUS_BONDED_SPIRIT_OR_SPELL(obj) = spirit;
       GET_FOCUS_TRADITION(obj) = GET_TRADITION(ch) == TRAD_HERMETIC ? 1 : 0;
 
+#ifdef ACCELERATE_FOR_TESTING
+      GET_FOCUS_BOND_TIME_REMAINING(obj) = GET_FOCUS_FORCE(obj);
+#endif
+
       if (access_level(ch, LVL_BUILDER)) {
         send_to_char(ch, "You use your staff powers to greatly accelerate the bonding ritual.\r\n");
         GET_FOCUS_BOND_TIME_REMAINING(obj) = 1;
       }
+
 
       send_to_char(ch, "You begin the ritual to bond %s.\r\n", GET_OBJ_NAME(obj));
       act("$n begins a ritual to bond $p.", TRUE, ch, obj, 0, TO_ROOM);
@@ -3227,7 +3289,7 @@ ACMD(do_conjure)
           library = TRUE;
         } else if (GET_OBJ_VAL(obj, 0) == TYPE_CIRCLE && !GET_OBJ_VAL(obj, 9)) {
           if (GET_OBJ_VAL(obj, 1) < force) {
-            send_to_char("Your hermetic circle isn't of a high enough rating to conjure that elemental.\r\n", ch);
+            send_to_char(ch, "Your hermetic circle isn't of a high enough rating to conjure that elemental. The maximum you can conjure with it is %d.\r\n", GET_OBJ_VAL(obj, 1));
             return;
           } else if (GET_OBJ_VAL(obj, 2) != spirit) {
             send_to_char("That circle is for a different type of elemental.\r\n", ch);
@@ -3258,8 +3320,13 @@ ACMD(do_conjure)
     if (GET_LEVEL(ch) > 1) {
       send_to_char(ch, "You use your staff powers to greatly accelerate the conjuring process.\r\n");
       ch->char_specials.conjure[2] = 1;
-    } else
+    } else {
+#ifdef ACCELERATE_FOR_TESTING
+      ch->char_specials.conjure[2] = force;
+#else
       ch->char_specials.conjure[2] = force * 30;
+#endif
+    }
     // Max tracking for PROGRESS command.
     ch->char_specials.conjure[3] = ch->char_specials.conjure[2];
     ch->char_specials.programming = obj;
@@ -3745,12 +3812,14 @@ void make_spirit_power(struct char_data *spirit, struct char_data *tch, int type
   ssust->type = type;
   ssust->caster = TRUE;
   ssust->target = tch;
+  ssust->force = GET_LEVEL(spirit);
   ssust->next = SPIRIT_SUST(spirit);
   SPIRIT_SUST(spirit) = ssust;
   ssust = new spirit_sustained;
   ssust->type = type;
   ssust->caster = FALSE;
   ssust->target = spirit;
+  ssust->force = GET_LEVEL(spirit);
   ssust->next = SPIRIT_SUST(tch);
   SPIRIT_SUST(tch) = ssust;
 }
@@ -5086,13 +5155,29 @@ ACMD(do_subpoint)
 
 ACMD(do_initiate)
 {
-  if (GET_TRADITION(ch) == TRAD_MUNDANE)
+  if (GET_TRADITION(ch) == TRAD_MUNDANE) {
     nonsensical_reply(ch, NULL, "standard");
-  else if (subcmd == SCMD_INITIATE && init_cost(ch, FALSE)) {
+    return;
+  }
+
+  if (subcmd == SCMD_INITIATE && init_cost(ch, FALSE)) {
+    // Enforce grade restrictions. We can't do this init_cost since it's used elsewhere.
+    if ((GET_GRADE(ch) + 1) > INITIATION_CAP) {
+      send_to_char("Congratulations, you've reached the initiation cap! You're not able to advance further.\r\n", ch);
+      return;
+    }
+
+    // Check to see that they can afford it. This sends its own message.
+    if (!init_cost(ch, FALSE)) {
+      return;
+    }
     STATE(ch->desc) = CON_INITIATE;
     PLR_FLAGS(ch).SetBit(PLR_INITIATE);
     disp_init_menu(ch->desc);
-  } else if (subcmd == SCMD_POWERPOINT) {
+    return;
+  }
+
+  if (subcmd == SCMD_POWERPOINT) {
     if (GET_TRADITION(ch) != TRAD_ADEPT) {
       nonsensical_reply(ch, NULL, "standard");
       return;
@@ -5112,6 +5197,7 @@ ACMD(do_initiate)
     GET_PP(ch) += 100;
     ch->points.extrapp++;
     send_to_char(ch, "You have purchased an additional powerpoint.\r\n");
+    return;
   }
 }
 void init_parse(struct descriptor_data *d, char *arg)

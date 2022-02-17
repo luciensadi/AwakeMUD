@@ -623,7 +623,7 @@ int get_max_skill_for_char(struct char_data *ch, int skill, int type) {
     return -1;
   }
 
-  // Override: All language skills can be learned to the maximum.
+  // Override: All language skills can be learned to the maximum from any trainer.
   //  This does remove a tiny bit of flavor (no learning Japanese to level 2 max
   //  from the guy in line at the shop), but it simplifies a lot of stuff.
   if (SKILL_IS_LANGUAGE(skill))
@@ -653,13 +653,22 @@ int get_max_skill_for_char(struct char_data *ch, int skill, int type) {
         case SKILL_ARCANELANGUAGE:
         case SKILL_CENTERING:
         case SKILL_ENCHANTING:
+#ifdef DIES_IRAE
+          // Full mages get full magic skills.
+          if (GET_ASPECT(ch) == ASPECT_FULL)
+            return MIN(max, 12);
+
+          // Aspected mages get 10 magic skills to compensate for their 10 mundane skills.
+          return MIN(max, 10);
+#else
           return MIN(max, 12);
+#endif
         default:
-          // Non-aspected mages get their non-magic skills capped at 8.
+          // Full mages get their non-magic skills capped to 8 to compensate for their 12 magic.
           if (GET_ASPECT(ch) == ASPECT_FULL)
             return MIN(max, 8);
 
-          // Aspected mages, since they're gimped by their aspect, get them to 10 like adepts.
+          // Aspected mages get them to 10 like adepts.
           return MIN(max, 10);
       }
   }
