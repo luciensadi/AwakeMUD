@@ -15,6 +15,7 @@
 #include "comm.h"
 #include "newmagic.h"
 #include "handler.h"
+#include "db.h"
 
 // Helper function for remove_ch_from_pc_perception_records().
 void _remove_ch_from_pc_perception_records(struct char_data *ch, struct char_data *vict) {
