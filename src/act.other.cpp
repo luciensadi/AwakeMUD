@@ -1187,6 +1187,16 @@ ACMD(do_toggle)
         continue;
       }
 
+      // Skip log bits.
+      if ((i >= PRF_CONNLOG && i <= PRF_ZONELOG) || i == PRF_CHEATLOG || i == PRF_BANLOG || i == PRF_GRIDLOG || i == PRF_WRECKLOG
+          || i == PRF_PGROUPLOG || i == PRF_HELPLOG || i == PRF_PURGELOG || i == PRF_FUCKUPLOG || i == PRF_ECONLOG || i == PRF_RADLOG
+          || i == PRF_IGNORELOG)
+        continue;
+
+      // Skip pgroup tag pref for non-grouped.
+      if (i == PRF_SHOWGROUPTAG && (!GET_PGROUP_MEMBER_DATA(ch) || !GET_PGROUP(ch)))
+        continue;
+
       // Select ONOFF or YESNO display type based on field 2.
       if (preference_bits_v2[i].on_off) {
         strcpy(buf2, ONOFF(PRF_FLAGGED(ch, i)));
@@ -1196,7 +1206,7 @@ ACMD(do_toggle)
 
       // Compose and append our line.
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf),
-              "%20s: %-3s%s",
+              "%22s: %-3s%s",
               preference_bits_v2[i].name,
               buf2,
               printed%3 == 2 || PRF_FLAGGED(ch, PRF_SCREENREADER) ? "\r\n" : "");
@@ -4243,6 +4253,8 @@ ACMD(do_spool)
   def = atoi(argument);
   reflect = atoi(buf);
 
+  // TODO: SR3 p182: No more Spell Pool dice can be added to the test than the Sorcery dice allocated.
+
   total -= ch->real_abils.casting_pool = GET_CASTING(ch) = MIN(cast, total);
   total -= ch->real_abils.drain_pool = GET_DRAIN(ch) = MIN(drain, total);
   total -= ch->real_abils.spell_defense_pool = GET_SDEFENSE(ch) = MIN(def, total);
@@ -4509,14 +4521,14 @@ ACMD(do_syspoints) {
   // Morts can only view their own system points.
   if (!access_level(ch, LVL_CONSPIRATOR)) {
     if (!*argument) {
-      send_to_char(ch, "You have %d system points.\r\n", GET_SYSTEM_POINTS(ch));
+      send_to_char(ch, "You have %d system points. See ^WHELP SYSPOINTS^n for how to use them.\r\n", GET_SYSTEM_POINTS(ch));
       return;
     }
 
     half_chop(argument, arg, buf);
 
     if (!*arg) {
-      send_to_char("Syntax: syspoints restring <item> <string>\r\n", ch);
+      send_to_char("See ^WHELP SYSPOINTS^n for command syntax.\r\n", ch);
       return;
     }
 
@@ -4526,7 +4538,41 @@ ACMD(do_syspoints) {
       return;
     }
 
-    send_to_char("Syntax: syspoints restring <item> <string>\r\n", ch);
+    if (is_abbrev(arg, "nodelete")) {
+      if (PRF_FLAGGED(ch, PRF_HARDCORE)) {
+        send_to_char("Hardcore characters are nodelete by default.\r\n", ch);
+        return;
+      }
+
+      // Already set.
+      if (PLR_FLAGGED(ch, PLR_NODELETE)) {
+        send_to_char("You're already set to never idle-delete. Thanks for your contributions!\r\n", ch);
+        return;
+      }
+
+      // Can they afford it?
+      if (GET_SYSTEM_POINTS(ch) >= SYSP_NODELETE_COST) {
+        // Have they entered the confirmation command?
+        if (is_abbrev(buf, "confirm")) {
+          GET_SYSTEM_POINTS(ch) -= SYSP_NODELETE_COST;
+          send_to_char(ch, "Congratulations, your character will never idle-delete! %d syspoints have been deducted from your total.\r\n", SYSP_NODELETE_COST);
+          PLR_FLAGS(ch).SetBit(PLR_NODELETE);
+          mudlog("Purchased nodelete with syspoints.", ch, LOG_SYSLOG, TRUE);
+          playerDB.SaveChar(ch);
+          return;
+        }
+
+        // They can afford it, but didn't use the confirm form.
+        send_to_char(ch, "You can spend %d syspoints to purchase a character that never idle-deletes. Type ^WSYSPOINTS NODELETE CONFIRM^n to do so.\r\n", SYSP_NODELETE_COST);
+        return;
+      }
+
+      // Too broke.
+      send_to_char(ch, "That costs %d syspoints, and you only have %d.", SYSP_NODELETE_COST, GET_SYSTEM_POINTS(ch));
+      return;
+    }
+
+    send_to_char(ch, "'%s' is not a valid mode. See ^WHELP SYSPOINTS^n for command syntax.\r\n", arg);
     return;
   }
 

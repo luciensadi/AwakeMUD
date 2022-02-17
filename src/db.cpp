@@ -6391,7 +6391,7 @@ void price_bio(struct obj_data *obj)
       GET_OBJ_AVAILTN(obj) = 10;
       GET_OBJ_AVAILDAY(obj) = 12;
       break;
-    case BIO_TRAUMADAMPNER:
+    case BIO_TRAUMADAMPER:
       GET_OBJ_COST(obj) = 40000;
       GET_OBJ_VAL(obj, 4) = 40;
       GET_OBJ_AVAILTN(obj) = 6;

@@ -562,7 +562,7 @@ int calculate_swim_successes(struct char_data *ch) {
     }
 
   snprintf(buf, sizeof(buf), "modify_target results: ");
-  swim_test_target = MAX(2, ch->in_room->rating) + modify_target_rbuf_raw(ch, buf, sizeof(buf), 4) - water_wings_bonus;
+  swim_test_target = MAX(2, ch->in_room->rating) + modify_target_rbuf_raw(ch, buf, sizeof(buf), 4, FALSE) - water_wings_bonus;
   act(buf, FALSE, ch, 0, 0, TO_ROLLS);
 
   if (GET_POS(ch) < POS_RESTING)

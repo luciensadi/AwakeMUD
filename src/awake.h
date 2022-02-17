@@ -412,11 +412,11 @@ enum {
 #define PRF_NO_VOID_ON_IDLE              57
 #define PRF_RADLOG                       58
 #define PRF_ANONYMOUS_ON_WHERE           59
-#define PRF_MAX                          60
+#define PRF_IGNORELOG                    60
+#define PRF_MAX                          61
 
 /* log watch */
 
-// If you add to this list, also add the name of your new log type to constants.cpp's log_types[].
 #define LOG_CONNLOG        0
 #define LOG_DEATHLOG       1
 #define LOG_MISCLOG        2
@@ -434,7 +434,10 @@ enum {
 #define LOG_FUCKUPLOG      14
 #define LOG_ECONLOG        15
 #define LOG_RADLOG         16
-#define NUM_LOGS           17
+#define LOG_IGNORELOG      17
+#define NUM_LOGS           18
+// If you add to this list, add your bit to act.other.cpp's 'skip log bits' section.
+// If you add to this list, also add the name of your new log type to constants.cpp's log_types[].
 
 /* player conditions */
 
@@ -1048,6 +1051,7 @@ enum {
 #define TYPE_POLTERGEIST      412
 #define TYPE_ELEVATOR         413
 #define TYPE_MEDICAL_MISHAP   414
+#define TYPE_SPELL_DRAIN      415
 
 #define WEAP_EDGED          0
 #define WEAP_CLUB           1
@@ -1444,7 +1448,7 @@ enum {
 #define BIO_REFLEXRECORDER  22
 #define BIO_SYNAPTICACCELERATOR  23
 #define BIO_THERMOSENSEORGAN  24
-#define BIO_TRAUMADAMPNER  25
+#define BIO_TRAUMADAMPER  25
 #define NUM_BIOWARE    26
 
 #define BIOWARE_STANDARD 0

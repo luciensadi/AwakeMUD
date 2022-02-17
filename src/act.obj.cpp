@@ -1680,7 +1680,7 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
     act(buf, FALSE, ch, obj, 0, TO_CHAR);
     return 0;
   }
-  if (IS_OBJ_STAT(obj, ITEM_KEPT)) {
+  if (IS_OBJ_STAT(obj, ITEM_KEPT) && !IS_SENATOR(ch)) {
     snprintf(buf, sizeof(buf), "You'll have to use the KEEP command on $p before you can %s it.", sname);
     act(buf, FALSE, ch, obj, 0, TO_CHAR);
     return 0;
@@ -1691,7 +1691,7 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
     return 0;
   }
 
-  if (obj_contains_kept_items(obj)) {
+  if (obj_contains_kept_items(obj) && !IS_SENATOR(ch)) {
     act("Action blocked: $p contains at least one kept item.", FALSE, ch, obj, 0, TO_CHAR);
     return 0;
   }
@@ -2002,11 +2002,11 @@ bool perform_give(struct char_data * ch, struct char_data * vict, struct obj_dat
     act("You can't let go of $p!!  Yeech!", FALSE, ch, obj, 0, TO_CHAR);
     return 0;
   }
-  if (IS_OBJ_STAT(obj, ITEM_KEPT)) {
+  if (IS_OBJ_STAT(obj, ITEM_KEPT) && !IS_SENATOR(ch)) {
     act("You'll have to use the KEEP command on $p before you can give it away.", FALSE, ch, obj, 0, TO_CHAR);
     return 0;
   }
-  if (obj_contains_kept_items(obj)) {
+  if (obj_contains_kept_items(obj) && !IS_SENATOR(ch)) {
     act("Action blocked: $p contains at least one kept item.", FALSE, ch, obj, 0, TO_CHAR);
     return 0;
   }

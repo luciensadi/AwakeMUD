@@ -53,7 +53,7 @@ int     stage(int successes, int wound);
 bool    access_level(struct char_data *ch, int level);
 char *  buf_mod(char *buf, int buf_len, const char *name, int bonus);
 //char *  buf_roll(char *buf, const char *name, int bonus);
-int     modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int current_visibility_penalty);
+int     modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int current_visibility_penalty, bool skill_is_magic);
 int     modify_target_rbuf(struct char_data *ch, char *rbuf, int rbuf_len);
 int     modify_target(struct char_data *ch);
 int     damage_modifier(struct char_data *ch, char *rbuf, int rbuf_len);

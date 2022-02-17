@@ -1378,7 +1378,7 @@ void mobile_activity(void)
     }
 
     // Confirm we have the skills to wield our current weapon, otherwise ditch it.
-#ifdef MOBS_REFUSE_TO_USE_WEAPONS_THAT_THEY_HAVE_NO_SKILL_FOR
+#ifndef SUPPRESS_MOB_SKILL_ERRORS
     if (GET_EQ(ch, WEAR_WIELD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_WEAPON) {
       char build_err_msg[2000];
 

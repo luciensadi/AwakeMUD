@@ -1045,7 +1045,11 @@ ACMD(do_progress)
   }
 
   if (AFF_FLAGS(ch).IsSet(AFF_CONJURE)) {
-    send_to_char(ch, "You are about %d%% of the way through the conjuring process.\r\n", (int) ((float) (ch->char_specials.conjure[2] / ch->char_specials.conjure[3]) * 100));
+    float current = ch->char_specials.conjure[3] - ch->char_specials.conjure[2];
+    float target = ch->char_specials.conjure[3];
+    float percentage = (current / target) * 100;
+
+    send_to_char(ch, "You are about %d%% of the way through the conjuring process.\r\n", (int) percentage);
     return;
   }
 

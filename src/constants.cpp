@@ -593,6 +593,7 @@ struct preference_bit_struct preference_bits_v2[] = {
   { "No Void on Idle"      , FALSE, TRUE  },
   { "RadLog"               , TRUE , TRUE  },
   { "Anonymous on Where"   , FALSE, TRUE  },
+  { "IgnoreLog"            , TRUE , TRUE  },
   { "\n"                   , 0    , 0     }
 };
 
@@ -659,6 +660,7 @@ const char *preference_bits[] =
     "NO_VOID",
     "RADLOG",
     "ANONYMOUS_ON_WHERE",
+    "IGNORELOG",
     "\n"
   };
 
@@ -1163,6 +1165,7 @@ const char *log_types[] =
     "FUCKUPLOG",
     "ECONLOG",
     "RADLOG",
+    "IGNORELOG",
     "\n"
   };
 

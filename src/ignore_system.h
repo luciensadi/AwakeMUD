@@ -49,6 +49,7 @@
 extern const char *ignored_bits_in_english[];
 
 void globally_remove_vict_id_from_logged_in_ignore_lists(long vict_idnum);
+void log_attempt_to_bypass_ic_ignore(struct char_data *ch, struct char_data *vict, const char *function);
 
 // The main IgnoreData class definition.
 class IgnoreData {

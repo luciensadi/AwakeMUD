@@ -139,7 +139,7 @@ ACMD(do_ignore) {
   }
 
   if (wrote_applied_block) {
-    mudlog(blocks_applied, ch, LOG_MISCLOG, TRUE);
+    mudlog(blocks_applied, ch, LOG_IGNORELOG, TRUE);
   }
 }
 
@@ -476,4 +476,10 @@ void display_characters_ignore_entries(struct char_data *viewer, struct char_dat
     send_to_char(viewer, " - %s: %s\r\n", ignored_name, ignored_bits_str);
     delete [] ignored_name;
   }
+}
+
+void log_attempt_to_bypass_ic_ignore(struct char_data *ch, struct char_data *vict, const char *function) {
+  char log_buf[5000];
+  snprintf(log_buf, sizeof(log_buf), "Blocked attempt by %s to bypass %s's IC ignore flag (%s).", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), function);
+  mudlog(log_buf, ch, LOG_IGNORELOG, TRUE);
 }

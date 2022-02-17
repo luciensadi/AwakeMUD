@@ -1569,6 +1569,9 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
 
   AFF_FLAGS(k).PrintBits(buf2, MAX_STRING_LENGTH, affected_bits, AFF_MAX);
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "AFF: ^y%s^n\r\n", buf2);
+  if (GET_BUILDING(k)) {
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Currently working on: ^c%s^n (%ld)\r\n", GET_OBJ_NAME(GET_BUILDING(k)), GET_OBJ_VNUM(GET_BUILDING(k)));
+  }
 
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Height: %d cm, Weight: %d kg\r\n", GET_HEIGHT(k), GET_WEIGHT(k));
 
@@ -6904,7 +6907,7 @@ int audit_zone_shops_(struct char_data *ch, int zone_num, bool verbose) {
       }
 
       // Flag the shopkeeper having wonky int values.
-      int intelligence = GET_INT(&mob_proto[shopkeeper_rnum]);
+      int intelligence = GET_REAL_INT(&mob_proto[shopkeeper_rnum]);
 #ifdef BE_STRICTER_ABOUT_SHOPKEEPER_INTELLIGENCE
       if (intelligence < 3 || intelligence > 12) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - out-of-range shopkeeper intelligence ^c%d^n (expecting between 3 and 12)^n.\r\n", intelligence);
@@ -6918,6 +6921,16 @@ int audit_zone_shops_(struct char_data *ch, int zone_num, bool verbose) {
         issues++;
       }
 #endif
+    }
+
+    for (struct shop_sell_data *sell = shop_table[real_shp].selling; sell; sell = sell->next) {
+      rnum_t obj_rnum = real_object(sell->vnum);
+      if (obj_rnum < 0) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - item ^c%ld^n is listed as for sale, but does not exist.\r\n", obj_rnum);
+      }
+      else if (sell->type == SELL_AVAIL && GET_OBJ_AVAILTN(&obj_proto[obj_rnum]) == 0) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - avail-listed item ^c%s ^n(^c%ld^n)^n has no TN.\r\n", GET_OBJ_NAME(&obj_proto[obj_rnum]), GET_OBJ_VNUM(&obj_proto[obj_rnum]));
+      }
     }
 
     if (printed) {

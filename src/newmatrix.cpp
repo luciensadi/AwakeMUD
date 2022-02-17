@@ -3075,7 +3075,7 @@ ACMD(do_reveal)
   if (!PERSONA)
     send_to_char(ch, "You can't do that while hitching.\r\n");
   else {
-    send_to_icon(PERSONA, "You lower your masking for a brief moment, broadcast your location to the host.\r\n");
+    send_to_icon(PERSONA, "You lower your masking for a brief moment, broadcasting your location to the host.\r\n");
     for (struct matrix_icon *icon = matrix[PERSONA->in_host].icons; icon; icon = icon->next_in_host)
       if (icon != PERSONA && icon->decker && !has_spotted(icon, PERSONA)) {
         make_seen(icon, PERSONA->idnum);

@@ -330,16 +330,29 @@ int damage_modifier(struct char_data *ch, char *rbuf, int rbuf_size)
 int sustain_modifier(struct char_data *ch, char *rbuf, size_t rbuf_len) {
   int base_target = 0;
 
+  // Since NPCs don't have sustain foci available to them at the moment, we don't throw these penalties on them.
+  if (IS_NPC(ch) && !IS_PROJECT(ch))
+    return 0;
+
   if (GET_SUSTAINED_NUM(ch) > 0) {
-    base_target += ((GET_SUSTAINED_NUM(ch) - GET_SUSTAINED_FOCI(ch)) * 2);
-    buf_mod(rbuf, rbuf_len, "Sustain", (GET_SUSTAINED_NUM(ch) - GET_SUSTAINED_FOCI(ch)) * 2);
+    int delta = (GET_SUSTAINED_NUM(ch) - GET_SUSTAINED_FOCI(ch)) * 2;
+    base_target += delta;
+    buf_mod(rbuf, rbuf_len, "Sustain", delta);
+  }
+
+  if (IS_PROJECT(ch) && ch->desc && ch->desc->original) {
+    if (GET_SUSTAINED_NUM(ch->desc->original) > 0) {
+      int delta = (GET_SUSTAINED_NUM(ch->desc->original) - GET_SUSTAINED_FOCI(ch->desc->original)) * 2;
+      base_target += delta;
+      buf_mod(rbuf, rbuf_len, "Sustain", delta);
+    }
   }
 
   return base_target;
 }
 
 // Adds the combat_mode toggle
-int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int current_visibility_penalty) {
+int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int current_visibility_penalty, bool skill_is_magic) {
   extern time_info_data time_info;
   int base_target = 0, light_target = 0;
   // get damage modifier
@@ -356,8 +369,10 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int c
 
   if (PLR_FLAGGED(ch, PLR_PERCEIVE))
   {
-    base_target += 2;
-    buf_mod(rbuf, rbuf_len, "AstralPercep", 2);
+    if (!skill_is_magic) {
+      base_target += 2;
+      buf_mod(rbuf, rbuf_len, "AstralPercep", 2);
+    }
   } else if (current_visibility_penalty < 8) {
     switch (light_level(temp_room)) {
       case LIGHT_FULLDARK:
@@ -540,14 +555,19 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int c
 
 int modify_target_rbuf(struct char_data *ch, char *rbuf, int rbuf_len)
 {
-  return modify_target_rbuf_raw(ch, rbuf, rbuf_len, 0);
+  return modify_target_rbuf_raw(ch, rbuf, rbuf_len, 0, FALSE);
+}
+
+int modify_target_rbuf_magical(struct char_data *ch, char *rbuf, int rbuf_len)
+{
+  return modify_target_rbuf_raw(ch, rbuf, rbuf_len, 0, TRUE);
 }
 
 int modify_target(struct char_data *ch)
 {
   char fake_rbuf[5000];
   memset(fake_rbuf, 0, sizeof(fake_rbuf));
-  return modify_target_rbuf_raw(ch, fake_rbuf, sizeof(fake_rbuf), 0);
+  return modify_target_rbuf_raw(ch, fake_rbuf, sizeof(fake_rbuf), 0, FALSE);
 }
 
 // this returns the general skill

@@ -1460,13 +1460,6 @@ void reboot_quest(int rnum, struct quest_data *quest)
   if (quest_table[rnum].johnson != quest->johnson)
   {
     ojn = real_mobile(quest_table[rnum].johnson);
-    if (ojn < 0) {
-      char oopsbuf[5000];
-      snprintf(oopsbuf, sizeof(oopsbuf), "BUILD ERROR: Quest %ld had non-existent Johnson %ld.", quest_table[rnum].vnum, quest_table[rnum].johnson);
-      mudlog(oopsbuf, NULL, LOG_SYSLOG, TRUE);
-      return;
-    }
-
     njn = real_mobile(quest->johnson);
     if (njn < 0) {
       char oopsbuf[5000];

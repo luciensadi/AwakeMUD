@@ -845,6 +845,8 @@ bool load_char(const char *name, char_data *ch, bool logon)
           GET_OBJ_EXTRA(obj).SetBit(ITEM_WIZLOAD);
         if (temp_extra_flags.IsSet(ITEM_IMMLOAD))
           GET_OBJ_EXTRA(obj).SetBit(ITEM_IMMLOAD);
+        if (temp_extra_flags.IsSet(ITEM_KEPT))
+          GET_OBJ_EXTRA(obj).SetBit(ITEM_KEPT);
 
         GET_OBJ_ATTEMPT(obj) = atoi(row[21]);
         GET_OBJ_CONDITION(obj) = atoi(row[22]);

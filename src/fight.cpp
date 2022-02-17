@@ -237,6 +237,16 @@ void update_pos(struct char_data * victim)
     GET_POS(victim) = POS_MORTALLYW;
 
   GET_INIT_ROLL(victim) = 0;
+
+  // SR3 p178
+  if (GET_POS(victim) <= POS_SLEEPING) {
+    struct sustain_data *next;
+    for (struct sustain_data *sust = GET_SUSTAINED(victim); sust; sust = next) {
+      next = sust->next;
+      if (sust->caster && !sust->focus && !sust->spirit)
+        end_sustained_spell(victim, sust);
+    }
+  }
 }
 
 /* blood blood blood, root */
@@ -2276,6 +2286,9 @@ void gen_death_msg(struct char_data *ch, struct char_data *vict, int attacktype)
     case TYPE_MEDICAL_MISHAP:
       WRITE_DEATH_MESSAGE("%s inadvertently starred in a medical-themed snuff film. {%s (%ld)}");
       break;
+    case TYPE_SPELL_DRAIN:
+      WRITE_DEATH_MESSAGE("%s turned themselves into a Mana bonfire. {%s (%ld)}");
+      break;
     case TYPE_CRASH:
       switch(number(0, 1)) {
         case 0:
@@ -2475,15 +2488,47 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
       send_to_char(ch, "^m(OOC Notice: You are unable to damage %s.)^n\r\n", GET_CHAR_NAME(victim));
   }
 
+  if (ch == victim) {
+    if (attacktype == TYPE_SPELL_DRAIN) {
+      snprintf(rbuf, sizeof(rbuf), "Drain damage (%s: ", GET_CHAR_NAME(ch));
+    } else {
+      snprintf(rbuf, sizeof(rbuf), "Self-damage (%s: ", GET_CHAR_NAME(ch));
+    }
+  } else {
+    snprintf(rbuf, sizeof(rbuf), "Damage (%s vs %s: ", GET_CHAR_NAME(ch), GET_CHAR_NAME(victim));
+  }
+
   if (attacktype <= TYPE_BLACKIC)
-    snprintf(rbuf, sizeof(rbuf),"Damage (%s vs %s, %s %s): ", GET_CHAR_NAME(ch), GET_CHAR_NAME(victim),
-            GET_WOUND_NAME(dam), damage_type_names_must_subtract_300_first_and_must_not_be_greater_than_blackic[attacktype - 300]);
+    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "%d %s boxes from %s): ",
+            dam, is_physical ? "physical" : "mental", damage_type_names_must_subtract_300_first_and_must_not_be_greater_than_blackic[attacktype - 300]);
   else
-    snprintf(rbuf, sizeof(rbuf),"Damage (%s vs %s, %s %d): ", GET_CHAR_NAME(ch), GET_CHAR_NAME(victim),
-            GET_WOUND_NAME(dam), attacktype);
+    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "%d %s boxes from type %d): ",
+            dam, is_physical ? "physical" : "mental", attacktype);
 
   if (victim != ch)
   {
+#ifdef IGNORING_IC_ALSO_IGNORES_COMBAT
+    if (IS_IGNORING(victim, is_blocking_ic_interaction_from, ch)) {
+      char oopsbuf[5000];
+      snprintf(oopsbuf, sizeof(oopsbuf), "SUPER SYSERR: Somehow, we made it all the way to damage() with the victim ignoring the attacker! "
+                                         "%s ch, %s victim, %d dam, %d attacktype, %d is_physical, %d send_message.",
+                                         GET_CHAR_NAME(ch), GET_CHAR_NAME(victim), dam, attacktype, is_physical, send_message
+                                       );
+      mudlog(oopsbuf, ch, LOG_SYSLOG, TRUE);
+      return 0;
+    }
+
+    if (IS_IGNORING(ch, is_blocking_ic_interaction_from, victim)) {
+      char oopsbuf[5000];
+      snprintf(oopsbuf, sizeof(oopsbuf), "SUPER SYSERR: Somehow, we made it all the way to damage() with the attacker ignoring the victim! "
+                                         "%s ch, %s victim, %d dam, %d attacktype, %d is_physical, %d send_message.",
+                                         GET_CHAR_NAME(ch), GET_CHAR_NAME(victim), dam, attacktype, is_physical, send_message
+                                       );
+      mudlog(oopsbuf, ch, LOG_SYSLOG, TRUE);
+      return 0;
+    }
+#endif
+
     if (GET_POS(ch) > POS_STUNNED && attacktype < TYPE_SUFFERING) {
       if (!FIGHTING(ch) && !ch->in_veh)
         set_fighting(ch, victim);
@@ -2507,24 +2552,25 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
         remember(victim, ch);
     }
   }
+
   if (victim->master && victim->master == ch)
     stop_follower(victim);
 
-  if (IS_AFFECTED(ch, AFF_HIDE))
-    appear(ch);
+  if (attacktype != TYPE_SPELL_DRAIN) {
+    if (IS_AFFECTED(ch, AFF_HIDE))
+      appear(ch);
 
-  /* stop sneaking if it's the case */
-  if (IS_AFFECTED(ch, AFF_SNEAK))
-    AFF_FLAGS(ch).RemoveBit(AFF_SNEAK);
-
-  if (PLR_FLAGGED(victim, PLR_PROJECT) && ch != victim)
-  {
-    do_return(victim, "", 0, 0);
-    WAIT_STATE(victim, PULSE_VIOLENCE);
+    /* stop sneaking if it's the case */
+    if (IS_AFFECTED(ch, AFF_SNEAK))
+      AFF_FLAGS(ch).RemoveBit(AFF_SNEAK);
   }
-  /* Figure out how to do WANTED flag*/
 
   if (ch != victim) {
+    if (PLR_FLAGGED(victim, PLR_PROJECT)) {
+      do_return(victim, "", 0, 0);
+      WAIT_STATE(victim, PULSE_VIOLENCE);
+    }
+
     if (attacktype == TYPE_SCATTERING && !IS_NPC(ch) && !IS_NPC(victim)) {
       // Unless both chars are PK, or victim is KILLER, deal no damage and abort without flagging anyone as KILLER.
       if (!(PLR_FLAGGED(victim, PLR_KILLER) || (PRF_FLAGGED(ch, PRF_PKER) && PRF_FLAGGED(victim, PRF_PKER)))) {
@@ -2536,19 +2582,22 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
     } else if (attacktype != TYPE_MEDICAL_MISHAP) {
       check_killer(ch, victim);
     }
+
+    if (PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(victim))
+    {
+      dam = -1;
+      buf_mod(rbuf, sizeof(rbuf), "No-PK",dam);
+    }
   }
-  if (PLR_FLAGGED(ch, PLR_KILLER) && ch != victim && !IS_NPC(victim))
-  {
-    dam = -1;
-    buf_mod(rbuf, sizeof(rbuf), "No-PK",dam);
-  }
+
   if (attacktype == TYPE_EXPLOSION && (IS_ASTRAL(victim) || MOB_FLAGGED(victim, MOB_IMMEXPLODE)))
   {
     dam = -1;
     buf_mod(rbuf, sizeof(rbuf), "ImmExplode",dam);
   }
+
   if (dam == 0)
-    strcat(rbuf, " 0");
+    strlcat(rbuf, " 0", sizeof(rbuf));
   else if (dam > 0)
     buf_mod(rbuf, sizeof(rbuf), "", dam);
 
@@ -2573,6 +2622,7 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
     }
     return 0;
   }
+
   int comp = 0;
   bool trauma = FALSE, pain = FALSE;
 
@@ -2587,7 +2637,7 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
         dam--;
       else if (GET_BIOWARE_TYPE(bio) == BIO_DAMAGECOMPENSATOR)
         comp = GET_BIOWARE_RATING(bio) * 100;
-      else if (GET_BIOWARE_TYPE(bio) == BIO_TRAUMADAMPNER && GET_MENTAL(real_body) >= 100)
+      else if (GET_BIOWARE_TYPE(bio) == BIO_TRAUMADAMPER && GET_MENTAL(real_body) >= 100)
         trauma = TRUE;
       else if (GET_BIOWARE_TYPE(bio) == BIO_PAINEDITOR && GET_BIOWARE_IS_ACTIVATED(bio))
         pain = TRUE;
@@ -2595,12 +2645,16 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
   }
 
   // Pain editors disable trauma dampers (M&M p75).
-  if (pain)
+  if (pain) {
+    act("(damper disabled - pedit)", FALSE, victim, NULL, NULL, TO_ROLLS);
     trauma = FALSE;
+  }
 
   // Damage compensators disable trauma dampers unless the character is damaged past the DC's ability to compensate.
-  if (comp && (1000 - GET_PHYSICAL(real_body) <= comp && 1000 - GET_PHYSICAL(real_body) <= comp))
+  if (comp && (is_physical ? (1000 - GET_PHYSICAL(real_body) <= comp) : (1000 - GET_MENTAL(real_body) <= comp))) {
+    act("(damper disabled - dcomp)", FALSE, victim, NULL, NULL, TO_ROLLS);
     trauma = FALSE;
+  }
 
   if (GET_PHYSICAL(victim) > 0)
     awake = FALSE;
@@ -2611,8 +2665,13 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
       GET_PHYSICAL(real_body) -= MAX(dam * 100, 0);
       AFF_FLAGS(real_body).SetBit(AFF_DAMAGED);
       if (trauma) {
-        GET_PHYSICAL(real_body) += 100;
-        GET_MENTAL(real_body) -= 100;
+        if (GET_MENTAL(real_body) >= 100) {
+          GET_PHYSICAL(real_body) += 100;
+          GET_MENTAL(real_body) -= 100;
+          act("(trauma damper: +1 phys -1 ment)", FALSE, victim, NULL, NULL, TO_ROLLS);
+        } else {
+          act("(damper disabled: not enough ment to flow into)", FALSE, victim, NULL, NULL, TO_ROLLS);
+        }
       }
       AFF_FLAGS(real_body).SetBit(AFF_DAMAGED);
 
@@ -2628,6 +2687,7 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
       AFF_FLAGS(real_body).SetBit(AFF_DAMAGED);
       if (trauma) {
         GET_MENTAL(real_body) += 100;
+        act("(trauma damper: +1 ment)", FALSE, victim, NULL, NULL, TO_ROLLS);
       }
       AFF_FLAGS(real_body).SetBit(AFF_DAMAGED);
 
@@ -2653,7 +2713,9 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
   }
   if (!awake && GET_PHYSICAL(victim) <= 0)
     victim->points.lastdamage = time(0);
+
   update_pos(victim);
+
   if (GET_SUSTAINED_NUM(victim))
   {
     struct sustain_data *next;
@@ -2666,7 +2728,7 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
           end_sustained_spell(victim, sust);
         }
       }
-    } else if (dam > 0) {
+    } else if (dam > 0 && attacktype != TYPE_SPELL_DRAIN) {
       for (struct sustain_data *sust = GET_SUSTAINED(victim); sust; sust = next) {
         next = sust->next;
         if (sust->caster && !sust->focus && !sust->spirit)
@@ -2698,7 +2760,8 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
          } else
            dam_message(dam, ch, victim, attacktype);
        }
-     } else if (dam > 0 && attacktype == TYPE_FALL) {
+     }
+     else if (dam > 0 && attacktype == TYPE_FALL) {
        if (dam > 5) {
          send_to_char(victim, "^RYou slam into the %s at speed, the impact reshaping your body in ways you do not appreciate.^n\r\n",
                       ROOM_FLAGGED(get_ch_in_room(victim), ROOM_INDOORS) ? "floor" : "ground");
@@ -2708,6 +2771,15 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
          send_to_char(victim, "^rYou hit the %s with bruising force.^n\r\n", ROOM_FLAGGED(get_ch_in_room(victim), ROOM_INDOORS) ? "floor" : "ground");
          snprintf(buf3, sizeof(buf3), "^r$n hits the %s with bruising force.^n\r\n", ROOM_FLAGGED(get_ch_in_room(victim), ROOM_INDOORS) ? "floor" : "ground");
          act(buf3, FALSE, victim, 0, 0, TO_ROOM);
+       }
+     }
+     else if (attacktype == TYPE_SPELL_DRAIN) {
+       if ((GET_POS(ch) <= POS_STUNNED) && (GET_POS(ch) > POS_DEAD)) {
+         send_to_char("You are unable to resist the strain of channeling mana and fall unconscious!\r\n", ch);
+         act("$n collapses unconscious!", FALSE, ch, 0, 0, TO_ROOM);
+       } else if (GET_POS(ch) == POS_DEAD) {
+         send_to_char("Unchecked mana overloads your body with energy, killing you...\r\n", ch);
+         act("$n suddenly collapses, dead!", FALSE, ch, 0, 0, TO_ROOM);
        }
      }
    }
@@ -2788,6 +2860,10 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
     default:                      /* >= POSITION SLEEPING */
       if (dam > ((int)(GET_MAX_PHYSICAL(victim) / 100) >> 2))
         act("^RThat really did HURT!^n", FALSE, victim, 0, 0, TO_CHAR);
+
+      // Don't bleed or flee from your own spellcast.
+      if (attacktype == TYPE_SPELL_DRAIN)
+        break;
 
       if (GET_PHYSICAL(victim) < (GET_MAX_PHYSICAL(victim) >> 2))
         send_to_char(victim, "%sYou wish that your wounds would stop "
@@ -4357,6 +4433,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
 #ifdef IGNORING_IC_ALSO_IGNORES_COMBAT
       if (IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)) {
         send_to_char("You and your opponent must both be toggled PK for that.\r\n", ch);
+        log_attempt_to_bypass_ic_ignore(ch, vict, "range_combat");
         return;
       }
 
