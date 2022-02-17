@@ -3440,8 +3440,10 @@ ACMD(do_activate)
         total += ability_cost(i, q);
       if (x < GET_POWER_ACT(ch, i))
         total *= -1;
-      if (total + GET_POWER_POINTS(ch) > ((int)(GET_REAL_MAG(ch) / 100) * 100))
-        send_to_char("You have too many powers activated already.\r\n", ch);
+
+      int delta = ((int)(GET_REAL_MAG(ch) / 100) * 100) - GET_POWER_POINTS(ch);
+      if (total > delta)
+        send_to_char(ch, "That costs %d points to activate, but you only have %d free.\r\n", total, delta);
       else if (GET_POWER_ACT(ch, i) == x) {
         send_to_char(ch, "%s is already active at rank %d.", CAP(adept_powers[i]), x);
         return;

@@ -559,6 +559,9 @@ void make_corpse(struct char_data * ch)
     credits = number(GET_BANK(ch) - credits, GET_BANK(ch) + credits) * NUYEN_GAIN_MULTIPLIER;
   } else
   {
+#ifdef DIES_IRAE
+    lose_nuyen(ch, MAX(0, (int) (GET_NUYEN(ch) / DEATH_NUYEN_LOSS_DIVISOR)), NUYEN_OUTFLOW_DEATH_PENALTY);
+#endif
     nuyen = GET_NUYEN(ch);
     credits = 0;
   }

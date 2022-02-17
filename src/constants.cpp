@@ -2708,7 +2708,8 @@ struct nuyen_faucet_or_sink nuyen_faucets_and_sinks[NUM_OF_TRACKED_NUYEN_INCOME_
     {"Taxis", NI_IS_SINK},
     {"Playergroups", NI_IS_SINK},
     {"Trade Command (n->k)", NI_IS_SINK},
-    {"Credstick Cracker", NI_IS_SINK}
+    {"Credstick Cracker", NI_IS_SINK},
+    {"Death Penalty", NI_IS_SINK}
   };
 
 const char *ignored_bits_in_english[] =

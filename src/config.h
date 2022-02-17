@@ -44,6 +44,11 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 #define HOST_SECURITY_RED_MARKET_MINIMUM                       2000
 #define HOST_SECURITY_BLACK_MARKET_MINIMUM                     2500
 
+#define MAX_PAYDATA_QTY_BLUE                                   4
+#define MAX_PAYDATA_QTY_GREEN                                  8
+#define MAX_PAYDATA_QTY_ORANGE                                 10
+#define MAX_PAYDATA_QTY_RED_BLACK                              12
+
 // What maximum amount of karma per action do you want PCs < 100 TKE to have?
 #define MAX_NEWCHAR_GAIN                                       50
 
@@ -127,6 +132,8 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 
 // How likely are you to lose stats on death? 1/X where X is this value.
 #define DEATH_PENALTY_CHANCE                                   25
+// How much nuyen do you lose on death? 1/X where X is this value.
+#define DEATH_NUYEN_LOSS_DIVISOR                               4
 
 // Configs for the idle nuyen reward, in nuyen and minutes respectively.
 #define IDLE_NUYEN_REWARD_AMOUNT                               1000

@@ -2285,8 +2285,8 @@ bool invis_ok(struct char_data *ch, struct char_data *vict) {
   if (IS_NPC(vict) && MOB_FLAGGED(vict, MOB_TOTALINVIS))
     return FALSE;
 
-  // Astral perception sees most things.
-  if (IS_ASTRAL(ch) || IS_DUAL(ch))
+  // Astral perception sees most things-- unless said thing is an inanimate mob with no spells on it.
+  if ((IS_ASTRAL(ch) || IS_DUAL(ch)) && !(MOB_FLAGGED(vict, MOB_INANIMATE) && !GET_SUSTAINED(vict)))
     return TRUE;
 
   // Ultrasound pierces all invis as long as it's not blocked by silence or stealth.
@@ -2294,21 +2294,24 @@ bool invis_ok(struct char_data *ch, struct char_data *vict) {
     return TRUE;
 
   // Allow perception test VS invis.
-  if (IS_AFFECTED(vict, AFF_SPELLIMPINVIS))
+  if (IS_AFFECTED(vict, AFF_SPELLIMPINVIS)) {
     return can_see_through_invis(ch, vict);
-
-  // Thermoptic, etc.
-  if (IS_AFFECTED(vict, AFF_IMP_INVIS))
-    return FALSE;
-
-  // Standard invis is pierced by thermographic vision, which is default on vehicles.
-  if (IS_AFFECTED(vict, AFF_INVISIBLE) || IS_AFFECTED(vict, AFF_SPELLINVIS)) {
-    return CURRENT_VISION(ch) == THERMOGRAPHIC || AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE);
   }
 
-  // Allow perception test VS invis.
+  // Thermoptic camouflage, a houseruled thing that doesn't actually show up in the game yet. This can only be broken by ultrasound.
+  if (IS_AFFECTED(vict, AFF_IMP_INVIS)) {
+    return FALSE;
+  }
+
+  // Ruthenium is pierced by thermographic vision, which is default on vehicles.
+  bool can_see_through_standard_invis = (CURRENT_VISION(ch) == THERMOGRAPHIC || AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE));
+  if (IS_AFFECTED(vict, AFF_INVISIBLE)) {
+    return can_see_through_standard_invis;
+  }
+
+  // Allow perception test VS invis spell.
   if (IS_AFFECTED(vict, AFF_SPELLINVIS)) {
-    return can_see_through_invis(ch, vict);
+    return (can_see_through_standard_invis || can_see_through_invis(ch, vict));
   }
 
   // If we've gotten here, they're not invisible.

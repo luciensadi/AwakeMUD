@@ -2427,19 +2427,21 @@ void matrix_update()
     if (time_info.hours == 0) {
       if (!host.type && !host.found && !host.payreset) {
         switch (host.colour) {
-        case HOST_SECURITY_BLUE:
-          host.found = number(1, 6) - 1;
-          break;
-        case HOST_SECURITY_GREEN:
-          host.found = number(1, 6) + number(1, 6) - 2;
-          break;
-        case HOST_SECURITY_ORANGE:
-          host.found = number(1, 6) + number(1, 6);
-          break;
-        case HOST_SECURITY_RED:
-        case HOST_SECURITY_BLACK:
-          host.found = number(1, 6) + number(1, 6) + 2;
-          break;
+          case HOST_SECURITY_BLUE:
+            host.found = MIN(number(1, 6) - 1, MAX_PAYDATA_QTY_BLUE);
+            break;
+          case HOST_SECURITY_GREEN:
+            host.found = MIN(number(1, 6) + number(1, 6) - 2, MAX_PAYDATA_QTY_GREEN);
+            break;
+          case HOST_SECURITY_ORANGE:
+            host.found = MIN(number(1, 6) + number(1, 6), MAX_PAYDATA_QTY_ORANGE);
+            break;
+          case HOST_SECURITY_RED:
+          case HOST_SECURITY_BLACK:
+            host.found = MIN(number(1, 6) + number(1, 6) + 2, MAX_PAYDATA_QTY_RED_BLACK);
+            break;
+          default:
+            host.found = 0;
         }
         host.payreset = TRUE;
       } else

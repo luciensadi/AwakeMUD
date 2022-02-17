@@ -1133,14 +1133,25 @@ bool mobact_process_scavenger(struct char_data *ch) {
       // Find the most valuable object in the room (ignoring worthless things):
       FOR_ITEMS_AROUND_CH(ch, obj) {
         // No stealing workshops or corpses.
-        if (GET_OBJ_TYPE(obj) != ITEM_WORKSHOP || GET_OBJ_TYPE(obj) != ITEM_CORPSE)
+        if (GET_OBJ_TYPE(obj) == ITEM_WORKSHOP || GET_OBJ_TYPE(obj) == ITEM_CORPSE)
           continue;
 
         // No scavenging people's quest items.
         if (obj->obj_flags.quest_id)
           continue;
 
-        if (CAN_GET_OBJ(ch, obj) && GET_OBJ_COST(obj) > max) {
+        // Only grab things we can actually get.
+        if (!CAN_GET_OBJ(ch, obj))
+          continue;
+
+        // We always go for keys.
+        if (GET_OBJ_TYPE(obj) == ITEM_KEY) {
+          best_obj = obj;
+          break;
+        }
+
+        // Otherwise, we only want it if it's worth more than the others.
+        if (GET_OBJ_COST(obj) > max) {
           best_obj = obj;
           max = GET_OBJ_COST(obj);
         }
@@ -1149,13 +1160,20 @@ bool mobact_process_scavenger(struct char_data *ch) {
       // Get the most valuable thing we've found.
       if (best_obj != NULL) {
         obj_from_room(best_obj);
-        obj_to_char(best_obj, ch);
-        act("$n gets $p.", FALSE, ch, best_obj, 0, TO_ROOM);
-        return true;
+        if (GET_OBJ_TYPE(obj) == ITEM_KEY) {
+          // "Accidentally."
+          act("$n accidentally breaks $p.", FALSE, ch, best_obj, 0, TO_ROOM);
+          extract_obj(best_obj);
+        } else {
+          obj_to_char(best_obj, ch);
+          act("$n gets $p.", FALSE, ch, best_obj, 0, TO_ROOM);
+        }
+
+        return TRUE;
       }
     }
   } /* End scavenger NPC. */
-  return false;
+  return FALSE;
 }
 
 // Find where the 'push' command is in the command index. This is SUCH a hack.
