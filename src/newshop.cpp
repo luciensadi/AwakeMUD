@@ -2438,7 +2438,11 @@ void shedit_parse(struct descriptor_data *d, const char *arg)
     switch(*arg) {
     case 'y':
     case 'Y':
+#ifdef ONLY_LOG_BUILD_ACTIONS_ON_CONNECTED_ZONES
       if (!vnum_from_non_connected_zone(d->edit_number)) {
+#else
+      {
+#endif
         snprintf(buf, sizeof(buf),"%s wrote new shop #%ld",
                 GET_CHAR_NAME(d->character), d->edit_number);
         mudlog(buf, d->character, LOG_WIZLOG, TRUE);
