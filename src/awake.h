@@ -438,6 +438,7 @@ enum {
 #define NUM_LOGS           18
 // If you add to this list, add your bit to act.other.cpp's 'skip log bits' section.
 // If you add to this list, also add the name of your new log type to constants.cpp's log_types[].
+// Finally, add to utils.cpp's mudlog() switch.
 
 /* player conditions */
 
