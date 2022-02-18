@@ -1160,7 +1160,7 @@ bool mobact_process_scavenger(struct char_data *ch) {
       // Get the most valuable thing we've found.
       if (best_obj != NULL) {
         obj_from_room(best_obj);
-        if (GET_OBJ_TYPE(obj) == ITEM_KEY) {
+        if (GET_OBJ_TYPE(best_obj) == ITEM_KEY) {
           // "Accidentally."
           act("$n accidentally breaks $p.", FALSE, ch, best_obj, 0, TO_ROOM);
           extract_obj(best_obj);
