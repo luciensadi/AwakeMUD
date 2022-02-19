@@ -763,11 +763,11 @@ void look_at_char(struct char_data * i, struct char_data * ch)
           show_obj_to_char(GET_EQ(i, j), ch, 7);
         } else if (j == WEAR_WIELD || j == WEAR_HOLD) {
           if (IS_OBJ_STAT(GET_EQ(i, j), ITEM_TWOHANDS))
-            send_to_char(hands[2], ch);
+            send_to_char(MOB_FLAGGED(i, MOB_INANIMATE) ? "<firmly mounted>     " : hands[2], ch);
           else if (j == WEAR_WIELD)
-            send_to_char(hands[(int)i->char_specials.saved.left_handed], ch);
+            send_to_char(MOB_FLAGGED(i, MOB_INANIMATE) ? "<mounted>            " : hands[(int)i->char_specials.saved.left_handed], ch);
           else
-            send_to_char(hands[!i->char_specials.saved.left_handed], ch);
+            send_to_char(MOB_FLAGGED(i, MOB_INANIMATE) ? "<mounted>            " : hands[!i->char_specials.saved.left_handed], ch);
           show_obj_to_char(GET_EQ(i, j), ch, 1);
         } else if ((j == WEAR_BODY || j == WEAR_LARM || j == WEAR_RARM || j == WEAR_WAIST)
                    && GET_EQ(i, WEAR_ABOUT)) {

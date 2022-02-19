@@ -1156,6 +1156,12 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
     return;
   }
 
+  if (IS_OBJ_STAT(obj, ITEM_NORENT) || IS_OBJ_STAT(obj, ITEM_GODONLY)) {
+    act("$p is worthless to me.", FALSE, ch, obj, 0, TO_CHAR);
+    send_to_char("(OOC: You can't sell !RENT and GOD-ONLY items.)\r\n", ch);
+    return;
+  }
+
   if (GET_OBJ_TYPE(obj) == ITEM_SHOPCONTAINER) {
     if (!shop_table[shop_nr].flags.IsSet(SHOP_DOCTOR)) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " I won't buy %s off of you. Take it to a cyberdoc.", GET_OBJ_NAME(obj));

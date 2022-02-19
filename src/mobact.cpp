@@ -327,8 +327,13 @@ bool vict_is_valid_guard_target(struct char_data *ch, struct char_data *vict) {
     // If victim's equipment is illegal here, blast them.
     if (GET_EQ(vict, i) && violates_zsp(security_level, vict, i, ch)) {
       // Target found, stop processing.
-      snprintf(buf3, sizeof(buf3), decapitalize_a_an(guard_messages[number(0, NUM_GUARD_MESSAGES - 1)]), GET_CHAR_NAME(vict), GET_OBJ_NAME(GET_EQ(vict, i)));
-      do_say(ch, buf3, 0, SCMD_SAYTO);
+      if (MOB_FLAGGED(ch, MOB_INANIMATE)) {
+        act("$n swivels towards you threateningly, its cameras zooming in on $p.", TRUE, ch, GET_EQ(vict, i), vict, TO_VICT);
+        act("$n swivels towards $N threateningly, its cameras zooming in on $p.", TRUE, ch, GET_EQ(vict, i), vict, TO_NOTVICT);
+      } else {
+        snprintf(buf3, sizeof(buf3), guard_messages[number(0, NUM_GUARD_MESSAGES - 1)], GET_CHAR_NAME(vict), decapitalize_a_an(GET_OBJ_NAME(GET_EQ(vict, i))));
+        do_say(ch, buf3, 0, SCMD_SAYTO);
+      }
       return TRUE;
     }
   }

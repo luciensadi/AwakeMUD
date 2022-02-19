@@ -97,9 +97,9 @@ void pedit_parse(struct descriptor_data *d, const char *arg)
       break;
     case 'q':
       send_to_char(CH, "Design saved!\r\n");
-      if (GET_OBJ_VAL(d->edit_obj, 0) == 5)
+      if (GET_PROGRAM_TYPE(d->edit_obj) == SOFT_ATTACK)
         GET_OBJ_VAL(d->edit_obj, 4) = GET_OBJ_VAL(d->edit_obj, 1) * attack_multiplier[GET_OBJ_VAL(d->edit_obj, 2)];
-      else if (GET_OBJ_VAL(d->edit_obj, 0) == SOFT_RESPONSE)
+      else if (GET_PROGRAM_TYPE(d->edit_obj) == SOFT_RESPONSE)
         GET_OBJ_VAL(d->edit_obj, 4) = GET_OBJ_VAL(d->edit_obj, 1) * (GET_OBJ_VAL(d->edit_obj, 1) * GET_OBJ_VAL(d->edit_obj, 1));
       else GET_OBJ_VAL(d->edit_obj, 4) = GET_OBJ_VAL(d->edit_obj, 1) * programs[GET_OBJ_VAL(d->edit_obj, 0)].multiplier;
       GET_OBJ_VAL(d->edit_obj, 6) = GET_OBJ_VAL(d->edit_obj, 1) * GET_OBJ_VAL(d->edit_obj, 4);
