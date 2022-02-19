@@ -65,13 +65,10 @@ void wire_nuyen(struct char_data *ch, int amount, vnum_t character_id)
   struct char_data *targ = NULL;
   char query_buf[1000], name_buf[500];
 
-  for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
-    targ = d->original ? d->original : d->character;
-
-    if (targ && GET_IDNUM(targ) == character_id)
+  // We used to just iterate over descriptors, but the change would be lost if someone was linkdead during transfer and reconnected after.
+  for (targ = character_list; targ; targ = targ->next) {
+    if (GET_IDNUM(targ) == character_id)
       break;
-
-    targ = NULL;
   }
 
   // Deduct from the sender (if any). Not a faucet or sink, unless coming from a shop.
