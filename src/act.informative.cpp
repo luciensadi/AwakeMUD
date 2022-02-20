@@ -1713,7 +1713,7 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
       }
     } else {
       if (weather_info.sky >= SKY_RAINING) {
-          if(ch->in_veh && ch->in_veh->type == !VEH_BIKE) {
+          if(ch->in_veh && ch->in_veh->type != VEH_BIKE) {
             send_to_char(ch, "^cRain glides down the windows, wipers brushing it clear with patient motion.^n\r\n");
         }
           if(ch->in_veh && ch->in_veh->type == VEH_BIKE) {
