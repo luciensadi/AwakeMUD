@@ -1160,7 +1160,7 @@ void medit_parse(struct descriptor_data *d, const char *arg)
       case 'Q':
       case '0':
       case 'b':
-      case 'B':
+      case 'B': 
         medit_disp_menu(d);
         break;
       case 'a':

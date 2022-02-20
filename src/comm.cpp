@@ -176,6 +176,8 @@ void process_wheres_my_car();
 extern int calculate_distance_between_rooms(vnum_t start_room_vnum, vnum_t target_room_vnum, bool ignore_roads);
 void set_descriptor_canaries(struct descriptor_data *newd);
 
+extern int modify_target_rbuf_magical(struct char_data *ch, char *rbuf, int rbuf_len);
+
 #ifdef USE_DEBUG_CANARIES
 void check_memory_canaries();
 #endif
@@ -1304,6 +1306,9 @@ int make_prompt(struct descriptor_data * d)
               break;
             case 'i':       // impact
               snprintf(str, sizeof(str), "%d", GET_IMPACT(d->character));
+              break;
+            case 'j':
+              snprintf(str, sizeof(str), "%d", modify_target(d->character));
               break;
             case 'k':       // karma
               snprintf(str, sizeof(str), "%0.2f", ((float)GET_KARMA(ch) / 100));

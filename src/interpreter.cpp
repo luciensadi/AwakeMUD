@@ -1741,7 +1741,7 @@ ACMD(do_alias)
         send_to_char("Aliases cannot contain the 'quit' command.\n\r",ch);
         return;
       }
-      if (strlen(repl) > 256)
+      if (strlen(repl) > 255)
         repl[255] = '\0';
       a = new alias;
       a->command = str_dup(arg);

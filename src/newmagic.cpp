@@ -3951,18 +3951,44 @@ POWER(spirit_sustain)
       send_to_char("You aren't sustaining that spell yourself.\r\n", ch);
       return;
     }
-    if ((spells[sust->spell].category == MANIPULATION && spiritdata->type == ELEM_EARTH) ||
-        (spells[sust->spell].category == COMBAT && spiritdata->type == ELEM_FIRE) ||
-        (spells[sust->spell].category == ILLUSION && spiritdata->type == ELEM_WATER) ||
-        (spells[sust->spell].category == DETECTION && spiritdata->type == ELEM_AIR)) {
-      sust->spirit = spirit;
-      GET_SUSTAINED_FOCI(ch)++;
-      GET_SUSTAINED_NUM(spirit)++;
-      spiritdata->services--;
-      GET_SUSTAINED(spirit) = sust;
-      send_to_char(ch, "%s sustains %s for you.\r\n", CAP(GET_NAME(spirit)), spells[sust->spell].name);
-    } else
-      send_to_char(ch, "That %s can't sustain that type of spell.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
+
+    switch (spiritdata->type) {
+      case ELEM_EARTH:
+        if (spells[sust->spell].category != MANIPULATION) {
+          send_to_char("Earth elementals can only sustain Manipulation spells.\r\n", ch);
+          return;
+        }
+        break;
+      case ELEM_FIRE:
+        if (spells[sust->spell].category != COMBAT) {
+          send_to_char("Fire elementals can only sustain Combat spells.\r\n", ch);
+          return;
+        }
+        break;
+      case ELEM_WATER:
+        if (spells[sust->spell].category != ILLUSION) {
+          send_to_char("Water elementals can only sustain Illusion spells.\r\n", ch);
+          return;
+        }
+        break;
+      case ELEM_AIR:
+        if (spells[sust->spell].category != DETECTION) {
+          send_to_char("Air elementals can only sustain Detection spells.\r\n", ch);
+          return;
+        }
+        break;
+      default:
+        snprintf(buf, sizeof(buf), "SYSERR: Unexpected elemental type %d in spirit_sustain.", spiritdata->type);
+        mudlog(buf, ch, LOG_SYSLOG, TRUE);
+        break;
+    }
+
+    sust->spirit = spirit;
+    GET_SUSTAINED_FOCI(ch)++;
+    GET_SUSTAINED_NUM(spirit)++;
+    spiritdata->services--;
+    GET_SUSTAINED(spirit) = sust;
+    send_to_char(ch, "%s sustains %s for you.\r\n", CAP(GET_NAME(spirit)), spells[sust->spell].name);
   }
 }
 
