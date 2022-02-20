@@ -116,6 +116,8 @@ void medit_disp_menu(struct descriptor_data *d)
   send_to_char("n) Skill menu.\r\n", CH);
   send_to_char(CH, "o) Arrive text: ^c%s^n,  p) Leave text: ^c%s^n\r\n",
                MOB->char_specials.arrive, MOB->char_specials.leave);
+  send_to_char("r) Edit Cyberware\r\n", CH);
+  send_to_char("s) Edit Bioware\r\n", CH);
   send_to_char("q) Quit and save\r\n", CH);
   send_to_char("x) Exit and abort\r\n", CH);
   send_to_char("Enter your choice:\r\n", CH);
@@ -145,10 +147,35 @@ void medit_disp_skills(struct descriptor_data *d)
 }
 
 void medit_disp_ammo_menu(struct descriptor_data *d) {
-  send_to_char(CH, "1) Show current ammo\r\n"
-                   "2) Edit current ammo\r\n"
+  display_pockets_to_char(CH, MOB);
+  send_to_char(CH, "\r\n1) Edit current ammo\r\n"
                    "q) Back\r\n");
   d->edit_mode = MEDIT_AMMO;
+}
+
+void _medit_display_ware_menu(struct descriptor_data *d, bool is_cyberware) {
+  int i = 1;
+  struct obj_data *ware = NULL;
+
+  for (ware = (is_cyberware ? MOB->cyberware : MOB->bioware); ware; ware = ware->next_content) {
+    send_to_char(CH, "%2d) %50s (vnum %ld)\r\n", i++, GET_OBJ_NAME(ware), GET_OBJ_VNUM(ware));
+  }
+
+  send_to_char("\r\n", CH);
+  send_to_char(CH, "a) Add %sware\r\n", is_cyberware ? "cyber" : "bio");
+  if (i > 1)
+    send_to_char(CH, "d) Delete %sware\r\n", is_cyberware ? "cyber" : "bio");
+  send_to_char("q) Return to main menu\r\n", CH);
+}
+
+void medit_disp_cyberware_menu(struct descriptor_data *d) {
+  _medit_display_ware_menu(d, TRUE);
+  d->edit_mode = MEDIT_CYBERWARE;
+}
+
+void medit_disp_bioware_menu(struct descriptor_data *d) {
+  _medit_display_ware_menu(d, FALSE);
+  d->edit_mode = MEDIT_BIOWARE;
 }
 
 void medit_disp_attack_menu(struct descriptor_data *d)
@@ -599,7 +626,12 @@ void medit_parse(struct descriptor_data *d, const char *arg)
       send_to_char("Enter leave text: ", CH);
       d->edit_mode = MEDIT_LEAVE_MSG;
       break;
-
+    case 'r':
+      medit_disp_cyberware_menu(d);
+      break;
+    case 's':
+      medit_disp_bioware_menu(d);
+      break;
     default:
       medit_disp_menu(d);
       break;
@@ -1121,6 +1153,94 @@ void medit_parse(struct descriptor_data *d, const char *arg)
     }
     break;
 
+  case MEDIT_CYBERWARE:
+  case MEDIT_BIOWARE:
+    switch (*arg) {
+      case 'q':
+      case 'Q':
+      case '0':
+      case 'b':
+      case 'B':
+        medit_disp_menu(d);
+        break;
+      case 'a':
+      case 'A':
+        send_to_char("\r\nEnter the vnum of the 'ware you want to add: ", CH);
+        d->edit_mode = (d->edit_mode == MEDIT_CYBERWARE ? MEDIT_ADD_CYBERWARE : MEDIT_ADD_BIOWARE);
+        break;
+      case 'd':
+      case 'D':
+        if (!(d->edit_mode == MEDIT_CYBERWARE ? MOB->cyberware : MOB->bioware)) {
+          send_to_char("\r\nThere's no 'ware installed.", CH);
+        } else {
+          send_to_char("\r\nEnter the index number of the 'ware you want to remove: ", CH);
+          d->edit_mode = (d->edit_mode == MEDIT_CYBERWARE ? MEDIT_DEL_CYBERWARE : MEDIT_DEL_BIOWARE);
+        }
+        break;
+      default:
+        send_to_char("That's not a choice. Enter a choice (1 to list, 2 to edit, or q to quit): ", CH);
+        break;
+    }
+    break;
+
+  case MEDIT_ADD_BIOWARE:
+  case MEDIT_ADD_CYBERWARE:
+    number = atoi(arg);
+    {
+      struct obj_data *ware = read_object(number, VIRTUAL);
+      if (!ware) {
+        send_to_char("\r\nInvalid vnum.\r\n", CH);
+      } else {
+        if (d->edit_mode == MEDIT_ADD_CYBERWARE) {
+          if (GET_OBJ_TYPE(ware) != ITEM_CYBERWARE) {
+            send_to_char(CH, "\r\n%s is not cyberware.\r\n", GET_OBJ_NAME(ware));
+          } else {
+            obj_to_cyberware(ware, MOB);
+          }
+        } else {
+          if (GET_OBJ_TYPE(ware) != ITEM_BIOWARE) {
+            send_to_char(CH, "\r\n%s is not bioware.\r\n", GET_OBJ_NAME(ware));
+          } else {
+            obj_to_bioware(ware, MOB);
+          }
+        }
+      }
+
+      if (d->edit_mode == MEDIT_ADD_CYBERWARE)
+        medit_disp_cyberware_menu(d);
+      else
+        medit_disp_bioware_menu(d);
+    }
+    break;
+
+  case MEDIT_DEL_BIOWARE:
+  case MEDIT_DEL_CYBERWARE:
+    number = atoi(arg) - 1;
+    {
+      struct obj_data *ware = (d->edit_mode == MEDIT_DEL_CYBERWARE ? MOB->cyberware : MOB->bioware);
+
+      for (; ware && number > 0; number--) {
+        ware = ware->next_content;
+      }
+
+      if (ware) {
+        if (d->edit_mode == MEDIT_DEL_CYBERWARE) {
+          obj_from_cyberware(ware);
+        } else {
+          obj_from_bioware(ware);
+        }
+        extract_obj(ware);
+      } else {
+        send_to_char("\r\nThere aren't that many pieces of 'ware installed.\r\n", CH);
+      }
+
+      if (d->edit_mode == MEDIT_DEL_CYBERWARE)
+        medit_disp_cyberware_menu(d);
+      else
+        medit_disp_bioware_menu(d);
+    }
+    break;
+
   case MEDIT_AMMO:
     switch (*arg) {
       case 'q':
@@ -1128,9 +1248,6 @@ void medit_parse(struct descriptor_data *d, const char *arg)
         medit_disp_menu(d);
         break;
       case '1':
-        display_pockets_to_char(CH, MOB);
-        break;
-      case '2':
         for (int i = START_OF_AMMO_USING_WEAPONS; i <= END_OF_AMMO_USING_WEAPONS; i++)
           send_to_char(CH, "%d) %s\r\n", (i + 1) - START_OF_AMMO_USING_WEAPONS, weapon_type[i]);
         send_to_char("\r\nSelect the weapon to edit: ", CH);
@@ -1329,6 +1446,24 @@ void write_mobs_to_disk(int zone)
             fprintf(fp, "\t%s:\t%u\n",
                         get_ammo_representation(wp, am, 0),
                         GET_BULLETPANTS_AMMO_AMOUNT(mob, wp, am));
+
+      // Print cyberware.
+      if (mob->cyberware) {
+        i = 0;
+        fprintf(fp, "[CYBERWARE]\n");
+        for (struct obj_data *cyb = mob->cyberware; cyb; cyb = cyb->next_content)
+          fprintf(fp, "\t[CYBER %d]\n\t\tVnum:\t%ld\n", i++, GET_OBJ_VNUM(cyb));
+      }
+
+      // Print bioware.
+      if (mob->bioware) {
+        i = 0;
+        fprintf(fp, "[BIOWARE]\n");
+        for (struct obj_data *bio = mob->bioware; bio; bio = bio->next_content)
+          fprintf(fp, "\t[BIO %d]\n\t\tVnum:\t%ld\n", i++, GET_OBJ_VNUM(bio));
+      }
+
+
 
       fprintf(fp, "BREAK\n");
     } // close if statement

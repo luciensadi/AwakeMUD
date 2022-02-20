@@ -4125,7 +4125,6 @@ bool ranged_response(struct char_data *ch, struct char_data *vict)
       || GET_POS(vict) <= POS_STUNNED
       || (!ch->in_room || ROOM_FLAGGED(ch->in_room, ROOM_PEACEFUL))
       || (!vict->in_room || ROOM_FLAGGED(vict->in_room, ROOM_PEACEFUL))
-      || (IS_NPC(vict) && (MOB_FLAGGED(vict, MOB_INANIMATE))) // TODO: This means turrets don't join in, right? Gotta fix that.
       || CH_IN_COMBAT(vict))
   {
     return FALSE;
@@ -4140,6 +4139,8 @@ bool ranged_response(struct char_data *ch, struct char_data *vict)
     do_flee(vict, "", 0, 0);
     return FALSE;
   }
+
+  bool vict_will_not_move = !IS_NPC(vict) || MOB_FLAGGED(vict, MOB_SENTINEL) || MOB_FLAGGED(vict, MOB_EMPLACED) || AFF_FLAGGED(vict, AFF_PRONE);
 
   // If we're wielding a ranged weapon, try to shoot.
   if (RANGE_OK(vict)) {
@@ -4163,10 +4164,10 @@ bool ranged_response(struct char_data *ch, struct char_data *vict)
 
       for (distance = 1; !is_responding && (nextroom && (distance <= 4)); distance++) {
         // Players and sentinels never charge, so we stop processing when we're getting attacked from beyond our weapon or sight range.
-        if ((!IS_NPC(vict) || MOB_FLAGGED(vict, MOB_SENTINEL) || AFF_FLAGGED(vict, AFF_PRONE)) && (distance > range || distance > sight)) {
+        if (vict_will_not_move && (distance > range || distance > sight)) {
           if (IS_NPC(vict)) {
             char buf[100];
-            snprintf(buf, sizeof(buf), "Sentinel/prone $n not ranged-responding: $N is out of range (weap %d, sight %d).", range, sight);
+            snprintf(buf, sizeof(buf), "Sentinel/prone/emplaced $n not ranged-responding: $N is out of range (weap %d, sight %d).", range, sight);
             act(buf, FALSE, vict, 0, ch, TO_ROLLS);
           }
           return FALSE;
@@ -4220,7 +4221,7 @@ bool ranged_response(struct char_data *ch, struct char_data *vict)
   }
 
   // Mobile NPC with a melee weapon. They only charge one room away for some reason.
-  else if (IS_NPC(vict) && !MOB_FLAGGED(vict, MOB_SENTINEL) && !AFF_FLAGGED(vict, AFF_PRONE)) {
+  else if (!vict_will_not_move) {
     for (dir = 0; dir < NUM_OF_DIRS && !is_responding; dir++) {
       if (CAN_GO(vict, dir) && EXIT2(vict->in_room, dir)->to_room == ch->in_room) {
         act("$n charges towards $s distant foe.", TRUE, vict, 0, 0, TO_ROOM);

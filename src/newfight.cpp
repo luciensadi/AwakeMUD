@@ -1205,14 +1205,14 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     combat_message(att->ch, def->ch, att->weapon, MAX(0, damage_total), att->ranged->burst_count);
     defender_died = damage_without_message(att->ch, def->ch, damage_total, att->ranged->dam_type, att->ranged->is_physical);
 
-    if (!defender_died)
+    if (!defender_died && damage_total > 0)
       perform_knockdown_test(def->ch, (GET_WEAPON_POWER(att->weapon) + att->ranged->burst_count) / (att->ranged->is_gel ? 1 : 2));
   } else {
     defender_died = damage(att->ch, def->ch, damage_total, att->melee->dam_type, att->melee->is_physical);
 
     if (!defender_died) {
-      // Houserule: You can't bring more than 10 str to bear on this test.
-      perform_knockdown_test(def->ch, MIN(10, GET_STR(att->ch)));
+      if (damage_total > 0)
+        perform_knockdown_test(def->ch, GET_STR(att->ch));
 
       if (successes_for_use_in_monowhip_test_check <= 0) {
         struct obj_data *weapon = net_successes < 0 ? def->weapon : att->weapon;

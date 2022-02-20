@@ -500,11 +500,11 @@ void boot_world(void)
   log("Checking start rooms.");
   check_start_rooms();
 
-  log("Loading mobs and generating index.");
-  index_boot(DB_BOOT_MOB);
-
   log("Loading objs and generating index.");
   index_boot(DB_BOOT_OBJ);
+
+  log("Loading mobs and generating index.");
+  index_boot(DB_BOOT_MOB);
 
   log("Loading vehicles and generating index.");
   index_boot(DB_BOOT_VEH);
@@ -1707,6 +1707,60 @@ void parse_mobile(File &in, long nr)
       snprintf(buf, sizeof(buf), "AMMO/%s", get_ammo_representation(wp, am, 0));
       GET_BULLETPANTS_AMMO_AMOUNT(mob, wp, am) = data.GetInt(buf, 0);
     }
+
+  // Load cyberware.
+  {
+    char field[32];
+    int num_fields = data.NumSubsections("CYBERWARE");
+    vnum_t vnum;
+    struct obj_data *ware = NULL;
+
+    for (int x = 0; x < num_fields; x++) {
+      const char *name = data.GetIndexSection("CYBERWARE", x);
+      snprintf(field, sizeof(field), "%s/Vnum", name);
+      vnum = data.GetLong(field, -1);
+
+      if (!(ware = read_object(vnum, VIRTUAL))) {
+        log_vfprintf("MOB FILE ERROR: Mob %ld referenced cyberware vnum %ld (entry %d) which does not exist.", nr, vnum, x);
+        continue;
+      } else {
+        if (GET_OBJ_TYPE(ware) != ITEM_CYBERWARE) {
+          log_vfprintf("MOB FILE ERROR: Mob %ld referenced vnum %ld (entry %d) as cyberware, but it's not cyberware.", nr, vnum, x);
+          extract_obj(ware);
+          continue;
+        }
+        log_vfprintf("debug: reading cyber %s (%ld) into prototype for %s.", GET_OBJ_NAME(ware), GET_OBJ_VNUM(ware), GET_CHAR_NAME(mob));
+        obj_to_cyberware(ware, mob);
+      }
+    }
+  }
+
+  // Same thing for bioware. TODO: Merge this copypasta'd code into one function.
+  {
+    char field[32];
+    int num_fields = data.NumSubsections("BIOWARE");
+    vnum_t vnum;
+    struct obj_data *ware = NULL;
+
+    for (int x = 0; x < num_fields; x++) {
+      const char *name = data.GetIndexSection("BIOWARE", x);
+      snprintf(field, sizeof(field), "%s/Vnum", name);
+      vnum = data.GetLong(field, -1);
+
+      if (!(ware = read_object(vnum, VIRTUAL))) {
+        log_vfprintf("MOB FILE ERROR: Mob %ld referenced bioware vnum %ld (entry %d) which does not exist.", nr, vnum, x);
+        continue;
+      } else {
+        if (GET_OBJ_TYPE(ware) != ITEM_BIOWARE) {
+          log_vfprintf("MOB FILE ERROR: Mob %ld referenced vnum %ld (entry %d) as bioware, but it's not bioware.", nr, vnum, x);
+          extract_obj(ware);
+          continue;
+        }
+        log_vfprintf("debug: reading bio %s (%ld) into prototype for %s.", GET_OBJ_NAME(ware), GET_OBJ_VNUM(ware), GET_CHAR_NAME(mob));
+        obj_to_bioware(ware, mob);
+      }
+    }
+  }
 
   top_of_mobt = rnum++;
 }
@@ -3080,6 +3134,20 @@ struct char_data *read_mobile(int nr, int type)
   set_new_mobile_unique_id(mob);
 
   set_natural_vision_for_race(mob);
+
+  // Copy off their cyberware from prototype.
+  mob->cyberware = NULL;
+  for (struct obj_data *obj = mob_proto[i].cyberware; obj; obj = obj->next_content) {
+    log_vfprintf("debug: cloning cyb %s (%ld) for %s.", GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj), GET_CHAR_NAME(mob));
+    obj_to_cyberware(read_object(GET_OBJ_VNUM(obj), VIRTUAL), mob);
+  }
+
+  // Same for bioware.
+  mob->bioware = NULL;
+  for (struct obj_data *obj = mob_proto[i].bioware; obj; obj = obj->next_content) {
+    log_vfprintf("debug: cloning bio %s (%ld) for %s.", GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj), GET_CHAR_NAME(mob));
+    obj_to_bioware(read_object(GET_OBJ_VNUM(obj), VIRTUAL), mob);
+  }
 
   affect_total(mob);
 
