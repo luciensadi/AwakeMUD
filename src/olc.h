@@ -249,6 +249,10 @@ extern void write_index_file(const char *suffix);
 #define MEDIT_BIOWARE                   53
 #define MEDIT_ADD_BIOWARE               54
 #define MEDIT_DEL_BIOWARE               55
+#define MEDIT_EQUIPMENT                 56
+#define MEDIT_SELECT_EQUIPMENT_VNUM     57
+#define MEDIT_SELECT_EQUIPMENT_WEARLOC  58
+#define MEDIT_DEL_EQUIPMENT             59
 
 // quest defines
 #define QEDIT_CONFIRM_EDIT                0

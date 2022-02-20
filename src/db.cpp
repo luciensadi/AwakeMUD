@@ -1729,7 +1729,7 @@ void parse_mobile(File &in, long nr)
           extract_obj(ware);
           continue;
         }
-        log_vfprintf("debug: reading cyber %s (%ld) into prototype for %s.", GET_OBJ_NAME(ware), GET_OBJ_VNUM(ware), GET_CHAR_NAME(mob));
+        // log_vfprintf("debug: reading cyber %s (%ld) into prototype for %s.", GET_OBJ_NAME(ware), GET_OBJ_VNUM(ware), GET_CHAR_NAME(mob));
         obj_to_cyberware(ware, mob);
       }
     }
@@ -1756,11 +1756,40 @@ void parse_mobile(File &in, long nr)
           extract_obj(ware);
           continue;
         }
-        log_vfprintf("debug: reading bio %s (%ld) into prototype for %s.", GET_OBJ_NAME(ware), GET_OBJ_VNUM(ware), GET_CHAR_NAME(mob));
+        // log_vfprintf("debug: reading bio %s (%ld) into prototype for %s.", GET_OBJ_NAME(ware), GET_OBJ_VNUM(ware), GET_CHAR_NAME(mob));
         obj_to_bioware(ware, mob);
       }
     }
   }
+
+  {
+    char field[32];
+    int num_fields = data.NumSubsections("EQUIPMENT"), wearloc;
+    vnum_t vnum;
+    struct obj_data *eq = NULL;
+
+    for (int x = 0; x < num_fields; x++) {
+      const char *name = data.GetIndexSection("EQUIPMENT", x);
+      snprintf(field, sizeof(field), "%s/Vnum", name);
+      vnum = data.GetLong(field, -1);
+      snprintf(field, sizeof(field), "%s/Wearloc", name);
+      wearloc = data.GetLong(field, -1);
+
+      if (!(eq = read_object(vnum, VIRTUAL))) {
+        log_vfprintf("MOB FILE ERROR: Mob %ld referenced equipment vnum %ld (entry %d) which does not exist.", nr, vnum, x);
+        continue;
+      }
+
+      if (wearloc < 0 || wearloc >= NUM_WEARS) {
+        log_vfprintf("MOB FILE ERROR: Mob %ld referenced invalid wearloc %d (entry %d).", nr, wearloc, x);
+        continue;
+      }
+
+      // log_vfprintf("debug: reading eq %s (%ld) into prototype for %s.", GET_OBJ_NAME(eq), GET_OBJ_VNUM(eq), GET_CHAR_NAME(mob));
+      equip_char(mob, eq, wearloc);
+    }
+  }
+
 
   top_of_mobt = rnum++;
 }
@@ -3138,15 +3167,22 @@ struct char_data *read_mobile(int nr, int type)
   // Copy off their cyberware from prototype.
   mob->cyberware = NULL;
   for (struct obj_data *obj = mob_proto[i].cyberware; obj; obj = obj->next_content) {
-    log_vfprintf("debug: cloning cyb %s (%ld) for %s.", GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj), GET_CHAR_NAME(mob));
     obj_to_cyberware(read_object(GET_OBJ_VNUM(obj), VIRTUAL), mob);
   }
 
   // Same for bioware.
   mob->bioware = NULL;
   for (struct obj_data *obj = mob_proto[i].bioware; obj; obj = obj->next_content) {
-    log_vfprintf("debug: cloning bio %s (%ld) for %s.", GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj), GET_CHAR_NAME(mob));
     obj_to_bioware(read_object(GET_OBJ_VNUM(obj), VIRTUAL), mob);
+  }
+
+  // And then equipment.
+  struct obj_data *eq;
+  for (int wearloc = 0; wearloc < NUM_WEARS; wearloc++) {
+    GET_EQ(mob, wearloc) = NULL;
+    if ((eq = GET_EQ(&mob_proto[i], wearloc))) {
+      equip_char(mob, read_object(GET_OBJ_VNUM(eq), VIRTUAL), wearloc);
+    }
   }
 
   affect_total(mob);

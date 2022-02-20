@@ -127,7 +127,9 @@ bool can_see_through_invis(struct char_data *ch, struct char_data *vict) {
   // Calculate the TN.
   int tn = invis_spell_sust->force;
   buf_mod(perception_test_rbuf, sizeof(perception_test_rbuf), "Spell TN", tn);
-  tn += modify_target_rbuf(ch, perception_test_rbuf, sizeof(perception_test_rbuf));
+
+  // SR3 p183: These modifiers don't apply.
+  // tn += modify_target_rbuf(ch, perception_test_rbuf, sizeof(perception_test_rbuf));
 
   // If the victim is affected by the Conceal power, add the force of that to the victim's TN.
   int conceal_rating = affected_by_power(vict, CONCEAL);
@@ -136,9 +138,9 @@ bool can_see_through_invis(struct char_data *ch, struct char_data *vict) {
     buf_mod(perception_test_rbuf, sizeof(perception_test_rbuf), "Conceal", conceal_rating);
   }
 
-  // Next, figure out how many dice they're rolling.
-  int dice = GET_INT(ch) + GET_TASK_POOL(ch, INT);
-  snprintf(ENDOF(perception_test_rbuf), sizeof(perception_test_rbuf) - strlen(perception_test_rbuf), "\r\nDice: %d (int) + %d (task pool)", GET_INT(ch), GET_TASK_POOL(ch, INT));
+  // Next, figure out how many dice they're rolling. We don't get task pool because this isn't a skill.
+  int dice = GET_INT(ch);
+  snprintf(ENDOF(perception_test_rbuf), sizeof(perception_test_rbuf) - strlen(perception_test_rbuf), "\r\nDice: %d (int)", GET_INT(ch));
 
   // House rule: Add tactical computer's rating as perception dice, but only for mundanes.
   if (GET_MAG(ch) <= 0) {
@@ -149,6 +151,16 @@ bool can_see_through_invis(struct char_data *ch, struct char_data *vict) {
         break;
       }
     }
+  }
+
+  if (GET_TRADITION(ch) == TRAD_SHAMANIC && GET_TOTEM(ch) == TOTEM_LEOPARD) {
+    dice -= 1;
+    buf_mod(perception_test_rbuf, sizeof(perception_test_rbuf), "LeopardTotem", -1);
+  }
+
+  if (GET_TRADITION(ch) == TRAD_ADEPT && GET_POWER(ch, ADEPT_TRUE_SIGHT)) {
+    dice += GET_POWER(ch, ADEPT_TRUE_SIGHT);
+    buf_mod(perception_test_rbuf, sizeof(perception_test_rbuf), "TrueSight", ADEPT_TRUE_SIGHT);
   }
 
   // Figure out how many successes they need to have to beat this spell.

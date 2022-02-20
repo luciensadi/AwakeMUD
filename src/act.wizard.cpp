@@ -1741,6 +1741,34 @@ void do_stat_mobile(struct char_data * ch, struct char_data * k)
   /* Showing the bitvector */
   AFF_FLAGS(k).PrintBits(buf2, MAX_STRING_LENGTH, affected_bits, AFF_MAX);
   send_to_char(ch, "%sAFF: ^y%s\r\n", buf, buf2);
+
+  /* Equipment */
+  if (k->cyberware) {
+    send_to_char(ch, "Cyberware:\r\n");
+    for (struct obj_data *ware = k->cyberware; ware; ware = ware->next_content)
+      send_to_char(ch, " - %s (^c%ld^n)\r\n", GET_OBJ_NAME(ware), GET_OBJ_VNUM(ware));
+  }
+
+  if (k->bioware) {
+    send_to_char(ch, "Bioware:\r\n");
+    for (struct obj_data *ware = k->bioware; ware; ware = ware->next_content)
+      send_to_char(ch, " - %s (^c%ld^n)\r\n", GET_OBJ_NAME(ware), GET_OBJ_VNUM(ware));
+  }
+
+  {
+    struct obj_data *worn_item;
+    bool sent_eq_string = FALSE;
+
+    for (int wearloc = 0; wearloc < NUM_WEARS; wearloc++) {
+      if ((worn_item = GET_EQ(k, wearloc))) {
+        if (!sent_eq_string) {
+          send_to_char(ch, "Equipment:\r\n");
+          sent_eq_string = TRUE;
+        }
+        send_to_char(ch, " - %s %s (^c%ld^n) (%d nuyen)\r\n", where[wearloc], GET_OBJ_NAME(worn_item), GET_OBJ_VNUM(worn_item), GET_OBJ_COST(worn_item));
+      }
+    }
+  }
 }
 
 ACMD(do_stat)
@@ -6485,13 +6513,6 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
         issues++;
       }
 
-    // Flag mobs with high armor.
-    if (GET_BALLISTIC(mob) > 10 || GET_IMPACT(mob) > 10) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - high armor (%d/%d)^n.\r\n", GET_BALLISTIC(mob), GET_IMPACT(mob));
-      printed = TRUE;
-      issues++;
-    }
-
     // Flag mobs with high nuyen.
     if (GET_NUYEN(mob) >= 200 || GET_BANK(mob) >= 200) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - high grinding rewards (%ld/%ld)^n.\r\n", GET_NUYEN(mob), GET_BANK(mob));
@@ -6561,6 +6582,30 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
       strlcat(buf, "  - is an Elemental with Sorcery, but is restricted from casting by its race.\r\n", sizeof(buf));
       printed = TRUE;
       issues++;
+    }
+
+    if (mob->cyberware || mob->bioware) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - has cyberware / bioware.\r\n");
+      printed = TRUE;
+      issues++;
+    }
+
+    {
+      int total_value = 0;
+      int total_items = 0;
+
+      for (int wearloc = 0; wearloc < NUM_WEARS; wearloc++) {
+        if (GET_EQ(mob, wearloc)) {
+          total_value += GET_OBJ_COST(GET_EQ(mob, wearloc));
+          total_items++;
+        }
+      }
+
+      if (total_items > 0) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - has %d piece%s of equipment (total value: ^c%d^n).\r\n", total_items, total_items == 1 ? "" : "s", total_value);
+        printed = TRUE;
+        issues++;
+      }
     }
 
     if (printed) {
