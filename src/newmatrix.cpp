@@ -1895,7 +1895,7 @@ ACMD(do_load)
           int success = 1;
           if (subcmd == SCMD_UPLOAD) {
             if (GET_OBJ_VAL(soft, 8)) {
-              send_to_char(ch, "%s is already being uploaded.", GET_OBJ_NAME(soft));
+              send_to_char(ch, "%s is already being uploaded.\r\n", GET_OBJ_NAME(soft));
               return;
             }
 

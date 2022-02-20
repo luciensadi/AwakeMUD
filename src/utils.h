@@ -116,6 +116,7 @@ char *  get_printable_mob_unique_id(struct char_data *ch);
 bool    mob_unique_id_matches(mob_unique_id_t id1, mob_unique_id_t id2);
 void    set_new_mobile_unique_id(struct char_data *ch);
 int     return_general(int skill_num);
+bool    perform_knockdown_test(struct char_data *ch, int initial_tn, int successes_to_avoid_knockback=0);
 
 // Skill-related.
 char *how_good(int skill, int rank);
@@ -676,6 +677,7 @@ float get_proto_weight(struct obj_data *obj);
 
 #define IS_WEAPON(type) (((type) >= TYPE_HIT) && ((type) < TYPE_SUFFERING))
 #define IS_GUN(type) ((((type) >= WEAP_HOLDOUT) && ((type) < WEAP_GREN_LAUNCHER)) || (type) == WEAP_REVOLVER)
+#define WEAPON_IS_GUN(weapon) ((weapon) && IS_GUN(GET_WEAPON_ATTACK_TYPE((weapon))) && (GET_WEAPON_SKILL((weapon)) >= SKILL_PISTOLS && GET_WEAPON_SKILL((weapon)) <= SKILL_ASSAULT_CANNON))
 
 #define IS_MONOWHIP(obj) (GET_OBJ_RNUM((obj)) >= 0 && obj_index[GET_OBJ_RNUM((obj))].wfunc == monowhip)
 

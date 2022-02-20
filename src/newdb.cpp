@@ -2407,7 +2407,7 @@ ACMD(do_register) {
   DELETE_ARRAY_IF_EXTANT(SETTABLE_EMAIL(ch));
   SETTABLE_EMAIL(ch) = str_dup(prepare_quotes(buf, argument, sizeof(buf) * sizeof(buf[0])));
 
-  send_to_char(ch, "OK, your email address has been set to '%s'.", GET_EMAIL(ch));
+  send_to_char(ch, "OK, your email address has been set to '%s'.\r\n", GET_EMAIL(ch));
 
   playerDB.SaveChar(ch);
 }

@@ -2706,24 +2706,21 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
       switch (GET_OBJ_TYPE(d->edit_obj)) {
         case ITEM_WEAPON:
           if (IS_GUN(GET_WEAPON_ATTACK_TYPE(OBJ))) {
-            if (!access_level(CH, LVL_ADMIN)) {
-              struct obj_data *you_know_this_would_leak_memory_right = NULL;
-              if (!(you_know_this_would_leak_memory_right = read_object(number, VIRTUAL))) {
-                send_to_char("Invalid vnum.\r\n", CH);
-                iedit_disp_val8_menu(d);
-                return;
-              } else {
-                extract_obj(you_know_this_would_leak_memory_right);
-              }
-            }
-            if (number > 0) {
-              modified = FALSE;
-              for (j = 0; (j < MAX_OBJ_AFFECT && !modified); j++)
+            struct obj_data *accessory = read_object(number, VIRTUAL);
+            if (!accessory) {
+              send_to_char("Invalid vnum.\r\n", CH);
+              iedit_disp_val8_menu(d);
+              return;
+            } else {
+              // Cascade affects (take the first one and glue it to the weapon).
+              for (j = 0; (j < MAX_OBJ_AFFECT && !modified); j++) {
                 if (!(OBJ->affected[j].modifier)) {
-                  OBJ->affected[j].location = read_object(number, VIRTUAL)->affected[0].location;
-                  OBJ->affected[j].modifier = read_object(number, VIRTUAL)->affected[0].modifier;
-                  modified = TRUE;
+                  OBJ->affected[j].location = accessory->affected[0].location;
+                  OBJ->affected[j].modifier = accessory->affected[0].modifier;
+                  break;
                 }
+              }
+              extract_obj(accessory);
             }
           } else {
             if (number < 0 || number > 4) {
@@ -2744,24 +2741,23 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
       number = atoi(arg);
       switch (GET_OBJ_TYPE(d->edit_obj)) {
         case ITEM_WEAPON:
-          if (!access_level(CH, LVL_ADMIN)) {
-            struct obj_data *you_know_this_would_leak_memory_right = NULL;
-            if (!(you_know_this_would_leak_memory_right = read_object(number, VIRTUAL))) {
+          {
+            struct obj_data *accessory = read_object(number, VIRTUAL);
+            if (!accessory) {
               send_to_char("Invalid vnum.\r\n", CH);
               iedit_disp_val9_menu(d);
               return;
             } else {
-              extract_obj(you_know_this_would_leak_memory_right);
-            }
-          }
-          if (number > 0) {
-            modified = FALSE;
-            for (j = 0; (j < MAX_OBJ_AFFECT && !modified); j++)
-              if (!(OBJ->affected[j].modifier)) {
-                OBJ->affected[j].location = read_object(number, VIRTUAL)->affected[0].location;
-                OBJ->affected[j].modifier = read_object(number, VIRTUAL)->affected[0].modifier;
-                modified = TRUE;
+              // Cascade affects (take the first one and glue it to the weapon).
+              for (j = 0; (j < MAX_OBJ_AFFECT && !modified); j++) {
+                if (!(OBJ->affected[j].modifier)) {
+                  OBJ->affected[j].location = accessory->affected[0].location;
+                  OBJ->affected[j].modifier = accessory->affected[0].modifier;
+                  break;
+                }
               }
+              extract_obj(accessory);
+            }
           }
           break;
         default:
@@ -2775,24 +2771,23 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
       number = atoi(arg);
       switch (GET_OBJ_TYPE(d->edit_obj)) {
         case ITEM_WEAPON:
-          if (!access_level(CH, LVL_ADMIN)) {
-            struct obj_data *you_know_this_would_leak_memory_right = NULL;
-            if (!(you_know_this_would_leak_memory_right = read_object(number, VIRTUAL))) {
+          {
+            struct obj_data *accessory = read_object(number, VIRTUAL);
+            if (!accessory) {
               send_to_char("Invalid vnum.\r\n", CH);
               iedit_disp_val10_menu(d);
               return;
             } else {
-              extract_obj(you_know_this_would_leak_memory_right);
-            }
-          }
-          if (number > 0) {
-            modified = FALSE;
-            for (j = 0; (j < MAX_OBJ_AFFECT && !modified); j++)
-              if (!(OBJ->affected[j].modifier)) {
-                OBJ->affected[j].location = read_object(number, VIRTUAL)->affected[0].location;
-                OBJ->affected[j].modifier = read_object(number, VIRTUAL)->affected[0].modifier;
-                modified = TRUE;
+              // Cascade affects (take the first one and glue it to the weapon).
+              for (j = 0; (j < MAX_OBJ_AFFECT && !modified); j++) {
+                if (!(OBJ->affected[j].modifier)) {
+                  OBJ->affected[j].location = accessory->affected[0].location;
+                  OBJ->affected[j].modifier = accessory->affected[0].modifier;
+                  break;
+                }
               }
+              extract_obj(accessory);
+            }
           }
           break;
         default:

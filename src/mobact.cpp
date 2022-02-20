@@ -27,6 +27,7 @@
 #include "config.h"
 
 ACMD_DECLARE(do_say);
+ACMD_DECLARE(do_prone);
 
 // Note: If you want mobact debugging, add -DMOBACT_DEBUG to your makefile.
 // #define MOBACT_DEBUG
@@ -342,12 +343,19 @@ bool vict_is_valid_guard_target(struct char_data *ch, struct char_data *vict) {
 
 void mobact_change_firemode(struct char_data *ch) {
   struct obj_data *weapon;
+  int proning_desire = 0;
 
   // Precheck: Weapon must exist and must be a gun.
-  if (!(weapon = GET_EQ(ch, WEAR_WIELD)) || !IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon)))
+  if (!(weapon = GET_EQ(ch, WEAR_WIELD)) || !IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon))) {
+    // Melee fighters never want to be prone, so they'll stand up from that.
+    if (AFF_FLAGGED(ch, AFF_PRONE)) {
+      strncpy(buf3, "", sizeof(buf3));
+      do_prone(ch, buf3, 0, 0);
+    }
     return;
+  }
 
-  // Reload the weapon if possible. If not, swap weapons.
+  // Empty? Reload the weapon if possible. If not, swap weapons.
   if (!weapon->contains && GET_WEAPON_MAX_AMMO(weapon) > 0 && !attempt_reload(ch, WEAR_WIELD)) {
     switch_weapons(ch, WEAR_WIELD);
     return;
@@ -355,7 +363,7 @@ void mobact_change_firemode(struct char_data *ch) {
 
   // Otherwise, set up info: We're now checking for firemode changes.
   int prev_value = GET_WEAPON_FIREMODE(weapon);
-  int standing_recoil_comp = GET_WEAPON_INTEGRAL_RECOIL_COMP(weapon);
+  int standing_recoil_comp = MAX(GET_WEAPON_INTEGRAL_RECOIL_COMP(weapon), 0);
   int prone_recoil_comp = 0, total_recoil_comp = 0;
   int real_obj;
   struct obj_data *access;
@@ -385,54 +393,103 @@ void mobact_change_firemode(struct char_data *ch) {
 
   total_recoil_comp = standing_recoil_comp + prone_recoil_comp;
 
+  // Emplaced enemies have unlimited standing recoil comp, and thus don't ever want to prone.
+  if (MOB_FLAGGED(ch, MOB_EMPLACED)) {
+    standing_recoil_comp = 10;
+    total_recoil_comp = 10;
+    prone_recoil_comp = 0;
+    proning_desire = -1000;
+  }
+
+  // You can't prone in vehicles.
+  if (ch->in_veh)
+    proning_desire = -1000;
+
+  // We're inclined to stand up if we're not in combat or are in combat with someone in our same room.
+  if ((GET_MOBALERT(ch) == MALERT_CALM && !FIGHTING(ch)) || (FIGHTING(ch) && FIGHTING(ch)->in_room == ch->in_room)) {
+    // Note the -3 here-- someone with FA and a tripod will stay prone.
+    proning_desire -= 3;
+  }
+
+  // We want to go prone more if we've got enough recoil comp for it. Note that we only consider positive proning desire if we have FA.
+  proning_desire += MIN(prone_recoil_comp, 10);
+
+  // Special case: If we're using a high-recoil weapon, that factors into our proning desire.
+  if (GET_WEAPON_INTEGRAL_RECOIL_COMP(weapon) < 0)
+    proning_desire += MIN(-GET_WEAPON_INTEGRAL_RECOIL_COMP(weapon), prone_recoil_comp);
+
   // Don't @ me about this, if I didn't take this shortcut then this would be a giant block of if-statements.
   int mode = GET_WEAPON_POSSIBLE_FIREMODES(weapon);
-  bool has_multiple_modes = (mode != 2 && mode != 4 && mode != 8 && mode != 16);
+  bool has_multiple_modes = (mode != (1 << MODE_SS) && mode != (1 << MODE_SA) && mode != (1 << MODE_BF) && mode != (1 << MODE_FA));
 
   // If our weapon is FA-capable, let's set ourselves up for success by configuring it to the maximum value it can handle.
   if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(weapon), 1 << MODE_FA)) {
-    if (total_recoil_comp >= 3) {
+    // If we desire to go prone, do so-- we're guaranteed at least 3 points of comp from our proning_desire formula.
+    if (proning_desire > 0 && total_recoil_comp >= 3) {
       GET_WEAPON_FIREMODE(weapon) = MODE_FA;
+      GET_OBJ_TIMER(weapon) = total_recoil_comp;
 
-      // If we get additional recoil comp from going prone, let's do that now.
-      if (prone_recoil_comp > 0 && !AFF_FLAGGED(ch, AFF_PRONE) && !ch->in_veh) {
-        ACMD_DECLARE(do_prone);
-        strncpy(buf3, "", sizeof(buf3));
+      // Go prone.
+      if (!AFF_FLAGGED(ch, AFF_PRONE)) {
+        strlcpy(buf3, "", sizeof(buf3));
+        do_prone(ch, buf3, 0, 0);
+      }
+    }
+    // Otherwise, we're inclined to stand and deliver, provided we have the recoil comp for it.
+    else {
+      // Stand up.
+      if (AFF_FLAGGED(ch, AFF_PRONE)) {
+        strlcpy(buf3, "", sizeof(buf3));
         do_prone(ch, buf3, 0, 0);
       }
 
-      GET_OBJ_TIMER(weapon) = total_recoil_comp;
-    } else {
-      // We don't have enough recoil comp for a multi-shot burst. Set to a single if we can.
-      if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(weapon), 1 << MODE_SA)) {
+      // We've got the standing comp to support full auto-- do so!
+      if (standing_recoil_comp >= 4) {
+        GET_WEAPON_FIREMODE(weapon) = MODE_FA;
+        GET_OBJ_TIMER(weapon) = standing_recoil_comp;
+      }
+
+      // Otherwise, if we only have 3 points of comp, just do burst fire.
+      else if (standing_recoil_comp == 3) {
+        GET_WEAPON_FIREMODE(weapon) = MODE_BF;
+      }
+
+      // We don't have enough recoil comp for a multi-shot burst. Set to SA if we can.
+      else if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(weapon), 1 << MODE_SA)) {
         GET_WEAPON_FIREMODE(weapon) = MODE_SA;
       }
 
+      // SS is an acceptable fallback.
       else if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(weapon), 1 << MODE_SS)) {
         GET_WEAPON_FIREMODE(weapon) = MODE_SS;
       }
 
-      // We couldn't... at least minimize the harm to us by setting it to FA-3.
+      // We're in the shit zone now: Not enough comp, but no gentler modes. BF is the lesser of the two evils.
+      else if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(weapon), 1 << MODE_BF)) {
+        GET_WEAPON_FIREMODE(weapon) = MODE_BF;
+      }
+
+      // We have no choice. Minimize the harm to us with FA-3.
       else {
         GET_WEAPON_FIREMODE(weapon) = MODE_FA;
         GET_OBJ_TIMER(weapon) = 3;
       }
     }
-  }
+  } // End check for weapon with FA.
+  else {
+    // Set to SA, or fallback to SS.
+    if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(weapon), 1 << MODE_SA)) {
+      GET_WEAPON_FIREMODE(weapon) = MODE_SA;
+    } else if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(weapon), 1 << MODE_SS)) {
+      GET_WEAPON_FIREMODE(weapon) = MODE_SS;
+    }
 
-  // Next up, we want burst fire if possible-- even if we don't have enough recoil comp to completely cover it.
-  else if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(weapon), 1 << MODE_BF) && standing_recoil_comp >= 3) {
-    GET_WEAPON_FIREMODE(weapon) = MODE_BF;
-  }
+    // Now, if we have enough recoil comp, override to BF.
+    if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(weapon), 1 << MODE_BF) && standing_recoil_comp >= 3) {
+      GET_WEAPON_FIREMODE(weapon) = MODE_BF;
+    }
 
-  // Semi-automatic is superior to single shot, so set that if we can.
-  else if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(weapon), 1 << MODE_SA)) {
-    GET_WEAPON_FIREMODE(weapon) = MODE_SA;
-  }
-
-  // Lowest-priority mode is single-shot.
-  if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(weapon), 1 << MODE_SS)) {
-    GET_WEAPON_FIREMODE(weapon) = MODE_SS;
+    // FA is not an option in this else-block, so we're done with our logic.
   }
 
   // Send a message to the room, but only if the weapon has received a new fire selection mode and has more than one available.
@@ -752,11 +809,11 @@ bool mobact_process_aggro(struct char_data *ch, struct room_data *room) {
           if (MOB_FLAGGED(ch, MOB_INANIMATE)) {
             snprintf(buf, sizeof(buf), "%s$n swivels aggressively towards %s!", GET_MOBALERT(ch) == MALERT_ALARM ? "Searching for more aggressors, " : "", GET_VEH_NAME(veh));
             snprintf(buf2, sizeof(buf2), "%s%s swivels aggressively towards your vehicle!\r\n", GET_MOBALERT(ch) == MALERT_ALARM ? "Searching for more aggressors, " : "" , GET_CHAR_NAME(ch));
-            send_to_char(ch, "You prepare to attack %s!", GET_VEH_NAME(veh));
+            send_to_char(ch, "You prepare to attack %s!\r\n", GET_VEH_NAME(veh));
           } else {
             snprintf(buf, sizeof(buf), "%s$n glares at %s, preparing to attack it!", GET_MOBALERT(ch) == MALERT_ALARM ? "Searching for more aggressors, " : "", GET_VEH_NAME(veh));
             snprintf(buf2, sizeof(buf2), "%s%s glares at your vehicle, preparing to attack!\r\n", GET_MOBALERT(ch) == MALERT_ALARM ? "Searching for more aggressors, " : "" , GET_CHAR_NAME(ch));
-            send_to_char(ch, "You prepare to attack %s!", GET_VEH_NAME(veh));
+            send_to_char(ch, "You prepare to attack %s!\r\n", GET_VEH_NAME(veh));
           }
 
 
@@ -1012,12 +1069,12 @@ bool mobact_process_guard(struct char_data *ch, struct room_data *room) {
 
         if (MOB_FLAGGED(ch, MOB_INANIMATE)) {
           snprintf(buf, sizeof(buf), "%s$n swivels threateningly towards %s, preparing to attack it for security infractions!", GET_MOBALERT(ch) == MALERT_ALARM ? "Searching for more aggressors, " : "", GET_VEH_NAME(veh));
-          snprintf(buf, sizeof(buf), "%s%s swivels threateningly towards your vehicle, preparing to attack over security infractions!\r\n", GET_MOBALERT(ch) == MALERT_ALARM ? "Searching for more aggressors, " : "", GET_CHAR_NAME(ch));
-          send_to_char(ch, "You prepare to attack %s for security infractions!", GET_VEH_NAME(veh));
+          snprintf(buf2, sizeof(buf2), "%s%s swivels threateningly towards your vehicle, preparing to attack over security infractions!\r\n", GET_MOBALERT(ch) == MALERT_ALARM ? "Searching for more aggressors, " : "", GET_CHAR_NAME(ch));
+          send_to_char(ch, "You prepare to attack %s for security infractions!\r\n", GET_VEH_NAME(veh));
         } else {
           snprintf(buf, sizeof(buf), "%s$n glares at %s, preparing to attack it for security infractions!", GET_MOBALERT(ch) == MALERT_ALARM ? "Searching for more aggressors, " : "", GET_VEH_NAME(veh));
-          snprintf(buf, sizeof(buf), "%s%s glares at your vehicle, preparing to attack over security infractions!\r\n", GET_MOBALERT(ch) == MALERT_ALARM ? "Searching for more aggressors, " : "", GET_CHAR_NAME(ch));
-          send_to_char(ch, "You prepare to attack %s for security infractions!", GET_VEH_NAME(veh));
+          snprintf(buf2, sizeof(buf2), "%s%s glares at your vehicle, preparing to attack over security infractions!\r\n", GET_MOBALERT(ch) == MALERT_ALARM ? "Searching for more aggressors, " : "", GET_CHAR_NAME(ch));
+          send_to_char(ch, "You prepare to attack %s for security infractions!\r\n", GET_VEH_NAME(veh));
         }
 
         act(buf, TRUE, ch, NULL, NULL, TO_ROOM);
@@ -1203,9 +1260,11 @@ bool mobact_process_movement(struct char_data *ch) {
   if (is_escortee(ch))
     return FALSE;
 
-  if (MOB_FLAGGED(ch, MOB_SENTINEL) || CH_IN_COMBAT(ch))
+  // If you can't move for a variety of reasons, bail out.
+  if (MOB_FLAGGED(ch, MOB_SENTINEL) || CH_IN_COMBAT(ch) || AFF_FLAGGED(ch, AFF_PRONE))
     return FALSE;
 
+  // The only way you can move while not standing is if you're driving a vehicle.
   if (GET_POS(ch) != POS_STANDING && !AFF_FLAGGED(ch, AFF_PILOT))
     return FALSE;
 
@@ -1249,11 +1308,11 @@ bool mobact_process_movement(struct char_data *ch) {
 
     // NPC standing outside an elevator? Maybe they want to call it.
     if (ch->in_room->func == call_elevator
-        && !MOB_FLAGGED(ch, MOB_SENTINEL)
         && !mob_is_aggressive(ch, TRUE)
-        && number(0, ELEVATOR_BUTTON_PRESS_CHANCE) == 0) {
+        && number(0, ELEVATOR_BUTTON_PRESS_CHANCE) == 0)
+    {
       char argument[500];
-      strcpy(argument, "button");
+      strlcpy(argument, "button", sizeof(argument));
       ch->in_room->func(ch, ch->in_room, find_command("push"), argument);
       return TRUE;
     }

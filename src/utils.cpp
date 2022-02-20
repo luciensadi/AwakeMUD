@@ -4051,6 +4051,74 @@ void set_new_mobile_unique_id(struct char_data *ch) {
   GET_MOB_UNIQUE_ID(ch) = global_mob_unique_id_number++;
 }
 
+void knockdown_character(struct char_data *ch) {
+  if (!AFF_FLAGGED(ch, AFF_PRONE)) {
+    send_to_char("^YYou are knocked prone!^n\r\n", ch);
+    act("$n is knocked prone!", TRUE, ch, 0, 0, TO_ROOM);
+    AFF_FLAGS(ch).SetBit(AFF_PRONE);
+    WAIT_STATE(ch, 1 RL_SEC);
+  }
+}
+
+// Performing a knockdown test (SR3 p124)
+bool perform_knockdown_test(struct char_data *ch, int initial_tn, int successes_to_avoid_knockback) {
+  // Some things can't be knocked down.
+  if (AFF_FLAGGED(ch, AFF_PRONE) || MOB_FLAGGED(ch, MOB_EMPLACED))
+    return FALSE;
+
+  if (GET_PHYSICAL(ch) <= (10 - damage_array[DEADLY]) || GET_MENTAL(ch) <= (10 - damage_array[DEADLY])) {
+    // If you're already mortally wounded (or knocked out), going prone won't matter.
+    return TRUE;
+  }
+
+  char rbuf[1000];
+  snprintf(rbuf, sizeof(rbuf), "^mKD test: %s. Mods: ", GET_CHAR_NAME(ch));
+  int tn_modifiers = modify_target_rbuf(ch, rbuf, sizeof(rbuf));
+
+  if (GET_PHYSICAL(ch) <= (10 - damage_array[SERIOUS]) || GET_MENTAL(ch) <= (10 - damage_array[SERIOUS])) {
+    successes_to_avoid_knockback = MAX(successes_to_avoid_knockback, 4);
+  }
+
+  else if (GET_PHYSICAL(ch) <= (10 - damage_array[MODERATE]) || GET_MENTAL(ch) <= (10 - damage_array[MODERATE])) {
+    successes_to_avoid_knockback = MAX(successes_to_avoid_knockback, 3);
+  }
+
+  else if (GET_PHYSICAL(ch) <= (10 - damage_array[LIGHT]) || GET_MENTAL(ch) <= (10 - damage_array[LIGHT])) {
+    successes_to_avoid_knockback = MAX(successes_to_avoid_knockback, 2);
+  }
+
+  // Roll the test.
+  int dice = GET_BOD(ch) + GET_BODY(ch);
+  int tn = MAX(2, initial_tn + tn_modifiers);
+  int successes = success_test(dice, tn);
+  snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "%s. %d dice (%d + %d) vs TN %d (%d + %d): %d hit%s (goal: %d).",
+           tn_modifiers ? "" : "None",
+           dice,
+           GET_BOD(ch),
+           GET_BODY(ch),
+           tn,
+           initial_tn,
+           tn_modifiers,
+           successes,
+           successes == 1 ? "" : "s",
+           successes_to_avoid_knockback
+         );
+
+  if (successes <= 0) {
+    strlcat(rbuf, " Knockdown!", sizeof(rbuf));
+    act(rbuf, FALSE, ch, 0, 0, TO_ROLLS);
+    knockdown_character(ch);
+    return TRUE;
+  } else if (successes < successes_to_avoid_knockback) {
+    strlcat(rbuf, " Knocked back.", sizeof(rbuf));
+  } else {
+    strlcat(rbuf, " No effect.", sizeof(rbuf));
+  }
+
+  act(rbuf, FALSE, ch, 0, 0, TO_ROLLS);
+  return FALSE;
+}
+
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.
 // Great for swapping out old Classic weapons, cyberware, etc for the new guaranteed-canon versions.
 #define PAIR(classic, current) case (classic): return (current);

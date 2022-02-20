@@ -1199,10 +1199,7 @@ struct combat_data
     ch = character;
     weapon = weap;
 
-    weapon_is_gun = (weapon
-                     && IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon))
-                     && (GET_WEAPON_SKILL(weapon) >= SKILL_PISTOLS
-                         && GET_WEAPON_SKILL(weapon) <= SKILL_ASSAULT_CANNON));
+    weapon_is_gun = WEAPON_IS_GUN(weapon);
 
     if (weapon_is_gun) {
       /* if (PLR_FLAGGED(att->ch, PLR_REMOTE) || AFF_FLAGGED(att->ch, AFF_RIG) || AFF_FLAGGED(att->ch, AFF_MANNING))

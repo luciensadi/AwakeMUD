@@ -903,7 +903,7 @@ void spell_bonus(struct char_data *ch, int spell, int &skill, int &target)
           case FOCI_EXPENDABLE:
             if (!used_expendable && spells[spell].category == GET_FOCUS_BONDED_SPIRIT_OR_SPELL(GET_EQ(ch, i))) {
               skill += GET_FOCUS_FORCE(GET_EQ(ch, i));
-              send_to_char(ch, "Its energies expended, %s crumbles away.", decapitalize_a_an(GET_OBJ_NAME(GET_EQ(ch, i))));
+              send_to_char(ch, "Its energies expended, %s crumbles away.\r\n", decapitalize_a_an(GET_OBJ_NAME(GET_EQ(ch, i))));
               extract_obj(GET_EQ(ch, i));
               used_expendable = TRUE;
             }

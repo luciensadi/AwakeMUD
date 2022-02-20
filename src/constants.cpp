@@ -524,6 +524,7 @@ const char *action_bits[] =
     "!KILL",
     "TOTALINVIS",
     "INANIMATE",
+    "EMPLACED",
     "\n"
   };
 

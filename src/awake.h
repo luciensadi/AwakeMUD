@@ -347,7 +347,8 @@ enum {
 #define MOB_NOKILL              30 /* Unkillable mob */
 #define MOB_TOTALINVIS          31 /* auto attack dragon PCs                 */
 #define MOB_INANIMATE            32
-#define MOB_MAX                  33
+#define MOB_EMPLACED             33 /* Won't close distance, can't be knocked down, has no recoil penalties, has unlimited ammo. Think emplaced turret. */
+#define MOB_MAX                  34
 
 /* preference flags: used by char_data.player_specials.pref */
 

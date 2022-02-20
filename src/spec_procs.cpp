@@ -1369,7 +1369,7 @@ SPECIAL(adept_trainer)
     send_to_char(buf, ch);
 
     if (!PLR_FLAGGED(ch, PLR_PAID_FOR_CLOSECOMBAT)) {
-      send_to_char(ch, "You can also learn Close Combat for %0.2f karma.", (float) KARMA_COST_FOR_CLOSECOMBAT / 100);
+      send_to_char(ch, "You can also learn Close Combat for %0.2f karma.\r\n", (float) KARMA_COST_FOR_CLOSECOMBAT / 100);
     }
     return TRUE;
   }

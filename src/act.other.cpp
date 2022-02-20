@@ -1757,6 +1757,9 @@ ACMD(do_eject)
   act("$n ejects and pockets a magazine from $p.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_ROOM);
   act("You eject and pocket a magazine from $p.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_CHAR);
 
+  // Ejecting a magazine costs a simple action.
+  GET_INIT_ROLL(ch) -= 5;
+
   // If it has a bayonet and you're in combat, you charge forth.
   if (FIGHTING(ch) && does_weapon_have_bayonet(weapon)) {
     send_to_char("With your weapon empty, you decide to do a bayonet charge!\r\n", ch);
@@ -4426,12 +4429,12 @@ ACMD(do_cleanup)
   generic_find(argument, FIND_OBJ_ROOM, ch, &tmp_char, &target_obj);
 
   if (!target_obj) {
-    send_to_char(ch, "You don't see anything called '%s' here.", argument);
+    send_to_char(ch, "You don't see anything called '%s' here.\r\n", argument);
     return;
   }
 
   if (GET_OBJ_VNUM(target_obj) != OBJ_GRAFFITI) {
-    send_to_char(ch, "%s is not graffiti.", capitalize(GET_OBJ_NAME(target_obj)));
+    send_to_char(ch, "%s is not graffiti.\r\n", capitalize(GET_OBJ_NAME(target_obj)));
     return;
   }
 
@@ -4568,7 +4571,7 @@ ACMD(do_syspoints) {
       }
 
       // Too broke.
-      send_to_char(ch, "That costs %d syspoints, and you only have %d.", SYSP_NODELETE_COST, GET_SYSTEM_POINTS(ch));
+      send_to_char(ch, "That costs %d syspoints, and you only have %d.\r\n", SYSP_NODELETE_COST, GET_SYSTEM_POINTS(ch));
       return;
     }
 

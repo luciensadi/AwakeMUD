@@ -1027,7 +1027,7 @@ SPECIAL(johnson)
       unsigned int johnson_max_rep = get_johnson_overall_max_rep(johnson);
       if (johnson_max_rep < GET_REP(ch)) {
         do_say(johnson, "My jobs aren't high-profile enough for someone with your rep!", 0, 0);
-        send_to_char(ch, "[OOC: This Johnson caps out at %d reputation, so you won't get any further work from them.]", johnson_max_rep);
+        send_to_char(ch, "[OOC: This Johnson caps out at %d reputation, so you won't get any further work from them.]\r\n", johnson_max_rep);
 
         GET_SPARE1(johnson) = -1;
         if (memory(johnson, ch))
@@ -1083,7 +1083,7 @@ SPECIAL(johnson)
         unsigned int johnson_min_rep = get_johnson_overall_min_rep(johnson);
         if (johnson_min_rep > GET_REP(ch)) {
           do_say(johnson, "You're not even worth my time right now.", 0, 0);
-          send_to_char(ch, "[OOC: This Johnson has a minimum reputation requirement of %d. Come back when you have at least that much rep.]", johnson_min_rep);
+          send_to_char(ch, "[OOC: This Johnson has a minimum reputation requirement of %d. Come back when you have at least that much rep.]\r\n", johnson_min_rep);
         } else {
             int rep_delta = quest_table[new_q].min_rep - GET_REP(ch);
             if (rep_delta >= 1000)

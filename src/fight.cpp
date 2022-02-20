@@ -103,6 +103,8 @@ extern struct obj_data *generate_ammobox_from_pockets(struct char_data *ch, int 
 extern void send_mob_aggression_warnings(struct char_data *pc, struct char_data *mob);
 extern void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *victim, struct obj_data *weap, struct obj_data *vict_weap, struct obj_data *weap_ammo, bool multi_weapon_modifier);
 
+extern void mobact_change_firemode(struct char_data *ch);
+
 /* Weapon attack texts */
 struct attack_hit_type attack_hit_text[] =
 {
@@ -4123,19 +4125,27 @@ bool ranged_response(struct char_data *ch, struct char_data *vict)
       || GET_POS(vict) <= POS_STUNNED
       || (!ch->in_room || ROOM_FLAGGED(ch->in_room, ROOM_PEACEFUL))
       || (!vict->in_room || ROOM_FLAGGED(vict->in_room, ROOM_PEACEFUL))
-      || (IS_NPC(vict) && (MOB_FLAGGED(vict, MOB_INANIMATE)))
+      || (IS_NPC(vict) && (MOB_FLAGGED(vict, MOB_INANIMATE))) // TODO: This means turrets don't join in, right? Gotta fix that.
       || CH_IN_COMBAT(vict))
   {
     return FALSE;
   }
 
+  // Stand up if you're not already standing.
   if (GET_POS(vict) < POS_FIGHTING)
     GET_POS(vict) = POS_STANDING;
+
+  // Wimpy mobs try to flee, unless they're sentinels.
   if (!AFF_FLAGGED(vict, AFF_PRONE) && (IS_NPC(vict) && MOB_FLAGGED(vict, MOB_WIMPY) && !MOB_FLAGGED(vict, MOB_SENTINEL))) {
     do_flee(vict, "", 0, 0);
-  } else if (RANGE_OK(vict)) {
+    return FALSE;
+  }
+
+  // If we're wielding a ranged weapon, try to shoot.
+  if (RANGE_OK(vict)) {
     sight = find_sight(vict);
     range = find_weapon_range(vict, GET_EQ(vict, WEAR_WIELD));
+
     for (dir = 0; dir < NUM_OF_DIRS  && !is_responding; dir++) {
       room = vict->in_room;
       if (!room) {
@@ -4150,22 +4160,53 @@ bool ranged_response(struct char_data *ch, struct char_data *vict)
       } else {
         nextroom = NULL;
       }
+
       for (distance = 1; !is_responding && (nextroom && (distance <= 4)); distance++) {
+        // Players and sentinels never charge, so we stop processing when we're getting attacked from beyond our weapon or sight range.
+        if ((!IS_NPC(vict) || MOB_FLAGGED(vict, MOB_SENTINEL) || AFF_FLAGGED(vict, AFF_PRONE)) && (distance > range || distance > sight)) {
+          if (IS_NPC(vict)) {
+            char buf[100];
+            snprintf(buf, sizeof(buf), "Sentinel/prone $n not ranged-responding: $N is out of range (weap %d, sight %d).", range, sight);
+            act(buf, FALSE, vict, 0, ch, TO_ROLLS);
+          }
+          return FALSE;
+        }
+
+        // We're either within weapon AND sight range, or we're willing to charge towards the target.
         for (temp = nextroom->people; !is_responding && temp; temp = temp->next_in_room) {
-          if (temp == ch && (distance > range || distance > sight) && IS_NPC(vict) && !MOB_FLAGGED(vict, MOB_SENTINEL)) {
-            is_responding = TRUE;
-            act("$n charges towards $s distant foe.", TRUE, vict, 0, 0, TO_ROOM);
-            act("You charge after $N.", FALSE, vict, 0, ch, TO_CHAR);
-            char_from_room(vict);
-            char_to_room(vict, EXIT2(room, dir)->to_room);
-            if (vict->in_room == ch->in_room) {
-              act("$n arrives in a rush of fury, immediately attacking $N!", TRUE, vict, 0, ch, TO_NOTVICT);
-              act("$n arrives in a rush of fury, rushing straight towards you!", TRUE, vict, 0, ch, TO_VICT);
-            } else {
-              act("$n arrives in a rush of fury, searching for $s attacker!!", TRUE, vict, 0, 0, TO_ROOM);
+          // Found our target?
+          if (temp == ch) {
+            // If we're over our weapon's max range:
+            if (distance > range && IS_NPC(vict)) {
+              act("$n charges towards $s distant foe.", TRUE, vict, 0, 0, TO_ROOM);
+              act("You charge after $N.", FALSE, vict, 0, ch, TO_CHAR);
+              char_from_room(vict);
+
+              // Move one room in their direction.
+              char_to_room(vict, EXIT2(room, dir)->to_room);
+
+              if (vict->in_room == ch->in_room) {
+                act("$n arrives in a rush of fury, immediately attacking $N!", TRUE, vict, 0, ch, TO_NOTVICT);
+                act("$n arrives in a rush of fury, rushing straight towards you!", TRUE, vict, 0, ch, TO_VICT);
+              } else {
+                act("$n arrives in a rush of fury, searching for $s attacker!!", TRUE, vict, 0, 0, TO_ROOM);
+              }
+
+              set_fighting(vict, ch);
+              return TRUE;
             }
+
+            // Within max range? Open fire.
+            else if (distance <= range) {
+              set_fighting(vict, ch);
+              return TRUE;
+            }
+
+            // Otherwise, we're a PC with distance > range. Do nothing.
           }
         }
+
+        // Prep for our next iteration.
         room = nextroom;
         if (CAN_GO2(room, dir))
           nextroom = EXIT2(room, dir)->to_room;
@@ -4173,12 +4214,15 @@ bool ranged_response(struct char_data *ch, struct char_data *vict)
           nextroom = NULL;
       }
     }
-    is_responding = TRUE;
-    set_fighting(vict, ch);
-  } else if (IS_NPC(vict) && !MOB_FLAGGED(vict, MOB_SENTINEL)) {
+
+    // If we got here, they're beyond our ability to damage.
+    act("$n not ranged-responding: Cannot find $N.", FALSE, vict, 0, ch, TO_ROLLS);
+  }
+
+  // Mobile NPC with a melee weapon. They only charge one room away for some reason.
+  else if (IS_NPC(vict) && !MOB_FLAGGED(vict, MOB_SENTINEL) && !AFF_FLAGGED(vict, AFF_PRONE)) {
     for (dir = 0; dir < NUM_OF_DIRS && !is_responding; dir++) {
       if (CAN_GO(vict, dir) && EXIT2(vict->in_room, dir)->to_room == ch->in_room) {
-        is_responding = TRUE;
         act("$n charges towards $s distant foe.", TRUE, vict, 0, 0, TO_ROOM);
         act("You charge after $N.", FALSE, vict, 0, ch, TO_CHAR);
         char_from_room(vict);
@@ -4186,6 +4230,7 @@ bool ranged_response(struct char_data *ch, struct char_data *vict)
         set_fighting(vict, ch);
         act("$n arrives in a rush of fury, immediately attacking $N!", TRUE, vict, 0, ch, TO_NOTVICT);
         act("$n arrives in a rush of fury, rushing straight towards you!", TRUE, vict, 0, ch, TO_VICT);
+        return TRUE;
       }
     }
   }
@@ -4835,11 +4880,18 @@ void perform_violence(void)
     }
 
     // You get no action if you're out of init.
-    if (GET_INIT_ROLL(ch) <= 0)
+    if (GET_INIT_ROLL(ch) <= 0) {
+      send_to_char("^L(OOC: You're out of initiative! Waiting for combat round reset.)^n\r\n", ch);
       continue;
+    }
 
     // Knock down their init.
     GET_INIT_ROLL(ch) -= 10;
+
+    // NPCs stand up if so desired. We just use mobact_change_firemode here since it's baked in.
+    if (IS_NPC(ch)) {
+      mobact_change_firemode(ch);
+    }
 
     // Process spirit attacks.
     for (struct spirit_sustained *ssust = SPIRIT_SUST(ch); ssust; ssust = ssust->next) {
@@ -4996,10 +5048,12 @@ void perform_violence(void)
 
       /* Automatic success:
         - Opponent charging at you too (both stop charging; clash)
+        - Opponent is emplaced (they can't run)
         - You're no longer in a fighting state (you'll be back in one soon enough; clash)
         - You both have melee weapons out (both stop charging; clash)
       */
       if (IS_AFFECTED(FIGHTING(ch), AFF_APPROACH)
+          || MOB_FLAGGED(FIGHTING(ch), MOB_EMPLACED)
           || GET_POS(FIGHTING(ch)) < POS_FIGHTING
           || (item_should_be_treated_as_melee_weapon(GET_EQ(ch, WEAR_WIELD)) && item_should_be_treated_as_melee_weapon(GET_EQ(FIGHTING(ch), WEAR_WIELD))))
       {

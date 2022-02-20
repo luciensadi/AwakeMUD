@@ -932,13 +932,13 @@ void look_at_char(struct char_data * i, struct char_data * ch)
 void list_one_char(struct char_data * i, struct char_data * ch)
 {
   struct obj_data *obj = NULL;
-  if (IS_NPC(i) && i->player.physical_text.room_desc &&
-      GET_POS(i) == GET_DEFAULT_POS(i) && !MOB_FLAGGED(i, MOB_FLAMEAURA))
+  if (IS_NPC(i)
+      && i->player.physical_text.room_desc
+      && GET_POS(i) == GET_DEFAULT_POS(i)
+      && !AFF_FLAGGED(i, AFF_PRONE)
+      && !MOB_FLAGGED(i, MOB_FLAMEAURA))
   {
-    if (IS_AFFECTED(i, AFF_INVISIBLE))
-      strlcpy(buf, "*", sizeof(buf));
-    else
-      *buf = '\0';
+    *buf = '\0';
 
     // Note quest or nokill protection.
     if (i->mob_specials.quest_id) {
@@ -984,6 +984,10 @@ void list_one_char(struct char_data * i, struct char_data * ch)
       }
     }
 #endif
+
+    // Make sure they always display flags that are relevant to the player.
+    if (IS_AFFECTED(i, AFF_INVISIBLE) || IS_AFFECTED(i, AFF_IMP_INVIS) || IS_AFFECTED(i, AFF_SPELLINVIS) || IS_AFFECTED(i, AFF_SPELLIMPINVIS))
+      strlcat(buf, "(invisible) ", sizeof(buf));
 
     if (IS_ASTRAL(ch) || IS_DUAL(ch)) {
       if (IS_ASTRAL(i))
@@ -1145,6 +1149,8 @@ void list_one_char(struct char_data * i, struct char_data * ch)
 
     return;
   }
+
+
   make_desc(ch, i, buf, FALSE, FALSE, sizeof(buf));
   if (PRF_FLAGGED(i, PRF_AFK))
     strlcat(buf, " (AFK)", sizeof(buf));
@@ -1221,8 +1227,13 @@ void list_one_char(struct char_data * i, struct char_data * ch)
     strlcat(buf, " is here, working on a workshop.", sizeof(buf));
   else if (AFF_FLAGGED(i, AFF_BONDING))
     strlcat(buf, " is here, performing a bonding ritual.", sizeof(buf));
-  else if (AFF_FLAGGED(i, AFF_PRONE))
-    strlcat(buf, " is laying prone here.", sizeof(buf));
+  else if (AFF_FLAGGED(i, AFF_PRONE)) {
+    if (WEAPON_IS_GUN(GET_EQ(i, WEAR_WIELD))) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " is prone here, manning %s.", decapitalize_a_an(GET_OBJ_NAME(GET_EQ(i, WEAR_WIELD))));
+    } else {
+      strlcat(buf, " is lying prone here.", sizeof(buf));
+    }
+  }
   else if (AFF_FLAGGED(i, AFF_PILOT))
   {
     if (AFF_FLAGGED(i, AFF_RIG))
@@ -1231,8 +1242,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
       strlcat(buf, " is sitting in the drivers seat.", sizeof(buf));
   } else if ((obj = get_mount_manned_by_ch(i))) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " is manning %s.", GET_OBJ_NAME(obj));
-  } else if (GET_POS(i) != POS_FIGHTING)
-  {
+  } else if (GET_POS(i) != POS_FIGHTING) {
     if (GET_DEFPOS(i))
       snprintf(buf2, sizeof(buf2), " %s^n", GET_DEFPOS(i));
     else
@@ -2237,43 +2247,52 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       // Ranged weapons first.
       if (IS_GUN(GET_WEAPON_ATTACK_TYPE(j))) {
         int burst_count = 0;
-        if (GET_WEAPON_MAX_AMMO(j) > 0) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%d-round %s^n that uses the ^c%s^n skill to fire.",
-                  GET_WEAPON_MAX_AMMO(j),
-                  weapon_type[GET_WEAPON_ATTACK_TYPE(j)],
-                  skills[GET_WEAPON_SKILL(j)].name);
-        } else {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is %s ^c%s^n that uses the ^c%s^n skill to fire.",
-                  AN(weapon_type[GET_WEAPON_ATTACK_TYPE(j)]),
-                  weapon_type[GET_WEAPON_ATTACK_TYPE(j)],
-                  skills[GET_WEAPON_SKILL(j)].name);
-        }
-        // Damage code.
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " Its base damage code is ^c%d%s%s^n",
-                 GET_WEAPON_POWER(j),
-                 wound_arr[GET_WEAPON_DAMAGE_CODE(j)],
-                 !IS_DAMTYPE_PHYSICAL(get_weapon_damage_type(j)) ? " (stun)" : "");
 
-        // Burst fire?
-        if (GET_WEAPON_FIREMODE(j) == MODE_BF || GET_WEAPON_FIREMODE(j) == MODE_FA) {
-          burst_count = GET_WEAPON_FIREMODE(j) == MODE_BF ? 3 : GET_WEAPON_FULL_AUTO_COUNT(j);
-
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", raised to ^c%d%s%s^n by its current fire mode.",
-                   GET_WEAPON_POWER(j) + burst_count,
-                   wound_arr[MIN(DEADLY, GET_WEAPON_DAMAGE_CODE(j) + (int)(burst_count / 3))],
-                   !IS_DAMTYPE_PHYSICAL(get_weapon_damage_type(j)) ? " (stun)" : "");
-        } else {
-          strlcat(buf, ".", sizeof(buf));
-        }
-
-        strlcat(buf, "\r\nIt has the following available firemodes:", sizeof(buf));
-        bool first_mode = TRUE;
-        for (int mode = MODE_SS; mode <= MODE_FA; mode++)
-          if (WEAPON_CAN_USE_FIREMODE(j, mode)) {
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s ^c%s^n", first_mode ? "" : ",", fire_mode[mode]);
-            first_mode = FALSE;
+        // Line 1: "It is a 3-round pistol that uses the Pistols skill to fire. Its base damage code is 2L."
+        {
+          if (GET_WEAPON_MAX_AMMO(j) > 0) {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%d-round %s^n that uses the ^c%s^n skill to fire.",
+                    GET_WEAPON_MAX_AMMO(j),
+                    weapon_type[GET_WEAPON_ATTACK_TYPE(j)],
+                    skills[GET_WEAPON_SKILL(j)].name);
+          } else {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is %s ^c%s^n that uses the ^c%s^n skill to fire.",
+                    AN(weapon_type[GET_WEAPON_ATTACK_TYPE(j)]),
+                    weapon_type[GET_WEAPON_ATTACK_TYPE(j)],
+                    skills[GET_WEAPON_SKILL(j)].name);
           }
+          // Damage code.
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " Its base damage code is ^c%d%s%s^n",
+                   GET_WEAPON_POWER(j),
+                   wound_arr[GET_WEAPON_DAMAGE_CODE(j)],
+                   !IS_DAMTYPE_PHYSICAL(get_weapon_damage_type(j)) ? " (stun)" : "");
 
+          // Burst fire?
+          if (GET_WEAPON_FIREMODE(j) == MODE_BF || GET_WEAPON_FIREMODE(j) == MODE_FA) {
+            burst_count = GET_WEAPON_FIREMODE(j) == MODE_BF ? 3 : GET_WEAPON_FULL_AUTO_COUNT(j);
+
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", raised to ^c%d%s%s^n by its current fire mode.\r\n",
+                     GET_WEAPON_POWER(j) + burst_count,
+                     wound_arr[MIN(DEADLY, GET_WEAPON_DAMAGE_CODE(j) + (int)(burst_count / 3))],
+                     !IS_DAMTYPE_PHYSICAL(get_weapon_damage_type(j)) ? " (stun)" : "");
+          } else {
+            strlcat(buf, ".\r\n", sizeof(buf));
+          }
+        }
+
+        // Second line: "It has the following available firemodes: Semi-Automatic"
+        {
+          strlcat(buf, "It has the following available firemodes:", sizeof(buf));
+          bool first_mode = TRUE;
+          for (int mode = MODE_SS; mode <= MODE_FA; mode++)
+            if (WEAPON_CAN_USE_FIREMODE(j, mode)) {
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s ^c%s^n", first_mode ? "" : ",", fire_mode[mode]);
+              first_mode = FALSE;
+            }
+          strlcat(buf, "\r\n", sizeof(buf));
+        }
+
+        // Third line (optional): "It is loaded with EX, which increases power by two."
         if (j->contains
             && GET_OBJ_TYPE(j->contains) == ITEM_GUN_MAGAZINE
             && GET_MAGAZINE_AMMO_COUNT(j->contains) > 0
@@ -2294,20 +2313,23 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
               strlcat(buf, "deals more damage to fully unarmored targets.", sizeof(buf));
               break;
             case AMMO_GEL:
-              strlcat(buf, "deals mental instead of physical damage, but treats the enemy's ballistic armor as two points higher.", sizeof(buf));
+              strlcat(buf, "doubles knockdown effectiveness, but deals mental instead of physical damage, and treats the enemy's ballistic armor as two points higher.", sizeof(buf));
               break;
           }
         }
 
-        if (GET_WEAPON_INTEGRAL_RECOIL_COMP(j) > 0) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt has ^c%d^n point%s of integral recoil compensation.",
-                  GET_WEAPON_INTEGRAL_RECOIL_COMP(j),
-                  GET_WEAPON_INTEGRAL_RECOIL_COMP(j) != 1 ? "s" : "");
-        }
-        else if (GET_WEAPON_INTEGRAL_RECOIL_COMP(j) < 0) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt adds ^c%d^n point%s of recoil per shot.",
-                  -GET_WEAPON_INTEGRAL_RECOIL_COMP(j),
-                  -GET_WEAPON_INTEGRAL_RECOIL_COMP(j) != 1 ? "s" : "");
+        // Fourth line (optional): Integral recoil compensation or per-shot recoil add.
+        {
+          if (GET_WEAPON_INTEGRAL_RECOIL_COMP(j) > 0) {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt has ^c%d^n point%s of integral recoil compensation.",
+                    GET_WEAPON_INTEGRAL_RECOIL_COMP(j),
+                    GET_WEAPON_INTEGRAL_RECOIL_COMP(j) != 1 ? "s" : "");
+          }
+          else if (GET_WEAPON_INTEGRAL_RECOIL_COMP(j) < 0) {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt adds ^c%d^n point%s of recoil per shot.",
+                    -GET_WEAPON_INTEGRAL_RECOIL_COMP(j),
+                    -GET_WEAPON_INTEGRAL_RECOIL_COMP(j) != 1 ? "s" : "");
+          }
         }
 
         // Info about attachments, if any.
@@ -2316,8 +2338,8 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
         int real_obj;
         bool has_laser_sight_already = FALSE;
         for (int i = ACCESS_LOCATION_TOP; i <= ACCESS_LOCATION_UNDER; i++) {
-          if (GET_OBJ_VAL(j, i) > 0
-              && (real_obj = real_object(GET_OBJ_VAL(j, i))) > 0
+          if (GET_WEAPON_ATTACH_LOC(j, i) > 0
+              && (real_obj = real_object(GET_WEAPON_ATTACH_LOC(j, i))) > 0
               && (access = &obj_proto[real_obj])) {
             // mount_location: used for gun_accessory_locations[] lookup.
             mount_location = i - ACCESS_LOCATION_TOP;
@@ -2433,7 +2455,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
                 if (mount_location != ACCESS_ACCESSORY_LOCATION_UNDER) {
                   strlcat(buf, "\r\n^RThe bayonet has been mounted in the wrong location and is nonfunctional. Alert an imm.", sizeof(buf));
                 } else {
-                  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nThe bayonet attached to the %s allows you to use the Pole Arms skill when defending from melee attacks.",
+                  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nThe bayonet attached to the %s allows you to use the Pole Arms skill when defending from melee attacks. It also lets you ^WEJECT^n your magazine to do a bayonet charge.",
                           gun_accessory_locations[mount_location]);
                 }
                 break;
@@ -2476,6 +2498,15 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
               break;
           }
         }
+
+        // Heavy weapon? Warn the wielder.
+        if (GET_WEAPON_SKILL(j) >= SKILL_MACHINE_GUNS && GET_WEAPON_SKILL(j) <= SKILL_ASSAULT_CANNON) {
+          if (GET_BOD(ch) < 8 || GET_STR(ch) < 8) {
+            strlcat(buf, "\r\n^YYou will be unable to wield it without using a gyromount or going prone.^n", sizeof(buf));
+          }
+          strlcat(buf, "\r\n^yAs a heavy weapon, it has the potential to damage you when fired.^n", sizeof(buf));
+        }
+
       }
       // Melee weapons.
       else {
@@ -2676,13 +2707,52 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
               GET_OBJ_VAL(j, 1), GET_OBJ_VAL(j, 2));
       break;
     case ITEM_GUN_ACCESSORY:
-      if (GET_OBJ_VAL(j, 1) == ACCESS_SMARTLINK || GET_OBJ_VAL(j, 1) == ACCESS_GASVENT) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^crating-%d %s^n that attaches to the ^c%s^n.",
-                GET_OBJ_VAL(j, 2), gun_accessory_types[GET_OBJ_VAL(j, 1)], gun_accessory_locations[GET_OBJ_VAL(j, 0)]);
-      } else {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is %s ^c%s^n that attaches to the ^c%s^n.",
-                AN(gun_accessory_types[GET_OBJ_VAL(j, 1)]), gun_accessory_types[GET_OBJ_VAL(j, 1)]
-                , gun_accessory_locations[GET_OBJ_VAL(j, 0)]);
+      if (GET_ACCESSORY_TYPE(j) == ACCESS_SMARTGOGGLE) { /* pass */ }
+      else if (GET_ACCESSORY_TYPE(j) == ACCESS_SMARTLINK || GET_ACCESSORY_TYPE(j) == ACCESS_GASVENT) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^crating-%d %s^n that attaches to the ^c%s^n of a firearm.",
+                 GET_ACCESSORY_TYPE(j) == ACCESS_GASVENT ? -GET_ACCESSORY_RATING(j) : GET_ACCESSORY_RATING(j), // gas vents have negative vals
+                 gun_accessory_types[GET_ACCESSORY_TYPE(j)],
+                 gun_accessory_locations[GET_ACCESSORY_ATTACH_LOCATION(j)]
+                );
+      }
+      else {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is %s ^c%s^n that attaches to the ^c%s^n of a firearm.",
+                 AN(gun_accessory_types[GET_ACCESSORY_TYPE(j)]),
+                 gun_accessory_types[GET_ACCESSORY_TYPE(j)],
+                 gun_accessory_locations[GET_ACCESSORY_ATTACH_LOCATION(j)]
+                );
+      }
+      switch (GET_ACCESSORY_TYPE(j)) {
+        case ACCESS_BIPOD:
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt adds ^c%d^n points of recoil compensation when used while prone.", RECOIL_COMP_VALUE_BIPOD);
+          break;
+        case ACCESS_TRIPOD:
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt adds ^c%d^n points of recoil compensation when used while prone.", RECOIL_COMP_VALUE_TRIPOD);
+          break;
+        case ACCESS_SHOCKPAD:
+          strlcat(buf, "\r\nIt adds ^c1^n point of recoil compensation.", sizeof(buf));
+          break;
+        case ACCESS_SMARTLINK:
+          strlcat(buf, "\r\nIt makes it easier to hit opponents, provided you have the Smartlink cyberware or goggles.", sizeof(buf));
+          break;
+        case ACCESS_SCOPE:
+          // These don't have built-in effects, check the affs.
+          break;
+        case ACCESS_GASVENT:
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt adds ^c%d^n points of recoil compensation, but once installed can only be removed with a gunsmithing workshop.", -GET_ACCESSORY_RATING(j));
+          break;
+        case ACCESS_SILENCER:
+          strlcat(buf, "\r\nIt muffles the report of weapons that fire in Single-Shot or Semi-Automatic mode.", sizeof(buf));
+          break;
+        case ACCESS_SOUNDSUPP:
+          strlcat(buf, "\r\nIt muffles the report of weapons that fire in Burst Fire or Full Auto mode.", sizeof(buf));
+          break;
+        case ACCESS_SMARTGOGGLE:
+          strlcat(buf, "\r\nIt enables the use of Smartlink attachments, though at a lower efficiency than the cyberware would.", sizeof(buf));
+          break;
+        case ACCESS_BAYONET:
+          strlcat(buf, "\r\nIt allows you to use the Pole Arms skill when defending against melee clashes. It also allows you to ^WEJECT^n your magazine to do a bayonet charge.", sizeof(buf));
+          break;
       }
 
       break;
@@ -3220,7 +3290,7 @@ const char *get_position_string(struct char_data *ch) {
   static char position_string[200];
 
   if (AFF_FLAGGED(ch, AFF_PRONE))
-    strlcpy(position_string, "laying prone.", sizeof(position_string));
+    strlcpy(position_string, "lying prone.", sizeof(position_string));
   else switch (GET_POS(ch)) {
     case POS_DEAD:
       strlcpy(position_string, "DEAD!", sizeof(position_string));
@@ -5781,7 +5851,7 @@ ACMD(do_wheresmycar) {
   skip_spaces(&argument);
   int paid = atoi(argument);
   if (paid < WHERES_MY_CAR_MINIMUM_NUYEN_CHARGE) {
-    send_to_char(ch, "Syntax: wheresmycar <nuyen amount to spend, minimum %d>", WHERES_MY_CAR_MINIMUM_NUYEN_CHARGE);
+    send_to_char(ch, "Syntax: wheresmycar <nuyen amount to spend, minimum %d>\r\n", WHERES_MY_CAR_MINIMUM_NUYEN_CHARGE);
     return;
   }
 

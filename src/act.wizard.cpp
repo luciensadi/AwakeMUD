@@ -2773,10 +2773,10 @@ ACMD(do_invis)
     else if (GET_LEVEL(ch) >= LVL_EXECUTIVE)
       perform_immort_invis(ch, 2);
     else
-      send_to_char(ch, "Due to player concerns, it is not possible for immortals under level %d to go invisible.", LVL_EXECUTIVE);
+      send_to_char(ch, "Due to player concerns, it is not possible for immortals under level %d to go invisible.\r\n", LVL_EXECUTIVE);
   } else {
     if (GET_LEVEL(ch) < LVL_EXECUTIVE) {
-      send_to_char(ch, "Due to player concerns, it is not possible for immortals under level %d to go invisible.", LVL_EXECUTIVE);
+      send_to_char(ch, "Due to player concerns, it is not possible for immortals under level %d to go invisible.\r\n", LVL_EXECUTIVE);
       perform_immort_vis(ch);
       return;
     }

@@ -3247,10 +3247,11 @@ ACMD(do_wield)
       if (GET_OBJ_VAL(obj, 9) && (rnum = real_object(GET_OBJ_VAL(obj, 9))) > -1 &&
         (attach = &obj_proto[rnum]) && GET_OBJ_TYPE(attach) == ITEM_GUN_ACCESSORY && (GET_OBJ_VAL(attach, 1) == ACCESS_BIPOD || GET_OBJ_VAL(attach, 1) == ACCESS_TRIPOD))
         found = TRUE;
+
       if (!found)
-        send_to_char(ch, "It's too heavy for you to wield effectively.\r\n");
-      else
-        perform_wear(ch, obj, WEAR_WIELD, TRUE);
+        send_to_char(ch, "Warning: %s is too heavy for you to wield effectively in combat unless you're ^WPRONE^n.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
+
+      perform_wear(ch, obj, WEAR_WIELD, TRUE);
     } else
       perform_wear(ch, obj, WEAR_WIELD, TRUE);
   }
@@ -3445,7 +3446,7 @@ ACMD(do_activate)
       if (total > delta)
         send_to_char(ch, "That costs %d points to activate, but you only have %d free.\r\n", total, delta);
       else if (GET_POWER_ACT(ch, i) == x) {
-        send_to_char(ch, "%s is already active at rank %d.", CAP(adept_powers[i]), x);
+        send_to_char(ch, "%s is already active at rank %d.\r\n", CAP(adept_powers[i]), x);
         return;
       } else {
         GET_POWER_ACT(ch, i) = x;
@@ -4025,15 +4026,15 @@ ACMD(do_keep) {
   generic_find(argument, FIND_OBJ_EQUIP | FIND_OBJ_INV, ch, &tmp_char, &obj);
 
   if (!obj) {
-    send_to_char(ch, "You're not carrying or wearing anything named '%s'.", argument);
+    send_to_char(ch, "You're not carrying or wearing anything named '%s'.\r\n", argument);
     return;
   }
 
   if (IS_OBJ_STAT(obj, ITEM_KEPT)) {
-    send_to_char(ch, "You un-keep %s.", decapitalize_a_an(GET_OBJ_NAME(obj)));
+    send_to_char(ch, "You un-keep %s.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
     GET_OBJ_EXTRA(obj).RemoveBit(ITEM_KEPT);
   } else {
-    send_to_char(ch, "You set %s as kept. You will be unable to drop, junk, or give it away until you use this command on it again.", decapitalize_a_an(GET_OBJ_NAME(obj)));
+    send_to_char(ch, "You set %s as kept. You will be unable to drop, junk, or give it away until you use this command on it again.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
     GET_OBJ_EXTRA(obj).SetBit(ITEM_KEPT);
   }
 
