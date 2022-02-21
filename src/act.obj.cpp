@@ -196,6 +196,21 @@ void perform_put(struct char_data *ch, struct obj_data *obj, struct obj_data *co
       return;
     }
 
+    // Rule out some of the weird keys.
+    switch (GET_OBJ_VNUM(obj)) {
+      case OBJ_ENCYCLOPEDIA_LABELED_O:
+      case OBJ_OPTICAL_CHIP_KEY:
+      case OBJ_FIBEROPTIC_CRYSTAL:
+      case OBJ_UNFINISHED_EQUATION:
+      case OBJ_SCANEYE:
+        send_to_char(ch, "You stare blankly at %s, unable to figure out how to thread it onto a keyring without putting holes in it.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
+        return;
+      case OBJ_EYEBALL_KEY:
+      case OBJ_ELECTRONIC_EYEBALL_KEY:
+        send_to_char(ch, "%s squishes unpleasantly between your fingers as you try to wrap the remnants of the optic nerve around the keyring.\r\n", capitalize(GET_OBJ_NAME(obj)));
+        return;
+    }
+
     // Previously, we weight-limited the keyring, but that's no fun.
     /*
     if (GET_OBJ_WEIGHT(cont) + GET_OBJ_WEIGHT(obj) > MAX_KEYRING_WEIGHT) {

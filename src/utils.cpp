@@ -77,6 +77,8 @@ extern SPECIAL(taxi);
 extern SPECIAL(painter);
 extern SPECIAL(nerp_skills_teacher);
 
+bool npc_can_see_in_any_situation(struct char_data *npc);
+
 /* creates a random number in interval [from;to] */
 int number(int from, int to)
 {
@@ -3435,6 +3437,10 @@ bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struc
   if (!SEE_ASTRAL(subj, obj))
     return FALSE;
 
+  // Johnsons, trainers, and cab drivers can always see. Them going blind doesn't increase the fun.
+  if (npc_can_see_in_any_situation(subj))
+    return TRUE;
+
   // If your vision can't see in the ambient light, fail.
   if (!LIGHT_OK_ROOM_SPECIFIED(subj, room_specified))
     return FALSE;
@@ -3946,6 +3952,17 @@ bool npc_is_protected_by_spec(struct char_data *npc) {
           || CHECK_FUNC_AND_SFUNC_FOR(painter)
           || CHECK_FUNC_AND_SFUNC_FOR(nerp_skills_teacher)
           || CHECK_FUNC_AND_SFUNC_FOR(hacker));
+}
+// Returns TRUE if the NPC should be able to see in any situation.
+bool npc_can_see_in_any_situation(struct char_data *npc) {
+  return (CHECK_FUNC_AND_SFUNC_FOR(johnson)
+          || CHECK_FUNC_AND_SFUNC_FOR(teacher)
+          || CHECK_FUNC_AND_SFUNC_FOR(metamagic_teacher)
+          || CHECK_FUNC_AND_SFUNC_FOR(trainer)
+          || CHECK_FUNC_AND_SFUNC_FOR(adept_trainer)
+          || CHECK_FUNC_AND_SFUNC_FOR(spell_trainer)
+          || CHECK_FUNC_AND_SFUNC_FOR(taxi)
+          || CHECK_FUNC_AND_SFUNC_FOR(nerp_skills_teacher));
 }
 #undef CHECK_FUNC_AND_SFUNC_FOR
 

@@ -2295,6 +2295,13 @@ enum {
 #define OBJ_MAGE_LETTER                    5735
 #define OBJ_MODIFIED_BARRET_SNIPER_RIFLE   14636
 #define OBJ_STAFF_REBATE_FOR_DECKBUILDING  10003
+#define OBJ_EYEBALL_KEY                    22892
+#define OBJ_ELECTRONIC_EYEBALL_KEY         15889
+#define OBJ_ENCYCLOPEDIA_LABELED_O         38095
+#define OBJ_FIBEROPTIC_CRYSTAL             35029
+#define OBJ_OPTICAL_CHIP_KEY               4600
+#define OBJ_UNFINISHED_EQUATION            1015
+#define OBJ_SCANEYE                        3817
 
 #define OBJ_CMT_AVATAR                     80004
 #define OBJ_NOVATECH_SIX_SENSORS           17116

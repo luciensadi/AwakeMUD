@@ -670,8 +670,6 @@ void elemental_fulfilled_services(struct char_data *ch, struct char_data *mob, s
 
 bool conjuring_drain(struct char_data *ch, int force)
 {
-  if (GET_BACKGROUND_AURA(get_ch_in_room(ch)) != AURA_POWERSITE)
-    force += GET_BACKGROUND_COUNT(get_ch_in_room(ch)) / 2;
   int drain = 0;
   if (force <= GET_CHA(ch) / 2)
     drain = LIGHT;
@@ -681,7 +679,26 @@ bool conjuring_drain(struct char_data *ch, int force)
     drain = DEADLY;
   else
     drain = SERIOUS;
-  drain = convert_damage(stage(-success_test(GET_CHA(ch), force), drain));
+
+  char buf[1000];
+  snprintf(buf, sizeof(buf), "conjuring_drain: TN %d w/ %s damage, additional TN modifiers: ", force, GET_WOUND_NAME(drain));
+
+  // SR3 p162: Add +2 to drain power for each sustained spell that's not being sustained by a focus.
+  force += sustain_modifier(ch, buf, sizeof(buf));
+
+  if (GET_BACKGROUND_AURA(get_ch_in_room(ch)) != AURA_POWERSITE) {
+    int background_tn_boost = GET_BACKGROUND_COUNT(get_ch_in_room(ch)) / 2;
+    if (background_tn_boost > 0) {
+      force += background_tn_boost;
+      buf_mod(buf, sizeof(buf), "background count", background_tn_boost);
+    }
+  }
+
+  int staged_damage = stage(-success_test(GET_CHA(ch), force), drain);
+  drain = convert_damage(staged_damage);
+
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "; staged damage after charisma test is %s.", GET_WOUND_NAME(staged_damage));
+  act(buf, FALSE, ch, NULL, NULL, TO_ROLLS);
 
   return damage(ch, ch, drain, TYPE_SPELL_DRAIN, (force > GET_MAG(ch) / 100));
 }
