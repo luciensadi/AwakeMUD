@@ -4093,9 +4093,33 @@ bool perform_knockdown_test(struct char_data *ch, int initial_tn, int successes_
     return TRUE;
   }
 
-  char rbuf[1000];
+  char rbuf[5000];
   snprintf(rbuf, sizeof(rbuf), "^mKD test: %s. Mods: ", GET_CHAR_NAME(ch));
-  int tn_modifiers = modify_target_rbuf(ch, rbuf, sizeof(rbuf));
+  int tn_modifiers = modify_target_rbuf_raw(ch, rbuf, sizeof(rbuf), 8, FALSE);
+
+  bool has_tail = FALSE, has_aug = FALSE;
+  for (struct obj_data *cyb = ch->cyberware; cyb; cyb = cyb->next_content) {
+    switch (GET_CYBERWARE_TYPE(cyb)) {
+      case CYB_BALANCETAIL:
+        has_tail = TRUE;
+        break;
+      case CYB_BALANCEAUG:
+        has_aug = TRUE;
+        break;
+      case CYB_FOOTANCHOR:
+        tn_modifiers += GET_CYBERWARE_RATING(cyb);
+        buf_mod(rbuf, sizeof(rbuf), "foot anchors", GET_CYBERWARE_RATING(cyb));
+        break;
+    }
+  }
+
+  if (has_tail && has_aug) {
+    tn_modifiers += -3;
+    buf_mod(rbuf, sizeof(rbuf), "balance tail & aug", -3);
+  } else if (has_tail || has_aug) {
+    tn_modifiers += -2;
+    buf_mod(rbuf, sizeof(rbuf), "balance tail or aug", -2);
+  }
 
   if (GET_PHYSICAL(ch) <= (10 - damage_array[SERIOUS]) || GET_MENTAL(ch) <= (10 - damage_array[SERIOUS])) {
     successes_to_avoid_knockback = MAX(successes_to_avoid_knockback, 4);
