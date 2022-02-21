@@ -3288,6 +3288,11 @@ bool combine_ammo_boxes(struct char_data *ch, struct obj_data *from, struct obj_
     return FALSE;
   }
 
+  if (GET_OBJ_TYPE(from) != ITEM_GUN_AMMO || GET_OBJ_TYPE(into) != ITEM_GUN_AMMO) {
+    mudlog("SYSERR: combine_ammo_boxes received something that was not an ammo box.", ch, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+
   if (GET_AMMOBOX_INTENDED_QUANTITY(from) > 0 || GET_AMMOBOX_INTENDED_QUANTITY(into) > 0) {
     mudlog("SYSERR: combine_ammo_boxes received a box that was not yet completed.", ch, LOG_SYSLOG, TRUE);
     return FALSE;
