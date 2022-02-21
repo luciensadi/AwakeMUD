@@ -679,10 +679,10 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
 
         struct obj_data *orig = ch->carrying;
         for (; orig; orig = orig->next_content) {
-          if (GET_OBJ_TYPE(obj) == ITEM_GUN_AMMO &&
-              GET_AMMOBOX_INTENDED_QUANTITY(obj) <= 0 &&
-              GET_AMMOBOX_WEAPON(obj) == GET_AMMOBOX_WEAPON(orig) &&
-              GET_AMMOBOX_TYPE(obj) == GET_AMMOBOX_TYPE(orig))
+          if (GET_OBJ_TYPE(orig) == ITEM_GUN_AMMO
+              && GET_AMMOBOX_INTENDED_QUANTITY(orig) <= 0
+              && GET_AMMOBOX_WEAPON(obj) == GET_AMMOBOX_WEAPON(orig)
+              && GET_AMMOBOX_TYPE(obj) == GET_AMMOBOX_TYPE(orig))
             break;
         }
         if (orig) {
