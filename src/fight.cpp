@@ -449,6 +449,17 @@ void stop_fighting(struct char_data * ch)
   update_pos(ch);
   GET_INIT_ROLL(ch) = 0;
   SHOOTING_DIR(ch) = NOWHERE;
+
+  // If they're mob who cast confusion/chaos on someone, drop the spell.
+  if (IS_NPC(ch) && GET_SUSTAINED(ch)) {
+    struct sustain_data *next;
+    for (struct sustain_data *sust = GET_SUSTAINED(ch); sust; sust = next) {
+      next = sust->next;
+      // Removed checks for focus and spirit sustains. It does say 'all'...
+      if (sust->caster && (sust->spell == SPELL_CONFUSION || sust->spell == SPELL_CHAOS))
+        end_sustained_spell(ch, sust);
+    }
+  }
 }
 
 void make_corpse(struct char_data * ch)

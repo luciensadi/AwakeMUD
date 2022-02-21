@@ -1491,62 +1491,74 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       if (!check_spell_victim(ch, vict, spell, arg))
         return;
 
+#ifdef DIES_IRAE  // note: if defined
       if (GET_SUSTAINED(vict)) {
-      for (struct sustain_data *sus = GET_SUSTAINED(vict); sus; sus = sus->next) {
-        /*  Q: Can you cast Decrease Attribute, followed by Increase Attribute (which is easier because the attribute TN is smaller),
-               then un-sustain the Decrease Attribute, allowing you to have a higher Attribute than you’d have without having
-               Decreased it? How about changing your Reaction after an Increased Reflexes spell?
-            A: No. Only one attribute-affecting health spell can be used to modify an attribute at a time.
+        for (struct sustain_data *sus = GET_SUSTAINED(vict); sus; sus = sus->next) {
+          /*  Q: Can you cast Decrease Attribute, followed by Increase Attribute (which is easier because the attribute TN is smaller),
+                 then un-sustain the Decrease Attribute, allowing you to have a higher Attribute than you’d have without having
+                 Decreased it? How about changing your Reaction after an Increased Reflexes spell?
+              A: No. Only one attribute-affecting health spell can be used to modify an attribute at a time.
 
-            Sources:
-            - https://www.shadowrunrpg.com/resources/sr3faq.html
-            - http://www.shadowruntabletop.com/game-resources/shadowrun-third-edition-faq/
-        */
-        // Skip over caster records.
-        if (sus->caster)
-          continue;
+              Sources:
+              - https://www.shadowrunrpg.com/resources/sr3faq.html
+              - http://www.shadowruntabletop.com/game-resources/shadowrun-third-edition-faq/
+          */
+          // Skip over caster records.
+          if (sus->caster)
+            continue;
 
-        if (sus->subtype == sub && (sus->spell == SPELL_INCATTR || sus->spell == SPELL_INCCYATTR || sus->spell == SPELL_DECATTR || sus->spell == SPELL_DECCYATTR || sus->spell == SPELL_INCREA)) {
-          send_to_char(ch, "%s is already affected by a similar spell.\r\n", GET_CHAR_NAME(vict));
-          return;
-        }
+          if (sus->subtype == sub && (sus->spell == SPELL_INCATTR || sus->spell == SPELL_INCCYATTR || sus->spell == SPELL_DECATTR || sus->spell == SPELL_DECCYATTR || sus->spell == SPELL_INCREA)) {
+            send_to_char(ch, "%s is already affected by a similar spell.\r\n", GET_CHAR_NAME(vict));
+            return;
+          }
 
-        if (spell == SPELL_INCREA && (sus->spell == SPELL_INCREF1 || sus->spell == SPELL_INCREF2 || sus->spell == SPELL_INCREF3)) {
-          send_to_char(ch, "%s's reflexes have already been modified, so this spell can't take effect.\r\n", GET_CHAR_NAME(vict));
-          return;
+          if (spell == SPELL_INCREA && (sus->spell == SPELL_INCREF1 || sus->spell == SPELL_INCREF2 || sus->spell == SPELL_INCREF3)) {
+            send_to_char(ch, "%s's reflexes have already been modified, so this spell can't take effect.\r\n", GET_CHAR_NAME(vict));
+            return;
+          }
         }
       }
-    }
-
+#endif
       if (GET_ATT(vict, sub) != GET_REAL_ATT(vict, sub)) {
         if (GET_TRADITION(vict) == TRAD_ADEPT && sub < CHA) {
           switch (sub) {
-          case BOD:
-            if (BOOST(vict)[BOD][0] || GET_POWER(vict, ADEPT_IMPROVED_BOD))
-              cyber = false;
-            break;
-          case QUI:
-            if (BOOST(vict)[QUI][0] || GET_POWER(vict, ADEPT_IMPROVED_QUI))
-              cyber = false;
-            break;
-          case STR:
-            if (BOOST(vict)[STR][0] || GET_POWER(vict, ADEPT_IMPROVED_STR))
-              cyber = false;
-            break;
+            case BOD:
+              if (BOOST(vict)[BOD][0] || GET_POWER(vict, ADEPT_IMPROVED_BOD))
+                cyber = false;
+              break;
+            case QUI:
+              if (BOOST(vict)[QUI][0] || GET_POWER(vict, ADEPT_IMPROVED_QUI))
+                cyber = false;
+              break;
+            case STR:
+              if (BOOST(vict)[STR][0] || GET_POWER(vict, ADEPT_IMPROVED_STR))
+                cyber = false;
+              break;
           }
         }
-
+#ifndef DIES_IRAE  // note: if NOT def
+        else if (GET_SUSTAINED(vict)) {
+          for (struct sustain_data *sus = GET_SUSTAINED(vict); sus; sus = sus->next) {
+            if (sus->caster == FALSE && (sus->spell == SPELL_INCATTR || sus->spell == SPELL_DECATTR) && sus->subtype == sub) {
+              cyber = false;
+              break;
+            }
+          }
+        }
+#endif
         if (cyber && (spell == SPELL_DECATTR || spell == SPELL_INCATTR || spell == SPELL_INCREA)) {
           snprintf(buf, sizeof(buf), "$N's %s has been modified by technological means and is immune to this spell.\r\n", attributes[sub]);
           act(buf, TRUE, ch, 0, vict, TO_CHAR);
           return;
         }
       }
+
       if ((spell == SPELL_DECCYATTR || spell == SPELL_INCCYATTR) && (!cyber || GET_ATT(vict, sub) == GET_REAL_ATT(vict, sub))) {
         snprintf(buf, sizeof(buf), "$N's %s has not been modified by technological means and is immune to this spell.\r\n", attributes[sub]);
         act(buf, TRUE, ch, 0, vict, TO_CHAR);
         return;
       }
+      
       WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
       int target = target_modifiers;
       if (spell == SPELL_INCREA)
