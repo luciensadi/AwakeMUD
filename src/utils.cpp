@@ -4053,7 +4053,7 @@ void set_new_mobile_unique_id(struct char_data *ch) {
 
 void knockdown_character(struct char_data *ch) {
   if (!AFF_FLAGGED(ch, AFF_PRONE)) {
-    send_to_char("^YYou are knocked prone!^n\r\n", ch);
+    send_to_char(ch, "^YYou are knocked prone!%s^n\r\n", GET_TKE(ch) < 100 ? " (You'll probably want to ^WSTAND^n.)" : "");
     act("$n is knocked prone!", TRUE, ch, 0, 0, TO_ROOM);
     AFF_FLAGS(ch).SetBit(AFF_PRONE);
     WAIT_STATE(ch, 1 RL_SEC);
