@@ -976,11 +976,13 @@ bool check_spell_victim(struct char_data *ch, struct char_data *vict, int spell,
     return FALSE;
   }
 
+#ifdef DIES_IRAE
   // If you can only see your victim through ultrasound, you can't cast on them (M&M p18).
-  if (CHAR_ONLY_SEES_VICT_WITH_ULTRASOUND(ch, vict)) {
+  if (AFF_FLAGGED(ch, AFF_ULTRASOUND)) {
     send_to_char("Ultrasound systems don't provide direct viewing-- your magic has nothing to lock on to!\r\n", ch);
     return FALSE;
   }
+#endif
 
   return TRUE;
 }
@@ -1558,7 +1560,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
         act(buf, TRUE, ch, 0, vict, TO_CHAR);
         return;
       }
-      
+
       WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
       int target = target_modifiers;
       if (spell == SPELL_INCREA)

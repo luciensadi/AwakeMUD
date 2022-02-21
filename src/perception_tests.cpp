@@ -183,7 +183,7 @@ bool can_see_through_invis(struct char_data *ch, struct char_data *vict) {
   act(perception_test_rbuf, FALSE, ch, NULL, NULL, TO_ROLLS);
 
   // Message the character if they can suddenly see their opponent.
-  if (test_result && ch != vict) {
+  if (test_result && ch != vict && (ch->in_room == vict->in_room || ch->in_veh == vict->in_veh)) {
     send_to_char(ch, "You squint at a hazy patch of air, and suddenly %s pops into view!\r\n", decapitalize_a_an(GET_CHAR_NAME(vict)));
 
     // Spotting an invisible person alarms NPCs.
