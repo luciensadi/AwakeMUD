@@ -170,7 +170,7 @@ void medit_display_equipment_menu(struct descriptor_data *d) {
   send_to_char("\r\n", CH);
   send_to_char("a) Add equiment\r\n", CH);
   if (i > 1)
-    send_to_char("a) Delete equiment\r\n", CH);
+    send_to_char("d) Delete equiment\r\n", CH);
   send_to_char("q) Return to main menu\r\n", CH);
   d->edit_mode = MEDIT_EQUIPMENT;
 }
@@ -397,9 +397,50 @@ void medit_parse(struct descriptor_data *d, const char *arg)
         DELETE_ARRAY_IF_EXTANT(mob_proto[mob_number].char_specials.arrive);
         DELETE_ARRAY_IF_EXTANT(mob_proto[mob_number].char_specials.leave);
 
+        // Blow away the proto's gear.
+        {
+          struct obj_data *obj;
+          while ((obj = mob_proto[mob_number].cyberware)) {
+            obj_from_cyberware(obj);
+            extract_obj(obj);
+          }
+          while ((obj = mob_proto[mob_number].bioware)) {
+            obj_from_bioware(obj);
+            extract_obj(obj);
+          }
+          for (int wearloc = 0; wearloc < NUM_WEARS; wearloc++) {
+            if ((obj = GET_EQ(&mob_proto[mob_number], wearloc))) {
+              unequip_char(&mob_proto[mob_number], wearloc, FALSE);
+              extract_obj(obj);
+            }
+          }
+        }
+
         mob_proto[mob_number] = *d->edit_mob;
         mob_proto[mob_number].nr = mob_number;
 
+        // Overwrite the proto's gear to be carried_by and worn_by it, not us, and zero out the edit mob's pointers in the process.
+        {
+          // Cyberware.
+          for (struct obj_data *obj = mob_proto[mob_number].cyberware; obj; obj = obj->next_content) {
+            obj->carried_by = &mob_proto[mob_number];
+          }
+          MOB->cyberware = NULL;
+
+          // Same for bioware.
+          for (struct obj_data *obj = mob_proto[mob_number].bioware; obj; obj = obj->next_content) {
+            obj->carried_by = &mob_proto[mob_number];
+          }
+          MOB->bioware = NULL;
+
+          // And then equipment.
+          for (int wearloc = 0; wearloc < NUM_WEARS; wearloc++) {
+            GET_EQ(MOB, wearloc) = NULL;
+            if (GET_EQ(&mob_proto[mob_number], wearloc)) {
+              GET_EQ(&mob_proto[mob_number], wearloc)->worn_by = &mob_proto[mob_number];
+            }
+          }
+        }
       } else {  // if not, we need to make a new spot in the list
         int             counter;
         int             found = FALSE;
@@ -424,6 +465,30 @@ void medit_parse(struct descriptor_data *d, const char *arg)
               new_mob_index[counter].func = NULL;
               /*---------*/
               new_mob_proto[counter] = *(d->edit_mob);
+
+              // Overwrite the proto's gear to be carried_by and worn_by it, not us, and zero out the edit mob's pointers in the process.
+              {
+                // Cyberware.
+                for (struct obj_data *obj = new_mob_proto[counter].cyberware; obj; obj = obj->next_content) {
+                  obj->carried_by = &new_mob_proto[counter];
+                }
+                MOB->cyberware = NULL;
+
+                // Same for bioware.
+                for (struct obj_data *obj = new_mob_proto[counter].bioware; obj; obj = obj->next_content) {
+                  obj->carried_by = &new_mob_proto[counter];
+                }
+                MOB->bioware = NULL;
+
+                // And then equipment.
+                for (int wearloc = 0; wearloc < NUM_WEARS; wearloc++) {
+                  GET_EQ(MOB, wearloc) = NULL;
+                  if (GET_EQ(&new_mob_proto[counter], wearloc)) {
+                    GET_EQ(&new_mob_proto[counter], wearloc)->worn_by = &new_mob_proto[counter];
+                  }
+                }
+              }
+
               new_mob_proto[counter].in_room = NULL;
               /* it is now safe (and necessary!) to assign real number to
                * the edit_mob, which has been -1 all this time */
@@ -448,7 +513,6 @@ void medit_parse(struct descriptor_data *d, const char *arg)
             new_mob_proto[counter + 1].nr = counter + 1;
           }
         } // for loop through list
-
 
         /* if we STILL haven't found it, means the mobile was > than all
         * the other mobs.. so insert at end */
@@ -1338,11 +1402,15 @@ void medit_parse(struct descriptor_data *d, const char *arg)
   case MEDIT_DEL_CYBERWARE:
     number = atoi(arg) - 1;
     {
-      struct obj_data *ware = (d->edit_mode == MEDIT_DEL_CYBERWARE ? MOB->cyberware : MOB->bioware);
+      struct obj_data *ware;
 
-      for (; ware && number > 0; number--) {
+      if (d->edit_mode == MEDIT_DEL_CYBERWARE)
+        ware = MOB->cyberware;
+      else
+        ware = MOB->bioware;
+
+      while (ware && number-- > 0)
         ware = ware->next_content;
-      }
 
       if (ware) {
         if (d->edit_mode == MEDIT_DEL_CYBERWARE) {

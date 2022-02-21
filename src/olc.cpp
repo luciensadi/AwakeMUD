@@ -1345,7 +1345,29 @@ ACMD(do_medit)
     if (mob_proto[mob_num].player_specials)
       mob->player_specials = &dummy_mob;
 
+    // Clone in cyberware.
+    mob->cyberware = NULL;
+    for (struct obj_data *obj = mob_proto[mob_num].cyberware; obj; obj = obj->next_content) {
+      obj_to_cyberware(read_object(GET_OBJ_VNUM(obj), VIRTUAL), mob);
+    }
+
+    // Same for bioware.
+    mob->bioware = NULL;
+    for (struct obj_data *obj = mob_proto[mob_num].bioware; obj; obj = obj->next_content) {
+      obj_to_bioware(read_object(GET_OBJ_VNUM(obj), VIRTUAL), mob);
+    }
+
+    // And then equipment.
+    struct obj_data *eq;
+    for (int wearloc = 0; wearloc < NUM_WEARS; wearloc++) {
+      GET_EQ(mob, wearloc) = NULL;
+      if ((eq = GET_EQ(&mob_proto[mob_num], wearloc))) {
+        equip_char(mob, read_object(GET_OBJ_VNUM(eq), VIRTUAL), wearloc);
+      }
+    }
+
     d->edit_mob = mob;
+    set_new_mobile_unique_id(d->edit_mob);
 #ifdef CONFIRM_EXISTING
 
     send_to_char ("A mob already exists at that number. Do you wish to edit it?\r\n", ch);
@@ -1377,6 +1399,11 @@ ACMD(do_medit)
 
     MOB_FLAGS(d->edit_mob).SetBit(MOB_ISNPC);
 
+    d->edit_mob->bioware = NULL;
+    d->edit_mob->cyberware = NULL;
+    for (int i = 0; i < NUM_WEARS; i++)
+      GET_EQ(d->edit_mob, i) = NULL;
+
     // set some default variables here
     GET_MAX_PHYSICAL(MOB) = 1000;
     GET_PHYSICAL(MOB) = 1000;
@@ -1388,6 +1415,7 @@ ACMD(do_medit)
     GET_SEX(MOB) = SEX_NEUTRAL;
     MOB->mob_specials.attack_type = 300;
     d->edit_mode = MEDIT_CONFIRM_EDIT;
+    set_new_mobile_unique_id(d->edit_mob);
     return;
   }
 }

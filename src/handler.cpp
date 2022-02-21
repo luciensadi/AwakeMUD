@@ -1431,6 +1431,7 @@ void obj_to_cyberware(struct obj_data * object, struct char_data * ch)
   ch->cyberware = object;
   object->carried_by = ch;
   object->in_room = NULL;
+  object->in_veh = NULL;
   affect_total(ch);
 }
 
@@ -1458,6 +1459,7 @@ void obj_to_bioware(struct obj_data * object, struct char_data * ch)
   ch->bioware = object;
   object->carried_by = ch;
   object->in_room = NULL;
+  object->in_veh = NULL;
 
   if (GET_OBJ_VAL(object, 0) != BIO_ADRENALPUMP || GET_OBJ_VAL(object, 5) > 0)
     for (temp = 0; temp < MAX_OBJ_AFFECT; temp++)
@@ -1476,9 +1478,14 @@ void obj_from_bioware(struct obj_data *bio)
 
   if (bio == NULL)
   {
-    log("SYSLOG: NULL object passed to obj_from_bioware");
+    mudlog("SYSERR: NULL bioware passed to obj_from_bioware!", NULL, LOG_SYSLOG, TRUE);
     return;
   }
+  if (!bio->carried_by) {
+    mudlog("SYSERR: Bioware with NO carried_by passed to obj_from_bioware!", NULL, LOG_SYSLOG, TRUE);
+    return;
+  }
+
   if (GET_OBJ_VAL(bio, 0) == BIO_ADRENALPUMP && GET_OBJ_VAL(bio, 5) < 1)
     for (i = 0; i < MAX_OBJ_AFFECT; i++)
       affect_modify(bio->carried_by,
@@ -1529,9 +1536,14 @@ void obj_from_cyberware(struct obj_data * cyber)
   struct obj_data *temp;
   if (cyber == NULL)
   {
-    log("SYSLOG: NULL object passed to obj_from_cyberware");
+    mudlog("SYSERR: NULL object passed to obj_from_cyberware!", NULL, LOG_SYSLOG, TRUE);
     return;
   }
+  if (!cyber->carried_by) {
+    mudlog("SYSERR: Cyberware with NO carried_by passed to obj_from_cyberware!", NULL, LOG_SYSLOG, TRUE);
+    return;
+  }
+
   REMOVE_FROM_LIST(cyber, cyber->carried_by->cyberware, next_content);
   cyber->carried_by = NULL;
   cyber->next_content = NULL;
