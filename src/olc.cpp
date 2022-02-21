@@ -1357,10 +1357,16 @@ ACMD(do_medit)
       obj_to_bioware(read_object(GET_OBJ_VNUM(obj), VIRTUAL), mob);
     }
 
-    // And then equipment.
-    struct obj_data *eq;
+    // Blank out the equipment (it stays on the proto, so this is not a leak).
+    // Then affect_total to reset our values to standard.
     for (int wearloc = 0; wearloc < NUM_WEARS; wearloc++) {
       GET_EQ(mob, wearloc) = NULL;
+    }
+    affect_total(mob);
+
+    // Then equip the thing to give it the expected amounts.
+    struct obj_data *eq;
+    for (int wearloc = 0; wearloc < NUM_WEARS; wearloc++) {
       if ((eq = GET_EQ(&mob_proto[mob_num], wearloc))) {
         equip_char(mob, read_object(GET_OBJ_VNUM(eq), VIRTUAL), wearloc);
       }

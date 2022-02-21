@@ -1642,8 +1642,8 @@ void parse_mobile(File &in, long nr)
   GET_LEVEL(mob) = data.GetInt("POINTS/Level", 0);
   GET_MAX_PHYSICAL(mob) = data.GetInt("POINTS/MaxPhys", 10*100);
   GET_MAX_MENTAL(mob) = data.GetInt("POINTS/MaxMent", 10*100);
-  GET_BALLISTIC(mob) = data.GetInt("POINTS/Ballistic", 0);
-  GET_IMPACT(mob) = data.GetInt("POINTS/Impact", 0);
+  GET_BALLISTIC(mob) = GET_INNATE_BALLISTIC(mob) = data.GetInt("POINTS/Ballistic", 0);
+  GET_IMPACT(mob) = GET_INNATE_IMPACT(mob) = data.GetInt("POINTS/Impact", 0);
   GET_NUYEN_RAW(mob) = data.GetInt("POINTS/Cash", 0);
   GET_BANK_RAW(mob) = data.GetInt("POINTS/Bank", 0);
   GET_KARMA(mob) = data.GetInt("POINTS/Karma", 0);

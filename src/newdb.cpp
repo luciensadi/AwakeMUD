@@ -135,7 +135,7 @@ static void init_char(struct char_data * ch)
   ch->points.max_physical = 1000;
   ch->points.mental = GET_MAX_MENTAL(ch);
   ch->points.physical = GET_MAX_PHYSICAL(ch);
-  GET_BALLISTIC(ch) = GET_TOTALBAL(ch) = GET_IMPACT(ch) = GET_TOTALIMP(ch) = 0;
+  GET_BALLISTIC(ch) = GET_TOTALBAL(ch) = GET_INNATE_BALLISTIC(ch) = GET_IMPACT(ch) = GET_TOTALIMP(ch) = GET_INNATE_IMPACT(ch) = 0;
   ch->points.sustained[0] = 0;
   ch->points.sustained[1] = 0;
   ch->points.grade = 0;
@@ -395,7 +395,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
     ch->char_specials.saved.skills[i][0] = 0;
   ch->char_specials.carry_weight = 0;
   ch->char_specials.carry_items = 0;
-  GET_BALLISTIC(ch) = GET_TOTALBAL(ch) = GET_IMPACT(ch) = GET_TOTALIMP(ch) = 0;
+  GET_BALLISTIC(ch) = GET_TOTALBAL(ch) = GET_INNATE_BALLISTIC(ch) = GET_IMPACT(ch) = GET_TOTALIMP(ch) = GET_INNATE_IMPACT(ch) = 0;
   ch->points.init_dice = 0;
   ch->points.init_roll = 0;
   ch->points.sustained[1] = 0;

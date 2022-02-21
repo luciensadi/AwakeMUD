@@ -82,9 +82,9 @@ void medit_disp_menu(struct descriptor_data *d)
                CCCYN(CH, C_CMP), GET_REAL_REA(MOB), CCNRM(CH, C_CMP));
   send_to_char(CH, "b) Level: %s%d%s\r\n", CCCYN(CH, C_CMP), GET_LEVEL(MOB),
                CCNRM(CH, C_CMP));
-  send_to_char(CH, "c) Ballistic: %s%d%s, ", CCCYN(CH, C_CMP), GET_BALLISTIC(MOB),
+  send_to_char(CH, "c) Ballistic: %s%d%s, ", CCCYN(CH, C_CMP), GET_INNATE_BALLISTIC(MOB),
                CCNRM(CH, C_CMP));
-  send_to_char(CH, "d) Impact: %s%d%s\r\n", CCCYN(CH, C_CMP), GET_IMPACT(MOB),
+  send_to_char(CH, "d) Impact: %s%d%s\r\n", CCCYN(CH, C_CMP), GET_INNATE_IMPACT(MOB),
                CCNRM(CH, C_CMP));
   send_to_char(CH, "e) Max physical points: %s%d%s, f) Max mental points: %s%d%s\r\n", CCCYN(CH, C_CMP),
                (int)(GET_MAX_PHYSICAL(MOB) / 100), CCNRM(CH, C_CMP), CCCYN(CH, C_CMP),
@@ -397,7 +397,8 @@ void medit_parse(struct descriptor_data *d, const char *arg)
         DELETE_ARRAY_IF_EXTANT(mob_proto[mob_number].char_specials.arrive);
         DELETE_ARRAY_IF_EXTANT(mob_proto[mob_number].char_specials.leave);
 
-        // Blow away the proto's gear.
+        // Blow away the proto's gear. We do this to avoid leaking memory.
+        struct obj_data *equipment[NUM_WEARS];
         {
           struct obj_data *obj;
           while ((obj = mob_proto[mob_number].cyberware)) {
@@ -413,34 +414,39 @@ void medit_parse(struct descriptor_data *d, const char *arg)
               unequip_char(&mob_proto[mob_number], wearloc, FALSE);
               extract_obj(obj);
             }
+
+            // Unequip the edit mob, too. This sets our edit mob's stats to baseline, which is necessary for the copy to go well.
+            if ((obj = GET_EQ(MOB, wearloc))) {
+              unequip_char(MOB, wearloc, FALSE);
+              equipment[wearloc] = obj;
+            } else {
+              equipment[wearloc] = NULL;
+            }
           }
+
+          // They're nude-- there should be no issue with us sanity-checking their ballistic and impact values.
+          GET_IMPACT(MOB) = GET_INNATE_IMPACT(MOB);
+          GET_BALLISTIC(MOB) = GET_INNATE_BALLISTIC(MOB);
         }
 
         mob_proto[mob_number] = *d->edit_mob;
         mob_proto[mob_number].nr = mob_number;
 
-        // Overwrite the proto's gear to be carried_by and worn_by it, not us, and zero out the edit mob's pointers in the process.
-        {
-          // Cyberware.
-          for (struct obj_data *obj = mob_proto[mob_number].cyberware; obj; obj = obj->next_content) {
-            obj->carried_by = &mob_proto[mob_number];
-          }
-          MOB->cyberware = NULL;
-
-          // Same for bioware.
-          for (struct obj_data *obj = mob_proto[mob_number].bioware; obj; obj = obj->next_content) {
-            obj->carried_by = &mob_proto[mob_number];
-          }
-          MOB->bioware = NULL;
-
-          // And then equipment.
-          for (int wearloc = 0; wearloc < NUM_WEARS; wearloc++) {
-            GET_EQ(MOB, wearloc) = NULL;
-            if (GET_EQ(&mob_proto[mob_number], wearloc)) {
-              GET_EQ(&mob_proto[mob_number], wearloc)->worn_by = &mob_proto[mob_number];
-            }
+        // Re-equip our proto. It now has the edit mob's stats, and can be safely upgraded.
+        for (int wearloc = 0; wearloc < NUM_WEARS; wearloc++) {
+          if (equipment[wearloc]) {
+            equip_char(&mob_proto[mob_number], equipment[wearloc], wearloc);
           }
         }
+
+        // Cyberware.
+        for (struct obj_data *obj = mob_proto[mob_number].cyberware; obj; obj = obj->next_content)
+          obj->carried_by = &mob_proto[mob_number];
+
+        // Same for bioware.
+        for (struct obj_data *obj = mob_proto[mob_number].bioware; obj; obj = obj->next_content)
+          obj->carried_by = &mob_proto[mob_number];
+
       } else {  // if not, we need to make a new spot in the list
         int             counter;
         int             found = FALSE;
@@ -1169,7 +1175,7 @@ void medit_parse(struct descriptor_data *d, const char *arg)
       send_to_char("Value must be greater than 0.\r\n", CH);
       send_to_char("Enter ballistic armor points: ", CH);
     } else {
-      GET_BALLISTIC(MOB) = number;
+      GET_INNATE_BALLISTIC(MOB) = number;
       medit_disp_menu(d);
     }
     break;
@@ -1180,7 +1186,7 @@ void medit_parse(struct descriptor_data *d, const char *arg)
       send_to_char("Value must be greater than 0.\r\n", CH);
       send_to_char("Enter impact armor points: ", CH);
     } else {
-      GET_IMPACT(MOB) = number;
+      GET_INNATE_IMPACT(MOB) = number;
       medit_disp_menu(d);
     }
     break;
@@ -1610,10 +1616,10 @@ void write_mobs_to_disk(int zone)
         fprintf(fp, "\tMaxPhys:\t%d\n", int(GET_MAX_PHYSICAL(mob) / 100));
       if (int(GET_MAX_MENTAL(mob) / 100) != 10)
         fprintf(fp, "\tMaxMent:\t%d\n", int(GET_MAX_MENTAL(mob) / 100));
-      if (GET_BALLISTIC(mob) > 0)
-        fprintf(fp, "\tBallistic:\t%d\n", GET_BALLISTIC(mob));
-      if (GET_IMPACT(mob) > 0)
-        fprintf(fp, "\tImpact:\t%d\n", GET_IMPACT(mob));
+      if (GET_INNATE_BALLISTIC(mob) > 0)
+        fprintf(fp, "\tBallistic:\t%d\n", GET_INNATE_BALLISTIC(mob));
+      if (GET_INNATE_IMPACT(mob) > 0)
+        fprintf(fp, "\tImpact:\t%d\n", GET_INNATE_IMPACT(mob));
       if (GET_NUYEN(mob) > 0)
         fprintf(fp, "\tCash:\t%ld\n", GET_NUYEN(mob));
       if (GET_BANK(mob) > 0)

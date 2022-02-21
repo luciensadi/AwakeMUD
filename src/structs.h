@@ -417,8 +417,8 @@ struct char_point_data
   sh_int physical;
   sh_int max_physical; /* Max hit for PC/NPC                      */
 
-  sh_int ballistic[2];    /* Ballistic armor class for bullets and such */
-  sh_int impact[2];       /* Impact armor class for clubs and such   */
+  sh_int ballistic[3];    /* Ballistic armor class for bullets and such */
+  sh_int impact[3];       /* Impact armor class for clubs and such   */
   long nuyen;           /* Money carried */
   long bank;           /* Nuyen the char has in a bank account */
   int karma;            /* The experience of the player */

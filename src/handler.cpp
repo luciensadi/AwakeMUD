@@ -564,13 +564,15 @@ void affect_total(struct char_data * ch)
   // Reset armor-related stats.
   {
     if (IS_SPIRIT(ch) || IS_ELEMENTAL(ch)) {
-      GET_IMPACT(ch) = GET_BALLISTIC(ch) = GET_SPARE1(ch) * 2;
+      GET_INNATE_IMPACT(ch) = GET_INNATE_BALLISTIC(ch) = GET_SPARE1(ch) * 2;
     } else if (ch_is_npc) {
-      GET_BALLISTIC(ch) = mob_proto[GET_MOB_RNUM(ch)].points.ballistic[0];
-      GET_IMPACT(ch) = mob_proto[GET_MOB_RNUM(ch)].points.impact[0];
+      GET_INNATE_BALLISTIC(ch) = GET_INNATE_BALLISTIC(&mob_proto[GET_MOB_RNUM(ch)]);
+      GET_INNATE_IMPACT(ch) = GET_INNATE_BALLISTIC(&mob_proto[GET_MOB_RNUM(ch)]);
     } else {
-      GET_BALLISTIC(ch) = GET_IMPACT(ch) = 0;
+      GET_INNATE_BALLISTIC(ch) = GET_INNATE_IMPACT(ch) = 0;
     }
+    GET_BALLISTIC(ch) = GET_INNATE_BALLISTIC(ch);
+    GET_IMPACT(ch) = GET_INNATE_IMPACT(ch);
 
     GET_TOTALBAL(ch) = GET_TOTALIMP(ch) = 0;
   }

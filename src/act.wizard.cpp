@@ -4515,7 +4515,7 @@ ACMD(do_set)
     break;
   case 16:
     RANGE(0, 100);
-    GET_BALLISTIC(vict) = value;
+    GET_INNATE_BALLISTIC(vict) = value;
     affect_total(vict);
     break;
   case 17:
@@ -4729,7 +4729,7 @@ ACMD(do_set)
     break;
   case 44:
     RANGE(0, 100);
-    GET_IMPACT(vict) = value;
+    GET_INNATE_IMPACT(vict) = value;
     affect_total(vict);
     break;
   case 45:
