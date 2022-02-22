@@ -3663,6 +3663,7 @@ ACMD(do_learn)
       }
   }
 
+#ifdef MUST_PASS_TEST_TO_LEARN_SPELL
   // Roll to see if you succeed.
   int successes = success_test(skill, force * 2 + modify_target(ch));
   if (successes == 0) {
@@ -3677,6 +3678,7 @@ ACMD(do_learn)
     WAIT_STATE(ch, FAILED_SPELL_LEARNING_WAIT_STATE * 3);
     return;
   }
+#endif
 
   // Success! Learn the spell.
   if (spell) {
