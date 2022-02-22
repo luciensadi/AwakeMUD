@@ -979,7 +979,7 @@ ACMD(do_matrix_score)
   }
 
   if (DECKER->io < GET_CYBERDECK_IO_RATING(DECKER->deck)) {
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^yYour I/O rating is restricted to %d by your jackpoint.^n\r\n", DECKER->io);
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^yYour I/O rating is restricted to %d by your jackpoint.^n\r\n", DECKER->io * 10);
   }
 
   send_to_icon(PERSONA, buf);
