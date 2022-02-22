@@ -4075,10 +4075,32 @@ void set_new_mobile_unique_id(struct char_data *ch) {
 
 void knockdown_character(struct char_data *ch) {
   if (!AFF_FLAGGED(ch, AFF_PRONE)) {
+    WAIT_STATE(ch, 1 RL_SEC);
+
+    /*
+    bool eligible_for_kipup = PLR_FLAGGED(ch, PLR_PAID_FOR_KIPUP) || (IS_NPC(ch) && (GET_QUI(ch) >= 10 && GET_SKILL(ch, SKILL_UNARMED_COMBAT) >= 6));
+
+    asdf in the process of writing an auto-stand, need to write a kipup command and redo the wording in spec_proc.
+    system lets you 'tog autostand' or 'tog autokipup' and have your character automatically execute either of those.
+    while we're adding this stuff, probably want a 'config autoconceal' for shamans that lets you specify a force of spirit to auto-conjure and conceal with.
+
+    if (eligible_for_kipup) {
+      if (PRF_FLAGGED(ch, PRF_AUTOKIPUP) && success_test(GET_QUI(ch), 6) > 0) {
+        send_to_char("^yYou're sent sprawling, but recover with a quick kip-up!\r\n", ch);
+        act("$n is knocked down, but pops right back up again!", TRUE, ch, 0, 0, TO_ROOM);
+        return;
+      } else if (PRF_FLAGGED(ch, PRF_AUTOSTAND)) {
+        send_to_char("^yYou're sent sprawling, and it takes you a moment to clamber back to your feet.\r\n", ch);
+        act("$n is knocked down, but clambers back to $s feet!", TRUE, ch, 0, 0, TO_ROOM);
+        return;
+      } else {
+        send_to_char(ch, "^YYou are knocked prone!%s^n\r\n", GET_TKE(ch) < 100 ? " (You'll probably want to ^WKIPUP^n or ^WSTAND^n.)" : "");
+      }
+    } else
+      */
     send_to_char(ch, "^YYou are knocked prone!%s^n\r\n", GET_TKE(ch) < 100 ? " (You'll probably want to ^WSTAND^n.)" : "");
     act("$n is knocked prone!", TRUE, ch, 0, 0, TO_ROOM);
     AFF_FLAGS(ch).SetBit(AFF_PRONE);
-    WAIT_STATE(ch, 1 RL_SEC);
   }
 }
 

@@ -169,6 +169,8 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 #define KARMA_COST_FOR_CLOSECOMBAT                             200
 #define NPC_SKILL_THRESHOLD_FOR_FREE_SWITCHING_OF_CLOSECOMBAT  8
 
+#define KARMA_COST_FOR_KIPUP                                   200
+
 // What is the standard batch size for ammo creation? Rules say 10, but you say...
 #define AMMOBUILD_BATCH_SIZE                                   10
 

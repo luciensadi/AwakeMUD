@@ -308,7 +308,8 @@ enum {
 #define PLR_NEWBIE_MUTED                    40 /* Remove their ability to talk on the newbie channel. */
 #define PLR_CYBERDOC                        41 /* Player may act as a cyberdoc. */
 #define PLR_PAID_FOR_CLOSECOMBAT            42
-#define PLR_MAX                             43
+#define PLR_PAID_FOR_KIPUP                  43
+#define PLR_MAX                             44
 
 
 

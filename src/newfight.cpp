@@ -1147,6 +1147,10 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
   // Declare our staged_damage variable, which is modified in the upcoming bod test and staging code.
   int staged_damage = 0;
 
+  // Nothing can raise our damage level past deadly or below none-- cap it.
+  att->ranged->damage_level = MAX(0, MIN(DEADLY, att->ranged->damage_level));
+  att->melee->damage_level = MAX(0, MIN(DEADLY, att->melee->damage_level));
+
   // Roll the bod test and apply necessary staging.
   if (att->ranged_combat_mode) {
     bod_success = success_test(bod, att->ranged->power);

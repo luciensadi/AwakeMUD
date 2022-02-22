@@ -485,6 +485,7 @@ const char *player_bits[] =
     "NEWBIE_MUTED",
     "IS_CYBERDOC",
     "PAID_FOR_CLOSECOMBAT",
+    "PAID_FOR_KIPUP",
     "\n"
   };
 

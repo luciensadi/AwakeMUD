@@ -1289,34 +1289,64 @@ SPECIAL(adept_trainer)
     return TRUE;
   }
 
+  bool paid_for_cc = PLR_FLAGGED(ch, PLR_PAID_FOR_CLOSECOMBAT);
+  bool paid_for_kipup = PLR_FLAGGED(ch, PLR_PAID_FOR_KIPUP);
+
+  skip_spaces(&argument);
+
   if (GET_TRADITION(ch) != TRAD_ADEPT) {
-    if (PLR_FLAGGED(ch, PLR_PAID_FOR_CLOSECOMBAT)) {
-      snprintf(arg, sizeof(arg), "%s You already know all I can teach you about Close Combat.", GET_CHAR_NAME(ch));
+    if (paid_for_cc && paid_for_kipup) {
+      snprintf(arg, sizeof(arg), "%s You already know all I can teach you.", GET_CHAR_NAME(ch));
+      do_say(trainer, arg, 0, SCMD_SAYTO);
+      return TRUE;
     }
 
-    else {
-      if (!*argument) {
-        snprintf(arg, sizeof(arg), "%s The only thing I can teach you is the art of Close Combat.", GET_CHAR_NAME(ch));
+    if (!*argument) {
+      if (paid_for_cc) {
+        snprintf(arg, sizeof(arg), "%s The only other thing I can teach you is the art of Kipping Up.", GET_CHAR_NAME(ch));
+      } else if (paid_for_kipup) {
+        snprintf(arg, sizeof(arg), "%s The only other thing I can teach you is the art of Close Combat.", GET_CHAR_NAME(ch));
       } else {
-        // at this point we just assume they typed 'train art' or 'train close' or anything else.
+        snprintf(arg, sizeof(arg), "%s I can teach you about Kipping Up (rising quickly to your feet) and the art of Close Combat.", GET_CHAR_NAME(ch));
+      }
+      do_say(trainer, arg, 0, SCMD_SAYTO);
+    } else {
+      if (is_abbrev(argument, "kipping up") || is_abbrev(argument, "kipup") || is_abbrev(argument, "the art of kipping up")) {
+        if (paid_for_kipup) {
+          send_to_char("You already know the art of kipping up.\r\n", ch);
+          return TRUE;
+        }
+
+        if (GET_KARMA(ch) >= KARMA_COST_FOR_KIPUP) {
+          send_to_char("You drill with your teacher on how to rise quickly after a fall.\r\n", ch);
+          send_to_char("(OOC: You'll now automatically attempt to kip-up after falling!)\r\n", ch);
+
+          GET_KARMA(ch) -= KARMA_COST_FOR_KIPUP;
+          PLR_FLAGS(ch).SetBit(PLR_PAID_FOR_KIPUP);
+        } else {
+          send_to_char(ch, "You need %0.2f karma to learn close combat.\r\n", (float) KARMA_COST_FOR_CLOSECOMBAT / 100);
+        }
+      } else if (is_abbrev(argument, "close combat") || is_abbrev(argument, "art of close combat")) {
+        if (paid_for_kipup) {
+          send_to_char("You already know the art of close combat.\r\n", ch);
+          return TRUE;
+        }
+
         if (GET_KARMA(ch) >= KARMA_COST_FOR_CLOSECOMBAT) {
           send_to_char("You drill with your teacher on closing the distance and entering your opponent's range, and you come away feeling like you're better-equipped to fight the hulking giants of the world.\r\n", ch);
           send_to_char("(OOC: You've unlocked the ^WCLOSECOMBAT^n command!)\r\n", ch);
-          snprintf(arg, sizeof(arg), "%s Good job. You've now learned everything you can from me.", GET_CHAR_NAME(ch));
 
           GET_KARMA(ch) -= KARMA_COST_FOR_CLOSECOMBAT;
           PLR_FLAGS(ch).SetBit(PLR_PAID_FOR_CLOSECOMBAT);
         } else {
           send_to_char(ch, "You need %0.2f karma to learn close combat.\r\n", (float) KARMA_COST_FOR_CLOSECOMBAT / 100);
-          return TRUE;
         }
+      } else {
+        send_to_char(ch, "That's not a valid choice.\r\n");
       }
     }
-    do_say(trainer, arg, 0, SCMD_SAYTO);
     return TRUE;
   }
-
-  skip_spaces(&argument);
 
   for (ind = 0; adepts[ind].vnum != 0; ind++)
     if (adepts[ind].vnum == GET_MOB_VNUM(trainer))
@@ -1324,8 +1354,6 @@ SPECIAL(adept_trainer)
 
   if (adepts[ind].vnum != GET_MOB_VNUM(trainer))
     return FALSE;
-
-  skip_spaces(&argument);
 
   // Sanity checks: Newbie trainers only train newbies; newbies cannot train at non-newbie trainers.
   if (adepts[ind].is_newbie && !PLR_FLAGGED(ch, PLR_NEWBIE)) {
@@ -1368,8 +1396,17 @@ SPECIAL(adept_trainer)
             ((GET_PP(ch) != 100) ? "s" : ""));
     send_to_char(buf, ch);
 
-    if (!PLR_FLAGGED(ch, PLR_PAID_FOR_CLOSECOMBAT)) {
-      send_to_char(ch, "You can also learn Close Combat for %0.2f karma.\r\n", (float) KARMA_COST_FOR_CLOSECOMBAT / 100);
+    if (!paid_for_cc && !paid_for_kipup) {
+      send_to_char(ch, "You can also learn Close Combat (%0.2f karma) and Kipping Up (%0.2f karma).\r\n",
+                   (float) KARMA_COST_FOR_CLOSECOMBAT / 100,
+                   (float) KARMA_COST_FOR_KIPUP / 100
+                   );
+    } else if (!paid_for_cc) {
+      send_to_char(ch, "You can also learn Close Combat for %0.2f karma.\r\n",
+                   (float) KARMA_COST_FOR_CLOSECOMBAT / 100);
+    } else if (!paid_for_kipup) {
+      send_to_char(ch, "You can also learn Kipping Up for %0.2f karma.\r\n",
+                   (float) KARMA_COST_FOR_KIPUP / 100);
     }
     return TRUE;
   }
@@ -1382,12 +1419,11 @@ SPECIAL(adept_trainer)
   // If they specified an invalid power, break out.
   if (power == ADEPT_NUMPOWER) {
     if (str_str(argument, "close") || str_str(argument, "combat") || str_str(argument, "closecombat")) {
-      if (PLR_FLAGGED(ch, PLR_PAID_FOR_CLOSECOMBAT)) {
+      if (paid_for_cc) {
         snprintf(arg, sizeof(arg), "%s You already know all I can teach you about close combat.", GET_CHAR_NAME(ch));
       }
 
       else {
-        // at this point we just assume they typed 'train art' or 'train close' or anything else.
         if (GET_KARMA(ch) >= KARMA_COST_FOR_CLOSECOMBAT) {
           send_to_char("You drill with your teacher on closing the distance and entering your opponent's range, and you come away feeling like you're better-equipped to fight the hulking giants of the world.\r\n", ch);
           send_to_char("(OOC: You've unlocked the ^WCLOSECOMBAT^n command!)\r\n", ch);
@@ -1400,7 +1436,29 @@ SPECIAL(adept_trainer)
           return TRUE;
         }
       }
+
       do_say(trainer, arg, 0, SCMD_SAYTO);
+      return TRUE;
+    }
+
+    if (is_abbrev(argument, "kipping up") || is_abbrev(argument, "the art of kipping up") || is_abbrev(argument, "kipup")) {
+      if (paid_for_kipup) {
+        snprintf(arg, sizeof(arg), "%s You already know all I can teach you about kipping up.", GET_CHAR_NAME(ch));
+        do_say(trainer, arg, 0, SCMD_SAYTO);
+      }
+
+      else {
+        if (GET_KARMA(ch) >= KARMA_COST_FOR_KIPUP) {
+          send_to_char("You drill with your teacher on how to rise quickly after a fall.\r\n", ch);
+          send_to_char("(OOC: You'll now automatically attempt to kip-up after falling!)\r\n", ch);
+
+          GET_KARMA(ch) -= KARMA_COST_FOR_CLOSECOMBAT;
+          PLR_FLAGS(ch).SetBit(PLR_PAID_FOR_CLOSECOMBAT);
+        } else {
+          send_to_char(ch, "You need %0.2f karma to learn close combat.\r\n", (float) KARMA_COST_FOR_CLOSECOMBAT / 100);
+        }
+      }
+
       return TRUE;
     }
 
