@@ -5207,7 +5207,7 @@ SPECIAL(weapon_dominator) {
       if (GET_LEVEL(ch) == LVL_PRESIDENT) {
         rank = "Inspector";
         authorized = TRUE;
-      } else if (GET_LEVEL(ch) == LVL_ADMIN) {
+      } else if (GET_LEVEL(ch) >= LVL_FIXER) {
         rank = "Enforcer";
         authorized = TRUE;
       } else {
