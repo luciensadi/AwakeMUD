@@ -65,18 +65,21 @@ void purge_invis_perception_records(struct char_data *ch) {
   ch->pc_perception_test_results = NULL;
 }
 
-void process_spotted_invis(struct char_data *ch, struct char_data *vict) {
+// Returns TRUE if we're alarmed, FALSE otherwise.
+bool process_spotted_invis(struct char_data *ch, struct char_data *vict) {
   // We don't get alarmed by invis NPCs.
   if (IS_NPC(vict))
-    return;
-    
+    return FALSE;
+
   // Higher-security zones have NPCs who are more on edge.
   if (number(0, 20) <= GET_SECURITY_LEVEL(get_ch_in_room(ch))) {
     GET_MOBALERT(ch) = MALERT_ALARM;
     GET_MOBALERTTIME(ch) = 10;
+    return TRUE;
   } else {
     GET_MOBALERT(ch) = MALERT_ALERT;
     GET_MOBALERTTIME(ch) = 20;
+    return FALSE;
   }
 }
 
@@ -103,8 +106,16 @@ bool can_see_through_invis(struct char_data *ch, struct char_data *vict) {
   if ((found = map_to_operate_on->find(idnum)) != map_to_operate_on->end()) {
     // Anti-cheese: As long as you're invis, guard NPCs etc are going to continue to be alarmed by you if they see you.
     // Prevents someone running in and out again, waiting for them to lose sight of us, and then going in while they're calm.
-    if (IS_NPC(ch))
-      process_spotted_invis(ch, vict);
+    if (IS_NPC(ch)) {
+      bool is_alarmed = process_spotted_invis(ch, vict);
+      if (is_alarmed && CAN_SEE(vict, ch)) {
+        if (MOB_FLAGGED(ch, MOB_INANIMATE)) {
+          send_to_char(vict, "%s swivels towards you with an alarmed chirp.\r\n", capitalize(GET_CHAR_NAME(ch)));
+        } else {
+          send_to_char(vict, "%s scowls at you, %s eyes focusing through your invisibility.\r\n", capitalize(GET_CHAR_NAME(ch)), HSHR(ch));
+        }
+      }
+    }
 
     return found->second;
   }
