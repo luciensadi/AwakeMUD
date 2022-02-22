@@ -1709,6 +1709,11 @@ void do_stat_mobile(struct char_data * ch, struct char_data * k)
   MOB_FLAGS(k).PrintBits(buf2, MAX_STRING_LENGTH, action_bits, MOB_MAX);
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "NPC flags: ^c%s^n\r\n", buf2);
 
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Alert status: ^c%s^n with ^c%d^n ticks cooldown.\r\n", 
+           GET_MOBALERT(k) == MALERT_ALARM ? "^rAlarm^n" : (MALERT_ALERT ? "^yAlert^n" : "^gCalm^n"),
+           GET_MOBALERTTIME(k)
+         );
+
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Height: %d cm, Weight: %d kg\r\n", GET_HEIGHT(k), GET_WEIGHT(k));
 
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Carried: weight: %.2f, items: %d; ",

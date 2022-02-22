@@ -66,6 +66,10 @@ void purge_invis_perception_records(struct char_data *ch) {
 }
 
 void process_spotted_invis(struct char_data *ch, struct char_data *vict) {
+  // We don't get alarmed by invis NPCs.
+  if (IS_NPC(vict))
+    return;
+    
   // Higher-security zones have NPCs who are more on edge.
   if (number(0, 20) <= GET_SECURITY_LEVEL(get_ch_in_room(ch))) {
     GET_MOBALERT(ch) = MALERT_ALARM;
