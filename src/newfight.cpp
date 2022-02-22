@@ -723,7 +723,7 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     snprintf(rbuf, sizeof(rbuf), "%s's burst/compensation info is %d/%d. Additional modifiers: ",
              GET_CHAR_NAME( att->ch ),
              att->ranged->burst_count,
-             att->ranged->recoil_comp);
+             MOB_FLAGGED(att->ch, MOB_EMPLACED) ? 10 : att->ranged->recoil_comp);
 
     att->ranged->tn += modify_target_rbuf_raw(att->ch, rbuf, sizeof(rbuf), att->ranged->modifiers[COMBAT_MOD_VISIBILITY], FALSE);
     for (int mod_index = 0; mod_index < NUM_COMBAT_MODIFIERS; mod_index++) {
@@ -771,6 +771,7 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
         buf_mod(rbuf, sizeof(rbuf), combat_modifiers[mod_index], def->ranged->modifiers[mod_index]);
         def->ranged->tn += att->ranged->modifiers[mod_index];
       }
+      SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
 
       // Minimum TN is 2.
       def->ranged->tn = MAX(def->ranged->tn, 2);
