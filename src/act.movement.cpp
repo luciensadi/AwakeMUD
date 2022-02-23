@@ -72,7 +72,7 @@ int can_move(struct char_data *ch, int dir, int extra)
   if (IS_SET(extra, CHECK_SPECIAL) && special(ch, convert_dir[dir], &empty_argument))
     return 0;
 
-  if (ch->in_room && ch->in_room->icesheet[0] && !IS_ASTRAL(ch) && !IS_PROJECT(ch)) {
+  if (ch->in_room && ch->in_room->icesheet[0] && !IS_ASTRAL(ch) && !IS_PROJECT(ch) && !IS_AFFECTED(ch, AFF_LEVITATE)) {
     if (FIGHTING(ch) && success_test(GET_QUI(ch), ch->in_room->icesheet[0] + modify_target(ch)) < 1)
     {
       send_to_char("The ice at your feet causes you to trip and fall!\r\n", ch);
