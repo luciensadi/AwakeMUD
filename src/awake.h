@@ -699,7 +699,6 @@ enum {
 #define SPELL_THUNDERCLAP    63
 #define SPELL_WATERBOLT    64
 #define SPELL_SPLASH    65
-#define SPELL_SPLASH    65
 #define SPELL_NIGHTVISION    66
 #define SPELL_INFRAVISION    67
 #define SPELL_LEVITATE    68
