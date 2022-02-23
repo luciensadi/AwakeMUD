@@ -390,7 +390,7 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
   }
 #endif
 
-  if (ROOM_FLAGGED(ch->in_room, ROOM_FALL) && !IS_ASTRAL(ch) && !IS_PROJECT(ch) && !(IS_SENATOR(ch) && PRF_FLAGGED(ch, PRF_NOHASSLE))) {
+  if (ROOM_FLAGGED(ch->in_room, ROOM_FALL) && !IS_ASTRAL(ch) && !IS_PROJECT(ch) && !IS_AFFECTED(ch, AFF_LEVITATE) && !(IS_SENATOR(ch) && PRF_FLAGGED(ch, PRF_NOHASSLE))) {
     perform_fall(ch);
     return 1;
   }
