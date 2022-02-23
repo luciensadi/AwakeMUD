@@ -37,6 +37,7 @@
 #include "newdb.h"
 #include "helpedit.h"
 #include "archetypes.h"
+#include "ignore_system.h"
 
 #if defined(__CYGWIN__)
 #include <crypt.h>
@@ -482,6 +483,9 @@ struct command_info cmd_info[] =
     { "banish"     , POS_STANDING, do_banish   , 0, 0, FALSE },
     { "balance"    , POS_LYING   , do_gold     , 0, 0, TRUE },
     { "bioware"    , POS_DEAD    , do_bioware  , 0, 0, TRUE },
+#ifdef ALLOW_IGNORE_USE
+    { "block"      , POS_DEAD    , do_ignore   , 0, 0, TRUE },
+#endif
     { "boost"      , POS_LYING   , do_boost    , 0, 0, FALSE },
     { "break"      , POS_LYING   , do_break    , 0, 0, FALSE },
     { "broadcast"  , POS_LYING   , do_broadcast, 0, 0, TRUE },
@@ -593,7 +597,7 @@ struct command_info cmd_info[] =
     { "hail"       , POS_STANDING, do_hail     , 0, 0, FALSE },
     { "hangup"     , POS_LYING   , do_phone    , 0, SCMD_HANGUP, FALSE },
     { "handbook"   , POS_DEAD    , do_gen_ps   , LVL_BUILDER, SCMD_HANDBOOK, FALSE },
-    { "hcontrol"   , POS_DEAD    , do_hcontrol , LVL_EXECUTIVE, 0, FALSE },
+    { "hcontrol"   , POS_DEAD    , do_hcontrol , LVL_CONSPIRATOR, 0, FALSE },
     { "heal"       , POS_STANDING, do_heal     , 0, 0, FALSE },
     { "hedit"      , POS_DEAD    , do_hedit    , LVL_BUILDER, 0, FALSE },
     { "helpedit"   , POS_DEAD    , do_helpedit , LVL_FIXER, 0, FALSE },
@@ -618,7 +622,9 @@ struct command_info cmd_info[] =
     { "idea"       , POS_DEAD    , do_gen_write, 0, SCMD_IDEA, TRUE },
     //{ "idelete"  , POS_DEAD    , do_idelete  , LVL_PRESIDENT, 0, FALSE },
     { "iedit"      , POS_DEAD    , do_iedit    , LVL_BUILDER, 0, FALSE },
+#ifdef ALLOW_IGNORE_USE
     { "ignore"     , POS_DEAD    , do_ignore   , 0, 0, TRUE },
+#endif
     { "ilist"      , POS_DEAD    , do_ilist    , LVL_BUILDER, 0, FALSE },
     { "iload"      , POS_DEAD    , do_iload    , LVL_BUILDER, 0, FALSE },
     { "imotd"      , POS_DEAD    , do_gen_ps   , LVL_BUILDER, SCMD_IMOTD, FALSE },
@@ -931,7 +937,7 @@ struct command_info cmd_info[] =
     { "land"       , POS_RESTING , do_not_here , 0, 0, FALSE },
     { "lease"      , POS_RESTING , do_not_here , 1, 0, FALSE },
     { "light"      , POS_STANDING, do_not_here , 0, 0, FALSE },
-    { "list"       , POS_RESTING, do_not_here , 0, 0, FALSE },
+    { "list"       , POS_RESTING , do_not_here , 0, 0, TRUE },
     { "mail"       , POS_STANDING, do_not_here , 0, 0, FALSE },
     { "offer"      , POS_RESTING , do_not_here , 0, 0, FALSE },
     { "paint"      , POS_RESTING , do_not_here , 0, 0, FALSE },
@@ -1218,7 +1224,7 @@ struct command_info mtx_info[] =
     { "answer", 0, do_comcall, 0, SCMD_ANSWER, FALSE },
     { "asist", 0, do_asist, 0, 0, FALSE },
     { "bug", 0, do_gen_write, 0, SCMD_BUG, FALSE },
-    { "call", 0, do_comcall, 0, 0, FALSE },
+    { "call", 0, do_comcall, 0, SCMD_RING, FALSE },
   //{ "control", 0, do_control, 0, 0, FALSE },     // This is a rigging command?
     { "commands", 0, do_commands, 0, SCMD_COMMANDS, FALSE },
     { "crash", 0, do_crash, 0, 0, FALSE },
@@ -1245,6 +1251,7 @@ struct command_info mtx_info[] =
     { "newbie", 0, do_gen_comm, 0, SCMD_NEWBIE, FALSE },
     { "ooc", 0, do_gen_comm, 0, SCMD_OOC, FALSE },
     { "parry", 0, do_parry, 0, 0, FALSE },
+    { "phone", 0, do_comcall, 0, 0, FALSE },
     { "position", 0, do_matrix_position, 0, 0, FALSE },
     { "prompt", 0, do_display, 0, 0 , FALSE },
     { "quit", 0, do_logoff, 0, 0, FALSE },
@@ -1734,7 +1741,7 @@ ACMD(do_alias)
         send_to_char("Aliases cannot contain the 'quit' command.\n\r",ch);
         return;
       }
-      if (strlen(repl) > 256)
+      if (strlen(repl) > 255)
         repl[255] = '\0';
       a = new alias;
       a->command = str_dup(arg);
@@ -2130,15 +2137,23 @@ int special(struct char_data * ch, int cmd, char *arg)
     if (ch->in_room)
     {
       for (struct char_data *k = ch->in_room->people; k; k = k->next_in_room) {
-        if (GET_MOB_SPEC(k) != NULL)
-          if (GET_MOB_SPEC(k) (ch, k, cmd, arg))
+        if (GET_MOB_SPEC(k) != NULL) {
+          bool spec_returned_true = GET_MOB_SPEC(k) (ch, k, cmd, arg);
+          if (IS_SENATOR(ch) && PRF_FLAGGED(ch, PRF_ROLLS) && !PRF_FLAGGED(ch, PRF_NOHASSLE))
+            send_to_char(ch, "^LEvaluation of spec for %s returned %s.^n\r\n", GET_CHAR_NAME(k), spec_returned_true ? "TRUE" : "FALSE");
+          if (spec_returned_true)
             return 1;
-        if (mob_index[GET_MOB_RNUM(k)].sfunc != NULL)
+        }
+        if (mob_index[GET_MOB_RNUM(k)].sfunc != NULL) {
+          bool spec_returned_true = GET_MOB_SPEC(k) (ch, k, cmd, arg);
+          if (IS_SENATOR(ch) && PRF_FLAGGED(ch, PRF_ROLLS) && !PRF_FLAGGED(ch, PRF_NOHASSLE))
+            send_to_char(ch, "^LEvaluation of secondary spec for %s returned %s.^n\r\n", GET_CHAR_NAME(k), spec_returned_true ? "TRUE" : "FALSE");
           if ((mob_index[GET_MOB_RNUM(k)].sfunc) (ch, k, cmd, arg))
             return 1;
+        }
       }
     }
-}
+  }
   return 0;
 }
 
@@ -2462,8 +2477,7 @@ void nanny(struct descriptor_data * d, char *arg)
         if (d->invalid_name > 3)
           close_socket(d);
         else {
-          snprintf(buf, sizeof(buf), "Invalid name '%s', please try another. Names must be standard letters with no spaces, numbers, or punctuation, and cannot be a reserved word.\r\nName: ", arg);
-          SEND_TO_Q(buf, d);
+          SEND_TO_Q("Names must be standard letters with no spaces, numbers, or punctuation, and cannot be a reserved word.\r\nName: ", d);
         }
 
 
@@ -2492,11 +2506,14 @@ void nanny(struct descriptor_data * d, char *arg)
           }
         if (d->character == NULL) {
           d->character = Mem->GetCh();
+
+          // Create and zero out their player_specials.
           DELETE_IF_EXTANT(d->character->player_specials);
           d->character->player_specials = new player_special_data;
-          // make sure to clear it up here
-          memset(d->character->player_specials, 0,
-                 sizeof(player_special_data));
+          memset(d->character->player_specials, 0, sizeof(player_special_data));
+
+          // Initialize their ignore data structure, which all PCs have.
+          GET_IGNORE_DATA(d->character) = new IgnoreData(d->character);
 
           d->character->desc = d;
         }
@@ -2579,7 +2596,7 @@ void nanny(struct descriptor_data * d, char *arg)
         snprintf(buf, sizeof(buf), "Bad PW: %s [%s]", GET_CHAR_NAME(d->character), d->host);
         mudlog(buf, d->character, LOG_CONNLOG, TRUE);
         GET_BAD_PWS(d->character)++;
-        d->character->in_room = &world[real_room(GET_LAST_IN(d->character))];
+        d->character->in_room = &world[MAX(0, real_room(GET_LAST_IN(d->character)))];
         playerDB.SaveChar(d->character, GET_LOADROOM(d->character));
         if (++(d->bad_pws) >= max_bad_pws) {    /* 3 strikes and you're out. */
           SEND_TO_Q("Wrong password... disconnecting.\r\n", d);
@@ -2608,8 +2625,10 @@ void nanny(struct descriptor_data * d, char *arg)
       load_result = GET_BAD_PWS(d->character);
       GET_BAD_PWS(d->character) = 0;
 
-      d->character->in_room = &world[real_room(GET_LAST_IN(d->character))];
+      d->character->in_room = &world[MAX(0, real_room(GET_LAST_IN(d->character)))];
       playerDB.SaveChar(d->character, GET_LOADROOM(d->character));
+
+      // TODO: Don't these returns leak memory by not cleaning up d->character?
       if (isbanned(d->host) == BAN_SELECT &&
           !PLR_FLAGGED(d->character, PLR_SITEOK)) {
         SEND_TO_Q("Sorry, this char has not been cleared for login from your site!\r\n", d);
@@ -3001,6 +3020,7 @@ void nanny(struct descriptor_data * d, char *arg)
       }
 
       DeleteChar(GET_IDNUM(d->character));
+
       snprintf(buf, sizeof(buf), "Character '%s' deleted!\r\nGoodbye.\r\n",
               GET_CHAR_NAME(d->character));
       SEND_TO_Q(buf, d);

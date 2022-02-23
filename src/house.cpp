@@ -33,7 +33,7 @@ extern char *cleanup(char *dest, const char *src);
 extern void ASSIGNMOB(long mob, SPECIAL(fname));
 extern void add_phone_to_list(struct obj_data *obj);
 extern void weight_change_object(struct obj_data * obj, float weight);
-extern void auto_repair_obj(struct obj_data *obj, const char *source);
+extern void auto_repair_obj(struct obj_data *obj);
 extern void handle_weapon_attachments(struct obj_data *obj);
 extern void raw_store_mail(long to, long from_id, const char *from_name, const char *message_pointer);
 
@@ -151,7 +151,6 @@ bool House_load(struct house_control_rec *house)
       snprintf(buf, sizeof(buf), "%s/Cost", sect_name);
       // At this point, the cost is restored to a positive value. MAX() guards against edge case of attachment being edited after it was attached.
       GET_OBJ_COST(obj) += MAX(0, data.GetInt(buf, GET_OBJ_COST(obj)));
-      snprintf(buf, sizeof(buf), "%s/Inside", sect_name);
 
       if (GET_OBJ_VNUM(obj) == OBJ_SPECIAL_PC_CORPSE) {
         // Invalid belongings.
@@ -186,8 +185,9 @@ bool House_load(struct house_control_rec *house)
 
       // Don't auto-repair cyberdecks until they're fully loaded.
       if (GET_OBJ_TYPE(obj) != ITEM_CYBERDECK)
-        auto_repair_obj(obj, buf3);
+        auto_repair_obj(obj);
 
+      snprintf(buf, sizeof(buf), "%s/Inside", sect_name);
       inside = data.GetInt(buf, 0);
       if (house_version == VERSION_HOUSE_FILE) {
         // Since we're now saved the obj linked lists  in reverse order, in order to fix the stupid reordering on
@@ -333,7 +333,7 @@ void validate_in_obj_pointers(struct obj_data *obj, struct obj_data *in_obj) {
 
 #define APPEND_IF_CHANGED(sectname, obj_val, proto_val) { \
   if (obj_val != proto_val)                                        \
-    obj_string_buf << (sectname) << (obj_val) << "\n";                            \
+    obj_string_buf << (sectname) << ((int) obj_val) << "\n";                            \
 }
 #define FILEBUF_SIZE 8192
 
@@ -411,7 +411,9 @@ void House_save(struct house_control_rec *house, const char *file_name, long rnu
       APPEND_IF_CHANGED("\t\tTimer:\t", GET_OBJ_TIMER(obj), GET_OBJ_TIMER(prototype));
       APPEND_IF_CHANGED("\t\tAttempt:\t", GET_OBJ_ATTEMPT(obj), 0);
       obj_string_buf << "\t\tCost:\t"<< GET_OBJ_COST(obj) << "\n";
-      APPEND_IF_CHANGED("\t\tExtraFlags:\t", GET_OBJ_EXTRA(obj).ToString(), GET_OBJ_EXTRA(prototype).ToString());
+
+      if (GET_OBJ_EXTRA(obj).ToString() != GET_OBJ_EXTRA(prototype).ToString())
+        obj_string_buf << "\t\tExtraFlags:\t"<< GET_OBJ_EXTRA(obj).ToString() << "\n";
       if (obj->restring)
         obj_string_buf << "\t\tName:\t" << obj->restring << "\n";
       if (obj->photo)
@@ -454,7 +456,7 @@ void House_save(struct house_control_rec *house, const char *file_name, long rnu
 
   if (!obj_strings.empty()) {
     int i = 0;
-    for(vector<std::string>::reverse_iterator rit = obj_strings.rbegin(); rit != obj_strings.rend(); rit++ ) {
+    for(std::vector<std::string>::reverse_iterator rit = obj_strings.rbegin(); rit != obj_strings.rend(); rit++ ) {
       fprintf(fl, "\t[Object %d]\n", i);
       fprintf(fl, "%s", rit->c_str());
       i++;
@@ -716,7 +718,8 @@ SPECIAL(landlord_spec)
     }
     room_record = find_room(arg, lord->rooms, recep);
     if (!room_record) {
-      do_say(recep, "Which room is that?", 0, 0);
+      // this is already handled in find_room
+      // do_say(recep, "Which room is that?", 0, 0);
       return TRUE;
     } else if (room_record->owner) {
       do_say(recep, "Sorry, I'm afraid that room is already taken.", 0, 0);
@@ -1098,20 +1101,132 @@ void hcontrol_destroy_house(struct char_data * ch, char *arg)
   }
 }
 
+void hcontrol_display_house_by_number(struct char_data * ch, vnum_t house_number) {
+  struct house_control_rec *i = NULL;
+  vnum_t real_house;
+
+  if (!(i = find_house(house_number))) {
+    send_to_char(ch, "There is no house numbered %ld.\r\n", house_number);
+    return;
+  }
+
+  if ((real_house = real_room(i->vnum)) < 0) {
+    send_to_char(ch, "House %ld has an invalid room! Bailing out.\r\n", house_number);
+    return;
+  }
+
+  const char *player_name = get_player_name(i->owner);
+  send_to_char(ch, "House ^c%ld^n (^c%s^n) is owned by ^c%s^n (^c%ld^n).\r\n",
+               i->vnum,
+               GET_ROOM_NAME(&world[real_house]),
+               player_name,
+               i->owner
+             );
+  if (player_name)
+    delete [] player_name;
+
+  send_to_char(ch, "It is paid up until epoch ^c%ld^n.\r\n", i->date);
+
+  send_to_char(ch, "Guests:\r\n");
+  bool printed_guest_yet = FALSE;
+  for (int guest_idx = 0; guest_idx < MAX_GUESTS; guest_idx++) {
+    if (i->guests[guest_idx]) {
+      printed_guest_yet = TRUE;
+      const char *player_name = get_player_name(i->guests[guest_idx]);
+      send_to_char(ch, "  ^c%s^n (^c%ld^n)\r\n", player_name, i->guests[guest_idx]);
+      if (player_name)
+        delete [] player_name;
+    }
+  }
+  if (!printed_guest_yet)
+    send_to_char("  ^cNone.^n\r\n", ch);
+
+  int obj_count = 0, veh_count = 0;
+  for (struct obj_data *obj = world[real_house].contents; obj; obj = obj->next_content)
+    obj_count += count_objects(obj);
+  for (struct veh_data *veh = world[real_house].vehicles; veh; veh = veh->next_veh) {
+    veh_count ++;
+    for (struct obj_data *obj = veh->contents; obj; obj = obj->next_content)
+      obj_count += count_objects(obj);
+  }
+  send_to_char(ch, "It contains ^c%d^n objects and ^c%d^n vehicles.\r\n", obj_count, veh_count);
+}
+
+void hcontrol_display_house_with_owner_or_guest(struct char_data * ch, const char *name, vnum_t idnum) {
+  send_to_char(ch, "Fetching data for owner/guest ^c%s^n (^c%ld^n)...\r\n", name, idnum);
+
+  bool printed_something = FALSE;
+  for (struct landlord *llord = landlords; llord; llord = llord->next) {
+    for (struct house_control_rec *house = llord->rooms; house; house = house->next) {
+      if (house->owner == idnum) {
+        send_to_char(ch, "- Owner of house ^c%ld^n.\r\n", house->vnum);
+        printed_something = TRUE;
+      }
+
+      else {
+        for (int guest_idx = 0; guest_idx < MAX_GUESTS; guest_idx++) {
+          if (house->guests[guest_idx] == idnum) {
+            const char *player_name = get_player_name(house->owner);
+            send_to_char(ch, "- Guest at house ^c%ld^n, owned by ^c%s^n (^c%ld^n).\r\n", house->vnum, player_name, house->owner);
+            printed_something = TRUE;
+            if (player_name)
+              delete [] player_name;
+            break;
+          }
+        }
+      }
+    }
+  }
+
+  if (!printed_something) {
+    send_to_char("- No records found.\r\n", ch);
+  }
+}
 
 /* The hcontrol command itself, used by imms to create/destroy houses */
 ACMD(do_hcontrol)
 {
   char arg1[MAX_INPUT_LENGTH], arg2[MAX_INPUT_LENGTH];
+  int house_number;
+  vnum_t idnum;
 
+  skip_spaces(&argument);
   half_chop(argument, arg1, arg2);
 
-  if (is_abbrev(arg1, "destroy"))
-    hcontrol_destroy_house(ch, arg2);
-  else if (is_abbrev(arg1, "show"))
-    hcontrol_list_houses(ch);
-  else
-    send_to_char(HCONTROL_FORMAT, ch);
+  if (is_abbrev(arg1, "destroy")) {
+    if (GET_LEVEL(ch) >= LVL_EXECUTIVE) {
+      hcontrol_destroy_house(ch, arg2);
+    } else {
+      send_to_char("Sorry, you can't do that at your level.\r\n", ch);
+    }
+    return;
+  }
+
+  if (is_abbrev(arg1, "show")) {
+    // With no argument, we default to the standard behavior.
+    if (!*arg2) {
+      hcontrol_list_houses(ch);
+      return;
+    }
+
+    // If the argument is an int, we assume you want to know about a specific house.
+    if ((house_number = atoi(arg2)) > 0) {
+      hcontrol_display_house_by_number(ch, house_number);
+      return;
+    }
+
+    // Otherwise, it's assumed to be a character name. Look up their houses and also houses where they're a guest.
+    if ((idnum = get_player_id(arg2)) > 0) {
+      hcontrol_display_house_with_owner_or_guest(ch, capitalize(arg2), idnum);
+    } else {
+      send_to_char(ch, "There is no player named '%s'.\r\n", arg2);
+    }
+
+    return;
+  }
+
+  // No valid command found.
+  send_to_char("Usage: hcontrol destroy <apartment number>; or hcontrol show; or hcontrol show (<apartment number> | <character name>).\r\n", ch);
 }
 
 
@@ -1147,9 +1262,11 @@ ACMD(do_house)
 
   if (!ROOM_FLAGGED(ch->in_room, ROOM_HOUSE))
     send_to_char("You must be in your house to set guests.\r\n", ch);
-  else if ((i = find_house(GET_ROOM_VNUM(ch->in_room))) == NULL)
+  else if ((i = find_house(GET_ROOM_VNUM(ch->in_room))) == NULL) {
     send_to_char("Um.. this house seems to be screwed up.\r\n", ch);
-  else if (GET_IDNUM(ch) != i->owner && !access_level(ch, LVL_PRESIDENT))
+    snprintf(buf, sizeof(buf), "SYSERR: Failed to find_house() on %s (%ld)!", GET_ROOM_NAME(ch->in_room), GET_ROOM_VNUM(ch->in_room));
+    mudlog(buf, ch, LOG_SYSLOG, TRUE);
+  } else if (GET_IDNUM(ch) != i->owner && !access_level(ch, LVL_PRESIDENT))
     send_to_char("Only the primary owner can set guests.\r\n", ch);
   else if (!*arg)
     House_list_guests(ch, i, FALSE);

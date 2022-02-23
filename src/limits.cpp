@@ -448,6 +448,7 @@ void check_idling(void)
         do_return(ch, "", 0, 0);
     } else if (!IS_NPC(ch)) {
       ch->char_specials.timer++;
+      ch->char_specials.last_emote++;
       if (!(IS_SENATOR(ch) || IS_WORKING(ch) || PLR_FLAGGED(ch, PLR_NO_IDLE_OUT) || PRF_FLAGGED(ch, PRF_NO_VOID_ON_IDLE)) || !ch->desc) {
 #ifdef VOID_IDLE_PCS
         if (!GET_WAS_IN(ch) && ch->in_room && ch->char_specials.timer > 15) {
@@ -509,8 +510,10 @@ void check_bioware(struct char_data *ch)
 {
   if (!ch->desc
       || (ch->desc && ch->desc->connected)
+      || ch->char_specials.timer >= 10
       || PLR_FLAGGED(ch, PLR_NEWBIE)
-      || AFF_FLAGS(ch).AreAnySet(AFF_PROGRAM, AFF_DESIGN, AFF_PART_BUILD, AFF_PART_DESIGN, AFF_SPELLDESIGN, AFF_AMMOBUILD, ENDBIT)
+      || PRF_FLAGGED(ch, PRF_AFK)
+      || AFF_FLAGS(ch).AreAnySet(BR_TASK_AFF_FLAGS, ENDBIT) // See awake.h for the definition of these aff flags.
   ) {
     return;
   }
@@ -525,11 +528,19 @@ void check_bioware(struct char_data *ch)
           send_to_char("Your blood seems to erupt.\r\n", ch);
           act("$n collapses to the floor, twitching.", TRUE, ch, 0, 0, TO_ROOM);
           damage(ch, ch, 10, TYPE_BIOWARE, PHYSICAL);
+        } else {
+          send_to_char("Your heart strains, and you have a feeling of impending doom. Your need for blood thinners is dire!\r\n", ch);
         }
         GET_OBJ_VAL(bio, 6)++;
       }
-      if (GET_OBJ_VAL(bio, 5) <= 4 && number(0, 4))
-        send_to_char("You feel like you should be taking your medication.\r\n", ch);
+      if (GET_OBJ_VAL(bio, 5) == 4)
+        send_to_char("You kinda feel like you should be taking some aspirin.\r\n", ch);
+      else if (GET_OBJ_VAL(bio, 5) == 3)
+        send_to_char("You could definitely go for some aspirin right now.\r\n", ch);
+      else if (GET_OBJ_VAL(bio, 5) <= 2)
+        send_to_char("You really feel like you need to take some aspirin.\r\n", ch);
+      else if (GET_OBJ_VAL(bio, 5) == 1)
+        send_to_char("Your heart strains, and you have a feeling of impending doom. Your need for blood thinners is dire!\r\n", ch);
       break;
     }
 }
@@ -551,7 +562,7 @@ int calculate_swim_successes(struct char_data *ch) {
     }
 
   snprintf(buf, sizeof(buf), "modify_target results: ");
-  swim_test_target = MAX(2, ch->in_room->rating) + modify_target_rbuf_raw(ch, buf, sizeof(buf), 4) - water_wings_bonus;
+  swim_test_target = MAX(2, ch->in_room->rating) + modify_target_rbuf_raw(ch, buf, sizeof(buf), 4, FALSE) - water_wings_bonus;
   act(buf, FALSE, ch, 0, 0, TO_ROLLS);
 
   if (GET_POS(ch) < POS_RESTING)
@@ -827,16 +838,20 @@ void point_update(void)
             total++;
           }
         }
-        if (force * 100 > GET_REAL_MAG(i) * 2 && success_test(GET_REAL_MAG(i) / 100, force / 2) < 1) {
-          int num = number(1, total);
-          struct obj_data *foci = NULL;
-          for (int x = 0; x < NUM_WEARS && !foci; x++)
-            if (GET_EQ(i, x) && GET_OBJ_TYPE(GET_EQ(i, x)) == ITEM_FOCUS && GET_OBJ_VAL(GET_EQ(i, x), 2) == GET_IDNUM(i) && GET_OBJ_VAL(GET_EQ(i, x), 4) && !--num)
-              foci = GET_EQ(i, x);
-          if (foci) {
-            send_to_char(i, "You feel some of your magic becoming locked in %s.\r\n", GET_OBJ_NAME(foci));
-            GET_OBJ_VAL(foci, 9) = GET_IDNUM(i);
-            magic_loss(i, 100, FALSE);
+        if (GET_REAL_MAG(i) * 2 < 0) {
+          mudlog("^RSYSERR: Multiplying magic for focus addiction check gave a NEGATIVE number! Increase the size of the variable!^n", i, LOG_SYSLOG, TRUE);
+        } else {
+          if (force * 100 > GET_REAL_MAG(i) * 2 && success_test(GET_REAL_MAG(i) / 100, force / 2) < 1) {
+            int num = number(1, total);
+            struct obj_data *foci = NULL;
+            for (int x = 0; x < NUM_WEARS && !foci; x++)
+              if (GET_EQ(i, x) && GET_OBJ_TYPE(GET_EQ(i, x)) == ITEM_FOCUS && GET_FOCUS_BONDED_TO(GET_EQ(i, x)) == GET_IDNUM(i) && GET_FOCUS_ACTIVATED(GET_EQ(i, x)) && !GET_FOCUS_BOND_TIME_REMAINING(GET_EQ(i, x)) && !--num)
+                foci = GET_EQ(i, x);
+            if (foci) {
+              send_to_char(i, "^RYou feel some of your magic becoming locked in %s!^n Quick, take off all your foci before it happens again!\r\n", GET_OBJ_NAME(foci));
+              GET_OBJ_VAL(foci, 9) = GET_IDNUM(i);
+              magic_loss(i, 100, FALSE);
+            }
           }
         }
       }
@@ -1135,11 +1150,11 @@ void save_vehicles(bool fromCopyover)
       else if (!fromCopyover
               && (!ROOM_FLAGGED(temp_room, ROOM_GARAGE)
               || (ROOM_FLAGGED(temp_room, ROOM_HOUSE)
-              && !House_can_enter_by_idnum(veh->owner, temp_room->number)))) {
-       snprintf(buf, sizeof(buf), "Falling back to a garage for non-garage-room veh %s (in '%s' %ld).",
-                GET_VEH_NAME(veh), GET_ROOM_NAME(temp_room), GET_ROOM_VNUM(temp_room)
-              );
-       log(buf);
+              && !House_can_enter_by_idnum(veh->owner, temp_room->number))))
+      {
+       /* snprintf(buf, sizeof(buf), "Falling back to a garage for non-garage-room veh %s (in '%s' %ld).",
+                   GET_VEH_NAME(veh), GET_ROOM_NAME(temp_room), GET_ROOM_VNUM(temp_room));
+       log(buf); */
         switch (GET_JURISDICTION(temp_room)) {
           case ZONE_PORTLAND:
             switch (number(0, 2)) {
@@ -1196,7 +1211,7 @@ void save_vehicles(bool fromCopyover)
         else if (GET_OBJ_TYPE(obj) != ITEM_WORN)
           for (int x = 0; x < NUM_VALUES; x++)
             obj_string_buf << "\t\tValue " << x << ":\t" << GET_OBJ_VAL(obj, x) << "\n";
-            
+
         obj_string_buf << "\t\tCondition:\t" << (int) GET_OBJ_CONDITION(obj) << "\n";
         obj_string_buf << "\t\tCost:\t" << GET_OBJ_COST(obj) << "\n";
         obj_string_buf << "\t\tTimer:\t" << GET_OBJ_TIMER(obj) << "\n";
@@ -1207,7 +1222,7 @@ void save_vehicles(bool fromCopyover)
           obj_string_buf << "\t\tName:\t" << obj->restring << "\n";
         if (obj->photo)
           obj_string_buf << "\t\tPhoto:$\n" << cleanup(buf2, obj->photo) << "~\n";
-          
+
         obj_strings.push_back(obj_string_buf.str());
         obj_string_buf.str(std::string());
       }
@@ -1225,10 +1240,10 @@ void save_vehicles(bool fromCopyover)
       if (obj)
         obj = obj->next_content;
     }
-    
+
     if (!obj_strings.empty()) {
       int i = 0;
-      for(vector<std::string>::reverse_iterator rit = obj_strings.rbegin(); rit != obj_strings.rend(); rit++ ) {
+      for(std::vector<std::string>::reverse_iterator rit = obj_strings.rbegin(); rit != obj_strings.rend(); rit++ ) {
         fprintf(fl, "\t[Object %d]\n", i);
         fprintf(fl, "%s", rit->c_str());
         i++;
@@ -1554,14 +1569,17 @@ void misc_update(void)
         }
         GET_PLAYER_MEMORY(ch) = NULL;
         extract_char(ch);
+        continue;
       }
       else if (!ch->desc && GET_MOB_VNUM(ch) >= 50 && GET_MOB_VNUM(ch) < 70) {
         extract_char(ch);
+        continue;
       }
       else if (IS_SPIRIT(ch)) {
         if (!check_spirit_sector(ch->in_room, GET_SPARE1(ch))) {
           act("Being away from its environment, $n suddenly ceases to exist.", TRUE, ch, 0, 0, TO_ROOM);
           end_spirit_existance(ch, FALSE);
+          continue;
         }
       }
     }

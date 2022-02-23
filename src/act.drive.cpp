@@ -16,6 +16,7 @@
 #include "limits.h"
 #include "act.drive.h"
 #include "config.h"
+#include "ignore_system.h"
 
 void die_follower(struct char_data *ch);
 void roll_individual_initiative(struct char_data *ch);
@@ -356,12 +357,12 @@ ACMD(do_vemote)
     return;
   }
   RIG_VEH(ch, veh)
-  snprintf(buf, sizeof(buf), "%s%s.\r\n", capitalize(GET_VEH_NAME(veh)), argument);
+  snprintf(buf, sizeof(buf), "%s%s%s^n\r\n", capitalize(GET_VEH_NAME(veh)), argument, ispunct(get_final_character_from_string(argument)) ? "" : ".");
   if (veh->in_room)
     send_to_room(buf, veh->in_room);
   else
     send_to_veh(buf, veh->in_veh, ch, TRUE);
-  snprintf(buf, sizeof(buf), "Your vehicle%s.\r\n", argument);
+  snprintf(buf, sizeof(buf), "Your vehicle%s%s^n\r\n", argument, ispunct(get_final_character_from_string(argument)) ? "" : ".");
   send_to_veh(buf, veh, NULL, TRUE);
   return;
 }
@@ -400,26 +401,52 @@ ACMD(do_ram)
   }
 
   if (!(vict = get_char_room(arg, veh->in_room)) &&
-      !(tveh = get_veh_list(arg, veh->in_room->vehicles, ch))) {
+      !(tveh = get_veh_list(arg, veh->in_room->vehicles, ch)))
+  {
     send_to_char("You can't seem to find the target you're looking for.\r\n", ch);
-    return;
-  }
-  if (vict && !invis_ok(ch, vict)) {
-    send_to_char("You can't seem to find the target you're looking for.\r\n", ch);
-    return;
-  }
-  if (vict && !IS_NPC(vict) && !(IS_NPC(ch) || (PRF_FLAGGED(ch, PRF_PKER) && PRF_FLAGGED(vict, PRF_PKER)))) {
-    send_to_char(ch, "You have to be flagged PK to attack another player.\r\n");
-    return;
-  }
-  if (tveh == veh) {
-    send_to_char("You can't ram yourself!\r\n", ch);
     return;
   }
 
-  // Prevent PvP damage against vehicles.
-  if (tveh && !can_damage_vehicle(ch, tveh)) {
-    return;
+  if (vict) {
+    if (!invis_ok(ch, vict)) {
+      send_to_char("You can't seem to find the target you're looking for.\r\n", ch);
+      return;
+    }
+
+    if (!IS_NPC(vict) && !(IS_NPC(ch) || (PRF_FLAGGED(ch, PRF_PKER) && PRF_FLAGGED(vict, PRF_PKER)))) {
+      send_to_char("You have to be flagged PK to attack another player.\r\n", ch);
+      return;
+    }
+
+#ifdef IGNORING_IC_ALSO_IGNORES_COMBAT
+    if (IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)) {
+      send_to_char("You can't seem to find the target you're looking for.\r\n", ch);
+      log_attempt_to_bypass_ic_ignore(ch, vict, "do_ram");
+      return;
+    }
+
+    if (IS_IGNORING(ch, is_blocking_ic_interaction_from, vict)) {
+      send_to_char("You can't attack someone you've blocked IC interaction with.\r\n", ch);
+      return;
+    }
+#endif
+
+    if (IS_ASTRAL(vict)) {
+      send_to_char("Your car's not nearly cool enough to be able to ram astral beings.\r\n", ch);
+      return;
+    }
+  }
+
+  if (tveh) {
+    if (tveh == veh) {
+      send_to_char("You can't ram yourself!\r\n", ch);
+      return;
+    }
+
+    // Prevent PvP damage against vehicles.
+    if (!can_damage_vehicle(ch, tveh)) {
+      return;
+    }
   }
 
   do_raw_ram(ch, veh, tveh, vict);
@@ -496,7 +523,7 @@ ACMD(do_upgrade)
 {
   struct veh_data *veh;
   struct obj_data *mod, *obj, *shop = NULL;
-  int j = 0, skill = 0, target = 0, kit = 0;
+  int j = 0, skill = 0, target = 0, kit = 0, mod_load_required = 0, mod_signature_change = 0, bod_already_used = 0;
   bool need_extract = FALSE;
 
   half_chop(argument, buf1, buf2);
@@ -576,33 +603,42 @@ ACMD(do_upgrade)
     }
     skill = get_skill(ch, skill, target);
     target += modify_target(ch);
+    // This is 'cute'. Because has_kit returns a boolean, and TRUE coerces to 1, and 1 is equal to TYPE_KIT,
+    //  this var TECHNICALLY contains TYPE_KIT when the player is carrying a vehicle kit.
     kit = has_kit(ch, TYPE_VEHICLE);
     if ((shop = find_workshop(ch, TYPE_VEHICLE)))
-      kit = GET_OBJ_VAL(shop, 0);
+      kit = GET_WORKSHOP_GRADE(shop);
     if (!kit && !shop) {
       send_to_char("You don't have any tools here for working on vehicles.\r\n", ch);
       return;
     }
-    if (kit < mod_types[GET_OBJ_VAL(mod, 0)].tools) {
+
+    // Artificially capping tool type to WORKSHOP, as many upgrades need facilities but they're not in game.
+    if (kit < MIN(TYPE_WORKSHOP, mod_types[GET_VEHICLE_MOD_TYPE(mod)].tools)) {
       send_to_char(ch, "You don't have the right tools for that job.\r\n");
       return;
-    } else if (mod_types[GET_OBJ_VAL(mod, 0)].tools == TYPE_KIT) {
+    }
+
+    if (mod_types[GET_VEHICLE_MOD_TYPE(mod)].tools == TYPE_KIT) {
       if (kit == TYPE_WORKSHOP)
         target--;
       else if (kit == TYPE_FACILITY)
         target -= 3;
-    } else if (mod_types[GET_OBJ_VAL(mod, 0)].tools == TYPE_WORKSHOP && kit == TYPE_FACILITY)
+    } else if (mod_types[GET_VEHICLE_MOD_TYPE(mod)].tools == TYPE_WORKSHOP && kit == TYPE_FACILITY)
       target--;
 
     if ((skill = success_test(skill, target)) == -1) {
       send_to_char(ch, "You botch up the upgrade completely, destroying %s.\r\n", GET_OBJ_NAME(mod));
       extract_obj(mod);
       return;
-    } else if (skill < 1) {
+    }
+
+    if (skill < 1) {
       send_to_char(ch, "You can't figure out how to install it. \r\n");
       return;
     }
-    if (GET_OBJ_VAL(mod, 0) == TYPE_DRIVEBYWIRE) {
+
+    if (GET_VEHICLE_MOD_TYPE(mod) == TYPE_DRIVEBYWIRE) {
       target = 4;
       skill = get_skill(ch, SKILL_BR_COMPUTER, target);
       if (success_test(skill, target) < 0) {
@@ -618,129 +654,131 @@ ACMD(do_upgrade)
     }
   }
 
-  if (veh->type == VEH_DRONE && GET_OBJ_VAL(mod, 4) < 1) {
+  if (veh->type == VEH_DRONE && GET_VEHICLE_MOD_DESIGNED_FOR_DRONE(mod) < 1) {
     send_to_char(ch, "That part won't fit on because it was designed for a standard vehicle.\r\n");
     return;
   }
-  if (veh->type != VEH_DRONE && GET_OBJ_VAL(mod, 4) == 1) {
+
+  if (veh->type != VEH_DRONE && GET_VEHICLE_MOD_DESIGNED_FOR_DRONE(mod) == 1) {
     send_to_char(ch, "That part won't fit on because it was designed for a drone.\r\n");
     return;
   }
+
   if (GET_VEHICLE_MOD_TYPE(mod) == TYPE_MOUNT) {
-    skill = 0;
     // Total up the existing mounts.
     for (obj = veh->mount; obj; obj = obj->next_content) {
       if (GET_VEHICLE_MOD_TYPE(obj) == TYPE_MOUNT) {
         switch (GET_VEHICLE_MOD_MOUNT_TYPE(obj)) {
           case MOUNT_FIRMPOINT_INTERNAL:
           case MOUNT_FIRMPOINT_EXTERNAL:
-            j++;
+            bod_already_used++;
             break;
           case MOUNT_HARDPOINT_INTERNAL:
           case MOUNT_HARDPOINT_EXTERNAL:
           case MOUNT_MINITURRET:
-            j += 2;
+            bod_already_used += 2;
             break;
           case MOUNT_TURRET:
-            j += 4;
+            bod_already_used += 4;
             break;
         }
       }
     }
 
     // Add the new mount's data.
+    int bod_required = 0;
     switch (GET_VEHICLE_MOD_MOUNT_TYPE(mod)) {
       case MOUNT_FIRMPOINT_EXTERNAL:
-        skill = 1;
+        mod_signature_change = 1;
         // explicit fallthrough-- internal mounts are +1 skill vs external mounts, but otherwise share attributes
         // fall through
       case MOUNT_FIRMPOINT_INTERNAL:
-        j++;
-        target = 10;
+        bod_required++;
+        mod_load_required = 10;
         break;
       case MOUNT_HARDPOINT_EXTERNAL:
-        skill = 1;
+        mod_signature_change = 1;
         // explicit fallthrough-- internal mounts are +1 skill vs external mounts, but otherwise share attributes
         // fall through
       case MOUNT_HARDPOINT_INTERNAL:
-        j += 2;
-        target = 10;
+        bod_required += 2;
+        mod_load_required = 10;
         break;
       case MOUNT_TURRET:
-        skill = 1;
-        j += 4;
-        target = 100;
+        mod_signature_change = 1;
+        bod_required += 4;
+        mod_load_required = 100;
         break;
       case MOUNT_MINITURRET:
-        skill = 1;
-        j += 2;
-        target = 25;
+        mod_signature_change = 1;
+        bod_required += 2;
+        mod_load_required = 25;
         break;
     }
-    if (j > veh->body || (veh->usedload + target) > veh->load) {
+    if ((bod_already_used + bod_required) > veh->body || (veh->usedload + mod_load_required) > veh->load) {
       send_to_char("Try as you might, you just can't fit it on.\r\n", ch);
       return;
     }
-    veh->usedload += target;
+    veh->usedload += mod_load_required;
     veh->sig -= skill;
     obj_from_char(mod);
     if (veh->mount)
       mod->next_content = veh->mount;
     veh->mount = mod;
   } else {
-    if (GET_OBJ_VAL(mod, 5) && !IS_SET(GET_OBJ_VAL(mod, 5), 1 << veh->engine)) {
+    if (GET_VEHICLE_MOD_ENGINE_BITS(mod) && !IS_SET(GET_VEHICLE_MOD_ENGINE_BITS(mod), 1 << veh->engine)) {
       send_to_char("You can't use that part on this type of engine.\r\n", ch);
       return;
     }
-    if (GET_MOD(veh, GET_OBJ_VAL(mod, 6))) {
+    if (GET_MOD(veh, GET_VEHICLE_MOD_LOCATION(mod))) {
       /* Prior logic included this: (GET_OBJ_VAL(mod, 0) != TYPE_SEATS
            && GET_OBJ_VAL(mod, 0) != TYPE_ARMOR
            && GET_OBJ_VAL(mod, 0) != TYPE_CONCEALEDARMOR)
 
         but it wasn't actually done in a way that would make it save across reboot, so it's stripped out. */
-      send_to_char(ch, "There is already a mod of that type installed.\r\n");
+      send_to_char(ch, "There's already something installed in the %s position.\r\n", mod_name[GET_VEHICLE_MOD_LOCATION(mod)]);
       return;
     }
-    if (GET_OBJ_VAL(mod, 0) == TYPE_ARMOR || GET_OBJ_VAL(mod, 0) == TYPE_CONCEALEDARMOR) {
-      if (GET_MOD(veh, GET_OBJ_VAL(mod, 6)) && GET_OBJ_VAL(GET_MOD(veh, GET_OBJ_VAL(mod, 6)), 0) != GET_OBJ_VAL(mod, 0)) {
+    if (GET_VEHICLE_MOD_TYPE(mod) == TYPE_ARMOR || GET_VEHICLE_MOD_TYPE(mod) == TYPE_CONCEALEDARMOR) {
+      if (GET_MOD(veh, GET_VEHICLE_MOD_LOCATION(mod)) && GET_VEHICLE_MOD_TYPE(GET_MOD(veh, GET_VEHICLE_MOD_LOCATION(mod))) != GET_VEHICLE_MOD_TYPE(mod)) {
         send_to_char("You cannot mix normal and concealed armor.\r\n", ch);
         return;
       }
-      int totalarmor = GET_OBJ_VAL(mod, 2);
-      if (GET_MOD(veh, GET_OBJ_VAL(mod, 6)))
-        totalarmor += GET_OBJ_VAL(GET_MOD(veh, GET_OBJ_VAL(mod, 6)), 2);
+      int totalarmor = GET_VEHICLE_MOD_RATING(mod);
+      if (GET_MOD(veh, GET_VEHICLE_MOD_LOCATION(mod)))
+        totalarmor += GET_VEHICLE_MOD_RATING(GET_MOD(veh, GET_VEHICLE_MOD_LOCATION(mod)));
       if (totalarmor > veh->body / 2) {
         send_to_char("You can't put this much armor on that vehicle.\r\n", ch);
         return;
       }
-      if (!GET_MOD(veh, GET_OBJ_VAL(mod, 6)))
-        GET_MOD(veh, GET_OBJ_VAL(mod, 6)) = mod;
+      if (!GET_MOD(veh, GET_VEHICLE_MOD_LOCATION(mod)))
+        GET_MOD(veh, GET_VEHICLE_MOD_LOCATION(mod)) = mod;
       else
-        affect_veh(veh, mod->affected[0].location, -mod->affected[0].modifier);
+        affect_veh(veh, mod->affected[0].location, -GET_MOD(veh, GET_VEHICLE_MOD_LOCATION(mod))->affected[0].modifier);
 
-      veh->usedload += GET_OBJ_VAL(GET_MOD(veh, GET_OBJ_VAL(mod, 6)), 1);
-      GET_OBJ_VAL(GET_MOD(veh, GET_OBJ_VAL(mod, 6)), 1) = (veh->body * veh->body) * totalarmor * 5;
+      veh->usedload += GET_VEHICLE_MOD_LOAD_SPACE_REQUIRED(mod);
+      GET_VEHICLE_MOD_LOAD_SPACE_REQUIRED(GET_MOD(veh, GET_VEHICLE_MOD_LOCATION(mod))) = (veh->body * veh->body) * totalarmor * 5;
       mod->affected[0].modifier = totalarmor;
       affect_veh(veh, mod->affected[0].location, mod->affected[0].modifier);
-      if (GET_MOD(veh, GET_OBJ_VAL(mod, 6)) != mod)
+      if (GET_MOD(veh, GET_VEHICLE_MOD_LOCATION(mod)) != mod)
         need_extract = TRUE;
       else
         obj_from_char(mod);
     } else {
-      if (veh->load - veh->usedload < GET_OBJ_VAL(mod, 1)) {
+      if (veh->load - veh->usedload < GET_VEHICLE_MOD_LOAD_SPACE_REQUIRED(mod)) {
         send_to_char(ch, "Try as you might, you just can't fit it in.\r\n");
         return;
       }
-      veh->usedload += GET_OBJ_VAL(mod, 1);
+      veh->usedload += GET_VEHICLE_MOD_LOAD_SPACE_REQUIRED(mod);
       for (j = 0; j < MAX_OBJ_AFFECT; j++)
         affect_veh(veh, mod->affected[j].location, mod->affected[j].modifier);
-      if (GET_OBJ_VAL(mod, 0) == TYPE_SEATS && GET_MOD(veh, GET_OBJ_VAL(mod, 6))) {
-        GET_MOD(veh, GET_OBJ_VAL(mod, 6))->affected[0].modifier++;
+      if (GET_VEHICLE_MOD_TYPE(mod) == TYPE_SEATS && GET_MOD(veh, GET_VEHICLE_MOD_LOCATION(mod))) {
+        GET_MOD(veh, GET_VEHICLE_MOD_LOCATION(mod))->affected[0].modifier++;
         need_extract = TRUE;
       } else {
-        if (GET_MOD(veh, GET_OBJ_VAL(mod, 6)))
-          extract_obj(GET_MOD(veh, GET_OBJ_VAL(mod, 6)));
-        GET_MOD(veh, GET_OBJ_VAL(mod, 6)) = mod;
+        if (GET_MOD(veh, GET_VEHICLE_MOD_LOCATION(mod)))
+          extract_obj(GET_MOD(veh, GET_VEHICLE_MOD_LOCATION(mod)));
+        GET_MOD(veh, GET_VEHICLE_MOD_LOCATION(mod)) = mod;
         obj_from_char(mod);
       }
     }
@@ -874,6 +912,12 @@ ACMD(do_control)
     mudlog(buf, ch, LOG_SYSLOG, TRUE);
     return;
   }
+
+  if (veh->in_room && GET_ROOM_VNUM(veh->in_room) == RM_PORTABLE_VEHICLE_STORAGE) {
+    send_to_char("The automated safety systems won't let you control a vehicle that's being carried around.\r\n", ch);
+    return;
+  }
+
   if (PLR_FLAGGED(ch, PLR_REMOTE))
     do_return(ch, NULL, 0, 0);
 
@@ -1136,6 +1180,11 @@ ACMD(do_driveby)
     send_to_char(ch, "You don't see anyone named '%s' here.\r\n", arg);
     return;
   }
+  if (IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)) {
+    send_to_char(ch, "You don't see anyone named '%s' here.\r\n", arg);
+    log_attempt_to_bypass_ic_ignore(ch, vict, "do_driveby");
+    return;
+  }
   if ((dir = search_block(buf2, lookdirs, FALSE)) == -1) {
     send_to_char("What direction?\r\n", ch);
     return;
@@ -1160,6 +1209,7 @@ ACMD(do_driveby)
       send_to_char(ch, "You have to be flagged PK to attack another player.\r\n");
       return;
     }
+
     send_to_char(ch, "You point %s towards %s and open fire!\r\n", GET_OBJ_NAME(wielded), GET_NAME(vict));
     snprintf(buf, sizeof(buf), "%s aims %s towards %s and opens fire!\r\n", GET_NAME(ch), GET_OBJ_NAME(wielded), GET_NAME(vict));
     send_to_veh(buf, ch->in_veh, ch, FALSE);
@@ -1453,7 +1503,20 @@ ACMD(do_target)
       return;
     }
   }
+#ifdef IGNORING_IC_ALSO_IGNORES_COMBAT
+  else {
+    if (IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)) {
+      send_to_char(ch, "You don't see anything named '%s' here.\r\n", arg);
+      log_attempt_to_bypass_ic_ignore(ch, vict, "do_target");
+      return;
+    }
 
+    if (IS_IGNORING(ch, is_blocking_ic_interaction_from, vict)) {
+      send_to_char("You can't attack someone you've blocked IC interaction with.\r\n", ch);
+      return;
+    }
+  }
+#endif
 
   do_raw_target(ch, veh, tveh, vict, modeall, obj);
 }

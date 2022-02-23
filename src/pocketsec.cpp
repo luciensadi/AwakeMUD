@@ -65,13 +65,10 @@ void wire_nuyen(struct char_data *ch, int amount, vnum_t character_id)
   struct char_data *targ = NULL;
   char query_buf[1000], name_buf[500];
 
-  for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
-    targ = d->original ? d->original : d->character;
-
-    if (targ && GET_IDNUM(targ) == character_id)
+  // We used to just iterate over descriptors, but the change would be lost if someone was linkdead during transfer and reconnected after.
+  for (targ = character_list; targ; targ = targ->next) {
+    if (GET_IDNUM(targ) == character_id)
       break;
-
-    targ = NULL;
   }
 
   // Deduct from the sender (if any). Not a faucet or sink, unless coming from a shop.
@@ -100,7 +97,7 @@ void wire_nuyen(struct char_data *ch, int amount, vnum_t character_id)
   char *player_name = targ ? NULL : get_player_name(character_id);
   snprintf(query_buf, sizeof(query_buf), "%s wired %d nuyen to %s.", ch ? GET_CHAR_NAME(ch) : "An NPC", amount, targ ? GET_CHAR_NAME(targ) : player_name);
   DELETE_ARRAY_IF_EXTANT(player_name);
-  mudlog(query_buf, ch, LOG_GRIDLOG, TRUE);
+  mudlog(query_buf, ch, LOG_SYSLOG, TRUE);
 }
 
 void pocketsec_phonemenu(struct descriptor_data *d)
@@ -112,7 +109,7 @@ void pocketsec_phonemenu(struct descriptor_data *d)
       break;
   CLS(CH);
   if (!folder) {
-    send_to_char("Your phonebook is empty.", CH);
+    send_to_char("Your phonebook is empty.\r\n", CH);
     mudlog("Prevented missing-phonebook crash. This player has lost their contacts list.", d->character, LOG_SYSLOG, TRUE);
     generate_pocket_secretary_folder(SEC, POCSEC_FOLDER_PHONEBOOK);
   } else {
@@ -543,12 +540,18 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
 
       if (arg) {
         if (d->edit_mode != SEC_KEEPMAIL && *arg == '*') {
-          struct obj_data *next;
+          struct obj_data *next, *kept = NULL;
           for (file = folder->contains; file; file = next) {
             next = file->next_content;
-            extract_obj(file);
+            // Only extract mail that has not been kept.
+            if (GET_OBJ_TIMER(file) >= 0)
+              extract_obj(file);
+            else {
+              file->next_content = kept;
+              kept = file;
+            }
           }
-          folder->contains = NULL;
+          folder->contains = kept;
         } else {
           i = atoi(arg);
           for (file = folder->contains; file && i > 1; file = file->next_content)
@@ -560,7 +563,10 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
               else
                 GET_OBJ_TIMER(file) = -1;
             } else {
-              extract_obj(file);
+              if (GET_OBJ_TIMER(file) < 0)
+                send_to_char(d->character, "%s has been marked as 'keep' and can't be deleted.\r\n", GET_OBJ_NAME(file));
+              else
+                extract_obj(file);
             }
           }
         }

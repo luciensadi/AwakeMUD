@@ -211,7 +211,11 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
     switch (*arg) {
     case 'y':
     case 'Y': {
+#ifdef ONLY_LOG_BUILD_ACTIONS_ON_CONNECTED_ZONES
         if (!vnum_from_non_connected_zone(d->edit_number)) {
+#else
+        {
+#endif
           snprintf(buf, sizeof(buf),"%s wrote new host #%ld",
                   GET_CHAR_NAME(d->character), d->edit_number);
           mudlog(buf, d->character, LOG_WIZLOG, TRUE);
@@ -356,35 +360,43 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
     }
     break;
   case HEDIT_RATINGS:
-    switch (LOWER(*arg)) {
-    case 'q':
-    case 'Q':
-      hedit_disp_data_menu(d);
-      break;
-    case '1':
-      send_to_char(CH, "Enter hosts Access rating: \r\n");
-      d->edit_mode = HEDIT_RATINGS_ACCESS;
-      break;
-    case '2':
-      send_to_char(CH, "Enter hosts Control rating: \r\n");
-      d->edit_mode = HEDIT_RATINGS_CONTROL;
-      break;
-    case '3':
-      send_to_char(CH, "Enter hosts Index rating: \r\n");
-      d->edit_mode = HEDIT_RATINGS_INDEX;
-      break;
-    case '4':
-      send_to_char(CH, "Enter hosts Files rating: \r\n");
-      d->edit_mode = HEDIT_RATINGS_FILES;
-      break;
-    case '5':
-      send_to_char(CH, "Enter hosts Slave rating: \r\n");
-      d->edit_mode = HEDIT_RATINGS_SLAVE;
-      break;
-    default:
-      send_to_char("Invalid choice!\r\n", d->character);
-      hedit_disp_rating_menu(d);
-      break;
+    {
+      char hedit_rating_buf[200];
+      snprintf(hedit_rating_buf, sizeof(hedit_rating_buf), "(for %s hosts: min %d, max %d)",
+               intrusion[d->edit_host->intrusion],
+               host_subsystem_acceptable_ratings[d->edit_host->intrusion][IDX_MTX_ACCEPTABLE_RATING_MINIMUM],
+               host_subsystem_acceptable_ratings[d->edit_host->intrusion][IDX_MTX_ACCEPTABLE_RATING_MAXIMUM]);
+
+      switch (LOWER(*arg)) {
+        case 'q':
+        case 'Q':
+          hedit_disp_data_menu(d);
+          break;
+        case '1':
+          send_to_char(CH, "Enter host's Access rating %s: \r\n", hedit_rating_buf);
+          d->edit_mode = HEDIT_RATINGS_ACCESS;
+          break;
+        case '2':
+          send_to_char(CH, "Enter host's Control rating %s: \r\n", hedit_rating_buf);
+          d->edit_mode = HEDIT_RATINGS_CONTROL;
+          break;
+        case '3':
+          send_to_char(CH, "Enter host's Index rating %s: \r\n", hedit_rating_buf);
+          d->edit_mode = HEDIT_RATINGS_INDEX;
+          break;
+        case '4':
+          send_to_char(CH, "Enter host's Files rating %s: \r\n", hedit_rating_buf);
+          d->edit_mode = HEDIT_RATINGS_FILES;
+          break;
+        case '5':
+          send_to_char(CH, "Enter host's Slave rating %s: \r\n", hedit_rating_buf);
+          d->edit_mode = HEDIT_RATINGS_SLAVE;
+          break;
+        default:
+          send_to_char("Invalid choice!\r\n", d->character);
+          hedit_disp_rating_menu(d);
+          break;
+      }
     }
     break;
   case HEDIT_EXTRA_MENU:
@@ -568,9 +580,10 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
     break;
   case HEDIT_RATINGS_ACCESS:
     number = atoi(arg);
-    if (number <= 0) {
-      send_to_char("Invalid choice!\r\n", d->character);
-      send_to_char(CH, "Enter Access rating: ");
+    if (number < host_subsystem_acceptable_ratings[d->edit_host->intrusion][IDX_MTX_ACCEPTABLE_RATING_MINIMUM]) {
+      send_to_char(CH, "The minimum rating for this system in %s hosts is %d. Enter Access rating: ", intrusion[d->edit_host->intrusion], host_subsystem_acceptable_ratings[d->edit_host->intrusion][IDX_MTX_ACCEPTABLE_RATING_MINIMUM]);
+    } else if (number > host_subsystem_acceptable_ratings[d->edit_host->intrusion][IDX_MTX_ACCEPTABLE_RATING_MAXIMUM]) {
+      send_to_char(CH, "The maximum rating for this system in %s hosts is %d. Enter Access rating: ", intrusion[d->edit_host->intrusion], host_subsystem_acceptable_ratings[d->edit_host->intrusion][IDX_MTX_ACCEPTABLE_RATING_MAXIMUM]);
     } else {
       d->edit_host->stats[ACCESS][0] = number;
       hedit_disp_rating_menu(d);
@@ -578,9 +591,10 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
     break;
   case HEDIT_RATINGS_CONTROL:
     number = atoi(arg);
-    if (number <= 0) {
-      send_to_char("Invalid choice!\r\n", d->character);
-      send_to_char(CH, "Enter Control rating: ");
+    if (number < host_subsystem_acceptable_ratings[d->edit_host->intrusion][IDX_MTX_ACCEPTABLE_RATING_MINIMUM]) {
+      send_to_char(CH, "The minimum rating for this system in %s hosts is %d. Enter Control rating: ", intrusion[d->edit_host->intrusion], host_subsystem_acceptable_ratings[d->edit_host->intrusion][IDX_MTX_ACCEPTABLE_RATING_MINIMUM]);
+    } else if (number > host_subsystem_acceptable_ratings[d->edit_host->intrusion][IDX_MTX_ACCEPTABLE_RATING_MAXIMUM]) {
+      send_to_char(CH, "The maximum rating for this system in %s hosts is %d. Enter Control rating: ", intrusion[d->edit_host->intrusion], host_subsystem_acceptable_ratings[d->edit_host->intrusion][IDX_MTX_ACCEPTABLE_RATING_MAXIMUM]);
     } else {
       d->edit_host->stats[CONTROL][0] = number;
       hedit_disp_rating_menu(d);
@@ -588,9 +602,10 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
     break;
   case HEDIT_RATINGS_INDEX:
     number = atoi(arg);
-    if (number <= 0) {
-      send_to_char("Invalid choice!\r\n", d->character);
-      send_to_char(CH, "Enter Index rating: ");
+    if (number < host_subsystem_acceptable_ratings[d->edit_host->intrusion][IDX_MTX_ACCEPTABLE_RATING_MINIMUM]) {
+      send_to_char(CH, "The minimum rating for this system in %s hosts is %d. Enter Index rating: ", intrusion[d->edit_host->intrusion], host_subsystem_acceptable_ratings[d->edit_host->intrusion][IDX_MTX_ACCEPTABLE_RATING_MINIMUM]);
+    } else if (number > host_subsystem_acceptable_ratings[d->edit_host->intrusion][IDX_MTX_ACCEPTABLE_RATING_MAXIMUM]) {
+      send_to_char(CH, "The maximum rating for this system in %s hosts is %d. Enter Index rating: ", intrusion[d->edit_host->intrusion], host_subsystem_acceptable_ratings[d->edit_host->intrusion][IDX_MTX_ACCEPTABLE_RATING_MAXIMUM]);
     } else {
       d->edit_host->stats[INDEX][0] = number;
       hedit_disp_rating_menu(d);
@@ -598,9 +613,10 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
     break;
   case HEDIT_RATINGS_FILES:
     number = atoi(arg);
-    if (number <= 0) {
-      send_to_char("Invalid choice!\r\n", d->character);
-      send_to_char(CH, "Enter Files rating: ");
+    if (number < host_subsystem_acceptable_ratings[d->edit_host->intrusion][IDX_MTX_ACCEPTABLE_RATING_MINIMUM]) {
+      send_to_char(CH, "The minimum rating for this system in %s hosts is %d. Enter Files rating: ", intrusion[d->edit_host->intrusion], host_subsystem_acceptable_ratings[d->edit_host->intrusion][IDX_MTX_ACCEPTABLE_RATING_MINIMUM]);
+    } else if (number > host_subsystem_acceptable_ratings[d->edit_host->intrusion][IDX_MTX_ACCEPTABLE_RATING_MAXIMUM]) {
+      send_to_char(CH, "The maximum rating for this system in %s hosts is %d. Enter Files rating: ", intrusion[d->edit_host->intrusion], host_subsystem_acceptable_ratings[d->edit_host->intrusion][IDX_MTX_ACCEPTABLE_RATING_MAXIMUM]);
     } else {
       d->edit_host->stats[FILES][0] = number;
       hedit_disp_rating_menu(d);
@@ -608,9 +624,10 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
     break;
   case HEDIT_RATINGS_SLAVE:
     number = atoi(arg);
-    if (number <= 0) {
-      send_to_char("Invalid choice!\r\n", d->character);
-      send_to_char(CH, "Enter slave rating: ");
+    if (number < host_subsystem_acceptable_ratings[d->edit_host->intrusion][IDX_MTX_ACCEPTABLE_RATING_MINIMUM]) {
+      send_to_char(CH, "The minimum rating for this system in %s hosts is %d. Enter Slave rating: ", intrusion[d->edit_host->intrusion], host_subsystem_acceptable_ratings[d->edit_host->intrusion][IDX_MTX_ACCEPTABLE_RATING_MINIMUM]);
+    } else if (number > host_subsystem_acceptable_ratings[d->edit_host->intrusion][IDX_MTX_ACCEPTABLE_RATING_MAXIMUM]) {
+      send_to_char(CH, "The maximum rating for this system in %s hosts is %d. Enter Slave rating: ", intrusion[d->edit_host->intrusion], host_subsystem_acceptable_ratings[d->edit_host->intrusion][IDX_MTX_ACCEPTABLE_RATING_MAXIMUM]);
     } else {
       d->edit_host->stats[SLAVE][0] = number;
       hedit_disp_rating_menu(d);

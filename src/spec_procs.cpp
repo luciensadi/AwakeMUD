@@ -623,7 +623,7 @@ int get_max_skill_for_char(struct char_data *ch, int skill, int type) {
     return -1;
   }
 
-  // Override: All language skills can be learned to the maximum.
+  // Override: All language skills can be learned to the maximum from any trainer.
   //  This does remove a tiny bit of flavor (no learning Japanese to level 2 max
   //  from the guy in line at the shop), but it simplifies a lot of stuff.
   if (SKILL_IS_LANGUAGE(skill))
@@ -653,13 +653,22 @@ int get_max_skill_for_char(struct char_data *ch, int skill, int type) {
         case SKILL_ARCANELANGUAGE:
         case SKILL_CENTERING:
         case SKILL_ENCHANTING:
+#ifdef DIES_IRAE
+          // Full mages get full magic skills.
+          if (GET_ASPECT(ch) == ASPECT_FULL)
+            return MIN(max, 12);
+
+          // Aspected mages get 10 magic skills to compensate for their 10 mundane skills.
+          return MIN(max, 10);
+#else
           return MIN(max, 12);
+#endif
         default:
-          // Non-aspected mages get their non-magic skills capped at 8.
+          // Full mages get their non-magic skills capped to 8 to compensate for their 12 magic.
           if (GET_ASPECT(ch) == ASPECT_FULL)
             return MIN(max, 8);
 
-          // Aspected mages, since they're gimped by their aspect, get them to 10 like adepts.
+          // Aspected mages get them to 10 like adepts.
           return MIN(max, 10);
       }
   }
@@ -1125,7 +1134,7 @@ SPECIAL(spell_trainer)
       send_to_char("Extra Force Point             25000 nuyen\r\n", ch);
       send_to_char(ch, "%d Force Point%s Remaining.\r\n", GET_FORCE_POINTS(ch), GET_FORCE_POINTS(ch) > 1 ? "s" : "");
     } else
-      send_to_char(ch, "%.2f Karma Available.\r\n", GET_KARMA(ch) / 100);
+      send_to_char(ch, "%.2f Karma Available.\r\n", ((float) GET_KARMA(ch)) / 100);
 
     send_to_char("\r\nLearning syntax:\r\n    ^WLEARN \"<spell name>\" <force between 1 and 6>^n\r\n    ^WLEARN FORCE^n\r\n    ^WLEARN CONJURING^n\r\n", ch);
   } else {
@@ -1280,34 +1289,64 @@ SPECIAL(adept_trainer)
     return TRUE;
   }
 
+  bool paid_for_cc = PLR_FLAGGED(ch, PLR_PAID_FOR_CLOSECOMBAT);
+  bool paid_for_kipup = PLR_FLAGGED(ch, PLR_PAID_FOR_KIPUP);
+
+  skip_spaces(&argument);
+
   if (GET_TRADITION(ch) != TRAD_ADEPT) {
-    if (PLR_FLAGGED(ch, PLR_PAID_FOR_CLOSECOMBAT)) {
-      snprintf(arg, sizeof(arg), "%s You already know all I can teach you about Close Combat.", GET_CHAR_NAME(ch));
+    if (paid_for_cc && paid_for_kipup) {
+      snprintf(arg, sizeof(arg), "%s You already know all I can teach you.", GET_CHAR_NAME(ch));
+      do_say(trainer, arg, 0, SCMD_SAYTO);
+      return TRUE;
     }
 
-    else {
-      if (!*argument) {
-        snprintf(arg, sizeof(arg), "%s The only thing I can teach you is the art of Close Combat.", GET_CHAR_NAME(ch));
+    if (!*argument) {
+      if (paid_for_cc) {
+        snprintf(arg, sizeof(arg), "%s The only other thing I can teach you is the art of Kipping Up.", GET_CHAR_NAME(ch));
+      } else if (paid_for_kipup) {
+        snprintf(arg, sizeof(arg), "%s The only other thing I can teach you is the art of Close Combat.", GET_CHAR_NAME(ch));
       } else {
-        // at this point we just assume they typed 'train art' or 'train close' or anything else.
+        snprintf(arg, sizeof(arg), "%s I can teach you about Kipping Up (rising quickly to your feet) and the art of Close Combat.", GET_CHAR_NAME(ch));
+      }
+      do_say(trainer, arg, 0, SCMD_SAYTO);
+    } else {
+      if (is_abbrev(argument, "kipping up") || is_abbrev(argument, "kipup") || is_abbrev(argument, "the art of kipping up")) {
+        if (paid_for_kipup) {
+          send_to_char("You already know the art of kipping up.\r\n", ch);
+          return TRUE;
+        }
+
+        if (GET_KARMA(ch) >= KARMA_COST_FOR_KIPUP) {
+          send_to_char("You drill with your teacher on how to rise quickly after a fall.\r\n", ch);
+          send_to_char("(OOC: You'll now automatically attempt to kip-up after falling!)\r\n", ch);
+
+          GET_KARMA(ch) -= KARMA_COST_FOR_KIPUP;
+          PLR_FLAGS(ch).SetBit(PLR_PAID_FOR_KIPUP);
+        } else {
+          send_to_char(ch, "You need %0.2f karma to learn close combat.\r\n", (float) KARMA_COST_FOR_CLOSECOMBAT / 100);
+        }
+      } else if (is_abbrev(argument, "close combat") || is_abbrev(argument, "art of close combat")) {
+        if (paid_for_kipup) {
+          send_to_char("You already know the art of close combat.\r\n", ch);
+          return TRUE;
+        }
+
         if (GET_KARMA(ch) >= KARMA_COST_FOR_CLOSECOMBAT) {
           send_to_char("You drill with your teacher on closing the distance and entering your opponent's range, and you come away feeling like you're better-equipped to fight the hulking giants of the world.\r\n", ch);
           send_to_char("(OOC: You've unlocked the ^WCLOSECOMBAT^n command!)\r\n", ch);
-          snprintf(arg, sizeof(arg), "%s Good job. You've now learned everything you can from me.", GET_CHAR_NAME(ch));
 
           GET_KARMA(ch) -= KARMA_COST_FOR_CLOSECOMBAT;
           PLR_FLAGS(ch).SetBit(PLR_PAID_FOR_CLOSECOMBAT);
         } else {
           send_to_char(ch, "You need %0.2f karma to learn close combat.\r\n", (float) KARMA_COST_FOR_CLOSECOMBAT / 100);
-          return TRUE;
         }
+      } else {
+        send_to_char(ch, "That's not a valid choice.\r\n");
       }
     }
-    do_say(trainer, arg, 0, SCMD_SAYTO);
     return TRUE;
   }
-
-  skip_spaces(&argument);
 
   for (ind = 0; adepts[ind].vnum != 0; ind++)
     if (adepts[ind].vnum == GET_MOB_VNUM(trainer))
@@ -1315,8 +1354,6 @@ SPECIAL(adept_trainer)
 
   if (adepts[ind].vnum != GET_MOB_VNUM(trainer))
     return FALSE;
-
-  skip_spaces(&argument);
 
   // Sanity checks: Newbie trainers only train newbies; newbies cannot train at non-newbie trainers.
   if (adepts[ind].is_newbie && !PLR_FLAGGED(ch, PLR_NEWBIE)) {
@@ -1359,8 +1396,17 @@ SPECIAL(adept_trainer)
             ((GET_PP(ch) != 100) ? "s" : ""));
     send_to_char(buf, ch);
 
-    if (!PLR_FLAGGED(ch, PLR_PAID_FOR_CLOSECOMBAT)) {
-      send_to_char(ch, "You can also learn Close Combat for %0.2f karma.", (float) KARMA_COST_FOR_CLOSECOMBAT / 100);
+    if (!paid_for_cc && !paid_for_kipup) {
+      send_to_char(ch, "You can also learn Close Combat (%0.2f karma) and Kipping Up (%0.2f karma).\r\n",
+                   (float) KARMA_COST_FOR_CLOSECOMBAT / 100,
+                   (float) KARMA_COST_FOR_KIPUP / 100
+                   );
+    } else if (!paid_for_cc) {
+      send_to_char(ch, "You can also learn Close Combat for %0.2f karma.\r\n",
+                   (float) KARMA_COST_FOR_CLOSECOMBAT / 100);
+    } else if (!paid_for_kipup) {
+      send_to_char(ch, "You can also learn Kipping Up for %0.2f karma.\r\n",
+                   (float) KARMA_COST_FOR_KIPUP / 100);
     }
     return TRUE;
   }
@@ -1373,12 +1419,11 @@ SPECIAL(adept_trainer)
   // If they specified an invalid power, break out.
   if (power == ADEPT_NUMPOWER) {
     if (str_str(argument, "close") || str_str(argument, "combat") || str_str(argument, "closecombat")) {
-      if (PLR_FLAGGED(ch, PLR_PAID_FOR_CLOSECOMBAT)) {
+      if (paid_for_cc) {
         snprintf(arg, sizeof(arg), "%s You already know all I can teach you about close combat.", GET_CHAR_NAME(ch));
       }
 
       else {
-        // at this point we just assume they typed 'train art' or 'train close' or anything else.
         if (GET_KARMA(ch) >= KARMA_COST_FOR_CLOSECOMBAT) {
           send_to_char("You drill with your teacher on closing the distance and entering your opponent's range, and you come away feeling like you're better-equipped to fight the hulking giants of the world.\r\n", ch);
           send_to_char("(OOC: You've unlocked the ^WCLOSECOMBAT^n command!)\r\n", ch);
@@ -1391,7 +1436,29 @@ SPECIAL(adept_trainer)
           return TRUE;
         }
       }
+
       do_say(trainer, arg, 0, SCMD_SAYTO);
+      return TRUE;
+    }
+
+    if (is_abbrev(argument, "kipping up") || is_abbrev(argument, "the art of kipping up") || is_abbrev(argument, "kipup")) {
+      if (paid_for_kipup) {
+        snprintf(arg, sizeof(arg), "%s You already know all I can teach you about kipping up.", GET_CHAR_NAME(ch));
+        do_say(trainer, arg, 0, SCMD_SAYTO);
+      }
+
+      else {
+        if (GET_KARMA(ch) >= KARMA_COST_FOR_KIPUP) {
+          send_to_char("You drill with your teacher on how to rise quickly after a fall.\r\n", ch);
+          send_to_char("(OOC: You'll now automatically attempt to kip-up after falling!)\r\n", ch);
+
+          GET_KARMA(ch) -= KARMA_COST_FOR_CLOSECOMBAT;
+          PLR_FLAGS(ch).SetBit(PLR_PAID_FOR_CLOSECOMBAT);
+        } else {
+          send_to_char(ch, "You need %0.2f karma to learn close combat.\r\n", (float) KARMA_COST_FOR_CLOSECOMBAT / 100);
+        }
+      }
+
       return TRUE;
     }
 
@@ -1639,8 +1706,8 @@ SPECIAL(car_dealer)
   } else if (CMD_IS("probe") || CMD_IS("info")) {
     argument = one_argument(argument, buf);
     if (!(veh = get_veh_list(buf, world[car_room].vehicles, ch))) {
-      send_to_char("There is no such vehicle for sale.\r\n", ch);
-      return TRUE;
+      // Bail out so standard probe can kick in.
+      return FALSE;
     }
     send_to_char(ch, "^yProbing shopkeeper's ^n%s^y...^n\r\n", GET_VEH_NAME(veh));
     do_probe_veh(ch, veh);
@@ -2654,6 +2721,8 @@ SPECIAL(fixer)
       do_say(fixer, arg, 0, SCMD_SAYTO);
       return TRUE;
     }
+    // Wipe out the timer. This prevents things like guns getting crazy FA values.
+    GET_OBJ_TIMER(obj) = 0;
     if (!perform_give(fixer, ch, obj)) {
       snprintf(arg, sizeof(arg), "%s That's odd...I can't let go of it.", GET_CHAR_NAME(ch));
       do_say(fixer, arg, 0, SCMD_SAYTO);
@@ -3813,8 +3882,7 @@ SPECIAL(terell_davis)
   else if (cmd) {
     if (CMD_IS("buy") || CMD_IS("sell") || CMD_IS("value") || CMD_IS("list") || CMD_IS("check")
         || CMD_IS("cancel") || CMD_IS("receive") || CMD_IS("info") || CMD_IS("probe")) {
-      shop_keeper(ch, me, cmd, argument);
-      return TRUE;
+      return shop_keeper(ch, me, cmd, argument);
     }
     return FALSE;
   } else if (time_info.hours == 7) {
@@ -3985,14 +4053,14 @@ SPECIAL(quest_debug_scanner)
       snprintf(buf, sizeof(buf), "NPC %s's quest-related information:\r\n", GET_CHAR_NAME(to));
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Overall max rep: %d, overall min rep: %d\r\n",
               get_johnson_overall_max_rep(to), get_johnson_overall_min_rep(to));
-              
+
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Quests: ");
       for (int i = 0; i <= top_of_questt; i++)
         if (quest_table[i].johnson == GET_MOB_VNUM(to))
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld ", quest_table[i].vnum);
-          
+
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n");
-      
+
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "SPARE1: %ld\r\n", GET_SPARE1(to));
       strcat(buf, "NPC's mob memory records hold the following character IDs: \r\n");
       for (memory_rec *tmp = GET_MOB_MEMORY(to); tmp; tmp = tmp->next)
@@ -4080,7 +4148,7 @@ SPECIAL(quest_debug_scanner)
 
     return TRUE;
   }
-  
+
   if (CMD_IS("reload")) {
     skip_spaces(&argument);
     if (!*argument) {
@@ -4088,11 +4156,11 @@ SPECIAL(quest_debug_scanner)
       return TRUE;
     }
 
-    if (GET_QUEST(ch)) {          
+    if (GET_QUEST(ch)) {
         send_to_char(ch, "End your current run first.\r\n");
         return TRUE;
     }
-      
+
     bool found = FALSE;
 
     for (to = ch->in_room->people; to; to = to->next_in_room) {
@@ -4105,13 +4173,13 @@ SPECIAL(quest_debug_scanner)
       send_to_char(ch, "There is no johnson here.\r\n");
       return TRUE;
     }
-    
+
     int quest = atoi(argument);
     if (!quest) {
       send_to_char(ch, "That's not a quest number.\r\n");
       return TRUE;
     }
-    
+
     found = FALSE;
     int i = 0;
     for (; i <= top_of_questt; i++) {
@@ -4134,10 +4202,10 @@ SPECIAL(quest_debug_scanner)
         mudlog(buf, ch, LOG_SYSLOG, TRUE);
         send_to_char(ch, "Warning: Null intro string in this quest.\r\n");
       }
-          
+
       if (!memory(to, ch))
         remember(to, ch);
-            
+
       // Assign them the quest.
       int num;
       GET_QUEST(ch) = i;
@@ -4147,11 +4215,11 @@ SPECIAL(quest_debug_scanner)
         ch->player_specials->obj_complete[num] = 0;
       for (num = 0; num < quest_table[GET_QUEST(ch)].num_mobs; num++)
         ch->player_specials->mob_complete[num] = 0;
-          
+
       //Load targets and give the details.
       load_quest_targets(to, ch);
       handle_info(to, i);
-      
+
       return TRUE;
     }
   }
@@ -5139,7 +5207,7 @@ SPECIAL(weapon_dominator) {
       if (GET_LEVEL(ch) == LVL_PRESIDENT) {
         rank = "Inspector";
         authorized = TRUE;
-      } else if (GET_LEVEL(ch) == LVL_ADMIN) {
+      } else if (GET_LEVEL(ch) >= LVL_FIXER) {
         rank = "Enforcer";
         authorized = TRUE;
       } else {
@@ -6512,6 +6580,14 @@ SPECIAL(medical_workshop) {
   PRF_FLAGS(found_char).RemoveBit(PRF_TOUCH_ME_DADDY);
 
   return TRUE;
+}
+
+SPECIAL(purge_prevented) {
+  if (CMD_IS("purge")) {
+    send_to_char(ch, "You can't purge here.\r\n");
+    return TRUE;
+  }
+  return FALSE;
 }
 
 /*

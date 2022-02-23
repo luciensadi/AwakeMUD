@@ -1118,15 +1118,15 @@ void iedit_disp_val12_menu(struct descriptor_data * d)
 /* object type */
 void iedit_disp_type_menu(struct descriptor_data * d)
 {
-  int counter;
-
   CLS(CH);
-  for (counter = 1; counter < NUM_ITEMS; counter += 2)
+  for (int counter = 1; counter < NUM_ITEMS; counter++)
   {
-    send_to_char(CH, "%2d) %-20s %2d) %-20s\r\n",
-                 counter, item_types[counter],
-                 counter + 1, counter + 1 <= NUM_ITEMS ?
-                 item_types[counter + 1] : "");
+    send_to_char(CH, "%s%2d) %-20s%s",
+                 counter % 2 == 0 ? " " : "",
+                 counter,
+                 item_types[counter],
+                 (counter % 2 == 0 || counter == NUM_ITEMS - 1) ? "\r\n" : ""
+                );
   }
   send_to_char("Enter object type (0 to quit): ", d->character);
 }
@@ -1426,7 +1426,11 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
         case 'y':
         case 'Y': {
           /* write to internal tables */
+#ifdef ONLY_LOG_BUILD_ACTIONS_ON_CONNECTED_ZONES
           if (!vnum_from_non_connected_zone(d->edit_number)) {
+#else
+          {
+#endif
             snprintf(buf, sizeof(buf),"%s wrote new obj #%ld",
                     GET_CHAR_NAME(d->character), d->edit_number);
             mudlog(buf, d->character, LOG_WIZLOG, TRUE);
@@ -1808,8 +1812,13 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
       break;
     case IEDIT_TYPE:
       number = atoi(arg);
-      if (number < 1 || number > NUM_ITEMS) {
-        send_to_char(d->character, "That's not a valid choice! You must choose something between 1 and %d.\r\n", NUM_ITEMS);
+      if (number == 0) {
+        // Back out.
+        iedit_disp_menu(d);
+        return;
+      }
+      if (number < 1 || number >= NUM_ITEMS) {
+        send_to_char(d->character, "That's not a valid choice! You must choose something between 1 and %d.\r\n", NUM_ITEMS - 1);
         iedit_disp_type_menu(d);
         return;
       }
@@ -1824,12 +1833,13 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
           }
           break;
         case ITEM_SHOPCONTAINER:
+        case ITEM_VEHCONTAINER:
           if (!access_level(CH, LVL_PRESIDENT)) {
-            send_to_char("Sorry, shopcontainers are for code use only and can't be created.\r\n", d->character);
+            send_to_char("Sorry, shop and vehicle containers are for code use only and can't be created.\r\n", d->character);
             iedit_disp_type_menu(d);
             return;
           }
-          send_to_char("WARNING: Shopcontainers are for code use only! Hope you know what you're doing...\r\n", d->character);
+          send_to_char("WARNING: Shop and vehicle containers are for code use only! Hope you know what you're doing...\r\n", d->character);
           break;
         case ITEM_GUN_MAGAZINE:
           send_to_char("Sorry, gun magazines are for code use only and can't be created.\r\n", d->character);
@@ -2696,24 +2706,21 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
       switch (GET_OBJ_TYPE(d->edit_obj)) {
         case ITEM_WEAPON:
           if (IS_GUN(GET_WEAPON_ATTACK_TYPE(OBJ))) {
-            if (!access_level(CH, LVL_ADMIN)) {
-              struct obj_data *you_know_this_would_leak_memory_right = NULL;
-              if (!(you_know_this_would_leak_memory_right = read_object(number, VIRTUAL))) {
-                send_to_char("Invalid vnum.\r\n", CH);
-                iedit_disp_val8_menu(d);
-                return;
-              } else {
-                extract_obj(you_know_this_would_leak_memory_right);
-              }
-            }
-            if (number > 0) {
-              modified = FALSE;
-              for (j = 0; (j < MAX_OBJ_AFFECT && !modified); j++)
+            struct obj_data *accessory = read_object(number, VIRTUAL);
+            if (!accessory) {
+              send_to_char("Invalid vnum.\r\n", CH);
+              iedit_disp_val8_menu(d);
+              return;
+            } else {
+              // Cascade affects (take the first one and glue it to the weapon).
+              for (j = 0; (j < MAX_OBJ_AFFECT && !modified); j++) {
                 if (!(OBJ->affected[j].modifier)) {
-                  OBJ->affected[j].location = read_object(number, VIRTUAL)->affected[0].location;
-                  OBJ->affected[j].modifier = read_object(number, VIRTUAL)->affected[0].modifier;
-                  modified = TRUE;
+                  OBJ->affected[j].location = accessory->affected[0].location;
+                  OBJ->affected[j].modifier = accessory->affected[0].modifier;
+                  break;
                 }
+              }
+              extract_obj(accessory);
             }
           } else {
             if (number < 0 || number > 4) {
@@ -2734,24 +2741,23 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
       number = atoi(arg);
       switch (GET_OBJ_TYPE(d->edit_obj)) {
         case ITEM_WEAPON:
-          if (!access_level(CH, LVL_ADMIN)) {
-            struct obj_data *you_know_this_would_leak_memory_right = NULL;
-            if (!(you_know_this_would_leak_memory_right = read_object(number, VIRTUAL))) {
+          {
+            struct obj_data *accessory = read_object(number, VIRTUAL);
+            if (!accessory) {
               send_to_char("Invalid vnum.\r\n", CH);
               iedit_disp_val9_menu(d);
               return;
             } else {
-              extract_obj(you_know_this_would_leak_memory_right);
-            }
-          }
-          if (number > 0) {
-            modified = FALSE;
-            for (j = 0; (j < MAX_OBJ_AFFECT && !modified); j++)
-              if (!(OBJ->affected[j].modifier)) {
-                OBJ->affected[j].location = read_object(number, VIRTUAL)->affected[0].location;
-                OBJ->affected[j].modifier = read_object(number, VIRTUAL)->affected[0].modifier;
-                modified = TRUE;
+              // Cascade affects (take the first one and glue it to the weapon).
+              for (j = 0; (j < MAX_OBJ_AFFECT && !modified); j++) {
+                if (!(OBJ->affected[j].modifier)) {
+                  OBJ->affected[j].location = accessory->affected[0].location;
+                  OBJ->affected[j].modifier = accessory->affected[0].modifier;
+                  break;
+                }
               }
+              extract_obj(accessory);
+            }
           }
           break;
         default:
@@ -2765,24 +2771,23 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
       number = atoi(arg);
       switch (GET_OBJ_TYPE(d->edit_obj)) {
         case ITEM_WEAPON:
-          if (!access_level(CH, LVL_ADMIN)) {
-            struct obj_data *you_know_this_would_leak_memory_right = NULL;
-            if (!(you_know_this_would_leak_memory_right = read_object(number, VIRTUAL))) {
+          {
+            struct obj_data *accessory = read_object(number, VIRTUAL);
+            if (!accessory) {
               send_to_char("Invalid vnum.\r\n", CH);
               iedit_disp_val10_menu(d);
               return;
             } else {
-              extract_obj(you_know_this_would_leak_memory_right);
-            }
-          }
-          if (number > 0) {
-            modified = FALSE;
-            for (j = 0; (j < MAX_OBJ_AFFECT && !modified); j++)
-              if (!(OBJ->affected[j].modifier)) {
-                OBJ->affected[j].location = read_object(number, VIRTUAL)->affected[0].location;
-                OBJ->affected[j].modifier = read_object(number, VIRTUAL)->affected[0].modifier;
-                modified = TRUE;
+              // Cascade affects (take the first one and glue it to the weapon).
+              for (j = 0; (j < MAX_OBJ_AFFECT && !modified); j++) {
+                if (!(OBJ->affected[j].modifier)) {
+                  OBJ->affected[j].location = accessory->affected[0].location;
+                  OBJ->affected[j].modifier = accessory->affected[0].modifier;
+                  break;
+                }
               }
+              extract_obj(accessory);
+            }
           }
           break;
         default:

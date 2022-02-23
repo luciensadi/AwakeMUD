@@ -27,6 +27,7 @@
 #include "config.h"
 
 ACMD_DECLARE(do_say);
+ACMD_DECLARE(do_prone);
 
 // Note: If you want mobact debugging, add -DMOBACT_DEBUG to your makefile.
 // #define MOBACT_DEBUG
@@ -51,8 +52,7 @@ extern bool is_escortee(struct char_data *mob);
 extern bool hunting_escortee(struct char_data *ch, struct char_data *vict);
 
 extern bool ranged_response(struct char_data *ch, struct char_data *vict);
-
-extern struct obj_data * find_magazine(struct obj_data *gun, struct obj_data *i);
+extern bool does_weapon_have_bayonet(struct obj_data *weapon);
 
 SPECIAL(elevator_spec);
 SPECIAL(call_elevator);
@@ -312,9 +312,13 @@ bool vict_is_valid_guard_target(struct char_data *ch, struct char_data *vict) {
     "%s Bringing %s in here was the last mistake you'll ever make.",
     "%s %s? Brave of you.",
     "%s Call the DocWagon. Maybe they can use %s to scrape you off the ground.",
-    "%s You think %s is going to save you?"
+    "%s You think %s is going to save you?",
+    "%s I hope %s was worth all this pain.",
+    "%s %s won't save you from me.",
+    "%s Who told you you could have %s here??",
+    "%s I'm keeping %s for myself, just watch."
   };
-  #define NUM_GUARD_MESSAGES 10
+  #define NUM_GUARD_MESSAGES 14
 
   if (!vict_is_valid_target(ch, vict))
     return FALSE;
@@ -324,8 +328,13 @@ bool vict_is_valid_guard_target(struct char_data *ch, struct char_data *vict) {
     // If victim's equipment is illegal here, blast them.
     if (GET_EQ(vict, i) && violates_zsp(security_level, vict, i, ch)) {
       // Target found, stop processing.
-      snprintf(buf3, sizeof(buf3), decapitalize_a_an(guard_messages[number(0, NUM_GUARD_MESSAGES - 1)]), GET_CHAR_NAME(vict), GET_OBJ_NAME(GET_EQ(vict, i)));
-      do_say(ch, buf3, 0, SCMD_SAYTO);
+      if (MOB_FLAGGED(ch, MOB_INANIMATE)) {
+        act("$n swivels towards you threateningly, its cameras zooming in on $p.", TRUE, ch, GET_EQ(vict, i), vict, TO_VICT);
+        act("$n swivels towards $N threateningly, its cameras zooming in on $p.", TRUE, ch, GET_EQ(vict, i), vict, TO_NOTVICT);
+      } else {
+        snprintf(buf3, sizeof(buf3), guard_messages[number(0, NUM_GUARD_MESSAGES - 1)], GET_CHAR_NAME(vict), decapitalize_a_an(GET_OBJ_NAME(GET_EQ(vict, i))));
+        do_say(ch, buf3, 0, SCMD_SAYTO);
+      }
       return TRUE;
     }
   }
@@ -334,12 +343,19 @@ bool vict_is_valid_guard_target(struct char_data *ch, struct char_data *vict) {
 
 void mobact_change_firemode(struct char_data *ch) {
   struct obj_data *weapon;
+  int proning_desire = 0;
 
   // Precheck: Weapon must exist and must be a gun.
-  if (!(weapon = GET_EQ(ch, WEAR_WIELD)) || !IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon)))
+  if (!(weapon = GET_EQ(ch, WEAR_WIELD)) || !IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon))) {
+    // Melee fighters never want to be prone, so they'll stand up from that.
+    if (AFF_FLAGGED(ch, AFF_PRONE)) {
+      strncpy(buf3, "", sizeof(buf3));
+      do_prone(ch, buf3, 0, 0);
+    }
     return;
+  }
 
-  // Reload the weapon if possible. If not, swap weapons.
+  // Empty? Reload the weapon if possible. If not, swap weapons.
   if (!weapon->contains && GET_WEAPON_MAX_AMMO(weapon) > 0 && !attempt_reload(ch, WEAR_WIELD)) {
     switch_weapons(ch, WEAR_WIELD);
     return;
@@ -347,7 +363,7 @@ void mobact_change_firemode(struct char_data *ch) {
 
   // Otherwise, set up info: We're now checking for firemode changes.
   int prev_value = GET_WEAPON_FIREMODE(weapon);
-  int standing_recoil_comp = GET_WEAPON_INTEGRAL_RECOIL_COMP(weapon);
+  int standing_recoil_comp = MAX(GET_WEAPON_INTEGRAL_RECOIL_COMP(weapon), 0);
   int prone_recoil_comp = 0, total_recoil_comp = 0;
   int real_obj;
   struct obj_data *access;
@@ -377,59 +393,110 @@ void mobact_change_firemode(struct char_data *ch) {
 
   total_recoil_comp = standing_recoil_comp + prone_recoil_comp;
 
+  // Emplaced enemies have unlimited standing recoil comp, and thus don't ever want to prone.
+  if (MOB_FLAGGED(ch, MOB_EMPLACED)) {
+    standing_recoil_comp = 10;
+    total_recoil_comp = 10;
+    prone_recoil_comp = 0;
+    proning_desire = -1000;
+  }
+
+  // You can't prone in vehicles.
+  if (ch->in_veh)
+    proning_desire = -1000;
+
+  // We're inclined to stand up if we're not in combat or are in combat with someone in our same room.
+  if ((GET_MOBALERT(ch) == MALERT_CALM && !FIGHTING(ch)) || (FIGHTING(ch) && FIGHTING(ch)->in_room == ch->in_room)) {
+    // Note the -3 here-- someone with FA and a tripod will stay prone.
+    proning_desire -= 3;
+  }
+
+  // We want to go prone more if we've got enough recoil comp for it. Note that we only consider positive proning desire if we have FA.
+  proning_desire += MIN(prone_recoil_comp, 10);
+
+  // Special case: If we're using a high-recoil weapon, that factors into our proning desire.
+  if (GET_WEAPON_INTEGRAL_RECOIL_COMP(weapon) < 0)
+    proning_desire += MIN(-GET_WEAPON_INTEGRAL_RECOIL_COMP(weapon), prone_recoil_comp);
+
   // Don't @ me about this, if I didn't take this shortcut then this would be a giant block of if-statements.
   int mode = GET_WEAPON_POSSIBLE_FIREMODES(weapon);
-  bool has_multiple_modes = (mode != 2 && mode != 4 && mode != 8 && mode != 16);
+  bool has_multiple_modes = (mode != (1 << MODE_SS) && mode != (1 << MODE_SA) && mode != (1 << MODE_BF) && mode != (1 << MODE_FA));
 
   // If our weapon is FA-capable, let's set ourselves up for success by configuring it to the maximum value it can handle.
   if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(weapon), 1 << MODE_FA)) {
-    if (total_recoil_comp >= 3) {
+    // If we desire to go prone, do so-- we're guaranteed at least 3 points of comp from our proning_desire formula.
+    if (proning_desire > 0 && total_recoil_comp >= 3) {
       GET_WEAPON_FIREMODE(weapon) = MODE_FA;
+      GET_OBJ_TIMER(weapon) = total_recoil_comp;
 
-      // If we get additional recoil comp from going prone, let's do that now.
-      if (prone_recoil_comp > 0 && !AFF_FLAGGED(ch, AFF_PRONE) && !ch->in_veh) {
-        ACMD_DECLARE(do_prone);
-        strncpy(buf3, "", sizeof(buf3));
+      // Go prone.
+      if (!AFF_FLAGGED(ch, AFF_PRONE)) {
+        strlcpy(buf3, "", sizeof(buf3));
+        do_prone(ch, buf3, 0, 0);
+      }
+    }
+    // Otherwise, we're inclined to stand and deliver, provided we have the recoil comp for it.
+    else {
+      // Stand up.
+      if (AFF_FLAGGED(ch, AFF_PRONE)) {
+        strlcpy(buf3, "", sizeof(buf3));
         do_prone(ch, buf3, 0, 0);
       }
 
-      GET_OBJ_TIMER(weapon) = total_recoil_comp;
-    } else {
-      // We don't have enough recoil comp for a multi-shot burst. Set to a single if we can.
-      if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(weapon), 1 << MODE_SA)) {
+      // We've got the standing comp to support full auto-- do so!
+      if (standing_recoil_comp >= 4) {
+        GET_WEAPON_FIREMODE(weapon) = MODE_FA;
+        GET_OBJ_TIMER(weapon) = standing_recoil_comp;
+      }
+
+      // Otherwise, if we only have 3 points of comp, just do burst fire.
+      else if (standing_recoil_comp == 3) {
+        GET_WEAPON_FIREMODE(weapon) = MODE_BF;
+      }
+
+      // We don't have enough recoil comp for a multi-shot burst. Set to SA if we can.
+      else if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(weapon), 1 << MODE_SA)) {
         GET_WEAPON_FIREMODE(weapon) = MODE_SA;
       }
 
+      // SS is an acceptable fallback.
       else if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(weapon), 1 << MODE_SS)) {
         GET_WEAPON_FIREMODE(weapon) = MODE_SS;
       }
 
-      // We couldn't... at least minimize the harm to us by setting it to FA-3.
+      // We're in the shit zone now: Not enough comp, but no gentler modes. BF is the lesser of the two evils.
+      else if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(weapon), 1 << MODE_BF)) {
+        GET_WEAPON_FIREMODE(weapon) = MODE_BF;
+      }
+
+      // We have no choice. Minimize the harm to us with FA-3.
       else {
         GET_WEAPON_FIREMODE(weapon) = MODE_FA;
         GET_OBJ_TIMER(weapon) = 3;
       }
     }
-  }
+  } // End check for weapon with FA.
+  else {
+    // Set to SA, or fallback to SS.
+    if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(weapon), 1 << MODE_SA)) {
+      GET_WEAPON_FIREMODE(weapon) = MODE_SA;
+    } else if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(weapon), 1 << MODE_SS)) {
+      GET_WEAPON_FIREMODE(weapon) = MODE_SS;
+    }
 
-  // Next up, we want burst fire if possible-- even if we don't have enough recoil comp to completely cover it.
-  else if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(weapon), 1 << MODE_BF) && standing_recoil_comp >= 3) {
-    GET_WEAPON_FIREMODE(weapon) = MODE_BF;
-  }
+    // Now, if we have enough recoil comp, override to BF.
+    if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(weapon), 1 << MODE_BF) && standing_recoil_comp >= 3) {
+      GET_WEAPON_FIREMODE(weapon) = MODE_BF;
+    }
 
-  // Semi-automatic is superior to single shot, so set that if we can.
-  else if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(weapon), 1 << MODE_SA)) {
-    GET_WEAPON_FIREMODE(weapon) = MODE_SA;
-  }
-
-  // Lowest-priority mode is single-shot.
-  if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(weapon), 1 << MODE_SS)) {
-    GET_WEAPON_FIREMODE(weapon) = MODE_SS;
+    // FA is not an option in this else-block, so we're done with our logic.
   }
 
   // Send a message to the room, but only if the weapon has received a new fire selection mode and has more than one available.
   if (prev_value != GET_WEAPON_FIREMODE(weapon) && has_multiple_modes) {
-    act("$n flicks the fire selector switch on $p.", TRUE, ch, weapon, 0, TO_ROOM);
+    if (!MOB_FLAGGED(ch, MOB_INANIMATE))
+      act("$n flicks the fire selector switch on $p.", TRUE, ch, weapon, 0, TO_ROOM);
+
     #ifdef MOBACT_DEBUG
       snprintf(buf3, sizeof(buf3), "Changed firemode to %s. I have recoil comp %d standing + %d prone.", fire_mode[GET_WEAPON_FIREMODE(weapon)], standing_recoil_comp, prone_recoil_comp);
       do_say(ch, buf3, 0, 0);
@@ -738,12 +805,23 @@ bool mobact_process_aggro(struct char_data *ch, struct room_data *room) {
         // Aggros don't care about road/garage status, so they act as if always alarmed.
         if (vehicle_is_valid_mob_target(veh, TRUE)) {
           stop_fighting(ch);
-          snprintf(buf, sizeof(buf), "%s$n glares at %s, preparing to attack it!", GET_MOBALERT(ch) == MALERT_ALARM ? "Searching for more aggressors, " : "", GET_VEH_NAME(veh));
+
+          if (MOB_FLAGGED(ch, MOB_INANIMATE)) {
+            snprintf(buf, sizeof(buf), "%s$n swivels aggressively towards %s!", GET_MOBALERT(ch) == MALERT_ALARM ? "Searching for more aggressors, " : "", GET_VEH_NAME(veh));
+            snprintf(buf2, sizeof(buf2), "%s%s swivels aggressively towards your vehicle!\r\n", GET_MOBALERT(ch) == MALERT_ALARM ? "Searching for more aggressors, " : "" , GET_CHAR_NAME(ch));
+            send_to_char(ch, "You prepare to attack %s!\r\n", GET_VEH_NAME(veh));
+          } else {
+            snprintf(buf, sizeof(buf), "%s$n glares at %s, preparing to attack it!", GET_MOBALERT(ch) == MALERT_ALARM ? "Searching for more aggressors, " : "", GET_VEH_NAME(veh));
+            snprintf(buf2, sizeof(buf2), "%s%s glares at your vehicle, preparing to attack!\r\n", GET_MOBALERT(ch) == MALERT_ALARM ? "Searching for more aggressors, " : "" , GET_CHAR_NAME(ch));
+            send_to_char(ch, "You prepare to attack %s!\r\n", GET_VEH_NAME(veh));
+          }
+
+
           act(buf, TRUE, ch, NULL, NULL, TO_ROOM);
-          send_to_char(ch, "You prepare to attack %s!", GET_VEH_NAME(veh));
-          snprintf(buf, sizeof(buf), "%s%s glares at your vehicle, preparing to attack!\r\n", GET_MOBALERT(ch) == MALERT_ALARM ? "Searching for more aggressors, " : "" , GET_CHAR_NAME(ch));
-          send_to_veh(buf, veh, NULL, TRUE);
+          send_to_veh(buf2, veh, NULL, TRUE);
+
           set_fighting(ch, veh);
+
           return TRUE;
         }
       }
@@ -782,7 +860,10 @@ void send_mob_aggression_warnings(struct char_data *pc, struct char_data *mob) {
   if (pc->in_room == mob->in_room)
     pc_tn = 2;
 
+  strlcpy(buf, "send_mob_aggression_warnings rbuf: ", sizeof(buf));
   pc_tn += modify_target_rbuf(pc, buf, sizeof(buf));
+  act(buf, FALSE, pc, NULL, NULL, TO_ROLLS);
+
   int pc_dice = GET_INT(pc) + GET_POWER(pc, ADEPT_IMPROVED_PERCEPT);
   int pc_percept_successes = success_test(pc_dice, pc_tn);
 
@@ -805,7 +886,11 @@ void send_mob_aggression_warnings(struct char_data *pc, struct char_data *mob) {
   // Message the PC.
   if (net_succ > 0) {
     if (pc->in_room == mob->in_room) {
-      snprintf(buf, sizeof(buf), "^y%s$n glares at you, preparing to attack!^n", GET_MOBALERT(mob) == MALERT_ALARM ? "Searching for more aggressors, " : "");
+      if (MOB_FLAGGED(mob, MOB_INANIMATE)) {
+        snprintf(buf, sizeof(buf), "^y%s$n swivels towards you threateningly!^n", GET_MOBALERT(mob) == MALERT_ALARM ? "Searching for more aggressors, " : "");
+      } else {
+        snprintf(buf, sizeof(buf), "^y%s$n glares at you, preparing to attack!^n", GET_MOBALERT(mob) == MALERT_ALARM ? "Searching for more aggressors, " : "");
+      }
       act(buf, TRUE, mob, NULL, pc, TO_VICT);
     } else {
       if (GET_EQ(mob, WEAR_WIELD) && GET_OBJ_TYPE(GET_EQ(mob, WEAR_WIELD)) == ITEM_WEAPON && IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(mob, WEAR_WIELD)))) {
@@ -825,10 +910,20 @@ void send_mob_aggression_warnings(struct char_data *pc, struct char_data *mob) {
   send_to_char(mob, "You prepare to attack %s!\r\n", GET_CHAR_NAME(pc));
 
   // Message bystanders.
-  if (pc->in_room == mob->in_room)
-    act("$n glares at $N, preparing to attack!", TRUE, mob, NULL, pc, TO_NOTVICT);
-  else
-    act("$n glares off into the distance, preparing to attack an intruder!", TRUE, mob, NULL, NULL, TO_ROOM);
+  if (pc->in_room == mob->in_room) {
+    if (MOB_FLAGGED(mob, MOB_INANIMATE)) {
+      act("$n swivels threateningly towards $N!", TRUE, mob, NULL, pc, TO_NOTVICT);
+    } else {
+      act("$n glares at $N, preparing to attack!", TRUE, mob, NULL, pc, TO_NOTVICT);
+    }
+  }
+  else {
+    if (MOB_FLAGGED(mob, MOB_INANIMATE)) {
+      act("$n swivels aggressively to point at a distant threat!", TRUE, mob, NULL, NULL, TO_ROOM);
+    } else {
+      act("$n glares off into the distance, preparing to attack an intruder!", TRUE, mob, NULL, NULL, TO_ROOM);
+    }
+  }
 }
 
 bool mobact_process_memory(struct char_data *ch, struct room_data *room) {
@@ -891,7 +986,7 @@ bool mobact_process_helper(struct char_data *ch) {
           }
         }
 
-        return true;
+        return TRUE;
       }
 
       // If the victim is a player who is fighting an NPC, and I can see the player, assist the NPC.
@@ -971,11 +1066,20 @@ bool mobact_process_guard(struct char_data *ch, struct room_data *room) {
       // If the room we're in is neither a road nor a garage, attack any vehicles we see. Never attack vehicles in a garage.
       if (vehicle_is_valid_mob_target(veh, GET_MOBALERT(ch) == MALERT_ALARM && !ROOM_FLAGGED(room, ROOM_GARAGE))) {
         stop_fighting(ch);
-        snprintf(buf, sizeof(buf), "%s$n glares at %s, preparing to attack it for security infractions!", GET_MOBALERT(ch) == MALERT_ALARM ? "Searching for more aggressors, " : "", GET_VEH_NAME(veh));
+
+        if (MOB_FLAGGED(ch, MOB_INANIMATE)) {
+          snprintf(buf, sizeof(buf), "%s$n swivels threateningly towards %s, preparing to attack it for security infractions!", GET_MOBALERT(ch) == MALERT_ALARM ? "Searching for more aggressors, " : "", GET_VEH_NAME(veh));
+          snprintf(buf2, sizeof(buf2), "%s%s swivels threateningly towards your vehicle, preparing to attack over security infractions!\r\n", GET_MOBALERT(ch) == MALERT_ALARM ? "Searching for more aggressors, " : "", GET_CHAR_NAME(ch));
+          send_to_char(ch, "You prepare to attack %s for security infractions!\r\n", GET_VEH_NAME(veh));
+        } else {
+          snprintf(buf, sizeof(buf), "%s$n glares at %s, preparing to attack it for security infractions!", GET_MOBALERT(ch) == MALERT_ALARM ? "Searching for more aggressors, " : "", GET_VEH_NAME(veh));
+          snprintf(buf2, sizeof(buf2), "%s%s glares at your vehicle, preparing to attack over security infractions!\r\n", GET_MOBALERT(ch) == MALERT_ALARM ? "Searching for more aggressors, " : "", GET_CHAR_NAME(ch));
+          send_to_char(ch, "You prepare to attack %s for security infractions!\r\n", GET_VEH_NAME(veh));
+        }
+
         act(buf, TRUE, ch, NULL, NULL, TO_ROOM);
-        send_to_char(ch, "You prepare to attack %s for security infractions!", GET_VEH_NAME(veh));
-        snprintf(buf, sizeof(buf), "%s%s glares at your vehicle, preparing to attack over security infractions!\r\n", GET_MOBALERT(ch) == MALERT_ALARM ? "Searching for more aggressors, " : "", GET_CHAR_NAME(ch));
-        send_to_veh(buf, veh, NULL, TRUE);
+        send_to_veh(buf2, veh, NULL, TRUE);
+
         set_fighting(ch, veh);
         return TRUE;
       }
@@ -1012,50 +1116,69 @@ bool mobact_process_self_buff(struct char_data *ch) {
     return TRUE;
   }
 
-  // Buff self, but only act one out of every 16 ticks (on average), and only if we're not going to put ourselves in a drain death loop.
-  if (number(0, 15) == 0 && GET_MENTAL(ch) >= 1000 && GET_PHYSICAL(ch) >= 1000) {
-    // Apply armor to self.
-    if (!affected_by_spell(ch, SPELL_ARMOR)) {
-      cast_manipulation_spell(ch, SPELL_ARMOR, number(1, GET_MAG(ch)/100), NULL, ch);
-      return TRUE;
-    }
+  // Buff self, but only act one out of every 11 ticks (on average), and only if we're not going to put ourselves in a drain death loop.
+  if (number(0, 10) == 0 && GET_MENTAL(ch) >= 1000 && GET_PHYSICAL(ch) >= 1000) {
+    bool imp_invis = IS_AFFECTED(ch, AFF_SPELLIMPINVIS) || affected_by_spell(ch, SPELL_IMP_INVIS);
+    bool std_invis = IS_AFFECTED(ch, AFF_SPELLINVIS) || affected_by_spell(ch, SPELL_INVIS);
+    int max_force = GET_MAG(ch) / 100;
+    int min_force = MIN(4, max_force);
 
     // If not invisible already, apply an invisibility spell based on my magic rating and sorcery skill.
-    if (!affected_by_spell(ch, SPELL_INVIS) && !affected_by_spell(ch, SPELL_IMP_INVIS)) {
+    if (!imp_invis && !std_invis) {
       // Changed cast ratings to 1-- if PCs are going to cheese with rating 1, NPCs should too. -- LS
       if (MIN(GET_SKILL(ch, SKILL_SORCERY), GET_MAG(ch)/100) <= 5) {
         // Lower skill means standard invisibility. Gotta make thermographic vision useful somehow.
-        // cast_illusion_spell(ch, SPELL_INVIS, number(1, GET_MAG(ch)/100), NULL, ch);
-        cast_illusion_spell(ch, SPELL_INVIS, 1, NULL, ch);
+        cast_illusion_spell(ch, SPELL_INVIS, number(min_force, max_force), NULL, ch);
       } else {
         // Look out, we've got a badass over here.
-        // cast_illusion_spell(ch, SPELL_IMP_INVIS, number(1, GET_MAG(ch)/100), NULL, ch);
-        cast_illusion_spell(ch, SPELL_IMP_INVIS, 1, NULL, ch);
+        cast_illusion_spell(ch, SPELL_IMP_INVIS, number(min_force, max_force), NULL, ch);
       }
       return TRUE;
     }
 
-    // Apply combat sense to self.
-    if (!affected_by_spell(ch, SPELL_COMBATSENSE)) {
-      cast_detection_spell(ch, SPELL_COMBATSENSE, number(1, GET_MAG(ch)/100), NULL, ch);
+#ifdef DIES_IRAE
+    // If we've got Improved Invis on, we want to go completely stealth if we can.
+    // Gating this behind Improved Invis means that only powerful mage characters (Sorcery and Magic both 6+) will do this.
+    if (imp_invis && !affected_by_spell(ch, SPELL_STEALTH)) {
+      cast_illusion_spell(ch, SPELL_STEALTH, number(1, MIN(4, max_force)), NULL, ch);
+      return TRUE;
+    }
+#endif
+
+    // Apply armor to self.
+    if (!affected_by_spell(ch, SPELL_ARMOR)) {
+      cast_manipulation_spell(ch, SPELL_ARMOR, number(min_force, max_force), NULL, ch);
       return TRUE;
     }
 
-    // We're dead-set on casting a spell, so try to boost attributes.
-    switch (number(1, 3)) {
-      case 1:
-        cast_health_spell(ch, SPELL_INCATTR, STR, number(1, GET_MAG(ch)/100), NULL, ch);
-        break;
-      case 2:
-        cast_health_spell(ch, SPELL_INCATTR, QUI, number(1, GET_MAG(ch)/100), NULL, ch);
-        break;
-      case 3:
-        cast_health_spell(ch, SPELL_INCATTR, BOD, number(1, GET_MAG(ch)/100), NULL, ch);
-        break;
-    }
+    if (number(0, 5) == 0) {
+      // Apply combat sense to self.
+      if (!affected_by_spell(ch, SPELL_COMBATSENSE)) {
+        cast_detection_spell(ch, SPELL_COMBATSENSE, number(min_force, max_force), NULL, ch);
+        return TRUE;
+      }
 
-    // We've spent our action casting a spell, so time to stop acting.
-    return TRUE;
+      // We're dead-set on casting a spell, so try to boost attributes.
+      min_force = min_force % 2 == 0 ? min_force : min_force - 1;
+      max_force = max_force % 2 == 0 ? max_force : max_force - 1;
+      switch (number(1, 5)) {
+        case 1:
+          cast_health_spell(ch, ch->cyberware || ch->bioware ? SPELL_INCCYATTR : SPELL_INCATTR, STR, number(min_force, max_force), NULL, ch);
+          return TRUE;
+        case 2:
+          cast_health_spell(ch, ch->cyberware || ch->bioware ? SPELL_INCCYATTR : SPELL_INCATTR, QUI, number(min_force, max_force), NULL, ch);
+          return TRUE;
+        case 3:
+          cast_health_spell(ch, ch->cyberware || ch->bioware ? SPELL_INCCYATTR : SPELL_INCATTR, BOD, number(min_force, max_force), NULL, ch);
+          return TRUE;
+        case 4:
+          cast_health_spell(ch, ch->cyberware || ch->bioware ? SPELL_INCCYATTR : SPELL_INCATTR, INT, number(min_force, max_force), NULL, ch);
+          return TRUE;
+        case 5:
+          cast_health_spell(ch, ch->cyberware || ch->bioware ? SPELL_INCCYATTR : SPELL_INCATTR, WIL, number(min_force, max_force), NULL, ch);
+          return TRUE;
+      }
+    }
   }
 
   return FALSE;
@@ -1074,14 +1197,25 @@ bool mobact_process_scavenger(struct char_data *ch) {
       // Find the most valuable object in the room (ignoring worthless things):
       FOR_ITEMS_AROUND_CH(ch, obj) {
         // No stealing workshops or corpses.
-        if (GET_OBJ_TYPE(obj) != ITEM_WORKSHOP || GET_OBJ_TYPE(obj) != ITEM_CORPSE)
+        if (GET_OBJ_TYPE(obj) == ITEM_WORKSHOP || GET_OBJ_TYPE(obj) == ITEM_CORPSE)
           continue;
 
         // No scavenging people's quest items.
         if (obj->obj_flags.quest_id)
           continue;
 
-        if (CAN_GET_OBJ(ch, obj) && GET_OBJ_COST(obj) > max) {
+        // Only grab things we can actually get.
+        if (!CAN_GET_OBJ(ch, obj))
+          continue;
+
+        // We always go for keys.
+        if (GET_OBJ_TYPE(obj) == ITEM_KEY) {
+          best_obj = obj;
+          break;
+        }
+
+        // Otherwise, we only want it if it's worth more than the others.
+        if (GET_OBJ_COST(obj) > max) {
           best_obj = obj;
           max = GET_OBJ_COST(obj);
         }
@@ -1090,13 +1224,20 @@ bool mobact_process_scavenger(struct char_data *ch) {
       // Get the most valuable thing we've found.
       if (best_obj != NULL) {
         obj_from_room(best_obj);
-        obj_to_char(best_obj, ch);
-        act("$n gets $p.", FALSE, ch, best_obj, 0, TO_ROOM);
-        return true;
+        if (GET_OBJ_TYPE(best_obj) == ITEM_KEY) {
+          // "Accidentally."
+          act("$n accidentally breaks $p.", FALSE, ch, best_obj, 0, TO_ROOM);
+          extract_obj(best_obj);
+        } else {
+          obj_to_char(best_obj, ch);
+          act("$n gets $p.", FALSE, ch, best_obj, 0, TO_ROOM);
+        }
+
+        return TRUE;
       }
     }
   } /* End scavenger NPC. */
-  return false;
+  return FALSE;
 }
 
 // Find where the 'push' command is in the command index. This is SUCH a hack.
@@ -1109,7 +1250,7 @@ int get_push_command_index() {
 
   if (global_push_command_index == -1) {
     mudlog("FATAL ERROR: Unable to find index of PUSH command for NPC elevator usage. Put it back.", NULL, LOG_SYSLOG, TRUE);
-    exit(1);
+    exit(ERROR_UNABLE_TO_FIND_PUSH_COMMAND);
   }
 
   return global_push_command_index;
@@ -1121,9 +1262,11 @@ bool mobact_process_movement(struct char_data *ch) {
   if (is_escortee(ch))
     return FALSE;
 
-  if (MOB_FLAGGED(ch, MOB_SENTINEL) || CH_IN_COMBAT(ch))
+  // If you can't move for a variety of reasons, bail out.
+  if (MOB_FLAGGED(ch, MOB_SENTINEL) || CH_IN_COMBAT(ch) || AFF_FLAGGED(ch, AFF_PRONE))
     return FALSE;
 
+  // The only way you can move while not standing is if you're driving a vehicle.
   if (GET_POS(ch) != POS_STANDING && !AFF_FLAGGED(ch, AFF_PILOT))
     return FALSE;
 
@@ -1167,11 +1310,11 @@ bool mobact_process_movement(struct char_data *ch) {
 
     // NPC standing outside an elevator? Maybe they want to call it.
     if (ch->in_room->func == call_elevator
-        && !MOB_FLAGGED(ch, MOB_SENTINEL)
         && !mob_is_aggressive(ch, TRUE)
-        && number(0, ELEVATOR_BUTTON_PRESS_CHANCE) == 0) {
+        && number(0, ELEVATOR_BUTTON_PRESS_CHANCE) == 0)
+    {
       char argument[500];
-      strcpy(argument, "button");
+      strlcpy(argument, "button", sizeof(argument));
       ch->in_room->func(ch, ch->in_room, find_command("push"), argument);
       return TRUE;
     }
@@ -1231,15 +1374,27 @@ bool mobact_process_movement(struct char_data *ch) {
       return TRUE;
     }
   } /* End NPC movement outside a vehicle. */
-  return false;
+  return FALSE;
+}
+
+bool mob_has_ammo_for_weapon(struct char_data *ch, struct obj_data *weapon) {
+  for (int am = 0; am < NUM_AMMOTYPES; am++)
+    if (GET_BULLETPANTS_AMMO_AMOUNT(ch, GET_WEAPON_ATTACK_TYPE(weapon), am) > 0) {
+      return TRUE;
+    }
+
+  return FALSE;
 }
 
 // Precondition: ch and weapon exist, and weapon is a firearm.
 void ensure_mob_has_ammo_for_weapon(struct char_data *ch, struct obj_data *weapon) {
-  // Check all ammotypes for this weapon. If we have any, return.
+  // Check all ammotypes for this weapon. If we have any, refill it to full, then return.
   for (int am = 0; am < NUM_AMMOTYPES; am++)
-    if (GET_BULLETPANTS_AMMO_AMOUNT(ch, GET_WEAPON_ATTACK_TYPE(weapon), am) > 0)
+    if (GET_BULLETPANTS_AMMO_AMOUNT(ch, GET_WEAPON_ATTACK_TYPE(weapon), am) > 0) {
+      GET_BULLETPANTS_AMMO_AMOUNT(ch, GET_WEAPON_ATTACK_TYPE(weapon), am) = MAX(GET_BULLETPANTS_AMMO_AMOUNT(ch, GET_WEAPON_ATTACK_TYPE(weapon), am),
+                                                                                GET_WEAPON_MAX_AMMO(weapon) * NUMBER_OF_MAGAZINES_TO_GIVE_TO_UNEQUIPPED_MOBS);
       return;
+    }
 
   // If we had none, give them normal.
   GET_BULLETPANTS_AMMO_AMOUNT(ch, GET_WEAPON_ATTACK_TYPE(weapon), AMMO_NORMAL) = GET_WEAPON_MAX_AMMO(weapon) * NUMBER_OF_MAGAZINES_TO_GIVE_TO_UNEQUIPPED_MOBS;
@@ -1314,6 +1469,46 @@ void mobile_activity(void)
             && GET_WEAPON_MAX_AMMO(GET_EQ(ch, index)) > 0)
           ensure_mob_has_ammo_for_weapon(ch, GET_EQ(ch, index));
     }
+
+    // Confirm we have the skills to wield our current weapon, otherwise ditch it.
+#ifndef SUPPRESS_MOB_SKILL_ERRORS
+    if (GET_EQ(ch, WEAR_WIELD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_WEAPON) {
+      char build_err_msg[2000];
+
+      int weapon_skill = GET_WEAPON_SKILL(GET_EQ(ch, WEAR_WIELD));
+      int melee_skill = does_weapon_have_bayonet(GET_EQ(ch, WEAR_WIELD)) ? SKILL_POLE_ARMS : SKILL_CLUBS;
+
+      int weapon_skill_dice = GET_SKILL(ch, weapon_skill) ? GET_SKILL(ch, weapon_skill) : GET_SKILL(ch, return_general(weapon_skill));
+      int melee_skill_dice = GET_SKILL(ch, melee_skill) ? GET_SKILL(ch, melee_skill) : GET_SKILL(ch, return_general(melee_skill));
+
+      if (weapon_skill_dice <= 0) {
+        #ifndef SUPPRESS_BUILD_ERROR_MESSAGES
+        snprintf(build_err_msg, sizeof(build_err_msg), "CONTENT ERROR: %s (%ld) is wielding %s %s, but has no weapon skill in %s!",
+                 GET_CHAR_NAME(ch),
+                 GET_MOB_VNUM(ch),
+                 AN(weapon_type[GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_WIELD))]),
+                 weapon_type[GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_WIELD))],
+                 skills[GET_WEAPON_SKILL(GET_EQ(ch, WEAR_WIELD))].name
+               );
+        mudlog(build_err_msg, ch, LOG_MISCLOG, TRUE);
+        #endif
+
+        switch_weapons(ch, WEAR_WIELD);
+      } else if (IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_WIELD))) && melee_skill_dice <= 0 && weapon_skill_dice >= 5) {
+        #ifndef SUPPRESS_BUILD_ERROR_MESSAGES
+        snprintf(build_err_msg, sizeof(build_err_msg), "CONTENT ERROR: Skilled mob %s (%ld) is wielding %s %s%s, but has no melee skill in %s!",
+                 GET_CHAR_NAME(ch),
+                 GET_MOB_VNUM(ch),
+                 AN(weapon_type[GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_WIELD))]),
+                 weapon_type[GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_WIELD))],
+                 melee_skill == SKILL_POLE_ARMS ? " (with bayonet)" : "",
+                 skills[melee_skill].name
+               );
+        mudlog(build_err_msg, ch, LOG_MISCLOG, TRUE);
+        #endif
+      }
+    }
+#endif
 
     // Manipulate wielded weapon (reload, set fire mode, etc).
     mobact_change_firemode(ch);
@@ -1600,11 +1795,6 @@ void switch_weapons(struct char_data *mob, int pos)
     return;
   }
 
-  if (GET_OBJ_TYPE(GET_EQ(mob, pos)) != ITEM_WEAPON) {
-    act("$n won't switch weapons- currently-equipped $o is not a weapon.", TRUE, mob, GET_EQ(mob, pos), NULL, TO_ROLLS);
-    return;
-  }
-
   for (i = mob->carrying; i; i = i->next_content)
   {
     /* No idea what these used to be, but now they're max ammo and reach.
@@ -1618,8 +1808,8 @@ void switch_weapons(struct char_data *mob, int pos)
     */
 
 
-    // We like using weapons that have unlimited ammo.
-    if (GET_OBJ_TYPE(i) == ITEM_WEAPON) {
+    // Classify our weapons by ammo usage and type. Only allow weapons we can actually use, though.
+    if (GET_OBJ_TYPE(i) == ITEM_WEAPON && (GET_SKILL(mob, GET_WEAPON_SKILL(i)) > 0 || GET_SKILL(mob, return_general(GET_WEAPON_SKILL(i))) > 0)) {
       if (IS_GUN(GET_WEAPON_ATTACK_TYPE(i))) {
         // Check for an unlimited-ammo weapon.
         if (GET_WEAPON_MAX_AMMO(i) == -1) {
@@ -1630,7 +1820,7 @@ void switch_weapons(struct char_data *mob, int pos)
 
         // It's a limited-ammo weapon. Check to see if we have ammo for it.
         if ((i->contains && GET_MAGAZINE_AMMO_COUNT(i->contains) > 0)
-            || find_magazine(i, mob->carrying)) {
+            || mob_has_ammo_for_weapon(mob, i)) {
               // TODO: Check if it's a better weapon.
               limited_ammo_weapon = i;
               break;

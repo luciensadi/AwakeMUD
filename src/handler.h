@@ -20,8 +20,8 @@ void    affect_modify(struct char_data *ch,
                       const Bitfield &bitv,
                       bool add
                        );
-bool 	affected_by_spell(struct char_data *ch, int type);
-bool	affected_by_power(struct char_data *ch, int type);
+bool  affected_by_spell(struct char_data *ch, int type);
+int   affected_by_power(struct char_data *ch, int type);
 void    affect_veh(struct veh_data *veh, byte loc, sbyte mod);
 void    spell_modify(struct char_data *ch, struct sustain_data *sust, bool add);
 /* utility */

@@ -23,6 +23,8 @@
 #include "constants.h"
 #include "newmagic.h"
 #include "config.h"
+#include "ignore_system.h"
+#include "perception_tests.h"
 
 /* external functs */
 int special(struct char_data * ch, int cmd, char *arg);
@@ -42,6 +44,7 @@ extern bool passed_flee_success_check(struct char_data *ch);
 extern int calculate_swim_successes(struct char_data *ch);
 extern bool can_edit_zone(struct char_data *ch, int zone);
 extern void send_mob_aggression_warnings(struct char_data *pc, struct char_data *mob);
+extern bool vict_is_valid_aggro_target(struct char_data *ch, struct char_data *vict);
 
 extern sh_int mortal_start_room;
 extern sh_int frozen_start_room;
@@ -99,10 +102,13 @@ int can_move(struct char_data *ch, int dir, int extra)
       send_to_char("That's private property -- no trespassing!\r\n", ch);
       return 0;
     }
-  if (ROOM_FLAGGED(EXIT(ch, dir)->to_room, ROOM_TUNNEL) && !IS_ASTRAL(ch) && !IS_PROJECT(ch))
-    if (EXIT(ch, dir)->to_room->people &&
-        EXIT(ch, dir)->to_room->people->next_in_room)
-    {
+  if (ROOM_FLAGGED(EXIT(ch, dir)->to_room, ROOM_TUNNEL) && !IS_ASTRAL(ch) && !IS_PROJECT(ch)) {
+    int num_occupants = 0;
+    for (struct char_data *in_room_ptr = EXIT(ch, dir)->to_room->people; in_room_ptr && num_occupants < 2; in_room_ptr = in_room_ptr->next_in_room) {
+      if (!IS_ASTRAL(in_room_ptr) && !IS_PROJECT(in_room_ptr) && !access_level(in_room_ptr, LVL_BUILDER))
+        num_occupants++;
+    }
+    if (num_occupants >= 2) {
       if (access_level(ch, LVL_BUILDER)) {
         send_to_char("You use your staff powers to bypass the tunnel restriction.\r\n", ch);
       } else {
@@ -110,6 +116,15 @@ int can_move(struct char_data *ch, int dir, int extra)
         return 0;
       }
     }
+  }
+  if (ROOM_FLAGGED(EXIT(ch, dir)->to_room, ROOM_TOO_CRAMPED_FOR_CHARACTERS) && !IS_ASTRAL(ch) && !IS_PROJECT(ch)) {
+    if (access_level(ch, LVL_BUILDER)) {
+      send_to_char("You use your staff powers to bypass the cramped-space restriction.\r\n", ch);
+    } else {
+      send_to_char("Try as you might, you can't fit in there!\r\n", ch);
+      return 0;
+    }
+  }
 
   /*
   if (ch->in_room && ch->in_room->func && ch->in_room->func == escalator)
@@ -162,7 +177,7 @@ bool should_tch_see_chs_movement_message(struct char_data *tch, struct char_data
   }
 
   // Absolutely can't see for whatever reason.
-  if (tch == ch || PRF_FLAGGED(tch, PRF_MOVEGAG) || !AWAKE(tch) || !CAN_SEE(tch, ch))
+  if (tch == ch || PRF_FLAGGED(tch, PRF_MOVEGAG) || !AWAKE(tch) || !CAN_SEE(tch, ch) || IS_IGNORING(tch, is_blocking_ic_interaction_from, ch))
     return FALSE;
 
   // Failed to see from vehicle.
@@ -314,14 +329,12 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
         if (hunting_escortee(tch, ch)) {
           set_fighting(tch, ch);
         } else {
-          if ((!IS_NPC(ch) || IS_PROJECT(ch) || is_escortee(ch))
-              && !PRF_FLAGGED(ch, PRF_NOHASSLE)
-              && MOB_FLAGGED(tch, MOB_AGGRESSIVE)
-              && !FIGHTING(tch)
-              && IS_SET(extra, LEADER))
-          {
-            GET_MOBALERT(tch) = MALERT_ALERT;
-            GET_MOBALERTTIME(tch) = 20;
+          if (AFF_FLAGGED(ch, AFF_SPELLINVIS) || AFF_FLAGGED(ch, AFF_SPELLIMPINVIS)) {
+            process_spotted_invis(tch, ch);
+          }
+
+          if (vict_is_valid_aggro_target(tch, ch)) {
+            stop_fighting(tch);
             send_mob_aggression_warnings(ch, tch);
             set_fighting(tch, ch);
           }
@@ -395,15 +408,20 @@ bool check_fall(struct char_data *ch, int modifier, const char *fall_message)
 {
   int base_target = ch->in_room->rating + modify_target(ch);
   int i, autosucc = 0, dice, success;
+  char roll_buf[10000];
+
+  snprintf(roll_buf, sizeof(roll_buf), "Computing fall test for %s vs initial TN %d and modifier %d.\r\n", GET_CHAR_NAME(ch), base_target, modifier);
 
   for (i = WEAR_LIGHT; i < NUM_WEARS; i++)
-    if (GET_EQ(ch, i) && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_CLIMBING && GET_OBJ_VAL(GET_EQ(ch, i), 1) == CLIMBING_TYPE_JUST_CLIMBING)
+    if (GET_EQ(ch, i) && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_CLIMBING && GET_OBJ_VAL(GET_EQ(ch, i), 1) == CLIMBING_TYPE_JUST_CLIMBING) {
+      snprintf(ENDOF(roll_buf), sizeof(roll_buf) - strlen(roll_buf), " - %s lowers TN by %d.\r\n", GET_OBJ_NAME(GET_EQ(ch, i)), GET_OBJ_VAL(GET_EQ(ch, i), 0));
       base_target -= GET_OBJ_VAL(GET_EQ(ch, i), 0);
+    }
   for (struct obj_data *cyber = ch->cyberware; cyber; cyber = cyber->next_content)
-    if (GET_OBJ_VAL(cyber, 0) == CYB_BALANCETAIL)
+    if (GET_CYBERWARE_TYPE(cyber) == CYB_BALANCETAIL || GET_CYBERWARE_TYPE(cyber) == CYB_BALANCEAUG) {
+      snprintf(ENDOF(roll_buf), sizeof(roll_buf) - strlen(roll_buf), " - %s lowers TN by 2.\r\n", GET_OBJ_NAME(cyber));
       base_target -= 2;
-    else if (GET_OBJ_VAL(cyber, 0) == CYB_BALANCEAUG)
-      base_target -= 2;
+    }
 
   base_target += modifier;
   base_target = MIN(base_target, 52);
@@ -414,8 +432,11 @@ bool check_fall(struct char_data *ch, int modifier, const char *fall_message)
   }
 
   dice = get_skill(ch, SKILL_ATHLETICS, base_target);
+  snprintf(ENDOF(roll_buf), sizeof(roll_buf) - strlen(roll_buf), "Athletics check: Rolling %d + %d dice against a final TN of %d results in ", dice, GET_REA(ch), base_target);
   dice += GET_REA(ch);
-  success = success_test(dice + autosucc, base_target);
+  success = success_test(dice, base_target) + autosucc;
+  snprintf(ENDOF(roll_buf), sizeof(roll_buf) - strlen(roll_buf), "^c%d^n success%s.", success, success == 1 ? "" : "es");
+  act(roll_buf, FALSE, ch, 0, 0, TO_ROLLS);
 
   if (success < 1)
     return TRUE;
@@ -467,6 +488,7 @@ void perform_fall(struct char_data *ch)
 
     // check_fall has them make a test to not fall / stop falling.
     // If they succeed their check, precede their success message with a fall message proportional to the distance they fell.
+    // Note that they don't take damage unless they actually hit the ground. This makes elevator shafts a lot less dangerous than originally expected.
     if (!check_fall(ch, levels * 4, fall_message))
       return;
 
@@ -535,7 +557,9 @@ void perform_fall(struct char_data *ch)
       meters -= GET_POWER(ch, ADEPT_FREEFALL) * 2;
     if (meters <= 0) {
       send_to_char(ch, "You manage to land on your feet.\r\n");
-      act("$e manages to land on $s feet.", FALSE, ch, 0, 0, TO_ROOM);
+      char fall_str[250];
+      snprintf(fall_str, sizeof(fall_str), "$e manage%s to land on $s feet.", HSSH_SHOULD_PLURAL(ch) ? "s" : "");
+      act(fall_str, FALSE, ch, 0, 0, TO_ROOM);
       return;
     }
     int power = (int)(meters / 2); // then divide by two to find power of damage
@@ -638,6 +662,11 @@ void move_vehicle(struct char_data *ch, int dir)
 
   if (ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_HOUSE) && !House_can_enter(ch, EXIT(veh, dir)->to_room->number)) {
     send_to_char("You can't use other people's garages without permission.\r\n", ch);
+    return;
+  }
+
+  if (ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_TOO_CRAMPED_FOR_CHARACTERS) && (veh->body > 1 || veh->type != VEH_DRONE)) {
+    send_to_char("Your vehicle is too big to fit in there, but a small drone might make it in.\r\n", ch);
     return;
   }
 
@@ -1165,14 +1194,22 @@ int ok_pick(struct char_data *ch, int keynum, int pickproof, int scmd, int lock_
       return 0;
     } else {
       WAIT_STATE(ch, PULSE_VIOLENCE);
+
+      // Require a kit.
       if (!has_kit(ch, TYPE_ELECTRONIC)) {
         send_to_char("You need an electronic kit to bypass electronic locks.\r\n", ch);
         return 0;
       }
+
+      // Don't allow bypassing pickproof doors.
+      if (pickproof) {
+        send_to_char("This lock's far too well shielded- it doesn't look like you'll ever be able to bypass it.\r\n", ch);
+        return 0;
+      }
+
       int skill = get_skill(ch, SKILL_ELECTRONICS, lock_level);
-      if (pickproof)
-        send_to_char("You can't seem to bypass the electronic lock.\r\n", ch);
-      else if (success_test(skill, lock_level) < 1) {
+
+      if (success_test(skill, lock_level) < 1) {
         act("$n attempts to bypass the electronic lock.", TRUE, ch, 0, 0, TO_ROOM);
         send_to_char("You fail to bypass the electronic lock.\r\n", ch);
       } else
@@ -1532,7 +1569,7 @@ ACMD(do_drag)
     return;
   }
 
-  if (!(vict = get_char_room_vis(ch, buf1))) {
+  if (!(vict = get_char_room_vis(ch, buf1)) || IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)) {
     send_to_char(ch, "You don't see anyone named '%s' here.\r\n", buf1);
     return;
   }
@@ -2195,6 +2232,12 @@ ACMD(do_follow)
         act("Sorry, but following in loops is not allowed.", FALSE, ch, 0, 0, TO_CHAR);
         return;
       }
+
+      if (IS_IGNORING(leader, is_blocking_following_from, ch)) {
+        send_to_char("You can't do that.\r\n", ch);
+        return;
+      }
+
       if (ch->master)
         stop_follower(ch);
       AFF_FLAGS(ch).RemoveBit(AFF_GROUP);

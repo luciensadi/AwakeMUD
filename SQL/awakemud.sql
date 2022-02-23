@@ -26,7 +26,7 @@ CREATE TABLE `pfiles` (
   `Title` varchar(48) default '^y(Newbie)^n',
   `Pretitle` varchar(48) default '',
   `Whotitle` varchar(10),
-  `Prompt` varchar(1000) default '<@pP @mM> ', 
+  `Prompt` varchar(1000) default '<@pP @mM> ',
   `MatrixPrompt` varchar(1000) default '<@pP @mM> ',
   `Host` varchar(72),
   `Bod` tinyint(2) default '0',
@@ -248,7 +248,7 @@ CREATE TABLE `pfiles_inv` (
   `Inside` tinyint(1) unsigned default '0',
   `Timer` mediumint(1) default '0',
   `ExtraFlags` varchar(128) default '0',
-  `Attempt` tinyint(1) unsigned default '0',
+  `Attempt` mediumint(6) default '0',
   `Cond` tinyint(1) unsigned default '0',
   `posi` smallint(1) unsigned default '0',
   KEY(`idnum`)
@@ -276,7 +276,7 @@ CREATE TABLE `pfiles_worn` (
   `Position` tinyint(1) unsigned default '0',
   `Timer` mediumint(1) default '0',
   `ExtraFlags` varchar(128) default '0',
-  `Attempt` tinyint(1) unsigned default '0',
+  `Attempt` mediumint(6) default '0',
   `Cond` tinyint(1) unsigned default '0',
   `posi` smallint(1) unsigned default '0',
   KEY(`idnum`)

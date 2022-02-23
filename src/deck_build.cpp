@@ -25,6 +25,22 @@ extern void ammo_build(struct char_data *ch, struct obj_data *obj);
 
 ACMD_DECLARE(do_sit);
 
+bool part_is_nerps(int part_type) {
+  switch (part_type) {
+    case PART_PORTS:
+    case PART_MASER:
+    case PART_CELLULAR:
+    case PART_LASER:
+    case PART_MICROWAVE:
+    case PART_RADIO:
+    case PART_SATELLITE:
+    case PART_SIGNAL_AMP:
+      return TRUE;
+  }
+
+  return FALSE;
+}
+
 bool part_can_have_its_rating_set(struct obj_data *part) {
   switch (GET_PART_TYPE(part)) {
     case PART_RESPONSE:
@@ -44,6 +60,37 @@ bool part_can_have_its_rating_set(struct obj_data *part) {
     default:
       return FALSE;
   }
+}
+
+int get_part_maximum_rating(struct obj_data *part) {
+  int mpcp = GET_PART_TARGET_MPCP(part);
+  int part_type = GET_PART_TYPE(part);
+
+  switch (part_type) {
+    case PART_IO:
+      return mpcp * 100;
+    case PART_STORAGE:
+      return mpcp * 600;
+    case PART_ACTIVE:
+      return mpcp * 250;
+    case PART_RESPONSE:
+      return MIN(3, (int)(mpcp / 4));
+    case PART_HARDENING:
+    case PART_ICON:
+    case PART_BOD:
+    case PART_SENSOR:
+    case PART_MASKING:
+    case PART_EVASION:
+    case PART_RADIO:
+    case PART_CELLULAR:
+    case PART_SATELLITE:
+      return mpcp;
+  }
+
+  char oopsbuf[1000];
+  snprintf(oopsbuf, sizeof(oopsbuf), "SYSERR: Received unknown part type %d to get_part_maximum_rating()!", part_type);
+  mudlog(oopsbuf, NULL, LOG_SYSLOG, TRUE);
+  return -1;
 }
 
 int get_part_cost(int type, int rating, int mpcp) {
@@ -146,14 +193,21 @@ void partbuild_main_menu(struct descriptor_data *d) {
   d->edit_mode = DEDIT_MAIN;
 }
 
+void render_part_type_to_character(struct char_data *ch, int index, int part_type, bool newline) {
+  char type_string[1000];
+  strlcpy(type_string, parts[part_type].name, sizeof(type_string));
+
+  if (part_is_nerps(part_type)) {
+    strlcat(type_string, " (Not Implemented)", sizeof(type_string));
+  }
+  send_to_char(ch, "%2d) %-40s%s", index, type_string, newline ? "\r\n" : "");
+}
+
 void partbuild_disp_types(struct descriptor_data *d) {
   CLS(CH);
-  int x = 1;
-  for (; x < NUM_PARTS - 1; x += 2)
-    send_to_char(CH, "%2d) %-28s%s%2d) %s\r\n", x, parts[x].name, D_PRF_FLAGGED(d, PRF_SCREENREADER) ? "\r\n\r\n" : "  ", x+1, parts[x+1].name);
-  if (x < NUM_PARTS)
-    send_to_char(CH, "%2d) %-28s\r\n\r\n", x, parts[x].name);
-  send_to_char(CH, "Enter Part Number: ");
+  for (int x = 1; x < NUM_PARTS; x++)
+    render_part_type_to_character(CH, x, x, D_PRF_FLAGGED(d, PRF_SCREENREADER) ? TRUE : x % 2 == 0);
+  send_to_char(CH, "\r\nEnter Part Number: ");
   d->edit_mode = DEDIT_TYPE;
 }
 
@@ -197,19 +251,19 @@ void pbuild_parse(struct descriptor_data *d, const char *arg) {
             if (part_can_have_its_rating_set(PART)) {
               switch (GET_PART_TYPE(PART)) {
                 case PART_IO:
-                  send_to_char(CH, "I/O rating (max %d): ", GET_PART_TARGET_MPCP(PART) * 100);
+                  send_to_char(CH, "I/O rating (max %d): ", get_part_maximum_rating(PART));
                   break;
                 case PART_STORAGE:
-                  send_to_char(CH, "Storage capacity (max %d): ", GET_PART_TARGET_MPCP(PART) * 600);
+                  send_to_char(CH, "Storage capacity (max %d): ", get_part_maximum_rating(PART));
                   break;
                 case PART_ACTIVE:
-                  send_to_char(CH, "Memory capacity (max %d): ", GET_PART_TARGET_MPCP(PART) * 250);
+                  send_to_char(CH, "Memory capacity (max %d): ", get_part_maximum_rating(PART));
                   break;
                 case PART_RESPONSE:
-                  send_to_char(CH, "Response increase (max %d): ", MIN(3, (int)(GET_PART_TARGET_MPCP(PART) / 4)));
+                  send_to_char(CH, "Response increase (max %d): ", get_part_maximum_rating(PART));
                   break;
                 default:
-                  send_to_char(CH, "Rating of part (max %d): ", GET_PART_TARGET_MPCP(PART));
+                  send_to_char(CH, "Rating of part (max %d): ", get_part_maximum_rating(PART));
                   break;
               }
 
@@ -224,44 +278,51 @@ void pbuild_parse(struct descriptor_data *d, const char *arg) {
         }
         break;
     case DEDIT_RATING:
+#define WARN_IF_PART_BELOW_RATING(min_rating, warning_string) if (number < (min_rating)) { send_to_char(CH, "^yWARNING:^n You've picked a pretty " #warning_string "! The maximum is %d. Be sure you want this!\r\n", get_part_maximum_rating(PART)); }
         switch (GET_PART_TYPE(PART)) {
-        case PART_IO:
-            if (number < 1 || number > GET_PART_TARGET_MPCP(PART) * 100) {
-                send_to_char(CH, "I/O must be between 1 and %d. Enter Speed of I/O: ", GET_PART_TARGET_MPCP(PART) * 100);
+          case PART_IO:
+            if (number < 1 || number > get_part_maximum_rating(PART)) {
+                send_to_char(CH, "I/O must be between 1 and %d. Enter Speed of I/O: ", get_part_maximum_rating(PART));
                 return;
             }
+            WARN_IF_PART_BELOW_RATING(GET_PART_TARGET_MPCP(PART) * 50, "slow I/O speed");
             break;
-        case PART_STORAGE:
-            if (number < 1 || number > GET_PART_TARGET_MPCP(PART) * 600) {
-                send_to_char(CH, "Memory must be between 1 and %d. Enter Amount of Memory: ", GET_PART_TARGET_MPCP(PART) * 600);
+          case PART_STORAGE:
+            if (number < 1 || number > get_part_maximum_rating(PART)) {
+                send_to_char(CH, "Memory must be between 1 and %d. Enter Amount of Memory: ", get_part_maximum_rating(PART));
                 return;
             }
+            WARN_IF_PART_BELOW_RATING(GET_PART_TARGET_MPCP(PART) * 300, "low amount of storage memory");
             break;
-        case PART_ACTIVE:
-            if (number < 1 || number > GET_PART_TARGET_MPCP(PART) * 250) {
-                send_to_char(CH, "Memory must be between 1 and %d. Enter Amount of Memory: ", GET_PART_TARGET_MPCP(PART) * 250);
+          case PART_ACTIVE:
+            if (number < 1 || number > get_part_maximum_rating(PART)) {
+                send_to_char(CH, "Memory must be between 1 and %d. Enter Amount of Memory: ", get_part_maximum_rating(PART));
                 return;
             }
+            WARN_IF_PART_BELOW_RATING(GET_PART_TARGET_MPCP(PART) * 150, "low amount of active memory");
             break;
-        case PART_RESPONSE:
-            if (number < 0 || number > MIN(3, (int)(GET_PART_TARGET_MPCP(PART) / 4))) {
-                send_to_char(CH, "Response Increase must be between 1 and %d. Enter Response Increase: ",
-                             MIN(3, (int)(GET_PART_TARGET_MPCP(PART) / 4)));
+          case PART_RESPONSE:
+            if (number < 0 || number > get_part_maximum_rating(PART)) {
+                send_to_char(CH, "Response Increase must be between 1 and %d. Enter Response Increase: ", get_part_maximum_rating(PART));
                 return;
             }
+            WARN_IF_PART_BELOW_RATING(get_part_maximum_rating(PART) - 1, "low response rating");
             break;
-        case PART_HARDENING:
-        case PART_ICON:
-        case PART_BOD:
-        case PART_SENSOR:
-        case PART_MASKING:
-        case PART_EVASION:
-        case PART_RADIO:
-        case PART_CELLULAR:
-        case PART_SATELLITE:
-            if (number < 1 || number > GET_PART_TARGET_MPCP(PART)) {
+          case PART_HARDENING:
+          case PART_ICON:
+          case PART_BOD:
+          case PART_SENSOR:
+          case PART_MASKING:
+          case PART_EVASION:
+          case PART_RADIO:
+          case PART_CELLULAR:
+          case PART_SATELLITE:
+            if (number < 1 || number > get_part_maximum_rating(PART)) {
                 send_to_char(CH, "Part ratings must be between 1 and the MPCP of the target deck (%d). Enter Rating: ", GET_PART_TARGET_MPCP(PART));
                 return;
+            }
+            if (!part_is_nerps(GET_PART_TYPE(PART))) {
+              WARN_IF_PART_BELOW_RATING(get_part_maximum_rating(PART) - 1, "low rating");
             }
             break;
         }
@@ -576,7 +637,7 @@ ACMD(do_build) {
           }
 
           FOR_ITEMS_AROUND_CH(ch, obj) {
-            if (GET_OBJ_TYPE(obj) == ITEM_MAGIC_TOOL && (GET_OBJ_VAL(obj, 0) == TYPE_CIRCLE || GET_OBJ_VAL(obj, 0) == TYPE_LODGE)) {
+            if (GET_OBJ_TYPE(obj) == ITEM_MAGIC_TOOL && (GET_MAGIC_TOOL_TYPE(obj) == TYPE_CIRCLE || GET_MAGIC_TOOL_TYPE(obj) == TYPE_LODGE)) {
               send_to_char("There is already a lodge or a hermetic circle here.\r\n", ch);
               return;
             }
@@ -612,20 +673,20 @@ ACMD(do_build) {
               send_to_char("It has already been completed!\r\n", ch);
           else if (GET_OBJ_VAL(obj, 3) != GET_IDNUM(ch))
               send_to_char("That's not yours!\r\n", ch);
-          else if (GET_OBJ_VAL(obj, 0) == TYPE_LODGE) {
+          else if (GET_MAGIC_TOOL_TYPE(obj) == TYPE_LODGE) {
               AFF_FLAGS(ch).SetBit(AFF_LODGE);
               GET_BUILDING(ch) = obj;
               send_to_char(ch, "You continue working on your lodge.\r\n");
               act("$n continues to build $s lodge.", FALSE, ch, 0, 0, TO_ROOM);
-          } else if (GET_OBJ_VAL(obj, 0) == TYPE_CIRCLE) {
+          } else if (GET_MAGIC_TOOL_TYPE(obj) == TYPE_CIRCLE) {
               AFF_FLAGS(ch).SetBit(AFF_CIRCLE);
               GET_BUILDING(ch) = obj;
               send_to_char(ch, "You continue working on %s.\r\n", GET_OBJ_NAME(obj));
               act("$n continues to draw the hermetic circle.", FALSE, ch, 0, 0, TO_ROOM);
           } else
-              send_to_char("You can't build that!\r\n", ch);
+              send_to_char(ch, "There's nothing about %s that strikes you as buildable.\r\n", GET_OBJ_NAME(obj));
       } else
-          send_to_char("You can't build that!\r\n", ch);
+          send_to_char(ch, "There's nothing about %s that strikes you as buildable.\r\n", GET_OBJ_NAME(obj));
       return;
 
     } else if (GET_OBJ_TYPE(obj) == ITEM_GUN_AMMO) {
@@ -637,7 +698,7 @@ ACMD(do_build) {
     }
 
     if(GET_OBJ_TYPE(obj) != ITEM_PART) {
-      send_to_char(ch, "You can't build a part out of %s.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
+      send_to_char(ch, "You can't build a cyberdeck part out of %s.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
       return;
     }
 
@@ -918,16 +979,13 @@ ACMD(do_progress)
 {
   int amount_left, amount_needed;
 
-  if (AFF_FLAGS(ch).IsSet(AFF_CIRCLE)) {
-    send_to_char(ch, "The hermetic circle you are working on is about %d%% completed.\r\n",
-                       (int)(((float)((GET_OBJ_VAL(ch->char_specials.programming, 1) * 60) -
-                                      GET_OBJ_VAL(ch->char_specials.programming, 9)) / (float)((GET_OBJ_VAL(ch->char_specials.programming, 1) != 0 ? GET_OBJ_VAL(ch->char_specials.programming, 1) : 1) * 60)) * 100));
-    return;
-  }
+  if (AFF_FLAGS(ch).IsSet(AFF_LODGE) || AFF_FLAGS(ch).IsSet(AFF_CIRCLE)) {
+    int initial_build_time = MAX(1, GET_MAGIC_TOOL_RATING(GET_BUILDING(ch)) * (AFF_FLAGS(ch).IsSet(AFF_CIRCLE) ? 60 : 300));
+    float completion_percentage = ((float)(initial_build_time - GET_MAGIC_TOOL_BUILD_TIME_LEFT(GET_BUILDING(ch))) / initial_build_time) * 100;
 
-  if (AFF_FLAGS(ch).IsSet(AFF_LODGE)) {
-    send_to_char(ch, "The lodge you are working on is about %d%% completed.\r\n", (int)(((float)(((GET_OBJ_VAL(ch->char_specials.programming, 1) != 0 ? GET_OBJ_VAL(ch->char_specials.programming, 1) : 1) * 300) -
-                     GET_OBJ_VAL(ch->char_specials.programming, 9)) / (float)(GET_OBJ_VAL(ch->char_specials.programming, 1) * 300)) * 100));
+    if (GET_MAGIC_TOOL_BUILD_TIME_LEFT(GET_BUILDING(ch)) && GET_MAGIC_TOOL_OWNER(GET_BUILDING(ch)) == GET_IDNUM(ch)) {
+      send_to_char(ch, "It looks like you've completed around %.02f%% of your %s.\r\n", completion_percentage, AFF_FLAGS(ch).IsSet(AFF_CIRCLE) ? "hermetic circle" : "lodge");
+    }
     return;
   }
 
@@ -945,9 +1003,14 @@ ACMD(do_progress)
   }
 
   if (AFF_FLAGS(ch).IsSet(AFF_BONDING)) {
-    send_to_char(ch, "There are %d ticks remaining until you finish bonding %s.\r\n", GET_OBJ_VAL(GET_BUILDING(ch), 9), GET_OBJ_NAME(GET_BUILDING(ch)));
-/*                 (int)(((float)(GET_OBJ_VAL(GET_BUILDING(ch), 1) - GET_OBJ_VAL(GET_BUILDING(ch), 9)) / (GET_OBJ_VAL(GET_BUILDING(ch), 1) != 0 ? GET_OBJ_VAL(GET_BUILDING(ch), 1) : 1) * 60)*100),
-                 GET_OBJ_NAME(GET_BUILDING(ch))); */
+    if (GET_OBJ_TYPE(GET_BUILDING(ch)) == ITEM_WEAPON) {
+      int initial_bond_time = MAX(1, GET_WEAPON_FOCUS_RATING(GET_BUILDING(ch)) * 60);
+      float completion_percentage = ((float)(initial_bond_time - GET_WEAPON_FOCUS_BOND_STATUS(GET_BUILDING(ch))) / initial_bond_time) * 100;
+
+      send_to_char(ch, "You are about %.02f%% of the way through bonding %s.\r\n", completion_percentage, GET_OBJ_NAME(GET_BUILDING(ch)));
+    } else {
+      send_to_char(ch, "There are %d ticks remaining until you finish bonding %s.\r\n", GET_OBJ_VAL(GET_BUILDING(ch), 9), GET_OBJ_NAME(GET_BUILDING(ch)));
+    }
     return;
   }
 
@@ -982,15 +1045,19 @@ ACMD(do_progress)
   }
 
   if (AFF_FLAGS(ch).IsSet(AFF_CONJURE)) {
-    send_to_char(ch, "You are about %d%% of the way through the conjuring process.\r\n", (int) ((float) (ch->char_specials.conjure[2] / ch->char_specials.conjure[3]) * 100));
+    float current = ch->char_specials.conjure[3] - ch->char_specials.conjure[2];
+    float target = ch->char_specials.conjure[3];
+    float percentage = (current / target) * 100;
+
+    send_to_char(ch, "You are about %d%% of the way through the conjuring process.\r\n", (int) percentage);
     return;
   }
 
   if (AFF_FLAGS(ch).IsSet(AFF_SPELLDESIGN)) {
-    int timeleft = GET_OBJ_VAL(ch->char_specials.programming, 6);
-    if (GET_OBJ_TIMER(ch->char_specials.programming) == -3)
+    int timeleft = GET_SPELLFORMULA_TIME_LEFT(ch->char_specials.programming);
+    if (GET_OBJ_TIMER(ch->char_specials.programming) == SPELL_DESIGN_FAILED_CODE)
       timeleft *= 2;
-    send_to_char(ch, "You are about %d%% done designing %s.\r\n", (int)(((float)timeleft / (float)GET_OBJ_VAL(ch->char_specials.programming, 7)) *-100 + 100), GET_OBJ_NAME(ch->char_specials.programming));
+    send_to_char(ch, "You are about %d%% done designing %s.\r\n", (int)(((float)timeleft / (float)GET_SPELLFORMULA_INITIAL_TIME(ch->char_specials.programming)) *-100 + 100), GET_OBJ_NAME(ch->char_specials.programming));
     return;
   }
 

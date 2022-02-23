@@ -18,8 +18,6 @@
 #include <stdarg.h>
 #include <iostream>
 
-using namespace std;
-
 #if defined(WIN32) && !defined(__CYGWIN__)
 #include <winsock.h>
 #define random() rand()
@@ -44,6 +42,7 @@ using namespace std;
 #include "newdb.h"
 #include "config.h"
 #include "bullet_pants.h"
+#include "perception_tests.h"
 
 extern class memoryClass *Mem;
 extern struct time_info_data time_info;
@@ -77,6 +76,8 @@ extern SPECIAL(fence);
 extern SPECIAL(taxi);
 extern SPECIAL(painter);
 extern SPECIAL(nerp_skills_teacher);
+
+bool npc_can_see_in_any_situation(struct char_data *npc);
 
 /* creates a random number in interval [from;to] */
 int number(int from, int to)
@@ -170,6 +171,10 @@ int resisted_test(int num4ch, int tar4ch, int num4vict, int tar4vict)
 
 int stage(int successes, int wound)
 {
+  // This is just a little bit faster than what was below.
+  return wound + (successes / 2);
+
+  /*
   if (successes >= 0)
     while (successes >= 2) {
       wound++;
@@ -180,7 +185,9 @@ int stage(int successes, int wound)
       wound--;
       successes += 2;
     }
+
   return wound;
+  */
 }
 
 int convert_damage(int damage)
@@ -326,16 +333,29 @@ int damage_modifier(struct char_data *ch, char *rbuf, int rbuf_size)
 int sustain_modifier(struct char_data *ch, char *rbuf, size_t rbuf_len) {
   int base_target = 0;
 
+  // Since NPCs don't have sustain foci available to them at the moment, we don't throw these penalties on them.
+  if (IS_NPC(ch) && !IS_PROJECT(ch))
+    return 0;
+
   if (GET_SUSTAINED_NUM(ch) > 0) {
-    base_target += ((GET_SUSTAINED_NUM(ch) - GET_SUSTAINED_FOCI(ch)) * 2);
-    buf_mod(rbuf, rbuf_len, "Sustain", (GET_SUSTAINED_NUM(ch) - GET_SUSTAINED_FOCI(ch)) * 2);
+    int delta = (GET_SUSTAINED_NUM(ch) - GET_SUSTAINED_FOCI(ch)) * 2;
+    base_target += delta;
+    buf_mod(rbuf, rbuf_len, "Sustain", delta);
+  }
+
+  if (IS_PROJECT(ch) && ch->desc && ch->desc->original) {
+    if (GET_SUSTAINED_NUM(ch->desc->original) > 0) {
+      int delta = (GET_SUSTAINED_NUM(ch->desc->original) - GET_SUSTAINED_FOCI(ch->desc->original)) * 2;
+      base_target += delta;
+      buf_mod(rbuf, rbuf_len, "Sustain", delta);
+    }
   }
 
   return base_target;
 }
 
 // Adds the combat_mode toggle
-int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int current_visibility_penalty) {
+int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int current_visibility_penalty, bool skill_is_magic) {
   extern time_info_data time_info;
   int base_target = 0, light_target = 0;
   // get damage modifier
@@ -350,10 +370,12 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int c
     return 100;
   }
 
-  if (PLR_FLAGGED(ch, PLR_PERCEIVE))
+  if (PLR_FLAGGED(ch, PLR_PERCEIVE) || MOB_FLAGGED(ch, MOB_DUAL_NATURE))
   {
-    base_target += 2;
-    buf_mod(rbuf, rbuf_len, "AstralPercep", 2);
+    if (!skill_is_magic && !MOB_FLAGGED(ch, MOB_DUAL_NATURE)) {
+      base_target += 2;
+      buf_mod(rbuf, rbuf_len, "AstralPercep", 2);
+    }
   } else if (current_visibility_penalty < 8) {
     switch (light_level(temp_room)) {
       case LIGHT_FULLDARK:
@@ -536,14 +558,19 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int c
 
 int modify_target_rbuf(struct char_data *ch, char *rbuf, int rbuf_len)
 {
-  return modify_target_rbuf_raw(ch, rbuf, rbuf_len, 0);
+  return modify_target_rbuf_raw(ch, rbuf, rbuf_len, 0, FALSE);
+}
+
+int modify_target_rbuf_magical(struct char_data *ch, char *rbuf, int rbuf_len)
+{
+  return modify_target_rbuf_raw(ch, rbuf, rbuf_len, 0, TRUE);
 }
 
 int modify_target(struct char_data *ch)
 {
   char fake_rbuf[5000];
   memset(fake_rbuf, 0, sizeof(fake_rbuf));
-  return modify_target_rbuf_raw(ch, fake_rbuf, sizeof(fake_rbuf), 0);
+  return modify_target_rbuf_raw(ch, fake_rbuf, sizeof(fake_rbuf), 0, FALSE);
 }
 
 // this returns the general skill
@@ -925,6 +952,9 @@ void mudlog(const char *str, struct char_data *ch, int log, bool file)
         case LOG_RADLOG:
           check_log = PRF_RADLOG;
           break;
+        case LOG_IGNORELOG:
+          check_log = PRF_IGNORELOG;
+          break;
         default:
           char errbuf[500];
           snprintf(errbuf, sizeof(errbuf), "SYSERR: Attempting to display a message to log type %d, but that log type is not handled in utils.cpp's mudlog() function! Dumping to SYSLOG.", log);
@@ -1245,41 +1275,57 @@ int get_speed(struct veh_data *veh)
   return (speed);
 }
 
-int negotiate(struct char_data *ch, struct char_data *tch, int comp, int basevalue, int mod, bool buy)
+int negotiate(struct char_data *ch, struct char_data *tch, int comp, int basevalue, int mod, bool buy, bool include_metavariant_penalty)
 {
   struct obj_data *bio;
   int cmod = -GET_POWER(ch, ADEPT_KINESICS);
   int tmod = -GET_POWER(tch, ADEPT_KINESICS);
   snprintf(buf3, sizeof(buf3), "ALRIGHT BOIS HERE WE GO. Base global mod is %d. After application of Kinesics bonuses (if any), base modifiers for PC and NPC are %d and %d.", mod, cmod, tmod);
-  if (GET_RACE(ch) != GET_RACE(tch)) {
-    switch (GET_RACE(ch)) {
-      case RACE_HUMAN:
-      case RACE_ELF:
-      case RACE_ORK:
-      case RACE_TROLL:
-      case RACE_DWARF:
-        break;
-      default:
-        cmod += 4;
-        snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), " Metavariant TN penalty +4 for PC.");
-        break;
-    }
-    switch (GET_RACE(tch)) {
-      case RACE_HUMAN:
-      case RACE_ELF:
-      case RACE_ORK:
-      case RACE_TROLL:
-      case RACE_DWARF:
-        break;
-      default:
-        tmod += 4;
-        snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), " Metavariant TN penalty +4 for NPC.");
-        break;
-    }
-  }
 
-  int chtn = GET_INT(tch)+mod+cmod;
-  int tchtn = GET_INT(ch)+mod+tmod;
+  if (include_metavariant_penalty) {
+    if (GET_RACE(ch) != GET_RACE(tch)) {
+      switch (GET_RACE(ch)) {
+        case RACE_HUMAN:
+        case RACE_ELF:
+        case RACE_ORK:
+        case RACE_TROLL:
+        case RACE_DWARF:
+          break;
+        default:
+          cmod += 4;
+          snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), " Metavariant TN penalty +4 for PC.");
+          break;
+      }
+      switch (GET_RACE(tch)) {
+        case RACE_HUMAN:
+        case RACE_ELF:
+        case RACE_ORK:
+        case RACE_TROLL:
+        case RACE_DWARF:
+          break;
+        default:
+          tmod += 4;
+          snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), " Metavariant TN penalty +4 for NPC.");
+          break;
+      }
+    }
+  } else {
+    snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), " Skipping any potential metavariant penalties.");
+  }
+  // House rule: Data fence negotiations use raw int in order to make them a little easier to balance.
+  bool negotiation_is_with_data_fence = (IS_NPC(ch) && MOB_HAS_SPEC(ch, fence)) || (IS_NPC(tch) && MOB_HAS_SPEC(ch, fence));
+
+  int ch_int = (negotiation_is_with_data_fence ? GET_REAL_INT(ch) : GET_INT(ch));
+  int tch_int = (negotiation_is_with_data_fence ? GET_REAL_INT(tch) : GET_INT(tch));
+
+  // Plenty of NPCs have no int, so we set these to an average value if found.
+  if (IS_NPC(tch) && tch_int <= 0)
+    tch_int = MAX(tch_int, 3);
+  if (IS_NPC(ch) && ch_int <= 0)
+    ch_int = MAX(ch_int, 3);
+
+  int chtn = mod + cmod + tch_int;
+  int tchtn = mod + tmod + ch_int;
 
   act("Getting skill for PC...", FALSE, ch, NULL, NULL, TO_ROLLS);
   int cskill = get_skill(ch, SKILL_NEGOTIATION, chtn);
@@ -1287,18 +1333,18 @@ int negotiate(struct char_data *ch, struct char_data *tch, int comp, int baseval
   int tskill = get_skill(tch, SKILL_NEGOTIATION, tchtn);
 
   for (bio = ch->bioware; bio; bio = bio->next_content)
-    if (GET_OBJ_VAL(bio, 0) == BIO_TAILOREDPHEREMONES)
+    if (GET_BIOWARE_TYPE(bio) == BIO_TAILOREDPHEREMONES)
     {
-      int delta = GET_OBJ_VAL(bio, 2) ? GET_OBJ_VAL(bio, 1) * 2: GET_OBJ_VAL(bio, 1);
+      int delta = GET_BIOWARE_IS_CULTURED(bio) ? GET_BIOWARE_RATING(bio) * 2 : GET_BIOWARE_RATING(bio);
       cskill += delta;
       snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), " Pheremone skill buff of %d for PC.", delta);
       break;
     }
 
   for (bio = tch->bioware; bio; bio = bio->next_content)
-    if (GET_OBJ_VAL(bio, 0) == BIO_TAILOREDPHEREMONES)
+    if (GET_BIOWARE_TYPE(bio) == BIO_TAILOREDPHEREMONES)
     {
-      int delta = GET_OBJ_VAL(bio, 2) ? GET_OBJ_VAL(bio, 1) * 2: GET_OBJ_VAL(bio, 1);
+      int delta = GET_BIOWARE_IS_CULTURED(bio) ? GET_BIOWARE_RATING(bio) * 2: GET_BIOWARE_RATING(bio);
       tskill += delta;
       snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), " Pheremone skill buff of %d for NPC.", delta);
       break;
@@ -1308,28 +1354,45 @@ int negotiate(struct char_data *ch, struct char_data *tch, int comp, int baseval
   int chnego = success_test(cskill, chtn);
 
   snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "\r\nPC negotiation test gave %d successes on %d dice with TN %d (calculated from opponent int (%d) + global mod (%d) + our mod (%d)).",
-           chnego, cskill, chtn, GET_INT(tch), mod, cmod);
+           chnego, cskill, chtn, tch_int, mod, cmod);
   snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "\r\nNPC negotiation test gave %d successes on %d dice with TN %d (calculated from opponent int (%d) + global mod (%d) + our mod (%d)).",
-           tchnego, tskill, tchtn, GET_INT(ch), mod, tmod);
+           tchnego, tskill, tchtn, ch_int, mod, tmod);
   if (comp)
   {
-    int ch_delta = success_test(GET_SKILL(ch, comp), GET_INT(tch)+mod+cmod) / 2;
-    int tch_delta = success_test(GET_SKILL(tch, comp), GET_INT(ch)+mod+tmod) / 2;
+    chtn = GET_INT(tch)+mod+cmod;
+    tchtn = GET_INT(ch)+mod+tmod;
+
+    act("Getting additional skill for PC...", FALSE, ch, NULL, NULL, TO_ROLLS);
+    cskill = get_skill(ch, comp, chtn);
+    act("Getting additional skill for NPC...", FALSE, tch, NULL, NULL, TO_ROLLS);
+    tskill = get_skill(tch, comp, tchtn);
+
+    int ch_delta = success_test(cskill, chtn) / 2;
+    int tch_delta = success_test(tskill, tchtn) / 2;
+
     chnego += ch_delta;
     tchnego += tch_delta;
-    snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "\r\nAdded additional rolls for %s, so we got an additional %d PC and %d successes.", skills[comp].name, ch_delta, tch_delta);
+    snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "\r\nAdded additional rolls for %s (%d dice at TN %d vs %d dice at TN %d), so we got an additional %d PC and %d NPC successes.",
+             skills[comp].name,
+             cskill,
+             chtn,
+             tskill,
+             tchtn,
+             ch_delta,
+             tch_delta);
   }
   int num = chnego - tchnego;
   if (num > 0)
   {
-    snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "\r\nPC got more successes, so basevalue goes from %d", basevalue);
+    snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "\r\nPC got %d net successes, so basevalue goes from %d", num, basevalue);
     if (buy)
       basevalue = MAX((int)(basevalue * 3/4), basevalue - (num * (basevalue / 20)));
     else
       basevalue = MIN((int)(basevalue * 5/4), basevalue + (num * (basevalue / 15)));
   } else
   {
-    snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "\r\nNPC got more successes, so basevalue goes from %d", basevalue);
+    num *= -1;
+    snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "\r\nNPC got %d net successes, so basevalue goes from %d", num, basevalue);
     if (buy)
       basevalue = MIN((int)(basevalue * 5/4), basevalue + (num * (basevalue / 15)));
     else
@@ -2227,21 +2290,33 @@ bool invis_ok(struct char_data *ch, struct char_data *vict) {
   if (IS_NPC(vict) && MOB_FLAGGED(vict, MOB_TOTALINVIS))
     return FALSE;
 
-  // Astral perception sees most things.
-  if (IS_ASTRAL(ch) || IS_DUAL(ch))
+  // Astral perception sees most things-- unless said thing is an inanimate mob with no spells on it.
+  if ((IS_ASTRAL(ch) || IS_DUAL(ch)) && !(MOB_FLAGGED(vict, MOB_INANIMATE) && !GET_SUSTAINED(vict)))
     return TRUE;
 
   // Ultrasound pierces all invis as long as it's not blocked by silence or stealth.
-  if (AFF_FLAGGED(ch, AFF_DETECT_INVIS) && (get_ch_in_room(ch)->silence[0] <= 0 && !affected_by_spell(vict, SPELL_STEALTH)))
+  if (AFF_FLAGGED(ch, AFF_ULTRASOUND) && (get_ch_in_room(ch)->silence[0] <= 0 && !affected_by_spell(vict, SPELL_STEALTH)))
     return TRUE;
 
-  // Improved invis defeats all other detection measures.
-  if (IS_AFFECTED(vict, AFF_IMP_INVIS) || IS_AFFECTED(vict, AFF_SPELLIMPINVIS))
-    return FALSE;
+  // Allow perception test VS invis.
+  if (IS_AFFECTED(vict, AFF_SPELLIMPINVIS)) {
+    return can_see_through_invis(ch, vict);
+  }
 
-  // Standard invis is pierced by thermographic vision, which is default on vehicles.
+  // Thermoptic camouflage, a houseruled thing that doesn't actually show up in the game yet. This can only be broken by ultrasound.
+  if (IS_AFFECTED(vict, AFF_IMP_INVIS)) {
+    return FALSE;
+  }
+
+  // Ruthenium is pierced by thermographic vision, which is default on vehicles.
+  bool can_see_through_standard_invis = (CURRENT_VISION(ch) == THERMOGRAPHIC || AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE));
   if (IS_AFFECTED(vict, AFF_INVISIBLE)) {
-    return CURRENT_VISION(ch) == THERMOGRAPHIC || AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE);
+    return can_see_through_standard_invis;
+  }
+
+  // Allow perception test VS invis spell.
+  if (IS_AFFECTED(vict, AFF_SPELLINVIS)) {
+    return (can_see_through_standard_invis || can_see_through_invis(ch, vict));
   }
 
   // If we've gotten here, they're not invisible.
@@ -3215,6 +3290,11 @@ bool combine_ammo_boxes(struct char_data *ch, struct obj_data *from, struct obj_
     return FALSE;
   }
 
+  if (GET_OBJ_TYPE(from) != ITEM_GUN_AMMO || GET_OBJ_TYPE(into) != ITEM_GUN_AMMO) {
+    mudlog("SYSERR: combine_ammo_boxes received something that was not an ammo box.", ch, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+
   if (GET_AMMOBOX_INTENDED_QUANTITY(from) > 0 || GET_AMMOBOX_INTENDED_QUANTITY(into) > 0) {
     mudlog("SYSERR: combine_ammo_boxes received a box that was not yet completed.", ch, LOG_SYSLOG, TRUE);
     return FALSE;
@@ -3356,6 +3436,10 @@ bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struc
   // Does the viewee have an astral state that makes them invisible to subj?
   if (!SEE_ASTRAL(subj, obj))
     return FALSE;
+
+  // Johnsons, trainers, and cab drivers can always see. Them going blind doesn't increase the fun.
+  if (npc_can_see_in_any_situation(subj))
+    return TRUE;
 
   // If your vision can't see in the ambient light, fail.
   if (!LIGHT_OK_ROOM_SPECIFIED(subj, room_specified))
@@ -3869,6 +3953,17 @@ bool npc_is_protected_by_spec(struct char_data *npc) {
           || CHECK_FUNC_AND_SFUNC_FOR(nerp_skills_teacher)
           || CHECK_FUNC_AND_SFUNC_FOR(hacker));
 }
+// Returns TRUE if the NPC should be able to see in any situation.
+bool npc_can_see_in_any_situation(struct char_data *npc) {
+  return (CHECK_FUNC_AND_SFUNC_FOR(johnson)
+          || CHECK_FUNC_AND_SFUNC_FOR(teacher)
+          || CHECK_FUNC_AND_SFUNC_FOR(metamagic_teacher)
+          || CHECK_FUNC_AND_SFUNC_FOR(trainer)
+          || CHECK_FUNC_AND_SFUNC_FOR(adept_trainer)
+          || CHECK_FUNC_AND_SFUNC_FOR(spell_trainer)
+          || CHECK_FUNC_AND_SFUNC_FOR(taxi)
+          || CHECK_FUNC_AND_SFUNC_FOR(nerp_skills_teacher));
+}
 #undef CHECK_FUNC_AND_SFUNC_FOR
 
 bool can_damage_vehicle(struct char_data *ch, struct veh_data *veh) {
@@ -3952,6 +4047,144 @@ void send_gamewide_annoucement(const char *msg, bool prepend_announcement_string
       send_to_char(d->character, announcement);
     }
   }
+}
+
+// Given an NPC, reads out the unique-on-this-boot-only ID number associated with this character.
+char *get_printable_mob_unique_id(struct char_data *ch) {
+  static char result_buf[1000];
+  // If you're using UUIDs here, you need something like this:
+  // uuid_unparse(GET_MOB_UNIQUE_ID(ch), result_buf);
+  // Buuut since we're just using unsigned longs...
+  snprintf(result_buf, sizeof(result_buf), "%ld", GET_MOB_UNIQUE_ID(ch));
+  return result_buf;
+}
+
+// This sort of function is dead stupid for comparing two unsigned longs... but if you change to UUIDs, you'll appreciate being able to change this.
+bool mob_unique_id_matches(mob_unique_id_t id1, mob_unique_id_t id2) {
+  // return uuid_compare(id1, id2) == 0;
+  return id1 == id2;
+}
+
+// Don't @ me about having a global declared here, it's only used in this one function. -LS
+unsigned long global_mob_unique_id_number = 0;
+void set_new_mobile_unique_id(struct char_data *ch) {
+  // Eventually, you'll swap this out for UUIDs, assuming we find a use case for that.
+  // uuid_generate(GET_MOB_UNIQUE_ID(ch));
+  GET_MOB_UNIQUE_ID(ch) = global_mob_unique_id_number++;
+}
+
+void knockdown_character(struct char_data *ch) {
+  if (!AFF_FLAGGED(ch, AFF_PRONE)) {
+    WAIT_STATE(ch, 1 RL_SEC);
+
+    /*
+    bool eligible_for_kipup = PLR_FLAGGED(ch, PLR_PAID_FOR_KIPUP) || (IS_NPC(ch) && (GET_QUI(ch) >= 10 && GET_SKILL(ch, SKILL_UNARMED_COMBAT) >= 6));
+
+    asdf in the process of writing an auto-stand, need to write a kipup command and redo the wording in spec_proc.
+    system lets you 'tog autostand' or 'tog autokipup' and have your character automatically execute either of those.
+    while we're adding this stuff, probably want a 'config autoconceal' for shamans that lets you specify a force of spirit to auto-conjure and conceal with.
+
+    if (eligible_for_kipup) {
+      if (PRF_FLAGGED(ch, PRF_AUTOKIPUP) && success_test(GET_QUI(ch), 6) > 0) {
+        send_to_char("^yYou're sent sprawling, but recover with a quick kip-up!\r\n", ch);
+        act("$n is knocked down, but pops right back up again!", TRUE, ch, 0, 0, TO_ROOM);
+        return;
+      } else if (PRF_FLAGGED(ch, PRF_AUTOSTAND)) {
+        send_to_char("^yYou're sent sprawling, and it takes you a moment to clamber back to your feet.\r\n", ch);
+        act("$n is knocked down, but clambers back to $s feet!", TRUE, ch, 0, 0, TO_ROOM);
+        return;
+      } else {
+        send_to_char(ch, "^YYou are knocked prone!%s^n\r\n", GET_TKE(ch) < 100 ? " (You'll probably want to ^WKIPUP^n or ^WSTAND^n.)" : "");
+      }
+    } else
+      */
+    send_to_char(ch, "^YYou are knocked prone!%s^n\r\n", GET_TKE(ch) < 100 ? " (You'll probably want to ^WSTAND^n.)" : "");
+    act("$n is knocked prone!", TRUE, ch, 0, 0, TO_ROOM);
+    AFF_FLAGS(ch).SetBit(AFF_PRONE);
+  }
+}
+
+// Performing a knockdown test (SR3 p124)
+bool perform_knockdown_test(struct char_data *ch, int initial_tn, int successes_to_avoid_knockback) {
+  // Some things can't be knocked down.
+  if (AFF_FLAGGED(ch, AFF_PRONE) || MOB_FLAGGED(ch, MOB_EMPLACED))
+    return FALSE;
+
+  if (GET_PHYSICAL(ch) <= (10 - damage_array[DEADLY]) || GET_MENTAL(ch) <= (10 - damage_array[DEADLY])) {
+    // If you're already mortally wounded (or knocked out), going prone won't matter.
+    return TRUE;
+  }
+
+  char rbuf[5000];
+  snprintf(rbuf, sizeof(rbuf), "^mKD test: %s. Mods: ", GET_CHAR_NAME(ch));
+  int tn_modifiers = modify_target_rbuf_raw(ch, rbuf, sizeof(rbuf), 8, FALSE);
+
+  bool has_tail = FALSE, has_aug = FALSE;
+  for (struct obj_data *cyb = ch->cyberware; cyb; cyb = cyb->next_content) {
+    switch (GET_CYBERWARE_TYPE(cyb)) {
+      case CYB_BALANCETAIL:
+        has_tail = TRUE;
+        break;
+      case CYB_BALANCEAUG:
+        has_aug = TRUE;
+        break;
+      case CYB_FOOTANCHOR:
+        tn_modifiers += GET_CYBERWARE_RATING(cyb);
+        buf_mod(rbuf, sizeof(rbuf), "foot anchors", GET_CYBERWARE_RATING(cyb));
+        break;
+    }
+  }
+
+  if (has_tail && has_aug) {
+    tn_modifiers += -3;
+    buf_mod(rbuf, sizeof(rbuf), "balance tail & aug", -3);
+  } else if (has_tail || has_aug) {
+    tn_modifiers += -2;
+    buf_mod(rbuf, sizeof(rbuf), "balance tail or aug", -2);
+  }
+
+  if (GET_PHYSICAL(ch) <= (10 - damage_array[SERIOUS]) || GET_MENTAL(ch) <= (10 - damage_array[SERIOUS])) {
+    successes_to_avoid_knockback = MAX(successes_to_avoid_knockback, 4);
+  }
+
+  else if (GET_PHYSICAL(ch) <= (10 - damage_array[MODERATE]) || GET_MENTAL(ch) <= (10 - damage_array[MODERATE])) {
+    successes_to_avoid_knockback = MAX(successes_to_avoid_knockback, 3);
+  }
+
+  else if (GET_PHYSICAL(ch) <= (10 - damage_array[LIGHT]) || GET_MENTAL(ch) <= (10 - damage_array[LIGHT])) {
+    successes_to_avoid_knockback = MAX(successes_to_avoid_knockback, 2);
+  }
+
+  // Roll the test.
+  int dice = GET_BOD(ch) + GET_BODY(ch);
+  int tn = MAX(2, initial_tn + tn_modifiers);
+  int successes = success_test(dice, tn);
+  snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "%s. %d dice (%d + %d) vs TN %d (%d + %d): %d hit%s (goal: %d).",
+           tn_modifiers ? "" : "None",
+           dice,
+           GET_BOD(ch),
+           GET_BODY(ch),
+           tn,
+           initial_tn,
+           tn_modifiers,
+           successes,
+           successes == 1 ? "" : "s",
+           successes_to_avoid_knockback
+         );
+
+  if (successes <= 0) {
+    strlcat(rbuf, " Knockdown!", sizeof(rbuf));
+    act(rbuf, FALSE, ch, 0, 0, TO_ROLLS);
+    knockdown_character(ch);
+    return TRUE;
+  } else if (successes < successes_to_avoid_knockback) {
+    strlcat(rbuf, " Knocked back.", sizeof(rbuf));
+  } else {
+    strlcat(rbuf, " No effect.", sizeof(rbuf));
+  }
+
+  act(rbuf, FALSE, ch, 0, 0, TO_ROLLS);
+  return FALSE;
 }
 
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.

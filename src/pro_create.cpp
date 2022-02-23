@@ -33,7 +33,7 @@ void pedit_disp_menu(struct descriptor_data *d)
   send_to_char(CH, "3) Rating: ^c%d^n\r\n", GET_OBJ_VAL(d->edit_obj, 1));
   if (GET_OBJ_VAL(d->edit_obj, 0) == 5)
   {
-    send_to_char(CH, "4) Damage: ^c%s^n\r\n", wound_name[GET_OBJ_VAL(d->edit_obj, 2)]);
+    send_to_char(CH, "4) Damage: ^c%s^n\r\n", GET_WOUND_NAME(GET_OBJ_VAL(d->edit_obj, 2)));
     send_to_char(CH, "Size: ^c%d^n\r\n", (GET_OBJ_VAL(d->edit_obj, 1) * GET_OBJ_VAL(d->edit_obj, 1)) * attack_multiplier[GET_OBJ_VAL(d->edit_obj, 2)]);
   } else
     send_to_char(CH, "Size: ^c%d^n\r\n", (GET_OBJ_VAL(d->edit_obj, 1) * GET_OBJ_VAL(d->edit_obj, 1)) * programs[GET_OBJ_VAL(d->edit_obj, 0)].multiplier);
@@ -44,18 +44,18 @@ void pedit_disp_menu(struct descriptor_data *d)
 void pedit_disp_program_menu(struct descriptor_data *d)
 {
   CLS(CH);
-  
+
   strncpy(buf, "", sizeof(buf) - 1);
-  
+
   bool screenreader_mode = PRF_FLAGGED(d->character, PRF_SCREENREADER);
   for (int counter = 1; counter < NUM_PROGRAMS; counter++)
   {
     if (screenreader_mode)
       send_to_char(d->character, "%d) %s\r\n", counter, programs[counter].name);
     else {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s%2d) %-22s%s", 
-              counter % 3 == 1 ? "  " : "", 
-              counter, 
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s%2d) %-22s%s",
+              counter % 3 == 1 ? "  " : "",
+              counter,
               programs[counter].name,
               counter % 3 == 0 ? "\r\n" : "");
     }
@@ -97,9 +97,9 @@ void pedit_parse(struct descriptor_data *d, const char *arg)
       break;
     case 'q':
       send_to_char(CH, "Design saved!\r\n");
-      if (GET_OBJ_VAL(d->edit_obj, 0) == 5)
+      if (GET_PROGRAM_TYPE(d->edit_obj) == SOFT_ATTACK)
         GET_OBJ_VAL(d->edit_obj, 4) = GET_OBJ_VAL(d->edit_obj, 1) * attack_multiplier[GET_OBJ_VAL(d->edit_obj, 2)];
-      else if (GET_OBJ_VAL(d->edit_obj, 0) == SOFT_RESPONSE)
+      else if (GET_PROGRAM_TYPE(d->edit_obj) == SOFT_RESPONSE)
         GET_OBJ_VAL(d->edit_obj, 4) = GET_OBJ_VAL(d->edit_obj, 1) * (GET_OBJ_VAL(d->edit_obj, 1) * GET_OBJ_VAL(d->edit_obj, 1));
       else GET_OBJ_VAL(d->edit_obj, 4) = GET_OBJ_VAL(d->edit_obj, 1) * programs[GET_OBJ_VAL(d->edit_obj, 0)].multiplier;
       GET_OBJ_VAL(d->edit_obj, 6) = GET_OBJ_VAL(d->edit_obj, 1) * GET_OBJ_VAL(d->edit_obj, 4);
@@ -135,7 +135,7 @@ void pedit_parse(struct descriptor_data *d, const char *arg)
   case PEDIT_NAME:
   {
     int length_with_no_color = get_string_length_after_color_code_removal(arg, CH);
-      
+
     // Silent failure: We already sent the error message in get_string_length_after_color_code_removal().
     if (length_with_no_color == -1) {
       pedit_disp_menu(d);
@@ -146,7 +146,7 @@ void pedit_parse(struct descriptor_data *d, const char *arg)
       pedit_disp_menu(d);
       return;
     }
-  
+
     if (strlen(arg) >= MAX_RESTRING_LENGTH) {
       send_to_char(CH, "That restring is too long, please shorten it. The maximum length with color codes included is %d characters.\r\n", MAX_RESTRING_LENGTH - 1);
       pedit_disp_menu(d);
@@ -219,7 +219,7 @@ struct obj_data *can_program(struct char_data *ch)
 ACMD(do_design)
 {
   ACMD_DECLARE(do_program);
-  
+
   struct obj_data *comp, *prog;
   if (!*argument) {
     if (AFF_FLAGS(ch).AreAnySet(AFF_DESIGN, AFF_PROGRAM, AFF_SPELLDESIGN, ENDBIT)) {
@@ -228,7 +228,7 @@ ACMD(do_design)
     } else
       send_to_char(ch, "Design what?\r\n");
     return;
-  }  
+  }
   if (GET_POS(ch) > POS_SITTING) {
     send_to_char(ch, "You have to be sitting to do that.\r\n");
     return;
@@ -357,7 +357,7 @@ ACMD(do_program)
     } else
       send_to_char(ch, "Program What?\r\n");
     return;
-  }  
+  }
   if (GET_POS(ch) > POS_SITTING) {
     send_to_char(ch, "You have to be sitting to do that.\r\n");
     return;
@@ -425,23 +425,23 @@ ACMD(do_program)
 ACMD(do_copy)
 {
   struct obj_data *comp, *prog;
-  
+
   FAILURE_CASE(!*argument, "What program do you want to copy?");
-  
+
   if (!(comp = can_program(ch)))
     return;
-    
+
   skip_spaces(&argument);
-  
+
   for (prog = comp->contains; prog; prog = prog->next_content)
     if ((isname(argument, prog->text.keywords) || isname(argument, prog->restring)) && GET_OBJ_TYPE(prog) == ITEM_PROGRAM)
       break;
-  
+
   FAILURE_CASE(!prog, "The program isn't on that computer.");
   FAILURE_CASE(GET_OBJ_TIMER(prog), "You can't copy from an optical chip.");
   FAILURE_CASE(GET_OBJ_VAL(prog, 2) > GET_OBJ_VAL(comp, 2) - GET_OBJ_VAL(comp, 3), "There isn't enough space on there to copy that.");
   FAILURE_CASE(!program_can_be_copied(prog), "You can't copy this program.");
-  
+
   GET_OBJ_VAL(comp, 3) += GET_OBJ_VAL(prog, 2);
   struct obj_data *newp = read_object(OBJ_BLANK_PROGRAM, VIRTUAL);
   newp->restring = str_dup(GET_OBJ_NAME(prog));
@@ -593,19 +593,33 @@ void update_buildrepair(void)
         if ((GET_OBJ_COST(PROG) -= CH->char_specials.conjure[1] * 1000) <= 0)
           extract_obj(PROG);
         STOP_WORKING(CH);
-        int skill = GET_SKILL(CH, SKILL_CONJURING), target = CH->char_specials.conjure[1];
+        int skill = GET_SKILL(CH, SKILL_CONJURING);
+        int target = CH->char_specials.conjure[1];
+
+        char rollbuf[5000];
+        snprintf(rollbuf, sizeof(rollbuf), "Conjure check: initial skill %d, initial target %d", skill, target);
+
         for (int i = 0; i < NUM_WEARS; i++)
           if (GET_EQ(CH, i) && GET_OBJ_TYPE(GET_EQ(CH, i)) == ITEM_FOCUS && GET_OBJ_VAL(GET_EQ(CH, i), 0) == FOCI_SPIRIT
               && GET_OBJ_VAL(GET_EQ(CH, i), 2) == GET_IDNUM(CH) && GET_OBJ_VAL(GET_EQ(CH, i), 3) == CH->char_specials.conjure[0]
               && GET_OBJ_VAL(GET_EQ(CH, i), 4)) {
+            snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), ", +%d skill from focus", GET_OBJ_VAL(GET_EQ(CH, i), 1));
             skill += GET_OBJ_VAL(GET_EQ(CH, i), 1);
             break;
           }
-        if (GET_BACKGROUND_AURA(CH->in_room) == AURA_POWERSITE)
+
+        if (GET_BACKGROUND_AURA(CH->in_room) == AURA_POWERSITE) {
           skill += GET_BACKGROUND_COUNT(CH->in_room);
-        else
+          snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), ", +%d skill from power site", GET_BACKGROUND_COUNT(CH->in_room));
+        } else {
           target += GET_BACKGROUND_COUNT(CH->in_room);
+          snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), ", +%d TN from background count", GET_BACKGROUND_COUNT(CH->in_room));
+        }
+
         int success = success_test(skill, target);
+        snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), ". Rolled %d successes.\r\n", success);
+        act(rollbuf, FALSE, CH, NULL, NULL, TO_ROLLS);
+
         if (success < 1) {
           send_to_char(CH, "You fail to conjure the %s elemental.\r\n", elements[CH->char_specials.conjure[0]].name);
           continue;
@@ -682,7 +696,7 @@ void update_buildrepair(void)
         else {
           send_to_char("You have completed a batch of ammo.\r\n", CH);
           GET_AMMOBOX_QUANTITY(PROG) += AMMOBUILD_BATCH_SIZE;
-          
+
           // Add the weight of the completed ammo to the box.
           weight_change_object(PROG, ammo_type[GET_AMMOBOX_TYPE(PROG)].weight * AMMOBUILD_BATCH_SIZE);
         }
@@ -692,21 +706,21 @@ void update_buildrepair(void)
           STOP_WORKING(CH);
         } else ammo_test(CH, PROG);
       } else if (AFF_FLAGGED(CH, AFF_SPELLDESIGN) && --GET_OBJ_VAL(PROG, 6) < 1) {
-        if (GET_OBJ_TIMER(PROG) == -3) {
+        if (GET_OBJ_TIMER(PROG) == SPELL_DESIGN_FAILED_CODE) {
           switch(number(1,8)) {
             case 1:
               send_to_char(CH, "The Dweller on the Threshold notices your attempts at spell creation and laughs. You failed to design %s.\r\n", GET_OBJ_NAME(PROG));
               break;
-            case 2:  
+            case 2:
               send_to_char(CH, "This spell would have been the profane bridge that brought the Horrors to the Sixth World. However, they were thoroughly unimpressed with your work. You failed to design %s.\r\n", GET_OBJ_NAME(PROG));
               break;
-            case 3:  
+            case 3:
               send_to_char(CH, "You draw the Magus of the Eternal Gods, Lord of the Wild and Fertile Lands, and the Ten of Spades. Go fish. You failed to design %s.\r\n", GET_OBJ_NAME(PROG));
               break;
-            case 4:  
+            case 4:
               send_to_char(CH, "You finished programming a Carrot Top reality filter for your cyberdeck - wait, what?!? You realise you have lost your inspiration for %s\r\n", GET_OBJ_NAME(PROG));
               break;
-            case 5:  
+            case 5:
               send_to_char(CH, "You've spilt your ritual chalice of your favorite drink all over %s! So much for that spell!\r\n", GET_OBJ_NAME(PROG));
             default:
               send_to_char(CH, "You realise you have lost your inspiration for %s.\r\n", GET_OBJ_NAME(PROG));
@@ -715,7 +729,7 @@ void update_buildrepair(void)
         } else {
           send_to_char(CH, "You successfully finish designing %s.\r\n", GET_OBJ_NAME(PROG));
           CH->char_specials.timer = 0;
-          GET_OBJ_TIMER(PROG) = 0; 
+          GET_OBJ_TIMER(PROG) = 0;
         }
         STOP_WORKING(CH);
       }

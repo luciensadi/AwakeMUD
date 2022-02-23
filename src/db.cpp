@@ -77,7 +77,7 @@ extern void populate_mobact_aggression_octets();
 extern void write_world_to_disk(int vnum);
 extern void handle_weapon_attachments(struct obj_data *obj);
 
-extern void auto_repair_obj(struct obj_data *obj, const char *source);
+extern void auto_repair_obj(struct obj_data *obj);
 
 
 /**************************************************************************
@@ -361,7 +361,7 @@ void require_that_sql_table_exists(const char *table_name, const char *migration
 }
 
 // Combines the logic of field_exists_in_table with more constraints-- for things you've recently updated but already existed.
-void require_that_field_meets_constraints(const char *field_name, const char *table_name, const char *migration_path_from_root_directory, int flength=0, const char *ftype=NULL) {
+void require_that_field_meets_constraints(const char *field_name, const char *table_name, const char *migration_path_from_root_directory, int flength=0, const char *ftype=NULL, bool is_unsigned=FALSE) {
   bool have_column = FALSE;
   char migration_string[3000];
 
@@ -393,11 +393,11 @@ void require_that_field_meets_constraints(const char *field_name, const char *ta
     if (flength) {
       if (ftype == NULL || !*ftype) {
         log("ERROR: You need to include the field type in require_that_field_meets_constraints when using the length parameter.");
-        exit(1);
+        exit(ERROR_CODER_DIDNT_SPECIFY_FIELD_TYPE);
       }
 
       char field_type[500];
-      snprintf(field_type, sizeof(field_type), "%s(%d)", ftype, flength);
+      snprintf(field_type, sizeof(field_type), "%s(%d)%s", ftype, flength, is_unsigned ? " unsigned" : "");
       if (strcmp(field_type, row[1])) {
         log_vfprintf("%s\r\n%s.%s's type '%s' did not match expected type '%s'.",
                      migration_string,
@@ -425,6 +425,10 @@ void require_that_field_exists_in_table(const char *field_name, const char *tabl
 
 void boot_world(void)
 {
+  // Pre-boot tests and other things you'd like to run in the context of the game.
+  //   Write your tests here, then uncomment the exit statement if all you want are those results.
+  // exit(EXIT_CODE_ZERO_ALL_IS_WELL);
+
   // Sanity check to ensure we haven't added more bits than our bitfield can hold.
   if (Bitfield::TotalWidth() < PRF_MAX) {
     log("Error: You have more PRF flags defined than bitfield space. You'll need to either expand the size of bitfields or reduce your flag count.");
@@ -477,6 +481,9 @@ void boot_world(void)
   require_that_field_exists_in_table("multiplier", "pfiles", "SQL/Migrations/multipliers.sql");
   require_that_field_meets_constraints("Prompt", "pfiles", "SQL/Migrations/prompt_expansion.sql", 2001, "varchar");
   require_that_field_meets_constraints("MatrixPrompt", "pfiles", "SQL/Migrations/prompt_expansion.sql", 2001, "varchar");
+  require_that_field_meets_constraints("Attempt", "pfiles_inv", "SQL/Migrations/attempt_value_fix.sql", 6, "mediumint");
+  require_that_field_meets_constraints("Attempt", "pfiles_worn", "SQL/Migrations/attempt_value_fix.sql", 6, "mediumint");
+  require_that_sql_table_exists("pfiles_ignore_v2", "SQL/ignore_system_v2.sql");
 
   log("Calculating lexicon data.");
   populate_lexicon_size_table();
@@ -493,11 +500,11 @@ void boot_world(void)
   log("Checking start rooms.");
   check_start_rooms();
 
-  log("Loading mobs and generating index.");
-  index_boot(DB_BOOT_MOB);
-
   log("Loading objs and generating index.");
   index_boot(DB_BOOT_OBJ);
+
+  log("Loading mobs and generating index.");
+  index_boot(DB_BOOT_MOB);
 
   log("Loading vehicles and generating index.");
   index_boot(DB_BOOT_VEH);
@@ -1635,8 +1642,8 @@ void parse_mobile(File &in, long nr)
   GET_LEVEL(mob) = data.GetInt("POINTS/Level", 0);
   GET_MAX_PHYSICAL(mob) = data.GetInt("POINTS/MaxPhys", 10*100);
   GET_MAX_MENTAL(mob) = data.GetInt("POINTS/MaxMent", 10*100);
-  GET_BALLISTIC(mob) = data.GetInt("POINTS/Ballistic", 0);
-  GET_IMPACT(mob) = data.GetInt("POINTS/Impact", 0);
+  GET_BALLISTIC(mob) = GET_INNATE_BALLISTIC(mob) = data.GetInt("POINTS/Ballistic", 0);
+  GET_IMPACT(mob) = GET_INNATE_IMPACT(mob) = data.GetInt("POINTS/Impact", 0);
   GET_NUYEN_RAW(mob) = data.GetInt("POINTS/Cash", 0);
   GET_BANK_RAW(mob) = data.GetInt("POINTS/Bank", 0);
   GET_KARMA(mob) = data.GetInt("POINTS/Karma", 0);
@@ -1700,6 +1707,89 @@ void parse_mobile(File &in, long nr)
       snprintf(buf, sizeof(buf), "AMMO/%s", get_ammo_representation(wp, am, 0));
       GET_BULLETPANTS_AMMO_AMOUNT(mob, wp, am) = data.GetInt(buf, 0);
     }
+
+  // Load cyberware.
+  {
+    char field[32];
+    int num_fields = data.NumSubsections("CYBERWARE");
+    vnum_t vnum;
+    struct obj_data *ware = NULL;
+
+    for (int x = 0; x < num_fields; x++) {
+      const char *name = data.GetIndexSection("CYBERWARE", x);
+      snprintf(field, sizeof(field), "%s/Vnum", name);
+      vnum = data.GetLong(field, -1);
+
+      if (!(ware = read_object(vnum, VIRTUAL))) {
+        log_vfprintf("MOB FILE ERROR: Mob %ld referenced cyberware vnum %ld (entry %d) which does not exist.", nr, vnum, x);
+        continue;
+      } else {
+        if (GET_OBJ_TYPE(ware) != ITEM_CYBERWARE) {
+          log_vfprintf("MOB FILE ERROR: Mob %ld referenced vnum %ld (entry %d) as cyberware, but it's not cyberware.", nr, vnum, x);
+          extract_obj(ware);
+          continue;
+        }
+        // log_vfprintf("debug: reading cyber %s (%ld) into prototype for %s.", GET_OBJ_NAME(ware), GET_OBJ_VNUM(ware), GET_CHAR_NAME(mob));
+        obj_to_cyberware(ware, mob);
+      }
+    }
+  }
+
+  // Same thing for bioware. TODO: Merge this copypasta'd code into one function.
+  {
+    char field[32];
+    int num_fields = data.NumSubsections("BIOWARE");
+    vnum_t vnum;
+    struct obj_data *ware = NULL;
+
+    for (int x = 0; x < num_fields; x++) {
+      const char *name = data.GetIndexSection("BIOWARE", x);
+      snprintf(field, sizeof(field), "%s/Vnum", name);
+      vnum = data.GetLong(field, -1);
+
+      if (!(ware = read_object(vnum, VIRTUAL))) {
+        log_vfprintf("MOB FILE ERROR: Mob %ld referenced bioware vnum %ld (entry %d) which does not exist.", nr, vnum, x);
+        continue;
+      } else {
+        if (GET_OBJ_TYPE(ware) != ITEM_BIOWARE) {
+          log_vfprintf("MOB FILE ERROR: Mob %ld referenced vnum %ld (entry %d) as bioware, but it's not bioware.", nr, vnum, x);
+          extract_obj(ware);
+          continue;
+        }
+        // log_vfprintf("debug: reading bio %s (%ld) into prototype for %s.", GET_OBJ_NAME(ware), GET_OBJ_VNUM(ware), GET_CHAR_NAME(mob));
+        obj_to_bioware(ware, mob);
+      }
+    }
+  }
+
+  {
+    char field[32];
+    int num_fields = data.NumSubsections("EQUIPMENT"), wearloc;
+    vnum_t vnum;
+    struct obj_data *eq = NULL;
+
+    for (int x = 0; x < num_fields; x++) {
+      const char *name = data.GetIndexSection("EQUIPMENT", x);
+      snprintf(field, sizeof(field), "%s/Vnum", name);
+      vnum = data.GetLong(field, -1);
+      snprintf(field, sizeof(field), "%s/Wearloc", name);
+      wearloc = data.GetLong(field, -1);
+
+      if (!(eq = read_object(vnum, VIRTUAL))) {
+        log_vfprintf("MOB FILE ERROR: Mob %ld referenced equipment vnum %ld (entry %d) which does not exist.", nr, vnum, x);
+        continue;
+      }
+
+      if (wearloc < 0 || wearloc >= NUM_WEARS) {
+        log_vfprintf("MOB FILE ERROR: Mob %ld referenced invalid wearloc %d (entry %d).", nr, wearloc, x);
+        continue;
+      }
+
+      // log_vfprintf("debug: reading eq %s (%ld) into prototype for %s.", GET_OBJ_NAME(eq), GET_OBJ_VNUM(eq), GET_CHAR_NAME(mob));
+      equip_char(mob, eq, wearloc);
+    }
+  }
+
 
   top_of_mobt = rnum++;
 }
@@ -1775,7 +1865,7 @@ void parse_object(File &fl, long nr)
 
   // Set the do-not-touch flags for known templated items.
   if ((BOTTOM_OF_TEMPLATE_ITEMS <= nr && nr <= TOP_OF_TEMPLATE_ITEMS)
-      || nr == OBJ_BLANK_MAGAZINE) {
+      || nr == OBJ_BLANK_MAGAZINE || nr ==  OBJ_VEHCONTAINER || nr == OBJ_SHOPCONTAINER) {
     GET_OBJ_EXTRA(obj).SetBit(ITEM_DONT_TOUCH);
   }
 
@@ -3064,11 +3154,36 @@ struct char_data *read_mobile(int nr, int type)
   mob->player.time.birth = time(0);
   mob->player.time.played = 0;
   mob->player.time.logon = time(0);
+  mob->player.tradition = mob->player.aspect = 0;
   mob->char_specials.saved.left_handed = (!number(0, 9) ? 1 : 0);
 
   mob_index[i].number++;
 
+  // See utils.cpp for this.
+  set_new_mobile_unique_id(mob);
+
   set_natural_vision_for_race(mob);
+
+  // Copy off their cyberware from prototype.
+  mob->cyberware = NULL;
+  for (struct obj_data *obj = mob_proto[i].cyberware; obj; obj = obj->next_content) {
+    obj_to_cyberware(read_object(GET_OBJ_VNUM(obj), VIRTUAL), mob);
+  }
+
+  // Same for bioware.
+  mob->bioware = NULL;
+  for (struct obj_data *obj = mob_proto[i].bioware; obj; obj = obj->next_content) {
+    obj_to_bioware(read_object(GET_OBJ_VNUM(obj), VIRTUAL), mob);
+  }
+
+  // And then equipment.
+  struct obj_data *eq;
+  for (int wearloc = 0; wearloc < NUM_WEARS; wearloc++) {
+    GET_EQ(mob, wearloc) = NULL;
+    if ((eq = GET_EQ(&mob_proto[i], wearloc))) {
+      equip_char(mob, read_object(GET_OBJ_VNUM(eq), VIRTUAL), wearloc);
+    }
+  }
 
   affect_total(mob);
 
@@ -3327,6 +3442,14 @@ void reset_zone(int zone, int reboot)
     case 'M':                 /* read a mobile */
       if ((mob_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1) ||
           (ZCMD.arg2 == 0 && reboot)) {
+        if (mob_index[ZCMD.arg1].vnum >= 20 && mob_index[ZCMD.arg1].vnum <= 22) {
+          // Refuse to zoneload projections and matrix personas.
+          char errbuf[1000];
+          snprintf(errbuf, sizeof(errbuf), "Refusing to zoneload mob #%ld for zone %d-- illegal loading vnum.\r\n", mob_index[ZCMD.arg1].vnum, zone_table[zone].number);
+          mudlog(errbuf, NULL, LOG_SYSLOG, TRUE);
+          continue;
+        }
+
         mob = read_mobile(ZCMD.arg1, REAL);
         char_to_room(mob, &world[ZCMD.arg3]);
         act("$n has arrived.", TRUE, mob, 0, 0, TO_ROOM);
@@ -3522,7 +3645,7 @@ void reset_zone(int zone, int reboot)
           }
 
           // It's a workshop, set it as unpacked already.
-          GET_WORKSHOP_IS_SETUP(obj) = 1;
+          GET_SETTABLE_WORKSHOP_IS_SETUP(obj) = 1;
 
           // Handle the room's workshop[] array.
           if (obj->in_room)
@@ -4376,7 +4499,7 @@ void reset_char(struct char_data * ch)
 /* clear ALL the working variables of a char; do NOT free any space alloc'ed */
 void clear_char(struct char_data * ch)
 {
-  memset((char *) ch, 0, sizeof(struct char_data));
+  memset(ch, 0, sizeof(struct char_data));
 
   ch->in_veh = NULL;
   ch->in_room = NULL;
@@ -4896,7 +5019,7 @@ void load_saved_veh()
 
         // Don't auto-repair cyberdecks until they're fully loaded.
         if (GET_OBJ_TYPE(obj) != ITEM_CYBERDECK)
-          auto_repair_obj(obj, buf3);
+          auto_repair_obj(obj);
 
         if (veh_version == VERSION_VEH_FILE) {
           // Since we're now saved the obj linked lists  in reverse order, in order to fix the stupid reordering on
@@ -5017,7 +5140,7 @@ void load_saved_veh()
         snprintf(buf, sizeof(buf), "%s/AmmoWeap", sect_name);
         GET_AMMOBOX_WEAPON(ammo) = data.GetInt(buf, 0);
         ammo->restring = str_dup(get_ammobox_default_restring(ammo));
-        auto_repair_obj(ammo, buf3);
+        auto_repair_obj(ammo);
         obj_to_obj(ammo, obj);
       }
       snprintf(buf, sizeof(buf), "%s/Vnum", sect_name);
@@ -5032,7 +5155,7 @@ void load_saved_veh()
           snprintf(buf, sizeof(buf), "%s/Value %d", sect_name, x);
           GET_OBJ_VAL(weapon, x) = data.GetInt(buf, GET_OBJ_VAL(weapon, x));
         }
-        auto_repair_obj(weapon, buf3);
+        auto_repair_obj(weapon);
         obj_to_obj(weapon, obj);
         veh->usedload += GET_OBJ_WEIGHT(weapon);
       }
@@ -5136,7 +5259,6 @@ void load_consist(void)
             GET_OBJ_ATTEMPT(obj) = data.GetInt(buf, 0);
             snprintf(buf, sizeof(buf), "%s/Cost", sect_name);
             GET_OBJ_COST(obj) = data.GetInt(buf, GET_OBJ_COST(obj));
-            snprintf(buf, sizeof(buf), "%s/Inside", sect_name);
 
             // Handle weapon attachments.
             if (GET_OBJ_TYPE(obj) == ITEM_WEAPON)
@@ -5175,8 +5297,9 @@ void load_consist(void)
 
             // Don't auto-repair cyberdecks until they're fully loaded.
             if (GET_OBJ_TYPE(obj) != ITEM_CYBERDECK)
-              auto_repair_obj(obj, buf3);
+              auto_repair_obj(obj);
 
+            snprintf(buf, sizeof(buf), "%s/Inside", sect_name);
             inside = data.GetInt(buf, 0);
             if (house_version == VERSION_HOUSE_FILE) {
               // Since we're now saved the obj linked lists  in reverse order, in order to fix the stupid reordering on
@@ -6140,6 +6263,10 @@ void price_cyber(struct obj_data *obj)
       GET_CYBERWARE_ESSENCE_COST(obj) = 130 + (GET_OBJ_VAL(obj, 1) * 20);
       GET_OBJ_AVAILTN(obj) = 12;
       GET_OBJ_AVAILDAY(obj) = 60;
+#ifdef DIES_IRAE
+      // Houserule: Tactical computers are mundane-only items.
+      obj->obj_flags.extra_flags.SetBit(ITEM_MAGIC_INCOMPATIBLE);
+#endif
       switch (GET_OBJ_VAL(obj, 1)) {
         case 1:
           GET_OBJ_COST(obj) = 400000;
@@ -6372,7 +6499,7 @@ void price_bio(struct obj_data *obj)
       GET_OBJ_AVAILTN(obj) = 10;
       GET_OBJ_AVAILDAY(obj) = 12;
       break;
-    case BIO_TRAUMADAMPNER:
+    case BIO_TRAUMADAMPER:
       GET_OBJ_COST(obj) = 40000;
       GET_OBJ_VAL(obj, 4) = 40;
       GET_OBJ_AVAILTN(obj) = 6;

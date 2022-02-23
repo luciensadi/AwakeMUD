@@ -21,6 +21,7 @@
 #include "awake.h"
 #include "constants.h"
 #include "newdb.h"
+#include "ignore_system.h"
 
 /* extern variables */
 extern struct room_data *world;
@@ -73,6 +74,18 @@ ACMD(do_assist)
     else if (!CAN_SEE(ch, opponent))
       act("You can't see who is fighting $M!", FALSE, ch, 0, helpee, TO_CHAR);
     else {
+#ifdef IGNORING_IC_ALSO_IGNORES_COMBAT
+      if (IS_IGNORING(opponent, is_blocking_ic_interaction_from, ch)) {
+        act("You can't see who is fighting $M!", FALSE, ch, 0, helpee, TO_CHAR);
+        log_attempt_to_bypass_ic_ignore(ch, opponent, "do_assist");
+        return;
+      }
+
+      if (IS_IGNORING(ch, is_blocking_ic_interaction_from, opponent)) {
+        send_to_char("You can't attack someone you've blocked IC interaction with.\r\n", ch);
+        return;
+      }
+#endif
       send_to_char("You join the fight!\r\n", ch);
       act("$N assists you!", FALSE, helpee, 0, ch, TO_CHAR);
       act("$n assists $N.", FALSE, ch, 0, helpee, TO_NOTVICT);
@@ -344,6 +357,23 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
       send_to_char("They are nothing but a figment of your imagination.\r\n", ch);
       return TRUE;
     }
+    if (!IS_NPC(ch) && !IS_NPC(vict) && (!PRF_FLAGGED(ch, PRF_PKER) || !PRF_FLAGGED(vict, PRF_PKER))) {
+      send_to_char("You and your opponent must both be toggled PK for that.\r\n", ch);
+      return TRUE;
+    }
+
+#ifdef IGNORING_IC_ALSO_IGNORES_COMBAT
+    if (IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)) {
+      send_to_char("They are nothing but a figment of your imagination.\r\n", ch);
+      log_attempt_to_bypass_ic_ignore(ch, vict, "perform_hit");
+      return TRUE;
+    }
+
+    if (IS_IGNORING(ch, is_blocking_ic_interaction_from, vict)) {
+      send_to_char("You can't attack someone you've blocked IC interaction with.\r\n", ch);
+      return TRUE;
+    }
+#endif
 
     if (!(GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD)))
       draw_weapon(ch);
@@ -458,7 +488,7 @@ ACMD(do_shoot)
 
   two_arguments(argument, target, direction);
 
-  if (*direction && AFF_FLAGGED(ch, AFF_DETECT_INVIS)) {
+  if (*direction && AFF_FLAGGED(ch, AFF_ULTRASOUND)) {
     send_to_char(ch, "The ultrasound distorts your vision.\r\n");
     return;
   }
@@ -598,8 +628,20 @@ bool passed_flee_success_check(struct char_data *ch) {
   if (!can_hurt(ch, FIGHTING(ch), TRUE, 0))
     return TRUE;
 
-  return success_test(GET_QUI(ch), GET_QUI(FIGHTING(ch))) > 0;
-}
+  int racial_flee_modifier = 0; // Satyrs have a x4 run multiplier and smaller races have x2, so we're houseruling a +1/-1 TN here.
+  switch (GET_RACE(ch)) {
+    case RACE_SATYR:
+      racial_flee_modifier--;
+      break;
+    case RACE_DWARF:
+    case RACE_GNOME:
+    case RACE_MENEHUNE:
+      racial_flee_modifier++;
+      break;
+      }
+  return success_test(GET_QUI(ch), (GET_REA(FIGHTING(ch)) + racial_flee_modifier)) > 0;
+
+  }
 
 ACMD(do_flee)
 {
@@ -665,8 +707,11 @@ ACMD(do_kick)
     } else {
       act("You sneak up behind $N and kick $M straight in the ass!",
           FALSE, ch, 0, vict, TO_CHAR);
-      act("$n sneaks up behind you and kicks you in the ass!\r\n"
-          "That's gonna leave a mark...", FALSE, ch, 0, vict, TO_VICT);
+      if (!IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)) {
+        act("$n sneaks up behind you and kicks you in the ass!\r\n"
+            "That's gonna leave a mark...", FALSE, ch, 0, vict, TO_VICT);
+        log_attempt_to_bypass_ic_ignore(ch, vict, "kick");
+      }
       act("$n sneaks up behind $N and gives $M a swift kick in the ass!",
           TRUE, ch, 0, vict, TO_NOTVICT);
     }
@@ -812,13 +857,97 @@ ACMD(do_mode)
 
 ACMD(do_prone)
 {
+  // Lose half an init pass to simulate taking a simple action.
+  GET_INIT_ROLL(ch) -= 5;
+
+  // Set wait state.
+  WAIT_STATE(ch, 0.5 RL_SEC);
+
   if (AFF_FLAGGED(ch, AFF_PRONE)) {
-    GET_INIT_ROLL(ch) -= 10;
-    act("$n gets to $s feet.", TRUE, ch, 0, 0, TO_ROOM);
-    send_to_char("You get to your feet.\r\n", ch);
-  } else {
-    act("$n drops into a prone position.", TRUE, ch, 0, 0, TO_ROOM);
-    send_to_char("You drop prone.\r\n", ch);
+    // Wounded? You gotta pass a Will test to stand (SR3 p106)
+    if (GET_PHYSICAL(ch) < 10 || GET_MENTAL(ch) < 10) {
+      char pronebuf[1000];
+      strlcpy(pronebuf, "^ostand-while-wounded will test: ", sizeof(pronebuf));
+
+      int dice = GET_WIL(ch) + GET_TASK_POOL(ch, WIL);
+      int tn = 2 + modify_target_rbuf_raw(ch, pronebuf, sizeof(pronebuf), 8, FALSE);
+      int successes = success_test(dice, tn);
+
+      snprintf(ENDOF(pronebuf), sizeof(pronebuf) - strlen(pronebuf), "; %d dice vs TN %d: %d success%s", dice, tn, successes, successes == 1 ? "" : "s");
+      act(pronebuf, FALSE, ch, 0, 0, TO_ROLLS);
+
+      if (successes <= 0) {
+        send_to_char("You can't quite overcome the pain of your injuries, and collapse back into the prone position.\r\n", ch);
+        act("$n struggles to rise.", TRUE, ch, 0, 0, TO_ROOM);
+        return;
+      }
+
+      act("$n fights through the pain to get back on $s feet.", TRUE, ch, 0, 0, TO_ROOM);
+      send_to_char("You fight through the pain to get back to your feet.\r\n", ch);
+    } else {
+      act("$n gets to $s feet.", TRUE, ch, 0, 0, TO_ROOM);
+      send_to_char("You get to your feet.\r\n", ch);
+    }
+    AFF_FLAGS(ch).RemoveBit(AFF_PRONE);
+    return;
   }
-  AFF_FLAGS(ch).ToggleBit(AFF_PRONE);
+
+  else {
+    // Modify messaging for people wielding guns with bipods / tripods.
+    struct obj_data *weapon = GET_EQ(ch, WEAR_WIELD);
+    struct obj_data *attach = NULL;
+
+    if (WEAPON_IS_GUN(weapon) && GET_WEAPON_ATTACH_UNDER_VNUM(weapon) > 0) {
+      rnum_t attach_rnum = real_object(GET_WEAPON_ATTACH_UNDER_VNUM(weapon));
+      if (attach_rnum >= 0) {
+        attach = &obj_proto[attach_rnum];
+
+        // We only allow bipods and tripods here.
+        if (GET_OBJ_TYPE(attach) != ITEM_GUN_ACCESSORY || !(GET_ACCESSORY_TYPE(attach) == ACCESS_TRIPOD || GET_ACCESSORY_TYPE(attach) == ACCESS_BIPOD)) {
+          attach = NULL;
+        }
+      }
+    }
+
+    if (!attach) {
+      act("$n settles into a prone position.", TRUE, ch, 0, 0, TO_ROOM);
+      send_to_char("You settle into a prone position.\r\n", ch);
+    } else {
+      if (GET_ACCESSORY_TYPE(attach) == ACCESS_TRIPOD) {
+        act("$n settles into a prone position, deploying $p's tripod.", TRUE, ch, weapon, 0, TO_ROOM);
+        send_to_char("You settle into a prone position, taking an additional moment to deploy your weapon's tripod.\r\n", ch);
+        // Lose an additional half an init pass to simulate the simple action to deploy the tripod.
+        GET_INIT_ROLL(ch) -= 5;
+        WAIT_STATE(ch, 1 RL_SEC);
+      } else {
+        act("$n settles into a prone position, resting $p on its bipod.", TRUE, ch, weapon, 0, TO_ROOM);
+        send_to_char("You settle into a prone position, resting your weapon on its bipod.\r\n", ch);
+      }
+    }
+
+    AFF_FLAGS(ch).SetBit(AFF_PRONE);
+    return;
+
+    /*  After writing this, I realized it only applies when you DROP prone instead of taking a simple action. -LS
+
+    // SR3 p105: Must make a Willpower(Force) test to avoid dropping a sustained spell when dropping prone.
+    struct sustain_data *next;
+    for (struct sustain_data *sust = GET_SUSTAINED(victim); sust; sust = next) {
+      next = sust->next;
+      if (sust->caster && !sust->focus && !sust->spirit) {
+        strlcat(buf, "Maintain-sustain-while-prone test: ", sizeof(buf));
+
+        int dice = GET_WILL(ch);
+        int tn = MAX(2, sust->force + modify_target_rbuf_raw(ch, buf, sizeof(buf), 8, TRUE));
+        int successes = success_test(dice, tn);
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  %d dice vs TN %d, %d successes.", dice, tn, successes);
+        act(buf, FALSE, ch, 0, 0, TO_ROLLS);
+
+        if (successes <= 0) {
+          end_sustained_spell(victim, sust);
+        }
+      }
+    }
+    */
+  }
 }

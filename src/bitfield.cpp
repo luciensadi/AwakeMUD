@@ -30,7 +30,7 @@ uint8_t count_ones (uint8_t byte)
     0, 1, 1, 2, 1, 2, 2, 3,
     1, 2, 2, 3, 2, 3, 3, 4
   };
-  
+
   return NIBBLE_LOOKUP[byte & 0x0F] + NIBBLE_LOOKUP[byte >> 4];
 }
 
@@ -117,10 +117,10 @@ bool Bitfield::AreAnyShared(const Bitfield &test) const
 int  Bitfield::GetNumShared(const Bitfield &test) const
 {
   int count = 0;
-  
+
   for (int i = 0; i < BITFIELD_SIZE; i++)
     count += count_ones(data[i] & test.data[i]);
-  
+
   return count;
 }
 
@@ -297,8 +297,11 @@ void Bitfield::FromString(const char *str)
   }
 }
 
-void Bitfield::PrintBits(char *dest, size_t dest_size,
-                         const char *names[], size_t name_cnt)
+void Bitfield::PrintBits(char *dest, size_t dest_size, const char *names[], size_t name_cnt) {
+  return PrintBitsColorized(dest, dest_size, names, name_cnt, "", "");
+}
+
+void Bitfield::PrintBitsColorized(char *dest, size_t dest_size, const char *names[], size_t name_cnt, const char *color_on, const char *color_off)
 {
   size_t len = 0;
   int left = dest_size - 1;
@@ -312,10 +315,10 @@ void Bitfield::PrintBits(char *dest, size_t dest_size,
 
       if ((unsigned)i < name_cnt && *names[i] != '\n')
         written = snprintf(dest + len, left,
-                           "%s%s", first? "" : ", ", names[i]);
+                           "%s%s%s%s", first? "" : ", ", color_on, names[i], color_off);
       else
         written = snprintf(dest + len, left,
-                           "%sUNDEFINED", first? "" : ", ");
+                           "%s%sUNDEFINED%s", first? "" : ", ", color_on, color_off);
 
       left -= written;
       len += written;

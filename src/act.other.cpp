@@ -34,6 +34,7 @@
 #include "bullet_pants.h"
 #include "config.h"
 #include "newmail.h"
+#include "ignore_system.h"
 
 #ifdef GITHUB_INTEGRATION
 #include <curl/curl.h>
@@ -245,7 +246,7 @@ ACMD(do_steal)
   else if (!IS_SENATOR(ch) && IS_NPC(vict) && (mob_index[GET_MOB_RNUM(vict)].func == shop_keeper
                                                || mob_index[GET_MOB_RNUM(vict)].sfunc == shop_keeper))
     send_to_char(ch, "%s slaps your hand away.\r\n", CAP(GET_NAME(vict)));
-  else if (!IS_SENATOR(ch) && AWAKE(vict))
+  else if (!IS_SENATOR(ch) && (AWAKE(vict) || IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)))
     send_to_char("That would be quite a feat.\r\n", ch);
   else if (!IS_SENATOR(ch) && !IS_NPC(vict) && (!PRF_FLAGGED(ch, PRF_PKER) || !PRF_FLAGGED(vict, PRF_PKER)))
     send_to_char(ch, "Both you and %s need to be toggled PK for that.\r\n", GET_NAME(vict));
@@ -549,6 +550,11 @@ ACMD(do_patch)
     send_to_char(ch, "There doesn't seem to be a '%s' here.\r\n", buf);
     return;
   }
+  if (IS_ASTRAL(vict)) {
+    send_to_char(ch, "You're going to have a hard time patching an astral being.\r\n");
+    return;
+  }
+
   if (GET_EQ(vict, WEAR_PATCH)) {
     act("$N already has a patch applied.", FALSE, ch, 0, vict, TO_CHAR);
     return;
@@ -1147,10 +1153,12 @@ const char *tog_messages[][2] = {
                              "You will no longer see the idle nuyen reward messages.\r\n"},
                             {"Player cyberdocs are no longer able to operate on you.\r\n",
                              "Player cyberdocs are now able to operate on you. This flag will be un-set after each operation.\r\n"},
-                            {"You will no longer void on idle out. This means you are vulnerable, you have been warned.\r\n",
-                             "You will return to the void when idle.\r\n"},
+                            {"You will return to the void when idle.\r\n",
+                             "You will no longer void on idle out. This means you are vulnerable, you have been warned.\r\n"},
                             {"You un-squelch your staff radio powers: You no longer require a radio to hear broadcasts, and will hear any language.\r\n",
-                             "You squelch your staff radio listening powers: You now require a radio, and your language skills are suppressed.\r\n"}
+                             "You squelch your staff radio listening powers: You now require a radio, and your language skills are suppressed.\r\n"},
+                            {"You will now show up by name on the where-list.\r\n",
+                             "You will no longer show up by name on the where-list.\r\n"}
                           };
 
 ACMD(do_toggle)
@@ -1179,6 +1187,16 @@ ACMD(do_toggle)
         continue;
       }
 
+      // Skip log bits.
+      if ((i >= PRF_CONNLOG && i <= PRF_ZONELOG) || i == PRF_CHEATLOG || i == PRF_BANLOG || i == PRF_GRIDLOG || i == PRF_WRECKLOG
+          || i == PRF_PGROUPLOG || i == PRF_HELPLOG || i == PRF_PURGELOG || i == PRF_FUCKUPLOG || i == PRF_ECONLOG || i == PRF_RADLOG
+          || i == PRF_IGNORELOG)
+        continue;
+
+      // Skip pgroup tag pref for non-grouped.
+      if (i == PRF_SHOWGROUPTAG && (!GET_PGROUP_MEMBER_DATA(ch) || !GET_PGROUP(ch)))
+        continue;
+
       // Select ONOFF or YESNO display type based on field 2.
       if (preference_bits_v2[i].on_off) {
         strcpy(buf2, ONOFF(PRF_FLAGGED(ch, i)));
@@ -1188,10 +1206,10 @@ ACMD(do_toggle)
 
       // Compose and append our line.
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf),
-              "%18s: %-3s%s",
+              "%22s: %-3s%s",
               preference_bits_v2[i].name,
               buf2,
-              printed%3 == 2 ? "\r\n" : "");
+              printed%3 == 2 || PRF_FLAGGED(ch, PRF_SCREENREADER) ? "\r\n" : "");
 
       // Increment our spacer.
       printed++;
@@ -1364,6 +1382,9 @@ ACMD(do_toggle)
     } else if (IS_SENATOR(ch) && (is_abbrev(argument, "staffradio") || is_abbrev(argument, "suppress staff radio"))) {
       result = PRF_TOG_CHK(ch, PRF_SUPPRESS_STAFF_RADIO);
       mode = 40;
+    } else if (is_abbrev(argument, "nowhere") || is_abbrev(argument, "where") || is_abbrev(argument, "anonymous on where")) {
+      result = PRF_TOG_CHK(ch, PRF_ANONYMOUS_ON_WHERE);
+      mode = 41;
     } else {
       send_to_char("That is not a valid toggle option.\r\n", ch);
       return;
@@ -1450,9 +1471,9 @@ ACMD(do_skills)
         if (max_ability(i) > 1)
           switch (i) {
           case ADEPT_KILLING_HANDS:
-            snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " %-8s", wound_name[MIN(DEADLY, GET_POWER_TOTAL(ch, i))]);
+            snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " %-8s", GET_WOUND_NAME(GET_POWER_TOTAL(ch, i)));
             if (GET_POWER_ACT(ch, i))
-              snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " ^Y(%-8s)^n", wound_name[MIN(DEADLY, GET_POWER_ACT(ch, i))]);
+              snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " ^Y(%-8s)^n", GET_WOUND_NAME(GET_POWER_ACT(ch, i)));
             strlcat(buf2, "\r\n", sizeof(buf2));
             break;
           default:
@@ -1474,25 +1495,6 @@ ACMD(do_skills)
     strlcat(buf, buf2, sizeof(buf));
   }
   send_to_char(buf, ch);
-}
-
-struct obj_data * find_magazine(struct obj_data *gun, struct obj_data *i)
-{
-  for (; i; i = i->next_content)
-  {
-    if (GET_OBJ_TYPE(i) == ITEM_GUN_MAGAZINE) {
-      if (GET_MAGAZINE_BONDED_MAXAMMO(i) == GET_WEAPON_MAX_AMMO(gun) &&
-          GET_MAGAZINE_BONDED_ATTACKTYPE(i) == GET_WEAPON_ATTACK_TYPE(gun))
-        return i;
-    }
-    if (i->contains && GET_OBJ_TYPE(i) == ITEM_WORN) {
-      struct obj_data *found;
-      found = find_magazine(gun, i->contains);
-      if ( found )
-        return found;
-    }
-  }
-  return NULL;
 }
 
 
@@ -1754,6 +1756,9 @@ ACMD(do_eject)
   extract_obj(magazine);
   act("$n ejects and pockets a magazine from $p.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_ROOM);
   act("You eject and pocket a magazine from $p.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_CHAR);
+
+  // Ejecting a magazine costs a simple action.
+  GET_INIT_ROLL(ch) -= 5;
 
   // If it has a bayonet and you're in combat, you charge forth.
   if (FIGHTING(ch) && does_weapon_have_bayonet(weapon)) {
@@ -2306,12 +2311,12 @@ void cedit_disp_menu(struct descriptor_data *d, int mode)
     {
       send_to_char(CH, "5) Arriving Text: ^c%s^n\r\n", d->edit_mob->char_specials.arrive);
       send_to_char(CH, "6) Leaving Text:  ^c%s^n\r\n", d->edit_mob->char_specials.leave);
-      if (PLR_FLAGGED(CH, PLR_NEWBIE)) {
-        send_to_char(CH, "7) Change Height: ^c%dcm^n\r\n", GET_HEIGHT(CH));
-        send_to_char(CH, "8) Change Weight: ^c%dkg^n\r\n", GET_WEIGHT(CH));
-      }
+
       send_to_char(CH, "Examples:\r\n  %s %s the north.\r\n", d->edit_mob->player.physical_text.name, d->edit_mob->char_specials.arrive);
       send_to_char(CH, "  %s %s north.\r\n", d->edit_mob->player.physical_text.name, d->edit_mob->char_specials.leave);
+
+      send_to_char(CH, "7) Change Height: ^c%dcm^n\r\n", GET_HEIGHT(CH));
+      send_to_char(CH, "8) Change Weight: ^c%dkg^n\r\n", GET_WEIGHT(CH));
     }
   }
   if (mode)
@@ -2673,10 +2678,16 @@ ACMD(do_remember)
   else if (ch == vict)
     send_to_char(ch, "You should have no problem remembering who you are.\r\n");
   else if (IS_SENATOR(vict))
-    send_to_char(ch, "Try as you might, you can't seem to remember them.\r\n");
+    send_to_char(ch, "You can't use the remember command on staff characters.\r\n");
   else {
     for (temp = GET_PLAYER_MEMORY(ch); temp; temp = temp->next)
       if (GET_IDNUM(vict) == temp->idnum) {
+        // Block abusive case.
+        if (is_abbrev(buf1, GET_CHAR_NAME(vict)) && !is_abbrev(buf1, temp->mem)) {
+          send_to_char(ch, "You don't see anyone named '%s' here.\r\n", buf1);
+          return;
+        }
+
         DELETE_AND_NULL_ARRAY(temp->mem);
         temp->mem = str_dup(buf2);
         send_to_char(ch, "Remembered %s as %s\r\n", GET_NAME(vict), buf2);
@@ -2684,12 +2695,18 @@ ACMD(do_remember)
         return;
       }
 
+    // Block the twinky case of 'remem <name> <name>' to force-identify new people.
+    if (is_abbrev(buf1, GET_CHAR_NAME(vict))) {
+      send_to_char(ch, "You don't see anyone named '%s' here.\r\n", buf1);
+      return;
+    }
+
     m = new remem;
     m->mem = str_dup(buf2);
     m->idnum = GET_IDNUM(vict);
     m->next = GET_PLAYER_MEMORY(ch);
     GET_PLAYER_MEMORY(ch) = m;
-    send_to_char(ch, "Remembered %s as %s\r\n", GET_NAME(vict), buf2);
+    send_to_char(ch, "Remembered %s as %s\r\n", GET_NAME(vict), m->mem);
     GET_MEMORY_DIRTY_BIT(ch) = TRUE;
   }
 }
@@ -3576,7 +3593,7 @@ ACMD(do_unpack)
       continue;
 
     if (GET_WORKSHOP_IS_SETUP(shop) || GET_WORKSHOP_UNPACK_TICKS(shop)) {
-      send_to_char("There is already a workshop set up here.\r\n", ch);
+      send_to_char(ch, "There is already a workshop set up here; you'll have to pack up %s first.\r\n", decapitalize_a_an(GET_OBJ_NAME(shop)));
       return;
     }
   }
@@ -3684,15 +3701,18 @@ ACMD(do_packup)
 
   if (!shop) {
     FOR_ITEMS_AROUND_CH(ch, shop) {
-      if (GET_OBJ_TYPE(shop) == ITEM_WORKSHOP && GET_OBJ_VAL(shop, 1) > 1) {
-        if (GET_OBJ_VAL(shop, 2))
-          break;
-      }
+      if (GET_OBJ_TYPE(shop) == ITEM_WORKSHOP && GET_WORKSHOP_GRADE(shop) == TYPE_WORKSHOP && GET_WORKSHOP_IS_SETUP(shop))
+        break;
     }
   }
 
   if (!shop) {
     send_to_char(ch, "There is no workshop here to pack up.\r\n");
+    return;
+  }
+
+  if (GET_OBJ_TYPE(shop) != ITEM_WORKSHOP || GET_WORKSHOP_GRADE(shop) != TYPE_WORKSHOP) {
+    send_to_char(ch, "%s isn't a workshop.\r\n", capitalize(GET_OBJ_NAME(shop)));
     return;
   }
 
@@ -4236,6 +4256,8 @@ ACMD(do_spool)
   def = atoi(argument);
   reflect = atoi(buf);
 
+  // TODO: SR3 p182: No more Spell Pool dice can be added to the test than the Sorcery dice allocated.
+
   total -= ch->real_abils.casting_pool = GET_CASTING(ch) = MIN(cast, total);
   total -= ch->real_abils.drain_pool = GET_DRAIN(ch) = MIN(drain, total);
   total -= ch->real_abils.spell_defense_pool = GET_SDEFENSE(ch) = MIN(def, total);
@@ -4407,12 +4429,12 @@ ACMD(do_cleanup)
   generic_find(argument, FIND_OBJ_ROOM, ch, &tmp_char, &target_obj);
 
   if (!target_obj) {
-    send_to_char(ch, "You don't see anything called '%s' here.", argument);
+    send_to_char(ch, "You don't see anything called '%s' here.\r\n", argument);
     return;
   }
 
   if (GET_OBJ_VNUM(target_obj) != OBJ_GRAFFITI) {
-    send_to_char(ch, "%s is not graffiti.", capitalize(GET_OBJ_NAME(target_obj)));
+    send_to_char(ch, "%s is not graffiti.\r\n", capitalize(GET_OBJ_NAME(target_obj)));
     return;
   }
 
@@ -4502,14 +4524,14 @@ ACMD(do_syspoints) {
   // Morts can only view their own system points.
   if (!access_level(ch, LVL_CONSPIRATOR)) {
     if (!*argument) {
-      send_to_char(ch, "You have %d system points.\r\n", GET_SYSTEM_POINTS(ch));
+      send_to_char(ch, "You have %d system points. See ^WHELP SYSPOINTS^n for how to use them.\r\n", GET_SYSTEM_POINTS(ch));
       return;
     }
 
     half_chop(argument, arg, buf);
 
     if (!*arg) {
-      send_to_char("Syntax: syspoints restring <item> <string>\r\n", ch);
+      send_to_char("See ^WHELP SYSPOINTS^n for command syntax.\r\n", ch);
       return;
     }
 
@@ -4519,7 +4541,41 @@ ACMD(do_syspoints) {
       return;
     }
 
-    send_to_char("Syntax: syspoints restring <item> <string>\r\n", ch);
+    if (is_abbrev(arg, "nodelete")) {
+      if (PRF_FLAGGED(ch, PRF_HARDCORE)) {
+        send_to_char("Hardcore characters are nodelete by default.\r\n", ch);
+        return;
+      }
+
+      // Already set.
+      if (PLR_FLAGGED(ch, PLR_NODELETE)) {
+        send_to_char("You're already set to never idle-delete. Thanks for your contributions!\r\n", ch);
+        return;
+      }
+
+      // Can they afford it?
+      if (GET_SYSTEM_POINTS(ch) >= SYSP_NODELETE_COST) {
+        // Have they entered the confirmation command?
+        if (is_abbrev(buf, "confirm")) {
+          GET_SYSTEM_POINTS(ch) -= SYSP_NODELETE_COST;
+          send_to_char(ch, "Congratulations, your character will never idle-delete! %d syspoints have been deducted from your total.\r\n", SYSP_NODELETE_COST);
+          PLR_FLAGS(ch).SetBit(PLR_NODELETE);
+          mudlog("Purchased nodelete with syspoints.", ch, LOG_SYSLOG, TRUE);
+          playerDB.SaveChar(ch);
+          return;
+        }
+
+        // They can afford it, but didn't use the confirm form.
+        send_to_char(ch, "You can spend %d syspoints to purchase a character that never idle-deletes. Type ^WSYSPOINTS NODELETE CONFIRM^n to do so.\r\n", SYSP_NODELETE_COST);
+        return;
+      }
+
+      // Too broke.
+      send_to_char(ch, "That costs %d syspoints, and you only have %d.\r\n", SYSP_NODELETE_COST, GET_SYSTEM_POINTS(ch));
+      return;
+    }
+
+    send_to_char(ch, "'%s' is not a valid mode. See ^WHELP SYSPOINTS^n for command syntax.\r\n", arg);
     return;
   }
 
@@ -4577,7 +4633,7 @@ ACMD(do_syspoints) {
 
   // Require all arguments.
   if (!*arg || !*target || !*amt || !*reason || k <= 0 ) {
-    send_to_char(ch, "Syntax: syspoints <award|penalize> <player> <%samount> <Reason for award>.\r\n", k < 0 ? "POSITIVE " : "");
+    send_to_char(ch, "Syntax: syspoints <award|penalize> <player> <%samount> <Reason for award>\r\n", k < 0 ? "POSITIVE " : "");
     return;
   }
 
@@ -4589,7 +4645,7 @@ ACMD(do_syspoints) {
     award_mode = FALSE;
     k *= -1;
   } else {
-    send_to_char("Syntax: syspoints <award|penalize> <player> <amount> <Reason for award>.\r\n", ch);
+    send_to_char("Syntax: syspoints <award|penalize> <player> <amount> <Reason for award>\r\n", ch);
     return;
   }
 
@@ -4622,22 +4678,24 @@ ACMD(do_syspoints) {
     }
 
     // Mail the victim.
-    snprintf(buf, sizeof(buf), "You have been %s %d system points for %s.\r\n",
+    snprintf(buf, sizeof(buf), "You have been %s %d system points for %s%s^n\r\n",
             (award_mode ? "awarded" : "penalized"),
             k,
-            reason);
+            reason,
+            ispunct(get_final_character_from_string(reason)) ? "" : ".");
     store_mail(idnum, ch, buf);
 
     // Notify the actor.
-    send_to_char(ch, "You %s %d system points %s %s for %s.\r\n",
+    send_to_char(ch, "You %s %d system points %s %s for %s%s^n\r\n",
                 (award_mode ? "awarded" : "penalized"),
                 k,
                 (award_mode ? "to" : "from"),
                 capitalize(target),
-                reason);
+                reason,
+                ispunct(get_final_character_from_string(reason)) ? "" : ".");
 
     // Log it.
-    snprintf(buf, sizeof(buf), "%s %s %d system points %s %s for %s (%d to %d).",
+    snprintf(buf, sizeof(buf), "%s %s %d system points %s %s for %s^g (%d to %d).",
             GET_CHAR_NAME(ch),
             (award_mode ? "awarded" : "penalized"),
             k,
@@ -4663,19 +4721,21 @@ ACMD(do_syspoints) {
     GET_SYSTEM_POINTS(vict) += k;
 
     // Notify the actor and the victim, then log it.
-    send_to_char(vict, "You have been %s %d system points for %s.\r\n",
+    send_to_char(vict, "You have been %s %d system points for %s%s^n\r\n",
                  (award_mode ? "awarded" : "penalized"),
                  k,
-                 reason);
+                 reason,
+                 ispunct(get_final_character_from_string(reason)) ? "" : ".");
 
-    send_to_char(ch, "You %s %d system points %s %s for %s.\r\n",
+    send_to_char(ch, "You %s %d system points %s %s for %s%s^n\r\n",
                 (award_mode ? "awarded" : "penalized"),
                 k,
                 (award_mode ? "to" : "from"),
                 GET_CHAR_NAME(vict),
-                reason);
+                reason,
+                ispunct(get_final_character_from_string(reason)) ? "" : ".");
 
-    snprintf(buf, sizeof(buf), "%s %s %d system points %s %s for %s (%d to %d).",
+    snprintf(buf, sizeof(buf), "%s %s %d system points %s %s for %s^g (%d to %d).",
             GET_CHAR_NAME(ch),
             (award_mode ? "awarded" : "penalized"),
             k,

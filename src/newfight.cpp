@@ -56,13 +56,14 @@ struct cyberware_data {
   int improved_handrazors;
   int handspurs;
   int footanchors;
+  bool cyberarms;
   int bone_lacing_power;
   int num_cyberweapons;
   bool cyberarm_gyromount;
 
   cyberware_data(struct char_data *ch) :
     climbingclaws(0), fins(0), handblades(0), handrazors(0), improved_handrazors(0),
-    handspurs(0), footanchors(0), bone_lacing_power(0), num_cyberweapons(0),
+    handspurs(0), footanchors(0), cyberarms(FALSE), bone_lacing_power(0), num_cyberweapons(0),
     cyberarm_gyromount(FALSE)
   {
     assert(ch != NULL);
@@ -83,6 +84,7 @@ struct cyberware_data {
             break;
         }
       } else if (GET_CYBERWARE_TYPE(obj) == CYB_ARMS) {
+        cyberarms = TRUE;
         if (IS_SET(GET_CYBERWARE_FLAGS(obj), ARMS_MOD_GYROMOUNT)) {
           cyberarm_gyromount = TRUE;
         }
@@ -130,6 +132,7 @@ struct ranged_combat_data {
   int tn;
   int dice;
   int successes;
+  bool is_gel;
 
   int burst_count;
   int recoil_comp;
@@ -143,7 +146,7 @@ struct ranged_combat_data {
 
   ranged_combat_data(struct char_data *ch, struct obj_data *weapon, bool ranged_combat_mode) :
     skill(0), power(0), dam_type(0), damage_level(0), is_physical(FALSE),
-    tn(4), dice(0), successes(0), burst_count(0), recoil_comp(0),
+    tn(4), dice(0), successes(0), is_gel(FALSE), burst_count(0), recoil_comp(0),
     using_mounted_gun(FALSE), magazine(NULL), gyro(NULL)
   {
     memset(modifiers, 0, sizeof(modifiers));
@@ -239,7 +242,7 @@ struct melee_combat_data {
 
         // Weapon foci. NPC use them implicitly.
         if (IS_NPC(ch) || WEAPON_FOCUS_USABLE_BY(weapon, ch)) {
-          skill_bonus = min(4, GET_WEAPON_FOCUS_RATING(weapon));
+          skill_bonus = MIN(4, GET_WEAPON_FOCUS_RATING(weapon));
         }
       }
     } else if (cyber->num_cyberweapons > 0) {
@@ -296,6 +299,11 @@ struct melee_combat_data {
         power += cyber->bone_lacing_power;
         damage_level = MODERATE;
         is_physical = FALSE;
+      }
+
+      // Add +2 to unarmed attack power for having cyberarms, per M&M p32.
+      if (cyber->cyberarms) {
+        power += 2;
       }
 
       // Check for Adept powers.
@@ -381,6 +389,7 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
   struct combat_data *def = &defender_data;
 
   char rbuf[MAX_STRING_LENGTH];
+  memset(rbuf, 0, sizeof(rbuf));
 
   // Short-circuit: If you're wielding an activated Dominator, you don't care about all these pesky rules.
   if (att->weapon && GET_OBJ_SPEC(att->weapon) == weapon_dominator) {
@@ -484,7 +493,7 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
              GET_CHAR_NAME(def->ch),
              GET_IMPACT(def->ch));
 
-    att->melee->tn += GET_IMPACT(def->ch) + modify_target_rbuf_raw(att->ch, rbuf, sizeof(rbuf), att->melee->modifiers[COMBAT_MOD_VISIBILITY]);
+    att->melee->tn += GET_IMPACT(def->ch) + modify_target_rbuf_raw(att->ch, rbuf, sizeof(rbuf), att->melee->modifiers[COMBAT_MOD_VISIBILITY], FALSE);
 
     for (int mod_index = 0; mod_index < NUM_COMBAT_MODIFIERS; mod_index++) {
       buf_mod(rbuf, sizeof(rbuf), combat_modifiers[mod_index], att->melee->modifiers[mod_index]);
@@ -557,20 +566,21 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
   // Setup for ranged combat. We assume that if you're here, you have a loaded ranged weapon and are not a candidate for receiving a counterstrike.
   if (att->weapon && att->ranged_combat_mode) {
     // Precondition: If you're using a heavy weapon, you must be strong enough to wield it, or else be using a gyro. CC p99
-    if (!att->ranged->using_mounted_gun
+    if (!IS_NPC(att->ch)
+        && !att->ranged->using_mounted_gun
         && !att->ranged->gyro
         && !att->cyber->cyberarm_gyromount
-        && !IS_NPC(att->ch)
         && (att->ranged->skill >= SKILL_MACHINE_GUNS && att->ranged->skill <= SKILL_ASSAULT_CANNON)
         && (GET_STR(att->ch) < 8 || GET_BOD(att->ch) < 8)
         && !(AFF_FLAGGED(att->ch, AFF_PRONE)))
     {
-      send_to_char("You can't lift the barrel high enough to fire.\r\n", att->ch);
+      send_to_char(att->ch, "You can't lift the barrel high enough to fire! You'll have to go ^WPRONE^n to use %s.\r\n", decapitalize_a_an(GET_OBJ_NAME(att->weapon)));
       return;
     }
 
     // Setup: Limit the burst of the weapon to the available ammo, and decrement ammo appropriately.
-    if (att->ranged->burst_count) {
+    // Emplaced mobs act as if they have unlimited ammo (technically draining 1 per shot) and no recoil.
+    if (att->ranged->burst_count && !MOB_FLAGGED(att->ch, MOB_EMPLACED)) {
       if (weap_ammo || att->ranged->magazine) {
         int ammo_available = weap_ammo ? ++GET_AMMOBOX_QUANTITY(weap_ammo) : ++GET_MAGAZINE_AMMO_COUNT(att->ranged->magazine);
 
@@ -590,6 +600,7 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       if (att->ranged->using_mounted_gun)
         recoil /= 2;
       att->ranged->modifiers[COMBAT_MOD_RECOIL] += MAX(0, recoil - att->ranged->recoil_comp);
+
       switch (att->ranged->skill) {
         case SKILL_SHOTGUNS:
         case SKILL_MACHINE_GUNS:
@@ -632,7 +643,7 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
         && (att->ch->in_room == def->ch->in_room
             || att->ranged->using_mounted_gun))
     {
-      att->ranged->modifiers[COMBAT_MOD_DISTANCE] += 6;
+      att->ranged->modifiers[COMBAT_MOD_DISTANCE] += SAME_ROOM_SNIPER_RIFLE_PENALTY;
     }
 
     // Setup: Compute modifiers to the TN based on the def->ch's current state.
@@ -712,9 +723,9 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     snprintf(rbuf, sizeof(rbuf), "%s's burst/compensation info is %d/%d. Additional modifiers: ",
              GET_CHAR_NAME( att->ch ),
              att->ranged->burst_count,
-             att->ranged->recoil_comp);
+             MOB_FLAGGED(att->ch, MOB_EMPLACED) ? 10 : att->ranged->recoil_comp);
 
-    att->ranged->tn += modify_target_rbuf_raw(att->ch, rbuf, sizeof(rbuf), att->ranged->modifiers[COMBAT_MOD_VISIBILITY]);
+    att->ranged->tn += modify_target_rbuf_raw(att->ch, rbuf, sizeof(rbuf), att->ranged->modifiers[COMBAT_MOD_VISIBILITY], FALSE);
     for (int mod_index = 0; mod_index < NUM_COMBAT_MODIFIERS; mod_index++) {
       // Ranged-specific modifiers.
       buf_mod(rbuf, sizeof(rbuf), combat_modifiers[mod_index], att->ranged->modifiers[mod_index]);
@@ -755,11 +766,12 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
 
       // Set up the defender's TN. Apply their modifiers.
       strlcpy(rbuf, "Defender's dodge roll modifiers: ", sizeof(rbuf));
-      def->ranged->tn += modify_target_rbuf_raw(def->ch, rbuf, sizeof(rbuf), def->ranged->modifiers[COMBAT_MOD_VISIBILITY]);
+      def->ranged->tn += modify_target_rbuf_raw(def->ch, rbuf, sizeof(rbuf), def->ranged->modifiers[COMBAT_MOD_VISIBILITY], FALSE);
       for (int mod_index = 0; mod_index < NUM_COMBAT_MODIFIERS; mod_index++) {
         buf_mod(rbuf, sizeof(rbuf), combat_modifiers[mod_index], def->ranged->modifiers[mod_index]);
         def->ranged->tn += att->ranged->modifiers[mod_index];
       }
+      SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
 
       // Minimum TN is 2.
       def->ranged->tn = MAX(def->ranged->tn, 2);
@@ -775,7 +787,9 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     } else {
       // Surprised, oversized, unconscious, or prone? No dodge test for you.
       att->ranged->successes = MAX(att->ranged->successes, 1);
-      snprintf(rbuf, sizeof(rbuf), "Opponent unable to dodge, successes confirmed as %d.", att->melee->successes);
+      snprintf(rbuf, sizeof(rbuf), "Opponent unable to dodge, successes confirmed as %d.", att->ranged->successes);
+      if (GET_DEFENSE(def->ch) > 0 && AFF_FLAGGED(def->ch, AFF_PRONE))
+        send_to_char(def->ch, "^yYou're unable to dodge while prone!^n\r\n");
     }
     SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
 
@@ -825,6 +839,7 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
           break;
         case AMMO_GEL:
           att->ranged->power -= GET_BALLISTIC(def->ch) + 2;
+          att->ranged->is_gel = TRUE;
           break;
         default:
           att->ranged->power -= GET_BALLISTIC(def->ch);
@@ -870,9 +885,11 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     AFF_FLAGS(def->ch).RemoveBit(AFF_APPROACH);
 
     // Setup: Calculate position modifiers.
-    // It's hard for you to fight while prone.
-    if (AFF_FLAGGED(att->ch, AFF_PRONE))
+    // It's hard for you to fight while prone. (SR3 p123)
+    if (AFF_FLAGGED(att->ch, AFF_PRONE)) {
+      send_to_char(att->ch, "You struggle to fight while prone!\r\n");
       def->melee->modifiers[COMBAT_MOD_POSITION] -= 2;
+    }
 
     // Treat unconscious as being a position mod of -6 (reflects ease of coup de grace)
     if (!AWAKE(def->ch))
@@ -958,7 +975,7 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     // Calculate and display pre-success-test information.
     snprintf(rbuf, sizeof(rbuf), "^cCalculating melee combat modifiers. %s's TN modifiers: ", GET_CHAR_NAME(att->ch) );
     // This feels a little shitty, but we know that if we're in melee mode, the TN has not been touched yet, and if we're not then it's already been calculated.
-    att->melee->tn += modify_target_rbuf_raw(att->ch, rbuf, sizeof(rbuf), att->melee->modifiers[COMBAT_MOD_VISIBILITY]);
+    att->melee->tn += modify_target_rbuf_raw(att->ch, rbuf, sizeof(rbuf), att->melee->modifiers[COMBAT_MOD_VISIBILITY], FALSE);
     for (int mod_index = 0; mod_index < NUM_COMBAT_MODIFIERS; mod_index++) {
       buf_mod(rbuf, sizeof(rbuf), combat_modifiers[mod_index], att->melee->modifiers[mod_index]);
       att->melee->tn += att->melee->modifiers[mod_index];
@@ -967,7 +984,7 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
 
     snprintf(rbuf, sizeof(rbuf), "^c%s%s's TN modifiers: ", GET_CHAR_NAME( def->ch ),
             (GET_PHYSICAL(def->ch) <= 0 || GET_MENTAL(def->ch) <= 0) ? " (incap)" : "" );
-    def->melee->tn += modify_target_rbuf_raw(def->ch, rbuf, sizeof(rbuf), def->melee->modifiers[COMBAT_MOD_VISIBILITY]);
+    def->melee->tn += modify_target_rbuf_raw(def->ch, rbuf, sizeof(rbuf), def->melee->modifiers[COMBAT_MOD_VISIBILITY], FALSE);
     for (int mod_index = 0; mod_index < NUM_COMBAT_MODIFIERS; mod_index++) {
       buf_mod(rbuf, sizeof(rbuf), combat_modifiers[mod_index], def->melee->modifiers[mod_index]);
       def->melee->tn += def->melee->modifiers[mod_index];
@@ -1114,6 +1131,10 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
   // Perform body test for damage resistance.
   int bod_success = 0;
   int bod = GET_BOD(def->ch) + (def->too_tall ? 0 : GET_BODY(def->ch));
+#ifndef USE_SLOUCH_RULES
+  assert(!def->too_tall);
+  assert(!att->too_tall);
+#endif
   int bod_dice = 0;
 
   // If you're a spirit attacking someone who has the conjuring skill, they can opt to use that instead of their body if it's higher.
@@ -1126,6 +1147,10 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
 
   // Declare our staged_damage variable, which is modified in the upcoming bod test and staging code.
   int staged_damage = 0;
+
+  // Nothing can raise our damage level past deadly or below none-- cap it.
+  att->ranged->damage_level = MAX(0, MIN(DEADLY, att->ranged->damage_level));
+  att->melee->damage_level = MAX(0, MIN(DEADLY, att->melee->damage_level));
 
   // Roll the bod test and apply necessary staging.
   if (att->ranged_combat_mode) {
@@ -1156,25 +1181,44 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
 
   int damage_total = convert_damage(staged_damage);
 
-  snprintf(rbuf, sizeof(rbuf), "^CBod dice %d, attack power after armor %d, BodSuc %d, ResSuc %d: Dam %s->%s. %d%c.^n",
-          bod,
-          att->ranged_combat_mode ? att->ranged->power : att->melee->power,
-          bod_success,
-          att->ranged_combat_mode ? att->ranged->successes : att->melee->successes,
-          wound_name[MIN(DEADLY, MAX(0,att->ranged_combat_mode ? att->ranged->damage_level : att->melee->damage_level))],
-          wound_name[MIN(DEADLY, MAX(0, staged_damage))],
-          damage_total,
-          (att->ranged_combat_mode ? att->ranged->is_physical : att->melee->is_physical) ? 'P' : 'M');
-  SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
+  {
+    int net_attack_power = att->ranged_combat_mode ? att->ranged->power : att->melee->power;
+    int net_successes = att->ranged_combat_mode ? att->ranged->successes : att->melee->successes;
+    int damage_level = att->ranged_combat_mode ? att->ranged->damage_level : att->melee->damage_level;
+    bool damage_is_physical = att->ranged_combat_mode ? att->ranged->is_physical : att->melee->is_physical;
 
-  bool defender_died;
+    snprintf(rbuf, sizeof(rbuf), "^cDefender rolls %d bod dice vs TN %d, getting %d success%s; attacker now has %d net success%s.\r\n^CDamage stages from %s(%d) to %s(%d), aka %d boxes of %c.^n",
+             bod,  // bod dice
+             net_attack_power,  // TN
+             bod_success, // success
+             bod_success == 1 ? "" : "es", // success plural
+             net_successes, // net success
+             net_successes == 1 ? "" : "es", // net success plural
+             GET_WOUND_NAME(damage_level), // damage stage from (word)
+             damage_level, // damage stage from (int)
+             GET_WOUND_NAME(staged_damage), // damage stage to (word)
+             staged_damage, // damage stage to (int)
+             damage_total, // actual boxes of damage done
+             damage_is_physical ? 'P' : 'M' // mental or physical
+            );
+    SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
+  }
+
+
+  bool defender_died, defender_was_npc = IS_NPC(def->ch);
   if (att->ranged_combat_mode) {
     combat_message(att->ch, def->ch, att->weapon, MAX(0, damage_total), att->ranged->burst_count);
     defender_died = damage_without_message(att->ch, def->ch, damage_total, att->ranged->dam_type, att->ranged->is_physical);
+
+    if (!defender_died && damage_total > 0)
+      perform_knockdown_test(def->ch, (GET_WEAPON_POWER(att->weapon) + att->ranged->burst_count) / (att->ranged->is_gel ? 1 : 2));
   } else {
     defender_died = damage(att->ch, def->ch, damage_total, att->melee->dam_type, att->melee->is_physical);
 
     if (!defender_died) {
+      if (damage_total > 0)
+        perform_knockdown_test(def->ch, GET_STR(att->ch));
+
       if (successes_for_use_in_monowhip_test_check <= 0) {
         struct obj_data *weapon = net_successes < 0 ? def->weapon : att->weapon;
         if (weapon && obj_index[GET_OBJ_RNUM(weapon)].wfunc == monowhip) {
@@ -1217,7 +1261,7 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
 
   if (defender_died) {
     // Fixes edge case where attacking quest NPC kills its hunter with a heavy weapon, is extracted, then tries to check recoil.
-    if (!IS_NPC(def->ch))
+    if (!defender_was_npc)
       return;
     // Clear out the defending character's pointer since it now points to a nulled character struct.
     else
@@ -1227,15 +1271,16 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
   }
 
   // If you're firing a heavy weapon without a gyro, you need to test against the damage of the recoil.
-  if (att->ranged_combat_mode
+  if (!IS_NPC(att->ch)
+      && att->ranged_combat_mode
       && !att->ranged->using_mounted_gun
-      && !IS_NPC(att->ch)
       && !att->ranged->gyro
       && !att->cyber->cyberarm_gyromount
-      && att->ranged->skill >= SKILL_MACHINE_GUNS
-      && att->ranged->skill <= SKILL_ASSAULT_CANNON)
+      && (att->ranged->skill >= SKILL_MACHINE_GUNS && att->ranged->skill <= SKILL_ASSAULT_CANNON)
+      && !AFF_FLAGGED(att->ch, AFF_PRONE))
   {
-    int recoil_successes = success_test(GET_BOD(att->ch) + GET_BODY(att->ch), GET_WEAPON_POWER(att->weapon) / 2 + modify_target(att->ch) + att->ranged->burst_count);
+    int weapon_power = GET_WEAPON_POWER(att->weapon) + att->ranged->burst_count;
+    int recoil_successes = success_test(GET_BOD(att->ch) + GET_BODY(att->ch), weapon_power / 2);
     int staged_dam = stage(-recoil_successes, LIGHT);
     snprintf(rbuf, sizeof(rbuf), "Heavy Recoil: %d successes, L->%s wound.", recoil_successes, staged_dam == LIGHT ? "L" : "no");
     // SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
@@ -1245,12 +1290,16 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     //prior to handling the damage and we don't alter alert state at all because if defender is a quest target
     //they will be extracted. If the attacker actually dies and it's a normal mob, they won't be surprised anymore
     //and alertness will trickle down on its own with update cycles.
-    if (IS_NPC(def->ch) && AFF_FLAGGED(def->ch, AFF_SURPRISE))
+    if (!defender_died && IS_NPC(def->ch) && AFF_FLAGGED(def->ch, AFF_SURPRISE))
       AFF_FLAGS(def->ch).RemoveBit(AFF_SURPRISE);
 
     // If the attacker dies from recoil, bail out.
     if (damage(att->ch, att->ch, convert_damage(staged_dam), TYPE_HIT, FALSE))
       return;
+
+    // Next, knockdown test vs half the weapon's power, on 0 successes you're knocked down.
+    // No need to subtract things like gyro from this recoil number-- prereq for getting here is that there's no gyro or mount.
+    perform_knockdown_test(att->ch, weapon_power / 2, att->ranged->modifiers[COMBAT_MOD_RECOIL]);
   }
 
   // Set the violence background count.

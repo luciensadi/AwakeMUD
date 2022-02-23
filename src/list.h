@@ -19,7 +19,7 @@
 
 #include <assert.h>
 #include <iostream>
-using namespace std;
+// using namespace std;
 
 #define ADD(a)  Add(a, __FILE__, __LINE__)
 
@@ -37,7 +37,7 @@ struct nodeStruct {
   T data;
   nodeStruct<T> *next;
   nodeStruct<T> *prev;
-  
+
   nodeStruct() :
     next(NULL), prev(NULL)
   {}
@@ -49,33 +49,33 @@ template <class T>
 class listClass {
 private:
   int num_items;
-  
+
 protected:
   nodeStruct<T> *head;
   nodeStruct<T> *tail;
-  
+
 public:
   // Constructor: Make an empty list.
   listClass() :
     num_items(0), head(NULL), tail(NULL)
   {}
-  
+
   // Constructor: Clone an existing list.
   listClass(const listClass<T>& L);
-  
+
   // Destructor.
   virtual ~listClass();
 
   // AddItem adds an item after the specified node (if none, add at head).
   bool AddItem(nodeStruct<T> *node, T item);
-  
+
   // RemoveItem the item in the list and removes it, however, a
   // function to find the item should be defined in a child class
   bool RemoveItem(nodeStruct<T> *node);
-  
+
   // What it says on the tin.
   nodeStruct<T> *FindItem(T item);
-  
+
   // Simple item retrieval.
   int NumItems() { return num_items; }
   nodeStruct<T> *Head() { return head; }
@@ -104,7 +104,7 @@ listClass<T>::listClass(const listClass<T> & L) {
 
     // shallow copy head's data over (don't clone pointers etc-- just use the same ones as the original)
     head->data = L.head->data;
-    
+
     // Set up head->prev to be null.
     head->prev = NULL;
 
@@ -113,13 +113,13 @@ listClass<T>::listClass(const listClass<T> & L) {
     for (nodeStruct<T> *temp = L.head->next; temp; temp = temp->next) {
       // Create the new next node.
       assert((currnode->next = new nodeStruct<T>) != NULL);
-      
+
       // Link it to our current node.
       currnode->prev = currnode;
-      
+
       // Switch operations to the newly-created next node.
       currnode = currnode->next;
-      
+
       // shallow copy this node's data over
       currnode->data = temp->data;
     }
@@ -146,11 +146,11 @@ listClass<T>::~listClass() {
 template <class T>
 bool listClass<T>::AddItem(nodeStruct<T> *node, T item) {
   assert(item != NULL);
-  
+
   /* AddItem adds the item AFTER the node, if it's NULL it goes at the head */
   nodeStruct<T> *NewNode = new nodeStruct<T>;
   assert(NewNode != NULL);
-  
+
   // Shallow copy the item into our new node.
   NewNode->data = item;
 
@@ -165,11 +165,11 @@ bool listClass<T>::AddItem(nodeStruct<T> *node, T item) {
     NewNode->prev = node;
     node->next = NewNode;
   }
-  
+
   // Tie in the reverse link of the next item in the list, provided it exists.
   if (NewNode->next)
     NewNode->next->prev = NewNode;
-  
+
   // Tail check-- if we're adding after last item (or last item is null), update tail pointer.
   if (tail == node || tail == NULL)
     tail = NewNode;
@@ -190,11 +190,11 @@ bool listClass<T>::RemoveItem(nodeStruct<T> *node) {
     // deallocate any memory
     found = head;
     head = found->next;
-    
+
     // If it's a one-item list, clean up the tail.
     if (tail == node)
       tail = NULL;
-    
+
     delete found;
     num_items--;  /* decrement number of items in list */
     return TRUE;  /* it's been found, so return TRUE */
@@ -206,11 +206,11 @@ bool listClass<T>::RemoveItem(nodeStruct<T> *node) {
     if (temp && temp->next == node) { // ie, it was found
       found = temp->next;
       temp->next = found->next;
-      
+
       // Tail check-- if it's the last item, clean up the tail.
       if (tail == found)
         tail = temp;
-      
+
       if (found)
         delete found;
       num_items--;  // decrement number of items in list
@@ -260,11 +260,11 @@ bool List<T>::Add(T item, const char *filename, int lineno) {
 
 #ifdef DEBUG
   if (item == NULL) {
-    cerr << "SYSERR: Attempt to add null to list in file " << filename << ", line: " << lineno << endl;
+    std::cerr << "SYSERR: Attempt to add null to list in file " << filename << ", line: " << lineno << std::endl;
   }
-  
+
   if (this->FindItem(item)) {
-    cerr << "SYSERR: Attempt to add duplicate item to list in file " << filename << ", line: " << lineno << endl;
+    std::cerr << "SYSERR: Attempt to add duplicate item to list in file " << filename << ", line: " << lineno << std::endl;
     abort();
   }
 #endif

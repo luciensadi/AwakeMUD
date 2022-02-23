@@ -1,5 +1,6 @@
 #include "structs.h"
 #include "awake.h"
+#include "newmagic.h"
 
 const char *awakemud_version[] =
     {
@@ -272,6 +273,7 @@ const char *room_bits[] =
     "SOCIALIZE!",
     "CORPSE_SAVE_HACK",
     "STERILE",
+    "CRAMPED",
     "\n"
   };
 
@@ -483,6 +485,7 @@ const char *player_bits[] =
     "NEWBIE_MUTED",
     "IS_CYBERDOC",
     "PAID_FOR_CLOSECOMBAT",
+    "PAID_FOR_KIPUP",
     "\n"
   };
 
@@ -522,6 +525,7 @@ const char *action_bits[] =
     "!KILL",
     "TOTALINVIS",
     "INANIMATE",
+    "EMPLACED",
     "\n"
   };
 
@@ -590,6 +594,8 @@ struct preference_bit_struct preference_bits_v2[] = {
   { "Cyberdocs Allowed"    , FALSE, TRUE  },
   { "No Void on Idle"      , FALSE, TRUE  },
   { "RadLog"               , TRUE , TRUE  },
+  { "Anonymous on Where"   , FALSE, TRUE  },
+  { "IgnoreLog"            , TRUE , TRUE  },
   { "\n"                   , 0    , 0     }
 };
 
@@ -655,6 +661,8 @@ const char *preference_bits[] =
     "CYBERDOC_PERMITTED",
     "NO_VOID",
     "RADLOG",
+    "ANONYMOUS_ON_WHERE",
+    "IGNORELOG",
     "\n"
   };
 
@@ -664,7 +672,7 @@ const char *affected_bits[] =
     "NOTHING",
     "Ruthenium",
     "Banishing",
-    "Det-invis",
+    "Ultrasound",
     "Prone",
     "Manifest",
     "Healed",
@@ -920,6 +928,7 @@ const char *item_types[] =
     "Ammo Box",
     "Keyring",
     "Shop Container",
+    "Vehicle Container",
     "\n"
   };
 
@@ -1158,6 +1167,7 @@ const char *log_types[] =
     "FUCKUPLOG",
     "ECONLOG",
     "RADLOG",
+    "IGNORELOG",
     "\n"
   };
 
@@ -1385,6 +1395,7 @@ const char *adept_powers[] =
 
 struct skill_data skills[] =
   {
+    // name, linked attribute, active/knowledge, requires magic
     {"OMGWTFBBQ", BOD, SKILL_TYPE_ACTIVE, FALSE},
     {"Athletics", BOD, SKILL_TYPE_ACTIVE, FALSE},
     {"Armed Combat", STR, SKILL_TYPE_ACTIVE, FALSE},
@@ -1709,6 +1720,14 @@ const char *intrusion[] =
     "Hard"
   };
 
+int host_subsystem_acceptable_ratings[][2] =
+  {
+    {8, 10},  // Easy
+    {10, 15}, // Average
+    {13, 18}, // Hard
+    {-1, -1}  // Error case
+  };
+
 const char *alerts[] =
   {
     "No Alert",
@@ -1873,13 +1892,13 @@ struct spell_types spells[] =
   {
     // name, category, vector, target, duration, drainpower, draindamage
     { "UNDEF", 0, 0, 0, 0, 0, 0, 0 },
-    { "Death Touch", FALSE, COMBAT, TOUCH, ATT_WIL, INSTANT, 0, -4 },
-    { "Manabolt", FALSE, COMBAT, SINGLE, ATT_WIL, INSTANT, 0, -3 },
-    { "Manaball", FALSE, COMBAT, AREA, ATT_WIL, INSTANT, 0, -2 },
-    { "Powerbolt", TRUE, COMBAT, SINGLE, ATT_BOD, INSTANT, 1, -3 },
-    { "Powerball", TRUE, COMBAT, AREA, ATT_BOD, INSTANT, 1, -2 },
-    { "Stunbolt", FALSE, COMBAT, SINGLE, ATT_WIL, INSTANT, -1, -3 },
-    { "Stunball", FALSE, COMBAT, AREA, ATT_WIL, INSTANT, -1, -2 },
+    { "Death Touch", FALSE, COMBAT, TOUCH, ATT_WIL, INSTANT, 0, PACK_VARIABLE_DRAIN_DAMAGE(-1) },
+    { "Manabolt", FALSE, COMBAT, SINGLE, ATT_WIL, INSTANT, 0, PACK_VARIABLE_DRAIN_DAMAGE(0) },
+    { "Manaball", FALSE, COMBAT, AREA, ATT_WIL, INSTANT, 0, PACK_VARIABLE_DRAIN_DAMAGE(1) },
+    { "Powerbolt", TRUE, COMBAT, SINGLE, ATT_BOD, INSTANT, 1, PACK_VARIABLE_DRAIN_DAMAGE(0) },
+    { "Powerball", TRUE, COMBAT, AREA, ATT_BOD, INSTANT, 1, PACK_VARIABLE_DRAIN_DAMAGE(1) },
+    { "Stunbolt", FALSE, COMBAT, SINGLE, ATT_WIL, INSTANT, -1, PACK_VARIABLE_DRAIN_DAMAGE(0) },
+    { "Stunball", FALSE, COMBAT, AREA, ATT_WIL, INSTANT, -1, PACK_VARIABLE_DRAIN_DAMAGE(1) },
     { "Analyze Device", TRUE, DETECTION, SINGLE, -1, SUSTAINED, 1, MODERATE },
     { "Clairaudience", FALSE, DETECTION, SINGLE, -6, SUSTAINED, 0, MODERATE },
     { "Clairvoyance", FALSE, DETECTION, SINGLE, -6, SUSTAINED, 0, MODERATE },
@@ -1892,9 +1911,9 @@ struct spell_types spells[] =
     { "Mindlink", FALSE, DETECTION, SINGLE, -1, SUSTAINED, 0, SERIOUS },
     { "Decrease ", FALSE, HEALTH, SINGLE, -1, SUSTAINED, 1, SERIOUS }, // Decrease Attribute
     { "Decrease Cybered ", TRUE, HEALTH, SINGLE, -1, SUSTAINED, 2, SERIOUS }, // Decrease Cybered Attribute
-    { "Detox", FALSE, HEALTH, SINGLE, -1, PERMANENT, -2, 0 },
-    { "Heal", FALSE, HEALTH, SINGLE, -1, PERMANENT, 0, -3 },
-    { "Treat", FALSE, HEALTH, SINGLE, -1, PERMANENT, -1, -3 },
+    { "Detox", FALSE, HEALTH, SINGLE, -1, PERMANENT, -2, LIGHT }, // drain: -2 (toxin damage) (toxin damage portion not implemented yet, so we go with Light)
+    { "Heal", FALSE, HEALTH, SINGLE, -1, PERMANENT, 0, PACK_VARIABLE_DRAIN_DAMAGE(0) },
+    { "Treat", FALSE, HEALTH, SINGLE, -1, PERMANENT, -1, PACK_VARIABLE_DRAIN_DAMAGE(0) },
     { "Healthy Glow", FALSE, HEALTH, SINGLE, -1, PERMANENT, 0, LIGHT },
     { "Increase ", FALSE, HEALTH, SINGLE, -1, SUSTAINED, 1, MODERATE }, // Increase Attribute
     { "Increase Cybered ", TRUE, HEALTH, SINGLE, -1, SUSTAINED, 2, MODERATE }, // Increase Cybered Attribute
@@ -1903,7 +1922,7 @@ struct spell_types spells[] =
     { "Increase Reflexes +2", FALSE, HEALTH, SINGLE, ATT_REA, SUSTAINED, 1, DEADLY },
     { "Increase Reflexes +3", FALSE, HEALTH, SINGLE, ATT_REA, SUSTAINED, 3, DEADLY },
     { "Prophylaxis", FALSE, HEALTH, SINGLE, -1, SUSTAINED, 1, LIGHT },
-    { "Resist Pain", FALSE, HEALTH, SINGLE, -1, SUSTAINED, -2, 0 },
+    { "Resist Pain", FALSE, HEALTH, SINGLE, -1, SUSTAINED, -2, PACK_VARIABLE_DRAIN_DAMAGE(0) },
     { "Stabilize", FALSE, HEALTH, SINGLE, -1, PERMANENT, 1, MODERATE },
     { "Confusion", FALSE, ILLUSION, SINGLE, ATT_WIL, SUSTAINED, 0, SERIOUS },
     { "Mass Confusion", FALSE, ILLUSION, AREA, ATT_WIL, SUSTAINED, 0, DEADLY },
@@ -1915,13 +1934,13 @@ struct spell_types spells[] =
     { "Physical Mask", TRUE, ILLUSION, SINGLE, -1, SUSTAINED, 1, MODERATE },
     { "Silence", TRUE, ILLUSION, AREA, -1, SUSTAINED, 1, SERIOUS },
     { "Stealth", TRUE, ILLUSION, SINGLE, -1, SUSTAINED, 1, MODERATE },
-    { "Acid Stream", TRUE, MANIPULATION, SINGLE, -1, INSTANT, 1, -2 },
-    { "Toxic Wave", TRUE, MANIPULATION, AREA, -1, INSTANT, 1, -1 },
-    { "Flamethrower", TRUE, MANIPULATION, SINGLE, -1, INSTANT, 1, -2 },
-    { "Fireball", TRUE, MANIPULATION, AREA, -1, INSTANT, 1, -1 },
-    { "Lightning Bolt", TRUE, MANIPULATION, SINGLE, -1, INSTANT, 1, -2 },
-    { "Ball Lightning", TRUE, MANIPULATION, AREA, -1, INSTANT, 1, -1 },
-    { "Clout", TRUE, MANIPULATION, SINGLE, -1, INSTANT, 0, -3 },
+    { "Acid Stream", TRUE, MANIPULATION, SINGLE, -1, INSTANT, 1, PACK_VARIABLE_DRAIN_DAMAGE(1) },
+    { "Toxic Wave", TRUE, MANIPULATION, AREA, -1, INSTANT, 1, PACK_VARIABLE_DRAIN_DAMAGE(2) },
+    { "Flamethrower", TRUE, MANIPULATION, SINGLE, -1, INSTANT, 1, PACK_VARIABLE_DRAIN_DAMAGE(1) },
+    { "Fireball", TRUE, MANIPULATION, AREA, -1, INSTANT, 1, PACK_VARIABLE_DRAIN_DAMAGE(2) },
+    { "Lightning Bolt", TRUE, MANIPULATION, SINGLE, -1, INSTANT, 1, PACK_VARIABLE_DRAIN_DAMAGE(1) },
+    { "Ball Lightning", TRUE, MANIPULATION, AREA, -1, INSTANT, 1, PACK_VARIABLE_DRAIN_DAMAGE(2) },
+    { "Clout", TRUE, MANIPULATION, SINGLE, -1, INSTANT, 0, PACK_VARIABLE_DRAIN_DAMAGE(0) },
     { "Poltergeist", TRUE, MANIPULATION, SINGLE, -1, SUSTAINED, 1, MODERATE },
     { "Armor", TRUE, MANIPULATION, SINGLE, -1, SUSTAINED, 2, MODERATE },
     { "Physical Barrier", TRUE, MANIPULATION, SINGLE, -1, SUSTAINED, 2, SERIOUS },
@@ -1930,14 +1949,14 @@ struct spell_types spells[] =
     { "Ignite", TRUE, MANIPULATION, SINGLE, -1, PERMANENT, 1, DEADLY },
     { "Light", TRUE, MANIPULATION, SINGLE, -1, SUSTAINED, 2, MODERATE },
     { "Shadow", TRUE, MANIPULATION, SINGLE, -1, SUSTAINED, 2, MODERATE },
-    { "Laser", TRUE, MANIPULATION, SINGLE, -1, INSTANT, 1, -2 },
-    { "Nova", TRUE, MANIPULATION, AREA, -1, INSTANT, 1, -1 },
-    { "Steam", TRUE, MANIPULATION, SINGLE, -1, INSTANT, 0, -2 },
-    { "Smoke Cloud", TRUE, MANIPULATION, AREA, -1, INSTANT, 1, -1 },
-    { "Thunderbolt", TRUE, MANIPULATION, SINGLE, -1, INSTANT, 0, -2 },
-    { "Thunderclap", TRUE, MANIPULATION, AREA, -1, INSTANT, 1, -1 },
-    { "Waterbolt", TRUE, MANIPULATION, SINGLE, -1, INSTANT, 0, -3 },
-    { "Splash", TRUE, MANIPULATION, AREA, -1, INSTANT, 0, -3 }
+    { "Laser", TRUE, MANIPULATION, SINGLE, -1, INSTANT, 1, PACK_VARIABLE_DRAIN_DAMAGE(1) },
+    { "Nova", TRUE, MANIPULATION, AREA, -1, INSTANT, 1, PACK_VARIABLE_DRAIN_DAMAGE(2) },
+    { "Steam", TRUE, MANIPULATION, SINGLE, -1, INSTANT, 0, PACK_VARIABLE_DRAIN_DAMAGE(1) },
+    { "Smoke Cloud", TRUE, MANIPULATION, AREA, -1, INSTANT, 1, PACK_VARIABLE_DRAIN_DAMAGE(2) },
+    { "Thunderbolt", TRUE, MANIPULATION, SINGLE, -1, INSTANT, 0, PACK_VARIABLE_DRAIN_DAMAGE(1) },
+    { "Thunderclap", TRUE, MANIPULATION, AREA, -1, INSTANT, 1, PACK_VARIABLE_DRAIN_DAMAGE(2) },
+    { "Waterbolt", TRUE, MANIPULATION, SINGLE, -1, INSTANT, 0, PACK_VARIABLE_DRAIN_DAMAGE(1) }, // these were both VDD+0, but I can't find them in the book, so I'm matching them to the other elemental manips. -LS
+    { "Splash", TRUE, MANIPULATION, AREA, -1, INSTANT, 0, PACK_VARIABLE_DRAIN_DAMAGE(2) }
   };
 
 const char *totem_types[] =
@@ -2577,7 +2596,7 @@ int acceptable_weapon_attachment_affects[] = {
   AFF_VISION_MAG_3,
   AFF_INFRAVISION,
   AFF_LOW_LIGHT,
-  AFF_DETECT_INVIS,
+  AFF_ULTRASOUND,
   -1
 };
 
@@ -2691,5 +2710,20 @@ struct nuyen_faucet_or_sink nuyen_faucets_and_sinks[NUM_OF_TRACKED_NUYEN_INCOME_
     {"Taxis", NI_IS_SINK},
     {"Playergroups", NI_IS_SINK},
     {"Trade Command (n->k)", NI_IS_SINK},
-    {"Credstick Cracker", NI_IS_SINK}
+    {"Credstick Cracker", NI_IS_SINK},
+    {"Death Penalty", NI_IS_SINK}
+  };
+
+const char *ignored_bits_in_english[] =
+  {
+    "where",
+    "oocs",
+    "radio",
+    "mindlinks",
+    "tells",
+    "osays",
+    "interaction",
+    "following",
+    "calls",
+    "ERROR: Coder forgot to add their new bit to ignored_bits_in_english!"
   };

@@ -37,3 +37,12 @@ extern int get_spell_affected_successes(struct char_data * ch, int type);
 #define INIT_MAIN	0
 #define INIT_META	1
 #define INIT_GEAS	2
+
+#define SPELLCASTING 0
+#define CONJURING 1
+
+// Because we define 'variable drain damage' in code as being a code below 0, we start out with -5 as our baseline
+//  (equivalent to 'variable damage with 0 modifier'), then add to or subtract from that to indicate the +1, -1 etc.
+#define VARIABLE_DRAIN_DAMAGE_CODE                 -5
+#define PACK_VARIABLE_DRAIN_DAMAGE(modifier)       (VARIABLE_DRAIN_DAMAGE_CODE + modifier)
+#define UNPACK_VARIABLE_DRAIN_DAMAGE(damage_code)  (-VARIABLE_DRAIN_DAMAGE_CODE + damage_code)

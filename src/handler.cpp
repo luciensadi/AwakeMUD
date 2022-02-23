@@ -471,6 +471,7 @@ void affect_total(struct char_data * ch)
   sh_int i, j, skill_dice;
   int has_rig = 0, has_trigger = -1, has_wired = 0, has_mbw = 0;
   bool wearing = FALSE;
+  bool ch_is_npc = IS_NPC(ch);
 
   if (IS_PROJECT(ch))
     return;
@@ -563,13 +564,15 @@ void affect_total(struct char_data * ch)
   // Reset armor-related stats.
   {
     if (IS_SPIRIT(ch) || IS_ELEMENTAL(ch)) {
-      GET_IMPACT(ch) = GET_BALLISTIC(ch) = GET_SPARE1(ch) * 2;
-    } else if (IS_NPC(ch)) {
-      GET_BALLISTIC(ch) = mob_proto[GET_MOB_RNUM(ch)].points.ballistic[0];
-      GET_IMPACT(ch) = mob_proto[GET_MOB_RNUM(ch)].points.impact[0];
+      GET_INNATE_IMPACT(ch) = GET_INNATE_BALLISTIC(ch) = GET_SPARE1(ch) * 2;
+    } else if (ch_is_npc) {
+      GET_INNATE_BALLISTIC(ch) = GET_INNATE_BALLISTIC(&mob_proto[GET_MOB_RNUM(ch)]);
+      GET_INNATE_IMPACT(ch) = GET_INNATE_BALLISTIC(&mob_proto[GET_MOB_RNUM(ch)]);
     } else {
-      GET_BALLISTIC(ch) = GET_IMPACT(ch) = 0;
+      GET_INNATE_BALLISTIC(ch) = GET_INNATE_IMPACT(ch) = 0;
     }
+    GET_BALLISTIC(ch) = GET_INNATE_BALLISTIC(ch);
+    GET_IMPACT(ch) = GET_INNATE_IMPACT(ch);
 
     GET_TOTALBAL(ch) = GET_TOTALIMP(ch) = 0;
   }
@@ -735,7 +738,7 @@ void affect_total(struct char_data * ch)
     }
   }
 
-  i = ((IS_NPC(ch) || (GET_LEVEL(ch) >= LVL_ADMIN)) ? 50 : 20);
+  i = ((ch_is_npc || (GET_LEVEL(ch) >= LVL_ADMIN)) ? 50 : 20);
   GET_REA(ch) += (GET_INT(ch) + GET_QUI(ch)) >> 1;
   GET_QUI(ch) = MAX(0, MIN(GET_QUI(ch), i));
   GET_CHA(ch) = MAX(1, MIN(GET_CHA(ch), i));
@@ -898,14 +901,26 @@ void affect_total(struct char_data * ch)
     GET_OFFENSE(ch) = skill_dice;
   }
 
+  // NPCs specialize their defenses: unless they've got crazy dodge dice, they'll want to just soak.
+  // AKA, 'your average wage slave is not going to try to do the Matrix bullet dodge when he sees a gun.'
+  if (ch_is_npc) {
+    if (GET_DEFENSE(ch) < 10) {
+      GET_BODY(ch) += GET_DEFENSE(ch);
+      GET_DEFENSE(ch) = 0;
+    }
+  }
+
   // Set up magic pool info correctly.
-  if (IS_NPC(ch) && (IS_SPIRIT(ch) || IS_ELEMENTAL(ch))) {
+  if (ch_is_npc && (IS_SPIRIT(ch) || IS_ELEMENTAL(ch))) {
     GET_ASTRAL(ch) = 1.5 * GET_LEVEL(ch);
-  } else if ((IS_NPC(ch) && GET_MAG(ch) > 0) || (GET_TRADITION(ch) == TRAD_SHAMANIC || GET_TRADITION(ch) == TRAD_HERMETIC)) {
+  } else if ((ch_is_npc && GET_MAG(ch) > 0) || (GET_TRADITION(ch) == TRAD_SHAMANIC || GET_TRADITION(ch) == TRAD_HERMETIC)) {
     GET_ASTRAL(ch) += GET_GRADE(ch);
     GET_MAGIC(ch) += (GET_INT(ch) + GET_WIL(ch) + (int)(GET_MAG(ch) / 100))/3;
-    if (IS_NPC(ch)) {
-      GET_DRAIN(ch) = GET_SDEFENSE(ch) = GET_MAGIC(ch) / 3;
+    if (ch_is_npc) {
+      if (GET_SKILL(ch, SKILL_SORCERY))
+        GET_DRAIN(ch) = GET_SDEFENSE(ch) = GET_MAGIC(ch) / 3;
+      else
+        GET_SDEFENSE(ch) = GET_MAGIC(ch);
     } else {
       GET_SDEFENSE(ch) = MIN(GET_MAGIC(ch), GET_SDEFENSE(ch));
       GET_DRAIN(ch) = MIN(GET_MAGIC(ch), GET_DRAIN(ch));
@@ -1012,11 +1027,11 @@ bool affected_by_spell(struct char_data * ch, int type)
   return FALSE;
 }
 
-bool affected_by_power(struct char_data *ch, int type)
+int affected_by_power(struct char_data *ch, int type)
 {
   for (struct spirit_sustained *sust = SPIRIT_SUST(ch); sust ; sust = sust->next)
     if (sust->type == type)
-      return TRUE;
+      return MAX(1, sust->force); // MAX here guarantees this matches the previous bool return.
   return FALSE;
 }
 void veh_from_room(struct veh_data * veh)
@@ -1024,7 +1039,7 @@ void veh_from_room(struct veh_data * veh)
   struct veh_data *temp;
   if (veh == NULL) {
     log("SYSERR: Null vehicle passed to veh_from_room. Terminating.");
-    exit(1);
+    exit(ERROR_NULL_VEHICLE_VEH_FROM_ROOM);
   }
   if (!veh->in_room && !veh->in_veh) {
     log("SYSERR: veh->in_room and veh->in_veh are both null; did you call veh_from_room twice?");
@@ -1418,6 +1433,7 @@ void obj_to_cyberware(struct obj_data * object, struct char_data * ch)
   ch->cyberware = object;
   object->carried_by = ch;
   object->in_room = NULL;
+  object->in_veh = NULL;
   affect_total(ch);
 }
 
@@ -1445,6 +1461,7 @@ void obj_to_bioware(struct obj_data * object, struct char_data * ch)
   ch->bioware = object;
   object->carried_by = ch;
   object->in_room = NULL;
+  object->in_veh = NULL;
 
   if (GET_OBJ_VAL(object, 0) != BIO_ADRENALPUMP || GET_OBJ_VAL(object, 5) > 0)
     for (temp = 0; temp < MAX_OBJ_AFFECT; temp++)
@@ -1463,9 +1480,14 @@ void obj_from_bioware(struct obj_data *bio)
 
   if (bio == NULL)
   {
-    log("SYSLOG: NULL object passed to obj_from_bioware");
+    mudlog("SYSERR: NULL bioware passed to obj_from_bioware!", NULL, LOG_SYSLOG, TRUE);
     return;
   }
+  if (!bio->carried_by) {
+    mudlog("SYSERR: Bioware with NO carried_by passed to obj_from_bioware!", NULL, LOG_SYSLOG, TRUE);
+    return;
+  }
+
   if (GET_OBJ_VAL(bio, 0) == BIO_ADRENALPUMP && GET_OBJ_VAL(bio, 5) < 1)
     for (i = 0; i < MAX_OBJ_AFFECT; i++)
       affect_modify(bio->carried_by,
@@ -1516,9 +1538,14 @@ void obj_from_cyberware(struct obj_data * cyber)
   struct obj_data *temp;
   if (cyber == NULL)
   {
-    log("SYSLOG: NULL object passed to obj_from_cyberware");
+    mudlog("SYSERR: NULL object passed to obj_from_cyberware!", NULL, LOG_SYSLOG, TRUE);
     return;
   }
+  if (!cyber->carried_by) {
+    mudlog("SYSERR: Cyberware with NO carried_by passed to obj_from_cyberware!", NULL, LOG_SYSLOG, TRUE);
+    return;
+  }
+
   REMOVE_FROM_LIST(cyber, cyber->carried_by->cyberware, next_content);
   cyber->carried_by = NULL;
   cyber->next_content = NULL;
@@ -1681,15 +1708,17 @@ struct veh_data *get_veh_list(char *name, struct veh_data *list, struct char_dat
 
   if (!list)
     return NULL;
-  strcpy(tmp, name);
+  strlcpy(tmp, get_string_after_color_code_removal(name, ch), sizeof(tmpname));
   if (!strncmp(tmp, "my.", 3)) {
     mine = TRUE;
-    strcpy(tmp, name+3);
+    strlcpy(tmp, name+3, sizeof(tmpname));
   }
   if (!(number = get_number(&tmp)))
     return NULL;
   for (i = list; i && (j <= number); i = i->next_veh)
-    if (isname(tmp, GET_VEH_NAME(i)) || isname(tmp, i->name)) {
+    if (isname(tmp, get_string_after_color_code_removal(GET_VEH_NAME(i), NULL))
+        || isname(tmp, get_string_after_color_code_removal(i->name, NULL)))
+    {
       if (ch && mine && i->owner == GET_IDNUM(ch))
         return i;
       else if (!mine && ++j == number)
@@ -1744,10 +1773,13 @@ struct char_data *get_char_room(const char *name, struct room_data *room)
     return NULL;
 
   for (i = room->people; i && (j <= number); i = i->next_in_room)
-    if (isname(tmp, GET_KEYWORDS(i)) ||
-        isname(tmp, GET_NAME(i)) || isname(tmp, GET_CHAR_NAME(i)))
+    if (isname(tmp, get_string_after_color_code_removal(GET_KEYWORDS(i), NULL))
+        || isname(tmp, get_string_after_color_code_removal(GET_NAME(i), NULL))
+        || isname(tmp, GET_CHAR_NAME(i)))
+    {
       if (++j == number)
         return i;
+    }
 
   return NULL;
 }
@@ -2222,6 +2254,20 @@ void extract_obj(struct obj_data * obj)
     mudlog(buf, NULL, LOG_PURGELOG, TRUE);
   }
 
+  if (GET_OBJ_VNUM(obj) == OBJ_VEHCONTAINER && (GET_VEHCONTAINER_VEH_VNUM(obj) || GET_VEHCONTAINER_VEH_IDNUM(obj) || GET_VEHCONTAINER_VEH_OWNER(obj))) {
+    const char *owner = get_player_name(GET_VEHCONTAINER_VEH_OWNER(obj));
+    snprintf(buf, sizeof(buf), "extract_obj: Destroying NON-ZEROED vehicle container %s (%d, idnum %d) for vehicle belonging to %s (%d).",
+             GET_OBJ_NAME(obj),
+             GET_VEHCONTAINER_VEH_VNUM(obj),
+             GET_VEHCONTAINER_VEH_IDNUM(obj),
+             owner,
+             GET_VEHCONTAINER_VEH_OWNER(obj)
+            );
+    DELETE_ARRAY_IF_EXTANT(owner);
+    mudlog(buf, NULL, LOG_CHEATLOG, TRUE);
+    mudlog(buf, NULL, LOG_PURGELOG, TRUE);
+  }
+
   if (obj->in_room)
     obj->in_room->dirty_bit = TRUE;
 
@@ -2377,6 +2423,15 @@ void extract_char(struct char_data * ch)
   {
     obj = ch->carrying;
     obj_from_char(obj);
+
+    // Zero out veh containers so we don't get nagged about destroyed vehicles every time someone quits.
+    if (GET_OBJ_VNUM(obj) == OBJ_VEHCONTAINER)
+      GET_VEHCONTAINER_VEH_VNUM(obj) = GET_VEHCONTAINER_VEH_IDNUM(obj) = GET_VEHCONTAINER_VEH_OWNER(obj) = 0;
+
+    // Un-keep items for the same reason.
+    if (IS_OBJ_STAT(obj, ITEM_KEPT))
+      GET_OBJ_EXTRA(obj).RemoveBit(ITEM_KEPT);
+
     extract_obj(obj);
   }
 
@@ -2572,7 +2627,7 @@ struct char_data *get_player_vis(struct char_data * ch, char *name, int inroom)
     if (IS_NPC(i) || (inroom && i->in_room != ch->in_room) || GET_LEVEL(ch) < GET_INCOG_LEV(i))
       continue;
 
-    if (isname(name, GET_CHAR_NAME(i)) || recog(ch, i, name))
+    if (isname(name, get_string_after_color_code_removal(GET_CHAR_NAME(i), NULL)) || recog(ch, i, name))
       return i;
   }
 
@@ -2581,7 +2636,7 @@ struct char_data *get_player_vis(struct char_data * ch, char *name, int inroom)
     if (IS_NPC(i) || (inroom && i->in_room != ch->in_room) || GET_LEVEL(ch) < GET_INCOG_LEV(i))
       continue;
 
-    if (isname(name, GET_KEYWORDS(i)))
+    if (isname(name, get_string_after_color_code_removal(GET_KEYWORDS(i), NULL)))
       return i;
   }
 
@@ -2593,9 +2648,13 @@ struct char_data *get_char_veh(struct char_data * ch, char *name, struct veh_dat
   struct char_data *i;
 
   for (i = veh->people; i; i = i->next_in_veh)
-    if ((isname(name, GET_KEYWORDS(i)) || isname(name, GET_CHAR_NAME(i)) || recog(ch, i, name))
+    if ((isname(name, get_string_after_color_code_removal(GET_KEYWORDS(i), NULL))
+         || isname(name, get_string_after_color_code_removal(GET_CHAR_NAME(i), NULL))
+         || recog(ch, i, name))
         && CAN_SEE(ch, i))
+    {
       return i;
+    }
 
   return NULL;
 }
@@ -2621,8 +2680,8 @@ struct char_data *get_char_room_vis(struct char_data * ch, char *name)
       return i;
 
   for (i = ch->in_veh ? ch->in_veh->people : ch->in_room->people; i && j <= number; i = ch->in_veh ? i->next_in_veh : i->next_in_room) {
-    if ((isname(tmp, GET_KEYWORDS(i))
-          || isname(tmp, GET_NAME(i))
+    if ((isname(tmp, get_string_after_color_code_removal(GET_KEYWORDS(i), NULL))
+          || isname(tmp, get_string_after_color_code_removal(GET_NAME(i), NULL))
           || recog(ch, i, name))
         && CAN_SEE(ch, i))
     {
@@ -2649,11 +2708,14 @@ struct char_data *get_char_in_list_vis(struct char_data * ch, char *name, struct
     return get_player_vis(ch, tmp, 1);
 
   for (; list && j <= number; list = list->next_in_room)
-    if ((isname(tmp, GET_KEYWORDS(list)) ||
-         isname(tmp, GET_NAME(list)) || recog(ch, list, name)) &&
-        CAN_SEE(ch, list))
+    if ((isname(tmp, get_string_after_color_code_removal(GET_KEYWORDS(list), NULL))
+         || isname(tmp, get_string_after_color_code_removal(GET_NAME(list), NULL))
+         || recog(ch, list, name))
+        && CAN_SEE(ch, list))
+    {
       if (++j == number)
         return list;
+    }
 
   return NULL;
 }
@@ -2681,10 +2743,13 @@ struct char_data *get_char_vis(struct char_data * ch, char *name)
     return get_player_vis(ch, tmp, 0);
 
   for (i = character_list; i && (j <= number); i = i->next)
-    if ((isname(tmp, GET_KEYWORDS(i)) || recog(ch, i, name)) &&
-        CAN_SEE(ch, i))
+    if ((isname(tmp, get_string_after_color_code_removal(GET_KEYWORDS(i), NULL))
+         || recog(ch, i, name))
+        && CAN_SEE(ch, i))
+    {
       if (++j == number)
         return i;
+    }
 
   return NULL;
 }
@@ -2703,7 +2768,9 @@ struct obj_data *get_obj_in_list_vis(struct char_data * ch, char *name, struct o
   for (i = list; i && (j <= number); i = i->next_content) {
     if (ch->in_veh && i->in_veh && i->vfront != ch->vfront)
       continue;
-    if (isname(tmp, i->text.keywords) || isname(tmp, i->text.name) || (i->restring && isname(tmp, get_string_after_color_code_removal(i->restring, ch))))
+    if (isname(tmp, i->text.keywords)
+        || isname(tmp, get_string_after_color_code_removal(i->text.name, NULL))
+        || (i->restring && isname(tmp, get_string_after_color_code_removal(i->restring, ch))))
       if (++j == number)
         return i;
   }
@@ -2748,16 +2815,23 @@ struct obj_data *get_object_in_equip_vis(struct char_data * ch,
   for ((*j) = 0; (*j) < NUM_WEARS && i <= number; (*j)++)
     if (equipment[(*j)])
     {
-      if (isname(tmp, equipment[(*j)]->text.keywords) || isname(tmp, equipment[(*j)]->text.name)  ||
-          (equipment[(*j)]->restring && isname(tmp, get_string_after_color_code_removal(equipment[(*j)]->restring, ch))))
+      if (isname(tmp, equipment[(*j)]->text.keywords)
+          || isname(tmp, get_string_after_color_code_removal(equipment[(*j)]->text.name, ch))
+          || (equipment[(*j)]->restring && isname(tmp, get_string_after_color_code_removal(equipment[(*j)]->restring, ch))))
+      {
         if (++i == number)
           return (equipment[(*j)]);
+      }
+
       if (GET_OBJ_TYPE(equipment[(*j)]) == ITEM_WORN && equipment[(*j)]->contains)
         for (struct obj_data *obj = equipment[(*j)]->contains; obj; obj = obj->next_content)
-          if (isname(tmp, obj->text.keywords) || isname(tmp, obj->text.name) ||
-              (obj->restring && isname(tmp, get_string_after_color_code_removal(obj->restring, ch))))
+          if (isname(tmp, obj->text.keywords)
+              || isname(tmp, get_string_after_color_code_removal(obj->text.name, ch))
+              || (obj->restring && isname(tmp, get_string_after_color_code_removal(obj->restring, ch))))
+          {
             if (++i == number)
               return (obj);
+          }
     }
 
   return NULL;
@@ -2944,7 +3018,7 @@ int generic_find(char *arg, int bitvector, struct char_data * ch,
                  struct char_data ** tar_ch, struct obj_data ** tar_obj)
 {
   int i;
-  char name[256];
+  char name[MAX_INPUT + 1];
 
   *tar_ch = NULL;
   *tar_obj = NULL;
@@ -2986,13 +3060,16 @@ int generic_find(char *arg, int bitvector, struct char_data * ch,
     number = MAX(1, get_number(&tmp));
 
     for (i = get_ch_in_room(ch)->people; i && j <= number; i = i->next_in_room)
-      if ((isname(tmp, GET_KEYWORDS(i)) ||
-           isname(tmp, GET_NAME(i)) || recog(ch, i, name)) &&
-          CAN_SEE(ch, i))
+      if ((isname(tmp, get_string_after_color_code_removal(GET_KEYWORDS(i), NULL))
+           || isname(tmp, get_string_after_color_code_removal(GET_NAME(i), NULL))
+           || recog(ch, i, name))
+          && CAN_SEE(ch, i))
+      {
         if (++j == number) {
           *tar_ch = i;
           return (FIND_CHAR_VEH_ROOM);
         }
+      }
   }
   if (IS_SET(bitvector, FIND_CHAR_WORLD))
   {
