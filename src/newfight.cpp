@@ -838,7 +838,7 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
           }
           break;
         case AMMO_GEL:
-          att->ranged->power -= GET_BALLISTIC(def->ch) + 2;
+          att->ranged->power -= GET_IMPACT(def->ch) + 2;
           att->ranged->is_gel = TRUE;
           break;
         default:

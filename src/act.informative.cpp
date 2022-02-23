@@ -2313,7 +2313,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
               strlcat(buf, "deals more damage to fully unarmored targets.", sizeof(buf));
               break;
             case AMMO_GEL:
-              strlcat(buf, "doubles knockdown effectiveness, but deals mental instead of physical damage, and treats the enemy's ballistic armor as two points higher.", sizeof(buf));
+              strlcat(buf, "doubles knockdown effectiveness, but deals mental instead of physical damage, and treats the enemy's impact armor as two points higher.", sizeof(buf));
               break;
           }
         }
