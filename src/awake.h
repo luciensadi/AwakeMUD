@@ -698,7 +698,11 @@ enum {
 #define SPELL_THUNDERCLAP    63
 #define SPELL_WATERBOLT    64
 #define SPELL_SPLASH    65
-#define MAX_SPELLS    66
+#define SPELL_SPLASH    65
+#define SPELL_NIGHTVISION    66
+#define SPELL_INFRAVISION    67
+#define SPELL_LEVITATE    68
+#define MAX_SPELLS    69
 
 #define SPELL_DESIGN_FAILED_CODE -3
 
