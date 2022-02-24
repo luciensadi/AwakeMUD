@@ -1711,41 +1711,32 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
     case SPELL_NIGHTVISION:
       WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
       success = success_test(skill, 6 + target_modifiers);
-      if (success < 1 || AFF_FLAGGED(vict, AFF_LOW_LIGHT)) {
-        send_to_char(FAILED_CAST, ch);
-      } else {
-        AFF_FLAGS(vict).SetBit(AFF_LOW_LIGHT);
+      if (success > 0) {
         send_to_char("Your eyes tingle as the shadows around you become clearer.\r\n", vict);
         act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
         create_sustained(ch, vict, spell, force, 0, success, drain);
-      }
-      spell_drain(ch, spell, force, drain);
+      } else
+        send_to_char(FAILED_CAST, ch);
       break;
     case SPELL_INFRAVISION:
       WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
       success = success_test(skill, 6 + target_modifiers);
-      if (success < 1 || AFF_FLAGGED(vict, AFF_INFRAVISION)) {
-        send_to_char(FAILED_CAST, ch);
-      } else {
-        AFF_FLAGS(vict).SetBit(AFF_INFRAVISION);
+      if (success > 0) {
         send_to_char("Your eyes tingle as you begin to see heat signatures around you.\r\n", vict);
         act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
         create_sustained(ch, vict, spell, force, 0, success, drain);
-      }
-      spell_drain(ch, spell, force, drain);
+      } else
+        send_to_char(FAILED_CAST, ch);
       break;
     case SPELL_LEVITATE:
       WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
       success = success_test(skill, 4 + target_modifiers);
-      if (success < 1 || AFF_FLAGGED(vict, AFF_LEVITATE)) {
-        send_to_char(FAILED_CAST, ch);
-      } else {
-        AFF_FLAGS(vict).SetBit(AFF_LEVITATE);
+      if (success > 0) {
         send_to_char("Your feet gently lift off from the ground as you levitate.\r\n", vict);
         act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
         create_sustained(ch, vict, spell, force, 0, success, drain);
-      }
-      spell_drain(ch, spell, force, drain);
+      } else
+        send_to_char(FAILED_CAST, ch);
       break;
   }
 }
