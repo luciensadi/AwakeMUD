@@ -1033,9 +1033,9 @@ const char *pc_readable_extra_bits[] =
     "Derived from Template Item",
     "Incompatible with Magic",
     "Kept",
-    "Filters Air",
-    "Resists Bio/Chemical Weapons",
-    "Immune to Bio/Chemical Weapons",
+    "Filters Air (NERP)",
+    "Resists Bio/Chemical Weapons (NERP)",
+    "Immune to Bio/Chemical Weapons (NERP)",
     "\n"
   };
 
