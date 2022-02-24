@@ -3217,6 +3217,7 @@ int check_recoil(struct char_data *ch, struct obj_data *gun)
 
 void astral_fight(struct char_data *ch, struct char_data *vict)
 {
+  char oopsbuf[1000];
   int w_type, dam, power, attack_success, newskill, skill_total, base_target;
   bool focus = FALSE, is_physical;
 
@@ -3224,12 +3225,15 @@ void astral_fight(struct char_data *ch, struct char_data *vict)
     stop_fighting(ch);
     if (FIGHTING(vict) == ch)
       stop_fighting(vict);
+    snprintf(oopsbuf, sizeof(oopsbuf), "SYSERR: Entered astral_fight with %s and %s who are not in the same room.", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict));
+    mudlog(oopsbuf, ch, LOG_SYSLOG, TRUE);
+    send_to_char("You struggle to figure out how to attack astral targets at range.\r\n", ch);
     return;
   }
 
   if (GET_POS(vict) <= POS_DEAD)
   {
-    log("SYSERR: Attempt to damage a corpse.");
+    mudlog("SYSERR: Attempt to damage a corpse.", ch, LOG_SYSLOG, TRUE);
     return;                     /* -je, 7/7/92 */
   }
 

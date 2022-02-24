@@ -2944,8 +2944,8 @@ ACMD(do_bond)
       return;
     }
     if (GET_POS(ch) > POS_SITTING) {
-      send_to_char("You must be sitting to perform a bonding ritual.\r\n", ch);
-      return;
+      GET_POS(ch) = POS_SITTING;
+      send_to_char(ch, "You find a place to sit and work on bonding.\r\n");
     }
 
     if (GET_WEAPON_FOCUS_BOND_STATUS(obj) > 0) {
@@ -2994,16 +2994,23 @@ ACMD(do_bond)
   }
 
   else if (GET_OBJ_TYPE(obj) == ITEM_FOCUS) {
+
+    if (IS_WORKING(ch)) {
+      send_to_char(TOOBUSY, ch);
+      return;
+    }
+
+    if (GET_POS(ch) > POS_SITTING) {
+      GET_POS(ch) = POS_SITTING;
+      send_to_char(ch, "You find a place to sit and work.\r\n");
+    }
+
     if (GET_TRADITION(ch) == TRAD_MUNDANE)
       send_to_char(ch, "You can't bond foci.\r\n");
     else if (GET_TRADITION(ch) == TRAD_ADEPT)
       send_to_char("Adepts can only bond weapon foci.\r\n", ch);
     else if (GET_FOCUS_BONDED_TO(obj) && GET_FOCUS_BONDED_TO(obj) != GET_IDNUM(ch))
       send_to_char(ch, "%s is already bonded to someone else.\r\n", capitalize(GET_OBJ_NAME(obj)));
-    else if (IS_WORKING(ch))
-      send_to_char(TOOBUSY, ch);
-    else if (GET_POS(ch) > POS_SITTING)
-      send_to_char("You must be sitting to perform a bonding ritual.\r\n", ch);
     else if (GET_FOCUS_BONDED_TO(obj) == GET_IDNUM(ch)) {
       if (GET_FOCUS_BOND_TIME_REMAINING(obj)) {
 

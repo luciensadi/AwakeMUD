@@ -564,6 +564,7 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
 
   if (att->veh && !att->weapon) {
     mudlog("SYSERR: Somehow, we ended up in a vehicle attacking someone with no weapon!", att->ch, LOG_SYSLOG, TRUE);
+    send_to_char("You'll have to leave your vehicle for that.\r\n", att->ch);
     return;
   }
 

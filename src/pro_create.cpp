@@ -230,8 +230,8 @@ ACMD(do_design)
     return;
   }
   if (GET_POS(ch) > POS_SITTING) {
-    send_to_char(ch, "You have to be sitting to do that.\r\n");
-    return;
+    GET_POS(ch) = POS_SITTING;
+    send_to_char(ch, "You find a place to sit and work with your materials.\r\n");
   }
   if (IS_WORKING(ch)) {
     send_to_char(TOOBUSY, ch);
@@ -359,8 +359,8 @@ ACMD(do_program)
     return;
   }
   if (GET_POS(ch) > POS_SITTING) {
-    send_to_char(ch, "You have to be sitting to do that.\r\n");
-    return;
+    GET_POS(ch) = POS_SITTING;
+    send_to_char(ch, "You find a place to sit and work.\r\n");
   }
   if (IS_WORKING(ch)) {
     send_to_char(TOOBUSY, ch);
