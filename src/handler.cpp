@@ -447,6 +447,24 @@ void spell_modify(struct char_data *ch, struct sustain_data *sust, bool add)
       mod *= MIN(sust->force, sust->success / 2);
       GET_COMBAT(ch) += mod;
       break;
+    case SPELL_NIGHTVISION:
+      if (mod == 1)
+        AFF_FLAGS(ch).SetBit(AFF_LOW_LIGHT);
+      else
+        AFF_FLAGS(ch).RemoveBit(AFF_LOW_LIGHT);
+      break;
+    case SPELL_INFRAVISION:
+      if (mod == 1)
+        AFF_FLAGS(ch).SetBit(AFF_INFRAVISION);
+      else
+        AFF_FLAGS(ch).RemoveBit(AFF_INFRAVISION);
+      break;
+    case SPELL_LEVITATE:
+      if (mod == 1)
+        AFF_FLAGS(ch).SetBit(AFF_LEVITATE);
+      else
+        AFF_FLAGS(ch).RemoveBit(AFF_LEVITATE);
+      break;
   }
 }
 
