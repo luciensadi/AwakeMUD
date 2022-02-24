@@ -1361,6 +1361,13 @@ bool House_can_enter(struct char_data *ch, vnum_t house)
     if (GET_IDNUM(ch) == room->guests[j])
       return TRUE;
 
+#ifdef IS_BUILDPORT
+  if (GET_LEVEL(ch) >= LVL_BUILDER) {
+    send_to_char("(OOC: Entry allowed via staff override.)\r\n", ch);
+    return TRUE;
+  }
+#endif
+
   return FALSE;
 }
 

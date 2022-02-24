@@ -2517,7 +2517,12 @@ void matrix_update()
           next = NULL;
         }
         if (GET_OBJ_TYPE(file) != ITEM_DECK_ACCESSORY) {
-          snprintf(buf, sizeof(buf), "SYSERR: Found non-file object '%s' (%ld) in Matrix file list! Terminating iteration immediately.\r\n", GET_OBJ_NAME(file), GET_OBJ_VNUM(file));
+          snprintf(buf, sizeof(buf), "SYSERR: Found non-file object '%s' (%ld, quest=%s) in Matrix file list for host %ld! Terminating iteration immediately.\r\n",
+                   GET_OBJ_NAME(file),
+                   GET_OBJ_VNUM(file),
+                   file->obj_flags.quest_id != 0 ? "TRUE" : "FALSE",
+                   host.vnum
+                 );
           mudlog(buf, NULL, LOG_SYSLOG, TRUE);
           return;
         }
