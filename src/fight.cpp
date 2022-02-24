@@ -349,7 +349,7 @@ void set_fighting(struct char_data * ch, struct char_data * vict, ...)
     if (!(GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD)))
       draw_weapon(ch);
 
-    if (item_should_be_treated_as_melee_weapon(GET_EQ(ch, WEAR_WIELD)) || item_should_be_treated_as_melee_weapon(GET_EQ(ch, WEAR_HOLD)))
+    if (item_should_be_treated_as_melee_weapon(GET_EQ(ch, WEAR_WIELD)) && item_should_be_treated_as_melee_weapon(GET_EQ(ch, WEAR_HOLD)))
       AFF_FLAGS(ch).SetBit(AFF_APPROACH);
 
     else if (!GET_EQ(ch, WEAR_WIELD) && !GET_EQ(ch, WEAR_HOLD))
@@ -2522,7 +2522,7 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
       snprintf(rbuf, sizeof(rbuf), "Self-damage (%s: ", GET_CHAR_NAME(ch));
     }
   } else {
-    snprintf(rbuf, sizeof(rbuf), "Damage (%s vs %s: ", GET_CHAR_NAME(ch), GET_CHAR_NAME(victim));
+    snprintf(rbuf, sizeof(rbuf), "Damage (%s to %s: ", GET_CHAR_NAME(ch), GET_CHAR_NAME(victim));
   }
 
   if (attacktype >= TYPE_HIT && attacktype <= TYPE_BLACKIC)
@@ -5071,12 +5071,10 @@ void perform_violence(void)
       /* Automatic success:
         - Opponent charging at you too (both stop charging; clash)
         - Opponent is emplaced (they can't run)
-        - You're no longer in a fighting state (you'll be back in one soon enough; clash)
         - You both have melee weapons out (both stop charging; clash)
       */
       if (IS_AFFECTED(FIGHTING(ch), AFF_APPROACH)
           || MOB_FLAGGED(FIGHTING(ch), MOB_EMPLACED)
-          || GET_POS(FIGHTING(ch)) < POS_FIGHTING
           || (item_should_be_treated_as_melee_weapon(GET_EQ(ch, WEAR_WIELD)) && item_should_be_treated_as_melee_weapon(GET_EQ(FIGHTING(ch), WEAR_WIELD))))
       {
         AFF_FLAGS(ch).RemoveBit(AFF_APPROACH);

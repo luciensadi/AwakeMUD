@@ -624,9 +624,13 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define GET_NUYEN_INCOME_THIS_PLAY_SESSION(ch, i)  (ch->desc->nuyen_income_this_play_session[i])
 /* descriptor-based utils ************************************************/
 
-#define WAIT_STATE(ch, cycle) { \
-        if ((ch)->desc) (ch)->desc->wait = (cycle); \
-        else if (IS_NPC(ch)) GET_MOB_WAIT(ch) = (cycle); }
+#define WAIT_STATE(ch, cycle) ({ \
+        if ((ch)->desc) { \
+          if (GET_LEVEL(ch) <= 1) { (ch)->desc->wait = (cycle); } else { send_to_char((ch), "Skipping wait state of %d ticks: Staff.", cycle); } \
+        } else if (IS_NPC(ch)) { \
+          GET_MOB_WAIT(ch) = (cycle); \
+        }  \
+      })
 
 #define CHECK_WAIT(ch)        (((ch)->desc) ? ((ch)->desc->wait > 1) : 0)
 #define STATE(d)                    ((d)->connected)

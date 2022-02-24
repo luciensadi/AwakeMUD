@@ -863,8 +863,14 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     // Namely: We require that the attack's power is greater than double the spirit's level, otherwise it takes no damage.
     // If the attack's power is greater, subtract double the level from it.
     if (IS_SPIRIT(def->ch) || IS_ELEMENTAL(def->ch)) {
-      if (att->ranged->power <= GET_LEVEL(def->ch) * 2) {
+      int minimum_power_to_damage_opponent = (GET_LEVEL(def->ch) * 2) + 1;
+      if (att->ranged->power < minimum_power_to_damage_opponent) {
         bool target_died = 0;
+
+        combat_message(att->ch, def->ch, att->weapon, 0, att->ranged->burst_count);
+        send_to_char(att->ch, "^o(OOC: Your weapon is too weak to injure %s! You need at least ^O%d^o attack power.)^n\r\n",
+                     decapitalize_a_an(GET_CHAR_NAME(def->ch)),
+                     minimum_power_to_damage_opponent);
         target_died = damage(att->ch, def->ch, 0, att->ranged->dam_type, att->ranged->is_physical);
 
         //Handle suprise attack/alertness here -- spirits ranged.
