@@ -209,11 +209,12 @@ struct melee_combat_data {
   int tn;
   int dice;
   int successes;
+  bool is_monowhip;
 
   int modifiers[NUM_COMBAT_MODIFIERS];
 
   melee_combat_data(struct char_data *ch, struct obj_data *weapon, bool ranged_combat_mode, struct cyberware_data *cyber) :
-    skill(0), skill_bonus(0), power(0), dam_type(0), damage_level(0), is_physical(FALSE), tn(4), dice(0), successes(0)
+    skill(0), skill_bonus(0), power(0), dam_type(0), damage_level(0), is_physical(FALSE), tn(4), dice(0), successes(0), is_monowhip(FALSE)
   {
     assert(ch != NULL);
 
@@ -244,6 +245,9 @@ struct melee_combat_data {
         if (IS_NPC(ch) || WEAPON_FOCUS_USABLE_BY(weapon, ch)) {
           skill_bonus = MIN(4, GET_WEAPON_FOCUS_RATING(weapon));
         }
+
+        // Monowhips.
+        is_monowhip = obj_index[GET_OBJ_RNUM(weapon)].wfunc == monowhip;
       }
     } else if (cyber->num_cyberweapons > 0) {
       skill = SKILL_CYBER_IMPLANTS;
@@ -1219,33 +1223,30 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       if (damage_total > 0)
         perform_knockdown_test(def->ch, GET_STR(att->ch));
 
-      if (successes_for_use_in_monowhip_test_check <= 0) {
-        struct obj_data *weapon = net_successes < 0 ? def->weapon : att->weapon;
-        if (weapon && obj_index[GET_OBJ_RNUM(weapon)].wfunc == monowhip) {
-          struct char_data *attacker = net_successes < 0 ? def->ch : att->ch;
-          struct char_data *defender = net_successes < 0 ? att->ch : def->ch;
+      if (successes_for_use_in_monowhip_test_check <= 0 && (net_successes < 0 ? def->melee->is_monowhip : att->melee->is_monowhip)) {
+        struct char_data *attacker = net_successes < 0 ? def->ch : att->ch;
+        struct char_data *defender = net_successes < 0 ? att->ch : def->ch;
 
-          int target = 6 + modify_target(attacker);
-          int skill = get_skill(attacker, SKILL_WHIPS_FLAILS, target);
-          int successes = success_test(skill, target);
-          snprintf(rbuf, sizeof(rbuf), "Monowhip 'flailure' test: Skill of %d, target of %d, successes is %d.", skill, target, successes);
-          SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
-          if (successes <= 0) {
-            act("^yYour monowhip flails out of control, striking you instead of $N!^n", FALSE, attacker, 0, defender, TO_CHAR);
-            act("$n's monowhip completely misses and recoils to hit $m!", TRUE, attacker, 0, 0, TO_ROOM);
-            int dam_total = convert_damage(stage(-1 * success_test(GET_BOD(attacker) + (successes == 0 ? GET_DEFENSE(attacker) : 0), 10), SERIOUS));
+        int target = 6 + modify_target(attacker);
+        int skill = get_skill(attacker, SKILL_WHIPS_FLAILS, target);
+        int successes = success_test(skill, target);
+        snprintf(rbuf, sizeof(rbuf), "Monowhip 'flailure' test: Skill of %d, target of %d, successes is %d.", skill, target, successes);
+        SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
+        if (successes <= 0) {
+          act("^yYour monowhip flails out of control, striking you instead of $N!^n", FALSE, attacker, 0, defender, TO_CHAR);
+          act("$n's monowhip completely misses and recoils to hit $m!", TRUE, attacker, 0, 0, TO_ROOM);
+          int dam_total = convert_damage(stage(-1 * success_test(GET_BOD(attacker) + (successes == 0 ? GET_DEFENSE(attacker) : 0), 10), SERIOUS));
 
 
-            //Handle suprise attack/alertness here -- attacker can die here, we remove the surprise flag anyhow
-            //prior to handling the damage and we don't alter alert state at all because if defender is a quest target
-            //they will be extracted. If the attacker actually dies and it's a normal mob, they won't be surprised anymore
-            //and alertness will trickle down on its own with update cycles.
-            if (IS_NPC(def->ch) && AFF_FLAGGED(def->ch, AFF_SURPRISE))
-              AFF_FLAGS(def->ch).RemoveBit(AFF_SURPRISE);
-            // If the attacker dies from backlash, bail out.
-            if (damage(attacker, attacker, dam_total, TYPE_RECOIL, PHYSICAL))
-              return;
-          }
+          //Handle suprise attack/alertness here -- attacker can die here, we remove the surprise flag anyhow
+          //prior to handling the damage and we don't alter alert state at all because if defender is a quest target
+          //they will be extracted. If the attacker actually dies and it's a normal mob, they won't be surprised anymore
+          //and alertness will trickle down on its own with update cycles.
+          if (IS_NPC(def->ch) && AFF_FLAGGED(def->ch, AFF_SURPRISE))
+            AFF_FLAGS(def->ch).RemoveBit(AFF_SURPRISE);
+          // If the attacker dies from backlash, bail out.
+          if (damage(attacker, attacker, dam_total, TYPE_RECOIL, PHYSICAL))
+            return;
         }
       }
       //Handle suprise attack/alertness here -- defender didn't die.
