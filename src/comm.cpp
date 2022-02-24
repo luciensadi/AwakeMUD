@@ -1206,7 +1206,7 @@ int make_prompt(struct descriptor_data * d)
     else if (!strchr(prompt, '@')) {
       data = colorize(d, prompt);
     } else {
-      char temp[MAX_INPUT_LENGTH], str[11];
+      char temp[MAX_INPUT_LENGTH], str[20];
       int i = 0, j, physical;
 
       for (; *prompt; prompt++) {
@@ -1348,6 +1348,16 @@ int make_prompt(struct descriptor_data * d)
               break;
             case 'P':       // max physical
               snprintf(str, sizeof(str), "%d", (int)(GET_MAX_PHYSICAL(d->character) / 100));
+              break;
+            case 'q':
+              {
+                struct room_data *room = get_ch_in_room(d->character);
+                if (room && SECT(room) != SPIRIT_FOREST && SECT(room) != SPIRIT_HEARTH && !ROOM_FLAGGED(room, ROOM_INDOORS)) {
+                  snprintf(str, sizeof(str), "%s, Sky", spirit_name[GET_DOMAIN(ch)]);
+                } else {
+                  strlcpy(str, GET_DOMAIN(ch) == SPIRIT_HEARTH ? "Hearth" : spirit_name[GET_DOMAIN(ch)], sizeof(str));
+                }
+              }
               break;
             case 'r':
               if (ch->persona && ch->persona->decker->deck)
