@@ -258,71 +258,72 @@ int light_level(struct room_data *room)
 
 int damage_modifier(struct char_data *ch, char *rbuf, int rbuf_size)
 {
-  int physical = GET_PHYSICAL(ch), mental = GET_MENTAL(ch), base_target = 0;
+  int physical = GET_PHYSICAL(ch) / 100;
+  int mental = GET_MENTAL(ch) / 100;
+  int base_target = 0;
   for (struct obj_data *obj = ch->bioware; obj; obj = obj->next_content) {
-    if (GET_OBJ_VAL(obj, 0) == BIO_DAMAGECOMPENSATOR) {
-      physical += GET_OBJ_VAL(obj, 1) * 100;
-      mental += GET_OBJ_VAL(obj, 1) * 100;
-    } else if (GET_OBJ_VAL(obj, 0) == BIO_PAINEDITOR && GET_OBJ_VAL(obj, 3))
+    if (GET_BIOWARE_TYPE(obj) == BIO_DAMAGECOMPENSATOR) {
+      physical += GET_BIOWARE_RATING(obj);
+      mental += GET_BIOWARE_RATING(obj);
+    } else if (GET_BIOWARE_TYPE(obj) == BIO_PAINEDITOR && GET_BIOWARE_IS_ACTIVATED(obj))
       mental = 1000;
   }
   if (AFF_FLAGGED(ch, AFF_RESISTPAIN))
   {
-    physical += ch->points.resistpain * 100;
-    mental += ch->points.resistpain * 100;
+    physical += ch->points.resistpain;
+    mental += ch->points.resistpain;
   }
   if (!IS_NPC(ch)) {
-    if (GET_TRADITION(ch) == TRAD_ADEPT
-        && GET_POWER(ch, ADEPT_PAIN_RESISTANCE) > 0)
+    if (GET_TRADITION(ch) == TRAD_ADEPT && GET_POWER(ch, ADEPT_PAIN_RESISTANCE) > 0)
     {
-      physical += GET_POWER(ch, ADEPT_PAIN_RESISTANCE) * 100;
-      mental += GET_POWER(ch, ADEPT_PAIN_RESISTANCE) * 100;
+      physical += GET_POWER(ch, ADEPT_PAIN_RESISTANCE);
+      mental += GET_POWER(ch, ADEPT_PAIN_RESISTANCE);
     }
 
     if (ch->player_specials && GET_DRUG_STAGE(ch) == 1)
       switch (GET_DRUG_AFFECT(ch)) {
         case DRUG_NITRO:
-          physical += 600;
-          mental += 600;
+          physical += 6;
+          mental += 6;
           break;
         case DRUG_NOVACOKE:
-          physical += 100;
-          mental += 100;
+          physical += 1;
+          mental += 1;
           break;
         case DRUG_BLISS:
-          physical += 300;
-          mental += 300;
+          physical += 3;
+          mental += 3;
           break;
         case DRUG_KAMIKAZE:
-          physical += 400;
-          mental += 400;
+          physical += 4;
+          mental += 4;
           break;
       }
   }
 
   // first apply physical damage modifiers
-  if (physical <= 400)
+  if (physical <= 4)
   {
     base_target += 3;
     buf_mod(rbuf, rbuf_size, "Physical damage (S)", 3 );
-  } else if (physical <= 700)
+  } else if (physical <= 7)
   {
     base_target += 2;
     buf_mod(rbuf, rbuf_size, "Physical damage (M)", 2 );
-  } else if (GET_PHYSICAL(ch) <= 900)
+  } else if (GET_PHYSICAL(ch) <= 9)
   {
     base_target += 1;
     buf_mod(rbuf, rbuf_size, "Physical damage (L)", 1 );
   }
-  if (mental <= 400)
+  if (mental <= 4)
   {
     base_target += 3;
     buf_mod(rbuf, rbuf_size, "Mental damage (S)", 3 );
-  } else if (mental <= 700)
+  } else if (mental <= 7)
   {
     base_target += 2;
     buf_mod(rbuf, rbuf_size, "Mental damage (M)", 2 );
-  } else if (mental <= 900)
+  } else if (mental <= 9)
   {
     base_target += 1;
     buf_mod(rbuf, rbuf_size, "Mental damage (L)", 1 );
