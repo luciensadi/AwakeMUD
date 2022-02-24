@@ -642,7 +642,7 @@ void affect_total(struct char_data * ch)
             totalimp += imp;
 
             // If it's formfit, track it there for later math.
-            if (IS_OBJ_STAT(worn_item, ITEM_FORMFIT)) {
+            if (IS_OBJ_STAT(worn_item, ITEM_EXTRA_FORMFIT)) {
               formfitbal += bal;
               formfitimp += imp;
             }
@@ -1281,7 +1281,7 @@ void char_to_room(struct char_data * ch, struct room_data *room)
   }
 }
 
-#define IS_INVIS(o) IS_OBJ_STAT(o, ITEM_INVISIBLE)
+#define IS_INVIS(o) IS_OBJ_STAT(o, ITEM_EXTRA_INVISIBLE)
 
 // Checks obj_to_x preconditions for common errors. Overwrites buf3. Returns TRUE for kosher, FALSE otherwise.
 bool check_obj_to_x_preconditions(struct obj_data * object, struct char_data *ch) {
@@ -1583,10 +1583,11 @@ bool equip_char(struct char_data * ch, struct obj_data * obj, int pos)
       mudlog("SYSERR: EQUIP: Obj is in_room when equip.", ch, LOG_SYSLOG, TRUE);
     return FALSE;
   }
-  if (IS_OBJ_STAT(obj, ITEM_GODONLY) && !IS_NPC(ch) && !IS_SENATOR(ch))
+  if (IS_OBJ_STAT(obj, ITEM_EXTRA_STAFF_ONLY) && !IS_NPC(ch) && !IS_SENATOR(ch))
   {
     act("You are zapped by $p and instantly let go of it.", FALSE, ch, obj, 0, TO_CHAR);
     act("$n is zapped by $p and instantly lets go of it.", FALSE, ch, obj, 0, TO_ROOM);
+    mudlog("WARNING: A staff-only item was obtained by a player.", ch, LOG_SYSLOG, TRUE);
     obj_to_room(obj, get_ch_in_room(ch));     /* changed to drop in inventory instead of
                                * ground */  // and now I've changed it back, who wants morts running around with god-only keys
     return FALSE;
@@ -2247,7 +2248,7 @@ void extract_obj(struct obj_data * obj)
   struct phone_data *phone, *temp;
   bool set = FALSE;
 
-  if (IS_OBJ_STAT(obj, ITEM_KEPT)) {
+  if (IS_OBJ_STAT(obj, ITEM_EXTRA_KEPT)) {
     const char *representation = generate_new_loggable_representation(obj);
     snprintf(buf, sizeof(buf), "extract_obj: Destroying KEPT item: %s", representation);
     delete [] representation;
@@ -2429,8 +2430,8 @@ void extract_char(struct char_data * ch)
       GET_VEHCONTAINER_VEH_VNUM(obj) = GET_VEHCONTAINER_VEH_IDNUM(obj) = GET_VEHCONTAINER_VEH_OWNER(obj) = 0;
 
     // Un-keep items for the same reason.
-    if (IS_OBJ_STAT(obj, ITEM_KEPT))
-      GET_OBJ_EXTRA(obj).RemoveBit(ITEM_KEPT);
+    if (IS_OBJ_STAT(obj, ITEM_EXTRA_KEPT))
+      GET_OBJ_EXTRA(obj).RemoveBit(ITEM_EXTRA_KEPT);
 
     extract_obj(obj);
   }

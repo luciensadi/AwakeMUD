@@ -222,6 +222,11 @@ void ammo_build(struct char_data *ch, struct obj_data *obj)
       return;
     }
 
+    if (GET_WORKSHOP_GRADE(workshop) == TYPE_KIT && GET_AMMOBOX_WEAPON(obj) == WEAP_CANNON) {
+      send_to_char("You need an ammunition workshop to create assault cannon rounds.\r\n", ch);
+      return;
+    }
+
     if (GET_AMMOBOX_TIME_TO_COMPLETION(obj))
       send_to_char(ch, "You continue working on %s.\r\n", GET_OBJ_NAME(obj));
     else {

@@ -3102,7 +3102,7 @@ char *generate_new_loggable_representation(struct obj_data *obj) {
   snprintf(log_string, sizeof(log_string), "(obj %ld) %s^g%s",
           GET_OBJ_VNUM(obj),
           obj->text.name,
-          IS_OBJ_STAT(obj, ITEM_WIZLOAD) ? " [wizloaded]" : "");
+          IS_OBJ_STAT(obj, ITEM_EXTRA_WIZLOAD) ? " [wizloaded]" : "");
 
   if (obj->restring)
     snprintf(ENDOF(log_string), sizeof(log_string) - strlen(log_string), " [restring: %s^g]", obj->restring);
@@ -4022,7 +4022,7 @@ bool obj_contains_kept_items(struct obj_data *obj) {
   // Iterate over each item in the content list.
   for (struct obj_data *tmp = obj->contains; tmp; tmp = tmp->next_content) {
     // If this item is kept, return true.
-    if (IS_OBJ_STAT(tmp, ITEM_KEPT))
+    if (IS_OBJ_STAT(tmp, ITEM_EXTRA_KEPT))
       return TRUE;
 
     // If this item contains kept items, return true.

@@ -73,7 +73,7 @@ int objList::CountPlayerCorpses()
     if (GET_OBJ_TYPE(temp->data) == ITEM_CONTAINER
         && temp->data->contains
         && GET_OBJ_VAL(temp->data, 4)
-        && IS_OBJ_STAT(temp->data, ITEM_CORPSE)
+        && IS_OBJ_STAT(temp->data, ITEM_EXTRA_CORPSE)
     )
       counter++;
 
@@ -331,11 +331,11 @@ void objList::UpdateCounters(void)
     }
 
     /* anti-twink measure...no decay until there's no eq in it */
-    if ( IS_OBJ_STAT(OBJ, ITEM_CORPSE) && GET_OBJ_VAL(OBJ, 4) && OBJ->contains != NULL )
+    if ( IS_OBJ_STAT(OBJ, ITEM_EXTRA_CORPSE) && GET_OBJ_VAL(OBJ, 4) && OBJ->contains != NULL )
       continue;
 
     // Corpse decay.
-    if (IS_OBJ_STAT(OBJ, ITEM_CORPSE)) {
+    if (IS_OBJ_STAT(OBJ, ITEM_EXTRA_CORPSE)) {
       if (GET_OBJ_TIMER(OBJ) > 1) {
         GET_OBJ_TIMER(OBJ)--;
       } else {
@@ -352,7 +352,7 @@ void objList::UpdateCounters(void)
 
             // Iterate through items in room, making sure there are no other corpses.
             for (struct obj_data *tmp_obj = temp->data->in_room->contents; tmp_obj; tmp_obj = tmp_obj->next_content) {
-              if (tmp_obj != temp->data && IS_OBJ_STAT(tmp_obj, ITEM_CORPSE) && GET_OBJ_BARRIER(tmp_obj) == PC_CORPSE_BARRIER) {
+              if (tmp_obj != temp->data && IS_OBJ_STAT(tmp_obj, ITEM_EXTRA_CORPSE) && GET_OBJ_BARRIER(tmp_obj) == PC_CORPSE_BARRIER) {
                 should_clear_flag = FALSE;
                 break;
               }

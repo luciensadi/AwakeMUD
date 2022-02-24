@@ -272,7 +272,7 @@ ACMD(do_steal)
         obj_to_char(unequip_char(vict, eq_pos, TRUE), ch);
         char *representation = generate_new_loggable_representation(obj);
         snprintf(buf, sizeof(buf), "%s steals from %s: %s", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), representation);
-        mudlog(buf, ch, IS_OBJ_STAT(obj, ITEM_WIZLOAD) ? LOG_WIZITEMLOG : LOG_CHEATLOG, TRUE);
+        mudlog(buf, ch, IS_OBJ_STAT(obj, ITEM_EXTRA_WIZLOAD) ? LOG_WIZITEMLOG : LOG_CHEATLOG, TRUE);
         delete [] representation;
       }
     } else {                    /* obj found in inventory */
@@ -283,7 +283,7 @@ ACMD(do_steal)
           else {
             char *representation = generate_new_loggable_representation(obj);
             snprintf(buf, sizeof(buf), "%s steals from %s: %s", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), representation);
-            mudlog(buf, ch, IS_OBJ_STAT(obj, ITEM_WIZLOAD) ? LOG_WIZITEMLOG : LOG_CHEATLOG, TRUE);
+            mudlog(buf, ch, IS_OBJ_STAT(obj, ITEM_EXTRA_WIZLOAD) ? LOG_WIZITEMLOG : LOG_CHEATLOG, TRUE);
             delete [] representation;
 
             obj_from_char(obj);
@@ -752,7 +752,7 @@ ACMD(do_use)
       send_to_char("You can't use that type of credstick.\r\n", ch);
     else if (!GET_OBJ_VAL(obj, 4) || belongs_to(ch, obj))
       send_to_char("And why would you need to do that?\r\n", ch);
-    else if (!IS_OBJ_STAT(corpse, ITEM_CORPSE))
+    else if (!IS_OBJ_STAT(corpse, ITEM_EXTRA_CORPSE))
       send_to_char("And how, pray tell, would that work?\r\n", ch);
     else if (GET_OBJ_VAL(obj, 3) || GET_OBJ_VAL(obj, 4) != GET_OBJ_VAL(corpse, 5)) {
       if (GET_OBJ_VAL(obj, 2) == 2) {
@@ -1805,7 +1805,7 @@ ACMD(do_attach)
       send_to_char(ch, "%s is not a weapon you can attach to %s.\r\n", capitalize(GET_OBJ_NAME(item)), GET_VEH_NAME(veh));
       return;
     }
-    if (IS_OBJ_STAT(item, ITEM_GODONLY)) {
+    if (IS_OBJ_STAT(item, ITEM_EXTRA_STAFF_ONLY)) {
       send_to_char(ch, "You're not able to use %s- it's been restricted by staff.\r\n", GET_OBJ_NAME(item));
       return;
     }
@@ -1949,7 +1949,7 @@ ACMD(do_unattach)
     return;
   }
 
-  if (IS_OBJ_STAT(gun, ITEM_GODONLY) || gun->obj_flags.quest_id) {
+  if (IS_OBJ_STAT(gun, ITEM_EXTRA_STAFF_ONLY) || gun->obj_flags.quest_id) {
     send_to_char(ch, "You're not able to modify %s.\r\n", GET_OBJ_NAME(gun));
     return;
   }
@@ -2823,7 +2823,7 @@ ACMD(do_photo)
           if (GET_EQ(i, j) && CAN_SEE_OBJ(ch, GET_EQ(i, j))) {
             // Describe special-case wielded/held objects.
             if (j == WEAR_WIELD || j == WEAR_HOLD) {
-              if (IS_OBJ_STAT(GET_EQ(i, j), ITEM_TWOHANDS))
+              if (IS_OBJ_STAT(GET_EQ(i, j), ITEM_EXTRA_TWOHANDS))
                 strlcat(buf, hands[2], sizeof(buf));
               else if (j == WEAR_WIELD)
                 strlcat(buf, hands[(int)i->char_specials.saved.left_handed], sizeof(buf));

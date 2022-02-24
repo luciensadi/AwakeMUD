@@ -508,8 +508,8 @@ void make_corpse(struct char_data * ch)
   corpse->text.look_desc = str_dup(buf3);
   GET_OBJ_TYPE(corpse) = ITEM_CONTAINER;
   // (corpse)->obj_flags.wear_flags.SetBits(ITEM_WEAR_TAKE, ENDBIT);
-  (corpse)->obj_flags.extra_flags.SetBits(ITEM_NODONATE, // ITEM_NORENT,
-                                          ITEM_CORPSE, ENDBIT);
+  (corpse)->obj_flags.extra_flags.SetBits(ITEM_EXTRA_NODONATE, // ITEM_NORENT,
+                                          ITEM_EXTRA_CORPSE, ENDBIT);
 
   GET_OBJ_VAL(corpse, 0) = 0;   /* You can't store stuff in a corpse */
   GET_OBJ_VAL(corpse, 4) = 1;   /* corpse identifier */
@@ -1791,7 +1791,7 @@ void damage_obj(struct char_data *ch, struct obj_data *obj, int power, int type)
   }
 
   // PC corpses are indestructable by normal means
-  if ( IS_OBJ_STAT(obj, ITEM_CORPSE) && GET_OBJ_VAL(obj, 4) == 1 )
+  if ( IS_OBJ_STAT(obj, ITEM_EXTRA_CORPSE) && GET_OBJ_VAL(obj, 4) == 1 )
   {
     if ( ch != NULL )
       send_to_char("You are not allowed to damage a player's corpse.\n\r",ch);
@@ -1953,7 +1953,7 @@ void damage_obj(struct char_data *ch, struct obj_data *obj, int power, int type)
       for (temp = obj->contains; temp; temp = next) {
         next = temp->next_content;
         obj_from_obj(temp);
-        if ((IS_OBJ_STAT(obj, ITEM_CORPSE) && !GET_OBJ_VAL(obj, 4) && GET_OBJ_TYPE(temp) != ITEM_MONEY)
+        if ((IS_OBJ_STAT(obj, ITEM_EXTRA_CORPSE) && !GET_OBJ_VAL(obj, 4) && GET_OBJ_TYPE(temp) != ITEM_MONEY)
             || GET_OBJ_VNUM(obj) == OBJ_POCKET_SECRETARY_FOLDER)
         {
           extract_obj(temp);
@@ -5760,8 +5760,8 @@ void vcombat(struct char_data * ch, struct veh_data * veh)
   }
   if (wielded)
     modtarget -= check_smartlink(ch, wielded);
-  if (wielded && IS_OBJ_STAT(wielded, ITEM_SNIPER) && ch->in_room == veh->in_room)
-    modtarget += 6;
+  if (wielded && IS_OBJ_STAT(wielded, ITEM_EXTRA_SNIPER) && ch->in_room == veh->in_room)
+    modtarget += SAME_ROOM_SNIPER_RIFLE_PENALTY;
 
   if (GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD))
     modtarget++;

@@ -841,12 +841,12 @@ bool load_char(const char *name, char_data *ch, bool logon)
         // row 20: extra flags. We want to retain the proto's flags but also persist anti-cheat flags.
         Bitfield temp_extra_flags;
         temp_extra_flags.FromString(row[20]);
-        if (temp_extra_flags.IsSet(ITEM_WIZLOAD))
-          GET_OBJ_EXTRA(obj).SetBit(ITEM_WIZLOAD);
-        if (temp_extra_flags.IsSet(ITEM_IMMLOAD))
-          GET_OBJ_EXTRA(obj).SetBit(ITEM_IMMLOAD);
-        if (temp_extra_flags.IsSet(ITEM_KEPT))
-          GET_OBJ_EXTRA(obj).SetBit(ITEM_KEPT);
+        if (temp_extra_flags.IsSet(ITEM_EXTRA_WIZLOAD))
+          GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_WIZLOAD);
+        if (temp_extra_flags.IsSet(ITEM_EXTRA_IMMLOAD))
+          GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_IMMLOAD);
+        if (temp_extra_flags.IsSet(ITEM_EXTRA_KEPT))
+          GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_KEPT);
 
         GET_OBJ_ATTEMPT(obj) = atoi(row[21]);
         GET_OBJ_CONDITION(obj) = atoi(row[22]);
@@ -956,12 +956,12 @@ bool load_char(const char *name, char_data *ch, bool logon)
         // row 19: extra flags. We want to retain the proto's flags but also persist anti-cheat flags and other necessary ones.
         Bitfield temp_extra_flags;
         temp_extra_flags.FromString(row[19]);
-        if (temp_extra_flags.IsSet(ITEM_WIZLOAD))
-          GET_OBJ_EXTRA(obj).SetBit(ITEM_WIZLOAD);
-        if (temp_extra_flags.IsSet(ITEM_IMMLOAD))
-          GET_OBJ_EXTRA(obj).SetBit(ITEM_IMMLOAD);
-        if (temp_extra_flags.IsSet(ITEM_KEPT))
-          GET_OBJ_EXTRA(obj).SetBit(ITEM_KEPT);
+        if (temp_extra_flags.IsSet(ITEM_EXTRA_WIZLOAD))
+          GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_WIZLOAD);
+        if (temp_extra_flags.IsSet(ITEM_EXTRA_IMMLOAD))
+          GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_IMMLOAD);
+        if (temp_extra_flags.IsSet(ITEM_EXTRA_KEPT))
+          GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_KEPT);
 
         GET_OBJ_ATTEMPT(obj) = atoi(row[20]);
         GET_OBJ_CONDITION(obj) = atoi(row[21]);
@@ -1373,10 +1373,10 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
   struct obj_data *obj = NULL;
   level = posi = 0;
   for (i = 0; i < NUM_WEARS; i++)
-    if ((obj = GET_EQ(player, i)) && !IS_OBJ_STAT(obj, ITEM_NORENT))
+    if ((obj = GET_EQ(player, i)) && !IS_OBJ_STAT(obj, ITEM_EXTRA_NORENT))
       break;
   while (obj && i < NUM_WEARS) {
-    if (!IS_OBJ_STAT(obj, ITEM_NORENT) || GET_OBJ_VNUM(obj) == OBJ_BLANK_MAGAZINE) {
+    if (!IS_OBJ_STAT(obj, ITEM_EXTRA_NORENT) || GET_OBJ_VNUM(obj) == OBJ_BLANK_MAGAZINE) {
       strcpy(buf, "INSERT INTO pfiles_worn (idnum, Vnum, Cost, Restring, Photo, Value0, Value1, Value2, Value3, Value4, Value5, Value6,"\
               "Value7, Value8, Value9, Value10, Value11, Inside, Position, Timer, ExtraFlags, Attempt, Cond, posi) VALUES (");
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %ld, %d, '%s', '%s'", GET_IDNUM(player), GET_OBJ_VNUM(obj), GET_OBJ_COST(obj),
@@ -1389,7 +1389,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
       mysql_wrapper(mysql, buf);
     }
 
-    if (obj->contains && !IS_OBJ_STAT(obj, ITEM_NORENT) && GET_OBJ_TYPE(obj) != ITEM_PART) {
+    if (obj->contains && !IS_OBJ_STAT(obj, ITEM_EXTRA_NORENT) && GET_OBJ_TYPE(obj) != ITEM_PART) {
       obj = obj->contains;
       level++;
       continue;
@@ -1402,7 +1402,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
     if (!obj || !obj->next_content)
       while (i < NUM_WEARS) {
         i++;
-        if ((obj = GET_EQ(player, i)) && !IS_OBJ_STAT(obj, ITEM_NORENT)) {
+        if ((obj = GET_EQ(player, i)) && !IS_OBJ_STAT(obj, ITEM_EXTRA_NORENT)) {
           level = 0;
           break;
         }
@@ -1415,7 +1415,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
   mysql_wrapper(mysql, buf);
   level = posi = 0;
   for (obj = player->carrying; obj;) {
-    if (!IS_OBJ_STAT(obj, ITEM_NORENT)) {
+    if (!IS_OBJ_STAT(obj, ITEM_EXTRA_NORENT)) {
       strcpy(buf, "INSERT INTO pfiles_inv (idnum, Vnum, Cost, Restring, Photo, Value0, Value1, Value2, Value3, Value4, Value5, Value6,"\
               "Value7, Value8, Value9, Value10, Value11, Inside, Timer, ExtraFlags, Attempt, Cond, posi) VALUES (");
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %ld, %d, '%s', '%s'", GET_IDNUM(player), GET_OBJ_VNUM(obj), GET_OBJ_COST(obj),
@@ -2578,7 +2578,7 @@ void save_bioware_to_db(struct char_data *player) {
                 "Value7, Value8, Value9, Value10, Value11) VALUES (");
     int q = 0;
     for (struct obj_data *obj = player->bioware; obj; obj = obj->next_content) {
-      if (!IS_OBJ_STAT(obj, ITEM_NORENT)) {
+      if (!IS_OBJ_STAT(obj, ITEM_EXTRA_NORENT)) {
         if (q)
           strcat(buf, "), (");
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %ld, %d", GET_IDNUM(player), GET_OBJ_VNUM(obj), GET_OBJ_COST(obj));

@@ -394,7 +394,7 @@ void House_save(struct house_control_rec *house, const char *file_name, long rnu
     }
 
     prototype = &obj_proto[real_obj];
-    if (!IS_OBJ_STAT(obj, ITEM_NORENT)) {
+    if (!IS_OBJ_STAT(obj, ITEM_EXTRA_NORENT)) {
       obj_string_buf << "\t\tVnum:\t" << GET_OBJ_VNUM(obj) << "\n";
       obj_string_buf << "\t\tInside:\t" << level << "\n";
       if (GET_OBJ_TYPE(obj) == ITEM_PHONE) {
@@ -422,7 +422,7 @@ void House_save(struct house_control_rec *house, const char *file_name, long rnu
       obj_strings.push_back(obj_string_buf.str());
       obj_string_buf.str(std::string());
 
-      if (obj->contains && !IS_OBJ_STAT(obj, ITEM_NORENT) && GET_OBJ_TYPE(obj) != ITEM_PART) {
+      if (obj->contains && !IS_OBJ_STAT(obj, ITEM_EXTRA_NORENT) && GET_OBJ_TYPE(obj) != ITEM_PART) {
         obj = obj->contains;
         level++;
 

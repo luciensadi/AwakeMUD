@@ -407,7 +407,7 @@ void dbuild_parse(struct descriptor_data *d, const char *arg) {
             break;
         case 'q':
         case 'Q':
-            GET_OBJ_EXTRA(PART).SetBit(ITEM_KEPT);
+            GET_OBJ_EXTRA(PART).SetBit(ITEM_EXTRA_KEPT);
             obj_to_char(PART, CH);
             PART = NULL;
             STATE(d) = CON_PLAYING;

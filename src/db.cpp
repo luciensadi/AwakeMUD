@@ -1870,7 +1870,7 @@ void parse_object(File &fl, long nr)
   // Set the do-not-touch flags for known templated items.
   if ((BOTTOM_OF_TEMPLATE_ITEMS <= nr && nr <= TOP_OF_TEMPLATE_ITEMS)
       || nr == OBJ_BLANK_MAGAZINE || nr ==  OBJ_VEHCONTAINER || nr == OBJ_SHOPCONTAINER) {
-    GET_OBJ_EXTRA(obj).SetBit(ITEM_DONT_TOUCH);
+    GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_DONT_TOUCH);
   }
 
   { // Per-type modifications and settings.
@@ -2801,7 +2801,7 @@ int vnum_object_weapons(char *searchname, struct char_data * ch)
             continue;
           if (GET_WEAPON_STR_BONUS(&obj_proto[nr]) > strength && strength != 5)
             continue;
-          if (IS_OBJ_STAT(&obj_proto[nr], ITEM_GODONLY))
+          if (IS_OBJ_STAT(&obj_proto[nr], ITEM_EXTRA_STAFF_ONLY))
             continue;
           if (vnum_from_non_connected_zone(OBJ_VNUM_RNUM(nr)))
             continue;
@@ -2902,7 +2902,7 @@ int vnum_object_magazines(char *searchname, struct char_data * ch)
           continue;
         if (GET_OBJ_VAL(&obj_proto[nr],1) > type && type != 38)
           continue;
-        if (IS_OBJ_STAT(&obj_proto[nr], ITEM_GODONLY))
+        if (IS_OBJ_STAT(&obj_proto[nr], ITEM_EXTRA_STAFF_ONLY))
           continue;
         if (vnum_from_non_connected_zone(OBJ_VNUM_RNUM(nr)))
           continue;
@@ -2975,7 +2975,7 @@ int vnum_object_affectloc(int type, struct char_data * ch)
   for( mod = 11; mod >= -11; mod -- )
     for (nr = 0; nr <= top_of_objt; nr++)
     {
-      if (IS_OBJ_STAT(&obj_proto[nr], ITEM_GODONLY))
+      if (IS_OBJ_STAT(&obj_proto[nr], ITEM_EXTRA_STAFF_ONLY))
         continue;
       if (vnum_from_non_connected_zone(OBJ_VNUM_RNUM(nr)))
         continue;
@@ -3011,7 +3011,7 @@ int vnum_object_affects(struct char_data *ch) {
   buf[0] = 0;
 
   for (nr = 0; nr <= top_of_objt; nr++) {
-    if (IS_OBJ_STAT(&obj_proto[nr], ITEM_GODONLY))
+    if (IS_OBJ_STAT(&obj_proto[nr], ITEM_EXTRA_STAFF_ONLY))
       continue;
     if (vnum_from_non_connected_zone(OBJ_VNUM_RNUM(nr)))
       continue;
@@ -3715,7 +3715,7 @@ void reset_zone(int zone, int reboot)
           }
         }
         if (!vnum_from_non_connected_zone(GET_OBJ_VNUM(obj)) && !zone_table[zone].connected)
-          GET_OBJ_EXTRA(obj).SetBit(ITEM_VOLATILE);
+          GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_VOLATILE);
         last_cmd = 1;
       } else
         last_cmd = 0;
@@ -3731,7 +3731,7 @@ void reset_zone(int zone, int reboot)
         obj = read_object(ZCMD.arg1, REAL);
         obj_to_char(obj, mob);
         if (!vnum_from_non_connected_zone(GET_OBJ_VNUM(obj)) && !zone_table[zone].connected)
-          GET_OBJ_EXTRA(obj).SetBit(ITEM_VOLATILE);
+          GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_VOLATILE);
         last_cmd = 1;
       } else
         last_cmd = 0;
@@ -3756,7 +3756,7 @@ void reset_zone(int zone, int reboot)
             last_cmd = 0;
           } else {
             if (!vnum_from_non_connected_zone(GET_OBJ_VNUM(obj)) && !zone_table[zone].connected)
-              GET_OBJ_EXTRA(obj).SetBit(ITEM_VOLATILE);
+              GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_VOLATILE);
             last_cmd = 1;
 
             // If it's a weapon, reload it.
@@ -3798,7 +3798,7 @@ void reset_zone(int zone, int reboot)
         obj = read_object(ZCMD.arg1, REAL);
         obj_to_char(obj, mob);
         if (!vnum_from_non_connected_zone(GET_OBJ_VNUM(obj)) && !zone_table[zone].connected)
-          GET_OBJ_EXTRA(obj).SetBit(ITEM_VOLATILE);
+          GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_VOLATILE);
         last_cmd = 1;
       }
       break;
@@ -5854,7 +5854,7 @@ void price_cyber(struct obj_data *obj)
       GET_OBJ_AVAILTN(obj) = 6;
       GET_OBJ_AVAILDAY(obj) = 4;
       GET_CYBERWARE_ESSENCE_COST(obj) = 75;
-      obj->obj_flags.extra_flags.SetBit(ITEM_MAGIC_INCOMPATIBLE);
+      obj->obj_flags.extra_flags.SetBit(ITEM_EXTRA_MAGIC_INCOMPATIBLE);
 
       if (IS_SET(GET_CYBERWARE_FLAGS(obj), SKULL_MOD_OBVIOUS)) {
         GET_OBJ_COST(obj) = 35000;
@@ -5876,7 +5876,7 @@ void price_cyber(struct obj_data *obj)
       GET_OBJ_AVAILTN(obj) = 6;
       GET_OBJ_AVAILDAY(obj) = 4;
       GET_CYBERWARE_ESSENCE_COST(obj) = 150;
-      obj->obj_flags.extra_flags.SetBit(ITEM_MAGIC_INCOMPATIBLE);
+      obj->obj_flags.extra_flags.SetBit(ITEM_EXTRA_MAGIC_INCOMPATIBLE);
 
       if (IS_SET(GET_CYBERWARE_FLAGS(obj), TORSO_MOD_OBVIOUS)) {
         GET_OBJ_COST(obj) = 90000;
@@ -5908,7 +5908,7 @@ void price_cyber(struct obj_data *obj)
       GET_OBJ_AVAILTN(obj) = 4;
       GET_OBJ_AVAILDAY(obj) = 4;
       GET_CYBERWARE_ESSENCE_COST(obj) = 200;
-      obj->obj_flags.extra_flags.SetBit(ITEM_MAGIC_INCOMPATIBLE);
+      obj->obj_flags.extra_flags.SetBit(ITEM_EXTRA_MAGIC_INCOMPATIBLE);
 
       if (IS_SET(GET_CYBERWARE_FLAGS(obj), LEGS_MOD_OBVIOUS)) {
         GET_OBJ_COST(obj) = 150000;
@@ -5963,7 +5963,7 @@ void price_cyber(struct obj_data *obj)
       GET_OBJ_AVAILTN(obj) = 4;
       GET_OBJ_AVAILDAY(obj) = 4;
       GET_CYBERWARE_ESSENCE_COST(obj) = 200;
-      obj->obj_flags.extra_flags.SetBit(ITEM_MAGIC_INCOMPATIBLE);
+      obj->obj_flags.extra_flags.SetBit(ITEM_EXTRA_MAGIC_INCOMPATIBLE);
 
       if (IS_SET(GET_CYBERWARE_FLAGS(obj), ARMS_MOD_OBVIOUS)) {
         GET_OBJ_COST(obj) = 75000;
@@ -6269,7 +6269,7 @@ void price_cyber(struct obj_data *obj)
       GET_OBJ_AVAILDAY(obj) = 60;
 #ifdef DIES_IRAE
       // Houserule: Tactical computers are mundane-only items.
-      obj->obj_flags.extra_flags.SetBit(ITEM_MAGIC_INCOMPATIBLE);
+      obj->obj_flags.extra_flags.SetBit(ITEM_EXTRA_MAGIC_INCOMPATIBLE);
 #endif
       switch (GET_OBJ_VAL(obj, 1)) {
         case 1:

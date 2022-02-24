@@ -213,7 +213,7 @@ char *make_desc(struct char_data *ch, struct char_data *i, char *buf, int act, b
 
 void get_obj_condition(struct char_data *ch, struct obj_data *obj)
 {
-  if (GET_OBJ_EXTRA(obj).IsSet(ITEM_CORPSE))
+  if (GET_OBJ_EXTRA(obj).IsSet(ITEM_EXTRA_CORPSE))
   {
     send_to_char("Examining it reveals that it really IS dead.\r\n", ch);
     return;
@@ -292,7 +292,7 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
     if (GET_OBJ_SPEC(object) == pocket_sec && amount_of_mail_waiting(ch) > 0) {
       strlcat(buf, " ^y(Mail Waiting)^n", sizeof(buf));
     }
-    if (IS_OBJ_STAT(object, ITEM_KEPT)) {
+    if (IS_OBJ_STAT(object, ITEM_EXTRA_KEPT)) {
       strlcat(buf, " ^c(kept)^n", sizeof(buf));
     }
   }
@@ -330,20 +330,20 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
       strlcat(buf, " (damaged)", sizeof(buf));
   }
   if (mode != 3) {
-    if (IS_OBJ_STAT(object, ITEM_INVISIBLE)) {
+    if (IS_OBJ_STAT(object, ITEM_EXTRA_INVISIBLE)) {
       strlcat(buf, " ^B(invisible)", sizeof(buf));
     }
 
-    if ((GET_OBJ_TYPE(object) == ITEM_FOCUS || IS_OBJ_STAT(object, ITEM_MAGIC))
+    if ((GET_OBJ_TYPE(object) == ITEM_FOCUS || IS_OBJ_STAT(object, ITEM_EXTRA_MAGIC))
         && (IS_ASTRAL(ch) || IS_DUAL(ch))) {
       strlcat(buf, " ^Y(magic aura)", sizeof(buf));
     }
 
-    if (IS_OBJ_STAT(object, ITEM_GLOW)) {
+    if (IS_OBJ_STAT(object, ITEM_EXTRA_GLOW)) {
       strlcat(buf, " ^W(glowing)", sizeof(buf));
     }
 
-    if (IS_OBJ_STAT(object, ITEM_HUM)) {
+    if (IS_OBJ_STAT(object, ITEM_EXTRA_HUM)) {
       strlcat(buf, " ^c(humming)", sizeof(buf));
     }
 
@@ -437,7 +437,7 @@ void list_veh_to_char(struct veh_data * list, struct char_data * ch)
   }
 }
 
-#define IS_INVIS(o) IS_OBJ_STAT(o, ITEM_INVISIBLE)
+#define IS_INVIS(o) IS_OBJ_STAT(o, ITEM_EXTRA_INVISIBLE)
 
 bool items_are_visually_similar(struct obj_data *first, struct obj_data *second) {
   if (!first || !second) {
@@ -454,7 +454,7 @@ bool items_are_visually_similar(struct obj_data *first, struct obj_data *second)
     return FALSE;
 
   // Kept state must match.
-  if (IS_OBJ_STAT(first, ITEM_KEPT) != IS_OBJ_STAT(second, ITEM_KEPT))
+  if (IS_OBJ_STAT(first, ITEM_EXTRA_KEPT) != IS_OBJ_STAT(second, ITEM_EXTRA_KEPT))
     return FALSE;
 
   // If the names don't match, they're not similar.
@@ -543,13 +543,13 @@ list_obj_to_char(struct obj_data * list, struct char_data * ch, int mode,
     }
 
     if (CAN_SEE_OBJ(ch, i)) {
-      if (corpse && IS_OBJ_STAT(i, ITEM_CORPSE)) {
+      if (corpse && IS_OBJ_STAT(i, ITEM_EXTRA_CORPSE)) {
         if (num > 1) {
           send_to_char(ch, "(%d) ", num);
         }
         show_obj_to_char(i, ch, mode);
       } else
-        if (!corpse && !mode && !IS_OBJ_STAT(i, ITEM_CORPSE)) {
+        if (!corpse && !mode && !IS_OBJ_STAT(i, ITEM_EXTRA_CORPSE)) {
           if (num > 1) {
             send_to_char(ch, "(%d) ", num);
           }
@@ -762,7 +762,7 @@ void look_at_char(struct char_data * i, struct char_data * ch)
           send_to_char(where[j], ch);
           show_obj_to_char(GET_EQ(i, j), ch, 7);
         } else if (j == WEAR_WIELD || j == WEAR_HOLD) {
-          if (IS_OBJ_STAT(GET_EQ(i, j), ITEM_TWOHANDS))
+          if (IS_OBJ_STAT(GET_EQ(i, j), ITEM_EXTRA_TWOHANDS))
             send_to_char(MOB_FLAGGED(i, MOB_INANIMATE) ? "<firmly mounted>     " : hands[2], ch);
           else if (j == WEAR_WIELD)
             send_to_char(MOB_FLAGGED(i, MOB_INANIMATE) ? "<mounted>            " : hands[(int)i->char_specials.saved.left_handed], ch);
@@ -2471,7 +2471,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
             }
 
             if (strcmp(GET_OBJ_EXTRA(access).ToString(), "0") != 0) {
-              GET_OBJ_EXTRA(access).PrintBits(buf2, MAX_STRING_LENGTH, pc_readable_extra_bits, ITEM_EXTRA_MAX);
+              GET_OBJ_EXTRA(access).PrintBits(buf2, MAX_STRING_LENGTH, pc_readable_extra_bits, MAX_ITEM_EXTRA);
               snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n ^- It provides the following extra features: ^c%s^n", buf2);
             }
           }
@@ -2651,7 +2651,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
                 decap_cyber_grades[GET_CYBERWARE_GRADE(j)], decap_cyber_types[GET_CYBERWARE_TYPE(j)],
                 ((float) GET_CYBERWARE_ESSENCE_COST(j) / 100));
       }
-      if (IS_OBJ_STAT(j, ITEM_MAGIC_INCOMPATIBLE)) {
+      if (IS_OBJ_STAT(j, ITEM_EXTRA_MAGIC_INCOMPATIBLE)) {
         strlcat(buf, "\r\n^yIt is incompatible with magic.^n", sizeof(buf));
       }
       break;
@@ -2906,18 +2906,18 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
   }
 
   // Remove the dont_touch bit for probe printing.
-  bool is_dont_touch = IS_OBJ_STAT(j, ITEM_DONT_TOUCH);
+  bool is_dont_touch = IS_OBJ_STAT(j, ITEM_EXTRA_DONT_TOUCH);
   if (is_dont_touch)
-    GET_OBJ_EXTRA(j).RemoveBit(ITEM_DONT_TOUCH);
+    GET_OBJ_EXTRA(j).RemoveBit(ITEM_EXTRA_DONT_TOUCH);
 
   if (strcmp(GET_OBJ_EXTRA(j).ToString(), "0") != 0) {
-    GET_OBJ_EXTRA(j).PrintBits(buf2, MAX_STRING_LENGTH, pc_readable_extra_bits, ITEM_EXTRA_MAX);
+    GET_OBJ_EXTRA(j).PrintBits(buf2, MAX_STRING_LENGTH, pc_readable_extra_bits, MAX_ITEM_EXTRA);
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "This object has the following extra features: ^c%s^n\r\n", buf2);
   }
 
   // Restore the dont_touch bit.
   if (is_dont_touch)
-    GET_OBJ_EXTRA(j).SetBit(ITEM_DONT_TOUCH);
+    GET_OBJ_EXTRA(j).SetBit(ITEM_EXTRA_DONT_TOUCH);
 
   strncpy(buf1, "This object modifies your character in the following ways when used:\r\n  ^c", sizeof(buf1));
   for (i = 0; i < MAX_OBJ_AFFECT; i++)
@@ -2934,7 +2934,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s^n\r\n", buf1);
   }
 
-  if (IS_OBJ_STAT(j, ITEM_NERPS)) {
+  if (IS_OBJ_STAT(j, ITEM_EXTRA_NERPS)) {
     strlcat(buf, "^YIt has been flagged NERPS, indicating it has no special coded effects.^n\r\n", sizeof(buf));
   }
 
@@ -3933,7 +3933,7 @@ ACMD(do_equipment)
   for (i = 0; i < NUM_WEARS; i++) {
     if (GET_EQ(ch, i)) {
       if (i == WEAR_WIELD || i == WEAR_HOLD) {
-        if (IS_OBJ_STAT(GET_EQ(ch, i), ITEM_TWOHANDS))
+        if (IS_OBJ_STAT(GET_EQ(ch, i), ITEM_EXTRA_TWOHANDS))
           send_to_char(hands[2], ch);
         else if (GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_WEAPON) { // wielding something?
           if (i == WEAR_WIELD)

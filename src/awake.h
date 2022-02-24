@@ -1178,36 +1178,39 @@ enum {
 /* extra object flags: used by obj_data.obj_flags.extra_flags */
 /* see: https://github.com/luciensadi/AwakeMUD/wiki/Item-Extra-Flags */
 
-#define ITEM_GLOW               0     /* Item is glowing              */
-#define ITEM_HUM                1     /* Item is humming              */
-#define ITEM_NORENT             2     /* Item cannot be rented        */
-#define ITEM_NODONATE           3     /* Item cannot be donated       */
-#define ITEM_NOINVIS            4     /* Item cannot be made invis    */
-#define ITEM_INVISIBLE          5     /* Item is invisible            */
-#define ITEM_MAGIC              6     /* Item is magical              */
-#define ITEM_NODROP             7     /* Item is cursed: can't drop   */
-#define ITEM_FORMFIT            8     /* Item is blessed              */
-#define ITEM_NOSELL             9     /* Shopkeepers won't touch it   */
-#define ITEM_CORPSE             10    /* Item is a corpse             */
-#define ITEM_GODONLY            11    /* Only a god may use this item */
-#define ITEM_TWOHANDS           12    /* weapon takes 2 hands to use */
-#define ITEM_COMPBURST          13    /* Weapon requires complex action to use burst fire */
-#define ITEM_VOLATILE           14    /* connected item loaded in ip zone */
-#define ITEM_WIZLOAD            15    /* item was loaded by an immortal */
-#define ITEM_NOTROLL            16
-#define ITEM_NOELF              17
-#define ITEM_NODWARF            18
-#define ITEM_NOORK              19
-#define ITEM_NOHUMAN            20
-#define ITEM_SNIPER             21
-#define ITEM_IMMLOAD            22
-#define ITEM_NERPS              23    /* Item does not actually have any coded effect. */
-#define ITEM_BLOCKS_ARMOR       24    // Can't wear other armors with this.
-#define ITEM_HARDENED_ARMOR     25    // Applies hardened armor rules (deflect attacks with power <= armor rating) CC p51
-#define ITEM_DONT_TOUCH         26    // Warns strenuously on editing.
-#define ITEM_MAGIC_INCOMPATIBLE 27    // Incompatible with magic. Used for cyberware and bioware.
-#define ITEM_KEPT               28    // Kept by the keep command.
-#define ITEM_EXTRA_MAX          29
+#define ITEM_EXTRA_GLOW               0     /* Item is glowing              */
+#define ITEM_EXTRA_HUM                1     /* Item is humming              */
+#define ITEM_EXTRA_NORENT             2     /* Item cannot be rented        */
+#define ITEM_EXTRA_NODONATE           3     /* Item cannot be donated       */
+#define ITEM_EXTRA_NOINVIS            4     /* Item cannot be made invis    */
+#define ITEM_EXTRA_INVISIBLE          5     /* Item is invisible            */
+#define ITEM_EXTRA_MAGIC              6     /* Item is magical              */
+#define ITEM_EXTRA_NODROP             7     /* Item is cursed: can't drop   */
+#define ITEM_EXTRA_FORMFIT            8     /* Item is blessed              */
+#define ITEM_EXTRA_NOSELL             9     /* Shopkeepers won't touch it   */
+#define ITEM_EXTRA_CORPSE             10    /* Item is a corpse             */
+#define ITEM_EXTRA_STAFF_ONLY         11    /* Only a god may use this item */
+#define ITEM_EXTRA_TWOHANDS           12    /* weapon takes 2 hands to use */
+#define ITEM_EXTRA_COMPBURST          13    /* Weapon requires complex action to use burst fire */
+#define ITEM_EXTRA_VOLATILE           14    /* connected item loaded in ip zone */
+#define ITEM_EXTRA_WIZLOAD            15    /* item was loaded by an immortal */
+#define ITEM_EXTRA_NOTROLL            16
+#define ITEM_EXTRA_NOELF              17
+#define ITEM_EXTRA_NODWARF            18
+#define ITEM_EXTRA_NOORK              19
+#define ITEM_EXTRA_NOHUMAN            20
+#define ITEM_EXTRA_SNIPER             21
+#define ITEM_EXTRA_IMMLOAD            22
+#define ITEM_EXTRA_NERPS              23    /* Item does not actually have any coded effect. */
+#define ITEM_EXTRA_BLOCKS_ARMOR       24    // Can't wear other armors with this.
+#define ITEM_EXTRA_HARDENED_ARMOR     25    // Applies hardened armor rules (deflect attacks with power <= armor rating) CC p51
+#define ITEM_EXTRA_DONT_TOUCH         26    // Warns strenuously on editing.
+#define ITEM_EXTRA_MAGIC_INCOMPATIBLE 27    // Incompatible with magic. Used for cyberware and bioware.
+#define ITEM_EXTRA_KEPT               28    // Kept by the keep command.
+#define ITEM_EXTRA_AIR_FILTRATION     29    // Provides the wearer with filtered air (gas mask, etc)
+#define ITEM_EXTRA_NBC_RESISTANT      30    // Gives a bonus on resistance tests for contact chemical/toxin damage.
+#define ITEM_EXTRA_NBC_IMMUNE         31    // Conveys immunity to contact chemical / toxin damage (full-body hazard suit, etc)
+#define MAX_ITEM_EXTRA                32
 
 /* Ammo types */
 #define AMMO_NORMAL     0

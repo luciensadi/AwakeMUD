@@ -996,6 +996,9 @@ const char *extra_bits[] =
     "DONT_TOUCH",
     "MAGIC_INCOMPATIBLE",
     "KEPT",
+    "AIR_FILTRATION",
+    "NBC_RESIST",
+    "NBC_IMMUNE",
     "\n"
   };
 
@@ -1030,6 +1033,9 @@ const char *pc_readable_extra_bits[] =
     "Derived from Template Item",
     "Incompatible with Magic",
     "Kept",
+    "Filters Air",
+    "Resists Bio/Chemical Weapons",
+    "Immune to Bio/Chemical Weapons",
     "\n"
   };
 

@@ -170,7 +170,7 @@ void load_quest_targets(struct char_data *johnson, struct char_data *ch)
           case QOL_TARMOB_I:
             obj = read_object(rnum, REAL);
             obj->obj_flags.quest_id = GET_IDNUM(ch);
-            obj->obj_flags.extra_flags.SetBits(ITEM_NODONATE, ITEM_NORENT, ITEM_NOSELL, ENDBIT);
+            obj->obj_flags.extra_flags.SetBits(ITEM_EXTRA_NODONATE, ITEM_EXTRA_NORENT, ITEM_EXTRA_NOSELL, ENDBIT);
             obj_to_char(obj, mob);
             break;
           case QOL_TARMOB_E:
@@ -179,7 +179,7 @@ void load_quest_targets(struct char_data *johnson, struct char_data *ch)
                                                 (pos == WEAR_WIELD && !GET_EQ(mob, WEAR_HOLD)))) {
               obj = read_object(rnum, REAL);
               obj->obj_flags.quest_id = GET_IDNUM(ch);
-              obj->obj_flags.extra_flags.SetBits(ITEM_NODONATE, ITEM_NORENT, ITEM_NOSELL, ENDBIT);
+              obj->obj_flags.extra_flags.SetBits(ITEM_EXTRA_NODONATE, ITEM_EXTRA_NORENT, ITEM_EXTRA_NOSELL, ENDBIT);
               equip_char(mob, obj, pos);
 
               // Could be a weapon-- make sure it's loaded if it is.
@@ -222,7 +222,7 @@ void load_quest_targets(struct char_data *johnson, struct char_data *ch)
           case QOL_TARMOB_C:
             obj = read_object(rnum, REAL);
             obj->obj_flags.quest_id = GET_IDNUM(ch);
-            obj->obj_flags.extra_flags.SetBits(ITEM_NODONATE, ITEM_NORENT, ITEM_NOSELL, ENDBIT);
+            obj->obj_flags.extra_flags.SetBits(ITEM_EXTRA_NODONATE, ITEM_EXTRA_NORENT, ITEM_EXTRA_NOSELL, ENDBIT);
             if (GET_OBJ_TYPE(obj) == ITEM_CYBERWARE &&
                 GET_ESS(mob) > GET_OBJ_VAL(obj, 1)) {
               obj_to_cyberware(obj, mob);
@@ -251,7 +251,7 @@ void load_quest_targets(struct char_data *johnson, struct char_data *ch)
           case QOL_TARMOB_I:
             obj = read_object(rnum, REAL);
             obj->obj_flags.quest_id = GET_IDNUM(ch);
-            obj->obj_flags.extra_flags.SetBits(ITEM_NODONATE, ITEM_NORENT, ITEM_NOSELL, ENDBIT);
+            obj->obj_flags.extra_flags.SetBits(ITEM_EXTRA_NODONATE, ITEM_EXTRA_NORENT, ITEM_EXTRA_NOSELL, ENDBIT);
             obj_to_char(obj, mob);
             break;
           case QOL_TARMOB_E:
@@ -260,14 +260,14 @@ void load_quest_targets(struct char_data *johnson, struct char_data *ch)
                                                 (pos == WEAR_WIELD && !GET_EQ(mob, WEAR_HOLD)))) {
               obj = read_object(rnum, REAL);
               obj->obj_flags.quest_id = GET_IDNUM(ch);
-              obj->obj_flags.extra_flags.SetBits(ITEM_NODONATE, ITEM_NORENT, ITEM_NOSELL, ENDBIT);
+              obj->obj_flags.extra_flags.SetBits(ITEM_EXTRA_NODONATE, ITEM_EXTRA_NORENT, ITEM_EXTRA_NOSELL, ENDBIT);
               equip_char(mob, obj, pos);
             }
             break;
           case QOL_TARMOB_C:
             obj = read_object(rnum, REAL);
             obj->obj_flags.quest_id = GET_IDNUM(ch);
-            obj->obj_flags.extra_flags.SetBits(ITEM_NODONATE, ITEM_NORENT, ITEM_NOSELL, ENDBIT);
+            obj->obj_flags.extra_flags.SetBits(ITEM_EXTRA_NODONATE, ITEM_EXTRA_NORENT, ITEM_EXTRA_NOSELL, ENDBIT);
             if (GET_OBJ_TYPE(obj) == ITEM_CYBERWARE &&
                 GET_ESS(mob) > GET_OBJ_VAL(obj, 1)) {
               obj_to_cyberware(obj, mob);
@@ -293,7 +293,7 @@ void load_quest_targets(struct char_data *johnson, struct char_data *ch)
         if ((room = real_room(quest_table[num].obj[i].l_data)) > -1) {
           obj = read_object(rnum, REAL);
           obj->obj_flags.quest_id = GET_IDNUM(ch);
-          obj->obj_flags.extra_flags.SetBits(ITEM_NODONATE, ITEM_NORENT, ITEM_NOSELL, ENDBIT);
+          obj->obj_flags.extra_flags.SetBits(ITEM_EXTRA_NODONATE, ITEM_EXTRA_NORENT, ITEM_EXTRA_NOSELL, ENDBIT);
           obj_to_room(obj, &world[room]);
         }
         obj = NULL;
@@ -302,7 +302,7 @@ void load_quest_targets(struct char_data *johnson, struct char_data *ch)
         if ((room = real_host(quest_table[num].obj[i].l_data)) > -1) {
           obj = read_object(rnum, REAL);
           obj->obj_flags.quest_id = GET_IDNUM(ch);
-          obj->obj_flags.extra_flags.SetBits(ITEM_NODONATE, ITEM_NORENT, ITEM_NOSELL, ENDBIT);
+          obj->obj_flags.extra_flags.SetBits(ITEM_EXTRA_NODONATE, ITEM_EXTRA_NORENT, ITEM_EXTRA_NOSELL, ENDBIT);
           GET_OBJ_VAL(obj, 7) = GET_IDNUM(ch);
           GET_OBJ_VAL(obj, 9) = 1;
           obj_to_host(obj, &matrix[room]);
@@ -312,7 +312,7 @@ void load_quest_targets(struct char_data *johnson, struct char_data *ch)
       case QOL_JOHNSON:
         obj = read_object(rnum, REAL);
         obj->obj_flags.quest_id = GET_IDNUM(ch);
-        obj->obj_flags.extra_flags.SetBits(ITEM_NODONATE, ITEM_NORENT, ITEM_NOSELL, ENDBIT);
+        obj->obj_flags.extra_flags.SetBits(ITEM_EXTRA_NODONATE, ITEM_EXTRA_NORENT, ITEM_EXTRA_NOSELL, ENDBIT);
         obj_to_char(obj, johnson);
         if (!perform_give(johnson, ch, obj)) {
           char buf[512];

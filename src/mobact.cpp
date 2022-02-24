@@ -1199,7 +1199,7 @@ bool mobact_process_scavenger(struct char_data *ch) {
       // Find the most valuable object in the room (ignoring worthless things):
       FOR_ITEMS_AROUND_CH(ch, obj) {
         // No stealing workshops or corpses.
-        if (GET_OBJ_TYPE(obj) == ITEM_WORKSHOP || GET_OBJ_TYPE(obj) == ITEM_CORPSE)
+        if (GET_OBJ_TYPE(obj) == ITEM_WORKSHOP || GET_OBJ_TYPE(obj) == ITEM_EXTRA_CORPSE)
           continue;
 
         // No scavenging people's quest items.

@@ -643,7 +643,7 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     }
 
     // Setup: Trying to fire a sniper rifle at close range is tricky. This is non-canon to reduce twinkery.
-    if (IS_OBJ_STAT(att->weapon, ITEM_SNIPER)
+    if (IS_OBJ_STAT(att->weapon, ITEM_EXTRA_SNIPER)
         && !IS_NPC(att->ch)
         && (att->ch->in_room == def->ch->in_room
             || att->ranged->using_mounted_gun))

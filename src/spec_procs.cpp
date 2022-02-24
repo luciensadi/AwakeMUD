@@ -1573,7 +1573,7 @@ SPECIAL(janitor)
     return 0;
 
   FOR_ITEMS_AROUND_CH(jan, i) {
-    if (!CAN_WEAR(i, ITEM_WEAR_TAKE) || IS_OBJ_STAT(i, ITEM_CORPSE) || i->obj_flags.quest_id)
+    if (!CAN_WEAR(i, ITEM_WEAR_TAKE) || IS_OBJ_STAT(i, ITEM_EXTRA_CORPSE) || i->obj_flags.quest_id)
       continue;
     switch (GET_MOB_VNUM(jan)) {
       case 2022:
@@ -2616,7 +2616,7 @@ SPECIAL(fixer)
       send_to_char(ch, "You don't seem to have %s %s.\r\n", AN(argument), argument);
       return TRUE;
     }
-    if (IS_OBJ_STAT(obj, ITEM_CORPSE) || IS_OBJ_STAT(obj, ITEM_IMMLOAD) || IS_OBJ_STAT(obj, ITEM_WIZLOAD)) {
+    if (IS_OBJ_STAT(obj, ITEM_EXTRA_CORPSE) || IS_OBJ_STAT(obj, ITEM_EXTRA_IMMLOAD) || IS_OBJ_STAT(obj, ITEM_EXTRA_WIZLOAD)) {
       snprintf(arg, sizeof(arg), "%s I can't repair that.", GET_CHAR_NAME(ch));
       do_say(fixer, arg, 0, SCMD_SAYTO);
       return TRUE;
@@ -3746,7 +3746,7 @@ void make_newbie(struct obj_data *obj)
     if (obj->contains)
       make_newbie(obj->contains);
     if (GET_OBJ_TYPE(obj) != ITEM_MAGIC_TOOL) {
-      GET_OBJ_EXTRA(obj).SetBits(ITEM_NODONATE, ITEM_NOSELL, ENDBIT);
+      GET_OBJ_EXTRA(obj).SetBits(ITEM_EXTRA_NODONATE, ITEM_EXTRA_NOSELL, ENDBIT);
       GET_OBJ_COST(obj) = 0;
     }
   }

@@ -1241,7 +1241,7 @@ void do_stat_object(struct char_data * ch, struct obj_data * j)
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Set char bits : %s\r\n", buf2);
 
   GET_OBJ_EXTRA(j).PrintBits(buf2, MAX_STRING_LENGTH,
-                             extra_bits, ITEM_EXTRA_MAX);
+                             extra_bits, MAX_ITEM_EXTRA);
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Extra flags   : %s\r\n", buf2);
 
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Weight: %.2f, Value: %d, Timer: %d, Availability: %d/%.2f Days\r\n",
@@ -2121,8 +2121,8 @@ void perform_wizload_object(struct char_data *ch, int vnum) {
   obj = read_object(real_num, REAL);
   obj_to_char(obj, ch);
   GET_OBJ_TIMER(obj) = 2;
-  obj->obj_flags.extra_flags.SetBit(ITEM_IMMLOAD); // Why the hell do we have immload AND wizload?
-  obj->obj_flags.extra_flags.SetBit(ITEM_WIZLOAD);
+  obj->obj_flags.extra_flags.SetBit(ITEM_EXTRA_IMMLOAD); // Why the hell do we have immload AND wizload?
+  obj->obj_flags.extra_flags.SetBit(ITEM_EXTRA_WIZLOAD);
   act("$n makes a strange magical gesture.", TRUE, ch, 0, 0, TO_ROOM);
   act("$n has created $p!", TRUE, ch, obj, 0, TO_ROOM);
   act("You create $p.", FALSE, ch, obj, 0, TO_CHAR);
