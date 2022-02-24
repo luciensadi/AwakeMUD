@@ -488,7 +488,7 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
   if (!att->weapon
       && IS_NERVE(att->ch)
       && !IS_SPIRIT(def->ch)
-      && !IS_ELEMENTAL(def->ch)
+      && !IS_ANY_ELEMENTAL(def->ch)
       && !(IS_NPC(def->ch) && MOB_FLAGGED(def->ch, MOB_INANIMATE)))
   {
     // Calculate and display pre-success-test information.
@@ -862,7 +862,7 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     // Handle spirits and elementals being little divas with their special combat rules.
     // Namely: We require that the attack's power is greater than double the spirit's level, otherwise it takes no damage.
     // If the attack's power is greater, subtract double the level from it.
-    if (IS_SPIRIT(def->ch) || IS_ELEMENTAL(def->ch)) {
+    if (IS_SPIRIT(def->ch) || IS_ANY_ELEMENTAL(def->ch)) {
       int minimum_power_to_damage_opponent = (GET_LEVEL(def->ch) * 2) + 1;
       if (att->ranged->power < minimum_power_to_damage_opponent) {
         bool target_died = 0;
@@ -911,11 +911,11 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     // Spirits use different dice than the rest of us plebs.
     // Disabled this portion for now-- it looks like the original intent was to implement a clash of wills, but the code does not support this at the moment.
     /*
-    if (IS_SPIRIT(def->ch) || IS_ELEMENTAL(def->ch)) {
+    if (IS_SPIRIT(def->ch) || IS_ANY_ELEMENTAL(def->ch)) {
       act("Defender is a spirit, so attacker uses wil and defender uses reaction for dice pool.", 1, att->ch, NULL, NULL, TO_ROLLS);
       att->dice = GET_WIL(att->ch);
       def->dice = GET_REA(def->ch);
-    } else if (IS_SPIRIT(att->ch) || IS_ELEMENTAL(att->ch)) {
+    } else if (IS_SPIRIT(att->ch) || IS_ANY_ELEMENTAL(att->ch)) {
       act("Attacker is a spirit, so attacker uses reaction and defender uses wil for dice pool.", 1, att->ch, NULL, NULL, TO_ROLLS);
       att->dice = GET_REA(att->ch);
       def->dice = GET_WIL(def->ch);
@@ -1115,7 +1115,7 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     // Handle spirits and elementals being little divas with their special combat rules.
     // Namely: We require that the attack's power is greater than double the spirit's level, otherwise it takes no damage.
     // If the attack's power is greater, subtract double the level from it.
-    if (IS_SPIRIT(def->ch) || IS_ELEMENTAL(def->ch)) {
+    if (IS_SPIRIT(def->ch) || IS_ANY_ELEMENTAL(def->ch)) {
       if (att->melee->power <= GET_LEVEL(def->ch) * 2) {
         bool target_died = 0;
         target_died = damage(att->ch, def->ch, 0, att->melee->dam_type, att->melee->is_physical);

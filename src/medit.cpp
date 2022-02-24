@@ -292,10 +292,16 @@ void medit_disp_gender_menu(struct descriptor_data *d)
 void medit_disp_class_menu(struct descriptor_data *d)
 {
   CLS(CH);
-  for (int c = 1; c < NUM_RACES; c++)
-    send_to_char(CH, "%2d) %-20s\r\n", c, pc_race_types[c]);
-  send_to_char(CH, "Mob class: ^c%s^n\r\n"
-               "Enter mob class, 0 to quit: ", pc_race_types[(int)GET_RACE(MOB)]);
+  for (int c = 1; c <= NUM_RACES; c++) {
+    if (c == RACE_PC_CONJURED_ELEMENTAL) {
+      send_to_char(CH, "%2d) ^Llocked^n\r\n", c);
+    } else {
+      send_to_char(CH, "%2d) %-20s\r\n", c, pc_race_types[c]);
+    }
+  }
+
+  send_to_char(CH, "Mob race: ^c%s^n\r\n"
+               "Enter mob race, 0 to quit: ", pc_race_types[(int)GET_RACE(MOB)]);
 }
 
 void medit_disp_att_menu(struct descriptor_data *d)
@@ -1239,7 +1245,7 @@ void medit_parse(struct descriptor_data *d, const char *arg)
 
   case MEDIT_CLASS:
     number = atoi(arg);
-    if ((number < 0) || (number > NUM_RACES))
+    if ((number < 0) || (number > NUM_RACES) || number == RACE_PC_CONJURED_ELEMENTAL)
       medit_disp_class_menu(d);
     else {
       if (number != 0)

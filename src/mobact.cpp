@@ -761,7 +761,7 @@ bool mobact_process_aggro(struct char_data *ch, struct room_data *room) {
     return FALSE;
 
   // Conjured spirits and elementals are never aggressive.
-  if ((IS_ELEMENTAL(ch) || IS_SPIRIT(ch)) && GET_ACTIVE(ch))
+  if ((IS_PC_CONJURED_ELEMENTAL(ch) || IS_SPIRIT(ch)) && GET_ACTIVE(ch))
     return FALSE;
 
   // Vehicle code is separate. Vehicles only attack same room.
@@ -1041,7 +1041,7 @@ bool mobact_process_guard(struct char_data *ch, struct room_data *room) {
     return FALSE;
 
   // Conjured spirits and elementals are never aggressive.
-  if ((IS_ELEMENTAL(ch) || IS_SPIRIT(ch)) && GET_ACTIVE(ch))
+  if ((IS_PC_CONJURED_ELEMENTAL(ch) || IS_SPIRIT(ch)) && GET_ACTIVE(ch))
     return FALSE;
 
   // Vehicle code is separate.
@@ -1117,7 +1117,7 @@ bool mobact_process_self_buff(struct char_data *ch) {
   }
 
   // Buff self, but only act one out of every 11 ticks (on average), and only if we're not going to put ourselves in a drain death loop.
-  if (number(0, 10) == 0 && GET_MENTAL(ch) >= 1000 && GET_PHYSICAL(ch) >= 1000) {
+  if (GET_MENTAL(ch) >= 1000 && GET_PHYSICAL(ch) >= 1000) {
     bool imp_invis = IS_AFFECTED(ch, AFF_SPELLIMPINVIS) || affected_by_spell(ch, SPELL_IMP_INVIS);
     bool std_invis = IS_AFFECTED(ch, AFF_SPELLINVIS) || affected_by_spell(ch, SPELL_INVIS);
     int max_force = GET_MAG(ch) / 100;
@@ -1145,38 +1145,40 @@ bool mobact_process_self_buff(struct char_data *ch) {
     }
 #endif
 
-    // Apply armor to self.
-    if (!affected_by_spell(ch, SPELL_ARMOR)) {
-      cast_manipulation_spell(ch, SPELL_ARMOR, number(min_force, max_force), NULL, ch);
-      return TRUE;
-    }
-
-    if (number(0, 5) == 0) {
-      // Apply combat sense to self.
-      if (!affected_by_spell(ch, SPELL_COMBATSENSE)) {
-        cast_detection_spell(ch, SPELL_COMBATSENSE, number(min_force, max_force), NULL, ch);
+    if (number(0, 10) == 0) {
+      // Apply armor to self.
+      if (!affected_by_spell(ch, SPELL_ARMOR)) {
+        cast_manipulation_spell(ch, SPELL_ARMOR, number(min_force, max_force), NULL, ch);
         return TRUE;
       }
 
-      // We're dead-set on casting a spell, so try to boost attributes.
-      min_force = min_force % 2 == 0 ? min_force : min_force - 1;
-      max_force = max_force % 2 == 0 ? max_force : max_force - 1;
-      switch (number(1, 5)) {
-        case 1:
-          cast_health_spell(ch, ch->cyberware || ch->bioware ? SPELL_INCCYATTR : SPELL_INCATTR, STR, number(min_force, max_force), NULL, ch);
+      if (number(0, 5) == 0) {
+        // Apply combat sense to self.
+        if (!affected_by_spell(ch, SPELL_COMBATSENSE)) {
+          cast_detection_spell(ch, SPELL_COMBATSENSE, number(min_force, max_force), NULL, ch);
           return TRUE;
-        case 2:
-          cast_health_spell(ch, ch->cyberware || ch->bioware ? SPELL_INCCYATTR : SPELL_INCATTR, QUI, number(min_force, max_force), NULL, ch);
-          return TRUE;
-        case 3:
-          cast_health_spell(ch, ch->cyberware || ch->bioware ? SPELL_INCCYATTR : SPELL_INCATTR, BOD, number(min_force, max_force), NULL, ch);
-          return TRUE;
-        case 4:
-          cast_health_spell(ch, ch->cyberware || ch->bioware ? SPELL_INCCYATTR : SPELL_INCATTR, INT, number(min_force, max_force), NULL, ch);
-          return TRUE;
-        case 5:
-          cast_health_spell(ch, ch->cyberware || ch->bioware ? SPELL_INCCYATTR : SPELL_INCATTR, WIL, number(min_force, max_force), NULL, ch);
-          return TRUE;
+        }
+
+        // We're dead-set on casting a spell, so try to boost attributes.
+        min_force = min_force % 2 == 0 ? min_force : min_force - 1;
+        max_force = max_force % 2 == 0 ? max_force : max_force - 1;
+        switch (number(1, 5)) {
+          case 1:
+            cast_health_spell(ch, ch->cyberware || ch->bioware ? SPELL_INCCYATTR : SPELL_INCATTR, STR, number(min_force, max_force), NULL, ch);
+            return TRUE;
+          case 2:
+            cast_health_spell(ch, ch->cyberware || ch->bioware ? SPELL_INCCYATTR : SPELL_INCATTR, QUI, number(min_force, max_force), NULL, ch);
+            return TRUE;
+          case 3:
+            cast_health_spell(ch, ch->cyberware || ch->bioware ? SPELL_INCCYATTR : SPELL_INCATTR, BOD, number(min_force, max_force), NULL, ch);
+            return TRUE;
+          case 4:
+            cast_health_spell(ch, ch->cyberware || ch->bioware ? SPELL_INCCYATTR : SPELL_INCATTR, INT, number(min_force, max_force), NULL, ch);
+            return TRUE;
+          case 5:
+            cast_health_spell(ch, ch->cyberware || ch->bioware ? SPELL_INCCYATTR : SPELL_INCATTR, WIL, number(min_force, max_force), NULL, ch);
+            return TRUE;
+        }
       }
     }
   }

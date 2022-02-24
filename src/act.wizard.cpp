@@ -1709,7 +1709,7 @@ void do_stat_mobile(struct char_data * ch, struct char_data * k)
   MOB_FLAGS(k).PrintBits(buf2, MAX_STRING_LENGTH, action_bits, MOB_MAX);
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "NPC flags: ^c%s^n\r\n", buf2);
 
-  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Alert status: ^c%s^n with ^c%d^n ticks cooldown.\r\n", 
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Alert status: ^c%s^n with ^c%d^n ticks cooldown.\r\n",
            GET_MOBALERT(k) == MALERT_ALARM ? "^rAlarm^n" : (MALERT_ALERT ? "^yAlert^n" : "^gCalm^n"),
            GET_MOBALERTTIME(k)
          );
@@ -6583,8 +6583,8 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
       }
     }
 
-    if (IS_ELEMENTAL(mob) && GET_SKILL(mob, SKILL_SORCERY) > 0) {
-      strlcat(buf, "  - is an Elemental with Sorcery, but is restricted from casting by its race.\r\n", sizeof(buf));
+    if (IS_PC_CONJURED_ELEMENTAL(mob)) {
+      strlcat(buf, "  - is a PC Conjured Elemental.\r\n", sizeof(buf));
       printed = TRUE;
       issues++;
     }

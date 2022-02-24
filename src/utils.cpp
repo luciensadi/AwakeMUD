@@ -532,7 +532,7 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int c
       buf_mod(rbuf, rbuf_len, "Confused", MIN(sust->force, sust->success));
     }
   }
-  if (!(IS_ELEMENTAL(ch) || IS_SPIRIT(ch)))
+  if (!(IS_PC_CONJURED_ELEMENTAL(ch) || IS_SPIRIT(ch)))
     for (struct spirit_sustained *sust = SPIRIT_SUST(ch); sust; sust = sust->next)
       if (sust == CONFUSION)
       {
@@ -1167,7 +1167,7 @@ void add_follower(struct char_data * ch, struct char_data * leader)
   k->follower = ch;
   k->next = leader->followers;
   leader->followers = k;
-  if (!IS_SPIRIT(ch) && !IS_ELEMENTAL(ch))
+  if (!IS_SPIRIT(ch) && !IS_PC_CONJURED_ELEMENTAL(ch))
   {
     act("You now follow $N.", FALSE, ch, 0, leader, TO_CHAR);
     if (CAN_SEE(leader, ch))

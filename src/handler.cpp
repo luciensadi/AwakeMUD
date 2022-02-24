@@ -563,7 +563,7 @@ void affect_total(struct char_data * ch)
 
   // Reset armor-related stats.
   {
-    if (IS_SPIRIT(ch) || IS_ELEMENTAL(ch)) {
+    if (IS_SPIRIT(ch) || IS_ANY_ELEMENTAL(ch)) {
       GET_INNATE_IMPACT(ch) = GET_INNATE_BALLISTIC(ch) = GET_SPARE1(ch) * 2;
     } else if (ch_is_npc) {
       GET_INNATE_BALLISTIC(ch) = GET_INNATE_BALLISTIC(&mob_proto[GET_MOB_RNUM(ch)]);
@@ -911,7 +911,7 @@ void affect_total(struct char_data * ch)
   }
 
   // Set up magic pool info correctly.
-  if (ch_is_npc && (IS_SPIRIT(ch) || IS_ELEMENTAL(ch))) {
+  if (ch_is_npc && (IS_SPIRIT(ch) || IS_ANY_ELEMENTAL(ch))) {
     GET_ASTRAL(ch) = 1.5 * GET_LEVEL(ch);
   } else if ((ch_is_npc && GET_MAG(ch) > 0) || (GET_TRADITION(ch) == TRAD_SHAMANIC || GET_TRADITION(ch) == TRAD_HERMETIC)) {
     GET_ASTRAL(ch) += GET_GRADE(ch);
@@ -2397,7 +2397,7 @@ void extract_char(struct char_data * ch)
     struct follow_type *nextfollow;
     for (struct follow_type *follow = ch->followers; follow; follow = nextfollow) {
       nextfollow = follow->next;
-      if (IS_SPIRIT(follow->follower) || IS_ELEMENTAL(follow->follower))
+      if (IS_SPIRIT(follow->follower) || IS_PC_CONJURED_ELEMENTAL(follow->follower))
         extract_char(follow->follower);
     }
   }
@@ -2485,7 +2485,7 @@ void extract_char(struct char_data * ch)
   /* clear spirit sustained spells */
   {
     struct spirit_sustained *next;
-    if (IS_ELEMENTAL(ch) || IS_SPIRIT(ch)) {
+    if (IS_PC_CONJURED_ELEMENTAL(ch) || IS_SPIRIT(ch)) {
       for (struct spirit_sustained *ssust = SPIRIT_SUST(ch); ssust; ssust = next) {
         next = ssust->next;
         if (ssust->caster)
@@ -2502,7 +2502,7 @@ void extract_char(struct char_data * ch)
   }
 
   /* continue clearing spirit sustained spells */
-  if (IS_ELEMENTAL(ch) && GET_SUSTAINED_NUM(ch))
+  if (IS_PC_CONJURED_ELEMENTAL(ch) && GET_SUSTAINED_NUM(ch))
   {
     for (struct descriptor_data *d = descriptor_list; d; d = d->next)
       if (d->character && GET_IDNUM(d->character) == GET_ACTIVE(ch)) {

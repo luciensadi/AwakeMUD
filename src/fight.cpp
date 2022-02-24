@@ -729,7 +729,7 @@ void raw_kill(struct char_data * ch)
   if (CH_IN_COMBAT(ch))
     stop_fighting(ch);
 
-  if (IS_ELEMENTAL(ch) && GET_ACTIVE(ch))
+  if (IS_PC_CONJURED_ELEMENTAL(ch) && GET_ACTIVE(ch))
   {
     for (struct descriptor_data *d = descriptor_list; d; d = d->next)
       if (d->character && GET_IDNUM(d->character) == GET_ACTIVE(ch)) {
@@ -758,7 +758,7 @@ void raw_kill(struct char_data * ch)
 
     death_cry(ch);
 
-    if (!(IS_SPIRIT(ch) || IS_ELEMENTAL(ch)))
+    if (!(IS_SPIRIT(ch) || IS_ANY_ELEMENTAL(ch)))
       make_corpse(ch);
 
     if (!IS_NPC(ch)) {
@@ -872,7 +872,7 @@ void die(struct char_data * ch)
 {
   struct room_data *temp_room = get_ch_in_room(ch);
 
-  if (!((IS_NPC(ch) && MOB_FLAGGED(ch, MOB_INANIMATE)) || IS_PROJECT(ch) || IS_SPIRIT(ch) || IS_ELEMENTAL(ch))) {
+  if (!(MOB_FLAGGED(ch, MOB_INANIMATE) || IS_PROJECT(ch) || IS_SPIRIT(ch) || IS_ANY_ELEMENTAL(ch))) {
     increase_blood(temp_room);
     act("^rBlood splatters everywhere!^n", FALSE, ch, 0, 0, TO_ROOM);
     if (!GET_BACKGROUND_COUNT(temp_room) || GET_BACKGROUND_AURA(temp_room) == AURA_PLAYERCOMBAT) {
@@ -935,7 +935,7 @@ int calc_karma(struct char_data *ch, struct char_data *vict)
   if (!ch || IS_NPC(ch))
     return 0;
 
-  if ((GET_RACE(vict) == RACE_SPIRIT || GET_RACE(vict) == RACE_ELEMENTAL) && GET_IDNUM(ch) == GET_ACTIVE(vict))
+  if ((GET_RACE(vict) == RACE_SPIRIT || GET_RACE(vict) == RACE_PC_CONJURED_ELEMENTAL) && GET_IDNUM(ch) == GET_ACTIVE(vict))
     return 0;
 
   base = (int)((1.2 * (GET_BOD(vict) + GET_BALLISTIC(vict) + GET_IMPACT(vict))) +
@@ -1414,6 +1414,11 @@ void weapon_scatter(struct char_data *ch, struct char_data *victim, struct obj_d
     if (vict && (IS_NPC(vict) || (!IS_NPC(vict) && vict->desc)) && can_hurt(ch, vict, TYPE_SCATTERING, TRUE)) {
       power = MAX(GET_WEAPON_POWER(weapon) - GET_BALLISTIC(vict) - 3, 2);
 
+      // Spirits and elementals get their own diva powers.
+      if (IS_SPIRIT(vict) || IS_ANY_ELEMENTAL(vict)) {
+        power -= GET_LEVEL(vict) * 2;
+      }
+
       // We do some ghettoized bastardization of the fight code here to make scatterfire a little less OP.
       if (AWAKE(vict) && !AFF_FLAGGED(vict, AFF_SURPRISE) && !AFF_FLAGGED(vict, AFF_PRONE)) {
         int def_dice = GET_DEFENSE(vict) + GET_POWER(vict, ADEPT_SIDESTEP);
@@ -1424,17 +1429,18 @@ void weapon_scatter(struct char_data *ch, struct char_data *victim, struct obj_d
 
       // Successful dodge?
       if (power <= 0) {
-        snprintf(buf, sizeof(buf), "A %s flies in from nowhere, almost hitting you!", ammo_type);
+        snprintf(buf, sizeof(buf), "A stray %s flies in from nowhere, almost hitting you!", ammo_type);
         act(buf, FALSE, vict, 0, 0, TO_CHAR);
-        snprintf(buf, sizeof(buf), "A %s hums into the room and barely misses $n!", ammo_type);
+        snprintf(buf, sizeof(buf), "A stray %s hums by, barely missing $n!", ammo_type);
         act(buf, FALSE, vict, 0, 0, TO_ROOM);
       }
       // Failed to dodge.
       else {
-        snprintf(buf, sizeof(buf), "A %s flies in from nowhere, hitting you!", ammo_type);
+        snprintf(buf, sizeof(buf), "A stray %s flies in from nowhere, hitting you!", ammo_type);
         act(buf, FALSE, vict, 0, 0, TO_CHAR);
-        snprintf(buf, sizeof(buf), "A %s hums into the room and hits $n!", ammo_type);
+        snprintf(buf, sizeof(buf), "A stray %s hums into the room and hits $n!", ammo_type);
         act(buf, FALSE, vict, 0, 0, TO_ROOM);
+
         damage_total = MAX(1, GET_WEAPON_DAMAGE_CODE(weapon));
         damage_total = convert_damage(stage((2 - success_test(GET_BOD(vict) + GET_BODY(vict), power)), damage_total));
         damage(ch, vict, damage_total, TYPE_SCATTERING, PHYSICAL);
@@ -3342,7 +3348,7 @@ void astral_fight(struct char_data *ch, struct char_data *vict)
       power += GET_WEAPON_FOCUS_RATING(wielded);
     power -= GET_IMPACT(vict);
     dam = MODERATE;
-    if (IS_SPIRIT(vict) || IS_ELEMENTAL(vict))
+    if (IS_SPIRIT(vict) || IS_ANY_ELEMENTAL(vict))
       skill_total = GET_WIL(ch);
     else if (GET_SKILL(ch, GET_WEAPON_SKILL(wielded)) < 1) {
       newskill = return_general(GET_WEAPON_SKILL(wielded));
@@ -3359,7 +3365,7 @@ void astral_fight(struct char_data *ch, struct char_data *vict)
       dam = LIGHT;
     else
       dam = MODERATE;
-    if (IS_SPIRIT(vict) || IS_ELEMENTAL(vict))
+    if (IS_SPIRIT(vict) || IS_ANY_ELEMENTAL(vict))
       skill_total = GET_WIL(ch);
     else if (GET_SKILL(ch, SKILL_UNARMED_COMBAT) < 1) {
       if (GET_SKILL(ch, SKILL_SORCERY) < 1) {
@@ -4733,7 +4739,7 @@ void roll_individual_initiative(struct char_data *ch)
       GET_INIT_ROLL(ch) -= 10;
       AFF_FLAGS(ch).RemoveBit(AFF_ACTION);
     }
-    if (IS_SPIRIT(ch) || IS_ELEMENTAL(ch)) {
+    if (IS_SPIRIT(ch) || IS_ANY_ELEMENTAL(ch)) {
       if (IS_DUAL(ch))
         GET_INIT_ROLL(ch) += 10;
       else
@@ -4915,7 +4921,7 @@ void perform_violence(void)
       if (ssust->type == ENGULF) {
         if (ssust->caster) {
           int dam;
-          if (IS_SPIRIT(ch) || (IS_ELEMENTAL(ch) && GET_SPARE1(ch) == ELEM_WATER)) {
+          if (IS_SPIRIT(ch) || (IS_ANY_ELEMENTAL(ch) && GET_SPARE1(ch) == ELEM_WATER)) {
             dam = convert_damage(stage(-success_test(GET_BOD(ssust->target), GET_SPARE2(ch) + GET_EXTRA(ssust->target)), MODERATE));
             act("$n can contorts in pain as the water engulfs $m!", TRUE, ssust->target, 0, 0, TO_ROOM);
             send_to_char("The water crushes you and leaves you unable to breath!\r\n", ssust->target);
@@ -4970,7 +4976,7 @@ void perform_violence(void)
     // Process banishment actions.
     if (IS_AFFECTED(ch, AFF_BANISH)
         && FIGHTING(ch)
-        && (IS_ELEMENTAL(FIGHTING(ch))
+        && (IS_ANY_ELEMENTAL(FIGHTING(ch))
             || IS_SPIRIT(FIGHTING(ch))))
     {
       struct char_data *spirit, *mage;

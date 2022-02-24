@@ -1349,7 +1349,7 @@ bool House_can_enter(struct char_data *ch, vnum_t house)
     return FALSE;
 
   // NPC, but not a spirit or elemental? No entry.
-  if (IS_NPC(ch) && !(IS_SPIRIT(ch) || IS_ELEMENTAL(ch)))
+  if (IS_NPC(ch) && !(IS_SPIRIT(ch) || IS_PC_CONJURED_ELEMENTAL(ch)))
     return FALSE;
 
   // Admins, astral projections, and owners can enter any room.

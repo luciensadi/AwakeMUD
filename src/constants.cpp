@@ -2680,6 +2680,7 @@ const char *pc_race_types[] =
     "Dragon",
     "Elemental",
     "Spirit",
+    "Conjured Elemental",
     "\n"
   };
 

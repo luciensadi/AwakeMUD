@@ -1364,7 +1364,7 @@ void misc_update(void)
     if (!CH_IN_COMBAT(ch) && AFF_FLAGGED(ch, AFF_ACID))
       AFF_FLAGS(ch).RemoveBit(AFF_ACID);
 
-    if (GET_SUSTAINED_NUM(ch) && !IS_ELEMENTAL(ch)) {
+    if (GET_SUSTAINED_NUM(ch) && !IS_ANY_ELEMENTAL(ch)) {
       struct sustain_data *next, *temp, *nsus;
       for (struct sustain_data *sus = GET_SUSTAINED(ch); sus; sus = next) {
         next = sus->next;

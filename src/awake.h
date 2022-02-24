@@ -179,30 +179,31 @@
 
 /* PC races */
 
-#define RACE_UNDEFINED          1
-#define RACE_HUMAN              2
-#define RACE_DWARF              3
-#define RACE_ELF                4
-#define RACE_ORK                5
-#define RACE_TROLL              6
-#define RACE_CYCLOPS      7
-#define RACE_KOBOROKURU  8
-#define RACE_FOMORI  9
-#define RACE_MENEHUNE  10
-#define RACE_HOBGOBLIN  11
-#define RACE_GIANT  12
-#define RACE_GNOME  13
-#define RACE_ONI  14
-#define RACE_WAKYAMBI  15
-#define RACE_OGRE  16
-#define RACE_MINOTAUR  17
-#define RACE_SATYR  18
-#define RACE_NIGHTONE  19
-#define RACE_DRYAD  20
-#define RACE_DRAGON             21
-#define RACE_ELEMENTAL    22
-#define RACE_SPIRIT    23
-#define NUM_RACES               23  /* This must be the number of races */
+#define RACE_UNDEFINED             1
+#define RACE_HUMAN                 2
+#define RACE_DWARF                 3
+#define RACE_ELF                   4
+#define RACE_ORK                   5
+#define RACE_TROLL                 6
+#define RACE_CYCLOPS               7
+#define RACE_KOBOROKURU            8
+#define RACE_FOMORI                9
+#define RACE_MENEHUNE              10
+#define RACE_HOBGOBLIN             11
+#define RACE_GIANT                 12
+#define RACE_GNOME                 13
+#define RACE_ONI                   14
+#define RACE_WAKYAMBI              15
+#define RACE_OGRE                  16
+#define RACE_MINOTAUR              17
+#define RACE_SATYR                 18
+#define RACE_NIGHTONE              19
+#define RACE_DRYAD                 20
+#define RACE_DRAGON                21
+#define RACE_ELEMENTAL             22
+#define RACE_SPIRIT                23
+#define RACE_PC_CONJURED_ELEMENTAL 24
+#define NUM_RACES                  24  /* This must be the NUMBER of races */
 
 /* level definitions */
 
@@ -2443,6 +2444,7 @@ enum {
 #define ERROR_UNABLE_TO_CREATE_STR_IN_MAIL            48
 #define ERROR_DATABASE_CHANGES_NEEDED                 49
 #define ERROR_NULL_VEHICLE_VEH_FROM_ROOM              50
+#define ERROR_MISSING_ELEMENTALS                      51
 #define EXIT_CODE_REBOOTING                           52   /* what's so great about HHGTTG, anyhow? */
 
 // Materials.

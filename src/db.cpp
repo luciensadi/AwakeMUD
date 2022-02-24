@@ -216,6 +216,7 @@ void boot_shop_orders(void);
 void price_cyber(struct obj_data *obj);
 void price_bio(struct obj_data *obj);
 extern void verify_db_password_column_size();
+void set_elemental_races();
 
 /* external vars */
 extern int no_specials;
@@ -505,6 +506,9 @@ void boot_world(void)
 
   log("Loading mobs and generating index.");
   index_boot(DB_BOOT_MOB);
+
+  log("Handling special-case mobs.");
+  set_elemental_races();
 
   log("Loading vehicles and generating index.");
   index_boot(DB_BOOT_VEH);
@@ -6512,5 +6516,16 @@ void price_bio(struct obj_data *obj)
     GET_OBJ_VAL(obj, 4) = (int) round(GET_OBJ_VAL(obj, 4) * .75);
     GET_OBJ_AVAILTN(obj) += 2;
     GET_OBJ_AVAILDAY(obj) *= 5;
+  }
+}
+
+void set_elemental_races() {
+  for (int idx = 0; idx < NUM_ELEMENTS; idx++) {
+    rnum_t rnum = real_mobile(elements[idx].vnum);
+    if (rnum < 0) {
+      log_vfprintf("ERROR: We require that mob %ld exists as an elemental, but it's not there!", elements[idx].vnum);
+      exit(ERROR_MISSING_ELEMENTALS);
+    }
+    GET_RACE(&mob_proto[rnum]) = RACE_PC_CONJURED_ELEMENTAL;
   }
 }

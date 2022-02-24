@@ -483,9 +483,7 @@ struct command_info cmd_info[] =
     { "banish"     , POS_STANDING, do_banish   , 0, 0, FALSE },
     { "balance"    , POS_LYING   , do_gold     , 0, 0, TRUE },
     { "bioware"    , POS_DEAD    , do_bioware  , 0, 0, TRUE },
-#ifdef ALLOW_IGNORE_USE
     { "block"      , POS_DEAD    , do_ignore   , 0, 0, TRUE },
-#endif
     { "boost"      , POS_LYING   , do_boost    , 0, 0, FALSE },
     { "break"      , POS_LYING   , do_break    , 0, 0, FALSE },
     { "broadcast"  , POS_LYING   , do_broadcast, 0, 0, TRUE },
@@ -622,9 +620,7 @@ struct command_info cmd_info[] =
     { "idea"       , POS_DEAD    , do_gen_write, 0, SCMD_IDEA, TRUE },
     //{ "idelete"  , POS_DEAD    , do_idelete  , LVL_PRESIDENT, 0, FALSE },
     { "iedit"      , POS_DEAD    , do_iedit    , LVL_BUILDER, 0, FALSE },
-#ifdef ALLOW_IGNORE_USE
     { "ignore"     , POS_DEAD    , do_ignore   , 0, 0, TRUE },
-#endif
     { "ilist"      , POS_DEAD    , do_ilist    , LVL_BUILDER, 0, FALSE },
     { "iload"      , POS_DEAD    , do_iload    , LVL_BUILDER, 0, FALSE },
     { "imotd"      , POS_DEAD    , do_gen_ps   , LVL_BUILDER, SCMD_IMOTD, FALSE },

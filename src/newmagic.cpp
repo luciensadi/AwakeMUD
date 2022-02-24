@@ -1779,7 +1779,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
 
   int success = 0;
   int skill;
-  if (IS_ELEMENTAL(ch) || IS_SPIRIT(ch)) {
+  if (IS_ANY_ELEMENTAL(ch) || IS_SPIRIT(ch)) {
     skill = GET_LEVEL(ch);
   } else {
     skill = GET_SKILL(ch, SKILL_SORCERY) + MIN(GET_SKILL(ch, SKILL_SORCERY), GET_CASTING(ch));
@@ -2460,7 +2460,7 @@ void cast_spell(struct char_data *ch, int spell, int sub, int force, char *arg)
 bool mob_magic(struct char_data *ch)
 {
   // Elementals don't get to cast: it breaks the game.
-  if (!FIGHTING(ch) || IS_ELEMENTAL(ch))
+  if (!FIGHTING(ch) || IS_PC_CONJURED_ELEMENTAL(ch))
     return FALSE;
   char buf[MAX_STRING_LENGTH], rbuf[5000];
   int spell = 0, sub = 0, force, magic = GET_MAG(ch) / 100;
@@ -3320,7 +3320,7 @@ ACMD(do_conjure)
   }
   if (GET_TRADITION(ch) == TRAD_HERMETIC) {
     if (GET_NUM_SPIRITS(ch) >= GET_CHA(ch)) {
-      send_to_char(ch, "You have too many elementals summoned.\r\n");
+      send_to_char(ch, "You have too many elementals summoned-- you can have a maximum of %d.\r\n", GET_CHA(ch));
       return;
     }
     for (spirit = 0; spirit < NUM_ELEMENTS; spirit++)
@@ -3330,13 +3330,37 @@ ACMD(do_conjure)
       send_to_char("You must specify one of Earth, Air, Fire, or Water.\r\n", ch);
       return;
     }
-    if ((GET_ASPECT(ch) == ASPECT_ELEMFIRE && spirit != ELEM_FIRE) ||
-        (GET_ASPECT(ch) == ASPECT_ELEMWATER && spirit != ELEM_WATER) ||
-        (GET_ASPECT(ch) == ASPECT_ELEMAIR && spirit != ELEM_AIR) ||
-        (GET_ASPECT(ch) == ASPECT_ELEMEARTH && spirit != ELEM_EARTH)) {
-      send_to_char("You cannot summon elementals of that type.\r\n", ch);
-      return;
+
+    // Restrict elemental by aspect.
+    if (GET_ASPECT(ch)) {
+      switch (GET_ASPECT(ch)) {
+        case ASPECT_ELEMFIRE:
+          if (spirit != ELEM_FIRE) {
+            send_to_char("Your aspect only lets you conjure fire elementals.\r\n", ch);
+            return;
+          }
+          break;
+        case ASPECT_ELEMWATER:
+          if (spirit != ELEM_WATER) {
+            send_to_char("Your aspect only lets you conjure water elementals.\r\n", ch);
+            return;
+          }
+          break;
+        case ASPECT_ELEMAIR:
+        if (spirit != ELEM_AIR) {
+          send_to_char("Your aspect only lets you conjure air elementals.\r\n", ch);
+          return;
+        }
+          break;
+        case ASPECT_ELEMEARTH:
+        if (spirit != ELEM_EARTH) {
+          send_to_char("Your aspect only lets you conjure earth elementals.\r\n", ch);
+          return;
+        }
+          break;
+      }
     }
+
     bool library = FALSE, circle = FALSE;
     struct obj_data *obj;
     FOR_ITEMS_AROUND_CH(ch, obj)
@@ -3762,7 +3786,7 @@ ACMD(do_banish)
     send_to_char(ch, "Attempt to banish which %s?\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
     return;
   }
-  if (GET_RACE(mob) != RACE_SPIRIT && GET_RACE(mob) != RACE_ELEMENTAL) {
+  if (GET_RACE(mob) != RACE_SPIRIT && GET_RACE(mob) != RACE_ELEMENTAL && GET_RACE(mob) != RACE_PC_CONJURED_ELEMENTAL) {
     send_to_char("You can only banish a nature spirit or elemental.\r\n", ch);
     return;
   }
@@ -3895,7 +3919,7 @@ void stop_spirit_power(struct char_data *spirit, int type)
       for (struct spirit_sustained *tsust = SPIRIT_SUST(ssust->target); tsust; tsust = tsust->next)
         if (tsust->type == type && tsust->target == spirit) {
           if (type == ENGULF) {
-            if (IS_SPIRIT(spirit) || (IS_ELEMENTAL(spirit) && GET_SPARE1(spirit) == ELEM_WATER)) {
+            if (IS_SPIRIT(spirit) || (IS_PC_CONJURED_ELEMENTAL(spirit) && GET_SPARE1(spirit) == ELEM_WATER)) {
               act("The water surrounding $n falls away and soaks into the ground almost instantly.", TRUE, ssust->target, 0, 0, TO_ROOM);
               send_to_char("The water surrounding you suddenly vanishes allowing you to gasp for breath!\r\n", ssust->target);
             } else {
@@ -4050,7 +4074,7 @@ POWER(spirit_accident)
   } else {
     int success = success_test(MAX(GET_INT(tch), GET_QUI(tch)), GET_SPARE2(spirit));
     for (struct char_data *mob = spirit->in_room->people; mob; mob = mob->next)
-      if (IS_NPC(mob) && (GET_RACE(mob) == RACE_SPIRIT || GET_RACE(mob) == RACE_ELEMENTAL) &&
+      if (IS_NPC(mob) && (GET_RACE(mob) == RACE_SPIRIT || GET_RACE(mob) == RACE_ELEMENTAL || GET_RACE(mob) == RACE_PC_CONJURED_ELEMENTAL) &&
           MOB_FLAGGED(mob, MOB_SPIRITGUARD)) {
         success = 10;
         break;
@@ -4172,7 +4196,7 @@ POWER(spirit_engulf)
       send_to_char("You successfully dodge!\r\n", tch);
       return;
     }
-    if (IS_SPIRIT(spirit) || (IS_ELEMENTAL(spirit) && GET_SPARE1(spirit) == ELEM_WATER)) {
+    if (IS_SPIRIT(spirit) || (IS_PC_CONJURED_ELEMENTAL(spirit) && GET_SPARE1(spirit) == ELEM_WATER)) {
       act("The water in the air surrounding $n seems to quickly condense and engulf $s!", TRUE, tch, 0, 0, TO_ROOM);
       send_to_char("The water in the air around you seems to condense and swallow you up!\r\n", tch);
     } else {
@@ -4873,7 +4897,7 @@ ACMD(do_track)
         send_to_char("They aren't wearing that.\r\n", ch);
         return;
       }
-    } else if (IS_NPC(vict) && (GET_RACE(vict) == RACE_SPIRIT || GET_RACE(vict) == RACE_ELEMENTAL) && GET_ACTIVE(vict)) {
+    } else if (IS_NPC(vict) && (GET_RACE(vict) == RACE_SPIRIT || GET_RACE(vict) == RACE_ELEMENTAL || GET_RACE(vict) == RACE_PC_CONJURED_ELEMENTAL) && GET_ACTIVE(vict)) {
       for (struct descriptor_data *desc = descriptor_list; desc; desc = desc->next)
         if (desc->original && GET_IDNUM(desc->original) == GET_ACTIVE(vict)) {
           vict = desc->original;
