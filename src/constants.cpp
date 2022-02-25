@@ -1563,6 +1563,17 @@ const char *weekdays[7] =
     "Fri",
     "Sat",
     "Sun"
+};
+
+const char *weekdays_tm_aligned[7] =
+  {
+    "Sun",
+    "Mon",
+    "Tue",
+    "Wed",
+    "Thu",
+    "Fri",
+    "Sat"
   };
 
 const char *month_name[12] =

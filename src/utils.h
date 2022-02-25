@@ -57,7 +57,7 @@ int     modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, i
 int     modify_target_rbuf(struct char_data *ch, char *rbuf, int rbuf_len);
 int     modify_target(struct char_data *ch);
 int     damage_modifier(struct char_data *ch, char *rbuf, int rbuf_len);
-int     sustain_modifier(struct char_data *ch, char *rbuf, size_t rbuf_len);
+int     sustain_modifier(struct char_data *ch, char *rbuf, size_t rbuf_len, bool minus_one_sustained=0);
 char *  capitalize(const char *source);
 char *  decapitalize_a_an(const char *source);
 char *  string_to_uppercase(const char *source);
@@ -628,7 +628,7 @@ int get_armor_penalty_grade(struct char_data *ch);
 
 #define WAIT_STATE(ch, cycle) ({ \
         if ((ch)->desc) { \
-          if (GET_LEVEL(ch) <= 1) { (ch)->desc->wait = (cycle); } else { send_to_char((ch), "Skipping wait state of %d ticks: Staff.", cycle); } \
+          if (GET_LEVEL(ch) <= 1) { (ch)->desc->wait = (cycle); } else { send_to_char((ch), "^L(Skipping wait state of %d ticks: Staff.)^n\r\n", cycle); } \
         } else if (IS_NPC(ch)) { \
           GET_MOB_WAIT(ch) = (cycle); \
         }  \

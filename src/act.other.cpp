@@ -840,13 +840,14 @@ ACMD(do_wimpy)
 
 }
 
+// AKA do_prompt
 ACMD(do_display)
 {
   struct char_data *tch;
   char arg_with_prepared_quotes[MAX_PROMPT_LENGTH * 2];
 
   if (IS_NPC(ch) && !ch->desc->original) {
-    send_to_char("Monsters don't need displays.  Go away.\r\n", ch);
+    send_to_char("NPCs don't need prompts.  Go away.\r\n", ch);
     return;
   } else
     tch = (ch->desc->original ? ch->desc->original : ch);
@@ -855,7 +856,7 @@ ACMD(do_display)
   delete_doubledollar(argument);
 
   if (!*argument) {
-    send_to_char(ch, "Current prompt:\r\n%s\r\n", GET_PROMPT(tch));
+    send_to_char(ch, "Current prompt:\r\n%s\r\n", double_up_color_codes(GET_PROMPT(tch)));
     return;
   }
 

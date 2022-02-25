@@ -1099,6 +1099,7 @@ enum {
 
 /* item types: used by obj_data.obj_flags.type_flag */
 
+#define MIN_ITEM                1        /* Must always be the minimum valid item-type number. */
 #define ITEM_LIGHT              1        /* Item is a light source            */
 #define ITEM_WORKSHOP           2        /* Item is a workshop (veh, etc)     */
 #define ITEM_CAMERA             3        /* Item is a camera                  */

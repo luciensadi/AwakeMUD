@@ -1,10 +1,13 @@
+#ifndef __newmagic_h__
+#define __newmagic_h__
+
 extern struct char_data *create_elemental(struct char_data *ch, int type, int force, int idnum, int tradition);
 extern void circle_build(struct char_data *ch, char *type, int force);
 extern void lodge_build(struct char_data *ch, int force);
 extern bool conjuring_drain(struct char_data *ch, int force);
 extern void end_spirit_existance(struct char_data *ch, bool message);
 extern bool check_spirit_sector(struct room_data *room, int type);
-extern bool spell_drain(struct char_data *ch, int type, int force, int damage);
+extern bool spell_drain(struct char_data *ch, int type, int force, int damage, bool minus_one_sustained=FALSE);
 extern void totem_bonus(struct char_data *ch, int action, int type, int &target, int &skill);
 extern void mob_cast(struct char_data *ch, struct char_data *tch, struct obj_data *tobj, int spellnum, int level);
 extern void end_sustained_spell(struct char_data *ch, struct sustain_data *sust);
@@ -46,3 +49,5 @@ extern int get_spell_affected_successes(struct char_data * ch, int type);
 #define VARIABLE_DRAIN_DAMAGE_CODE                 -5
 #define PACK_VARIABLE_DRAIN_DAMAGE(modifier)       (VARIABLE_DRAIN_DAMAGE_CODE + modifier)
 #define UNPACK_VARIABLE_DRAIN_DAMAGE(damage_code)  (-VARIABLE_DRAIN_DAMAGE_CODE + damage_code)
+
+#endif

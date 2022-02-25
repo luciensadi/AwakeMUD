@@ -2934,6 +2934,56 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s^n\r\n", buf1);
   }
 
+  extern SPECIAL(clock);
+  extern SPECIAL(hand_held_scanner);
+  extern SPECIAL(anticoagulant);
+  extern SPECIAL(toggled_invis);
+  extern SPECIAL(desktop);
+  extern SPECIAL(portable_gridguide);
+  extern SPECIAL(pocket_sec);
+  extern SPECIAL(trideo);
+  extern SPECIAL(spraypaint);
+  extern SPECIAL(floor_usable_radio);
+  extern SPECIAL(medical_workshop);
+
+  if (GET_OBJ_SPEC(j) == spraypaint) {
+    strlcat(buf, "\r\nIt's used with the ^WSPRAY^n command.\r\n", sizeof(buf));
+  }
+  else if (GET_OBJ_SPEC(j) == anticoagulant) {
+    strlcat(buf, "\r\nIt's an anticoagulant, used to help control platelet factory bioware. Take it with the ^WEAT^n command.\r\n", sizeof(buf));
+  }
+  else if (GET_OBJ_SPEC(j) == medical_workshop) {
+    strlcat(buf, "\r\nIt enables the use of player cyberdoc commands (^WHELP CYBERDOC^n).\r\n", sizeof(buf));
+  }
+  else if (GET_OBJ_SPEC(j) == floor_usable_radio) {
+    strlcat(buf, "\r\nIt can be used even while on the ground.\r\n", sizeof(buf));
+  }
+  else if (GET_OBJ_SPEC(j) == pocket_sec) {
+    strlcat(buf, "\r\nIt's a pocket secretary-- you can ^WUSE^n it.\r\n", sizeof(buf));
+  }
+  else if (GET_OBJ_SPEC(j) == portable_gridguide) {
+    strlcat(buf, "\r\nIt lets you use the ^WGRID^n command while holding it.\r\n", sizeof(buf));
+  }
+  else if (GET_OBJ_SPEC(j) == toggled_invis) {
+    strlcat(buf, "\r\nYou can ^WACTIVATE^n and ^WDEACTIVATE^n the ruthenium fibers, granting invisibility.\r\n", sizeof(buf));
+  }
+  else if (GET_OBJ_SPEC(j) == hand_held_scanner) {
+    strlcat(buf, "\r\nWhile held, it will vibrate if you move and it detects someone nearby.\r\n", sizeof(buf));
+  }
+  else if (GET_OBJ_SPEC(j) == clock) {
+    strlcat(buf, "\r\nIt gives you a more accurate ^WTIME^n readout.\r\n", sizeof(buf));
+  }
+  else if (GET_OBJ_SPEC(j) == desktop) {
+    strlcat(buf, "\r\nIt's a computer for programming decking software on- drop it and ^WLIST^n to see its contents.\r\n", sizeof(buf));
+  }
+  else if (GET_OBJ_SPEC(j) == trideo) {
+    if (CAN_WEAR(j, ITEM_WEAR_TAKE)) {
+      strlcat(buf, "\r\nIt's a trideo unit, aka a Shadowrun TV-- you can ^WUSE^n it to turn it off and on.\r\n", sizeof(buf));
+    } else {
+      strlcat(buf, "\r\nIt's a trideo unit, aka a Shadowrun TV-- however, you can't use it.\r\n", sizeof(buf));
+    }
+  }
+
   if (IS_OBJ_STAT(j, ITEM_EXTRA_NERPS)) {
     strlcat(buf, "^YIt has been flagged NERPS, indicating it has no special coded effects.^n\r\n", sizeof(buf));
   }
@@ -3975,11 +4025,28 @@ ACMD(do_time)
   extern const char *month_name[];
   struct obj_data *check;
 
-  if (subcmd == SCMD_NORMAL && GET_REAL_LEVEL(ch) >= LVL_BUILDER)
-    subcmd = SCMD_PRECISE;
-  for (check = ch->cyberware; check; check = check->next_content)
-    if (GET_OBJ_VAL(check, 0) == CYB_MATHSSPU || (GET_OBJ_VAL(check, 0) == CYB_EYES && IS_SET(GET_OBJ_VAL(check, 3), EYE_CLOCK)))
+  if (subcmd == SCMD_NORMAL) {
+    if (GET_REAL_LEVEL(ch) >= LVL_BUILDER) {
       subcmd = SCMD_PRECISE;
+      send_to_char("You use your staff powers to get an accurate time.\r\n", ch);
+    } else {
+      for (check = ch->cyberware; check; check = check->next_content) {
+        if (GET_OBJ_VAL(check, 0) == CYB_MATHSSPU || (GET_OBJ_VAL(check, 0) == CYB_EYES && IS_SET(GET_OBJ_VAL(check, 3), EYE_CLOCK))) {
+          subcmd = SCMD_PRECISE;
+          send_to_char(ch, "You use %s for the most up-to-date time.\r\n", decapitalize_a_an(GET_OBJ_NAME(check)));
+        }
+      }
+    }
+  }
+
+  // If you still get scrub-grade time after the above checks...
+  if (subcmd == SCMD_NORMAL) {
+    struct room_data *room = get_ch_in_room(ch);
+    if (room && ROOM_FLAGGED(room, ROOM_INDOORS))
+      send_to_char("You guess at the time.\r\n", ch);
+    else
+      send_to_char("You glance up at the sky to help you guess the time.\r\n", ch);
+  }
 
   year = time_info.year % 100;
   month = time_info.month + 1;
@@ -3989,13 +4056,10 @@ ACMD(do_time)
   pm = (time_info.hours >= 12);
 
   if (subcmd == SCMD_NORMAL)
-    snprintf(buf, sizeof(buf), "Gameplay Time: %2d o'clock %s, %s, %s %d, %d.\r\n", hour, pm ? "PM" : "AM",
-            weekdays[(int)time_info.weekday], month_name[month - 1], day, time_info.year);
+    snprintf(buf, sizeof(buf), "Gameplay Time: %2d o'clock %s.\r\n", hour, pm ? "PM" : "AM");
   else
-    snprintf(buf, sizeof(buf), "Gameplay Time: %2d:%s%d %s, %s, %s%d/%s%d/%d.\r\n", hour,
-            minute < 10 ? "0" : "", minute, pm ? "PM" : "AM",
-            weekdays[(int)time_info.weekday], month < 10 ? "0" : "", month,
-            day < 10 ? "0" : "", day, year);
+    snprintf(buf, sizeof(buf), "Gameplay Time: %2d:%s%d %s.\r\n", hour,
+            minute < 10 ? "0" : "", minute, pm ? "PM" : "AM");
 
   send_to_char(buf, ch);
 
@@ -4011,7 +4075,16 @@ ACMD(do_time)
 
     minute = modifiable_time->tm_min;
 
-    send_to_char(ch, "Roleplay Time: %2d:%.2d %s\r\n", hour, minute, pm ? "PM" : "AM");
+    mktime(modifiable_time);
+
+    send_to_char(ch, "Roleplay Time: %2d:%.2d %s, %s, %s %d, 2064.\r\n",
+                 hour,
+                 minute,
+                 pm ? "PM" : "AM",
+                 weekdays_tm_aligned[(int) modifiable_time->tm_wday],
+                 month_name[modifiable_time->tm_mon],
+                 modifiable_time->tm_mday
+               );
   }
 }
 

@@ -736,7 +736,7 @@ void magic_perception(struct char_data *ch, int force, int spell)
   }
 }
 
-bool spell_drain(struct char_data *ch, int spell_idx, int force, int drain_damage) {
+bool spell_drain(struct char_data *ch, int spell_idx, int force, int drain_damage, bool minus_one_sustained) {
   /*
     deals drain damage to a caster
 
@@ -744,7 +744,8 @@ bool spell_drain(struct char_data *ch, int spell_idx, int force, int drain_damag
       ch: the character who's soaking the drain
       type: the index of the spell that's being cast (SPELL_MANABOLT etc)
       force: the force it's cast at
-      damage: the damage code (1=Light, etc)
+      drain_damage: the damage code (1=Light, etc)
+      minus_one_sustained: Set to TRUE if we've just created a non-focus-sustained spell before invoking this.
 
     returns TRUE on ch's death, FALSE otherwise
   */
@@ -753,22 +754,28 @@ bool spell_drain(struct char_data *ch, int spell_idx, int force, int drain_damag
   int target = (int)(force / 2);
   int success = 0;
 
-  strlcpy(buf, "spell_drain: ", sizeof(buf));
+  snprintf(buf, sizeof(buf), "spell_drain (%s, %d, %d, %d, %d): ", GET_CHAR_NAME(ch), spell_idx, force, drain_damage, minus_one_sustained);
   //  We don't use modify_target here since wound penalties don't apply to damage resistance tests. -LS
   // strlcpy(rbuf, "Spell drain modify_target results: ", sizeof(rbuf));
   // target += modify_target_rbuf_magical(ch, ENDOF(rbuf), sizeof(rbuf));
   // act(rbuf, FALSE, ch, NULL, NULL, TO_ROLLS);
 
   // Target then adds the drain modifier of the spell.
-  target += spells[spell_idx].drainpower;
+  int drainpower = spells[spell_idx].drainpower;
+  target += drainpower;
+  buf_mod(buf, sizeof(buf), "drainpower", drainpower);
 
   // If we're in a non-powersite background aura room, add half its rating to the TN.
-  if (GET_BACKGROUND_AURA(get_ch_in_room(ch)) != AURA_POWERSITE)
-    target += (GET_BACKGROUND_COUNT(get_ch_in_room(ch)) / 2);
+  if (GET_BACKGROUND_AURA(get_ch_in_room(ch)) != AURA_POWERSITE) {
+    int background_tn_boost = GET_BACKGROUND_COUNT(get_ch_in_room(ch)) / 2;
+    if (background_tn_boost != 0) {
+      target += background_tn_boost;
+      buf_mod(buf, sizeof(buf), "background count", background_tn_boost);
+    }
+  }
 
   // SR3 p162: Add +2 to drain power for each sustained spell that's not being sustained by a focus.
-  target += sustain_modifier(ch, buf, sizeof(buf));
-  act(buf, FALSE, ch, NULL, NULL, TO_ROLLS);
+  target += sustain_modifier(ch, buf, sizeof(buf), minus_one_sustained);
 
   // Set our drain damage values.
   {
@@ -782,9 +789,14 @@ bool spell_drain(struct char_data *ch, int spell_idx, int force, int drain_damag
       drain_damage += UNPACK_VARIABLE_DRAIN_DAMAGE(spells[spell_idx].draindamage);
 
       // MitS p54
+      int overdeadly_bump = 0;
       while (drain_damage > DEADLY) {
         drain_damage--;
         target += 2;
+        overdeadly_bump += 2;
+      }
+      if (overdeadly_bump) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " over-deadly drain +%d", overdeadly_bump);
       }
     }
 
@@ -794,6 +806,8 @@ bool spell_drain(struct char_data *ch, int spell_idx, int force, int drain_damag
       mudlog(buf, ch, LOG_SYSLOG, TRUE);
     }
   }
+
+  act(buf, FALSE, ch, NULL, NULL, TO_ROLLS);
 
   // Allow others to see that you're casting.
   magic_perception(ch, force, spell_idx);
@@ -825,8 +839,22 @@ struct char_data *find_target_at_range(struct char_data *ch, char *name, char *d
 {
   return NULL;
 }
-void create_sustained(struct char_data *ch, struct char_data *vict, int spell, int force, int sub, int success, int drain)
+bool create_sustained(struct char_data *ch, struct char_data *vict, int spell, int force, int sub, int success, int drain)
 {
+  /* Use to create a sustained spell structure on:
+     - the ch (as caster)
+     - the vict (as person affected by spell)
+
+     Params:
+     - ch (caster)
+     - vict (affected, may be the same as ch)
+     - spell, force, sub: spell idx, force of casting, subtype (or 0 if none)
+     - success: how many successes we rolled
+     - drain: ?
+
+     Returns TRUE if ch IS NOW SUSTAINING IT RAW DOG STYLE, otherwise returns FALSE (sustained by focus, spirit, adept, whatever)
+  */
+
   struct obj_data *focus = NULL;
   char focus_selection_rolls_msg[MAX_STRING_LENGTH];
   for (int i = 0; !focus && i < NUM_WEARS; i++) {
@@ -883,6 +911,9 @@ void create_sustained(struct char_data *ch, struct char_data *vict, int spell, i
   vsust->focus = focus;
   GET_SUSTAINED(vict) = vsust;
   spell_modify(vict, vsust, TRUE);
+
+  // Returns TRUE if character is sustaining directly, FALSE if using focus etc.
+  return focus == NULL;
 }
 
 void spell_bonus(struct char_data *ch, int spell, int &skill, int &target)
@@ -1270,6 +1301,8 @@ void cast_detection_spell(struct char_data *ch, int spell, int force, char *arg,
   int target_modifiers = modify_target_rbuf_magical(ch, rbuf, sizeof(rbuf));
   act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
 
+  bool direct_sustain = FALSE;
+
   int skill = GET_SKILL(ch, SKILL_SORCERY) + MIN(GET_SKILL(ch, SKILL_SORCERY), GET_CASTING(ch));
   int success = 0;
   spell_bonus(ch, spell, skill, target_modifiers);
@@ -1297,23 +1330,23 @@ void cast_detection_spell(struct char_data *ch, int spell, int force, char *arg,
         return;
       }
     if (success > 0) {
-      create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
+      direct_sustain = create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
       act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
       vict->char_specials.mindlink = ch;
       ch->char_specials.mindlink = vict;
     } else send_to_char(FAILED_CAST, ch);
-    spell_drain(ch, spell, force, 0);
+    spell_drain(ch, spell, force, 0, direct_sustain);
     break;
   case SPELL_COMBATSENSE:
     WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
     success = success_test(skill, 4 + target_modifiers);
     if (success > 0) {
-      create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
+      direct_sustain = create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
       send_to_char("The world seems to slow down around you as your sense of your surroundings becomes clearer.\r\n", vict);
       act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
     } else
       send_to_char(FAILED_CAST, ch);
-    spell_drain(ch, spell, force, 0);
+    spell_drain(ch, spell, force, 0, direct_sustain);
     break;
   }
 
@@ -1337,6 +1370,8 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
   int target_modifiers = modify_target_rbuf_magical(ch, rbuf, sizeof(rbuf));
   act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
 
+  bool direct_sustain = FALSE;
+
   int skill = GET_SKILL(ch, SKILL_SORCERY) + MIN(GET_SKILL(ch, SKILL_SORCERY), GET_CASTING(ch));
   int success = 0;
   int drain = LIGHT;
@@ -1358,23 +1393,23 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
       success = success_test(skill, base_target + target_modifiers);
       if (success > 0 && !AFF_FLAGGED(vict, AFF_DETOX)) {
-        create_sustained(ch, vict, spell, force, 0, success, spells[SPELL_STABILIZE].draindamage);
+        direct_sustain = create_sustained(ch, vict, spell, force, 0, success, spells[SPELL_STABILIZE].draindamage);
         send_to_char("You notice the effects of the drugs suddenly wear off.\r\n", vict);
         act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
       } else
         send_to_char(FAILED_CAST, ch);
-      spell_drain(ch, spell, force, 0);
+      spell_drain(ch, spell, force, 0, direct_sustain);
       break;
     case SPELL_STABILIZE:
       WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
       success = success_test(skill, 4 + ((GET_LAST_DAMAGETIME(vict) - time(0)) / SECS_PER_MUD_HOUR) + target_modifiers);
       if (success > 0 && force >= (GET_PHYSICAL(vict) <= 0 ? -(GET_PHYSICAL(vict) / 100) : 50)) {
-        create_sustained(ch, vict, spell, force, 0, success, spells[SPELL_STABILIZE].draindamage);
+        direct_sustain = create_sustained(ch, vict, spell, force, 0, success, spells[SPELL_STABILIZE].draindamage);
         send_to_char("Your condition stabilizes, you manage to grab a thin hold on life.\r\n", vict);
         act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
       } else
         send_to_char(FAILED_CAST, ch);
-      spell_drain(ch, spell, force, 0);
+      spell_drain(ch, spell, force, 0, direct_sustain);
       break;
     case SPELL_RESISTPAIN:
       WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
@@ -1386,7 +1421,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       else if (GET_PHYSICAL(vict) <= 700)
         drain = MODERATE;
       if (success > 0 && !AFF_FLAGGED(ch, AFF_RESISTPAIN)) {
-        create_sustained(ch, vict, spell, force, 0, success, spells[SPELL_RESISTPAIN].draindamage);
+        direct_sustain = create_sustained(ch, vict, spell, force, 0, success, spells[SPELL_RESISTPAIN].draindamage);
         send_to_char("Your pain begins to fade.\r\n", vict);
         act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
         vict->points.resistpain = MIN(force, success) * 100;
@@ -1398,12 +1433,12 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
       success = success_test(skill, 4 + target_modifiers);
       if (success > 0) {
-        create_sustained(ch, vict, spell, force, 0, success, spells[SPELL_HEALTHYGLOW].draindamage);
+        direct_sustain = create_sustained(ch, vict, spell, force, 0, success, spells[SPELL_HEALTHYGLOW].draindamage);
         send_to_char("You begin to feel healthier and more attractive.\r\n", vict);
         act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
       } else
         send_to_char(FAILED_CAST, ch);
-      spell_drain(ch, spell, force, 0);
+      spell_drain(ch, spell, force, 0, direct_sustain);
       break;
     case SPELL_TREAT:
       if (!AFF_FLAGGED(vict, AFF_DAMAGED)) {
@@ -1426,10 +1461,10 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
         AFF_FLAGS(vict).SetBit(AFF_HEALED);
         send_to_char("A warm feeling floods your body.\r\n", vict);
         act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
-        create_sustained(ch, vict, spell, force, 0, success, drain);
+        direct_sustain = create_sustained(ch, vict, spell, force, 0, success, drain);
         update_pos(vict);
       }
-      spell_drain(ch, spell, force, drain);
+      spell_drain(ch, spell, force, drain, direct_sustain);
       break;
     case SPELL_INCREF1:
     case SPELL_INCREF2:
@@ -1493,12 +1528,12 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
 
       if ((success = success_test(skill, GET_REA(vict) + target_modifiers)) > 0) {
-        create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
+        direct_sustain = create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
         send_to_char("The world slows down around you.\r\n", vict);
         act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
       } else
         send_to_char(FAILED_CAST, ch);
-      spell_drain(ch, spell, force, 0);
+      spell_drain(ch, spell, force, 0, direct_sustain);
       break;
     case SPELL_INCREA:
       sub = REA;
@@ -1589,12 +1624,12 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       success = (int)(success_test(skill, target) -
                       ((spell == SPELL_DECATTR || spell == SPELL_DECCYATTR) ? resist_spell(vict, spell, force, sub) : 0));
       if (success > 1) {
-        create_sustained(ch, vict, spell, force, sub, success, spells[spell].draindamage);
+        direct_sustain = create_sustained(ch, vict, spell, force, sub, success, spells[spell].draindamage);
         act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
         send_to_char("You feel your body tingle.\r\n", vict);
       } else
         send_to_char(FAILED_CAST, ch);
-      spell_drain(ch, spell, force, 0);
+      spell_drain(ch, spell, force, 0, direct_sustain);
       break;
     }
   }
@@ -1609,6 +1644,8 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       vict = get_char_room_vis(ch, arg);
     if (find_duplicate_spell(ch, vict, spell, 0))
       return;
+
+    bool direct_sustain = FALSE;
 
     // Pre-calculate the modifiers to the target (standard modify_target(), altered by spell_bonus()).
     char rbuf[MAX_STRING_LENGTH];
@@ -1649,10 +1686,10 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       if (success > 0) {
         send_to_char("Coherent thought is suddenly a foreign concept.\r\n", vict);
         act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
-        create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
+        direct_sustain = create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
       } else
         send_to_char(FAILED_CAST, reflected ? vict : ch);
-      spell_drain(reflected ? vict : ch, spell, force, 0);
+      spell_drain(reflected ? vict : ch, spell, force, 0, direct_sustain);
       break;
     case SPELL_INVIS:
     case SPELL_IMP_INVIS:
@@ -1673,14 +1710,14 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       if (success > 0) {
         act("You blink and suddenly $n is gone!", TRUE, vict, 0, 0, TO_ROOM);
         send_to_char("You feel your body tingle.\r\n", vict);
-        create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
+        direct_sustain = create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
         for (struct char_data *viewer = ch->in_veh ? ch->in_veh->people : ch->in_room->people; viewer; viewer = (ch->in_veh ? viewer->next_in_veh : viewer->next_in_room)) {
           // You get to immediately try to break the invis.
           can_see_through_invis(viewer, vict);
         }
       } else
         send_to_char(FAILED_CAST, ch);
-      spell_drain(ch, spell, force, 0);
+      spell_drain(ch, spell, force, 0, direct_sustain);
       break;
     case SPELL_STEALTH:
       if (!check_spell_victim(ch, vict, spell, arg))
@@ -1692,10 +1729,10 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       if (success > 0) {
         act("You successfully sustain that spell on $n.", FALSE, vict, 0, ch, TO_VICT);
         send_to_char("Your every move becomes silent.\r\n", vict);
-        create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
+        direct_sustain = create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
       } else
         send_to_char(FAILED_CAST, ch);
-      spell_drain(ch, spell, force, 0);
+      spell_drain(ch, spell, force, 0, direct_sustain);
       break;
     case SPELL_SILENCE:
       WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
@@ -1703,10 +1740,10 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       if (success > 0) {
         act("The room falls silent.", FALSE, ch, 0, 0, TO_ROOM);
         act("The room falls silent.", FALSE, ch, 0, 0, TO_CHAR);
-        create_sustained(ch, ch, spell, force, 0, success, spells[spell].draindamage);
+        direct_sustain = create_sustained(ch, ch, spell, force, 0, success, spells[spell].draindamage);
       } else
         send_to_char(FAILED_CAST, ch);
-      spell_drain(ch, spell, force, 0);
+      spell_drain(ch, spell, force, 0, direct_sustain);
       break;
   }
 }
@@ -1717,6 +1754,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
   bool reflected = FALSE;
   int basedamage = 0;
   bool cast_by_npc = IS_NPC(ch);
+  bool direct_sustain = FALSE;
   switch (spell)
   {
     case SPELL_LASER:
@@ -1798,34 +1836,34 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
     WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
     success = success_test(skill, 6 + target_modifiers);
     if (success > 0) {
-      create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
+      direct_sustain = create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
       send_to_char("You feel your body tingle.\r\n", vict);
       act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
     } else
       send_to_char(FAILED_CAST, ch);
-    spell_drain(ch, spell, force, 0);
+    spell_drain(ch, spell, force, 0, direct_sustain);
     break;
   case SPELL_POLTERGEIST:
     WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
     success = success_test(skill, 4 + target_modifiers);
     if (success > 0) {
-      create_sustained(ch, ch, spell, force, 0, success, spells[spell].draindamage);
+      direct_sustain = create_sustained(ch, ch, spell, force, 0, success, spells[spell].draindamage);
       act("An invisible wind begins to spin small objects around the area!", FALSE, ch, 0, 0, TO_ROOM);
       act("An invisible wind begins to spin small objects around the area!", FALSE, ch, 0, 0, TO_CHAR);
     } else
       send_to_char(FAILED_CAST, ch);
-    spell_drain(ch, spell, force, 0);
+    spell_drain(ch, spell, force, 0, direct_sustain);
     break;
   case SPELL_LIGHT:
     WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
     success = success_test(skill, 4 + target_modifiers);
     if (success > 0) {
-      create_sustained(ch, ch, spell, force, 0, success, spells[spell].draindamage);
+      direct_sustain = create_sustained(ch, ch, spell, force, 0, success, spells[spell].draindamage);
       act("Light radiates from $n, illuminating the area!", FALSE, ch, 0, 0, TO_ROOM);
       act("The area brightens as your light spell takes affect!", FALSE, ch, 0, 0, TO_CHAR);
     } else
       send_to_char(FAILED_CAST, ch);
-    spell_drain(ch, spell, force, 0);
+    spell_drain(ch, spell, force, 0, direct_sustain);
     break;
   case SPELL_ICESHEET:
     if (!ch->in_room) {
@@ -1873,7 +1911,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
     if (success > 0) {
       send_to_char("You feel the room temperature sharply rise.\r\n", vict);
       act("You succeed in raising the body temperature of $N to dangerous levels.", FALSE, ch, 0, vict, TO_CHAR);
-      create_sustained(ch, vict, spell, force, 0, success, MAX(1, 10 / MIN(force, success)));
+      direct_sustain = create_sustained(ch, vict, spell, force, 0, success, MAX(1, 10 / MIN(force, success)));
       if (!FIGHTING(vict) && vict != ch && AWAKE(vict))
         set_fighting(vict, ch);
       if (IS_NPC(vict) && !IS_NPC(ch))
@@ -1882,18 +1920,18 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       send_to_char("You feel your body heat slightly then return to normal.\r\n", vict);
       send_to_char("You fail to generate enough heat in your target.\r\n", reflected ? vict : ch);
     }
-    spell_drain(reflected ? vict : ch, spell, force, 0);
+    spell_drain(reflected ? vict : ch, spell, force, 0, direct_sustain);
     break;
   case SPELL_SHADOW:
     WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
     success = success_test(skill, 4 + target_modifiers);
     if (success > 0) {
-      create_sustained(ch, ch, spell, force, 0, success, spells[spell].draindamage);
+      direct_sustain = create_sustained(ch, ch, spell, force, 0, success, spells[spell].draindamage);
       act("Dark shadows fall over the area.", FALSE, ch, 0, 0, TO_ROOM);
       act("Dark shadows fall over the area as your spell takes affect.", FALSE, ch, 0, 0, TO_CHAR);
     } else
       send_to_char(FAILED_CAST, ch);
-    spell_drain(ch, spell, force, 0);
+    spell_drain(ch, spell, force, 0, direct_sustain);
     break;
   case SPELL_CLOUT:
     if (!check_spell_victim(ch, vict, spell, arg))

@@ -2512,6 +2512,7 @@ ACMD(do_eat)
         if (GET_OBJ_VAL(cyber, 0) == BIO_PLATELETFACTORY) {
           GET_OBJ_VAL(cyber, 5) = 36;
           GET_OBJ_VAL(cyber, 6) = 0;
+          send_to_char("You relax as your platelet factory calms down.\r\n", ch);
           break;
         }
     }

@@ -6650,6 +6650,13 @@ int audit_zone_objects_(struct char_data *ch, int zone_num, bool verbose) {
       issues++;
     }
 
+    // Flag objects with odd typing
+    if (GET_OBJ_TYPE(obj) < MIN_ITEM || GET_OBJ_TYPE(obj) >= NUM_ITEMS) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - invalid type %d^n.\r\n", GET_OBJ_TYPE(obj));
+      printed = TRUE;
+      issues++;
+    }
+
     // Call out all objects with affs
     for (int aff_index = 0; aff_index < MAX_OBJ_AFFECT; aff_index++) {
       if (obj->affected[aff_index].modifier) {

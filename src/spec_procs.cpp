@@ -3020,6 +3020,7 @@ SPECIAL(clock)
     return FALSE;
 
   if (CMD_IS("time")) {
+    send_to_char(ch, "You glance at %s.\r\n", decapitalize_a_an(GET_OBJ_NAME(clock)));
     do_time(ch, "", 0, SCMD_PRECISE);
     return TRUE;
   }

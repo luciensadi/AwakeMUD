@@ -331,7 +331,7 @@ int damage_modifier(struct char_data *ch, char *rbuf, int rbuf_size)
   return base_target;
 }
 
-int sustain_modifier(struct char_data *ch, char *rbuf, size_t rbuf_len) {
+int sustain_modifier(struct char_data *ch, char *rbuf, size_t rbuf_len, bool minus_one_sustained) {
   int base_target = 0;
 
   // Since NPCs don't have sustain foci available to them at the moment, we don't throw these penalties on them.
@@ -339,7 +339,12 @@ int sustain_modifier(struct char_data *ch, char *rbuf, size_t rbuf_len) {
     return 0;
 
   if (GET_SUSTAINED_NUM(ch) > 0) {
-    int delta = (GET_SUSTAINED_NUM(ch) - GET_SUSTAINED_FOCI(ch)) * 2;
+    // We often create a sustained spell and THEN roll drain. minus_one_sustained accounts for this.
+    int sustained_num = GET_SUSTAINED_NUM(ch) - GET_SUSTAINED_FOCI(ch);
+    if (minus_one_sustained && sustained_num > 0)
+      sustained_num--;
+
+    int delta = sustained_num * 2;
     base_target += delta;
     buf_mod(rbuf, rbuf_len, "Sustain", delta);
   }
