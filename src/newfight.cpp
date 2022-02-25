@@ -458,8 +458,23 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
 
   // Precondition: If your foe is astral (ex: a non-manifested projection, a dematerialized spirit), you don't belong here.
   if (IS_ASTRAL(def->ch)) {
-    if (IS_DUAL(att->ch) || IS_ASTRAL(att->ch))
+    if (IS_DUAL(att->ch) || IS_ASTRAL(att->ch)) {
       astral_fight(att->ch, def->ch);
+    } else {
+      mudlog("SYSERR: Entered hit() with an non-astrally-reachable character attacking an astral character.", att->ch, LOG_SYSLOG, TRUE);
+      act("Unable to hit $N- $E's astral and $n can't touch that.", FALSE, att->ch, 0, def->ch, TO_ROLLS);
+    }
+    return;
+  }
+
+  // Precondition: Same for if you're an astral being and your target isn't.
+  if (IS_ASTRAL(att->ch)) {
+    if (IS_DUAL(def->ch) || IS_ASTRAL(def->ch)) {
+      astral_fight(att->ch, def->ch);
+    } else {
+      mudlog("SYSERR: Entered hit() with an astral character attacking a non-astrally-reachable character.", att->ch, LOG_SYSLOG, TRUE);
+      act("Unable to hit $N- $E's unreachable from the astral plane and $n can't touch that.", FALSE, att->ch, 0, def->ch, TO_ROLLS);
+    }
     return;
   }
 

@@ -2285,7 +2285,7 @@ bool invis_ok(struct char_data *ch, struct char_data *vict) {
   }
 
   // If they're in an invis staffer above your level, no.
-  if (!IS_NPC(vict) && (IS_NPC(ch) ? GET_INVIS_LEV(vict) > 0 : !access_level(ch, GET_INVIS_LEV(vict))))
+  if (!IS_NPC(vict) && GET_INVIS_LEV(vict) > 0 && (IS_NPC(ch) || !access_level(ch, GET_INVIS_LEV(vict))))
     return FALSE;
 
   // Staff members see almost everything.
@@ -2297,14 +2297,14 @@ bool invis_ok(struct char_data *ch, struct char_data *vict) {
     return FALSE;
 
   // Astral perception sees most things-- unless said thing is an inanimate mob with no spells on it.
-  if ((IS_ASTRAL(ch) || IS_DUAL(ch)) && !(MOB_FLAGGED(vict, MOB_INANIMATE) && !GET_SUSTAINED(vict)))
+  if ((IS_ASTRAL(ch) || IS_DUAL(ch)) && (!MOB_FLAGGED(vict, MOB_INANIMATE) || GET_SUSTAINED(vict)))
     return TRUE;
 
   // Ultrasound pierces all invis as long as it's not blocked by silence or stealth.
-  if (AFF_FLAGGED(ch, AFF_ULTRASOUND) && (get_ch_in_room(ch)->silence[0] <= 0 && !affected_by_spell(vict, SPELL_STEALTH)))
+  if (AFF_FLAGGED(ch, AFF_ULTRASOUND) && (get_ch_in_room(ch)->silence[0] <= 0 && !affected_by_spell(vict, SPELL_STEALTH) && !affected_by_spell(ch, SPELL_STEALTH)))
     return TRUE;
 
-  // Allow perception test VS invis.
+  // Allow resist test VS invis.
   if (IS_AFFECTED(vict, AFF_SPELLIMPINVIS)) {
     return can_see_through_invis(ch, vict);
   }
@@ -3961,6 +3961,9 @@ bool npc_is_protected_by_spec(struct char_data *npc) {
 }
 // Returns TRUE if the NPC should be able to see in any situation.
 bool npc_can_see_in_any_situation(struct char_data *npc) {
+  if (!IS_NPC(npc))
+    return FALSE;
+
   return (CHECK_FUNC_AND_SFUNC_FOR(johnson)
           || CHECK_FUNC_AND_SFUNC_FOR(teacher)
           || CHECK_FUNC_AND_SFUNC_FOR(metamagic_teacher)

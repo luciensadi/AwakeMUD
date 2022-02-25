@@ -22,6 +22,7 @@
 #include "newmagic.h"
 #include "bullet_pants.h"
 #include "ignore_system.h"
+#include "perception_tests.h"
 
 /* Structures */
 struct char_data *combat_list = NULL;   /* head of l-list of fighting chars */
@@ -3903,7 +3904,7 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
     return 0;
 
   // If they're in an invis staffer above your level, you done goofed by fighting them. Return special code so we know what caused this in rolls.
-  if (!IS_NPC(victim) && !IS_NPC(ch) && GET_INVIS_LEV(victim) > 0 && !access_level(ch, GET_INVIS_LEV(victim))) {
+  if (!IS_NPC(victim) && GET_INVIS_LEV(victim) > 0 && (IS_NPC(ch) || !access_level(ch, GET_INVIS_LEV(victim)))) {
     act("$n: Maximum penalty- fighting invis staff.", 0, ch, 0, 0, TO_ROLLS);
     if (ch->in_room != victim->in_room)
       act("$N: Maximum penalty- fighting invis staff.", 0, victim, 0, ch, TO_ROLLS);
@@ -3933,16 +3934,27 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
   }
 
   // Next, vict invis info.
-  bool vict_is_imp_invis = IS_AFFECTED(victim, AFF_IMP_INVIS) || IS_AFFECTED(victim, AFF_SPELLIMPINVIS);
-  bool vict_is_just_invis = IS_AFFECTED(victim, AFF_INVISIBLE) || IS_AFFECTED(victim, AFF_SPELLINVIS);
-  bool vict_is_inanimate = IS_NPC(victim) && MOB_FLAGGED(victim, MOB_INANIMATE);
+  bool vict_is_imp_invis = IS_AFFECTED(victim, AFF_IMP_INVIS);
+  bool vict_is_just_invis = IS_AFFECTED(victim, AFF_INVISIBLE);
+  if (!can_see_through_invis(ch, victim)) {
+    vict_is_imp_invis  |= IS_AFFECTED(victim, AFF_SPELLIMPINVIS);
+    vict_is_just_invis |= IS_AFFECTED(victim, AFF_SPELLINVIS);
+  }
+
+  bool vict_is_inanimate = MOB_FLAGGED(victim, MOB_INANIMATE);
 
   if (ch_sees_astral) {
-    // If you're astrally perceiving, you see anything living with no vision penalty.
-    // (You get penalties from perceiving, that's handled elsewhere.)
-    if (!vict_is_inanimate)
+    if (!vict_is_inanimate) {
+      // If you're astrally perceiving, you see anything living with no vision penalty.
+      // (You get penalties from perceiving, that's handled elsewhere.)
       return 0;
-  } else if (IS_ASTRAL(victim) && !AFF_FLAGGED(victim, AFF_MANIFEST)) {
+    }
+    // Otherwise, fall through.
+  }
+  else if (IS_ASTRAL(victim) && !AFF_FLAGGED(victim, AFF_MANIFEST)) {
+    // This shouldn't have happened in the first place.
+    mudlog("SYSERR: Received non-perceiving ch and purely-astral vict to calculate_vision_penalty()!", ch, LOG_SYSLOG, TRUE);
+
     // You're not astrally perceiving, and your victim is a non-manifested astral being. Blind fire.
     if (GET_POWER(ch, ADEPT_BLIND_FIGHTING)) {
       modifier = BLIND_FIGHTING_MAX;

@@ -188,6 +188,10 @@ bool vict_is_valid_target(struct char_data *ch, struct char_data *vict) {
     return FALSE;
   }
 
+  // Astral mismatch? Failure.
+  if ((IS_ASTRAL(ch) && (!IS_ASTRAL(vict) && !IS_DUAL(vict))) || (IS_ASTRAL(vict) && (!IS_ASTRAL(ch) && !IS_DUAL(ch))))
+    return FALSE;
+
   // Vict is an NPC.
   if (IS_NPC(vict)) {
     // Am I a quest mob hunting this mob?
@@ -1124,7 +1128,7 @@ bool mobact_process_self_buff(struct char_data *ch) {
     int min_force = MIN(4, max_force);
 
     // If not invisible already, apply an invisibility spell based on my magic rating and sorcery skill.
-    if (!imp_invis && !std_invis) {
+    if (!imp_invis && !std_invis && !IS_ASTRAL(ch)) {
       // Changed cast ratings to 1-- if PCs are going to cheese with rating 1, NPCs should too. -- LS
       if (MIN(GET_SKILL(ch, SKILL_SORCERY), GET_MAG(ch)/100) <= 5) {
         // Lower skill means standard invisibility. Gotta make thermographic vision useful somehow.
@@ -1139,7 +1143,7 @@ bool mobact_process_self_buff(struct char_data *ch) {
 #ifdef DIES_IRAE
     // If we've got Improved Invis on, we want to go completely stealth if we can.
     // Gating this behind Improved Invis means that only powerful mage characters (Sorcery and Magic both 6+) will do this.
-    if (imp_invis && !affected_by_spell(ch, SPELL_STEALTH)) {
+    if (imp_invis && !affected_by_spell(ch, SPELL_STEALTH) && !IS_ASTRAL(ch)) {
       cast_illusion_spell(ch, SPELL_STEALTH, number(1, MIN(4, max_force)), NULL, ch);
       return TRUE;
     }
@@ -1147,16 +1151,32 @@ bool mobact_process_self_buff(struct char_data *ch) {
 
     if (number(0, 10) == 0) {
       // Apply armor to self.
-      if (!affected_by_spell(ch, SPELL_ARMOR)) {
+      if (!affected_by_spell(ch, SPELL_ARMOR) && !IS_ASTRAL(ch)) {
         cast_manipulation_spell(ch, SPELL_ARMOR, number(min_force, max_force), NULL, ch);
         return TRUE;
       }
 
       if (number(0, 5) == 0) {
         // Apply combat sense to self.
-        if (!affected_by_spell(ch, SPELL_COMBATSENSE)) {
+        if (GET_MAG(ch) >= 4 && !affected_by_spell(ch, SPELL_COMBATSENSE)) {
           cast_detection_spell(ch, SPELL_COMBATSENSE, number(min_force, max_force), NULL, ch);
           return TRUE;
+        }
+
+        // Apply the appropriate increased reflexes spell.
+        if (!affected_by_spell(ch, SPELL_INCREF3) && !affected_by_spell(ch, SPELL_INCREF2) && !affected_by_spell(ch, SPELL_INCREF1)) {
+          if (GET_MAG(ch) >= 8) {
+            cast_health_spell(ch, SPELL_INCREF3, 0, number(min_force, max_force), NULL, ch);
+            return TRUE;
+          }
+          else if (GET_MAG(ch) >= 6) {
+            cast_health_spell(ch, SPELL_INCREF2, 0, number(min_force, max_force), NULL, ch);
+            return TRUE;
+          }
+          else if (GET_MAG(ch) >= 4) {
+            cast_health_spell(ch, SPELL_INCREF1, 0, number(min_force, max_force), NULL, ch);
+            return TRUE;
+          }
         }
 
         // We're dead-set on casting a spell, so try to boost attributes.
