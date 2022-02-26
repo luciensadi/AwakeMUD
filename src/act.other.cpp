@@ -888,6 +888,11 @@ ACMD(do_gen_write)
     return;
   }
 
+#ifdef IS_BUILDPORT
+  send_to_char("That command is disabled on the buildport. Please file ideas etc on the main port!\r\n", ch);
+  return;
+#endif
+
   const char *cmd_name = "Error";
 
   switch (subcmd) {
@@ -1159,7 +1164,9 @@ const char *tog_messages[][2] = {
                             {"You un-squelch your staff radio powers: You no longer require a radio to hear broadcasts, and will hear any language.\r\n",
                              "You squelch your staff radio listening powers: You now require a radio, and your language skills are suppressed.\r\n"},
                             {"You will now show up by name on the where-list.\r\n",
-                             "You will no longer show up by name on the where-list.\r\n"}
+                             "You will no longer show up by name on the where-list.\r\n"},
+                            {"You will no longer see newbie tips.\r\n",
+                             "You will now see newbie tips.\r\n"}
                           };
 
 ACMD(do_toggle)
@@ -1386,6 +1393,9 @@ ACMD(do_toggle)
     } else if (is_abbrev(argument, "nowhere") || is_abbrev(argument, "where") || is_abbrev(argument, "anonymous on where")) {
       result = PRF_TOG_CHK(ch, PRF_ANONYMOUS_ON_WHERE);
       mode = 41;
+    } else if (is_abbrev(argument, "tips") || is_abbrev(argument, "sees newbie tips") || is_abbrev(argument, "hints")) {
+      result = PRF_TOG_CHK(ch, PRF_SEE_TIPS);
+      mode = 42;
     } else {
       send_to_char("That is not a valid toggle option.\r\n", ch);
       return;

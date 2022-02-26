@@ -416,7 +416,8 @@ enum {
 #define PRF_RADLOG                       58
 #define PRF_ANONYMOUS_ON_WHERE           59
 #define PRF_IGNORELOG                    60
-#define PRF_MAX                          61
+#define PRF_SEE_TIPS                     61
+#define PRF_MAX                          62
 
 /* log watch */
 

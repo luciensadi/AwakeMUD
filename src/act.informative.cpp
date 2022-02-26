@@ -1007,20 +1007,20 @@ void list_one_char(struct char_data * i, struct char_data * ch)
                    HSSH(i),
                    already_printed ? " also" : "",
                    HSSH_SHOULD_PLURAL(i) ? "looks" : "look",
-                   GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Use the ^YTRAIN^y command to begin." : "");
+                   SHOULD_SEE_TIPS(ch) ? " Use the ^YTRAIN^y command to begin." : "");
           already_printed = TRUE;
         }
         if (MOB_HAS_SPEC(i, teacher)) {
           if (MOB_FLAGGED(i, MOB_INANIMATE)) {
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...it%s can be used to help you practice your skills.%s^n\r\n",
                      already_printed ? " also" : "",
-                     GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Use the ^YPRACTICE^y command to begin." : "");
+                     SHOULD_SEE_TIPS(ch) ? " Use the ^YPRACTICE^y command to begin." : "");
           } else {
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s willing to help you practice your skills.%s^n\r\n",
                      HSSH(i),
                      already_printed ? " also" : "",
                      HSSH_SHOULD_PLURAL(i) ? "looks" : "look",
-                     GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Use the ^YPRACTICE^y command to begin." : "");
+                     SHOULD_SEE_TIPS(ch) ? " Use the ^YPRACTICE^y command to begin." : "");
           }
           already_printed = TRUE;
         }
@@ -1031,7 +1031,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
                      HSSH(i),
                      already_printed ? " also" : "",
                      HSSH_SHOULD_PLURAL(i) ? "looks" : "look",
-                     GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Use the ^YTRAIN^y command to begin." : "");
+                     SHOULD_SEE_TIPS(ch) ? " Use the ^YTRAIN^y command to begin." : "");
             already_printed = TRUE;
           }
         }
@@ -1042,7 +1042,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
                      HSSH(i),
                      already_printed ? " also" : "",
                      HSSH_SHOULD_PLURAL(i) ? "looks" : "look",
-                     GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Use the ^YTRAIN^y command to begin." : "");
+                     SHOULD_SEE_TIPS(ch) ? " Use the ^YTRAIN^y command to begin." : "");
             already_printed = TRUE;
           }
           else if (!PLR_FLAGGED(ch, PLR_PAID_FOR_CLOSECOMBAT)) {
@@ -1050,7 +1050,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
                      HSSH(i),
                      already_printed ? " also" : "",
                      HSSH_SHOULD_PLURAL(i) ? "looks" : "look",
-                     GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Use the ^YTRAIN^y command to begin." : "");
+                     SHOULD_SEE_TIPS(ch) ? " Use the ^YTRAIN^y command to begin." : "");
             already_printed = TRUE;
           }
         }
@@ -1061,7 +1061,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
                      HSSH(i),
                      already_printed ? " also" : "",
                      HSSH_SHOULD_PLURAL(i) ? "looks" : "look",
-                     GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Use the ^YLEARN^y command to begin." : "");
+                     SHOULD_SEE_TIPS(ch) ? " Use the ^YLEARN^y command to begin." : "");
             already_printed = TRUE;
           }
         }
@@ -1069,7 +1069,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might have a job for you.%s^n\r\n",
                    HSSH(i),
                    already_printed ? " also" : "",
-                   GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " See ^YHELP JOB^y for instructions." : "");
+                   SHOULD_SEE_TIPS(ch) ? " See ^YHELP JOB^y for instructions." : "");
           already_printed = TRUE;
         }
         if (MOB_HAS_SPEC(i, shop_keeper) || MOB_HAS_SPEC(i, terell_davis)) {
@@ -1077,21 +1077,21 @@ void list_one_char(struct char_data * i, struct char_data * ch)
                    HSSH(i),
                    already_printed ? " also" : "",
                    HASHAVE(i),
-                   GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Use the ^YLIST^y command to see them." : "");
+                   SHOULD_SEE_TIPS(ch) ? " Use the ^YLIST^y command to see them." : "");
           already_printed = TRUE;
         }
         if (MOB_HAS_SPEC(i, landlord_spec)) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might have some rooms for lease.%s^n\r\n",
                    HSSH(i),
                    already_printed ? " also" : "",
-                   GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " See ^YHELP APARTMENTS^y for details." : "");
+                   SHOULD_SEE_TIPS(ch) ? " See ^YHELP APARTMENTS^y for details." : "");
           already_printed = TRUE;
         }
         if (MOB_HAS_SPEC(i, fence)) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might be willing to buy paydata from you.%s^n\r\n",
                    HSSH(i),
                    already_printed ? " also" : "",
-                   GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " If you have paydata, ^YUNINSTALL^y it from your deck and then ^YSELL PAYDATA^y." : "");
+                   SHOULD_SEE_TIPS(ch) ? " If you have paydata, ^YUNINSTALL^y it from your deck and then ^YSELL PAYDATA^y." : "");
           already_printed = TRUE;
         }
         if (MOB_HAS_SPEC(i, hacker)) {
@@ -1106,14 +1106,14 @@ void list_one_char(struct char_data * i, struct char_data * ch)
                    HSSH(i),
                    already_printed ? " also" : "",
                    HASHAVE(i),
-                   GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Renting is purely for flavor and is not required in AwakeMUD." : "");
+                   SHOULD_SEE_TIPS(ch) ? " Renting is purely for flavor and is not required in AwakeMUD." : "");
           already_printed = TRUE;
         }
         if (MOB_HAS_SPEC(i, fixer)) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s can repair objects for you.%s^n\r\n",
                    HSSH(i),
                    already_printed ? " also" : "",
-                   GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Use the ^YREPAIR^y command to proceed." : "");
+                   SHOULD_SEE_TIPS(ch) ? " Use the ^YREPAIR^y command to proceed." : "");
           already_printed = TRUE;
         }
         if (i->in_room && GET_ROOM_SPEC(i->in_room) == mageskill_hermes) {

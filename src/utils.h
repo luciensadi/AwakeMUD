@@ -435,6 +435,8 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define GET_MENTAL(ch)          ((ch)->points.mental)
 #define GET_MAX_MENTAL(ch)      ((ch)->points.max_mental)
 
+#define SHOULD_SEE_TIPS(ch)     (PRF_FLAGGED((ch), PRF_SEE_TIPS))
+
 // Changed to a non-assignable expression to cause all code that sets this value to not compile.
 // This makes it easier to find outliers when looking to track nuyen inflow / outflows.
 #define GET_NUYEN(ch)           ((ch)->points.nuyen != 0 ? (ch)->points.nuyen : 0)

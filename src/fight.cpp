@@ -1908,13 +1908,13 @@ void damage_obj(struct char_data *ch, struct obj_data *obj, int power, int type)
                    CAP(inside_buf),
                    GET_OBJ_NAME(obj),
                    ch == vict ? "^Y" : "",
-                   ch == vict ? (GET_TKE(vict) <= NEWBIE_KARMA_THRESHOLD * 2 ? " Better find a repairman..." : "") : ""
+                   ch == vict ? (SHOULD_SEE_TIPS(ch) ? " Better find a repairman..." : "") : ""
                  );
     if (vict && vict != ch)
       send_to_char(vict, "^Y%s%s^Y has been damaged!^n%s\r\n",
                    CAP(inside_buf),
                    GET_OBJ_NAME(obj),
-                   GET_TKE(vict) <= NEWBIE_KARMA_THRESHOLD * 2 ? " Better find a repairman..." : ""
+                   SHOULD_SEE_TIPS(ch) ? " Better find a repairman..." : ""
                  );
     GET_OBJ_CONDITION(obj) -= 1 + (power - rating) / half;
   }

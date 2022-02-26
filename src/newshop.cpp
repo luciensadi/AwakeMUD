@@ -1464,7 +1464,7 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
   }
 
   // New characters get reminded about the probe and info commands.
-  if (GET_TKE(ch) <= 2 * NEWBIE_KARMA_THRESHOLD)
+  if (SHOULD_SEE_TIPS(ch))
     strlcat(buf, "\r\nUse ^WPROBE^n for more details.\r\n", sizeof(buf));
   page_string(ch->desc, buf, 1);
 }
