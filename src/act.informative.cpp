@@ -4077,7 +4077,7 @@ ACMD(do_time)
 
     mktime(modifiable_time);
 
-    send_to_char(ch, "Roleplay Time: %2d:%.2d %s, %s, %s %d, 2064.\r\n",
+    send_to_char(ch, "Roleplay Time: %2d:%.2d %s, %s, %s %d, 2064-ish.\r\n",
                  hour,
                  minute,
                  pm ? "PM" : "AM",

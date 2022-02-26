@@ -956,7 +956,7 @@ void assign_rooms(void)
   SPECIAL(car_dealer);
   SPECIAL(oceansounds);
   SPECIAL(escalator);
-  SPECIAL(neophyte_entrance);
+  SPECIAL(neophyte_salvation_army);
   SPECIAL(simulate_bar_fight);
   SPECIAL(crime_mall_blockade);
   SPECIAL(waterfall);
@@ -1035,7 +1035,7 @@ void assign_rooms(void)
   }
 
   /* Neophyte Guild */
-  ASSIGNROOM(60585, neophyte_entrance);
+  ASSIGNROOM(60563, neophyte_salvation_army);
   ASSIGNROOM(60586, newbie_car);
   ASSIGNROOM(60548, newbie_housing);
 
