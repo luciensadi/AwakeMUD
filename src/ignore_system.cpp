@@ -430,7 +430,7 @@ void IgnoreData::load_from_db() {
 void globally_remove_vict_id_from_logged_in_ignore_lists(long vict_idnum) {
   for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
     struct char_data *ch = d->original ? d->original : d->character;
-    if (GET_IGNORE_DATA(ch))
+    if (ch && GET_IGNORE_DATA(ch))
       GET_IGNORE_DATA(ch)->ignored_map.erase(vict_idnum);
   }
 }
