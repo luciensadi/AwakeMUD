@@ -1739,6 +1739,32 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       } else
         send_to_char(FAILED_CAST, ch);
       break;
+    case SPELL_FLAME_AURA:
+      if (!check_spell_victim(ch, vict, spell, arg))
+        return;
+
+      if (would_become_killer(ch, vict)) {
+        send_to_char("That would make you a PLAYER KILLER! Both you and your opponent must `toggle PK` to do that.\r\n", ch);
+        return;
+      }
+
+      if (!IS_NPC(ch) && !IS_NPC(vict) && PLR_FLAGGED(ch, PLR_KILLER)) {
+        act("You have the KILLER flag, so you can't affect $N with an aggressive spell.", TRUE, ch, 0, vict, TO_CHAR);
+        return;
+      }
+      WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
+
+      success = success_test(skill, 4 + target_modifiers);
+      if (success > 0 && !AFF_FLAGGED(ch, AFF_FLAME_AURA)) {
+        char msg_buf[500];
+        snprintf(msg_buf, sizeof(msg_buf), "$n's body is enveloped in an aura of fierce flames.", HSSH_SHOULD_PLURAL(ch) ? "s" : "");
+        act(msg_buf, TRUE, vict, 0, 0, TO_ROOM);
+        send_to_char("Your body is enveloped in an aura of fierce flames.\r\n", vict);
+        act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
+        create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
+      } else
+        send_to_char(FAILED_CAST, ch);
+      break;
   }
 }
 
