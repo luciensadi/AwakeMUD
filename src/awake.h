@@ -515,7 +515,8 @@ enum {
 #define AFF_AMMOBUILD    49
 #define AFF_CLOSECOMBAT  50
 #define AFF_SMART_ENOUGH_TO_TOGGLE_CLOSECOMBAT  51
-#define AFF_MAX       52
+#define AFF_LEVITATE  52
+#define AFF_MAX       53
 // TODO: If you add another long-state action like building, designing, etc:
 // - Add it to the BR_TASK_AFF_FLAGS section below, which affects bioware_check and the B/R flag in the wholist
 // - Add it to the IS_WORKING and STOP_WORKING macros in utils.h
@@ -700,7 +701,10 @@ enum {
 #define SPELL_THUNDERCLAP    63
 #define SPELL_WATERBOLT    64
 #define SPELL_SPLASH    65
-#define MAX_SPELLS    66
+#define SPELL_NIGHTVISION    66
+#define SPELL_INFRAVISION    67
+#define SPELL_LEVITATE    68
+#define MAX_SPELLS    69
 
 #define SPELL_DESIGN_FAILED_CODE -3
 

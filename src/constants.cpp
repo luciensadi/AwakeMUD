@@ -722,7 +722,8 @@ const char *affected_bits[] =
     "Surprised",
     "Ammo Building",
     "Engaging in Close Combat",
-    "Tries for Close Combat"
+    "Tries for Close Combat",
+    "Levitate"
   };
 
 /* CON_x */
@@ -1975,7 +1976,10 @@ struct spell_types spells[] =
     { "Thunderbolt", TRUE, MANIPULATION, SINGLE, -1, INSTANT, 0, PACK_VARIABLE_DRAIN_DAMAGE(1) },
     { "Thunderclap", TRUE, MANIPULATION, AREA, -1, INSTANT, 1, PACK_VARIABLE_DRAIN_DAMAGE(2) },
     { "Waterbolt", TRUE, MANIPULATION, SINGLE, -1, INSTANT, 0, PACK_VARIABLE_DRAIN_DAMAGE(1) }, // these were both VDD+0, but I can't find them in the book, so I'm matching them to the other elemental manips. -LS
-    { "Splash", TRUE, MANIPULATION, AREA, -1, INSTANT, 0, PACK_VARIABLE_DRAIN_DAMAGE(2) }
+    { "Splash", TRUE, MANIPULATION, AREA, -1, INSTANT, 0, PACK_VARIABLE_DRAIN_DAMAGE(2) },
+    { "Nightvision", TRUE, DETECTION, SINGLE, -1, SUSTAINED, 1, MODERATE },
+    { "Infravision", TRUE, DETECTION, SINGLE, -1, SUSTAINED, 1, MODERATE },
+    { "Levitate", TRUE, MANIPULATION, SINGLE, -1, SUSTAINED, 2, MODERATE }
   };
 
 const char *totem_types[] =

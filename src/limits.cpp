@@ -548,7 +548,7 @@ void check_bioware(struct char_data *ch)
 int calculate_swim_successes(struct char_data *ch) {
   int swim_test_target, skill_dice, opposing_dice, successes, water_wings_bonus = 0, fin_bonus = 0;
 
-  if (IS_NPC(ch) || IS_SENATOR(ch) || !ch->in_room)
+  if (IS_NPC(ch) || IS_SENATOR(ch) || IS_AFFECTED(ch, AFF_LEVITATE) || !ch->in_room)
     return 20;
 
   for (int x = WEAR_LIGHT; x < NUM_WEARS; x++)
