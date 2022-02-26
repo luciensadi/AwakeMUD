@@ -1751,7 +1751,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       if (success > 0 || AFF_FLAGGED(vict, AFF_LOW_LIGHT)) {
         send_to_char("Your eyes tingle as the shadows around you become clearer.\r\n", vict);
         act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
-        create_sustained(ch, vict, spell, force, 0, success, drain);
+        create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
       } else
         send_to_char(FAILED_CAST, ch);
       break;
@@ -1761,7 +1761,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       if (success > 0 && !AFF_FLAGGED(ch, AFF_INFRAVISION)) {
         send_to_char("Your eyes tingle as you begin to see heat signatures around you.\r\n", vict);
         act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
-        create_sustained(ch, vict, spell, force, 0, success, drain);
+        create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
       } else
         send_to_char(FAILED_CAST, ch);
       break;
@@ -1769,10 +1769,12 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
       success = success_test(skill, 4 + target_modifiers);
       if (success > 0 && !AFF_FLAGGED(ch, AFF_LEVITATE)) {
-        act("$s feet gently lift off from the ground as they begin to levitate.", TRUE, vict, 0, 0, TO_ROOM);
+        char msg_buf[500];
+        snprintf(msg_buf, sizeof(msg_buf), "$n's feet gently lift off from the ground as $e begin%s to levitate.", HSSH_SHOULD_PLURAL(ch) ? "s" : "");
+        act(msg_buf, TRUE, vict, 0, 0, TO_ROOM);
         send_to_char("Your feet gently lift off from the ground as you levitate.\r\n", vict);
         act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
-        create_sustained(ch, vict, spell, force, 0, success, drain);
+        create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
       } else
         send_to_char(FAILED_CAST, ch);
       break;
