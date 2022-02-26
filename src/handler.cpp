@@ -465,6 +465,12 @@ void spell_modify(struct char_data *ch, struct sustain_data *sust, bool add)
       else
         AFF_FLAGS(ch).RemoveBit(AFF_LEVITATE);
       break;
+    case SPELL_FLAME_AURA:
+      if (mod == 1)
+        AFF_FLAGS(ch).SetBit(AFF_FLAME_AURA);
+      else
+        AFF_FLAGS(ch).RemoveBit(AFF_FLAME_AURA);
+      break;
   }
 }
 
