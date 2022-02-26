@@ -305,6 +305,11 @@ struct melee_combat_data {
       if (cyber->cyberarms) {
         power += 2;
       }
+      
+      // Add +2 power to unarmed/melee, per MitS p147. -Vile
+      if (AFF_FLAGGED(ch, AFF_SPELL_FLAME_AURA)) {
+        power += 2;
+      }
 
       // Check for Adept powers.
       // TODO: Elemental Strike (SotA64 p65)
