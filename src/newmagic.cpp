@@ -1743,15 +1743,14 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       if (!check_spell_victim(ch, vict, spell, arg))
         return;
 
-      if (would_become_killer(ch, vict)) {
-        send_to_char("That would make you a PLAYER KILLER! Both you and your opponent must `toggle PK` to do that.\r\n", ch);
-        return;
+      // Specific message checking if they're already affected by the flag.
+      for (struct sustain_data *sust = GET_SUSTAINED(vict); sust; sust = sust->next) {
+        if (!sust->caster && (sust->spell == SPELL_FLAME_AURA)) {
+          send_to_char("They already have a flame aura.\r\n", ch);
+          return;
+        }
       }
 
-      if (!IS_NPC(ch) && !IS_NPC(vict) && PLR_FLAGGED(ch, PLR_KILLER)) {
-        act("You have the KILLER flag, so you can't affect $N with an aggressive spell.", TRUE, ch, 0, vict, TO_CHAR);
-        return;
-      }
       WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
 
       success = success_test(skill, 4 + target_modifiers);
