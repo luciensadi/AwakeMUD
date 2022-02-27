@@ -1021,19 +1021,21 @@ void assign_rooms(void)
   ASSIGNROOM(60507, chargen_unpractice_skill);
   ASSIGNROOM(60508, chargen_unpractice_skill);
   ASSIGNROOM(60509, chargen_unpractice_skill);
+  ASSIGNROOM(60510, chargen_unpractice_skill);
+  ASSIGNROOM(60511, chargen_unpractice_skill);
   #ifdef REQUIRE_LANGUAGE_SKILL_POINTS_BE_USED_ONLY_FOR_LANGUAGE
   ASSIGNROOM(60512, chargen_language_annex);
   #else
   ASSIGNROOM(60512, chargen_unpractice_skill);
   #endif
-  ASSIGNROOM(60511, chargen_unpractice_skill);
-  ASSIGNROOM(60510, chargen_unpractice_skill);
   ASSIGNROOM(60591, chargen_unpractice_skill);
   ASSIGNROOM(60592, chargen_unpractice_skill);
   ASSIGNROOM(60593, chargen_unpractice_skill);
   ASSIGNROOM(60626, chargen_unpractice_skill);
   ASSIGNROOM(60627, chargen_unpractice_skill);
   ASSIGNROOM(60628, chargen_unpractice_skill);
+  ASSIGNROOM(60661, chargen_unpractice_skill);
+  ASSIGNROOM(60662, chargen_unpractice_skill);
   /* CharGen - auto-set archetype end rooms etc */
   for (int i = 0; i < NUM_CCR_ARCHETYPES; i++) {
     ASSIGNROOM(archetypes[i]->auth_room, auth_room);
