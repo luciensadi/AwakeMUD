@@ -790,7 +790,7 @@ struct command_info cmd_info[] =
     { "set"        , POS_DEAD    , do_set      , LVL_CONSPIRATOR, 0, FALSE },
     { "setfind"    , POS_DEAD    , do_setfind , LVL_VICEPRES, 0, FALSE },
     { "settime"    , POS_DEAD    , do_settime  , LVL_DEVELOPER, 0, FALSE },
-    { "sheath"     , POS_RESTING , do_holster  , 0, 0, FALSE },
+    { "sheathe"    , POS_RESTING , do_holster  , 0, 0, FALSE },
     { "shortexits" , POS_LYING   , do_exits    , 0, SCMD_SHORTEXITS, FALSE },
     { "shout"      , POS_LYING   , do_gen_comm , 0, SCMD_SHOUT, FALSE },
     { "shouts"     , POS_DEAD    , do_switched_message_history, 0, COMM_CHANNEL_SHOUTS, TRUE },
@@ -3155,7 +3155,6 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("recieve", "receive");
   COMMAND_ALIAS("dorp", "drop");
   COMMAND_ALIAS("weild", "wield");
-  COMMAND_ALIAS("sheathe", "sheath");
   COMMAND_ALIAS("unsheathe", "draw");
   COMMAND_ALIAS("prove", "probe");
   COMMAND_ALIAS("chekc", "check");
