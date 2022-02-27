@@ -807,6 +807,11 @@ bool spell_drain(struct char_data *ch, int spell_idx, int force, int drain_damag
     }
   }
 
+  /* https://www.shadowrunrpg.com/resources/sr3faq.html
+      Q: What happens if a spell with a Drain Code of Damage Level -1 is cast at Light?
+      A: All spells have a minimum Drain of Light, so the caster will still face Light Drain.  */
+  drain_damage = MAX(drain_damage, LIGHT);
+
   act(buf, FALSE, ch, NULL, NULL, TO_ROLLS);
 
   // Allow others to see that you're casting.
