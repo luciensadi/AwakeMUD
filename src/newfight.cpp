@@ -1186,6 +1186,33 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     }
   }
 
+  // Handle spirits and elementals being little divas with their special combat rules.
+    // Namely: We require that the attack's power is greater than double the spirit's level, otherwise it takes no damage.
+    // If the attack's power is greater, subtract double the level from it.
+    if (IS_SPIRIT(def->ch) || IS_ANY_ELEMENTAL(def->ch)) {
+      if (att->melee->power <= GET_LEVEL(def->ch) * 2) {
+        bool target_died = 0;
+        target_died = damage(att->ch, def->ch, 0, att->melee->dam_type, att->melee->is_physical);
+
+        //Handle suprise attack/alertness here -- spirits melee.
+        if (!target_died) {
+          if (IS_NPC(def->ch)) {
+            if (AFF_FLAGGED(def->ch, AFF_SURPRISE))
+              AFF_FLAGS(def->ch).RemoveBit(AFF_SURPRISE);
+
+            GET_MOBALERT(def->ch) = MALERT_ALARM;
+            GET_MOBALERTTIME(def->ch) = 30;
+          }
+
+          // Process flame aura here since the spirit will otherwise end combat evaluation here.
+          handle_flame_aura(att, def);
+        }
+        return;
+      } else {
+        att->melee->power -= GET_LEVEL(def->ch) * 2;
+      }
+    }
+  
   int damage_total = convert_damage(staged_damage);
 
   {
