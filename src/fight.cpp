@@ -2684,8 +2684,9 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
     trauma = FALSE;
   }
 
-  // Damage compensators disable trauma dampers unless the character is damaged past the DC's ability to compensate.
-  if (comp && (is_physical ? (1000 - GET_PHYSICAL(real_body) <= comp) : (1000 - GET_MENTAL(real_body) <= comp))) {
+  // Damage compensators disable trauma dampers unless the character is being damaged past the DC's ability to compensate.
+  int expected_total_damage = 1000 - (is_physical ? GET_PHYSICAL(real_body) : GET_MENTAL(real_body)) - (dam * 100);
+  if (comp && expected_total_damage < comp) {
     act("(damper disabled - dcomp)", FALSE, victim, NULL, NULL, TO_ROLLS);
     trauma = FALSE;
   }
