@@ -39,6 +39,8 @@ extern bool damage_without_message(struct char_data *ch, struct char_data *victi
 
 void engage_close_combat_if_appropriate(struct combat_data *att, struct combat_data *def, int net_reach);
 
+bool handle_flame_aura(struct combat_data *att, struct combat_data *def);
+
 bool does_weapon_have_bayonet(struct obj_data *weapon);
 
 #define IS_RANGED(eq)   (GET_OBJ_TYPE(eq) == ITEM_FIREWEAPON || \
@@ -1364,4 +1366,44 @@ void engage_close_combat_if_appropriate(struct combat_data *att, struct combat_d
       }
     }
   }
+}
+
+bool handle_flame_aura(struct combat_data *att, struct combat_data *def) {
+  // Now that we've counterstrike-swapped if applicable, check and try to apply flame aura.
+  if (AFF_FLAGGED(def->ch, AFF_FLAME_AURA) || MOB_FLAGGED(def->ch, MOB_FLAMEAURA)) {
+    int force;
+
+    // First, we require that the attacker really is fighting in melee and unarmed. Flame aura only burns body parts.
+    if (att->ranged_combat_mode || !att->weapon) {
+      // Flameaura-flagged NPCs just use their own level as the force.
+      if (MOB_FLAGGED(def->ch, MOB_FLAMEAURA)) {
+        force = GET_LEVEL(def->ch);
+      }
+      else {
+        // Iterate through their spells, find the flame aura that's applied to them, and extract its force.
+        for (struct sustain_data *sust = GET_SUSTAINED(def->ch); sust; sust = sust->next) {
+          if (!sust->caster && sust->spell == SPELL_FLAMEAURA) {
+            force = sust->force;
+            break;
+          }
+        }
+      }
+
+      if (GET_EQ(att->ch, WEAR_HANDS) && GET_EQ(att->ch, WEAR_FEET)) {
+        // TODO: Apply impact armor.
+      }
+
+      // TODO: Now that we've set the force, deal (Force)M damage to the attacker. Use TYPE_SUFFERING maybe?
+      // Remember that damage() returns true if it's killed them-- if this happens, you'll need to abort handling, because att->ch is already nulled out.
+      if (damage(att->ch, ...)) {
+        // TODO: send a message to the defender and the room. Remember not to use att->ch here since it's been nulled by death.
+
+        // Attacker died, so return TRUE here.
+        return TRUE;
+      }
+    }
+  }
+
+  // We survived! Return FALSE to indicate attacker did not die.
+  return FALSE;
 }
