@@ -1293,6 +1293,23 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     }
   }
 
+  bool defender_died, defender_was_npc = IS_NPC(def->ch);
+  if (att->ranged_combat_mode) {
+    combat_message(att->ch, def->ch, att->weapon, MAX(0, damage_total), att->ranged->burst_count);
+    defender_died = damage_without_message(att->ch, def->ch, damage_total, att->ranged->dam_type, att->ranged->is_physical);
+
+    if (!defender_died && damage_total > 0)
+      perform_knockdown_test(def->ch, (GET_WEAPON_POWER(att->weapon) + att->ranged->burst_count) / (att->ranged->is_gel ? 1 : 2));
+  } else {
+    // Process flame aura right before damage.
+    if (handle_flame_aura(att, def)) {
+      // TODO: Print a message to the defender and the room that the attacker burned themselves up, then bail out.
+      return;
+    }
+
+    defender_died = damage(att->ch, def->ch, damage_total, att->melee->dam_type, att->melee->is_physical);
+    ...
+  
   if (defender_died) {
     // Fixes edge case where attacking quest NPC kills its hunter with a heavy weapon, is extracted, then tries to check recoil.
     if (!defender_was_npc)
