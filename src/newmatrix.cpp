@@ -2498,10 +2498,22 @@ void matrix_update()
             host.found = 0;
         }
         host.payreset = TRUE;
-      } else
-        for (int x = 0; x < 5; x++)
-          if (host.stats[x][MTX_STAT_SCRAMBLE_IC_RATING] && !host.stats[x][MTX_STAT_ENCRYPTED])
-            host.stats[x][MTX_STAT_ENCRYPTED]++;
+      } else {
+        for (int x = 0; x < 5; x++) {
+          if (host.stats[x][MTX_STAT_ENCRYPTED] != 0 && host.stats[x][MTX_STAT_ENCRYPTED] != 1) {
+            char warnbuf[1000];
+            snprintf(warnbuf, sizeof(warnbuf), "WARNING: %s mtx_stat_encrypted on %ld is %ld (must be 1 or 0)!",
+                     acifs_strings[x],
+                     host.vnum,
+                     host.stats[x][MTX_STAT_ENCRYPTED]);
+            mudlog(warnbuf, NULL, LOG_SYSLOG, TRUE);
+            host.stats[x][MTX_STAT_ENCRYPTED] = 0;
+          }
+
+          if (host.stats[x][MTX_STAT_SCRAMBLE_IC_RATING] && host.stats[x][MTX_STAT_ENCRYPTED] == 0)
+            host.stats[x][MTX_STAT_ENCRYPTED] = 1;
+        }
+      }
     }
     if (host.shutdown) {
       if (success_test(host.security, host.shutdown_mpcp) > 0) {
