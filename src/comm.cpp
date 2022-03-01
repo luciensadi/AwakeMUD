@@ -176,6 +176,8 @@ void process_wheres_my_car();
 extern int calculate_distance_between_rooms(vnum_t start_room_vnum, vnum_t target_room_vnum, bool ignore_roads);
 void set_descriptor_canaries(struct descriptor_data *newd);
 
+extern int modify_target_rbuf_magical(struct char_data *ch, char *rbuf, int rbuf_len);
+
 #ifdef USE_DEBUG_CANARIES
 void check_memory_canaries();
 #endif
@@ -1204,7 +1206,7 @@ int make_prompt(struct descriptor_data * d)
     else if (!strchr(prompt, '@')) {
       data = colorize(d, prompt);
     } else {
-      char temp[MAX_INPUT_LENGTH], str[11];
+      char temp[MAX_INPUT_LENGTH], str[20];
       int i = 0, j, physical;
 
       for (; *prompt; prompt++) {
@@ -1305,6 +1307,9 @@ int make_prompt(struct descriptor_data * d)
             case 'i':       // impact
               snprintf(str, sizeof(str), "%d", GET_IMPACT(d->character));
               break;
+            case 'j':
+              snprintf(str, sizeof(str), "%d", modify_target(d->character));
+              break;
             case 'k':       // karma
               snprintf(str, sizeof(str), "%0.2f", ((float)GET_KARMA(ch) / 100));
               break;
@@ -1343,6 +1348,16 @@ int make_prompt(struct descriptor_data * d)
               break;
             case 'P':       // max physical
               snprintf(str, sizeof(str), "%d", (int)(GET_MAX_PHYSICAL(d->character) / 100));
+              break;
+            case 'q':
+              {
+                struct room_data *room = get_ch_in_room(d->character);
+                if (room && SECT(room) != SPIRIT_FOREST && SECT(room) != SPIRIT_HEARTH && !ROOM_FLAGGED(room, ROOM_INDOORS)) {
+                  snprintf(str, sizeof(str), "%s, Sky", spirit_name[GET_DOMAIN(ch)]);
+                } else {
+                  strlcpy(str, GET_DOMAIN(ch) == SPIRIT_HEARTH ? "Hearth" : spirit_name[GET_DOMAIN(ch)], sizeof(str));
+                }
+              }
               break;
             case 'r':
               if (ch->persona && ch->persona->decker->deck)
@@ -3075,7 +3090,6 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
   return lbuf;
 }
 
-// TODO: stopped partway through editing this func, it is nonfunctional.
 bool can_send_act_to_target(struct char_data *ch, bool hide_invisible, struct obj_data * obj, void *vict_obj, struct char_data *to, int type) {
 #define SENDOK(ch) ((ch)->desc && AWAKE(ch) && !(PLR_FLAGGED((ch), PLR_WRITING) || PLR_FLAGGED((ch), PLR_EDITING) || PLR_FLAGGED((ch), PLR_MAILING) || PLR_FLAGGED((ch), PLR_CUSTOMIZE)) && (STATE(ch->desc) != CON_SPELL_CREATE))
   bool remote;
@@ -3083,13 +3097,23 @@ bool can_send_act_to_target(struct char_data *ch, bool hide_invisible, struct ob
   if ((remote = (type & TO_REMOTE)))
     type &= ~TO_REMOTE;
 
-  return (to
-          && SENDOK(to)
-          && !(hide_invisible && ch && !CAN_SEE(to, ch))
-          && (to != ch)
-          && (remote || !PLR_FLAGGED(to, PLR_REMOTE))
-          && !PLR_FLAGGED(to, PLR_MATRIX)
-          && (type == TO_ROOM || type == TO_ROLLS || (to != vict_obj)));
+  // Nobody unique to send to? Fail.
+  if (!to || !SENDOK(to) || to == ch)
+    return FALSE;
+
+  // Can't see them and it's an action-based message? Fail.
+  if (hide_invisible && ch && !CAN_SEE(to, ch))
+    return FALSE;
+
+  // Only some things go through to remote users.
+  if (!remote && PLR_FLAGGED(to, PLR_REMOTE))
+    return FALSE;
+
+  // Matrix users skip almost everything-- staff sees rolls there though.
+  if (PLR_FLAGGED(to, PLR_MATRIX) && !(IS_SENATOR(to) && type == TO_ROLLS))
+    return FALSE;
+
+  return type == TO_ROOM || type == TO_ROLLS || (to != vict_obj);
 
 #undef SENDOK
 }
@@ -3401,7 +3425,7 @@ void increase_congregation_bonus_pools() {
     }
 
     // Skip people who haven't emoted in a while, but only if they're not alone there.
-    if (occupants > 1 && i->char_specials.last_emote > LAST_EMOTE_REQUIREMENT_FOR_CONGREGATION_BONUS) {
+    if (occupants > 1 && i->char_specials.last_social_action > LAST_SOCIAL_ACTION_REQUIREMENT_FOR_CONGREGATION_BONUS) {
       snprintf(buf, sizeof(buf), "Socialization: Skipping %s's opportunity to earn social points-- they've not emoted to their partner.", GET_CHAR_NAME(i));
       act(buf, FALSE, i, 0, 0, TO_ROLLS);
       continue;

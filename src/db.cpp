@@ -216,6 +216,7 @@ void boot_shop_orders(void);
 void price_cyber(struct obj_data *obj);
 void price_bio(struct obj_data *obj);
 extern void verify_db_password_column_size();
+void set_elemental_races();
 
 /* external vars */
 extern int no_specials;
@@ -500,11 +501,14 @@ void boot_world(void)
   log("Checking start rooms.");
   check_start_rooms();
 
+  log("Loading objs and generating index.");
+  index_boot(DB_BOOT_OBJ);
+
   log("Loading mobs and generating index.");
   index_boot(DB_BOOT_MOB);
 
-  log("Loading objs and generating index.");
-  index_boot(DB_BOOT_OBJ);
+  log("Handling special-case mobs.");
+  set_elemental_races();
 
   log("Loading vehicles and generating index.");
   index_boot(DB_BOOT_VEH);
@@ -1637,8 +1641,8 @@ void parse_mobile(File &in, long nr)
   GET_LEVEL(mob) = data.GetInt("POINTS/Level", 0);
   GET_MAX_PHYSICAL(mob) = data.GetInt("POINTS/MaxPhys", 10*100);
   GET_MAX_MENTAL(mob) = data.GetInt("POINTS/MaxMent", 10*100);
-  GET_BALLISTIC(mob) = data.GetInt("POINTS/Ballistic", 0);
-  GET_IMPACT(mob) = data.GetInt("POINTS/Impact", 0);
+  GET_BALLISTIC(mob) = GET_INNATE_BALLISTIC(mob) = data.GetInt("POINTS/Ballistic", 0);
+  GET_IMPACT(mob) = GET_INNATE_IMPACT(mob) = data.GetInt("POINTS/Impact", 0);
   GET_NUYEN_RAW(mob) = data.GetInt("POINTS/Cash", 0);
   GET_BANK_RAW(mob) = data.GetInt("POINTS/Bank", 0);
   GET_KARMA(mob) = data.GetInt("POINTS/Karma", 0);
@@ -1702,6 +1706,89 @@ void parse_mobile(File &in, long nr)
       snprintf(buf, sizeof(buf), "AMMO/%s", get_ammo_representation(wp, am, 0));
       GET_BULLETPANTS_AMMO_AMOUNT(mob, wp, am) = data.GetInt(buf, 0);
     }
+
+  // Load cyberware.
+  {
+    char field[32];
+    int num_fields = data.NumSubsections("CYBERWARE");
+    vnum_t vnum;
+    struct obj_data *ware = NULL;
+
+    for (int x = 0; x < num_fields; x++) {
+      const char *name = data.GetIndexSection("CYBERWARE", x);
+      snprintf(field, sizeof(field), "%s/Vnum", name);
+      vnum = data.GetLong(field, -1);
+
+      if (!(ware = read_object(vnum, VIRTUAL))) {
+        log_vfprintf("MOB FILE ERROR: Mob %ld referenced cyberware vnum %ld (entry %d) which does not exist.", nr, vnum, x);
+        continue;
+      } else {
+        if (GET_OBJ_TYPE(ware) != ITEM_CYBERWARE) {
+          log_vfprintf("MOB FILE ERROR: Mob %ld referenced vnum %ld (entry %d) as cyberware, but it's not cyberware.", nr, vnum, x);
+          extract_obj(ware);
+          continue;
+        }
+        // log_vfprintf("debug: reading cyber %s (%ld) into prototype for %s.", GET_OBJ_NAME(ware), GET_OBJ_VNUM(ware), GET_CHAR_NAME(mob));
+        obj_to_cyberware(ware, mob);
+      }
+    }
+  }
+
+  // Same thing for bioware. TODO: Merge this copypasta'd code into one function.
+  {
+    char field[32];
+    int num_fields = data.NumSubsections("BIOWARE");
+    vnum_t vnum;
+    struct obj_data *ware = NULL;
+
+    for (int x = 0; x < num_fields; x++) {
+      const char *name = data.GetIndexSection("BIOWARE", x);
+      snprintf(field, sizeof(field), "%s/Vnum", name);
+      vnum = data.GetLong(field, -1);
+
+      if (!(ware = read_object(vnum, VIRTUAL))) {
+        log_vfprintf("MOB FILE ERROR: Mob %ld referenced bioware vnum %ld (entry %d) which does not exist.", nr, vnum, x);
+        continue;
+      } else {
+        if (GET_OBJ_TYPE(ware) != ITEM_BIOWARE) {
+          log_vfprintf("MOB FILE ERROR: Mob %ld referenced vnum %ld (entry %d) as bioware, but it's not bioware.", nr, vnum, x);
+          extract_obj(ware);
+          continue;
+        }
+        // log_vfprintf("debug: reading bio %s (%ld) into prototype for %s.", GET_OBJ_NAME(ware), GET_OBJ_VNUM(ware), GET_CHAR_NAME(mob));
+        obj_to_bioware(ware, mob);
+      }
+    }
+  }
+
+  {
+    char field[32];
+    int num_fields = data.NumSubsections("EQUIPMENT"), wearloc;
+    vnum_t vnum;
+    struct obj_data *eq = NULL;
+
+    for (int x = 0; x < num_fields; x++) {
+      const char *name = data.GetIndexSection("EQUIPMENT", x);
+      snprintf(field, sizeof(field), "%s/Vnum", name);
+      vnum = data.GetLong(field, -1);
+      snprintf(field, sizeof(field), "%s/Wearloc", name);
+      wearloc = data.GetLong(field, -1);
+
+      if (!(eq = read_object(vnum, VIRTUAL))) {
+        log_vfprintf("MOB FILE ERROR: Mob %ld referenced equipment vnum %ld (entry %d) which does not exist.", nr, vnum, x);
+        continue;
+      }
+
+      if (wearloc < 0 || wearloc >= NUM_WEARS) {
+        log_vfprintf("MOB FILE ERROR: Mob %ld referenced invalid wearloc %d (entry %d).", nr, wearloc, x);
+        continue;
+      }
+
+      // log_vfprintf("debug: reading eq %s (%ld) into prototype for %s.", GET_OBJ_NAME(eq), GET_OBJ_VNUM(eq), GET_CHAR_NAME(mob));
+      equip_char(mob, eq, wearloc);
+    }
+  }
+
 
   top_of_mobt = rnum++;
 }
@@ -1778,7 +1865,7 @@ void parse_object(File &fl, long nr)
   // Set the do-not-touch flags for known templated items.
   if ((BOTTOM_OF_TEMPLATE_ITEMS <= nr && nr <= TOP_OF_TEMPLATE_ITEMS)
       || nr == OBJ_BLANK_MAGAZINE || nr ==  OBJ_VEHCONTAINER || nr == OBJ_SHOPCONTAINER) {
-    GET_OBJ_EXTRA(obj).SetBit(ITEM_DONT_TOUCH);
+    GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_DONT_TOUCH);
   }
 
   { // Per-type modifications and settings.
@@ -2707,7 +2794,7 @@ int vnum_object_weapons(char *searchname, struct char_data * ch)
             continue;
           if (GET_WEAPON_STR_BONUS(&obj_proto[nr]) > strength && strength != 5)
             continue;
-          if (IS_OBJ_STAT(&obj_proto[nr], ITEM_GODONLY))
+          if (IS_OBJ_STAT(&obj_proto[nr], ITEM_EXTRA_STAFF_ONLY))
             continue;
           if (vnum_from_non_connected_zone(OBJ_VNUM_RNUM(nr)))
             continue;
@@ -2808,7 +2895,7 @@ int vnum_object_magazines(char *searchname, struct char_data * ch)
           continue;
         if (GET_OBJ_VAL(&obj_proto[nr],1) > type && type != 38)
           continue;
-        if (IS_OBJ_STAT(&obj_proto[nr], ITEM_GODONLY))
+        if (IS_OBJ_STAT(&obj_proto[nr], ITEM_EXTRA_STAFF_ONLY))
           continue;
         if (vnum_from_non_connected_zone(OBJ_VNUM_RNUM(nr)))
           continue;
@@ -2881,7 +2968,7 @@ int vnum_object_affectloc(int type, struct char_data * ch)
   for( mod = 11; mod >= -11; mod -- )
     for (nr = 0; nr <= top_of_objt; nr++)
     {
-      if (IS_OBJ_STAT(&obj_proto[nr], ITEM_GODONLY))
+      if (IS_OBJ_STAT(&obj_proto[nr], ITEM_EXTRA_STAFF_ONLY))
         continue;
       if (vnum_from_non_connected_zone(OBJ_VNUM_RNUM(nr)))
         continue;
@@ -2917,7 +3004,7 @@ int vnum_object_affects(struct char_data *ch) {
   buf[0] = 0;
 
   for (nr = 0; nr <= top_of_objt; nr++) {
-    if (IS_OBJ_STAT(&obj_proto[nr], ITEM_GODONLY))
+    if (IS_OBJ_STAT(&obj_proto[nr], ITEM_EXTRA_STAFF_ONLY))
       continue;
     if (vnum_from_non_connected_zone(OBJ_VNUM_RNUM(nr)))
       continue;
@@ -3073,6 +3160,27 @@ struct char_data *read_mobile(int nr, int type)
   set_new_mobile_unique_id(mob);
 
   set_natural_vision_for_race(mob);
+
+  // Copy off their cyberware from prototype.
+  mob->cyberware = NULL;
+  for (struct obj_data *obj = mob_proto[i].cyberware; obj; obj = obj->next_content) {
+    obj_to_cyberware(read_object(GET_OBJ_VNUM(obj), VIRTUAL), mob);
+  }
+
+  // Same for bioware.
+  mob->bioware = NULL;
+  for (struct obj_data *obj = mob_proto[i].bioware; obj; obj = obj->next_content) {
+    obj_to_bioware(read_object(GET_OBJ_VNUM(obj), VIRTUAL), mob);
+  }
+
+  // And then equipment.
+  struct obj_data *eq;
+  for (int wearloc = 0; wearloc < NUM_WEARS; wearloc++) {
+    GET_EQ(mob, wearloc) = NULL;
+    if ((eq = GET_EQ(&mob_proto[i], wearloc))) {
+      equip_char(mob, read_object(GET_OBJ_VNUM(eq), VIRTUAL), wearloc);
+    }
+  }
 
   affect_total(mob);
 
@@ -3600,7 +3708,7 @@ void reset_zone(int zone, int reboot)
           }
         }
         if (!vnum_from_non_connected_zone(GET_OBJ_VNUM(obj)) && !zone_table[zone].connected)
-          GET_OBJ_EXTRA(obj).SetBit(ITEM_VOLATILE);
+          GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_VOLATILE);
         last_cmd = 1;
       } else
         last_cmd = 0;
@@ -3616,7 +3724,7 @@ void reset_zone(int zone, int reboot)
         obj = read_object(ZCMD.arg1, REAL);
         obj_to_char(obj, mob);
         if (!vnum_from_non_connected_zone(GET_OBJ_VNUM(obj)) && !zone_table[zone].connected)
-          GET_OBJ_EXTRA(obj).SetBit(ITEM_VOLATILE);
+          GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_VOLATILE);
         last_cmd = 1;
       } else
         last_cmd = 0;
@@ -3641,7 +3749,7 @@ void reset_zone(int zone, int reboot)
             last_cmd = 0;
           } else {
             if (!vnum_from_non_connected_zone(GET_OBJ_VNUM(obj)) && !zone_table[zone].connected)
-              GET_OBJ_EXTRA(obj).SetBit(ITEM_VOLATILE);
+              GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_VOLATILE);
             last_cmd = 1;
 
             // If it's a weapon, reload it.
@@ -3683,7 +3791,7 @@ void reset_zone(int zone, int reboot)
         obj = read_object(ZCMD.arg1, REAL);
         obj_to_char(obj, mob);
         if (!vnum_from_non_connected_zone(GET_OBJ_VNUM(obj)) && !zone_table[zone].connected)
-          GET_OBJ_EXTRA(obj).SetBit(ITEM_VOLATILE);
+          GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_VOLATILE);
         last_cmd = 1;
       }
       break;
@@ -5739,7 +5847,7 @@ void price_cyber(struct obj_data *obj)
       GET_OBJ_AVAILTN(obj) = 6;
       GET_OBJ_AVAILDAY(obj) = 4;
       GET_CYBERWARE_ESSENCE_COST(obj) = 75;
-      obj->obj_flags.extra_flags.SetBit(ITEM_MAGIC_INCOMPATIBLE);
+      obj->obj_flags.extra_flags.SetBit(ITEM_EXTRA_MAGIC_INCOMPATIBLE);
 
       if (IS_SET(GET_CYBERWARE_FLAGS(obj), SKULL_MOD_OBVIOUS)) {
         GET_OBJ_COST(obj) = 35000;
@@ -5761,7 +5869,7 @@ void price_cyber(struct obj_data *obj)
       GET_OBJ_AVAILTN(obj) = 6;
       GET_OBJ_AVAILDAY(obj) = 4;
       GET_CYBERWARE_ESSENCE_COST(obj) = 150;
-      obj->obj_flags.extra_flags.SetBit(ITEM_MAGIC_INCOMPATIBLE);
+      obj->obj_flags.extra_flags.SetBit(ITEM_EXTRA_MAGIC_INCOMPATIBLE);
 
       if (IS_SET(GET_CYBERWARE_FLAGS(obj), TORSO_MOD_OBVIOUS)) {
         GET_OBJ_COST(obj) = 90000;
@@ -5793,7 +5901,7 @@ void price_cyber(struct obj_data *obj)
       GET_OBJ_AVAILTN(obj) = 4;
       GET_OBJ_AVAILDAY(obj) = 4;
       GET_CYBERWARE_ESSENCE_COST(obj) = 200;
-      obj->obj_flags.extra_flags.SetBit(ITEM_MAGIC_INCOMPATIBLE);
+      obj->obj_flags.extra_flags.SetBit(ITEM_EXTRA_MAGIC_INCOMPATIBLE);
 
       if (IS_SET(GET_CYBERWARE_FLAGS(obj), LEGS_MOD_OBVIOUS)) {
         GET_OBJ_COST(obj) = 150000;
@@ -5848,7 +5956,7 @@ void price_cyber(struct obj_data *obj)
       GET_OBJ_AVAILTN(obj) = 4;
       GET_OBJ_AVAILDAY(obj) = 4;
       GET_CYBERWARE_ESSENCE_COST(obj) = 200;
-      obj->obj_flags.extra_flags.SetBit(ITEM_MAGIC_INCOMPATIBLE);
+      obj->obj_flags.extra_flags.SetBit(ITEM_EXTRA_MAGIC_INCOMPATIBLE);
 
       if (IS_SET(GET_CYBERWARE_FLAGS(obj), ARMS_MOD_OBVIOUS)) {
         GET_OBJ_COST(obj) = 75000;
@@ -6152,6 +6260,10 @@ void price_cyber(struct obj_data *obj)
       GET_CYBERWARE_ESSENCE_COST(obj) = 130 + (GET_OBJ_VAL(obj, 1) * 20);
       GET_OBJ_AVAILTN(obj) = 12;
       GET_OBJ_AVAILDAY(obj) = 60;
+#ifdef DIES_IRAE
+      // Houserule: Tactical computers are mundane-only items.
+      obj->obj_flags.extra_flags.SetBit(ITEM_EXTRA_MAGIC_INCOMPATIBLE);
+#endif
       switch (GET_OBJ_VAL(obj, 1)) {
         case 1:
           GET_OBJ_COST(obj) = 400000;
@@ -6384,7 +6496,7 @@ void price_bio(struct obj_data *obj)
       GET_OBJ_AVAILTN(obj) = 10;
       GET_OBJ_AVAILDAY(obj) = 12;
       break;
-    case BIO_TRAUMADAMPNER:
+    case BIO_TRAUMADAMPER:
       GET_OBJ_COST(obj) = 40000;
       GET_OBJ_VAL(obj, 4) = 40;
       GET_OBJ_AVAILTN(obj) = 6;
@@ -6397,5 +6509,16 @@ void price_bio(struct obj_data *obj)
     GET_OBJ_VAL(obj, 4) = (int) round(GET_OBJ_VAL(obj, 4) * .75);
     GET_OBJ_AVAILTN(obj) += 2;
     GET_OBJ_AVAILDAY(obj) *= 5;
+  }
+}
+
+void set_elemental_races() {
+  for (int idx = 0; idx < NUM_ELEMENTS; idx++) {
+    rnum_t rnum = real_mobile(elements[idx].vnum);
+    if (rnum < 0) {
+      log_vfprintf("ERROR: We require that mob %ld exists as an elemental, but it's not there!", elements[idx].vnum);
+      exit(ERROR_MISSING_ELEMENTALS);
+    }
+    GET_RACE(&mob_proto[rnum]) = RACE_PC_CONJURED_ELEMENTAL;
   }
 }

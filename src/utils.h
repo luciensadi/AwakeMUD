@@ -53,11 +53,11 @@ int     stage(int successes, int wound);
 bool    access_level(struct char_data *ch, int level);
 char *  buf_mod(char *buf, int buf_len, const char *name, int bonus);
 //char *  buf_roll(char *buf, const char *name, int bonus);
-int     modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int current_visibility_penalty);
+int     modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int current_visibility_penalty, bool skill_is_magic);
 int     modify_target_rbuf(struct char_data *ch, char *rbuf, int rbuf_len);
 int     modify_target(struct char_data *ch);
 int     damage_modifier(struct char_data *ch, char *rbuf, int rbuf_len);
-int     sustain_modifier(struct char_data *ch, char *rbuf, size_t rbuf_len);
+int     sustain_modifier(struct char_data *ch, char *rbuf, size_t rbuf_len, bool minus_one_sustained=0);
 char *  capitalize(const char *source);
 char *  decapitalize_a_an(const char *source);
 char *  string_to_uppercase(const char *source);
@@ -116,6 +116,7 @@ char *  get_printable_mob_unique_id(struct char_data *ch);
 bool    mob_unique_id_matches(mob_unique_id_t id1, mob_unique_id_t id2);
 void    set_new_mobile_unique_id(struct char_data *ch);
 int     return_general(int skill_num);
+bool    perform_knockdown_test(struct char_data *ch, int initial_tn, int successes_to_avoid_knockback=0);
 
 // Skill-related.
 char *how_good(int skill, int rank);
@@ -275,7 +276,9 @@ void    update_pos(struct char_data *victim);
   PLR_FLAGS(ch->desc->original).IsSet(PLR_PROJECT) && \
   GET_MOB_VNUM(ch) == 22)
 #define IS_SPIRIT(ch) (IS_NPC(ch) && GET_RACE(ch) == RACE_SPIRIT)
-#define IS_ELEMENTAL(ch) (IS_NPC(ch) && GET_RACE(ch) == RACE_ELEMENTAL)
+#define IS_ANY_ELEMENTAL(ch) (IS_NPC(ch) && (GET_RACE(ch) == RACE_ELEMENTAL || GET_RACE(ch) == RACE_PC_CONJURED_ELEMENTAL))
+#define IS_WILD_ELEMENTAL(ch) (IS_NPC(ch) && GET_RACE(ch) == RACE_ELEMENTAL)
+#define IS_PC_CONJURED_ELEMENTAL(ch) (IS_NPC(ch) && GET_RACE(ch) == RACE_PC_CONJURED_ELEMENTAL)
 #define IS_ASTRAL(ch) (MOB_FLAGGED(ch, MOB_ASTRAL) || IS_PROJECT(ch))
 #define IS_DUAL(ch)   (MOB_FLAGGED(ch, MOB_DUAL_NATURE) || PLR_FLAGGED(ch, PLR_PERCEIVE) || access_level(ch, LVL_ADMIN))
 #define IS_SENATOR(ch) (access_level((ch), LVL_BUILDER))
@@ -424,10 +427,12 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define GET_TKE(ch)           ((ch)->points.tke)
 #define GET_SIG(ch)	      ((ch)->points.sig)
 
-#define GET_TOTALBAL(ch)      ((ch)->points.ballistic[1])
-#define GET_BALLISTIC(ch)     ((ch)->points.ballistic[0])
-#define GET_TOTALIMP(ch)      ((ch)->points.impact[1])
-#define GET_IMPACT(ch)          ((ch)->points.impact[0])
+#define GET_INNATE_BALLISTIC(ch)       ((ch)->points.ballistic[0])
+#define GET_TOTALBAL(ch)               ((ch)->points.ballistic[1])
+#define GET_BALLISTIC(ch)              ((ch)->points.ballistic[2])
+#define GET_INNATE_IMPACT(ch)          ((ch)->points.impact[0])
+#define GET_TOTALIMP(ch)               ((ch)->points.impact[1])
+#define GET_IMPACT(ch)                 ((ch)->points.impact[2])
 int get_armor_penalty_grade(struct char_data *ch);
 
 #define GET_PHYSICAL(ch)        ((ch)->points.physical)
@@ -435,6 +440,8 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define GET_GRADE(ch)   	((ch)->points.grade)
 #define GET_MENTAL(ch)          ((ch)->points.mental)
 #define GET_MAX_MENTAL(ch)      ((ch)->points.max_mental)
+
+#define SHOULD_SEE_TIPS(ch)     (PRF_FLAGGED((ch), PRF_SEE_TIPS))
 
 // Changed to a non-assignable expression to cause all code that sets this value to not compile.
 // This makes it easier to find outliers when looking to track nuyen inflow / outflows.
@@ -627,9 +634,13 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define GET_NUYEN_INCOME_THIS_PLAY_SESSION(ch, i)  (ch->desc->nuyen_income_this_play_session[i])
 /* descriptor-based utils ************************************************/
 
-#define WAIT_STATE(ch, cycle) { \
-        if ((ch)->desc) (ch)->desc->wait = (cycle); \
-        else if (IS_NPC(ch)) GET_MOB_WAIT(ch) = (cycle); }
+#define WAIT_STATE(ch, cycle) ({ \
+        if ((ch)->desc) { \
+          if (GET_LEVEL(ch) <= 1) { (ch)->desc->wait = (cycle); } else { send_to_char((ch), "^L(Skipping wait state of %d ticks: Staff.)^n\r\n", cycle); } \
+        } else if (IS_NPC(ch)) { \
+          GET_MOB_WAIT(ch) = (cycle); \
+        }  \
+      })
 
 #define CHECK_WAIT(ch)        (((ch)->desc) ? ((ch)->desc->wait > 1) : 0)
 #define STATE(d)                    ((d)->connected)
@@ -682,6 +693,7 @@ float get_proto_weight(struct obj_data *obj);
 
 #define IS_WEAPON(type) (((type) >= TYPE_HIT) && ((type) < TYPE_SUFFERING))
 #define IS_GUN(type) ((((type) >= WEAP_HOLDOUT) && ((type) < WEAP_GREN_LAUNCHER)) || (type) == WEAP_REVOLVER)
+#define WEAPON_IS_GUN(weapon) ((weapon) && IS_GUN(GET_WEAPON_ATTACK_TYPE((weapon))) && (GET_WEAPON_SKILL((weapon)) >= SKILL_PISTOLS && GET_WEAPON_SKILL((weapon)) <= SKILL_ASSAULT_CANNON))
 
 #define IS_MONOWHIP(obj) (GET_OBJ_RNUM((obj)) >= 0 && obj_index[GET_OBJ_RNUM((obj))].wfunc == monowhip)
 
@@ -719,7 +731,7 @@ bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struc
 
 #define CHAR_ONLY_SEES_VICT_WITH_ULTRASOUND(ch, vict) (ch != vict && (IS_AFFECTED((vict), AFF_IMP_INVIS) || IS_AFFECTED((vict), AFF_SPELLIMPINVIS)) && !(IS_DUAL((ch)) || IS_PROJECT((ch)) || IS_ASTRAL((ch))))
 
-#define INVIS_OK_OBJ(sub, obj) (!IS_OBJ_STAT((obj), ITEM_INVISIBLE) || \
+#define INVIS_OK_OBJ(sub, obj) (!IS_OBJ_STAT((obj), ITEM_EXTRA_INVISIBLE) || \
    IS_AFFECTED((sub), AFF_ULTRASOUND) || IS_ASTRAL(sub) || \
    IS_DUAL(sub) || HOLYLIGHT_OK(sub))
 
@@ -966,6 +978,11 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 #define GET_CYBERDECK_FREE_STORAGE(deck)          (GET_CYBERDECK_TOTAL_STORAGE((deck)) -GET_CYBERDECK_USED_STORAGE((deck)))
 
 // ITEM_PROGRAM convenience defines
+#define GET_PROGRAM_TYPE(prog)                    (GET_OBJ_VAL((prog), 0))
+#define GET_PROGRAM_RATING(prog)                  (GET_OBJ_VAL((prog), 1))
+#define GET_PROGRAM_SIZE(prog)                    (GET_OBJ_VAL((prog), 2))
+#define GET_PROGRAM_ATTACK_DAMAGE(prog)           (GET_OBJ_VAL((prog), 3))
+#define GET_PROGRAM_IS_DEFAULTED(prog)            (GET_OBJ_VAL((prog), 4))
 
 // ITEM_GUN_MAGAZINE convenience defines
 #define GET_MAGAZINE_BONDED_MAXAMMO(magazine)     (GET_OBJ_VAL((magazine), 0))
@@ -1052,8 +1069,6 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 #define GET_HOLSTER_READY_STATUS(holster)                   (GET_OBJ_VAL((holster), 3))
 
 // ITEM_DESIGN convenience defines
-
-// ITEM_QUEST convenience defines
 
 // ITEM_GUN_AMMO convenience defines
 #define GET_AMMOBOX_QUANTITY(box)                           (GET_OBJ_VAL((box), 0))

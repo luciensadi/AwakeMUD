@@ -748,6 +748,7 @@ void iedit_disp_val4_menu(struct descriptor_data * d)
           break;
         case CYB_HANDBLADE:
         case CYB_HANDSPUR:
+        case CYB_CLIMBINGCLAWS:
           send_to_char("Retractable? (1 for Yes, 0 for No): ", CH);
           break;
         case CYB_BONELACING:
@@ -1229,14 +1230,14 @@ void iedit_disp_extra_menu(struct descriptor_data * d)
   int             counter;
 
   CLS(CH);
-  for (counter = 0; counter < ITEM_EXTRA_MAX; counter += 2)
+  for (counter = 0; counter < MAX_ITEM_EXTRA; counter += 2)
     send_to_char(CH, "%2d) %-20s %2d) %-20s\r\n",
                  counter + 1, extra_bits[counter],
-                 counter + 2, counter + 1 < ITEM_EXTRA_MAX ?
+                 counter + 2, counter + 1 < MAX_ITEM_EXTRA ?
                  extra_bits[counter + 1] : "");
 
   GET_OBJ_EXTRA(d->edit_obj).PrintBits(buf1, MAX_STRING_LENGTH,
-                                       extra_bits, ITEM_EXTRA_MAX);
+                                       extra_bits, MAX_ITEM_EXTRA);
   send_to_char(CH, "Object flags: %s%s%s\r\n"
                "Enter object extra flag, 0 to quit: ",
                CCCYN(CH, C_CMP), buf1, CCNRM(CH, C_CMP));
@@ -1314,7 +1315,7 @@ void iedit_disp_legality_menu(struct descriptor_data *d) {
 void iedit_disp_menu(struct descriptor_data * d)
 {
   CLS(CH);
-  if (IS_OBJ_STAT(OBJ, ITEM_DONT_TOUCH)) {
+  if (IS_OBJ_STAT(OBJ, ITEM_EXTRA_DONT_TOUCH)) {
     send_to_char(CH, "^RThis is a templated object. You are unable to edit it while the game is running.\r\n");
   }
   send_to_char(CH, "Item number: ^c%d^n\r\n", d->edit_number);
@@ -1327,7 +1328,7 @@ void iedit_disp_menu(struct descriptor_data * d)
   sprinttype(GET_OBJ_TYPE(d->edit_obj), item_types, buf1, sizeof(buf1));
   send_to_char(CH, "5) Item type: ^c%s^n\r\n", buf1);
   GET_OBJ_EXTRA(d->edit_obj).PrintBits(buf1, MAX_STRING_LENGTH,
-                                       extra_bits, ITEM_EXTRA_MAX);
+                                       extra_bits, MAX_ITEM_EXTRA);
   send_to_char(CH, "6) Item extra flags: ^c%s^n\r\n", buf1);
   OBJ->obj_flags.bitvector.PrintBits(buf1, MAX_STRING_LENGTH,
                                      affected_bits, AFF_MAX);
@@ -1371,13 +1372,13 @@ void iedit_disp_menu(struct descriptor_data * d)
                "i) Item extra descriptions:\r\n"
                "j) Source book: ^c%s^n\r\n"
                "k) Street index: ^c%.2f\r\n^n",  d->edit_obj->source_info ? d->edit_obj->source_info : "<none>", GET_OBJ_STREET_INDEX(d->edit_obj));
-  if (!IS_OBJ_STAT(OBJ, ITEM_DONT_TOUCH)) {
+  if (!IS_OBJ_STAT(OBJ, ITEM_EXTRA_DONT_TOUCH)) {
     send_to_char(CH, "q) Quit and save\r\n");
   }
   send_to_char(CH, "x) Exit and abort\r\n"
                "Enter your choice:\r\n");
   d->edit_mode = IEDIT_MAIN_MENU;
-  if (IS_OBJ_STAT(OBJ, ITEM_DONT_TOUCH)) {
+  if (IS_OBJ_STAT(OBJ, ITEM_EXTRA_DONT_TOUCH)) {
     send_to_char(CH, "^RThis is a templated object. You are unable to edit it while the game is running.\r\n");
   }
 }
@@ -1426,7 +1427,11 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
         case 'y':
         case 'Y': {
           /* write to internal tables */
+#ifdef ONLY_LOG_BUILD_ACTIONS_ON_CONNECTED_ZONES
           if (!vnum_from_non_connected_zone(d->edit_number)) {
+#else
+          {
+#endif
             snprintf(buf, sizeof(buf),"%s wrote new obj #%ld",
                     GET_CHAR_NAME(d->character), d->edit_number);
             mudlog(buf, d->character, LOG_WIZLOG, TRUE);
@@ -1623,7 +1628,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
       switch (*arg) {
         case 'q':
         case 'Q':
-          if (IS_OBJ_STAT(OBJ, ITEM_DONT_TOUCH)) {
+          if (IS_OBJ_STAT(OBJ, ITEM_EXTRA_DONT_TOUCH)) {
             send_to_char("You can't save this object! Edit it directly in the world files.\r\n", d->character);
             break;
           }
@@ -1853,13 +1858,13 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
       break;
     case IEDIT_EXTRAS:
       number = atoi(arg);
-      if ((number < 0) || (number > ITEM_EXTRA_MAX)) {
+      if ((number < 0) || (number > MAX_ITEM_EXTRA)) {
         send_to_char("That's not a valid choice!\r\n", d->character);
         iedit_disp_extra_menu(d);
-      } else if (number == ITEM_DONT_TOUCH + 1) {
+      } else if (number == ITEM_EXTRA_DONT_TOUCH + 1) {
         send_to_char("You can't set the Don't Touch flag here. Do it in the world files.\r\n", d->character);
         iedit_disp_extra_menu(d);
-      } else if (number == ITEM_KEPT + 1) {
+      } else if (number == ITEM_EXTRA_KEPT + 1) {
         send_to_char("You can't set the Kept flag, it's only settable by code.\r\n", d->character);
         iedit_disp_extra_menu(d);
       } else {
@@ -2460,7 +2465,14 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
             case CYB_TOOTHCOMPARTMENT:
             case CYB_HANDBLADE:
             case CYB_HANDSPUR:
+            case CYB_CLIMBINGCLAWS:
             case CYB_REFLEXTRIGGER:
+              if (number < 0 || number > 1) {
+                send_to_char("Invalid Input! Enter 1 or 0: ", CH);
+                return;
+              }
+              TOGGLE_BIT(GET_CYBERWARE_FLAGS(OBJ), 1 << number);
+              break;
             case CYB_ARMS:
               if (number < 0 || number > NUM_ARMS_MODS) {
                 send_to_char("Invalid Input! Enter options (0 to quit): ", CH);
@@ -2702,24 +2714,21 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
       switch (GET_OBJ_TYPE(d->edit_obj)) {
         case ITEM_WEAPON:
           if (IS_GUN(GET_WEAPON_ATTACK_TYPE(OBJ))) {
-            if (!access_level(CH, LVL_ADMIN)) {
-              struct obj_data *you_know_this_would_leak_memory_right = NULL;
-              if (!(you_know_this_would_leak_memory_right = read_object(number, VIRTUAL))) {
-                send_to_char("Invalid vnum.\r\n", CH);
-                iedit_disp_val8_menu(d);
-                return;
-              } else {
-                extract_obj(you_know_this_would_leak_memory_right);
-              }
-            }
-            if (number > 0) {
-              modified = FALSE;
-              for (j = 0; (j < MAX_OBJ_AFFECT && !modified); j++)
+            struct obj_data *accessory = read_object(number, VIRTUAL);
+            if (!accessory) {
+              send_to_char("Invalid vnum.\r\n", CH);
+              iedit_disp_val8_menu(d);
+              return;
+            } else {
+              // Cascade affects (take the first one and glue it to the weapon).
+              for (j = 0; (j < MAX_OBJ_AFFECT && !modified); j++) {
                 if (!(OBJ->affected[j].modifier)) {
-                  OBJ->affected[j].location = read_object(number, VIRTUAL)->affected[0].location;
-                  OBJ->affected[j].modifier = read_object(number, VIRTUAL)->affected[0].modifier;
-                  modified = TRUE;
+                  OBJ->affected[j].location = accessory->affected[0].location;
+                  OBJ->affected[j].modifier = accessory->affected[0].modifier;
+                  break;
                 }
+              }
+              extract_obj(accessory);
             }
           } else {
             if (number < 0 || number > 4) {
@@ -2740,24 +2749,23 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
       number = atoi(arg);
       switch (GET_OBJ_TYPE(d->edit_obj)) {
         case ITEM_WEAPON:
-          if (!access_level(CH, LVL_ADMIN)) {
-            struct obj_data *you_know_this_would_leak_memory_right = NULL;
-            if (!(you_know_this_would_leak_memory_right = read_object(number, VIRTUAL))) {
+          {
+            struct obj_data *accessory = read_object(number, VIRTUAL);
+            if (!accessory) {
               send_to_char("Invalid vnum.\r\n", CH);
               iedit_disp_val9_menu(d);
               return;
             } else {
-              extract_obj(you_know_this_would_leak_memory_right);
-            }
-          }
-          if (number > 0) {
-            modified = FALSE;
-            for (j = 0; (j < MAX_OBJ_AFFECT && !modified); j++)
-              if (!(OBJ->affected[j].modifier)) {
-                OBJ->affected[j].location = read_object(number, VIRTUAL)->affected[0].location;
-                OBJ->affected[j].modifier = read_object(number, VIRTUAL)->affected[0].modifier;
-                modified = TRUE;
+              // Cascade affects (take the first one and glue it to the weapon).
+              for (j = 0; (j < MAX_OBJ_AFFECT && !modified); j++) {
+                if (!(OBJ->affected[j].modifier)) {
+                  OBJ->affected[j].location = accessory->affected[0].location;
+                  OBJ->affected[j].modifier = accessory->affected[0].modifier;
+                  break;
+                }
               }
+              extract_obj(accessory);
+            }
           }
           break;
         default:
@@ -2771,24 +2779,23 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
       number = atoi(arg);
       switch (GET_OBJ_TYPE(d->edit_obj)) {
         case ITEM_WEAPON:
-          if (!access_level(CH, LVL_ADMIN)) {
-            struct obj_data *you_know_this_would_leak_memory_right = NULL;
-            if (!(you_know_this_would_leak_memory_right = read_object(number, VIRTUAL))) {
+          {
+            struct obj_data *accessory = read_object(number, VIRTUAL);
+            if (!accessory) {
               send_to_char("Invalid vnum.\r\n", CH);
               iedit_disp_val10_menu(d);
               return;
             } else {
-              extract_obj(you_know_this_would_leak_memory_right);
-            }
-          }
-          if (number > 0) {
-            modified = FALSE;
-            for (j = 0; (j < MAX_OBJ_AFFECT && !modified); j++)
-              if (!(OBJ->affected[j].modifier)) {
-                OBJ->affected[j].location = read_object(number, VIRTUAL)->affected[0].location;
-                OBJ->affected[j].modifier = read_object(number, VIRTUAL)->affected[0].modifier;
-                modified = TRUE;
+              // Cascade affects (take the first one and glue it to the weapon).
+              for (j = 0; (j < MAX_OBJ_AFFECT && !modified); j++) {
+                if (!(OBJ->affected[j].modifier)) {
+                  OBJ->affected[j].location = accessory->affected[0].location;
+                  OBJ->affected[j].modifier = accessory->affected[0].modifier;
+                  break;
+                }
               }
+              extract_obj(accessory);
+            }
           }
           break;
         default:

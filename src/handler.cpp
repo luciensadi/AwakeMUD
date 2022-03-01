@@ -447,6 +447,24 @@ void spell_modify(struct char_data *ch, struct sustain_data *sust, bool add)
       mod *= MIN(sust->force, sust->success / 2);
       GET_COMBAT(ch) += mod;
       break;
+    case SPELL_NIGHTVISION:
+      if (mod == 1)
+        AFF_FLAGS(ch).SetBit(AFF_LOW_LIGHT);
+      else
+        AFF_FLAGS(ch).RemoveBit(AFF_LOW_LIGHT);
+      break;
+    case SPELL_INFRAVISION:
+      if (mod == 1)
+        AFF_FLAGS(ch).SetBit(AFF_INFRAVISION);
+      else
+        AFF_FLAGS(ch).RemoveBit(AFF_INFRAVISION);
+      break;
+    case SPELL_LEVITATE:
+      if (mod == 1)
+        AFF_FLAGS(ch).SetBit(AFF_LEVITATE);
+      else
+        AFF_FLAGS(ch).RemoveBit(AFF_LEVITATE);
+      break;
   }
 }
 
@@ -563,14 +581,16 @@ void affect_total(struct char_data * ch)
 
   // Reset armor-related stats.
   {
-    if (IS_SPIRIT(ch) || IS_ELEMENTAL(ch)) {
-      GET_IMPACT(ch) = GET_BALLISTIC(ch) = GET_SPARE1(ch) * 2;
+    if (IS_SPIRIT(ch) || IS_ANY_ELEMENTAL(ch)) {
+      GET_INNATE_IMPACT(ch) = GET_INNATE_BALLISTIC(ch) = GET_SPARE1(ch) * 2;
     } else if (ch_is_npc) {
-      GET_BALLISTIC(ch) = mob_proto[GET_MOB_RNUM(ch)].points.ballistic[0];
-      GET_IMPACT(ch) = mob_proto[GET_MOB_RNUM(ch)].points.impact[0];
+      GET_INNATE_BALLISTIC(ch) = GET_INNATE_BALLISTIC(&mob_proto[GET_MOB_RNUM(ch)]);
+      GET_INNATE_IMPACT(ch) = GET_INNATE_BALLISTIC(&mob_proto[GET_MOB_RNUM(ch)]);
     } else {
-      GET_BALLISTIC(ch) = GET_IMPACT(ch) = 0;
+      GET_INNATE_BALLISTIC(ch) = GET_INNATE_IMPACT(ch) = 0;
     }
+    GET_BALLISTIC(ch) = GET_INNATE_BALLISTIC(ch);
+    GET_IMPACT(ch) = GET_INNATE_IMPACT(ch);
 
     GET_TOTALBAL(ch) = GET_TOTALIMP(ch) = 0;
   }
@@ -640,7 +660,7 @@ void affect_total(struct char_data * ch)
             totalimp += imp;
 
             // If it's formfit, track it there for later math.
-            if (IS_OBJ_STAT(worn_item, ITEM_FORMFIT)) {
+            if (IS_OBJ_STAT(worn_item, ITEM_EXTRA_FORMFIT)) {
               formfitbal += bal;
               formfitimp += imp;
             }
@@ -909,7 +929,7 @@ void affect_total(struct char_data * ch)
   }
 
   // Set up magic pool info correctly.
-  if (ch_is_npc && (IS_SPIRIT(ch) || IS_ELEMENTAL(ch))) {
+  if (ch_is_npc && (IS_SPIRIT(ch) || IS_ANY_ELEMENTAL(ch))) {
     GET_ASTRAL(ch) = 1.5 * GET_LEVEL(ch);
   } else if ((ch_is_npc && GET_MAG(ch) > 0) || (GET_TRADITION(ch) == TRAD_SHAMANIC || GET_TRADITION(ch) == TRAD_HERMETIC)) {
     GET_ASTRAL(ch) += GET_GRADE(ch);
@@ -1025,11 +1045,11 @@ bool affected_by_spell(struct char_data * ch, int type)
   return FALSE;
 }
 
-bool affected_by_power(struct char_data *ch, int type)
+int affected_by_power(struct char_data *ch, int type)
 {
   for (struct spirit_sustained *sust = SPIRIT_SUST(ch); sust ; sust = sust->next)
     if (sust->type == type)
-      return TRUE;
+      return MAX(1, sust->force); // MAX here guarantees this matches the previous bool return.
   return FALSE;
 }
 void veh_from_room(struct veh_data * veh)
@@ -1267,7 +1287,7 @@ void char_to_room(struct char_data * ch, struct room_data *room)
   }
 }
 
-#define IS_INVIS(o) IS_OBJ_STAT(o, ITEM_INVISIBLE)
+#define IS_INVIS(o) IS_OBJ_STAT(o, ITEM_EXTRA_INVISIBLE)
 
 // Checks obj_to_x preconditions for common errors. Overwrites buf3. Returns TRUE for kosher, FALSE otherwise.
 bool check_obj_to_x_preconditions(struct obj_data * object, struct char_data *ch) {
@@ -1419,6 +1439,7 @@ void obj_to_cyberware(struct obj_data * object, struct char_data * ch)
   ch->cyberware = object;
   object->carried_by = ch;
   object->in_room = NULL;
+  object->in_veh = NULL;
   affect_total(ch);
 }
 
@@ -1446,6 +1467,7 @@ void obj_to_bioware(struct obj_data * object, struct char_data * ch)
   ch->bioware = object;
   object->carried_by = ch;
   object->in_room = NULL;
+  object->in_veh = NULL;
 
   if (GET_OBJ_VAL(object, 0) != BIO_ADRENALPUMP || GET_OBJ_VAL(object, 5) > 0)
     for (temp = 0; temp < MAX_OBJ_AFFECT; temp++)
@@ -1464,9 +1486,14 @@ void obj_from_bioware(struct obj_data *bio)
 
   if (bio == NULL)
   {
-    log("SYSLOG: NULL object passed to obj_from_bioware");
+    mudlog("SYSERR: NULL bioware passed to obj_from_bioware!", NULL, LOG_SYSLOG, TRUE);
     return;
   }
+  if (!bio->carried_by) {
+    mudlog("SYSERR: Bioware with NO carried_by passed to obj_from_bioware!", NULL, LOG_SYSLOG, TRUE);
+    return;
+  }
+
   if (GET_OBJ_VAL(bio, 0) == BIO_ADRENALPUMP && GET_OBJ_VAL(bio, 5) < 1)
     for (i = 0; i < MAX_OBJ_AFFECT; i++)
       affect_modify(bio->carried_by,
@@ -1517,9 +1544,14 @@ void obj_from_cyberware(struct obj_data * cyber)
   struct obj_data *temp;
   if (cyber == NULL)
   {
-    log("SYSLOG: NULL object passed to obj_from_cyberware");
+    mudlog("SYSERR: NULL object passed to obj_from_cyberware!", NULL, LOG_SYSLOG, TRUE);
     return;
   }
+  if (!cyber->carried_by) {
+    mudlog("SYSERR: Cyberware with NO carried_by passed to obj_from_cyberware!", NULL, LOG_SYSLOG, TRUE);
+    return;
+  }
+
   REMOVE_FROM_LIST(cyber, cyber->carried_by->cyberware, next_content);
   cyber->carried_by = NULL;
   cyber->next_content = NULL;
@@ -1557,10 +1589,11 @@ bool equip_char(struct char_data * ch, struct obj_data * obj, int pos)
       mudlog("SYSERR: EQUIP: Obj is in_room when equip.", ch, LOG_SYSLOG, TRUE);
     return FALSE;
   }
-  if (IS_OBJ_STAT(obj, ITEM_GODONLY) && !IS_NPC(ch) && !IS_SENATOR(ch))
+  if (IS_OBJ_STAT(obj, ITEM_EXTRA_STAFF_ONLY) && !IS_NPC(ch) && !IS_SENATOR(ch))
   {
     act("You are zapped by $p and instantly let go of it.", FALSE, ch, obj, 0, TO_CHAR);
     act("$n is zapped by $p and instantly lets go of it.", FALSE, ch, obj, 0, TO_ROOM);
+    mudlog("WARNING: A staff-only item was obtained by a player.", ch, LOG_SYSLOG, TRUE);
     obj_to_room(obj, get_ch_in_room(ch));     /* changed to drop in inventory instead of
                                * ground */  // and now I've changed it back, who wants morts running around with god-only keys
     return FALSE;
@@ -2221,7 +2254,7 @@ void extract_obj(struct obj_data * obj)
   struct phone_data *phone, *temp;
   bool set = FALSE;
 
-  if (IS_OBJ_STAT(obj, ITEM_KEPT)) {
+  if (IS_OBJ_STAT(obj, ITEM_EXTRA_KEPT)) {
     const char *representation = generate_new_loggable_representation(obj);
     snprintf(buf, sizeof(buf), "extract_obj: Destroying KEPT item: %s", representation);
     delete [] representation;
@@ -2371,7 +2404,7 @@ void extract_char(struct char_data * ch)
     struct follow_type *nextfollow;
     for (struct follow_type *follow = ch->followers; follow; follow = nextfollow) {
       nextfollow = follow->next;
-      if (IS_SPIRIT(follow->follower) || IS_ELEMENTAL(follow->follower))
+      if (IS_SPIRIT(follow->follower) || IS_PC_CONJURED_ELEMENTAL(follow->follower))
         extract_char(follow->follower);
     }
   }
@@ -2403,8 +2436,8 @@ void extract_char(struct char_data * ch)
       GET_VEHCONTAINER_VEH_VNUM(obj) = GET_VEHCONTAINER_VEH_IDNUM(obj) = GET_VEHCONTAINER_VEH_OWNER(obj) = 0;
 
     // Un-keep items for the same reason.
-    if (IS_OBJ_STAT(obj, ITEM_KEPT))
-      GET_OBJ_EXTRA(obj).RemoveBit(ITEM_KEPT);
+    if (IS_OBJ_STAT(obj, ITEM_EXTRA_KEPT))
+      GET_OBJ_EXTRA(obj).RemoveBit(ITEM_EXTRA_KEPT);
 
     extract_obj(obj);
   }
@@ -2459,7 +2492,7 @@ void extract_char(struct char_data * ch)
   /* clear spirit sustained spells */
   {
     struct spirit_sustained *next;
-    if (IS_ELEMENTAL(ch) || IS_SPIRIT(ch)) {
+    if (IS_PC_CONJURED_ELEMENTAL(ch) || IS_SPIRIT(ch)) {
       for (struct spirit_sustained *ssust = SPIRIT_SUST(ch); ssust; ssust = next) {
         next = ssust->next;
         if (ssust->caster)
@@ -2476,7 +2509,7 @@ void extract_char(struct char_data * ch)
   }
 
   /* continue clearing spirit sustained spells */
-  if (IS_ELEMENTAL(ch) && GET_SUSTAINED_NUM(ch))
+  if (IS_PC_CONJURED_ELEMENTAL(ch) && GET_SUSTAINED_NUM(ch))
   {
     for (struct descriptor_data *d = descriptor_list; d; d = d->next)
       if (d->character && GET_IDNUM(d->character) == GET_ACTIVE(ch)) {
@@ -3108,7 +3141,7 @@ int veh_skill(struct char_data *ch, struct veh_data *veh)
       if (!skill)
         skill = (int)(GET_SKILL(ch, SKILL_PILOT_TRUCK) / 2);
       if (!skill)
-        skill = (int)(GET_SKILL(ch, SKILL_PILOT_CAR) / 2);
+        skill = (int)(GET_SKILL(ch, SKILL_PILOT_BIKE) / 2);
       break;
     case VEH_BIKE:
       skill = GET_SKILL(ch, SKILL_PILOT_BIKE);

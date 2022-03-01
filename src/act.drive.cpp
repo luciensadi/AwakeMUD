@@ -421,6 +421,7 @@ ACMD(do_ram)
 #ifdef IGNORING_IC_ALSO_IGNORES_COMBAT
     if (IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)) {
       send_to_char("You can't seem to find the target you're looking for.\r\n", ch);
+      log_attempt_to_bypass_ic_ignore(ch, vict, "do_ram");
       return;
     }
 
@@ -1179,6 +1180,11 @@ ACMD(do_driveby)
     send_to_char(ch, "You don't see anyone named '%s' here.\r\n", arg);
     return;
   }
+  if (IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)) {
+    send_to_char(ch, "You don't see anyone named '%s' here.\r\n", arg);
+    log_attempt_to_bypass_ic_ignore(ch, vict, "do_driveby");
+    return;
+  }
   if ((dir = search_block(buf2, lookdirs, FALSE)) == -1) {
     send_to_char("What direction?\r\n", ch);
     return;
@@ -1203,6 +1209,7 @@ ACMD(do_driveby)
       send_to_char(ch, "You have to be flagged PK to attack another player.\r\n");
       return;
     }
+
     send_to_char(ch, "You point %s towards %s and open fire!\r\n", GET_OBJ_NAME(wielded), GET_NAME(vict));
     snprintf(buf, sizeof(buf), "%s aims %s towards %s and opens fire!\r\n", GET_NAME(ch), GET_OBJ_NAME(wielded), GET_NAME(vict));
     send_to_veh(buf, ch->in_veh, ch, FALSE);
@@ -1498,6 +1505,7 @@ ACMD(do_target)
   else {
     if (IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)) {
       send_to_char(ch, "You don't see anything named '%s' here.\r\n", arg);
+      log_attempt_to_bypass_ic_ignore(ch, vict, "do_target");
       return;
     }
 

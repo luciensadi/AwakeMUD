@@ -97,9 +97,9 @@ void pedit_parse(struct descriptor_data *d, const char *arg)
       break;
     case 'q':
       send_to_char(CH, "Design saved!\r\n");
-      if (GET_OBJ_VAL(d->edit_obj, 0) == 5)
+      if (GET_PROGRAM_TYPE(d->edit_obj) == SOFT_ATTACK)
         GET_OBJ_VAL(d->edit_obj, 4) = GET_OBJ_VAL(d->edit_obj, 1) * attack_multiplier[GET_OBJ_VAL(d->edit_obj, 2)];
-      else if (GET_OBJ_VAL(d->edit_obj, 0) == SOFT_RESPONSE)
+      else if (GET_PROGRAM_TYPE(d->edit_obj) == SOFT_RESPONSE)
         GET_OBJ_VAL(d->edit_obj, 4) = GET_OBJ_VAL(d->edit_obj, 1) * (GET_OBJ_VAL(d->edit_obj, 1) * GET_OBJ_VAL(d->edit_obj, 1));
       else GET_OBJ_VAL(d->edit_obj, 4) = GET_OBJ_VAL(d->edit_obj, 1) * programs[GET_OBJ_VAL(d->edit_obj, 0)].multiplier;
       GET_OBJ_VAL(d->edit_obj, 6) = GET_OBJ_VAL(d->edit_obj, 1) * GET_OBJ_VAL(d->edit_obj, 4);
@@ -230,8 +230,8 @@ ACMD(do_design)
     return;
   }
   if (GET_POS(ch) > POS_SITTING) {
-    send_to_char(ch, "You have to be sitting to do that.\r\n");
-    return;
+    GET_POS(ch) = POS_SITTING;
+    send_to_char(ch, "You find a place to sit and work with your materials.\r\n");
   }
   if (IS_WORKING(ch)) {
     send_to_char(TOOBUSY, ch);
@@ -359,8 +359,8 @@ ACMD(do_program)
     return;
   }
   if (GET_POS(ch) > POS_SITTING) {
-    send_to_char(ch, "You have to be sitting to do that.\r\n");
-    return;
+    GET_POS(ch) = POS_SITTING;
+    send_to_char(ch, "You find a place to sit and work.\r\n");
   }
   if (IS_WORKING(ch)) {
     send_to_char(TOOBUSY, ch);
@@ -593,19 +593,33 @@ void update_buildrepair(void)
         if ((GET_OBJ_COST(PROG) -= CH->char_specials.conjure[1] * 1000) <= 0)
           extract_obj(PROG);
         STOP_WORKING(CH);
-        int skill = GET_SKILL(CH, SKILL_CONJURING), target = CH->char_specials.conjure[1];
+        int skill = GET_SKILL(CH, SKILL_CONJURING);
+        int target = CH->char_specials.conjure[1];
+
+        char rollbuf[5000];
+        snprintf(rollbuf, sizeof(rollbuf), "Conjure check: initial skill %d, initial target %d", skill, target);
+
         for (int i = 0; i < NUM_WEARS; i++)
           if (GET_EQ(CH, i) && GET_OBJ_TYPE(GET_EQ(CH, i)) == ITEM_FOCUS && GET_OBJ_VAL(GET_EQ(CH, i), 0) == FOCI_SPIRIT
               && GET_OBJ_VAL(GET_EQ(CH, i), 2) == GET_IDNUM(CH) && GET_OBJ_VAL(GET_EQ(CH, i), 3) == CH->char_specials.conjure[0]
               && GET_OBJ_VAL(GET_EQ(CH, i), 4)) {
+            snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), ", +%d skill from focus", GET_OBJ_VAL(GET_EQ(CH, i), 1));
             skill += GET_OBJ_VAL(GET_EQ(CH, i), 1);
             break;
           }
-        if (GET_BACKGROUND_AURA(CH->in_room) == AURA_POWERSITE)
+
+        if (GET_BACKGROUND_AURA(CH->in_room) == AURA_POWERSITE) {
           skill += GET_BACKGROUND_COUNT(CH->in_room);
-        else
+          snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), ", +%d skill from power site", GET_BACKGROUND_COUNT(CH->in_room));
+        } else {
           target += GET_BACKGROUND_COUNT(CH->in_room);
+          snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), ", +%d TN from background count", GET_BACKGROUND_COUNT(CH->in_room));
+        }
+
         int success = success_test(skill, target);
+        snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), ". Rolled %d successes.\r\n", success);
+        act(rollbuf, FALSE, CH, NULL, NULL, TO_ROLLS);
+
         if (success < 1) {
           send_to_char(CH, "You fail to conjure the %s elemental.\r\n", elements[CH->char_specials.conjure[0]].name);
           continue;

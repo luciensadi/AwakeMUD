@@ -485,6 +485,7 @@ const char *player_bits[] =
     "NEWBIE_MUTED",
     "IS_CYBERDOC",
     "PAID_FOR_CLOSECOMBAT",
+    "PAID_FOR_KIPUP",
     "\n"
   };
 
@@ -524,6 +525,7 @@ const char *action_bits[] =
     "!KILL",
     "TOTALINVIS",
     "INANIMATE",
+    "EMPLACED",
     "\n"
   };
 
@@ -593,6 +595,8 @@ struct preference_bit_struct preference_bits_v2[] = {
   { "No Void on Idle"      , FALSE, TRUE  },
   { "RadLog"               , TRUE , TRUE  },
   { "Anonymous on Where"   , FALSE, TRUE  },
+  { "IgnoreLog"            , TRUE , TRUE  },
+  { "Sees Newbie Tips"     , FALSE, TRUE  },
   { "\n"                   , 0    , 0     }
 };
 
@@ -659,6 +663,8 @@ const char *preference_bits[] =
     "NO_VOID",
     "RADLOG",
     "ANONYMOUS_ON_WHERE",
+    "IGNORELOG",
+    "TIPS",
     "\n"
   };
 
@@ -716,7 +722,8 @@ const char *affected_bits[] =
     "Surprised",
     "Ammo Building",
     "Engaging in Close Combat",
-    "Tries for Close Combat"
+    "Tries for Close Combat",
+    "Levitate"
   };
 
 /* CON_x */
@@ -992,6 +999,9 @@ const char *extra_bits[] =
     "DONT_TOUCH",
     "MAGIC_INCOMPATIBLE",
     "KEPT",
+    "AIR_FILTRATION",
+    "NBC_RESIST",
+    "NBC_IMMUNE",
     "\n"
   };
 
@@ -1026,6 +1036,9 @@ const char *pc_readable_extra_bits[] =
     "Derived from Template Item",
     "Incompatible with Magic",
     "Kept",
+    "Filters Air (NERP)",
+    "Resists Bio/Chemical Weapons (NERP)",
+    "Immune to Bio/Chemical Weapons (NERP)",
     "\n"
   };
 
@@ -1163,6 +1176,7 @@ const char *log_types[] =
     "FUCKUPLOG",
     "ECONLOG",
     "RADLOG",
+    "IGNORELOG",
     "\n"
   };
 
@@ -1552,6 +1566,17 @@ const char *weekdays[7] =
     "Fri",
     "Sat",
     "Sun"
+};
+
+const char *weekdays_tm_aligned[7] =
+  {
+    "Sun",
+    "Mon",
+    "Tue",
+    "Wed",
+    "Thu",
+    "Fri",
+    "Sat"
   };
 
 const char *month_name[12] =
@@ -1951,7 +1976,10 @@ struct spell_types spells[] =
     { "Thunderbolt", TRUE, MANIPULATION, SINGLE, -1, INSTANT, 0, PACK_VARIABLE_DRAIN_DAMAGE(1) },
     { "Thunderclap", TRUE, MANIPULATION, AREA, -1, INSTANT, 1, PACK_VARIABLE_DRAIN_DAMAGE(2) },
     { "Waterbolt", TRUE, MANIPULATION, SINGLE, -1, INSTANT, 0, PACK_VARIABLE_DRAIN_DAMAGE(1) }, // these were both VDD+0, but I can't find them in the book, so I'm matching them to the other elemental manips. -LS
-    { "Splash", TRUE, MANIPULATION, AREA, -1, INSTANT, 0, PACK_VARIABLE_DRAIN_DAMAGE(2) }
+    { "Splash", TRUE, MANIPULATION, AREA, -1, INSTANT, 0, PACK_VARIABLE_DRAIN_DAMAGE(2) },
+    { "Nightvision", TRUE, DETECTION, SINGLE, -1, SUSTAINED, 1, MODERATE },
+    { "Infravision", TRUE, DETECTION, SINGLE, -1, SUSTAINED, 1, MODERATE },
+    { "Levitate", TRUE, MANIPULATION, SINGLE, -1, SUSTAINED, 2, MODERATE }
   };
 
 const char *totem_types[] =
@@ -2675,6 +2703,7 @@ const char *pc_race_types[] =
     "Dragon",
     "Elemental",
     "Spirit",
+    "Conjured Elemental",
     "\n"
   };
 
@@ -2705,7 +2734,8 @@ struct nuyen_faucet_or_sink nuyen_faucets_and_sinks[NUM_OF_TRACKED_NUYEN_INCOME_
     {"Taxis", NI_IS_SINK},
     {"Playergroups", NI_IS_SINK},
     {"Trade Command (n->k)", NI_IS_SINK},
-    {"Credstick Cracker", NI_IS_SINK}
+    {"Credstick Cracker", NI_IS_SINK},
+    {"Death Penalty", NI_IS_SINK}
   };
 
 const char *ignored_bits_in_english[] =

@@ -396,7 +396,7 @@ void House_save(struct house_control_rec *house, const char *file_name, long rnu
     }
 
     prototype = &obj_proto[real_obj];
-    if (!IS_OBJ_STAT(obj, ITEM_NORENT)) {
+    if (!IS_OBJ_STAT(obj, ITEM_EXTRA_NORENT)) {
       obj_string_buf << "\t\tVnum:\t" << GET_OBJ_VNUM(obj) << "\n";
       obj_string_buf << "\t\tInside:\t" << level << "\n";
       if (GET_OBJ_TYPE(obj) == ITEM_PHONE) {
@@ -424,7 +424,7 @@ void House_save(struct house_control_rec *house, const char *file_name, long rnu
       obj_strings.push_back(obj_string_buf.str());
       obj_string_buf.str(std::string());
 
-      if (obj->contains && !IS_OBJ_STAT(obj, ITEM_NORENT) && GET_OBJ_TYPE(obj) != ITEM_PART) {
+      if (obj->contains && !IS_OBJ_STAT(obj, ITEM_EXTRA_NORENT) && GET_OBJ_TYPE(obj) != ITEM_PART) {
         obj = obj->contains;
         level++;
 
@@ -1351,7 +1351,7 @@ bool House_can_enter(struct char_data *ch, vnum_t house)
     return FALSE;
 
   // NPC, but not a spirit or elemental? No entry.
-  if (IS_NPC(ch) && !(IS_SPIRIT(ch) || IS_ELEMENTAL(ch)))
+  if (IS_NPC(ch) && !(IS_SPIRIT(ch) || IS_PC_CONJURED_ELEMENTAL(ch)))
     return FALSE;
 
   // Admins, astral projections, and owners can enter any room.
@@ -1362,6 +1362,13 @@ bool House_can_enter(struct char_data *ch, vnum_t house)
   for (j = 0; j < MAX_GUESTS; j++)
     if (GET_IDNUM(ch) == room->guests[j])
       return TRUE;
+
+#ifdef IS_BUILDPORT
+  if (GET_LEVEL(ch) >= LVL_BUILDER) {
+    send_to_char("(OOC: Entry allowed via staff override.)\r\n", ch);
+    return TRUE;
+  }
+#endif
 
   return FALSE;
 }

@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sodium.h> // for crypto_pwhash_STRBYTES
+#include <unordered_map>
 
 #include "types.h"
 #include "awake.h"
@@ -426,8 +427,8 @@ struct char_point_data
   sh_int physical;
   sh_int max_physical; /* Max hit for PC/NPC                      */
 
-  sh_int ballistic[2];    /* Ballistic armor class for bullets and such */
-  sh_int impact[2];       /* Impact armor class for clubs and such   */
+  sh_int ballistic[3];    /* Ballistic armor class for bullets and such */
+  sh_int impact[3];       /* Impact armor class for clubs and such   */
   long nuyen;           /* Money carried */
   long bank;           /* Nuyen the char has in a bank account */
   int karma;            /* The experience of the player */
@@ -479,7 +480,7 @@ struct char_special_data
   struct obj_data *programming; /* Program char is currently designing/programming */
   int conjure[4];
   int num_spirits;
-  long idnum;
+  idnum_t idnum;
   bool nervestrike;
   int tempquiloss;
   int cost_breakup;
@@ -498,7 +499,7 @@ struct char_special_data
   sh_int last_healed;
   int timer;                  /* Timer for update                     */
   int last_timer;             /* Last timer, which is restored on actions that don't block idle nuyen rewards */
-  int last_emote;             /* Set whenever you emote. Used to check that people in social rooms aren't just hanging out idle and ignoring each other. */
+  int last_social_action;     /* Set whenever you emote or speak. Used to check that people in social rooms aren't just hanging out idle and ignoring each other. */
   int actions;
   int coord[3];
 
@@ -569,7 +570,7 @@ struct player_special_data
 
   struct alias *aliases;       /* Character's aliases                  */
   struct remem *remem;         /* Character's Remembers          */
-  long last_tell;              /* idnum of last tell from              */
+  idnum_t last_tell;              /* idnum of last tell from              */
   sh_int  questnum;
   sh_int *obj_complete;
   sh_int *mob_complete;
@@ -702,7 +703,7 @@ struct veh_data
   bool sub;
 
   long idnum;
-  long owner;
+  idnum_t owner;
   long spare, spare2;
   bool locked;
   struct room_data *dest;
@@ -789,6 +790,10 @@ struct char_data
 
   int congregation_bonus_pool;         /* Bonuses accrued from spending time in a congregation room */
 
+  // See perception_tests.cpp for details.
+  std::unordered_map<idnum_t, bool> *pc_perception_test_results;
+  std::unordered_map<idnum_t, bool> *mob_perception_test_results;
+
   bool alias_dirty_bit;
 
   /* Named after 'magic bullet pants', the 'technology' in FPS games that allows you to never have to worry about which mag has how much ammo in it. */
@@ -801,7 +806,7 @@ struct char_data
       ssust(NULL), carrying(NULL), desc(NULL), cyberware(NULL), bioware(NULL), next_in_room(NULL), next(NULL),
       next_fighting(NULL), next_in_zone(NULL), next_in_veh(NULL), next_watching(NULL), followers(NULL),
       master(NULL), spells(NULL), ignore_data(NULL), pgroup(NULL), pgroup_invitations(NULL), congregation_bonus_pool(0),
-      alias_dirty_bit(FALSE)
+      pc_perception_test_results(NULL), mob_perception_test_results(NULL), alias_dirty_bit(FALSE)
   {
     for (int i = 0; i < NUM_WEARS; i++) {
       equipment[i] = NULL;
@@ -1011,7 +1016,7 @@ struct index_data
 
 struct remem
 {
-  long idnum;
+  idnum_t idnum;
   char *mem;
   struct remem *next;
 
@@ -1098,7 +1103,7 @@ struct sustain_data {
   unsigned char subtype;
   unsigned char force;
   unsigned char success;
-  int idnum;
+  int idnum; // This is distinct from caster idnum etc, so does not necessarily need to be idnum_t.
   int time;
   unsigned char drain;
   bool caster;
@@ -1125,8 +1130,9 @@ struct spirit_sustained
   bool caster;
   struct char_data *target;
   struct spirit_sustained *next;
+  int force;
   spirit_sustained() :
-    target(NULL), next(NULL)
+    type(0), caster(FALSE), target(NULL), next(NULL), force(0)
   {}
 };
 
@@ -1213,10 +1219,7 @@ struct combat_data
     ch = character;
     weapon = weap;
 
-    weapon_is_gun = (weapon
-                     && IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon))
-                     && (GET_WEAPON_SKILL(weapon) >= SKILL_PISTOLS
-                         && GET_WEAPON_SKILL(weapon) <= SKILL_ASSAULT_CANNON));
+    weapon_is_gun = WEAPON_IS_GUN(weapon);
 
     if (weapon_is_gun) {
       /* if (PLR_FLAGGED(att->ch, PLR_REMOTE) || AFF_FLAGGED(att->ch, AFF_RIG) || AFF_FLAGGED(att->ch, AFF_MANNING))

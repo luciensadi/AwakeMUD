@@ -44,6 +44,11 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 #define HOST_SECURITY_RED_MARKET_MINIMUM                       2000
 #define HOST_SECURITY_BLACK_MARKET_MINIMUM                     2500
 
+#define MAX_PAYDATA_QTY_BLUE                                   4
+#define MAX_PAYDATA_QTY_GREEN                                  8
+#define MAX_PAYDATA_QTY_ORANGE                                 10
+#define MAX_PAYDATA_QTY_RED_BLACK                              12
+
 // What maximum amount of karma per action do you want PCs < 100 TKE to have?
 #define MAX_NEWCHAR_GAIN                                       50
 
@@ -60,8 +65,9 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 // What do you want the newbie karma threshold to be? Above this, you lose the newbie flag.
 #define NEWBIE_KARMA_THRESHOLD                                 50
 
-// How many syspoints should someone spend to restring an item?
+// How many syspoints do the various options cost?
 #define SYSP_RESTRING_COST                                     2
+#define SYSP_NODELETE_COST                                     100
 
 // How long should the MUD wait for recovery before killing itself? Note that it
 // considers itself to be stuck during copyover too, so if you have a large world,
@@ -127,6 +133,8 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 
 // How likely are you to lose stats on death? 1/X where X is this value.
 #define DEATH_PENALTY_CHANCE                                   25
+// How much nuyen do you lose on death? 1/X where X is this value.
+#define DEATH_NUYEN_LOSS_DIVISOR                               4
 
 // Configs for the idle nuyen reward, in nuyen and minutes respectively.
 #define IDLE_NUYEN_REWARD_AMOUNT                               1000
@@ -162,6 +170,8 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 #define KARMA_COST_FOR_CLOSECOMBAT                             200
 #define NPC_SKILL_THRESHOLD_FOR_FREE_SWITCHING_OF_CLOSECOMBAT  8
 
+#define KARMA_COST_FOR_KIPUP                                   200
+
 // What is the standard batch size for ammo creation? Rules say 10, but you say...
 #define AMMOBUILD_BATCH_SIZE                                   10
 
@@ -179,6 +189,7 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 #define SPELL_WAIT_STATE_TIME                                  (0.2  RL_SEC)
 #define OFFENSIVE_SPELL_WAIT_STATE_TIME                        (0.2  RL_SEC)
 #define FAILED_SPELL_LEARNING_WAIT_STATE                       (0.25 RL_SEC)
+#define INITIATION_CAP                                         50
 
 // How many sunrises (currently spans of 48 minutes) are spirits good for?
 #define NUMBER_OF_IG_DAYS_FOR_SPIRIT_TO_LAST                   4
@@ -198,10 +209,14 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 #define MINIMUM_TN_FOR_CLOSING_CHECK                           4
 
 // At what point do we consider someone to be too idle in a scene to get socialization bonuses?
-#define LAST_EMOTE_REQUIREMENT_FOR_CONGREGATION_BONUS          15
+#define LAST_SOCIAL_ACTION_REQUIREMENT_FOR_CONGREGATION_BONUS                20
+#define SOCIAL_ACTION_GRACE_PERIOD_GRANTED_BY_SPEECH                         5
 
 // Don't @ me about how long this name is, this is what we call self-documenting code.
-#define NUMBER_OF_TKE_POINTS_PER_REAL_DAY_OF_EXTRA_IDLE_DELETE_GRACE_PERIOD  5
+#define NUMBER_OF_TKE_POINTS_PER_REAL_DAY_OF_EXTRA_IDLE_DELETE_GRACE_PERIOD  10
+
+// If you don't think the same-room +6 TN penalty for using a sniper rifle is appropriate, adjust here.
+#define SAME_ROOM_SNIPER_RIFLE_PENALTY                         6
 
 /////////////// OLC permissions configuration /////////////////////////
 #define LVL_FOR_SETTING_ZONE_EDITOR_ID_NUMBERS                 LVL_VICEPRES

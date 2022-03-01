@@ -1361,7 +1361,7 @@ static void close_elevator_doors(struct room_data *room, int num, int floor)
     mudlog(buf, NULL, LOG_SYSLOG, TRUE);
   }
 
-  send_to_room("The elevator doors close.", landing);
+  send_to_room("The elevator doors close.\r\n", landing);
 }
 
 // ______________________________
@@ -1671,7 +1671,7 @@ int process_elevator(struct room_data *room,
     } else if (elevator[num].dir > 0)
       elevator[num].dir--;
     else if (!elevator[num].dir) {
-      send_to_room("The elevator doors close.", &world[real_room(room->number)]);
+      send_to_room("The elevator doors close.\r\n", &world[real_room(room->number)]);
       close_elevator_doors(room, num, room->rating);
       elevator[num].dir = -1;
     }
@@ -1705,7 +1705,7 @@ int process_elevator(struct room_data *room,
       return TRUE;
     } else if (!strncmp(argument, "close", strlen(argument))) {
       if (!IS_SET(room->dir_option[elevator[num].floor[room->rating].doors]->exit_info, EX_CLOSED)) {
-        send_to_room("The elevator doors close.", &world[real_room(room->number)]);
+        send_to_room("The elevator doors close.\r\n", &world[real_room(room->number)]);
         close_elevator_doors(room, num, room->rating);
         elevator[num].dir = -1;
       } else {

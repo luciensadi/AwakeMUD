@@ -344,6 +344,9 @@ struct spell_trainer spelltrainers[] = {
 //{60602, SPELL_DETECTOBJECT, 0, 6},
   {60602, SPELL_COMBATSENSE, 0, 6},
   {60602, SPELL_MINDLINK, 0, 6},
+  {60602, SPELL_NIGHTVISION, 0, 6},
+  {60602, SPELL_INFRAVISION, 0, 6},
+  {60602, SPELL_LEVITATE, 0, 6},
 
 //{60603, SPELL_MASSCONFUSION, 0, 6},
 //{60603, SPELL_CHAOTICWORLD, 0, 6},
@@ -419,6 +422,9 @@ struct spell_trainer spelltrainers[] = {
                             {10013, SPELL_DETECTMAGIC, 0, 50},
                             {10013, SPELL_DETECTOBJECT, 0, 50},
                             {10013, SPELL_MINDLINK, 0, 50},
+                            {10013, SPELL_NIGHTVISION, 0, 50},
+                            {10013, SPELL_INFRAVISION, 0, 50},
+                            {10013, SPELL_LEVITATE, 0, 50},
                             {10013, SPELL_CONFUSION, 0, 50},
                             {10013, SPELL_MASSCONFUSION, 0, 50},
                             {10013, SPELL_CHAOS, 0, 50},
@@ -956,7 +962,7 @@ void assign_rooms(void)
   SPECIAL(car_dealer);
   SPECIAL(oceansounds);
   SPECIAL(escalator);
-  SPECIAL(neophyte_entrance);
+  SPECIAL(neophyte_salvation_army);
   SPECIAL(simulate_bar_fight);
   SPECIAL(crime_mall_blockade);
   SPECIAL(waterfall);
@@ -1015,19 +1021,21 @@ void assign_rooms(void)
   ASSIGNROOM(60507, chargen_unpractice_skill);
   ASSIGNROOM(60508, chargen_unpractice_skill);
   ASSIGNROOM(60509, chargen_unpractice_skill);
+  ASSIGNROOM(60510, chargen_unpractice_skill);
+  ASSIGNROOM(60511, chargen_unpractice_skill);
   #ifdef REQUIRE_LANGUAGE_SKILL_POINTS_BE_USED_ONLY_FOR_LANGUAGE
   ASSIGNROOM(60512, chargen_language_annex);
   #else
   ASSIGNROOM(60512, chargen_unpractice_skill);
   #endif
-  ASSIGNROOM(60511, chargen_unpractice_skill);
-  ASSIGNROOM(60510, chargen_unpractice_skill);
   ASSIGNROOM(60591, chargen_unpractice_skill);
   ASSIGNROOM(60592, chargen_unpractice_skill);
   ASSIGNROOM(60593, chargen_unpractice_skill);
   ASSIGNROOM(60626, chargen_unpractice_skill);
   ASSIGNROOM(60627, chargen_unpractice_skill);
   ASSIGNROOM(60628, chargen_unpractice_skill);
+  ASSIGNROOM(60661, chargen_unpractice_skill);
+  ASSIGNROOM(60662, chargen_unpractice_skill);
   /* CharGen - auto-set archetype end rooms etc */
   for (int i = 0; i < NUM_CCR_ARCHETYPES; i++) {
     ASSIGNROOM(archetypes[i]->auth_room, auth_room);
@@ -1035,7 +1043,7 @@ void assign_rooms(void)
   }
 
   /* Neophyte Guild */
-  ASSIGNROOM(60585, neophyte_entrance);
+  ASSIGNROOM(60563, neophyte_salvation_army);
   ASSIGNROOM(60586, newbie_car);
   ASSIGNROOM(60548, newbie_housing);
 

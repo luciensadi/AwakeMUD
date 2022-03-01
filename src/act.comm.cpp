@@ -27,6 +27,7 @@
 #include "constants.h"
 #include "newecho.h"
 #include "ignore_system.h"
+#include "config.h"
 
 /* extern variables */
 extern struct skill_data skills[];
@@ -142,6 +143,9 @@ ACMD(do_say)
         store_message_to_history(veh->rigger->desc, COMM_CHANNEL_OSAYS, perform_act(buf, ch, NULL, NULL, veh->rigger));
     }
   } else {
+    // Speech gives you 5 minutes of grace period. Emotes give you more.
+    ch->char_specials.last_social_action = LAST_SOCIAL_ACTION_REQUIREMENT_FOR_CONGREGATION_BONUS - SOCIAL_ACTION_GRACE_PERIOD_GRANTED_BY_SPEECH;
+
     for (tmp = ch->in_room ? ch->in_room->people : ch->in_veh->people; tmp; tmp = ch->in_room ? tmp->next_in_room : tmp->next_in_veh) {
       if (tmp == ch || IS_IGNORING(tmp, is_blocking_ic_interaction_from, ch))
         continue;
@@ -275,6 +279,8 @@ ACMD(do_exclaim)
     send_to_char(buf, ch);
     store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, buf);
   }
+  // Speech gives you 5 minutes of grace period. Emotes give you more.
+  ch->char_specials.last_social_action = LAST_SOCIAL_ACTION_REQUIREMENT_FOR_CONGREGATION_BONUS - SOCIAL_ACTION_GRACE_PERIOD_GRANTED_BY_SPEECH;
 }
 
 void perform_tell(struct char_data *ch, struct char_data *vict, char *arg)
@@ -455,6 +461,8 @@ ACMD(do_ask)
     send_to_char(buf, ch);
     store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, buf);
   }
+  // Speech gives you 5 minutes of grace period. Emotes give you more.
+  ch->char_specials.last_social_action = LAST_SOCIAL_ACTION_REQUIREMENT_FOR_CONGREGATION_BONUS - SOCIAL_ACTION_GRACE_PERIOD_GRANTED_BY_SPEECH;
 }
 
 ACMD(do_spec_comm)
@@ -607,6 +615,8 @@ ACMD(do_spec_comm)
              (subcmd == SCMD_WHISPER) ? (ispunct(get_final_character_from_string(buf2)) ? "" : ".") : "?");
     store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, act(buf, FALSE, ch, 0, vict, TO_CHAR));
   }
+  // Speech gives you 5 minutes of grace period. Emotes give you more.
+  ch->char_specials.last_social_action = LAST_SOCIAL_ACTION_REQUIREMENT_FOR_CONGREGATION_BONUS - SOCIAL_ACTION_GRACE_PERIOD_GRANTED_BY_SPEECH;
 
   // TODO: Should this be stored to message history? It's super nondescript.
   // TODO: How can we prevent blocking people from seeing this?
@@ -1186,6 +1196,8 @@ ACMD(do_gen_comm)
       // Note that this line invokes act().
       store_message_to_history(ch->desc, COMM_CHANNEL_SHOUTS, act(buf1, FALSE, ch, 0, 0, TO_CHAR));
     }
+    // Speech gives you 5 minutes of grace period. Emotes give you more.
+    ch->char_specials.last_social_action = LAST_SOCIAL_ACTION_REQUIREMENT_FOR_CONGREGATION_BONUS - SOCIAL_ACTION_GRACE_PERIOD_GRANTED_BY_SPEECH;
 
     was_in = ch->in_room;
     if (ch->in_veh) {

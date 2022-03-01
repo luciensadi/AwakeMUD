@@ -457,7 +457,7 @@ struct command_info cmd_info[] =
     { "aecho"      , POS_SLEEPING, do_new_echo , LVL_ARCHITECT, SCMD_AECHO, FALSE },
     { "accept"     , POS_LYING   , do_accept   , 0, 0, FALSE },
     { "addpoint"   , POS_DEAD    , do_initiate , 0, SCMD_POWERPOINT, FALSE },
-    { "affects"    , POS_LYING   , do_status   , 0, 0, TRUE },
+    { "affects"    , POS_MORTALLYW, do_status   , 0, 0, TRUE },
     { "afk"        , POS_DEAD    , do_afk      , 0, 0, TRUE },
     { "ammo"       , POS_LYING   , do_ammo     , 0, 0, TRUE },
     { "assense"    , POS_LYING   , do_assense  , 0, 0, FALSE },
@@ -483,9 +483,7 @@ struct command_info cmd_info[] =
     { "banish"     , POS_STANDING, do_banish   , 0, 0, FALSE },
     { "balance"    , POS_LYING   , do_gold     , 0, 0, TRUE },
     { "bioware"    , POS_DEAD    , do_bioware  , 0, 0, TRUE },
-#ifdef ALLOW_IGNORE_USE
     { "block"      , POS_DEAD    , do_ignore   , 0, 0, TRUE },
-#endif
     { "boost"      , POS_LYING   , do_boost    , 0, 0, FALSE },
     { "break"      , POS_LYING   , do_break    , 0, 0, FALSE },
     { "broadcast"  , POS_LYING   , do_broadcast, 0, 0, TRUE },
@@ -588,7 +586,7 @@ struct command_info cmd_info[] =
     { "gaecho"     , POS_DEAD    , do_gecho    , LVL_CONSPIRATOR, SCMD_AECHO, FALSE },
     { "gecho"      , POS_DEAD    , do_gecho    , LVL_CONSPIRATOR, 0, FALSE },
     { "give"       , POS_RESTING , do_give     , 0, 0, FALSE },
-    { "goto"       , POS_SLEEPING, do_goto     , LVL_BUILDER, 0, FALSE },
+    { "goto"       , POS_MORTALLYW, do_goto     , LVL_BUILDER, 0, FALSE },
     { "group"      , POS_RESTING , do_group    , 1, 0, FALSE },
     { "grab"       , POS_RESTING , do_grab     , 0, 0, FALSE },
     { "gridguide"  , POS_RESTING , do_gridguide, 0, 0, FALSE },
@@ -601,7 +599,7 @@ struct command_info cmd_info[] =
     { "heal"       , POS_STANDING, do_heal     , 0, 0, FALSE },
     { "hedit"      , POS_DEAD    , do_hedit    , LVL_BUILDER, 0, FALSE },
     { "helpedit"   , POS_DEAD    , do_helpedit , LVL_FIXER, 0, FALSE },
-    { "helpexport" ,POS_DEAD    , do_helpexport, LVL_DEVELOPER, 0, FALSE },
+    { "helpexport" , POS_DEAD    , do_helpexport, LVL_PRESIDENT, 0, FALSE },
     { "hit"        , POS_FIGHTING, do_hit      , 0, SCMD_HIT, FALSE },
     { "highlight"  , POS_DEAD    , do_highlight, 0, 0, TRUE },
     { "history"    , POS_DEAD    , do_message_history, 0, 0, TRUE },
@@ -622,9 +620,7 @@ struct command_info cmd_info[] =
     { "idea"       , POS_DEAD    , do_gen_write, 0, SCMD_IDEA, TRUE },
     //{ "idelete"  , POS_DEAD    , do_idelete  , LVL_PRESIDENT, 0, FALSE },
     { "iedit"      , POS_DEAD    , do_iedit    , LVL_BUILDER, 0, FALSE },
-#ifdef ALLOW_IGNORE_USE
     { "ignore"     , POS_DEAD    , do_ignore   , 0, 0, TRUE },
-#endif
     { "ilist"      , POS_DEAD    , do_ilist    , LVL_BUILDER, 0, FALSE },
     { "iload"      , POS_DEAD    , do_iload    , LVL_BUILDER, 0, FALSE },
     { "imotd"      , POS_DEAD    , do_gen_ps   , LVL_BUILDER, SCMD_IMOTD, FALSE },
@@ -794,7 +790,7 @@ struct command_info cmd_info[] =
     { "set"        , POS_DEAD    , do_set      , LVL_CONSPIRATOR, 0, FALSE },
     { "setfind"    , POS_DEAD    , do_setfind , LVL_VICEPRES, 0, FALSE },
     { "settime"    , POS_DEAD    , do_settime  , LVL_DEVELOPER, 0, FALSE },
-    { "sheath"     , POS_RESTING , do_holster  , 0, 0, FALSE },
+    { "sheathe"    , POS_RESTING , do_holster  , 0, 0, FALSE },
     { "shortexits" , POS_LYING   , do_exits    , 0, SCMD_SHORTEXITS, FALSE },
     { "shout"      , POS_LYING   , do_gen_comm , 0, SCMD_SHOUT, FALSE },
     { "shouts"     , POS_DEAD    , do_switched_message_history, 0, COMM_CHANNEL_SHOUTS, TRUE },
@@ -1741,7 +1737,7 @@ ACMD(do_alias)
         send_to_char("Aliases cannot contain the 'quit' command.\n\r",ch);
         return;
       }
-      if (strlen(repl) > 256)
+      if (strlen(repl) > 255)
         repl[255] = '\0';
       a = new alias;
       a->command = str_dup(arg);
@@ -3159,7 +3155,6 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("recieve", "receive");
   COMMAND_ALIAS("dorp", "drop");
   COMMAND_ALIAS("weild", "wield");
-  COMMAND_ALIAS("sheathe", "sheath");
   COMMAND_ALIAS("unsheathe", "draw");
   COMMAND_ALIAS("prove", "probe");
   COMMAND_ALIAS("chekc", "check");

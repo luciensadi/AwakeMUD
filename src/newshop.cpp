@@ -332,7 +332,7 @@ bool install_ware_in_target_character(struct obj_data *ware, struct char_data *i
   }
 
   // Don't shrek the mages.
-  if (IS_OBJ_STAT(ware, ITEM_MAGIC_INCOMPATIBLE) && (GET_MAG(recipient) > 0 || GET_TRADITION(recipient) != TRAD_MUNDANE)) {
+  if (IS_OBJ_STAT(ware, ITEM_EXTRA_MAGIC_INCOMPATIBLE) && (GET_MAG(recipient) > 0 || GET_TRADITION(recipient) != TRAD_MUNDANE)) {
     if (IS_NPC(installer)) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " That operation would eradicate your magic!");
       do_say(installer, buf, cmd_say, SCMD_SAYTO);
@@ -679,10 +679,10 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
 
         struct obj_data *orig = ch->carrying;
         for (; orig; orig = orig->next_content) {
-          if (GET_OBJ_TYPE(obj) == ITEM_GUN_AMMO &&
-              GET_AMMOBOX_INTENDED_QUANTITY(obj) <= 0 &&
-              GET_AMMOBOX_WEAPON(obj) == GET_AMMOBOX_WEAPON(orig) &&
-              GET_AMMOBOX_TYPE(obj) == GET_AMMOBOX_TYPE(orig))
+          if (GET_OBJ_TYPE(orig) == ITEM_GUN_AMMO
+              && GET_AMMOBOX_INTENDED_QUANTITY(orig) <= 0
+              && GET_AMMOBOX_WEAPON(obj) == GET_AMMOBOX_WEAPON(orig)
+              && GET_AMMOBOX_TYPE(obj) == GET_AMMOBOX_TYPE(orig))
             break;
         }
         if (orig) {
@@ -1151,8 +1151,14 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
     }
   }
 
-  if (IS_OBJ_STAT(obj, ITEM_KEPT)) {
+  if (IS_OBJ_STAT(obj, ITEM_EXTRA_KEPT)) {
     act("You'll have to use the KEEP command on $p before you can sell it.", FALSE, ch, obj, 0, TO_CHAR);
+    return;
+  }
+
+  if (IS_OBJ_STAT(obj, ITEM_EXTRA_NORENT) || IS_OBJ_STAT(obj, ITEM_EXTRA_STAFF_ONLY)) {
+    act("$p is worthless to me.", FALSE, ch, obj, 0, TO_CHAR);
+    send_to_char("(OOC: You can't sell !RENT and GOD-ONLY items.)\r\n", ch);
     return;
   }
 
@@ -1173,7 +1179,7 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
     obj = obj->contains;
   }
 
-  if (!shop_table[shop_nr].buytypes.IsSet(GET_OBJ_TYPE(obj)) || IS_OBJ_STAT(obj, ITEM_NOSELL) || GET_OBJ_COST(obj) < 1)
+  if (!shop_table[shop_nr].buytypes.IsSet(GET_OBJ_TYPE(obj)) || IS_OBJ_STAT(obj, ITEM_EXTRA_NOSELL) || GET_OBJ_COST(obj) < 1)
   {
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %s", shop_table[shop_nr].doesnt_buy);
     do_say(keeper, buf, cmd_say, SCMD_SAYTO);
@@ -1319,7 +1325,7 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
         }
       }
 
-      if (IS_OBJ_STAT(obj, ITEM_NERPS))
+      if (IS_OBJ_STAT(obj, ITEM_EXTRA_NERPS))
         strlcat(buf, ". OOC note: It has no coded effect", sizeof(buf));
 
       strlcat(buf, ".\r\n", sizeof(buf));
@@ -1346,7 +1352,7 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
         continue;
       }
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %2d)  ", i);
-      if (sell->type == SELL_ALWAYS)
+      if (sell->type == SELL_ALWAYS || (sell->type == SELL_AVAIL && GET_OBJ_AVAILTN(obj) == 0))
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Yes      ");
       else if (sell->type == SELL_AVAIL) {
         int arbitrary_difficulty = GET_OBJ_AVAILTN(obj);
@@ -1379,7 +1385,7 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
         snprintf(buf2, sizeof(buf2), "%d", GET_OBJ_VAL(obj, 1));
       else strcpy(buf2, "-");
 
-      if (IS_OBJ_STAT(obj, ITEM_NERPS)) {
+      if (IS_OBJ_STAT(obj, ITEM_EXTRA_NERPS)) {
         //Format string: "^Y(N)^n %-58s^n %-6s%2s   %0.2f%c  %9d\r\n"
         //We apply padding for color codes here.
         snprintf(paddingnumberstr, sizeof(paddingnumberstr), "%d", 53 + count_color_codes_in_string(GET_OBJ_NAME(obj)));
@@ -1410,8 +1416,8 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
         continue;
       }
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %2d)  ", i);
-      if (sell->type == SELL_ALWAYS)
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Yes      ");
+      if (sell->type == SELL_ALWAYS || (sell->type == SELL_AVAIL && GET_OBJ_AVAILTN(obj) == 0))
+        strlcat(buf, "Yes      ", sizeof(buf));
       else if (sell->type == SELL_AVAIL) {
         int arbitrary_difficulty = GET_OBJ_AVAILTN(obj);
         if (arbitrary_difficulty <= 2) {
@@ -1434,7 +1440,7 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-3d     ", sell->stock);
       }
 
-      if (IS_OBJ_STAT(obj, ITEM_NERPS)) {
+      if (IS_OBJ_STAT(obj, ITEM_EXTRA_NERPS)) {
         //Format string for reference: "^Y(N)^n %-44s^n %6d\r\n"
         //We apply padding for color codes here.
         snprintf(paddingnumberstr, sizeof(paddingnumberstr), "%d", 67 + count_color_codes_in_string(GET_OBJ_NAME(obj)));
@@ -1458,7 +1464,7 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
   }
 
   // New characters get reminded about the probe and info commands.
-  if (GET_TKE(ch) <= 2 * NEWBIE_KARMA_THRESHOLD)
+  if (SHOULD_SEE_TIPS(ch))
     strlcat(buf, "\r\nUse ^WPROBE^n for more details.\r\n", sizeof(buf));
   page_string(ch->desc, buf, 1);
 }
@@ -1517,7 +1523,7 @@ void shop_value(char *arg, struct char_data *ch, struct char_data *keeper, vnum_
     strcpy(buf, GET_CHAR_NAME(ch));
   }
 
-  if (!shop_table[shop_nr].buytypes.IsSet(GET_OBJ_TYPE(obj)) || IS_OBJ_STAT(obj, ITEM_NOSELL))
+  if (!shop_table[shop_nr].buytypes.IsSet(GET_OBJ_TYPE(obj)) || IS_OBJ_STAT(obj, ITEM_EXTRA_NOSELL))
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " I wouldn't buy %s off of you.", GET_OBJ_NAME(obj));
   else
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " I would be able to give you around %d nuyen for %s.", sell_price(obj, shop_nr), GET_OBJ_NAME(obj));
@@ -1612,7 +1618,7 @@ void shop_info(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
       else if (IS_SET(GET_OBJ_VAL(obj, 10), 1 << MODE_SA))
         strcat(buf, " semi-automatic");
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %s", weapon_type[GET_OBJ_VAL(obj, 3)]);
-      if (IS_OBJ_STAT(obj, ITEM_TWOHANDS))
+      if (IS_OBJ_STAT(obj, ITEM_EXTRA_TWOHANDS))
         strcat(buf, " and requires two hands to wield correctly");
       if (GET_WEAPON_INTEGRAL_RECOIL_COMP(obj))
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ". It has %d round%s of built-in recoil compensation",
@@ -1658,7 +1664,7 @@ void shop_info(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %s", weapon_type[GET_OBJ_VAL(obj, 3)]);
 
       // Two-handed weapon?
-      if (IS_OBJ_STAT(obj, ITEM_TWOHANDS))
+      if (IS_OBJ_STAT(obj, ITEM_EXTRA_TWOHANDS))
         strcat(buf, " that requires two hands to wield correctly.");
       else
         strcat(buf, ".");
@@ -1922,7 +1928,7 @@ void shop_info(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
   } else snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%.0f kilogram%s", GET_OBJ_WEIGHT(obj), (GET_OBJ_WEIGHT(obj) >= 2 ? "s" : ""));
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " and I couldn't let it go for less than %d nuyen.", buy_price(obj, shop_nr));
 
-  if (IS_OBJ_STAT(obj, ITEM_NERPS)) {
+  if (IS_OBJ_STAT(obj, ITEM_EXTRA_NERPS)) {
     strcat(buf, " ^Y(OOC: It has no special coded effects.)^n");
   }
 
@@ -2438,7 +2444,11 @@ void shedit_parse(struct descriptor_data *d, const char *arg)
     switch(*arg) {
     case 'y':
     case 'Y':
+#ifdef ONLY_LOG_BUILD_ACTIONS_ON_CONNECTED_ZONES
       if (!vnum_from_non_connected_zone(d->edit_number)) {
+#else
+      {
+#endif
         snprintf(buf, sizeof(buf),"%s wrote new shop #%ld",
                 GET_CHAR_NAME(d->character), d->edit_number);
         mudlog(buf, d->character, LOG_WIZLOG, TRUE);
@@ -3048,8 +3058,8 @@ struct obj_data *shop_package_up_ware(struct obj_data *obj) {
   GET_OBJ_BARRIER(shop_container) = 32;
   GET_OBJ_MATERIAL(shop_container) = MATERIAL_ADV_PLASTICS;
   GET_OBJ_COST(shop_container) = 0;
-  GET_OBJ_EXTRA(shop_container).SetBit(ITEM_KEPT);
-  
+  GET_OBJ_EXTRA(shop_container).SetBit(ITEM_EXTRA_KEPT);
+
   snprintf(buf3, sizeof(buf3), "a packaged-up '%s'", GET_OBJ_NAME(obj));
   DELETE_ARRAY_IF_EXTANT(shop_container->restring);
   shop_container->restring = str_dup(buf3);

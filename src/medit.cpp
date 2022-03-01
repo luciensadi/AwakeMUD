@@ -82,9 +82,9 @@ void medit_disp_menu(struct descriptor_data *d)
                CCCYN(CH, C_CMP), GET_REAL_REA(MOB), CCNRM(CH, C_CMP));
   send_to_char(CH, "b) Level: %s%d%s\r\n", CCCYN(CH, C_CMP), GET_LEVEL(MOB),
                CCNRM(CH, C_CMP));
-  send_to_char(CH, "c) Ballistic: %s%d%s, ", CCCYN(CH, C_CMP), GET_BALLISTIC(MOB),
+  send_to_char(CH, "c) Ballistic: %s%d%s, ", CCCYN(CH, C_CMP), GET_INNATE_BALLISTIC(MOB),
                CCNRM(CH, C_CMP));
-  send_to_char(CH, "d) Impact: %s%d%s\r\n", CCCYN(CH, C_CMP), GET_IMPACT(MOB),
+  send_to_char(CH, "d) Impact: %s%d%s\r\n", CCCYN(CH, C_CMP), GET_INNATE_IMPACT(MOB),
                CCNRM(CH, C_CMP));
   send_to_char(CH, "e) Max physical points: %s%d%s, f) Max mental points: %s%d%s\r\n", CCCYN(CH, C_CMP),
                (int)(GET_MAX_PHYSICAL(MOB) / 100), CCNRM(CH, C_CMP), CCCYN(CH, C_CMP),
@@ -97,7 +97,7 @@ void medit_disp_menu(struct descriptor_data *d)
   send_to_char(CH, "h) Default Position: %s%s%s\r\n", CCCYN(CH, C_CMP), buf1,
                CCNRM(CH, C_CMP));
                */
-               
+
   send_to_char(CH, "h) Ammunition\r\n");
   sprinttype(GET_SEX(MOB), genders, buf1, sizeof(buf1));
   //  strcpy(buf1, genders[GET_SEX(d->edit_mob)]);
@@ -116,6 +116,9 @@ void medit_disp_menu(struct descriptor_data *d)
   send_to_char("n) Skill menu.\r\n", CH);
   send_to_char(CH, "o) Arrive text: ^c%s^n,  p) Leave text: ^c%s^n\r\n",
                MOB->char_specials.arrive, MOB->char_specials.leave);
+  send_to_char("r) Edit Cyberware\r\n", CH);
+  send_to_char("s) Edit Bioware\r\n", CH);
+  send_to_char("t) Edit Equipment\r\n", CH);
   send_to_char("q) Quit and save\r\n", CH);
   send_to_char("x) Exit and abort\r\n", CH);
   send_to_char("Enter your choice:\r\n", CH);
@@ -145,10 +148,56 @@ void medit_disp_skills(struct descriptor_data *d)
 }
 
 void medit_disp_ammo_menu(struct descriptor_data *d) {
-  send_to_char(CH, "1) Show current ammo\r\n"
-                   "2) Edit current ammo\r\n"
+  display_pockets_to_char(CH, MOB);
+  send_to_char(CH, "\r\n1) Edit current ammo\r\n"
                    "q) Back\r\n");
   d->edit_mode = MEDIT_AMMO;
+}
+
+void medit_display_equipment_menu(struct descriptor_data *d) {
+  int i = 1, total_cost = 0;
+  struct obj_data *worn_item = NULL;
+
+  for (int wearloc = 0; wearloc < NUM_WEARS; wearloc++) {
+    if ((worn_item = GET_EQ(MOB, wearloc))) {
+      send_to_char(CH, "%2d) %s %s (^c%ld^n) (%d nuyen)\r\n", i++, where[wearloc], GET_OBJ_NAME(worn_item), GET_OBJ_VNUM(worn_item), GET_OBJ_COST(worn_item));
+      total_cost += GET_OBJ_COST(worn_item);
+    }
+  }
+
+  send_to_char("\r\n", CH);
+  send_to_char(CH, "Total cost of equipment is %d.\r\n", total_cost);
+  send_to_char("\r\n", CH);
+  send_to_char("a) Add equiment\r\n", CH);
+  if (i > 1)
+    send_to_char("d) Delete equiment\r\n", CH);
+  send_to_char("q) Return to main menu\r\n", CH);
+  d->edit_mode = MEDIT_EQUIPMENT;
+}
+
+void _medit_display_ware_menu(struct descriptor_data *d, bool is_cyberware) {
+  int i = 1;
+  struct obj_data *ware = NULL;
+
+  for (ware = (is_cyberware ? MOB->cyberware : MOB->bioware); ware; ware = ware->next_content) {
+    send_to_char(CH, "%2d) %50s (vnum %ld)\r\n", i++, GET_OBJ_NAME(ware), GET_OBJ_VNUM(ware));
+  }
+
+  send_to_char("\r\n", CH);
+  send_to_char(CH, "a) Add %sware\r\n", is_cyberware ? "cyber" : "bio");
+  if (i > 1)
+    send_to_char(CH, "d) Delete %sware\r\n", is_cyberware ? "cyber" : "bio");
+  send_to_char("q) Return to main menu\r\n", CH);
+}
+
+void medit_disp_cyberware_menu(struct descriptor_data *d) {
+  _medit_display_ware_menu(d, TRUE);
+  d->edit_mode = MEDIT_CYBERWARE;
+}
+
+void medit_disp_bioware_menu(struct descriptor_data *d) {
+  _medit_display_ware_menu(d, FALSE);
+  d->edit_mode = MEDIT_BIOWARE;
 }
 
 void medit_disp_attack_menu(struct descriptor_data *d)
@@ -243,10 +292,16 @@ void medit_disp_gender_menu(struct descriptor_data *d)
 void medit_disp_class_menu(struct descriptor_data *d)
 {
   CLS(CH);
-  for (int c = 1; c < NUM_RACES; c++)
-    send_to_char(CH, "%2d) %-20s\r\n", c, pc_race_types[c]);
-  send_to_char(CH, "Mob class: ^c%s^n\r\n"
-               "Enter mob class, 0 to quit: ", pc_race_types[(int)GET_RACE(MOB)]);
+  for (int c = 1; c <= NUM_RACES; c++) {
+    if (c == RACE_PC_CONJURED_ELEMENTAL) {
+      send_to_char(CH, "%2d) ^Llocked^n\r\n", c);
+    } else {
+      send_to_char(CH, "%2d) %-20s\r\n", c, pc_race_types[c]);
+    }
+  }
+
+  send_to_char(CH, "Mob race: ^c%s^n\r\n"
+               "Enter mob race, 0 to quit: ", pc_race_types[(int)GET_RACE(MOB)]);
 }
 
 void medit_disp_att_menu(struct descriptor_data *d)
@@ -309,7 +364,11 @@ void medit_parse(struct descriptor_data *d, const char *arg)
     case 'y':
     case 'Y':
       // first write to the internal tables
+#ifdef ONLY_LOG_BUILD_ACTIONS_ON_CONNECTED_ZONES
       if (!vnum_from_non_connected_zone(d->edit_number)) {
+#else
+      {
+#endif
         snprintf(buf, sizeof(buf),"%s wrote new mob #%ld",
                 GET_CHAR_NAME(d->character), d->edit_number);
         mudlog(buf, d->character, LOG_WIZLOG, TRUE);
@@ -344,8 +403,55 @@ void medit_parse(struct descriptor_data *d, const char *arg)
         DELETE_ARRAY_IF_EXTANT(mob_proto[mob_number].char_specials.arrive);
         DELETE_ARRAY_IF_EXTANT(mob_proto[mob_number].char_specials.leave);
 
+        // Blow away the proto's gear. We do this to avoid leaking memory.
+        struct obj_data *equipment[NUM_WEARS];
+        {
+          struct obj_data *obj;
+          while ((obj = mob_proto[mob_number].cyberware)) {
+            obj_from_cyberware(obj);
+            extract_obj(obj);
+          }
+          while ((obj = mob_proto[mob_number].bioware)) {
+            obj_from_bioware(obj);
+            extract_obj(obj);
+          }
+          for (int wearloc = 0; wearloc < NUM_WEARS; wearloc++) {
+            if ((obj = GET_EQ(&mob_proto[mob_number], wearloc))) {
+              unequip_char(&mob_proto[mob_number], wearloc, FALSE);
+              extract_obj(obj);
+            }
+
+            // Unequip the edit mob, too. This sets our edit mob's stats to baseline, which is necessary for the copy to go well.
+            if ((obj = GET_EQ(MOB, wearloc))) {
+              unequip_char(MOB, wearloc, FALSE);
+              equipment[wearloc] = obj;
+            } else {
+              equipment[wearloc] = NULL;
+            }
+          }
+
+          // They're nude-- there should be no issue with us sanity-checking their ballistic and impact values.
+          GET_IMPACT(MOB) = GET_INNATE_IMPACT(MOB);
+          GET_BALLISTIC(MOB) = GET_INNATE_BALLISTIC(MOB);
+        }
+
         mob_proto[mob_number] = *d->edit_mob;
         mob_proto[mob_number].nr = mob_number;
+
+        // Re-equip our proto. It now has the edit mob's stats, and can be safely upgraded.
+        for (int wearloc = 0; wearloc < NUM_WEARS; wearloc++) {
+          if (equipment[wearloc]) {
+            equip_char(&mob_proto[mob_number], equipment[wearloc], wearloc);
+          }
+        }
+
+        // Cyberware.
+        for (struct obj_data *obj = mob_proto[mob_number].cyberware; obj; obj = obj->next_content)
+          obj->carried_by = &mob_proto[mob_number];
+
+        // Same for bioware.
+        for (struct obj_data *obj = mob_proto[mob_number].bioware; obj; obj = obj->next_content)
+          obj->carried_by = &mob_proto[mob_number];
 
       } else {  // if not, we need to make a new spot in the list
         int             counter;
@@ -371,6 +477,30 @@ void medit_parse(struct descriptor_data *d, const char *arg)
               new_mob_index[counter].func = NULL;
               /*---------*/
               new_mob_proto[counter] = *(d->edit_mob);
+
+              // Overwrite the proto's gear to be carried_by and worn_by it, not us, and zero out the edit mob's pointers in the process.
+              {
+                // Cyberware.
+                for (struct obj_data *obj = new_mob_proto[counter].cyberware; obj; obj = obj->next_content) {
+                  obj->carried_by = &new_mob_proto[counter];
+                }
+                MOB->cyberware = NULL;
+
+                // Same for bioware.
+                for (struct obj_data *obj = new_mob_proto[counter].bioware; obj; obj = obj->next_content) {
+                  obj->carried_by = &new_mob_proto[counter];
+                }
+                MOB->bioware = NULL;
+
+                // And then equipment.
+                for (int wearloc = 0; wearloc < NUM_WEARS; wearloc++) {
+                  GET_EQ(MOB, wearloc) = NULL;
+                  if (GET_EQ(&new_mob_proto[counter], wearloc)) {
+                    GET_EQ(&new_mob_proto[counter], wearloc)->worn_by = &new_mob_proto[counter];
+                  }
+                }
+              }
+
               new_mob_proto[counter].in_room = NULL;
               /* it is now safe (and necessary!) to assign real number to
                * the edit_mob, which has been -1 all this time */
@@ -396,7 +526,6 @@ void medit_parse(struct descriptor_data *d, const char *arg)
           }
         } // for loop through list
 
-
         /* if we STILL haven't found it, means the mobile was > than all
         * the other mobs.. so insert at end */
         if (!found) {
@@ -420,7 +549,7 @@ void medit_parse(struct descriptor_data *d, const char *arg)
         for (temp_mob = character_list; temp_mob; temp_mob = temp_mob->next)
           if (GET_MOB_RNUM (temp_mob) >= d->edit_mob->nr)
             GET_MOB_RNUM (temp_mob)++;
-            
+
         /* RENUMBER ZONE TABLES HERE, only              *
         *   because I ADDED a mobile!                   *
         *   This code shamelessly ripped off from db.c */
@@ -595,7 +724,15 @@ void medit_parse(struct descriptor_data *d, const char *arg)
       send_to_char("Enter leave text: ", CH);
       d->edit_mode = MEDIT_LEAVE_MSG;
       break;
-
+    case 'r':
+      medit_disp_cyberware_menu(d);
+      break;
+    case 's':
+      medit_disp_bioware_menu(d);
+      break;
+    case 't':
+      medit_display_equipment_menu(d);
+      break;
     default:
       medit_disp_menu(d);
       break;
@@ -1044,7 +1181,7 @@ void medit_parse(struct descriptor_data *d, const char *arg)
       send_to_char("Value must be greater than 0.\r\n", CH);
       send_to_char("Enter ballistic armor points: ", CH);
     } else {
-      GET_BALLISTIC(MOB) = number;
+      GET_INNATE_BALLISTIC(MOB) = number;
       medit_disp_menu(d);
     }
     break;
@@ -1055,7 +1192,7 @@ void medit_parse(struct descriptor_data *d, const char *arg)
       send_to_char("Value must be greater than 0.\r\n", CH);
       send_to_char("Enter impact armor points: ", CH);
     } else {
-      GET_IMPACT(MOB) = number;
+      GET_INNATE_IMPACT(MOB) = number;
       medit_disp_menu(d);
     }
     break;
@@ -1108,12 +1245,200 @@ void medit_parse(struct descriptor_data *d, const char *arg)
 
   case MEDIT_CLASS:
     number = atoi(arg);
-    if ((number < 0) || (number > NUM_RACES))
+    if ((number < 0) || (number > NUM_RACES) || number == RACE_PC_CONJURED_ELEMENTAL)
       medit_disp_class_menu(d);
     else {
       if (number != 0)
         GET_RACE(MOB) = number;
       medit_disp_menu(d);
+    }
+    break;
+
+  case MEDIT_EQUIPMENT:
+    switch (*arg) {
+      case 'q':
+      case 'Q':
+      case '0':
+      case 'b':
+      case 'B':
+        medit_disp_menu(d);
+        break;
+      case 'a':
+      case 'A':
+        send_to_char("\r\nEnter the vnum of the equipment you want to add: ", CH);
+        d->edit_mode = MEDIT_SELECT_EQUIPMENT_VNUM;
+        break;
+      case 'd':
+      case 'D':
+        for (int i = 0; i < NUM_WEARS; i++) {
+          if (GET_EQ(MOB, i)) {
+            send_to_char("\r\nEnter the index number of the equipment you want to remove: ", CH);
+            d->edit_mode = MEDIT_DEL_EQUIPMENT;
+            return;
+          }
+        }
+        send_to_char("\r\nThey don't have any equipment.", CH);
+        medit_display_equipment_menu(d);
+        break;
+      default:
+        send_to_char("That's not a choice. Enter a choice (A to add, D to delete, or Q to quit): ", CH);
+        break;
+    }
+    break;
+
+  case MEDIT_SELECT_EQUIPMENT_VNUM:
+    number = atoi(arg);
+    {
+      struct obj_data *equipment = read_object(number, VIRTUAL);
+      if (!equipment) {
+        send_to_char("\r\nInvalid vnum.\r\n", CH);
+        medit_display_equipment_menu(d);
+      } else {
+        // Vnum is valid.
+        extract_obj(equipment);
+        d->edit_number2 = number;
+        send_to_char("\r\n", CH);
+
+        // Print wearlocs.
+        for (int wearloc = 0; wearloc < NUM_WEARS; wearloc++) {
+          if (GET_EQ(MOB, wearloc))
+            send_to_char(CH, "^L%2d) %s (already filled)^n\r\n", wearloc, short_where[wearloc]);
+          else
+            send_to_char(CH, "%2d) %s\r\n", wearloc, short_where[wearloc]);
+        }
+
+        send_to_char("\r\n\r\nSelect a wear location: ", CH);
+        d->edit_mode = MEDIT_SELECT_EQUIPMENT_WEARLOC;
+      }
+    }
+    break;
+
+  case MEDIT_SELECT_EQUIPMENT_WEARLOC:
+    number = atoi(arg);
+    {
+      if (number < 0 || number >= NUM_WEARS || GET_EQ(MOB, number)) {
+        send_to_char("\r\nInvalid wearloc. Enter the numeric index of the wearloc: ", CH);
+        break;
+      }
+      equip_char(MOB, read_object(d->edit_number2, VIRTUAL), number);
+      d->edit_number2 = 0;
+      medit_display_equipment_menu(d);
+    }
+    break;
+
+  case MEDIT_DEL_EQUIPMENT:
+    number = atoi(arg);
+    {
+      for (int wearloc = 0; wearloc < NUM_WEARS && number >= 1; wearloc++) {
+        if (GET_EQ(MOB, wearloc)) {
+          if (--number == 0) {
+            extract_obj(unequip_char(MOB, wearloc, FALSE));
+            medit_display_equipment_menu(d);
+            break;
+          }
+        }
+      }
+
+      if (number != 0)
+        send_to_char("\r\nInvalid number.\r\n", CH);
+
+      medit_display_equipment_menu(d);
+    }
+    break;
+
+  case MEDIT_CYBERWARE:
+  case MEDIT_BIOWARE:
+    switch (*arg) {
+      case 'q':
+      case 'Q':
+      case '0':
+      case 'b':
+      case 'B':
+        medit_disp_menu(d);
+        break;
+      case 'a':
+      case 'A':
+        send_to_char("\r\nEnter the vnum of the 'ware you want to add: ", CH);
+        d->edit_mode = (d->edit_mode == MEDIT_CYBERWARE ? MEDIT_ADD_CYBERWARE : MEDIT_ADD_BIOWARE);
+        break;
+      case 'd':
+      case 'D':
+        if (!(d->edit_mode == MEDIT_CYBERWARE ? MOB->cyberware : MOB->bioware)) {
+          send_to_char("\r\nThere's no 'ware installed.", CH);
+          if (d->edit_mode == MEDIT_CYBERWARE)
+            medit_disp_cyberware_menu(d);
+          else
+            medit_disp_bioware_menu(d);
+        } else {
+          send_to_char("\r\nEnter the index number of the 'ware you want to remove: ", CH);
+          d->edit_mode = (d->edit_mode == MEDIT_CYBERWARE ? MEDIT_DEL_CYBERWARE : MEDIT_DEL_BIOWARE);
+        }
+        break;
+      default:
+        send_to_char("That's not a choice. Enter a choice (A to add, D to delete, or Q to quit): ", CH);
+        break;
+    }
+    break;
+
+  case MEDIT_ADD_BIOWARE:
+  case MEDIT_ADD_CYBERWARE:
+    number = atoi(arg);
+    {
+      struct obj_data *ware = read_object(number, VIRTUAL);
+      if (!ware) {
+        send_to_char("\r\nInvalid vnum.\r\n", CH);
+      } else {
+        if (d->edit_mode == MEDIT_ADD_CYBERWARE) {
+          if (GET_OBJ_TYPE(ware) != ITEM_CYBERWARE) {
+            send_to_char(CH, "\r\n%s is not cyberware.\r\n", GET_OBJ_NAME(ware));
+          } else {
+            obj_to_cyberware(ware, MOB);
+          }
+        } else {
+          if (GET_OBJ_TYPE(ware) != ITEM_BIOWARE) {
+            send_to_char(CH, "\r\n%s is not bioware.\r\n", GET_OBJ_NAME(ware));
+          } else {
+            obj_to_bioware(ware, MOB);
+          }
+        }
+      }
+
+      if (d->edit_mode == MEDIT_ADD_CYBERWARE)
+        medit_disp_cyberware_menu(d);
+      else
+        medit_disp_bioware_menu(d);
+    }
+    break;
+
+  case MEDIT_DEL_BIOWARE:
+  case MEDIT_DEL_CYBERWARE:
+    number = atoi(arg) - 1;
+    {
+      struct obj_data *ware;
+
+      if (d->edit_mode == MEDIT_DEL_CYBERWARE)
+        ware = MOB->cyberware;
+      else
+        ware = MOB->bioware;
+
+      while (ware && number-- > 0)
+        ware = ware->next_content;
+
+      if (ware) {
+        if (d->edit_mode == MEDIT_DEL_CYBERWARE) {
+          obj_from_cyberware(ware);
+        } else {
+          obj_from_bioware(ware);
+        }
+        extract_obj(ware);
+      } else {
+        send_to_char("\r\nThere aren't that many pieces of 'ware installed.\r\n", CH);
+      }
+
+      if (d->edit_mode == MEDIT_DEL_CYBERWARE)
+        medit_disp_cyberware_menu(d);
+      else
+        medit_disp_bioware_menu(d);
     }
     break;
 
@@ -1124,9 +1449,6 @@ void medit_parse(struct descriptor_data *d, const char *arg)
         medit_disp_menu(d);
         break;
       case '1':
-        display_pockets_to_char(CH, MOB);
-        break;
-      case '2':
         for (int i = START_OF_AMMO_USING_WEAPONS; i <= END_OF_AMMO_USING_WEAPONS; i++)
           send_to_char(CH, "%d) %s\r\n", (i + 1) - START_OF_AMMO_USING_WEAPONS, weapon_type[i]);
         send_to_char("\r\nSelect the weapon to edit: ", CH);
@@ -1137,7 +1459,7 @@ void medit_parse(struct descriptor_data *d, const char *arg)
         break;
     }
     break;
-  
+
   case MEDIT_AMMO_SELECT_WEAPON:
     number = (atoi(arg) - 1) + START_OF_AMMO_USING_WEAPONS;
     if (number < START_OF_AMMO_USING_WEAPONS || number > END_OF_AMMO_USING_WEAPONS)
@@ -1150,7 +1472,7 @@ void medit_parse(struct descriptor_data *d, const char *arg)
       d->edit_mode = MEDIT_AMMO_SELECT_AMMO;
     }
     break;
-  
+
   case MEDIT_AMMO_SELECT_AMMO:
     number = atoi(arg) - 1;
     if (number < AMMO_NORMAL || number >= NUM_AMMOTYPES)
@@ -1161,7 +1483,7 @@ void medit_parse(struct descriptor_data *d, const char *arg)
       d->edit_mode = MEDIT_AMMO_SELECT_QUANTITY;
     }
     break;
-    
+
   case MEDIT_AMMO_SELECT_QUANTITY:
     number = atoi(arg);
     if (number < 0 || number > MAX_NUMBER_OF_BULLETS_IN_PANTS) {
@@ -1171,7 +1493,7 @@ void medit_parse(struct descriptor_data *d, const char *arg)
       medit_disp_ammo_menu(d);
     }
     break;
-      
+
   case MEDIT_POSITION:
     number = atoi(arg);
     if ((number < POS_MORTALLYW) || (number > POS_STANDING)) {
@@ -1300,18 +1622,18 @@ void write_mobs_to_disk(int zone)
         fprintf(fp, "\tMaxPhys:\t%d\n", int(GET_MAX_PHYSICAL(mob) / 100));
       if (int(GET_MAX_MENTAL(mob) / 100) != 10)
         fprintf(fp, "\tMaxMent:\t%d\n", int(GET_MAX_MENTAL(mob) / 100));
-      if (GET_BALLISTIC(mob) > 0)
-        fprintf(fp, "\tBallistic:\t%d\n", GET_BALLISTIC(mob));
-      if (GET_IMPACT(mob) > 0)
-        fprintf(fp, "\tImpact:\t%d\n", GET_IMPACT(mob));
+      if (GET_INNATE_BALLISTIC(mob) > 0)
+        fprintf(fp, "\tBallistic:\t%d\n", GET_INNATE_BALLISTIC(mob));
+      if (GET_INNATE_IMPACT(mob) > 0)
+        fprintf(fp, "\tImpact:\t%d\n", GET_INNATE_IMPACT(mob));
       if (GET_NUYEN(mob) > 0)
         fprintf(fp, "\tCash:\t%ld\n", GET_NUYEN(mob));
       if (GET_BANK(mob) > 0)
         fprintf(fp, "\tBank:\t%ld\n", GET_BANK(mob));
       if (GET_KARMA(mob) > 0)
         fprintf(fp, "\tKarma:\t%d\n", GET_KARMA(mob));
-      fprintf(fp, "[SKILLS]\n");
 
+      fprintf(fp, "[SKILLS]\n");
       for (i = 0; i <= 8; i = i +2)
         if (mob->mob_specials.mob_skills[i])
           fprintf(fp, "\t%s:\t%d\n", skills[mob->mob_specials.mob_skills[i]].name,
@@ -1322,10 +1644,32 @@ void write_mobs_to_disk(int zone)
       for (int wp = START_OF_AMMO_USING_WEAPONS; wp <= END_OF_AMMO_USING_WEAPONS; wp++)
         for (int am = AMMO_NORMAL; am < NUM_AMMOTYPES; am++)
           if (GET_BULLETPANTS_AMMO_AMOUNT(mob, wp, am) > 0)
-            fprintf(fp, "\t%s:\t%u\n", 
+            fprintf(fp, "\t%s:\t%u\n",
                         get_ammo_representation(wp, am, 0),
                         GET_BULLETPANTS_AMMO_AMOUNT(mob, wp, am));
-            
+
+      // Print cyberware.
+      if (mob->cyberware) {
+        i = 0;
+        fprintf(fp, "[CYBERWARE]\n");
+        for (struct obj_data *cyb = mob->cyberware; cyb; cyb = cyb->next_content)
+          fprintf(fp, "\t[CYBER %d]\n\t\tVnum:\t%ld\n", i++, GET_OBJ_VNUM(cyb));
+      }
+
+      // Print bioware.
+      if (mob->bioware) {
+        i = 0;
+        fprintf(fp, "[BIOWARE]\n");
+        for (struct obj_data *bio = mob->bioware; bio; bio = bio->next_content)
+          fprintf(fp, "\t[BIO %d]\n\t\tVnum:\t%ld\n", i++, GET_OBJ_VNUM(bio));
+      }
+
+      fprintf(fp, "[EQUIPMENT]\n");
+      int idx = 0;
+      for (i = 0; i < NUM_WEARS; i++)
+        if (GET_EQ(mob, i))
+          fprintf(fp, "\t[EQ %d]\n\t\tVnum:\t%ld\n\t\tWearloc:\t%d\n", idx++, GET_OBJ_VNUM(GET_EQ(mob, i)), i);
+
       fprintf(fp, "BREAK\n");
     } // close if statement
   } // close for loop

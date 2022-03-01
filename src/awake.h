@@ -175,30 +175,31 @@
 
 /* PC races */
 
-#define RACE_UNDEFINED          1
-#define RACE_HUMAN              2
-#define RACE_DWARF              3
-#define RACE_ELF                4
-#define RACE_ORK                5
-#define RACE_TROLL              6
-#define RACE_CYCLOPS      7
-#define RACE_KOBOROKURU  8
-#define RACE_FOMORI  9
-#define RACE_MENEHUNE  10
-#define RACE_HOBGOBLIN  11
-#define RACE_GIANT  12
-#define RACE_GNOME  13
-#define RACE_ONI  14
-#define RACE_WAKYAMBI  15
-#define RACE_OGRE  16
-#define RACE_MINOTAUR  17
-#define RACE_SATYR  18
-#define RACE_NIGHTONE  19
-#define RACE_DRYAD  20
-#define RACE_DRAGON             21
-#define RACE_ELEMENTAL    22
-#define RACE_SPIRIT    23
-#define NUM_RACES               23  /* This must be the number of races */
+#define RACE_UNDEFINED             1
+#define RACE_HUMAN                 2
+#define RACE_DWARF                 3
+#define RACE_ELF                   4
+#define RACE_ORK                   5
+#define RACE_TROLL                 6
+#define RACE_CYCLOPS               7
+#define RACE_KOBOROKURU            8
+#define RACE_FOMORI                9
+#define RACE_MENEHUNE              10
+#define RACE_HOBGOBLIN             11
+#define RACE_GIANT                 12
+#define RACE_GNOME                 13
+#define RACE_ONI                   14
+#define RACE_WAKYAMBI              15
+#define RACE_OGRE                  16
+#define RACE_MINOTAUR              17
+#define RACE_SATYR                 18
+#define RACE_NIGHTONE              19
+#define RACE_DRYAD                 20
+#define RACE_DRAGON                21
+#define RACE_ELEMENTAL             22
+#define RACE_SPIRIT                23
+#define RACE_PC_CONJURED_ELEMENTAL 24
+#define NUM_RACES                  24  /* This must be the NUMBER of races */
 
 /* level definitions */
 
@@ -304,7 +305,8 @@ enum {
 #define PLR_NEWBIE_MUTED                    40 /* Remove their ability to talk on the newbie channel. */
 #define PLR_CYBERDOC                        41 /* Player may act as a cyberdoc. */
 #define PLR_PAID_FOR_CLOSECOMBAT            42
-#define PLR_MAX                             43
+#define PLR_PAID_FOR_KIPUP                  43
+#define PLR_MAX                             44
 
 
 
@@ -343,7 +345,8 @@ enum {
 #define MOB_NOKILL              30 /* Unkillable mob */
 #define MOB_TOTALINVIS          31 /* auto attack dragon PCs                 */
 #define MOB_INANIMATE            32
-#define MOB_MAX                  33
+#define MOB_EMPLACED             33 /* Won't close distance, can't be knocked down, has no recoil penalties, has unlimited ammo. Think emplaced turret. */
+#define MOB_MAX                  34
 
 /* preference flags: used by char_data.player_specials.pref */
 
@@ -408,11 +411,12 @@ enum {
 #define PRF_NO_VOID_ON_IDLE              57
 #define PRF_RADLOG                       58
 #define PRF_ANONYMOUS_ON_WHERE           59
-#define PRF_MAX                          60
+#define PRF_IGNORELOG                    60
+#define PRF_SEE_TIPS                     61
+#define PRF_MAX                          62
 
 /* log watch */
 
-// If you add to this list, also add the name of your new log type to constants.cpp's log_types[].
 #define LOG_CONNLOG        0
 #define LOG_DEATHLOG       1
 #define LOG_MISCLOG        2
@@ -430,7 +434,11 @@ enum {
 #define LOG_FUCKUPLOG      14
 #define LOG_ECONLOG        15
 #define LOG_RADLOG         16
-#define NUM_LOGS           17
+#define LOG_IGNORELOG      17
+#define NUM_LOGS           18
+// If you add to this list, add your bit to act.other.cpp's 'skip log bits' section.
+// If you add to this list, also add the name of your new log type to constants.cpp's log_types[].
+// Finally, add to utils.cpp's mudlog() switch.
 
 /* player conditions */
 
@@ -503,7 +511,8 @@ enum {
 #define AFF_AMMOBUILD    49
 #define AFF_CLOSECOMBAT  50
 #define AFF_SMART_ENOUGH_TO_TOGGLE_CLOSECOMBAT  51
-#define AFF_MAX       52
+#define AFF_LEVITATE  52
+#define AFF_MAX       53
 // TODO: If you add another long-state action like building, designing, etc:
 // - Add it to the BR_TASK_AFF_FLAGS section below, which affects bioware_check and the B/R flag in the wholist
 // - Add it to the IS_WORKING and STOP_WORKING macros in utils.h
@@ -688,7 +697,10 @@ enum {
 #define SPELL_THUNDERCLAP    63
 #define SPELL_WATERBOLT    64
 #define SPELL_SPLASH    65
-#define MAX_SPELLS    66
+#define SPELL_NIGHTVISION    66
+#define SPELL_INFRAVISION    67
+#define SPELL_LEVITATE    68
+#define MAX_SPELLS    69
 
 #define SPELL_DESIGN_FAILED_CODE -3
 
@@ -1044,6 +1056,7 @@ enum {
 #define TYPE_POLTERGEIST      412
 #define TYPE_ELEVATOR         413
 #define TYPE_MEDICAL_MISHAP   414
+#define TYPE_SPELL_DRAIN      415
 
 #define WEAP_EDGED          0
 #define WEAP_CLUB           1
@@ -1087,6 +1100,7 @@ enum {
 
 /* item types: used by obj_data.obj_flags.type_flag */
 
+#define MIN_ITEM                1        /* Must always be the minimum valid item-type number. */
 #define ITEM_LIGHT              1        /* Item is a light source            */
 #define ITEM_WORKSHOP           2        /* Item is a workshop (veh, etc)     */
 #define ITEM_CAMERA             3        /* Item is a camera                  */
@@ -1126,7 +1140,7 @@ enum {
 #define ITEM_MOD                38
 #define ITEM_HOLSTER            39
 #define ITEM_DESIGN             40
-#define ITEM_QUEST              41
+// AVAILABLE================================
 #define ITEM_GUN_AMMO           42
 #define ITEM_KEYRING            43
 #define ITEM_SHOPCONTAINER      44
@@ -1166,36 +1180,39 @@ enum {
 /* extra object flags: used by obj_data.obj_flags.extra_flags */
 /* see: https://github.com/luciensadi/AwakeMUD/wiki/Item-Extra-Flags */
 
-#define ITEM_GLOW               0     /* Item is glowing              */
-#define ITEM_HUM                1     /* Item is humming              */
-#define ITEM_NORENT             2     /* Item cannot be rented        */
-#define ITEM_NODONATE           3     /* Item cannot be donated       */
-#define ITEM_NOINVIS            4     /* Item cannot be made invis    */
-#define ITEM_INVISIBLE          5     /* Item is invisible            */
-#define ITEM_MAGIC              6     /* Item is magical              */
-#define ITEM_NODROP             7     /* Item is cursed: can't drop   */
-#define ITEM_FORMFIT            8     /* Item is blessed              */
-#define ITEM_NOSELL             9     /* Shopkeepers won't touch it   */
-#define ITEM_CORPSE             10    /* Item is a corpse             */
-#define ITEM_GODONLY            11    /* Only a god may use this item */
-#define ITEM_TWOHANDS           12    /* weapon takes 2 hands to use */
-#define ITEM_COMPBURST          13    /* Weapon requires complex action to use burst fire */
-#define ITEM_VOLATILE           14    /* connected item loaded in ip zone */
-#define ITEM_WIZLOAD            15    /* item was loaded by an immortal */
-#define ITEM_NOTROLL            16
-#define ITEM_NOELF              17
-#define ITEM_NODWARF            18
-#define ITEM_NOORK              19
-#define ITEM_NOHUMAN            20
-#define ITEM_SNIPER             21
-#define ITEM_IMMLOAD            22
-#define ITEM_NERPS              23    /* Item does not actually have any coded effect. */
-#define ITEM_BLOCKS_ARMOR       24    // Can't wear other armors with this.
-#define ITEM_HARDENED_ARMOR     25    // Applies hardened armor rules (deflect attacks with power <= armor rating) CC p51
-#define ITEM_DONT_TOUCH         26    // Warns strenuously on editing.
-#define ITEM_MAGIC_INCOMPATIBLE 27    // Incompatible with magic. Used for cyberware and bioware.
-#define ITEM_KEPT               28    // Kept by the keep command.
-#define ITEM_EXTRA_MAX          29
+#define ITEM_EXTRA_GLOW               0     /* Item is glowing              */
+#define ITEM_EXTRA_HUM                1     /* Item is humming              */
+#define ITEM_EXTRA_NORENT             2     /* Item cannot be rented        */
+#define ITEM_EXTRA_NODONATE           3     /* Item cannot be donated       */
+#define ITEM_EXTRA_NOINVIS            4     /* Item cannot be made invis    */
+#define ITEM_EXTRA_INVISIBLE          5     /* Item is invisible            */
+#define ITEM_EXTRA_MAGIC              6     /* Item is magical              */
+#define ITEM_EXTRA_NODROP             7     /* Item is cursed: can't drop   */
+#define ITEM_EXTRA_FORMFIT            8     /* Item is blessed              */
+#define ITEM_EXTRA_NOSELL             9     /* Shopkeepers won't touch it   */
+#define ITEM_EXTRA_CORPSE             10    /* Item is a corpse             */
+#define ITEM_EXTRA_STAFF_ONLY         11    /* Only a god may use this item */
+#define ITEM_EXTRA_TWOHANDS           12    /* weapon takes 2 hands to use */
+#define ITEM_EXTRA_COMPBURST          13    /* Weapon requires complex action to use burst fire */
+#define ITEM_EXTRA_VOLATILE           14    /* connected item loaded in ip zone */
+#define ITEM_EXTRA_WIZLOAD            15    /* item was loaded by an immortal */
+#define ITEM_EXTRA_NOTROLL            16
+#define ITEM_EXTRA_NOELF              17
+#define ITEM_EXTRA_NODWARF            18
+#define ITEM_EXTRA_NOORK              19
+#define ITEM_EXTRA_NOHUMAN            20
+#define ITEM_EXTRA_SNIPER             21
+#define ITEM_EXTRA_IMMLOAD            22
+#define ITEM_EXTRA_NERPS              23    /* Item does not actually have any coded effect. */
+#define ITEM_EXTRA_BLOCKS_ARMOR       24    // Can't wear other armors with this.
+#define ITEM_EXTRA_HARDENED_ARMOR     25    // Applies hardened armor rules (deflect attacks with power <= armor rating) CC p51
+#define ITEM_EXTRA_DONT_TOUCH         26    // Warns strenuously on editing.
+#define ITEM_EXTRA_MAGIC_INCOMPATIBLE 27    // Incompatible with magic. Used for cyberware and bioware.
+#define ITEM_EXTRA_KEPT               28    // Kept by the keep command.
+#define ITEM_EXTRA_AIR_FILTRATION     29    // Provides the wearer with filtered air (gas mask, etc)
+#define ITEM_EXTRA_NBC_RESISTANT      30    // Gives a bonus on resistance tests for contact chemical/toxin damage.
+#define ITEM_EXTRA_NBC_IMMUNE         31    // Conveys immunity to contact chemical / toxin damage (full-body hazard suit, etc)
+#define MAX_ITEM_EXTRA                32
 
 /* Ammo types */
 #define AMMO_NORMAL     0
@@ -1447,7 +1464,7 @@ enum {
 #define BIO_REFLEXRECORDER  22
 #define BIO_SYNAPTICACCELERATOR  23
 #define BIO_THERMOSENSEORGAN  24
-#define BIO_TRAUMADAMPNER  25
+#define BIO_TRAUMADAMPER  25
 #define NUM_BIOWARE    26
 
 #define BIOWARE_STANDARD 0
@@ -2292,6 +2309,13 @@ enum {
 #define OBJ_MAGE_LETTER                    5735
 #define OBJ_MODIFIED_BARRET_SNIPER_RIFLE   14636
 #define OBJ_STAFF_REBATE_FOR_DECKBUILDING  10003
+#define OBJ_EYEBALL_KEY                    22892
+#define OBJ_ELECTRONIC_EYEBALL_KEY         15889
+#define OBJ_ENCYCLOPEDIA_LABELED_O         38095
+#define OBJ_FIBEROPTIC_CRYSTAL             35029
+#define OBJ_OPTICAL_CHIP_KEY               4600
+#define OBJ_UNFINISHED_EQUATION            1015
+#define OBJ_SCANEYE                        3817
 
 #define OBJ_CMT_AVATAR                     80004
 #define OBJ_NOVATECH_SIX_SENSORS           17116
@@ -2432,6 +2456,7 @@ enum {
 #define ERROR_UNABLE_TO_CREATE_STR_IN_MAIL            48
 #define ERROR_DATABASE_CHANGES_NEEDED                 49
 #define ERROR_NULL_VEHICLE_VEH_FROM_ROOM              50
+#define ERROR_MISSING_ELEMENTALS                      51
 #define EXIT_CODE_REBOOTING                           52   /* what's so great about HHGTTG, anyhow? */
 
 // Materials.
@@ -2569,8 +2594,10 @@ enum {
 #define NUYEN_OUTFLOW_PGROUP                23
 #define NUYEN_OUTFLOW_TRADE_COMMAND         24
 #define NUYEN_OUTFLOW_CREDSTICK_CRACKER     25
+#define NUYEN_OUTFLOW_DEATH_PENALTY         26
 
-#define NUM_OF_TRACKED_NUYEN_INCOME_SOURCES 26
+#define NUM_OF_TRACKED_NUYEN_INCOME_SOURCES 27
+// Make sure you update constants.cpp's nuyen_faucets_and_sinks[] too!
 
 #define NI_IS_SINK   0
 #define NI_IS_FAUCET 1

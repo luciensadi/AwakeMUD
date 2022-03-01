@@ -24,6 +24,7 @@
 #include "newmagic.h"
 #include "config.h"
 #include "ignore_system.h"
+#include "perception_tests.h"
 
 /* external functs */
 int special(struct char_data * ch, int cmd, char *arg);
@@ -43,6 +44,7 @@ extern bool passed_flee_success_check(struct char_data *ch);
 extern int calculate_swim_successes(struct char_data *ch);
 extern bool can_edit_zone(struct char_data *ch, int zone);
 extern void send_mob_aggression_warnings(struct char_data *pc, struct char_data *mob);
+extern bool vict_is_valid_aggro_target(struct char_data *ch, struct char_data *vict);
 
 extern sh_int mortal_start_room;
 extern sh_int frozen_start_room;
@@ -70,7 +72,7 @@ int can_move(struct char_data *ch, int dir, int extra)
   if (IS_SET(extra, CHECK_SPECIAL) && special(ch, convert_dir[dir], &empty_argument))
     return 0;
 
-  if (ch->in_room && ch->in_room->icesheet[0] && !IS_ASTRAL(ch) && !IS_PROJECT(ch)) {
+  if (ch->in_room && ch->in_room->icesheet[0] && !IS_ASTRAL(ch) && !IS_PROJECT(ch) && !IS_AFFECTED(ch, AFF_LEVITATE)) {
     if (FIGHTING(ch) && success_test(GET_QUI(ch), ch->in_room->icesheet[0] + modify_target(ch)) < 1)
     {
       send_to_char("The ice at your feet causes you to trip and fall!\r\n", ch);
@@ -327,14 +329,12 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
         if (hunting_escortee(tch, ch)) {
           set_fighting(tch, ch);
         } else {
-          if ((!IS_NPC(ch) || IS_PROJECT(ch) || is_escortee(ch))
-              && !PRF_FLAGGED(ch, PRF_NOHASSLE)
-              && MOB_FLAGGED(tch, MOB_AGGRESSIVE)
-              && !FIGHTING(tch)
-              && IS_SET(extra, LEADER))
-          {
-            GET_MOBALERT(tch) = MALERT_ALERT;
-            GET_MOBALERTTIME(tch) = 20;
+          if (AFF_FLAGGED(ch, AFF_SPELLINVIS) || AFF_FLAGGED(ch, AFF_SPELLIMPINVIS)) {
+            process_spotted_invis(tch, ch);
+          }
+
+          if (vict_is_valid_aggro_target(tch, ch)) {
+            stop_fighting(tch);
             send_mob_aggression_warnings(ch, tch);
             set_fighting(tch, ch);
           }
@@ -390,7 +390,7 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
   }
 #endif
 
-  if (ROOM_FLAGGED(ch->in_room, ROOM_FALL) && !IS_ASTRAL(ch) && !IS_PROJECT(ch) && !(IS_SENATOR(ch) && PRF_FLAGGED(ch, PRF_NOHASSLE))) {
+  if (ROOM_FLAGGED(ch->in_room, ROOM_FALL) && !IS_ASTRAL(ch) && !IS_PROJECT(ch) && !IS_AFFECTED(ch, AFF_LEVITATE) && !(IS_SENATOR(ch) && PRF_FLAGGED(ch, PRF_NOHASSLE))) {
     perform_fall(ch);
     return 1;
   }

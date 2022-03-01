@@ -1242,7 +1242,7 @@ void do_stat_object(struct char_data * ch, struct obj_data * j)
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Set char bits : %s\r\n", buf2);
 
   GET_OBJ_EXTRA(j).PrintBits(buf2, MAX_STRING_LENGTH,
-                             extra_bits, ITEM_EXTRA_MAX);
+                             extra_bits, MAX_ITEM_EXTRA);
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Extra flags   : %s\r\n", buf2);
 
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Weight: %.2f, Value: %d, Timer: %d, Availability: %d/%.2f Days\r\n",
@@ -1560,7 +1560,7 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
   sprinttype((k->mob_specials.default_pos), position_types, buf2, sizeof(buf2));
   strlcat(buf, buf2, sizeof(buf));
 
-  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", Idle Timer: [%d], Emote Timer: [%d]\r\n", k->char_specials.timer, k->char_specials.last_emote);
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", Idle Timer: [%d], Emote Timer: [%d]\r\n", k->char_specials.timer, k->char_specials.last_social_action);
 
   PLR_FLAGS(k).PrintBits(buf2, MAX_STRING_LENGTH, player_bits, PLR_MAX);
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "PLR: ^c%s^n\r\n", buf2);
@@ -1570,6 +1570,9 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
 
   AFF_FLAGS(k).PrintBits(buf2, MAX_STRING_LENGTH, affected_bits, AFF_MAX);
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "AFF: ^y%s^n\r\n", buf2);
+  if (GET_BUILDING(k)) {
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Currently working on: ^c%s^n (%ld)\r\n", GET_OBJ_NAME(GET_BUILDING(k)), GET_OBJ_VNUM(GET_BUILDING(k)));
+  }
 
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Height: %d cm, Weight: %d kg\r\n", GET_HEIGHT(k), GET_WEIGHT(k));
 
@@ -1707,6 +1710,11 @@ void do_stat_mobile(struct char_data * ch, struct char_data * k)
   MOB_FLAGS(k).PrintBits(buf2, MAX_STRING_LENGTH, action_bits, MOB_MAX);
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "NPC flags: ^c%s^n\r\n", buf2);
 
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Alert status: ^c%s^n with ^c%d^n ticks cooldown.\r\n",
+           GET_MOBALERT(k) == MALERT_ALARM ? "^rAlarm^n" : (MALERT_ALERT ? "^yAlert^n" : "^gCalm^n"),
+           GET_MOBALERTTIME(k)
+         );
+
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Height: %d cm, Weight: %d kg\r\n", GET_HEIGHT(k), GET_WEIGHT(k));
 
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Carried: weight: %.2f, items: %d; ",
@@ -1739,6 +1747,34 @@ void do_stat_mobile(struct char_data * ch, struct char_data * k)
   /* Showing the bitvector */
   AFF_FLAGS(k).PrintBits(buf2, MAX_STRING_LENGTH, affected_bits, AFF_MAX);
   send_to_char(ch, "%sAFF: ^y%s\r\n", buf, buf2);
+
+  /* Equipment */
+  if (k->cyberware) {
+    send_to_char(ch, "Cyberware:\r\n");
+    for (struct obj_data *ware = k->cyberware; ware; ware = ware->next_content)
+      send_to_char(ch, " - %s (^c%ld^n)\r\n", GET_OBJ_NAME(ware), GET_OBJ_VNUM(ware));
+  }
+
+  if (k->bioware) {
+    send_to_char(ch, "Bioware:\r\n");
+    for (struct obj_data *ware = k->bioware; ware; ware = ware->next_content)
+      send_to_char(ch, " - %s (^c%ld^n)\r\n", GET_OBJ_NAME(ware), GET_OBJ_VNUM(ware));
+  }
+
+  {
+    struct obj_data *worn_item;
+    bool sent_eq_string = FALSE;
+
+    for (int wearloc = 0; wearloc < NUM_WEARS; wearloc++) {
+      if ((worn_item = GET_EQ(k, wearloc))) {
+        if (!sent_eq_string) {
+          send_to_char(ch, "Equipment:\r\n");
+          sent_eq_string = TRUE;
+        }
+        send_to_char(ch, " - %s %s (^c%ld^n) (%d nuyen)\r\n", where[wearloc], GET_OBJ_NAME(worn_item), GET_OBJ_VNUM(worn_item), GET_OBJ_COST(worn_item));
+      }
+    }
+  }
 }
 
 ACMD(do_stat)
@@ -2086,8 +2122,8 @@ void perform_wizload_object(struct char_data *ch, int vnum) {
   obj = read_object(real_num, REAL);
   obj_to_char(obj, ch);
   GET_OBJ_TIMER(obj) = 2;
-  obj->obj_flags.extra_flags.SetBit(ITEM_IMMLOAD); // Why the hell do we have immload AND wizload?
-  obj->obj_flags.extra_flags.SetBit(ITEM_WIZLOAD);
+  obj->obj_flags.extra_flags.SetBit(ITEM_EXTRA_IMMLOAD); // Why the hell do we have immload AND wizload?
+  obj->obj_flags.extra_flags.SetBit(ITEM_EXTRA_WIZLOAD);
   act("$n makes a strange magical gesture.", TRUE, ch, 0, 0, TO_ROOM);
   act("$n has created $p!", TRUE, ch, obj, 0, TO_ROOM);
   act("You create $p.", FALSE, ch, obj, 0, TO_CHAR);
@@ -2771,10 +2807,10 @@ ACMD(do_invis)
     else if (GET_LEVEL(ch) >= LVL_EXECUTIVE)
       perform_immort_invis(ch, 2);
     else
-      send_to_char(ch, "Due to player concerns, it is not possible for immortals under level %d to go invisible.", LVL_EXECUTIVE);
+      send_to_char(ch, "Due to player concerns, it is not possible for immortals under level %d to go invisible.\r\n", LVL_EXECUTIVE);
   } else {
     if (GET_LEVEL(ch) < LVL_EXECUTIVE) {
-      send_to_char(ch, "Due to player concerns, it is not possible for immortals under level %d to go invisible.", LVL_EXECUTIVE);
+      send_to_char(ch, "Due to player concerns, it is not possible for immortals under level %d to go invisible.\r\n", LVL_EXECUTIVE);
       perform_immort_vis(ch);
       return;
     }
@@ -4485,7 +4521,7 @@ ACMD(do_set)
     break;
   case 16:
     RANGE(0, 100);
-    GET_BALLISTIC(vict) = value;
+    GET_INNATE_BALLISTIC(vict) = value;
     affect_total(vict);
     break;
   case 17:
@@ -4699,7 +4735,7 @@ ACMD(do_set)
     break;
   case 44:
     RANGE(0, 100);
-    GET_IMPACT(vict) = value;
+    GET_INNATE_IMPACT(vict) = value;
     affect_total(vict);
     break;
   case 45:
@@ -4856,7 +4892,7 @@ ACMD(do_set)
     mudlog(buf, ch, LOG_WIZLOG, TRUE );
     break;
   case 78: /* powerpoints */
-    RANGE(0, 10000);
+    RANGE(-10000, 10000);
     GET_PP(vict) = value;
     snprintf(buf, sizeof(buf),"%s changed %s's powerpoints to %d.", GET_CHAR_NAME(ch), GET_NAME(vict), value);
     mudlog(buf, ch, LOG_WIZLOG, TRUE );
@@ -4925,7 +4961,7 @@ ACMD(do_logwatch)
   */
 
   if (!*buf) {
-    snprintf(buf, sizeof(buf), "You are currently watching the following:\r\n%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s",
+    snprintf(buf, sizeof(buf), "You are currently watching the following:\r\n%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s",
             (PRF_FLAGGED(ch, PRF_CONNLOG) ? "  ConnLog\r\n" : ""),
             (PRF_FLAGGED(ch, PRF_DEATHLOG) ? "  DeathLog\r\n" : ""),
             (PRF_FLAGGED(ch, PRF_MISCLOG) ? "  MiscLog\r\n" : ""),
@@ -4941,7 +4977,9 @@ ACMD(do_logwatch)
             (PRF_FLAGGED(ch, PRF_PURGELOG) ? "  PurgeLog\r\n" : ""),
             (PRF_FLAGGED(ch, PRF_FUCKUPLOG) ? "  FuckupLog\r\n" : ""),
             (PRF_FLAGGED(ch, PRF_ECONLOG) ? "  EconLog\r\n" : ""),
-            (PRF_FLAGGED(ch, PRF_RADLOG) ? "  RadLog\r\n" : ""));
+            (PRF_FLAGGED(ch, PRF_RADLOG) ? "  RadLog\r\n" : ""),
+            (PRF_FLAGGED(ch, PRF_IGNORELOG) ? "  IgnoreLog\r\n" : "")
+          );
 
     send_to_char(buf, ch);
     return;
@@ -5099,6 +5137,16 @@ ACMD(do_logwatch)
     } else {
       send_to_char("You aren't permitted to view that log at your level.\r\n", ch);
     }
+  } else if (is_abbrev(buf, "ignorelog")) {
+    if (PRF_FLAGGED(ch, PRF_IGNORELOG)) {
+      send_to_char("You no longer watch the IgnoreLog.\r\n", ch);
+      PRF_FLAGS(ch).RemoveBit(PRF_IGNORELOG);
+    } else if (access_level(ch, LVL_ADMIN)) {
+      send_to_char("You will now see the IgnoreLog.\r\n", ch);
+      PRF_FLAGS(ch).SetBit(PRF_IGNORELOG);
+    } else {
+      send_to_char("You aren't permitted to view that log at your level.\r\n", ch);
+    }
   } else if (is_abbrev(buf, "all")) {
     if (!PRF_FLAGGED(ch, PRF_CONNLOG))
       PRF_FLAGS(ch).SetBit(PRF_CONNLOG);
@@ -5132,12 +5180,14 @@ ACMD(do_logwatch)
       PRF_FLAGS(ch).SetBit(PRF_ECONLOG);
     if (!PRF_FLAGGED(ch, PRF_RADLOG) && access_level(ch, LVL_FIXER))
       PRF_FLAGS(ch).SetBit(PRF_RADLOG);
+    if (!PRF_FLAGGED(ch, PRF_IGNORELOG) && access_level(ch, LVL_ADMIN))
+      PRF_FLAGS(ch).SetBit(PRF_IGNORELOG);
     send_to_char("All available logs have been activated.\r\n", ch);
   } else if (is_abbrev(buf, "none")) {
     PRF_FLAGS(ch).RemoveBits(PRF_CONNLOG, PRF_DEATHLOG, PRF_MISCLOG, PRF_WIZLOG,
                              PRF_SYSLOG, PRF_ZONELOG, PRF_CHEATLOG, PRF_BANLOG, PRF_GRIDLOG,
                              PRF_WRECKLOG, PRF_PGROUPLOG, PRF_HELPLOG, PRF_PURGELOG,
-                             PRF_FUCKUPLOG, PRF_ECONLOG, PRF_RADLOG, ENDBIT);
+                             PRF_FUCKUPLOG, PRF_ECONLOG, PRF_RADLOG, PRF_IGNORELOG, ENDBIT);
     send_to_char("All logs have been disabled.\r\n", ch);
   } else
     send_to_char("Watch what log?\r\n", ch);
@@ -6470,13 +6520,6 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
         issues++;
       }
 
-    // Flag mobs with high armor.
-    if (GET_BALLISTIC(mob) > 10 || GET_IMPACT(mob) > 10) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - high armor (%d/%d)^n.\r\n", GET_BALLISTIC(mob), GET_IMPACT(mob));
-      printed = TRUE;
-      issues++;
-    }
-
     // Flag mobs with high nuyen.
     if (GET_NUYEN(mob) >= 200 || GET_BANK(mob) >= 200) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - high grinding rewards (%ld/%ld)^n.\r\n", GET_NUYEN(mob), GET_BANK(mob));
@@ -6542,10 +6585,34 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
       }
     }
 
-    if (IS_ELEMENTAL(mob) && GET_SKILL(mob, SKILL_SORCERY) > 0) {
-      strlcat(buf, "  - is an Elemental with Sorcery, but is restricted from casting by its race.\r\n", sizeof(buf));
+    if (IS_PC_CONJURED_ELEMENTAL(mob)) {
+      strlcat(buf, "  - is a PC Conjured Elemental.\r\n", sizeof(buf));
       printed = TRUE;
       issues++;
+    }
+
+    if (mob->cyberware || mob->bioware) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - has cyberware / bioware.\r\n");
+      printed = TRUE;
+      issues++;
+    }
+
+    {
+      int total_value = 0;
+      int total_items = 0;
+
+      for (int wearloc = 0; wearloc < NUM_WEARS; wearloc++) {
+        if (GET_EQ(mob, wearloc)) {
+          total_value += GET_OBJ_COST(GET_EQ(mob, wearloc));
+          total_items++;
+        }
+      }
+
+      if (total_items > 0) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - has %d piece%s of equipment (total value: ^c%d^n).\r\n", total_items, total_items == 1 ? "" : "s", total_value);
+        printed = TRUE;
+        issues++;
+      }
     }
 
     if (printed) {
@@ -6581,6 +6648,13 @@ int audit_zone_objects_(struct char_data *ch, int zone_num, bool verbose) {
     // Flag objects with zero cost
     if (GET_OBJ_COST(obj) <= 0) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - cost %d^n.\r\n", GET_OBJ_COST(obj));
+      printed = TRUE;
+      issues++;
+    }
+
+    // Flag objects with odd typing
+    if (GET_OBJ_TYPE(obj) < MIN_ITEM || GET_OBJ_TYPE(obj) >= NUM_ITEMS) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - invalid type %d^n.\r\n", GET_OBJ_TYPE(obj));
       printed = TRUE;
       issues++;
     }
@@ -6906,7 +6980,7 @@ int audit_zone_shops_(struct char_data *ch, int zone_num, bool verbose) {
       }
 
       // Flag the shopkeeper having wonky int values.
-      int intelligence = GET_INT(&mob_proto[shopkeeper_rnum]);
+      int intelligence = GET_REAL_INT(&mob_proto[shopkeeper_rnum]);
 #ifdef BE_STRICTER_ABOUT_SHOPKEEPER_INTELLIGENCE
       if (intelligence < 3 || intelligence > 12) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - out-of-range shopkeeper intelligence ^c%d^n (expecting between 3 and 12)^n.\r\n", intelligence);
@@ -6920,6 +6994,16 @@ int audit_zone_shops_(struct char_data *ch, int zone_num, bool verbose) {
         issues++;
       }
 #endif
+    }
+
+    for (struct shop_sell_data *sell = shop_table[real_shp].selling; sell; sell = sell->next) {
+      rnum_t obj_rnum = real_object(sell->vnum);
+      if (obj_rnum < 0) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - item ^c%ld^n is listed as for sale, but does not exist.\r\n", obj_rnum);
+      }
+      else if (sell->type == SELL_AVAIL && GET_OBJ_AVAILTN(&obj_proto[obj_rnum]) == 0) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - avail-listed item ^c%s ^n(^c%ld^n)^n has no TN.\r\n", GET_OBJ_NAME(&obj_proto[obj_rnum]), GET_OBJ_VNUM(&obj_proto[obj_rnum]));
+      }
     }
 
     if (printed) {

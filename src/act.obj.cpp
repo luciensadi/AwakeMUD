@@ -179,12 +179,12 @@ void perform_put(struct char_data *ch, struct obj_data *obj, struct obj_data *co
       act("You put $p in $P.", FALSE, ch, obj, cont, TO_CHAR);
       act("$n puts $p in $P.", TRUE, ch, obj, cont, TO_ROOM);
       if ( (!IS_NPC(ch) && access_level( ch, LVL_BUILDER ))
-           || IS_OBJ_STAT( obj, ITEM_WIZLOAD) ) {
+           || IS_OBJ_STAT( obj, ITEM_EXTRA_WIZLOAD) ) {
         char *representation = generate_new_loggable_representation(obj);
         snprintf(buf, sizeof(buf), "%s puts in (%ld) %s [restring: %s]: %s", GET_CHAR_NAME(ch),
                 GET_OBJ_VNUM( cont ), cont->text.name, cont->restring ? cont->restring : "none",
                 representation);
-        mudlog(buf, ch, IS_OBJ_STAT(obj, ITEM_WIZLOAD) ? LOG_WIZITEMLOG : LOG_CHEATLOG, TRUE);
+        mudlog(buf, ch, IS_OBJ_STAT(obj, ITEM_EXTRA_WIZLOAD) ? LOG_WIZITEMLOG : LOG_CHEATLOG, TRUE);
         delete [] representation;
       }
     }
@@ -195,6 +195,21 @@ void perform_put(struct char_data *ch, struct obj_data *obj, struct obj_data *co
     if (GET_OBJ_TYPE(obj) != ITEM_KEY) {
       act("You can only put keys on $P.", FALSE, ch, obj, cont, TO_CHAR);
       return;
+    }
+
+    // Rule out some of the weird keys.
+    switch (GET_OBJ_VNUM(obj)) {
+      case OBJ_ENCYCLOPEDIA_LABELED_O:
+      case OBJ_OPTICAL_CHIP_KEY:
+      case OBJ_FIBEROPTIC_CRYSTAL:
+      case OBJ_UNFINISHED_EQUATION:
+      case OBJ_SCANEYE:
+        send_to_char(ch, "You stare blankly at %s, unable to figure out how to thread it onto a keyring without putting holes in it.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
+        return;
+      case OBJ_EYEBALL_KEY:
+      case OBJ_ELECTRONIC_EYEBALL_KEY:
+        send_to_char(ch, "%s squishes unpleasantly between your fingers as you try to wrap the remnants of the optic nerve around the keyring.\r\n", capitalize(GET_OBJ_NAME(obj)));
+        return;
     }
 
     // Previously, we weight-limited the keyring, but that's no fun.
@@ -218,12 +233,12 @@ void perform_put(struct char_data *ch, struct obj_data *obj, struct obj_data *co
   act("You put $p in $P.", FALSE, ch, obj, cont, TO_CHAR);
   act("$n puts $p in $P.", TRUE, ch, obj, cont, TO_ROOM);
   if ( (!IS_NPC(ch) && access_level( ch, LVL_BUILDER ))
-       || IS_OBJ_STAT( obj, ITEM_WIZLOAD) ) {
+       || IS_OBJ_STAT( obj, ITEM_EXTRA_WIZLOAD) ) {
     char *representation = generate_new_loggable_representation(obj);
     snprintf(buf, sizeof(buf), "%s puts in (%ld) %s [restring: %s]: %s", GET_CHAR_NAME(ch),
             GET_OBJ_VNUM( cont ), cont->text.name, cont->restring ? cont->restring : "none",
             representation);
-    mudlog(buf, ch, IS_OBJ_STAT(obj, ITEM_WIZLOAD) ? LOG_WIZITEMLOG : LOG_CHEATLOG, TRUE);
+    mudlog(buf, ch, IS_OBJ_STAT(obj, ITEM_EXTRA_WIZLOAD) ? LOG_WIZITEMLOG : LOG_CHEATLOG, TRUE);
     delete [] representation;
   }
 }
@@ -708,7 +723,7 @@ void get_check_money(struct char_data * ch, struct obj_data * obj, struct obj_da
       send_to_char(ch, "There was 1 nuyen.\r\n");
 
     // Income from an NPC corpse is always tracked.
-    if (from_obj && (GET_OBJ_VNUM(from_obj) != OBJ_SPECIAL_PC_CORPSE && IS_OBJ_STAT(from_obj, ITEM_CORPSE))) {
+    if (from_obj && (GET_OBJ_VNUM(from_obj) != OBJ_SPECIAL_PC_CORPSE && IS_OBJ_STAT(from_obj, ITEM_EXTRA_CORPSE))) {
       if (IS_SENATOR(ch))
         send_to_char("(nuyen from npc corpse)\r\n", ch);
       gain_nuyen(ch, GET_ITEM_MONEY_VALUE(obj), NUYEN_INCOME_LOOTED_FROM_NPCS);
@@ -728,7 +743,7 @@ void get_check_money(struct char_data * ch, struct obj_data * obj, struct obj_da
   // Credstick? Handle it here.
   else {
     // Income from an NPC corpse is always tracked. We don't add it to their cash level though-- credstick.
-    if (from_obj && (GET_OBJ_VNUM(from_obj) != OBJ_SPECIAL_PC_CORPSE && IS_OBJ_STAT(from_obj, ITEM_CORPSE))) {
+    if (from_obj && (GET_OBJ_VNUM(from_obj) != OBJ_SPECIAL_PC_CORPSE && IS_OBJ_STAT(from_obj, ITEM_EXTRA_CORPSE))) {
       if (IS_SENATOR(ch))
         send_to_char("(credstick from npc corpse)\r\n", ch);
       GET_NUYEN_INCOME_THIS_PLAY_SESSION(ch, NUYEN_INCOME_LOOTED_FROM_NPCS) += GET_ITEM_MONEY_VALUE(obj);
@@ -800,14 +815,14 @@ void perform_get_from_container(struct char_data * ch, struct obj_data * obj,
       act("$p: you can't hold any more items.", FALSE, ch, obj, 0, TO_CHAR);
     else {
       if ( (!IS_NPC(ch) && access_level(ch, LVL_BUILDER))
-            || IS_OBJ_STAT(obj, ITEM_WIZLOAD)
-            || (cont->obj_flags.extra_flags.IsSet(ITEM_CORPSE) && GET_OBJ_VAL(cont, 4))) {
+            || IS_OBJ_STAT(obj, ITEM_EXTRA_WIZLOAD)
+            || (cont->obj_flags.extra_flags.IsSet(ITEM_EXTRA_CORPSE) && GET_OBJ_VAL(cont, 4))) {
         char *representation = generate_new_loggable_representation(obj);
         snprintf(buf, sizeof(buf), "%s gets from (%ld) %s [restring: %s]: %s",
                 GET_CHAR_NAME(ch),
                 GET_OBJ_VNUM( cont ), cont->text.name, cont->restring ? cont->restring : "none",
                 representation);
-        mudlog(buf, ch, IS_OBJ_STAT(obj, ITEM_WIZLOAD) ? LOG_WIZITEMLOG : LOG_CHEATLOG, TRUE);
+        mudlog(buf, ch, IS_OBJ_STAT(obj, ITEM_EXTRA_WIZLOAD) ? LOG_WIZITEMLOG : LOG_CHEATLOG, TRUE);
         delete [] representation;
       }
 
@@ -894,13 +909,13 @@ void perform_get_from_container(struct char_data * ch, struct obj_data * obj,
         obj = NULL;
       }
 
-      if (cont->obj_flags.extra_flags.IsSet(ITEM_CORPSE) && GET_OBJ_VAL(cont, 4) && !cont->contains) {
+      if (cont->obj_flags.extra_flags.IsSet(ITEM_EXTRA_CORPSE) && GET_OBJ_VAL(cont, 4) && !cont->contains) {
         if (cont->in_room && ROOM_FLAGGED(cont->in_room, ROOM_CORPSE_SAVE_HACK)) {
           bool should_clear_flag = TRUE;
 
           // Iterate through items in room, making sure there are no other corpses.
           for (struct obj_data *tmp_obj = cont->in_room->contents; tmp_obj; tmp_obj = tmp_obj->next_content) {
-            if (tmp_obj != cont && IS_OBJ_STAT(tmp_obj, ITEM_CORPSE) && GET_OBJ_BARRIER(tmp_obj) == PC_CORPSE_BARRIER) {
+            if (tmp_obj != cont && IS_OBJ_STAT(tmp_obj, ITEM_EXTRA_CORPSE) && GET_OBJ_BARRIER(tmp_obj) == PC_CORPSE_BARRIER) {
               should_clear_flag = FALSE;
               break;
             }
@@ -973,7 +988,7 @@ void get_from_container(struct char_data * ch, struct obj_data * cont,
     }
     return;
   }
-  if ( IS_OBJ_STAT(cont, ITEM_CORPSE) )
+  if ( IS_OBJ_STAT(cont, ITEM_EXTRA_CORPSE) )
   {
     if (GET_OBJ_VAL(cont, 4) == 1 && GET_OBJ_VAL(cont, 5) != GET_IDNUM(ch)
          && !IS_SENATOR(ch)) {
@@ -1099,11 +1114,11 @@ int perform_get_from_room(struct char_data * ch, struct obj_data * obj, bool dow
   }
 
   if ( (!IS_NPC(ch) && access_level( ch, LVL_BUILDER ))
-       || IS_OBJ_STAT( obj, ITEM_WIZLOAD) )
+       || IS_OBJ_STAT( obj, ITEM_EXTRA_WIZLOAD) )
   {
     char *representation = generate_new_loggable_representation(obj);
     snprintf(buf, sizeof(buf), "%s gets from room: %s", GET_CHAR_NAME(ch), representation);
-    mudlog(buf, ch, IS_OBJ_STAT(obj, ITEM_WIZLOAD) ? LOG_WIZITEMLOG : LOG_CHEATLOG, TRUE);
+    mudlog(buf, ch, IS_OBJ_STAT(obj, ITEM_EXTRA_WIZLOAD) ? LOG_WIZITEMLOG : LOG_CHEATLOG, TRUE);
     delete [] representation;
   }
 
@@ -1253,7 +1268,7 @@ void get_from_room(struct char_data * ch, char *arg, bool download)
       send_to_char(ch, "You don't see %s %s here.\r\n", AN(arg), arg);
     } else {
       if ( CAN_SEE_OBJ(ch, obj) ) {
-        if ( IS_OBJ_STAT(obj, ITEM_CORPSE) && GET_OBJ_VAL(obj, 4) == 1
+        if ( IS_OBJ_STAT(obj, ITEM_EXTRA_CORPSE) && GET_OBJ_VAL(obj, 4) == 1
              && GET_OBJ_VAL(obj, 5) != GET_IDNUM(ch) && !IS_SENATOR(ch) )
           send_to_char("It's not yours chummer...better leave it be.\r\n",ch);
         else {
@@ -1281,7 +1296,7 @@ void get_from_room(struct char_data * ch, char *arg, bool download)
       if (CAN_SEE_OBJ(ch, obj) &&
           (dotmode == FIND_ALL || isname(arg, obj->text.keywords))) {
         found = 1;
-        if ( IS_OBJ_STAT(obj, ITEM_CORPSE) && GET_OBJ_VAL(obj, 4) == 1
+        if ( IS_OBJ_STAT(obj, ITEM_EXTRA_CORPSE) && GET_OBJ_VAL(obj, 4) == 1
              && GET_OBJ_VAL(obj, 5) != GET_IDNUM(ch) && !access_level(ch, LVL_FIXER) )
           send_to_char("It's not yours chummer...better leave it be.\r\n",ch);
         else {
@@ -1641,7 +1656,7 @@ void perform_drop_gold(struct char_data * ch, int amount, byte mode, struct room
 
   if ( !IS_NPC(ch) && (access_level(ch, LVL_BUILDER)
        || IS_NPC(ch)))
-    obj->obj_flags.extra_flags.SetBit(ITEM_WIZLOAD);
+    obj->obj_flags.extra_flags.SetBit(ITEM_EXTRA_WIZLOAD);
 
   // Dropping money is not a sink.
   GET_NUYEN_RAW(ch) -= amount;
@@ -1675,13 +1690,13 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
 {
   int value;
 
-  if (IS_OBJ_STAT(obj, ITEM_NODROP))
+  if (IS_OBJ_STAT(obj, ITEM_EXTRA_NODROP))
   {
     snprintf(buf, sizeof(buf), "You can't %s $p, it must be CURSED!", sname);
     act(buf, FALSE, ch, obj, 0, TO_CHAR);
     return 0;
   }
-  if (IS_OBJ_STAT(obj, ITEM_KEPT)) {
+  if (IS_OBJ_STAT(obj, ITEM_EXTRA_KEPT) && !IS_SENATOR(ch)) {
     snprintf(buf, sizeof(buf), "You'll have to use the KEEP command on $p before you can %s it.", sname);
     act(buf, FALSE, ch, obj, 0, TO_CHAR);
     return 0;
@@ -1692,7 +1707,7 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
     return 0;
   }
 
-  if (obj_contains_kept_items(obj)) {
+  if (obj_contains_kept_items(obj) && !IS_SENATOR(ch)) {
     act("Action blocked: $p contains at least one kept item.", FALSE, ch, obj, 0, TO_CHAR);
     return 0;
   }
@@ -1816,17 +1831,17 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
     obj_from_char(obj);
   affect_total(ch);
 
-  if ((mode == SCMD_DONATE) && IS_OBJ_STAT(obj, ITEM_NODONATE))
+  if ((mode == SCMD_DONATE) && IS_OBJ_STAT(obj, ITEM_EXTRA_NODONATE))
     mode = SCMD_JUNK;
 
   if ( (!IS_NPC(ch) && access_level( ch, LVL_BUILDER ))
-       || IS_OBJ_STAT( obj, ITEM_WIZLOAD) )
+       || IS_OBJ_STAT( obj, ITEM_EXTRA_WIZLOAD) )
   {
     char *representation = generate_new_loggable_representation(obj);
     snprintf(buf, sizeof(buf), "%s %ss: %s", GET_CHAR_NAME(ch),
             sname,
             representation);
-    mudlog(buf, ch, IS_OBJ_STAT(obj, ITEM_WIZLOAD) ? LOG_WIZITEMLOG : LOG_CHEATLOG, TRUE);
+    mudlog(buf, ch, IS_OBJ_STAT(obj, ITEM_EXTRA_WIZLOAD) ? LOG_WIZITEMLOG : LOG_CHEATLOG, TRUE);
     delete [] representation;
   }
 
@@ -2002,16 +2017,16 @@ bool perform_give(struct char_data * ch, struct char_data * vict, struct obj_dat
     act("What use would $E have for $p?!", FALSE, ch, obj, vict, TO_CHAR);
     return 0;
   }
-  if (IS_OBJ_STAT(obj, ITEM_NODROP))
+  if (IS_OBJ_STAT(obj, ITEM_EXTRA_NODROP))
   {
     act("You can't let go of $p!!  Yeech!", FALSE, ch, obj, 0, TO_CHAR);
     return 0;
   }
-  if (IS_OBJ_STAT(obj, ITEM_KEPT)) {
+  if (IS_OBJ_STAT(obj, ITEM_EXTRA_KEPT) && !IS_SENATOR(ch)) {
     act("You'll have to use the KEEP command on $p before you can give it away.", FALSE, ch, obj, 0, TO_CHAR);
     return 0;
   }
-  if (obj_contains_kept_items(obj)) {
+  if (obj_contains_kept_items(obj) && !IS_SENATOR(ch)) {
     act("Action blocked: $p contains at least one kept item.", FALSE, ch, obj, 0, TO_CHAR);
     return 0;
   }
@@ -2067,12 +2082,12 @@ bool perform_give(struct char_data * ch, struct char_data * vict, struct obj_dat
   act("$n gives $p to $N.", TRUE, ch, obj, vict, TO_NOTVICT);
 
   if ( (!IS_NPC(ch) && access_level( ch, LVL_BUILDER ))
-       || IS_OBJ_STAT( obj, ITEM_WIZLOAD) )
+       || IS_OBJ_STAT( obj, ITEM_EXTRA_WIZLOAD) )
   {
     // Default/preliminary logging message; this is appended to where necessary.
     char *representation = generate_new_loggable_representation(obj);
     snprintf(buf, sizeof(buf), "%s gives %s: %s", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), representation);
-    mudlog(buf, ch, IS_OBJ_STAT(obj, ITEM_WIZLOAD) ? LOG_WIZITEMLOG : LOG_CHEATLOG, TRUE);
+    mudlog(buf, ch, IS_OBJ_STAT(obj, ITEM_EXTRA_WIZLOAD) ? LOG_WIZITEMLOG : LOG_CHEATLOG, TRUE);
     delete [] representation;
   }
 
@@ -2503,6 +2518,7 @@ ACMD(do_eat)
         if (GET_OBJ_VAL(cyber, 0) == BIO_PLATELETFACTORY) {
           GET_OBJ_VAL(cyber, 5) = 36;
           GET_OBJ_VAL(cyber, 6) = 0;
+          send_to_char("You relax as your platelet factory calms down.\r\n", ch);
           break;
         }
     }
@@ -2813,7 +2829,7 @@ int can_wield_both(struct char_data *ch, struct obj_data *one, struct obj_data *
     return FALSE;
   else if (!IS_GUN(GET_OBJ_VAL(one, 3)) && !IS_GUN(GET_OBJ_VAL(two, 3)))
     return FALSE;
-  else if (IS_OBJ_STAT(one, ITEM_TWOHANDS) || IS_OBJ_STAT(two, ITEM_TWOHANDS))
+  else if (IS_OBJ_STAT(one, ITEM_EXTRA_TWOHANDS) || IS_OBJ_STAT(two, ITEM_EXTRA_TWOHANDS))
     return FALSE;
 
   return TRUE;
@@ -2879,7 +2895,7 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where, bool 
   case RACE_DRYAD:
   case RACE_ELF:
   case RACE_NIGHTONE:
-    if (IS_OBJ_STAT(obj, ITEM_NOELF)) {
+    if (IS_OBJ_STAT(obj, ITEM_EXTRA_NOELF)) {
       if (print_messages)
         send_to_char(ch, "%s isn't sized right for elves.\r\n", capitalize(GET_OBJ_NAME(obj)));
       return;
@@ -2889,7 +2905,7 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where, bool 
   case RACE_MENEHUNE:
   case RACE_GNOME:
   case RACE_KOBOROKURU:
-    if (IS_OBJ_STAT(obj, ITEM_NODWARF)) {
+    if (IS_OBJ_STAT(obj, ITEM_EXTRA_NODWARF)) {
       if (print_messages)
         send_to_char(ch, "%s isn't sized right for dwarfs.\r\n", capitalize(GET_OBJ_NAME(obj)));
       return;
@@ -2900,14 +2916,14 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where, bool 
   case RACE_GIANT:
   case RACE_FOMORI:
   case RACE_CYCLOPS:
-    if (IS_OBJ_STAT(obj, ITEM_NOTROLL)) {
+    if (IS_OBJ_STAT(obj, ITEM_EXTRA_NOTROLL)) {
       if (print_messages)
         send_to_char(ch, "%s isn't sized right for trolls.\r\n", capitalize(GET_OBJ_NAME(obj)));
       return;
     }
     break;
   case RACE_HUMAN:
-    if (IS_OBJ_STAT(obj, ITEM_NOHUMAN)) {
+    if (IS_OBJ_STAT(obj, ITEM_EXTRA_NOHUMAN)) {
       if (print_messages)
         send_to_char(ch, "%s isn't sized right for humans.\r\n", capitalize(GET_OBJ_NAME(obj)));
       return;
@@ -2917,7 +2933,7 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where, bool 
   case RACE_ORK:
   case RACE_OGRE:
   case RACE_HOBGOBLIN:
-    if (IS_OBJ_STAT(obj, ITEM_NOORK)) {
+    if (IS_OBJ_STAT(obj, ITEM_EXTRA_NOORK)) {
       if (print_messages)
         send_to_char(ch, "%s isn't sized right for orks.\r\n", capitalize(GET_OBJ_NAME(obj)));
       return;
@@ -2939,7 +2955,7 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where, bool 
   }
 
 
-  if ((where == WEAR_WIELD || where == WEAR_HOLD) && IS_OBJ_STAT(obj, ITEM_TWOHANDS) &&
+  if ((where == WEAR_WIELD || where == WEAR_HOLD) && IS_OBJ_STAT(obj, ITEM_EXTRA_TWOHANDS) &&
       (GET_EQ(ch, WEAR_SHIELD) || GET_EQ(ch, WEAR_HOLD) || GET_EQ(ch, WEAR_WIELD)))
   {
     if (print_messages)
@@ -2986,13 +3002,13 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where, bool 
     return;
   }
 
-  if (GET_EQ(ch, WEAR_WIELD) && IS_OBJ_STAT(GET_EQ(ch, WEAR_WIELD), ITEM_TWOHANDS) &&
+  if (GET_EQ(ch, WEAR_WIELD) && IS_OBJ_STAT(GET_EQ(ch, WEAR_WIELD), ITEM_EXTRA_TWOHANDS) &&
       (where == WEAR_HOLD || where == WEAR_SHIELD))
   {
     if (print_messages)
       act("$p requires two free hands.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), 0, TO_CHAR);
     return;
-  } else if (GET_EQ(ch, WEAR_HOLD) && IS_OBJ_STAT(GET_EQ(ch, WEAR_HOLD), ITEM_TWOHANDS) &&
+  } else if (GET_EQ(ch, WEAR_HOLD) && IS_OBJ_STAT(GET_EQ(ch, WEAR_HOLD), ITEM_EXTRA_TWOHANDS) &&
              (where == WEAR_WIELD || where == WEAR_SHIELD))
   {
     if (print_messages)
@@ -3012,7 +3028,7 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where, bool 
       continue;
 
     // If this item can't be worn with other armors, check to make sure we meet that restriction.
-    if ((IS_OBJ_STAT(obj, ITEM_BLOCKS_ARMOR) || IS_OBJ_STAT(obj, ITEM_HARDENED_ARMOR)) &&
+    if ((IS_OBJ_STAT(obj, ITEM_EXTRA_BLOCKS_ARMOR) || IS_OBJ_STAT(obj, ITEM_EXTRA_HARDENED_ARMOR)) &&
         (GET_OBJ_TYPE(worn_item) == ITEM_WORN && (GET_WORN_IMPACT(worn_item) || GET_WORN_BALLISTIC(worn_item)))) {
       if (print_messages)
         send_to_char(ch, "You can't wear %s with %s.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(worn_item));
@@ -3020,7 +3036,7 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where, bool 
     }
 
     // If what they're wearing blocks other armors, and this item is armored, fail.
-    if ((IS_OBJ_STAT(worn_item, ITEM_BLOCKS_ARMOR) || IS_OBJ_STAT(worn_item, ITEM_HARDENED_ARMOR)) &&
+    if ((IS_OBJ_STAT(worn_item, ITEM_EXTRA_BLOCKS_ARMOR) || IS_OBJ_STAT(worn_item, ITEM_EXTRA_HARDENED_ARMOR)) &&
         (GET_OBJ_TYPE(obj) == ITEM_WORN && (GET_WORN_IMPACT(obj) || GET_WORN_BALLISTIC(obj)))) {
       if (print_messages)
         send_to_char(ch, "You can't wear %s with %s.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(worn_item));
@@ -3253,10 +3269,11 @@ ACMD(do_wield)
       if (GET_OBJ_VAL(obj, 9) && (rnum = real_object(GET_OBJ_VAL(obj, 9))) > -1 &&
         (attach = &obj_proto[rnum]) && GET_OBJ_TYPE(attach) == ITEM_GUN_ACCESSORY && (GET_OBJ_VAL(attach, 1) == ACCESS_BIPOD || GET_OBJ_VAL(attach, 1) == ACCESS_TRIPOD))
         found = TRUE;
+
       if (!found)
-        send_to_char(ch, "It's too heavy for you to wield effectively.\r\n");
-      else
-        perform_wear(ch, obj, WEAR_WIELD, TRUE);
+        send_to_char(ch, "Warning: %s is too heavy for you to wield effectively in combat unless you're ^WPRONE^n.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
+
+      perform_wear(ch, obj, WEAR_WIELD, TRUE);
     } else
       perform_wear(ch, obj, WEAR_WIELD, TRUE);
   }
@@ -3446,10 +3463,12 @@ ACMD(do_activate)
         total += ability_cost(i, q);
       if (x < GET_POWER_ACT(ch, i))
         total *= -1;
-      if (total + GET_POWER_POINTS(ch) > ((int)(GET_REAL_MAG(ch) / 100) * 100))
-        send_to_char("You have too many powers activated already.\r\n", ch);
+
+      int delta = ((int)(GET_REAL_MAG(ch) / 100) * 100) - GET_POWER_POINTS(ch);
+      if (total > delta)
+        send_to_char(ch, "That costs %d points to activate, but you only have %d free.\r\n", total, delta);
       else if (GET_POWER_ACT(ch, i) == x) {
-        send_to_char(ch, "%s is already active at rank %d.", CAP(adept_powers[i]), x);
+        send_to_char(ch, "%s is already active at rank %d.\r\n", CAP(adept_powers[i]), x);
         return;
       } else {
         GET_POWER_ACT(ch, i) = x;
@@ -3687,7 +3706,7 @@ int draw_from_readied_holster(struct char_data *ch, struct obj_data *holster) {
     return 0;
 
   // Did we fill up our hands, or do we only have one free hand for a two-handed weapon? Skip.
-  if ((GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD)) || ((GET_EQ(ch, WEAR_WIELD) || GET_EQ(ch, WEAR_HOLD)) && IS_OBJ_STAT(contents, ITEM_TWOHANDS)))
+  if ((GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD)) || ((GET_EQ(ch, WEAR_WIELD) || GET_EQ(ch, WEAR_HOLD)) && IS_OBJ_STAT(contents, ITEM_EXTRA_TWOHANDS)))
     return 0;
 
   // TODO: What does this check mean? (ed: probably intended to prevent machine guns and assault cannons from being drawn. Nonfunctional.)
@@ -4029,16 +4048,16 @@ ACMD(do_keep) {
   generic_find(argument, FIND_OBJ_EQUIP | FIND_OBJ_INV, ch, &tmp_char, &obj);
 
   if (!obj) {
-    send_to_char(ch, "You're not carrying or wearing anything named '%s'.", argument);
+    send_to_char(ch, "You're not carrying or wearing anything named '%s'.\r\n", argument);
     return;
   }
 
-  if (IS_OBJ_STAT(obj, ITEM_KEPT)) {
-    send_to_char(ch, "You un-keep %s.", decapitalize_a_an(GET_OBJ_NAME(obj)));
-    GET_OBJ_EXTRA(obj).RemoveBit(ITEM_KEPT);
+  if (IS_OBJ_STAT(obj, ITEM_EXTRA_KEPT)) {
+    send_to_char(ch, "You un-keep %s.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
+    GET_OBJ_EXTRA(obj).RemoveBit(ITEM_EXTRA_KEPT);
   } else {
-    send_to_char(ch, "You set %s as kept. You will be unable to drop, junk, or give it away until you use this command on it again.", decapitalize_a_an(GET_OBJ_NAME(obj)));
-    GET_OBJ_EXTRA(obj).SetBit(ITEM_KEPT);
+    send_to_char(ch, "You set %s as kept. You will be unable to drop, junk, or give it away until you use this command on it again.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
+    GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_KEPT);
   }
 
   playerDB.SaveChar(ch);

@@ -48,7 +48,7 @@ void vedit_disp_menu(struct descriptor_data * d)
                "(not set)");
   send_to_char(CH, "5) Vehicle Inside Descript: \r\n%s\r\n",
                d->edit_veh->inside_description ? d->edit_veh->inside_description : "(not set)");
-  send_to_char(CH, "6) Vehicle Inside Rear Descript: \r\n%s\r\n", 
+  send_to_char(CH, "6) Vehicle Inside Rear Descript: \r\n%s\r\n",
                d->edit_veh->rear_description ? d->edit_veh->rear_description : "(not set)");
   send_to_char(CH, "7) Arrive text: ^c%s^n,  8) Leave text: ^c%s^n\r\n",
                d->edit_veh->arrive, d->edit_veh->leave);
@@ -156,6 +156,14 @@ void vedit_parse(struct descriptor_data * d, const char *arg)
     switch (*arg) {
     case 'y':
     case 'Y': {
+#ifdef ONLY_LOG_BUILD_ACTIONS_ON_CONNECTED_ZONES
+        if (!vnum_from_non_connected_zone(d->edit_number)) {
+#else
+        {
+#endif
+          snprintf(buf, sizeof(buf),"%s wrote new vehicle #%ld", GET_CHAR_NAME(d->character), d->edit_number);
+          mudlog(buf, d->character, LOG_WIZLOG, TRUE);
+        }
         /* write to internal tables */
         veh_number = real_vehicle(d->edit_number);
         if (veh_number > 0) {
@@ -189,7 +197,7 @@ void vedit_parse(struct descriptor_data * d, const char *arg)
           // this function updates pointers to the active list of vehicles
           // in the mud
           /* now safe to free old proto and write over */
-          
+
 #define SAFE_VEH_ARRAY_DELETE(ITEM)                                                                        \
 if (d->edit_veh->ITEM && veh_proto[veh_number].ITEM && d->edit_veh->ITEM != veh_proto[veh_number].ITEM) {  \
   delete [] veh_proto[veh_number].ITEM;                                                                    \
@@ -204,11 +212,11 @@ if (d->edit_veh->ITEM && veh_proto[veh_number].ITEM && d->edit_veh->ITEM != veh_
           SAFE_VEH_ARRAY_DELETE(rear_description);
           SAFE_VEH_ARRAY_DELETE(arrive);
           SAFE_VEH_ARRAY_DELETE(leave);
-          
+
 #undef SAFE_VEH_ARRAY_DELETE
-          
+
           veh_proto[veh_number] = *d->edit_veh;
-          
+
         } else {
           /* uhoh.. need to make a new place in the vehicle prototype table */
           int             found = FALSE;

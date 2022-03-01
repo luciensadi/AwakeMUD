@@ -37,6 +37,12 @@
 #define IDX_MTX_ACCEPTABLE_RATING_MINIMUM 0
 #define IDX_MTX_ACCEPTABLE_RATING_MAXIMUM 1
 
+#define MTX_STAT_RATING             0
+#define MTX_STAT_ENCRYPTED          1
+#define MTX_STAT_SCRAMBLE_IC_RATING 2
+#define MTX_STAT_TRAPDOOR           5
+
+extern const char *acifs_strings[];
 
 struct host_data {
   vnum_t vnum;

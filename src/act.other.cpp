@@ -272,7 +272,7 @@ ACMD(do_steal)
         obj_to_char(unequip_char(vict, eq_pos, TRUE), ch);
         char *representation = generate_new_loggable_representation(obj);
         snprintf(buf, sizeof(buf), "%s steals from %s: %s", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), representation);
-        mudlog(buf, ch, IS_OBJ_STAT(obj, ITEM_WIZLOAD) ? LOG_WIZITEMLOG : LOG_CHEATLOG, TRUE);
+        mudlog(buf, ch, IS_OBJ_STAT(obj, ITEM_EXTRA_WIZLOAD) ? LOG_WIZITEMLOG : LOG_CHEATLOG, TRUE);
         delete [] representation;
       }
     } else {                    /* obj found in inventory */
@@ -283,7 +283,7 @@ ACMD(do_steal)
           else {
             char *representation = generate_new_loggable_representation(obj);
             snprintf(buf, sizeof(buf), "%s steals from %s: %s", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), representation);
-            mudlog(buf, ch, IS_OBJ_STAT(obj, ITEM_WIZLOAD) ? LOG_WIZITEMLOG : LOG_CHEATLOG, TRUE);
+            mudlog(buf, ch, IS_OBJ_STAT(obj, ITEM_EXTRA_WIZLOAD) ? LOG_WIZITEMLOG : LOG_CHEATLOG, TRUE);
             delete [] representation;
 
             obj_from_char(obj);
@@ -741,7 +741,7 @@ ACMD(do_use)
       send_to_char("You can't use that type of credstick.\r\n", ch);
     else if (!GET_OBJ_VAL(obj, 4) || belongs_to(ch, obj))
       send_to_char("And why would you need to do that?\r\n", ch);
-    else if (!IS_OBJ_STAT(corpse, ITEM_CORPSE))
+    else if (!IS_OBJ_STAT(corpse, ITEM_EXTRA_CORPSE))
       send_to_char("And how, pray tell, would that work?\r\n", ch);
     else if (GET_OBJ_VAL(obj, 3) || GET_OBJ_VAL(obj, 4) != GET_OBJ_VAL(corpse, 5)) {
       if (GET_OBJ_VAL(obj, 2) == 2) {
@@ -829,13 +829,14 @@ ACMD(do_wimpy)
 
 }
 
+// AKA do_prompt
 ACMD(do_display)
 {
   struct char_data *tch;
   char arg_with_prepared_quotes[MAX_PROMPT_LENGTH * 2];
 
   if (IS_NPC(ch) && !ch->desc->original) {
-    send_to_char("Monsters don't need displays.  Go away.\r\n", ch);
+    send_to_char("NPCs don't need prompts.  Go away.\r\n", ch);
     return;
   } else
     tch = (ch->desc->original ? ch->desc->original : ch);
@@ -844,7 +845,7 @@ ACMD(do_display)
   delete_doubledollar(argument);
 
   if (!*argument) {
-    send_to_char(ch, "Current prompt:\r\n%s\r\n", GET_PROMPT(tch));
+    send_to_char(ch, "Current prompt:\r\n%s\r\n", double_up_color_codes(GET_PROMPT(tch)));
     return;
   }
 
@@ -875,6 +876,11 @@ ACMD(do_gen_write)
     send_to_char("You must be Authorized to use that command.\r\n", ch);
     return;
   }
+
+#ifdef IS_BUILDPORT
+  send_to_char("That command is disabled on the buildport. Please file ideas etc on the main port!\r\n", ch);
+  return;
+#endif
 
   const char *cmd_name = "Error";
 
@@ -1147,7 +1153,9 @@ const char *tog_messages[][2] = {
                             {"You un-squelch your staff radio powers: You no longer require a radio to hear broadcasts, and will hear any language.\r\n",
                              "You squelch your staff radio listening powers: You now require a radio, and your language skills are suppressed.\r\n"},
                             {"You will now show up by name on the where-list.\r\n",
-                             "You will no longer show up by name on the where-list.\r\n"}
+                             "You will no longer show up by name on the where-list.\r\n"},
+                            {"You will no longer see newbie tips.\r\n",
+                             "You will now see newbie tips.\r\n"}
                           };
 
 ACMD(do_toggle)
@@ -1176,6 +1184,16 @@ ACMD(do_toggle)
         continue;
       }
 
+      // Skip log bits.
+      if ((i >= PRF_CONNLOG && i <= PRF_ZONELOG) || i == PRF_CHEATLOG || i == PRF_BANLOG || i == PRF_GRIDLOG || i == PRF_WRECKLOG
+          || i == PRF_PGROUPLOG || i == PRF_HELPLOG || i == PRF_PURGELOG || i == PRF_FUCKUPLOG || i == PRF_ECONLOG || i == PRF_RADLOG
+          || i == PRF_IGNORELOG)
+        continue;
+
+      // Skip pgroup tag pref for non-grouped.
+      if (i == PRF_SHOWGROUPTAG && (!GET_PGROUP_MEMBER_DATA(ch) || !GET_PGROUP(ch)))
+        continue;
+
       // Select ONOFF or YESNO display type based on field 2.
       if (preference_bits_v2[i].on_off) {
         strcpy(buf2, ONOFF(PRF_FLAGGED(ch, i)));
@@ -1185,7 +1203,7 @@ ACMD(do_toggle)
 
       // Compose and append our line.
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf),
-              "%20s: %-3s%s",
+              "%22s: %-3s%s",
               preference_bits_v2[i].name,
               buf2,
               printed%3 == 2 || PRF_FLAGGED(ch, PRF_SCREENREADER) ? "\r\n" : "");
@@ -1364,6 +1382,9 @@ ACMD(do_toggle)
     } else if (is_abbrev(argument, "nowhere") || is_abbrev(argument, "where") || is_abbrev(argument, "anonymous on where")) {
       result = PRF_TOG_CHK(ch, PRF_ANONYMOUS_ON_WHERE);
       mode = 41;
+    } else if (is_abbrev(argument, "tips") || is_abbrev(argument, "sees newbie tips") || is_abbrev(argument, "hints")) {
+      result = PRF_TOG_CHK(ch, PRF_SEE_TIPS);
+      mode = 42;
     } else {
       send_to_char("That is not a valid toggle option.\r\n", ch);
       return;
@@ -1735,6 +1756,9 @@ ACMD(do_eject)
   act("$n ejects and pockets a magazine from $p.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_ROOM);
   act("You eject and pocket a magazine from $p.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_CHAR);
 
+  // Ejecting a magazine costs a simple action.
+  GET_INIT_ROLL(ch) -= 5;
+
   // If it has a bayonet and you're in combat, you charge forth.
   if (FIGHTING(ch) && does_weapon_have_bayonet(weapon)) {
     send_to_char("With your weapon empty, you decide to do a bayonet charge!\r\n", ch);
@@ -1780,7 +1804,7 @@ ACMD(do_attach)
       send_to_char(ch, "%s is not a weapon you can attach to %s.\r\n", capitalize(GET_OBJ_NAME(item)), GET_VEH_NAME(veh));
       return;
     }
-    if (IS_OBJ_STAT(item, ITEM_GODONLY)) {
+    if (IS_OBJ_STAT(item, ITEM_EXTRA_STAFF_ONLY)) {
       send_to_char(ch, "You're not able to use %s- it's been restricted by staff.\r\n", GET_OBJ_NAME(item));
       return;
     }
@@ -1924,7 +1948,7 @@ ACMD(do_unattach)
     return;
   }
 
-  if (IS_OBJ_STAT(gun, ITEM_GODONLY) || gun->obj_flags.quest_id) {
+  if (IS_OBJ_STAT(gun, ITEM_EXTRA_STAFF_ONLY) || gun->obj_flags.quest_id) {
     send_to_char(ch, "You're not able to modify %s.\r\n", GET_OBJ_NAME(gun));
     return;
   }
@@ -2798,7 +2822,7 @@ ACMD(do_photo)
           if (GET_EQ(i, j) && CAN_SEE_OBJ(ch, GET_EQ(i, j))) {
             // Describe special-case wielded/held objects.
             if (j == WEAR_WIELD || j == WEAR_HOLD) {
-              if (IS_OBJ_STAT(GET_EQ(i, j), ITEM_TWOHANDS))
+              if (IS_OBJ_STAT(GET_EQ(i, j), ITEM_EXTRA_TWOHANDS))
                 strlcat(buf, hands[2], sizeof(buf));
               else if (j == WEAR_WIELD)
                 strlcat(buf, hands[(int)i->char_specials.saved.left_handed], sizeof(buf));
@@ -3201,7 +3225,7 @@ ACMD(do_assense)
         if (IS_NPC(vict)) {
           if (IS_SPIRIT(vict))
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %s a %s spirit", HSSH_SHOULD_PLURAL(vict) ? "is" : "are", spirit_name[GET_SPARE1(vict)]);
-          else if (IS_ELEMENTAL(vict))
+          else if (IS_ANY_ELEMENTAL(vict))
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %s a %s elemental", HSSH_SHOULD_PLURAL(vict) ? "is" : "are", elements[GET_SPARE1(vict)].name);
           else if (GET_MAG(vict) > 0)
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %s awakened", HSSH_SHOULD_PLURAL(vict) ? "is" : "are");
@@ -3230,7 +3254,7 @@ ACMD(do_assense)
         if (IS_NPC(vict)) {
           if (IS_SPIRIT(vict))
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %s a %s spirit", HSSH_SHOULD_PLURAL(vict) ? "is" : "are", spirits[GET_SPARE1(vict)].name);
-          else if (IS_ELEMENTAL(vict))
+          else if (IS_ANY_ELEMENTAL(vict))
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %s a %s elemental", HSSH_SHOULD_PLURAL(vict) ? "is" : "are", elements[GET_SPARE1(vict)].name);
           else if (GET_MAG(vict) > 0)
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %s awakened", HSSH_SHOULD_PLURAL(vict) ? "is" : "are");
@@ -3341,7 +3365,7 @@ ACMD(do_assense)
         if (IS_NPC(vict)) {
           if (IS_SPIRIT(vict))
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " is a %s of force %d", spirits[GET_SPARE1(vict)].name, GET_LEVEL(vict));
-          else if (IS_ELEMENTAL(vict))
+          else if (IS_ANY_ELEMENTAL(vict))
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " is a %s elemental of force %d", elements[GET_SPARE1(vict)].name, GET_LEVEL(vict));
           else if (GET_MAG(vict) > 0)
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " has %d magic", (int)(GET_MAG(vict) / 100));
@@ -4231,6 +4255,8 @@ ACMD(do_spool)
   def = atoi(argument);
   reflect = atoi(buf);
 
+  // TODO: SR3 p182: No more Spell Pool dice can be added to the test than the Sorcery dice allocated.
+
   total -= ch->real_abils.casting_pool = GET_CASTING(ch) = MIN(cast, total);
   total -= ch->real_abils.drain_pool = GET_DRAIN(ch) = MIN(drain, total);
   total -= ch->real_abils.spell_defense_pool = GET_SDEFENSE(ch) = MIN(def, total);
@@ -4402,12 +4428,12 @@ ACMD(do_cleanup)
   generic_find(argument, FIND_OBJ_ROOM, ch, &tmp_char, &target_obj);
 
   if (!target_obj) {
-    send_to_char(ch, "You don't see anything called '%s' here.", argument);
+    send_to_char(ch, "You don't see anything called '%s' here.\r\n", argument);
     return;
   }
 
   if (GET_OBJ_VNUM(target_obj) != OBJ_GRAFFITI) {
-    send_to_char(ch, "%s is not graffiti.", capitalize(GET_OBJ_NAME(target_obj)));
+    send_to_char(ch, "%s is not graffiti.\r\n", capitalize(GET_OBJ_NAME(target_obj)));
     return;
   }
 
@@ -4497,14 +4523,14 @@ ACMD(do_syspoints) {
   // Morts can only view their own system points.
   if (!access_level(ch, LVL_CONSPIRATOR)) {
     if (!*argument) {
-      send_to_char(ch, "You have %d system points.\r\n", GET_SYSTEM_POINTS(ch));
+      send_to_char(ch, "You have %d system points. See ^WHELP SYSPOINTS^n for how to use them.\r\n", GET_SYSTEM_POINTS(ch));
       return;
     }
 
     half_chop(argument, arg, buf);
 
     if (!*arg) {
-      send_to_char("Syntax: syspoints restring <item> <string>\r\n", ch);
+      send_to_char("See ^WHELP SYSPOINTS^n for command syntax.\r\n", ch);
       return;
     }
 
@@ -4514,7 +4540,41 @@ ACMD(do_syspoints) {
       return;
     }
 
-    send_to_char("Syntax: syspoints restring <item> <string>\r\n", ch);
+    if (is_abbrev(arg, "nodelete")) {
+      if (PRF_FLAGGED(ch, PRF_HARDCORE)) {
+        send_to_char("Hardcore characters are nodelete by default.\r\n", ch);
+        return;
+      }
+
+      // Already set.
+      if (PLR_FLAGGED(ch, PLR_NODELETE)) {
+        send_to_char("You're already set to never idle-delete. Thanks for your contributions!\r\n", ch);
+        return;
+      }
+
+      // Can they afford it?
+      if (GET_SYSTEM_POINTS(ch) >= SYSP_NODELETE_COST) {
+        // Have they entered the confirmation command?
+        if (is_abbrev(buf, "confirm")) {
+          GET_SYSTEM_POINTS(ch) -= SYSP_NODELETE_COST;
+          send_to_char(ch, "Congratulations, your character will never idle-delete! %d syspoints have been deducted from your total.\r\n", SYSP_NODELETE_COST);
+          PLR_FLAGS(ch).SetBit(PLR_NODELETE);
+          mudlog("Purchased nodelete with syspoints.", ch, LOG_SYSLOG, TRUE);
+          playerDB.SaveChar(ch);
+          return;
+        }
+
+        // They can afford it, but didn't use the confirm form.
+        send_to_char(ch, "You can spend %d syspoints to purchase a character that never idle-deletes. Type ^WSYSPOINTS NODELETE CONFIRM^n to do so.\r\n", SYSP_NODELETE_COST);
+        return;
+      }
+
+      // Too broke.
+      send_to_char(ch, "That costs %d syspoints, and you only have %d.\r\n", SYSP_NODELETE_COST, GET_SYSTEM_POINTS(ch));
+      return;
+    }
+
+    send_to_char(ch, "'%s' is not a valid mode. See ^WHELP SYSPOINTS^n for command syntax.\r\n", arg);
     return;
   }
 

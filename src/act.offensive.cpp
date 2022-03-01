@@ -77,6 +77,7 @@ ACMD(do_assist)
 #ifdef IGNORING_IC_ALSO_IGNORES_COMBAT
       if (IS_IGNORING(opponent, is_blocking_ic_interaction_from, ch)) {
         act("You can't see who is fighting $M!", FALSE, ch, 0, helpee, TO_CHAR);
+        log_attempt_to_bypass_ic_ignore(ch, opponent, "do_assist");
         return;
       }
 
@@ -364,6 +365,7 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
 #ifdef IGNORING_IC_ALSO_IGNORES_COMBAT
     if (IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)) {
       send_to_char("They are nothing but a figment of your imagination.\r\n", ch);
+      log_attempt_to_bypass_ic_ignore(ch, vict, "perform_hit");
       return TRUE;
     }
 
@@ -708,6 +710,7 @@ ACMD(do_kick)
       if (!IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)) {
         act("$n sneaks up behind you and kicks you in the ass!\r\n"
             "That's gonna leave a mark...", FALSE, ch, 0, vict, TO_VICT);
+        log_attempt_to_bypass_ic_ignore(ch, vict, "kick");
       }
       act("$n sneaks up behind $N and gives $M a swift kick in the ass!",
           TRUE, ch, 0, vict, TO_NOTVICT);
@@ -742,6 +745,28 @@ ACMD(do_kick)
   }
 }
 
+bool cyber_is_retractable(struct obj_data *cyber) {
+  if (GET_OBJ_TYPE(cyber) != ITEM_CYBERWARE) {
+    mudlog("SYSERR: Received non-cyberware to cyber_is_retractable!", NULL, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+
+  switch (GET_CYBERWARE_TYPE(cyber)) {
+    case CYB_HANDRAZOR:
+    case CYB_HANDBLADE:
+    case CYB_HANDSPUR:
+    case CYB_CLIMBINGCLAWS:
+      if (!IS_SET(GET_CYBERWARE_FLAGS(cyber), CYBERWEAPON_RETRACTABLE))
+        return FALSE;
+      // fallthrough
+    case CYB_FOOTANCHOR:
+    case CYB_FIN:
+      return TRUE;
+  }
+
+  return FALSE;
+}
+
 ACMD(do_retract)
 {
   skip_spaces(&argument);
@@ -749,43 +774,42 @@ ACMD(do_retract)
   if (*argument)
     cyber = get_obj_in_list_vis(ch, argument, ch->cyberware);
   else {
-    for (struct obj_data *obj = ch->cyberware; obj; obj = obj->next_content)
-      switch (GET_CYBERWARE_TYPE(obj)) {
-        case CYB_HANDRAZOR:
-        case CYB_HANDBLADE:
-        case CYB_HANDSPUR:
-          if (!IS_SET(GET_OBJ_VAL(obj, 3), CYBERWEAPON_RETRACTABLE))
-            continue;
-          // fall through
-        case CYB_CLIMBINGCLAWS:
-        case CYB_FOOTANCHOR:
-        case CYB_FIN:
-          cyber = obj;
-          break;
+    for (struct obj_data *obj = ch->cyberware; obj; obj = obj->next_content) {
+      if (cyber_is_retractable(obj)) {
+        cyber = obj;
+        break;
       }
-  }
-  if (!cyber) {
-    if (!*argument)
-      send_to_char("You don't have any retractable cyberware.\r\n", ch);
-    else send_to_char("You don't have that cyberware.\r\n", ch);
-  } else if (!(GET_CYBERWARE_TYPE(cyber) == CYB_HANDRAZOR || GET_CYBERWARE_TYPE(cyber) == CYB_HANDSPUR || GET_CYBERWARE_TYPE(cyber) == CYB_HANDBLADE || GET_CYBERWARE_TYPE(cyber) == CYB_FOOTANCHOR || GET_CYBERWARE_TYPE(cyber) == CYB_FIN))
-    send_to_char("That cyberware isn't retractable.\r\n",ch );
-  else if ((GET_CYBERWARE_TYPE(cyber) == CYB_HANDRAZOR || GET_CYBERWARE_TYPE(cyber) == CYB_HANDSPUR || GET_CYBERWARE_TYPE(cyber) == CYB_HANDBLADE) && !IS_SET(GET_CYBERWARE_FLAGS(cyber), CYBERWEAPON_RETRACTABLE))
-    send_to_char("That cyberweapon isn't retractable.\r\n",ch );
-  else {
-    if (GET_CYBERWARE_IS_DISABLED(cyber)) {
-      GET_CYBERWARE_IS_DISABLED(cyber) = FALSE;
-      snprintf(buf, sizeof(buf), "$n extends %s.", GET_OBJ_NAME(cyber));
-      act(buf, TRUE, ch, 0, 0, TO_ROOM);
-      send_to_char(ch, "You extend %s.\r\n", GET_OBJ_NAME(cyber));
-    } else {
-      GET_CYBERWARE_IS_DISABLED(cyber) = TRUE;
-      snprintf(buf, sizeof(buf), "$n retracts %s.", GET_OBJ_NAME(cyber));
-      act(buf, TRUE, ch, 0, 0, TO_ROOM);
-      send_to_char(ch, "You retract %s.\r\n", GET_OBJ_NAME(cyber));
     }
-    affect_total(ch);
   }
+
+  // Found nothing?
+  if (!cyber) {
+    if (!*argument) {
+      send_to_char("You don't have any retractable cyberware.\r\n", ch);
+    } else {
+      send_to_char("You don't have that cyberware.\r\n", ch);
+    }
+    return;
+  }
+
+  // Found something, but it's not flagged retractable.
+  if (!cyber_is_retractable(cyber)) {
+    send_to_char(ch, "%s isn't retractable.\r\n", capitalize(GET_OBJ_NAME(cyber)));
+    return;
+  }
+
+  if (GET_CYBERWARE_IS_DISABLED(cyber)) {
+    GET_CYBERWARE_IS_DISABLED(cyber) = FALSE;
+    snprintf(buf, sizeof(buf), "$n extends %s.", decapitalize_a_an(GET_OBJ_NAME(cyber)));
+    act(buf, TRUE, ch, 0, 0, TO_ROOM);
+    send_to_char(ch, "You extend %s.\r\n", decapitalize_a_an(GET_OBJ_NAME(cyber)));
+  } else {
+    GET_CYBERWARE_IS_DISABLED(cyber) = TRUE;
+    snprintf(buf, sizeof(buf), "$n retracts %s.", decapitalize_a_an(GET_OBJ_NAME(cyber)));
+    act(buf, TRUE, ch, 0, 0, TO_ROOM);
+    send_to_char(ch, "You retract %s.\r\n", decapitalize_a_an(GET_OBJ_NAME(cyber)));
+  }
+  affect_total(ch);
 }
 
 ACMD(do_mode)
@@ -854,13 +878,97 @@ ACMD(do_mode)
 
 ACMD(do_prone)
 {
+  // Lose half an init pass to simulate taking a simple action.
+  GET_INIT_ROLL(ch) -= 5;
+
+  // Set wait state.
+  WAIT_STATE(ch, 0.5 RL_SEC);
+
   if (AFF_FLAGGED(ch, AFF_PRONE)) {
-    GET_INIT_ROLL(ch) -= 10;
-    act("$n gets to $s feet.", TRUE, ch, 0, 0, TO_ROOM);
-    send_to_char("You get to your feet.\r\n", ch);
-  } else {
-    act("$n drops into a prone position.", TRUE, ch, 0, 0, TO_ROOM);
-    send_to_char("You drop prone.\r\n", ch);
+    // Wounded? You gotta pass a Will test to stand (SR3 p106)
+    if (GET_PHYSICAL(ch) < 10 || GET_MENTAL(ch) < 10) {
+      char pronebuf[1000];
+      strlcpy(pronebuf, "^ostand-while-wounded will test: ", sizeof(pronebuf));
+
+      int dice = GET_WIL(ch) + GET_TASK_POOL(ch, WIL);
+      int tn = 2 + modify_target_rbuf_raw(ch, pronebuf, sizeof(pronebuf), 8, FALSE);
+      int successes = success_test(dice, tn);
+
+      snprintf(ENDOF(pronebuf), sizeof(pronebuf) - strlen(pronebuf), "; %d dice vs TN %d: %d success%s", dice, tn, successes, successes == 1 ? "" : "s");
+      act(pronebuf, FALSE, ch, 0, 0, TO_ROLLS);
+
+      if (successes <= 0) {
+        send_to_char("You can't quite overcome the pain of your injuries, and collapse back into the prone position.\r\n", ch);
+        act("$n struggles to rise.", TRUE, ch, 0, 0, TO_ROOM);
+        return;
+      }
+
+      act("$n fights through the pain to get back on $s feet.", TRUE, ch, 0, 0, TO_ROOM);
+      send_to_char("You fight through the pain to get back to your feet.\r\n", ch);
+    } else {
+      act("$n gets to $s feet.", TRUE, ch, 0, 0, TO_ROOM);
+      send_to_char("You get to your feet.\r\n", ch);
+    }
+    AFF_FLAGS(ch).RemoveBit(AFF_PRONE);
+    return;
   }
-  AFF_FLAGS(ch).ToggleBit(AFF_PRONE);
+
+  else {
+    // Modify messaging for people wielding guns with bipods / tripods.
+    struct obj_data *weapon = GET_EQ(ch, WEAR_WIELD);
+    struct obj_data *attach = NULL;
+
+    if (WEAPON_IS_GUN(weapon) && GET_WEAPON_ATTACH_UNDER_VNUM(weapon) > 0) {
+      rnum_t attach_rnum = real_object(GET_WEAPON_ATTACH_UNDER_VNUM(weapon));
+      if (attach_rnum >= 0) {
+        attach = &obj_proto[attach_rnum];
+
+        // We only allow bipods and tripods here.
+        if (GET_OBJ_TYPE(attach) != ITEM_GUN_ACCESSORY || !(GET_ACCESSORY_TYPE(attach) == ACCESS_TRIPOD || GET_ACCESSORY_TYPE(attach) == ACCESS_BIPOD)) {
+          attach = NULL;
+        }
+      }
+    }
+
+    if (!attach) {
+      act("$n settles into a prone position.", TRUE, ch, 0, 0, TO_ROOM);
+      send_to_char("You settle into a prone position.\r\n", ch);
+    } else {
+      if (GET_ACCESSORY_TYPE(attach) == ACCESS_TRIPOD) {
+        act("$n settles into a prone position, deploying $p's tripod.", TRUE, ch, weapon, 0, TO_ROOM);
+        send_to_char("You settle into a prone position, taking an additional moment to deploy your weapon's tripod.\r\n", ch);
+        // Lose an additional half an init pass to simulate the simple action to deploy the tripod.
+        GET_INIT_ROLL(ch) -= 5;
+        WAIT_STATE(ch, 1 RL_SEC);
+      } else {
+        act("$n settles into a prone position, resting $p on its bipod.", TRUE, ch, weapon, 0, TO_ROOM);
+        send_to_char("You settle into a prone position, resting your weapon on its bipod.\r\n", ch);
+      }
+    }
+
+    AFF_FLAGS(ch).SetBit(AFF_PRONE);
+    return;
+
+    /*  After writing this, I realized it only applies when you DROP prone instead of taking a simple action. -LS
+
+    // SR3 p105: Must make a Willpower(Force) test to avoid dropping a sustained spell when dropping prone.
+    struct sustain_data *next;
+    for (struct sustain_data *sust = GET_SUSTAINED(victim); sust; sust = next) {
+      next = sust->next;
+      if (sust->caster && !sust->focus && !sust->spirit) {
+        strlcat(buf, "Maintain-sustain-while-prone test: ", sizeof(buf));
+
+        int dice = GET_WILL(ch);
+        int tn = MAX(2, sust->force + modify_target_rbuf_raw(ch, buf, sizeof(buf), 8, TRUE));
+        int successes = success_test(dice, tn);
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  %d dice vs TN %d, %d successes.", dice, tn, successes);
+        act(buf, FALSE, ch, 0, 0, TO_ROLLS);
+
+        if (successes <= 0) {
+          end_sustained_spell(victim, sust);
+        }
+      }
+    }
+    */
+  }
 }

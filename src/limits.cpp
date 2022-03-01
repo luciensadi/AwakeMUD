@@ -449,7 +449,7 @@ void check_idling(void)
         do_return(ch, "", 0, 0);
     } else if (!IS_NPC(ch)) {
       ch->char_specials.timer++;
-      ch->char_specials.last_emote++;
+      ch->char_specials.last_social_action++;
       if (!(IS_SENATOR(ch) || IS_WORKING(ch) || PLR_FLAGGED(ch, PLR_NO_IDLE_OUT) || PRF_FLAGGED(ch, PRF_NO_VOID_ON_IDLE)) || !ch->desc) {
 #ifdef VOID_IDLE_PCS
         if (!GET_WAS_IN(ch) && ch->in_room && ch->char_specials.timer > 15) {
@@ -549,7 +549,7 @@ void check_bioware(struct char_data *ch)
 int calculate_swim_successes(struct char_data *ch) {
   int swim_test_target, skill_dice, opposing_dice, successes, water_wings_bonus = 0, fin_bonus = 0;
 
-  if (IS_NPC(ch) || IS_SENATOR(ch) || !ch->in_room)
+  if (IS_NPC(ch) || IS_SENATOR(ch) || IS_AFFECTED(ch, AFF_LEVITATE) || !ch->in_room)
     return 20;
 
   for (int x = WEAR_LIGHT; x < NUM_WEARS; x++)
@@ -563,7 +563,7 @@ int calculate_swim_successes(struct char_data *ch) {
     }
 
   snprintf(buf, sizeof(buf), "modify_target results: ");
-  swim_test_target = MAX(2, ch->in_room->rating) + modify_target_rbuf_raw(ch, buf, sizeof(buf), 4) - water_wings_bonus;
+  swim_test_target = MAX(2, ch->in_room->rating) + modify_target_rbuf_raw(ch, buf, sizeof(buf), 4, FALSE) - water_wings_bonus;
   act(buf, FALSE, ch, 0, 0, TO_ROLLS);
 
   if (GET_POS(ch) < POS_RESTING)
@@ -1252,7 +1252,7 @@ void save_vehicles(bool fromCopyover)
     std::vector<std::string> obj_strings;
     std::stringstream obj_string_buf;
     for (obj = veh->contents;obj;) {
-      if (!IS_OBJ_STAT(obj, ITEM_NORENT)) {
+      if (!IS_OBJ_STAT(obj, ITEM_EXTRA_NORENT)) {
         obj_string_buf << "\t\tVnum:\t" << GET_OBJ_VNUM(obj) << "\n";
         obj_string_buf << "\t\tInside:\t" << level << "\n";
         if (GET_OBJ_TYPE(obj) == ITEM_PHONE)
@@ -1277,7 +1277,7 @@ void save_vehicles(bool fromCopyover)
         obj_string_buf.str(std::string());
       }
 
-      if (obj->contains && !IS_OBJ_STAT(obj, ITEM_NORENT) && GET_OBJ_TYPE(obj) != ITEM_PART) {
+      if (obj->contains && !IS_OBJ_STAT(obj, ITEM_EXTRA_NORENT) && GET_OBJ_TYPE(obj) != ITEM_PART) {
         obj = obj->contains;
         level++;
         continue;
@@ -1414,7 +1414,7 @@ void misc_update(void)
     if (!CH_IN_COMBAT(ch) && AFF_FLAGGED(ch, AFF_ACID))
       AFF_FLAGS(ch).RemoveBit(AFF_ACID);
 
-    if (GET_SUSTAINED_NUM(ch) && !IS_ELEMENTAL(ch)) {
+    if (GET_SUSTAINED_NUM(ch) && !IS_ANY_ELEMENTAL(ch)) {
       struct sustain_data *next, *temp, *nsus;
       for (struct sustain_data *sus = GET_SUSTAINED(ch); sus; sus = next) {
         next = sus->next;

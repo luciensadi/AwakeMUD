@@ -30,6 +30,7 @@ extern const char *drinks[];
 extern const char *color_liquid[];
 extern const char *fullness[];
 extern const char *weekdays[];
+extern const char *weekdays_tm_aligned[];
 extern const char *month_name[];
 extern int rev_dir[];
 extern int drink_aff[][3];

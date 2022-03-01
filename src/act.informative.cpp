@@ -102,6 +102,8 @@ extern const char *pc_readable_extra_bits[];
 extern struct elevator_data *elevator;
 extern int num_elevators;
 
+const char *get_command_hints_for_obj(struct obj_data *obj);
+
 /* blood stuff */
 
 const char* blood_messages[] = {
@@ -211,7 +213,7 @@ char *make_desc(struct char_data *ch, struct char_data *i, char *buf, int act, b
 
 void get_obj_condition(struct char_data *ch, struct obj_data *obj)
 {
-  if (GET_OBJ_EXTRA(obj).IsSet(ITEM_CORPSE))
+  if (GET_OBJ_EXTRA(obj).IsSet(ITEM_EXTRA_CORPSE))
   {
     send_to_char("Examining it reveals that it really IS dead.\r\n", ch);
     return;
@@ -290,7 +292,7 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
     if (GET_OBJ_SPEC(object) == pocket_sec && amount_of_mail_waiting(ch) > 0) {
       strlcat(buf, " ^y(Mail Waiting)^n", sizeof(buf));
     }
-    if (IS_OBJ_STAT(object, ITEM_KEPT)) {
+    if (IS_OBJ_STAT(object, ITEM_EXTRA_KEPT)) {
       strlcat(buf, " ^c(kept)^n", sizeof(buf));
     }
   }
@@ -328,20 +330,20 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
       strlcat(buf, " (damaged)", sizeof(buf));
   }
   if (mode != 3) {
-    if (IS_OBJ_STAT(object, ITEM_INVISIBLE)) {
+    if (IS_OBJ_STAT(object, ITEM_EXTRA_INVISIBLE)) {
       strlcat(buf, " ^B(invisible)", sizeof(buf));
     }
 
-    if ((GET_OBJ_TYPE(object) == ITEM_FOCUS || IS_OBJ_STAT(object, ITEM_MAGIC))
+    if ((GET_OBJ_TYPE(object) == ITEM_FOCUS || IS_OBJ_STAT(object, ITEM_EXTRA_MAGIC))
         && (IS_ASTRAL(ch) || IS_DUAL(ch))) {
       strlcat(buf, " ^Y(magic aura)", sizeof(buf));
     }
 
-    if (IS_OBJ_STAT(object, ITEM_GLOW)) {
+    if (IS_OBJ_STAT(object, ITEM_EXTRA_GLOW)) {
       strlcat(buf, " ^W(glowing)", sizeof(buf));
     }
 
-    if (IS_OBJ_STAT(object, ITEM_HUM)) {
+    if (IS_OBJ_STAT(object, ITEM_EXTRA_HUM)) {
       strlcat(buf, " ^c(humming)", sizeof(buf));
     }
 
@@ -435,7 +437,7 @@ void list_veh_to_char(struct veh_data * list, struct char_data * ch)
   }
 }
 
-#define IS_INVIS(o) IS_OBJ_STAT(o, ITEM_INVISIBLE)
+#define IS_INVIS(o) IS_OBJ_STAT(o, ITEM_EXTRA_INVISIBLE)
 
 bool items_are_visually_similar(struct obj_data *first, struct obj_data *second) {
   if (!first || !second) {
@@ -452,7 +454,7 @@ bool items_are_visually_similar(struct obj_data *first, struct obj_data *second)
     return FALSE;
 
   // Kept state must match.
-  if (IS_OBJ_STAT(first, ITEM_KEPT) != IS_OBJ_STAT(second, ITEM_KEPT))
+  if (IS_OBJ_STAT(first, ITEM_EXTRA_KEPT) != IS_OBJ_STAT(second, ITEM_EXTRA_KEPT))
     return FALSE;
 
   // If the names don't match, they're not similar.
@@ -541,13 +543,13 @@ list_obj_to_char(struct obj_data * list, struct char_data * ch, int mode,
     }
 
     if (CAN_SEE_OBJ(ch, i)) {
-      if (corpse && IS_OBJ_STAT(i, ITEM_CORPSE)) {
+      if (corpse && IS_OBJ_STAT(i, ITEM_EXTRA_CORPSE)) {
         if (num > 1) {
           send_to_char(ch, "(%d) ", num);
         }
         show_obj_to_char(i, ch, mode);
       } else
-        if (!corpse && !mode && !IS_OBJ_STAT(i, ITEM_CORPSE)) {
+        if (!corpse && !mode && !IS_OBJ_STAT(i, ITEM_EXTRA_CORPSE)) {
           if (num > 1) {
             send_to_char(ch, "(%d) ", num);
           }
@@ -760,12 +762,12 @@ void look_at_char(struct char_data * i, struct char_data * ch)
           send_to_char(where[j], ch);
           show_obj_to_char(GET_EQ(i, j), ch, 7);
         } else if (j == WEAR_WIELD || j == WEAR_HOLD) {
-          if (IS_OBJ_STAT(GET_EQ(i, j), ITEM_TWOHANDS))
-            send_to_char(hands[2], ch);
+          if (IS_OBJ_STAT(GET_EQ(i, j), ITEM_EXTRA_TWOHANDS))
+            send_to_char(MOB_FLAGGED(i, MOB_INANIMATE) ? "<firmly mounted>     " : hands[2], ch);
           else if (j == WEAR_WIELD)
-            send_to_char(hands[(int)i->char_specials.saved.left_handed], ch);
+            send_to_char(MOB_FLAGGED(i, MOB_INANIMATE) ? "<mounted>            " : hands[(int)i->char_specials.saved.left_handed], ch);
           else
-            send_to_char(hands[!i->char_specials.saved.left_handed], ch);
+            send_to_char(MOB_FLAGGED(i, MOB_INANIMATE) ? "<mounted>            " : hands[!i->char_specials.saved.left_handed], ch);
           show_obj_to_char(GET_EQ(i, j), ch, 1);
         } else if ((j == WEAR_BODY || j == WEAR_LARM || j == WEAR_RARM || j == WEAR_WAIST)
                    && GET_EQ(i, WEAR_ABOUT)) {
@@ -930,13 +932,13 @@ void look_at_char(struct char_data * i, struct char_data * ch)
 void list_one_char(struct char_data * i, struct char_data * ch)
 {
   struct obj_data *obj = NULL;
-  if (IS_NPC(i) && i->player.physical_text.room_desc &&
-      GET_POS(i) == GET_DEFAULT_POS(i) && !MOB_FLAGGED(i, MOB_FLAMEAURA))
+  if (IS_NPC(i)
+      && i->player.physical_text.room_desc
+      && GET_POS(i) == GET_DEFAULT_POS(i)
+      && !AFF_FLAGGED(i, AFF_PRONE)
+      && !MOB_FLAGGED(i, MOB_FLAMEAURA))
   {
-    if (IS_AFFECTED(i, AFF_INVISIBLE))
-      strlcpy(buf, "*", sizeof(buf));
-    else
-      *buf = '\0';
+    *buf = '\0';
 
     // Note quest or nokill protection.
     if (i->mob_specials.quest_id) {
@@ -983,6 +985,10 @@ void list_one_char(struct char_data * i, struct char_data * ch)
     }
 #endif
 
+    // Make sure they always display flags that are relevant to the player.
+    if (IS_AFFECTED(i, AFF_INVISIBLE) || IS_AFFECTED(i, AFF_IMP_INVIS) || IS_AFFECTED(i, AFF_SPELLINVIS) || IS_AFFECTED(i, AFF_SPELLIMPINVIS))
+      strlcat(buf, "(invisible) ", sizeof(buf));
+
     if (IS_ASTRAL(ch) || IS_DUAL(ch)) {
       if (IS_ASTRAL(i))
         strlcat(buf, "(astral) ", sizeof(buf));
@@ -1001,20 +1007,20 @@ void list_one_char(struct char_data * i, struct char_data * ch)
                    HSSH(i),
                    already_printed ? " also" : "",
                    HSSH_SHOULD_PLURAL(i) ? "looks" : "look",
-                   GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Use the ^YTRAIN^y command to begin." : "");
+                   SHOULD_SEE_TIPS(ch) ? " Use the ^YTRAIN^y command to begin." : "");
           already_printed = TRUE;
         }
         if (MOB_HAS_SPEC(i, teacher)) {
           if (MOB_FLAGGED(i, MOB_INANIMATE)) {
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...it%s can be used to help you practice your skills.%s^n\r\n",
                      already_printed ? " also" : "",
-                     GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Use the ^YPRACTICE^y command to begin." : "");
+                     SHOULD_SEE_TIPS(ch) ? " Use the ^YPRACTICE^y command to begin." : "");
           } else {
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s willing to help you practice your skills.%s^n\r\n",
                      HSSH(i),
                      already_printed ? " also" : "",
                      HSSH_SHOULD_PLURAL(i) ? "looks" : "look",
-                     GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Use the ^YPRACTICE^y command to begin." : "");
+                     SHOULD_SEE_TIPS(ch) ? " Use the ^YPRACTICE^y command to begin." : "");
           }
           already_printed = TRUE;
         }
@@ -1025,7 +1031,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
                      HSSH(i),
                      already_printed ? " also" : "",
                      HSSH_SHOULD_PLURAL(i) ? "looks" : "look",
-                     GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Use the ^YTRAIN^y command to begin." : "");
+                     SHOULD_SEE_TIPS(ch) ? " Use the ^YTRAIN^y command to begin." : "");
             already_printed = TRUE;
           }
         }
@@ -1036,7 +1042,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
                      HSSH(i),
                      already_printed ? " also" : "",
                      HSSH_SHOULD_PLURAL(i) ? "looks" : "look",
-                     GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Use the ^YTRAIN^y command to begin." : "");
+                     SHOULD_SEE_TIPS(ch) ? " Use the ^YTRAIN^y command to begin." : "");
             already_printed = TRUE;
           }
           else if (!PLR_FLAGGED(ch, PLR_PAID_FOR_CLOSECOMBAT)) {
@@ -1044,7 +1050,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
                      HSSH(i),
                      already_printed ? " also" : "",
                      HSSH_SHOULD_PLURAL(i) ? "looks" : "look",
-                     GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Use the ^YTRAIN^y command to begin." : "");
+                     SHOULD_SEE_TIPS(ch) ? " Use the ^YTRAIN^y command to begin." : "");
             already_printed = TRUE;
           }
         }
@@ -1055,7 +1061,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
                      HSSH(i),
                      already_printed ? " also" : "",
                      HSSH_SHOULD_PLURAL(i) ? "looks" : "look",
-                     GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Use the ^YLEARN^y command to begin." : "");
+                     SHOULD_SEE_TIPS(ch) ? " Use the ^YLEARN^y command to begin." : "");
             already_printed = TRUE;
           }
         }
@@ -1063,7 +1069,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might have a job for you.%s^n\r\n",
                    HSSH(i),
                    already_printed ? " also" : "",
-                   GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " See ^YHELP JOB^y for instructions." : "");
+                   SHOULD_SEE_TIPS(ch) ? " See ^YHELP JOB^y for instructions." : "");
           already_printed = TRUE;
         }
         if (MOB_HAS_SPEC(i, shop_keeper) || MOB_HAS_SPEC(i, terell_davis)) {
@@ -1071,21 +1077,21 @@ void list_one_char(struct char_data * i, struct char_data * ch)
                    HSSH(i),
                    already_printed ? " also" : "",
                    HASHAVE(i),
-                   GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Use the ^YLIST^y command to see them." : "");
+                   SHOULD_SEE_TIPS(ch) ? " Use the ^YLIST^y command to see them." : "");
           already_printed = TRUE;
         }
         if (MOB_HAS_SPEC(i, landlord_spec)) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might have some rooms for lease.%s^n\r\n",
                    HSSH(i),
                    already_printed ? " also" : "",
-                   GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " See ^YHELP APARTMENTS^y for details." : "");
+                   SHOULD_SEE_TIPS(ch) ? " See ^YHELP APARTMENTS^y for details." : "");
           already_printed = TRUE;
         }
         if (MOB_HAS_SPEC(i, fence)) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might be willing to buy paydata from you.%s^n\r\n",
                    HSSH(i),
                    already_printed ? " also" : "",
-                   GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " If you have paydata, ^YUNINSTALL^y it from your deck and then ^YSELL PAYDATA^y." : "");
+                   SHOULD_SEE_TIPS(ch) ? " If you have paydata, ^YUNINSTALL^y it from your deck and then ^YSELL PAYDATA^y." : "");
           already_printed = TRUE;
         }
         if (MOB_HAS_SPEC(i, hacker)) {
@@ -1100,14 +1106,14 @@ void list_one_char(struct char_data * i, struct char_data * ch)
                    HSSH(i),
                    already_printed ? " also" : "",
                    HASHAVE(i),
-                   GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Renting is purely for flavor and is not required in AwakeMUD." : "");
+                   SHOULD_SEE_TIPS(ch) ? " Renting is purely for flavor and is not required in AwakeMUD." : "");
           already_printed = TRUE;
         }
         if (MOB_HAS_SPEC(i, fixer)) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s can repair objects for you.%s^n\r\n",
                    HSSH(i),
                    already_printed ? " also" : "",
-                   GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Use the ^YREPAIR^y command to proceed." : "");
+                   SHOULD_SEE_TIPS(ch) ? " Use the ^YREPAIR^y command to proceed." : "");
           already_printed = TRUE;
         }
         if (i->in_room && GET_ROOM_SPEC(i->in_room) == mageskill_hermes) {
@@ -1143,6 +1149,8 @@ void list_one_char(struct char_data * i, struct char_data * ch)
 
     return;
   }
+
+
   make_desc(ch, i, buf, FALSE, FALSE, sizeof(buf));
   if (PRF_FLAGGED(i, PRF_AFK))
     strlcat(buf, " (AFK)", sizeof(buf));
@@ -1219,8 +1227,13 @@ void list_one_char(struct char_data * i, struct char_data * ch)
     strlcat(buf, " is here, working on a workshop.", sizeof(buf));
   else if (AFF_FLAGGED(i, AFF_BONDING))
     strlcat(buf, " is here, performing a bonding ritual.", sizeof(buf));
-  else if (AFF_FLAGGED(i, AFF_PRONE))
-    strlcat(buf, " is laying prone here.", sizeof(buf));
+  else if (AFF_FLAGGED(i, AFF_PRONE)) {
+    if (WEAPON_IS_GUN(GET_EQ(i, WEAR_WIELD))) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " is prone here, manning %s.", decapitalize_a_an(GET_OBJ_NAME(GET_EQ(i, WEAR_WIELD))));
+    } else {
+      strlcat(buf, " is lying prone here.", sizeof(buf));
+    }
+  }
   else if (AFF_FLAGGED(i, AFF_PILOT))
   {
     if (AFF_FLAGGED(i, AFF_RIG))
@@ -1229,8 +1242,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
       strlcat(buf, " is sitting in the drivers seat.", sizeof(buf));
   } else if ((obj = get_mount_manned_by_ch(i))) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " is manning %s.", GET_OBJ_NAME(obj));
-  } else if (GET_POS(i) != POS_FIGHTING)
-  {
+  } else if (GET_POS(i) != POS_FIGHTING) {
     if (GET_DEFPOS(i))
       snprintf(buf2, sizeof(buf2), " %s^n", GET_DEFPOS(i));
     else
@@ -1704,6 +1716,8 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
         break;
     }
   }
+
+  // Display weather info in the room.
   if (!ROOM_FLAGGED(ch->in_room, ROOM_INDOORS)) {
     if (IS_WATER(ch->in_room)) {
       if (weather_info.sky >= SKY_RAINING) {
@@ -1711,7 +1725,15 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
       }
     } else {
       if (weather_info.sky >= SKY_RAINING) {
-        send_to_char(ch, "^cRain splashes into the puddles around your feet.^n\r\n");
+        if (ch->in_veh) {
+          if (ch->in_veh->type == VEH_BIKE) {
+            send_to_char(ch, "^cRain ricochets off your shoulders and splashes about the bike.^n\r\n");
+          } else {
+            send_to_char(ch, "^cRain glides down your vehicle's windows, wipers brushing it clear with patient motion.^n\r\n");
+          }
+        } else {
+          send_to_char(ch, "^cRain splashes into the puddles around your feet.^n\r\n");
+        }
       } else if (weather_info.lastrain < 5) {
         send_to_char(ch, "^cThe ground is wet, it must have rained recently.^n\r\n");
       }
@@ -2233,43 +2255,52 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       // Ranged weapons first.
       if (IS_GUN(GET_WEAPON_ATTACK_TYPE(j))) {
         int burst_count = 0;
-        if (GET_WEAPON_MAX_AMMO(j) > 0) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%d-round %s^n that uses the ^c%s^n skill to fire.",
-                  GET_WEAPON_MAX_AMMO(j),
-                  weapon_type[GET_WEAPON_ATTACK_TYPE(j)],
-                  skills[GET_WEAPON_SKILL(j)].name);
-        } else {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is %s ^c%s^n that uses the ^c%s^n skill to fire.",
-                  AN(weapon_type[GET_WEAPON_ATTACK_TYPE(j)]),
-                  weapon_type[GET_WEAPON_ATTACK_TYPE(j)],
-                  skills[GET_WEAPON_SKILL(j)].name);
-        }
-        // Damage code.
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " Its base damage code is ^c%d%s%s^n",
-                 GET_WEAPON_POWER(j),
-                 wound_arr[GET_WEAPON_DAMAGE_CODE(j)],
-                 !IS_DAMTYPE_PHYSICAL(get_weapon_damage_type(j)) ? " (stun)" : "");
 
-        // Burst fire?
-        if (GET_WEAPON_FIREMODE(j) == MODE_BF || GET_WEAPON_FIREMODE(j) == MODE_FA) {
-          burst_count = GET_WEAPON_FIREMODE(j) == MODE_BF ? 3 : GET_WEAPON_FULL_AUTO_COUNT(j);
-
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", raised to ^c%d%s%s^n by its current fire mode.",
-                   GET_WEAPON_POWER(j) + burst_count,
-                   wound_arr[MIN(DEADLY, GET_WEAPON_DAMAGE_CODE(j) + (int)(burst_count / 3))],
-                   !IS_DAMTYPE_PHYSICAL(get_weapon_damage_type(j)) ? " (stun)" : "");
-        } else {
-          strlcat(buf, ".", sizeof(buf));
-        }
-
-        strlcat(buf, "\r\nIt has the following available firemodes:", sizeof(buf));
-        bool first_mode = TRUE;
-        for (int mode = MODE_SS; mode <= MODE_FA; mode++)
-          if (WEAPON_CAN_USE_FIREMODE(j, mode)) {
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s ^c%s^n", first_mode ? "" : ",", fire_mode[mode]);
-            first_mode = FALSE;
+        // Line 1: "It is a 3-round pistol that uses the Pistols skill to fire. Its base damage code is 2L."
+        {
+          if (GET_WEAPON_MAX_AMMO(j) > 0) {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%d-round %s^n that uses the ^c%s^n skill to fire.",
+                    GET_WEAPON_MAX_AMMO(j),
+                    weapon_type[GET_WEAPON_ATTACK_TYPE(j)],
+                    skills[GET_WEAPON_SKILL(j)].name);
+          } else {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is %s ^c%s^n that uses the ^c%s^n skill to fire.",
+                    AN(weapon_type[GET_WEAPON_ATTACK_TYPE(j)]),
+                    weapon_type[GET_WEAPON_ATTACK_TYPE(j)],
+                    skills[GET_WEAPON_SKILL(j)].name);
           }
+          // Damage code.
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " Its base damage code is ^c%d%s%s^n",
+                   GET_WEAPON_POWER(j),
+                   wound_arr[GET_WEAPON_DAMAGE_CODE(j)],
+                   !IS_DAMTYPE_PHYSICAL(get_weapon_damage_type(j)) ? " (stun)" : "");
 
+          // Burst fire?
+          if (GET_WEAPON_FIREMODE(j) == MODE_BF || GET_WEAPON_FIREMODE(j) == MODE_FA) {
+            burst_count = GET_WEAPON_FIREMODE(j) == MODE_BF ? 3 : GET_WEAPON_FULL_AUTO_COUNT(j);
+
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", raised to ^c%d%s%s^n by its current fire mode.\r\n",
+                     GET_WEAPON_POWER(j) + burst_count,
+                     wound_arr[MIN(DEADLY, GET_WEAPON_DAMAGE_CODE(j) + (int)(burst_count / 3))],
+                     !IS_DAMTYPE_PHYSICAL(get_weapon_damage_type(j)) ? " (stun)" : "");
+          } else {
+            strlcat(buf, ".\r\n", sizeof(buf));
+          }
+        }
+
+        // Second line: "It has the following available firemodes: Semi-Automatic"
+        {
+          strlcat(buf, "It has the following available firemodes:", sizeof(buf));
+          bool first_mode = TRUE;
+          for (int mode = MODE_SS; mode <= MODE_FA; mode++)
+            if (WEAPON_CAN_USE_FIREMODE(j, mode)) {
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s ^c%s^n", first_mode ? "" : ",", fire_mode[mode]);
+              first_mode = FALSE;
+            }
+          strlcat(buf, "\r\n", sizeof(buf));
+        }
+
+        // Third line (optional): "It is loaded with EX, which increases power by two."
         if (j->contains
             && GET_OBJ_TYPE(j->contains) == ITEM_GUN_MAGAZINE
             && GET_MAGAZINE_AMMO_COUNT(j->contains) > 0
@@ -2290,20 +2321,23 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
               strlcat(buf, "deals more damage to fully unarmored targets.", sizeof(buf));
               break;
             case AMMO_GEL:
-              strlcat(buf, "deals mental instead of physical damage, but treats the enemy's ballistic armor as two points higher.", sizeof(buf));
+              strlcat(buf, "doubles knockdown effectiveness, but deals mental instead of physical damage, and treats the enemy's impact armor as two points higher.", sizeof(buf));
               break;
           }
         }
 
-        if (GET_WEAPON_INTEGRAL_RECOIL_COMP(j) > 0) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt has ^c%d^n point%s of integral recoil compensation.",
-                  GET_WEAPON_INTEGRAL_RECOIL_COMP(j),
-                  GET_WEAPON_INTEGRAL_RECOIL_COMP(j) != 1 ? "s" : "");
-        }
-        else if (GET_WEAPON_INTEGRAL_RECOIL_COMP(j) < 0) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt adds ^c%d^n point%s of recoil per shot.",
-                  -GET_WEAPON_INTEGRAL_RECOIL_COMP(j),
-                  -GET_WEAPON_INTEGRAL_RECOIL_COMP(j) != 1 ? "s" : "");
+        // Fourth line (optional): Integral recoil compensation or per-shot recoil add.
+        {
+          if (GET_WEAPON_INTEGRAL_RECOIL_COMP(j) > 0) {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt has ^c%d^n point%s of integral recoil compensation.",
+                    GET_WEAPON_INTEGRAL_RECOIL_COMP(j),
+                    GET_WEAPON_INTEGRAL_RECOIL_COMP(j) != 1 ? "s" : "");
+          }
+          else if (GET_WEAPON_INTEGRAL_RECOIL_COMP(j) < 0) {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt adds ^c%d^n point%s of recoil per shot.",
+                    -GET_WEAPON_INTEGRAL_RECOIL_COMP(j),
+                    -GET_WEAPON_INTEGRAL_RECOIL_COMP(j) != 1 ? "s" : "");
+          }
         }
 
         // Info about attachments, if any.
@@ -2312,8 +2346,8 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
         int real_obj;
         bool has_laser_sight_already = FALSE;
         for (int i = ACCESS_LOCATION_TOP; i <= ACCESS_LOCATION_UNDER; i++) {
-          if (GET_OBJ_VAL(j, i) > 0
-              && (real_obj = real_object(GET_OBJ_VAL(j, i))) > 0
+          if (GET_WEAPON_ATTACH_LOC(j, i) > 0
+              && (real_obj = real_object(GET_WEAPON_ATTACH_LOC(j, i))) > 0
               && (access = &obj_proto[real_obj])) {
             // mount_location: used for gun_accessory_locations[] lookup.
             mount_location = i - ACCESS_LOCATION_TOP;
@@ -2429,7 +2463,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
                 if (mount_location != ACCESS_ACCESSORY_LOCATION_UNDER) {
                   strlcat(buf, "\r\n^RThe bayonet has been mounted in the wrong location and is nonfunctional. Alert an imm.", sizeof(buf));
                 } else {
-                  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nThe bayonet attached to the %s allows you to use the Pole Arms skill when defending from melee attacks.",
+                  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nThe bayonet attached to the %s allows you to use the Pole Arms skill when defending from melee attacks. It also lets you ^WEJECT^n your magazine to do a bayonet charge.",
                           gun_accessory_locations[mount_location]);
                 }
                 break;
@@ -2445,7 +2479,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
             }
 
             if (strcmp(GET_OBJ_EXTRA(access).ToString(), "0") != 0) {
-              GET_OBJ_EXTRA(access).PrintBits(buf2, MAX_STRING_LENGTH, pc_readable_extra_bits, ITEM_EXTRA_MAX);
+              GET_OBJ_EXTRA(access).PrintBits(buf2, MAX_STRING_LENGTH, pc_readable_extra_bits, MAX_ITEM_EXTRA);
               snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n ^- It provides the following extra features: ^c%s^n", buf2);
             }
           }
@@ -2472,6 +2506,15 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
               break;
           }
         }
+
+        // Heavy weapon? Warn the wielder.
+        if (GET_WEAPON_SKILL(j) >= SKILL_MACHINE_GUNS && GET_WEAPON_SKILL(j) <= SKILL_ASSAULT_CANNON) {
+          if (GET_BOD(ch) < 8 || GET_STR(ch) < 8) {
+            strlcat(buf, "\r\n^YYou will be unable to wield it without using a gyromount or going prone.^n", sizeof(buf));
+          }
+          strlcat(buf, "\r\n^yAs a heavy weapon, it has the potential to damage you when fired.^n", sizeof(buf));
+        }
+
       }
       // Melee weapons.
       else {
@@ -2616,7 +2659,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
                 decap_cyber_grades[GET_CYBERWARE_GRADE(j)], decap_cyber_types[GET_CYBERWARE_TYPE(j)],
                 ((float) GET_CYBERWARE_ESSENCE_COST(j) / 100));
       }
-      if (IS_OBJ_STAT(j, ITEM_MAGIC_INCOMPATIBLE)) {
+      if (IS_OBJ_STAT(j, ITEM_EXTRA_MAGIC_INCOMPATIBLE)) {
         strlcat(buf, "\r\n^yIt is incompatible with magic.^n", sizeof(buf));
       }
       break;
@@ -2672,13 +2715,52 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
               GET_OBJ_VAL(j, 1), GET_OBJ_VAL(j, 2));
       break;
     case ITEM_GUN_ACCESSORY:
-      if (GET_OBJ_VAL(j, 1) == ACCESS_SMARTLINK || GET_OBJ_VAL(j, 1) == ACCESS_GASVENT) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^crating-%d %s^n that attaches to the ^c%s^n.",
-                GET_OBJ_VAL(j, 2), gun_accessory_types[GET_OBJ_VAL(j, 1)], gun_accessory_locations[GET_OBJ_VAL(j, 0)]);
-      } else {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is %s ^c%s^n that attaches to the ^c%s^n.",
-                AN(gun_accessory_types[GET_OBJ_VAL(j, 1)]), gun_accessory_types[GET_OBJ_VAL(j, 1)]
-                , gun_accessory_locations[GET_OBJ_VAL(j, 0)]);
+      if (GET_ACCESSORY_TYPE(j) == ACCESS_SMARTGOGGLE) { /* pass */ }
+      else if (GET_ACCESSORY_TYPE(j) == ACCESS_SMARTLINK || GET_ACCESSORY_TYPE(j) == ACCESS_GASVENT) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^crating-%d %s^n that attaches to the ^c%s^n of a firearm.",
+                 GET_ACCESSORY_TYPE(j) == ACCESS_GASVENT ? -GET_ACCESSORY_RATING(j) : GET_ACCESSORY_RATING(j), // gas vents have negative vals
+                 gun_accessory_types[GET_ACCESSORY_TYPE(j)],
+                 gun_accessory_locations[GET_ACCESSORY_ATTACH_LOCATION(j)]
+                );
+      }
+      else {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is %s ^c%s^n that attaches to the ^c%s^n of a firearm.",
+                 AN(gun_accessory_types[GET_ACCESSORY_TYPE(j)]),
+                 gun_accessory_types[GET_ACCESSORY_TYPE(j)],
+                 gun_accessory_locations[GET_ACCESSORY_ATTACH_LOCATION(j)]
+                );
+      }
+      switch (GET_ACCESSORY_TYPE(j)) {
+        case ACCESS_BIPOD:
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt adds ^c%d^n points of recoil compensation when used while prone.", RECOIL_COMP_VALUE_BIPOD);
+          break;
+        case ACCESS_TRIPOD:
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt adds ^c%d^n points of recoil compensation when used while prone.", RECOIL_COMP_VALUE_TRIPOD);
+          break;
+        case ACCESS_SHOCKPAD:
+          strlcat(buf, "\r\nIt adds ^c1^n point of recoil compensation.", sizeof(buf));
+          break;
+        case ACCESS_SMARTLINK:
+          strlcat(buf, "\r\nIt makes it easier to hit opponents, provided you have the Smartlink cyberware or goggles.", sizeof(buf));
+          break;
+        case ACCESS_SCOPE:
+          // These don't have built-in effects, check the affs.
+          break;
+        case ACCESS_GASVENT:
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt adds ^c%d^n points of recoil compensation, but once installed can only be removed with a gunsmithing workshop.", -GET_ACCESSORY_RATING(j));
+          break;
+        case ACCESS_SILENCER:
+          strlcat(buf, "\r\nIt muffles the report of weapons that fire in Single-Shot or Semi-Automatic mode.", sizeof(buf));
+          break;
+        case ACCESS_SOUNDSUPP:
+          strlcat(buf, "\r\nIt muffles the report of weapons that fire in Burst Fire or Full Auto mode.", sizeof(buf));
+          break;
+        case ACCESS_SMARTGOGGLE:
+          strlcat(buf, "\r\nIt enables the use of Smartlink attachments, though at a lower efficiency than the cyberware would.", sizeof(buf));
+          break;
+        case ACCESS_BAYONET:
+          strlcat(buf, "\r\nIt allows you to use the Pole Arms skill when defending against melee clashes. It also allows you to ^WEJECT^n your magazine to do a bayonet charge.", sizeof(buf));
+          break;
       }
 
       break;
@@ -2796,7 +2878,6 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
 
     // All info about these is displayed when you examine them.
     case ITEM_GUN_MAGAZINE:
-    case ITEM_QUEST:
     case ITEM_CAMERA:
     case ITEM_PHONE:
     case ITEM_KEYRING:
@@ -2832,18 +2913,18 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
   }
 
   // Remove the dont_touch bit for probe printing.
-  bool is_dont_touch = IS_OBJ_STAT(j, ITEM_DONT_TOUCH);
+  bool is_dont_touch = IS_OBJ_STAT(j, ITEM_EXTRA_DONT_TOUCH);
   if (is_dont_touch)
-    GET_OBJ_EXTRA(j).RemoveBit(ITEM_DONT_TOUCH);
+    GET_OBJ_EXTRA(j).RemoveBit(ITEM_EXTRA_DONT_TOUCH);
 
   if (strcmp(GET_OBJ_EXTRA(j).ToString(), "0") != 0) {
-    GET_OBJ_EXTRA(j).PrintBits(buf2, MAX_STRING_LENGTH, pc_readable_extra_bits, ITEM_EXTRA_MAX);
+    GET_OBJ_EXTRA(j).PrintBits(buf2, MAX_STRING_LENGTH, pc_readable_extra_bits, MAX_ITEM_EXTRA);
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "This object has the following extra features: ^c%s^n\r\n", buf2);
   }
 
   // Restore the dont_touch bit.
   if (is_dont_touch)
-    GET_OBJ_EXTRA(j).SetBit(ITEM_DONT_TOUCH);
+    GET_OBJ_EXTRA(j).SetBit(ITEM_EXTRA_DONT_TOUCH);
 
   strncpy(buf1, "This object modifies your character in the following ways when used:\r\n  ^c", sizeof(buf1));
   for (i = 0; i < MAX_OBJ_AFFECT; i++)
@@ -2860,7 +2941,9 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s^n\r\n", buf1);
   }
 
-  if (IS_OBJ_STAT(j, ITEM_NERPS)) {
+  strlcat(buf, get_command_hints_for_obj(j), sizeof(buf));
+
+  if (IS_OBJ_STAT(j, ITEM_EXTRA_NERPS)) {
     strlcat(buf, "^YIt has been flagged NERPS, indicating it has no special coded effects.^n\r\n", sizeof(buf));
   }
 
@@ -3216,7 +3299,7 @@ const char *get_position_string(struct char_data *ch) {
   static char position_string[200];
 
   if (AFF_FLAGGED(ch, AFF_PRONE))
-    strlcpy(position_string, "laying prone.", sizeof(position_string));
+    strlcpy(position_string, "lying prone.", sizeof(position_string));
   else switch (GET_POS(ch)) {
     case POS_DEAD:
       strlcpy(position_string, "DEAD!", sizeof(position_string));
@@ -3864,7 +3947,7 @@ ACMD(do_equipment)
   for (i = 0; i < NUM_WEARS; i++) {
     if (GET_EQ(ch, i)) {
       if (i == WEAR_WIELD || i == WEAR_HOLD) {
-        if (IS_OBJ_STAT(GET_EQ(ch, i), ITEM_TWOHANDS))
+        if (IS_OBJ_STAT(GET_EQ(ch, i), ITEM_EXTRA_TWOHANDS))
           send_to_char(hands[2], ch);
         else if (GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_WEAPON) { // wielding something?
           if (i == WEAR_WIELD)
@@ -3906,11 +3989,28 @@ ACMD(do_time)
   extern const char *month_name[];
   struct obj_data *check;
 
-  if (subcmd == SCMD_NORMAL && GET_REAL_LEVEL(ch) >= LVL_BUILDER)
-    subcmd = SCMD_PRECISE;
-  for (check = ch->cyberware; check; check = check->next_content)
-    if (GET_OBJ_VAL(check, 0) == CYB_MATHSSPU || (GET_OBJ_VAL(check, 0) == CYB_EYES && IS_SET(GET_OBJ_VAL(check, 3), EYE_CLOCK)))
+  if (subcmd == SCMD_NORMAL) {
+    if (GET_REAL_LEVEL(ch) >= LVL_BUILDER) {
       subcmd = SCMD_PRECISE;
+      send_to_char("You use your staff powers to get an accurate time.\r\n", ch);
+    } else {
+      for (check = ch->cyberware; check; check = check->next_content) {
+        if (GET_OBJ_VAL(check, 0) == CYB_MATHSSPU || (GET_OBJ_VAL(check, 0) == CYB_EYES && IS_SET(GET_OBJ_VAL(check, 3), EYE_CLOCK))) {
+          subcmd = SCMD_PRECISE;
+          send_to_char(ch, "You use %s for the most up-to-date time.\r\n", decapitalize_a_an(GET_OBJ_NAME(check)));
+        }
+      }
+    }
+  }
+
+  // If you still get scrub-grade time after the above checks...
+  if (subcmd == SCMD_NORMAL) {
+    struct room_data *room = get_ch_in_room(ch);
+    if (room && ROOM_FLAGGED(room, ROOM_INDOORS))
+      send_to_char("You guess at the time.\r\n", ch);
+    else
+      send_to_char("You glance up at the sky to help you guess the time.\r\n", ch);
+  }
 
   year = time_info.year % 100;
   month = time_info.month + 1;
@@ -3920,13 +4020,10 @@ ACMD(do_time)
   pm = (time_info.hours >= 12);
 
   if (subcmd == SCMD_NORMAL)
-    snprintf(buf, sizeof(buf), "Gameplay Time: %2d o'clock %s, %s, %s %d, %d.\r\n", hour, pm ? "PM" : "AM",
-            weekdays[(int)time_info.weekday], month_name[month - 1], day, time_info.year);
+    snprintf(buf, sizeof(buf), "Gameplay Time: %2d o'clock %s.\r\n", hour, pm ? "PM" : "AM");
   else
-    snprintf(buf, sizeof(buf), "Gameplay Time: %2d:%s%d %s, %s, %s%d/%s%d/%d.\r\n", hour,
-            minute < 10 ? "0" : "", minute, pm ? "PM" : "AM",
-            weekdays[(int)time_info.weekday], month < 10 ? "0" : "", month,
-            day < 10 ? "0" : "", day, year);
+    snprintf(buf, sizeof(buf), "Gameplay Time: %2d:%s%d %s.\r\n", hour,
+            minute < 10 ? "0" : "", minute, pm ? "PM" : "AM");
 
   send_to_char(buf, ch);
 
@@ -3942,7 +4039,16 @@ ACMD(do_time)
 
     minute = modifiable_time->tm_min;
 
-    send_to_char(ch, "Roleplay Time: %2d:%.2d %s\r\n", hour, minute, pm ? "PM" : "AM");
+    mktime(modifiable_time);
+
+    send_to_char(ch, "Roleplay Time: %2d:%.2d %s, %s, %s %d, 2064-ish.\r\n",
+                 hour,
+                 minute,
+                 pm ? "PM" : "AM",
+                 weekdays_tm_aligned[(int) modifiable_time->tm_wday],
+                 month_name[modifiable_time->tm_mon],
+                 modifiable_time->tm_mday
+               );
   }
 }
 
@@ -4266,8 +4372,13 @@ ACMD(do_who)
         continue;
       num_can_see++;
 
-      if (tch->in_room && !IS_SENATOR(tch) && CAN_SEE(ch, tch) && ROOM_FLAGGED(tch->in_room, ROOM_ENCOURAGE_CONGREGATION))
+      if (tch->in_room
+          && !IS_SENATOR(tch)
+          && ROOM_FLAGGED(tch->in_room, ROOM_ENCOURAGE_CONGREGATION)
+          && CAN_SEE(ch, tch)
+          && !IS_IGNORING(tch, is_blocking_where_visibility_for, ch)) {
         num_in_socialization_rooms++;
+      }
 
       if ( output_header ) {
         output_header = 0;
@@ -5537,7 +5648,7 @@ ACMD(do_status)
         } else if (SPELL_HAS_SUBTYPE(sust->spell)) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (%s)", attributes[sust->subtype]);
         }
-        send_to_char(ch, "%d) %s (%d successes)", i, buf, sust->success);
+        send_to_char(ch, "%d) %s (force %d, %d successes)", i, buf, sust->force, sust->success);
         if (sust->focus)
           send_to_char(ch, "(Sustained by %s)", GET_OBJ_NAME(sust->focus));
         if (sust->spirit && sust->spirit != ch)
@@ -5782,7 +5893,7 @@ ACMD(do_wheresmycar) {
   skip_spaces(&argument);
   int paid = atoi(argument);
   if (paid < WHERES_MY_CAR_MINIMUM_NUYEN_CHARGE) {
-    send_to_char(ch, "Syntax: wheresmycar <nuyen amount to spend, minimum %d>", WHERES_MY_CAR_MINIMUM_NUYEN_CHARGE);
+    send_to_char(ch, "Syntax: wheresmycar <nuyen amount to spend, minimum %d>\r\n", WHERES_MY_CAR_MINIMUM_NUYEN_CHARGE);
     return;
   }
 
@@ -5797,4 +5908,185 @@ ACMD(do_wheresmycar) {
   send_to_char(ch, "You gather up a few bored-looking passersby and pay out %d nuyen"
                    " to have them search for your vehicles, reserving the other half as a"
                    " reward for whoever finds it. They set off, and you prepare for a wait...\r\n", paid / 2);
+}
+
+/* Generates a few hints for the reader about what the object does and how you can interact with it.
+   Displayed both when probing and when examining the object.                                         */
+const char *get_command_hints_for_obj(struct obj_data *obj) {
+  extern SPECIAL(clock);
+  extern SPECIAL(hand_held_scanner);
+  extern SPECIAL(anticoagulant);
+  extern SPECIAL(toggled_invis);
+  extern SPECIAL(desktop);
+  extern SPECIAL(portable_gridguide);
+  extern SPECIAL(pocket_sec);
+  extern SPECIAL(trideo);
+  extern SPECIAL(spraypaint);
+  extern SPECIAL(floor_usable_radio);
+  extern SPECIAL(medical_workshop);
+
+  static char hint_string[1000];
+  strlcpy(hint_string, "", sizeof(hint_string));
+
+  if (GET_OBJ_SPEC(obj) == spraypaint) {
+    strlcat(hint_string, "\r\nIt's used with the ^WSPRAY^n command.\r\n", sizeof(hint_string));
+  }
+  else if (GET_OBJ_SPEC(obj) == anticoagulant) {
+    strlcat(hint_string, "\r\nIt's an anticoagulant, used to help control platelet factory bioware. Take it with the ^WEAT^n command.\r\n", sizeof(hint_string));
+  }
+  else if (GET_OBJ_SPEC(obj) == medical_workshop) {
+    strlcat(hint_string, "\r\nIt enables the use of player cyberdoc commands (^WHELP CYBERDOC^n).\r\n", sizeof(hint_string));
+  }
+  else if (GET_OBJ_SPEC(obj) == floor_usable_radio) {
+    strlcat(hint_string, "\r\nIt can be used even while on the ground.\r\n", sizeof(hint_string));
+  }
+  else if (GET_OBJ_SPEC(obj) == pocket_sec) {
+    strlcat(hint_string, "\r\nIt's a pocket secretary-- you can ^WUSE^n it.\r\n", sizeof(hint_string));
+  }
+  else if (GET_OBJ_SPEC(obj) == portable_gridguide) {
+    strlcat(hint_string, "\r\nIt lets you use the ^WGRID^n command while holding it.\r\n", sizeof(hint_string));
+  }
+  else if (GET_OBJ_SPEC(obj) == toggled_invis) {
+    strlcat(hint_string, "\r\nYou can ^WACTIVATE^n and ^WDEACTIVATE^n the ruthenium fibers, granting invisibility.\r\n", sizeof(hint_string));
+  }
+  else if (GET_OBJ_SPEC(obj) == hand_held_scanner) {
+    strlcat(hint_string, "\r\nWhile held, it will vibrate if you move and it detects someone nearby.\r\n", sizeof(hint_string));
+  }
+  else if (GET_OBJ_SPEC(obj) == clock) {
+    strlcat(hint_string, "\r\nIt gives you a more accurate ^WTIME^n readout.\r\n", sizeof(hint_string));
+  }
+  else if (GET_OBJ_SPEC(obj) == desktop) {
+    strlcat(hint_string, "\r\nIt's a computer for programming decking software on- drop it and ^WLIST^n to see its contents.\r\n", sizeof(hint_string));
+  }
+  else if (GET_OBJ_SPEC(obj) == trideo) {
+    if (CAN_WEAR(obj, ITEM_WEAR_TAKE)) {
+      strlcat(hint_string, "\r\nIt's a trideo unit, aka a Shadowrun TV-- you can ^WUSE^n it to turn it off and on.\r\n", sizeof(hint_string));
+    } else {
+      strlcat(hint_string, "\r\nIt's a trideo unit, aka a Shadowrun TV-- however, you can't use it.\r\n", sizeof(hint_string));
+    }
+  }
+
+  switch (GET_OBJ_TYPE(obj)) {
+    case ITEM_LIGHT:
+      strlcat(hint_string, "\r\nYou can ^WWEAR^n and ^WREMOVE^n it.\r\n", sizeof(hint_string));
+      break;
+    case ITEM_WORN:
+      strlcat(hint_string, "\r\nYou can ^WWEAR^n and ^WREMOVE^n it, and potentially ^WPUT^n things in it while worn. That exposes those stored things to combat damage, though!\r\n", sizeof(hint_string));
+      break;
+    case ITEM_WORKSHOP:
+      switch (GET_WORKSHOP_GRADE(obj)) {
+        case TYPE_KIT:
+          if (GET_WORKSHOP_TYPE(obj) != TYPE_AMMO) {
+            strlcat(hint_string, "\r\nHave it in your inventory to use it.\r\n", sizeof(hint_string));
+          }
+          break;
+        case TYPE_WORKSHOP:
+          strlcat(hint_string, "\r\nDrop it in your apartment or safe vehicle, then ^WUNPACK^n it to use it.\r\n", sizeof(hint_string));
+          break;
+        case TYPE_FACILITY:
+          strlcat(hint_string, "\r\nDrop it in your apartment or safe vehicle it to use it.\r\n", sizeof(hint_string));
+          break;
+        default:
+          mudlog("SYSERR: Came across unknown workshop grade in get_command_hints_for_obj()! Update the code.", NULL, LOG_SYSLOG, TRUE);
+          break;
+      }
+      break;
+    case ITEM_CAMERA:
+      strlcat(hint_string, "\r\nYou can use the ^WPHOTO^n command while holding it.\r\n", sizeof(hint_string));
+      break;
+    case ITEM_PART:
+      strlcat(hint_string, "\r\nIt's part of a deck. See ^WHELP DECKBUILDING^n for details.\r\n", sizeof(hint_string)); //asdf write this file
+      break;
+    case ITEM_WEAPON:
+      if (WEAPON_IS_GUN(obj)) {
+        strlcat(hint_string, "\r\n^WWIELD^n it in combat for best results. You can also ^WHOLSTER^n it if you have the right equipment.\r\n", sizeof(hint_string));
+      } else {
+        strlcat(hint_string, "\r\n^WWIELD^n it in combat for best results. You can also ^WSHEATHE^n it if you have the right equipment.\r\n", sizeof(hint_string));
+      }
+      break;
+    case ITEM_FIREWEAPON:
+    case ITEM_MISSILE:
+      strlcat(hint_string, "\r\n^YBows / crossbows are not currently implemented.^n\r\n", sizeof(hint_string));
+      break;
+    case ITEM_CUSTOM_DECK:
+      strlcat(hint_string, "\r\nIt's a custom cyberdeck, used with the matrix commands. See ^WHELP DECKING^n to begin.\r\n", sizeof(hint_string));
+      break;
+    case ITEM_GYRO:
+      strlcat(hint_string, "\r\nIt absorbs recoil from heavy weapons when you ^WWEAR^n it.\r\n", sizeof(hint_string));
+      break;
+    case ITEM_DRUG:
+      break;
+    case ITEM_OTHER:
+    case ITEM_KEY:
+      // No specific commands for these, do nothing.
+      break;
+    case ITEM_MAGIC_TOOL:
+      break;
+    case ITEM_DOCWAGON:
+      break;
+    case ITEM_CONTAINER:
+      break;
+    case ITEM_RADIO:
+      break;
+    case ITEM_DRINKCON:
+      break;
+    case ITEM_FOOD:
+      break;
+    case ITEM_MONEY:
+      break;
+    case ITEM_PHONE:
+      break;
+    case ITEM_BIOWARE:
+      break;
+    case ITEM_FOUNTAIN:
+      break;
+    case ITEM_CYBERWARE:
+      break;
+    case ITEM_CYBERDECK:
+      break;
+    case ITEM_PROGRAM:
+      break;
+    case ITEM_GUN_MAGAZINE:
+      break;
+    case ITEM_GUN_ACCESSORY:
+      break;
+    case ITEM_SPELL_FORMULA:
+      break;
+    case ITEM_FOCUS:
+      break;
+    case ITEM_PATCH:
+      break;
+    case ITEM_CLIMBING:
+      break;
+    case ITEM_QUIVER:
+      break;
+    case ITEM_DECK_ACCESSORY:
+      break;
+    case ITEM_RCDECK:
+      break;
+    case ITEM_CHIP:
+      break;
+    case ITEM_MOD:
+      break;
+    case ITEM_HOLSTER:
+      break;
+    case ITEM_DESIGN:
+      break;
+    case ITEM_GUN_AMMO:
+      strlcat(hint_string, "\r\nIt's used with the ^WPOCKETS^n command-- see ^WHELP POCKETS^n for details.\r\n", sizeof(hint_string));
+      break;
+    case ITEM_KEYRING:
+      break;
+    case ITEM_SHOPCONTAINER:
+      if (obj->contains && (GET_OBJ_TYPE(obj->contains) == ITEM_CYBERWARE || GET_OBJ_TYPE(obj->contains) == ITEM_BIOWARE)) {
+        strlcat(hint_string, "\r\nIt's used with cyberdoc commands, see ^WHELP CYBERDOC^n for details.\r\n", sizeof(hint_string));
+      } else {
+        mudlog("SYSERR: Received ITEM_SHOPCONTAINER to get_command_hints_for_obj that didn't contain cyberware or bioware! Update the code.", NULL, LOG_SYSLOG, TRUE);
+      }
+      break;
+    case ITEM_VEHCONTAINER:
+      break;
+  }
+
+  return hint_string;
 }
