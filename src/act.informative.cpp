@@ -1718,6 +1718,8 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
         break;
     }
   }
+
+  // Display weather info in the room.
   if (!ROOM_FLAGGED(ch->in_room, ROOM_INDOORS)) {
     if (IS_WATER(ch->in_room)) {
       if (weather_info.sky >= SKY_RAINING) {
@@ -1725,16 +1727,17 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
       }
     } else {
       if (weather_info.sky >= SKY_RAINING) {
-          if(ch->in_veh && ch->in_veh->type != VEH_BIKE) {
-            send_to_char(ch, "^cRain glides down the windows, wipers brushing it clear with patient motion.^n\r\n");
+        if (ch->in_veh) {
+          if (ch->in_veh->type == VEH_BIKE) {
+            send_to_char(ch, "^cRain ricochets off your shoulders and splashes about the bike.^n\r\n");
+          } else {
+            send_to_char(ch, "^cRain glides down your vehicle's windows, wipers brushing it clear with patient motion.^n\r\n");
+          }
+        } else {
+          send_to_char(ch, "^cRain splashes into the puddles around your feet.^n\r\n");
         }
-          if(ch->in_veh && ch->in_veh->type == VEH_BIKE) {
-            send_to_char(ch, "^cRain richotchets off your shoulders and splashes about the bike.^n\r\n");
-        }
-          else if(!ch->in_veh) send_to_char(ch, "^cRain splashes into the puddles around your feet.^n\r\n");
-        }
-        else if (weather_info.lastrain < 5) {
-          send_to_char(ch, "^cThe ground is wet, it must have rained recently.^n\r\n");
+      } else if (weather_info.lastrain < 5) {
+        send_to_char(ch, "^cThe ground is wet, it must have rained recently.^n\r\n");
       }
     }
   }
