@@ -4890,7 +4890,7 @@ ACMD(do_set)
     mudlog(buf, ch, LOG_WIZLOG, TRUE );
     break;
   case 78: /* powerpoints */
-    RANGE(0, 10000);
+    RANGE(-10000, 10000);
     GET_PP(vict) = value;
     snprintf(buf, sizeof(buf),"%s changed %s's powerpoints to %d.", GET_CHAR_NAME(ch), GET_NAME(vict), value);
     mudlog(buf, ch, LOG_WIZLOG, TRUE );

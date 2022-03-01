@@ -1032,9 +1032,22 @@ SPECIAL(trainer)
     GET_ATT_POINTS(ch) = 0;
   }
 
-  else if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED) && GET_ATT_POINTS(ch) <= 0) {
-    send_to_char(ch, "You don't have any more attribute points to spend.\r\n");
-    return TRUE;
+  else if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
+    // You have to be able to afford it.
+    if (GET_ATT_POINTS(ch) <= 0) {
+      send_to_char(ch, "You don't have any more attribute points to spend.\r\n");
+      return TRUE;
+    }
+
+    // Check for adept powers.
+    if (GET_TRADITION(ch) == TRAD_ADEPT && (GET_POWER_TOTAL(ch, ADEPT_IMPROVED_BOD)
+                                            || GET_POWER_TOTAL(ch, ADEPT_IMPROVED_QUI)
+                                            || GET_POWER_TOTAL(ch, ADEPT_IMPROVED_STR)))
+    {
+      send_to_char(ch, "You'll have to untrain your Improved Attribute powers at the adept trainer before you can do that.\r\n");
+      mudlog("WARNING: Character had train points left after getting adept improved attribute power!", ch, LOG_CHEATLOG, TRUE);
+      return TRUE;
+    }
   }
 
   if (!*argument) {
@@ -4722,6 +4735,15 @@ void untrain_attribute(struct char_data *ch, int attr, const char *success_messa
   // Check for racial maximums.
   if (GET_REAL_ATT(ch, attr) <= MAX(1, 1 + racial_attribute_modifiers[(int)GET_RACE(ch)][attr])) {
     send_to_char(ch, "Your %s attribute is at its minimum.\r\n", attributes[attr]);
+    return;
+  }
+
+  // Check for adept powers.
+  if (GET_TRADITION(ch) == TRAD_ADEPT && (GET_POWER_TOTAL(ch, ADEPT_IMPROVED_BOD)
+                                          || GET_POWER_TOTAL(ch, ADEPT_IMPROVED_QUI)
+                                          || GET_POWER_TOTAL(ch, ADEPT_IMPROVED_STR)))
+  {
+    send_to_char(ch, "You'll have to untrain your Improved Attribute powers at the adept trainer before you can do that.\r\n");
     return;
   }
 
