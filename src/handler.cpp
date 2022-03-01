@@ -3153,7 +3153,7 @@ int veh_skill(struct char_data *ch, struct veh_data *veh)
       if (!skill)
         skill = (int)(GET_SKILL(ch, SKILL_PILOT_TRUCK) / 2);
       if (!skill)
-        skill = (int)(GET_SKILL(ch, SKILL_PILOT_CAR) / 2);
+        skill = (int)(GET_SKILL(ch, SKILL_PILOT_BIKE) / 2);
       break;
     case VEH_BIKE:
       skill = GET_SKILL(ch, SKILL_PILOT_BIKE);
