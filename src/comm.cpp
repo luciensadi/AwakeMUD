@@ -3416,7 +3416,7 @@ void increase_congregation_bonus_pools() {
     }
 
     // Skip people who haven't emoted in a while, but only if they're not alone there.
-    if (occupants > 1 && i->char_specials.last_emote > LAST_EMOTE_REQUIREMENT_FOR_CONGREGATION_BONUS) {
+    if (occupants > 1 && i->char_specials.last_social_action > LAST_SOCIAL_ACTION_REQUIREMENT_FOR_CONGREGATION_BONUS) {
       snprintf(buf, sizeof(buf), "Socialization: Skipping %s's opportunity to earn social points-- they've not emoted to their partner.", GET_CHAR_NAME(i));
       act(buf, FALSE, i, 0, 0, TO_ROLLS);
       continue;

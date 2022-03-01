@@ -104,6 +104,8 @@ extern const char *pc_readable_extra_bits[];
 extern struct elevator_data *elevator;
 extern int num_elevators;
 
+const char *get_command_hints_for_obj(struct obj_data *obj);
+
 /* blood stuff */
 
 const char* blood_messages[] = {
@@ -2870,7 +2872,6 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
 
     // All info about these is displayed when you examine them.
     case ITEM_GUN_MAGAZINE:
-    case ITEM_QUEST:
     case ITEM_CAMERA:
     case ITEM_PHONE:
     case ITEM_KEYRING:
@@ -2934,55 +2935,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s^n\r\n", buf1);
   }
 
-  extern SPECIAL(clock);
-  extern SPECIAL(hand_held_scanner);
-  extern SPECIAL(anticoagulant);
-  extern SPECIAL(toggled_invis);
-  extern SPECIAL(desktop);
-  extern SPECIAL(portable_gridguide);
-  extern SPECIAL(pocket_sec);
-  extern SPECIAL(trideo);
-  extern SPECIAL(spraypaint);
-  extern SPECIAL(floor_usable_radio);
-  extern SPECIAL(medical_workshop);
-
-  if (GET_OBJ_SPEC(j) == spraypaint) {
-    strlcat(buf, "\r\nIt's used with the ^WSPRAY^n command.\r\n", sizeof(buf));
-  }
-  else if (GET_OBJ_SPEC(j) == anticoagulant) {
-    strlcat(buf, "\r\nIt's an anticoagulant, used to help control platelet factory bioware. Take it with the ^WEAT^n command.\r\n", sizeof(buf));
-  }
-  else if (GET_OBJ_SPEC(j) == medical_workshop) {
-    strlcat(buf, "\r\nIt enables the use of player cyberdoc commands (^WHELP CYBERDOC^n).\r\n", sizeof(buf));
-  }
-  else if (GET_OBJ_SPEC(j) == floor_usable_radio) {
-    strlcat(buf, "\r\nIt can be used even while on the ground.\r\n", sizeof(buf));
-  }
-  else if (GET_OBJ_SPEC(j) == pocket_sec) {
-    strlcat(buf, "\r\nIt's a pocket secretary-- you can ^WUSE^n it.\r\n", sizeof(buf));
-  }
-  else if (GET_OBJ_SPEC(j) == portable_gridguide) {
-    strlcat(buf, "\r\nIt lets you use the ^WGRID^n command while holding it.\r\n", sizeof(buf));
-  }
-  else if (GET_OBJ_SPEC(j) == toggled_invis) {
-    strlcat(buf, "\r\nYou can ^WACTIVATE^n and ^WDEACTIVATE^n the ruthenium fibers, granting invisibility.\r\n", sizeof(buf));
-  }
-  else if (GET_OBJ_SPEC(j) == hand_held_scanner) {
-    strlcat(buf, "\r\nWhile held, it will vibrate if you move and it detects someone nearby.\r\n", sizeof(buf));
-  }
-  else if (GET_OBJ_SPEC(j) == clock) {
-    strlcat(buf, "\r\nIt gives you a more accurate ^WTIME^n readout.\r\n", sizeof(buf));
-  }
-  else if (GET_OBJ_SPEC(j) == desktop) {
-    strlcat(buf, "\r\nIt's a computer for programming decking software on- drop it and ^WLIST^n to see its contents.\r\n", sizeof(buf));
-  }
-  else if (GET_OBJ_SPEC(j) == trideo) {
-    if (CAN_WEAR(j, ITEM_WEAR_TAKE)) {
-      strlcat(buf, "\r\nIt's a trideo unit, aka a Shadowrun TV-- you can ^WUSE^n it to turn it off and on.\r\n", sizeof(buf));
-    } else {
-      strlcat(buf, "\r\nIt's a trideo unit, aka a Shadowrun TV-- however, you can't use it.\r\n", sizeof(buf));
-    }
-  }
+  strlcat(buf, get_command_hints_for_obj(j), sizeof(buf));
 
   if (IS_OBJ_STAT(j, ITEM_EXTRA_NERPS)) {
     strlcat(buf, "^YIt has been flagged NERPS, indicating it has no special coded effects.^n\r\n", sizeof(buf));
@@ -4408,8 +4361,13 @@ ACMD(do_who)
         continue;
       num_can_see++;
 
-      if (tch->in_room && !IS_SENATOR(tch) && CAN_SEE(ch, tch) && ROOM_FLAGGED(tch->in_room, ROOM_ENCOURAGE_CONGREGATION))
+      if (tch->in_room
+          && !IS_SENATOR(tch)
+          && ROOM_FLAGGED(tch->in_room, ROOM_ENCOURAGE_CONGREGATION)
+          && CAN_SEE(ch, tch)
+          && !IS_IGNORING(tch, is_blocking_where_visibility_for, ch)) {
         num_in_socialization_rooms++;
+      }
 
       if ( output_header ) {
         output_header = 0;
@@ -5939,4 +5897,185 @@ ACMD(do_wheresmycar) {
   send_to_char(ch, "You gather up a few bored-looking passersby and pay out %d nuyen"
                    " to have them search for your vehicles, reserving the other half as a"
                    " reward for whoever finds it. They set off, and you prepare for a wait...\r\n", paid / 2);
+}
+
+/* Generates a few hints for the reader about what the object does and how you can interact with it.
+   Displayed both when probing and when examining the object.                                         */
+const char *get_command_hints_for_obj(struct obj_data *obj) {
+  extern SPECIAL(clock);
+  extern SPECIAL(hand_held_scanner);
+  extern SPECIAL(anticoagulant);
+  extern SPECIAL(toggled_invis);
+  extern SPECIAL(desktop);
+  extern SPECIAL(portable_gridguide);
+  extern SPECIAL(pocket_sec);
+  extern SPECIAL(trideo);
+  extern SPECIAL(spraypaint);
+  extern SPECIAL(floor_usable_radio);
+  extern SPECIAL(medical_workshop);
+
+  static char hint_string[1000];
+  strlcpy(hint_string, "", sizeof(hint_string));
+
+  if (GET_OBJ_SPEC(obj) == spraypaint) {
+    strlcat(hint_string, "\r\nIt's used with the ^WSPRAY^n command.\r\n", sizeof(hint_string));
+  }
+  else if (GET_OBJ_SPEC(obj) == anticoagulant) {
+    strlcat(hint_string, "\r\nIt's an anticoagulant, used to help control platelet factory bioware. Take it with the ^WEAT^n command.\r\n", sizeof(hint_string));
+  }
+  else if (GET_OBJ_SPEC(obj) == medical_workshop) {
+    strlcat(hint_string, "\r\nIt enables the use of player cyberdoc commands (^WHELP CYBERDOC^n).\r\n", sizeof(hint_string));
+  }
+  else if (GET_OBJ_SPEC(obj) == floor_usable_radio) {
+    strlcat(hint_string, "\r\nIt can be used even while on the ground.\r\n", sizeof(hint_string));
+  }
+  else if (GET_OBJ_SPEC(obj) == pocket_sec) {
+    strlcat(hint_string, "\r\nIt's a pocket secretary-- you can ^WUSE^n it.\r\n", sizeof(hint_string));
+  }
+  else if (GET_OBJ_SPEC(obj) == portable_gridguide) {
+    strlcat(hint_string, "\r\nIt lets you use the ^WGRID^n command while holding it.\r\n", sizeof(hint_string));
+  }
+  else if (GET_OBJ_SPEC(obj) == toggled_invis) {
+    strlcat(hint_string, "\r\nYou can ^WACTIVATE^n and ^WDEACTIVATE^n the ruthenium fibers, granting invisibility.\r\n", sizeof(hint_string));
+  }
+  else if (GET_OBJ_SPEC(obj) == hand_held_scanner) {
+    strlcat(hint_string, "\r\nWhile held, it will vibrate if you move and it detects someone nearby.\r\n", sizeof(hint_string));
+  }
+  else if (GET_OBJ_SPEC(obj) == clock) {
+    strlcat(hint_string, "\r\nIt gives you a more accurate ^WTIME^n readout.\r\n", sizeof(hint_string));
+  }
+  else if (GET_OBJ_SPEC(obj) == desktop) {
+    strlcat(hint_string, "\r\nIt's a computer for programming decking software on- drop it and ^WLIST^n to see its contents.\r\n", sizeof(hint_string));
+  }
+  else if (GET_OBJ_SPEC(obj) == trideo) {
+    if (CAN_WEAR(obj, ITEM_WEAR_TAKE)) {
+      strlcat(hint_string, "\r\nIt's a trideo unit, aka a Shadowrun TV-- you can ^WUSE^n it to turn it off and on.\r\n", sizeof(hint_string));
+    } else {
+      strlcat(hint_string, "\r\nIt's a trideo unit, aka a Shadowrun TV-- however, you can't use it.\r\n", sizeof(hint_string));
+    }
+  }
+
+  switch (GET_OBJ_TYPE(obj)) {
+    case ITEM_LIGHT:
+      strlcat(hint_string, "\r\nYou can ^WWEAR^n and ^WREMOVE^n it.\r\n", sizeof(hint_string));
+      break;
+    case ITEM_WORN:
+      strlcat(hint_string, "\r\nYou can ^WWEAR^n and ^WREMOVE^n it, and potentially ^WPUT^n things in it while worn. That exposes those stored things to combat damage, though!\r\n", sizeof(hint_string));
+      break;
+    case ITEM_WORKSHOP:
+      switch (GET_WORKSHOP_GRADE(obj)) {
+        case TYPE_KIT:
+          if (GET_WORKSHOP_TYPE(obj) != TYPE_AMMO) {
+            strlcat(hint_string, "\r\nHave it in your inventory to use it.\r\n", sizeof(hint_string));
+          }
+          break;
+        case TYPE_WORKSHOP:
+          strlcat(hint_string, "\r\nDrop it in your apartment or safe vehicle, then ^WUNPACK^n it to use it.\r\n", sizeof(hint_string));
+          break;
+        case TYPE_FACILITY:
+          strlcat(hint_string, "\r\nDrop it in your apartment or safe vehicle it to use it.\r\n", sizeof(hint_string));
+          break;
+        default:
+          mudlog("SYSERR: Came across unknown workshop grade in get_command_hints_for_obj()! Update the code.", NULL, LOG_SYSLOG, TRUE);
+          break;
+      }
+      break;
+    case ITEM_CAMERA:
+      strlcat(hint_string, "\r\nYou can use the ^WPHOTO^n command while holding it.\r\n", sizeof(hint_string));
+      break;
+    case ITEM_PART:
+      strlcat(hint_string, "\r\nIt's part of a deck. See ^WHELP DECKBUILDING^n for details.\r\n", sizeof(hint_string)); //asdf write this file
+      break;
+    case ITEM_WEAPON:
+      if (WEAPON_IS_GUN(obj)) {
+        strlcat(hint_string, "\r\n^WWIELD^n it in combat for best results. You can also ^WHOLSTER^n it if you have the right equipment.\r\n", sizeof(hint_string));
+      } else {
+        strlcat(hint_string, "\r\n^WWIELD^n it in combat for best results. You can also ^WSHEATHE^n it if you have the right equipment.\r\n", sizeof(hint_string));
+      }
+      break;
+    case ITEM_FIREWEAPON:
+    case ITEM_MISSILE:
+      strlcat(hint_string, "\r\n^YBows / crossbows are not currently implemented.^n\r\n", sizeof(hint_string));
+      break;
+    case ITEM_CUSTOM_DECK:
+      strlcat(hint_string, "\r\nIt's a custom cyberdeck, used with the matrix commands. See ^WHELP DECKING^n to begin.\r\n", sizeof(hint_string));
+      break;
+    case ITEM_GYRO:
+      strlcat(hint_string, "\r\nIt absorbs recoil from heavy weapons when you ^WWEAR^n it.\r\n", sizeof(hint_string));
+      break;
+    case ITEM_DRUG:
+      break;
+    case ITEM_OTHER:
+    case ITEM_KEY:
+      // No specific commands for these, do nothing.
+      break;
+    case ITEM_MAGIC_TOOL:
+      break;
+    case ITEM_DOCWAGON:
+      break;
+    case ITEM_CONTAINER:
+      break;
+    case ITEM_RADIO:
+      break;
+    case ITEM_DRINKCON:
+      break;
+    case ITEM_FOOD:
+      break;
+    case ITEM_MONEY:
+      break;
+    case ITEM_PHONE:
+      break;
+    case ITEM_BIOWARE:
+      break;
+    case ITEM_FOUNTAIN:
+      break;
+    case ITEM_CYBERWARE:
+      break;
+    case ITEM_CYBERDECK:
+      break;
+    case ITEM_PROGRAM:
+      break;
+    case ITEM_GUN_MAGAZINE:
+      break;
+    case ITEM_GUN_ACCESSORY:
+      break;
+    case ITEM_SPELL_FORMULA:
+      break;
+    case ITEM_FOCUS:
+      break;
+    case ITEM_PATCH:
+      break;
+    case ITEM_CLIMBING:
+      break;
+    case ITEM_QUIVER:
+      break;
+    case ITEM_DECK_ACCESSORY:
+      break;
+    case ITEM_RCDECK:
+      break;
+    case ITEM_CHIP:
+      break;
+    case ITEM_MOD:
+      break;
+    case ITEM_HOLSTER:
+      break;
+    case ITEM_DESIGN:
+      break;
+    case ITEM_GUN_AMMO:
+      strlcat(hint_string, "\r\nIt's used with the ^WPOCKETS^n command-- see ^WHELP POCKETS^n for details.\r\n", sizeof(hint_string));
+      break;
+    case ITEM_KEYRING:
+      break;
+    case ITEM_SHOPCONTAINER:
+      if (obj->contains && (GET_OBJ_TYPE(obj->contains) == ITEM_CYBERWARE || GET_OBJ_TYPE(obj->contains) == ITEM_BIOWARE)) {
+        strlcat(hint_string, "\r\nIt's used with cyberdoc commands, see ^WHELP CYBERDOC^n for details.\r\n", sizeof(hint_string));
+      } else {
+        mudlog("SYSERR: Received ITEM_SHOPCONTAINER to get_command_hints_for_obj that didn't contain cyberware or bioware! Update the code.", NULL, LOG_SYSLOG, TRUE);
+      }
+      break;
+    case ITEM_VEHCONTAINER:
+      break;
+  }
+
+  return hint_string;
 }

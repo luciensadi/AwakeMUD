@@ -208,7 +208,8 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 #define MINIMUM_TN_FOR_CLOSING_CHECK                           4
 
 // At what point do we consider someone to be too idle in a scene to get socialization bonuses?
-#define LAST_EMOTE_REQUIREMENT_FOR_CONGREGATION_BONUS          15
+#define LAST_SOCIAL_ACTION_REQUIREMENT_FOR_CONGREGATION_BONUS                20
+#define SOCIAL_ACTION_GRACE_PERIOD_GRANTED_BY_SPEECH                         5
 
 // Don't @ me about how long this name is, this is what we call self-documenting code.
 #define NUMBER_OF_TKE_POINTS_PER_REAL_DAY_OF_EXTRA_IDLE_DELETE_GRACE_PERIOD  10

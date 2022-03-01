@@ -745,6 +745,28 @@ ACMD(do_kick)
   }
 }
 
+bool cyber_is_retractable(struct obj_data *cyber) {
+  if (GET_OBJ_TYPE(cyber) != ITEM_CYBERWARE) {
+    mudlog("SYSERR: Received non-cyberware to cyber_is_retractable!", NULL, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+
+  switch (GET_CYBERWARE_TYPE(cyber)) {
+    case CYB_HANDRAZOR:
+    case CYB_HANDBLADE:
+    case CYB_HANDSPUR:
+    case CYB_CLIMBINGCLAWS:
+      if (!IS_SET(GET_CYBERWARE_FLAGS(cyber), CYBERWEAPON_RETRACTABLE))
+        return FALSE;
+      // fallthrough
+    case CYB_FOOTANCHOR:
+    case CYB_FIN:
+      return TRUE;
+  }
+
+  return FALSE;
+}
+
 ACMD(do_retract)
 {
   skip_spaces(&argument);
@@ -752,43 +774,42 @@ ACMD(do_retract)
   if (*argument)
     cyber = get_obj_in_list_vis(ch, argument, ch->cyberware);
   else {
-    for (struct obj_data *obj = ch->cyberware; obj; obj = obj->next_content)
-      switch (GET_CYBERWARE_TYPE(obj)) {
-        case CYB_HANDRAZOR:
-        case CYB_HANDBLADE:
-        case CYB_HANDSPUR:
-          if (!IS_SET(GET_OBJ_VAL(obj, 3), CYBERWEAPON_RETRACTABLE))
-            continue;
-          // fall through
-        case CYB_CLIMBINGCLAWS:
-        case CYB_FOOTANCHOR:
-        case CYB_FIN:
-          cyber = obj;
-          break;
+    for (struct obj_data *obj = ch->cyberware; obj; obj = obj->next_content) {
+      if (cyber_is_retractable(obj)) {
+        cyber = obj;
+        break;
       }
-  }
-  if (!cyber) {
-    if (!*argument)
-      send_to_char("You don't have any retractable cyberware.\r\n", ch);
-    else send_to_char("You don't have that cyberware.\r\n", ch);
-  } else if (!(GET_CYBERWARE_TYPE(cyber) == CYB_HANDRAZOR || GET_CYBERWARE_TYPE(cyber) == CYB_HANDSPUR || GET_CYBERWARE_TYPE(cyber) == CYB_HANDBLADE || GET_CYBERWARE_TYPE(cyber) == CYB_FOOTANCHOR || GET_CYBERWARE_TYPE(cyber) == CYB_FIN))
-    send_to_char("That cyberware isn't retractable.\r\n",ch );
-  else if ((GET_CYBERWARE_TYPE(cyber) == CYB_HANDRAZOR || GET_CYBERWARE_TYPE(cyber) == CYB_HANDSPUR || GET_CYBERWARE_TYPE(cyber) == CYB_HANDBLADE) && !IS_SET(GET_CYBERWARE_FLAGS(cyber), CYBERWEAPON_RETRACTABLE))
-    send_to_char("That cyberweapon isn't retractable.\r\n",ch );
-  else {
-    if (GET_CYBERWARE_IS_DISABLED(cyber)) {
-      GET_CYBERWARE_IS_DISABLED(cyber) = FALSE;
-      snprintf(buf, sizeof(buf), "$n extends %s.", GET_OBJ_NAME(cyber));
-      act(buf, TRUE, ch, 0, 0, TO_ROOM);
-      send_to_char(ch, "You extend %s.\r\n", GET_OBJ_NAME(cyber));
-    } else {
-      GET_CYBERWARE_IS_DISABLED(cyber) = TRUE;
-      snprintf(buf, sizeof(buf), "$n retracts %s.", GET_OBJ_NAME(cyber));
-      act(buf, TRUE, ch, 0, 0, TO_ROOM);
-      send_to_char(ch, "You retract %s.\r\n", GET_OBJ_NAME(cyber));
     }
-    affect_total(ch);
   }
+
+  // Found nothing?
+  if (!cyber) {
+    if (!*argument) {
+      send_to_char("You don't have any retractable cyberware.\r\n", ch);
+    } else {
+      send_to_char("You don't have that cyberware.\r\n", ch);
+    }
+    return;
+  }
+
+  // Found something, but it's not flagged retractable.
+  if (!cyber_is_retractable(cyber)) {
+    send_to_char(ch, "%s isn't retractable.\r\n", capitalize(GET_OBJ_NAME(cyber)));
+    return;
+  }
+
+  if (GET_CYBERWARE_IS_DISABLED(cyber)) {
+    GET_CYBERWARE_IS_DISABLED(cyber) = FALSE;
+    snprintf(buf, sizeof(buf), "$n extends %s.", decapitalize_a_an(GET_OBJ_NAME(cyber)));
+    act(buf, TRUE, ch, 0, 0, TO_ROOM);
+    send_to_char(ch, "You extend %s.\r\n", decapitalize_a_an(GET_OBJ_NAME(cyber)));
+  } else {
+    GET_CYBERWARE_IS_DISABLED(cyber) = TRUE;
+    snprintf(buf, sizeof(buf), "$n retracts %s.", decapitalize_a_an(GET_OBJ_NAME(cyber)));
+    act(buf, TRUE, ch, 0, 0, TO_ROOM);
+    send_to_char(ch, "You retract %s.\r\n", decapitalize_a_an(GET_OBJ_NAME(cyber)));
+  }
+  affect_total(ch);
 }
 
 ACMD(do_mode)

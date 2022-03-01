@@ -1059,8 +1059,6 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 
 // ITEM_DESIGN convenience defines
 
-// ITEM_QUEST convenience defines
-
 // ITEM_GUN_AMMO convenience defines
 #define GET_AMMOBOX_QUANTITY(box)                           (GET_OBJ_VAL((box), 0))
 #define GET_AMMOBOX_WEAPON(box)                             (GET_OBJ_VAL((box), 1))

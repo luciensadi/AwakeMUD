@@ -1144,7 +1144,7 @@ enum {
 #define ITEM_MOD                38
 #define ITEM_HOLSTER            39
 #define ITEM_DESIGN             40
-#define ITEM_QUEST              41
+// AVAILABLE================================
 #define ITEM_GUN_AMMO           42
 #define ITEM_KEYRING            43
 #define ITEM_SHOPCONTAINER      44
