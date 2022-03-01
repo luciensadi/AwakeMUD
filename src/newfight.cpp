@@ -1155,21 +1155,30 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
   // End melee-only calculations. Code beyond here is unified for both ranged and melee.
 
   // Perform body test for damage resistance.
-  int bod_success = 0;
-  int bod = GET_BOD(def->ch) + (def->too_tall ? 0 : GET_BODY(def->ch));
+  int bod_success = 0, bod_dice = 0;
+
+  // Put your body dice pool in, if applicable.
 #ifndef USE_SLOUCH_RULES
-  assert(!def->too_tall);
-  assert(!att->too_tall);
+  if (def->too_tall || att->too_tall) {
+    mudlog("SYSERR: Someone is too_tall when USE_SLOUCH_RULES is disabled!", att->ch, LOG_SYSLOG, TRUE);
+  }
+  bod_dice += GET_BODY(def->ch);
+#else
+  if (!def->too_tall) {
+    bod_dice += GET_BODY(def->ch);
+  }
 #endif
-  int bod_dice = 0;
 
-  // If you're a spirit attacking someone who has the conjuring skill, they can opt to use that instead of their body if it's higher.
-  if (IS_SPIRIT(att->ch) && GET_MAG(def->ch) > 0 && GET_SKILL(def->ch, SKILL_CONJURING))
-    bod_dice = MAX(bod, GET_SKILL(def->ch, SKILL_CONJURING));
-
-  // Unconscious? No dice for you.
+  // Unconscious? No pool dice for you.
   if (!AWAKE(def->ch))
     bod_dice = 0;
+
+  // Add your attribute.
+  // If you're a spirit attacking someone who has the conjuring skill, they can opt to use that instead of their body if it's higher.
+  if (IS_SPIRIT(att->ch) && GET_MAG(def->ch) > 0 && GET_SKILL(def->ch, SKILL_CONJURING))
+    bod_dice += MAX(GET_BOD(def->ch), GET_SKILL(def->ch, SKILL_CONJURING));
+  else
+    bod_dice += GET_BOD(def->ch);
 
   // Declare our staged_damage variable, which is modified in the upcoming bod test and staging code.
   int staged_damage = 0;
@@ -1180,7 +1189,7 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
 
   // Roll the bod test and apply necessary staging.
   if (att->ranged_combat_mode) {
-    bod_success = success_test(bod, att->ranged->power);
+    bod_success = success_test(GET_BOD(def->ch) + bod_dice, att->ranged->power);
     att->ranged->successes -= bod_success;
 
     // Adjust messaging for unkillable enemies (ranged stanza)
@@ -1192,7 +1201,7 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
     }
   } else {
-    bod_success = success_test(bod, att->melee->power);
+    bod_success = success_test(bod_dice, att->melee->power);
     att->melee->successes -= bod_success;
 
     // Adjust messaging for unkillable entities (melee stanza)
@@ -1214,7 +1223,7 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     bool damage_is_physical = att->ranged_combat_mode ? att->ranged->is_physical : att->melee->is_physical;
 
     snprintf(rbuf, sizeof(rbuf), "^cDefender rolls %d bod dice vs TN %d, getting %d success%s; attacker now has %d net success%s.\r\n^CDamage stages from %s(%d) to %s(%d), aka %d boxes of %c.^n",
-             bod,  // bod dice
+             bod_dice,  // bod dice
              net_attack_power,  // TN
              bod_success, // success
              bod_success == 1 ? "" : "es", // success plural
