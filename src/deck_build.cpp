@@ -1015,32 +1015,34 @@ ACMD(do_progress)
   }
 
   if (AFF_FLAGS(ch).IsSet(AFF_PROGRAM)) {
-    send_to_char(ch, "You are about %d%% of the way through programming %s.\r\n",
-           (int)(((float)(GET_OBJ_TIMER(GET_BUILDING(ch)) - GET_OBJ_VAL(GET_BUILDING(ch), 5)) /
-           GET_OBJ_TIMER(GET_BUILDING(ch))) * 100), GET_OBJ_NAME(GET_BUILDING(ch)));
+    amount_left   = GET_OBJ_VAL(GET_BUILDING(ch), 5);
+    amount_needed = GET_OBJ_TIMER(GET_BUILDING(ch));
+    send_to_char(ch, "You are about %2.2f%% of the way through programming %s.\r\n",
+           (((float)(amount_needed - amount_left) * 100) / amount_needed), GET_OBJ_NAME(GET_BUILDING(ch)));
     return;
   }
 
   if (AFF_FLAGS(ch).IsSet(AFF_PART_BUILD)) {
-    send_to_char(ch, "You are about %d%% of the way through building %s.\r\n",
-           (int)(((float)(GET_OBJ_VAL(GET_BUILDING(ch), 10) - GET_OBJ_VAL(GET_BUILDING(ch), 4)) /
-           GET_OBJ_VAL(GET_BUILDING(ch), 10)) * 100), GET_OBJ_NAME(GET_BUILDING(ch)));
+    amount_left   = GET_OBJ_VAL(GET_BUILDING(ch), 4);
+    amount_needed = GET_OBJ_VAL(GET_BUILDING(ch), 10);
+    send_to_char(ch, "You are about %2.2f%% of the way through building %s.\r\n",
+           (((float)(amount_needed - amount_left) * 100) / amount_needed), GET_OBJ_NAME(GET_BUILDING(ch)));
     return;
   }
 
   if (AFF_FLAGS(ch).IsSet(AFF_PART_DESIGN)) {
     amount_left = GET_PART_DESIGN_COMPLETION(GET_BUILDING(ch));
     amount_needed = GET_PART_TARGET_MPCP(GET_BUILDING(ch)) * 2;
-    send_to_char(ch, "You are about %d%% of the way through designing %s.\r\n",
-           (int)(((float)(amount_needed - amount_left) * 100) / amount_needed), GET_OBJ_NAME(GET_BUILDING(ch)));
+    send_to_char(ch, "You are about %2.2f%% of the way through designing %s.\r\n",
+           (((float)(amount_needed - amount_left) * 100) / amount_needed), GET_OBJ_NAME(GET_BUILDING(ch)));
     return;
   }
 
   if (AFF_FLAGS(ch).IsSet(AFF_DESIGN)) {
     amount_left = GET_OBJ_VAL(GET_BUILDING(ch), 4);
     amount_needed = GET_OBJ_TIMER(GET_BUILDING(ch));
-    send_to_char(ch, "You are about %d%% of the way through designing %s.\r\n",
-           (int)(((float)(amount_needed - amount_left) * 100) / amount_needed), GET_OBJ_NAME(GET_BUILDING(ch)));
+    send_to_char(ch, "You are about %2.2f%% of the way through designing %s.\r\n",
+           (((float)(amount_needed - amount_left) * 100) / amount_needed), GET_OBJ_NAME(GET_BUILDING(ch)));
     return;
   }
 

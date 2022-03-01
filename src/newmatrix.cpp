@@ -88,12 +88,13 @@ void check_trigger(rnum_t host, struct char_data *ch)
         }
       }
       if (real_ic(trig->ic) > 0) {
-        struct matrix_icon *ic;
-        ic = read_ic(trig->ic, VIRTUAL);
+        struct matrix_icon *ic = read_ic(trig->ic, VIRTUAL);
         if (!ic) {
           snprintf(buf, sizeof(buf), "SYSERR: Attempted to process trigger for non-existent IC. Read failure caused on host %ld, trigger step %d, IC %ld.", host, trig->step, trig->ic);
           mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+          return;
         }
+
         ic->ic.target = PERSONA->idnum;
         for (struct matrix_icon *icon = HOST.icons; icon; icon = icon->next_in_host)
           if (icon->decker) {
@@ -199,26 +200,46 @@ int system_test(rnum_t host, struct char_data *ch, int type, int software, int m
   GET_REM_HACKING(ch) -= skill - get_skill(ch, SKILL_COMPUTER, detect);
   detect = 0;
   struct obj_data *prog = NULL;
-  if (HOST.stats[type][1] && software != SOFT_DECRYPT && software != SOFT_ANALYZE)
+
+  char rollbuf[5000];
+
+  // You can only successfully run Decrypt and Analyze against encrypted subsystems.
+  if (HOST.stats[type][MTX_STAT_ENCRYPTED] && software != SOFT_DECRYPT && software != SOFT_ANALYZE) {
+    snprintf(rollbuf, sizeof(rollbuf), "Can't perform test against %s with software %s-- subsystem encrypted.", acifs_strings[type], programs[software].name);
+    act(rollbuf, FALSE, ch, 0, 0, TO_ROLLS);
     return 0;
-  target = HOST.stats[type][0];
-  if (HOST.alert)
+  }
+
+  target = HOST.stats[type][MTX_STAT_RATING];
+  snprintf(rollbuf, sizeof(rollbuf), "System test against %s with software %s: Starting TN %d", acifs_strings[type], programs[software].name, target);
+
+  if (HOST.alert) {
     target += 2;
-  target += modify_target(ch) + DECKER->res_test + (DECKER->ras ? 0 : 4);
-  for (struct obj_data *soft = DECKER->software; soft; soft = soft->next_content)
-    if (GET_OBJ_VAL(soft, 0) == SOFT_SLEAZE)
-      detect = GET_OBJ_VAL(soft, 1);
-    else if (GET_OBJ_VAL(soft, 0) == software)
-    {
-      target -= GET_OBJ_VAL(soft, 1);
+    strlcat(rollbuf, ", +2 for alert", sizeof(rollbuf));
+  }
+  strlcat(rollbuf, ". Modifiers: ", sizeof(rollbuf));
+  target += modify_target_rbuf_raw(ch, rollbuf, sizeof(rollbuf), 8, FALSE) + DECKER->res_test + (DECKER->ras ? 0 : 4);
+
+  for (struct obj_data *soft = DECKER->software; soft; soft = soft->next_content) {
+    if (GET_PROGRAM_TYPE(soft) == SOFT_SLEAZE)
+      detect = GET_PROGRAM_RATING(soft);
+    else if (!prog && GET_PROGRAM_TYPE(soft) == software) {
+      target -= GET_PROGRAM_RATING(soft);
+      buf_mod(rollbuf, sizeof(rollbuf), "soft", -GET_PROGRAM_RATING(soft));
       prog = soft;
     }
+  }
+
   detect += DECKER->masking;
   detect = detect / 2;
   detect -= DECKER->res_det;
   int tally = MAX(0, success_test(HOST.security, detect));
   int success = success_test(skill, target);
   success -= tally;
+  act(rollbuf, FALSE, ch, 0, 0, TO_ROLLS);
+  snprintf(rollbuf, sizeof(rollbuf), "Rolled %d successes on %d dice, then lost %d to tally (%d dice vs TN %d).", success, skill, tally, HOST.security, detect);
+  act(rollbuf, FALSE, ch, 0, 0, TO_ROLLS);
+
   struct matrix_icon *temp;
   bool tarred = FALSE;
   for (struct matrix_icon *ic = HOST.icons; ic; ic = temp)
@@ -1341,31 +1362,31 @@ ACMD(do_analyze)
         else
           strcat(buf, "? ");
         if (found[2])
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld/", matrix[PERSONA->in_host].stats[ACCESS][0]);
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld/", matrix[PERSONA->in_host].stats[ACCESS][MTX_STAT_RATING]);
         else
           strcat(buf, "0/");
         if (found[3])
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld/", matrix[PERSONA->in_host].stats[CONTROL][0]);
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld/", matrix[PERSONA->in_host].stats[CONTROL][MTX_STAT_RATING]);
         else
           strcat(buf, "0/");
         if (found[4])
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld/", matrix[PERSONA->in_host].stats[INDEX][0]);
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld/", matrix[PERSONA->in_host].stats[INDEX][MTX_STAT_RATING]);
         else
           strcat(buf, "0/");
         if (found[5])
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld/", matrix[PERSONA->in_host].stats[FILES][0]);
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld/", matrix[PERSONA->in_host].stats[FILES][MTX_STAT_RATING]);
         else
           strcat(buf, "0/");
         if (found[6])
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld/", matrix[PERSONA->in_host].stats[SLAVE][0]);
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld/", matrix[PERSONA->in_host].stats[SLAVE][MTX_STAT_RATING]);
         else
           strcat(buf, "0");
         strcat(buf, "\r\n");
       } else
         snprintf(buf, sizeof(buf), "%s-%d %ld/%ld/%ld/%ld/%ld\r\n", host_sec[matrix[PERSONA->in_host].colour],
-                matrix[PERSONA->in_host].security, matrix[PERSONA->in_host].stats[ACCESS][0],
-                matrix[PERSONA->in_host].stats[CONTROL][0], matrix[PERSONA->in_host].stats[INDEX][0],
-                matrix[PERSONA->in_host].stats[FILES][0], matrix[PERSONA->in_host].stats[SLAVE][0]);
+                matrix[PERSONA->in_host].security, matrix[PERSONA->in_host].stats[ACCESS][MTX_STAT_RATING],
+                matrix[PERSONA->in_host].stats[CONTROL][MTX_STAT_RATING], matrix[PERSONA->in_host].stats[INDEX][MTX_STAT_RATING],
+                matrix[PERSONA->in_host].stats[FILES][MTX_STAT_RATING], matrix[PERSONA->in_host].stats[SLAVE][MTX_STAT_RATING]);
       send_to_char(buf, ch);
     } else
       send_to_icon(PERSONA, "Your program fails to run.\r\n");
@@ -1395,10 +1416,10 @@ ACMD(do_analyze)
       mode = TEST_SLAVE;
     int success = system_test(PERSONA->in_host, ch, mode, SOFT_ANALYZE, 0);
     if (success > 0) {
-      if (matrix[PERSONA->in_host].stats[mode][1] || matrix[PERSONA->in_host].stats[mode][5]) {
-        if (matrix[PERSONA->in_host].stats[mode][1])
-          send_to_icon(PERSONA, "The subsystem is protected by Scramble-%ld IC.\r\n", matrix[PERSONA->in_host].stats[mode][2]);
-        if (matrix[PERSONA->in_host].stats[mode][5])
+      if (matrix[PERSONA->in_host].stats[mode][MTX_STAT_ENCRYPTED] || matrix[PERSONA->in_host].stats[mode][MTX_STAT_TRAPDOOR]) {
+        if (matrix[PERSONA->in_host].stats[mode][MTX_STAT_ENCRYPTED])
+          send_to_icon(PERSONA, "The subsystem is protected by Scramble-%ld IC.\r\n", matrix[PERSONA->in_host].stats[mode][MTX_STAT_SCRAMBLE_IC_RATING]);
+        if (matrix[PERSONA->in_host].stats[mode][MTX_STAT_TRAPDOOR])
           send_to_icon(PERSONA, "There is a trapdoor located in this subsystem.\r\n");
       } else send_to_icon(PERSONA, "There is nothing out of the ordinary about that subsystem.\r\n");
     } else send_to_icon(PERSONA, "Your program fails to run.\r\n");
@@ -1467,16 +1488,16 @@ ACMD(do_logon)
       send_to_icon(PERSONA, "This host is not connected to a RTG.\r\n");
       return;
     }
-  } else if (!str_cmp(argument, "access") && matrix[PERSONA->in_host].stats[ACCESS][5])
-    target_host = real_host(matrix[PERSONA->in_host].stats[ACCESS][5]);
-  else if (!str_cmp(argument, "control") && matrix[PERSONA->in_host].stats[CONTROL][5])
-    target_host = real_host(matrix[PERSONA->in_host].stats[CONTROL][5]);
-  else if (!str_cmp(argument, "index") && matrix[PERSONA->in_host].stats[INDEX][5])
-    target_host = real_host(matrix[PERSONA->in_host].stats[INDEX][5]);
-  else if (!str_cmp(argument, "files") && matrix[PERSONA->in_host].stats[FILES][5])
-    target_host = real_host(matrix[PERSONA->in_host].stats[FILES][5]);
-  else if (!str_cmp(argument, "slave") && matrix[PERSONA->in_host].stats[SLAVE][5])
-    target_host = real_host(matrix[PERSONA->in_host].stats[SLAVE][5]);
+  } else if (!str_cmp(argument, "access") && matrix[PERSONA->in_host].stats[ACCESS][MTX_STAT_TRAPDOOR])
+    target_host = real_host(matrix[PERSONA->in_host].stats[ACCESS][MTX_STAT_TRAPDOOR]);
+  else if (!str_cmp(argument, "control") && matrix[PERSONA->in_host].stats[CONTROL][MTX_STAT_TRAPDOOR])
+    target_host = real_host(matrix[PERSONA->in_host].stats[CONTROL][MTX_STAT_TRAPDOOR]);
+  else if (!str_cmp(argument, "index") && matrix[PERSONA->in_host].stats[INDEX][MTX_STAT_TRAPDOOR])
+    target_host = real_host(matrix[PERSONA->in_host].stats[INDEX][MTX_STAT_TRAPDOOR]);
+  else if (!str_cmp(argument, "files") && matrix[PERSONA->in_host].stats[FILES][MTX_STAT_TRAPDOOR])
+    target_host = real_host(matrix[PERSONA->in_host].stats[FILES][MTX_STAT_TRAPDOOR]);
+  else if (!str_cmp(argument, "slave") && matrix[PERSONA->in_host].stats[SLAVE][MTX_STAT_TRAPDOOR])
+    target_host = real_host(matrix[PERSONA->in_host].stats[SLAVE][MTX_STAT_TRAPDOOR]);
   else {
     for (struct exit_data *exit = matrix[PERSONA->in_host].exit; exit; exit = exit->next)
       if (isname(argument, exit->addresses))
@@ -2149,12 +2170,42 @@ ACMD(do_decrypt)
       mode = FILES;
     else if (is_abbrev(argument, "slave"))
       mode = SLAVE;
+
+    // If there's nothing to decrypt, there's nothing to succeed at.
+    if (!matrix[PERSONA->in_host].stats[mode][MTX_STAT_ENCRYPTED]) {
+      send_to_icon(PERSONA, "You fail to decrypt that subsystem.\r\n");
+      return;
+    }
+
     int success = system_test(PERSONA->in_host, ch, mode, SOFT_DECRYPT, 0 );
-    if (success > 0 && matrix[PERSONA->in_host].stats[mode][1]) {
-      matrix[PERSONA->in_host].stats[mode][1] = 0;
+    if (success > 0) {
+      matrix[PERSONA->in_host].stats[mode][MTX_STAT_ENCRYPTED] = 0;
       send_to_icon(PERSONA, "You decrypt the subsystem.\r\n");
     } else {
       send_to_icon(PERSONA, "You fail to decrypt that subsystem.\r\n");
+      if (mode == FILES && PERSONA->decker && PERSONA->decker->ch) {
+        // Paydata is destroyed on failed tests per SR3 p228.
+        if (success_test(matrix[PERSONA->in_host].stats[mode][MTX_STAT_RATING], GET_SKILL(PERSONA->decker->ch, SKILL_COMPUTER)) > 0) {
+          send_to_host(PERSONA->in_host, "A wash of static sweeps over the host, tearing away at potential paydata!\r\n", NULL, FALSE);
+
+          // Remove the not-yet-found data.
+          matrix[PERSONA->in_host].found = 0;
+
+          // Remove the already-found data.
+          struct obj_data *current, *next;
+          for (current = matrix[PERSONA->in_host].file; current; current = next) {
+            next = current->next_content;
+
+            // Skip non-paydata.
+            if (GET_OBJ_TYPE(obj) != ITEM_DECK_ACCESSORY || GET_DECK_ACCESSORY_TYPE(obj) != TYPE_FILE || GET_DECK_ACCESSORY_FILE_HOST_VNUM(obj) != matrix[PERSONA->in_host].vnum)
+              continue;
+
+            // The file is paydata-- delete it.
+            obj_from_host(obj);
+            extract_obj(obj);
+          }
+        }
+      }
     }
     return;
   }
@@ -2165,9 +2216,9 @@ ACMD(do_decrypt)
       icon_from_host(PERSONA);
       icon_to_host(PERSONA, host_rnum);
       int success = system_test(PERSONA->in_host, ch, TEST_ACCESS, SOFT_DECRYPT, 0);
-      if (success > 0 && matrix[host_rnum].stats[ACCESS][1]) {
+      if (success > 0 && matrix[host_rnum].stats[ACCESS][MTX_STAT_ENCRYPTED]) {
         send_to_icon(PERSONA, "You successfully decrypt that SAN.\r\n");
-        matrix[host_rnum].stats[ACCESS][1] = 0;
+        matrix[host_rnum].stats[ACCESS][MTX_STAT_ENCRYPTED] = 0;
       } else
         send_to_icon(PERSONA, "You fail to decrypt that SAN.\r\n");
       if (PERSONA) {
@@ -2425,7 +2476,7 @@ void matrix_update()
     if (time_info.hours == 2 && host.payreset)
       host.payreset = FALSE;
     if (time_info.hours == 0) {
-      if (!host.type && !host.found && !host.payreset) {
+      if (host.type == HOST_DATASTORE && host.found <= 0 && !host.payreset) {
         switch (host.colour) {
           case HOST_SECURITY_BLUE:
             host.found = MIN(number(1, 6) - 1, MAX_PAYDATA_QTY_BLUE);
@@ -2441,13 +2492,16 @@ void matrix_update()
             host.found = MIN(number(1, 6) + number(1, 6) + 2, MAX_PAYDATA_QTY_RED_BLACK);
             break;
           default:
+            char oopsbuf[500];
+            snprintf(oopsbuf, sizeof(oopsbuf), "SYSERR: Unknown host color %d for host %ld- can't generate paydata.", host.colour, host.vnum);
+            mudlog(oopsbuf, NULL, LOG_SYSLOG, TRUE);
             host.found = 0;
         }
         host.payreset = TRUE;
       } else
         for (int x = 0; x < 5; x++)
-          if (host.stats[x][2] && !host.stats[x][1])
-            host.stats[x][1]++;
+          if (host.stats[x][MTX_STAT_SCRAMBLE_IC_RATING] && !host.stats[x][MTX_STAT_ENCRYPTED])
+            host.stats[x][MTX_STAT_ENCRYPTED]++;
     }
     if (host.shutdown) {
       if (success_test(host.security, host.shutdown_mpcp) > 0) {
@@ -3330,3 +3384,12 @@ int get_paydata_market_minimum(int host_color) {
     default: return 0;
   }
 }
+
+const char *acifs_strings[] =
+  {
+    "Access",
+    "Control",
+    "Index",
+    "Files",
+    "Slave"
+  };

@@ -3090,7 +3090,6 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
   return lbuf;
 }
 
-// TODO: stopped partway through editing this func, it is nonfunctional.
 bool can_send_act_to_target(struct char_data *ch, bool hide_invisible, struct obj_data * obj, void *vict_obj, struct char_data *to, int type) {
 #define SENDOK(ch) ((ch)->desc && AWAKE(ch) && !(PLR_FLAGGED((ch), PLR_WRITING) || PLR_FLAGGED((ch), PLR_EDITING) || PLR_FLAGGED((ch), PLR_MAILING) || PLR_FLAGGED((ch), PLR_CUSTOMIZE)) && (STATE(ch->desc) != CON_SPELL_CREATE))
   bool remote;
@@ -3098,13 +3097,23 @@ bool can_send_act_to_target(struct char_data *ch, bool hide_invisible, struct ob
   if ((remote = (type & TO_REMOTE)))
     type &= ~TO_REMOTE;
 
-  return (to
-          && SENDOK(to)
-          && !(hide_invisible && ch && !CAN_SEE(to, ch))
-          && (to != ch)
-          && (remote || !PLR_FLAGGED(to, PLR_REMOTE))
-          && !PLR_FLAGGED(to, PLR_MATRIX)
-          && (type == TO_ROOM || type == TO_ROLLS || (to != vict_obj)));
+  // Nobody unique to send to? Fail.
+  if (!to || !SENDOK(to) || to == ch)
+    return FALSE;
+
+  // Can't see them and it's an action-based message? Fail.
+  if (hide_invisible && ch && !CAN_SEE(to, ch))
+    return FALSE;
+
+  // Only some things go through to remote users.
+  if (!remote && PLR_FLAGGED(to, PLR_REMOTE))
+    return FALSE;
+
+  // Matrix users skip almost everything-- staff sees rolls there though.
+  if (PLR_FLAGGED(to, PLR_MATRIX) && !(IS_SENATOR(to) && type == TO_ROLLS))
+    return FALSE;
+
+  return type == TO_ROOM || type == TO_ROLLS || (to != vict_obj);
 
 #undef SENDOK
 }
