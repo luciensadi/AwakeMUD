@@ -1312,7 +1312,7 @@ ACMD(do_toggle)
     } else if (is_abbrev(argument, "norpe") || is_abbrev(argument, "rpe")) {
       result = PRF_TOG_CHK(ch, PRF_NORPE);
       mode = 21;
-    } else if (is_abbrev(argument, "nohired") || is_abbrev(argument, "hired") || is_abbrev(argument, "quest")) {
+    } else if (is_abbrev(argument, "nohired")) {
       result = PRF_TOG_CHK(ch, PRF_NOHIRED);
       mode = 22;
     } else if (is_abbrev(argument, "pacify") && IS_SENATOR(ch)) {
