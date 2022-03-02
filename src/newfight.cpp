@@ -1186,7 +1186,7 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     }
   }
 
-  // Handle spirits and elementals being little divas with their special combat rules.
+    // Handle spirits and elementals being little divas with their special combat rules.
     // Namely: We require that the attack's power is greater than double the spirit's level, otherwise it takes no damage.
     // If the attack's power is greater, subtract double the level from it.
     if (IS_SPIRIT(def->ch) || IS_ANY_ELEMENTAL(def->ch)) {
