@@ -1303,7 +1303,8 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
   } else {
     // Process flame aura right before damage.
     if (handle_flame_aura(att, def)) {
-      // TODO: Print a message to the defender and the room that the attacker burned themselves up, then bail out.
+      act("$n gets too close and manages to burn themselves on the flame aura.", FALSE, vict, 0, 0, TO_ROOM);
+      send_to_char("You miscalculate and manage to burn yourself on the flames!\r\n", vict);
       return;
     }
 
