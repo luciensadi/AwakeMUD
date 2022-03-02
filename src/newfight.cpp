@@ -309,7 +309,7 @@ struct melee_combat_data {
       }
       
       // Add +2 power to unarmed/melee, per MitS p147. -Vile
-      if (AFF_FLAGGED(ch, AFF_SPELL_FLAME_AURA)) {
+      if (AFF_FLAGGED(ch, AFF_SPELL_FLAME_AURA) || MOB_FLAGGED(ch, MOB_FLAMEAURA)) {
         power += 2;
       }
 
