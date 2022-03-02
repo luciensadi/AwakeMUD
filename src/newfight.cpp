@@ -1434,14 +1434,14 @@ bool handle_flame_aura(struct combat_data *att, struct combat_data *def) {
         }
       }
 
-      if (GET_EQ(att->ch, WEAR_HANDS) && GET_EQ(att->ch, WEAR_FEET)) {
+      if (GET_POWER(att->ch, ADEPT_TEMPERATURE_TOLERANCE) && (GET_CYBERWARE_TYPE(cyber) == CYB_DERMALSHEATHING || BIO_ORTHOSKIN || CYB_ARMS)) {
         // TODO: Apply impact armor.
       }
 
       // TODO: Now that we've set the force, deal (Force)M damage to the attacker. Use TYPE_SUFFERING maybe?
       // Remember that damage() returns true if it's killed them-- if this happens, you'll need to abort handling, because att->ch is already nulled out.
-      if (damage(att->ch, ...)) {
-        // TODO: send a message to the defender and the room. Remember not to use att->ch here since it's been nulled by death.
+      if (damage(att->ch, vict, force, TYPE_SUFFERING, PHYSICAL)) {
+        act("The flames consume $m, leaving their body smoldering and smoking.", TRUE, vict, 0, 0, TO_ROOM);
 
         // Attacker died, so return TRUE here.
         return TRUE;
