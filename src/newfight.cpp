@@ -1304,7 +1304,7 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     // Process flame aura right before damage.
     if (handle_flame_aura(att, def)) {
       act("$n gets too close and manages to burn themselves on the flame aura.", FALSE, vict, 0, 0, TO_ROOM);
-      send_to_char("You miscalculate and manage to burn yourself on the flames!\r\n", vict);
+      act("You miscalculate and manage to burn yourself on $N's flame aura!", FALSE, def->ch, 0, att->ch, TO_CHAR);
       return;
     }
 
