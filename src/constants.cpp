@@ -722,7 +722,8 @@ const char *affected_bits[] =
     "Engaging in Close Combat",
     "Tries for Close Combat",
     "Levitate",
-    "Flame Aura"
+    "Flame Aura",
+    "Voice Modulator"
   };
 
 /* CON_x */
