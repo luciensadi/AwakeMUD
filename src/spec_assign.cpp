@@ -825,6 +825,7 @@ void assign_objects(void)
   SPECIAL(nerpcorpolis_button);
   SPECIAL(floor_usable_radio);
   SPECIAL(medical_workshop);
+  SPECIAL(toggled_voice_modulator);
 
   ASSIGNOBJ(3, gen_board);  /* Rift's Board */
   ASSIGNOBJ(4, gen_board);  /* Pook's Board */
@@ -931,6 +932,7 @@ void assign_objects(void)
   ASSIGNOBJ(5498, bank); // Vancouver ATM
   ASSIGNOBJ(6997, nerpcorpolis_button);
   ASSIGNOBJ(16298, floor_usable_radio);
+  ASSIGNOBJ(26104, toggled_voice_modulator);
 
   perform_secret_obj_assignments();
 #endif
