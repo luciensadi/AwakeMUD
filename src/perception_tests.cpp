@@ -90,6 +90,10 @@ bool can_see_through_invis(struct char_data *ch, struct char_data *vict) {
   std::unordered_map<idnum_t, bool>::const_iterator found;
   idnum_t idnum;
 
+  act("Processing can_see_through_invis ($N looking at $n).", FALSE, vict, 0, ch, TO_ROLLS);
+  if (vict->in_room != ch->in_room)
+    act("Processing can_see_through_invis ($n looking at $N).", FALSE, ch, 0, vict, TO_ROLLS);
+
   // NPCs and PCs have their own separate maps.
   if (IS_NPC(ch)) {
     if (!vict->mob_perception_test_results)

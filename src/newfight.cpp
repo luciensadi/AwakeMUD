@@ -149,7 +149,8 @@ struct ranged_combat_data {
     tn(4), dice(0), successes(0), is_gel(FALSE), burst_count(0), recoil_comp(0),
     using_mounted_gun(FALSE), magazine(NULL), gyro(NULL)
   {
-    memset(modifiers, 0, sizeof(modifiers));
+    for (int i = 0; i < NUM_COMBAT_MODIFIERS; i++)
+      modifiers[i] = 0;
 
     assert(ch != NULL);
 
@@ -218,7 +219,8 @@ struct melee_combat_data {
   {
     assert(ch != NULL);
 
-    memset(modifiers, 0, sizeof(modifiers));
+    for (int i = 0; i < NUM_COMBAT_MODIFIERS; i++)
+      modifiers[i] = 0;
 
     // Set up melee combat data. This holds true for all melee combat, but can be overwritten later on.
     skill = SKILL_UNARMED_COMBAT;
@@ -602,12 +604,13 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     // Emplaced mobs act as if they have unlimited ammo (technically draining 1 per shot) and no recoil.
     if (att->ranged->burst_count && !MOB_FLAGGED(att->ch, MOB_EMPLACED)) {
       if (weap_ammo || att->ranged->magazine) {
+        // When we called has_ammo() earlier, we decremented their ammo by one. Give it back to true up the equation.
         int ammo_available = weap_ammo ? ++GET_AMMOBOX_QUANTITY(weap_ammo) : ++GET_MAGAZINE_AMMO_COUNT(att->ranged->magazine);
 
         // Cap their burst to their magazine's ammo.
         att->ranged->burst_count = MIN(att->ranged->burst_count, ammo_available);
 
-        // When we called has_ammo() earlier, we decremented their ammo by one. Give it back to true up the equation.
+        // Subtract the full ammo count.
         if (weap_ammo) {
           update_ammobox_ammo_quantity(weap_ammo, -(att->ranged->burst_count));
         } else {
@@ -657,20 +660,11 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       }
     }
 
-    // Setup: Trying to fire a sniper rifle at close range is tricky. This is non-canon to reduce twinkery.
-    if (IS_OBJ_STAT(att->weapon, ITEM_EXTRA_SNIPER)
-        && !IS_NPC(att->ch)
-        && (att->ch->in_room == def->ch->in_room
-            || att->ranged->using_mounted_gun))
-    {
-      att->ranged->modifiers[COMBAT_MOD_DISTANCE] += SAME_ROOM_SNIPER_RIFLE_PENALTY;
-    }
-
     // Setup: Compute modifiers to the TN based on the def->ch's current state.
     if (!AWAKE(def->ch))
       att->ranged->modifiers[COMBAT_MOD_POSITION] -= 6;
     else if (AFF_FLAGGED(def->ch, AFF_PRONE)) {
-      // Prone next to you is a bigger target, prone far away is a smaller one.
+      // Prone next to you is a bigger / easier target, prone far away is a smaller / harder one.
       if (def->ch->in_room == att->ch->in_room)
         att->ranged->modifiers[COMBAT_MOD_POSITION]--;
       else
@@ -712,6 +706,21 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
         send_to_char(att->ch, "You squint around, but you can't find your opponent anywhere.\r\n");
         stop_fighting(att->ch);
         return;
+      }
+    }
+
+    // Setup: Sniper rifle ranged penalty modifiers.
+    if (IS_OBJ_STAT(att->weapon, ITEM_EXTRA_SNIPER)) {
+      // If you're in the same room, you take a penalty. This is non-canon to reduce twinkery.
+      if (att->ch->in_room == def->ch->in_room || att->ranged->using_mounted_gun) {
+        // NPCs don't take the penalty because their weapon selection is at the mercy of the builders.
+        if (!IS_NPC(att->ch)) {
+          att->ranged->modifiers[COMBAT_MOD_DISTANCE] += SAME_ROOM_SNIPER_RIFLE_PENALTY;
+        }
+      }
+      // However, using it at a distance gives a bonus due to it being a long-distance weapon.
+      else {
+        att->ranged->modifiers[COMBAT_MOD_DISTANCE] -= 2;
       }
     }
 
@@ -758,17 +767,22 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     // Minimum TN is 2.
     att->ranged->tn = MAX(att->ranged->tn, 2);
 
-    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "\r\nThus, attacker's ranged TN is: %d.", att->ranged->tn);
+    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "\r\nAfter get_skill(), attacker's ranged TN is ^c%d^n.", att->ranged->tn);
     SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
 
-    // Execute skill test
+    int bonus_if_not_too_tall = MIN(GET_SKILL(att->ch, att->ranged->skill), GET_OFFENSE(att->ch));
+#ifdef USE_SLOUCH_RULES
+    // Height penalty.
     if (!att->too_tall) {
-      int bonus = MIN(GET_SKILL(att->ch, att->ranged->skill), GET_OFFENSE(att->ch));
-      snprintf(rbuf, sizeof(rbuf), "Not too tall, so will roll %d + %d dice... ", att->ranged->dice, bonus);
-      att->ranged->dice += bonus;
+      snprintf(rbuf, sizeof(rbuf), "Not too tall, so will roll %d + %d dice... ", att->ranged->dice, bonus_if_not_too_tall);
+      att->ranged->dice += bonus_if_not_too_tall;
     } else {
       snprintf(rbuf, sizeof(rbuf), "Too tall, so will roll just %d dice... ", att->ranged->dice);
     }
+#else
+    att->ranged->dice += bonus_if_not_too_tall;
+    snprintf(rbuf, sizeof(rbuf), "Rolling %d + %d dice... ", att->ranged->dice, bonus_if_not_too_tall);
+#endif
 
     att->ranged->successes = success_test(att->ranged->dice, att->ranged->tn);
     snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "%d successes.", att->ranged->successes);
@@ -789,7 +803,7 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       def->ranged->tn += modify_target_rbuf_raw(def->ch, rbuf, sizeof(rbuf), def->ranged->modifiers[COMBAT_MOD_VISIBILITY], FALSE);
       for (int mod_index = 0; mod_index < NUM_COMBAT_MODIFIERS; mod_index++) {
         buf_mod(rbuf, sizeof(rbuf), combat_modifiers[mod_index], def->ranged->modifiers[mod_index]);
-        def->ranged->tn += att->ranged->modifiers[mod_index];
+        def->ranged->tn += def->ranged->modifiers[mod_index];
       }
       SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
 
@@ -799,15 +813,17 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       def->ranged->successes = MAX(success_test(def->ranged->dice, def->ranged->tn), 0);
       att->ranged->successes -= def->ranged->successes;
 
-      snprintf(rbuf, sizeof(rbuf), "Dodge: Dice %d, TN %d, Successes %d.  This means attacker's net successes = %d.",
+      snprintf(rbuf, sizeof(rbuf), "Dodge: Dice %d (%d pool + %d sidestep), TN %d, Successes %d.  This means attacker's net successes = %d.",
                def->ranged->dice,
+               GET_DEFENSE(def->ch),
+               GET_POWER(def->ch, ADEPT_SIDESTEP),
                def->ranged->tn,
                def->ranged->successes,
                att->ranged->successes);
     } else {
       // Surprised, oversized, unconscious, or prone? No dodge test for you.
       att->ranged->successes = MAX(att->ranged->successes, 1);
-      snprintf(rbuf, sizeof(rbuf), "Opponent unable to dodge, successes confirmed as %d.", att->ranged->successes);
+      snprintf(rbuf, sizeof(rbuf), "Opponent unable to dodge, attacker's successes will remain at %d.", att->ranged->successes);
       if (GET_DEFENSE(def->ch) > 0 && AFF_FLAGGED(def->ch, AFF_PRONE))
         send_to_char(def->ch, "^yYou're unable to dodge while prone!^n\r\n");
     }
@@ -857,6 +873,9 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
             att->ranged->power -= MAX(GET_BALLISTIC(def->ch), GET_IMPACT(def->ch) * 2);
           }
           break;
+        case AMMO_HARMLESS:
+          att->ranged->power = 0;
+          // fall through
         case AMMO_GEL:
           att->ranged->power -= GET_IMPACT(def->ch) + 2;
           att->ranged->is_gel = TRUE;
@@ -873,6 +892,9 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     // Increment character's shots_fired. This is used for internal tracking of eligibility for a skill quest.
     if (GET_SKILL(att->ch, att->ranged->skill) >= 8 && SHOTS_FIRED(att->ch) < 10000)
       SHOTS_FIRED(att->ch)++;
+
+    // The power of an attack can't be below 2 from ammo changes.
+    att->ranged->power = MAX(att->ranged->power, 2);
 
     // Handle spirits and elementals being little divas with their special combat rules.
     // Namely: We require that the attack's power is greater than double the spirit's level, otherwise it takes no damage.
@@ -914,7 +936,7 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     // It's hard for you to fight while prone. (SR3 p123)
     if (AFF_FLAGGED(att->ch, AFF_PRONE)) {
       send_to_char(att->ch, "You struggle to fight while prone!\r\n");
-      def->melee->modifiers[COMBAT_MOD_POSITION] -= 2;
+      def->melee->modifiers[COMBAT_MOD_POSITION] += 2;
     }
 
     // Treat unconscious as being a position mod of -6 (reflects ease of coup de grace)
@@ -942,6 +964,7 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     att->melee->dice = att->melee->skill_bonus + get_skill(att->ch, att->melee->skill, att->melee->tn);
     if (!att->too_tall)
       att->melee->dice += MIN(GET_SKILL(att->ch, att->melee->skill) + att->melee->skill_bonus, GET_OFFENSE(att->ch));
+
     strlcpy(rbuf, "Computing dice for defender...", sizeof(rbuf));
     SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
     def->melee->dice = def->melee->skill_bonus + get_skill(def->ch, def->melee->skill, def->melee->tn);
@@ -950,7 +973,7 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
 
     // }
 
-    // Adepts get bonus dice when counterattacking. Maybe they practice Wing Chun?
+    // Adepts get bonus dice when counterattacking.
     if (GET_POWER(def->ch, ADEPT_COUNTERSTRIKE) > 0) {
       def->melee->dice += GET_POWER(def->ch, ADEPT_COUNTERSTRIKE);
       snprintf(rbuf, sizeof(rbuf), "Defender counterstrike dice bonus is %d.", GET_POWER(def->ch, ADEPT_COUNTERSTRIKE));
@@ -1192,10 +1215,16 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     bod_success = success_test(GET_BOD(def->ch) + bod_dice, att->ranged->power);
     att->ranged->successes -= bod_success;
 
-    // Adjust messaging for unkillable enemies (ranged stanza)
-    if (can_hurt(att->ch, def->ch, att->ranged->dam_type, TRUE)) {
+    // Harmless ammo never deals damage.
+    if (att->ranged->magazine && GET_MAGAZINE_AMMO_TYPE(att->ranged->magazine) == AMMO_HARMLESS) {
+      staged_damage = -1;
+      strlcpy(rbuf, "Damage reduced to -1 due to use of harmless ammo.", sizeof(rbuf));
+      SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
+    } else if (can_hurt(att->ch, def->ch, att->ranged->dam_type, TRUE)) {
+      // You're able to hurt them? Proceed as normal.
       staged_damage = stage(att->ranged->successes, att->ranged->damage_level);
     } else {
+      // You're unable to hurt them. Adjust messaging for unkillable enemies.
       staged_damage = -1;
       strlcpy(rbuf, "Damage reduced to -1 due to failure of CAN_HURT().", sizeof(rbuf));
       SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;

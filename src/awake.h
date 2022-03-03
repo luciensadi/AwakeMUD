@@ -584,7 +584,8 @@ enum {
 #define ROOM_CORPSE_SAVE_HACK           33
 #define ROOM_STERILE                    34 // Gives a bonus to medical actions.
 #define ROOM_TOO_CRAMPED_FOR_CHARACTERS 35 // Prevents you from entering if you're not a projection or tiny drone.
-#define ROOM_MAX                        36
+#define ROOM_RADIATION                  36 // You take radiation damage while you're here, scaled by Rating.
+#define ROOM_MAX                        37
 
 #define NORMAL    0
 #define LOWLIGHT  1
@@ -1225,7 +1226,8 @@ enum {
 #define AMMO_EX         3
 #define AMMO_FLECHETTE  4
 #define AMMO_GEL        5
-#define NUM_AMMOTYPES   6
+#define AMMO_HARMLESS   6
+#define NUM_AMMOTYPES   7
 
 /* material type for item */
 #define ITEM_NONE                  0

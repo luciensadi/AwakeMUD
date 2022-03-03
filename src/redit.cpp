@@ -337,10 +337,15 @@ void redit_disp_menu(struct descriptor_data * d)
                d->edit_room->background[PERMANENT_BACKGROUND_COUNT],
                background_types[d->edit_room->background[PERMANENT_BACKGROUND_TYPE]]);
   send_to_char(CH, "l) Extra descriptions\r\n", d->character);
-  if (d->edit_room->sector_type == SPIRIT_LAKE || d->edit_room->sector_type == SPIRIT_SEA ||
-      d->edit_room->sector_type == SPIRIT_RIVER || d->edit_room->room_flags.IsSet(ROOM_FALL))
-    send_to_char(CH, "m) %s test difficulty (TN): %s%d%s\r\n", d->edit_room->room_flags.IsSet(ROOM_FALL) ? "Fall" : "Swim", CCCYN(CH, C_CMP),
-                 ROOM->rating, CCNRM(CH, C_CMP));
+  if (d->edit_room->sector_type == SPIRIT_LAKE || d->edit_room->sector_type == SPIRIT_SEA || d->edit_room->sector_type == SPIRIT_RIVER) {
+    send_to_char(CH, "m) Swim test difficulty (TN): %s%d%s\r\n", CCCYN(CH, C_CMP), ROOM->rating, CCNRM(CH, C_CMP));
+  }
+  else if (d->edit_room->room_flags.IsSet(ROOM_FALL)) {
+    send_to_char(CH, "m) Fall test difficulty (TN): %s%d%s\r\n", CCCYN(CH, C_CMP), ROOM->rating, CCNRM(CH, C_CMP));
+  }
+  else if (d->edit_room->room_flags.IsSet(ROOM_RADIATION)) {
+    send_to_char(CH, "m) Radiation power: %s%d%s\r\n", CCCYN(CH, C_CMP), ROOM->rating, CCNRM(CH, C_CMP));
+  }
   send_to_char(CH, "n) Staff Level Required to Enter: %s%d%s\r\n", CCCYN(CH, C_CMP), ROOM->staff_level_lock, CCNRM(CH, C_CMP));
   if (d->edit_convert_color_codes)
     send_to_char("t) Restore color codes\r\n", d->character);
@@ -735,7 +740,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
       break;
       // new stuff here
     case 'm':
-      if (ROOM->sector_type == SPIRIT_LAKE || ROOM->sector_type == SPIRIT_SEA || ROOM->sector_type == SPIRIT_RIVER || d->edit_room->room_flags.IsSet(ROOM_FALL)) {
+      if (ROOM->sector_type == SPIRIT_LAKE || ROOM->sector_type == SPIRIT_SEA || ROOM->sector_type == SPIRIT_RIVER || d->edit_room->room_flags.AreAnySet(ROOM_FALL, ROOM_RADIATION, ENDBIT)) {
         send_to_char("Enter environmental difficulty rating (1 to 20): ", CH);
         d->edit_mode = REDIT_LIBRARY_RATING;
       } else {
