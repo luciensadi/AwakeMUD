@@ -770,6 +770,8 @@ struct char_data
 
   int congregation_bonus_pool;         /* Bonuses accrued from spending time in a congregation room */
 
+  unsigned long last_violence_loop;
+
   // See perception_tests.cpp for details.
   std::unordered_map<idnum_t, bool> *pc_perception_test_results;
   std::unordered_map<idnum_t, bool> *mob_perception_test_results;
@@ -786,7 +788,7 @@ struct char_data
       ssust(NULL), carrying(NULL), desc(NULL), cyberware(NULL), bioware(NULL), next_in_room(NULL), next(NULL),
       next_fighting(NULL), next_in_zone(NULL), next_in_veh(NULL), next_watching(NULL), followers(NULL),
       master(NULL), spells(NULL), ignore_data(NULL), pgroup(NULL), pgroup_invitations(NULL), congregation_bonus_pool(0),
-      pc_perception_test_results(NULL), mob_perception_test_results(NULL), alias_dirty_bit(FALSE)
+      last_violence_loop(0), pc_perception_test_results(NULL), mob_perception_test_results(NULL), alias_dirty_bit(FALSE)
   {
     for (int i = 0; i < NUM_WEARS; i++) {
       equipment[i] = NULL;

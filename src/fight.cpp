@@ -310,23 +310,6 @@ void set_fighting(struct char_data * ch, struct char_data * vict, ...)
   if (CH_IN_COMBAT(ch))
     return;
 
-  char logbuf[10000];
-  if (IS_NPC(ch))
-    snprintf(logbuf, sizeof(logbuf), "Set_fighting adding %s (vnum %ld, uid %ld)", GET_CHAR_NAME(ch), GET_MOB_VNUM(ch), GET_MOB_UNIQUE_ID(ch));
-  else
-    snprintf(logbuf, sizeof(logbuf), "Set_fighting adding %s (id %ld)", GET_CHAR_NAME(ch), GET_IDNUM_EVEN_IF_PROJECTING(ch));
-  mudlog(logbuf, NULL, LOG_SYSLOG, TRUE);
-
-  strlcpy(logbuf, "List at start: ", sizeof(logbuf));
-  for (struct char_data *tch = combat_list; tch; tch = tch->next_fighting)
-    snprintf(ENDOF(logbuf), sizeof(logbuf) - strlen(logbuf), "%s%s (%s %ld)",
-             tch == combat_list ? "" : ", ",
-             GET_CHAR_NAME(tch),
-             IS_NPC(tch) ? "mob" : "pc",
-             IS_NPC(tch) ? GET_MOB_UNIQUE_ID(tch) : GET_IDNUM(tch)
-           );
-  mudlog(logbuf, NULL, LOG_SYSLOG, TRUE);
-
 #ifdef IGNORING_IC_ALSO_IGNORES_COMBAT
   char warnbuf[5000];
   if (IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)) {
@@ -397,16 +380,6 @@ void set_fighting(struct char_data * ch, struct char_data * vict, ...)
           do_assist(k->follower, buf, 0, 0);
     }
   }
-
-  strlcpy(logbuf, "List at end: ", sizeof(logbuf));
-  for (struct char_data *tch = combat_list; tch; tch = tch->next_fighting)
-    snprintf(ENDOF(logbuf), sizeof(logbuf) - strlen(logbuf), "%s%s (%s %ld)",
-             tch == combat_list ? "" : ", ",
-             GET_CHAR_NAME(tch),
-             IS_NPC(tch) ? "mob" : "pc",
-             IS_NPC(tch) ? GET_MOB_UNIQUE_ID(tch) : GET_IDNUM(tch)
-           );
-  mudlog(logbuf, NULL, LOG_SYSLOG, TRUE);
 }
 
 void set_fighting(struct char_data * ch, struct veh_data * vict)
@@ -4887,6 +4860,7 @@ bool next_combat_list_is_valid(struct char_data *ncl) {
 }
 
 /* control the fights going on.  Called every 2 seconds from comm.c. */
+unsigned long violence_loop_counter = 0;
 void perform_violence(void)
 {
   PERF_PROF_SCOPE(pr_, __func__);
@@ -4898,22 +4872,13 @@ void perform_violence(void)
   if (!combat_list)
     return;
 
+  // Increment our violence loop counter.
+  violence_loop_counter++;
+
   if (GET_INIT_ROLL(combat_list) <= 0) {
     roll_initiative();
     order_list(TRUE);
   }
-
-  char logbuf[10000];
-  strlcpy(logbuf, "Processing combat list: ", sizeof(logbuf));
-  for (struct char_data *tch = combat_list; tch; tch = tch->next_fighting)
-    snprintf(ENDOF(logbuf), sizeof(logbuf) - strlen(logbuf), "%s%s (%s %ld)",
-             tch == combat_list ? "" : ", ",
-             GET_CHAR_NAME(tch),
-             IS_NPC(tch) ? "mob" : "pc",
-             IS_NPC(tch) ? GET_MOB_UNIQUE_ID(tch) : GET_IDNUM(tch)
-           );
-  mudlog(logbuf, NULL, LOG_SYSLOG, TRUE);
-
 
   // This while-loop replaces the combat list for-loop so we can do better edge case checking.
   ch = NULL;
@@ -4933,16 +4898,8 @@ void perform_violence(void)
     }
 
     if (!ch) {
-      mudlog("Combat list complete.", NULL, LOG_SYSLOG, TRUE);
       return;
     }
-
-
-    if (IS_NPC(ch))
-      snprintf(logbuf, sizeof(logbuf), "- %s (vnum %ld, uid %ld)", GET_CHAR_NAME(ch), GET_MOB_VNUM(ch), GET_MOB_UNIQUE_ID(ch));
-    else
-      snprintf(logbuf, sizeof(logbuf), "- %s (id %ld)", GET_CHAR_NAME(ch), GET_IDNUM_EVEN_IF_PROJECTING(ch));
-    mudlog(logbuf, NULL, LOG_SYSLOG, TRUE);
 
     // Clear the first-iteration flag.
     first_iteration = FALSE;
@@ -4951,6 +4908,14 @@ void perform_violence(void)
 
     // Clear the engulfed status.
     engulfed = FALSE;
+
+    // Prevent people from being processed multiple times per loop.
+    if (ch->last_violence_loop == violence_loop_counter) {
+      mudlog("SYSERR: Encountered someone who already went this combat turn. Fix set_fighting().", ch, LOG_SYSLOG, TRUE);
+      continue;
+    } else {
+      ch->last_violence_loop = violence_loop_counter;
+    }
 
     // You're not in combat or not awake.
     if (!CH_IN_COMBAT(ch) || !AWAKE(ch)) {
