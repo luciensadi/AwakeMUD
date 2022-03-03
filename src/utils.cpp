@@ -4083,33 +4083,66 @@ void set_new_mobile_unique_id(struct char_data *ch) {
 }
 
 void knockdown_character(struct char_data *ch) {
-  if (!AFF_FLAGGED(ch, AFF_PRONE)) {
-    WAIT_STATE(ch, 1 RL_SEC);
+  // Error guard.
+  if (!ch) {
+    mudlog("SYSERR: Received NULL character to knockdown_character()!", ch, LOG_SYSLOG, TRUE);
+    return;
+  }
 
-    /*
-    bool eligible_for_kipup = PLR_FLAGGED(ch, PLR_PAID_FOR_KIPUP) || (IS_NPC(ch) && (GET_QUI(ch) >= 10 && GET_SKILL(ch, SKILL_UNARMED_COMBAT) >= 6));
+  // No knockdown if you're already down.
+  if (AFF_FLAGGED(ch, AFF_PRONE))
+    return;
 
-    asdf in the process of writing an auto-stand, need to write a kipup command and redo the wording in spec_proc.
-    system lets you 'tog autostand' or 'tog autokipup' and have your character automatically execute either of those.
-    while we're adding this stuff, probably want a 'config autoconceal' for shamans that lets you specify a force of spirit to auto-conjure and conceal with.
+  // Getting knocked down staggers your commands.
+  WAIT_STATE(ch, 1 RL_SEC);
 
-    if (eligible_for_kipup) {
-      if (PRF_FLAGGED(ch, PRF_AUTOKIPUP) && success_test(GET_QUI(ch), 6) > 0) {
-        send_to_char("^yYou're sent sprawling, but recover with a quick kip-up!\r\n", ch);
-        act("$n is knocked down, but pops right back up again!", TRUE, ch, 0, 0, TO_ROOM);
-        return;
-      } else if (PRF_FLAGGED(ch, PRF_AUTOSTAND)) {
-        send_to_char("^yYou're sent sprawling, and it takes you a moment to clamber back to your feet.\r\n", ch);
-        act("$n is knocked down, but clambers back to $s feet!", TRUE, ch, 0, 0, TO_ROOM);
-        return;
-      } else {
-        send_to_char(ch, "^YYou are knocked prone!%s^n\r\n", GET_TKE(ch) < 100 ? " (You'll probably want to ^WKIPUP^n or ^WSTAND^n.)" : "");
-      }
-    } else
-      */
-    send_to_char(ch, "^YYou are knocked prone!%s^n\r\n", GET_TKE(ch) < 100 ? " (You'll probably want to ^WSTAND^n.)" : "");
-    act("$n is knocked prone!", TRUE, ch, 0, 0, TO_ROOM);
+  bool eligible_for_kipup = PLR_FLAGGED(ch, PLR_PAID_FOR_KIPUP) || (IS_NPC(ch) && (GET_QUI(ch) >= 10 && GET_SKILL(ch, SKILL_UNARMED_COMBAT) >= 6));
+
+  if (eligible_for_kipup && PRF_FLAGGED(ch, PRF_AUTOKIPUP)) {
+    // Successfully kipping up gets you back on your feet with no penalty.
+    if (success_test(GET_QUI(ch), 6) > 0) {
+      send_to_char("^yYou're sent sprawling, but recover with a quick kip-up!\r\n", ch);
+      act("$n is knocked down, but pops right back up again!", TRUE, ch, 0, 0, TO_ROOM);
+      return;
+    }
+
+    // Char failed to kip up.
+    GET_INIT_ROLL(ch) -= 5;
+
+    // If they want to autostand no matter what, let them.
+    if (PRF_FLAGGED(ch, PRF_AUTOSTAND)) {
+      send_to_char("^yYou're sent sprawling, and your failed attempt to kip-up adds insult to injury!\r\n^yIt takes you a long moment to struggle back to your feet.^n\r\n", ch);
+      act("$n is knocked down, only regaining $s feet after an embarrassing struggle!", TRUE, ch, 0, 0, TO_ROOM);
+      GET_INIT_ROLL(ch) -= 5;
+      return;
+    }
+
+    // Otherwise, notify them of the failed kip-up and just send them prone.
+    send_to_char("^yYou're sent sprawling, and your failed attempt to kip-up adds insult to injury!^n\r\n", ch);
+    act("After being knocked down, $n wriggles around in a vain attempt to kip back up!", TRUE, ch, 0, 0, TO_ROOM);
     AFF_FLAGS(ch).SetBit(AFF_PRONE);
+
+    if (PRF_FLAGGED(ch, PRF_SEE_TIPS)) {
+      send_to_char("^c(You'll probably want to ^WKIPUP^c or ^WSTAND^c.)^n\r\n", ch);
+    }
+    return;
+  }
+
+  // Otherwise, if they're set up to auto-stand...
+  if (PRF_FLAGGED(ch, PRF_AUTOSTAND)) {
+    GET_INIT_ROLL(ch) -= 5;
+    send_to_char("^yYou're sent sprawling, and it takes you a moment to clamber back to your feet.\r\n", ch);
+    act("$n is knocked down, but clambers back to $s feet!", TRUE, ch, 0, 0, TO_ROOM);
+    return;
+  }
+
+  // Neither autokip nor autostand.
+  send_to_char("^YYou are knocked prone!^n\r\n", ch);
+  act("$n is knocked prone!", TRUE, ch, 0, 0, TO_ROOM);
+  AFF_FLAGS(ch).SetBit(AFF_PRONE);
+
+  if (PRF_FLAGGED(ch, PRF_SEE_TIPS)) {
+    send_to_char("^c(You'll probably want to ^WKIPUP^c or ^WSTAND^c.)^n\r\n", ch);
   }
 }
 

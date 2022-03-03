@@ -342,7 +342,7 @@ void do_start(struct char_data * ch, bool wipe_skills)
 
   // Set the appropriate flags.
   PLR_FLAGS(ch).SetBits(PLR_NEWBIE, PLR_NOT_YET_AUTHED, PLR_RECEIVED_CYBEREYE_ESSENCE_DELTA, ENDBIT);
-  PRF_FLAGS(ch).SetBits(PRF_AUTOEXIT, PRF_LONGEXITS, PRF_SEE_TIPS, ENDBIT);
+  PRF_FLAGS(ch).SetBits(PRF_AUTOEXIT, PRF_LONGEXITS, PRF_SEE_TIPS, PRF_AUTOSTAND, ENDBIT);
 
   // PLR_FLAGS(ch).SetBit(PLR_NOT_YET_AUTHED);
   ch->player.time.played = 0;

@@ -569,7 +569,7 @@ void iedit_disp_val3_menu(struct descriptor_data * d)
   {
     case ITEM_WORKSHOP:
       if (GET_OBJ_VAL(OBJ, 0) == TYPE_AMMO && GET_OBJ_VAL(OBJ, 1) == TYPE_KIT) {
-        for (c = AMMO_NORMAL; c <= AMMO_GEL; c++)
+        for (c = AMMO_NORMAL; c < NUM_AMMOTYPES; c++)
           send_to_char(CH, "%d) %s\r\n", c, ammo_type[c].name);
         send_to_char("Select ammunition type: ", CH);
       } else iedit_disp_menu(d);
@@ -604,10 +604,10 @@ void iedit_disp_val3_menu(struct descriptor_data * d)
       break;
     case ITEM_GUN_AMMO:
     case ITEM_GUN_MAGAZINE:
-      send_to_char("  0) Normal             1) APDS\r\n"
-                   "  2) Explosive          3) EX\r\n"
-                   "  4) Flechette          5) Gel\r\n"
-                   "Select Type: ", CH);
+      for (int i = 0; i < NUM_AMMOTYPES; i++) {
+        send_to_char(CH, "%d) %s\r\n", i, CAP(ammo_type[i].name));
+      }
+      send_to_char("Select Type: ", CH);
       break;
     case ITEM_CYBERDECK:
       send_to_char("Active: ", CH);
@@ -2252,7 +2252,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
       number = atoi(arg);
       switch (GET_OBJ_TYPE(d->edit_obj)) {
         case ITEM_WORKSHOP:
-          if (number < 1 || number > AMMO_GEL) {
+          if (number < 1 || number >= NUM_AMMOTYPES) {
             send_to_char(CH, "Invalid value. Enter Ammunition Type: ");
             return;
           }
@@ -2373,7 +2373,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
           break;
         case ITEM_GUN_AMMO:
         case ITEM_GUN_MAGAZINE:
-          if (number < 0 || number > 5) {
+          if (number < 0 || number >= NUM_AMMOTYPES) {
             send_to_char("INVALID TYPE!\r\nSelect Type: ", CH);
             return;
           }

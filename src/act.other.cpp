@@ -1166,7 +1166,11 @@ const char *tog_messages[][2] = {
                             {"You will now show up by name on the where-list.\r\n",
                              "You will no longer show up by name on the where-list.\r\n"},
                             {"You will no longer see newbie tips.\r\n",
-                             "You will now see newbie tips.\r\n"}
+                             "You will now see newbie tips.\r\n"},
+                            {"You will no longer automatically stand when knocked down.\r\n",
+                             "You will now automatically stand when knocked down.\r\n"},
+                            {"You will no longer automatically attempt to kip-up when knocked down.\r\n",
+                             "You will now automatically attempt to kip-up when knocked down.\r\n"}
                           };
 
 ACMD(do_toggle)
@@ -1396,6 +1400,16 @@ ACMD(do_toggle)
     } else if (is_abbrev(argument, "tips") || is_abbrev(argument, "sees newbie tips") || is_abbrev(argument, "hints")) {
       result = PRF_TOG_CHK(ch, PRF_SEE_TIPS);
       mode = 42;
+    } else if (is_abbrev(argument, "autostand") || is_abbrev(argument, "stand")) {
+      result = PRF_TOG_CHK(ch, PRF_AUTOSTAND);
+      mode = 43;
+    } else if (is_abbrev(argument, "autokipup") || is_abbrev(argument, "kipup") || is_abbrev(argument, "autokip-up") || is_abbrev(argument, "kip-up")) {
+      if (!PLR_FLAGGED(ch, PLR_PAID_FOR_KIPUP)) {
+        send_to_char("You don't know how to kip up.\r\n.", ch);
+        return;
+      }
+      result = PRF_TOG_CHK(ch, PRF_AUTOKIPUP);
+      mode = 44;
     } else {
       send_to_char("That is not a valid toggle option.\r\n", ch);
       return;

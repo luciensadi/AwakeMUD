@@ -598,6 +598,8 @@ struct preference_bit_struct preference_bits_v2[] = {
   { "Anonymous on Where"   , FALSE, TRUE  },
   { "IgnoreLog"            , TRUE , TRUE  },
   { "Sees Newbie Tips"     , FALSE, TRUE  },
+  { "AutoStand"            , FALSE, TRUE  },
+  { "AutoKipUp"            , FALSE, TRUE  },
   { "\n"                   , 0    , 0     }
 };
 
@@ -666,6 +668,8 @@ const char *preference_bits[] =
     "ANONYMOUS_ON_WHERE",
     "IGNORELOG",
     "TIPS",
+    "AUTOSTAND",
+    "AUTOKIPUP",
     "\n"
   };
 
