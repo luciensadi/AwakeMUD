@@ -2880,7 +2880,7 @@ const char *get_voice_perceived_by(struct char_data *speaker, struct char_data *
     else {
       strlcpy(voice_buf, speaker->player.physical_text.room_desc, sizeof(voice_buf));
       for (struct obj_data *obj = speaker->cyberware; obj; obj = obj->next_content) {
-        if (GET_CYBERWARE_TYPE(obj) == CYB_VOICEMOD && GET_OBJ_VAL(obj, 3)) {
+        if (GET_CYBERWARE_TYPE(obj) == CYB_VOICEMOD && GET_OBJ_VAL(obj, 3) || (AFF_FLAGGED(ch, AFF_VOICE_MODULATOR)){
           strlcpy(voice_buf, "a masked voice", sizeof(voice_buf));
           break;
         }
