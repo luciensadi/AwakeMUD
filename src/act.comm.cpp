@@ -1633,7 +1633,7 @@ ACMD(do_phone)
     #define VOICE_BUF_SIZE 20
     char voice[VOICE_BUF_SIZE] = {"$v"};
     for (struct obj_data *obj = ch->cyberware; obj; obj = obj->next_content)
-      if (GET_CYBERWARE_TYPE(obj) == CYB_VOICEMOD && GET_CYBERWARE_FLAGS(obj))
+      if (GET_CYBERWARE_TYPE(obj) == CYB_VOICEMOD && GET_CYBERWARE_FLAGS(obj) || (AFF_FLAGGED(ch, AFF_VOICE_MODULATOR))
         snprintf(voice, VOICE_BUF_SIZE, "A masked voice");
 
     snprintf(buf3, MAX_STRING_LENGTH, "^YYou say into your phone, \"%s%s^Y\"\r\n",
