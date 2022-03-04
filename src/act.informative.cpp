@@ -991,6 +991,9 @@ void list_one_char(struct char_data * i, struct char_data * ch)
     if (IS_AFFECTED(i, AFF_INVISIBLE) || IS_AFFECTED(i, AFF_IMP_INVIS) || IS_AFFECTED(i, AFF_SPELLINVIS) || IS_AFFECTED(i, AFF_SPELLIMPINVIS))
       strlcat(buf, "(invisible) ", sizeof(buf));
 
+    if (MOB_FLAGGED(i, MOB_FLAMEAURA) || affected_by_spell(i, SPELL_FLAME_AURA))
+      strlcat(buf, "(flaming) ", sizeof(buf));
+
     if (IS_ASTRAL(ch) || IS_DUAL(ch)) {
       if (IS_ASTRAL(i))
         strlcat(buf, "(astral) ", sizeof(buf));
@@ -1204,7 +1207,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
     strlcat(buf, " (editing)", sizeof(buf));
   if (PLR_FLAGGED(i, PLR_PROJECT))
     strlcat(buf, " (projecting)", sizeof(buf));
-  if (IS_NPC(i) && MOB_FLAGGED(i, MOB_FLAMEAURA))
+  if (MOB_FLAGGED(i, MOB_FLAMEAURA) || affected_by_spell(i, SPELL_FLAME_AURA))
     strlcat(buf, ", surrounded by flames,", sizeof(buf));
 
   if (GET_QUI(i) <= 0)

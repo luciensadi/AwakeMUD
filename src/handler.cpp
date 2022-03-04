@@ -1039,16 +1039,16 @@ void affect_total(struct char_data * ch)
  * Return if a char is affected by a spell (SPELL_XXX), NULL indicates
  * not affected
  */
-bool affected_by_spell(struct char_data * ch, int type)
+int affected_by_spell(struct char_data * ch, int type)
 {
   if (!GET_SUSTAINED(ch))
-    return FALSE;
+    return 0;
 
   for (struct sustain_data *hjp = GET_SUSTAINED(ch); hjp; hjp = hjp->next)
     if ((hjp->spell == type) && (hjp->caster == FALSE))
-      return TRUE;
+      return hjp->force;
 
-  return FALSE;
+  return 0;
 }
 
 int affected_by_power(struct char_data *ch, int type)

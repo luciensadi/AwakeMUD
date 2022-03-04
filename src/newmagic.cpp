@@ -1315,44 +1315,64 @@ void cast_detection_spell(struct char_data *ch, int spell, int force, char *arg,
     return;
   switch (spell)
   {
-  case SPELL_MINDLINK:
-    // Block mindlinks from ignoring characters without divulging information.
-    if (IS_IGNORING(vict, is_blocking_mindlinks_from, ch)) {
-      send_to_char("They are already under the influence of a mindlink.\r\n", ch);
-      return;
-    }
-
-    WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
-    success = success_test(skill, 4 + target_modifiers);
-    for (struct sustain_data *sust = GET_SUSTAINED(ch); sust; sust = sust->next)
-      if (sust->spell == SPELL_MINDLINK) {
-        send_to_char("You are already under the influence of a mindlink.\r\n", ch);
-        return;
-      }
-    for (struct sustain_data *sust = GET_SUSTAINED(vict); sust; sust = sust->next)
-      if (sust->spell == SPELL_MINDLINK) {
+    case SPELL_MINDLINK:
+      // Block mindlinks from ignoring characters without divulging information.
+      if (IS_IGNORING(vict, is_blocking_mindlinks_from, ch)) {
         send_to_char("They are already under the influence of a mindlink.\r\n", ch);
         return;
       }
-    if (success > 0) {
-      direct_sustain = create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
-      act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
-      vict->char_specials.mindlink = ch;
-      ch->char_specials.mindlink = vict;
-    } else send_to_char(FAILED_CAST, ch);
-    spell_drain(ch, spell, force, 0, direct_sustain);
-    break;
-  case SPELL_COMBATSENSE:
-    WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
-    success = success_test(skill, 4 + target_modifiers);
-    if (success > 0) {
-      direct_sustain = create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
-      send_to_char("The world seems to slow down around you as your sense of your surroundings becomes clearer.\r\n", vict);
-      act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
-    } else
-      send_to_char(FAILED_CAST, ch);
-    spell_drain(ch, spell, force, 0, direct_sustain);
-    break;
+
+      WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
+      success = success_test(skill, 4 + target_modifiers);
+      for (struct sustain_data *sust = GET_SUSTAINED(ch); sust; sust = sust->next)
+        if (sust->spell == SPELL_MINDLINK) {
+          send_to_char("You are already under the influence of a mindlink.\r\n", ch);
+          return;
+        }
+      for (struct sustain_data *sust = GET_SUSTAINED(vict); sust; sust = sust->next)
+        if (sust->spell == SPELL_MINDLINK) {
+          send_to_char("They are already under the influence of a mindlink.\r\n", ch);
+          return;
+        }
+      if (success > 0) {
+        direct_sustain = create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
+        act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
+        vict->char_specials.mindlink = ch;
+        ch->char_specials.mindlink = vict;
+      } else send_to_char(FAILED_CAST, ch);
+      spell_drain(ch, spell, force, 0, direct_sustain);
+      break;
+    case SPELL_COMBATSENSE:
+      WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
+      success = success_test(skill, 4 + target_modifiers);
+      if (success > 0) {
+        direct_sustain = create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
+        send_to_char("The world seems to slow down around you as your sense of your surroundings becomes clearer.\r\n", vict);
+        act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
+      } else
+        send_to_char(FAILED_CAST, ch);
+      spell_drain(ch, spell, force, 0, direct_sustain);
+      break;
+    case SPELL_NIGHTVISION:
+      WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
+      success = success_test(skill, 6 + target_modifiers);
+      if (success > 0 || AFF_FLAGGED(vict, AFF_LOW_LIGHT)) {
+        send_to_char("Your eyes tingle as the shadows around you become clearer.\r\n", vict);
+        act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
+        create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
+      } else
+        send_to_char(FAILED_CAST, ch);
+      break;
+    case SPELL_INFRAVISION:
+      WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
+      success = success_test(skill, 6 + target_modifiers);
+      if (success > 0 && !AFF_FLAGGED(ch, AFF_INFRAVISION)) {
+        send_to_char("Your eyes tingle as you begin to see heat signatures around you.\r\n", vict);
+        act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
+        create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
+      } else
+        send_to_char(FAILED_CAST, ch);
+      break;
   }
 
 }
@@ -1750,26 +1770,6 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
         send_to_char(FAILED_CAST, ch);
       spell_drain(ch, spell, force, 0, direct_sustain);
       break;
-    case SPELL_NIGHTVISION:
-      WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
-      success = success_test(skill, 6 + target_modifiers);
-      if (success > 0 || AFF_FLAGGED(vict, AFF_LOW_LIGHT)) {
-        send_to_char("Your eyes tingle as the shadows around you become clearer.\r\n", vict);
-        act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
-        create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
-      } else
-        send_to_char(FAILED_CAST, ch);
-      break;
-    case SPELL_INFRAVISION:
-      WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
-      success = success_test(skill, 6 + target_modifiers);
-      if (success > 0 && !AFF_FLAGGED(ch, AFF_INFRAVISION)) {
-        send_to_char("Your eyes tingle as you begin to see heat signatures around you.\r\n", vict);
-        act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
-        create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
-      } else
-        send_to_char(FAILED_CAST, ch);
-      break;
     case SPELL_LEVITATE:
       WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
       success = success_test(skill, 4 + target_modifiers);
@@ -1778,31 +1778,6 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
         snprintf(msg_buf, sizeof(msg_buf), "$n's feet gently lift off from the ground as $e begin%s to levitate.", HSSH_SHOULD_PLURAL(ch) ? "s" : "");
         act(msg_buf, TRUE, vict, 0, 0, TO_ROOM);
         send_to_char("Your feet gently lift off from the ground as you levitate.\r\n", vict);
-        act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
-        create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
-      } else
-        send_to_char(FAILED_CAST, ch);
-      break;
-    case SPELL_FLAME_AURA:
-      if (!check_spell_victim(ch, vict, spell, arg))
-        return;
-
-      // Specific message checking if they're already affected by the flag.
-      for (struct sustain_data *sust = GET_SUSTAINED(vict); sust; sust = sust->next) {
-        if (!sust->caster && (sust->spell == SPELL_FLAME_AURA)) {
-          send_to_char("They already have a flame aura.\r\n", ch);
-          return;
-        }
-      }
-
-      WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
-
-      success = success_test(skill, 4 + target_modifiers);
-      if (success > 0 && !AFF_FLAGGED(ch, AFF_FLAME_AURA)) {
-        char msg_buf[500];
-        snprintf(msg_buf, sizeof(msg_buf), "$n's body is enveloped in an aura of fierce flames.", HSSH_SHOULD_PLURAL(ch) ? "s" : "");
-        act(msg_buf, TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("Your body is enveloped in an aura of fierce flames.\r\n", vict);
         act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
         create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
       } else
@@ -2525,6 +2500,35 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       }
     }
     spell_drain(ch, spell, force, basedamage);
+    break;
+  case SPELL_FLAME_AURA:
+    if (!check_spell_victim(ch, vict, spell, arg))
+      return;
+
+    // No double-aura-ing.
+    if (MOB_FLAGGED(ch, MOB_FLAMEAURA)) {
+      send_to_char("They already have a flame aura.\r\n", ch);
+      return;
+    }
+
+    // Specific message checking if they're already affected by the flag.
+    for (struct sustain_data *sust = GET_SUSTAINED(vict); sust; sust = sust->next) {
+      if (!sust->caster && (sust->spell == SPELL_FLAME_AURA)) {
+        send_to_char("They already have a flame aura.\r\n", ch);
+        return;
+      }
+    }
+
+    WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
+
+    success = success_test(skill, 4 + target_modifiers);
+    if (success > 0 && !AFF_FLAGGED(ch, AFF_FLAME_AURA)) {
+      create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
+      act("$n's body is enveloped in an aura of fierce flames.", TRUE, vict, 0, 0, TO_ROOM);
+      send_to_char("Your body is enveloped in an aura of fierce flames.\r\n", vict);
+      act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
+    } else
+      send_to_char(FAILED_CAST, ch);
     break;
   }
 }

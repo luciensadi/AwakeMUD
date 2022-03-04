@@ -313,9 +313,9 @@ struct melee_combat_data {
       if (cyber->cyberarms) {
         power += 2;
       }
-      
+
       // Add +2 power to unarmed/melee, per MitS p147. -Vile
-      if (AFF_FLAGGED(ch, AFF_SPELL_FLAME_AURA) || MOB_FLAGGED(ch, MOB_FLAMEAURA)) {
+      if (AFF_FLAGGED(ch, AFF_FLAME_AURA) || MOB_FLAGGED(ch, MOB_FLAMEAURA)) {
         power += 2;
       }
 
@@ -922,8 +922,8 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
           if (AFF_FLAGGED(def->ch, AFF_SURPRISE))
             AFF_FLAGS(def->ch).RemoveBit(AFF_SURPRISE);
 
-          GET_MOBALERT(def->ch) = MALERT_ALERT;
-          GET_MOBALERTTIME(def->ch) = 20;
+          GET_MOBALERT(def->ch) = MALERT_ALARM;
+          GET_MOBALERTTIME(def->ch) = 30;
         }
         return;
       } else
@@ -1161,8 +1161,13 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     // Namely: We require that the attack's power is greater than double the spirit's level, otherwise it takes no damage.
     // If the attack's power is greater, subtract double the level from it.
     if (IS_SPIRIT(def->ch) || IS_ANY_ELEMENTAL(def->ch)) {
-      if (att->melee->power <= GET_LEVEL(def->ch) * 2) {
+      int minimum_power_to_damage_opponent = (GET_LEVEL(def->ch) * 2) + 1;
+      if (att->melee->power < minimum_power_to_damage_opponent) {
         bool target_died = 0;
+
+        send_to_char(att->ch, "^o(OOC: Your weapon is too weak to injure %s! You need at least ^O%d^o attack power.)^n\r\n",
+                     decapitalize_a_an(GET_CHAR_NAME(def->ch)),
+                     minimum_power_to_damage_opponent);
         target_died = damage(att->ch, def->ch, 0, att->melee->dam_type, att->melee->is_physical);
 
         //Handle suprise attack/alertness here -- spirits melee.
@@ -1172,6 +1177,9 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
 
           GET_MOBALERT(def->ch) = MALERT_ALARM;
           GET_MOBALERTTIME(def->ch) = 30;
+
+          // Process flame aura here since the spirit will otherwise end combat evaluation here.
+          handle_flame_aura(att, def);
         }
         return;
       } else {
@@ -1250,33 +1258,6 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     }
   }
 
-    // Handle spirits and elementals being little divas with their special combat rules.
-    // Namely: We require that the attack's power is greater than double the spirit's level, otherwise it takes no damage.
-    // If the attack's power is greater, subtract double the level from it.
-    if (IS_SPIRIT(def->ch) || IS_ANY_ELEMENTAL(def->ch)) {
-      if (att->melee->power <= GET_LEVEL(def->ch) * 2) {
-        bool target_died = 0;
-        target_died = damage(att->ch, def->ch, 0, att->melee->dam_type, att->melee->is_physical);
-
-        //Handle suprise attack/alertness here -- spirits melee.
-        if (!target_died) {
-          if (IS_NPC(def->ch)) {
-            if (AFF_FLAGGED(def->ch, AFF_SURPRISE))
-              AFF_FLAGS(def->ch).RemoveBit(AFF_SURPRISE);
-
-            GET_MOBALERT(def->ch) = MALERT_ALARM;
-            GET_MOBALERTTIME(def->ch) = 30;
-          }
-
-          // Process flame aura here since the spirit will otherwise end combat evaluation here.
-          handle_flame_aura(att, def);
-        }
-        return;
-      } else {
-        att->melee->power -= GET_LEVEL(def->ch) * 2;
-      }
-    }
-  
   int damage_total = convert_damage(staged_damage);
 
   {
@@ -1311,6 +1292,12 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     if (!defender_died && damage_total > 0)
       perform_knockdown_test(def->ch, (GET_WEAPON_POWER(att->weapon) + att->ranged->burst_count) / (att->ranged->is_gel ? 1 : 2));
   } else {
+    // Process flame aura right before damage.
+    if (handle_flame_aura(att, def)) {
+      // They died! Bail out.
+      return;
+    }
+
     defender_died = damage(att->ch, def->ch, damage_total, att->melee->dam_type, att->melee->is_physical);
 
     if (!defender_died) {
@@ -1354,24 +1341,6 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     }
   }
 
-  bool defender_died, defender_was_npc = IS_NPC(def->ch);
-  if (att->ranged_combat_mode) {
-    combat_message(att->ch, def->ch, att->weapon, MAX(0, damage_total), att->ranged->burst_count);
-    defender_died = damage_without_message(att->ch, def->ch, damage_total, att->ranged->dam_type, att->ranged->is_physical);
-
-    if (!defender_died && damage_total > 0)
-      perform_knockdown_test(def->ch, (GET_WEAPON_POWER(att->weapon) + att->ranged->burst_count) / (att->ranged->is_gel ? 1 : 2));
-  } else {
-    // Process flame aura right before damage.
-    if (handle_flame_aura(att, def)) {
-      act("$n gets too close and manages to burn themselves on the flame aura.", FALSE, vict, 0, 0, TO_ROOM);
-      act("You miscalculate and manage to burn yourself on $N's flame aura!", FALSE, def->ch, 0, att->ch, TO_CHAR);
-      return;
-    }
-
-    defender_died = damage(att->ch, def->ch, damage_total, att->melee->dam_type, att->melee->is_physical);
-    ...
-  
   if (defender_died) {
     // Fixes edge case where attacking quest NPC kills its hunter with a heavy weapon, is extracted, then tries to check recoil.
     if (!defender_was_npc)
@@ -1475,38 +1444,133 @@ void engage_close_combat_if_appropriate(struct combat_data *att, struct combat_d
 }
 
 bool handle_flame_aura(struct combat_data *att, struct combat_data *def) {
-  // Now that we've counterstrike-swapped if applicable, check and try to apply flame aura.
-  if (AFF_FLAGGED(def->ch, AFF_FLAME_AURA) || MOB_FLAGGED(def->ch, MOB_FLAMEAURA)) {
-    int force;
+  // no-op: defender has no aura
+  if (!AFF_FLAGGED(def->ch, AFF_FLAME_AURA) && !MOB_FLAGGED(def->ch, MOB_FLAMEAURA))
+    return FALSE;
 
-    // First, we require that the attacker really is fighting in melee and unarmed. Flame aura only burns body parts.
-    if (att->ranged_combat_mode || !att->weapon) {
-      // Flameaura-flagged NPCs just use their own level as the force.
-      if (MOB_FLAGGED(def->ch, MOB_FLAMEAURA)) {
-        force = GET_LEVEL(def->ch);
-      }
-      else {
-        // Iterate through their spells, find the flame aura that's applied to them, and extract its force.
-        for (struct sustain_data *sust = GET_SUSTAINED(def->ch); sust; sust = sust->next) {
-          if (!sust->caster && sust->spell == SPELL_FLAMEAURA) {
-            force = sust->force;
-            break;
-          }
-        }
-      }
+  // no-op: you have a weapon
+  if (att->ranged_combat_mode || att->weapon)
+    return FALSE;
 
-      if (GET_POWER(att->ch, ADEPT_TEMPERATURE_TOLERANCE) && (GET_CYBERWARE_TYPE(cyber) == CYB_DERMALSHEATHING || BIO_ORTHOSKIN || CYB_ARMS)) {
-        // TODO: Apply impact armor.
-      }
+  int force = -1;
 
-      // TODO: Now that we've set the force, deal (Force)M damage to the attacker. Use TYPE_SUFFERING maybe?
-      // Remember that damage() returns true if it's killed them-- if this happens, you'll need to abort handling, because att->ch is already nulled out.
-      if (damage(att->ch, vict, force, TYPE_SUFFERING, PHYSICAL)) {
-        act("The flames consume $m, leaving their body smoldering and smoking.", TRUE, vict, 0, 0, TO_ROOM);
-
-        // Attacker died, so return TRUE here.
-        return TRUE;
+  // Flameaura-flagged NPCs just use their own level as the force.
+  if (MOB_FLAGGED(def->ch, MOB_FLAMEAURA)) {
+    force = GET_LEVEL(def->ch);
+  } else {
+    // Iterate through their spells, find the flame aura that's applied to them, and extract its force.
+    for (struct sustain_data *sust = GET_SUSTAINED(def->ch); sust; sust = sust->next) {
+      if (!sust->caster && sust->spell == SPELL_FLAME_AURA) {
+        force = sust->force;
+        break;
       }
+    }
+
+    // Account for edge case of not finding the spell.
+    if (force == -1) {
+      mudlog("SYSERR: Unable to find flameaura spell! Using default of 6 for force.", def->ch, LOG_SYSLOG, TRUE);
+      force = 6;
+    }
+  }
+
+  char rolls_buf[1000];
+  snprintf(rolls_buf, sizeof(rolls_buf), "^oFlame Aura (%s hitting %s): Force starts at %d.",
+           GET_CHAR_NAME(att->ch),
+           GET_CHAR_NAME(def->ch),
+           force
+         );
+
+  force -= GET_POWER(att->ch, ADEPT_TEMPERATURE_TOLERANCE);
+  force -= GET_POWER(att->ch, ADEPT_MYSTIC_ARMOR);
+
+  snprintf(ENDOF(rolls_buf), sizeof(rolls_buf) - strlen(rolls_buf), " After adept powers, it's %d.", force);
+
+  force -= affected_by_spell(att->ch, SPELL_ARMOR);
+
+  snprintf(ENDOF(rolls_buf), sizeof(rolls_buf) - strlen(rolls_buf), " After armor spell, it's %d.", force);
+
+  for (struct obj_data *cyber = att->ch->cyberware; cyber; cyber = cyber->next_content) {
+    if (GET_CYBERWARE_TYPE(cyber) == CYB_DERMALPLATING) {
+      force -= GET_CYBERWARE_RATING(cyber);
+    }
+    else if (GET_CYBERWARE_TYPE(cyber) == CYB_DERMALSHEATHING) {
+      force -= GET_CYBERWARE_RATING(cyber);
+    }
+    else if (GET_CYBERWARE_TYPE(cyber) == CYB_ARMS) {
+      if (IS_SET(GET_CYBERWARE_FLAGS(cyber), ARMS_MOD_ARMOR_MOD1)) {
+        force -= 1;
+      }
+    }
+    else if (GET_CYBERWARE_TYPE(cyber) == CYB_LEGS) {
+      if (IS_SET(GET_CYBERWARE_FLAGS(cyber), LEGS_MOD_ARMOR_MOD1)) {
+        force -= 1;
+      }
+    }
+  }
+
+  snprintf(ENDOF(rolls_buf), sizeof(rolls_buf) - strlen(rolls_buf), " After cyberware, it's %d.", force);
+
+  for (struct obj_data *bio = att->ch->bioware; bio; bio = bio->next_content) {
+    if (GET_BIOWARE_TYPE(bio) == BIO_ORTHOSKIN) {
+      force -= GET_BIOWARE_RATING(bio);
+    }
+  }
+
+  snprintf(ENDOF(rolls_buf), sizeof(rolls_buf) - strlen(rolls_buf), " After bioware, it's %d.", force);
+
+  // Roll a body check, idk.
+  int dice = GET_BOD(att->ch);
+  int successes = success_test(dice, force);
+  int staged_damage = stage(-successes, MODERATE);
+
+  snprintf(ENDOF(rolls_buf), sizeof(rolls_buf) - strlen(rolls_buf), "\r\n^oRolled %d successes on %d dice, staged damage Moderate->%s.",
+           successes, dice, GET_WOUND_NAME(staged_damage));
+  act(rolls_buf, FALSE, att->ch, 0, 0, TO_ROLLS);
+
+  if (staged_damage <= 0) {
+    // Do nothing-- they took no damage.
+    return FALSE;
+  }
+
+  // Convert light/medium/serious/deadly to boxes.
+  int converted_damage = convert_damage(staged_damage);
+
+  // Remember that damage() returns true if it's killed them-- if this happens, you'll need to abort handling, because att->ch is already nulled out.
+  char death_msg[500];
+  snprintf(death_msg, sizeof(death_msg), "^O%s^O's flames consume %s^O, leaving %s body a smoking heap!^n",
+           capitalize(GET_CHAR_NAME(def->ch)),
+           decapitalize_a_an(GET_CHAR_NAME(att->ch)),
+           HSHR(att->ch));
+  // Deal damage based on boxes instead of wound levels.
+  if (damage(def->ch, att->ch, converted_damage, TYPE_SUFFERING, PHYSICAL)) {
+    // We killed them! Write our pre-written message and bail out.
+    act(death_msg, TRUE, 0, 0, def->ch, TO_VICT);
+    act(death_msg, TRUE, def->ch, 0, 0, TO_ROOM);
+
+    // Attacker died, so return TRUE here.
+    return TRUE;
+  } else {
+    // They lived-- give a standard message.
+    switch (MAX(LIGHT, MIN(DEADLY, staged_damage))) {
+      case LIGHT:
+        act("^oYou singe yourself on the flames surrounding $N^o.^n", FALSE, att->ch, 0, def->ch, TO_CHAR);
+        act("^o$n singes $mself on the flames surrounding $N^o.^n", FALSE, att->ch, 0, def->ch, TO_ROOM);
+        break;
+      case MODERATE:
+        act("^oYou burn yourself on the flames surrounding $N^o.^n", FALSE, att->ch, 0, def->ch, TO_CHAR);
+        act("^o$n burns $mself on the flames surrounding $N^o.^n", FALSE, att->ch, 0, def->ch, TO_ROOM);
+        break;
+      case SERIOUS:
+        act("^OYou catch a deep burn from the flames surrounding $N^O.^n", FALSE, att->ch, 0, def->ch, TO_CHAR);
+        act("^O$n^O catches a deep burn from the flames surrounding $N^O.^n", FALSE, att->ch, 0, def->ch, TO_ROOM);
+        break;
+      case DEADLY:
+        act("^RThe flames surrounding $N^R burn you to the bone!^n", FALSE, att->ch, 0, def->ch, TO_CHAR);
+        act("^RThe flames surrounding $N^R burn $n^R to the bone!^n", FALSE, att->ch, 0, def->ch, TO_ROOM);
+        break;
+      default:
+        mudlog("SYSERR: Received invalid code to switch in handle_flame_aura()!", att->ch, LOG_SYSLOG, TRUE);
+        break;
     }
   }
 

@@ -1368,7 +1368,7 @@ void misc_update(void)
       struct sustain_data *next, *temp, *nsus;
       for (struct sustain_data *sus = GET_SUSTAINED(ch); sus; sus = next) {
         next = sus->next;
-        if (sus->spell > SPELL_SHADOW) {
+        if (sus->spell >= MAX_SPELLS) {
           snprintf(buf, sizeof(buf), "COWS GO MOO %s %d", GET_CHAR_NAME(ch), sus->spell);
           log(buf);
           continue;
