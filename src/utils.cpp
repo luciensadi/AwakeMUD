@@ -413,23 +413,24 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int c
         }
         break;
       case LIGHT_PARTLIGHT:
-        if (CURRENT_VISION(ch) == NORMAL) {
-          light_target += 2;
-          buf_mod(rbuf, rbuf_len, "PartLight", 2);
-        } else if (CURRENT_VISION(ch) == LOWLIGHT) {
+        if (CURRENT_VISION(ch) == LOWLIGHT) {
           if (NATURAL_VISION(ch) != LOWLIGHT) {
-            light_target++;
+            light_target ++;
             buf_mod(rbuf, rbuf_len, "PartLight", 1);
-          }
-        } else {
-          if (NATURAL_VISION(ch) != THERMOGRAPHIC) {
-            light_target += 2;
-            buf_mod(rbuf, rbuf_len, "PartLight", 2);
           } else {
-            light_target++;
-            buf_mod(rbuf, rbuf_len, "PartLight", 1);
-          }
+            light_target += 0;
+            buf_mod(rbuf, rbuf_len, "PartLight", 0);
+            }
         }
+        else if (NATURAL_VISION(ch) == THERMOGRAPHIC && CURRENT_VISION(ch) != LOWLIGHT ) {
+            light_target ++;
+            buf_mod(rbuf, rbuf_len, "PartLight", 1);
+        } 
+        else {
+         light_target += 2;
+         buf_mod(rbuf, rbuf_len, "PartLight", 2);
+        }
+        
         break;
       case LIGHT_GLARE:
         if (CURRENT_VISION(ch) == NORMAL) {
