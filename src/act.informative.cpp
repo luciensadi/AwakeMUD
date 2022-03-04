@@ -195,11 +195,23 @@ char *make_desc(struct char_data *ch, struct char_data *i, char *buf, int act, b
   }
   if (GET_SUSTAINED(i) && (IS_ASTRAL(ch) || IS_DUAL(ch)))
   {
-    for (struct sustain_data *sust = GET_SUSTAINED(i); sust; sust = sust->next)
+    bool has_aura = FALSE;
+    for (struct sustain_data *sust = GET_SUSTAINED(i); sust; sust = sust->next) {
       if (!sust->caster) {
         strlcat(buf, ", surrounded by a spell aura", buf_size);
+        has_aura = TRUE;
         break;
       }
+    }
+
+    if (MOB_FLAGGED(i, MOB_FLAMEAURA) || affected_by_spell(i, SPELL_FLAME_AURA)) {
+      if (has_aura)
+        strlcat(buf, " and flames", buf_size);
+      else
+        strlcat(buf, ", surrounded by flames", buf_size);
+    }
+  } else if (MOB_FLAGGED(i, MOB_FLAMEAURA) || affected_by_spell(i, SPELL_FLAME_AURA)) {
+    strlcat(buf, ", surrounded by flames", buf_size);
   }
 
   if (!IS_NPC(i) && PRF_FLAGGED(ch, PRF_LONGWEAPON) && GET_EQ(i, WEAR_WIELD))
@@ -1207,8 +1219,6 @@ void list_one_char(struct char_data * i, struct char_data * ch)
     strlcat(buf, " (editing)", sizeof(buf));
   if (PLR_FLAGGED(i, PLR_PROJECT))
     strlcat(buf, " (projecting)", sizeof(buf));
-  if (MOB_FLAGGED(i, MOB_FLAMEAURA) || affected_by_spell(i, SPELL_FLAME_AURA))
-    strlcat(buf, ", surrounded by flames,", sizeof(buf));
 
   if (GET_QUI(i) <= 0)
     strlcat(buf, " is here, seemingly paralyzed.", sizeof(buf));
