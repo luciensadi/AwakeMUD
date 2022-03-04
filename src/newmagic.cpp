@@ -1773,7 +1773,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
     case SPELL_LEVITATE:
       WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
       success = success_test(skill, 4 + target_modifiers);
-      if (success > 0 || AFF_FLAGGED(vict, AFF_LEVITATE)) {
+      if (success > 0 && !AFF_FLAGGED(ch, AFF_INFRAVISION)) {
         send_to_char(FAILED_CAST, ch);
       } else {
         AFF_FLAGS(vict).SetBit(AFF_LEVITATE);
