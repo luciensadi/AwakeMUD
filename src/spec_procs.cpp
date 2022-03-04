@@ -6610,6 +6610,48 @@ SPECIAL(purge_prevented) {
   return FALSE;
 }
 
+SPECIAL(toggled_voice_modulator)
+{
+  struct obj_data *obj = (struct obj_data *) me;
+
+  if(!obj->worn_by)
+    return FALSE;
+
+  if (CMD_IS("deactivate")) {
+    skip_spaces(&argument);
+    if (!str_cmp(argument, "voice") || isname(argument, GET_OBJ_KEYWORDS(obj))) {
+      if (obj->obj_flags.bitvector.IsSet(AFF_VOICE_MODULATOR)) {
+        AFF_FLAGS(obj->worn_by).RemoveBit(AFF_VOICE_MODULATOR);
+        obj->obj_flags.bitvector.RemoveBit(AFF_VOICE_MODULATOR);
+        send_to_char(ch, "You feel %s deactivate with a gentle click.\r\n", GET_OBJ_NAME(obj));
+        return TRUE;
+      } else {
+        send_to_char(ch, "%s is already deactivated.\r\n", capitalize(GET_OBJ_NAME(obj)));
+        return TRUE;
+      }
+    }
+    return FALSE;
+  }
+
+  if (CMD_IS("activate")) {
+    skip_spaces(&argument);
+    if (!str_cmp(argument, "voice") || isname(argument, GET_OBJ_KEYWORDS(obj))) {
+      if (!obj->obj_flags.bitvector.IsSet(AFF_VOICE_MODULATOR)) {
+        AFF_FLAGS(obj->worn_by).SetBit(AFF_VOICE_MODULATOR);
+        obj->obj_flags.bitvector.SetBit(AFF_VOICE_MODULATOR);
+        send_to_char(ch, "You feel %s activate with a gentle click.\r\n", GET_OBJ_NAME(obj));
+        return TRUE;
+      } else {
+        send_to_char(ch, "%s is already activated.\r\n", capitalize(GET_OBJ_NAME(obj)));
+        return TRUE;
+      }
+    }
+    return FALSE;
+  }
+
+  return FALSE;
+}
+
 /*
 SPECIAL(business_card_printer) {
   struct obj_data *printer = (struct obj_data *) me;

@@ -346,7 +346,6 @@ struct spell_trainer spelltrainers[] = {
   {60602, SPELL_MINDLINK, 0, 6},
   {60602, SPELL_NIGHTVISION, 0, 6},
   {60602, SPELL_INFRAVISION, 0, 6},
-  {60602, SPELL_LEVITATE, 0, 6},
 
 //{60603, SPELL_MASSCONFUSION, 0, 6},
 //{60603, SPELL_CHAOTICWORLD, 0, 6},
@@ -378,6 +377,8 @@ struct spell_trainer spelltrainers[] = {
   {60604, SPELL_STEAM, 0, 6},
   {60604, SPELL_THUNDERBOLT, 0, 6},
   {60604, SPELL_WATERBOLT, 0, 6},
+  {60604, SPELL_LEVITATE, 0, 6},
+  {60604, SPELL_FLAME_AURA, 0, 6},
 
   // A throwaway spell teacher slot for Jarmine so it can let people learn force.
   { 60531, SPELL_MANABOLT, 0, 6 },
@@ -457,6 +458,7 @@ struct spell_trainer spelltrainers[] = {
                             {10013, SPELL_ICESHEET, 0, 50},
                             {10013, SPELL_IGNITE, 0, 50},
                             {10013, SPELL_SHADOW, 0, 50},
+                            {10013, SPELL_FLAME_AURA, 0, 50},
 
                             // Final line
                             { 0, 0, 0, 0},
@@ -823,6 +825,7 @@ void assign_objects(void)
   SPECIAL(nerpcorpolis_button);
   SPECIAL(floor_usable_radio);
   SPECIAL(medical_workshop);
+  SPECIAL(toggled_voice_modulator);
 
   ASSIGNOBJ(3, gen_board);  /* Rift's Board */
   ASSIGNOBJ(4, gen_board);  /* Pook's Board */
@@ -929,6 +932,7 @@ void assign_objects(void)
   ASSIGNOBJ(5498, bank); // Vancouver ATM
   ASSIGNOBJ(6997, nerpcorpolis_button);
   ASSIGNOBJ(16298, floor_usable_radio);
+  ASSIGNOBJ(26104, toggled_voice_modulator);
 
   perform_secret_obj_assignments();
 #endif

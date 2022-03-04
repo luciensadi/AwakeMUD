@@ -728,7 +728,9 @@ const char *affected_bits[] =
     "Ammo Building",
     "Engaging in Close Combat",
     "Tries for Close Combat",
-    "Levitate"
+    "Levitate",
+    "Flame Aura",
+    "Voice Modulator"
   };
 
 /* CON_x */
@@ -1985,7 +1987,8 @@ struct spell_types spells[] =
     { "Splash", TRUE, MANIPULATION, AREA, -1, INSTANT, 0, PACK_VARIABLE_DRAIN_DAMAGE(2) },
     { "Nightvision", TRUE, DETECTION, SINGLE, -1, SUSTAINED, 1, MODERATE },
     { "Infravision", TRUE, DETECTION, SINGLE, -1, SUSTAINED, 1, MODERATE },
-    { "Levitate", TRUE, MANIPULATION, SINGLE, -1, SUSTAINED, 2, MODERATE }
+    { "Levitate", TRUE, MANIPULATION, SINGLE, -1, SUSTAINED, 2, MODERATE },
+    { "Flame Aura", TRUE, MANIPULATION, SINGLE, -1, SUSTAINED, 2, MODERATE }
   };
 
 const char *totem_types[] =
