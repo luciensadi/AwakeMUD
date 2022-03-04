@@ -25,7 +25,7 @@ Previously tested on:
 - Ubuntu 14, 16
 
 ## Installation (Ubuntu commands in parentheses)
-- Install [MySQL 5](https://dev.mysql.com/doc/refman/5.7/en/installing.html), including its development headers (ensure `mysql/mysql.h` exists in your path).
+- Install [MySQL 5.7](https://dev.mysql.com/doc/refman/5.7/en/installing.html), including its development headers (ensure `mysql/mysql.h` exists in your path).
 - Install automake, make, gcc, g++, clang, libtool, autoconf, zlib1g-dev, libcurl4-openssl-dev, and libmysqlclient-dev if they're not already present (`sudo apt-get install automake make gcc g++ clang libtool autoconf zlib1g-dev libcurl4-openssl-dev libmysqlclient-dev`)
 - Install [libsodium](https://github.com/jedisct1/libsodium/releases) per their [installation instructions](https://download.libsodium.org/doc/installation). Version 1.0.16 is known to work, but higher versions should work as well.
 - Set your server's timezone to the West Coast to enable RP time to work correctly (`sudo timedatectl set-timezone America/Los_Angeles`)
@@ -39,19 +39,21 @@ Previously tested on:
 - Change to the root directory (`cd ..`) and run the game (raw invocation `bin/awake`, or use a debugger like `gdb bin/awake`, or `lldb bin/awake` on OS X to help troubleshoot issues).
 - Connect to the game with telnet at `127.0.0.1:4000` and enjoy!
 
-### Cygwin Installation Notes
+### Additional Cygwin Installation Notes
 - AwakeCE can run in Windows under Cygwin.
-- To build it, you need Cygwin (64bit) and Cygwin apps/libraries: make, g++, libcrypt, libsodium, mysqlclient.
+- To build it, you need Cygwin (64bit) and Cygwin apps/libraries: clang, make, automake, mysql, dos2unix, g++, libcrypt, libsodium, mysqlclient, gcc. You'll want the debugs too. If it fails to install one of these, retry, or try another mirror; manual install is possible but not recommended.
 - Update src/Makefile and comment out/uncomment the Cygwin config.
-- Build by doing `cd src;make`.
+- Make sure to initialize the DB with `mysql_install_db` if you haven't done so already.
+- You may need to `dos2unix gensql.sh` to get it to read properly before executing with `bash ./gensql.sh -s`.
+- Build by doing `cd src;make` from the root directory.
 - Run by doing `./bin/awake`.
 - Note: You may have to manually import the SQL changes as gensql.sh may or may not work, use 127.0.0.1 as dbhost if running local db.
 - With Cygwin, you can also use Eclipse CPP IDE, just create a Cygwin-C++ project and point the directory to where your AwakeMUD is located, play around with build settings to ensure it is using your Makefile in src. Debugging/Running works.
 
-### OSX Installation Notes
-- Install mysql@5.7 and mysql-client@5.7
+### Additional OSX Installation Notes
+- To install mysql@5.7 and mysql-client@5.7:
     - `brew install mysql@5.7`
-    - `brew install mysql-client@5.7` 
+    - `brew install mysql-client@5.7`
     - Follow the instructions to add mysql/mysql-client to your path, along with their `CPPFLAGS` export
 - Symlink mysql headers and libmysqlclient to your /usr/local directory (replace `<version>` with the version installed)
     - `ln -s /usr/local/Cellar/mysql@5.7/<version>/include/mysql/ /usr/local/include/mysql`
@@ -82,4 +84,6 @@ If you get an error like `error while loading shared libraries: libsodium.so.23:
 
 If you get an error like `MYSQLERROR: Table 'awakemud.pfiles_mail' doesn't exist`, you need to run the command found in `SQL/mail_fixes.sql` in your database. This will upgrade your database to be compatible with the new mail system. This command is automatically run for new databases.
 
-If it takes an exceedingly long time between you entering your password and the MUD responding, but the MUD is responsive for all other input, the machine that's hosting the MUD is not powerful enough for the password storage algorithm used by default. You may opt to either endure the delay (more secure, less convenient) or add `-DNOCRYPT` to your Makefile (not at all secure, convenient, will break all current passwords and require you to either fix them by hand or purge and re-create your database and all characters in it).
+If it takes an exceedingly long time between you entering your password and the MUD responding, but the MUD is responsive for all other input, the machine that's hosting the MUD is not powerful enough for the password storage algorithm used by default. You may opt to either endure the delay (more secure, less convenient) or either lessen the work factor or add `-DNOCRYPT` to your Makefile (not at all secure, convenient, will break all current passwords and require you to either fix them by hand or purge and re-create your database and all characters in it).
+
+If you log on for the first time and you're not a staff member, quit out and change your rank in the database. Rank 10 is the maximum. Your MySQL command will look something like: `update pfiles set rank=10 where idnum=1;`
