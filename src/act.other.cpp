@@ -1270,7 +1270,7 @@ ACMD(do_toggle)
     } else if (is_abbrev(argument, "nonewbie") || is_abbrev(argument, "newbie")) {
       result = PRF_TOG_CHK(ch, PRF_NONEWBIE);
       mode = 9;
-    } else if (is_abbrev(argument, "noshout") || is_abbrev(argument, "shout")) {
+    } else if (is_abbrev(argument, "noshout") || is_abbrev(argument, "shout") || is_abbrev(argument, "deaf")) {
       result = PRF_TOG_CHK(ch, PRF_DEAF);
       mode = 10;
     } else if ((is_abbrev(argument, "notell") || is_abbrev(argument, "tell"))) {
@@ -1295,7 +1295,7 @@ ACMD(do_toggle)
         PRF_FLAGS(ch).SetBit(PRF_PKER);
       mode = 13;
       result = 1;
-    } else if (is_abbrev(argument, "hired")) {
+    } else if (is_abbrev(argument, "hired") || is_abbrev(argument, "quest")) {
       result = PRF_TOG_CHK(ch, PRF_QUEST);
       mode = 14;
     } else if (is_abbrev(argument, "rolls") && (IS_SENATOR(ch) || _OVERRIDE_ALLOW_PLAYERS_TO_USE_ROLLS_)) {
@@ -1316,7 +1316,7 @@ ACMD(do_toggle)
     } else if (is_abbrev(argument, "norpe") || is_abbrev(argument, "rpe")) {
       result = PRF_TOG_CHK(ch, PRF_NORPE);
       mode = 21;
-    } else if (is_abbrev(argument, "nohired") || is_abbrev(argument, "hired")) {
+    } else if (is_abbrev(argument, "nohired")) {
       result = PRF_TOG_CHK(ch, PRF_NOHIRED);
       mode = 22;
     } else if (is_abbrev(argument, "pacify") && IS_SENATOR(ch)) {
