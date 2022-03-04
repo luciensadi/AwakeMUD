@@ -388,10 +388,10 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int c
         if (CURRENT_VISION(ch) == THERMOGRAPHIC) {
           if (NATURAL_VISION(ch) == THERMOGRAPHIC) {
             light_target += 2;
-            buf_mod(rbuf, rbuf_len, "FullDark", 2);
+            buf_mod(rbuf, rbuf_len, "FullDark[TH-N]", 2);
           } else {
             light_target += 4;
-            buf_mod(rbuf, rbuf_len, "FullDark", 4);
+            buf_mod(rbuf, rbuf_len, "FullDark[TH-UN]", 4);
           }
         } else {
           light_target += 8;
@@ -401,47 +401,47 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int c
       case LIGHT_MINLIGHT:
         if (CURRENT_VISION(ch) == NORMAL) {
           light_target += 6;
-          buf_mod(rbuf, rbuf_len, "MinLight", 6);
+          buf_mod(rbuf, rbuf_len, "MinLight[N]", 6);
         } else {
           if (NATURAL_VISION(ch) == NORMAL) {
             light_target += 4;
-            buf_mod(rbuf, rbuf_len, "MinLight", 4);
+            buf_mod(rbuf, rbuf_len, "MinLight[LL/TH-UN]", 4);
           } else {
             base_target += 2;
-            buf_mod(rbuf, rbuf_len, "MinLight", 2);
+            buf_mod(rbuf, rbuf_len, "MinLight[LL/TH-N]", 2);
           }
         }
         break;
       case LIGHT_PARTLIGHT:
         if (CURRENT_VISION(ch) == NORMAL) {
           light_target += 2;
-          buf_mod(rbuf, rbuf_len, "PartLight", 2);
+          buf_mod(rbuf, rbuf_len, "PartLight[N]", 2);
         } else if (CURRENT_VISION(ch) == LOWLIGHT) {
           if (NATURAL_VISION(ch) != LOWLIGHT) {
             light_target++;
-            buf_mod(rbuf, rbuf_len, "PartLight", 1);
+            buf_mod(rbuf, rbuf_len, "PartLight[LL-UN]", 1);
           }
         } else {
           if (NATURAL_VISION(ch) != THERMOGRAPHIC) {
             light_target += 2;
-            buf_mod(rbuf, rbuf_len, "PartLight", 2);
+            buf_mod(rbuf, rbuf_len, "PartLight[TH-UN]", 2);
           } else {
             light_target++;
-            buf_mod(rbuf, rbuf_len, "PartLight", 1);
+            buf_mod(rbuf, rbuf_len, "PartLight[TH-N]", 1);
           }
         }
         break;
       case LIGHT_GLARE:
         if (CURRENT_VISION(ch) == NORMAL) {
           light_target += 2;
-          buf_mod(rbuf, rbuf_len, "Glare", 2);
+          buf_mod(rbuf, rbuf_len, "Glare[N]", 2);
         } else {
           if (NATURAL_VISION(ch) == NORMAL) {
             light_target += 4;
-            buf_mod(rbuf, rbuf_len, "Glare", 2);
+            buf_mod(rbuf, rbuf_len, "Glare[LL/TH-UN]", 2);
           } else {
             light_target += 2;
-            buf_mod(rbuf, rbuf_len, "Glare", 2);
+            buf_mod(rbuf, rbuf_len, "Glare[LL/TH-N]", 2);
           }
         }
         break;
