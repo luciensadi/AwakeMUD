@@ -41,9 +41,9 @@ Previously tested on:
 
 ### Additional Cygwin Installation Notes
 - AwakeCE can run in Windows under Cygwin.
-- To build it, you need Cygwin (64bit) and Cygwin apps/libraries: clang, make, automake, mysql, dos2unix, g++, libcrypt, libsodium, mysqlclient, gcc. You'll want the debugs too. If it fails to install one of these, retry, or try another mirror; manual install is possible but not recommended.
-- Update src/Makefile and comment out/uncomment the Cygwin config.
-- Make sure to initialize the DB with `mysql_install_db` if you haven't done so already.
+- To build it, you need Cygwin (64bit) and Cygwin apps/libraries: clang, make, automake, mysql-server, mysql-client, libmariadb-devel, dos2unix, g++, libcrypt, libsodium, gcc, gdb. You'll want the debugs too. If it fails to install one of these, retry, or try another mirror; manual install is possible but not recommended.
+- In src/Makefile, comment out the OSX config, and uncomment the Cygwin config.
+- Make sure to initialize the DB with `mysql_install_db` if you haven't done so already. Start it with `mysqld_safe &`, then `mysql_secure_installation` and accept all the options.
 - You may need to `dos2unix gensql.sh` to get it to read properly before executing with `bash ./gensql.sh -s`.
 - Build by doing `cd src;make` from the root directory.
 - Run by doing `./bin/awake`.

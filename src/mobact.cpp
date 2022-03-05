@@ -1503,13 +1503,15 @@ void mobile_activity(void)
       int weapon_skill_dice = GET_SKILL(ch, weapon_skill) ? GET_SKILL(ch, weapon_skill) : GET_SKILL(ch, return_general(weapon_skill));
       int melee_skill_dice = GET_SKILL(ch, melee_skill) ? GET_SKILL(ch, melee_skill) : GET_SKILL(ch, return_general(melee_skill));
 
+      int indexed_attack_type = MAX(0, MIN(MAX_WEAP - 1, GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_WIELD))));
+
       if (weapon_skill_dice <= 0) {
         #ifndef SUPPRESS_BUILD_ERROR_MESSAGES
         snprintf(build_err_msg, sizeof(build_err_msg), "CONTENT ERROR: %s (%ld) is wielding %s %s, but has no weapon skill in %s!",
                  GET_CHAR_NAME(ch),
                  GET_MOB_VNUM(ch),
-                 AN(weapon_type[GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_WIELD))]),
-                 weapon_type[GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_WIELD))],
+                 AN(weapon_type[indexed_attack_type]),
+                 weapon_type[indexed_attack_type],
                  skills[GET_WEAPON_SKILL(GET_EQ(ch, WEAR_WIELD))].name
                );
         mudlog(build_err_msg, ch, LOG_MISCLOG, TRUE);
@@ -1521,8 +1523,8 @@ void mobile_activity(void)
         snprintf(build_err_msg, sizeof(build_err_msg), "CONTENT ERROR: Skilled mob %s (%ld) is wielding %s %s%s, but has no melee skill in %s!",
                  GET_CHAR_NAME(ch),
                  GET_MOB_VNUM(ch),
-                 AN(weapon_type[GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_WIELD))]),
-                 weapon_type[GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_WIELD))],
+                 AN(weapon_type[indexed_attack_type]),
+                 weapon_type[indexed_attack_type],
                  melee_skill == SKILL_POLE_ARMS ? " (with bayonet)" : "",
                  skills[melee_skill].name
                );
