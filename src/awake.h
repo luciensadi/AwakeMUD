@@ -97,6 +97,10 @@
 #define ASPECT_ELEMAIR    5
 #define ASPECT_ELEMFIRE    6
 #define ASPECT_ELEMWATER  7
+#define ASPECT_EARTHMAGE  8
+#define ASPECT_AIRMAGE  9
+#define ASPECT_FIREMAGE  10
+#define ASPECT_WATERMAGE  11
 
 
 /* totems */
