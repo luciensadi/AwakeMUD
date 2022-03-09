@@ -19,6 +19,7 @@
 #define CCR_PO_MAGIC                 13
 #define CCR_ARCHETYPE_MODE           14
 #define CCR_ARCHETYPE_SELECTION_MODE 15
+#define CCR_MAGE                     16
 
 #define PO_RACE		0
 #define PO_ATTR		1
