@@ -2640,7 +2640,11 @@ const char *aspect_names[] = {
   "Earth Elementalist",
   "Air Elementalist",
   "Fire Elementalist",
-  "Water Elementalist"
+  "Water Elementalist",
+  "Earth Mage",
+  "Air Mage",
+  "Fire Mage",
+  "Water Mage"
 };
 
 const char *tradition_names[] = {
