@@ -633,6 +633,80 @@ void totem_bonus(struct char_data *ch, int action, int type, int &target, int &s
   }
 }
 
+void aspect_bonus(struct char_data *ch, int action, int type, int &target, int &skill)
+{
+  if (action == SPELLCASTING)
+  {
+    type = spells[type].category;
+	switch (GET_ASPECT(ch)) {
+      case ASPECT_EARTHMAGE:
+        if (type == MANIPULATION)
+          skill += 2;
+        else if (type == DETECTION)
+          skill -= 1;
+        break;
+      case ASPECT_AIRMAGE:
+        if (type == DETECTION)
+          skill += 2;
+        else if (type == MANIPULATION)
+          skill -= 1;
+        break;
+      case ASPECT_FIREMAGE:
+        if (type == COMBAT)
+          skill += 2;
+        else if (type == ILLUSION)
+          skill -= 1;
+        break;
+      case ASPECT_WATERMAGE:
+        if (type == ILLUSION)
+          skill += 2;
+        else if (type == COMBAT)
+          skill -= 1;
+        break;
+      }
+    } if (action == CONJURING)
+    {
+	switch (GET_ASPECT(ch)) {
+      case ASPECT_EARTHMAGE:
+        if (type == ELEM_EARTH) {
+          skill += 2;
+          act("Skill +2: aspect", FALSE, ch, 0, 0, TO_ROLLS);
+        } else if (type == ELEM_AIR) {
+          skill -= 1;
+          act("Skill -1: aspect", FALSE, ch, 0, 0, TO_ROLLS);
+        }
+        break;
+      case ASPECT_AIRMAGE:
+        if (type == ELEM_AIR) {
+          skill += 2;
+          act("Skill +2: aspect", FALSE, ch, 0, 0, TO_ROLLS);
+        } else if (type == ELEM_EARTH) {
+          skill -= 1;
+          act("Skill -1: aspect", FALSE, ch, 0, 0, TO_ROLLS);
+        }
+        break;
+      case ASPECT_FIREMAGE:
+        if (type == ELEM_FIRE) {
+          skill += 2;
+          act("Skill +2: aspect", FALSE, ch, 0, 0, TO_ROLLS);
+        } else if (type == ELEM_WATER) {
+          skill -= 1;
+          act("Skill -1: aspect", FALSE, ch, 0, 0, TO_ROLLS);
+        }
+        break;
+      case ASPECT_WATERMAGE:
+        if (type == ELEM_WATER) {
+          skill += 2;
+          act("Skill +2: aspect", FALSE, ch, 0, 0, TO_ROLLS);
+        } else if (type == ELEM_FIRE) {
+          skill -= 1;
+          act("Skill -1: aspect", FALSE, ch, 0, 0, TO_ROLLS);
+        }
+        break;
+    }
+  }
+}
+
 void end_spirit_existance(struct char_data *ch, bool message)
 {
   struct char_data *tempc;
@@ -929,6 +1003,8 @@ void spell_bonus(struct char_data *ch, int spell, int &skill, int &target)
     target += GET_BACKGROUND_COUNT(get_ch_in_room(ch));
   if (GET_TRADITION(ch) == TRAD_SHAMANIC)
     totem_bonus(ch, SPELLCASTING, spell, target, skill);
+  else if (GET_TRADITION(ch) == TRAD_HERMETIC)
+  	aspect_bonus(ch, SPELLCASTING, spell, target, skill);
   else if (GET_TRADITION(ch) == TRAD_HERMETIC && GET_SPIRIT(ch) && spells[spell].category != HEALTH)
   {
     for (struct spirit_data *spirit = GET_SPIRIT(ch); spirit; spirit = spirit->next)
@@ -1354,6 +1430,11 @@ void cast_detection_spell(struct char_data *ch, int spell, int force, char *arg,
       spell_drain(ch, spell, force, 0, direct_sustain);
       break;
     case SPELL_NIGHTVISION:
+      if (AFF_FLAGGED(vict, AFF_LOW_LIGHT)) {
+        act("$N already has low-light vision.", FALSE, ch, 0, vict, TO_CHAR);
+        return;
+      }
+
       WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
       success = success_test(skill, 6 + target_modifiers);
       if (success > 0 || AFF_FLAGGED(vict, AFF_LOW_LIGHT)) {
@@ -1362,8 +1443,14 @@ void cast_detection_spell(struct char_data *ch, int spell, int force, char *arg,
         create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
       } else
         send_to_char(FAILED_CAST, ch);
+      spell_drain(ch, spell, force, 0);
       break;
     case SPELL_INFRAVISION:
+      if (AFF_FLAGGED(vict, AFF_INFRAVISION)) {
+        act("$N already has thermographic vision.", FALSE, ch, 0, vict, TO_CHAR);
+        return;
+      }
+
       WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
       success = success_test(skill, 6 + target_modifiers);
       if (success > 0 && !AFF_FLAGGED(ch, AFF_INFRAVISION)) {
@@ -1372,6 +1459,7 @@ void cast_detection_spell(struct char_data *ch, int spell, int force, char *arg,
         create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
       } else
         send_to_char(FAILED_CAST, ch);
+      spell_drain(ch, spell, force, 0);
       break;
   }
 
@@ -1769,22 +1857,6 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       } else
         send_to_char(FAILED_CAST, ch);
       spell_drain(ch, spell, force, 0, direct_sustain);
-      break;
-    case SPELL_LEVITATE:
-      WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
-      success = success_test(skill, 4 + target_modifiers);
-      if (success > 0 && !AFF_FLAGGED(ch, AFF_LEVITATE)) {
-        send_to_char(FAILED_CAST, ch);
-      } else {
-        AFF_FLAGS(vict).SetBit(AFF_LEVITATE);
-        char msg_buf[500];
-        snprintf(msg_buf, sizeof(msg_buf), "$n's feet gently lift off from the ground as $e begin%s to levitate.", HSSH_SHOULD_PLURAL(ch) ? "s" : "");
-        act(msg_buf, TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("Your feet gently lift off from the ground as you levitate.\r\n", vict);
-        act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
-        create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
-      }
-      spell_drain(ch, spell, force, drain);
       break;
   }
 }
@@ -2532,6 +2604,29 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
     } else
       send_to_char(FAILED_CAST, ch);
+    spell_drain(ch, spell, force, 0);
+    break;
+  case SPELL_LEVITATE:
+    if (!check_spell_victim(ch, vict, spell, arg))
+      return;
+
+    if (AFF_FLAGGED(ch, AFF_LEVITATE)) {
+      act("$N is already affected by the levitate spell.", FALSE, ch, 0, vict, TO_CHAR);
+      return;
+    }
+
+    WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
+    success = success_test(skill, 4 + target_modifiers);
+    if (success > 0) {
+      char msg_buf[500];
+      snprintf(msg_buf, sizeof(msg_buf), "$n's feet gently lift off from the ground as $e begin%s to levitate.", HSSH_SHOULD_PLURAL(ch) ? "s" : "");
+      act(msg_buf, TRUE, vict, 0, 0, TO_ROOM);
+      send_to_char("Your feet gently lift off from the ground as you levitate.\r\n", vict);
+      act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
+      create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
+    } else
+      send_to_char(FAILED_CAST, ch);
+    spell_drain(ch, spell, force, 0);
     break;
   }
 }
