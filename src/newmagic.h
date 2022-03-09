@@ -9,6 +9,7 @@ extern void end_spirit_existance(struct char_data *ch, bool message);
 extern bool check_spirit_sector(struct room_data *room, int type);
 extern bool spell_drain(struct char_data *ch, int type, int force, int damage, bool minus_one_sustained=FALSE);
 extern void totem_bonus(struct char_data *ch, int action, int type, int &target, int &skill);
+extern void aspect_bonus(struct char_data *ch, int action, int type, int &target, int &skill);
 extern void mob_cast(struct char_data *ch, struct char_data *tch, struct obj_data *tobj, int spellnum, int level);
 extern void end_sustained_spell(struct char_data *ch, struct sustain_data *sust);
 extern void stop_spirit_power(struct char_data *spirit, int type);
