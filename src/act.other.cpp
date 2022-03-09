@@ -2277,7 +2277,7 @@ ACMD(do_customize)
 
   skip_spaces(&argument);
   if (!*argument) {
-     send_to_char(ch, "Usage: customize <persona/physical%s%s/background>\r\n", ch, (GET_TRADITION(ch) == TRAD_SHAMANIC || GET_TRADITION(ch) == TRAD_HERMETIC) && GET_ASPECT(ch) == ASPECT_FULL ? "/reflection" : "",
+     send_to_char(ch, "Usage: customize <persona/physical%s%s/background>\r\n", ch, (GET_TRADITION(ch) == TRAD_SHAMANIC || GET_TRADITION(ch) == TRAD_HERMETIC) && GET_ASPECT(ch) == ASPECT_FULL && GET_ASPECT(ch) == ASPECT_EARTHMAGE && ASPECT_AIRMAGE && ASPECT_FIREMAGE && ASPECT_WATERMAGE ? "/reflection" : "",
                  GET_TRADITION(ch) == TRAD_HERMETIC || GET_TRADITION(ch) == TRAD_SHAMANIC ? "/magic" : "");
     return;
   }
