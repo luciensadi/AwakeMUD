@@ -6062,12 +6062,13 @@ SPECIAL(axehead) {
   int message_num;
   const char *axehead_messages[] = {
     "Runners these days don't realize how valuable keeping notes on their pocket secretary is. Like where Johnsons hang out.",
-    "Stick your radio and phone in a pocket. You can still hear 'em, and it keeps your hands free.",
-    "Seems like every day I hear about another wanna-be runner getting gunned down by the Star for walking around with their gun in their hand.",
+    "Don't hide your radio or phone in a box, you won't be able to hear them - but putting it right in your coat pocket won't do much but break it if you get shot.",
+    "Seems like every day I hear about another wanna-be runner getting gunned down by the Star for walking around with their gun or cyberdeck in hand.",
     "Back in my day, we didn't have anything like the 8 MHz band available. Being able to talk to runners is a blessing.",
     "When in doubt, just take a cab back to somewhere familiar.",
     "If you're on a job and you just can't get it done, call your Johnson and tell them you quit. Easier than hoofing it all the way back.",
-    "It's dangerous to go alone. Make friends."
+    "It's dangerous to go alone. Make friends.",
+    "Keep your eyes and ears open. You never know when you'll make an unfair weather friend."
   };
 #define NUM_AXEHEAD_MESSAGES 7
 
