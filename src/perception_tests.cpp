@@ -209,12 +209,14 @@ bool can_see_through_invis(struct char_data *ch, struct char_data *vict) {
           } else {
             send_to_char(vict, "^y%s scowls at you, %s eyes focusing through your invisibility.^n\r\n", capitalize(GET_CHAR_NAME(ch)), HSHR(ch));
           }
+          if (GET_NOT(vict) < NEWBIE_KARMA_THRESHOLD && number(0, MAX(1, GET_NOT(vict) / 5)) == 0) {
+            send_to_char(vict, "(OOC: Being invisible sets NPCs on edge! Be careful out there.)\r\n");
+          }
         } else if (number(0, 5) == 0) {
           send_to_char("You get an uneasy feeling...\r\n", vict);
-        }
-
-        if (GET_NOT(vict) < NEWBIE_KARMA_THRESHOLD && number(0, MAX(1, GET_NOT(vict) / 5)) == 0) {
-          send_to_char(vict, "(OOC: Being invisible sets NPCs on edge! Be careful out there.)\r\n");
+          if (GET_NOT(vict) < NEWBIE_KARMA_THRESHOLD && number(0, MAX(1, GET_NOT(vict) / 5)) == 0) {
+            send_to_char(vict, "(OOC: Being invisible sets NPCs on edge! Be careful out there.)\r\n");
+          }
         }
       }
     }
