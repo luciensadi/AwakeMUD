@@ -2593,9 +2593,9 @@ bool mob_magic(struct char_data *ch)
   int spell = 0, sub = 0, force, magic = GET_MAG(ch) / 100;
   if (GET_WIL(ch) <= 2)
     force = magic;
-  else force = MIN(magic, number(2, 8));
+  else force = MIN(magic, number(MIN_MOB_COMBAT_MAGIC_FORCE, MAX_MOB_COMBAT_MAGIC_FORCE));
   while (!spell) {
-    switch (number (0, 12)) {
+    switch (number (0, 26)) { // If you're adding more cases to this switch, increase this number to match!
       case 0:
       case 1:
         spell = SPELL_POWERBOLT;
@@ -2681,7 +2681,7 @@ bool mob_magic(struct char_data *ch)
     case SPELL_STEAM:
     case SPELL_THUNDERBOLT:
     case SPELL_WATERBOLT:
-      snprintf(buf, sizeof(buf), "%s %s", wound_name[number(2, 4)], GET_CHAR_NAME(FIGHTING(ch)));
+      snprintf(buf, sizeof(buf), "%s %s", wound_name[number(MIN_MOB_COMBAT_MAGIC_WOUND, MAX_MOB_COMBAT_MAGIC_WOUND)], GET_CHAR_NAME(FIGHTING(ch)));
       break;
     default:
       strcpy(buf, GET_CHAR_NAME(FIGHTING(ch)));
