@@ -1005,11 +1005,11 @@ void ccr_aspect_menu(struct descriptor_data *d)
 void ccr_mage_menu(struct descriptor_data *d)
 {
   strncpy(buf,   "As a hermetic mage, you must select your aspect: \r\n"
-                 "  [1] Full Mage\r\n"
-                 "  [2] Earth Mage\r\n"
-                 "  [3] Air Mage\r\n"
-                 "  [4] Fire Mage\r\n"
-                 "  [5] Water Mage\r\n", sizeof(buf));
+                 "  [1] Full Mage (Jack of All Trades)\r\n"
+                 "  [2] Earth Mage (Manipulation Bonus / Detection Penalty)\r\n"
+                 "  [3] Air Mage (Detection Bonus / Manipulation Penalty)\r\n"
+                 "  [4] Fire Mage (Combat Bonus / Illusion Penalty)\r\n"
+                 "  [5] Water Mage (Illusion Bonus / Combat Penalty)\r\n", sizeof(buf));
  
   strlcat(buf,   "  [?] Help\r\n\r\nAspect: ", sizeof(buf));
   SEND_TO_Q(buf, d);
