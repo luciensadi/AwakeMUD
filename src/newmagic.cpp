@@ -2624,7 +2624,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       char msg_buf[500];
       snprintf(msg_buf, sizeof(msg_buf), "$n's feet gently lift off from the ground as $e begin%s to levitate.", HSSH_SHOULD_PLURAL(ch) ? "s" : "");
       act(msg_buf, TRUE, vict, 0, 0, TO_ROOM);
-      send_to_char("Your feet gently lift off from the ground as you levitate.\r\n", vict);
+      send_to_char("Your feet gently lift off from the ground as you begin to levitate.\r\n", vict);
       act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
       create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
     } else
