@@ -1006,8 +1006,8 @@ void spell_bonus(struct char_data *ch, int spell, int &skill, int &target)
     target += GET_BACKGROUND_COUNT(get_ch_in_room(ch));
   if (GET_TRADITION(ch) == TRAD_SHAMANIC)
     totem_bonus(ch, SPELLCASTING, spell, target, skill);
-  else if (GET_TRADITION(ch) == TRAD_HERMETIC)
-  	aspect_bonus(ch, SPELLCASTING, spell, target, skill);
+  else (GET_TRADITION(ch) == TRAD_HERMETIC)
+    aspect_bonus(ch, SPELLCASTING, spell, target, skill);
   else if (GET_TRADITION(ch) == TRAD_HERMETIC && GET_SPIRIT(ch) && spells[spell].category != HEALTH)
   {
     for (struct spirit_data *spirit = GET_SPIRIT(ch); spirit; spirit = spirit->next)
