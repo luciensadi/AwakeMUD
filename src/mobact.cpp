@@ -353,6 +353,9 @@ void mobact_change_firemode(struct char_data *ch) {
   if (!(weapon = GET_EQ(ch, WEAR_WIELD)) || !IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon))) {
     // Melee fighters never want to be prone, so they'll stand up from that.
     if (AFF_FLAGGED(ch, AFF_PRONE)) {
+#ifdef MOBACT_DEBUG
+      act("$n is prone with a non-gun weapon; standing.", FALSE, ch, NULL, NULL, TO_ROOM);
+#endif
       strncpy(buf3, "", sizeof(buf3));
       do_prone(ch, buf3, 0, 0);
     }
@@ -481,6 +484,12 @@ void mobact_change_firemode(struct char_data *ch) {
     }
   } // End check for weapon with FA.
   else {
+    // If we're prone, we almost certainly don't want to be. Stand back up. We only consume proning_desire in MODE_FA above.
+    if (AFF_FLAGGED(ch, AFF_PRONE)) {
+      strlcpy(buf3, "", sizeof(buf3));
+      do_prone(ch, buf3, 0, 0);
+    }
+
     // Set to SA, or fallback to SS.
     if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(weapon), 1 << MODE_SA)) {
       GET_WEAPON_FIREMODE(weapon) = MODE_SA;
