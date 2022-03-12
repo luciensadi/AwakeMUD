@@ -633,11 +633,11 @@ void totem_bonus(struct char_data *ch, int action, int type, int &target, int &s
   }
 }
 
-void aspect_bonus(struct char_data *ch, int action, int type, int &target, int &skill)
+void aspect_bonus(struct char_data *ch, int action, int spell_idx, int &target, int &skill)
 {
   if (action == SPELLCASTING)
   {
-    type = spells[type].category;
+    type = spells[spell_idx].category;
 	switch (GET_ASPECT(ch)) {
       case ASPECT_EARTHMAGE:
         if (type == MANIPULATION)
