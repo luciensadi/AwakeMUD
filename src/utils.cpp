@@ -1336,7 +1336,16 @@ int negotiate(struct char_data *ch, struct char_data *tch, int comp, int baseval
   act("Getting skill for PC...", FALSE, ch, NULL, NULL, TO_ROLLS);
   int cskill = get_skill(ch, SKILL_NEGOTIATION, chtn);
   act("Getting skill for NPC...", FALSE, tch, NULL, NULL, TO_ROLLS);
-  int tskill = get_skill(tch, SKILL_NEGOTIATION, tchtn);
+
+  // Plenty of NPCs also have no negotiation skill set when they should, so we make this an average value as well.
+  int tskill;
+  if (IS_NPC(tch) && GET_SKILL(tch, SKILL_NEGOTIATION) == 0) {
+    int tch_cha = (negotiation_is_with_data_fence ? GET_REAL_CHA(tch) : GET_CHA(tch));
+    tskill = MAX(tch_cha, 3);
+  } else {
+    tskill = get_skill(tch, SKILL_NEGOTIATION, tchtn);
+  }
+
 
   for (bio = ch->bioware; bio; bio = bio->next_content)
     if (GET_BIOWARE_TYPE(bio) == BIO_TAILOREDPHEREMONES)
@@ -1365,8 +1374,8 @@ int negotiate(struct char_data *ch, struct char_data *tch, int comp, int baseval
            tchnego, tskill, tchtn, ch_int, mod, tmod);
   if (comp)
   {
-    chtn = GET_INT(tch)+mod+cmod;
-    tchtn = GET_INT(ch)+mod+tmod;
+    chtn = tch_int+mod+cmod;
+    tchtn = ch_int+mod+tmod;
 
     act("Getting additional skill for PC...", FALSE, ch, NULL, NULL, TO_ROLLS);
     cskill = get_skill(ch, comp, chtn);
