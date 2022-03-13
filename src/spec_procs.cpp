@@ -6062,7 +6062,7 @@ SPECIAL(axehead) {
   int message_num;
   const char *axehead_messages[] = {
     "Runners these days don't realize how valuable keeping notes on their pocket secretary is. Like where Johnsons hang out.",
-    "Best to keep your phone and radio in hand. In a box, you won't hear it, and in your pocket, it'll just get shot.",
+    "Best to keep your phone and radio in hand. In a box, you won't hear it, and in your coat pocket, it'll just get shot.",
     "Seems like every day I hear about another wanna-be runner getting gunned down by the Star for walking around with their gun or cyberdeck in hand.",
     "Back in my day, we didn't have anything like the 8 MHz band available. Being able to talk to runners is a blessing.",
     "When in doubt, just take a cab back to somewhere familiar.",
