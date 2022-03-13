@@ -664,11 +664,12 @@ void aspect_bonus(struct char_data *ch, int action, int spell_idx, int &target, 
           skill -= 1;
         break;
       }
-  }
+   }
+}
 
 void aspect_conjuring_bonus(struct char_data *ch, int action, int type, int &target, int &skill);
 {
-  if (action == SPELLCASTING)
+  if (action == CONJURING)
   {
     switch (GET_ASPECT(ch)) {
     case ASPECT_EARTHMAGE:
