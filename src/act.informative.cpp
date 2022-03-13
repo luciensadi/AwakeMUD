@@ -3410,14 +3410,14 @@ const char *get_vision_string(struct char_data *ch, bool ascii_friendly=FALSE) {
     }
   }
 
-  if (CURRENT_VISION(ch) == THERMOGRAPHIC) {
+  if (has_vision(ch, VISION_THERMOGRAPHIC)) {
     if (ascii_friendly)
       return "You have thermographic vision.";
     else
       return "You have thermographic vision.\r\n";
   }
 
-  if (CURRENT_VISION(ch) == LOWLIGHT) {
+  if (has_vision(ch, VISION_LOWLIGHT)) {
     if (ascii_friendly)
       return "You have low-light vision.";
     else
@@ -5416,10 +5416,8 @@ ACMD(do_scan)
     ch->in_room = in_veh->in_room;
   }
 
-  infra = ((PRF_FLAGGED(ch, PRF_HOLYLIGHT) ||
-            CURRENT_VISION(ch) == THERMOGRAPHIC) ? TRUE : FALSE);
-  lowlight = ((PRF_FLAGGED(ch, PRF_HOLYLIGHT) ||
-               CURRENT_VISION(ch) == LOWLIGHT) ? TRUE : FALSE);
+  infra = PRF_FLAGGED(ch, PRF_HOLYLIGHT) || has_vision(ch, VISION_THERMOGRAPHIC);
+  lowlight = PRF_FLAGGED(ch, PRF_HOLYLIGHT) || has_vision(ch, VISION_LOWLIGHT);
 
   if (!infra && IS_ASTRAL(ch))
     infra = TRUE;

@@ -47,6 +47,7 @@
 #include "perfmon.h"
 #include "newmail.h"
 #include "transport.h"
+#include "vision_overhaul.h"
 
 #if defined(__CYGWIN__)
 #include <crypt.h>
@@ -1539,9 +1540,7 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Armor: ^W%d (%d) / %d (%d)^n, I-Dice: ^W%d^n, I-Roll: ^W%d^n, Sus: ^W%d^n, Foci: ^W%d^n, TargMod: ^W%d^n, Reach: ^W%d^n\r\n",
           GET_BALLISTIC(k), GET_TOTALBAL(k), GET_IMPACT(k), GET_TOTALIMP(k), GET_INIT_DICE(k), GET_INIT_ROLL(k),
           GET_SUSTAINED_NUM(k), GET_FOCI(k), GET_TARGET_MOD(k), GET_REACH(k));
-  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Current Vision: %s Natural Vision: %s\r\n",
-          CURRENT_VISION(k) == NORMAL ? "^WNormal^n" : CURRENT_VISION(k) == THERMOGRAPHIC ? "^rThermo^n" : "^yLow-Light^n",
-          NATURAL_VISION(k) == NORMAL ? "^WNormal^n" : NATURAL_VISION(k) == THERMOGRAPHIC ? "^rThermo^n" : "^yLow-Light^n");
+  strlcat(buf, write_vision_string_for_display(k, VISION_STRING_MODE_STAFF), sizeof(buf));
   sprinttype(GET_POS(k), position_types, buf2, sizeof(buf2));
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Current Zone: %d, Pos: %s, Fighting: %s",
           k->player_specials->saved.zonenum, buf2,

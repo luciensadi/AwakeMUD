@@ -3921,8 +3921,8 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
   }
 
   // Pre-calculate the things we care about here. First, character vision info.
-  bool ch_has_ultrasound = AFF_FLAGGED(ch, AFF_ULTRASOUND);
-  bool ch_has_thermographic = AFF_FLAGGED(ch, AFF_INFRAVISION) || CURRENT_VISION(ch) == THERMOGRAPHIC;
+  bool ch_has_ultrasound = AFF_FLAGGED(ch, AFF_ULTRASOUND) || has_vision(ch, VISION_ULTRASONIC);
+  bool ch_has_thermographic = AFF_FLAGGED(ch, AFF_INFRAVISION) || has_vision(ch, VISION_THERMOGRAPHIC);
   bool ch_sees_astral = IS_ASTRAL(ch) || IS_DUAL(ch);
 
   // EXCEPT: If you're rigging (not manning), things change.
@@ -4670,10 +4670,10 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
         isname(target, EXIT2(nextroom, dir)->keyword) &&
         !IS_SET(EXIT2(nextroom, dir)->exit_info, EX_DESTROYED) &&
         !IS_SET(EXIT2(nextroom, dir)->exit_info, EX_HIDDEN) &&
-        (PRF_FLAGGED(ch, PRF_HOLYLIGHT) || CURRENT_VISION(ch) == THERMOGRAPHIC ||
+        (PRF_FLAGGED(ch, PRF_HOLYLIGHT) || has_vision(ch, VISION_THERMOGRAPHIC) ||
          light_level(nextroom) <= LIGHT_NORMALNOLIT ||
          ((light_level(nextroom) == LIGHT_MINLIGHT || light_level(nextroom) == LIGHT_PARTLIGHT) &&
-          CURRENT_VISION(ch) == LOWLIGHT))) {
+          has_vision(ch, VISION_LOWLIGHT)))) {
            found = TRUE;
            break;
          }

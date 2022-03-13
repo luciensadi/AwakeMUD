@@ -103,7 +103,6 @@ bool    builder_cant_go_there(struct char_data *ch, struct room_data *room);
 bool    get_and_deduct_one_deckbuilding_token_from_char(struct char_data *ch);
 bool    program_can_be_copied(struct obj_data *prog);
 struct  obj_data *get_obj_proto_for_vnum(vnum_t vnum);
-void    set_natural_vision_for_race(struct char_data *ch);
 int     get_string_length_after_color_code_removal(const char *str, struct char_data *ch_to_notify_of_failure_reason);
 char *  get_string_after_color_code_removal(const char *str, struct char_data *ch);
 int     count_color_codes_in_string(const char *str);
@@ -530,8 +529,6 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define GET_LAST_DAMAGETIME(ch)	((ch)->points.lastdamage)
 #define HOURS_LEFT_TRACK(ch)	((ch)->points.track[0])
 #define HOURS_SINCE_TRACK(ch)	((ch)->points.track[1])
-#define NATURAL_VISION(ch)	((ch)->points.vision[0])
-#define CURRENT_VISION(ch)	((ch)->points.vision[1])
 #define SHOTS_FIRED(ch)		((ch)->points.extras[0])
 #define SHOTS_TRIGGERED(ch)	((ch)->points.extras[1])
 #define RIG_VEH(ch, veh)	((veh) = ((ch)->char_specials.rigging ? (ch)->char_specials.rigging : (ch)->in_veh));

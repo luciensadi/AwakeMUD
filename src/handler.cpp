@@ -554,6 +554,9 @@ void affect_total(struct char_data * ch)
     if (!sust->caster)
       spell_modify(ch, sust, FALSE);
 
+  // Wipe out vision bits, resetting them to race-only bits.
+  clear_ch_vision_bits(ch);
+
   // reset the affected ability scores
   ch->aff_abils = ch->real_abils;
 
@@ -709,24 +712,37 @@ void affect_total(struct char_data * ch)
   /* effects of cyberware */
   for (cyber = ch->cyberware; cyber; cyber = cyber->next_content)
   {
-    if (GET_OBJ_VAL(cyber, 0) == CYB_VCR)
-      has_rig = GET_OBJ_VAL(cyber, 1);
-    else if (GET_OBJ_VAL(cyber, 0) == CYB_REFLEXTRIGGER)
-      has_trigger = GET_OBJ_VAL(cyber, 1);
-    else if (GET_OBJ_VAL(cyber, 0) == CYB_WIREDREFLEXES)
-      has_wired = GET_OBJ_VAL(cyber, 1);
-    else if (GET_OBJ_VAL(cyber, 0) == CYB_MOVEBYWIRE)
-      has_mbw = GET_OBJ_VAL(cyber, 1);
-    else if (GET_OBJ_VAL(cyber, 0) == CYB_DERMALSHEATHING || GET_OBJ_VAL(cyber, 0) == CYB_DERMALPLATING) {
-      if (GET_OBJ_VAL(cyber, 0) == CYB_DERMALSHEATHING && GET_OBJ_VAL(cyber, 3) == 1 && !wearing)
-        AFF_FLAGS(ch).SetBit(AFF_INVISIBLE);
-      // todo
+    switch (GET_CYBERWARE_TYPE(cyber)) {
+      case CYB_VCR:
+        has_rig = GET_CYBERWARE_RATING(cyber);
+        break;
+      case CYB_REFLEXTRIGGER:
+        has_trigger = GET_CYBERWARE_RATING(cyber);
+        break;
+      case CYB_WIREDREFLEXES:
+        has_wired = GET_CYBERWARE_RATING(cyber);
+        break;
+      case CYB_MOVEBYWIRE:
+        has_mbw = GET_CYBERWARE_RATING(cyber);
+        break;
+      case CYB_DERMALSHEATHING:
+      case CYB_DERMALPLATING:
+        // Ruthenium sheathing.
+        if (GET_CYBERWARE_TYPE(cyber) == CYB_DERMALSHEATHING && GET_OBJ_VAL(cyber, 3) == 1 && !wearing)
+          AFF_FLAGS(ch).SetBit(AFF_INVISIBLE);
+        // todo
+        break;
+      case CYB_EYES:
+        apply_vision_bits_from_cyberware(ch, cyber);
+        break;
     }
-    for (j = 0; j < MAX_OBJ_AFFECT; j++)
+
+    for (j = 0; j < MAX_OBJ_AFFECT; j++) {
       affect_modify(ch,
                     cyber->affected[j].location,
                     cyber->affected[j].modifier,
                     cyber->obj_flags.bitvector, TRUE);
+    }
   }
   if (has_wired && has_trigger) {
     if (has_trigger == -1)
@@ -754,11 +770,19 @@ void affect_total(struct char_data * ch)
   if (GET_TEMP_QUI_LOSS(ch))
     GET_QUI(ch) = MAX(0, GET_QUI(ch) - (GET_TEMP_QUI_LOSS(ch) / 4));
 
-  for (cyber = ch->bioware; cyber; cyber = cyber->next_content) {
-    if (GET_OBJ_VAL(cyber, 0) == BIO_PAINEDITOR && GET_OBJ_VAL(cyber, 3)) {
-      GET_WIL(ch) += 1;
-      GET_INT(ch) -= 1;
-      break;
+  for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content) {
+    switch (GET_BIOWARE_TYPE(bio)) {
+      case BIO_PAINEDITOR:
+        if (GET_BIOWARE_IS_ACTIVATED(bio)) {
+          GET_WIL(ch) += 1;
+          GET_INT(ch) -= 1;
+        }
+        break;
+      case BIO_CATSEYES:
+        // M&M p45
+        remove_racial_vision_due_to_eye_replacement(ch);
+        set_vision_bit(ch, VISION_LOWLIGHT, VISION_BIT_IS_NATURAL);
+        break;
     }
   }
 
@@ -801,10 +825,12 @@ void affect_total(struct char_data * ch)
     if (BOOST(ch)[BOD][0] > 0)
       GET_BOD(ch) += BOOST(ch)[BOD][1];
     GET_COMBAT(ch) += MIN(3, GET_POWER(ch, ADEPT_COMBAT_SENSE));
-    if (GET_POWER(ch, ADEPT_LOW_LIGHT))
-      NATURAL_VISION(ch) = LOWLIGHT;
-    if (GET_POWER(ch, ADEPT_THERMO))
-      NATURAL_VISION(ch) = THERMOGRAPHIC;
+    if (GET_POWER(ch, ADEPT_LOW_LIGHT)) {
+      set_vision_bit(ch, VISION_LOWLIGHT, VISION_BIT_IS_ADEPT_POWER);
+    }
+    if (GET_POWER(ch, ADEPT_THERMO)) {
+      set_vision_bit(ch, VISION_THERMOGRAPHIC, VISION_BIT_IS_ADEPT_POWER);
+    }
     if (GET_POWER(ch, ADEPT_IMAGE_MAG))
       AFF_FLAGS(ch).SetBit(AFF_VISION_MAG_2);
   }
@@ -992,12 +1018,12 @@ void affect_total(struct char_data * ch)
   }
 
   // Update current vision to match what's being worn.
-  if (AFF_FLAGGED(ch, AFF_INFRAVISION))
-    CURRENT_VISION(ch) = THERMOGRAPHIC;
-  else if (AFF_FLAGGED(ch, AFF_LOW_LIGHT))
-    CURRENT_VISION(ch) = LOWLIGHT;
-  else
-    CURRENT_VISION(ch) = NATURAL_VISION(ch);
+  if (AFF_FLAGGED(ch, AFF_INFRAVISION)) {
+    set_vision_bit(ch, VISION_THERMOGRAPHIC, VISION_BIT_FROM_EQUIPMENT);
+  }
+  if (AFF_FLAGGED(ch, AFF_LOW_LIGHT)) {
+    set_vision_bit(ch, VISION_LOWLIGHT, VISION_BIT_FROM_EQUIPMENT);
+  }
 
   // Strip invisibility from ruthenium etc if you're wearing about or body items that aren't also ruthenium.
   if (AFF_FLAGGED(ch, AFF_INVISIBLE) || AFF_FLAGGED(ch, AFF_IMP_INVIS))

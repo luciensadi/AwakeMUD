@@ -43,6 +43,7 @@
 #include "config.h"
 #include "bullet_pants.h"
 #include "perception_tests.h"
+#include "vision_overhaul.h"
 
 extern class memoryClass *Mem;
 extern struct time_info_data time_info;
@@ -209,29 +210,43 @@ int light_level(struct room_data *room)
 
   int artificial_light_level = -1;
 
-  // Flashlights. More flashlights, more light.
-  if (room->light[0])
-    artificial_light_level = room->light[0] == 1 ? LIGHT_MINLIGHT : LIGHT_PARTLIGHT;
+  // If we have streetlights, we don't care about flashlights etc-- we're guaranteeing partlight.
+  if (ROOM_FLAGGED(room, ROOM_STREETLIGHTS) && (time_info.hours < 6 || time_info.hours > 19)) {
+    artificial_light_level = LIGHT_PARTLIGHT;
+  } else {
+    // Flashlights. More flashlights, more light.
+    if (room->light[0]) {
+      if (room->light[0] <= 1)
+        artificial_light_level = LIGHT_MINLIGHT;
+      else
+        artificial_light_level = LIGHT_PARTLIGHT;
+    }
 
-  // Light spell.
-  if (room->light[1])
-    artificial_light_level = LIGHT_NORMAL;
+    // We treat the light spell like another flashlight. Its true purpose is adjusting TNs, which is done in vision_overhaul.cpp.
+    if (room->light[1])
+      artificial_light_level = MAX(LIGHT_MINLIGHT, artificial_light_level);
+  }
 
   int candidate_light_level = room->vision[0];
 
   switch (artificial_light_level) {
+    // Minlight overrides full dark, otherwise we use the existing value.
     case LIGHT_MINLIGHT:
       if (room->vision[0] == LIGHT_FULLDARK)
         candidate_light_level = LIGHT_MINLIGHT;
       else
         candidate_light_level = room->vision[0];
       break;
+
+    // Partlight overrides minlight and full dark, otherwise we use the existing value.
     case LIGHT_PARTLIGHT:
       if (room->vision[0] == LIGHT_FULLDARK || room->vision[0] == LIGHT_MINLIGHT)
         candidate_light_level = LIGHT_PARTLIGHT;
       else
         candidate_light_level = room->vision[0];
       break;
+
+    // Normal light overrides normal-no-lit, minlight, and fulldark, otherwise we use the existing value.
     case LIGHT_NORMAL:
       if (room->vision[0] == LIGHT_FULLDARK || room->vision[0] == LIGHT_MINLIGHT || room->vision[0] == LIGHT_NORMALNOLIT)
         candidate_light_level = LIGHT_NORMAL;
@@ -240,18 +255,25 @@ int light_level(struct room_data *room)
       break;
   }
 
+  // Indoor rooms have no weather or time-based light influences.
   if (room->sector_type == SPIRIT_HEARTH)
     return candidate_light_level;
+
+  // Outdoor city rooms (roads, etc) are impacted by ambient light.
   if (room->sector_type == SPIRIT_CITY) {
-    if ((time_info.hours > 6 && time_info.hours < 19))
+    // It's daytime. No changes.
+    if ((time_info.hours > 6 && time_info.hours < 19)) {
       return candidate_light_level;
-    else if (candidate_light_level == LIGHT_NORMALNOLIT)
-      return LIGHT_MINLIGHT;
+    }
+    // It's nighttime, and this area is flagged as having no light.
+    else if (candidate_light_level == LIGHT_NORMALNOLIT) {
+      return MAX(LIGHT_MINLIGHT, artificial_light_level);
+    }
     else
-      return LIGHT_PARTLIGHT;
+      return MAX(LIGHT_PARTLIGHT, artificial_light_level);
   }
   if ((time_info.hours < 6 || time_info.hours > 19) && (candidate_light_level > LIGHT_MINLIGHT || candidate_light_level <= LIGHT_NORMALNOLIT))
-    return LIGHT_MINLIGHT;
+    return MAX(LIGHT_MINLIGHT, artificial_light_level);
   else
     return candidate_light_level;
 }
@@ -363,7 +385,7 @@ int sustain_modifier(struct char_data *ch, char *rbuf, size_t rbuf_len, bool min
 // Adds the combat_mode toggle
 int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int current_visibility_penalty, bool skill_is_magic) {
   extern time_info_data time_info;
-  int base_target = 0, light_target = 0;
+  int base_target = 0;
   // get damage modifier
   base_target += damage_modifier(ch, rbuf, rbuf_len);
   // then apply modifiers for sustained spells
@@ -382,132 +404,10 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int c
       base_target += 2;
       buf_mod(rbuf, rbuf_len, "AstralPercep", 2);
     }
-  } else if (current_visibility_penalty < 8) {
-    switch (light_level(temp_room)) {
-      case LIGHT_FULLDARK:
-        if (CURRENT_VISION(ch) == THERMOGRAPHIC) {
-          if (NATURAL_VISION(ch) == THERMOGRAPHIC) {
-            light_target += 2;
-            buf_mod(rbuf, rbuf_len, "FullDark[TH-N]", 2);
-          } else {
-            light_target += 4;
-            buf_mod(rbuf, rbuf_len, "FullDark[TH-UN]", 4);
-          }
-        } else {
-          light_target += 8;
-          buf_mod(rbuf, rbuf_len, "FullDark", 8);
-        }
-        break;
-      case LIGHT_MINLIGHT:
-        if (CURRENT_VISION(ch) == NORMAL) {
-          light_target += 6;
-          buf_mod(rbuf, rbuf_len, "MinLight[N]", 6);
-        } else {
-          if (NATURAL_VISION(ch) == NORMAL) {
-            light_target += 4;
-            buf_mod(rbuf, rbuf_len, "MinLight[LL/TH-UN]", 4);
-          } else {
-            base_target += 2;
-            buf_mod(rbuf, rbuf_len, "MinLight[LL/TH-N]", 2);
-          }
-        }
-        break;
-      case LIGHT_PARTLIGHT:
-        if (CURRENT_VISION(ch) == NORMAL) {
-          light_target += 2;
-          buf_mod(rbuf, rbuf_len, "PartLight[N]", 2);
-        } else if (CURRENT_VISION(ch) == LOWLIGHT) {
-          if (NATURAL_VISION(ch) != LOWLIGHT) {
-            light_target++;
-            buf_mod(rbuf, rbuf_len, "PartLight[LL-UN]", 1);
-          }
-        } else {
-          if (NATURAL_VISION(ch) != THERMOGRAPHIC) {
-            light_target += 2;
-            buf_mod(rbuf, rbuf_len, "PartLight[TH-UN]", 2);
-          } else {
-            light_target++;
-            buf_mod(rbuf, rbuf_len, "PartLight[TH-N]", 1);
-          }
-        }
-        break;
-      case LIGHT_GLARE:
-        if (CURRENT_VISION(ch) == NORMAL) {
-          light_target += 2;
-          buf_mod(rbuf, rbuf_len, "Glare[N]", 2);
-        } else {
-          if (NATURAL_VISION(ch) == NORMAL) {
-            light_target += 4;
-            buf_mod(rbuf, rbuf_len, "Glare[LL/TH-UN]", 2);
-          } else {
-            light_target += 2;
-            buf_mod(rbuf, rbuf_len, "Glare[LL/TH-N]", 2);
-          }
-        }
-        break;
-    }
-    if (light_target > 0 && temp_room->light[1]) {
-      if (temp_room->light[2]) {
-        light_target = MAX(0, light_target - temp_room->light[2]);
-        buf_mod(rbuf, rbuf_len, "LightSpell", - temp_room->light[2]);
-      } else
-        light_target /= 2;
-    }
-    if (temp_room->shadow[0]) {
-      light_target += temp_room->shadow[1];
-      buf_mod(rbuf, rbuf_len, "ShadowSpell", temp_room->shadow[1]);
-    }
-    int smoke_target = 0;
-
-    if (temp_room->vision[1] == LIGHT_MIST)
-      if (CURRENT_VISION(ch) == NORMAL || (CURRENT_VISION(ch) == LOWLIGHT && NATURAL_VISION(ch) == LOWLIGHT)) {
-        smoke_target += 2;
-        buf_mod(rbuf, rbuf_len, "Mist", 2);
-      }
-    if (temp_room->vision[1] == LIGHT_LIGHTSMOKE || (weather_info.sky == SKY_RAINING &&
-                                                             temp_room->sector_type != SPIRIT_HEARTH && !ROOM_FLAGGED(temp_room, ROOM_INDOORS))) {
-      if (CURRENT_VISION(ch) == NORMAL || (CURRENT_VISION(ch) == LOWLIGHT && NATURAL_VISION(ch) != LOWLIGHT)) {
-        smoke_target += 4;
-        buf_mod(rbuf, rbuf_len, "LSmoke/LRain", 4);
-      } else if (CURRENT_VISION(ch) == LOWLIGHT) {
-        smoke_target += 2;
-        buf_mod(rbuf, rbuf_len, "LSmoke/LRain", 2);
-      }
-    }
-    if (temp_room->vision[1] == LIGHT_HEAVYSMOKE || (weather_info.sky == SKY_LIGHTNING &&
-                                                             temp_room->sector_type != SPIRIT_HEARTH && !ROOM_FLAGGED(temp_room, ROOM_INDOORS))) {
-      if (CURRENT_VISION(ch) == NORMAL || (CURRENT_VISION(ch) == LOWLIGHT && NATURAL_VISION(ch) == NORMAL)) {
-        smoke_target += 6;
-        buf_mod(rbuf, rbuf_len, "HSmoke/HRain", 6);
-      } else if (CURRENT_VISION(ch) == LOWLIGHT) {
-        smoke_target += 4;
-        buf_mod(rbuf, rbuf_len, "HSmoke/HRain", 4);
-      } else if (CURRENT_VISION(ch) == THERMOGRAPHIC && NATURAL_VISION(ch) != THERMOGRAPHIC) {
-        smoke_target++;
-        buf_mod(rbuf, rbuf_len, "HSmoke/HRain", 1);
-      }
-    }
-    if (temp_room->vision[1] == LIGHT_THERMALSMOKE) {
-      if (CURRENT_VISION(ch) == NORMAL || CURRENT_VISION(ch) == LOWLIGHT) {
-        smoke_target += 4;
-        buf_mod(rbuf, rbuf_len, "TSmoke", 4);
-      } else {
-        if (NATURAL_VISION(ch) == THERMOGRAPHIC) {
-          smoke_target += 6;
-          buf_mod(rbuf, rbuf_len, "TSmoke", 6);
-        } else {
-          smoke_target += 8;
-          buf_mod(rbuf, rbuf_len, "TSmoke", 8);
-        }
-      }
-    }
-    // The maximum visibility penalty we apply is +8 TN to avoid things like an invisible person in a smoky pitch-black room getting +24 to hit TN.
-    if (light_target + smoke_target + current_visibility_penalty > 8) {
-      buf_mod(rbuf, rbuf_len, "ButVisPenaltyMaxIs8", (8 - current_visibility_penalty) - (light_target + smoke_target));
-      base_target += 8 - current_visibility_penalty;
-    } else
-      base_target += light_target + smoke_target;
+  } else {
+    base_target += get_vision_penalty(ch, temp_room, rbuf, rbuf_len);
   }
+
   base_target += GET_TARGET_MOD(ch);
   buf_mod(rbuf, rbuf_len, "GET_TARGET_MOD", GET_TARGET_MOD(ch) );
   if (GET_RACE(ch) == RACE_NIGHTONE && ((time_info.hours > 6) && (time_info.hours < 19)) && OUTSIDE(ch))
@@ -2324,7 +2224,7 @@ bool invis_ok(struct char_data *ch, struct char_data *vict) {
   }
 
   // Ruthenium is pierced by thermographic vision, which is default on vehicles.
-  bool can_see_through_standard_invis = (CURRENT_VISION(ch) == THERMOGRAPHIC || AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE));
+  bool can_see_through_standard_invis = (has_vision(ch, VISION_THERMOGRAPHIC) || AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE));
   if (IS_AFFECTED(vict, AFF_INVISIBLE)) {
     return can_see_through_standard_invis;
   }
@@ -2822,8 +2722,9 @@ void copy_over_necessary_info(struct char_data *original, struct char_data *clon
   REPLICATE(points.init_roll);
   REPLICATE(points.sustained[0]);
   REPLICATE(points.sustained[1]);
-  REPLICATE(points.vision[0]);
-  REPLICATE(points.vision[1]);
+
+  copy_vision_from_original_to_clone(original, clone);
+
   REPLICATE(points.fire[0]);
   REPLICATE(points.fire[1]);
   REPLICATE(points.reach[0]);
@@ -3469,9 +3370,6 @@ bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struc
 }
 
 bool LIGHT_OK_ROOM_SPECIFIED(struct char_data *sub, struct room_data *provided_room) {
-  struct obj_data *light;
-  struct room_data *in_room;
-
   // Fix the ruh-rohs.
   if (!sub || !provided_room)
     return FALSE;
@@ -3481,11 +3379,7 @@ bool LIGHT_OK_ROOM_SPECIFIED(struct char_data *sub, struct room_data *provided_r
     return TRUE;
 
   // If you have thermographic vision or holy light, you're good.
-  if (CURRENT_VISION((sub)) == THERMOGRAPHIC || HOLYLIGHT_OK(sub))
-    return TRUE;
-
-  // Check room light levels.
-  if (IS_LIGHT(provided_room) || (CURRENT_VISION(sub) == NORMAL && (light_level(provided_room) != LIGHT_MINLIGHT && light_level(provided_room) != LIGHT_FULLDARK)))
+  if (has_vision(sub, VISION_THERMOGRAPHIC) || HOLYLIGHT_OK(sub))
     return TRUE;
 
   // If you're in a vehicle, we assume you have headlights and interior lights.
@@ -3499,21 +3393,18 @@ bool LIGHT_OK_ROOM_SPECIFIED(struct char_data *sub, struct room_data *provided_r
         return TRUE;
   }
 
-  // If anyone in the room has a flashlight equipped, you're good. Note that this requires further checks in combat modifiers-- this is really just partlight.
-  if ((in_room = get_ch_in_room(sub))) {
-    for (struct char_data *tch = in_room->people; tch; tch = tch->next_in_room) {
-      // Have a flashlight?
-      if ((light = GET_EQ(tch, WEAR_LIGHT)) && GET_OBJ_TYPE(light) == ITEM_LIGHT && GET_OBJ_VAL(light, 2) != 0)
-        return TRUE;
+  // Otherwise, fetch the room's light level. Note that light_level already handles flashlights etc.
+  int room_light_level = light_level(provided_room);
 
-      // TODO: Have the light spell on them?
+  // At this point, we know that we're using ultrasonic, low-light, or normal vision.
+  // Ultrasonic can see in any light condition. LL can see in minlight and better. Normal is the most restricted.
+  if (room_light_level == LIGHT_FULLDARK)
+    return has_vision(sub, VISION_ULTRASONIC);
+  if (room_light_level == LIGHT_MINLIGHT)
+    return has_vision(sub, VISION_LOWLIGHT);
 
-      // TODO: Have the shadow spell on them?
-    }
-  }
-
-  // No saving grace, you get darkness.
-  return FALSE;
+  // It's bright enough for your vision class.
+  return TRUE;
 }
 
 float get_proto_weight(struct obj_data *obj) {
@@ -3773,36 +3664,6 @@ void turn_hardcore_off_for_character(struct char_data *ch) {
   PLR_FLAGS(ch).RemoveBit(PLR_NODELETE);
   snprintf(buf, sizeof(buf), "UPDATE pfiles SET Hardcore=0, NoDelete=0 WHERE idnum=%ld;", GET_IDNUM(ch));
   mysql_wrapper(mysql, buf);
-}
-
-void set_natural_vision_for_race(struct char_data *ch) {
-  switch (GET_RACE(ch)) {
-    case RACE_HUMAN:
-    case RACE_OGRE:
-      NATURAL_VISION(ch) = NORMAL;
-      break;
-    case RACE_DWARF:
-    case RACE_GNOME:
-    case RACE_MENEHUNE:
-    case RACE_KOBOROKURU:
-    case RACE_TROLL:
-    case RACE_CYCLOPS:
-    case RACE_FOMORI:
-    case RACE_GIANT:
-    case RACE_MINOTAUR:
-      NATURAL_VISION(ch) = THERMOGRAPHIC;
-      break;
-    case RACE_ORK:
-    case RACE_HOBGOBLIN:
-    case RACE_SATYR:
-    case RACE_ONI:
-    case RACE_ELF:
-    case RACE_WAKYAMBI:
-    case RACE_NIGHTONE:
-    case RACE_DRYAD:
-      NATURAL_VISION(ch) = LOWLIGHT;
-      break;
-  }
 }
 
 // Returns -1 on error, make sure you catch that!

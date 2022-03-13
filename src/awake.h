@@ -597,9 +597,11 @@ enum {
 #define ROOM_RADIATION                  36 // You take radiation damage while you're here, scaled by Rating.
 #define ROOM_MAX                        37
 
-#define NORMAL    0
-#define LOWLIGHT  1
-#define THERMOGRAPHIC  2
+#define VISION_NORMAL         0
+#define VISION_LOWLIGHT       1
+#define VISION_THERMOGRAPHIC  2
+#define VISION_ULTRASONIC     3
+#define NUM_VISION_TYPES      4
 
 #define LIGHT_NORMAL    0
 #define LIGHT_NORMALNOLIT  1

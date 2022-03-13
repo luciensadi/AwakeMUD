@@ -4880,34 +4880,10 @@ void deactivate_power(struct char_data *ch, int power)
       send_to_char("You return to your physical senses.\r\n", ch);
       break;
     case ADEPT_LOW_LIGHT:
+      remove_vision_bit(ch, VISION_LOWLIGHT, VISION_BIT_IS_ADEPT_POWER);
+      break;
     case ADEPT_THERMO:
-      switch (GET_RACE(ch)) {
-        case RACE_HUMAN:
-        case RACE_OGRE:
-          NATURAL_VISION(ch) = NORMAL;
-          break;
-        case RACE_DWARF:
-        case RACE_GNOME:
-        case RACE_MENEHUNE:
-        case RACE_KOBOROKURU:
-        case RACE_TROLL:
-        case RACE_CYCLOPS:
-        case RACE_FOMORI:
-        case RACE_GIANT:
-        case RACE_MINOTAUR:
-          NATURAL_VISION(ch) = THERMOGRAPHIC;
-          break;
-        case RACE_ORK:
-        case RACE_HOBGOBLIN:
-        case RACE_SATYR:
-        case RACE_ONI:
-        case RACE_ELF:
-        case RACE_WAKYAMBI:
-        case RACE_NIGHTONE:
-        case RACE_DRYAD:
-          NATURAL_VISION(ch) = LOWLIGHT;
-          break;
-        }
+      remove_vision_bit(ch, VISION_THERMOGRAPHIC, VISION_BIT_IS_ADEPT_POWER);
       break;
     case ADEPT_LIVINGFOCUS:
       if (GET_SUSTAINED_NUM(ch))

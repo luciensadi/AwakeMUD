@@ -16,6 +16,7 @@
 #include "playergroup_classes.h"
 #include "protocol.h"
 #include "chargen.h"
+#include "vision_overhaul.h"
 
 #define SPECIAL(name) \
    int (name)(struct char_data *ch, void *me, int cmd, char *argument)
@@ -438,11 +439,16 @@ struct char_point_data
   ubyte resistpain;
   ubyte lastdamage;
   int track[2];
-  byte vision[2];
+  Bitfield vision[NUM_VISION_TYPES];
   ubyte fire[2];
   ubyte binding;
   ubyte reach[2];
   int extras[2];
+
+  // Adding something important? If it needs to be replicated to medited mobs, also update
+  // utils.cpp's copy_over_necessary_info().
+
+  // Need defaults? Set them in db.cpp and olc.cpp (search for 'memset.*struct.*char_data').
 };
 
 struct char_special_data_saved

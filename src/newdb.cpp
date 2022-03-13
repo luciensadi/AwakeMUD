@@ -1127,33 +1127,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
     GET_COND(ch, COND_DRUNK) = -1;
   }
 
-  switch (GET_RACE(ch)) {
-  case RACE_HUMAN:
-  case RACE_OGRE:
-    NATURAL_VISION(ch) = NORMAL;
-    break;
-  case RACE_DWARF:
-  case RACE_GNOME:
-  case RACE_MENEHUNE:
-  case RACE_KOBOROKURU:
-  case RACE_TROLL:
-  case RACE_CYCLOPS:
-  case RACE_FOMORI:
-  case RACE_GIANT:
-  case RACE_MINOTAUR:
-    NATURAL_VISION(ch) = THERMOGRAPHIC;
-    break;
-  case RACE_ORK:
-  case RACE_HOBGOBLIN:
-  case RACE_SATYR:
-  case RACE_ONI:
-  case RACE_ELF:
-  case RACE_WAKYAMBI:
-  case RACE_NIGHTONE:
-  case RACE_DRYAD:
-    NATURAL_VISION(ch) = LOWLIGHT;
-    break;
-  }
+  set_natural_vision_for_race(ch);
 
   return true;
 }

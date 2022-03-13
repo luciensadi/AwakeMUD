@@ -2153,6 +2153,23 @@ const char *cyber_grades[4] =
   "Delta"
 };
 
+const char *vision_types[] = {
+  "Normal",
+  "Low-Light",
+  "Thermographic",
+  "Ultrasonic"
+};
+
+const char *vision_bits[] = {
+  "natural",
+  "implanted",
+  "equipment",
+  "optical",
+  "electronic",
+  "adept-power",
+  "spelled"
+};
+
 const char *eyemods[] = {
   "Camera",
   "Cyber Replacement (MUST SET FOR PACKAGES)",
