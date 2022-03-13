@@ -6062,7 +6062,7 @@ SPECIAL(axehead) {
   int message_num;
   const char *axehead_messages[] = {
     "Runners these days don't realize how valuable keeping notes on their pocket secretary is. Like where Johnsons hang out.",
-    "Don't hide your radio or phone in a box, you won't be able to hear them - but putting it right in your coat pocket won't do much but break it if you get shot.",
+    "Best to keep your phone and radio in hand. In a box, you won't hear it, and in your pocket, it'll just get shot.",
     "Seems like every day I hear about another wanna-be runner getting gunned down by the Star for walking around with their gun or cyberdeck in hand.",
     "Back in my day, we didn't have anything like the 8 MHz band available. Being able to talk to runners is a blessing.",
     "When in doubt, just take a cab back to somewhere familiar.",
@@ -6070,7 +6070,7 @@ SPECIAL(axehead) {
     "It's dangerous to go alone. Make friends.",
     "Keep your eyes and ears open. You never know when you'll make an unfair weather friend."
   };
-#define NUM_AXEHEAD_MESSAGES 7
+#define NUM_AXEHEAD_MESSAGES 8
 
   if (cmd || FIGHTING(ch) || !AWAKE(ch) || (message_num = number(0, NUM_AXEHEAD_MESSAGES * 20)) >= NUM_AXEHEAD_MESSAGES || message_num == axehead_last_said)
     return FALSE;
