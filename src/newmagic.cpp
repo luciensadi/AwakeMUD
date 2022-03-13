@@ -667,7 +667,7 @@ void aspect_bonus(struct char_data *ch, int action, int spell_idx, int &target, 
    }
 }
 
-void aspect_conjuring_bonus(struct char_data *ch, int action, int type, int &target, int &skill);
+void aspect_conjuring_bonus(struct char_data *ch, int action, int type, int &target, int &skill)
 {
   if (action == CONJURING)
   {
