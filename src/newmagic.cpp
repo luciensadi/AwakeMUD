@@ -672,42 +672,43 @@ void aspect_conjuring_bonus(struct char_data *ch, int action, int type, int &tar
   if (action == CONJURING)
   {
     switch (GET_ASPECT(ch)) {
-    case ASPECT_EARTHMAGE:
-      if (type == ELEM_EARTH) {
-        skill += 2;
-        act("Skill +2: aspect", FALSE, ch, 0, 0, TO_ROLLS);
-      } else if (type == ELEM_AIR) {
-        skill -= 1;
-        act("Skill -1: aspect", FALSE, ch, 0, 0, TO_ROLLS);
+      case ASPECT_EARTHMAGE:
+        if (type == ELEM_EARTH) {
+          skill += 2;
+          act("Skill +2: aspect", FALSE, ch, 0, 0, TO_ROLLS);
+       } else if (type == ELEM_AIR) {
+          skill -= 1;
+          act("Skill -1: aspect", FALSE, ch, 0, 0, TO_ROLLS);
+        }
+        break;
+      case ASPECT_AIRMAGE:
+        if (type == ELEM_AIR) {
+          skill += 2;
+          act("Skill +2: aspect", FALSE, ch, 0, 0, TO_ROLLS);
+        } else if (type == ELEM_EARTH) {
+          skill -= 1;
+          act("Skill -1: aspect", FALSE, ch, 0, 0, TO_ROLLS);
+        }
+        break;
+      case ASPECT_FIREMAGE:
+        if (type == ELEM_FIRE) {
+          skill += 2;
+          act("Skill +2: aspect", FALSE, ch, 0, 0, TO_ROLLS);
+        } else if (type == ELEM_WATER) {
+          skill -= 1;
+          act("Skill -1: aspect", FALSE, ch, 0, 0, TO_ROLLS);
+        }
+        break;
+      case ASPECT_WATERMAGE:
+        if (type == ELEM_WATER) {
+          skill += 2;
+          act("Skill +2: aspect", FALSE, ch, 0, 0, TO_ROLLS);
+        } else if (type == ELEM_FIRE) {
+          skill -= 1;
+          act("Skill -1: aspect", FALSE, ch, 0, 0, TO_ROLLS);
+        }
+        break;
       }
-      break;
-    case ASPECT_AIRMAGE:
-      if (type == ELEM_AIR) {
-        skill += 2;
-        act("Skill +2: aspect", FALSE, ch, 0, 0, TO_ROLLS);
-      } else if (type == ELEM_EARTH) {
-        skill -= 1;
-        act("Skill -1: aspect", FALSE, ch, 0, 0, TO_ROLLS);
-      }
-      break;
-    case ASPECT_FIREMAGE:
-      if (type == ELEM_FIRE) {
-        skill += 2;
-        act("Skill +2: aspect", FALSE, ch, 0, 0, TO_ROLLS);
-      } else if (type == ELEM_WATER) {
-        skill -= 1;
-        act("Skill -1: aspect", FALSE, ch, 0, 0, TO_ROLLS);
-      }
-      break;
-    case ASPECT_WATERMAGE:
-      if (type == ELEM_WATER) {
-        skill += 2;
-        act("Skill +2: aspect", FALSE, ch, 0, 0, TO_ROLLS);
-      } else if (type == ELEM_FIRE) {
-        skill -= 1;
-        act("Skill -1: aspect", FALSE, ch, 0, 0, TO_ROLLS);
-      }
-      break;
    }
 }
 
