@@ -966,12 +966,13 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 #define GET_CYBERDECK_IS_INCOMPLETE(deck)         (GET_OBJ_VAL((deck), 9))
 #define GET_CYBERDECK_FREE_STORAGE(deck)          (GET_CYBERDECK_TOTAL_STORAGE((deck)) -GET_CYBERDECK_USED_STORAGE((deck)))
 
-// ITEM_PROGRAM convenience defines
+// ITEM_PROGRAM convenience defines, aka GET_SOFTWARE
 #define GET_PROGRAM_TYPE(prog)                    (GET_OBJ_VAL((prog), 0))
 #define GET_PROGRAM_RATING(prog)                  (GET_OBJ_VAL((prog), 1))
 #define GET_PROGRAM_SIZE(prog)                    (GET_OBJ_VAL((prog), 2))
 #define GET_PROGRAM_ATTACK_DAMAGE(prog)           (GET_OBJ_VAL((prog), 3))
 #define GET_PROGRAM_IS_DEFAULTED(prog)            (GET_OBJ_VAL((prog), 4))
+/* Values 5 through 9 are reserved by the Matrix code too! See GET_DECK_ACCESSORY_FILE_* for details. */
 
 // ITEM_GUN_MAGAZINE convenience defines
 #define GET_MAGAZINE_BONDED_MAXAMMO(magazine)     (GET_OBJ_VAL((magazine), 0))
