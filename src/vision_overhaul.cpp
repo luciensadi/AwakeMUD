@@ -382,7 +382,11 @@ const char *write_vision_string_for_display(struct char_data *ch, int mode) {
                printed_something ? "^n, ^C" : "",
                vision_types[vision_idx],
                has_natural_vision(ch, vision_idx) ? "natural" : "artificial",
+#ifdef DIES_IRAE
                has_castable_vision(ch, vision_idx) ? ", castable" : "",
+#else
+               "",
+#endif
                mode == VISION_STRING_MODE_STAFF ? " [" : "",
                bit_string,
                mode == VISION_STRING_MODE_STAFF ? "]" : ""
@@ -390,6 +394,8 @@ const char *write_vision_string_for_display(struct char_data *ch, int mode) {
       printed_something = TRUE;
     }
   }
+
+  strlcat(vision_string_buf, "\r\n", sizeof(vision_string_buf));
 
   return vision_string_buf;
 }
