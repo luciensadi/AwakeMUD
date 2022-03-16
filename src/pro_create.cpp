@@ -595,8 +595,8 @@ void update_buildrepair(void)
         STOP_WORKING(CH);
         int skill = GET_SKILL(CH, SKILL_CONJURING);
         int target = CH->char_specials.conjure[1];
-	int type = CH->char_specials.conjure[0];
-	aspect_conjuring_bonus(CH, CONJURING, type, target, skill);
+        int type = CH->char_specials.conjure[0];
+        aspect_conjuring_bonus(CH, CONJURING, type, target, skill);
 
         char rollbuf[5000];
         snprintf(rollbuf, sizeof(rollbuf), "Conjure check: initial skill %d, initial target %d", skill, target);
