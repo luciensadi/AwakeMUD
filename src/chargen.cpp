@@ -1789,6 +1789,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
       }
     start_game(d);
     break;
+    }
   case CCR_ASPECT:
     if (GET_TRADITION(d->character) == TRAD_SHAMANIC) {
       switch (i) {
@@ -1833,6 +1834,5 @@ void create_parse(struct descriptor_data *d, const char *arg)
       }
     start_game(d);
     break;
-    }
   }
 }
