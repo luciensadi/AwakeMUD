@@ -5611,14 +5611,14 @@ void price_cyber(struct obj_data *obj)
        }
        break;
     case CYB_FINGERTIP:
-      GET_OBJ_VAL(obj, 1) = 0;
+      GET_CYBERWARE_RATING(obj) = 0;
       GET_CYBERWARE_ESSENCE_COST(obj) = 10;
       GET_OBJ_COST(obj) = 3000;
       GET_OBJ_AVAILTN(obj) = 3;
       GET_OBJ_AVAILDAY(obj) = 1;
       break;
     case CYB_HANDBLADE:
-      GET_OBJ_VAL(obj, 1) = 0;
+      GET_CYBERWARE_RATING(obj) = 0;
       if (GET_OBJ_VAL(obj, 3)) {
         GET_CYBERWARE_ESSENCE_COST(obj) = 25;
         GET_OBJ_COST(obj) = 10000;
@@ -5630,10 +5630,10 @@ void price_cyber(struct obj_data *obj)
       GET_OBJ_AVAILDAY(obj) = 5;
       break;
     case CYB_HANDRAZOR:
-      GET_OBJ_VAL(obj, 1) = 0;
+      GET_CYBERWARE_RATING(obj) = 0;
       GET_OBJ_AVAILDAY(obj) = 3;
-      if (IS_SET(GET_OBJ_VAL(obj, 3), 1 << CYBERWEAPON_RETRACTABLE)) {
-        GET_CYBERWARE_ESSENCE_COST(obj) = 25;
+      if (IS_SET(GET_CYBERWARE_FLAGS(obj), 1 << CYBERWEAPON_RETRACTABLE)) {
+        GET_CYBERWARE_ESSENCE_COST(obj) = 20;
         GET_OBJ_COST(obj) = 9000;
         GET_OBJ_AVAILTN(obj) = 5;
       } else {
@@ -5641,13 +5641,13 @@ void price_cyber(struct obj_data *obj)
         GET_CYBERWARE_ESSENCE_COST(obj) = 10;
         GET_OBJ_AVAILTN(obj) = 3;
       }
-      if (IS_SET(GET_OBJ_VAL(obj, 3), 1 << CYBERWEAPON_IMPROVED)) {
+      if (IS_SET(GET_CYBERWARE_FLAGS(obj), 1 << CYBERWEAPON_IMPROVED)) {
         GET_OBJ_COST(obj) += 8500;
         GET_OBJ_AVAILTN(obj) = 6;
       }
       break;
     case CYB_HANDSPUR:
-      GET_OBJ_VAL(obj, 1) = 0;
+      GET_CYBERWARE_RATING(obj) = 0;
       if (GET_OBJ_VAL(obj, 3)) {
         GET_CYBERWARE_ESSENCE_COST(obj) = 30;
         GET_OBJ_COST(obj) = 11500;
