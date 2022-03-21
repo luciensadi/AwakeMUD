@@ -2582,8 +2582,8 @@ void matrix_update()
           file->next_content = NULL;
           next = NULL;
         }
-        if (GET_OBJ_TYPE(file) != ITEM_DECK_ACCESSORY) {
-          snprintf(buf, sizeof(buf), "SYSERR: Found non-file object '%s' (%ld, quest=%s) in Matrix file list for host %ld! Terminating iteration immediately.\r\n",
+        if (GET_OBJ_TYPE(file) != ITEM_DECK_ACCESSORY && GET_OBJ_TYPE(file) != ITEM_PROGRAM) {
+          snprintf(buf, sizeof(buf), "SYSERR: Found non-file, non-program object '%s' (%ld, quest=%s) in Matrix file list for host %ld! Terminating iteration immediately.",
                    GET_OBJ_NAME(file),
                    GET_OBJ_VNUM(file),
                    file->obj_flags.quest_id != 0 ? "TRUE" : "FALSE",
@@ -2592,8 +2592,8 @@ void matrix_update()
           mudlog(buf, NULL, LOG_SYSLOG, TRUE);
           return;
         }
-        if (file->next_content && GET_OBJ_TYPE(file->next_content) != ITEM_DECK_ACCESSORY) {
-          snprintf(buf, sizeof(buf), "SYSERR: Found non-file object '%s' (%ld) in Matrix file->next_content! Striking that link, object will be orphaned if not located elsewhere.\r\n", GET_OBJ_NAME(file), GET_OBJ_VNUM(file));
+        if (file->next_content && (GET_OBJ_TYPE(file->next_content) != ITEM_DECK_ACCESSORY && GET_OBJ_TYPE(file->next_content) != ITEM_PROGRAM)) {
+          snprintf(buf, sizeof(buf), "SYSERR: Found non-file, non-program object '%s' (%ld) in Matrix file->next_content! Striking that link, object will be orphaned if not located elsewhere.", GET_OBJ_NAME(file), GET_OBJ_VNUM(file));
           mudlog(buf, NULL, LOG_SYSLOG, TRUE);
           file->next_content = next = NULL;
         }

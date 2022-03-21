@@ -1243,7 +1243,27 @@ void list_one_char(struct char_data * i, struct char_data * ch)
   else if (AFF_FLAGGED(i, AFF_BONDING))
     strlcat(buf, " is here, performing a bonding ritual.", sizeof(buf));
   else if (AFF_FLAGGED(i, AFF_PRONE)) {
-    if (WEAPON_IS_GUN(GET_EQ(i, WEAR_WIELD))) {
+    struct obj_data *wielded = GET_EQ(i, WEAR_WIELD);
+    bool is_using_bipod_or_tripod = FALSE;
+
+    if (wielded && WEAPON_IS_GUN(wielded)) {
+      rnum_t rnum;
+
+      for (int access_loc = ACCESS_LOCATION_TOP; access_loc <= ACCESS_LOCATION_UNDER; access_loc++) {
+        if (GET_WEAPON_ATTACH_LOC(wielded, access_loc) <= 0)
+          continue;
+
+        if ((rnum = real_object(GET_WEAPON_ATTACH_LOC(wielded, access_loc))) > -1) {
+          if (GET_OBJ_TYPE(&obj_proto[rnum]) == ITEM_GUN_ACCESSORY
+              && (GET_ACCESSORY_TYPE(&obj_proto[rnum]) == ACCESS_BIPOD || GET_ACCESSORY_TYPE(&obj_proto[rnum]) == ACCESS_TRIPOD))
+          {
+            is_using_bipod_or_tripod = TRUE;
+          }
+        }
+      }
+    }
+
+    if (is_using_bipod_or_tripod) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " is prone here, manning %s.", decapitalize_a_an(GET_OBJ_NAME(GET_EQ(i, WEAR_WIELD))));
     } else {
       strlcat(buf, " is lying prone here.", sizeof(buf));
@@ -5428,7 +5448,25 @@ ACMD(do_scan)
                 }
 
               }
-              snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "  %s%s\r\n", GET_NAME(list), FIGHTING(list) == ch ? " (fighting you!)" : "");
+
+              char desc_line[200];
+              strlcpy(desc_line, "", sizeof(desc_line));
+
+              if (list->mob_specials.quest_id == GET_IDNUM(ch)) {
+                strlcat(desc_line, "(quest) ", sizeof(desc_line));
+              } else if (list->mob_specials.quest_id != 0) {
+                strlcat(desc_line, "(protected) ", sizeof(desc_line));
+              }
+
+              if (IS_AFFECTED(list, AFF_INVISIBLE) || IS_AFFECTED(list, AFF_IMP_INVIS) || IS_AFFECTED(list, AFF_SPELLINVIS) || IS_AFFECTED(list, AFF_SPELLIMPINVIS)) {
+                strlcat(desc_line, "(invisible) ", sizeof(desc_line));
+              }
+
+              if ((IS_ASTRAL(ch) || IS_DUAL(ch)) && IS_ASTRAL(list)) {
+                  strlcat(desc_line, "(astral) ", sizeof(desc_line));
+              }
+
+              snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "  %s%s%s\r\n", desc_line, GET_NAME(list), FIGHTING(list) == ch ? " (fighting you!)" : "");
               onethere = TRUE;
               anythere = TRUE;
             }

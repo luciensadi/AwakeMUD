@@ -353,6 +353,9 @@ void mobact_change_firemode(struct char_data *ch) {
   if (!(weapon = GET_EQ(ch, WEAR_WIELD)) || !IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon))) {
     // Melee fighters never want to be prone, so they'll stand up from that.
     if (AFF_FLAGGED(ch, AFF_PRONE)) {
+#ifdef MOBACT_DEBUG
+      act("$n is prone with a non-gun weapon; standing.", FALSE, ch, NULL, NULL, TO_ROOM);
+#endif
       strncpy(buf3, "", sizeof(buf3));
       do_prone(ch, buf3, 0, 0);
     }
@@ -481,6 +484,12 @@ void mobact_change_firemode(struct char_data *ch) {
     }
   } // End check for weapon with FA.
   else {
+    // If we're prone, we almost certainly don't want to be. Stand back up. We only consume proning_desire in MODE_FA above.
+    if (AFF_FLAGGED(ch, AFF_PRONE)) {
+      strlcpy(buf3, "", sizeof(buf3));
+      do_prone(ch, buf3, 0, 0);
+    }
+
     // Set to SA, or fallback to SS.
     if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(weapon), 1 << MODE_SA)) {
       GET_WEAPON_FIREMODE(weapon) = MODE_SA;
@@ -1503,13 +1512,15 @@ void mobile_activity(void)
       int weapon_skill_dice = GET_SKILL(ch, weapon_skill) ? GET_SKILL(ch, weapon_skill) : GET_SKILL(ch, return_general(weapon_skill));
       int melee_skill_dice = GET_SKILL(ch, melee_skill) ? GET_SKILL(ch, melee_skill) : GET_SKILL(ch, return_general(melee_skill));
 
+      int indexed_attack_type = MAX(0, MIN(MAX_WEAP - 1, GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_WIELD))));
+
       if (weapon_skill_dice <= 0) {
         #ifndef SUPPRESS_BUILD_ERROR_MESSAGES
         snprintf(build_err_msg, sizeof(build_err_msg), "CONTENT ERROR: %s (%ld) is wielding %s %s, but has no weapon skill in %s!",
                  GET_CHAR_NAME(ch),
                  GET_MOB_VNUM(ch),
-                 AN(weapon_type[GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_WIELD))]),
-                 weapon_type[GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_WIELD))],
+                 AN(weapon_type[indexed_attack_type]),
+                 weapon_type[indexed_attack_type],
                  skills[GET_WEAPON_SKILL(GET_EQ(ch, WEAR_WIELD))].name
                );
         mudlog(build_err_msg, ch, LOG_MISCLOG, TRUE);
@@ -1521,8 +1532,8 @@ void mobile_activity(void)
         snprintf(build_err_msg, sizeof(build_err_msg), "CONTENT ERROR: Skilled mob %s (%ld) is wielding %s %s%s, but has no melee skill in %s!",
                  GET_CHAR_NAME(ch),
                  GET_MOB_VNUM(ch),
-                 AN(weapon_type[GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_WIELD))]),
-                 weapon_type[GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_WIELD))],
+                 AN(weapon_type[indexed_attack_type]),
+                 weapon_type[indexed_attack_type],
                  melee_skill == SKILL_POLE_ARMS ? " (with bayonet)" : "",
                  skills[melee_skill].name
                );

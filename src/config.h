@@ -190,6 +190,12 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 #define FAILED_SPELL_LEARNING_WAIT_STATE                       (0.25 RL_SEC)
 #define INITIATION_CAP                                         50
 
+#define MAX_MOB_COMBAT_MAGIC_FORCE                             10
+#define MIN_MOB_COMBAT_MAGIC_FORCE                             4
+
+#define MAX_MOB_COMBAT_MAGIC_WOUND                             SERIOUS
+#define MIN_MOB_COMBAT_MAGIC_WOUND                             MODERATE
+
 // How many sunrises (currently spans of 48 minutes) are spirits good for?
 #define NUMBER_OF_IG_DAYS_FOR_SPIRIT_TO_LAST                   4
 

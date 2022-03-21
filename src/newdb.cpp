@@ -2558,10 +2558,14 @@ void save_aliases_to_db(struct char_data *player) {
   mysql_wrapper(mysql, buf);
   strcpy(buf, "INSERT INTO pfiles_alias (idnum, command, replacement) VALUES (");
   int q = 0;
+  char cmd_buf[500];
   for (struct alias *a = GET_ALIASES(player); a; a = a->next) {
     if (q)
       strcat(buf, "), (");
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, '%s', '%s'", GET_IDNUM(player), a->command, prepare_quotes(buf3, a->replacement, sizeof(buf3) / sizeof(buf3[0])));
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, '%s', '%s'",
+             GET_IDNUM(player),
+             prepare_quotes(cmd_buf, a->command, sizeof(cmd_buf) / sizeof(cmd_buf[0])),
+             prepare_quotes(buf3, a->replacement, sizeof(buf3) / sizeof(buf3[0])));
     q = 1;
   }
   if (q) {

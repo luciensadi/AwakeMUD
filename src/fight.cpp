@@ -4998,7 +4998,6 @@ void perform_violence(void)
     if ((ch->points.fire[0] > 0 && success_test(GET_WIL(ch), 6) < 0)
         || engulfed)
     {
-      act("$n skipping turn- on fire or engulfed.", FALSE, ch, 0, 0, TO_ROLLS);
       continue;
     }
 
@@ -5060,7 +5059,6 @@ void perform_violence(void)
         AFF_FLAGS(mage).RemoveBit(AFF_BANISH);
         AFF_FLAGS(spirit).RemoveBit(AFF_BANISH);
       }
-      act("$n skipping turn- processed banishment.", FALSE, ch, 0, 0, TO_ROLLS);
       continue;
     }
 
@@ -5075,7 +5073,6 @@ void perform_violence(void)
       {
         // Only continue if we successfully cast.
         if (mob_magic(ch)) {
-          act("$n skipping turn- processed mob_magic.", FALSE, ch, 0, 0, TO_ROLLS);
           continue;
         }
       }
@@ -5084,7 +5081,6 @@ void perform_violence(void)
         cast_spell(ch, ch->squeue->spell, ch->squeue->sub, ch->squeue->force, ch->squeue->arg);
         DELETE_ARRAY_IF_EXTANT(ch->squeue->arg);
         DELETE_AND_NULL(ch->squeue);
-        act("$n skipping turn- processed squeue.", FALSE, ch, 0, 0, TO_ROLLS);
         continue;
       }
     }
@@ -5099,7 +5095,6 @@ void perform_violence(void)
         AFF_FLAGS(ch).RemoveBit(AFF_APPROACH);
         AFF_FLAGS(FIGHTING(ch)).RemoveBit(AFF_APPROACH);
         // stop_fighting(ch);
-        act("$n skipping turn- stripped approach flags from dissimilar-room characters.", FALSE, ch, 0, 0, TO_ROLLS);
         continue;
       }
 
@@ -5258,7 +5253,6 @@ void perform_violence(void)
     // Attacking a vehicle. Stopped here.
     else if (FIGHTING_VEH(ch)) {
       if (ch->in_room != FIGHTING_VEH(ch)->in_room) {
-        act("$n skipping turn- target vehicle not in room.", FALSE, ch, 0, 0, TO_ROLLS);
         stop_fighting(ch);
       } else
         vcombat(ch, FIGHTING_VEH(ch));
@@ -5650,13 +5644,11 @@ void vcombat(struct char_data * ch, struct veh_data * veh)
   int recoil=0, burst=0, recoil_comp=0, newskill, modtarget = 0;
 
   if (IS_AFFECTED(ch, AFF_PETRIFY)) {
-    act("$n: is petrified, aborting attack.", 0, ch, 0, 0, TO_ROLLS);
     stop_fighting(ch);
     return;
   }
 
   if (veh->damage >= VEH_DAM_THRESHOLD_DESTROYED) {
-    act("$n: target vehicle has been destroyed, aborting attack.", 0, ch, 0, 0, TO_ROLLS);
     stop_fighting(ch);
     return;
   }
@@ -5688,7 +5680,6 @@ void vcombat(struct char_data * ch, struct veh_data * veh)
   if (wielded) {
     // Ensure it has ammo.
     if (!has_ammo(ch, wielded)) {
-      act("$n has no ammo, aborting attack.", 0, ch, 0, 0, TO_ROLLS);
       return;
     }
 

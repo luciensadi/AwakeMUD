@@ -341,7 +341,7 @@ void require_that_sql_table_exists(const char *table_name, const char *migration
 
   if (!(res = mysql_use_result(mysql))) {
     log_vfprintf("ERROR: You need to run the %s migration from the SQL directory. "
-                 "Probable syntax from root directory: `mysql -u YOUR_USERNAME -p AwakeMUD < %s`.",
+                 "Probable syntax from your AwakeMUD directory: `mysql -u YOUR_USERNAME -p AwakeMUD < %s`.",
                  table_name,
                  migration_path_from_root_directory);
     exit(ERROR_DB_TABLE_REQUIRED);
@@ -354,7 +354,7 @@ void require_that_sql_table_exists(const char *table_name, const char *migration
 
   if (!have_table) {
     log_vfprintf("ERROR: You need to run the %s migration from the SQL directory. "
-                 "Probable syntax from root directory: `mysql -u YOUR_USERNAME -p AwakeMUD < %s`.",
+                 "Probable syntax from your AwakeMUD directory: `mysql -u YOUR_USERNAME -p AwakeMUD < %s`.",
                  table_name,
                  migration_path_from_root_directory);
     exit(ERROR_DB_TABLE_REQUIRED);
@@ -373,7 +373,7 @@ void require_that_field_meets_constraints(const char *field_name, const char *ta
 
   snprintf(migration_string, sizeof(migration_string),
            "ERROR: You need to run the %s migration from the SQL directory. "
-           "Probable syntax from root directory: `mysql -u YOUR_USERNAME -p AwakeMUD < %s`.",
+           "Probable syntax from your AwakeMUD directory: `mysql -u YOUR_USERNAME -p AwakeMUD < %s`.",
            table_name,
            migration_path_from_root_directory);
 
@@ -5611,14 +5611,14 @@ void price_cyber(struct obj_data *obj)
        }
        break;
     case CYB_FINGERTIP:
-      GET_OBJ_VAL(obj, 1) = 0;
+      GET_CYBERWARE_RATING(obj) = 0;
       GET_CYBERWARE_ESSENCE_COST(obj) = 10;
       GET_OBJ_COST(obj) = 3000;
       GET_OBJ_AVAILTN(obj) = 3;
       GET_OBJ_AVAILDAY(obj) = 1;
       break;
     case CYB_HANDBLADE:
-      GET_OBJ_VAL(obj, 1) = 0;
+      GET_CYBERWARE_RATING(obj) = 0;
       if (GET_OBJ_VAL(obj, 3)) {
         GET_CYBERWARE_ESSENCE_COST(obj) = 25;
         GET_OBJ_COST(obj) = 10000;
@@ -5630,10 +5630,10 @@ void price_cyber(struct obj_data *obj)
       GET_OBJ_AVAILDAY(obj) = 5;
       break;
     case CYB_HANDRAZOR:
-      GET_OBJ_VAL(obj, 1) = 0;
+      GET_CYBERWARE_RATING(obj) = 0;
       GET_OBJ_AVAILDAY(obj) = 3;
-      if (IS_SET(GET_OBJ_VAL(obj, 3), 1 << CYBERWEAPON_RETRACTABLE)) {
-        GET_CYBERWARE_ESSENCE_COST(obj) = 25;
+      if (IS_SET(GET_CYBERWARE_FLAGS(obj), 1 << CYBERWEAPON_RETRACTABLE)) {
+        GET_CYBERWARE_ESSENCE_COST(obj) = 20;
         GET_OBJ_COST(obj) = 9000;
         GET_OBJ_AVAILTN(obj) = 5;
       } else {
@@ -5641,13 +5641,13 @@ void price_cyber(struct obj_data *obj)
         GET_CYBERWARE_ESSENCE_COST(obj) = 10;
         GET_OBJ_AVAILTN(obj) = 3;
       }
-      if (IS_SET(GET_OBJ_VAL(obj, 3), 1 << CYBERWEAPON_IMPROVED)) {
+      if (IS_SET(GET_CYBERWARE_FLAGS(obj), 1 << CYBERWEAPON_IMPROVED)) {
         GET_OBJ_COST(obj) += 8500;
         GET_OBJ_AVAILTN(obj) = 6;
       }
       break;
     case CYB_HANDSPUR:
-      GET_OBJ_VAL(obj, 1) = 0;
+      GET_CYBERWARE_RATING(obj) = 0;
       if (GET_OBJ_VAL(obj, 3)) {
         GET_CYBERWARE_ESSENCE_COST(obj) = 30;
         GET_OBJ_COST(obj) = 11500;

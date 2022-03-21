@@ -903,18 +903,22 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     // The power of an attack can't be below 2 from ammo changes.
     att->ranged->power = MAX(att->ranged->power, 2);
 
-    // Handle spirits and elementals being little divas with their special combat rules.
-    // Namely: We require that the attack's power is greater than double the spirit's level, otherwise it takes no damage.
+    // Handle spirits and elementals being divas, AKA having Immunity to Normal Weapons (SR3 p188, 264).
+    // Namely: We require that the attack's power is greater than double the spirit's force, otherwise it takes no damage.
     // If the attack's power is greater, subtract double the level from it.
+    // There's no checking for weapon foci here since there are no ranged weapon foci.
     if (IS_SPIRIT(def->ch) || IS_ANY_ELEMENTAL(def->ch)) {
       int minimum_power_to_damage_opponent = (GET_LEVEL(def->ch) * 2) + 1;
       if (att->ranged->power < minimum_power_to_damage_opponent) {
         bool target_died = 0;
 
         combat_message(att->ch, def->ch, att->weapon, 0, att->ranged->burst_count);
-        send_to_char(att->ch, "^o(OOC: Your weapon is too weak to injure %s! You need at least ^O%d^o attack power.)^n\r\n",
+        send_to_char(att->ch, "^o(OOC: %s is immune to normal weapons! You need at least ^O%d^o weapon power to damage %s, and you only have %d.)^n\r\n",
                      decapitalize_a_an(GET_CHAR_NAME(def->ch)),
-                     minimum_power_to_damage_opponent);
+                     minimum_power_to_damage_opponent,
+                     HMHR(def->ch),
+                     att->ranged->power
+                    );
         target_died = damage(att->ch, def->ch, 0, att->ranged->dam_type, att->ranged->is_physical);
 
         //Handle suprise attack/alertness here -- spirits ranged.
@@ -1157,17 +1161,22 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       }
     }
 
-    // Handle spirits and elementals being little divas with their special combat rules.
-    // Namely: We require that the attack's power is greater than double the spirit's level, otherwise it takes no damage.
+    // Handle spirits and elementals being divas, AKA having Immunity to Normal Weapons (SR3 p188, 264).
+    // Namely: We require that the attack's power is greater than double the spirit's force, otherwise it takes no damage.
     // If the attack's power is greater, subtract double the level from it.
-    if (IS_SPIRIT(def->ch) || IS_ANY_ELEMENTAL(def->ch)) {
+    if ((IS_SPIRIT(def->ch) || IS_ANY_ELEMENTAL(def->ch))
+        && (!att->weapon || GET_WEAPON_FOCUS_RATING(att->weapon) == 0 || !WEAPON_FOCUS_USABLE_BY(att->weapon, att->ch)))
+    {
       int minimum_power_to_damage_opponent = (GET_LEVEL(def->ch) * 2) + 1;
       if (att->melee->power < minimum_power_to_damage_opponent) {
         bool target_died = 0;
 
-        send_to_char(att->ch, "^o(OOC: Your weapon is too weak to injure %s! You need at least ^O%d^o attack power.)^n\r\n",
+        send_to_char(att->ch, "^o(OOC: %s is immune to normal weapons! You need at least ^O%d^o weapon power to damage %s, and you only have %d.)^n\r\n",
                      decapitalize_a_an(GET_CHAR_NAME(def->ch)),
-                     minimum_power_to_damage_opponent);
+                     minimum_power_to_damage_opponent,
+                     HMHR(def->ch),
+                     att->melee->power
+                    );
         target_died = damage(att->ch, def->ch, 0, att->melee->dam_type, att->melee->is_physical);
 
         //Handle suprise attack/alertness here -- spirits melee.
