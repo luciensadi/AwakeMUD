@@ -4549,7 +4549,10 @@ ACMD(do_syspoints) {
   // Morts can only view their own system points.
   if (!access_level(ch, LVL_CONSPIRATOR)) {
     if (!*argument) {
-      send_to_char(ch, "You have %d system points. See ^WHELP SYSPOINTS^n for how to use them.\r\n", GET_SYSTEM_POINTS(ch));
+      send_to_char(ch, "You have %d system point%s. See ^WHELP SYSPOINTS^n for how to use them.\r\n",
+                    GET_SYSTEM_POINTS(ch),
+                    GET_SYSTEM_POINTS(ch) == 1 ? "" : "s"
+                  );
       return;
     }
 
@@ -4615,7 +4618,7 @@ ACMD(do_syspoints) {
   if (is_abbrev(arg, "show")) {
     // No target? Show your own.
     if (!*buf) {
-      send_to_char(ch, "You have %d system points.\r\n", GET_SYSTEM_POINTS(ch));
+      send_to_char(ch, "You have %d system point%s.\r\n", GET_SYSTEM_POINTS(ch), GET_SYSTEM_POINTS(ch) == 1 ? "" : "s");
       return;
     }
 
@@ -4636,7 +4639,7 @@ ACMD(do_syspoints) {
         send_to_char("There is no such player.\r\n", ch);
         return;
       }
-      send_to_char(ch, "%s has %s system points.\r\n", row[0], row[1]);
+      send_to_char(ch, "%s has %s system point(s).\r\n", row[0], row[1]);
       mysql_free_result(res);
     } else {
       // Target cannot be NPC. We don't expect to ever hit this case using get_player_vis though.
@@ -4645,7 +4648,7 @@ ACMD(do_syspoints) {
         return;
       }
 
-      send_to_char(ch, "%s has %d system points.\r\n", GET_CHAR_NAME(vict), GET_SYSTEM_POINTS(vict));
+      send_to_char(ch, "%s has %d system point%s.\r\n", GET_CHAR_NAME(vict), GET_SYSTEM_POINTS(vict), GET_SYSTEM_POINTS(vict) == 1 ? "" : "s");
     }
     return;
   }
@@ -4703,27 +4706,30 @@ ACMD(do_syspoints) {
     }
 
     // Mail the victim.
-    snprintf(buf, sizeof(buf), "You have been %s %d system points for %s%s^n\r\n",
+    snprintf(buf, sizeof(buf), "You have been %s %d system point%s for %s%s^n\r\n",
             (award_mode ? "awarded" : "penalized"),
             k,
+            k == 1 ? "" : "s",
             reason,
             ispunct(get_final_character_from_string(reason)) ? "" : ".");
     store_mail(idnum, ch, buf);
 
     // Notify the actor.
-    send_to_char(ch, "You %s %d system points %s %s for %s%s^n\r\n",
+    send_to_char(ch, "You %s %d system point%s %s %s for %s%s^n\r\n",
                 (award_mode ? "awarded" : "penalized"),
                 k,
+                k == 1 ? "" : "s",
                 (award_mode ? "to" : "from"),
                 capitalize(target),
                 reason,
                 ispunct(get_final_character_from_string(reason)) ? "" : ".");
 
     // Log it.
-    snprintf(buf, sizeof(buf), "%s %s %d system points %s %s for %s^g (%d to %d).",
+    snprintf(buf, sizeof(buf), "%s %s %d system point%s %s %s for %s^g (%d to %d).",
             GET_CHAR_NAME(ch),
             (award_mode ? "awarded" : "penalized"),
             k,
+            k == 1 ? "" : "s",
             (award_mode ? "to" : "from"),
             target,
             reason,
@@ -4746,24 +4752,27 @@ ACMD(do_syspoints) {
     GET_SYSTEM_POINTS(vict) += k;
 
     // Notify the actor and the victim, then log it.
-    send_to_char(vict, "You have been %s %d system points for %s%s^n\r\n",
+    send_to_char(vict, "You have been %s %d system point%s for %s%s^n\r\n",
                  (award_mode ? "awarded" : "penalized"),
                  k,
+                 k == 1 ? "" : "s",
                  reason,
                  ispunct(get_final_character_from_string(reason)) ? "" : ".");
 
-    send_to_char(ch, "You %s %d system points %s %s for %s%s^n\r\n",
+    send_to_char(ch, "You %s %d system point%s %s %s for %s%s^n\r\n",
                 (award_mode ? "awarded" : "penalized"),
                 k,
+                k == 1 ? "" : "s",
                 (award_mode ? "to" : "from"),
                 GET_CHAR_NAME(vict),
                 reason,
                 ispunct(get_final_character_from_string(reason)) ? "" : ".");
 
-    snprintf(buf, sizeof(buf), "%s %s %d system points %s %s for %s^g (%d to %d).",
+    snprintf(buf, sizeof(buf), "%s %s %d system point%s %s %s for %s^g (%d to %d).",
             GET_CHAR_NAME(ch),
             (award_mode ? "awarded" : "penalized"),
             k,
+            k == 1 ? "" : "s",
             (award_mode ? "to" : "from"),
             GET_CHAR_NAME(vict),
             reason,

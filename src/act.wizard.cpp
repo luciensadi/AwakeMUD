@@ -5912,8 +5912,9 @@ bool restring_with_args(struct char_data *ch, char *argument, bool using_sysp) {
 
   if (using_sysp) {
     if (GET_SYSTEM_POINTS(ch) < SYSP_RESTRING_COST) {
-      send_to_char(ch, "It costs %d system points to restring something, and you only have %d.\r\n",
+      send_to_char(ch, "It costs %d system point%s to restring something, and you only have %d.\r\n",
                    SYSP_RESTRING_COST,
+                   SYSP_RESTRING_COST == 1 ? "" : "s",
                    GET_SYSTEM_POINTS(ch));
       return FALSE;
     }
