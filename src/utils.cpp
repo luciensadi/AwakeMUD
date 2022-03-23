@@ -2367,7 +2367,7 @@ struct obj_data *find_matching_obj_in_container(struct obj_data *container, vnum
   struct obj_data *result = NULL;
 
   // Nothing given to us? Nothing to find.
-  if (container == NULL)
+  if (container == NULL || GET_OBJ_TYPE(container) == ITEM_PART)
     return NULL;
 
   // Check each item in this container. If it's a match, return it; otherwise, check its contents.
@@ -4033,7 +4033,7 @@ bool obj_contains_kept_items(struct obj_data *obj) {
     return FALSE;
   }
 
-  if (!obj->contains) {
+  if (!obj->contains || GET_OBJ_TYPE(obj) == ITEM_PART) {
     return FALSE;
   }
 
