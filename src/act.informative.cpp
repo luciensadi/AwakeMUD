@@ -87,6 +87,7 @@ extern SPECIAL(marksmanship_second);
 extern SPECIAL(marksmanship_third);
 extern SPECIAL(marksmanship_fourth);
 extern SPECIAL(marksmanship_master);
+extern SPECIAL(bank);
 extern WSPEC(monowhip);
 
 extern bool trainable_attribute_is_maximized(struct char_data *ch, int attribute);
@@ -367,8 +368,13 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
 
   // Special case: Radio is spec-flagged and should show a help message.
   // This is pretty much only true for the Docwagon radios.
-  if (mode == 0 && object->text.room_desc && GET_OBJ_SPEC(object) == floor_usable_radio) {
-    strlcat(buf, "\r\n^y...It's free to use. See ^YHELP RADIO^y for more.^n", sizeof(buf));
+  if (mode == 0 && object->text.room_desc) {
+    if (GET_OBJ_SPEC(object) == floor_usable_radio) {
+      strlcat(buf, "\r\n^y...It's free to use. See ^YHELP RADIO^y for more.^n", sizeof(buf));
+    }
+    else if (GET_OBJ_SPEC(object) == bank) {
+      strlcat(buf, "\r\n^y...See ^YHELP ATM^y for details.^n", sizeof(buf));
+    }
   }
 
   strlcat(buf, "^N\r\n", sizeof(buf));

@@ -3066,6 +3066,7 @@ SPECIAL(vendtix)
   }
 
   if (CMD_IS("buy")) {
+    any_one_arg(argument, arg);
     if (!is_abbrev(arg, "ticket")) {
       send_to_char("This machine only sells tickets.\r\n", ch);
       return TRUE;
@@ -3079,6 +3080,7 @@ SPECIAL(vendtix)
     struct obj_data *tobj = read_object(ticket, VIRTUAL);
     if (!tobj) {
       mudlog("No ticket for the Vend-Tix machine!", ch, LOG_SYSLOG, TRUE);
+      send_to_char("The machine whirrs for a moment, then returns your nuyen.\r\n", ch);
       return TRUE;
     }
 
