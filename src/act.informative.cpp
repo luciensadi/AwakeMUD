@@ -285,10 +285,6 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
         strlcat(buf, object->text.room_desc, sizeof(buf));
       }
     }
-    // Special case: Radio is spec-flagged. This is pretty much only true for the Docwagon radios.
-    if (GET_OBJ_SPEC(object) == floor_usable_radio) {
-      strlcat(buf, "\r\n^y...It's free to use. See ^YHELP RADIO^y for more.^n", sizeof(buf));
-    }
   }
   else if (GET_OBJ_NAME(object) && mode == 1) {
     strlcpy(buf, GET_OBJ_NAME(object), sizeof(buf));
@@ -368,6 +364,13 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
         strlcat(buf, " ^m(Protected)^n", sizeof(buf));
     }
   }
+
+  // Special case: Radio is spec-flagged and should show a help message.
+  // This is pretty much only true for the Docwagon radios.
+  if (mode == 0 && object->text.room_desc && GET_OBJ_SPEC(object) == floor_usable_radio) {
+    strlcat(buf, "\r\n^y...It's free to use. See ^YHELP RADIO^y for more.^n", sizeof(buf));
+  }
+
   strlcat(buf, "^N\r\n", sizeof(buf));
   send_to_char(buf, ch);
   if ((mode == 7 || mode == 8) && !PRF_FLAGGED(ch, PRF_COMPACT))
