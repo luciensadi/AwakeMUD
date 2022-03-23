@@ -278,7 +278,7 @@ static void init_char_strings(char_data *ch)
 }
 
 // Eventual TODO: https://dev.mysql.com/doc/refman/5.7/en/mysql-real-escape-string-quote.html
-char *prepare_quotes(char *dest, const char *str, size_t size_of_dest, bool include_newline_processing)
+char *prepare_quotes(char *dest, const char *str, size_t size_of_dest, bool include_newline_processing, bool is_like)
 {
   if (!str)
     return NULL;
@@ -299,7 +299,11 @@ char *prepare_quotes(char *dest, const char *str, size_t size_of_dest, bool incl
       }
     }
 
-    if (*str == '\'' || *str == '`' || *str == '"' || *str == '\\' || *str == '%') {
+    if (*str == '\'' || *str == '`' || *str == '"' || *str == '\\') {
+      *temp++ = '\\';
+    }
+    // Special case handling: % has special meaning in LIKE statements.
+    if (is_like && *str == '%') {
       *temp++ = '\\';
     }
     *temp++ = *str++;

@@ -1978,19 +1978,19 @@ void process_seatac_monorail(void)
     close_doors(carnum, seatac[ind].to, roomnum, seatac[ind].from);
     break;
   case 3:
-    send_to_room("A voice announces, \"Next stop: Knight Center\"\r\n", &world[carnum]);
+    send_to_room("A voice announces, \"Next stop: Knight Center.\"\r\n", &world[carnum]);
     break;
   case 7:
-    send_to_room("A voice announces, \"Next stop: Auburn\"\r\n", &world[carnum]);
+    send_to_room("A voice announces, \"Next stop: Auburn.\"\r\n", &world[carnum]);
     break;
   case 11:
-    send_to_room("A voice announces, \"Next stop: Seattle. Change here for Downtown Shuttle\"\r\n", &world[carnum]);
+    send_to_room("A voice announces, \"Next stop: Seattle. Change here for Downtown Shuttle.\"\r\n", &world[carnum]);
     break;
   case 15:
-    send_to_room("A voice announces, \"Next stop: Auburn\"\r\n", &world[carnum]);
+    send_to_room("A voice announces, \"Next stop: Auburn.\"\r\n", &world[carnum]);
     break;
   case 19:
-    send_to_room("A voice announces, \"Next stop: Knight Center\"\r\n", &world[carnum]);
+    send_to_room("A voice announces, \"Next stop: Knight Center.\"\r\n", &world[carnum]);
     break;
   case 23:
     send_to_room("A voice announces, \"Next stop: West Tacoma.\"\r\n", &world[carnum]);
@@ -2138,13 +2138,13 @@ void process_hellhound_bus(void)
     close_busdoor(bus, hellhound[ind].to, stop, hellhound[ind].from);
     break;
   case 23:
-    send_to_room("The driver shouts from the front, \"Next stop: Portland\"\r\n", &world[bus]);
+    send_to_room("The driver shouts from the front, \"Next stop: Portland.\"\r\n", &world[bus]);
     break;
   case 26:
     send_to_room("The bus pulls into the garage, and slowly moves to the platform.\r\n", &world[stop]);
     break;
   case 49:
-    send_to_room("The driver shouts from the front, \"Next stop: Seattle\".\r\n", &world[bus]);
+    send_to_room("The driver shouts from the front, \"Next stop: Seattle.\"\r\n", &world[bus]);
     break;
   }
   where++;
@@ -2256,7 +2256,7 @@ void process_lightrail_train(void)
   switch (where) {
     //Downtown Stop Stuff
   case 39:
-    send_to_room("An LCD Panel Flashes: \"Next Stop: Downtown Portland\".\r\n", &world[train]);
+    send_to_room("An LCD Panel Flashes: \"Next Stop: Downtown Portland.\"\r\n", &world[train]);
     break;
   case 0:
     send_to_room("The lightrail emits a loud grind as it brakes into the station.\r\n", &world[stop]);
@@ -2270,7 +2270,7 @@ void process_lightrail_train(void)
     break;
     //60th Stop Stuff (1)
   case 9:
-    send_to_room("An LCD Panel Flashes: \"Next Stop: 60th Street\".\r\n", &world[train]);
+    send_to_room("An LCD Panel Flashes: \"Next Stop: 60th Street.\"\r\n", &world[train]);
     break;
   case 10:
     send_to_room("The lightrail emits a loud grind as it brakes into the station.\r\n", &world[stop]);
@@ -2284,7 +2284,7 @@ void process_lightrail_train(void)
     break;
     //Gresham Stop Stuff
   case 19:
-    send_to_room("An LCD Panel Flashes: \"Next Stop: Gresham\".\r\n", &world[train]);
+    send_to_room("An LCD Panel Flashes: \"Next Stop: Gresham.\"\r\n", &world[train]);
     break;
   case 20:
     send_to_room("The lightrail emits a loud grind as it brakes into the station.\r\n", &world[stop]);
@@ -2298,7 +2298,7 @@ void process_lightrail_train(void)
     break;
     //To60th
   case 29:
-    send_to_room("An LCD Panel Flashes: \"Next Stop: 60th Street\".\r\n", &world[train]);
+    send_to_room("An LCD Panel Flashes: \"Next Stop: 60th Street.\"\r\n", &world[train]);
     break;
   case 30:
     send_to_room("The lightrail emits a loud grind as it brakes into the station.\r\n", &world[stop]);

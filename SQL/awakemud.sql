@@ -120,7 +120,7 @@ CREATE TABLE `pfiles_magic` (
   `Aspect` tinyint(2) default '0',
   `UsedGrade` tinyint(2) unsigned default '0',
   `ExtraPower` tinyint(2) unsigned default '0',
-  `PowerPoints` smallint(3) unsigned default '600',
+  `PowerPoints` smallint(4) default '600',
   `Sig` tinyint(2) unsigned default '0',
   `Masking` tinyint(1) unsigned default '0',
   PRIMARY KEY (`idnum`)

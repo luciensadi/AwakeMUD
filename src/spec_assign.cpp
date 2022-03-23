@@ -930,6 +930,7 @@ void assign_objects(void)
   ASSIGNOBJ(60620, bank); // Neophyte ATM
   ASSIGNOBJ(94329, bank); // NERPcropolis ATM
   ASSIGNOBJ(5498, bank); // Vancouver ATM
+  ASSIGNOBJ(16297, bank);
   ASSIGNOBJ(6997, nerpcorpolis_button);
   ASSIGNOBJ(16298, floor_usable_radio);
   ASSIGNOBJ(26104, toggled_voice_modulator);

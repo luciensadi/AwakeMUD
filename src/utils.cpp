@@ -3121,7 +3121,8 @@ char *generate_new_loggable_representation(struct obj_data *obj) {
   if (obj->restring)
     snprintf(ENDOF(log_string), sizeof(log_string) - strlen(log_string), " [restring: %s^g]", obj->restring);
 
-  if (obj->contains) {
+  // We explicitly have to exclude ITEM_PART here because these things 'contain' the deck while in progress.
+  if (obj->contains && GET_OBJ_TYPE(obj) != ITEM_PART) {
     snprintf(ENDOF(log_string), sizeof(log_string) - strlen(log_string), ", containing: [");
     for (struct obj_data *temp = obj->contains; temp; temp = temp->next_content) {
       char *representation = generate_new_loggable_representation(temp);

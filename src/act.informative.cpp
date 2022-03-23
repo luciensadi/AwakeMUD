@@ -4151,16 +4151,17 @@ ACMD(do_index)
 }
 
 void display_help(char *help, int help_len, const char *arg, struct char_data *ch) {
-  char query[MAX_STRING_LENGTH];
+  char query[MAX_STRING_LENGTH], prepared_standard[MAX_STRING_LENGTH], prepared_for_like[MAX_STRING_LENGTH];
   MYSQL_RES *res;
   MYSQL_ROW row;
   *help = '\0';
 
-  // Buf now holds the quoted version of arg.
-  prepare_quotes(buf, arg, sizeof(buf) / sizeof(buf[0]));
+  // Pre-process our prepare_quotes.
+  prepare_quotes(prepared_standard, arg, sizeof(prepared_standard) / sizeof(prepared_standard[0]));
+  prepare_quotes(prepared_for_like, arg, sizeof(prepared_for_like) / sizeof(prepared_for_like[0]), FALSE, TRUE);
 
   // First strategy: Look for an exact match.
-  snprintf(query, sizeof(query), "SELECT * FROM help_topic WHERE name='%s'", buf);
+  snprintf(query, sizeof(query), "SELECT * FROM help_topic WHERE name='%s'", prepared_standard);
   if (mysql_wrapper(mysql, query)) {
     // We got a SQL error-- bail.
     snprintf(help, help_len, "The help system is temporarily unavailable.\r\n");
@@ -4181,7 +4182,7 @@ void display_help(char *help, int help_len, const char *arg, struct char_data *c
   }
 
   // Second strategy: Search for possible like-matches.
-  snprintf(query, sizeof(query), "SELECT * FROM help_topic WHERE name LIKE '%%%s%%' ORDER BY name ASC", buf);
+  snprintf(query, sizeof(query), "SELECT * FROM help_topic WHERE name LIKE '%%%s%%' ORDER BY name ASC", prepared_for_like);
   if (mysql_wrapper(mysql, query)) {
     // If we don't find it here either, we know the file doesn't exist-- failure condition.
     snprintf(help, help_len, "No such help file exists.\r\n");
@@ -4209,7 +4210,7 @@ void display_help(char *help, int help_len, const char *arg, struct char_data *c
     mysql_free_result(res);
 
     // Try a lookup with just files that have the search string at the start of their title.
-    snprintf(query, sizeof(query), "SELECT * FROM help_topic WHERE name LIKE '%s%%' ORDER BY name ASC", buf);
+    snprintf(query, sizeof(query), "SELECT * FROM help_topic WHERE name LIKE '%s%%' ORDER BY name ASC", prepared_for_like);
     if (mysql_wrapper(mysql, query)) {
       // We hit an error with this followup search, so we just return our pre-prepared string with the search that succeeded.
       snprintf(buf3, sizeof(buf3), "Overbroad helpfile search combined with follow-up lookup failure (%d articles): %s.", x, arg);

@@ -49,7 +49,7 @@ static void Write( descriptor_t *apDescriptor, const char *apData )
 static void ReportBug( const char *apText )
 {
   static char bugbuf[1000];
-  snprintf(bugbuf, sizeof(bugbuf), "protocol.c bug: %s", apText);
+  snprintf(bugbuf, sizeof(bugbuf), "SYSERR: protocol.c bug: %s", apText);
   mudlog(bugbuf, NULL, LOG_SYSLOG, TRUE);
 }
 
