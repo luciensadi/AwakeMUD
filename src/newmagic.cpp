@@ -635,10 +635,9 @@ void totem_bonus(struct char_data *ch, int action, int type, int &target, int &s
 
 void aspect_bonus(struct char_data *ch, int action, int spell_idx, int &target, int &skill)
 {
-  if (action == SPELLCASTING)
-  {
-    type = spells[spell_idx].category;
-	switch (GET_ASPECT(ch)) {
+  if (action == SPELLCASTING) {
+    int type = spells[spell_idx].category;
+  	switch (GET_ASPECT(ch)) {
       case ASPECT_EARTHMAGE:
         if (type == MANIPULATION)
           skill += 2;
@@ -664,6 +663,10 @@ void aspect_bonus(struct char_data *ch, int action, int spell_idx, int &target, 
           skill -= 1;
         break;
       }
+   } else {
+     char oopsbuf[500];
+     snprintf(oopsbuf, sizeof(oopsbuf), "SYSERR: Received unknown action type %d to aspect_bonus!", action);
+     mudlog(oopsbuf, ch, LOG_SYSLOG, TRUE);
    }
 }
 
@@ -709,6 +712,10 @@ void aspect_conjuring_bonus(struct char_data *ch, int action, int type, int &tar
         }
         break;
       }
+   } else {
+     char oopsbuf[500];
+     snprintf(oopsbuf, sizeof(oopsbuf), "SYSERR: Received unknown action type %d to aspect_conjuring_bonus!", action);
+     mudlog(oopsbuf, ch, LOG_SYSLOG, TRUE);
    }
 }
 
