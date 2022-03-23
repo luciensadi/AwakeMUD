@@ -287,7 +287,7 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
     }
     // Special case: Radio is spec-flagged. This is pretty much only true for the Docwagon radios.
     if (GET_OBJ_SPEC(object) == floor_usable_radio) {
-      strlcat(buf, "^y...It's free to use. See ^YHELP RADIO^y for more.^n", sizeof(buf));
+      strlcat(buf, "\r\n^y...It's free to use. See ^YHELP RADIO^y for more.^n", sizeof(buf));
     }
   }
   else if (GET_OBJ_NAME(object) && mode == 1) {
