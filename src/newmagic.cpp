@@ -633,6 +633,85 @@ void totem_bonus(struct char_data *ch, int action, int type, int &target, int &s
   }
 }
 
+void aspect_bonus(struct char_data *ch, int action, int spell_idx, int &target, int &skill)
+{
+  if (action == SPELLCASTING)
+  {
+    type = spells[spell_idx].category;
+	switch (GET_ASPECT(ch)) {
+      case ASPECT_EARTHMAGE:
+        if (type == MANIPULATION)
+          skill += 2;
+        else if (type == DETECTION)
+          skill -= 1;
+        break;
+      case ASPECT_AIRMAGE:
+        if (type == DETECTION)
+          skill += 2;
+        else if (type == MANIPULATION)
+          skill -= 1;
+        break;
+      case ASPECT_FIREMAGE:
+        if (type == COMBAT)
+          skill += 2;
+        else if (type == ILLUSION)
+          skill -= 1;
+        break;
+      case ASPECT_WATERMAGE:
+        if (type == ILLUSION)
+          skill += 2;
+        else if (type == COMBAT)
+          skill -= 1;
+        break;
+      }
+   }
+}
+
+void aspect_conjuring_bonus(struct char_data *ch, int action, int type, int &target, int &skill)
+{
+  if (action == CONJURING)
+  {
+    switch (GET_ASPECT(ch)) {
+      case ASPECT_EARTHMAGE:
+        if (type == ELEM_EARTH) {
+          skill += 2;
+          act("Skill +2: aspect", FALSE, ch, 0, 0, TO_ROLLS);
+       } else if (type == ELEM_AIR) {
+          skill -= 1;
+          act("Skill -1: aspect", FALSE, ch, 0, 0, TO_ROLLS);
+        }
+        break;
+      case ASPECT_AIRMAGE:
+        if (type == ELEM_AIR) {
+          skill += 2;
+          act("Skill +2: aspect", FALSE, ch, 0, 0, TO_ROLLS);
+        } else if (type == ELEM_EARTH) {
+          skill -= 1;
+          act("Skill -1: aspect", FALSE, ch, 0, 0, TO_ROLLS);
+        }
+        break;
+      case ASPECT_FIREMAGE:
+        if (type == ELEM_FIRE) {
+          skill += 2;
+          act("Skill +2: aspect", FALSE, ch, 0, 0, TO_ROLLS);
+        } else if (type == ELEM_WATER) {
+          skill -= 1;
+          act("Skill -1: aspect", FALSE, ch, 0, 0, TO_ROLLS);
+        }
+        break;
+      case ASPECT_WATERMAGE:
+        if (type == ELEM_WATER) {
+          skill += 2;
+          act("Skill +2: aspect", FALSE, ch, 0, 0, TO_ROLLS);
+        } else if (type == ELEM_FIRE) {
+          skill -= 1;
+          act("Skill -1: aspect", FALSE, ch, 0, 0, TO_ROLLS);
+        }
+        break;
+      }
+   }
+}
+
 void end_spirit_existance(struct char_data *ch, bool message)
 {
   struct char_data *tempc;
@@ -931,6 +1010,7 @@ void spell_bonus(struct char_data *ch, int spell, int &skill, int &target)
     totem_bonus(ch, SPELLCASTING, spell, target, skill);
   else if (GET_TRADITION(ch) == TRAD_HERMETIC && GET_SPIRIT(ch) && spells[spell].category != HEALTH)
   {
+    aspect_bonus(ch, SPELLCASTING, spell, target, skill);
     for (struct spirit_data *spirit = GET_SPIRIT(ch); spirit; spirit = spirit->next)
       if (((spells[spell].category == MANIPULATION && spirit->type == ELEM_EARTH) ||
            (spells[spell].category == COMBAT && spirit->type == ELEM_FIRE) ||
@@ -2545,7 +2625,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       char msg_buf[500];
       snprintf(msg_buf, sizeof(msg_buf), "$n's feet gently lift off from the ground as $e begin%s to levitate.", HSSH_SHOULD_PLURAL(ch) ? "s" : "");
       act(msg_buf, TRUE, vict, 0, 0, TO_ROOM);
-      send_to_char("Your feet gently lift off from the ground as you levitate.\r\n", vict);
+      send_to_char("Your feet gently lift off from the ground as you begin to levitate.\r\n", vict);
       act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
       create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
     } else
