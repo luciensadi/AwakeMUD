@@ -487,6 +487,8 @@ const char *player_bits[] =
     "IS_CYBERDOC",
     "PAID_FOR_CLOSECOMBAT",
     "PAID_FOR_KIPUP",
+    "PAID_FOR_ROLLS",
+    "NO_AUTO_SYSP",
     "\n"
   };
 
@@ -562,7 +564,7 @@ struct preference_bit_struct preference_bits_v2[] = {
   { "Syslog"               , TRUE , TRUE  },
   { "Zonelog"              , TRUE , TRUE  },
   { "Long Exits"           , FALSE, TRUE  },
-  { "Rolls"                , TRUE , TRUE  },
+  { "Rolls"                , FALSE, TRUE  },
   { "No OOC"               , FALSE, TRUE  },
   { "Auto Invis"           , TRUE , TRUE  },
   { "Cheatlog"             , TRUE , TRUE  },

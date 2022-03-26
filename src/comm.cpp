@@ -3231,8 +3231,12 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
   if ( type == TO_ROLLS )
   {
     for (; to; to = to->next_in_room) {
-      if (IS_NPC(to) || !PRF_FLAGGED(to, PRF_ROLLS) || !(IS_SENATOR(to) || _OVERRIDE_ALLOW_PLAYERS_TO_USE_ROLLS_))
+      if (IS_NPC(to) || !PRF_FLAGGED(to, PRF_ROLLS))
         continue;
+
+      if (!IS_SENATOR(to) && !_OVERRIDE_ALLOW_PLAYERS_TO_USE_ROLLS_ && !PLR_FLAGGED(to, PLR_PAID_FOR_ROLLS))
+        continue;
+
       if (SENDOK(to)
           && !(hide_invisible
                && ch

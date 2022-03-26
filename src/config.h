@@ -68,6 +68,7 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 // How many syspoints do the various options cost?
 #define SYSP_RESTRING_COST                                     2
 #define SYSP_NODELETE_COST                                     100
+#define SYSP_ROLLS_COST                                        25
 
 // How long should the MUD wait for recovery before killing itself? Note that it
 // considers itself to be stuck during copyover too, so if you have a large world,

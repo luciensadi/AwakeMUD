@@ -1077,7 +1077,21 @@ ACMD(do_gen_write)
   curl_global_cleanup();
 #endif
 
-  send_to_char("Okay. Thanks!\r\n", ch);
+  if (subcmd == SCMD_TYPO && !PLR_FLAGGED(ch, PLR_NO_AUTO_SYSP_AWARDS)) {
+    // We reward typos instantly-- they're quick to verify and don't have grey area.
+    send_to_char("Thanks! You've earned +1 system points for your contribution.\r\n", ch);
+    if (GET_SYSTEM_POINTS(ch) < 10) {
+      send_to_char("(See ^WHELP SYSPOINTS^n to see what you can do with them.)\r\n", ch);
+    }
+
+    GET_SYSTEM_POINTS(ch)++;
+  } else {
+    // All other commands need manual system point awarding from staff. Rationales:
+    // - IDEAS: Auto-awarding the idea command would incentivize frivolous ideas that aren't actionable.
+    // - BUGS: These often stem from misunderstandings and aren't actually bugs.
+    // - PRAISE: Immediate payout would make us question if we were legitimately being given props, or if it was just to get the payout.
+    send_to_char("Okay. Thanks!\r\n", ch);
+  }
 }
 
 const char *tog_messages[][2] = {
@@ -1209,6 +1223,10 @@ ACMD(do_toggle)
       if (i == PRF_SHOWGROUPTAG && (!GET_PGROUP_MEMBER_DATA(ch) || !GET_PGROUP(ch)))
         continue;
 
+      // Skip rolls if you can't use it.
+      if (i == PRF_ROLLS && !(IS_SENATOR(ch) || _OVERRIDE_ALLOW_PLAYERS_TO_USE_ROLLS_ || PLR_FLAGGED(ch, PLR_PAID_FOR_ROLLS)))
+        continue;
+
       // Select ONOFF or YESNO display type based on field 2.
       if (preference_bits_v2[i].on_off) {
         strcpy(buf2, ONOFF(PRF_FLAGGED(ch, i)));
@@ -1298,7 +1316,7 @@ ACMD(do_toggle)
     } else if (is_abbrev(argument, "hired") || is_abbrev(argument, "quest")) {
       result = PRF_TOG_CHK(ch, PRF_QUEST);
       mode = 14;
-    } else if (is_abbrev(argument, "rolls") && (IS_SENATOR(ch) || _OVERRIDE_ALLOW_PLAYERS_TO_USE_ROLLS_)) {
+    } else if (is_abbrev(argument, "rolls") && (IS_SENATOR(ch) || _OVERRIDE_ALLOW_PLAYERS_TO_USE_ROLLS_ || PLR_FLAGGED(ch, PLR_PAID_FOR_ROLLS))) {
       result = PRF_TOG_CHK(ch, PRF_ROLLS);
       mode = 17;
     } else if (is_abbrev(argument, "roomflags") && IS_SENATOR(ch)) {
@@ -4600,6 +4618,35 @@ ACMD(do_syspoints) {
 
       // Too broke.
       send_to_char(ch, "That costs %d syspoints, and you only have %d.\r\n", SYSP_NODELETE_COST, GET_SYSTEM_POINTS(ch));
+      return;
+    }
+
+    if (is_abbrev(arg, "rolls")) {
+      // Already set.
+      if (PLR_FLAGGED(ch, PLR_PAID_FOR_ROLLS)) {
+        send_to_char("You've already purchased the ability to see rolls! You can enable/disable it with ^WTOGGLE ROLLS^n.\r\n", ch);
+        return;
+      }
+
+      // Can they afford it?
+      if (GET_SYSTEM_POINTS(ch) >= SYSP_ROLLS_COST) {
+        // Have they entered the confirmation command?
+        if (is_abbrev(buf, "confirm")) {
+          GET_SYSTEM_POINTS(ch) -= SYSP_ROLLS_COST;
+          send_to_char(ch, "Congratulations, you can now see rolls with ^WTOGGLE ROLLS^n! %d syspoints have been deducted from your total.\r\n", SYSP_ROLLS_COST);
+          PLR_FLAGS(ch).SetBit(PLR_PAID_FOR_ROLLS);
+          mudlog("Purchased rolls with syspoints.", ch, LOG_SYSLOG, TRUE);
+          playerDB.SaveChar(ch);
+          return;
+        }
+
+        // They can afford it, but didn't use the confirm form.
+        send_to_char(ch, "You can spend %d syspoints to purchase the ability to see mechanical and debug information. Type ^WSYSPOINTS ROLLS CONFIRM^n to do so.\r\n", SYSP_ROLLS_COST);
+        return;
+      }
+
+      // Too broke.
+      send_to_char(ch, "That costs %d syspoints, and you only have %d.\r\n", SYSP_ROLLS_COST, GET_SYSTEM_POINTS(ch));
       return;
     }
 

@@ -4306,6 +4306,7 @@ ACMD(do_set)
                { "cyberdoc", LVL_CONSPIRATOR, PC, BINARY },
                { "hardcore", LVL_PRESIDENT, PC, BINARY }, //80
                { "esshole",  LVL_ADMIN, BOTH,   NUMBER },
+               { "noautosyspoints", LVL_FIXER, PC, BINARY },
                { "\n", 0, BOTH, MISC }
              };
 
@@ -4915,6 +4916,11 @@ ACMD(do_set)
     snprintf(buf, sizeof(buf),"%s changed %s's esshole from %d to %d.", GET_CHAR_NAME(ch), GET_NAME(vict), GET_ESSHOLE(vict), value);
     GET_ESSHOLE(vict) = value;
     mudlog(buf, ch, LOG_WIZLOG, TRUE );
+    break;
+  case 82: /* no syspoint auto awards */
+    SET_OR_REMOVE(PLR_FLAGS(vict), PLR_NO_AUTO_SYSP_AWARDS);
+    snprintf(buf, sizeof(buf),"%s turned %s's no-auto-sysp-awards flag %s.", GET_CHAR_NAME(ch), GET_NAME(vict), PLR_FLAGGED(vict, PLR_NO_AUTO_SYSP_AWARDS) ? "ON" : "OFF");
+    mudlog(buf, ch, LOG_WIZLOG, TRUE);
     break;
   default:
     snprintf(buf, sizeof(buf), "Can't set that!");
