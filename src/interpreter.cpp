@@ -3233,6 +3233,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("purchase", "buy");
   COMMAND_ALIAS("stats", "score");
   COMMAND_ALIAS("attributes", "score");
+  COMMAND_ALIAS("make", "create");
 
   // Alternate spellings.
   COMMAND_ALIAS("customise", "customize");
