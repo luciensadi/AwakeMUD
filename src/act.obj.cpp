@@ -3609,8 +3609,10 @@ ACMD(do_type)
 
   if (i < 100000 || i > 999999)
     send_to_char("Code must be 6-digits!\r\n", ch);
-  else if (i != GET_OBJ_VAL(obj, 5))
+  else if (i != GET_OBJ_VAL(obj, 5)) {
     send_to_char("The display flashes red and beeps annoyingly.\r\n", ch);
+    WAIT_STATE(ch, 2 RL_SEC);
+  }
   else {
     send_to_char("The display flashes green.\r\n", ch);
     GET_OBJ_VAL(obj, 3) = 0;
