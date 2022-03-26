@@ -1909,7 +1909,12 @@ ACMD(do_leave)
 ACMD(do_stand)
 {
   if (ch->in_veh) {
-    send_to_char("You can't stand up in here.\r\n", ch);
+    if (GET_POS(ch) < POS_SITTING && GET_POS(ch) > POS_SLEEPING) {
+      ACMD_DECLARE(do_sit);
+      do_sit(ch, argument, 0, 0);
+    } else {
+      send_to_char("You can't stand up in here.\r\n", ch);
+    }
     return;
   }
   if (IS_WORKING(ch)) {

@@ -1318,6 +1318,7 @@ struct command_info rig_info[] =
     { "ooc", 0, do_gen_comm, 0, SCMD_OOC, FALSE },
     { "pools", 0, do_pool, 0, 0 , FALSE },
     { "ram", 0, do_ram, 0, 0, FALSE },
+    { "recap", 0, do_recap, 0, 0 , FALSE },
     { "rig", POS_SITTING , do_rig, 0, 0 , FALSE },
     { "return", 0, do_return, 0, 0, FALSE },
     { "reply", 0, do_reply, 0, 0 , FALSE },
@@ -1333,6 +1334,7 @@ struct command_info rig_info[] =
     { "typo", 0, do_gen_write, 0, SCMD_TYPO, FALSE },
     { "unlock", 0, do_gen_door , 0, SCMD_UNLOCK , FALSE },
     { "vemote", 0, do_vemote, 0, 0, FALSE },
+    { "where", 0, do_where, 0, 0, FALSE },
     { "who", 0, do_who, 0, 0, FALSE },
     { "wtell", 0, do_wiztell, LVL_BUILDER, 0, FALSE },
     { "\n", 0, 0, 0, 0, FALSE }

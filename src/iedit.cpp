@@ -988,18 +988,15 @@ void iedit_disp_val8_menu(struct descriptor_data * d)
   {
     case ITEM_WEAPON:
       if (IS_GUN(GET_WEAPON_ATTACK_TYPE(OBJ))) {
-        if (access_level(CH, LVL_ADMIN)) {
-          if (GET_WEAPON_ATTACH_TOP_VNUM(OBJ) >= -1)
-            send_to_char("Enter vnum of object to attach on top: ", CH);
-          else {
-            // Skipping this field while doing nothing? Re-increment our counter.
-            if (d->iedit_limit_edits)
-              d->iedit_limit_edits++;
-            iedit_disp_val9_menu(d);
-            return;
-          }
-        } else
-          iedit_disp_menu(d);
+        if (GET_WEAPON_ATTACH_TOP_VNUM(OBJ) >= -1)
+          send_to_char("Enter vnum of object to attach on top: ", CH);
+        else {
+          // Skipping this field while doing nothing? Re-increment our counter.
+          if (d->iedit_limit_edits)
+            d->iedit_limit_edits++;
+          iedit_disp_val9_menu(d);
+          return;
+        }
       } else {
         send_to_char("Enter weapon focus rating (0 for no focus, up to 4): ", CH);
       }
@@ -1029,7 +1026,7 @@ void iedit_disp_val9_menu(struct descriptor_data * d)
       send_to_char("Armored clothing set (0 for no set): ", CH);
       break;
     case ITEM_WEAPON:
-      if (access_level(CH, LVL_ADMIN) && IS_GUN(GET_WEAPON_ATTACK_TYPE(OBJ))) {
+      if (IS_GUN(GET_WEAPON_ATTACK_TYPE(OBJ))) {
         if (GET_WEAPON_ATTACH_BARREL_VNUM(OBJ) >= -1)
           send_to_char("Enter vnum of object to attach on barrel: ", CH);
         else {
