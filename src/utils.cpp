@@ -405,7 +405,14 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int c
       buf_mod(rbuf, rbuf_len, "AstralPercep", 2);
     }
   } else {
-    base_target += get_vision_penalty(ch, temp_room, rbuf, rbuf_len);
+    int visibility_penalty = get_vision_penalty(ch, temp_room, rbuf, rbuf_len);
+
+    if (current_visibility_penalty + visibility_penalty > 8) {
+      buf_mod(rbuf, rbuf_len, "VisPenaltyMax8", 8 - (current_visibility_penalty + visibility_penalty));
+      visibility_penalty = 8;
+    }
+
+    base_target += visibility_penalty;
   }
 
   base_target += GET_TARGET_MOD(ch);
@@ -415,7 +422,7 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int c
     base_target += 1;
     buf_mod(rbuf, rbuf_len, "Sunlight", 1);
   }
-  if (temp_room->poltergeist[0] && !IS_ASTRAL(ch) && !IS_DUAL(ch))
+  if (temp_room->poltergeist[0] && !IS_ASTRAL(ch) && !MOB_FLAGGED(ch, MOB_DUAL_NATURE))
   {
     base_target += 2;
     buf_mod(rbuf, rbuf_len, "Polter", 2);
