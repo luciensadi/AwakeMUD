@@ -233,14 +233,18 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
   }
   else if (ch->in_room->dir_option[dir]->go_into_thirdperson)
     strcpy(buf2, ch->in_room->dir_option[dir]->go_into_thirdperson);
-  else if (IS_WATER(ch->in_room) && !IS_WATER(EXIT(ch, dir)->to_room))
-    snprintf(buf2, sizeof(buf2), "$n climbs out of the water to the %s.", fulldirs[dir]);
+  else if (IS_WATER(ch->in_room)) {
+    if (!IS_WATER(EXIT(ch, dir)->to_room))
+      snprintf(buf2, sizeof(buf2), "$n climbs out of the water to the %s.", fulldirs[dir]);
+    else
+      snprintf(buf2, sizeof(buf2), "$n swims %s.", fulldirs[dir]);
+  }
   else if (!IS_WATER(ch->in_room) && IS_WATER(EXIT(ch, dir)->to_room))
     snprintf(buf2, sizeof(buf2), "$n jumps into the water to the %s.", fulldirs[dir]);
   else if (ch->char_specials.leave)
     snprintf(buf2, sizeof(buf2), "$n %s %s.", ch->char_specials.leave, fulldirs[dir]);
   else
-    snprintf(buf2, sizeof(buf2), "$n %s %s.", (IS_WATER(ch->in_room) ? "swims" : "leaves"), fulldirs[dir]);
+    snprintf(buf2, sizeof(buf2), "$n leaves %s.", fulldirs[dir]);
 
   if (ch->in_room->dir_option[dir]->go_into_secondperson)
     send_to_char(ch, "%s\r\n", ch->in_room->dir_option[dir]->go_into_secondperson);
@@ -309,15 +313,18 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
     snprintf(buf2, sizeof(buf2), "$n drags %s in from %s.", GET_NAME(vict), thedirs[rev_dir[dir]]);
   else if (ch->in_room->dir_option[rev_dir[dir]] && ch->in_room->dir_option[rev_dir[dir]]->come_out_of_thirdperson)
     strcpy(buf2, ch->in_room->dir_option[rev_dir[dir]]->come_out_of_thirdperson);
-  else if (ch->char_specials.arrive)
-    snprintf(buf2, sizeof(buf2), "$n %s %s.", ch->char_specials.arrive, thedirs[rev_dir[dir]]);
-  else if (IS_WATER(was_in) && !IS_WATER(ch->in_room))
-    snprintf(buf2, sizeof(buf2), "$n climbs out of the water from %s.", thedirs[rev_dir[dir]]);
+  else if (IS_WATER(was_in)) {
+    if (!IS_WATER(ch->in_room))
+      snprintf(buf2, sizeof(buf2), "$n climbs out of the water from %s.", thedirs[rev_dir[dir]]);
+    else
+      snprintf(buf2, sizeof(buf2), "$n swims in from %s.", thedirs[rev_dir[dir]]);
+  }
   else if (!IS_WATER(was_in) && IS_WATER(ch->in_room))
     snprintf(buf2, sizeof(buf2), "$n jumps into the water from %s.", thedirs[rev_dir[dir]]);
+  else if (ch->char_specials.arrive)
+    snprintf(buf2, sizeof(buf2), "$n %s %s.", ch->char_specials.arrive, thedirs[rev_dir[dir]]);
   else
-    snprintf(buf2, sizeof(buf2), "$n %s %s.", (IS_WATER(ch->in_room) ?
-                                "swims in from" : "arrives from"), thedirs[rev_dir[dir]]);
+    snprintf(buf2, sizeof(buf2), "$n arrives from %s.", thedirs[rev_dir[dir]]);
 
 
   // People in the room.
