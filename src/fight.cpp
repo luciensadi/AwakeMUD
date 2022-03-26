@@ -3066,7 +3066,7 @@ bool process_has_ammo(struct char_data *ch, struct obj_data *wielded, bool deduc
       }
 
       // No ammo boxes found, or the ones that were found were empty. Click it.
-      send_to_char("*Click*\r\n", ch);
+      send_to_char(ch, "%s just clicks-- it's out of ammo!\r\n", capitalize(GET_OBJ_NAME(wielded)));
       return FALSE;
     } // End manned checks.
 
@@ -3085,7 +3085,7 @@ bool process_has_ammo(struct char_data *ch, struct obj_data *wielded, bool deduc
       }
 
       // Empty magazine. Send the empty-gun click.
-      send_to_char("*Click*\r\n", ch);
+      send_to_char(ch, "%s just clicks when you pull the trigger-- it's out of ammo!\r\n", capitalize(GET_OBJ_NAME(wielded)));
 
       act("$n can't fire- no ammo.", TRUE, ch, 0, 0, TO_ROLLS);
 
@@ -3106,7 +3106,7 @@ bool process_has_ammo(struct char_data *ch, struct obj_data *wielded, bool deduc
     }
 
     // The weapon requires a magazine and doesn't have one.
-    send_to_char("*Click*\r\n", ch);
+    send_to_char(ch, "%s just clicks when you pull the trigger-- it's out of ammo!\r\n", capitalize(GET_OBJ_NAME(wielded)));
     return FALSE;
   }
 
