@@ -1016,7 +1016,7 @@ const char *pc_readable_extra_bits[] =
   {
     "Glowing",
     "Humming",
-    "Can't be Kept",
+    "Doesn't Save",
     "Can't be Donated",
     "Can't be Made Invis",
     "Invisible",

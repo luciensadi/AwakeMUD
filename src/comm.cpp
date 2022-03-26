@@ -1239,7 +1239,7 @@ int make_prompt(struct descriptor_data * d)
                 else strlcpy(str, "ML", sizeof(str));
 
               } else
-                strlcpy(str, "NA", sizeof(str));
+                strlcpy(str, "N/A", sizeof(str));
               break;
             case 'b':       // ballistic
               snprintf(str, sizeof(str), "%d", GET_BALLISTIC(d->character));
@@ -1401,6 +1401,17 @@ int make_prompt(struct descriptor_data * d)
             case 'U':
               snprintf(str, sizeof(str), "%d", GET_REFLECT(d->character));
               break;
+            case 'v':
+              if (GET_REAL_LEVEL(d->character) >= LVL_BUILDER) {
+                struct room_data *room = get_ch_in_room(d->character);
+                if (room)
+                  snprintf(str, sizeof(str), "%ld", room->number);
+                else
+                  strlcpy(str, "(fuck if I know mate)", sizeof(str));
+              }
+              else
+                strcpy(str, "@v");
+              break;
             case 'w':
               snprintf(str, sizeof(str), "%d", GET_INVIS_LEV(d->character));
               break;
@@ -1412,17 +1423,6 @@ int make_prompt(struct descriptor_data * d)
                 snprintf(str, sizeof(str), "%d", d->character->player_specials->saved.zonenum);
               else
                 strcpy(str, "@z");
-              break;
-            case 'v':
-              if (GET_REAL_LEVEL(d->character) >= LVL_BUILDER) {
-                struct room_data *room = get_ch_in_room(d->character);
-                if (room)
-                  snprintf(str, sizeof(str), "%ld", room->number);
-                else
-                  strlcpy(str, "(fuck if I know mate)", sizeof(str));
-              }
-              else
-                strcpy(str, "@v");
               break;
             case '@':
               strcpy(str, "@");

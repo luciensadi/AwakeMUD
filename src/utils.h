@@ -683,6 +683,8 @@ float get_proto_weight(struct obj_data *obj);
         (obj_index[GET_OBJ_RNUM(obj)].wfunc) : NULL)
 #define GET_OBJ_STREET_INDEX(obj)   ((obj)->obj_flags.street_index)
 
+#define GET_OBJ_CONTENTS(obj)  (GET_OBJ_TYPE((obj)) != ITEM_PART ? (obj)->contains : NULL)
+
 #define CAN_WEAR(obj, part) ((obj)->obj_flags.wear_flags.IsSet((part)))
 
 #define IS_WEAPON(type) (((type) >= TYPE_HIT) && ((type) < TYPE_SUFFERING))
