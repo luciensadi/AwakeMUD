@@ -648,21 +648,43 @@ void move_vehicle(struct char_data *ch, int dir)
     send_to_char("You aren't the Kool-Aid Man, so you decide against ramming your way out of here.\r\n", ch);
     return;
   }
-  if (!EXIT(veh, dir)
-      || !EXIT(veh, dir)->to_room
-      || (!ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_ROAD)
-          && !ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_GARAGE)
-          && (veh->type != VEH_DRONE && veh->type != VEH_BIKE))
-      || IS_SET(EXIT(veh, dir)->exit_info, EX_CLOSED)
-      || (veh->type == VEH_BIKE && ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_NOBIKE))
-#ifdef DEATH_FLAGS
-      || ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_DEATH)
-#endif
-      || ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_FALL))
-  {
+  if (!EXIT(veh, dir) || !EXIT(veh, dir)->to_room || EXIT(veh, dir)->to_room == &world[0] || IS_SET(EXIT(veh, dir)->exit_info, EX_CLOSED)) {
     send_to_char(CANNOT_GO_THAT_WAY, ch);
     return;
   }
+  if ((!ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_ROAD) && !ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_GARAGE))
+      && (veh->type != VEH_DRONE && veh->type != VEH_BIKE))
+  {
+    send_to_char("Your vehicle is too big to fit there.\r\n", ch);
+    return;
+  }
+  if (veh->type == VEH_BIKE && ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_NOBIKE)) {
+    send_to_char(CANNOT_GO_THAT_WAY, ch);
+    return;
+  }
+#ifdef DEATH_FLAGS
+  if (ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_DEATH)) {
+    send_to_char(CANNOT_GO_THAT_WAY, ch);
+    return;
+  }
+#endif
+
+#ifdef DIES_IRAE
+  // Flying vehicles can traverse any terrain.If you're not a flying or amphibious vehicle, you can't go into water.
+  if (!veh->flags.IsSet(VFLAG_CAN_FLY)) {
+    // Non-flying vehicles can't pass fall rooms.
+    if (ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_FALL)) {
+      send_to_char("Your vehicle would plunge to its destruction!\r\n", ch);
+      return;
+    }
+
+    // Non-amphibious vehicles can't traverse water.
+    if (IS_WATER(EXIT(veh, dir)->to_room)) {
+      send_to_char("Your vehicle would sink!\r\n", ch);
+      return;
+    }
+  }
+#endif
 
   if (special(ch, convert_dir[dir], &empty_argument))
     return;
