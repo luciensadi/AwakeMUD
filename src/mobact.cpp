@@ -66,6 +66,7 @@ bool attempt_reload(struct char_data *mob, int pos);
 bool vehicle_is_valid_mob_target(struct veh_data *veh, bool alarmed);
 void switch_weapons(struct char_data *mob, int pos);
 void send_mob_aggression_warnings(struct char_data *pc, struct char_data *mob);
+bool mob_cannot_be_aggressive(struct char_data *ch);
 
 // This takes up a significant amount of processing time, so let's precompute it.
 #define NUM_AGGRO_OCTETS 3
@@ -545,8 +546,13 @@ bool mobact_process_in_vehicle_guard(struct char_data *ch) {
   struct char_data *vict = NULL;
   struct room_data *in_room;
 
-  if (is_escortee(ch))
+  if (mob_cannot_be_aggressive(ch)) {
+    #ifdef MOBACT_DEBUG
+      strncpy(buf3, "m_p_i_v_g: I cannot be aggressive.", sizeof(buf));
+      do_say(ch, buf3, 0, 0);
+    #endif
     return FALSE;
+  }
 
   // Precondition: Vehicle must exist, we must be manning or driving, and we must not be astral.
   if (!ch->in_veh || !(AFF_FLAGGED(ch, AFF_PILOT) || AFF_FLAGGED(ch, AFF_MANNING)) || IS_ASTRAL(ch)) {
@@ -656,8 +662,13 @@ bool mobact_process_in_vehicle_aggro(struct char_data *ch) {
   struct char_data *vict = NULL;
   struct room_data *in_room;
 
-  if (is_escortee(ch))
+  if (mob_cannot_be_aggressive(ch)) {
+    #ifdef MOBACT_DEBUG
+      strncpy(buf3, "m_p_i_v_a: I cannot be aggressive.", sizeof(buf));
+      do_say(ch, buf3, 0, 0);
+    #endif
     return FALSE;
+  }
 
   // Precondition: Vehicle must exist, we must be manning or driving, and we must not be astral.
   if (!ch->in_veh || !(AFF_FLAGGED(ch, AFF_PILOT) || AFF_FLAGGED(ch, AFF_MANNING)) || IS_ASTRAL(ch)) {
@@ -770,13 +781,6 @@ bool mobact_process_aggro(struct char_data *ch, struct room_data *room) {
   struct char_data *vict = NULL;
   struct veh_data *veh = NULL;
 
-  if (is_escortee(ch))
-    return FALSE;
-
-  // Conjured spirits and elementals are never aggressive.
-  if ((IS_PC_CONJURED_ELEMENTAL(ch) || IS_SPIRIT(ch)) && GET_ACTIVE(ch))
-    return FALSE;
-
   // Vehicle code is separate. Vehicles only attack same room.
   if (ch->in_veh) {
     if (ch->in_veh->in_room->number == room->number)
@@ -790,6 +794,14 @@ bool mobact_process_aggro(struct char_data *ch, struct room_data *room) {
     strncpy(buf3, "m_p_a: Room is peaceful.", sizeof(buf));
     do_say(ch, buf3, 0, 0);
 #endif
+    return FALSE;
+  }
+
+  if (mob_cannot_be_aggressive(ch)) {
+    #ifdef MOBACT_DEBUG
+      strncpy(buf3, "m_p_a: I cannot be aggressive.", sizeof(buf));
+      do_say(ch, buf3, 0, 0);
+    #endif
     return FALSE;
   }
 
@@ -1053,16 +1065,20 @@ bool mobact_process_guard(struct char_data *ch, struct room_data *room) {
   if (is_escortee(ch))
     return FALSE;
 
-  // Conjured spirits and elementals are never aggressive.
-  if ((IS_PC_CONJURED_ELEMENTAL(ch) || IS_SPIRIT(ch)) && GET_ACTIVE(ch))
-    return FALSE;
-
   // Vehicle code is separate.
   if (ch->in_veh) {
     if (ch->in_veh->in_room == room)
       return mobact_process_in_vehicle_guard(ch);
     else
       return FALSE;
+  }
+
+  if (mob_cannot_be_aggressive(ch)) {
+    #ifdef MOBACT_DEBUG
+      strncpy(buf3, "m_p_g: I cannot be aggressive.", sizeof(buf));
+      do_say(ch, buf3, 0, 0);
+    #endif
+    return FALSE;
   }
 
   // Check vehicles, but only if they're in the same room as the guard.
@@ -1879,4 +1895,20 @@ void switch_weapons(struct char_data *mob, int pos)
     perform_wear(mob, melee_weapon, pos, TRUE);
   else
     act("$n won't wield a new weapon- no alternative weapon found.", TRUE, mob, GET_EQ(mob, pos), NULL, TO_ROLLS);
+}
+
+bool mob_cannot_be_aggressive(struct char_data *ch) {
+  // Conjured spirits and elementals are never aggressive.
+  if ((IS_PC_CONJURED_ELEMENTAL(ch) || IS_SPIRIT(ch)) && GET_ACTIVE(ch))
+    return TRUE;
+
+  // Anything that's spec-protected can't fight (shopkeepers, Johnsons, etc).
+  if (npc_is_protected_by_spec(ch))
+    return TRUE;
+
+  // Escortees don't hit first.
+  if (is_escortee(ch))
+    return TRUE;
+
+  return FALSE;
 }
