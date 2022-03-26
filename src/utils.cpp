@@ -2940,9 +2940,9 @@ void set_character_skill(struct char_data *ch, int skill_num, int new_value, boo
       } else if (new_value == 9) {
         send_to_char(ch, "^CYou have achieved bachelor's-degree-level fluency.^n\r\n");
       } else if (new_value == 10) {
-        send_to_char(ch, "^CYou have achieved a native-level fluency.^n\r\n");
+        send_to_char(ch, "^gYou have achieved a native-level fluency.^n\r\n");
       } else if (new_value == 12) {
-        send_to_char(ch, "^CYou have achieved doctorate-degree-level fluency.^n\r\n");
+        send_to_char(ch, "^GYou have achieved doctorate-degree-level fluency.^n\r\n");
       } else {
         send_to_char(ch, "^GYou further hone your talents towards perfection.^n\r\n");
       }
@@ -2992,32 +2992,32 @@ const char *skill_rank_name(int rank, bool knowledge) {
   if (rank < 0)
     return "uh oh! you have a negative skill, please report!";
 
-  RANK_MESSAGE(0, "not learned", "not learned");
-  RANK_MESSAGE(1, "introduced", "scream-sheet level");
-  RANK_MESSAGE(2, "practiced", "interested");
-  RANK_MESSAGE(3, "novice", "interested");
-  RANK_MESSAGE(4, "competent", "dedicated");
-  RANK_MESSAGE(5, "proficient", "well-rounded");
-  RANK_MESSAGE(6, "proficient", "educated");
-  RANK_MESSAGE(7, "skilled", "educated");
-  RANK_MESSAGE(8, "professional", "mastered");
-  RANK_MESSAGE(9, "professional", "intuitive");
-  RANK_MESSAGE(10, "specialist", "specialist");
-  RANK_MESSAGE(11, "expert", "expert");
+  RANK_MESSAGE(0,  "Not Learned" , "Not Learned");
+  RANK_MESSAGE(1,  "Introduced"  , "Scream-Sheet Level");
+  RANK_MESSAGE(2,  "Practiced"   , "Interested");
+  RANK_MESSAGE(3,  "Novice"      , "Interested");
+  RANK_MESSAGE(4,  "Competent"   , "Dedicated");
+  RANK_MESSAGE(5,  "Proficient"  , "Well-Rounded");
+  RANK_MESSAGE(6,  "Proficient"  , "Educated");
+  RANK_MESSAGE(7,  "Skilled"     , "Educated");
+  RANK_MESSAGE(8,  "Professional", "Mastered");
+  RANK_MESSAGE(9,  "Professional", "Intuitive");
+  RANK_MESSAGE(10, "Specialist"  , "Specialist");
+  RANK_MESSAGE(11, "Expert"      , "Expert");
 
   if (rank < MAX_SKILL_LEVEL_FOR_IMMS) {
-    if (knowledge) return "genius";
-    else return "world-class";
+    if (knowledge) return "Genius";
+    else return "World-Class";
   }
 
-  return "godly";
+  return "Godly";
 #undef RANK_MESSAGE
 }
 
 char *how_good(int skill, int rank)
 {
   static char buf[256];
-  snprintf(buf, sizeof(buf), " (%s / rank %d)", skill_rank_name(rank, skills[skill].type == SKILL_TYPE_KNOWLEDGE), rank);
+  snprintf(buf, sizeof(buf), " (rank ^c%2d^n: %s)", rank, skill_rank_name(rank, skills[skill].type == SKILL_TYPE_KNOWLEDGE));
   return buf;
 }
 
