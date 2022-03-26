@@ -733,7 +733,7 @@ void affect_total(struct char_data * ch)
         // todo
         break;
       case CYB_EYES:
-        apply_vision_bits_from_cyberware(ch, cyber);
+        apply_vision_bits_from_implant(ch, cyber);
         break;
     }
 
@@ -780,8 +780,7 @@ void affect_total(struct char_data * ch)
         break;
       case BIO_CATSEYES:
         // M&M p45
-        remove_racial_vision_due_to_eye_replacement(ch);
-        set_vision_bit(ch, VISION_LOWLIGHT, VISION_BIT_IS_NATURAL);
+        apply_vision_bits_from_implant(ch, bio);
         break;
     }
   }
@@ -1023,6 +1022,9 @@ void affect_total(struct char_data * ch)
   }
   if (AFF_FLAGGED(ch, AFF_LOW_LIGHT)) {
     set_vision_bit(ch, VISION_LOWLIGHT, VISION_BIT_FROM_EQUIPMENT);
+  }
+  if (AFF_FLAGGED(ch, AFF_ULTRASOUND)) {
+    set_vision_bit(ch, VISION_ULTRASONIC, VISION_BIT_FROM_EQUIPMENT);
   }
 
   // Strip invisibility from ruthenium etc if you're wearing about or body items that aren't also ruthenium.

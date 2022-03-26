@@ -13,7 +13,7 @@ bool _vision_bit_is_valid(int bit, const char *function_name);
 
 // Do we have a given type of vision at all?
 bool has_vision(struct char_data *ch, int type, bool staff_override) {
-  if (!_vision_prereqs_are_valid(ch, type, "has_vision"))
+  if (!_vision_prereqs_are_valid(ch, type, __func__))
     return FALSE;
 
   return ch->points.vision[type].HasAnythingSetAtAll();
@@ -21,7 +21,7 @@ bool has_vision(struct char_data *ch, int type, bool staff_override) {
 
 // Do we have a given type of vision in a natural form? (Used for vision penalties)
 bool has_natural_vision(struct char_data *ch, int type) {
-  if (!_vision_prereqs_are_valid(ch, type, "has_natural_vision"))
+  if (!_vision_prereqs_are_valid(ch, type, __func__))
     return FALSE;
 
   // Spell vision specifically functions as if cybernetic, so it doesn't qualify as natural.
@@ -30,7 +30,7 @@ bool has_natural_vision(struct char_data *ch, int type) {
 
 // Do we have a given type of vision in a form we can cast with?
 bool has_castable_vision(struct char_data *ch, int type) {
-  if (!_vision_prereqs_are_valid(ch, type, "has_castable_vision"))
+  if (!_vision_prereqs_are_valid(ch, type, __func__))
     return FALSE;
 
 #ifndef DIES_IRAE
@@ -59,6 +59,9 @@ bool has_castable_vision(struct char_data *ch, int type) {
 }
 
 void remove_racial_vision_due_to_eye_replacement(struct char_data *ch) {
+  // Make sure you set VISION_BIT_FROM_IMPLANTS on normal vision after you call this.
+  remove_vision_bit(ch, VISION_NORMAL, VISION_BIT_IS_NATURAL);
+
   switch (GET_RACE(ch)) {
     case RACE_DWARF:
     case RACE_GNOME:
@@ -79,6 +82,13 @@ void remove_racial_vision_due_to_eye_replacement(struct char_data *ch) {
     case RACE_WAKYAMBI:
     case RACE_NIGHTONE:
     case RACE_DRYAD:
+      // We refuse to remove LL vision from someone who has the Cat's Eyes bioware.
+      for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content) {
+        if (GET_BIOWARE_TYPE(bio) == BIO_CATSEYES)
+          return;
+      }
+
+      // No bioware to protect you? Goodbye, natural vision.
       remove_vision_bit(ch, VISION_LOWLIGHT, VISION_BIT_IS_NATURAL);
       break;
   }
@@ -87,26 +97,20 @@ void remove_racial_vision_due_to_eye_replacement(struct char_data *ch) {
 
 /* Setters. */
 void set_vision_bit(struct char_data *ch, int type, int bit) {
-  if (!_vision_prereqs_are_valid(ch, type, "set_vision_bit"))
+  if (!_vision_prereqs_are_valid(ch, type, __func__))
     return;
 
-  if (!_vision_bit_is_valid(bit, "set_vision_bit"))
+  if (!_vision_bit_is_valid(bit, __func__))
     return;
-
-  // Eye replacements strip racial benefits, so if we have those and are setting the implant flag, strip them.
-  // See M&M p64 (Cat's Eyes) for an example of this rule.
-  if (bit == VISION_BIT_FROM_IMPLANTS) {
-
-  }
 
   ch->points.vision[type].SetBit(bit);
 }
 
 void remove_vision_bit(struct char_data *ch, int type, int bit) {
-  if (!_vision_prereqs_are_valid(ch, type, "remove_vision_bit"))
+  if (!_vision_prereqs_are_valid(ch, type, __func__))
     return;
 
-  if (!_vision_bit_is_valid(bit, "remove_vision_bit"))
+  if (!_vision_bit_is_valid(bit, __func__))
     return;
 
   ch->points.vision[type].RemoveBit(bit);
@@ -114,9 +118,12 @@ void remove_vision_bit(struct char_data *ch, int type, int bit) {
 
 
 /////////////////// Utilities and helpers for other files //////////////////////
+
+// Local defines to make the get_vision_penalty code easier to handle.
 #define TH_PENALTY(str, pen) { thermo_penalties.emplace(str, pen); tn_with_thermo += pen; }
 #define LL_PENALTY(str, pen) { lowlight_penalties.emplace(str, pen); tn_with_ll += pen; }
 #define NM_PENALTY(str, pen) { normal_penalties.emplace(str, pen); tn_with_none += pen; }
+/* Calculate the vision penalty for character based on their room. */
 int get_vision_penalty(struct char_data *ch, struct room_data *temp_room, char *rbuf, int rbuf_size) {
   int tn_with_thermo = 0;
   int tn_with_ll = 0;
@@ -244,7 +251,7 @@ int get_vision_penalty(struct char_data *ch, struct room_data *temp_room, char *
     } else {
       // This happens when you roll no successes at all, right?
       // light_target /= 2;
-      mudlog("Encountered that weird light case, investigate here!", ch, LOG_SYSLOG, TRUE);
+      mudlog("Encountered that weird case where light spell force is zero, investigate here!", ch, LOG_SYSLOG, TRUE);
     }
   }
 
@@ -257,7 +264,7 @@ int get_vision_penalty(struct char_data *ch, struct room_data *temp_room, char *
   }
 
   if (temp_room->vision[1] == LIGHT_LIGHTSMOKE
-      || (weather_info.sky == SKY_RAINING && temp_room->sector_type != SPIRIT_HEARTH && !ROOM_FLAGGED(temp_room, ROOM_INDOORS)))
+      || (weather_info.sky == SKY_RAINING && !ROOM_FLAGGED(temp_room, ROOM_INDOORS)))
   {
     if (has_natural_lowlight_vision) {
       LL_PENALTY("LSmoke/LRain[LL-N]", 2);
@@ -269,7 +276,7 @@ int get_vision_penalty(struct char_data *ch, struct room_data *temp_room, char *
   }
 
   if (temp_room->vision[1] == LIGHT_HEAVYSMOKE
-      || (weather_info.sky == SKY_LIGHTNING && temp_room->sector_type != SPIRIT_HEARTH && !ROOM_FLAGGED(temp_room, ROOM_INDOORS)))
+      || (weather_info.sky == SKY_LIGHTNING && !ROOM_FLAGGED(temp_room, ROOM_INDOORS)))
   {
     if (!has_natural_thermographic_vision) {
       TH_PENALTY("HSmoke/HRain[TH-U]", 1);
@@ -313,8 +320,8 @@ int get_vision_penalty(struct char_data *ch, struct room_data *temp_room, char *
     penalty_chosen = tn_with_none;
   }
 
-  for (auto it = penalty_vector->begin(); it != penalty_vector->end(); ++it) {
-    buf_mod(rbuf, rbuf_size, it->first, it->second);
+  for (auto it : *penalty_vector) {
+    buf_mod(rbuf, rbuf_size, it.first, it.second);
   }
 
   if (penalty_chosen > 8) {
@@ -407,19 +414,59 @@ void clear_ch_vision_bits(struct char_data *ch) {
   set_natural_vision_for_race(ch);
 }
 
-void apply_vision_bits_from_cyberware(struct char_data *ch, struct obj_data *cyber) {
+void apply_vision_bits_from_implant(struct char_data *ch, struct obj_data *implant) {
+  char oopsbuf[500];
+
+  if (!implant || !ch) {
+    mudlog("SYSERR: Received NULL implant or ch to apply_vision_bits_from_implant()!", ch, LOG_SYSLOG, TRUE);
+    return;
+  }
+
+  // Eye replacements strip racial benefits, so we call this function before applying the implant.
+  // See M&M p64 (Cat's Eyes) for an example of this rule.
   remove_racial_vision_due_to_eye_replacement(ch);
 
-  if (IS_SET(GET_CYBERWARE_FLAGS(cyber), EYE_THERMO)) {
-    set_vision_bit(ch, VISION_THERMOGRAPHIC, VISION_BIT_FROM_IMPLANTS);
-  }
+  // All implants grant normal vision as a matter of course.
+  set_vision_bit(ch, VISION_NORMAL, VISION_BIT_FROM_IMPLANTS);
 
-  if (IS_SET(GET_CYBERWARE_FLAGS(cyber), EYE_LOWLIGHT)) {
-    set_vision_bit(ch, VISION_LOWLIGHT, VISION_BIT_FROM_IMPLANTS);
-  }
+  switch (GET_OBJ_TYPE(implant)) {
+    // Handle cyberware.
+    case ITEM_CYBERWARE:
+      if (GET_CYBERWARE_TYPE(implant) != CYB_EYES) {
+        snprintf(oopsbuf, sizeof(oopsbuf), "SYSERR: Received non-CYB_EYES cyberware type %d to %s!", GET_CYBERWARE_TYPE(implant), __func__);
+        mudlog(oopsbuf, ch, LOG_SYSLOG, TRUE);
+        return;
+      }
 
-  if (IS_SET(GET_CYBERWARE_FLAGS(cyber), EYE_ULTRASOUND)) {
-    set_vision_bit(ch, VISION_ULTRASONIC, VISION_BIT_FROM_IMPLANTS);
+      if (IS_SET(GET_CYBERWARE_FLAGS(implant), EYE_THERMO)) {
+        set_vision_bit(ch, VISION_THERMOGRAPHIC, VISION_BIT_FROM_IMPLANTS);
+      }
+
+      if (IS_SET(GET_CYBERWARE_FLAGS(implant), EYE_LOWLIGHT)) {
+        set_vision_bit(ch, VISION_LOWLIGHT, VISION_BIT_FROM_IMPLANTS);
+      }
+
+      if (IS_SET(GET_CYBERWARE_FLAGS(implant), EYE_ULTRASOUND)) {
+        set_vision_bit(ch, VISION_ULTRASONIC, VISION_BIT_FROM_IMPLANTS);
+      }
+      break;
+
+    // Handle bioware.
+    case ITEM_BIOWARE:
+      if (GET_BIOWARE_TYPE(implant) != BIO_CATSEYES) {
+        snprintf(oopsbuf, sizeof(oopsbuf), "SYSERR: Received non-BIO_CATSEYES bioware type %d to %s!", GET_BIOWARE_TYPE(implant), __func__);
+        mudlog(oopsbuf, ch, LOG_SYSLOG, TRUE);
+        return;
+      }
+
+      set_vision_bit(ch, VISION_LOWLIGHT, VISION_BIT_IS_NATURAL);
+      break;
+
+    // Handle bugs.
+    default:
+      snprintf(oopsbuf, sizeof(oopsbuf), "SYSERR: Received unhandled item type %d to %s!", GET_OBJ_TYPE(implant), __func__);
+      mudlog(oopsbuf, ch, LOG_SYSLOG, TRUE);
+      return;
   }
 }
 

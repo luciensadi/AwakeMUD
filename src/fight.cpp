@@ -3921,8 +3921,8 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
   }
 
   // Pre-calculate the things we care about here. First, character vision info.
-  bool ch_has_ultrasound = AFF_FLAGGED(ch, AFF_ULTRASOUND) || has_vision(ch, VISION_ULTRASONIC);
-  bool ch_has_thermographic = AFF_FLAGGED(ch, AFF_INFRAVISION) || has_vision(ch, VISION_THERMOGRAPHIC);
+  bool ch_has_ultrasound = has_vision(ch, VISION_ULTRASONIC);
+  bool ch_has_thermographic = has_vision(ch, VISION_THERMOGRAPHIC);
   bool ch_sees_astral = IS_ASTRAL(ch) || IS_DUAL(ch);
 
   // EXCEPT: If you're rigging (not manning), things change.

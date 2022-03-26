@@ -256,7 +256,7 @@ int light_level(struct room_data *room)
   }
 
   // Indoor rooms have no weather or time-based light influences.
-  if (room->sector_type == SPIRIT_HEARTH)
+  if (ROOM_FLAGGED(room, ROOM_INDOORS))
     return candidate_light_level;
 
   // Outdoor city rooms (roads, etc) are impacted by ambient light.
@@ -272,10 +272,11 @@ int light_level(struct room_data *room)
     else
       return MAX(LIGHT_PARTLIGHT, artificial_light_level);
   }
-  if ((time_info.hours < 6 || time_info.hours > 19) && (candidate_light_level > LIGHT_MINLIGHT || candidate_light_level <= LIGHT_NORMALNOLIT))
+  if ((time_info.hours < 6 || time_info.hours > 19) && (candidate_light_level > LIGHT_MINLIGHT || candidate_light_level <= LIGHT_NORMALNOLIT)) {
     return MAX(LIGHT_MINLIGHT, artificial_light_level);
-  else
+  } else {
     return candidate_light_level;
+  }
 }
 
 int damage_modifier(struct char_data *ch, char *rbuf, int rbuf_size)
@@ -3385,8 +3386,8 @@ bool LIGHT_OK_ROOM_SPECIFIED(struct char_data *sub, struct room_data *provided_r
   if (IS_ASTRAL(sub) || IS_DUAL(sub))
     return TRUE;
 
-  // If you have thermographic vision or holy light, you're good.
-  if (has_vision(sub, VISION_THERMOGRAPHIC) || HOLYLIGHT_OK(sub))
+  // If you have ultrasonic or thermographic vision or holy light, you're good.
+  if (has_vision(sub, VISION_ULTRASONIC) || has_vision(sub, VISION_THERMOGRAPHIC) || HOLYLIGHT_OK(sub))
     return TRUE;
 
   // If you're in a vehicle, we assume you have headlights and interior lights.
@@ -3404,13 +3405,15 @@ bool LIGHT_OK_ROOM_SPECIFIED(struct char_data *sub, struct room_data *provided_r
   int room_light_level = light_level(provided_room);
 
   // At this point, we know that we're using ultrasonic, low-light, or normal vision.
-  // Ultrasonic can see in any light condition. LL can see in minlight and better. Normal is the most restricted.
+  // We already checked for thermo and ultra above, which means you have LL or Normal vision. You can't see in full darkness.
   if (room_light_level == LIGHT_FULLDARK)
-    return has_vision(sub, VISION_ULTRASONIC);
+    return FALSE;
+
+  // Between LL and Normal, only LL can see in minlight.
   if (room_light_level == LIGHT_MINLIGHT)
     return has_vision(sub, VISION_LOWLIGHT);
 
-  // It's bright enough for your vision class.
+  // Both LL and Normal can see in all other lighting conditions (partlight, etc).
   return TRUE;
 }
 

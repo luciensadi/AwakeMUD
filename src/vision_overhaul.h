@@ -38,7 +38,7 @@ void clear_ch_vision_bits(struct char_data *ch);
 void set_natural_vision_for_race(struct char_data *ch);
 void remove_racial_vision_due_to_eye_replacement(struct char_data *ch);
 
-void apply_vision_bits_from_cyberware(struct char_data *ch, struct obj_data *cyber);
+void apply_vision_bits_from_implant(struct char_data *ch, struct obj_data *cyber);
 
 int get_vision_penalty(struct char_data *ch, struct room_data *temp_room, char *rbuf, int rbuf_len);
 
