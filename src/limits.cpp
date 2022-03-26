@@ -450,8 +450,7 @@ void check_idling(void)
       ch->char_specials.timer++;
       ch->char_specials.last_social_action++;
 
-#ifdef VOID_IDLE_PCS
-      // Staff and busy PCs never idle out.
+      // Staff and busy PCs never idle out or get dropped from being LD.
       if (IS_SENATOR(ch) || IS_WORKING(ch))
         continue;
 
@@ -459,6 +458,7 @@ void check_idling(void)
       if (ch->desc && (PLR_FLAGGED(ch, PLR_NO_IDLE_OUT) || PRF_FLAGGED(ch, PRF_NO_VOID_ON_IDLE)))
         continue;
 
+#ifdef VOID_IDLE_PCS
       if (!GET_WAS_IN(ch) && ch->in_room && ch->char_specials.timer > 15) {
         if (FIGHTING(ch))
           stop_fighting(FIGHTING(ch));
@@ -504,7 +504,7 @@ void check_idling(void)
         }
         */
 
-      if (!ch->desc && ch->char_specials.timer > NUM_MINUTES_BEFORE_LINKDEAD_EXTRACTION) {
+      else if (!ch->desc && ch->char_specials.timer > NUM_MINUTES_BEFORE_LINKDEAD_EXTRACTION) {
         snprintf(buf, sizeof(buf), "%s removed from game (no link).", GET_CHAR_NAME(ch));
         mudlog(buf, ch, LOG_CONNLOG, TRUE);
         extract_char(ch);
