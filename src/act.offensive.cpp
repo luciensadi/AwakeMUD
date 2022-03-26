@@ -408,9 +408,9 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
         act("You take a swing at $N!", FALSE, ch, 0, vict, TO_CHAR);
         act("$n prepares to take a swing at you!", FALSE, ch, 0, vict, TO_VICT);
       }
-    } else if (FIGHTING(ch) && vict != FIGHTING(ch)) {
-      char name[80];
-      strcpy(name, GET_NAME(FIGHTING(ch)));
+    } else if ((FIGHTING(ch) && vict != FIGHTING(ch)) || FIGHTING_VEH(ch)) {
+      char name[200];
+      strcpy(name, FIGHTING(ch) ? GET_NAME(FIGHTING(ch)) : GET_VEH_NAME(FIGHTING_VEH(ch)));
       stop_fighting(ch);
       set_fighting(ch, vict);
       if (!CH_IN_COMBAT(vict) && AWAKE(vict))
