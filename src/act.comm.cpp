@@ -1605,7 +1605,10 @@ ACMD(do_phone)
           snprintf(ended_call_buf, sizeof(ended_call_buf), "The phone is hung up from the other side. A mechanical voice notes, \"Call ended: %.4d-%.4d\".\r\n", (int) phone->number / 10000, (int) phone->number % 10000);
           act(ended_call_buf, FALSE, tch, 0, 0, TO_CHAR);
         } else {
-          snprintf(ended_call_buf, sizeof(ended_call_buf), "Your phone stops ringing, and \"Missed Call: %.4d-%.4d\" flashes briefly on its display.\r\n", (int) phone->number / 10000, (int) phone->number % 10000);
+          snprintf(ended_call_buf, sizeof(ended_call_buf), "%s stops ringing, and \"Missed Call: %.4d-%.4d\" flashes briefly on its display.\r\n",
+                   capitalize(GET_OBJ_NAME(phone->dest->phone)),
+                   (int) phone->number / 10000,
+                   (int) phone->number % 10000);
           act(ended_call_buf, FALSE, tch, 0, 0, TO_CHAR);
         }
       }
@@ -1825,7 +1828,7 @@ void ring_phone(struct phone_data *k) {
       // If the ringer is on, notify the room, otherwise just the carrier.
       if (!GET_OBJ_VAL(k->phone, 3)) {
         struct room_data *in_room = get_ch_in_room(tch);
-        act("Your phone rings.", FALSE, tch, 0, 0, TO_CHAR);
+        act("$p rings.", FALSE, tch, k->phone, 0, TO_CHAR);
         if (in_room && GET_ROOM_VNUM(in_room) > 1)
           act("$n's phone rings.", FALSE, tch, 0, 0, TO_ROOM);
       }
