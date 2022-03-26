@@ -449,33 +449,43 @@ void check_idling(void)
     } else if (!IS_NPC(ch)) {
       ch->char_specials.timer++;
       ch->char_specials.last_social_action++;
-      if (!(IS_SENATOR(ch) || IS_WORKING(ch) || PLR_FLAGGED(ch, PLR_NO_IDLE_OUT) || PRF_FLAGGED(ch, PRF_NO_VOID_ON_IDLE)) || !ch->desc) {
+
 #ifdef VOID_IDLE_PCS
-        if (!GET_WAS_IN(ch) && ch->in_room && ch->char_specials.timer > 15) {
-          if (FIGHTING(ch))
-            stop_fighting(FIGHTING(ch));
-          if (CH_IN_COMBAT(ch))
-            stop_fighting(ch);
-          if (ch->master)
-            stop_follower(ch);
+      // Staff and busy PCs never idle out.
+      if (IS_SENATOR(ch) || IS_WORKING(ch))
+        continue;
 
-          // No idling out in cabs.
-          if (ROOM_VNUM_IS_CAB(GET_ROOM_VNUM(ch->in_room))) {
+      // We allow people prf-flagged appropriately to not idle out, but only if they have a link.
+      if (ch->desc && (PLR_FLAGGED(ch, PLR_NO_IDLE_OUT) || PRF_FLAGGED(ch, PRF_NO_VOID_ON_IDLE)))
+        continue;
+
+      if (!GET_WAS_IN(ch) && ch->in_room && ch->char_specials.timer > 15) {
+        if (FIGHTING(ch))
+          stop_fighting(FIGHTING(ch));
+        if (CH_IN_COMBAT(ch))
+          stop_fighting(ch);
+        if (ch->master)
+          stop_follower(ch);
+
+        // No idling out in cabs.
+        if (ROOM_VNUM_IS_CAB(GET_ROOM_VNUM(ch->in_room))) {
+          if (ch->desc)
             send_to_char("The cabdriver stops off at Dante's long enough to kick you out.\r\n", ch);
-            int rnum = real_room(RM_ENTRANCE_TO_DANTES);
-            if (rnum >= 0)
-              GET_WAS_IN(ch) = &world[rnum];
-            else
-              GET_WAS_IN(ch) = &world[1];
-          } else {
-            GET_WAS_IN(ch) = ch->in_room;
-          }
-
-          act("$n disappears into the void.", TRUE, ch, 0, 0, TO_ROOM);
-          send_to_char("You have been idle, and are pulled into a void.\r\n", ch);
-          char_from_room(ch);
-          char_to_room(ch, &world[1]);
+          int rnum = real_room(RM_ENTRANCE_TO_DANTES);
+          if (rnum >= 0)
+            GET_WAS_IN(ch) = &world[rnum];
+          else
+            GET_WAS_IN(ch) = &world[1];
+        } else {
+          GET_WAS_IN(ch) = ch->in_room;
         }
+
+        act("$n disappears into the void.", TRUE, ch, 0, 0, TO_ROOM);
+        if (ch->desc)
+          send_to_char("You have been idle, and are pulled into a void.\r\n", ch);
+        char_from_room(ch);
+        char_to_room(ch, &world[1]);
+      }
 #endif
         /* Disabled-- I get protecting them by moving them to the void, but why DC them?
         else if (ch->char_specials.timer > 30) {
@@ -493,7 +503,8 @@ void check_idling(void)
           extract_char(ch);
         }
         */
-      } else if (!ch->desc && ch->char_specials.timer > 15) {
+
+      if (!ch->desc && ch->char_specials.timer > NUM_MINUTES_BEFORE_LINKDEAD_EXTRACTION) {
         snprintf(buf, sizeof(buf), "%s removed from game (no link).", GET_CHAR_NAME(ch));
         mudlog(buf, ch, LOG_CONNLOG, TRUE);
         extract_char(ch);

@@ -141,6 +141,8 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 #define IDLE_NUYEN_REWARD_THRESHOLD_IN_MINUTES                 10
 #define IDLE_NUYEN_MINUTES_BETWEEN_AWARDS                      60
 
+#define NUM_MINUTES_BEFORE_LINKDEAD_EXTRACTION                 5
+
 // What is the multiplier at which a cyberdoc will buy 'ware from you?
 #define CYBERDOC_MAXIMUM_SELL_TO_SHOPKEEP_MULTIPLIER           0.30
 
