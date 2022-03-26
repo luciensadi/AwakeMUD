@@ -5069,6 +5069,7 @@ void perform_violence(void)
           && GET_SKILL(ch, SKILL_SORCERY) > 0
           && GET_MENTAL(ch) > 400
           && ch->in_room == FIGHTING(ch)->in_room
+          && !AFF_FLAGGED(ch, AFF_SURPRISE)
           && success_test(1, 8 - GET_SKILL(ch, SKILL_SORCERY)))
       {
         // Only continue if we successfully cast.
