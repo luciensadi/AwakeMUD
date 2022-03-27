@@ -1446,7 +1446,8 @@ enum {
 #define CYB_ARMS             47
 #define CYB_LEGS             48
 #define CYB_TACTICALCOMPUTER 49
-#define NUM_CYBER            50
+#define CYB_CRD              50
+#define NUM_CYBER            51
 
 #define BIO_ADRENALPUMP    0
 #define BIO_CATSEYES    1
