@@ -888,6 +888,11 @@ ACMD(do_control)
         if (GET_OBJ_TYPE(GET_EQ(ch, x)) == ITEM_RCDECK)
           has_rig = TRUE;
 
+  if (!has_rig)
+    for (cyber = ch->cyberware; cyber; cyber = cyber->next_content)
+      if (GET_OBJ_VAL(cyber, 0) == CYB_CRD))
+        has_rig = TRUE;
+
   if (!has_rig) {
     send_to_char("You need a Remote Control Deck to do that.\r\n", ch);
     return;
@@ -955,7 +960,7 @@ ACMD(do_control)
 ACMD(do_subscribe)
 {
   struct veh_data *veh = NULL;
-  struct obj_data *obj;
+  struct obj_data *obj, *cyber;
   bool has_deck = FALSE;
   int i = 0, num;
 
@@ -968,6 +973,11 @@ ACMD(do_subscribe)
       if (GET_EQ(ch, x))
         if (GET_OBJ_TYPE(GET_EQ(ch, x)) == ITEM_RCDECK)
           has_deck = TRUE;
+
+  if (!has_deck)
+  for (cyber = ch->cyberware; cyber; cyber = cyber->next_content)
+    if (GET_OBJ_VAL(cyber, 0) == CYB_CRD)
+      has_rig = TRUE;
 
   if (!has_deck) {
     send_to_char("You need a Remote Control Deck to do that.\r\n", ch);
