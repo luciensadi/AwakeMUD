@@ -376,28 +376,40 @@ const char *write_vision_string_for_display(struct char_data *ch, int mode) {
   static char vision_string_buf[1000], bit_string[1000];
   bool printed_something = FALSE;
 
-  strlcpy(vision_string_buf, "Vision: ", sizeof(vision_string_buf));
+  if (mode == VISION_STRING_MODE_STATUS)
+    strlcpy(vision_string_buf, "", sizeof(vision_string_buf));
+  else
+    strlcpy(vision_string_buf, "Vision: ", sizeof(vision_string_buf));
+
   bit_string[0] = '\0';
 
   for (int vision_idx = 0; vision_idx < NUM_VISION_TYPES; vision_idx++) {
     if (has_vision(ch, vision_idx)) {
-      if (mode == VISION_STRING_MODE_STAFF) {
+      snprintf(ENDOF(vision_string_buf), sizeof(vision_string_buf) - strlen(vision_string_buf), "%s%s%s^n (%s%s%s^n)",
+               // In status mode, we put in newlines-- otherwise, colorized commas.
+               printed_something ? (mode == VISION_STRING_MODE_STATUS ? "\r\n  " : "^n, ^C") : "",
+               // Skip the bright blue for status mode.
+               mode != VISION_STRING_MODE_STATUS ? "^C" : "",
+               // Print the vision type itself (ex: thermographic).
+               vision_types[vision_idx],
+               // Mark it as natural or artificial.
+               has_natural_vision(ch, vision_idx) ? "natural" : "artificial",
+               // Skip the color for status mode again.
+               mode != VISION_STRING_MODE_STATUS ? "^c" : "",
+#ifdef DIES_IRAE
+               // If we're in DI mode, add the castable flag if it's there.
+               has_castable_vision(ch, vision_idx) ? ", castable" : ""
+#else
+               ""
+#endif
+      );
+
+      // We don't print the bits for score mode (what's seen in the status command etc.)
+      if (mode != VISION_STRING_MODE_STATUS) {
         ch->points.vision[vision_idx].PrintBits(bit_string, sizeof(bit_string), vision_bits, NUM_VISION_BITS);
+        snprintf(ENDOF(vision_string_buf), sizeof(vision_string_buf) - strlen(vision_string_buf), " [%s]", bit_string);
       }
 
-      snprintf(ENDOF(vision_string_buf), sizeof(vision_string_buf) - strlen(vision_string_buf), "%s^C%s^n (^c%s%s^n)%s%s%s",
-               printed_something ? "^n, ^C" : "",
-               vision_types[vision_idx],
-               has_natural_vision(ch, vision_idx) ? "natural" : "artificial",
-#ifdef DIES_IRAE
-               has_castable_vision(ch, vision_idx) ? ", castable" : "",
-#else
-               "",
-#endif
-               mode == VISION_STRING_MODE_STAFF ? " [" : "",
-               bit_string,
-               mode == VISION_STRING_MODE_STAFF ? "]" : ""
-      );
       printed_something = TRUE;
     }
   }

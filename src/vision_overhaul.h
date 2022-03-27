@@ -17,6 +17,7 @@
 
 #define VISION_STRING_MODE_STAFF     0
 #define VISION_STRING_MODE_SCORE     1
+#define VISION_STRING_MODE_STATUS    2
 
 /* Getters. */
 // Do we have a given type of vision at all?

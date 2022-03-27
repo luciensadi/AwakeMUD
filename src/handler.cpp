@@ -554,6 +554,9 @@ void affect_total(struct char_data * ch)
     if (!sust->caster)
       spell_modify(ch, sust, FALSE);
 
+  // Because equipment-granted vision AFFs are notoriously sticky, clear them deliberately.
+  AFF_FLAGS(ch).RemoveBits(AFF_LOW_LIGHT, AFF_INFRAVISION, AFF_ULTRASOUND, AFF_VISION_MAG_1, AFF_VISION_MAG_2, AFF_VISION_MAG_3, ENDBIT);
+
   // Wipe out vision bits, resetting them to race-only bits.
   clear_ch_vision_bits(ch);
 
@@ -1528,7 +1531,6 @@ void obj_to_bioware(struct obj_data * object, struct char_data * ch)
 void obj_from_bioware(struct obj_data *bio)
 {
   struct obj_data *temp;
-  int i;
 
   if (bio == NULL)
   {
@@ -1540,18 +1542,26 @@ void obj_from_bioware(struct obj_data *bio)
     return;
   }
 
-  if (GET_OBJ_VAL(bio, 0) == BIO_ADRENALPUMP && GET_OBJ_VAL(bio, 5) < 1)
-    for (i = 0; i < MAX_OBJ_AFFECT; i++)
-      affect_modify(bio->carried_by,
-                    bio->affected[i].location,
-                    bio->affected[i].modifier,
-                    bio->obj_flags.bitvector, FALSE);
+  struct char_data *ch = bio->carried_by;
 
-  affect_total(bio->carried_by);
+  /* remove the effects of bioware */
+  for (struct obj_data *tmp_bio = ch->bioware; tmp_bio; tmp_bio = tmp_bio->next_content)
+  {
+    // Remove the effects of this bioware OR activated adrenal pump.
+    if (GET_BIOWARE_TYPE(tmp_bio) != BIO_ADRENALPUMP || GET_OBJ_VAL(tmp_bio, 5) > 0) {
+      for (int j = 0; j < MAX_OBJ_AFFECT; j++)
+        affect_modify(ch,
+                      tmp_bio->affected[j].location,
+                      tmp_bio->affected[j].modifier,
+                      tmp_bio->obj_flags.bitvector, FALSE);
+    }
+  }
 
-  REMOVE_FROM_LIST(bio, bio->carried_by->bioware, next_content);
+  REMOVE_FROM_LIST(bio, ch->bioware, next_content);
   bio->carried_by = NULL;
   bio->next_content = NULL;
+
+  affect_total(ch);
 }
 
 /* take an object from a char */
@@ -1598,9 +1608,23 @@ void obj_from_cyberware(struct obj_data * cyber)
     return;
   }
 
-  REMOVE_FROM_LIST(cyber, cyber->carried_by->cyberware, next_content);
+  struct char_data *ch = cyber->carried_by;
+
+  /* remove the effects of cyberware */
+  for (struct obj_data *tmp_cyber = cyber->carried_by->cyberware; tmp_cyber; tmp_cyber = tmp_cyber->next_content)
+  {
+    for (int j = 0; j < MAX_OBJ_AFFECT; j++)
+      affect_modify(ch,
+                    tmp_cyber->affected[j].location,
+                    tmp_cyber->affected[j].modifier,
+                    tmp_cyber->obj_flags.bitvector, FALSE);
+  }
+
+  REMOVE_FROM_LIST(cyber, ch->cyberware, next_content);
   cyber->carried_by = NULL;
   cyber->next_content = NULL;
+
+  affect_total(ch);
 }
 
 bool equip_char(struct char_data * ch, struct obj_data * obj, int pos)
