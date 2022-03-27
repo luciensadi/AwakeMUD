@@ -4867,7 +4867,7 @@ ACMD(do_afk) {
 }
 
 ACMD(do_map) {
-  send_to_char("We're actively working on building a map feature. In the meantime, please feel free to use the cab system to get around, or ask for directions in the Newbie or OOC channels!\r\n", ch);
+  send_to_char("Lost? ^WHAIL^ning a cab is a great way to get around, and you can always ask on the radio or in the newbie / OOC channels if you need directions. ASCII maps are available in HELP MAP.\r\n", ch);
 }
 
 ACMD(do_discord) {
