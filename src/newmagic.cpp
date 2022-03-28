@@ -1118,8 +1118,10 @@ bool check_spell_victim(struct char_data *ch, struct char_data *vict, int spell,
 
 #ifdef DIES_IRAE
   // If you can only see your victim through ultrasound, you can't cast on them (M&M p18).
-  if (AFF_FLAGGED(ch, AFF_ULTRASOUND)) {
-    send_to_char("Ultrasound systems don't provide direct viewing-- your magic has nothing to lock on to!\r\n", ch);
+  // TODO: This needs to be rewritten.
+  deliberately breaking statement for dies irae compilation
+  if (has_vision(ch, VISION_ULTRASONIC) && !has_natural_vision(ch, VISION_ULTRASONIC)) {
+    send_to_char("External ultrasound systems don't provide direct viewing-- your magic has nothing to lock on to!\r\n", ch);
     return FALSE;
   }
 #endif

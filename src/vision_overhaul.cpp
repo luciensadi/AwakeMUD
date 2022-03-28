@@ -395,13 +395,8 @@ const char *write_vision_string_for_display(struct char_data *ch, int mode) {
   }
 
   // Add in magnification.
-  int vision_mag = 0;
-  if (AFF_FLAGGED(ch, AFF_VISION_MAG_3))
-    vision_mag = 3;
-  else if (AFF_FLAGGED(ch, AFF_VISION_MAG_2))
-    vision_mag = 2;
-  else if (AFF_FLAGGED(ch, AFF_VISION_MAG_1))
-    vision_mag = 1;
+  int vision_mag = get_vision_mag(ch);
+
 
   if (vision_mag) {
     if (mode == VISION_STRING_MODE_STATUS) {
@@ -509,6 +504,19 @@ bool has_flare_compensation(struct char_data *ch) {
   }
 
   return FALSE;
+}
+
+int get_vision_mag(struct char_data *ch) {
+  int vision_mag = 0;
+  
+  if (AFF_FLAGGED(ch, AFF_VISION_MAG_3))
+    vision_mag = 3;
+  else if (AFF_FLAGGED(ch, AFF_VISION_MAG_2))
+    vision_mag = 2;
+  else if (AFF_FLAGGED(ch, AFF_VISION_MAG_1))
+    vision_mag = 1;
+
+  return vision_mag;
 }
 
 

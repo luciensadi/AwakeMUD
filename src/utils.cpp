@@ -2190,13 +2190,14 @@ struct room_data *get_obj_in_room(struct obj_data *obj) {
 }
 
 bool invis_ok(struct char_data *ch, struct char_data *vict) {
+  struct room_data *ch_room = NULL, *vict_room = NULL;
   // No room at all? Nope.
-  if (!ch || !get_ch_in_room(ch)) {
+  if (!ch || !(ch_room = get_ch_in_room(ch))) {
     mudlog("invis_ok() received char with NO room!", ch, LOG_SYSLOG, TRUE);
     return FALSE;
   }
 
-  if (!vict || !get_ch_in_room(vict)) {
+  if (!vict || !(vict_room = get_ch_in_room(vict))) {
     mudlog("invis_ok() received vict with NO room!", ch, LOG_SYSLOG, TRUE);
     return FALSE;
   }
@@ -2217,8 +2218,12 @@ bool invis_ok(struct char_data *ch, struct char_data *vict) {
   if ((IS_ASTRAL(ch) || IS_DUAL(ch)) && (!MOB_FLAGGED(vict, MOB_INANIMATE) || GET_SUSTAINED(vict)))
     return TRUE;
 
-  // Ultrasound pierces all invis as long as it's not blocked by silence or stealth.
-  if (AFF_FLAGGED(ch, AFF_ULTRASOUND) && (get_ch_in_room(ch)->silence[0] <= 0 && !affected_by_spell(vict, SPELL_STEALTH) && !affected_by_spell(ch, SPELL_STEALTH)))
+  // Ultrasound pierces all invis as long as it's in the same room and not blocked by silence or stealth.
+  if (has_vision(ch, VISION_ULTRASONIC)
+      && ch_room == vict_room
+      && (ch_room->silence[0] <= 0
+          && !affected_by_spell(vict, SPELL_STEALTH)
+          && !affected_by_spell(ch, SPELL_STEALTH)))
     return TRUE;
 
   // Allow resist test VS invis.

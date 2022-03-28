@@ -725,7 +725,7 @@ bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struc
 #define CHAR_ONLY_SEES_VICT_WITH_ULTRASOUND(ch, vict) (ch != vict && (IS_AFFECTED((vict), AFF_IMP_INVIS) || IS_AFFECTED((vict), AFF_SPELLIMPINVIS)) && !(IS_DUAL((ch)) || IS_PROJECT((ch)) || IS_ASTRAL((ch))))
 
 #define INVIS_OK_OBJ(sub, obj) (!IS_OBJ_STAT((obj), ITEM_EXTRA_INVISIBLE) || \
-   IS_AFFECTED((sub), AFF_ULTRASOUND) || IS_ASTRAL(sub) || \
+   has_vision(sub, VISION_ULTRASONIC) || IS_ASTRAL(sub) || \
    IS_DUAL(sub) || HOLYLIGHT_OK(sub))
 
 #define CAN_SEE_CARRIER(sub, obj) \

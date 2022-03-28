@@ -5393,10 +5393,6 @@ ACMD(do_scan)
   int i = 0, j, dist = 3;
   struct room_data *was_in = NULL, *x = NULL;
 
-  if (has_vision(ch, VISION_ULTRASONIC) && !(PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_RIG))) {
-    send_to_char(ch, "The ultrasound distorts your vision.\r\n");
-    return;
-  }
   argument = any_one_arg(argument, buf);
 
   if (*buf) {
