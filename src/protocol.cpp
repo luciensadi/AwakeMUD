@@ -1607,6 +1607,10 @@ void MXPSendTag( descriptor_t *apDescriptor, const char *apTag )
          int i; /* Renegotiate everything except TTYPE */
          for ( i = eNEGOTIATED_TTYPE+1; i < eNEGOTIATED_MAX; ++i )
          {
+            // Don't renegotiate echo, we already handled everything related to this.
+            if (i == TELOPT_ECHO)
+              continue;
+
             pProtocol->Negotiated[i] = FALSE;
             ConfirmNegotiation(apDescriptor, (negotiated_t)i, TRUE, TRUE);
          }

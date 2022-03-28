@@ -2208,9 +2208,12 @@ int perform_dupe_check(struct descriptor_data *d)
         target = k->original;
         mode = UNSWITCH;
       }
+      // TODO: Desc is leaked?
       if (k->character)
         k->character->desc = NULL;
+      // TODO: Character is leaked?
       k->character = NULL;
+      // Original is not leaked since it's inherited by the new connection.
       k->original = NULL;
     } else if (k->character && (GET_IDNUM(k->character) == id)) {
       if (!target && STATE(k) == CON_PLAYING) {
@@ -2218,7 +2221,9 @@ int perform_dupe_check(struct descriptor_data *d)
         target = k->character;
         mode = USURP;
       }
+      // TODO: Desc is leaked?
       k->character->desc = NULL;
+      // TODO: Character is leaked?
       k->character = NULL;
       k->original = NULL;
       SEND_TO_Q("\r\nMultiple login detected -- disconnecting.\r\n", k);
