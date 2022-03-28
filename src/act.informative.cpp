@@ -2638,8 +2638,13 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       break;
     case ITEM_DOCWAGON:
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%s^n contract that ^c%s bonded%s^n.",
-              docwagon_contract_types[GET_OBJ_VAL(j, 0)], GET_OBJ_VAL(j, 1) ? "is" : "has not been",
-              GET_OBJ_VAL(j, 1) ? (GET_OBJ_VAL(j, 1) == GET_IDNUM(ch) ? " to you" : " to someone else") : " to anyone yet");
+              docwagon_contract_types[GET_DOCWAGON_CONTRACT_GRADE(j)],
+              GET_DOCWAGON_BONDED_IDNUM(j) ? "is" : "has not been",
+              GET_DOCWAGON_BONDED_IDNUM(j) ? (GET_DOCWAGON_BONDED_IDNUM(j) == GET_IDNUM(ch) ? " to you" : " to someone else") : " to anyone yet^n, and ^ywill not function until it is^n");
+
+      if (GET_DOCWAGON_BONDED_IDNUM(j) == GET_IDNUM(ch) && !j->worn_by) {
+        strlcat(buf, "\r\n\r\n^yIt must be worn to be effective.^n", sizeof(buf));
+      }
       break;
     case ITEM_CONTAINER:
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It can hold a maximum of ^c%d^n kilograms.", GET_OBJ_VAL(j, 0));
