@@ -420,6 +420,7 @@ ACMD_DECLARE(do_man);
 ACMD_DECLARE(do_target);
 ACMD_DECLARE(do_vteleport);
 ACMD_DECLARE(do_gridguide);
+ACMD_DECLARE(do_quickwho);
 ACMD_DECLARE(do_hedit);
 ACMD_DECLARE(do_icedit);
 ACMD_DECLARE(do_connect);
@@ -739,6 +740,8 @@ struct command_info cmd_info[] =
     { "qui"        , POS_DEAD    , do_quit     , 0, 0, FALSE },
     { "quit"       , POS_SLEEPING, do_quit     , 0, SCMD_QUIT, FALSE },
     { "quicklook"  , POS_LYING   , do_look     , 0, SCMD_QUICKLOOK, TRUE },
+    { "quickwho"   , POS_DEAD    , do_quickwho , 0, 0, TRUE },
+    { "qwho"       , POS_DEAD    , do_quickwho , 0, 0, TRUE },
     { "qlist"      , POS_DEAD    , do_qlist    , LVL_FIXER, 0, FALSE },
     { "qedit"      , POS_DEAD    , do_qedit    , LVL_FIXER, 0, FALSE },
 

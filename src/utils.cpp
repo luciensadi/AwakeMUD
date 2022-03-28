@@ -4115,6 +4115,31 @@ bool perform_knockdown_test(struct char_data *ch, int initial_tn, int successes_
   return FALSE;
 }
 
+const char *get_level_wholist_color(int level) {
+  switch (level) {
+    case LVL_BUILDER:
+      return "^g";
+    case LVL_ARCHITECT:
+      return "^G";
+    case LVL_FIXER:
+      return "^m";
+    case LVL_CONSPIRATOR:
+      return "^M";
+    case LVL_EXECUTIVE:
+      return "^c";
+    case LVL_DEVELOPER:
+      return "^C";
+    case LVL_VICEPRES:
+      return "^y";
+    case LVL_ADMIN:
+      return "^b";
+    case LVL_PRESIDENT:
+      return "^B";
+    default:
+      return "^n";
+  }
+}
+
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.
 // Great for swapping out old Classic weapons, cyberware, etc for the new guaranteed-canon versions.
 #define PAIR(classic, current) case (classic): return (current);

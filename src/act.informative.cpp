@@ -93,6 +93,7 @@ extern WSPEC(monowhip);
 extern bool trainable_attribute_is_maximized(struct char_data *ch, int attribute);
 extern float get_bulletpants_weight(struct char_data *ch);
 extern bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype, bool include_func_protections);
+extern const char *get_level_wholist_color(int level);
 
 #ifdef USE_PRIVATE_CE_WORLD
   extern void display_secret_info_about_object(struct char_data *ch, struct obj_data *obj);
@@ -4341,6 +4342,50 @@ ACMD_CONST(do_who) {
   do_who(ch, not_const, cmd, subcmd);
 }
 
+ACMD(do_quickwho)
+{
+  struct descriptor_data *d;
+  struct char_data *tch;
+  bool printed = FALSE;
+
+  skip_spaces(&argument);
+  strlcpy(buf, "Currently in-game: ", sizeof(buf));
+
+  for (int candidate_level = LVL_MAX; candidate_level >= LVL_MORTAL; candidate_level--) {
+    for (d = descriptor_list; d; d = d->next) {
+      if (DESCRIPTOR_CONN_STATE_NOT_PLAYING(d))
+        continue;
+
+      // Assign tch to their most-relevant character.
+      if (!(tch = d->original) && !(tch = d->character))
+        continue;
+
+      if (GET_LEVEL(tch) != candidate_level)
+        continue;
+
+      if (GET_INCOG_LEV(tch) > GET_LEVEL(ch))
+        continue;
+
+      if (PRF_FLAGGED(ch, PRF_NOCOLOR)) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s%s%s",
+                  printed ? ", " : "",
+                  GET_CHAR_NAME(tch),
+                  GET_LEVEL(tch) > LVL_MORTAL ? " (staff)" : ""
+                );
+      } else {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s%s%s^n",
+                  printed ? ", " : "",
+                  get_level_wholist_color(GET_LEVEL(tch)),
+                  GET_CHAR_NAME(tch)
+                );
+      }
+
+      printed = TRUE;
+    }
+  }
+  send_to_char(ch, "%s\r\n", buf);
+}
+
 ACMD(do_who)
 {
   struct descriptor_data *d;
@@ -4430,32 +4475,8 @@ ACMD(do_who)
           strlcat(buf, "\r\n     ^W Race ^L: ^WVisible Players\r\n ^W---------------------------\r\n", sizeof(buf));
       }
 
-      switch (GET_LEVEL(tch)) {
-        case LVL_BUILDER:
-        case LVL_ARCHITECT:
-          snprintf(buf1, sizeof(buf1), "^G");
-          break;
-        case LVL_FIXER:
-        case LVL_CONSPIRATOR:
-          snprintf(buf1, sizeof(buf1), "^m");
-          break;
-        case LVL_EXECUTIVE:
-          snprintf(buf1, sizeof(buf1), "^c");
-          break;
-        case LVL_DEVELOPER:
-          snprintf(buf1, sizeof(buf1), "^r");
-          break;
-        case LVL_VICEPRES:
-        case LVL_ADMIN:
-          snprintf(buf1, sizeof(buf1), "^b");
-          break;
-        case LVL_PRESIDENT:
-          snprintf(buf1, sizeof(buf1), "^B");
-          break;
-        default:
-          snprintf(buf1, sizeof(buf1), "^L");
-          break;
-      }
+      strlcpy(buf1, get_level_wholist_color(GET_LEVEL(tch)), sizeof(buf1));
+
       if (PRF_FLAGGED(tch, PRF_SHOWGROUPTAG) && GET_PGROUP_MEMBER_DATA(tch) && GET_PGROUP(tch)) {
         snprintf(buf2, sizeof(buf2), "%10s :^N %s%s^N%s%s%s %s^n",
                 (GET_WHOTITLE(tch) ? GET_WHOTITLE(tch) : ""),
