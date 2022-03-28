@@ -577,7 +577,7 @@ ACMD(do_put)
     }
 
     if ((obj == cont) && !cyberdeck) {
-      send_to_char("You attempt to fold it into itself, but fail.\r\n", ch);
+      send_to_char(ch, "You attempt to fold %s into itself, but fail.\r\n", GET_OBJ_NAME(obj));
       return;
     }
 

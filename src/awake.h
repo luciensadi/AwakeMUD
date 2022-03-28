@@ -2201,6 +2201,11 @@ enum {
 #define NUM_COMBAT_MODIFIERS             14
 // End new combat modifiers.
 
+#define JURISDICTION_SEATTLE   0
+#define JURISDICTION_PORTLAND  1
+#define JURISDICTION_CARIBBEAN 2
+#define JURISDICTION_OCEAN     3
+
 // Locations, to remove the magic numbers from the code.
 #define RM_CHARGEN_START_ROOM        60500
 #define RM_NEWBIE_LOADROOM           60565 // The Neophyte Hotel.

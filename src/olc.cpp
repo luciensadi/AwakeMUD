@@ -180,7 +180,7 @@ ACMD (do_redit)
   struct descriptor_data *d;
   char arg1[MAX_INPUT_LENGTH];
   struct room_data *room;
-  int counter, found = 0;
+  int counter;
 
   if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
     send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
@@ -207,13 +207,8 @@ ACMD (do_redit)
     number = atoi(arg1);
     room_num = real_room (number);
   }
-  for (counter = 0; counter <= top_of_zone_table; counter++) {
-    if ((number >= (zone_table[counter].number * 100)) && (number <= (zone_table[counter].top))) {
-      found = 1;
-      break;
-    }
-  }
-  if (!found) {
+
+  if ((counter = get_zone_index_number_from_vnum(number)) < 0) {
     send_to_char ("Sorry, that number is not part of any zone!\r\n", ch);
     return;
   }
@@ -327,11 +322,14 @@ ACMD(do_rclone)
   arg1 = atoi(buf);
   arg2 = atoi(buf1);
 
-  for (counter = 0; counter <= top_of_zone_table; counter++) {
-    if (arg1 >= (zone_table[counter].number * 100) && arg1 <= zone_table[counter].top)
-      zone1 = counter;
-    if (arg2 >= (zone_table[counter].number * 100) && arg2 <= zone_table[counter].top)
-      zone2 = counter;
+  if ((zone1 = get_zone_index_number_from_vnum(arg1)) < 0) {
+    send_to_char(ch, "%ld is not part of any zone.\r\n", arg1);
+    return;
+  }
+
+  if ((zone2 = get_zone_index_number_from_vnum(arg2)) < 0) {
+    send_to_char(ch, "%ld is not part of any zone.\r\n", arg1);
+    return;
   }
 
   if (zone1 < 0 || zone2 < 0) {
@@ -462,17 +460,8 @@ ACMD(do_dig)
 
     room = real_room(atoi_buf);
 
-    // TODO: This allows creation of rooms in a zone you can't edit.
     if (room == -1) {
-      // Make sure the room is part of a valid zone.
-      int counter, found = 0;
-      for (counter = 0; counter <= top_of_zone_table; counter++) {
-        if ((atoi_buf >= (zone_table[counter].number * 100)) && (atoi_buf <= (zone_table[counter].top))) {
-          found = 1;
-          break;
-        }
-      }
-      if (!found) {
+      if ((counter = get_zone_index_number_from_vnum(atoi_buf)) < 0) {
         send_to_char ("Sorry, that number is not part of any zone.\r\n", ch);
         return;
       }
@@ -522,13 +511,14 @@ ACMD(do_dig)
     }
   }
 
-  for (counter = 0; counter <= top_of_zone_table; counter++) {
-    if (in_room->number >= (zone_table[counter].number * 100) &&
-        in_room->number <= zone_table[counter].top)
-      zone1 = counter;
-    if (world[room].number >= (zone_table[counter].number * 100) &&
-        world[room].number <= zone_table[counter].top)
-      zone2 = counter;
+  // Neither of these two cases should fail.
+  if ((zone1 = get_zone_index_number_from_vnum(in_room->number)) < 0) {
+    send_to_char (ch, "Sorry, %ld is not part of any zone... somehow?\r\n", in_room->number);
+    return;
+  }
+  if ((zone2 = get_zone_index_number_from_vnum(world[room].number)) < 0) {
+    send_to_char (ch, "Sorry, %ld is not part of any zone... somehow?\r\n", world[room].number);
+    return;
   }
 
   // Dig is one of the only two-zone commands that requires edit access to both zones.
@@ -597,7 +587,7 @@ ACMD(do_dig)
 
 ACMD(do_rdelete)
 {
-  int num, counter, found = 0;
+  int num, counter;
 
   if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
     send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
@@ -624,13 +614,7 @@ ACMD(do_rdelete)
     return;
   }
 
-  for (counter = 0; counter <= top_of_zone_table; counter++) {
-    if ((num >= (zone_table[counter].number * 100)) && (num <= (zone_table[counter].top))) {
-      found = 1;
-      break;
-    }
-  }
-  if (!found) {
+  if ((counter = get_zone_index_number_from_vnum(num)) < 0) {
     send_to_char ("Sorry, that number is not part of any zone.\r\n", ch);
     return;
   }
@@ -769,7 +753,7 @@ ACMD (do_vedit)
   struct descriptor_data *d;
   char arg1[MAX_INPUT_LENGTH];
   struct veh_data *veh;
-  int counter, found = 0;
+  int counter;
   if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
     send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
     return;
@@ -793,14 +777,7 @@ ACMD (do_vedit)
   number = atoi (arg1);
   veh_num = real_vehicle (number);
 
-  for (counter = 0; counter <= top_of_zone_table; counter++) {
-    if ((number >= (zone_table[counter].number * 100)) &&
-        (number <= (zone_table[counter].top))) {
-      found = 1;
-      break;
-    }
-  }
-  if (!found) {
+  if ((counter = get_zone_index_number_from_vnum(number)) < 0) {
     send_to_char ("Sorry, that number is not part of any zone.\r\n", ch);
     return;
   }
@@ -887,7 +864,7 @@ ACMD (do_iedit)
   struct descriptor_data *d;
   char arg1[MAX_INPUT_LENGTH];
   struct obj_data *obj;
-  int counter, found = 0;
+  int counter;
 
   if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
     send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
@@ -912,14 +889,7 @@ ACMD (do_iedit)
   number = atoi (arg1);
   obj_num = real_object (number);
 
-  for (counter = 0; counter <= top_of_zone_table; counter++) {
-    if ((number >= (zone_table[counter].number * 100)) &&
-        (number <= (zone_table[counter].top))) {
-      found = 1;
-      break;
-    }
-  }
-  if (!found) {
+  if ((counter = get_zone_index_number_from_vnum(number)) < 0) {
     send_to_char ("Sorry, that number is not part of any zone.\r\n", ch);
     return;
   }
@@ -1115,7 +1085,10 @@ ACMD(do_iclone)
 
 ACMD(do_idelete)
 {
-  int num, counter, found = 0;
+  vnum_t vnum;
+  rnum_t rnum;
+  int counter;
+
   if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
     send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
     return;
@@ -1128,54 +1101,47 @@ ACMD(do_idelete)
     return;
   }
 
-  num = atoi(buf);
+  vnum = atol(buf);
 
-  if (num == -1) {
+  if (vnum == -1) {
     send_to_char("No such object.\r\n", ch);
     return;
   }
 
-  for (counter = 0; counter <= top_of_zone_table; counter++) {
-    if ((atoi(buf) >= (zone_table[counter].number * 100)) && (atoi(buf) <=
-        (zone_table[counter].top))) {
-      found = 1;
-      break;
-    }
-  }
-  if (!found) {
+  if ((counter = get_zone_index_number_from_vnum(vnum)) < 0) {
     send_to_char ("Sorry, that number is not part of any zone.\r\n", ch);
     return;
   }
 
   REQUIRE_ZONE_EDIT_ACCESS(counter);
 
-  num = real_object(num);
+  rnum = real_object(vnum);
 
-  if (num < 0) {
+  if (rnum < 0) {
     send_to_char("No object was found with that vnum.\r\n", ch);
     return;
   }
 
-  snprintf(buf, sizeof(buf), "%s deleted obj %ld (%s).", GET_CHAR_NAME(ch), GET_OBJ_VNUM(&obj_proto[num]), GET_OBJ_NAME(&obj_proto[num]));
+  snprintf(buf, sizeof(buf), "%s deleted obj %ld (%s).", GET_CHAR_NAME(ch), GET_OBJ_VNUM(&obj_proto[rnum]), GET_OBJ_NAME(&obj_proto[rnum]));
   mudlog(buf, ch, LOG_WIZLOG, TRUE);
 
   // Wipe it from saved database tables.
-  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_cyberware WHERE Vnum=%ld", obj_proto[num].item_number);
+  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_cyberware WHERE Vnum=%ld", obj_proto[rnum].item_number);
   mysql_wrapper(mysql, buf);
-  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_bioware WHERE Vnum=%ld", obj_proto[num].item_number);
+  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_bioware WHERE Vnum=%ld", obj_proto[rnum].item_number);
   mysql_wrapper(mysql, buf);
-  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_inv WHERE Vnum=%ld", obj_proto[num].item_number);
+  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_inv WHERE Vnum=%ld", obj_proto[rnum].item_number);
   mysql_wrapper(mysql, buf);
-  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_worn WHERE Vnum=%ld", obj_proto[num].item_number);
+  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_worn WHERE Vnum=%ld", obj_proto[rnum].item_number);
   mysql_wrapper(mysql, buf);
 
   // Wipe the object from the game.
   ch->player_specials->saved.zonenum = zone_table[counter].number;
-  ObjList.RemoveObjNum(num);
-  free_obj(&obj_proto[num]);
+  ObjList.RemoveObjNum(rnum);
+  free_obj(&obj_proto[rnum]);
 
   // Renumber the object tables.
-  for (counter = num; counter < top_of_objt; counter++) {
+  for (counter = rnum; counter < top_of_objt; counter++) {
     obj_index[counter] = obj_index[counter + 1];
     obj_proto[counter] = obj_proto[counter + 1];
     ObjList.UpdateObjsIDelete(&obj_proto[counter], counter + 1, counter);
@@ -1196,7 +1162,7 @@ ACMD(do_idelete)
         case 'U':
         case 'I':
         case 'H':
-          if (ZCMD.arg1 == num) {
+          if (ZCMD.arg1 == rnum) {
             snprintf(buf, sizeof(buf), "Wiping zcmd %d in %d (%c: %ld %ld %ld).",
                     cmd_no, zone_table[zone].number, ZCMD.command, ZCMD.arg1, ZCMD.arg2, ZCMD.arg3);
             mudlog(buf, NULL, LOG_SYSLOG, TRUE);
@@ -1206,11 +1172,11 @@ ACMD(do_idelete)
             ZCMD.arg2 = 0;
             ZCMD.arg3 = 0;
             zone_dirty = TRUE;
-          } else if (ZCMD.arg1 > num)
+          } else if (ZCMD.arg1 > rnum)
             ZCMD.arg1--;
           break;
         case 'R':
-          if (ZCMD.arg2 == num) {
+          if (ZCMD.arg2 == rnum) {
             snprintf(buf, sizeof(buf), "Wiping zcmd %d in %d (%c: %ld %ld %ld).",
                     cmd_no, zone_table[zone].number, ZCMD.command, ZCMD.arg1, ZCMD.arg2, ZCMD.arg3);
             mudlog(buf, NULL, LOG_SYSLOG, TRUE);
@@ -1220,11 +1186,11 @@ ACMD(do_idelete)
             ZCMD.arg2 = 0;
             ZCMD.arg3 = 0;
             zone_dirty = TRUE;
-          } else if (ZCMD.arg2 > num)
+          } else if (ZCMD.arg2 > rnum)
             ZCMD.arg2--;
           break;
         case 'P':
-          if (ZCMD.arg3 == num || ZCMD.arg1 == num) {
+          if (ZCMD.arg3 == rnum || ZCMD.arg1 == rnum) {
             snprintf(buf, sizeof(buf), "Wiping zcmd %d in %d (%c: %ld %ld %ld).",
                     cmd_no, zone_table[zone].number, ZCMD.command, ZCMD.arg1, ZCMD.arg2, ZCMD.arg3);
             mudlog(buf, NULL, LOG_SYSLOG, TRUE);
@@ -1235,9 +1201,9 @@ ACMD(do_idelete)
             ZCMD.arg3 = 0;
             zone_dirty = TRUE;
           } else {
-            if (ZCMD.arg3 > num)
+            if (ZCMD.arg3 > rnum)
               ZCMD.arg3--;
-            if (ZCMD.arg1 > num)
+            if (ZCMD.arg1 > rnum)
               ZCMD.arg1--;
           }
           break;
@@ -1261,7 +1227,7 @@ ACMD(do_medit)
   struct descriptor_data *d;
   char arg1[MAX_INPUT_LENGTH];
   struct char_data *mob;
-  int counter, found = 0;
+  int counter;
 
   // they must be flagged with olc to edit
   if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
@@ -1291,16 +1257,11 @@ ACMD(do_medit)
   mob_num = real_mobile(number);
 
   //check zone numbers
-  for (counter = 0; counter <= top_of_zone_table; counter++) {
-    if ((number >= (zone_table[counter].number * 100)) && (number <= (zone_table[counter].top))) {
-      found = 1;
-      break;
-    }
-  }
-  if (!found) {
+  if ((counter = get_zone_index_number_from_vnum(number)) < 0) {
     send_to_char ("Sorry, that number is not part of any zone.\r\n", ch);
     return;
   }
+
   // only allow them to edit their zone
   REQUIRE_ZONE_EDIT_ACCESS(counter);
 
@@ -1507,7 +1468,9 @@ ACMD(do_mclone)
 
 ACMD(do_mdelete)
 {
-  int num, counter, found = 0;
+  vnum_t vnum;
+  rnum_t rnum;
+  int counter;
 
   one_argument(argument, buf);
 
@@ -1521,20 +1484,14 @@ ACMD(do_mdelete)
     return;
   }
 
-  num = atoi(buf);
+  vnum = atol(buf);
 
-  if (num == -1) {
+  if (vnum == -1) {
     send_to_char("No such mob.\r\n", ch);
     return;
   }
 
-  for (counter = 0; counter <= top_of_zone_table; counter++) {
-    if ((atoi(buf) >= (zone_table[counter].number * 100)) && (atoi(buf) <= (zone_table[counter].top))) {
-      found = 1;
-      break;
-    }
-  }
-  if (!found) {
+  if ((counter = get_zone_index_number_from_vnum(vnum)) < 0) {
     send_to_char ("Sorry, that number is not part of any zone.\r\n", ch);
     return;
   }
@@ -1542,13 +1499,13 @@ ACMD(do_mdelete)
   REQUIRE_ZONE_EDIT_ACCESS(counter);
 
   ch->player_specials->saved.zonenum = zone_table[counter].number;
-  num = real_mobile(num);
+  rnum = real_mobile(vnum);
 
-  if (num < 0) {
+  if (rnum < 0) {
     send_to_char("No such mob.\r\n", ch);
     return;
   } else {
-    snprintf(buf3, sizeof(buf3), "NPC '%s' (%ld) deleted.", GET_NAME(&mob_proto[num]), GET_MOB_VNUM(&mob_proto[num]));
+    snprintf(buf3, sizeof(buf3), "NPC '%s' (%ld) deleted.", GET_NAME(&mob_proto[rnum]), GET_MOB_VNUM(&mob_proto[rnum]));
     mudlog(buf3, ch, LOG_WIZLOG, TRUE);
   }
 
@@ -1556,15 +1513,15 @@ ACMD(do_mdelete)
   /* cycle through characters, purging soon-to-be-delete mobs as we go */
   for (temp = character_list; temp; temp = next_char) {
     next_char = temp->next;
-    if (IS_NPC(temp) && GET_MOB_RNUM(temp) == num) {
+    if (IS_NPC(temp) && GET_MOB_RNUM(temp) == rnum) {
       act("$n disintegrates.", FALSE, temp, 0, 0, TO_ROOM);
       extract_char(temp);
     }
   }
 
-  Mem->DeleteCh(&mob_proto[num]);
+  Mem->DeleteCh(&mob_proto[rnum]);
 
-  for (counter = num; counter < top_of_mobt; counter++) {
+  for (counter = rnum; counter < top_of_mobt; counter++) {
     mob_index[counter] = mob_index[counter + 1];
     mob_proto[counter] = mob_proto[counter + 1];
     mob_proto[counter].nr = counter;
@@ -1593,20 +1550,20 @@ ACMD(do_mdelete)
         case 'S':
         case 'M':
           last = ZCMD.arg1;
-          if (ZCMD.arg1 == num) {
+          if (ZCMD.arg1 == rnum) {
             ZCMD.command = '*';
             ZCMD.if_flag = 0;
             ZCMD.arg1 = 0;
             ZCMD.arg2 = 0;
             ZCMD.arg3 = 0;
-          } else if (ZCMD.arg1 > num)
+          } else if (ZCMD.arg1 > rnum)
             ZCMD.arg1--;
           break;
         case 'E':
         case 'G':
         case 'C':
         case 'N':
-          if (last == num) {
+          if (last == rnum) {
             ZCMD.command = '*';
             ZCMD.if_flag = 0;
             ZCMD.arg1 = 0;
@@ -1624,7 +1581,7 @@ ACMD(do_mdelete)
 
 ACMD(do_qedit)
 {
-  int number, rnum, counter, found = 0, i;
+  int number, rnum, counter, i;
   char arg1[MAX_INPUT_LENGTH];
   struct descriptor_data *d;
   struct quest_data *qst;
@@ -1654,14 +1611,7 @@ ACMD(do_qedit)
 
   rnum = real_quest(number);
 
-  for (counter = 0; counter <= top_of_zone_table; counter++) {
-    if ((number >= (zone_table[counter].number * 100)) &&
-        (number <= (zone_table[counter].top))) {
-      found = 1;
-      break;
-    }
-  }
-  if (!found) {
+  if ((counter = get_zone_index_number_from_vnum(number)) < 0) {
     send_to_char ("Sorry, that number is not part of any zone.\r\n", ch);
     return;
   }
@@ -1742,7 +1692,7 @@ ACMD(do_qedit)
 
 ACMD(do_shedit)
 {
-  int number = 0, counter, found = 0;
+  int number = 0, counter;
   struct shop_data *shop = NULL;
   struct descriptor_data *d;
 
@@ -1768,13 +1718,8 @@ ACMD(do_shedit)
   }
 
   number = atoi(arg);
-  for (counter = 0; counter <= top_of_zone_table; counter++) {
-    if ((number >= (zone_table[counter].number * 100)) && (number <= (zone_table[counter].top))) {
-      found = 1;
-      break;
-    }
-  }
-  if (!found) {
+
+  if ((counter = get_zone_index_number_from_vnum(number)) < 0) {
     send_to_char ("Sorry, that number is not part of any zone.\r\n", ch);
     return;
   }
@@ -2033,7 +1978,7 @@ ACMD(do_hedit)
   struct descriptor_data *d;
   char arg1[MAX_INPUT_LENGTH];
   struct host_data *host;
-  int counter, found = 0;
+  int counter;
   long host_num, number;
   if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
     send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
@@ -2058,14 +2003,7 @@ ACMD(do_hedit)
   number = atoi(arg1);
   host_num = real_host(number);
 
-  for (counter = 0; counter <= top_of_zone_table; counter++) {
-    if ((number >= (zone_table[counter].number * 100)) &&
-        (number <= (zone_table[counter].top))) {
-      found = 1;
-      break;
-    }
-  }
-  if (!found) {
+  if ((counter = get_zone_index_number_from_vnum(number)) < 0) {
     send_to_char ("Sorry, that number is not part of any zone.\r\n", ch);
     return;
   }
@@ -2164,7 +2102,7 @@ ACMD(do_icedit)
   struct descriptor_data *d;
   char arg1[MAX_INPUT_LENGTH];
   struct matrix_icon *icon;
-  int counter, found = 0;
+  int counter;
   long ic_num, number;
   if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
     send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
@@ -2189,14 +2127,7 @@ ACMD(do_icedit)
   number = atoi(arg1);
   ic_num = real_ic(number);
 
-  for (counter = 0; counter <= top_of_zone_table; counter++) {
-    if ((number >= (zone_table[counter].number * 100)) &&
-        (number <= (zone_table[counter].top))) {
-      found = 1;
-      break;
-    }
-  }
-  if (!found) {
+  if ((counter = get_zone_index_number_from_vnum(number)) < 0) {
     send_to_char ("Sorry, that number is not part of any zone.\r\n", ch);
     return;
   }

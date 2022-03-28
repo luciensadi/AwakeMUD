@@ -25,9 +25,6 @@ extern int find_first_step(vnum_t src, vnum_t target, bool ignore_roads);
 int move_vehicle(struct char_data *ch, int dir);
 ACMD_CONST(do_return);
 
-extern long get_room_gridguide_x(vnum_t room_vnum);
-extern long get_room_gridguide_y(vnum_t room_vnum);
-
 #define VEH ch->in_veh
 
 int get_maneuver(struct veh_data *veh)
@@ -1747,7 +1744,9 @@ ACMD(do_gridguide)
 {
   struct veh_data *veh;
   struct grid_data *grid = NULL;
-  vnum_t x = 0, y = 0;
+  long x = 0, y = 0;
+  vnum_t grid_vnum;
+
   RIG_VEH(ch, veh);
 
   if (!veh) {
@@ -1871,23 +1870,17 @@ ACMD(do_gridguide)
     if (!*argument) {
       if (!veh->in_room || !(ROOM_FLAGGED(veh->in_room, ROOM_ROAD) || ROOM_FLAGGED(veh->in_room, ROOM_GARAGE)) ||
           ROOM_FLAGGED(veh->in_room, ROOM_NOGRID)) {
-        send_to_char("You currently aren't on the grid.\r\n", ch);
+        send_to_char("You aren't currently on the grid.\r\n", ch);
         return;
       }
-      x = real_room(veh->in_room->number);
+      grid_vnum = veh->in_room->number;
     } else {
       two_arguments(argument, arg, buf);
       if (!*buf) {
         send_to_char("You need a second co-ordinate.\r\n", ch);
         return;
       }
-      if (!((x = atoi(arg)) && (y = atoi(buf)))) {
-        send_to_char("Those co-ordinates seem invalid.\r\n", ch);
-        return;
-      }
-      x = (x + ((y - 100) * 3));
-      if ((x = real_room(x)) <= 0 || !(ROOM_FLAGGED(&world[x], ROOM_ROAD) || ROOM_FLAGGED(&world[x], ROOM_GARAGE)) ||
-          ROOM_FLAGGED(&world[x], ROOM_NOGRID)) {
+      if (!((x = atol(arg)) && (y = atol(buf))) || (grid_vnum = vnum_from_gridguide_coordinates(x, y)) <= 0) {
         send_to_char("Those co-ordinates seem invalid.\r\n", ch);
         return;
       }
@@ -1896,7 +1889,7 @@ ACMD(do_gridguide)
     if (strlen(buf2) >= LINE_LENGTH)
       buf2[LINE_LENGTH] = '\0';
     grid->name = str_dup(buf2);
-    grid->room = world[x].number;
+    grid->room = grid_vnum;
     grid->next = veh->grid;
     veh->grid = grid;
     send_to_char("You add the destination into the system.\r\n", ch);

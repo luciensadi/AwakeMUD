@@ -116,6 +116,11 @@ bool    mob_unique_id_matches(mob_unique_id_t id1, mob_unique_id_t id2);
 void    set_new_mobile_unique_id(struct char_data *ch);
 int     return_general(int skill_num);
 bool    perform_knockdown_test(struct char_data *ch, int initial_tn, int successes_to_avoid_knockback=0);
+int     get_zone_index_number_from_vnum(vnum_t vnum);
+
+long get_room_gridguide_x(vnum_t room_vnum);
+long get_room_gridguide_y(vnum_t room_vnum);
+vnum_t vnum_from_gridguide_coordinates(long x, long y);
 
 // Skill-related.
 char *how_good(int skill, int rank);

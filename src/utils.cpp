@@ -4148,6 +4148,36 @@ long get_room_gridguide_y(vnum_t room_vnum) {
   return room_vnum + 100;
 }
 
+vnum_t vnum_from_gridguide_coordinates(long x, long y) {
+  // We could just use the y-coordinate, but then the X could be anything.
+  vnum_t candidate_vnum = x + ((y - 100) * 3);
+  rnum_t candidate_rnum = real_room(candidate_vnum);
+
+  // -1: Room didn't even exist.
+  if (candidate_rnum <= 0)
+    return -1;
+
+  // -2: Room was not drivable.
+  if (!(ROOM_FLAGGED(&world[candidate_rnum], ROOM_ROAD) || ROOM_FLAGGED(&world[candidate_rnum], ROOM_GARAGE)))
+    return -2;
+
+  // -3: Room not on gridguide system. Likely a creation of the player-- warrants investigation.
+  if (ROOM_FLAGGED(&world[candidate_rnum], ROOM_NOGRID))
+    return -3;
+
+  return candidate_vnum;
+}
+
+int get_zone_index_number_from_vnum(vnum_t vnum) {
+  for (int counter = 0; counter <= top_of_zone_table; counter++) {
+    if ((vnum >= (zone_table[counter].number * 100)) &&
+        (vnum <= (zone_table[counter].top))) {
+      return counter;
+    }
+  }
+  return -1;
+}
+
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.
 // Great for swapping out old Classic weapons, cyberware, etc for the new guaranteed-canon versions.
 #define PAIR(classic, current) case (classic): return (current);

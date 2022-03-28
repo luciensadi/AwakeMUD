@@ -38,6 +38,8 @@ extern void perform_fall(struct char_data *ch);
 ACMD_DECLARE(do_echo);
 struct dest_data *get_dest_data_list_for_zone(int zone_num);
 
+bool cab_jurisdiction_matches_destination(vnum_t cab_vnum, vnum_t dest_vnum);
+
 // ----------------------------------------------------------------------------
 
 // ______________________________
@@ -827,24 +829,46 @@ SPECIAL(taxi)
     // Otherwise, process the incoming command.
     switch (GET_ACTIVE(driver)) {
       case ACT_REPLY_DEST:
-        if (destination_list[GET_SPARE2(driver)].vnum == RM_NERPCORPOLIS_LOBBY)
-          do_say(ch, "The NERPcorpolis?  Sure, that ride is free.  Want to go there?", 0, 0);
-        else {
+        // Are we in gridguide mode?
+        if (GET_SPARE2(driver) < 0) {
           if (destination_list == portland_taxi_destinations)
             snprintf(say, sizeof(say), "%s?  Sure, that will be %d nuyen.",
-                     portland_taxi_destinations[GET_SPARE2(driver)].str, (int)GET_SPARE1(driver));
+                     get_string_after_color_code_removal(GET_ROOM_NAME(&world[real_room(-GET_SPARE2(driver))]), ch), (int)GET_SPARE1(driver));
           else if (destination_list == caribbean_taxi_destinations)
             snprintf(say, sizeof(say), "%s?  Yeah, sure...it'll cost ya %d nuyen, whaddya say?",
-                     caribbean_taxi_destinations[GET_SPARE2(driver)].str, (int)GET_SPARE1(driver));
+                     get_string_after_color_code_removal(GET_ROOM_NAME(&world[real_room(-GET_SPARE2(driver))]), ch), (int)GET_SPARE1(driver));
           else
             snprintf(say, sizeof(say), "%s?  Yeah, sure...it'll cost ya %d nuyen, whaddya say?",
-                    seattle_taxi_destinations[GET_SPARE2(driver)].str, (int)GET_SPARE1(driver));
+                     get_string_after_color_code_removal(GET_ROOM_NAME(&world[real_room(-GET_SPARE2(driver))]), ch), (int)GET_SPARE1(driver));
+
           do_say(driver, say, 0, 0);
           if (GET_EXTRA(driver) == 1) {
             do_say(driver, "But seeing as you're new around here, I'll waive my usual fee, okay?", 0, 0);
             GET_SPARE1(driver) = 0;
           }
         }
+        // Standard dest mode.
+        else {
+          if (destination_list[GET_SPARE2(driver)].vnum == RM_NERPCORPOLIS_LOBBY)
+            do_say(ch, "The NERPcorpolis?  Sure, that ride is free.  Want to go there?", 0, 0);
+          else {
+            if (destination_list == portland_taxi_destinations)
+              snprintf(say, sizeof(say), "%s?  Sure, that will be %d nuyen.",
+                       portland_taxi_destinations[GET_SPARE2(driver)].str, (int)GET_SPARE1(driver));
+            else if (destination_list == caribbean_taxi_destinations)
+              snprintf(say, sizeof(say), "%s?  Yeah, sure...it'll cost ya %d nuyen, whaddya say?",
+                       caribbean_taxi_destinations[GET_SPARE2(driver)].str, (int)GET_SPARE1(driver));
+            else
+              snprintf(say, sizeof(say), "%s?  Yeah, sure...it'll cost ya %d nuyen, whaddya say?",
+                      seattle_taxi_destinations[GET_SPARE2(driver)].str, (int)GET_SPARE1(driver));
+            do_say(driver, say, 0, 0);
+            if (GET_EXTRA(driver) == 1) {
+              do_say(driver, "But seeing as you're new around here, I'll waive my usual fee, okay?", 0, 0);
+              GET_SPARE1(driver) = 0;
+            }
+          }
+        }
+
         GET_EXTRA(driver) = 0;
         GET_ACTIVE(driver) = ACT_AWAIT_YESNO;
         break;
@@ -972,16 +996,33 @@ SPECIAL(taxi)
           comm = CMD_TAXI_NO;
         }
       } else {
-        do_say(ch, argument, 0, 0);
-        if (destination_list == portland_taxi_destinations) {
-          snprintf(buf2, sizeof(buf2), " Sorry chummer, rules are rules. You need to tell me something from the sign.");
-        } else {
-          snprintf(buf2, sizeof(buf2), " Hey chummer, rules is rules. You gotta tell me something off of that sign there.");
+        // The destination was not on the list. Check for gridguide coordinates.
+        char x_buf[MAX_INPUT_LENGTH + 1], y_buf[MAX_INPUT_LENGTH + 1];
+        two_arguments(argument, x_buf, y_buf);
+        long x_coord = atol(x_buf), y_coord = atol(y_buf);
+        vnum_t dest_vnum = vnum_from_gridguide_coordinates(x_coord, y_coord);
+        // Gridguide coords were valid. That's our new destination.
+        if (x_coord && y_coord && dest_vnum > 0 && cab_jurisdiction_matches_destination(GET_ROOM_VNUM(ch->in_room), dest_vnum)) {
+          comm = CMD_TAXI_DEST_GRIDGUIDE;
+          found = TRUE;
+          dest = -dest_vnum;
+          do_say(ch, argument, 0, 0);
+          strncpy(buf2, " punches a few buttons on the meter, calculating the fare.", sizeof(buf2));
+          do_echo(driver, buf2, 0, SCMD_EMOTE);
+          forget(driver, ch);
         }
-        do_say(driver, buf2, 0, 0);
-        return TRUE;
+        // Gridguide coords were invalid. Bail out.
+        else {
+          do_say(ch, argument, 0, 0);
+          if (destination_list == portland_taxi_destinations) {
+            snprintf(buf2, sizeof(buf2), " Sorry chummer, rules are rules. You need to tell me something from the sign.");
+          } else {
+            snprintf(buf2, sizeof(buf2), " Hey chummer, rules is rules. You gotta tell me something off of that sign there.");
+          }
+          do_say(driver, buf2, 0, 0);
+          return TRUE;
+        }
       }
-      do_say(ch, argument, 0, 0);
     }
   } else if ((CMD_IS("nod") || CMD_IS("agree")) && CAN_SEE(driver, ch)) {
     comm = CMD_TAXI_YES;
@@ -993,7 +1034,7 @@ SPECIAL(taxi)
     return FALSE;
 
   /* I would like to extend a personal and heartfelt 'fuck you' to whomever thought that using the anonymously-named 'i' as both an rnum and a direction was a good idea. - LS */
-  if (comm == CMD_TAXI_DEST && !memory(driver, ch) && GET_ACTIVE(driver) == ACT_AWAIT_CMD) {
+  if ((comm == CMD_TAXI_DEST || comm == CMD_TAXI_DEST_GRIDGUIDE) && !memory(driver, ch) && GET_ACTIVE(driver) == ACT_AWAIT_CMD) {
     if (real_room(GET_LASTROOM(ch)) <= -1) {
       GET_SPARE1(driver) = MAX_CAB_FARE;
     } else {
@@ -1004,7 +1045,11 @@ SPECIAL(taxi)
           break;
         }
 
-      int distance_between_rooms = calculate_distance_between_rooms(temp_room->number, destination_list[dest].vnum, FALSE);
+      int distance_between_rooms;
+      if (comm == CMD_TAXI_DEST)
+        distance_between_rooms = calculate_distance_between_rooms(temp_room->number, destination_list[dest].vnum, FALSE);
+      else
+        distance_between_rooms = calculate_distance_between_rooms(temp_room->number, -dest, FALSE);
 
       if (distance_between_rooms < 0)
         GET_SPARE1(driver) = MAX_CAB_FARE;
@@ -1030,8 +1075,18 @@ SPECIAL(taxi)
     }
     if (!IS_SENATOR(ch))
       lose_nuyen(ch, GET_SPARE1(driver), NUYEN_OUTFLOW_TAXIS);
-    GET_SPARE1(driver) = (int)(GET_SPARE1(driver) / 50);
-    GET_SPARE2(driver) = destination_list[GET_SPARE2(driver)].vnum;
+
+    // Set the delay, staff get no delay.
+    if (access_level(ch, LVL_BUILDER)) {
+      send_to_char("Your staff status convinces the driver to go as fast as possible.\r\n", ch);
+      GET_SPARE1(driver) = 1;
+    } else
+      GET_SPARE1(driver) = (int)(GET_SPARE1(driver) / 50);
+    // Are we in gridguide mode? If so, this holds the vnum in negative form.
+    if (GET_SPARE2(driver) < 0)
+      GET_SPARE2(driver) *= -1;
+    else
+      GET_SPARE2(driver) = destination_list[GET_SPARE2(driver)].vnum;
     GET_ACTIVE(driver) = ACT_DRIVING;
 
     raw_taxi_leaves(real_room(GET_ROOM_VNUM(ch->in_room)));
@@ -2583,4 +2638,29 @@ bool room_is_a_taxicab(vnum_t vnum) {
   return ((vnum >= FIRST_SEATTLE_CAB && vnum <= LAST_SEATTLE_CAB)
           || (vnum >= FIRST_PORTLAND_CAB && vnum <= LAST_PORTLAND_CAB)
           || (vnum >= FIRST_CARIBBEAN_CAB && vnum <= LAST_CARIBBEAN_CAB));
+}
+
+bool cab_jurisdiction_matches_destination(vnum_t cab_vnum, vnum_t dest_vnum) {
+  int cab_jurisdiction;
+
+  if (cab_vnum >= FIRST_SEATTLE_CAB && cab_vnum <= LAST_SEATTLE_CAB) {
+    cab_jurisdiction = JURISDICTION_SEATTLE;
+  }
+
+  else if (cab_vnum >= FIRST_PORTLAND_CAB && cab_vnum <= LAST_PORTLAND_CAB) {
+    cab_jurisdiction = JURISDICTION_PORTLAND;
+  }
+
+  else if (cab_vnum >= FIRST_CARIBBEAN_CAB && cab_vnum <= LAST_CARIBBEAN_CAB) {
+    cab_jurisdiction = JURISDICTION_CARIBBEAN;
+  }
+
+  else {
+    mudlog("SYSERR: Unrecognized cab vnum in cab_jurisdiction_matches_destination()! Update the function.", NULL, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+
+  int dest_zone_idx = get_zone_index_number_from_vnum(dest_vnum);
+
+  return cab_jurisdiction == zone_table[dest_zone_idx].jurisdiction;
 }
