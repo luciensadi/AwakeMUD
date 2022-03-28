@@ -2203,6 +2203,46 @@ ACMD(do_wizload)
     send_to_char("That'll have to be either 'obj', 'mob', or 'veh'.\r\n", ch);
 }
 
+ACMD(do_vfind) {
+  struct room_data *room;
+  idnum_t idnum;
+  int idx = 1;
+
+  skip_spaces(&argument);
+
+  if ((idnum = get_player_id(argument)) <= 0) {
+    send_to_char(ch, "Didn't find anyone named '%s'. Syntax: vfind <character name>\r\n", argument);
+    return;
+  }
+
+  for (struct veh_data *veh = veh_list; veh; veh = veh->next_veh) {
+    room = get_veh_in_room(veh);
+
+    if (veh->owner == idnum) {
+      send_to_char(ch, "%2d) %s^n (%ld): %s^n (%ld)",
+                   idx++,
+                   GET_VEH_NAME(veh),
+                   GET_VEH_VNUM(veh),
+                   GET_ROOM_NAME(room),
+                   GET_ROOM_VNUM(room)
+                  );
+
+      if (veh->in_veh) {
+        send_to_char(ch, " inside %s^n (%ld)",
+                     GET_VEH_NAME(veh->in_veh),
+                     GET_VEH_VNUM(veh->in_veh)
+                    );
+      }
+
+      send_to_char("\r\n", ch);
+    }
+  }
+
+  if (idx == 1) {
+    send_to_char(ch, "Found no vehicles belonging to idnum %ld.", idnum);
+  }
+}
+
 ACMD(do_vstat)
 {
   struct char_data *mob;

@@ -362,6 +362,7 @@ ACMD_DECLARE(do_users);
 ACMD_DECLARE(do_vset);
 ACMD_DECLARE(do_vemote);
 ACMD_DECLARE(do_visible);
+ACMD_DECLARE(do_vfind);
 ACMD_DECLARE(do_vnum);
 ACMD_DECLARE(do_vstat);
 ACMD_DECLARE(do_wake);
@@ -875,6 +876,7 @@ struct command_info cmd_info[] =
     { "vemote"     , POS_SLEEPING, do_vemote   , 0 , 0, FALSE },
     { "visible"    , POS_RESTING , do_visible  , LVL_BUILDER, 0, FALSE },
     { "view"       , POS_LYING   , do_imagelink, 0, 0, FALSE },
+    { "vfind"      , POS_DEAD    , do_vfind    , LVL_BUILDER, 0, FALSE },
     { "vlist"      , POS_DEAD    , do_vlist    , LVL_BUILDER, 0, FALSE },
     { "vnum"       , POS_DEAD    , do_vnum     , LVL_BUILDER, 0, FALSE },
     { "vset"       , POS_DEAD    , do_vset     , LVL_DEVELOPER, 0, FALSE },
