@@ -449,15 +449,15 @@ void spell_modify(struct char_data *ch, struct sustain_data *sust, bool add)
       break;
     case SPELL_NIGHTVISION:
       if (mod == 1)
-        AFF_FLAGS(ch).SetBit(AFF_LOW_LIGHT);
+        set_vision_bit(ch, VISION_LOWLIGHT, VISION_BIT_IS_SPELL);
       else
-        AFF_FLAGS(ch).RemoveBit(AFF_LOW_LIGHT);
+        remove_vision_bit(ch, VISION_LOWLIGHT, VISION_BIT_IS_SPELL);
       break;
     case SPELL_INFRAVISION:
       if (mod == 1)
-        AFF_FLAGS(ch).SetBit(AFF_INFRAVISION);
+        set_vision_bit(ch, VISION_THERMOGRAPHIC, VISION_BIT_IS_SPELL);
       else
-        AFF_FLAGS(ch).RemoveBit(AFF_INFRAVISION);
+        remove_vision_bit(ch, VISION_THERMOGRAPHIC, VISION_BIT_IS_SPELL);
       break;
     case SPELL_LEVITATE:
       if (mod == 1)

@@ -488,7 +488,7 @@ ACMD(do_shoot)
 
   two_arguments(argument, target, direction);
 
-  if (*direction && AFF_FLAGGED(ch, AFF_ULTRASOUND)) {
+  if (*direction && has_vision(ch, VISION_ULTRASONIC)) {
     send_to_char(ch, "The ultrasound distorts your vision.\r\n");
     return;
   }

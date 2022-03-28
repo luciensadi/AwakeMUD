@@ -13,7 +13,8 @@
 #define VISION_BIT_IS_ELECTRONIC     4  /* We gained this vision bit through electronic means- blocks magic. Overrides optical bit. */
 #define VISION_BIT_IS_ADEPT_POWER    5  /* We gained this vision from an adept power. */
 #define VISION_BIT_IS_SPELL          6  /* We gained this vision from a spell. */
-#define NUM_VISION_BITS              7
+#define VISION_BIT_OVERRIDE          7  /* Has been temporarily overridden by code. */
+#define NUM_VISION_BITS              8
 
 #define VISION_STRING_MODE_STAFF     0
 #define VISION_STRING_MODE_SCORE     1

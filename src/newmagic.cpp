@@ -1441,14 +1441,14 @@ void cast_detection_spell(struct char_data *ch, int spell, int force, char *arg,
       spell_drain(ch, spell, force, 0, direct_sustain);
       break;
     case SPELL_NIGHTVISION:
-      if (AFF_FLAGGED(vict, AFF_LOW_LIGHT)) {
+      if (has_vision(ch, VISION_LOWLIGHT)) {
         act("$N already has low-light vision.", FALSE, ch, 0, vict, TO_CHAR);
         return;
       }
 
       WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
       success = success_test(skill, 6 + target_modifiers);
-      if (success > 0 || AFF_FLAGGED(vict, AFF_LOW_LIGHT)) {
+      if (success > 0) {
         send_to_char("Your eyes tingle as the shadows around you become clearer.\r\n", vict);
         act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
         create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
@@ -1457,14 +1457,14 @@ void cast_detection_spell(struct char_data *ch, int spell, int force, char *arg,
       spell_drain(ch, spell, force, 0);
       break;
     case SPELL_INFRAVISION:
-      if (AFF_FLAGGED(vict, AFF_INFRAVISION)) {
+      if (has_vision(ch, VISION_THERMOGRAPHIC)) {
         act("$N already has thermographic vision.", FALSE, ch, 0, vict, TO_CHAR);
         return;
       }
 
       WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
       success = success_test(skill, 6 + target_modifiers);
-      if (success > 0 && !AFF_FLAGGED(ch, AFF_INFRAVISION)) {
+      if (success > 0) {
         send_to_char("Your eyes tingle as you begin to see heat signatures around you.\r\n", vict);
         act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
         create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);

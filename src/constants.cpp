@@ -2167,7 +2167,8 @@ const char *vision_bits[] = {
   "optical",
   "electronic",
   "adept-power",
-  "spell-given"
+  "spell-given",
+  "overridden"
 };
 
 const char *eyemods[] = {
