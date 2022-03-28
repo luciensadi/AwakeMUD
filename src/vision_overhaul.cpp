@@ -179,43 +179,23 @@ int get_vision_penalty(struct char_data *ch, struct room_data *temp_room, char *
       NM_PENALTY("PartLight[NM]", 2);
       break;
     case LIGHT_GLARE:
-      {
-        bool has_fc = FALSE;
-
-        // Find cybernetic flare comp.
-        for (struct obj_data *cyber = ch->cyberware; cyber && !has_fc; cyber = cyber->next_content) {
-          if (GET_CYBERWARE_TYPE(cyber) == CYB_EYES && IS_SET(GET_CYBERWARE_FLAGS(cyber), EYE_FLARECOMP)) {
-            has_fc = TRUE;
-            break;
-          }
+      // If you have a flare compensator, this doesn't affect you.
+      if (!has_flare_compensation(ch)) {
+        // You don't have a flare compensator. What a shame.
+        if (has_natural_thermographic_vision) {
+          TH_PENALTY("Glare[TH-N]", 2);
+        } else {
+          TH_PENALTY("Glare[TH-U]", 4);
         }
 
-        // Find biologic flare comp.
-        for (struct obj_data *bio = ch->bioware; bio && !has_fc; bio = bio->next_content) {
-          if (GET_BIOWARE_TYPE(bio) == BIO_NICTATINGGLAND) {
-            has_fc = TRUE;
-            break;
-          }
+        if (has_natural_lowlight_vision) {
+          LL_PENALTY("Glare[LL-N]", 2);
+        } else {
+          LL_PENALTY("Glare[LL-U]", 4);
         }
 
-        // If you have a flare compensator, this doesn't affect you.
-        if (!has_fc) {
-          // You don't have a flare compensator. What a shame.
-          if (has_natural_thermographic_vision) {
-            TH_PENALTY("Glare[TH-N]", 2);
-          } else {
-            TH_PENALTY("Glare[TH-U]", 4);
-          }
-
-          if (has_natural_lowlight_vision) {
-            LL_PENALTY("Glare[LL-N]", 2);
-          } else {
-            LL_PENALTY("Glare[LL-U]", 4);
-          }
-
-          NM_PENALTY("Glare[NM]", 2);
-          break;
-        }
+        NM_PENALTY("Glare[NM]", 2);
+        break;
       }
       break;
   }
@@ -414,7 +394,38 @@ const char *write_vision_string_for_display(struct char_data *ch, int mode) {
     }
   }
 
-  strlcat(vision_string_buf, "\r\n", sizeof(vision_string_buf));
+  // Add in magnification.
+  int vision_mag = 0;
+  if (AFF_FLAGGED(ch, AFF_VISION_MAG_3))
+    vision_mag = 3;
+  else if (AFF_FLAGGED(ch, AFF_VISION_MAG_2))
+    vision_mag = 2;
+  else if (AFF_FLAGGED(ch, AFF_VISION_MAG_1))
+    vision_mag = 1;
+
+  if (vision_mag) {
+    if (mode == VISION_STRING_MODE_STATUS) {
+      snprintf(ENDOF(vision_string_buf), sizeof(vision_string_buf) - strlen(vision_string_buf), "\r\n\r\nYou%s can see %d rooms away with your magnification.",
+               has_flare_compensation(ch) ? " have flare compensation and" : "",
+               vision_mag
+             );
+    } else {
+      snprintf(ENDOF(vision_string_buf), sizeof(vision_string_buf) - strlen(vision_string_buf), "^n, ^CMagnification-%d^n%s",
+               vision_mag,
+               has_flare_compensation(ch) ? ", ^CFlare Comp^n" : ""
+             );
+    }
+  } else if (has_flare_compensation(ch)) {
+    if (mode == VISION_STRING_MODE_STATUS) {
+      strlcat(vision_string_buf, "\r\n\r\nYou have flare compensation.", sizeof(vision_string_buf));
+    } else {
+      strlcat(vision_string_buf, "^n, ^CFlare Comp^n", sizeof(vision_string_buf));
+    }
+  }
+
+
+
+  strlcat(vision_string_buf, "^n\r\n", sizeof(vision_string_buf));
 
   return vision_string_buf;
 }
@@ -480,6 +491,24 @@ void apply_vision_bits_from_implant(struct char_data *ch, struct obj_data *impla
       mudlog(oopsbuf, ch, LOG_SYSLOG, TRUE);
       return;
   }
+}
+
+bool has_flare_compensation(struct char_data *ch) {
+  // Find cybernetic flare comp.
+  for (struct obj_data *cyber = ch->cyberware; cyber; cyber = cyber->next_content) {
+    if (GET_CYBERWARE_TYPE(cyber) == CYB_EYES && IS_SET(GET_CYBERWARE_FLAGS(cyber), EYE_FLARECOMP)) {
+      return TRUE;
+    }
+  }
+
+  // Find bioware flare comp.
+  for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content) {
+    if (GET_BIOWARE_TYPE(bio) == BIO_NICTATINGGLAND) {
+      return TRUE;
+    }
+  }
+
+  return FALSE;
 }
 
 
