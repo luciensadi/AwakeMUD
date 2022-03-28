@@ -1103,6 +1103,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
       auto_repair_obj(GET_EQ(ch, i));
   }
 
+  set_natural_vision_for_race(ch);
   affect_total(ch);
 
   if ((((long) (time(0) - ch->player.time.lastdisc)) >= SECS_PER_REAL_HOUR)) {
@@ -1126,8 +1127,6 @@ bool load_char(const char *name, char_data *ch, bool logon)
     GET_COND(ch, COND_THIRST) = -1;
     GET_COND(ch, COND_DRUNK) = -1;
   }
-
-  set_natural_vision_for_race(ch);
 
   return true;
 }
