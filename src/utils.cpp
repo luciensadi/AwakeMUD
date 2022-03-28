@@ -4140,6 +4140,14 @@ const char *get_level_wholist_color(int level) {
   }
 }
 
+long get_room_gridguide_x(vnum_t room_vnum) {
+  return room_vnum - (room_vnum * 3);
+}
+
+long get_room_gridguide_y(vnum_t room_vnum) {
+  return room_vnum + 100;
+}
+
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.
 // Great for swapping out old Classic weapons, cyberware, etc for the new guaranteed-canon versions.
 #define PAIR(classic, current) case (classic): return (current);

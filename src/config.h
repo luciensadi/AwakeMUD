@@ -226,6 +226,9 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 // If you don't think the same-room +6 TN penalty for using a sniper rifle is appropriate, adjust here.
 #define SAME_ROOM_SNIPER_RIFLE_PENALTY                         6
 
+// How many slots should a gridguide have?
+#define GET_VEH_MAX_AUTONAV_SLOTS(veh)                         (veh->autonav * 10)
+
 /////////////// OLC permissions configuration /////////////////////////
 #define LVL_FOR_SETTING_ZONE_EDITOR_ID_NUMBERS                 LVL_VICEPRES
 #define LVL_FOR_SETTING_ZONE_CONNECTED_STATUS                  LVL_FIXER

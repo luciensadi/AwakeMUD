@@ -11,8 +11,8 @@ class objList : public List<struct obj_data *>
   int trideo_ticks;
 public:
   objList() { trideo_ticks = 0; }
-  
-  int PrintList(struct char_data *ch, const char *arg);
+
+  int PrintList(struct char_data *ch, const char *arg, bool override_vis_check=FALSE);
   int CountObj(int num);
   int CountPlayerCorpses();
   struct obj_data *FindObj(int num);

@@ -25,6 +25,9 @@ extern int find_first_step(vnum_t src, vnum_t target, bool ignore_roads);
 int move_vehicle(struct char_data *ch, int dir);
 ACMD_CONST(do_return);
 
+extern long get_room_gridguide_x(vnum_t room_vnum);
+extern long get_room_gridguide_y(vnum_t room_vnum);
+
 #define VEH ch->in_veh
 
 int get_maneuver(struct veh_data *veh)
@@ -1019,13 +1022,39 @@ ACMD(do_subscribe)
 
   if (!*argument) {
     if (ch->char_specials.subscribe) {
-      send_to_char("Your subscriber list contains:\r\n", ch);
       struct room_data *room;
+      char room_name_with_coords[1000];
+
+      send_to_char("Your subscriber list contains:\r\n", ch);
       for (veh = ch->char_specials.subscribe; veh; veh = veh->next_sub) {
-        snprintf(buf, sizeof(buf), "%2d) %-30s (At %s^n) [%2d/10] Damage\r\n", i, GET_VEH_NAME(veh),
-                (room = get_veh_in_room(veh)) ? room->name : "someone's tow rig, probably", veh->damage);
-        send_to_char(buf, ch);
-        i++;
+        if ((room = get_veh_in_room(veh))) {
+          snprintf(room_name_with_coords, sizeof(room_name_with_coords), "at %s^n", GET_ROOM_NAME(room));
+          if (!ROOM_FLAGGED(room, ROOM_NOGRID) && (ROOM_FLAGGED(room, ROOM_GARAGE) || ROOM_FLAGGED(room, ROOM_ROAD))) {
+            snprintf(ENDOF(room_name_with_coords), sizeof(room_name_with_coords) - strlen(room_name_with_coords), " (%ld, %ld)",
+                     get_room_gridguide_x(GET_ROOM_VNUM(room)),
+                     get_room_gridguide_y(GET_ROOM_VNUM(room))
+                    );
+          }
+        } else {
+          strlcpy(room_name_with_coords, "in someone's tow rig", sizeof(room_name_with_coords));
+        }
+
+        if (veh->in_veh) {
+          send_to_char(ch, "%2d) [%2d/10 dam]: %-35s (in %s^n, %s) \r\n",
+                       i++,
+                       veh->damage,
+                       GET_VEH_NAME(veh),
+                       GET_VEH_NAME(veh->in_veh),
+                       room_name_with_coords
+          );
+        } else {
+          send_to_char(ch, "%2d) [%2d/10 dam]: %-35s (%s)\r\n",
+                       i++,
+                       veh->damage,
+                       GET_VEH_NAME(veh),
+                       room_name_with_coords
+          );
+        }
       }
     } else
       send_to_char("Your subscriber list is empty.\r\n", ch);
@@ -1742,6 +1771,7 @@ ACMD(do_gridguide)
     send_to_char("You don't have control over the vehicle.\r\n", ch);
     return;
   }
+
   argument = two_arguments(argument, arg, buf2);
   if (!*arg) {
     int i = 0;
@@ -1750,13 +1780,13 @@ ACMD(do_gridguide)
       i++;
       if (!veh->in_room || find_first_step(real_room(veh->in_room->number), real_room(grid->room), FALSE) < 0)
         snprintf(buf, sizeof(buf), "^r%-20s [%-6ld, %-6ld](Unavailable)\r\n", CAP(grid->name),
-                grid->room - (grid->room * 3), grid->room + 100);
+                 get_room_gridguide_x(grid->room), get_room_gridguide_y(grid->room));
       else
         snprintf(buf, sizeof(buf), "^B%-20s [%-6ld, %-6ld](Available)\r\n", CAP(grid->name),
-                grid->room - (grid->room * 3), grid->room + 100);
+                 get_room_gridguide_x(grid->room), get_room_gridguide_y(grid->room));
       send_to_char(buf, ch);
     }
-    send_to_char(ch, "%d Entries remaining.\r\n", (veh->autonav * 5) - i);
+    send_to_char(ch, "%d Entries remaining.\r\n", GET_VEH_MAX_AUTONAV_SLOTS(veh) - i);
     return;
   }
 
@@ -1834,7 +1864,7 @@ ACMD(do_gridguide)
       }
       i++;
     }
-    if (i >= (veh->autonav * 5)) {
+    if (i >= GET_VEH_MAX_AUTONAV_SLOTS(veh)) {
       send_to_char("The system seems to be full.\r\n", ch);
       return;
     }
