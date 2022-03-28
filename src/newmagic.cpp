@@ -1118,8 +1118,10 @@ bool check_spell_victim(struct char_data *ch, struct char_data *vict, int spell,
 
 #ifdef DIES_IRAE
   // If you can only see your victim through ultrasound, you can't cast on them (M&M p18).
-  if (AFF_FLAGGED(ch, AFF_ULTRASOUND)) {
-    send_to_char("Ultrasound systems don't provide direct viewing-- your magic has nothing to lock on to!\r\n", ch);
+  // TODO: This needs to be rewritten.
+  deliberately breaking statement for dies irae compilation
+  if (has_vision(ch, VISION_ULTRASONIC) && !has_natural_vision(ch, VISION_ULTRASONIC)) {
+    send_to_char("External ultrasound systems don't provide direct viewing-- your magic has nothing to lock on to!\r\n", ch);
     return FALSE;
   }
 #endif
@@ -1441,14 +1443,14 @@ void cast_detection_spell(struct char_data *ch, int spell, int force, char *arg,
       spell_drain(ch, spell, force, 0, direct_sustain);
       break;
     case SPELL_NIGHTVISION:
-      if (AFF_FLAGGED(vict, AFF_LOW_LIGHT)) {
+      if (has_vision(ch, VISION_LOWLIGHT)) {
         act("$N already has low-light vision.", FALSE, ch, 0, vict, TO_CHAR);
         return;
       }
 
       WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
       success = success_test(skill, 6 + target_modifiers);
-      if (success > 0 || AFF_FLAGGED(vict, AFF_LOW_LIGHT)) {
+      if (success > 0) {
         send_to_char("Your eyes tingle as the shadows around you become clearer.\r\n", vict);
         act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
         create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
@@ -1457,14 +1459,14 @@ void cast_detection_spell(struct char_data *ch, int spell, int force, char *arg,
       spell_drain(ch, spell, force, 0);
       break;
     case SPELL_INFRAVISION:
-      if (AFF_FLAGGED(vict, AFF_INFRAVISION)) {
+      if (has_vision(ch, VISION_THERMOGRAPHIC)) {
         act("$N already has thermographic vision.", FALSE, ch, 0, vict, TO_CHAR);
         return;
       }
 
       WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
       success = success_test(skill, 6 + target_modifiers);
-      if (success > 0 && !AFF_FLAGGED(ch, AFF_INFRAVISION)) {
+      if (success > 0) {
         send_to_char("Your eyes tingle as you begin to see heat signatures around you.\r\n", vict);
         act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
         create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
@@ -4880,34 +4882,10 @@ void deactivate_power(struct char_data *ch, int power)
       send_to_char("You return to your physical senses.\r\n", ch);
       break;
     case ADEPT_LOW_LIGHT:
+      remove_vision_bit(ch, VISION_LOWLIGHT, VISION_BIT_IS_ADEPT_POWER);
+      break;
     case ADEPT_THERMO:
-      switch (GET_RACE(ch)) {
-        case RACE_HUMAN:
-        case RACE_OGRE:
-          NATURAL_VISION(ch) = NORMAL;
-          break;
-        case RACE_DWARF:
-        case RACE_GNOME:
-        case RACE_MENEHUNE:
-        case RACE_KOBOROKURU:
-        case RACE_TROLL:
-        case RACE_CYCLOPS:
-        case RACE_FOMORI:
-        case RACE_GIANT:
-        case RACE_MINOTAUR:
-          NATURAL_VISION(ch) = THERMOGRAPHIC;
-          break;
-        case RACE_ORK:
-        case RACE_HOBGOBLIN:
-        case RACE_SATYR:
-        case RACE_ONI:
-        case RACE_ELF:
-        case RACE_WAKYAMBI:
-        case RACE_NIGHTONE:
-        case RACE_DRYAD:
-          NATURAL_VISION(ch) = LOWLIGHT;
-          break;
-        }
+      remove_vision_bit(ch, VISION_THERMOGRAPHIC, VISION_BIT_IS_ADEPT_POWER);
       break;
     case ADEPT_LIVINGFOCUS:
       if (GET_SUSTAINED_NUM(ch))

@@ -449,15 +449,15 @@ void spell_modify(struct char_data *ch, struct sustain_data *sust, bool add)
       break;
     case SPELL_NIGHTVISION:
       if (mod == 1)
-        AFF_FLAGS(ch).SetBit(AFF_LOW_LIGHT);
+        set_vision_bit(ch, VISION_LOWLIGHT, VISION_BIT_IS_SPELL);
       else
-        AFF_FLAGS(ch).RemoveBit(AFF_LOW_LIGHT);
+        remove_vision_bit(ch, VISION_LOWLIGHT, VISION_BIT_IS_SPELL);
       break;
     case SPELL_INFRAVISION:
       if (mod == 1)
-        AFF_FLAGS(ch).SetBit(AFF_INFRAVISION);
+        set_vision_bit(ch, VISION_THERMOGRAPHIC, VISION_BIT_IS_SPELL);
       else
-        AFF_FLAGS(ch).RemoveBit(AFF_INFRAVISION);
+        remove_vision_bit(ch, VISION_THERMOGRAPHIC, VISION_BIT_IS_SPELL);
       break;
     case SPELL_LEVITATE:
       if (mod == 1)
@@ -553,6 +553,12 @@ void affect_total(struct char_data * ch)
   for (sust = GET_SUSTAINED(ch); sust; sust = sust->next)
     if (!sust->caster)
       spell_modify(ch, sust, FALSE);
+
+  // Because equipment-granted vision AFFs are notoriously sticky, clear them deliberately.
+  AFF_FLAGS(ch).RemoveBits(AFF_LOW_LIGHT, AFF_INFRAVISION, AFF_ULTRASOUND, AFF_VISION_MAG_1, AFF_VISION_MAG_2, AFF_VISION_MAG_3, ENDBIT);
+
+  // Wipe out vision bits, resetting them to race-only bits.
+  clear_ch_vision_bits(ch);
 
   // reset the affected ability scores
   ch->aff_abils = ch->real_abils;
@@ -709,24 +715,37 @@ void affect_total(struct char_data * ch)
   /* effects of cyberware */
   for (cyber = ch->cyberware; cyber; cyber = cyber->next_content)
   {
-    if (GET_OBJ_VAL(cyber, 0) == CYB_VCR)
-      has_rig = GET_OBJ_VAL(cyber, 1);
-    else if (GET_OBJ_VAL(cyber, 0) == CYB_REFLEXTRIGGER)
-      has_trigger = GET_OBJ_VAL(cyber, 1);
-    else if (GET_OBJ_VAL(cyber, 0) == CYB_WIREDREFLEXES)
-      has_wired = GET_OBJ_VAL(cyber, 1);
-    else if (GET_OBJ_VAL(cyber, 0) == CYB_MOVEBYWIRE)
-      has_mbw = GET_OBJ_VAL(cyber, 1);
-    else if (GET_OBJ_VAL(cyber, 0) == CYB_DERMALSHEATHING || GET_OBJ_VAL(cyber, 0) == CYB_DERMALPLATING) {
-      if (GET_OBJ_VAL(cyber, 0) == CYB_DERMALSHEATHING && GET_OBJ_VAL(cyber, 3) == 1 && !wearing)
-        AFF_FLAGS(ch).SetBit(AFF_INVISIBLE);
-      // todo
+    switch (GET_CYBERWARE_TYPE(cyber)) {
+      case CYB_VCR:
+        has_rig = GET_CYBERWARE_RATING(cyber);
+        break;
+      case CYB_REFLEXTRIGGER:
+        has_trigger = GET_CYBERWARE_RATING(cyber);
+        break;
+      case CYB_WIREDREFLEXES:
+        has_wired = GET_CYBERWARE_RATING(cyber);
+        break;
+      case CYB_MOVEBYWIRE:
+        has_mbw = GET_CYBERWARE_RATING(cyber);
+        break;
+      case CYB_DERMALSHEATHING:
+      case CYB_DERMALPLATING:
+        // Ruthenium sheathing.
+        if (GET_CYBERWARE_TYPE(cyber) == CYB_DERMALSHEATHING && GET_OBJ_VAL(cyber, 3) == 1 && !wearing)
+          AFF_FLAGS(ch).SetBit(AFF_INVISIBLE);
+        // todo
+        break;
+      case CYB_EYES:
+        apply_vision_bits_from_implant(ch, cyber);
+        break;
     }
-    for (j = 0; j < MAX_OBJ_AFFECT; j++)
+
+    for (j = 0; j < MAX_OBJ_AFFECT; j++) {
       affect_modify(ch,
                     cyber->affected[j].location,
                     cyber->affected[j].modifier,
                     cyber->obj_flags.bitvector, TRUE);
+    }
   }
   if (has_wired && has_trigger) {
     if (has_trigger == -1)
@@ -754,11 +773,18 @@ void affect_total(struct char_data * ch)
   if (GET_TEMP_QUI_LOSS(ch))
     GET_QUI(ch) = MAX(0, GET_QUI(ch) - (GET_TEMP_QUI_LOSS(ch) / 4));
 
-  for (cyber = ch->bioware; cyber; cyber = cyber->next_content) {
-    if (GET_OBJ_VAL(cyber, 0) == BIO_PAINEDITOR && GET_OBJ_VAL(cyber, 3)) {
-      GET_WIL(ch) += 1;
-      GET_INT(ch) -= 1;
-      break;
+  for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content) {
+    switch (GET_BIOWARE_TYPE(bio)) {
+      case BIO_PAINEDITOR:
+        if (GET_BIOWARE_IS_ACTIVATED(bio)) {
+          GET_WIL(ch) += 1;
+          GET_INT(ch) -= 1;
+        }
+        break;
+      case BIO_CATSEYES:
+        // M&M p45
+        apply_vision_bits_from_implant(ch, bio);
+        break;
     }
   }
 
@@ -801,10 +827,12 @@ void affect_total(struct char_data * ch)
     if (BOOST(ch)[BOD][0] > 0)
       GET_BOD(ch) += BOOST(ch)[BOD][1];
     GET_COMBAT(ch) += MIN(3, GET_POWER(ch, ADEPT_COMBAT_SENSE));
-    if (GET_POWER(ch, ADEPT_LOW_LIGHT))
-      NATURAL_VISION(ch) = LOWLIGHT;
-    if (GET_POWER(ch, ADEPT_THERMO))
-      NATURAL_VISION(ch) = THERMOGRAPHIC;
+    if (GET_POWER(ch, ADEPT_LOW_LIGHT)) {
+      set_vision_bit(ch, VISION_LOWLIGHT, VISION_BIT_IS_ADEPT_POWER);
+    }
+    if (GET_POWER(ch, ADEPT_THERMO)) {
+      set_vision_bit(ch, VISION_THERMOGRAPHIC, VISION_BIT_IS_ADEPT_POWER);
+    }
     if (GET_POWER(ch, ADEPT_IMAGE_MAG))
       AFF_FLAGS(ch).SetBit(AFF_VISION_MAG_2);
   }
@@ -992,12 +1020,15 @@ void affect_total(struct char_data * ch)
   }
 
   // Update current vision to match what's being worn.
-  if (AFF_FLAGGED(ch, AFF_INFRAVISION))
-    CURRENT_VISION(ch) = THERMOGRAPHIC;
-  else if (AFF_FLAGGED(ch, AFF_LOW_LIGHT))
-    CURRENT_VISION(ch) = LOWLIGHT;
-  else
-    CURRENT_VISION(ch) = NATURAL_VISION(ch);
+  if (AFF_FLAGGED(ch, AFF_INFRAVISION)) {
+    set_vision_bit(ch, VISION_THERMOGRAPHIC, VISION_BIT_FROM_EQUIPMENT);
+  }
+  if (AFF_FLAGGED(ch, AFF_LOW_LIGHT)) {
+    set_vision_bit(ch, VISION_LOWLIGHT, VISION_BIT_FROM_EQUIPMENT);
+  }
+  if (AFF_FLAGGED(ch, AFF_ULTRASOUND)) {
+    set_vision_bit(ch, VISION_ULTRASONIC, VISION_BIT_FROM_EQUIPMENT);
+  }
 
   // Strip invisibility from ruthenium etc if you're wearing about or body items that aren't also ruthenium.
   if (AFF_FLAGGED(ch, AFF_INVISIBLE) || AFF_FLAGGED(ch, AFF_IMP_INVIS))
@@ -1500,7 +1531,6 @@ void obj_to_bioware(struct obj_data * object, struct char_data * ch)
 void obj_from_bioware(struct obj_data *bio)
 {
   struct obj_data *temp;
-  int i;
 
   if (bio == NULL)
   {
@@ -1512,18 +1542,26 @@ void obj_from_bioware(struct obj_data *bio)
     return;
   }
 
-  if (GET_OBJ_VAL(bio, 0) == BIO_ADRENALPUMP && GET_OBJ_VAL(bio, 5) < 1)
-    for (i = 0; i < MAX_OBJ_AFFECT; i++)
-      affect_modify(bio->carried_by,
-                    bio->affected[i].location,
-                    bio->affected[i].modifier,
-                    bio->obj_flags.bitvector, FALSE);
+  struct char_data *ch = bio->carried_by;
 
-  affect_total(bio->carried_by);
+  /* remove the effects of bioware */
+  for (struct obj_data *tmp_bio = ch->bioware; tmp_bio; tmp_bio = tmp_bio->next_content)
+  {
+    // Remove the effects of this bioware OR activated adrenal pump.
+    if (GET_BIOWARE_TYPE(tmp_bio) != BIO_ADRENALPUMP || GET_OBJ_VAL(tmp_bio, 5) > 0) {
+      for (int j = 0; j < MAX_OBJ_AFFECT; j++)
+        affect_modify(ch,
+                      tmp_bio->affected[j].location,
+                      tmp_bio->affected[j].modifier,
+                      tmp_bio->obj_flags.bitvector, FALSE);
+    }
+  }
 
-  REMOVE_FROM_LIST(bio, bio->carried_by->bioware, next_content);
+  REMOVE_FROM_LIST(bio, ch->bioware, next_content);
   bio->carried_by = NULL;
   bio->next_content = NULL;
+
+  affect_total(ch);
 }
 
 /* take an object from a char */
@@ -1570,9 +1608,23 @@ void obj_from_cyberware(struct obj_data * cyber)
     return;
   }
 
-  REMOVE_FROM_LIST(cyber, cyber->carried_by->cyberware, next_content);
+  struct char_data *ch = cyber->carried_by;
+
+  /* remove the effects of cyberware */
+  for (struct obj_data *tmp_cyber = cyber->carried_by->cyberware; tmp_cyber; tmp_cyber = tmp_cyber->next_content)
+  {
+    for (int j = 0; j < MAX_OBJ_AFFECT; j++)
+      affect_modify(ch,
+                    tmp_cyber->affected[j].location,
+                    tmp_cyber->affected[j].modifier,
+                    tmp_cyber->obj_flags.bitvector, FALSE);
+  }
+
+  REMOVE_FROM_LIST(cyber, ch->cyberware, next_content);
   cyber->carried_by = NULL;
   cyber->next_content = NULL;
+
+  affect_total(ch);
 }
 
 bool equip_char(struct char_data * ch, struct obj_data * obj, int pos)

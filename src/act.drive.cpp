@@ -321,9 +321,17 @@ ACMD(do_rig)
       send_to_char("You jack in and nothing happens.\r\n", ch);
       return;
     }
+
+    // No perception while rigging.
+    if (PLR_FLAGGED(ch, PLR_PERCEIVE)) {
+      ACMD_DECLARE(do_astral);
+      do_astral(ch, buf, 0, SCMD_PERCEIVE);
+    }
+
     AFF_FLAGS(ch).SetBits(AFF_PILOT, AFF_RIG, ENDBIT);
     VEH->cspeed = SPEED_IDLE;
     VEH->lastin[0] = VEH->in_room;
+
     stop_manning_weapon_mounts(ch, TRUE);
     send_to_char("As you jack in, your perception shifts.\r\n", ch);
     snprintf(buf1, sizeof(buf1), "%s jacks into the vehicle control system.\r\n", capitalize(GET_NAME(ch)));
@@ -916,6 +924,12 @@ ACMD(do_control)
   if (veh->in_room && GET_ROOM_VNUM(veh->in_room) == RM_PORTABLE_VEHICLE_STORAGE) {
     send_to_char("The automated safety systems won't let you control a vehicle that's being carried around.\r\n", ch);
     return;
+  }
+
+  // No perception while controlling.
+  if (PLR_FLAGGED(ch, PLR_PERCEIVE)) {
+    ACMD_DECLARE(do_astral);
+    do_astral(ch, buf, 0, SCMD_PERCEIVE);
   }
 
   if (PLR_FLAGGED(ch, PLR_REMOTE))

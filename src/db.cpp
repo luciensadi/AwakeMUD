@@ -6103,6 +6103,9 @@ void price_cyber(struct obj_data *obj)
       GET_OBJ_AVAILDAY(obj) = 4;
       break;
     case CYB_EYES:
+      // Auto-remove the vision affs from this object.
+      obj->obj_flags.bitvector.RemoveBits(AFF_LOW_LIGHT, AFF_INFRAVISION, AFF_ULTRASOUND, AFF_VISION_MAG_1, AFF_VISION_MAG_2, AFF_VISION_MAG_3, ENDBIT);
+
       GET_OBJ_AVAILDAY(obj) = GET_OBJ_AVAILTN(obj) = GET_CYBERWARE_ESSENCE_COST(obj) = GET_OBJ_COST(obj) = 0;
       if (IS_SET(GET_OBJ_VAL(obj, 3), EYE_CAMERA)) {
         GET_OBJ_COST(obj) = 5000;

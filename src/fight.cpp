@@ -3921,8 +3921,8 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
   }
 
   // Pre-calculate the things we care about here. First, character vision info.
-  bool ch_has_ultrasound = AFF_FLAGGED(ch, AFF_ULTRASOUND);
-  bool ch_has_thermographic = AFF_FLAGGED(ch, AFF_INFRAVISION) || CURRENT_VISION(ch) == THERMOGRAPHIC;
+  bool ch_has_ultrasound = has_vision(ch, VISION_ULTRASONIC);
+  bool ch_has_thermographic = has_vision(ch, VISION_THERMOGRAPHIC);
   bool ch_sees_astral = IS_ASTRAL(ch) || IS_DUAL(ch);
 
   // EXCEPT: If you're rigging (not manning), things change.
@@ -4078,30 +4078,31 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
 
 int find_sight(struct char_data *ch)
 {
-  int sight;
+  // You can always see the room you're in.
+  int sight = 1;
 
-  if ((!IS_NPC(ch) && access_level(ch, LVL_VICEPRES)) || AFF_FLAGGED(ch, AFF_VISION_MAG_3))
+  // High-level staff see forever.
+  if (!access_level(ch, LVL_VICEPRES)) {
     sight = 4;
-  else if (AFF_FLAGGED(ch, AFF_VISION_MAG_2))
-    sight = 3;
-  else if (AFF_FLAGGED(ch, AFF_VISION_MAG_1))
-    sight = 2;
-  else
-    sight = 1;
-
-  /* add more weather conditions here to affect scan */
-  if (SECT(get_ch_in_room(ch)) != SPIRIT_HEARTH && (IS_NPC(ch) || !access_level(ch, LVL_VICEPRES)))
-    switch (weather_info.sky)
-  {
-    case SKY_RAINING:
-      sight -= 1;
-      break;
-    case SKY_LIGHTNING:
-      sight -= 2;
-      break;
   }
+  // Lower-level staff, morts, and NPCs are limited by sight and weather.
+  else {
+    sight += get_vision_mag(ch);
 
-  sight = MIN(4, MAX(1, sight));
+    /* add more weather conditions here to affect scan */
+    if (SECT(get_ch_in_room(ch)) != SPIRIT_HEARTH) {
+      switch (weather_info.sky) {
+        case SKY_RAINING:
+          sight -= 1;
+          break;
+        case SKY_LIGHTNING:
+          sight -= 2;
+          break;
+      }
+    }
+
+    sight = MIN(4, MAX(1, sight));
+  }
 
   return sight;
 }
@@ -4670,10 +4671,10 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
         isname(target, EXIT2(nextroom, dir)->keyword) &&
         !IS_SET(EXIT2(nextroom, dir)->exit_info, EX_DESTROYED) &&
         !IS_SET(EXIT2(nextroom, dir)->exit_info, EX_HIDDEN) &&
-        (PRF_FLAGGED(ch, PRF_HOLYLIGHT) || CURRENT_VISION(ch) == THERMOGRAPHIC ||
+        (PRF_FLAGGED(ch, PRF_HOLYLIGHT) || has_vision(ch, VISION_THERMOGRAPHIC) ||
          light_level(nextroom) <= LIGHT_NORMALNOLIT ||
          ((light_level(nextroom) == LIGHT_MINLIGHT || light_level(nextroom) == LIGHT_PARTLIGHT) &&
-          CURRENT_VISION(ch) == LOWLIGHT))) {
+          has_vision(ch, VISION_LOWLIGHT)))) {
            found = TRUE;
            break;
          }

@@ -3399,10 +3399,10 @@ const char *get_vision_string(struct char_data *ch, bool ascii_friendly=FALSE) {
   }
 
   if (ascii_friendly) {
-    if (AFF_FLAGGED(ch, AFF_ULTRASOUND) && get_ch_in_room(ch)->silence[0] <= 0)
+    if (has_vision(ch, VISION_ULTRASONIC) && get_ch_in_room(ch)->silence[0] <= 0)
         return "You have ultrasonic vision.";
   } else {
-    if (AFF_FLAGGED(ch, AFF_ULTRASOUND)) {
+    if (has_vision(ch, VISION_ULTRASONIC)) {
       if (get_ch_in_room(ch)->silence[0] > 0)
         return "Your ultrasonic vision is being suppressed by a field of silence here.\r\n";
       else
@@ -3410,14 +3410,14 @@ const char *get_vision_string(struct char_data *ch, bool ascii_friendly=FALSE) {
     }
   }
 
-  if (CURRENT_VISION(ch) == THERMOGRAPHIC) {
+  if (has_vision(ch, VISION_THERMOGRAPHIC)) {
     if (ascii_friendly)
       return "You have thermographic vision.";
     else
       return "You have thermographic vision.\r\n";
   }
 
-  if (CURRENT_VISION(ch) == LOWLIGHT) {
+  if (has_vision(ch, VISION_LOWLIGHT)) {
     if (ascii_friendly)
       return "You have low-light vision.";
     else
@@ -5393,10 +5393,6 @@ ACMD(do_scan)
   int i = 0, j, dist = 3;
   struct room_data *was_in = NULL, *x = NULL;
 
-  if (AFF_FLAGGED(ch, AFF_ULTRASOUND) && !(PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_RIG))) {
-    send_to_char(ch, "The ultrasound distorts your vision.\r\n");
-    return;
-  }
   argument = any_one_arg(argument, buf);
 
   if (*buf) {
@@ -5416,10 +5412,8 @@ ACMD(do_scan)
     ch->in_room = in_veh->in_room;
   }
 
-  infra = ((PRF_FLAGGED(ch, PRF_HOLYLIGHT) ||
-            CURRENT_VISION(ch) == THERMOGRAPHIC) ? TRUE : FALSE);
-  lowlight = ((PRF_FLAGGED(ch, PRF_HOLYLIGHT) ||
-               CURRENT_VISION(ch) == LOWLIGHT) ? TRUE : FALSE);
+  infra = PRF_FLAGGED(ch, PRF_HOLYLIGHT) || has_vision(ch, VISION_THERMOGRAPHIC);
+  lowlight = PRF_FLAGGED(ch, PRF_HOLYLIGHT) || has_vision(ch, VISION_LOWLIGHT);
 
   if (!infra && IS_ASTRAL(ch))
     infra = TRUE;
@@ -5721,6 +5715,9 @@ ACMD(do_status)
   if (!printed) {
     send_to_char(ch, "Nothing.\r\n");
   }
+
+  send_to_char(ch, "\r\nYou have the following vision types:\r\n  %s\r\n",
+               write_vision_string_for_display(ch, VISION_STRING_MODE_STATUS));
 
   if (GET_MAG(targ) > 0) {
     send_to_char("\r\n", ch);

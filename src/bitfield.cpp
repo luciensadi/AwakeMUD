@@ -105,6 +105,15 @@ int  Bitfield::GetNumSet() const
   return count;
 }
 
+bool Bitfield::HasAnythingSetAtAll() const
+{
+  for (int i = 0; i < BITFIELD_SIZE; i++)
+    if (data[i] != 0)
+      return TRUE;
+
+  return FALSE;
+}
+
 bool Bitfield::AreAnyShared(const Bitfield &test) const
 {
   for (int i = 0; i < BITFIELD_SIZE; i++)
