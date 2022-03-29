@@ -17,6 +17,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <signal.h>
+#include <unordered_map>
 
 #if defined(WIN32) && !defined(__CYGWIN__)
 #define popen(x,y) _popen(x,y)
@@ -6356,6 +6357,8 @@ int audit_zone_rooms_(struct char_data *ch, int zone_num, bool verbose) {
   if (verbose)
     send_to_char(ch, "\r\n^WAuditing rooms for zone %d...^n\r\n", zone_table[zone_num].number);
 
+  std::unordered_map<std::string, int> rooms = {};
+
   for (int i = zone_table[zone_num].number * 100; i <= zone_table[zone_num].top; i++) {
     if ((real_rm = real_room(i)) < 0)
       continue;
@@ -6381,6 +6384,13 @@ int audit_zone_rooms_(struct char_data *ch, int zone_num, bool verbose) {
       issues++;
       printed = TRUE;
     }
+
+    if (rooms.find(std::string(GET_ROOM_NAME(room))) != rooms.end()) {
+      strlcat(buf, "  - Room title is not unique within this zone.\r\n", sizeof(buf));
+      issues++;
+      printed = TRUE;
+    }
+    rooms.emplace(std::string(GET_ROOM_NAME(room)), 1);
 
     if (room->matrix > 0) {
       if (real_host(room->matrix) < 1) {
