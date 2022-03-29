@@ -3944,7 +3944,7 @@ SPECIAL(desktop)
                                             ((float)(GET_OBJ_TIMER(soft) - GET_OBJ_VAL(soft, 5)) / (GET_OBJ_TIMER(soft) != 0 ? GET_OBJ_TIMER(soft) : 1)) * 100 :
                                             ((float)(GET_OBJ_TIMER(soft) - GET_OBJ_VAL(soft, 4)) / (GET_OBJ_TIMER(soft) != 0 ? GET_OBJ_TIMER(soft) : 1)) * 100) : 0);
       else
-        send_to_char(ch, "%-40s %dMp (%dMp taken) Rating %d\r\n", soft->restring ? soft->restring :
+        send_to_char(ch, "%-40s %dMp (%dMp taken) (Completed) Rating %d\r\n", soft->restring ? soft->restring :
                      soft->text.name, GET_OBJ_VAL(soft, 2), GET_OBJ_VAL(soft, 2), GET_OBJ_VAL(soft, 1));
     }
   } else

@@ -1040,6 +1040,10 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 #define GET_DECK_ACCESSORY_COOKER_ORIGINAL_TIME(accessory)  (GET_OBJ_VAL((accessory), 8))
 #define GET_DECK_ACCESSORY_COOKER_TIME_REMAINING(accessory) (GET_OBJ_VAL((accessory), 9))
 
+// ITEM_DECK_ACCESSORY TYPE_COMPUTER convenience defines
+#define GET_DECK_ACCESSORY_COMPUTER_MAX_MEMORY(accessory)   (GET_OBJ_VAL((accessory), 2))
+#define GET_DECK_ACCESSORY_COMPUTER_USED_MEMORY(accessory)  (GET_OBJ_VAL((accessory), 3))
+
 // ITEM_RCDECK convenience defines
 
 // ITEM_CHIP convenience defines
@@ -1064,6 +1068,7 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 #define GET_HOLSTER_READY_STATUS(holster)                   (GET_OBJ_VAL((holster), 3))
 
 // ITEM_DESIGN convenience defines
+#define GET_DESIGN_SIZE(prog)                               (GET_OBJ_VAL((prog), 6))
 
 // ITEM_GUN_AMMO convenience defines
 #define GET_AMMOBOX_QUANTITY(box)                           (GET_OBJ_VAL((box), 0))
