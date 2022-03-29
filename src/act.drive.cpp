@@ -890,7 +890,7 @@ ACMD(do_control)
 
   if (!has_rig)
     for (cyber = ch->cyberware; cyber; cyber = cyber->next_content)
-      if (GET_CYBERWARE_TYPE == CYB_CRD))
+      if (GET_CYBERWARE_TYPE(cyber, 0) == CYB_CRD))
         has_rig = TRUE;
 
   if (!has_rig) {
@@ -976,7 +976,7 @@ ACMD(do_subscribe)
 
   if (!has_deck)
   for (struct obj_data *cyber = ch->cyberware; cyber; cyber = cyber->next_content)
-    if (GET_CYBERWARE_TYPE == CYB_CRD)
+    if (GET_CYBERWARE_TYPE(cyber, 0) == CYB_CRD)
       has_rig = TRUE;
 
   if (!has_deck) {
