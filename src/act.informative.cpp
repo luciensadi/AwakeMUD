@@ -1409,10 +1409,12 @@ void disp_long_exits(struct char_data *ch, bool autom)
   {
     if (EXIT(ch, door) && EXIT(ch, door)->to_room && EXIT(ch, door)->to_room != &world[0]) {
       if (GET_REAL_LEVEL(ch) >= LVL_BUILDER) {
-        snprintf(buf2, sizeof(buf2), "%-5s - [%5ld] %s%s\r\n", dirs[door],
-                EXIT(ch, door)->to_room->number,
-                EXIT(ch, door)->to_room->name,
-                (IS_SET(EXIT(ch, door)->exit_info, EX_CLOSED) ? " (closed)" : ""));
+        snprintf(buf2, sizeof(buf2), "%-5s - [%5ld] %s%s%s\r\n", dirs[door],
+                 EXIT(ch, door)->to_room->number,
+                 EXIT(ch, door)->to_room->name,
+                 (IS_SET(EXIT(ch, door)->exit_info, EX_CLOSED) ? " (closed)" : ""),
+                 (veh && !room_accessible_to_vehicle_piloted_by_ch(EXIT(veh, door)->to_room, veh, ch)) ? " (impassible)" : ""
+                );
         if (autom)
           strlcat(buf, "^c", sizeof(buf));
         strlcat(buf, CAP(buf2), sizeof(buf));

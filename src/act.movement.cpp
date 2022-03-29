@@ -658,10 +658,12 @@ void move_vehicle(struct char_data *ch, int dir)
     send_to_char("Your vehicle is too big to fit there.\r\n", ch);
     return;
   }
+
   if (veh->type == VEH_BIKE && ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_NOBIKE)) {
     send_to_char(CANNOT_GO_THAT_WAY, ch);
     return;
   }
+
 #ifdef DEATH_FLAGS
   if (ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_DEATH)) {
     send_to_char(CANNOT_GO_THAT_WAY, ch);
@@ -706,6 +708,13 @@ void move_vehicle(struct char_data *ch, int dir)
         return;
       }
     }
+  }
+
+  // Sanity check: Did you update the impassibility code without updating this?
+  if (!room_accessible_to_vehicle_piloted_by_ch(EXIT(veh, dir)->to_room, veh, ch)) {
+    mudlog("SYSERR: room_accessible_to_vehicle() does not match move_vehicle() constraints!", ch, LOG_SYSLOG, TRUE);
+    send_to_char(CANNOT_GO_THAT_WAY, ch);
+    return;
   }
 
   snprintf(buf2, sizeof(buf2), "%s %s from %s.", GET_VEH_NAME(veh), veh->arrive, thedirs[rev_dir[dir]]);

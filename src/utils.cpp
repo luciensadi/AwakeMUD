@@ -4178,6 +4178,51 @@ int get_zone_index_number_from_vnum(vnum_t vnum) {
   return -1;
 }
 
+bool room_accessible_to_vehicle_piloted_by_ch(struct room_data *room, struct veh_data *veh, struct char_data *ch) {
+  if (veh->type == VEH_BIKE && ROOM_FLAGGED(room, ROOM_NOBIKE))
+    return FALSE;
+
+  if (!ROOM_FLAGGED(room, ROOM_ROAD) && !ROOM_FLAGGED(room, ROOM_GARAGE)) {
+    if (veh->type != VEH_BIKE && veh->type != VEH_DRONE)
+      return FALSE;
+  }
+
+  #ifdef DEATH_FLAGS
+    if (ROOM_FLAGGED(room, ROOM_DEATH)) {
+      return FALSE;
+    }
+  #endif
+
+  #ifdef DIES_IRAE
+    // Flying vehicles can traverse any terrain. If you're not a flying or amphibious vehicle, you can't go into water.
+    if (!veh->flags.IsSet(VFLAG_CAN_FLY)) {
+      // Non-flying vehicles can't pass fall rooms.
+      if (ROOM_FLAGGED(room, ROOM_FALL)) {
+        return FALSE;
+      }
+
+      // Non-amphibious vehicles can't traverse water.
+      if (IS_WATER(room)) {
+        return FALSE;
+      }
+    }
+  #endif
+
+  if (ROOM_FLAGGED(room, ROOM_TOO_CRAMPED_FOR_CHARACTERS) && (veh->body > 1 || veh->type != VEH_DRONE)) {
+    return FALSE;
+  }
+
+  if (ROOM_FLAGGED(room, ROOM_STAFF_ONLY)) {
+    for (struct char_data *tch = veh->people; tch; tch = tch->next_in_veh) {
+      if (!IS_NPC(tch) && !access_level(tch, LVL_BUILDER)) {
+        return FALSE;
+      }
+    }
+  }
+
+  return TRUE;
+}
+
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.
 // Great for swapping out old Classic weapons, cyberware, etc for the new guaranteed-canon versions.
 #define PAIR(classic, current) case (classic): return (current);
