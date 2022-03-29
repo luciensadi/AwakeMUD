@@ -2948,8 +2948,8 @@ ACMD(do_dc)
     return;
   }
 
-  send_to_char(ch, "%s's connection closed.\r\n", GET_NAME(vict));
-  snprintf(buf, sizeof(buf), "%s's connection closed by %s.", GET_NAME(vict),
+  send_to_char(ch, "%s's connection closed.\r\n", GET_CHAR_NAME(vict));
+  snprintf(buf, sizeof(buf), "%s's connection closed by %s.", GET_CHAR_NAME(vict),
           GET_CHAR_NAME(ch));
   mudlog(buf, ch, LOG_WIZLOG, TRUE);
   /* Since we are DCing somone lets remove them from the game as well*/
