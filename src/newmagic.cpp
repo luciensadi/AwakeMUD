@@ -2794,7 +2794,7 @@ bool check_spirit_sector(struct room_data *room, int spirit)
 
 void circle_build(struct char_data *ch, char *type, int force)
 {
-  long cost = force * force;
+  long cost = (force * force) * 100;
   if (IS_WORKING(ch))
   {
     send_to_char(TOOBUSY, ch);
