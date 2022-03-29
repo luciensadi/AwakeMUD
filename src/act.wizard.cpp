@@ -5929,13 +5929,23 @@ bool restring_with_args(struct char_data *ch, char *argument, bool using_sysp) {
     return FALSE;
   }
 
-  if (GET_OBJ_TYPE(obj) == ITEM_GUN_ACCESSORY || GET_OBJ_TYPE(obj) == ITEM_MOD || GET_OBJ_TYPE(obj) == ITEM_GUN_AMMO) {
-    send_to_char("Sorry, gun attachments, vehicle mods, and ammo containers can't be restrung.\r\n", ch);
+  if (GET_OBJ_TYPE(obj) == ITEM_GUN_ACCESSORY && GET_ACCESSORY_TYPE(obj) != ACCESS_SMARTGOGGLE) {
+    send_to_char("Sorry, gun attachments can't be restrung.\r\n", ch);
+    return FALSE;
+  }
+
+  if (GET_OBJ_TYPE(obj) == ITEM_MOD || GET_OBJ_TYPE(obj) == ITEM_GUN_AMMO) {
+    send_to_char("Sorry, vehicle mods and ammo containers can't be restrung.\r\n", ch);
     return FALSE;
   }
 
   if (GET_OBJ_TYPE(obj) == ITEM_CLIMBING && GET_OBJ_VAL(obj, 1) == CLIMBING_TYPE_WATER_WINGS) {
     send_to_char("No amount of cosmetic changes could hide the garishness of water wings.\r\n", ch);
+    return FALSE;
+  }
+
+  if (GET_OBJ_TYPE(obj) == ITEM_VEHCONTAINER) {
+    send_to_char("Sorry, vehicle containers can't be restrung.\r\n", ch);
     return FALSE;
   }
 
@@ -5953,6 +5963,12 @@ bool restring_with_args(struct char_data *ch, char *argument, bool using_sysp) {
   if (strlen(buf) >= MAX_RESTRING_LENGTH) {
     send_to_char(ch, "That restring is too long, please shorten it. The maximum length with color codes included is %d characters.\r\n", MAX_RESTRING_LENGTH - 1);
     return FALSE;
+  }
+
+  struct obj_data *shopcontainer = NULL;
+  if (GET_OBJ_TYPE(obj) == ITEM_SHOPCONTAINER) {
+    shopcontainer = obj;
+    obj = shopcontainer->contains;
   }
 
   if (using_sysp) {
@@ -5978,12 +5994,23 @@ bool restring_with_args(struct char_data *ch, char *argument, bool using_sysp) {
     GET_KARMA(ch) -= 250;
   }
 
-  snprintf(buf2, sizeof(buf2), "%s restrung '%s' to '%s'", GET_CHAR_NAME(ch), obj->text.name, buf);
+  snprintf(buf2, sizeof(buf2), "%s restrung '%s' (%ld) to '%s'", GET_CHAR_NAME(ch), obj->text.name, GET_OBJ_VNUM(obj), buf);
   mudlog(buf2, ch, LOG_WIZLOG, TRUE);
 
   DELETE_ARRAY_IF_EXTANT(obj->restring);
   obj->restring = str_dup(buf);
   send_to_char(ch, "%s successfully restrung.\r\n", obj->text.name);
+
+  // Repackage it to reflect its restrung status.
+  if (shopcontainer) {
+    extern struct obj_data *shop_package_up_ware(struct obj_data *obj);
+
+    obj_from_obj(obj);
+    obj_to_char(shop_package_up_ware(obj), ch);
+
+    GET_OBJ_EXTRA(shopcontainer).RemoveBit(ITEM_EXTRA_KEPT);
+    extract_obj(shopcontainer);
+  }
 
   return TRUE;
 }

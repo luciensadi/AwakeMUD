@@ -689,6 +689,19 @@ void diag_char_to_char(struct char_data * i, struct char_data * ch)
   send_to_char(buf, ch);
 }
 
+const char *render_ware_for_privileged_viewer(struct obj_data *ware) {
+  static char render_buf[1000];
+
+  strlcpy(render_buf, GET_OBJ_NAME(ware), sizeof(render_buf));
+  if (ware->restring) {
+    snprintf(ENDOF(render_buf), sizeof(render_buf) - strlen(render_buf), " (restrung from %s)\r\n", ware->text.name);
+  } else {
+    strlcat(render_buf, "\r\n", sizeof(render_buf));
+  }
+
+  return render_buf;
+}
+
 void look_at_char(struct char_data * i, struct char_data * ch)
 {
   int j, found, weight;
@@ -825,116 +838,139 @@ void look_at_char(struct char_data * i, struct char_data * ch)
       }
   }
 
-  found = FALSE;
-  *buf = '\0';
-  *buf2 = '\0';
+  char internal_cyberware[MAX_STRING_LENGTH];
+  char visible_cyberware[MAX_STRING_LENGTH];
+  *internal_cyberware = '\0';
+  *visible_cyberware = '\0';
+
+  bool ch_can_see_all_ware = (access_level(ch, LVL_FIXER) || (PRF_FLAGGED(i, PRF_QUEST) && PRF_FLAGGED(ch, PRF_QUESTOR)));
+
   for (tmp_obj = i->cyberware; tmp_obj; tmp_obj = tmp_obj->next_content)
-    switch (GET_OBJ_VAL(tmp_obj, 0)) {
+    switch (GET_CYBERWARE_TYPE(tmp_obj)) {
       case CYB_HANDRAZOR:
       case CYB_HANDBLADE:
       case CYB_HANDSPUR:
       case CYB_FIN:
       case CYB_FOOTANCHOR:
       case CYB_CLIMBINGCLAWS:
-        if (GET_OBJ_VAL(tmp_obj, 9)) {
-          found = TRUE;
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s\r\n", GET_OBJ_NAME(tmp_obj));
-        } else snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%s\r\n", cyber_types[GET_OBJ_VAL(tmp_obj, 0)]);
+        // Retracted? We only show it to people who can see it.
+        if (GET_CYBERWARE_IS_DISABLED(tmp_obj)) {
+          if (ch_can_see_all_ware) {
+            strlcat(internal_cyberware, render_ware_for_privileged_viewer(tmp_obj), sizeof(internal_cyberware));
+          }
+        }
+        // Extended.
+        else {
+          if (ch_can_see_all_ware) {
+            strlcat(visible_cyberware, render_ware_for_privileged_viewer(tmp_obj), sizeof(visible_cyberware));
+          } else {
+            snprintf(ENDOF(visible_cyberware), sizeof(visible_cyberware) - strlen(visible_cyberware), "%s\r\n", cyber_types[GET_OBJ_VAL(tmp_obj, 0)]);
+          }
+        }
         break;
         /*  Code for the previous version of cyber skulls / torsos. - LS 2021
           case CYB_TORSO:
           case CYB_SKULL:
-            if (GET_OBJ_VAL(tmp_obj, 3)) {
+            if (GET_CYBERWARE_FLAGS(tmp_obj)) {
               found = TRUE;
               snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s\r\n", GET_OBJ_NAME(tmp_obj));
             } else snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%s\r\n", cyber_types[GET_OBJ_VAL(tmp_obj, 0)]);
             break;
         */
+
+      // BUF2 is VISIBLE, buf is hidden
       case CYB_DATAJACK:
-        if (GET_EQ(i, WEAR_HEAD))
+        if (!ch_can_see_all_ware && GET_EQ(i, WEAR_HEAD))
           continue;
-        if (GET_OBJ_VAL(tmp_obj, 3)) {
-          found = TRUE;
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s\r\n", GET_OBJ_NAME(tmp_obj));
-        } else snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%s\r\n", cyber_types[GET_OBJ_VAL(tmp_obj, 0)]);
+        if (GET_CYBERWARE_FLAGS(tmp_obj)) {
+          strlcat(internal_cyberware, render_ware_for_privileged_viewer(tmp_obj), sizeof(internal_cyberware));
+        }
+        else {
+          if (ch_can_see_all_ware) {
+            strlcat(visible_cyberware, render_ware_for_privileged_viewer(tmp_obj), sizeof(visible_cyberware));
+          } else {
+            snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%s\r\n", cyber_types[GET_OBJ_VAL(tmp_obj, 0)]);
+          }
+        }
         break;
       case CYB_CHIPJACK:
-        if (GET_EQ(i, WEAR_HEAD))
+        if (!ch_can_see_all_ware && GET_EQ(i, WEAR_HEAD))
           continue;
         // fall through.
       case CYB_DERMALPLATING:
       case CYB_BALANCETAIL:
-        snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%s\r\n", cyber_types[GET_OBJ_VAL(tmp_obj, 0)]);
+        if (ch_can_see_all_ware) {
+          strlcat(visible_cyberware, render_ware_for_privileged_viewer(tmp_obj), sizeof(visible_cyberware));
+        } else {
+          snprintf(ENDOF(visible_cyberware), sizeof(visible_cyberware) - strlen(visible_cyberware), "%s\r\n", cyber_types[GET_CYBERWARE_TYPE(tmp_obj)]);
+        }
         break;
       case CYB_EYES:
-        if (GET_EQ(i, WEAR_EYES) || (GET_EQ(i, WEAR_HEAD) && GET_OBJ_VAL(GET_EQ(i, WEAR_HEAD), 7) > 1))
-          continue;
-        if ((IS_SET(GET_OBJ_VAL(tmp_obj, 3), EYE_OPTMAG1) || IS_SET(GET_OBJ_VAL(tmp_obj, 3), EYE_OPTMAG2) ||
-             IS_SET(GET_OBJ_VAL(tmp_obj, 3), EYE_OPTMAG3)) && success_test(GET_INT(ch), 9) > 0)
-          strlcat(buf2, "Optical Magnification\r\n", sizeof(buf2));
-        if (IS_SET(GET_OBJ_VAL(tmp_obj, 3), EYE_COSMETIC))
-          snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%s\r\n", GET_OBJ_NAME(tmp_obj));
+        if (ch_can_see_all_ware) {
+          strlcat(visible_cyberware, render_ware_for_privileged_viewer(tmp_obj), sizeof(visible_cyberware));
+        } else {
+          if (GET_EQ(i, WEAR_EYES) || (GET_EQ(i, WEAR_HEAD) && GET_OBJ_VAL(GET_EQ(i, WEAR_HEAD), 7) > 1))
+            continue;
+          if ((IS_SET(GET_CYBERWARE_FLAGS(tmp_obj), EYE_OPTMAG1) || IS_SET(GET_CYBERWARE_FLAGS(tmp_obj), EYE_OPTMAG2) ||
+               IS_SET(GET_CYBERWARE_FLAGS(tmp_obj), EYE_OPTMAG3)) && success_test(GET_INT(ch), 9) > 0)
+            strlcat(visible_cyberware, "Optical Magnification\r\n", sizeof(visible_cyberware));
+          if (IS_SET(GET_CYBERWARE_FLAGS(tmp_obj), EYE_COSMETIC))
+            snprintf(ENDOF(visible_cyberware), sizeof(visible_cyberware) - strlen(visible_cyberware), "%s\r\n", GET_OBJ_NAME(tmp_obj));
+        }
         break;
       case CYB_ARMS:
-        if (IS_SET(GET_CYBERWARE_FLAGS(tmp_obj), ARMS_MOD_OBVIOUS)) {
-          snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%s\r\n", cyber_types[GET_OBJ_VAL(tmp_obj, 0)]);
-        } else {
-          found = TRUE;
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s\r\n", GET_OBJ_NAME(tmp_obj));
-        }
-        break;
       case CYB_LEGS:
-        if (IS_SET(GET_CYBERWARE_FLAGS(tmp_obj), LEGS_MOD_OBVIOUS)) {
-          snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%s\r\n", cyber_types[GET_OBJ_VAL(tmp_obj, 0)]);
-        } else {
-          found = TRUE;
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s\r\n", GET_OBJ_NAME(tmp_obj));
-        }
-        break;
       case CYB_SKULL:
-        if (IS_SET(GET_CYBERWARE_FLAGS(tmp_obj), SKULL_MOD_OBVIOUS)) {
-          snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%s\r\n", cyber_types[GET_OBJ_VAL(tmp_obj, 0)]);
-        } else {
-          found = TRUE;
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s\r\n", GET_OBJ_NAME(tmp_obj));
-        }
-        break;
       case CYB_TORSO:
-        if (IS_SET(GET_CYBERWARE_FLAGS(tmp_obj), TORSO_MOD_OBVIOUS)) {
-          snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%s\r\n", cyber_types[GET_OBJ_VAL(tmp_obj, 0)]);
+        if ((GET_CYBERWARE_TYPE(tmp_obj) == CYB_ARMS && IS_SET(GET_CYBERWARE_FLAGS(tmp_obj), ARMS_MOD_OBVIOUS))
+            || (GET_CYBERWARE_TYPE(tmp_obj) == CYB_LEGS && IS_SET(GET_CYBERWARE_FLAGS(tmp_obj), LEGS_MOD_OBVIOUS))
+            || (GET_CYBERWARE_TYPE(tmp_obj) == CYB_SKULL && IS_SET(GET_CYBERWARE_FLAGS(tmp_obj), SKULL_MOD_OBVIOUS))
+            || (GET_CYBERWARE_TYPE(tmp_obj) == CYB_TORSO && IS_SET(GET_CYBERWARE_FLAGS(tmp_obj), TORSO_MOD_OBVIOUS))
+        ) {
+          if (ch_can_see_all_ware)
+            strlcat(visible_cyberware, render_ware_for_privileged_viewer(tmp_obj), sizeof(visible_cyberware));
+          else
+            snprintf(ENDOF(visible_cyberware), sizeof(visible_cyberware) - strlen(visible_cyberware), "%s\r\n", cyber_types[GET_OBJ_VAL(tmp_obj, 0)]);
         } else {
-          found = TRUE;
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s\r\n", GET_OBJ_NAME(tmp_obj));
+          strlcat(internal_cyberware, render_ware_for_privileged_viewer(tmp_obj), sizeof(internal_cyberware));
         }
         break;
       default:
-        found = TRUE;
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s\r\n", GET_OBJ_NAME(tmp_obj));
+        if (ch_can_see_all_ware)
+          strlcat(internal_cyberware, render_ware_for_privileged_viewer(tmp_obj), sizeof(internal_cyberware));
         break;
     }
-  if (*buf2)
-    send_to_char(ch, "\r\nVisible Cyberware:\r\n%s", buf2);
-  if (found && GET_LEVEL(ch) > 1)
-    send_to_char(ch, "\r\nInternal Cyberware:\r\n%s", buf);
+  if (*visible_cyberware)
+    send_to_char(ch, "\r\nVisible Cyberware:\r\n%s", visible_cyberware);
+  if (*internal_cyberware)
+    send_to_char(ch, "\r\nInternal Cyberware:\r\n%s", internal_cyberware);
 
-  for (tmp_obj = i->bioware; tmp_obj; tmp_obj = tmp_obj->next_content)
-    if (GET_OBJ_VAL(tmp_obj, 0) == BIO_ORTHOSKIN) {
-      int targ = 10;
-      switch (GET_OBJ_VAL(tmp_obj, 1)) {
-        case 2:
-          targ = 9;
-          break;
-        case 3:
-          targ = 8;
+  for (tmp_obj = i->bioware; tmp_obj; tmp_obj = tmp_obj->next_content) {
+    if (GET_BIOWARE_TYPE(tmp_obj) == BIO_ORTHOSKIN) {
+      if (ch_can_see_all_ware) {
+        send_to_char(ch, "\r\nVisible Bioware:\r\n%s\r\n", render_ware_for_privileged_viewer(tmp_obj));
+      } else {
+        int targ = 10;
+        switch (GET_OBJ_VAL(tmp_obj, 1)) {
+          case 2:
+            targ = 9;
+            break;
+          case 3:
+            targ = 8;
+        }
+        if (success_test(GET_INT(ch), targ) > 0) {
+          send_to_char(ch, "\r\nVisible Bioware:\r\n%s\r\n", bio_types[GET_OBJ_VAL(tmp_obj, 0)]);
+        }
       }
-      if (success_test(GET_INT(ch), targ) > 0)
-        send_to_char(ch, "\r\nVisible bioware:\r\n%s\r\n", bio_types[GET_OBJ_VAL(tmp_obj, 0)]);
     }
+  }
 
   if (GET_LEVEL(ch) >= LVL_BUILDER && i->bioware) {
-    send_to_char("\r\nInternal bioware:\r\n", ch);
-    for (tmp_obj = i->bioware; tmp_obj; tmp_obj = tmp_obj->next_content)
-      send_to_char(ch, "%s\r\n", GET_OBJ_NAME(tmp_obj));
+    send_to_char("\r\nInternal Bioware:\r\n", ch);
+    for (tmp_obj = i->bioware; tmp_obj; tmp_obj = tmp_obj->next_content) {
+      if (GET_BIOWARE_TYPE(tmp_obj) != BIO_ORTHOSKIN)
+        send_to_char(ch, "%s\r\n", render_ware_for_privileged_viewer(tmp_obj));
+    }
   }
 
   if (ch != i && (GET_REAL_LEVEL(ch) >= LVL_BUILDER || !AWAKE(i)))
@@ -1941,7 +1977,8 @@ void look_in_obj(struct char_data * ch, char *arg, bool exa)
              (GET_OBJ_TYPE(obj) != ITEM_HOLSTER) &&
              (GET_OBJ_TYPE(obj) != ITEM_WORN) &&
              (GET_OBJ_TYPE(obj) != ITEM_KEYRING) &&
-             (GET_OBJ_TYPE(obj) != ITEM_GUN_AMMO)
+             (GET_OBJ_TYPE(obj) != ITEM_GUN_AMMO) &&
+             (GET_OBJ_TYPE(obj) != ITEM_SHOPCONTAINER)
            )
     send_to_char("There's nothing inside that!\r\n", ch);
   else
@@ -1951,7 +1988,7 @@ void look_in_obj(struct char_data * ch, char *arg, bool exa)
                    GET_AMMOBOX_QUANTITY(obj),
                    get_ammo_representation(GET_AMMOBOX_WEAPON(obj), GET_AMMOBOX_TYPE(obj), GET_AMMOBOX_QUANTITY(obj)));
       return;
-    } else if (GET_OBJ_TYPE(obj) == ITEM_WORN) {
+    } else if (GET_OBJ_TYPE(obj) == ITEM_WORN || GET_OBJ_TYPE(obj) == ITEM_SHOPCONTAINER) {
       if (obj->contains) {
         send_to_char(GET_OBJ_NAME(obj), ch);
         switch (bits) {

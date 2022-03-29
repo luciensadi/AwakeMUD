@@ -423,6 +423,7 @@ bool install_ware_in_target_character(struct obj_data *ware, struct char_data *i
     if (ware->in_obj && GET_OBJ_TYPE(ware->in_obj) == ITEM_SHOPCONTAINER) {
       struct obj_data *container = ware->in_obj;
       obj_from_obj(ware);
+      GET_OBJ_EXTRA(container).RemoveBit(ITEM_EXTRA_KEPT);
       extract_obj(container);
       container = NULL;
     }
@@ -502,6 +503,7 @@ bool install_ware_in_target_character(struct obj_data *ware, struct char_data *i
     if (ware->in_obj && GET_OBJ_TYPE(ware->in_obj) == ITEM_SHOPCONTAINER) {
       struct obj_data *container = ware->in_obj;
       obj_from_obj(ware);
+      GET_OBJ_EXTRA(container).RemoveBit(ITEM_EXTRA_KEPT);
       extract_obj(container);
       container = NULL;
     }
@@ -3060,7 +3062,7 @@ struct obj_data *shop_package_up_ware(struct obj_data *obj) {
   GET_OBJ_COST(shop_container) = 0;
   GET_OBJ_EXTRA(shop_container).SetBit(ITEM_EXTRA_KEPT);
 
-  snprintf(buf3, sizeof(buf3), "a packaged-up '%s'", GET_OBJ_NAME(obj));
+  snprintf(buf3, sizeof(buf3), "a packaged-up '%s'%s", GET_OBJ_NAME(obj), obj->restring ? " (restrung)" : "");
   DELETE_ARRAY_IF_EXTANT(shop_container->restring);
   shop_container->restring = str_dup(buf3);
 

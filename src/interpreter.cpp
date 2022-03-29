@@ -860,6 +860,7 @@ struct command_info cmd_info[] =
     { "ungroup"    , POS_DEAD    , do_ungroup  , 0, 0, FALSE },
     { "uninstall"  , POS_SITTING , do_get      , 0, SCMD_UNINSTALL, FALSE },
     { "unjack"     , POS_SITTING , do_jack     , 0, 1, FALSE },
+    { "unkeep"     , POS_LYING   , do_keep     , 0, 0, FALSE },
     { "unlock"     , POS_SITTING , do_gen_door , 0, SCMD_UNLOCK, FALSE },
     { "unlink"     , POS_SLEEPING, do_link     , 0, 1, FALSE },
     { "unbond"     , POS_RESTING , do_unbond   , 0, 0, FALSE },
