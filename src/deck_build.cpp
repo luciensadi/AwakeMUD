@@ -692,9 +692,16 @@ ACMD(do_build) {
     } else if (GET_OBJ_TYPE(obj) == ITEM_GUN_AMMO) {
       ammo_build(ch, obj);
       return;
-    } else if (!(deck = get_obj_in_list_vis(ch, arg2, ch->carrying))) {
-        send_to_char(ch, "You don't have that deck.\r\n");
-        return;
+    }
+
+    if (!*arg2) {
+      send_to_char("Syntax: BUILD <part> <deck>\r\n", ch);
+      return;
+    }
+
+    if (!(deck = get_obj_in_list_vis(ch, arg2, ch->carrying))) {
+      send_to_char(ch, "You don't have a deck named '%s'.\r\n", arg2);
+      return;
     }
 
     if(GET_OBJ_TYPE(obj) != ITEM_PART) {
@@ -703,7 +710,7 @@ ACMD(do_build) {
     }
 
     if (GET_OBJ_TYPE(deck) != ITEM_CUSTOM_DECK) {
-      send_to_char(ch, "%s isn't a custom deck; how exactly did you plan to build %s into it?\r\n", capitalize(GET_OBJ_NAME(deck)), decapitalize_a_an(GET_OBJ_NAME(obj)));
+      send_to_char(ch, "%s isn't a custom deck, so you can't build anything into it.\r\n", capitalize(GET_OBJ_NAME(deck)));
       return;
     }
 
