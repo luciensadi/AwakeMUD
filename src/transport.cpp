@@ -1059,7 +1059,7 @@ SPECIAL(taxi)
     }
 
     // Rides to the NERPcorpolis are free.
-    if (destination_list[dest].vnum == RM_NERPCORPOLIS_LOBBY)
+    if (dest > 0 && destination_list[dest].vnum == RM_NERPCORPOLIS_LOBBY)
       GET_SPARE1(driver) = 0;
 
     GET_SPARE2(driver) = dest;
