@@ -2895,12 +2895,15 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
     case ITEM_DESIGN:
       if (GET_OBJ_VAL(j, 0) == 5) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "This design is for a ^crating-%d %s (%s)^n program. It requires ^c%d^n units of storage.\r\n",
-                GET_OBJ_VAL(j, 1), programs[GET_OBJ_VAL(j, 0)].name, GET_WOUND_NAME(GET_OBJ_VAL(j, 2)),
-                (GET_OBJ_VAL(j, 1) * GET_OBJ_VAL(j, 1)) * attack_multiplier[GET_OBJ_VAL(j, 2)]);
+                GET_DESIGN_RATING(j),
+                programs[GET_DESIGN_PROGRAM(j)].name,
+                GET_WOUND_NAME(GET_DESIGN_PROGRAM_WOUND_LEVEL(j)),
+                (int) ((GET_DESIGN_RATING(j) * GET_DESIGN_RATING(j)) * attack_multiplier[GET_DESIGN_PROGRAM_WOUND_LEVEL(j)] * 1.1));
       } else {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "This design is for a ^crating-%d %s^n program. It requires ^c%d^n units of storage.\r\n",
-                GET_OBJ_VAL(j, 1), programs[GET_OBJ_VAL(j, 0)].name,
-                (GET_OBJ_VAL(j, 1) * GET_OBJ_VAL(j, 1)) * programs[GET_OBJ_VAL(j, 0)].multiplier);
+                GET_DESIGN_RATING(j),
+                programs[GET_DESIGN_PROGRAM(j)].name,
+                (int) ((GET_DESIGN_RATING(j) * GET_DESIGN_RATING(j)) * programs[GET_DESIGN_PROGRAM(j)].multiplier * 1.1));
       }
       break;
     case ITEM_GUN_AMMO:

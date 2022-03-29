@@ -1068,6 +1068,9 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 #define GET_HOLSTER_READY_STATUS(holster)                   (GET_OBJ_VAL((holster), 3))
 
 // ITEM_DESIGN convenience defines
+#define GET_DESIGN_PROGRAM(prog)                            (GET_OBJ_VAL((prog), 0))
+#define GET_DESIGN_RATING(prog)                             (GET_OBJ_VAL((prog), 1))
+#define GET_DESIGN_PROGRAM_WOUND_LEVEL(prog)                (GET_OBJ_VAL((prog), 2))
 #define GET_DESIGN_SIZE(prog)                               (GET_OBJ_VAL((prog), 6))
 
 // ITEM_GUN_AMMO convenience defines

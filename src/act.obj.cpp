@@ -266,7 +266,7 @@ void perform_put_cyberdeck(struct char_data * ch, struct obj_data * obj,
     if (GET_OBJ_TYPE(obj) == ITEM_PROGRAM) {
       space_required = GET_PROGRAM_SIZE(obj);
     } else {
-      space_required = GET_DESIGN_SIZE(obj) + (GET_DESIGN_SIZE(obj) / 10);
+      space_required = (int) GET_DESIGN_SIZE(obj) * 1.1;
     }
     int free_space = GET_DECK_ACCESSORY_COMPUTER_MAX_MEMORY(cont) - GET_DECK_ACCESSORY_COMPUTER_USED_MEMORY(cont);
 
