@@ -977,6 +977,7 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 #define GET_PROGRAM_SIZE(prog)                    (GET_OBJ_VAL((prog), 2))
 #define GET_PROGRAM_ATTACK_DAMAGE(prog)           (GET_OBJ_VAL((prog), 3))
 #define GET_PROGRAM_IS_DEFAULTED(prog)            (GET_OBJ_VAL((prog), 4))
+#define GET_PROGRAM_IS_COOKED(prog)               (GET_OBJ_TIMER((prog)) == 1)
 /* Values 5 through 9 are reserved by the Matrix code too! See GET_DECK_ACCESSORY_FILE_* for details. */
 
 // ITEM_GUN_MAGAZINE convenience defines

@@ -2725,9 +2725,18 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       break;
     case ITEM_PROGRAM:
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^crating-%d %s^n program, ^c%d^n units in size.",
-              GET_OBJ_VAL(j, 1), programs[GET_OBJ_VAL(j, 0)].name, GET_OBJ_VAL(j, 2));
-      if (GET_OBJ_VAL(j, 0) == SOFT_ATTACK)
+               GET_PROGRAM_RATING(j), programs[GET_PROGRAM_TYPE(j)].name, GET_PROGRAM_SIZE(j));
+      if (GET_PROGRAM_TYPE(j) == SOFT_ATTACK)
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " Its damage code is ^c%s^n.", GET_WOUND_NAME(GET_OBJ_VAL(j, 3)));
+
+      if (GET_PROGRAM_TYPE(j) >= SOFT_ASIST_COLD || GET_PROGRAM_TYPE(j) < SOFT_SENSOR) {
+        if (GET_OBJ_TIMER(j) < 0)
+          strlcat(buf, " It was ruined in cooking and is useless.\r\n", sizeof(buf));
+        else if (!GET_OBJ_TIMER(j))
+          strlcat(buf, " It still needs to be cooked to a chip.\r\n", sizeof(buf));
+        else
+          strlcat(buf, " It has been cooked and is ready for use.\r\n", sizeof(buf));
+      }
       break;
     case ITEM_BIOWARE:
       if (GET_BIOWARE_RATING(j) > 0) {
@@ -2784,8 +2793,9 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       }
       break;
     case ITEM_PART:
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is %s^c%s^n designed for MPCP ^c%d^n decks. It will cost %d nuyen in parts and %d nuyen in chips to build.",
-               !GET_PART_DESIGN_COMPLETION(j) ? "a not-yet-designed " : AN(parts[GET_PART_TYPE(j)].name),
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a%s rating-^C%d^n ^c%s^n designed for MPCP ^c%d^n decks. It will cost %d nuyen in parts and %d nuyen in chips to build.",
+               !GET_PART_DESIGN_COMPLETION(j) ? " not-yet-designed" : AN(parts[GET_PART_TYPE(j)].name),
+               GET_PART_RATING(j),
                parts[GET_PART_TYPE(j)].name,
                GET_PART_TARGET_MPCP(j),
                GET_PART_PART_COST(j),
