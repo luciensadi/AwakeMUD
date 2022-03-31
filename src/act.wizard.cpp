@@ -113,6 +113,7 @@ extern int mother_desc, port;
 
 /* Prototypes. */
 void restore_character(struct char_data *vict, bool reset_staff_stats);
+bool is_invalid_ending_punct(char candidate);
 
 
 #define EXE_FILE "bin/awake" /* maybe use argv[0] but it's not reliable */
@@ -6635,7 +6636,7 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
       printed = TRUE;
       issues++;
     } else {
-      if (ispunct((candidate = get_final_character_from_string(mob->player.physical_text.name))) && candidate != '"' && candidate != '\'') {
+      if (is_invalid_ending_punct((candidate = get_final_character_from_string(mob->player.physical_text.name)))) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - name ending in punctuation (%c)^n.\r\n", candidate);
         printed = TRUE;
         issues++;
@@ -6759,15 +6760,15 @@ int audit_zone_objects_(struct char_data *ch, int zone_num, bool verbose) {
       issues++;
     }
 
-    // Flag objects with high weight
-    if (GET_OBJ_WEIGHT(obj) >= 100.0) {
+    // Flag objects with high weight-- except fountains, which are often given high weights.
+    if (GET_OBJ_TYPE(obj) != ITEM_FOUNTAIN && GET_OBJ_WEIGHT(obj) >= 100.0) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - high weight %0.2f^n.\r\n", GET_OBJ_WEIGHT(obj));
       printed = TRUE;
       issues++;
     }
 
-    // Flag objects that can't be picked up
-    if (!GET_OBJ_WEAR(obj).IsSet(ITEM_WEAR_TAKE)) {
+    // Flag objects that can't be picked up-- except fountains, which are often flagged as such.
+    if (GET_OBJ_TYPE(obj) != ITEM_FOUNTAIN && !GET_OBJ_WEAR(obj).IsSet(ITEM_WEAR_TAKE)) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - cannot be picked up if dropped^n.\r\n");
       printed = TRUE;
       issues++;
@@ -6778,7 +6779,7 @@ int audit_zone_objects_(struct char_data *ch, int zone_num, bool verbose) {
       printed = TRUE;
       issues++;
     } else {
-      if (ispunct((candidate = get_final_character_from_string(obj->text.name)))) {
+      if (is_invalid_ending_punct((candidate = get_final_character_from_string(obj->text.name)))) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - name ending in punctuation (%c)^n.\r\n", candidate);
         printed = TRUE;
         issues++;
@@ -7422,4 +7423,13 @@ ACMD(do_forceget) {
   send_to_char(ch, "Bypassing all restrictions and calculations, you forcibly get %s from %s. Hope you know what you're doing!\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(cont));
   obj_from_obj(obj);
   obj_to_char(obj, ch);
+}
+
+bool is_invalid_ending_punct(char candidate) {
+  // Non-puncts are all valid.
+  if (!ispunct(candidate))
+    return FALSE;
+
+  // All punctuation other than these are invalid.
+  return candidate != '"' && candidate != '\'' && candidate != ')';
 }
