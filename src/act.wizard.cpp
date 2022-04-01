@@ -6609,16 +6609,31 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
       issues++;
     }
 
-    // Flag mobs with no weight or height
+    // Flag mobs with no weight or height.
     if (GET_HEIGHT(mob) == 0 || GET_WEIGHT(mob) == 0.0) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - missing vital statistics (weight %d, height %d)^n.\r\n", GET_HEIGHT(mob), GET_WEIGHT(mob));
       printed = TRUE;
       issues++;
     }
 
-    // Flag mobs with neutral (default) gender
-    if (GET_SEX(mob) == SEX_NEUTRAL) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - neutral (default) gender (is this intentional?).\r\n");
+    // Flag mobs with inappropriate genders.
+    if (GET_RACE(mob) == RACE_ELEMENTAL || GET_RACE(mob) == RACE_SPIRIT || MOB_FLAGGED(mob, MOB_INANIMATE)) {
+      if (GET_SEX(mob) != SEX_NEUTRAL) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - is a spirit/elemental/machine with a gender (is this intentional?).\r\n");
+        printed = TRUE;
+        issues++;
+      }
+    } else {
+      if (GET_SEX(mob) == SEX_NEUTRAL) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - neutral (default) gender (is this intentional?).\r\n");
+        printed = TRUE;
+        issues++;
+      }
+    }
+
+    // Flag emplaced mobs that aren't inanimate.
+    if (MOB_FLAGGED(mob, MOB_EMPLACED) && !MOB_FLAGGED(mob, MOB_INANIMATE)) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - is emplaced, but not inanimate.\r\n");
       printed = TRUE;
       issues++;
     }

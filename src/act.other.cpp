@@ -2142,7 +2142,7 @@ ACMD(do_astral)
   if (GET_TRADITION(ch) != TRAD_SHAMANIC && GET_TRADITION(ch) != TRAD_HERMETIC &&
       !access_level(ch, LVL_ADMIN) && !(GET_TRADITION(ch) == TRAD_ADEPT &&
                                         GET_POWER(ch, ADEPT_PERCEPTION) > 0 && subcmd == SCMD_PERCEIVE)) {
-    send_to_char("You can't do that!\r\n", ch);
+    send_to_char("You have no sense of the astral plane.\r\n", ch);
     return;
   }
   if (IS_WORKING(ch)) {
