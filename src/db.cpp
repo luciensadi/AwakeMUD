@@ -6302,6 +6302,22 @@ void price_cyber(struct obj_data *obj)
           break;
       }
       break;
+    case CYB_CRD:
+      GET_CYBERWARE_ESSENCE_COST(obj) = 30;
+      GET_OBJ_AVAILTN(obj) = 4;
+      GET_OBJ_AVAILDAY(obj) = 3;
+      switch (GET_CYBERWARE_RATING(obj, 1)) {
+        case 1:
+          GET_OBJ_COST(obj) = 25000;
+          break;
+        case 2:
+          GET_OBJ_COST(obj) = 50000;
+          break;
+        case 3:
+          GET_OBJ_COST(obj) = 75000;
+          break;
+      }
+      break;
   }
   float grade_essence_modifier = 1.0;
   switch (GET_CYBERWARE_GRADE(obj)) {
