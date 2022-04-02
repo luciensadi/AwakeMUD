@@ -804,6 +804,8 @@ bool load_char(const char *name, char_data *ch, bool logon)
         for (int x = 0, y = 3; x < NUM_VALUES; x++, y++) {
           GET_OBJ_VAL(obj, x) = atoi(row[y]);
         }
+        if (row[15] && *row[15])
+          obj->restring = str_dup(row[15]);
         auto_repair_obj(obj);
         obj_to_bioware(obj, ch);
       }
@@ -2552,7 +2554,7 @@ void save_bioware_to_db(struct char_data *player) {
   mysql_wrapper(mysql, buf);
   if (player->bioware) {
     strcpy(buf, "INSERT INTO pfiles_bioware (idnum, Vnum, Cost, Value0, Value1, Value2, Value3, Value4, Value5, Value6,"\
-                "Value7, Value8, Value9, Value10, Value11) VALUES (");
+                "Value7, Value8, Value9, Value10, Value11, Restring) VALUES (");
     int q = 0;
     for (struct obj_data *obj = player->bioware; obj; obj = obj->next_content) {
       if (!IS_OBJ_STAT(obj, ITEM_EXTRA_NORENT)) {
@@ -2562,6 +2564,9 @@ void save_bioware_to_db(struct char_data *player) {
 
         for (int x = 0; x < NUM_VALUES; x++)
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", %d", GET_OBJ_VAL(obj, x));
+
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", '%s'", obj->restring ? prepare_quotes(buf3, obj->restring, sizeof(buf3) / sizeof(buf3[0])) : "");
+
         q = 1;;
       }
     }

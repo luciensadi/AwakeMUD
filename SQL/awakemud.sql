@@ -201,6 +201,7 @@ CREATE TABLE `pfiles_bioware` (
   `Value9` int(2) default '0',
   `Value10` int(2) default '0',
   `Value11` int(2) default '0',
+  `Restring` varchar(256),
   KEY(`idnum`)
 );
 
