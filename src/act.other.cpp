@@ -1544,7 +1544,7 @@ ACMD(do_skills)
 ACMD(do_reload)
 {
   struct obj_data *i, *gun = NULL, *m = NULL, *ammo = NULL; /* Appears unused:  *bin = NULL; */
-  int n, def = 0, mount = 0;
+  int n, mount = 0;
   struct veh_data *veh = NULL;
   int ammotype = -1;
 
@@ -1720,7 +1720,7 @@ ACMD(do_reload)
       send_to_char("No weapons in need of reloading found.\r\n", ch);
       return;
     }
-    def = 1;
+    // def = 1;
   }
 
   else if (!(gun = get_object_in_equip_vis(ch, buf, ch->equipment, &n)))
