@@ -80,6 +80,7 @@ extern void list_detailed_shop(struct char_data *ch, long shop_nr);
 extern void list_detailed_quest(struct char_data *ch, long rnum);
 extern int vnum_vehicles(char *searchname, struct char_data * ch);
 extern void disp_init_menu(struct descriptor_data *d);
+extern struct obj_data *shop_package_up_ware(struct obj_data *obj);
 
 extern const char *pgroup_print_privileges(Bitfield privileges, bool full);
 extern void nonsensical_reply(struct char_data *ch, const char *arg, const char *mode);
@@ -2122,7 +2123,6 @@ void perform_wizload_object(struct char_data *ch, int vnum) {
   obj = read_object(real_num, REAL);
   obj_to_char(obj, ch);
   GET_OBJ_TIMER(obj) = 2;
-  obj->obj_flags.extra_flags.SetBit(ITEM_EXTRA_IMMLOAD); // Why the hell do we have immload AND wizload?
   obj->obj_flags.extra_flags.SetBit(ITEM_EXTRA_WIZLOAD);
   act("$n makes a strange magical gesture.", TRUE, ch, 0, 0, TO_ROOM);
   act("$n has created $p!", TRUE, ch, obj, 0, TO_ROOM);
@@ -5971,6 +5971,13 @@ bool restring_with_args(struct char_data *ch, char *argument, bool using_sysp) {
   if (GET_OBJ_TYPE(obj) == ITEM_SHOPCONTAINER) {
     shopcontainer = obj;
     obj = shopcontainer->contains;
+
+    if (GET_OBJ_VNUM(obj) == OBJ_CUSTOM_NERPS_BIOWARE || GET_OBJ_VNUM(obj) == OBJ_CUSTOM_NERPS_CYBERWARE) {
+      if (GET_LEVEL(ch) < LVL_FIXER) {
+        send_to_char(ch, "Sorry, only a Fixer-grade staff member can restring %s.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
+        return FALSE;
+      }
+    }
   }
 
   if (using_sysp) {
@@ -7447,4 +7454,67 @@ bool is_invalid_ending_punct(char candidate) {
 
   // All punctuation other than these are invalid.
   return candidate != '"' && candidate != '\'' && candidate != ')';
+}
+
+#define NERPS_WARE_USAGE_STRING "Syntax: ^WMAKENERPS <BIOWARE|CYBERWARE> <essence/index cost in decimal form like 1.3> <nuyen cost> <name>"
+ACMD(do_makenerps) {
+  struct obj_data *ware;
+
+  // syntax: makenerps <bio|cyber> <essencecost|index> <name>
+  skip_spaces(&argument);
+
+  if (!*argument) {
+    send_to_char(NERPS_WARE_USAGE_STRING, ch);
+    return;
+  }
+
+  argument = one_argument(argument, buf);  // BIOWARE or CYBERWARE
+  argument = one_argument(argument, buf2); // a float for the essence / index cost
+  argument = one_argument(argument, buf3); // an integer of nuyen cost
+  // argument contains the restring
+
+  if (!*argument) {
+    // Failed to provide a restring.
+    send_to_char(NERPS_WARE_USAGE_STRING, ch);
+    return;
+  }
+
+  // Parse out our float.
+  double essence_cost = atof(buf2);
+  if (essence_cost <= 0) {
+    send_to_char(ch, "%f is not a valid essence cost. Please reference the book value.\r\n%s", essence_cost, NERPS_WARE_USAGE_STRING);
+    return;
+  }
+
+  int nuyen_cost = atoi(buf3);
+  if (nuyen_cost <= 0) {
+    send_to_char(ch, "%d is not a valid nuyen cost. Please reference the book value.\r\n%s", nuyen_cost, NERPS_WARE_USAGE_STRING);
+    return;
+  }
+
+  if (is_abbrev(buf, "cyberware")) {
+    ware = read_object(OBJ_CUSTOM_NERPS_CYBERWARE, VIRTUAL);
+    GET_CYBERWARE_ESSENCE_COST(ware) = (int) (essence_cost * 100);
+  } else if (is_abbrev(buf, "bioware")) {
+    ware = read_object(OBJ_CUSTOM_NERPS_BIOWARE, VIRTUAL);
+    GET_BIOWARE_ESSENCE_COST(ware) = (int) (essence_cost * 100);
+  } else {
+    send_to_char(ch, "You must choose either CYBERWARE or BIOWARE, not '%s'.\r\n%s", buf, NERPS_WARE_USAGE_STRING);
+    return;
+  }
+
+  // Set the restring and cost.
+  ware->restring = str_dup(argument);
+  GET_OBJ_COST(ware) = nuyen_cost;
+
+  // Flag it for review.
+  GET_OBJ_EXTRA(ware).SetBit(ITEM_EXTRA_WIZLOAD);
+  GET_OBJ_EXTRA(ware).SetBit(ITEM_EXTRA_NERPS);
+
+  // Package it and hand it over.
+  struct obj_data *container = shop_package_up_ware(ware);
+  GET_OBJ_EXTRA(container).RemoveBit(ITEM_EXTRA_KEPT);
+  obj_to_char(container, ch);
+
+  send_to_char(ch, "Done, you are now carrying %s^n (%0.2f essence/index, %d nuyen).", GET_OBJ_NAME(container), essence_cost, nuyen_cost);
 }

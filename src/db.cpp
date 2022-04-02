@@ -5496,6 +5496,9 @@ void price_cyber(struct obj_data *obj)
   bool has_strength = FALSE, has_qui = FALSE;
 
   switch (GET_CYBERWARE_TYPE(obj)) {
+    case CYB_CUSTOM_NERPS:
+      // Do absolutely nothing with it.
+      break;
     case CYB_CHIPJACK:
       GET_OBJ_VAL(obj, 1) = 0;
       GET_OBJ_COST(obj) = GET_OBJ_VAL(obj, 3) * 1000;
@@ -6330,6 +6333,9 @@ void price_cyber(struct obj_data *obj)
 void price_bio(struct obj_data *obj)
 {
   switch (GET_OBJ_VAL(obj, 0)) {
+    case BIO_CUSTOM_NERPS:
+      // Do absolutely nothing with it.
+      break;
     case BIO_ADRENALPUMP:
       if (GET_OBJ_VAL(obj, 1) == 1)
         GET_OBJ_COST(obj) = 60000;

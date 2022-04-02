@@ -3177,7 +3177,6 @@ int check_recoil(struct char_data *ch, struct obj_data *gun)
 {
   struct obj_data *obj;
   int rnum, comp = 0;
-  bool gasvent = FALSE;
 
   bool can_use_bipods_and_tripods = !(PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_RIG) || AFF_FLAGGED(ch, AFF_MANNING));
 
@@ -3196,7 +3195,6 @@ int check_recoil(struct char_data *ch, struct obj_data *gun)
       if (GET_ACCESSORY_TYPE(obj) == ACCESS_GASVENT) {
         // Gas vent values are negative when built, so we need to flip them.
         comp += 0 - GET_ACCESSORY_RATING(obj);
-        gasvent = TRUE;
       }
       else if (GET_ACCESSORY_TYPE(obj) == ACCESS_SHOCKPAD)
         comp++;
@@ -3564,7 +3562,7 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
   }
   ch_room = get_ch_in_room(ch);
   vict_room = get_ch_in_room(victim);
-  if (ch->in_room == victim->in_room) {
+  if (ch_room == vict_room) {
     // Same-room messaging.
     static char vehicle_message[1000];
 

@@ -236,6 +236,7 @@ ACMD_DECLARE(do_logwatch);
 ACMD_DECLARE(do_manifest);
 ACMD_DECLARE(do_map);
 ACMD_DECLARE(do_masking);
+ACMD_DECLARE(do_makenerps);
 ACMD_DECLARE(do_memory);
 ACMD_DECLARE(do_message_history);
 ACMD_DECLARE(do_metamagic);
@@ -670,6 +671,7 @@ struct command_info cmd_info[] =
     { "mode"       , POS_LYING   , do_mode     , 0, 0, FALSE },
     { "motd"       , POS_DEAD    , do_gen_ps   , 0, SCMD_MOTD, FALSE },
     { "mount"      , POS_RESTING , do_mount    , 0, 0, FALSE },
+    { "makenerps"  , POS_SLEEPING, do_makenerps, LVL_FIXER, 0, FALSE },
     { "mask"       , POS_RESTING , do_masking  , 0, 0, FALSE },
     { "mute"       , POS_DEAD    , do_wizutil  , LVL_FREEZE, SCMD_SQUELCH, FALSE },
     { "muteooc"    , POS_DEAD    , do_wizutil  , LVL_FREEZE, SCMD_SQUELCHOOC, FALSE },

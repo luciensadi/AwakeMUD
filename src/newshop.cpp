@@ -490,7 +490,6 @@ bool install_ware_in_target_character(struct obj_data *ware, struct char_data *i
           } else {
             send_to_char(installer, "You can't install %s-- it would take away the last of their magic.\r\n", GET_OBJ_NAME(ware), GET_OBJ_NAME(check));
           }
-          do_say(installer, buf, cmd_say, SCMD_SAYTO);
           GET_INDEX(recipient) -= esscost;
           return FALSE;
         }

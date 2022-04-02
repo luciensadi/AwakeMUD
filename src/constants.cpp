@@ -2313,7 +2313,8 @@ const char *cyber_types[] = {
   "Muscle Replacement",
   "Paired Set of Cyber Arms",
   "Paired Set of Cyber Legs",
-  "Tactical Computer"
+  "Tactical Computer",
+  "Custom NERPS Cyberware"
 };
 
 const char *decap_cyber_types[] = {
@@ -2366,7 +2367,8 @@ const char *decap_cyber_types[] = {
   "muscle replacement",
   "paired set of cyber arms",
   "paired set of cyber legs",
-  "tactical computer"
+  "tactical computer",
+  "custom NERPS cyberware"
 };
 
 const char *bio_types[] = {
@@ -2395,7 +2397,8 @@ const char *bio_types[] = {
   "Reflex Recorder",
   "Synaptic Accelerator",
   "Thermosense Organs",
-  "Trauma Dampener"
+  "Trauma Damper",
+  "Custom NERPS Bioware"
 };
 
 const char *decap_bio_types[] = {
@@ -2424,7 +2427,8 @@ const char *decap_bio_types[] = {
   "reflex recorder",
   "synaptic accelerator",
   "thermosense organs",
-  "trauma dampener"
+  "trauma damper",
+  "custom NERPS bioware"
 };
 
 const char *metamagic[] = {

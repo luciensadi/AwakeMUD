@@ -2622,7 +2622,7 @@ SPECIAL(fixer)
       send_to_char(ch, "You don't seem to have %s %s.\r\n", AN(argument), argument);
       return TRUE;
     }
-    if (IS_OBJ_STAT(obj, ITEM_EXTRA_CORPSE) || IS_OBJ_STAT(obj, ITEM_EXTRA_IMMLOAD) || IS_OBJ_STAT(obj, ITEM_EXTRA_WIZLOAD)) {
+    if (IS_OBJ_STAT(obj, ITEM_EXTRA_CORPSE) || IS_OBJ_STAT(obj, ITEM_EXTRA_WIZLOAD)) {
       snprintf(arg, sizeof(arg), "%s I can't repair that.", GET_CHAR_NAME(ch));
       do_say(fixer, arg, 0, SCMD_SAYTO);
       return TRUE;

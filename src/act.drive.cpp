@@ -1262,11 +1262,8 @@ ACMD(do_driveby)
     send_to_veh(buf, ch->in_veh, ch, FALSE);
   }
 
-  bool has_people = FALSE;
   for (pass = ch->in_veh->people; pass; pass = pass->next_in_veh) {
     if (pass != ch) {
-      has_people = TRUE;
-
       if (PLR_FLAGGED(pass, PLR_DRIVEBY) && AWAKE(pass) && GET_EQ(pass, WEAR_WIELD) &&
           GET_OBJ_VAL(GET_EQ(pass, WEAR_WIELD),4) >= SKILL_FIREARMS) {
         if (!IS_NPC(vict) && !PRF_FLAGGED(pass, PRF_PKER) && !PRF_FLAGGED(vict, PRF_PKER))

@@ -847,8 +847,6 @@ bool load_char(const char *name, char_data *ch, bool logon)
         temp_extra_flags.FromString(row[20]);
         if (temp_extra_flags.IsSet(ITEM_EXTRA_WIZLOAD))
           GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_WIZLOAD);
-        if (temp_extra_flags.IsSet(ITEM_EXTRA_IMMLOAD))
-          GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_IMMLOAD);
         if (temp_extra_flags.IsSet(ITEM_EXTRA_KEPT))
           GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_KEPT);
 
@@ -962,8 +960,6 @@ bool load_char(const char *name, char_data *ch, bool logon)
         temp_extra_flags.FromString(row[19]);
         if (temp_extra_flags.IsSet(ITEM_EXTRA_WIZLOAD))
           GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_WIZLOAD);
-        if (temp_extra_flags.IsSet(ITEM_EXTRA_IMMLOAD))
-          GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_IMMLOAD);
         if (temp_extra_flags.IsSet(ITEM_EXTRA_KEPT))
           GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_KEPT);
 

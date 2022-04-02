@@ -1941,7 +1941,7 @@ void look_in_obj(struct char_data * ch, char *arg, bool exa)
 
   if (veh) {
     struct veh_data *curr_in_veh = ch->in_veh;
-    bool curr_vfront = ch->vfront;
+    // bool curr_vfront = ch->vfront;
 
     /* Disabled-- a check with no penalty that you can spam until success does not add to the fun.
     if (veh->cspeed > SPEED_IDLE) {
@@ -1968,7 +1968,7 @@ void look_in_obj(struct char_data * ch, char *arg, bool exa)
     ch->vfront = TRUE;
     look_in_veh(ch);
     ch->in_veh = curr_in_veh;
-    curr_vfront = ch->vfront;
+    // curr_vfront = ch->vfront;
     return;
   } else if ((GET_OBJ_TYPE(obj) != ITEM_DRINKCON) &&
              (GET_OBJ_TYPE(obj) != ITEM_FOUNTAIN) &&
@@ -4082,7 +4082,7 @@ ACMD_CONST(do_time) {
 
 ACMD(do_time)
 {
-  sh_int year, month, day, hour, minute, pm;
+  sh_int /* year, month, day,*/ hour, minute, pm;
   extern struct time_info_data time_info;
   extern const char *weekdays[];
   extern const char *month_name[];
@@ -4111,9 +4111,9 @@ ACMD(do_time)
       send_to_char("You glance up at the sky to help you guess the time.\r\n", ch);
   }
 
-  year = time_info.year % 100;
-  month = time_info.month + 1;
-  day = time_info.day + 1;
+  // year = time_info.year % 100;
+  // month = time_info.month + 1;
+  // day = time_info.day + 1;
   hour = (time_info.hours % 12 == 0 ? 12 : time_info.hours % 12);
   minute = time_info.minute;
   pm = (time_info.hours >= 12);

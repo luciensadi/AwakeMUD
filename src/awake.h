@@ -1448,7 +1448,8 @@ enum {
 #define CYB_ARMS             47
 #define CYB_LEGS             48
 #define CYB_TACTICALCOMPUTER 49
-#define NUM_CYBER            50
+#define CYB_CUSTOM_NERPS     50
+#define NUM_CYBER            51
 
 #define BIO_ADRENALPUMP    0
 #define BIO_CATSEYES    1
@@ -1477,7 +1478,8 @@ enum {
 #define BIO_SYNAPTICACCELERATOR  23
 #define BIO_THERMOSENSEORGAN  24
 #define BIO_TRAUMADAMPER  25
-#define NUM_BIOWARE    26
+#define BIO_CUSTOM_NERPS  26
+#define NUM_BIOWARE       27
 
 #define BIOWARE_STANDARD 0
 #define BIOWARE_CULTURED 1
@@ -2389,7 +2391,9 @@ enum {
 #define OBJ_NEOPHYTE_SUBSIDY_CARD          119
 #define OBJ_GRAFFITI                       120
 #define OBJ_BLANK_AMMOBOX                  121
-#define TOP_OF_TEMPLATE_ITEMS              121
+#define OBJ_CUSTOM_NERPS_CYBERWARE         122
+#define OBJ_CUSTOM_NERPS_BIOWARE           123
+#define TOP_OF_TEMPLATE_ITEMS              123
 
 #define OBJ_BLANK_MAGAZINE                 127
 
