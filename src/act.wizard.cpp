@@ -7474,7 +7474,7 @@ ACMD(do_makenerps) {
   // argument contains the restring
 
   if (!*argument) {
-    // Failed to provide a restring.
+    // Failed to provide a restring or any of the arguments leading up to it.
     send_to_char(NERPS_WARE_USAGE_STRING, ch);
     return;
   }
@@ -7510,11 +7510,25 @@ ACMD(do_makenerps) {
   // Flag it for review.
   GET_OBJ_EXTRA(ware).SetBit(ITEM_EXTRA_WIZLOAD);
   GET_OBJ_EXTRA(ware).SetBit(ITEM_EXTRA_NERPS);
+  snprintf(buf, sizeof(buf), "%s made new custom %s: '%s^g' (%0.2f%c, %d nuyen)",
+           GET_CHAR_NAME(ch),
+           GET_OBJ_TYPE(ware) == ITEM_CYBERWARE ? "cyberware" : "bioware",
+           GET_OBJ_NAME(ware),
+           essence_cost,
+           GET_OBJ_TYPE(ware) == ITEM_CYBERWARE ? 'e' : 'i',
+           nuyen_cost
+          );
+  mudlog(buf, ch, LOG_CHEATLOG, TRUE);
 
   // Package it and hand it over.
   struct obj_data *container = shop_package_up_ware(ware);
   GET_OBJ_EXTRA(container).RemoveBit(ITEM_EXTRA_KEPT);
   obj_to_char(container, ch);
 
-  send_to_char(ch, "Done, you are now carrying %s^n (%0.2f essence/index, %d nuyen).", GET_OBJ_NAME(container), essence_cost, nuyen_cost);
+  send_to_char(ch, "Done, you are now carrying %s^n (%0.2f %s, %d nuyen).",
+               GET_OBJ_NAME(container),
+               essence_cost,
+               GET_OBJ_TYPE(ware) == ITEM_CYBERWARE ? "essence" : "index",
+               nuyen_cost
+              );
 }
