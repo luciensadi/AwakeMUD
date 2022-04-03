@@ -4763,7 +4763,7 @@ ACMD(do_set)
       RANGE(0, 5000);
     else
       RANGE(0, 3000);
-    vict->real_abils.mag = value;
+    GET_REAL_MAG(vict) = value;
     affect_total(vict);
     break;
   case 43:
@@ -4829,6 +4829,12 @@ ACMD(do_set)
     break;
   case 55:
     RANGE(0, 7);
+    // They need a new magic table entry.
+    if (GET_TRADITION(vict) == TRAD_MUNDANE && value != TRAD_MUNDANE) {
+      snprintf(buf, sizeof(buf), "INSERT INTO pfiles_magic (idnum, Totem, TotemSpirit, Aspect) VALUES"\
+                 "('%ld', '%d', '%d', '%d');", GET_IDNUM(vict), GET_TOTEM(vict), GET_TOTEMSPIRIT(vict), value);
+      mysql_wrapper(mysql, buf);
+    }
     GET_TRADITION(vict) = value;
     send_to_char(ch, "%s is now %s %s.\r\n", GET_CHAR_NAME(vict), AN(aspect_names[value]), tradition_names[value]);
     break;

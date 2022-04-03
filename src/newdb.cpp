@@ -585,7 +585,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
     mysql_wrapper(mysql, buf);
     res = mysql_use_result(mysql);
     if ((row = mysql_fetch_row(res))) {
-      ch->real_abils.mag = atoi(row[1]);
+      GET_REAL_MAG(ch) = atoi(row[1]);
       ch->real_abils.casting_pool = atoi(row[2]);
       ch->real_abils.spell_defense_pool = atoi(row[3]);
       ch->real_abils.drain_pool = atoi(row[4]);
