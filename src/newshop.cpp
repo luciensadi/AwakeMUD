@@ -1349,7 +1349,6 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
       obj = read_object(sell->vnum, VIRTUAL);
       if (!can_sell_object(obj, keeper, shop_nr)) {
         i--;
-        extract_obj(obj);
         continue;
       }
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %2d)  ", i);
