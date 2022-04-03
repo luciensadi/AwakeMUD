@@ -510,17 +510,17 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
       targ->decker->scout = 0;
     }
     power = iconrating;
-    if (icon->ic.type >= IC_LETHAL_BLACK) {
-      if (matrix[icon->in_host].colour <= 1)
+    if (icon->ic.type == IC_LETHAL_BLACK || icon->ic.type == IC_NON_LETHAL_BLACK) {
+      if (matrix[icon->in_host].colour == HOST_SECURITY_BLUE || matrix[icon->in_host].colour == HOST_SECURITY_GREEN)
         dam = MODERATE;
-      else if (matrix[icon->in_host].colour >= 2) {
-        if (matrix[icon->in_host].colour == 4)
+      else if (matrix[icon->in_host].colour >= HOST_SECURITY_ORANGE) {
+        if (matrix[icon->in_host].colour == HOST_SECURITY_BLACK)
           power += 2;
         dam = SERIOUS;
       }
     } else {
-      dam = MAX(matrix[icon->in_host].colour + 1, DEADLY);
-      if (matrix[icon->in_host].colour == 4)
+      dam = MIN(matrix[icon->in_host].colour + 1, DEADLY);
+      if (matrix[icon->in_host].colour == HOST_SECURITY_BLACK)
         power += 2;
     }
   }
