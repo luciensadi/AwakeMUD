@@ -2578,8 +2578,9 @@ void save_bioware_to_db(struct char_data *player) {
 }
 
 void save_cyberware_to_db(struct char_data *player) {
-  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_cyberware WHERE idnum=%ld", GET_IDNUM(player));
-  mysql_wrapper(mysql, buf);
+  char cyberware_query_str[MAX_STRING_LENGTH];
+  snprintf(cyberware_query_str, sizeof(cyberware_query_str), "DELETE FROM pfiles_cyberware WHERE idnum=%ld", GET_IDNUM(player));
+  mysql_wrapper(mysql, cyberware_query_str);
   int level = 0, posi = 0;
   if (player->cyberware) {
     /* Ran into a weird edge case where people would fill their headware memory with photos of people, and their memory would no longer save in the DB.
@@ -2587,7 +2588,8 @@ void save_cyberware_to_db(struct char_data *player) {
         As such, we write each cyberware entry on its own now instead of batching them together. */
 
     for (struct obj_data *obj = player->cyberware; obj;) {
-      snprintf(buf, sizeof(buf), "INSERT INTO pfiles_cyberware (idnum, Vnum, Cost, Restring, "
+      snprintf(cyberware_query_str, sizeof(cyberware_query_str),
+                                 "INSERT INTO pfiles_cyberware (idnum, Vnum, Cost, Restring, "
                                  "Photo, Value0, Value1, Value2, Value3, Value4, Value5, Value6,"
                                  "Value7, Value8, Value9, Value10, Value11, Level, posi) VALUES "
                                  "(%ld, %ld, %d, '%s', '%s'", GET_IDNUM(player), GET_OBJ_VNUM(obj), GET_OBJ_COST(obj),
@@ -2603,11 +2605,11 @@ void save_cyberware_to_db(struct char_data *player) {
         <for loop to iterate over values>
       */
       for (int x = 0; x < NUM_VALUES; x++)
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", %d", GET_OBJ_VAL(obj, x));
+        snprintf(ENDOF(cyberware_query_str), sizeof(cyberware_query_str) - strlen(buf), ", %d", GET_OBJ_VAL(obj, x));
 
       // Add our level and position information here, then execute.
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", %d, %d);", level, posi++);
-      mysql_wrapper(mysql, buf);
+      snprintf(ENDOF(cyberware_query_str), sizeof(cyberware_query_str) - strlen(cyberware_query_str), ", %d, %d);", level, posi++);
+      mysql_wrapper(mysql, cyberware_query_str);
 
       if (obj->contains) {
         obj = obj->contains;

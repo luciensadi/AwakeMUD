@@ -3073,11 +3073,13 @@ void save_shop_orders() {
   FILE *fl;
   float totaltime = 0;
   time_t curr_time = time(0);
+  char shop_file_name[MAX_STRING_LENGTH];
+  char shop_message[MAX_STRING_LENGTH];
 
   for (int shop_nr = 0; shop_nr <= top_of_shopt; shop_nr++) {
     // Wipe the existing shop order save files-- they're out of date.
-    snprintf(buf, sizeof(buf), "order/%ld", shop_table[shop_nr].vnum);
-    unlink(buf);
+    snprintf(shop_file_name, sizeof(shop_file_name), "order/%ld", shop_table[shop_nr].vnum);
+    unlink(shop_file_name);
 
     if (shop_table[shop_nr].order) {
       // Expire out orders that have reached their end of life. Yes, this means a whole separate for-loop just for this.
@@ -3094,7 +3096,7 @@ void save_shop_orders() {
 
             // Look up the item (we need its name for the mail).
             int real_obj = real_object(order->item);
-            snprintf(buf2, sizeof(buf2), "%s can't be held for you any longer at %s. %d nuyen will be refunded to your account.\r\n",
+            snprintf(shop_message, sizeof(shop_message), "%s can't be held for you any longer at %s. %d nuyen will be refunded to your account.\r\n",
                      real_obj > 0 ? CAP(obj_proto[real_obj].text.name) : "Something",
                      shop_table[shop_nr].shopname,
                      repayment_amount
@@ -3103,9 +3105,9 @@ void save_shop_orders() {
             // Look up the shopkeeper, then send the mail with their name attached.
             int real_mob = real_mobile(shop_table[shop_nr].keeper);
             if (real_mob > 0)
-              raw_store_mail(order->player, 0, mob_proto[real_mob].player.physical_text.name, (const char *) buf2);
+              raw_store_mail(order->player, 0, mob_proto[real_mob].player.physical_text.name, (const char *) shop_message);
             else
-              raw_store_mail(order->player, 0, "An anonymous shopkeeper", (const char *) buf2);
+              raw_store_mail(order->player, 0, "An anonymous shopkeeper", (const char *) shop_message);
 
             // Wire the funds. This will not notify them (they're already getting a message through here.)
             // This is a thorny one-- this is technically a sink, since we're losing X% of the refunded value, but the PC may not be online.
@@ -3125,7 +3127,7 @@ void save_shop_orders() {
         continue;
 
       // We have orders, so open the shop file and write the header.
-      if (!(fl = fopen(buf, "w"))) {
+      if (!(fl = fopen(shop_file_name, "w"))) {
         perror("SYSERR: Error saving order file");
         continue;
       }
@@ -3137,7 +3139,7 @@ void save_shop_orders() {
         totaltime = order->timeavail - time(0);
         if (!order->sent && totaltime < 0) {
           int real_obj = real_object(order->item);
-          snprintf(buf2, sizeof(buf2), "%s has arrived at %s and is ready for pickup for a total cost of %d nuyen. It will be held for you for %d days.\r\n",
+          snprintf(shop_message, sizeof(shop_message), "%s has arrived at %s and is ready for pickup for a total cost of %d nuyen. It will be held for you for %d days.\r\n",
                    real_obj > 0 ? CAP(obj_proto[real_obj].text.name) : "Something",
                    shop_table[shop_nr].shopname,
                    order->price,
@@ -3145,9 +3147,9 @@ void save_shop_orders() {
                   );
           int real_mob = real_mobile(shop_table[shop_nr].keeper);
           if (real_mob > 0)
-            raw_store_mail(order->player, 0, mob_proto[real_mob].player.physical_text.name, (const char *) buf2);
+            raw_store_mail(order->player, 0, mob_proto[real_mob].player.physical_text.name, (const char *) shop_message);
           else
-            raw_store_mail(order->player, 0, "An anonymous shopkeeper", (const char *) buf2);
+            raw_store_mail(order->player, 0, "An anonymous shopkeeper", (const char *) shop_message);
           order->sent = TRUE;
         }
         fprintf(fl, "\t[ORDER %d]\n", i);
