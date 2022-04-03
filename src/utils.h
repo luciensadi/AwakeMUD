@@ -121,7 +121,7 @@ bool    room_accessible_to_vehicle_piloted_by_ch(struct room_data *room, struct 
 
 long get_room_gridguide_x(vnum_t room_vnum);
 long get_room_gridguide_y(vnum_t room_vnum);
-vnum_t vnum_from_gridguide_coordinates(long x, long y);
+vnum_t vnum_from_gridguide_coordinates(long x, long y, struct char_data *ch);
 
 // Skill-related.
 char *how_good(int skill, int rank);

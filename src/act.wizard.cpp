@@ -200,6 +200,9 @@ ACMD(do_copyover)
 
     if (!(och = d->character))
       continue;
+      
+    if (och == ch)
+      continue;
 
     if (GET_QUEST(och)) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s%s",

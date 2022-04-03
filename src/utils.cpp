@@ -4148,22 +4148,40 @@ long get_room_gridguide_y(vnum_t room_vnum) {
   return room_vnum + 100;
 }
 
-vnum_t vnum_from_gridguide_coordinates(long x, long y) {
+vnum_t vnum_from_gridguide_coordinates(long x, long y, struct char_data *ch) {
   // We could just use the y-coordinate, but then the X could be anything.
-  vnum_t candidate_vnum = x + ((y - 100) * 3);
+  int vnum_from_y = y - 100;
+  int vnum_from_x = x - ((x / 2) * 3);
+
+  // Probably a typo.
+  if (vnum_from_x != vnum_from_y)
+    return -1;
+
+  vnum_t candidate_vnum = vnum_from_y;
   rnum_t candidate_rnum = real_room(candidate_vnum);
 
   // -1: Room didn't even exist.
   if (candidate_rnum <= 0)
-    return -1;
-
-  // -2: Room was not drivable.
-  if (!(ROOM_FLAGGED(&world[candidate_rnum], ROOM_ROAD) || ROOM_FLAGGED(&world[candidate_rnum], ROOM_GARAGE)))
     return -2;
 
-  // -3: Room not on gridguide system. Likely a creation of the player-- warrants investigation.
-  if (ROOM_FLAGGED(&world[candidate_rnum], ROOM_NOGRID))
+  // -2: Room was not drivable, or not on the gridguide system.
+  if (!ROOM_FLAGS(&world[candidate_rnum]).AreAnySet(ROOM_ROAD, ROOM_GARAGE, ENDBIT) ||
+       ROOM_FLAGS(&world[candidate_rnum]).AreAnySet(ROOM_NOGRID, ROOM_STAFF_ONLY, ROOM_NOBIKE, ROOM_FALL, ENDBIT))
+  {
+    if (ch) {
+      char susbuf[1000];
+      snprintf(susbuf, sizeof(susbuf), "%s attempted to grid to room #%ld (%s), but it's not a legal gridguide destination.",
+               GET_CHAR_NAME(ch),
+               candidate_vnum,
+               GET_ROOM_NAME(&world[candidate_rnum])
+              );
+      mudlog(susbuf, ch, LOG_CHEATLOG, TRUE);
+
+      send_to_char("^Y(FYI, if that had actually worked, it would have been an exploit!)^n\r\n", ch);
+    }
+
     return -3;
+  }
 
   return candidate_vnum;
 }

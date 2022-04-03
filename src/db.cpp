@@ -542,7 +542,7 @@ void boot_world(void)
     // Cheeky little self-test. Requires that RM_ENTRANCE_TO_DANTES exists and is flagged ROAD/GARAGE and not NOGRID.
     long x = get_room_gridguide_x(RM_ENTRANCE_TO_DANTES);
     long y = get_room_gridguide_y(RM_ENTRANCE_TO_DANTES);
-    vnum_t z = vnum_from_gridguide_coordinates(x, y);
+    vnum_t z = vnum_from_gridguide_coordinates(x, y, NULL);
     if (z != RM_ENTRANCE_TO_DANTES)
       log_vfprintf("x: %ld, y: %ld, z: %ld", x, y, z);
     assert(z == RM_ENTRANCE_TO_DANTES);

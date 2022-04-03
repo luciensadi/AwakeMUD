@@ -35,6 +35,8 @@ SPECIAL(elevator_spec);
 extern int calculate_distance_between_rooms(vnum_t start_room_vnum, vnum_t target_room_vnum, bool ignore_roads);
 extern void perform_fall(struct char_data *ch);
 
+extern int find_first_step(vnum_t src, vnum_t target, bool ignore_roads);
+
 ACMD_DECLARE(do_echo);
 struct dest_data *get_dest_data_list_for_zone(int zone_num);
 
@@ -286,7 +288,7 @@ SPECIAL(taxi_sign) {
   }
 
   // Set up our default string.
-  strncpy(buf, "The keyword for each location is listed after the location name.  ^WSAY^n the keyword to the driver, and for a small fee, he will drive you to your destination.\r\n", sizeof(buf) - 1);
+  strncpy(buf, "The keyword for each location is listed after the location name.  ^WSAY^n the keyword to the driver, and for a small fee, he will drive you to your destination.\r\nYou can also ^WSAY^n a set of GridGuide coordinates, like ^WSAY -65322, 32761^n.\r\n", sizeof(buf) - 1);
   if (!PRF_FLAGGED(ch, PRF_SCREENREADER))
     strlcat(buf, "-------------------------------------------------\r\n", sizeof(buf));
 
@@ -1001,9 +1003,49 @@ SPECIAL(taxi)
         char x_buf[MAX_INPUT_LENGTH + 1], y_buf[MAX_INPUT_LENGTH + 1];
         two_arguments(argument, x_buf, y_buf);
         long x_coord = atol(x_buf), y_coord = atol(y_buf);
-        vnum_t dest_vnum = vnum_from_gridguide_coordinates(x_coord, y_coord);
-        // Gridguide coords were valid. That's our new destination.
-        if (x_coord && y_coord && dest_vnum > 0 && cab_jurisdiction_matches_destination(GET_ROOM_VNUM(ch->in_room), dest_vnum)) {
+
+        // Looks like we got gridguide coordinates.
+        if (x_coord && y_coord) {
+          // Check to see if they're valid.
+          vnum_t dest_vnum = vnum_from_gridguide_coordinates(x_coord, y_coord, ch);
+
+          // Invalid coordinates.
+          if (dest_vnum <= 0) {
+            strncpy(buf2, " punches a few buttons on the meter to calculate the fare, but it immediately flashes red.", sizeof(buf2));
+            do_echo(driver, buf2, 0, SCMD_EMOTE);
+            snprintf(buf2, sizeof(buf2), " Oi, chummer, those aren't valid coordinates.");
+            do_say(driver, buf2, 0, 0);
+            return TRUE;
+          }
+
+          // Cross-jurisdiction (Seattle to Caribbean, etc).
+          if (!cab_jurisdiction_matches_destination(GET_ROOM_VNUM(ch->in_room), dest_vnum)) {
+            strncpy(buf2, " punches a few buttons on the meter to calculate the fare, but it immediately flashes yellow.", sizeof(buf2));
+            do_echo(driver, buf2, 0, SCMD_EMOTE);
+            snprintf(buf2, sizeof(buf2), " How exactly am I supposed to get there?");
+            do_say(driver, buf2, 0, 0);
+            return TRUE;
+          }
+
+          // Grid doesn't extend there in an unbroken path? No good.
+          // 1. Find the room the taxi is attached to.
+          temp_room = NULL;
+          for (int dir = NORTH; dir < UP; dir++)
+            if (ch->in_room->dir_option[dir]) {
+              temp_room = ch->in_room->dir_option[dir]->to_room;
+              break;
+            }
+
+          // 2. Pathfind there. Fail if we can't find a path.
+          if (temp_room && find_first_step(real_room(temp_room->number), real_room(dest_vnum), FALSE) < 0) {
+            strncpy(buf2, " punches a few buttons on the meter to calculate the fare, but it flashes red after a moment.", sizeof(buf2));
+            do_echo(driver, buf2, 0, SCMD_EMOTE);
+            snprintf(buf2, sizeof(buf2), " I can't get there from here.");
+            do_say(driver, buf2, 0, 0);
+            return TRUE;
+          }
+
+          // Valid location.
           comm = CMD_TAXI_DEST_GRIDGUIDE;
           found = TRUE;
           dest = -dest_vnum;
@@ -1012,13 +1054,14 @@ SPECIAL(taxi)
           do_echo(driver, buf2, 0, SCMD_EMOTE);
           forget(driver, ch);
         }
-        // Gridguide coords were invalid. Bail out.
+
+        // We didn't get a pair of coordinates, either. Bail out.
         else {
           do_say(ch, argument, 0, 0);
           if (destination_list == portland_taxi_destinations) {
-            snprintf(buf2, sizeof(buf2), " Sorry chummer, rules are rules. You need to tell me something from the sign.");
+            snprintf(buf2, sizeof(buf2), " Sorry chummer, rules are rules. You need to tell me something from the sign, or give me a pair of GridGuide coordinates.");
           } else {
-            snprintf(buf2, sizeof(buf2), " Hey chummer, rules is rules. You gotta tell me something off of that sign there.");
+            snprintf(buf2, sizeof(buf2), " Hey chummer, rules is rules. You gotta tell me something off of that sign there, or give me a pair of GridGuide coordinates.");
           }
           do_say(driver, buf2, 0, 0);
           return TRUE;

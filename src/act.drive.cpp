@@ -1888,7 +1888,7 @@ ACMD(do_gridguide)
         send_to_char("You need a second co-ordinate.\r\n", ch);
         return;
       }
-      if (!((x = atol(arg)) && (y = atol(buf))) || (grid_vnum = vnum_from_gridguide_coordinates(x, y)) <= 0) {
+      if (!((x = atol(arg)) && (y = atol(buf))) || (grid_vnum = vnum_from_gridguide_coordinates(x, y, ch)) <= 0) {
         send_to_char("Those co-ordinates seem invalid.\r\n", ch);
         return;
       }
