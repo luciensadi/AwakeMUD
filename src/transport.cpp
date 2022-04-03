@@ -1040,7 +1040,7 @@ SPECIAL(taxi)
           if (temp_room && find_first_step(real_room(temp_room->number), real_room(dest_vnum), FALSE) < 0) {
             strncpy(buf2, " punches a few buttons on the meter to calculate the fare, but it flashes red after a moment.", sizeof(buf2));
             do_echo(driver, buf2, 0, SCMD_EMOTE);
-            snprintf(buf2, sizeof(buf2), " I can't get there from here.");
+            snprintf(buf2, sizeof(buf2), " The GridGuide network doesn't connect through to there.");
             do_say(driver, buf2, 0, 0);
             return TRUE;
           }
