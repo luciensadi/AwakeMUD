@@ -25,6 +25,9 @@ bool has_natural_vision(struct char_data *ch, int type) {
     return FALSE;
 
   // Spell vision specifically functions as if cybernetic, so it doesn't qualify as natural.
+  //  MitS p141, 'Nightvision': '[...] like that provided by the low-light cybernetic enhancement'
+  //  SR3 p111, 'Visibility Impaired': '[...] the first modifier applies to cybernetic or electronic vision and the second to natural vision.'
+  // The Adept improved senses power is natural according to https://www.shadowrunrpg.com/resources/sr3faq.html.
   return ch->points.vision[type].AreAnySet(VISION_BIT_IS_NATURAL, VISION_BIT_IS_ADEPT_POWER, ENDBIT);
 }
 
@@ -440,10 +443,6 @@ void apply_vision_bits_from_implant(struct char_data *ch, struct obj_data *impla
     return;
   }
 
-  // Eye replacements strip racial benefits, so we call this function before applying the implant.
-  // See M&M p64 (Cat's Eyes) for an example of this rule.
-  remove_racial_vision_due_to_eye_replacement(ch);
-
   // All implants grant normal vision as a matter of course.
   set_vision_bit(ch, VISION_NORMAL, VISION_BIT_FROM_IMPLANTS);
 
@@ -454,6 +453,13 @@ void apply_vision_bits_from_implant(struct char_data *ch, struct obj_data *impla
         snprintf(oopsbuf, sizeof(oopsbuf), "SYSERR: Received non-CYB_EYES cyberware type %d to %s!", GET_CYBERWARE_TYPE(implant), __func__);
         mudlog(oopsbuf, ch, LOG_SYSLOG, TRUE);
         return;
+      }
+
+      // Replacements strip standard vision.
+      if (IS_SET(GET_CYBERWARE_FLAGS(implant), EYE_CYBEREYES)) {
+        // Eye replacements strip racial benefits, so we call this function before applying the implant.
+        // See M&M p64 (Cat's Eyes) for an example of this rule.
+        remove_racial_vision_due_to_eye_replacement(ch);
       }
 
       if (IS_SET(GET_CYBERWARE_FLAGS(implant), EYE_THERMO)) {
@@ -477,6 +483,12 @@ void apply_vision_bits_from_implant(struct char_data *ch, struct obj_data *impla
         return;
       }
 
+      // Eye replacements strip racial benefits, so we call this function before applying the implant.
+      // See M&M p64 (Cat's Eyes) for an example of this rule.
+      remove_racial_vision_due_to_eye_replacement(ch);
+      remove_vision_bit(ch, VISION_NORMAL, VISION_BIT_FROM_IMPLANTS);
+
+      set_vision_bit(ch, VISION_NORMAL, VISION_BIT_IS_NATURAL);
       set_vision_bit(ch, VISION_LOWLIGHT, VISION_BIT_IS_NATURAL);
       break;
 
@@ -508,7 +520,7 @@ bool has_flare_compensation(struct char_data *ch) {
 
 int get_vision_mag(struct char_data *ch) {
   int vision_mag = 0;
-  
+
   if (AFF_FLAGGED(ch, AFF_VISION_MAG_3))
     vision_mag = 3;
   else if (AFF_FLAGGED(ch, AFF_VISION_MAG_2))

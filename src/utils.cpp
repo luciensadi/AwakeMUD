@@ -418,7 +418,7 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int c
 
   base_target += GET_TARGET_MOD(ch);
   buf_mod(rbuf, rbuf_len, "GET_TARGET_MOD", GET_TARGET_MOD(ch) );
-  if (GET_RACE(ch) == RACE_NIGHTONE && ((time_info.hours > 6) && (time_info.hours < 19)) && OUTSIDE(ch))
+  if (GET_RACE(ch) == RACE_NIGHTONE && ((time_info.hours > 6) && (time_info.hours < 19)) && OUTSIDE(ch) && weather_info.sky < SKY_RAINING)
   {
     base_target += 1;
     buf_mod(rbuf, rbuf_len, "Sunlight", 1);
