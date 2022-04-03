@@ -1196,8 +1196,15 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
   if (!shop_table[shop_nr].flags.IsSet(SHOP_WONT_NEGO))
     sellprice = negotiate(ch, keeper, 0, sellprice, 0, 0);
 
-  if (shop_table[shop_nr].flags.IsSet(SHOP_DOCTOR) && !obj->in_obj)
+  if (shop_table[shop_nr].flags.IsSet(SHOP_DOCTOR) && !obj->in_obj) {
+    for (struct obj_data *ware_verifier = ch->carrying; ware_verifier; ware_verifier = ware_verifier->next_content) {
+      if (ware_verifier == obj) {
+        mudlog("SYSERR: carrying an uninstalled piece of 'ware!", ch, LOG_SYSLOG, TRUE);
+        return;
+      }
+    }
     uninstall_ware_from_target_character(obj, keeper, ch, !shop_table[shop_nr].flags.IsSet(SHOP_CHARGEN));
+  }
   else {
     if (obj->in_obj) {
       struct obj_data *container = obj->in_obj;

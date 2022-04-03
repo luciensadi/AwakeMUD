@@ -2838,6 +2838,10 @@ struct obj_data *get_obj_in_list_vis(struct char_data * ch, char *name, struct o
   char tmpname[MAX_INPUT_LENGTH];
   char *tmp = tmpname;
 
+  // No list, no worries.
+  if (!list)
+    return NULL;
+
   strcpy(tmp, name);
   if (!(number = get_number(&tmp)))
     return NULL;
