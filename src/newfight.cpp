@@ -105,7 +105,7 @@ struct cyberware_data {
             num_cyberweapons++;
             break;
           case CYB_HANDRAZOR:
-            if (IS_SET(GET_CYBERWARE_FLAGS(obj), CYBERWEAPON_IMPROVED))
+            if (IS_SET(GET_CYBERWARE_FLAGS(obj), 1 << CYBERWEAPON_IMPROVED))
               improved_handrazors++;
             else
               handrazors++;
