@@ -689,16 +689,31 @@ void diag_char_to_char(struct char_data * i, struct char_data * ch)
   send_to_char(buf, ch);
 }
 
-const char *render_ware_for_privileged_viewer(struct obj_data *ware) {
+#define RENDER_PRIVILEGED TRUE
+const char *render_ware_for_viewer(struct obj_data *ware, bool privileged, bool force_full_name) {
   static char render_buf[1000];
 
-  strlcpy(render_buf, GET_OBJ_NAME(ware), sizeof(render_buf));
-  if (ware->restring) {
-    snprintf(ENDOF(render_buf), sizeof(render_buf) - strlen(render_buf), " (restrung from %s)\r\n", ware->text.name);
-  } else {
-    strlcat(render_buf, "\r\n", sizeof(render_buf));
+  // Show its restring and what it was restrung from
+  if (privileged && ware->restring) {
+    if (GET_OBJ_VNUM(ware) == OBJ_CUSTOM_NERPS_BIOWARE || GET_OBJ_VNUM(ware) == OBJ_CUSTOM_NERPS_CYBERWARE) {
+      snprintf(render_buf, sizeof(render_buf), "%s (NERPS)", ware->restring);
+    } else {
+      snprintf(render_buf, sizeof(render_buf), "%s (restrung from %s)", ware->restring, ware->text.name);
+    }
+  }
+  // Show its restrung / full name.
+  else if (privileged || force_full_name || ware->restring) {
+    strlcpy(render_buf, GET_OBJ_NAME(ware), sizeof(render_buf));
+  }
+  // Only show its type.
+  else {
+    if (GET_OBJ_TYPE(ware) == ITEM_CYBERWARE)
+      strlcpy(render_buf, cyber_types[GET_CYBERWARE_TYPE(ware)], sizeof(render_buf));
+    else
+      strlcpy(render_buf, cyber_types[GET_CYBERWARE_TYPE(ware)], sizeof(render_buf));
   }
 
+  strlcat(render_buf, "\r\n", sizeof(render_buf));
   return render_buf;
 }
 
@@ -838,84 +853,66 @@ void look_at_char(struct char_data * i, struct char_data * ch)
       }
   }
 
-  char internal_cyberware[MAX_STRING_LENGTH];
-  char visible_cyberware[MAX_STRING_LENGTH];
-  *internal_cyberware = '\0';
-  *visible_cyberware = '\0';
+  char internal_ware[MAX_STRING_LENGTH];
+  char visible_ware[MAX_STRING_LENGTH];
+  *internal_ware = '\0';
+  *visible_ware = '\0';
 
   bool ch_can_see_all_ware = (access_level(ch, LVL_FIXER) || (PRF_FLAGGED(i, PRF_QUEST) && PRF_FLAGGED(ch, PRF_QUESTOR)));
 
-  for (tmp_obj = i->cyberware; tmp_obj; tmp_obj = tmp_obj->next_content)
+  for (tmp_obj = i->cyberware; tmp_obj; tmp_obj = tmp_obj->next_content) {
+    bool ware_is_internal = TRUE, force_full_name = FALSE;
+
     switch (GET_CYBERWARE_TYPE(tmp_obj)) {
+      case CYB_CUSTOM_NERPS:
+        if (IS_SET(GET_CYBERWARE_FLAGS(tmp_obj), NERPS_WARE_VISIBLE)) {
+          ware_is_internal = FALSE;
+          force_full_name = TRUE;
+        }
+        break;
       case CYB_HANDRAZOR:
       case CYB_HANDBLADE:
       case CYB_HANDSPUR:
       case CYB_FIN:
       case CYB_FOOTANCHOR:
       case CYB_CLIMBINGCLAWS:
-        // Retracted? We only show it to people who can see it.
-        if (GET_CYBERWARE_IS_DISABLED(tmp_obj)) {
-          if (ch_can_see_all_ware) {
-            strlcat(internal_cyberware, render_ware_for_privileged_viewer(tmp_obj), sizeof(internal_cyberware));
-          }
-        }
-        // Extended.
-        else {
-          if (ch_can_see_all_ware) {
-            strlcat(visible_cyberware, render_ware_for_privileged_viewer(tmp_obj), sizeof(visible_cyberware));
-          } else {
-            snprintf(ENDOF(visible_cyberware), sizeof(visible_cyberware) - strlen(visible_cyberware), "%s\r\n", cyber_types[GET_OBJ_VAL(tmp_obj, 0)]);
-          }
+        if (!GET_CYBERWARE_IS_DISABLED(tmp_obj)) {
+          ware_is_internal = FALSE;
         }
         break;
-        /*  Code for the previous version of cyber skulls / torsos. - LS 2021
-          case CYB_TORSO:
-          case CYB_SKULL:
-            if (GET_CYBERWARE_FLAGS(tmp_obj)) {
-              found = TRUE;
-              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s\r\n", GET_OBJ_NAME(tmp_obj));
-            } else snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%s\r\n", cyber_types[GET_OBJ_VAL(tmp_obj, 0)]);
-            break;
-        */
-
       // BUF2 is VISIBLE, buf is hidden
       case CYB_DATAJACK:
-        if (!ch_can_see_all_ware && GET_EQ(i, WEAR_HEAD))
-          continue;
-        if (GET_CYBERWARE_FLAGS(tmp_obj)) {
-          strlcat(internal_cyberware, render_ware_for_privileged_viewer(tmp_obj), sizeof(internal_cyberware));
-        }
-        else {
-          if (ch_can_see_all_ware) {
-            strlcat(visible_cyberware, render_ware_for_privileged_viewer(tmp_obj), sizeof(visible_cyberware));
-          } else {
-            snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%s\r\n", cyber_types[GET_OBJ_VAL(tmp_obj, 0)]);
-          }
+        if (!GET_EQ(i, WEAR_HEAD) && !GET_CYBERWARE_FLAGS(tmp_obj)) {
+          ware_is_internal = FALSE;
         }
         break;
       case CYB_CHIPJACK:
-        if (!ch_can_see_all_ware && GET_EQ(i, WEAR_HEAD))
-          continue;
-        // fall through.
-      case CYB_DERMALPLATING:
-      case CYB_BALANCETAIL:
-        if (ch_can_see_all_ware) {
-          strlcat(visible_cyberware, render_ware_for_privileged_viewer(tmp_obj), sizeof(visible_cyberware));
-        } else {
-          snprintf(ENDOF(visible_cyberware), sizeof(visible_cyberware) - strlen(visible_cyberware), "%s\r\n", cyber_types[GET_CYBERWARE_TYPE(tmp_obj)]);
+        if (!GET_EQ(i, WEAR_HEAD)) {
+          ware_is_internal = FALSE;
         }
         break;
+      case CYB_DERMALPLATING:
+      case CYB_BALANCETAIL:
+        ware_is_internal = FALSE;
+        break;
       case CYB_EYES:
-        if (ch_can_see_all_ware) {
-          strlcat(visible_cyberware, render_ware_for_privileged_viewer(tmp_obj), sizeof(visible_cyberware));
-        } else {
-          if (GET_EQ(i, WEAR_EYES) || (GET_EQ(i, WEAR_HEAD) && GET_OBJ_VAL(GET_EQ(i, WEAR_HEAD), 7) > 1))
-            continue;
-          if ((IS_SET(GET_CYBERWARE_FLAGS(tmp_obj), EYE_OPTMAG1) || IS_SET(GET_CYBERWARE_FLAGS(tmp_obj), EYE_OPTMAG2) ||
-               IS_SET(GET_CYBERWARE_FLAGS(tmp_obj), EYE_OPTMAG3)) && success_test(GET_INT(ch), 9) > 0)
-            strlcat(visible_cyberware, "Optical Magnification\r\n", sizeof(visible_cyberware));
-          if (IS_SET(GET_CYBERWARE_FLAGS(tmp_obj), EYE_COSMETIC))
-            snprintf(ENDOF(visible_cyberware), sizeof(visible_cyberware) - strlen(visible_cyberware), "%s\r\n", GET_OBJ_NAME(tmp_obj));
+        if (GET_EQ(i, WEAR_EYES) || (GET_EQ(i, WEAR_HEAD) && GET_WORN_CONCEAL_RATING(GET_EQ(i, WEAR_HEAD)) > 1))
+          continue;
+
+        ware_is_internal = FALSE;
+
+        if (IS_SET(GET_CYBERWARE_FLAGS(tmp_obj), EYE_COSMETIC))
+          force_full_name = TRUE;
+
+        // Optical magnification is shown separately, unless you're viewing in privileged mode.
+        if (!ch_can_see_all_ware) {
+          if ((IS_SET(GET_CYBERWARE_FLAGS(tmp_obj), EYE_OPTMAG1)
+               || IS_SET(GET_CYBERWARE_FLAGS(tmp_obj), EYE_OPTMAG2)
+               || IS_SET(GET_CYBERWARE_FLAGS(tmp_obj), EYE_OPTMAG3))
+              && success_test(GET_INT(ch), 9) > 0)
+          {
+            strlcat(visible_ware, "Optical Magnification\r\n", sizeof(visible_ware));
+          }
         }
         break;
       case CYB_ARMS:
@@ -927,51 +924,66 @@ void look_at_char(struct char_data * i, struct char_data * ch)
             || (GET_CYBERWARE_TYPE(tmp_obj) == CYB_SKULL && IS_SET(GET_CYBERWARE_FLAGS(tmp_obj), SKULL_MOD_OBVIOUS))
             || (GET_CYBERWARE_TYPE(tmp_obj) == CYB_TORSO && IS_SET(GET_CYBERWARE_FLAGS(tmp_obj), TORSO_MOD_OBVIOUS))
         ) {
-          if (ch_can_see_all_ware)
-            strlcat(visible_cyberware, render_ware_for_privileged_viewer(tmp_obj), sizeof(visible_cyberware));
-          else
-            snprintf(ENDOF(visible_cyberware), sizeof(visible_cyberware) - strlen(visible_cyberware), "%s\r\n", cyber_types[GET_OBJ_VAL(tmp_obj, 0)]);
-        } else {
-          strlcat(internal_cyberware, render_ware_for_privileged_viewer(tmp_obj), sizeof(internal_cyberware));
+          ware_is_internal = FALSE;
         }
         break;
-      default:
-        if (ch_can_see_all_ware)
-          strlcat(internal_cyberware, render_ware_for_privileged_viewer(tmp_obj), sizeof(internal_cyberware));
-        break;
     }
-  if (*visible_cyberware)
-    send_to_char(ch, "\r\nVisible Cyberware:\r\n%s", visible_cyberware);
-  if (*internal_cyberware)
-    send_to_char(ch, "\r\nInternal Cyberware:\r\n%s", internal_cyberware);
+
+    // Now that we know if it's internal or not, hand it off to our render function.
+    if (ware_is_internal) {
+      if (ch_can_see_all_ware) {
+        strlcat(internal_ware, render_ware_for_viewer(tmp_obj, ch_can_see_all_ware, force_full_name), sizeof(internal_ware));
+      }
+    } else {
+      strlcat(visible_ware, render_ware_for_viewer(tmp_obj, ch_can_see_all_ware, force_full_name), sizeof(visible_ware));
+    }
+  }
+
+  if (*visible_ware)
+    send_to_char(ch, "\r\nVisible Cyberware:\r\n%s", visible_ware);
+  if (*internal_ware)
+    send_to_char(ch, "\r\nInternal Cyberware:\r\n%s", internal_ware);
+
+  // Reset: It's bioware time.
+  *visible_ware = '\0';
+  *internal_ware = '\0';
 
   for (tmp_obj = i->bioware; tmp_obj; tmp_obj = tmp_obj->next_content) {
+    bool ware_is_internal = TRUE;
+    bool force_full_name = FALSE;
+
     if (GET_BIOWARE_TYPE(tmp_obj) == BIO_ORTHOSKIN) {
-      if (ch_can_see_all_ware) {
-        send_to_char(ch, "\r\nVisible Bioware:\r\n%s\r\n", render_ware_for_privileged_viewer(tmp_obj));
-      } else {
-        int targ = 10;
-        switch (GET_OBJ_VAL(tmp_obj, 1)) {
-          case 2:
-            targ = 9;
-            break;
-          case 3:
-            targ = 8;
-        }
-        if (success_test(GET_INT(ch), targ) > 0) {
-          send_to_char(ch, "\r\nVisible Bioware:\r\n%s\r\n", bio_types[GET_OBJ_VAL(tmp_obj, 0)]);
-        }
+      int targ = 10;
+      switch (GET_BIOWARE_RATING(tmp_obj)) {
+        case 2:
+          targ = 9;
+          break;
+        case 3:
+          targ = 8;
       }
+
+      if (ch_can_see_all_ware || tmp_obj->restring || success_test(GET_INT(ch), targ) > 0) {
+        ware_is_internal = FALSE;
+      }
+    } else if (GET_BIOWARE_TYPE(tmp_obj) == BIO_CUSTOM_NERPS && IS_SET(GET_BIOWARE_FLAGS(tmp_obj), NERPS_WARE_VISIBLE)) {
+      ware_is_internal = FALSE;
+      force_full_name = TRUE;
+    }
+
+    // Now that we know if it's internal or not, hand it off to our render function.
+    if (ware_is_internal) {
+      if (ch_can_see_all_ware) {
+        strlcat(internal_ware, render_ware_for_viewer(tmp_obj, ch_can_see_all_ware, force_full_name), sizeof(internal_ware));
+      }
+    } else {
+      strlcat(visible_ware, render_ware_for_viewer(tmp_obj, ch_can_see_all_ware, force_full_name), sizeof(visible_ware));
     }
   }
 
-  if (GET_LEVEL(ch) >= LVL_BUILDER && i->bioware) {
-    send_to_char("\r\nInternal Bioware:\r\n", ch);
-    for (tmp_obj = i->bioware; tmp_obj; tmp_obj = tmp_obj->next_content) {
-      if (GET_BIOWARE_TYPE(tmp_obj) != BIO_ORTHOSKIN)
-        send_to_char(ch, "%s\r\n", render_ware_for_privileged_viewer(tmp_obj));
-    }
-  }
+  if (*visible_ware)
+    send_to_char(ch, "\r\nVisible Bioware:\r\n%s", visible_ware);
+  if (*internal_ware)
+    send_to_char(ch, "\r\nInternal Bioware:\r\n%s", internal_ware);
 
   if (ch != i && (GET_REAL_LEVEL(ch) >= LVL_BUILDER || !AWAKE(i)))
   {

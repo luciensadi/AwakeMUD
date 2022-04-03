@@ -942,12 +942,21 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 
 // ITEM_BIOWARE convenience defines
 
-#define GET_BIOWARE_TYPE(bioware)                 (GET_OBJ_VAL((bioware), 0))
-#define GET_BIOWARE_RATING(bioware)               (GET_OBJ_VAL((bioware), 1))
-#define GET_BIOWARE_IS_CULTURED(bioware)          (GET_OBJ_VAL((bioware), 2) || GET_BIOWARE_TYPE((bioware)) >= BIO_CEREBRALBOOSTER)
-#define GET_SETTABLE_BIOWARE_IS_CULTURED(bioware) (GET_OBJ_VAL((bioware), 2))
-#define GET_BIOWARE_IS_ACTIVATED(bioware)         (GET_OBJ_VAL((bioware), 3))
-#define GET_BIOWARE_ESSENCE_COST(bioware)         (GET_OBJ_VAL((bioware), 4))
+#define GET_BIOWARE_TYPE(bioware)                    (GET_OBJ_VAL((bioware), 0))
+#define GET_BIOWARE_RATING(bioware)                  (GET_OBJ_VAL((bioware), 1))
+#define GET_BIOWARE_IS_CULTURED(bioware)             (GET_OBJ_VAL((bioware), 2) || GET_BIOWARE_TYPE((bioware)) >= BIO_CEREBRALBOOSTER)
+#define GET_SETTABLE_BIOWARE_IS_CULTURED(bioware)    (GET_OBJ_VAL((bioware), 2))
+#define GET_BIOWARE_IS_ACTIVATED(bioware)            (GET_OBJ_VAL((bioware), 3))
+#define GET_BIOWARE_ESSENCE_COST(bioware)            (GET_OBJ_VAL((bioware), 4))
+
+#define GET_BIOWARE_FLAGS(bioware)                   (GET_OBJ_VAL((bioware), 11))
+
+// Platelet factory extra data.
+#define GET_BIOWARE_PLATELETFACTORY_DATA(bioware)       (GET_OBJ_VAL((bioware), 5))
+#define GET_BIOWARE_PLATELETFACTORY_DIFFICULTY(bioware) (GET_OBJ_VAL((bioware), 6))
+
+// Symbiote extra data.
+#define GET_BIOWARE_SYMBIOTE_CONDITION_DATA(bioware)    (GET_OBJ_VAL((bioware), 6))
 
 // ITEM_FOUNTAIN convenience defines
 

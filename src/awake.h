@@ -1386,6 +1386,9 @@ enum {
 #define TORSO_MOD_ARMOR_MOD3    (1 << 4)
 #define NUM_TORSO_MODS    5
 
+#define NERPS_WARE_VISIBLE   (1 << 0)
+#define NUM_NERPS_MODS    1
+
 #define FILTER_AIR  0
 #define FILTER_BLOOD  1
 #define FILTER_INGESTED  2

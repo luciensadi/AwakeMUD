@@ -7456,9 +7456,11 @@ bool is_invalid_ending_punct(char candidate) {
   return candidate != '"' && candidate != '\'' && candidate != ')';
 }
 
-#define NERPS_WARE_USAGE_STRING "Syntax: ^WMAKENERPS <BIOWARE|CYBERWARE> <essence/index cost in decimal form like 1.3> <nuyen cost> <name>"
+#define NERPS_WARE_USAGE_STRING "Syntax: ^WMAKENERPS <BIOWARE|CYBERWARE> <essence/index cost in decimal form like 1.3> <nuyen cost> <VISIBLE|INTERNAL> <name>"
 ACMD(do_makenerps) {
   struct obj_data *ware;
+  char vis_buf[MAX_INPUT_LENGTH];
+  bool is_visible;
 
   // syntax: makenerps <bio|cyber> <essencecost|index> <name>
   skip_spaces(&argument);
@@ -7471,6 +7473,7 @@ ACMD(do_makenerps) {
   argument = one_argument(argument, buf);  // BIOWARE or CYBERWARE
   argument = one_argument(argument, buf2); // a float for the essence / index cost
   argument = one_argument(argument, buf3); // an integer of nuyen cost
+  argument = one_argument(argument, vis_buf); // an integer of nuyen cost
   // argument contains the restring
 
   if (!*argument) {
@@ -7492,13 +7495,30 @@ ACMD(do_makenerps) {
     return;
   }
 
+  if (is_abbrev(vis_buf, "visible") || is_abbrev(vis_buf, "external")) {
+    is_visible = TRUE;
+  } else if (is_abbrev(vis_buf, "internal")) {
+    is_visible = FALSE;
+  } else {
+    send_to_char(ch, "You must choose either VISIBLE or INTERNAL, not '%s'.\r\n%s", buf, NERPS_WARE_USAGE_STRING);
+    return;
+  }
+
   if (is_abbrev(buf, "cyberware")) {
     ware = read_object(OBJ_CUSTOM_NERPS_CYBERWARE, VIRTUAL);
     GET_CYBERWARE_ESSENCE_COST(ware) = (int) (essence_cost * 100);
-  } else if (is_abbrev(buf, "bioware")) {
+
+    if (is_visible)
+      SET_BIT(GET_CYBERWARE_FLAGS(ware), NERPS_WARE_VISIBLE);
+  }
+  else if (is_abbrev(buf, "bioware")) {
     ware = read_object(OBJ_CUSTOM_NERPS_BIOWARE, VIRTUAL);
     GET_BIOWARE_ESSENCE_COST(ware) = (int) (essence_cost * 100);
-  } else {
+
+    if (is_visible)
+      SET_BIT(GET_BIOWARE_FLAGS(ware), NERPS_WARE_VISIBLE);
+  }
+  else {
     send_to_char(ch, "You must choose either CYBERWARE or BIOWARE, not '%s'.\r\n%s", buf, NERPS_WARE_USAGE_STRING);
     return;
   }

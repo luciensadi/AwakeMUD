@@ -158,8 +158,8 @@ void physical_gain(struct char_data * ch)
   {
     gain = MAX(1, gain);
     for (bio = ch->bioware; bio; bio = bio->next_content)
-      if (GET_OBJ_VAL(bio, 0) == BIO_SYMBIOTES) {
-        switch (GET_OBJ_VAL(bio, 1)) {
+      if (GET_BIOWARE_TYPE(bio) == BIO_SYMBIOTES) {
+        switch (GET_BIOWARE_RATING(bio)) {
           case 1:
             gain = (int)(gain * 10/9);
             break;
@@ -336,26 +336,29 @@ void gain_condition(struct char_data * ch, int condition, int value)
 
   if (value == -1) {
     for (bio = ch->bioware; bio; bio = bio->next_content) {
-      if (GET_OBJ_VAL(bio, 0) == BIO_SYMBIOTES) {
-        switch (GET_OBJ_VAL(bio, 1)) {
+      if (GET_BIOWARE_TYPE(bio) == BIO_SYMBIOTES) {
+        switch (GET_BIOWARE_RATING(bio)) {
           case 1:
-            if (GET_OBJ_VAL(bio, 6))
+            // Every other evaluation tick, remove an extra point of this condition.
+            if (GET_BIOWARE_SYMBIOTE_CONDITION_DATA(bio))
               value--;
-            GET_OBJ_VAL(bio, 6) = !GET_OBJ_VAL(bio, 6);
+            GET_BIOWARE_SYMBIOTE_CONDITION_DATA(bio) = !GET_BIOWARE_SYMBIOTE_CONDITION_DATA(bio);
             break;
           case 2:
-            if (!(GET_OBJ_VAL(bio, 6) % 3))
+            // Every two out of three ticks, remove an extra point of this condition.
+            if (!(GET_BIOWARE_SYMBIOTE_CONDITION_DATA(bio) % 3))
               value--;
-            if ((++GET_OBJ_VAL(bio, 6)) > 9)
-              GET_OBJ_VAL(bio, 6) = 0;
+            if ((++GET_BIOWARE_SYMBIOTE_CONDITION_DATA(bio)) > 9)
+              GET_BIOWARE_SYMBIOTE_CONDITION_DATA(bio) = 0;
             break;
           case 3:
+            // Every tick, remove an extra point.
             value--;
             break;
         }
-      } else if (GET_OBJ_VAL(bio, 0) == BIO_SUPRATHYROIDGLAND) {
+      } else if (GET_BIOWARE_TYPE(bio) == BIO_SUPRATHYROIDGLAND) {
         value *= 2;
-      } else if (GET_OBJ_VAL(bio, 0) == BIO_DIGESTIVEEXPANSION) {
+      } else if (GET_BIOWARE_TYPE(bio) == BIO_DIGESTIVEEXPANSION) {
         value = (int)((float)value / .8);
       }
     }
@@ -531,26 +534,26 @@ void check_bioware(struct char_data *ch)
 
   struct obj_data *bio;
   for (bio = ch->bioware; bio; bio = bio->next_content)
-    if (GET_OBJ_VAL(bio, 0) == BIO_PLATELETFACTORY)
+    if (GET_BIOWARE_TYPE(bio) == BIO_PLATELETFACTORY)
     {
-      if (--GET_OBJ_VAL(bio, 5) < 1) {
-        GET_OBJ_VAL(bio, 5) = 12;
-        if (success_test(GET_REAL_BOD(ch), 3 + GET_OBJ_VAL(bio, 6)) < 1) {
+      if (--GET_BIOWARE_PLATELETFACTORY_DATA(bio) < 1) {
+        GET_BIOWARE_PLATELETFACTORY_DATA(bio) = 12;
+        if (success_test(GET_REAL_BOD(ch), 3 + GET_BIOWARE_PLATELETFACTORY_DIFFICULTY(bio)) < 1) {
           send_to_char("Your blood seems to erupt.\r\n", ch);
           act("$n collapses to the floor, twitching.", TRUE, ch, 0, 0, TO_ROOM);
           damage(ch, ch, 10, TYPE_BIOWARE, PHYSICAL);
         } else {
           send_to_char("Your heart strains, and you have a feeling of impending doom. Your need for blood thinners is dire!\r\n", ch);
         }
-        GET_OBJ_VAL(bio, 6)++;
+        GET_BIOWARE_PLATELETFACTORY_DIFFICULTY(bio)++;
       }
-      if (GET_OBJ_VAL(bio, 5) == 4)
+      if (GET_BIOWARE_PLATELETFACTORY_DATA(bio) == 4)
         send_to_char("You kinda feel like you should be taking some aspirin.\r\n", ch);
-      else if (GET_OBJ_VAL(bio, 5) == 3)
+      else if (GET_BIOWARE_PLATELETFACTORY_DATA(bio) == 3)
         send_to_char("You could definitely go for some aspirin right now.\r\n", ch);
-      else if (GET_OBJ_VAL(bio, 5) <= 2)
+      else if (GET_BIOWARE_PLATELETFACTORY_DATA(bio) <= 2)
         send_to_char("You really feel like you need to take some aspirin.\r\n", ch);
-      else if (GET_OBJ_VAL(bio, 5) == 1)
+      else if (GET_BIOWARE_PLATELETFACTORY_DATA(bio) == 1)
         send_to_char("Your heart strains, and you have a feeling of impending doom. Your need for blood thinners is dire!\r\n", ch);
       break;
     }
@@ -738,9 +741,9 @@ void process_regeneration(int half_hour)
     if (GET_POS(ch) == POS_MORTALLYW && !AFF_FLAGS(ch).IsSet(AFF_STABILIZE) && half_hour) {
       bool dam = TRUE;
       for (struct obj_data *obj = ch->bioware; obj; obj = obj->next_content)
-        if (GET_OBJ_VAL(obj, 0) == BIO_METABOLICARRESTER) {
-          if (++GET_OBJ_VAL(obj, 3) == 5) {
-            GET_OBJ_VAL(obj, 3) = 0;
+        if (GET_BIOWARE_TYPE(obj) == BIO_METABOLICARRESTER) {
+          if (++GET_BIOWARE_IS_ACTIVATED(obj) == 5) {
+            GET_BIOWARE_IS_ACTIVATED(obj) = 0;
             dam = TRUE;
           } else
             dam = FALSE;
@@ -1522,8 +1525,8 @@ void misc_update(void)
       else if (GET_DRUG_STAGE(ch) == 1) {
         int toxin = 0;
         for (struct obj_data *obj = ch->bioware; obj && !toxin; obj = obj->next_content)
-          if (GET_OBJ_VAL(obj, 0) == BIO_TOXINEXTRACTOR)
-            toxin = GET_OBJ_VAL(obj, 1);
+          if (GET_BIOWARE_TYPE(obj) == BIO_TOXINEXTRACTOR)
+            toxin = GET_BIOWARE_RATING(obj);
         if (GET_DRUG_AFFECT(ch) > 0)
           send_to_char(ch, "You begin to feel drained as the %s wears off.\r\n", drug_types[GET_DRUG_AFFECT(ch)].name);
         GET_DRUG_STAGE(ch) = 2;
