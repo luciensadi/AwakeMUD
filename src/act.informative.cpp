@@ -2775,135 +2775,151 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       }
       break;
     case ITEM_CYBERWARE:
+      strlcat(buf, "It is a ^c", sizeof(buf));
+
       if (GET_CYBERWARE_RATING(j) > 0) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^crating-%d %s-grade %s^n that uses ^c%.2f^n essence when installed.",
-                GET_CYBERWARE_RATING(j), decap_cyber_grades[GET_CYBERWARE_GRADE(j)], decap_cyber_types[GET_CYBERWARE_TYPE(j)],
-                ((float) GET_CYBERWARE_ESSENCE_COST(j) / 100));
+         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "rating-%d ", GET_CYBERWARE_RATING(j));
       }
-      else {
-        char flag_parse[1000];
-        *flag_parse = '\0';
 
-        switch (GET_CYBERWARE_TYPE(j)) {
-          case CYB_DATAJACK:
-            if (GET_CYBERWARE_FLAGS(j) != DATA_STANDARD)
-              strlcpy(flag_parse, " induction", sizeof(flag_parse));
-            else
-              strlcpy(flag_parse, " standard", sizeof(flag_parse));
-            break;
-          case CYB_TOOTHCOMPARTMENT:
-          if (GET_CYBERWARE_FLAGS(j))
-            strlcpy(flag_parse, " breakable", sizeof(flag_parse));
+      char flag_parse[1000];
+      *flag_parse = '\0';
+
+      switch (GET_CYBERWARE_TYPE(j)) {
+        case CYB_DATAJACK:
+          if (GET_CYBERWARE_FLAGS(j) != DATA_STANDARD)
+            strlcpy(flag_parse, " induction", sizeof(flag_parse));
           else
-            strlcpy(flag_parse, " storage", sizeof(flag_parse));
+            strlcpy(flag_parse, " standard", sizeof(flag_parse));
           break;
-          case CYB_HANDSPUR:
-          case CYB_HANDBLADE:
-            if (GET_CYBERWARE_FLAGS(j))
-              strlcpy(flag_parse, " retractable", sizeof(flag_parse));
-            break;
-          case CYB_HANDRAZOR:
-            if (IS_SET(GET_CYBERWARE_FLAGS(j), 1 << CYBERWEAPON_RETRACTABLE))
-              strlcpy(flag_parse, " retractable", sizeof(flag_parse));
+        case CYB_TOOTHCOMPARTMENT:
+        if (GET_CYBERWARE_FLAGS(j))
+          strlcpy(flag_parse, " breakable", sizeof(flag_parse));
+        else
+          strlcpy(flag_parse, " storage", sizeof(flag_parse));
+        break;
+        case CYB_HANDSPUR:
+        case CYB_HANDBLADE:
+          if (GET_CYBERWARE_FLAGS(j))
+            strlcpy(flag_parse, " retractable", sizeof(flag_parse));
+          break;
+        case CYB_HANDRAZOR:
+          if (IS_SET(GET_CYBERWARE_FLAGS(j), 1 << CYBERWEAPON_RETRACTABLE))
+            strlcpy(flag_parse, " retractable", sizeof(flag_parse));
 
-            if (IS_SET(GET_CYBERWARE_FLAGS(j), 1 << CYBERWEAPON_IMPROVED)) {
-              if (*flag_parse) {
-                strlcat(flag_parse, ", improved", sizeof(flag_parse));
-              } else {
-                strlcat(flag_parse, " improved", sizeof(flag_parse));
-              }
+          if (IS_SET(GET_CYBERWARE_FLAGS(j), 1 << CYBERWEAPON_IMPROVED)) {
+            if (*flag_parse) {
+              strlcat(flag_parse, ", improved", sizeof(flag_parse));
+            } else {
+              strlcat(flag_parse, " improved", sizeof(flag_parse));
             }
-            break;
-          case CYB_BONELACING:
-            snprintf(flag_parse, sizeof(flag_parse), " %s", bone_lacing[GET_CYBERWARE_FLAGS(j)]);
-            break;
-          case CYB_REFLEXTRIGGER:
-            if (GET_CYBERWARE_FLAGS(j))
-              strlcpy(flag_parse, " stepped", sizeof(flag_parse));
-            break;
-          case CYB_SKULL:
-            if (IS_SET(GET_CYBERWARE_FLAGS(j), SKULL_MOD_OBVIOUS))
-              strlcat(flag_parse, " obvious", sizeof(flag_parse));
-            else
-              strlcpy(flag_parse, " synthetic", sizeof(flag_parse));
+          }
+          break;
+        case CYB_BONELACING:
+          snprintf(flag_parse, sizeof(flag_parse), " %s", bone_lacing[GET_CYBERWARE_FLAGS(j)]);
+          break;
+        case CYB_REFLEXTRIGGER:
+          if (GET_CYBERWARE_FLAGS(j))
+            strlcpy(flag_parse, " stepped", sizeof(flag_parse));
+          break;
+        case CYB_SKULL:
+          if (IS_SET(GET_CYBERWARE_FLAGS(j), SKULL_MOD_OBVIOUS))
+            strlcat(flag_parse, " obvious", sizeof(flag_parse));
+          else
+            strlcpy(flag_parse, " synthetic", sizeof(flag_parse));
 
-            if (IS_SET(GET_CYBERWARE_FLAGS(j), SKULL_MOD_ARMOR_MOD1))
-              strlcpy(flag_parse, ", armored", sizeof(flag_parse));
-            break;
-          case CYB_TORSO:
-            if (IS_SET(GET_CYBERWARE_FLAGS(j), TORSO_MOD_OBVIOUS))
-              strlcat(flag_parse, " obvious", sizeof(flag_parse));
-            else
-              strlcpy(flag_parse, " synthetic", sizeof(flag_parse));
+          if (IS_SET(GET_CYBERWARE_FLAGS(j), SKULL_MOD_ARMOR_MOD1))
+            strlcpy(flag_parse, ", armored", sizeof(flag_parse));
+          break;
+        case CYB_TORSO:
+          if (IS_SET(GET_CYBERWARE_FLAGS(j), TORSO_MOD_OBVIOUS))
+            strlcat(flag_parse, " obvious", sizeof(flag_parse));
+          else
+            strlcpy(flag_parse, " synthetic", sizeof(flag_parse));
 
-            if (IS_SET(GET_CYBERWARE_FLAGS(j), TORSO_MOD_ARMOR_MOD1))
-              strlcpy(flag_parse, ", armored (grade 1)", sizeof(flag_parse));
-            else if (IS_SET(GET_CYBERWARE_FLAGS(j), TORSO_MOD_ARMOR_MOD2))
-              strlcpy(flag_parse, ", armored (grade 2)", sizeof(flag_parse));
-            else if (IS_SET(GET_CYBERWARE_FLAGS(j), TORSO_MOD_ARMOR_MOD3))
-              strlcpy(flag_parse, ", armored (grade 3)", sizeof(flag_parse));
-            break;
-          case CYB_LEGS:
-            if (IS_SET(GET_CYBERWARE_FLAGS(j), LEGS_MOD_OBVIOUS))
-              strlcat(flag_parse, " obvious", sizeof(flag_parse));
-            else
-              strlcpy(flag_parse, " synthetic", sizeof(flag_parse));
+          if (IS_SET(GET_CYBERWARE_FLAGS(j), TORSO_MOD_ARMOR_MOD1))
+            strlcpy(flag_parse, ", armored (grade 1)", sizeof(flag_parse));
+          else if (IS_SET(GET_CYBERWARE_FLAGS(j), TORSO_MOD_ARMOR_MOD2))
+            strlcpy(flag_parse, ", armored (grade 2)", sizeof(flag_parse));
+          else if (IS_SET(GET_CYBERWARE_FLAGS(j), TORSO_MOD_ARMOR_MOD3))
+            strlcpy(flag_parse, ", armored (grade 3)", sizeof(flag_parse));
+          break;
+        case CYB_LEGS:
+          if (IS_SET(GET_CYBERWARE_FLAGS(j), LEGS_MOD_OBVIOUS))
+            strlcat(flag_parse, " obvious", sizeof(flag_parse));
+          else
+            strlcpy(flag_parse, " synthetic", sizeof(flag_parse));
 
-            if (IS_SET(GET_CYBERWARE_FLAGS(j), LEGS_MOD_ARMOR_MOD1))
-              strlcpy(flag_parse, ", armored (grade 1)", sizeof(flag_parse));
+          if (IS_SET(GET_CYBERWARE_FLAGS(j), LEGS_MOD_ARMOR_MOD1))
+            strlcpy(flag_parse, ", armored (grade 1)", sizeof(flag_parse));
 
-            if (IS_SET(GET_CYBERWARE_FLAGS(j), LEGS_MOD_STRENGTH_MOD1))
-              strlcpy(flag_parse, ", strengthening (grade 1)", sizeof(flag_parse));
-            else if (IS_SET(GET_CYBERWARE_FLAGS(j), LEGS_MOD_STRENGTH_MOD2))
-              strlcpy(flag_parse, ", strengthening (grade 2)", sizeof(flag_parse));
-            else if (IS_SET(GET_CYBERWARE_FLAGS(j), LEGS_MOD_STRENGTH_MOD3))
-              strlcpy(flag_parse, ", strengthening (grade 3)", sizeof(flag_parse));
+          if (IS_SET(GET_CYBERWARE_FLAGS(j), LEGS_MOD_STRENGTH_MOD1))
+            strlcpy(flag_parse, ", strengthening (grade 1)", sizeof(flag_parse));
+          else if (IS_SET(GET_CYBERWARE_FLAGS(j), LEGS_MOD_STRENGTH_MOD2))
+            strlcpy(flag_parse, ", strengthening (grade 2)", sizeof(flag_parse));
+          else if (IS_SET(GET_CYBERWARE_FLAGS(j), LEGS_MOD_STRENGTH_MOD3))
+            strlcpy(flag_parse, ", strengthening (grade 3)", sizeof(flag_parse));
 
-            if (IS_SET(GET_CYBERWARE_FLAGS(j), LEGS_MOD_QUICKNESS_MOD1))
-              strlcpy(flag_parse, ", quickening (grade 1)", sizeof(flag_parse));
-            else if (IS_SET(GET_CYBERWARE_FLAGS(j), LEGS_MOD_QUICKNESS_MOD2))
-              strlcpy(flag_parse, ", quickening (grade 2)", sizeof(flag_parse));
-            else if (IS_SET(GET_CYBERWARE_FLAGS(j), LEGS_MOD_QUICKNESS_MOD3))
-              strlcpy(flag_parse, ", quickening (grade 3)", sizeof(flag_parse));
-            break;
-          case CYB_ARMS:
-            if (IS_SET(GET_CYBERWARE_FLAGS(j), ARMS_MOD_OBVIOUS))
-              strlcat(flag_parse, " obvious", sizeof(flag_parse));
-            else
-              strlcpy(flag_parse, " synthetic", sizeof(flag_parse));
+          if (IS_SET(GET_CYBERWARE_FLAGS(j), LEGS_MOD_QUICKNESS_MOD1))
+            strlcpy(flag_parse, ", quickening (grade 1)", sizeof(flag_parse));
+          else if (IS_SET(GET_CYBERWARE_FLAGS(j), LEGS_MOD_QUICKNESS_MOD2))
+            strlcpy(flag_parse, ", quickening (grade 2)", sizeof(flag_parse));
+          else if (IS_SET(GET_CYBERWARE_FLAGS(j), LEGS_MOD_QUICKNESS_MOD3))
+            strlcpy(flag_parse, ", quickening (grade 3)", sizeof(flag_parse));
+          break;
+        case CYB_ARMS:
+          if (IS_SET(GET_CYBERWARE_FLAGS(j), ARMS_MOD_OBVIOUS))
+            strlcat(flag_parse, " obvious", sizeof(flag_parse));
+          else
+            strlcpy(flag_parse, " synthetic", sizeof(flag_parse));
 
-            if (IS_SET(GET_CYBERWARE_FLAGS(j), ARMS_MOD_ARMOR_MOD1))
-              strlcpy(flag_parse, ", armored (grade 1)", sizeof(flag_parse));
+          if (IS_SET(GET_CYBERWARE_FLAGS(j), ARMS_MOD_ARMOR_MOD1))
+            strlcpy(flag_parse, ", armored (grade 1)", sizeof(flag_parse));
 
-            if (IS_SET(GET_CYBERWARE_FLAGS(j), ARMS_MOD_STRENGTH_MOD1))
-              strlcpy(flag_parse, ", strengthening (grade 1)", sizeof(flag_parse));
-            else if (IS_SET(GET_CYBERWARE_FLAGS(j), ARMS_MOD_STRENGTH_MOD2))
-              strlcpy(flag_parse, ", strengthening (grade 2)", sizeof(flag_parse));
-            else if (IS_SET(GET_CYBERWARE_FLAGS(j), ARMS_MOD_STRENGTH_MOD3))
-              strlcpy(flag_parse, ", strengthening (grade 3)", sizeof(flag_parse));
+          if (IS_SET(GET_CYBERWARE_FLAGS(j), ARMS_MOD_STRENGTH_MOD1))
+            strlcpy(flag_parse, ", strengthening (grade 1)", sizeof(flag_parse));
+          else if (IS_SET(GET_CYBERWARE_FLAGS(j), ARMS_MOD_STRENGTH_MOD2))
+            strlcpy(flag_parse, ", strengthening (grade 2)", sizeof(flag_parse));
+          else if (IS_SET(GET_CYBERWARE_FLAGS(j), ARMS_MOD_STRENGTH_MOD3))
+            strlcpy(flag_parse, ", strengthening (grade 3)", sizeof(flag_parse));
 
-            if (IS_SET(GET_CYBERWARE_FLAGS(j), ARMS_MOD_QUICKNESS_MOD1))
-              strlcpy(flag_parse, ", quickening (grade 1)", sizeof(flag_parse));
-            else if (IS_SET(GET_CYBERWARE_FLAGS(j), ARMS_MOD_QUICKNESS_MOD2))
-              strlcpy(flag_parse, ", quickening (grade 2)", sizeof(flag_parse));
-            else if (IS_SET(GET_CYBERWARE_FLAGS(j), ARMS_MOD_QUICKNESS_MOD3))
-              strlcpy(flag_parse, ", quickening (grade 3)", sizeof(flag_parse));
+          if (IS_SET(GET_CYBERWARE_FLAGS(j), ARMS_MOD_QUICKNESS_MOD1))
+            strlcpy(flag_parse, ", quickening (grade 1)", sizeof(flag_parse));
+          else if (IS_SET(GET_CYBERWARE_FLAGS(j), ARMS_MOD_QUICKNESS_MOD2))
+            strlcpy(flag_parse, ", quickening (grade 2)", sizeof(flag_parse));
+          else if (IS_SET(GET_CYBERWARE_FLAGS(j), ARMS_MOD_QUICKNESS_MOD3))
+            strlcpy(flag_parse, ", quickening (grade 3)", sizeof(flag_parse));
 
-            if (IS_SET(GET_CYBERWARE_FLAGS(j), ARMS_MOD_GYROMOUNT))
-              strlcpy(flag_parse, ", gyromountable", sizeof(flag_parse));
-            break;
-          case CYB_DERMALSHEATHING:
-            if (GET_CYBERWARE_FLAGS(j))
-              strlcpy(flag_parse, " ruthenium-coated", sizeof(flag_parse));
-            break;
+          if (IS_SET(GET_CYBERWARE_FLAGS(j), ARMS_MOD_GYROMOUNT))
+            strlcpy(flag_parse, ", gyromountable", sizeof(flag_parse));
+          break;
+        case CYB_DERMALSHEATHING:
+          if (GET_CYBERWARE_FLAGS(j))
+            strlcpy(flag_parse, " ruthenium-coated", sizeof(flag_parse));
+          break;
+      }
+
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s-grade%s %s^n that uses ^c%.2f^n essence when installed.",
+              decap_cyber_grades[GET_CYBERWARE_GRADE(j)],
+              flag_parse,
+              decap_cyber_types[GET_CYBERWARE_TYPE(j)],
+              ((float) GET_CYBERWARE_ESSENCE_COST(j) / 100));
+
+      if (GET_CYBERWARE_TYPE(j) == CYB_EYES) {
+        char eye_bits[1000];
+
+        if (IS_SET(GET_CYBERWARE_FLAGS(j), EYE_CYBEREYES)) {
+          strlcat(buf, "\r\n\r\nAs a set of replacement cybereyes, it has the following features: ", sizeof(buf));
+          REMOVE_BIT(GET_CYBERWARE_FLAGS(j), EYE_CYBEREYES);
+          sprintbit(GET_CYBERWARE_FLAGS(j), eyemods, eye_bits, sizeof(eye_bits));
+          SET_BIT(GET_CYBERWARE_FLAGS(j), EYE_CYBEREYES);
+        } else {
+          strlcat(buf, "\r\n\r\nAs a standalone retinal modification, it has the following features: ", sizeof(buf));
+          sprintbit(GET_CYBERWARE_FLAGS(j), eyemods, eye_bits, sizeof(eye_bits));
         }
 
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%s-grade%s %s^n that uses ^c%.2f^n essence when installed.",
-                decap_cyber_grades[GET_CYBERWARE_GRADE(j)],
-                flag_parse,
-                decap_cyber_types[GET_CYBERWARE_TYPE(j)],
-                ((float) GET_CYBERWARE_ESSENCE_COST(j) / 100));
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n  ^c%s^n.", eye_bits);
       }
+
       if (IS_OBJ_STAT(j, ITEM_EXTRA_MAGIC_INCOMPATIBLE)) {
         strlcat(buf, "\r\n^yIt is incompatible with magic.^n", sizeof(buf));
       }
