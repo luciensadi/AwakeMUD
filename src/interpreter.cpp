@@ -459,7 +459,18 @@ struct command_info cmd_info[] =
     { "activate"   , POS_LYING   , do_activate , 0, 0, FALSE },
     { "aecho"      , POS_SLEEPING, do_new_echo , LVL_ARCHITECT, SCMD_AECHO, FALSE },
     { "accept"     , POS_LYING   , do_accept   , 0, 0, FALSE },
+
+#ifdef DIES_IRAE
+    /* The power point for Karma rule was specifically included for players who do not use the advanced magic (initiation) rules.
+       It is recommended that this rule be ignored if the initation rules in Magic in the Shadows are also being used.
+          -- https://www.shadowrunrpg.com/resources/sr3faq.html#6
+
+      Per the above, addpoint has been disabled.
+    */
+    // { "addpoint"   , POS_DEAD    , do_initiate , 0, SCMD_POWERPOINT, FALSE },
+#else
     { "addpoint"   , POS_DEAD    , do_initiate , 0, SCMD_POWERPOINT, FALSE },
+#endif
     { "affects"    , POS_MORTALLYW, do_status   , 0, 0, TRUE },
     { "afk"        , POS_DEAD    , do_afk      , 0, 0, TRUE },
     { "ammo"       , POS_LYING   , do_ammo     , 0, 0, TRUE },

@@ -256,11 +256,6 @@ struct melee_combat_data {
     } else if (cyber->num_cyberweapons > 0) {
       skill = SKILL_CYBER_IMPLANTS;
 
-      if (cyber->num_cyberweapons >= 2) {
-        // Dual cyberweapons gives a power bonus per Core p121.
-        power += (int) (GET_STR(ch) / 2);
-      }
-
       // Select the best cyberweapon and use its stats.
       if (cyber->handblades) {
         power += 3;
@@ -272,17 +267,32 @@ struct melee_combat_data {
         damage_level = MODERATE;
         dam_type = TYPE_SLASH;
         is_physical = TRUE;
+
+        if (cyber->handspurs >= 2) {
+          // Dual cyberweapons gives a power bonus per Core p121.
+          power += (int) (GET_STR(ch) / 2);
+        }
       }
       else if (cyber->improved_handrazors) {
         power += 2;
         damage_level = LIGHT;
         dam_type = TYPE_STAB;
         is_physical = TRUE;
+
+        if (cyber->improved_handrazors >= 2) {
+          // Dual cyberweapons gives a power bonus per Core p121.
+          power += (int) (GET_STR(ch) / 2);
+        }
       }
       else if (cyber->handrazors) {
         damage_level = LIGHT;
         dam_type = TYPE_STAB;
         is_physical = TRUE;
+
+        if (cyber->handrazors >= 2) {
+          // Dual cyberweapons gives a power bonus per Core p121.
+          power += (int) (GET_STR(ch) / 2);
+        }
       }
       else if (cyber->fins || cyber->climbingclaws) {
         power -= 1;
@@ -884,6 +894,7 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
           att->ranged->power = 0;
           // fall through
         case AMMO_GEL:
+          // Errata: Add the following after the third line: "Impact armor, not Ballistic, applies."
           att->ranged->power -= GET_IMPACT(def->ch) + 2;
           att->ranged->is_gel = TRUE;
           break;

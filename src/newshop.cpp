@@ -360,11 +360,14 @@ bool install_ware_in_target_character(struct obj_data *ware, struct char_data *i
     }
 
     // Check for matching cyberware and related limits.
-    int enhancers = 0;
+    int num_reaction_enhancers = 0;
+    int num_handspurs = 0;
+    int num_handrazors = 0;
+    int num_improved_handrazors = 0;
     for (check = recipient->cyberware; check != NULL; check = check->next_content) {
-      if ((GET_OBJ_VNUM(check) == GET_OBJ_VNUM(ware))) {
+      if (GET_CYBERWARE_TYPE(ware) == GET_CYBERWARE_TYPE(check)) {
         if (GET_CYBERWARE_TYPE(check) == CYB_REACTIONENHANCE) {
-          if (++enhancers == 6) {
+          if (++num_reaction_enhancers == 6) {
             if (IS_NPC(installer)) {
               snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " You already have the maximum number of reaction enhancers installed.");
               do_say(installer, buf, cmd_say, SCMD_SAYTO);
@@ -373,26 +376,59 @@ bool install_ware_in_target_character(struct obj_data *ware, struct char_data *i
             }
             return FALSE;
           }
-        } else {
-          if (IS_NPC(installer)) {
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " You already have %s installed.", GET_OBJ_NAME(ware));
-            do_say(installer, buf, cmd_say, SCMD_SAYTO);
+        } else if (GET_CYBERWARE_TYPE(check) == CYB_HANDRAZOR) {
+          if (IS_SET(GET_CYBERWARE_FLAGS(check), 1 << CYBERWEAPON_IMPROVED)) {
+            if (++num_improved_handrazors >= 2) {
+              if (IS_NPC(installer)) {
+                strlcat(buf, " You already have the maximum of two installed.", sizeof(buf));
+                do_say(installer, buf, cmd_say, SCMD_SAYTO);
+              } else {
+                send_to_char(installer, "You can't install %s-- the maximum of two is already installed.\r\n", GET_OBJ_NAME(ware));
+              }
+              return FALSE;
+            }
           } else {
-            send_to_char(installer, "You can't install %s-- another one is already installed.\r\n", GET_OBJ_NAME(ware));
+            if (++num_handrazors >= 2) {
+              if (IS_NPC(installer)) {
+                strlcat(buf, " You already have the maximum of two installed.", sizeof(buf));
+                do_say(installer, buf, cmd_say, SCMD_SAYTO);
+              } else {
+                send_to_char(installer, "You can't install %s-- the maximum of two is already installed.\r\n", GET_OBJ_NAME(ware));
+              }
+              return FALSE;
+            }
           }
-          return FALSE;
-        }
-      }
-      if (GET_CYBERWARE_TYPE(check) == GET_CYBERWARE_TYPE(ware)
-          && (GET_CYBERWARE_TYPE(ware) != CYB_EYES && GET_CYBERWARE_TYPE(ware) != CYB_FILTRATION && GET_CYBERWARE_TYPE(ware) != CYB_REACTIONENHANCE))
-      {
-        if (IS_NPC(installer)) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " You already have %s, and it's too similar to %s for them to work together.", GET_OBJ_NAME(check), GET_OBJ_NAME(ware));
-          do_say(installer, buf, cmd_say, SCMD_SAYTO);
+        } else if (GET_CYBERWARE_TYPE(check) == CYB_HANDSPUR) {
+          if (++num_handspurs >= 2) {
+            if (IS_NPC(installer)) {
+              strlcat(buf, " You already have the maximum of two installed.", sizeof(buf));
+              do_say(installer, buf, cmd_say, SCMD_SAYTO);
+            } else {
+              send_to_char(installer, "You can't install %s-- the maximum of two is already installed.\r\n", GET_OBJ_NAME(ware));
+            }
+            return FALSE;
+          }
         } else {
-          send_to_char(installer, "You can't install %s-- it's too similar to the already-installed %s.\r\n", GET_OBJ_NAME(ware), GET_OBJ_NAME(check));
+          if (GET_OBJ_VNUM(check) == GET_OBJ_VNUM(ware)) {
+            if (IS_NPC(installer)) {
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " You already have %s installed.", GET_OBJ_NAME(ware));
+              do_say(installer, buf, cmd_say, SCMD_SAYTO);
+            } else {
+              send_to_char(installer, "You can't install %s-- another one is already installed.\r\n", GET_OBJ_NAME(ware));
+            }
+            return FALSE;
+          }
+
+          if (GET_CYBERWARE_TYPE(ware) != CYB_EYES && GET_CYBERWARE_TYPE(ware) != CYB_FILTRATION) {
+            if (IS_NPC(installer)) {
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " You already have %s, and it's too similar to %s for them to work together.", GET_OBJ_NAME(check), GET_OBJ_NAME(ware));
+              do_say(installer, buf, cmd_say, SCMD_SAYTO);
+            } else {
+              send_to_char(installer, "You can't install %s-- it's too similar to the already-installed %s.\r\n", GET_OBJ_NAME(ware), GET_OBJ_NAME(check));
+            }
+            return FALSE;
+          }
         }
-        return FALSE;
       }
     }
 

@@ -94,6 +94,7 @@ extern bool trainable_attribute_is_maximized(struct char_data *ch, int attribute
 extern float get_bulletpants_weight(struct char_data *ch);
 extern bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype, bool include_func_protections);
 extern const char *get_level_wholist_color(int level);
+extern bool cyber_is_retractable(struct obj_data *cyber);
 
 #ifdef USE_PRIVATE_CE_WORLD
   extern void display_secret_info_about_object(struct char_data *ch, struct obj_data *obj);
@@ -4159,7 +4160,23 @@ ACMD(do_cyberware)
         continue;
       }
     }
-    snprintf(buf, sizeof(buf), "%-40s Essence: %0.2f\r\n", GET_OBJ_NAME(obj), ((float)GET_CYBERWARE_ESSENCE_COST(obj) / 100));
+
+    char retraction_string[100];
+    if (cyber_is_retractable(obj)) {
+      if (GET_CYBERWARE_IS_DISABLED(obj)) {
+        strlcpy(retraction_string, "  (retracted)", sizeof(retraction_string));
+      } else {
+        strlcpy(retraction_string, "  (extended)", sizeof(retraction_string));
+      }
+    } else {
+      strlcpy(retraction_string, "", sizeof(retraction_string));
+    }
+
+    snprintf(buf, sizeof(buf), "%-40s Essence: %0.2f%s\r\n",
+             GET_OBJ_NAME(obj),
+             ((float)GET_CYBERWARE_ESSENCE_COST(obj) / 100),
+             retraction_string
+           );
     send_to_char(buf, ch);
   }
 }
