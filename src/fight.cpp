@@ -5125,13 +5125,13 @@ void perform_violence(void)
 
         // Take the better of the defender's QUI and REA.
         int defender_attribute = MAX(GET_QUI(FIGHTING(ch)), GET_REA(FIGHTING(ch)));
-        // Set the target from the defender's attribute.
-        int target = defender_attribute;
+        int target = 0;
         // Set the dice pool to be the character's quickness.
         int quickness = GET_QUI(ch);
         // Extended foot anchors suck for running.
 
         bool footanchor = FALSE;
+        bool defender_footanchor = FALSE;
 
         // Visibility penalty for defender, it's hard to avoid someone you can't see.
         if (!CAN_SEE(FIGHTING(ch), ch))
@@ -5176,7 +5176,7 @@ void perform_violence(void)
             && !(GET_EQ(ch, WEAR_WIELD) || GET_EQ(ch, WEAR_HOLD)))
           target -= (int)GET_REAL_MAG(ch) / 150;
 
-        // Hydraulic jack and foot anchor.
+        // Hydraulic jack and foot anchor - charger
         for (struct obj_data *cyber = ch->cyberware; cyber; cyber = cyber->next_content) {
           if (GET_CYBERWARE_TYPE(cyber) == CYB_HYDRAULICJACK)
             quickness += GET_CYBERWARE_RATING(cyber);
@@ -5184,20 +5184,39 @@ void perform_violence(void)
             footanchor = TRUE;
         }
 
-        // Movement modifications via spells.
+        // Hydraulic jack and foot anchor - defender
+        for (struct obj_data *cyber = FIGHTING(ch)->cyberware; cyber; cyber = cyber->next_content) {
+          if (GET_CYBERWARE_TYPE(cyber) == CYB_HYDRAULICJACK)
+            defender_attribute += GET_CYBERWARE_RATING(cyber);
+          else if (GET_CYBERWARE_TYPE(cyber) == CYB_FOOTANCHOR && !GET_CYBERWARE_IS_DISABLED(cyber))
+            defender_footanchor = TRUE;
+        }
+
+        // Movement modifications via spells - charger
         for (struct spirit_sustained *ssust = SPIRIT_SUST(ch); ssust; ssust = ssust->next)
           if (ssust->type == MOVEMENTUP && ssust->caster == FALSE && GET_LEVEL(ssust->target))
             quickness *= GET_LEVEL(ssust->target);
           else if (ssust->type == MOVEMENTDOWN && ssust->caster == FALSE && GET_LEVEL(ssust->target))
             quickness /= GET_LEVEL(ssust->target);
 
+        // Movement modifications via spells - defender
+        for (struct spirit_sustained *ssust = SPIRIT_SUST(FIGHTING(ch)); ssust; ssust = ssust->next)
+          if (ssust->type == MOVEMENTUP && ssust->caster == FALSE && GET_LEVEL(ssust->target))
+            defender_attribute *= GET_LEVEL(ssust->target);
+          else if (ssust->type == MOVEMENTDOWN && ssust->caster == FALSE && GET_LEVEL(ssust->target))
+            defender_attribute /= GET_LEVEL(ssust->target);
+
         // Movement reset: Can't move if binding.
         if (AFF_FLAGGED(ch, AFF_BINDING))
           quickness = 0;
+        if (AFF_FLAGGED(FIGHTING(ch), AFF_BINDING))
+          defender_attribute = 0;
 
         // Penalty from footanchor.
         if (footanchor)
           quickness /= 2;
+        if (defender_footanchor)
+          defender_attribute /= 2;
 
         // Penalty from too-tall.
 #ifdef USE_SLOUCH_RULES
@@ -5213,6 +5232,8 @@ void perform_violence(void)
         }
 #endif
 
+        // Set the target from the defender's attribute.
+        target += defender_attribute;
         // Lock the target to a range. Nobody enjoys rolling TN 14 to close with high-level invis mages.
         target = MIN(MINIMUM_TN_FOR_CLOSING_CHECK, MAX(target, MAXIMUM_TN_FOR_CLOSING_CHECK));
 
