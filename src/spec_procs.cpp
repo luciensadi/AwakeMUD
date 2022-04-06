@@ -1695,7 +1695,7 @@ SPECIAL(car_dealer)
       return TRUE;
     }
     if (GET_NUYEN(ch) < veh->cost) {
-      send_to_char("You can't afford that.\r\n", ch);
+      send_to_char("You aren't carrying enough nuyen for that, and this shop doesn't take credsticks.\r\n", ch);
       return TRUE;
     }
     lose_nuyen(ch, veh->cost, NUYEN_OUTFLOW_VEHICLE_PURCHASES);
