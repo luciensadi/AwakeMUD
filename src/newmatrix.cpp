@@ -3363,7 +3363,7 @@ bool display_cyberdeck_issues(struct char_data *ch, struct obj_data *cyberdeck) 
       snprintf(buf2, sizeof(buf2), "SYSERR: Cyberdeck '%s' held by '%s' identifies itself as being incomplete, but has all necessary parts. Autofixing.",
               GET_OBJ_NAME(cyberdeck), GET_CHAR_NAME(ch));
       mudlog(buf2, ch, LOG_SYSLOG, TRUE);
-      GET_CYBERDECK_IS_INCOMPLETE(cyberdeck) = 1;
+      GET_CYBERDECK_IS_INCOMPLETE(cyberdeck) = 0;
       send_to_char(ch, "You smack the side of %s a few times. It sparks, then powers on.\r\n", GET_OBJ_NAME(cyberdeck));
       return TRUE;
     }
