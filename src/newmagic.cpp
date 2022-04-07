@@ -886,11 +886,8 @@ bool spell_drain(struct char_data *ch, int spell_idx, int force, int drain_damag
       }
     }
 
-    // Otherwise, we got a spell with both no spell idx and no damage code. Log it.
-    else {
-      snprintf(buf, sizeof(buf), "SYSERR: Received invalid spell index %d to spell_drain().", spell_idx);
-      mudlog(buf, ch, LOG_SYSLOG, TRUE);
-    }
+    // Otherwise, we got a spell with both no spell idx and no damage code. This generally means this is an adept boosted-attribute drain.
+    else {}
   }
 
   /* https://www.shadowrunrpg.com/resources/sr3faq.html
