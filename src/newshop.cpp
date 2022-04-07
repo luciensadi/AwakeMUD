@@ -29,7 +29,8 @@ extern void do_probe_object(struct char_data * ch, struct obj_data * j);
 extern void wire_nuyen(struct char_data *ch, int amount, vnum_t character_id);
 ACMD_CONST(do_say);
 
-bool can_sell_object(struct obj_data *obj, struct char_data *keeper, int shop_nr);
+bool shop_can_sell_object(struct obj_data *obj, struct char_data *keeper, int shop_nr);
+bool shop_will_buy_item_from_ch(rnum_t shop_nr, struct obj_data *obj, struct char_data *ch);
 void shop_install(char *argument, struct char_data *ch, struct char_data *keeper, vnum_t shop_nr);
 void shop_uninstall(char *argument, struct char_data *ch, struct char_data *keeper, vnum_t shop_nr);
 struct obj_data *shop_package_up_ware(struct obj_data *obj);
@@ -195,7 +196,7 @@ struct shop_sell_data *find_obj_shop(char *arg, vnum_t shop_nr, struct obj_data 
       if (real_obj >= 0) {
         // Can't sell it? Don't have it show up here.
         struct obj_data *temp_obj = read_object(real_obj, REAL);
-        if (!can_sell_object(temp_obj, NULL, shop_nr)) {
+        if (!shop_can_sell_object(temp_obj, NULL, shop_nr)) {
           num++;
           continue;
         }
@@ -256,7 +257,9 @@ bool uninstall_ware_from_target_character(struct obj_data *obj, struct char_data
   }
 
   if (!IS_NPC(remover)) {
-    snprintf(buf, sizeof(buf), "Player Cyberdoc: %s uninstalled %s from %s.", GET_CHAR_NAME(remover), GET_OBJ_NAME(obj), GET_CHAR_NAME(victim));
+    const char *representation = generate_new_loggable_representation(obj);
+    snprintf(buf, sizeof(buf), "Player Cyberdoc: %s uninstalled %s from %s.", GET_CHAR_NAME(remover), representation, GET_CHAR_NAME(victim));
+    delete [] representation;
     mudlog(buf, remover, LOG_GRIDLOG, TRUE);
   }
 
@@ -1214,9 +1217,14 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
     }
 
     obj = obj->contains;
+  } else {
+    if (obj->contains) {
+      send_to_char(ch, "%s has things inside it! You can't sell it until you empty it out.\r\n", capitalize(GET_OBJ_NAME(obj)));
+      return;
+    }
   }
 
-  if (!shop_table[shop_nr].buytypes.IsSet(GET_OBJ_TYPE(obj)) || IS_OBJ_STAT(obj, ITEM_EXTRA_NOSELL) || GET_OBJ_COST(obj) < 1)
+  if (!shop_will_buy_item_from_ch(shop_nr, obj, ch))
   {
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %s", shop_table[shop_nr].doesnt_buy);
     do_say(keeper, buf, cmd_say, SCMD_SAYTO);
@@ -1261,7 +1269,10 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
     gain_nuyen(ch, sellprice, NUYEN_INCOME_SHOP_SALES);
   else
     gain_nuyen_on_credstick(ch, cred, sellprice, NUYEN_INCOME_SHOP_SALES);
-  snprintf(buf3, sizeof(buf3), "%s sold %s^g at %s^g (%ld) for %d.", GET_CHAR_NAME(ch), GET_OBJ_NAME(obj), GET_CHAR_NAME(keeper), shop_table[shop_nr].vnum, sellprice);
+
+  const char *representation = generate_new_loggable_representation(obj);
+  snprintf(buf3, sizeof(buf3), "%s sold %s^g at %s^g (%ld) for %d.", GET_CHAR_NAME(ch), representation, GET_CHAR_NAME(keeper), shop_table[shop_nr].vnum, sellprice);
+  delete [] representation;
   mudlog(buf3, ch, LOG_GRIDLOG, TRUE);
 
   // Write the nuyen cost to buf3 and the current buy-string to arg.
@@ -1330,7 +1341,7 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
     for (struct shop_sell_data *sell = shop_table[shop_nr].selling; sell; sell = sell->next, i++) {
       // Read the object; however, if it's an invalid vnum or has no sale cost, skip it.
       obj = read_object(sell->vnum, VIRTUAL);
-      if (!can_sell_object(obj, keeper, shop_nr)) {
+      if (!shop_can_sell_object(obj, keeper, shop_nr)) {
         i--;
         continue;
       }
@@ -1390,7 +1401,7 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
 
     for (struct shop_sell_data *sell = shop_table[shop_nr].selling; sell; sell = sell->next, i++) {
       obj = read_object(sell->vnum, VIRTUAL);
-      if (!can_sell_object(obj, keeper, shop_nr)) {
+      if (!shop_can_sell_object(obj, keeper, shop_nr)) {
         i--;
         continue;
       }
@@ -1454,7 +1465,7 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
                 "----------------------------------------------------------------------------------------------------\r\n");
     for (struct shop_sell_data *sell = shop_table[shop_nr].selling; sell; sell = sell->next, i++) {
       obj = read_object(sell->vnum, VIRTUAL);
-      if (!can_sell_object(obj, keeper, shop_nr)) {
+      if (!shop_can_sell_object(obj, keeper, shop_nr)) {
         i--;
         continue;
       }
@@ -1564,9 +1575,14 @@ void shop_value(char *arg, struct char_data *ch, struct char_data *keeper, vnum_
   } else {
     // Since we're not pre-filling buf with something else to say, just stick the name in for the sayto target.
     strcpy(buf, GET_CHAR_NAME(ch));
+
+    if (obj->contains) {
+      send_to_char(ch, "%s has things inside it! You can't sell it until you empty it out.\r\n", capitalize(GET_OBJ_NAME(obj)));
+      return;
+    }
   }
 
-  if (!shop_table[shop_nr].buytypes.IsSet(GET_OBJ_TYPE(obj)) || IS_OBJ_STAT(obj, ITEM_EXTRA_NOSELL))
+  if (!shop_will_buy_item_from_ch(shop_nr, obj, ch))
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " I wouldn't buy %s off of you.", GET_OBJ_NAME(obj));
   else
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " I would be able to give you around %d nuyen for %s.", sell_price(obj, shop_nr), GET_OBJ_NAME(obj));
@@ -2876,7 +2892,7 @@ void shedit_parse(struct descriptor_data *d, const char *arg)
   }
 }
 
-bool can_sell_object(struct obj_data *obj, struct char_data *keeper, int shop_nr) {
+bool shop_can_sell_object(struct obj_data *obj, struct char_data *keeper, int shop_nr) {
   if (!obj) {
     snprintf(buf2, sizeof(buf2), "Shop %ld ('%s'): Hiding nonexistant item from sale.", shop_table[shop_nr].vnum, GET_NAME(keeper));
     mudlog(buf2, keeper, LOG_SYSLOG, TRUE);
@@ -3208,4 +3224,44 @@ void save_shop_orders() {
       fclose(fl);
     }
   }
+}
+
+bool shop_will_buy_item_from_ch(rnum_t shop_nr, struct obj_data *obj, struct char_data *ch) {
+  // This item cannot be sold.
+  if (IS_OBJ_STAT(obj, ITEM_EXTRA_NOSELL)) {
+    return FALSE;
+  }
+
+  // Wizloaded items are also not sellable.
+  if (IS_OBJ_STAT(obj, ITEM_EXTRA_WIZLOAD)) {
+    return FALSE;
+  }
+
+  // Item has contents.
+  if (obj->contains && GET_OBJ_TYPE(obj) != ITEM_SHOPCONTAINER) {
+    return FALSE;
+  }
+
+  // This item has no value.
+  if (GET_OBJ_COST(obj) < 1) {
+    return FALSE;
+  }
+
+  // If this shop doesn't buy this item type at all, bail out.
+  if (!shop_table[shop_nr].buytypes.IsSet(GET_OBJ_TYPE(obj))) {
+    return FALSE;
+  }
+
+  // Item is not from a connected zone.
+  if (vnum_from_non_connected_zone(GET_OBJ_VNUM(obj))) {
+    char oopsbuf[1000];
+    snprintf(oopsbuf, sizeof(oopsbuf), "BUILD ERROR: Somehow %s got %s^n (%ld) which is from a non-connected zone.",
+             GET_CHAR_NAME(ch),
+             GET_OBJ_NAME(obj),
+             GET_OBJ_VNUM(obj));
+    mudlog(oopsbuf, ch, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+
+  return TRUE;
 }
