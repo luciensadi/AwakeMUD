@@ -5230,7 +5230,7 @@ void print_object_location(int num, struct obj_data *obj, struct char_data *ch,
   } else if (obj->in_obj) {
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "inside %s%s",
             GET_OBJ_NAME(obj->in_obj),
-            (recur ? ", which is" : " "));
+            (recur ? ", which is\r\n" : " "));
     if (recur)
       print_object_location(0, obj->in_obj, ch, recur);
   } else if (obj->in_veh) {
