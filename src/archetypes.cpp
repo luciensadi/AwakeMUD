@@ -50,6 +50,7 @@ struct archetype_data *generate_street_samurai() {
   arch->skills[SKILL_PILOT_BIKE] = 3;
   arch->skills[SKILL_BR_BIKE] = 3;
   arch->skills[SKILL_STREET_ETIQUETTE] = 1;
+  arch->skills[SKILL_PILOT_TRUCK] = 1;  
   
   // Inventory.
   arch->weapon = OBJ_COLT_M23; // colt m-23, TODO: should be set to burst fire
@@ -152,6 +153,7 @@ struct archetype_data *generate_adept() {
   arch->skills[SKILL_PILOT_BIKE] = 1;
   arch->skills[SKILL_BR_BIKE] = 1;
   arch->skills[SKILL_STREET_ETIQUETTE] = 1;
+  arch->skills[SKILL_PILOT_BIKE] = 1;
   
   // Inventory.
   arch->weapon = OBJ_COLT_M23; // colt m-23, should be set to burst fire
@@ -243,6 +245,7 @@ struct archetype_data *generate_shaman() {
   arch->skills[SKILL_STREET_ETIQUETTE] = 2;
   arch->skills[SKILL_AURA_READING] = 2;
   arch->skills[SKILL_STEALTH] = 3;
+  arch->skills[SKILL_PILOT_TRUCK] = 1;
   
   // Inventory.  
   // arch->nuyen = 22660;
@@ -311,7 +314,8 @@ struct archetype_data *generate_street_mage() {
   arch->skills[SKILL_NEGOTIATION] = 2;
   arch->skills[SKILL_STEALTH] = 3;
   arch->skills[SKILL_SPELLDESIGN] = 4;
-  
+  arch->skills[SKILL_PILOT_CAR] = 1;
+
   ARCH_SPELL(SPELL_HEAL, 0, 5);
   ARCH_SPELL(SPELL_COMBATSENSE, 0, 3);
   ARCH_SPELL(SPELL_FLAMETHROWER, 0, 6);
@@ -395,7 +399,8 @@ struct archetype_data *generate_decker() {
   arch->skills[SKILL_PROGRAM_SPECIAL] = 2;
   arch->skills[SKILL_PROGRAM_CYBERTERM] = 2;
   arch->skills[SKILL_DATA_BROKERAGE] = 4;
-  
+  arch->skills[SKILL_PILOT_TRUCK] = 1;
+
   // Inventory.
   arch->weapon = OBJ_SCK_MODEL_100;
   arch->weapon_barrel = OBJ_VENT_IV;
@@ -550,8 +555,6 @@ void generate_archetypes() {
     // Give them all Brawling so they don't get facerolled by training dummies.
     archetypes[i]->skills[SKILL_UNARMED_COMBAT] = MAX(2, archetypes[i]->skills[SKILL_UNARMED_COMBAT]);
     
-    // Give them all a driving skill.
-    archetypes[i]->skills[SKILL_PILOT_TRUCK] = MAX(1, archetypes[i]->skills[SKILL_PILOT_TRUCK]);
     log_vfprintf("... %s.", archetypes[i]->name);
   }
 }
