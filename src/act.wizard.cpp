@@ -200,7 +200,7 @@ ACMD(do_copyover)
 
     if (!(och = d->character))
       continue;
-      
+
     if (och == ch)
       continue;
 
@@ -1236,7 +1236,7 @@ void do_stat_object(struct char_data * ch, struct obj_data * j)
       strlcat(buf, " ", sizeof(buf));
       strlcat(buf, desc->keyword, sizeof(buf));
     }
-    strlcat(buf, "\r\n", sizeof(buf));
+    strlcat(buf, "^n\r\n", sizeof(buf));
   }
 
   j->obj_flags.wear_flags.PrintBits(buf2, MAX_STRING_LENGTH,
