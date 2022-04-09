@@ -7029,6 +7029,14 @@ int audit_zone_objects_(struct char_data *ch, int zone_num, bool verbose) {
       }
     }
 
+    if (GET_OBJ_TYPE(obj) == ITEM_FIREWEAPON) {
+      if (GET_FIREWEAPON_TYPE(obj) == FIREWEAPON_CROSSBOW && GET_FIREWEAPON_POWER(obj) == 0) {
+        strlcat(buf, "  - crossbow has no power set.\r\n", sizeof(buf));
+        printed = TRUE;
+        issues++;
+      }
+    }
+
     if (printed) {
       send_to_char(ch, "%s\r\n", buf);
     }

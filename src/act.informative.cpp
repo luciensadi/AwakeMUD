@@ -64,6 +64,7 @@ extern int belongs_to(struct char_data *ch, struct obj_data *obj);
 extern int calculate_vehicle_entry_load(struct veh_data *veh);
 
 extern int get_weapon_damage_type(struct obj_data* weapon);
+extern int calculate_fireweapon_power(struct obj_data *weapon);
 
 extern SPECIAL(trainer);
 extern SPECIAL(teacher);
@@ -2084,27 +2085,30 @@ void look_in_obj(struct char_data * ch, char *arg, bool exa)
         list_obj_to_char(obj->contains, ch, SHOW_MODE_INSIDE_CONTAINER, TRUE, FALSE);
       }
     } else if (GET_OBJ_TYPE(obj) == ITEM_CONTAINER || GET_OBJ_TYPE(obj) == ITEM_HOLSTER ||
-               GET_OBJ_TYPE(obj) == ITEM_QUIVER || GET_OBJ_TYPE(obj) == ITEM_KEYRING) {
-      if (IS_SET(GET_OBJ_VAL(obj, 1), CONT_CLOSED)) {
+               GET_OBJ_TYPE(obj) == ITEM_QUIVER || GET_OBJ_TYPE(obj) == ITEM_KEYRING)
+    {
+      if (GET_OBJ_TYPE(obj) == ITEM_CONTAINER && IS_SET(GET_CONTAINER_FLAGS(obj), CONT_CLOSED)) {
         send_to_char("It is closed.\r\n", ch);
         return;
-      } else {
-        if (!exa) {
-          send_to_char(GET_OBJ_NAME(obj), ch);
-          switch (bits) {
-            case FIND_OBJ_INV:
-              send_to_char(" (carried): \r\n", ch);
-              break;
-            case FIND_OBJ_ROOM:
-              send_to_char(" (here): \r\n", ch);
-              break;
-            case FIND_OBJ_EQUIP:
-              send_to_char(" (used): \r\n", ch);
-              break;
-          }
+      }
+
+      if (!exa) {
+        send_to_char(GET_OBJ_NAME(obj), ch);
+        switch (bits) {
+          case FIND_OBJ_INV:
+            send_to_char(" (carried): \r\n", ch);
+            break;
+          case FIND_OBJ_ROOM:
+            send_to_char(" (here): \r\n", ch);
+            break;
+          case FIND_OBJ_EQUIP:
+            send_to_char(" (used): \r\n", ch);
+            break;
         }
         list_obj_to_char(obj->contains, ch, SHOW_MODE_INSIDE_CONTAINER, TRUE, FALSE);
       }
+
+      list_obj_to_char(obj->contains, ch, 2, TRUE, FALSE);
     } else {            /* item must be a fountain or drink container */
       if (GET_OBJ_VAL(obj, 1) <= 0)
         send_to_char("It is empty.\r\n", ch);
@@ -2402,19 +2406,14 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       strlcat(buf, "It is an ^cinfinite^n light source.", sizeof(buf));
       break;
     case ITEM_FIREWEAPON:
-      strlcat(buf, "As a fireweapon, it is not currently implemented.\r\n", sizeof(buf));
-      /*
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%s^n that requires ^c%d^n strength to use in combat.\r\n",
-              GET_OBJ_VAL(j, 5) == 0 ? "Bow" : "Crossbow", GET_OBJ_VAL(j, 6));
-      if (GET_OBJ_VAL(j, 2)) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It has a damage code of ^c(STR+%d)%s%s^n", GET_OBJ_VAL(j, 2), wound_arr[GET_OBJ_VAL(j, 1)],
-                !IS_DAMTYPE_PHYSICAL(get_weapon_damage_type(j)) ? " (stun)" : "");
-      } else {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It has a damage code of ^c(STR)%s%s^n", wound_arr[GET_OBJ_VAL(j, 1)],
-                !IS_DAMTYPE_PHYSICAL(get_weapon_damage_type(j)) ? " (stun)" : "");
-      }
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " and requires the ^c%s^n skill to use.", skills[GET_OBJ_VAL(j, 4)].name);
-      */
+               fireweapon_types[GET_FIREWEAPON_TYPE(j)],
+               GET_FIREWEAPON_STR_MINIMUM(j));
+
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It has a damage code of ^c%d%s^n and requires the ^c%s^n skill to use.",
+               calculate_fireweapon_power(j),
+               wound_arr[GET_FIREWEAPON_DAMAGE_CODE(j)],
+               skills[GET_FIREWEAPON_SKILL(j)].name);
       break;
     case ITEM_WEAPON:
       // Ranged weapons first.
@@ -2792,11 +2791,13 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It provides ^c%d^n units of nutrition when eaten.", GET_OBJ_VAL(j, 0));
       break;
     case ITEM_QUIVER:
-      if (GET_OBJ_VAL(j, 1) >= 0 && GET_OBJ_VAL(j, 1) <= 3) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It can hold up to ^c%d^n ^c%s%s^n.", GET_OBJ_VAL(j, 0), projectile_ammo_types[GET_OBJ_VAL(j, 1)],
-                GET_OBJ_VAL(j, 0) > 1 ? "s" : "");
+      if (GET_QUIVER_AMMO_TYPE(j) >= PROJECTILE_ARROW && GET_QUIVER_AMMO_TYPE(j) <= PROJECTILE_THROWING_KNIFE) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It can hold a maximum of ^c%d %s%s^n.",
+                 GET_QUIVER_MAXIMUM_PROJECTILES(j),
+                 projectile_ammo_types[GET_QUIVER_AMMO_TYPE(j)],
+                 GET_QUIVER_MAXIMUM_PROJECTILES(j) != 1 ? "s" : "");
       } else {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It can hold up to ^c%d^n ^cundefined projectiles^n.", GET_OBJ_VAL(j, 0));
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It can hold up to ^c%d undefined projectiles^n.", GET_QUIVER_MAXIMUM_PROJECTILES(j));
       }
       break;
     case ITEM_PATCH:
@@ -6515,7 +6516,7 @@ const char *get_command_hints_for_obj(struct obj_data *obj) {
       break;
     case ITEM_FIREWEAPON:
     case ITEM_MISSILE:
-      strlcat(hint_string, "\r\n^YBows / crossbows are not currently implemented.^n\r\n", sizeof(hint_string));
+      // strlcat(hint_string, "\r\n^YBows / crossbows are not currently implemented.^n\r\n", sizeof(hint_string));
       break;
     case ITEM_CUSTOM_DECK:
       strlcat(hint_string, "\r\nIt's a custom cyberdeck, used with the matrix commands. See ^WHELP DECKING^n to begin.\r\n", sizeof(hint_string));

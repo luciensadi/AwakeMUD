@@ -226,7 +226,7 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
           act(buf, TRUE, ch, 0, 0, TO_ROOM);
           act("You aim $p at the door!", FALSE, ch, wielded, 0, TO_CHAR);
         }
-        damage_door(ch, ch->in_room, dir, (int)(GET_WEAPON_POWER(wielded) / 2), DAMOBJ_PIERCE);
+        damage_door(ch, ch->in_room, dir, (int)(GET_FIREWEAPON_POWER(wielded) / 2), DAMOBJ_PIERCE);
         return TRUE;
       } else if (GET_WEAPON_ATTACK_TYPE(wielded) >= WEAP_HOLDOUT) {
         if (!has_ammo(ch, wielded))
@@ -389,27 +389,25 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
         set_fighting(vict, ch);
       WAIT_STATE(ch, PULSE_VIOLENCE + 2);
       act("$n attacks $N.", TRUE, ch, 0, vict, TO_NOTVICT);
-      if (GET_EQ(ch, WEAR_WIELD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_WEAPON) {
-        if (!GET_EQ(ch, WEAR_WIELD)->contains && does_weapon_have_bayonet(GET_EQ(ch, WEAR_WIELD))) {
-          act("With your weapon empty, you aim the bayonet on $p at $N!", FALSE, ch, GET_EQ(ch, WEAR_WIELD), vict, TO_CHAR);
-          act("$n aims the bayonet on $p straight at you!", FALSE, ch, GET_EQ(ch, WEAR_WIELD), vict, TO_VICT);
-        }
-        else {
-          act("You aim $p at $N!", FALSE, ch, GET_EQ(ch, WEAR_WIELD), vict, TO_CHAR);
-          act("$n aims $p straight at you!", FALSE, ch, GET_EQ(ch, WEAR_WIELD), vict, TO_VICT);
-        }
-      } else if (GET_EQ(ch, WEAR_HOLD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_HOLD)) == ITEM_WEAPON) {
-        if (!GET_EQ(ch, WEAR_HOLD)->contains && does_weapon_have_bayonet(GET_EQ(ch, WEAR_HOLD))) {
-          act("With your weapon empty, you aim the bayonet on $p at $N!", FALSE, ch, GET_EQ(ch, WEAR_HOLD), vict, TO_CHAR);
-          act("$n aims the bayonet on $p straight at you!", FALSE, ch, GET_EQ(ch, WEAR_HOLD), vict, TO_VICT);
-        }
-        else {
-          act("You aim $p at $N!", FALSE, ch, GET_EQ(ch, WEAR_HOLD), vict, TO_CHAR);
-          act("$n aims $p straight at you!", FALSE, ch, GET_EQ(ch, WEAR_HOLD), vict, TO_VICT);
-        }
-      } else {
+
+      struct obj_data *weapon;
+      if (!(weapon = GET_EQ(ch, WEAR_WIELD)) && !(weapon = GET_EQ(ch, WEAR_HOLD))) {
         act("You take a swing at $N!", FALSE, ch, 0, vict, TO_CHAR);
         act("$n prepares to take a swing at you!", FALSE, ch, 0, vict, TO_VICT);
+      } else {
+        if (GET_OBJ_TYPE(weapon) == ITEM_WEAPON) {
+          if (weapon->contains && does_weapon_have_bayonet(weapon)) {
+            act("With your weapon empty, you aim the bayonet on $p at $N!", FALSE, ch, weapon, vict, TO_CHAR);
+            act("$n aims the bayonet on $p straight at you!", FALSE, ch, weapon, vict, TO_VICT);
+          }
+          else {
+            act("You aim $p at $N!", FALSE, ch, weapon, vict, TO_CHAR);
+            act("$n aims $p straight at you!", FALSE, ch, weapon, vict, TO_VICT);
+          }
+        } else if (GET_OBJ_TYPE(weapon) == ITEM_FIREWEAPON) {
+          act("You aim $p at $N!", FALSE, ch, weapon, vict, TO_CHAR);
+          act("$n aims $p straight at you!", FALSE, ch, weapon, vict, TO_VICT);
+        }
       }
     } else if ((FIGHTING(ch) && vict != FIGHTING(ch)) || FIGHTING_VEH(ch)) {
       char name[200];
@@ -478,43 +476,47 @@ ACMD(do_kill)
 
 ACMD(do_shoot)
 {
-  struct obj_data *weapon = NULL;
+  struct obj_data *weapon;
   char direction[MAX_INPUT_LENGTH];
   char target[MAX_INPUT_LENGTH];
-  int dir, i, pos = 0, range = -1;
+  int range = -1;
 
-  if (!(GET_EQ(ch, WEAR_WIELD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_WEAPON) &&
-      !(GET_EQ(ch, WEAR_HOLD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_HOLD)) == ITEM_WEAPON)) {
+  if (!(GET_EQ(ch, WEAR_WIELD) && (GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_WEAPON || GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_FIREWEAPON))
+      && !(GET_EQ(ch, WEAR_HOLD) && (GET_OBJ_TYPE(GET_EQ(ch, WEAR_HOLD)) == ITEM_WEAPON || GET_OBJ_TYPE(GET_EQ(ch, WEAR_HOLD)) == ITEM_FIREWEAPON)))
+  {
     send_to_char("Wielding a weapon generally helps.\r\n", ch);
     return;
   }
 
   two_arguments(argument, target, direction);
 
-  for (i = WEAR_WIELD; i <= WEAR_HOLD; i++)
+  for (int i = WEAR_WIELD; i <= WEAR_HOLD; i++) {
     if ((weapon = GET_EQ(ch, i)) &&
         (GET_OBJ_TYPE(weapon) == ITEM_FIREWEAPON ||
          (GET_OBJ_TYPE(weapon) == ITEM_WEAPON && (IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon))
                                                   || GET_WEAPON_ATTACK_TYPE(weapon) == WEAP_GREN_LAUNCHER
                                                   || GET_WEAPON_ATTACK_TYPE(weapon) == WEAP_MISS_LAUNCHER))))
-      if (find_weapon_range(ch, weapon) > range)
-        pos = i;
+    {
+      int weapon_range = find_weapon_range(ch, weapon);
+      if (weapon_range > range) {
+        range = weapon_range;
+        weapon = GET_EQ(ch, i);
+      }
+    }
+  }
 
-  if (!pos) {
+  if (!weapon) {
     send_to_char("Normally guns or bows are used to do that.\r\n", ch);
     return;
   }
 
-  if (((weapon = GET_EQ(ch, WEAR_WIELD)) || (weapon = GET_EQ(ch, WEAR_HOLD))) && GET_OBJ_TYPE(weapon) == ITEM_WEAPON && !weapon->contains) {
-    send_to_char("You should probably load it first.\r\n", ch);
+  if (GET_OBJ_TYPE(weapon) == ITEM_WEAPON && GET_WEAPON_MAX_AMMO(weapon) > 0 && !weapon->contains) {
+    send_to_char(ch, "You should probably load %s first.\r\n", decapitalize_a_an(GET_OBJ_NAME(weapon)));
     return;
   }
 
   if (perform_hit(ch, argument, "shoot"))
     return;
-
-  weapon = GET_EQ(ch, pos);
-  range = find_weapon_range(ch, weapon);
 
   if (!*target) {
     send_to_char("Syntax: shoot <target>\r\n"
@@ -522,7 +524,8 @@ ACMD(do_shoot)
     return;
   }
 
-  if ((dir = search_block(direction, lookdirs, FALSE)) == -1) {
+  int dir = search_block(direction, lookdirs, FALSE);
+  if (dir == -1) {
     send_to_char("What direction?\r\n", ch);
     return;
   }

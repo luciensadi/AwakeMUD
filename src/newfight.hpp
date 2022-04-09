@@ -8,6 +8,7 @@ extern bool is_char_too_tall(struct char_data *ch);
 
 bool does_weapon_have_bayonet(struct obj_data *weapon);
 bool perform_nerve_strike(struct combat_data *att, struct combat_data *def, char *rbuf, size_t rbuf_len);
+int calculate_fireweapon_power(struct obj_data *weapon);
 
 SPECIAL(weapon_dominator);
 WSPEC(monowhip);
@@ -90,15 +91,16 @@ struct cyberware_data {
 struct ranged_combat_data {
   int skill;
   int power;
-  int unaugmented_power;
   int dam_type;
   int damage_level;
-  int unaugmented_damage_level;
   bool is_physical;
   int tn;
   int dice;
   int successes;
   bool is_gel;
+  bool is_fireweapon; // is_bow && is_crossbow
+  bool is_bow;
+  bool is_crossbow;
 
   int burst_count;
   int recoil_comp;
@@ -111,8 +113,9 @@ struct ranged_combat_data {
   struct obj_data *gyro;
 
   ranged_combat_data(struct char_data *ch, struct obj_data *weapon, bool ranged_combat_mode) :
-    skill(0), power(0), unaugmented_power(0), dam_type(0), damage_level(0), unaugmented_damage_level(0),
-    is_physical(FALSE), tn(4), dice(0), successes(0), is_gel(FALSE), burst_count(0), recoil_comp(0),
+    skill(0), power(0), dam_type(0), damage_level(0), is_physical(FALSE),
+    tn(4), dice(0), successes(0), is_gel(FALSE), is_fireweapon(FALSE),
+    is_bow(FALSE), is_crossbow(FALSE), burst_count(0), recoil_comp(0),
     using_mounted_gun(FALSE), magazine(NULL), gyro(NULL)
   {
     for (int i = 0; i < NUM_COMBAT_MODIFIERS; i++)
@@ -125,43 +128,77 @@ struct ranged_combat_data {
       modifiers[COMBAT_MOD_DISTANCE] += 2;
 
     if (weapon && ranged_combat_mode) {
-      // Extract our various fields from the weapon.
-      skill = GET_WEAPON_SKILL(weapon);
-      power = GET_WEAPON_POWER(weapon);
-      dam_type = get_weapon_damage_type(weapon);
-      damage_level = GET_WEAPON_DAMAGE_CODE(weapon);
-      is_physical = IS_DAMTYPE_PHYSICAL(dam_type);
+      // Standard firearms.
+      if (GET_OBJ_TYPE(weapon) == ITEM_WEAPON) {
+        // Extract our various fields from the weapon.
+        skill = GET_WEAPON_SKILL(weapon);
+        power = GET_WEAPON_POWER(weapon);
+        dam_type = get_weapon_damage_type(weapon);
+        damage_level = GET_WEAPON_DAMAGE_CODE(weapon);
+        is_physical = IS_DAMTYPE_PHYSICAL(dam_type);
 
-      // Gunners use the gunnery skill.
-      if ((using_mounted_gun = (AFF_FLAGGED(ch, AFF_MANNING) || AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE)))) {
-        skill = SKILL_GUNNERY;
-      } else {
-        // Since they're not using a mounted weapon, check for a gyro.
-        for (int q = 0; q < NUM_WEARS; q++) {
-          if (GET_EQ(ch, q) && GET_OBJ_TYPE(GET_EQ(ch, q)) == ITEM_GYRO) {
-            gyro = GET_EQ(ch, q);
-            break;
+        // Gunners use the gunnery skill.
+        if ((using_mounted_gun = (AFF_FLAGGED(ch, AFF_MANNING) || AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE)))) {
+          skill = SKILL_GUNNERY;
+        } else {
+          // Since they're not using a mounted weapon, check for a gyro.
+          for (int q = 0; q < NUM_WEARS; q++) {
+            if (GET_EQ(ch, q) && GET_OBJ_TYPE(GET_EQ(ch, q)) == ITEM_GYRO) {
+              gyro = GET_EQ(ch, q);
+              break;
+            }
           }
         }
+
+        // Get a pointer to the magazine.
+        magazine = weapon->contains;
+
+        // Determine the initial burst value of the weapon.
+        if (WEAPON_IS_BF(weapon))
+          burst_count = 3;
+        else if (WEAPON_IS_FA(weapon))
+          burst_count = GET_OBJ_TIMER(weapon);
+
+        // Calculate recoil comp.
+        recoil_comp = check_recoil(ch, weapon);
+
+        // Setup: If you're dual-wielding, take that penalty, otherwise you get your smartlink bonus.
+        if (GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD))
+          modifiers[COMBAT_MOD_DUAL_WIELDING] = 2;
+        else
+          modifiers[COMBAT_MOD_SMARTLINK] -= check_smartlink(ch, weapon);
       }
+      else if (GET_OBJ_TYPE(weapon) == ITEM_FIREWEAPON) {
+        is_fireweapon = TRUE;
 
-      // Get a pointer to the magazine.
-      magazine = weapon->contains;
+        // Extract our various fields from the weapon.
+        skill = GET_FIREWEAPON_SKILL(weapon);
+        dam_type = get_weapon_damage_type(weapon);
+        damage_level = GET_FIREWEAPON_DAMAGE_CODE(weapon);
+        power = calculate_fireweapon_power(weapon);
 
-      // Determine the initial burst value of the weapon.
-      if (WEAPON_IS_BF(weapon))
-        burst_count = 3;
-      else if (WEAPON_IS_FA(weapon))
-        burst_count = GET_OBJ_TIMER(weapon);
+        // All bows / crossbows deal physical damage unless using Hammerhead arrows.
+        is_physical = TRUE;
 
-      // Calculate recoil comp.
-      recoil_comp = check_recoil(ch, weapon);
-
-      // Setup: If you're dual-wielding, take that penalty, otherwise you get your smartlink bonus.
-      if (GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD))
-        modifiers[COMBAT_MOD_DUAL_WIELDING] = 2;
-      else
-        modifiers[COMBAT_MOD_SMARTLINK] -= check_smartlink(ch, weapon);
+        switch (GET_FIREWEAPON_TYPE(weapon)) {
+          case FIREWEAPON_RANGER_X_BOW:
+          case FIREWEAPON_BOW:
+            is_bow = TRUE;
+            // Bows have strength minimums. Make sure we meet them.
+            if (GET_STR(ch) < GET_FIREWEAPON_STR_MINIMUM(weapon)) {
+              modifiers[COMBAT_MOD_FIREWEAPON_LOW_STRENGTH] = GET_FIREWEAPON_STR_MINIMUM(weapon) - GET_STR(ch);
+            }
+            break;
+          case FIREWEAPON_CROSSBOW:
+            is_crossbow = TRUE;
+            // Crossbows also have strength minimums, but they only come into play when reloading.
+            break;
+          default:
+            mudlog("SYSERR: Received unknown fireweapon type in ranged_combat_data()!", ch, LOG_SYSLOG, TRUE);
+            is_crossbow = TRUE;
+            break;
+        }
+      }
     }
   }
 };

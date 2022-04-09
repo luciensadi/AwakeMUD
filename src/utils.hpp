@@ -902,8 +902,17 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 #define WEAPON_IS_FA(eq)    (GET_OBJ_TYPE(eq) == ITEM_WEAPON && GET_OBJ_VAL(eq, 11) == MODE_FA)
 
 // ITEM_FIREWEAPON convenience defines
+#define GET_FIREWEAPON_POWER(weapon)            (GET_OBJ_VAL((weapon), 0))
+#define GET_FIREWEAPON_DAMAGE_CODE(weapon)      (GET_OBJ_VAL((weapon), 1))
+#define GET_FIREWEAPON_STR_BONUS(weapon)        (GET_OBJ_VAL((weapon), 2))
+#define GET_FIREWEAPON_ATTACK_TYPE(weapon)      (GET_OBJ_VAL((weapon), 3))  // This is always TYPE_ARROW.
+#define GET_FIREWEAPON_SKILL(weapon)            (GET_OBJ_VAL((weapon), 4))
+#define GET_FIREWEAPON_TYPE(weapon)             (GET_OBJ_VAL((weapon), 5))
+#define GET_FIREWEAPON_STR_MINIMUM(weapon)      (GET_OBJ_VAL((weapon), 6))
+#define GET_FIREWEAPON_ATTACHMENT_VNUM(weapon)  (GET_OBJ_VAL((weapon), 7))
 
 // ITEM_MISSILE convenience defines
+#define GET_MISSILE_IS_CROSSBOW_BOLT(missile)   (GET_OBJ_VAL((missile), 5))
 
 // ITEM_CUSTOM_DECK convenience defines
 
@@ -937,6 +946,7 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 #define GET_DOCWAGON_BONDED_IDNUM(modulator)      (GET_OBJ_VAL((modulator), 1))
 
 // ITEM_CONTAINER convenience defines
+#define GET_CONTAINER_FLAGS(container)            (GET_OBJ_VAL((container), 1))
 
 // ITEM_RADIO convenience defines
 
@@ -1046,6 +1056,9 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 // ITEM_CLIMBING convenience defines
 
 // ITEM_QUIVER convenience defines
+#define GET_QUIVER_MAXIMUM_PROJECTILES(quiver)     (GET_OBJ_VAL((quiver), 0))
+#define GET_QUIVER_AMMO_TYPE(quiver)               (GET_OBJ_VAL((quiver), 1))
+#define GET_QUIVER_CURRENT_PROJECTILES(quiver)     (GET_OBJ_VAL((quiver), 2))
 
 // ITEM_DECK_ACCESSORY convenience defines
 #define GET_DECK_ACCESSORY_TYPE(accessory)                  (GET_OBJ_VAL((accessory), 0))

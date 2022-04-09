@@ -2607,6 +2607,7 @@ const char *combat_modifiers[] =
   "Opponent Burst",
   "Foot Anchors",
   "Vehicle Handling",
+  "Low Strength",
   "ERROR"
 };
 
@@ -2650,6 +2651,12 @@ const char *projectile_ammo_types[] = {
   "Bolt",
   "Shuriken",
   "Throwing Knife"
+};
+
+const char *fireweapon_types[] = {
+  "Bow",
+  "Crossbow",
+  "Ranger X-Bow"
 };
 
 const char *magic_tool_types[] = {

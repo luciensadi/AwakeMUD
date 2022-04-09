@@ -39,9 +39,7 @@ extern bool damage(struct char_data *ch, struct char_data *victim, int dam, int 
 extern bool damage_without_message(struct char_data *ch, struct char_data *victim, int dam, int attacktype, bool is_physical);
 
 void engage_close_combat_if_appropriate(struct combat_data *att, struct combat_data *def, int net_reach);
-
 bool handle_flame_aura(struct combat_data *att, struct combat_data *def);
-
 bool does_weapon_have_bayonet(struct obj_data *weapon);
 bool perform_nerve_strike(struct combat_data *att, struct combat_data *def, char *rbuf, size_t rbuf_len);
 
@@ -114,7 +112,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
   }
 
   // Precondition: If you're wielding a non-weapon, back out.
-  if (att->weapon && (GET_OBJ_TYPE(att->weapon) != ITEM_WEAPON)) {
+  if (att->weapon && (GET_OBJ_TYPE(att->weapon) != ITEM_WEAPON && GET_OBJ_TYPE(att->weapon) != ITEM_FIREWEAPON)) {
     send_to_char(att->ch, "You struggle to figure out how to attack while using %s as a weapon!\r\n", decapitalize_a_an(GET_OBJ_NAME(att->weapon)));
     return FALSE;
   }
@@ -131,7 +129,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
   }
 
   // Precondition: If you're out of ammo, you don't get to fight. Note the use of the deducting has_ammo here.
-  if (att->weapon && !has_ammo(att->ch, att->weapon))
+  if (att->weapon && !has_ammo(att->ch, att->weapon)) // asdf TODO: Update has_ammo to work with fireweapons again.
     return FALSE;
 
   // Precondition: If your foe is astral (ex: a non-manifested projection, a dematerialized spirit), you don't belong here.
@@ -198,6 +196,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
   if (att->weapon && att->ranged_combat_mode) {
     // Precondition: If you're using a heavy weapon, you must be strong enough to wield it, or else be using a gyro. CC p99
     if (!IS_NPC(att->ch)
+        && !att->ranged->is_fireweapon
         && !att->ranged->using_mounted_gun
         && !att->ranged->gyro
         && (!att->cyber->cyberarm_gyromount || !GUN_IS_CYBER_GYRO_MOUNTABLE(att->weapon))
@@ -207,6 +206,11 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     {
       send_to_char(att->ch, "You can't lift the barrel high enough to fire! You'll have to go ^WPRONE^n to use %s.\r\n", decapitalize_a_an(GET_OBJ_NAME(att->weapon)));
       return FALSE;
+    }
+
+    if (att->ranged->is_bow && att->ranged->modifiers[COMBAT_MOD_FIREWEAPON_LOW_STRENGTH] > 0) {
+      send_to_char("You struggle to draw such a heavy bow.\r\n", att->ch);
+      // deliberately not returning here, this is a warning, not a failure case
     }
 
     // Setup: Limit the burst of the weapon to the available ammo, and decrement ammo appropriately.
@@ -281,6 +285,12 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
         att->ranged->modifiers[COMBAT_MOD_POSITION]++;
     }
 
+    // Houserule: Firing a bow from prone is HARD. Firing a crossbow is doable though.
+    if (AFF_FLAGGED(att->ch, AFF_PRONE) && att->ranged->is_bow) {
+      send_to_char(att->ch, "You struggle to draw %s properly while prone!\r\n", decapitalize_a_an(GET_OBJ_NAME(att->weapon)));
+      att->ranged->modifiers[COMBAT_MOD_POSITION] += 2;
+    }
+
     // Setup: Determine distance penalties.
     if (!att->veh && att->ch->in_room != def->ch->in_room) {
       struct char_data *vict;
@@ -341,26 +351,32 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       att->ranged->modifiers[COMBAT_MOD_IN_MELEE_COMBAT] += 2; // technically supposed to be +2 per attacker, but ehhhh.
 
     // Setup: If you have a gyro mount, it negates recoil and movement penalties up to its rating.
-    if (!att->ranged->using_mounted_gun) {
-      int maximum_recoil_comp_from_gyros = att->ranged->modifiers[COMBAT_MOD_MOVEMENT] + att->ranged->modifiers[COMBAT_MOD_RECOIL];
-      if (att->ranged->gyro) {
-        att->ranged->modifiers[COMBAT_MOD_GYRO] -= MIN(maximum_recoil_comp_from_gyros, GET_OBJ_VAL(att->ranged->gyro, 0));
-      } else if (att->cyber->cyberarm_gyromount) {
-        if (!GUN_IS_CYBER_GYRO_MOUNTABLE(att->weapon)) {
-          send_to_char(att->ch, "Your cyberarm gyro locks up-- %s is too heavy for it to compensate recoil for!\r\n", decapitalize_a_an(GET_OBJ_NAME(att->weapon)));
-          snprintf(rbuf, sizeof(rbuf), "%s's cyberarm gyro not activating-- weapon too heavy.", GET_CHAR_NAME( att->ch ));
-          SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
-        } else {
-          att->ranged->modifiers[COMBAT_MOD_GYRO] -= MIN(maximum_recoil_comp_from_gyros, 3);
+    if (!att->ranged->is_fireweapon) {
+      if (!att->ranged->using_mounted_gun) {
+        int maximum_recoil_comp_from_gyros = att->ranged->modifiers[COMBAT_MOD_MOVEMENT] + att->ranged->modifiers[COMBAT_MOD_RECOIL];
+        if (att->ranged->gyro) {
+          att->ranged->modifiers[COMBAT_MOD_GYRO] -= MIN(maximum_recoil_comp_from_gyros, GET_OBJ_VAL(att->ranged->gyro, 0));
+        } else if (att->cyber->cyberarm_gyromount) {
+          if (!GUN_IS_CYBER_GYRO_MOUNTABLE(att->weapon)) {
+            send_to_char(att->ch, "Your cyberarm gyro locks up-- %s is too heavy for it to compensate recoil for!\r\n", decapitalize_a_an(GET_OBJ_NAME(att->weapon)));
+            snprintf(rbuf, sizeof(rbuf), "%s's cyberarm gyro not activating-- weapon too heavy.", GET_CHAR_NAME( att->ch ));
+            SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
+          } else {
+            att->ranged->modifiers[COMBAT_MOD_GYRO] -= MIN(maximum_recoil_comp_from_gyros, 3);
+          }
         }
       }
+      // Calculate and display pre-success-test information.
+      snprintf(rbuf, sizeof(rbuf), "%s's burst/compensation info (excluding gyros) is ^c%d^n/^c%d^n. Additional modifiers: ",
+               GET_CHAR_NAME( att->ch ),
+               att->ranged->burst_count,
+               MOB_FLAGGED(att->ch, MOB_EMPLACED) ? 10 : att->ranged->recoil_comp);
+    } else {
+      // Using a fireweapon? No gyro, just display pre-success-test information.
+      snprintf(rbuf, sizeof(rbuf), "%s using a %s. Modifiers: ",
+               GET_CHAR_NAME( att->ch ),
+               att->ranged->is_bow ? "bow" : "crossbow");
     }
-
-    // Calculate and display pre-success-test information.
-    snprintf(rbuf, sizeof(rbuf), "%s's burst/compensation info (excluding gyros) is ^c%d^n/^c%d^n. Additional modifiers: ",
-             GET_CHAR_NAME( att->ch ),
-             att->ranged->burst_count,
-             MOB_FLAGGED(att->ch, MOB_EMPLACED) ? 10 : att->ranged->recoil_comp);
 
     att->ranged->tn += modify_target_rbuf_raw(att->ch, rbuf, sizeof(rbuf), att->ranged->modifiers[COMBAT_MOD_VISIBILITY], FALSE);
     for (int mod_index = 0; mod_index < NUM_COMBAT_MODIFIERS; mod_index++) {
@@ -508,9 +524,50 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       att->ranged->power -= GET_BALLISTIC(def->ch);
     }
 
-    // Increment character's shots_fired. This is used for internal tracking of eligibility for a skill quest.
-    if (GET_SKILL(att->ch, att->ranged->skill) >= 8 && SHOTS_FIRED(att->ch) < 10000)
-      SHOTS_FIRED(att->ch)++;
+    if (att->ranged->is_fireweapon) {
+      att->ranged->power -= GET_IMPACT(def->ch);
+    } else {
+      // Calculate effects of armor on the power of the attack.
+      if (att->ranged->magazine) {
+        switch (GET_MAGAZINE_AMMO_TYPE(att->ranged->magazine)) {
+          case AMMO_APDS:
+            att->ranged->power -= (int)(GET_BALLISTIC(def->ch) / 2);
+            break;
+          case AMMO_EX:
+            att->ranged->power++;
+            // fall through
+          case AMMO_EXPLOSIVE:
+            att->ranged->power++;
+            att->ranged->power -= GET_BALLISTIC(def->ch);
+            break;
+          case AMMO_FLECHETTE:
+            if (!GET_IMPACT(def->ch) && !GET_BALLISTIC(def->ch))
+              att->ranged->damage_level++;
+            else {
+              att->ranged->power -= MAX(GET_BALLISTIC(def->ch), GET_IMPACT(def->ch) * 2);
+            }
+            break;
+          case AMMO_HARMLESS:
+            att->ranged->power = 0;
+            // fall through
+          case AMMO_GEL:
+            // Errata: Add the following after the third line: "Impact armor, not Ballistic, applies."
+            att->ranged->power -= GET_IMPACT(def->ch) + 2;
+            att->ranged->is_gel = TRUE;
+            break;
+          default:
+            att->ranged->power -= GET_BALLISTIC(def->ch);
+        }
+      }
+      // Weapon fired without a magazine (probably by an NPC)-- we assume its ammo type is normal.
+      else {
+        att->ranged->power -= GET_BALLISTIC(def->ch);
+      }
+
+      // Increment character's shots_fired. This is used for internal tracking of eligibility for a skill quest.
+      if (GET_SKILL(att->ch, att->ranged->skill) >= 8 && SHOTS_FIRED(att->ch) < 10000)
+        SHOTS_FIRED(att->ch)++;
+    }
 
     // The power of an attack can't be below 2 from ammo changes.
     att->ranged->power = MAX(att->ranged->power, 2);
@@ -549,6 +606,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     // Core p113.
     att->ranged->power = MAX(att->ranged->power, 2);
   }
+
   // Melee combat. If you're here, we don't care about your ranged combat setup-- it's face-beating time. All calculations here are done for both attacker and defender (in case of defender counterstriking)
   else {
     // Ensure that neither combatant has the closing flag set.
@@ -1000,6 +1058,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
   // If you're firing a heavy weapon without a gyro, you need to test against the damage of the recoil.
   if (!IS_NPC(att->ch)
       && att->ranged_combat_mode
+      && !att->ranged->is_fireweapon
       && !att->ranged->using_mounted_gun
       && !att->ranged->gyro
       && !att->cyber->cyberarm_gyromount
@@ -1320,6 +1379,15 @@ bool perform_nerve_strike(struct combat_data *att, struct combat_data *def, char
   handle_flame_aura(att, def);
 
   return TRUE;
+}
+
+int calculate_fireweapon_power(struct obj_data *weapon) {
+  if (GET_FIREWEAPON_TYPE(weapon) == FIREWEAPON_RANGER_X_BOW)
+    return GET_FIREWEAPON_STR_MINIMUM(weapon) + 4;
+  else if (GET_FIREWEAPON_TYPE(weapon) == FIREWEAPON_BOW)
+    return GET_FIREWEAPON_STR_MINIMUM(weapon) + 2;
+  else
+    return GET_FIREWEAPON_POWER(weapon);
 }
 
 #undef SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER

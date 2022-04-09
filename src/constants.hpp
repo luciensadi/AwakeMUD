@@ -117,6 +117,7 @@ extern struct pgroup_priv_struct pgroup_privileges[];
 extern const char *workshops[];
 extern const char *kit_workshop_facility[];
 extern const char *projectile_ammo_types[];
+extern const char *fireweapon_types[];
 extern const char *magic_tool_types[];
 extern const char *holster_types[];
 extern const char *docwagon_contract_types[];

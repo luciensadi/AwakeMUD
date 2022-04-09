@@ -93,14 +93,17 @@ void perform_put(struct char_data *ch, struct obj_data *obj, struct obj_data *co
     }
 
     if (GET_OBJ_TYPE(obj) == ITEM_HOLSTER || GET_OBJ_TYPE(obj) == ITEM_QUIVER) {
-      if (GET_OBJ_VAL(cont, 0)) {
-        GET_OBJ_VAL(cont, 0)--;
+      if (GET_WORN_POCKETS_HOLSTERS(cont) > 0) {
+        GET_WORN_POCKETS_HOLSTERS(cont)--;
         GET_OBJ_TIMER(obj) = 0;
       } else {
         act("$p won't fit in $P.", FALSE, ch, obj, cont, TO_CHAR);
         return;
       }
     } else if (GET_OBJ_TYPE(obj) == ITEM_GUN_MAGAZINE) {
+      // We don't expect you to be carrying gun magazines.
+      act("$p won't fit in $P.", FALSE, ch, obj, cont, TO_CHAR);
+      /*
       if (GET_OBJ_VAL(cont, 1)) {
         GET_OBJ_VAL(cont, 1)--;
         GET_OBJ_TIMER(obj) = 1;
@@ -111,6 +114,7 @@ void perform_put(struct char_data *ch, struct obj_data *obj, struct obj_data *co
         act("$p won't fit in $P.", FALSE, ch, obj, cont, TO_CHAR);
         return;
       }
+      */
     } else if (GET_OBJ_TYPE(obj) == ITEM_WEAPON) {
       if (GET_OBJ_VAL(obj, 3) == TYPE_HAND_GRENADE) {
         if (GET_OBJ_VAL(cont, 2)) {
@@ -163,18 +167,18 @@ void perform_put(struct char_data *ch, struct obj_data *obj, struct obj_data *co
   }
 
   if (GET_OBJ_TYPE(cont) == ITEM_QUIVER) {
-    if ((GET_OBJ_VAL(cont, 1) == 0 && !(GET_OBJ_TYPE(obj) == ITEM_MISSILE && GET_OBJ_VAL(obj, 0) == 0)) ||
-        (GET_OBJ_VAL(cont, 1) == 1 && !(GET_OBJ_TYPE(obj) == ITEM_MISSILE && GET_OBJ_VAL(obj, 0) == 1)) ||
-        (GET_OBJ_VAL(cont, 1) == 2 && !(GET_OBJ_TYPE(obj) == ITEM_WEAPON && GET_OBJ_VAL(obj, 3) == TYPE_SHURIKEN)) ||
-        (GET_OBJ_VAL(cont, 1) == 3 && !(GET_OBJ_TYPE(obj) == ITEM_WEAPON && GET_OBJ_VAL(obj, 3) == TYPE_THROWING_KNIFE)))
+    if ((GET_QUIVER_AMMO_TYPE(cont) == PROJECTILE_ARROW && !(GET_OBJ_TYPE(obj) == ITEM_MISSILE && GET_MISSILE_IS_CROSSBOW_BOLT(obj) == FALSE)) ||
+        (GET_QUIVER_AMMO_TYPE(cont) == PROJECTILE_BOLT && !(GET_OBJ_TYPE(obj) == ITEM_MISSILE && GET_MISSILE_IS_CROSSBOW_BOLT(obj) == TRUE)) ||
+        (GET_QUIVER_AMMO_TYPE(cont) == PROJECTILE_SHURIKEN && !(GET_OBJ_TYPE(obj) == ITEM_WEAPON && GET_WEAPON_ATTACK_TYPE(obj) == TYPE_SHURIKEN)) ||
+        (GET_QUIVER_AMMO_TYPE(cont) == PROJECTILE_THROWING_KNIFE && !(GET_OBJ_TYPE(obj) == ITEM_WEAPON && GET_WEAPON_ATTACK_TYPE(obj) == TYPE_THROWING_KNIFE)))
       return;
-    if (GET_OBJ_VAL(cont, 2) >= GET_OBJ_VAL(cont, 0))
+    if (GET_QUIVER_CURRENT_PROJECTILES(cont) >= GET_QUIVER_MAXIMUM_PROJECTILES(cont))
       act("$p won't fit in $P.", FALSE, ch, obj, cont, TO_CHAR);
     else {
       obj_from_char(obj);
       obj_to_obj(obj, cont);
 
-      GET_OBJ_VAL(cont, 2)++;
+      GET_QUIVER_CURRENT_PROJECTILES(cont)++;
       act("You put $p in $P.", FALSE, ch, obj, cont, TO_CHAR);
       act("$n puts $p in $P.", TRUE, ch, obj, cont, TO_ROOM);
       if ( (!IS_NPC(ch) && access_level( ch, LVL_BUILDER ))
@@ -630,13 +634,13 @@ ACMD(do_put)
     }
 
     if (GET_OBJ_TYPE(cont) == ITEM_QUIVER) {
-      if (GET_OBJ_VAL(cont, 1) == 0 && !(GET_OBJ_TYPE(obj) == ITEM_MISSILE && GET_OBJ_VAL(obj, 0) == 0))
+      if (GET_QUIVER_AMMO_TYPE(cont) == PROJECTILE_ARROW && !(GET_OBJ_TYPE(obj) == ITEM_MISSILE && GET_MISSILE_IS_CROSSBOW_BOLT(obj) == 0))
         send_to_char(ch, "Only arrows may be placed in %s.\r\n", GET_OBJ_NAME(obj));
-      else if (GET_OBJ_VAL(cont, 1) == 1 && !(GET_OBJ_TYPE(obj) == ITEM_MISSILE && GET_OBJ_VAL(obj, 0) == 1))
+      else if (GET_QUIVER_AMMO_TYPE(cont) == PROJECTILE_BOLT && !(GET_OBJ_TYPE(obj) == ITEM_MISSILE && GET_MISSILE_IS_CROSSBOW_BOLT(obj) == 1))
         send_to_char(ch, "Only bolts may be placed in %s.\r\n", GET_OBJ_NAME(obj));
-      else if (GET_OBJ_VAL(cont, 1) == 2 && !(GET_OBJ_TYPE(obj) == ITEM_WEAPON && GET_OBJ_VAL(obj, 3) == TYPE_SHURIKEN))
+      else if (GET_QUIVER_AMMO_TYPE(cont) == PROJECTILE_SHURIKEN && !(GET_OBJ_TYPE(obj) == ITEM_WEAPON && GET_WEAPON_ATTACK_TYPE(obj) == TYPE_SHURIKEN))
         send_to_char(ch, "Only shurikens can be stored in %s.\r\n", GET_OBJ_NAME(obj));
-      else if (GET_OBJ_VAL(cont, 1) == 3 && !(GET_OBJ_TYPE(obj) == ITEM_WEAPON && GET_OBJ_VAL(obj, 3) == TYPE_THROWING_KNIFE))
+      else if (GET_QUIVER_AMMO_TYPE(cont) == PROJECTILE_THROWING_KNIFE && !(GET_OBJ_TYPE(obj) == ITEM_WEAPON && GET_WEAPON_ATTACK_TYPE(obj) == TYPE_THROWING_KNIFE))
         send_to_char(ch, "%s is used to hold throwing knives only.\r\n", capitalize(GET_OBJ_NAME(obj)));
       else {
         perform_put(ch, obj, cont);
@@ -848,7 +852,7 @@ void perform_get_from_container(struct char_data * ch, struct obj_data * obj,
       }
 
       if (GET_OBJ_TYPE(cont) == ITEM_QUIVER)
-        GET_OBJ_VAL(cont, 2) = MAX(0, GET_OBJ_VAL(cont, 2) - 1);
+        GET_QUIVER_CURRENT_PROJECTILES(cont) = MAX(0, GET_QUIVER_CURRENT_PROJECTILES(cont) - 1);
       snprintf(buf, sizeof(buf), "You %s $p from $P.", (cyberdeck || computer ? "uninstall" : "get"));
 
       if (computer) {
@@ -1596,11 +1600,15 @@ ACMD(do_get)
         }
       } else if (!cont) {
         send_to_char(ch, "You don't have %s %s.\r\n", AN(arg2), arg2);
-      } else if ((!cyberdeck && !(GET_OBJ_TYPE(cont) == ITEM_CONTAINER || GET_OBJ_TYPE(cont) == ITEM_KEYRING || GET_OBJ_TYPE(cont) ==
-                                  ITEM_QUIVER || GET_OBJ_TYPE(cont) == ITEM_HOLSTER || GET_OBJ_TYPE(cont) ==
-                                  ITEM_WORN)) || (cyberdeck && !(GET_OBJ_TYPE(cont) == ITEM_CYBERDECK ||
-                                                                 GET_OBJ_TYPE(cont) == ITEM_CUSTOM_DECK ||
-                                                                 GET_OBJ_TYPE(cont) == ITEM_DECK_ACCESSORY))) {
+      } else if ((!cyberdeck && !(GET_OBJ_TYPE(cont) == ITEM_CONTAINER
+                                  || GET_OBJ_TYPE(cont) == ITEM_KEYRING
+                                  || GET_OBJ_TYPE(cont) == ITEM_QUIVER
+                                  || GET_OBJ_TYPE(cont) == ITEM_HOLSTER
+                                  || GET_OBJ_TYPE(cont) == ITEM_WORN))
+                 || (cyberdeck && !(GET_OBJ_TYPE(cont) == ITEM_CYBERDECK            /* Thanks, I hate it. -LS */
+                                    || GET_OBJ_TYPE(cont) == ITEM_CUSTOM_DECK
+                                    || GET_OBJ_TYPE(cont) == ITEM_DECK_ACCESSORY)))
+      {
         snprintf(buf, sizeof(buf), "$p is not a %s.", (!cyberdeck ? "container" : "cyberdeck"));
         act(buf, FALSE, ch, cont, 0, TO_CHAR);
 

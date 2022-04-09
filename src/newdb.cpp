@@ -2373,6 +2373,10 @@ void auto_repair_obj(struct obj_data *obj) {
       FORCE_PROTO_VALUE("gun accessory", GET_ACCESSORY_TYPE(obj), GET_ACCESSORY_TYPE(&obj_proto[rnum]));
       FORCE_PROTO_VALUE("gun accessory", GET_ACCESSORY_RATING(obj), GET_ACCESSORY_RATING(&obj_proto[rnum]));
       break;
+    case ITEM_QUIVER:
+      FORCE_PROTO_VALUE("quiver", GET_QUIVER_MAXIMUM_PROJECTILES(obj), GET_QUIVER_MAXIMUM_PROJECTILES(&obj_proto[rnum]));
+      FORCE_PROTO_VALUE("quiver", GET_QUIVER_AMMO_TYPE(obj), GET_QUIVER_AMMO_TYPE(&obj_proto[rnum]));
+      break;
   }
 }
 #undef CLAMP_VALUE

@@ -2407,8 +2407,7 @@ void gen_death_msg(struct char_data *ch, struct char_data *vict, int attacktype)
 }
 
 #define IS_RANGED(eq)   (GET_OBJ_TYPE(eq) == ITEM_FIREWEAPON || \
-(GET_OBJ_TYPE(eq) == ITEM_WEAPON && \
-(IS_GUN(GET_OBJ_VAL(eq, 3)))))
+                         (GET_OBJ_TYPE(eq) == ITEM_WEAPON && (IS_GUN(GET_WEAPON_ATTACK_TYPE(eq)))))
 
 #define RANGE_OK(ch) ((GET_EQ(ch, WEAR_WIELD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_WEAPON && \
 IS_RANGED(GET_EQ(ch, WEAR_WIELD))) || (GET_EQ(ch, WEAR_HOLD) && \
@@ -3030,10 +3029,32 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
   return 0;
 }
 
+bool quiver_has_projectile(struct char_data *ch, struct obj_data *weapon, struct obj_data *quiver, bool deduct_one_round) {
+  bool is_crossbow = (GET_FIREWEAPON_TYPE(weapon) == FIREWEAPON_CROSSBOW);
+
+  for (struct obj_data *missile = quiver->contains; missile; missile = missile->next_content) {
+    if (GET_OBJ_TYPE(missile) == ITEM_MISSILE && GET_MISSILE_IS_CROSSBOW_BOLT(missile) == is_crossbow) {
+      if (deduct_one_round) {
+        GET_QUIVER_CURRENT_PROJECTILES(quiver)--;
+        extract_obj(missile);
+
+        // Crossbow strength minimums slow you down when you try to load the next bolt.
+        if (is_crossbow) {
+          if (GET_STR(ch) < GET_FIREWEAPON_STR_MINIMUM(weapon)) {
+            send_to_char(ch, "(OOC: %s is too heavy for you-- you're losing initiative reloading it!)\r\n", decapitalize_a_an(GET_OBJ_NAME(weapon)));
+            // A simple action is half an init pass, so we drop 5 from your roll per point of lacking str.
+            GET_INIT_ROLL(ch) -= 5 * (GET_FIREWEAPON_STR_MINIMUM(weapon) - GET_STR(ch));
+          }
+        }
+      }
+      return TRUE;
+    }
+  }
+  return FALSE;
+}
+
 bool process_has_ammo(struct char_data *ch, struct obj_data *wielded, bool deduct_one_round) {
-  int i;
   bool found = FALSE;
-  struct obj_data *obj, *cont;
 
   if (!ch) {
     mudlog("SYSERR: process_has_ammo received null value for ch. Returning TRUE.", ch, LOG_SYSLOG, TRUE);
@@ -3047,28 +3068,24 @@ bool process_has_ammo(struct char_data *ch, struct obj_data *wielded, bool deduc
 
   // Fireweapon code.
   if (GET_OBJ_TYPE(wielded) == ITEM_FIREWEAPON) {
-    for (i = 0; i < NUM_WEARS; i++) {
-      if (GET_EQ(ch, i) && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_QUIVER)
-        for (obj = GET_EQ(ch, i)->contains; obj; obj = obj->next_content)
-          if (GET_OBJ_TYPE(obj) == ITEM_MISSILE && GET_OBJ_VAL(obj, 0) == GET_OBJ_VAL(wielded, 5)) {
-            if (deduct_one_round) {
-              GET_OBJ_VAL(GET_EQ(ch, i), 2)--;
-              extract_obj(obj);
-            }
-            found = TRUE;
+    for (int i = 0; i < NUM_WEARS; i++) {
+      struct obj_data *quiver;
+      struct obj_data *equipment = GET_EQ(ch, i);
+
+      if (!equipment)
+        continue;
+
+      if (GET_OBJ_TYPE(equipment) == ITEM_QUIVER) {
+        found = quiver_has_projectile(ch, wielded, equipment, deduct_one_round);
+      }
+
+      if (GET_OBJ_TYPE(equipment) == ITEM_WORN) {
+        for (quiver = equipment->contains; quiver; quiver = quiver->next_content) {
+          if (GET_OBJ_TYPE(quiver) == ITEM_QUIVER) {
+            found = quiver_has_projectile(ch, wielded, quiver, deduct_one_round);
           }
-      if (GET_EQ(ch, i) && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_WORN)
-        for (cont = GET_EQ(ch,i)->contains; cont; cont = cont->next_content)
-          if (GET_OBJ_TYPE(cont) == ITEM_QUIVER)
-            for (obj = cont->contains; obj; obj = obj->next_content)
-              if (GET_OBJ_TYPE(obj) == ITEM_MISSILE && GET_OBJ_VAL(obj, 0) == GET_OBJ_VAL(wielded, 5)) {
-                if (deduct_one_round) {
-                  GET_OBJ_VAL(cont, 2)--;
-                  extract_obj(obj);
-                }
-                found = TRUE;
-              }
-      // Was there really no better way to do this whole block?
+        }
+      }
     }
     if (found)
       return TRUE;
@@ -3078,7 +3095,6 @@ bool process_has_ammo(struct char_data *ch, struct obj_data *wielded, bool deduc
         return TRUE;
       } else {
         send_to_char("You're out of arrows!\r\n", ch);
-        stop_fighting(ch);
         return FALSE;
       }
     }
@@ -3168,41 +3184,75 @@ bool has_ammo_no_deduct(struct char_data *ch, struct obj_data *wielded) {
   return process_has_ammo(ch, wielded, FALSE);
 }
 
+int _calculate_smartlink_rating(struct char_data *ch, struct obj_data *access) {
+  // Iterate through their cyberware and look for a matching smartlink.
+  for (struct obj_data *obj = ch->cyberware; obj; obj = obj->next_content) {
+    if (GET_CYBERWARE_TYPE(obj) == CYB_SMARTLINK) {
+      if (GET_CYBERWARE_RATING(obj) == 2 && GET_ACCESSORY_RATING(access) == 2) {
+        // Smartlink II with compatible cyberware.
+        return SMARTLINK_II_MODIFIER;
+      }
+      // Smartlink I.
+      return SMARTLINK_I_MODIFIER;
+    }
+  }
+
+  // Check for goggles.
+  if (GET_EQ(ch, WEAR_EYES)
+      && GET_OBJ_TYPE(GET_EQ(ch, WEAR_EYES)) == ITEM_GUN_ACCESSORY
+      && GET_ACCESSORY_TYPE(GET_EQ(ch, WEAR_EYES)) == ACCESS_SMARTGOGGLE) {
+    // Smartlink plus goggle found-- half value.
+    return 1;
+  }
+
+  // Nothing to work with: Return no bonus.
+  return 0;
+}
+
 int check_smartlink(struct char_data *ch, struct obj_data *weapon)
 {
-  struct obj_data *obj, *access;
+  struct obj_data *access;
+  int bonus;
+  rnum_t real_obj;
 
   // are they wielding two weapons?
   if (GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD) &&
       CAN_WEAR(GET_EQ(ch, WEAR_HOLD), ITEM_WEAR_WIELD))
     return 0;
 
-  int real_obj;
-  for (int i = ACCESS_LOCATION_TOP; i <= ACCESS_LOCATION_UNDER; i++) {
-    // If they have a smartlink attached:
-    if (GET_OBJ_VAL(weapon, i) > 0
-        && (real_obj = real_object(GET_OBJ_VAL(weapon, i))) > 0
-        && (access = &obj_proto[real_obj])
-        && GET_ACCESSORY_TYPE(access) == ACCESS_SMARTLINK) {
+  if (!weapon) {
+    mudlog("SYSERR: Null weapon received to check_smartlink!", ch, LOG_SYSLOG, TRUE);
+    return 0;
+  }
 
-      // Iterate through their cyberware and look for a matching smartlink.
-      for (obj = ch->cyberware; obj; obj = obj->next_content) {
-        if (GET_CYBERWARE_TYPE(obj) == CYB_SMARTLINK) {
-          if (GET_CYBERWARE_RATING(obj) == 2 && GET_ACCESSORY_RATING(access) == 2) {
-            // Smartlink II with compatible cyberware.
-            return SMARTLINK_II_MODIFIER;
-          }
-          // Smartlink I.
-          return SMARTLINK_I_MODIFIER;
-        }
-      }
-      if (GET_EQ(ch, WEAR_EYES)
-          && GET_OBJ_TYPE(GET_EQ(ch, WEAR_EYES)) == ITEM_GUN_ACCESSORY
-          && GET_ACCESSORY_TYPE(GET_EQ(ch, WEAR_EYES)) == ACCESS_SMARTGOGGLE) {
-        // Smartlink plus goggle found-- half value.
-        return 1;
+  if (GET_OBJ_TYPE(weapon) == ITEM_FIREWEAPON) {
+    if (GET_FIREWEAPON_ATTACHMENT_VNUM(weapon) > 0
+        && (real_obj = real_object(GET_FIREWEAPON_ATTACHMENT_VNUM(weapon))) > 0
+        && (access = &obj_proto[real_obj])
+        && GET_ACCESSORY_TYPE(access) == ACCESS_SMARTLINK)
+    {
+      if ((bonus = _calculate_smartlink_rating(ch, access)) > 0)
+        return bonus;
+    }
+  } else if (GET_OBJ_TYPE(weapon) == ITEM_WEAPON) {
+    for (int i = ACCESS_LOCATION_TOP; i <= ACCESS_LOCATION_UNDER; i++) {
+      // If they have a smartlink attached:
+      if (GET_OBJ_VAL(weapon, i) > 0
+          && (real_obj = real_object(GET_OBJ_VAL(weapon, i))) > 0
+          && (access = &obj_proto[real_obj])
+          && GET_ACCESSORY_TYPE(access) == ACCESS_SMARTLINK)
+      {
+        if ((bonus = _calculate_smartlink_rating(ch, access)) > 0)
+          return bonus;
       }
     }
+  } else {
+    char oopsbuf[500];
+    snprintf(oopsbuf, sizeof(oopsbuf), "SYSERR: Non-weapon, non-fireweapon obj %s (%ld) received to check_smartlink!",
+             GET_OBJ_NAME(weapon),
+             GET_OBJ_VNUM(weapon));
+    mudlog(oopsbuf, ch, LOG_SYSLOG, TRUE);
+    return 0;
   }
 
   if (AFF_FLAGGED(ch, AFF_LASER_SIGHT)) {
@@ -3210,6 +3260,7 @@ int check_smartlink(struct char_data *ch, struct obj_data *weapon)
     return 1;
   }
 
+  // No smartlink OR laser.
   return 0;
 }
 
@@ -3477,21 +3528,45 @@ void remove_throwing(struct char_data *ch)
   int i, pos, type;
 
   for (pos = WEAR_WIELD; pos <= WEAR_HOLD; pos++) {
-    if (GET_EQ(ch, pos))
-    {
-      type = GET_OBJ_VAL(GET_EQ(ch, pos), 3);
-      if (type == TYPE_SHURIKEN || type == TYPE_THROWING_KNIFE) {
-        extract_obj(unequip_char(ch, pos, TRUE));
-        for (i = 0; i < NUM_WEARS; i++)
-          if (GET_EQ(ch, i) && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_QUIVER)
-            for (obj = GET_EQ(ch, i)->contains; obj; obj = obj->next_content)
-              if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && GET_OBJ_VAL(obj, 3) == type) {
-                obj_from_obj(obj);
-                equip_char(ch, obj, WEAR_WIELD);
-                return;
+    struct obj_data *weapon = GET_EQ(ch, pos);
+    if (!weapon)
+      continue;
+
+    type = GET_WEAPON_ATTACK_TYPE(weapon);
+    if (type == TYPE_SHURIKEN || type == TYPE_THROWING_KNIFE) {
+      extract_obj(unequip_char(ch, pos, TRUE));
+      for (i = 0; i < NUM_WEARS; i++) {
+        struct obj_data *equipment = GET_EQ(ch, i), *quiver;
+
+        if (!equipment)
+          continue;
+
+        if (GET_OBJ_TYPE(equipment) == ITEM_QUIVER) {
+          quiver = equipment;
+          for (struct obj_data *projectile = quiver->contains; projectile; projectile = projectile->next_content) {
+            if (GET_OBJ_TYPE(projectile) == ITEM_WEAPON && GET_WEAPON_ATTACK_TYPE(projectile) == type) {
+              obj_from_obj(obj);
+              equip_char(ch, obj, WEAR_WIELD);
+              return;
+            }
+          }
+        }
+
+        else if (GET_OBJ_TYPE(equipment) == ITEM_WORN) {
+          for (quiver = equipment->contains; quiver; quiver = quiver->next_content) {
+            if (GET_OBJ_TYPE(quiver) == ITEM_QUIVER) {
+              for (struct obj_data *projectile = quiver->contains; projectile; projectile = projectile->next_content) {
+                if (GET_OBJ_TYPE(projectile) == ITEM_WEAPON && GET_WEAPON_ATTACK_TYPE(projectile) == type) {
+                  obj_from_obj(obj);
+                  equip_char(ch, obj, WEAR_WIELD);
+                  return;
+                }
               }
-        return;
+            }
+          }
+        }
       }
+      return;
     }
   }
 }
@@ -3580,7 +3655,6 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
 {
   char buf[MAX_MESSAGE_LENGTH], buf1[MAX_MESSAGE_LENGTH], buf2[MAX_MESSAGE_LENGTH], buf3[MAX_MESSAGE_LENGTH], buf4[MAX_MESSAGE_LENGTH],
   been_heard[MAX_STRING_LENGTH], temp[20];
-  struct obj_data *obj = NULL;
   struct room_data *ch_room = NULL, *vict_room = NULL;
   rnum_t room1 = 0, room2 = 0, rnum = 0;
   struct veh_data *veh = NULL;
@@ -3591,7 +3665,13 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
   }
 
   if (burst <= 1) {
-    if (GET_OBJ_VAL(weapon, 4) == SKILL_SHOTGUNS || GET_OBJ_VAL(weapon, 4) == SKILL_ASSAULT_CANNON)
+    if (GET_OBJ_TYPE(weapon) == ITEM_FIREWEAPON) {
+      if (GET_FIREWEAPON_TYPE(weapon) == FIREWEAPON_CROSSBOW) {
+        strcpy(buf, "bolt from $p");
+      } else {
+        strcpy(buf, "arrow from $p");
+      }
+    } else if (GET_WEAPON_SKILL(weapon) == SKILL_SHOTGUNS || GET_WEAPON_SKILL(weapon) == SKILL_ASSAULT_CANNON)
       strcpy(buf, "single shell from $p");
     else
       strcpy(buf, "single round from $p");
@@ -3772,16 +3852,17 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
   }
 
   // If the player's in a silent room, don't propagate the gunshot.
-  if (ch_room->silence[ROOM_NUM_SPELLS_OF_TYPE] > 0)
+  if (ch_room->silence[ROOM_NUM_SPELLS_OF_TYPE] > 0 || GET_OBJ_TYPE(weapon) == ITEM_FIREWEAPON)
     return;
 
-  // If the player has a silencer or suppressor, restrict the propagation of the gunshot.
-  bool has_suppressor = FALSE;
+  // If the player has a silencer or suppressor, or is under the Stealth spell, restrict the propagation of the gunshot.
+  bool has_suppressor = affected_by_spell(ch, SPELL_STEALTH);
   for (int i = 7; i < 10; i++) {
+    struct obj_data *obj;
     if (GET_OBJ_VAL(weapon, i) > 0 &&
         (rnum = real_object(GET_OBJ_VAL(weapon, i))) > -1 &&
         (obj = &obj_proto[rnum]) && GET_OBJ_TYPE(obj) == ITEM_GUN_ACCESSORY)
-      if (GET_OBJ_VAL(obj, 1) == ACCESS_SILENCER || GET_OBJ_VAL(obj, 1) == ACCESS_SOUNDSUPP) {
+      if (GET_ACCESSORY_TYPE(obj) == ACCESS_SILENCER || GET_ACCESSORY_TYPE(obj) == ACCESS_SOUNDSUPP) {
         has_suppressor = TRUE;
         break;
       }
@@ -3872,8 +3953,23 @@ int get_weapon_damage_type(struct obj_data* weapon) {
   if (!weapon)
     return TYPE_HIT;
 
+  if (GET_OBJ_TYPE(weapon) != ITEM_WEAPON && GET_OBJ_TYPE(weapon) != ITEM_FIREWEAPON) {
+    char oopsbuf[500];
+    snprintf(oopsbuf, sizeof(oopsbuf), "SYSERR: Received non-weapon, non-bow %s (%ld) to get_weapon_damage_type()!",
+             GET_OBJ_NAME(weapon),
+             GET_OBJ_VNUM(weapon)
+            );
+    mudlog(oopsbuf, NULL, LOG_SYSLOG, TRUE);
+    return TYPE_HIT;
+  }
+
+  int attack_type = GET_WEAPON_ATTACK_TYPE(weapon);
+  if (GET_OBJ_TYPE(weapon) == ITEM_FIREWEAPON) {
+    return TYPE_PIERCE;
+  }
+
   int type;
-  switch (GET_OBJ_VAL(weapon, 3)) {
+  switch (attack_type) {
     case WEAP_EDGED:
     case WEAP_POLEARM:
       type = TYPE_SLASH;
@@ -4170,15 +4266,34 @@ int find_sight(struct char_data *ch)
 
 int find_weapon_range(struct char_data *ch, struct obj_data *weapon)
 {
-  int temp;
-
   if ( weapon == NULL )
     return 0;
 
-  if (GET_OBJ_TYPE(weapon) == ITEM_FIREWEAPON)
-  {
-    temp = MIN(MAX(1, ((int)(GET_STR(ch)/3))), 4);
-    return temp;
+  if (GET_OBJ_TYPE(weapon) == ITEM_FIREWEAPON) {
+    // Flat range for crossbows, your strength doesn't figure into it.
+    if (GET_FIREWEAPON_TYPE(weapon) == FIREWEAPON_CROSSBOW) {
+      // Heavy crossbows can fire up to 2 rooms away.
+      if (GET_FIREWEAPON_POWER(weapon) >= 5) {
+        return 2;
+      }
+
+      // Light and Medium crossbows fire one room away.
+      if (GET_FIREWEAPON_POWER(weapon) >= 3) {
+        return 1;
+      }
+
+      // Pistol crossbows are same-room.
+      return 0;
+    }
+    // Otherwise, it's a bow; your strength influences how far you can draw the bow.
+    int str_component = MAX(1, (int)(GET_STR(ch) / 3));
+
+    // The bow's construction dictates the maximum force it can put behind an arrow.
+    // The maximum str_min is 10, so this means we cap out at 2 rooms of distance.
+    int bow_component = MAX(1, (int)(GET_FIREWEAPON_STR_MINIMUM(weapon) / 4));
+
+    // Take the lesser of those two and call it good.
+    return MIN(str_component, bow_component);
   }
 
   switch(GET_WEAPON_ATTACK_TYPE(weapon))

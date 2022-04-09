@@ -305,8 +305,10 @@ void iedit_disp_val1_menu(struct descriptor_data * d)
       send_to_char("0) Camera\r\n1) Photo\r\nObject Type: ", CH);
       break;
     case ITEM_WEAPON:
+      send_to_char("Power (0 for melee weapons):", d->character);
+      break;
     case ITEM_FIREWEAPON:
-      send_to_char("Power (0 for melee weapon or bow):", d->character);
+      send_to_char("Power (0 for bows):", d->character);
       break;
     case ITEM_MISSILE:
       send_to_char("\r\n  0) Arrow     1) Bolt\r\nMissile type: ", CH);
@@ -584,8 +586,10 @@ void iedit_disp_val3_menu(struct descriptor_data * d)
 
       break;
     case ITEM_WEAPON:
-    case ITEM_FIREWEAPON:
       send_to_char("Strength bonus for melee (0 for non-melee weapons): ", CH);
+      break;
+    case ITEM_FIREWEAPON:
+      send_to_char("Strength bonus for bows (0 for crossbows): ", CH);
       break;
     case ITEM_CONTAINER:
       send_to_char("Vnum of key to open container (-1 for no key): ", d->character);
@@ -726,8 +730,11 @@ void iedit_disp_val4_menu(struct descriptor_data * d)
   switch (GET_OBJ_TYPE(d->edit_obj))
   {
     case ITEM_WEAPON:
-    case ITEM_FIREWEAPON:
       iedit_disp_weapon_menu(d);
+      break;
+    case ITEM_FIREWEAPON:
+      GET_FIREWEAPON_ATTACK_TYPE(OBJ) = TYPE_ARROW;
+      iedit_disp_val5_menu(d);
       break;
     case ITEM_CONTAINER:
       send_to_char("Lock level on container: ", d->character);
@@ -908,7 +915,10 @@ void iedit_disp_val6_menu(struct descriptor_data * d)
       send_to_char("Max Ammo (-1 if doesn't use ammo): ", CH);
       break;
     case ITEM_FIREWEAPON:
-      send_to_char("  0) Bow\r\n  1) Crossbow\r\nType: ", CH);
+      for (int idx = 0; idx < NUM_FIREWEAPON_TYPES; idx++) {
+        send_to_char(CH, "  %d) %s\r\n", fireweapon_types[idx]);
+      }
+      send_to_char("\r\nType: ", CH);
       break;
     case ITEM_WORN:
       send_to_char("Ballistic Rating: ", CH);
@@ -2684,8 +2694,8 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
         case ITEM_WEAPON:
           break;
         case ITEM_FIREWEAPON:
-          if (number < 0 || number > 1) {
-            send_to_char("Value must be 0 or 1!\r\nType: ", CH);
+          if (number < 0 || number >= NUM_FIREWEAPON_TYPES) {
+            send_to_char(CH, "That's not a valid fireweapon type! Select from 0 to %d.\r\nType: ", NUM_FIREWEAPON_TYPES - 1);
             return;
           }
           break;
