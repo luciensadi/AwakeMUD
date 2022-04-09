@@ -149,10 +149,9 @@ struct archetype_data *generate_adept() {
   arch->skills[SKILL_ATHLETICS] = 3;
   arch->skills[SKILL_NEGOTIATION] = 3;
   arch->skills[SKILL_ELECTRONICS] = 1;
-  arch->skills[SKILL_PILOT_BIKE] = 1;
+  arch->skills[SKILL_PILOT_BIKE] = 2;
   arch->skills[SKILL_BR_BIKE] = 1;
   arch->skills[SKILL_STREET_ETIQUETTE] = 1;
-  arch->skills[SKILL_PILOT_BIKE] = 1;
 
   // Inventory.
   arch->weapon = OBJ_COLT_M23; // colt m-23, should be set to burst fire
