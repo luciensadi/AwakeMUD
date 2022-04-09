@@ -180,7 +180,7 @@ bool can_see_through_invis(struct char_data *ch, struct char_data *vict) {
     }
     if (GET_POWER(ch, ADEPT_MAGIC_RESISTANCE)) {
       dice += GET_POWER(ch, ADEPT_MAGIC_RESISTANCE);
-      buf_mod(resistance_test_rbuf, sizeof(resistance_test_rbuf), "MagicResist", ADEPT_TRUE_SIGHT);
+      buf_mod(resistance_test_rbuf, sizeof(resistance_test_rbuf), "MagicResist", ADEPT_MAGIC_RESISTANCE);
     }
   }
 
