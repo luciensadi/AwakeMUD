@@ -146,36 +146,38 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
     return;
   }
   if (!strncmp("help", arg, MIN(strlen("help"), strlen(arg)))) {
-    char helpbuf[100];
+    char helpbuf[MAX_INPUT_LENGTH];
     char non_const_arg[MAX_INPUT_LENGTH];
-    strncpy(non_const_arg, arg, sizeof(non_const_arg) - 1);
+    strlcpy(non_const_arg, arg, sizeof(non_const_arg) - 1);
     char *line = any_one_arg(non_const_arg, helpbuf);
     if (!*line) {
-      strncpy(helpbuf, " archetypes", sizeof(helpbuf) - 1);
+      strlcpy(helpbuf, " archetypes", sizeof(helpbuf) - 1);
       do_help(d->character, helpbuf, 0, 0);
     } else {
       // Check for numbers, like 'help 1'. Skip the first char of line since it's expected to be a space.
       if (*(line) && *(line + 1)) {
         switch ((int) (*(line + 1) - '0') - 1) {
           case ARCHETYPE_STREET_SAMURAI:
-            strncpy(line, " street samurai", sizeof(line) - 1);
+            strlcpy(helpbuf, " street samurai", sizeof(helpbuf));
             break;
           case ARCHETYPE_ADEPT:
-            strncpy(line, " adepts", sizeof(line) - 1);
+            strlcpy(helpbuf, " adepts", sizeof(helpbuf));
             break;
           case ARCHETYPE_SHAMANIC_MAGE:
-            strncpy(line, " shamans", sizeof(line) - 1);
+            strlcpy(helpbuf, " shamans", sizeof(helpbuf));
             break;
           case ARCHETYPE_STREET_MAGE:
-            strncpy(line, " mages", sizeof(line) - 1);
+            strlcpy(helpbuf, " mages", sizeof(helpbuf));
             break;
           case ARCHETYPE_DECKER:
-            strncpy(line, " deckers", sizeof(line) - 1);
+            strlcpy(helpbuf, " deckers", sizeof(helpbuf));
             break;
         }
+      } else {
+        strlcpy(helpbuf, line, sizeof(helpbuf));
       }
 
-      do_help(d->character, line, 0, 0);
+      do_help(d->character, helpbuf, 0, 0);
     }
     SEND_TO_Q("\r\n\r\nYou can use 'HELP <topic>' to get more info on a topic, or hit return to see the list of archetypes again.\r\n", d);
     return;
@@ -513,6 +515,11 @@ int nuyen_vals[5] = { 1000000, 400000, 90000, 20000, 5000 };
 int force_vals[5] = { 25, 25, 25, 25, 25 };
 int resource_table[2][8] = {{ 500, 5000, 20000, 90000, 200000, 400000, 650000, 1000000 }, { -5, 0, 5, 10, 15, 20, 25, 30 }};
 int magic_cost[4] = { 0, 30, 25, 25 };
+
+#define CCR_MAGIC_NONE     0
+#define CCR_MAGIC_FULL     1
+#define CCR_MAGIC_ASPECTED 2
+#define CCR_MAGIC_ADEPT    3
 const char *magic_table[4] = { "None", "Full Magician", "Aspected Magician", "Adept" };
 
 void set_attributes(struct char_data *ch, int magic)
@@ -782,8 +789,9 @@ void priority_menu(struct descriptor_data *d)
     snprintf(buf2, sizeof(buf2), "%-10c", 'A' + i);
     switch (d->ccr.pr[i]) {
     case PR_NONE:
-      snprintf(buf2, sizeof(buf2), "%s?           %-2d           %-2d        %d nuyen / %d\r\n",
-              buf2, attrib_vals[i], skill_vals[i], nuyen_vals[i], force_vals[i]);
+      snprintf(buf3, sizeof(buf3), "%s?           %-2d           %-2d        %d nuyen / %d\r\n",
+               buf2, attrib_vals[i], skill_vals[i], nuyen_vals[i], force_vals[i]);
+      strlcpy(buf2, buf3, sizeof(buf2));
       break;
     case PR_RACE:
       if (GET_RACE(d->character) == RACE_ELF)
@@ -834,16 +842,23 @@ void priority_menu(struct descriptor_data *d)
         strlcat(buf2, "Mundane     -            -         -\r\n", sizeof(buf2));
       break;
     case PR_ATTRIB:
-      snprintf(buf2, sizeof(buf2), "%sAttributes  %-2d           -         -\r\n", buf2,
-              attrib_vals[i]);
+      snprintf(buf3, sizeof(buf3), "%sAttributes  %-2d           -         -\r\n",
+               buf2,
+               attrib_vals[i]);
+      strlcpy(buf2, buf3, sizeof(buf2));
       break;
     case PR_SKILL:
-      snprintf(buf2, sizeof(buf2), "%sSkills      -            %-2d        -\r\n", buf2,
-              skill_vals[i]);
+      snprintf(buf3, sizeof(buf3), "%sSkills      -            %-2d        -\r\n",
+               buf2,
+               skill_vals[i]);
+      strlcpy(buf2, buf3, sizeof(buf2));
       break;
     case PR_RESOURCE:
-      snprintf(buf2, sizeof(buf2), "%sResources   -            -         %d nuyen / %d\r\n",
-              buf2, nuyen_vals[i], force_vals[i]);
+      snprintf(buf3, sizeof(buf3), "%sResources   -            -         %d nuyen / %d\r\n",
+               buf2,
+               nuyen_vals[i],
+               force_vals[i]);
+      strlcpy(buf2, buf3, sizeof(buf2));
       break;
     }
     SEND_TO_Q(buf2, d);
@@ -985,7 +1000,7 @@ void ccr_totem_spirit_menu(struct descriptor_data *d)
 
 void ccr_aspect_menu(struct descriptor_data *d)
 {
-  strncpy(buf,   "As an aspected mage, you must select your aspect: \r\n"
+  strlcpy(buf,   "As an aspected mage, you must select your aspect: \r\n"
                  "  [1] Conjurer\r\n"
                  "  [2] Sorcerer\r\n", sizeof(buf) - strlen(buf) - 1);
 
@@ -1004,13 +1019,13 @@ void ccr_aspect_menu(struct descriptor_data *d)
 
 void ccr_mage_menu(struct descriptor_data *d)
 {
-  strncpy(buf,   "As a hermetic mage, you must select your aspect: \r\n"
+  strlcpy(buf,   "As a hermetic mage, you must select your aspect: \r\n"
                  "  [1] Full Mage (Jack of All Trades)\r\n"
                  "  [2] Earth Mage (Manipulation Bonus / Detection Penalty)\r\n"
                  "  [3] Air Mage (Detection Bonus / Manipulation Penalty)\r\n"
                  "  [4] Fire Mage (Combat Bonus / Illusion Penalty)\r\n"
                  "  [5] Water Mage (Illusion Bonus / Combat Penalty)\r\n", sizeof(buf));
- 
+
   strlcat(buf,   "  [?] Help\r\n\r\nAspect: ", sizeof(buf));
   SEND_TO_Q(buf, d);
   d->ccr.mode = CCR_MAGE;
@@ -1127,7 +1142,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
     break;
   case CCR_PO_MAGIC:
     i--;
-    if (i > 3 || i < 0)
+    if (i > CCR_MAGIC_ADEPT || i < CCR_MAGIC_NONE)
       send_to_char(CH, "Invalid number. Enter desired type of magic (^c%d^n points available): ", d->ccr.points);
     else if (magic_cost[i] > d->ccr.points)
       send_to_char(CH, "You do not have enough points for that. Enter desired type of magic (^c%d^n points available):", d->ccr.points);
@@ -1196,18 +1211,18 @@ void create_parse(struct descriptor_data *d, const char *arg)
         GET_NUYEN_RAW(CH) = resource_table[0][d->ccr.pr[PO_RESOURCES]];
         GET_SKILL_POINTS(CH) = d->ccr.pr[PO_SKILL];
         GET_ATT_POINTS(CH) = d->ccr.pr[PO_ATTR]/2;
-        if (d->ccr.pr[PO_MAGIC] > 0) {
+        if (d->ccr.pr[PO_MAGIC] > CCR_MAGIC_NONE) {
           set_attributes(CH, 1);
           if (GET_RACE(CH) == RACE_GNOME) {
             GET_TRADITION(CH) = TRAD_SHAMANIC;
-            if (d->ccr.pr[PO_MAGIC] == 1) {
+            if (d->ccr.pr[PO_MAGIC] == CCR_MAGIC_FULL) {
               GET_FORCE_POINTS(CH) = 25;
               ccr_totem_menu(d);
             } else {
               GET_FORCE_POINTS(CH) = 35;
               ccr_aspect_menu(d);
              }
-          } else if (d->ccr.pr[PO_MAGIC] == 3) {
+          } else if (d->ccr.pr[PO_MAGIC] == CCR_MAGIC_ADEPT) {
             GET_TRADITION(CH) = TRAD_ADEPT;
             GET_PP(CH) = 600;
             start_game(d);
@@ -1238,7 +1253,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
 
         d->ccr.pr[PO_SKILL] = 0;
         d->ccr.pr[PO_RESOURCES] = 1;
-        d->ccr.pr[PO_MAGIC] = 0;
+        d->ccr.pr[PO_MAGIC] = CCR_MAGIC_NONE;
 
         // Assign racial costs and subtract them from the point value.
         switch (GET_RACE(CH)) {
@@ -1737,7 +1752,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
       switch (LOWER(*arg)) {
       case 'h':
         GET_TRADITION(d->character) = TRAD_HERMETIC;
-        if ((d->ccr.pr[5] = -1 && d->ccr.pr[PO_MAGIC] == 2) || (d->ccr.pr[5] != -1 && d->ccr.pr[1] == PR_MAGIC)) {
+        if ((d->ccr.pr[5] == -1 && d->ccr.pr[PO_MAGIC] == CCR_MAGIC_ASPECTED) || (d->ccr.pr[5] != -1 && d->ccr.pr[1] == PR_MAGIC)) {
           GET_FORCE_POINTS(CH) = 35;
           ccr_aspect_menu(d);
         } else {
@@ -1747,7 +1762,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
         break;
       case 's':
         GET_TRADITION(d->character) = TRAD_SHAMANIC;
-        if ((d->ccr.pr[5] = -1 && d->ccr.pr[PO_MAGIC] == 2) || (d->ccr.pr[5] != -1 && d->ccr.pr[1] == PR_MAGIC)) {
+        if ((d->ccr.pr[5] == -1 && d->ccr.pr[PO_MAGIC] == CCR_MAGIC_ASPECTED) || (d->ccr.pr[5] != -1 && d->ccr.pr[1] == PR_MAGIC)) {
           GET_FORCE_POINTS(CH) = 35;
           ccr_aspect_menu(d);
         } else {
@@ -1787,9 +1802,9 @@ void create_parse(struct descriptor_data *d, const char *arg)
         SEND_TO_Q("\r\nFull Mages are general practitioners of all elements and the standard Hermetic experience. Elemental Mages specialize in a specific element, which they gain an advantage in at a disadvantage to their opposing element.\r\n\r\nSelect your aspect (1 for Full Mage, 2 for Earth Mage, 3 for Air Mage, 4 for Fire Mage or 5 for Water Mage.) ", d);
         return;
       }
+    }
     start_game(d);
     break;
-    }
   case CCR_ASPECT:
     if (GET_TRADITION(d->character) == TRAD_SHAMANIC) {
       switch (i) {

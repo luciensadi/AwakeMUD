@@ -195,13 +195,15 @@ int ability_cost(int abil, int level)
     return 300;
   case ADEPT_REFLEXES:
     switch(level) {
-    case 1:
-      return 200;
-    case 2:
-      return 100;
-    case 3:
-      return 200;
+      case 1:
+        return 200;
+      case 2:
+        return 100;
+      case 3:
+        return 200;
     }
+    mudlog("SYSERR: Unknown value provided for ADEPT_REFLEXES!", NULL, LOG_SYSLOG, TRUE);
+    return 10000;
   case ADEPT_KILLING_HANDS:
     if (level < 3)
       return 50;

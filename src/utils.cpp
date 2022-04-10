@@ -730,7 +730,6 @@ bool has_cyberweapon(struct char_data * ch)
 void log_death_trap(struct char_data * ch)
 {
   char buf[150];
-  extern struct room_data *world;
 
   snprintf(buf, sizeof(buf), "%s hit DeathTrap #%ld (%s)", GET_CHAR_NAME(ch),
           ch->in_room->number, ch->in_room->name);
@@ -1130,7 +1129,7 @@ bool PLR_TOG_CHK(char_data *ch, dword offset)
   return PLR_FLAGS(ch).IsSet(offset);
 }
 
-char * buf_mod(char *rbuf, int rbuf_len, const char *name, int bonus)
+char * buf_mod(char *rbuf, size_t rbuf_len, const char *name, int bonus)
 {
   if ( !rbuf )
     return rbuf;
@@ -1148,12 +1147,12 @@ char * buf_mod(char *rbuf, int rbuf_len, const char *name, int bonus)
   return rbuf;
 }
 
-char * buf_roll(char *rbuf, const char *name, int bonus)
+char * buf_roll(char *rbuf, size_t rbuf_len, const char *name, int bonus)
 {
   if ( !rbuf )
     return rbuf;
   rbuf += strlen(rbuf);
-  snprintf(rbuf, sizeof(rbuf), " [%s %d]", name, bonus);
+  snprintf(rbuf, rbuf_len, " [%s %d]", name, bonus);
   return rbuf;
 }
 

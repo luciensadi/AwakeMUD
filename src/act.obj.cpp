@@ -2380,8 +2380,9 @@ void name_to_drinkcon(struct obj_data *obj, int type)
   if (!obj || (GET_OBJ_TYPE(obj) != ITEM_DRINKCON && GET_OBJ_TYPE(obj) != ITEM_FOUNTAIN))
     return;
 
-  new_name = new char[strlen(obj->text.keywords)+strlen(drinknames[type])+2];
-  snprintf(new_name, sizeof(new_name), "%s %s", obj->text.keywords, drinknames[type]);
+  size_t length = strlen(obj->text.keywords) + strlen(drinknames[type]) + 2;
+  new_name = new char[length];
+  snprintf(new_name, length, "%s %s", obj->text.keywords, drinknames[type]);
 
   if (GET_OBJ_RNUM(obj) == NOTHING ||
       obj->text.keywords != obj_proto[GET_OBJ_RNUM(obj)].text.keywords)

@@ -14,7 +14,9 @@ SHELL = /bin/sh
 .PHONY : unittest
 #CXX = g++
 CXX = clang
+#CXX = /opt/homebrew/Cellar/gcc/11.2.0_3/bin/aarch64-apple-darwin21-g++-11 -Wno-format-truncation -Wno-deprecated-copy
 CC = g++
+#CC = /opt/homebrew/Cellar/gcc/11.2.0_3/bin/aarch64-apple-darwin21-g++-11 -Wno-format-truncation -Wno-deprecated-copy
 
 PROFILE = -ggdb
 CVS = cvs

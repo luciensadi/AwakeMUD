@@ -730,6 +730,7 @@ void update_buildrepair(void)
               break;
             case 5:
               send_to_char(CH, "You've spilt your ritual chalice of your favorite drink all over %s! So much for that spell!\r\n", GET_OBJ_NAME(PROG));
+              break;
             default:
               send_to_char(CH, "You realise you have lost your inspiration for %s.\r\n", GET_OBJ_NAME(PROG));
           }

@@ -115,7 +115,7 @@ listClass<T>::listClass(const listClass<T> & L) {
       assert((currnode->next = new nodeStruct<T>) != NULL);
 
       // Link it to our current node.
-      currnode->prev = currnode;
+      currnode->next->prev = currnode;
 
       // Switch operations to the newly-created next node.
       currnode = currnode->next;

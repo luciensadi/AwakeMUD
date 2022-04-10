@@ -4261,7 +4261,6 @@ ACMD(do_time)
 {
   sh_int /* year, month, day,*/ hour, minute, pm;
   extern struct time_info_data time_info;
-  extern const char *weekdays[];
   extern const char *month_name[];
   struct obj_data *check;
 

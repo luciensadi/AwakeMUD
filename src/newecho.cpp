@@ -321,8 +321,9 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
       // Short names don't auto-match unless they're complete matches or explicit tags.
       bool require_exact_match = !at_mode && (quote_mode || (start_of_new_sentence || strlen(tag_check_string) < 5));
 
-      if (require_exact_match)
+      if (require_exact_match) {
         NEW_EMOTE_DEBUG(actor, "\r\nUsing exact mode for this evaluation due to non-at and low string length %d.", strlen(tag_check_string));
+      }
 
       target_ch = NULL;
 
@@ -345,8 +346,9 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
           if (!IS_NPC(actor) && (mem_record = safe_found_mem(actor, target_ch)) && !str_cmp(mem_record->mem, tag_check_string))
             break;
         }
-        if (target_ch)
+        if (target_ch) {
           NEW_EMOTE_DEBUG(actor, "\r\nWith target string '%s', found %s by memory (exact).\r\n", tag_check_string, GET_CHAR_NAME(target_ch));
+        }
       }
 
       // Compare it to bystanders' memorized names. Now that exact matches mode is out of the way, go for imprecise.
@@ -363,8 +365,9 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
           if (!IS_NPC(actor) && (mem_record = safe_found_mem(actor, target_ch)) && !strn_cmp(mem_record->mem, tag_check_string, strlen(tag_check_string)))
             break;
         }
-        if (target_ch)
+        if (target_ch) {
           NEW_EMOTE_DEBUG(actor, "\r\nWith target string '%s', found %s by memory (approximate).\r\n", tag_check_string, GET_CHAR_NAME(target_ch));
+        }
       }
 
       // Didn't find anyone by that memorized name? Check PC names, trying for exact match first.
@@ -380,8 +383,9 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
           if (!str_cmp(target_ch->player.char_name, tag_check_string))
             break;
         }
-        if (target_ch)
+        if (target_ch) {
           NEW_EMOTE_DEBUG(actor, "\r\nWith target string '%s', found %s by name (exact).\r\n", tag_check_string, GET_CHAR_NAME(target_ch));
+        }
       }
 
       if (!target_ch && !require_exact_match) {
@@ -396,8 +400,9 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
           if (!strn_cmp(target_ch->player.char_name, tag_check_string, strlen(tag_check_string)))
             break;
         }
-        if (target_ch)
+        if (target_ch) {
           NEW_EMOTE_DEBUG(actor, "\r\nWith target string '%s', found %s by name (approximate).\r\n", tag_check_string, GET_CHAR_NAME(target_ch));
+        }
       }
 
       // Didn't find anyone by their PC name? Check keywords (only if not in exact-match mode).
@@ -415,8 +420,9 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
             break;
           }
         }
-        if (target_ch)
+        if (target_ch) {
           NEW_EMOTE_DEBUG(actor, "\r\nWith target string '%s', found %s by alias.\r\n", tag_check_string, GET_CHAR_NAME(target_ch));
+        }
       }
 
       // Didn't find anyone by their keywords? Check in short description (only if not in exact-match mode).
@@ -434,8 +440,9 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
             break;
           }
         }
-        if (target_ch)
+        if (target_ch) {
           NEW_EMOTE_DEBUG(actor, "\r\nWith target string '%s', found %s by alias.\r\n", tag_check_string, GET_CHAR_NAME(target_ch));
+        }
       }
 
       // Found someone.

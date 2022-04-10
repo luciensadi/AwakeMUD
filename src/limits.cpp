@@ -610,8 +610,6 @@ int calculate_swim_successes(struct char_data *ch) {
 }
 
 void analyze_swim_successes(struct char_data *temp_char) {
-  extern class memoryClass *Mem;
-
   struct room_data *room = temp_char->in_room;
   int old_sector_type = room->sector_type;
   room->sector_type = SPIRIT_SEA;
@@ -777,7 +775,6 @@ void point_update(void)
   PERF_PROF_SCOPE(pr_, __func__);
   ACMD_DECLARE(do_use);
   struct char_data *i, *next_char;
-  extern struct time_info_data time_info;
 
   // Generate the wholist file.
   ACMD_CONST(do_who);
