@@ -2391,7 +2391,7 @@ int perform_dupe_check(struct descriptor_data *d)
 /* deal with newcomers and other non-playing sockets */
 void nanny(struct descriptor_data * d, char *arg)
 {
-  char buf[128];
+  char buf[1000 ];
   int load_result = NOWHERE;
   char tmp_name[MAX_INPUT_LENGTH];
   extern vnum_t mortal_start_room;

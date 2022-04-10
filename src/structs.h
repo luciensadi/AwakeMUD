@@ -505,10 +505,22 @@ struct char_point_data
   ubyte reach[2];
   int extras[2];
 
+  char_point_data() :
+    mental(0), max_mental(0), physical(0), max_physical(10), nuyen(0), bank(0), karma(0), rep(0),
+    noto(0), tke(0), sig(0), init_dice(0), init_roll(0), grade(0), extrapp(0), extra(0), magic_loss(0),
+    ess_loss(0), domain(0), resistpain(0), lastdamage(0)
+  {
+    ZERO_OUT_ARRAY(ballistic, 3);
+    ZERO_OUT_ARRAY(impact, 3);
+    ZERO_OUT_ARRAY(sustained, 3);
+    ZERO_OUT_ARRAY(track, 2);
+    ZERO_OUT_ARRAY(fire, 2);
+    ZERO_OUT_ARRAY(reach, 2);
+    ZERO_OUT_ARRAY(extras, 2);
+  }
+
   // Adding something important? If it needs to be replicated to medited mobs, also update
   // utils.cpp's copy_over_necessary_info().
-
-  // Need defaults? Set them in db.cpp and olc.cpp (search for 'memset.*struct.*char_data').
 };
 
 struct char_special_data_saved
@@ -526,6 +538,24 @@ struct char_special_data_saved
   ush_int boosted[3][2];           /* str/qui/bod timeleft/amount		*/
   ubyte masking;
   int points;
+
+  char_special_data_saved() :
+    powerpoints(0), left_handed(0), cur_lang(0), centeringskill(0), masking(0), points(0)
+  {
+    for (int i = 0; i < MAX_SKILLS + 1; i++) {
+      ZERO_OUT_ARRAY(skills[i], 2);
+    }
+
+    for (int i = 0; i < ADEPT_NUMPOWER + 1; i++) {
+      ZERO_OUT_ARRAY(powers[i], 2);
+    }
+
+    ZERO_OUT_ARRAY(metamagic, META_MAX + 1);
+
+    for (int i = 0; i < 3; i++) {
+      ZERO_OUT_ARRAY(boosted[i], 2);
+    }
+  }
 };
 
 struct char_special_data
@@ -859,20 +889,18 @@ struct char_data
   /* Adding a field here? If it's a pointer, add it to utils.cpp's copy_over_necessary_info() to avoid breaking mdelete etc. */
 
   char_data() :
-      in_room(NULL), was_in_room(NULL), player_specials(NULL), in_veh(NULL), persona(NULL), squeue(NULL), sustained(NULL),
-      ssust(NULL), carrying(NULL), desc(NULL), cyberware(NULL), bioware(NULL), next_in_room(NULL), next(NULL),
-      next_fighting(NULL), next_in_zone(NULL), next_in_veh(NULL), next_watching(NULL), followers(NULL),
-      master(NULL), spells(NULL), ignore_data(NULL), pgroup(NULL), pgroup_invitations(NULL), congregation_bonus_pool(0),
-      last_violence_loop(0), pc_perception_test_results(NULL), mob_perception_test_results(NULL), alias_dirty_bit(FALSE)
+      nr(0), unique_id(0), in_room(NULL), was_in_room(NULL), player_specials(NULL), in_veh(NULL), vfront(FALSE),
+      persona(NULL), squeue(NULL), sustained(NULL), ssust(NULL), carrying(NULL), desc(NULL), cyberware(NULL),
+      bioware(NULL), next_in_room(NULL), next(NULL), next_fighting(NULL), next_in_zone(NULL), next_in_veh(NULL),
+      next_watching(NULL), followers(NULL), master(NULL), spells(NULL), ignore_data(NULL), pgroup(NULL),
+      pgroup_invitations(NULL), congregation_bonus_pool(0), last_violence_loop(0), pc_perception_test_results(NULL),
+       mob_perception_test_results(NULL), alias_dirty_bit(FALSE)
   {
-    for (int i = 0; i < NUM_WEARS; i++) {
-      equipment[i] = NULL;
-    }
+    ZERO_OUT_ARRAY(equipment, NUM_WEARS);
 
     // Initialize our bullet pants. Note that we index from 0 here.
     for (int wp = 0; wp <= END_OF_AMMO_USING_WEAPONS - START_OF_AMMO_USING_WEAPONS; wp++) {
-      for (int am = AMMO_NORMAL; am < NUM_AMMOTYPES; am++)
-        bullet_pants[wp][am] = 0;
+      ZERO_OUT_ARRAY(bullet_pants[wp], NUM_AMMOTYPES);
     }
   }
 };
