@@ -4471,7 +4471,7 @@ int file_to_string(const char *name, char *buf)
   }
   do {
     fgets(tmp, sizeof(tmp) - 1, fl);
-    tmp[strlen(tmp) - 1] = '\0';/* take off the trailing \n */
+    tmp[MAX(0, (int)(strlen(tmp)) - 1)] = '\0';/* take off the trailing \n */
     strcat(tmp, "\r\n");
 
     if (!feof(fl)) {

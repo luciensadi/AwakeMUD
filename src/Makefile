@@ -10,7 +10,7 @@ SHELL = /bin/sh
 
 .SUFFIXES :
 .SUFFIXES : .cpp .o
-.DELETE_ON_ERROR : 
+.DELETE_ON_ERROR :
 .PHONY : unittest
 #CXX = g++
 CXX = clang
@@ -29,8 +29,8 @@ CVS = cvs
 COMMON_FLAGS = -lmysqlclient -lz -lm -lsodium -lstdc++ -std=c++11
 
 # OSX? Uncomment these:
-LIBS = -L/usr/local/lib $(COMMON_FLAGS) -lcurl
-MYFLAGS = -DUSE_MEMORY_CANARIES -DDEBUG -DSELFADVANCE -Dosx -I /usr/local/include/ -Wall -Wextra -Wno-unused-parameter -std=c++11 -DSUPPRESS_MOB_SKILL_ERRORS -DACCELERATE_FOR_TESTING
+LIBS = -L/usr/local/lib $(COMMON_FLAGS) -lcurl -fsanitize=address
+MYFLAGS = -DUSE_MEMORY_CANARIES -DDEBUG -DSELFADVANCE -Dosx -I /usr/local/include/ -Wall -Wextra -Wno-unused-parameter -std=c++11 -DSUPPRESS_MOB_SKILL_ERRORS -DACCELERATE_FOR_TESTING -D_GLIBCXX_DEBUG -fsanitize=address
 
 # Linux / others? Uncomment these:
 #LIBS = -lcrypt -L/usr/local/lib $(COMMON_FLAGS) -lnsl -lcurl
@@ -130,7 +130,7 @@ clean:
 	$(CXX) -o ../bin/awake $(PROFILE) $(objfiles) $(LIBS)
 
 recompile:
-	$(MAKE) clean 
+	$(MAKE) clean
 	$(MAKE) depend
 	$(MAKE) ../bin/awake.new
 
@@ -157,4 +157,3 @@ unittest: ../bin/unittest
 
 
 include $(sourcefiles:.cpp=.d)
-

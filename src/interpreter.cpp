@@ -1564,12 +1564,12 @@ void command_interpreter(struct char_data * ch, char *argument, char *tcname)
       if (ch->desc)
         ch->desc->invalid_command_counter = 0;
     }
-    verify_data(ch, line, cmd, mtx_info[cmd].subcmd, "pre-rig");
+    verify_data(ch, line, cmd, rig_info[cmd].subcmd, "pre-rig");
     if (!special(ch, cmd, line)) {
       ((*rig_info[cmd].command_pointer) (ch, line, cmd, rig_info[cmd].subcmd));
-      verify_data(ch, line, cmd, mtx_info[cmd].subcmd, "rig");
+      verify_data(ch, line, cmd, rig_info[cmd].subcmd, "rig");
     } else {
-      verify_data(ch, line, cmd, mtx_info[cmd].subcmd, "rig special");
+      verify_data(ch, line, cmd, rig_info[cmd].subcmd, "rig special");
     }
   } else
   {
@@ -1668,13 +1668,13 @@ void command_interpreter(struct char_data * ch, char *argument, char *tcname)
       return;
     }
 
-    verify_data(ch, line, cmd, mtx_info[cmd].subcmd, "pre-command");
+    verify_data(ch, line, cmd, cmd_info[cmd].subcmd, "pre-command");
 
     if (no_specials || !special(ch, cmd, line)) {
       ((*cmd_info[cmd].command_pointer) (ch, line, cmd, cmd_info[cmd].subcmd));
-      verify_data(ch, line, cmd, mtx_info[cmd].subcmd, "command");
+      verify_data(ch, line, cmd, cmd_info[cmd].subcmd, "command");
     } else {
-      verify_data(ch, line, cmd, mtx_info[cmd].subcmd, "command special");
+      verify_data(ch, line, cmd, cmd_info[cmd].subcmd, "command special");
     }
   }
 }
