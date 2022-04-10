@@ -2703,7 +2703,7 @@ SPECIAL(fixer)
       do_say(fixer, arg, 0, SCMD_SAYTO);
       return TRUE;
     }
-    if (!(extra = get_number(&temp))) {
+    if (!(extra = get_number(&temp, sizeof(tmpvar)))) {
       snprintf(arg, sizeof(arg), "%s I don't have anything like that.", GET_CHAR_NAME(ch));
       do_say(fixer, arg, 0, SCMD_SAYTO);
       return TRUE;
@@ -5015,8 +5015,8 @@ SPECIAL(chargen_hopper)
       return FALSE;
 
     // Strip out the numbers for fewer shenanigans.
-    get_number(&arg1_ptr);
-    get_number(&arg2_ptr);
+    get_number(&arg1_ptr, sizeof(arg1));
+    get_number(&arg2_ptr, sizeof(arg2));
 
     // If the keyword they're using is valid for the hopper:
     if ((isname(arg2, hopper->text.keywords) || isname(arg2, hopper->text.name) || strcmp(arg2, "all") == 0)

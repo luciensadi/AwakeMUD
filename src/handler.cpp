@@ -1755,18 +1755,20 @@ struct obj_data *unequip_char(struct char_data * ch, int pos, bool focus)
   return (obj);
 }
 
-int get_number(char **name)
+int get_number(char **name, size_t name_len)
 {
   int i;
   char *ppos;
   char number[MAX_INPUT_LENGTH];
+  char source[MAX_INPUT_LENGTH];
 
   *number = '\0';
+  strlcpy(source, *name, sizeof(source));
 
-  if ((ppos = strchr(*name, '.'))) {
+  if ((ppos = strchr(source, '.'))) {
     *ppos++ = '\0';
-    strcpy(number, *name);
-    strcpy(*name, ppos);
+    strlcpy(number, source, sizeof(number));
+    strlcpy(*name, ppos, name_len);
 
     for (i = 0; *(number + i); i++)
       if (!isdigit(*(number + i)))
@@ -1792,7 +1794,7 @@ struct veh_data *get_veh_list(char *name, struct veh_data *list, struct char_dat
     mine = TRUE;
     strlcpy(tmp, name+3, sizeof(tmpname));
   }
-  if (!(number = get_number(&tmp)))
+  if (!(number = get_number(&tmp, sizeof(tmpname))))
     return NULL;
   for (i = list; i && (j <= number); i = i->next_veh)
     if (isname(tmp, get_string_after_color_code_removal(GET_VEH_NAME(i), NULL))
@@ -1848,7 +1850,7 @@ struct char_data *get_char_room(const char *name, struct room_data *room)
   }
 
   strcpy(tmp, name);
-  if (!(number = get_number(&tmp)))
+  if (!(number = get_number(&tmp, sizeof(tmpname))))
     return NULL;
 
   for (i = room->people; i && (j <= number); i = i->next_in_room)
@@ -2756,7 +2758,7 @@ struct char_data *get_char_room_vis(struct char_data * ch, char *name)
 
   /* 0.<name> means PC with name */
   strcpy(tmp, name);
-  if (!(number = get_number(&tmp)))
+  if (!(number = get_number(&tmp, sizeof(tmpname))))
     return get_player_vis(ch, tmp, 1);
 
   if (ch->in_veh)
@@ -2788,7 +2790,7 @@ struct char_data *get_char_in_list_vis(struct char_data * ch, char *name, struct
 
   /* 0.<name> means PC with name */
   strcpy(tmp, name);
-  if (!(number = get_number(&tmp)))
+  if (!(number = get_number(&tmp, sizeof(tmpname))))
     return get_player_vis(ch, tmp, 1);
 
   for (; list && j <= number; list = list->next_in_room)
@@ -2823,7 +2825,7 @@ struct char_data *get_char_vis(struct char_data * ch, char *name)
     return i;
 
   strcpy(tmp, name);
-  if (!(number = get_number(&tmp)))
+  if (!(number = get_number(&tmp, sizeof(tmpname))))
     return get_player_vis(ch, tmp, 0);
 
   for (i = character_list; i && (j <= number); i = i->next)
@@ -2850,7 +2852,7 @@ struct obj_data *get_obj_in_list_vis(struct char_data * ch, char *name, struct o
     return NULL;
 
   strcpy(tmp, name);
-  if (!(number = get_number(&tmp)))
+  if (!(number = get_number(&tmp, sizeof(tmpname))))
     return NULL;
 
   for (i = list; i && (j <= number); i = i->next_content) {
@@ -2882,7 +2884,7 @@ struct obj_data *get_obj_vis(struct char_data * ch, char *name)
     return i;
 
   strcpy(tmp, name);
-  if (!(number = get_number(&tmp)))
+  if (!(number = get_number(&tmp, sizeof(tmpname))))
     return NULL;
 
   //  return find_obj(ch, tmp, number);
@@ -2897,7 +2899,7 @@ struct obj_data *get_object_in_equip_vis(struct char_data * ch,
   int i = 0, number;
 
   strcpy(tmp, arg);
-  if (!(number = get_number(&tmp)))
+  if (!(number = get_number(&tmp, sizeof(tmpname))))
     return NULL;
 
   for ((*j) = 0; (*j) < NUM_WEARS && i <= number; (*j)++)
@@ -3145,7 +3147,7 @@ int generic_find(char *arg, int bitvector, struct char_data * ch,
 
     /* 0.<name> means PC with name-- except here we're overriding that because I cannot be bothered right now. TODO. --LS */
     strcpy(tmp, name);
-    number = MAX(1, get_number(&tmp));
+    number = MAX(1, get_number(&tmp, sizeof(tmpname)));
 
     for (i = get_ch_in_room(ch)->people; i && j <= number; i = i->next_in_room)
       if ((isname(tmp, get_string_after_color_code_removal(GET_KEYWORDS(i), NULL))
