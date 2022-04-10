@@ -741,17 +741,11 @@ void get_check_money(struct char_data * ch, struct obj_data * obj, struct obj_da
     else
       send_to_char(ch, "There was 1 nuyen.\r\n");
 
-    // Income from an NPC corpse is always tracked.
     if (from_obj && (GET_OBJ_VNUM(from_obj) != OBJ_SPECIAL_PC_CORPSE && IS_OBJ_STAT(from_obj, ITEM_EXTRA_CORPSE))) {
-      if (IS_SENATOR(ch))
-        send_to_char("(nuyen from npc corpse)\r\n", ch);
+      // Income from an NPC corpse is always tracked.
       gain_nuyen(ch, GET_ITEM_MONEY_VALUE(obj), NUYEN_INCOME_LOOTED_FROM_NPCS);
-    }
-
-    // Picking up money from a player corpse, or dropped money etc-- not a faucet, came from a PC.
-    else {
-      if (IS_SENATOR(ch))
-        send_to_char("(nuyen from player corpse)\r\n", ch);
+    } else {
+      // Picking up money from a player corpse, or dropped money etc-- not a faucet, came from a PC.
       GET_NUYEN_RAW(ch) += GET_ITEM_MONEY_VALUE(obj);
     }
 

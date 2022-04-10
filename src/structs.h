@@ -599,18 +599,16 @@ struct char_special_data
   struct char_special_data_saved saved; /* constants saved in plrfile  */
 
   char_special_data() :
-      fight_veh(NULL), fighting(NULL), hunting(NULL), programming(NULL),
-      position(POS_STANDING), defined_position(NULL), leave(NULL), arrive(NULL), subscribe(NULL), rigging(NULL),
+      fight_veh(NULL), fighting(NULL), hunting(NULL), programming(NULL), num_spirits(0), idnum(0),
+      nervestrike(FALSE), tempquiloss(0), cost_breakup(0), avail_offset(0), shooting_dir(0),
+      position(POS_STANDING), defined_position(NULL), leave(NULL), arrive(NULL), target_mod(0),
+      carry_weight(0), carry_items(0), foci(0), last_healed(0), timer(0), last_timer(0),
+      last_social_action(0), actions(0), subscribe(NULL), rigging(NULL),
       mindlink(NULL), spirits(NULL)
   {
-    for (int i = 0; i < 3; i++)
-      conjure[i] = 0;
-
-    for (int i = 0; i < 3; i++)
-      coord[i] = 0;
-
-    for (int i = 0; i < NUM_DIRTY_BITS; i++)
-      dirty_bits[i] = 0;
+    ZERO_OUT_ARRAY(conjure, 4);
+    ZERO_OUT_ARRAY(coord, 3);
+    ZERO_OUT_ARRAY(dirty_bits, NUM_DIRTY_BITS);
   }
 };
 

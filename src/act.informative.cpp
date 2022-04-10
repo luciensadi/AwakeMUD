@@ -5907,6 +5907,9 @@ ACMD(do_status)
       printed = TRUE;
       break;
   }
+  if (GET_TEMP_QUI_LOSS(ch)) {
+    send_to_char(ch, "  Temporary quickness loss: %d\r\n", GET_TEMP_QUI_LOSS(ch));
+  }
   if (GET_REACH(targ)) {
     send_to_char(ch, "  Extra Reach (%dm)\r\n", GET_REACH(targ));
     printed = TRUE;
