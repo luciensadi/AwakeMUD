@@ -78,8 +78,14 @@ struct alias
   char *replacement;
   int type;
   struct alias *next;
+
   alias():
     command(NULL), replacement(NULL), next(NULL)
   {}
+
+  ~alias() {
+    delete [] command;
+    delete [] replacement;
+  }
 };
 #endif

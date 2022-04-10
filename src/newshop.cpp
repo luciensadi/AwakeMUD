@@ -1042,7 +1042,7 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
 
     // Calculate their skill level, including bioware.
     bool pheremones = FALSE;
-    int skill = get_skill(ch, shop_table[shop_nr].ettiquete, target);
+    int skill = get_skill(ch, shop_table[shop_nr].etiquette, target);
     for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content)
       if (GET_OBJ_VAL(bio, 0) == BIO_TAILOREDPHEREMONES) {
         pheremones = TRUE;
@@ -1055,16 +1055,16 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
 
     // Failure case.
     if (success < 1) {
-      if (GET_SKILL(ch, shop_table[shop_nr].ettiquete) == 0) {
+      if (GET_SKILL(ch, shop_table[shop_nr].etiquette) == 0) {
         if (pheremones)
           snprintf(buf, sizeof(buf), "Not even your tailored pheremones can soothe $N's annoyance at your lack of %s.\r\n",
-                   skills[shop_table[shop_nr].ettiquete].name);
+                   skills[shop_table[shop_nr].etiquette].name);
         else
           snprintf(buf, sizeof(buf), "$N seems annoyed that you don't even know the basics of %s.\r\n",
-                   skills[shop_table[shop_nr].ettiquete].name);
+                   skills[shop_table[shop_nr].etiquette].name);
       } else {
         snprintf(buf, sizeof(buf), "You exert every bit of %s you can muster, %sbut $N shakes $S head after calling a few contacts.\r\n",
-                 skills[shop_table[shop_nr].ettiquete].name,
+                 skills[shop_table[shop_nr].etiquette].name,
                  pheremones ? "aided by your tailored pheremones, " : "");
       }
       act(buf, FALSE, ch, 0, keeper, TO_CHAR);
@@ -1081,13 +1081,13 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
       return;
     }
 
-    if (GET_SKILL(ch, shop_table[shop_nr].ettiquete) == 0) {
+    if (GET_SKILL(ch, shop_table[shop_nr].etiquette) == 0) {
       snprintf(buf, sizeof(buf), "$N seems annoyed that you don't even know the basics of %s, but %syou convince $M to call a few contacts anyways.\r\n",
-              skills[shop_table[shop_nr].ettiquete].name,
+              skills[shop_table[shop_nr].etiquette].name,
               pheremones ? "aided by your tailored pheremones, " : "");
     } else {
       snprintf(buf, sizeof(buf), "You exert every bit of %s you can muster, %sand $N nods to you after calling a few contacts.\r\n",
-               skills[shop_table[shop_nr].ettiquete].name,
+               skills[shop_table[shop_nr].etiquette].name,
                pheremones ? "aided by your tailored pheremones, " : "");
     }
     act(buf, FALSE, ch, 0, keeper, TO_CHAR);
@@ -2270,7 +2270,7 @@ void list_detailed_shop(struct char_data *ch, vnum_t shop_nr)
 #else
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", Hours (disabled) [%d-%d]\r\n", shop_table[shop_nr].open, shop_table[shop_nr].close);
 #endif
-  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Type:       %s, Etiquette: %s\r\n", shop_type[shop_table[shop_nr].type], skills[shop_table[shop_nr].ettiquete].name);
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Type:       %s, Etiquette: %s\r\n", shop_type[shop_table[shop_nr].type], skills[shop_table[shop_nr].etiquette].name);
   shop_table[shop_nr].races.PrintBits(buf2, MAX_STRING_LENGTH, pc_race_types, NUM_RACES);
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "!Serves:     %s\r\n", buf2);
   shop_table[shop_nr].flags.PrintBits(buf2, MAX_STRING_LENGTH, shop_flags, SHOP_FLAGS);
@@ -2336,7 +2336,7 @@ void write_shops_to_disk(int zone)
               "Races:\t%s\n"
               "Buytypes:\t%s\n"
               "Etiquette:\t%d\n",
-              shop->flags.ToString(), shop->races.ToString(), shop->buytypes.ToString(), shop->ettiquete);
+              shop->flags.ToString(), shop->races.ToString(), shop->buytypes.ToString(), shop->etiquette);
       fprintf(fp, "[SELLING]\n");
       int i = 0;
       for (struct shop_sell_data *sell = shop->selling; sell; sell = sell->next, i++) {
@@ -2457,7 +2457,7 @@ void shedit_disp_menu(struct descriptor_data *d)
 #else
   send_to_char(CH, "6) Opens: ^c%d^n Closes: ^c%d^n (Note: system is currently disabled)\r\n", SHOP->open, SHOP->close);
 #endif
-  send_to_char(CH, "7) Etiquette Used for Availability Rolls: ^c%s^n\r\n", skills[SHOP->ettiquete].name);
+  send_to_char(CH, "7) Etiquette Used for Availability Rolls: ^c%s^n\r\n", skills[SHOP->etiquette].name);
   SHOP->races.PrintBits(buf, MAX_STRING_LENGTH, pc_race_types, NUM_RACES);
   send_to_char(CH, "8) Doesn't Trade With: ^c%s^n\r\n", buf);
   SHOP->flags.PrintBits(buf, MAX_STRING_LENGTH, shop_flags, SHOP_FLAGS);
@@ -2655,7 +2655,7 @@ void shedit_parse(struct descriptor_data *d, const char *arg)
       send_to_char("Invalid Choice! Enter Etiquette skill: ", CH);
       return;
     }
-    SHOP->ettiquete = --number + SKILL_CORPORATE_ETIQUETTE;
+    SHOP->etiquette = --number + SKILL_CORPORATE_ETIQUETTE;
     shedit_disp_menu(d);
     break;
   case SHEDIT_KEEPER:

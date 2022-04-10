@@ -320,12 +320,6 @@ void copyover_recover()
 
     /* Now, find the pfile */
 
-    /* Why would you create a new character, then immediately discard it and load a new one from the DB? */
-    //CREATE(d->character, struct char_data, 1);
-    //clear_char(d->character);
-    //CREATE(d->character->player_specials, struct player_special_data, 1);
-    //d->character->desc = d;
-
     if ((d->character = playerDB.LoadChar(name, FALSE))) {
       d->character->desc = d;
       if (!PLR_FLAGGED(d->character, PLR_DELETED))

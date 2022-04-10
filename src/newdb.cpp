@@ -758,7 +758,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
             auto it = std::find_if(contained_obj.begin(), contained_obj.end(), find_level(inside+1));
             while (it != contained_obj.end()) {
               obj_to_obj(it->obj, obj);
-              contained_obj.erase(it);
+              it = contained_obj.erase(it);
             }
 
             if (inside > 0) {
@@ -872,7 +872,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
             auto it = std::find_if(contained_obj.begin(), contained_obj.end(), find_level(inside+1));
             while (it != contained_obj.end()) {
               obj_to_obj(it->obj, obj);
-              contained_obj.erase(it);
+              it = contained_obj.erase(it);
             }
 
             if (inside > 0) {
@@ -985,7 +985,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
             auto it = std::find_if(contained_obj.begin(), contained_obj.end(), find_level(inside+1));
             while (it != contained_obj.end()) {
               obj_to_obj(it->obj, obj);
-              contained_obj.erase(it);
+              it = contained_obj.erase(it);
             }
 
             if (inside > 0) {
@@ -1692,7 +1692,6 @@ char_data *PCIndex::LoadChar(const char *name, bool logon)
   char_data *ch = Mem->GetCh();
 
   ch->player_specials = new player_special_data;
-  memset(ch->player_specials, 0, sizeof(player_special_data));
 
   load_char(name, ch, logon);
 
@@ -1815,14 +1814,8 @@ void PCIndex::resize_table(int empty_slots)
     for (int i = 0; i < entry_cnt; i++)
       new_tab[i] = tab[i];
 
-    // fill empty slots with zeroes
-    memset(new_tab+entry_cnt, 0, sizeof(entry)*(entry_size-entry_cnt));
-
     // delete the old table
     delete [] tab;
-  } else {
-    // fill entire table with zeros
-    memset(new_tab, 0, sizeof(entry)*entry_size);
   }
 
   // finally, update the pointer

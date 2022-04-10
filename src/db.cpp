@@ -1089,7 +1089,6 @@ void parse_host(File &fl, long nr)
   for (int x = 0; x < num_fields; x++) {
     const char *name = data.GetIndexSection("EXITS", x);
     exit_data *exit = new exit_data;
-    memset(exit, 0, sizeof(exit_data));
     snprintf(field, sizeof(field), "%s/Exit", name);
     exit->host = data.GetLong(field, 0);
     snprintf(field, sizeof(field), "%s/Number", name);
@@ -1110,7 +1109,6 @@ void parse_host(File &fl, long nr)
   for (int x = 0; x < num_fields; x++) {
     const char *name = data.GetIndexSection("TRIGGERS", x);
     trigger_step *trigger = new trigger_step;
-    memset(trigger, 0, sizeof(trigger_step));
     snprintf(field, sizeof(field), "%s/Step", name);
     trigger->step = data.GetInt(field, 0);
     snprintf(field, sizeof(field), "%s/Alert", name);
@@ -1294,7 +1292,6 @@ void parse_room(File &fl, long nr)
 
       room->dir_option[i] = new room_direction_data;
       room_direction_data *dir = room->dir_option[i];
-      memset(dir, 0, sizeof(room_direction_data));
 
       dir->to_room = &world[0];
       dir->to_room_vnum = to_vnum;
@@ -1376,7 +1373,6 @@ void parse_room(File &fl, long nr)
 
 
       extra_descr_data *desc = new extra_descr_data;
-      memset(desc, 0, sizeof(extra_descr_data));
       desc->keyword = keywords;
       snprintf(field, sizeof(field), "%s/Desc", sect);
       desc->description = str_dup(data.GetString(field, NULL));
@@ -1403,7 +1399,6 @@ void setup_dir(FILE * fl, int room, int dir)
   snprintf(buf2, sizeof(buf2), "room #%ld, direction D%d", world[room].number, dir);
 
   world[room].dir_option[dir] = new room_direction_data;
-  memset(world[room].dir_option[dir], 0, sizeof(room_direction_data));
   world[room].dir_option[dir]->general_description = fread_string(fl, buf2);
   world[room].dir_option[dir]->keyword = fread_string(fl, buf2);
 
@@ -2157,7 +2152,6 @@ void parse_object(File &fl, long nr)
       }
 
       extra_descr_data *desc = new extra_descr_data;
-      memset(desc, 0, sizeof(extra_descr_data));
       desc->keyword = keywords;
       snprintf(field, sizeof(field), "%s/Desc", sect);
       desc->description = str_dup(data.GetString(field, NULL));
@@ -2312,7 +2306,7 @@ void parse_shop(File &fl, long virtual_nr)
   shop->flags.FromString(data.GetString("Flags", "0"));
   shop->races.FromString(data.GetString("Races", "0"));
   shop->buytypes.FromString(data.GetString("BuyTypes", "0"));
-  shop->ettiquete = data.GetInt("Etiquette", SKILL_STREET_ETIQUETTE);
+  shop->etiquette = data.GetInt("Etiquette", SKILL_STREET_ETIQUETTE);
   int num_fields = data.NumSubsections("SELLING"), vnum;
   struct shop_sell_data *templist = NULL;
 
@@ -2341,7 +2335,6 @@ void parse_shop(File &fl, long virtual_nr)
       continue;
     }
     shop_sell_data *sell = new shop_sell_data;
-    memset(sell, 0, sizeof(shop_sell_data));
     sell->vnum = vnum;
     snprintf(field, sizeof(field), "%s/Type", name);
     sell->type = data.LookupInt(field, selling_type, SELL_ALWAYS);
@@ -4012,7 +4005,6 @@ bool resize_world_array()
   struct room_data *new_world;
 
   new_world = new struct room_data[top_of_world_array + world_chunk_size];
-  memset(new_world, 0, sizeof(room_data) * (top_of_world_array + world_chunk_size));
 
   if (!new_world) {
     mudlog("Unable to allocate new world array.", NULL, LOG_SYSLOG, TRUE);
@@ -4044,7 +4036,6 @@ bool resize_qst_array(void)
   struct quest_data *new_qst;
 
   new_qst = new struct quest_data[top_of_quest_array + quest_chunk_size];
-  memset(new_qst, 0, sizeof(quest_data) * (top_of_quest_array + quest_chunk_size));
 
   if (!new_qst) {
     mudlog("Unable to allocate new quest array.", NULL, LOG_SYSLOG, TRUE);
@@ -4128,9 +4119,6 @@ char *fread_string(FILE * fl, char *error)
 void free_char(struct char_data * ch)
 {
   int i;
-  struct alias *a, *temp, *next;
-  struct remem *b, *nextr;
-  extern void free_alias(struct alias * a);
 
   /* clean up spells */
   {
@@ -4170,16 +4158,22 @@ void free_char(struct char_data * ch)
   if (ch->player_specials != NULL && ch->player_specials != &dummy_mob)
   {
     // we have to delete these here before we delete the struct
-    for (a = GET_ALIASES(ch); a; a = next) {
-      next = a->next;
-      REMOVE_FROM_LIST(a, GET_ALIASES(ch), next);
-      free_alias(a);
+    {
+      struct alias *temp, *next;
+      for (struct alias *a = GET_ALIASES(ch); a; a = next) {
+        next = a->next;
+        REMOVE_FROM_LIST(a, GET_ALIASES(ch), next);
+        delete a;
+      }
     }
 
-    for (b = GET_PLAYER_MEMORY(ch); b; b = nextr) {
-      nextr = b->next;
-      DELETE_ARRAY_IF_EXTANT(b->mem);
-      DELETE_AND_NULL(b);
+    {
+      struct remem *nextr;
+      for (struct remem *b = GET_PLAYER_MEMORY(ch); b; b = nextr) {
+        nextr = b->next;
+        DELETE_ARRAY_IF_EXTANT(b->mem);
+        DELETE_AND_NULL(b);
+      }
     }
 
     DELETE_ARRAY_IF_EXTANT(ch->player_specials->obj_complete);
@@ -4510,17 +4504,10 @@ void reset_char(struct char_data * ch)
     GET_MENTAL(ch) = 100;
 }
 
-// TODO: this doesn't even clear 50% of the working variables, wat
-/* clear ALL the working variables of a char; do NOT free any space alloc'ed */
 void clear_char(struct char_data * ch)
 {
-  memset(ch, 0, sizeof(struct char_data));
-
-  ch->in_veh = NULL;
-  ch->in_room = NULL;
+  reset_char(ch);
   GET_WAS_IN(ch) = NULL;
-  GET_POS(ch) = POS_STANDING;
-  ch->mob_specials.default_pos = POS_STANDING;
   if (ch->points.max_mental < 1000)
     ch->points.max_mental = 1000;
   ch->player.time.logon = time(0);
@@ -5052,7 +5039,7 @@ void load_saved_veh()
               auto it = std::find_if(contained_obj.begin(), contained_obj.end(), find_level(inside+1));
               while (it != contained_obj.end()) {
                 obj_to_obj(it->obj, obj);
-                contained_obj.erase(it);
+                it = contained_obj.erase(it);
               }
 
               if (inside > 0) {
@@ -5131,7 +5118,6 @@ void load_saved_veh()
     num_mods = data.NumSubsections("GRIDGUIDE");
     for (int i = 0; i < num_mods; i++) {
       struct grid_data *grid = new grid_data;
-      memset(grid, 0, sizeof(grid_data));
       const char *sect_name = data.GetIndexSection("GRIDGUIDE", i);
       snprintf(buf, sizeof(buf), "%s/Name", sect_name);
       grid->name = str_dup(data.GetString(buf, NULL));
@@ -5332,7 +5318,7 @@ void load_consist(void)
                   auto it = std::find_if(contained_obj.begin(), contained_obj.end(), find_level(inside+1));
                   while (it != contained_obj.end()) {
                     obj_to_obj(it->obj, obj);
-                    contained_obj.erase(it);
+                    it = contained_obj.erase(it);
                   }
 
                   if (inside > 0) {
@@ -5467,7 +5453,6 @@ void boot_shop_orders(void)
       if (real_object(vnum) < 0 || !does_player_exist(player))
         continue;
       order = new shop_order_data;
-      memset(order, 0, sizeof(shop_order_data));
       order->item = vnum;
       order->player = player;
       snprintf(buf, sizeof(buf), "%s/Time", sect_name);

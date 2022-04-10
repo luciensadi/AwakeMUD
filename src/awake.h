@@ -70,6 +70,8 @@
 #define INT    4
 #define WIL    5
 #define REA    6
+#define NUM_ATTRIBUTES 7
+
 #define TBOD             (1 << 0)
 #define TQUI             (1 << 1)
 #define TSTR             (1 << 2)
@@ -2512,9 +2514,7 @@ enum {
 #define LIST_COMMAND_LIMIT 500
 
 // Stack / memory canaries.
-#ifdef USE_DEBUG_CANARIES
 #define CANARY_VALUE 31337
-#endif
 
 // MySQL constraints.
 #define MYSQL_SIGNED_TINYINT_MAX     127

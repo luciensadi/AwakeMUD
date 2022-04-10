@@ -1694,13 +1694,6 @@ struct alias *find_alias(struct alias *alias_list, char *str)
   return NULL;
 }
 
-void free_alias(struct alias *a)
-{
-  DELETE_ARRAY_IF_EXTANT(a->command);
-  DELETE_ARRAY_IF_EXTANT(a->replacement);
-  DELETE_AND_NULL(a);
-}
-
 ACMD(do_keepalive) {
   // no-op command to give you something to send without generating server load
 }
@@ -1734,15 +1727,19 @@ ACMD(do_alias)
     /* is this an alias we've already defined? */
     if ((a = find_alias(GET_ALIASES(ch), arg)) != NULL) {
       REMOVE_FROM_LIST(a, GET_ALIASES(ch), next);
-      free_alias(a);
+      delete a;
+      a = NULL;
+
+      // No replacement string was specified-- assume we want to delete.
+      if (!*repl) {
+        send_to_char("Alias deleted.\r\n", ch);
+        return;
+      }
     }
 
-    /* if no replacement string is specified, assume we want to delete */
     if (!*repl) {
-      if (a == NULL)
-        send_to_char("No such alias.\r\n", ch);
-      else
-        send_to_char("Alias deleted.\r\n", ch);
+      // They wanted to delete an alias, but it didn't exist.
+      send_to_char("No such alias.\r\n", ch);
     } else { /* otherwise, either add or redefine an alias */
       if (!str_cmp(arg, "alias")) {
         send_to_char("You can't alias 'alias'.\r\n", ch);
@@ -2532,7 +2529,6 @@ void nanny(struct descriptor_data * d, char *arg)
           // Create and zero out their player_specials.
           DELETE_IF_EXTANT(d->character->player_specials);
           d->character->player_specials = new player_special_data;
-          memset(d->character->player_specials, 0, sizeof(player_special_data));
 
           // Initialize their ignore data structure, which all PCs have.
           GET_IGNORE_DATA(d->character) = new IgnoreData(d->character);
@@ -2822,6 +2818,8 @@ void nanny(struct descriptor_data * d, char *arg)
         char char_name[strlen(GET_CHAR_NAME(d->character))+1];
         strcpy(char_name, GET_CHAR_NAME(d->character));
         free_char(d->character);
+        delete d->character;
+
         d->character = playerDB.LoadChar(char_name, false);
         d->character->desc = d;
         PLR_FLAGS(d->character).RemoveBit(PLR_JUST_DIED);

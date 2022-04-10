@@ -3598,7 +3598,7 @@ ACMD(do_activate)
     send_to_char("You press your thumb against the pad and the display flashes green.\r\n", ch);
     break;
   case 3:
-    act("$p scans your retina and the display flashes green.\r\n", FALSE, ch, obj, 0, TO_CHAR);
+    act("$p scans your retina and the display flashes green.", FALSE, ch, obj, 0, TO_CHAR);
     break;
   }
 }

@@ -13,9 +13,9 @@ SHELL = /bin/sh
 .DELETE_ON_ERROR :
 .PHONY : unittest
 #CXX = g++
-CXX = clang
+CXX = clang -fsanitize=address
 #CXX = /opt/homebrew/Cellar/gcc/11.2.0_3/bin/aarch64-apple-darwin21-g++-11 -Wno-format-truncation -Wno-deprecated-copy
-CC = g++
+CC = g++ -fsanitize=address
 #CC = /opt/homebrew/Cellar/gcc/11.2.0_3/bin/aarch64-apple-darwin21-g++-11 -Wno-format-truncation -Wno-deprecated-copy
 
 PROFILE = -ggdb
@@ -29,8 +29,8 @@ CVS = cvs
 COMMON_FLAGS = -lmysqlclient -lz -lm -lsodium -lstdc++ -std=c++11
 
 # OSX? Uncomment these:
-LIBS = -L/usr/local/lib $(COMMON_FLAGS) -lcurl -fsanitize=address
-MYFLAGS = -DUSE_MEMORY_CANARIES -DDEBUG -DSELFADVANCE -Dosx -I /usr/local/include/ -Wall -Wextra -Wno-unused-parameter -std=c++11 -DSUPPRESS_MOB_SKILL_ERRORS -DACCELERATE_FOR_TESTING -D_GLIBCXX_DEBUG -fsanitize=address
+LIBS = -L/usr/local/lib $(COMMON_FLAGS) -lcurl
+MYFLAGS = -DUSE_MEMORY_CANARIES -DDEBUG -DSELFADVANCE -Dosx -I /usr/local/include/ -Wall -Wextra -Wno-unused-parameter -std=c++11 -DSUPPRESS_MOB_SKILL_ERRORS -DACCELERATE_FOR_TESTING -D_GLIBCXX_DEBUG
 
 # Linux / others? Uncomment these:
 #LIBS = -lcrypt -L/usr/local/lib $(COMMON_FLAGS) -lnsl -lcurl

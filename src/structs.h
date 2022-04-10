@@ -32,6 +32,8 @@
 #define NOTHING (-1)
 #define NOBODY  (-1)
 
+#define ZERO_OUT_ARRAY(array_name, array_size) { for (int array_zero_idx = 0; array_zero_idx < (array_size); array_zero_idx++) { (array_name)[array_zero_idx] = 0; } }
+
 class IgnoreData;
 
 /* Extra description: used in objects, mobiles, and rooms */
@@ -82,6 +84,16 @@ struct obj_flag_data
   int legality[3];
   long quest_id;
   int attempt;  // ITEM_MONEY: Number of failed cracks. ITEM_WEAPON: Built-in recoil comp.
+
+  obj_flag_data() :
+    type_flag(0), weight(0), cost(0), timer(0), material(0), barrier(0), condition(0),
+    availtn(0), availdays(0), street_index(0), quest_id(0), attempt(0)
+  {
+    ZERO_OUT_ARRAY(value, NUM_VALUES);
+    ZERO_OUT_ARRAY(legality, 3);
+
+    // No need to do anything with the bitfields-- they auto-clear.
+  }
 };
 
 /* Used in obj_file_elem *DO*NOT*CHANGE* */
@@ -89,6 +101,10 @@ struct obj_affected_type
 {
   byte location;      /* Which ability to change (APPLY_XXX) */
   sbyte modifier;     /* How much it changes by              */
+
+  obj_affected_type() :
+    location(0), modifier(0)
+  {}
 };
 
 /* ================== Memory Structure for Objects ================== */
@@ -123,19 +139,28 @@ struct obj_data
   struct veh_data *tveh;
 
 #ifdef USE_DEBUG_CANARIES
-  // No sense in initializing the value since it's memset to 0 in most invocations.
   int canary;
 #endif
   obj_data() :
-      in_room(NULL), in_veh(NULL), ex_description(NULL), restring(NULL), photo(NULL), graffiti(NULL), source_info(NULL),
-      carried_by(NULL), worn_by(NULL), in_obj(NULL), contains(NULL), next_content(NULL), in_host(NULL), targ(NULL), tveh(NULL)
-  {}
+      item_number(0), in_room(NULL), in_veh(NULL), vfront(FALSE), ex_description(NULL),
+      restring(NULL), photo(NULL), graffiti(NULL), source_info(NULL), carried_by(NULL),
+      worn_by(NULL), worn_on(0), in_obj(NULL), contains(NULL), next_content(NULL),
+      in_host(NULL), targ(NULL), tveh(NULL)
+  {
+    #ifdef USE_DEBUG_CANARIES
+      canary = CANARY_VALUE;
+    #endif
+  }
 };
 
 // Struct for preserving order of objects.
 struct nested_obj {
-      int level;
-      struct obj_data* obj;
+  int level;
+  struct obj_data* obj;
+
+  nested_obj() :
+    level(0), obj(NULL)
+  {}
 };
 
 // Comparator for preserving order of objects.
@@ -175,7 +200,6 @@ struct room_direction_data
   const char *come_out_of_thirdperson;
 
 #ifdef USE_DEBUG_CANARIES
-  // No sense in initializing the value since it's memset to 0 in most invocations.
   int canary;
 #endif
   room_direction_data() :
@@ -183,7 +207,11 @@ struct room_direction_data
       key_level(0), ward(0), idnum(0), hidden(0), material(0), barrier(0), condition(0),
       to_room_vnum(NOWHERE), go_into_secondperson(NULL), go_into_thirdperson(NULL),
       come_out_of_thirdperson(NULL)
-  {}
+  {
+    #ifdef USE_DEBUG_CANARIES
+      canary = CANARY_VALUE;
+    #endif
+  }
 }
 ;
 
@@ -237,22 +265,31 @@ struct room_data
   struct obj_data *best_workshop[NUM_WORKSHOP_TYPES];
 
 #ifdef USE_DEBUG_CANARIES
-  // No sense in initializing the value since it's memset to 0 in most invocations.
   int canary;
 #endif
   room_data() :
-      name(NULL), description(NULL), night_desc(NULL), ex_description(NULL),
-      matrix(0), access(0), io(0), trace(0), bandwidth(0), jacknumber(0),
-      address(NULL), peaceful(0), func(NULL), dirty_bit(FALSE),
-      staff_level_lock(0), contents(NULL), people(NULL), vehicles(NULL), watching(NULL)
+      number(0), zone(0), sector_type(0), name(NULL), description(NULL),
+      night_desc(NULL), ex_description(NULL), matrix(0), access(0), io(0),
+      trace(0), bandwidth(0), rtg(0), jacknumber(0),
+      address(NULL), blood(0), debris(0), spec(0), rating(0), cover(0), crowd(0),
+      type(0), x(0), y(0), z(0), peaceful(0), func(NULL), dirty_bit(FALSE),
+      staff_level_lock(0), elevator_number(0), contents(NULL), people(NULL),
+      vehicles(NULL), watching(NULL)
   {
-    for (int i = 0; i < NUM_OF_DIRS; i++) {
-      dir_option[i] = NULL;
-      temporary_stored_exit[i] = NULL;
-    }
+    ZERO_OUT_ARRAY(dir_option, NUM_OF_DIRS);
+    ZERO_OUT_ARRAY(temporary_stored_exit, NUM_OF_DIRS);
+    ZERO_OUT_ARRAY(vision, 3);
+    ZERO_OUT_ARRAY(background, 4);
+    ZERO_OUT_ARRAY(light, 3);
+    ZERO_OUT_ARRAY(poltergeist, 2);
+    ZERO_OUT_ARRAY(icesheet, 2);
+    ZERO_OUT_ARRAY(shadow, 2);
+    ZERO_OUT_ARRAY(silence, 2);
+    ZERO_OUT_ARRAY(best_workshop, NUM_WORKSHOP_TYPES);
 
-    for (int i = 0; i < NUM_WORKSHOP_TYPES; i++)
-      best_workshop[i] = NULL;
+#ifdef USE_DEBUG_CANARIES
+    canary = CANARY_VALUE;
+#endif
   }
 }
 ;
@@ -269,7 +306,7 @@ struct spell_data
   struct spell_data *next;              // pointer to next spell in list
 
   spell_data() :
-      name(NULL), next(NULL)
+      name(NULL), type(0), force(0), subtype(0), next(NULL)
   {}
 };
 
@@ -322,7 +359,7 @@ struct memory_rec_struct
   struct memory_rec_struct *next;
 
   memory_rec_struct() :
-      next(NULL)
+      id(0), next(NULL)
   {}
 };
 
@@ -334,6 +371,10 @@ struct time_info_data
 {
   byte minute, hours, day, month, weekday;
   sh_int year;
+
+  time_info_data() :
+    minute(0), hours(0), day(0), month(0), weekday(0)
+  {}
 };
 
 /* These data contain information about a players time data */
@@ -343,9 +384,14 @@ struct time_data
   time_t logon;    /* Time of the last logon (used to calculate played) */
   time_t lastdisc;
   int  played;     /* This is the total accumulated time played in secs */
+
+  time_data() :
+    birth(0), logon(0), lastdisc(0), played(0)
+  {}
 };
 
 /* general player-related info, usually PC's and NPC's */
+#define YES_PLEASE  0  /* Austin Powers, anyone? */
 struct char_player_data
 {
   char *char_name;
@@ -380,15 +426,19 @@ struct char_player_data
   char_player_data() :
       char_name(NULL), background(NULL), title(NULL), pretitle(NULL), whotitle(NULL),
       prompt(NULL), matrixprompt(NULL), poofin(NULL), poofout(NULL), highlight_color_code(NULL),
-      email(NULL), tradition(2), host(NULL)
-  {}
+      email(NULL), multiplier(0), sex(YES_PLEASE), level(0), last_room(NOWHERE),
+      weight(0), height(0), race(0), tradition(TRAD_MUNDANE), aspect(0), host(NULL)
+  {
+    memset(passwd, 0, sizeof(passwd));
+  }
 }
 ;
+#undef YES_PLEASE
 
 /* Char's abilities.  Used in char_file_u *DO*NOT*CHANGE* */
 struct char_ability_data
 {
-  sbyte attributes[7];
+  sbyte attributes[NUM_ATTRIBUTES];
   sh_int mag;
   sh_int bod_index;
   sh_int ess;
@@ -408,7 +458,17 @@ struct char_ability_data
   sh_int defense_pool;
   sh_int body_pool;
   sh_int control_pool;
-  sh_int task_pool[7];
+  sh_int task_pool[NUM_ATTRIBUTES];
+
+  char_ability_data() :
+    mag(0), bod_index(0), ess(0), esshole(0), highestindex(0), astral_pool(0),
+    combat_pool(0), hacking_pool(0), hacking_pool_max(0), hacking_pool_remaining(0),
+    magic_pool(0), casting_pool(0), drain_pool(0), spell_defense_pool(0),
+    reflection_pool(0), offense_pool(0), defense_pool(0), body_pool(0), control_pool(0)
+  {
+    ZERO_OUT_ARRAY(attributes, NUM_ATTRIBUTES);
+    ZERO_OUT_ARRAY(task_pool, NUM_ATTRIBUTES);
+  }
 };
 
 struct char_point_data
@@ -550,6 +610,15 @@ struct player_special_data_saved
   bool archetypal;
 
   int system_points;
+
+  player_special_data_saved() :
+    wimp_level(0), freeze_level(0), invis_level(0), incog_level(0), load_room(NOWHERE),
+    last_in(NOWHERE), last_veh(NOTHING), bad_pws(0), totem(0), totemspirit(0),
+    att_points(0), skill_points(0), force_points(0), restring_points(0), zonenum(0),
+    archetype(0), archetypal(FALSE), system_points(0)
+  {
+    ZERO_OUT_ARRAY(conditions, 3);
+  }
 };
 
 struct player_special_data
@@ -572,17 +641,15 @@ struct player_special_data
 
   player_special_data() :
       aliases(NULL), remem(NULL), last_tell(0), questnum(0), obj_complete(NULL),
-      mob_complete(NULL), watching(NULL)
+      mob_complete(NULL), mental_loss(0), physical_loss(0), perm_bod(0), watching(NULL)
   {
+    ZERO_OUT_ARRAY(last_quest, QUEST_TIMER);
+
     for (int i = 0; i < NUM_DRUGS+1; i++) {
-      for (int j = 0; j < 7; j++) {
-        drugs[i][j] = 0;
-      }
+      ZERO_OUT_ARRAY(drugs[i], 7);
     }
 
-    for (int i = 0; i < 5; i++) {
-      drug_affect[i] = 0;
-    }
+    ZERO_OUT_ARRAY(drug_affect, 5);
   }
 }
 ;
@@ -608,10 +675,12 @@ struct mob_special_data
   long lasthit;
 
   mob_special_data() :
-      memory(NULL), alert(0), alerttime(0), lasthit(0)
+    last_direction(NORTH), attack_type(0), default_pos(POS_STANDING),
+    active(0), memory(NULL), wait_state(0), value_death_nuyen(0),
+    value_death_items(0), value_death_karma(0), count_death(0),
+    alert(0), alerttime(0), spare1(0), spare2(0), lasthit(0)
   {
-    for (int i = 0; i < 10; i++)
-      mob_skills[i] = 0;
+    ZERO_OUT_ARRAY(mob_skills, 10);
   }
 }
 ;
@@ -644,7 +713,7 @@ struct grid_data
   struct grid_data *next;
 
   grid_data() :
-      name(NULL), next(NULL)
+      name(NULL), room(NOWHERE), next(NULL)
   {}
 };
 struct veh_data
@@ -919,12 +988,12 @@ struct descriptor_data
   // This is mostly a just-in-case section. Descriptors are zeroed out when created in comm.cpp's new_descriptor().
   descriptor_data() :
       showstr_head(NULL), showstr_point(NULL), str(NULL),
-      output(NULL), output_canary(31337), large_outbuf(NULL), input_and_character_canary(31337),
+      output(NULL), output_canary(CANARY_VALUE), large_outbuf(NULL), input_and_character_canary(CANARY_VALUE),
       character(NULL), original(NULL), snooping(NULL), snoop_by(NULL), next(NULL),
       invalid_command_counter(0), iedit_limit_edits(0), misc_data(NULL),
       edit_obj(NULL), edit_room(NULL), edit_mob(NULL), edit_quest(NULL), edit_shop(NULL),
       edit_zon(NULL), edit_cmd(NULL), edit_veh(NULL), edit_host(NULL), edit_icon(NULL),
-      edit_helpfile(NULL), edit_pgroup(NULL), canary(31337), pProtocol(NULL)
+      edit_helpfile(NULL), edit_pgroup(NULL), canary(CANARY_VALUE), pProtocol(NULL)
   {
     // Zero out the communication history for all channels.
     for (int channel = 0; channel < NUM_COMMUNICATION_CHANNELS; channel++)

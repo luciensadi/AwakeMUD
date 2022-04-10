@@ -1538,8 +1538,10 @@ ACMD(do_mdelete)
     }
   }
   // Wipe out the top entry of the table (it's not needed), then shrink the table.
-  memset(&mob_proto[top_of_mobt], 0, sizeof(struct char_data));
-  memset(&mob_index[top_of_mobt], 0, sizeof(struct index_data));
+  delete &mob_proto[top_of_mobt];
+  delete &mob_index[top_of_mobt];
+  // memset(&mob_proto[top_of_mobt], 0, sizeof(struct char_data));
+  // memset(&mob_index[top_of_mobt], 0, sizeof(struct index_data));
   top_of_mobt--;
 
   // update the zones by decrementing numbers if >= number deleted
@@ -1762,7 +1764,7 @@ ACMD(do_shedit)
     shop->flags = shop_table[number].flags;
     shop->keeper = shop_table[number].keeper;
     shop->races = shop_table[number].races;
-    shop->ettiquete = shop_table[number].ettiquete;
+    shop->etiquette = shop_table[number].etiquette;
     shop->open = shop_table[number].open;
     shop->close = shop_table[number].close;
     if (shop_table[number].no_such_itemk)
@@ -1807,7 +1809,7 @@ ACMD(do_shedit)
     d->edit_shop->open = 0;
     d->edit_shop->close = 24;
     d->edit_shop->type = SHOP_GREY;
-    d->edit_shop->ettiquete = SKILL_STREET_ETIQUETTE;
+    d->edit_shop->etiquette = SKILL_STREET_ETIQUETTE;
     d->edit_mode = SHEDIT_CONFIRM_EDIT;
   }
 }

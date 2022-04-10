@@ -46,7 +46,8 @@ struct quest_om_data
 
 struct quest_data
 {
-  long vnum, johnson;
+  vnum_t vnum;
+  vnum_t johnson;
   sh_int time, num_objs, num_mobs, s_time, e_time, s_room;
   unsigned int min_rep, max_rep;
   int nuyen, karma, reward;
@@ -65,7 +66,7 @@ struct quest_data
 #endif
 
   quest_data() :
-      johnson(-1), time(0), num_objs(0), num_mobs(0),
+      vnum(-1), johnson(-1), time(0), num_objs(0), num_mobs(0),
       s_time(0), e_time(0), s_room(0), min_rep(0), max_rep(0),
       nuyen(0), karma(0), reward(-1), obj(NULL), mob(NULL), intro(NULL),
       decline(NULL), quit(NULL), finish(NULL), info(NULL),
@@ -79,7 +80,7 @@ struct quest_data
 ;
 
 struct quest_entry {
-      int index; 
+      int index;
       int rep;
   };
 
