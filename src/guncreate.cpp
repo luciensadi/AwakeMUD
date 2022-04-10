@@ -44,12 +44,20 @@ void create_ammo(struct char_data *ch)
 void aedit_disp_weapon_menu(struct descriptor_data *d)
 {
   CLS(CH);
-  for (int counter = 0; counter < WEAP_CANNON - WEAP_HOLDOUT; counter += 2)
-  {
-    send_to_char(CH, "  %2d) %-15s %2d) %s\r\n",
-                 counter, weapon_type[counter + WEAP_HOLDOUT],
-                 counter + 1, counter + 1 < WEAP_CANNON - WEAP_HOLDOUT ?
-                 weapon_type[counter + 1 + WEAP_HOLDOUT] : "(none)");
+
+  int index = 0;
+  for (int counter = WEAP_HOLDOUT; counter < MAX_WEAP; counter++) {
+    // We can't make cannon, grenade, or missile ammo here.
+    if (counter >= WEAP_CANNON && counter != WEAP_MINIGUN)
+      continue;
+
+    index++;
+
+    send_to_char(CH, "  %2d) %-18s%s",
+                 index,
+                 weapon_type[counter],
+                 index % 2 == 0 || PRF_FLAGGED(CH, PRF_SCREENREADER) ? "\r\n" : ""
+               );
   }
   send_to_char("Weapon type: ", d->character);
   d->edit_mode = AEDIT_WEAPON;
@@ -107,15 +115,26 @@ void aedit_parse(struct descriptor_data *d, const char *arg)
    }
    break;
   case AEDIT_WEAPON:
-   number += WEAP_HOLDOUT;
-   if (number >= WEAP_CANNON || number < WEAP_HOLDOUT)
-     send_to_char("Invalid selection.\r\nWeapon Type: ", CH);
-   else {
-     GET_AMMOBOX_WEAPON(OBJ) = number;
-     GET_AMMOBOX_TYPE(OBJ) = AMMO_NORMAL;
-     aedit_disp_menu(d);
-   }
-   break;
+    {
+      int selected_weapon = WEAP_HOLDOUT, index = 0;
+      for (selected_weapon = WEAP_HOLDOUT; selected_weapon < MAX_WEAP; selected_weapon++) {
+        // We can't make cannon, grenade, or missile ammo here.
+        if (selected_weapon >= WEAP_CANNON && selected_weapon != WEAP_MINIGUN)
+          continue;
+
+        if (++index == number)
+          break;
+      }
+
+      if (number > index || selected_weapon >= MAX_WEAP)
+        send_to_char("Invalid selection.\r\nWeapon Type: ", CH);
+      else {
+        GET_AMMOBOX_WEAPON(OBJ) = selected_weapon;
+        GET_AMMOBOX_TYPE(OBJ) = AMMO_NORMAL;
+        aedit_disp_menu(d);
+      }
+    }
+    break;
   case AEDIT_QUANTITY:
     if (number < 0)
       number = 0;
@@ -184,57 +203,64 @@ bool ammo_test(struct char_data *ch, struct obj_data *obj)
 
 void ammo_build(struct char_data *ch, struct obj_data *obj)
 {
-  if (GET_AMMOBOX_CREATOR(obj) != GET_IDNUM(ch))
-    send_to_char("You cannot build this batch of ammunition.\r\n", ch);
-  else {
-    // Find a deployed workshop in the room.
-    struct obj_data *workshop = find_workshop(ch, TYPE_AMMO);
-    bool kitwarn = FALSE;
+  if (GET_AMMOBOX_CREATOR(obj) != GET_IDNUM(ch)) {
+    send_to_char(ch, "Looks like someone else already started on %s; they'll have to pick up where they left off.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
+    return;
+  }
 
-    if (!workshop) {
-      // Find a kit in the character's inventory.
-      for (workshop = ch->carrying; workshop; workshop = workshop->next_content) {
-        if (GET_OBJ_TYPE(workshop) == ITEM_WORKSHOP && GET_WORKSHOP_TYPE(workshop) == TYPE_AMMO &&
-            GET_WORKSHOP_GRADE(workshop) == TYPE_KIT) {
-          // Ensure that, if a kit was found, the kit is of the right type.
-          if (GET_AMMOBOX_TYPE(obj) == AMMO_NORMAL || (GET_AMMOBOX_TYPE(obj) == GET_WORKSHOP_AMMOKIT_TYPE(workshop)))
-            break;
-          else
-            kitwarn = TRUE;
-        }
+  if (GET_AMMOBOX_INTENDED_QUANTITY(obj) <= 0) {
+    send_to_char(ch, "%s has already been completed.", capitalize(GET_OBJ_NAME(obj)));
+    return;
+  }
 
+  // Find a deployed workshop in the room.
+  struct obj_data *workshop = find_workshop(ch, TYPE_AMMO);
+  bool kitwarn = FALSE;
+
+  // No workshop existed: Search for a kit in their inventory.
+  if (!workshop) {
+    for (workshop = ch->carrying; workshop; workshop = workshop->next_content) {
+      if (GET_OBJ_TYPE(workshop) == ITEM_WORKSHOP && GET_WORKSHOP_TYPE(workshop) == TYPE_AMMO &&
+          GET_WORKSHOP_GRADE(workshop) == TYPE_KIT) {
+        // Ensure that, if a kit was found, the kit is of the right type.
+        if (GET_AMMOBOX_TYPE(obj) == AMMO_NORMAL || (GET_AMMOBOX_TYPE(obj) == GET_WORKSHOP_AMMOKIT_TYPE(workshop)))
+          break;
+        else
+          kitwarn = TRUE;
       }
-    }
 
-    if (!workshop) {
-      if (kitwarn) {
-        send_to_char(ch, "Your ammunition kit doesn't have the right tooling for %s ammo. You'll need a different kit or an ammunition workshop.\r\n",
+    }
+  }
+
+  // No valid workshop / kit.
+  if (!workshop) {
+    if (kitwarn) {
+      send_to_char(ch, "Your ammunition kit doesn't have the right tooling for %s ammo. You'll need a different kit or an ammunition workshop.\r\n",
+                   ammo_type[GET_AMMOBOX_TYPE(obj)].name);
+    } else {
+      if (GET_AMMOBOX_TYPE(obj) != AMMO_NORMAL) {
+        send_to_char(ch, "You need to be standing next to an unpacked ammunition workshop or to be carrying %s %s ammunition kit.\r\n",
+                     AN(ammo_type[GET_AMMOBOX_TYPE(obj)].name),
                      ammo_type[GET_AMMOBOX_TYPE(obj)].name);
       } else {
-        if (GET_AMMOBOX_TYPE(obj) != AMMO_NORMAL) {
-          send_to_char(ch, "You need to be standing next to an unpacked ammunition workshop or to be carrying %s %s ammunition kit.\r\n",
-                       AN(ammo_type[GET_AMMOBOX_TYPE(obj)].name),
-                       ammo_type[GET_AMMOBOX_TYPE(obj)].name);
-        } else {
-          send_to_char("You need to be standing next to an unpacked ammunition workshop or to be carrying an ammunition kit.\r\n", ch);
-        }
+        send_to_char("You need to be standing next to an unpacked ammunition workshop or to be carrying an ammunition kit.\r\n", ch);
       }
-      return;
     }
-
-    if (GET_WORKSHOP_GRADE(workshop) == TYPE_KIT && GET_AMMOBOX_WEAPON(obj) == WEAP_CANNON) {
-      send_to_char("You need an ammunition workshop to create assault cannon rounds.\r\n", ch);
-      return;
-    }
-
-    if (GET_AMMOBOX_TIME_TO_COMPLETION(obj))
-      send_to_char(ch, "You continue working on %s.\r\n", GET_OBJ_NAME(obj));
-    else {
-      send_to_char(ch, "You start working on %s.\r\n", GET_OBJ_NAME(obj));
-      if (!ammo_test(ch, obj))
-        return;
-    }
-    AFF_FLAGS(ch).SetBit(AFF_AMMOBUILD);
-    GET_BUILDING(ch) = obj;
+    return;
   }
+
+  if (GET_WORKSHOP_GRADE(workshop) == TYPE_KIT && GET_AMMOBOX_WEAPON(obj) == WEAP_CANNON) {
+    send_to_char("You need an ammunition workshop to create assault cannon rounds.\r\n", ch);
+    return;
+  }
+
+  if (GET_AMMOBOX_TIME_TO_COMPLETION(obj))
+    send_to_char(ch, "You continue working on %s.\r\n", GET_OBJ_NAME(obj));
+  else {
+    send_to_char(ch, "You start working on %s.\r\n", GET_OBJ_NAME(obj));
+    if (!ammo_test(ch, obj))
+      return;
+  }
+  AFF_FLAGS(ch).SetBit(AFF_AMMOBUILD);
+  GET_BUILDING(ch) = obj;
 }

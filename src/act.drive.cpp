@@ -321,9 +321,17 @@ ACMD(do_rig)
       send_to_char("You jack in and nothing happens.\r\n", ch);
       return;
     }
+
+    // No perception while rigging.
+    if (PLR_FLAGGED(ch, PLR_PERCEIVE)) {
+      ACMD_DECLARE(do_astral);
+      do_astral(ch, buf, 0, SCMD_PERCEIVE);
+    }
+
     AFF_FLAGS(ch).SetBits(AFF_PILOT, AFF_RIG, ENDBIT);
     VEH->cspeed = SPEED_IDLE;
     VEH->lastin[0] = VEH->in_room;
+
     stop_manning_weapon_mounts(ch, TRUE);
     send_to_char("As you jack in, your perception shifts.\r\n", ch);
     snprintf(buf1, sizeof(buf1), "%s jacks into the vehicle control system.\r\n", capitalize(GET_NAME(ch)));
@@ -888,6 +896,11 @@ ACMD(do_control)
         if (GET_OBJ_TYPE(GET_EQ(ch, x)) == ITEM_RCDECK)
           has_rig = TRUE;
 
+  if (!has_rig)
+    for (cyber = ch->cyberware; cyber; cyber = cyber->next_content)
+      if (GET_CYBERWARE_TYPE(cyber) == CYB_CRD)
+        has_rig = TRUE;
+
   if (!has_rig) {
     send_to_char("You need a Remote Control Deck to do that.\r\n", ch);
     return;
@@ -916,6 +929,12 @@ ACMD(do_control)
   if (veh->in_room && GET_ROOM_VNUM(veh->in_room) == RM_PORTABLE_VEHICLE_STORAGE) {
     send_to_char("The automated safety systems won't let you control a vehicle that's being carried around.\r\n", ch);
     return;
+  }
+
+  // No perception while controlling.
+  if (PLR_FLAGGED(ch, PLR_PERCEIVE)) {
+    ACMD_DECLARE(do_astral);
+    do_astral(ch, buf, 0, SCMD_PERCEIVE);
   }
 
   if (PLR_FLAGGED(ch, PLR_REMOTE))
@@ -970,6 +989,12 @@ ACMD(do_subscribe)
           has_deck = TRUE;
 
   if (!has_deck) {
+    for (struct obj_data *cyber = ch->cyberware; cyber; cyber = cyber->next_content)
+      if (GET_CYBERWARE_TYPE(cyber) == CYB_CRD)
+        has_deck = TRUE;
+  }
+
+  if (!has_deck) {
     send_to_char("You need a Remote Control Deck to do that.\r\n", ch);
     return;
   }
@@ -1005,13 +1030,39 @@ ACMD(do_subscribe)
 
   if (!*argument) {
     if (ch->char_specials.subscribe) {
-      send_to_char("Your subscriber list contains:\r\n", ch);
       struct room_data *room;
+      char room_name_with_coords[1000];
+
+      send_to_char("Your subscriber list contains:\r\n", ch);
       for (veh = ch->char_specials.subscribe; veh; veh = veh->next_sub) {
-        snprintf(buf, sizeof(buf), "%2d) %-30s (At %s^n) [%2d/10] Damage\r\n", i, GET_VEH_NAME(veh),
-                (room = get_veh_in_room(veh)) ? room->name : "someone's tow rig, probably", veh->damage);
-        send_to_char(buf, ch);
-        i++;
+        if ((room = get_veh_in_room(veh))) {
+          snprintf(room_name_with_coords, sizeof(room_name_with_coords), "at %s^n", GET_ROOM_NAME(room));
+          if (!ROOM_FLAGGED(room, ROOM_NOGRID) && (ROOM_FLAGGED(room, ROOM_GARAGE) || ROOM_FLAGGED(room, ROOM_ROAD))) {
+            snprintf(ENDOF(room_name_with_coords), sizeof(room_name_with_coords) - strlen(room_name_with_coords), " (%ld, %ld)",
+                     get_room_gridguide_x(GET_ROOM_VNUM(room)),
+                     get_room_gridguide_y(GET_ROOM_VNUM(room))
+                    );
+          }
+        } else {
+          strlcpy(room_name_with_coords, "in someone's tow rig", sizeof(room_name_with_coords));
+        }
+
+        if (veh->in_veh) {
+          send_to_char(ch, "%2d) [%2d/10 dam]: %-35s (in %s^n, %s) \r\n",
+                       i++,
+                       veh->damage,
+                       GET_VEH_NAME(veh),
+                       GET_VEH_NAME(veh->in_veh),
+                       room_name_with_coords
+          );
+        } else {
+          send_to_char(ch, "%2d) [%2d/10 dam]: %-35s (%s)\r\n",
+                       i++,
+                       veh->damage,
+                       GET_VEH_NAME(veh),
+                       room_name_with_coords
+          );
+        }
       }
     } else
       send_to_char("Your subscriber list is empty.\r\n", ch);
@@ -1224,7 +1275,6 @@ ACMD(do_driveby)
 
   for (pass = ch->in_veh->people; pass; pass = pass->next_in_veh) {
     if (pass != ch) {
-
       if (PLR_FLAGGED(pass, PLR_DRIVEBY) && AWAKE(pass) && GET_EQ(pass, WEAR_WIELD) &&
           GET_OBJ_VAL(GET_EQ(pass, WEAR_WIELD),4) >= SKILL_FIREARMS) {
         if (!IS_NPC(vict) && !PRF_FLAGGED(pass, PRF_PKER) && !PRF_FLAGGED(vict, PRF_PKER))
@@ -1702,7 +1752,9 @@ ACMD(do_gridguide)
 {
   struct veh_data *veh;
   struct grid_data *grid = NULL;
-  vnum_t x = 0, y = 0;
+  long x = 0, y = 0;
+  vnum_t grid_vnum;
+
   RIG_VEH(ch, veh);
 
   if (!veh) {
@@ -1726,6 +1778,7 @@ ACMD(do_gridguide)
     send_to_char("You don't have control over the vehicle.\r\n", ch);
     return;
   }
+
   argument = two_arguments(argument, arg, buf2);
   if (!*arg) {
     int i = 0;
@@ -1734,13 +1787,13 @@ ACMD(do_gridguide)
       i++;
       if (!veh->in_room || find_first_step(real_room(veh->in_room->number), real_room(grid->room), FALSE) < 0)
         snprintf(buf, sizeof(buf), "^r%-20s [%-6ld, %-6ld](Unavailable)\r\n", CAP(grid->name),
-                grid->room - (grid->room * 3), grid->room + 100);
+                 get_room_gridguide_x(grid->room), get_room_gridguide_y(grid->room));
       else
         snprintf(buf, sizeof(buf), "^B%-20s [%-6ld, %-6ld](Available)\r\n", CAP(grid->name),
-                grid->room - (grid->room * 3), grid->room + 100);
+                 get_room_gridguide_x(grid->room), get_room_gridguide_y(grid->room));
       send_to_char(buf, ch);
     }
-    send_to_char(ch, "%d Entries remaining.\r\n", (veh->autonav * 5) - i);
+    send_to_char(ch, "%d Entries remaining.\r\n", GET_VEH_MAX_AUTONAV_SLOTS(veh) - i);
     return;
   }
 
@@ -1818,30 +1871,24 @@ ACMD(do_gridguide)
       }
       i++;
     }
-    if (i >= (veh->autonav * 5)) {
+    if (i >= GET_VEH_MAX_AUTONAV_SLOTS(veh)) {
       send_to_char("The system seems to be full.\r\n", ch);
       return;
     }
     if (!*argument) {
       if (!veh->in_room || !(ROOM_FLAGGED(veh->in_room, ROOM_ROAD) || ROOM_FLAGGED(veh->in_room, ROOM_GARAGE)) ||
           ROOM_FLAGGED(veh->in_room, ROOM_NOGRID)) {
-        send_to_char("You currently aren't on the grid.\r\n", ch);
+        send_to_char("You aren't currently on the grid.\r\n", ch);
         return;
       }
-      x = real_room(veh->in_room->number);
+      grid_vnum = veh->in_room->number;
     } else {
       two_arguments(argument, arg, buf);
       if (!*buf) {
         send_to_char("You need a second co-ordinate.\r\n", ch);
         return;
       }
-      if (!((x = atoi(arg)) && (y = atoi(buf)))) {
-        send_to_char("Those co-ordinates seem invalid.\r\n", ch);
-        return;
-      }
-      x = (x + ((y - 100) * 3));
-      if ((x = real_room(x)) <= 0 || !(ROOM_FLAGGED(&world[x], ROOM_ROAD) || ROOM_FLAGGED(&world[x], ROOM_GARAGE)) ||
-          ROOM_FLAGGED(&world[x], ROOM_NOGRID)) {
+      if (!((x = atol(arg)) && (y = atol(buf))) || (grid_vnum = vnum_from_gridguide_coordinates(x, y, ch)) <= 0) {
         send_to_char("Those co-ordinates seem invalid.\r\n", ch);
         return;
       }
@@ -1850,7 +1897,7 @@ ACMD(do_gridguide)
     if (strlen(buf2) >= LINE_LENGTH)
       buf2[LINE_LENGTH] = '\0';
     grid->name = str_dup(buf2);
-    grid->room = world[x].number;
+    grid->room = grid_vnum;
     grid->next = veh->grid;
     veh->grid = grid;
     send_to_char("You add the destination into the system.\r\n", ch);

@@ -24,20 +24,20 @@ CVS = cvs
 # The obvious drawback is that it's time consuming, so once things go
 # smooth, the define can be removed.
 
-COMMON_FLAGS = -lmysqlclient -lz -lm -lsodium -lstdc++
+COMMON_FLAGS = -lmysqlclient -lz -lm -lsodium -lstdc++ -std=c++11
 
 # OSX? Uncomment these:
 LIBS = -L/usr/local/lib $(COMMON_FLAGS) -lcurl
-MYFLAGS = -DUSE_MEMORY_CANARIES -DDEBUG -DSELFADVANCE -DGITHUB_INTEGRATION -Dosx -I /usr/local/include/ -Wall -Wextra -Wno-unused-parameter
+MYFLAGS = -DUSE_MEMORY_CANARIES -DDEBUG -DSELFADVANCE -Dosx -I /usr/local/include/ -Wall -Wextra -Wno-unused-parameter -std=c++11 -DSUPPRESS_MOB_SKILL_ERRORS -DACCELERATE_FOR_TESTING
 
 # Linux / others? Uncomment these:
 #LIBS = -lcrypt -L/usr/local/lib $(COMMON_FLAGS) -lnsl -lcurl
-#MYFLAGS = -DDEBUG_CRYPTO -DDEBUG -DSELFADVANCE -DIDLEDELETE_DRYRUN -Dlinux -I /usr/local/include/ -Wall -Wextra -Wno-unused-parameter
+#MYFLAGS = -DDEBUG_CRYPTO -DDEBUG -DSELFADVANCE -DIDLEDELETE_DRYRUN -Dlinux -I /usr/local/include/ -Wall -Wextra -Wno-unused-parameter -DSUPPRESS_MOB_SKILL_ERRORS
 # If you want GitHub integration, add -DGITHUB_INTEGRATION to the above and fill out your basic auth credentials in github_config.cpp.
 
 # Cygwin:
 #LIBS = -L/usr/local/lib $(COMMON_FLAGS) -lcrypt
-#MYFLAGS = -DDEBUG -DSELFADVANCE -DIDLEDELETE_DRYRUN -DWIN32 -I /usr/local/include/ -Wall -Wextra -Wno-unused-parameter
+#MYFLAGS = -DDEBUG -DSELFADVANCE -DIDLEDELETE_DRYRUN -DWIN32 -I /usr/local/include/ -Wall -Wextra -Wno-unused-parameter -DSUPPRESS_MOB_SKILL_ERRORS
 
 # These are currently required on GCC because we have strn type function calls which feed a buffer onto itself which is
 # unsafe due to null termination and because we have others that can cause truncation of the string. They need rewriting

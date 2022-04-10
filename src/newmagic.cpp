@@ -636,6 +636,92 @@ void totem_bonus(struct char_data *ch, int action, int type, int &target, int &s
   }
 }
 
+void aspect_bonus(struct char_data *ch, int action, int spell_idx, int &target, int &skill)
+{
+  if (action == SPELLCASTING) {
+    int type = spells[spell_idx].category;
+  	switch (GET_ASPECT(ch)) {
+      case ASPECT_EARTHMAGE:
+        if (type == MANIPULATION)
+          skill += 2;
+        else if (type == DETECTION)
+          skill -= 1;
+        break;
+      case ASPECT_AIRMAGE:
+        if (type == DETECTION)
+          skill += 2;
+        else if (type == MANIPULATION)
+          skill -= 1;
+        break;
+      case ASPECT_FIREMAGE:
+        if (type == COMBAT)
+          skill += 2;
+        else if (type == ILLUSION)
+          skill -= 1;
+        break;
+      case ASPECT_WATERMAGE:
+        if (type == ILLUSION)
+          skill += 2;
+        else if (type == COMBAT)
+          skill -= 1;
+        break;
+      }
+   } else {
+     char oopsbuf[500];
+     snprintf(oopsbuf, sizeof(oopsbuf), "SYSERR: Received unknown action type %d to aspect_bonus!", action);
+     mudlog(oopsbuf, ch, LOG_SYSLOG, TRUE);
+   }
+}
+
+void aspect_conjuring_bonus(struct char_data *ch, int action, int type, int &target, int &skill)
+{
+  if (action == CONJURING)
+  {
+    switch (GET_ASPECT(ch)) {
+      case ASPECT_EARTHMAGE:
+        if (type == ELEM_EARTH) {
+          skill += 2;
+          act("Skill +2: aspect", FALSE, ch, 0, 0, TO_ROLLS);
+       } else if (type == ELEM_AIR) {
+          skill -= 1;
+          act("Skill -1: aspect", FALSE, ch, 0, 0, TO_ROLLS);
+        }
+        break;
+      case ASPECT_AIRMAGE:
+        if (type == ELEM_AIR) {
+          skill += 2;
+          act("Skill +2: aspect", FALSE, ch, 0, 0, TO_ROLLS);
+        } else if (type == ELEM_EARTH) {
+          skill -= 1;
+          act("Skill -1: aspect", FALSE, ch, 0, 0, TO_ROLLS);
+        }
+        break;
+      case ASPECT_FIREMAGE:
+        if (type == ELEM_FIRE) {
+          skill += 2;
+          act("Skill +2: aspect", FALSE, ch, 0, 0, TO_ROLLS);
+        } else if (type == ELEM_WATER) {
+          skill -= 1;
+          act("Skill -1: aspect", FALSE, ch, 0, 0, TO_ROLLS);
+        }
+        break;
+      case ASPECT_WATERMAGE:
+        if (type == ELEM_WATER) {
+          skill += 2;
+          act("Skill +2: aspect", FALSE, ch, 0, 0, TO_ROLLS);
+        } else if (type == ELEM_FIRE) {
+          skill -= 1;
+          act("Skill -1: aspect", FALSE, ch, 0, 0, TO_ROLLS);
+        }
+        break;
+      }
+   } else {
+     char oopsbuf[500];
+     snprintf(oopsbuf, sizeof(oopsbuf), "SYSERR: Received unknown action type %d to aspect_conjuring_bonus!", action);
+     mudlog(oopsbuf, ch, LOG_SYSLOG, TRUE);
+   }
+}
+
 void end_spirit_existance(struct char_data *ch, bool message)
 {
   struct char_data *tempc;
@@ -803,11 +889,8 @@ bool spell_drain(struct char_data *ch, int spell_idx, int force, int drain_damag
       }
     }
 
-    // Otherwise, we got a spell with both no spell idx and no damage code. Log it.
-    else {
-      snprintf(buf, sizeof(buf), "SYSERR: Received invalid spell index %d to spell_drain().", spell_idx);
-      mudlog(buf, ch, LOG_SYSLOG, TRUE);
-    }
+    // Otherwise, we got a spell with both no spell idx and no damage code. This generally means this is an adept boosted-attribute drain.
+    else {}
   }
 
   /* https://www.shadowrunrpg.com/resources/sr3faq.html
@@ -934,6 +1017,7 @@ void spell_bonus(struct char_data *ch, int spell, int &skill, int &target)
     totem_bonus(ch, SPELLCASTING, spell, target, skill);
   else if (GET_TRADITION(ch) == TRAD_HERMETIC && GET_SPIRIT(ch) && spells[spell].category != HEALTH)
   {
+    aspect_bonus(ch, SPELLCASTING, spell, target, skill);
     for (struct spirit_data *spirit = GET_SPIRIT(ch); spirit; spirit = spirit->next)
       if (((spells[spell].category == MANIPULATION && spirit->type == ELEM_EARTH) ||
            (spells[spell].category == COMBAT && spirit->type == ELEM_FIRE) ||
@@ -1034,8 +1118,10 @@ bool check_spell_victim(struct char_data *ch, struct char_data *vict, int spell,
 
 #ifdef DIES_IRAE
   // If you can only see your victim through ultrasound, you can't cast on them (M&M p18).
-  if (AFF_FLAGGED(ch, AFF_ULTRASOUND)) {
-    send_to_char("Ultrasound systems don't provide direct viewing-- your magic has nothing to lock on to!\r\n", ch);
+  // TODO: This needs to be rewritten.
+  deliberately breaking statement for dies irae compilation
+  if (has_vision(ch, VISION_ULTRASONIC) && !has_natural_vision(ch, VISION_ULTRASONIC)) {
+    send_to_char("External ultrasound systems don't provide direct viewing-- your magic has nothing to lock on to!\r\n", ch);
     return FALSE;
   }
 #endif
@@ -1318,44 +1404,76 @@ void cast_detection_spell(struct char_data *ch, int spell, int force, char *arg,
     return;
   switch (spell)
   {
-  case SPELL_MINDLINK:
-    // Block mindlinks from ignoring characters without divulging information.
-    if (IS_IGNORING(vict, is_blocking_mindlinks_from, ch)) {
-      send_to_char("They are already under the influence of a mindlink.\r\n", ch);
-      return;
-    }
-
-    WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
-    success = success_test(skill, 4 + target_modifiers);
-    for (struct sustain_data *sust = GET_SUSTAINED(ch); sust; sust = sust->next)
-      if (sust->spell == SPELL_MINDLINK) {
-        send_to_char("You are already under the influence of a mindlink.\r\n", ch);
-        return;
-      }
-    for (struct sustain_data *sust = GET_SUSTAINED(vict); sust; sust = sust->next)
-      if (sust->spell == SPELL_MINDLINK) {
+    case SPELL_MINDLINK:
+      // Block mindlinks from ignoring characters without divulging information.
+      if (IS_IGNORING(vict, is_blocking_mindlinks_from, ch)) {
         send_to_char("They are already under the influence of a mindlink.\r\n", ch);
         return;
       }
-    if (success > 0) {
-      direct_sustain = create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
-      act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
-      vict->char_specials.mindlink = ch;
-      ch->char_specials.mindlink = vict;
-    } else send_to_char(FAILED_CAST, ch);
-    spell_drain(ch, spell, force, 0, direct_sustain);
-    break;
-  case SPELL_COMBATSENSE:
-    WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
-    success = success_test(skill, 4 + target_modifiers);
-    if (success > 0) {
-      direct_sustain = create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
-      send_to_char("The world seems to slow down around you as your sense of your surroundings becomes clearer.\r\n", vict);
-      act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
-    } else
-      send_to_char(FAILED_CAST, ch);
-    spell_drain(ch, spell, force, 0, direct_sustain);
-    break;
+
+      WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
+      success = success_test(skill, 4 + target_modifiers);
+      for (struct sustain_data *sust = GET_SUSTAINED(ch); sust; sust = sust->next)
+        if (sust->spell == SPELL_MINDLINK) {
+          send_to_char("You are already under the influence of a mindlink.\r\n", ch);
+          return;
+        }
+      for (struct sustain_data *sust = GET_SUSTAINED(vict); sust; sust = sust->next)
+        if (sust->spell == SPELL_MINDLINK) {
+          send_to_char("They are already under the influence of a mindlink.\r\n", ch);
+          return;
+        }
+      if (success > 0) {
+        direct_sustain = create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
+        act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
+        vict->char_specials.mindlink = ch;
+        ch->char_specials.mindlink = vict;
+      } else send_to_char(FAILED_CAST, ch);
+      spell_drain(ch, spell, force, 0, direct_sustain);
+      break;
+    case SPELL_COMBATSENSE:
+      WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
+      success = success_test(skill, 4 + target_modifiers);
+      if (success > 0) {
+        direct_sustain = create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
+        send_to_char("The world seems to slow down around you as your sense of your surroundings becomes clearer.\r\n", vict);
+        act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
+      } else
+        send_to_char(FAILED_CAST, ch);
+      spell_drain(ch, spell, force, 0, direct_sustain);
+      break;
+    case SPELL_NIGHTVISION:
+      if (has_vision(ch, VISION_LOWLIGHT)) {
+        act("$N already has low-light vision.", FALSE, ch, 0, vict, TO_CHAR);
+        return;
+      }
+
+      WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
+      success = success_test(skill, 6 + target_modifiers);
+      if (success > 0) {
+        send_to_char("Your eyes tingle as the shadows around you become clearer.\r\n", vict);
+        act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
+        create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
+      } else
+        send_to_char(FAILED_CAST, ch);
+      spell_drain(ch, spell, force, 0);
+      break;
+    case SPELL_INFRAVISION:
+      if (has_vision(ch, VISION_THERMOGRAPHIC)) {
+        act("$N already has thermographic vision.", FALSE, ch, 0, vict, TO_CHAR);
+        return;
+      }
+
+      WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
+      success = success_test(skill, 6 + target_modifiers);
+      if (success > 0) {
+        send_to_char("Your eyes tingle as you begin to see heat signatures around you.\r\n", vict);
+        act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
+        create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
+      } else
+        send_to_char(FAILED_CAST, ch);
+      spell_drain(ch, spell, force, 0);
+      break;
   }
 
 }
@@ -1752,39 +1870,6 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       } else
         send_to_char(FAILED_CAST, ch);
       spell_drain(ch, spell, force, 0, direct_sustain);
-      break;
-    case SPELL_NIGHTVISION:
-      WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
-      success = success_test(skill, 6 + target_modifiers);
-      if (success > 0 || AFF_FLAGGED(vict, AFF_LOW_LIGHT)) {
-        send_to_char("Your eyes tingle as the shadows around you become clearer.\r\n", vict);
-        act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
-        create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
-      } else
-        send_to_char(FAILED_CAST, ch);
-      break;
-    case SPELL_INFRAVISION:
-      WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
-      success = success_test(skill, 6 + target_modifiers);
-      if (success > 0 && !AFF_FLAGGED(ch, AFF_INFRAVISION)) {
-        send_to_char("Your eyes tingle as you begin to see heat signatures around you.\r\n", vict);
-        act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
-        create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
-      } else
-        send_to_char(FAILED_CAST, ch);
-      break;
-    case SPELL_LEVITATE:
-      WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
-      success = success_test(skill, 4 + target_modifiers);
-      if (success > 0 && !AFF_FLAGGED(ch, AFF_LEVITATE)) {
-        char msg_buf[500];
-        snprintf(msg_buf, sizeof(msg_buf), "$n's feet gently lift off from the ground as $e begin%s to levitate.", HSSH_SHOULD_PLURAL(ch) ? "s" : "");
-        act(msg_buf, TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("Your feet gently lift off from the ground as you levitate.\r\n", vict);
-        act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
-        create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
-      } else
-        send_to_char(FAILED_CAST, ch);
       break;
   }
 }
@@ -2504,6 +2589,58 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
     }
     spell_drain(ch, spell, force, basedamage);
     break;
+  case SPELL_FLAME_AURA:
+    if (!check_spell_victim(ch, vict, spell, arg))
+      return;
+
+    // No double-aura-ing.
+    if (MOB_FLAGGED(ch, MOB_FLAMEAURA)) {
+      send_to_char("They already have a flame aura.\r\n", ch);
+      return;
+    }
+
+    // Specific message checking if they're already affected by the flag.
+    for (struct sustain_data *sust = GET_SUSTAINED(vict); sust; sust = sust->next) {
+      if (!sust->caster && (sust->spell == SPELL_FLAME_AURA)) {
+        send_to_char("They already have a flame aura.\r\n", ch);
+        return;
+      }
+    }
+
+    WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
+
+    success = success_test(skill, 4 + target_modifiers);
+    if (success > 0 && !AFF_FLAGGED(ch, AFF_FLAME_AURA)) {
+      create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
+      act("$n's body is enveloped in an aura of fierce flames.", TRUE, vict, 0, 0, TO_ROOM);
+      send_to_char("Your body is enveloped in an aura of fierce flames.\r\n", vict);
+      act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
+    } else
+      send_to_char(FAILED_CAST, ch);
+    spell_drain(ch, spell, force, 0);
+    break;
+  case SPELL_LEVITATE:
+    if (!check_spell_victim(ch, vict, spell, arg))
+      return;
+
+    if (AFF_FLAGGED(ch, AFF_LEVITATE)) {
+      act("$N is already affected by the levitate spell.", FALSE, ch, 0, vict, TO_CHAR);
+      return;
+    }
+
+    WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
+    success = success_test(skill, 4 + target_modifiers);
+    if (success > 0) {
+      char msg_buf[500];
+      snprintf(msg_buf, sizeof(msg_buf), "$n's feet gently lift off from the ground as $e begin%s to levitate.", HSSH_SHOULD_PLURAL(ch) ? "s" : "");
+      act(msg_buf, TRUE, vict, 0, 0, TO_ROOM);
+      send_to_char("Your feet gently lift off from the ground as you begin to levitate.\r\n", vict);
+      act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
+      create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
+    } else
+      send_to_char(FAILED_CAST, ch);
+    spell_drain(ch, spell, force, 0);
+    break;
   }
 }
 
@@ -2545,9 +2682,9 @@ bool mob_magic(struct char_data *ch)
   int spell = 0, sub = 0, force, magic = GET_MAG(ch) / 100;
   if (GET_WIL(ch) <= 2)
     force = magic;
-  else force = MIN(magic, number(2, 8));
+  else force = MIN(magic, number(MIN_MOB_COMBAT_MAGIC_FORCE, MAX_MOB_COMBAT_MAGIC_FORCE));
   while (!spell) {
-    switch (number (0, 12)) {
+    switch (number (0, 26)) { // If you're adding more cases to this switch, increase this number to match!
       case 0:
       case 1:
         spell = SPELL_POWERBOLT;
@@ -2633,7 +2770,7 @@ bool mob_magic(struct char_data *ch)
     case SPELL_STEAM:
     case SPELL_THUNDERBOLT:
     case SPELL_WATERBOLT:
-      snprintf(buf, sizeof(buf), "%s %s", wound_name[number(2, 4)], GET_CHAR_NAME(FIGHTING(ch)));
+      snprintf(buf, sizeof(buf), "%s %s", wound_name[number(MIN_MOB_COMBAT_MAGIC_WOUND, MAX_MOB_COMBAT_MAGIC_WOUND)], GET_CHAR_NAME(FIGHTING(ch)));
       break;
     default:
       strcpy(buf, GET_CHAR_NAME(FIGHTING(ch)));
@@ -4745,34 +4882,10 @@ void deactivate_power(struct char_data *ch, int power)
       send_to_char("You return to your physical senses.\r\n", ch);
       break;
     case ADEPT_LOW_LIGHT:
+      remove_vision_bit(ch, VISION_LOWLIGHT, VISION_BIT_IS_ADEPT_POWER);
+      break;
     case ADEPT_THERMO:
-      switch (GET_RACE(ch)) {
-        case RACE_HUMAN:
-        case RACE_OGRE:
-          NATURAL_VISION(ch) = NORMAL;
-          break;
-        case RACE_DWARF:
-        case RACE_GNOME:
-        case RACE_MENEHUNE:
-        case RACE_KOBOROKURU:
-        case RACE_TROLL:
-        case RACE_CYCLOPS:
-        case RACE_FOMORI:
-        case RACE_GIANT:
-        case RACE_MINOTAUR:
-          NATURAL_VISION(ch) = THERMOGRAPHIC;
-          break;
-        case RACE_ORK:
-        case RACE_HOBGOBLIN:
-        case RACE_SATYR:
-        case RACE_ONI:
-        case RACE_ELF:
-        case RACE_WAKYAMBI:
-        case RACE_NIGHTONE:
-        case RACE_DRYAD:
-          NATURAL_VISION(ch) = LOWLIGHT;
-          break;
-        }
+      remove_vision_bit(ch, VISION_THERMOGRAPHIC, VISION_BIT_IS_ADEPT_POWER);
       break;
     case ADEPT_LIVINGFOCUS:
       if (GET_SUSTAINED_NUM(ch))

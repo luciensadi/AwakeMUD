@@ -657,7 +657,7 @@ int get_max_skill_for_char(struct char_data *ch, int skill, int type) {
         case SKILL_ENCHANTING:
 #ifdef DIES_IRAE
           // Full mages get full magic skills.
-          if (GET_ASPECT(ch) == ASPECT_FULL)
+          if (GET_ASPECT(ch) == ASPECT_FULL || GET_ASPECT(ch) == ASPECT_EARTHMAGE || GET_ASPECT(ch) == ASPECT_AIRMAGE || GET_ASPECT(ch) == ASPECT_FIREMAGE || GET_ASPECT(ch) == ASPECT_WATERMAGE)
             return MIN(max, 12);
 
           // Aspected mages get 10 magic skills to compensate for their 10 mundane skills.
@@ -667,7 +667,7 @@ int get_max_skill_for_char(struct char_data *ch, int skill, int type) {
 #endif
         default:
           // Full mages get their non-magic skills capped to 8 to compensate for their 12 magic.
-          if (GET_ASPECT(ch) == ASPECT_FULL)
+          if (GET_ASPECT(ch) == ASPECT_FULL || GET_ASPECT(ch) == ASPECT_EARTHMAGE || GET_ASPECT(ch) == ASPECT_AIRMAGE || GET_ASPECT(ch) == ASPECT_FIREMAGE || GET_ASPECT(ch) == ASPECT_WATERMAGE)
             return MIN(max, 8);
 
           // Aspected mages get them to 10 like adepts.
@@ -1318,7 +1318,7 @@ SPECIAL(adept_trainer)
 
     if (!*argument) {
       if (paid_for_cc) {
-        snprintf(arg, sizeof(arg), "%s The only other thing I can teach you is the art of Kipping Up.", GET_CHAR_NAME(ch));
+        snprintf(arg, sizeof(arg), "%s The only other thing I can teach you is the art of Kipping Up-- rising quickly when knocked down.", GET_CHAR_NAME(ch));
       } else if (paid_for_kipup) {
         snprintf(arg, sizeof(arg), "%s The only other thing I can teach you is the art of Close Combat.", GET_CHAR_NAME(ch));
       } else {
@@ -1338,11 +1338,12 @@ SPECIAL(adept_trainer)
 
           GET_KARMA(ch) -= KARMA_COST_FOR_KIPUP;
           PLR_FLAGS(ch).SetBit(PLR_PAID_FOR_KIPUP);
+          PRF_FLAGS(ch).SetBit(PRF_AUTOKIPUP);
         } else {
-          send_to_char(ch, "You need %0.2f karma to learn close combat.\r\n", (float) KARMA_COST_FOR_CLOSECOMBAT / 100);
+          send_to_char(ch, "You need %0.2f karma to learn about kipping up.\r\n", (float) KARMA_COST_FOR_CLOSECOMBAT / 100);
         }
       } else if (is_abbrev(argument, "close combat") || is_abbrev(argument, "art of close combat")) {
-        if (paid_for_kipup) {
+        if (paid_for_cc) {
           send_to_char("You already know the art of close combat.\r\n", ch);
           return TRUE;
         }
@@ -1436,23 +1437,18 @@ SPECIAL(adept_trainer)
     if (str_str(argument, "close") || str_str(argument, "combat") || str_str(argument, "closecombat")) {
       if (paid_for_cc) {
         snprintf(arg, sizeof(arg), "%s You already know all I can teach you about close combat.", GET_CHAR_NAME(ch));
-      }
-
-      else {
+        do_say(trainer, arg, 0, SCMD_SAYTO);
+      } else {
         if (GET_KARMA(ch) >= KARMA_COST_FOR_CLOSECOMBAT) {
           send_to_char("You drill with your teacher on closing the distance and entering your opponent's range, and you come away feeling like you're better-equipped to fight the hulking giants of the world.\r\n", ch);
           send_to_char("(OOC: You've unlocked the ^WCLOSECOMBAT^n command!)\r\n", ch);
-          snprintf(arg, sizeof(arg), "%s Good job. You've now learned everything you can from me.", GET_CHAR_NAME(ch));
 
           GET_KARMA(ch) -= KARMA_COST_FOR_CLOSECOMBAT;
           PLR_FLAGS(ch).SetBit(PLR_PAID_FOR_CLOSECOMBAT);
         } else {
           send_to_char(ch, "You need %0.2f karma to learn close combat.\r\n", (float) KARMA_COST_FOR_CLOSECOMBAT / 100);
-          return TRUE;
         }
       }
-
-      do_say(trainer, arg, 0, SCMD_SAYTO);
       return TRUE;
     }
 
@@ -1460,20 +1456,17 @@ SPECIAL(adept_trainer)
       if (paid_for_kipup) {
         snprintf(arg, sizeof(arg), "%s You already know all I can teach you about kipping up.", GET_CHAR_NAME(ch));
         do_say(trainer, arg, 0, SCMD_SAYTO);
-      }
-
-      else {
+      } else {
         if (GET_KARMA(ch) >= KARMA_COST_FOR_KIPUP) {
           send_to_char("You drill with your teacher on how to rise quickly after a fall.\r\n", ch);
-          send_to_char("(OOC: You'll now automatically attempt to kip-up after falling!)\r\n", ch);
+          send_to_char("(OOC: You'll now automatically attempt to kip-up after being knocked down!)\r\n", ch);
 
-          GET_KARMA(ch) -= KARMA_COST_FOR_CLOSECOMBAT;
-          PLR_FLAGS(ch).SetBit(PLR_PAID_FOR_CLOSECOMBAT);
+          GET_KARMA(ch) -= KARMA_COST_FOR_KIPUP;
+          PLR_FLAGS(ch).SetBit(PLR_PAID_FOR_KIPUP);
         } else {
-          send_to_char(ch, "You need %0.2f karma to learn close combat.\r\n", (float) KARMA_COST_FOR_CLOSECOMBAT / 100);
+          send_to_char(ch, "You need %0.2f karma to learn how to kip-up.\r\n", (float) KARMA_COST_FOR_CLOSECOMBAT / 100);
         }
       }
-
       return TRUE;
     }
 
@@ -1704,7 +1697,7 @@ SPECIAL(car_dealer)
       return TRUE;
     }
     if (GET_NUYEN(ch) < veh->cost) {
-      send_to_char("You can't afford that.\r\n", ch);
+      send_to_char("You aren't carrying enough nuyen for that, and this shop doesn't take credsticks.\r\n", ch);
       return TRUE;
     }
     lose_nuyen(ch, veh->cost, NUYEN_OUTFLOW_VEHICLE_PURCHASES);
@@ -2631,7 +2624,7 @@ SPECIAL(fixer)
       send_to_char(ch, "You don't seem to have %s %s.\r\n", AN(argument), argument);
       return TRUE;
     }
-    if (IS_OBJ_STAT(obj, ITEM_EXTRA_CORPSE) || IS_OBJ_STAT(obj, ITEM_EXTRA_IMMLOAD) || IS_OBJ_STAT(obj, ITEM_EXTRA_WIZLOAD)) {
+    if (IS_OBJ_STAT(obj, ITEM_EXTRA_CORPSE) || IS_OBJ_STAT(obj, ITEM_EXTRA_WIZLOAD)) {
       snprintf(arg, sizeof(arg), "%s I can't repair that.", GET_CHAR_NAME(ch));
       do_say(fixer, arg, 0, SCMD_SAYTO);
       return TRUE;
@@ -3075,6 +3068,7 @@ SPECIAL(vendtix)
   }
 
   if (CMD_IS("buy")) {
+    any_one_arg(argument, arg);
     if (!is_abbrev(arg, "ticket")) {
       send_to_char("This machine only sells tickets.\r\n", ch);
       return TRUE;
@@ -3088,6 +3082,7 @@ SPECIAL(vendtix)
     struct obj_data *tobj = read_object(ticket, VIRTUAL);
     if (!tobj) {
       mudlog("No ticket for the Vend-Tix machine!", ch, LOG_SYSLOG, TRUE);
+      send_to_char("The machine whirrs for a moment, then returns your nuyen.\r\n", ch);
       return TRUE;
     }
 
@@ -3951,7 +3946,7 @@ SPECIAL(desktop)
                                             ((float)(GET_OBJ_TIMER(soft) - GET_OBJ_VAL(soft, 5)) / (GET_OBJ_TIMER(soft) != 0 ? GET_OBJ_TIMER(soft) : 1)) * 100 :
                                             ((float)(GET_OBJ_TIMER(soft) - GET_OBJ_VAL(soft, 4)) / (GET_OBJ_TIMER(soft) != 0 ? GET_OBJ_TIMER(soft) : 1)) * 100) : 0);
       else
-        send_to_char(ch, "%-40s %dMp (%dMp taken) Rating %d\r\n", soft->restring ? soft->restring :
+        send_to_char(ch, "%-40s %dMp (%dMp taken) (Completed) Rating %d\r\n", soft->restring ? soft->restring :
                      soft->text.name, GET_OBJ_VAL(soft, 2), GET_OBJ_VAL(soft, 2), GET_OBJ_VAL(soft, 1));
     }
   } else
@@ -6071,14 +6066,15 @@ SPECIAL(axehead) {
   int message_num;
   const char *axehead_messages[] = {
     "Runners these days don't realize how valuable keeping notes on their pocket secretary is. Like where Johnsons hang out.",
-    "Stick your radio and phone in a pocket. You can still hear 'em, and it keeps your hands free.",
-    "Seems like every day I hear about another wanna-be runner getting gunned down by the Star for walking around with their gun in their hand.",
+    "Best to keep your phone and radio in hand. In a box, you won't hear it, and in your coat pocket, it'll just get shot.",
+    "Seems like every day I hear about another wanna-be runner getting gunned down by the Star for walking around with their gun or cyberdeck in hand.",
     "Back in my day, we didn't have anything like the 8 MHz band available. Being able to talk to runners is a blessing.",
     "When in doubt, just take a cab back to somewhere familiar.",
     "If you're on a job and you just can't get it done, call your Johnson and tell them you quit. Easier than hoofing it all the way back.",
-    "It's dangerous to go alone. Make friends."
+    "It's dangerous to go alone. Make friends.",
+    "Keep your eyes and ears open. You never know when you'll make an unfair weather friend."
   };
-#define NUM_AXEHEAD_MESSAGES 7
+#define NUM_AXEHEAD_MESSAGES 8
 
   if (cmd || FIGHTING(ch) || !AWAKE(ch) || (message_num = number(0, NUM_AXEHEAD_MESSAGES * 20)) >= NUM_AXEHEAD_MESSAGES || message_num == axehead_last_said)
     return FALSE;
@@ -6616,6 +6612,48 @@ SPECIAL(purge_prevented) {
     send_to_char(ch, "You can't purge here.\r\n");
     return TRUE;
   }
+  return FALSE;
+}
+
+SPECIAL(toggled_voice_modulator)
+{
+  struct obj_data *obj = (struct obj_data *) me;
+
+  if(!obj->worn_by)
+    return FALSE;
+
+  if (CMD_IS("deactivate")) {
+    skip_spaces(&argument);
+    if (!str_cmp(argument, "voice") || isname(argument, GET_OBJ_KEYWORDS(obj))) {
+      if (obj->obj_flags.bitvector.IsSet(AFF_VOICE_MODULATOR)) {
+        AFF_FLAGS(obj->worn_by).RemoveBit(AFF_VOICE_MODULATOR);
+        obj->obj_flags.bitvector.RemoveBit(AFF_VOICE_MODULATOR);
+        send_to_char(ch, "You feel %s deactivate with a gentle click.\r\n", GET_OBJ_NAME(obj));
+        return TRUE;
+      } else {
+        send_to_char(ch, "%s is already deactivated.\r\n", capitalize(GET_OBJ_NAME(obj)));
+        return TRUE;
+      }
+    }
+    return FALSE;
+  }
+
+  if (CMD_IS("activate")) {
+    skip_spaces(&argument);
+    if (!str_cmp(argument, "voice") || isname(argument, GET_OBJ_KEYWORDS(obj))) {
+      if (!obj->obj_flags.bitvector.IsSet(AFF_VOICE_MODULATOR)) {
+        AFF_FLAGS(obj->worn_by).SetBit(AFF_VOICE_MODULATOR);
+        obj->obj_flags.bitvector.SetBit(AFF_VOICE_MODULATOR);
+        send_to_char(ch, "You feel %s activate with a gentle click.\r\n", GET_OBJ_NAME(obj));
+        return TRUE;
+      } else {
+        send_to_char(ch, "%s is already activated.\r\n", capitalize(GET_OBJ_NAME(obj)));
+        return TRUE;
+      }
+    }
+    return FALSE;
+  }
+
   return FALSE;
 }
 

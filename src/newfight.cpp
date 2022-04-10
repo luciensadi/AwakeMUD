@@ -39,6 +39,8 @@ extern bool damage_without_message(struct char_data *ch, struct char_data *victi
 
 void engage_close_combat_if_appropriate(struct combat_data *att, struct combat_data *def, int net_reach);
 
+bool handle_flame_aura(struct combat_data *att, struct combat_data *def);
+
 bool does_weapon_have_bayonet(struct obj_data *weapon);
 
 #define IS_RANGED(eq)   (GET_OBJ_TYPE(eq) == ITEM_FIREWEAPON || \
@@ -103,7 +105,7 @@ struct cyberware_data {
             num_cyberweapons++;
             break;
           case CYB_HANDRAZOR:
-            if (IS_SET(GET_CYBERWARE_FLAGS(obj), CYBERWEAPON_IMPROVED))
+            if (IS_SET(GET_CYBERWARE_FLAGS(obj), 1 << CYBERWEAPON_IMPROVED))
               improved_handrazors++;
             else
               handrazors++;
@@ -149,7 +151,8 @@ struct ranged_combat_data {
     tn(4), dice(0), successes(0), is_gel(FALSE), burst_count(0), recoil_comp(0),
     using_mounted_gun(FALSE), magazine(NULL), gyro(NULL)
   {
-    memset(modifiers, 0, sizeof(modifiers));
+    for (int i = 0; i < NUM_COMBAT_MODIFIERS; i++)
+      modifiers[i] = 0;
 
     assert(ch != NULL);
 
@@ -218,7 +221,8 @@ struct melee_combat_data {
   {
     assert(ch != NULL);
 
-    memset(modifiers, 0, sizeof(modifiers));
+    for (int i = 0; i < NUM_COMBAT_MODIFIERS; i++)
+      modifiers[i] = 0;
 
     // Set up melee combat data. This holds true for all melee combat, but can be overwritten later on.
     skill = SKILL_UNARMED_COMBAT;
@@ -252,11 +256,6 @@ struct melee_combat_data {
     } else if (cyber->num_cyberweapons > 0) {
       skill = SKILL_CYBER_IMPLANTS;
 
-      if (cyber->num_cyberweapons >= 2) {
-        // Dual cyberweapons gives a power bonus per Core p121.
-        power += (int) (GET_STR(ch) / 2);
-      }
-
       // Select the best cyberweapon and use its stats.
       if (cyber->handblades) {
         power += 3;
@@ -268,17 +267,32 @@ struct melee_combat_data {
         damage_level = MODERATE;
         dam_type = TYPE_SLASH;
         is_physical = TRUE;
+
+        if (cyber->handspurs >= 2) {
+          // Dual cyberweapons gives a power bonus per Core p121.
+          power += (int) (GET_STR(ch) / 2);
+        }
       }
       else if (cyber->improved_handrazors) {
         power += 2;
         damage_level = LIGHT;
         dam_type = TYPE_STAB;
         is_physical = TRUE;
+
+        if (cyber->improved_handrazors >= 2) {
+          // Dual cyberweapons gives a power bonus per Core p121.
+          power += (int) (GET_STR(ch) / 2);
+        }
       }
       else if (cyber->handrazors) {
         damage_level = LIGHT;
         dam_type = TYPE_STAB;
         is_physical = TRUE;
+
+        if (cyber->handrazors >= 2) {
+          // Dual cyberweapons gives a power bonus per Core p121.
+          power += (int) (GET_STR(ch) / 2);
+        }
       }
       else if (cyber->fins || cyber->climbingclaws) {
         power -= 1;
@@ -307,6 +321,11 @@ struct melee_combat_data {
 
       // Add +2 to unarmed attack power for having cyberarms, per M&M p32.
       if (cyber->cyberarms) {
+        power += 2;
+      }
+
+      // Add +2 power to unarmed/melee, per MitS p147. -Vile
+      if (AFF_FLAGGED(ch, AFF_FLAME_AURA) || MOB_FLAGGED(ch, MOB_FLAMEAURA)) {
         power += 2;
       }
 
@@ -602,12 +621,13 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     // Emplaced mobs act as if they have unlimited ammo (technically draining 1 per shot) and no recoil.
     if (att->ranged->burst_count && !MOB_FLAGGED(att->ch, MOB_EMPLACED)) {
       if (weap_ammo || att->ranged->magazine) {
+        // When we called has_ammo() earlier, we decremented their ammo by one. Give it back to true up the equation.
         int ammo_available = weap_ammo ? ++GET_AMMOBOX_QUANTITY(weap_ammo) : ++GET_MAGAZINE_AMMO_COUNT(att->ranged->magazine);
 
         // Cap their burst to their magazine's ammo.
         att->ranged->burst_count = MIN(att->ranged->burst_count, ammo_available);
 
-        // When we called has_ammo() earlier, we decremented their ammo by one. Give it back to true up the equation.
+        // Subtract the full ammo count.
         if (weap_ammo) {
           update_ammobox_ammo_quantity(weap_ammo, -(att->ranged->burst_count));
         } else {
@@ -657,20 +677,11 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       }
     }
 
-    // Setup: Trying to fire a sniper rifle at close range is tricky. This is non-canon to reduce twinkery.
-    if (IS_OBJ_STAT(att->weapon, ITEM_EXTRA_SNIPER)
-        && !IS_NPC(att->ch)
-        && (att->ch->in_room == def->ch->in_room
-            || att->ranged->using_mounted_gun))
-    {
-      att->ranged->modifiers[COMBAT_MOD_DISTANCE] += SAME_ROOM_SNIPER_RIFLE_PENALTY;
-    }
-
     // Setup: Compute modifiers to the TN based on the def->ch's current state.
     if (!AWAKE(def->ch))
       att->ranged->modifiers[COMBAT_MOD_POSITION] -= 6;
     else if (AFF_FLAGGED(def->ch, AFF_PRONE)) {
-      // Prone next to you is a bigger target, prone far away is a smaller one.
+      // Prone next to you is a bigger / easier target, prone far away is a smaller / harder one.
       if (def->ch->in_room == att->ch->in_room)
         att->ranged->modifiers[COMBAT_MOD_POSITION]--;
       else
@@ -712,6 +723,21 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
         send_to_char(att->ch, "You squint around, but you can't find your opponent anywhere.\r\n");
         stop_fighting(att->ch);
         return;
+      }
+    }
+
+    // Setup: Sniper rifle ranged penalty modifiers.
+    if (IS_OBJ_STAT(att->weapon, ITEM_EXTRA_SNIPER)) {
+      // If you're in the same room, you take a penalty. This is non-canon to reduce twinkery.
+      if (att->ch->in_room == def->ch->in_room || att->ranged->using_mounted_gun) {
+        // NPCs don't take the penalty because their weapon selection is at the mercy of the builders.
+        if (!IS_NPC(att->ch)) {
+          att->ranged->modifiers[COMBAT_MOD_DISTANCE] += SAME_ROOM_SNIPER_RIFLE_PENALTY;
+        }
+      }
+      // However, using it at a distance gives a bonus due to it being a long-distance weapon.
+      else {
+        att->ranged->modifiers[COMBAT_MOD_DISTANCE] -= 2;
       }
     }
 
@@ -758,17 +784,22 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     // Minimum TN is 2.
     att->ranged->tn = MAX(att->ranged->tn, 2);
 
-    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "\r\nThus, attacker's ranged TN is: %d.", att->ranged->tn);
+    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "\r\nAfter get_skill(), attacker's ranged TN is ^c%d^n.", att->ranged->tn);
     SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
 
-    // Execute skill test
+    int bonus_if_not_too_tall = MIN(GET_SKILL(att->ch, att->ranged->skill), GET_OFFENSE(att->ch));
+#ifdef USE_SLOUCH_RULES
+    // Height penalty.
     if (!att->too_tall) {
-      int bonus = MIN(GET_SKILL(att->ch, att->ranged->skill), GET_OFFENSE(att->ch));
-      snprintf(rbuf, sizeof(rbuf), "Not too tall, so will roll %d + %d dice... ", att->ranged->dice, bonus);
-      att->ranged->dice += bonus;
+      snprintf(rbuf, sizeof(rbuf), "Not too tall, so will roll %d + %d dice... ", att->ranged->dice, bonus_if_not_too_tall);
+      att->ranged->dice += bonus_if_not_too_tall;
     } else {
       snprintf(rbuf, sizeof(rbuf), "Too tall, so will roll just %d dice... ", att->ranged->dice);
     }
+#else
+    att->ranged->dice += bonus_if_not_too_tall;
+    snprintf(rbuf, sizeof(rbuf), "Rolling %d + %d dice... ", att->ranged->dice, bonus_if_not_too_tall);
+#endif
 
     att->ranged->successes = success_test(att->ranged->dice, att->ranged->tn);
     snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "%d successes.", att->ranged->successes);
@@ -789,7 +820,7 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       def->ranged->tn += modify_target_rbuf_raw(def->ch, rbuf, sizeof(rbuf), def->ranged->modifiers[COMBAT_MOD_VISIBILITY], FALSE);
       for (int mod_index = 0; mod_index < NUM_COMBAT_MODIFIERS; mod_index++) {
         buf_mod(rbuf, sizeof(rbuf), combat_modifiers[mod_index], def->ranged->modifiers[mod_index]);
-        def->ranged->tn += att->ranged->modifiers[mod_index];
+        def->ranged->tn += def->ranged->modifiers[mod_index];
       }
       SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
 
@@ -799,15 +830,17 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       def->ranged->successes = MAX(success_test(def->ranged->dice, def->ranged->tn), 0);
       att->ranged->successes -= def->ranged->successes;
 
-      snprintf(rbuf, sizeof(rbuf), "Dodge: Dice %d, TN %d, Successes %d.  This means attacker's net successes = %d.",
+      snprintf(rbuf, sizeof(rbuf), "Dodge: Dice %d (%d pool + %d sidestep), TN %d, Successes %d.  This means attacker's net successes = %d.",
                def->ranged->dice,
+               GET_DEFENSE(def->ch),
+               GET_POWER(def->ch, ADEPT_SIDESTEP),
                def->ranged->tn,
                def->ranged->successes,
                att->ranged->successes);
     } else {
       // Surprised, oversized, unconscious, or prone? No dodge test for you.
       att->ranged->successes = MAX(att->ranged->successes, 1);
-      snprintf(rbuf, sizeof(rbuf), "Opponent unable to dodge, successes confirmed as %d.", att->ranged->successes);
+      snprintf(rbuf, sizeof(rbuf), "Opponent unable to dodge, attacker's successes will remain at %d.", att->ranged->successes);
       if (GET_DEFENSE(def->ch) > 0 && AFF_FLAGGED(def->ch, AFF_PRONE))
         send_to_char(def->ch, "^yYou're unable to dodge while prone!^n\r\n");
     }
@@ -857,7 +890,11 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
             att->ranged->power -= MAX(GET_BALLISTIC(def->ch), GET_IMPACT(def->ch) * 2);
           }
           break;
+        case AMMO_HARMLESS:
+          att->ranged->power = 0;
+          // fall through
         case AMMO_GEL:
+          // Errata: Add the following after the third line: "Impact armor, not Ballistic, applies."
           att->ranged->power -= GET_IMPACT(def->ch) + 2;
           att->ranged->is_gel = TRUE;
           break;
@@ -874,18 +911,25 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     if (GET_SKILL(att->ch, att->ranged->skill) >= 8 && SHOTS_FIRED(att->ch) < 10000)
       SHOTS_FIRED(att->ch)++;
 
-    // Handle spirits and elementals being little divas with their special combat rules.
-    // Namely: We require that the attack's power is greater than double the spirit's level, otherwise it takes no damage.
+    // The power of an attack can't be below 2 from ammo changes.
+    att->ranged->power = MAX(att->ranged->power, 2);
+
+    // Handle spirits and elementals being divas, AKA having Immunity to Normal Weapons (SR3 p188, 264).
+    // Namely: We require that the attack's power is greater than double the spirit's force, otherwise it takes no damage.
     // If the attack's power is greater, subtract double the level from it.
+    // There's no checking for weapon foci here since there are no ranged weapon foci.
     if (IS_SPIRIT(def->ch) || IS_ANY_ELEMENTAL(def->ch)) {
       int minimum_power_to_damage_opponent = (GET_LEVEL(def->ch) * 2) + 1;
       if (att->ranged->power < minimum_power_to_damage_opponent) {
         bool target_died = 0;
 
         combat_message(att->ch, def->ch, att->weapon, 0, att->ranged->burst_count);
-        send_to_char(att->ch, "^o(OOC: Your weapon is too weak to injure %s! You need at least ^O%d^o attack power.)^n\r\n",
+        send_to_char(att->ch, "^o(OOC: %s is immune to normal weapons! You need at least ^O%d^o weapon power to damage %s, and you only have %d.)^n\r\n",
                      decapitalize_a_an(GET_CHAR_NAME(def->ch)),
-                     minimum_power_to_damage_opponent);
+                     minimum_power_to_damage_opponent,
+                     HMHR(def->ch),
+                     att->ranged->power
+                    );
         target_died = damage(att->ch, def->ch, 0, att->ranged->dam_type, att->ranged->is_physical);
 
         //Handle suprise attack/alertness here -- spirits ranged.
@@ -893,8 +937,8 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
           if (AFF_FLAGGED(def->ch, AFF_SURPRISE))
             AFF_FLAGS(def->ch).RemoveBit(AFF_SURPRISE);
 
-          GET_MOBALERT(def->ch) = MALERT_ALERT;
-          GET_MOBALERTTIME(def->ch) = 20;
+          GET_MOBALERT(def->ch) = MALERT_ALARM;
+          GET_MOBALERTTIME(def->ch) = 30;
         }
         return;
       } else
@@ -914,7 +958,7 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     // It's hard for you to fight while prone. (SR3 p123)
     if (AFF_FLAGGED(att->ch, AFF_PRONE)) {
       send_to_char(att->ch, "You struggle to fight while prone!\r\n");
-      def->melee->modifiers[COMBAT_MOD_POSITION] -= 2;
+      def->melee->modifiers[COMBAT_MOD_POSITION] += 2;
     }
 
     // Treat unconscious as being a position mod of -6 (reflects ease of coup de grace)
@@ -942,6 +986,7 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     att->melee->dice = att->melee->skill_bonus + get_skill(att->ch, att->melee->skill, att->melee->tn);
     if (!att->too_tall)
       att->melee->dice += MIN(GET_SKILL(att->ch, att->melee->skill) + att->melee->skill_bonus, GET_OFFENSE(att->ch));
+
     strlcpy(rbuf, "Computing dice for defender...", sizeof(rbuf));
     SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
     def->melee->dice = def->melee->skill_bonus + get_skill(def->ch, def->melee->skill, def->melee->tn);
@@ -950,7 +995,7 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
 
     // }
 
-    // Adepts get bonus dice when counterattacking. Maybe they practice Wing Chun?
+    // Adepts get bonus dice when counterattacking.
     if (GET_POWER(def->ch, ADEPT_COUNTERSTRIKE) > 0) {
       def->melee->dice += GET_POWER(def->ch, ADEPT_COUNTERSTRIKE);
       snprintf(rbuf, sizeof(rbuf), "Defender counterstrike dice bonus is %d.", GET_POWER(def->ch, ADEPT_COUNTERSTRIKE));
@@ -1127,12 +1172,22 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       }
     }
 
-    // Handle spirits and elementals being little divas with their special combat rules.
-    // Namely: We require that the attack's power is greater than double the spirit's level, otherwise it takes no damage.
+    // Handle spirits and elementals being divas, AKA having Immunity to Normal Weapons (SR3 p188, 264).
+    // Namely: We require that the attack's power is greater than double the spirit's force, otherwise it takes no damage.
     // If the attack's power is greater, subtract double the level from it.
-    if (IS_SPIRIT(def->ch) || IS_ANY_ELEMENTAL(def->ch)) {
-      if (att->melee->power <= GET_LEVEL(def->ch) * 2) {
+    if ((IS_SPIRIT(def->ch) || IS_ANY_ELEMENTAL(def->ch))
+        && (!att->weapon || GET_WEAPON_FOCUS_RATING(att->weapon) == 0 || !WEAPON_FOCUS_USABLE_BY(att->weapon, att->ch)))
+    {
+      int minimum_power_to_damage_opponent = (GET_LEVEL(def->ch) * 2) + 1;
+      if (att->melee->power < minimum_power_to_damage_opponent) {
         bool target_died = 0;
+
+        send_to_char(att->ch, "^o(OOC: %s is immune to normal weapons! You need at least ^O%d^o weapon power to damage %s, and you only have %d.)^n\r\n",
+                     decapitalize_a_an(GET_CHAR_NAME(def->ch)),
+                     minimum_power_to_damage_opponent,
+                     HMHR(def->ch),
+                     att->melee->power
+                    );
         target_died = damage(att->ch, def->ch, 0, att->melee->dam_type, att->melee->is_physical);
 
         //Handle suprise attack/alertness here -- spirits melee.
@@ -1142,6 +1197,9 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
 
           GET_MOBALERT(def->ch) = MALERT_ALARM;
           GET_MOBALERTTIME(def->ch) = 30;
+
+          // Process flame aura here since the spirit will otherwise end combat evaluation here.
+          handle_flame_aura(att, def);
         }
         return;
       } else {
@@ -1192,10 +1250,16 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     bod_success = success_test(GET_BOD(def->ch) + bod_dice, att->ranged->power);
     att->ranged->successes -= bod_success;
 
-    // Adjust messaging for unkillable enemies (ranged stanza)
-    if (can_hurt(att->ch, def->ch, att->ranged->dam_type, TRUE)) {
+    // Harmless ammo never deals damage.
+    if (att->ranged->magazine && GET_MAGAZINE_AMMO_TYPE(att->ranged->magazine) == AMMO_HARMLESS) {
+      staged_damage = -1;
+      strlcpy(rbuf, "Damage reduced to -1 due to use of harmless ammo.", sizeof(rbuf));
+      SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
+    } else if (can_hurt(att->ch, def->ch, att->ranged->dam_type, TRUE)) {
+      // You're able to hurt them? Proceed as normal.
       staged_damage = stage(att->ranged->successes, att->ranged->damage_level);
     } else {
+      // You're unable to hurt them. Adjust messaging for unkillable enemies.
       staged_damage = -1;
       strlcpy(rbuf, "Damage reduced to -1 due to failure of CAN_HURT().", sizeof(rbuf));
       SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
@@ -1248,6 +1312,12 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     if (!defender_died && damage_total > 0)
       perform_knockdown_test(def->ch, (GET_WEAPON_POWER(att->weapon) + att->ranged->burst_count) / (att->ranged->is_gel ? 1 : 2));
   } else {
+    // Process flame aura right before damage.
+    if (handle_flame_aura(att, def)) {
+      // They died! Bail out.
+      return;
+    }
+
     defender_died = damage(att->ch, def->ch, damage_total, att->melee->dam_type, att->melee->is_physical);
 
     if (!defender_died) {
@@ -1391,4 +1461,139 @@ void engage_close_combat_if_appropriate(struct combat_data *att, struct combat_d
       }
     }
   }
+}
+
+bool handle_flame_aura(struct combat_data *att, struct combat_data *def) {
+  // no-op: defender has no aura
+  if (!AFF_FLAGGED(def->ch, AFF_FLAME_AURA) && !MOB_FLAGGED(def->ch, MOB_FLAMEAURA))
+    return FALSE;
+
+  // no-op: you have a weapon
+  if (att->ranged_combat_mode || att->weapon)
+    return FALSE;
+
+  int force = -1;
+
+  // Flameaura-flagged NPCs just use their own level as the force.
+  if (MOB_FLAGGED(def->ch, MOB_FLAMEAURA)) {
+    force = GET_LEVEL(def->ch);
+  } else {
+    // Iterate through their spells, find the flame aura that's applied to them, and extract its force.
+    for (struct sustain_data *sust = GET_SUSTAINED(def->ch); sust; sust = sust->next) {
+      if (!sust->caster && sust->spell == SPELL_FLAME_AURA) {
+        force = sust->force;
+        break;
+      }
+    }
+
+    // Account for edge case of not finding the spell.
+    if (force == -1) {
+      mudlog("SYSERR: Unable to find flameaura spell! Using default of 6 for force.", def->ch, LOG_SYSLOG, TRUE);
+      force = 6;
+    }
+  }
+
+  char rolls_buf[1000];
+  snprintf(rolls_buf, sizeof(rolls_buf), "^oFlame Aura (%s hitting %s): Force starts at %d.",
+           GET_CHAR_NAME(att->ch),
+           GET_CHAR_NAME(def->ch),
+           force
+         );
+
+  force -= GET_POWER(att->ch, ADEPT_TEMPERATURE_TOLERANCE);
+  force -= GET_POWER(att->ch, ADEPT_MYSTIC_ARMOR);
+
+  snprintf(ENDOF(rolls_buf), sizeof(rolls_buf) - strlen(rolls_buf), " After adept powers, it's %d.", force);
+
+  force -= affected_by_spell(att->ch, SPELL_ARMOR);
+
+  snprintf(ENDOF(rolls_buf), sizeof(rolls_buf) - strlen(rolls_buf), " After armor spell, it's %d.", force);
+
+  for (struct obj_data *cyber = att->ch->cyberware; cyber; cyber = cyber->next_content) {
+    if (GET_CYBERWARE_TYPE(cyber) == CYB_DERMALPLATING) {
+      force -= GET_CYBERWARE_RATING(cyber);
+    }
+    else if (GET_CYBERWARE_TYPE(cyber) == CYB_DERMALSHEATHING) {
+      force -= GET_CYBERWARE_RATING(cyber);
+    }
+    else if (GET_CYBERWARE_TYPE(cyber) == CYB_ARMS) {
+      if (IS_SET(GET_CYBERWARE_FLAGS(cyber), ARMS_MOD_ARMOR_MOD1)) {
+        force -= 1;
+      }
+    }
+    else if (GET_CYBERWARE_TYPE(cyber) == CYB_LEGS) {
+      if (IS_SET(GET_CYBERWARE_FLAGS(cyber), LEGS_MOD_ARMOR_MOD1)) {
+        force -= 1;
+      }
+    }
+  }
+
+  snprintf(ENDOF(rolls_buf), sizeof(rolls_buf) - strlen(rolls_buf), " After cyberware, it's %d.", force);
+
+  for (struct obj_data *bio = att->ch->bioware; bio; bio = bio->next_content) {
+    if (GET_BIOWARE_TYPE(bio) == BIO_ORTHOSKIN) {
+      force -= GET_BIOWARE_RATING(bio);
+    }
+  }
+
+  snprintf(ENDOF(rolls_buf), sizeof(rolls_buf) - strlen(rolls_buf), " After bioware, it's %d.", force);
+
+  // Roll a body check, idk.
+  int dice = GET_BOD(att->ch);
+  int successes = success_test(dice, force);
+  int staged_damage = stage(-successes, MODERATE);
+
+  snprintf(ENDOF(rolls_buf), sizeof(rolls_buf) - strlen(rolls_buf), "\r\n^oRolled %d successes on %d dice, staged damage Moderate->%s.",
+           successes, dice, GET_WOUND_NAME(staged_damage));
+  act(rolls_buf, FALSE, att->ch, 0, 0, TO_ROLLS);
+
+  if (staged_damage <= 0) {
+    // Do nothing-- they took no damage.
+    return FALSE;
+  }
+
+  // Convert light/medium/serious/deadly to boxes.
+  int converted_damage = convert_damage(staged_damage);
+
+  // Remember that damage() returns true if it's killed them-- if this happens, you'll need to abort handling, because att->ch is already nulled out.
+  char death_msg[500];
+  snprintf(death_msg, sizeof(death_msg), "^O%s^O's flames consume %s^O, leaving %s body a smoking heap!^n",
+           capitalize(GET_CHAR_NAME(def->ch)),
+           decapitalize_a_an(GET_CHAR_NAME(att->ch)),
+           HSHR(att->ch));
+  // Deal damage based on boxes instead of wound levels.
+  if (damage(def->ch, att->ch, converted_damage, TYPE_SUFFERING, PHYSICAL)) {
+    // We killed them! Write our pre-written message and bail out.
+    act(death_msg, TRUE, 0, 0, def->ch, TO_VICT);
+    act(death_msg, TRUE, def->ch, 0, 0, TO_ROOM);
+
+    // Attacker died, so return TRUE here.
+    return TRUE;
+  } else {
+    // They lived-- give a standard message.
+    switch (MAX(LIGHT, MIN(DEADLY, staged_damage))) {
+      case LIGHT:
+        act("^oYou singe yourself on the flames surrounding $N^o.^n", FALSE, att->ch, 0, def->ch, TO_CHAR);
+        act("^o$n singes $mself on the flames surrounding $N^o.^n", FALSE, att->ch, 0, def->ch, TO_ROOM);
+        break;
+      case MODERATE:
+        act("^oYou burn yourself on the flames surrounding $N^o.^n", FALSE, att->ch, 0, def->ch, TO_CHAR);
+        act("^o$n burns $mself on the flames surrounding $N^o.^n", FALSE, att->ch, 0, def->ch, TO_ROOM);
+        break;
+      case SERIOUS:
+        act("^OYou catch a deep burn from the flames surrounding $N^O.^n", FALSE, att->ch, 0, def->ch, TO_CHAR);
+        act("^O$n^O catches a deep burn from the flames surrounding $N^O.^n", FALSE, att->ch, 0, def->ch, TO_ROOM);
+        break;
+      case DEADLY:
+        act("^RThe flames surrounding $N^R burn you to the bone!^n", FALSE, att->ch, 0, def->ch, TO_CHAR);
+        act("^RThe flames surrounding $N^R burn $n^R to the bone!^n", FALSE, att->ch, 0, def->ch, TO_ROOM);
+        break;
+      default:
+        mudlog("SYSERR: Received invalid code to switch in handle_flame_aura()!", att->ch, LOG_SYSLOG, TRUE);
+        break;
+    }
+  }
+
+  // We survived! Return FALSE to indicate attacker did not die.
+  return FALSE;
 }

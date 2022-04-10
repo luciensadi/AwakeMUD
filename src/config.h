@@ -68,6 +68,7 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 // How many syspoints do the various options cost?
 #define SYSP_RESTRING_COST                                     2
 #define SYSP_NODELETE_COST                                     100
+#define SYSP_ROLLS_COST                                        25
 
 // How long should the MUD wait for recovery before killing itself? Note that it
 // considers itself to be stuck during copyover too, so if you have a large world,
@@ -141,6 +142,8 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 #define IDLE_NUYEN_REWARD_THRESHOLD_IN_MINUTES                 10
 #define IDLE_NUYEN_MINUTES_BETWEEN_AWARDS                      60
 
+#define NUM_MINUTES_BEFORE_LINKDEAD_EXTRACTION                 5
+
 // What is the multiplier at which a cyberdoc will buy 'ware from you?
 #define CYBERDOC_MAXIMUM_SELL_TO_SHOPKEEP_MULTIPLIER           0.30
 
@@ -191,6 +194,12 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 #define FAILED_SPELL_LEARNING_WAIT_STATE                       (0.25 RL_SEC)
 #define INITIATION_CAP                                         50
 
+#define MAX_MOB_COMBAT_MAGIC_FORCE                             10
+#define MIN_MOB_COMBAT_MAGIC_FORCE                             4
+
+#define MAX_MOB_COMBAT_MAGIC_WOUND                             SERIOUS
+#define MIN_MOB_COMBAT_MAGIC_WOUND                             MODERATE
+
 // How many sunrises (currently spans of 48 minutes) are spirits good for?
 #define NUMBER_OF_IG_DAYS_FOR_SPIRIT_TO_LAST                   4
 
@@ -217,6 +226,9 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 
 // If you don't think the same-room +6 TN penalty for using a sniper rifle is appropriate, adjust here.
 #define SAME_ROOM_SNIPER_RIFLE_PENALTY                         6
+
+// How many slots should a gridguide have?
+#define GET_VEH_MAX_AUTONAV_SLOTS(veh)                         (veh->autonav * 10)
 
 /////////////// OLC permissions configuration /////////////////////////
 #define LVL_FOR_SETTING_ZONE_EDITOR_ID_NUMBERS                 LVL_VICEPRES

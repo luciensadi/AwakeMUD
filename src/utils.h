@@ -103,7 +103,6 @@ bool    builder_cant_go_there(struct char_data *ch, struct room_data *room);
 bool    get_and_deduct_one_deckbuilding_token_from_char(struct char_data *ch);
 bool    program_can_be_copied(struct obj_data *prog);
 struct  obj_data *get_obj_proto_for_vnum(vnum_t vnum);
-void    set_natural_vision_for_race(struct char_data *ch);
 int     get_string_length_after_color_code_removal(const char *str, struct char_data *ch_to_notify_of_failure_reason);
 char *  get_string_after_color_code_removal(const char *str, struct char_data *ch);
 int     count_color_codes_in_string(const char *str);
@@ -117,6 +116,12 @@ bool    mob_unique_id_matches(mob_unique_id_t id1, mob_unique_id_t id2);
 void    set_new_mobile_unique_id(struct char_data *ch);
 int     return_general(int skill_num);
 bool    perform_knockdown_test(struct char_data *ch, int initial_tn, int successes_to_avoid_knockback=0);
+int     get_zone_index_number_from_vnum(vnum_t vnum);
+bool    room_accessible_to_vehicle_piloted_by_ch(struct room_data *room, struct veh_data *veh, struct char_data *ch);
+
+long get_room_gridguide_x(vnum_t room_vnum);
+long get_room_gridguide_y(vnum_t room_vnum);
+vnum_t vnum_from_gridguide_coordinates(long x, long y, struct char_data *ch);
 
 // Skill-related.
 char *how_good(int skill, int rank);
@@ -536,8 +541,6 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define GET_LAST_DAMAGETIME(ch)	((ch)->points.lastdamage)
 #define HOURS_LEFT_TRACK(ch)	((ch)->points.track[0])
 #define HOURS_SINCE_TRACK(ch)	((ch)->points.track[1])
-#define NATURAL_VISION(ch)	((ch)->points.vision[0])
-#define CURRENT_VISION(ch)	((ch)->points.vision[1])
 #define SHOTS_FIRED(ch)		((ch)->points.extras[0])
 #define SHOTS_TRIGGERED(ch)	((ch)->points.extras[1])
 #define RIG_VEH(ch, veh)	((veh) = ((ch)->char_specials.rigging ? (ch)->char_specials.rigging : (ch)->in_veh));
@@ -689,6 +692,8 @@ float get_proto_weight(struct obj_data *obj);
         (obj_index[GET_OBJ_RNUM(obj)].wfunc) : NULL)
 #define GET_OBJ_STREET_INDEX(obj)   ((obj)->obj_flags.street_index)
 
+#define GET_OBJ_CONTENTS(obj)  (GET_OBJ_TYPE((obj)) != ITEM_PART ? (obj)->contains : NULL)
+
 #define CAN_WEAR(obj, part) ((obj)->obj_flags.wear_flags.IsSet((part)))
 
 #define IS_WEAPON(type) (((type) >= TYPE_HIT) && ((type) < TYPE_SUFFERING))
@@ -732,7 +737,7 @@ bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struc
 #define CHAR_ONLY_SEES_VICT_WITH_ULTRASOUND(ch, vict) (ch != vict && (IS_AFFECTED((vict), AFF_IMP_INVIS) || IS_AFFECTED((vict), AFF_SPELLIMPINVIS)) && !(IS_DUAL((ch)) || IS_PROJECT((ch)) || IS_ASTRAL((ch))))
 
 #define INVIS_OK_OBJ(sub, obj) (!IS_OBJ_STAT((obj), ITEM_EXTRA_INVISIBLE) || \
-   IS_AFFECTED((sub), AFF_ULTRASOUND) || IS_ASTRAL(sub) || \
+   has_vision(sub, VISION_ULTRASONIC) || IS_ASTRAL(sub) || \
    IS_DUAL(sub) || HOLYLIGHT_OK(sub))
 
 #define CAN_SEE_CARRIER(sub, obj) \
@@ -944,7 +949,6 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 
 
 // ITEM_BIOWARE convenience defines
-
 #define GET_BIOWARE_TYPE(bioware)                 (GET_OBJ_VAL((bioware), 0))
 #define GET_BIOWARE_RATING(bioware)               (GET_OBJ_VAL((bioware), 1))
 #define GET_BIOWARE_IS_CULTURED(bioware)          (GET_OBJ_VAL((bioware), 2) || (GET_BIOWARE_TYPE((bioware)) >= BIO_CEREBRALBOOSTER && GET_BIOWARE_TYPE(bioware) <= BIO_TRAUMADAMPNER))
@@ -954,6 +958,14 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 #define GET_BIOWARE_PUMP_ADRENALINE(bioware)      (GET_OBJ_VAL((bioware), 5)) //Adrenaline in the Adrenaline Pump sack. Controls duration.
 #define GET_BIOWARE_PUMP_TEST_TN(bioware)         (GET_OBJ_VAL((bioware), 6)) //TN for Adrenaline Pump crash test, set when activating the pump the the value of GET_BIOWARE_PUMP_ADRENALINE()
 
+#define GET_BIOWARE_FLAGS(bioware)                   (GET_OBJ_VAL((bioware), 11))
+
+// Platelet factory extra data.
+#define GET_BIOWARE_PLATELETFACTORY_DATA(bioware)       (GET_OBJ_VAL((bioware), 5))
+#define GET_BIOWARE_PLATELETFACTORY_DIFFICULTY(bioware) (GET_OBJ_VAL((bioware), 6))
+
+// Symbiote extra data.
+#define GET_BIOWARE_SYMBIOTE_CONDITION_DATA(bioware)    (GET_OBJ_VAL((bioware), 6))
 
 // ITEM_FOUNTAIN convenience defines
 
@@ -977,12 +989,14 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 #define GET_CYBERDECK_IS_INCOMPLETE(deck)         (GET_OBJ_VAL((deck), 9))
 #define GET_CYBERDECK_FREE_STORAGE(deck)          (GET_CYBERDECK_TOTAL_STORAGE((deck)) -GET_CYBERDECK_USED_STORAGE((deck)))
 
-// ITEM_PROGRAM convenience defines
+// ITEM_PROGRAM convenience defines, aka GET_SOFTWARE
 #define GET_PROGRAM_TYPE(prog)                    (GET_OBJ_VAL((prog), 0))
 #define GET_PROGRAM_RATING(prog)                  (GET_OBJ_VAL((prog), 1))
 #define GET_PROGRAM_SIZE(prog)                    (GET_OBJ_VAL((prog), 2))
 #define GET_PROGRAM_ATTACK_DAMAGE(prog)           (GET_OBJ_VAL((prog), 3))
 #define GET_PROGRAM_IS_DEFAULTED(prog)            (GET_OBJ_VAL((prog), 4))
+#define GET_PROGRAM_IS_COOKED(prog)               (GET_OBJ_TIMER((prog)) == 1)
+/* Values 5 through 9 are reserved by the Matrix code too! See GET_DECK_ACCESSORY_FILE_* for details. */
 
 // ITEM_GUN_MAGAZINE convenience defines
 #define GET_MAGAZINE_BONDED_MAXAMMO(magazine)     (GET_OBJ_VAL((magazine), 0))
@@ -1045,6 +1059,10 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 #define GET_DECK_ACCESSORY_COOKER_ORIGINAL_TIME(accessory)  (GET_OBJ_VAL((accessory), 8))
 #define GET_DECK_ACCESSORY_COOKER_TIME_REMAINING(accessory) (GET_OBJ_VAL((accessory), 9))
 
+// ITEM_DECK_ACCESSORY TYPE_COMPUTER convenience defines
+#define GET_DECK_ACCESSORY_COMPUTER_MAX_MEMORY(accessory)   (GET_OBJ_VAL((accessory), 2))
+#define GET_DECK_ACCESSORY_COMPUTER_USED_MEMORY(accessory)  (GET_OBJ_VAL((accessory), 3))
+
 // ITEM_RCDECK convenience defines
 
 // ITEM_CHIP convenience defines
@@ -1069,6 +1087,10 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 #define GET_HOLSTER_READY_STATUS(holster)                   (GET_OBJ_VAL((holster), 3))
 
 // ITEM_DESIGN convenience defines
+#define GET_DESIGN_PROGRAM(prog)                            (GET_OBJ_VAL((prog), 0))
+#define GET_DESIGN_RATING(prog)                             (GET_OBJ_VAL((prog), 1))
+#define GET_DESIGN_PROGRAM_WOUND_LEVEL(prog)                (GET_OBJ_VAL((prog), 2))
+#define GET_DESIGN_SIZE(prog)                               (GET_OBJ_VAL((prog), 6))
 
 // ITEM_GUN_AMMO convenience defines
 #define GET_AMMOBOX_QUANTITY(box)                           (GET_OBJ_VAL((box), 0))

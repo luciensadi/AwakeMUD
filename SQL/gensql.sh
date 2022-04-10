@@ -41,7 +41,7 @@ if [ ! "$MYSQL_VERSION_CHECK_BYPASS" = true ]; then
   MYSQLVER=`mysql --version | grep -o -e 'Distrib [^,]*'`
   MYSQLMAJORVER=`echo $MYSQLVER | grep -o -e ' 5' | tr -d [:space:]`
   if [ "$MYSQLMAJORVER" != "5" ]; then
-    echo "Error: You must have MySQL version 5 installed to use this script."
+    echo "Error: You must have MySQL version 5 installed to use this script. If you're using MariaDB, re-run this script with the -s flag to skip compatibility checks."
     exit 1
   fi
   MYSQLMINORVER=`echo $MYSQLVER | grep -o -e '\.[0-9]*\.' | tr -d [:space:] | tr -d "\."`

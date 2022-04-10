@@ -92,6 +92,8 @@ extern const char *room_types[];
 extern int damage_array[];
 extern const char *cyber_grades[4];
 extern const char *decap_cyber_grades[4];
+extern const char *vision_types[];
+extern const char *vision_bits[];
 extern const char *eyemods[];
 extern const char *armsmods[];
 extern const char *legsmods[];

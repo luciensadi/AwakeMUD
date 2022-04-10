@@ -251,6 +251,7 @@ It looks pretty much like a normal alphanumeric pager.
 ~
 Type:	Other
 WearFlags:	100000000001
+ExtraFlags:	100000000000000000000000000
 Material:	adv. plastics
 [POINTS]
 	Barrier:	1
@@ -814,6 +815,7 @@ with it!
 ~
 Type:	Shop Container
 WearFlags:	1
+ExtraFlags:	100000000000000000000000000
 Material:	metal
 [POINTS]
 	Barrier:	32
@@ -1213,47 +1215,41 @@ Material:	metal
 	Val0:	10
 BREAK
 #122
-Keywords:	armor jacket ucas army dress uniform overcoat
-Name:	^LA UCAS Navy Dress Uniform overcoat
+Keywords:	custom nerps cyberware
+Name:	a piece of custom NERPS cyberware
 RoomDesc:$
-A lined UCAS Navy dress overcoat lies here, folded neatly.~
+A piece of custom NERPS cyberware has been exposed here.~
 LookDesc:$
-The black overcoat that is a part of the UCAS Navy's Dress Uniform. The
-insides are lined with kevlar, and polymer mesh creating a layer of ballistic
-and impact protection. 
+Created by staff on an individual basis. 
 ~
-Type:	Worn
-WearFlags:	10000000001
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	100000001000000000000000
 Material:	metal
 [POINTS]
-	Weight:	4.00
+	Weight:	1.00
 	Barrier:	8
-	Cost:	15000
 [VALUES]
-	Val0:	2
-	Val1:	6
-	Val4:	4
-	Val5:	5
-	Val6:	3
-	Val7:	2
+	Val0:	50
 BREAK
 #123
-Keywords:	keyn jraye hood white
-Name:	a white hood enshrouds the face
+Keywords:	piece custom nerps bioware
+Name:	a piece of custom NERPS bioware
 RoomDesc:$
-A white hood, covered in indecipherable runes lies here.~
+A piece of custom NERPS bioware has been exposed here.~
 LookDesc:$
-A white hood that is a part of the Keyn J'raye cloak.  It is covered in
-indecipherable runes, not found in any Earth language, not even the more
-arcane and ancient tongues. 
+Created by staff on an individual basis. 
 ~
-Type:	Worn
-WearFlags:	10001
-ExtraFlags:	1
-Material:	fabric
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	100000001000000000000000
+Material:	metal
 [POINTS]
 	Weight:	1.00
-	Barrier:	32
+	Barrier:	8
+[VALUES]
+	Val0:	26
+	Val2:	1
 BREAK
 #124
 Keywords:	white cloak alien keyn jraye

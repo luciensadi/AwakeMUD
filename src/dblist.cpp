@@ -31,13 +31,13 @@ extern void write_world_to_disk(int vnum);
 extern void print_object_location(int, struct obj_data *, struct char_data *, int);
 #define OBJ temp->data
 
-int objList::PrintList(struct char_data *ch, const char *arg)
+int objList::PrintList(struct char_data *ch, const char *arg, bool override_vis_check)
 {
   nodeStruct<struct obj_data *> *temp = head;
   int num = 0;
 
   for (;temp; temp = temp->next)
-    if (temp->data && CAN_SEE_OBJ(ch, temp->data)
+    if (temp->data && (override_vis_check || CAN_SEE_OBJ(ch, temp->data))
         && isname(arg, temp->data->text.keywords))
       print_object_location(++num, temp->data, ch, TRUE);
 

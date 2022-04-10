@@ -1003,6 +1003,20 @@ void ccr_aspect_menu(struct descriptor_data *d)
   d->ccr.mode = CCR_ASPECT;
 }
 
+void ccr_mage_menu(struct descriptor_data *d)
+{
+  strncpy(buf,   "As a hermetic mage, you must select your aspect: \r\n"
+                 "  [1] Full Mage (Jack of All Trades)\r\n"
+                 "  [2] Earth Mage (Manipulation Bonus / Detection Penalty)\r\n"
+                 "  [3] Air Mage (Detection Bonus / Manipulation Penalty)\r\n"
+                 "  [4] Fire Mage (Combat Bonus / Illusion Penalty)\r\n"
+                 "  [5] Water Mage (Illusion Bonus / Combat Penalty)\r\n", sizeof(buf));
+ 
+  strlcat(buf,   "  [?] Help\r\n\r\nAspect: ", sizeof(buf));
+  SEND_TO_Q(buf, d);
+  d->ccr.mode = CCR_MAGE;
+}
+
 void ccr_type_menu(struct descriptor_data *d)
 {
   SEND_TO_Q("\r\nSelect Type of Character Creation:\r\n"
@@ -1729,7 +1743,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
           ccr_aspect_menu(d);
         } else {
           GET_FORCE_POINTS(CH) = 25;
-          start_game(d);
+          ccr_mage_menu(d);
         }
         break;
       case 's':
@@ -1752,6 +1766,31 @@ void create_parse(struct descriptor_data *d, const char *arg)
       }
     }
     break;
+  case CCR_MAGE:
+    if (GET_TRADITION(d->character) == TRAD_HERMETIC) {
+      switch (i) {
+      case 1:
+        GET_ASPECT(d->character) = ASPECT_FULL;
+        break;
+      case 2:
+        GET_ASPECT(d->character) = ASPECT_EARTHMAGE;
+        break;
+      case 3:
+        GET_ASPECT(d->character) = ASPECT_AIRMAGE;
+        break;
+      case 4:
+        GET_ASPECT(d->character) = ASPECT_FIREMAGE;
+        break;
+      case 5:
+        GET_ASPECT(d->character) = ASPECT_WATERMAGE;
+        break;
+      default:
+        SEND_TO_Q("\r\nFull Mages are general practitioners of all elements and the standard Hermetic experience. Elemental Mages specialize in a specific element, which they gain an advantage in at a disadvantage to their opposing element.\r\n\r\nSelect your aspect (1 for Full Mage, 2 for Earth Mage, 3 for Air Mage, 4 for Fire Mage or 5 for Water Mage.) ", d);
+        return;
+      }
+    start_game(d);
+    break;
+    }
   case CCR_ASPECT:
     if (GET_TRADITION(d->character) == TRAD_SHAMANIC) {
       switch (i) {

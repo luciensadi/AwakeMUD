@@ -2,8 +2,8 @@
   - add unordered map to all characters
   - add invis-changing function that is called whenever invis level shifts
   - link it in to releasing invis spell and toggling invis on thermoptic/ruthenium
-  - add perception function
-  - link in perception function on activities that could induce it (movement after breaking sneak, attacks, etc)
+  - add invis resistance function
+  - link in invis resistance function on activities that could induce it (movement after breaking sneak, attacks, etc)
   - add function for stripping an idnum from maps, link it in extract_char
   - add houseruled limiter for invis / impinvis: no more successes than force of spell
 */
@@ -84,11 +84,17 @@ bool process_spotted_invis(struct char_data *ch, struct char_data *vict, bool ju
   }
 }
 
-// Checks if you've seen through their invis, and does the perception check if you haven't done it yet.
+// Despite the name of this file etc, this is actually a spell resistance test, not a perception test.
 bool can_see_through_invis(struct char_data *ch, struct char_data *vict) {
   std::unordered_map<idnum_t, bool> *map_to_operate_on = NULL;
   std::unordered_map<idnum_t, bool>::const_iterator found;
   idnum_t idnum;
+
+  /*
+  act("Processing can_see_through_invis ($N looking at $n).", FALSE, vict, 0, ch, TO_ROLLS);
+  if (vict->in_room != ch->in_room)
+    act("Processing can_see_through_invis ($n looking at $N).", FALSE, ch, 0, vict, TO_ROLLS);
+  */
 
   // NPCs and PCs have their own separate maps.
   if (IS_NPC(ch)) {
@@ -114,7 +120,7 @@ bool can_see_through_invis(struct char_data *ch, struct char_data *vict) {
     return found->second;
   }
 
-  // They weren't in the map yet-- add them to it with their perception test results.
+  // They weren't in the map yet-- add them to it with their invis resistance test results.
   struct sustain_data *invis_spell_sust = NULL;
 
   // Scan through their spells and find the invis spell on them, if any.
@@ -124,39 +130,39 @@ bool can_see_through_invis(struct char_data *ch, struct char_data *vict) {
       break;
   }
 
-  // You don't get to use a perception test to see through ruthenium etc-- just bail out.
+  // You don't get to use a invis resistance test to see through ruthenium etc-- just bail out.
   if (!invis_spell_sust) {
     return FALSE;
   }
 
   // Looks like we're going to need to process a check.
-  char perception_test_rbuf[5000];
-  snprintf(perception_test_rbuf, sizeof(perception_test_rbuf), "Perception test %s vs %s: ", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict));
+  char resistance_test_rbuf[5000];
+  snprintf(resistance_test_rbuf, sizeof(resistance_test_rbuf), "Invis Resistance test %s vs %s: ", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict));
 
   // Calculate the TN.
   int tn = invis_spell_sust->force;
-  buf_mod(perception_test_rbuf, sizeof(perception_test_rbuf), "Spell TN", tn);
+  buf_mod(resistance_test_rbuf, sizeof(resistance_test_rbuf), "Spell TN", tn);
 
   // SR3 p183: These modifiers don't apply.
-  // tn += modify_target_rbuf(ch, perception_test_rbuf, sizeof(perception_test_rbuf));
+  // tn += modify_target_rbuf(ch, resistance_test_rbuf, sizeof(resistance_test_rbuf));
 
   // If the victim is affected by the Conceal power, add the force of that to the victim's TN.
   int conceal_rating = affected_by_power(vict, CONCEAL);
   if (conceal_rating) {
     tn += conceal_rating;
-    buf_mod(perception_test_rbuf, sizeof(perception_test_rbuf), "Conceal", conceal_rating);
+    buf_mod(resistance_test_rbuf, sizeof(resistance_test_rbuf), "Conceal", conceal_rating);
   }
 
   // Next, figure out how many dice they're rolling. We don't get task pool because this isn't a skill.
   int dice = GET_INT(ch);
-  snprintf(ENDOF(perception_test_rbuf), sizeof(perception_test_rbuf) - strlen(perception_test_rbuf), "\r\nDice: %d (int)", GET_INT(ch));
+  snprintf(ENDOF(resistance_test_rbuf), sizeof(resistance_test_rbuf) - strlen(resistance_test_rbuf), "\r\nDice: %d (int)", GET_INT(ch));
 
-  // House rule: Add tactical computer's rating as perception dice, but only for mundanes.
+  // House rule: Add tactical computer's rating as invis resistance dice, but only for mundanes.
   if (GET_MAG(ch) <= 0) {
     for (struct obj_data *cyber = ch->cyberware; cyber; cyber = cyber->next_content) {
       if (GET_CYBERWARE_TYPE(cyber) == CYB_TACTICALCOMPUTER) {
         dice += GET_CYBERWARE_RATING(cyber);
-        buf_mod(perception_test_rbuf, sizeof(perception_test_rbuf), ", TacComp", GET_CYBERWARE_RATING(cyber));
+        buf_mod(resistance_test_rbuf, sizeof(resistance_test_rbuf), ", TacComp", GET_CYBERWARE_RATING(cyber));
         break;
       }
     }
@@ -164,12 +170,18 @@ bool can_see_through_invis(struct char_data *ch, struct char_data *vict) {
 
   if (GET_TRADITION(ch) == TRAD_SHAMANIC && GET_TOTEM(ch) == TOTEM_LEOPARD) {
     dice -= 1;
-    buf_mod(perception_test_rbuf, sizeof(perception_test_rbuf), "LeopardTotem", -1);
+    buf_mod(resistance_test_rbuf, sizeof(resistance_test_rbuf), "LeopardTotem", -1);
   }
 
-  if (GET_TRADITION(ch) == TRAD_ADEPT && GET_POWER(ch, ADEPT_TRUE_SIGHT)) {
-    dice += GET_POWER(ch, ADEPT_TRUE_SIGHT);
-    buf_mod(perception_test_rbuf, sizeof(perception_test_rbuf), "TrueSight", ADEPT_TRUE_SIGHT);
+  if (GET_TRADITION(ch) == TRAD_ADEPT) {
+    if (GET_POWER(ch, ADEPT_TRUE_SIGHT)) {
+      dice += GET_POWER(ch, ADEPT_TRUE_SIGHT);
+      buf_mod(resistance_test_rbuf, sizeof(resistance_test_rbuf), "TrueSight", ADEPT_TRUE_SIGHT);
+    }
+    if (GET_POWER(ch, ADEPT_MAGIC_RESISTANCE)) {
+      dice += GET_POWER(ch, ADEPT_MAGIC_RESISTANCE);
+      buf_mod(resistance_test_rbuf, sizeof(resistance_test_rbuf), "MagicResist", ADEPT_MAGIC_RESISTANCE);
+    }
   }
 
   // Figure out how many successes they need to have to beat this spell.
@@ -179,7 +191,7 @@ bool can_see_through_invis(struct char_data *ch, struct char_data *vict) {
   // Finally, roll the dice.
   int successes = success_test(dice, tn);
   bool test_result = (successes >= effective_spell_successes);
-  snprintf(ENDOF(perception_test_rbuf), sizeof(perception_test_rbuf) - strlen(perception_test_rbuf), "\r\nResult: %d hits vs %d: %s",
+  snprintf(ENDOF(resistance_test_rbuf), sizeof(resistance_test_rbuf) - strlen(resistance_test_rbuf), "\r\nResult: %d hits vs %d: %s",
            successes,
            effective_spell_successes,
            test_result ? "success" : "failure"
@@ -189,7 +201,7 @@ bool can_see_through_invis(struct char_data *ch, struct char_data *vict) {
   map_to_operate_on->emplace(idnum, test_result);
 
   // Write the rolls for debugging.
-  act(perception_test_rbuf, FALSE, ch, NULL, NULL, TO_ROLLS);
+  act(resistance_test_rbuf, FALSE, ch, NULL, NULL, TO_ROLLS);
 
   // Message the character if they can suddenly see their opponent.
   if (test_result && ch != vict && (ch->in_room ? ch->in_room == vict->in_room : ch->in_veh == vict->in_veh)) {
@@ -205,12 +217,14 @@ bool can_see_through_invis(struct char_data *ch, struct char_data *vict) {
           } else {
             send_to_char(vict, "^y%s scowls at you, %s eyes focusing through your invisibility.^n\r\n", capitalize(GET_CHAR_NAME(ch)), HSHR(ch));
           }
+          if (GET_NOT(vict) < NEWBIE_KARMA_THRESHOLD && number(0, MAX(1, GET_NOT(vict) / 5)) == 0) {
+            send_to_char(vict, "(OOC: Being invisible sets NPCs on edge! Be careful out there.)\r\n");
+          }
         } else if (number(0, 5) == 0) {
           send_to_char("You get an uneasy feeling...\r\n", vict);
-        }
-
-        if (GET_NOT(vict) < NEWBIE_KARMA_THRESHOLD && number(0, MAX(1, GET_NOT(vict) / 5)) == 0) {
-          send_to_char(vict, "(OOC: Being invisible sets NPCs on edge! Be careful out there.)\r\n");
+          if (GET_NOT(vict) < NEWBIE_KARMA_THRESHOLD && number(0, MAX(1, GET_NOT(vict) / 5)) == 0) {
+            send_to_char(vict, "(OOC: Being invisible sets NPCs on edge! Be careful out there.)\r\n");
+          }
         }
       }
     }

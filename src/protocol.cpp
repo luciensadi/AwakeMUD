@@ -42,14 +42,18 @@ static void Write( descriptor_t *apDescriptor, const char *apData )
     if ( apDescriptor->pProtocol->WriteOOB > 0 ) {
       apDescriptor->pProtocol->WriteOOB = 2;
     }
-   write_to_output( apData, apDescriptor );
+    // Append our output to the player's output buffer.
+    write_to_output( apData, apDescriptor );
+
+    // Writing directly to the descriptor can break control sequences mid-stream, causing display problems.
+    // write_to_descriptor( apDescriptor->descriptor, apData );
   }
 }
 
 static void ReportBug( const char *apText )
 {
   static char bugbuf[1000];
-  snprintf(bugbuf, sizeof(bugbuf), "protocol.c bug: %s", apText);
+  snprintf(bugbuf, sizeof(bugbuf), "SYSERR: protocol.c bug: %s", apText);
   mudlog(bugbuf, NULL, LOG_SYSLOG, TRUE);
 }
 
@@ -1603,6 +1607,10 @@ void MXPSendTag( descriptor_t *apDescriptor, const char *apTag )
          int i; /* Renegotiate everything except TTYPE */
          for ( i = eNEGOTIATED_TTYPE+1; i < eNEGOTIATED_MAX; ++i )
          {
+            // Don't renegotiate echo, we already handled everything related to this.
+            if (i == TELOPT_ECHO)
+              continue;
+
             pProtocol->Negotiated[i] = FALSE;
             ConfirmNegotiation(apDescriptor, (negotiated_t)i, TRUE, TRUE);
          }
@@ -1810,6 +1818,16 @@ static void PerformHandshake( descriptor_t *apDescriptor, char aCmd, char aProto
          break;
 
       case (char)TELOPT_ECHO:
+         /* Disabled the ability for the protocol snippet to respond to this, because:
+            - We decide when we're echoing anyways, so this has no mechanical effect, AND
+            - This can cause a race condition where the client and server endlessly spam DO DONT WILL WONT at each other.
+         */
+
+#ifdef LOG_TELOPT_ECHO
+         log_vfprintf("Received IAC %s ECHO from %ld.", aCmd == (char)DO ? "DO" : "DONT", apDescriptor->descriptor);
+#endif
+
+#ifdef RESPOND_TO_TELOPT_ECHO
          if ( aCmd == (char)DO )
          {
             ConfirmNegotiation(apDescriptor, eNEGOTIATED_ECHO, TRUE, TRUE);
@@ -1825,6 +1843,7 @@ static void PerformHandshake( descriptor_t *apDescriptor, char aCmd, char aProto
             /* Invalid negotiation, send a rejection */
             SendNegotiationSequence( apDescriptor, (char)DONT, (char)aProtocol );
          }
+ #endif
          break;
 
       case (char)TELOPT_NAWS:

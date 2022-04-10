@@ -510,17 +510,17 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
       targ->decker->scout = 0;
     }
     power = iconrating;
-    if (icon->ic.type >= IC_LETHAL_BLACK) {
-      if (matrix[icon->in_host].colour <= 1)
+    if (icon->ic.type == IC_LETHAL_BLACK || icon->ic.type == IC_NON_LETHAL_BLACK) {
+      if (matrix[icon->in_host].colour == HOST_SECURITY_BLUE || matrix[icon->in_host].colour == HOST_SECURITY_GREEN)
         dam = MODERATE;
-      else if (matrix[icon->in_host].colour >= 2) {
-        if (matrix[icon->in_host].colour == 4)
+      else if (matrix[icon->in_host].colour >= HOST_SECURITY_ORANGE) {
+        if (matrix[icon->in_host].colour == HOST_SECURITY_BLACK)
           power += 2;
         dam = SERIOUS;
       }
     } else {
-      dam = MAX(matrix[icon->in_host].colour + 1, DEADLY);
-      if (matrix[icon->in_host].colour == 4)
+      dam = MIN(matrix[icon->in_host].colour + 1, DEADLY);
+      if (matrix[icon->in_host].colour == HOST_SECURITY_BLACK)
         power += 2;
     }
   }
@@ -2581,8 +2581,8 @@ void matrix_update()
           file->next_content = NULL;
           next = NULL;
         }
-        if (GET_OBJ_TYPE(file) != ITEM_DECK_ACCESSORY) {
-          snprintf(buf, sizeof(buf), "SYSERR: Found non-file object '%s' (%ld, quest=%s) in Matrix file list for host %ld! Terminating iteration immediately.\r\n",
+        if (GET_OBJ_TYPE(file) != ITEM_DECK_ACCESSORY && GET_OBJ_TYPE(file) != ITEM_PROGRAM) {
+          snprintf(buf, sizeof(buf), "SYSERR: Found non-file, non-program object '%s' (%ld, quest=%s) in Matrix file list for host %ld! Terminating iteration immediately.",
                    GET_OBJ_NAME(file),
                    GET_OBJ_VNUM(file),
                    file->obj_flags.quest_id != 0 ? "TRUE" : "FALSE",
@@ -2591,8 +2591,8 @@ void matrix_update()
           mudlog(buf, NULL, LOG_SYSLOG, TRUE);
           return;
         }
-        if (file->next_content && GET_OBJ_TYPE(file->next_content) != ITEM_DECK_ACCESSORY) {
-          snprintf(buf, sizeof(buf), "SYSERR: Found non-file object '%s' (%ld) in Matrix file->next_content! Striking that link, object will be orphaned if not located elsewhere.\r\n", GET_OBJ_NAME(file), GET_OBJ_VNUM(file));
+        if (file->next_content && (GET_OBJ_TYPE(file->next_content) != ITEM_DECK_ACCESSORY && GET_OBJ_TYPE(file->next_content) != ITEM_PROGRAM)) {
+          snprintf(buf, sizeof(buf), "SYSERR: Found non-file, non-program object '%s' (%ld) in Matrix file->next_content! Striking that link, object will be orphaned if not located elsewhere.", GET_OBJ_NAME(file), GET_OBJ_VNUM(file));
           mudlog(buf, NULL, LOG_SYSLOG, TRUE);
           file->next_content = next = NULL;
         }
@@ -3362,7 +3362,7 @@ bool display_cyberdeck_issues(struct char_data *ch, struct obj_data *cyberdeck) 
       snprintf(buf2, sizeof(buf2), "SYSERR: Cyberdeck '%s' held by '%s' identifies itself as being incomplete, but has all necessary parts. Autofixing.",
               GET_OBJ_NAME(cyberdeck), GET_CHAR_NAME(ch));
       mudlog(buf2, ch, LOG_SYSLOG, TRUE);
-      GET_CYBERDECK_IS_INCOMPLETE(cyberdeck) = 1;
+      GET_CYBERDECK_IS_INCOMPLETE(cyberdeck) = 0;
       send_to_char(ch, "You smack the side of %s a few times. It sparks, then powers on.\r\n", GET_OBJ_NAME(cyberdeck));
       return TRUE;
     }

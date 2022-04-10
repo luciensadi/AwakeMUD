@@ -43,6 +43,7 @@
 #include "config.h"
 #include "bullet_pants.h"
 #include "perception_tests.h"
+#include "vision_overhaul.h"
 
 extern class memoryClass *Mem;
 extern struct time_info_data time_info;
@@ -210,29 +211,43 @@ int light_level(struct room_data *room)
 
   int artificial_light_level = -1;
 
-  // Flashlights. More flashlights, more light.
-  if (room->light[0])
-    artificial_light_level = room->light[0] == 1 ? LIGHT_MINLIGHT : LIGHT_PARTLIGHT;
+  // If we have streetlights, we don't care about flashlights etc-- we're guaranteeing partlight.
+  if (ROOM_FLAGGED(room, ROOM_STREETLIGHTS) && (time_info.hours < 6 || time_info.hours > 19)) {
+    artificial_light_level = LIGHT_PARTLIGHT;
+  } else {
+    // Flashlights. More flashlights, more light.
+    if (room->light[0]) {
+      if (room->light[0] <= 1)
+        artificial_light_level = LIGHT_MINLIGHT;
+      else
+        artificial_light_level = LIGHT_PARTLIGHT;
+    }
 
-  // Light spell.
-  if (room->light[1])
-    artificial_light_level = LIGHT_NORMAL;
+    // We treat the light spell like another flashlight. Its true purpose is adjusting TNs, which is done in vision_overhaul.cpp.
+    if (room->light[1])
+      artificial_light_level = MAX(LIGHT_MINLIGHT, artificial_light_level);
+  }
 
   int candidate_light_level = room->vision[0];
 
   switch (artificial_light_level) {
+    // Minlight overrides full dark, otherwise we use the existing value.
     case LIGHT_MINLIGHT:
       if (room->vision[0] == LIGHT_FULLDARK)
         candidate_light_level = LIGHT_MINLIGHT;
       else
         candidate_light_level = room->vision[0];
       break;
+
+    // Partlight overrides minlight and full dark, otherwise we use the existing value.
     case LIGHT_PARTLIGHT:
       if (room->vision[0] == LIGHT_FULLDARK || room->vision[0] == LIGHT_MINLIGHT)
         candidate_light_level = LIGHT_PARTLIGHT;
       else
         candidate_light_level = room->vision[0];
       break;
+
+    // Normal light overrides normal-no-lit, minlight, and fulldark, otherwise we use the existing value.
     case LIGHT_NORMAL:
       if (room->vision[0] == LIGHT_FULLDARK || room->vision[0] == LIGHT_MINLIGHT || room->vision[0] == LIGHT_NORMALNOLIT)
         candidate_light_level = LIGHT_NORMAL;
@@ -241,20 +256,28 @@ int light_level(struct room_data *room)
       break;
   }
 
-  if (room->sector_type == SPIRIT_HEARTH)
+  // Indoor rooms have no weather or time-based light influences.
+  if (ROOM_FLAGGED(room, ROOM_INDOORS))
     return candidate_light_level;
+
+  // Outdoor city rooms (roads, etc) are impacted by ambient light.
   if (room->sector_type == SPIRIT_CITY) {
-    if ((time_info.hours > 6 && time_info.hours < 19))
+    // It's daytime. No changes.
+    if ((time_info.hours > 6 && time_info.hours < 19)) {
       return candidate_light_level;
-    else if (candidate_light_level == LIGHT_NORMALNOLIT)
-      return LIGHT_MINLIGHT;
+    }
+    // It's nighttime, and this area is flagged as having no light.
+    else if (candidate_light_level == LIGHT_NORMALNOLIT) {
+      return MAX(LIGHT_MINLIGHT, artificial_light_level);
+    }
     else
-      return LIGHT_PARTLIGHT;
+      return MAX(LIGHT_PARTLIGHT, artificial_light_level);
   }
-  if ((time_info.hours < 6 || time_info.hours > 19) && (candidate_light_level > LIGHT_MINLIGHT || candidate_light_level <= LIGHT_NORMALNOLIT))
-    return LIGHT_MINLIGHT;
-  else
+  if ((time_info.hours < 6 || time_info.hours > 19) && (candidate_light_level > LIGHT_MINLIGHT || candidate_light_level <= LIGHT_NORMALNOLIT)) {
+    return MAX(LIGHT_MINLIGHT, artificial_light_level);
+  } else {
     return candidate_light_level;
+  }
 }
 
 int damage_modifier(struct char_data *ch, char *rbuf, int rbuf_size)
@@ -364,7 +387,7 @@ int sustain_modifier(struct char_data *ch, char *rbuf, size_t rbuf_len, bool min
 // Adds the combat_mode toggle
 int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int current_visibility_penalty, bool skill_is_magic) {
   extern time_info_data time_info;
-  int base_target = 0, light_target = 0;
+  int base_target = 0;
   // get damage modifier
   base_target += damage_modifier(ch, rbuf, rbuf_len);
   // then apply modifiers for sustained spells
@@ -377,146 +400,31 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int c
     return 100;
   }
 
-  if (PLR_FLAGGED(ch, PLR_PERCEIVE) || MOB_FLAGGED(ch, MOB_DUAL_NATURE))
+  if (PLR_FLAGGED(ch, PLR_PERCEIVE) || MOB_FLAGGED(ch, MOB_DUAL_NATURE) || IS_ASTRAL(ch))
   {
-    if (!skill_is_magic && !MOB_FLAGGED(ch, MOB_DUAL_NATURE)) {
+    if (!skill_is_magic && PLR_FLAGGED(ch, PLR_PERCEIVE)) {
       base_target += 2;
       buf_mod(rbuf, rbuf_len, "AstralPercep", 2);
     }
-  } else if (current_visibility_penalty < 8) {
-    switch (light_level(temp_room)) {
-      case LIGHT_FULLDARK:
-        if (CURRENT_VISION(ch) == THERMOGRAPHIC) {
-          if (NATURAL_VISION(ch) == THERMOGRAPHIC) {
-            light_target += 2;
-            buf_mod(rbuf, rbuf_len, "FullDark", 2);
-          } else {
-            light_target += 4;
-            buf_mod(rbuf, rbuf_len, "FullDark", 4);
-          }
-        } else {
-          light_target += 8;
-          buf_mod(rbuf, rbuf_len, "FullDark", 8);
-        }
-        break;
-      case LIGHT_MINLIGHT:
-        if (CURRENT_VISION(ch) == NORMAL) {
-          light_target += 6;
-          buf_mod(rbuf, rbuf_len, "MinLight", 6);
-        } else {
-          if (NATURAL_VISION(ch) == NORMAL) {
-            light_target += 4;
-            buf_mod(rbuf, rbuf_len, "MinLight", 4);
-          } else {
-            base_target += 2;
-            buf_mod(rbuf, rbuf_len, "MinLight", 2);
-          }
-        }
-        break;
-      case LIGHT_PARTLIGHT:
-        if (CURRENT_VISION(ch) == NORMAL) {
-          light_target += 2;
-          buf_mod(rbuf, rbuf_len, "PartLight", 2);
-        } else if (CURRENT_VISION(ch) == LOWLIGHT) {
-          if (NATURAL_VISION(ch) != LOWLIGHT) {
-            light_target++;
-            buf_mod(rbuf, rbuf_len, "PartLight", 1);
-          }
-        } else {
-          if (NATURAL_VISION(ch) != THERMOGRAPHIC) {
-            light_target += 2;
-            buf_mod(rbuf, rbuf_len, "PartLight", 2);
-          } else {
-            light_target++;
-            buf_mod(rbuf, rbuf_len, "PartLight", 1);
-          }
-        }
-        break;
-      case LIGHT_GLARE:
-        if (CURRENT_VISION(ch) == NORMAL) {
-          light_target += 2;
-          buf_mod(rbuf, rbuf_len, "Glare", 2);
-        } else {
-          if (NATURAL_VISION(ch) == NORMAL) {
-            light_target += 4;
-            buf_mod(rbuf, rbuf_len, "Glare", 2);
-          } else {
-            light_target += 2;
-            buf_mod(rbuf, rbuf_len, "Glare", 2);
-          }
-        }
-        break;
-    }
-    if (light_target > 0 && temp_room->light[1]) {
-      if (temp_room->light[2]) {
-        light_target = MAX(0, light_target - temp_room->light[2]);
-        buf_mod(rbuf, rbuf_len, "LightSpell", - temp_room->light[2]);
-      } else
-        light_target /= 2;
-    }
-    if (temp_room->shadow[0]) {
-      light_target += temp_room->shadow[1];
-      buf_mod(rbuf, rbuf_len, "ShadowSpell", temp_room->shadow[1]);
-    }
-    int smoke_target = 0;
+  } else {
+    int visibility_penalty = get_vision_penalty(ch, temp_room, rbuf, rbuf_len);
 
-    if (temp_room->vision[1] == LIGHT_MIST)
-      if (CURRENT_VISION(ch) == NORMAL || (CURRENT_VISION(ch) == LOWLIGHT && NATURAL_VISION(ch) == LOWLIGHT)) {
-        smoke_target += 2;
-        buf_mod(rbuf, rbuf_len, "Mist", 2);
-      }
-    if (temp_room->vision[1] == LIGHT_LIGHTSMOKE || (weather_info.sky == SKY_RAINING &&
-                                                             temp_room->sector_type != SPIRIT_HEARTH && !ROOM_FLAGGED(temp_room, ROOM_INDOORS))) {
-      if (CURRENT_VISION(ch) == NORMAL || (CURRENT_VISION(ch) == LOWLIGHT && NATURAL_VISION(ch) != LOWLIGHT)) {
-        smoke_target += 4;
-        buf_mod(rbuf, rbuf_len, "LSmoke/LRain", 4);
-      } else if (CURRENT_VISION(ch) == LOWLIGHT) {
-        smoke_target += 2;
-        buf_mod(rbuf, rbuf_len, "LSmoke/LRain", 2);
-      }
+    if (current_visibility_penalty + visibility_penalty > 8) {
+      buf_mod(rbuf, rbuf_len, "VisPenaltyMax8", 8 - (current_visibility_penalty + visibility_penalty));
+      visibility_penalty = 8;
     }
-    if (temp_room->vision[1] == LIGHT_HEAVYSMOKE || (weather_info.sky == SKY_LIGHTNING &&
-                                                             temp_room->sector_type != SPIRIT_HEARTH && !ROOM_FLAGGED(temp_room, ROOM_INDOORS))) {
-      if (CURRENT_VISION(ch) == NORMAL || (CURRENT_VISION(ch) == LOWLIGHT && NATURAL_VISION(ch) == NORMAL)) {
-        smoke_target += 6;
-        buf_mod(rbuf, rbuf_len, "HSmoke/HRain", 6);
-      } else if (CURRENT_VISION(ch) == LOWLIGHT) {
-        smoke_target += 4;
-        buf_mod(rbuf, rbuf_len, "HSmoke/HRain", 4);
-      } else if (CURRENT_VISION(ch) == THERMOGRAPHIC && NATURAL_VISION(ch) != THERMOGRAPHIC) {
-        smoke_target++;
-        buf_mod(rbuf, rbuf_len, "HSmoke/HRain", 1);
-      }
-    }
-    if (temp_room->vision[1] == LIGHT_THERMALSMOKE) {
-      if (CURRENT_VISION(ch) == NORMAL || CURRENT_VISION(ch) == LOWLIGHT) {
-        smoke_target += 4;
-        buf_mod(rbuf, rbuf_len, "TSmoke", 4);
-      } else {
-        if (NATURAL_VISION(ch) == THERMOGRAPHIC) {
-          smoke_target += 6;
-          buf_mod(rbuf, rbuf_len, "TSmoke", 6);
-        } else {
-          smoke_target += 8;
-          buf_mod(rbuf, rbuf_len, "TSmoke", 8);
-        }
-      }
-    }
-    // The maximum visibility penalty we apply is +8 TN to avoid things like an invisible person in a smoky pitch-black room getting +24 to hit TN.
-    if (light_target + smoke_target + current_visibility_penalty > 8) {
-      buf_mod(rbuf, rbuf_len, "ButVisPenaltyMaxIs8", (8 - current_visibility_penalty) - (light_target + smoke_target));
-      base_target += 8 - current_visibility_penalty;
-    } else
-      base_target += light_target + smoke_target;
+
+    base_target += visibility_penalty;
   }
+
   base_target += GET_TARGET_MOD(ch);
   buf_mod(rbuf, rbuf_len, "GET_TARGET_MOD", GET_TARGET_MOD(ch) );
-  if (GET_RACE(ch) == RACE_NIGHTONE && ((time_info.hours > 6) && (time_info.hours < 19)) && OUTSIDE(ch))
+  if (GET_RACE(ch) == RACE_NIGHTONE && ((time_info.hours > 6) && (time_info.hours < 19)) && OUTSIDE(ch) && weather_info.sky < SKY_RAINING)
   {
     base_target += 1;
     buf_mod(rbuf, rbuf_len, "Sunlight", 1);
   }
-  if (temp_room->poltergeist[0] && !IS_ASTRAL(ch) && !IS_DUAL(ch))
+  if (temp_room->poltergeist[0] && !IS_ASTRAL(ch) && !MOB_FLAGGED(ch, MOB_DUAL_NATURE))
   {
     base_target += 2;
     buf_mod(rbuf, rbuf_len, "Polter", 2);
@@ -1350,7 +1258,16 @@ int negotiate(struct char_data *ch, struct char_data *tch, int comp, int baseval
   act("Getting skill for PC...", FALSE, ch, NULL, NULL, TO_ROLLS);
   int cskill = get_skill(ch, SKILL_NEGOTIATION, chtn);
   act("Getting skill for NPC...", FALSE, tch, NULL, NULL, TO_ROLLS);
-  int tskill = get_skill(tch, SKILL_NEGOTIATION, tchtn);
+
+  // Plenty of NPCs also have no negotiation skill set when they should, so we make this an average value as well.
+  int tskill;
+  if (IS_NPC(tch) && GET_SKILL(tch, SKILL_NEGOTIATION) == 0) {
+    int tch_cha = (negotiation_is_with_data_fence ? GET_REAL_CHA(tch) : GET_CHA(tch));
+    tskill = MAX(tch_cha, 3);
+  } else {
+    tskill = get_skill(tch, SKILL_NEGOTIATION, tchtn);
+  }
+
 
   for (bio = ch->bioware; bio; bio = bio->next_content)
     if (GET_BIOWARE_TYPE(bio) == BIO_TAILOREDPHEREMONES)
@@ -1379,8 +1296,8 @@ int negotiate(struct char_data *ch, struct char_data *tch, int comp, int baseval
            tchnego, tskill, tchtn, ch_int, mod, tmod);
   if (comp)
   {
-    chtn = GET_INT(tch)+mod+cmod;
-    tchtn = GET_INT(ch)+mod+tmod;
+    chtn = tch_int+mod+cmod;
+    tchtn = ch_int+mod+tmod;
 
     act("Getting additional skill for PC...", FALSE, ch, NULL, NULL, TO_ROLLS);
     cskill = get_skill(ch, comp, chtn);
@@ -2287,13 +2204,14 @@ struct room_data *get_obj_in_room(struct obj_data *obj) {
 }
 
 bool invis_ok(struct char_data *ch, struct char_data *vict) {
+  struct room_data *ch_room = NULL, *vict_room = NULL;
   // No room at all? Nope.
-  if (!ch || !get_ch_in_room(ch)) {
+  if (!ch || !(ch_room = get_ch_in_room(ch))) {
     mudlog("invis_ok() received char with NO room!", ch, LOG_SYSLOG, TRUE);
     return FALSE;
   }
 
-  if (!vict || !get_ch_in_room(vict)) {
+  if (!vict || !(vict_room = get_ch_in_room(vict))) {
     mudlog("invis_ok() received vict with NO room!", ch, LOG_SYSLOG, TRUE);
     return FALSE;
   }
@@ -2314,8 +2232,12 @@ bool invis_ok(struct char_data *ch, struct char_data *vict) {
   if ((IS_ASTRAL(ch) || IS_DUAL(ch)) && (!MOB_FLAGGED(vict, MOB_INANIMATE) || GET_SUSTAINED(vict)))
     return TRUE;
 
-  // Ultrasound pierces all invis as long as it's not blocked by silence or stealth.
-  if (AFF_FLAGGED(ch, AFF_ULTRASOUND) && (get_ch_in_room(ch)->silence[0] <= 0 && !affected_by_spell(vict, SPELL_STEALTH) && !affected_by_spell(ch, SPELL_STEALTH)))
+  // Ultrasound pierces all invis as long as it's in the same room and not blocked by silence or stealth.
+  if (has_vision(ch, VISION_ULTRASONIC)
+      && ch_room == vict_room
+      && (ch_room->silence[0] <= 0
+          && !affected_by_spell(vict, SPELL_STEALTH)
+          && !affected_by_spell(ch, SPELL_STEALTH)))
     return TRUE;
 
   // Allow resist test VS invis.
@@ -2329,7 +2251,7 @@ bool invis_ok(struct char_data *ch, struct char_data *vict) {
   }
 
   // Ruthenium is pierced by thermographic vision, which is default on vehicles.
-  bool can_see_through_standard_invis = (CURRENT_VISION(ch) == THERMOGRAPHIC || AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE));
+  bool can_see_through_standard_invis = (has_vision(ch, VISION_THERMOGRAPHIC) || AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE));
   if (IS_AFFECTED(vict, AFF_INVISIBLE)) {
     return can_see_through_standard_invis;
   }
@@ -2372,7 +2294,7 @@ struct obj_data *find_matching_obj_in_container(struct obj_data *container, vnum
   struct obj_data *result = NULL;
 
   // Nothing given to us? Nothing to find.
-  if (container == NULL)
+  if (container == NULL || GET_OBJ_TYPE(container) == ITEM_PART)
     return NULL;
 
   // Check each item in this container. If it's a match, return it; otherwise, check its contents.
@@ -2827,8 +2749,9 @@ void copy_over_necessary_info(struct char_data *original, struct char_data *clon
   REPLICATE(points.init_roll);
   REPLICATE(points.sustained[0]);
   REPLICATE(points.sustained[1]);
-  REPLICATE(points.vision[0]);
-  REPLICATE(points.vision[1]);
+
+  copy_vision_from_original_to_clone(original, clone);
+
   REPLICATE(points.fire[0]);
   REPLICATE(points.fire[1]);
   REPLICATE(points.reach[0]);
@@ -2945,9 +2868,9 @@ void set_character_skill(struct char_data *ch, int skill_num, int new_value, boo
       } else if (new_value == 9) {
         send_to_char(ch, "^CYou have achieved bachelor's-degree-level fluency.^n\r\n");
       } else if (new_value == 10) {
-        send_to_char(ch, "^CYou have achieved a native-level fluency.^n\r\n");
+        send_to_char(ch, "^gYou have achieved a native-level fluency.^n\r\n");
       } else if (new_value == 12) {
-        send_to_char(ch, "^CYou have achieved doctorate-degree-level fluency.^n\r\n");
+        send_to_char(ch, "^GYou have achieved doctorate-degree-level fluency.^n\r\n");
       } else {
         send_to_char(ch, "^GYou further hone your talents towards perfection.^n\r\n");
       }
@@ -2997,32 +2920,32 @@ const char *skill_rank_name(int rank, bool knowledge) {
   if (rank < 0)
     return "uh oh! you have a negative skill, please report!";
 
-  RANK_MESSAGE(0, "not learned", "not learned");
-  RANK_MESSAGE(1, "introduced", "scream-sheet level");
-  RANK_MESSAGE(2, "practiced", "interested");
-  RANK_MESSAGE(3, "novice", "interested");
-  RANK_MESSAGE(4, "competent", "dedicated");
-  RANK_MESSAGE(5, "proficient", "well-rounded");
-  RANK_MESSAGE(6, "proficient", "educated");
-  RANK_MESSAGE(7, "skilled", "educated");
-  RANK_MESSAGE(8, "professional", "mastered");
-  RANK_MESSAGE(9, "professional", "intuitive");
-  RANK_MESSAGE(10, "specialist", "specialist");
-  RANK_MESSAGE(11, "expert", "expert");
+  RANK_MESSAGE(0,  "Not Learned" , "Not Learned");
+  RANK_MESSAGE(1,  "Introduced"  , "Scream-Sheet Level");
+  RANK_MESSAGE(2,  "Practiced"   , "Interested");
+  RANK_MESSAGE(3,  "Novice"      , "Interested");
+  RANK_MESSAGE(4,  "Competent"   , "Dedicated");
+  RANK_MESSAGE(5,  "Proficient"  , "Well-Rounded");
+  RANK_MESSAGE(6,  "Proficient"  , "Educated");
+  RANK_MESSAGE(7,  "Skilled"     , "Educated");
+  RANK_MESSAGE(8,  "Professional", "Mastered");
+  RANK_MESSAGE(9,  "Professional", "Intuitive");
+  RANK_MESSAGE(10, "Specialist"  , "Specialist");
+  RANK_MESSAGE(11, "Expert"      , "Expert");
 
   if (rank < MAX_SKILL_LEVEL_FOR_IMMS) {
-    if (knowledge) return "genius";
-    else return "world-class";
+    if (knowledge) return "Genius";
+    else return "World-Class";
   }
 
-  return "godly";
+  return "Godly";
 #undef RANK_MESSAGE
 }
 
 char *how_good(int skill, int rank)
 {
   static char buf[256];
-  snprintf(buf, sizeof(buf), " (%s / rank %d)", skill_rank_name(rank, skills[skill].type == SKILL_TYPE_KNOWLEDGE), rank);
+  snprintf(buf, sizeof(buf), " (rank ^c%2d^n: %s)", rank, skill_rank_name(rank, skills[skill].type == SKILL_TYPE_KNOWLEDGE));
   return buf;
 }
 
@@ -3126,7 +3049,8 @@ char *generate_new_loggable_representation(struct obj_data *obj) {
   if (obj->restring)
     snprintf(ENDOF(log_string), sizeof(log_string) - strlen(log_string), " [restring: %s^g]", obj->restring);
 
-  if (obj->contains) {
+  // We explicitly have to exclude ITEM_PART here because these things 'contain' the deck while in progress.
+  if (obj->contains && GET_OBJ_TYPE(obj) != ITEM_PART) {
     snprintf(ENDOF(log_string), sizeof(log_string) - strlen(log_string), ", containing: [");
     for (struct obj_data *temp = obj->contains; temp; temp = temp->next_content) {
       char *representation = generate_new_loggable_representation(temp);
@@ -3473,9 +3397,6 @@ bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struc
 }
 
 bool LIGHT_OK_ROOM_SPECIFIED(struct char_data *sub, struct room_data *provided_room) {
-  struct obj_data *light;
-  struct room_data *in_room;
-
   // Fix the ruh-rohs.
   if (!sub || !provided_room)
     return FALSE;
@@ -3484,12 +3405,8 @@ bool LIGHT_OK_ROOM_SPECIFIED(struct char_data *sub, struct room_data *provided_r
   if (IS_ASTRAL(sub) || IS_DUAL(sub))
     return TRUE;
 
-  // If you have thermographic vision or holy light, you're good.
-  if (CURRENT_VISION((sub)) == THERMOGRAPHIC || HOLYLIGHT_OK(sub))
-    return TRUE;
-
-  // Check room light levels.
-  if (IS_LIGHT(provided_room) || (CURRENT_VISION(sub) == NORMAL && (light_level(provided_room) != LIGHT_MINLIGHT && light_level(provided_room) != LIGHT_FULLDARK)))
+  // If you have ultrasonic or thermographic vision or holy light, you're good.
+  if (has_vision(sub, VISION_ULTRASONIC) || has_vision(sub, VISION_THERMOGRAPHIC) || HOLYLIGHT_OK(sub))
     return TRUE;
 
   // If you're in a vehicle, we assume you have headlights and interior lights.
@@ -3503,21 +3420,20 @@ bool LIGHT_OK_ROOM_SPECIFIED(struct char_data *sub, struct room_data *provided_r
         return TRUE;
   }
 
-  // If anyone in the room has a flashlight equipped, you're good. Note that this requires further checks in combat modifiers-- this is really just partlight.
-  if ((in_room = get_ch_in_room(sub))) {
-    for (struct char_data *tch = in_room->people; tch; tch = tch->next_in_room) {
-      // Have a flashlight?
-      if ((light = GET_EQ(tch, WEAR_LIGHT)) && GET_OBJ_TYPE(light) == ITEM_LIGHT && GET_OBJ_VAL(light, 2) != 0)
-        return TRUE;
+  // Otherwise, fetch the room's light level. Note that light_level already handles flashlights etc.
+  int room_light_level = light_level(provided_room);
 
-      // TODO: Have the light spell on them?
+  // At this point, we know that we're using ultrasonic, low-light, or normal vision.
+  // We already checked for thermo and ultra above, which means you have LL or Normal vision. You can't see in full darkness.
+  if (room_light_level == LIGHT_FULLDARK)
+    return FALSE;
 
-      // TODO: Have the shadow spell on them?
-    }
-  }
+  // Between LL and Normal, only LL can see in minlight.
+  if (room_light_level == LIGHT_MINLIGHT)
+    return has_vision(sub, VISION_LOWLIGHT);
 
-  // No saving grace, you get darkness.
-  return FALSE;
+  // Both LL and Normal can see in all other lighting conditions (partlight, etc).
+  return TRUE;
 }
 
 float get_proto_weight(struct obj_data *obj) {
@@ -3779,36 +3695,6 @@ void turn_hardcore_off_for_character(struct char_data *ch) {
   mysql_wrapper(mysql, buf);
 }
 
-void set_natural_vision_for_race(struct char_data *ch) {
-  switch (GET_RACE(ch)) {
-    case RACE_HUMAN:
-    case RACE_OGRE:
-      NATURAL_VISION(ch) = NORMAL;
-      break;
-    case RACE_DWARF:
-    case RACE_GNOME:
-    case RACE_MENEHUNE:
-    case RACE_KOBOROKURU:
-    case RACE_TROLL:
-    case RACE_CYCLOPS:
-    case RACE_FOMORI:
-    case RACE_GIANT:
-    case RACE_MINOTAUR:
-      NATURAL_VISION(ch) = THERMOGRAPHIC;
-      break;
-    case RACE_ORK:
-    case RACE_HOBGOBLIN:
-    case RACE_SATYR:
-    case RACE_ONI:
-    case RACE_ELF:
-    case RACE_WAKYAMBI:
-    case RACE_NIGHTONE:
-    case RACE_DRYAD:
-      NATURAL_VISION(ch) = LOWLIGHT;
-      break;
-  }
-}
-
 // Returns -1 on error, make sure you catch that!
 int get_string_length_after_color_code_removal(const char *str, struct char_data *ch_to_notify_of_failure_reason) {
   if (!str) {
@@ -4037,7 +3923,7 @@ bool obj_contains_kept_items(struct obj_data *obj) {
     return FALSE;
   }
 
-  if (!obj->contains) {
+  if (!obj->contains || GET_OBJ_TYPE(obj) == ITEM_PART) {
     return FALSE;
   }
 
@@ -4097,33 +3983,66 @@ void set_new_mobile_unique_id(struct char_data *ch) {
 }
 
 void knockdown_character(struct char_data *ch) {
-  if (!AFF_FLAGGED(ch, AFF_PRONE)) {
-    WAIT_STATE(ch, 1 RL_SEC);
+  // Error guard.
+  if (!ch) {
+    mudlog("SYSERR: Received NULL character to knockdown_character()!", ch, LOG_SYSLOG, TRUE);
+    return;
+  }
 
-    /*
-    bool eligible_for_kipup = PLR_FLAGGED(ch, PLR_PAID_FOR_KIPUP) || (IS_NPC(ch) && (GET_QUI(ch) >= 10 && GET_SKILL(ch, SKILL_UNARMED_COMBAT) >= 6));
+  // No knockdown if you're already down.
+  if (AFF_FLAGGED(ch, AFF_PRONE))
+    return;
 
-    asdf in the process of writing an auto-stand, need to write a kipup command and redo the wording in spec_proc.
-    system lets you 'tog autostand' or 'tog autokipup' and have your character automatically execute either of those.
-    while we're adding this stuff, probably want a 'config autoconceal' for shamans that lets you specify a force of spirit to auto-conjure and conceal with.
+  // Getting knocked down staggers your commands.
+  WAIT_STATE(ch, 1 RL_SEC);
 
-    if (eligible_for_kipup) {
-      if (PRF_FLAGGED(ch, PRF_AUTOKIPUP) && success_test(GET_QUI(ch), 6) > 0) {
-        send_to_char("^yYou're sent sprawling, but recover with a quick kip-up!\r\n", ch);
-        act("$n is knocked down, but pops right back up again!", TRUE, ch, 0, 0, TO_ROOM);
-        return;
-      } else if (PRF_FLAGGED(ch, PRF_AUTOSTAND)) {
-        send_to_char("^yYou're sent sprawling, and it takes you a moment to clamber back to your feet.\r\n", ch);
-        act("$n is knocked down, but clambers back to $s feet!", TRUE, ch, 0, 0, TO_ROOM);
-        return;
-      } else {
-        send_to_char(ch, "^YYou are knocked prone!%s^n\r\n", GET_TKE(ch) < 100 ? " (You'll probably want to ^WKIPUP^n or ^WSTAND^n.)" : "");
-      }
-    } else
-      */
-    send_to_char(ch, "^YYou are knocked prone!%s^n\r\n", GET_TKE(ch) < 100 ? " (You'll probably want to ^WSTAND^n.)" : "");
-    act("$n is knocked prone!", TRUE, ch, 0, 0, TO_ROOM);
+  bool eligible_for_kipup = PLR_FLAGGED(ch, PLR_PAID_FOR_KIPUP) || (IS_NPC(ch) && (GET_QUI(ch) >= 10 && GET_SKILL(ch, SKILL_UNARMED_COMBAT) >= 6));
+
+  if (eligible_for_kipup && PRF_FLAGGED(ch, PRF_AUTOKIPUP)) {
+    // Successfully kipping up gets you back on your feet with no penalty.
+    if (success_test(GET_QUI(ch), 6) > 0) {
+      send_to_char("^yYou're sent sprawling, but recover with a quick kip-up!\r\n", ch);
+      act("$n is knocked down, but pops right back up again!", TRUE, ch, 0, 0, TO_ROOM);
+      return;
+    }
+
+    // Char failed to kip up.
+    GET_INIT_ROLL(ch) -= 5;
+
+    // If they want to autostand no matter what, let them.
+    if (PRF_FLAGGED(ch, PRF_AUTOSTAND)) {
+      send_to_char("^yYou're sent sprawling, and your failed attempt to kip-up adds insult to injury!\r\n^yIt takes you a long moment to struggle back to your feet.^n\r\n", ch);
+      act("$n is knocked down, only regaining $s feet after an embarrassing struggle!", TRUE, ch, 0, 0, TO_ROOM);
+      GET_INIT_ROLL(ch) -= 5;
+      return;
+    }
+
+    // Otherwise, notify them of the failed kip-up and just send them prone.
+    send_to_char("^yYou're sent sprawling, and your failed attempt to kip-up adds insult to injury!^n\r\n", ch);
+    act("After being knocked down, $n wriggles around in a vain attempt to kip back up!", TRUE, ch, 0, 0, TO_ROOM);
     AFF_FLAGS(ch).SetBit(AFF_PRONE);
+
+    if (PRF_FLAGGED(ch, PRF_SEE_TIPS)) {
+      send_to_char("^c(You'll probably want to ^WKIPUP^c or ^WSTAND^c.)^n\r\n", ch);
+    }
+    return;
+  }
+
+  // Otherwise, if they're set up to auto-stand...
+  if (PRF_FLAGGED(ch, PRF_AUTOSTAND)) {
+    GET_INIT_ROLL(ch) -= 5;
+    send_to_char("^yYou're sent sprawling, and it takes you a moment to clamber back to your feet.\r\n", ch);
+    act("$n is knocked down, but clambers back to $s feet!", TRUE, ch, 0, 0, TO_ROOM);
+    return;
+  }
+
+  // Neither autokip nor autostand.
+  send_to_char("^YYou are knocked prone!^n\r\n", ch);
+  act("$n is knocked prone!", TRUE, ch, 0, 0, TO_ROOM);
+  AFF_FLAGS(ch).SetBit(AFF_PRONE);
+
+  if (PRF_FLAGGED(ch, PRF_SEE_TIPS)) {
+    send_to_char("^c(You'll probably want to ^WKIPUP^c or ^WSTAND^c.)^n\r\n", ch);
   }
 }
 
@@ -4208,6 +4127,132 @@ bool perform_knockdown_test(struct char_data *ch, int initial_tn, int successes_
 
   act(rbuf, FALSE, ch, 0, 0, TO_ROLLS);
   return FALSE;
+}
+
+const char *get_level_wholist_color(int level) {
+  switch (level) {
+    case LVL_BUILDER:
+      return "^g";
+    case LVL_ARCHITECT:
+      return "^G";
+    case LVL_FIXER:
+      return "^m";
+    case LVL_CONSPIRATOR:
+      return "^M";
+    case LVL_EXECUTIVE:
+      return "^c";
+    case LVL_DEVELOPER:
+      return "^C";
+    case LVL_VICEPRES:
+      return "^y";
+    case LVL_ADMIN:
+      return "^b";
+    case LVL_PRESIDENT:
+      return "^B";
+    default:
+      return "^n";
+  }
+}
+
+long get_room_gridguide_x(vnum_t room_vnum) {
+  return room_vnum - (room_vnum * 3);
+}
+
+long get_room_gridguide_y(vnum_t room_vnum) {
+  return room_vnum + 100;
+}
+
+vnum_t vnum_from_gridguide_coordinates(long x, long y, struct char_data *ch) {
+  // We could just use the y-coordinate, but then the X could be anything.
+  int vnum_from_y = y - 100;
+  int vnum_from_x = x - ((x / 2) * 3);
+
+  // Probably a typo.
+  if (vnum_from_x != vnum_from_y)
+    return -1;
+
+  vnum_t candidate_vnum = vnum_from_y;
+  rnum_t candidate_rnum = real_room(candidate_vnum);
+
+  // -1: Room didn't even exist.
+  if (candidate_rnum <= 0)
+    return -2;
+
+  // -2: Room was not drivable, or not on the gridguide system.
+  if (!ROOM_FLAGS(&world[candidate_rnum]).AreAnySet(ROOM_ROAD, ROOM_GARAGE, ENDBIT) ||
+       ROOM_FLAGS(&world[candidate_rnum]).AreAnySet(ROOM_NOGRID, ROOM_STAFF_ONLY, ROOM_NOBIKE, ROOM_FALL, ENDBIT))
+  {
+    if (ch) {
+      char susbuf[1000];
+      snprintf(susbuf, sizeof(susbuf), "%s attempted to grid to room #%ld (%s), but it's not a legal gridguide destination.",
+               GET_CHAR_NAME(ch),
+               candidate_vnum,
+               GET_ROOM_NAME(&world[candidate_rnum])
+              );
+      mudlog(susbuf, ch, LOG_CHEATLOG, TRUE);
+
+      send_to_char("^Y(FYI, if that had actually worked, it would have been an exploit!)^n\r\n", ch);
+    }
+
+    return -3;
+  }
+
+  return candidate_vnum;
+}
+
+int get_zone_index_number_from_vnum(vnum_t vnum) {
+  for (int counter = 0; counter <= top_of_zone_table; counter++) {
+    if ((vnum >= (zone_table[counter].number * 100)) &&
+        (vnum <= (zone_table[counter].top))) {
+      return counter;
+    }
+  }
+  return -1;
+}
+
+bool room_accessible_to_vehicle_piloted_by_ch(struct room_data *room, struct veh_data *veh, struct char_data *ch) {
+  if (veh->type == VEH_BIKE && ROOM_FLAGGED(room, ROOM_NOBIKE))
+    return FALSE;
+
+  if (!ROOM_FLAGGED(room, ROOM_ROAD) && !ROOM_FLAGGED(room, ROOM_GARAGE)) {
+    if (veh->type != VEH_BIKE && veh->type != VEH_DRONE)
+      return FALSE;
+  }
+
+  #ifdef DEATH_FLAGS
+    if (ROOM_FLAGGED(room, ROOM_DEATH)) {
+      return FALSE;
+    }
+  #endif
+
+  #ifdef DIES_IRAE
+    // Flying vehicles can traverse any terrain. If you're not a flying or amphibious vehicle, you can't go into water.
+    if (!veh->flags.IsSet(VFLAG_CAN_FLY)) {
+      // Non-flying vehicles can't pass fall rooms.
+      if (ROOM_FLAGGED(room, ROOM_FALL)) {
+        return FALSE;
+      }
+
+      // Non-amphibious vehicles can't traverse water.
+      if (IS_WATER(room)) {
+        return FALSE;
+      }
+    }
+  #endif
+
+  if (ROOM_FLAGGED(room, ROOM_TOO_CRAMPED_FOR_CHARACTERS) && (veh->body > 1 || veh->type != VEH_DRONE)) {
+    return FALSE;
+  }
+
+  if (ROOM_FLAGGED(room, ROOM_STAFF_ONLY)) {
+    for (struct char_data *tch = veh->people; tch; tch = tch->next_in_veh) {
+      if (!IS_NPC(tch) && !access_level(tch, LVL_BUILDER)) {
+        return FALSE;
+      }
+    }
+  }
+
+  return TRUE;
 }
 
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.

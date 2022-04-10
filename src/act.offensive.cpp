@@ -408,9 +408,9 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
         act("You take a swing at $N!", FALSE, ch, 0, vict, TO_CHAR);
         act("$n prepares to take a swing at you!", FALSE, ch, 0, vict, TO_VICT);
       }
-    } else if (FIGHTING(ch) && vict != FIGHTING(ch)) {
-      char name[80];
-      strcpy(name, GET_NAME(FIGHTING(ch)));
+    } else if ((FIGHTING(ch) && vict != FIGHTING(ch)) || FIGHTING_VEH(ch)) {
+      char name[200];
+      strcpy(name, FIGHTING(ch) ? GET_NAME(FIGHTING(ch)) : GET_VEH_NAME(FIGHTING_VEH(ch)));
       stop_fighting(ch);
       set_fighting(ch, vict);
       if (!CH_IN_COMBAT(vict) && AWAKE(vict))
@@ -487,11 +487,6 @@ ACMD(do_shoot)
   }
 
   two_arguments(argument, target, direction);
-
-  if (*direction && AFF_FLAGGED(ch, AFF_ULTRASOUND)) {
-    send_to_char(ch, "The ultrasound distorts your vision.\r\n");
-    return;
-  }
 
   for (i = WEAR_WIELD; i <= WEAR_HOLD; i++)
     if ((weapon = GET_EQ(ch, i)) &&
@@ -756,7 +751,7 @@ bool cyber_is_retractable(struct obj_data *cyber) {
     case CYB_HANDBLADE:
     case CYB_HANDSPUR:
     case CYB_CLIMBINGCLAWS:
-      if (!IS_SET(GET_CYBERWARE_FLAGS(cyber), CYBERWEAPON_RETRACTABLE))
+      if (!IS_SET(GET_CYBERWARE_FLAGS(cyber), 1 << CYBERWEAPON_RETRACTABLE))
         return FALSE;
       // fallthrough
     case CYB_FOOTANCHOR:

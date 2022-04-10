@@ -31,13 +31,19 @@ void pedit_disp_menu(struct descriptor_data *d)
   send_to_char(CH, "1) Name: ^c%s^n\r\n", d->edit_obj->restring);
   send_to_char(CH, "2) Type: ^c%s^n\r\n", programs[GET_OBJ_VAL(d->edit_obj, 0)].name);
   send_to_char(CH, "3) Rating: ^c%d^n\r\n", GET_OBJ_VAL(d->edit_obj, 1));
+
+  int program_size = 0;
   if (GET_OBJ_VAL(d->edit_obj, 0) == 5)
   {
+    program_size = (GET_OBJ_VAL(d->edit_obj, 1) * GET_OBJ_VAL(d->edit_obj, 1)) * attack_multiplier[GET_OBJ_VAL(d->edit_obj, 2)];
     send_to_char(CH, "4) Damage: ^c%s^n\r\n", GET_WOUND_NAME(GET_OBJ_VAL(d->edit_obj, 2)));
-    send_to_char(CH, "Size: ^c%d^n\r\n", (GET_OBJ_VAL(d->edit_obj, 1) * GET_OBJ_VAL(d->edit_obj, 1)) * attack_multiplier[GET_OBJ_VAL(d->edit_obj, 2)]);
-  } else
-    send_to_char(CH, "Size: ^c%d^n\r\n", (GET_OBJ_VAL(d->edit_obj, 1) * GET_OBJ_VAL(d->edit_obj, 1)) * programs[GET_OBJ_VAL(d->edit_obj, 0)].multiplier);
-  send_to_char(CH, "q) Quit\r\nEnter your choice: ");
+  } else {
+    program_size = (GET_OBJ_VAL(d->edit_obj, 1) * GET_OBJ_VAL(d->edit_obj, 1)) * programs[GET_OBJ_VAL(d->edit_obj, 0)].multiplier;
+  }
+  send_to_char(CH, "\r\nInitial Design Size: ^c%d^n\r\n", (int) (program_size * 1.1));
+  send_to_char(CH, "Completed Size: ^c%d^n\r\n\r\n", program_size);
+
+  send_to_char(CH, "q) Quit and save\r\nEnter your choice: ");
   d->edit_mode = PEDIT_MENU;
 }
 
@@ -182,7 +188,7 @@ void create_program(struct char_data *ch)
 {
   struct obj_data *design = read_object(OBJ_BLANK_PROGRAM_DESIGN, VIRTUAL);
   STATE(ch->desc) = CON_PRO_CREATE;
-  design->restring = str_dup("A blank program");
+  design->restring = str_dup("a blank program");
   ch->desc->edit_obj = design;
   pedit_disp_menu(ch->desc);
 }
@@ -595,6 +601,8 @@ void update_buildrepair(void)
         STOP_WORKING(CH);
         int skill = GET_SKILL(CH, SKILL_CONJURING);
         int target = CH->char_specials.conjure[1];
+        int type = CH->char_specials.conjure[0];
+        aspect_conjuring_bonus(CH, CONJURING, type, target, skill);
 
         char rollbuf[5000];
         snprintf(rollbuf, sizeof(rollbuf), "Conjure check: initial skill %d, initial target %d", skill, target);

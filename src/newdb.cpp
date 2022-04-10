@@ -278,7 +278,7 @@ static void init_char_strings(char_data *ch)
 }
 
 // Eventual TODO: https://dev.mysql.com/doc/refman/5.7/en/mysql-real-escape-string-quote.html
-char *prepare_quotes(char *dest, const char *str, size_t size_of_dest, bool include_newline_processing)
+char *prepare_quotes(char *dest, const char *str, size_t size_of_dest, bool include_newline_processing, bool is_like)
 {
   if (!str)
     return NULL;
@@ -299,7 +299,11 @@ char *prepare_quotes(char *dest, const char *str, size_t size_of_dest, bool incl
       }
     }
 
-    if (*str == '\'' || *str == '`' || *str == '"' || *str == '\\' || *str == '%') {
+    if (*str == '\'' || *str == '`' || *str == '"' || *str == '\\') {
+      *temp++ = '\\';
+    }
+    // Special case handling: % has special meaning in LIKE statements.
+    if (is_like && *str == '%') {
       *temp++ = '\\';
     }
     *temp++ = *str++;
@@ -342,7 +346,7 @@ void do_start(struct char_data * ch, bool wipe_skills)
 
   // Set the appropriate flags.
   PLR_FLAGS(ch).SetBits(PLR_NEWBIE, PLR_NOT_YET_AUTHED, PLR_RECEIVED_CYBEREYE_ESSENCE_DELTA, ENDBIT);
-  PRF_FLAGS(ch).SetBits(PRF_AUTOEXIT, PRF_LONGEXITS, PRF_SEE_TIPS, ENDBIT);
+  PRF_FLAGS(ch).SetBits(PRF_AUTOEXIT, PRF_LONGEXITS, PRF_SEE_TIPS, PRF_AUTOSTAND, ENDBIT);
 
   // PLR_FLAGS(ch).SetBit(PLR_NOT_YET_AUTHED);
   ch->player.time.played = 0;
@@ -581,7 +585,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
     mysql_wrapper(mysql, buf);
     res = mysql_use_result(mysql);
     if ((row = mysql_fetch_row(res))) {
-      ch->real_abils.mag = atoi(row[1]);
+      GET_REAL_MAG(ch) = atoi(row[1]);
       ch->real_abils.casting_pool = atoi(row[2]);
       ch->real_abils.spell_defense_pool = atoi(row[3]);
       ch->real_abils.drain_pool = atoi(row[4]);
@@ -800,6 +804,8 @@ bool load_char(const char *name, char_data *ch, bool logon)
         for (int x = 0, y = 3; x < NUM_VALUES; x++, y++) {
           GET_OBJ_VAL(obj, x) = atoi(row[y]);
         }
+        if (row[15] && *row[15])
+          obj->restring = str_dup(row[15]);
         auto_repair_obj(obj);
         obj_to_bioware(obj, ch);
       }
@@ -843,8 +849,6 @@ bool load_char(const char *name, char_data *ch, bool logon)
         temp_extra_flags.FromString(row[20]);
         if (temp_extra_flags.IsSet(ITEM_EXTRA_WIZLOAD))
           GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_WIZLOAD);
-        if (temp_extra_flags.IsSet(ITEM_EXTRA_IMMLOAD))
-          GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_IMMLOAD);
         if (temp_extra_flags.IsSet(ITEM_EXTRA_KEPT))
           GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_KEPT);
 
@@ -958,8 +962,6 @@ bool load_char(const char *name, char_data *ch, bool logon)
         temp_extra_flags.FromString(row[19]);
         if (temp_extra_flags.IsSet(ITEM_EXTRA_WIZLOAD))
           GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_WIZLOAD);
-        if (temp_extra_flags.IsSet(ITEM_EXTRA_IMMLOAD))
-          GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_IMMLOAD);
         if (temp_extra_flags.IsSet(ITEM_EXTRA_KEPT))
           GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_KEPT);
 
@@ -1099,6 +1101,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
       auto_repair_obj(GET_EQ(ch, i));
   }
 
+  set_natural_vision_for_race(ch);
   affect_total(ch);
 
   if ((((long) (time(0) - ch->player.time.lastdisc)) >= SECS_PER_REAL_HOUR)) {
@@ -1121,34 +1124,6 @@ bool load_char(const char *name, char_data *ch, bool logon)
     GET_COND(ch, COND_FULL) = -1;
     GET_COND(ch, COND_THIRST) = -1;
     GET_COND(ch, COND_DRUNK) = -1;
-  }
-
-  switch (GET_RACE(ch)) {
-  case RACE_HUMAN:
-  case RACE_OGRE:
-    NATURAL_VISION(ch) = NORMAL;
-    break;
-  case RACE_DWARF:
-  case RACE_GNOME:
-  case RACE_MENEHUNE:
-  case RACE_KOBOROKURU:
-  case RACE_TROLL:
-  case RACE_CYCLOPS:
-  case RACE_FOMORI:
-  case RACE_GIANT:
-  case RACE_MINOTAUR:
-    NATURAL_VISION(ch) = THERMOGRAPHIC;
-    break;
-  case RACE_ORK:
-  case RACE_HOBGOBLIN:
-  case RACE_SATYR:
-  case RACE_ONI:
-  case RACE_ELF:
-  case RACE_WAKYAMBI:
-  case RACE_NIGHTONE:
-  case RACE_DRYAD:
-    NATURAL_VISION(ch) = LOWLIGHT;
-    break;
   }
 
   return true;
@@ -2558,10 +2533,14 @@ void save_aliases_to_db(struct char_data *player) {
   mysql_wrapper(mysql, buf);
   strcpy(buf, "INSERT INTO pfiles_alias (idnum, command, replacement) VALUES (");
   int q = 0;
+  char cmd_buf[500];
   for (struct alias *a = GET_ALIASES(player); a; a = a->next) {
     if (q)
       strcat(buf, "), (");
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, '%s', '%s'", GET_IDNUM(player), a->command, prepare_quotes(buf3, a->replacement, sizeof(buf3) / sizeof(buf3[0])));
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, '%s', '%s'",
+             GET_IDNUM(player),
+             prepare_quotes(cmd_buf, a->command, sizeof(cmd_buf) / sizeof(cmd_buf[0])),
+             prepare_quotes(buf3, a->replacement, sizeof(buf3) / sizeof(buf3[0])));
     q = 1;
   }
   if (q) {
@@ -2575,7 +2554,7 @@ void save_bioware_to_db(struct char_data *player) {
   mysql_wrapper(mysql, buf);
   if (player->bioware) {
     strcpy(buf, "INSERT INTO pfiles_bioware (idnum, Vnum, Cost, Value0, Value1, Value2, Value3, Value4, Value5, Value6,"\
-                "Value7, Value8, Value9, Value10, Value11) VALUES (");
+                "Value7, Value8, Value9, Value10, Value11, Restring) VALUES (");
     int q = 0;
     for (struct obj_data *obj = player->bioware; obj; obj = obj->next_content) {
       if (!IS_OBJ_STAT(obj, ITEM_EXTRA_NORENT)) {
@@ -2585,6 +2564,9 @@ void save_bioware_to_db(struct char_data *player) {
 
         for (int x = 0; x < NUM_VALUES; x++)
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", %d", GET_OBJ_VAL(obj, x));
+
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", '%s'", obj->restring ? prepare_quotes(buf3, obj->restring, sizeof(buf3) / sizeof(buf3[0])) : "");
+
         q = 1;;
       }
     }
@@ -2596,8 +2578,9 @@ void save_bioware_to_db(struct char_data *player) {
 }
 
 void save_cyberware_to_db(struct char_data *player) {
-  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_cyberware WHERE idnum=%ld", GET_IDNUM(player));
-  mysql_wrapper(mysql, buf);
+  char cyberware_query_str[MAX_STRING_LENGTH];
+  snprintf(cyberware_query_str, sizeof(cyberware_query_str), "DELETE FROM pfiles_cyberware WHERE idnum=%ld", GET_IDNUM(player));
+  mysql_wrapper(mysql, cyberware_query_str);
   int level = 0, posi = 0;
   if (player->cyberware) {
     /* Ran into a weird edge case where people would fill their headware memory with photos of people, and their memory would no longer save in the DB.
@@ -2605,7 +2588,8 @@ void save_cyberware_to_db(struct char_data *player) {
         As such, we write each cyberware entry on its own now instead of batching them together. */
 
     for (struct obj_data *obj = player->cyberware; obj;) {
-      snprintf(buf, sizeof(buf), "INSERT INTO pfiles_cyberware (idnum, Vnum, Cost, Restring, "
+      snprintf(cyberware_query_str, sizeof(cyberware_query_str),
+                                 "INSERT INTO pfiles_cyberware (idnum, Vnum, Cost, Restring, "
                                  "Photo, Value0, Value1, Value2, Value3, Value4, Value5, Value6,"
                                  "Value7, Value8, Value9, Value10, Value11, Level, posi) VALUES "
                                  "(%ld, %ld, %d, '%s', '%s'", GET_IDNUM(player), GET_OBJ_VNUM(obj), GET_OBJ_COST(obj),
@@ -2621,11 +2605,11 @@ void save_cyberware_to_db(struct char_data *player) {
         <for loop to iterate over values>
       */
       for (int x = 0; x < NUM_VALUES; x++)
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", %d", GET_OBJ_VAL(obj, x));
+        snprintf(ENDOF(cyberware_query_str), sizeof(cyberware_query_str) - strlen(buf), ", %d", GET_OBJ_VAL(obj, x));
 
       // Add our level and position information here, then execute.
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", %d, %d);", level, posi++);
-      mysql_wrapper(mysql, buf);
+      snprintf(ENDOF(cyberware_query_str), sizeof(cyberware_query_str) - strlen(cyberware_query_str), ", %d, %d);", level, posi++);
+      mysql_wrapper(mysql, cyberware_query_str);
 
       if (obj->contains) {
         obj = obj->contains;

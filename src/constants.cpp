@@ -274,6 +274,7 @@ const char *room_bits[] =
     "CORPSE_SAVE_HACK",
     "STERILE",
     "CRAMPED",
+    "RADIOACTIVE",
     "\n"
   };
 
@@ -486,6 +487,8 @@ const char *player_bits[] =
     "IS_CYBERDOC",
     "PAID_FOR_CLOSECOMBAT",
     "PAID_FOR_KIPUP",
+    "PAID_FOR_ROLLS",
+    "NO_AUTO_SYSP",
     "\n"
   };
 
@@ -561,7 +564,7 @@ struct preference_bit_struct preference_bits_v2[] = {
   { "Syslog"               , TRUE , TRUE  },
   { "Zonelog"              , TRUE , TRUE  },
   { "Long Exits"           , FALSE, TRUE  },
-  { "Rolls"                , TRUE , TRUE  },
+  { "Rolls"                , FALSE, TRUE  },
   { "No OOC"               , FALSE, TRUE  },
   { "Auto Invis"           , TRUE , TRUE  },
   { "Cheatlog"             , TRUE , TRUE  },
@@ -597,6 +600,8 @@ struct preference_bit_struct preference_bits_v2[] = {
   { "Anonymous on Where"   , FALSE, TRUE  },
   { "IgnoreLog"            , TRUE , TRUE  },
   { "Sees Newbie Tips"     , FALSE, TRUE  },
+  { "AutoStand"            , FALSE, TRUE  },
+  { "AutoKipUp"            , FALSE, TRUE  },
   { "\n"                   , 0    , 0     }
 };
 
@@ -665,6 +670,8 @@ const char *preference_bits[] =
     "ANONYMOUS_ON_WHERE",
     "IGNORELOG",
     "TIPS",
+    "AUTOSTAND",
+    "AUTOKIPUP",
     "\n"
   };
 
@@ -723,7 +730,9 @@ const char *affected_bits[] =
     "Ammo Building",
     "Engaging in Close Combat",
     "Tries for Close Combat",
-    "Levitate"
+    "Levitate",
+    "Flame Aura",
+    "Voice Modulator"
   };
 
 /* CON_x */
@@ -1009,7 +1018,7 @@ const char *pc_readable_extra_bits[] =
   {
     "Glowing",
     "Humming",
-    "Can't be Kept",
+    "Doesn't Save",
     "Can't be Donated",
     "Can't be Made Invis",
     "Invisible",
@@ -1800,13 +1809,14 @@ const char *ic_option_long[] =
 // Weight and cost are PER ROUND now.
 struct ammo_data ammo_type[] =
   {
-    // name      tn  time  weight  cost    s. index
+    // name      tn   time   weight  cost   s. index
     {"normal",    2,    1,    .025,    2,     .75},
     {"APDS",     14,   14,    .025,    7,     4},
     {"explosive", 3,  1.5,    .075,    5,     .8},
     {"EX",        6,    3,    .075,   10,     1.5},
     {"flechette", 3,  1.5,    .05,    10,     .8},
-    {"gel",       4,    2,    .025,    3,     1}
+    {"gel",       4,    2,    .025,    3,     1},
+    {"harmless",  1,   0.1,   .010,    1,     .5}
   };
 
 const char *positions[] =
@@ -1979,7 +1989,8 @@ struct spell_types spells[] =
     { "Splash", TRUE, MANIPULATION, AREA, -1, INSTANT, 0, PACK_VARIABLE_DRAIN_DAMAGE(2) },
     { "Nightvision", TRUE, DETECTION, SINGLE, -1, SUSTAINED, 1, MODERATE },
     { "Infravision", TRUE, DETECTION, SINGLE, -1, SUSTAINED, 1, MODERATE },
-    { "Levitate", TRUE, MANIPULATION, SINGLE, -1, SUSTAINED, 2, MODERATE }
+    { "Levitate", TRUE, MANIPULATION, SINGLE, -1, SUSTAINED, 2, MODERATE },
+    { "Flame Aura", TRUE, MANIPULATION, SINGLE, -1, SUSTAINED, 2, MODERATE }
   };
 
 const char *totem_types[] =
@@ -2142,6 +2153,24 @@ const char *cyber_grades[4] =
   "Delta"
 };
 
+const char *vision_types[] = {
+  "Normal",
+  "Low-Light",
+  "Thermographic",
+  "Ultrasonic"
+};
+
+const char *vision_bits[] = {
+  "natural",
+  "implanted",
+  "equipment",
+  "optical",
+  "electronic",
+  "adept-power",
+  "spell-given",
+  "overridden"
+};
+
 const char *eyemods[] = {
   "Camera",
   "Cyber Replacement (MUST SET FOR PACKAGES)",
@@ -2284,7 +2313,9 @@ const char *cyber_types[] = {
   "Muscle Replacement",
   "Paired Set of Cyber Arms",
   "Paired Set of Cyber Legs",
-  "Tactical Computer"
+  "Tactical Computer",
+  "Custom NERPS Cyberware",
+  "Cranial Remote Deck"
 };
 
 const char *decap_cyber_types[] = {
@@ -2337,7 +2368,9 @@ const char *decap_cyber_types[] = {
   "muscle replacement",
   "paired set of cyber arms",
   "paired set of cyber legs",
-  "tactical computer"
+  "tactical computer",
+  "custom NERPS cyberware",
+  "cranial remote deck"
 };
 
 const char *bio_types[] = {
@@ -2366,7 +2399,8 @@ const char *bio_types[] = {
   "Reflex Recorder",
   "Synaptic Accelerator",
   "Thermosense Organs",
-  "Trauma Dampener"
+  "Trauma Damper",
+  "Custom NERPS Bioware"
 };
 
 const char *decap_bio_types[] = {
@@ -2395,7 +2429,8 @@ const char *decap_bio_types[] = {
   "reflex recorder",
   "synaptic accelerator",
   "thermosense organs",
-  "trauma dampener"
+  "trauma damper",
+  "custom NERPS bioware"
 };
 
 const char *metamagic[] = {
@@ -2631,7 +2666,11 @@ const char *aspect_names[] = {
   "Earth Elementalist",
   "Air Elementalist",
   "Fire Elementalist",
-  "Water Elementalist"
+  "Water Elementalist",
+  "Earth Mage",
+  "Air Mage",
+  "Fire Mage",
+  "Water Mage"
 };
 
 const char *tradition_names[] = {

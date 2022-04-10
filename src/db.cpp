@@ -341,7 +341,7 @@ void require_that_sql_table_exists(const char *table_name, const char *migration
 
   if (!(res = mysql_use_result(mysql))) {
     log_vfprintf("ERROR: You need to run the %s migration from the SQL directory. "
-                 "Probable syntax from root directory: `mysql -u YOUR_USERNAME -p AwakeMUD < %s`.",
+                 "Probable syntax from your AwakeMUD directory: `mysql -u YOUR_USERNAME -p AwakeMUD < %s`.",
                  table_name,
                  migration_path_from_root_directory);
     exit(ERROR_DB_TABLE_REQUIRED);
@@ -354,7 +354,7 @@ void require_that_sql_table_exists(const char *table_name, const char *migration
 
   if (!have_table) {
     log_vfprintf("ERROR: You need to run the %s migration from the SQL directory. "
-                 "Probable syntax from root directory: `mysql -u YOUR_USERNAME -p AwakeMUD < %s`.",
+                 "Probable syntax from your AwakeMUD directory: `mysql -u YOUR_USERNAME -p AwakeMUD < %s`.",
                  table_name,
                  migration_path_from_root_directory);
     exit(ERROR_DB_TABLE_REQUIRED);
@@ -373,7 +373,7 @@ void require_that_field_meets_constraints(const char *field_name, const char *ta
 
   snprintf(migration_string, sizeof(migration_string),
            "ERROR: You need to run the %s migration from the SQL directory. "
-           "Probable syntax from root directory: `mysql -u YOUR_USERNAME -p AwakeMUD < %s`.",
+           "Probable syntax from your AwakeMUD directory: `mysql -u YOUR_USERNAME -p AwakeMUD < %s`.",
            table_name,
            migration_path_from_root_directory);
 
@@ -480,6 +480,7 @@ void boot_world(void)
   require_that_field_exists_in_table("highlight", "pfiles", "SQL/Migrations/rp_upgrade.sql");
   require_that_field_exists_in_table("email", "pfiles", "SQL/Migrations/rp_upgrade.sql");
   require_that_field_exists_in_table("multiplier", "pfiles", "SQL/Migrations/multipliers.sql");
+  require_that_field_exists_in_table("Restring", "pfiles_bioware", "SQL/Migrations/bioware_restrings.sql");
   require_that_field_meets_constraints("Prompt", "pfiles", "SQL/Migrations/prompt_expansion.sql", 2001, "varchar");
   require_that_field_meets_constraints("MatrixPrompt", "pfiles", "SQL/Migrations/prompt_expansion.sql", 2001, "varchar");
   require_that_field_meets_constraints("Attempt", "pfiles_inv", "SQL/Migrations/attempt_value_fix.sql", 6, "mediumint");
@@ -536,6 +537,16 @@ void boot_world(void)
 
   log("Performing final validation checks.");
   check_for_common_fuckups();
+
+  {
+    // Cheeky little self-test. Requires that RM_ENTRANCE_TO_DANTES exists and is flagged ROAD/GARAGE and not NOGRID.
+    long x = get_room_gridguide_x(RM_ENTRANCE_TO_DANTES);
+    long y = get_room_gridguide_y(RM_ENTRANCE_TO_DANTES);
+    vnum_t z = vnum_from_gridguide_coordinates(x, y, NULL);
+    if (z != RM_ENTRANCE_TO_DANTES)
+      log_vfprintf("x: %ld, y: %ld, z: %ld", x, y, z);
+    assert(z == RM_ENTRANCE_TO_DANTES);
+  }
 }
 
 /* body of the booting system */
@@ -5479,6 +5490,9 @@ void price_cyber(struct obj_data *obj)
   bool has_strength = FALSE, has_qui = FALSE;
 
   switch (GET_CYBERWARE_TYPE(obj)) {
+    case CYB_CUSTOM_NERPS:
+      // Do absolutely nothing with it.
+      break;
     case CYB_CHIPJACK:
       GET_OBJ_VAL(obj, 1) = 0;
       GET_OBJ_COST(obj) = GET_OBJ_VAL(obj, 3) * 1000;
@@ -5488,7 +5502,7 @@ void price_cyber(struct obj_data *obj)
       break;
     case CYB_DATAJACK:
       GET_OBJ_VAL(obj, 1) = 0;
-      if (GET_OBJ_VAL(obj, 3) == DATA_STANDARD) {
+      if (GET_CYBERWARE_FLAGS(obj) == DATA_STANDARD) {
         GET_OBJ_COST(obj) = 1000;
         GET_CYBERWARE_ESSENCE_COST(obj) = 20;
         GET_OBJ_AVAILDAY(obj) = GET_OBJ_AVAILTN(obj) = 0;
@@ -5543,7 +5557,7 @@ void price_cyber(struct obj_data *obj)
        GET_OBJ_VAL(obj, 1) = 0;
        GET_CYBERWARE_ESSENCE_COST(obj) = 0;
        GET_OBJ_AVAILDAY(obj) = 2;
-       if (!GET_OBJ_VAL(obj, 3)) {
+       if (!GET_CYBERWARE_FLAGS(obj)) {
          GET_OBJ_COST(obj) = 1500;
          GET_OBJ_AVAILTN(obj) = 2;
        } else {
@@ -5565,7 +5579,7 @@ void price_cyber(struct obj_data *obj)
        GET_OBJ_AVAILDAY(obj) = 1;
        break;
      case CYB_BONELACING:
-       switch (GET_OBJ_VAL(obj, 3)) {
+       switch (GET_CYBERWARE_FLAGS(obj)) {
          case BONE_PLASTIC:
            GET_OBJ_VAL(obj, 1) = 0;
            GET_CYBERWARE_ESSENCE_COST(obj) = 50;
@@ -5604,15 +5618,15 @@ void price_cyber(struct obj_data *obj)
        }
        break;
     case CYB_FINGERTIP:
-      GET_OBJ_VAL(obj, 1) = 0;
+      GET_CYBERWARE_RATING(obj) = 0;
       GET_CYBERWARE_ESSENCE_COST(obj) = 10;
       GET_OBJ_COST(obj) = 3000;
       GET_OBJ_AVAILTN(obj) = 3;
       GET_OBJ_AVAILDAY(obj) = 1;
       break;
     case CYB_HANDBLADE:
-      GET_OBJ_VAL(obj, 1) = 0;
-      if (GET_OBJ_VAL(obj, 3)) {
+      GET_CYBERWARE_RATING(obj) = 0;
+      if (GET_CYBERWARE_FLAGS(obj)) {
         GET_CYBERWARE_ESSENCE_COST(obj) = 25;
         GET_OBJ_COST(obj) = 10000;
       } else {
@@ -5623,10 +5637,10 @@ void price_cyber(struct obj_data *obj)
       GET_OBJ_AVAILDAY(obj) = 5;
       break;
     case CYB_HANDRAZOR:
-      GET_OBJ_VAL(obj, 1) = 0;
+      GET_CYBERWARE_RATING(obj) = 0;
       GET_OBJ_AVAILDAY(obj) = 3;
-      if (IS_SET(GET_OBJ_VAL(obj, 3), 1 << CYBERWEAPON_RETRACTABLE)) {
-        GET_CYBERWARE_ESSENCE_COST(obj) = 25;
+      if (IS_SET(GET_CYBERWARE_FLAGS(obj), 1 << CYBERWEAPON_RETRACTABLE)) {
+        GET_CYBERWARE_ESSENCE_COST(obj) = 20;
         GET_OBJ_COST(obj) = 9000;
         GET_OBJ_AVAILTN(obj) = 5;
       } else {
@@ -5634,14 +5648,14 @@ void price_cyber(struct obj_data *obj)
         GET_CYBERWARE_ESSENCE_COST(obj) = 10;
         GET_OBJ_AVAILTN(obj) = 3;
       }
-      if (IS_SET(GET_OBJ_VAL(obj, 3), 1 << CYBERWEAPON_IMPROVED)) {
+      if (IS_SET(GET_CYBERWARE_FLAGS(obj), 1 << CYBERWEAPON_IMPROVED)) {
         GET_OBJ_COST(obj) += 8500;
         GET_OBJ_AVAILTN(obj) = 6;
       }
       break;
     case CYB_HANDSPUR:
-      GET_OBJ_VAL(obj, 1) = 0;
-      if (GET_OBJ_VAL(obj, 3)) {
+      GET_CYBERWARE_RATING(obj) = 0;
+      if (GET_CYBERWARE_FLAGS(obj)) {
         GET_CYBERWARE_ESSENCE_COST(obj) = 30;
         GET_OBJ_COST(obj) = 11500;
         GET_OBJ_AVAILTN(obj) = 5;
@@ -5653,7 +5667,7 @@ void price_cyber(struct obj_data *obj)
       GET_OBJ_AVAILDAY(obj) = 3;
       break;
     case CYB_VOICEMOD:
-      GET_OBJ_VAL(obj, 1) = 0;
+      GET_CYBERWARE_RATING(obj) = 0;
       GET_CYBERWARE_ESSENCE_COST(obj) = 20;
       GET_OBJ_COST(obj) = 45000;
       GET_OBJ_AVAILTN(obj) = 2;
@@ -5662,7 +5676,7 @@ void price_cyber(struct obj_data *obj)
     case CYB_BOOSTEDREFLEXES:
       GET_OBJ_AVAILTN(obj) = 3;
       GET_OBJ_AVAILDAY(obj) = 1;
-      switch (GET_OBJ_VAL(obj, 1)) {
+      switch (GET_CYBERWARE_RATING(obj)) {
         case 1:
           GET_CYBERWARE_ESSENCE_COST(obj) = 50;
           GET_OBJ_COST(obj) = 15000;
@@ -5678,10 +5692,10 @@ void price_cyber(struct obj_data *obj)
       }
       break;
     case CYB_DERMALPLATING:
-      GET_CYBERWARE_ESSENCE_COST(obj) = 50 * GET_OBJ_VAL(obj, 1);
+      GET_CYBERWARE_ESSENCE_COST(obj) = 50 * GET_CYBERWARE_RATING(obj);
       GET_OBJ_AVAILTN(obj) = 4;
       GET_OBJ_AVAILDAY(obj) = 12;
-      switch (GET_OBJ_VAL(obj, 1)) {
+      switch (GET_CYBERWARE_RATING(obj)) {
         case 1:
           GET_OBJ_COST(obj) = 6000;
           break;
@@ -5696,7 +5710,7 @@ void price_cyber(struct obj_data *obj)
     case CYB_FILTRATION:
       GET_OBJ_AVAILTN(obj) = 6;
       GET_OBJ_AVAILDAY(obj) = 4;
-      if (!GET_OBJ_VAL(obj, 3)) {
+      if (!GET_CYBERWARE_FLAGS(obj)) {
         GET_OBJ_COST(obj) = GET_OBJ_VAL(obj, 1) * 15000;
         GET_CYBERWARE_ESSENCE_COST(obj) = GET_OBJ_VAL(obj, 1) * 10;
       } else {
@@ -5706,13 +5720,13 @@ void price_cyber(struct obj_data *obj)
       break;
     case CYB_VCR:
       GET_OBJ_AVAILDAY(obj) = 2;
-      if (GET_OBJ_VAL(obj, 1) == 1) {
+      if (GET_CYBERWARE_RATING(obj) == 1) {
         GET_OBJ_COST(obj) = 12000;
         GET_OBJ_AVAILTN(obj) = 6;
         GET_CYBERWARE_ESSENCE_COST(obj) = 200;
       } else {
         GET_OBJ_AVAILTN(obj) = 8;
-        if (GET_OBJ_VAL(obj, 1) == 2) {
+        if (GET_CYBERWARE_RATING(obj) == 2) {
           GET_OBJ_COST(obj) = 60000;
           GET_CYBERWARE_ESSENCE_COST(obj) = 300;
         } else {
@@ -5722,7 +5736,7 @@ void price_cyber(struct obj_data *obj)
       }
       break;
     case CYB_WIREDREFLEXES:
-      if (GET_OBJ_VAL(obj, 1) == 3) {
+      if (GET_CYBERWARE_RATING(obj) == 3) {
         GET_OBJ_COST(obj) = 500000;
         GET_OBJ_AVAILTN(obj) = 8;
         GET_OBJ_AVAILDAY(obj) = 14;
@@ -5730,7 +5744,7 @@ void price_cyber(struct obj_data *obj)
       } else {
         GET_OBJ_AVAILTN(obj) = 4;
         GET_OBJ_AVAILDAY(obj) = 8;
-        if (GET_OBJ_VAL(obj, 1) == 1) {
+        if (GET_CYBERWARE_RATING(obj) == 1) {
           GET_OBJ_COST(obj) = 55000;
           GET_CYBERWARE_ESSENCE_COST(obj) = 200;
         } else {
@@ -5740,8 +5754,8 @@ void price_cyber(struct obj_data *obj)
       }
       break;
     case CYB_REACTIONENHANCE:
-      GET_OBJ_COST(obj) = GET_OBJ_VAL(obj, 1) * 60000;
-      GET_CYBERWARE_ESSENCE_COST(obj) = 30 * GET_OBJ_VAL(obj, 1);
+      GET_OBJ_COST(obj) = GET_CYBERWARE_RATING(obj) * 60000;
+      GET_CYBERWARE_ESSENCE_COST(obj) = 30 * GET_CYBERWARE_RATING(obj);
       GET_OBJ_AVAILDAY(obj) = 7;
       GET_OBJ_AVAILTN(obj) = 6;
       break;
@@ -5750,67 +5764,67 @@ void price_cyber(struct obj_data *obj)
       GET_CYBERWARE_ESSENCE_COST(obj) = 20;
       GET_OBJ_AVAILDAY(obj) = 8;
       GET_OBJ_AVAILTN(obj) = 4;
-      if (GET_OBJ_VAL(obj, 3))
+      if (GET_CYBERWARE_FLAGS(obj))
         GET_OBJ_COST(obj) = (int)(GET_OBJ_COST(obj) * 1.25);
       break;
     case CYB_BALANCEAUG:
-      GET_OBJ_VAL(obj, 1) = 0;
+      GET_CYBERWARE_RATING(obj) = 0;
       GET_CYBERWARE_ESSENCE_COST(obj) = 40;
       GET_OBJ_COST(obj) = 14000;
       GET_OBJ_AVAILTN(obj) = 8;
       GET_OBJ_AVAILDAY(obj) = 16;
       break;
     case CYB_ORALDART:
-      GET_OBJ_VAL(obj, 1) = 0;
+      GET_CYBERWARE_RATING(obj) = 0;
       GET_CYBERWARE_ESSENCE_COST(obj) = 25;
       GET_OBJ_COST(obj) = 3600;
       GET_OBJ_AVAILTN(obj) = 6;
       GET_OBJ_AVAILDAY(obj) = 7;
       break;
     case CYB_ORALGUN:
-      GET_OBJ_VAL(obj, 1) = 0;
+      GET_CYBERWARE_RATING(obj) = 0;
       GET_CYBERWARE_ESSENCE_COST(obj) = 40;
       GET_OBJ_COST(obj) = 5600;
       GET_OBJ_AVAILTN(obj) = 6;
       GET_OBJ_AVAILDAY(obj) = 3;
       break;
     case CYB_ORALSLASHER:
-      GET_OBJ_VAL(obj, 1) = 0;
+      GET_CYBERWARE_RATING(obj) = 0;
       GET_CYBERWARE_ESSENCE_COST(obj) = 25;
       GET_OBJ_COST(obj) = 10050;
       GET_OBJ_AVAILTN(obj) = 8;
       GET_OBJ_AVAILDAY(obj) = 7;
       break;
     case CYB_ASIST:
-      GET_OBJ_VAL(obj, 1) = 0;
+      GET_CYBERWARE_RATING(obj) = 0;
       GET_CYBERWARE_ESSENCE_COST(obj) = 0;
       GET_OBJ_COST(obj) = 1000;
       GET_OBJ_AVAILTN(obj) = 3;
       GET_OBJ_AVAILDAY(obj) = 1.5;
       break;
     case CYB_CHIPJACKEXPERT:
-      GET_CYBERWARE_ESSENCE_COST(obj) = 10 * GET_OBJ_VAL(obj, 1);
-      GET_OBJ_COST(obj) = 5000 * GET_OBJ_VAL(obj, 1);
+      GET_CYBERWARE_ESSENCE_COST(obj) = 10 * GET_CYBERWARE_RATING(obj);
+      GET_OBJ_COST(obj) = 5000 * GET_CYBERWARE_RATING(obj);
       GET_OBJ_AVAILTN(obj) = 4;
       GET_OBJ_AVAILDAY(obj) = 2;
       break;
     case CYB_DATACOMPACT:
-      GET_CYBERWARE_ESSENCE_COST(obj) = 5 + (GET_OBJ_VAL(obj, 1) * 5);
-      GET_OBJ_COST(obj) = 9500 * GET_OBJ_VAL(obj, 1);
+      GET_CYBERWARE_ESSENCE_COST(obj) = 5 + (GET_CYBERWARE_RATING(obj) * 5);
+      GET_OBJ_COST(obj) = 9500 * GET_CYBERWARE_RATING(obj);
       GET_OBJ_AVAILTN(obj) = 6;
       GET_OBJ_AVAILDAY(obj) = 2.5;
       break;
     case CYB_ENCEPHALON:
-      GET_CYBERWARE_ESSENCE_COST(obj) = 75 * GET_OBJ_VAL(obj, 1);
-      GET_OBJ_COST(obj) = GET_OBJ_VAL(obj, 1) > 1 ? 115000 : 40000;
+      GET_CYBERWARE_ESSENCE_COST(obj) = 75 * GET_CYBERWARE_RATING(obj);
+      GET_OBJ_COST(obj) = GET_CYBERWARE_RATING(obj) > 1 ? 115000 : 40000;
       GET_OBJ_AVAILTN(obj) = 6;
       GET_OBJ_AVAILDAY(obj) = 12;
       break;
     case CYB_MATHSSPU:
-      GET_CYBERWARE_ESSENCE_COST(obj) = 5 + (GET_OBJ_VAL(obj, 1) * 5);
+      GET_CYBERWARE_ESSENCE_COST(obj) = 5 + (GET_CYBERWARE_RATING(obj) * 5);
       GET_OBJ_AVAILTN(obj) = 6;
       GET_OBJ_AVAILDAY(obj) = 2.5;
-      switch (GET_OBJ_VAL(obj, 1)) {
+      switch (GET_CYBERWARE_RATING(obj)) {
         case 1:
           GET_OBJ_COST(obj) = 2000;
           break;
@@ -5823,21 +5837,21 @@ void price_cyber(struct obj_data *obj)
       }
       break;
     case CYB_BALANCETAIL:
-      GET_OBJ_VAL(obj, 1) = 0;
+      GET_CYBERWARE_RATING(obj) = 0;
       GET_CYBERWARE_ESSENCE_COST(obj) = 50;
       GET_OBJ_COST(obj) = 10000;
       GET_OBJ_AVAILTN(obj) = 8;
       GET_OBJ_AVAILDAY(obj) = 7;
       break;
     case CYB_BODYCOMPART:
-      GET_OBJ_VAL(obj, 1) = 0;
+      GET_CYBERWARE_RATING(obj) = 0;
       GET_CYBERWARE_ESSENCE_COST(obj) = 20;
       GET_OBJ_COST(obj) = 5000;
       GET_OBJ_AVAILTN(obj) = 4;
       GET_OBJ_AVAILDAY(obj) = 2;
       break;
     case CYB_FIN:
-      GET_OBJ_VAL(obj, 1) = 0;
+      GET_CYBERWARE_RATING(obj) = 0;
       GET_CYBERWARE_ESSENCE_COST(obj) = 30;
       GET_OBJ_COST(obj) = 105000;
       GET_OBJ_AVAILTN(obj) = 5;
@@ -6008,18 +6022,18 @@ void price_cyber(struct obj_data *obj)
       }
       break;
     case CYB_DERMALSHEATHING:
-      GET_CYBERWARE_ESSENCE_COST(obj) = 70 * GET_OBJ_VAL(obj, 1);
+      GET_CYBERWARE_ESSENCE_COST(obj) = 70 * GET_CYBERWARE_RATING(obj);
       GET_OBJ_AVAILDAY(obj) = 14;
-      if (GET_OBJ_VAL(obj, 1) == 3) {
+      if (GET_CYBERWARE_RATING(obj) == 3) {
         GET_OBJ_AVAILTN(obj) = 8;
         GET_OBJ_COST(obj) = 120000;
       } else {
         GET_OBJ_AVAILTN(obj) = 6;
-        if (GET_OBJ_VAL(obj, 1) == 1)
+        if (GET_CYBERWARE_RATING(obj) == 1)
           GET_OBJ_COST(obj) = 24000;
         else GET_OBJ_COST(obj) = 60000;
       }
-      if (GET_OBJ_VAL(obj, 3)) {
+      if (GET_CYBERWARE_FLAGS(obj)) {
         GET_CYBERWARE_ESSENCE_COST(obj) += 20;
         GET_OBJ_COST(obj) += 150000;
         GET_OBJ_AVAILTN(obj) += 2;
@@ -6034,21 +6048,21 @@ void price_cyber(struct obj_data *obj)
       GET_OBJ_AVAILDAY(obj) = 7;
       break;
     case CYB_HYDRAULICJACK:
-      GET_CYBERWARE_ESSENCE_COST(obj) = 75 + (25 * GET_OBJ_VAL(obj, 1));
-      GET_OBJ_COST(obj) = GET_OBJ_VAL(obj, 1) * 5000;
+      GET_CYBERWARE_ESSENCE_COST(obj) = 75 + (25 * GET_CYBERWARE_RATING(obj));
+      GET_OBJ_COST(obj) = GET_CYBERWARE_RATING(obj) * 5000;
       GET_OBJ_AVAILTN(obj) = 5;
       GET_OBJ_AVAILDAY(obj) = 6;
       break;
     case CYB_SKILLWIRE:
-      GET_CYBERWARE_ESSENCE_COST(obj) = 20 * GET_OBJ_VAL(obj, 1);
-      GET_OBJ_COST(obj) = GET_OBJ_VAL(obj, 1) * GET_OBJ_VAL(obj, 3) * 500;
-      GET_OBJ_AVAILTN(obj) = GET_OBJ_VAL(obj, 1);
+      GET_CYBERWARE_ESSENCE_COST(obj) = 20 * GET_CYBERWARE_RATING(obj);
+      GET_OBJ_COST(obj) = GET_CYBERWARE_RATING(obj) * GET_OBJ_VAL(obj, 3) * 500;
+      GET_OBJ_AVAILTN(obj) = GET_CYBERWARE_RATING(obj);
       GET_OBJ_AVAILDAY(obj) = 10;
       break;
     case CYB_MOVEBYWIRE:
-      GET_OBJ_COST(obj) = 125000 * (int)pow((double)2, (double)GET_OBJ_VAL(obj, 1));
-      GET_CYBERWARE_ESSENCE_COST(obj) = 100 + (150 * GET_OBJ_VAL(obj, 1));
-      switch (GET_OBJ_VAL(obj, 1)) {
+      GET_OBJ_COST(obj) = 125000 * (int)pow((double)2, (double)GET_CYBERWARE_RATING(obj));
+      GET_CYBERWARE_ESSENCE_COST(obj) = 100 + (150 * GET_CYBERWARE_RATING(obj));
+      switch (GET_CYBERWARE_RATING(obj)) {
         case 1:
           GET_OBJ_AVAILTN(obj) = 8;
           GET_OBJ_AVAILDAY(obj) = 10;
@@ -6068,7 +6082,7 @@ void price_cyber(struct obj_data *obj)
       }
       break;
     case CYB_CLIMBINGCLAWS:
-      GET_OBJ_VAL(obj, 1) = 0;
+      GET_CYBERWARE_RATING(obj) = 0;
       GET_CYBERWARE_ESSENCE_COST(obj) = 30;
       GET_OBJ_COST(obj) = 10000;
       GET_OBJ_AVAILTN(obj) = 5;
@@ -6076,7 +6090,7 @@ void price_cyber(struct obj_data *obj)
       break;
     case CYB_SMARTLINK:
       GET_CYBERWARE_ESSENCE_COST(obj) = 50;
-      switch (GET_OBJ_VAL(obj, 1)) {
+      switch (GET_CYBERWARE_RATING(obj)) {
         case 1:
           GET_OBJ_COST(obj) = 2500;
           GET_OBJ_AVAILTN(obj) = 3;
@@ -6090,12 +6104,15 @@ void price_cyber(struct obj_data *obj)
       }
       break;
     case CYB_MUSCLEREP:
-      GET_OBJ_COST(obj) = GET_OBJ_VAL(obj, 1) * 20000;
-      GET_CYBERWARE_ESSENCE_COST(obj) = GET_OBJ_VAL(obj, 1) * 100;
+      GET_OBJ_COST(obj) = GET_CYBERWARE_RATING(obj) * 20000;
+      GET_CYBERWARE_ESSENCE_COST(obj) = GET_CYBERWARE_RATING(obj) * 100;
       GET_OBJ_AVAILTN(obj) = 4;
       GET_OBJ_AVAILDAY(obj) = 4;
       break;
     case CYB_EYES:
+      // Auto-remove the vision affs from this object.
+      obj->obj_flags.bitvector.RemoveBits(AFF_LOW_LIGHT, AFF_INFRAVISION, AFF_ULTRASOUND, ENDBIT);
+
       GET_OBJ_AVAILDAY(obj) = GET_OBJ_AVAILTN(obj) = GET_CYBERWARE_ESSENCE_COST(obj) = GET_OBJ_COST(obj) = 0;
       if (IS_SET(GET_OBJ_VAL(obj, 3), EYE_CAMERA)) {
         GET_OBJ_COST(obj) = 5000;
@@ -6264,7 +6281,7 @@ void price_cyber(struct obj_data *obj)
       // Houserule: Tactical computers are mundane-only items.
       obj->obj_flags.extra_flags.SetBit(ITEM_EXTRA_MAGIC_INCOMPATIBLE);
 #endif
-      switch (GET_OBJ_VAL(obj, 1)) {
+      switch (GET_CYBERWARE_RATING(obj)) {
         case 1:
           GET_OBJ_COST(obj) = 400000;
           break;
@@ -6276,6 +6293,22 @@ void price_cyber(struct obj_data *obj)
           break;
         case 4:
           GET_OBJ_COST(obj) = 460000;
+          break;
+      }
+      break;
+    case CYB_CRD:
+      GET_CYBERWARE_ESSENCE_COST(obj) = 30;
+      GET_OBJ_AVAILTN(obj) = 4;
+      GET_OBJ_AVAILDAY(obj) = 3;
+      switch (GET_CYBERWARE_RATING(obj)) {
+        case 1:
+          GET_OBJ_COST(obj) = 25000;
+          break;
+        case 2:
+          GET_OBJ_COST(obj) = 50000;
+          break;
+        case 3:
+          GET_OBJ_COST(obj) = 75000;
           break;
       }
       break;
@@ -6310,6 +6343,9 @@ void price_cyber(struct obj_data *obj)
 void price_bio(struct obj_data *obj)
 {
   switch (GET_OBJ_VAL(obj, 0)) {
+    case BIO_CUSTOM_NERPS:
+      // Do absolutely nothing with it.
+      break;
     case BIO_ADRENALPUMP:
       if (GET_OBJ_VAL(obj, 1) == 1)
         GET_OBJ_COST(obj) = 60000;

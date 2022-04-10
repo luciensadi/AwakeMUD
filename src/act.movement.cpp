@@ -233,14 +233,18 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
   }
   else if (ch->in_room->dir_option[dir]->go_into_thirdperson)
     strcpy(buf2, ch->in_room->dir_option[dir]->go_into_thirdperson);
-  else if (IS_WATER(ch->in_room) && !IS_WATER(EXIT(ch, dir)->to_room))
-    snprintf(buf2, sizeof(buf2), "$n climbs out of the water to the %s.", fulldirs[dir]);
+  else if (IS_WATER(ch->in_room)) {
+    if (!IS_WATER(EXIT(ch, dir)->to_room))
+      snprintf(buf2, sizeof(buf2), "$n climbs out of the water to the %s.", fulldirs[dir]);
+    else
+      snprintf(buf2, sizeof(buf2), "$n swims %s.", fulldirs[dir]);
+  }
   else if (!IS_WATER(ch->in_room) && IS_WATER(EXIT(ch, dir)->to_room))
     snprintf(buf2, sizeof(buf2), "$n jumps into the water to the %s.", fulldirs[dir]);
   else if (ch->char_specials.leave)
     snprintf(buf2, sizeof(buf2), "$n %s %s.", ch->char_specials.leave, fulldirs[dir]);
   else
-    snprintf(buf2, sizeof(buf2), "$n %s %s.", (IS_WATER(ch->in_room) ? "swims" : "leaves"), fulldirs[dir]);
+    snprintf(buf2, sizeof(buf2), "$n leaves %s.", fulldirs[dir]);
 
   if (ch->in_room->dir_option[dir]->go_into_secondperson)
     send_to_char(ch, "%s\r\n", ch->in_room->dir_option[dir]->go_into_secondperson);
@@ -309,15 +313,18 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
     snprintf(buf2, sizeof(buf2), "$n drags %s in from %s.", GET_NAME(vict), thedirs[rev_dir[dir]]);
   else if (ch->in_room->dir_option[rev_dir[dir]] && ch->in_room->dir_option[rev_dir[dir]]->come_out_of_thirdperson)
     strcpy(buf2, ch->in_room->dir_option[rev_dir[dir]]->come_out_of_thirdperson);
-  else if (ch->char_specials.arrive)
-    snprintf(buf2, sizeof(buf2), "$n %s %s.", ch->char_specials.arrive, thedirs[rev_dir[dir]]);
-  else if (IS_WATER(was_in) && !IS_WATER(ch->in_room))
-    snprintf(buf2, sizeof(buf2), "$n climbs out of the water from %s.", thedirs[rev_dir[dir]]);
+  else if (IS_WATER(was_in)) {
+    if (!IS_WATER(ch->in_room))
+      snprintf(buf2, sizeof(buf2), "$n climbs out of the water from %s.", thedirs[rev_dir[dir]]);
+    else
+      snprintf(buf2, sizeof(buf2), "$n swims in from %s.", thedirs[rev_dir[dir]]);
+  }
   else if (!IS_WATER(was_in) && IS_WATER(ch->in_room))
     snprintf(buf2, sizeof(buf2), "$n jumps into the water from %s.", thedirs[rev_dir[dir]]);
+  else if (ch->char_specials.arrive)
+    snprintf(buf2, sizeof(buf2), "$n %s %s.", ch->char_specials.arrive, thedirs[rev_dir[dir]]);
   else
-    snprintf(buf2, sizeof(buf2), "$n %s %s.", (IS_WATER(ch->in_room) ?
-                                "swims in from" : "arrives from"), thedirs[rev_dir[dir]]);
+    snprintf(buf2, sizeof(buf2), "$n arrives from %s.", thedirs[rev_dir[dir]]);
 
 
   // People in the room.
@@ -641,21 +648,45 @@ void move_vehicle(struct char_data *ch, int dir)
     send_to_char("You aren't the Kool-Aid Man, so you decide against ramming your way out of here.\r\n", ch);
     return;
   }
-  if (!EXIT(veh, dir)
-      || !EXIT(veh, dir)->to_room
-      || (!ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_ROAD)
-          && !ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_GARAGE)
-          && (veh->type != VEH_DRONE && veh->type != VEH_BIKE))
-      || IS_SET(EXIT(veh, dir)->exit_info, EX_CLOSED)
-      || (veh->type == VEH_BIKE && ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_NOBIKE))
-#ifdef DEATH_FLAGS
-      || ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_DEATH)
-#endif
-      || ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_FALL))
-  {
+  if (!EXIT(veh, dir) || !EXIT(veh, dir)->to_room || EXIT(veh, dir)->to_room == &world[0] || IS_SET(EXIT(veh, dir)->exit_info, EX_CLOSED)) {
     send_to_char(CANNOT_GO_THAT_WAY, ch);
     return;
   }
+  if ((!ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_ROAD) && !ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_GARAGE))
+      && (veh->type != VEH_DRONE && veh->type != VEH_BIKE))
+  {
+    send_to_char("Your vehicle is too big to fit there.\r\n", ch);
+    return;
+  }
+
+  if (veh->type == VEH_BIKE && ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_NOBIKE)) {
+    send_to_char(CANNOT_GO_THAT_WAY, ch);
+    return;
+  }
+
+#ifdef DEATH_FLAGS
+  if (ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_DEATH)) {
+    send_to_char(CANNOT_GO_THAT_WAY, ch);
+    return;
+  }
+#endif
+
+#ifdef DIES_IRAE
+  // Flying vehicles can traverse any terrain.If you're not a flying or amphibious vehicle, you can't go into water.
+  if (!veh->flags.IsSet(VFLAG_CAN_FLY)) {
+    // Non-flying vehicles can't pass fall rooms.
+    if (ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_FALL)) {
+      send_to_char("Your vehicle would plunge to its destruction!\r\n", ch);
+      return;
+    }
+
+    // Non-amphibious vehicles can't traverse water.
+    if (IS_WATER(EXIT(veh, dir)->to_room)) {
+      send_to_char("Your vehicle would sink!\r\n", ch);
+      return;
+    }
+  }
+#endif
 
   if (special(ch, convert_dir[dir], &empty_argument))
     return;
@@ -677,6 +708,13 @@ void move_vehicle(struct char_data *ch, int dir)
         return;
       }
     }
+  }
+
+  // Sanity check: Did you update the impassibility code without updating this?
+  if (!room_accessible_to_vehicle_piloted_by_ch(EXIT(veh, dir)->to_room, veh, ch)) {
+    mudlog("SYSERR: room_accessible_to_vehicle() does not match move_vehicle() constraints!", ch, LOG_SYSLOG, TRUE);
+    send_to_char(CANNOT_GO_THAT_WAY, ch);
+    return;
   }
 
   snprintf(buf2, sizeof(buf2), "%s %s from %s.", GET_VEH_NAME(veh), veh->arrive, thedirs[rev_dir[dir]]);
@@ -1974,7 +2012,12 @@ ACMD(do_leave)
 ACMD(do_stand)
 {
   if (ch->in_veh) {
-    send_to_char("You can't stand up in here.\r\n", ch);
+    if (GET_POS(ch) < POS_SITTING && GET_POS(ch) > POS_SLEEPING) {
+      ACMD_DECLARE(do_sit);
+      do_sit(ch, argument, 0, 0);
+    } else {
+      send_to_char("You can't stand up in here.\r\n", ch);
+    }
     return;
   }
   if (IS_WORKING(ch)) {

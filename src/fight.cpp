@@ -3082,7 +3082,7 @@ bool process_has_ammo(struct char_data *ch, struct obj_data *wielded, bool deduc
       }
 
       // No ammo boxes found, or the ones that were found were empty. Click it.
-      send_to_char("*Click*\r\n", ch);
+      send_to_char(ch, "%s just clicks-- it's out of ammo!\r\n", capitalize(GET_OBJ_NAME(wielded)));
       return FALSE;
     } // End manned checks.
 
@@ -3101,7 +3101,7 @@ bool process_has_ammo(struct char_data *ch, struct obj_data *wielded, bool deduc
       }
 
       // Empty magazine. Send the empty-gun click.
-      send_to_char("*Click*\r\n", ch);
+      send_to_char(ch, "%s just clicks when you pull the trigger-- it's out of ammo!\r\n", capitalize(GET_OBJ_NAME(wielded)));
 
       act("$n can't fire- no ammo.", TRUE, ch, 0, 0, TO_ROLLS);
 
@@ -3122,7 +3122,7 @@ bool process_has_ammo(struct char_data *ch, struct obj_data *wielded, bool deduc
     }
 
     // The weapon requires a magazine and doesn't have one.
-    send_to_char("*Click*\r\n", ch);
+    send_to_char(ch, "%s just clicks when you pull the trigger-- it's out of ammo!\r\n", capitalize(GET_OBJ_NAME(wielded)));
     return FALSE;
   }
 
@@ -3578,8 +3578,8 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
   }
   
   ch_room = get_ch_in_room(ch);
-  
-  if (ch->in_room == victim->in_room) {
+  vict_room = get_ch_in_room(victim);
+  if (ch_room == vict_room) {
     // Same-room messaging.
     static char vehicle_message[1000];
 
@@ -3936,8 +3936,8 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
   }
 
   // Pre-calculate the things we care about here. First, character vision info.
-  bool ch_has_ultrasound = AFF_FLAGGED(ch, AFF_ULTRASOUND);
-  bool ch_has_thermographic = AFF_FLAGGED(ch, AFF_INFRAVISION) || CURRENT_VISION(ch) == THERMOGRAPHIC;
+  bool ch_has_ultrasound = has_vision(ch, VISION_ULTRASONIC);
+  bool ch_has_thermographic = has_vision(ch, VISION_THERMOGRAPHIC);
   bool ch_sees_astral = IS_ASTRAL(ch) || IS_DUAL(ch);
 
   // EXCEPT: If you're rigging (not manning), things change.
@@ -4093,30 +4093,31 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
 
 int find_sight(struct char_data *ch)
 {
-  int sight;
+  // You can always see the room you're in.
+  int sight = 1;
 
-  if ((!IS_NPC(ch) && access_level(ch, LVL_VICEPRES)) || AFF_FLAGGED(ch, AFF_VISION_MAG_3))
+  // High-level staff see forever.
+  if (!access_level(ch, LVL_VICEPRES)) {
     sight = 4;
-  else if (AFF_FLAGGED(ch, AFF_VISION_MAG_2))
-    sight = 3;
-  else if (AFF_FLAGGED(ch, AFF_VISION_MAG_1))
-    sight = 2;
-  else
-    sight = 1;
-
-  /* add more weather conditions here to affect scan */
-  if (SECT(get_ch_in_room(ch)) != SPIRIT_HEARTH && (IS_NPC(ch) || !access_level(ch, LVL_VICEPRES)))
-    switch (weather_info.sky)
-  {
-    case SKY_RAINING:
-      sight -= 1;
-      break;
-    case SKY_LIGHTNING:
-      sight -= 2;
-      break;
   }
+  // Lower-level staff, morts, and NPCs are limited by sight and weather.
+  else {
+    sight += get_vision_mag(ch);
 
-  sight = MIN(4, MAX(1, sight));
+    /* add more weather conditions here to affect scan */
+    if (SECT(get_ch_in_room(ch)) != SPIRIT_HEARTH) {
+      switch (weather_info.sky) {
+        case SKY_RAINING:
+          sight -= 1;
+          break;
+        case SKY_LIGHTNING:
+          sight -= 2;
+          break;
+      }
+    }
+
+    sight = MIN(4, MAX(1, sight));
+  }
 
   return sight;
 }
@@ -4685,10 +4686,10 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
         isname(target, EXIT2(nextroom, dir)->keyword) &&
         !IS_SET(EXIT2(nextroom, dir)->exit_info, EX_DESTROYED) &&
         !IS_SET(EXIT2(nextroom, dir)->exit_info, EX_HIDDEN) &&
-        (PRF_FLAGGED(ch, PRF_HOLYLIGHT) || CURRENT_VISION(ch) == THERMOGRAPHIC ||
+        (PRF_FLAGGED(ch, PRF_HOLYLIGHT) || has_vision(ch, VISION_THERMOGRAPHIC) ||
          light_level(nextroom) <= LIGHT_NORMALNOLIT ||
          ((light_level(nextroom) == LIGHT_MINLIGHT || light_level(nextroom) == LIGHT_PARTLIGHT) &&
-          CURRENT_VISION(ch) == LOWLIGHT))) {
+          has_vision(ch, VISION_LOWLIGHT)))) {
            found = TRUE;
            break;
          }
@@ -4873,17 +4874,24 @@ bool next_combat_list_is_valid(struct char_data *ncl) {
 }
 
 /* control the fights going on.  Called every 2 seconds from comm.c. */
+unsigned long violence_loop_counter = 0;
 void perform_violence(void)
 {
   PERF_PROF_SCOPE(pr_, __func__);
   struct char_data *ch = NULL;
   bool engulfed;
   extern struct index_data *mob_index;
-  if (combat_list) {
-    if (GET_INIT_ROLL(combat_list) <= 0) {
-      roll_initiative();
-      order_list(TRUE);
-    }
+
+  // No list? No work.
+  if (!combat_list)
+    return;
+
+  // Increment our violence loop counter.
+  violence_loop_counter++;
+
+  if (GET_INIT_ROLL(combat_list) <= 0) {
+    roll_initiative();
+    order_list(TRUE);
   }
 
   // This while-loop replaces the combat list for-loop so we can do better edge case checking.
@@ -4903,8 +4911,9 @@ void perform_violence(void)
       }
     }
 
-    if (!ch)
+    if (!ch) {
       return;
+    }
 
     // Clear the first-iteration flag.
     first_iteration = FALSE;
@@ -4913,6 +4922,14 @@ void perform_violence(void)
 
     // Clear the engulfed status.
     engulfed = FALSE;
+
+    // Prevent people from being processed multiple times per loop.
+    if (ch->last_violence_loop == violence_loop_counter) {
+      mudlog("SYSERR: Encountered someone who already went this combat turn. Fix set_fighting().", ch, LOG_SYSLOG, TRUE);
+      continue;
+    } else {
+      ch->last_violence_loop = violence_loop_counter;
+    }
 
     // You're not in combat or not awake.
     if (!CH_IN_COMBAT(ch) || !AWAKE(ch)) {
@@ -4995,7 +5012,6 @@ void perform_violence(void)
     if ((ch->points.fire[0] > 0 && success_test(GET_WIL(ch), 6) < 0)
         || engulfed)
     {
-      act("$n skipping turn- on fire or engulfed.", FALSE, ch, 0, 0, TO_ROLLS);
       continue;
     }
 
@@ -5057,7 +5073,6 @@ void perform_violence(void)
         AFF_FLAGS(mage).RemoveBit(AFF_BANISH);
         AFF_FLAGS(spirit).RemoveBit(AFF_BANISH);
       }
-      act("$n skipping turn- processed banishment.", FALSE, ch, 0, 0, TO_ROLLS);
       continue;
     }
 
@@ -5068,11 +5083,11 @@ void perform_violence(void)
           && GET_SKILL(ch, SKILL_SORCERY) > 0
           && GET_MENTAL(ch) > 400
           && ch->in_room == FIGHTING(ch)->in_room
+          && !AFF_FLAGGED(ch, AFF_SURPRISE)
           && success_test(1, 8 - GET_SKILL(ch, SKILL_SORCERY)))
       {
         // Only continue if we successfully cast.
         if (mob_magic(ch)) {
-          act("$n skipping turn- processed mob_magic.", FALSE, ch, 0, 0, TO_ROLLS);
           continue;
         }
       }
@@ -5081,7 +5096,6 @@ void perform_violence(void)
         cast_spell(ch, ch->squeue->spell, ch->squeue->sub, ch->squeue->force, ch->squeue->arg);
         DELETE_ARRAY_IF_EXTANT(ch->squeue->arg);
         DELETE_AND_NULL(ch->squeue);
-        act("$n skipping turn- processed squeue.", FALSE, ch, 0, 0, TO_ROLLS);
         continue;
       }
     }
@@ -5096,7 +5110,6 @@ void perform_violence(void)
         AFF_FLAGS(ch).RemoveBit(AFF_APPROACH);
         AFF_FLAGS(FIGHTING(ch)).RemoveBit(AFF_APPROACH);
         // stop_fighting(ch);
-        act("$n skipping turn- stripped approach flags from dissimilar-room characters.", FALSE, ch, 0, 0, TO_ROLLS);
         continue;
       }
 
@@ -5127,13 +5140,13 @@ void perform_violence(void)
 
         // Take the better of the defender's QUI and REA.
         int defender_attribute = MAX(GET_QUI(FIGHTING(ch)), GET_REA(FIGHTING(ch)));
-        // Set the target from the defender's attribute.
-        int target = defender_attribute;
+        int target = 0;
         // Set the dice pool to be the character's quickness.
         int quickness = GET_QUI(ch);
         // Extended foot anchors suck for running.
 
         bool footanchor = FALSE;
+        bool defender_footanchor = FALSE;
 
         // Visibility penalty for defender, it's hard to avoid someone you can't see.
         if (!CAN_SEE(FIGHTING(ch), ch))
@@ -5178,7 +5191,7 @@ void perform_violence(void)
             && !(GET_EQ(ch, WEAR_WIELD) || GET_EQ(ch, WEAR_HOLD)))
           target -= (int)GET_REAL_MAG(ch) / 150;
 
-        // Hydraulic jack and foot anchor.
+        // Hydraulic jack and foot anchor - charger
         for (struct obj_data *cyber = ch->cyberware; cyber; cyber = cyber->next_content) {
           if (GET_CYBERWARE_TYPE(cyber) == CYB_HYDRAULICJACK)
             quickness += GET_CYBERWARE_RATING(cyber);
@@ -5186,20 +5199,39 @@ void perform_violence(void)
             footanchor = TRUE;
         }
 
-        // Movement modifications via spells.
+        // Hydraulic jack and foot anchor - defender
+        for (struct obj_data *cyber = FIGHTING(ch)->cyberware; cyber; cyber = cyber->next_content) {
+          if (GET_CYBERWARE_TYPE(cyber) == CYB_HYDRAULICJACK)
+            defender_attribute += GET_CYBERWARE_RATING(cyber);
+          else if (GET_CYBERWARE_TYPE(cyber) == CYB_FOOTANCHOR && !GET_CYBERWARE_IS_DISABLED(cyber))
+            defender_footanchor = TRUE;
+        }
+
+        // Movement modifications via spells - charger
         for (struct spirit_sustained *ssust = SPIRIT_SUST(ch); ssust; ssust = ssust->next)
           if (ssust->type == MOVEMENTUP && ssust->caster == FALSE && GET_LEVEL(ssust->target))
             quickness *= GET_LEVEL(ssust->target);
           else if (ssust->type == MOVEMENTDOWN && ssust->caster == FALSE && GET_LEVEL(ssust->target))
             quickness /= GET_LEVEL(ssust->target);
 
+        // Movement modifications via spells - defender
+        for (struct spirit_sustained *ssust = SPIRIT_SUST(FIGHTING(ch)); ssust; ssust = ssust->next)
+          if (ssust->type == MOVEMENTUP && ssust->caster == FALSE && GET_LEVEL(ssust->target))
+            defender_attribute *= GET_LEVEL(ssust->target);
+          else if (ssust->type == MOVEMENTDOWN && ssust->caster == FALSE && GET_LEVEL(ssust->target))
+            defender_attribute /= GET_LEVEL(ssust->target);
+
         // Movement reset: Can't move if binding.
         if (AFF_FLAGGED(ch, AFF_BINDING))
           quickness = 0;
+        if (AFF_FLAGGED(FIGHTING(ch), AFF_BINDING))
+          defender_attribute = 0;
 
         // Penalty from footanchor.
         if (footanchor)
           quickness /= 2;
+        if (defender_footanchor)
+          defender_attribute /= 2;
 
         // Penalty from too-tall.
 #ifdef USE_SLOUCH_RULES
@@ -5215,6 +5247,8 @@ void perform_violence(void)
         }
 #endif
 
+        // Set the target from the defender's attribute.
+        target += defender_attribute;
         // Lock the target to a range. Nobody enjoys rolling TN 14 to close with high-level invis mages.
         target = MIN(MINIMUM_TN_FOR_CLOSING_CHECK, MAX(target, MAXIMUM_TN_FOR_CLOSING_CHECK));
 
@@ -5255,7 +5289,6 @@ void perform_violence(void)
     // Attacking a vehicle. Stopped here.
     else if (FIGHTING_VEH(ch)) {
       if (ch->in_room != FIGHTING_VEH(ch)->in_room) {
-        act("$n skipping turn- target vehicle not in room.", FALSE, ch, 0, 0, TO_ROLLS);
         stop_fighting(ch);
       } else
         vcombat(ch, FIGHTING_VEH(ch));
@@ -5290,6 +5323,8 @@ void perform_violence(void)
       (mob_index[GET_MOB_RNUM(ch)].func) (ch, ch, 0, &empty_argument);
     }
   }
+
+  mudlog("Combat list complete.", NULL, LOG_SYSLOG, TRUE);
 }
 
 void order_list(bool first, ...)
@@ -5645,13 +5680,11 @@ void vcombat(struct char_data * ch, struct veh_data * veh)
   int recoil=0, burst=0, recoil_comp=0, newskill, modtarget = 0;
 
   if (IS_AFFECTED(ch, AFF_PETRIFY)) {
-    act("$n: is petrified, aborting attack.", 0, ch, 0, 0, TO_ROLLS);
     stop_fighting(ch);
     return;
   }
 
   if (veh->damage >= VEH_DAM_THRESHOLD_DESTROYED) {
-    act("$n: target vehicle has been destroyed, aborting attack.", 0, ch, 0, 0, TO_ROLLS);
     stop_fighting(ch);
     return;
   }
@@ -5683,7 +5716,6 @@ void vcombat(struct char_data * ch, struct veh_data * veh)
   if (wielded) {
     // Ensure it has ammo.
     if (!has_ammo(ch, wielded)) {
-      act("$n has no ammo, aborting attack.", 0, ch, 0, 0, TO_ROLLS);
       return;
     }
 

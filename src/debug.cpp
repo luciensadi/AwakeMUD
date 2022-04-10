@@ -6,6 +6,8 @@
 #include <time.h>
 #include <string.h>
 
+#include "telnet.h"
+
 #include "types.h"
 #include "awake.h"
 #include "interpreter.h"
@@ -108,6 +110,31 @@ ACMD(do_debug) {
 
   if (access_level(ch, LVL_PRESIDENT) && is_abbrev(arg1, "invis")) {
     can_see_through_invis(ch, ch);
+    return;
+  }
+
+  if (access_level(ch, LVL_PRESIDENT) && is_abbrev(arg1, "telnet")) {
+    char on_string[] =
+    {
+      (char) IAC,
+      (char) WONT,
+      (char) TELOPT_ECHO,
+      (char) 0,
+    };
+
+    char off_string[] =
+    {
+      (char) IAC,
+      (char) WILL,
+      (char) TELOPT_ECHO,
+      (char) 0,
+    };
+
+    SEND_TO_Q(on_string, ch->desc);
+    SEND_TO_Q(off_string, ch->desc);
+    SEND_TO_Q(on_string, ch->desc);
+    SEND_TO_Q(off_string, ch->desc);
+
     return;
   }
 

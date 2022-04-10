@@ -1066,7 +1066,21 @@ ACMD(do_gen_write)
   curl_global_cleanup();
 #endif
 
-  send_to_char("Okay. Thanks!\r\n", ch);
+  if (subcmd == SCMD_TYPO && !PLR_FLAGGED(ch, PLR_NO_AUTO_SYSP_AWARDS)) {
+    // We reward typos instantly-- they're quick to verify and don't have grey area.
+    send_to_char("Thanks! You've earned +1 system points for your contribution.\r\n", ch);
+    if (GET_SYSTEM_POINTS(ch) < 10) {
+      send_to_char("(See ^WHELP SYSPOINTS^n to see what you can do with them.)\r\n", ch);
+    }
+
+    GET_SYSTEM_POINTS(ch)++;
+  } else {
+    // All other commands need manual system point awarding from staff. Rationales:
+    // - IDEAS: Auto-awarding the idea command would incentivize frivolous ideas that aren't actionable.
+    // - BUGS: These often stem from misunderstandings and aren't actually bugs.
+    // - PRAISE: Immediate payout would make us question if we were legitimately being given props, or if it was just to get the payout.
+    send_to_char("Okay. Thanks!\r\n", ch);
+  }
 }
 
 const char *tog_messages[][2] = {
@@ -1155,7 +1169,11 @@ const char *tog_messages[][2] = {
                             {"You will now show up by name on the where-list.\r\n",
                              "You will no longer show up by name on the where-list.\r\n"},
                             {"You will no longer see newbie tips.\r\n",
-                             "You will now see newbie tips.\r\n"}
+                             "You will now see newbie tips.\r\n"},
+                            {"You will no longer automatically stand when knocked down.\r\n",
+                             "You will now automatically stand when knocked down.\r\n"},
+                            {"You will no longer automatically attempt to kip-up when knocked down.\r\n",
+                             "You will now automatically attempt to kip-up when knocked down.\r\n"}
                           };
 
 ACMD(do_toggle)
@@ -1192,6 +1210,10 @@ ACMD(do_toggle)
 
       // Skip pgroup tag pref for non-grouped.
       if (i == PRF_SHOWGROUPTAG && (!GET_PGROUP_MEMBER_DATA(ch) || !GET_PGROUP(ch)))
+        continue;
+
+      // Skip rolls if you can't use it.
+      if (i == PRF_ROLLS && !(IS_SENATOR(ch) || _OVERRIDE_ALLOW_PLAYERS_TO_USE_ROLLS_ || PLR_FLAGGED(ch, PLR_PAID_FOR_ROLLS)))
         continue;
 
       // Select ONOFF or YESNO display type based on field 2.
@@ -1255,7 +1277,7 @@ ACMD(do_toggle)
     } else if (is_abbrev(argument, "nonewbie") || is_abbrev(argument, "newbie")) {
       result = PRF_TOG_CHK(ch, PRF_NONEWBIE);
       mode = 9;
-    } else if (is_abbrev(argument, "noshout") || is_abbrev(argument, "shout")) {
+    } else if (is_abbrev(argument, "noshout") || is_abbrev(argument, "shout") || is_abbrev(argument, "deaf")) {
       result = PRF_TOG_CHK(ch, PRF_DEAF);
       mode = 10;
     } else if ((is_abbrev(argument, "notell") || is_abbrev(argument, "tell"))) {
@@ -1280,10 +1302,10 @@ ACMD(do_toggle)
         PRF_FLAGS(ch).SetBit(PRF_PKER);
       mode = 13;
       result = 1;
-    } else if (is_abbrev(argument, "hired")) {
+    } else if (is_abbrev(argument, "hired") || is_abbrev(argument, "quest")) {
       result = PRF_TOG_CHK(ch, PRF_QUEST);
       mode = 14;
-    } else if (is_abbrev(argument, "rolls") && (IS_SENATOR(ch) || _OVERRIDE_ALLOW_PLAYERS_TO_USE_ROLLS_)) {
+    } else if (is_abbrev(argument, "rolls") && (IS_SENATOR(ch) || _OVERRIDE_ALLOW_PLAYERS_TO_USE_ROLLS_ || PLR_FLAGGED(ch, PLR_PAID_FOR_ROLLS))) {
       result = PRF_TOG_CHK(ch, PRF_ROLLS);
       mode = 17;
     } else if (is_abbrev(argument, "roomflags") && IS_SENATOR(ch)) {
@@ -1301,7 +1323,7 @@ ACMD(do_toggle)
     } else if (is_abbrev(argument, "norpe") || is_abbrev(argument, "rpe")) {
       result = PRF_TOG_CHK(ch, PRF_NORPE);
       mode = 21;
-    } else if (is_abbrev(argument, "nohired") || is_abbrev(argument, "hired")) {
+    } else if (is_abbrev(argument, "nohired")) {
       result = PRF_TOG_CHK(ch, PRF_NOHIRED);
       mode = 22;
     } else if (is_abbrev(argument, "pacify") && IS_SENATOR(ch)) {
@@ -1385,6 +1407,16 @@ ACMD(do_toggle)
     } else if (is_abbrev(argument, "tips") || is_abbrev(argument, "sees newbie tips") || is_abbrev(argument, "hints")) {
       result = PRF_TOG_CHK(ch, PRF_SEE_TIPS);
       mode = 42;
+    } else if (is_abbrev(argument, "autostand") || is_abbrev(argument, "stand")) {
+      result = PRF_TOG_CHK(ch, PRF_AUTOSTAND);
+      mode = 43;
+    } else if (is_abbrev(argument, "autokipup") || is_abbrev(argument, "kipup") || is_abbrev(argument, "autokip-up") || is_abbrev(argument, "kip-up")) {
+      if (!PLR_FLAGGED(ch, PLR_PAID_FOR_KIPUP)) {
+        send_to_char("You don't know how to kip up.\r\n.", ch);
+        return;
+      }
+      result = PRF_TOG_CHK(ch, PRF_AUTOKIPUP);
+      mode = 44;
     } else {
       send_to_char("That is not a valid toggle option.\r\n", ch);
       return;
@@ -2098,7 +2130,7 @@ ACMD(do_astral)
   if (GET_TRADITION(ch) != TRAD_SHAMANIC && GET_TRADITION(ch) != TRAD_HERMETIC &&
       !access_level(ch, LVL_ADMIN) && !(GET_TRADITION(ch) == TRAD_ADEPT &&
                                         GET_POWER(ch, ADEPT_PERCEPTION) > 0 && subcmd == SCMD_PERCEIVE)) {
-    send_to_char("You can't do that!\r\n", ch);
+    send_to_char("You have no sense of the astral plane.\r\n", ch);
     return;
   }
   if (IS_WORKING(ch)) {
@@ -2311,7 +2343,7 @@ void cedit_disp_menu(struct descriptor_data *d, int mode)
       send_to_char(CH, "5) Arriving Text: ^c%s^n\r\n", d->edit_mob->char_specials.arrive);
       send_to_char(CH, "6) Leaving Text:  ^c%s^n\r\n", d->edit_mob->char_specials.leave);
 
-      send_to_char(CH, "Examples:\r\n  %s %s the north.\r\n", d->edit_mob->player.physical_text.name, d->edit_mob->char_specials.arrive);
+      send_to_char(CH, "Preview:\r\n  %s %s the north.\r\n", d->edit_mob->player.physical_text.name, d->edit_mob->char_specials.arrive);
       send_to_char(CH, "  %s %s north.\r\n", d->edit_mob->player.physical_text.name, d->edit_mob->char_specials.leave);
 
       send_to_char(CH, "7) Change Height: ^c%dcm^n\r\n", GET_HEIGHT(CH));
@@ -2556,11 +2588,11 @@ void cedit_parse(struct descriptor_data *d, char *arg)
 
       break;
     case '5':
-      send_to_char("Enter arrival message: ", CH);
+      send_to_char("Enter arrival message (note that the game appends ' the <dir>.'): ", CH);
       d->edit_mode = CEDIT_ARRIVE;
       break;
     case '6':
-      send_to_char("Enter leaving message: ", CH);
+      send_to_char("Enter leaving message (note that the game appends ' <dir>.'): ", CH);
       d->edit_mode = CEDIT_LEAVE;
       break;
     case '7':
@@ -4523,7 +4555,10 @@ ACMD(do_syspoints) {
   // Morts can only view their own system points.
   if (!access_level(ch, LVL_CONSPIRATOR)) {
     if (!*argument) {
-      send_to_char(ch, "You have %d system points. See ^WHELP SYSPOINTS^n for how to use them.\r\n", GET_SYSTEM_POINTS(ch));
+      send_to_char(ch, "You have %d system point%s. See ^WHELP SYSPOINTS^n for how to use them.\r\n",
+                    GET_SYSTEM_POINTS(ch),
+                    GET_SYSTEM_POINTS(ch) == 1 ? "" : "s"
+                  );
       return;
     }
 
@@ -4574,6 +4609,35 @@ ACMD(do_syspoints) {
       return;
     }
 
+    if (is_abbrev(arg, "rolls")) {
+      // Already set.
+      if (PLR_FLAGGED(ch, PLR_PAID_FOR_ROLLS)) {
+        send_to_char("You've already purchased the ability to see rolls! You can enable/disable it with ^WTOGGLE ROLLS^n.\r\n", ch);
+        return;
+      }
+
+      // Can they afford it?
+      if (GET_SYSTEM_POINTS(ch) >= SYSP_ROLLS_COST) {
+        // Have they entered the confirmation command?
+        if (is_abbrev(buf, "confirm")) {
+          GET_SYSTEM_POINTS(ch) -= SYSP_ROLLS_COST;
+          send_to_char(ch, "Congratulations, you can now see rolls with ^WTOGGLE ROLLS^n! %d syspoints have been deducted from your total.\r\n", SYSP_ROLLS_COST);
+          PLR_FLAGS(ch).SetBit(PLR_PAID_FOR_ROLLS);
+          mudlog("Purchased rolls with syspoints.", ch, LOG_SYSLOG, TRUE);
+          playerDB.SaveChar(ch);
+          return;
+        }
+
+        // They can afford it, but didn't use the confirm form.
+        send_to_char(ch, "You can spend %d syspoints to purchase the ability to see mechanical and debug information. Type ^WSYSPOINTS ROLLS CONFIRM^n to do so.\r\n", SYSP_ROLLS_COST);
+        return;
+      }
+
+      // Too broke.
+      send_to_char(ch, "That costs %d syspoints, and you only have %d.\r\n", SYSP_ROLLS_COST, GET_SYSTEM_POINTS(ch));
+      return;
+    }
+
     send_to_char(ch, "'%s' is not a valid mode. See ^WHELP SYSPOINTS^n for command syntax.\r\n", arg);
     return;
   }
@@ -4589,7 +4653,7 @@ ACMD(do_syspoints) {
   if (is_abbrev(arg, "show")) {
     // No target? Show your own.
     if (!*buf) {
-      send_to_char(ch, "You have %d system points.\r\n", GET_SYSTEM_POINTS(ch));
+      send_to_char(ch, "You have %d system point%s.\r\n", GET_SYSTEM_POINTS(ch), GET_SYSTEM_POINTS(ch) == 1 ? "" : "s");
       return;
     }
 
@@ -4610,7 +4674,7 @@ ACMD(do_syspoints) {
         send_to_char("There is no such player.\r\n", ch);
         return;
       }
-      send_to_char(ch, "%s has %s system points.\r\n", row[0], row[1]);
+      send_to_char(ch, "%s has %s system point(s).\r\n", row[0], row[1]);
       mysql_free_result(res);
     } else {
       // Target cannot be NPC. We don't expect to ever hit this case using get_player_vis though.
@@ -4619,7 +4683,7 @@ ACMD(do_syspoints) {
         return;
       }
 
-      send_to_char(ch, "%s has %d system points.\r\n", GET_CHAR_NAME(vict), GET_SYSTEM_POINTS(vict));
+      send_to_char(ch, "%s has %d system point%s.\r\n", GET_CHAR_NAME(vict), GET_SYSTEM_POINTS(vict), GET_SYSTEM_POINTS(vict) == 1 ? "" : "s");
     }
     return;
   }
@@ -4677,27 +4741,30 @@ ACMD(do_syspoints) {
     }
 
     // Mail the victim.
-    snprintf(buf, sizeof(buf), "You have been %s %d system points for %s%s^n\r\n",
+    snprintf(buf, sizeof(buf), "You have been %s %d system point%s for %s%s^n\r\n",
             (award_mode ? "awarded" : "penalized"),
             k,
+            k == 1 ? "" : "s",
             reason,
             ispunct(get_final_character_from_string(reason)) ? "" : ".");
     store_mail(idnum, ch, buf);
 
     // Notify the actor.
-    send_to_char(ch, "You %s %d system points %s %s for %s%s^n\r\n",
+    send_to_char(ch, "You %s %d system point%s %s %s for %s%s^n\r\n",
                 (award_mode ? "awarded" : "penalized"),
                 k,
+                k == 1 ? "" : "s",
                 (award_mode ? "to" : "from"),
                 capitalize(target),
                 reason,
                 ispunct(get_final_character_from_string(reason)) ? "" : ".");
 
     // Log it.
-    snprintf(buf, sizeof(buf), "%s %s %d system points %s %s for %s^g (%d to %d).",
+    snprintf(buf, sizeof(buf), "%s %s %d system point%s %s %s for %s^g (%d to %d).",
             GET_CHAR_NAME(ch),
             (award_mode ? "awarded" : "penalized"),
             k,
+            k == 1 ? "" : "s",
             (award_mode ? "to" : "from"),
             target,
             reason,
@@ -4720,24 +4787,27 @@ ACMD(do_syspoints) {
     GET_SYSTEM_POINTS(vict) += k;
 
     // Notify the actor and the victim, then log it.
-    send_to_char(vict, "You have been %s %d system points for %s%s^n\r\n",
+    send_to_char(vict, "You have been %s %d system point%s for %s%s^n\r\n",
                  (award_mode ? "awarded" : "penalized"),
                  k,
+                 k == 1 ? "" : "s",
                  reason,
                  ispunct(get_final_character_from_string(reason)) ? "" : ".");
 
-    send_to_char(ch, "You %s %d system points %s %s for %s%s^n\r\n",
+    send_to_char(ch, "You %s %d system point%s %s %s for %s%s^n\r\n",
                 (award_mode ? "awarded" : "penalized"),
                 k,
+                k == 1 ? "" : "s",
                 (award_mode ? "to" : "from"),
                 GET_CHAR_NAME(vict),
                 reason,
                 ispunct(get_final_character_from_string(reason)) ? "" : ".");
 
-    snprintf(buf, sizeof(buf), "%s %s %d system points %s %s for %s^g (%d to %d).",
+    snprintf(buf, sizeof(buf), "%s %s %d system point%s %s %s for %s^g (%d to %d).",
             GET_CHAR_NAME(ch),
             (award_mode ? "awarded" : "penalized"),
             k,
+            k == 1 ? "" : "s",
             (award_mode ? "to" : "from"),
             GET_CHAR_NAME(vict),
             reason,
@@ -4785,7 +4855,7 @@ ACMD(do_afk) {
 }
 
 ACMD(do_map) {
-  send_to_char("We're actively working on building a map feature. In the meantime, please feel free to use the cab system to get around, or ask for directions in the Newbie or OOC channels!\r\n", ch);
+  send_to_char("Lost? ^WHAIL^ning a cab is a great way to get around, and you can always ask on the radio or in the newbie / OOC channels if you need directions. ASCII maps are available in HELP MAP.\r\n", ch);
 }
 
 ACMD(do_discord) {

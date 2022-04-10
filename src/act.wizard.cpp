@@ -17,6 +17,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <signal.h>
+#include <unordered_map>
 
 #if defined(WIN32) && !defined(__CYGWIN__)
 #define popen(x,y) _popen(x,y)
@@ -47,6 +48,7 @@
 #include "perfmon.h"
 #include "newmail.h"
 #include "transport.h"
+#include "vision_overhaul.h"
 
 #if defined(__CYGWIN__)
 #include <crypt.h>
@@ -79,6 +81,7 @@ extern void list_detailed_shop(struct char_data *ch, long shop_nr);
 extern void list_detailed_quest(struct char_data *ch, long rnum);
 extern int vnum_vehicles(char *searchname, struct char_data * ch);
 extern void disp_init_menu(struct descriptor_data *d);
+extern struct obj_data *shop_package_up_ware(struct obj_data *obj);
 
 extern const char *pgroup_print_privileges(Bitfield privileges, bool full);
 extern void nonsensical_reply(struct char_data *ch, const char *arg, const char *mode);
@@ -112,6 +115,7 @@ extern int mother_desc, port;
 
 /* Prototypes. */
 void restore_character(struct char_data *vict, bool reset_staff_stats);
+bool is_invalid_ending_punct(char candidate);
 
 
 #define EXE_FILE "bin/awake" /* maybe use argv[0] but it's not reliable */
@@ -196,6 +200,9 @@ ACMD(do_copyover)
     }
 
     if (!(och = d->character))
+      continue;
+
+    if (och == ch)
       continue;
 
     if (GET_QUEST(och)) {
@@ -1230,7 +1237,7 @@ void do_stat_object(struct char_data * ch, struct obj_data * j)
       strlcat(buf, " ", sizeof(buf));
       strlcat(buf, desc->keyword, sizeof(buf));
     }
-    strlcat(buf, "\r\n", sizeof(buf));
+    strlcat(buf, "^n\r\n", sizeof(buf));
   }
 
   j->obj_flags.wear_flags.PrintBits(buf2, MAX_STRING_LENGTH,
@@ -1540,9 +1547,7 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Armor: ^W%d (%d) / %d (%d)^n, I-Dice: ^W%d^n, I-Roll: ^W%d^n, Sus: ^W%d^n, Foci: ^W%d^n, TargMod: ^W%d^n, Reach: ^W%d^n\r\n",
           GET_BALLISTIC(k), GET_TOTALBAL(k), GET_IMPACT(k), GET_TOTALIMP(k), GET_INIT_DICE(k), GET_INIT_ROLL(k),
           GET_SUSTAINED_NUM(k), GET_FOCI(k), GET_TARGET_MOD(k), GET_REACH(k));
-  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Current Vision: %s Natural Vision: %s\r\n",
-          CURRENT_VISION(k) == NORMAL ? "^WNormal^n" : CURRENT_VISION(k) == THERMOGRAPHIC ? "^rThermo^n" : "^yLow-Light^n",
-          NATURAL_VISION(k) == NORMAL ? "^WNormal^n" : NATURAL_VISION(k) == THERMOGRAPHIC ? "^rThermo^n" : "^yLow-Light^n");
+  strlcat(buf, write_vision_string_for_display(k, VISION_STRING_MODE_STAFF), sizeof(buf));
   sprinttype(GET_POS(k), position_types, buf2, sizeof(buf2));
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Current Zone: %d, Pos: %s, Fighting: %s",
           k->player_specials->saved.zonenum, buf2,
@@ -1711,7 +1716,7 @@ void do_stat_mobile(struct char_data * ch, struct char_data * k)
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "NPC flags: ^c%s^n\r\n", buf2);
 
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Alert status: ^c%s^n with ^c%d^n ticks cooldown.\r\n",
-           GET_MOBALERT(k) == MALERT_ALARM ? "^rAlarm^n" : (MALERT_ALERT ? "^yAlert^n" : "^gCalm^n"),
+           GET_MOBALERT(k) == MALERT_ALARM ? "^rAlarm^n" : (GET_MOBALERT(k) == MALERT_ALERT ? "^yAlert^n" : "^gCalm^n"),
            GET_MOBALERTTIME(k)
          );
 
@@ -2122,7 +2127,6 @@ void perform_wizload_object(struct char_data *ch, int vnum) {
   obj = read_object(real_num, REAL);
   obj_to_char(obj, ch);
   GET_OBJ_TIMER(obj) = 2;
-  obj->obj_flags.extra_flags.SetBit(ITEM_EXTRA_IMMLOAD); // Why the hell do we have immload AND wizload?
   obj->obj_flags.extra_flags.SetBit(ITEM_EXTRA_WIZLOAD);
   act("$n makes a strange magical gesture.", TRUE, ch, 0, 0, TO_ROOM);
   act("$n has created $p!", TRUE, ch, obj, 0, TO_ROOM);
@@ -2203,6 +2207,46 @@ ACMD(do_wizload)
     perform_wizload_object(ch, numb);
   } else
     send_to_char("That'll have to be either 'obj', 'mob', or 'veh'.\r\n", ch);
+}
+
+ACMD(do_vfind) {
+  struct room_data *room;
+  idnum_t idnum;
+  int idx = 1;
+
+  skip_spaces(&argument);
+
+  if ((idnum = get_player_id(argument)) <= 0) {
+    send_to_char(ch, "Didn't find anyone named '%s'. Syntax: vfind <character name>\r\n", argument);
+    return;
+  }
+
+  for (struct veh_data *veh = veh_list; veh; veh = veh->next_veh) {
+    room = get_veh_in_room(veh);
+
+    if (veh->owner == idnum) {
+      send_to_char(ch, "%2d) %s^n (%ld): %s^n (%ld)",
+                   idx++,
+                   GET_VEH_NAME(veh),
+                   GET_VEH_VNUM(veh),
+                   GET_ROOM_NAME(room),
+                   GET_ROOM_VNUM(room)
+                  );
+
+      if (veh->in_veh) {
+        send_to_char(ch, " inside %s^n (%ld)",
+                     GET_VEH_NAME(veh->in_veh),
+                     GET_VEH_VNUM(veh->in_veh)
+                    );
+      }
+
+      send_to_char("\r\n", ch);
+    }
+  }
+
+  if (idx == 1) {
+    send_to_char(ch, "Found no vehicles belonging to idnum %ld.", idnum);
+  }
 }
 
 ACMD(do_vstat)
@@ -2909,8 +2953,8 @@ ACMD(do_dc)
     return;
   }
 
-  send_to_char(ch, "%s's connection closed.\r\n", GET_NAME(vict));
-  snprintf(buf, sizeof(buf), "%s's connection closed by %s.", GET_NAME(vict),
+  send_to_char(ch, "%s's connection closed.\r\n", GET_CHAR_NAME(vict));
+  snprintf(buf, sizeof(buf), "%s's connection closed by %s.", GET_CHAR_NAME(vict),
           GET_CHAR_NAME(ch));
   mudlog(buf, ch, LOG_WIZLOG, TRUE);
   /* Since we are DCing somone lets remove them from the game as well*/
@@ -4307,6 +4351,7 @@ ACMD(do_set)
                { "cyberdoc", LVL_CONSPIRATOR, PC, BINARY },
                { "hardcore", LVL_PRESIDENT, PC, BINARY }, //80
                { "esshole",  LVL_ADMIN, BOTH,   NUMBER },
+               { "noautosyspoints", LVL_FIXER, PC, BINARY },
                { "\n", 0, BOTH, MISC }
              };
 
@@ -4722,7 +4767,7 @@ ACMD(do_set)
       RANGE(0, 5000);
     else
       RANGE(0, 3000);
-    vict->real_abils.mag = value;
+    GET_REAL_MAG(vict) = value;
     affect_total(vict);
     break;
   case 43:
@@ -4788,6 +4833,12 @@ ACMD(do_set)
     break;
   case 55:
     RANGE(0, 7);
+    // They need a new magic table entry.
+    if (GET_TRADITION(vict) == TRAD_MUNDANE && value != TRAD_MUNDANE) {
+      snprintf(buf, sizeof(buf), "INSERT INTO pfiles_magic (idnum, Totem, TotemSpirit, Aspect) VALUES"\
+                 "('%ld', '%d', '%d', '%d');", GET_IDNUM(vict), GET_TOTEM(vict), GET_TOTEMSPIRIT(vict), value);
+      mysql_wrapper(mysql, buf);
+    }
     GET_TRADITION(vict) = value;
     send_to_char(ch, "%s is now %s %s.\r\n", GET_CHAR_NAME(vict), AN(aspect_names[value]), tradition_names[value]);
     break;
@@ -4917,6 +4968,11 @@ ACMD(do_set)
     snprintf(buf, sizeof(buf),"%s changed %s's esshole from %d to %d.", GET_CHAR_NAME(ch), GET_NAME(vict), GET_ESSHOLE(vict), value);
     GET_ESSHOLE(vict) = value;
     mudlog(buf, ch, LOG_WIZLOG, TRUE );
+    break;
+  case 82: /* no syspoint auto awards */
+    SET_OR_REMOVE(PLR_FLAGS(vict), PLR_NO_AUTO_SYSP_AWARDS);
+    snprintf(buf, sizeof(buf),"%s turned %s's no-auto-sysp-awards flag %s.", GET_CHAR_NAME(ch), GET_NAME(vict), PLR_FLAGGED(vict, PLR_NO_AUTO_SYSP_AWARDS) ? "ON" : "OFF");
+    mudlog(buf, ch, LOG_WIZLOG, TRUE);
     break;
   default:
     snprintf(buf, sizeof(buf), "Can't set that!");
@@ -5886,13 +5942,23 @@ bool restring_with_args(struct char_data *ch, char *argument, bool using_sysp) {
     return FALSE;
   }
 
-  if (GET_OBJ_TYPE(obj) == ITEM_GUN_ACCESSORY || GET_OBJ_TYPE(obj) == ITEM_MOD || GET_OBJ_TYPE(obj) == ITEM_GUN_AMMO) {
-    send_to_char("Sorry, gun attachments, vehicle mods, and ammo containers can't be restrung.\r\n", ch);
+  if (GET_OBJ_TYPE(obj) == ITEM_GUN_ACCESSORY && GET_ACCESSORY_TYPE(obj) != ACCESS_SMARTGOGGLE) {
+    send_to_char("Sorry, gun attachments can't be restrung.\r\n", ch);
+    return FALSE;
+  }
+
+  if (GET_OBJ_TYPE(obj) == ITEM_MOD || GET_OBJ_TYPE(obj) == ITEM_GUN_AMMO) {
+    send_to_char("Sorry, vehicle mods and ammo containers can't be restrung.\r\n", ch);
     return FALSE;
   }
 
   if (GET_OBJ_TYPE(obj) == ITEM_CLIMBING && GET_OBJ_VAL(obj, 1) == CLIMBING_TYPE_WATER_WINGS) {
     send_to_char("No amount of cosmetic changes could hide the garishness of water wings.\r\n", ch);
+    return FALSE;
+  }
+
+  if (GET_OBJ_TYPE(obj) == ITEM_VEHCONTAINER) {
+    send_to_char("Sorry, vehicle containers can't be restrung.\r\n", ch);
     return FALSE;
   }
 
@@ -5912,10 +5978,24 @@ bool restring_with_args(struct char_data *ch, char *argument, bool using_sysp) {
     return FALSE;
   }
 
+  struct obj_data *shopcontainer = NULL;
+  if (GET_OBJ_TYPE(obj) == ITEM_SHOPCONTAINER) {
+    shopcontainer = obj;
+    obj = shopcontainer->contains;
+
+    if (GET_OBJ_VNUM(obj) == OBJ_CUSTOM_NERPS_BIOWARE || GET_OBJ_VNUM(obj) == OBJ_CUSTOM_NERPS_CYBERWARE) {
+      if (GET_LEVEL(ch) < LVL_FIXER) {
+        send_to_char(ch, "Sorry, only a Fixer-grade staff member can restring %s.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
+        return FALSE;
+      }
+    }
+  }
+
   if (using_sysp) {
     if (GET_SYSTEM_POINTS(ch) < SYSP_RESTRING_COST) {
-      send_to_char(ch, "It costs %d system points to restring something, and you only have %d.\r\n",
+      send_to_char(ch, "It costs %d system point%s to restring something, and you only have %d.\r\n",
                    SYSP_RESTRING_COST,
+                   SYSP_RESTRING_COST == 1 ? "" : "s",
                    GET_SYSTEM_POINTS(ch));
       return FALSE;
     }
@@ -5934,12 +6014,23 @@ bool restring_with_args(struct char_data *ch, char *argument, bool using_sysp) {
     GET_KARMA(ch) -= 250;
   }
 
-  snprintf(buf2, sizeof(buf2), "%s restrung '%s' to '%s'", GET_CHAR_NAME(ch), obj->text.name, buf);
+  snprintf(buf2, sizeof(buf2), "%s restrung '%s' (%ld) to '%s'", GET_CHAR_NAME(ch), obj->text.name, GET_OBJ_VNUM(obj), buf);
   mudlog(buf2, ch, LOG_WIZLOG, TRUE);
 
   DELETE_ARRAY_IF_EXTANT(obj->restring);
   obj->restring = str_dup(buf);
   send_to_char(ch, "%s successfully restrung.\r\n", obj->text.name);
+
+  // Repackage it to reflect its restrung status.
+  if (shopcontainer) {
+    extern struct obj_data *shop_package_up_ware(struct obj_data *obj);
+
+    obj_from_obj(obj);
+    obj_to_char(shop_package_up_ware(obj), ch);
+
+    GET_OBJ_EXTRA(shopcontainer).RemoveBit(ITEM_EXTRA_KEPT);
+    extract_obj(shopcontainer);
+  }
 
   return TRUE;
 }
@@ -6285,6 +6376,8 @@ int audit_zone_rooms_(struct char_data *ch, int zone_num, bool verbose) {
   if (verbose)
     send_to_char(ch, "\r\n^WAuditing rooms for zone %d...^n\r\n", zone_table[zone_num].number);
 
+  std::unordered_map<std::string, int> rooms = {};
+
   for (int i = zone_table[zone_num].number * 100; i <= zone_table[zone_num].top; i++) {
     if ((real_rm = real_room(i)) < 0)
       continue;
@@ -6310,6 +6403,13 @@ int audit_zone_rooms_(struct char_data *ch, int zone_num, bool verbose) {
       issues++;
       printed = TRUE;
     }
+
+    if (rooms.find(std::string(GET_ROOM_NAME(room))) != rooms.end()) {
+      strlcat(buf, "  - Room title is not unique within this zone.\r\n", sizeof(buf));
+      issues++;
+      printed = TRUE;
+    }
+    rooms.emplace(std::string(GET_ROOM_NAME(room)), 1);
 
     if (room->matrix > 0) {
       if (real_host(room->matrix) < 1) {
@@ -6527,16 +6627,31 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
       issues++;
     }
 
-    // Flag mobs with no weight or height
+    // Flag mobs with no weight or height.
     if (GET_HEIGHT(mob) == 0 || GET_WEIGHT(mob) == 0.0) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - missing vital statistics (weight %d, height %d)^n.\r\n", GET_HEIGHT(mob), GET_WEIGHT(mob));
       printed = TRUE;
       issues++;
     }
 
-    // Flag mobs with neutral (default) gender
-    if (GET_SEX(mob) == SEX_NEUTRAL) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - neutral (default) gender (is this intentional?).\r\n");
+    // Flag mobs with inappropriate genders.
+    if (GET_RACE(mob) == RACE_ELEMENTAL || GET_RACE(mob) == RACE_SPIRIT || MOB_FLAGGED(mob, MOB_INANIMATE)) {
+      if (GET_SEX(mob) != SEX_NEUTRAL) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - is a spirit/elemental/machine with a gender (is this intentional?).\r\n");
+        printed = TRUE;
+        issues++;
+      }
+    } else {
+      if (GET_SEX(mob) == SEX_NEUTRAL) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - neutral (default) gender (is this intentional?).\r\n");
+        printed = TRUE;
+        issues++;
+      }
+    }
+
+    // Flag emplaced mobs that aren't inanimate.
+    if (MOB_FLAGGED(mob, MOB_EMPLACED) && !MOB_FLAGGED(mob, MOB_INANIMATE)) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - is emplaced, but not inanimate.\r\n");
       printed = TRUE;
       issues++;
     }
@@ -6554,7 +6669,7 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
       printed = TRUE;
       issues++;
     } else {
-      if (ispunct((candidate = get_final_character_from_string(mob->player.physical_text.name))) && candidate != '"' && candidate != '\'') {
+      if (is_invalid_ending_punct((candidate = get_final_character_from_string(mob->player.physical_text.name)))) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - name ending in punctuation (%c)^n.\r\n", candidate);
         printed = TRUE;
         issues++;
@@ -6678,15 +6793,15 @@ int audit_zone_objects_(struct char_data *ch, int zone_num, bool verbose) {
       issues++;
     }
 
-    // Flag objects with high weight
-    if (GET_OBJ_WEIGHT(obj) >= 100.0) {
+    // Flag objects with high weight-- except fountains, which are often given high weights.
+    if (GET_OBJ_TYPE(obj) != ITEM_FOUNTAIN && GET_OBJ_WEIGHT(obj) >= 100.0) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - high weight %0.2f^n.\r\n", GET_OBJ_WEIGHT(obj));
       printed = TRUE;
       issues++;
     }
 
-    // Flag objects that can't be picked up
-    if (!GET_OBJ_WEAR(obj).IsSet(ITEM_WEAR_TAKE)) {
+    // Flag objects that can't be picked up-- except fountains, which are often flagged as such.
+    if (GET_OBJ_TYPE(obj) != ITEM_FOUNTAIN && !GET_OBJ_WEAR(obj).IsSet(ITEM_WEAR_TAKE)) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - cannot be picked up if dropped^n.\r\n");
       printed = TRUE;
       issues++;
@@ -6697,7 +6812,7 @@ int audit_zone_objects_(struct char_data *ch, int zone_num, bool verbose) {
       printed = TRUE;
       issues++;
     } else {
-      if (ispunct((candidate = get_final_character_from_string(obj->text.name)))) {
+      if (is_invalid_ending_punct((candidate = get_final_character_from_string(obj->text.name)))) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - name ending in punctuation (%c)^n.\r\n", candidate);
         printed = TRUE;
         issues++;
@@ -7341,4 +7456,110 @@ ACMD(do_forceget) {
   send_to_char(ch, "Bypassing all restrictions and calculations, you forcibly get %s from %s. Hope you know what you're doing!\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(cont));
   obj_from_obj(obj);
   obj_to_char(obj, ch);
+}
+
+bool is_invalid_ending_punct(char candidate) {
+  // Non-puncts are all valid.
+  if (!ispunct(candidate))
+    return FALSE;
+
+  // All punctuation other than these are invalid.
+  return candidate != '"' && candidate != '\'' && candidate != ')';
+}
+
+#define NERPS_WARE_USAGE_STRING "Syntax: ^WMAKENERPS <BIOWARE|CYBERWARE> <essence/index cost in decimal form like 1.3> <nuyen cost> <VISIBLE|INTERNAL> <name>"
+ACMD(do_makenerps) {
+  struct obj_data *ware;
+  char vis_buf[MAX_INPUT_LENGTH];
+  bool is_visible;
+
+  // syntax: makenerps <bio|cyber> <essencecost|index> <name>
+  skip_spaces(&argument);
+
+  if (!*argument) {
+    send_to_char(NERPS_WARE_USAGE_STRING, ch);
+    return;
+  }
+
+  argument = one_argument(argument, buf);  // BIOWARE or CYBERWARE
+  argument = one_argument(argument, buf2); // a float for the essence / index cost
+  argument = one_argument(argument, buf3); // an integer of nuyen cost
+  argument = one_argument(argument, vis_buf); // an integer of nuyen cost
+  // argument contains the restring
+
+  if (!*argument) {
+    // Failed to provide a restring or any of the arguments leading up to it.
+    send_to_char(NERPS_WARE_USAGE_STRING, ch);
+    return;
+  }
+
+  // Parse out our float.
+  double essence_cost = atof(buf2);
+  if (essence_cost <= 0) {
+    send_to_char(ch, "%f is not a valid essence cost. Please reference the book value.\r\n%s", essence_cost, NERPS_WARE_USAGE_STRING);
+    return;
+  }
+
+  int nuyen_cost = atoi(buf3);
+  if (nuyen_cost <= 0) {
+    send_to_char(ch, "%d is not a valid nuyen cost. Please reference the book value.\r\n%s", nuyen_cost, NERPS_WARE_USAGE_STRING);
+    return;
+  }
+
+  if (is_abbrev(vis_buf, "visible") || is_abbrev(vis_buf, "external")) {
+    is_visible = TRUE;
+  } else if (is_abbrev(vis_buf, "internal")) {
+    is_visible = FALSE;
+  } else {
+    send_to_char(ch, "You must choose either VISIBLE or INTERNAL, not '%s'.\r\n%s", buf, NERPS_WARE_USAGE_STRING);
+    return;
+  }
+
+  if (is_abbrev(buf, "cyberware")) {
+    ware = read_object(OBJ_CUSTOM_NERPS_CYBERWARE, VIRTUAL);
+    GET_CYBERWARE_ESSENCE_COST(ware) = (int) (essence_cost * 100);
+
+    if (is_visible)
+      SET_BIT(GET_CYBERWARE_FLAGS(ware), NERPS_WARE_VISIBLE);
+  }
+  else if (is_abbrev(buf, "bioware")) {
+    ware = read_object(OBJ_CUSTOM_NERPS_BIOWARE, VIRTUAL);
+    GET_BIOWARE_ESSENCE_COST(ware) = (int) (essence_cost * 100);
+
+    if (is_visible)
+      SET_BIT(GET_BIOWARE_FLAGS(ware), NERPS_WARE_VISIBLE);
+  }
+  else {
+    send_to_char(ch, "You must choose either CYBERWARE or BIOWARE, not '%s'.\r\n%s", buf, NERPS_WARE_USAGE_STRING);
+    return;
+  }
+
+  // Set the restring and cost.
+  ware->restring = str_dup(argument);
+  GET_OBJ_COST(ware) = nuyen_cost;
+
+  // Flag it for review.
+  GET_OBJ_EXTRA(ware).SetBit(ITEM_EXTRA_WIZLOAD);
+  GET_OBJ_EXTRA(ware).SetBit(ITEM_EXTRA_NERPS);
+  snprintf(buf, sizeof(buf), "%s made new custom %s: '%s^g' (%0.2f%c, %d nuyen)",
+           GET_CHAR_NAME(ch),
+           GET_OBJ_TYPE(ware) == ITEM_CYBERWARE ? "cyberware" : "bioware",
+           GET_OBJ_NAME(ware),
+           essence_cost,
+           GET_OBJ_TYPE(ware) == ITEM_CYBERWARE ? 'e' : 'i',
+           nuyen_cost
+          );
+  mudlog(buf, ch, LOG_CHEATLOG, TRUE);
+
+  // Package it and hand it over.
+  struct obj_data *container = shop_package_up_ware(ware);
+  GET_OBJ_EXTRA(container).RemoveBit(ITEM_EXTRA_KEPT);
+  obj_to_char(container, ch);
+
+  send_to_char(ch, "Done, you are now carrying %s^n (%0.2f %s, %d nuyen).",
+               GET_OBJ_NAME(container),
+               essence_cost,
+               GET_OBJ_TYPE(ware) == ITEM_CYBERWARE ? "essence" : "index",
+               nuyen_cost
+              );
 }

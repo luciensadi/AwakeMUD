@@ -26,8 +26,8 @@ CREATE TABLE `pfiles` (
   `Title` varchar(48) default '^y(Newbie)^n',
   `Pretitle` varchar(48) default '',
   `Whotitle` varchar(10),
-  `Prompt` varchar(1000) default '<@pP @mM> ',
-  `MatrixPrompt` varchar(1000) default '<@pP @mM> ',
+  `Prompt` varchar(2001) default '<@pP @mM> ',
+  `MatrixPrompt` varchar(2001) default '<@pP @mM> ',
   `Host` varchar(72),
   `Bod` tinyint(2) default '0',
   `Qui` tinyint(2) default '0',
@@ -120,7 +120,7 @@ CREATE TABLE `pfiles_magic` (
   `Aspect` tinyint(2) default '0',
   `UsedGrade` tinyint(2) unsigned default '0',
   `ExtraPower` tinyint(2) unsigned default '0',
-  `PowerPoints` smallint(3) unsigned default '600',
+  `PowerPoints` smallint(4) default '600',
   `Sig` tinyint(2) unsigned default '0',
   `Masking` tinyint(1) unsigned default '0',
   PRIMARY KEY (`idnum`)
@@ -201,6 +201,7 @@ CREATE TABLE `pfiles_bioware` (
   `Value9` int(2) default '0',
   `Value10` int(2) default '0',
   `Value11` int(2) default '0',
+  `Restring` varchar(256),
   KEY(`idnum`)
 );
 

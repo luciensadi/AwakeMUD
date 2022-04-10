@@ -93,6 +93,10 @@
 #define ASPECT_ELEMAIR    5
 #define ASPECT_ELEMFIRE    6
 #define ASPECT_ELEMWATER  7
+#define ASPECT_EARTHMAGE  8
+#define ASPECT_AIRMAGE  9
+#define ASPECT_FIREMAGE  10
+#define ASPECT_WATERMAGE  11
 
 
 /* totems */
@@ -306,7 +310,9 @@ enum {
 #define PLR_CYBERDOC                        41 /* Player may act as a cyberdoc. */
 #define PLR_PAID_FOR_CLOSECOMBAT            42
 #define PLR_PAID_FOR_KIPUP                  43
-#define PLR_MAX                             44
+#define PLR_PAID_FOR_ROLLS                  44
+#define PLR_NO_AUTO_SYSP_AWARDS             45 /* Player abuses typo etc for automatic sysp awards. */
+#define PLR_MAX                             46
 
 
 
@@ -413,7 +419,9 @@ enum {
 #define PRF_ANONYMOUS_ON_WHERE           59
 #define PRF_IGNORELOG                    60
 #define PRF_SEE_TIPS                     61
-#define PRF_MAX                          62
+#define PRF_AUTOSTAND                    62
+#define PRF_AUTOKIPUP                    63
+#define PRF_MAX                          64
 
 /* log watch */
 
@@ -512,7 +520,9 @@ enum {
 #define AFF_CLOSECOMBAT  50
 #define AFF_SMART_ENOUGH_TO_TOGGLE_CLOSECOMBAT  51
 #define AFF_LEVITATE  52
-#define AFF_MAX       53
+#define AFF_FLAME_AURA  53
+#define AFF_VOICE_MODULATOR  54
+#define AFF_MAX       55
 // TODO: If you add another long-state action like building, designing, etc:
 // - Add it to the BR_TASK_AFF_FLAGS section below, which affects bioware_check and the B/R flag in the wholist
 // - Add it to the IS_WORKING and STOP_WORKING macros in utils.h
@@ -580,11 +590,14 @@ enum {
 #define ROOM_CORPSE_SAVE_HACK           33
 #define ROOM_STERILE                    34 // Gives a bonus to medical actions.
 #define ROOM_TOO_CRAMPED_FOR_CHARACTERS 35 // Prevents you from entering if you're not a projection or tiny drone.
-#define ROOM_MAX                        36
+#define ROOM_RADIATION                  36 // You take radiation damage while you're here, scaled by Rating.
+#define ROOM_MAX                        37
 
-#define NORMAL    0
-#define LOWLIGHT  1
-#define THERMOGRAPHIC  2
+#define VISION_NORMAL         0
+#define VISION_LOWLIGHT       1
+#define VISION_THERMOGRAPHIC  2
+#define VISION_ULTRASONIC     3
+#define NUM_VISION_TYPES      4
 
 #define LIGHT_NORMAL    0
 #define LIGHT_NORMALNOLIT  1
@@ -700,7 +713,8 @@ enum {
 #define SPELL_NIGHTVISION    66
 #define SPELL_INFRAVISION    67
 #define SPELL_LEVITATE    68
-#define MAX_SPELLS    69
+#define SPELL_FLAME_AURA    69
+#define MAX_SPELLS    70
 
 #define SPELL_DESIGN_FAILED_CODE -3
 
@@ -1221,7 +1235,8 @@ enum {
 #define AMMO_EX         3
 #define AMMO_FLECHETTE  4
 #define AMMO_GEL        5
-#define NUM_AMMOTYPES   6
+#define AMMO_HARMLESS   6
+#define NUM_AMMOTYPES   7
 
 /* material type for item */
 #define ITEM_NONE                  0
@@ -1374,12 +1389,15 @@ enum {
 #define TORSO_MOD_ARMOR_MOD3    (1 << 4)
 #define NUM_TORSO_MODS    5
 
+#define NERPS_WARE_VISIBLE   (1 << 0)
+#define NUM_NERPS_MODS    1
+
 #define FILTER_AIR  0
 #define FILTER_BLOOD  1
 #define FILTER_INGESTED  2
 
-#define CYBERWEAPON_RETRACTABLE  1
-#define CYBERWEAPON_IMPROVED  2
+#define CYBERWEAPON_RETRACTABLE  0
+#define CYBERWEAPON_IMPROVED  1
 
 #define GRADE_STANDARD  0
 #define GRADE_ALPHA  1
@@ -1436,7 +1454,9 @@ enum {
 #define CYB_ARMS             47
 #define CYB_LEGS             48
 #define CYB_TACTICALCOMPUTER 49
-#define NUM_CYBER            50
+#define CYB_CUSTOM_NERPS     50
+#define CYB_CRD              51
+#define NUM_CYBER            52
 
 #define BIO_ADRENALPUMP    0
 #define BIO_CATSEYES    1
@@ -1465,7 +1485,8 @@ enum {
 #define BIO_SYNAPTICACCELERATOR  23
 #define BIO_THERMOSENSEORGAN  24
 #define BIO_TRAUMADAMPER  25
-#define NUM_BIOWARE    26
+#define BIO_CUSTOM_NERPS  26
+#define NUM_BIOWARE       27
 
 #define BIOWARE_STANDARD 0
 #define BIOWARE_CULTURED 1
@@ -2189,6 +2210,11 @@ enum {
 #define NUM_COMBAT_MODIFIERS             14
 // End new combat modifiers.
 
+#define JURISDICTION_SEATTLE   0
+#define JURISDICTION_PORTLAND  1
+#define JURISDICTION_CARIBBEAN 2
+#define JURISDICTION_OCEAN     3
+
 // Locations, to remove the magic numbers from the code.
 #define RM_CHARGEN_START_ROOM        60500
 #define RM_NEWBIE_LOADROOM           60565 // The Neophyte Hotel.
@@ -2372,7 +2398,9 @@ enum {
 #define OBJ_NEOPHYTE_SUBSIDY_CARD          119
 #define OBJ_GRAFFITI                       120
 #define OBJ_BLANK_AMMOBOX                  121
-#define TOP_OF_TEMPLATE_ITEMS              121
+#define OBJ_CUSTOM_NERPS_CYBERWARE         122
+#define OBJ_CUSTOM_NERPS_BIOWARE           123
+#define TOP_OF_TEMPLATE_ITEMS              123
 
 #define OBJ_BLANK_MAGAZINE                 127
 

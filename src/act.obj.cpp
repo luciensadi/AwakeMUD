@@ -248,25 +248,45 @@ void perform_put_cyberdeck(struct char_data * ch, struct obj_data * obj,
 {
   if (GET_OBJ_TYPE(cont) == ITEM_DECK_ACCESSORY)
   {
-    if (GET_OBJ_VAL(cont, 0) != 2)
+    if (GET_DECK_ACCESSORY_TYPE(cont) != TYPE_COMPUTER) {
       send_to_char(ch, "You can't install anything into %s.\r\n", GET_OBJ_NAME(cont));
-    else if (cont->carried_by)
-      send_to_char(ch, "It doesn't seem to be switched on.\r\n");
-    else if (GET_OBJ_TYPE(obj) != ITEM_DESIGN && GET_OBJ_TYPE(obj) != ITEM_PROGRAM && !(GET_OBJ_TYPE(obj) == ITEM_PROGRAM && GET_OBJ_TIMER(obj)))
-      send_to_char(ch, "You can't install %s onto a personal computer.\r\n", GET_OBJ_NAME(obj));
-    else if ((GET_OBJ_TYPE(obj) == ITEM_PROGRAM && (GET_OBJ_VAL(obj, 2) > GET_OBJ_VAL(cont, 2) - GET_OBJ_VAL(cont, 3))) ||
-             (GET_OBJ_TYPE(obj) == ITEM_DESIGN && (GET_OBJ_VAL(obj, 6) + (GET_OBJ_VAL(obj, 6) / 10) > GET_OBJ_VAL(cont, 2) - GET_OBJ_VAL(cont, 3))))
-      send_to_char(ch, "It doesn't seem to fit.\r\n");
-    else {
-      if (GET_OBJ_TYPE(obj) == ITEM_PROGRAM)
-        GET_OBJ_VAL(cont, 3) += GET_OBJ_VAL(obj, 2);
-      else
-        GET_OBJ_VAL(cont, 3) += GET_OBJ_VAL(obj, 6) + (GET_OBJ_VAL(obj, 6) / 10);
-      obj_from_char(obj);
-      obj_to_obj(obj, cont);
-      send_to_char(ch, "You install %s onto %s.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(cont));
-      act("$n installs $p on $P.", TRUE, ch, obj, cont, TO_ROOM);
+      return;
     }
+
+    if (cont->carried_by) {
+      send_to_char(ch, "%s won't work while carried, you'll have to drop it.\r\n", capitalize(GET_OBJ_NAME(cont)));
+      return;
+    }
+
+    if (GET_OBJ_TYPE(obj) != ITEM_DESIGN && GET_OBJ_TYPE(obj) != ITEM_PROGRAM && !(GET_OBJ_TYPE(obj) == ITEM_PROGRAM && GET_OBJ_TIMER(obj))) {
+      send_to_char(ch, "You can't install %s onto a personal computer; you can only install uncooked programs and designs.\r\n", GET_OBJ_NAME(obj));
+      return;
+    }
+
+    int space_required = 0;
+    if (GET_OBJ_TYPE(obj) == ITEM_PROGRAM) {
+      space_required = GET_PROGRAM_SIZE(obj);
+    } else {
+      space_required = (int) GET_DESIGN_SIZE(obj) * 1.1;
+    }
+    int free_space = GET_DECK_ACCESSORY_COMPUTER_MAX_MEMORY(cont) - GET_DECK_ACCESSORY_COMPUTER_USED_MEMORY(cont);
+
+    if (free_space < space_required) {
+      send_to_char(ch, "%s doesn't seem to fit on %s-- it takes %d megapulses, but there are only %d available.\r\n",
+                   capitalize(GET_OBJ_NAME(obj)),
+                   decapitalize_a_an(GET_OBJ_NAME(cont)),
+                   space_required,
+                   free_space
+                  );
+      return;
+    }
+
+    GET_DECK_ACCESSORY_COMPUTER_USED_MEMORY(cont) += space_required;
+
+    obj_from_char(obj);
+    obj_to_obj(obj, cont);
+    send_to_char(ch, "You install %s onto %s.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(cont));
+    act("$n installs $p on $P.", TRUE, ch, obj, cont, TO_ROOM);
     return;
   } else if (GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY)
   {
@@ -578,7 +598,7 @@ ACMD(do_put)
     }
 
     if ((obj == cont) && !cyberdeck) {
-      send_to_char("You attempt to fold it into itself, but fail.\r\n", ch);
+      send_to_char(ch, "You attempt to fold %s into itself, but fail.\r\n", GET_OBJ_NAME(obj));
       return;
     }
 
@@ -3615,8 +3635,10 @@ ACMD(do_type)
 
   if (i < 100000 || i > 999999)
     send_to_char("Code must be 6-digits!\r\n", ch);
-  else if (i != GET_OBJ_VAL(obj, 5))
+  else if (i != GET_OBJ_VAL(obj, 5)) {
     send_to_char("The display flashes red and beeps annoyingly.\r\n", ch);
+    WAIT_STATE(ch, 2 RL_SEC);
+  }
   else {
     send_to_char("The display flashes green.\r\n", ch);
     GET_OBJ_VAL(obj, 3) = 0;

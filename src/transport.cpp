@@ -35,8 +35,12 @@ SPECIAL(elevator_spec);
 extern int calculate_distance_between_rooms(vnum_t start_room_vnum, vnum_t target_room_vnum, bool ignore_roads);
 extern void perform_fall(struct char_data *ch);
 
+extern int find_first_step(vnum_t src, vnum_t target, bool ignore_roads);
+
 ACMD_DECLARE(do_echo);
 struct dest_data *get_dest_data_list_for_zone(int zone_num);
+
+bool cab_jurisdiction_matches_destination(vnum_t cab_vnum, vnum_t dest_vnum);
 
 // ----------------------------------------------------------------------------
 
@@ -128,6 +132,7 @@ struct dest_data seattle_taxi_destinations[] =
     { "junkyard", "",  "The Tacoma Junkyard", 2070, TAXI_DEST_TYPE_AREA_OF_TOWN, TRUE },
     { "neophyte", "guild",  "The Neophyte Guild", 32679, TAXI_DEST_TYPE_OTHER, TRUE },
     { "zoo", "", "Seattle Municipal Zoo", 32569, TAXI_DEST_TYPE_OTHER, TRUE },
+    { "bicson", "", "Bicson Biomedical", 39285, TAXI_DEST_TYPE_HOSPITALS, TRUE },
 #ifdef USE_PRIVATE_CE_WORLD
     { "slitch", "pit", "The Slitch Pit", 32660, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
     { "planetary", "", "Planetary Corporation", 72503, TAXI_DEST_TYPE_CORPORATE_PARK, FALSE },
@@ -136,6 +141,7 @@ struct dest_data seattle_taxi_destinations[] =
     { "glenn", "quiet", "Quiet Glenn Apartments", 32713, TAXI_DEST_TYPE_ACCOMMODATIONS, TRUE },
     { "triple", "inn", "Triple Tree Inn", 12401, TAXI_DEST_TYPE_ACCOMMODATIONS, TRUE },
     { "rokhalla", "hooligans", "Rokhalla", 32759, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
+    { "impulse", "", "Impulse Garage Complex", 25310, TAXI_DEST_TYPE_ACCOMMODATIONS, TRUE },
 #endif
     { "\n", "", "", 0, 0, 0 } // this MUST be last
   };
@@ -283,7 +289,7 @@ SPECIAL(taxi_sign) {
   }
 
   // Set up our default string.
-  strncpy(buf, "The keyword for each location is listed after the location name.  ^WSAY^n the keyword to the driver, and for a small fee, he will drive you to your destination.\r\n", sizeof(buf) - 1);
+  strncpy(buf, "The keyword for each location is listed after the location name.  ^WSAY^n the keyword to the driver, and for a small fee, he will drive you to your destination.\r\nYou can also ^WSAY^n a set of GridGuide coordinates, like ^WSAY -65322, 32761^n.\r\n", sizeof(buf) - 1);
   if (!PRF_FLAGGED(ch, PRF_SCREENREADER))
     strlcat(buf, "-------------------------------------------------\r\n", sizeof(buf));
 
@@ -827,24 +833,46 @@ SPECIAL(taxi)
     // Otherwise, process the incoming command.
     switch (GET_ACTIVE(driver)) {
       case ACT_REPLY_DEST:
-        if (destination_list[GET_SPARE2(driver)].vnum == RM_NERPCORPOLIS_LOBBY)
-          do_say(ch, "The NERPcorpolis?  Sure, that ride is free.  Want to go there?", 0, 0);
-        else {
+        // Are we in gridguide mode?
+        if (GET_SPARE2(driver) < 0) {
           if (destination_list == portland_taxi_destinations)
             snprintf(say, sizeof(say), "%s?  Sure, that will be %d nuyen.",
-                     portland_taxi_destinations[GET_SPARE2(driver)].str, (int)GET_SPARE1(driver));
+                     get_string_after_color_code_removal(GET_ROOM_NAME(&world[real_room(-GET_SPARE2(driver))]), ch), (int)GET_SPARE1(driver));
           else if (destination_list == caribbean_taxi_destinations)
             snprintf(say, sizeof(say), "%s?  Yeah, sure...it'll cost ya %d nuyen, whaddya say?",
-                     caribbean_taxi_destinations[GET_SPARE2(driver)].str, (int)GET_SPARE1(driver));
+                     get_string_after_color_code_removal(GET_ROOM_NAME(&world[real_room(-GET_SPARE2(driver))]), ch), (int)GET_SPARE1(driver));
           else
             snprintf(say, sizeof(say), "%s?  Yeah, sure...it'll cost ya %d nuyen, whaddya say?",
-                    seattle_taxi_destinations[GET_SPARE2(driver)].str, (int)GET_SPARE1(driver));
+                     get_string_after_color_code_removal(GET_ROOM_NAME(&world[real_room(-GET_SPARE2(driver))]), ch), (int)GET_SPARE1(driver));
+
           do_say(driver, say, 0, 0);
           if (GET_EXTRA(driver) == 1) {
             do_say(driver, "But seeing as you're new around here, I'll waive my usual fee, okay?", 0, 0);
             GET_SPARE1(driver) = 0;
           }
         }
+        // Standard dest mode.
+        else {
+          if (destination_list[GET_SPARE2(driver)].vnum == RM_NERPCORPOLIS_LOBBY)
+            do_say(ch, "The NERPcorpolis?  Sure, that ride is free.  Want to go there?", 0, 0);
+          else {
+            if (destination_list == portland_taxi_destinations)
+              snprintf(say, sizeof(say), "%s?  Sure, that will be %d nuyen.",
+                       portland_taxi_destinations[GET_SPARE2(driver)].str, (int)GET_SPARE1(driver));
+            else if (destination_list == caribbean_taxi_destinations)
+              snprintf(say, sizeof(say), "%s?  Yeah, sure...it'll cost ya %d nuyen, whaddya say?",
+                       caribbean_taxi_destinations[GET_SPARE2(driver)].str, (int)GET_SPARE1(driver));
+            else
+              snprintf(say, sizeof(say), "%s?  Yeah, sure...it'll cost ya %d nuyen, whaddya say?",
+                      seattle_taxi_destinations[GET_SPARE2(driver)].str, (int)GET_SPARE1(driver));
+            do_say(driver, say, 0, 0);
+            if (GET_EXTRA(driver) == 1) {
+              do_say(driver, "But seeing as you're new around here, I'll waive my usual fee, okay?", 0, 0);
+              GET_SPARE1(driver) = 0;
+            }
+          }
+        }
+
         GET_EXTRA(driver) = 0;
         GET_ACTIVE(driver) = ACT_AWAIT_YESNO;
         break;
@@ -972,16 +1000,74 @@ SPECIAL(taxi)
           comm = CMD_TAXI_NO;
         }
       } else {
-        do_say(ch, argument, 0, 0);
-        if (destination_list == portland_taxi_destinations) {
-          snprintf(buf2, sizeof(buf2), " Sorry chummer, rules are rules. You need to tell me something from the sign.");
-        } else {
-          snprintf(buf2, sizeof(buf2), " Hey chummer, rules is rules. You gotta tell me something off of that sign there.");
+        // The destination was not on the list. Check for gridguide coordinates.
+        char x_buf[MAX_INPUT_LENGTH + 1], y_buf[MAX_INPUT_LENGTH + 1];
+        two_arguments(argument, x_buf, y_buf);
+        long x_coord = atol(x_buf), y_coord = atol(y_buf);
+
+        // Looks like we got gridguide coordinates.
+        if (x_coord && y_coord) {
+          // Check to see if they're valid.
+          vnum_t dest_vnum = vnum_from_gridguide_coordinates(x_coord, y_coord, ch);
+
+          // Invalid coordinates.
+          if (dest_vnum <= 0) {
+            strncpy(buf2, " punches a few buttons on the meter to calculate the fare, but it immediately flashes red.", sizeof(buf2));
+            do_echo(driver, buf2, 0, SCMD_EMOTE);
+            snprintf(buf2, sizeof(buf2), " Oi, chummer, those aren't valid coordinates.");
+            do_say(driver, buf2, 0, 0);
+            return TRUE;
+          }
+
+          // Cross-jurisdiction (Seattle to Caribbean, etc).
+          if (!cab_jurisdiction_matches_destination(GET_ROOM_VNUM(ch->in_room), dest_vnum)) {
+            strncpy(buf2, " punches a few buttons on the meter to calculate the fare, but it immediately flashes yellow.", sizeof(buf2));
+            do_echo(driver, buf2, 0, SCMD_EMOTE);
+            snprintf(buf2, sizeof(buf2), " How exactly am I supposed to get there?");
+            do_say(driver, buf2, 0, 0);
+            return TRUE;
+          }
+
+          // Grid doesn't extend there in an unbroken path? No good.
+          // 1. Find the room the taxi is attached to.
+          temp_room = NULL;
+          for (int dir = NORTH; dir < UP; dir++)
+            if (ch->in_room->dir_option[dir]) {
+              temp_room = ch->in_room->dir_option[dir]->to_room;
+              break;
+            }
+
+          // 2. Pathfind there. Fail if we can't find a path.
+          if (temp_room && find_first_step(real_room(temp_room->number), real_room(dest_vnum), FALSE) < 0) {
+            strncpy(buf2, " punches a few buttons on the meter to calculate the fare, but it flashes red after a moment.", sizeof(buf2));
+            do_echo(driver, buf2, 0, SCMD_EMOTE);
+            snprintf(buf2, sizeof(buf2), " The GridGuide network doesn't connect through to there.");
+            do_say(driver, buf2, 0, 0);
+            return TRUE;
+          }
+
+          // Valid location.
+          comm = CMD_TAXI_DEST_GRIDGUIDE;
+          found = TRUE;
+          dest = -dest_vnum;
+          do_say(ch, argument, 0, 0);
+          strncpy(buf2, " punches a few buttons on the meter, calculating the fare.", sizeof(buf2));
+          do_echo(driver, buf2, 0, SCMD_EMOTE);
+          forget(driver, ch);
         }
-        do_say(driver, buf2, 0, 0);
-        return TRUE;
+
+        // We didn't get a pair of coordinates, either. Bail out.
+        else {
+          do_say(ch, argument, 0, 0);
+          if (destination_list == portland_taxi_destinations) {
+            snprintf(buf2, sizeof(buf2), " Sorry chummer, rules are rules. You need to tell me something from the sign, or give me a pair of GridGuide coordinates.");
+          } else {
+            snprintf(buf2, sizeof(buf2), " Hey chummer, rules is rules. You gotta tell me something off of that sign there, or give me a pair of GridGuide coordinates.");
+          }
+          do_say(driver, buf2, 0, 0);
+          return TRUE;
+        }
       }
-      do_say(ch, argument, 0, 0);
     }
   } else if ((CMD_IS("nod") || CMD_IS("agree")) && CAN_SEE(driver, ch)) {
     comm = CMD_TAXI_YES;
@@ -993,7 +1079,7 @@ SPECIAL(taxi)
     return FALSE;
 
   /* I would like to extend a personal and heartfelt 'fuck you' to whomever thought that using the anonymously-named 'i' as both an rnum and a direction was a good idea. - LS */
-  if (comm == CMD_TAXI_DEST && !memory(driver, ch) && GET_ACTIVE(driver) == ACT_AWAIT_CMD) {
+  if ((comm == CMD_TAXI_DEST || comm == CMD_TAXI_DEST_GRIDGUIDE) && !memory(driver, ch) && GET_ACTIVE(driver) == ACT_AWAIT_CMD) {
     if (real_room(GET_LASTROOM(ch)) <= -1) {
       GET_SPARE1(driver) = MAX_CAB_FARE;
     } else {
@@ -1004,7 +1090,11 @@ SPECIAL(taxi)
           break;
         }
 
-      int distance_between_rooms = calculate_distance_between_rooms(temp_room->number, destination_list[dest].vnum, FALSE);
+      int distance_between_rooms;
+      if (comm == CMD_TAXI_DEST)
+        distance_between_rooms = calculate_distance_between_rooms(temp_room->number, destination_list[dest].vnum, FALSE);
+      else
+        distance_between_rooms = calculate_distance_between_rooms(temp_room->number, -dest, FALSE);
 
       if (distance_between_rooms < 0)
         GET_SPARE1(driver) = MAX_CAB_FARE;
@@ -1013,7 +1103,7 @@ SPECIAL(taxi)
     }
 
     // Rides to the NERPcorpolis are free.
-    if (destination_list[dest].vnum == RM_NERPCORPOLIS_LOBBY)
+    if (dest > 0 && destination_list[dest].vnum == RM_NERPCORPOLIS_LOBBY)
       GET_SPARE1(driver) = 0;
 
     GET_SPARE2(driver) = dest;
@@ -1030,8 +1120,18 @@ SPECIAL(taxi)
     }
     if (!IS_SENATOR(ch))
       lose_nuyen(ch, GET_SPARE1(driver), NUYEN_OUTFLOW_TAXIS);
-    GET_SPARE1(driver) = (int)(GET_SPARE1(driver) / 50);
-    GET_SPARE2(driver) = destination_list[GET_SPARE2(driver)].vnum;
+
+    // Set the delay, staff get no delay.
+    if (access_level(ch, LVL_BUILDER)) {
+      send_to_char("Your staff status convinces the driver to go as fast as possible.\r\n", ch);
+      GET_SPARE1(driver) = 1;
+    } else
+      GET_SPARE1(driver) = (int)(GET_SPARE1(driver) / 50);
+    // Are we in gridguide mode? If so, this holds the vnum in negative form.
+    if (GET_SPARE2(driver) < 0)
+      GET_SPARE2(driver) *= -1;
+    else
+      GET_SPARE2(driver) = destination_list[GET_SPARE2(driver)].vnum;
     GET_ACTIVE(driver) = ACT_DRIVING;
 
     raw_taxi_leaves(real_room(GET_ROOM_VNUM(ch->in_room)));
@@ -1978,19 +2078,19 @@ void process_seatac_monorail(void)
     close_doors(carnum, seatac[ind].to, roomnum, seatac[ind].from);
     break;
   case 3:
-    send_to_room("A voice announces, \"Next stop: Knight Center\"\r\n", &world[carnum]);
+    send_to_room("A voice announces, \"Next stop: Knight Center.\"\r\n", &world[carnum]);
     break;
   case 7:
-    send_to_room("A voice announces, \"Next stop: Auburn\"\r\n", &world[carnum]);
+    send_to_room("A voice announces, \"Next stop: Auburn.\"\r\n", &world[carnum]);
     break;
   case 11:
-    send_to_room("A voice announces, \"Next stop: Seattle. Change here for Downtown Shuttle\"\r\n", &world[carnum]);
+    send_to_room("A voice announces, \"Next stop: Seattle. Change here for Downtown Shuttle.\"\r\n", &world[carnum]);
     break;
   case 15:
-    send_to_room("A voice announces, \"Next stop: Auburn\"\r\n", &world[carnum]);
+    send_to_room("A voice announces, \"Next stop: Auburn.\"\r\n", &world[carnum]);
     break;
   case 19:
-    send_to_room("A voice announces, \"Next stop: Knight Center\"\r\n", &world[carnum]);
+    send_to_room("A voice announces, \"Next stop: Knight Center.\"\r\n", &world[carnum]);
     break;
   case 23:
     send_to_room("A voice announces, \"Next stop: West Tacoma.\"\r\n", &world[carnum]);
@@ -2138,13 +2238,13 @@ void process_hellhound_bus(void)
     close_busdoor(bus, hellhound[ind].to, stop, hellhound[ind].from);
     break;
   case 23:
-    send_to_room("The driver shouts from the front, \"Next stop: Portland\"\r\n", &world[bus]);
+    send_to_room("The driver shouts from the front, \"Next stop: Portland.\"\r\n", &world[bus]);
     break;
   case 26:
     send_to_room("The bus pulls into the garage, and slowly moves to the platform.\r\n", &world[stop]);
     break;
   case 49:
-    send_to_room("The driver shouts from the front, \"Next stop: Seattle\".\r\n", &world[bus]);
+    send_to_room("The driver shouts from the front, \"Next stop: Seattle.\"\r\n", &world[bus]);
     break;
   }
   where++;
@@ -2256,7 +2356,7 @@ void process_lightrail_train(void)
   switch (where) {
     //Downtown Stop Stuff
   case 39:
-    send_to_room("An LCD Panel Flashes: \"Next Stop: Downtown Portland\".\r\n", &world[train]);
+    send_to_room("An LCD Panel Flashes: \"Next Stop: Downtown Portland.\"\r\n", &world[train]);
     break;
   case 0:
     send_to_room("The lightrail emits a loud grind as it brakes into the station.\r\n", &world[stop]);
@@ -2270,7 +2370,7 @@ void process_lightrail_train(void)
     break;
     //60th Stop Stuff (1)
   case 9:
-    send_to_room("An LCD Panel Flashes: \"Next Stop: 60th Street\".\r\n", &world[train]);
+    send_to_room("An LCD Panel Flashes: \"Next Stop: 60th Street.\"\r\n", &world[train]);
     break;
   case 10:
     send_to_room("The lightrail emits a loud grind as it brakes into the station.\r\n", &world[stop]);
@@ -2284,7 +2384,7 @@ void process_lightrail_train(void)
     break;
     //Gresham Stop Stuff
   case 19:
-    send_to_room("An LCD Panel Flashes: \"Next Stop: Gresham\".\r\n", &world[train]);
+    send_to_room("An LCD Panel Flashes: \"Next Stop: Gresham.\"\r\n", &world[train]);
     break;
   case 20:
     send_to_room("The lightrail emits a loud grind as it brakes into the station.\r\n", &world[stop]);
@@ -2298,7 +2398,7 @@ void process_lightrail_train(void)
     break;
     //To60th
   case 29:
-    send_to_room("An LCD Panel Flashes: \"Next Stop: 60th Street\".\r\n", &world[train]);
+    send_to_room("An LCD Panel Flashes: \"Next Stop: 60th Street.\"\r\n", &world[train]);
     break;
   case 30:
     send_to_room("The lightrail emits a loud grind as it brakes into the station.\r\n", &world[stop]);
@@ -2583,4 +2683,29 @@ bool room_is_a_taxicab(vnum_t vnum) {
   return ((vnum >= FIRST_SEATTLE_CAB && vnum <= LAST_SEATTLE_CAB)
           || (vnum >= FIRST_PORTLAND_CAB && vnum <= LAST_PORTLAND_CAB)
           || (vnum >= FIRST_CARIBBEAN_CAB && vnum <= LAST_CARIBBEAN_CAB));
+}
+
+bool cab_jurisdiction_matches_destination(vnum_t cab_vnum, vnum_t dest_vnum) {
+  int cab_jurisdiction;
+
+  if (cab_vnum >= FIRST_SEATTLE_CAB && cab_vnum <= LAST_SEATTLE_CAB) {
+    cab_jurisdiction = JURISDICTION_SEATTLE;
+  }
+
+  else if (cab_vnum >= FIRST_PORTLAND_CAB && cab_vnum <= LAST_PORTLAND_CAB) {
+    cab_jurisdiction = JURISDICTION_PORTLAND;
+  }
+
+  else if (cab_vnum >= FIRST_CARIBBEAN_CAB && cab_vnum <= LAST_CARIBBEAN_CAB) {
+    cab_jurisdiction = JURISDICTION_CARIBBEAN;
+  }
+
+  else {
+    mudlog("SYSERR: Unrecognized cab vnum in cab_jurisdiction_matches_destination()! Update the function.", NULL, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+
+  int dest_zone_idx = get_zone_index_number_from_vnum(dest_vnum);
+
+  return cab_jurisdiction == zone_table[dest_zone_idx].jurisdiction;
 }

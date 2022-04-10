@@ -85,11 +85,14 @@ extern SPECIAL(marksmanship_second);
 extern SPECIAL(marksmanship_third);
 extern SPECIAL(marksmanship_fourth);
 extern SPECIAL(marksmanship_master);
+extern SPECIAL(bank);
 extern WSPEC(monowhip);
 
 extern bool trainable_attribute_is_maximized(struct char_data *ch, int attribute);
 extern float get_bulletpants_weight(struct char_data *ch);
 extern bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype, bool include_func_protections);
+extern const char *get_level_wholist_color(int level);
+extern bool cyber_is_retractable(struct obj_data *cyber);
 
 #ifdef USE_PRIVATE_CE_WORLD
   extern void display_secret_info_about_object(struct char_data *ch, struct obj_data *obj);
@@ -193,11 +196,23 @@ char *make_desc(struct char_data *ch, struct char_data *i, char *buf, int act, b
   }
   if (GET_SUSTAINED(i) && (IS_ASTRAL(ch) || IS_DUAL(ch)))
   {
-    for (struct sustain_data *sust = GET_SUSTAINED(i); sust; sust = sust->next)
+    bool has_aura = FALSE;
+    for (struct sustain_data *sust = GET_SUSTAINED(i); sust; sust = sust->next) {
       if (!sust->caster) {
         strlcat(buf, ", surrounded by a spell aura", buf_size);
+        has_aura = TRUE;
         break;
       }
+    }
+
+    if (MOB_FLAGGED(i, MOB_FLAMEAURA) || affected_by_spell(i, SPELL_FLAME_AURA)) {
+      if (has_aura)
+        strlcat(buf, " and flames", buf_size);
+      else
+        strlcat(buf, ", surrounded by flames", buf_size);
+    }
+  } else if (MOB_FLAGGED(i, MOB_FLAMEAURA) || affected_by_spell(i, SPELL_FLAME_AURA)) {
+    strlcat(buf, ", surrounded by flames", buf_size);
   }
 
   if (!IS_NPC(i) && PRF_FLAGGED(ch, PRF_LONGWEAPON) && GET_EQ(i, WEAR_WIELD))
@@ -270,10 +285,6 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
         }
         strlcat(buf, object->text.room_desc, sizeof(buf));
       }
-    }
-    // Special case: Radio is spec-flagged. This is pretty much only true for the Docwagon radios.
-    if (GET_OBJ_SPEC(object) == floor_usable_radio) {
-      strlcat(buf, "^y...It's free to use. See ^YHELP RADIO^y for more.^n", sizeof(buf));
     }
   }
   else if (GET_OBJ_NAME(object) && mode == 1) {
@@ -354,6 +365,18 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
         strlcat(buf, " ^m(Protected)^n", sizeof(buf));
     }
   }
+
+  // Special case: Radio is spec-flagged and should show a help message.
+  // This is pretty much only true for the Docwagon radios.
+  if (mode == 0 && object->text.room_desc) {
+    if (GET_OBJ_SPEC(object) == floor_usable_radio) {
+      strlcat(buf, "\r\n^y...It's free to use. See ^YHELP RADIO^y for more.^n", sizeof(buf));
+    }
+    else if (GET_OBJ_SPEC(object) == bank) {
+      strlcat(buf, "\r\n^y...See ^YHELP ATM^y for details.^n", sizeof(buf));
+    }
+  }
+
   strlcat(buf, "^N\r\n", sizeof(buf));
   send_to_char(buf, ch);
   if ((mode == 7 || mode == 8) && !PRF_FLAGGED(ch, PRF_COMPACT))
@@ -665,6 +688,34 @@ void diag_char_to_char(struct char_data * i, struct char_data * ch)
   send_to_char(buf, ch);
 }
 
+#define RENDER_PRIVILEGED TRUE
+const char *render_ware_for_viewer(struct obj_data *ware, bool privileged, bool force_full_name) {
+  static char render_buf[1000];
+
+  // Show its restring and what it was restrung from
+  if (privileged && ware->restring) {
+    if (GET_OBJ_VNUM(ware) == OBJ_CUSTOM_NERPS_BIOWARE || GET_OBJ_VNUM(ware) == OBJ_CUSTOM_NERPS_CYBERWARE) {
+      snprintf(render_buf, sizeof(render_buf), "%s (NERPS)", ware->restring);
+    } else {
+      snprintf(render_buf, sizeof(render_buf), "%s (restrung from %s)", ware->restring, ware->text.name);
+    }
+  }
+  // Show its restrung / full name.
+  else if (privileged || force_full_name || ware->restring) {
+    strlcpy(render_buf, GET_OBJ_NAME(ware), sizeof(render_buf));
+  }
+  // Only show its type.
+  else {
+    if (GET_OBJ_TYPE(ware) == ITEM_CYBERWARE)
+      strlcpy(render_buf, cyber_types[GET_CYBERWARE_TYPE(ware)], sizeof(render_buf));
+    else
+      strlcpy(render_buf, cyber_types[GET_CYBERWARE_TYPE(ware)], sizeof(render_buf));
+  }
+
+  strlcat(render_buf, "\r\n", sizeof(render_buf));
+  return render_buf;
+}
+
 void look_at_char(struct char_data * i, struct char_data * ch)
 {
   int j, found, weight;
@@ -801,117 +852,137 @@ void look_at_char(struct char_data * i, struct char_data * ch)
       }
   }
 
-  found = FALSE;
-  *buf = '\0';
-  *buf2 = '\0';
-  for (tmp_obj = i->cyberware; tmp_obj; tmp_obj = tmp_obj->next_content)
-    switch (GET_OBJ_VAL(tmp_obj, 0)) {
+  char internal_ware[MAX_STRING_LENGTH];
+  char visible_ware[MAX_STRING_LENGTH];
+  *internal_ware = '\0';
+  *visible_ware = '\0';
+
+  bool ch_can_see_all_ware = (access_level(ch, LVL_FIXER) || (PRF_FLAGGED(i, PRF_QUEST) && PRF_FLAGGED(ch, PRF_QUESTOR)));
+
+  for (tmp_obj = i->cyberware; tmp_obj; tmp_obj = tmp_obj->next_content) {
+    bool ware_is_internal = TRUE, force_full_name = FALSE;
+
+    switch (GET_CYBERWARE_TYPE(tmp_obj)) {
+      case CYB_CUSTOM_NERPS:
+        if (IS_SET(GET_CYBERWARE_FLAGS(tmp_obj), NERPS_WARE_VISIBLE)) {
+          ware_is_internal = FALSE;
+          force_full_name = TRUE;
+        }
+        break;
       case CYB_HANDRAZOR:
       case CYB_HANDBLADE:
       case CYB_HANDSPUR:
       case CYB_FIN:
       case CYB_FOOTANCHOR:
       case CYB_CLIMBINGCLAWS:
-        if (GET_OBJ_VAL(tmp_obj, 9)) {
-          found = TRUE;
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s\r\n", GET_OBJ_NAME(tmp_obj));
-        } else snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%s\r\n", cyber_types[GET_OBJ_VAL(tmp_obj, 0)]);
+        if (!GET_CYBERWARE_IS_DISABLED(tmp_obj)) {
+          ware_is_internal = FALSE;
+        }
         break;
-        /*  Code for the previous version of cyber skulls / torsos. - LS 2021
-          case CYB_TORSO:
-          case CYB_SKULL:
-            if (GET_OBJ_VAL(tmp_obj, 3)) {
-              found = TRUE;
-              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s\r\n", GET_OBJ_NAME(tmp_obj));
-            } else snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%s\r\n", cyber_types[GET_OBJ_VAL(tmp_obj, 0)]);
-            break;
-        */
+      // BUF2 is VISIBLE, buf is hidden
       case CYB_DATAJACK:
-        if (GET_EQ(i, WEAR_HEAD))
-          continue;
-        if (GET_OBJ_VAL(tmp_obj, 3)) {
-          found = TRUE;
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s\r\n", GET_OBJ_NAME(tmp_obj));
-        } else snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%s\r\n", cyber_types[GET_OBJ_VAL(tmp_obj, 0)]);
+        if (!GET_EQ(i, WEAR_HEAD) && !GET_CYBERWARE_FLAGS(tmp_obj)) {
+          ware_is_internal = FALSE;
+        }
         break;
       case CYB_CHIPJACK:
-        if (GET_EQ(i, WEAR_HEAD))
-          continue;
-        // fall through.
+        if (!GET_EQ(i, WEAR_HEAD)) {
+          ware_is_internal = FALSE;
+        }
+        break;
       case CYB_DERMALPLATING:
       case CYB_BALANCETAIL:
-        snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%s\r\n", cyber_types[GET_OBJ_VAL(tmp_obj, 0)]);
+        ware_is_internal = FALSE;
         break;
       case CYB_EYES:
-        if (GET_EQ(i, WEAR_EYES) || (GET_EQ(i, WEAR_HEAD) && GET_OBJ_VAL(GET_EQ(i, WEAR_HEAD), 7) > 1))
+        if (GET_EQ(i, WEAR_EYES) || (GET_EQ(i, WEAR_HEAD) && GET_WORN_CONCEAL_RATING(GET_EQ(i, WEAR_HEAD)) > 1))
           continue;
-        if ((IS_SET(GET_OBJ_VAL(tmp_obj, 3), EYE_OPTMAG1) || IS_SET(GET_OBJ_VAL(tmp_obj, 3), EYE_OPTMAG2) ||
-             IS_SET(GET_OBJ_VAL(tmp_obj, 3), EYE_OPTMAG3)) && success_test(GET_INT(ch), 9) > 0)
-          strlcat(buf2, "Optical Magnification\r\n", sizeof(buf2));
-        if (IS_SET(GET_OBJ_VAL(tmp_obj, 3), EYE_COSMETIC))
-          snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%s\r\n", GET_OBJ_NAME(tmp_obj));
+
+        ware_is_internal = FALSE;
+
+        if (IS_SET(GET_CYBERWARE_FLAGS(tmp_obj), EYE_COSMETIC))
+          force_full_name = TRUE;
+
+        // Optical magnification is shown separately, unless you're viewing in privileged mode.
+        if (!ch_can_see_all_ware) {
+          if ((IS_SET(GET_CYBERWARE_FLAGS(tmp_obj), EYE_OPTMAG1)
+               || IS_SET(GET_CYBERWARE_FLAGS(tmp_obj), EYE_OPTMAG2)
+               || IS_SET(GET_CYBERWARE_FLAGS(tmp_obj), EYE_OPTMAG3))
+              && success_test(GET_INT(ch), 9) > 0)
+          {
+            strlcat(visible_ware, "Optical Magnification\r\n", sizeof(visible_ware));
+          }
+        }
         break;
       case CYB_ARMS:
-        if (IS_SET(GET_CYBERWARE_FLAGS(tmp_obj), ARMS_MOD_OBVIOUS)) {
-          snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%s\r\n", cyber_types[GET_OBJ_VAL(tmp_obj, 0)]);
-        } else {
-          found = TRUE;
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s\r\n", GET_OBJ_NAME(tmp_obj));
-        }
-        break;
       case CYB_LEGS:
-        if (IS_SET(GET_CYBERWARE_FLAGS(tmp_obj), LEGS_MOD_OBVIOUS)) {
-          snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%s\r\n", cyber_types[GET_OBJ_VAL(tmp_obj, 0)]);
-        } else {
-          found = TRUE;
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s\r\n", GET_OBJ_NAME(tmp_obj));
-        }
-        break;
       case CYB_SKULL:
-        if (IS_SET(GET_CYBERWARE_FLAGS(tmp_obj), SKULL_MOD_OBVIOUS)) {
-          snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%s\r\n", cyber_types[GET_OBJ_VAL(tmp_obj, 0)]);
-        } else {
-          found = TRUE;
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s\r\n", GET_OBJ_NAME(tmp_obj));
-        }
-        break;
       case CYB_TORSO:
-        if (IS_SET(GET_CYBERWARE_FLAGS(tmp_obj), TORSO_MOD_OBVIOUS)) {
-          snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%s\r\n", cyber_types[GET_OBJ_VAL(tmp_obj, 0)]);
-        } else {
-          found = TRUE;
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s\r\n", GET_OBJ_NAME(tmp_obj));
+        if ((GET_CYBERWARE_TYPE(tmp_obj) == CYB_ARMS && IS_SET(GET_CYBERWARE_FLAGS(tmp_obj), ARMS_MOD_OBVIOUS))
+            || (GET_CYBERWARE_TYPE(tmp_obj) == CYB_LEGS && IS_SET(GET_CYBERWARE_FLAGS(tmp_obj), LEGS_MOD_OBVIOUS))
+            || (GET_CYBERWARE_TYPE(tmp_obj) == CYB_SKULL && IS_SET(GET_CYBERWARE_FLAGS(tmp_obj), SKULL_MOD_OBVIOUS))
+            || (GET_CYBERWARE_TYPE(tmp_obj) == CYB_TORSO && IS_SET(GET_CYBERWARE_FLAGS(tmp_obj), TORSO_MOD_OBVIOUS))
+        ) {
+          ware_is_internal = FALSE;
         }
-        break;
-      default:
-        found = TRUE;
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s\r\n", GET_OBJ_NAME(tmp_obj));
         break;
     }
-  if (*buf2)
-    send_to_char(ch, "\r\nVisible Cyberware:\r\n%s", buf2);
-  if (found && GET_LEVEL(ch) > 1)
-    send_to_char(ch, "\r\nInternal Cyberware:\r\n%s", buf);
 
-  for (tmp_obj = i->bioware; tmp_obj; tmp_obj = tmp_obj->next_content)
-    if (GET_OBJ_VAL(tmp_obj, 0) == BIO_ORTHOSKIN) {
+    // Now that we know if it's internal or not, hand it off to our render function.
+    if (ware_is_internal) {
+      if (ch_can_see_all_ware) {
+        strlcat(internal_ware, render_ware_for_viewer(tmp_obj, ch_can_see_all_ware, force_full_name), sizeof(internal_ware));
+      }
+    } else {
+      strlcat(visible_ware, render_ware_for_viewer(tmp_obj, ch_can_see_all_ware, force_full_name), sizeof(visible_ware));
+    }
+  }
+
+  if (*visible_ware)
+    send_to_char(ch, "\r\nVisible Cyberware:\r\n%s", visible_ware);
+  if (*internal_ware)
+    send_to_char(ch, "\r\nInternal Cyberware:\r\n%s", internal_ware);
+
+  // Reset: It's bioware time.
+  *visible_ware = '\0';
+  *internal_ware = '\0';
+
+  for (tmp_obj = i->bioware; tmp_obj; tmp_obj = tmp_obj->next_content) {
+    bool ware_is_internal = TRUE;
+    bool force_full_name = FALSE;
+
+    if (GET_BIOWARE_TYPE(tmp_obj) == BIO_ORTHOSKIN) {
       int targ = 10;
-      switch (GET_OBJ_VAL(tmp_obj, 1)) {
+      switch (GET_BIOWARE_RATING(tmp_obj)) {
         case 2:
           targ = 9;
           break;
         case 3:
           targ = 8;
       }
-      if (success_test(GET_INT(ch), targ) > 0)
-        send_to_char(ch, "\r\nVisible bioware:\r\n%s\r\n", bio_types[GET_OBJ_VAL(tmp_obj, 0)]);
+
+      if (ch_can_see_all_ware || tmp_obj->restring || success_test(GET_INT(ch), targ) > 0) {
+        ware_is_internal = FALSE;
+      }
+    } else if (GET_BIOWARE_TYPE(tmp_obj) == BIO_CUSTOM_NERPS && IS_SET(GET_BIOWARE_FLAGS(tmp_obj), NERPS_WARE_VISIBLE)) {
+      ware_is_internal = FALSE;
+      force_full_name = TRUE;
     }
 
-  if (GET_LEVEL(ch) >= LVL_BUILDER && i->bioware) {
-    send_to_char("\r\nInternal bioware:\r\n", ch);
-    for (tmp_obj = i->bioware; tmp_obj; tmp_obj = tmp_obj->next_content)
-      send_to_char(ch, "%s\r\n", GET_OBJ_NAME(tmp_obj));
+    // Now that we know if it's internal or not, hand it off to our render function.
+    if (ware_is_internal) {
+      if (ch_can_see_all_ware) {
+        strlcat(internal_ware, render_ware_for_viewer(tmp_obj, ch_can_see_all_ware, force_full_name), sizeof(internal_ware));
+      }
+    } else {
+      strlcat(visible_ware, render_ware_for_viewer(tmp_obj, ch_can_see_all_ware, force_full_name), sizeof(visible_ware));
+    }
   }
+
+  if (*visible_ware)
+    send_to_char(ch, "\r\nVisible Bioware:\r\n%s", visible_ware);
+  if (*internal_ware)
+    send_to_char(ch, "\r\nInternal Bioware:\r\n%s", internal_ware);
 
   if (ch != i && (GET_REAL_LEVEL(ch) >= LVL_BUILDER || !AWAKE(i)))
   {
@@ -988,6 +1059,9 @@ void list_one_char(struct char_data * i, struct char_data * ch)
     // Make sure they always display flags that are relevant to the player.
     if (IS_AFFECTED(i, AFF_INVISIBLE) || IS_AFFECTED(i, AFF_IMP_INVIS) || IS_AFFECTED(i, AFF_SPELLINVIS) || IS_AFFECTED(i, AFF_SPELLIMPINVIS))
       strlcat(buf, "(invisible) ", sizeof(buf));
+
+    if (MOB_FLAGGED(i, MOB_FLAMEAURA) || affected_by_spell(i, SPELL_FLAME_AURA))
+      strlcat(buf, "(flaming) ", sizeof(buf));
 
     if (IS_ASTRAL(ch) || IS_DUAL(ch)) {
       if (IS_ASTRAL(i))
@@ -1202,8 +1276,6 @@ void list_one_char(struct char_data * i, struct char_data * ch)
     strlcat(buf, " (editing)", sizeof(buf));
   if (PLR_FLAGGED(i, PLR_PROJECT))
     strlcat(buf, " (projecting)", sizeof(buf));
-  if (IS_NPC(i) && MOB_FLAGGED(i, MOB_FLAMEAURA))
-    strlcat(buf, ", surrounded by flames,", sizeof(buf));
 
   if (GET_QUI(i) <= 0)
     strlcat(buf, " is here, seemingly paralyzed.", sizeof(buf));
@@ -1228,7 +1300,27 @@ void list_one_char(struct char_data * i, struct char_data * ch)
   else if (AFF_FLAGGED(i, AFF_BONDING))
     strlcat(buf, " is here, performing a bonding ritual.", sizeof(buf));
   else if (AFF_FLAGGED(i, AFF_PRONE)) {
-    if (WEAPON_IS_GUN(GET_EQ(i, WEAR_WIELD))) {
+    struct obj_data *wielded = GET_EQ(i, WEAR_WIELD);
+    bool is_using_bipod_or_tripod = FALSE;
+
+    if (wielded && WEAPON_IS_GUN(wielded)) {
+      rnum_t rnum;
+
+      for (int access_loc = ACCESS_LOCATION_TOP; access_loc <= ACCESS_LOCATION_UNDER; access_loc++) {
+        if (GET_WEAPON_ATTACH_LOC(wielded, access_loc) <= 0)
+          continue;
+
+        if ((rnum = real_object(GET_WEAPON_ATTACH_LOC(wielded, access_loc))) > -1) {
+          if (GET_OBJ_TYPE(&obj_proto[rnum]) == ITEM_GUN_ACCESSORY
+              && (GET_ACCESSORY_TYPE(&obj_proto[rnum]) == ACCESS_BIPOD || GET_ACCESSORY_TYPE(&obj_proto[rnum]) == ACCESS_TRIPOD))
+          {
+            is_using_bipod_or_tripod = TRUE;
+          }
+        }
+      }
+    }
+
+    if (is_using_bipod_or_tripod) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " is prone here, manning %s.", decapitalize_a_an(GET_OBJ_NAME(GET_EQ(i, WEAR_WIELD))));
     } else {
       strlcat(buf, " is lying prone here.", sizeof(buf));
@@ -1364,10 +1456,12 @@ void disp_long_exits(struct char_data *ch, bool autom)
   {
     if (EXIT(ch, door) && EXIT(ch, door)->to_room && EXIT(ch, door)->to_room != &world[0]) {
       if (GET_REAL_LEVEL(ch) >= LVL_BUILDER) {
-        snprintf(buf2, sizeof(buf2), "%-5s - [%5ld] %s%s\r\n", dirs[door],
-                EXIT(ch, door)->to_room->number,
-                EXIT(ch, door)->to_room->name,
-                (IS_SET(EXIT(ch, door)->exit_info, EX_CLOSED) ? " (closed)" : ""));
+        snprintf(buf2, sizeof(buf2), "%-5s - [%5ld] %s%s%s\r\n", dirs[door],
+                 EXIT(ch, door)->to_room->number,
+                 EXIT(ch, door)->to_room->name,
+                 (IS_SET(EXIT(ch, door)->exit_info, EX_CLOSED) ? " (closed)" : ""),
+                 (veh && !room_accessible_to_vehicle_piloted_by_ch(EXIT(veh, door)->to_room, veh, ch)) ? " (impassible)" : ""
+                );
         if (autom)
           strlcat(buf, "^c", sizeof(buf));
         strlcat(buf, CAP(buf2), sizeof(buf));
@@ -1724,7 +1818,7 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
         send_to_char(ch, "^cThe water around you is dimpled by the falling rain.^n\r\n");
       }
     } else {
-      if (weather_info.sky >= SKY_RAINING) {
+      if (weather_info.sky == SKY_RAINING) {
         if (ch->in_veh) {
           if (ch->in_veh->type == VEH_BIKE) {
             send_to_char(ch, "^cRain ricochets off your shoulders and splashes about the bike.^n\r\n");
@@ -1734,7 +1828,19 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
         } else {
           send_to_char(ch, "^cRain splashes into the puddles around your feet.^n\r\n");
         }
-      } else if (weather_info.lastrain < 5) {
+      }
+      else if (weather_info.sky == SKY_LIGHTNING) {
+        if (ch->in_veh) {
+          if (ch->in_veh->type == VEH_BIKE) {
+            send_to_char(ch, "^cHeavy rain pounds down around you, splashing off your bike.^n\r\n");
+          } else {
+            send_to_char(ch, "^cHeavy rain pounds against your vehicle's windows.^n\r\n");
+          }
+        } else {
+          send_to_char(ch, "^cYou struggle to see through the heavy rain that pounds down from the sky.^n\r\n");
+        }
+      }
+      else if (weather_info.lastrain < 5) {
         send_to_char(ch, "^cThe ground is wet, it must have rained recently.^n\r\n");
       }
     }
@@ -1892,7 +1998,8 @@ void look_in_obj(struct char_data * ch, char *arg, bool exa)
              (GET_OBJ_TYPE(obj) != ITEM_HOLSTER) &&
              (GET_OBJ_TYPE(obj) != ITEM_WORN) &&
              (GET_OBJ_TYPE(obj) != ITEM_KEYRING) &&
-             (GET_OBJ_TYPE(obj) != ITEM_GUN_AMMO)
+             (GET_OBJ_TYPE(obj) != ITEM_GUN_AMMO) &&
+             (GET_OBJ_TYPE(obj) != ITEM_SHOPCONTAINER)
            )
     send_to_char("There's nothing inside that!\r\n", ch);
   else
@@ -1902,7 +2009,7 @@ void look_in_obj(struct char_data * ch, char *arg, bool exa)
                    GET_AMMOBOX_QUANTITY(obj),
                    get_ammo_representation(GET_AMMOBOX_WEAPON(obj), GET_AMMOBOX_TYPE(obj), GET_AMMOBOX_QUANTITY(obj)));
       return;
-    } else if (GET_OBJ_TYPE(obj) == ITEM_WORN) {
+    } else if (GET_OBJ_TYPE(obj) == ITEM_WORN || GET_OBJ_TYPE(obj) == ITEM_SHOPCONTAINER) {
       if (obj->contains) {
         send_to_char(GET_OBJ_NAME(obj), ch);
         switch (bits) {
@@ -2591,8 +2698,13 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       break;
     case ITEM_DOCWAGON:
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%s^n contract that ^c%s bonded%s^n.",
-              docwagon_contract_types[GET_OBJ_VAL(j, 0)], GET_OBJ_VAL(j, 1) ? "is" : "has not been",
-              GET_OBJ_VAL(j, 1) ? (GET_OBJ_VAL(j, 1) == GET_IDNUM(ch) ? " to you" : " to someone else") : " to anyone yet");
+              docwagon_contract_types[GET_DOCWAGON_CONTRACT_GRADE(j)],
+              GET_DOCWAGON_BONDED_IDNUM(j) ? "is" : "has not been",
+              GET_DOCWAGON_BONDED_IDNUM(j) ? (GET_DOCWAGON_BONDED_IDNUM(j) == GET_IDNUM(ch) ? " to you" : " to someone else") : " to anyone yet^n, and ^ywill not function until it is^n");
+
+      if (GET_DOCWAGON_BONDED_IDNUM(j) == GET_IDNUM(ch) && !j->worn_by) {
+        strlcat(buf, "\r\n\r\n^yIt must be worn to be effective.^n", sizeof(buf));
+      }
       break;
     case ITEM_CONTAINER:
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It can hold a maximum of ^c%d^n kilograms.", GET_OBJ_VAL(j, 0));
@@ -2634,9 +2746,18 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       break;
     case ITEM_PROGRAM:
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^crating-%d %s^n program, ^c%d^n units in size.",
-              GET_OBJ_VAL(j, 1), programs[GET_OBJ_VAL(j, 0)].name, GET_OBJ_VAL(j, 2));
-      if (GET_OBJ_VAL(j, 0) == SOFT_ATTACK)
+               GET_PROGRAM_RATING(j), programs[GET_PROGRAM_TYPE(j)].name, GET_PROGRAM_SIZE(j));
+      if (GET_PROGRAM_TYPE(j) == SOFT_ATTACK)
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " Its damage code is ^c%s^n.", GET_WOUND_NAME(GET_OBJ_VAL(j, 3)));
+
+      if (GET_PROGRAM_TYPE(j) >= SOFT_ASIST_COLD || GET_PROGRAM_TYPE(j) < SOFT_SENSOR) {
+        if (GET_OBJ_TIMER(j) < 0)
+          strlcat(buf, " It was ruined in cooking and is useless.\r\n", sizeof(buf));
+        else if (!GET_OBJ_TIMER(j))
+          strlcat(buf, " It still needs to be cooked to a chip.\r\n", sizeof(buf));
+        else
+          strlcat(buf, " It has been cooked and is ready for use.\r\n", sizeof(buf));
+      }
       break;
     case ITEM_BIOWARE:
       if (GET_BIOWARE_RATING(j) > 0) {
@@ -2650,15 +2771,151 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       }
       break;
     case ITEM_CYBERWARE:
+      strlcat(buf, "It is a ^c", sizeof(buf));
+
       if (GET_CYBERWARE_RATING(j) > 0) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^crating-%d %s-grade %s^n that uses ^c%.2f^n essence when installed.",
-                GET_CYBERWARE_RATING(j), decap_cyber_grades[GET_CYBERWARE_GRADE(j)], decap_cyber_types[GET_CYBERWARE_TYPE(j)],
-                ((float) GET_CYBERWARE_ESSENCE_COST(j) / 100));
-      } else {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%s-grade %s^n that uses ^c%.2f^n essence when installed.",
-                decap_cyber_grades[GET_CYBERWARE_GRADE(j)], decap_cyber_types[GET_CYBERWARE_TYPE(j)],
-                ((float) GET_CYBERWARE_ESSENCE_COST(j) / 100));
+         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "rating-%d ", GET_CYBERWARE_RATING(j));
       }
+
+      char flag_parse[1000];
+      *flag_parse = '\0';
+
+      switch (GET_CYBERWARE_TYPE(j)) {
+        case CYB_DATAJACK:
+          if (GET_CYBERWARE_FLAGS(j) != DATA_STANDARD)
+            strlcpy(flag_parse, " induction", sizeof(flag_parse));
+          else
+            strlcpy(flag_parse, " standard", sizeof(flag_parse));
+          break;
+        case CYB_TOOTHCOMPARTMENT:
+        if (GET_CYBERWARE_FLAGS(j))
+          strlcpy(flag_parse, " breakable", sizeof(flag_parse));
+        else
+          strlcpy(flag_parse, " storage", sizeof(flag_parse));
+        break;
+        case CYB_HANDSPUR:
+        case CYB_HANDBLADE:
+          if (GET_CYBERWARE_FLAGS(j))
+            strlcpy(flag_parse, " retractable", sizeof(flag_parse));
+          break;
+        case CYB_HANDRAZOR:
+          if (IS_SET(GET_CYBERWARE_FLAGS(j), 1 << CYBERWEAPON_RETRACTABLE))
+            strlcpy(flag_parse, " retractable", sizeof(flag_parse));
+
+          if (IS_SET(GET_CYBERWARE_FLAGS(j), 1 << CYBERWEAPON_IMPROVED)) {
+            if (*flag_parse) {
+              strlcat(flag_parse, ", improved", sizeof(flag_parse));
+            } else {
+              strlcat(flag_parse, " improved", sizeof(flag_parse));
+            }
+          }
+          break;
+        case CYB_BONELACING:
+          snprintf(flag_parse, sizeof(flag_parse), " %s", bone_lacing[GET_CYBERWARE_FLAGS(j)]);
+          break;
+        case CYB_REFLEXTRIGGER:
+          if (GET_CYBERWARE_FLAGS(j))
+            strlcpy(flag_parse, " stepped", sizeof(flag_parse));
+          break;
+        case CYB_SKULL:
+          if (IS_SET(GET_CYBERWARE_FLAGS(j), SKULL_MOD_OBVIOUS))
+            strlcat(flag_parse, " obvious", sizeof(flag_parse));
+          else
+            strlcpy(flag_parse, " synthetic", sizeof(flag_parse));
+
+          if (IS_SET(GET_CYBERWARE_FLAGS(j), SKULL_MOD_ARMOR_MOD1))
+            strlcpy(flag_parse, ", armored", sizeof(flag_parse));
+          break;
+        case CYB_TORSO:
+          if (IS_SET(GET_CYBERWARE_FLAGS(j), TORSO_MOD_OBVIOUS))
+            strlcat(flag_parse, " obvious", sizeof(flag_parse));
+          else
+            strlcpy(flag_parse, " synthetic", sizeof(flag_parse));
+
+          if (IS_SET(GET_CYBERWARE_FLAGS(j), TORSO_MOD_ARMOR_MOD1))
+            strlcpy(flag_parse, ", armored (grade 1)", sizeof(flag_parse));
+          else if (IS_SET(GET_CYBERWARE_FLAGS(j), TORSO_MOD_ARMOR_MOD2))
+            strlcpy(flag_parse, ", armored (grade 2)", sizeof(flag_parse));
+          else if (IS_SET(GET_CYBERWARE_FLAGS(j), TORSO_MOD_ARMOR_MOD3))
+            strlcpy(flag_parse, ", armored (grade 3)", sizeof(flag_parse));
+          break;
+        case CYB_LEGS:
+          if (IS_SET(GET_CYBERWARE_FLAGS(j), LEGS_MOD_OBVIOUS))
+            strlcat(flag_parse, " obvious", sizeof(flag_parse));
+          else
+            strlcpy(flag_parse, " synthetic", sizeof(flag_parse));
+
+          if (IS_SET(GET_CYBERWARE_FLAGS(j), LEGS_MOD_ARMOR_MOD1))
+            strlcpy(flag_parse, ", armored (grade 1)", sizeof(flag_parse));
+
+          if (IS_SET(GET_CYBERWARE_FLAGS(j), LEGS_MOD_STRENGTH_MOD1))
+            strlcpy(flag_parse, ", strengthening (grade 1)", sizeof(flag_parse));
+          else if (IS_SET(GET_CYBERWARE_FLAGS(j), LEGS_MOD_STRENGTH_MOD2))
+            strlcpy(flag_parse, ", strengthening (grade 2)", sizeof(flag_parse));
+          else if (IS_SET(GET_CYBERWARE_FLAGS(j), LEGS_MOD_STRENGTH_MOD3))
+            strlcpy(flag_parse, ", strengthening (grade 3)", sizeof(flag_parse));
+
+          if (IS_SET(GET_CYBERWARE_FLAGS(j), LEGS_MOD_QUICKNESS_MOD1))
+            strlcpy(flag_parse, ", quickening (grade 1)", sizeof(flag_parse));
+          else if (IS_SET(GET_CYBERWARE_FLAGS(j), LEGS_MOD_QUICKNESS_MOD2))
+            strlcpy(flag_parse, ", quickening (grade 2)", sizeof(flag_parse));
+          else if (IS_SET(GET_CYBERWARE_FLAGS(j), LEGS_MOD_QUICKNESS_MOD3))
+            strlcpy(flag_parse, ", quickening (grade 3)", sizeof(flag_parse));
+          break;
+        case CYB_ARMS:
+          if (IS_SET(GET_CYBERWARE_FLAGS(j), ARMS_MOD_OBVIOUS))
+            strlcat(flag_parse, " obvious", sizeof(flag_parse));
+          else
+            strlcpy(flag_parse, " synthetic", sizeof(flag_parse));
+
+          if (IS_SET(GET_CYBERWARE_FLAGS(j), ARMS_MOD_ARMOR_MOD1))
+            strlcpy(flag_parse, ", armored (grade 1)", sizeof(flag_parse));
+
+          if (IS_SET(GET_CYBERWARE_FLAGS(j), ARMS_MOD_STRENGTH_MOD1))
+            strlcpy(flag_parse, ", strengthening (grade 1)", sizeof(flag_parse));
+          else if (IS_SET(GET_CYBERWARE_FLAGS(j), ARMS_MOD_STRENGTH_MOD2))
+            strlcpy(flag_parse, ", strengthening (grade 2)", sizeof(flag_parse));
+          else if (IS_SET(GET_CYBERWARE_FLAGS(j), ARMS_MOD_STRENGTH_MOD3))
+            strlcpy(flag_parse, ", strengthening (grade 3)", sizeof(flag_parse));
+
+          if (IS_SET(GET_CYBERWARE_FLAGS(j), ARMS_MOD_QUICKNESS_MOD1))
+            strlcpy(flag_parse, ", quickening (grade 1)", sizeof(flag_parse));
+          else if (IS_SET(GET_CYBERWARE_FLAGS(j), ARMS_MOD_QUICKNESS_MOD2))
+            strlcpy(flag_parse, ", quickening (grade 2)", sizeof(flag_parse));
+          else if (IS_SET(GET_CYBERWARE_FLAGS(j), ARMS_MOD_QUICKNESS_MOD3))
+            strlcpy(flag_parse, ", quickening (grade 3)", sizeof(flag_parse));
+
+          if (IS_SET(GET_CYBERWARE_FLAGS(j), ARMS_MOD_GYROMOUNT))
+            strlcpy(flag_parse, ", gyromountable", sizeof(flag_parse));
+          break;
+        case CYB_DERMALSHEATHING:
+          if (GET_CYBERWARE_FLAGS(j))
+            strlcpy(flag_parse, " ruthenium-coated", sizeof(flag_parse));
+          break;
+      }
+
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s-grade%s %s^n that uses ^c%.2f^n essence when installed.",
+              decap_cyber_grades[GET_CYBERWARE_GRADE(j)],
+              flag_parse,
+              decap_cyber_types[GET_CYBERWARE_TYPE(j)],
+              ((float) GET_CYBERWARE_ESSENCE_COST(j) / 100));
+
+      if (GET_CYBERWARE_TYPE(j) == CYB_EYES) {
+        char eye_bits[1000];
+
+        if (IS_SET(GET_CYBERWARE_FLAGS(j), EYE_CYBEREYES)) {
+          strlcat(buf, "\r\n\r\nAs a set of replacement cybereyes, it has the following features: ", sizeof(buf));
+          REMOVE_BIT(GET_CYBERWARE_FLAGS(j), EYE_CYBEREYES);
+          sprintbit(GET_CYBERWARE_FLAGS(j), eyemods, eye_bits, sizeof(eye_bits));
+          SET_BIT(GET_CYBERWARE_FLAGS(j), EYE_CYBEREYES);
+        } else {
+          strlcat(buf, "\r\n\r\nAs a standalone retinal modification, it has the following features: ", sizeof(buf));
+          sprintbit(GET_CYBERWARE_FLAGS(j), eyemods, eye_bits, sizeof(eye_bits));
+        }
+
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n  ^c%s^n.", eye_bits);
+      }
+
       if (IS_OBJ_STAT(j, ITEM_EXTRA_MAGIC_INCOMPATIBLE)) {
         strlcat(buf, "\r\n^yIt is incompatible with magic.^n", sizeof(buf));
       }
@@ -2693,8 +2950,9 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       }
       break;
     case ITEM_PART:
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is %s^c%s^n designed for MPCP ^c%d^n decks. It will cost %d nuyen in parts and %d nuyen in chips to build.",
-               !GET_PART_DESIGN_COMPLETION(j) ? "a not-yet-designed " : AN(parts[GET_PART_TYPE(j)].name),
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a%s rating-^C%d^n ^c%s^n designed for MPCP ^c%d^n decks. It will cost %d nuyen in parts and %d nuyen in chips to build.",
+               !GET_PART_DESIGN_COMPLETION(j) ? " not-yet-designed" : AN(parts[GET_PART_TYPE(j)].name),
+               GET_PART_RATING(j),
                parts[GET_PART_TYPE(j)].name,
                GET_PART_TARGET_MPCP(j),
                GET_PART_PART_COST(j),
@@ -2841,12 +3099,15 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
     case ITEM_DESIGN:
       if (GET_OBJ_VAL(j, 0) == 5) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "This design is for a ^crating-%d %s (%s)^n program. It requires ^c%d^n units of storage.\r\n",
-                GET_OBJ_VAL(j, 1), programs[GET_OBJ_VAL(j, 0)].name, GET_WOUND_NAME(GET_OBJ_VAL(j, 2)),
-                (GET_OBJ_VAL(j, 1) * GET_OBJ_VAL(j, 1)) * attack_multiplier[GET_OBJ_VAL(j, 2)]);
+                GET_DESIGN_RATING(j),
+                programs[GET_DESIGN_PROGRAM(j)].name,
+                GET_WOUND_NAME(GET_DESIGN_PROGRAM_WOUND_LEVEL(j)),
+                (int) ((GET_DESIGN_RATING(j) * GET_DESIGN_RATING(j)) * attack_multiplier[GET_DESIGN_PROGRAM_WOUND_LEVEL(j)] * 1.1));
       } else {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "This design is for a ^crating-%d %s^n program. It requires ^c%d^n units of storage.\r\n",
-                GET_OBJ_VAL(j, 1), programs[GET_OBJ_VAL(j, 0)].name,
-                (GET_OBJ_VAL(j, 1) * GET_OBJ_VAL(j, 1)) * programs[GET_OBJ_VAL(j, 0)].multiplier);
+                GET_DESIGN_RATING(j),
+                programs[GET_DESIGN_PROGRAM(j)].name,
+                (int) ((GET_DESIGN_RATING(j) * GET_DESIGN_RATING(j)) * programs[GET_DESIGN_PROGRAM(j)].multiplier * 1.1));
       }
       break;
     case ITEM_GUN_AMMO:
@@ -3353,10 +3614,10 @@ const char *get_vision_string(struct char_data *ch, bool ascii_friendly=FALSE) {
   }
 
   if (ascii_friendly) {
-    if (AFF_FLAGGED(ch, AFF_ULTRASOUND) && get_ch_in_room(ch)->silence[0] <= 0)
+    if (has_vision(ch, VISION_ULTRASONIC) && get_ch_in_room(ch)->silence[0] <= 0)
         return "You have ultrasonic vision.";
   } else {
-    if (AFF_FLAGGED(ch, AFF_ULTRASOUND)) {
+    if (has_vision(ch, VISION_ULTRASONIC)) {
       if (get_ch_in_room(ch)->silence[0] > 0)
         return "Your ultrasonic vision is being suppressed by a field of silence here.\r\n";
       else
@@ -3364,14 +3625,14 @@ const char *get_vision_string(struct char_data *ch, bool ascii_friendly=FALSE) {
     }
   }
 
-  if (CURRENT_VISION(ch) == THERMOGRAPHIC) {
+  if (has_vision(ch, VISION_THERMOGRAPHIC)) {
     if (ascii_friendly)
       return "You have thermographic vision.";
     else
       return "You have thermographic vision.\r\n";
   }
 
-  if (CURRENT_VISION(ch) == LOWLIGHT) {
+  if (has_vision(ch, VISION_LOWLIGHT)) {
     if (ascii_friendly)
       return "You have low-light vision.";
     else
@@ -3911,7 +4172,23 @@ ACMD(do_cyberware)
         continue;
       }
     }
-    snprintf(buf, sizeof(buf), "%-40s Essence: %0.2f\r\n", GET_OBJ_NAME(obj), ((float)GET_CYBERWARE_ESSENCE_COST(obj) / 100));
+
+    char retraction_string[100];
+    if (cyber_is_retractable(obj)) {
+      if (GET_CYBERWARE_IS_DISABLED(obj)) {
+        strlcpy(retraction_string, "  (retracted)", sizeof(retraction_string));
+      } else {
+        strlcpy(retraction_string, "  (extended)", sizeof(retraction_string));
+      }
+    } else {
+      strlcpy(retraction_string, "", sizeof(retraction_string));
+    }
+
+    snprintf(buf, sizeof(buf), "%-40s Essence: %0.2f%s\r\n",
+             GET_OBJ_NAME(obj),
+             ((float)GET_CYBERWARE_ESSENCE_COST(obj) / 100),
+             retraction_string
+           );
     send_to_char(buf, ch);
   }
 }
@@ -3983,7 +4260,7 @@ ACMD_CONST(do_time) {
 
 ACMD(do_time)
 {
-  sh_int year, month, day, hour, minute, pm;
+  sh_int /* year, month, day,*/ hour, minute, pm;
   extern struct time_info_data time_info;
   extern const char *weekdays[];
   extern const char *month_name[];
@@ -4012,9 +4289,9 @@ ACMD(do_time)
       send_to_char("You glance up at the sky to help you guess the time.\r\n", ch);
   }
 
-  year = time_info.year % 100;
-  month = time_info.month + 1;
-  day = time_info.day + 1;
+  // year = time_info.year % 100;
+  // month = time_info.month + 1;
+  // day = time_info.day + 1;
   hour = (time_info.hours % 12 == 0 ? 12 : time_info.hours % 12);
   minute = time_info.minute;
   pm = (time_info.hours >= 12);
@@ -4119,16 +4396,17 @@ ACMD(do_index)
 }
 
 void display_help(char *help, int help_len, const char *arg, struct char_data *ch) {
-  char query[MAX_STRING_LENGTH];
+  char query[MAX_STRING_LENGTH], prepared_standard[MAX_STRING_LENGTH], prepared_for_like[MAX_STRING_LENGTH];
   MYSQL_RES *res;
   MYSQL_ROW row;
   *help = '\0';
 
-  // Buf now holds the quoted version of arg.
-  prepare_quotes(buf, arg, sizeof(buf) / sizeof(buf[0]));
+  // Pre-process our prepare_quotes.
+  prepare_quotes(prepared_standard, arg, sizeof(prepared_standard) / sizeof(prepared_standard[0]));
+  prepare_quotes(prepared_for_like, arg, sizeof(prepared_for_like) / sizeof(prepared_for_like[0]), FALSE, TRUE);
 
   // First strategy: Look for an exact match.
-  snprintf(query, sizeof(query), "SELECT * FROM help_topic WHERE name='%s'", buf);
+  snprintf(query, sizeof(query), "SELECT * FROM help_topic WHERE name='%s'", prepared_standard);
   if (mysql_wrapper(mysql, query)) {
     // We got a SQL error-- bail.
     snprintf(help, help_len, "The help system is temporarily unavailable.\r\n");
@@ -4149,7 +4427,7 @@ void display_help(char *help, int help_len, const char *arg, struct char_data *c
   }
 
   // Second strategy: Search for possible like-matches.
-  snprintf(query, sizeof(query), "SELECT * FROM help_topic WHERE name LIKE '%%%s%%' ORDER BY name ASC", buf);
+  snprintf(query, sizeof(query), "SELECT * FROM help_topic WHERE name LIKE '%%%s%%' ORDER BY name ASC", prepared_for_like);
   if (mysql_wrapper(mysql, query)) {
     // If we don't find it here either, we know the file doesn't exist-- failure condition.
     snprintf(help, help_len, "No such help file exists.\r\n");
@@ -4177,7 +4455,7 @@ void display_help(char *help, int help_len, const char *arg, struct char_data *c
     mysql_free_result(res);
 
     // Try a lookup with just files that have the search string at the start of their title.
-    snprintf(query, sizeof(query), "SELECT * FROM help_topic WHERE name LIKE '%s%%' ORDER BY name ASC", buf);
+    snprintf(query, sizeof(query), "SELECT * FROM help_topic WHERE name LIKE '%s%%' ORDER BY name ASC", prepared_for_like);
     if (mysql_wrapper(mysql, query)) {
       // We hit an error with this followup search, so we just return our pre-prepared string with the search that succeeded.
       snprintf(buf3, sizeof(buf3), "Overbroad helpfile search combined with follow-up lookup failure (%d articles): %s.", x, arg);
@@ -4299,6 +4577,50 @@ ACMD_CONST(do_who) {
   do_who(ch, not_const, cmd, subcmd);
 }
 
+ACMD(do_quickwho)
+{
+  struct descriptor_data *d;
+  struct char_data *tch;
+  bool printed = FALSE;
+
+  skip_spaces(&argument);
+  strlcpy(buf, "Currently in-game: ", sizeof(buf));
+
+  for (int candidate_level = LVL_MAX; candidate_level >= LVL_MORTAL; candidate_level--) {
+    for (d = descriptor_list; d; d = d->next) {
+      if (DESCRIPTOR_CONN_STATE_NOT_PLAYING(d))
+        continue;
+
+      // Assign tch to their most-relevant character.
+      if (!(tch = d->original) && !(tch = d->character))
+        continue;
+
+      if (GET_LEVEL(tch) != candidate_level)
+        continue;
+
+      if (GET_INCOG_LEV(tch) > GET_LEVEL(ch))
+        continue;
+
+      if (PRF_FLAGGED(ch, PRF_NOCOLOR)) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s%s%s",
+                  printed ? ", " : "",
+                  GET_CHAR_NAME(tch),
+                  GET_LEVEL(tch) > LVL_MORTAL ? " (staff)" : ""
+                );
+      } else {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s%s%s^n",
+                  printed ? ", " : "",
+                  get_level_wholist_color(GET_LEVEL(tch)),
+                  GET_CHAR_NAME(tch)
+                );
+      }
+
+      printed = TRUE;
+    }
+  }
+  send_to_char(ch, "%s\r\n", buf);
+}
+
 ACMD(do_who)
 {
   struct descriptor_data *d;
@@ -4388,32 +4710,8 @@ ACMD(do_who)
           strlcat(buf, "\r\n     ^W Race ^L: ^WVisible Players\r\n ^W---------------------------\r\n", sizeof(buf));
       }
 
-      switch (GET_LEVEL(tch)) {
-        case LVL_BUILDER:
-        case LVL_ARCHITECT:
-          snprintf(buf1, sizeof(buf1), "^G");
-          break;
-        case LVL_FIXER:
-        case LVL_CONSPIRATOR:
-          snprintf(buf1, sizeof(buf1), "^m");
-          break;
-        case LVL_EXECUTIVE:
-          snprintf(buf1, sizeof(buf1), "^c");
-          break;
-        case LVL_DEVELOPER:
-          snprintf(buf1, sizeof(buf1), "^r");
-          break;
-        case LVL_VICEPRES:
-        case LVL_ADMIN:
-          snprintf(buf1, sizeof(buf1), "^b");
-          break;
-        case LVL_PRESIDENT:
-          snprintf(buf1, sizeof(buf1), "^B");
-          break;
-        default:
-          snprintf(buf1, sizeof(buf1), "^L");
-          break;
-      }
+      strlcpy(buf1, get_level_wholist_color(GET_LEVEL(tch)), sizeof(buf1));
+
       if (PRF_FLAGGED(tch, PRF_SHOWGROUPTAG) && GET_PGROUP_MEMBER_DATA(tch) && GET_PGROUP(tch)) {
         snprintf(buf2, sizeof(buf2), "%10s :^N %s%s^N%s%s%s %s^n",
                 (GET_WHOTITLE(tch) ? GET_WHOTITLE(tch) : ""),
@@ -4910,35 +5208,38 @@ void print_object_location(int num, struct obj_data *obj, struct char_data *ch,
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%33s", " - ");
 
   if (obj->in_room)
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%5ld] %s\r\n", GET_ROOM_VNUM(obj->in_room), GET_ROOM_NAME(obj->in_room));
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%5ld] %s", GET_ROOM_VNUM(obj->in_room), GET_ROOM_NAME(obj->in_room));
   else if (obj->carried_by) {
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "carried by %s", GET_CHAR_NAME(obj->carried_by));
     if (obj->carried_by->in_room) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " @ room %ld (%s)\r\n", GET_ROOM_VNUM(obj->carried_by->in_room), GET_ROOM_NAME(obj->carried_by->in_room));
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " @ room %ld (%s)", GET_ROOM_VNUM(obj->carried_by->in_room), GET_ROOM_NAME(obj->carried_by->in_room));
     } else if (obj->carried_by->in_veh) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " @ veh %ld (%s)\r\n", GET_VEH_VNUM(obj->carried_by->in_veh), GET_VEH_NAME(obj->carried_by->in_veh));
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " @ veh %ld (%s)", GET_VEH_VNUM(obj->carried_by->in_veh), GET_VEH_NAME(obj->carried_by->in_veh));
     } else {
-      strlcat(buf, " ^Rnowhere^n\r\n", sizeof(buf) - strlen(buf));
+      strlcat(buf, " ^Rnowhere^n", sizeof(buf));
     }
   }
   else if (obj->worn_by) {
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "worn by %s", GET_CHAR_NAME(obj->worn_by));
     if (obj->worn_by->in_room) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " @ room %ld (%s)\r\n", GET_ROOM_VNUM(obj->worn_by->in_room), GET_ROOM_NAME(obj->worn_by->in_room));
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " @ room %ld (%s)", GET_ROOM_VNUM(obj->worn_by->in_room), GET_ROOM_NAME(obj->worn_by->in_room));
     } else if (obj->worn_by->in_veh) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " @ veh %ld (%s)\r\n", GET_VEH_VNUM(obj->worn_by->in_veh), GET_VEH_NAME(obj->worn_by->in_veh));
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " @ veh %ld (%s)", GET_VEH_VNUM(obj->worn_by->in_veh), GET_VEH_NAME(obj->worn_by->in_veh));
     } else {
-      strlcat(buf, " ^Rnowhere^n\r\n", sizeof(buf) - strlen(buf));
+      strlcat(buf, " ^Rnowhere^n", sizeof(buf));
     }
   } else if (obj->in_obj) {
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "inside %s%s\r\n",
-            GET_OBJ_NAME(obj->in_obj), (recur ? ", which is" : " "));
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "inside %s%s",
+            GET_OBJ_NAME(obj->in_obj),
+            (recur ? ", which is\r\n" : " "));
     if (recur)
       print_object_location(0, obj->in_obj, ch, recur);
   } else if (obj->in_veh) {
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "in %s @ %ld%s", GET_VEH_NAME(obj->in_veh), GET_ROOM_VNUM(get_obj_in_room(obj)), obj->in_veh->in_veh ? " (nested veh)" : "");
   } else
-    strlcat(buf, " in an unknown location.\r\n", sizeof(buf) - strlen(buf));
+    strlcat(buf, " in an unknown location.", sizeof(buf));
+
+  strlcat(buf, "\r\n", sizeof(buf));
 }
 
 void perform_immort_where(struct char_data * ch, char *arg)
@@ -4987,8 +5288,7 @@ void perform_immort_where(struct char_data * ch, char *arg)
   // Location version of the command (where <keyword>)
   *buf = '\0';
   for (struct char_data *i = character_list; i; i = i->next)
-    if (CAN_SEE(ch, i) && (i->in_room || i->in_veh) &&
-        isname(arg, GET_KEYWORDS(i))) {
+    if ((i->in_room || i->in_veh) && CAN_SEE(ch, i) && isname(arg, GET_KEYWORDS(i))) {
       found = 1;
       room = get_ch_in_room(i);
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "M%3d. %-25s - [%5ld] %s^n", ++num,
@@ -5002,7 +5302,7 @@ void perform_immort_where(struct char_data * ch, char *arg)
         strlcat(buf, "\r\n", sizeof(buf));
       }
     }
-  found2 = ObjList.PrintList(ch, arg);
+  found2 = ObjList.PrintList(ch, arg, TRUE);
 
   if (!found && !found2)
     send_to_char("Couldn't find any such thing.\r\n", ch);
@@ -5351,10 +5651,6 @@ ACMD(do_scan)
   int i = 0, j, dist = 3;
   struct room_data *was_in = NULL, *x = NULL;
 
-  if (AFF_FLAGGED(ch, AFF_ULTRASOUND) && !(PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_RIG))) {
-    send_to_char(ch, "The ultrasound distorts your vision.\r\n");
-    return;
-  }
   argument = any_one_arg(argument, buf);
 
   if (*buf) {
@@ -5374,10 +5670,8 @@ ACMD(do_scan)
     ch->in_room = in_veh->in_room;
   }
 
-  infra = ((PRF_FLAGGED(ch, PRF_HOLYLIGHT) ||
-            CURRENT_VISION(ch) == THERMOGRAPHIC) ? TRUE : FALSE);
-  lowlight = ((PRF_FLAGGED(ch, PRF_HOLYLIGHT) ||
-               CURRENT_VISION(ch) == LOWLIGHT) ? TRUE : FALSE);
+  infra = PRF_FLAGGED(ch, PRF_HOLYLIGHT) || has_vision(ch, VISION_THERMOGRAPHIC);
+  lowlight = PRF_FLAGGED(ch, PRF_HOLYLIGHT) || has_vision(ch, VISION_LOWLIGHT);
 
   if (!infra && IS_ASTRAL(ch))
     infra = TRUE;
@@ -5416,7 +5710,25 @@ ACMD(do_scan)
                 }
 
               }
-              snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "  %s%s\r\n", GET_NAME(list), FIGHTING(list) == ch ? " (fighting you!)" : "");
+
+              char desc_line[200];
+              strlcpy(desc_line, "", sizeof(desc_line));
+
+              if (list->mob_specials.quest_id == GET_IDNUM(ch)) {
+                strlcat(desc_line, "(quest) ", sizeof(desc_line));
+              } else if (list->mob_specials.quest_id != 0) {
+                strlcat(desc_line, "(protected) ", sizeof(desc_line));
+              }
+
+              if (IS_AFFECTED(list, AFF_INVISIBLE) || IS_AFFECTED(list, AFF_IMP_INVIS) || IS_AFFECTED(list, AFF_SPELLINVIS) || IS_AFFECTED(list, AFF_SPELLIMPINVIS)) {
+                strlcat(desc_line, "(invisible) ", sizeof(desc_line));
+              }
+
+              if ((IS_ASTRAL(ch) || IS_DUAL(ch)) && IS_ASTRAL(list)) {
+                  strlcat(desc_line, "(astral) ", sizeof(desc_line));
+              }
+
+              snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "  %s%s%s\r\n", desc_line, GET_NAME(list), FIGHTING(list) == ch ? " (fighting you!)" : "");
               onethere = TRUE;
               anythere = TRUE;
             }
@@ -5661,6 +5973,9 @@ ACMD(do_status)
   if (!printed) {
     send_to_char(ch, "Nothing.\r\n");
   }
+
+  send_to_char(ch, "\r\nYou have the following vision types:\r\n  %s\r\n",
+               write_vision_string_for_display(ch, VISION_STRING_MODE_STATUS));
 
   if (GET_MAG(targ) > 0) {
     send_to_char("\r\n", ch);

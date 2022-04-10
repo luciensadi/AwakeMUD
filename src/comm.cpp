@@ -1239,7 +1239,7 @@ int make_prompt(struct descriptor_data * d)
                 else strlcpy(str, "ML", sizeof(str));
 
               } else
-                strlcpy(str, "NA", sizeof(str));
+                strlcpy(str, "N/A", sizeof(str));
               break;
             case 'b':       // ballistic
               snprintf(str, sizeof(str), "%d", GET_BALLISTIC(d->character));
@@ -1401,6 +1401,17 @@ int make_prompt(struct descriptor_data * d)
             case 'U':
               snprintf(str, sizeof(str), "%d", GET_REFLECT(d->character));
               break;
+            case 'v':
+              if (GET_REAL_LEVEL(d->character) >= LVL_BUILDER) {
+                struct room_data *room = get_ch_in_room(d->character);
+                if (room)
+                  snprintf(str, sizeof(str), "%ld", room->number);
+                else
+                  strlcpy(str, "(fuck if I know mate)", sizeof(str));
+              }
+              else
+                strcpy(str, "@v");
+              break;
             case 'w':
               snprintf(str, sizeof(str), "%d", GET_INVIS_LEV(d->character));
               break;
@@ -1412,17 +1423,6 @@ int make_prompt(struct descriptor_data * d)
                 snprintf(str, sizeof(str), "%d", d->character->player_specials->saved.zonenum);
               else
                 strcpy(str, "@z");
-              break;
-            case 'v':
-              if (GET_REAL_LEVEL(d->character) >= LVL_BUILDER) {
-                struct room_data *room = get_ch_in_room(d->character);
-                if (room)
-                  snprintf(str, sizeof(str), "%ld", room->number);
-                else
-                  strlcpy(str, "(fuck if I know mate)", sizeof(str));
-              }
-              else
-                strcpy(str, "@v");
               break;
             case '@':
               strcpy(str, "@");
@@ -2890,10 +2890,13 @@ const char *get_voice_perceived_by(struct char_data *speaker, struct char_data *
     else {
       strlcpy(voice_buf, speaker->player.physical_text.room_desc, sizeof(voice_buf));
       for (struct obj_data *obj = speaker->cyberware; obj; obj = obj->next_content) {
-        if (GET_CYBERWARE_TYPE(obj) == CYB_VOICEMOD && GET_OBJ_VAL(obj, 3)) {
+        if (GET_CYBERWARE_TYPE(obj) == CYB_VOICEMOD && GET_CYBERWARE_FLAGS(obj)) {
           strlcpy(voice_buf, "a masked voice", sizeof(voice_buf));
           break;
         }
+      }
+      if (AFF_FLAGGED(speaker, AFF_VOICE_MODULATOR)) {
+        strlcpy(voice_buf, "a masked voice", sizeof(voice_buf));
       }
     }
 
@@ -3228,8 +3231,12 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
   if ( type == TO_ROLLS )
   {
     for (; to; to = to->next_in_room) {
-      if (IS_NPC(to) || !PRF_FLAGGED(to, PRF_ROLLS) || !(IS_SENATOR(to) || _OVERRIDE_ALLOW_PLAYERS_TO_USE_ROLLS_))
+      if (IS_NPC(to) || !PRF_FLAGGED(to, PRF_ROLLS))
         continue;
+
+      if (!IS_SENATOR(to) && !_OVERRIDE_ALLOW_PLAYERS_TO_USE_ROLLS_ && !PLR_FLAGGED(to, PLR_PAID_FOR_ROLLS))
+        continue;
+
       if (SENDOK(to)
           && !(hide_invisible
                && ch
@@ -3242,15 +3249,13 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
       if ((tch = rigger_check->rigger) && tch->desc && PRF_FLAGGED(tch, PRF_ROLLS)) {
         // We currently treat all vehicles as having ultrasonic sensors.
         // Since the check is done to the rigger, we have to apply det-invis to them directly, then remove it when done.
-        bool rigger_is_det_invis = AFF_FLAGGED(tch, AFF_ULTRASOUND);
-        AFF_FLAGS(tch).SetBit(AFF_ULTRASOUND);
+        set_vision_bit(tch, VISION_ULTRASONIC, VISION_BIT_OVERRIDE);
         if (SENDOK(tch)
             && !(hide_invisible
                  && ch
                  && !CAN_SEE(tch, ch)))
           perform_act(str, ch, obj, vict_obj, tch);
-        if (!rigger_is_det_invis)
-          AFF_FLAGS(tch).RemoveBit(AFF_ULTRASOUND);
+        remove_vision_bit(tch, VISION_ULTRASONIC, VISION_BIT_OVERRIDE);
       }
     }
 
@@ -3286,12 +3291,10 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
     if ((tch = rigger_check->rigger) && tch->desc) {
       // We currently treat all vehicles as having ultrasonic sensors.
       // Since the check is done to the rigger, we have to apply det-invis to them directly, then remove it when done.
-      bool rigger_is_det_invis = AFF_FLAGGED(tch, AFF_ULTRASOUND);
-      AFF_FLAGS(tch).SetBit(AFF_ULTRASOUND);
+      set_vision_bit(tch, VISION_ULTRASONIC, VISION_BIT_OVERRIDE);
       if (can_send_act_to_target(ch, hide_invisible, obj, vict_obj, tch, type | TO_REMOTE))
         perform_act(str, ch, obj, vict_obj, tch);
-      if (!rigger_is_det_invis)
-        AFF_FLAGS(tch).RemoveBit(AFF_ULTRASOUND);
+      remove_vision_bit(tch, VISION_ULTRASONIC, VISION_BIT_OVERRIDE);
     }
   }
 

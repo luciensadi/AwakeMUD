@@ -159,8 +159,8 @@ void physical_gain(struct char_data * ch)
   {
     gain = MAX(1, gain);
     for (bio = ch->bioware; bio; bio = bio->next_content)
-      if (GET_OBJ_VAL(bio, 0) == BIO_SYMBIOTES) {
-        switch (GET_OBJ_VAL(bio, 1)) {
+      if (GET_BIOWARE_TYPE(bio) == BIO_SYMBIOTES) {
+        switch (GET_BIOWARE_RATING(bio)) {
           case 1:
             gain = (int)(gain * 10/9);
             break;
@@ -337,26 +337,29 @@ void gain_condition(struct char_data * ch, int condition, int value)
 
   if (value == -1) {
     for (bio = ch->bioware; bio; bio = bio->next_content) {
-      if (GET_OBJ_VAL(bio, 0) == BIO_SYMBIOTES) {
-        switch (GET_OBJ_VAL(bio, 1)) {
+      if (GET_BIOWARE_TYPE(bio) == BIO_SYMBIOTES) {
+        switch (GET_BIOWARE_RATING(bio)) {
           case 1:
-            if (GET_OBJ_VAL(bio, 6))
+            // Every other evaluation tick, remove an extra point of this condition.
+            if (GET_BIOWARE_SYMBIOTE_CONDITION_DATA(bio))
               value--;
-            GET_OBJ_VAL(bio, 6) = !GET_OBJ_VAL(bio, 6);
+            GET_BIOWARE_SYMBIOTE_CONDITION_DATA(bio) = !GET_BIOWARE_SYMBIOTE_CONDITION_DATA(bio);
             break;
           case 2:
-            if (!(GET_OBJ_VAL(bio, 6) % 3))
+            // Every two out of three ticks, remove an extra point of this condition.
+            if (!(GET_BIOWARE_SYMBIOTE_CONDITION_DATA(bio) % 3))
               value--;
-            if ((++GET_OBJ_VAL(bio, 6)) > 9)
-              GET_OBJ_VAL(bio, 6) = 0;
+            if ((++GET_BIOWARE_SYMBIOTE_CONDITION_DATA(bio)) > 9)
+              GET_BIOWARE_SYMBIOTE_CONDITION_DATA(bio) = 0;
             break;
           case 3:
+            // Every tick, remove an extra point.
             value--;
             break;
         }
-      } else if (GET_OBJ_VAL(bio, 0) == BIO_SUPRATHYROIDGLAND) {
+      } else if (GET_BIOWARE_TYPE(bio) == BIO_SUPRATHYROIDGLAND) {
         value *= 2;
-      } else if (GET_OBJ_VAL(bio, 0) == BIO_DIGESTIVEEXPANSION) {
+      } else if (GET_BIOWARE_TYPE(bio) == BIO_DIGESTIVEEXPANSION) {
         value = (int)((float)value / .8);
       }
     }
@@ -450,33 +453,43 @@ void check_idling(void)
     } else if (!IS_NPC(ch)) {
       ch->char_specials.timer++;
       ch->char_specials.last_social_action++;
-      if (!(IS_SENATOR(ch) || IS_WORKING(ch) || PLR_FLAGGED(ch, PLR_NO_IDLE_OUT) || PRF_FLAGGED(ch, PRF_NO_VOID_ON_IDLE)) || !ch->desc) {
+
+      // Staff and busy PCs never idle out or get dropped from being LD.
+      if (IS_SENATOR(ch) || IS_WORKING(ch))
+        continue;
+
+      // We allow people prf-flagged appropriately to not idle out, but only if they have a link.
+      if (ch->desc && (PLR_FLAGGED(ch, PLR_NO_IDLE_OUT) || PRF_FLAGGED(ch, PRF_NO_VOID_ON_IDLE)))
+        continue;
+
 #ifdef VOID_IDLE_PCS
-        if (!GET_WAS_IN(ch) && ch->in_room && ch->char_specials.timer > 15) {
-          if (FIGHTING(ch))
-            stop_fighting(FIGHTING(ch));
-          if (CH_IN_COMBAT(ch))
-            stop_fighting(ch);
-          if (ch->master)
-            stop_follower(ch);
+      if (!GET_WAS_IN(ch) && ch->in_room && ch->char_specials.timer > 15) {
+        if (FIGHTING(ch))
+          stop_fighting(FIGHTING(ch));
+        if (CH_IN_COMBAT(ch))
+          stop_fighting(ch);
+        if (ch->master)
+          stop_follower(ch);
 
-          // No idling out in cabs.
-          if (ROOM_VNUM_IS_CAB(GET_ROOM_VNUM(ch->in_room))) {
+        // No idling out in cabs.
+        if (ROOM_VNUM_IS_CAB(GET_ROOM_VNUM(ch->in_room))) {
+          if (ch->desc)
             send_to_char("The cabdriver stops off at Dante's long enough to kick you out.\r\n", ch);
-            int rnum = real_room(RM_ENTRANCE_TO_DANTES);
-            if (rnum >= 0)
-              GET_WAS_IN(ch) = &world[rnum];
-            else
-              GET_WAS_IN(ch) = &world[1];
-          } else {
-            GET_WAS_IN(ch) = ch->in_room;
-          }
-
-          act("$n disappears into the void.", TRUE, ch, 0, 0, TO_ROOM);
-          send_to_char("You have been idle, and are pulled into a void.\r\n", ch);
-          char_from_room(ch);
-          char_to_room(ch, &world[1]);
+          int rnum = real_room(RM_ENTRANCE_TO_DANTES);
+          if (rnum >= 0)
+            GET_WAS_IN(ch) = &world[rnum];
+          else
+            GET_WAS_IN(ch) = &world[1];
+        } else {
+          GET_WAS_IN(ch) = ch->in_room;
         }
+
+        act("$n disappears into the void.", TRUE, ch, 0, 0, TO_ROOM);
+        if (ch->desc)
+          send_to_char("You have been idle, and are pulled into a void.\r\n", ch);
+        char_from_room(ch);
+        char_to_room(ch, &world[1]);
+      }
 #endif
         /* Disabled-- I get protecting them by moving them to the void, but why DC them?
         else if (ch->char_specials.timer > 30) {
@@ -494,7 +507,8 @@ void check_idling(void)
           extract_char(ch);
         }
         */
-      } else if (!ch->desc && ch->char_specials.timer > 15) {
+
+      else if (!ch->desc && ch->char_specials.timer > NUM_MINUTES_BEFORE_LINKDEAD_EXTRACTION) {
         snprintf(buf, sizeof(buf), "%s removed from game (no link).", GET_CHAR_NAME(ch));
         mudlog(buf, ch, LOG_CONNLOG, TRUE);
         extract_char(ch);
@@ -521,26 +535,26 @@ void check_bioware(struct char_data *ch)
 
   struct obj_data *bio;
   for (bio = ch->bioware; bio; bio = bio->next_content)
-    if (GET_OBJ_VAL(bio, 0) == BIO_PLATELETFACTORY)
+    if (GET_BIOWARE_TYPE(bio) == BIO_PLATELETFACTORY)
     {
-      if (--GET_OBJ_VAL(bio, 5) < 1) {
-        GET_OBJ_VAL(bio, 5) = 12;
-        if (success_test(GET_REAL_BOD(ch), 3 + GET_OBJ_VAL(bio, 6)) < 1) {
+      if (--GET_BIOWARE_PLATELETFACTORY_DATA(bio) < 1) {
+        GET_BIOWARE_PLATELETFACTORY_DATA(bio) = 12;
+        if (success_test(GET_REAL_BOD(ch), 3 + GET_BIOWARE_PLATELETFACTORY_DIFFICULTY(bio)) < 1) {
           send_to_char("Your blood seems to erupt.\r\n", ch);
           act("$n collapses to the floor, twitching.", TRUE, ch, 0, 0, TO_ROOM);
           damage(ch, ch, 10, TYPE_BIOWARE, PHYSICAL);
         } else {
           send_to_char("Your heart strains, and you have a feeling of impending doom. Your need for blood thinners is dire!\r\n", ch);
         }
-        GET_OBJ_VAL(bio, 6)++;
+        GET_BIOWARE_PLATELETFACTORY_DIFFICULTY(bio)++;
       }
-      if (GET_OBJ_VAL(bio, 5) == 4)
+      if (GET_BIOWARE_PLATELETFACTORY_DATA(bio) == 4)
         send_to_char("You kinda feel like you should be taking some aspirin.\r\n", ch);
-      else if (GET_OBJ_VAL(bio, 5) == 3)
+      else if (GET_BIOWARE_PLATELETFACTORY_DATA(bio) == 3)
         send_to_char("You could definitely go for some aspirin right now.\r\n", ch);
-      else if (GET_OBJ_VAL(bio, 5) <= 2)
+      else if (GET_BIOWARE_PLATELETFACTORY_DATA(bio) <= 2)
         send_to_char("You really feel like you need to take some aspirin.\r\n", ch);
-      else if (GET_OBJ_VAL(bio, 5) == 1)
+      else if (GET_BIOWARE_PLATELETFACTORY_DATA(bio) == 1)
         send_to_char("Your heart strains, and you have a feeling of impending doom. Your need for blood thinners is dire!\r\n", ch);
       break;
     }
@@ -727,9 +741,9 @@ void process_regeneration(int half_hour)
     if (GET_POS(ch) == POS_MORTALLYW && !AFF_FLAGS(ch).IsSet(AFF_STABILIZE) && half_hour) {
       bool dam = TRUE;
       for (struct obj_data *obj = ch->bioware; obj; obj = obj->next_content)
-        if (GET_OBJ_VAL(obj, 0) == BIO_METABOLICARRESTER) {
-          if (++GET_OBJ_VAL(obj, 3) == 5) {
-            GET_OBJ_VAL(obj, 3) = 0;
+        if (GET_BIOWARE_TYPE(obj) == BIO_METABOLICARRESTER) {
+          if (++GET_BIOWARE_IS_ACTIVATED(obj) == 5) {
+            GET_BIOWARE_IS_ACTIVATED(obj) = 0;
             dam = TRUE;
           } else
             dam = FALSE;
@@ -1418,7 +1432,7 @@ void misc_update(void)
       struct sustain_data *next, *temp, *nsus;
       for (struct sustain_data *sus = GET_SUSTAINED(ch); sus; sus = next) {
         next = sus->next;
-        if (sus->spell > SPELL_SHADOW) {
+        if (sus->spell >= MAX_SPELLS) {
           snprintf(buf, sizeof(buf), "COWS GO MOO %s %d", GET_CHAR_NAME(ch), sus->spell);
           log(buf);
           continue;

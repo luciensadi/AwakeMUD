@@ -236,6 +236,7 @@ ACMD_DECLARE(do_logwatch);
 ACMD_DECLARE(do_manifest);
 ACMD_DECLARE(do_map);
 ACMD_DECLARE(do_masking);
+ACMD_DECLARE(do_makenerps);
 ACMD_DECLARE(do_memory);
 ACMD_DECLARE(do_message_history);
 ACMD_DECLARE(do_metamagic);
@@ -362,6 +363,7 @@ ACMD_DECLARE(do_users);
 ACMD_DECLARE(do_vset);
 ACMD_DECLARE(do_vemote);
 ACMD_DECLARE(do_visible);
+ACMD_DECLARE(do_vfind);
 ACMD_DECLARE(do_vnum);
 ACMD_DECLARE(do_vstat);
 ACMD_DECLARE(do_wake);
@@ -419,6 +421,7 @@ ACMD_DECLARE(do_man);
 ACMD_DECLARE(do_target);
 ACMD_DECLARE(do_vteleport);
 ACMD_DECLARE(do_gridguide);
+ACMD_DECLARE(do_quickwho);
 ACMD_DECLARE(do_hedit);
 ACMD_DECLARE(do_icedit);
 ACMD_DECLARE(do_connect);
@@ -456,7 +459,18 @@ struct command_info cmd_info[] =
     { "activate"   , POS_LYING   , do_activate , 0, 0, FALSE },
     { "aecho"      , POS_SLEEPING, do_new_echo , LVL_ARCHITECT, SCMD_AECHO, FALSE },
     { "accept"     , POS_LYING   , do_accept   , 0, 0, FALSE },
+
+#ifdef DIES_IRAE
+    /* The power point for Karma rule was specifically included for players who do not use the advanced magic (initiation) rules.
+       It is recommended that this rule be ignored if the initation rules in Magic in the Shadows are also being used.
+          -- https://www.shadowrunrpg.com/resources/sr3faq.html#6
+
+      Per the above, addpoint has been disabled.
+    */
+    // { "addpoint"   , POS_DEAD    , do_initiate , 0, SCMD_POWERPOINT, FALSE },
+#else
     { "addpoint"   , POS_DEAD    , do_initiate , 0, SCMD_POWERPOINT, FALSE },
+#endif
     { "affects"    , POS_MORTALLYW, do_status   , 0, 0, TRUE },
     { "afk"        , POS_DEAD    , do_afk      , 0, 0, TRUE },
     { "ammo"       , POS_LYING   , do_ammo     , 0, 0, TRUE },
@@ -668,6 +682,7 @@ struct command_info cmd_info[] =
     { "mode"       , POS_LYING   , do_mode     , 0, 0, FALSE },
     { "motd"       , POS_DEAD    , do_gen_ps   , 0, SCMD_MOTD, FALSE },
     { "mount"      , POS_RESTING , do_mount    , 0, 0, FALSE },
+    { "makenerps"  , POS_SLEEPING, do_makenerps, LVL_FIXER, 0, FALSE },
     { "mask"       , POS_RESTING , do_masking  , 0, 0, FALSE },
     { "mute"       , POS_DEAD    , do_wizutil  , LVL_FREEZE, SCMD_SQUELCH, FALSE },
     { "muteooc"    , POS_DEAD    , do_wizutil  , LVL_FREEZE, SCMD_SQUELCHOOC, FALSE },
@@ -738,6 +753,8 @@ struct command_info cmd_info[] =
     { "qui"        , POS_DEAD    , do_quit     , 0, 0, FALSE },
     { "quit"       , POS_SLEEPING, do_quit     , 0, SCMD_QUIT, FALSE },
     { "quicklook"  , POS_LYING   , do_look     , 0, SCMD_QUICKLOOK, TRUE },
+    { "quickwho"   , POS_DEAD    , do_quickwho , 0, 0, TRUE },
+    { "qwho"       , POS_DEAD    , do_quickwho , 0, 0, TRUE },
     { "qlist"      , POS_DEAD    , do_qlist    , LVL_FIXER, 0, FALSE },
     { "qedit"      , POS_DEAD    , do_qedit    , LVL_FIXER, 0, FALSE },
 
@@ -856,6 +873,7 @@ struct command_info cmd_info[] =
     { "ungroup"    , POS_DEAD    , do_ungroup  , 0, 0, FALSE },
     { "uninstall"  , POS_SITTING , do_get      , 0, SCMD_UNINSTALL, FALSE },
     { "unjack"     , POS_SITTING , do_jack     , 0, 1, FALSE },
+    { "unkeep"     , POS_LYING   , do_keep     , 0, 0, FALSE },
     { "unlock"     , POS_SITTING , do_gen_door , 0, SCMD_UNLOCK, FALSE },
     { "unlink"     , POS_SLEEPING, do_link     , 0, 1, FALSE },
     { "unbond"     , POS_RESTING , do_unbond   , 0, 0, FALSE },
@@ -875,6 +893,7 @@ struct command_info cmd_info[] =
     { "vemote"     , POS_SLEEPING, do_vemote   , 0 , 0, FALSE },
     { "visible"    , POS_RESTING , do_visible  , LVL_BUILDER, 0, FALSE },
     { "view"       , POS_LYING   , do_imagelink, 0, 0, FALSE },
+    { "vfind"      , POS_DEAD    , do_vfind    , LVL_BUILDER, 0, FALSE },
     { "vlist"      , POS_DEAD    , do_vlist    , LVL_BUILDER, 0, FALSE },
     { "vnum"       , POS_DEAD    , do_vnum     , LVL_BUILDER, 0, FALSE },
     { "vset"       , POS_DEAD    , do_vset     , LVL_DEVELOPER, 0, FALSE },
@@ -1318,6 +1337,7 @@ struct command_info rig_info[] =
     { "ooc", 0, do_gen_comm, 0, SCMD_OOC, FALSE },
     { "pools", 0, do_pool, 0, 0 , FALSE },
     { "ram", 0, do_ram, 0, 0, FALSE },
+    { "recap", 0, do_recap, 0, 0 , FALSE },
     { "rig", POS_SITTING , do_rig, 0, 0 , FALSE },
     { "return", 0, do_return, 0, 0, FALSE },
     { "reply", 0, do_reply, 0, 0 , FALSE },
@@ -1333,6 +1353,7 @@ struct command_info rig_info[] =
     { "typo", 0, do_gen_write, 0, SCMD_TYPO, FALSE },
     { "unlock", 0, do_gen_door , 0, SCMD_UNLOCK , FALSE },
     { "vemote", 0, do_vemote, 0, 0, FALSE },
+    { "where", 0, do_where, 0, 0, FALSE },
     { "who", 0, do_who, 0, 0, FALSE },
     { "wtell", 0, do_wiztell, LVL_BUILDER, 0, FALSE },
     { "\n", 0, 0, 0, 0, FALSE }
@@ -2206,9 +2227,12 @@ int perform_dupe_check(struct descriptor_data *d)
         target = k->original;
         mode = UNSWITCH;
       }
+      // TODO: Desc is leaked?
       if (k->character)
         k->character->desc = NULL;
+      // TODO: Character is leaked?
       k->character = NULL;
+      // Original is not leaked since it's inherited by the new connection.
       k->original = NULL;
     } else if (k->character && (GET_IDNUM(k->character) == id)) {
       if (!target && STATE(k) == CON_PLAYING) {
@@ -2216,7 +2240,9 @@ int perform_dupe_check(struct descriptor_data *d)
         target = k->character;
         mode = USURP;
       }
+      // TODO: Desc is leaked?
       k->character->desc = NULL;
+      // TODO: Character is leaked?
       k->character = NULL;
       k->original = NULL;
       SEND_TO_Q("\r\nMultiple login detected -- disconnecting.\r\n", k);
@@ -3233,6 +3259,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("purchase", "buy");
   COMMAND_ALIAS("stats", "score");
   COMMAND_ALIAS("attributes", "score");
+  COMMAND_ALIAS("make", "create");
 
   // Alternate spellings.
   COMMAND_ALIAS("customise", "customize");

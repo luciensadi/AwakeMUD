@@ -833,5 +833,6 @@ int npc_ammo_usage_preferences[] = {
   AMMO_EXPLOSIVE,
   AMMO_NORMAL,
   AMMO_GEL,
-  AMMO_FLECHETTE
+  AMMO_FLECHETTE,
+  AMMO_HARMLESS
 };
