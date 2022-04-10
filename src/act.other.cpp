@@ -1867,8 +1867,12 @@ ACMD(do_attach)
       send_to_char("The mount is locked.\r\n", ch);
       return;
     }
-    if (!IS_GUN(GET_OBJ_VAL(item, 3)) || veh->usedload + GET_OBJ_WEIGHT(item) > veh->load) {
-      send_to_char("You can't seem to fit it on.\r\n", ch);
+    if (!IS_GUN(GET_WEAPON_ATTACK_TYPE(item))) {
+      send_to_char(ch, "%s isn't a gun, there'd be no point in attaching it to a mount.\r\n", capitalize(GET_OBJ_NAME(item)));
+      return;
+    }
+    if (veh->usedload + GET_OBJ_WEIGHT(item) > veh->load) {
+      send_to_char(ch, "%s would put %s over its load limit!\r\n", capitalize(GET_OBJ_NAME(item)), decapitalize_a_an(GET_VEH_NAME(veh)));
       return;
     }
     switch (GET_OBJ_VAL(item, 4)) {

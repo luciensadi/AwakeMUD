@@ -490,7 +490,12 @@ ACMD(do_put)
 
   generic_find(arg2, FIND_OBJ_EQUIP | FIND_OBJ_INV | FIND_OBJ_ROOM, ch, &tmp_char, &cont);
   if (!cont) {
-    send_to_char(ch, "You don't see %s %s here.\r\n", AN(arg2), arg2);
+    struct veh_data *veh = get_veh_list(arg2, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch);
+    if (veh) {
+      send_to_char(ch, "%s is a vehicle-- you'll have to use the UPGRADE command.\r\n", capitalize(GET_VEH_NAME(veh)));
+    } else {
+      send_to_char(ch, "You don't see %s %s here.\r\n", AN(arg2), arg2);
+    }
     return;
   }
 

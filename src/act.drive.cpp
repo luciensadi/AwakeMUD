@@ -1205,7 +1205,7 @@ ACMD(do_driveby)
   int dir;
 
   if (!ch->in_veh) {
-    send_to_char(ch, "You must be in a vehicle to do that.\r\n");
+    send_to_char(ch, "You must be in a vehicle to perform a driveby.\r\n");
     return;
   }
   if (!AFF_FLAGGED(ch, AFF_PILOT)) {
@@ -1464,7 +1464,7 @@ ACMD(do_target)
   int j;
   RIG_VEH(ch, veh);
   if (!veh) {
-    send_to_char("You must be in a vehicle to do that.\r\n", ch);
+    send_to_char("You must be in a vehicle to target someone with mounted weapons.\r\n", ch);
     return;
   }
   if (!veh->mount) {
@@ -1663,7 +1663,7 @@ ACMD(do_mount)
   struct obj_data *obj, *gun = NULL, *ammo = NULL; /* Appears unused:  *bin = NULL; */
   RIG_VEH(ch, veh);
   if (!veh) {
-    send_to_char("You must be in a vehicle to use that.\r\n", ch);
+    send_to_char("You must be in a vehicle to control mounted weapons. (Are you looking for the ^WATTACH^n command?)\r\n", ch);
     return;
   }
   if (IS_ASTRAL(ch)) {
