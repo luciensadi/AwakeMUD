@@ -1189,8 +1189,12 @@ void do_stat_veh(struct char_data *ch, struct veh_data * k)
           virt, k->veh_number, veh_type[k->type], k->idnum, k->owner);
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Han: [^B%d^n]  Spe: [^B%d^n]  Acc: [^B%d^n]  Bod: [^B%d^n]  Arm: [^B%d^n]\r\n",
           k->handling, k->speed, k->accel, k->body, k->armor);
-  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Sig: [^B%d^n]  Aut: [^B%d^n]  Pil: [^B%d^n]  Sea: [^B%d/%d^n]  Loa: [^B%d/%d^n]  Cos: [^B%d^n]\r\n",
-          k->sig, k->autonav, k->pilot, k->seating[1], k->seating[0], (int)k->usedload, (int)k->load, k->cost);
+
+  char flag_buf[1000];
+  k->flags.PrintBits(flag_buf, sizeof(flag_buf), veh_flag, NUM_VFLAGS);
+
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Sig: [^B%d^n]  Aut: [^B%d^n]  Pil: [^B%d^n]  Sea: [^B%d/%d^n]  Loa: [^B%d/%d^n]  Cos: [^B%d^n]\r\nFlags: [^B%s^n]\r\n",
+          k->sig, k->autonav, k->pilot, k->seating[1], k->seating[0], (int)k->usedload, (int)k->load, k->cost, *flag_buf ? flag_buf : "none");
   send_to_char(buf, ch);
 }
 

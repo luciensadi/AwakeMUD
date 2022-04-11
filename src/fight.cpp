@@ -38,7 +38,7 @@ bool does_weapon_have_bayonet(struct obj_data *weapon);
 int find_sight(struct char_data *ch);
 void damage_door(struct char_data *ch, struct room_data *room, int dir, int power, int type);
 void damage_obj(struct char_data *ch, struct obj_data *obj, int power, int type);
-void mount_fire(struct char_data *ch);
+bool mount_fire(struct char_data *ch);
 /* External procedures */
 char *fread_action(FILE * fl, int nr);
 char *fread_string(FILE * fl, char *error);
@@ -102,7 +102,7 @@ extern bool item_should_be_treated_as_ranged_weapon(struct obj_data *obj);
 
 extern struct obj_data *generate_ammobox_from_pockets(struct char_data *ch, int weapontype, int ammotype, int quantity);
 extern void send_mob_aggression_warnings(struct char_data *pc, struct char_data *mob);
-extern void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *victim, struct obj_data *weap, struct obj_data *vict_weap, struct obj_data *weap_ammo, bool multi_weapon_modifier);
+extern bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *victim, struct obj_data *weap, struct obj_data *vict_weap, struct obj_data *weap_ammo, bool multi_weapon_modifier);
 
 extern void mobact_change_firemode(struct char_data *ch);
 
@@ -218,26 +218,22 @@ void load_messages(void)
 
 void update_pos(struct char_data * victim)
 {
-  if ((GET_MENTAL(victim) < 100) && (GET_PHYSICAL(victim) >= 100))
-  {
+  if ((GET_MENTAL(victim) < 100) && (GET_PHYSICAL(victim) >= 100)) {
     for (struct obj_data *bio = victim->bioware; bio; bio = bio->next_content)
       if (GET_BIOWARE_TYPE(bio) == BIO_PAINEDITOR && GET_BIOWARE_IS_ACTIVATED(bio))
         return;
     GET_POS(victim) = POS_STUNNED;
     GET_INIT_ROLL(victim) = 0;
+  } else if ((GET_PHYSICAL(victim) >= 100) && (GET_POS(victim) > POS_STUNNED)) {
     return;
-  }
-
-  if ((GET_PHYSICAL(victim) >= 100) && (GET_POS(victim) > POS_STUNNED))
-    return;
-  else if (GET_PHYSICAL(victim) >= 100)
-  {
+  } else if (GET_PHYSICAL(victim) >= 100) {
     GET_POS(victim) = POS_STANDING;
     return;
-  } else if ((int)(GET_PHYSICAL(victim) / 100) <= -GET_REAL_BOD(victim) + (GET_BIOOVER(victim) > 0 ? GET_BIOOVER(victim) : 0))
+  } else if ((int)(GET_PHYSICAL(victim) / 100) <= -GET_REAL_BOD(victim) + (GET_BIOOVER(victim) > 0 ? GET_BIOOVER(victim) : 0)) {
     GET_POS(victim) = POS_DEAD;
-  else
+  } else {
     GET_POS(victim) = POS_MORTALLYW;
+  }
 
   GET_INIT_ROLL(victim) = 0;
 
@@ -248,6 +244,19 @@ void update_pos(struct char_data * victim)
       next = sust->next;
       if (sust->caster && !sust->focus && !sust->spirit)
         end_sustained_spell(victim, sust);
+    }
+
+    char cmd_buf[100];
+    *cmd_buf = '\0';
+
+    if (PLR_FLAGGED(victim, PLR_REMOTE) || AFF_FLAGGED(victim, AFF_RIG)) {
+      ACMD_DECLARE(do_return);
+      do_return(victim, cmd_buf, 0, 0);
+    }
+
+    if (PLR_FLAGGED(victim, PLR_MATRIX)) {
+      ACMD_DECLARE(do_logoff);
+      do_logoff(victim, cmd_buf, 0, 1);
     }
   }
 }
@@ -2115,8 +2124,8 @@ void check_adrenaline(struct char_data *ch, int mode)
   {
     GET_OBJ_VAL(pump, 5) = dice(GET_OBJ_VAL(pump, 1), 6);
     GET_OBJ_VAL(pump, 6) = GET_OBJ_VAL(pump, 5);
-    send_to_char("Your body is wracked with renewed vitality as adrenaline pumps into your\r\n"
-                 "bloodstream.\r\n", ch);
+    if (!IS_JACKED_IN(ch))
+      send_to_char("Your body is wracked with renewed vitality as adrenaline pumps into your bloodstream.\r\n", ch);
     for (i = 0; i < MAX_OBJ_AFFECT; i++)
       affect_modify(ch,
                     pump->affected[i].location,
@@ -2132,7 +2141,8 @@ void check_adrenaline(struct char_data *ch, int mode)
                       pump->affected[i].modifier,
                       pump->obj_flags.bitvector, FALSE);
       GET_OBJ_VAL(pump, 5) = -number(80, 100);
-      send_to_char("Your body softens and relaxes as the adrenaline wears off.\r\n", ch);
+      if (!IS_JACKED_IN(ch))
+        send_to_char("Your body softens and relaxes as the adrenaline wears off.\r\n", ch);
       dam = convert_damage(stage(-success_test(GET_BOD(ch) + GET_BODY(ch),
                                                (int)(GET_OBJ_VAL(pump, 6) / 2)), DEADLY));
       GET_OBJ_VAL(pump, 6) = 0;
@@ -2857,7 +2867,7 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
         act("$n is stunned, but will probably regain consciousness again.",
             TRUE, victim, 0, 0, TO_ROOM);
       }
-      if (!PLR_FLAGGED(victim, PLR_MATRIX)) {
+      if (!IS_JACKED_IN(victim)) {
         send_to_char("You're stunned, but will probably regain consciousness "
                      "again.\r\n", victim);
       }
@@ -2893,24 +2903,26 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
 
       break;
     default:                      /* >= POSITION SLEEPING */
-      if (dam > ((int)(GET_MAX_PHYSICAL(victim) / 100) >> 2))
+      if (dam > ((int)(GET_MAX_PHYSICAL(victim) / 100) >> 2) && !IS_JACKED_IN(victim)) {
         act("^RThat really did HURT!^n", FALSE, victim, 0, 0, TO_CHAR);
+      }
 
       // Don't bleed or flee from your own spellcast.
       if (attacktype == TYPE_SPELL_DRAIN)
         break;
 
-      if (GET_PHYSICAL(victim) < (GET_MAX_PHYSICAL(victim) >> 2))
+      if (GET_PHYSICAL(victim) < (GET_MAX_PHYSICAL(victim) >> 2) && !IS_JACKED_IN(victim)) {
         send_to_char(victim, "%sYou wish that your wounds would stop "
                      "^RBLEEDING^r so much!%s\r\n", CCRED(victim, C_SPR),
                      CCNRM(victim, C_SPR));
+      }
 
       if (MOB_FLAGGED(victim, MOB_WIMPY) && !AFF_FLAGGED(victim, AFF_PRONE) && ch != victim &&
           GET_PHYSICAL(victim) < (GET_MAX_PHYSICAL(victim) >> 2))
         do_flee(victim, "", 0, 0);
 
       if (!IS_NPC(victim) && GET_WIMP_LEV(victim) && victim != ch &&
-          (int)(GET_PHYSICAL(victim) / 100) < GET_WIMP_LEV(victim)) {
+          (int)(GET_PHYSICAL(victim) / 100) < GET_WIMP_LEV(victim) && !IS_JACKED_IN(victim)) {
         send_to_char("You ^Ywimp^n out, and attempt to flee!\r\n", victim);
         do_flee(victim, "", 0, 0);
       }
@@ -3221,7 +3233,7 @@ int check_recoil(struct char_data *ch, struct obj_data *gun)
   return comp;
 }
 
-void astral_fight(struct char_data *ch, struct char_data *vict)
+bool astral_fight(struct char_data *ch, struct char_data *vict)
 {
   char oopsbuf[1000];
   int w_type, dam, power, attack_success, newskill, skill_total, base_target;
@@ -3234,13 +3246,13 @@ void astral_fight(struct char_data *ch, struct char_data *vict)
     snprintf(oopsbuf, sizeof(oopsbuf), "SYSERR: Entered astral_fight with %s and %s who are not in the same room.", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict));
     mudlog(oopsbuf, ch, LOG_SYSLOG, TRUE);
     send_to_char("You struggle to figure out how to attack astral targets at range.\r\n", ch);
-    return;
+    return FALSE;
   }
 
   if (GET_POS(vict) <= POS_DEAD)
   {
     mudlog("SYSERR: Attempt to damage a corpse.", ch, LOG_SYSLOG, TRUE);
-    return;                     /* -je, 7/7/92 */
+    return FALSE;                     /* -je, 7/7/92 */
   }
 
   snprintf(buf3, sizeof(buf3), "^WWelcome to the ancient-ass astral_fight()! Featuring: %s vs %s.^n", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict));
@@ -3398,6 +3410,7 @@ void astral_fight(struct char_data *ch, struct char_data *vict)
     act("$n whiffs $s attack on $N!", 1, ch, NULL, vict, TO_CHAR);
     act("$n whiffs $s attack on $N!", 1, ch, NULL, vict, TO_VICT);
     if (!AFF_FLAGGED(ch, AFF_COUNTER_ATT)) {
+      bool victim_died = FALSE;
       if ((GET_ASTRAL(vict) > 0)
           && (attack_success < 0)
           && FIGHTING(vict) == ch
@@ -3406,12 +3419,12 @@ void astral_fight(struct char_data *ch, struct char_data *vict)
         send_to_char(vict, "You counter %s's attack!\r\n", GET_NAME(ch));
         act("$n counters $N's attack!", 1, ch, NULL, vict, TO_ROOM);
         AFF_FLAGS(vict).SetBit(AFF_COUNTER_ATT);
-        astral_fight(vict, ch);
+        victim_died = astral_fight(vict, ch);
       }
-      return;
+      return victim_died;
     } else {
       AFF_FLAGS(ch).RemoveBit(AFF_COUNTER_ATT);
-      return;
+      return FALSE;
     }
   } else if (AFF_FLAGGED(ch, AFF_COUNTER_ATT))
     AFF_FLAGS(ch).RemoveBit(AFF_COUNTER_ATT);
@@ -3423,7 +3436,7 @@ void astral_fight(struct char_data *ch, struct char_data *vict)
   if (IS_PROJECT(ch) && PLR_FLAGGED(ch->desc->original, PLR_KILLER))
     dam = 0;
 
-  damage(ch, vict, dam, w_type, is_physical);
+  return damage(ch, vict, dam, w_type, is_physical);
   /*  This echo-back-damage code is not necessary, it's handled automatically in damage().
   if (IS_PROJECT(vict) && dam > 0)
     damage(vict->desc->original, vict->desc->original, dam, 0, is_physical);
@@ -3542,6 +3555,7 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
   struct obj_data *obj = NULL;
   struct room_data *ch_room = NULL, *vict_room = NULL;
   rnum_t room1 = 0, room2 = 0, rnum = 0;
+  struct veh_data *veh = NULL;
 
   if (weapon == NULL) {
     mudlog("SYSERR: Null weapon in combat_message()!", ch, LOG_SYSLOG, TRUE);
@@ -3703,9 +3717,30 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
     }
     act(buf1, FALSE, ch, weapon, victim, TO_VICT);
     act(buf2, FALSE, ch, weapon, victim, TO_CHAR | TO_REMOTE);
-    act(buf3, FALSE, ch, weapon, victim, TO_NOTVICT);
-    act(buf4, FALSE, victim, weapon, ch, TO_ROOM);
+    if (!PLR_FLAGGED(ch, PLR_REMOTE)) {
+      act(buf3, FALSE, ch, weapon, victim, TO_NOTVICT);
+    }
+    act(buf4, FALSE, victim, weapon, ch, TO_NOTVICT);
     // End ranged messaging.
+  }
+
+  // Now that we've sent the messages, change to the vehicle's room (if we're in a vehicle).
+  if (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE)) {
+    RIG_VEH(ch, veh);
+    ch_room = get_veh_in_room(veh);
+  }
+
+  // Alert everyone in the room.
+  for (struct char_data *listener = ch_room->people; listener; listener = listener->next_in_room) {
+    if (IS_NPC(listener)) {
+      if (veh || CAN_SEE(listener, ch)) {
+        GET_MOBALERTTIME(listener) = 30;
+        GET_MOBALERT(listener) = MALERT_ALARM;
+      } else {
+        GET_MOBALERTTIME(listener) = 20;
+        GET_MOBALERT(listener) = MALERT_ALERT;
+      }
+    }
   }
 
   // If the player's in a silent room, don't propagate the gunshot.
@@ -4931,7 +4966,7 @@ void perform_violence(void)
     }
 
     // You get no action if you're out of init.
-    if (GET_INIT_ROLL(ch) <= 0) {
+    if (GET_INIT_ROLL(ch) <= 0 && !IS_JACKED_IN(ch)) {
       send_to_char("^L(OOC: You're out of initiative! Waiting for combat round reset.)^n\r\n", ch);
       continue;
     }
@@ -5264,11 +5299,15 @@ void perform_violence(void)
       if ((veh && veh->in_room)
           && ((FIGHTING(ch) && veh->in_room != FIGHTING(ch)->in_room)
                || (FIGHTING_VEH(ch) && veh->in_room != FIGHTING_VEH(ch)->in_room))) {
-        send_to_char("Your target has left your line of sight.\r\n", ch);
+        if (!IS_JACKED_IN(ch))
+          send_to_char("Your target has left your line of sight.\r\n", ch);
         stop_fighting(ch);
         continue;
       }
-      mount_fire(ch);
+
+      // Fire, then check for death.
+      if (mount_fire(ch))
+        continue;
     }
 
     // Attacking a vehicle. Stopped here.
@@ -5276,13 +5315,17 @@ void perform_violence(void)
       if (ch->in_room != FIGHTING_VEH(ch)->in_room) {
         stop_fighting(ch);
       } else
-        vcombat(ch, FIGHTING_VEH(ch));
+        if (vcombat(ch, FIGHTING_VEH(ch)))
+          continue;
     } else if (FIGHTING(ch)) {
-      hit(ch,
-          FIGHTING(ch),
-          GET_EQ(ch, WEAR_WIELD) ? GET_EQ(ch, WEAR_WIELD) : GET_EQ(ch, WEAR_HOLD),
-          GET_EQ(FIGHTING(ch), WEAR_WIELD) ? GET_EQ(FIGHTING(ch), WEAR_WIELD) : GET_EQ(FIGHTING(ch), WEAR_HOLD),
-          NULL);
+      bool target_died = hit(ch,
+                             FIGHTING(ch),
+                             GET_EQ(ch, WEAR_WIELD) ? GET_EQ(ch, WEAR_WIELD) : GET_EQ(ch, WEAR_HOLD),
+                             GET_EQ(FIGHTING(ch), WEAR_WIELD) ? GET_EQ(FIGHTING(ch), WEAR_WIELD) : GET_EQ(FIGHTING(ch), WEAR_HOLD),
+                             NULL);
+
+      if (target_died)
+        continue;
 
       // TODO: Two-weapon fighting for melee weapons (see CC p96 for off-hand weapons).
       if (GET_EQ(ch, WEAR_WIELD)
@@ -5290,11 +5333,16 @@ void perform_violence(void)
           && FIGHTING(ch)
           && IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_HOLD)))
           && GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_HOLD)) != WEAP_TASER)
-        hit(ch,
-            FIGHTING(ch),
-            GET_EQ(ch, WEAR_HOLD),
-            GET_EQ(FIGHTING(ch), WEAR_WIELD) ? GET_EQ(FIGHTING(ch), WEAR_WIELD) : GET_EQ(FIGHTING(ch), WEAR_HOLD),
-            NULL);
+      {
+        target_died = hit(ch,
+                          FIGHTING(ch),
+                          GET_EQ(ch, WEAR_HOLD),
+                          GET_EQ(FIGHTING(ch), WEAR_WIELD) ? GET_EQ(FIGHTING(ch), WEAR_WIELD) : GET_EQ(FIGHTING(ch), WEAR_HOLD),
+                          NULL);
+
+        if (target_died)
+          continue;
+      }
     } else {
       mudlog("SYSERR: Character is in the combat list, but isn't fighting anything! (Second block)", ch, LOG_SYSLOG, TRUE);
       send_to_char("Your mind goes fuzzy for a moment, and you shake your head, then stand down.\r\n", ch);
@@ -5498,7 +5546,7 @@ void chkdmg(struct veh_data * veh)
   return;
 }
 
-void vram(struct veh_data * veh, struct char_data * ch, struct veh_data * tveh)
+bool vram(struct veh_data * veh, struct char_data * ch, struct veh_data * tveh)
 {
   int power, damage_total = 0, veh_dam = 0;
   int veh_resist = 0, ch_resist = 0, modbod = 0;
@@ -5563,13 +5611,14 @@ void vram(struct veh_data * veh, struct char_data * ch, struct veh_data * tveh)
     }
     act(buf1, FALSE, ch, 0, 0, TO_ROOM);
     act(buf2, FALSE, ch, 0, 0, TO_CHAR);
-    damage(get_driver(veh), ch, damage_total, TYPE_RAM, PHYSICAL);
+    bool victim_died = damage(get_driver(veh), ch, damage_total, TYPE_RAM, PHYSICAL);
 
     // Deal damage to the rammer's vehicle if they incurred any.
     if (will_damage_vehicle && veh_dam > 0) {
       veh->damage += veh_dam;
       chkdmg(veh);
     }
+    return victim_died;
   } else
   {
     power = veh->cspeed - tveh->cspeed;
@@ -5653,9 +5702,10 @@ void vram(struct veh_data * veh, struct char_data * ch, struct veh_data * tveh)
       }
     chkdmg(veh);
   }
+  return FALSE;
 }
 
-void vcombat(struct char_data * ch, struct veh_data * veh)
+bool vcombat(struct char_data * ch, struct veh_data * veh)
 {
   char ammo_type[20];
   static struct obj_data *wielded = NULL;
@@ -5666,12 +5716,12 @@ void vcombat(struct char_data * ch, struct veh_data * veh)
 
   if (IS_AFFECTED(ch, AFF_PETRIFY)) {
     stop_fighting(ch);
-    return;
+    return FALSE;
   }
 
   if (veh->damage >= VEH_DAM_THRESHOLD_DESTROYED) {
     stop_fighting(ch);
-    return;
+    return FALSE;
   }
 
   // Manning a mount, let's use that.
@@ -5694,18 +5744,17 @@ void vcombat(struct char_data * ch, struct veh_data * veh)
 
   if (get_speed(veh) > 10 && !AFF_FLAGGED(ch, AFF_COUNTER_ATT) && ((!wielded || !IS_GUN(GET_OBJ_VAL(wielded, 3)))))
   {
-    vram(veh, ch, NULL);
-    return;
+    return vram(veh, ch, NULL);
   }
 
   if (wielded) {
     // Ensure it has ammo.
     if (!has_ammo(ch, wielded)) {
-      return;
+      return FALSE;
     }
 
     // Set the attack description.
-    switch(GET_OBJ_VAL(wielded, 3)) {
+    switch(GET_WEAPON_ATTACK_TYPE(wielded)) {
       case WEAP_SHOTGUN:
         snprintf(ammo_type, sizeof(ammo_type), "horde of pellets");
         break;
@@ -5780,8 +5829,8 @@ void vcombat(struct char_data * ch, struct veh_data * veh)
     act(buf, FALSE, ch, NULL, NULL, TO_ROOM);
     act(buf2, FALSE, ch, NULL, NULL, TO_CHAR);
     snprintf(buf, sizeof(buf), "A %s ricochets off of your ride.\r\n", ammo_type);
-    send_to_veh(buf, veh, 0, TRUE);
-    return;
+    send_to_veh(buf, veh, 0, FALSE);
+    return FALSE;
   } else
     power -= veh->armor;
 
@@ -5844,7 +5893,7 @@ void vcombat(struct char_data * ch, struct veh_data * veh)
     act(buf1, FALSE, ch, wielded, 0, TO_CHAR);
     send_to_veh(buf2, veh, 0, TRUE);
     weapon_scatter(ch, ch, wielded);
-    return;
+    return FALSE;
   }
   attack_resist = success_test(veh->body, power + get_vehicle_modifier(veh));
   attack_success -= attack_resist;
@@ -5895,9 +5944,10 @@ void vcombat(struct char_data * ch, struct veh_data * veh)
     mudlog(buf, ch, LOG_WRECKLOG, TRUE);
   }
   chkdmg(veh);
+  return FALSE;
 }
 
-void mount_fire(struct char_data *ch)
+bool mount_fire(struct char_data *ch)
 {
   struct veh_data *veh = NULL;
   struct obj_data *mount = NULL, *gun = NULL;
@@ -5907,19 +5957,18 @@ void mount_fire(struct char_data *ch)
   if (AFF_FLAGGED(ch, AFF_MANNING)) {
     // No mount or mount is empty? Failure.
     if (!(mount = get_mount_manned_by_ch(ch)) || !(gun = get_mount_weapon(mount)))
-      return;
+      return FALSE;
 
     // No target? Failure.
     if (!mount->targ && !mount->tveh)
-      return;
+      return FALSE;
 
     // Got a target and a gun? Fire.
     if (mount->targ && (gun = get_mount_weapon(mount)))
-      hit(ch, mount->targ, gun, NULL, get_mount_ammo(mount));
-    else
-      vcombat(ch, mount->tveh);
-
-    return;
+      return hit(ch, mount->targ, gun, NULL, get_mount_ammo(mount));
+    else {
+      return vcombat(ch, mount->tveh);
+    }
   }
 
   if (ch->char_specials.rigging || AFF_FLAGGED(ch, AFF_RIG)) {
@@ -5935,10 +5984,12 @@ void mount_fire(struct char_data *ch)
       if (!mount->worn_by && (gun = get_mount_weapon(mount))) {
         // Fire at the enemy, assuming we're fighting it.
         if (mount->targ && FIGHTING(ch) == mount->targ)
-          hit_with_multiweapon_toggle(ch, mount->targ, gun, NULL, get_mount_ammo(mount), num_mounts > 1);
-        else if (mount->tveh && FIGHTING_VEH(ch) == mount->tveh)
-          vcombat(ch, mount->tveh);
+          return hit_with_multiweapon_toggle(ch, mount->targ, gun, NULL, get_mount_ammo(mount), num_mounts > 1);
+        else if (mount->tveh && FIGHTING_VEH(ch) == mount->tveh) {
+          return vcombat(ch, mount->tveh);
+        }
       }
     }
   }
+  return FALSE;
 }

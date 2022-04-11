@@ -5802,7 +5802,24 @@ ACMD(do_scan)
                   }
                 }
               }
-              snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "  %s\r\n", GET_NAME(list));
+              char desc_line[200];
+              strlcpy(desc_line, "", sizeof(desc_line));
+
+              if (list->mob_specials.quest_id == GET_IDNUM(ch)) {
+                strlcat(desc_line, "(quest) ", sizeof(desc_line));
+              } else if (list->mob_specials.quest_id != 0) {
+                strlcat(desc_line, "(protected) ", sizeof(desc_line));
+              }
+
+              if (IS_AFFECTED(list, AFF_INVISIBLE) || IS_AFFECTED(list, AFF_IMP_INVIS) || IS_AFFECTED(list, AFF_SPELLINVIS) || IS_AFFECTED(list, AFF_SPELLIMPINVIS)) {
+                strlcat(desc_line, "(invisible) ", sizeof(desc_line));
+              }
+
+              if ((IS_ASTRAL(ch) || IS_DUAL(ch)) && IS_ASTRAL(list)) {
+                  strlcat(desc_line, "(astral) ", sizeof(desc_line));
+              }
+
+              snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "  %s%s%s\r\n", desc_line, GET_NAME(list), FIGHTING(list) == ch ? " (fighting you!)" : "");
               onethere = TRUE;
               anythere = TRUE;
             }

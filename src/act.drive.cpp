@@ -1051,7 +1051,7 @@ ACMD(do_subscribe)
           send_to_char(ch, "%2d) [%2d/10 dam]: %-35s (in %s^n, %s) \r\n",
                        i++,
                        veh->damage,
-                       GET_VEH_NAME(veh),
+                       GET_VEH_NAME_NOFORMAT(veh),
                        GET_VEH_NAME(veh->in_veh),
                        room_name_with_coords
           );
@@ -2261,6 +2261,22 @@ ACMD(do_transfer)
   else if (!(targ = get_char_room_vis(ch, buf2)))
     send_to_char(ch, "You don't see anyone named '%s' here.\r\n", buf2);
   else {
+    // Unsub it.
+    if (veh->sub) {
+      if (veh->prev_sub)
+        veh->prev_sub->next_sub = veh->next_sub;
+      else
+        ch->char_specials.subscribe = veh->next_sub;
+
+      if (veh->next_sub)
+        veh->next_sub->prev_sub = veh->prev_sub;
+
+      // Now that we've removed it from the list, wipe the sub data from this vehicle.
+      veh->sub = FALSE;
+      veh->next_sub = NULL;
+      veh->prev_sub = NULL;
+    }
+
     snprintf(buf, sizeof(buf), "You transfer ownership of %s to $N.", GET_VEH_NAME(veh));
     snprintf(buf2, sizeof(buf2), "$n transfers ownership of %s to you.", GET_VEH_NAME(veh));
     act(buf, 0, ch, 0, targ, TO_CHAR);

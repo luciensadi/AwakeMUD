@@ -1702,6 +1702,7 @@ const char *veh_aff[] =
     "Load",
     "Sensors",
     "Pilot",
+    "Ultrasound"
   };
 
 const char *veh_flag[] =

@@ -135,20 +135,23 @@ void iedit_disp_apply_menu(struct descriptor_data * d)
   int             counter;
   if (GET_OBJ_TYPE(d->edit_obj) == ITEM_MOD)
   {
-    for (counter = 0; counter < VAFF_MAX; counter += 2)
-      send_to_char(CH, "%2d) %-18s    %2d) %-18s\r\n",
-                   counter, veh_aff[counter],
-                   counter + 1, counter + 1 < VAFF_MAX ?
-                   veh_aff[counter + 1] : "");
-  } else
-  {
-    for (counter = 0; counter < APPLY_MAX; counter += 2)
-      send_to_char(CH, "%2d) %-18s    %2d) %-18s\r\n",
-                   counter, apply_types[counter],
-                   counter + 1, counter + 1 < APPLY_MAX ?
-                   apply_types[counter + 1] : "");
+    for (counter = 0; counter < VAFF_MAX; counter++) {
+      send_to_char(CH, "%2d) %-18s%s",
+                    counter,
+                    veh_aff[counter],
+                    counter % 2 == 1 ? "    " : "\r\n"
+                  );
+    }
+  } else {
+    for (counter = 0; counter < APPLY_MAX; counter ++) {
+      send_to_char(CH, "%2d) %-18s%s",
+                    counter,
+                    apply_types[counter],
+                    counter % 2 == 1 ? "    " : "\r\n"
+                  );
+    }
   }
-  send_to_char("Enter apply type (0 is no apply):", d->character);
+  send_to_char("\r\nEnter apply type (0 is no apply):", d->character);
   d->edit_mode = IEDIT_APPLY;
 }
 

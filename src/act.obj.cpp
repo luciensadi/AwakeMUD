@@ -971,7 +971,7 @@ void perform_get_from_container(struct char_data * ch, struct obj_data * obj,
 
 
 void get_from_container(struct char_data * ch, struct obj_data * cont,
-                        char *arg, int mode)
+                        char *arg, int mode, bool confirmed=FALSE)
 {
   struct obj_data *obj, *next_obj;
   int obj_dotmode, found = 0;
@@ -989,6 +989,15 @@ void get_from_container(struct char_data * ch, struct obj_data * cont,
       snprintf(buf, sizeof(buf), "There doesn't seem to be %s %s installed in $p.", AN(arg), arg);
       act(buf, FALSE, ch, cont, 0, TO_CHAR);
       return;
+    }
+    if (GET_OBJ_TYPE(obj) == ITEM_PART) {
+      if (!confirmed) {
+        send_to_char(ch, "It takes a while to reinstall parts once you've removed them! You'll have to do ^WUNINSTALL <part> <deck> CONFIRM^n to uninstall %s from %s.\r\n",
+                      GET_OBJ_NAME(obj),
+                      GET_OBJ_NAME(cont)
+                    );
+        return;
+      }
     }
     perform_get_from_container(ch, obj, cont, mode);
     return;
@@ -1351,7 +1360,7 @@ ACMD(do_get)
 
   if (subcmd == SCMD_UNINSTALL)
     cyberdeck = TRUE;
-  two_arguments(argument, arg1, arg2);
+  const char *remainder = two_arguments(argument, arg1, arg2);
 
   if (IS_CARRYING_N(ch) >= CAN_CARRY_N(ch))
     send_to_char("Your arms are already full!\r\n", ch);
@@ -1607,7 +1616,7 @@ ACMD(do_get)
           }
         }
       } else {
-        get_from_container(ch, cont, arg1, mode);
+        get_from_container(ch, cont, arg1, mode, is_abbrev("confirm", remainder));
       }
     } else {
       if (cont_dotmode == FIND_ALLDOT && !*arg2) {
@@ -1728,6 +1737,17 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
   if (obj_contains_kept_items(obj) && !IS_SENATOR(ch)) {
     act("Action blocked: $p contains at least one kept item.", FALSE, ch, obj, 0, TO_CHAR);
     return 0;
+  }
+
+  if (mode == SCMD_DONATE) {
+    if (IS_OBJ_STAT(obj, ITEM_EXTRA_WIZLOAD)) {
+      act("You can't donate $p: It was given to you by staff.", FALSE, ch, obj, 0, TO_CHAR);
+      return 0;
+    }
+    if (IS_OBJ_STAT(obj, ITEM_EXTRA_NOSELL) || IS_OBJ_STAT(obj, ITEM_EXTRA_NORENT)) {
+      act("You can't donate $p: It's flagged !SELL or !RENT.", FALSE, ch, obj, 0, TO_CHAR);
+      return 0;
+    }
   }
 
   // Special handling: Vehicle containers.

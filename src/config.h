@@ -229,6 +229,9 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 // How many slots should a gridguide have?
 #define GET_VEH_MAX_AUTONAV_SLOTS(veh)                         (veh->autonav * 10)
 
+// Approximately how often should we see traffic messages? 1:(N+1) spec ticks where N is this number.
+#define TRAFFIC_INFREQUENCY_CONTROL                            10
+
 /////////////// OLC permissions configuration /////////////////////////
 #define LVL_FOR_SETTING_ZONE_EDITOR_ID_NUMBERS                 LVL_VICEPRES
 #define LVL_FOR_SETTING_ZONE_CONNECTED_STATUS                  LVL_FIXER

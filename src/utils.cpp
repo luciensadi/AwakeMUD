@@ -399,7 +399,14 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int c
     return 100;
   }
 
-  if (PLR_FLAGGED(ch, PLR_PERCEIVE) || MOB_FLAGGED(ch, MOB_DUAL_NATURE) || IS_ASTRAL(ch))
+  bool is_rigging = (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE));
+  if (is_rigging) {
+    struct veh_data *veh;
+    RIG_VEH(ch, veh);
+    temp_room = get_veh_in_room(veh);
+  }
+
+  if (!is_rigging && (PLR_FLAGGED(ch, PLR_PERCEIVE) || MOB_FLAGGED(ch, MOB_DUAL_NATURE) || IS_ASTRAL(ch)))
   {
     if (!skill_is_magic && PLR_FLAGGED(ch, PLR_PERCEIVE)) {
       base_target += 2;
@@ -2213,21 +2220,40 @@ bool invis_ok(struct char_data *ch, struct char_data *vict) {
   if (IS_NPC(vict) && MOB_FLAGGED(vict, MOB_TOTALINVIS))
     return FALSE;
 
+  // Figure out if we're using vehicle sensors. If we are, we need to be judicious about the sight we give.
+  bool has_thermographic, has_ultrasound, has_astral, is_vehicle;
+  if (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE)) {
+    // We are. Set based on vehicle sensors.
+    struct veh_data *veh;
+    RIG_VEH(ch, veh);
+
+    if (!veh) {
+      mudlog("SYSERR: Something went seriously wrong: rig_veh in invis_ok failed!", ch, LOG_SYSLOG, TRUE);
+      return FALSE;
+    }
+
+    is_vehicle = TRUE;
+    has_astral = FALSE;
+    has_ultrasound = veh->flags.IsSet(VFLAG_ULTRASOUND) && vict_room == veh->in_room;
+    has_thermographic = TRUE;
+  } else {
+    is_vehicle = FALSE;
+    has_astral = (IS_ASTRAL(ch) || IS_DUAL(ch));
+    has_ultrasound = (has_vision(ch, VISION_ULTRASONIC) && !affected_by_spell(ch, SPELL_STEALTH) && vict_room == ch_room);
+    has_thermographic = has_vision(ch, VISION_THERMOGRAPHIC);
+  }
+
   // Astral perception sees most things-- unless said thing is an inanimate mob with no spells on it.
-  if ((IS_ASTRAL(ch) || IS_DUAL(ch)) && (!MOB_FLAGGED(vict, MOB_INANIMATE) || GET_SUSTAINED(vict)))
+  if (has_astral && (!MOB_FLAGGED(vict, MOB_INANIMATE) || GET_SUSTAINED(vict)))
     return TRUE;
 
   // Ultrasound pierces all invis as long as it's in the same room and not blocked by silence or stealth.
-  if (has_vision(ch, VISION_ULTRASONIC)
-      && ch_room == vict_room
-      && (ch_room->silence[0] <= 0
-          && !affected_by_spell(vict, SPELL_STEALTH)
-          && !affected_by_spell(ch, SPELL_STEALTH)))
+  if (has_ultrasound && !affected_by_spell(vict, SPELL_STEALTH) && vict_room->silence[0] <= 0)
     return TRUE;
 
-  // Allow resist test VS invis.
+  // Allow resist test VS improved invis-- but only if you're not seeing the world through sensors.
   if (IS_AFFECTED(vict, AFF_SPELLIMPINVIS)) {
-    return can_see_through_invis(ch, vict);
+    return !is_vehicle && can_see_through_invis(ch, vict);
   }
 
   // Thermoptic camouflage, a houseruled thing that doesn't actually show up in the game yet. This can only be broken by ultrasound.
@@ -2236,14 +2262,13 @@ bool invis_ok(struct char_data *ch, struct char_data *vict) {
   }
 
   // Ruthenium is pierced by thermographic vision, which is default on vehicles.
-  bool can_see_through_standard_invis = (has_vision(ch, VISION_THERMOGRAPHIC) || AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE));
   if (IS_AFFECTED(vict, AFF_INVISIBLE)) {
-    return can_see_through_standard_invis;
+    return has_thermographic;
   }
 
-  // Allow perception test VS invis spell.
+  // Allow resistance test VS invis spell.
   if (IS_AFFECTED(vict, AFF_SPELLINVIS)) {
-    return (can_see_through_standard_invis || can_see_through_invis(ch, vict));
+    return (has_thermographic || can_see_through_invis(ch, vict));
   }
 
   // If we've gotten here, they're not invisible.
@@ -3983,7 +4008,7 @@ void knockdown_character(struct char_data *ch) {
 
   bool eligible_for_kipup = PLR_FLAGGED(ch, PLR_PAID_FOR_KIPUP) || (IS_NPC(ch) && (GET_QUI(ch) >= 10 && GET_SKILL(ch, SKILL_UNARMED_COMBAT) >= 6));
 
-  if (eligible_for_kipup && PRF_FLAGGED(ch, PRF_AUTOKIPUP)) {
+  if (eligible_for_kipup && PRF_FLAGGED(ch, PRF_AUTOKIPUP) && !IS_JACKED_IN(ch)) {
     // Successfully kipping up gets you back on your feet with no penalty.
     if (success_test(GET_QUI(ch), 6) > 0) {
       send_to_char("^yYou're sent sprawling, but recover with a quick kip-up!\r\n", ch);
@@ -4014,7 +4039,7 @@ void knockdown_character(struct char_data *ch) {
   }
 
   // Otherwise, if they're set up to auto-stand...
-  if (PRF_FLAGGED(ch, PRF_AUTOSTAND)) {
+  if (PRF_FLAGGED(ch, PRF_AUTOSTAND) && !IS_JACKED_IN(ch)) {
     GET_INIT_ROLL(ch) -= 5;
     send_to_char("^yYou're sent sprawling, and it takes you a moment to clamber back to your feet.\r\n", ch);
     act("$n is knocked down, but clambers back to $s feet!", TRUE, ch, 0, 0, TO_ROOM);
@@ -4022,7 +4047,8 @@ void knockdown_character(struct char_data *ch) {
   }
 
   // Neither autokip nor autostand.
-  send_to_char("^YYou are knocked prone!^n\r\n", ch);
+  if (!IS_JACKED_IN(ch))
+    send_to_char("^YYou are knocked prone!^n\r\n", ch);
   act("$n is knocked prone!", TRUE, ch, 0, 0, TO_ROOM);
   AFF_FLAGS(ch).SetBit(AFF_PRONE);
 

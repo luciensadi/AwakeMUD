@@ -319,6 +319,12 @@ void affect_veh(struct veh_data *veh, byte loc, sbyte mod)
     case VAFF_PILOT:
       veh->pilot = mod;
       break;
+    case VAFF_ULTRASONIC:
+      if (mod > 0)
+        veh->flags.SetBit(VFLAG_ULTRASOUND);
+      else
+        veh->flags.RemoveBit(VFLAG_ULTRASOUND);
+      break;
     default:
       log_vfprintf("SYSLOG: Unknown apply adjust: %s/%d.", veh->short_description, loc);
       break;

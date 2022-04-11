@@ -3313,7 +3313,7 @@ void spec_update(void)
   char empty_argument = '\0';
 
   // Instead of calculating the random number for every traffic room, just calc once.
-  bool will_traffic = (number(0, 6) == 1);
+  bool will_traffic = (number(0, TRAFFIC_INFREQUENCY_CONTROL) == 0);
 
   for (i = 0; i <= top_of_world; i++)
     if (world[i].func != NULL && (will_traffic || world[i].func != traffic))
@@ -5109,9 +5109,9 @@ void load_saved_veh()
       snprintf(buf, sizeof(buf), "MODIS/Mod%d", i);
       obj = read_object(data.GetLong(buf, 0), VIRTUAL);
       GET_MOD(veh, GET_OBJ_VAL(obj, 6)) = obj;
-      if (GET_OBJ_VAL(obj, 0) == TYPE_ENGINECUST)
-        veh->engine = GET_OBJ_VAL(obj, 2);
-      veh->usedload += GET_OBJ_VAL(obj, 1);
+      if (GET_VEHICLE_MOD_TYPE(obj) == TYPE_ENGINECUST)
+        veh->engine = GET_VEHICLE_MOD_RATING(obj);
+      veh->usedload += GET_VEHICLE_MOD_LOAD_SPACE_REQUIRED(obj);
       for (int l = 0; l < MAX_OBJ_AFFECT; l++)
         affect_veh(veh, obj->affected[l].location, obj->affected[l].modifier);
     }

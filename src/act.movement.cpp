@@ -29,7 +29,7 @@
 /* external functs */
 int special(struct char_data * ch, int cmd, char *arg);
 void death_cry(struct char_data * ch);
-void perform_fall(struct char_data *);
+bool perform_fall(struct char_data *);
 bool check_fall(struct char_data *, int, bool need_to_send_fall_message);
 extern int modify_target(struct char_data *);
 extern int convert_damage(int);
@@ -398,7 +398,11 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
 #endif
 
   if (ROOM_FLAGGED(ch->in_room, ROOM_FALL) && !IS_ASTRAL(ch) && !IS_PROJECT(ch) && !IS_AFFECTED(ch, AFF_LEVITATE) && !(IS_SENATOR(ch) && PRF_FLAGGED(ch, PRF_NOHASSLE))) {
-    perform_fall(ch);
+    bool character_died;
+    // We break the return code paradigm here to avoid having the code check follower data for a dead NPC.
+    if (IS_NPC(ch) && (character_died = perform_fall(ch))) {
+      return 0;
+    }
     return 1;
   }
 
@@ -465,9 +469,10 @@ bool check_fall(struct char_data *ch, int modifier, const char *fall_message)
   return FALSE;
 }
 
-void perform_fall(struct char_data *ch)
+bool perform_fall(struct char_data *ch)
 {
   int levels = 0;
+  bool character_died = FALSE;
   float meters = 0;
   bool sent_fall_message = FALSE;
   const char *fall_message = NULL;
@@ -497,7 +502,7 @@ void perform_fall(struct char_data *ch)
     // If they succeed their check, precede their success message with a fall message proportional to the distance they fell.
     // Note that they don't take damage unless they actually hit the ground. This makes elevator shafts a lot less dangerous than originally expected.
     if (!check_fall(ch, levels * 4, fall_message))
-      return;
+      return FALSE;
 
     levels++;
     meters += ch->in_room->z;
@@ -537,7 +542,7 @@ void perform_fall(struct char_data *ch)
       char_to_room(ch, real_room(RM_SEATTLE_DOCWAGON));
 
       extract_char(ch);
-      return;
+      return TRUE;
     }
 #endif
   }
@@ -567,7 +572,7 @@ void perform_fall(struct char_data *ch)
       char fall_str[250];
       snprintf(fall_str, sizeof(fall_str), "$e manage%s to land on $s feet.", HSSH_SHOULD_PLURAL(ch) ? "s" : "");
       act(fall_str, FALSE, ch, 0, 0, TO_ROOM);
-      return;
+      return FALSE;
     }
     int power = (int)(meters / 2); // then divide by two to find power of damage
     power -= GET_IMPACT(ch) / 2; // subtract 1/2 impact armor
@@ -588,28 +593,31 @@ void perform_fall(struct char_data *ch)
 
     int success = success_test(GET_BOD(ch), MAX(2, power) + modify_target(ch));
     int dam = convert_damage(stage(-success, MIN(levels + 1, 4)));
-    damage(ch, ch, dam, TYPE_FALL, TRUE);
+
+    struct room_data *in_room_at_impact = ch->in_room;
+    character_died = damage(ch, ch, dam, TYPE_FALL, TRUE);
+
+    if (character_died) {
+      // RIP, they died!
+      strcpy(impact_noise, "sickeningly wet ");
+    } else {
+      if (dam < 2) {
+        strcpy(impact_noise, "muted ");
+      } else if (dam < 5) {
+        strcpy(impact_noise, "");
+      } else if (dam < 8) {
+        strcpy(impact_noise, "loud ");
+      } else {
+        strcpy(impact_noise, "crunching ");
+      }
+    }
 
     // Message everyone in the fall rooms above, just because flavor is great.
     if (dam > 0) {
-      if (GET_POS(ch) == POS_DEAD) {
-        // Splattered on impact.
-        strcpy(impact_noise, "sickeningly wet ");
-      } else {
-        if (dam < 2) {
-          strcpy(impact_noise, "muted ");
-        } else if (dam < 5) {
-          strcpy(impact_noise, "");
-        } else if (dam < 8) {
-          strcpy(impact_noise, "loud ");
-        } else {
-          strcpy(impact_noise, "crunching ");
-        }
-      }
       snprintf(splat_msg, sizeof(splat_msg), "^rA %sthud %s from below.^n\r\n", impact_noise, tmp_room->room_flags.IsSet(ROOM_ELEVATOR_SHAFT) ? "echoes" : "emanates");
 
       while (in_room) {
-        if (in_room != ch->in_room)
+        if (in_room != in_room_at_impact)
           send_to_room(splat_msg, in_room);
 
         if (EXIT2(in_room, UP)) {
@@ -619,7 +627,7 @@ void perform_fall(struct char_data *ch)
       }
     }
   }
-  return;
+  return character_died;
 }
 
 void move_vehicle(struct char_data *ch, int dir)

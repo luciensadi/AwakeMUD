@@ -1222,7 +1222,7 @@ enum {
 #define ITEM_EXTRA_NOORK              19
 #define ITEM_EXTRA_NOHUMAN            20
 #define ITEM_EXTRA_SNIPER             21
-#define ITEM_EXTRA_IMMLOAD            22
+// #define ITEM_EXTRA_IMMLOAD            22  not currently used, BUT reserved since many items have this set.
 #define ITEM_EXTRA_NERPS              23    /* Item does not actually have any coded effect. */
 #define ITEM_EXTRA_BLOCKS_ARMOR       24    // Can't wear other armors with this.
 #define ITEM_EXTRA_HARDENED_ARMOR     25    // Applies hardened armor rules (deflect attacks with power <= armor rating) CC p51
@@ -1299,7 +1299,8 @@ enum {
 #define VAFF_LOAD  10
 #define VAFF_SEN  11
 #define VAFF_PILOT  12
-#define VAFF_MAX  13
+#define VAFF_ULTRASONIC 13
+#define VAFF_MAX  14
 #define SHFT(ch) (GET_LEVEL(ch))
 
 /* vehicle flag table */

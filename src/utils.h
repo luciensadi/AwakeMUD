@@ -354,6 +354,7 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define GET_WAS_IN(ch)  ((ch)->was_in_room)
 
 #define GET_VEH_NAME(veh) (decapitalize_a_an((veh)->restring ? (veh)->restring : ((veh)->short_description ? (veh)->short_description : "an ERRONEOUS VEHICLE")))
+#define GET_VEH_NAME_NOFORMAT(veh) ((veh)->restring ? (veh)->restring : ((veh)->short_description ? (veh)->short_description : "an ERRONEOUS VEHICLE"))
 #define GET_VEH_DESC(veh) ((veh)->restring_long ? (veh)->restring_long : (veh)->long_description)
 #define GET_VEH_RNUM(veh) ((veh)->veh_number)
 #define GET_VEH_VNUM(veh) (GET_VEH_RNUM(veh) >= 0 ? veh_index[GET_VEH_RNUM(veh)].vnum : -1)
@@ -603,6 +604,7 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define CAN_CARRY_W(ch)       ((GET_STR(ch) * 10) + 30)
 #define CAN_CARRY_N(ch)       (8 + GET_QUI(ch) + (GET_REAL_LEVEL(ch)>=LVL_BUILDER?50:0))
 #define AWAKE(ch)             (GET_POS(ch) > POS_SLEEPING && GET_QUI(ch) > 0)
+#define IS_JACKED_IN(ch)      (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE) || PLR_FLAGGED(ch, PLR_MATRIX))
 #define CAN_SEE_IN_DARK(ch)   ((IS_ASTRAL(ch) || IS_DUAL(ch) || \
     CURRENT_VISION(ch) == THERMOGRAPHIC || PRF_FLAGGED((ch), PRF_HOLYLIGHT)))
 #define GET_BUILDING(ch)	((ch)->char_specials.programming)

@@ -1423,7 +1423,7 @@ ACMD(do_toggle)
       mode = 43;
     } else if (is_abbrev(argument, "autokipup") || is_abbrev(argument, "kipup") || is_abbrev(argument, "autokip-up") || is_abbrev(argument, "kip-up")) {
       if (!PLR_FLAGGED(ch, PLR_PAID_FOR_KIPUP)) {
-        send_to_char("You don't know how to kip up.\r\n.", ch);
+        send_to_char("You don't know how to kip up.\r\n", ch);
         return;
       }
       result = PRF_TOG_CHK(ch, PRF_AUTOKIPUP);
@@ -1677,7 +1677,7 @@ ACMD(do_reload)
         }
       }
 
-      send_to_char("You don't have an ammobox containing the right ammunition for that mount.\r\n", ch);
+      send_to_char("You're not carrying an ammobox containing the right ammunition for that mount.\r\n", ch);
       return;
     } /* End of mount evaluation. */
   } /* end of mounts */
@@ -1827,7 +1827,7 @@ ACMD(do_attach)
     return;
   }
   if (*arg) {
-    if (ch->in_veh || !(veh = get_veh_list(buf1, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch))) {
+    if (!(veh = get_veh_list(buf1, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch))) {
       send_to_char(ch, "You don't see any vehicles named '%s' here.\r\n", buf1);
       return;
     }
@@ -1895,11 +1895,25 @@ ACMD(do_attach)
 
   if (!(item = get_obj_in_list_vis(ch, buf1, ch->carrying))) {
     send_to_char(ch, "You don't seem to have any '%s'.\r\n", buf1);
+    if ((veh = get_veh_list(buf1, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch))) {
+      if (veh->type == VEH_DRONE) {
+        send_to_char("(To attach a weapon to a drone, use ^WATTACH <drone> <weapon> <mount number>^n.)\r\n", ch);
+      } else {
+        send_to_char("(To attach a weapon to a non-drone, enter the vehicle, then use ^WATTACH <weapon> <mount number>^n.)\r\n", ch);
+      }
+    }
     return;
   }
 
   if (GET_OBJ_TYPE(item) != ITEM_GUN_ACCESSORY) {
     send_to_char(ch, "%s is not a weapon accessory.\r\n", capitalize(GET_OBJ_NAME(item)));
+    if ((veh = get_veh_list(buf2, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch))) {
+      if (veh->type == VEH_DRONE) {
+        send_to_char("(To attach a weapon to a drone, use ^WATTACH <drone> <weapon> <mount number>^n.)\r\n", ch);
+      } else {
+        send_to_char("(To attach a weapon to a non-drone, enter the vehicle, then use ^WATTACH <weapon> <mount number>^n.)\r\n", ch);
+      }
+    }
     return;
   }
 
