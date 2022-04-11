@@ -47,8 +47,6 @@ int get_skill_dice_in_use_for_weapons(struct char_data *ch);
 
 struct obj_data *find_obj(struct char_data *ch, char *name, int num);
 
-SPECIAL(pocket_sec);
-
 char *fname(char *namelist)
 {
   static char holder[50];
@@ -2337,11 +2335,6 @@ void extract_obj(struct obj_data * obj)
   if (IS_OBJ_STAT(obj, ITEM_EXTRA_KEPT)) {
     const char *representation = generate_new_loggable_representation(obj);
     snprintf(buf, sizeof(buf), "extract_obj: Destroying KEPT item: %s", representation);
-    delete [] representation;
-    mudlog(buf, NULL, LOG_PURGELOG, TRUE);
-  } else if (GET_OBJ_SPEC(obj) == pocket_sec) {
-    const char *representation = generate_new_loggable_representation(obj);
-    snprintf(buf, sizeof(buf), "extract_obj: Destroying pocket secretary: %s", representation);
     delete [] representation;
     mudlog(buf, NULL, LOG_PURGELOG, TRUE);
   }
