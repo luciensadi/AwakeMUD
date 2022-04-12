@@ -1794,6 +1794,11 @@ ACMD(do_gridguide)
       send_to_char(buf, ch);
     }
     send_to_char(ch, "%d Entries remaining.\r\n", GET_VEH_MAX_AUTONAV_SLOTS(veh) - i);
+    if (veh->in_room) {
+      send_to_char(ch, "You are currently located at %ld, %ld.\r\n",
+                   get_room_gridguide_x(GET_ROOM_VNUM(veh->in_room)),
+                   get_room_gridguide_y(GET_ROOM_VNUM(veh->in_room)));
+    }
     return;
   }
 
