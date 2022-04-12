@@ -351,7 +351,7 @@ int get_skill_price(struct char_data *ch, int i)
 SPECIAL(metamagic_teacher)
 {
   struct char_data *master = (struct char_data *) me;
-  int i = 0, x = 0, suc, ind;
+  int i = 0, x = 0, ind;
   if (!(CMD_IS("train")))
     return FALSE;
 
@@ -389,8 +389,11 @@ SPECIAL(metamagic_teacher)
   if (metamagict[ind].vnum != GET_MOB_VNUM(master))
     return FALSE;
 
+  // This used to be based off of a die roll, but that's not easy to convey.
+  int cost = (int)((GET_MAG(ch) / 100) * 1000 * 14);
+
   if (!*argument) {
-    send_to_char(ch, "%s can teach you the following techniques: \r\n", GET_NAME(master));
+    send_to_char(ch, "%s can teach you the following techniques for %d nuyen each: \r\n", GET_NAME(master), cost);
     for (; i < NUM_TEACHER_SKILLS; i++)
       if (metamagict[ind].s[i])
         send_to_char(ch, "  %s\r\n", metamagic[metamagict[ind].s[i]]);
@@ -429,12 +432,6 @@ SPECIAL(metamagic_teacher)
     return TRUE;
   }
 
-  if ((suc = success_test(GET_MAG(ch) / 100, 14 - (GET_MAG(master) / 100))) < 1) {
-    send_to_char("Try as you might, you fail to understand how to learn that technique.\r\n", ch);
-    return TRUE;
-  }
-
-  int cost = (int)((GET_MAG(ch) / 100) * 1000 * (14 / suc));
   if (GET_NUYEN(ch) < cost) {
     send_to_char(ch, "You don't have the %d nuyen required to learn %s.\r\n", cost, metamagic[i]);
     return TRUE;
