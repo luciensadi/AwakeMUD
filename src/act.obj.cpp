@@ -681,6 +681,9 @@ bool can_take_obj(struct char_data * ch, struct obj_data * obj)
 
   if ((IS_CARRYING_W(ch) + GET_OBJ_WEIGHT(obj)) > CAN_CARRY_W(ch)) {
     act("$p: you can't carry that much weight.", FALSE, ch, obj, 0, TO_CHAR);
+    if (GET_OBJ_TYPE(obj) == ITEM_GUN_AMMO) {
+      send_to_char("(You can still grab rounds out of it with ^WPOCKETS ADD <container>^n though!)\r\n", ch);
+    }
     return 0;
   }
 
