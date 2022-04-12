@@ -2143,10 +2143,10 @@ void process_seattle_ferry(void)
   static int where = 0;
   int ferry, dock, ind;
 
-  if (where >= 26)
+  if (where >= 30)
     where = 0;
 
-  ind = (where >= 13 ? 1 : 0);
+  ind = (where >= 15 ? 1 : 0);
 
   ferry = real_room(seattle_ferry[ind].transport);
   dock = real_room(seattle_ferry[ind].room);
@@ -2157,22 +2157,26 @@ void process_seattle_ferry(void)
                  "the dock.\r\n", &world[dock]);
     break;
   case 1:
-  case 14:
     extend_walkway_st(ferry, seattle_ferry[ind].to, dock, seattle_ferry[ind].from);
     break;
-  case 4:
-  case 17:
+  case 6:
     contract_walkway_st(ferry, seattle_ferry[ind].to, dock, seattle_ferry[ind].from);
     break;
-  case 5:
+  case 7:
     send_to_room("A voice announces through a rusting speaker, "
                  "\"Next stop: Tacoma.\"\r\n", &world[ferry]);
     break;
-  case 13:
+  case 15:
     send_to_room("The Seattle-Tacoma ferry approaches, gliding across the bay towards "
                  "the dock.\r\n", &world[dock]);
     break;
-  case 18:
+  case 16:
+    extend_walkway_st(ferry, seattle_ferry[ind].to, dock, seattle_ferry[ind].from);
+    break;
+  case 21:
+    contract_walkway_st(ferry, seattle_ferry[ind].to, dock, seattle_ferry[ind].from);
+    break;
+  case 23:
     send_to_room("A voice announces through a rusting speaker, "
                  "\"Next stop: Seattle.\"\r\n", &world[ferry]);
     break;
@@ -2217,10 +2221,10 @@ void process_hellhound_bus(void)
   static int where = 0;
   int bus, stop, ind;
 
-  if (where >= 52)
+  if (where >= 56)
     where = 0;
 
-  ind = (where >= 26 ? 1 : 0);
+  ind = (where >= 30 ? 1 : 0);
 
   bus = real_room(hellhound[ind].transport);
   stop = real_room(hellhound[ind].room);
@@ -2230,20 +2234,24 @@ void process_hellhound_bus(void)
     send_to_room("The bus pulls into the garage, and slowly moves to the platform.\r\n", &world[stop]);
     break;
   case 1:
-  case 28:
     open_busdoor(bus, hellhound[ind].to, stop, hellhound[ind].from);
     break;
-  case 8:
-  case 34:
+  case 10:
     close_busdoor(bus, hellhound[ind].to, stop, hellhound[ind].from);
     break;
-  case 23:
+  case 25:
     send_to_room("The driver shouts from the front, \"Next stop: Portland.\"\r\n", &world[bus]);
     break;
-  case 26:
+  case 28:
     send_to_room("The bus pulls into the garage, and slowly moves to the platform.\r\n", &world[stop]);
     break;
-  case 49:
+  case 30:
+    open_busdoor(bus, hellhound[ind].to, stop, hellhound[ind].from);
+    break;
+  case 38:
+    close_busdoor(bus, hellhound[ind].to, stop, hellhound[ind].from);
+    break;
+  case 53:
     send_to_room("The driver shouts from the front, \"Next stop: Seattle.\"\r\n", &world[bus]);
     break;
   }
@@ -2290,19 +2298,25 @@ void process_camas_ferry(void)
 
   switch (where) {
   case 0:
-  case 84:
     send_to_room("A Lear-Cessna Platinum II appears overhead and circles as it moves in for a landing.\r\n", &world[stop]);
     break;
   case 4:
-  case 92:
     camas_extend(bus, camas[ind].to, stop, camas[ind].from);
     break;
   case 32:
-  case 112:
     camas_retract(bus, camas[ind].to, stop, camas[ind].from);
     break;
   case 72:
     send_to_room("The Lear-Cessna Platinum II approaches a private Caribbean island.\r\n", &world[bus]);
+    break;
+  case 84:
+    send_to_room("A Lear-Cessna Platinum II appears overhead and circles as it moves in for a landing.\r\n", &world[stop]);
+    break;
+  case 92:
+    camas_extend(bus, camas[ind].to, stop, camas[ind].from);
+    break;
+  case 112:
+    camas_retract(bus, camas[ind].to, stop, camas[ind].from);
     break;
   case 152:
     send_to_room("The Lear-Cessna Platinum II approaches the Salish-Sidhe lands.\r\n", &world[bus]);
@@ -2453,10 +2467,10 @@ void process_seatac_ferry(void)
   static int where = 0;
   int ferry, dock, ind;
 
-  if (where >= 26)
+  if (where >= 30)
     where = 0;
 
-  ind = (where >= 13 ? 1 : 0);
+  ind = (where >= 15 ? 1 : 0);
 
   ferry = real_room(tacsea[ind].transport);
   dock = real_room(tacsea[ind].room);
@@ -2467,22 +2481,26 @@ void process_seatac_ferry(void)
                  "the dock.\r\n", &world[dock]);
     break;
   case 1:
-  case 14:
     extend_walkway(ferry, tacsea[ind].to, dock, tacsea[ind].from, "Bradenton-Tacoma");
     break;
-  case 4:
-  case 17:
+  case 6:
     contract_walkway(ferry, tacsea[ind].to, dock, tacsea[ind].from, "Bradenton-Tacoma");
     break;
-  case 5:
+  case 7:
     send_to_room("A voice announces through a rusting speaker, "
                  "\"Next stop: Bradenton.\"\r\n", &world[ferry]);
     break;
-  case 13:
+  case 15:
     send_to_room("The Bradenton-Tacoma ferry approaches, gliding across the bay towards "
                  "the dock.\r\n", &world[dock]);
     break;
-  case 18:
+  case 16:
+    extend_walkway(ferry, tacsea[ind].to, dock, tacsea[ind].from, "Bradenton-Tacoma");
+    break;
+  case 21:
+    contract_walkway(ferry, tacsea[ind].to, dock, tacsea[ind].from, "Bradenton-Tacoma");
+    break;
+  case 22:
     send_to_room("A voice announces through a rusting speaker, "
                  "\"Next stop: Tacoma.\"\r\n", &world[ferry]);
     break;
@@ -2512,21 +2530,28 @@ void process_victoria_ferry(void)
 
   switch (where) {
   case 0:
-  case 26:
     send_to_room("The Victoria-Sauteurs ferry approaches, gliding across the sea towards "
                  "the dock.\r\n", &world[dock]);
     break;
   case 1:
-  case 28:
     extend_walkway(ferry, victoria[ind].to, dock, victoria[ind].from, "Victoria-Sauteurs");
     break;
   case 8:
-  case 34:
     contract_walkway(ferry, victoria[ind].to, dock, victoria[ind].from, "Victoria-Sauteurs");
     break;
   case 23:
     send_to_room("The ferryman calls out, "
                  "\"Next stop: Victoria.\"\r\n", &world[ferry]);
+    break;
+  case 26:
+    send_to_room("The Victoria-Sauteurs ferry approaches, gliding across the sea towards "
+                 "the dock.\r\n", &world[dock]);
+    break;
+  case 28:
+    extend_walkway(ferry, victoria[ind].to, dock, victoria[ind].from, "Victoria-Sauteurs");
+    break;
+  case 34:
+    contract_walkway(ferry, victoria[ind].to, dock, victoria[ind].from, "Victoria-Sauteurs");
     break;
   case 49:
     send_to_room("The ferryman calls out, "
