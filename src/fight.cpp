@@ -491,24 +491,36 @@ void make_corpse(struct char_data * ch)
   corpse->item_number = NOTHING;
   corpse->in_room = NULL;
 
+  char color_replaced_name[500];
+  {
+    strlcpy(color_replaced_name, decapitalize_a_an(GET_NAME(ch)), sizeof(color_replaced_name));
+    bool just_saw_carat = FALSE;
+    for (char *ptr = color_replaced_name; *ptr; ptr++) {
+      if (just_saw_carat && (*ptr == 'n' || *ptr == 'N'))
+        *ptr = 'r';
+      just_saw_carat = (*ptr == '^');
+    }
+  }
+
+
   if (IS_NPC(ch))
   {
     if (MOB_FLAGGED(ch, MOB_INANIMATE)) {
       snprintf(buf, sizeof(buf), "remains corpse %s", ch->player.physical_text.keywords);
-      snprintf(buf1, sizeof(buf1), "^rThe remains of %s are lying here.^n", decapitalize_a_an(GET_NAME(ch)));
-      snprintf(buf2, sizeof(buf2), "^rthe remains of %s^n", decapitalize_a_an(GET_NAME(ch)));
+      snprintf(buf1, sizeof(buf1), "^rThe remains of %s are lying here.^n", color_replaced_name);
+      snprintf(buf2, sizeof(buf2), "^rthe remains of %s^n", color_replaced_name);
       strlcpy(buf3, "It's been powered down permanently.\r\n", sizeof(buf3));
     } else {
       snprintf(buf, sizeof(buf), "corpse %s", ch->player.physical_text.keywords);
-      snprintf(buf1, sizeof(buf1), "^rThe corpse of %s is lying here.^n", decapitalize_a_an(GET_NAME(ch)));
-      snprintf(buf2, sizeof(buf2), "^rthe corpse of %s^n", decapitalize_a_an(GET_NAME(ch)));
+      snprintf(buf1, sizeof(buf1), "^rThe corpse of %s is lying here.^n", color_replaced_name);
+      snprintf(buf2, sizeof(buf2), "^rthe corpse of %s^n", color_replaced_name);
       strlcpy(buf3, "What once was living is no longer. Poor sap.\r\n", sizeof(buf3));
     }
   } else
   {
     snprintf(buf, sizeof(buf), "belongings %s", ch->player.physical_text.keywords);
-    snprintf(buf1, sizeof(buf1), "^rThe belongings of %s are lying here.^n", decapitalize_a_an(GET_NAME(ch)));
-    snprintf(buf2, sizeof(buf2), "^rthe belongings of %s^n", decapitalize_a_an(GET_NAME(ch)));
+    snprintf(buf1, sizeof(buf1), "^rThe belongings of %s are lying here.^n", color_replaced_name);
+    snprintf(buf2, sizeof(buf2), "^rthe belongings of %s^n", color_replaced_name);
     strlcpy(buf3, "Looks like the DocWagon trauma team wasn't able to bring this stuff along.\r\n", sizeof(buf3));
     corpse->item_number = real_object(OBJ_SPECIAL_PC_CORPSE);
   }
