@@ -2427,6 +2427,13 @@ ACMD(do_purge)
         next_ve = veh->next;
         if (veh == ch->in_veh)
           continue;
+
+        // Notify the owner.
+        if (veh->owner > 0) {
+          snprintf(buf2, sizeof(buf2), "^ROOC Alert: Your vehicle '%s' has been deleted by administrator '%s'.^n\r\n", GET_VEH_NAME(veh), GET_CHAR_NAME(ch));
+          store_mail(veh->owner, ch, buf2);
+        }
+        
         snprintf(buf1, sizeof(buf1), "%s has purged %s.", GET_CHAR_NAME(ch), GET_VEH_NAME(veh));
         mudlog(buf1, ch, LOG_WIZLOG, TRUE);
         purgelog(veh);

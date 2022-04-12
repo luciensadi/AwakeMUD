@@ -4951,6 +4951,11 @@ void load_saved_veh()
     veh->locked = TRUE;
     veh->sub = data.GetLong("VEHICLE/Subscribed", 0);
     veh_room = data.GetLong("VEHICLE/InRoom", 0);
+
+    const char *veh_flag_string = data.GetString("VEHICLE/Flags", NULL);
+    if (veh_flag_string)
+      veh->flags.FromString(veh_flag_string);
+
     if (!veh->spare2)
       veh_to_room(veh, &world[real_room(veh_room)]);
     veh->restring = str_dup(data.GetString("VEHICLE/VRestring", NULL));

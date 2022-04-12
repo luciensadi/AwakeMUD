@@ -1675,7 +1675,7 @@ SPECIAL(car_dealer)
   if (!cmd || ch->in_veh || !ch->in_room)
     return FALSE;
 
-  if (!(CMD_IS("list") || CMD_IS("buy") || CMD_IS("info") || CMD_IS("probe")))
+  if (!(CMD_IS("list") || CMD_IS("buy") || CMD_IS("info") || CMD_IS("probe") || CMD_IS("value") || CMD_IS("sell")))
     return FALSE;
 
   if (IS_NPC(ch)) {
@@ -1719,6 +1719,65 @@ SPECIAL(car_dealer)
     }
     send_to_char(ch, "^yProbing shopkeeper's ^n%s^y...^n\r\n", GET_VEH_NAME(veh));
     do_probe_veh(ch, veh);
+    return TRUE;
+  } else if (CMD_IS("value") || CMD_IS("sell")) {
+    argument = one_argument(argument, buf);
+    if (!(veh = get_veh_list(buf, get_ch_in_room(ch)->vehicles, ch))) {
+      send_to_char(ch, "You don't see a vehicle named '%s' here.\r\n", buf);
+      return TRUE;
+    }
+    // You have to own it.
+    if (veh->owner != GET_IDNUM(ch)) {
+      send_to_char(ch, "%s^n isn't yours.\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
+      return TRUE;
+    }
+    // It must be empty.
+    if (veh->carriedvehs || veh->people || veh->towing || veh->contents) {
+      send_to_char(ch, "%s^n has to be empty before you can sell it.\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
+      return TRUE;
+    }
+    // It must not have mods.
+    for (int mod_location = 0; mod_location < NUM_MODS; mod_location++) {
+      if (GET_MOD(veh, mod_location)) {
+        send_to_char(ch, "You'll have to remove the mods from %s^n before you can sell it.\r\n", GET_VEH_NAME(veh));
+        return TRUE;
+      }
+    }
+    if (veh->mount) {
+      send_to_char(ch, "You'll have to remove the mounts from %s^n before you can sell it.\r\n", GET_VEH_NAME(veh));
+      return TRUE;
+    }
+    // Calculate price.
+    int sell_price = veh->flags.IsSet(VFLAG_NEWBIE) ? 0 : veh->cost / VEHICLE_SELL_PRICE_DIVISOR;
+    // Sell it.
+    if (CMD_IS("sell")) {
+      // Require that the final argument is 'confirm'.
+      if (!is_abbrev("confirm", argument)) {
+        send_to_char(ch, "This is an irreversible process. If you're sure you want to sell %s for %d nuyen, type ^WSELL %s CONFIRM^n.\r\n",
+                     GET_VEH_NAME(veh),
+                     sell_price,
+                     buf);
+      } else {
+        send_to_char(ch, "You sell %s for %d nuyen.\r\n",
+                     GET_VEH_NAME(veh),
+                     sell_price);
+
+        char sellbuf[1000];
+        snprintf(sellbuf, sizeof(sellbuf), "$n sells %s, and it's wheeled away immediately.", GET_VEH_NAME(veh));
+        act(sellbuf, TRUE, ch, 0, 0, TO_ROOM);
+        gain_nuyen(ch, sell_price, NUYEN_INCOME_SHOP_SALES);
+        snprintf(sellbuf, sizeof(sellbuf), "%s sold vehicle '%s^g' (%ld) for %d nuyen.",
+                 GET_CHAR_NAME(ch),
+                 GET_VEH_NAME(veh),
+                 GET_VEH_VNUM(veh),
+                 sell_price);
+        mudlog(sellbuf, ch, LOG_GRIDLOG, TRUE);
+        // Destroy the vehicle.
+        extract_veh(veh);
+      }
+    } else {
+      send_to_char(ch, "You could sell %s^n for %d nuyen (non-negotiable).\r\n", GET_VEH_NAME(veh), sell_price);
+    }
     return TRUE;
   }
   return FALSE;

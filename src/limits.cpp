@@ -1202,6 +1202,10 @@ void save_vehicles(bool fromCopyover)
     fprintf(fl, "\tDamage:\t%d\n", veh->damage);
     fprintf(fl, "\tSpare:\t%ld\n", veh->spare);
     fprintf(fl, "\tIdnum:\t%ld\n", veh->idnum);
+
+    rnum_t rnum = real_vehicle(GET_VEH_VNUM(veh));
+    if (rnum < 0 || veh->flags != veh_proto[rnum].flags)
+      fprintf(fl, "\tFlags:\t%s\n", veh->flags.ToString());
     if (veh->in_veh)
       fprintf(fl, "\tInVeh:\t%ld\n", veh->in_veh->idnum);
     if (veh->restring)

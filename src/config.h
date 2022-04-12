@@ -157,6 +157,9 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 #define PREORDERS_ARE_GOOD_FOR_X_DAYS                          7
 #define PREORDER_RESTOCKING_FEE_DIVISOR                        10
 
+// What amount of a vehicle's value do you receive when you sell it? 1/N where N is this number.
+#define VEHICLE_SELL_PRICE_DIVISOR                             5
+
 // How many minutes must have passed since the creation of a piece of mail before it is auto-deleted?
 #define MAIL_EXPIRATION_TICKS                                  (60 * 24 * 14) /* 14 days */
 
