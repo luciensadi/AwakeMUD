@@ -1888,26 +1888,29 @@ int perform_alias(struct descriptor_data * d, char *orig)
  * it to be returned.  Returns -1 if not found; 0..n otherwise.  Array
  * must be terminated with a '\n' so it knows to stop searching.
  */
-int search_block(char *arg, const char **list, bool exact)
+int search_block(const char *arg, const char **list, bool exact)
 {
   int i, l;
   if (!strcmp(arg, "!"))
     return -1;
 
+  char mutable_arg[strlen(arg) + 1];
+  strlcpy(mutable_arg, arg, sizeof(mutable_arg));
+
   /* Make into lower case, and get length of string */
-  for (l = 0; *(arg + l); l++)
-    *(arg + l) = LOWER(*(arg + l));
+  for (l = 0; *(mutable_arg + l); l++)
+    *(mutable_arg + l) = LOWER(*(mutable_arg + l));
 
   if (exact) {
     for (i = 0; **(list + i) != '\n'; i++)
-      if (!strcmp(arg, *(list + i)))
+      if (!strcmp(mutable_arg, *(list + i)))
         return (i);
   } else {
     if (!l)
       l = 1;                    /* Avoid "" to match the first available
                                                                                      * string */
     for (i = 0; **(list + i) != '\n'; i++)
-      if (!strncmp(arg, *(list + i), l))
+      if (!strncmp(mutable_arg, *(list + i), l))
         return (i);
   }
 
@@ -1964,7 +1967,7 @@ int reserved_word(char *argument)
  * copy the first non-fill-word, space-delimited argument of 'argument'
  * to 'first_arg'; return a pointer to the remainder of the string.
  */
-char *one_argument(char *argument, char *first_arg)
+char *one_argument(char *argument, char *first_arg, bool preserve_case)
 {
   char *begin = first_arg;
 
@@ -1973,7 +1976,7 @@ char *one_argument(char *argument, char *first_arg)
 
     first_arg = begin;
     while (*argument && !isspace(*argument)) {
-      *(first_arg++) = LOWER(*argument);
+      *(first_arg++) = (preserve_case ? *argument : LOWER(*argument));
       argument++;
     }
 
@@ -1987,7 +1990,7 @@ char *one_argument(char *argument, char *first_arg)
 
 
 /* same as one_argument except that it doesn't ignore fill words */
-char *any_one_arg(char *argument, char *first_arg)
+char *any_one_arg(char *argument, char *first_arg, bool preserve_case)
 {
   *first_arg = '\0';
 
@@ -1997,7 +2000,7 @@ char *any_one_arg(char *argument, char *first_arg)
   skip_spaces(&argument);
 
   while (*argument && !isspace(*argument)) {
-    *(first_arg++) = LOWER(*argument);
+    *(first_arg++) = (preserve_case ? *argument : LOWER(*argument));
     argument++;
   }
 
@@ -2007,7 +2010,7 @@ char *any_one_arg(char *argument, char *first_arg)
 }
 
 // Same as above, but without skip_spaces.
-const char *any_one_arg_const(const char *argument, char *first_arg)
+const char *any_one_arg_const(const char *argument, char *first_arg, bool preserve_case)
 {
   *first_arg = '\0';
 
@@ -2015,7 +2018,7 @@ const char *any_one_arg_const(const char *argument, char *first_arg)
     return NULL;
 
   while (*argument && !isspace(*argument)) {
-    *(first_arg++) = LOWER(*argument);
+    *(first_arg++) = (preserve_case ? *argument : LOWER(*argument));
     argument++;
   }
 

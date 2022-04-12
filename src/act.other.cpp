@@ -2720,7 +2720,7 @@ ACMD(do_remember)
   struct remem *m, *temp;
 
   argument = any_one_arg(argument, buf1);
-  argument = one_argument(argument, buf2);
+  argument = one_argument(argument, buf2, TRUE);
 
   if (!*buf1 || !*buf2) {
     send_to_char(ch, "Remember Who as What?\r\n");
