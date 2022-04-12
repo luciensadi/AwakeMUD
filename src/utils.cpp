@@ -3209,7 +3209,7 @@ void update_ammobox_ammo_quantity(struct obj_data *ammobox, int amount) {
   }
 
   if (amount == 0) {
-    mudlog("SYSERR: Zero-quantity ammobox passed to update_ammobox_ammo_quantity.", ammobox->carried_by, LOG_SYSLOG, TRUE);
+    mudlog("SYSERR: Zero amount passed to update_ammobox_ammo_quantity.", ammobox->carried_by, LOG_SYSLOG, TRUE);
     return;
   }
 

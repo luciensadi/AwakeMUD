@@ -1548,7 +1548,9 @@ ACMD(do_reload)
   struct veh_data *veh = NULL;
   int ammotype = -1;
 
-  two_arguments(argument, buf, buf1);
+  const char *ammo_type_ptr;
+
+  argument = two_arguments(argument, buf, buf1);
 
   // Disqualifying condition: If you're in combat and wielding an assault cannon, you don't get to reload it. (TODO: what stops someone from unwield, reload, wield?)
   if (GET_POS(ch) == POS_FIGHTING && GET_EQ(ch, WEAR_WIELD) && GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 4) == SKILL_ASSAULT_CANNON) {
@@ -1564,6 +1566,12 @@ ACMD(do_reload)
         veh = ch->in_veh;
         mount = atoi(buf1);
 
+        if (!isdigit(*buf1)) {
+          ammo_type_ptr = buf1;
+        } else {
+          ammo_type_ptr = argument;
+        }
+
         for (m = veh->mount; m; m = m->next_content)
           if (--mount < 0)
             break;
@@ -1574,9 +1582,10 @@ ACMD(do_reload)
         }
       }
 
-      // No argument and manning? Reload the turret.
+      // No argument and manning? Reload the turret with what's already in it.
       else if (!*buf && (m = get_mount_manned_by_ch(ch))) {
         veh = ch->in_veh;
+        ammo_type_ptr = NULL;
       }
     }
 
@@ -1587,6 +1596,12 @@ ACMD(do_reload)
         return;
       }
       mount = atoi(buf1);
+
+      if (!isdigit(*buf1)) {
+        ammo_type_ptr = buf1;
+      } else {
+        ammo_type_ptr = argument;
+      }
 
       for (m = veh->mount; m; m = m->next_content)
         if (--mount < 0)
@@ -1601,84 +1616,82 @@ ACMD(do_reload)
     // Process mount reloading.
     if (veh && m) {
       // Iterate over the mount and look for its weapon and ammo box.
-
       if (!(gun = get_mount_weapon(m))) {
-        send_to_char("There is no weapon attached to that mount.\r\n", ch);
+        send_to_char(ch, "There is no weapon attached to %s.\r\n", decapitalize_a_an(GET_OBJ_NAME(m)));
+        return;
+      }
+
+      if (GET_WEAPON_MAX_AMMO(gun) <= 0) {
+        send_to_char(ch, "%s has an internal ammo supply that doesn't need reloading.\r\n", capitalize(GET_OBJ_NAME(gun)));
         return;
       }
 
       ammo = get_mount_ammo(m);
 
-      for (i = ch->carrying; i; i = i->next_content) {
-        if (GET_OBJ_TYPE(i) == ITEM_GUN_AMMO
-            && GET_AMMOBOX_WEAPON(i) == GET_WEAPON_ATTACK_TYPE(gun)
-            && GET_AMMOBOX_QUANTITY(i) > 0) {
-          int max = GET_WEAPON_MAX_AMMO(gun) * 2;
+      int weapontype = GET_WEAPON_ATTACK_TYPE(gun);
+      ammotype = ammo ? GET_AMMOBOX_TYPE(ammo) : AMMO_NORMAL;
+      int max = GET_WEAPON_MAX_AMMO(gun) * 2;
 
-          // Reload an ammo box directly.
-          if (ammo) {
-            if (GET_AMMOBOX_QUANTITY(ammo) > 0
-                && (GET_AMMOBOX_WEAPON(i) != GET_AMMOBOX_WEAPON(ammo) ||
-                    GET_AMMOBOX_TYPE(i) != GET_AMMOBOX_TYPE(ammo))) {
-              send_to_char(ch, "You cannot mix ammunition types in ammunition bins. The bin is currently loaded with %s, while you're using %s.\r\n",
-                           get_ammo_representation(GET_AMMOBOX_WEAPON(ammo), GET_AMMOBOX_TYPE(ammo), 0),
-                           get_ammo_representation(GET_AMMOBOX_WEAPON(i), GET_AMMOBOX_TYPE(i), 0));
-              return;
-            }
-            max -= GET_AMMOBOX_QUANTITY(ammo);
-            if (max < 1) {
-              send_to_char("The ammunition bin on that mount is already full.\r\n", ch);
-              return;
-
-            } else {
-              max = MIN(max, GET_AMMOBOX_QUANTITY(i));
-              update_ammobox_ammo_quantity(ammo, max);
-              update_ammobox_ammo_quantity(i, -max);
-              GET_AMMOBOX_WEAPON(ammo) = GET_AMMOBOX_WEAPON(i);
-              GET_AMMOBOX_TYPE(ammo) = GET_AMMOBOX_TYPE(i);
-              if (GET_AMMOBOX_QUANTITY(i) == 0 && (!i->restring || !(*i->restring))) {
-                send_to_char(ch, "You insert %d %s into %s, then junk the empty %s.\r\n",
-                             max,
-                             get_ammo_representation(GET_AMMOBOX_WEAPON(i), GET_AMMOBOX_TYPE(i), max),
-                             decapitalize_a_an(GET_OBJ_NAME(m)),
-                             GET_OBJ_NAME(i));
-                extract_obj(i);
-              } else {
-                send_to_char(ch, "You insert %d %s into %s.\r\n",
-                             max,
-                             get_ammo_representation(GET_AMMOBOX_WEAPON(i), GET_AMMOBOX_TYPE(i), max),
-                             decapitalize_a_an(GET_OBJ_NAME(m)));
-              }
-              return;
-            }
-          }
-
-          // No ammo box-- add a new one.
-          else {
-            max = MIN(max, GET_AMMOBOX_QUANTITY(i));
-            ammo = read_object(OBJ_BLANK_AMMOBOX, VIRTUAL);
-            GET_AMMOBOX_WEAPON(ammo) = GET_AMMOBOX_WEAPON(i);
-            GET_AMMOBOX_TYPE(ammo) = GET_AMMOBOX_TYPE(i);
-            GET_AMMOBOX_QUANTITY(ammo) = 0;
-            update_ammobox_ammo_quantity(ammo, max);
-            update_ammobox_ammo_quantity(i, -max);
-            ammo->restring = str_dup(get_ammobox_default_restring(ammo));
-            obj_to_obj(ammo, m);
-
-            if (GET_AMMOBOX_QUANTITY(i) == 0 && (!i->restring || !(*i->restring))) {
-              send_to_char(ch, "You insert %d rounds of ammunition into %s, then junk the empty %s.\r\n", max, decapitalize_a_an(GET_OBJ_NAME(m)), GET_OBJ_NAME(i));
-              extract_obj(i);
-            } else {
-              send_to_char(ch, "You insert %d rounds of ammunition into %s.\r\n", max, decapitalize_a_an(GET_OBJ_NAME(m)));
-            }
-
-            return;
+      if (ammo_type_ptr && *ammo_type_ptr) {
+        for (int i = NUM_AMMOTYPES - 1; i >= AMMO_NORMAL ; i--) {
+          if (str_str(ammo_type[i].name, ammo_type_ptr)) {
+            ammotype = i;
+            break;
           }
         }
       }
 
-      send_to_char("You're not carrying an ammobox containing the right ammunition for that mount.\r\n", ch);
+      int pocket_quantity = GET_BULLETPANTS_AMMO_AMOUNT(ch, weapontype, ammotype);
+      if (pocket_quantity <= 0) {
+        send_to_char(ch, "You don't have any %s in your pockets.\r\n", get_ammo_representation(weapontype, ammotype, 0));
+        return;
+      }
+
+      // If the mount already has an ammo box, fill it.
+      if (ammo) {
+        if (GET_AMMOBOX_TYPE(ammo) != ammotype && GET_AMMOBOX_QUANTITY(ammo) > 0) {
+          send_to_char(ch, "%s is already loaded with %s. You'll have to unattach the weapon to empty it first.\r\n",
+                       capitalize(GET_OBJ_NAME(m)),
+                       get_ammo_representation(weapontype, ammotype, 0)
+                      );
+          return;
+        }
+
+        if (pocket_quantity > 0) {
+          if ((max -= GET_AMMOBOX_QUANTITY(ammo)) < 1) {
+            send_to_char(ch, "The ammunition bin on %s is already full.\r\n", decapitalize_a_an(GET_OBJ_NAME(m)));
+          } else {
+            max = MIN(max, pocket_quantity);
+            update_ammobox_ammo_quantity(ammo, max);
+            update_bulletpants_ammo_quantity(ch, weapontype, ammotype, -max);
+            send_to_char(ch, "You insert %d %s into %s.\r\n",
+                         max,
+                         get_ammo_representation(weapontype, ammotype, max),
+                         decapitalize_a_an(GET_OBJ_NAME(m)));
+          }
+        } else {
+          send_to_char(ch, "You don't have any %s in your pockets.\r\n", get_ammo_representation(weapontype, ammotype, 0));
+        }
+        return;
+      }
+
+      // No ammo box found-- make a new one.
+      max = MIN(max, pocket_quantity);
+      ammo = read_object(OBJ_BLANK_AMMOBOX, VIRTUAL);
+      GET_AMMOBOX_WEAPON(ammo) = weapontype;
+      GET_AMMOBOX_TYPE(ammo) = ammotype;
+      GET_AMMOBOX_QUANTITY(ammo) = 0;
+      update_ammobox_ammo_quantity(ammo, max);
+      update_bulletpants_ammo_quantity(ch, weapontype, ammotype, -max);
+      ammo->restring = str_dup(get_ammobox_default_restring(ammo));
+      obj_to_obj(ammo, m);
+      send_to_char(ch, "You insert %d %s into %s.\r\n",
+                   max,
+                   get_ammo_representation(weapontype, ammotype, max),
+                   decapitalize_a_an(GET_OBJ_NAME(m)));
       return;
+
+
     } /* End of mount evaluation. */
   } /* end of mounts */
 
