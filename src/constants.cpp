@@ -275,6 +275,7 @@ const char *room_bits[] =
     "STERILE",
     "CRAMPED",
     "RADIOACTIVE",
+    "ALL_VEH_ACCESS",
     "\n"
   };
 

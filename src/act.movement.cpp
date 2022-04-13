@@ -680,7 +680,7 @@ void move_vehicle(struct char_data *ch, int dir)
 #endif
 
   // Flying vehicles can traverse any terrain.
-  if (!veh_can_traverse_air(veh)) {
+  if (!ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_ALL_VEHICLE_ACCESS) && !veh_can_traverse_air(veh)) {
     // Non-flying vehicles can't pass fall rooms.
     if (ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_FALL)) {
       send_to_char(ch, "%s would plunge to its destruction!\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));

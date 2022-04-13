@@ -4242,7 +4242,7 @@ bool room_accessible_to_vehicle_piloted_by_ch(struct room_data *room, struct veh
   #endif
 
   // Flying vehicles can traverse any terrain.
-  if (!veh_can_traverse_air(veh)) {
+  if (!ROOM_FLAGGED(room, ROOM_ALL_VEHICLE_ACCESS) && !veh_can_traverse_air(veh)) {
     // Non-flying vehicles can't pass fall rooms.
     if (ROOM_FLAGGED(room, ROOM_FALL)) {
       return FALSE;
