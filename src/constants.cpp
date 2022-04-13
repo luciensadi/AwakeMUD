@@ -1550,7 +1550,18 @@ struct skill_data skills[] =
     {"Pharmaceuticals", INT, SKILL_TYPE_ACTIVE, FALSE},
     {"Hebrew", INT, SKILL_TYPE_KNOWLEDGE, FALSE},
     {"Iroquois", INT, SKILL_TYPE_KNOWLEDGE, FALSE},
-    {"Medicine", INT, SKILL_TYPE_KNOWLEDGE, FALSE}
+    {"Medicine", INT, SKILL_TYPE_KNOWLEDGE, FALSE},
+    {"Repairing Fixed Wing Aircraft", INT, SKILL_TYPE_ACTIVE, FALSE},
+    {"Repairing Rotorcraft", INT, SKILL_TYPE_ACTIVE, FALSE},
+    {"Repairing Vector Thrust Aircraft", INT, SKILL_TYPE_ACTIVE, FALSE},
+    {"Repairing Hovercraft", INT, SKILL_TYPE_ACTIVE, FALSE},
+    {"Repairing Motorboats", INT, SKILL_TYPE_ACTIVE, FALSE},
+    {"Repairing Ships", INT, SKILL_TYPE_ACTIVE, FALSE},
+    {"Repairing Lighter-than-Air Aircraft", INT, SKILL_TYPE_ACTIVE, FALSE},
+    {"Piloting Hovercraft", REA, SKILL_TYPE_ACTIVE, FALSE},
+    {"Piloting Motorboats", REA, SKILL_TYPE_ACTIVE, FALSE},
+    {"Piloting Ships", REA, SKILL_TYPE_ACTIVE, FALSE},
+    {"Piloting Lighter-than-Air Aircraft", REA, SKILL_TYPE_ACTIVE, FALSE}
   };
 
 int rev_dir[] =

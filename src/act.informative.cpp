@@ -3257,20 +3257,8 @@ ACMD(do_examine)
         return;
       }
 
-      switch(found_veh->type) {
-        case VEH_DRONE:
-          skill = SKILL_BR_DRONE;
-          break;
-        case VEH_BIKE:
-          skill = SKILL_BR_BIKE;
-          break;
-        case VEH_CAR:
-          skill = SKILL_BR_CAR;
-          break;
-        case VEH_TRUCK:
-          skill = SKILL_BR_TRUCK;
-          break;
-      }
+      skill = get_br_skill_for_veh(found_veh);
+      
       int target = (found_veh->cspeed > SPEED_IDLE) ? 8 : 4;
       skill = get_skill(ch, skill, target);
       target += modify_target(ch);

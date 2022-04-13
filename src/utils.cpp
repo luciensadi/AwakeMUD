@@ -1488,6 +1488,17 @@ int get_skill(struct char_data *ch, int skill, int &target)
         case SKILL_BR_HEAVYWEAPON:
         case SKILL_BR_SMG:
         case SKILL_BR_ARMOR:
+        case SKILL_BR_FIXEDWING:
+        case SKILL_BR_ROTORCRAFT:
+        case SKILL_BR_VECTORTHRUST:
+        case SKILL_BR_HOVERCRAFT:
+        case SKILL_BR_MOTORBOAT:
+        case SKILL_BR_SHIP:
+        case SKILL_BR_LTA:
+        case SKILL_PILOT_HOVERCRAFT:
+        case SKILL_PILOT_MOTORBOAT:
+        case SKILL_PILOT_SHIP:
+        case SKILL_PILOT_LTA:
         case SKILL_PILOT_ROTORCRAFT:
         case SKILL_PILOT_FIXEDWING:
         case SKILL_PILOT_VECTORTHRUST:
@@ -4329,6 +4340,85 @@ bool veh_can_traverse_air(struct veh_data *veh) {
   }
 
   return FALSE;
+}
+
+int get_pilot_skill_for_veh(struct veh_data *veh) {
+  if (!veh) {
+    mudlog("SYSERR: NULL vehicle to get_pilot_skill_for_veh()!", NULL, LOG_SYSLOG, TRUE);
+    return 0;
+  }
+
+  switch(veh->type) {
+    case VEH_DRONE:
+      mudlog("SYSERR: Called get_pilot_skill_for_veh() on a drone!", NULL, LOG_SYSLOG, TRUE);
+      return 0;
+    case VEH_BIKE:
+      return SKILL_PILOT_BIKE;
+    case VEH_CAR:
+      return SKILL_PILOT_CAR;
+    case VEH_TRUCK:
+      return SKILL_PILOT_TRUCK;
+    case VEH_FIXEDWING:
+      return SKILL_PILOT_FIXEDWING;
+    case VEH_ROTORCRAFT:
+      return SKILL_PILOT_ROTORCRAFT;
+    case VEH_VECTORTHRUST:
+      return SKILL_PILOT_VECTORTHRUST;
+    case VEH_HOVERCRAFT:
+      return SKILL_PILOT_HOVERCRAFT;
+    case VEH_MOTORBOAT:
+      return SKILL_PILOT_MOTORBOAT;
+    case VEH_SHIP:
+      return SKILL_PILOT_SHIP;
+    case VEH_LTA:
+      return SKILL_PILOT_LTA;
+    default:
+      {
+        char oopsbuf[500];
+        snprintf(oopsbuf, sizeof(oopsbuf), "SYSERR: Unknown veh type %d to get_br_skill_for_veh()!", veh->type);
+        mudlog(oopsbuf, NULL, LOG_SYSLOG, TRUE);
+      }
+      return 0;
+  }
+}
+
+int get_br_skill_for_veh(struct veh_data *veh) {
+  if (!veh) {
+    mudlog("SYSERR: NULL vehicle to get_br_skill_for_veh()!", NULL, LOG_SYSLOG, TRUE);
+    return 0;
+  }
+
+  switch(veh->type) {
+    case VEH_DRONE:
+      return SKILL_BR_DRONE;
+    case VEH_BIKE:
+      return SKILL_BR_BIKE;
+    case VEH_CAR:
+      return SKILL_BR_CAR;
+    case VEH_TRUCK:
+      return SKILL_BR_TRUCK;
+    case VEH_FIXEDWING:
+      return SKILL_BR_FIXEDWING;
+    case VEH_ROTORCRAFT:
+      return SKILL_BR_ROTORCRAFT;
+    case VEH_VECTORTHRUST:
+      return SKILL_BR_VECTORTHRUST;
+    case VEH_HOVERCRAFT:
+      return SKILL_BR_HOVERCRAFT;
+    case VEH_MOTORBOAT:
+      return SKILL_BR_MOTORBOAT;
+    case VEH_SHIP:
+      return SKILL_BR_SHIP;
+    case VEH_LTA:
+      return SKILL_BR_LTA;
+    default:
+      {
+        char oopsbuf[500];
+        snprintf(oopsbuf, sizeof(oopsbuf), "SYSERR: Unknown veh type %d to get_br_skill_for_veh()!", veh->type);
+        mudlog(oopsbuf, NULL, LOG_SYSLOG, TRUE);
+      }
+      return 0;
+  }
 }
 
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.

@@ -3211,43 +3211,99 @@ int find_all_dots(char *arg)
     return FIND_INDIV;
 }
 
-int veh_skill(struct char_data *ch, struct veh_data *veh)
+#define DEFAULT_TO(skill_name) {if (!dice) {dice = GET_SKILL(ch, (skill_name)); defaulting = TRUE;}}
+int veh_skill(struct char_data *ch, struct veh_data *veh, int *tn)
 {
-  int skill = 0;
+  int dice = 0;
+
+  bool defaulting = FALSE;
 
   switch (veh->type)
   {
     case VEH_CAR:
-      skill = GET_SKILL(ch, SKILL_PILOT_CAR);
-      if (!skill)
-        skill = (int)(GET_SKILL(ch, SKILL_PILOT_TRUCK) / 2);
-      if (!skill)
-        skill = (int)(GET_SKILL(ch, SKILL_PILOT_BIKE) / 2);
+      dice = GET_SKILL(ch, SKILL_PILOT_CAR);
+      DEFAULT_TO(SKILL_PILOT_TRUCK);
       break;
     case VEH_BIKE:
-      skill = GET_SKILL(ch, SKILL_PILOT_BIKE);
-      if (!skill)
-        skill = (int)(GET_SKILL(ch, SKILL_PILOT_CAR) / 2);
-      if (!skill)
-        skill = (int)(GET_SKILL(ch, SKILL_PILOT_TRUCK) / 2);
+      dice = GET_SKILL(ch, SKILL_PILOT_BIKE);
       break;
     case VEH_TRUCK:
-      skill = GET_SKILL(ch, SKILL_PILOT_TRUCK);
-      if (!skill)
-        skill = (int)(GET_SKILL(ch, SKILL_PILOT_CAR) / 2);
-      if (!skill)
-        skill = (int)(GET_SKILL(ch, SKILL_PILOT_BIKE) / 2);
+      dice = GET_SKILL(ch, SKILL_PILOT_TRUCK);
+      DEFAULT_TO(SKILL_PILOT_CAR);
+      break;
+    case VEH_FIXEDWING:
+      dice = GET_SKILL(ch, SKILL_PILOT_FIXEDWING);
+      DEFAULT_TO(SKILL_PILOT_VECTORTHRUST);
+      DEFAULT_TO(SKILL_PILOT_ROTORCRAFT);
+      DEFAULT_TO(SKILL_PILOT_LTA);
+      break;
+    case VEH_VECTORTHRUST:
+      dice = GET_SKILL(ch, SKILL_PILOT_VECTORTHRUST);
+      DEFAULT_TO(SKILL_PILOT_FIXEDWING);
+      DEFAULT_TO(SKILL_PILOT_ROTORCRAFT);
+      DEFAULT_TO(SKILL_PILOT_LTA);
+      break;
+    case VEH_ROTORCRAFT:
+      dice = GET_SKILL(ch, SKILL_PILOT_ROTORCRAFT);
+      DEFAULT_TO(SKILL_PILOT_VECTORTHRUST);
+      DEFAULT_TO(SKILL_PILOT_FIXEDWING);
+      DEFAULT_TO(SKILL_PILOT_LTA);
+      break;
+    case VEH_HOVERCRAFT:
+      dice = GET_SKILL(ch, SKILL_PILOT_HOVERCRAFT);
+      break;
+    case VEH_MOTORBOAT:
+      dice = GET_SKILL(ch, SKILL_PILOT_MOTORBOAT);
+      DEFAULT_TO(SKILL_PILOT_SHIP);
+      break;
+    case VEH_SHIP:
+      dice = GET_SKILL(ch, SKILL_PILOT_SHIP);
+      DEFAULT_TO(SKILL_PILOT_MOTORBOAT);
+      break;
+    case VEH_LTA:
+      dice = GET_SKILL(ch, SKILL_PILOT_LTA);
+      DEFAULT_TO(SKILL_PILOT_VECTORTHRUST);
+      DEFAULT_TO(SKILL_PILOT_FIXEDWING);
+      DEFAULT_TO(SKILL_PILOT_ROTORCRAFT);
       break;
   }
+
+  // Assume any NPC with a vehicle and no skill dice has a minimum dice of 4 and that the builder just forgot to set it.
+  if (IS_NPC(ch) && dice == 0) {
+    dice = 4;
+    defaulting = FALSE;
+  }
+
+  // Skill-to-skill default.
+  if (defaulting && dice > 0) {
+    *tn += 2;
+  }
+
+  // Skill-to-attribute default.
+  else if (dice <= 0) {
+    dice = GET_REA(ch);
+
+    bool has_vcr = FALSE;
+    for (struct obj_data *cyber = ch->cyberware; cyber; cyber = cyber->next_content) {
+      if (GET_CYBERWARE_TYPE(cyber) == CYB_VCR) {
+        has_vcr = TRUE;
+        break;
+      }
+    }
+
+    if (has_vcr) {
+      *tn += 2;
+    } else {
+      *tn += 4;
+    }
+  }
+
   if (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE))
-    skill += GET_CONTROL(ch);
+    dice += GET_CONTROL(ch);
 
-  // Assume any NPC with a vehicle and no skill has a minimum skill of 4 and that the builder just forgot to set it.
-  if (IS_NPC(ch) && skill == 0)
-    skill = MAX(skill, 4);
-
-  return skill;
+  return dice;
 }
+#undef DEFAULT_TO
 
 int get_skill_num_in_use_for_weapons(struct char_data *ch) {
   struct obj_data *one, *two;

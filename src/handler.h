@@ -79,7 +79,7 @@ void    char_to_veh(struct veh_data *veh, struct char_data *ch);
 void veh_from_room(struct veh_data *veh);
 void veh_to_room(struct veh_data *veh, struct room_data *room);
 void veh_to_veh(struct veh_data *veh, struct veh_data *dest);
-int veh_skill(struct char_data *ch, struct veh_data *veh);
+int veh_skill(struct char_data *ch, struct veh_data *veh, int *tn);
 void	icon_from_host(struct matrix_icon *icon);
 void	icon_to_host(struct matrix_icon *icon, vnum_t to_host);
 

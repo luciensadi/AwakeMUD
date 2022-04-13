@@ -58,7 +58,8 @@ int get_maneuver(struct veh_data *veh)
   if (ch)
   {
     // TODO: What is this passage for? -LS
-    for (skill = veh_skill(ch, veh); skill > 0; skill--) {
+    int dummy_target = 0;
+    for (skill = veh_skill(ch, veh, &dummy_target); skill > 0; skill--) {
       x = MAX(x, srdice());
     }
     score += x;
@@ -156,9 +157,9 @@ void crash_test(struct char_data *ch)
   snprintf(buf, sizeof(buf), "%s begins to lose control!\r\n", capitalize(GET_VEH_NAME(veh)));
   act(buf, FALSE, ch, NULL, NULL, TO_VEH_ROOM);
 
-  skill = veh_skill(ch, veh) + veh->autonav;
+  skill = veh_skill(ch, veh, &target) + veh->autonav;
 
-  if (success_test(skill, target))
+  if (success_test(skill, target) > 0)
   {
     snprintf(crash_buf, sizeof(crash_buf), "^y%s shimmies sickeningly under you, but you manage to keep control.^n\r\n", capitalize(GET_VEH_NAME(veh)));
     send_to_veh(crash_buf, veh, NULL, TRUE);
@@ -166,9 +167,14 @@ void crash_test(struct char_data *ch)
       send_to_char("^YYou don't have the skills to be driving like this!^n\r\n", ch);
     return;
   }
-  snprintf(crash_buf, sizeof(crash_buf), "^r%s shimmies sickeningly under you, then bounces hard before careening off the road!^n\r\n", capitalize(GET_VEH_NAME(veh)));
+  if (veh->in_room && IS_WATER(veh->in_room)) {
+    snprintf(crash_buf, sizeof(crash_buf), "^r%s shimmies sickeningly under you, then bounces hard before flipping over!^n\r\n", capitalize(GET_VEH_NAME(veh)));
+    snprintf(buf, sizeof(buf), "%s plows into a wave and flips!\r\n", capitalize(GET_VEH_NAME(veh)));
+  } else {
+    snprintf(crash_buf, sizeof(crash_buf), "^r%s shimmies sickeningly under you, then bounces hard before careening off the road!^n\r\n", capitalize(GET_VEH_NAME(veh)));
+    snprintf(buf, sizeof(buf), "%s careens off the road!\r\n", capitalize(GET_VEH_NAME(veh)));
+  }
   send_to_veh(crash_buf, veh, NULL, TRUE);
-  snprintf(buf, sizeof(buf), "%s careens off the road!\r\n", capitalize(GET_VEH_NAME(veh)));
   act(buf, FALSE, ch, NULL, NULL, TO_VEH_ROOM);
 
   attack_resist = success_test(veh->body, power) * -1;
@@ -178,7 +184,7 @@ void crash_test(struct char_data *ch)
 
   veh->damage += damage_total;
   stop_chase(veh);
-  if (veh->type == VEH_BIKE && veh->people)
+  if ((veh->type == VEH_BIKE || veh->type == VEH_MOTORBOAT) && veh->people)
   {
     power = (int)(get_speed(veh) / 10);
     for (tch = veh->people; tch; tch = next) {
@@ -188,7 +194,7 @@ void crash_test(struct char_data *ch)
       damage_total = convert_damage(stage(0 - success_test(GET_BOD(tch), power), MODERATE));
       damage(tch, tch, damage_total, TYPE_CRASH, PHYSICAL);
       AFF_FLAGS(tch).RemoveBits(AFF_PILOT, AFF_RIG, ENDBIT);
-      send_to_char("You are thrown from the bike!\r\n", tch);
+      send_to_char(tch, "You are thrown from the %s!\r\n", veh->type == VEH_BIKE ? "bike" : "boat");
     }
     veh->cspeed = SPEED_OFF;
   }
@@ -462,7 +468,7 @@ ACMD(do_ram)
 }
 
 void do_raw_ram(struct char_data *ch, struct veh_data *veh, struct veh_data *tveh, struct char_data *vict) {
-  int skill = veh_skill(ch, veh), target = 0, vehm = 0, tvehm = 0;
+  int target = 0, vehm = 0, tvehm = 0;
 
   if (tveh && tveh == veh) {
     strncpy(buf, "SYSERR: do_raw_ram got veh = tveh!", sizeof(buf) - 1);
@@ -511,6 +517,7 @@ void do_raw_ram(struct char_data *ch, struct veh_data *veh, struct veh_data *tve
         return;
     }
   }
+  int skill = veh_skill(ch, veh, &target);
   int success = success_test(skill, target);
   if (vict) {
     target = 4 + damage_modifier(vict, buf, sizeof(buf));
@@ -568,20 +575,8 @@ ACMD(do_upgrade)
     return;
   }
   if (!IS_NPC(ch)) {
-    switch(veh->type) {
-    case VEH_DRONE:
-      skill = SKILL_BR_DRONE;
-      break;
-    case VEH_BIKE:
-      skill = SKILL_BR_BIKE;
-      break;
-    case VEH_CAR:
-      skill = SKILL_BR_CAR;
-      break;
-    case VEH_TRUCK:
-      skill = SKILL_BR_TRUCK;
-      break;
-    }
+    skill = get_br_skill_for_veh(veh);
+
     switch (GET_OBJ_VAL(mod, 0)) {
       case TYPE_ENGINECUST:
         target = 6;
@@ -1138,21 +1133,7 @@ ACMD(do_repair)
     return;
   }
 
-  switch(veh->type) {
-    case VEH_DRONE:
-      skill = SKILL_BR_DRONE;
-      break;
-    case VEH_BIKE:
-      skill = SKILL_BR_BIKE;
-      break;
-    case VEH_CAR:
-      skill = SKILL_BR_CAR;
-      break;
-    case VEH_TRUCK:
-      skill = SKILL_BR_TRUCK;
-      break;
-  }
-  skill = get_skill(ch, skill, target);
+  skill = get_skill(ch, get_br_skill_for_veh(veh), target);
   target += (veh->damage - 2) / 2;
   target += modify_target(ch);
 

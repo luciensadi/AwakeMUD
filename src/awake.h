@@ -960,8 +960,19 @@ enum {
 #define SKILL_HEBREW              133
 #define SKILL_IROQUOIS            134
 #define SKILL_MEDICINE            135
+#define SKILL_BR_FIXEDWING        136
+#define SKILL_BR_ROTORCRAFT       137
+#define SKILL_BR_VECTORTHRUST     138
+#define SKILL_BR_HOVERCRAFT       139
+#define SKILL_BR_MOTORBOAT        140
+#define SKILL_BR_SHIP             141
+#define SKILL_BR_LTA              142
+#define SKILL_PILOT_HOVERCRAFT    143
+#define SKILL_PILOT_MOTORBOAT     144
+#define SKILL_PILOT_SHIP          145
+#define SKILL_PILOT_LTA           146
 
-#define MAX_SKILLS                136
+#define MAX_SKILLS                147
 
 // Skill type definitions.
 #define SKILL_TYPE_ACTIVE         0

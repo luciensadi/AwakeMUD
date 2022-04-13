@@ -121,6 +121,8 @@ bool    room_accessible_to_vehicle_piloted_by_ch(struct room_data *room, struct 
 bool    veh_can_traverse_land(struct veh_data *veh);
 bool    veh_can_traverse_water(struct veh_data *veh);
 bool    veh_can_traverse_air(struct veh_data *veh);
+int     get_br_skill_for_veh(struct veh_data *veh);
+int     get_pilot_skill_for_veh(struct veh_data *veh);
 
 long get_room_gridguide_x(vnum_t room_vnum);
 long get_room_gridguide_y(vnum_t room_vnum);

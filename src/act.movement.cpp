@@ -789,7 +789,10 @@ void move_vehicle(struct char_data *ch, int dir)
     target = (int)(target / 20);
     target2 = target + veh->handling + get_vehicle_modifier(veh) + modify_target(ch);
     target = -target + v->follower->handling + get_vehicle_modifier(v->follower) + modify_target(pilot);
-    int success = resisted_test(veh_skill(pilot, v->follower), target, veh_skill(ch, veh), target2);
+
+    int follower_dice = veh_skill(pilot, v->follower, &target);
+    int lead_dice = veh_skill(ch, veh, &target2);
+    int success = resisted_test(follower_dice, target, lead_dice, target2);
     if (success > 0) {
       send_to_char(pilot, "You gain ground.\r\n");
       send_to_char(ch, "%s seems to catch up.\r\n", capitalize(GET_VEH_NAME(v->follower)));

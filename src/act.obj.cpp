@@ -1457,20 +1457,8 @@ ACMD(do_get)
           return;
         } else {
           if (!IS_NPC(ch)) {
-            switch(veh->type) {
-            case VEH_DRONE:
-              skill = SKILL_BR_DRONE;
-              break;
-            case VEH_BIKE:
-              skill = SKILL_BR_BIKE;
-              break;
-            case VEH_CAR:
-              skill = SKILL_BR_CAR;
-              break;
-            case VEH_TRUCK:
-              skill = SKILL_BR_TRUCK;
-              break;
-            }
+            skill = get_br_skill_for_veh(veh);
+            
             switch (GET_VEHICLE_MOD_TYPE(cont)) {
             case TYPE_ENGINECUST:
               target = 6;
