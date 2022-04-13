@@ -6499,10 +6499,16 @@ int audit_zone_rooms_(struct char_data *ch, int zone_num, bool verbose) {
       printed = TRUE;
     }
 
-    if ((IS_WATER(room) || ROOM_FLAGGED(room, ROOM_FALL)) && room->rating == 0) {
-      strlcat(buf, "  - Swim / Fall rating not set.\r\n", sizeof(buf));
-      issues++;
-      printed = TRUE;
+    if ((IS_WATER(room) || ROOM_FLAGGED(room, ROOM_FALL))) {
+      if (room->rating == 0) {
+        strlcat(buf, "  - Swim / Fall rating not set.\r\n", sizeof(buf));
+        issues++;
+        printed = TRUE;
+      } else if (room->rating > 6) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - Swim / Fall rating is high (%d > 6).\r\n", room->rating);
+        issues++;
+        printed = TRUE;
+      }
     }
 
     // Check its exits.

@@ -273,7 +273,7 @@ const char *room_bits[] =
     "SOCIALIZE!",
     "CORPSE_SAVE_HACK",
     "STERILE",
-    "CRAMPED",
+    "SMALL_DRONE_ONLY",
     "RADIOACTIVE",
     "ALL_VEH_ACCESS",
     "\n"
