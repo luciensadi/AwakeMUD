@@ -660,17 +660,6 @@ void move_vehicle(struct char_data *ch, int dir)
     send_to_char(CANNOT_GO_THAT_WAY, ch);
     return;
   }
-  if ((!ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_ROAD) && !ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_GARAGE))
-      && (veh->type != VEH_DRONE && veh->type != VEH_BIKE))
-  {
-    send_to_char("Your vehicle is too big to fit there.\r\n", ch);
-    return;
-  }
-
-  if (veh->type == VEH_BIKE && ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_NOBIKE)) {
-    send_to_char(CANNOT_GO_THAT_WAY, ch);
-    return;
-  }
 
 #ifdef DEATH_FLAGS
   if (ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_DEATH)) {
@@ -706,6 +695,18 @@ void move_vehicle(struct char_data *ch, int dir)
 
   if (ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_HOUSE) && !House_can_enter(ch, EXIT(veh, dir)->to_room->number)) {
     send_to_char("You can't use other people's garages without permission.\r\n", ch);
+    return;
+  }
+
+  if ((!ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_ROAD) && !ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_GARAGE))
+      && (veh->type != VEH_DRONE && veh->type != VEH_BIKE))
+  {
+    send_to_char("That's not an easy path-- only drones and bikes have a chance of making it through.\r\n", ch);
+    return;
+  }
+
+  if (veh->type == VEH_BIKE && ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_NOBIKE)) {
+    send_to_char(CANNOT_GO_THAT_WAY, ch);
     return;
   }
 
@@ -1518,7 +1519,7 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
   }
 
   // Locked? Can't (unless admin)
-  if (found_veh->type != VEH_BIKE && found_veh->locked) {
+  if ((found_veh->type != VEH_BIKE && found_veh->type != VEH_MOTORBOAT) && found_veh->locked) {
     if (access_level(ch, LVL_ADMIN)) {
       send_to_char("You use your staff powers to bypass the locked doors.\r\n", ch);
     } else if (IS_ASTRAL(ch)) {

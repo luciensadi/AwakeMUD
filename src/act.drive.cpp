@@ -233,7 +233,7 @@ ACMD(do_drive)
     send_to_char("Someone is already in charge!\r\n", ch);
     return;
   }
-  if (VEH->type == VEH_BIKE && VEH->locked && GET_IDNUM(ch) != VEH->owner) {
+  if ((VEH->type == VEH_BIKE || VEH->type == VEH_MOTORBOAT) && VEH->locked && GET_IDNUM(ch) != VEH->owner) {
     send_to_char("You can't seem to start it.\r\n", ch);
     return;
   }

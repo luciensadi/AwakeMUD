@@ -2274,19 +2274,18 @@ void extract_veh(struct veh_data * veh)
 
   // Unhitch its tows.
   if (veh->towing) {
-    strcpy(buf3, GET_VEH_NAME(veh));
-    snprintf(buf, sizeof(buf), "%s falls from %s's towing equipment.\r\n", GET_VEH_NAME(veh->towing), buf3);
-    if (ch->in_veh->in_room) {
-      act(buf, FALSE, ch->in_veh->in_room->people, 0, 0, TO_ROOM);
-      act(buf, FALSE, ch->in_veh->in_room->people, 0, 0, TO_CHAR);
+    snprintf(buf, sizeof(buf), "%s falls from %s's towing equipment.\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh->towing)), GET_VEH_NAME(veh));
+    if (veh->in_room) {
+      act(buf, FALSE, veh->in_room->people, 0, 0, TO_ROOM);
+      act(buf, FALSE, veh->in_room->people, 0, 0, TO_CHAR);
       veh_to_room(veh->towing, veh->in_room);
-    } else if (ch->in_veh->in_veh){
-      send_to_veh(buf, ch->in_veh->in_veh, ch, TRUE);
+    } else if (veh->in_veh){
+      send_to_veh(buf, veh->in_veh, ch, TRUE);
       veh_to_veh(veh->towing, veh->in_veh);
     } else {
-      snprintf(buf, sizeof(buf), "SYSERR: Veh %s (%ld) has neither in_room nor in_veh! Dropping towed veh in Dante's Garage.", GET_VEH_NAME(ch->in_veh), ch->in_veh->idnum);
+      snprintf(buf, sizeof(buf), "SYSERR: Veh %s (%ld) has neither in_room nor in_veh! Dropping towed veh in Dante's Garage.", GET_VEH_NAME(veh), veh->idnum);
       mudlog(buf, ch, LOG_SYSLOG, TRUE);
-      // Can't stop, we're already blowing up the vehicle. Drop it in Dante's garage.
+      // Can't stop, we're already blowing up the vehicle. Drop the towed one in Dante's garage.
       veh_to_room(veh->towing, &world[real_room(RM_DANTES_GARAGE)]);
     }
     veh->towing = NULL;
