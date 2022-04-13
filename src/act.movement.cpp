@@ -679,22 +679,27 @@ void move_vehicle(struct char_data *ch, int dir)
   }
 #endif
 
-#ifdef DIES_IRAE
-  // Flying vehicles can traverse any terrain.If you're not a flying or amphibious vehicle, you can't go into water.
-  if (!veh->flags.IsSet(VFLAG_CAN_FLY)) {
+  // Flying vehicles can traverse any terrain.
+  if (!veh_can_traverse_air(veh)) {
     // Non-flying vehicles can't pass fall rooms.
     if (ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_FALL)) {
-      send_to_char("Your vehicle would plunge to its destruction!\r\n", ch);
+      send_to_char(ch, "%s would plunge to its destruction!\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
       return;
     }
 
-    // Non-amphibious vehicles can't traverse water.
+    // Check to see if your vehicle can handle the terrain type you're giving it.
     if (IS_WATER(EXIT(veh, dir)->to_room)) {
-      send_to_char("Your vehicle would sink!\r\n", ch);
-      return;
+      if (!veh_can_traverse_water(veh)) {
+        send_to_char(ch, "%s would sink!\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
+        return;
+      }
+    } else {
+      if (!veh_can_traverse_land(veh)) {
+        send_to_char(ch, "You'll have a hard time getting %s on land.\r\n", GET_VEH_NAME(veh));
+        return;
+      }
     }
   }
-#endif
 
   if (special(ch, convert_dir[dir], &empty_argument))
     return;

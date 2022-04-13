@@ -2307,6 +2307,10 @@ void do_probe_veh(struct char_data *ch, struct veh_data * k)
           k->autonav, (int)k->load, (int)k->usedload);
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Its engine is adapted for ^c%s^n. If loaded into another vehicle, it takes up ^c%d^n load.\r\n",
                   engine_type[k->engine], calculate_vehicle_entry_load(k));
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It can travel over %s.\r\n",
+           veh_can_traverse_land(k) ? "land" : "",
+           veh_can_traverse_land(k) && veh_can_traverse_water(k) ? " and " : "",
+           veh_can_traverse_water(k) ? "water" : "");
   send_to_char(buf, ch);
 }
 

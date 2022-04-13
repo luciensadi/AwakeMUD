@@ -118,10 +118,13 @@ int     return_general(int skill_num);
 bool    perform_knockdown_test(struct char_data *ch, int initial_tn, int successes_to_avoid_knockback=0);
 int     get_zone_index_number_from_vnum(vnum_t vnum);
 bool    room_accessible_to_vehicle_piloted_by_ch(struct room_data *room, struct veh_data *veh, struct char_data *ch);
+bool    veh_can_traverse_land(struct veh_data *veh);
+bool    veh_can_traverse_water(struct veh_data *veh);
+bool    veh_can_traverse_air(struct veh_data *veh);
 
 long get_room_gridguide_x(vnum_t room_vnum);
 long get_room_gridguide_y(vnum_t room_vnum);
-vnum_t vnum_from_gridguide_coordinates(long x, long y, struct char_data *ch);
+vnum_t vnum_from_gridguide_coordinates(long x, long y, struct char_data *ch, struct veh_data *veh=NULL);
 
 // Skill-related.
 char *how_good(int skill, int rank);

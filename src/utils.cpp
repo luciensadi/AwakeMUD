@@ -4173,7 +4173,7 @@ long get_room_gridguide_y(vnum_t room_vnum) {
   return room_vnum + 100;
 }
 
-vnum_t vnum_from_gridguide_coordinates(long x, long y, struct char_data *ch) {
+vnum_t vnum_from_gridguide_coordinates(long x, long y, struct char_data *ch, struct veh_data *veh) {
   // We could just use the y-coordinate, but then the X could be anything.
   int vnum_from_y = y - 100;
   int vnum_from_x = x - ((x / 2) * 3);
@@ -4185,11 +4185,11 @@ vnum_t vnum_from_gridguide_coordinates(long x, long y, struct char_data *ch) {
   vnum_t candidate_vnum = vnum_from_y;
   rnum_t candidate_rnum = real_room(candidate_vnum);
 
-  // -1: Room didn't even exist.
+  // -2: Room didn't even exist.
   if (candidate_rnum <= 0)
     return -2;
 
-  // -2: Room was not drivable, or not on the gridguide system.
+  // -3: Room was not drivable, or not on the gridguide system.
   if (!ROOM_FLAGS(&world[candidate_rnum]).AreAnySet(ROOM_ROAD, ROOM_GARAGE, ENDBIT) ||
        ROOM_FLAGS(&world[candidate_rnum]).AreAnySet(ROOM_NOGRID, ROOM_STAFF_ONLY, ROOM_NOBIKE, ROOM_FALL, ENDBIT))
   {
@@ -4206,6 +4206,11 @@ vnum_t vnum_from_gridguide_coordinates(long x, long y, struct char_data *ch) {
     }
 
     return -3;
+  }
+
+  // -4: Vehicle not compatible with room.
+  if (veh && !room_accessible_to_vehicle_piloted_by_ch(&world[candidate_rnum], veh, ch)) {
+    return -4;
   }
 
   return candidate_vnum;
@@ -4236,20 +4241,24 @@ bool room_accessible_to_vehicle_piloted_by_ch(struct room_data *room, struct veh
     }
   #endif
 
-  #ifdef DIES_IRAE
-    // Flying vehicles can traverse any terrain. If you're not a flying or amphibious vehicle, you can't go into water.
-    if (!veh->flags.IsSet(VFLAG_CAN_FLY)) {
-      // Non-flying vehicles can't pass fall rooms.
-      if (ROOM_FLAGGED(room, ROOM_FALL)) {
+  // Flying vehicles can traverse any terrain.
+  if (!veh_can_traverse_air(veh)) {
+    // Non-flying vehicles can't pass fall rooms.
+    if (ROOM_FLAGGED(room, ROOM_FALL)) {
+      return FALSE;
+    }
+
+    // Check to see if your vehicle can handle the terrain type you're giving it.
+    if (IS_WATER(room)) {
+      if (!veh_can_traverse_water(veh)) {
         return FALSE;
       }
-
-      // Non-amphibious vehicles can't traverse water.
-      if (IS_WATER(room)) {
+    } else {
+      if (!veh_can_traverse_land(veh)) {
         return FALSE;
       }
     }
-  #endif
+  }
 
   if (ROOM_FLAGGED(room, ROOM_TOO_CRAMPED_FOR_CHARACTERS) && (veh->body > 1 || veh->type != VEH_DRONE)) {
     return FALSE;
@@ -4264,6 +4273,62 @@ bool room_accessible_to_vehicle_piloted_by_ch(struct room_data *room, struct veh
   }
 
   return TRUE;
+}
+
+bool veh_can_traverse_land(struct veh_data *veh) {
+  if (veh_can_traverse_air(veh) || veh->flags.IsSet(VFLAG_AMPHIB)) {
+    return TRUE;
+  }
+
+  switch (veh->type) {
+    case VEH_DRONE:
+    case VEH_BIKE:
+    case VEH_CAR:
+    case VEH_TRUCK:
+    case VEH_FIXEDWING:
+    case VEH_ROTORCRAFT:
+    case VEH_VECTORTHRUST:
+    case VEH_HOVERCRAFT:
+    case VEH_LTA:
+      return TRUE;
+  }
+
+  return FALSE;
+}
+
+bool veh_can_traverse_water(struct veh_data *veh) {
+  if (veh_can_traverse_air(veh) || veh->flags.IsSet(VFLAG_AMPHIB)) {
+    return TRUE;
+  }
+
+  switch (veh->type) {
+    case VEH_FIXEDWING:
+    case VEH_ROTORCRAFT:
+    case VEH_VECTORTHRUST:
+    case VEH_HOVERCRAFT:
+    case VEH_MOTORBOAT:
+    case VEH_SHIP:
+    case VEH_LTA:
+      return TRUE;
+  }
+
+  return FALSE;
+}
+
+bool veh_can_traverse_air(struct veh_data *veh) {
+  if (veh->flags.IsSet(VFLAG_CAN_FLY)) {
+    return TRUE;
+  }
+
+  switch (veh->type) {
+    case VEH_FIXEDWING:
+    case VEH_ROTORCRAFT:
+    case VEH_VECTORTHRUST:
+    case VEH_LTA:
+      return TRUE;
+  }
+
+  return FALSE;
 }
 
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.
