@@ -2433,7 +2433,7 @@ ACMD(do_purge)
           snprintf(buf2, sizeof(buf2), "^ROOC Alert: Your vehicle '%s' has been deleted by administrator '%s'.^n\r\n", GET_VEH_NAME(veh), GET_CHAR_NAME(ch));
           store_mail(veh->owner, ch, buf2);
         }
-        
+
         snprintf(buf1, sizeof(buf1), "%s has purged %s.", GET_CHAR_NAME(ch), GET_VEH_NAME(veh));
         mudlog(buf1, ch, LOG_WIZLOG, TRUE);
         purgelog(veh);
@@ -4362,6 +4362,8 @@ ACMD(do_set)
                { "hardcore", LVL_PRESIDENT, PC, BINARY }, //80
                { "esshole",  LVL_ADMIN, BOTH,   NUMBER },
                { "noautosyspoints", LVL_FIXER, PC, BINARY },
+               { "notells", LVL_FIXER, PC, BINARY },
+               { "noooc", LVL_FIXER, PC, BINARY },
                { "\n", 0, BOTH, MISC }
              };
 
@@ -4982,6 +4984,16 @@ ACMD(do_set)
   case 82: /* no syspoint auto awards */
     SET_OR_REMOVE(PLR_FLAGS(vict), PLR_NO_AUTO_SYSP_AWARDS);
     snprintf(buf, sizeof(buf),"%s turned %s's no-auto-sysp-awards flag %s.", GET_CHAR_NAME(ch), GET_NAME(vict), PLR_FLAGGED(vict, PLR_NO_AUTO_SYSP_AWARDS) ? "ON" : "OFF");
+    mudlog(buf, ch, LOG_WIZLOG, TRUE);
+    break;
+  case 83: /* no tells */
+    SET_OR_REMOVE(PLR_FLAGS(vict), PLR_NOOOC);
+    snprintf(buf, sizeof(buf),"%s turned %s's no-ooc flag %s.", GET_CHAR_NAME(ch), GET_NAME(vict), PLR_FLAGGED(vict, PLR_NOOOC) ? "ON" : "OFF");
+    mudlog(buf, ch, LOG_WIZLOG, TRUE);
+    break;
+  case 84: /* no ooc */
+    SET_OR_REMOVE(PLR_FLAGS(vict), PLR_TELLS_MUTED);
+    snprintf(buf, sizeof(buf),"%s turned %s's no-tells flag %s.", GET_CHAR_NAME(ch), GET_NAME(vict), PLR_FLAGGED(vict, PLR_NOOOC) ? "ON" : "OFF");
     mudlog(buf, ch, LOG_WIZLOG, TRUE);
     break;
   default:
