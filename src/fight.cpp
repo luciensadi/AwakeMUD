@@ -5480,23 +5480,40 @@ void chkdmg(struct veh_data * veh)
 
     if (veh->cspeed >= SPEED_IDLE) {
       if (veh->people) {
-        send_to_veh("You are hurled into the street as your ride is wrecked!\r\n", veh, NULL, FALSE);
-        snprintf(buf, sizeof(buf), "%s careens off the road, its occupants hurled into the street!\r\n", GET_VEH_NAME(veh));
+        if (veh->in_room && IS_WATER(veh->in_room)) {
+          send_to_veh("You are hurled into the water as your ride is wrecked!\r\n", veh, NULL, FALSE);
+          snprintf(buf, sizeof(buf), "%s bites deep into the water and flips, its occupants hurled into the water!\r\n", GET_VEH_NAME(veh));
+        } else {
+          send_to_veh("You are hurled into the street as your ride is wrecked!\r\n", veh, NULL, FALSE);
+          snprintf(buf, sizeof(buf), "%s careens off the road, its occupants hurled into the street!\r\n", GET_VEH_NAME(veh));
+        }
         act(buf, FALSE, veh->people, NULL, NULL, TO_VEH_ROOM);
       } else {
-        snprintf(buf, sizeof(buf), "%s careens off the road!\r\n", GET_VEH_NAME(veh));
+        if (veh->in_room && IS_WATER(veh->in_room)) {
+          snprintf(buf, sizeof(buf), "%s takes on too much water and is swamped!\r\n", GET_VEH_NAME(veh));
+        } else {
+          snprintf(buf, sizeof(buf), "%s careens off the road!\r\n", GET_VEH_NAME(veh));
+        }
         send_to_room(buf, get_veh_in_room(veh));
       }
 
       damage_rating = SERIOUS;
       damage_tn = 8;
     } else {
-      send_to_veh("You scramble into the street as your ride is wrecked!\r\n", veh, NULL, FALSE);
+      if (veh->in_room && IS_WATER(veh->in_room)) {
+        send_to_veh("You dive into the water as your ride is wrecked!\r\n", veh, NULL, FALSE);
+      } else {
+        send_to_veh("You scramble into the street as your ride is wrecked!\r\n", veh, NULL, FALSE);
+      }
 
       if (veh->people) {
-        snprintf(buf, sizeof(buf), "%s's occupants scramble to safety as it is wrecked!\r\n", GET_VEH_NAME(veh));
-        send_to_room(buf, veh->in_room);
+        if (veh->in_room && IS_WATER(veh->in_room)) {
+          snprintf(buf, sizeof(buf), "%s's occupants dive for safety as it is wrecked!\r\n", GET_VEH_NAME(veh));
+        } else {
+          snprintf(buf, sizeof(buf), "%s's occupants scramble to safety as it is wrecked!\r\n", GET_VEH_NAME(veh));
+        }
       }
+      send_to_room(buf, veh->in_room);
 
       damage_rating = MODERATE;
       damage_tn = 4;

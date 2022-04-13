@@ -1825,7 +1825,7 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
           if (ch->in_veh->type == VEH_BIKE) {
             send_to_char(ch, "^cRain ricochets off your shoulders and splashes about the bike.^n\r\n");
           } else {
-            send_to_char(ch, "^cRain glides down your vehicle's windows, wipers brushing it clear with patient motion.^n\r\n");
+            send_to_char(ch, "^cRain glides down your windows, wipers brushing it clear with patient motion.^n\r\n");
           }
         } else {
           send_to_char(ch, "^cRain splashes into the puddles around your feet.^n\r\n");
@@ -1834,9 +1834,9 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
       else if (weather_info.sky == SKY_LIGHTNING) {
         if (ch->in_veh) {
           if (ch->in_veh->type == VEH_BIKE) {
-            send_to_char(ch, "^cHeavy rain pounds down around you, splashing off your bike.^n\r\n");
+            send_to_char(ch, "^cHeavy rain pounds down around you, running in rivulets off of your bike.^n\r\n");
           } else {
-            send_to_char(ch, "^cHeavy rain pounds against your vehicle's windows.^n\r\n");
+            send_to_char(ch, "^cHeavy rain pounds against your windows, making it hard to see.^n\r\n");
           }
         } else {
           send_to_char(ch, "^cYou struggle to see through the heavy rain that pounds down from the sky.^n\r\n");
