@@ -6511,6 +6511,12 @@ int audit_zone_rooms_(struct char_data *ch, int zone_num, bool verbose) {
       }
     }
 
+    if (GET_BACKGROUND_COUNT(room) > 5) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - Background count: Mana warp (%d > 5).\r\n", GET_BACKGROUND_COUNT(room));
+      issues++;
+      printed = TRUE;
+    }
+
     // Check its exits.
     for (int k = 0; k < NUM_OF_DIRS; k++) {
       if (!room->dir_option[k])
