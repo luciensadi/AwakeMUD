@@ -376,9 +376,16 @@ void create_linked_exit(int rnum_a, int dir_a, int rnum_b, int dir_b, const char
       mudlog(buf, NULL, LOG_SYSLOG, TRUE);
 #endif
     } else {
+      /* This situation happens somewhat often-- either we edit a zone that has a ferry/bus/etc, or someone dies in it,
+         causing it to be saved to disk with the exit already baked in. This isn't a big issue, so I'm disabling the
+         warning. The only real effect is that the state of the transport is out of sync at the start of the game,
+         with potentially a straight bridge across the ferry between destinations if the exits are fucky enough.
+         It fixes itself over time though. -- LS '22
+
       snprintf(buf, sizeof(buf), "WARNING: create_linked_exit() for %s (%s from %ld) would have overwritten an existing exit!",
                source, dirs[dir_a], GET_ROOM_VNUM(&world[rnum_a]));
       mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+      */
     }
   }
 
