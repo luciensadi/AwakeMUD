@@ -1816,8 +1816,10 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
   // Display weather info in the room.
   if (!ROOM_FLAGGED(ch->in_room, ROOM_INDOORS)) {
     if (IS_WATER(ch->in_room)) {
-      if (weather_info.sky >= SKY_RAINING) {
-        send_to_char(ch, "^cThe water around you is dimpled by the falling rain.^n\r\n");
+      if (weather_info.sky == SKY_RAINING) {
+        send_to_char(ch, "^cThe rain gets in your eyes as you swim.^n\r\n");
+      } else if (weather_info.sky == SKY_LIGHTNING) {
+        send_to_char(ch, "^cThe water is made treacherous by the pouring rain.^n\r\n");
       }
     } else {
       if (weather_info.sky == SKY_RAINING) {
