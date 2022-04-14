@@ -1616,7 +1616,7 @@ const char *month_name[12] =
     "December"
   };
 
-const char *veh_type[11] =
+const char *veh_types[NUM_VEH_TYPES] =
   {
     "Drone",
     "Bike",
@@ -1689,7 +1689,7 @@ const char *mod_name[NUM_MODS] =
     "Mounts"
   };
 
-const char *engine_type[6] =
+const char *engine_types[NUM_ENGINE_TYPES] =
   {
      "Nothing",
      "Electric",

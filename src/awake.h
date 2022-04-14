@@ -1296,6 +1296,7 @@ enum {
 #define VEH_MOTORBOAT 8
 #define VEH_SHIP 9
 #define VEH_LTA 10
+#define NUM_VEH_TYPES 11
 
 /* vehicle affection table */
 #define VAFF_NONE  0

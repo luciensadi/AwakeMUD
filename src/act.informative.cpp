@@ -2298,7 +2298,7 @@ void do_probe_veh(struct char_data *ch, struct veh_data * k)
   snprintf(buf, sizeof(buf), "Name: '^y%s^n', Aliases: %s\r\n",
           k->short_description, k->name);
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%s^n with handling ^c%d^n, a top speed of ^c%d^n, and raw acceleration of ^c%d^n.\r\n",
-          veh_type[k->type], k->handling, k->speed, k->accel);
+          veh_types[k->type], k->handling, k->speed, k->accel);
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It has a body rating of ^c%d^n and rating-^c%d^n vehicular armor. It seats ^c%d^n up front and ^c%d^n in the back.\r\n",
           k->body, k->armor, k->seating[1], k->seating[0]);
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Its signature rating is ^c%d^n, and its NERP pilot rating is ^c%d^n.\r\n",
@@ -2306,7 +2306,7 @@ void do_probe_veh(struct char_data *ch, struct veh_data * k)
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It has ^c%d^n slots in its autonav and carrying capacity of ^c%d^n (%d in use).\r\n",
           k->autonav, (int)k->load, (int)k->usedload);
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Its engine is adapted for ^c%s^n. If loaded into another vehicle, it takes up ^c%d^n load.\r\n",
-                  engine_type[k->engine], calculate_vehicle_entry_load(k));
+                  engine_types[k->engine], calculate_vehicle_entry_load(k));
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It can travel over %s%s%s.\r\n",
            veh_can_traverse_land(k) ? "land" : "",
            veh_can_traverse_land(k) && veh_can_traverse_water(k) ? " and " : "",
@@ -3077,32 +3077,36 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is %s ^c%s^n upgrade", AN(mod_types[GET_OBJ_VAL(j, 0)].name), mod_types[GET_OBJ_VAL(j, 0)].name);
 
       // Val 1
-      if (GET_OBJ_VAL(j, 0) == TYPE_MOUNT) {
+      if (GET_VEHICLE_MOD_TYPE(j) == TYPE_MOUNT) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " that adds %s ^c%s^n.", AN(mount_types[GET_OBJ_VAL(j, 1)]), mount_types[GET_OBJ_VAL(j, 1)]);
       } else {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " that takes up ^c%d^n load space.", GET_OBJ_VAL(j, 1));
       }
 
       // Val 2
-      if (GET_OBJ_VAL(j, 0) == MOD_ENGINE) {
+      if (GET_VEHICLE_MOD_TYPE(j) == MOD_ENGINE) {
         // engine type
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt is %s ^c%s^n engine.", AN(engine_type[GET_OBJ_VAL(j, 2)]), engine_type[GET_OBJ_VAL(j, 2)]);
-      } else if (GET_OBJ_VAL(j, 0) == MOD_RADIO) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt is %s ^c%s^n engine.",
+                 AN(engine_types[GET_VEHICLE_MOD_RATING(j)]),
+                 engine_types[GET_VEHICLE_MOD_RATING(j)]);
+      } else if (GET_VEHICLE_MOD_TYPE(j) == MOD_RADIO) {
         // radio range 0-5
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt has a ^c%d/5^n range and can encrypt and decrypt signals up to crypt level ^c%d^n.",
-                GET_OBJ_VAL(j, 2), GET_OBJ_VAL(j, 3));
+                 GET_VEHICLE_MOD_RATING(j),
+                 GET_VEHICLE_MOD_RADIO_CRYPT(j));
       } else {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt functions at rating ^c%d^n.", GET_OBJ_VAL(j, 2));
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt functions at rating ^c%d^n.", GET_VEHICLE_MOD_RATING(j));
       }
 
       // Val 5
-      sprintbit(GET_OBJ_VAL(j, 5), engine_type, buf2, sizeof(buf2));
+      sprintbit(GET_VEHICLE_MOD_ENGINE_BITS(j), engine_types, buf2, sizeof(buf2));
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt is compatible with the following engine types:\r\n^c  %s^n", buf2);
 
       // Vals 4 and 6
+      sprintbit(GET_VEHICLE_MOD_DESIGNED_FOR_FLAGS(j), veh_types, buf2, sizeof(buf2));
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt has been designed to fit ^c%s^n, and installs to the ^c%s^n.",
-              GET_OBJ_VAL(j, 4) == 0 ? "vehicles" : GET_OBJ_VAL(j, 4) == 1 ? "drones" : "all types of vehicles",
-              mod_name[GET_OBJ_VAL(j, 6)]);
+               buf2,
+               mod_name[GET_VEHICLE_MOD_LOCATION(j)]);
       break;
     case ITEM_DESIGN:
       if (GET_OBJ_VAL(j, 0) == 5) {
@@ -3195,17 +3199,26 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
   if (is_dont_touch)
     GET_OBJ_EXTRA(j).SetBit(ITEM_EXTRA_DONT_TOUCH);
 
-  strncpy(buf1, "This object modifies your character in the following ways when used:\r\n  ^c", sizeof(buf1));
-  for (i = 0; i < MAX_OBJ_AFFECT; i++)
-    if (j->affected[i].modifier)
-    {
-      if (GET_OBJ_TYPE(j) == ITEM_MOD)
+  if (GET_OBJ_TYPE(j) == ITEM_MOD) {
+    strncpy(buf1, "This object modifies your vehicle in the following ways:\r\n  ^c", sizeof(buf1));
+    for (i = 0; i < MAX_OBJ_AFFECT; i++) {
+      if (j->affected[i].modifier) {
         sprinttype(j->affected[i].location, veh_aff, buf2, sizeof(buf2));
-      else
-        sprinttype(j->affected[i].location, apply_types, buf2, sizeof(buf2));
-      snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "%s %+d to %s", found++ ? "," : "",
-              j->affected[i].modifier, buf2);
+        snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "%s %+d to %s", found++ ? "," : "",
+                 j->affected[i].modifier, buf2);
+      }
     }
+  } else {
+    strncpy(buf1, "This object modifies your character in the following ways when used:\r\n  ^c", sizeof(buf1));
+    for (i = 0; i < MAX_OBJ_AFFECT; i++) {
+      if (j->affected[i].modifier) {
+        sprinttype(j->affected[i].location, apply_types, buf2, sizeof(buf2));
+        snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "%s %+d to %s", found++ ? "," : "",
+                 j->affected[i].modifier, buf2);
+      }
+    }
+  }
+
   if (found) {
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s^n\r\n", buf1);
   }
@@ -3258,7 +3271,7 @@ ACMD(do_examine)
       }
 
       skill = get_br_skill_for_veh(found_veh);
-      
+
       int target = (found_veh->cspeed > SPEED_IDLE) ? 8 : 4;
       skill = get_skill(ch, skill, target);
       target += modify_target(ch);

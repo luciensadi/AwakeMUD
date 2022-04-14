@@ -577,12 +577,12 @@ ACMD(do_upgrade)
   if (!IS_NPC(ch)) {
     skill = get_br_skill_for_veh(veh);
 
-    switch (GET_OBJ_VAL(mod, 0)) {
+    switch (GET_VEHICLE_MOD_TYPE(mod)) {
       case TYPE_ENGINECUST:
         target = 6;
         break;
       case TYPE_TURBOCHARGER:
-        target = 2 + GET_OBJ_VAL(mod, 2);
+        target = 2 + GET_VEHICLE_MOD_RATING(mod);
         break;
       case TYPE_AUTONAV:
         target = 8 - veh->handling;
@@ -593,7 +593,7 @@ ACMD(do_upgrade)
         break;
       case TYPE_ARMOR:
       case TYPE_CONCEALEDARMOR:
-        target = (int)((GET_OBJ_VAL(mod, 2) + (GET_MOD(veh, GET_OBJ_VAL(mod, 6)) ? GET_OBJ_VAL(GET_MOD(veh, GET_OBJ_VAL(mod, 6)), 2) : 0))/ 3);
+        target = (int)((GET_VEHICLE_MOD_RATING(mod) + (GET_MOD(veh, GET_VEHICLE_MOD_LOCATION(mod)) ? GET_VEHICLE_MOD_RATING(GET_MOD(veh, GET_VEHICLE_MOD_LOCATION(mod))) : 0))/ 3);
         break;
       case TYPE_ROLLBARS:
       case TYPE_TIRES:
@@ -657,13 +657,8 @@ ACMD(do_upgrade)
     }
   }
 
-  if (veh->type == VEH_DRONE && GET_VEHICLE_MOD_DESIGNED_FOR_DRONE(mod) < 1) {
-    send_to_char(ch, "That part won't fit on because it was designed for a standard vehicle.\r\n");
-    return;
-  }
-
-  if (veh->type != VEH_DRONE && GET_VEHICLE_MOD_DESIGNED_FOR_DRONE(mod) == 1) {
-    send_to_char(ch, "That part won't fit on because it was designed for a drone.\r\n");
+  if (!IS_SET(GET_VEHICLE_MOD_DESIGNED_FOR_FLAGS(mod), 1 << veh->type)) {
+    send_to_char(ch, "That part's not designed for %ss.\r\n", veh_types[veh->type]);
     return;
   }
 
@@ -723,7 +718,7 @@ ACMD(do_upgrade)
       return;
     }
     veh->usedload += mod_load_required;
-    veh->sig -= skill;
+    veh->sig -= mod_signature_change;
     obj_from_char(mod);
     if (veh->mount)
       mod->next_content = veh->mount;

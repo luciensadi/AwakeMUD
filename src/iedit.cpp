@@ -261,13 +261,22 @@ void iedit_disp_firemodes_menu(struct descriptor_data *d)
   send_to_char(CH, "Set Options: ^c%s^n\r\nEnter options (0 to quit): ", buf1);
 }
 
-void iedit_disp_mod_menu(struct descriptor_data *d)
+void iedit_disp_mod_engine_menu(struct descriptor_data *d)
 {
   CLS(CH);
-  for (int y = ENGINE_ELECTRIC; y <= ENGINE_DIESEL; y++)
-    send_to_char(CH, "  %d) %s\r\n", y, engine_type[y]);
-  sprintbit(GET_OBJ_VAL(OBJ, 5), engine_type, buf1, sizeof(buf1));
+  for (int engine_type = ENGINE_ELECTRIC; engine_type <= ENGINE_DIESEL; engine_type++)
+    send_to_char(CH, "  %d) %s\r\n", engine_type, engine_types[engine_type]);
+  sprintbit(GET_OBJ_VAL(OBJ, 5), engine_types, buf1, sizeof(buf1));
   send_to_char(CH, "Set Options: ^c%s^n\r\nEnter options (0 to quit): ", buf1);
+}
+
+void iedit_disp_mod_vehicle_type_menu(struct descriptor_data *d)
+{
+  CLS(CH);
+  for (int veh_type = 0; veh_type < NUM_VEH_TYPES; veh_type++)
+    send_to_char(CH, " %2d) %s\r\n", veh_type, veh_types[veh_type]);
+  sprintbit(GET_VEHICLE_MOD_DESIGNED_FOR_FLAGS(OBJ), veh_types, buf1, sizeof(buf1));
+  send_to_char(CH, "Set Compatible Vehicle Types: ^c%s^n\r\nEnter options (0 to quit): ", buf1);
 }
 
 /* object value 1 */
@@ -530,7 +539,7 @@ void iedit_disp_val2_menu(struct descriptor_data * d)
       send_to_char("Type (1 - cash, 2 - credstick): ", d->character);
       break;
     case ITEM_MOD:
-      if (GET_OBJ_VAL(d->edit_obj, 0) == TYPE_MOUNT)
+      if (GET_VEHICLE_MOD_TYPE(OBJ) == TYPE_MOUNT)
         send_to_char("  0) Firmpoint Internal Fixed Mount\r\n"
                      "  1) Firmpoint External Fixed Mount\r\n"
                      "  2) Hardpoint Internal Fixed Mount\r\n"
@@ -675,24 +684,28 @@ void iedit_disp_val3_menu(struct descriptor_data * d)
         iedit_disp_menu(d);
       break;
     case ITEM_MOD:
-      if (GET_OBJ_VAL(d->edit_obj, 0) == TYPE_MOUNT) {
-        // Mounts don't have ratings. Set it to 1.
-        GET_OBJ_VAL(d->edit_obj, 2) = 1;
-        // Skipping this field? Re-increment our counter.
-        if (d->iedit_limit_edits)
-          d->iedit_limit_edits++;
-        iedit_disp_val4_menu(d);
-        return;
+      switch (GET_VEHICLE_MOD_TYPE(OBJ)) {
+        case TYPE_MOUNT:
+          // Mounts don't have ratings. Set it to 1.
+          GET_VEHICLE_MOD_RATING(OBJ) = 1;
+          // Skipping this field? Re-increment our counter.
+          if (d->iedit_limit_edits)
+            d->iedit_limit_edits++;
+          iedit_disp_val4_menu(d);
+          return;
+        case MOD_ENGINE:
+          CLS(CH);
+          for (int engine_type = ENGINE_ELECTRIC; engine_type <= ENGINE_DIESEL; engine_type++)
+            send_to_char(CH, " %d) %s\r\n", engine_type, engine_types[engine_type]);
+          send_to_char("Engine type: ", CH);
+          break;
+        case MOD_RADIO:
+          send_to_char("Radio Range (0-5): ", CH);
+          break;
+        default:
+          send_to_char("Rating: ", CH);
+          break;
       }
-      else if (GET_OBJ_VAL(d->edit_obj, 0) == MOD_ENGINE) {
-        CLS(CH);
-        for (c = 1; c <= ENGINE_DIESEL; c++)
-          send_to_char(CH, " %d) %s\r\n", c, engine_type[c]);
-        send_to_char("Engine type: ", CH);
-      } else if (GET_OBJ_VAL(d->edit_obj, 0) == MOD_RADIO)
-        send_to_char("Radio Range (0-5): ", CH);
-      else
-        send_to_char("Rating: ", CH);
       break;
     case ITEM_WORN:
       // Skipping this field while doing nothing? Re-increment our counter.
@@ -871,14 +884,14 @@ void iedit_disp_val5_menu(struct descriptor_data * d)
     case ITEM_MOD:
       if (GET_OBJ_VAL(d->edit_obj, 0) == TYPE_MOUNT) {
         // Mounts automatically fit both types of vehicle.
-        GET_OBJ_VAL(d->edit_obj, 4) = 2;
+        GET_VEHICLE_MOD_DESIGNED_FOR_FLAGS(d->edit_obj) = -1;
         // Skipping this field while doing nothing? Re-increment our counter.
         if (d->iedit_limit_edits)
           d->iedit_limit_edits++;
         iedit_disp_val6_menu(d);
         return;
       }
-      send_to_char("Designed For (0 - Vehicle, 1 - Drone, 2 - Both): ", CH);
+      iedit_disp_mod_vehicle_type_menu(d);
       break;
     default:
       iedit_disp_menu(d);
@@ -916,7 +929,7 @@ void iedit_disp_val6_menu(struct descriptor_data * d)
         iedit_disp_menu(d);
         return;
       }
-      iedit_disp_mod_menu(d);
+      iedit_disp_mod_engine_menu(d);
       break;
     case ITEM_CYBERDECK:
       // Skipping this field while doing nothing? Re-increment our counter.
@@ -2460,7 +2473,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
           }
           break;
         case ITEM_CYBERWARE:
-          switch (GET_OBJ_VAL(OBJ, 0)) {
+          switch (GET_CYBERWARE_TYPE(OBJ)) {
             case CYB_DATAJACK:
             case CYB_TOOTHCOMPARTMENT:
             case CYB_HANDBLADE:
@@ -2651,6 +2664,18 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
               number++;
           }
           break;
+        case ITEM_MOD:
+          if (number < 0 || number >= NUM_VEH_TYPES) {
+            send_to_char("Invalid Input! Enter options (0 to quit): ", CH);
+            return;
+          }
+          if (number == 0) {
+            iedit_disp_val6_menu(d);
+            return;
+          }
+          TOGGLE_BIT(GET_VEHICLE_MOD_DESIGNED_FOR_FLAGS(OBJ), 1 << number);
+          iedit_disp_mod_vehicle_type_menu(d);
+          return;
         default:
           break;
       }
@@ -2679,7 +2704,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
             return;
           }
           TOGGLE_BIT(GET_OBJ_VAL(OBJ, 5), 1 << number);
-          iedit_disp_mod_menu(d);
+          iedit_disp_mod_engine_menu(d);
           return;
       }
       GET_OBJ_VAL(d->edit_obj, 5) = number;

@@ -1075,8 +1075,8 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 #define GET_VEHICLE_MOD_MOUNT_TYPE(mod)                     (GET_OBJ_VAL((mod), 1))
 #define GET_VEHICLE_MOD_LOAD_SPACE_REQUIRED(mod)            (GET_OBJ_VAL((mod), 1)) // Yes, this is also value 1.
 #define GET_VEHICLE_MOD_RATING(mod)                         (GET_OBJ_VAL((mod), 2))
-// what's 3?
-#define GET_VEHICLE_MOD_DESIGNED_FOR_DRONE(mod)             (GET_OBJ_VAL((mod), 4)) // 0=veh, 1=drone, 2=both
+#define GET_VEHICLE_MOD_RADIO_CRYPT(mod)                    (GET_OBJ_VAL((mod), 3))
+#define GET_VEHICLE_MOD_DESIGNED_FOR_FLAGS(mod)             (GET_OBJ_VAL((mod), 4))
 #define GET_VEHICLE_MOD_ENGINE_BITS(mod)                    (GET_OBJ_VAL((mod), 5))
 #define GET_VEHICLE_MOD_LOCATION(mod)                       (GET_OBJ_VAL((mod), 6))
 

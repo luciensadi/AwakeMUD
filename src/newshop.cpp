@@ -1918,24 +1918,24 @@ void shop_info(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
     break;
   case ITEM_MOD:
     strcat(buf, " a vehicle modification for the ");
-    if (GET_OBJ_VAL(obj, 6) >= MOD_INTAKE_FRONT && GET_OBJ_VAL(obj, 6) <= MOD_INTAKE_REAR)
+    if (GET_VEHICLE_MOD_LOCATION(obj) >= MOD_INTAKE_FRONT && GET_VEHICLE_MOD_LOCATION(obj) <= MOD_INTAKE_REAR)
       strcat(buf, "intake");
-    else if (GET_OBJ_VAL(obj, 6) >= MOD_BODY_FRONT && GET_OBJ_VAL(obj, 6) <= MOD_BODY_WINDOWS)
+    else if (GET_VEHICLE_MOD_LOCATION(obj) >= MOD_BODY_FRONT && GET_VEHICLE_MOD_LOCATION(obj) <= MOD_BODY_WINDOWS)
       strcat(buf, "body");
-    else if (GET_OBJ_VAL(obj, 6) >= MOD_COMPUTER1 && GET_OBJ_VAL(obj, 6) <= MOD_COMPUTER3)
+    else if (GET_VEHICLE_MOD_LOCATION(obj) >= MOD_COMPUTER1 && GET_VEHICLE_MOD_LOCATION(obj) <= MOD_COMPUTER3)
       strcat(buf, "computer");
-    else strcat(buf, mod_name[GET_OBJ_VAL(obj, 6)]);
+    else strcat(buf, mod_name[GET_VEHICLE_MOD_LOCATION(obj)]);
     strcat(buf, ". It is for ");
     for (int q = 1; q <= ENGINE_DIESEL; q++)
-      if (IS_SET(GET_OBJ_VAL(obj, 5), 1 << q))
+      if (IS_SET(GET_VEHICLE_MOD_ENGINE_BITS(obj), 1 << q))
         num++;
     if (num) {
-      if (IS_SET(GET_OBJ_VAL(obj, 5), 1 << ENGINE_ELECTRIC)) {
+      if (IS_SET(GET_VEHICLE_MOD_ENGINE_BITS(obj), 1 << ENGINE_ELECTRIC)) {
         strcat(buf, "electric");
         num2++;
         num--;
       }
-      if (IS_SET(GET_OBJ_VAL(obj, 5), 1 << ENGINE_FUELCELL)) {
+      if (IS_SET(GET_VEHICLE_MOD_ENGINE_BITS(obj), 1 << ENGINE_FUELCELL)) {
         if (num2) {
           if (num > 1)
             strcat(buf, ", ");
@@ -1945,7 +1945,7 @@ void shop_info(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
         num2++;
         num--;
       }
-      if (IS_SET(GET_OBJ_VAL(obj, 5), 1 << ENGINE_GASOLINE)) {
+      if (IS_SET(GET_VEHICLE_MOD_ENGINE_BITS(obj), 1 << ENGINE_GASOLINE)) {
         if (num2) {
           if (num > 1)
             strcat(buf, ", ");
@@ -1955,7 +1955,7 @@ void shop_info(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
         num2++;
         num--;
       }
-      if (IS_SET(GET_OBJ_VAL(obj, 5), 1 << ENGINE_METHANE)) {
+      if (IS_SET(GET_VEHICLE_MOD_ENGINE_BITS(obj), 1 << ENGINE_METHANE)) {
         if (num2) {
           if (num > 1)
             strcat(buf, ", ");
@@ -1965,7 +1965,7 @@ void shop_info(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
         num2++;
         num--;
       }
-      if (IS_SET(GET_OBJ_VAL(obj, 5), 1 << ENGINE_DIESEL)) {
+      if (IS_SET(GET_VEHICLE_MOD_ENGINE_BITS(obj), 1 << ENGINE_DIESEL)) {
         if (num2) {
           if (num > 1)
             strcat(buf, ", ");

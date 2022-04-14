@@ -2254,6 +2254,12 @@ void auto_repair_obj(struct obj_data *obj) {
       FORCE_PROTO_VALUE("focus", GET_FOCUS_TYPE(obj), GET_FOCUS_TYPE(&obj_proto[rnum]));
       FORCE_PROTO_VALUE("focus", GET_FOCUS_FORCE(obj), GET_FOCUS_FORCE(&obj_proto[rnum]));
       break;
+    case ITEM_MOD:
+      // Mods don't ever get changed, so we clamp them aggressively.
+      for (int i = 0; i < NUM_VALUES; i++) {
+        FORCE_PROTO_VALUE("vehicle mod", GET_OBJ_VAL(obj, i), GET_OBJ_VAL(&obj_proto[rnum], i));
+      }
+      break;
     case ITEM_WEAPON:
       {
         // We perform extensive clamping and checks on weapons due to prior issues with corrupted weapon data.

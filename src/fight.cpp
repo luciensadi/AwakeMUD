@@ -1465,7 +1465,10 @@ void weapon_scatter(struct char_data *ch, struct char_data *victim, struct obj_d
 
         damage_total = MAX(1, GET_WEAPON_DAMAGE_CODE(weapon));
         damage_total = convert_damage(stage((2 - success_test(GET_BOD(vict) + GET_BODY(vict), power)), damage_total));
-        damage(ch, vict, damage_total, TYPE_SCATTERING, PHYSICAL);
+        if (damage(ch, vict, damage_total, TYPE_SCATTERING, PHYSICAL)) {
+          // They died!
+          return;
+        }
       }
 
       // If you're not already fighting someone else, that's a great reason to get into combat, don't you think?
@@ -2158,7 +2161,10 @@ void check_adrenaline(struct char_data *ch, int mode)
       dam = convert_damage(stage(-success_test(GET_BOD(ch) + GET_BODY(ch),
                                                (int)(GET_OBJ_VAL(pump, 6) / 2)), DEADLY));
       GET_OBJ_VAL(pump, 6) = 0;
-      damage(ch, ch, dam, TYPE_BIOWARE, FALSE);
+      if (damage(ch, ch, dam, TYPE_BIOWARE, FALSE)) {
+        // Died-- RIP
+        return;
+      }
     }
   } else if (GET_OBJ_VAL(pump, 5) < 0 && !mode)
     GET_OBJ_VAL(pump, 5)++;

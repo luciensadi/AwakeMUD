@@ -1186,7 +1186,7 @@ void do_stat_veh(struct char_data *ch, struct veh_data * k)
           k->short_description, k->name);
 
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Vnum: [^g%8ld^n] Rnum: [%5ld] Type: [%10s] Idnum: [%8ld] Owner: [%8ld]\r\n",
-          virt, k->veh_number, veh_type[k->type], k->idnum, k->owner);
+          virt, k->veh_number, veh_types[k->type], k->idnum, k->owner);
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Han: [^B%d^n]  Spe: [^B%d^n]  Acc: [^B%d^n]  Bod: [^B%d^n]  Arm: [^B%d^n]\r\n",
           k->handling, k->speed, k->accel, k->body, k->armor);
 

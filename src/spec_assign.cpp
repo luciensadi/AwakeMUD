@@ -61,8 +61,8 @@ struct teach_data teachers[] = {
                        { 1004, { SKILL_OFFHAND_EDGED, SKILL_OFFHAND_CLUB, SKILL_OFFHAND_CYBERIMPLANTS, SKILL_OFFHAND_WHIP,
                          SKILL_SPRAY_WEAPONS, SKILL_GUNCANE, SKILL_BRACERGUN, SKILL_BLOWGUN, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "After about an hour of "
                          "shuffling slides you feel you can now do your job safer.\r\n", ADVANCED },
-                       { 1005, { SKILL_NAVI_LAND, SKILL_NAVI_AIR, SKILL_NAVI_WATER, SKILL_PILOT_ROTORCRAFT, SKILL_PILOT_FIXEDWING,
-                         SKILL_PILOT_VECTORTHRUST, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "After about an hour of shuffling slides you feel you can now do "
+                       { 1005, { SKILL_NAVI_LAND, SKILL_NAVI_AIR, SKILL_NAVI_WATER,
+                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "After about an hour of shuffling slides you feel you can now do "
                          "your job safer.\r\n", ADVANCED },
                        { 1006, { SKILL_INTIMIDATION, SKILL_INTERROGATION, SKILL_LEADERSHIP, SKILL_SURVIVAL, SKILL_LEGERDEMAIN,
                          SKILL_TRACK, SKILL_DISGUISE, SKILL_SMALL_UNIT_TACTICS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "After about an hour of shuffling slides you "
@@ -88,10 +88,17 @@ struct teach_data teachers[] = {
     "You polish and hone your melee skills and learn to flow like water.\r\n", ADVANCED },
   { 784, { SKILL_PILOT_BIKE, SKILL_PILOT_CAR, SKILL_PILOT_TRUCK, SKILL_BR_BIKE,
            SKILL_BR_DRONE, SKILL_BR_CAR, SKILL_BR_TRUCK, SKILL_GUNNERY,
+#ifdef WE_HAVE_VEHICLE_QUEST
            SKILL_PILOT_ROTORCRAFT, SKILL_PILOT_FIXEDWING, SKILL_PILOT_VECTORTHRUST,
            SKILL_BR_FIXEDWING, SKILL_BR_ROTORCRAFT, SKILL_BR_VECTORTHRUST, SKILL_BR_HOVERCRAFT,
            SKILL_BR_MOTORBOAT, SKILL_BR_SHIP, SKILL_BR_LTA, SKILL_PILOT_HOVERCRAFT,
            SKILL_PILOT_MOTORBOAT, SKILL_PILOT_SHIP, SKILL_PILOT_LTA, 0, 0, 0 },
+#else
+           0, 0, 0,
+           0, 0, 0, 0,
+           0, 0, 0, 0,
+           0, 0, 0, 0, 0, 0 },
+#endif
     "You pick up a few new tricks of the trade and emerge more skilled than before.\r\n", ADVANCED },
   { 786, { SKILL_COMPUTER, SKILL_BR_COMPUTER, SKILL_DATA_BROKERAGE, SKILL_CYBERTERM_DESIGN,
     SKILL_ELECTRONICS, SKILL_BR_ELECTRONICS, SKILL_PROGRAM_COMBAT, SKILL_PROGRAM_CYBERTERM,
@@ -227,27 +234,39 @@ struct teach_data teachers[] = {
   "You learn a few things from the surprisingly-knowledgeable kid.\r\n", AMATEUR },
 #endif
 
-    { 65106, { SKILL_MEDIA_ETIQUETTE, SKILL_STEALTH, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "You talk to the reporter about current events for"
-         " a while.\r\n", AMATEUR },
+   { 65106, { SKILL_MEDIA_ETIQUETTE, SKILL_STEALTH, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+     "You talk to the reporter about current events for a while.\r\n", AMATEUR },
 
    { 18311, { SKILL_STREET_ETIQUETTE, SKILL_MEDIA_ETIQUETTE, SKILL_ELF_ETIQUETTE, SKILL_CORPORATE_ETIQUETTE,
-              SKILL_TRIBAL_ETIQUETTE, SKILL_NEGOTIATION, SKILL_POLICE_PROCEDURES, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "You read through "
-     "various lifestyle books for a while.\r\n", LIBRARY },
+              SKILL_TRIBAL_ETIQUETTE, SKILL_NEGOTIATION, SKILL_POLICE_PROCEDURES, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+     "You read through various lifestyle books for a while.\r\n", LIBRARY },
 
    { 18312, { SKILL_COMPUTER, SKILL_ELECTRONICS, SKILL_BR_COMPUTER, SKILL_CYBERTERM_DESIGN,
               SKILL_BR_ELECTRONICS, SKILL_DATA_BROKERAGE, SKILL_PROGRAM_CYBERTERM, SKILL_PROGRAM_SPECIAL, SKILL_BIOTECH, SKILL_MEDICINE, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
      "You read through various academic journals.\r\n", LIBRARY },
 
-     { 18313, { SKILL_ARABIC, SKILL_CHINESE, SKILL_CROW, SKILL_ENGLISH, SKILL_FRENCH, SKILL_GAELIC, SKILL_GERMAN,
-       SKILL_ITALIAN, SKILL_JAPANESE, SKILL_KOREAN, SKILL_LATIN, SKILL_MAKAW, SKILL_NAVAJO, SKILL_ORZET,
-       SKILL_RUSSIAN, SKILL_SALISH, SKILL_SIOUX, SKILL_SPANISH, SKILL_SPERETHIEL, SKILL_UTE, SKILL_HEBREW, SKILL_IROQUOIS, 0, 0, 0 }, "You raid the teach-yourself-languages section.\r\n", LIBRARY },
+   { 18313, { SKILL_ARABIC, SKILL_CHINESE, SKILL_CROW, SKILL_ENGLISH, SKILL_FRENCH, SKILL_GAELIC, SKILL_GERMAN,
+              SKILL_ITALIAN, SKILL_JAPANESE, SKILL_KOREAN, SKILL_LATIN, SKILL_MAKAW, SKILL_NAVAJO, SKILL_ORZET,
+              SKILL_RUSSIAN, SKILL_SALISH, SKILL_SIOUX, SKILL_SPANISH, SKILL_SPERETHIEL, SKILL_UTE, SKILL_HEBREW, SKILL_IROQUOIS, 0, 0, 0 },
+     "You raid the teach-yourself-languages section.\r\n", LIBRARY },
+
+#ifdef USE_PRIVATE_CE_WORLD
+   { 18317, { SKILL_PILOT_BIKE, SKILL_PILOT_CAR, SKILL_PILOT_TRUCK, SKILL_BR_BIKE,
+              SKILL_BR_DRONE, SKILL_BR_CAR, SKILL_BR_TRUCK, SKILL_GUNNERY,
+              SKILL_PILOT_ROTORCRAFT, SKILL_PILOT_FIXEDWING, SKILL_PILOT_VECTORTHRUST,
+              SKILL_BR_FIXEDWING, SKILL_BR_ROTORCRAFT, SKILL_BR_VECTORTHRUST, SKILL_BR_HOVERCRAFT,
+              SKILL_BR_MOTORBOAT, SKILL_BR_SHIP, SKILL_BR_LTA, SKILL_PILOT_HOVERCRAFT,
+              SKILL_PILOT_MOTORBOAT, SKILL_PILOT_SHIP, SKILL_PILOT_LTA, 0, 0, 0},
+     "You read through trade magazines and come away with a better understanding of vehicles.\r\n", LIBRARY },
+#endif
 
    { 778, { SKILL_SORCERY, SKILL_CONJURING, SKILL_AURA_READING, SKILL_SPELLDESIGN, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
      "The Master teaches you more than you thought possible.\r\n", ADVANCED },
 
    { 5914, { SKILL_PISTOLS, SKILL_RIFLES, SKILL_SHOTGUNS, SKILL_SMG, SKILL_ASSAULT_RIFLES,
-     SKILL_GUNNERY, SKILL_MACHINE_GUNS, SKILL_BR_RIFLE, SKILL_BR_SMG, SKILL_BR_SHOTGUN, SKILL_TASERS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },  "Lucas runs through some theory with you then lets you "
-     "have a few shots on the range.\r\n", NEWBIE},
+             SKILL_GUNNERY, SKILL_MACHINE_GUNS, SKILL_BR_RIFLE, SKILL_BR_SMG, SKILL_BR_SHOTGUN,
+             SKILL_TASERS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+     "Lucas runs through some theory with you then lets you have a few shots on the range.\r\n", NEWBIE},
 
    { 65119, { SKILL_RUSSIAN, SKILL_GERMAN, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "Olga Chernov brutally crams language forms and syntaxes into your skull.\r\n", AMATEUR },
 
