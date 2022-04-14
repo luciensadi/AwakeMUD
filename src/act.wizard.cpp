@@ -6809,14 +6809,24 @@ int audit_zone_objects_(struct char_data *ch, int zone_num, bool verbose) {
     }
 
     // Call out all objects with affs
-    for (int aff_index = 0; aff_index < MAX_OBJ_AFFECT; aff_index++) {
-      if (obj->affected[aff_index].modifier) {
-        sprinttype(obj->affected[aff_index].location, apply_types, buf2, sizeof(buf2));
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - AFF %s %d^n.\r\n",
-                 buf2,
-                 obj->affected[aff_index].modifier);
-        printed = TRUE;
-        issues++;
+    if (GET_OBJ_TYPE(obj) != ITEM_MOD) {
+      for (int aff_index = 0; aff_index < MAX_OBJ_AFFECT; aff_index++) {
+        if (obj->affected[aff_index].modifier) {
+          sprinttype(obj->affected[aff_index].location, apply_types, buf2, sizeof(buf2));
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - AFF %s %d^n.\r\n",
+                   buf2,
+                   obj->affected[aff_index].modifier);
+          printed = TRUE;
+          issues++;
+        }
+      }
+    } else {
+      for (int wearloc = 0; wearloc < NUM_WEARS; wearloc++) {
+        if (wearloc != ITEM_WEAR_TAKE && CAN_WEAR(obj, wearloc)) {
+          strlcat(buf, "  - ^yVehicle mod can be worn.^n\r\n", sizeof(buf));
+          printed = TRUE;
+          issues++;
+        }
       }
     }
 
@@ -7341,6 +7351,11 @@ ACMD(do_audit) {
   number = atoi(arg1);
   // find the real zone number
   zonenum = real_zone(number);
+
+  if (zonenum < 0 || zonenum > top_of_zone_table) {
+    send_to_char(ch, "That's not a zone.\r\n");
+    return;
+  }
 
   #define AUDIT_ALL_ZONES(func_suffix)                           \
   if (!str_cmp(arg1, #func_suffix)) {                            \

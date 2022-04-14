@@ -58,6 +58,11 @@ extern void redit_parse(struct descriptor_data * d, const char *arg);
 extern class memoryClass *Mem;
 
 #define REQUIRE_ZONE_EDIT_ACCESS(real_zonenum) {                                                                                               \
+  if (real_zonenum < 0 || real_zonenum > top_of_zone_table) {                                                                                  \
+    send_to_char("That's not a zone.", ch);                                                                                                    \
+    return;                                                                                                                                    \
+  }                                                                                                                                            \
+                                                                                                                                               \
   if (!can_edit_zone(ch, (real_zonenum))) {                                                                                                    \
     send_to_char(ch, "Sorry, you don't have access to edit zone %ld.\r\n", zone_table[(real_zonenum)].number);                                 \
     return;                                                                                                                                    \
@@ -83,9 +88,14 @@ bool is_olc_available(struct char_data *ch) {
 }
 
 bool can_edit_zone(struct char_data *ch, int zone) {
+  if (zone > top_of_zone_table) {
+    mudlog("SYSERR: Received zone above top of zone table in can_edit_zone()!", ch, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+
   for (int i = 0; i < NUM_ZONE_EDITOR_IDS; i++)
     if (zone_table[zone].editor_ids[i] == GET_IDNUM(ch))
-      return true;
+      return TRUE;
   return access_level(ch, LVL_ADMIN);
 }
 

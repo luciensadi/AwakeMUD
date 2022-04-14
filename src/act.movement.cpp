@@ -42,7 +42,6 @@ extern int get_vehicle_modifier(struct veh_data *veh);
 extern int calculate_vehicle_entry_load(struct veh_data *veh);
 extern bool passed_flee_success_check(struct char_data *ch);
 extern int calculate_swim_successes(struct char_data *ch);
-extern bool can_edit_zone(struct char_data *ch, int zone);
 extern void send_mob_aggression_warnings(struct char_data *pc, struct char_data *mob);
 extern bool vict_is_valid_aggro_target(struct char_data *ch, struct char_data *vict);
 
