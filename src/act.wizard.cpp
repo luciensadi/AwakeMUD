@@ -7325,16 +7325,18 @@ int audit_zone_commands_(struct char_data *ch, int zone_num, bool verbose) {
                  zone_table[zone_num].number,
                  zone_table[zone_num].name,
                  zone_table[zone_num].lifespan);
+    issues += 1;
   }
 
   if (zone_table[zone_num].reset_mode == 0) {
     send_to_char(ch, "\r\nZone ^c%d^n (%s^n): Zone ^ydoes not reset^n",
                  zone_table[zone_num].number,
                  zone_table[zone_num].name);
+    issues += 1;
   }
 
   for (int cmd_no = 0; cmd_no < zone_table[zone_num].num_cmds; cmd_no++) {
-
+    // TODO-- but what would we even check for?
   }
 
   return issues;
