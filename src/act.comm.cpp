@@ -739,6 +739,10 @@ ACMD(do_radio)
         snprintf(buf, sizeof(buf), "$p's max crypt rating is %d.", max_crypt);
         act(buf, FALSE, ch, radio, 0, TO_CHAR);
       }
+      else if (i < 0) {
+        send_to_char(ch, "A negative crypt rating?\r\n");
+        return;
+      }
       else {
         send_to_char(ch, "Crypt mode enabled at rating %d.\r\n", i);
         GET_OBJ_VAL(radio, (cyberware ? 6 : (vehicle ? 5 : 3))) = i;
