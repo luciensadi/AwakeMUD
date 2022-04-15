@@ -3545,7 +3545,10 @@ SPECIAL(newbie_car)
       send_to_char(ch, "You don't have a deed for that.\r\n");
       return TRUE;
     }
-    if (GET_OBJ_VNUM(obj) < 891 || GET_OBJ_VNUM(obj) > 898 || GET_OBJ_VNUM(obj) == 896) {
+    if (!((GET_OBJ_VNUM(obj) >= 891 && GET_OBJ_VNUM(obj) <= 898)
+           || (GET_OBJ_VNUM(obj) >= 904 && GET_OBJ_VNUM(obj) <= 908))
+        || GET_OBJ_VNUM(obj) == 896)
+    {
       send_to_char(ch, "You can't collect anything with that.\r\n");
       return TRUE;
     }
