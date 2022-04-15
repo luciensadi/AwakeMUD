@@ -1184,7 +1184,9 @@ const char *tog_messages[][2] = {
                             {"You will no longer automatically stand when knocked down.\r\n",
                              "You will now automatically stand when knocked down.\r\n"},
                             {"You will no longer automatically attempt to kip-up when knocked down.\r\n",
-                             "You will now automatically attempt to kip-up when knocked down.\r\n"}
+                             "You will now automatically attempt to kip-up when knocked down.\r\n"},
+                            {"You will now see weather and lighting messages in rooms.\r\n",
+                             "You will no longer see weather and lighting messages in rooms.\r\n"}
                           };
 
 ACMD(do_toggle)
@@ -1428,6 +1430,9 @@ ACMD(do_toggle)
       }
       result = PRF_TOG_CHK(ch, PRF_AUTOKIPUP);
       mode = 44;
+    } else if (is_abbrev(argument, "weather") || is_abbrev(argument, "rain") || is_abbrev(argument, "noweather") || is_abbrev(argument, "no weather")) {
+      result = PRF_TOG_CHK(ch, PRF_NO_WEATHER);
+      mode = 45;
     } else {
       send_to_char("That is not a valid toggle option.\r\n", ch);
       return;

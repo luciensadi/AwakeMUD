@@ -55,7 +55,7 @@ extern int ability_cost(int abil, int level);
 extern void weight_change_object(struct obj_data * obj, float weight);
 extern void calc_weight(struct char_data *ch);
 extern const char *get_ammobox_default_restring(struct obj_data *ammobox);
-extern bool can_edit_zone(struct char_data *ch, int zone);
+extern bool can_edit_zone(struct char_data *ch, rnum_t real_zone);
 extern int find_first_step(vnum_t src, vnum_t target, bool ignore_roads);
 
 extern SPECIAL(johnson);
@@ -211,7 +211,7 @@ int light_level(struct room_data *room)
   int artificial_light_level = -1;
 
   // If we have streetlights, we don't care about flashlights etc-- we're guaranteeing partlight.
-  if (ROOM_FLAGGED(room, ROOM_STREETLIGHTS) && (time_info.hours < 6 || time_info.hours > 19)) {
+  if (ROOM_FLAGGED(room, ROOM_STREETLIGHTS) && (time_info.hours <= 6 || time_info.hours >= 19)) {
     artificial_light_level = LIGHT_PARTLIGHT;
   } else {
     // Flashlights. More flashlights, more light.
@@ -272,7 +272,7 @@ int light_level(struct room_data *room)
     else
       return MAX(LIGHT_PARTLIGHT, artificial_light_level);
   }
-  if ((time_info.hours < 6 || time_info.hours > 19) && (candidate_light_level > LIGHT_MINLIGHT || candidate_light_level <= LIGHT_NORMALNOLIT)) {
+  if ((time_info.hours <= 6 || time_info.hours >= 19) && (candidate_light_level > LIGHT_MINLIGHT || candidate_light_level <= LIGHT_NORMALNOLIT)) {
     return MAX(LIGHT_MINLIGHT, artificial_light_level);
   } else {
     return candidate_light_level;

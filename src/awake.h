@@ -427,7 +427,8 @@ enum {
 #define PRF_SEE_TIPS                     61
 #define PRF_AUTOSTAND                    62
 #define PRF_AUTOKIPUP                    63
-#define PRF_MAX                          64
+#define PRF_NO_WEATHER                   64
+#define PRF_MAX                          65
 
 /* log watch */
 

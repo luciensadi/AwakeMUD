@@ -1814,27 +1814,28 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
     }
   }
 
-  // Display lighting info.
-  bool is_nighttime = (time_info.hours < 6 || time_info.hours > 19) && !ROOM_FLAGGED(ch->in_room, ROOM_INDOORS);
-  if (is_nighttime && ROOM_FLAGGED(ch->in_room, ROOM_STREETLIGHTS)) {
-    send_to_char("^LStreetlights drive back the nighttime darkness.^n\r\n", ch);
-  } else if (is_nighttime && ch->in_room->sector_type == SPIRIT_CITY) {
-    send_to_char("^LStreaks of light pollution soften the shadows.^n\r\n", ch);
-  } else if (is_nighttime || (ch->in_room->vision[0] > LIGHT_NORMAL && ch->in_room->vision[0] <= LIGHT_PARTLIGHT)) {
-    if (ch->in_room->light[1] && ch->in_room->light[0] <= 1) {
-      send_to_char(ch, "^LAn ambient magical glow lightens the %sshadows.^n\r\n", is_nighttime ? "nighttime " : "");
-    } else if (ch->in_room->light[0] > 1) {
-      if (GET_EQ(ch, WEAR_LIGHT)) {
-        send_to_char(ch, "^LYour flashlight highlights the %sshadows.^n\r\n", is_nighttime ? "nighttime " : "");
+  if (!PRF_FLAGGED(ch, PRF_NO_WEATHER)) {
+    // Display lighting info.
+    bool is_nighttime = (time_info.hours <= 6 || time_info.hours >= 19) && !ROOM_FLAGGED(ch->in_room, ROOM_INDOORS);
+    if (is_nighttime && ROOM_FLAGGED(ch->in_room, ROOM_STREETLIGHTS)) {
+      send_to_char("^LStreetlights drive back the nighttime darkness.^n\r\n", ch);
+    } else if (is_nighttime && ch->in_room->sector_type == SPIRIT_CITY) {
+      send_to_char("^LStreaks of light pollution soften the shadows.^n\r\n", ch);
+    } else if (is_nighttime || (ch->in_room->vision[0] > LIGHT_NORMAL && ch->in_room->vision[0] <= LIGHT_PARTLIGHT)) {
+      if (ch->in_room->light[1] && ch->in_room->light[0] <= 1) {
+        send_to_char(ch, "^LAn ambient magical glow lightens the %sshadows.^n\r\n", is_nighttime ? "nighttime " : "");
+      } else if (ch->in_room->light[0] > 1) {
+        if (GET_EQ(ch, WEAR_LIGHT)) {
+          send_to_char(ch, "^LYour flashlight highlights the %sshadows.^n\r\n", is_nighttime ? "nighttime " : "");
+        } else {
+          send_to_char(ch, "^LBeams of light highlight the %sshadows.^n\r\n", is_nighttime ? "nighttime " : "");
+        }
       } else {
-        send_to_char(ch, "^LBeams of light highlight the %sshadows.^n\r\n", is_nighttime ? "nighttime " : "");
+        send_to_char(ch, "^LDarkness cloaks the area.^n\r\n");
       }
-    } else {
-      send_to_char(ch, "^LDarkness cloaks the area.^n\r\n");
     }
-  }
 
-  if (!ROOM_FLAGGED(ch->in_room, ROOM_INDOORS)) {
+    if (!ROOM_FLAGGED(ch->in_room, ROOM_INDOORS)) {
     // Display weather info in the room.
     if (IS_WATER(ch->in_room)) {
       if (weather_info.sky == SKY_RAINING) {
@@ -1870,6 +1871,8 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
       }
     }
   }
+  }
+
   if (ch->in_room->poltergeist[0])
     send_to_char("^cAn invisible force is whipping small objects around the area.^n\r\n", ch);
   if (ch->in_room->icesheet[0])

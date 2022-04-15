@@ -93,7 +93,7 @@ extern int write_quests_to_disk(int zone);
 extern void write_world_to_disk(int vnum);
 extern void write_objs_to_disk(int zone);
 extern void alarm_handler(int signal);
-extern bool can_edit_zone(struct char_data *ch, int zone);
+extern bool can_edit_zone(struct char_data *ch, rnum_t real_zone);
 extern const char *render_door_type_string(struct room_direction_data *door);
 extern void save_shop_orders();
 extern void turn_hardcore_on_for_character(struct char_data *ch);
@@ -2273,7 +2273,7 @@ ACMD(do_vstat)
   // Require that they have access to edit the zone they're statting.
   for (int counter = 0; counter <= top_of_zone_table; counter++) {
     if ((number >= (zone_table[counter].number * 100)) && (number <= (zone_table[counter].top))) {
-      if (!can_edit_zone(ch, zone_table[counter].number)) {
+      if (!can_edit_zone(ch, counter)) {
         send_to_char("Sorry, you don't have access to edit that zone.\r\n", ch);
         return;
       }

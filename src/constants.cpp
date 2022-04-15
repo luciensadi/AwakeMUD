@@ -603,6 +603,7 @@ struct preference_bit_struct preference_bits_v2[] = {
   { "Sees Newbie Tips"     , FALSE, TRUE  },
   { "AutoStand"            , FALSE, TRUE  },
   { "AutoKipUp"            , FALSE, TRUE  },
+  { "No Weather"           , FALSE, TRUE  },
   { "\n"                   , 0    , 0     }
 };
 
@@ -673,6 +674,7 @@ const char *preference_bits[] =
     "TIPS",
     "AUTOSTAND",
     "AUTOKIPUP",
+    "!WEATHER",
     "\n"
   };
 
