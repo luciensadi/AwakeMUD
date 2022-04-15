@@ -2660,6 +2660,9 @@ enum {
 
 #endif
 
+// Don't actually change this value unless you're rewriting regeneration etc.
+#define TEMP_QUI_LOSS_DIVISOR                 4
+
 // This is to flag variables used eg in macros so that the compiler won't complain about unused variables
 // when they're actually used. Casting to void does nothing but the compiler will stop thinking it's
 // unused. This is the same way Q_UNUSED is used in Qt. -- Nodens

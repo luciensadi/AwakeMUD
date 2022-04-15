@@ -2686,12 +2686,14 @@ void restore_character(struct char_data *vict, bool reset_staff_stats) {
   GET_PHYSICAL(vict) = GET_MAX_PHYSICAL(vict);
   GET_MENTAL(vict) = GET_MAX_MENTAL(vict);
 
+  GET_TEMP_QUI_LOSS(vict) = 0;
+
   // Non-NPCs get further consideration.
   if (!IS_NPC(vict)) {
     // Touch up their hunger, thirst, etc.
-    for (int i = COND_DRUNK; i <= COND_THIRST; i++)
+    for (int i = COND_DRUNK; i <= COND_THIRST; i++){
       // Staff don't deal with hunger, etc-- disable it for them.
-      if IS_SENATOR(vict) {
+      if (IS_SENATOR(vict)) {
         GET_COND(vict, i) = COND_IS_DISABLED;
       }
 
@@ -2713,6 +2715,7 @@ void restore_character(struct char_data *vict, bool reset_staff_stats) {
             return;
         }
       }
+    }
 
 
     // Staff members get their skills set to max, and also their stats boosted.

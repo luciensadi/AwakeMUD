@@ -777,7 +777,7 @@ void affect_total(struct char_data * ch)
       spell_modify(ch, sust, TRUE);
 
   if (GET_TEMP_QUI_LOSS(ch))
-    GET_QUI(ch) = MAX(0, GET_QUI(ch) - (GET_TEMP_QUI_LOSS(ch) / 4));
+    GET_QUI(ch) = MAX(0, GET_QUI(ch) - (GET_TEMP_QUI_LOSS(ch) / TEMP_QUI_LOSS_DIVISOR));
 
   for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content) {
     switch (GET_BIOWARE_TYPE(bio)) {
