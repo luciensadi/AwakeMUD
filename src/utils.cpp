@@ -3557,10 +3557,10 @@ bool get_and_deduct_one_deckbuilding_token_from_char(struct char_data *ch) {
 
 // States whether a program can be copied or not.
 bool program_can_be_copied(struct obj_data *prog) {
-  if (!prog)
+  if (!prog || GET_OBJ_TYPE(prog) != ITEM_PROGRAM)
     return FALSE;
 
-  switch (GET_OBJ_VAL(prog, 0)) {
+  switch (GET_PROGRAM_TYPE(prog)) {
     case SOFT_ASIST_COLD:
     case SOFT_ASIST_HOT:
     case SOFT_HARDENING:
@@ -3858,6 +3858,17 @@ int count_color_codes_in_string(const char *str) {
       ptr += 1;
   }
   return  sum;
+}
+
+char *get_obj_name_with_padding(struct obj_data *obj, int padding) {
+  static char namestr[MAX_INPUT_LENGTH * 2];
+  char paddingnumberstr[50], formatstr[50];
+
+  snprintf(paddingnumberstr, sizeof(paddingnumberstr), "%d", padding + count_color_codes_in_string(GET_OBJ_NAME(obj)));
+  snprintf(formatstr, sizeof(formatstr), "%s%s%s", "%-", paddingnumberstr, "s^n");
+  snprintf(namestr, sizeof(namestr), formatstr, GET_OBJ_NAME(obj));
+
+  return namestr;
 }
 
 #define CHECK_FUNC_AND_SFUNC_FOR(function) (mob_index[GET_MOB_RNUM(npc)].func == (function) || mob_index[GET_MOB_RNUM(npc)].sfunc == (function))
@@ -4419,6 +4430,53 @@ int get_br_skill_for_veh(struct veh_data *veh) {
       }
       return 0;
   }
+}
+
+// Rigger 3 p.61-62
+int calculate_vehicle_weight(struct veh_data *veh) {
+  int load;
+
+  switch (veh->body) {
+    case 0:
+      load = 2;
+      break;
+    case 1:
+      load = 20;
+      break;
+    case 2:
+      load = 150;
+      break;
+    case 3:
+      load = 500;
+      break;
+    case 4:
+      load = 1500;
+      break;
+    case 5:
+      load = 4000;
+      break;
+    case 6:
+      load = 12000;
+      break;
+    case 7:
+      load = 25000;
+      break;
+    case 8:
+      load = 35000;
+      break;
+    case 9:
+      load = 50000;
+      break;
+    case 10:
+      load = 75000;
+      break;
+    default:
+      load = 500;
+      break;
+  }
+  load += veh->usedload;
+
+  return load;
 }
 
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.

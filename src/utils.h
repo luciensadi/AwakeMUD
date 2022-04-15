@@ -91,6 +91,7 @@ char *  double_up_color_codes(const char *string);
 struct  char_data *get_obj_carried_by_recursive(struct obj_data *obj);
 struct  char_data *get_obj_worn_by_recursive(struct obj_data *obj);
 struct  char_data *get_obj_possessor(struct obj_data *obj);
+char *  get_obj_name_with_padding(struct obj_data *obj, int padding);
 char *  generate_new_loggable_representation(struct obj_data *obj);
 void    purgelog(struct veh_data *veh);
 char *  replace_substring(char *source, char *dest, const char *replace_target, const char *replacement);
@@ -123,6 +124,7 @@ bool    veh_can_traverse_water(struct veh_data *veh);
 bool    veh_can_traverse_air(struct veh_data *veh);
 int     get_br_skill_for_veh(struct veh_data *veh);
 int     get_pilot_skill_for_veh(struct veh_data *veh);
+int     calculate_vehicle_weight(struct veh_data *veh);
 
 long get_room_gridguide_x(vnum_t room_vnum);
 long get_room_gridguide_y(vnum_t room_vnum);
