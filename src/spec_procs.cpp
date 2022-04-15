@@ -3575,6 +3575,26 @@ SPECIAL(newbie_car)
       case 898:
         num = 1303;
         break;
+#ifdef USE_PRIVATE_CE_WORLD
+      case 904:
+        num = 37500;
+        break;
+      case 905:
+        num = 37501;
+        break;
+      case 906:
+        num = 37502;
+        break;
+      case 907:
+        num = 37503;
+        break;
+      case 908:
+        num = 37504;
+        break;
+#endif
+      default:
+        mudlog("SYSERR: Attempting to 'collect' a mis-assigned title!", ch, LOG_SYSLOG, TRUE);
+        return FALSE;
     }
     veh = read_vehicle(num, VIRTUAL);
     veh->locked = TRUE;

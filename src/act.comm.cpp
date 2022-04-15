@@ -829,6 +829,11 @@ ACMD(do_broadcast)
     return;
   }
 
+  if (PLR_FLAGGED(ch, PLR_RADIO_MUTED)) {
+    send_to_char("You're not able to broadcast at this time.\r\n", ch);
+    return;
+  }
+
   if (IS_ASTRAL(ch)) {
     send_to_char("You can't manipulate electronics from the astral plane.\r\n", ch);
     return;

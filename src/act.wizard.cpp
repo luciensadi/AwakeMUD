@@ -4367,6 +4367,7 @@ ACMD(do_set)
                { "noautosyspoints", LVL_FIXER, PC, BINARY },
                { "notells", LVL_FIXER, PC, BINARY },
                { "noooc", LVL_FIXER, PC, BINARY },
+               { "noradio", LVL_FIXER, PC, BINARY },
                { "\n", 0, BOTH, MISC }
              };
 
@@ -4990,13 +4991,18 @@ ACMD(do_set)
     mudlog(buf, ch, LOG_WIZLOG, TRUE);
     break;
   case 83: /* no tells */
+    SET_OR_REMOVE(PLR_FLAGS(vict), PLR_TELLS_MUTED);
+    snprintf(buf, sizeof(buf),"%s turned %s's no-tells flag %s.", GET_CHAR_NAME(ch), GET_NAME(vict), PLR_FLAGGED(vict, PLR_TELLS_MUTED) ? "ON" : "OFF");
+    mudlog(buf, ch, LOG_WIZLOG, TRUE);
+    break;
+  case 84: /* no ooc */
     SET_OR_REMOVE(PLR_FLAGS(vict), PLR_NOOOC);
     snprintf(buf, sizeof(buf),"%s turned %s's no-ooc flag %s.", GET_CHAR_NAME(ch), GET_NAME(vict), PLR_FLAGGED(vict, PLR_NOOOC) ? "ON" : "OFF");
     mudlog(buf, ch, LOG_WIZLOG, TRUE);
     break;
-  case 84: /* no ooc */
-    SET_OR_REMOVE(PLR_FLAGS(vict), PLR_TELLS_MUTED);
-    snprintf(buf, sizeof(buf),"%s turned %s's no-tells flag %s.", GET_CHAR_NAME(ch), GET_NAME(vict), PLR_FLAGGED(vict, PLR_NOOOC) ? "ON" : "OFF");
+  case 85: /* no radio */
+    SET_OR_REMOVE(PLR_FLAGS(vict), PLR_RADIO_MUTED);
+    snprintf(buf, sizeof(buf),"%s turned %s's no-radio flag %s.", GET_CHAR_NAME(ch), GET_NAME(vict), PLR_FLAGGED(vict, PLR_RADIO_MUTED) ? "ON" : "OFF");
     mudlog(buf, ch, LOG_WIZLOG, TRUE);
     break;
   default:

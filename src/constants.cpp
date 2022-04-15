@@ -490,6 +490,7 @@ const char *player_bits[] =
     "PAID_FOR_KIPUP",
     "PAID_FOR_ROLLS",
     "NO_AUTO_SYSP",
+    "RADIO_MUTED",
     "\n"
   };
 
