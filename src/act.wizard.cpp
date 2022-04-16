@@ -6858,7 +6858,7 @@ int audit_zone_objects_(struct char_data *ch, int zone_num, bool verbose) {
     printed = FALSE;
 
     // Flag objects with zero cost
-    if (GET_OBJ_COST(obj) <= 0) {
+    if (GET_OBJ_TYPE(obj) != ITEM_OTHER && GET_OBJ_COST(obj) <= 0) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - cost %d^n.\r\n", GET_OBJ_COST(obj));
       printed = TRUE;
       issues++;
@@ -6900,14 +6900,14 @@ int audit_zone_objects_(struct char_data *ch, int zone_num, bool verbose) {
     }
 
     // Flag objects with zero weight
-    if (GET_OBJ_WEIGHT(obj) <= 0) {
+    if (GET_OBJ_TYPE(obj) != ITEM_OTHER && GET_OBJ_WEIGHT(obj) <= 0) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - no or negative weight^n.\r\n");
       printed = TRUE;
       issues++;
     }
 
     // Flag objects with high weight-- except fountains, which are often given high weights.
-    if (GET_OBJ_TYPE(obj) != ITEM_FOUNTAIN && GET_OBJ_WEIGHT(obj) >= 100.0) {
+    if (GET_OBJ_TYPE(obj) != ITEM_OTHER && GET_OBJ_TYPE(obj) != ITEM_FOUNTAIN && GET_OBJ_WEIGHT(obj) >= 100.0) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - high weight %0.2f^n.\r\n", GET_OBJ_WEIGHT(obj));
       printed = TRUE;
       issues++;
