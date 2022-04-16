@@ -1218,7 +1218,7 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
 
     obj = obj->contains;
   } else {
-    if (obj->contains) {
+    if (obj->contains && (GET_OBJ_TYPE(obj) != ITEM_WEAPON || GET_OBJ_TYPE(obj->contains) != ITEM_GUN_MAGAZINE)) {
       send_to_char(ch, "%s has things inside it! You can't sell it until you empty it out.\r\n", capitalize(GET_OBJ_NAME(obj)));
       return;
     }
