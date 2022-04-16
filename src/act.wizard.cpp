@@ -2474,7 +2474,7 @@ ACMD(do_purge)
           snprintf(buf2, sizeof(buf2), "^ROOC Alert: Your vehicle '%s' has been deleted by administrator '%s'.^n\r\n", GET_VEH_NAME(veh), GET_CHAR_NAME(ch));
           store_mail(veh->owner, ch, buf2);
         }
-        
+
         extract_veh(veh);
       }
 
@@ -6389,6 +6389,53 @@ ACMD(do_rewrite_world) {
   // Clear our alarm handler.
   signal(SIGALRM, SIG_IGN);
 
+  // Perform any rectification needed.
+  if (TRUE) {
+    bool all_flags_are_2_or_less = TRUE;
+
+    for (int rnum = 0; rnum <= top_of_objt; rnum++) {
+      struct obj_data *obj = &obj_proto[rnum];
+      if (GET_OBJ_TYPE(obj) == ITEM_MOD && (GET_VEHICLE_MOD_DESIGNED_FOR_FLAGS(obj) > 2 || GET_VEHICLE_MOD_DESIGNED_FOR_FLAGS(obj) < 0)) {
+        mudlog("SYSERR: Veh mod type swap code is enabled despite already having done that function!", ch, LOG_SYSLOG, TRUE);
+        all_flags_are_2_or_less = FALSE;
+        break;
+      }
+    }
+
+    if (all_flags_are_2_or_less) {
+      int flags_with_all_common_vehs = 0;
+      SET_BIT(flags_with_all_common_vehs, 1 << VEH_BIKE);
+      SET_BIT(flags_with_all_common_vehs, 1 << VEH_TRUCK);
+      SET_BIT(flags_with_all_common_vehs, 1 << VEH_CAR);
+      SET_BIT(flags_with_all_common_vehs, 1 << VEH_DRONE);
+
+      int flags_for_non_drone = 0;
+      SET_BIT(flags_for_non_drone, 1 << VEH_BIKE);
+      SET_BIT(flags_for_non_drone, 1 << VEH_TRUCK);
+      SET_BIT(flags_for_non_drone, 1 << VEH_CAR);
+
+      int flags_for_drone = 0;
+      SET_BIT(flags_for_drone, 1 << VEH_DRONE);
+
+      for (int rnum = 0; rnum <= top_of_objt; rnum++) {
+        struct obj_data *obj = &obj_proto[rnum];
+        if (GET_OBJ_TYPE(obj) == ITEM_MOD) {
+          switch (GET_VEHICLE_MOD_DESIGNED_FOR_FLAGS(obj)) {
+            case 0:
+              GET_VEHICLE_MOD_DESIGNED_FOR_FLAGS(obj) = flags_for_non_drone;
+              break;
+            case 1:
+              GET_VEHICLE_MOD_DESIGNED_FOR_FLAGS(obj) = flags_for_drone;
+              break;
+            case 2:
+              GET_VEHICLE_MOD_DESIGNED_FOR_FLAGS(obj) = flags_with_all_common_vehs;
+              break;
+          }
+        }
+      }
+    }
+  }
+
   // Perform writing for all zones that have rooms.
   for (int i = 0; i <= top_of_zone_table; i++) {
     snprintf(buf, sizeof(buf), "Writing zone %d...\r\n", zone_table[i].number);
@@ -6843,6 +6890,12 @@ int audit_zone_objects_(struct char_data *ch, int zone_num, bool verbose) {
           printed = TRUE;
           issues++;
         }
+      }
+
+      if (GET_VEHICLE_MOD_LOCATION(obj) == MOD_NOWHERE) {
+        strlcat(buf, "  - Mounts to NOWHERE.\r\n", sizeof(buf));
+        printed = TRUE;
+        issues++;
       }
     }
 

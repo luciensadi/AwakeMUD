@@ -3130,7 +3130,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
 
       // Vals 4 and 6
       sprintbit(GET_VEHICLE_MOD_DESIGNED_FOR_FLAGS(j), veh_types, buf2, sizeof(buf2));
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt has been designed to fit ^c%s^n, and installs to the ^c%s^n.",
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt has been designed to fit vehicles of type: ^c%s^n, and installs to the ^c%s^n.",
                buf2,
                mod_name[GET_VEHICLE_MOD_LOCATION(j)]);
       break;

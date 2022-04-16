@@ -2665,7 +2665,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
           }
           break;
         case ITEM_MOD:
-          if (number < 1 || number > NUM_VEH_TYPES) {
+          if (number < 0 || number > NUM_VEH_TYPES) {
             send_to_char("Invalid Input! Enter options (0 to quit): ", CH);
             return;
           }
