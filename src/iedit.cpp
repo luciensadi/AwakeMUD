@@ -274,7 +274,7 @@ void iedit_disp_mod_vehicle_type_menu(struct descriptor_data *d)
 {
   CLS(CH);
   for (int veh_type = 0; veh_type < NUM_VEH_TYPES; veh_type++)
-    send_to_char(CH, " %2d) %s\r\n", veh_type, veh_types[veh_type]);
+    send_to_char(CH, " %2d) %s\r\n", veh_type + 1, veh_types[veh_type]);
   sprintbit(GET_VEHICLE_MOD_DESIGNED_FOR_FLAGS(OBJ), veh_types, buf1, sizeof(buf1));
   send_to_char(CH, "Set Compatible Vehicle Types: ^c%s^n\r\nEnter options (0 to quit): ", buf1);
 }
@@ -2665,7 +2665,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
           }
           break;
         case ITEM_MOD:
-          if (number < 0 || number >= NUM_VEH_TYPES) {
+          if (number < 1 || number > NUM_VEH_TYPES) {
             send_to_char("Invalid Input! Enter options (0 to quit): ", CH);
             return;
           }
@@ -2673,7 +2673,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
             iedit_disp_val6_menu(d);
             return;
           }
-          TOGGLE_BIT(GET_VEHICLE_MOD_DESIGNED_FOR_FLAGS(OBJ), 1 << number);
+          TOGGLE_BIT(GET_VEHICLE_MOD_DESIGNED_FOR_FLAGS(OBJ), 1 << (number - 1));
           iedit_disp_mod_vehicle_type_menu(d);
           return;
         default:
