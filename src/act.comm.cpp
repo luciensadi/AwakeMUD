@@ -333,6 +333,7 @@ ACMD(do_tell)
 
   if ((PLR_FLAGGED(ch, PLR_NOSHOUT) || PLR_FLAGGED(ch, PLR_TELLS_MUTED)) && !IS_SENATOR(vict)) {
     send_to_char(ch, "You can only send tells to staff.\r\n");
+    return;
   }
 
   if (!IS_NPC(vict) && !vict->desc) {      /* linkless */
@@ -378,36 +379,45 @@ ACMD(do_tell)
 
 ACMD(do_reply)
 {
-  struct char_data *tch = character_list;
+  struct char_data *tch;
 
   skip_spaces(&argument);
 
-  if (GET_LAST_TELL(ch) == NOBODY)
+  if (GET_LAST_TELL(ch) == NOBODY) {
     send_to_char("You have no-one to reply to!\r\n", ch);
-  else if (!*argument)
-    send_to_char("What is your reply?\r\n", ch);
-  else {
-    /* Make sure the person you're replying to is still playing by searching
-     * for them.  Note, this will break in a big way if I ever implement some
-     * scheme where it keeps a pool of char_data structures for reuse.
-     */
-
-    for (; tch != NULL; tch = tch->next)
-      if (!IS_NPC(tch) && GET_IDNUM(tch) == GET_LAST_TELL(ch))
-        break;
-
-    if (tch == NULL || (tch && GET_IDNUM(tch) != GET_LAST_TELL(ch))) {
-      send_to_char("They are no longer playing.\r\n", ch);
-      return;
-    }
-
-    if (PRF_FLAGGED(tch, PRF_NOTELL) || IS_IGNORING(tch, is_blocking_tells_from, ch)) {
-      act("$E has disabled tells.", FALSE, ch, 0, tch, TO_CHAR);
-      return;
-    }
-
-    perform_tell(ch, tch, argument);
+    return;
   }
+
+  if (!*argument) {
+    send_to_char("What is your reply?\r\n", ch);
+    return;
+  }
+
+  /* Make sure the person you're replying to is still playing by searching
+   * for them.  Note, this will break in a big way if I ever implement some
+   * scheme where it keeps a pool of char_data structures for reuse.
+   */
+
+  for (tch = character_list; tch != NULL; tch = tch->next)
+    if (!IS_NPC(tch) && GET_IDNUM(tch) == GET_LAST_TELL(ch))
+      break;
+
+  if (tch == NULL || (tch && GET_IDNUM(tch) != GET_LAST_TELL(ch))) {
+    send_to_char("They are no longer playing.\r\n", ch);
+    return;
+  }
+
+  if ((PLR_FLAGGED(ch, PLR_NOSHOUT) || PLR_FLAGGED(ch, PLR_TELLS_MUTED)) && !IS_SENATOR(tch)) {
+    send_to_char(ch, "You can only send tells to staff.\r\n");
+    return;
+  }
+
+  if (PRF_FLAGGED(tch, PRF_NOTELL) || IS_IGNORING(tch, is_blocking_tells_from, ch)) {
+    act("$E has disabled tells.", FALSE, ch, 0, tch, TO_CHAR);
+    return;
+  }
+
+  perform_tell(ch, tch, argument);
 }
 
 ACMD(do_ask)
