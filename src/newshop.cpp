@@ -1576,7 +1576,7 @@ void shop_value(char *arg, struct char_data *ch, struct char_data *keeper, vnum_
     // Since we're not pre-filling buf with something else to say, just stick the name in for the sayto target.
     strcpy(buf, GET_CHAR_NAME(ch));
 
-    if (obj->contains) {
+    if (obj->contains && (GET_OBJ_TYPE(obj) != ITEM_WEAPON || GET_OBJ_TYPE(obj->contains) != ITEM_GUN_MAGAZINE)) {
       send_to_char(ch, "%s has things inside it! You can't sell it until you empty it out.\r\n", capitalize(GET_OBJ_NAME(obj)));
       return;
     }
