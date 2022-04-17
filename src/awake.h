@@ -499,7 +499,7 @@ enum {
 #define AFF_VISION_MAG_3        21 /* Magnification level 3         */
 #define AFF_COUNTER_ATT      22 /* plr just attacked          */
 #define AFF_STABILIZE        23 /* player won't die due to phys loss */
-#define AFF_PETRIFY             24 /* player's commands don't work       */
+// UNUSED (previously AFF_PETRIFY)
 #define AFF_IMP_INVIS        25 /* char is improved invis         */
 #define AFF_ACID    26
 #define AFF_APPROACH      27 /* Character is using melee */

@@ -1605,14 +1605,6 @@ void command_interpreter(struct char_data * ch, char *argument, char *tcname)
         send_to_char("The ice covering you crackles alarmingly as you slam your sovereign will through it.\r\n", ch);
     }
 
-    if (AFF_FLAGGED(ch, AFF_PETRIFY) && cmd_info[cmd].minimum_position > POS_DEAD) {
-      if (!access_level(ch, LVL_VICEPRES)) {
-        send_to_char("Your muscles don't respond to your impulse.\r\n", ch);
-        return;
-      } else
-        send_to_char("You abuse your administrative powers and force your petrified body to respond.\r\n", ch);
-    }
-
     if (cmd_info[cmd].command_pointer == NULL) {
       send_to_char("Sorry, that command hasn't been implemented yet.\r\n", ch);
       return;
