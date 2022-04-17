@@ -713,10 +713,25 @@ ACMD(do_upgrade)
         mod_load_required = 25;
         break;
     }
-    if ((bod_already_used + bod_required) > veh->body || (veh->usedload + mod_load_required) > veh->load) {
-      send_to_char("Try as you might, you just can't fit it on.\r\n", ch);
+
+    if ((bod_already_used + bod_required) > veh->body) {
+      send_to_char(ch, "%s requires %d free bod, and %s only has %d.\r\n",
+                   GET_OBJ_NAME(mod),
+                   bod_required,
+                   GET_VEH_NAME(veh),
+                   veh->body - bod_already_used);
       return;
     }
+
+    if ((veh->usedload + mod_load_required) > veh->load) {
+        send_to_char(ch, "%s requires %d free load space, and %s only has %d.\r\n",
+                     GET_OBJ_NAME(mod),
+                     mod_load_required,
+                     GET_VEH_NAME(veh),
+                     veh->load - veh->usedload);
+      return;
+    }
+
     veh->usedload += mod_load_required;
     veh->sig -= mod_signature_change;
     obj_from_char(mod);
@@ -799,6 +814,8 @@ void disp_mod(struct veh_data *veh, struct char_data *ch, int i)
       send_to_char(ch, "%s mounted on %s.\r\n", CAP(GET_OBJ_NAME(mounted_weapon)), GET_OBJ_NAME(mount));
     } else if (GET_OBJ_VAL(mount, 1) != 0 && GET_OBJ_VAL(mount, 1) != 2 && mount->contains) {
       send_to_char(ch, "%s attached to %s.\r\n", CAP(GET_OBJ_NAME(mount->contains)), GET_OBJ_NAME(mount));
+    } else {
+      send_to_char(ch, "%s (empty).\r\n", CAP(GET_OBJ_NAME(mount)));
     }
   }
   send_to_char("Modifications:\r\n", ch);

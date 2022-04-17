@@ -64,9 +64,6 @@ int can_move(struct char_data *ch, int dir, int extra)
   SPECIAL(escalator);
   int dam;
 
-  if (IS_AFFECTED(ch, AFF_PETRIFY))
-    return 0;
-
   char empty_argument = '\0';
   if (IS_SET(extra, CHECK_SPECIAL) && special(ch, convert_dir[dir], &empty_argument))
     return 0;
