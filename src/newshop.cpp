@@ -913,33 +913,16 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
   one_argument(arg, buf);
 
   // Allow specification of cash purchases in grey shops.
-  if (!str_cmp(buf, "cash"))
-  {
-    if (shop_table[shop_nr].type == SHOP_LEGAL) {
-      if (access_level(ch, LVL_ADMIN)) {
-        send_to_char(ch, "You stare unblinkingly at %s until %s makes an exception to the no-credstick, no-sale policy.\r\n",
-                     GET_NAME(keeper), HSSH(keeper));
-      } else {
-        snprintf(buf, sizeof(buf), "%s No Credstick, No Sale.", GET_CHAR_NAME(ch));
-        do_say(keeper, buf, cmd_say, SCMD_SAYTO);
-        if (obj)
-          extract_obj(obj);
-        return;
-      }
-    }
-
-    arg = any_one_arg(arg, buf);
-    skip_spaces(&arg);
-    cash = TRUE;
-  }
-
   // Fallback: You didn't specify cash, and you have no credstick on hand.
-  else if (!cred)
+  if (!str_cmp(buf, "cash") || !cred)
   {
     if (shop_table[shop_nr].type == SHOP_LEGAL) {
       if (access_level(ch, LVL_ADMIN)) {
-        send_to_char(ch, "You stare unblinkingly at %s until %s makes an exception to the no-credstick, no-sale policy.\r\n",
-                     GET_NAME(keeper), HSSH(keeper));
+        send_to_char(ch, "You stare unblinkingly at %s until %s make%s an exception to the no-credstick, no-sale policy.\r\n",
+                     GET_NAME(keeper),
+                     HSSH(keeper),
+                     HSSH_SHOULD_PLURAL(keeper) ? "s" : ""
+                    );
       } else {
         snprintf(buf, sizeof(buf), "%s No Credstick, No Sale.", GET_CHAR_NAME(ch));
         do_say(keeper, buf, cmd_say, SCMD_SAYTO);
@@ -948,20 +931,26 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
         return;
       }
     }
-    send_to_char("Lacking an activated credstick, you choose to deal in cash.\r\n", ch );
+
+    // Strip out the CASH argument.
+    if (!str_cmp(buf, "cash")) {
+      arg = any_one_arg(arg, buf);
+      skip_spaces(&arg);
+    } else {
+      send_to_char("Lacking an activated credstick, you choose to deal in cash.\r\n", ch );
+    }
+
     cash = TRUE;
   }
 
   // You have a credstick, but the shopkeeper doesn't want it.
-  else if (shop_table[shop_nr].type == SHOP_BLACK)
-  {
+  if (!cash && cred && shop_table[shop_nr].type == SHOP_BLACK) {
     send_to_char("The shopkeeper refuses to deal with credsticks.\r\n", ch);
     cash = TRUE;
   }
 
   // You must clarify what you want to buy.
-  if (!*arg || !buynum)
-  {
+  if (!*arg || !buynum) {
     snprintf(buf, sizeof(buf), "%s What do you want to buy?", GET_CHAR_NAME(ch));
     do_say(keeper, buf, cmd_say, SCMD_SAYTO);
     if (obj)
@@ -1164,41 +1153,29 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
   struct obj_data *obj = NULL, *cred = get_first_credstick(ch, "credstick");
   struct shop_sell_data *sell = shop_table[shop_nr].selling;
 
-  if (!*arg)
-  {
+  if (!*arg) {
     send_to_char("What item do you want to sell?\r\n", ch);
     return;
   }
 
   strcpy(buf, GET_CHAR_NAME(ch));
 
-  if (shop_table[shop_nr].flags.IsSet(SHOP_DOCTOR))
-  {
-    if (!(obj = get_obj_in_list_vis(ch, arg, ch->carrying))
-        && !(obj = get_obj_in_list_vis(ch, arg, ch->cyberware))
-        && !(obj = get_obj_in_list_vis(ch, arg, ch->bioware))) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %s", shop_table[shop_nr].no_such_itemp);
-      do_say(keeper, buf, cmd_say, SCMD_SAYTO);
-      return;
+  // Find the object.
+  obj = get_obj_in_list_vis(ch, arg, ch->carrying);
+  if (!obj && shop_table[shop_nr].flags.IsSet(SHOP_DOCTOR)) {
+    if (!(obj = get_obj_in_list_vis(ch, arg, ch->cyberware))) {
+      obj = get_obj_in_list_vis(ch, arg, ch->bioware);
     }
   }
 
-  else {
-    if (!(obj = get_obj_in_list_vis(ch, arg, ch->carrying))) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %s", shop_table[shop_nr].no_such_itemp);
-      do_say(keeper, buf, cmd_say, SCMD_SAYTO);
-      return;
-    }
-  }
-
-  if (IS_OBJ_STAT(obj, ITEM_EXTRA_KEPT)) {
-    act("You'll have to use the KEEP command on $p before you can sell it.", FALSE, ch, obj, 0, TO_CHAR);
+  if (!obj) {
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %s", shop_table[shop_nr].no_such_itemp);
+    do_say(keeper, buf, cmd_say, SCMD_SAYTO);
     return;
   }
 
-  if (IS_OBJ_STAT(obj, ITEM_EXTRA_NORENT) || IS_OBJ_STAT(obj, ITEM_EXTRA_STAFF_ONLY)) {
-    act("$p is worthless to me.", FALSE, ch, obj, 0, TO_CHAR);
-    send_to_char("(OOC: You can't sell !RENT and GOD-ONLY items.)\r\n", ch);
+  if (IS_OBJ_STAT(obj, ITEM_EXTRA_KEPT)) {
+    send_to_char(ch, "You'll have to use the KEEP command on %s before you can sell it.", decapitalize_a_an(GET_OBJ_NAME(obj)));
     return;
   }
 
@@ -1217,11 +1194,6 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
     }
 
     obj = obj->contains;
-  } else {
-    if (obj->contains && (GET_OBJ_TYPE(obj) != ITEM_WEAPON || GET_OBJ_TYPE(obj->contains) != ITEM_GUN_MAGAZINE)) {
-      send_to_char(ch, "%s has things inside it! You can't sell it until you empty it out.\r\n", capitalize(GET_OBJ_NAME(obj)));
-      return;
-    }
   }
 
   if (!shop_will_buy_item_from_ch(shop_nr, obj, ch))
@@ -1230,12 +1202,14 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
     do_say(keeper, buf, cmd_say, SCMD_SAYTO);
     return;
   }
+
   if (shop_table[shop_nr].type == SHOP_LEGAL && !cred)
   {
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " No cred, no business.");
     do_say(keeper, buf, cmd_say, SCMD_SAYTO);
     return;
   }
+
   int sellprice = sell_price(obj, shop_nr);
   if (!shop_table[shop_nr].flags.IsSet(SHOP_WONT_NEGO))
     sellprice = negotiate(ch, keeper, 0, sellprice, 0, 0);
@@ -1575,11 +1549,6 @@ void shop_value(char *arg, struct char_data *ch, struct char_data *keeper, vnum_
   } else {
     // Since we're not pre-filling buf with something else to say, just stick the name in for the sayto target.
     strcpy(buf, GET_CHAR_NAME(ch));
-
-    if (obj->contains && (GET_OBJ_TYPE(obj) != ITEM_WEAPON || GET_OBJ_TYPE(obj->contains) != ITEM_GUN_MAGAZINE)) {
-      send_to_char(ch, "%s has things inside it! You can't sell it until you empty it out.\r\n", capitalize(GET_OBJ_NAME(obj)));
-      return;
-    }
   }
 
   if (!shop_will_buy_item_from_ch(shop_nr, obj, ch))
@@ -3228,27 +3197,38 @@ void save_shop_orders() {
 
 bool shop_will_buy_item_from_ch(rnum_t shop_nr, struct obj_data *obj, struct char_data *ch) {
   // This item cannot be sold.
-  if (IS_OBJ_STAT(obj, ITEM_EXTRA_NOSELL)) {
+  if (IS_OBJ_STAT(obj, ITEM_EXTRA_NOSELL) || IS_OBJ_STAT(obj, ITEM_EXTRA_STAFF_ONLY) || IS_OBJ_STAT(obj, ITEM_EXTRA_WIZLOAD)) {
+    send_to_char(ch, "%s can't be sold.\r\n", capitalize(GET_OBJ_NAME(obj)));
     return FALSE;
   }
 
-  // Wizloaded items are also not sellable.
-  if (IS_OBJ_STAT(obj, ITEM_EXTRA_WIZLOAD)) {
+  if (!obj->contains && GET_OBJ_TYPE(obj) == ITEM_SHOPCONTAINER) {
+    send_to_char(ch, "%s is empty!\r\n", capitalize(GET_OBJ_NAME(obj)));
+    snprintf(buf, sizeof(buf), "SYSERR: Shop container '%s' is empty!", GET_OBJ_NAME(obj));
+    mudlog(buf, ch, LOG_SYSLOG, TRUE);
     return FALSE;
   }
 
   // Item has contents.
-  if (obj->contains && GET_OBJ_TYPE(obj) != ITEM_SHOPCONTAINER) {
-    return FALSE;
+  if (obj->contains) {
+    switch (GET_OBJ_TYPE(obj)) {
+      case ITEM_SHOPCONTAINER:
+        break;
+      case ITEM_WEAPON:
+        if (GET_OBJ_TYPE(obj->contains) != ITEM_GUN_MAGAZINE) {
+          send_to_char(ch, "You'll have to empty %s out before you can sell it.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
+          return FALSE;
+        }
+        break;
+      default:
+        send_to_char(ch, "You'll have to empty %s out before you can sell it.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
+        return FALSE;
+    }
   }
 
   // This item has no value.
   if (GET_OBJ_COST(obj) < 1) {
-    return FALSE;
-  }
-
-  // If this shop doesn't buy this item type at all, bail out.
-  if (!shop_table[shop_nr].buytypes.IsSet(GET_OBJ_TYPE(obj))) {
+    send_to_char(ch, "%s is worthless!\r\n", capitalize(GET_OBJ_NAME(obj)));
     return FALSE;
   }
 
@@ -3260,6 +3240,12 @@ bool shop_will_buy_item_from_ch(rnum_t shop_nr, struct obj_data *obj, struct cha
              GET_OBJ_NAME(obj),
              GET_OBJ_VNUM(obj));
     mudlog(oopsbuf, ch, LOG_SYSLOG, TRUE);
+    send_to_char(ch, "%s is bugged!\r\n", capitalize(GET_OBJ_NAME(obj)));
+    return FALSE;
+  }
+
+  // If this shop doesn't buy this item type at all, bail out. We don't send a message for this one-- the shopkeeper has a flavor line to say.
+  if (!shop_table[shop_nr].buytypes.IsSet(GET_OBJ_TYPE(obj))) {
     return FALSE;
   }
 
