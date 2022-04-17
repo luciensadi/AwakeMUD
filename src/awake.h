@@ -627,6 +627,7 @@ enum {
 #define EX_DESTROYED            (1 << 4)   /* door has been destroyed   */
 #define EX_HIDDEN               (1 << 5)   /* exit is hidden            */
 #define EX_ASTRALLY_WARDED      (1 << 6)   /* Exit blocks passage of astral beings */
+#define EX_IS_TEMPORARY         (1 << 7)   /* Created temporarily by code */
 
 
 /* spirit powers */

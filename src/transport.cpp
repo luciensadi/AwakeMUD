@@ -361,6 +361,7 @@ void create_linked_exit(int rnum_a, int dir_a, int rnum_b, int dir_b, const char
       world[rnum_a].dir_option[dir_a]->barrier = 8;
       world[rnum_a].dir_option[dir_a]->condition = 8;
       world[rnum_a].dir_option[dir_a]->material = 8;
+      SET_BIT(world[rnum_a].dir_option[dir_a]->exit_info, EX_IS_TEMPORARY);
   #ifdef USE_DEBUG_CANARIES
       world[rnum_a].dir_option[dir_a]->canary = CANARY_VALUE;
   #endif
@@ -401,6 +402,7 @@ void create_linked_exit(int rnum_a, int dir_a, int rnum_b, int dir_b, const char
       world[rnum_b].dir_option[dir_b]->barrier = 8;
       world[rnum_b].dir_option[dir_b]->condition = 8;
       world[rnum_b].dir_option[dir_b]->material = 8;
+      SET_BIT(world[rnum_b].dir_option[dir_b]->exit_info, EX_IS_TEMPORARY);
   #ifdef USE_DEBUG_CANARIES
       world[rnum_b].dir_option[dir_b]->canary = CANARY_VALUE;
   #endif

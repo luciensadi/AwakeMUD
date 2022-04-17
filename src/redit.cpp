@@ -1387,7 +1387,7 @@ void write_world_to_disk(int vnum)
       for (counter2 = 0; counter2 < NUM_OF_DIRS; counter2++) {
         room_direction_data *ptr = RM.dir_option[counter2];
 
-        if (ptr) {
+        if (ptr && !IS_SET(ptr->exit_info, EX_IS_TEMPORARY)) {
           int             temp_door_flag;
 
           fprintf(fp, "[EXIT %s]\n", fulldirs[counter2]);
