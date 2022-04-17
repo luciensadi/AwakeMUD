@@ -21,7 +21,6 @@
 #include "bullet_pants.hpp"
 #include "newfight.hpp"
 
-extern int check_recoil(struct char_data *ch, struct obj_data *gun);
 extern void die(struct char_data * ch);
 extern bool astral_fight(struct char_data *ch, struct char_data *vict);
 extern void dominator_mode_switch(struct char_data *ch, struct obj_data *obj, int mode);
@@ -31,12 +30,11 @@ extern int find_weapon_range(struct char_data *ch, struct obj_data *weapon);
 extern bool has_ammo(struct char_data *ch, struct obj_data *wielded);
 extern bool has_ammo_no_deduct(struct char_data *ch, struct obj_data *wielded);
 extern void combat_message(struct char_data *ch, struct char_data *victim, struct obj_data *weapon, int damage, int burst);
-extern int check_smartlink(struct char_data *ch, struct obj_data *weapon);
 extern bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype, bool include_func_protections);
 extern int get_weapon_damage_type(struct obj_data* weapon);
-extern bool is_char_too_tall(struct char_data *ch);
 extern bool damage(struct char_data *ch, struct char_data *victim, int dam, int attacktype, bool is_physical);
 extern bool damage_without_message(struct char_data *ch, struct char_data *victim, int dam, int attacktype, bool is_physical);
+extern char *get_player_name(vnum_t id);
 
 void engage_close_combat_if_appropriate(struct combat_data *att, struct combat_data *def, int net_reach);
 
@@ -46,14 +44,490 @@ bool does_weapon_have_bayonet(struct obj_data *weapon);
 bool perform_nerve_strike(struct combat_data *att, struct combat_data *def, char *rbuf, size_t rbuf_len);
 
 #define SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER {act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS ); if (att->ch->in_room != def->ch->in_room) act( rbuf, 1, def->ch, NULL, NULL, TO_ROLLS );}
+#define SEND_RBUF_TO_ROLLS_FOR_ATTACKER {act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );}
 
-#define IS_RANGED(eq)   (GET_OBJ_TYPE(eq) == ITEM_FIREWEAPON || \
-(GET_OBJ_TYPE(eq) == ITEM_WEAPON && \
-(IS_GUN(GET_OBJ_VAL(eq, 3)))))
 
-SPECIAL(weapon_dominator);
+// Precondition: If you're using a heavy weapon, you must be strong enough to wield it, or else be using a gyro. CC p99
+bool _using_heavy_weapon_without_gyro(struct combat_data *att) {
+  // NPCs don't need to deal with gyros-- the builder probably didn't add them for loot balance reasons.
+  if (IS_NPC(att->ch))
+    return FALSE;
 
-bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *victim, struct obj_data *weap, struct obj_data *vict_weap, struct obj_data *weap_ammo, bool multi_weapon_modifier)
+  // You're not using a heavy weapon.
+  switch (att->ranged->skill) {
+    case SKILL_MACHINE_GUNS:
+    case SKILL_MISSILE_LAUNCHERS:
+    case SKILL_ASSAULT_CANNON:
+    case SKILL_ARTILLERY:
+      // These are heavy weapons.
+      break;
+    default:
+      // Anything else is not.
+      return FALSE;
+  }
+
+  // You're using a mount or gyro, and thus don't care about this constraint.
+  if (att->ranged->using_mounted_gun || att->ranged->gyro || att->cyber->cyberarm_gyromount)
+    return FALSE;
+
+  return TRUE;
+}
+
+bool _precondition_non_weapon(struct combat_data *att) {
+  if (att->weapon && (GET_OBJ_TYPE(att->weapon) != ITEM_WEAPON)) {
+    send_to_char(att->ch, "You struggle to figure out how to attack while using %s as a weapon!\r\n", decapitalize_a_an(GET_OBJ_NAME(att->weapon)));
+    return FALSE;
+  }
+  return TRUE;
+}
+
+void _handle_burst_count(struct combat_data *att, struct obj_data *weap_ammo) {
+  // Setup: Limit the burst of the weapon to the available ammo, and decrement ammo appropriately.
+  // Emplaced mobs act as if they have unlimited ammo (technically draining 1 per shot) and no recoil.
+  if (att->ranged->burst_count && !MOB_FLAGGED(att->ch, MOB_EMPLACED)) {
+    if (weap_ammo || att->ranged->magazine) {
+      // When we called has_ammo() earlier, we decremented their ammo by one. Give it back to true up the equation.
+      int ammo_available = weap_ammo ? ++GET_AMMOBOX_QUANTITY(weap_ammo) : ++GET_MAGAZINE_AMMO_COUNT(att->ranged->magazine);
+
+      // Cap their burst to their magazine's ammo.
+      att->ranged->burst_count = MIN(att->ranged->burst_count, ammo_available);
+
+      // Subtract the full ammo count.
+      if (weap_ammo) {
+        update_ammobox_ammo_quantity(weap_ammo, -(att->ranged->burst_count));
+      } else {
+        GET_MAGAZINE_AMMO_COUNT(att->ranged->magazine) -= (att->ranged->burst_count);
+      }
+    }
+
+    // SR3 p151: Mounted weapons get halved recoil.
+    int recoil = att->ranged->burst_count;
+    if (att->ranged->using_mounted_gun)
+      recoil /= 2;
+    att->ranged->modifiers[COMBAT_MOD_RECOIL] += MAX(0, recoil - att->ranged->recoil_comp);
+
+    switch (att->ranged->skill) {
+      case SKILL_SHOTGUNS:
+      case SKILL_MACHINE_GUNS:
+      case SKILL_ASSAULT_CANNON:
+        // Uncompensated recoil from high-recoil weapons is doubled.
+        att->ranged->modifiers[COMBAT_MOD_RECOIL] *= 2;
+    }
+  }
+}
+
+void _handle_veh_modifiers(struct combat_data *att) {
+  // Setup: Modify recoil based on vehicular stats.
+  if (att->veh) {
+    if (!att->ranged->using_mounted_gun) {
+      // Core p152: Unmounted weapons get +2 TN.
+      att->ranged->modifiers[COMBAT_MOD_MOVEMENT] += 2;
+    } else {
+      // TODO: Sensor stuff. It's a bitch to write due to all the various things that go into it, so it'll be done later.
+      // Sensor tests per Core p152 and p135.
+      // TN modifiers for sensor test per Core p154.
+      // Success? You get half the sensor rating, rounded down, added to your dice.
+    }
+
+    // We assume all targets are standing still.
+    // Per Core p153, movement gunnery modifier is +1 per 30m/CT.
+    att->ranged->modifiers[COMBAT_MOD_MOVEMENT] += (int) (get_speed(att->veh) / 30);
+
+    // Penalty for damaged veh.
+    if ((att->veh)->damage > 0) {
+      if ((att->veh)->damage <= 2)
+        att->ranged->modifiers[COMBAT_MOD_VEHICLE_DAMAGE] += 1;
+      else if ((att->veh)->damage <= 5)
+        att->ranged->modifiers[COMBAT_MOD_VEHICLE_DAMAGE] += 2;
+      else
+        att->ranged->modifiers[COMBAT_MOD_VEHICLE_DAMAGE] += 3;
+    }
+  }
+}
+
+void _handle_gyro_recoil_comp(struct combat_data *att) {
+  // Setup: If you have a gyro mount, it negates recoil and movement penalties up to its rating.
+  if (!att->ranged->using_mounted_gun) {
+    int maximum_recoil_comp_from_gyros = att->ranged->modifiers[COMBAT_MOD_MOVEMENT] + att->ranged->modifiers[COMBAT_MOD_RECOIL];
+    if (att->ranged->gyro) {
+      att->ranged->modifiers[COMBAT_MOD_GYRO] -= MIN(maximum_recoil_comp_from_gyros, GET_OBJ_VAL(att->ranged->gyro, 0));
+    } else if (att->cyber->cyberarm_gyromount) {
+      switch (GET_WEAPON_ATTACK_TYPE(att->weapon)) {
+        case WEAP_MMG:
+        case WEAP_HMG:
+        case WEAP_CANNON:
+          break;
+        default:
+          att->ranged->modifiers[COMBAT_MOD_GYRO] -= MIN(maximum_recoil_comp_from_gyros, 3);
+          break;
+      }
+    }
+  }
+}
+
+void _apply_modifiers_to_att(struct combat_data *att, char *rbuf, size_t rbuf_len) {
+  snprintf(rbuf, rbuf_len, "%s's burst/compensation info (excluding gyros) is ^c%d^n/^c%d^n. Additional modifiers: "
+           GET_CHAR_NAME( att->ch ),
+           att->ranged->burst_count,
+           MOB_FLAGGED(att->ch, MOB_EMPLACED) ? 10 : att->ranged->recoil_comp);
+
+  att->ranged->tn += modify_target_rbuf_raw(att->ch, rbuf, rbuf_len, att->ranged->modifiers[COMBAT_MOD_VISIBILITY], FALSE);
+  for (int mod_index = 0; mod_index < NUM_COMBAT_MODIFIERS; mod_index++) {
+    // Ranged-specific modifiers.
+    buf_mod(rbuf, rbuf_len, combat_modifiers[mod_index], att->ranged->modifiers[mod_index]);
+    att->ranged->tn += att->ranged->modifiers[mod_index];
+  }
+
+  // Calculate the attacker's total skill (this modifies TN)
+  att->ranged->dice = get_skill(att->ch, att->ranged->skill, att->ranged->tn);
+
+  // Minimum TN is 2.
+  att->ranged->tn = MAX(att->ranged->tn, 2);
+
+  snprintf(ENDOF(rbuf), rbuf_len - strlen(rbuf), "\r\nAfter get_skill(), attacker's ranged TN is ^c%d^n.", att->ranged->tn);
+
+}
+
+void _add_skill_dice_and_calculate_successes(struct combat_data *att, char *rbuf, size_t rbuf_len) {
+  int bonus_if_not_too_tall = MIN(GET_SKILL(att->ch, att->ranged->skill), GET_OFFENSE(att->ch));
+  att->ranged->dice += bonus_if_not_too_tall;
+  snprintf(rbuf, rbuf_len, "Rolling %d + %d dice... ", att->ranged->dice, bonus_if_not_too_tall);
+
+  att->ranged->successes = success_test(att->ranged->dice, att->ranged->tn);
+  snprintf(ENDOF(rbuf), rbuf_len - strlen(rbuf), "%d successes.", att->ranged->successes);
+}
+
+const char *projectile_description(struct obj_data *weapon) {
+  // Set the attack description.
+  static char ammo_string[500];
+  char ammo_name[50];
+
+  switch(GET_WEAPON_ATTACK_TYPE(weapon)) {
+    case WEAP_SHOTGUN:
+      strlcpy(ammo_name, "slug", sizeof(ammo_name));
+      break;
+    case WEAP_CANNON:
+      strlcpy(ammo_name, "shell", sizeof(ammo_name));
+      break;
+    case WEAP_MISS_LAUNCHER:
+      strlcpy(ammo_name, "rocket", sizeof(ammo_name));
+      break;
+    case WEAP_GREN_LAUNCHER:
+      strlcpy(ammo_name, "grenade", sizeof(ammo_name));
+      break;
+    default:
+      strlcpy(ammo_name, "bullet", sizeof(ammo_name));
+      break;
+  }
+
+  if (WEAPON_IS_BF(weapon)) {
+    snprintf(ammo_string, sizeof(ammo_string), "burst of %ss", ammo_name);
+  } else if (WEAPON_IS_FA(weapon)) {
+    snprintf(ammo_string, sizeof(ammo_string), "stream of %ss", ammo_name);
+  } else {
+    strlcpy(ammo_string, ammo_name, sizeof(ammo_string));
+  }
+
+  return ammo_string;
+}
+
+// A rigged vehicle is targeting another.
+bool hit_rigger_vs_veh() {
+  return TRUE;
+}
+
+// A character is directly attacking a target, either with a manned weapon or a handheld one.
+void hit_char_vs_veh(struct char_data *attacker, struct veh_data *vict_veh, bool multi_weapon_modifier) {
+  struct obj_data *weap_ammo = NULL;
+
+  struct char_data *vict_controller = vict_veh->rigger;
+  if (!vict_controller) {
+    for (vict_controller = vict_veh->people; vict_controller; vict_controller = vict_controller->next_in_veh) {
+      if (AFF_FLAGGED(vict_controller, AFF_PILOT) || AFF_FLAGGED(vict_controller, AFF_RIG))
+        break;
+    }
+  }
+
+  char rbuf[MAX_STRING_LENGTH];
+  memset(rbuf, 0, sizeof(rbuf));
+
+  if (vict_veh->damage >= VEH_DAM_THRESHOLD_DESTROYED) {
+    send_to_char(attacker, "With your opponent destroyed, you relax.\r\n");
+    stop_fighting(attacker);
+    return;
+  }
+
+  // We will default to their wielded weapon, if any.
+  struct obj_data *weapon = GET_EQ(attacker, WEAR_WIELD);
+
+  // Check for a manned weapon.
+  if (attacker->in_veh && AFF_FLAGGED(attacker, AFF_MANNING)) {
+    struct obj_data *mount = get_mount_manned_by_ch(attacker);
+    if (mount) {
+      // Override their wielded weapon.
+      weapon = get_mount_weapon(mount);
+      if (!weapon) {
+        // uhhhhhhhhhhhhhhhhhhhh. manning a valid turret with no weapon and attacking a vehicle... idk how we got here.
+        mudlog("SYSERR: Manning a mount with no weapon in vcombat!", attacker, LOG_SYSLOG, TRUE);
+        send_to_char(attacker, "Your mount has malfunctioned! It's missing a weapon and can't fire.\r\n");
+        return;
+      }
+      weap_ammo = get_mount_ammo(mount);
+    }
+  }
+
+  // Establish our combat data structures.
+  struct combat_data attacker_data(attacker, weapon);
+  struct combat_data *att = &attacker_data;
+
+  // Precondition: If you're wielding a non-weapon, back out.
+  if (!_precondition_non_weapon(att))
+    return;
+
+  // Precondition: If you're asleep or paralyzed, you don't get to fight.
+  if (!AWAKE(att->ch) || GET_QUI(att->ch) <= 0) {
+    if (AWAKE(att->ch)) {
+      send_to_char("You can't react-- you're paralyzed!\r\n", att->ch);
+    }
+    return;
+  }
+
+  // Precondition: If you're out of ammo, you don't get to fight. Note the use of the deducting has_ammo here.
+  if (att->weapon && !has_ammo(att->ch, att->weapon))
+    return;
+
+  // There are no vision penalties (ex: invis) to calculate here-- vehicles don't currently go invis.
+
+  // Setup: If the character is firing multiple weapons, apply the dual-weapon penalty.
+  if (multi_weapon_modifier) {
+    att->ranged->modifiers[COMBAT_MOD_DUAL_WIELDING] = 2;
+    att->ranged->modifiers[COMBAT_MOD_SMARTLINK] = 0;
+  }
+
+  // Setup for ranged combat. We assume that if you're here, you have a loaded ranged weapon and are not a candidate for receiving a counterstrike.
+  if (att->weapon && att->ranged_combat_mode) {
+    // Failure case: You're using a non-mounted, non-gyro heavy weapon without the right stats or prone position.
+    if (_using_heavy_weapon_without_gyro(att) && !AFF_FLAGGED(att->ch, AFF_PRONE) && (GET_STR(att->ch) < 8 || GET_BOD(att->ch) < 8)) {
+      send_to_char(att->ch, "You can't lift the barrel high enough to fire! You'll have to go ^WPRONE^n to use %s.\r\n", decapitalize_a_an(GET_OBJ_NAME(att->weapon)));
+      return;
+    }
+
+    // Setup: Limit the burst of the weapon to the available ammo, and decrement ammo appropriately.
+    _handle_burst_count(att, weap_ammo);
+
+    // Setup: Modify recoil based on vehicular stats.
+    _handle_veh_modifiers(att);
+
+    // Setup: Sniper rifle ranged penalty modifiers. This always happens- vehicle combat is same-room by nature.
+    if (IS_OBJ_STAT(att->weapon, ITEM_EXTRA_SNIPER) && !IS_NPC(att->ch)) {
+      att->ranged->modifiers[COMBAT_MOD_DISTANCE] += SAME_ROOM_SNIPER_RIFLE_PENALTY;
+    }
+
+    // Setup: If you have a gyro mount, it negates recoil and movement penalties up to its rating.
+    _handle_gyro_recoil_comp(att);
+
+    // Calculate and display pre-success-test information.
+    _apply_modifiers_to_att(att, rbuf, sizeof(rbuf));
+    SEND_RBUF_TO_ROLLS_FOR_ATTACKER;
+
+    _add_skill_dice_and_calculate_successes(att, rbuf, sizeof(rbuf));
+    SEND_RBUF_TO_ROLLS_FOR_ATTACKER;
+
+    // Dodge test.
+    if (vict_controller) {
+      struct combat_data defender_data(vict_controller, NULL);
+      struct combat_data *controller = &defender_data;
+
+      // We use control pool instead of dodge dice, up to the maximum of your skill.
+      controller->ranged->tn = vict_veh->handling;
+      // todo asdf: add driving test penalties like speed etc here-- does speed make it easier to dodge or harder?
+      int control_pool_spent = MIN(GET_CONTROL(controller->ch), veh_skill(controller->ch, vict_veh, &controller->ranged->tn));
+      GET_CONTROL(controller->ch) -= control_pool_spent;
+      controller->ranged->dice = control_pool_spent;
+
+      // Set up the defender's modifiers.
+      controller->ranged->modifiers[COMBAT_MOD_OPPONENT_BURST_COUNT] = (int)(att->ranged->burst_count / 3);
+
+      // Set up the defender's TN. Apply their modifiers.
+      strlcpy(rbuf, "Vehicle's dodge roll modifiers: ", sizeof(rbuf));
+      controller->ranged->tn += modify_target_rbuf_raw(controller->ch, rbuf, sizeof(rbuf), controller->ranged->modifiers[COMBAT_MOD_VISIBILITY], FALSE);
+      for (int mod_index = 0; mod_index < NUM_COMBAT_MODIFIERS; mod_index++) {
+        buf_mod(rbuf, sizeof(rbuf), combat_modifiers[mod_index], controller->ranged->modifiers[mod_index]);
+        controller->ranged->tn += controller->ranged->modifiers[mod_index];
+      }
+      SEND_RBUF_TO_ROLLS_FOR_ATTACKER;
+
+      // Minimum TN is 2.
+      controller->ranged->tn = MAX(controller->ranged->tn, 2);
+
+      controller->ranged->successes = MAX(success_test(controller->ranged->dice, controller->ranged->tn), 0);
+      att->ranged->successes -= controller->ranged->successes;
+
+      snprintf(rbuf, sizeof(rbuf), "Dodge: Dice %d, TN %d, Successes ^c%d^n.  This means attacker's net successes = ^c%d^n.",
+               controller->ranged->dice,
+               controller->ranged->tn,
+               controller->ranged->successes,
+               att->ranged->successes);
+       SEND_RBUF_TO_ROLLS_FOR_ATTACKER;
+    }
+
+    // If the ranged attack failed, print the relevant message and terminate.
+    if (att->ranged->successes < 1) {
+      snprintf(rbuf, sizeof(rbuf), "%s failed to achieve any net successes, so we're bailing out.", GET_CHAR_NAME(att->ch));
+      SEND_RBUF_TO_ROLLS_FOR_ATTACKER;
+
+      char msg_buf[1000];
+      snprintf(msg_buf, sizeof(msg_buf), "Your %s misses %s!", projectile_description(att->weapon), GET_VEH_NAME(vict_veh));
+      act(msg_buf, FALSE, att->ch, 0, 0, TO_CHAR);
+      snprintf(msg_buf, sizeof(msg_buf), "$n's %s misses %s!", projectile_description(att->weapon), GET_VEH_NAME(vict_veh));
+      act(msg_buf, FALSE, att->ch, 0, 0, TO_ROOM);
+      if (att->ch->in_veh && vict_veh->in_veh != att->ch->in_veh) {
+        act(msg_buf, FALSE, att->ch, 0, 0, TO_VEH_ROOM);
+      }
+
+      //Handle suprise attack/alertness here -- ranged attack failed.
+      if (vict_controller && IS_NPC(vict_controller)) {
+        if (AFF_FLAGGED(vict_controller, AFF_SURPRISE))
+          AFF_FLAGS(vict_controller).RemoveBit(AFF_SURPRISE);
+
+        GET_MOBALERT(vict_controller) = MALERT_ALARM;
+        GET_MOBALERTTIME(vict_controller) = 30;
+      }
+      return;
+    }
+
+    // Calculate the power of the attack.
+    att->ranged->power = GET_WEAPON_POWER(att->weapon) + att->ranged->burst_count;
+    att->ranged->unaugmented_power = GET_WEAPON_POWER(att->weapon);
+    att->ranged->damage_level = GET_WEAPON_DAMAGE_CODE(att->weapon) + (int)(att->ranged->burst_count / 3);
+    att->ranged->unaugmented_damage_level = GET_WEAPON_DAMAGE_CODE(att->weapon);
+
+    // Calculate effects of armor on the power of the attack.
+    if (att->ranged->magazine) {
+      switch (GET_MAGAZINE_AMMO_TYPE(att->ranged->magazine)) {
+        case AMMO_EX:
+          att->ranged->power += 2;
+          break;
+        case AMMO_EXPLOSIVE:
+          att->ranged->power++;
+          break;
+        case AMMO_FLECHETTE:
+        case AMMO_HARMLESS:
+        case AMMO_GEL:
+          att->ranged->power = 0;
+          break;
+      }
+
+      if (GET_MAGAZINE_AMMO_TYPE(att->ranged->magazine) != AMMO_AV) {
+        // SR3 p149: Attacks against vehicles are at half power and -1 damage level, unless AV ammo is used.
+        att->ranged->power /= 2;
+        att->ranged->damage_level--;
+
+        // SR3 p149: Subtract vehicle's armor from power.
+        att->ranged->power -= vict_veh->armor;
+        att->ranged->unaugmented_power -= vict_veh->armor;
+      } else {
+        // SR3 p149: Reduce power by half the vehicle's armor, round down.
+        att->ranged->power -= (int) (vict_veh->armor / 2);
+        att->ranged->unaugmented_power -= (int) (vict_veh->armor / 2);
+      }
+
+      // If the attack's damage level is 0, or if the power is not greater than the armor, bail out.
+      if (att->ranged->unaugmented_damage_level <= LIGHT || att->ranged->unaugmented_power <= 0) {
+        // asdf TODO: Message about shot ricocheting off vehicle.
+      }
+    }
+
+    // Increment character's shots_fired. This is used for internal tracking of eligibility for a skill quest.
+    if (GET_SKILL(att->ch, att->ranged->skill) >= 8 && SHOTS_FIRED(att->ch) < 10000)
+      SHOTS_FIRED(att->ch)++;
+
+    // The power of an attack can't be below 2 from ammo changes.
+    att->ranged->power = MAX(att->ranged->power, 2);
+  }
+  // Setup for melee combat. You're probably getting hit by a car at this point, but at least you can swing back at them?
+  else {
+    // asdf TODO
+  }
+
+  // Make a damage resistance test.
+  int damage_resist_dice = vict_veh->body;
+  int damage_resist_tn, attacker_successes, damage_level, staged_damage;
+
+  if (vict_controller && GET_CONTROL(vict_controller) > 0) {
+    int control_pool_spent = MIN(GET_CONTROL(vict_controller), veh_skill(vict_controller, vict_veh, &damage_resist_tn));
+    GET_CONTROL(vict_controller) -= control_pool_spent;
+    damage_resist_dice += control_pool_spent;
+  }
+
+  if (att->ranged_combat_mode) {
+    damage_resist_tn = att->ranged->power;
+    attacker_successes = att->ranged->successes;
+    damage_level = att->ranged->damage_level;
+  } else {
+    damage_resist_tn = att->melee->power;
+    attacker_successes = att->melee->successes;
+    damage_level = att->melee->damage_level;
+  }
+
+  int damage_resist_successes = success_test(damage_resist_dice, damage_resist_tn);
+  if (damage_resist_successes > 0) {
+    staged_damage = stage(attacker_successes - damage_resist_successes, damage_level);
+  } else {
+    staged_damage = damage_level;
+  }
+
+  // If a vehicle has a Body Rating of 0 (as in the case of very small drones), any success rolled by the attacker automatically destroys the vehicle.
+  if (staged_damage >= LIGHT && vict_veh->body <= 0) {
+    staged_damage = DEADLY;
+  }
+
+  if (att->ranged_combat_mode) {
+    char msg_buf[1000], to_room_buf[1000];
+    switch (staged_damage) {
+      case LIGHT:
+        snprintf(msg_buf, sizeof(msg_buf), "Your %s leaves scratches and dents on %s.", projectile_description(att->weapon), GET_VEH_NAME(vict_veh));
+        snprintf(to_room_buf, sizeof(to_room_buf), "$n's %s digs scratches and dents into %s.", projectile_description(att->weapon), GET_VEH_NAME(vict_veh));
+        break;
+      case MODERATE:
+        snprintf(msg_buf, sizeof(msg_buf), "Your %s punches holes in %s.", projectile_description(att->weapon), GET_VEH_NAME(vict_veh));
+        snprintf(to_room_buf, sizeof(to_room_buf), "$n's %s punches holes in %s.", projectile_description(att->weapon), GET_VEH_NAME(vict_veh));
+        break;
+      case SERIOUS:
+        snprintf(msg_buf, sizeof(msg_buf), "Your %s tears into %s!", projectile_description(att->weapon), GET_VEH_NAME(vict_veh));
+        snprintf(to_room_buf, sizeof(to_room_buf), "$n's %s tears into %s!", projectile_description(att->weapon), GET_VEH_NAME(vict_veh));
+        break;
+      case DEADLY:
+        snprintf(msg_buf, sizeof(msg_buf), "Your %s blasts gaping holes through %s!", projectile_description(att->weapon), GET_VEH_NAME(vict_veh));
+        snprintf(to_room_buf, sizeof(to_room_buf), "$n's %s blasts gaping holes through %s!", projectile_description(att->weapon), GET_VEH_NAME(vict_veh));
+        break;
+    }
+
+    act(msg_buf, FALSE, att->ch, 0, 0, TO_CHAR);
+    act(to_room_buf, FALSE, att->ch, 0, 0, TO_ROOM);
+    if (att->ch->in_veh && vict_veh->in_veh != att->ch->in_veh) {
+      act(to_room_buf, FALSE, att->ch, 0, 0, TO_VEH_ROOM);
+    }
+  }
+
+  if (vict_veh->owner && !IS_NPC(att->ch))
+  {
+    char *cname = get_player_name(vict_veh->owner);
+    snprintf(buf, sizeof(buf), "%s attacked vehicle (%s) owned by player %s (%ld).", GET_CHAR_NAME(att->ch), GET_VEH_NAME(vict_veh), cname, vict_veh->owner);
+    delete [] cname;
+    mudlog(buf, att->ch, LOG_WRECKLOG, TRUE);
+  }
+
+  vict_veh->damage += convert_damage(staged_damage);
+  chkdmg(vict_veh);
+}
+
+bool hit_with_multiweapon_toggle(struct char_data *attacker,
+                                 struct char_data *victim,
+                                 struct obj_data *weap,
+                                 struct obj_data *vict_weap,
+                                 struct obj_data *weap_ammo,
+                                 bool multi_weapon_modifier)
 {
   int net_successes, successes_for_use_in_monowhip_test_check;
   assert(attacker != NULL);
@@ -70,7 +544,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
   char rbuf[MAX_STRING_LENGTH];
   memset(rbuf, 0, sizeof(rbuf));
 
-  snprintf(rbuf, sizeof(rbuf), ">> ^cCombat eval: %s vs %s.", GET_CHAR_NAME(attacker), GET_CHAR_NAME(victim));
+  snprintf(rbuf, sizeof(rbuf), ">> ^cCombat eval: %s vs %s.", GET_CHAR_NAME(att->ch), GET_CHAR_NAME(def->ch));
   SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
 
   // Short-circuit: If you're wielding an activated Dominator, you don't care about all these pesky rules.
@@ -114,10 +588,8 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
   }
 
   // Precondition: If you're wielding a non-weapon, back out.
-  if (att->weapon && (GET_OBJ_TYPE(att->weapon) != ITEM_WEAPON)) {
-    send_to_char(att->ch, "You struggle to figure out how to attack while using %s as a weapon!\r\n", decapitalize_a_an(GET_OBJ_NAME(att->weapon)));
+  if (!_precondition_non_weapon(att))
     return FALSE;
-  }
 
   // Precondition: If you're asleep or paralyzed, you don't get to fight, and also your opponent closes immediately.
   if (!AWAKE(att->ch) || GET_QUI(att->ch) <= 0) {
@@ -180,92 +652,38 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
   // Setup: If the character is rigging a vehicle or is in a vehicle, set veh to that vehicle.
   RIG_VEH(att->ch, att->veh);
 
+  // Precondition check: Vehicles only do ranged combat.
+  if (att->veh) {
+    if (!att->weapon) {
+      mudlog("SYSERR: Somehow, we ended up in a vehicle attacking someone with no weapon!", att->ch, LOG_SYSLOG, TRUE);
+      send_to_char("You'll have to leave your vehicle for that.\r\n", att->ch);
+      return FALSE;
+    }
+    if (!att->ranged_combat_mode) {
+      mudlog("SYSERR: Somehow, we ended up doing melee combat with the attacker controlling a vehicle!", att->ch, LOG_SYSLOG, TRUE);
+      send_to_char("You'll have to leave your vehicle for that.\r\n", att->ch);
+      return FALSE;
+    }
+  }
+
   // Setup: If the character is firing multiple rigged weapons, apply the dual-weapon penalty.
   if (multi_weapon_modifier) {
     att->ranged->modifiers[COMBAT_MOD_DUAL_WIELDING] = 2;
     att->ranged->modifiers[COMBAT_MOD_SMARTLINK] = 0;
   }
 
-  if (att->veh && !att->weapon) {
-    mudlog("SYSERR: Somehow, we ended up in a vehicle attacking someone with no weapon!", att->ch, LOG_SYSLOG, TRUE);
-    send_to_char("You'll have to leave your vehicle for that.\r\n", att->ch);
-    return FALSE;
-  }
-
   // Setup for ranged combat. We assume that if you're here, you have a loaded ranged weapon and are not a candidate for receiving a counterstrike.
   if (att->weapon && att->ranged_combat_mode) {
-    // Precondition: If you're using a heavy weapon, you must be strong enough to wield it, or else be using a gyro. CC p99
-    if (!IS_NPC(att->ch)
-        && !att->ranged->using_mounted_gun
-        && !att->ranged->gyro
-        && !att->cyber->cyberarm_gyromount
-        && (att->ranged->skill >= SKILL_MACHINE_GUNS && att->ranged->skill <= SKILL_ASSAULT_CANNON)
-        && (GET_STR(att->ch) < 8 || GET_BOD(att->ch) < 8)
-        && !(AFF_FLAGGED(att->ch, AFF_PRONE)))
-    {
+    if (_using_heavy_weapon_without_gyro(att) && !AFF_FLAGGED(att->ch, AFF_PRONE) && (GET_STR(att->ch) < 8 || GET_BOD(att->ch) < 8)) {
       send_to_char(att->ch, "You can't lift the barrel high enough to fire! You'll have to go ^WPRONE^n to use %s.\r\n", decapitalize_a_an(GET_OBJ_NAME(att->weapon)));
       return FALSE;
     }
 
     // Setup: Limit the burst of the weapon to the available ammo, and decrement ammo appropriately.
-    // Emplaced mobs act as if they have unlimited ammo (technically draining 1 per shot) and no recoil.
-    if (att->ranged->burst_count && !MOB_FLAGGED(att->ch, MOB_EMPLACED)) {
-      if (weap_ammo || att->ranged->magazine) {
-        // When we called has_ammo() earlier, we decremented their ammo by one. Give it back to true up the equation.
-        int ammo_available = weap_ammo ? ++GET_AMMOBOX_QUANTITY(weap_ammo) : ++GET_MAGAZINE_AMMO_COUNT(att->ranged->magazine);
-
-        // Cap their burst to their magazine's ammo.
-        att->ranged->burst_count = MIN(att->ranged->burst_count, ammo_available);
-
-        // Subtract the full ammo count.
-        if (weap_ammo) {
-          update_ammobox_ammo_quantity(weap_ammo, -(att->ranged->burst_count));
-        } else {
-          GET_MAGAZINE_AMMO_COUNT(att->ranged->magazine) -= (att->ranged->burst_count);
-        }
-      }
-
-      // SR3 p151: Mounted weapons get halved recoil.
-      int recoil = att->ranged->burst_count;
-      if (att->ranged->using_mounted_gun)
-        recoil /= 2;
-      att->ranged->modifiers[COMBAT_MOD_RECOIL] += MAX(0, recoil - att->ranged->recoil_comp);
-
-      switch (att->ranged->skill) {
-        case SKILL_SHOTGUNS:
-        case SKILL_MACHINE_GUNS:
-        case SKILL_ASSAULT_CANNON:
-          // Uncompensated recoil from high-recoil weapons is doubled.
-          att->ranged->modifiers[COMBAT_MOD_RECOIL] *= 2;
-      }
-    }
+    _handle_burst_count(att, weap_ammo);
 
     // Setup: Modify recoil based on vehicular stats.
-    if (att->veh) {
-      if (!att->ranged->using_mounted_gun) {
-        // Core p152: Unmounted weapons get +2 TN.
-        att->ranged->modifiers[COMBAT_MOD_MOVEMENT] += 2;
-      } else {
-        // TODO: Sensor stuff. It's a bitch to write due to all the various things that go into it, so it'll be done later.
-        // Sensor tests per Core p152 and p135.
-        // TN modifiers for sensor test per Core p154.
-        // Success? You get half the sensor rating, rounded down, added to your dice.
-      }
-
-      // We assume all targets are standing still.
-      // Per Core p153, movement gunnery modifier is +1 per 30m/CT.
-      att->ranged->modifiers[COMBAT_MOD_MOVEMENT] += (int) (get_speed(att->veh) / 30);
-
-      // Penalty for damaged veh.
-      if ((att->veh)->damage > 0) {
-        if ((att->veh)->damage <= 2)
-          att->ranged->modifiers[COMBAT_MOD_VEHICLE_DAMAGE] += 1;
-        else if ((att->veh)->damage <= 5)
-          att->ranged->modifiers[COMBAT_MOD_VEHICLE_DAMAGE] += 2;
-        else
-          att->ranged->modifiers[COMBAT_MOD_VEHICLE_DAMAGE] += 3;
-      }
-    }
+    _handle_veh_modifiers(att);
 
     // Setup: Compute modifiers to the TN based on the def->ch's current state.
     if (!AWAKE(def->ch) || IS_JACKED_IN(def->ch))
@@ -322,6 +740,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       if (att->ch->in_room == def->ch->in_room || att->ranged->using_mounted_gun) {
         // NPCs don't take the penalty because their weapon selection is at the mercy of the builders.
         if (!IS_NPC(att->ch)) {
+          send_to_char(att->ch, "You struggle to aim such a lengthy weapon in close quarters.\r\n");
           att->ranged->modifiers[COMBAT_MOD_DISTANCE] += SAME_ROOM_SNIPER_RIFLE_PENALTY;
         }
       }
@@ -338,61 +757,13 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       att->ranged->modifiers[COMBAT_MOD_IN_MELEE_COMBAT] += 2; // technically supposed to be +2 per attacker, but ehhhh.
 
     // Setup: If you have a gyro mount, it negates recoil and movement penalties up to its rating.
-    if (!att->ranged->using_mounted_gun) {
-      int maximum_recoil_comp_from_gyros = att->ranged->modifiers[COMBAT_MOD_MOVEMENT] + att->ranged->modifiers[COMBAT_MOD_RECOIL];
-      if (att->ranged->gyro) {
-        att->ranged->modifiers[COMBAT_MOD_GYRO] -= MIN(maximum_recoil_comp_from_gyros, GET_OBJ_VAL(att->ranged->gyro, 0));
-      } else if (att->cyber->cyberarm_gyromount) {
-        switch (GET_WEAPON_ATTACK_TYPE(att->weapon)) {
-          case WEAP_MMG:
-          case WEAP_HMG:
-          case WEAP_CANNON:
-            break;
-          default:
-            att->ranged->modifiers[COMBAT_MOD_GYRO] -= MIN(maximum_recoil_comp_from_gyros, 3);
-            break;
-        }
-      }
-    }
+    _handle_gyro_recoil_comp(att);
 
     // Calculate and display pre-success-test information.
-    snprintf(rbuf, sizeof(rbuf), "%s's burst/compensation info (excluding gyros) is ^c%d^n/^c%d^n. Additional modifiers: ",
-             GET_CHAR_NAME( att->ch ),
-             att->ranged->burst_count,
-             MOB_FLAGGED(att->ch, MOB_EMPLACED) ? 10 : att->ranged->recoil_comp);
-
-    att->ranged->tn += modify_target_rbuf_raw(att->ch, rbuf, sizeof(rbuf), att->ranged->modifiers[COMBAT_MOD_VISIBILITY], FALSE);
-    for (int mod_index = 0; mod_index < NUM_COMBAT_MODIFIERS; mod_index++) {
-      // Ranged-specific modifiers.
-      buf_mod(rbuf, sizeof(rbuf), combat_modifiers[mod_index], att->ranged->modifiers[mod_index]);
-      att->ranged->tn += att->ranged->modifiers[mod_index];
-    }
-
-    // Calculate the attacker's total skill (this modifies TN)
-    att->ranged->dice = get_skill(att->ch, att->ranged->skill, att->ranged->tn);
-
-    // Minimum TN is 2.
-    att->ranged->tn = MAX(att->ranged->tn, 2);
-
-    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "\r\nAfter get_skill(), attacker's ranged TN is ^c%d^n.", att->ranged->tn);
+    _apply_modifiers_to_att(att, rbuf, sizeof(rbuf));
     SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
 
-    int bonus_if_not_too_tall = MIN(GET_SKILL(att->ch, att->ranged->skill), GET_OFFENSE(att->ch));
-#ifdef USE_SLOUCH_RULES
-    // Height penalty.
-    if (!att->too_tall) {
-      snprintf(rbuf, sizeof(rbuf), "Not too tall, so will roll %d + %d dice... ", att->ranged->dice, bonus_if_not_too_tall);
-      att->ranged->dice += bonus_if_not_too_tall;
-    } else {
-      snprintf(rbuf, sizeof(rbuf), "Too tall, so will roll just %d dice... ", att->ranged->dice);
-    }
-#else
-    att->ranged->dice += bonus_if_not_too_tall;
-    snprintf(rbuf, sizeof(rbuf), "Rolling %d + %d dice... ", att->ranged->dice, bonus_if_not_too_tall);
-#endif
-
-    att->ranged->successes = success_test(att->ranged->dice, att->ranged->tn);
-    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "%d successes.", att->ranged->successes);
+    _add_skill_dice_and_calculate_successes(att, rbuf, sizeof(rbuf));
     SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
 
     // Dodge test.
@@ -443,7 +814,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
 
     // If the ranged attack failed, print the relevant message and terminate.
     if (att->ranged->successes < 1) {
-      snprintf(rbuf, sizeof(rbuf), "%s failed to achieve any net successes, so we're bailing out.", GET_CHAR_NAME(attacker));
+      snprintf(rbuf, sizeof(rbuf), "%s failed to achieve any net successes, so we're bailing out.", GET_CHAR_NAME(att->ch));
       SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
 
       combat_message(att->ch, def->ch, att->weapon, -1, att->ranged->burst_count);
@@ -919,8 +1290,35 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     combat_message(att->ch, def->ch, att->weapon, MAX(0, damage_total), att->ranged->burst_count);
     defender_died = damage_without_message(att->ch, def->ch, damage_total, att->ranged->dam_type, att->ranged->is_physical);
 
-    if (!defender_died && damage_total > 0)
+    // Attempt to knock down the defender, provided they're alive.
+    if (!defender_died && damage_total > 0) {
       perform_knockdown_test(def->ch, (GET_WEAPON_POWER(att->weapon) + att->ranged->burst_count) / (att->ranged->is_gel ? 1 : 2));
+    }
+
+    // If you're firing a heavy weapon without a gyro, you need to test against the damage of the recoil.
+    if (_using_heavy_weapon_without_gyro(att) && !AFF_FLAGGED(att->ch, AFF_PRONE)) {
+      int weapon_power = GET_WEAPON_POWER(att->weapon) + att->ranged->burst_count;
+      int recoil_successes = success_test(GET_BOD(att->ch) + GET_BODY(att->ch), weapon_power / 2);
+      int staged_dam = stage(-recoil_successes, LIGHT);
+      snprintf(rbuf, sizeof(rbuf), "Heavy Recoil: %d successes, L->%s wound.", recoil_successes, staged_dam == LIGHT ? "L" : "no");
+      // SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
+      act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );
+
+      // Handle suprise attack/alertness here -- attacker can die here, we remove the surprise flag anyhow
+      // prior to handling the damage and we don't alter alert state at all because if defender is a quest target
+      // they will be extracted. If the attacker actually dies and it's a normal mob, they won't be surprised anymore
+      // and alertness will trickle down on its own with update cycles.
+      if (!defender_died && IS_NPC(def->ch) && AFF_FLAGGED(def->ch, AFF_SURPRISE))
+        AFF_FLAGS(def->ch).RemoveBit(AFF_SURPRISE);
+
+      // If the attacker dies from recoil, bail out.
+      if (damage(att->ch, att->ch, convert_damage(staged_dam), TYPE_HIT, FALSE))
+        return TRUE;
+
+      // Next, knockdown test vs half the weapon's power, on 0 successes you're knocked down.
+      // No need to subtract things like gyro from this recoil number-- prereq for getting here is that there's no gyro or mount.
+      perform_knockdown_test(att->ch, weapon_power / 2, att->ranged->modifiers[COMBAT_MOD_RECOIL]);
+    }
   } else {
     // Process flame aura right before damage.
     if (handle_flame_aura(att, def)) {
@@ -987,38 +1385,6 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       def->ch = NULL;
   } else if (!IS_NPC(att->ch) && IS_NPC(def->ch)) {
     GET_LASTHIT(def->ch) = GET_IDNUM(att->ch);
-  }
-
-  // If you're firing a heavy weapon without a gyro, you need to test against the damage of the recoil.
-  if (!IS_NPC(att->ch)
-      && att->ranged_combat_mode
-      && !att->ranged->using_mounted_gun
-      && !att->ranged->gyro
-      && !att->cyber->cyberarm_gyromount
-      && (att->ranged->skill >= SKILL_MACHINE_GUNS && att->ranged->skill <= SKILL_ASSAULT_CANNON)
-      && !AFF_FLAGGED(att->ch, AFF_PRONE))
-  {
-    int weapon_power = GET_WEAPON_POWER(att->weapon) + att->ranged->burst_count;
-    int recoil_successes = success_test(GET_BOD(att->ch) + GET_BODY(att->ch), weapon_power / 2);
-    int staged_dam = stage(-recoil_successes, LIGHT);
-    snprintf(rbuf, sizeof(rbuf), "Heavy Recoil: %d successes, L->%s wound.", recoil_successes, staged_dam == LIGHT ? "L" : "no");
-    // SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
-    act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );
-
-    //Handle suprise attack/alertness here -- attacker can die here, we remove the surprise flag anyhow
-    //prior to handling the damage and we don't alter alert state at all because if defender is a quest target
-    //they will be extracted. If the attacker actually dies and it's a normal mob, they won't be surprised anymore
-    //and alertness will trickle down on its own with update cycles.
-    if (!defender_died && IS_NPC(def->ch) && AFF_FLAGGED(def->ch, AFF_SURPRISE))
-      AFF_FLAGS(def->ch).RemoveBit(AFF_SURPRISE);
-
-    // If the attacker dies from recoil, bail out.
-    if (damage(att->ch, att->ch, convert_damage(staged_dam), TYPE_HIT, FALSE))
-      return TRUE;
-
-    // Next, knockdown test vs half the weapon's power, on 0 successes you're knocked down.
-    // No need to subtract things like gyro from this recoil number-- prereq for getting here is that there's no gyro or mount.
-    perform_knockdown_test(att->ch, weapon_power / 2, att->ranged->modifiers[COMBAT_MOD_RECOIL]);
   }
 
   // Set the violence background count.

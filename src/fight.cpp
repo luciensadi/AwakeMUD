@@ -103,6 +103,7 @@ extern bool item_should_be_treated_as_ranged_weapon(struct obj_data *obj);
 extern struct obj_data *generate_ammobox_from_pockets(struct char_data *ch, int weapontype, int ammotype, int quantity);
 extern void send_mob_aggression_warnings(struct char_data *pc, struct char_data *mob);
 extern bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *victim, struct obj_data *weap, struct obj_data *vict_weap, struct obj_data *weap_ammo, bool multi_weapon_modifier);
+extern void hit_char_vs_veh(struct char_data *attacker, struct veh_data *vict_veh, bool multi_weapon_modifier=FALSE);
 
 extern void mobact_change_firemode(struct char_data *ch);
 
@@ -5345,9 +5346,12 @@ void perform_violence(void)
     else if (FIGHTING_VEH(ch)) {
       if (ch->in_room != FIGHTING_VEH(ch)->in_room) {
         stop_fighting(ch);
-      } else
-        if (vcombat(ch, FIGHTING_VEH(ch)))
-          continue;
+      } else {
+        hit_char_vs_veh(ch, FIGHTING_VEH(ch));
+        // if (vcombat(ch, FIGHTING_VEH(ch)))
+          // continue;
+      }
+
     } else if (FIGHTING(ch)) {
       bool target_died = hit(ch,
                              FIGHTING(ch),
