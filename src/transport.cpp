@@ -2231,7 +2231,7 @@ void process_hellhound_bus(void)
   if (where >= 56)
     where = 0;
 
-  ind = (where >= 30 ? 1 : 0);
+  ind = (where >= 28 ? 1 : 0);
 
   bus = real_room(hellhound[ind].transport);
   stop = real_room(hellhound[ind].room);
