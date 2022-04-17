@@ -2126,7 +2126,7 @@ void docwagon(struct char_data *ch)
 }
 
 
-void check_adrenaline(struct char_data *ch, int mode)
+bool check_adrenaline(struct char_data *ch, int mode)
 {
   int i, dam;
   struct obj_data *pump = NULL;
@@ -2134,7 +2134,7 @@ void check_adrenaline(struct char_data *ch, int mode)
   for (pump = ch->bioware; pump && GET_OBJ_VAL(pump, 0) != BIO_ADRENALPUMP; pump = pump->next_content)
     ;
   if (!pump)
-    return;
+    return FALSE;
   if (GET_OBJ_VAL(pump, 5) == 0 && mode == 1)
   {
     GET_OBJ_VAL(pump, 5) = dice(GET_OBJ_VAL(pump, 1), 6);
@@ -2163,11 +2163,12 @@ void check_adrenaline(struct char_data *ch, int mode)
       GET_OBJ_VAL(pump, 6) = 0;
       if (damage(ch, ch, dam, TYPE_BIOWARE, FALSE)) {
         // Died-- RIP
-        return;
+        return TRUE;
       }
     }
   } else if (GET_OBJ_VAL(pump, 5) < 0 && !mode)
     GET_OBJ_VAL(pump, 5)++;
+  return FALSE;
 }
 
 #define WRITE_DEATH_MESSAGE(format_string) \
@@ -2852,7 +2853,8 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
     weapon_scatter(ch, victim, GET_EQ(ch, WEAR_WIELD));
 
   if (victim->bioware && GET_POS(victim) > POS_STUNNED && dam > 0 && ch != victim)
-    check_adrenaline(victim, 1);
+    if (check_adrenaline(victim, 1))
+      return TRUE;
 
   if (ch != victim && dam > 0 && attacktype >= TYPE_HIT)
     damage_equip(ch, victim, dam, attacktype);
@@ -4836,11 +4838,13 @@ void roll_individual_initiative(struct char_data *ch)
 void decide_combat_pool(void)
 {
   PERF_PROF_SCOPE(pr_, __func__);
-  struct char_data *ch;
+  struct char_data *ch, *next_ch;
 
-  for (ch = combat_list; ch; ch = ch->next_fighting) {
+  for (ch = combat_list; ch; ch = next_ch) {
+    next_ch = ch->next_fighting;
     if (ch->bioware)
-      check_adrenaline(ch, 0);
+      if (check_adrenaline(ch, 0))
+        continue;
 
     if (IS_NPC(ch) && !IS_PROJECT(ch) && FIGHTING(ch)) {
       if (GET_INIT_ROLL(ch) == GET_INIT_ROLL(FIGHTING(ch)))

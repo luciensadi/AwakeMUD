@@ -47,7 +47,7 @@ extern int modify_target(struct char_data *ch);
 extern void end_quest(struct char_data *ch);
 extern char *cleanup(char *dest, const char *src);
 extern void damage_equip(struct char_data *ch, struct char_data *victim, int power, int type);
-extern void check_adrenaline(struct char_data *, int);
+extern bool check_adrenaline(struct char_data *, int);
 extern bool House_can_enter_by_idnum(long idnum, vnum_t house);
 extern int get_paydata_market_maximum(int host_color);
 extern int get_paydata_market_minimum(int host_color);
@@ -1471,7 +1471,8 @@ void misc_update(void)
 
     if (!IS_NPC(ch)) {
       if (!CH_IN_COMBAT(ch))
-        check_adrenaline(ch, 0);
+        if (check_adrenaline(ch, 0))
+          continue;
       if (GET_DRUG_DOSE(ch) && --GET_DRUG_DURATION(ch) < 0 && !GET_DRUG_STAGE(ch)) {
         bool physical = TRUE;
         if (GET_DRUG_AFFECT(ch) == DRUG_HYPER || GET_DRUG_AFFECT(ch) == DRUG_BURN)
@@ -1488,8 +1489,8 @@ void misc_update(void)
         switch (GET_DRUG_AFFECT(ch)) {
           case DRUG_ACTH:
             snprintf(buf, sizeof(buf), "You feel a brief moment of vertigo.\r\n");
-            extern void check_adrenaline(struct char_data *ch, int mode);
-            check_adrenaline(ch, 1);
+            if (check_adrenaline(ch, 1))
+              continue;
             GET_DRUG_AFFECT(ch) = GET_DRUG_DOSE(ch) = GET_DRUG_DURATION(ch) = 0;
             break;
           case DRUG_HYPER:
