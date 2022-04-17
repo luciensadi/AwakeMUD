@@ -1458,7 +1458,7 @@ ACMD(do_get)
         } else {
           if (!IS_NPC(ch)) {
             skill = get_br_skill_for_veh(veh);
-            
+
             switch (GET_VEHICLE_MOD_TYPE(cont)) {
             case TYPE_ENGINECUST:
               target = 6;
@@ -1836,14 +1836,17 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
 
   if (ch->in_veh)
   {
-    if (ch->in_veh->usedload + GET_OBJ_WEIGHT(obj) > ch->in_veh->load) {
-      send_to_char("There is too much in the vehicle already!\r\n", ch);
-      return 0;
+    if (mode != SCMD_DONATE && mode != SCMD_JUNK) {
+      if (ch->in_veh->usedload + GET_OBJ_WEIGHT(obj) > ch->in_veh->load) {
+        send_to_char("There is too much in the vehicle already!\r\n", ch);
+        return 0;
+      }
+      if (ch->vfront && ch->in_veh->seating[0] && ch->in_veh->usedload + GET_OBJ_WEIGHT(obj) > ch->in_veh->load / 10) {
+        send_to_char("There is too much in the front of the vehicle!\r\n", ch);
+        return 0;
+      }
     }
-    if (ch->vfront && ch->in_veh->seating[0] && ch->in_veh->usedload + GET_OBJ_WEIGHT(obj) > ch->in_veh->load / 10) {
-      send_to_char("There is too much in the front of the vehicle!\r\n", ch);
-      return 0;
-    }
+
     snprintf(buf, sizeof(buf), "%s %ss %s.%s\r\n", GET_NAME(ch), sname, GET_OBJ_NAME(obj), VANISH(mode));
     send_to_veh(buf, ch->in_veh, ch, FALSE);
   } else
