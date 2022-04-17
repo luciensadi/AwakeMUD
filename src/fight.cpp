@@ -5533,9 +5533,10 @@ void chkdmg(struct veh_data * veh)
 
     if (veh->rigger) {
       send_to_char("Your mind is blasted with pain as your vehicle is wrecked.\r\n", veh->rigger);
-      damage(veh->rigger, veh->rigger, convert_damage(stage(-success_test(GET_WIL(veh->rigger), 6), SERIOUS)), TYPE_CRASH, MENTAL);
-      veh->rigger->char_specials.rigging = NULL;
-      PLR_FLAGS(veh->rigger).RemoveBit(PLR_REMOTE);
+      if (!damage(veh->rigger, veh->rigger, convert_damage(stage(-success_test(GET_WIL(veh->rigger), 6), SERIOUS)), TYPE_CRASH, MENTAL)) {
+        veh->rigger->char_specials.rigging = NULL;
+        PLR_FLAGS(veh->rigger).RemoveBit(PLR_REMOTE);
+      }
       veh->rigger = NULL;
     }
 
@@ -5748,11 +5749,6 @@ bool vcombat(struct char_data * ch, struct veh_data * veh)
 
   int attack_success = 0, attack_resist=0, skill_total = 1;
   int recoil=0, burst=0, recoil_comp=0, newskill, modtarget = 0;
-
-  if (IS_AFFECTED(ch, AFF_PETRIFY)) {
-    stop_fighting(ch);
-    return FALSE;
-  }
 
   if (veh->damage >= VEH_DAM_THRESHOLD_DESTROYED) {
     stop_fighting(ch);
