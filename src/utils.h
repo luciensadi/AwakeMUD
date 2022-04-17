@@ -841,6 +841,7 @@ bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struc
 /* Specific value invocations and macro defines for item types *****************************/
 
 // ITEM_LIGHT convenience defines
+#define GET_LIGHT_IS_ON(light)                   (GET_OBJ_VAL((light), 2))
 
 // ITEM_WORKSHOP convenience defines
 #define GET_WORKSHOP_TYPE(workshop)              (GET_OBJ_VAL((workshop), 0))

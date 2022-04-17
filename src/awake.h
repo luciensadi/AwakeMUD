@@ -2664,6 +2664,11 @@ enum {
 // Don't actually change this value unless you're rewriting regeneration etc.
 #define TEMP_QUI_LOSS_DIVISOR                 4
 
+// Names for room->light[X] (also shadow, poltergeist, silence)
+#define ROOM_NUM_SPELLS_OF_TYPE               0
+#define ROOM_HIGHEST_SPELL_FORCE              1
+#define ROOM_LIGHT_HEADLIGHTS_AND_FLASHLIGHTS 2
+
 // This is to flag variables used eg in macros so that the compiler won't complain about unused variables
 // when they're actually used. Casting to void does nothing but the compiler will stop thinking it's
 // unused. This is the same way Q_UNUSED is used in Qt. -- Nodens

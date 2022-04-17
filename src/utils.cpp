@@ -214,17 +214,14 @@ int light_level(struct room_data *room)
   if (ROOM_FLAGGED(room, ROOM_STREETLIGHTS) && (time_info.hours <= 6 || time_info.hours >= 19)) {
     artificial_light_level = LIGHT_PARTLIGHT;
   } else {
-    // Flashlights. More flashlights, more light.
-    if (room->light[0]) {
-      if (room->light[0] <= 1)
-        artificial_light_level = LIGHT_MINLIGHT;
-      else
-        artificial_light_level = LIGHT_PARTLIGHT;
-    }
+    int num_light_sources = room->light[ROOM_LIGHT_HEADLIGHTS_AND_FLASHLIGHTS] + room->light[ROOM_HIGHEST_SPELL_FORCE];
 
-    // We treat the light spell like another flashlight. Its true purpose is adjusting TNs, which is done in vision_overhaul.cpp.
-    if (room->light[1])
-      artificial_light_level = MAX(LIGHT_MINLIGHT, artificial_light_level);
+    // Light sources. More sources, more light.
+    if (num_light_sources >= 2) {
+      artificial_light_level = LIGHT_PARTLIGHT;
+    } else if (num_light_sources) {
+      artificial_light_level = LIGHT_MINLIGHT;
+    }
   }
 
   int candidate_light_level = room->vision[0];

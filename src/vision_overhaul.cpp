@@ -211,32 +211,26 @@ int get_vision_penalty(struct char_data *ch, struct room_data *temp_room, char *
     NM_PENALTY("ShadowSpell[NM]", MIN(8, temp_room->shadow[1]));
   }
 
-  if (light_level(temp_room) != LIGHT_GLARE && temp_room->light[1]) {
-    if (temp_room->light[2]) {
-      if (tn_with_thermo > 0) {
-        int new_thermo = MAX(0, tn_with_thermo - temp_room->light[2]);
-        if (new_thermo != tn_with_thermo) {
-          TH_PENALTY("LightSpell[TH]", new_thermo - tn_with_thermo);
-        }
+  if (light_level(temp_room) != LIGHT_GLARE && temp_room->light[ROOM_HIGHEST_SPELL_FORCE]) {
+    if (tn_with_thermo > 0) {
+      int new_thermo = MAX(0, tn_with_thermo - temp_room->light[ROOM_HIGHEST_SPELL_FORCE]);
+      if (new_thermo != tn_with_thermo) {
+        TH_PENALTY("LightSpell[TH]", new_thermo - tn_with_thermo);
       }
+    }
 
-      if (tn_with_ll > 0) {
-        int new_ll = MAX(0, tn_with_ll - temp_room->light[2]);
-        if (new_ll != tn_with_ll) {
-          LL_PENALTY("LightSpell[LL]", new_ll - tn_with_ll);
-        }
+    if (tn_with_ll > 0) {
+      int new_ll = MAX(0, tn_with_ll - temp_room->light[ROOM_HIGHEST_SPELL_FORCE]);
+      if (new_ll != tn_with_ll) {
+        LL_PENALTY("LightSpell[LL]", new_ll - tn_with_ll);
       }
+    }
 
-      if (tn_with_none > 0) {
-        int new_normal = MAX(0, tn_with_none - temp_room->light[2]);
-        if (new_normal != tn_with_none) {
-          NM_PENALTY("LightSpell[NM]", new_normal - tn_with_none);
-        }
+    if (tn_with_none > 0) {
+      int new_normal = MAX(0, tn_with_none - temp_room->light[ROOM_HIGHEST_SPELL_FORCE]);
+      if (new_normal != tn_with_none) {
+        NM_PENALTY("LightSpell[NM]", new_normal - tn_with_none);
       }
-    } else {
-      // This happens when you roll no successes at all, right?
-      // light_target /= 2;
-      mudlog("Encountered that weird case where light spell force is zero, investigate here!", ch, LOG_SYSLOG, TRUE);
     }
   }
 

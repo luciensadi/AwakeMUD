@@ -19,6 +19,8 @@ typedef unsigned int u_int;
 typedef unsigned char                    byte;
 #endif
 
+typedef byte                   room_spell_t;
+
 #ifdef NO_UINT8_T
 typedef unsigned char uint8_t;
 #endif

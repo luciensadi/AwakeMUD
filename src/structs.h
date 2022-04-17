@@ -244,12 +244,12 @@ struct room_data
   sbyte rating;                 // rating of room for various things
   int cover, crowd, type, x, y;
   float z;
-  byte light[3];                  /* Number of lightsources in room     */
+  room_spell_t light[3];                  /* Number of lightsources in room     */
   byte peaceful;
-  byte poltergeist[2];
-  byte icesheet[2];
-  byte shadow[2];
-  byte silence[2];
+  room_spell_t poltergeist[2];
+  room_spell_t icesheet[2];
+  room_spell_t shadow[2];
+  room_spell_t silence[2];
   SPECIAL(*func);
 
   bool dirty_bit;

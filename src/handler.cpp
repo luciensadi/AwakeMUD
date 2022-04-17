@@ -45,6 +45,11 @@ extern void end_quest(struct char_data *ch);
 int get_skill_num_in_use_for_weapons(struct char_data *ch);
 int get_skill_dice_in_use_for_weapons(struct char_data *ch);
 
+void _char_with_spell_to_room(struct char_data *ch, int spell_num, room_spell_t *room_spell_tracker);
+void _char_with_spell_from_room(struct char_data *ch, int spell_num, room_spell_t *room_spell_tracker);
+void _char_with_light_to_room(struct char_data *ch);
+void _char_with_light_from_room(struct char_data *ch);
+
 struct obj_data *find_obj(struct char_data *ch, char *name, int num);
 
 char *fname(char *namelist)
@@ -400,31 +405,28 @@ void spell_modify(struct char_data *ch, struct sustain_data *sust, bool add)
     case SPELL_POLTERGEIST:
       if (ch->in_room) {
         if (mod == 1) {
-          ch->in_room->poltergeist[0]++;
-          if (sust->force > ch->in_room->poltergeist[1])
-            ch->in_room->poltergeist[1] = sust->force;
-        } else if (!--ch->in_room->poltergeist[0])
-          ch->in_room->poltergeist[1] = 0;
+          _char_with_spell_to_room(ch, SPELL_POLTERGEIST, ch->in_room->poltergeist);
+        } else {
+          _char_with_spell_from_room(ch, SPELL_POLTERGEIST, ch->in_room->poltergeist);
+        }
       }
       break;
     case SPELL_LIGHT:
       if (ch->in_room) {
         if (mod == 1) {
-          ch->in_room->light[0]++;
-          if (sust->force > ch->in_room->light[1])
-            ch->in_room->light[1] = MIN(sust->force, sust->success);
-        } else if (!--ch->in_room->light[0])
-          ch->in_room->light[1] = 0;
+          _char_with_spell_to_room(ch, SPELL_LIGHT, ch->in_room->light);
+        } else {
+          _char_with_spell_from_room(ch, SPELL_LIGHT, ch->in_room->light);
+        }
       }
       break;
     case SPELL_SHADOW:
       if (ch->in_room) {
         if (mod == 1) {
-          ch->in_room->shadow[0]++;
-          if (sust->force > ch->in_room->shadow[1])
-            ch->in_room->shadow[1] = MIN(sust->force, sust->success);
-        } else if (!--ch->in_room->shadow[0])
-          ch->in_room->shadow[1] = 0;
+          _char_with_spell_to_room(ch, SPELL_SHADOW, ch->in_room->shadow);
+        } else {
+          _char_with_spell_from_room(ch, SPELL_SHADOW, ch->in_room->shadow);
+        }
       }
       break;
     case SPELL_INVIS:
@@ -442,11 +444,10 @@ void spell_modify(struct char_data *ch, struct sustain_data *sust, bool add)
     case SPELL_SILENCE:
       if (ch->in_room) {
         if (mod == 1) {
-          ch->in_room->silence[0]++;
-          if (sust->force > ch->in_room->silence[1])
-            ch->in_room->silence[1] = MIN(sust->force, sust->success);
-        } else if (!--ch->in_room->silence[0])
-          ch->in_room->silence[1] = 0;
+          _char_with_spell_to_room(ch, SPELL_SILENCE, ch->in_room->silence);
+        } else {
+          _char_with_spell_from_room(ch, SPELL_SILENCE, ch->in_room->silence);
+        }
       }
       break;
     case SPELL_COMBATSENSE:
@@ -1123,7 +1124,7 @@ void veh_from_room(struct veh_data * veh)
     veh->in_veh->usedload -= veh->body * mult;
   } else {
     REMOVE_FROM_LIST(veh, veh->in_room->vehicles, next_veh);
-    veh->in_room->light[0]--;
+    veh->in_room->light[ROOM_LIGHT_HEADLIGHTS_AND_FLASHLIGHTS]--;
   }
   veh->in_room = NULL;
   veh->next_veh = NULL;
@@ -1150,18 +1151,13 @@ void char_from_room(struct char_data * ch)
 
   if (ch->in_room) {
     // Character is in a room. Clean up room effects sourced by character.
-    if (GET_EQ(ch, WEAR_LIGHT) != NULL)
-      if (GET_OBJ_TYPE(GET_EQ(ch, WEAR_LIGHT)) == ITEM_LIGHT)
-        if (GET_OBJ_VAL(GET_EQ(ch, WEAR_LIGHT), 2))       /* Light is ON */
-          ch->in_room->light[0]--;
-    if (affected_by_spell(ch, SPELL_LIGHT) && !--ch->in_room->light[0])
-      ch->in_room->light[1] = 0;
-    if (affected_by_spell(ch, SPELL_SHADOW) && !--ch->in_room->shadow[0])
-      ch->in_room->shadow[1] = 0;
-    if (affected_by_spell(ch, SPELL_POLTERGEIST) && !--ch->in_room->poltergeist[0])
-      ch->in_room->poltergeist[1] = 0;
-    if (affected_by_spell(ch, SPELL_SILENCE) && !--ch->in_room->silence[0])
-      ch->in_room->silence[1] = 0;
+    _char_with_light_from_room(ch);
+
+    _char_with_spell_from_room(ch, SPELL_SILENCE, ch->in_room->silence);
+    _char_with_spell_from_room(ch, SPELL_SHADOW, ch->in_room->shadow);
+    _char_with_spell_from_room(ch, SPELL_LIGHT, ch->in_room->light);
+    _char_with_spell_from_room(ch, SPELL_POLTERGEIST, ch->in_room->poltergeist);
+
     if (IS_SENATOR(ch) && PRF_FLAGGED(ch, PRF_PACIFY) && ch->in_room->peaceful > 0)
       ch->in_room->peaceful--;
 
@@ -1211,7 +1207,7 @@ void veh_to_room(struct veh_data * veh, struct room_data *room)
     veh->next_veh = room->vehicles;
     room->vehicles = veh;
     veh->in_room = room;
-    room->light[0]++; // headlights
+    room->light[ROOM_LIGHT_HEADLIGHTS_AND_FLASHLIGHTS]++; // headlights
   }
 }
 
@@ -1276,6 +1272,7 @@ void icon_from_host(struct matrix_icon *icon)
   icon->next_in_host = NULL;
   icon->fighting = NULL;
 }
+
 /* place a character in a room */
 void char_to_room(struct char_data * ch, struct room_data *room)
 {
@@ -1297,49 +1294,15 @@ void char_to_room(struct char_data * ch, struct room_data *room)
   if (IS_SENATOR(ch) && PRF_FLAGGED(ch, PRF_PACIFY))
     room->peaceful++;
 
-  if (GET_EQ(ch, WEAR_LIGHT))
-    if (GET_OBJ_TYPE(GET_EQ(ch, WEAR_LIGHT)) == ITEM_LIGHT)
-      if (GET_OBJ_VAL(GET_EQ(ch, WEAR_LIGHT), 2))     /* Light ON */
-        room->light[0]++;
   if (GET_TRADITION(ch) == TRAD_SHAMANIC)
     GET_DOMAIN(ch) = SECT(ch->in_room);
-  if (affected_by_spell(ch, SPELL_SILENCE))
-  {
-    room->silence[0]++;
-    for (struct sustain_data *sust = GET_SUSTAINED(ch); sust; sust = sust->next)
-      if (sust->spell == SPELL_SILENCE && MIN(sust->force, sust->success) > room->silence[1]) {
-        room->silence[1] = MIN(sust->force, sust->success);
-        break;
-      }
-  }
-  if (affected_by_spell(ch, SPELL_SHADOW))
-  {
-    room->shadow[0]++;
-    for (struct sustain_data *sust = GET_SUSTAINED(ch); sust; sust = sust->next)
-      if (sust->spell == SPELL_SHADOW && MIN(sust->force, sust->success) > room->shadow[1]) {
-        room->shadow[1] = MIN(sust->force, sust->success);
-        break;
-      }
-  }
-  if (affected_by_spell(ch, SPELL_LIGHT))
-  {
-    room->light[0]++;
-    for (struct sustain_data *sust = GET_SUSTAINED(ch); sust; sust = sust->next)
-      if (sust->spell == SPELL_LIGHT && MIN(sust->force, sust->success) > room->light[1]) {
-        room->light[1] = MIN(sust->force, sust->success);
-        break;
-      }
-  }
-  if (affected_by_spell(ch, SPELL_POLTERGEIST))
-  {
-    room->poltergeist[0]++;
-    for (struct sustain_data *sust = GET_SUSTAINED(ch); sust; sust = sust->next)
-      if (sust->spell == SPELL_POLTERGEIST)
-        if (sust->force > room->poltergeist[1]) {
-          room->poltergeist[1] = sust->force;
-          break;
-        }
-  }
+
+  _char_with_light_to_room(ch);
+
+  _char_with_spell_to_room(ch, SPELL_SILENCE, ch->in_room->silence);
+  _char_with_spell_to_room(ch, SPELL_SHADOW, ch->in_room->shadow);
+  _char_with_spell_to_room(ch, SPELL_LIGHT, ch->in_room->light);
+  _char_with_spell_to_room(ch, SPELL_POLTERGEIST, ch->in_room->poltergeist);
 }
 
 #define IS_INVIS(o) IS_OBJ_STAT(o, ITEM_EXTRA_INVISIBLE)
@@ -1679,11 +1642,8 @@ bool equip_char(struct char_data * ch, struct obj_data * obj, int pos)
   obj->worn_by = ch;
   obj->worn_on = pos;
 
-  if (ch->in_room)
-  {
-    if (pos == WEAR_LIGHT && GET_OBJ_TYPE(obj) == ITEM_LIGHT)
-      if (GET_OBJ_VAL(obj, 2))  /* if light is ON */
-        ch->in_room->light[0]++;
+  if (ch->in_room) {
+    _char_with_light_to_room(ch);
   }
 
   for (j = 0; j < MAX_OBJ_AFFECT; j++)
@@ -1722,9 +1682,7 @@ struct obj_data *unequip_char(struct char_data * ch, int pos, bool focus)
 
   if (ch->in_room)
   {
-    if (pos == WEAR_LIGHT && GET_OBJ_TYPE(obj) == ITEM_LIGHT)
-      if (GET_OBJ_VAL(obj, 2))  /* if light is ON */
-        ch->in_room->light[0]--;
+    _char_with_light_from_room(ch);
   }
 
   if (pos == WEAR_HOLD || pos == WEAR_WIELD)
@@ -3367,4 +3325,63 @@ int get_skill_dice_in_use_for_weapons(struct char_data *ch) {
   }
 
   return skill_dice;
+}
+
+void _char_with_spell_to_room(struct char_data *ch, int spell_num, room_spell_t *room_spell_tracker) {
+  if (affected_by_spell(ch, spell_num)) {
+    room_spell_tracker[ROOM_NUM_SPELLS_OF_TYPE]++;
+    for (struct sustain_data *sust = GET_SUSTAINED(ch); sust; sust = sust->next) {
+      if (sust->spell == spell_num) {
+        int force = MIN(sust->force, sust->success);
+        room_spell_tracker[ROOM_HIGHEST_SPELL_FORCE] = MAX(room_spell_tracker[ROOM_HIGHEST_SPELL_FORCE], force);
+      }
+    }
+  }
+}
+
+void _char_with_spell_from_room(struct char_data *ch, int spell_num, room_spell_t *room_spell_tracker) {
+  if (affected_by_spell(ch, spell_num)) {
+    // Clear the room's spell value.
+    room_spell_tracker[ROOM_NUM_SPELLS_OF_TYPE]--;
+    room_spell_tracker[ROOM_HIGHEST_SPELL_FORCE] = 0;
+
+    // If we still have a spell, search everyone here to re-establish it.
+    if (room_spell_tracker[ROOM_NUM_SPELLS_OF_TYPE] > 0) {
+      for (struct char_data *tmp_ch = ch->in_room->people; tmp_ch; tmp_ch = tmp_ch->next_in_room) {
+        if (tmp_ch == ch)
+          continue;
+          
+        for (struct sustain_data *sust = GET_SUSTAINED(tmp_ch); sust; sust = sust->next) {
+          if (sust->spell == spell_num) {
+            int force = MIN(sust->force, sust->success);
+            room_spell_tracker[ROOM_HIGHEST_SPELL_FORCE] = MAX(room_spell_tracker[ROOM_HIGHEST_SPELL_FORCE], force);
+          }
+        }
+      }
+    }
+  }
+}
+
+void _handle_char_with_light(struct char_data *ch, bool add) {
+  if (!ch->in_room) {
+    mudlog("SYSERR: Got NULL ch->in_room to _handle_char_with_light()!", ch, LOG_SYSLOG, TRUE);
+    return;
+  }
+
+  struct obj_data *light = GET_EQ(ch, WEAR_LIGHT);
+  if (light && GET_OBJ_TYPE(light) == ITEM_LIGHT && GET_LIGHT_IS_ON(light)) {
+    if (add) {
+      ch->in_room->light[ROOM_LIGHT_HEADLIGHTS_AND_FLASHLIGHTS]++;
+    } else {
+      ch->in_room->light[ROOM_LIGHT_HEADLIGHTS_AND_FLASHLIGHTS]--;
+    }
+  }
+}
+
+void _char_with_light_to_room(struct char_data *ch) {
+  _handle_char_with_light(ch, TRUE);
+}
+
+void _char_with_light_from_room(struct char_data *ch) {
+  _handle_char_with_light(ch, FALSE);
 }
