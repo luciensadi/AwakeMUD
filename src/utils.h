@@ -51,8 +51,8 @@ int     success_test(int number, int target);
 int     resisted_test(int num4ch, int tar4ch, int num4vict, int tar4vict);
 int     stage(int successes, int wound);
 bool    access_level(struct char_data *ch, int level);
-char *  buf_mod(char *buf, int buf_len, const char *name, int bonus);
-//char *  buf_roll(char *buf, const char *name, int bonus);
+char *  buf_mod(char *buf, size_t buf_len, const char *name, int bonus);
+char *  buf_roll(char *buf, size_t buf_len, const char *name, int bonus);
 int     modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int current_visibility_penalty, bool skill_is_magic);
 int     modify_target_rbuf(struct char_data *ch, char *rbuf, int rbuf_len);
 int     modify_target(struct char_data *ch);
@@ -91,6 +91,7 @@ char *  double_up_color_codes(const char *string);
 struct  char_data *get_obj_carried_by_recursive(struct obj_data *obj);
 struct  char_data *get_obj_worn_by_recursive(struct obj_data *obj);
 struct  char_data *get_obj_possessor(struct obj_data *obj);
+char *  get_obj_name_with_padding(struct obj_data *obj, int padding);
 char *  generate_new_loggable_representation(struct obj_data *obj);
 void    purgelog(struct veh_data *veh);
 char *  replace_substring(char *source, char *dest, const char *replace_target, const char *replacement);
@@ -118,10 +119,16 @@ int     return_general(int skill_num);
 bool    perform_knockdown_test(struct char_data *ch, int initial_tn, int successes_to_avoid_knockback=0);
 int     get_zone_index_number_from_vnum(vnum_t vnum);
 bool    room_accessible_to_vehicle_piloted_by_ch(struct room_data *room, struct veh_data *veh, struct char_data *ch);
+bool    veh_can_traverse_land(struct veh_data *veh);
+bool    veh_can_traverse_water(struct veh_data *veh);
+bool    veh_can_traverse_air(struct veh_data *veh);
+int     get_br_skill_for_veh(struct veh_data *veh);
+int     get_pilot_skill_for_veh(struct veh_data *veh);
+int     calculate_vehicle_weight(struct veh_data *veh);
 
 long get_room_gridguide_x(vnum_t room_vnum);
 long get_room_gridguide_y(vnum_t room_vnum);
-vnum_t vnum_from_gridguide_coordinates(long x, long y, struct char_data *ch);
+vnum_t vnum_from_gridguide_coordinates(long x, long y, struct char_data *ch, struct veh_data *veh=NULL);
 
 // Skill-related.
 char *how_good(int skill, int rank);
@@ -352,6 +359,7 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 /* veh utils  ************************************************************/
 
 #define GET_VEH_NAME(veh) (decapitalize_a_an((veh)->restring ? (veh)->restring : ((veh)->short_description ? (veh)->short_description : "an ERRONEOUS VEHICLE")))
+#define GET_VEH_NAME_NOFORMAT(veh) ((veh)->restring ? (veh)->restring : ((veh)->short_description ? (veh)->short_description : "an ERRONEOUS VEHICLE"))
 #define GET_VEH_DESC(veh) ((veh)->restring_long ? (veh)->restring_long : (veh)->long_description)
 #define GET_VEH_RNUM(veh) ((veh)->veh_number)
 #define GET_VEH_VNUM(veh) (GET_VEH_RNUM(veh) >= 0 ? veh_index[GET_VEH_RNUM(veh)].vnum : -1)
@@ -609,6 +617,7 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define CAN_CARRY_W(ch)       ((GET_STR(ch) * 10) + 30)
 #define CAN_CARRY_N(ch)       (8 + GET_QUI(ch) + (GET_REAL_LEVEL(ch)>=LVL_BUILDER?50:0))
 #define AWAKE(ch)             (GET_POS(ch) > POS_SLEEPING && GET_QUI(ch) > 0)
+#define IS_JACKED_IN(ch)      (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE) || PLR_FLAGGED(ch, PLR_MATRIX))
 #define CAN_SEE_IN_DARK(ch)   ((IS_ASTRAL(ch) || IS_DUAL(ch) || \
     CURRENT_VISION(ch) == THERMOGRAPHIC || PRF_FLAGGED((ch), PRF_HOLYLIGHT)))
 #define GET_BUILDING(ch)	((ch)->char_specials.programming)
@@ -1077,8 +1086,8 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 #define GET_VEHICLE_MOD_MOUNT_TYPE(mod)                     (GET_OBJ_VAL((mod), 1))
 #define GET_VEHICLE_MOD_LOAD_SPACE_REQUIRED(mod)            (GET_OBJ_VAL((mod), 1)) // Yes, this is also value 1.
 #define GET_VEHICLE_MOD_RATING(mod)                         (GET_OBJ_VAL((mod), 2))
-// what's 3?
-#define GET_VEHICLE_MOD_DESIGNED_FOR_DRONE(mod)             (GET_OBJ_VAL((mod), 4)) // 0=veh, 1=drone, 2=both
+#define GET_VEHICLE_MOD_RADIO_CRYPT(mod)                    (GET_OBJ_VAL((mod), 3))
+#define GET_VEHICLE_MOD_DESIGNED_FOR_FLAGS(mod)             (GET_OBJ_VAL((mod), 4))
 #define GET_VEHICLE_MOD_ENGINE_BITS(mod)                    (GET_OBJ_VAL((mod), 5))
 #define GET_VEHICLE_MOD_LOCATION(mod)                       (GET_OBJ_VAL((mod), 6))
 

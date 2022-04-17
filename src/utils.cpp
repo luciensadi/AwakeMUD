@@ -55,7 +55,7 @@ extern int ability_cost(int abil, int level);
 extern void weight_change_object(struct obj_data * obj, float weight);
 extern void calc_weight(struct char_data *ch);
 extern const char *get_ammobox_default_restring(struct obj_data *ammobox);
-extern bool can_edit_zone(struct char_data *ch, int zone);
+extern bool can_edit_zone(struct char_data *ch, rnum_t real_zone);
 extern int find_first_step(vnum_t src, vnum_t target, bool ignore_roads);
 extern int calculate_vehicle_weight(struct veh_data *veh);
 
@@ -212,7 +212,7 @@ int light_level(struct room_data *room)
   int artificial_light_level = -1;
 
   // If we have streetlights, we don't care about flashlights etc-- we're guaranteeing partlight.
-  if (ROOM_FLAGGED(room, ROOM_STREETLIGHTS) && (time_info.hours < 6 || time_info.hours > 19)) {
+  if (ROOM_FLAGGED(room, ROOM_STREETLIGHTS) && (time_info.hours <= 6 || time_info.hours >= 19)) {
     artificial_light_level = LIGHT_PARTLIGHT;
   } else {
     // Flashlights. More flashlights, more light.
@@ -273,7 +273,7 @@ int light_level(struct room_data *room)
     else
       return MAX(LIGHT_PARTLIGHT, artificial_light_level);
   }
-  if ((time_info.hours < 6 || time_info.hours > 19) && (candidate_light_level > LIGHT_MINLIGHT || candidate_light_level <= LIGHT_NORMALNOLIT)) {
+  if ((time_info.hours <= 6 || time_info.hours >= 19) && (candidate_light_level > LIGHT_MINLIGHT || candidate_light_level <= LIGHT_NORMALNOLIT)) {
     return MAX(LIGHT_MINLIGHT, artificial_light_level);
   } else {
     return candidate_light_level;
@@ -400,7 +400,14 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int c
     return 100;
   }
 
-  if (PLR_FLAGGED(ch, PLR_PERCEIVE) || MOB_FLAGGED(ch, MOB_DUAL_NATURE) || IS_ASTRAL(ch))
+  bool is_rigging = (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE));
+  if (is_rigging) {
+    struct veh_data *veh;
+    RIG_VEH(ch, veh);
+    temp_room = get_veh_in_room(veh);
+  }
+
+  if (!is_rigging && (PLR_FLAGGED(ch, PLR_PERCEIVE) || MOB_FLAGGED(ch, MOB_DUAL_NATURE) || IS_ASTRAL(ch)))
   {
     if (!skill_is_magic && PLR_FLAGGED(ch, PLR_PERCEIVE)) {
       base_target += 2;
@@ -1130,7 +1137,7 @@ bool PLR_TOG_CHK(char_data *ch, dword offset)
   return PLR_FLAGS(ch).IsSet(offset);
 }
 
-char * buf_mod(char *rbuf, int rbuf_len, const char *name, int bonus)
+char * buf_mod(char *rbuf, size_t rbuf_len, const char *name, int bonus)
 {
   if ( !rbuf )
     return rbuf;
@@ -1149,12 +1156,12 @@ char * buf_mod(char *rbuf, int rbuf_len, const char *name, int bonus)
 }
 
 /* This is unused.
-char * buf_roll(char *rbuf, const char *name, int bonus)
+char * buf_roll(char *rbuf, size_t rbuf_len, const char *name, int bonus)
 {
   if ( !rbuf )
     return rbuf;
   rbuf += strlen(rbuf);
-  snprintf(rbuf, sizeof(rbuf), " [%s %d]", name, bonus);
+  snprintf(rbuf, rbuf_len, " [%s %d]", name, bonus);
   return rbuf;
 }
 */
@@ -1496,6 +1503,17 @@ int get_skill(struct char_data *ch, int skill, int &target)
         case SKILL_BR_HEAVYWEAPON:
         case SKILL_BR_SMG:
         case SKILL_BR_ARMOR:
+        case SKILL_BR_FIXEDWING:
+        case SKILL_BR_ROTORCRAFT:
+        case SKILL_BR_VECTORTHRUST:
+        case SKILL_BR_HOVERCRAFT:
+        case SKILL_BR_MOTORBOAT:
+        case SKILL_BR_SHIP:
+        case SKILL_BR_LTA:
+        case SKILL_PILOT_HOVERCRAFT:
+        case SKILL_PILOT_MOTORBOAT:
+        case SKILL_PILOT_SHIP:
+        case SKILL_PILOT_LTA:
         case SKILL_PILOT_ROTORCRAFT:
         case SKILL_PILOT_FIXEDWING:
         case SKILL_PILOT_VECTORTHRUST:
@@ -2228,21 +2246,40 @@ bool invis_ok(struct char_data *ch, struct char_data *vict) {
   if (IS_NPC(vict) && MOB_FLAGGED(vict, MOB_TOTALINVIS))
     return FALSE;
 
+  // Figure out if we're using vehicle sensors. If we are, we need to be judicious about the sight we give.
+  bool has_thermographic, has_ultrasound, has_astral, is_vehicle;
+  if (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE)) {
+    // We are. Set based on vehicle sensors.
+    struct veh_data *veh;
+    RIG_VEH(ch, veh);
+
+    if (!veh) {
+      mudlog("SYSERR: Something went seriously wrong: rig_veh in invis_ok failed!", ch, LOG_SYSLOG, TRUE);
+      return FALSE;
+    }
+
+    is_vehicle = TRUE;
+    has_astral = FALSE;
+    has_ultrasound = veh->flags.IsSet(VFLAG_ULTRASOUND) && vict_room == veh->in_room;
+    has_thermographic = TRUE;
+  } else {
+    is_vehicle = FALSE;
+    has_astral = (IS_ASTRAL(ch) || IS_DUAL(ch));
+    has_ultrasound = (has_vision(ch, VISION_ULTRASONIC) && !affected_by_spell(ch, SPELL_STEALTH) && vict_room == ch_room);
+    has_thermographic = has_vision(ch, VISION_THERMOGRAPHIC);
+  }
+
   // Astral perception sees most things-- unless said thing is an inanimate mob with no spells on it.
-  if ((IS_ASTRAL(ch) || IS_DUAL(ch)) && (!MOB_FLAGGED(vict, MOB_INANIMATE) || GET_SUSTAINED(vict)))
+  if (has_astral && (!MOB_FLAGGED(vict, MOB_INANIMATE) || GET_SUSTAINED(vict)))
     return TRUE;
 
   // Ultrasound pierces all invis as long as it's in the same room and not blocked by silence or stealth.
-  if (has_vision(ch, VISION_ULTRASONIC)
-      && ch_room == vict_room
-      && (ch_room->silence[0] <= 0
-          && !affected_by_spell(vict, SPELL_STEALTH)
-          && !affected_by_spell(ch, SPELL_STEALTH)))
+  if (has_ultrasound && !affected_by_spell(vict, SPELL_STEALTH) && vict_room->silence[0] <= 0)
     return TRUE;
 
-  // Allow resist test VS invis.
+  // Allow resist test VS improved invis-- but only if you're not seeing the world through sensors.
   if (IS_AFFECTED(vict, AFF_SPELLIMPINVIS)) {
-    return can_see_through_invis(ch, vict);
+    return !is_vehicle && can_see_through_invis(ch, vict);
   }
 
   // Thermoptic camouflage, a houseruled thing that doesn't actually show up in the game yet. This can only be broken by ultrasound.
@@ -2251,14 +2288,13 @@ bool invis_ok(struct char_data *ch, struct char_data *vict) {
   }
 
   // Ruthenium is pierced by thermographic vision, which is default on vehicles.
-  bool can_see_through_standard_invis = (has_vision(ch, VISION_THERMOGRAPHIC) || AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE));
   if (IS_AFFECTED(vict, AFF_INVISIBLE)) {
-    return can_see_through_standard_invis;
+    return has_thermographic;
   }
 
-  // Allow perception test VS invis spell.
+  // Allow resistance test VS invis spell.
   if (IS_AFFECTED(vict, AFF_SPELLINVIS)) {
-    return (can_see_through_standard_invis || can_see_through_invis(ch, vict));
+    return (has_thermographic || can_see_through_invis(ch, vict));
   }
 
   // If we've gotten here, they're not invisible.
@@ -3199,7 +3235,7 @@ void update_ammobox_ammo_quantity(struct obj_data *ammobox, int amount) {
   }
 
   if (amount == 0) {
-    mudlog("SYSERR: Zero-quantity ammobox passed to update_ammobox_ammo_quantity.", ammobox->carried_by, LOG_SYSLOG, TRUE);
+    mudlog("SYSERR: Zero amount passed to update_ammobox_ammo_quantity.", ammobox->carried_by, LOG_SYSLOG, TRUE);
     return;
   }
 
@@ -3536,10 +3572,10 @@ bool get_and_deduct_one_deckbuilding_token_from_char(struct char_data *ch) {
 
 // States whether a program can be copied or not.
 bool program_can_be_copied(struct obj_data *prog) {
-  if (!prog)
+  if (!prog || GET_OBJ_TYPE(prog) != ITEM_PROGRAM)
     return FALSE;
 
-  switch (GET_OBJ_VAL(prog, 0)) {
+  switch (GET_PROGRAM_TYPE(prog)) {
     case SOFT_ASIST_COLD:
     case SOFT_ASIST_HOT:
     case SOFT_HARDENING:
@@ -3839,6 +3875,17 @@ int count_color_codes_in_string(const char *str) {
   return  sum;
 }
 
+char *get_obj_name_with_padding(struct obj_data *obj, int padding) {
+  static char namestr[MAX_INPUT_LENGTH * 2];
+  char paddingnumberstr[50], formatstr[50];
+
+  snprintf(paddingnumberstr, sizeof(paddingnumberstr), "%d", padding + count_color_codes_in_string(GET_OBJ_NAME(obj)));
+  snprintf(formatstr, sizeof(formatstr), "%s%s%s", "%-", paddingnumberstr, "s^n");
+  snprintf(namestr, sizeof(namestr), formatstr, GET_OBJ_NAME(obj));
+
+  return namestr;
+}
+
 #define CHECK_FUNC_AND_SFUNC_FOR(function) (mob_index[GET_MOB_RNUM(npc)].func == (function) || mob_index[GET_MOB_RNUM(npc)].sfunc == (function))
 // Returns TRUE if the NPC has a spec that should protect it from damage, FALSE otherwise.
 bool npc_is_protected_by_spec(struct char_data *npc) {
@@ -3998,7 +4045,7 @@ void knockdown_character(struct char_data *ch) {
 
   bool eligible_for_kipup = PLR_FLAGGED(ch, PLR_PAID_FOR_KIPUP) || (IS_NPC(ch) && (GET_QUI(ch) >= 10 && GET_SKILL(ch, SKILL_UNARMED_COMBAT) >= 6));
 
-  if (eligible_for_kipup && PRF_FLAGGED(ch, PRF_AUTOKIPUP)) {
+  if (eligible_for_kipup && PRF_FLAGGED(ch, PRF_AUTOKIPUP) && !IS_JACKED_IN(ch)) {
     // Successfully kipping up gets you back on your feet with no penalty.
     if (success_test(GET_QUI(ch), 6) > 0) {
       send_to_char("^yYou're sent sprawling, but recover with a quick kip-up!\r\n", ch);
@@ -4029,7 +4076,7 @@ void knockdown_character(struct char_data *ch) {
   }
 
   // Otherwise, if they're set up to auto-stand...
-  if (PRF_FLAGGED(ch, PRF_AUTOSTAND)) {
+  if (PRF_FLAGGED(ch, PRF_AUTOSTAND) && !IS_JACKED_IN(ch)) {
     GET_INIT_ROLL(ch) -= 5;
     send_to_char("^yYou're sent sprawling, and it takes you a moment to clamber back to your feet.\r\n", ch);
     act("$n is knocked down, but clambers back to $s feet!", TRUE, ch, 0, 0, TO_ROOM);
@@ -4037,7 +4084,8 @@ void knockdown_character(struct char_data *ch) {
   }
 
   // Neither autokip nor autostand.
-  send_to_char("^YYou are knocked prone!^n\r\n", ch);
+  if (!IS_JACKED_IN(ch))
+    send_to_char("^YYou are knocked prone!^n\r\n", ch);
   act("$n is knocked prone!", TRUE, ch, 0, 0, TO_ROOM);
   AFF_FLAGS(ch).SetBit(AFF_PRONE);
 
@@ -4162,7 +4210,7 @@ long get_room_gridguide_y(vnum_t room_vnum) {
   return room_vnum + 100;
 }
 
-vnum_t vnum_from_gridguide_coordinates(long x, long y, struct char_data *ch) {
+vnum_t vnum_from_gridguide_coordinates(long x, long y, struct char_data *ch, struct veh_data *veh) {
   // We could just use the y-coordinate, but then the X could be anything.
   int vnum_from_y = y - 100;
   int vnum_from_x = x - ((x / 2) * 3);
@@ -4174,11 +4222,11 @@ vnum_t vnum_from_gridguide_coordinates(long x, long y, struct char_data *ch) {
   vnum_t candidate_vnum = vnum_from_y;
   rnum_t candidate_rnum = real_room(candidate_vnum);
 
-  // -1: Room didn't even exist.
+  // -2: Room didn't even exist.
   if (candidate_rnum <= 0)
     return -2;
 
-  // -2: Room was not drivable, or not on the gridguide system.
+  // -3: Room was not drivable, or not on the gridguide system.
   if (!ROOM_FLAGS(&world[candidate_rnum]).AreAnySet(ROOM_ROAD, ROOM_GARAGE, ENDBIT) ||
        ROOM_FLAGS(&world[candidate_rnum]).AreAnySet(ROOM_NOGRID, ROOM_STAFF_ONLY, ROOM_NOBIKE, ROOM_FALL, ENDBIT))
   {
@@ -4195,6 +4243,11 @@ vnum_t vnum_from_gridguide_coordinates(long x, long y, struct char_data *ch) {
     }
 
     return -3;
+  }
+
+  // -4: Vehicle not compatible with room.
+  if (veh && !room_accessible_to_vehicle_piloted_by_ch(&world[candidate_rnum], veh, ch)) {
+    return -4;
   }
 
   return candidate_vnum;
@@ -4225,20 +4278,24 @@ bool room_accessible_to_vehicle_piloted_by_ch(struct room_data *room, struct veh
     }
   #endif
 
-  #ifdef DIES_IRAE
-    // Flying vehicles can traverse any terrain. If you're not a flying or amphibious vehicle, you can't go into water.
-    if (!veh->flags.IsSet(VFLAG_CAN_FLY)) {
-      // Non-flying vehicles can't pass fall rooms.
-      if (ROOM_FLAGGED(room, ROOM_FALL)) {
+  // Flying vehicles can traverse any terrain.
+  if (!ROOM_FLAGGED(room, ROOM_ALL_VEHICLE_ACCESS) && !veh_can_traverse_air(veh)) {
+    // Non-flying vehicles can't pass fall rooms.
+    if (ROOM_FLAGGED(room, ROOM_FALL)) {
+      return FALSE;
+    }
+
+    // Check to see if your vehicle can handle the terrain type you're giving it.
+    if (IS_WATER(room)) {
+      if (!veh_can_traverse_water(veh)) {
         return FALSE;
       }
-
-      // Non-amphibious vehicles can't traverse water.
-      if (IS_WATER(room)) {
+    } else {
+      if (!veh_can_traverse_land(veh)) {
         return FALSE;
       }
     }
-  #endif
+  }
 
   if (ROOM_FLAGGED(room, ROOM_TOO_CRAMPED_FOR_CHARACTERS) && (veh->body > 1 || veh->type != VEH_DRONE)) {
     return FALSE;
@@ -4253,6 +4310,188 @@ bool room_accessible_to_vehicle_piloted_by_ch(struct room_data *room, struct veh
   }
 
   return TRUE;
+}
+
+bool veh_can_traverse_land(struct veh_data *veh) {
+  if (veh_can_traverse_air(veh) || veh->flags.IsSet(VFLAG_AMPHIB)) {
+    return TRUE;
+  }
+
+  switch (veh->type) {
+    case VEH_DRONE:
+    case VEH_BIKE:
+    case VEH_CAR:
+    case VEH_TRUCK:
+    case VEH_FIXEDWING:
+    case VEH_ROTORCRAFT:
+    case VEH_VECTORTHRUST:
+    case VEH_HOVERCRAFT:
+    case VEH_LTA:
+      return TRUE;
+  }
+
+  return FALSE;
+}
+
+bool veh_can_traverse_water(struct veh_data *veh) {
+  if (veh_can_traverse_air(veh) || veh->flags.IsSet(VFLAG_AMPHIB)) {
+    return TRUE;
+  }
+
+  switch (veh->type) {
+    case VEH_FIXEDWING:
+    case VEH_ROTORCRAFT:
+    case VEH_VECTORTHRUST:
+    case VEH_HOVERCRAFT:
+    case VEH_MOTORBOAT:
+    case VEH_SHIP:
+    case VEH_LTA:
+      return TRUE;
+  }
+
+  return FALSE;
+}
+
+bool veh_can_traverse_air(struct veh_data *veh) {
+  if (veh->flags.IsSet(VFLAG_CAN_FLY)) {
+    return TRUE;
+  }
+
+  switch (veh->type) {
+    case VEH_FIXEDWING:
+    case VEH_ROTORCRAFT:
+    case VEH_VECTORTHRUST:
+    case VEH_LTA:
+      return TRUE;
+  }
+
+  return FALSE;
+}
+
+int get_pilot_skill_for_veh(struct veh_data *veh) {
+  if (!veh) {
+    mudlog("SYSERR: NULL vehicle to get_pilot_skill_for_veh()!", NULL, LOG_SYSLOG, TRUE);
+    return 0;
+  }
+
+  switch(veh->type) {
+    case VEH_DRONE:
+      mudlog("SYSERR: Called get_pilot_skill_for_veh() on a drone!", NULL, LOG_SYSLOG, TRUE);
+      return 0;
+    case VEH_BIKE:
+      return SKILL_PILOT_BIKE;
+    case VEH_CAR:
+      return SKILL_PILOT_CAR;
+    case VEH_TRUCK:
+      return SKILL_PILOT_TRUCK;
+    case VEH_FIXEDWING:
+      return SKILL_PILOT_FIXEDWING;
+    case VEH_ROTORCRAFT:
+      return SKILL_PILOT_ROTORCRAFT;
+    case VEH_VECTORTHRUST:
+      return SKILL_PILOT_VECTORTHRUST;
+    case VEH_HOVERCRAFT:
+      return SKILL_PILOT_HOVERCRAFT;
+    case VEH_MOTORBOAT:
+      return SKILL_PILOT_MOTORBOAT;
+    case VEH_SHIP:
+      return SKILL_PILOT_SHIP;
+    case VEH_LTA:
+      return SKILL_PILOT_LTA;
+    default:
+      {
+        char oopsbuf[500];
+        snprintf(oopsbuf, sizeof(oopsbuf), "SYSERR: Unknown veh type %d to get_br_skill_for_veh()!", veh->type);
+        mudlog(oopsbuf, NULL, LOG_SYSLOG, TRUE);
+      }
+      return 0;
+  }
+}
+
+int get_br_skill_for_veh(struct veh_data *veh) {
+  if (!veh) {
+    mudlog("SYSERR: NULL vehicle to get_br_skill_for_veh()!", NULL, LOG_SYSLOG, TRUE);
+    return 0;
+  }
+
+  switch(veh->type) {
+    case VEH_DRONE:
+      return SKILL_BR_DRONE;
+    case VEH_BIKE:
+      return SKILL_BR_BIKE;
+    case VEH_CAR:
+      return SKILL_BR_CAR;
+    case VEH_TRUCK:
+      return SKILL_BR_TRUCK;
+    case VEH_FIXEDWING:
+      return SKILL_BR_FIXEDWING;
+    case VEH_ROTORCRAFT:
+      return SKILL_BR_ROTORCRAFT;
+    case VEH_VECTORTHRUST:
+      return SKILL_BR_VECTORTHRUST;
+    case VEH_HOVERCRAFT:
+      return SKILL_BR_HOVERCRAFT;
+    case VEH_MOTORBOAT:
+      return SKILL_BR_MOTORBOAT;
+    case VEH_SHIP:
+      return SKILL_BR_SHIP;
+    case VEH_LTA:
+      return SKILL_BR_LTA;
+    default:
+      {
+        char oopsbuf[500];
+        snprintf(oopsbuf, sizeof(oopsbuf), "SYSERR: Unknown veh type %d to get_br_skill_for_veh()!", veh->type);
+        mudlog(oopsbuf, NULL, LOG_SYSLOG, TRUE);
+      }
+      return 0;
+  }
+}
+
+// Rigger 3 p.61-62
+int calculate_vehicle_weight(struct veh_data *veh) {
+  int load;
+
+  switch (veh->body) {
+    case 0:
+      load = 2;
+      break;
+    case 1:
+      load = 20;
+      break;
+    case 2:
+      load = 150;
+      break;
+    case 3:
+      load = 500;
+      break;
+    case 4:
+      load = 1500;
+      break;
+    case 5:
+      load = 4000;
+      break;
+    case 6:
+      load = 12000;
+      break;
+    case 7:
+      load = 25000;
+      break;
+    case 8:
+      load = 35000;
+      break;
+    case 9:
+      load = 50000;
+      break;
+    case 10:
+      load = 75000;
+      break;
+    default:
+      load = 500;
+      break;
+  }
+  load += veh->usedload;
+
+  return load;
 }
 
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.

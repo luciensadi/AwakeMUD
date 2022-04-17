@@ -273,8 +273,9 @@ const char *room_bits[] =
     "SOCIALIZE!",
     "CORPSE_SAVE_HACK",
     "STERILE",
-    "CRAMPED",
+    "SMALL_DRONE_ONLY",
     "RADIOACTIVE",
+    "ALL_VEH_ACCESS",
     "\n"
   };
 
@@ -489,6 +490,7 @@ const char *player_bits[] =
     "PAID_FOR_KIPUP",
     "PAID_FOR_ROLLS",
     "NO_AUTO_SYSP",
+    "RADIO_MUTED",
     "\n"
   };
 
@@ -602,6 +604,7 @@ struct preference_bit_struct preference_bits_v2[] = {
   { "Sees Newbie Tips"     , FALSE, TRUE  },
   { "AutoStand"            , FALSE, TRUE  },
   { "AutoKipUp"            , FALSE, TRUE  },
+  { "No Weather"           , FALSE, TRUE  },
   { "\n"                   , 0    , 0     }
 };
 
@@ -672,6 +675,7 @@ const char *preference_bits[] =
     "TIPS",
     "AUTOSTAND",
     "AUTOKIPUP",
+    "!WEATHER",
     "\n"
   };
 
@@ -1549,7 +1553,18 @@ struct skill_data skills[] =
     {"Pharmaceuticals", INT, SKILL_TYPE_ACTIVE, FALSE},
     {"Hebrew", INT, SKILL_TYPE_KNOWLEDGE, FALSE},
     {"Iroquois", INT, SKILL_TYPE_KNOWLEDGE, FALSE},
-    {"Medicine", INT, SKILL_TYPE_KNOWLEDGE, FALSE}
+    {"Medicine", INT, SKILL_TYPE_KNOWLEDGE, FALSE},
+    {"Repairing Fixed Wing Aircraft", INT, SKILL_TYPE_ACTIVE, FALSE},
+    {"Repairing Rotorcraft", INT, SKILL_TYPE_ACTIVE, FALSE},
+    {"Repairing Vector Thrust Aircraft", INT, SKILL_TYPE_ACTIVE, FALSE},
+    {"Repairing Hovercraft", INT, SKILL_TYPE_ACTIVE, FALSE},
+    {"Repairing Motorboats", INT, SKILL_TYPE_ACTIVE, FALSE},
+    {"Repairing Ships", INT, SKILL_TYPE_ACTIVE, FALSE},
+    {"Repairing Lighter-than-Air Aircraft", INT, SKILL_TYPE_ACTIVE, FALSE},
+    {"Piloting Hovercraft", REA, SKILL_TYPE_ACTIVE, FALSE},
+    {"Piloting Motorboats", REA, SKILL_TYPE_ACTIVE, FALSE},
+    {"Piloting Ships", REA, SKILL_TYPE_ACTIVE, FALSE},
+    {"Piloting Lighter-than-Air Aircraft", REA, SKILL_TYPE_ACTIVE, FALSE}
   };
 
 int rev_dir[] =
@@ -1604,7 +1619,7 @@ const char *month_name[12] =
     "December"
   };
 
-const char *veh_type[11] =
+const char *veh_types[NUM_VEH_TYPES] =
   {
     "Drone",
     "Bike",
@@ -1677,7 +1692,7 @@ const char *mod_name[NUM_MODS] =
     "Mounts"
   };
 
-const char *engine_type[6] =
+const char *engine_types[NUM_ENGINE_TYPES] =
   {
      "Nothing",
      "Electric",
@@ -1702,6 +1717,7 @@ const char *veh_aff[] =
     "Load",
     "Sensors",
     "Pilot",
+    "Ultrasound"
   };
 
 const char *veh_flag[] =

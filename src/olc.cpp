@@ -58,6 +58,11 @@ extern void redit_parse(struct descriptor_data * d, const char *arg);
 extern class memoryClass *Mem;
 
 #define REQUIRE_ZONE_EDIT_ACCESS(real_zonenum) {                                                                                               \
+  if (real_zonenum < 0 || real_zonenum > top_of_zone_table) {                                                                                  \
+    send_to_char("That's not a zone.", ch);                                                                                                    \
+    return;                                                                                                                                    \
+  }                                                                                                                                            \
+                                                                                                                                               \
   if (!can_edit_zone(ch, (real_zonenum))) {                                                                                                    \
     send_to_char(ch, "Sorry, you don't have access to edit zone %ld.\r\n", zone_table[(real_zonenum)].number);                                 \
     return;                                                                                                                                    \
@@ -82,10 +87,15 @@ bool is_olc_available(struct char_data *ch) {
   return olc_state;
 }
 
-bool can_edit_zone(struct char_data *ch, int zone) {
+bool can_edit_zone(struct char_data *ch, rnum_t real_zone) {
+  if (real_zone > top_of_zone_table) {
+    mudlog("SYSERR: Received zone above top of zone table in can_edit_zone()!", ch, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+
   for (int i = 0; i < NUM_ZONE_EDITOR_IDS; i++)
-    if (zone_table[zone].editor_ids[i] == GET_IDNUM(ch))
-      return true;
+    if (zone_table[real_zone].editor_ids[i] == GET_IDNUM(ch))
+      return TRUE;
   return access_level(ch, LVL_ADMIN);
 }
 
@@ -1547,8 +1557,10 @@ ACMD(do_mdelete)
 #pragma GCC diagnostic ignored "-Wunknown-warning-option"
 #pragma GCC diagnostic ignored "-Wclass-memaccess"
   // Wipe out the top entry of the table (it's not needed), then shrink the table.
-  memset(&mob_proto[top_of_mobt], 0, sizeof(struct char_data));
-  memset(&mob_index[top_of_mobt], 0, sizeof(struct index_data));
+  delete &mob_proto[top_of_mobt];
+  delete &mob_index[top_of_mobt];
+  // memset(&mob_proto[top_of_mobt], 0, sizeof(struct char_data));
+  // memset(&mob_index[top_of_mobt], 0, sizeof(struct index_data));
 #pragma GCC diagnostic pop
   top_of_mobt--;
 
@@ -1772,7 +1784,7 @@ ACMD(do_shedit)
     shop->flags = shop_table[number].flags;
     shop->keeper = shop_table[number].keeper;
     shop->races = shop_table[number].races;
-    shop->ettiquete = shop_table[number].ettiquete;
+    shop->etiquette = shop_table[number].etiquette;
     shop->open = shop_table[number].open;
     shop->close = shop_table[number].close;
     if (shop_table[number].no_such_itemk)
@@ -1817,7 +1829,7 @@ ACMD(do_shedit)
     d->edit_shop->open = 0;
     d->edit_shop->close = 24;
     d->edit_shop->type = SHOP_GREY;
-    d->edit_shop->ettiquete = SKILL_STREET_ETIQUETTE;
+    d->edit_shop->etiquette = SKILL_STREET_ETIQUETTE;
     d->edit_mode = SHEDIT_CONFIRM_EDIT;
   }
 }

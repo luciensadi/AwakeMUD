@@ -158,6 +158,9 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 #define PREORDERS_ARE_GOOD_FOR_X_DAYS                          7
 #define PREORDER_RESTOCKING_FEE_DIVISOR                        10
 
+// What amount of a vehicle's value do you receive when you sell it? 1/N where N is this number.
+#define VEHICLE_SELL_PRICE_DIVISOR                             5
+
 // How many minutes must have passed since the creation of a piece of mail before it is auto-deleted?
 #define MAIL_EXPIRATION_TICKS                                  (60 * 24 * 14) /* 14 days */
 
@@ -229,6 +232,9 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 
 // How many slots should a gridguide have?
 #define GET_VEH_MAX_AUTONAV_SLOTS(veh)                         (veh->autonav * 10)
+
+// Approximately how often should we see traffic messages? 1:(N+1) spec ticks where N is this number.
+#define TRAFFIC_INFREQUENCY_CONTROL                            10
 
 /////////////// OLC permissions configuration /////////////////////////
 #define LVL_FOR_SETTING_ZONE_EDITOR_ID_NUMBERS                 LVL_VICEPRES

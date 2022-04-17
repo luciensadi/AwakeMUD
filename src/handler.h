@@ -28,7 +28,7 @@ void    spell_modify(struct char_data *ch, struct sustain_data *sust, bool add);
 int isname(const char *str, const char *namelist);
 char    *fname(char *namelist);
 char    *fname_allchars(char *namelist);
-int     get_number(char **name);
+int     get_number(char **name, size_t name_len);
 int vnum_from_non_connected_zone(int vnum);
 struct remem *safe_found_mem(struct char_data *rememberer, struct char_data *ch);
 struct remem *unsafe_found_mem(struct remem *mem, struct char_data *ch);
@@ -79,7 +79,7 @@ void    char_to_veh(struct veh_data *veh, struct char_data *ch);
 void veh_from_room(struct veh_data *veh);
 void veh_to_room(struct veh_data *veh, struct room_data *room);
 void veh_to_veh(struct veh_data *veh, struct veh_data *dest);
-int veh_skill(struct char_data *ch, struct veh_data *veh);
+int veh_skill(struct char_data *ch, struct veh_data *veh, int *tn);
 void	icon_from_host(struct matrix_icon *icon);
 void	icon_to_host(struct matrix_icon *icon, vnum_t to_host);
 
@@ -123,7 +123,7 @@ void    set_fighting(struct char_data *ch, struct char_data *victim, ...);
 void    set_fighting(struct char_data *ch, struct veh_data *victim);
 void    stop_fighting(struct char_data *ch);
 void    stop_follower(struct char_data *ch);
-void    hit(struct char_data *ch, struct char_data *victim, struct obj_data *weapon, struct obj_data *vweapon, struct obj_data *ammobox);
+bool    hit(struct char_data *ch, struct char_data *victim, struct obj_data *weapon, struct obj_data *vweapon, struct obj_data *ammobox);
 void    forget(struct char_data *ch, struct char_data *victim);
 void    remember(struct char_data *ch, struct char_data *victim);
 bool    damage(struct char_data *ch, struct char_data *victim, int dam, int attacktype,
@@ -131,8 +131,8 @@ bool    damage(struct char_data *ch, struct char_data *victim, int dam, int atta
 bool    skill_message(int dam, struct char_data *ch, struct char_data *vict,
                       int attacktype);
 
-void    vcombat(struct char_data *ch, struct veh_data *veh);
-void    vram(struct veh_data *veh, struct char_data *ch, struct veh_data *tveh);
+bool    vcombat(struct char_data *ch, struct veh_data *veh);
+bool    vram(struct veh_data *veh, struct char_data *ch, struct veh_data *tveh);
 void    process_vcombat(struct veh_data *veh);
 void    chkdmg(struct veh_data * veh);
 void    disp_mod(struct veh_data *veh, struct char_data *ch, int i);

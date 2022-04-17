@@ -257,7 +257,7 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
 
     if (start_of_block && *start_of_block) {
       // send_to_char(actor, "Last attempt. Evaluating '%s'.\r\n", start_of_block);
-      if (!(must_prepend_name = !str_str_isolated(start_of_block, "@self"))) {
+      if (!(must_prepend_name = !(str_str_isolated(start_of_block, "@self") || str_str_isolated(start_of_block, "@me") || str_str_isolated(start_of_block, "@myself")))) {
         // send_to_char("Found @self in final analysis.\r\n", actor);
       }
 
@@ -324,6 +324,7 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
       if (require_exact_match) {
         NEW_EMOTE_DEBUG(actor, "\r\nUsing exact mode for this evaluation due to non-at and low string length %d.", strlen(tag_check_string));
       }
+      
       target_ch = NULL;
 
       // Short-circuit check: @self.

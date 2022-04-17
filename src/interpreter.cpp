@@ -1255,6 +1255,7 @@ struct command_info mtx_info[] =
     { "help", 0, do_help, 0, 0, FALSE },
     { "ht", 0, do_gen_comm , 0, SCMD_HIREDTALK, FALSE },
     { "idea", 0, do_gen_write, 0, SCMD_IDEA, FALSE },
+    { "index", 0, do_index, 0, 0, FALSE },
     { "look", 0, do_matrix_look, 0, 0, FALSE },
     { "list", 0, do_not_here, 0, 0, FALSE },
     { "load", 0, do_load, 0, SCMD_SWAP, FALSE },
@@ -1329,6 +1330,7 @@ struct command_info rig_info[] =
     { "help", 0, do_help, 0, 0, FALSE },
     { "ht", 0, do_gen_comm , 0, SCMD_HIREDTALK, FALSE },
     { "idea", 0, do_gen_write, 0, SCMD_IDEA, FALSE },
+    { "index", 0, do_index, 0, 0, FALSE },
     { "look", 0, do_look, 0, 0, FALSE },
     { "leave", 0, do_leave, 0 ,0 , FALSE },
     { "lock", 0, do_gen_door , 0, SCMD_LOCK , FALSE },
@@ -1564,12 +1566,12 @@ void command_interpreter(struct char_data * ch, char *argument, char *tcname)
       if (ch->desc)
         ch->desc->invalid_command_counter = 0;
     }
-    verify_data(ch, line, cmd, mtx_info[cmd].subcmd, "pre-rig");
+    verify_data(ch, line, cmd, rig_info[cmd].subcmd, "pre-rig");
     if (!special(ch, cmd, line)) {
       ((*rig_info[cmd].command_pointer) (ch, line, cmd, rig_info[cmd].subcmd));
-      verify_data(ch, line, cmd, mtx_info[cmd].subcmd, "rig");
+      verify_data(ch, line, cmd, rig_info[cmd].subcmd, "rig");
     } else {
-      verify_data(ch, line, cmd, mtx_info[cmd].subcmd, "rig special");
+      verify_data(ch, line, cmd, rig_info[cmd].subcmd, "rig special");
     }
   } else
   {
@@ -1601,14 +1603,6 @@ void command_interpreter(struct char_data * ch, char *argument, char *tcname)
         return;
       } else
         send_to_char("The ice covering you crackles alarmingly as you slam your sovereign will through it.\r\n", ch);
-    }
-
-    if (AFF_FLAGGED(ch, AFF_PETRIFY) && cmd_info[cmd].minimum_position > POS_DEAD) {
-      if (!access_level(ch, LVL_VICEPRES)) {
-        send_to_char("Your muscles don't respond to your impulse.\r\n", ch);
-        return;
-      } else
-        send_to_char("You abuse your administrative powers and force your petrified body to respond.\r\n", ch);
     }
 
     if (cmd_info[cmd].command_pointer == NULL) {
@@ -1668,13 +1662,13 @@ void command_interpreter(struct char_data * ch, char *argument, char *tcname)
       return;
     }
 
-    verify_data(ch, line, cmd, mtx_info[cmd].subcmd, "pre-command");
+    verify_data(ch, line, cmd, cmd_info[cmd].subcmd, "pre-command");
 
     if (no_specials || !special(ch, cmd, line)) {
       ((*cmd_info[cmd].command_pointer) (ch, line, cmd, cmd_info[cmd].subcmd));
-      verify_data(ch, line, cmd, mtx_info[cmd].subcmd, "command");
+      verify_data(ch, line, cmd, cmd_info[cmd].subcmd, "command");
     } else {
-      verify_data(ch, line, cmd, mtx_info[cmd].subcmd, "command special");
+      verify_data(ch, line, cmd, cmd_info[cmd].subcmd, "command special");
     }
   }
 }
@@ -1692,13 +1686,6 @@ struct alias *find_alias(struct alias *alias_list, char *str)
 
 
   return NULL;
-}
-
-void free_alias(struct alias *a)
-{
-  DELETE_ARRAY_IF_EXTANT(a->command);
-  DELETE_ARRAY_IF_EXTANT(a->replacement);
-  DELETE_AND_NULL(a);
 }
 
 ACMD(do_keepalive) {
@@ -1734,15 +1721,19 @@ ACMD(do_alias)
     /* is this an alias we've already defined? */
     if ((a = find_alias(GET_ALIASES(ch), arg)) != NULL) {
       REMOVE_FROM_LIST(a, GET_ALIASES(ch), next);
-      free_alias(a);
+      delete a;
+      a = NULL;
+
+      // No replacement string was specified-- assume we want to delete.
+      if (!*repl) {
+        send_to_char("Alias deleted.\r\n", ch);
+        return;
+      }
     }
 
-    /* if no replacement string is specified, assume we want to delete */
     if (!*repl) {
-      if (a == NULL)
-        send_to_char("No such alias.\r\n", ch);
-      else
-        send_to_char("Alias deleted.\r\n", ch);
+      // They wanted to delete an alias, but it didn't exist.
+      send_to_char("No such alias.\r\n", ch);
     } else { /* otherwise, either add or redefine an alias */
       if (!str_cmp(arg, "alias")) {
         send_to_char("You can't alias 'alias'.\r\n", ch);
@@ -1891,26 +1882,29 @@ int perform_alias(struct descriptor_data * d, char *orig)
  * it to be returned.  Returns -1 if not found; 0..n otherwise.  Array
  * must be terminated with a '\n' so it knows to stop searching.
  */
-int search_block(char *arg, const char **list, bool exact)
+int search_block(const char *arg, const char **list, bool exact)
 {
   int i, l;
   if (!strcmp(arg, "!"))
     return -1;
 
+  char mutable_arg[strlen(arg) + 1];
+  strlcpy(mutable_arg, arg, sizeof(mutable_arg));
+
   /* Make into lower case, and get length of string */
-  for (l = 0; *(arg + l); l++)
-    *(arg + l) = LOWER(*(arg + l));
+  for (l = 0; *(mutable_arg + l); l++)
+    *(mutable_arg + l) = LOWER(*(mutable_arg + l));
 
   if (exact) {
     for (i = 0; **(list + i) != '\n'; i++)
-      if (!strcmp(arg, *(list + i)))
+      if (!strcmp(mutable_arg, *(list + i)))
         return (i);
   } else {
     if (!l)
       l = 1;                    /* Avoid "" to match the first available
                                                                                      * string */
     for (i = 0; **(list + i) != '\n'; i++)
-      if (!strncmp(arg, *(list + i), l))
+      if (!strncmp(mutable_arg, *(list + i), l))
         return (i);
   }
 
@@ -1967,7 +1961,7 @@ int reserved_word(char *argument)
  * copy the first non-fill-word, space-delimited argument of 'argument'
  * to 'first_arg'; return a pointer to the remainder of the string.
  */
-char *one_argument(char *argument, char *first_arg)
+char *one_argument(char *argument, char *first_arg, bool preserve_case)
 {
   char *begin = first_arg;
 
@@ -1976,7 +1970,7 @@ char *one_argument(char *argument, char *first_arg)
 
     first_arg = begin;
     while (*argument && !isspace(*argument)) {
-      *(first_arg++) = LOWER(*argument);
+      *(first_arg++) = (preserve_case ? *argument : LOWER(*argument));
       argument++;
     }
 
@@ -1990,7 +1984,7 @@ char *one_argument(char *argument, char *first_arg)
 
 
 /* same as one_argument except that it doesn't ignore fill words */
-char *any_one_arg(char *argument, char *first_arg)
+char *any_one_arg(char *argument, char *first_arg, bool preserve_case)
 {
   *first_arg = '\0';
 
@@ -2000,7 +1994,7 @@ char *any_one_arg(char *argument, char *first_arg)
   skip_spaces(&argument);
 
   while (*argument && !isspace(*argument)) {
-    *(first_arg++) = LOWER(*argument);
+    *(first_arg++) = (preserve_case ? *argument : LOWER(*argument));
     argument++;
   }
 
@@ -2010,7 +2004,7 @@ char *any_one_arg(char *argument, char *first_arg)
 }
 
 // Same as above, but without skip_spaces.
-const char *any_one_arg_const(const char *argument, char *first_arg)
+const char *any_one_arg_const(const char *argument, char *first_arg, bool preserve_case)
 {
   *first_arg = '\0';
 
@@ -2018,7 +2012,7 @@ const char *any_one_arg_const(const char *argument, char *first_arg)
     return NULL;
 
   while (*argument && !isspace(*argument)) {
-    *(first_arg++) = LOWER(*argument);
+    *(first_arg++) = (preserve_case ? *argument : LOWER(*argument));
     argument++;
   }
 
@@ -2394,7 +2388,7 @@ int perform_dupe_check(struct descriptor_data *d)
 /* deal with newcomers and other non-playing sockets */
 void nanny(struct descriptor_data * d, char *arg)
 {
-  char buf[128];
+  char buf[1000 ];
   int load_result = NOWHERE;
   char tmp_name[MAX_INPUT_LENGTH];
   extern vnum_t mortal_start_room;
@@ -2532,7 +2526,6 @@ void nanny(struct descriptor_data * d, char *arg)
           // Create and zero out their player_specials.
           DELETE_IF_EXTANT(d->character->player_specials);
           d->character->player_specials = new player_special_data;
-          memset(d->character->player_specials, 0, sizeof(player_special_data));
 
           // Initialize their ignore data structure, which all PCs have.
           GET_IGNORE_DATA(d->character) = new IgnoreData(d->character);
@@ -2822,6 +2815,8 @@ void nanny(struct descriptor_data * d, char *arg)
         char char_name[strlen(GET_CHAR_NAME(d->character))+1];
         strcpy(char_name, GET_CHAR_NAME(d->character));
         free_char(d->character);
+        delete d->character;
+
         d->character = playerDB.LoadChar(char_name, false);
         d->character->desc = d;
         PLR_FLAGS(d->character).RemoveBit(PLR_JUST_DIED);
@@ -3172,7 +3167,9 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("ws", "southwest");
   COMMAND_ALIAS("wn", "northwest");
   COMMAND_ALIAS("en", "northeast");
-  COMMAND_ALIAS("ws", "southwest");
+  COMMAND_ALIAS("es", "southeast");
+  COMMAND_ALIAS("sse", "southeast");
+  COMMAND_ALIAS("ssw", "southwest");
   COMMAND_ALIAS("norht", "north"); // this one happened 18 times
   COMMAND_ALIAS("esat", "east"); // this one only 8
 
@@ -3193,8 +3190,19 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("cyberwear", "cyberware");
   COMMAND_ALIAS("biowear", "bioware");
   COMMAND_ALIAS("lsit", "list");
+  COMMAND_ALIAS("ist", "list");
   COMMAND_ALIAS("out", "put");
   COMMAND_ALIAS("ivn", "inventory");
+  COMMAND_ALIAS("hoslter", "holster");
+  COMMAND_ALIAS("stnad", "stand");
+  COMMAND_ALIAS("saerch", "search");
+  COMMAND_ALIAS("serach", "search");
+  COMMAND_ALIAS("shot", "shoot");
+  COMMAND_ALIAS("trian", "train");
+  COMMAND_ALIAS("opne", "open");
+  COMMAND_ALIAS("recpa", "recap");
+  COMMAND_ALIAS("scoe", "score");
+  COMMAND_ALIAS("hial", "hail");
 
   // Combat stuff.
   COMMAND_ALIAS("attack", "kill");
@@ -3203,6 +3211,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
 
   // Misc aliases.
   COMMAND_ALIAS("taxi", "hail");
+  COMMAND_ALIAS("cab", "hail");
   COMMAND_ALIAS("yes", "nod");
   COMMAND_ALIAS("setup", "unpack");
   COMMAND_ALIAS("ability", "abilities");
@@ -3213,6 +3222,9 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("email", "register");
   COMMAND_ALIAS("clothing", "equipment");
   COMMAND_ALIAS("armor", "equipment");
+  COMMAND_ALIAS("programs", "software");
+  COMMAND_ALIAS("bank", "balance");
+  COMMAND_ALIAS("recall", "recap");
 
   // Toggles.
   COMMAND_ALIAS("settings", "toggle");
@@ -3228,6 +3240,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("lok", "look");
   COMMAND_ALIAS("loko", "look");
   COMMAND_ALIAS("loook", "look");
+  COMMAND_ALIAS("ook", "look");
 
   // equipment seems to give people a lot of trouble
   COMMAND_ALIAS("unwield", "remove");

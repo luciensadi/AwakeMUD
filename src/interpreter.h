@@ -39,11 +39,11 @@ const int RETURN_HELP = 127;
 
 
 void    command_interpreter(struct char_data *ch, char *argument, char *tchname);
-int     search_block(char *arg, const char **list, bool exact);
+int     search_block(const char *arg, const char **list, bool exact);
 char    lower( char c );
-char    *one_argument(char *argument, char *first_arg);
-char    *any_one_arg(char *argument, char *first_arg);
-const char *any_one_arg_const(const char *argument, char *first_arg);
+char    *one_argument(char *argument, char *first_arg, bool preserve_case=0);
+char    *any_one_arg(char *argument, char *first_arg, bool preserve_case=0);
+const char *any_one_arg_const(const char *argument, char *first_arg, bool preserve_case=0);
 char    *two_arguments(char *argument, char *first_arg, char *second_arg);
 int     fill_word(char *argument);
 void    half_chop(char *string, char *arg1, char *arg2);
@@ -78,8 +78,14 @@ struct alias
   char *replacement;
   int type;
   struct alias *next;
+
   alias():
     command(NULL), replacement(NULL), next(NULL)
   {}
+
+  ~alias() {
+    delete [] command;
+    delete [] replacement;
+  }
 };
 #endif

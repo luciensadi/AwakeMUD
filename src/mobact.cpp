@@ -814,7 +814,7 @@ bool mobact_process_aggro(struct char_data *ch, struct room_data *room) {
   }
 
   // Attack vehicles (but not for aggr-to-race)
-  if (MOB_FLAGGED(ch, MOB_AGGRESSIVE) || GET_MOBALERT(ch) == MALERT_ALARM) {
+  if (MOB_FLAGGED(ch, MOB_AGGRESSIVE) || (GET_MOBALERT(ch) == MALERT_ALARM && !MOB_FLAGGED(ch, MOB_WIMPY))) {
     // If I am not astral, am in the same room, and am willing to attack a vehicle this round (coin flip), pick a fight with a vehicle.
     if (ch->in_room->number == room->number && !IS_ASTRAL(ch) && number(0, 1)) {
       bool area_has_pc_occupants = FALSE;
@@ -1093,7 +1093,7 @@ bool mobact_process_guard(struct char_data *ch, struct room_data *room) {
         continue;
 
       // If the room we're in is neither a road nor a garage, attack any vehicles we see. Never attack vehicles in a garage.
-      if (vehicle_is_valid_mob_target(veh, GET_MOBALERT(ch) == MALERT_ALARM && !ROOM_FLAGGED(room, ROOM_GARAGE))) {
+      if (vehicle_is_valid_mob_target(veh, GET_MOBALERT(ch) == MALERT_ALARM && !ROOM_FLAGGED(room, ROOM_GARAGE) && !MOB_FLAGGED(ch, MOB_WIMPY))) {
         stop_fighting(ch);
 
         if (MOB_FLAGGED(ch, MOB_INANIMATE)) {

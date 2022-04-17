@@ -333,7 +333,7 @@ void extract_quest_targets(int num)
 
   for (mob = character_list; mob; mob = next) {
     next = mob->next;
-    if (mob->mob_specials.quest_id == num) {
+    if (IS_NPC(mob) && mob->mob_specials.quest_id == num) {
       for (obj = mob->carrying; obj; obj = next_obj) {
         next_obj = obj->next_content;
         extract_obj(obj);

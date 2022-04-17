@@ -51,6 +51,7 @@ extern bool DISPLAY_HELPFUL_STRINGS_FOR_MOB_FUNCS;
 extern class objList ObjList;
 extern class helpList Help;
 extern class helpList WizHelp;
+extern struct time_info_data time_info;
 
 extern char *short_object(int virt, int where);
 extern const char *dist_name[];
@@ -1811,11 +1812,34 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
     }
   }
 
-  // Display weather info in the room.
-  if (!ROOM_FLAGGED(ch->in_room, ROOM_INDOORS)) {
+  if (!PRF_FLAGGED(ch, PRF_NO_WEATHER)) {
+    // Display lighting info.
+    bool is_nighttime = (time_info.hours <= 6 || time_info.hours >= 19) && !ROOM_FLAGGED(ch->in_room, ROOM_INDOORS);
+    if (is_nighttime && ROOM_FLAGGED(ch->in_room, ROOM_STREETLIGHTS)) {
+      send_to_char("^LStreetlights drive back the nighttime darkness.^n\r\n", ch);
+    } else if (is_nighttime && ch->in_room->sector_type == SPIRIT_CITY) {
+      send_to_char("^LStreaks of light pollution soften the shadows.^n\r\n", ch);
+    } else if (is_nighttime || (ch->in_room->vision[0] > LIGHT_NORMAL && ch->in_room->vision[0] <= LIGHT_PARTLIGHT)) {
+      if (ch->in_room->light[1] && ch->in_room->light[0] <= 1) {
+        send_to_char(ch, "^LAn ambient magical glow lightens the %sshadows.^n\r\n", is_nighttime ? "nighttime " : "");
+      } else if (ch->in_room->light[0] > 1) {
+        if (GET_EQ(ch, WEAR_LIGHT)) {
+          send_to_char(ch, "^LYour flashlight highlights the %sshadows.^n\r\n", is_nighttime ? "nighttime " : "");
+        } else {
+          send_to_char(ch, "^LBeams of light highlight the %sshadows.^n\r\n", is_nighttime ? "nighttime " : "");
+        }
+      } else {
+        send_to_char(ch, "^LDarkness cloaks the area.^n\r\n");
+      }
+    }
+
+    if (!ROOM_FLAGGED(ch->in_room, ROOM_INDOORS)) {
+    // Display weather info in the room.
     if (IS_WATER(ch->in_room)) {
-      if (weather_info.sky >= SKY_RAINING) {
-        send_to_char(ch, "^cThe water around you is dimpled by the falling rain.^n\r\n");
+      if (weather_info.sky == SKY_RAINING) {
+        send_to_char(ch, "^cThe rain gets in your eyes as you swim.^n\r\n");
+      } else if (weather_info.sky == SKY_LIGHTNING) {
+        send_to_char(ch, "^cThe water is made treacherous by the pounding rain.^n\r\n");
       }
     } else {
       if (weather_info.sky == SKY_RAINING) {
@@ -1823,7 +1847,7 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
           if (ch->in_veh->type == VEH_BIKE) {
             send_to_char(ch, "^cRain ricochets off your shoulders and splashes about the bike.^n\r\n");
           } else {
-            send_to_char(ch, "^cRain glides down your vehicle's windows, wipers brushing it clear with patient motion.^n\r\n");
+            send_to_char(ch, "^cRain glides down your windows, wipers brushing it clear with patient motion.^n\r\n");
           }
         } else {
           send_to_char(ch, "^cRain splashes into the puddles around your feet.^n\r\n");
@@ -1832,9 +1856,9 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
       else if (weather_info.sky == SKY_LIGHTNING) {
         if (ch->in_veh) {
           if (ch->in_veh->type == VEH_BIKE) {
-            send_to_char(ch, "^cHeavy rain pounds down around you, splashing off your bike.^n\r\n");
+            send_to_char(ch, "^cHeavy rain pounds down around you, running in rivulets off of your bike.^n\r\n");
           } else {
-            send_to_char(ch, "^cHeavy rain pounds against your vehicle's windows.^n\r\n");
+            send_to_char(ch, "^cHeavy rain pounds against your windows, making it hard to see.^n\r\n");
           }
         } else {
           send_to_char(ch, "^cYou struggle to see through the heavy rain that pounds down from the sky.^n\r\n");
@@ -1845,6 +1869,8 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
       }
     }
   }
+  }
+
   if (ch->in_room->poltergeist[0])
     send_to_char("^cAn invisible force is whipping small objects around the area.^n\r\n", ch);
   if (ch->in_room->icesheet[0])
@@ -2294,7 +2320,7 @@ void do_probe_veh(struct char_data *ch, struct veh_data * k)
   snprintf(buf, sizeof(buf), "Name: '^y%s^n', Aliases: %s\r\n",
           k->short_description, k->name);
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%s^n with handling ^c%d^n, a top speed of ^c%d^n, and raw acceleration of ^c%d^n.\r\n",
-          veh_type[k->type], k->handling, k->speed, k->accel);
+          veh_types[k->type], k->handling, k->speed, k->accel);
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It has a body rating of ^c%d^n and rating-^c%d^n vehicular armor. It seats ^c%d^n up front and ^c%d^n in the back.\r\n",
           k->body, k->armor, k->seating[1], k->seating[0]);
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Its signature rating is ^c%d^n, and its NERP pilot rating is ^c%d^n.\r\n",
@@ -2302,7 +2328,11 @@ void do_probe_veh(struct char_data *ch, struct veh_data * k)
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It has rating ^c%d^n autonav and stock capacity of ^c%d^n, ^c%d^n w/ current empty seats (^y%d^n load in use).\r\n",
           k->autonav, (int)k->load, (int)GET_VEH_MAXLOAD(k), (int)k->usedload);
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Its engine is adapted for ^c%s^n. If loaded into another vehicle, it takes up ^c%d^n load.\r\n",
-                  engine_type[k->engine], calculate_vehicle_weight(k));
+                  engine_types[k->engine], calculate_vehicle_entry_load(k));
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It can travel over %s%s%s.\r\n",
+           veh_can_traverse_land(k) ? "land" : "",
+           veh_can_traverse_land(k) && veh_can_traverse_water(k) ? " and " : "",
+           veh_can_traverse_water(k) ? "water" : "");
   send_to_char(buf, ch);
 }
 
@@ -3069,32 +3099,36 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is %s ^c%s^n upgrade", AN(mod_types[GET_OBJ_VAL(j, 0)].name), mod_types[GET_OBJ_VAL(j, 0)].name);
 
       // Val 1
-      if (GET_OBJ_VAL(j, 0) == TYPE_MOUNT) {
+      if (GET_VEHICLE_MOD_TYPE(j) == TYPE_MOUNT) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " that adds %s ^c%s^n.", AN(mount_types[GET_OBJ_VAL(j, 1)]), mount_types[GET_OBJ_VAL(j, 1)]);
       } else {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " that takes up ^c%d^n load space.", GET_OBJ_VAL(j, 1));
       }
 
       // Val 2
-      if (GET_OBJ_VAL(j, 0) == MOD_ENGINE) {
+      if (GET_VEHICLE_MOD_TYPE(j) == MOD_ENGINE) {
         // engine type
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt is %s ^c%s^n engine.", AN(engine_type[GET_OBJ_VAL(j, 2)]), engine_type[GET_OBJ_VAL(j, 2)]);
-      } else if (GET_OBJ_VAL(j, 0) == MOD_RADIO) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt is %s ^c%s^n engine.",
+                 AN(engine_types[GET_VEHICLE_MOD_RATING(j)]),
+                 engine_types[GET_VEHICLE_MOD_RATING(j)]);
+      } else if (GET_VEHICLE_MOD_TYPE(j) == MOD_RADIO) {
         // radio range 0-5
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt has a ^c%d/5^n range and can encrypt and decrypt signals up to crypt level ^c%d^n.",
-                GET_OBJ_VAL(j, 2), GET_OBJ_VAL(j, 3));
+                 GET_VEHICLE_MOD_RATING(j),
+                 GET_VEHICLE_MOD_RADIO_CRYPT(j));
       } else {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt functions at rating ^c%d^n.", GET_OBJ_VAL(j, 2));
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt functions at rating ^c%d^n.", GET_VEHICLE_MOD_RATING(j));
       }
 
       // Val 5
-      sprintbit(GET_OBJ_VAL(j, 5), engine_type, buf2, sizeof(buf2));
+      sprintbit(GET_VEHICLE_MOD_ENGINE_BITS(j), engine_types, buf2, sizeof(buf2));
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt is compatible with the following engine types:\r\n^c  %s^n", buf2);
 
       // Vals 4 and 6
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt has been designed to fit ^c%s^n, and installs to the ^c%s^n.",
-              GET_OBJ_VAL(j, 4) == 0 ? "vehicles" : GET_OBJ_VAL(j, 4) == 1 ? "drones" : "all types of vehicles",
-              mod_name[GET_OBJ_VAL(j, 6)]);
+      sprintbit(GET_VEHICLE_MOD_DESIGNED_FOR_FLAGS(j), veh_types, buf2, sizeof(buf2));
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt has been designed to fit vehicles of type: ^c%s^n, and installs to the ^c%s^n.",
+               buf2,
+               mod_name[GET_VEHICLE_MOD_LOCATION(j)]);
       break;
     case ITEM_DESIGN:
       if (GET_OBJ_VAL(j, 0) == 5) {
@@ -3187,17 +3221,26 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
   if (is_dont_touch)
     GET_OBJ_EXTRA(j).SetBit(ITEM_EXTRA_DONT_TOUCH);
 
-  strncpy(buf1, "This object modifies your character in the following ways when used:\r\n  ^c", sizeof(buf1));
-  for (i = 0; i < MAX_OBJ_AFFECT; i++)
-    if (j->affected[i].modifier)
-    {
-      if (GET_OBJ_TYPE(j) == ITEM_MOD)
+  if (GET_OBJ_TYPE(j) == ITEM_MOD) {
+    strncpy(buf1, "This object modifies your vehicle in the following ways:\r\n  ^c", sizeof(buf1));
+    for (i = 0; i < MAX_OBJ_AFFECT; i++) {
+      if (j->affected[i].modifier) {
         sprinttype(j->affected[i].location, veh_aff, buf2, sizeof(buf2));
-      else
-        sprinttype(j->affected[i].location, apply_types, buf2, sizeof(buf2));
-      snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "%s %+d to %s", found++ ? "," : "",
-              j->affected[i].modifier, buf2);
+        snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "%s %+d to %s", found++ ? "," : "",
+                 j->affected[i].modifier, buf2);
+      }
     }
+  } else {
+    strncpy(buf1, "This object modifies your character in the following ways when used:\r\n  ^c", sizeof(buf1));
+    for (i = 0; i < MAX_OBJ_AFFECT; i++) {
+      if (j->affected[i].modifier) {
+        sprinttype(j->affected[i].location, apply_types, buf2, sizeof(buf2));
+        snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "%s %+d to %s", found++ ? "," : "",
+                 j->affected[i].modifier, buf2);
+      }
+    }
+  }
+
   if (found) {
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s^n\r\n", buf1);
   }
@@ -3249,20 +3292,8 @@ ACMD(do_examine)
         return;
       }
 
-      switch(found_veh->type) {
-        case VEH_DRONE:
-          skill = SKILL_BR_DRONE;
-          break;
-        case VEH_BIKE:
-          skill = SKILL_BR_BIKE;
-          break;
-        case VEH_CAR:
-          skill = SKILL_BR_CAR;
-          break;
-        case VEH_TRUCK:
-          skill = SKILL_BR_TRUCK;
-          break;
-      }
+      skill = get_br_skill_for_veh(found_veh);
+
       int target = (found_veh->cspeed > SPEED_IDLE) ? 8 : 4;
       skill = get_skill(ch, skill, target);
       target += modify_target(ch);
@@ -4262,7 +4293,6 @@ ACMD(do_time)
 {
   sh_int /* year, month, day,*/ hour, minute, pm;
   extern struct time_info_data time_info;
-  extern const char *weekdays[];
   extern const char *month_name[];
   struct obj_data *check;
 
@@ -5804,7 +5834,24 @@ ACMD(do_scan)
                   }
                 }
               }
-              snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "  %s\r\n", GET_NAME(list));
+              char desc_line[200];
+              strlcpy(desc_line, "", sizeof(desc_line));
+
+              if (list->mob_specials.quest_id == GET_IDNUM(ch)) {
+                strlcat(desc_line, "(quest) ", sizeof(desc_line));
+              } else if (list->mob_specials.quest_id != 0) {
+                strlcat(desc_line, "(protected) ", sizeof(desc_line));
+              }
+
+              if (IS_AFFECTED(list, AFF_INVISIBLE) || IS_AFFECTED(list, AFF_IMP_INVIS) || IS_AFFECTED(list, AFF_SPELLINVIS) || IS_AFFECTED(list, AFF_SPELLIMPINVIS)) {
+                strlcat(desc_line, "(invisible) ", sizeof(desc_line));
+              }
+
+              if ((IS_ASTRAL(ch) || IS_DUAL(ch)) && IS_ASTRAL(list)) {
+                  strlcat(desc_line, "(astral) ", sizeof(desc_line));
+              }
+
+              snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "  %s%s%s\r\n", desc_line, GET_NAME(list), FIGHTING(list) == ch ? " (fighting you!)" : "");
               onethere = TRUE;
               anythere = TRUE;
             }
@@ -5908,6 +5955,15 @@ ACMD(do_status)
       send_to_char("  Bulky Armor (Light)\r\n", ch);
       printed = TRUE;
       break;
+  }
+  if (GET_TEMP_QUI_LOSS(ch)) {
+    send_to_char(ch, "  Temporary Quickness Loss: %d\r\n", GET_TEMP_QUI_LOSS(ch));
+  }
+  if (GET_TEMP_MAGIC_LOSS(ch)) {
+    send_to_char(ch, "  Temporary Magic Loss: %d\r\n", GET_TEMP_MAGIC_LOSS(ch));
+  }
+  if (GET_TEMP_ESSLOSS(ch)) {
+    send_to_char(ch, "  Temporary Essence Loss: %d\r\n", GET_TEMP_ESSLOSS(ch));
   }
   if (GET_REACH(targ)) {
     send_to_char(ch, "  Extra Reach (%dm)\r\n", GET_REACH(targ));

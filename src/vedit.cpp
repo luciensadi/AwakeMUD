@@ -60,8 +60,8 @@ void vedit_disp_menu(struct descriptor_data * d)
   send_to_char(CH, "   Sig(^c%d^n) Au(^c%d^n) P(^c%d^n) Seat(^c%d/%d^n) Load(^c%d^n) Cost(^c%d^n)\r\n",
                d->edit_veh->sig, d->edit_veh->autonav, d->edit_veh->pilot, d->edit_veh->seating[1], d->edit_veh->seating[0],
                (int)d->edit_veh->load, d->edit_veh->cost);
-  send_to_char(CH, "b) Type: ^C%s^n\r\n", veh_type[d->edit_veh->type]);
-  send_to_char(CH, "c) Stock Engine: ^C%s^n\r\n", engine_type[d->edit_veh->engine]);
+  send_to_char(CH, "b) Type: ^C%s^n\r\n", veh_types[d->edit_veh->type]);
+  send_to_char(CH, "c) Stock Engine: ^C%s^n\r\n", engine_types[d->edit_veh->engine]);
   send_to_char("q) Quit and save\r\n"
                "x) Exit and abort\r\n"
                "Enter your choice:\r\n", CH);
@@ -399,7 +399,7 @@ if (d->edit_veh->ITEM && veh_proto[veh_number].ITEM && d->edit_veh->ITEM != veh_
       break;
     case 'c':
       for (number = 1; number <= ENGINE_DIESEL; number ++)
-        send_to_char(CH, "  %d) %s\r\n", number, engine_type[number]);
+        send_to_char(CH, "  %d) %s\r\n", number, engine_types[number]);
       send_to_char("Enter default engine type: ", CH);
       d->edit_mode = VEDIT_ENGINE;
       break;

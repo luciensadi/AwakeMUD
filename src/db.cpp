@@ -2306,7 +2306,7 @@ void parse_shop(File &fl, long virtual_nr)
   shop->flags.FromString(data.GetString("Flags", "0"));
   shop->races.FromString(data.GetString("Races", "0"));
   shop->buytypes.FromString(data.GetString("BuyTypes", "0"));
-  shop->ettiquete = data.GetInt("Etiquette", SKILL_STREET_ETIQUETTE);
+  shop->etiquette = data.GetInt("Etiquette", SKILL_STREET_ETIQUETTE);
   int num_fields = data.NumSubsections("SELLING"), vnum;
   struct shop_sell_data *templist = NULL;
 
@@ -3313,7 +3313,7 @@ void spec_update(void)
   char empty_argument = '\0';
 
   // Instead of calculating the random number for every traffic room, just calc once.
-  bool will_traffic = (number(0, 6) == 1);
+  bool will_traffic = (number(0, TRAFFIC_INFREQUENCY_CONTROL) == 0);
 
   for (i = 0; i <= top_of_world; i++)
     if (world[i].func != NULL && (will_traffic || world[i].func != traffic))
@@ -4119,9 +4119,6 @@ char *fread_string(FILE * fl, char *error)
 void free_char(struct char_data * ch)
 {
   int i;
-  struct alias *a, *temp, *next;
-  struct remem *b, *nextr;
-  extern void free_alias(struct alias * a);
 
   /* clean up spells */
   {
@@ -4161,16 +4158,22 @@ void free_char(struct char_data * ch)
   if (ch->player_specials != NULL && ch->player_specials != &dummy_mob)
   {
     // we have to delete these here before we delete the struct
-    for (a = GET_ALIASES(ch); a; a = next) {
-      next = a->next;
-      REMOVE_FROM_LIST(a, GET_ALIASES(ch), next);
-      free_alias(a);
+    {
+      struct alias *temp, *next;
+      for (struct alias *a = GET_ALIASES(ch); a; a = next) {
+        next = a->next;
+        REMOVE_FROM_LIST(a, GET_ALIASES(ch), next);
+        delete a;
+      }
     }
 
-    for (b = GET_PLAYER_MEMORY(ch); b; b = nextr) {
-      nextr = b->next;
-      DELETE_ARRAY_IF_EXTANT(b->mem);
-      DELETE_AND_NULL(b);
+    {
+      struct remem *nextr;
+      for (struct remem *b = GET_PLAYER_MEMORY(ch); b; b = nextr) {
+        nextr = b->next;
+        DELETE_ARRAY_IF_EXTANT(b->mem);
+        DELETE_AND_NULL(b);
+      }
     }
 
     DELETE_ARRAY_IF_EXTANT(ch->player_specials->obj_complete);
@@ -4462,7 +4465,7 @@ int file_to_string(const char *name, char *buf)
   }
   do {
     fgets(tmp, sizeof(tmp) - 1, fl);
-    tmp[strlen(tmp) - 1] = '\0';/* take off the trailing \n */
+    tmp[MAX(0, (int)(strlen(tmp)) - 1)] = '\0';/* take off the trailing \n */
     strcat(tmp, "\r\n");
 
     if (!feof(fl)) {
@@ -4501,17 +4504,10 @@ void reset_char(struct char_data * ch)
     GET_MENTAL(ch) = 100;
 }
 
-// TODO: this doesn't even clear 50% of the working variables, wat
-/* clear ALL the working variables of a char; do NOT free any space alloc'ed */
 void clear_char(struct char_data * ch)
 {
-  memset(ch, 0, sizeof(struct char_data));
-
-  ch->in_veh = NULL;
-  ch->in_room = NULL;
+  reset_char(ch);
   GET_WAS_IN(ch) = NULL;
-  GET_POS(ch) = POS_STANDING;
-  ch->mob_specials.default_pos = POS_STANDING;
   if (ch->points.max_mental < 1000)
     ch->points.max_mental = 1000;
   ch->player.time.logon = time(0);
@@ -4955,6 +4951,11 @@ void load_saved_veh()
     veh->locked = TRUE;
     veh->sub = data.GetLong("VEHICLE/Subscribed", 0);
     veh_room = data.GetLong("VEHICLE/InRoom", 0);
+
+    const char *veh_flag_string = data.GetString("VEHICLE/Flags", NULL);
+    if (veh_flag_string)
+      veh->flags.FromString(veh_flag_string);
+
     if (!veh->spare2)
       veh_to_room(veh, &world[real_room(veh_room)]);
     veh->restring = str_dup(data.GetString("VEHICLE/VRestring", NULL));
@@ -5044,7 +5045,7 @@ void load_saved_veh()
               auto it = std::find_if(contained_obj.begin(), contained_obj.end(), find_level(inside+1));
               while (it != contained_obj.end()) {
                 obj_to_obj(it->obj, obj);
-                contained_obj.erase(it);
+                it = contained_obj.erase(it);
               }
 
               if (inside > 0) {
@@ -5115,9 +5116,9 @@ void load_saved_veh()
       snprintf(buf, sizeof(buf), "MODIS/Mod%d", i);
       obj = read_object(data.GetLong(buf, 0), VIRTUAL);
       GET_MOD(veh, GET_OBJ_VAL(obj, 6)) = obj;
-      if (GET_OBJ_VAL(obj, 0) == TYPE_ENGINECUST)
-        veh->engine = GET_OBJ_VAL(obj, 2);
-      veh->usedload += GET_OBJ_VAL(obj, 1);
+      if (GET_VEHICLE_MOD_TYPE(obj) == TYPE_ENGINECUST)
+        veh->engine = GET_VEHICLE_MOD_RATING(obj);
+      veh->usedload += GET_VEHICLE_MOD_LOAD_SPACE_REQUIRED(obj);
       for (int l = 0; l < MAX_OBJ_AFFECT; l++)
         affect_veh(veh, obj->affected[l].location, obj->affected[l].modifier);
     }
@@ -5325,7 +5326,7 @@ void load_consist(void)
                   auto it = std::find_if(contained_obj.begin(), contained_obj.end(), find_level(inside+1));
                   while (it != contained_obj.end()) {
                     obj_to_obj(it->obj, obj);
-                    contained_obj.erase(it);
+                    it = contained_obj.erase(it);
                   }
 
                   if (inside > 0) {

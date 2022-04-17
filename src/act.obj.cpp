@@ -491,7 +491,12 @@ ACMD(do_put)
 
   generic_find(arg2, FIND_OBJ_EQUIP | FIND_OBJ_INV | FIND_OBJ_ROOM, ch, &tmp_char, &cont);
   if (!cont) {
-    send_to_char(ch, "You don't see %s %s here.\r\n", AN(arg2), arg2);
+    struct veh_data *veh = get_veh_list(arg2, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch);
+    if (veh) {
+      send_to_char(ch, "%s is a vehicle-- you'll have to use the UPGRADE command.\r\n", capitalize(GET_VEH_NAME(veh)));
+    } else {
+      send_to_char(ch, "You don't see %s %s here.\r\n", AN(arg2), arg2);
+    }
     return;
   }
 
@@ -677,6 +682,9 @@ bool can_take_obj(struct char_data * ch, struct obj_data * obj)
 
   if ((IS_CARRYING_W(ch) + GET_OBJ_WEIGHT(obj)) > CAN_CARRY_W(ch)) {
     act("$p: you can't carry that much weight.", FALSE, ch, obj, 0, TO_CHAR);
+    if (GET_OBJ_TYPE(obj) == ITEM_GUN_AMMO) {
+      send_to_char("(You can still grab rounds out of it with ^WPOCKETS ADD <container>^n though!)\r\n", ch);
+    }
     return 0;
   }
 
@@ -742,17 +750,11 @@ void get_check_money(struct char_data * ch, struct obj_data * obj, struct obj_da
     else
       send_to_char(ch, "There was 1 nuyen.\r\n");
 
-    // Income from an NPC corpse is always tracked.
     if (from_obj && (GET_OBJ_VNUM(from_obj) != OBJ_SPECIAL_PC_CORPSE && IS_OBJ_STAT(from_obj, ITEM_EXTRA_CORPSE))) {
-      if (IS_SENATOR(ch))
-        send_to_char("(nuyen from npc corpse)\r\n", ch);
+      // Income from an NPC corpse is always tracked.
       gain_nuyen(ch, GET_ITEM_MONEY_VALUE(obj), NUYEN_INCOME_LOOTED_FROM_NPCS);
-    }
-
-    // Picking up money from a player corpse, or dropped money etc-- not a faucet, came from a PC.
-    else {
-      if (IS_SENATOR(ch))
-        send_to_char("(nuyen from player corpse)\r\n", ch);
+    } else {
+      // Picking up money from a player corpse, or dropped money etc-- not a faucet, came from a PC.
       GET_NUYEN_RAW(ch) += GET_ITEM_MONEY_VALUE(obj);
     }
 
@@ -973,7 +975,7 @@ void perform_get_from_container(struct char_data * ch, struct obj_data * obj,
 
 
 void get_from_container(struct char_data * ch, struct obj_data * cont,
-                        char *arg, int mode)
+                        char *arg, int mode, bool confirmed=FALSE)
 {
   struct obj_data *obj, *next_obj;
   int obj_dotmode, found = 0;
@@ -991,6 +993,15 @@ void get_from_container(struct char_data * ch, struct obj_data * cont,
       snprintf(buf, sizeof(buf), "There doesn't seem to be %s %s installed in $p.", AN(arg), arg);
       act(buf, FALSE, ch, cont, 0, TO_CHAR);
       return;
+    }
+    if (GET_OBJ_TYPE(obj) == ITEM_PART) {
+      if (!confirmed) {
+        send_to_char(ch, "It takes a while to reinstall parts once you've removed them! You'll have to do ^WUNINSTALL <part> <deck> CONFIRM^n to uninstall %s from %s.\r\n",
+                      GET_OBJ_NAME(obj),
+                      GET_OBJ_NAME(cont)
+                    );
+        return;
+      }
     }
     perform_get_from_container(ch, obj, cont, mode);
     return;
@@ -1353,7 +1364,7 @@ ACMD(do_get)
 
   if (subcmd == SCMD_UNINSTALL)
     cyberdeck = TRUE;
-  two_arguments(argument, arg1, arg2);
+  const char *remainder = two_arguments(argument, arg1, arg2);
 
   if (IS_CARRYING_N(ch) >= CAN_CARRY_N(ch))
     send_to_char("Your arms are already full!\r\n", ch);
@@ -1447,20 +1458,8 @@ ACMD(do_get)
           return;
         } else {
           if (!IS_NPC(ch)) {
-            switch(veh->type) {
-            case VEH_DRONE:
-              skill = SKILL_BR_DRONE;
-              break;
-            case VEH_BIKE:
-              skill = SKILL_BR_BIKE;
-              break;
-            case VEH_CAR:
-              skill = SKILL_BR_CAR;
-              break;
-            case VEH_TRUCK:
-              skill = SKILL_BR_TRUCK;
-              break;
-            }
+            skill = get_br_skill_for_veh(veh);
+
             switch (GET_VEHICLE_MOD_TYPE(cont)) {
             case TYPE_ENGINECUST:
               target = 6;
@@ -1609,7 +1608,7 @@ ACMD(do_get)
           }
         }
       } else {
-        get_from_container(ch, cont, arg1, mode);
+        get_from_container(ch, cont, arg1, mode, is_abbrev("confirm", remainder));
       }
     } else {
       if (cont_dotmode == FIND_ALLDOT && !*arg2) {
@@ -1732,6 +1731,17 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
     return 0;
   }
 
+  if (mode == SCMD_DONATE) {
+    if (IS_OBJ_STAT(obj, ITEM_EXTRA_WIZLOAD)) {
+      act("You can't donate $p: It was given to you by staff.", FALSE, ch, obj, 0, TO_CHAR);
+      return 0;
+    }
+    if (IS_OBJ_STAT(obj, ITEM_EXTRA_NOSELL) || IS_OBJ_STAT(obj, ITEM_EXTRA_NORENT)) {
+      act("You can't donate $p: It's flagged !SELL or !RENT.", FALSE, ch, obj, 0, TO_CHAR);
+      return 0;
+    }
+  }
+
   // Special handling: Vehicle containers.
   if (GET_OBJ_VNUM(obj) == OBJ_VEHCONTAINER) {
     if (mode != SCMD_DROP) {
@@ -1827,14 +1837,17 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
 
   if (ch->in_veh)
   {
-    if (ch->in_veh->usedload + GET_OBJ_WEIGHT(obj) > GET_VEH_MAXOVERLOAD(ch->in_veh)) {
-      send_to_char("There is too much in the vehicle already!\r\n", ch);
-      return 0;
+    if (mode != SCMD_DONATE && mode != SCMD_JUNK) {
+      if (ch->in_veh->usedload + GET_OBJ_WEIGHT(obj) > GET_VEH_MAXOVERLOAD(ch->in_veh)) {
+        send_to_char("There is too much in the vehicle already!\r\n", ch);
+        return 0;
+      }
+      if (ch->vfront && ch->in_veh->seating[0] && ch->in_veh->usedload + GET_OBJ_WEIGHT(obj) > GET_VEH_MAXOVERLOAD(ch->in_veh) / 10) {
+        send_to_char("There is too much in the front of the vehicle!\r\n", ch);
+        return 0;
+      }
     }
-    if (ch->vfront && ch->in_veh->seating[0] && ch->in_veh->usedload + GET_OBJ_WEIGHT(obj) > GET_VEH_MAXOVERLOAD(ch->in_veh) / 10) {
-      send_to_char("There is too much in the front of the vehicle!\r\n", ch);
-      return 0;
-    }
+
     snprintf(buf, sizeof(buf), "%s %ss %s.%s\r\n", GET_NAME(ch), sname, GET_OBJ_NAME(obj), VANISH(mode));
     send_to_veh(buf, ch->in_veh, ch, FALSE);
   } else
@@ -2385,9 +2398,9 @@ void name_to_drinkcon(struct obj_data *obj, int type)
   if (!obj || (GET_OBJ_TYPE(obj) != ITEM_DRINKCON && GET_OBJ_TYPE(obj) != ITEM_FOUNTAIN))
     return;
 
-  int new_name_length = strlen(obj->text.keywords)+strlen(drinknames[type])+2;
-  new_name = new char[new_name_length];
-  snprintf(new_name, sizeof(new_name_length), "%s %s", obj->text.keywords, drinknames[type]);
+  size_t length = strlen(obj->text.keywords) + strlen(drinknames[type]) + 2;
+  new_name = new char[length];
+  snprintf(new_name, length, "%s %s", obj->text.keywords, drinknames[type]);
 
   if (GET_OBJ_RNUM(obj) == NOTHING ||
       obj->text.keywords != obj_proto[GET_OBJ_RNUM(obj)].text.keywords)
@@ -3603,7 +3616,7 @@ ACMD(do_activate)
     send_to_char("You press your thumb against the pad and the display flashes green.\r\n", ch);
     break;
   case 3:
-    act("$p scans your retina and the display flashes green.\r\n", FALSE, ch, obj, 0, TO_CHAR);
+    act("$p scans your retina and the display flashes green.", FALSE, ch, obj, 0, TO_CHAR);
     break;
   }
 }

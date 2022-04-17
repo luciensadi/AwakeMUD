@@ -25,12 +25,15 @@ struct shop_data
   sh_int random_amount, random_current, open, close, type;
   char *no_such_itemk, *no_such_itemp, *not_enough_nuyen, *doesnt_buy, *buy, *sell, *shopname;
   Bitfield buytypes, races, flags;
-  int ettiquete;
+  int etiquette;
   struct shop_sell_data *selling;
   struct shop_order_data *order;
+  
   shop_data() :
-    no_such_itemk(NULL), no_such_itemp(NULL), not_enough_nuyen(NULL), doesnt_buy(NULL), buy(NULL), sell(NULL),
-    shopname(NULL), selling(NULL), order(NULL)
+    vnum(NOTHING), keeper(NOBODY), profit_buy(0), profit_sell(0), random_amount(0),
+    random_current(0), open(0), close(0), type(0), no_such_itemk(NULL),
+    no_such_itemp(NULL), not_enough_nuyen(NULL), doesnt_buy(NULL), buy(NULL),
+    sell(NULL), shopname(NULL), etiquette(0), selling(NULL), order(NULL)
   {}
 };
 
@@ -40,7 +43,7 @@ struct shop_sell_data {
   int stock;
   int lastidnum[SHOP_LAST_IDNUM_LIST_SIZE];
   struct shop_sell_data *next;
-  
+
   shop_sell_data() :
     vnum(0), type(0), stock(0), next(NULL)
   {
@@ -60,7 +63,8 @@ struct shop_order_data {
   struct shop_order_data *next;
 
   shop_order_data() :
-    item(0), player(0), timeavail(0), number(0), price(0), sent(0), paid(0), expiration(0), next(NULL)
+    item(NOTHING), player(NOBODY), timeavail(0), number(0), price(0),
+    sent(0), paid(0), expiration(0), next(NULL)
   {}
 };
 

@@ -94,7 +94,7 @@ extern int write_quests_to_disk(int zone);
 extern void write_world_to_disk(int vnum);
 extern void write_objs_to_disk(int zone);
 extern void alarm_handler(int signal);
-extern bool can_edit_zone(struct char_data *ch, int zone);
+extern bool can_edit_zone(struct char_data *ch, rnum_t real_zone);
 extern const char *render_door_type_string(struct room_direction_data *door);
 extern void save_shop_orders();
 extern void turn_hardcore_on_for_character(struct char_data *ch);
@@ -1187,11 +1187,16 @@ void do_stat_veh(struct char_data *ch, struct veh_data * k)
           k->short_description, k->name);
 
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Vnum: [^g%8ld^n] Rnum: [%5ld] Type: [%10s] Idnum: [%8ld] Owner: [%8ld]\r\n",
-          virt, k->veh_number, veh_type[k->type], k->idnum, k->owner);
+          virt, k->veh_number, veh_types[k->type], k->idnum, k->owner);
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Han: [^B%d^n]  Spe: [^B%d^n]  Acc: [^B%d^n]  Bod: [^B%d^n]  Arm: [^B%d^n]\r\n",
           k->handling, k->speed, k->accel, k->body, k->armor);
-  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Sig: [^B%d^n]  Aut: [^B%d^n]  Pil: [^B%d^n]  Sea: [^B%d/%d^n]  Loa: [^B%d/%d(%d)^n]  Cos: [^B%d^n]\r\n",
-          k->sig, k->autonav, k->pilot, k->seating[1], k->seating[0], (int)k->usedload, (int)k->load, (int)GET_VEH_MAXLOAD(k), k->cost);
+
+  char flag_buf[1000];
+  k->flags.PrintBits(flag_buf, sizeof(flag_buf), veh_flag, NUM_VFLAGS);
+
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Sig: [^B%d^n]  Aut: [^B%d^n]  Pil: [^B%d^n]  Sea: [^B%d/%d^n]  Loa: [^B%d/%d(%d)^n]  Cos: [^B%d^n]\r\nFlags: [^B%s^n]\r\n",
+          k->sig, k->autonav, k->pilot, k->seating[1], k->seating[0], (int)k->usedload, (int)k->load, (int)GET_VEH_MAXLOAD(k), k->cost, *flag_buf ? flag_buf : "none");
+
   send_to_char(buf, ch);
 }
 
@@ -2270,7 +2275,7 @@ ACMD(do_vstat)
   // Require that they have access to edit the zone they're statting.
   for (int counter = 0; counter <= top_of_zone_table; counter++) {
     if ((number >= (zone_table[counter].number * 100)) && (number <= (zone_table[counter].top))) {
-      if (!can_edit_zone(ch, zone_table[counter].number)) {
+      if (!can_edit_zone(ch, counter)) {
         send_to_char("Sorry, you don't have access to edit that zone.\r\n", ch);
         return;
       }
@@ -2424,6 +2429,13 @@ ACMD(do_purge)
         next_ve = veh->next;
         if (veh == ch->in_veh)
           continue;
+
+        // Notify the owner.
+        if (veh->owner > 0) {
+          snprintf(buf2, sizeof(buf2), "^ROOC Alert: Your vehicle '%s' has been deleted by administrator '%s'.^n\r\n", GET_VEH_NAME(veh), GET_CHAR_NAME(ch));
+          store_mail(veh->owner, ch, buf2);
+        }
+
         snprintf(buf1, sizeof(buf1), "%s has purged %s.", GET_CHAR_NAME(ch), GET_VEH_NAME(veh));
         mudlog(buf1, ch, LOG_WIZLOG, TRUE);
         purgelog(veh);
@@ -2458,6 +2470,13 @@ ACMD(do_purge)
         snprintf(buf1, sizeof(buf1), "%s has purged %s.", GET_CHAR_NAME(ch), GET_VEH_NAME(veh));
         mudlog(buf1, ch, LOG_WIZLOG, TRUE);
         purgelog(veh);
+
+        // Notify the owner.
+        if (veh->owner > 0) {
+          snprintf(buf2, sizeof(buf2), "^ROOC Alert: Your vehicle '%s' has been deleted by administrator '%s'.^n\r\n", GET_VEH_NAME(veh), GET_CHAR_NAME(ch));
+          store_mail(veh->owner, ch, buf2);
+        }
+
         extract_veh(veh);
       }
 
@@ -2676,12 +2695,14 @@ void restore_character(struct char_data *vict, bool reset_staff_stats) {
   GET_PHYSICAL(vict) = GET_MAX_PHYSICAL(vict);
   GET_MENTAL(vict) = GET_MAX_MENTAL(vict);
 
+  GET_TEMP_QUI_LOSS(vict) = 0;
+
   // Non-NPCs get further consideration.
   if (!IS_NPC(vict)) {
     // Touch up their hunger, thirst, etc.
-    for (int i = COND_DRUNK; i <= COND_THIRST; i++)
+    for (int i = COND_DRUNK; i <= COND_THIRST; i++){
       // Staff don't deal with hunger, etc-- disable it for them.
-      if IS_SENATOR(vict) {
+      if (IS_SENATOR(vict)) {
         GET_COND(vict, i) = COND_IS_DISABLED;
       }
 
@@ -2703,6 +2724,7 @@ void restore_character(struct char_data *vict, bool reset_staff_stats) {
             return;
         }
       }
+    }
 
 
     // Staff members get their skills set to max, and also their stats boosted.
@@ -4352,6 +4374,9 @@ ACMD(do_set)
                { "hardcore", LVL_PRESIDENT, PC, BINARY }, //80
                { "esshole",  LVL_ADMIN, BOTH,   NUMBER },
                { "noautosyspoints", LVL_FIXER, PC, BINARY },
+               { "notells", LVL_FIXER, PC, BINARY },
+               { "noooc", LVL_FIXER, PC, BINARY },
+               { "noradio", LVL_FIXER, PC, BINARY },
                { "\n", 0, BOTH, MISC }
              };
 
@@ -4972,6 +4997,21 @@ ACMD(do_set)
   case 82: /* no syspoint auto awards */
     SET_OR_REMOVE(PLR_FLAGS(vict), PLR_NO_AUTO_SYSP_AWARDS);
     snprintf(buf, sizeof(buf),"%s turned %s's no-auto-sysp-awards flag %s.", GET_CHAR_NAME(ch), GET_NAME(vict), PLR_FLAGGED(vict, PLR_NO_AUTO_SYSP_AWARDS) ? "ON" : "OFF");
+    mudlog(buf, ch, LOG_WIZLOG, TRUE);
+    break;
+  case 83: /* no tells */
+    SET_OR_REMOVE(PLR_FLAGS(vict), PLR_TELLS_MUTED);
+    snprintf(buf, sizeof(buf),"%s turned %s's no-tells flag %s.", GET_CHAR_NAME(ch), GET_NAME(vict), PLR_FLAGGED(vict, PLR_TELLS_MUTED) ? "ON" : "OFF");
+    mudlog(buf, ch, LOG_WIZLOG, TRUE);
+    break;
+  case 84: /* no ooc */
+    SET_OR_REMOVE(PLR_FLAGS(vict), PLR_NOOOC);
+    snprintf(buf, sizeof(buf),"%s turned %s's no-ooc flag %s.", GET_CHAR_NAME(ch), GET_NAME(vict), PLR_FLAGGED(vict, PLR_NOOOC) ? "ON" : "OFF");
+    mudlog(buf, ch, LOG_WIZLOG, TRUE);
+    break;
+  case 85: /* no radio */
+    SET_OR_REMOVE(PLR_FLAGS(vict), PLR_RADIO_MUTED);
+    snprintf(buf, sizeof(buf),"%s turned %s's no-radio flag %s.", GET_CHAR_NAME(ch), GET_NAME(vict), PLR_FLAGGED(vict, PLR_RADIO_MUTED) ? "ON" : "OFF");
     mudlog(buf, ch, LOG_WIZLOG, TRUE);
     break;
   default:
@@ -6351,6 +6391,53 @@ ACMD(do_rewrite_world) {
   // Clear our alarm handler.
   signal(SIGALRM, SIG_IGN);
 
+  // Perform any rectification needed.
+  if (TRUE) {
+    bool all_flags_are_2_or_less = TRUE;
+
+    for (int rnum = 0; rnum <= top_of_objt; rnum++) {
+      struct obj_data *obj = &obj_proto[rnum];
+      if (GET_OBJ_TYPE(obj) == ITEM_MOD && (GET_VEHICLE_MOD_DESIGNED_FOR_FLAGS(obj) > 2 || GET_VEHICLE_MOD_DESIGNED_FOR_FLAGS(obj) < 0)) {
+        mudlog("SYSERR: Veh mod type swap code is enabled despite already having done that function!", ch, LOG_SYSLOG, TRUE);
+        all_flags_are_2_or_less = FALSE;
+        break;
+      }
+    }
+
+    if (all_flags_are_2_or_less) {
+      int flags_with_all_common_vehs = 0;
+      SET_BIT(flags_with_all_common_vehs, 1 << VEH_BIKE);
+      SET_BIT(flags_with_all_common_vehs, 1 << VEH_TRUCK);
+      SET_BIT(flags_with_all_common_vehs, 1 << VEH_CAR);
+      SET_BIT(flags_with_all_common_vehs, 1 << VEH_DRONE);
+
+      int flags_for_non_drone = 0;
+      SET_BIT(flags_for_non_drone, 1 << VEH_BIKE);
+      SET_BIT(flags_for_non_drone, 1 << VEH_TRUCK);
+      SET_BIT(flags_for_non_drone, 1 << VEH_CAR);
+
+      int flags_for_drone = 0;
+      SET_BIT(flags_for_drone, 1 << VEH_DRONE);
+
+      for (int rnum = 0; rnum <= top_of_objt; rnum++) {
+        struct obj_data *obj = &obj_proto[rnum];
+        if (GET_OBJ_TYPE(obj) == ITEM_MOD) {
+          switch (GET_VEHICLE_MOD_DESIGNED_FOR_FLAGS(obj)) {
+            case 0:
+              GET_VEHICLE_MOD_DESIGNED_FOR_FLAGS(obj) = flags_for_non_drone;
+              break;
+            case 1:
+              GET_VEHICLE_MOD_DESIGNED_FOR_FLAGS(obj) = flags_for_drone;
+              break;
+            case 2:
+              GET_VEHICLE_MOD_DESIGNED_FOR_FLAGS(obj) = flags_with_all_common_vehs;
+              break;
+          }
+        }
+      }
+    }
+  }
+
   // Perform writing for all zones that have rooms.
   for (int i = 0; i <= top_of_zone_table; i++) {
     snprintf(buf, sizeof(buf), "Writing zone %d...\r\n", zone_table[i].number);
@@ -6477,8 +6564,20 @@ int audit_zone_rooms_(struct char_data *ch, int zone_num, bool verbose) {
       printed = TRUE;
     }
 
-    if ((IS_WATER(room) || ROOM_FLAGGED(room, ROOM_FALL)) && room->rating == 0) {
-      strlcat(buf, "  - Swim / Fall rating not set.\r\n", sizeof(buf));
+    if ((IS_WATER(room) || ROOM_FLAGGED(room, ROOM_FALL))) {
+      if (room->rating == 0) {
+        strlcat(buf, "  - Swim / Fall rating not set.\r\n", sizeof(buf));
+        issues++;
+        printed = TRUE;
+      } else if (room->rating > 6) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - Swim / Fall rating is high (%d > 6).\r\n", room->rating);
+        issues++;
+        printed = TRUE;
+      }
+    }
+
+    if (GET_BACKGROUND_COUNT(room) > 5) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - Background count: Mana warp (%d > 5).\r\n", GET_BACKGROUND_COUNT(room));
       issues++;
       printed = TRUE;
     }
@@ -6761,7 +6860,7 @@ int audit_zone_objects_(struct char_data *ch, int zone_num, bool verbose) {
     printed = FALSE;
 
     // Flag objects with zero cost
-    if (GET_OBJ_COST(obj) <= 0) {
+    if (GET_OBJ_TYPE(obj) != ITEM_OTHER && GET_OBJ_COST(obj) <= 0) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - cost %d^n.\r\n", GET_OBJ_COST(obj));
       printed = TRUE;
       issues++;
@@ -6775,26 +6874,42 @@ int audit_zone_objects_(struct char_data *ch, int zone_num, bool verbose) {
     }
 
     // Call out all objects with affs
-    for (int aff_index = 0; aff_index < MAX_OBJ_AFFECT; aff_index++) {
-      if (obj->affected[aff_index].modifier) {
-        sprinttype(obj->affected[aff_index].location, apply_types, buf2, sizeof(buf2));
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - AFF %s %d^n.\r\n",
-                 buf2,
-                 obj->affected[aff_index].modifier);
+    if (GET_OBJ_TYPE(obj) != ITEM_MOD) {
+      for (int aff_index = 0; aff_index < MAX_OBJ_AFFECT; aff_index++) {
+        if (obj->affected[aff_index].modifier) {
+          sprinttype(obj->affected[aff_index].location, apply_types, buf2, sizeof(buf2));
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - AFF %s %d^n.\r\n",
+                   buf2,
+                   obj->affected[aff_index].modifier);
+          printed = TRUE;
+          issues++;
+        }
+      }
+    } else {
+      for (int wearloc = 0; wearloc < NUM_WEARS; wearloc++) {
+        if (wearloc != ITEM_WEAR_TAKE && CAN_WEAR(obj, wearloc)) {
+          strlcat(buf, "  - ^yVehicle mod can be worn.^n\r\n", sizeof(buf));
+          printed = TRUE;
+          issues++;
+        }
+      }
+
+      if (GET_VEHICLE_MOD_LOCATION(obj) == MOD_NOWHERE) {
+        strlcat(buf, "  - Mounts to NOWHERE.\r\n", sizeof(buf));
         printed = TRUE;
         issues++;
       }
     }
 
     // Flag objects with zero weight
-    if (GET_OBJ_WEIGHT(obj) <= 0) {
+    if (GET_OBJ_TYPE(obj) != ITEM_OTHER && GET_OBJ_WEIGHT(obj) <= 0) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - no or negative weight^n.\r\n");
       printed = TRUE;
       issues++;
     }
 
     // Flag objects with high weight-- except fountains, which are often given high weights.
-    if (GET_OBJ_TYPE(obj) != ITEM_FOUNTAIN && GET_OBJ_WEIGHT(obj) >= 100.0) {
+    if (GET_OBJ_TYPE(obj) != ITEM_OTHER && GET_OBJ_TYPE(obj) != ITEM_FOUNTAIN && GET_OBJ_WEIGHT(obj) >= 100.0) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - high weight %0.2f^n.\r\n", GET_OBJ_WEIGHT(obj));
       printed = TRUE;
       issues++;
@@ -7281,16 +7396,18 @@ int audit_zone_commands_(struct char_data *ch, int zone_num, bool verbose) {
                  zone_table[zone_num].number,
                  zone_table[zone_num].name,
                  zone_table[zone_num].lifespan);
+    issues += 1;
   }
 
   if (zone_table[zone_num].reset_mode == 0) {
     send_to_char(ch, "\r\nZone ^c%d^n (%s^n): Zone ^ydoes not reset^n",
                  zone_table[zone_num].number,
                  zone_table[zone_num].name);
+    issues += 1;
   }
 
   for (int cmd_no = 0; cmd_no < zone_table[zone_num].num_cmds; cmd_no++) {
-
+    // TODO-- but what would we even check for?
   }
 
   return issues;
@@ -7307,6 +7424,11 @@ ACMD(do_audit) {
   number = atoi(arg1);
   // find the real zone number
   zonenum = real_zone(number);
+
+  if (zonenum < 0 || zonenum > top_of_zone_table) {
+    send_to_char(ch, "That's not a zone.\r\n");
+    return;
+  }
 
   #define AUDIT_ALL_ZONES(func_suffix)                           \
   if (!str_cmp(arg1, #func_suffix)) {                            \

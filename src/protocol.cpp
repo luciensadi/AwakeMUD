@@ -1644,8 +1644,9 @@ void SoundSend( descriptor_t *apDescriptor, const char *apTrigger )
          else if ( strlen(apTrigger) <= MaxTriggerLength )
          {
             /* Use an old MSP-style trigger */
-            char *pBuffer = new char[MaxTriggerLength+10];
-            snprintf( pBuffer, MaxTriggerLength+10, "\t!SOUND(%s)", apTrigger );
+            size_t length = MaxTriggerLength+10;
+            char *pBuffer = new char[length];
+            snprintf( pBuffer, length, "\t!SOUND(%s)", apTrigger );
             Write(apDescriptor, pBuffer);
             delete [] pBuffer;
          }

@@ -477,10 +477,10 @@ float get_bulletpants_weight(struct char_data *ch) {
 
 // I went kinda crazy with the aliases for these things, so I put them into functions to avoid code reuse.
 bool is_valid_pockets_put_command(char *mode_buf) {
-  return !str_cmp(mode_buf, "put") || !str_cmp(mode_buf, "store") || !str_cmp(mode_buf, "add") || !str_cmp(mode_buf, "stow") || !str_cmp(mode_buf, "load");
+  return !str_cmp(mode_buf, "put") || !str_cmp(mode_buf, "store") || !str_cmp(mode_buf, "add") || !str_cmp(mode_buf, "stow") || !str_cmp(mode_buf, "load") || !str_cmp(mode_buf, "fill");
 }
 bool is_valid_pockets_get_command(char *mode_buf) {
-  return !str_cmp(mode_buf, "get") || !str_cmp(mode_buf, "remove") || !str_cmp(mode_buf, "retrieve");
+  return !str_cmp(mode_buf, "get") || !str_cmp(mode_buf, "remove") || !str_cmp(mode_buf, "retrieve") || !str_cmp(mode_buf, "empty");
 }
 
 // Returns 'APDS heavy pistol rounds' or equivalent.

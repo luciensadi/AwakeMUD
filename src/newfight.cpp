@@ -22,7 +22,7 @@
 
 extern int check_recoil(struct char_data *ch, struct obj_data *gun);
 extern void die(struct char_data * ch);
-extern void astral_fight(struct char_data *ch, struct char_data *vict);
+extern bool astral_fight(struct char_data *ch, struct char_data *vict);
 extern void dominator_mode_switch(struct char_data *ch, struct obj_data *obj, int mode);
 extern int calculate_vision_penalty(struct char_data *ch, struct char_data *victim);
 extern int find_sight(struct char_data *ch);
@@ -42,6 +42,9 @@ void engage_close_combat_if_appropriate(struct combat_data *att, struct combat_d
 bool handle_flame_aura(struct combat_data *att, struct combat_data *def);
 
 bool does_weapon_have_bayonet(struct obj_data *weapon);
+bool perform_nerve_strike(struct combat_data *att, struct combat_data *def, char *rbuf, size_t rbuf_len);
+
+#define SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER {act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS ); if (att->ch->in_room != def->ch->in_room) act( rbuf, 1, def->ch, NULL, NULL, TO_ROLLS );}
 
 #define IS_RANGED(eq)   (GET_OBJ_TYPE(eq) == ITEM_FIREWEAPON || \
 (GET_OBJ_TYPE(eq) == ITEM_WEAPON && \
@@ -396,8 +399,7 @@ struct combat_data
   }
 };
 
-#define SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER {act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS ); if (att->ch->in_room != def->ch->in_room) act( rbuf, 1, def->ch, NULL, NULL, TO_ROLLS );}
-void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *victim, struct obj_data *weap, struct obj_data *vict_weap, struct obj_data *weap_ammo, bool multi_weapon_modifier)
+bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *victim, struct obj_data *weap, struct obj_data *vict_weap, struct obj_data *weap_ammo, bool multi_weapon_modifier)
 {
   int net_successes, successes_for_use_in_monowhip_test_check;
   assert(attacker != NULL);
@@ -414,12 +416,15 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
   char rbuf[MAX_STRING_LENGTH];
   memset(rbuf, 0, sizeof(rbuf));
 
+  snprintf(rbuf, sizeof(rbuf), ">> ^cCombat eval: %s vs %s.", GET_CHAR_NAME(attacker), GET_CHAR_NAME(victim));
+  SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
+
   // Short-circuit: If you're wielding an activated Dominator, you don't care about all these pesky rules.
   if (att->weapon && GET_OBJ_SPEC(att->weapon) == weapon_dominator) {
     if (GET_LEVEL(def->ch) > GET_LEVEL(att->ch)) {
       send_to_char(att->ch, "As you aim your weapon at %s, a dispassionate feminine voice states: \"^cThe target's Crime Coefficient is below 100. %s is not a target for enforcement. The trigger has been locked.^n\"\r\n", GET_CHAR_NAME(def->ch), HSSH(def->ch));
       dominator_mode_switch(att->ch, att->weapon, DOMINATOR_MODE_DEACTIVATED);
-      return;
+      return FALSE;
     }
     switch (GET_WEAPON_ATTACK_TYPE(att->weapon)) {
       case WEAP_TASER:
@@ -428,14 +433,14 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
         act("A crackling shot of energy erupts from $n's Dominator and slams into $N, disabling $M!", FALSE, att->ch, 0, def->ch, TO_NOTVICT);
         act("A crackling shot of energy erupts from $n's Dominator and slams into you! Your vision fades as your muscles lock up.", FALSE, att->ch, 0, def->ch, TO_VICT);
         GET_MENTAL(def->ch) = -10;
-        break;
+        return FALSE;
       case WEAP_HEAVY_PISTOL:
         // Lethal? Kill your target.
         act("A ball of coherent light leaps from your Dominator, tearing into $N. With a scream, $E crumples, bubbles, and explodes in a shower of gore!", FALSE, att->ch, 0, def->ch, TO_CHAR);
         act("A ball of coherent light leaps from $n's Dominator, tearing into $N. With a scream, $E crumples, bubbles, and explodes in a shower of gore!", FALSE, att->ch, 0, def->ch, TO_NOTVICT);
         act("A ball of coherent light leaps from $n's Dominator, tearing into you! A horrible rending sensation tears through you as your vision fades.", FALSE, att->ch, 0, def->ch, TO_VICT);
         die(def->ch);
-        break;
+        return TRUE;
       case WEAP_CANNON:
         // Decomposer? Don't just kill your target-- if they're a player, disconnect them.
         act("A roaring column of force explodes from your Dominator, erasing $N from existence!", FALSE, att->ch, 0, def->ch, TO_CHAR);
@@ -446,18 +451,18 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
           STATE(def->ch->desc) = CON_CLOSE;
           close_socket(def->ch->desc);
         }
-        break;
+        return TRUE;
       default:
         send_to_char(att->ch, "Dominator code fault.\r\n");
         break;
     }
-    return;
+    return FALSE;
   }
 
   // Precondition: If you're wielding a non-weapon, back out.
   if (att->weapon && (GET_OBJ_TYPE(att->weapon) != ITEM_WEAPON)) {
     send_to_char(att->ch, "You struggle to figure out how to attack while using %s as a weapon!\r\n", decapitalize_a_an(GET_OBJ_NAME(att->weapon)));
-    return;
+    return FALSE;
   }
 
   // Precondition: If you're asleep or paralyzed, you don't get to fight, and also your opponent closes immediately.
@@ -468,22 +473,22 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     if (AWAKE(att->ch)) {
       send_to_char("You can't react-- you're paralyzed!\r\n", att->ch);
     }
-    return;
+    return FALSE;
   }
 
   // Precondition: If you're out of ammo, you don't get to fight. Note the use of the deducting has_ammo here.
   if (att->weapon && !has_ammo(att->ch, att->weapon))
-    return;
+    return FALSE;
 
   // Precondition: If your foe is astral (ex: a non-manifested projection, a dematerialized spirit), you don't belong here.
   if (IS_ASTRAL(def->ch)) {
     if (IS_DUAL(att->ch) || IS_ASTRAL(att->ch)) {
-      astral_fight(att->ch, def->ch);
+      return astral_fight(att->ch, def->ch);
     } else {
       mudlog("SYSERR: Entered hit() with an non-astrally-reachable character attacking an astral character.", att->ch, LOG_SYSLOG, TRUE);
       act("Unable to hit $N- $E's astral and $n can't touch that.", FALSE, att->ch, 0, def->ch, TO_ROLLS);
     }
-    return;
+    return FALSE;
   }
 
   // Precondition: Same for if you're an astral being and your target isn't.
@@ -494,14 +499,14 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       mudlog("SYSERR: Entered hit() with an astral character attacking a non-astrally-reachable character.", att->ch, LOG_SYSLOG, TRUE);
       act("Unable to hit $N- $E's unreachable from the astral plane and $n can't touch that.", FALSE, att->ch, 0, def->ch, TO_ROLLS);
     }
-    return;
+    return FALSE;
   }
 
   // Precondition: If you're in melee combat and your foe isn't present, stop fighting.
   if (!att->ranged_combat_mode && att->ch->in_room != def->ch->in_room) {
     send_to_char(att->ch, "You relax with the knowledge that your opponent is no longer present.\r\n");
     stop_fighting(att->ch);
-    return;
+    return FALSE;
   }
 
   // Remove closing flags if both are melee.
@@ -518,75 +523,6 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
   def->melee->modifiers[COMBAT_MOD_VISIBILITY] += calculate_vision_penalty(def->ch, att->ch);
   def->ranged->modifiers[COMBAT_MOD_VISIBILITY] += calculate_vision_penalty(def->ch, att->ch);
 
-  // Early execution: Nerve strike doesn't require as much setup, so perform it here to save on resources.
-  if (!att->weapon
-      && IS_NERVE(att->ch)
-      && !IS_SPIRIT(def->ch)
-      && !IS_ANY_ELEMENTAL(def->ch)
-      && !(IS_NPC(def->ch) && MOB_FLAGGED(def->ch, MOB_INANIMATE)))
-  {
-    // Calculate and display pre-success-test information.
-    snprintf(rbuf, sizeof(rbuf), "%s VS %s: Nerve Strike target is 4 + impact (%d) + modifiers: ",
-             GET_CHAR_NAME(att->ch),
-             GET_CHAR_NAME(def->ch),
-             GET_IMPACT(def->ch));
-
-    att->melee->tn += GET_IMPACT(def->ch) + modify_target_rbuf_raw(att->ch, rbuf, sizeof(rbuf), att->melee->modifiers[COMBAT_MOD_VISIBILITY], FALSE);
-
-    for (int mod_index = 0; mod_index < NUM_COMBAT_MODIFIERS; mod_index++) {
-      buf_mod(rbuf, sizeof(rbuf), combat_modifiers[mod_index], att->melee->modifiers[mod_index]);
-      att->melee->tn += att->melee->modifiers[mod_index];
-    }
-
-    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), ". Total TN is %d.", att->melee->tn);
-    SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
-
-    // Calculate the attacker's total skill and execute a success test.
-    att->melee->dice = get_skill(att->ch, SKILL_UNARMED_COMBAT, att->melee->tn);
-    if (!att->too_tall) {
-      int bonus = MIN(GET_SKILL(att->ch, SKILL_UNARMED_COMBAT), GET_OFFENSE(att->ch));
-      snprintf(rbuf, sizeof(rbuf), "Attacker is rolling %d + %d dice", att->melee->dice, bonus);
-      att->melee->dice += bonus;
-    } else {
-      snprintf(rbuf, sizeof(rbuf), "Attacker is rolling %d dice (no bonus: too tall)", att->melee->dice);
-    }
-
-    if (GET_QUI(def->ch) <= 0) {
-      strlcat(rbuf, "-- but we're zeroing out successes since the defender is paralyzed.", sizeof(rbuf));
-      att->melee->successes = 0;
-    }
-    else {
-      att->melee->successes = success_test(att->melee->dice, att->melee->tn);
-      snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), ", and got %d successes, which translates to %d qui loss.",
-               att->melee->successes,
-               (int) (att->melee->successes / 2));
-    }
-    SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
-
-    // Ensure that neither combatant has the closing flag set.
-    AFF_FLAGS(att->ch).RemoveBit(AFF_APPROACH);
-    AFF_FLAGS(def->ch).RemoveBit(AFF_APPROACH);
-
-    if (att->melee->successes > 1) {
-      GET_TEMP_QUI_LOSS(def->ch) += (int) (att->melee->successes / 2); // This used to be * 2!
-      affect_total(def->ch);
-      if (GET_QUI(def->ch) <= 0) {
-        act("You hit $N's pressure points successfully, $e is paralyzed!", FALSE, att->ch, 0, def->ch, TO_CHAR);
-        act("As $n hits you, you feel your body freeze up!", FALSE, att->ch, 0, def->ch, TO_VICT);
-        act("$N freezes as $n's attack lands successfully!", FALSE, att->ch, 0, def->ch, TO_NOTVICT);
-      } else {
-        act("You hit $N's pressure points successfully, $e seems to slow down!", FALSE, att->ch, 0, def->ch, TO_CHAR);
-        act("$n's blows seem to bring great pain and you find yourself moving slower!", FALSE, att->ch, 0, def->ch, TO_VICT);
-        act("$n's attack hits $N, who seems to move slower afterwards.", FALSE, att->ch, 0, def->ch, TO_NOTVICT);
-      }
-    } else {
-      act("You fail to hit any of the needed pressure points on $N.", FALSE, att->ch, 0, def->ch, TO_CHAR);
-      act("$n fails to land any blows on you.", FALSE, att->ch, 0, def->ch, TO_VICT);
-      act("$n's unarmed attack misses $N completely.", TRUE, att->ch, 0, def->ch, TO_NOTVICT);
-    }
-    return;
-  }
-
   // Setup: If the character is rigging a vehicle or is in a vehicle, set veh to that vehicle.
   RIG_VEH(att->ch, att->veh);
 
@@ -599,7 +535,7 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
   if (att->veh && !att->weapon) {
     mudlog("SYSERR: Somehow, we ended up in a vehicle attacking someone with no weapon!", att->ch, LOG_SYSLOG, TRUE);
     send_to_char("You'll have to leave your vehicle for that.\r\n", att->ch);
-    return;
+    return FALSE;
   }
 
   // Setup for ranged combat. We assume that if you're here, you have a loaded ranged weapon and are not a candidate for receiving a counterstrike.
@@ -614,7 +550,7 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
         && !(AFF_FLAGGED(att->ch, AFF_PRONE)))
     {
       send_to_char(att->ch, "You can't lift the barrel high enough to fire! You'll have to go ^WPRONE^n to use %s.\r\n", decapitalize_a_an(GET_OBJ_NAME(att->weapon)));
-      return;
+      return FALSE;
     }
 
     // Setup: Limit the burst of the weapon to the available ammo, and decrement ammo appropriately.
@@ -678,7 +614,7 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     }
 
     // Setup: Compute modifiers to the TN based on the def->ch's current state.
-    if (!AWAKE(def->ch))
+    if (!AWAKE(def->ch) || IS_JACKED_IN(def->ch))
       att->ranged->modifiers[COMBAT_MOD_POSITION] -= 6;
     else if (AFF_FLAGGED(def->ch, AFF_PRONE)) {
       // Prone next to you is a bigger / easier target, prone far away is a smaller / harder one.
@@ -722,7 +658,7 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       if (!vict_found) {
         send_to_char(att->ch, "You squint around, but you can't find your opponent anywhere.\r\n");
         stop_fighting(att->ch);
-        return;
+        return FALSE;
       }
     }
 
@@ -744,7 +680,7 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     // Setup: If your attacker is closing the distance (running), take a penalty per Core p112.
     if (AFF_FLAGGED(def->ch, AFF_APPROACH))
       att->ranged->modifiers[COMBAT_MOD_DEFENDER_MOVING] += 2;
-    else if (!def->ranged_combat_mode && def->ch->in_room == att->ch->in_room)
+    else if (!def->ranged_combat_mode && def->ch->in_room == att->ch->in_room && !IS_JACKED_IN(def->ch))
       att->ranged->modifiers[COMBAT_MOD_IN_MELEE_COMBAT] += 2; // technically supposed to be +2 per attacker, but ehhhh.
 
     // Setup: If you have a gyro mount, it negates recoil and movement penalties up to its rating.
@@ -766,7 +702,7 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     }
 
     // Calculate and display pre-success-test information.
-    snprintf(rbuf, sizeof(rbuf), "%s's burst/compensation info is %d/%d. Additional modifiers: ",
+    snprintf(rbuf, sizeof(rbuf), "%s's burst/compensation info is ^c%d^n/^c%d^n. Additional modifiers: ",
              GET_CHAR_NAME( att->ch ),
              att->ranged->burst_count,
              MOB_FLAGGED(att->ch, MOB_EMPLACED) ? 10 : att->ranged->recoil_comp);
@@ -806,7 +742,12 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
 
     // Dodge test.
-    if (AWAKE(def->ch) && !AFF_FLAGGED(def->ch, AFF_SURPRISE) && !def->too_tall && !AFF_FLAGGED(def->ch, AFF_PRONE)) {
+    if (AWAKE(def->ch)
+        && !IS_JACKED_IN(def->ch)
+        && !AFF_FLAGGED(def->ch, AFF_SURPRISE)
+        && !def->too_tall
+        && !AFF_FLAGGED(def->ch, AFF_PRONE))
+    {
       // Previous code only allowed you to sidestep if you had also allocated at least one normal dodge die. Why?
       // We use the ranged slots here since we're positive they won't get used in a counterattack.
       def->ranged->dice = GET_DEFENSE(def->ch) + GET_POWER(def->ch, ADEPT_SIDESTEP);
@@ -830,7 +771,7 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       def->ranged->successes = MAX(success_test(def->ranged->dice, def->ranged->tn), 0);
       att->ranged->successes -= def->ranged->successes;
 
-      snprintf(rbuf, sizeof(rbuf), "Dodge: Dice %d (%d pool + %d sidestep), TN %d, Successes %d.  This means attacker's net successes = %d.",
+      snprintf(rbuf, sizeof(rbuf), "Dodge: Dice %d (%d pool + %d sidestep), TN %d, Successes ^c%d^n.  This means attacker's net successes = ^c%d^n.",
                def->ranged->dice,
                GET_DEFENSE(def->ch),
                GET_POWER(def->ch, ADEPT_SIDESTEP),
@@ -839,9 +780,9 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
                att->ranged->successes);
     } else {
       // Surprised, oversized, unconscious, or prone? No dodge test for you.
-      att->ranged->successes = MAX(att->ranged->successes, 1);
-      snprintf(rbuf, sizeof(rbuf), "Opponent unable to dodge, attacker's successes will remain at %d.", att->ranged->successes);
-      if (GET_DEFENSE(def->ch) > 0 && AFF_FLAGGED(def->ch, AFF_PRONE))
+      att->ranged->successes = MAX(att->ranged->successes, 0);
+      snprintf(rbuf, sizeof(rbuf), "Opponent unable to dodge, attacker's successes will remain at ^c%d^n.", att->ranged->successes);
+      if (GET_DEFENSE(def->ch) > 0 && AFF_FLAGGED(def->ch, AFF_PRONE) && !IS_JACKED_IN(def->ch))
         send_to_char(def->ch, "^yYou're unable to dodge while prone!^n\r\n");
     }
     SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
@@ -863,7 +804,7 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
         GET_MOBALERT(def->ch) = MALERT_ALARM;
         GET_MOBALERTTIME(def->ch) = 30;
       }
-      return;
+      return target_died;
     }
 
     // Calculate the power of the attack.
@@ -940,7 +881,7 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
           GET_MOBALERT(def->ch) = MALERT_ALARM;
           GET_MOBALERTTIME(def->ch) = 30;
         }
-        return;
+        return target_died;
       } else
         att->ranged->power -= GET_LEVEL(def->ch) * 2;
     }
@@ -967,6 +908,11 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     else if (AFF_FLAGGED(def->ch, AFF_PRONE))
       att->melee->modifiers[COMBAT_MOD_POSITION] -= 2;
 
+    // If we're doing nerve strike, wrap that up and break out early.
+    if (!att->weapon && IS_NERVE(att->ch)) {
+      if (perform_nerve_strike(att, def, rbuf, sizeof(rbuf)))
+        return FALSE;
+    }
     // Spirits use different dice than the rest of us plebs.
     // Disabled this portion for now-- it looks like the original intent was to implement a clash of wills, but the code does not support this at the moment.
     /*
@@ -1003,7 +949,7 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     }
 
     // Bugfix: If you're unconscious or mortally wounded, you don't get to counterattack.
-    if (GET_PHYSICAL(def->ch) <= 0 || GET_MENTAL(def->ch) <= 0) {
+    if (GET_PHYSICAL(def->ch) <= 0 || GET_MENTAL(def->ch) <= 0 || IS_JACKED_IN(def->ch)) {
       def->melee->dice = 0;
       strlcpy(rbuf, "^yDefender incapped, dice capped to zero.^n", sizeof(rbuf));
       SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
@@ -1132,6 +1078,12 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
 
       // Prevent ranged combat messaging.
       att->ranged_combat_mode = FALSE;
+
+      // Nerve-strike counterattacks are a thing.
+      if (!att->weapon && IS_NERVE(att->ch)) {
+        if (perform_nerve_strike(att, def, rbuf, sizeof(rbuf)))
+          return FALSE;
+      }
     } else {
       att->melee->successes = net_successes;
     }
@@ -1201,7 +1153,7 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
           // Process flame aura here since the spirit will otherwise end combat evaluation here.
           handle_flame_aura(att, def);
         }
-        return;
+        return target_died;
       } else {
         att->melee->power -= GET_LEVEL(def->ch) * 2;
       }
@@ -1315,7 +1267,7 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     // Process flame aura right before damage.
     if (handle_flame_aura(att, def)) {
       // They died! Bail out.
-      return;
+      return TRUE;
     }
 
     defender_died = damage(att->ch, def->ch, damage_total, att->melee->dam_type, att->melee->is_physical);
@@ -1347,7 +1299,7 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
             AFF_FLAGS(def->ch).RemoveBit(AFF_SURPRISE);
           // If the attacker dies from backlash, bail out.
           if (damage(attacker, attacker, dam_total, TYPE_RECOIL, PHYSICAL))
-            return;
+            return TRUE;
         }
       }
       //Handle suprise attack/alertness here -- defender didn't die.
@@ -1364,7 +1316,7 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
   if (defender_died) {
     // Fixes edge case where attacking quest NPC kills its hunter with a heavy weapon, is extracted, then tries to check recoil.
     if (!defender_was_npc)
-      return;
+      return TRUE;
     // Clear out the defending character's pointer since it now points to a nulled character struct.
     else
       def->ch = NULL;
@@ -1397,7 +1349,7 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
 
     // If the attacker dies from recoil, bail out.
     if (damage(att->ch, att->ch, convert_damage(staged_dam), TYPE_HIT, FALSE))
-      return;
+      return TRUE;
 
     // Next, knockdown test vs half the weapon's power, on 0 successes you're knocked down.
     // No need to subtract things like gyro from this recoil number-- prereq for getting here is that there's no gyro or mount.
@@ -1410,12 +1362,11 @@ void hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     GET_SETTABLE_BACKGROUND_COUNT(room) = 1;
     GET_SETTABLE_BACKGROUND_AURA(room) = AURA_PLAYERCOMBAT;
   }
-
+  return FALSE;
 }
-#undef SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER
 
-void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *weap, struct obj_data *vict_weap, struct obj_data *weap_ammo) {
-  hit_with_multiweapon_toggle(attacker, victim, weap, vict_weap, weap_ammo, FALSE);
+bool hit(struct char_data *attacker, struct char_data *victim, struct obj_data *weap, struct obj_data *vict_weap, struct obj_data *weap_ammo) {
+  return hit_with_multiweapon_toggle(attacker, victim, weap, vict_weap, weap_ammo, FALSE);
 }
 
 bool does_weapon_have_bayonet(struct obj_data *weapon) {
@@ -1474,9 +1425,9 @@ bool handle_flame_aura(struct combat_data *att, struct combat_data *def) {
 
   int force = -1;
 
-  // Flameaura-flagged NPCs just use their own level as the force.
+  // Flameaura-flagged NPCs just use the larger of half their magic or their own full level as the force.
   if (MOB_FLAGGED(def->ch, MOB_FLAMEAURA)) {
-    force = GET_LEVEL(def->ch);
+    force = MAX(GET_MAG(def->ch) / 200, GET_LEVEL(def->ch));
   } else {
     // Iterate through their spells, find the flame aura that's applied to them, and extract its force.
     for (struct sustain_data *sust = GET_SUSTAINED(def->ch); sust; sust = sust->next) {
@@ -1573,20 +1524,20 @@ bool handle_flame_aura(struct combat_data *att, struct combat_data *def) {
     // They lived-- give a standard message.
     switch (MAX(LIGHT, MIN(DEADLY, staged_damage))) {
       case LIGHT:
-        act("^oYou singe yourself on the flames surrounding $N^o.^n", FALSE, att->ch, 0, def->ch, TO_CHAR);
-        act("^o$n singes $mself on the flames surrounding $N^o.^n", FALSE, att->ch, 0, def->ch, TO_ROOM);
+        act("^oYou singe yourself on $S flames.^n", FALSE, att->ch, 0, def->ch, TO_CHAR);
+        act("^o$n singes $mself on the flames.^n", FALSE, att->ch, 0, def->ch, TO_ROOM);
         break;
       case MODERATE:
-        act("^oYou burn yourself on the flames surrounding $N^o.^n", FALSE, att->ch, 0, def->ch, TO_CHAR);
-        act("^o$n burns $mself on the flames surrounding $N^o.^n", FALSE, att->ch, 0, def->ch, TO_ROOM);
+        act("^oYou burn yourself on $S flames.^n", FALSE, att->ch, 0, def->ch, TO_CHAR);
+        act("^o$n burns $mself on the flames.^n", FALSE, att->ch, 0, def->ch, TO_ROOM);
         break;
       case SERIOUS:
-        act("^OYou catch a deep burn from the flames surrounding $N^O.^n", FALSE, att->ch, 0, def->ch, TO_CHAR);
-        act("^O$n^O catches a deep burn from the flames surrounding $N^O.^n", FALSE, att->ch, 0, def->ch, TO_ROOM);
+        act("^OYou catch a deep burn from $S flames.^n", FALSE, att->ch, 0, def->ch, TO_CHAR);
+        act("^O$n^O catches a deep burn from the flames.^n", FALSE, att->ch, 0, def->ch, TO_ROOM);
         break;
       case DEADLY:
-        act("^RThe flames surrounding $N^R burn you to the bone!^n", FALSE, att->ch, 0, def->ch, TO_CHAR);
-        act("^RThe flames surrounding $N^R burn $n^R to the bone!^n", FALSE, att->ch, 0, def->ch, TO_ROOM);
+        act("^R$S flames burn you to the bone!^n", FALSE, att->ch, 0, def->ch, TO_CHAR);
+        act("^RThe flames burn $n^R to the bone!^n", FALSE, att->ch, 0, def->ch, TO_ROOM);
         break;
       default:
         mudlog("SYSERR: Received invalid code to switch in handle_flame_aura()!", att->ch, LOG_SYSLOG, TRUE);
@@ -1597,3 +1548,105 @@ bool handle_flame_aura(struct combat_data *att, struct combat_data *def) {
   // We survived! Return FALSE to indicate attacker did not die.
   return FALSE;
 }
+
+// Returns true if we struck, false otherwise.
+bool perform_nerve_strike(struct combat_data *att, struct combat_data *def, char *rbuf, size_t rbuf_len) {
+  if (!att || !def) {
+    mudlog("SYSERR: Received NULL struct(s) to perform_nerve_strike!", att->ch, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+
+  if (att->weapon || !IS_NERVE(att->ch)) {
+    mudlog("SYSERR: Somehow, we reached perform_nerve_strike with invalid preconditions.", att->ch, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+
+  if (IS_SPIRIT(def->ch) || IS_ANY_ELEMENTAL(def->ch) || (IS_NPC(def->ch) && MOB_FLAGGED(def->ch, MOB_INANIMATE))) {
+    send_to_char(att->ch, "You can't find any nerves to strike!\r\n");
+    return FALSE;
+  }
+
+  // Ensure that neither combatant has the closing flag set.
+  AFF_FLAGS(att->ch).RemoveBit(AFF_APPROACH);
+  AFF_FLAGS(def->ch).RemoveBit(AFF_APPROACH);
+
+  if (GET_QUI(def->ch) <= 0) {
+    send_to_char(att->ch, "Your victim is already paralyzed, so you hold your attack.\r\n");
+    return TRUE;
+  }
+
+  int impact_armor = GET_IMPACT(def->ch);
+  // Apply Penetrating Strike to the nerve strike.
+  if (GET_POWER(att->ch, ADEPT_PENETRATINGSTRIKE) && !GET_POWER(att->ch, ADEPT_DISTANCE_STRIKE)) {
+    impact_armor = MAX(0, GET_IMPACT(def->ch) - GET_POWER(att->ch, ADEPT_PENETRATINGSTRIKE));
+  }
+
+  // Calculate and display pre-success-test information.
+  snprintf(rbuf, rbuf_len, "%s VS %s: Nerve Strike target is 4 + impact %d (PS: -%d) + modifiers: ",
+           GET_CHAR_NAME(att->ch),
+           GET_CHAR_NAME(def->ch),
+           GET_IMPACT(def->ch),
+           GET_POWER(att->ch, ADEPT_PENETRATINGSTRIKE)
+         );
+
+  att->melee->tn += impact_armor + modify_target_rbuf_raw(att->ch, rbuf, rbuf_len, att->melee->modifiers[COMBAT_MOD_VISIBILITY], FALSE);
+
+  for (int mod_index = 0; mod_index < NUM_COMBAT_MODIFIERS; mod_index++) {
+    buf_mod(rbuf, rbuf_len, combat_modifiers[mod_index], att->melee->modifiers[mod_index]);
+    att->melee->tn += att->melee->modifiers[mod_index];
+  }
+
+  snprintf(ENDOF(rbuf), rbuf_len - strlen(rbuf), ". Total TN is %d.", att->melee->tn);
+  SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
+
+  // Calculate the attacker's total skill and execute a success test.
+  att->melee->dice = get_skill(att->ch, SKILL_UNARMED_COMBAT, att->melee->tn);
+  if (!att->too_tall) {
+    int bonus = MIN(GET_SKILL(att->ch, SKILL_UNARMED_COMBAT), GET_OFFENSE(att->ch));
+    snprintf(rbuf, rbuf_len, "Attacker is rolling %d + %d dice", att->melee->dice, bonus);
+    att->melee->dice += bonus;
+  } else {
+    snprintf(rbuf, rbuf_len, "Attacker is rolling %d dice (no bonus: too tall)", att->melee->dice);
+  }
+
+  att->melee->successes = success_test(att->melee->dice, att->melee->tn);
+  int temp_qui_loss = (int) (att->melee->successes / 2);
+  snprintf(ENDOF(rbuf), rbuf_len - strlen(rbuf), ", and got %d successes, which translates to %d qui loss.",
+           att->melee->successes,
+           temp_qui_loss);
+  SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
+
+  if (att->melee->successes > 1) {
+    GET_TEMP_QUI_LOSS(def->ch) += temp_qui_loss * TEMP_QUI_LOSS_DIVISOR;
+    affect_total(def->ch);
+
+    if (access_level(att->ch, LVL_ADMIN) && PRF_FLAGGED(att->ch, PRF_ROLLS)) {
+      send_to_char(att->ch, "[Remaining qui: %d (TQL %d).]\r\n",
+               GET_QUI(def->ch),
+               GET_TEMP_QUI_LOSS(def->ch));
+    }
+
+    char msg_buf[500];
+    if (GET_QUI(def->ch) <= 0) {
+      snprintf(msg_buf, sizeof(msg_buf), "You hit $N's pressure points successfully, %s %s paralyzed!", HSSH(def->ch), HSSH_SHOULD_PLURAL(def->ch) ? "is" : "are");
+      act(msg_buf, FALSE, att->ch, 0, def->ch, TO_CHAR);
+      act("As $n hits you, you feel your body freeze up!", FALSE, att->ch, 0, def->ch, TO_VICT);
+      act("$N freezes as $n's attack lands successfully!", FALSE, att->ch, 0, def->ch, TO_NOTVICT);
+    } else {
+      snprintf(msg_buf, sizeof(msg_buf), "You hit $N's pressure points successfully, %s seem%s to slow down!", HSSH(def->ch), HSSH_SHOULD_PLURAL(def->ch) ? "s" : "");
+      act(msg_buf, FALSE, att->ch, 0, def->ch, TO_CHAR);
+      act("$n's blows seem to bring great pain and you find yourself moving slower!", FALSE, att->ch, 0, def->ch, TO_VICT);
+      act("$n's attack hits $N, who seems to move slower afterwards.", FALSE, att->ch, 0, def->ch, TO_NOTVICT);
+    }
+  } else {
+    act("You fail to hit any of the needed pressure points on $N.", FALSE, att->ch, 0, def->ch, TO_CHAR);
+    act("$n fails to land any blows on you.", FALSE, att->ch, 0, def->ch, TO_VICT);
+    act("$n's unarmed attack misses $N completely.", TRUE, att->ch, 0, def->ch, TO_NOTVICT);
+  }
+
+  handle_flame_aura(att, def);
+
+  return TRUE;
+}
+
+#undef SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER

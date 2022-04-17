@@ -66,6 +66,8 @@
 #define INT    4
 #define WIL    5
 #define REA    6
+#define NUM_ATTRIBUTES 7
+
 #define TBOD             (1 << 0)
 #define TQUI             (1 << 1)
 #define TSTR             (1 << 2)
@@ -312,7 +314,8 @@ enum {
 #define PLR_PAID_FOR_KIPUP                  43
 #define PLR_PAID_FOR_ROLLS                  44
 #define PLR_NO_AUTO_SYSP_AWARDS             45 /* Player abuses typo etc for automatic sysp awards. */
-#define PLR_MAX                             46
+#define PLR_RADIO_MUTED                     46
+#define PLR_MAX                             47
 
 
 
@@ -421,7 +424,8 @@ enum {
 #define PRF_SEE_TIPS                     61
 #define PRF_AUTOSTAND                    62
 #define PRF_AUTOKIPUP                    63
-#define PRF_MAX                          64
+#define PRF_NO_WEATHER                   64
+#define PRF_MAX                          65
 
 /* log watch */
 
@@ -491,7 +495,7 @@ enum {
 #define AFF_VISION_MAG_3        21 /* Magnification level 3         */
 #define AFF_COUNTER_ATT      22 /* plr just attacked          */
 #define AFF_STABILIZE        23 /* player won't die due to phys loss */
-#define AFF_PETRIFY             24 /* player's commands don't work       */
+// UNUSED (previously AFF_PETRIFY)
 #define AFF_IMP_INVIS        25 /* char is improved invis         */
 #define AFF_ACID    26
 #define AFF_APPROACH      27 /* Character is using melee */
@@ -591,7 +595,8 @@ enum {
 #define ROOM_STERILE                    34 // Gives a bonus to medical actions.
 #define ROOM_TOO_CRAMPED_FOR_CHARACTERS 35 // Prevents you from entering if you're not a projection or tiny drone.
 #define ROOM_RADIATION                  36 // You take radiation damage while you're here, scaled by Rating.
-#define ROOM_MAX                        37
+#define ROOM_ALL_VEHICLE_ACCESS         37 // Bypasses land/air/water constraints.
+#define ROOM_MAX                        38
 
 #define VISION_NORMAL         0
 #define VISION_LOWLIGHT       1
@@ -953,8 +958,19 @@ enum {
 #define SKILL_HEBREW              133
 #define SKILL_IROQUOIS            134
 #define SKILL_MEDICINE            135
+#define SKILL_BR_FIXEDWING        136
+#define SKILL_BR_ROTORCRAFT       137
+#define SKILL_BR_VECTORTHRUST     138
+#define SKILL_BR_HOVERCRAFT       139
+#define SKILL_BR_MOTORBOAT        140
+#define SKILL_BR_SHIP             141
+#define SKILL_BR_LTA              142
+#define SKILL_PILOT_HOVERCRAFT    143
+#define SKILL_PILOT_MOTORBOAT     144
+#define SKILL_PILOT_SHIP          145
+#define SKILL_PILOT_LTA           146
 
-#define MAX_SKILLS                136
+#define MAX_SKILLS                147
 
 // Skill type definitions.
 #define SKILL_TYPE_ACTIVE         0
@@ -1216,7 +1232,7 @@ enum {
 #define ITEM_EXTRA_NOORK              19
 #define ITEM_EXTRA_NOHUMAN            20
 #define ITEM_EXTRA_SNIPER             21
-#define ITEM_EXTRA_IMMLOAD            22
+// #define ITEM_EXTRA_IMMLOAD            22  not currently used, BUT reserved since many items have this set.
 #define ITEM_EXTRA_NERPS              23    /* Item does not actually have any coded effect. */
 #define ITEM_EXTRA_BLOCKS_ARMOR       24    // Can't wear other armors with this.
 #define ITEM_EXTRA_HARDENED_ARMOR     25    // Applies hardened armor rules (deflect attacks with power <= armor rating) CC p51
@@ -1278,6 +1294,7 @@ enum {
 #define VEH_MOTORBOAT 8
 #define VEH_SHIP 9
 #define VEH_LTA 10
+#define NUM_VEH_TYPES 11
 
 /* vehicle affection table */
 #define VAFF_NONE  0
@@ -1293,7 +1310,8 @@ enum {
 #define VAFF_LOAD  10
 #define VAFF_SEN  11
 #define VAFF_PILOT  12
-#define VAFF_MAX  13
+#define VAFF_ULTRASONIC 13
+#define VAFF_MAX  14
 #define SHFT(ch) (GET_LEVEL(ch))
 
 /* vehicle flag table */
@@ -2515,9 +2533,7 @@ enum {
 #define LIST_COMMAND_LIMIT 500
 
 // Stack / memory canaries.
-#ifdef USE_DEBUG_CANARIES
 #define CANARY_VALUE 31337
-#endif
 
 // MySQL constraints.
 #define MYSQL_SIGNED_TINYINT_MAX     127
@@ -2647,6 +2663,9 @@ enum {
 #define SMARTLINK_I_MODIFIER  2
 
 #endif
+
+// Don't actually change this value unless you're rewriting regeneration etc.
+#define TEMP_QUI_LOSS_DIVISOR                 4
 
 // This is to flag variables used eg in macros so that the compiler won't complain about unused variables
 // when they're actually used. Casting to void does nothing but the compiler will stop thinking it's

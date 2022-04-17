@@ -47,7 +47,7 @@ extern int modify_target(struct char_data *ch);
 extern void end_quest(struct char_data *ch);
 extern char *cleanup(char *dest, const char *src);
 extern void damage_equip(struct char_data *ch, struct char_data *victim, int power, int type);
-extern void check_adrenaline(struct char_data *, int);
+extern bool check_adrenaline(struct char_data *, int);
 extern bool House_can_enter_by_idnum(long idnum, vnum_t house);
 extern int get_paydata_market_maximum(int host_color);
 extern int get_paydata_market_minimum(int host_color);
@@ -521,7 +521,7 @@ void check_idling(void)
   }
 }
 
-void check_bioware(struct char_data *ch)
+bool check_bioware(struct char_data *ch)
 {
   if (!ch->desc
       || (ch->desc && ch->desc->connected)
@@ -530,11 +530,11 @@ void check_bioware(struct char_data *ch)
       || PRF_FLAGGED(ch, PRF_AFK)
       || AFF_FLAGS(ch).AreAnySet(BR_TASK_AFF_FLAGS, ENDBIT) // See awake.h for the definition of these aff flags.
   ) {
-    return;
+    return FALSE;
   }
 
   struct obj_data *bio;
-  for (bio = ch->bioware; bio; bio = bio->next_content)
+  for (bio = ch->bioware; bio; bio = bio->next_content) {
     if (GET_BIOWARE_TYPE(bio) == BIO_PLATELETFACTORY)
     {
       if (--GET_BIOWARE_PLATELETFACTORY_DATA(bio) < 1) {
@@ -542,7 +542,8 @@ void check_bioware(struct char_data *ch)
         if (success_test(GET_REAL_BOD(ch), 3 + GET_BIOWARE_PLATELETFACTORY_DIFFICULTY(bio)) < 1) {
           send_to_char("Your blood seems to erupt.\r\n", ch);
           act("$n collapses to the floor, twitching.", TRUE, ch, 0, 0, TO_ROOM);
-          damage(ch, ch, 10, TYPE_BIOWARE, PHYSICAL);
+          if (damage(ch, ch, 10, TYPE_BIOWARE, PHYSICAL))
+            return TRUE;
         } else {
           send_to_char("Your heart strains, and you have a feeling of impending doom. Your need for blood thinners is dire!\r\n", ch);
         }
@@ -558,6 +559,8 @@ void check_bioware(struct char_data *ch)
         send_to_char("Your heart strains, and you have a feeling of impending doom. Your need for blood thinners is dire!\r\n", ch);
       break;
     }
+  }
+  return FALSE;
 }
 
 int calculate_swim_successes(struct char_data *ch) {
@@ -611,7 +614,6 @@ int calculate_swim_successes(struct char_data *ch) {
 }
 
 void analyze_swim_successes(struct char_data *temp_char) {
-
   struct room_data *room = temp_char->in_room;
   int old_sector_type = room->sector_type;
   room->sector_type = SPIRIT_SEA;
@@ -654,12 +656,12 @@ void analyze_swim_successes(struct char_data *temp_char) {
   GET_LEVEL(temp_char) = old_level;
 }
 
-void check_swimming(struct char_data *ch)
+bool check_swimming(struct char_data *ch)
 {
   int target, i, dam, test;
 
   if (!ch || IS_NPC(ch) || IS_SENATOR(ch) || !ch->in_room)
-    return;
+    return FALSE;
 
   i = calculate_swim_successes(ch);
   target = MAX(2, ch->in_room->rating) - i;
@@ -670,11 +672,12 @@ void check_swimming(struct char_data *ch)
       send_to_char("The feeling of dull impacts makes its way through the haze in your mind.\r\n", ch);
       act("$n's unconscious body is mercilessly thrown about by the current.",
           FALSE, ch, 0, 0, TO_ROOM);
-      damage(ch, ch, dam, TYPE_DROWN, FALSE);
+      if (damage(ch, ch, dam, TYPE_DROWN, FALSE))
+        return TRUE;
     } else {
       act("$n's unconscious body bobs in the current.", FALSE, ch, 0, 0, TO_ROOM);
     }
-    return;
+    return FALSE;
   }
 
   // Roll their damage test, in case it matters here.
@@ -692,21 +695,25 @@ void check_swimming(struct char_data *ch)
     dam = convert_damage(stage(-test, SERIOUS));
     if (dam > 0) {
       send_to_char(ch, "You fail to keep the water out of your lungs, and a racking cough seizes you.\r\n");
-      damage(ch, ch, dam, TYPE_DROWN, FALSE);
+      if (damage(ch, ch, dam, TYPE_DROWN, FALSE))
+        return TRUE;
     }
   } else if (!i) {
     dam = convert_damage(stage(-test, MODERATE));
     if (dam > 0) {
       send_to_char(ch, "Your head briefly slips below the surface, and you struggle to keep from inhaling water.\r\n");
-      damage(ch, ch, dam, TYPE_DROWN, FALSE);
+      if (damage(ch, ch, dam, TYPE_DROWN, FALSE))
+        return TRUE;
     }
   } else if (i < 3) {
     dam = convert_damage(stage(-test, LIGHT));
     if (dam > 0) {
       send_to_char(ch, "You struggle to keep your head above the water.\r\n");
-      damage(ch, ch, dam, TYPE_DROWN, FALSE);
+      if (damage(ch, ch, dam, TYPE_DROWN, FALSE))
+        return TRUE;
     }
   }
+  return FALSE;
 }
 
 void process_regeneration(int half_hour)
@@ -724,7 +731,8 @@ void process_regeneration(int half_hour)
       physical_gain(ch);
       mental_gain(ch);
       if (!IS_NPC(ch) && IS_WATER(ch->in_room) && half_hour)
-        check_swimming(ch);
+        if (check_swimming(ch))
+          continue;
       if (GET_POS(ch) == POS_STUNNED)
         update_pos(ch);
       if (GET_PHYSICAL(ch) >= GET_MAX_PHYSICAL(ch)) {
@@ -749,7 +757,8 @@ void process_regeneration(int half_hour)
             dam = FALSE;
         }
       if (dam)
-        damage(ch, ch, 1, TYPE_SUFFERING, PHYSICAL);
+        if (damage(ch, ch, 1, TYPE_SUFFERING, PHYSICAL))
+          continue;
     }
   }
 
@@ -873,7 +882,8 @@ void point_update(void)
         HUNTING(i) = NULL;
 
       if (i->bioware)
-        check_bioware(i);
+        if (check_bioware(i))
+          continue;
 
       for (int x = MIN_DRUG; x < NUM_DRUGS; x++) {
         if (GET_DRUG_ADDICT(i, x) > 0) {
@@ -971,7 +981,8 @@ void point_update(void)
         extract_char(i);
 
         // Deal the damage instead of setting it.
-        damage(victim, victim, (GET_BOD(victim) - 1) * 100, TYPE_SUFFERING, TRUE);
+        if (damage(victim, victim, (GET_BOD(victim) - 1) * 100, TYPE_SUFFERING, TRUE))
+          continue;
       } else if (GET_ESS(i) <= 100)
         send_to_char("You feel memories of your physical body slipping away.\r\n", i);
     }
@@ -1255,6 +1266,10 @@ void save_vehicles(bool fromCopyover)
     fprintf(fl, "\tDamage:\t%d\n", veh->damage);
     fprintf(fl, "\tSpare:\t%ld\n", veh->spare);
     fprintf(fl, "\tIdnum:\t%ld\n", veh->idnum);
+
+    rnum_t rnum = real_vehicle(GET_VEH_VNUM(veh));
+    if (rnum < 0 || veh->flags != veh_proto[rnum].flags)
+      fprintf(fl, "\tFlags:\t%s\n", veh->flags.ToString());
     if (veh->in_veh)
       fprintf(fl, "\tInVeh:\t%ld\n", veh->in_veh->idnum);
     if (veh->restring)
@@ -1507,7 +1522,8 @@ void misc_update(void)
     }
 
     if (!IS_NPC(ch)) {
-      check_adrenaline(ch, 0);
+      if (check_adrenaline(ch, 0))
+        continue;
       if (GET_DRUG_DOSE(ch) && --GET_DRUG_DURATION(ch) < 0 && !GET_DRUG_STAGE(ch)) {
         bool physical = TRUE;
         if (GET_DRUG_AFFECT(ch) == DRUG_HYPER || GET_DRUG_AFFECT(ch) == DRUG_BURN)
@@ -1516,15 +1532,16 @@ void misc_update(void)
           dam = drug_types[GET_DRUG_AFFECT(ch)].level + (GET_DRUG_DOSE(ch) > 1 ? 1 : 0);
           power = drug_types[GET_DRUG_AFFECT(ch)].power + (GET_DRUG_DOSE(ch) > 2 ? GET_DRUG_DOSE(ch) - 2 : 0);
           dam = convert_damage(stage(-success_test(GET_REAL_BOD(ch) - (GET_BIOOVER(ch) > 0 ? GET_BIOOVER(ch) / 2 : 0), power), dam));
-          damage(ch, ch, dam, TYPE_BIOWARE, physical);
+          if (damage(ch, ch, dam, TYPE_BIOWARE, physical))
+            continue;
         }
         GET_DRUG_STAGE(ch) = 1;
         GET_DRUG_LASTFIX(ch, GET_DRUG_AFFECT(ch)) = time(0);
         switch (GET_DRUG_AFFECT(ch)) {
           case DRUG_ACTH:
             snprintf(buf, sizeof(buf), "You feel a brief moment of vertigo.\r\n");
-            extern void check_adrenaline(struct char_data *ch, int mode);
-            check_adrenaline(ch, 1);
+            if (check_adrenaline(ch, 1))
+              continue;
             GET_DRUG_AFFECT(ch) = GET_DRUG_DOSE(ch) = GET_DRUG_DURATION(ch) = 0;
             break;
           case DRUG_HYPER:
@@ -1582,17 +1599,20 @@ void misc_update(void)
         switch (GET_DRUG_AFFECT(ch)) {
           case DRUG_JAZZ:
             GET_DRUG_DURATION(ch) = 100 * srdice();
-            damage(ch, ch, convert_damage(stage(-success_test(GET_REAL_BOD(ch) - (GET_BIOOVER(ch) > 0 ? GET_BIOOVER(ch) / 2 : 0), 8 - toxin), LIGHT)), TYPE_BIOWARE, 0);
+            if (damage(ch, ch, convert_damage(stage(-success_test(GET_REAL_BOD(ch) - (GET_BIOOVER(ch) > 0 ? GET_BIOOVER(ch) / 2 : 0), 8 - toxin), LIGHT)), TYPE_BIOWARE, 0))
+              continue;
             break;
           case DRUG_KAMIKAZE:
             GET_DRUG_DURATION(ch) = 100 * srdice();
-            damage(ch, ch, convert_damage(stage(-success_test(GET_REAL_BOD(ch) - (GET_BIOOVER(ch) > 0 ? GET_BIOOVER(ch) / 2 : 0), 6 - toxin), MODERATE)), TYPE_BIOWARE, 0);
+            if (damage(ch, ch, convert_damage(stage(-success_test(GET_REAL_BOD(ch) - (GET_BIOOVER(ch) > 0 ? GET_BIOOVER(ch) / 2 : 0), 6 - toxin), MODERATE)), TYPE_BIOWARE, 0))
+              continue;
             break;
           case DRUG_CRAM:
             GET_DRUG_DURATION(ch) = MAX(1, 12 - GET_REAL_BOD(ch) - (GET_BIOOVER(ch) > 0 ? GET_BIOOVER(ch) / 2 : 0)) * 600;
             break;
           case DRUG_NITRO:
-            damage(ch, ch, convert_damage(stage(-success_test(GET_REAL_BOD(ch) - (GET_BIOOVER(ch) > 0 ? GET_BIOOVER(ch) / 2 : 0), 8 - toxin), DEADLY)), TYPE_BIOWARE, 0);
+            if (damage(ch, ch, convert_damage(stage(-success_test(GET_REAL_BOD(ch) - (GET_BIOOVER(ch) > 0 ? GET_BIOOVER(ch) / 2 : 0), 8 - toxin), DEADLY)), TYPE_BIOWARE, 0))
+              continue;
             GET_DRUG_STAGE(ch) = GET_DRUG_DOSE(ch) = GET_DRUG_AFFECT(ch) = 0;
             break;
           case DRUG_NOVACOKE:
@@ -1667,9 +1687,9 @@ void misc_update(void)
 
       int dam = convert_damage(stage(-success_test(GET_BOD(ch) + GET_POWER(ch, ADEPT_TEMPERATURE_TOLERANCE), 6 + ch->points.fire[1]++ - GET_IMPACT(ch)), MODERATE));
       ch->points.fire[1]++;
-      damage(ch, ch, dam, TYPE_SUFFERING, PHYSICAL);
+      if (damage(ch, ch, dam, TYPE_SUFFERING, PHYSICAL))
+        continue;
     }
-
   }
 }
 

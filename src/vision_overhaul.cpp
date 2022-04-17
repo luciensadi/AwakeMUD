@@ -132,8 +132,10 @@ int get_vision_penalty(struct char_data *ch, struct room_data *temp_room, char *
   int tn_with_ll = 0;
   int tn_with_none = 0;
 
-  bool has_natural_thermographic_vision = has_natural_vision(ch, VISION_THERMOGRAPHIC);
-  bool has_natural_lowlight_vision = has_natural_vision(ch, VISION_LOWLIGHT);
+  bool is_rigging = (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE));
+
+  bool has_natural_thermographic_vision = !is_rigging && has_natural_vision(ch, VISION_THERMOGRAPHIC);
+  bool has_natural_lowlight_vision = !is_rigging && has_natural_vision(ch, VISION_LOWLIGHT);
 
   // each vision mode has a vector that we tack things onto along with a running total
   // at the end, we pick the one with the fewest penalties, and output the vector to rolls
@@ -290,11 +292,14 @@ int get_vision_penalty(struct char_data *ch, struct room_data *temp_room, char *
   std::map<const char *, int> *penalty_vector;
   int penalty_chosen;
 
-  if (has_vision(ch, VISION_THERMOGRAPHIC) && tn_with_thermo <= tn_with_ll && tn_with_thermo <= tn_with_none) {
+  bool has_thermographic = is_rigging || has_vision(ch, VISION_THERMOGRAPHIC);
+  bool has_lowlight = is_rigging || has_vision(ch, VISION_LOWLIGHT);
+
+  if (has_thermographic && tn_with_thermo <= tn_with_ll && tn_with_thermo <= tn_with_none) {
     penalty_vector = &thermo_penalties;
     penalty_chosen = tn_with_thermo;
   }
-  else if (has_vision(ch, VISION_LOWLIGHT) && tn_with_ll <= tn_with_thermo && tn_with_ll <= tn_with_none) {
+  else if (has_lowlight && tn_with_ll <= tn_with_thermo && tn_with_ll <= tn_with_none) {
     penalty_vector = &lowlight_penalties;
     penalty_chosen = tn_with_ll;
   }

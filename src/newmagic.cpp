@@ -603,10 +603,8 @@ void totem_bonus(struct char_data *ch, int action, int type, int &target, int &s
         skill += 2;
       break;
     case TOTEM_HORNEDMAN:
-      if (type == SPIRIT_DESERT || type == SPIRIT_FOREST || type == SPIRIT_MOUNTAIN || type == SPIRIT_PRAIRIE) {
-      // Not sure if a skill value is missing here but as this is written it can fall through to TOTEM_LOVER and I'm sure that's not
-      // intended. Braces fix it for now. -- Nodens
-      }
+      if (type == SPIRIT_DESERT || type == SPIRIT_FOREST || type == SPIRIT_MOUNTAIN || type == SPIRIT_PRAIRIE)
+        skill += 2;
       break;
     case TOTEM_LOVER:
       if (type == SPIRIT_SEA || type == SPIRIT_LAKE || type == SPIRIT_RIVER || type == SPIRIT_SWAMP)
@@ -3921,8 +3919,9 @@ ACMD(do_learn)
   } else if (successes < 0) {
     // Botched it!
     send_to_char("You attempt to form mana into the proper shape to practice the spell, but it feeds back and lashes out at your psyche.\r\n", ch);
-    damage(ch, ch, 1, TYPE_SUFFERING, MENTAL);
-    WAIT_STATE(ch, FAILED_SPELL_LEARNING_WAIT_STATE * 3);
+    if (!damage(ch, ch, 1, TYPE_SUFFERING, MENTAL)) {
+      WAIT_STATE(ch, FAILED_SPELL_LEARNING_WAIT_STATE * 3);
+    }
     return;
   }
 #endif
@@ -4716,7 +4715,7 @@ ACMD(do_order)
     send_to_char("Available Services: \r\n", ch);
     if (GET_TRADITION(ch) == TRAD_HERMETIC) {
       if (!spirit->called)
-        send_to_char("  ^WAppear^n\r\n", ch);
+        send_to_char("  ^WMaterialize^n\r\n", ch);
       else {
         send_to_char("  Aid ^WSorcery^n\r\n"
                      "  Aid ^WStudy^n\r\n"
@@ -4772,9 +4771,10 @@ ACMD(do_order)
     send_to_char("  Attack\r\n", ch);
   } else {
     half_chop(buf1, buf, buf2);
-    for (;order < NUM_SERVICES; order++)
+    for (;order < NUM_SERVICES; order++) {
       if (is_abbrev(buf, services[order].name) && spirit_can_perform(spirit->type, order, GET_TRADITION(ch)))
         break;
+    }
     if (order == NUM_SERVICES) {
       send_to_char(ch, "Which service do you wish to order the %s to perform?\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
       return;
@@ -4789,8 +4789,9 @@ ACMD(do_order)
           return;
         }
       } else if (!spirit->called) {
-        send_to_char(ch, "That %s is waiting on the metaplanes.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
-        return;
+        spirit_appear(ch, NULL, spirit, buf2);
+        // send_to_char(ch, "That %s is waiting on the metaplanes.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
+        // return;
       }
     }
     struct char_data *mob = find_spirit_by_id(spirit->id, GET_IDNUM(ch));

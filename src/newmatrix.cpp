@@ -145,7 +145,7 @@ bool tarbaby(struct obj_data *prog, struct char_data *ch, struct matrix_icon *ic
   return FALSE;
 }
 
-void dumpshock(struct matrix_icon *icon)
+bool dumpshock(struct matrix_icon *icon)
 {
   if (icon->decker && icon->decker->ch)
   {
@@ -189,9 +189,11 @@ void dumpshock(struct matrix_icon *icon)
       act("Smoke emerges from $n's $p.", FALSE, icon->decker->ch, icon->decker->deck, NULL, TO_ROOM);
       act("Smoke emerges from $p.", FALSE, icon->decker->ch, icon->decker->deck, NULL, TO_CHAR);
     }
-    damage(icon->decker->ch, icon->decker->ch, dam, TYPE_DUMPSHOCK, MENTAL);
+    if (damage(icon->decker->ch, icon->decker->ch, dam, TYPE_DUMPSHOCK, MENTAL))
+      return TRUE;
   }
   extract_icon(icon);
+  return FALSE;
 }
 
 int system_test(rnum_t host, struct char_data *ch, int type, int software, int modifier)
@@ -748,7 +750,9 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
       }
       if (success_test(GET_WIL(targ->decker->ch), power) < 1) {
         send_to_icon(targ, "Your interface overloads.\r\n");
-        damage(targ->decker->ch, targ->decker->ch, 1, TYPE_TASER, MENTAL);
+        if (damage(targ->decker->ch, targ->decker->ch, 1, TYPE_TASER, MENTAL)) {
+          return;
+        }
       }
     }
   }
@@ -763,7 +767,9 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
           fry_mpcp(icon, targ, success);
           success = success - success_test(GET_BOD(targ->decker->ch), iconrating - targ->decker->hardening);
           dam = convert_damage(stage(success, MODERATE));
-          damage(targ->decker->ch, targ->decker->ch, dam, TYPE_BLACKIC, PHYSICAL);
+          if (damage(targ->decker->ch, targ->decker->ch, dam, TYPE_BLACKIC, PHYSICAL)) {
+            return;
+          }
           break;
         case IC_BLASTER:
           success = success_test(iconrating, targ->decker->mpcp + targ->decker->hardening);
@@ -771,7 +777,8 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
           break;
         }
       }
-      dumpshock(targ);
+      if (dumpshock(targ))
+        return;
     } else {
       icon->decker->tally += iconrating;
       if (icon->decker->located)
@@ -2016,7 +2023,8 @@ ACMD(do_download)
             PERSONA->condition -= dam;
             if (PERSONA->condition < 1) {
               send_to_icon(PERSONA, "The %s explodes, ripping your icon into junk logic\r\n", GET_OBJ_VAL(soft, 5) == 2 ? "Data Bomb" : "Pavlov");
-              dumpshock(PERSONA);
+              if (dumpshock(PERSONA))
+                return;
             } else
               send_to_icon(PERSONA, "The %s explodes, damaging your icon.\r\n", GET_OBJ_VAL(soft, 5) == 2 ? "Data Bomb" : "Pavlov");
           }
@@ -2321,33 +2329,33 @@ ACMD(do_software)
     int bod = 0, sensor = 0, masking = 0, evasion = 0;
     for (struct obj_data *soft = cyberdeck->contains; soft; soft = soft->next_content)
       if (GET_OBJ_TYPE(soft) == ITEM_PROGRAM && GET_OBJ_VNUM(soft) != OBJ_BLANK_PROGRAM) {
-        switch (GET_OBJ_VAL(soft, 0)) {
+        switch (GET_PROGRAM_TYPE(soft)) {
         case SOFT_BOD:
-          bod = GET_OBJ_VAL(soft, 1);
+          bod = GET_PROGRAM_RATING(soft);
           break;
         case SOFT_SENSOR:
-          sensor = GET_OBJ_VAL(soft, 1);
+          sensor = GET_PROGRAM_RATING(soft);
           break;
         case SOFT_MASKING:
-          masking = GET_OBJ_VAL(soft, 1);
+          masking = GET_PROGRAM_RATING(soft);
           break;
         case SOFT_EVASION:
-          evasion = GET_OBJ_VAL(soft, 1);
+          evasion = GET_PROGRAM_RATING(soft);
           break;
         }
       } else if (GET_OBJ_TYPE(soft) == ITEM_PART)
-        switch (GET_OBJ_VAL(soft, 0)) {
+        switch (GET_PART_TYPE(soft)) {
         case PART_BOD:
-          bod = GET_OBJ_VAL(soft, 1);
+          bod = GET_PART_RATING(soft);
           break;
         case PART_SENSOR:
-          sensor = GET_OBJ_VAL(soft, 1);
+          sensor = GET_PART_RATING(soft);
           break;
         case PART_MASKING:
-          masking = GET_OBJ_VAL(soft, 1);
+          masking = GET_PART_RATING(soft);
           break;
         case PART_EVASION:
-          evasion = GET_OBJ_VAL(soft, 1);
+          evasion = GET_PART_RATING(soft);
           break;
         }
     if (PRF_FLAGGED(ch, PRF_SCREENREADER)) {
@@ -2359,18 +2367,29 @@ ACMD(do_software)
                    "Bod:     ^g%2d^n   Masking: ^g%2d^n\r\n"
                    "Sensors: ^g%2d^n   Evasion: ^g%2d^n\r\n", bod, masking, sensor, evasion);
     }
+
     strcpy(buf, "Other Software:\r\n");
-    if (GET_OBJ_TYPE(cyberdeck) == ITEM_CUSTOM_DECK)
+    if (GET_OBJ_TYPE(cyberdeck) == ITEM_CUSTOM_DECK) {
       strcpy(buf2, "Custom Components:\r\n");
-    for (struct obj_data *soft = cyberdeck->contains; soft; soft = soft->next_content)
+    }
+
+    const char *defaulted_string = PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(defaulted)" : "*";
+    for (struct obj_data *soft = cyberdeck->contains; soft; soft = soft->next_content) {
       if (GET_OBJ_TYPE(soft) == ITEM_PROGRAM) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-30s^n Rating: %2d %s\r\n", GET_OBJ_NAME(soft),
-                GET_OBJ_VAL(soft, 1), GET_OBJ_VAL(soft, 4) ? (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(defaulted)" : "*") : " ");
-      } else if (GET_OBJ_TYPE(soft) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(soft, 0) == TYPE_FILE)
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s Rating: %2d %s\r\n",
+                 get_obj_name_with_padding(soft, 40),
+                 GET_PROGRAM_RATING(soft),
+                 GET_PROGRAM_IS_DEFAULTED(soft) ? defaulted_string : " ");
+      } else if (GET_OBJ_TYPE(soft) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(soft) == TYPE_FILE) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s^n\r\n", GET_OBJ_NAME(soft));
-      else if (GET_OBJ_TYPE(soft) == ITEM_PART)
-        snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%-30s^n Type: %-15s Rating: %d\r\n",
-                GET_OBJ_NAME(soft), parts[GET_OBJ_VAL(soft, 0)].name, GET_PART_RATING(soft));
+      } else if (GET_OBJ_TYPE(soft) == ITEM_PART) {
+        snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%s Type: %-15s Rating: %d\r\n",
+                get_obj_name_with_padding(soft, 40),
+                parts[GET_PART_TYPE(soft)].name,
+                GET_PART_RATING(soft));
+      }
+    }
+
     send_to_char(buf, ch);
     if (GET_OBJ_TYPE(cyberdeck) == ITEM_CUSTOM_DECK)
       send_to_char(buf2, ch);

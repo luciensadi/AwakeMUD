@@ -48,6 +48,12 @@ private:
     char_data *active_data;
     int instance_cnt;
 
+    entry() :
+      id(0), level(0), flags(0), last(0), active_data(NULL), instance_cnt(0)
+    {
+      memset(name, 0, sizeof(name));
+    }
+
     entry &operator=(const entry &two)
     {
       strcpy(name, two.name);

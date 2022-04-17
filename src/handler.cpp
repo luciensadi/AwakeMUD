@@ -47,8 +47,6 @@ int get_skill_dice_in_use_for_weapons(struct char_data *ch);
 
 struct obj_data *find_obj(struct char_data *ch, char *name, int num);
 
-SPECIAL(pocket_sec);
-
 char *fname(char *namelist)
 {
   static char holder[50];
@@ -318,6 +316,12 @@ void affect_veh(struct veh_data *veh, byte loc, sbyte mod)
       break;
     case VAFF_PILOT:
       veh->pilot = mod;
+      break;
+    case VAFF_ULTRASONIC:
+      if (mod > 0)
+        veh->flags.SetBit(VFLAG_ULTRASOUND);
+      else
+        veh->flags.RemoveBit(VFLAG_ULTRASOUND);
       break;
     default:
       log_vfprintf("SYSLOG: Unknown apply adjust: %s/%d.", veh->short_description, loc);
@@ -773,7 +777,7 @@ void affect_total(struct char_data * ch)
       spell_modify(ch, sust, TRUE);
 
   if (GET_TEMP_QUI_LOSS(ch))
-    GET_QUI(ch) = MAX(0, GET_QUI(ch) - (GET_TEMP_QUI_LOSS(ch) / 4));
+    GET_QUI(ch) = MAX(0, GET_QUI(ch) - (GET_TEMP_QUI_LOSS(ch) / TEMP_QUI_LOSS_DIVISOR));
 
   for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content) {
     switch (GET_BIOWARE_TYPE(bio)) {
@@ -1743,18 +1747,20 @@ struct obj_data *unequip_char(struct char_data * ch, int pos, bool focus)
   return (obj);
 }
 
-int get_number(char **name)
+int get_number(char **name, size_t name_len)
 {
   int i;
   char *ppos;
   char number[MAX_INPUT_LENGTH];
+  char source[MAX_INPUT_LENGTH];
 
   *number = '\0';
+  strlcpy(source, *name, sizeof(source));
 
-  if ((ppos = strchr(*name, '.'))) {
+  if ((ppos = strchr(source, '.'))) {
     *ppos++ = '\0';
-    strcpy(number, *name);
-    strcpy(*name, ppos);
+    strlcpy(number, source, sizeof(number));
+    strlcpy(*name, ppos, name_len);
 
     for (i = 0; *(number + i); i++)
       if (!isdigit(*(number + i)))
@@ -1780,7 +1786,7 @@ struct veh_data *get_veh_list(char *name, struct veh_data *list, struct char_dat
     mine = TRUE;
     strlcpy(tmp, name+3, sizeof(tmpname));
   }
-  if (!(number = get_number(&tmp)))
+  if (!(number = get_number(&tmp, sizeof(tmpname))))
     return NULL;
   for (i = list; i && (j <= number); i = i->next_veh)
     if (isname(tmp, get_string_after_color_code_removal(GET_VEH_NAME(i), NULL))
@@ -1836,7 +1842,7 @@ struct char_data *get_char_room(const char *name, struct room_data *room)
   }
 
   strcpy(tmp, name);
-  if (!(number = get_number(&tmp)))
+  if (!(number = get_number(&tmp, sizeof(tmpname))))
     return NULL;
 
   for (i = room->people; i && (j <= number); i = i->next_in_room)
@@ -2256,19 +2262,18 @@ void extract_veh(struct veh_data * veh)
 
   // Unhitch its tows.
   if (veh->towing) {
-    strcpy(buf3, GET_VEH_NAME(veh));
-    snprintf(buf, sizeof(buf), "%s falls from %s's towing equipment.\r\n", GET_VEH_NAME(veh->towing), buf3);
-    if (ch->in_veh->in_room) {
-      act(buf, FALSE, ch->in_veh->in_room->people, 0, 0, TO_ROOM);
-      act(buf, FALSE, ch->in_veh->in_room->people, 0, 0, TO_CHAR);
+    snprintf(buf, sizeof(buf), "%s falls from %s's towing equipment.\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh->towing)), GET_VEH_NAME(veh));
+    if (veh->in_room) {
+      act(buf, FALSE, veh->in_room->people, 0, 0, TO_ROOM);
+      act(buf, FALSE, veh->in_room->people, 0, 0, TO_CHAR);
       veh_to_room(veh->towing, veh->in_room);
-    } else if (ch->in_veh->in_veh){
-      send_to_veh(buf, ch->in_veh->in_veh, ch, TRUE);
+    } else if (veh->in_veh){
+      send_to_veh(buf, veh->in_veh, ch, TRUE);
       veh_to_veh(veh->towing, veh->in_veh);
     } else {
-      snprintf(buf, sizeof(buf), "SYSERR: Veh %s (%ld) has neither in_room nor in_veh! Dropping towed veh in Dante's Garage.", GET_VEH_NAME(ch->in_veh), ch->in_veh->idnum);
+      snprintf(buf, sizeof(buf), "SYSERR: Veh %s (%ld) has neither in_room nor in_veh! Dropping towed veh in Dante's Garage.", GET_VEH_NAME(veh), veh->idnum);
       mudlog(buf, ch, LOG_SYSLOG, TRUE);
-      // Can't stop, we're already blowing up the vehicle. Drop it in Dante's garage.
+      // Can't stop, we're already blowing up the vehicle. Drop the towed one in Dante's garage.
       veh_to_room(veh->towing, &world[real_room(RM_DANTES_GARAGE)]);
     }
     veh->towing = NULL;
@@ -2317,11 +2322,6 @@ void extract_obj(struct obj_data * obj)
   if (IS_OBJ_STAT(obj, ITEM_EXTRA_KEPT)) {
     const char *representation = generate_new_loggable_representation(obj);
     snprintf(buf, sizeof(buf), "extract_obj: Destroying KEPT item: %s", representation);
-    delete [] representation;
-    mudlog(buf, NULL, LOG_PURGELOG, TRUE);
-  } else if (GET_OBJ_SPEC(obj) == pocket_sec) {
-    const char *representation = generate_new_loggable_representation(obj);
-    snprintf(buf, sizeof(buf), "extract_obj: Destroying pocket secretary: %s", representation);
     delete [] representation;
     mudlog(buf, NULL, LOG_PURGELOG, TRUE);
   }
@@ -2744,7 +2744,7 @@ struct char_data *get_char_room_vis(struct char_data * ch, char *name)
 
   /* 0.<name> means PC with name */
   strcpy(tmp, name);
-  if (!(number = get_number(&tmp)))
+  if (!(number = get_number(&tmp, sizeof(tmpname))))
     return get_player_vis(ch, tmp, 1);
 
   if (ch->in_veh)
@@ -2776,7 +2776,7 @@ struct char_data *get_char_in_list_vis(struct char_data * ch, char *name, struct
 
   /* 0.<name> means PC with name */
   strcpy(tmp, name);
-  if (!(number = get_number(&tmp)))
+  if (!(number = get_number(&tmp, sizeof(tmpname))))
     return get_player_vis(ch, tmp, 1);
 
   for (; list && j <= number; list = list->next_in_room)
@@ -2811,7 +2811,7 @@ struct char_data *get_char_vis(struct char_data * ch, char *name)
     return i;
 
   strcpy(tmp, name);
-  if (!(number = get_number(&tmp)))
+  if (!(number = get_number(&tmp, sizeof(tmpname))))
     return get_player_vis(ch, tmp, 0);
 
   for (i = character_list; i && (j <= number); i = i->next)
@@ -2838,7 +2838,7 @@ struct obj_data *get_obj_in_list_vis(struct char_data * ch, char *name, struct o
     return NULL;
 
   strcpy(tmp, name);
-  if (!(number = get_number(&tmp)))
+  if (!(number = get_number(&tmp, sizeof(tmpname))))
     return NULL;
 
   for (i = list; i && (j <= number); i = i->next_content) {
@@ -2870,7 +2870,7 @@ struct obj_data *get_obj_vis(struct char_data * ch, char *name)
     return i;
 
   strcpy(tmp, name);
-  if (!(number = get_number(&tmp)))
+  if (!(number = get_number(&tmp, sizeof(tmpname))))
     return NULL;
 
   //  return find_obj(ch, tmp, number);
@@ -2885,7 +2885,7 @@ struct obj_data *get_object_in_equip_vis(struct char_data * ch,
   int i = 0, number;
 
   strcpy(tmp, arg);
-  if (!(number = get_number(&tmp)))
+  if (!(number = get_number(&tmp, sizeof(tmpname))))
     return NULL;
 
   for ((*j) = 0; (*j) < NUM_WEARS && i <= number; (*j)++)
@@ -3133,7 +3133,7 @@ int generic_find(char *arg, int bitvector, struct char_data * ch,
 
     /* 0.<name> means PC with name-- except here we're overriding that because I cannot be bothered right now. TODO. --LS */
     strcpy(tmp, name);
-    number = MAX(1, get_number(&tmp));
+    number = MAX(1, get_number(&tmp, sizeof(tmpname)));
 
     for (i = get_ch_in_room(ch)->people; i && j <= number; i = i->next_in_room)
       if ((isname(tmp, get_string_after_color_code_removal(GET_KEYWORDS(i), NULL))
@@ -3199,43 +3199,99 @@ int find_all_dots(char *arg)
     return FIND_INDIV;
 }
 
-int veh_skill(struct char_data *ch, struct veh_data *veh)
+#define DEFAULT_TO(skill_name) {if (!dice) {dice = GET_SKILL(ch, (skill_name)); defaulting = TRUE;}}
+int veh_skill(struct char_data *ch, struct veh_data *veh, int *tn)
 {
-  int skill = 0;
+  int dice = 0;
+
+  bool defaulting = FALSE;
 
   switch (veh->type)
   {
     case VEH_CAR:
-      skill = GET_SKILL(ch, SKILL_PILOT_CAR);
-      if (!skill)
-        skill = (int)(GET_SKILL(ch, SKILL_PILOT_TRUCK) / 2);
-      if (!skill)
-        skill = (int)(GET_SKILL(ch, SKILL_PILOT_BIKE) / 2);
+      dice = GET_SKILL(ch, SKILL_PILOT_CAR);
+      DEFAULT_TO(SKILL_PILOT_TRUCK);
       break;
     case VEH_BIKE:
-      skill = GET_SKILL(ch, SKILL_PILOT_BIKE);
-      if (!skill)
-        skill = (int)(GET_SKILL(ch, SKILL_PILOT_CAR) / 2);
-      if (!skill)
-        skill = (int)(GET_SKILL(ch, SKILL_PILOT_TRUCK) / 2);
+      dice = GET_SKILL(ch, SKILL_PILOT_BIKE);
       break;
     case VEH_TRUCK:
-      skill = GET_SKILL(ch, SKILL_PILOT_TRUCK);
-      if (!skill)
-        skill = (int)(GET_SKILL(ch, SKILL_PILOT_CAR) / 2);
-      if (!skill)
-        skill = (int)(GET_SKILL(ch, SKILL_PILOT_BIKE) / 2);
+      dice = GET_SKILL(ch, SKILL_PILOT_TRUCK);
+      DEFAULT_TO(SKILL_PILOT_CAR);
+      break;
+    case VEH_FIXEDWING:
+      dice = GET_SKILL(ch, SKILL_PILOT_FIXEDWING);
+      DEFAULT_TO(SKILL_PILOT_VECTORTHRUST);
+      DEFAULT_TO(SKILL_PILOT_ROTORCRAFT);
+      DEFAULT_TO(SKILL_PILOT_LTA);
+      break;
+    case VEH_VECTORTHRUST:
+      dice = GET_SKILL(ch, SKILL_PILOT_VECTORTHRUST);
+      DEFAULT_TO(SKILL_PILOT_FIXEDWING);
+      DEFAULT_TO(SKILL_PILOT_ROTORCRAFT);
+      DEFAULT_TO(SKILL_PILOT_LTA);
+      break;
+    case VEH_ROTORCRAFT:
+      dice = GET_SKILL(ch, SKILL_PILOT_ROTORCRAFT);
+      DEFAULT_TO(SKILL_PILOT_VECTORTHRUST);
+      DEFAULT_TO(SKILL_PILOT_FIXEDWING);
+      DEFAULT_TO(SKILL_PILOT_LTA);
+      break;
+    case VEH_HOVERCRAFT:
+      dice = GET_SKILL(ch, SKILL_PILOT_HOVERCRAFT);
+      break;
+    case VEH_MOTORBOAT:
+      dice = GET_SKILL(ch, SKILL_PILOT_MOTORBOAT);
+      DEFAULT_TO(SKILL_PILOT_SHIP);
+      break;
+    case VEH_SHIP:
+      dice = GET_SKILL(ch, SKILL_PILOT_SHIP);
+      DEFAULT_TO(SKILL_PILOT_MOTORBOAT);
+      break;
+    case VEH_LTA:
+      dice = GET_SKILL(ch, SKILL_PILOT_LTA);
+      DEFAULT_TO(SKILL_PILOT_VECTORTHRUST);
+      DEFAULT_TO(SKILL_PILOT_FIXEDWING);
+      DEFAULT_TO(SKILL_PILOT_ROTORCRAFT);
       break;
   }
+
+  // Assume any NPC with a vehicle and no skill dice has a minimum dice of 4 and that the builder just forgot to set it.
+  if (IS_NPC(ch) && dice == 0) {
+    dice = 4;
+    defaulting = FALSE;
+  }
+
+  // Skill-to-skill default.
+  if (defaulting && dice > 0) {
+    *tn += 2;
+  }
+
+  // Skill-to-attribute default.
+  else if (dice <= 0) {
+    dice = GET_REA(ch);
+
+    bool has_vcr = FALSE;
+    for (struct obj_data *cyber = ch->cyberware; cyber; cyber = cyber->next_content) {
+      if (GET_CYBERWARE_TYPE(cyber) == CYB_VCR) {
+        has_vcr = TRUE;
+        break;
+      }
+    }
+
+    if (has_vcr) {
+      *tn += 2;
+    } else {
+      *tn += 4;
+    }
+  }
+
   if (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE))
-    skill += GET_CONTROL(ch);
+    dice += GET_CONTROL(ch);
 
-  // Assume any NPC with a vehicle and no skill has a minimum skill of 4 and that the builder just forgot to set it.
-  if (IS_NPC(ch) && skill == 0)
-    skill = MAX(skill, 4);
-
-  return skill;
+  return dice;
 }
+#undef DEFAULT_TO
 
 int get_skill_num_in_use_for_weapons(struct char_data *ch) {
   struct obj_data *one, *two;

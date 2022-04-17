@@ -320,12 +320,6 @@ void copyover_recover()
 
     /* Now, find the pfile */
 
-    /* Why would you create a new character, then immediately discard it and load a new one from the DB? */
-    //CREATE(d->character, struct char_data, 1);
-    //clear_char(d->character);
-    //CREATE(d->character->player_specials, struct player_special_data, 1);
-    //d->character->desc = d;
-
     if ((d->character = playerDB.LoadChar(name, FALSE))) {
       d->character->desc = d;
       if (!PLR_FLAGGED(d->character, PLR_DELETED))
@@ -1320,12 +1314,18 @@ int make_prompt(struct descriptor_data * d)
               snprintf(str, sizeof(str), "%d", CAN_CARRY_W(d->character));
               break;
             case 'm':       // current mental
-              physical = (int)(GET_MENTAL(d->character) / 100);
-              for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content)
-                if (GET_BIOWARE_TYPE(bio) == BIO_PAINEDITOR && GET_BIOWARE_IS_ACTIVATED(bio)) {
-                  physical = 10;
-                  break;
+              physical = (int)(GET_MENTAL(ch) / 100);
+              if (IS_JACKED_IN(ch)) {
+                physical = 10;
+              } else {
+                for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content) {
+                  if (GET_BIOWARE_TYPE(bio) == BIO_PAINEDITOR && GET_BIOWARE_IS_ACTIVATED(bio)) {
+                    physical = 10;
+                    break;
+                  }
                 }
+              }
+
               snprintf(str, sizeof(str), "%d", physical);
               break;
             case 'M':       // max mental
@@ -1338,12 +1338,19 @@ int make_prompt(struct descriptor_data * d)
               snprintf(str, sizeof(str), "%d", GET_OFFENSE(d->character));
               break;
             case 'p':       // current physical
-              physical = (int)(GET_PHYSICAL(d->character) / 100);
-              for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content)
-                if (GET_BIOWARE_TYPE(bio) == BIO_PAINEDITOR && GET_BIOWARE_IS_ACTIVATED(bio)) {
-                  physical = 10;
-                  break;
+              physical = (int)(GET_PHYSICAL(ch) / 100);
+
+              if (IS_JACKED_IN(ch)) {
+                physical = 10;
+              } else {
+                for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content) {
+                  if (GET_BIOWARE_TYPE(bio) == BIO_PAINEDITOR && GET_BIOWARE_IS_ACTIVATED(bio)) {
+                    physical = 10;
+                    break;
+                  }
                 }
+              }
+
               snprintf(str, sizeof(str), "%d", physical);
               break;
             case 'P':       // max physical
@@ -2989,8 +2996,15 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
             i = "you";
           else if (!IS_NPC(ch) && (IS_SENATOR(to) || IS_SENATOR(ch)))
             i = GET_CHAR_NAME(ch);
-          else if (CAN_SEE(to, ch))
-            i = make_desc(to, ch, temp_buf, TRUE, TRUE, sizeof(temp_buf));
+          else if (CAN_SEE(to, ch)) {
+            if (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE)) {
+              struct veh_data *veh;
+              RIG_VEH(ch, veh);
+              i = GET_VEH_NAME(veh);
+            } else {
+              i = make_desc(to, ch, temp_buf, TRUE, TRUE, sizeof(temp_buf));
+            }
+          }
           else
             i = "someone";
           break;
@@ -3001,8 +3015,15 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
             i = "you";
           else if (!IS_NPC(vict) && (IS_SENATOR(to) || IS_SENATOR(vict)))
             i = GET_CHAR_NAME(vict);
-          else if (CAN_SEE(to, vict))
-            i = make_desc(to, vict, temp_buf, TRUE, TRUE, sizeof(temp_buf));
+          else if (CAN_SEE(to, vict)) {
+            if (AFF_FLAGGED(vict, AFF_RIG) || PLR_FLAGGED(vict, PLR_REMOTE)) {
+              struct veh_data *veh;
+              RIG_VEH(vict, veh);
+              i = GET_VEH_NAME(veh);
+            } else {
+              i = make_desc(to, vict, temp_buf, TRUE, TRUE, sizeof(temp_buf));
+            }
+          }
           else
             i = "someone";
           break;

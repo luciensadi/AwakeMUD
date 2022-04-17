@@ -167,8 +167,7 @@ struct deck_info {
     redirect(0), redirectedon(NULL), mxp(0), hitcher(NULL), software(NULL), deck(NULL),
     seen(NULL), ch(NULL), phone(NULL)
    {
-     asist[0] = 0;
-     asist[1] = 0;
+     ZERO_OUT_ARRAY(asist, 2);
    }
 };
 

@@ -195,15 +195,17 @@ int ability_cost(int abil, int level)
     return 300;
   case ADEPT_REFLEXES:
     switch(level) {
-    case 1:
-      return 200;
-    case 2:
-      return 100;
-    case 3:
-      return 200;
-    default:
-      return 0;
+      case 1:
+        return 200;
+      case 2:
+        return 100;
+      case 3:
+        return 200;
+      default:
+        mudlog("SYSERR: Unknown value provided for ADEPT_REFLEXES!", NULL, LOG_SYSLOG, TRUE);
+        return 10000;
     }
+    break;
   case ADEPT_KILLING_HANDS:
     if (level < 3)
       return 50;
@@ -351,7 +353,7 @@ int get_skill_price(struct char_data *ch, int i)
 SPECIAL(metamagic_teacher)
 {
   struct char_data *master = (struct char_data *) me;
-  int i = 0, x = 0, suc, ind;
+  int i = 0, x = 0, ind;
   if (!(CMD_IS("train")))
     return FALSE;
 
@@ -389,8 +391,11 @@ SPECIAL(metamagic_teacher)
   if (metamagict[ind].vnum != GET_MOB_VNUM(master))
     return FALSE;
 
+  // This used to be based off of a die roll, but that's not easy to convey.
+  int cost = (int)((GET_MAG(ch) / 100) * 1000 * 14);
+
   if (!*argument) {
-    send_to_char(ch, "%s can teach you the following techniques: \r\n", GET_NAME(master));
+    send_to_char(ch, "%s can teach you the following techniques for %d nuyen each: \r\n", GET_NAME(master), cost);
     for (; i < NUM_TEACHER_SKILLS; i++)
       if (metamagict[ind].s[i])
         send_to_char(ch, "  %s\r\n", metamagic[metamagict[ind].s[i]]);
@@ -429,12 +434,6 @@ SPECIAL(metamagic_teacher)
     return TRUE;
   }
 
-  if ((suc = success_test(GET_MAG(ch) / 100, 14 - (GET_MAG(master) / 100))) < 1) {
-    send_to_char("Try as you might, you fail to understand how to learn that technique.\r\n", ch);
-    return TRUE;
-  }
-
-  int cost = (int)((GET_MAG(ch) / 100) * 1000 * (14 / suc));
   if (GET_NUYEN(ch) < cost) {
     send_to_char(ch, "You don't have the %d nuyen required to learn %s.\r\n", cost, metamagic[i]);
     return TRUE;
@@ -1675,7 +1674,7 @@ SPECIAL(car_dealer)
   if (!cmd || ch->in_veh || !ch->in_room)
     return FALSE;
 
-  if (!(CMD_IS("list") || CMD_IS("buy") || CMD_IS("info") || CMD_IS("probe")))
+  if (!(CMD_IS("list") || CMD_IS("buy") || CMD_IS("info") || CMD_IS("probe") || CMD_IS("value") || CMD_IS("sell")))
     return FALSE;
 
   if (IS_NPC(ch)) {
@@ -1719,6 +1718,65 @@ SPECIAL(car_dealer)
     }
     send_to_char(ch, "^yProbing shopkeeper's ^n%s^y...^n\r\n", GET_VEH_NAME(veh));
     do_probe_veh(ch, veh);
+    return TRUE;
+  } else if (CMD_IS("value") || CMD_IS("sell")) {
+    argument = one_argument(argument, buf);
+    if (!(veh = get_veh_list(buf, get_ch_in_room(ch)->vehicles, ch))) {
+      send_to_char(ch, "You don't see a vehicle named '%s' here.\r\n", buf);
+      return TRUE;
+    }
+    // You have to own it.
+    if (veh->owner != GET_IDNUM(ch)) {
+      send_to_char(ch, "%s^n isn't yours.\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
+      return TRUE;
+    }
+    // It must be empty.
+    if (veh->carriedvehs || veh->people || veh->towing || veh->contents) {
+      send_to_char(ch, "%s^n has to be empty before you can sell it.\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
+      return TRUE;
+    }
+    // It must not have mods.
+    for (int mod_location = 0; mod_location < NUM_MODS; mod_location++) {
+      if (GET_MOD(veh, mod_location)) {
+        send_to_char(ch, "You'll have to remove the mods from %s^n before you can sell it.\r\n", GET_VEH_NAME(veh));
+        return TRUE;
+      }
+    }
+    if (veh->mount) {
+      send_to_char(ch, "You'll have to remove the mounts from %s^n before you can sell it.\r\n", GET_VEH_NAME(veh));
+      return TRUE;
+    }
+    // Calculate price.
+    int sell_price = veh->flags.IsSet(VFLAG_NEWBIE) ? 0 : veh->cost / VEHICLE_SELL_PRICE_DIVISOR;
+    // Sell it.
+    if (CMD_IS("sell")) {
+      // Require that the final argument is 'confirm'.
+      if (!is_abbrev("confirm", argument)) {
+        send_to_char(ch, "This is an irreversible process. If you're sure you want to sell %s for %d nuyen, type ^WSELL %s CONFIRM^n.\r\n",
+                     GET_VEH_NAME(veh),
+                     sell_price,
+                     buf);
+      } else {
+        send_to_char(ch, "You sell %s for %d nuyen.\r\n",
+                     GET_VEH_NAME(veh),
+                     sell_price);
+
+        char sellbuf[1000];
+        snprintf(sellbuf, sizeof(sellbuf), "$n sells %s, and it's wheeled away immediately.", GET_VEH_NAME(veh));
+        act(sellbuf, TRUE, ch, 0, 0, TO_ROOM);
+        gain_nuyen(ch, sell_price, NUYEN_INCOME_SHOP_SALES);
+        snprintf(sellbuf, sizeof(sellbuf), "%s sold vehicle '%s^g' (%ld) for %d nuyen.",
+                 GET_CHAR_NAME(ch),
+                 GET_VEH_NAME(veh),
+                 GET_VEH_VNUM(veh),
+                 sell_price);
+        mudlog(sellbuf, ch, LOG_GRIDLOG, TRUE);
+        // Destroy the vehicle.
+        extract_veh(veh);
+      }
+    } else {
+      send_to_char(ch, "You could sell %s^n for %d nuyen (non-negotiable).\r\n", GET_VEH_NAME(veh), sell_price);
+    }
     return TRUE;
   }
   return FALSE;
@@ -2703,7 +2761,7 @@ SPECIAL(fixer)
       do_say(fixer, arg, 0, SCMD_SAYTO);
       return TRUE;
     }
-    if (!(extra = get_number(&temp))) {
+    if (!(extra = get_number(&temp, sizeof(tmpvar)))) {
       snprintf(arg, sizeof(arg), "%s I don't have anything like that.", GET_CHAR_NAME(ch));
       do_say(fixer, arg, 0, SCMD_SAYTO);
       return TRUE;
@@ -3489,7 +3547,10 @@ SPECIAL(newbie_car)
       send_to_char(ch, "You don't have a deed for that.\r\n");
       return TRUE;
     }
-    if (GET_OBJ_VNUM(obj) < 891 || GET_OBJ_VNUM(obj) > 898 || GET_OBJ_VNUM(obj) == 896) {
+    if (!((GET_OBJ_VNUM(obj) >= 891 && GET_OBJ_VNUM(obj) <= 898)
+           || (GET_OBJ_VNUM(obj) >= 904 && GET_OBJ_VNUM(obj) <= 908))
+        || GET_OBJ_VNUM(obj) == 896)
+    {
       send_to_char(ch, "You can't collect anything with that.\r\n");
       return TRUE;
     }
@@ -3519,6 +3580,26 @@ SPECIAL(newbie_car)
       case 898:
         num = 1303;
         break;
+#ifdef USE_PRIVATE_CE_WORLD
+      case 904:
+        num = 37500;
+        break;
+      case 905:
+        num = 37501;
+        break;
+      case 906:
+        num = 37502;
+        break;
+      case 907:
+        num = 37503;
+        break;
+      case 908:
+        num = 37504;
+        break;
+#endif
+      default:
+        mudlog("SYSERR: Attempting to 'collect' a mis-assigned title!", ch, LOG_SYSLOG, TRUE);
+        return FALSE;
     }
     veh = read_vehicle(num, VIRTUAL);
     veh->locked = TRUE;
@@ -5015,8 +5096,8 @@ SPECIAL(chargen_hopper)
       return FALSE;
 
     // Strip out the numbers for fewer shenanigans.
-    get_number(&arg1_ptr);
-    get_number(&arg2_ptr);
+    get_number(&arg1_ptr, sizeof(arg1));
+    get_number(&arg2_ptr, sizeof(arg2));
 
     // If the keyword they're using is valid for the hopper:
     if ((isname(arg2, hopper->text.keywords) || isname(arg2, hopper->text.name) || strcmp(arg2, "all") == 0)
@@ -6562,12 +6643,14 @@ SPECIAL(medical_workshop) {
     snprintf(buf, sizeof(buf), "$n fumbles $s attempt to %sinstall $o, wounding $N!", mode_is_install ? "" : "un");
     act(buf, FALSE, ch, ware, found_char, TO_ROOM);
 
-    // Damage the character. This damage type does not result in a killer check.
-    damage(ch, found_char, SERIOUS, TYPE_MEDICAL_MISHAP, PHYSICAL);
-
     // Victim obviously doesn't trust you anymore, so revoke permission.
     send_to_char("(System notice: Automatically disabling your ^WTOGGLE CYBERDOC^n permission.)\r\n", found_char);
     PRF_FLAGS(found_char).RemoveBit(PRF_TOUCH_ME_DADDY);
+
+    // Damage the character. This damage type does not result in a killer check.
+    if (damage(ch, found_char, SERIOUS, TYPE_MEDICAL_MISHAP, PHYSICAL)) {
+      send_to_char(ch, "Seems your scalpel cut something critical... your patient has died.\r\n");
+    }
 
     return TRUE;
   }
