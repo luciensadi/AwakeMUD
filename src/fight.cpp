@@ -4871,7 +4871,6 @@ void roll_initiative(void)
         act("You are hit by flying objects!\r\n", FALSE, ch, 0, 0, TO_CHAR);
         act("$n is hit by flying objects!\r\n", TRUE, ch, 0, 0, TO_ROOM);
         damage(ch, ch, dam, TYPE_POLTERGEIST, MENTAL);
-        // TODO: Doesn't this cause issues if poltergeist kills someone during the init roll?
       }
     }
   }
@@ -5006,8 +5005,8 @@ void perform_violence(void)
             dam = convert_damage(stage(-success_test(GET_BOD(ssust->target), GET_SPARE2(ch) + GET_EXTRA(ssust->target)), MODERATE));
             act("$n can contorts in pain as the water engulfs $m!", TRUE, ssust->target, 0, 0, TO_ROOM);
             send_to_char("The water crushes you and leaves you unable to breath!\r\n", ssust->target);
-            if (dam > 0)
-              damage(ch, ssust->target, dam, TYPE_FUMES, MENTAL);
+            if (dam > 0 && damage(ch, ssust->target, dam, TYPE_FUMES, MENTAL))
+              break;
             GET_EXTRA(ssust->target)++;
           } else
             switch (GET_SPARE1(ch)) {
@@ -5104,7 +5103,9 @@ void perform_violence(void)
       } else if (GET_MAG(mage) < 1) {
         send_to_char(mage, "Your magic spent from your battle with %s, you fall unconscious.\r\n", GET_NAME(spirit));
         act("$n falls unconscious, drained by magical combat.", FALSE, mage, 0, 0, TO_ROOM);
-        damage(mage, spirit, TYPE_DRAIN, DEADLY, MENTAL);
+        if (damage(spirit, mage, TYPE_DRAIN, DEADLY, MENTAL)) {
+          continue;
+        }
         stop_fighting(spirit);
         stop_fighting(mage);
         update_pos(mage);
@@ -5561,7 +5562,8 @@ void chkdmg(struct veh_data * veh)
 
       // Deal damage.
       damage_rating = convert_damage(stage(-success_test(GET_BOD(i), damage_tn), damage_rating));
-      damage(i, i, damage_rating, TYPE_CRASH, PHYSICAL);
+      if (damage(i, i, damage_rating, TYPE_CRASH, PHYSICAL))
+        continue;
     }
 
     // Dump out and destroy objects.

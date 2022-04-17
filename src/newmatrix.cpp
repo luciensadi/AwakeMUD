@@ -145,7 +145,7 @@ bool tarbaby(struct obj_data *prog, struct char_data *ch, struct matrix_icon *ic
   return FALSE;
 }
 
-void dumpshock(struct matrix_icon *icon)
+bool dumpshock(struct matrix_icon *icon)
 {
   if (icon->decker && icon->decker->ch)
   {
@@ -189,9 +189,11 @@ void dumpshock(struct matrix_icon *icon)
       act("Smoke emerges from $n's $p.", FALSE, icon->decker->ch, icon->decker->deck, NULL, TO_ROOM);
       act("Smoke emerges from $p.", FALSE, icon->decker->ch, icon->decker->deck, NULL, TO_CHAR);
     }
-    damage(icon->decker->ch, icon->decker->ch, dam, TYPE_DUMPSHOCK, MENTAL);
+    if (damage(icon->decker->ch, icon->decker->ch, dam, TYPE_DUMPSHOCK, MENTAL))
+      return TRUE;
   }
   extract_icon(icon);
+  return FALSE;
 }
 
 int system_test(rnum_t host, struct char_data *ch, int type, int software, int modifier)
@@ -748,7 +750,9 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
       }
       if (success_test(GET_WIL(targ->decker->ch), power) < 1) {
         send_to_icon(targ, "Your interface overloads.\r\n");
-        damage(targ->decker->ch, targ->decker->ch, 1, TYPE_TASER, MENTAL);
+        if (damage(targ->decker->ch, targ->decker->ch, 1, TYPE_TASER, MENTAL)) {
+          return;
+        }
       }
     }
   }
@@ -763,7 +767,9 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
           fry_mpcp(icon, targ, success);
           success = success - success_test(GET_BOD(targ->decker->ch), iconrating - targ->decker->hardening);
           dam = convert_damage(stage(success, MODERATE));
-          damage(targ->decker->ch, targ->decker->ch, dam, TYPE_BLACKIC, PHYSICAL);
+          if (damage(targ->decker->ch, targ->decker->ch, dam, TYPE_BLACKIC, PHYSICAL)) {
+            return;
+          }
           break;
         case IC_BLASTER:
           success = success_test(iconrating, targ->decker->mpcp + targ->decker->hardening);
@@ -771,7 +777,8 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
           break;
         }
       }
-      dumpshock(targ);
+      if (dumpshock(targ))
+        return;
     } else {
       icon->decker->tally += iconrating;
       if (icon->decker->located)
@@ -2016,7 +2023,8 @@ ACMD(do_download)
             PERSONA->condition -= dam;
             if (PERSONA->condition < 1) {
               send_to_icon(PERSONA, "The %s explodes, ripping your icon into junk logic\r\n", GET_OBJ_VAL(soft, 5) == 2 ? "Data Bomb" : "Pavlov");
-              dumpshock(PERSONA);
+              if (dumpshock(PERSONA))
+                return;
             } else
               send_to_icon(PERSONA, "The %s explodes, damaging your icon.\r\n", GET_OBJ_VAL(soft, 5) == 2 ? "Data Bomb" : "Pavlov");
           }

@@ -3162,7 +3162,8 @@ void process_boost()
             damage = MODERATE;
           else
             damage = SERIOUS;
-          spell_drain(i, 0, power, damage);
+          if (spell_drain(i, 0, power, damage))
+            continue;
         }
       }
       if (BOOST(i)[QUI][0] > 0) {
@@ -3176,7 +3177,8 @@ void process_boost()
             damage = MODERATE;
           else
             damage = SERIOUS;
-          spell_drain(i, 0, power, damage);
+          if (spell_drain(i, 0, power, damage))
+            continue;
         }
       }
       if (BOOST(i)[BOD][0] > 0) {
@@ -3190,7 +3192,8 @@ void process_boost()
             damage = MODERATE;
           else
             damage = SERIOUS;
-          spell_drain(i, 0, power, damage);
+          if (spell_drain(i, 0, power, damage))
+            continue;
         }
       }
       if (i)

@@ -6641,12 +6641,14 @@ SPECIAL(medical_workshop) {
     snprintf(buf, sizeof(buf), "$n fumbles $s attempt to %sinstall $o, wounding $N!", mode_is_install ? "" : "un");
     act(buf, FALSE, ch, ware, found_char, TO_ROOM);
 
-    // Damage the character. This damage type does not result in a killer check.
-    damage(ch, found_char, SERIOUS, TYPE_MEDICAL_MISHAP, PHYSICAL);
-
     // Victim obviously doesn't trust you anymore, so revoke permission.
     send_to_char("(System notice: Automatically disabling your ^WTOGGLE CYBERDOC^n permission.)\r\n", found_char);
     PRF_FLAGS(found_char).RemoveBit(PRF_TOUCH_ME_DADDY);
+
+    // Damage the character. This damage type does not result in a killer check.
+    if (damage(ch, found_char, SERIOUS, TYPE_MEDICAL_MISHAP, PHYSICAL)) {
+      send_to_char(ch, "Seems your scalpel cut something critical... your patient has died.\r\n");
+    }
 
     return TRUE;
   }

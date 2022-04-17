@@ -192,9 +192,11 @@ void crash_test(struct char_data *ch)
       char_from_room(tch);
       char_to_room(tch, veh->in_room);
       damage_total = convert_damage(stage(0 - success_test(GET_BOD(tch), power), MODERATE));
-      damage(tch, tch, damage_total, TYPE_CRASH, PHYSICAL);
-      AFF_FLAGS(tch).RemoveBits(AFF_PILOT, AFF_RIG, ENDBIT);
       send_to_char(tch, "You are thrown from the %s!\r\n", veh->type == VEH_BIKE ? "bike" : "boat");
+      if (damage(tch, tch, damage_total, TYPE_CRASH, PHYSICAL)) {
+        continue;
+      }
+      AFF_FLAGS(tch).RemoveBits(AFF_PILOT, AFF_RIG, ENDBIT);
     }
     veh->cspeed = SPEED_OFF;
   }

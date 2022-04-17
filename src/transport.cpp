@@ -1669,7 +1669,10 @@ int process_elevator(struct room_data *room,
         power = MIN(4, 15 - (GET_IMPACT(vict) / 2)); // Base power 15 (getting pinned and dragged by an elevator HURTS). Impact armor helps.
         success = success_test(GET_BOD(vict), MAX(2, power) + modify_target(vict));
         dam = convert_damage(stage(-success, power));
-        damage(vict, vict, dam, TYPE_ELEVATOR, TRUE);
+
+        // Check for vict's death. This continue statement is essentially no-op, but proves that I've cleared this statement.
+        if (damage(vict, vict, dam, TYPE_ELEVATOR, TRUE))
+          continue;
       }
 
       // Restore the exit shaft->landing. EDGE CASE: Will be NULL if the car started here on boot and hasn't moved.

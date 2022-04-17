@@ -3919,8 +3919,9 @@ ACMD(do_learn)
   } else if (successes < 0) {
     // Botched it!
     send_to_char("You attempt to form mana into the proper shape to practice the spell, but it feeds back and lashes out at your psyche.\r\n", ch);
-    damage(ch, ch, 1, TYPE_SUFFERING, MENTAL);
-    WAIT_STATE(ch, FAILED_SPELL_LEARNING_WAIT_STATE * 3);
+    if (!damage(ch, ch, 1, TYPE_SUFFERING, MENTAL)) {
+      WAIT_STATE(ch, FAILED_SPELL_LEARNING_WAIT_STATE * 3);
+    }
     return;
   }
 #endif
