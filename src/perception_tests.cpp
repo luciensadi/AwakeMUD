@@ -190,46 +190,54 @@ bool can_see_through_invis(struct char_data *ch, struct char_data *vict) {
 
   // Finally, roll the dice.
   int successes = success_test(dice, tn);
-  bool test_result = (successes >= effective_spell_successes);
+  bool test_succeeded = (successes >= effective_spell_successes);
   snprintf(ENDOF(resistance_test_rbuf), sizeof(resistance_test_rbuf) - strlen(resistance_test_rbuf), "\r\nResult: %d hits vs %d: %s",
            successes,
            effective_spell_successes,
-           test_result ? "success" : "failure"
+           test_succeeded ? "success" : "failure"
          );
 
   // Store the result.
-  map_to_operate_on->emplace(idnum, test_result);
+  map_to_operate_on->emplace(idnum, test_succeeded);
 
   // Write the rolls for debugging.
   act(resistance_test_rbuf, FALSE, ch, NULL, NULL, TO_ROLLS);
 
   // Message the character if they can suddenly see their opponent.
-  if (test_result && ch != vict && (ch->in_room ? ch->in_room == vict->in_room : ch->in_veh == vict->in_veh) && GET_POS(ch) > POS_SLEEPING) {
-    send_to_char(ch, "You squint at a hazy patch of air, and suddenly %s pops into view!\r\n", decapitalize_a_an(GET_CHAR_NAME(vict)));
+  bool ch_in_same_place_as_vict = (ch->in_room ? ch->in_room == vict->in_room : ch->in_veh == vict->in_veh);
+  if (ch != vict && ch_in_same_place_as_vict && GET_POS(ch) > POS_SLEEPING && AWAKE(ch)) {
+    if (test_succeeded) {
+      send_to_char(ch, "You squint at a hazy patch of air, and suddenly %s pops into view!\r\n", decapitalize_a_an(GET_CHAR_NAME(vict)));
 
-    // Spotting an invisible person alarms NPCs.
-    if (IS_NPC(ch)) {
-      bool is_alarmed = process_spotted_invis(ch, vict, TRUE);
-      if (is_alarmed && CAN_SEE(vict, ch)) {
-        if (vict->in_room == ch->in_room) {
-          if (MOB_FLAGGED(ch, MOB_INANIMATE)) {
-            send_to_char(vict, "^y%s swivels towards you with an alarmed chirp.^n\r\n", capitalize(GET_CHAR_NAME(ch)));
-          } else {
-            send_to_char(vict, "^y%s scowls at you, %s eyes focusing through your invisibility.^n\r\n", capitalize(GET_CHAR_NAME(ch)), HSHR(ch));
-          }
-          if (GET_NOT(vict) < NEWBIE_KARMA_THRESHOLD && number(0, MAX(1, GET_NOT(vict) / 5)) == 0) {
-            send_to_char(vict, "(OOC: Being invisible sets NPCs on edge! Be careful out there.)\r\n");
-          }
-        } else if (number(0, 5) == 0) {
-          send_to_char("You get an uneasy feeling...\r\n", vict);
-          if (GET_NOT(vict) < NEWBIE_KARMA_THRESHOLD && number(0, MAX(1, GET_NOT(vict) / 5)) == 0) {
-            send_to_char(vict, "(OOC: Being invisible sets NPCs on edge! Be careful out there.)\r\n");
+      // Spotting an invisible person alarms NPCs.
+      if (IS_NPC(ch)) {
+        bool is_alarmed = process_spotted_invis(ch, vict, TRUE);
+        if (is_alarmed && CAN_SEE(vict, ch)) {
+          if (vict->in_room == ch->in_room) {
+            if (MOB_FLAGGED(ch, MOB_INANIMATE)) {
+              send_to_char(vict, "^y%s swivels towards you with an alarmed chirp.^n\r\n", capitalize(GET_CHAR_NAME(ch)));
+            } else {
+              send_to_char(vict, "^y%s scowls at you, %s eyes focusing through your invisibility.^n\r\n", capitalize(GET_CHAR_NAME(ch)), HSHR(ch));
+            }
+            if (GET_NOT(vict) < NEWBIE_KARMA_THRESHOLD && number(0, MAX(1, GET_NOT(vict) / 5)) == 0) {
+              send_to_char(vict, "(OOC: Being invisible sets NPCs on edge! Be careful out there.)\r\n");
+            }
+          } else if (number(0, 5) == 0) {
+            send_to_char("You get an uneasy feeling...\r\n", vict);
+            if (GET_NOT(vict) < NEWBIE_KARMA_THRESHOLD && number(0, MAX(1, GET_NOT(vict) / 5)) == 0) {
+              send_to_char(vict, "(OOC: Being invisible sets NPCs on edge! Be careful out there.)\r\n");
+            }
           }
         }
       }
     }
+    else if (GET_EQ(vict, WEAR_LIGHT) && IS_NPC(ch)) {
+      // You can't see them, but their flashlight beam is still visible.
+      GET_MOBALERT(ch) = MALERT_ALERT;
+      GET_MOBALERTTIME(ch) = 20;
+    }
   }
 
   // Return the result.
-  return test_result;
+  return test_succeeded;
 }

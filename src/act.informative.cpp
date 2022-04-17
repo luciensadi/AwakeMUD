@@ -1824,11 +1824,15 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
     } else if (is_nighttime || (ch->in_room->vision[0] > LIGHT_NORMAL && ch->in_room->vision[0] <= LIGHT_PARTLIGHT)) {
       if (ch->in_room->light[ROOM_HIGHEST_SPELL_FORCE]) {
         send_to_char(ch, "^LAn ambient magical glow lightens the %sshadows.^n\r\n", is_nighttime ? "nighttime " : "");
-      } else if (ch->in_room->light[ROOM_LIGHT_HEADLIGHTS_AND_FLASHLIGHTS] > 1) {
-        if (GET_EQ(ch, WEAR_LIGHT)) {
-          send_to_char(ch, "^LYour flashlight highlights the %sshadows.^n\r\n", is_nighttime ? "nighttime " : "");
+      } else if (ch->in_room->light[ROOM_LIGHT_HEADLIGHTS_AND_FLASHLIGHTS]) {
+        if (ch->in_room->light[ROOM_LIGHT_HEADLIGHTS_AND_FLASHLIGHTS] == 1) {
+          if (GET_EQ(ch, WEAR_LIGHT)) {
+            send_to_char(ch, "^LYour flashlight highlights the %sshadows.^n\r\n", is_nighttime ? "nighttime " : "");
+          } else {
+            send_to_char(ch, "^LA beam of light highlights the %sshadows.^n\r\n", is_nighttime ? "nighttime " : "");
+          }
         } else {
-          send_to_char(ch, "^LBeams of light highlight the %sshadows.^n\r\n", is_nighttime ? "nighttime " : "");
+          send_to_char(ch, "^LSeveral beams of light highlight the %sshadows.^n\r\n", is_nighttime ? "nighttime " : "");
         }
       } else {
         send_to_char(ch, "^LDarkness cloaks the area.^n\r\n");
@@ -2371,11 +2375,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
   switch (GET_OBJ_TYPE(j))
   {
     case ITEM_LIGHT:
-      if (GET_OBJ_VAL(j, 2) == -1) {
-        strlcat(buf, "It is an ^cinfinite^n light source.", sizeof(buf));
-      } else {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It has ^c%d^n hours of light left.", GET_OBJ_VAL(j, 2));
-      }
+      strlcat(buf, "It is an ^cinfinite^n light source.", sizeof(buf));
       break;
     case ITEM_FIREWEAPON:
       strlcat(buf, "As a fireweapon, it is not currently implemented.\r\n", sizeof(buf));

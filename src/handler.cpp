@@ -3350,7 +3350,7 @@ void _char_with_spell_from_room(struct char_data *ch, int spell_num, room_spell_
       for (struct char_data *tmp_ch = ch->in_room->people; tmp_ch; tmp_ch = tmp_ch->next_in_room) {
         if (tmp_ch == ch)
           continue;
-          
+
         for (struct sustain_data *sust = GET_SUSTAINED(tmp_ch); sust; sust = sust->next) {
           if (sust->spell == spell_num) {
             int force = MIN(sust->force, sust->success);
@@ -3369,7 +3369,7 @@ void _handle_char_with_light(struct char_data *ch, bool add) {
   }
 
   struct obj_data *light = GET_EQ(ch, WEAR_LIGHT);
-  if (light && GET_OBJ_TYPE(light) == ITEM_LIGHT && GET_LIGHT_IS_ON(light)) {
+  if (light && GET_OBJ_TYPE(light) == ITEM_LIGHT) {
     if (add) {
       ch->in_room->light[ROOM_LIGHT_HEADLIGHTS_AND_FLASHLIGHTS]++;
     } else {

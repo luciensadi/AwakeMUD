@@ -304,10 +304,6 @@ void iedit_disp_val1_menu(struct descriptor_data * d)
     case ITEM_CAMERA:
       send_to_char("0) Camera\r\n1) Photo\r\nObject Type: ", CH);
       break;
-    case ITEM_LIGHT:
-      /* values 0 and 1 are unused.. jump to 2 */
-      iedit_disp_val3_menu(d);
-      break;
     case ITEM_WEAPON:
     case ITEM_FIREWEAPON:
       send_to_char("Power (0 for melee weapon or bow):", d->character);
@@ -586,9 +582,6 @@ void iedit_disp_val3_menu(struct descriptor_data * d)
         send_to_char("Select ammunition type: ", CH);
       } else iedit_disp_menu(d);
 
-      break;
-    case ITEM_LIGHT:
-      send_to_char("Number of hours (0 = burnt, -1 is infinite): ", d->character);
       break;
     case ITEM_WEAPON:
     case ITEM_FIREWEAPON:
