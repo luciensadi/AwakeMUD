@@ -3167,7 +3167,9 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("ws", "southwest");
   COMMAND_ALIAS("wn", "northwest");
   COMMAND_ALIAS("en", "northeast");
-  COMMAND_ALIAS("ws", "southwest");
+  COMMAND_ALIAS("es", "southeast");
+  COMMAND_ALIAS("sse", "southeast");
+  COMMAND_ALIAS("ssw", "southwest");
   COMMAND_ALIAS("norht", "north"); // this one happened 18 times
   COMMAND_ALIAS("esat", "east"); // this one only 8
 
@@ -3188,8 +3190,19 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("cyberwear", "cyberware");
   COMMAND_ALIAS("biowear", "bioware");
   COMMAND_ALIAS("lsit", "list");
+  COMMAND_ALIAS("ist", "list");
   COMMAND_ALIAS("out", "put");
   COMMAND_ALIAS("ivn", "inventory");
+  COMMAND_ALIAS("hoslter", "holster");
+  COMMAND_ALIAS("stnad", "stand");
+  COMMAND_ALIAS("saerch", "search");
+  COMMAND_ALIAS("serach", "search");
+  COMMAND_ALIAS("shot", "shoot");
+  COMMAND_ALIAS("trian", "train");
+  COMMAND_ALIAS("opne", "open");
+  COMMAND_ALIAS("recpa", "recap");
+  COMMAND_ALIAS("scoe", "score");
+  COMMAND_ALIAS("hial", "hail");
 
   // Combat stuff.
   COMMAND_ALIAS("attack", "kill");
@@ -3198,6 +3211,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
 
   // Misc aliases.
   COMMAND_ALIAS("taxi", "hail");
+  COMMAND_ALIAS("cab", "hail");
   COMMAND_ALIAS("yes", "nod");
   COMMAND_ALIAS("setup", "unpack");
   COMMAND_ALIAS("ability", "abilities");
@@ -3208,6 +3222,9 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("email", "register");
   COMMAND_ALIAS("clothing", "equipment");
   COMMAND_ALIAS("armor", "equipment");
+  COMMAND_ALIAS("programs", "software");
+  COMMAND_ALIAS("bank", "balance");
+  COMMAND_ALIAS("recall", "recap");
 
   // Toggles.
   COMMAND_ALIAS("settings", "toggle");
@@ -3223,6 +3240,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("lok", "look");
   COMMAND_ALIAS("loko", "look");
   COMMAND_ALIAS("loook", "look");
+  COMMAND_ALIAS("ook", "look");
 
   // equipment seems to give people a lot of trouble
   COMMAND_ALIAS("unwield", "remove");
