@@ -849,7 +849,9 @@ void disp_mod(struct veh_data *veh, struct char_data *ch, int i)
         if (i >= 5)
           send_to_char(ch, "  %s\r\n", GET_OBJ_NAME(GET_MOD(veh, x)));
         break;
-
+      default:
+        send_to_char(ch, "  %s\r\n", GET_OBJ_NAME(GET_MOD(veh, x)));
+        break;
     }
   }
 }
