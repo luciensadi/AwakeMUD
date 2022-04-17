@@ -2230,8 +2230,10 @@ ACMD(do_transfer)
   two_arguments(argument, buf, buf2);
   struct veh_data *veh = NULL;
   struct char_data *targ = NULL;
-
-  if (!*buf || !*buf2)
+  
+  if(PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED) && subcmd != SCMD_NEWBIE)
+    send_to_char("You can't transfer vehicles until authorized.\r\n", ch);
+  else if (!*buf || !*buf2)
     send_to_char("Transfer what to who?\r\n", ch);
   else if (ch->in_veh)
     send_to_char("You can't transfer ownership while you're inside a vehicle.\r\n", ch);
