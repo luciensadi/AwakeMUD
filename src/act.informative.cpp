@@ -5956,7 +5956,13 @@ ACMD(do_status)
       break;
   }
   if (GET_TEMP_QUI_LOSS(ch)) {
-    send_to_char(ch, "  Temporary quickness loss: %d\r\n", GET_TEMP_QUI_LOSS(ch));
+    send_to_char(ch, "  Temporary Quickness Loss: %d\r\n", GET_TEMP_QUI_LOSS(ch));
+  }
+  if (GET_TEMP_MAGIC_LOSS(ch)) {
+    send_to_char(ch, "  Temporary Magic Loss: %d\r\n", GET_TEMP_MAGIC_LOSS(ch));
+  }
+  if (GET_TEMP_ESSLOSS(ch)) {
+    send_to_char(ch, "  Temporary Essence Loss: %d\r\n", GET_TEMP_ESSLOSS(ch));
   }
   if (GET_REACH(targ)) {
     send_to_char(ch, "  Extra Reach (%dm)\r\n", GET_REACH(targ));
