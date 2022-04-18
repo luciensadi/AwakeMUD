@@ -2502,6 +2502,7 @@ enum {
 #define ERROR_NULL_VEHICLE_VEH_FROM_ROOM              50
 #define ERROR_MISSING_ELEMENTALS                      51
 #define EXIT_CODE_REBOOTING                           52   /* what's so great about HHGTTG, anyhow? */
+#define ERROR_WORLD_BOOT_FORMAT_ERROR                 53
 
 // Materials.
 #define MATERIAL_PAPER        0

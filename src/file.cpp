@@ -123,8 +123,9 @@ char *File::ReadString(const char* section)
 
   while (!done) {
     if (!GetLine(line, 512, FALSE)) {
-      log_vfprintf("Error: format error in %s, line %d: expecting ~-terminated string for section '%s'.",
+      log_vfprintf("FATAL ERROR: format error in %s, line %d: expecting ~-terminated string for section '%s'.",
           Filename(), LineNumber(), section);
+      exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
       break;
     }
 

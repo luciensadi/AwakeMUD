@@ -928,7 +928,7 @@ void discrete_load(File &fl, int mode)
       if (sscanf(line, "#%ld", &nr) != 1) {
         log_vfprintf("FATAL ERROR: Format error in %s, line %d: Expected '#' followed by one or more digits.",
             fl.Filename(), fl.LineNumber());
-        shutdown();
+        exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
       }
       if (nr >= 99999999)
         return;
@@ -962,7 +962,7 @@ void discrete_load(File &fl, int mode)
     } else {
       log_vfprintf("FATAL ERROR: Format error in %s, line %d: Expected '#' followed by one or more digits.",
           fl.Filename(), fl.LineNumber());
-      shutdown();
+      exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
     }
   }
 }
@@ -987,12 +987,12 @@ void parse_veh(File &fl, long virtual_nr)
 
   if (virtual_nr <= (zone ? zone_table[zone - 1].top : -1)) {
     fprintf(stderr, "FATAL ERROR: Veh #%ld is below zone %d.\n", virtual_nr, zone_table[zone].number);
-    shutdown();
+    exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
   }
   while (virtual_nr > zone_table[zone].top)
     if (++zone > top_of_zone_table) {
       fprintf(stderr, "FATAL ERROR: Veh %ld is outside of any zone.\n", virtual_nr);
-      shutdown();
+      exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
     }
   VTable data;
   data.Parse(&fl);
@@ -1035,19 +1035,19 @@ void parse_host(File &fl, long nr)
   } else if (last_seen >= nr) {
     snprintf(buf, sizeof(buf), "FATAL ERROR: last_seen %ld >= nr %ld.", last_seen, nr);
     log(buf);
-    shutdown();
+    exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
   }
 
   static DBIndex::rnum_t rnum = 0, zone = 0;
   char field[64];
   if (nr <= (zone ? zone_table[zone - 1].top : -1)) {
     log_vfprintf("FATAL ERROR: Host #%d is below zone %d.\n", nr, zone_table[zone].number);
-    shutdown();
+    exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
   }
   while (nr > zone_table[zone].top)
     if (++zone > top_of_zone_table) {
       log_vfprintf("FATAL ERROR: Host %d is outside of any zone.\n", nr);
-      shutdown();
+      exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
     }
   host_data *host = matrix+rnum;
 
@@ -1153,7 +1153,7 @@ void parse_ic(File &fl, long nr)
   } else if (last_seen >= nr) {
     snprintf(buf, sizeof(buf), "FATAL ERROR: last_seen %ld >= nr %ld.", last_seen, nr);
     log(buf);
-    shutdown();
+    exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
   }
 
   static DBIndex::rnum_t rnum = 0, zone = 0;
@@ -1167,12 +1167,12 @@ void parse_ic(File &fl, long nr)
 
   if (nr <= (zone ? zone_table[zone - 1].top : -1)) {
     log_vfprintf("FATAL ERROR: IC #%d is below zone %d.\n", nr, zone);
-    shutdown();
+    exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
   }
   while (nr > zone_table[zone].top)
     if (++zone > top_of_zone_table) {
       log_vfprintf("FATAL ERROR: IC%d is outside of any zone.\n", nr);
-      shutdown();
+      exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
     }
 
   VTable data;
@@ -1198,19 +1198,19 @@ void parse_room(File &fl, long nr)
   } else if (last_seen >= nr) {
     snprintf(buf, sizeof(buf), "FATAL ERROR: last_seen %ld >= nr %ld.", last_seen, nr);
     log(buf);
-    shutdown();
+    exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
   }
 
   static DBIndex::rnum_t rnum = 0, zone = 0;
 
   if (nr <= (zone ? zone_table[zone - 1].top : -1)) {
     log_vfprintf("FATAL ERROR: Room #%d is below zone %d.\n", nr, zone_table[zone].number);
-    shutdown();
+    exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
   }
   while (nr > zone_table[zone].top)
     if (++zone > top_of_zone_table) {
       log_vfprintf("FATAL ERROR: Room %d is outside of any zone.\n", nr);
-      shutdown();
+      exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
     }
 
   room_data *room = world+rnum;
@@ -1404,12 +1404,12 @@ void setup_dir(FILE * fl, int room, int dir)
 
   if (!get_line(fl, line)) {
     fprintf(stderr, "FATAL ERROR: Format error, %s: Cannot get line from file.\n", buf2);
-    shutdown();
+    exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
   }
   if ((retval = sscanf(line, " %d %d %d %d %d %d %d", t, t + 1, t + 2, t + 3,
                        t + 4, t + 5, t + 6)) < 4) {
     fprintf(stderr, "FATAL ERROR: Format error, %s: Expected seven numbers like ' # # # # # # #'\n", buf2);
-    shutdown();
+    exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
   }
   if (t[0] == 1)
     world[room].dir_option[dir]->exit_info = EX_ISDOOR;
@@ -1439,7 +1439,7 @@ void check_start_rooms(void)
 
   if ((r_mortal_start_room = real_room(mortal_start_room)) < 0) {
     log("FATAL SYSERR:  Mortal start room does not exist.  Change in config.c.");
-    shutdown();
+    exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
   }
   if ((r_immort_start_room = real_room(immort_start_room)) < 0) {
     log("SYSERR:  Warning: Immort start room does not exist.  Change in config.c.");
@@ -1586,7 +1586,7 @@ void parse_mobile(File &in, long nr)
   } else if (last_seen >= nr) {
     snprintf(buf, sizeof(buf), "FATAL ERROR: last_seen %ld >= nr %ld.", last_seen, nr);
     log(buf);
-    shutdown();
+    exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
   }
 
   static DBIndex::rnum_t rnum = 0;
@@ -1812,7 +1812,7 @@ void parse_object(File &fl, long nr)
   } else if (last_seen >= nr) {
     snprintf(buf, sizeof(buf), "FATAL ERROR: last_seen %ld >= nr %ld.", last_seen, nr);
     log(buf);
-    shutdown();
+    exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
   }
 
   static DBIndex::rnum_t rnum = 0;
@@ -2179,7 +2179,7 @@ void parse_quest(File &fl, long virtual_nr)
              t + 6, t + 7, t + 8, t + 9, t + 10, t + 11) != 12) {
     fprintf(stderr, "FATAL ERROR: Format error in quest #%ld, expecting twelve numbers like '# # # # # # # # # # # #'.\n",
             quest_nr);
-    shutdown();
+    exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
   }
   quest_table[quest_nr].johnson = t[0];
   quest_table[quest_nr].time = t[1];
@@ -2202,7 +2202,7 @@ void parse_quest(File &fl, long virtual_nr)
       if (sscanf(line, "%ld %ld %ld %ld %ld %ld %ld %ld", t, t + 1, t + 2, t + 3,
                  t + 4, t + 5, t + 6, t + 7) != 8) {
         fprintf(stderr, "FATAL ERROR: Format error in quest #%ld, obj #%ld: expecting 8 numbers like '# # # # # # # #'\n", quest_nr, j);
-        shutdown();
+        exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
       }
       quest_table[quest_nr].obj[j].vnum = t[0];
       quest_table[quest_nr].obj[j].nuyen = t[1];
@@ -2224,7 +2224,7 @@ void parse_quest(File &fl, long virtual_nr)
       if (sscanf(line, "%ld %ld %ld %ld %ld %ld %ld %ld", t, t + 1, t + 2, t + 3,
                  t + 4, t + 5, t + 6, t + 7) != 8) {
         fprintf(stderr, "FATAL ERROR: Format error in quest #%ld, mob #%ld: expecting 8 numbers like '# # # # # # # #'\n", quest_nr, j);
-        shutdown();
+        exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
       }
       quest_table[quest_nr].mob[j].vnum = t[0];
       quest_table[quest_nr].mob[j].nuyen = t[1];
@@ -2270,19 +2270,19 @@ void parse_shop(File &fl, long virtual_nr)
   } else if (last_seen >= virtual_nr) {
     snprintf(buf, sizeof(buf), "FATAL ERROR: last_seen %ld >= virtual_nr %ld.", last_seen, virtual_nr);
     log(buf);
-    shutdown();
+    exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
   }
 
   static DBIndex::rnum_t rnum = 0, zone = 0;
   char field[64];
   if (virtual_nr <= (zone ? zone_table[zone - 1].top : -1)) {
     log_vfprintf("FATAL ERROR: Shop #%d is below zone %d.\n", virtual_nr, zone_table[zone].number);
-    shutdown();
+    exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
   }
   while (virtual_nr > zone_table[zone].top)
     if (++zone > top_of_zone_table) {
       log_vfprintf("FATAL ERROR: Shop %d is outside of any zone.\n", virtual_nr);
-      shutdown();
+      exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
     }
   shop_data *shop = shop_table+rnum;
   shop->vnum = virtual_nr;
@@ -2385,7 +2385,7 @@ void load_zones(File &fl)
   if (sscanf(buf, "#%d", &Z.number) != 1) {
     fprintf(stderr, "FATAL ERROR: Format error in %s, line %d: Expected '#' followed by a number.\n",
             fl.Filename(), fl.LineNumber());
-    shutdown();
+    exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
   }
   fl.GetLine(buf, 256, FALSE);
   if ((ptr = strchr(buf, '~')) != NULL)   /* take off the '~' if it's there */
@@ -2403,7 +2403,7 @@ void load_zones(File &fl)
                &Z.top, &Z.lifespan, &Z.reset_mode,
                &Z.security, &Z.connected, &Z.jurisdiction) < 5) {
       fprintf(stderr, "FATAL ERROR: Format error in 6-constant line of %s: Expected six numbers like ' # # # # # #'.", fl.Filename());
-      shutdown();
+      exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
     }
   }
 
@@ -2413,7 +2413,7 @@ void load_zones(File &fl)
   if (sscanf(buf, "%d %d %d %d %d", &Z.editor_ids[0], &Z.editor_ids[1],
              &Z.editor_ids[2], &Z.editor_ids[3], &Z.editor_ids[4]) != NUM_ZONE_EDITOR_IDS) {
     fprintf(stderr, "FATAL ERROR: Format error in editor id list of %s: Expected five numbers like '# # # # #'", fl.Filename());
-    shutdown();
+    exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
   }
 
   cmd_no = 0;
@@ -4073,7 +4073,7 @@ char *fread_string(FILE * fl, char *error)
   do {
     if (!fgets(tmp, 512, fl)) {
       fprintf(stderr, "FATAL SYSERR: fread_string: format error at or near %s\n", error);
-      shutdown();
+      exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
     }
     /* If there is a '~', end the string; else put an "\r\n" over the '\n'. */
     if ((point = strchr(tmp, '~')) != NULL) {
@@ -4090,9 +4090,8 @@ char *fread_string(FILE * fl, char *error)
     templength = strlen(tmp);
 
     if ((length + templength + 3) >= MAX_STRING_LENGTH) {
-      fprintf(stderr, "FATAL SYSERR: fread_string: string too large at or near %s\n", error);
-      log("FATAL SYSERR: fread_string: string too large (db.c)");
-      shutdown();
+      log_vfprintf("FATAL SYSERR: fread_string: string too large at or near %s\n", error);
+      exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
     } else {
 
       /* Last but not least, we copy byte by byte from array to array. It's

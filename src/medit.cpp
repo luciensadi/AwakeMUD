@@ -1634,8 +1634,8 @@ void write_mobs_to_disk(int zone)
         fprintf(fp, "\tKarma:\t%d\n", GET_KARMA(mob));
 
       fprintf(fp, "[SKILLS]\n");
-      for (i = 0; i <= 8; i = i +2)
-        if (mob->mob_specials.mob_skills[i])
+      for (i = 0; i <= 8; i += 2)
+        if (mob->mob_specials.mob_skills[i] > 0 && mob->mob_specials.mob_skills[i] < MAX_SKILLS)
           fprintf(fp, "\t%s:\t%d\n", skills[mob->mob_specials.mob_skills[i]].name,
                   mob->mob_specials.mob_skills[i+1]);
 
