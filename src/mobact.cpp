@@ -31,7 +31,7 @@ ACMD_DECLARE(do_prone);
 ACMD_DECLARE(do_reload);
 
 // Note: If you want mobact debugging, add -DMOBACT_DEBUG to your makefile.
-// #define MOBACT_DEBUG
+#define MOBACT_DEBUG
 
 /* external structs */
 extern void resist_drain(struct char_data *ch, int power, int drain_add, int wound);
@@ -634,6 +634,14 @@ bool mobact_process_in_vehicle_guard(struct char_data *ch) {
     strncpy(buf3, "m_p_i_v_g: Ramming.", sizeof(buf));
     do_say(ch, buf3, 0, 0);
 #endif
+    // Alarm all NPCs inside the ramming vehicle.
+    for (struct char_data *npc = ch->in_veh->people; npc; npc = npc->next_in_veh) {
+      if (IS_NPC(npc)) {
+        GET_MOBALERT(npc) = MALERT_ALARM;
+        GET_MOBALERTTIME(npc) = 30;
+      }
+    }
+
     do_raw_ram(ch, ch->in_veh, tveh, vict);
 
     return TRUE;
