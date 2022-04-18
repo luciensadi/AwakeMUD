@@ -1633,20 +1633,36 @@ void write_mobs_to_disk(int zone)
       if (GET_KARMA(mob) > 0)
         fprintf(fp, "\tKarma:\t%d\n", GET_KARMA(mob));
 
-      fprintf(fp, "[SKILLS]\n");
-      for (i = 0; i <= 8; i += 2)
-        if (mob->mob_specials.mob_skills[i] > 0 && mob->mob_specials.mob_skills[i] < MAX_SKILLS)
-          fprintf(fp, "\t%s:\t%d\n", skills[mob->mob_specials.mob_skills[i]].name,
+
+      bool printed_skills_yet = FALSE;
+      for (i = 0; i <= 8; i += 2) {
+        if (mob->mob_specials.mob_skills[i] > 0 && mob->mob_specials.mob_skills[i] < MAX_SKILLS && mob->mob_specials.mob_skills[i+1] > 0) {
+          if (!printed_skills_yet) {
+            fprintf(fp, "[SKILLS]\n");
+            printed_skills_yet = TRUE;
+          }
+
+          fprintf(fp, "\t%s:\t%d\n",
+                  skills[mob->mob_specials.mob_skills[i]].name,
                   mob->mob_specials.mob_skills[i+1]);
+        }
+      }
 
       // Print the ammo. Format: "APDS heavy pistol:  123"
-      fprintf(fp, "[AMMO]\n");
-      for (int wp = START_OF_AMMO_USING_WEAPONS; wp <= END_OF_AMMO_USING_WEAPONS; wp++)
-        for (int am = AMMO_NORMAL; am < NUM_AMMOTYPES; am++)
-          if (GET_BULLETPANTS_AMMO_AMOUNT(mob, wp, am) > 0)
+      bool printed_ammo_yet = FALSE;
+      for (int wp = START_OF_AMMO_USING_WEAPONS; wp <= END_OF_AMMO_USING_WEAPONS; wp++) {
+        for (int am = AMMO_NORMAL; am < NUM_AMMOTYPES; am++) {
+          if (GET_BULLETPANTS_AMMO_AMOUNT(mob, wp, am) > 0) {
+            if (!printed_ammo_yet) {
+              printed_ammo_yet = TRUE;
+              fprintf(fp, "[AMMO]\n");
+            }
             fprintf(fp, "\t%s:\t%u\n",
                         get_ammo_representation(wp, am, 0),
                         GET_BULLETPANTS_AMMO_AMOUNT(mob, wp, am));
+          }
+        }
+      }
 
       // Print cyberware.
       if (mob->cyberware) {
@@ -1664,11 +1680,15 @@ void write_mobs_to_disk(int zone)
           fprintf(fp, "\t[BIO %d]\n\t\tVnum:\t%ld\n", i++, GET_OBJ_VNUM(bio));
       }
 
-      fprintf(fp, "[EQUIPMENT]\n");
       int idx = 0;
-      for (i = 0; i < NUM_WEARS; i++)
-        if (GET_EQ(mob, i))
+      for (i = 0; i < NUM_WEARS; i++) {
+        if (GET_EQ(mob, i)) {
+          if (idx == 0) {
+            fprintf(fp, "[EQUIPMENT]\n");
+          }
           fprintf(fp, "\t[EQ %d]\n\t\tVnum:\t%ld\n\t\tWearloc:\t%d\n", idx++, GET_OBJ_VNUM(GET_EQ(mob, i)), i);
+        }
+      }
 
       fprintf(fp, "BREAK\n");
     } // close if statement
