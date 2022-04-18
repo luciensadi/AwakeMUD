@@ -330,6 +330,20 @@ void hit_char_vs_veh(struct char_data *attacker, struct veh_data *vict_veh, bool
     _apply_modifiers_to_att(att, rbuf, sizeof(rbuf));
     SEND_RBUF_TO_ROLLS_FOR_ATTACKER;
 
+    // Toss in vehicle speed penalty.
+    if (get_speed(vict_veh) > 10) {
+      if (get_speed(vict_veh) < 60)
+        att->ranged->tn++;
+      else if (get_speed(vict_veh) < 120)
+        att->ranged->tn += 2;
+      else if (get_speed(vict_veh) < 200)
+        att->ranged->tn += 2;
+      else if (get_speed(vict_veh) >= 200)
+        att->ranged->tn += 3;
+      snprintf(rbuf, sizeof(rbuf), "TN increased to %d due to target speed.", att->ranged->tn);
+      SEND_RBUF_TO_ROLLS_FOR_ATTACKER;
+    }
+
     _add_skill_dice_and_calculate_successes(att, rbuf, sizeof(rbuf));
     SEND_RBUF_TO_ROLLS_FOR_ATTACKER;
 
@@ -342,7 +356,7 @@ void hit_char_vs_veh(struct char_data *attacker, struct veh_data *vict_veh, bool
       controller->ranged->tn = vict_veh->handling;
       // todo asdf: add driving test penalties like speed etc here-- does speed make it easier to dodge or harder?
       int control_pool_spent = MIN(GET_CONTROL(controller->ch), veh_skill(controller->ch, vict_veh, &controller->ranged->tn));
-      GET_CONTROL(controller->ch) -= control_pool_spent;
+      // GET_CONTROL(controller->ch) -= control_pool_spent;
       controller->ranged->dice = control_pool_spent;
 
       // Set up the defender's modifiers.
@@ -377,13 +391,15 @@ void hit_char_vs_veh(struct char_data *attacker, struct veh_data *vict_veh, bool
       SEND_RBUF_TO_ROLLS_FOR_ATTACKER;
 
       char msg_buf[1000];
-      snprintf(msg_buf, sizeof(msg_buf), "Your %s misses %s!", projectile_description(att->weapon), GET_VEH_NAME(vict_veh));
-      act(msg_buf, FALSE, att->ch, 0, 0, TO_CHAR);
-      snprintf(msg_buf, sizeof(msg_buf), "$n's %s misses %s!", projectile_description(att->weapon), GET_VEH_NAME(vict_veh));
-      act(msg_buf, FALSE, att->ch, 0, 0, TO_ROOM);
+      snprintf(msg_buf, sizeof(msg_buf), "Your %s misses $X!", projectile_description(att->weapon));
+      act(msg_buf, FALSE, att->ch, 0, vict_veh, TO_CHAR);
+      snprintf(msg_buf, sizeof(msg_buf), "$n's %s misses $X!", projectile_description(att->weapon));
+      act(msg_buf, FALSE, att->ch, 0, vict_veh, TO_ROOM);
       if (att->ch->in_veh && vict_veh->in_veh != att->ch->in_veh) {
-        act(msg_buf, FALSE, att->ch, 0, 0, TO_VEH_ROOM);
+        act(msg_buf, FALSE, att->ch, 0, vict_veh, TO_VEH_ROOM);
       }
+      snprintf(msg_buf, sizeof(msg_buf), "%s's %s misses your vehicle!\r\n", GET_NAME(att->ch), projectile_description(att->weapon));
+      send_to_veh(msg_buf, vict_veh, NULL, FALSE);
 
       //Handle suprise attack/alertness here -- ranged attack failed.
       if (vict_controller && IS_NPC(vict_controller)) {
@@ -403,39 +419,69 @@ void hit_char_vs_veh(struct char_data *attacker, struct veh_data *vict_veh, bool
     att->ranged->unaugmented_damage_level = GET_WEAPON_DAMAGE_CODE(att->weapon);
 
     // Calculate effects of armor on the power of the attack.
+    int ammo_type = -1;
     if (att->ranged->magazine) {
-      switch (GET_MAGAZINE_AMMO_TYPE(att->ranged->magazine)) {
-        case AMMO_EX:
-          att->ranged->power += 2;
-          break;
-        case AMMO_EXPLOSIVE:
-          att->ranged->power++;
-          break;
-        case AMMO_FLECHETTE:
-        case AMMO_HARMLESS:
-        case AMMO_GEL:
-          att->ranged->power = 0;
-          break;
-      }
+      ammo_type = GET_MAGAZINE_AMMO_TYPE(att->ranged->magazine);
+    } else if (weap_ammo) {
+      ammo_type = GET_AMMOBOX_TYPE(weap_ammo);
+    }
 
-      if (GET_MAGAZINE_AMMO_TYPE(att->ranged->magazine) != AMMO_AV) {
-        // SR3 p149: Attacks against vehicles are at half power and -1 damage level, unless AV ammo is used.
-        att->ranged->power /= 2;
-        att->ranged->damage_level--;
+    switch (ammo_type) {
+      case AMMO_EX:
+        att->ranged->power += 2;
+        break;
+      case AMMO_EXPLOSIVE:
+        att->ranged->power++;
+        break;
+      case AMMO_FLECHETTE:
+      case AMMO_HARMLESS:
+      case AMMO_GEL:
+        att->ranged->power = 0;
+        break;
+    }
 
-        // SR3 p149: Subtract vehicle's armor from power.
-        att->ranged->power -= vict_veh->armor;
-        att->ranged->unaugmented_power -= vict_veh->armor;
-      } else {
-        // SR3 p149: Reduce power by half the vehicle's armor, round down.
-        att->ranged->power -= (int) (vict_veh->armor / 2);
-        att->ranged->unaugmented_power -= (int) (vict_veh->armor / 2);
-      }
+    if (ammo_type != AMMO_AV) {
+      // SR3 p149: Attacks against vehicles are at half power and -1 damage level, unless AV ammo is used.
+      att->ranged->power /= 2;
+      att->ranged->unaugmented_power /= 2;
+      att->ranged->damage_level--;
 
-      // If the attack's damage level is 0, or if the power is not greater than the armor, bail out.
-      if (att->ranged->unaugmented_damage_level <= LIGHT || att->ranged->unaugmented_power <= 0) {
-        // asdf TODO: Message about shot ricocheting off vehicle.
+      // SR3 p149: Subtract vehicle's armor from power.
+      att->ranged->power -= vict_veh->armor;
+      att->ranged->unaugmented_power -= vict_veh->armor;
+      snprintf(rbuf, sizeof(rbuf), "After halving and vehicle armor, power is %d (from %d) and damage level is %s (from %s).",
+               att->ranged->power,
+               GET_WEAPON_POWER(att->weapon) + att->ranged->burst_count,
+               GET_WOUND_NAME(att->ranged->damage_level),
+               GET_WOUND_NAME(GET_WEAPON_DAMAGE_CODE(att->weapon) + (int)(att->ranged->burst_count / 3))
+             );
+      SEND_RBUF_TO_ROLLS_FOR_ATTACKER;
+    } else {
+      // SR3 p149: Reduce power by half the vehicle's armor, round down.
+      att->ranged->power -= (int) (vict_veh->armor / 2);
+      att->ranged->unaugmented_power -= (int) (vict_veh->armor / 2);
+      snprintf(rbuf, sizeof(rbuf), "After half vehicle armor, power is %d (from %d) and damage level is %s (from %s).",
+               att->ranged->power,
+               GET_WEAPON_POWER(att->weapon) + att->ranged->burst_count,
+               GET_WOUND_NAME(att->ranged->damage_level),
+               GET_WOUND_NAME(GET_WEAPON_DAMAGE_CODE(att->weapon) + (int)(att->ranged->burst_count / 3))
+             );
+      SEND_RBUF_TO_ROLLS_FOR_ATTACKER;
+    }
+
+    // If the attack's damage level is 0, or if the power is not greater than the armor, bail out.
+    if (att->ranged->unaugmented_damage_level <= LIGHT || att->ranged->unaugmented_power <= 0 || att->ranged->power <= 0) {
+      char msg_buf[1000];
+      snprintf(msg_buf, sizeof(msg_buf), "Your %s ricochets off of $X%s!", projectile_description(att->weapon), vict_veh->armor ? "'s armor" : "");
+      act(msg_buf, FALSE, att->ch, 0, vict_veh, TO_CHAR);
+      snprintf(msg_buf, sizeof(msg_buf), "$n's %s ricochets off of $X%s!", projectile_description(att->weapon), vict_veh->armor ? "'s armor" : "");
+      act(msg_buf, FALSE, att->ch, 0, vict_veh, TO_ROOM);
+      if (att->ch->in_veh && vict_veh->in_veh != att->ch->in_veh) {
+        act(msg_buf, FALSE, att->ch, 0, vict_veh, TO_VEH_ROOM);
       }
+      snprintf(msg_buf, sizeof(msg_buf), "%s's %s ricochets off of your vehicle%s!\r\n", GET_NAME(att->ch), projectile_description(att->weapon), vict_veh->armor ? "'s armor" : "");
+      send_to_veh(msg_buf, vict_veh, NULL, FALSE);
+      return;
     }
 
     // Increment character's shots_fired. This is used for internal tracking of eligibility for a skill quest.
@@ -447,7 +493,14 @@ void hit_char_vs_veh(struct char_data *attacker, struct veh_data *vict_veh, bool
   }
   // Setup for melee combat. You're probably getting hit by a car at this point, but at least you can swing back at them?
   else {
-    // asdf TODO
+    if (vict_veh->speed > SPEED_IDLE) {
+      send_to_char(att->ch, "%s is moving too fast for you to catch!\r\n", CAP(GET_VEH_NAME_NOFORMAT(vict_veh)));
+      stop_fighting(att->ch);
+      return;
+    }
+
+    // It's standing still, we can hit it.
+    // asdf todo
   }
 
   // Make a damage resistance test.
@@ -456,7 +509,7 @@ void hit_char_vs_veh(struct char_data *attacker, struct veh_data *vict_veh, bool
 
   if (vict_controller && GET_CONTROL(vict_controller) > 0) {
     int control_pool_spent = MIN(GET_CONTROL(vict_controller), veh_skill(vict_controller, vict_veh, &damage_resist_tn));
-    GET_CONTROL(vict_controller) -= control_pool_spent;
+    // GET_CONTROL(vict_controller) -= control_pool_spent;
     damage_resist_dice += control_pool_spent;
   }
 
@@ -472,7 +525,7 @@ void hit_char_vs_veh(struct char_data *attacker, struct veh_data *vict_veh, bool
 
   int damage_resist_successes = success_test(damage_resist_dice, damage_resist_tn);
   if (damage_resist_successes > 0) {
-    staged_damage = stage(attacker_successes - damage_resist_successes, damage_level);
+    staged_damage = MIN(DEADLY, stage(attacker_successes - damage_resist_successes, damage_level));
   } else {
     staged_damage = damage_level;
   }
@@ -483,31 +536,43 @@ void hit_char_vs_veh(struct char_data *attacker, struct veh_data *vict_veh, bool
   }
 
   if (att->ranged_combat_mode) {
-    char msg_buf[1000], to_room_buf[1000];
+    char msg_buf[500], to_room_buf[500], to_veh_buf[500];
     switch (staged_damage) {
       case LIGHT:
         snprintf(msg_buf, sizeof(msg_buf), "Your %s leaves scratches and dents on %s.", projectile_description(att->weapon), GET_VEH_NAME(vict_veh));
-        snprintf(to_room_buf, sizeof(to_room_buf), "$n's %s digs scratches and dents into %s.", projectile_description(att->weapon), GET_VEH_NAME(vict_veh));
+        snprintf(to_room_buf, sizeof(to_room_buf), "$n's %s digs scratches and dents into $X.", projectile_description(att->weapon));
+        snprintf(to_veh_buf, sizeof(to_room_buf), "%s's %s digs scratches and dents into your vehicle.\r\n", GET_NAME(att->ch), projectile_description(att->weapon));
         break;
       case MODERATE:
         snprintf(msg_buf, sizeof(msg_buf), "Your %s punches holes in %s.", projectile_description(att->weapon), GET_VEH_NAME(vict_veh));
-        snprintf(to_room_buf, sizeof(to_room_buf), "$n's %s punches holes in %s.", projectile_description(att->weapon), GET_VEH_NAME(vict_veh));
+        snprintf(to_room_buf, sizeof(to_room_buf), "$n's %s punches holes in $X.", projectile_description(att->weapon));
+        snprintf(to_veh_buf, sizeof(to_room_buf), "%s's %s punches holes in your vehicle.\r\n", GET_NAME(att->ch), projectile_description(att->weapon));
         break;
       case SERIOUS:
         snprintf(msg_buf, sizeof(msg_buf), "Your %s tears into %s!", projectile_description(att->weapon), GET_VEH_NAME(vict_veh));
-        snprintf(to_room_buf, sizeof(to_room_buf), "$n's %s tears into %s!", projectile_description(att->weapon), GET_VEH_NAME(vict_veh));
+        snprintf(to_room_buf, sizeof(to_room_buf), "$n's %s tears into $X!", projectile_description(att->weapon));
+        snprintf(to_veh_buf, sizeof(to_room_buf), "%s's %s tears into your vehicle!\r\n", GET_NAME(att->ch), projectile_description(att->weapon));
         break;
       case DEADLY:
         snprintf(msg_buf, sizeof(msg_buf), "Your %s blasts gaping holes through %s!", projectile_description(att->weapon), GET_VEH_NAME(vict_veh));
-        snprintf(to_room_buf, sizeof(to_room_buf), "$n's %s blasts gaping holes through %s!", projectile_description(att->weapon), GET_VEH_NAME(vict_veh));
+        snprintf(to_room_buf, sizeof(to_room_buf), "$n's %s blasts gaping holes through $X!", projectile_description(att->weapon));
+        snprintf(to_veh_buf, sizeof(to_room_buf), "%s's %s blasts gaping holes through your vehicle!\r\n", GET_NAME(att->ch), projectile_description(att->weapon));
         break;
+      default:
+        snprintf(msg_buf, sizeof(msg_buf), "SYSERR: staged_damage %d in hit_char_vs_veh()!", staged_damage);
+        mudlog(msg_buf, att->ch, LOG_SYSLOG, TRUE);
+        return;
     }
 
     act(msg_buf, FALSE, att->ch, 0, 0, TO_CHAR);
-    act(to_room_buf, FALSE, att->ch, 0, 0, TO_ROOM);
+    act(to_room_buf, FALSE, att->ch, 0, vict_veh, TO_ROOM);
     if (att->ch->in_veh && vict_veh->in_veh != att->ch->in_veh) {
-      act(to_room_buf, FALSE, att->ch, 0, 0, TO_VEH_ROOM);
+      act(to_room_buf, FALSE, att->ch, 0, vict_veh, TO_VEH_ROOM);
     }
+    send_to_veh(to_veh_buf, vict_veh, NULL, FALSE);
+  } else {
+    // asdf todo
+    send_to_char(att->ch, "Melee mode??\r\n");
   }
 
   if (vict_veh->owner && !IS_NPC(att->ch))
@@ -519,6 +584,9 @@ void hit_char_vs_veh(struct char_data *attacker, struct veh_data *vict_veh, bool
   }
 
   vict_veh->damage += convert_damage(staged_damage);
+  if (vict_veh->damage >= VEH_DAM_THRESHOLD_DESTROYED) {
+    stop_fighting(att->ch);
+  }
   chkdmg(vict_veh);
 }
 
@@ -837,40 +905,42 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker,
     att->ranged->damage_level = GET_WEAPON_DAMAGE_CODE(att->weapon) + (int)(att->ranged->burst_count / 3);
 
     // Calculate effects of armor on the power of the attack.
-    if (att->ranged->magazine) {
-      switch (GET_MAGAZINE_AMMO_TYPE(att->ranged->magazine)) {
-        case AMMO_APDS:
-          att->ranged->power -= (int)(GET_BALLISTIC(def->ch) / 2);
-          break;
-        case AMMO_EX:
-          att->ranged->power++;
-          // fall through
-        case AMMO_EXPLOSIVE:
-          att->ranged->power++;
-          att->ranged->power -= GET_BALLISTIC(def->ch);
-          break;
-        case AMMO_FLECHETTE:
-          if (!GET_IMPACT(def->ch) && !GET_BALLISTIC(def->ch))
-            att->ranged->damage_level++;
-          else {
-            att->ranged->power -= MAX(GET_BALLISTIC(def->ch), GET_IMPACT(def->ch) * 2);
-          }
-          break;
-        case AMMO_HARMLESS:
-          att->ranged->power = 0;
-          // fall through
-        case AMMO_GEL:
-          // Errata: Add the following after the third line: "Impact armor, not Ballistic, applies."
-          att->ranged->power -= GET_IMPACT(def->ch) + 2;
-          att->ranged->is_gel = TRUE;
-          break;
-        default:
-          att->ranged->power -= GET_BALLISTIC(def->ch);
-      }
-    }
-    // Weapon fired without a magazine (probably by an NPC)-- we assume its ammo type is normal.
-    else {
-      att->ranged->power -= GET_BALLISTIC(def->ch);
+    int ammo_type = -1;
+    if (att->ranged->magazine)
+      ammo_type = GET_MAGAZINE_AMMO_TYPE(att->ranged->magazine);
+    else if (weap_ammo)
+      ammo_type = GET_AMMOBOX_TYPE(weap_ammo);
+
+    switch (ammo_type) {
+      case AMMO_APDS:
+      case AMMO_AV:
+        att->ranged->power -= (int)(GET_BALLISTIC(def->ch) / 2);
+        break;
+      case AMMO_EX:
+        att->ranged->power++;
+        // fall through
+      case AMMO_EXPLOSIVE:
+        att->ranged->power++;
+        att->ranged->power -= GET_BALLISTIC(def->ch);
+        break;
+      case AMMO_FLECHETTE:
+        if (!GET_IMPACT(def->ch) && !GET_BALLISTIC(def->ch))
+          att->ranged->damage_level++;
+        else {
+          att->ranged->power -= MAX(GET_BALLISTIC(def->ch), GET_IMPACT(def->ch) * 2);
+        }
+        break;
+      case AMMO_HARMLESS:
+        att->ranged->power = 0;
+        // fall through
+      case AMMO_GEL:
+        // Errata: Add the following after the third line: "Impact armor, not Ballistic, applies."
+        att->ranged->power -= GET_IMPACT(def->ch) + 2;
+        att->ranged->is_gel = TRUE;
+        break;
+      default:
+        att->ranged->power -= GET_BALLISTIC(def->ch);
+        break;
     }
 
     // Increment character's shots_fired. This is used for internal tracking of eligibility for a skill quest.
@@ -1232,7 +1302,9 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker,
     att->ranged->successes -= bod_success;
 
     // Harmless ammo never deals damage.
-    if (att->ranged->magazine && GET_MAGAZINE_AMMO_TYPE(att->ranged->magazine) == AMMO_HARMLESS) {
+    if ((att->ranged->magazine && GET_MAGAZINE_AMMO_TYPE(att->ranged->magazine) == AMMO_HARMLESS)
+        || (weap_ammo && GET_AMMOBOX_TYPE(weap_ammo) == AMMO_HARMLESS))
+    {
       staged_damage = -1;
       strlcpy(rbuf, "Damage reduced to -1 due to use of harmless ammo.", sizeof(rbuf));
       SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;

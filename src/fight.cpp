@@ -5535,6 +5535,8 @@ void chkdmg(struct veh_data * veh)
         } else {
           snprintf(buf, sizeof(buf), "%s's occupants scramble to safety as it is wrecked!\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
         }
+      } else {
+        snprintf(buf, sizeof(buf), "Smoke belches from %s as it is wrecked!\r\n", GET_VEH_NAME(veh));
       }
       send_to_room(buf, veh->in_room);
 
