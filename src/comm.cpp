@@ -2816,7 +2816,7 @@ void send_to_veh(const char *messg, struct veh_data *veh, struct char_data *ch, 
   {
     for (i = veh->people; i; i = i->next_in_veh)
       if (i != ch && i->desc) {
-        if (!(!torig && AFF_FLAGGED(i, AFF_RIG)))
+        if (!AFF_FLAGGED(i, AFF_RIG))
           SEND_TO_Q(messg, i->desc);
       }
     if (torig && veh->rigger && veh->rigger->desc)
@@ -3059,6 +3059,13 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
           break;
         case 'T':
           i = CHECK_NULL(vict_obj, (char *) vict_obj);
+          break;
+        case 'X':
+          if (to->in_veh && to->in_veh == vict_obj) {
+            i = "your vehicle";
+          } else {
+            i = CHECK_NULL(vict_obj, GET_VEH_NAME((struct veh_data *) vict_obj));
+          }
           break;
         case 'v': /* Just voice */
           i = get_voice_perceived_by(ch, to, FALSE);

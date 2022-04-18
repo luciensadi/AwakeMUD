@@ -315,7 +315,7 @@ ACMD(do_rig)
     send_to_char("This vehicle is too much of a wreck to move!\r\n", ch);
     return;
   }
-  if (VEH->rigger || VEH->dest) {
+  if ((VEH->rigger && VEH->rigger != ch) || VEH->dest) {
     send_to_char("The system is unresponsive!\r\n", ch);
     return;
   }
@@ -339,6 +339,7 @@ ACMD(do_rig)
     AFF_FLAGS(ch).SetBits(AFF_PILOT, AFF_RIG, ENDBIT);
     VEH->cspeed = SPEED_IDLE;
     VEH->lastin[0] = VEH->in_room;
+    VEH->rigger = ch;
 
     stop_manning_weapon_mounts(ch, TRUE);
     send_to_char("As you jack in, your perception shifts.\r\n", ch);
@@ -1382,22 +1383,39 @@ ACMD(do_speed)
   }
 
   RIG_VEH(ch, veh);
+  bool gets_own_message = !PLR_FLAGGED(ch, PLR_REMOTE) && !AFF_FLAGGED(ch, AFF_RIG);
+
   if (veh->hood) {
     send_to_char("You can't move with the hood up.\r\n", ch);
     return;
   } else if (i < veh->cspeed) {
     if (i == 1) {
       send_to_char("You bring the vehicle to a halt.\r\n", ch);
-      send_to_veh("The vehicle slows to a stop.\r\n", veh, ch, FALSE);
+      if (veh->in_room) {
+        snprintf(buf, sizeof(buf), "%s slows to a stop.\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
+        send_to_room(buf, veh->in_room);
+      } else {
+        send_to_veh("The vehicle slows to a stop.\r\n", veh, ch, FALSE);
+      }
     } else {
-      if (!PLR_FLAGGED(ch, PLR_REMOTE) && !AFF_FLAGGED(ch, AFF_RIG))
+      if (gets_own_message)
         send_to_char("You put your foot on the brake.\r\n", ch);
-      send_to_veh("You slow down.", veh, ch, TRUE);
+      if (veh->in_room) {
+        snprintf(buf, sizeof(buf), "%s slows down.\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
+        send_to_room(buf, veh->in_room);
+      } else {
+        send_to_veh("You slow down.", veh, gets_own_message ? ch : NULL, TRUE);
+      }
     }
   } else if (i > veh->cspeed) {
-    if (!PLR_FLAGGED(ch, PLR_REMOTE) && !AFF_FLAGGED(ch, AFF_RIG))
+    if (gets_own_message)
       send_to_char("You put your foot on the accelerator.\r\n", ch);
-    send_to_veh("You speed up.", veh, ch, TRUE);
+    if (veh->in_room) {
+      snprintf(buf, sizeof(buf), "%s speeds up.\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
+      send_to_room(buf, veh->in_room);
+    } else {
+      send_to_veh("You speed up.", veh, gets_own_message ? ch : NULL, TRUE);
+    }
   } else {
     send_to_char("But you're already traveling that fast!\r\n", ch);
     return;

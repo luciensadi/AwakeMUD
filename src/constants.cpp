@@ -1834,7 +1834,11 @@ struct ammo_data ammo_type[] =
     {"flechette",     3,  1.5,    .05,    10,    0.8 },
     {"gel",           4,    2,    .025,    3,    1.0 },
     {"harmless",      1,  0.1,    .010,    1,    0.5 },
+<<<<<<< HEAD
     {"anti-vehicle", 16,   14,    .100,   20,    4.0 }
+=======
+    {"anti-vehicle", 16,   14,    .100,   20,    4.0 } // non-canon numbers. todo: rectify
+>>>>>>> 698c10a7 (Further implementation.)
   };
 
 const char *positions[] =
