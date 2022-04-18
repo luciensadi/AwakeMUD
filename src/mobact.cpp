@@ -31,7 +31,7 @@ ACMD_DECLARE(do_prone);
 ACMD_DECLARE(do_reload);
 
 // Note: If you want mobact debugging, add -DMOBACT_DEBUG to your makefile.
-// #define MOBACT_DEBUG
+#define MOBACT_DEBUG
 
 /* external structs */
 extern void resist_drain(struct char_data *ch, int power, int drain_add, int wound);
@@ -634,6 +634,14 @@ bool mobact_process_in_vehicle_guard(struct char_data *ch) {
     strncpy(buf3, "m_p_i_v_g: Ramming.", sizeof(buf));
     do_say(ch, buf3, 0, 0);
 #endif
+    // Alarm all NPCs inside the ramming vehicle.
+    for (struct char_data *npc = ch->in_veh->people; npc; npc = npc->next_in_veh) {
+      if (IS_NPC(npc)) {
+        GET_MOBALERT(npc) = MALERT_ALARM;
+        GET_MOBALERTTIME(npc) = 30;
+      }
+    }
+
     do_raw_ram(ch, ch->in_veh, tveh, vict);
 
     return TRUE;
@@ -768,6 +776,12 @@ bool mobact_process_in_vehicle_aggro(struct char_data *ch) {
   else if (AFF_FLAGGED(ch, AFF_MANNING)) {
     struct obj_data *mount = get_mount_manned_by_ch(ch);
     if (mount && mount_has_weapon(mount)) {
+      struct obj_data *ammobox = get_mount_ammo(mount);
+      if (!ammobox || GET_AMMOBOX_QUANTITY(ammobox) <= 0) {
+        char empty_argument[1];
+        *empty_argument = '\0';
+        do_reload(ch, empty_argument, 0, 0);
+      }
 #ifdef MOBACT_DEBUG
       strncpy(buf3, "m_p_i_v_a: Firing.", sizeof(buf));
       do_say(ch, buf3, 0, 0);

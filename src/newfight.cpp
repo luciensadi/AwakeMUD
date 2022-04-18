@@ -296,6 +296,14 @@ void hit_char_vs_veh(struct char_data *attacker, struct veh_data *vict_veh, bool
   if (att->weapon && !has_ammo(att->ch, att->weapon))
     return;
 
+  // Alarm all NPCs inside the vehicle.
+  for (struct char_data *npc = vict_veh->people; npc; npc = npc->next_in_veh) {
+    if (IS_NPC(npc)) {
+      GET_MOBALERT(npc) = MALERT_ALARM;
+      GET_MOBALERTTIME(npc) = 30;
+    }
+  }
+
   // There are no vision penalties (ex: invis) to calculate here-- vehicles don't currently go invis.
 
   // Setup: If the character is firing multiple weapons, apply the dual-weapon penalty.

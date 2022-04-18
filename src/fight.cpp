@@ -5607,6 +5607,29 @@ bool vram(struct veh_data * veh, struct char_data * ch, struct veh_data * tveh)
   int power, damage_total = 0, veh_dam = 0;
   int veh_resist = 0, ch_resist = 0, modbod = 0;
 
+  // Alarm all NPCs inside the ramming vehicle.
+  for (struct char_data *npc = veh->people; npc; npc = npc->next_in_veh) {
+    if (IS_NPC(npc)) {
+      GET_MOBALERT(npc) = MALERT_ALARM;
+      GET_MOBALERTTIME(npc) = 30;
+    }
+  }
+
+  if (ch && IS_NPC(ch)) {
+    GET_MOBALERT(ch) = MALERT_ALARM;
+    GET_MOBALERTTIME(ch) = 30;
+  }
+
+  // Alarm all NPCs inside the target vehicle.
+  if (tveh) {
+    for (struct char_data *npc = tveh->people; npc; npc = npc->next_in_veh) {
+      if (IS_NPC(npc)) {
+        GET_MOBALERT(npc) = MALERT_ALARM;
+        GET_MOBALERTTIME(npc) = 30;
+      }
+    }
+  }
+
   if (ch)
   {
     power = (int)(get_speed(veh) / 10);
