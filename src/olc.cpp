@@ -1826,7 +1826,6 @@ ACMD(do_shedit)
 
 ACMD(do_zswitch)
 {
-  int number, zonenum;
   char arg1[MAX_INPUT_LENGTH];
 
   // they must be flagged with olc to zswitch
@@ -1843,12 +1842,24 @@ ACMD(do_zswitch)
   any_one_arg(argument, arg1);
 
   // convert the arg to an int
-  number = atoi(arg1);
+  vnum_t number = atoi(arg1);
   // find the real zone number
-  zonenum = real_zone(number);
+  rnum_t real_zonenum = real_zone(number);
 
   // and see if they can edit it
-  REQUIRE_ZONE_EDIT_ACCESS(zonenum);
+  if (real_zonenum < 0 || real_zonenum > top_of_zone_table) {
+    send_to_char("Switching to non-existent zone.", ch);
+  } else {
+    if (!can_edit_zone(ch, (real_zonenum))) {
+      send_to_char(ch, "Sorry, you don't have access to edit zone %ld.\r\n", zone_table[(real_zonenum)].number);
+      return;
+    }
+
+    if (!(access_level(ch, LVL_EXECUTIVE) || PLR_FLAGGED(ch, PLR_EDCON)) && zone_table[(real_zonenum)].connected) {
+      send_to_char(ch, "Sorry, zone %d is marked as connected to the game world, so you can't edit it.\r\n", zone_table[(real_zonenum)].number);
+      return;
+    }
+  }
 
   // and set their zonenum to it
   ch->player_specials->saved.zonenum = number;
