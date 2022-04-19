@@ -46,6 +46,9 @@ bool perform_nerve_strike(struct combat_data *att, struct combat_data *def, char
 #define SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER {act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS ); if (att->ch->in_room != def->ch->in_room) act( rbuf, 1, def->ch, NULL, NULL, TO_ROLLS );}
 #define SEND_RBUF_TO_ROLLS_FOR_ATTACKER {act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );}
 
+// A place to shove get_skill()'s crap.
+int global_dummy_tn = 0;
+
 
 // Precondition: If you're using a heavy weapon, you must be strong enough to wield it, or else be using a gyro. CC p99
 bool _using_heavy_weapon_without_gyro(struct combat_data *att) {
@@ -189,7 +192,7 @@ void _apply_modifiers_to_att(struct combat_data *att, char *rbuf, size_t rbuf_le
 }
 
 void _add_skill_dice_and_calculate_successes(struct combat_data *att, char *rbuf, size_t rbuf_len) {
-  int bonus_if_not_too_tall = MIN(GET_SKILL(att->ch, att->ranged->skill), GET_OFFENSE(att->ch));
+  int bonus_if_not_too_tall = MIN(get_skill(att->ch, att->ranged->skill, global_dummy_tn), GET_OFFENSE(att->ch));
   att->ranged->dice += bonus_if_not_too_tall;
   snprintf(rbuf, rbuf_len, "Rolling %d + %d dice... ", att->ranged->dice, bonus_if_not_too_tall);
 
@@ -501,7 +504,7 @@ void hit_char_vs_veh(struct char_data *attacker, struct veh_data *vict_veh, bool
   }
   // Setup for melee combat. You're probably getting hit by a car at this point, but at least you can swing back at them?
   else {
-    if (vict_veh->speed > SPEED_IDLE) {
+    if (vict_veh->cspeed > SPEED_IDLE) {
       send_to_char(att->ch, "%s is moving too fast for you to catch!\r\n", CAP(GET_VEH_NAME_NOFORMAT(vict_veh)));
       stop_fighting(att->ch);
       return;
@@ -1034,13 +1037,13 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker,
     SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
     att->melee->dice = att->melee->skill_bonus + get_skill(att->ch, att->melee->skill, att->melee->tn);
     if (!att->too_tall)
-      att->melee->dice += MIN(GET_SKILL(att->ch, att->melee->skill) + att->melee->skill_bonus, GET_OFFENSE(att->ch));
+      att->melee->dice += MIN(get_skill(att->ch, att->melee->skill, global_dummy_tn) + att->melee->skill_bonus, GET_OFFENSE(att->ch));
 
     strlcpy(rbuf, "Computing dice for defender...", sizeof(rbuf));
     SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
     def->melee->dice = def->melee->skill_bonus + get_skill(def->ch, def->melee->skill, def->melee->tn);
     if (!def->too_tall)
-      def->melee->dice += MIN(GET_SKILL(def->ch, def->melee->skill) + def->melee->skill_bonus, GET_OFFENSE(def->ch));
+      def->melee->dice += MIN(get_skill(def->ch, def->melee->skill, global_dummy_tn) + def->melee->skill_bonus, GET_OFFENSE(def->ch));
 
     // }
 
@@ -1713,7 +1716,7 @@ bool perform_nerve_strike(struct combat_data *att, struct combat_data *def, char
   // Calculate the attacker's total skill and execute a success test.
   att->melee->dice = get_skill(att->ch, SKILL_UNARMED_COMBAT, att->melee->tn);
   if (!att->too_tall) {
-    int bonus = MIN(GET_SKILL(att->ch, SKILL_UNARMED_COMBAT), GET_OFFENSE(att->ch));
+    int bonus = MIN(get_skill(att->ch, SKILL_UNARMED_COMBAT, global_dummy_tn), GET_OFFENSE(att->ch));
     snprintf(rbuf, rbuf_len, "Attacker is rolling %d + %d dice", att->melee->dice, bonus);
     att->melee->dice += bonus;
   } else {
