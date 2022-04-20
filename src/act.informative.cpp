@@ -263,7 +263,7 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
   SPECIAL(pocket_sec);
 
   *buf = '\0';
-  if ((mode == 0) && object->text.room_desc) {
+  if ((mode == SHOW_MODE_ON_GROUND) && object->text.room_desc) {
     strlcpy(buf, CCHAR ? CCHAR : "", sizeof(buf));
     if (object->graffiti)
       strlcat(buf, object->graffiti, sizeof(buf));
@@ -290,7 +290,7 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
       }
     }
   }
-  else if (GET_OBJ_NAME(object) && mode == 1) {
+  else if (GET_OBJ_NAME(object) && mode == SHOW_MODE_IN_INVENTORY) {
     strlcpy(buf, GET_OBJ_NAME(object), sizeof(buf));
     if (GET_OBJ_TYPE(object) == ITEM_DESIGN)
       strlcat(buf, " (Plan)", sizeof(buf));
@@ -310,39 +310,54 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
       strlcat(buf, " ^c(kept)^n", sizeof(buf));
     }
   }
-  else if (GET_OBJ_NAME(object) && ((mode == 2) || (mode == 3) || (mode == 4) || (mode == 7))) {
+  else if (GET_OBJ_NAME(object) && ((mode == SHOW_MODE_INSIDE_CONTAINER) || (mode == 3) || (mode == 4) || (mode == SHOW_MODE_OWN_EQUIPMENT) || (mode == SHOW_MODE_SOMEONE_ELSES_EQUIPMENT))) {
     strlcpy(buf, GET_OBJ_NAME(object), sizeof(buf));
   }
-  else if (mode == 5) {
+  else if (mode == SHOW_MODE_JUST_DESCRIPTION) {
     if (GET_OBJ_DESC(object))
       strlcpy(buf, GET_OBJ_DESC(object), sizeof(buf));
     else
       strlcpy(buf, "You see nothing special..", sizeof(buf));
   }
-  else if (mode == 8) {
+  else if (mode == SHOW_MODE_CONTAINED_OBJ) {
     snprintf(buf, sizeof(buf), "\t\t\t\t%s", GET_OBJ_NAME(object));
   }
-  if (mode == 7 || mode == 8) {
+
+  if (mode == SHOW_MODE_SOMEONE_ELSES_EQUIPMENT) {
+    if (GET_OBJ_TYPE(object) == ITEM_HOLSTER) {
+      if (object->contains) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (Holding %s)", GET_OBJ_NAME(object->contains));
+      }
+    }
+    if (GET_OBJ_CONDITION(object) * 100 / MAX(1, GET_OBJ_BARRIER(object)) < 100) {
+      strlcat(buf, " (damaged)", sizeof(buf));
+    }
+  }
+  else if (mode == SHOW_MODE_OWN_EQUIPMENT || mode == SHOW_MODE_CONTAINED_OBJ) {
     if (GET_OBJ_TYPE(object) == ITEM_HOLSTER) {
       if (object->contains)
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (Holding %s)", GET_OBJ_NAME(object->contains));
-      if (GET_OBJ_VAL(object, 3) == 1 && ((object->worn_by && object->worn_by == ch) ||
-                                          (object->in_obj && object->in_obj->worn_by && object->in_obj->worn_by == ch)))
+      if (GET_HOLSTER_READY_STATUS(object) == 1 && get_obj_possessor(object) == ch)
         strlcat(buf, " ^Y(Ready)", sizeof(buf));
     }
     else if (GET_OBJ_TYPE(object) == ITEM_WORN && object->contains && !PRF_FLAGGED(ch, PRF_COMPACT)) {
       strlcat(buf, " carrying:", sizeof(buf));
     }
     else if (GET_OBJ_TYPE(object) == ITEM_FOCUS) {
-      if (GET_OBJ_VAL(object, 4))
+      if (GET_FOCUS_ACTIVATED(object))
         strlcat(buf, " ^m(Activated Focus)^n", sizeof(buf));
-      if (GET_OBJ_VAL(object, 9) == GET_IDNUM(ch))
+      if (GET_FOCUS_BONDED_TO(object) == GET_IDNUM(ch))
         strlcat(buf, " ^Y(Geas)^n", sizeof(buf));
     }
 
     if (GET_OBJ_CONDITION(object) * 100 / MAX(1, GET_OBJ_BARRIER(object)) < 100)
       strlcat(buf, " (damaged)", sizeof(buf));
+
+    if (IS_OBJ_STAT(object, ITEM_EXTRA_KEPT)) {
+      strlcat(buf, " ^c(kept)^n", sizeof(buf));
+    }
   }
+
   if (mode != 3) {
     if (IS_OBJ_STAT(object, ITEM_EXTRA_INVISIBLE)) {
       strlcat(buf, " ^B(invisible)", sizeof(buf));
@@ -371,7 +386,7 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
 
   // Special case: Radio is spec-flagged and should show a help message.
   // This is pretty much only true for the Docwagon radios.
-  if (mode == 0 && object->text.room_desc) {
+  if (mode == SHOW_MODE_ON_GROUND && object->text.room_desc) {
     if (GET_OBJ_SPEC(object) == floor_usable_radio) {
       strlcat(buf, "\r\n^y...It's free to use. See ^YHELP RADIO^y for more.^n", sizeof(buf));
     }
@@ -382,11 +397,11 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
 
   strlcat(buf, "^N\r\n", sizeof(buf));
   send_to_char(buf, ch);
-  if ((mode == 7 || mode == 8) && !PRF_FLAGGED(ch, PRF_COMPACT))
+  if ((mode == SHOW_MODE_OWN_EQUIPMENT || mode == SHOW_MODE_CONTAINED_OBJ) && !PRF_FLAGGED(ch, PRF_COMPACT))
     if (GET_OBJ_TYPE(object) == ITEM_WORN && object->contains)
     {
       for (struct obj_data *cont = object->contains; cont; cont = cont->next_content)
-        show_obj_to_char(cont, ch, 8);
+        show_obj_to_char(cont, ch, SHOW_MODE_CONTAINED_OBJ);
     }
 
 }
@@ -814,7 +829,7 @@ void look_at_char(struct char_data * i, struct char_data * ch)
       if (GET_EQ(i, j) && CAN_SEE_OBJ(ch, GET_EQ(i, j))) {
         if (GET_OBJ_TYPE(GET_EQ(i, j)) == ITEM_HOLSTER && GET_OBJ_VAL(GET_EQ(i, j), 0) == 2) {
           send_to_char(where[j], ch);
-          show_obj_to_char(GET_EQ(i, j), ch, 7);
+          show_obj_to_char(GET_EQ(i, j), ch, SHOW_MODE_OWN_EQUIPMENT);
         } else if (j == WEAR_WIELD || j == WEAR_HOLD) {
           if (IS_OBJ_STAT(GET_EQ(i, j), ITEM_EXTRA_TWOHANDS))
             send_to_char(MOB_FLAGGED(i, MOB_INANIMATE) ? "<firmly mounted>     " : hands[2], ch);
@@ -822,35 +837,35 @@ void look_at_char(struct char_data * i, struct char_data * ch)
             send_to_char(MOB_FLAGGED(i, MOB_INANIMATE) ? "<mounted>            " : hands[(int)i->char_specials.saved.left_handed], ch);
           else
             send_to_char(MOB_FLAGGED(i, MOB_INANIMATE) ? "<mounted>            " : hands[!i->char_specials.saved.left_handed], ch);
-          show_obj_to_char(GET_EQ(i, j), ch, 1);
+          show_obj_to_char(GET_EQ(i, j), ch, SHOW_MODE_SOMEONE_ELSES_EQUIPMENT);
         } else if ((j == WEAR_BODY || j == WEAR_LARM || j == WEAR_RARM || j == WEAR_WAIST)
                    && GET_EQ(i, WEAR_ABOUT)) {
           if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 4 + GET_OBJ_VAL(GET_EQ(i, WEAR_ABOUT), 7)) >= 2) {
             send_to_char(where[j], ch);
-            show_obj_to_char(GET_EQ(i, j), ch, 1);
+            show_obj_to_char(GET_EQ(i, j), ch, SHOW_MODE_SOMEONE_ELSES_EQUIPMENT);
           }
         } else if (j == WEAR_UNDER && (GET_EQ(i, WEAR_ABOUT) || GET_EQ(i, WEAR_BODY))) {
           if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 6 +
                            (GET_EQ(i, WEAR_ABOUT) ? GET_OBJ_VAL(GET_EQ(i, WEAR_ABOUT), 7) : 0) +
                            (GET_EQ(i, WEAR_BODY) ? GET_OBJ_VAL(GET_EQ(i, WEAR_BODY), 7) : 0)) >= 2) {
             send_to_char(where[j], ch);
-            show_obj_to_char(GET_EQ(i, j), ch, 1);
+            show_obj_to_char(GET_EQ(i, j), ch, SHOW_MODE_SOMEONE_ELSES_EQUIPMENT);
           }
         } else if (j == WEAR_LEGS && GET_EQ(i, WEAR_ABOUT)) {
           if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 2 + GET_OBJ_VAL(GET_EQ(i, WEAR_ABOUT), 7)) >= 2) {
             send_to_char(where[j], ch);
-            show_obj_to_char(GET_EQ(i, j), ch, 1);
+            show_obj_to_char(GET_EQ(i, j), ch, SHOW_MODE_SOMEONE_ELSES_EQUIPMENT);
           }
         } else if ((j == WEAR_RANKLE || j == WEAR_LANKLE) && (GET_EQ(i, WEAR_ABOUT) || GET_EQ(i, WEAR_LEGS))) {
           if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 5 +
                            (GET_EQ(i, WEAR_ABOUT) ? GET_OBJ_VAL(GET_EQ(i, WEAR_ABOUT), 7) : 0) +
                            (GET_EQ(i, WEAR_LEGS) ? GET_OBJ_VAL(GET_EQ(i, WEAR_LEGS), 7) : 0)) >= 2) {
             send_to_char(where[j], ch);
-            show_obj_to_char(GET_EQ(i, j), ch, 1);
+            show_obj_to_char(GET_EQ(i, j), ch, SHOW_MODE_SOMEONE_ELSES_EQUIPMENT);
           }
         } else {
           send_to_char(where[j], ch);
-          show_obj_to_char(GET_EQ(i, j), ch, 1);
+          show_obj_to_char(GET_EQ(i, j), ch, SHOW_MODE_SOMEONE_ELSES_EQUIPMENT);
         }
       }
   }
@@ -993,7 +1008,7 @@ void look_at_char(struct char_data * i, struct char_data * ch)
     act("\r\nYou peek at $s inventory:", FALSE, i, 0, ch, TO_VICT);
     for (tmp_obj = i->carrying; tmp_obj; tmp_obj = tmp_obj->next_content) {
       if (CAN_SEE_OBJ(ch, tmp_obj)) {
-        show_obj_to_char(tmp_obj, ch, 1);
+        show_obj_to_char(tmp_obj, ch, SHOW_MODE_IN_INVENTORY);
         found = TRUE;
       }
     }
@@ -1598,10 +1613,10 @@ void look_in_veh(struct char_data * ch)
     send_to_char(ch->vfront ? ch->in_veh->inside_description : ch->in_veh->rear_description, ch);
     CCHAR = "^g";
     CGLOB = KGRN;
-    list_obj_to_char(ch->in_veh->contents, ch, 0, FALSE, FALSE);
+    list_obj_to_char(ch->in_veh->contents, ch, SHOW_MODE_ON_GROUND, FALSE, FALSE);
     CGLOB = KNRM;
     CCHAR = NULL;
-    list_obj_to_char(ch->in_veh->contents, ch, 0, FALSE, TRUE);
+    list_obj_to_char(ch->in_veh->contents, ch, SHOW_MODE_ON_GROUND, FALSE, TRUE);
     list_char_to_char(ch->in_veh->people, ch);
     if (!ch->vfront) {
       CCHAR = "^y";
@@ -1625,10 +1640,10 @@ void look_in_veh(struct char_data * ch)
       send_to_char(veh->in_veh->rear_description, ch);
       CCHAR = "^g";
       CGLOB = KGRN;
-      list_obj_to_char(veh->in_veh->contents, ch, 0, FALSE, FALSE);
+      list_obj_to_char(veh->in_veh->contents, ch, SHOW_MODE_ON_GROUND, FALSE, FALSE);
       CGLOB = KNRM;
       CCHAR = NULL;
-      list_obj_to_char(veh->in_veh->contents, ch, 0, FALSE, TRUE);
+      list_obj_to_char(veh->in_veh->contents, ch, SHOW_MODE_ON_GROUND, FALSE, TRUE);
       list_char_to_char(veh->in_veh->people, ch);
       ch->vfront = ov;
     } else {
@@ -1653,7 +1668,7 @@ void look_in_veh(struct char_data * ch)
       do_auto_exits(ch);
       CCHAR = "^g";
       CGLOB = KGRN;
-      list_obj_to_char(veh->in_room->contents, ch, 0, FALSE, FALSE);
+      list_obj_to_char(veh->in_room->contents, ch, SHOW_MODE_ON_GROUND, FALSE, FALSE);
       CGLOB = KNRM;
       CCHAR = NULL;
       list_char_to_char(veh->in_room->people, ch);
@@ -1913,10 +1928,10 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
   // what fun just to get a colorized listing
   CCHAR = "^g";
   CGLOB = KGRN;
-  list_obj_to_char(ch->in_room->contents, ch, 0, FALSE, FALSE);
+  list_obj_to_char(ch->in_room->contents, ch, SHOW_MODE_ON_GROUND, FALSE, FALSE);
   CGLOB = KNRM;
   CCHAR = NULL;
-  list_obj_to_char(ch->in_room->contents, ch, 0, FALSE, TRUE);
+  list_obj_to_char(ch->in_room->contents, ch, SHOW_MODE_ON_GROUND, FALSE, TRUE);
   list_char_to_char(ch->in_room->people, ch);
   CCHAR = "^y";
   list_veh_to_char(ch->in_room->vehicles, ch);
@@ -2057,7 +2072,7 @@ void look_in_obj(struct char_data * ch, char *arg, bool exa)
             send_to_char(" (used): \r\n", ch);
             break;
         }
-        list_obj_to_char(obj->contains, ch, 2, TRUE, FALSE);
+        list_obj_to_char(obj->contains, ch, SHOW_MODE_INSIDE_CONTAINER, TRUE, FALSE);
       }
     } else if (GET_OBJ_TYPE(obj) == ITEM_CONTAINER || GET_OBJ_TYPE(obj) == ITEM_HOLSTER ||
                GET_OBJ_TYPE(obj) == ITEM_QUIVER || GET_OBJ_TYPE(obj) == ITEM_KEYRING) {
@@ -2079,7 +2094,7 @@ void look_in_obj(struct char_data * ch, char *arg, bool exa)
               break;
           }
         }
-        list_obj_to_char(obj->contains, ch, 2, TRUE, FALSE);
+        list_obj_to_char(obj->contains, ch, SHOW_MODE_INSIDE_CONTAINER, TRUE, FALSE);
       }
     } else {            /* item must be a fountain or drink container */
       if (GET_OBJ_VAL(obj, 1) <= 0)
@@ -2240,9 +2255,9 @@ void look_at_target(struct char_data * ch, char *arg)
   {                   /* If an object was found back in
                        * generic_find */
     if (!found)
-      show_obj_to_char(found_obj, ch, 5);       /* Show no-description */
+      show_obj_to_char(found_obj, ch, SHOW_MODE_JUST_DESCRIPTION);       /* Show no-description */
     else
-      show_obj_to_char(found_obj, ch, 6);       /* Find hum, glow etc */
+      show_obj_to_char(found_obj, ch, SHOW_MODE_JUST_SHOW_GLOW_ETC);       /* Find hum, glow etc */
   } else if (!found) {
     if (str_str("pockets", arg)) {
       send_to_char("Please see ^WHELP POCKETS^n for info on how to use your ammo pockets.\r\n", ch);
@@ -4170,7 +4185,7 @@ ACMD(do_score)
 ACMD(do_inventory)
 {
   send_to_char("You are carrying:\r\n", ch);
-  list_obj_to_char(ch->carrying, ch, 1, TRUE, FALSE);
+  list_obj_to_char(ch->carrying, ch, SHOW_MODE_IN_INVENTORY, TRUE, FALSE);
 
   float ammo_weight = get_bulletpants_weight(ch);
   if (ammo_weight > 0)
@@ -4270,7 +4285,7 @@ ACMD(do_equipment)
       } else
         send_to_char(where[i], ch);
       if (CAN_SEE_OBJ(ch, GET_EQ(ch, i)))
-        show_obj_to_char(GET_EQ(ch, i), ch, 7);
+        show_obj_to_char(GET_EQ(ch, i), ch, SHOW_MODE_OWN_EQUIPMENT);
       else
         send_to_char("Something.\r\n", ch);
       found = TRUE;
@@ -6112,7 +6127,7 @@ ACMD(do_mort_show)
     act("$n shows $p to $N.", TRUE, ch, obj, vict, TO_NOTVICT);
   } else {
     act("$n shows $p to $N.", TRUE, ch, obj, vict, TO_ROOM);
-    show_obj_to_char(obj, vict, 5);
+    show_obj_to_char(obj, vict, SHOW_MODE_JUST_DESCRIPTION);
   }
 }
 

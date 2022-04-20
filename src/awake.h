@@ -2671,6 +2671,17 @@ enum {
 #define ROOM_HIGHEST_SPELL_FORCE              1
 #define ROOM_LIGHT_HEADLIGHTS_AND_FLASHLIGHTS 2
 
+// Mode definitions for act.informative.cpp.
+#define SHOW_MODE_ON_GROUND                0
+#define SHOW_MODE_IN_INVENTORY             1
+#define SHOW_MODE_INSIDE_CONTAINER         2
+// 3 and 4 are not used, idk what they used to be.
+#define SHOW_MODE_JUST_DESCRIPTION         5
+#define SHOW_MODE_JUST_SHOW_GLOW_ETC       6
+#define SHOW_MODE_OWN_EQUIPMENT            7
+#define SHOW_MODE_CONTAINED_OBJ            8
+#define SHOW_MODE_SOMEONE_ELSES_EQUIPMENT  9
+
 // This is to flag variables used eg in macros so that the compiler won't complain about unused variables
 // when they're actually used. Casting to void does nothing but the compiler will stop thinking it's
 // unused. This is the same way Q_UNUSED is used in Qt. -- Nodens
