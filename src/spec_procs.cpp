@@ -1685,7 +1685,7 @@ SPECIAL(car_dealer)
   if (CMD_IS("list")) {
     send_to_char("Available vehicles are:\r\n", ch);
     for (veh = world[car_room].vehicles; veh; veh = veh->next_veh)
-      send_to_char(ch, "%8d - %s\r\n", veh->cost, capitalize(GET_VEH_NAME(veh)));
+      send_to_char(ch, "%8d - %s\r\n", veh->cost, capitalize(GET_VEH_NAME_NOFORMAT(veh)));
     return TRUE;
   } else if (CMD_IS("buy")) {
     argument = one_argument(argument, buf);

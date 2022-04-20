@@ -1890,7 +1890,7 @@ ACMD(do_attach)
       return;
     }
     if (veh->usedload + GET_OBJ_WEIGHT(item) > veh->load) {
-      send_to_char(ch, "%s would put %s over its load limit!\r\n", capitalize(GET_OBJ_NAME(item)), decapitalize_a_an(GET_VEH_NAME(veh)));
+      send_to_char(ch, "%s would put %s over its load limit!\r\n", capitalize(GET_OBJ_NAME(item)), GET_VEH_NAME(veh));
       return;
     }
     switch (GET_OBJ_VAL(item, 4)) {
@@ -2869,7 +2869,7 @@ ACMD(do_photo)
 
     // Look for a targeted vehicle.
     if ((found_veh = get_veh_list(argument, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch))) {
-      snprintf(buf2, sizeof(buf2), "a photo of %s^n", decapitalize_a_an(GET_VEH_NAME(found_veh)));
+      snprintf(buf2, sizeof(buf2), "a photo of %s^n", GET_VEH_NAME(found_veh));
       snprintf(buf, sizeof(buf), "^c%s^c in %s%s^n\r\n%s",
               GET_VEH_NAME(found_veh),
               found_veh->in_veh ? "the rear of " : "",
@@ -2891,7 +2891,7 @@ ACMD(do_photo)
           snprintf(buf, sizeof(buf), "^c%s^c sitting in the %s of %s^n\r\n%s",
                   make_desc(ch, i, buf3, 2, FALSE, sizeof(buf3)),
                   i->vfront ? "front" : "back",
-                  decapitalize_a_an(GET_VEH_NAME(i->in_veh)),
+                  GET_VEH_NAME(i->in_veh),
                   i->player.physical_text.look_desc);
         } else {
           snprintf(buf, sizeof(buf), "^c%s^c in %s^n\r\n%s", make_desc(ch, i, buf3, 2, FALSE, sizeof(buf3)),
@@ -2948,7 +2948,7 @@ ACMD(do_photo)
         if (ch->in_veh) {
           snprintf(buf, sizeof(buf), "^c%s^c in %s^n\r\n%s",
                   GET_OBJ_NAME(found_obj),
-                  decapitalize_a_an(GET_VEH_NAME(i->in_veh)),
+                  GET_VEH_NAME(i->in_veh),
                   found_obj->photo ? found_obj->photo : found_obj->text.look_desc);
         } else {
           snprintf(buf, sizeof(buf), "^c%s^c in %s^n\r\n%s", GET_OBJ_NAME(found_obj), GET_ROOM_NAME(ch->in_room), found_obj->photo ? found_obj->photo : found_obj->text.look_desc);

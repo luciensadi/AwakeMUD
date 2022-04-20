@@ -154,25 +154,25 @@ void crash_test(struct char_data *ch)
   target = veh->handling + get_vehicle_modifier(veh) + modify_target(ch);
   power = (int)(ceilf(get_speed(veh) / 10));
 
-  snprintf(buf, sizeof(buf), "%s begins to lose control!\r\n", capitalize(GET_VEH_NAME(veh)));
+  snprintf(buf, sizeof(buf), "%s begins to lose control!\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
   act(buf, FALSE, ch, NULL, NULL, TO_VEH_ROOM);
 
   skill = veh_skill(ch, veh, &target) + veh->autonav;
 
   if (success_test(skill, target) > 0)
   {
-    snprintf(crash_buf, sizeof(crash_buf), "^y%s shimmies sickeningly under you, but you manage to keep control.^n\r\n", capitalize(GET_VEH_NAME(veh)));
+    snprintf(crash_buf, sizeof(crash_buf), "^y%s shimmies sickeningly under you, but you manage to keep control.^n\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
     send_to_veh(crash_buf, veh, NULL, TRUE);
     if (!number(0, 10))
       send_to_char("^YYou don't have the skills to be driving like this!^n\r\n", ch);
     return;
   }
   if (veh->in_room && IS_WATER(veh->in_room)) {
-    snprintf(crash_buf, sizeof(crash_buf), "^r%s shimmies sickeningly under you, then bounces hard before flipping over!^n\r\n", capitalize(GET_VEH_NAME(veh)));
-    snprintf(buf, sizeof(buf), "%s plows into a wave and flips!\r\n", capitalize(GET_VEH_NAME(veh)));
+    snprintf(crash_buf, sizeof(crash_buf), "^r%s shimmies sickeningly under you, then bounces hard before flipping over!^n\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
+    snprintf(buf, sizeof(buf), "%s plows into a wave and flips!\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
   } else {
-    snprintf(crash_buf, sizeof(crash_buf), "^r%s shimmies sickeningly under you, then bounces hard before careening off the road!^n\r\n", capitalize(GET_VEH_NAME(veh)));
-    snprintf(buf, sizeof(buf), "%s careens off the road!\r\n", capitalize(GET_VEH_NAME(veh)));
+    snprintf(crash_buf, sizeof(crash_buf), "^r%s shimmies sickeningly under you, then bounces hard before careening off the road!^n\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
+    snprintf(buf, sizeof(buf), "%s careens off the road!\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
   }
   send_to_veh(crash_buf, veh, NULL, TRUE);
   act(buf, FALSE, ch, NULL, NULL, TO_VEH_ROOM);
@@ -373,7 +373,7 @@ ACMD(do_vemote)
     return;
   }
   RIG_VEH(ch, veh)
-  snprintf(buf, sizeof(buf), "%s%s%s^n\r\n", capitalize(GET_VEH_NAME(veh)), argument, ispunct(get_final_character_from_string(argument)) ? "" : ".");
+  snprintf(buf, sizeof(buf), "%s%s%s^n\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)), argument, ispunct(get_final_character_from_string(argument)) ? "" : ".");
   if (veh->in_room)
     send_to_room(buf, veh->in_room);
   else

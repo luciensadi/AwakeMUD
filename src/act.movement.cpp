@@ -791,7 +791,7 @@ void move_vehicle(struct char_data *ch, int dir)
     int success = resisted_test(follower_dice, target, lead_dice, target2);
     if (success > 0) {
       send_to_char(pilot, "You gain ground.\r\n");
-      send_to_char(ch, "%s seems to catch up.\r\n", capitalize(GET_VEH_NAME(v->follower)));
+      send_to_char(ch, "%s seems to catch up.\r\n", capitalize(GET_VEH_NAME_NOFORMAT(v->follower)));
       for (int x = 0; r >= 0 && x < 2; r-- && x++) {
         for (door = 0; door < NUM_OF_DIRS; door++)
           if (EXIT(v->follower, door))

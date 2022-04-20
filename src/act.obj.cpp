@@ -492,7 +492,7 @@ ACMD(do_put)
   if (!cont) {
     struct veh_data *veh = get_veh_list(arg2, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch);
     if (veh) {
-      send_to_char(ch, "%s is a vehicle-- you'll have to use the UPGRADE command.\r\n", capitalize(GET_VEH_NAME(veh)));
+      send_to_char(ch, "%s is a vehicle-- you'll have to use the UPGRADE command.\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
     } else {
       send_to_char(ch, "You don't see %s %s here.\r\n", AN(arg2), arg2);
     }
@@ -1192,37 +1192,37 @@ void get_from_room(struct char_data * ch, char *arg, bool download)
 
         // No taking vehicles you can't carry.
         if (vehicle_weight + IS_CARRYING_W(ch) > CAN_CARRY_W(ch)) {
-          send_to_char(ch, "Seeing as how it weighs %dkg, %s is too heavy for you to carry.\r\n", vehicle_weight, decapitalize_a_an(GET_VEH_NAME(veh)));
+          send_to_char(ch, "Seeing as how it weighs %dkg, %s is too heavy for you to carry.\r\n", vehicle_weight, GET_VEH_NAME(veh));
           return;
         }
 
         // No taking vehicles that are moving.
         if (veh->cspeed != SPEED_OFF) {
-          send_to_char(ch, "%s needs to be completely powered off before you can lift it.\r\n", capitalize(GET_VEH_NAME(veh)));
+          send_to_char(ch, "%s needs to be completely powered off before you can lift it.\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
           return;
         }
 
         // No taking vehicles that are actively rigged.
         if (veh->rigger) {
-          send_to_char(ch, "%s has someone in control of it, you'd better not.\r\n", capitalize(GET_VEH_NAME(veh)));
+          send_to_char(ch, "%s has someone in control of it, you'd better not.\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
           return;
         }
 
         // No taking vehicles with people inside.
         if (veh->people) {
-          send_to_char(ch, "%s has people inside it, you'd better not.\r\n", capitalize(GET_VEH_NAME(veh)));
+          send_to_char(ch, "%s has people inside it, you'd better not.\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
           return;
         }
 
         // No taking vehicles with other vehicles inside.
         if (veh->carriedvehs) {
-          send_to_char(ch, "%s has another vehicle inside it, there's no way you can carry that much!\r\n", capitalize(GET_VEH_NAME(veh)));
+          send_to_char(ch, "%s has another vehicle inside it, there's no way you can carry that much!\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
           return;
         }
 
         // No taking NPC vehicles or locked, non-destroyed vehicles that belong to someone else.
         if (!veh->owner || (veh->owner != GET_IDNUM(ch) && (veh->locked && veh->damage < VEH_DAM_THRESHOLD_DESTROYED))) {
-          snprintf(buf, sizeof(buf), "%s's anti-theft measures beep loudly.\r\n", capitalize(GET_VEH_NAME(veh)));
+          snprintf(buf, sizeof(buf), "%s's anti-theft measures beep loudly.\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
           act(buf, FALSE, ch, 0, 0, TO_ROOM);
           send_to_char(buf, ch);
           return;
@@ -1252,7 +1252,7 @@ void get_from_room(struct char_data * ch, char *arg, bool download)
         // For vehicle containers, value 11 is the weight of the container.
         GET_VEHCONTAINER_WEIGHT(container) = GET_OBJ_WEIGHT(container);
 
-        snprintf(buf, sizeof(buf), "^y%s^n (carried vehicle)", decapitalize_a_an(GET_VEH_NAME(veh)));
+        snprintf(buf, sizeof(buf), "^y%s^n (carried vehicle)", GET_VEH_NAME(veh));
         container->restring = str_dup(buf);
 
         // Give the object to the character.
@@ -1272,8 +1272,8 @@ void get_from_room(struct char_data * ch, char *arg, bool download)
         veh_to_room(veh, &world[vehicle_storage_rnum]);
 
         // Finally, message the room.
-        send_to_char(ch, "With a grunt, you lift %s.\r\n", decapitalize_a_an(GET_VEH_NAME(veh)));
-        snprintf(buf, sizeof(buf), "With a grunt, $n picks up %s.", decapitalize_a_an(GET_VEH_NAME(veh)));
+        send_to_char(ch, "With a grunt, you lift %s.\r\n", GET_VEH_NAME(veh));
+        snprintf(buf, sizeof(buf), "With a grunt, $n picks up %s.", GET_VEH_NAME(veh));
         act(buf, FALSE, ch, 0, 0, TO_ROOM);
 
         const char *owner = get_player_name(veh->owner);
@@ -1427,7 +1427,7 @@ ACMD(do_get)
       if (cyberdeck && veh) {
         cont = NULL;
         if (veh->owner != GET_IDNUM(ch) && veh->locked) {
-          snprintf(buf, sizeof(buf), "%s's anti-theft measures beep loudly.\r\n", capitalize(GET_VEH_NAME(veh)));
+          snprintf(buf, sizeof(buf), "%s's anti-theft measures beep loudly.\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
           act(buf, FALSE, ch, 0, 0, TO_ROOM);
           send_to_char(buf, ch);
           return;
@@ -1778,8 +1778,8 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
         // Found it! Proceed to drop.
         veh_from_room(veh);
         veh_to_room(veh, ch->in_room);
-        send_to_char(ch, "You set %s down with a sigh of relief.\r\n", decapitalize_a_an(GET_VEH_NAME(veh)));
-        snprintf(buf, sizeof(buf), "$n sets %s down with a sigh of relief.", decapitalize_a_an(GET_VEH_NAME(veh)));
+        send_to_char(ch, "You set %s down with a sigh of relief.\r\n", GET_VEH_NAME(veh));
+        snprintf(buf, sizeof(buf), "$n sets %s down with a sigh of relief.", GET_VEH_NAME(veh));
         act(buf, FALSE, ch, 0, 0, TO_ROOM);
 
         const char *owner = get_player_name(veh->owner);

@@ -3601,7 +3601,7 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
     static char vehicle_message[1000];
 
     if (ch->in_veh)
-      snprintf(vehicle_message, sizeof(vehicle_message), "From inside %s, ", decapitalize_a_an(GET_VEH_NAME(ch->in_veh)));
+      snprintf(vehicle_message, sizeof(vehicle_message), "From inside %s, ", decapitalize_a_an(GET_VEH_NAME_NOFORMAT(ch->in_veh)));
     else
       strcpy(vehicle_message, "");
 

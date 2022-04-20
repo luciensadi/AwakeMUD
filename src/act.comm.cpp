@@ -584,7 +584,7 @@ ACMD(do_spec_comm)
 
     snprintf(buf, sizeof(buf), "You lean into %s^n and say in %s, \"%s%s%s\"",
              skills[language].name,
-             decapitalize_a_an(GET_VEH_NAME(veh)),
+             GET_VEH_NAME(veh),
              (PRF_FLAGGED(ch, PRF_NOHIGHLIGHT) || PRF_FLAGGED(ch, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch),
              capitalize(buf2),
              ispunct(get_final_character_from_string(buf2)) ? "" : ".");
@@ -1227,7 +1227,7 @@ ACMD(do_gen_comm)
         if (!IS_IGNORING(tmp, is_blocking_ic_interaction_from, ch)) {
           snprintf(buf1, sizeof(buf1), "%sFrom inside %s^n, $z^n shouts in %s, \"%s%s%s\"^n",
                    com_msgs[subcmd][3],
-                   decapitalize_a_an(GET_VEH_NAME(ch->in_veh)),
+                   GET_VEH_NAME(ch->in_veh),
                    (IS_NPC(tmp) || GET_SKILL(tmp, language) > 0) ? skills[language].name : "an unknown language",
                    capitalize(replace_too_long_words(tmp, ch, argument, language, com_msgs[subcmd][3])),
                    ispunct(get_final_character_from_string(argument)) ? "" : "!",
