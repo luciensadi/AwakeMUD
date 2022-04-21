@@ -6977,7 +6977,6 @@ SPECIAL(initiative_tracker)
       for (struct obj_data *temp = obj->contains; temp; temp = temp->next_content) {
         send_to_char(ch, "%d) %s\r\n", GET_TRACKER_INIT_VALUE(temp), GET_OBJ_NAME(temp));
       }
-      send_to_char("\r\nUse 'clear' to wipe, 'track' to configure.\r\n", ch);
       return TRUE;
     }
 

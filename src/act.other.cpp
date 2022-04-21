@@ -2189,10 +2189,15 @@ ACMD(do_astral)
   */
   if (IS_NPC(ch))
     return;
-  if (GET_ASPECT(ch) != ASPECT_FULL && subcmd == SCMD_PROJECT) {
+
+  if (subcmd == SCMD_PROJECT
+      && GET_ASPECT(ch) != ASPECT_FULL
+      && !(GET_TRADITION(ch) == TRAD_HERMETIC && (GET_ASPECT(ch) >= ASPECT_EARTHMAGE && GET_ASPECT(ch) <= ASPECT_WATERMAGE)))
+  {
     send_to_char("You do not have enough control over the astral plane to do that.\r\n", ch);
     return;
   }
+  
   if (IS_PROJECT(ch)) {
     send_to_char("But you are already projecting!\r\n", ch);
     return;
