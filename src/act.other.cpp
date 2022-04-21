@@ -2181,10 +2181,12 @@ ACMD(do_astral)
     send_to_char("You have no sense of the astral plane.\r\n", ch);
     return;
   }
+  /*
   if (IS_WORKING(ch)) {
     send_to_char(TOOBUSY, ch);
     return;
   }
+  */
   if (IS_NPC(ch))
     return;
   if (GET_ASPECT(ch) != ASPECT_FULL && subcmd == SCMD_PROJECT) {
