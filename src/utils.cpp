@@ -1342,8 +1342,9 @@ int negotiate(struct char_data *ch, struct char_data *tch, int comp, int baseval
 int get_skill(struct char_data *ch, int skill, int &target)
 {
   char gskbuf[MAX_STRING_LENGTH];
-  gskbuf[0] = '\0';
   int increase = 0;
+
+  snprintf(gskbuf, sizeof(gskbuf), "get_skill(%s, %s):", GET_CHAR_NAME(ch), skills[skill].name);
 
   // Wearing too much armor? That'll hurt.
   if (skills[skill].attribute == QUI) {
