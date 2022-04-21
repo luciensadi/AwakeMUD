@@ -4855,7 +4855,7 @@ ACMD(do_set)
     affect_total(vict);
     break;
   case 55:
-    RANGE(0, 7);
+    RANGE(0, TRAD_ADEPT);
     // They need a new magic table entry.
     if (GET_TRADITION(vict) == TRAD_MUNDANE && value != TRAD_MUNDANE) {
       snprintf(buf, sizeof(buf), "INSERT INTO pfiles_magic (idnum, Totem, TotemSpirit, Aspect) VALUES"\
@@ -4897,7 +4897,7 @@ ACMD(do_set)
     SET_OR_REMOVE(PRF_FLAGS(vict), PRF_QUESTOR);
     break;
   case 66:
-    RANGE(0, 7);
+    RANGE(0, ASPECT_WATERMAGE);
     GET_ASPECT(vict) = value;
     send_to_char(ch, "%s is now %s %s.\r\n", GET_CHAR_NAME(vict), AN(aspect_names[value]), aspect_names[value]);
     break;
