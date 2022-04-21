@@ -2197,11 +2197,12 @@ ACMD(do_astral)
     send_to_char("But you are already projecting!\r\n", ch);
     return;
   }
-
+  /*
   if (AFF_FLAGGED(ch, AFF_PILOT)) {
     send_to_char("While driving? That would be a nice trick!\r\n", ch);
     return;
   }
+  */
   if (subcmd == SCMD_PERCEIVE) {
     if (PLR_FLAGGED(ch, PLR_PERCEIVE)) {
       PLR_FLAGS(ch).RemoveBit(PLR_PERCEIVE);

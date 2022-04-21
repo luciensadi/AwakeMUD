@@ -849,6 +849,7 @@ void assign_objects(void)
   SPECIAL(floor_usable_radio);
   SPECIAL(medical_workshop);
   SPECIAL(toggled_voice_modulator);
+  SPECIAL(initiative_tracker);
 
   ASSIGNOBJ(3, gen_board);  /* Rift's Board */
   ASSIGNOBJ(4, gen_board);  /* Pook's Board */
@@ -945,6 +946,7 @@ void assign_objects(void)
   ASSIGNOBJ(9826, locker);
   ASSIGNOBJ(60500, chargen_hopper);
   ASSIGNOBJ(10033, quest_debug_scanner);
+  ASSIGNOBJ(6996, initiative_tracker);
 #ifdef USE_PRIVATE_CE_WORLD
   ASSIGNOBJ(94331, trideo);
   ASSIGNOBJ(70605, desktop);

@@ -72,11 +72,41 @@ void raw_store_mail(long to, long from_id, const char *from_name, const char *me
   }
 
   // Notify pocket secretaries of online characters.
+  #define IS_VALID_POCKET_SEC(obj) ((obj) && GET_OBJ_SPEC((obj)) == pocket_sec && (obj)->contains)
   for (struct descriptor_data *desc = descriptor_list; desc; desc = desc->next)
-    if (desc->character && GET_IDNUM(desc->character) == to)
-      for (struct obj_data *obj = desc->character->carrying; obj; obj = obj->next_content)
-        if (GET_OBJ_SPEC(obj) && GET_OBJ_SPEC(obj) == pocket_sec && obj->contains)
+    if (desc->character && GET_IDNUM(desc->character) == to) {
+      bool has_beeped = FALSE;
+
+      for (struct obj_data *obj = desc->character->carrying; obj && !has_beeped; obj = obj->next_content) {
+        if (IS_VALID_POCKET_SEC(obj)) {
           send_to_char(desc->character, "%s beeps.\r\n", GET_OBJ_NAME(obj));
+          has_beeped = TRUE;
+          break;
+        }
+      }
+
+      for (int wear_pos = 0; wear_pos < NUM_WEARS && !has_beeped; wear_pos++) {
+        struct obj_data *eq = GET_EQ(desc->character, wear_pos);
+
+        if (!eq)
+          continue;
+
+        if (IS_VALID_POCKET_SEC(eq)) {
+          send_to_char(desc->character, "%s beeps.\r\n", GET_OBJ_NAME(eq));
+          has_beeped = TRUE;
+          break;
+        } else {
+          for (struct obj_data *obj = eq->contains; obj && !has_beeped; obj = obj->next_content) {
+            if (IS_VALID_POCKET_SEC(obj)) {
+              send_to_char(desc->character, "From inside %s, %s beeps.\r\n", GET_OBJ_NAME(eq), GET_OBJ_NAME(obj));
+              has_beeped = TRUE;
+              break;
+            }
+          }
+        }
+      }
+    }
+
 }
 
 int amount_of_mail_waiting(struct char_data *ch) {

@@ -164,14 +164,22 @@ void string_add(struct descriptor_data *d, char *str)
 
   if ((terminator = (*str == '@')))
     *str = '\0';
-  else if (*str == '$' && !str_cmp(str, "$abort") && !d->connected)
+  else if (*str == '$')
   {
-    SEND_TO_Q("Aborted.\r\n", d);
-    d->mail_to = 0;
-    DELETE_D_STR_IF_EXTANT(d);
-    if (!IS_NPC(d->character))
-      PLR_FLAGS(d->character).RemoveBits(PLR_MAILING, PLR_WRITING, ENDBIT);
-    return;
+    bool will_abort = !str_cmp(str, "$abort");
+    send_to_char(d->character, "[detected $, str is: '%s' -- will %sabort (str_cmp %s)]",
+                 str,
+                 will_abort ? "" : "NOT ",
+                 !str_cmp(str, "$abort") ? "ok" : "FAIL"
+               );
+    if (will_abort) {
+      SEND_TO_Q("Aborted.\r\n", d);
+      d->mail_to = 0;
+      DELETE_D_STR_IF_EXTANT(d);
+      if (!IS_NPC(d->character))
+        PLR_FLAGS(d->character).RemoveBits(PLR_MAILING, PLR_WRITING, ENDBIT);
+      return;
+    }
   }
 
   if (!(*d->str))
