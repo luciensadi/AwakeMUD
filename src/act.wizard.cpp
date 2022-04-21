@@ -3322,7 +3322,7 @@ ACMD(do_wiztitle)
   else if (subcmd == SCMD_WHOTITLE) {
     skip_spaces(&argument);
     if (strstr((const char *)argument, "^"))
-      send_to_char("Whotitles can't contain the ^ character.\r\n", ch);
+      send_to_char("Whotitles can't contain the ^^ character.\r\n", ch);
     else if (strlen(argument) > MAX_WHOTITLE_LENGTH) {
       send_to_char(ch, "Sorry, whotitles can't be longer than %d characters.\r\n", MAX_WHOTITLE_LENGTH);
     } else {
@@ -4837,7 +4837,7 @@ ACMD(do_set)
     break;
   case 52:
     if (strstr((const char *)val_arg, "^")) {
-      send_to_char("Whotitles can't contain the ^ character.\r\n", ch);
+      send_to_char("Whotitles can't contain the ^^ character.\r\n", ch);
       SET_CLEANUP(false);
       return;
     } else

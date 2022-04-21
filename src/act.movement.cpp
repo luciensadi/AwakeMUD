@@ -183,17 +183,39 @@ bool should_tch_see_chs_movement_message(struct char_data *tch, struct char_data
 
   // Check for stealth and other person-to-person modifiers.
   if (IS_AFFECTED(ch, AFF_SNEAK)) {
-    int target = GET_SKILL(ch, SKILL_STEALTH) ? 0 : 4;
-    int skill = get_skill(ch, SKILL_STEALTH, target);
-    int tchtarg = skill;
+    int dummy_tn = 0;
+    char rbuf[1000];
 
-    if (affected_by_spell(ch, SPELL_STEALTH))
-      tchtarg += 4;
-    if (ch->in_room->silence[0])
-      tchtarg += ch->in_room->silence[1];
+    // Get the skill dice to roll.
+    snprintf(rbuf, sizeof(rbuf), "Sneak perception test: %s vs %s. get_skill: ", GET_CHAR_NAME(ch), GET_CHAR_NAME(ch));
+    int skill_dice = get_skill(ch, SKILL_STEALTH, dummy_tn);
 
-    if (resisted_test(GET_INT(tch), tchtarg, skill, (GET_INT(tch) + target)) <= 0)
-      return FALSE;
+    // Make an open test to determine the TN for the perception test to notice you.
+    strlcat(rbuf, ". get_vision_penalty: ", sizeof(rbuf));
+    int open_test_result = open_test(skill_dice);
+    int vision_penalty = get_vision_penalty(tch, get_ch_in_room(tch), rbuf, sizeof(rbuf));
+    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), ". TN is %d (OT) + %d (vis)", open_test_result, vision_penalty);
+
+    int test_tn = open_test_result + vision_penalty;
+
+    if (affected_by_spell(ch, SPELL_STEALTH)) {
+      test_tn += 4;
+      strlcat(rbuf, " + 4 (stealth spell)", sizeof(rbuf));
+    }
+
+    if (get_ch_in_room(ch)->silence[0]) {
+      int silence_tn = get_ch_in_room(ch)->silence[1];
+      test_tn += silence_tn;
+      snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), " + %d (silence spell)", silence_tn);
+    }
+
+    // Roll the perception test.
+    int perception_result = success_test(GET_INT(tch), test_tn);
+    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "Result: %d hits.", perception_result);
+    act(rbuf, FALSE, ch, 0, 0, TO_ROLLS);
+
+    // If the result met or beat the TN, we're good.
+    return perception_result > 0;
   }
 
   // If we got here, we can see it.

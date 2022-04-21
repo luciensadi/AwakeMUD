@@ -49,6 +49,7 @@ int     convert_damage(int damage);
 int     srdice(void);
 int     success_test(int number, int target);
 int     resisted_test(int num4ch, int tar4ch, int num4vict, int tar4vict);
+int     open_test(int num_dice);
 int     stage(int successes, int wound);
 bool    access_level(struct char_data *ch, int level);
 char *  buf_mod(char *buf, size_t buf_len, const char *name, int bonus);

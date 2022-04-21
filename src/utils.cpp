@@ -170,6 +170,14 @@ int resisted_test(int num4ch, int tar4ch, int num4vict, int tar4vict)
   return (success_test(num4ch, tar4ch) - success_test(num4vict, tar4vict));
 }
 
+int open_test(int num_dice) {
+  int maximum_rolled = 0;
+  while (num_dice-- > 0)
+    maximum_rolled = MAX(maximum_rolled, srdice());
+
+  return maximum_rolled;
+}
+
 int stage(int successes, int wound)
 {
   // This is just a little bit faster than what was below.

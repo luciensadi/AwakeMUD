@@ -4749,15 +4749,15 @@ ACMD(do_who)
       if ( output_header ) {
         output_header = 0;
         if ( sort >= LVL_BUILDER )
-          strlcat(buf, "\r\n^W Immortals ^L: ^WStaff Online\r\n ^w---------------------------\r\n", sizeof(buf));
+          strlcat(buf, "\r\n^W     Staff ^L: ^wReach us on Discord!\r\n ^w---------------------------\r\n", sizeof(buf));
         else
-          strlcat(buf, "\r\n     ^W Race ^L: ^WVisible Players\r\n ^W---------------------------\r\n", sizeof(buf));
+          strlcat(buf, "\r\n^W   Players ^L: ^w(OOC Info)\r\n ^W---------------------------\r\n", sizeof(buf));
       }
 
       strlcpy(buf1, get_level_wholist_color(GET_LEVEL(tch)), sizeof(buf1));
 
       if (PRF_FLAGGED(tch, PRF_SHOWGROUPTAG) && GET_PGROUP_MEMBER_DATA(tch) && GET_PGROUP(tch)) {
-        snprintf(buf2, sizeof(buf2), "%10s :^N %s%s^N%s%s%s %s^n",
+        snprintf(buf2, sizeof(buf2), "%10s ^n:^N %s%s^N%s%s%s %s^n",
                 (GET_WHOTITLE(tch) ? GET_WHOTITLE(tch) : ""),
                 (GET_PGROUP(tch)->get_tag()),
                 (strlen(GET_PGROUP(tch)->get_tag()) ? " " : ""),
@@ -4766,7 +4766,7 @@ ACMD(do_who)
                 GET_CHAR_NAME(tch),
                 GET_TITLE(tch));
       } else {
-        snprintf(buf2, sizeof(buf2), "%10s :^N %s%s%s %s^n",
+        snprintf(buf2, sizeof(buf2), "%10s ^n:^N %s%s%s %s^n",
                 (GET_WHOTITLE(tch) ? GET_WHOTITLE(tch) : ""),
                 (GET_PRETITLE(tch) ? GET_PRETITLE(tch) : ""),
                 (GET_PRETITLE(tch) && strlen(GET_PRETITLE(tch)) ? " " : ""),
