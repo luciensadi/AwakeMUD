@@ -6812,7 +6812,7 @@ bool _tracker_is_locked_against_ch(struct obj_data *obj, struct char_data *ch) {
 
 SPECIAL(initiative_tracker)
 {
-  if (!CMD_IS("track") && !CMD_IS("roll"))
+  if (!CMD_IS("track") && !CMD_IS("tracker") && !CMD_IS("roll"))
     return FALSE;
 
   struct obj_data *obj = (struct obj_data *) me;
@@ -6834,20 +6834,20 @@ SPECIAL(initiative_tracker)
     return TRUE;
   }
 
-  if (CMD_IS("track")) {
+  if (CMD_IS("track") || CMD_IS("tracker")) {
     char name[MAX_INPUT_LENGTH];
 
     char *remainder = any_one_arg(argument, arg);
 
     if (!*arg) {
       send_to_char("Valid initiative tracker options are:\r\n", ch);
-      send_to_char(" - ^WTRACK ADD <new name> <value>^n\r\n", ch);
-      send_to_char(" - ^WTRACK DELETE <existing name>^n\r\n", ch);
-      send_to_char(" - ^WTRACK SET <existing name> <value>^n\r\n", ch);
-      send_to_char(" - ^WTRACK LIST^n\r\n", ch);
-      send_to_char(" - ^WTRACK CLEAR^n\r\n", ch);
-      send_to_char(" - ^WTRACK ADVANCE^n (to go to the next initiative pass)\r\n", ch);
-      send_to_char(" - ^WTRACK (LOCK|UNLOCK)^n\r\n", ch);
+      send_to_char(" - ^WTRACKER ADD <new name> <value>^n\r\n", ch);
+      send_to_char(" - ^WTRACKER DELETE <existing name>^n\r\n", ch);
+      send_to_char(" - ^WTRACKER SET <existing name> <value>^n\r\n", ch);
+      send_to_char(" - ^WTRACKER LIST^n\r\n", ch);
+      send_to_char(" - ^WTRACKER CLEAR^n\r\n", ch);
+      send_to_char(" - ^WTRACKER ADVANCE^n (to go to the next initiative pass)\r\n", ch);
+      send_to_char(" - ^WTRACKER (LOCK|UNLOCK)^n\r\n", ch);
       return TRUE;
     }
 
@@ -7043,12 +7043,13 @@ SPECIAL(initiative_tracker)
       }
 
       if (!obj->contains) {
-        strlcat(buf2, "The initiative list is now empty.\r\n", sizeof(buf2));
+        strlcat(buf2, "\r\nThe initiative list is now empty.\r\n", sizeof(buf2));
       } else {
-        send_to_char("\r\nCurrent initiative list is now:\r\n", ch);
+        strlcat(buf2, "\r\nCurrent initiative list is now:\r\n", sizeof(buf2));
         for (struct obj_data *temp = obj->contains; temp; temp = temp->next_content) {
-          send_to_char(ch, "%d) %s\r\n", GET_TRACKER_INIT_VALUE(temp), GET_OBJ_NAME(temp));
+          snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%d) %s\r\n", GET_TRACKER_INIT_VALUE(temp), GET_OBJ_NAME(temp));
         }
+
       }
 
       send_to_room(buf2, get_ch_in_room(ch));
@@ -7057,13 +7058,13 @@ SPECIAL(initiative_tracker)
     }
 
     send_to_char("Valid initiative tracker options are:\r\n", ch);
-    send_to_char(" - ^WTRACK ADD <new name> <value>^n\r\n", ch);
-    send_to_char(" - ^WTRACK DELETE <existing name>^n\r\n", ch);
-    send_to_char(" - ^WTRACK SET <existing name> <value>^n\r\n", ch);
-    send_to_char(" - ^WTRACK LIST^n\r\n", ch);
-    send_to_char(" - ^WTRACK CLEAR^n\r\n", ch);
-    send_to_char(" - ^WTRACK ADVANCE^n (to go to the next initiative pass)\r\n", ch);
-    send_to_char(" - ^WTRACK (LOCK|UNLOCK)^n\r\n", ch);
+    send_to_char(" - ^WTRACKER ADD <new name> <value>^n\r\n", ch);
+    send_to_char(" - ^WTRACKER DELETE <existing name>^n\r\n", ch);
+    send_to_char(" - ^WTRACKER SET <existing name> <value>^n\r\n", ch);
+    send_to_char(" - ^WTRACKER LIST^n\r\n", ch);
+    send_to_char(" - ^WTRACKER CLEAR^n\r\n", ch);
+    send_to_char(" - ^WTRACKER ADVANCE^n (to go to the next initiative pass)\r\n", ch);
+    send_to_char(" - ^WTRACKER (LOCK|UNLOCK)^n\r\n", ch);
     return TRUE;
   }
 

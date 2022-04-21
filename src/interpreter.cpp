@@ -860,6 +860,7 @@ struct command_info cmd_info[] =
     { "toggle"     , POS_DEAD    , do_toggle   , 0, 0, FALSE },
     { "tow"        , POS_SITTING , do_tow      , 0, 0, FALSE },
     { "track"      , POS_STANDING, do_track    , 0, 0, FALSE },
+    { "tracker"    , POS_RESTING , do_not_here , 0, 0, FALSE },
     { "treat"      , POS_SITTING , do_treat    , 0, 0, FALSE },
     { "trade"      , POS_DEAD    , do_trade    , 0, 0, FALSE },
     { "train"      , POS_STANDING, do_train    , 0, 0, FALSE },
