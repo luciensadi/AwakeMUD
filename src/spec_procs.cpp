@@ -7044,6 +7044,11 @@ SPECIAL(initiative_tracker)
 
       if (!obj->contains) {
         strlcat(buf2, "The initiative list is now empty.\r\n", sizeof(buf2));
+      } else {
+        send_to_char("\r\nCurrent initiative list is now:\r\n", ch);
+        for (struct obj_data *temp = obj->contains; temp; temp = temp->next_content) {
+          send_to_char(ch, "%d) %s\r\n", GET_TRACKER_INIT_VALUE(temp), GET_OBJ_NAME(temp));
+        }
       }
 
       send_to_room(buf2, get_ch_in_room(ch));
