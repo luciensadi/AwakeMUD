@@ -185,6 +185,7 @@ bool should_tch_see_chs_movement_message(struct char_data *tch, struct char_data
   if (IS_AFFECTED(ch, AFF_SNEAK)) {
     int dummy_tn = 0;
     char rbuf[1000];
+    struct room_data *in_room = get_ch_in_room(ch);
 
     // Get the skill dice to roll.
     snprintf(rbuf, sizeof(rbuf), "Sneak perception test: %s vs %s. get_skill: ", GET_CHAR_NAME(ch), GET_CHAR_NAME(ch));
@@ -193,20 +194,21 @@ bool should_tch_see_chs_movement_message(struct char_data *tch, struct char_data
     // Make an open test to determine the TN for the perception test to notice you.
     strlcat(rbuf, ". get_vision_penalty: ", sizeof(rbuf));
     int open_test_result = open_test(skill_dice);
-    int vision_penalty = get_vision_penalty(tch, get_ch_in_room(tch), rbuf, sizeof(rbuf));
+    int vision_penalty = get_vision_penalty(tch, in_room, rbuf, sizeof(rbuf));
     snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), ". TN is %d (OT) + %d (vis)", open_test_result, vision_penalty);
 
     int test_tn = open_test_result + vision_penalty;
 
-    if (affected_by_spell(ch, SPELL_STEALTH)) {
-      test_tn += 4;
-      strlcat(rbuf, " + 4 (stealth spell)", sizeof(rbuf));
-    }
+    // House rule: Stealth/silence spells add a TN penalty to the spotter, up to 4.
+    {
+      int stealth_spell_tn = get_spell_affected_successes(ch, SPELL_STEALTH);
+      int silence_tn = in_room->silence[0] ? in_room->silence[1] : 0;
+      int magic_tn_modifier = MIN(stealth_spell_tn + silence_tn, 4);
 
-    if (get_ch_in_room(ch)->silence[0]) {
-      int silence_tn = get_ch_in_room(ch)->silence[1];
-      test_tn += silence_tn;
-      snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), " + %d (silence spell)", silence_tn);
+      if (magic_tn_modifier > 0) {
+        test_tn += magic_tn_modifier;
+        snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), " + %d (magic)", magic_tn_modifier);
+      }
     }
 
     // Roll the perception test.
