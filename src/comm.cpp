@@ -3410,8 +3410,10 @@ void increase_congregation_bonus_pools() {
 
     // You can't be maxed out.
     if (GET_CONGREGATION_BONUS(i) == MAX_CONGREGATION_BONUS) {
+      /*
       snprintf(buf, sizeof(buf), "Socialization: Skipping %s's opportunity to earn social points-- already maximized.", GET_CHAR_NAME(i));
       act(buf, FALSE, i, 0, 0, TO_ROLLS);
+      */
       continue;
     }
 
@@ -3443,15 +3445,19 @@ void increase_congregation_bonus_pools() {
         continue;
       */
 
+      /*
       snprintf(buf, sizeof(buf), "Socialization: Counting %s as an occupant.", GET_CHAR_NAME(tempch));
       act(buf, FALSE, i, 0, 0, TO_ROLLS);
+      */
       occupants++;
     }
 
     // Skip people who haven't emoted in a while, but only if they're not alone there.
     if (occupants > 1 && i->char_specials.last_social_action > LAST_SOCIAL_ACTION_REQUIREMENT_FOR_CONGREGATION_BONUS) {
+      /*
       snprintf(buf, sizeof(buf), "Socialization: Skipping %s's opportunity to earn social points-- they've not emoted to their partner.", GET_CHAR_NAME(i));
       act(buf, FALSE, i, 0, 0, TO_ROLLS);
+      */
       continue;
     }
 
@@ -3463,12 +3469,14 @@ void increase_congregation_bonus_pools() {
     else if (occupants >= 3)
       point_gain = 2;
 
+    /*
     snprintf(buf, sizeof(buf), "Socialization: %s gets %d (valid PC occupants: %d of %d).",
              GET_CHAR_NAME(i),
              MIN(GET_CONGREGATION_BONUS(i) + point_gain, MAX_CONGREGATION_BONUS) - GET_CONGREGATION_BONUS(i),
              occupants,
              total_occupants);
     act(buf, FALSE, i, 0, 0, TO_ROLLS);
+    */
     GET_CONGREGATION_BONUS(i) = MIN(GET_CONGREGATION_BONUS(i) + point_gain, MAX_CONGREGATION_BONUS);
   }
 }
