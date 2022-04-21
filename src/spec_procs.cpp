@@ -6794,6 +6794,22 @@ void _add_to_initiative_tracker(struct obj_data *tracker, const char *name, int 
   head->next_content = initiative;
 }
 
+bool _tracker_is_locked_against_ch(struct obj_data *obj, struct char_data *ch) {
+  // Clear the existing lock if the locker is no longer here.
+  if (GET_TRACKER_LOCK_IDNUM(obj)) {
+    bool lock_is_valid = FALSE;
+    for (struct char_data *vict = get_ch_in_room(ch)->people; vict && !lock_is_valid; vict = vict->next_in_room) {
+      lock_is_valid = (!IS_NPC(vict) && GET_IDNUM(vict) == GET_TRACKER_LOCK_IDNUM(obj));
+    }
+    if (!lock_is_valid) {
+      GET_TRACKER_LOCK_IDNUM(obj) = 0;
+      send_to_char("The tracker unlocks due to the locker no longer being present.\r\n", ch);
+    }
+  }
+
+  return GET_TRACKER_LOCK_IDNUM(obj) && GET_TRACKER_LOCK_IDNUM(obj) != GET_IDNUM(ch);
+}
+
 SPECIAL(initiative_tracker)
 {
   if (!CMD_IS("track") && !CMD_IS("roll"))
@@ -6836,15 +6852,8 @@ SPECIAL(initiative_tracker)
     }
 
     if (is_abbrev(arg, "lock") || is_abbrev(arg, "unlock")) {
-      // Clear the existing lock if the locker is no longer here.
-      if (GET_TRACKER_LOCK_IDNUM(obj)) {
-        bool lock_is_valid = FALSE;
-        for (struct char_data *vict = get_ch_in_room(ch)->people; vict && !lock_is_valid; vict = vict->next_in_room) {
-          lock_is_valid = (!IS_NPC(vict) && GET_IDNUM(vict) == GET_TRACKER_LOCK_IDNUM(obj));
-        }
-        if (!lock_is_valid)
-          GET_TRACKER_LOCK_IDNUM(obj) = 0;
-      }
+      // Run this just to unlock it if needed.
+      _tracker_is_locked_against_ch(obj, ch);
 
       if (is_abbrev(arg, "lock")) {
         // Attempt to override a tracker locked by someone else.
@@ -6903,7 +6912,7 @@ SPECIAL(initiative_tracker)
     struct obj_data *entry_in_tracker = _find_name_in_tracker(obj, name, TRUE);
 
     if (is_abbrev(arg, "add")) {
-      if (GET_TRACKER_LOCK_IDNUM(obj) && GET_TRACKER_LOCK_IDNUM(obj) != GET_IDNUM(ch)) {
+      if (_tracker_is_locked_against_ch(obj, ch)) {
         send_to_char("The tracker has been locked-- you can't modify it.\r\n", ch);
         return TRUE;
       }
@@ -6927,7 +6936,7 @@ SPECIAL(initiative_tracker)
     }
 
     if (is_abbrev(arg, "delete")) {
-      if (GET_TRACKER_LOCK_IDNUM(obj) && GET_TRACKER_LOCK_IDNUM(obj) != GET_IDNUM(ch)) {
+      if (_tracker_is_locked_against_ch(obj, ch)) {
         send_to_char("The tracker has been locked-- you can't modify it.\r\n", ch);
         return TRUE;
       }
@@ -6945,7 +6954,7 @@ SPECIAL(initiative_tracker)
     }
 
     if (is_abbrev(arg, "set")) {
-      if (GET_TRACKER_LOCK_IDNUM(obj) && GET_TRACKER_LOCK_IDNUM(obj) != GET_IDNUM(ch)) {
+      if (_tracker_is_locked_against_ch(obj, ch)) {
         send_to_char("The tracker has been locked-- you can't modify it.\r\n", ch);
         return TRUE;
       }
@@ -6981,7 +6990,7 @@ SPECIAL(initiative_tracker)
     }
 
     if (is_abbrev(arg, "clear")) {
-      if (GET_TRACKER_LOCK_IDNUM(obj) && GET_TRACKER_LOCK_IDNUM(obj) != GET_IDNUM(ch)) {
+      if (_tracker_is_locked_against_ch(obj, ch)) {
         send_to_char("The tracker has been locked-- you can't modify it.\r\n", ch);
         return TRUE;
       }
@@ -7011,7 +7020,7 @@ SPECIAL(initiative_tracker)
     }
 
     if (is_abbrev(arg, "advance")) {
-      if (GET_TRACKER_LOCK_IDNUM(obj) && GET_TRACKER_LOCK_IDNUM(obj) != GET_IDNUM(ch)) {
+      if (_tracker_is_locked_against_ch(obj, ch)) {
         send_to_char("The tracker has been locked-- you can't modify it.\r\n", ch);
         return TRUE;
       }
@@ -7055,6 +7064,8 @@ SPECIAL(initiative_tracker)
 
   return FALSE;
 }
+#undef GET_TRACKER_INIT_VALUE
+#undef GET_TRACKER_LOCK_IDNUM
 
 /*
 SPECIAL(business_card_printer) {
