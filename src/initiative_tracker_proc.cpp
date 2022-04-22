@@ -47,7 +47,6 @@ void _add_to_initiative_tracker(struct obj_data *tracker, const char *name, int 
   GET_TRACKER_ENTRY_PLR_IDNUM(initiative) = idnum;
   initiative->restring = str_dup(name);
   initiative->in_obj = tracker;
-  GET_OBJ_EXTRA(initiative).SetBit(ITEM_EXTRA_NORENT);
 
   // Seek for where we can add it.
   if (!(head = tracker->contains) || GET_TRACKER_ENTRY_INIT_VALUE(head) < GET_TRACKER_ENTRY_INIT_VALUE(initiative)) {
