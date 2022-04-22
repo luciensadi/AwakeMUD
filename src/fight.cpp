@@ -4800,7 +4800,7 @@ void roll_individual_initiative(struct char_data *ch)
     if (AFF_FLAGGED(ch, AFF_PILOT))
       GET_INIT_ROLL(ch) = dice(1, 6) + GET_REA(ch);
     else
-      GET_INIT_ROLL(ch) = dice(1 + GET_INIT_DICE(ch), 6) + GET_REA(ch);
+      GET_INIT_ROLL(ch) = roll_default_initiative(ch);
     GET_INIT_ROLL(ch) -= damage_modifier(ch, buf, sizeof(buf));
     if (AFF_FLAGGED(ch, AFF_ACTION)) {
       GET_INIT_ROLL(ch) -= 10;

@@ -4485,6 +4485,10 @@ int calculate_vehicle_weight(struct veh_data *veh) {
   return load;
 }
 
+int roll_default_initiative(struct char_data *ch) {
+  return dice(1 + GET_INIT_DICE(ch), 6) + GET_REA(ch);
+}
+
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.
 // Great for swapping out old Classic weapons, cyberware, etc for the new guaranteed-canon versions.
 #define PAIR(classic, current) case (classic): return (current);
