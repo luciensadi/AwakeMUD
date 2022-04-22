@@ -6131,8 +6131,8 @@ ACMD(do_mort_show)
   }
 }
 
-ACMD(do_tke){
-  send_to_char(ch, "Your current TKE is %d.\r\n", GET_TKE(ch));
+ACMD(do_karma){
+  send_to_char(ch, "Your current TKE is %d, and you have %d reputation and %d notoriety.\r\n", GET_TKE(ch), GET_REP(ch), GET_NOT(ch));
 }
 
 #define LEADERBOARD_SYNTAX_STRING "Syntax: leaderboard <option>, where option is one of: tke, reputation, notoriety, nuyen, syspoints, blocks\r\n"

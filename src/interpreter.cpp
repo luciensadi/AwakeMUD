@@ -342,7 +342,7 @@ ACMD_DECLARE(do_think);
 ACMD_DECLARE(do_throw);
 ACMD_DECLARE(do_time);
 ACMD_DECLARE(do_title);
-ACMD_DECLARE(do_tke);
+ACMD_DECLARE(do_karma);
 ACMD_DECLARE(do_toggle);
 ACMD_DECLARE(do_tow);
 ACMD_DECLARE(do_track);
@@ -856,7 +856,7 @@ struct command_info cmd_info[] =
     { "thaw"       , POS_DEAD    , do_wizutil  , LVL_FREEZE, SCMD_THAW, FALSE },
     { "title"      , POS_DEAD    , do_title    , 0, 0, TRUE },
     { "time"       , POS_DEAD    , do_time     , 0, SCMD_NORMAL, TRUE },
-    { "tke"        , POS_DEAD    , do_tke      , 0, 0, TRUE },
+    { "tke"        , POS_DEAD    , do_karma    , 0, 0, TRUE },
     { "toggle"     , POS_DEAD    , do_toggle   , 0, 0, FALSE },
     { "tow"        , POS_SITTING , do_tow      , 0, 0, FALSE },
     { "track"      , POS_STANDING, do_track    , 0, 0, FALSE },
@@ -3235,6 +3235,8 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   // Job interaction commands.
   COMMAND_ALIAS("endjob", "endrun");
   COMMAND_ALIAS("resign", "endrun");
+  COMMAND_ALIAS("work",   "recap");
+  COMMAND_ALIAS("recao",  "recap");
 
   // one of the most common commands, although people eventually learn to just use 'l'
   COMMAND_ALIAS("olok", "look");
@@ -3289,6 +3291,12 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("sstat", "vstat");
 
   COMMAND_ALIAS("health", "hp");
+  COMMAND_ALIAS("karma", "tke");
+
+  COMMAND_ALIAS("stealth", "sneak");
+  COMMAND_ALIAS("board", "enter");
+  COMMAND_ALIAS("gps", "gridguide");
+  COMMAND_ALIAS("detach", "unattach");
 
   COMMAND_ALIAS("powers", "abilities");
 
