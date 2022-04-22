@@ -1278,7 +1278,7 @@ SPECIAL(adept_trainer)
   struct char_data *trainer = (struct char_data *) me;
   int ind, power, i;
 
-  if (!CMD_IS("train"))
+  if (!CMD_IS("train") && !CMD_IS("untrain"))
     return FALSE;
 
   if (GET_POS(ch) < POS_STANDING) {
@@ -1301,70 +1301,10 @@ SPECIAL(adept_trainer)
     return TRUE;
   }
 
-  bool paid_for_cc = PLR_FLAGGED(ch, PLR_PAID_FOR_CLOSECOMBAT);
-  bool paid_for_kipup = PLR_FLAGGED(ch, PLR_PAID_FOR_KIPUP);
-
-  skip_spaces(&argument);
-
-  if (GET_TRADITION(ch) != TRAD_ADEPT) {
-    if (paid_for_cc && paid_for_kipup) {
-      snprintf(arg, sizeof(arg), "%s You already know all I can teach you.", GET_CHAR_NAME(ch));
-      do_say(trainer, arg, 0, SCMD_SAYTO);
-      return TRUE;
-    }
-
-    if (!*argument) {
-      if (paid_for_cc) {
-        snprintf(arg, sizeof(arg), "%s The only other thing I can teach you is the art of Kipping Up-- rising quickly when knocked down.", GET_CHAR_NAME(ch));
-      } else if (paid_for_kipup) {
-        snprintf(arg, sizeof(arg), "%s The only other thing I can teach you is the art of Close Combat.", GET_CHAR_NAME(ch));
-      } else {
-        snprintf(arg, sizeof(arg), "%s I can teach you about Kipping Up (rising quickly to your feet) and the art of Close Combat.", GET_CHAR_NAME(ch));
-      }
-      do_say(trainer, arg, 0, SCMD_SAYTO);
-    } else {
-      if (is_abbrev(argument, "kipping up") || is_abbrev(argument, "kipup") || is_abbrev(argument, "the art of kipping up")) {
-        if (paid_for_kipup) {
-          send_to_char("You already know the art of kipping up.\r\n", ch);
-          return TRUE;
-        }
-
-        if (GET_KARMA(ch) >= KARMA_COST_FOR_KIPUP) {
-          send_to_char("You drill with your teacher on how to rise quickly after a fall.\r\n", ch);
-          send_to_char("(OOC: You'll now automatically attempt to kip-up after falling!)\r\n", ch);
-
-          GET_KARMA(ch) -= KARMA_COST_FOR_KIPUP;
-          PLR_FLAGS(ch).SetBit(PLR_PAID_FOR_KIPUP);
-          PRF_FLAGS(ch).SetBit(PRF_AUTOKIPUP);
-        } else {
-          send_to_char(ch, "You need %0.2f karma to learn about kipping up.\r\n", (float) KARMA_COST_FOR_CLOSECOMBAT / 100);
-        }
-      } else if (is_abbrev(argument, "close combat") || is_abbrev(argument, "art of close combat")) {
-        if (paid_for_cc) {
-          send_to_char("You already know the art of close combat.\r\n", ch);
-          return TRUE;
-        }
-
-        if (GET_KARMA(ch) >= KARMA_COST_FOR_CLOSECOMBAT) {
-          send_to_char("You drill with your teacher on closing the distance and entering your opponent's range, and you come away feeling like you're better-equipped to fight the hulking giants of the world.\r\n", ch);
-          send_to_char("(OOC: You've unlocked the ^WCLOSECOMBAT^n command!)\r\n", ch);
-
-          GET_KARMA(ch) -= KARMA_COST_FOR_CLOSECOMBAT;
-          PLR_FLAGS(ch).SetBit(PLR_PAID_FOR_CLOSECOMBAT);
-        } else {
-          send_to_char(ch, "You need %0.2f karma to learn close combat.\r\n", (float) KARMA_COST_FOR_CLOSECOMBAT / 100);
-        }
-      } else {
-        send_to_char(ch, "That's not a valid choice.\r\n");
-      }
-    }
-    return TRUE;
-  }
-
+  // Find the index for this trainer.
   for (ind = 0; adepts[ind].vnum != 0; ind++)
     if (adepts[ind].vnum == GET_MOB_VNUM(trainer))
       break;
-
   if (adepts[ind].vnum != GET_MOB_VNUM(trainer))
     return FALSE;
 
@@ -1377,15 +1317,6 @@ SPECIAL(adept_trainer)
     return TRUE;
   }
 
-  /*
-  if (!adepts[ind].is_newbie && PLR_FLAGGED(ch, PLR_NEWBIE)) {
-    snprintf(arg, sizeof(arg), "%s You're not quite ready yet!", GET_CHAR_NAME(ch));
-    do_say(trainer, arg, 0, SCMD_SAYTO);
-    send_to_char(ch, "(^mOOC^n: You can't train until you've earned at least %d karma.)\r\n", NEWBIE_KARMA_THRESHOLD + 1);
-    return TRUE;
-  }
-  */
-
   // Exploit prevention: You're not allowed to train before allocating attributes to avoid discounted training of improved-attribute powers.
   if (GET_ATT_POINTS(ch) > 0) {
     snprintf(arg, sizeof(arg), "%s You must go train your attributes fully before you see me.", GET_CHAR_NAME(ch));
@@ -1393,116 +1324,226 @@ SPECIAL(adept_trainer)
     return TRUE;
   }
 
-  // List the powers available to train if they don't supply an argument.
-  if (!*argument) {
-    int num = 0;
-    for (i = 1; i < ADEPT_NUMPOWER; i++)
-      if (adepts[ind].skills[i])
-        num++;
-    snprintf(buf, sizeof(buf), "You can learn the following abilit%s:\r\n", num == 1 ? "y" : "ies");
-    for (i = 1; i < ADEPT_NUMPOWER; i++)
-      if (adepts[ind].skills[i] && GET_POWER_TOTAL(ch, i) < max_ability(i) && GET_POWER_TOTAL(ch, i) < adepts[ind].skills[i])
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%30s (%0.2f points)\r\n", adept_powers[i],
-                ((float) train_ability_cost(ch, i, GET_POWER_TOTAL(ch, i) + 1)/ 100));
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nYou have %0.2f power point%s to "
-            "distribute to your abilities.\r\n", ((float)GET_PP(ch) / 100),
-            ((GET_PP(ch) != 100) ? "s" : ""));
-    send_to_char(buf, ch);
-
-    if (!paid_for_cc && !paid_for_kipup) {
-      send_to_char(ch, "You can also learn Close Combat (%0.2f karma) and Kipping Up (%0.2f karma).\r\n",
-                   (float) KARMA_COST_FOR_CLOSECOMBAT / 100,
-                   (float) KARMA_COST_FOR_KIPUP / 100
-                   );
-    } else if (!paid_for_cc) {
-      send_to_char(ch, "You can also learn Close Combat for %0.2f karma.\r\n",
-                   (float) KARMA_COST_FOR_CLOSECOMBAT / 100);
-    } else if (!paid_for_kipup) {
-      send_to_char(ch, "You can also learn Kipping Up for %0.2f karma.\r\n",
-                   (float) KARMA_COST_FOR_KIPUP / 100);
+  if (CMD_IS("untrain")) {
+    if (GET_TRADITION(ch) != TRAD_ADEPT) {
+      send_to_char(ch, "There's nothing you can untrain here.\r\n");
+      return TRUE;
     }
-    return TRUE;
+
+    if (!*argument) {
+      send_to_char(ch, "What ability would you like to untrain?\r\n");
+      return TRUE;
+    }
+
+    skip_spaces(&argument);
+
+    // Search for their selected power.
+    for (power = 1; power < ADEPT_NUMPOWER; power++) {
+      if (is_abbrev(argument, adept_powers[power])) {
+        break;
+      }
+    }
+
+    if (power == ADEPT_NUMPOWER) {
+      send_to_char(ch, "That's not a valid power. Which power do you wish to untrain?\r\n");
+      return TRUE;
+    }
+
+    if (GET_POWER_TOTAL(ch, power) <= 0) {
+      send_to_char(ch, "You don't know anything about %s.\r\n", adept_powers[power]);
+      return TRUE;
+    }
+
+    // Calculate the refund cost.
+    int cost = train_ability_cost(ch, power, GET_POWER_TOTAL(ch, power));
+
+    // Refund their PP and decrease their power level.
+    GET_PP(ch) += cost;
+    SET_POWER_TOTAL(ch, power, GET_POWER_TOTAL(ch, power) - 1);
+    send_to_char(ch, "You untrain %s.\r\n", adept_powers[power]);
   }
 
-  // Search for their selected power.
-  for (power = 1; power < ADEPT_NUMPOWER; power++)
-    if (is_abbrev(argument, adept_powers[power]) && adepts[ind].skills[power])
-      break;
+  else if (CMD_IS("train")) {
+    bool paid_for_cc = PLR_FLAGGED(ch, PLR_PAID_FOR_CLOSECOMBAT);
+    bool paid_for_kipup = PLR_FLAGGED(ch, PLR_PAID_FOR_KIPUP);
 
-  // If they specified an invalid power, break out.
-  if (power == ADEPT_NUMPOWER) {
-    if (str_str(argument, "close") || str_str(argument, "combat") || str_str(argument, "closecombat")) {
-      if (paid_for_cc) {
-        snprintf(arg, sizeof(arg), "%s You already know all I can teach you about close combat.", GET_CHAR_NAME(ch));
+    skip_spaces(&argument);
+
+    if (GET_TRADITION(ch) != TRAD_ADEPT) {
+      if (paid_for_cc && paid_for_kipup) {
+        snprintf(arg, sizeof(arg), "%s You already know all I can teach you.", GET_CHAR_NAME(ch));
+        do_say(trainer, arg, 0, SCMD_SAYTO);
+        return TRUE;
+      }
+
+      if (!*argument) {
+        if (paid_for_cc) {
+          snprintf(arg, sizeof(arg), "%s The only other thing I can teach you is the art of Kipping Up-- rising quickly when knocked down.", GET_CHAR_NAME(ch));
+        } else if (paid_for_kipup) {
+          snprintf(arg, sizeof(arg), "%s The only other thing I can teach you is the art of Close Combat.", GET_CHAR_NAME(ch));
+        } else {
+          snprintf(arg, sizeof(arg), "%s I can teach you about Kipping Up (rising quickly to your feet) and the art of Close Combat.", GET_CHAR_NAME(ch));
+        }
         do_say(trainer, arg, 0, SCMD_SAYTO);
       } else {
-        if (GET_KARMA(ch) >= KARMA_COST_FOR_CLOSECOMBAT) {
-          send_to_char("You drill with your teacher on closing the distance and entering your opponent's range, and you come away feeling like you're better-equipped to fight the hulking giants of the world.\r\n", ch);
-          send_to_char("(OOC: You've unlocked the ^WCLOSECOMBAT^n command!)\r\n", ch);
+        if (is_abbrev(argument, "kipping up") || is_abbrev(argument, "kipup") || is_abbrev(argument, "the art of kipping up")) {
+          if (paid_for_kipup) {
+            send_to_char("You already know the art of kipping up.\r\n", ch);
+            return TRUE;
+          }
 
-          GET_KARMA(ch) -= KARMA_COST_FOR_CLOSECOMBAT;
-          PLR_FLAGS(ch).SetBit(PLR_PAID_FOR_CLOSECOMBAT);
+          if (GET_KARMA(ch) >= KARMA_COST_FOR_KIPUP) {
+            send_to_char("You drill with your teacher on how to rise quickly after a fall.\r\n", ch);
+            send_to_char("(OOC: You'll now automatically attempt to kip-up after falling!)\r\n", ch);
+
+            GET_KARMA(ch) -= KARMA_COST_FOR_KIPUP;
+            PLR_FLAGS(ch).SetBit(PLR_PAID_FOR_KIPUP);
+            PRF_FLAGS(ch).SetBit(PRF_AUTOKIPUP);
+          } else {
+            send_to_char(ch, "You need %0.2f karma to learn about kipping up.\r\n", (float) KARMA_COST_FOR_CLOSECOMBAT / 100);
+          }
+        } else if (is_abbrev(argument, "close combat") || is_abbrev(argument, "art of close combat")) {
+          if (paid_for_cc) {
+            send_to_char("You already know the art of close combat.\r\n", ch);
+            return TRUE;
+          }
+
+          if (GET_KARMA(ch) >= KARMA_COST_FOR_CLOSECOMBAT) {
+            send_to_char("You drill with your teacher on closing the distance and entering your opponent's range, and you come away feeling like you're better-equipped to fight the hulking giants of the world.\r\n", ch);
+            send_to_char("(OOC: You've unlocked the ^WCLOSECOMBAT^n command!)\r\n", ch);
+
+            GET_KARMA(ch) -= KARMA_COST_FOR_CLOSECOMBAT;
+            PLR_FLAGS(ch).SetBit(PLR_PAID_FOR_CLOSECOMBAT);
+          } else {
+            send_to_char(ch, "You need %0.2f karma to learn close combat.\r\n", (float) KARMA_COST_FOR_CLOSECOMBAT / 100);
+          }
         } else {
-          send_to_char(ch, "You need %0.2f karma to learn close combat.\r\n", (float) KARMA_COST_FOR_CLOSECOMBAT / 100);
+          send_to_char(ch, "That's not a valid choice.\r\n");
         }
       }
       return TRUE;
     }
 
-    if (is_abbrev(argument, "kipping up") || is_abbrev(argument, "the art of kipping up") || is_abbrev(argument, "kipup")) {
-      if (paid_for_kipup) {
-        snprintf(arg, sizeof(arg), "%s You already know all I can teach you about kipping up.", GET_CHAR_NAME(ch));
-        do_say(trainer, arg, 0, SCMD_SAYTO);
-      } else {
-        if (GET_KARMA(ch) >= KARMA_COST_FOR_KIPUP) {
-          send_to_char("You drill with your teacher on how to rise quickly after a fall.\r\n", ch);
-          send_to_char("(OOC: You'll now automatically attempt to kip-up after being knocked down!)\r\n", ch);
+    /*
+    if (!adepts[ind].is_newbie && PLR_FLAGGED(ch, PLR_NEWBIE)) {
+      snprintf(arg, sizeof(arg), "%s You're not quite ready yet!", GET_CHAR_NAME(ch));
+      do_say(trainer, arg, 0, SCMD_SAYTO);
+      send_to_char(ch, "(^mOOC^n: You can't train until you've earned at least %d karma.)\r\n", NEWBIE_KARMA_THRESHOLD + 1);
+      return TRUE;
+    }
+    */
 
-          GET_KARMA(ch) -= KARMA_COST_FOR_KIPUP;
-          PLR_FLAGS(ch).SetBit(PLR_PAID_FOR_KIPUP);
-        } else {
-          send_to_char(ch, "You need %0.2f karma to learn how to kip-up.\r\n", (float) KARMA_COST_FOR_CLOSECOMBAT / 100);
-        }
+    // List the powers available to train if they don't supply an argument.
+    if (!*argument) {
+      int num = 0;
+      for (i = 1; i < ADEPT_NUMPOWER; i++)
+        if (adepts[ind].skills[i])
+          num++;
+      snprintf(buf, sizeof(buf), "You can learn the following abilit%s:\r\n", num == 1 ? "y" : "ies");
+      for (i = 1; i < ADEPT_NUMPOWER; i++)
+        if (adepts[ind].skills[i] && GET_POWER_TOTAL(ch, i) < max_ability(i) && GET_POWER_TOTAL(ch, i) < adepts[ind].skills[i])
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%30s (%0.2f points)\r\n", adept_powers[i],
+                  ((float) train_ability_cost(ch, i, GET_POWER_TOTAL(ch, i) + 1)/ 100));
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nYou have %0.2f power point%s to "
+              "distribute to your abilities.\r\n", ((float)GET_PP(ch) / 100),
+              ((GET_PP(ch) != 100) ? "s" : ""));
+      send_to_char(buf, ch);
+
+      if (!paid_for_cc && !paid_for_kipup) {
+        send_to_char(ch, "You can also learn Close Combat (%0.2f karma) and Kipping Up (%0.2f karma).\r\n",
+                     (float) KARMA_COST_FOR_CLOSECOMBAT / 100,
+                     (float) KARMA_COST_FOR_KIPUP / 100
+                     );
+      } else if (!paid_for_cc) {
+        send_to_char(ch, "You can also learn Close Combat for %0.2f karma.\r\n",
+                     (float) KARMA_COST_FOR_CLOSECOMBAT / 100);
+      } else if (!paid_for_kipup) {
+        send_to_char(ch, "You can also learn Kipping Up for %0.2f karma.\r\n",
+                     (float) KARMA_COST_FOR_KIPUP / 100);
       }
       return TRUE;
     }
 
-    send_to_char(ch, "Which power do you wish to train?\r\n");
-    return TRUE;
+    // Search for their selected power.
+    for (power = 1; power < ADEPT_NUMPOWER; power++)
+      if (is_abbrev(argument, adept_powers[power]) && adepts[ind].skills[power])
+        break;
+
+    // If they specified an invalid power, break out.
+    if (power == ADEPT_NUMPOWER) {
+      if (str_str(argument, "close") || str_str(argument, "combat") || str_str(argument, "closecombat")) {
+        if (paid_for_cc) {
+          snprintf(arg, sizeof(arg), "%s You already know all I can teach you about close combat.", GET_CHAR_NAME(ch));
+          do_say(trainer, arg, 0, SCMD_SAYTO);
+        } else {
+          if (GET_KARMA(ch) >= KARMA_COST_FOR_CLOSECOMBAT) {
+            send_to_char("You drill with your teacher on closing the distance and entering your opponent's range, and you come away feeling like you're better-equipped to fight the hulking giants of the world.\r\n", ch);
+            send_to_char("(OOC: You've unlocked the ^WCLOSECOMBAT^n command!)\r\n", ch);
+
+            GET_KARMA(ch) -= KARMA_COST_FOR_CLOSECOMBAT;
+            PLR_FLAGS(ch).SetBit(PLR_PAID_FOR_CLOSECOMBAT);
+          } else {
+            send_to_char(ch, "You need %0.2f karma to learn close combat.\r\n", (float) KARMA_COST_FOR_CLOSECOMBAT / 100);
+          }
+        }
+        return TRUE;
+      }
+
+      if (is_abbrev(argument, "kipping up") || is_abbrev(argument, "the art of kipping up") || is_abbrev(argument, "kipup")) {
+        if (paid_for_kipup) {
+          snprintf(arg, sizeof(arg), "%s You already know all I can teach you about kipping up.", GET_CHAR_NAME(ch));
+          do_say(trainer, arg, 0, SCMD_SAYTO);
+        } else {
+          if (GET_KARMA(ch) >= KARMA_COST_FOR_KIPUP) {
+            send_to_char("You drill with your teacher on how to rise quickly after a fall.\r\n", ch);
+            send_to_char("(OOC: You'll now automatically attempt to kip-up after being knocked down!)\r\n", ch);
+
+            GET_KARMA(ch) -= KARMA_COST_FOR_KIPUP;
+            PLR_FLAGS(ch).SetBit(PLR_PAID_FOR_KIPUP);
+          } else {
+            send_to_char(ch, "You need %0.2f karma to learn how to kip-up.\r\n", (float) KARMA_COST_FOR_CLOSECOMBAT / 100);
+          }
+        }
+        return TRUE;
+      }
+
+      send_to_char(ch, "Which power do you wish to train?\r\n");
+      return TRUE;
+    }
+
+    // Trainer power limits.
+    if (GET_POWER_TOTAL(ch, power) >= adepts[ind].skills[power] ||
+        GET_POWER_TOTAL(ch, power) >= max_ability(power)) {
+      send_to_char("You have advanced beyond the teachings of your trainer.\r\n", ch);
+      return 1;
+    }
+
+    // Character power limits.
+    if (GET_POWER_TOTAL(ch, power) >= GET_MAG(ch) / 100) {
+      send_to_char(ch, "Your magic isn't strong enough to allow you to advance further in that discipline.\r\n");
+      return TRUE;
+    }
+
+    // Check to see if they can afford the cost of training the selected power.
+    int cost = train_ability_cost(ch, power, GET_POWER_TOTAL(ch, power) + 1);
+    if (GET_PP(ch) < cost) {
+      send_to_char("You don't have enough power points to raise that ability.\r\n", ch);
+      return TRUE;
+    }
+
+    // Subtract their PP and increase their power level.
+    GET_PP(ch) -= cost;
+    SET_POWER_TOTAL(ch, power, GET_POWER_TOTAL(ch, power) + 1);
+    send_to_char("After hours of focus and practice, you feel your ability sharpen.\r\n", ch);
+
+    // Post-increase messaging to let them know they've maxed out.
+    if (GET_POWER_TOTAL(ch, power) >= GET_MAG(ch) / 100)
+      send_to_char(ch, "You feel you've reached the limits of your magical ability in %s.\r\n", adept_powers[power]);
+
+    // If they haven't maxed out but their teacher has, let them know that instead.
+    else if (GET_POWER_TOTAL(ch, power) >= max_ability(power) || GET_POWER_TOTAL(ch, power) >= adepts[ind].skills[power])
+      send_to_char(ch, "You have learned all your teacher knows about %s.\r\n", adept_powers[power]);
   }
-
-  // Trainer power limits.
-  if (GET_POWER_TOTAL(ch, power) >= adepts[ind].skills[power] ||
-      GET_POWER_TOTAL(ch, power) >= max_ability(power)) {
-    send_to_char("You have advanced beyond the teachings of your trainer.\r\n", ch);
-    return 1;
-  }
-
-  // Character power limits.
-  if (GET_POWER_TOTAL(ch, power) >= GET_MAG(ch) / 100) {
-    send_to_char(ch, "Your magic isn't strong enough to allow you to advance further in that discipline.\r\n");
-    return TRUE;
-  }
-
-  // Check to see if they can afford the cost of training the selected power.
-  int cost = train_ability_cost(ch, power, GET_POWER_TOTAL(ch, power) + 1);
-  if (GET_PP(ch) < cost) {
-    send_to_char("You don't have enough power points to raise that ability.\r\n", ch);
-    return TRUE;
-  }
-
-  // Subtract their PP and increase their power level.
-  GET_PP(ch) -= cost;
-  SET_POWER_TOTAL(ch, power, GET_POWER_TOTAL(ch, power) + 1);
-  send_to_char("After hours of focus and practice, you feel your ability sharpen.\r\n", ch);
-
-  // Post-increase messaging to let them know they've maxed out.
-  if (GET_POWER_TOTAL(ch, power) >= GET_MAG(ch) / 100)
-    send_to_char(ch, "You feel you've reached the limits of your magical ability in %s.\r\n", adept_powers[power]);
-
-  // If they haven't maxed out but their teacher has, let them know that instead.
-  else if (GET_POWER_TOTAL(ch, power) >= max_ability(power) || GET_POWER_TOTAL(ch, power) >= adepts[ind].skills[power])
-    send_to_char(ch, "You have learned all your teacher knows about %s.\r\n", adept_powers[power]);
 
   // Update character and end routine.
   affect_total(ch);
