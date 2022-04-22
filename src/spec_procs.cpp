@@ -6827,7 +6827,11 @@ SPECIAL(initiative_tracker)
     for (struct char_data *vict = get_ch_in_room(ch)->people; vict; vict = vict->next_in_room) {
       int new_init_value = dice(1 + GET_INIT_DICE(vict), 6) + GET_REA(vict);
       _add_to_initiative_tracker(obj, GET_CHAR_NAME(vict), new_init_value);
-      snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " - Added %s to the initiative track with a roll of %d.\r\n", GET_CHAR_NAME(vict), new_init_value);
+    }
+
+    strlcat(buf2, "\r\nThe new initiative list is:\r\n", sizeof(buf2));
+    for (struct obj_data *temp = obj->contains; temp; temp = temp->next_content) {
+      snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%d) %s\r\n", GET_TRACKER_INIT_VALUE(temp), GET_OBJ_NAME(temp));
     }
 
     send_to_room(buf2, get_ch_in_room(ch));
@@ -6917,6 +6921,10 @@ SPECIAL(initiative_tracker)
         return TRUE;
       }
 
+      if (!str_cmp(name, "self")) {
+        strlcpy(name, GET_CHAR_NAME(ch), sizeof(name));
+      }
+
       if (entry_in_tracker) {
         send_to_char(ch, "%s is already in the tracker. Use ^WTRACK SET %s <number>^n to alter their values.\r\n", name);
         return TRUE;
@@ -6924,8 +6932,24 @@ SPECIAL(initiative_tracker)
 
       int new_init_value;
       if (!*remainder || (new_init_value = atoi(remainder)) <= 0) {
-        send_to_char(ch, "You must specify a value 1 or higher for %s's initiative.\r\n", name);
-        return TRUE;
+        struct char_data *vict;
+        for (vict = get_ch_in_room(ch)->people; vict; vict = vict->next_in_room) {
+          if (!IS_NPC(vict) && (is_abbrev(name, GET_CHAR_NAME(vict)))) {
+            for (struct obj_data *trk = obj->contains; trk; trk = trk->next_content) {
+              if (!str_cmp(GET_OBJ_NAME(trk), GET_CHAR_NAME(vict))) {
+                send_to_char(ch, "%s is already in the tracker. Use ^WTRACKER SET^n to modify their entry.\r\n", GET_CHAR_NAME(vict));
+                return TRUE;
+              }
+            }
+            new_init_value = dice(1 + GET_INIT_DICE(vict), 6) + GET_REA(vict);
+            send_to_char(ch, "Auto-rolling value for %s: Got %d.\r\n", capitalize(name), new_init_value);
+            break;
+          }
+        }
+        if (!vict) {
+          send_to_char("You must specify a value for someone who's not here (e.g. ^WTRACKER ADD GROG 12^n)\r\n", ch);
+          return TRUE;
+        }
       }
 
       // Add it to the initiative list.
@@ -7049,7 +7073,6 @@ SPECIAL(initiative_tracker)
         for (struct obj_data *temp = obj->contains; temp; temp = temp->next_content) {
           snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%d) %s\r\n", GET_TRACKER_INIT_VALUE(temp), GET_OBJ_NAME(temp));
         }
-
       }
 
       send_to_room(buf2, get_ch_in_room(ch));
