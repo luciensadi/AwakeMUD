@@ -6942,6 +6942,7 @@ SPECIAL(initiative_tracker)
               }
             }
             new_init_value = dice(1 + GET_INIT_DICE(vict), 6) + GET_REA(vict);
+            strlcpy(name, GET_CHAR_NAME(vict), sizeof(name));
             send_to_char(ch, "Auto-rolling value for %s: Got %d.\r\n", capitalize(name), new_init_value);
             break;
           }
