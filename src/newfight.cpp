@@ -1374,7 +1374,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker,
     defender_died = damage_without_message(att->ch, def->ch, damage_total, att->ranged->dam_type, att->ranged->is_physical);
 
     // Attempt to knock down the defender, provided they're alive.
-    if (!defender_died && damage_total > 0) {
+    if (!defender_died && damage_total > 0 && GET_POS(def->ch) > POS_STUNNED) {
       perform_knockdown_test(def->ch, (GET_WEAPON_POWER(att->weapon) + att->ranged->burst_count) / (att->ranged->is_gel ? 1 : 2));
     }
 
@@ -1400,7 +1400,8 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker,
 
       // Next, knockdown test vs half the weapon's power, on 0 successes you're knocked down.
       // No need to subtract things like gyro from this recoil number-- prereq for getting here is that there's no gyro or mount.
-      perform_knockdown_test(att->ch, weapon_power / 2, att->ranged->modifiers[COMBAT_MOD_RECOIL]);
+      if (GET_POS(att->ch) > POS_STUNNED)
+        perform_knockdown_test(att->ch, weapon_power / 2, att->ranged->modifiers[COMBAT_MOD_RECOIL]);
     }
   } else {
     // Process flame aura right before damage.
@@ -1412,7 +1413,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker,
     defender_died = damage(att->ch, def->ch, damage_total, att->melee->dam_type, att->melee->is_physical);
 
     if (!defender_died) {
-      if (damage_total > 0)
+      if (damage_total > 0 && GET_POS(def->ch) > POS_STUNNED)
         perform_knockdown_test(def->ch, GET_STR(att->ch));
 
       if (successes_for_use_in_monowhip_test_check <= 0 && (net_successes < 0 ? def->melee->is_monowhip : att->melee->is_monowhip)) {
