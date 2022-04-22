@@ -4220,8 +4220,8 @@ bool ranged_response(struct char_data *ch, struct char_data *vict)
   if (!vict
       || ch->in_room == vict->in_room
       || GET_POS(vict) <= POS_STUNNED
-      || (!ch->in_room || ROOM_FLAGGED(ch->in_room, ROOM_PEACEFUL))
-      || (!vict->in_room || ROOM_FLAGGED(vict->in_room, ROOM_PEACEFUL))
+      || get_ch_in_room(ch)->peaceful
+      || get_ch_in_room(vict)->peaceful
       || CH_IN_COMBAT(vict))
   {
     return FALSE;
