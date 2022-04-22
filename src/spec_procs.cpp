@@ -1330,6 +1330,11 @@ SPECIAL(adept_trainer)
       return TRUE;
     }
 
+    if (!adepts[ind].is_newbie) {
+      send_to_char(ch, "Sorry, you can only untrain powers in character generation.\r\n");
+      return TRUE;
+    }
+
     if (!*argument) {
       send_to_char(ch, "What ability would you like to untrain?\r\n");
       return TRUE;
