@@ -5310,11 +5310,11 @@ void perform_immort_where(struct char_data * ch, char *arg)
                     GET_CHAR_NAME(primary_char),
                     GET_ROOM_VNUM(room),
                     GET_ROOM_NAME(room),
-                    ROOM_FLAGGED(room, ROOM_ENCOURAGE_CONGREGATION) ? " (social room)" : ""
+                    ROOM_FLAGGED(room, ROOM_ENCOURAGE_CONGREGATION) ? " ^c(social room)^n" : ""
                   );
 
           if (d->character->in_veh) {
-            snprintf(ENDOF(buf1), sizeof(buf1), " (in vehicle %s)", GET_VEH_NAME(d->character->in_veh));
+            snprintf(ENDOF(buf1), sizeof(buf1), " (in %s)", GET_VEH_NAME(d->character->in_veh));
           }
 
           if (d->original) {
