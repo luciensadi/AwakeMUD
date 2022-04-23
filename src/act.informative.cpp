@@ -3935,10 +3935,10 @@ ACMD(do_score)
     }
   } else {
     // Switches for the specific score types.
+    skip_spaces(&argument);
+
     if (*argument) {
       int cmd_index;
-
-      skip_spaces(&argument);
 
       // Find the index of the command the player wants.
       for (cmd_index = 0; *(score_switches[cmd_index].cmd) != '\n'; cmd_index++)
