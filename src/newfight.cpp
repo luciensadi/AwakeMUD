@@ -305,7 +305,7 @@ struct melee_combat_data {
       }
       else if (cyber->footanchors) {
         power -= 1;
-        damage_level = LIGHT;
+        damage_level = MODERATE;
         dam_type = TYPE_STAB;
         is_physical = TRUE;
       }
