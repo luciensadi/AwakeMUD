@@ -97,7 +97,7 @@ struct veh_data *get_veh_list(char *name, struct veh_data *list, struct char_dat
 
 /* find all dots */
 
-int     find_all_dots(char *arg);
+int     find_all_dots(char *arg, size_t arg_size);
 
 #define FIND_INDIV      0
 #define FIND_ALL        1

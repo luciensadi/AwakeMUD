@@ -59,7 +59,7 @@ char *fname(char *namelist)
 
   if (!namelist || !*namelist) {
     mudlog("SYSERR: fname received null namelist!", NULL, LOG_SYSLOG, TRUE);
-    strcpy(holder, "error-report-this-to-staff");
+    strlcpy(holder, "error-report-this-to-staff", sizeof(holder));
     return holder;
   }
 
@@ -1361,7 +1361,7 @@ bool check_obj_to_x_preconditions(struct obj_data * object, struct char_data *ch
     return FALSE;
   }
 
-  strcpy(buf3, "");
+  strlcpy(buf3, "", sizeof(buf3));
   return TRUE;
 }
 
@@ -1811,7 +1811,7 @@ struct char_data *get_char_room(const char *name, struct room_data *room)
     return NULL;
   }
 
-  strcpy(tmp, name);
+  strlcpy(tmp, name, sizeof(tmpname));
   if (!(number = get_number(&tmp, sizeof(tmpname))))
     return NULL;
 
@@ -2713,7 +2713,7 @@ struct char_data *get_char_room_vis(struct char_data * ch, char *name)
     return ch;
 
   /* 0.<name> means PC with name */
-  strcpy(tmp, name);
+  strlcpy(tmp, name, sizeof(tmpname));
   if (!(number = get_number(&tmp, sizeof(tmpname))))
     return get_player_vis(ch, tmp, 1);
 
@@ -2745,7 +2745,7 @@ struct char_data *get_char_in_list_vis(struct char_data * ch, char *name, struct
     return ch;
 
   /* 0.<name> means PC with name */
-  strcpy(tmp, name);
+  strlcpy(tmp, name, sizeof(tmpname));
   if (!(number = get_number(&tmp, sizeof(tmpname))))
     return get_player_vis(ch, tmp, 1);
 
@@ -2780,7 +2780,7 @@ struct char_data *get_char_vis(struct char_data * ch, char *name)
   if ((i = get_char_room_vis(ch, name)) != NULL)
     return i;
 
-  strcpy(tmp, name);
+  strlcpy(tmp, name, sizeof(tmpname));
   if (!(number = get_number(&tmp, sizeof(tmpname))))
     return get_player_vis(ch, tmp, 0);
 
@@ -2807,7 +2807,7 @@ struct obj_data *get_obj_in_list_vis(struct char_data * ch, char *name, struct o
   if (!list)
     return NULL;
 
-  strcpy(tmp, name);
+  strlcpy(tmp, name, sizeof(tmpname));
   if (!(number = get_number(&tmp, sizeof(tmpname))))
     return NULL;
 
@@ -2839,7 +2839,7 @@ struct obj_data *get_obj_vis(struct char_data * ch, char *name)
   if (ch->in_room && (i = get_obj_in_list_vis(ch, name, ch->in_room->contents)))
     return i;
 
-  strcpy(tmp, name);
+  strlcpy(tmp, name, sizeof(tmpname));
   if (!(number = get_number(&tmp, sizeof(tmpname))))
     return NULL;
 
@@ -2854,7 +2854,7 @@ struct obj_data *get_object_in_equip_vis(struct char_data * ch,
   char *tmp = tmpname;
   int i = 0, number;
 
-  strcpy(tmp, arg);
+  strlcpy(tmp, arg, sizeof(tmpname));
   if (!(number = get_number(&tmp, sizeof(tmpname))))
     return NULL;
 
@@ -3007,7 +3007,7 @@ int find_spell_num(char *name)
     int ok = 1;
     const char *temp = any_one_arg_const(spells[index].name, first);
     const char *temp2 = any_one_arg(name, first2);
-    
+
     while (*first && *first2 && ok) {
       if (!is_abbrev(first2, first))
         ok = 0;
@@ -3108,7 +3108,7 @@ int generic_find(char *arg, int bitvector, struct char_data * ch,
     char *tmp = tmpname;
 
     /* 0.<name> means PC with name-- except here we're overriding that because I cannot be bothered right now. TODO. --LS */
-    strcpy(tmp, name);
+    strlcpy(tmp, name, sizeof(tmpname));
     number = MAX(1, get_number(&tmp, sizeof(tmpname)));
 
     for (i = get_ch_in_room(ch)->people; i && j <= number; i = i->next_in_room)
@@ -3163,13 +3163,13 @@ int generic_find(char *arg, int bitvector, struct char_data * ch,
 }
 
 /* a function to scan for "all" or "all.x" */
-int find_all_dots(char *arg)
+int find_all_dots(char *arg, size_t arg_size)
 {
   if (!strcmp(arg, "all"))
     return FIND_ALL;
   else if (!strncmp(arg, "all.", 4)) {
-    strcpy(buf, arg + 4);
-    strcpy(arg, buf);
+    strlcpy(buf, arg + 4, sizeof(buf));
+    strlcpy(arg, buf, arg_size);
     return FIND_ALLDOT;
   } else
     return FIND_INDIV;

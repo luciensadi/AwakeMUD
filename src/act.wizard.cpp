@@ -7501,8 +7501,8 @@ ACMD(do_forceput) {
   int obj_dotmode, cont_dotmode;
 
   two_arguments(argument, arg1, arg2);
-  obj_dotmode = find_all_dots(arg1);
-  cont_dotmode = find_all_dots(arg2);
+  obj_dotmode = find_all_dots(arg1, sizeof(arg1));
+  cont_dotmode = find_all_dots(arg2, sizeof(arg2));
 
   if (!*arg1) {
     send_to_char("Force-put what in what?\r\n", ch);
@@ -7545,8 +7545,8 @@ ACMD(do_forceget) {
   int obj_dotmode, cont_dotmode;
 
   two_arguments(argument, arg1, arg2);
-  obj_dotmode = find_all_dots(arg1);
-  cont_dotmode = find_all_dots(arg2);
+  obj_dotmode = find_all_dots(arg1, sizeof(arg1));
+  cont_dotmode = find_all_dots(arg2, sizeof(arg2));
 
   if (!*arg1 || !*arg2) {
     send_to_char("Force-get what from what?\r\n", ch);

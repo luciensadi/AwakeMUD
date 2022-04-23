@@ -374,8 +374,8 @@ ACMD(do_put)
   }
 
   two_arguments(argument, arg1, arg2);
-  obj_dotmode = find_all_dots(arg1);
-  cont_dotmode = find_all_dots(arg2);
+  obj_dotmode = find_all_dots(arg1, sizeof(arg1));
+  cont_dotmode = find_all_dots(arg2, sizeof(arg2));
   cont_dotmode++;
 
   if (subcmd == SCMD_INSTALL)
@@ -979,7 +979,7 @@ void get_from_container(struct char_data * ch, struct obj_data * cont,
   struct obj_data *obj, *next_obj;
   int obj_dotmode, found = 0;
 
-  obj_dotmode = find_all_dots(arg);
+  obj_dotmode = find_all_dots(arg, sizeof(arg));
 
   if (GET_OBJ_TYPE(cont) == ITEM_CYBERDECK || GET_OBJ_TYPE(cont) == ITEM_CUSTOM_DECK)
   {
@@ -1169,7 +1169,7 @@ void get_from_room(struct char_data * ch, char *arg, bool download)
 {
   struct obj_data *obj, *next_obj;
   int dotmode, found = 0;
-  dotmode = find_all_dots(arg);
+  dotmode = find_all_dots(arg, sizeof(arg));
 
   if (dotmode == FIND_INDIV || download)
   {
@@ -1419,7 +1419,7 @@ ACMD(do_get)
   } else if (!*arg2 || download) {
     get_from_room(ch, arg1, download);
   } else {
-    cont_dotmode = find_all_dots(arg2);
+    cont_dotmode = find_all_dots(arg2, sizeof(arg2));
     if (cont_dotmode == FIND_INDIV) {
       mode = generic_find(arg2, FIND_OBJ_EQUIP | FIND_OBJ_INV | FIND_OBJ_ROOM, ch, &tmp_char, &cont);
       if (!ch->in_veh || (ch->in_veh->flags.IsSet(VFLAG_WORKSHOP) && !ch->vfront))
@@ -1994,7 +1994,7 @@ ACMD(do_drop)
     }
     return;
   } else {
-    dotmode = find_all_dots(arg);
+    dotmode = find_all_dots(arg, sizeof(arg));
 
     /* Can't junk or donate all */
     if ((dotmode == FIND_ALL) && (subcmd == SCMD_JUNK || subcmd == SCMD_DONATE)) {
@@ -2290,7 +2290,7 @@ ACMD(do_give)
       return;
     }
 
-    dotmode = find_all_dots(arg);
+    dotmode = find_all_dots(arg, sizeof(arg));
     if (dotmode == FIND_INDIV) {
       if (!(obj = get_obj_in_list_vis(ch, arg, ch->carrying))) {
         send_to_char(ch, "You don't seem to have %s %s in your inventory.\r\n", AN(arg), arg);
@@ -3223,7 +3223,7 @@ ACMD(do_wear)
     send_to_char("Wear what?\r\n", ch);
     return;
   }
-  dotmode = find_all_dots(arg1);
+  dotmode = find_all_dots(arg1, sizeof(arg1));
 
   if (*arg2 && (dotmode != FIND_INDIV)) {
     send_to_char("You can't specify the same body location for more than one item!\r\n", ch);
@@ -3385,7 +3385,7 @@ ACMD(do_remove)
     return;
   }
 
-  dotmode = find_all_dots(arg);
+  dotmode = find_all_dots(arg, sizeof(arg));
 
   if (dotmode == FIND_ALL) {
     found = 0;

@@ -6562,7 +6562,7 @@ SPECIAL(medical_workshop) {
   } /* End diagnose command. */
 
   // Parse out the dotmode.
-  int dotmode = find_all_dots(argument);
+  int dotmode = find_all_dots(argument, sizeof(argument));
 
   // Can't operate with more than one thing at once.
   if ((dotmode == FIND_ALL) || dotmode == FIND_ALLDOT) {

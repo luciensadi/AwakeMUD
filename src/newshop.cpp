@@ -2943,7 +2943,7 @@ void shop_install(char *argument, struct char_data *ch, struct char_data *keeper
     return;
   }
 
-  int dotmode = find_all_dots(arg);
+  int dotmode = find_all_dots(arg, sizeof(arg));
 
   /* Can't junk or donate all */
   if ((dotmode == FIND_ALL) || dotmode == FIND_ALLDOT) {
@@ -3023,7 +3023,7 @@ void shop_uninstall(char *argument, struct char_data *ch, struct char_data *keep
     return;
   }
 
-  int dotmode = find_all_dots(arg);
+  int dotmode = find_all_dots(arg, sizeof(arg));
 
   /* Can't junk or donate all */
   if ((dotmode == FIND_ALL) || dotmode == FIND_ALLDOT) {

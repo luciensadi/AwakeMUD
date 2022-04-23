@@ -2197,7 +2197,7 @@ ACMD(do_astral)
     send_to_char("You do not have enough control over the astral plane to do that.\r\n", ch);
     return;
   }
-  
+
   if (IS_PROJECT(ch)) {
     send_to_char("But you are already projecting!\r\n", ch);
     return;
@@ -3690,7 +3690,7 @@ ACMD(do_unpack)
   shop = NULL;
 
   argument = one_argument(argument, arg);
-  int dotmode = find_all_dots(arg);
+  int dotmode = find_all_dots(arg, sizeof(arg));
 
   /* Targeted unpack. */
   if (dotmode == FIND_ALL || dotmode == FIND_ALLDOT) {
@@ -3763,7 +3763,7 @@ ACMD(do_packup)
   struct obj_data *shop = NULL;
 
   argument = one_argument(argument, arg);
-  int dotmode = find_all_dots(arg);
+  int dotmode = find_all_dots(arg, sizeof(arg));
 
   /* Targeted pack. */
   if (dotmode == FIND_ALL || dotmode == FIND_ALLDOT) {

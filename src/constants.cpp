@@ -1825,14 +1825,15 @@ const char *ic_option_long[] =
 // Weight and cost are PER ROUND now.
 struct ammo_data ammo_type[] =
   {
-    // name      tn   time   weight  cost   s. index
-    {"normal",    2,    1,    .025,    2,     .75},
-    {"APDS",     14,   14,    .025,    7,     4},
-    {"explosive", 3,  1.5,    .075,    5,     .8},
-    {"EX",        6,    3,    .075,   10,     1.5},
-    {"flechette", 3,  1.5,    .05,    10,     .8},
-    {"gel",       4,    2,    .025,    3,     1},
-    {"harmless",  1,   0.1,   .010,    1,     .5}
+    // name          tn   time   weight  cost   s. index
+    {"normal",        2,    1,    .025,    2,    0.75},
+    {"APDS",         14,   14,    .025,    7,    4.0 },
+    {"explosive",     3,  1.5,    .075,    5,    0.8 },
+    {"EX",            6,    3,    .075,   10,    1.5 },
+    {"flechette",     3,  1.5,    .05,    10,    0.8 },
+    {"gel",           4,    2,    .025,    3,    1.0 },
+    {"harmless",      1,  0.1,    .010,    1,    0.5 },
+    {"anti-vehicle", 16,   14,    .100,   20,    4.0 }
   };
 
 const char *positions[] =
