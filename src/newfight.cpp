@@ -505,8 +505,21 @@ void hit_char_vs_veh(struct char_data *attacker, struct veh_data *vict_veh, bool
   // Setup for melee combat. You're probably getting hit by a car at this point, but at least you can swing back at them?
   else {
     if (vict_veh->cspeed > SPEED_IDLE) {
-      send_to_char(att->ch, "%s is moving too fast for you to catch!\r\n", CAP(GET_VEH_NAME_NOFORMAT(vict_veh)));
-      stop_fighting(att->ch);
+      // They get to make a roll to evade you-- dodge vs athletics?
+      int num_successes = 1;
+
+      // If the dodge was successful, you don't get to hit them at all.
+      if (num_successes > 0) {
+        send_to_char(att->ch, "%s is moving too fast for you to catch!\r\n", CAP(GET_VEH_NAME_NOFORMAT(vict_veh)));
+
+        // Make a crash test for the dodging vehicle.
+      }
+
+      // They didn't dodge-- hit them.
+      else {
+
+      }
+
       return;
     }
 
@@ -565,9 +578,9 @@ void hit_char_vs_veh(struct char_data *attacker, struct veh_data *vict_veh, bool
         snprintf(to_veh_buf, sizeof(to_room_buf), "%s's %s tears into your vehicle!\r\n", GET_NAME(att->ch), projectile_description(att->weapon));
         break;
       case DEADLY:
-        snprintf(msg_buf, sizeof(msg_buf), "Your %s blasts gaping holes through %s!", projectile_description(att->weapon), GET_VEH_NAME(vict_veh));
-        snprintf(to_room_buf, sizeof(to_room_buf), "$n's %s blasts gaping holes through $X!", projectile_description(att->weapon));
-        snprintf(to_veh_buf, sizeof(to_room_buf), "%s's %s blasts gaping holes through your vehicle!\r\n", GET_NAME(att->ch), projectile_description(att->weapon));
+        snprintf(msg_buf, sizeof(msg_buf), "Your %s blasts a gaping hole through %s!", projectile_description(att->weapon), GET_VEH_NAME(vict_veh));
+        snprintf(to_room_buf, sizeof(to_room_buf), "$n's %s blasts a gaping hole through $X!", projectile_description(att->weapon));
+        snprintf(to_veh_buf, sizeof(to_room_buf), "%s's %s blasts a gaping hole through your vehicle!\r\n", GET_NAME(att->ch), projectile_description(att->weapon));
         break;
       default:
         snprintf(msg_buf, sizeof(msg_buf), "SYSERR: staged_damage %d in hit_char_vs_veh()!", staged_damage);
