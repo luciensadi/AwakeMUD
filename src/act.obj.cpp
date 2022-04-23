@@ -3732,6 +3732,7 @@ int draw_from_readied_holster(struct char_data *ch, struct obj_data *holster) {
     return 0;
   }
 
+  // Check to see if it can be wielded.
   if (!CAN_WEAR(contents, ITEM_WEAR_WIELD))
     return 0;
 
@@ -3749,6 +3750,53 @@ int draw_from_readied_holster(struct char_data *ch, struct obj_data *holster) {
            && GET_WEAPON_FOCUS_BONDED_BY(contents) == GET_IDNUM(ch)
            && GET_MAG(ch) * 2 < GET_WEAPON_FOCUS_RATING(contents))
   {
+    return 0;
+  }
+
+  // Apply racial limitations.
+  switch (GET_RACE(ch)) {
+    case RACE_WAKYAMBI:
+    case RACE_DRYAD:
+    case RACE_ELF:
+    case RACE_NIGHTONE:
+      if (IS_OBJ_STAT(contents, ITEM_EXTRA_NOELF)) {
+        return 0;
+      }
+      break;
+    case RACE_DWARF:
+    case RACE_MENEHUNE:
+    case RACE_GNOME:
+    case RACE_KOBOROKURU:
+      if (IS_OBJ_STAT(contents, ITEM_EXTRA_NODWARF)) {
+        return 0;
+      }
+      break;
+    case RACE_TROLL:
+    case RACE_MINOTAUR:
+    case RACE_GIANT:
+    case RACE_FOMORI:
+    case RACE_CYCLOPS:
+      if (IS_OBJ_STAT(contents, ITEM_EXTRA_NOTROLL)) {
+        return 0;
+      }
+      break;
+    case RACE_HUMAN:
+      if (IS_OBJ_STAT(contents, ITEM_EXTRA_NOHUMAN)) {
+        return 0;
+      }
+      break;
+    case RACE_ONI:
+    case RACE_ORK:
+    case RACE_OGRE:
+    case RACE_HOBGOBLIN:
+      if (IS_OBJ_STAT(contents, ITEM_EXTRA_NOORK)) {
+        return 0;
+      }
+      break;
+  }
+
+  // Staff-only limitations.
+  if (IS_OBJ_STAT(contents, ITEM_EXTRA_STAFF_ONLY) && !access_level(ch, LVL_BUILDER)) {
     return 0;
   }
 
