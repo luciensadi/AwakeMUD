@@ -1273,6 +1273,7 @@ struct command_info mtx_info[] =
     { "prompt", 0, do_display, 0, 0 , FALSE },
     { "quit", 0, do_logoff, 0, 0, FALSE },
     { "read", 0, do_not_here, 0, 0, FALSE },
+    { "recap", 0, do_recap, 0, 0, FALSE },
     { "redirect", 0, do_redirect, 0, 0, FALSE },
     { "remove", 0, do_not_here, 0, 0, FALSE },
     { "reply", 0, do_reply, 0, 0 , FALSE },
@@ -3204,11 +3205,14 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("recpa", "recap");
   COMMAND_ALIAS("scoe", "score");
   COMMAND_ALIAS("hial", "hail");
+  COMMAND_ALIAS("haul", "hail");
+  COMMAND_ALIAS("clsoe", "close");
 
   // Combat stuff.
   COMMAND_ALIAS("attack", "kill");
   COMMAND_ALIAS("stab", "kill");
   COMMAND_ALIAS("unload", "eject");
+  COMMAND_ALIAS("fire", "shoot");
 
   // Misc aliases.
   COMMAND_ALIAS("taxi", "hail");
@@ -3263,6 +3267,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("bamfin", "poofin");
   COMMAND_ALIAS("bamfout", "poofout");
   COMMAND_ALIAS("sacrifice", "junk");
+  COMMAND_ALIAS("trash", "junk");
   COMMAND_ALIAS("inspect", "probe");
   COMMAND_ALIAS("worth", "balance");
   COMMAND_ALIAS("money", "balance");
