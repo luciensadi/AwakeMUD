@@ -1730,7 +1730,7 @@ void parse_mobile(File &in, long nr)
       snprintf(field, sizeof(field), "%s/Vnum", name);
       vnum = data.GetLong(field, -1);
 
-      if (!(ware = read_object(vnum, VIRTUAL))) {
+      if (vnum < 1 || !(ware = read_object(vnum, VIRTUAL))) {
         log_vfprintf("MOB FILE ERROR: Mob %ld referenced cyberware vnum %ld (entry %d) which does not exist.", nr, vnum, x);
         continue;
       } else {
@@ -1757,7 +1757,7 @@ void parse_mobile(File &in, long nr)
       snprintf(field, sizeof(field), "%s/Vnum", name);
       vnum = data.GetLong(field, -1);
 
-      if (!(ware = read_object(vnum, VIRTUAL))) {
+      if (vnum == -1 || !(ware = read_object(vnum, VIRTUAL))) {
         log_vfprintf("MOB FILE ERROR: Mob %ld referenced bioware vnum %ld (entry %d) which does not exist.", nr, vnum, x);
         continue;
       } else {
@@ -5864,7 +5864,7 @@ void price_cyber(struct obj_data *obj)
       } else if (IS_SET(GET_CYBERWARE_FLAGS(obj), SKULL_MOD_SYNTHETIC)) {
         GET_OBJ_COST(obj) = 55000;
       } else {
-        log_vfprintf("ERROR: Cyberskull %ld is neither obvious nor synthetic!", GET_OBJ_VNUM(obj));
+        log_vfprintf("ERROR: %s is neither obvious nor synthetic!", GET_OBJ_NAME(obj));
         GET_OBJ_COST(obj) = 99999999;
         GET_CYBERWARE_ESSENCE_COST(obj) = 999;
       }
@@ -5886,7 +5886,7 @@ void price_cyber(struct obj_data *obj)
       } else if (IS_SET(GET_CYBERWARE_FLAGS(obj), TORSO_MOD_SYNTHETIC)) {
         GET_OBJ_COST(obj) = 120000;
       } else {
-        log_vfprintf("ERROR: Cybertorso %ld is neither obvious nor synthetic!", GET_OBJ_VNUM(obj));
+        log_vfprintf("ERROR: %s is neither obvious nor synthetic!", GET_OBJ_NAME(obj));
         GET_OBJ_COST(obj) = 99999999;
         GET_CYBERWARE_ESSENCE_COST(obj) = 999;
       }
@@ -5918,7 +5918,7 @@ void price_cyber(struct obj_data *obj)
       } else if (IS_SET(GET_CYBERWARE_FLAGS(obj), LEGS_MOD_SYNTHETIC)) {
         GET_OBJ_COST(obj) = 200000;
       } else {
-        log_vfprintf("ERROR: Cyberleg %ld is neither obvious nor synthetic!", GET_OBJ_VNUM(obj));
+        log_vfprintf("ERROR: %s is neither obvious nor synthetic!", GET_OBJ_NAME(obj));
         GET_OBJ_COST(obj) = 99999999;
         GET_CYBERWARE_ESSENCE_COST(obj) = 999;
       }
@@ -5973,7 +5973,7 @@ void price_cyber(struct obj_data *obj)
       } else if (IS_SET(GET_CYBERWARE_FLAGS(obj), ARMS_MOD_SYNTHETIC)) {
         GET_OBJ_COST(obj) = 100000;
       } else {
-        log_vfprintf("ERROR: Cyberarm %ld is neither obvious nor synthetic!", GET_OBJ_VNUM(obj));
+        log_vfprintf("ERROR: %s is neither obvious nor synthetic!", GET_OBJ_NAME(obj));
         GET_OBJ_COST(obj) = 99999999;
         GET_CYBERWARE_ESSENCE_COST(obj) = 999;
       }

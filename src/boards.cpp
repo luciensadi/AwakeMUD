@@ -9,11 +9,11 @@
 ************************************************************************ */
 
 /* FEATURES & INSTALLATION INSTRUCTIONS ***********************************
- 
+
 Written by Jeremy "Ras" Elson (jelson@cs.jhu.edu)
- 
+
 TO ADD A NEW BOARD, simply follow our easy 4-step program:
- 
+
 1 - Create a new board object in the object files
 2 - Increase the NUM_OF_BOARDS constant in awake.h
 3 - Add a new line to the board_info array below.  The fields, in order, are:
@@ -54,18 +54,23 @@ TO ADD A NEW BOARD, simply follow our easy 4-step program:
 
 struct board_info_type board_info[NUM_OF_BOARDS] =
   {
-    {3   , LVL_BUILDER, LVL_BUILDER, LVL_VICEPRES, "etc/board.rift"},
-    {4   , LVL_BUILDER, LVL_BUILDER, LVL_PRESIDENT, "etc/board.pook"},
-    {12  , LVL_FIXER, LVL_FIXER, LVL_VICEPRES, "etc/board.dunkelzahn"},
-    {22  , LVL_ADMIN, LVL_ADMIN, LVL_ADMIN, "etc/board.oldchange"},
-    {26  , 0, 0, LVL_ADMIN, "etc/board.rp"},
-    {28  , 0, 0, LVL_ADMIN, "etc/board.quest"},
-    {31  , LVL_BUILDER, LVL_BUILDER, LVL_VICEPRES, "etc/board.senate"},
-    {50  , LVL_BUILDER, LVL_BUILDER, LVL_VICEPRES, "etc/board.harlequin"},
-    {1006, LVL_BUILDER, LVL_BUILDER, LVL_ADMIN, "etc/board.builder"},
-    {1007, LVL_BUILDER, LVL_BUILDER, LVL_ADMIN, "etc/board.coder"},
-    {66  , LVL_BUILDER, LVL_BUILDER, LVL_ADMIN, "etc/board.lofwyr"},
+//  {3   , LVL_BUILDER, LVL_BUILDER, LVL_VICEPRES, "etc/board.rift"},
+//  {4   , LVL_BUILDER, LVL_BUILDER, LVL_PRESIDENT, "etc/board.pook"},
+//  {12  , LVL_FIXER, LVL_FIXER, LVL_VICEPRES, "etc/board.dunkelzahn"},
+//  {22  , LVL_ADMIN, LVL_ADMIN, LVL_ADMIN, "etc/board.oldchange"},
+//  {26  , 0, 0, LVL_ADMIN, "etc/board.rp"},
+//  {28  , 0, 0, LVL_ADMIN, "etc/board.quest"},
+//  {31  , LVL_BUILDER, LVL_BUILDER, LVL_VICEPRES, "etc/board.senate"},
+//  {50  , LVL_BUILDER, LVL_BUILDER, LVL_VICEPRES, "etc/board.harlequin"},
+//  {1006, LVL_BUILDER, LVL_BUILDER, LVL_ADMIN, "etc/board.builder"},
+//  {1007, LVL_BUILDER, LVL_BUILDER, LVL_ADMIN, "etc/board.coder"},
+//  {66  , LVL_BUILDER, LVL_BUILDER, LVL_ADMIN, "etc/board.lofwyr"},
+#ifdef USE_PRIVATE_CE_WORLD
+    {10018, LVL_BUILDER, LVL_BUILDER, LVL_ADMIN, "etc/board.immhq"},
+    {10034, LVL_BUILDER, LVL_BUILDER, LVL_ADMIN, "etc/board.immhq-rp"}
+#else
     {10018, LVL_BUILDER, LVL_BUILDER, LVL_ADMIN, "etc/board.immhq"}
+#endif
 //  {2104, 0, 0, LVL_ADMIN, "etc/board.mort"},
 //  {2106, LVL_BUILDER, LVL_BUILDER, LVL_ADMIN, "etc/board.immort"},
 //  {64900, 0, 0, LVL_BUILDER, "etc/board.rpe"},
@@ -102,16 +107,24 @@ static int find_slot(void)
 static int find_board(struct char_data * ch, struct obj_data **terminal)
 {
   struct obj_data *obj;
-  int i;
+
+  char object_list[MAX_STRING_LENGTH];
+  strlcpy(object_list, "Object list: ", sizeof(object_list));
+  bool wrote_something = FALSE;
 
   if (ch->persona) {
     obj = matrix[ch->persona->in_host].file;
   } else {
     obj = ch->in_room->contents;
   }
-    
+
   for (; obj; obj = obj->next_content) {
-    for (i = 0; i < NUM_OF_BOARDS; i++) {
+    snprintf(ENDOF(object_list), sizeof(object_list) - strlen(object_list), "%s%s (%ld)",
+             wrote_something ? ", " : "",
+             GET_OBJ_NAME(obj),
+             GET_OBJ_VNUM(obj)
+            );
+    for (int i = 0; i < NUM_OF_BOARDS; i++) {
       if (BOARD_VNUM(i) == GET_OBJ_VNUM(obj)) {
         *terminal = obj;
         return i;
@@ -119,6 +132,12 @@ static int find_board(struct char_data * ch, struct obj_data **terminal)
     }
   }
 
+  log_vfprintf("SYSERR: find_board failed for %s, who is in %s %ld. %s",
+               GET_CHAR_NAME(ch),
+               ch->persona ? "Matrix host" : "room",
+               ch->persona ? matrix[ch->persona->in_host].vnum : GET_ROOM_VNUM(ch->in_room),
+               object_list
+              );
   return -1;
 }
 

@@ -851,27 +851,10 @@ void assign_objects(void)
   SPECIAL(toggled_voice_modulator);
   SPECIAL(initiative_tracker);
 
-  ASSIGNOBJ(3, gen_board);  /* Rift's Board */
-  ASSIGNOBJ(4, gen_board);  /* Pook's Board */
-  ASSIGNOBJ(12, gen_board);  /* Dunk's Board */
-  ASSIGNOBJ(22, gen_board);   /* old Changelogs */
-  ASSIGNOBJ(26, gen_board);  /* RP Board */
-  ASSIGNOBJ(28, gen_board);  /* Quest Board */
-  ASSIGNOBJ(31, gen_board);  /* War Room Board */
-  ASSIGNOBJ(50, gen_board);  /* Harl's Board */
-  ASSIGNOBJ(66, gen_board);             /* Lofwyr's Board */
-  ASSIGNOBJ(1006, gen_board);  /* Builder Board  */
-  ASSIGNOBJ(1038, gen_board);  /* Coders Board */
-  ASSIGNOBJ(1074, gen_board);  /* Administration Board */
   ASSIGNOBJ(10018, gen_board);  /* ImmHQ Board */
 #ifdef USE_PRIVATE_CE_WORLD
   ASSIGNOBJ(10034, gen_board); /* Mortal Relations Board */
 #endif
-  ASSIGNOBJ(65126, gen_board);
-  ASSIGNOBJ(26150, gen_board);
-  ASSIGNOBJ(11482, gen_board);
-  ASSIGNOBJ(70405, gen_board);
-  ASSIGNOBJ(71025, gen_board); // shadow couriers PGHQ
   ASSIGNOBJ(1117, desktop);
   ASSIGNOBJ(1118, desktop);
   ASSIGNOBJ(1119, desktop);
@@ -888,35 +871,23 @@ void assign_objects(void)
   ASSIGNOBJ(1848, desktop);
   ASSIGNOBJ(1904, clock);  // clock
   ASSIGNOBJ(1946, bank);  // atm
-  ASSIGNOBJ(2104, gen_board);     // mortal board
-  ASSIGNOBJ(2106, gen_board);      // immortal board
-  ASSIGNOBJ(2107, gen_board);      // freeze board
   ASSIGNOBJ(2108, bank);         // atm
   ASSIGNOBJ(2506, anticoagulant);
   ASSIGNOBJ(3012, vendtix);
   ASSIGNOBJ(4006, clock);
   ASSIGNOBJ(4216, clock);
-  ASSIGNOBJ(8001, gen_board);  // newbie board
-  ASSIGNOBJ(8002, gen_board);  // newbie board
-  ASSIGNOBJ(8003, gen_board);  // newbie board
-  ASSIGNOBJ(8004, gen_board);  // newbie board
-  ASSIGNOBJ(8013, gen_board);  // newbie board
   ASSIGNOBJ(9329, vending_machine);
   ASSIGNOBJ(10011, desktop);
   ASSIGNOBJ(10108, vending_machine);
   ASSIGNOBJ(42130, anticoagulant);
   ASSIGNOBJ(10025, pocket_sec);
   ASSIGNOBJ(9406, hand_held_scanner);
-  ASSIGNOBJ(29997, gen_board);  // Loki's Board
   ASSIGNOBJ(22445, bank);
   ASSIGNOBJ(14645, clock);
   ASSIGNOBJ(16234, clock);
   ASSIGNOBJ(18884, clock);
   ASSIGNOBJ(18950, bank);
   ASSIGNOBJ(14726, bank);
-  ASSIGNOBJ(64900, gen_board); // RPE Board
-  ASSIGNOBJ(65207, gen_board); // Backstage Group's Board
-  ASSIGNOBJ(4603, gen_board);
   ASSIGNOBJ(722, toggled_invis);
   ASSIGNOBJ(25519, toggled_invis);
   ASSIGNOBJ(50301, toggled_invis);

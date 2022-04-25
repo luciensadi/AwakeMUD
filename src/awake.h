@@ -2094,7 +2094,12 @@ enum {
 
 /* Boards */
 
-#define NUM_OF_BOARDS           12 /* change if needed! */
+#ifdef USE_PRIVATE_CE_WORLD
+#define NUM_OF_BOARDS           2
+#else
+#define NUM_OF_BOARDS           1 /* change if needed! */
+#endif
+
 #define MAX_BOARD_MESSAGES      300     /* arbitrary -- change if needed */
 #define MAX_MESSAGE_LENGTH      5120    /* arbitrary -- change if needed */
 #define INDEX_SIZE         ((NUM_OF_BOARDS*MAX_BOARD_MESSAGES) + 5)
