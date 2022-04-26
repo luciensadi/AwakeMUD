@@ -12,6 +12,8 @@ bool perform_nerve_strike(struct combat_data *att, struct combat_data *def, char
 SPECIAL(weapon_dominator);
 WSPEC(monowhip);
 
+#define IS_RANGED(eq)   (GET_OBJ_TYPE(eq) == ITEM_FIREWEAPON || (GET_OBJ_TYPE(eq) == ITEM_WEAPON && (IS_GUN(GET_WEAPON_ATTACK_TYPE(eq)))))
+
 struct cyberware_data {
   int climbingclaws;
   int fins;
