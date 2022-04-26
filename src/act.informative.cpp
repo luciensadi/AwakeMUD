@@ -4230,6 +4230,12 @@ ACMD(do_cyberware)
       } else {
         strlcpy(retraction_string, "  (extended)", sizeof(retraction_string));
       }
+    } else if (GET_CYBERWARE_TYPE(obj) == CYB_ARMS && IS_SET(GET_CYBERWARE_FLAGS(obj), ARMS_MOD_GYROMOUNT)) {
+      if (GET_CYBERWARE_IS_DISABLED(obj)) {
+        strlcpy(retraction_string, "  (gyro deactivated)", sizeof(retraction_string));
+      } else {
+        strlcpy(retraction_string, "  (gyro activated)", sizeof(retraction_string));
+      }
     } else {
       strlcpy(retraction_string, "", sizeof(retraction_string));
     }

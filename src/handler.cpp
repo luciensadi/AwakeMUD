@@ -927,27 +927,23 @@ void affect_total(struct char_data * ch)
 
   // Apply gyromount penalties, but only if you're wielding a gun.
   // TODO: Ideally, this would only apply if you have uncompensated recoil, but that's a looot of code.
-  if (GET_EQ(ch, WEAR_WIELD)
-      && GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_WEAPON)
-  {
-    if (IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_WIELD)))) {
-      bool added_gyro_penalty = FALSE;
-      for (i = 0; !added_gyro_penalty && i < (NUM_WEARS -1); i++)
-        if (GET_EQ(ch, i) && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_GYRO) {
+  struct obj_data *wielded = GET_EQ(ch, WEAR_WIELD);
+  if (wielded && GET_OBJ_TYPE(wielded) == ITEM_WEAPON && IS_GUN(GET_WEAPON_ATTACK_TYPE(wielded))) {
+    bool added_gyro_penalty = FALSE;
+    for (i = 0; !added_gyro_penalty && i < NUM_WEARS; i++) {
+      if (GET_EQ(ch, i) && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_GYRO) {
+        added_gyro_penalty = TRUE;
+        GET_COMBAT(ch) /= 2;
+      }
+    }
+
+    if (!added_gyro_penalty) {
+      for (struct obj_data *cyb = ch->cyberware; !added_gyro_penalty && cyb; cyb = cyb->next_content) {
+        if (GET_CYBERWARE_TYPE(cyb) == CYB_ARMS && IS_SET(GET_CYBERWARE_FLAGS(cyb), ARMS_MOD_GYROMOUNT) && !GET_CYBERWARE_IS_DISABLED(cyb)) {
           added_gyro_penalty = TRUE;
           GET_COMBAT(ch) /= 2;
         }
-
-      /*
-      if (!added_gyro_penalty) {
-        for (struct obj_data *cyb = ch->cyberware; !added_gyro_penalty && cyb; cyb = cyb->next_content) {
-          if (GET_CYBERWARE_TYPE(cyb) == CYB_ARMS && IS_SET(GET_CYBERWARE_FLAGS(cyb), ARMS_MOD_GYROMOUNT)) {
-            added_gyro_penalty = TRUE;
-            GET_COMBAT(ch) /= 2;
-          }
-        }
       }
-      */
     }
   }
 

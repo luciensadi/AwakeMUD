@@ -3543,11 +3543,34 @@ ACMD(do_activate)
       }
   }
 
-  if (!(obj = get_obj_in_list_vis(ch, arg, ch->carrying)))
+  if (!(obj = get_obj_in_list_vis(ch, arg, ch->carrying))) {
     if (!(obj = get_object_in_equip_vis(ch, arg, ch->equipment, &i))) {
-      send_to_char(ch, "You don't have %s %s.\r\n", AN(arg), arg);
-      return;
+      if (!(obj = get_obj_in_list_vis(ch, arg, ch->cyberware))) {
+        send_to_char(ch, "You don't have %s %s.\r\n", AN(arg), arg);
+        return;
+      }
     }
+  }
+
+  if (GET_OBJ_TYPE(obj) == ITEM_CYBERWARE) {
+    switch (GET_CYBERWARE_TYPE(obj)) {
+      case CYB_ARMS:
+        if (IS_SET(GET_CYBERWARE_FLAGS(obj), ARMS_MOD_GYROMOUNT)) {
+          if (GET_CYBERWARE_IS_DISABLED(obj)) {
+            send_to_char(ch, "You activate the gyromount on %s.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
+          } else {
+            send_to_char(ch, "%s's gyromount was already activated.\r\n", CAP(GET_OBJ_NAME(obj)));
+          }
+          GET_CYBERWARE_IS_DISABLED(obj) = FALSE;
+          return;
+        }
+        send_to_char(ch, "%s doesn't have a gyromount to activate.\r\n", CAP(GET_OBJ_NAME(obj)));
+        return;
+    }
+    send_to_char(ch, "You can't activate %s.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
+    return;
+  }
+
   if (GET_OBJ_TYPE(obj) == ITEM_FOCUS && GET_IDNUM(ch) == GET_OBJ_VAL(obj, 2)) {
     if (obj->worn_on == NOWHERE) {
       send_to_char("You have to be wearing or holding a focus to activate it.\r\n", ch);

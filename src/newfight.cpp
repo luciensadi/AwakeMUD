@@ -90,7 +90,7 @@ struct cyberware_data {
         }
       } else if (GET_CYBERWARE_TYPE(obj) == CYB_ARMS) {
         cyberarms = TRUE;
-        if (IS_SET(GET_CYBERWARE_FLAGS(obj), ARMS_MOD_GYROMOUNT)) {
+        if (IS_SET(GET_CYBERWARE_FLAGS(obj), ARMS_MOD_GYROMOUNT) && !GET_CYBERWARE_IS_DISABLED(obj)) {
           cyberarm_gyromount = TRUE;
         }
       } else if (!GET_CYBERWARE_IS_DISABLED(obj)) {

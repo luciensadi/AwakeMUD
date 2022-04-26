@@ -4988,11 +4988,33 @@ ACMD(do_deactivate)
       }
   }
 
-  if (!(obj = get_object_in_equip_vis(ch, argument, ch->equipment, &i)) &&
-      !(obj = get_obj_in_list_vis(ch, argument, ch->carrying))) {
-    send_to_char("Deactivate which focus or power?\r\n", ch);
+  if (!(obj = get_object_in_equip_vis(ch, argument, ch->equipment, &i))
+      && !(obj = get_obj_in_list_vis(ch, argument, ch->carrying))
+      && !(obj = get_obj_in_list_vis(ch, argument, ch->cyberware)))
+  {
+    send_to_char("Which focus, power, or implant do you want to deactivate?\r\n", ch);
     return;
   }
+
+  if (GET_OBJ_TYPE(obj) == ITEM_CYBERWARE) {
+    switch (GET_CYBERWARE_TYPE(obj)) {
+      case CYB_ARMS:
+        if (IS_SET(GET_CYBERWARE_FLAGS(obj), ARMS_MOD_GYROMOUNT)) {
+          if (!GET_CYBERWARE_IS_DISABLED(obj)) {
+            send_to_char(ch, "You deactivate the gyromount on %s.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
+          } else {
+            send_to_char(ch, "%s's gyromount was already deactivated.\r\n", CAP(GET_OBJ_NAME(obj)));
+          }
+          GET_CYBERWARE_IS_DISABLED(obj) = TRUE;
+          return;
+        }
+        send_to_char(ch, "%s doesn't have a gyromount to deactivate.\r\n", CAP(GET_OBJ_NAME(obj)));
+        return;
+    }
+    send_to_char(ch, "You can't deactivate %s.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
+    return;
+  }
+
   if (GET_OBJ_TYPE(obj) == ITEM_FOCUS) {
     if (GET_FOCUS_ACTIVATED(obj) < 1)
       send_to_char(ch, "%s isn't activated.\r\n", GET_OBJ_NAME(obj));
