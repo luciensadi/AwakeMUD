@@ -1848,7 +1848,7 @@ ACMD(do_zswitch)
 
   // and see if they can edit it
   if (real_zonenum < 0 || real_zonenum > top_of_zone_table) {
-    send_to_char("Switching to non-existent zone.", ch);
+    send_to_char("Switching to non-existent zone.\r\n", ch);
   } else {
     if (!can_edit_zone(ch, (real_zonenum))) {
       send_to_char(ch, "Sorry, you don't have access to edit zone %ld.\r\n", zone_table[(real_zonenum)].number);
@@ -1894,7 +1894,9 @@ ACMD(do_zedit)
 
   zonenum = real_zone(ch->player_specials->saved.zonenum);
 
-  REQUIRE_ZONE_EDIT_ACCESS(zonenum);
+  if (zonenum >= 0 && zonenum <= top_of_zone_table) {
+    REQUIRE_ZONE_EDIT_ACCESS(zonenum);
+  }
 
   if (!*arg1) {
     PLR_FLAGS(ch).SetBit(PLR_EDITING);

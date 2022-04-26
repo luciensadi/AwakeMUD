@@ -24,6 +24,7 @@
 
 extern const char *dirs[];
 extern const char *short_where[];
+extern char *get_player_name(vnum_t id);
 
 const char *reset_mode[] =
   {
@@ -207,9 +208,25 @@ void zedit_disp_data_menu(struct descriptor_data *d)
   send_to_char(CH, "^G5^Y) ^WSecurity level: ^c%d^n\r\n", ZON->security );
   send_to_char(CH, "^G6^Y) ^WJurisdiction: ^c%s^n\r\n", jurid[ZON->jurisdiction]);
   if (access_level(CH, LVL_FOR_SETTING_ZONE_EDITOR_ID_NUMBERS)) {
-    send_to_char(CH, "^G7^Y) ^WEditor's ID Numbers: ^c%d^w, ^c%d^w, ^c%d^w, ^c%d^w, ^c%d^n\r\n",
-                 ZON->editor_ids[0], ZON->editor_ids[1], ZON->editor_ids[2],
-                 ZON->editor_ids[3], ZON->editor_ids[4]);
+    send_to_char("^G7^Y) ^WEditors: ", CH);
+    bool printed_something = FALSE;
+    for (int i = 0; i <= 4; i++) {
+      if (ZON->editor_ids[i] > 0) {
+        const char *plr_name = get_player_name(ZON->editor_ids[i]);
+        if (plr_name && str_cmp(plr_name, CHARACTER_DELETED_NAME_FOR_SQL)) {
+          send_to_char(CH, "%s^c%s ^n(^c%ld^n)", printed_something ? ", ": "", plr_name, ZON->editor_ids[i]);
+          printed_something = TRUE;
+        } else {
+          ZON->editor_ids[i] = 0;
+        }
+        delete [] plr_name;
+      }
+    }
+    if (!printed_something) {
+      send_to_char("^cNobody.^n\r\n", CH);
+    } else {
+      send_to_char("\r\n", CH);
+    }
   }
   if (access_level(CH, LVL_FOR_SETTING_ZONE_CONNECTED_STATUS)) {
     send_to_char(CH, "^G8^Y) ^WConnected: ^c%d^n\r\n", ZON->connected);
@@ -340,17 +357,17 @@ void zedit_disp_direction_menu(struct descriptor_data *d)
 const char *get_zedit_maximum_info_string(int amount) {
   if (amount < -1)
     return " (invalid quantity - this will never load!)";
-  
+
   if (amount == -1)
     return " (ignore limit and load infinitely)";
-  
+
   if (amount == 0)
     return " (loads exactly once at game startup, then never again)";
-  
+
   if (amount > 0) {
     return " (loads until this many are in game)";
   }
-  
+
   return " (error: report this message to administration)";
 }
 
@@ -534,6 +551,7 @@ void zedit_parse(struct descriptor_data *d, const char *arg)
       ZON->name = str_dup("an unfinished zone");
       ZON->number = CH->player_specials->saved.zonenum;
       ZON->top = ZON->number * 100 + 99;
+      ZON->editor_ids[0] = GET_IDNUM(CH);
       zedit_disp_data_menu(d);
       break;
     case 'n':
