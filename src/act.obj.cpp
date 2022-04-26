@@ -1426,7 +1426,7 @@ ACMD(do_get)
         veh = get_veh_list(arg2, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch);
       if (cyberdeck && veh) {
         cont = NULL;
-        if (veh->owner != GET_IDNUM(ch) && veh->locked) {
+        if (!veh->owner || (veh->locked && veh->owner != GET_IDNUM(ch))) {
           snprintf(buf, sizeof(buf), "%s's anti-theft measures beep loudly.\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
           act(buf, FALSE, ch, 0, 0, TO_ROOM);
           send_to_char(buf, ch);
@@ -1515,7 +1515,12 @@ ACMD(do_get)
           if (GET_VEHICLE_MOD_TYPE(cont) == TYPE_MOUNT) {
             // Check to see if anyone is manning it.
             if (cont->worn_by) {
-              send_to_char(ch, "Someone is manning it.\r\n");
+              send_to_char(ch, "Someone is manning %s.\r\n", GET_OBJ_NAME(cont));
+              return;
+            }
+            // Make sure it's empty.
+            if (cont->contains) {
+              send_to_char(ch, "You'll have to remove the weapon from %s first.\r\n", GET_OBJ_NAME(cont));
               return;
             }
           }

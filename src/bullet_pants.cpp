@@ -836,3 +836,4 @@ int npc_ammo_usage_preferences[] = {
   AMMO_FLECHETTE,
   AMMO_HARMLESS
 };
+// Changing this? Make sure you update NPC_AMMO_USAGE_PREFERENCES_AMMO_NORMAL_INDEX in the header!
