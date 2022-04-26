@@ -3078,17 +3078,24 @@ char *generate_new_loggable_representation(struct obj_data *obj) {
 
   // We explicitly have to exclude ITEM_PART here because these things 'contain' the deck while in progress.
   if (obj->contains && GET_OBJ_TYPE(obj) != ITEM_PART) {
-    snprintf(ENDOF(log_string), sizeof(log_string) - strlen(log_string), ", containing: [");
-    for (struct obj_data *temp = obj->contains; temp; temp = temp->next_content) {
-      char *representation = generate_new_loggable_representation(temp);
-      snprintf(buf3, sizeof(buf3), " %s%s^g%s",
-              (!temp->next_content && temp != obj->contains) ? "and " : "",
-              representation,
-              temp->next_content ? ";" : "");
-      strlcat(log_string, buf3, MAX_STRING_LENGTH);
-      delete [] representation;
+    // I don't need to see "Containing a blank magazine (restring X) containing..."
+    if (GET_OBJ_TYPE(obj->contains) == ITEM_GUN_AMMO && !(obj->contains->next_content)) {
+      snprintf(ENDOF(log_string), sizeof(log_string) - strlen(log_string), " (loaded with %d %s)",
+               GET_MAGAZINE_AMMO_COUNT(obj),
+               get_ammo_representation(GET_MAGAZINE_BONDED_ATTACKTYPE(obj), GET_MAGAZINE_AMMO_TYPE(obj), GET_MAGAZINE_AMMO_COUNT(obj)));
+    } else {
+      snprintf(ENDOF(log_string), sizeof(log_string) - strlen(log_string), ", containing: [");
+      for (struct obj_data *temp = obj->contains; temp; temp = temp->next_content) {
+        char *representation = generate_new_loggable_representation(temp);
+        snprintf(buf3, sizeof(buf3), " %s%s^g%s",
+                (!temp->next_content && temp != obj->contains) ? "and " : "",
+                representation,
+                temp->next_content ? ";" : "");
+        strlcat(log_string, buf3, MAX_STRING_LENGTH);
+        delete [] representation;
+      }
+      strlcat(log_string, " ]", MAX_STRING_LENGTH);
     }
-    strlcat(log_string, " ]", MAX_STRING_LENGTH);
   }
 
   switch(GET_OBJ_TYPE(obj)) {
