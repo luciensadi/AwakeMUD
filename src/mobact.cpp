@@ -1719,7 +1719,7 @@ int violates_zsp(int security, struct char_data *ch, int pos, struct char_data *
     obj = obj->contains;
 
   int skill = get_skill(mob, SKILL_POLICE_PROCEDURES, i);
-  if (success_test(skill, GET_LEGAL_NUM(obj)))
+  if (success_test(skill, GET_LEGAL_NUM(obj)) > 0)
     return 1;
   else
     return 0;

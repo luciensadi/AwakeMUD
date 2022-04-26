@@ -632,7 +632,7 @@ ACMD(do_upgrade)
     } else if (mod_types[GET_VEHICLE_MOD_TYPE(mod)].tools == TYPE_WORKSHOP && kit == TYPE_FACILITY)
       target--;
 
-    if ((skill = success_test(skill, target)) == -1) {
+    if ((skill = success_test(skill, target)) == BOTCHED_ROLL_RESULT) {
       send_to_char(ch, "You botch up the upgrade completely, destroying %s.\r\n", GET_OBJ_NAME(mod));
       extract_obj(mod);
       return;

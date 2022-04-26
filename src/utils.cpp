@@ -146,7 +146,7 @@ int srdice(void)
 int success_test(int number, int target)
 {
   if (number < 1)
-    return -1;
+    return BOTCHED_ROLL_RESULT;
 
   int total = 0, roll, one = 0;
   int i;
@@ -161,7 +161,7 @@ int success_test(int number, int target)
   }
 
   if (one == number)
-    return -1;
+    return BOTCHED_ROLL_RESULT;
   return total;
 }
 

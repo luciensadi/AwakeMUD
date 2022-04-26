@@ -2687,6 +2687,8 @@ enum {
 #define SHOW_MODE_CONTAINED_OBJ            8
 #define SHOW_MODE_SOMEONE_ELSES_EQUIPMENT  9
 
+#define BOTCHED_ROLL_RESULT                -1
+
 // This is to flag variables used eg in macros so that the compiler won't complain about unused variables
 // when they're actually used. Casting to void does nothing but the compiler will stop thinking it's
 // unused. This is the same way Q_UNUSED is used in Qt. -- Nodens

@@ -2142,7 +2142,7 @@ ACMD(do_treat)
     target += 2;
 
   act("$n begins to treat $N.", TRUE, ch, 0, vict, TO_NOTVICT);
-  if (success_test(i, target)) {
+  if (success_test(i, target) > 0) {
     act("$N appears better.", FALSE, ch, 0, vict, TO_CHAR);
     act("The pain seems significantly less after $n's treatment.",
         FALSE, ch, 0, vict, TO_VICT);

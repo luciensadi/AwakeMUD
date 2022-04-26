@@ -941,13 +941,20 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
         int target = 6 + modify_target(attacker);
         int skill = get_skill(attacker, SKILL_WHIPS_FLAILS, target);
         int successes = success_test(skill, target);
-        snprintf(rbuf, sizeof(rbuf), "Monowhip 'flailure' test: Skill of %d, target of %d, successes is %d.", skill, target, successes);
+        snprintf(rbuf, sizeof(rbuf), "Monowhip 'flailure' avoidance test: Skill of %d, target of %d, successes is %d.", skill, target, successes);
         SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
+
+        // If you didn't manage to avoid flailure, you risk taking damage.
         if (successes <= 0) {
           act("^yYour monowhip flails out of control, striking you instead of $N!^n", FALSE, attacker, 0, defender, TO_CHAR);
           act("$n's monowhip completely misses and recoils to hit $m!", TRUE, attacker, 0, 0, TO_ROOM);
-          int dam_total = convert_damage(stage(-1 * success_test(GET_BOD(attacker) + (successes == 0 ? GET_DEFENSE(attacker) : 0), 10), SERIOUS));
-
+          int base_damage = SERIOUS;
+          int damage_resist_dice = GET_BOD(attacker);
+          if (successes != BOTCHED_ROLL_RESULT) {
+            damage_resist_dice += GET_DEFENSE(attacker);
+          }
+          int staged_damage = stage(-1 * success_test(damage_resist_dice, 10), base_damage);
+          int dam_total = convert_damage(staged_damage);
 
           //Handle suprise attack/alertness here -- attacker can die here, we remove the surprise flag anyhow
           //prior to handling the damage and we don't alter alert state at all because if defender is a quest target
