@@ -2872,8 +2872,10 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
           else
             strlcpy(flag_parse, " synthetic", sizeof(flag_parse));
 
+          /*
           if (IS_SET(GET_CYBERWARE_FLAGS(j), SKULL_MOD_ARMOR_MOD1))
             strlcpy(flag_parse, ", armored", sizeof(flag_parse));
+          */
           break;
         case CYB_TORSO:
           if (IS_SET(GET_CYBERWARE_FLAGS(j), TORSO_MOD_OBVIOUS))
@@ -2881,12 +2883,14 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
           else
             strlcpy(flag_parse, " synthetic", sizeof(flag_parse));
 
+          /*
           if (IS_SET(GET_CYBERWARE_FLAGS(j), TORSO_MOD_ARMOR_MOD1))
             strlcpy(flag_parse, ", armored (grade 1)", sizeof(flag_parse));
           else if (IS_SET(GET_CYBERWARE_FLAGS(j), TORSO_MOD_ARMOR_MOD2))
             strlcpy(flag_parse, ", armored (grade 2)", sizeof(flag_parse));
           else if (IS_SET(GET_CYBERWARE_FLAGS(j), TORSO_MOD_ARMOR_MOD3))
             strlcpy(flag_parse, ", armored (grade 3)", sizeof(flag_parse));
+          */
           break;
         case CYB_LEGS:
           if (IS_SET(GET_CYBERWARE_FLAGS(j), LEGS_MOD_OBVIOUS))
@@ -2894,6 +2898,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
           else
             strlcpy(flag_parse, " synthetic", sizeof(flag_parse));
 
+          /*
           if (IS_SET(GET_CYBERWARE_FLAGS(j), LEGS_MOD_ARMOR_MOD1))
             strlcpy(flag_parse, ", armored (grade 1)", sizeof(flag_parse));
 
@@ -2910,6 +2915,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
             strlcpy(flag_parse, ", quickening (grade 2)", sizeof(flag_parse));
           else if (IS_SET(GET_CYBERWARE_FLAGS(j), LEGS_MOD_QUICKNESS_MOD3))
             strlcpy(flag_parse, ", quickening (grade 3)", sizeof(flag_parse));
+          */
           break;
         case CYB_ARMS:
           if (IS_SET(GET_CYBERWARE_FLAGS(j), ARMS_MOD_OBVIOUS))
@@ -2917,6 +2923,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
           else
             strlcpy(flag_parse, " synthetic", sizeof(flag_parse));
 
+          /*
           if (IS_SET(GET_CYBERWARE_FLAGS(j), ARMS_MOD_ARMOR_MOD1))
             strlcpy(flag_parse, ", armored (grade 1)", sizeof(flag_parse));
 
@@ -2933,9 +2940,10 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
             strlcpy(flag_parse, ", quickening (grade 2)", sizeof(flag_parse));
           else if (IS_SET(GET_CYBERWARE_FLAGS(j), ARMS_MOD_QUICKNESS_MOD3))
             strlcpy(flag_parse, ", quickening (grade 3)", sizeof(flag_parse));
+          */
 
           if (IS_SET(GET_CYBERWARE_FLAGS(j), ARMS_MOD_GYROMOUNT))
-            strlcpy(flag_parse, ", gyromountable", sizeof(flag_parse));
+            strlcpy(flag_parse, ", gyromount-enabled", sizeof(flag_parse));
           break;
         case CYB_DERMALSHEATHING:
           if (GET_CYBERWARE_FLAGS(j))
