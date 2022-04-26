@@ -51,7 +51,6 @@ bool perform_nerve_strike(struct combat_data *att, struct combat_data *def, char
 (IS_GUN(GET_OBJ_VAL(eq, 3)))))
 
 SPECIAL(weapon_dominator);
-WSPEC(monowhip);
 
 struct cyberware_data {
   int climbingclaws;
@@ -254,6 +253,7 @@ struct melee_combat_data {
         }
 
         // Monowhips.
+        WSPEC(monowhip);
         is_monowhip = obj_index[GET_OBJ_RNUM(weapon)].wfunc == monowhip;
       }
     } else if (cyber->num_cyberweapons > 0) {
@@ -1091,11 +1091,15 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     // Calculate the power of the attack.
     if (att->weapon) {
       // Monowhips deal flat damage.
-      if (GET_OBJ_RNUM(att->weapon) >= 0 && obj_index[GET_OBJ_RNUM(att->weapon)].wfunc == monowhip) {
+      if (GET_OBJ_RNUM(att->weapon) >= 0 && att->melee->is_monowhip) {
         att->melee->power = 10;
         att->melee->damage_level = SERIOUS;
 
-        att->melee->power -= GET_IMPACT(def->ch) / 2;
+        // SR3 p121: Halve impact armor, but double barrier ratings. This approximates that.
+        if (!MOB_FLAGGED(def->ch, MOB_INANIMATE))
+          att->melee->power -= GET_IMPACT(def->ch) / 2;
+        else
+          att->melee->power += GET_IMPACT(def->ch) * 2;
       }
       // Because we swap att and def pointers if defender wins the clash we need to make sure attacker gets proper values
       // if they're using a ranged weapon in clash instead of setting their melee power to the damage code of the ranged
