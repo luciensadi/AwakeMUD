@@ -2294,10 +2294,14 @@ bool invis_ok(struct char_data *ch, struct char_data *vict) {
 
 // Returns TRUE if the character is able to make noise, FALSE otherwise.
 bool char_can_make_noise(struct char_data *ch, const char *message) {
-  if (affected_by_spell(ch, SPELL_STEALTH) || get_ch_in_room(ch)->silence[0]) {
+  bool is_stealth = affected_by_spell(ch, SPELL_STEALTH);
+  bool is_silence = get_ch_in_room(ch)->silence[ROOM_NUM_SPELLS_OF_TYPE] > 0;
+  if (is_stealth || is_silence) {
     // Can't make noise.
-    if (message)
+    if (message) {
       send_to_char(message, ch);
+      send_to_char(ch, "(OOC: You're %s.\r\n)", is_stealth ? "under a stealth spell" : "in a silent room");
+    }
 
     return FALSE;
   }
