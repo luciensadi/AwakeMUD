@@ -3764,7 +3764,7 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
   }
 
   // If the player's in a silent room, don't propagate the gunshot.
-  if (ch_room->silence[0])
+  if (ch_room->silence[ROOM_NUM_SPELLS_OF_TYPE] > 0)
     return;
 
   // If the player has a silencer or suppressor, restrict the propagation of the gunshot.
@@ -3788,7 +3788,7 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
   // Scan the shooter's room's exits and add notifications to any valid adjacent rooms.
   // 'Valid' is defined as 'exists and is not flagged as silent'.
   for (int door1 = 0; door1 < NUM_OF_DIRS; door1++) {
-    if (ch_room->dir_option[door1] && (room1 = real_room(ch_room->dir_option[door1]->to_room->number)) != NOWHERE && !(world[room1].silence[0])) {
+    if (ch_room->dir_option[door1] && (room1 = real_room(ch_room->dir_option[door1]->to_room->number)) != NOWHERE && world[room1].silence[ROOM_NUM_SPELLS_OF_TYPE] <= 0) {
       // If the room is in the heard-it-already list, skip to the next one.
       snprintf(temp, sizeof(temp), ".%ld.", room1);
       if (strstr(been_heard, temp) != 0)
@@ -3812,7 +3812,7 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
 
         // Add the room's exits to the list.
         for (int door2 = 0; door2 < NUM_OF_DIRS; door2++)
-          if (world[room1].dir_option[door2] && (room2 = real_room(world[room1].dir_option[door2]->to_room->number)) != NOWHERE && !(world[room2].silence[0]))
+          if (world[room1].dir_option[door2] && (room2 = real_room(world[room1].dir_option[door2]->to_room->number)) != NOWHERE && world[room2].silence[ROOM_NUM_SPELLS_OF_TYPE] <= 0)
             room_queue.push(room2);
       }
     }
@@ -3838,7 +3838,7 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
 
     // Add the room's exits to the list.
     for (int door = 0; door < NUM_OF_DIRS; door++)
-      if (world[room1].dir_option[door] && (room2 = real_room(world[room1].dir_option[door]->to_room->number)) != NOWHERE && !(world[room2].silence[0]))
+      if (world[room1].dir_option[door] && (room2 = real_room(world[room1].dir_option[door]->to_room->number)) != NOWHERE && world[room2].silence[ROOM_NUM_SPELLS_OF_TYPE] <= 0)
         secondary_room_queue.push(room2);
   }
 
@@ -4042,7 +4042,7 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
 
     // Silence level is the highest of the room's silence or the victim's stealth. Stealth in AwakeMUD is a hybrid of
     //  the silence and stealth spells, so it's a little OP but whatever.
-    int silence_level = MAX(get_ch_in_room(ch)->silence[0], get_ch_in_room(victim)->silence[0]);
+    int silence_level = MAX(get_ch_in_room(ch)->silence[ROOM_NUM_SPELLS_OF_TYPE], get_ch_in_room(victim)->silence[ROOM_NUM_SPELLS_OF_TYPE]);
     silence_level = MAX(silence_level, get_spell_affected_successes(victim, SPELL_STEALTH));
 
     // SR3 p196: Silence spell increases hearing perception test TN up to the lower of its successes or the spell's rating.

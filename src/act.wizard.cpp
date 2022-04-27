@@ -1058,6 +1058,21 @@ void do_stat_room(struct char_data * ch)
           (rm->func == NULL) ? "None" : "^CExists^n", buf2, light_levels[light_level(rm)], light_levels[rm->vision[1]]);
   send_to_char(buf, ch);
 
+  send_to_char(ch, "Effects: light[^c%d^n][^c%d^n][^c%d^n], peaceful[^c%d^n], poltergeist[^c%d^n][^c%d^n], icesheet[^c%d^n][^c%d^n], shadow[^c%d^n][^c%d^n], silence[^c%d^n][^c%d^n]\r\n",
+               rm->light[0],
+               rm->light[1],
+               rm->light[2],
+               rm->peaceful,
+               rm->poltergeist[0],
+               rm->poltergeist[1],
+               rm->icesheet[0],
+               rm->icesheet[1],
+               rm->shadow[0],
+               rm->shadow[1],
+               rm->silence[0],
+               rm->silence[1]
+              );
+
   send_to_char("Description:\r\n", ch);
   if (rm->description)
     send_to_char(rm->description, ch);

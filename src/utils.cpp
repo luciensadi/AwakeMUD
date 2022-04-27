@@ -2265,7 +2265,7 @@ bool invis_ok(struct char_data *ch, struct char_data *vict) {
     return TRUE;
 
   // Ultrasound pierces all invis as long as it's in the same room and not blocked by silence or stealth.
-  if (has_ultrasound && !affected_by_spell(vict, SPELL_STEALTH) && vict_room->silence[0] <= 0)
+  if (has_ultrasound && !affected_by_spell(vict, SPELL_STEALTH) && vict_room->silence[ROOM_NUM_SPELLS_OF_TYPE] <= 0)
     return TRUE;
 
   // Allow resist test VS improved invis-- but only if you're not seeing the world through sensors.

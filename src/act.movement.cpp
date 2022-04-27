@@ -202,7 +202,7 @@ bool should_tch_see_chs_movement_message(struct char_data *tch, struct char_data
     // House rule: Stealth/silence spells add a TN penalty to the spotter, up to 4.
     {
       int stealth_spell_tn = get_spell_affected_successes(ch, SPELL_STEALTH);
-      int silence_tn = in_room->silence[0] ? in_room->silence[1] : 0;
+      int silence_tn = in_room->silence[ROOM_NUM_SPELLS_OF_TYPE] > 0 ? in_room->silence[ROOM_HIGHEST_SPELL_FORCE] : 0;
       int magic_tn_modifier = MIN(stealth_spell_tn + silence_tn, 4);
 
       if (magic_tn_modifier > 0) {

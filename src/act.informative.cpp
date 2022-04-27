@@ -3672,11 +3672,11 @@ const char *get_vision_string(struct char_data *ch, bool ascii_friendly=FALSE) {
   }
 
   if (ascii_friendly) {
-    if (has_vision(ch, VISION_ULTRASONIC) && get_ch_in_room(ch)->silence[0] <= 0)
+    if (has_vision(ch, VISION_ULTRASONIC) && get_ch_in_room(ch)->silence[ROOM_NUM_SPELLS_OF_TYPE] <= 0)
         return "You have ultrasonic vision.";
   } else {
     if (has_vision(ch, VISION_ULTRASONIC)) {
-      if (get_ch_in_room(ch)->silence[0] > 0)
+      if (get_ch_in_room(ch)->silence[ROOM_NUM_SPELLS_OF_TYPE] > 0)
         return "Your ultrasonic vision is being suppressed by a field of silence here.\r\n";
       else
         return "You have ultrasonic vision.\r\n";
