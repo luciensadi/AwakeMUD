@@ -491,6 +491,7 @@ const char *player_bits[] =
     "PAID_FOR_ROLLS",
     "NO_AUTO_SYSP",
     "RADIO_MUTED",
+    "SITE_HIDDEN",
     "\n"
   };
 

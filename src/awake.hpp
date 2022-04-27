@@ -319,7 +319,8 @@ enum {
 #define PLR_PAID_FOR_ROLLS                  44
 #define PLR_NO_AUTO_SYSP_AWARDS             45 /* Player abuses typo etc for automatic sysp awards. */
 #define PLR_RADIO_MUTED                     46
-#define PLR_MAX                             47
+#define PLR_SITE_HIDDEN                     47 /* For staff who really don't want people knowing who their alt is. */
+#define PLR_MAX                             48
 
 
 

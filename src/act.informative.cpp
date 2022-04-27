@@ -5137,7 +5137,7 @@ ACMD(do_users)
     if (*d->host && GET_DESC_LEVEL(d) <= GET_LEVEL(ch))
       snprintf(ENDOF(line), sizeof(line) - strlen(line), "[%s]\r\n", d->host);
     else
-      snprintf(line, sizeof(line), "[Hostname unknown]\r\n");
+      snprintf(ENDOF(line), sizeof(line) - strlen(line), "[hostname masked]\r\n");
 
     if (d->connected) {
       snprintf(line2, sizeof(line2), "^g%s^n", line);

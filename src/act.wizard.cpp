@@ -1570,7 +1570,13 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
 
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", Idle Timer: [%d], Emote Timer: [%d]\r\n", k->char_specials.timer, k->char_specials.last_social_action);
 
-  PLR_FLAGS(k).PrintBits(buf2, MAX_STRING_LENGTH, player_bits, PLR_MAX);
+  if (PLR_FLAGGED(k, PLR_SITE_HIDDEN) && !access_level(ch, LVL_PRESIDENT)) {
+    PLR_FLAGS(k).RemoveBit(PLR_SITE_HIDDEN);
+    PLR_FLAGS(k).PrintBits(buf2, MAX_STRING_LENGTH, player_bits, PLR_MAX);
+    PLR_FLAGS(k).SetBit(PLR_SITE_HIDDEN);
+  } else {
+    PLR_FLAGS(k).PrintBits(buf2, MAX_STRING_LENGTH, player_bits, PLR_MAX);
+  }
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "PLR: ^c%s^n\r\n", buf2);
 
   PRF_FLAGS(k).PrintBits(buf2, MAX_STRING_LENGTH, preference_bits, PRF_MAX);
@@ -4374,7 +4380,8 @@ ACMD(do_set)
                { "noautosyspoints", LVL_FIXER, PC, BINARY },
                { "notells", LVL_FIXER, PC, BINARY },
                { "noooc", LVL_FIXER, PC, BINARY },
-               { "noradio", LVL_FIXER, PC, BINARY },
+               { "noradio", LVL_FIXER, PC, BINARY }, // 85
+               { "sitehidden",  LVL_PRESIDENT, PC, BINARY },
                { "\n", 0, BOTH, MISC }
              };
 
@@ -4474,7 +4481,8 @@ ACMD(do_set)
     snprintf(buf, sizeof(buf),"%s set %s -> %s.",GET_CHAR_NAME(ch),vict?GET_NAME(vict):"", argument);
   else
     snprintf(buf, sizeof(buf),"%s set %s -> %s.",GET_CHAR_NAME(ch),vict?GET_CHAR_NAME(vict):"", argument);
-  mudlog(buf, ch, LOG_WIZLOG, TRUE );
+  if (l != 86)
+    mudlog(buf, ch, LOG_WIZLOG, TRUE );
 
   strcpy(buf, "Okay.");  /* can't use OK macro here 'cause of \r\n */
   switch (l) {
@@ -5011,6 +5019,10 @@ ACMD(do_set)
     SET_OR_REMOVE(PLR_FLAGS(vict), PLR_RADIO_MUTED);
     snprintf(buf, sizeof(buf),"%s turned %s's no-radio flag %s.", GET_CHAR_NAME(ch), GET_NAME(vict), PLR_FLAGGED(vict, PLR_RADIO_MUTED) ? "ON" : "OFF");
     mudlog(buf, ch, LOG_WIZLOG, TRUE);
+    break;
+  case 86: /* site hidden */
+    SET_OR_REMOVE(PLR_FLAGS(vict), PLR_SITE_HIDDEN);
+    log_vfprintf("CHEATLOG: %s turned %s's site-hidden flag %s.", GET_CHAR_NAME(ch), GET_NAME(vict), PLR_FLAGGED(vict, PLR_SITE_HIDDEN) ? "ON" : "OFF");
     break;
   default:
     snprintf(buf, sizeof(buf), "Can't set that!");

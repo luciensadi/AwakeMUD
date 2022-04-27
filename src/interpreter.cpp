@@ -2668,6 +2668,16 @@ void nanny(struct descriptor_data * d, char *arg)
       if (perform_dupe_check(d))
         return;
 
+      if (PLR_FLAGGED(d->character, PLR_SITE_HIDDEN)) {
+#ifdef USE_PRIVATE_CE_WORLD
+        extern void rewrite_hidden_site(struct descriptor_data *d);
+        SEND_TO_Q("\r\n^GFYI, you've connected to a site-hidden character. Rewriting your site now.^n\r\n", d);
+        rewrite_hidden_site(d);
+#else
+        SEND_TO_Q("\r\n^RFYI, you've connected to a site-hidden character, but no site rewriting logic has been implemented for your game. Contact staff.^n\r\n", d);
+#endif
+      }
+
       /* undo it just in case they are set */
       PLR_FLAGS(d->character).RemoveBits(PLR_WRITING, PLR_MAILING,
                                          PLR_EDITING,
