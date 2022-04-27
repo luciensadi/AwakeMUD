@@ -1,12 +1,12 @@
 // File describes the spec and helpers for the initiative tracker, which is
 // deployed in all the Nerpcorpolis rooms. - LS
 
-#include "awake.h"
-#include "structs.h"
-#include "comm.h"
-#include "interpreter.h"
-#include "db.h"
-#include "handler.h"
+#include "awake.hpp"
+#include "structs.hpp"
+#include "comm.hpp"
+#include "interpreter.hpp"
+#include "db.hpp"
+#include "handler.hpp"
 
 char tracker_primary_buf[2000];
 

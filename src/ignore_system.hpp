@@ -3,8 +3,8 @@
 
 #include <unordered_map>
 
-#include "bitfield.h"  // for Bitfield
-#include "structs.h"   // for struct char_data
+#include "bitfield.hpp"  // for Bitfield
+#include "structs.hpp"   // for struct char_data
 
 /* Design Principles
 

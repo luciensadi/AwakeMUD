@@ -8,19 +8,19 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "structs.h"
-#include "awake.h"
-#include "interpreter.h"
-#include "comm.h"
-#include "constants.h"
-#include "utils.h"
-#include "db.h"
+#include "structs.hpp"
+#include "awake.hpp"
+#include "interpreter.hpp"
+#include "comm.hpp"
+#include "constants.hpp"
+#include "utils.hpp"
+#include "db.hpp"
 #include <stdlib.h>
-#include "boards.h"
-#include "screen.h"
-#include "olc.h"
-#include "newmatrix.h"
-#include "config.h"
+#include "boards.hpp"
+#include "screen.hpp"
+#include "olc.hpp"
+#include "newmatrix.hpp"
+#include "config.hpp"
 
 extern const char *dirs[];
 extern const char *short_where[];

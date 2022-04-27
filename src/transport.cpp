@@ -18,17 +18,17 @@
 #else
 #endif
 
-#include "structs.h"
-#include "awake.h"
-#include "utils.h"
-#include "comm.h"
-#include "interpreter.h"
-#include "handler.h"
-#include "db.h"
-#include "transport.h"
-#include "utils.h"
-#include "constants.h"
-#include "config.h"
+#include "structs.hpp"
+#include "awake.hpp"
+#include "utils.hpp"
+#include "comm.hpp"
+#include "interpreter.hpp"
+#include "handler.hpp"
+#include "db.hpp"
+#include "transport.hpp"
+#include "utils.hpp"
+#include "constants.hpp"
+#include "config.hpp"
 
 SPECIAL(call_elevator);
 SPECIAL(elevator_spec);

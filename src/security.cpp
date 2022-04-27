@@ -2,12 +2,12 @@
 #include <string.h>
 #include <sodium.h>
 
-#include "utils.h"
-#include "structs.h"
-#include "comm.h"
-#include "newdb.h"
-#include "security.h"
-#include "perfmon.h"
+#include "utils.hpp"
+#include "structs.hpp"
+#include "comm.hpp"
+#include "newdb.hpp"
+#include "security.hpp"
+#include "perfmon.hpp"
 
 #ifdef NOCRYPT
 bool run_crypto_tests() {return TRUE;}

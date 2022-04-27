@@ -9,9 +9,9 @@
 
 #include <mysql/mysql.h>
 
-#include "awake.h"
-#include "structs.h"
-#include "utils.h"
+#include "awake.hpp"
+#include "structs.hpp"
+#include "utils.hpp"
 
 class File;
 

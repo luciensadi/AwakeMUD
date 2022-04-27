@@ -6,19 +6,19 @@
 #include <math.h>
 #include <unistd.h>
 
-#include "structs.h"
-#include "awake.h"
-#include "comm.h"
-#include "handler.h"
-#include "db.h"
-#include "interpreter.h"
-#include "utils.h"
-#include "newshop.h"
-#include "screen.h"
-#include "olc.h"
-#include "constants.h"
-#include "config.h"
-#include "newmail.h"
+#include "structs.hpp"
+#include "awake.hpp"
+#include "comm.hpp"
+#include "handler.hpp"
+#include "db.hpp"
+#include "interpreter.hpp"
+#include "utils.hpp"
+#include "newshop.hpp"
+#include "screen.hpp"
+#include "olc.hpp"
+#include "constants.hpp"
+#include "config.hpp"
+#include "newmail.hpp"
 
 extern struct time_info_data time_info;
 extern const char *pc_race_types[];

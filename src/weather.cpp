@@ -12,14 +12,14 @@
 #include <string.h>
 #include <time.h>
 
-#include "structs.h"
-#include "awake.h"
-#include "utils.h"
-#include "comm.h"
-#include "handler.h"
-#include "interpreter.h"
-#include "db.h"
-#include "newmagic.h"
+#include "structs.hpp"
+#include "awake.hpp"
+#include "utils.hpp"
+#include "comm.hpp"
+#include "handler.hpp"
+#include "interpreter.hpp"
+#include "db.hpp"
+#include "newmagic.hpp"
 extern struct time_info_data time_info;
 extern struct char_data *character_list;
 extern struct index_data *mob_index;

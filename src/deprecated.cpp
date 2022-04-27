@@ -1,8 +1,8 @@
 #include <math.h>
 
-#include "awake.h"
-#include "structs.h"
-#include "utils.h"
+#include "awake.hpp"
+#include "structs.hpp"
+#include "utils.hpp"
 
 /* Given a cybereye package, calculate what its essence cost would have been under the old system. */
 int get_deprecated_cybereye_essence_cost(struct obj_data *obj) {

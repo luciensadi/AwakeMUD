@@ -1,6 +1,6 @@
-#include "awake.h"
-#include "utils.h"
-#include "lexicons.h"
+#include "awake.hpp"
+#include "utils.hpp"
+#include "lexicons.hpp"
 
 int lexicon_sizes[NUM_LEXICONS];
 int lexicon_last_used[NUM_LEXICONS][NUM_LEXICON_WORDS_BEFORE_REPEAT];

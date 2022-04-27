@@ -88,24 +88,24 @@ convobj:
 convwld:
 	$(MAKE) ../bin/convwld
 
-../bin/autowiz : util/autowiz.cc structs.h db.h utils.h
+../bin/autowiz : util/autowiz.cc structs.hpp db.hpp utils.hpp
 	$(CXX) $(CPPFLAGS) -o ../bin/autowiz util/autowiz.cc
-../bin/delobjs : util/delobjs.cc structs.h
+../bin/delobjs : util/delobjs.cc structs.hpp
 	$(CXX) $(CPPFLAGS) -o ../bin/delobjs util/delobjs.cc
-../bin/listrent : util/listrent.cc structs.h
+../bin/listrent : util/listrent.cc structs.hpp
 
 	$(CXX) $(CPPFLAGS) -o ../bin/listrent util/listrent.cc
-../bin/mudpasswd   : util/mudpasswd.cc structs.h
+../bin/mudpasswd   : util/mudpasswd.cc structs.hpp
 	$(CXX) $(CPPFLAGS) -o ../bin/mudpasswd util/mudpasswd.cc
-../bin/purgeplay : util/purgeplay.cc structs.h
+../bin/purgeplay : util/purgeplay.cc structs.hpp
 	$(CXX) $(CPPFLAGS) -o ../bin/purgeplay util/purgeplay.cc
-../bin/showplay : util/showplay.cc structs.h
+../bin/showplay : util/showplay.cc structs.hpp
 	$(CXX) $(CPPFLAGS) -o ../bin/showplay util/showplay.cc
 ../bin/sign: util/sign.cc
 	$(CXX) $(CPPFLAGS) -o ../bin/sign $(COMMFLAGS) util/sign.cc
 ../bin/split: util/split.cc
 	$(CXX) $(CPPFLAGS) -o ../bin/split util/split.cc
-../bin/plrtoascii: util/plrtoascii.cc db.h utils.h structs.h
+../bin/plrtoascii: util/plrtoascii.cc db.hpp utils.hpp structs.hpp
 	$(CXX) $(CPPFLAGS) -o ../bin/plrtoascii util/plrtoascii.cc
 
 ../bin/convmob: util/convmob.cpp constants.cpp bitfield.cpp

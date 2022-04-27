@@ -11,20 +11,20 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "structs.h"
-#include "awake.h"
-#include "utils.h"
-#include "comm.h"
-#include "interpreter.h"
-#include "handler.h"
-#include "db.h"
-#include "house.h"
-#include "transport.h"
-#include "constants.h"
-#include "newmagic.h"
-#include "config.h"
-#include "ignore_system.h"
-#include "perception_tests.h"
+#include "structs.hpp"
+#include "awake.hpp"
+#include "utils.hpp"
+#include "comm.hpp"
+#include "interpreter.hpp"
+#include "handler.hpp"
+#include "db.hpp"
+#include "house.hpp"
+#include "transport.hpp"
+#include "constants.hpp"
+#include "newmagic.hpp"
+#include "config.hpp"
+#include "ignore_system.hpp"
+#include "perception_tests.hpp"
 
 /* external functs */
 int special(struct char_data * ch, int cmd, char *arg);

@@ -13,21 +13,21 @@
 #include <stdlib.h>
 #include <ctype.h>
 
-#include "structs.h"
-#include "awake.h"
-#include "utils.h"
-#include "comm.h"
-#include "db.h"
-#include "newdb.h"
-#include "handler.h"
-#include "interpreter.h"
-#include "memory.h"
-#include "dblist.h"
-#include "constants.h"
-#include "newmatrix.h"
-#include "newmagic.h"
-#include "playergroups.h"
-#include "config.h"
+#include "structs.hpp"
+#include "awake.hpp"
+#include "utils.hpp"
+#include "comm.hpp"
+#include "db.hpp"
+#include "newdb.hpp"
+#include "handler.hpp"
+#include "interpreter.hpp"
+#include "memory.hpp"
+#include "dblist.hpp"
+#include "constants.hpp"
+#include "newmatrix.hpp"
+#include "newmagic.hpp"
+#include "playergroups.hpp"
+#include "config.hpp"
 
 /* external functions */
 extern void stop_fighting(struct char_data * ch);

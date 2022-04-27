@@ -11,20 +11,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "structs.h"
-#include "awake.h"
-#include "utils.h"
-#include "db.h"
-#include "comm.h"
-#include "interpreter.h"
-#include "handler.h"
-#include "constants.h"
-#include "act.drive.h"
-#include "transport.h"
-#include "quest.h"
-#include "bullet_pants.h"
-#include "bitfield.h"
-#include "config.h"
+#include "structs.hpp"
+#include "awake.hpp"
+#include "utils.hpp"
+#include "db.hpp"
+#include "comm.hpp"
+#include "interpreter.hpp"
+#include "handler.hpp"
+#include "constants.hpp"
+#include "act.drive.hpp"
+#include "transport.hpp"
+#include "quest.hpp"
+#include "bullet_pants.hpp"
+#include "bitfield.hpp"
+#include "config.hpp"
 
 ACMD_DECLARE(do_say);
 ACMD_DECLARE(do_prone);

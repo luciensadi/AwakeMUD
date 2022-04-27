@@ -39,15 +39,15 @@ TO ADD A NEW BOARD, simply follow our easy 4-step program:
 #include <unistd.h>
 #include <sys/time.h>
 #endif
-#include "structs.h"
-#include "utils.h"
-#include "comm.h"
-#include "db.h"
-#include "boards.h"
-#include "interpreter.h"
-#include "handler.h"
-#include "awake.h"
-#include "newmatrix.h"
+#include "structs.hpp"
+#include "utils.hpp"
+#include "comm.hpp"
+#include "db.hpp"
+#include "boards.hpp"
+#include "interpreter.hpp"
+#include "handler.hpp"
+#include "awake.hpp"
+#include "newmatrix.hpp"
 
 /* format:      vnum, read lvl, write lvl, remove lvl, filename
    Be sure to also change NUM_OF_BOARDS in awake.h */

@@ -13,20 +13,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "structs.h"
-#include "awake.h"
-#include "interpreter.h"
-#include "comm.h"
-#include "utils.h"
-#include "db.h"
-#include "newdb.h"
-#include "boards.h"
-#include "screen.h"
-#include "olc.h"
-#include "memory.h"
-#include "constants.h"
-#include "handler.h"
-#include "config.h"
+#include "structs.hpp"
+#include "awake.hpp"
+#include "interpreter.hpp"
+#include "comm.hpp"
+#include "utils.hpp"
+#include "db.hpp"
+#include "newdb.hpp"
+#include "boards.hpp"
+#include "screen.hpp"
+#include "olc.hpp"
+#include "memory.hpp"
+#include "constants.hpp"
+#include "handler.hpp"
+#include "config.hpp"
 
 extern class memoryClass *Mem;
 

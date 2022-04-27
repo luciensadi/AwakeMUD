@@ -8,15 +8,15 @@
 #include <sodium.h> // for crypto_pwhash_STRBYTES
 #include <unordered_map>
 
-#include "types.h"
-#include "awake.h"
-#include "list.h"
-#include "bitfield.h"
-#include "utils.h"
-#include "playergroup_classes.h"
-#include "protocol.h"
-#include "chargen.h"
-#include "vision_overhaul.h"
+#include "types.hpp"
+#include "awake.hpp"
+#include "list.hpp"
+#include "bitfield.hpp"
+#include "utils.hpp"
+#include "playergroup_classes.hpp"
+#include "protocol.hpp"
+#include "chargen.hpp"
+#include "vision_overhaul.hpp"
 
 #define SPECIAL(name) \
    int (name)(struct char_data *ch, void *me, int cmd, char *argument)

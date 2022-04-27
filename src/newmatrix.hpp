@@ -1,7 +1,7 @@
 #ifndef __newmatrix_h__
 #define __newmatrix_h__
 
-#include "bitfield.h"
+#include "bitfield.hpp"
 
 #define ACCESS	0
 #define CONTROL	1

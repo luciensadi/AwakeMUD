@@ -13,24 +13,24 @@
 #include <algorithm>
 #include <mysql/mysql.h>
 
-#include "structs.h"
-#include "newdb.h"
-#include "db.h"
-#include "comm.h"       // for shutdown()
-#include "file.h"
-#include "utils.h"
-#include "memory.h"
-#include "handler.h"
-#include "vtable.h"
-#include "constants.h"
-#include "interpreter.h" // for alias
-#include "config.h"
-#include "bullet_pants.h"
-#include "ignore_system.h"
+#include "structs.hpp"
+#include "newdb.hpp"
+#include "db.hpp"
+#include "comm.hpp"       // for shutdown()
+#include "file.hpp"
+#include "utils.hpp"
+#include "memory.hpp"
+#include "handler.hpp"
+#include "vtable.hpp"
+#include "constants.hpp"
+#include "interpreter.hpp" // for alias
+#include "config.hpp"
+#include "bullet_pants.hpp"
+#include "ignore_system.hpp"
 
 /* mysql_config.h must be filled out with your own connection info. */
 /* For obvious reasons, DO NOT ADD THIS FILE TO SOURCE CONTROL AFTER CUSTOMIZATION. */
-#include "mysql_config.h"
+#include "mysql_config.hpp"
 
 extern void kill_ems(char *);
 extern void init_char_sql(struct char_data *ch);

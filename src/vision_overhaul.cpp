@@ -4,9 +4,9 @@
 
 #include <map>
 
-#include "structs.h"
-#include "comm.h"
-#include "constants.h"
+#include "structs.hpp"
+#include "comm.hpp"
+#include "constants.hpp"
 
 bool _vision_prereqs_are_valid(struct char_data *ch, int type, const char *function_name);
 bool _vision_bit_is_valid(int bit, const char *function_name);

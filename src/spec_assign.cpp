@@ -10,12 +10,12 @@
 
 #include <stdio.h>
 
-#include "structs.h"
-#include "awake.h"
-#include "db.h"
-#include "interpreter.h"
-#include "utils.h"
-#include "archetypes.h"
+#include "structs.hpp"
+#include "awake.hpp"
+#include "db.hpp"
+#include "interpreter.hpp"
+#include "utils.hpp"
+#include "archetypes.hpp"
 
 void ASSIGNMOB(long mob, SPECIAL(fname));
 

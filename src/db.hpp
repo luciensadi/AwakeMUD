@@ -12,7 +12,7 @@
 #define _db_h_
 
 #include <stdio.h>
-#include "bitfield.h"
+#include "bitfield.hpp"
 
 // Versioning for flat file formats. Gonna start adding these as it will make updating formats a lot
 // easier to handle in code.

@@ -1,18 +1,18 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "structs.h"
-#include "awake.h"
-#include "interpreter.h"
-#include "comm.h"
-#include "constants.h"
-#include "utils.h"
-#include "db.h"
+#include "structs.hpp"
+#include "awake.hpp"
+#include "interpreter.hpp"
+#include "comm.hpp"
+#include "constants.hpp"
+#include "utils.hpp"
+#include "db.hpp"
 #include <stdlib.h>
-#include "screen.h"
-#include "olc.h"
-#include "newmatrix.h"
-#include "memory.h"
+#include "screen.hpp"
+#include "olc.hpp"
+#include "newmatrix.hpp"
+#include "memory.hpp"
 
 #define HOST d->edit_host
 #define NUM_OF_HOST_TYPES 6

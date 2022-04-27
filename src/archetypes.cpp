@@ -1,9 +1,9 @@
-#include "types.h"
-#include "structs.h"
-#include "awake.h"
-#include "comm.h" // for shutdown()
-#include "db.h"
-#include "archetypes.h"
+#include "types.hpp"
+#include "structs.hpp"
+#include "awake.hpp"
+#include "comm.hpp" // for shutdown()
+#include "db.hpp"
+#include "archetypes.hpp"
 
 // todo
 /*
@@ -50,8 +50,8 @@ struct archetype_data *generate_street_samurai() {
   arch->skills[SKILL_PILOT_BIKE] = 3;
   arch->skills[SKILL_BR_BIKE] = 3;
   arch->skills[SKILL_STREET_ETIQUETTE] = 1;
-  arch->skills[SKILL_PILOT_TRUCK] = 1;  
-  
+  arch->skills[SKILL_PILOT_TRUCK] = 1;
+
   // Inventory.
   arch->weapon = OBJ_COLT_M23; // colt m-23, TODO: should be set to burst fire
   arch->weapon_top = OBJ_NICAMI_SCOPE; // nicami scope
@@ -244,8 +244,8 @@ struct archetype_data *generate_shaman() {
   arch->skills[SKILL_AURA_READING] = 2;
   arch->skills[SKILL_STEALTH] = 3;
   arch->skills[SKILL_PILOT_TRUCK] = 1;
-  
-  // Inventory.  
+
+  // Inventory.
   // arch->nuyen = 22660;
 
   arch->modulator = OBJ_DOCWAGON_BASIC_MOD;

@@ -11,8 +11,8 @@
 #ifndef _interpreter_h_
 #define _interpreter_h_
 
-#include "types.h"
-#include "perfmon.h"
+#include "types.hpp"
+#include "perfmon.hpp"
 /*
 #define ACMD(name)  \
    void (name)(struct char_data *ch, __attribute__ ((unused)) char *argument, __attribute__ ((unused)) int cmd, __attribute__ ((unused)) int subcmd)

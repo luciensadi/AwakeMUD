@@ -1,6 +1,6 @@
-#include "structs.h"
-#include "awake.h"
-#include "newmagic.h"
+#include "structs.hpp"
+#include "awake.hpp"
+#include "newmagic.hpp"
 
 const char *awakemud_version[] =
     {

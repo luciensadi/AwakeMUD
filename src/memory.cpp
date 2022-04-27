@@ -12,14 +12,14 @@
 #include <assert.h>
 #include <stdio.h>
 
-#include "memory.h"
-#include "structs.h"
-#include "awake.h"
-#include "db.h"
-#include "utils.h"
-#include "newmatrix.h"
-#include "ignore_system.h"
-#include "perception_tests.h"
+#include "memory.hpp"
+#include "structs.hpp"
+#include "awake.hpp"
+#include "db.hpp"
+#include "utils.hpp"
+#include "newmatrix.hpp"
+#include "ignore_system.hpp"
+#include "perception_tests.hpp"
 
 memoryClass::memoryClass()
 {

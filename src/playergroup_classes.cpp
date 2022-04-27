@@ -9,18 +9,18 @@
 #include <stdarg.h>
 #include <time.h>
 
-#include "awake.h"
-#include "structs.h"
-#include "newdb.h"
-#include "db.h"
-#include "utils.h"
-#include "interpreter.h"
-#include "constants.h"
-#include "playergroups.h"
-#include "olc.h"
-#include "handler.h"
-#include "comm.h"
-#include "ignore_system.h"
+#include "awake.hpp"
+#include "structs.hpp"
+#include "newdb.hpp"
+#include "db.hpp"
+#include "utils.hpp"
+#include "interpreter.hpp"
+#include "constants.hpp"
+#include "playergroups.hpp"
+#include "olc.hpp"
+#include "handler.hpp"
+#include "comm.hpp"
+#include "ignore_system.hpp"
 
 // The linked list of loaded playergroups.
 extern Playergroup *loaded_playergroups;

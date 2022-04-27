@@ -1,10 +1,10 @@
 #include <mysql/mysql.h>
 
-#include "interpreter.h"
-#include "newdb.h"
-#include "comm.h"
-#include "db.h" // for descriptor_list
-#include "ignore_system.h"
+#include "interpreter.hpp"
+#include "newdb.hpp"
+#include "comm.hpp"
+#include "db.hpp" // for descriptor_list
+#include "ignore_system.hpp"
 
 extern void stop_follower(struct char_data *ch);
 extern void end_sustained_spell(struct char_data *ch, struct sustain_data *sust);

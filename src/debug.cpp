@@ -6,19 +6,19 @@
 #include <time.h>
 #include <string.h>
 
-#include "telnet.h"
+#include "telnet.hpp"
 
-#include "types.h"
-#include "awake.h"
-#include "interpreter.h"
-#include "bitfield.h"
-#include "comm.h"
-#include "utils.h"
-#include "playergroup_classes.h"
-#include "playergroups.h"
-#include "structs.h"
-#include "handler.h"
-#include "perception_tests.h"
+#include "types.hpp"
+#include "awake.hpp"
+#include "interpreter.hpp"
+#include "bitfield.hpp"
+#include "comm.hpp"
+#include "utils.hpp"
+#include "playergroup_classes.hpp"
+#include "playergroups.hpp"
+#include "structs.hpp"
+#include "handler.hpp"
+#include "perception_tests.hpp"
 
 // The linked list of loaded playergroups.
 extern Playergroup *loaded_playergroups;

@@ -16,29 +16,29 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
-#include "structs.h"
-#include "utils.h"
-#include "comm.h"
-#include "interpreter.h"
-#include "handler.h"
-#include "db.h"
-#include "newdb.h"
-#include "house.h"
-#include "newmagic.h"
-#include "olc.h"
-#include "boards.h"
-#include "screen.h"
-#include "memory.h"
-#include "awake.h"
-#include "constants.h"
-#include "bullet_pants.h"
-#include "config.h"
-#include "newmail.h"
-#include "ignore_system.h"
+#include "structs.hpp"
+#include "utils.hpp"
+#include "comm.hpp"
+#include "interpreter.hpp"
+#include "handler.hpp"
+#include "db.hpp"
+#include "newdb.hpp"
+#include "house.hpp"
+#include "newmagic.hpp"
+#include "olc.hpp"
+#include "boards.hpp"
+#include "screen.hpp"
+#include "memory.hpp"
+#include "awake.hpp"
+#include "constants.hpp"
+#include "bullet_pants.hpp"
+#include "config.hpp"
+#include "newmail.hpp"
+#include "ignore_system.hpp"
 
 #ifdef GITHUB_INTEGRATION
 #include <curl/curl.h>
-#include "github_config.h"
+#include "github_config.hpp"
 #endif
 
 bool is_reloadable_weapon(struct obj_data *weapon, int ammotype);

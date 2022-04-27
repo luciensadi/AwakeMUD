@@ -7,9 +7,9 @@
 #include <stdio.h>
 #include <stdint.h>
 
-#include "bitfield.h"
-#include "structs.h"
-#include "utils.h"
+#include "bitfield.hpp"
+#include "structs.hpp"
+#include "utils.hpp"
 
 // ______________________________
 //

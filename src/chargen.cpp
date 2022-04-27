@@ -3,21 +3,21 @@
 #include <time.h>
 #include <string.h>
 #include <mysql/mysql.h>
-#include "structs.h"
-#include "db.h"
-#include "dblist.h"
-#include "newdb.h"
-#include "utils.h"
-#include "interpreter.h"
-#include "comm.h"
-#include "handler.h"
-#include "newmagic.h"
-#include "awake.h"
-#include "constants.h"
-#include "config.h"
-#include "chargen.h"
-#include "archetypes.h"
-#include "bullet_pants.h"
+#include "structs.hpp"
+#include "db.hpp"
+#include "dblist.hpp"
+#include "newdb.hpp"
+#include "utils.hpp"
+#include "interpreter.hpp"
+#include "comm.hpp"
+#include "handler.hpp"
+#include "newmagic.hpp"
+#include "awake.hpp"
+#include "constants.hpp"
+#include "config.hpp"
+#include "chargen.hpp"
+#include "archetypes.hpp"
+#include "bullet_pants.hpp"
 
 #define CH d->character
 

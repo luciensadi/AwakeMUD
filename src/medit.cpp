@@ -8,19 +8,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "structs.h"
-#include "awake.h"
-#include "comm.h"
-#include "utils.h"
-#include "interpreter.h"
-#include "db.h"
-#include "olc.h"
-#include "boards.h"
-#include "screen.h"
-#include "memory.h"
-#include "handler.h"
-#include "constants.h"
-#include "bullet_pants.h"
+#include "structs.hpp"
+#include "awake.hpp"
+#include "comm.hpp"
+#include "utils.hpp"
+#include "interpreter.hpp"
+#include "db.hpp"
+#include "olc.hpp"
+#include "boards.hpp"
+#include "screen.hpp"
+#include "memory.hpp"
+#include "handler.hpp"
+#include "constants.hpp"
+#include "bullet_pants.hpp"
 
 void write_mobs_to_disk(int zone);
 

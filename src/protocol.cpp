@@ -24,12 +24,12 @@
 #include <time.h>
 #include <ctype.h>
 
-#include "utils.h"
-#include "awake.h"
-#include "structs.h"
-#include "constants.h"
-#include "comm.h"
-#include "protocol.h"
+#include "utils.hpp"
+#include "awake.hpp"
+#include "structs.hpp"
+#include "constants.hpp"
+#include "comm.hpp"
+#include "protocol.hpp"
 
 /******************************************************************************
  The following section is for Diku/Merc derivatives.  Replace as needed.

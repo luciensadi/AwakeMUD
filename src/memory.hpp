@@ -13,8 +13,8 @@
 #define INITIAL_STACK_SIZE      500
 #define STACK_SIZE_INCREASE 100
 
-#include "structs.h"
-#include "utils.h"
+#include "structs.hpp"
+#include "utils.hpp"
 
 template <class T>
 class stackClass
@@ -141,7 +141,7 @@ bool stackClass<T>::ResizeStack()
   Items = NewItems;
 
   max_size += STACK_SIZE_INCREASE;
-  
+
   char log_buf[1000];
   snprintf(log_buf, sizeof(log_buf), "Resizing Stack (%d to %d)...", max_size - STACK_SIZE_INCREASE, max_size);
   mudlog(log_buf, NULL, LOG_SYSLOG, TRUE);

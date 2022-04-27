@@ -10,17 +10,17 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "structs.h"
-#include "awake.h"
-#include "constants.h"
-#include "interpreter.h"
-#include "comm.h"
-#include "utils.h"
-#include "db.h"
-#include "dblist.h"
-#include "screen.h"
-#include "olc.h"
-#include "memory.h"
+#include "structs.hpp"
+#include "awake.hpp"
+#include "constants.hpp"
+#include "interpreter.hpp"
+#include "comm.hpp"
+#include "utils.hpp"
+#include "db.hpp"
+#include "dblist.hpp"
+#include "screen.hpp"
+#include "olc.hpp"
+#include "memory.hpp"
 
 #define VEH     d->edit_veh
 

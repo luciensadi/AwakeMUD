@@ -16,13 +16,13 @@
 #include <time.h>
 #include <sys/types.h>
 
-#include "awake.h"
-#include "structs.h"
-#include "utils.h"
-#include "comm.h"
-#include "interpreter.h"
-#include "handler.h"
-#include "db.h"
+#include "awake.hpp"
+#include "structs.hpp"
+#include "utils.hpp"
+#include "comm.hpp"
+#include "interpreter.hpp"
+#include "handler.hpp"
+#include "db.hpp"
 
 struct ban_list_element *ban_list = NULL;
 

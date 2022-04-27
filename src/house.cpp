@@ -14,20 +14,20 @@
 #include <unistd.h>
 #endif
 
-#include "structs.h"
-#include "awake.h"
-#include "comm.h"
-#include "handler.h"
-#include "db.h"
-#include "newdb.h"
-#include "interpreter.h"
-#include "utils.h"
-#include "house.h"
-#include "memory.h"
-#include "constants.h"
-#include "file.h"
-#include "vtable.h"
-#include "limits.h"
+#include "structs.hpp"
+#include "awake.hpp"
+#include "comm.hpp"
+#include "handler.hpp"
+#include "db.hpp"
+#include "newdb.hpp"
+#include "interpreter.hpp"
+#include "utils.hpp"
+#include "house.hpp"
+#include "memory.hpp"
+#include "constants.hpp"
+#include "file.hpp"
+#include "vtable.hpp"
+#include "limits.hpp"
 
 extern char *cleanup(char *dest, const char *src);
 extern void ASSIGNMOB(long mob, SPECIAL(fname));

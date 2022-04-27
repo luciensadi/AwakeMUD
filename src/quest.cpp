@@ -14,22 +14,22 @@
 #include <vector>
 #include <algorithm>
 
-#include "structs.h"
-#include "awake.h"
-#include "utils.h"
-#include "comm.h"
-#include "interpreter.h"
-#include "handler.h"
-#include "db.h"
-#include "quest.h"
-#include "dblist.h"
-#include "olc.h"
-#include "screen.h"
-#include "boards.h"
-#include "constants.h"
-#include "newmatrix.h"
-#include "config.h"
-#include "bullet_pants.h"
+#include "structs.hpp"
+#include "awake.hpp"
+#include "utils.hpp"
+#include "comm.hpp"
+#include "interpreter.hpp"
+#include "handler.hpp"
+#include "db.hpp"
+#include "quest.hpp"
+#include "dblist.hpp"
+#include "olc.hpp"
+#include "screen.hpp"
+#include "boards.hpp"
+#include "constants.hpp"
+#include "newmatrix.hpp"
+#include "config.hpp"
+#include "bullet_pants.hpp"
 
 extern bool memory(struct char_data *ch, struct char_data *vict);
 extern class objList ObjList;

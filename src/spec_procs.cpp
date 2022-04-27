@@ -3,30 +3,30 @@
 #include <string.h>
 #include <ctype.h>
 #include <sys/types.h>
+#include <time.h>
 
 #if defined(WIN32) && !defined(__CYGWIN__)
 #define strcasecmp(x, y) _stricmp(x,y)
 #endif
 
-#include "structs.h"
-#include "awake.h"
-#include "utils.h"
-#include "comm.h"
-#include "interpreter.h"
-#include "handler.h"
-#include "db.h"
-#include "newmagic.h"
-#include "house.h"
-#include "time.h"
-#include "constants.h"
-#include "newdb.h"
-#include "quest.h"
-#include "newmail.h"
-#include "pocketsec.h"
-#include "limits.h"
-#include "config.h"
-#include "transport.h"
-#include "newmatrix.h"
+#include "structs.hpp"
+#include "awake.hpp"
+#include "utils.hpp"
+#include "comm.hpp"
+#include "interpreter.hpp"
+#include "handler.hpp"
+#include "db.hpp"
+#include "newmagic.hpp"
+#include "house.hpp"
+#include "constants.hpp"
+#include "newdb.hpp"
+#include "quest.hpp"
+#include "newmail.hpp"
+#include "pocketsec.hpp"
+#include "limits.hpp"
+#include "config.hpp"
+#include "transport.hpp"
+#include "newmatrix.hpp"
 
 /*   external vars  */
 ACMD_DECLARE(do_goto);

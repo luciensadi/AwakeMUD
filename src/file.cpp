@@ -6,9 +6,9 @@
 #include <string.h>
 #include <time.h>   // for awake.h (time_t)
 
-#include "file.h"
-#include "awake.h"  // for MAX_STRING_LENGTH
-#include "utils.h"  // for log()
+#include "file.hpp"
+#include "awake.hpp"  // for MAX_STRING_LENGTH
+#include "utils.hpp"  // for log()
 #include <new>
 
 File::File()

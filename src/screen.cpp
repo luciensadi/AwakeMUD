@@ -8,7 +8,7 @@
 *  CircleMUD is based on DikuMUD, Copyright (C) 1990, 1991.               *
 ************************************************************************ */
 
-#include "screen.h"
+#include "screen.hpp"
 
 
 /* Attribute codes:                                                       */

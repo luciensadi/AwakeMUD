@@ -1,17 +1,17 @@
 #include <stdlib.h>
 
-#include "structs.h"
-#include "awake.h"
-#include "db.h"
-#include "comm.h"
-#include "interpreter.h"
-#include "handler.h"
-#include "utils.h"
-#include "screen.h"
-#include "constants.h"
-#include "olc.h"
-#include "newmagic.h"
-#include "newmatrix.h"
+#include "structs.hpp"
+#include "awake.hpp"
+#include "db.hpp"
+#include "comm.hpp"
+#include "interpreter.hpp"
+#include "handler.hpp"
+#include "utils.hpp"
+#include "screen.hpp"
+#include "constants.hpp"
+#include "olc.hpp"
+#include "newmagic.hpp"
+#include "newmatrix.hpp"
 
 #define CH d->character
 #define PART d->edit_obj

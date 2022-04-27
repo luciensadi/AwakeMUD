@@ -6,9 +6,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "file.h"
-#include "vtable.h"
-#include "utils.h"    // for str_cmp(), log()
+#include "file.hpp"
+#include "vtable.hpp"
+#include "utils.hpp"    // for str_cmp(), log()
 
 VTable::field::~field()
 {

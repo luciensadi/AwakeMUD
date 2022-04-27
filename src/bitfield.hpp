@@ -5,13 +5,14 @@
 #ifndef __bitfield_h__
 #define __bitfield_h__
 
-#include "types.h"
+#include <assert.h>
+
+#include "types.hpp"
 
 typedef unsigned int bitfield_t;
 #define BITFIELD_BITS_PER_VAR (sizeof(bitfield_t) * 8)
 
 const dword ENDBIT = 127;
-#include "assert.h"
 class Bitfield
 {
   static const int BITFIELD_SIZE = 4;

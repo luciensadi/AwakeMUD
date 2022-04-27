@@ -11,12 +11,12 @@
 // unordered_map<idnum_t, bool> pc_perception_test_results;
 // unordered_map<idnum_t, bool> mob_perception_test_results;
 
-#include "structs.h"
-#include "comm.h"
-#include "newmagic.h"
-#include "handler.h"
-#include "db.h"
-#include "config.h"
+#include "structs.hpp"
+#include "comm.hpp"
+#include "newmagic.hpp"
+#include "handler.hpp"
+#include "db.hpp"
+#include "config.hpp"
 
 // Helper function for remove_ch_from_pc_perception_records().
 void _remove_ch_from_pc_perception_records(struct char_data *ch, struct char_data *vict) {

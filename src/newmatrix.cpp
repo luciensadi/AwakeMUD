@@ -1,19 +1,19 @@
 #include <time.h>
 
-#include "structs.h"
-#include "awake.h"
-#include "utils.h"
-#include "comm.h"
-#include "interpreter.h"
-#include "handler.h"
-#include "db.h"
-#include "dblist.h"
-#include "constants.h"
-#include "newmatrix.h"
-#include "memory.h"
-#include "quest.h"
-#include "config.h"
-#include "ignore_system.h"
+#include "structs.hpp"
+#include "awake.hpp"
+#include "utils.hpp"
+#include "comm.hpp"
+#include "interpreter.hpp"
+#include "handler.hpp"
+#include "db.hpp"
+#include "dblist.hpp"
+#include "constants.hpp"
+#include "newmatrix.hpp"
+#include "memory.hpp"
+#include "quest.hpp"
+#include "config.hpp"
+#include "ignore_system.hpp"
 
 #define PERSONA ch->persona
 #define DECKER PERSONA->decker

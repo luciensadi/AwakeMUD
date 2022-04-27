@@ -12,7 +12,7 @@
 #define _utils_h_
 
 #include <stdio.h>
-#include "bitfield.h"
+#include "bitfield.hpp"
 
 #if defined(osx)
 /* crypt() is defined in unistd.h in OSX. */

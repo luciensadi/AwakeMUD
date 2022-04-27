@@ -1,4 +1,4 @@
-#include "perfmon.h"
+#include "perfmon.hpp"
 
 #include <map>
 #include <string>
@@ -24,7 +24,7 @@ using perfmon::kPulsePerSecond;
 #define USEC_TOTAL( val ) ( ( (val)->tv_sec * 1000000) + (val)->tv_usec )
 
 
-static struct 
+static struct
 {
     int const threshold;
     unsigned long count;
@@ -93,7 +93,7 @@ static PerfIntvlData sSecData( SEC_PER_MIN, &sMinuteData );
 static PerfIntvlData sPulseData( kPulsePerSecond, &sSecData );
 
 
-void 
+void
 PerfIntvlData::AddData(double avg, double min, double max)
 {
     mAvgs[mInd] = avg;
@@ -165,7 +165,7 @@ PerfIntvlData::GetMaxMax() const
         }
     }
 
-    return max;   
+    return max;
 }
 
 static void check_init( void )
@@ -173,7 +173,7 @@ static void check_init( void )
     static bool init_done = false;
     if (init_done)
         return;
-    
+
     init_time = time(NULL);
 
     init_done = true;
@@ -205,9 +205,9 @@ void PERF_log_pulse(double val)
     last_pulse = val;
     if (val > max_pulse)
         max_pulse = val;
-    
+
     check_thresholds(val);
-    
+
     sPulseData.AddData( val, val, val );
 }
 
@@ -244,12 +244,12 @@ size_t PERF_repr( char *out_buf, size_t n )
 
     os << std::fixed << std::setprecision(2)
        << "                     Avg         Min         Max\n\r"
-       << std::setw(3) << 1 << " Pulse:   " 
-       << std::setw(10) << last_pulse << "% " 
-       << std::setw(10) << last_pulse << "% " 
+       << std::setw(3) << 1 << " Pulse:   "
+       << std::setw(10) << last_pulse << "% "
+       << std::setw(10) << last_pulse << "% "
        << std::setw(10) << last_pulse << "%\n\r"
 
-       << std::setw(3) << sPulseData.GetCount() << " Pulses:  " 
+       << std::setw(3) << sPulseData.GetCount() << " Pulses:  "
        << std::setw(10) << sPulseData.GetAvgAvg() << "% "
        << std::setw(10) << pulse_min << "% "
        << std::setw(10) << sPulseData.GetMaxMax() << "%\n\r"
@@ -270,17 +270,17 @@ size_t PERF_repr( char *out_buf, size_t n )
        << std::setw(10) << sHourData.GetMaxMax() << "%\n\r"
 
        << "\n\rMax pulse:      " << max_pulse << "\n\r\n\r";
-  
+
 
     for (i=0; i < thresh_count; ++i)
     {
-        os << "Over " << std::setw(5)  
+        os << "Over " << std::setw(5)
            << threshold_info[i].threshold << "%:      "
            << (threshold_info[i].count / total_pulses) << "% "
            << "(" << threshold_info[i].count << ")\n\r";
     }
 
-    
+
 
     std::string str = os.str();
     size_t copied = str.copy( out_buf, n - 1 );
@@ -316,7 +316,7 @@ public:
     inline void Exit();
 
     std::string const & GetId() { return mId; }
-    
+
     struct timeval const & GetPulseTotal() { return mPulseTotal; }
     struct timeval const & GetPulseMax() { return mPulseMax; }
     struct timeval const & GetTotal() { return mTotal; }
@@ -419,9 +419,9 @@ PerfProfMgr::SectOutput(std::ostream &os, PERF_prof_sect *sect, bool isTotal) co
         return;
     }
 
-    os << std::left 
-       << std::setw(20) << sect->GetId() << "|" 
-       << std::right 
+    os << std::left
+       << std::setw(20) << sect->GetId() << "|"
+       << std::right
        << std::setw(12) << enterCount << "|";
     if (!isTotal)
     {
@@ -469,9 +469,9 @@ PerfProfMgr::ReprBase(char *out_buf, size_t n, bool isTotal, PERF_prof_sect *sec
 
     os << std::setprecision(2) << std::fixed
        << "\n\r"
-       << std::left 
+       << std::left
        << std::setw(20) << "Section name" << "|"
-       << std::right 
+       << std::right
        << std::setw(12) << "Enter Count" << "|";
     if (!isTotal)
     {
@@ -488,7 +488,7 @@ PerfProfMgr::ReprBase(char *out_buf, size_t n, bool isTotal, PERF_prof_sect *sec
         os << std::setw(12) << "pulse %" << "|";
     }
     os << std::setw(20) << "max pulse % (1 entry)" << "\n\r";
-       
+
     os << std::setfill('-') << std::setw(80) << " " << std::setfill(' ') << "\n\r" ;
 
     if (sect)
@@ -510,7 +510,7 @@ PerfProfMgr::ReprBase(char *out_buf, size_t n, bool isTotal, PERF_prof_sect *sec
     return copied;
 }
 
-PERF_prof_sect * 
+PERF_prof_sect *
 PerfProfMgr::NewSection(const char *id)
 {
     PERF_prof_sect *ptr = new PERF_prof_sect( id );
@@ -551,8 +551,8 @@ PERF_prof_sect::Exit()
     struct timeval now;
     struct timeval diff;
     gettimeofday(&now, NULL);
- 
-    timersub(&now, &mLastEnterTime, &diff);   
+
+    timersub(&now, &mLastEnterTime, &diff);
     timeradd(&mPulseTotal, &diff, &mPulseTotal);
     timeradd(&mTotal, &diff, &mTotal);
 

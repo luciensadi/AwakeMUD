@@ -1,15 +1,15 @@
 #include <mysql/mysql.h>
 
-#include "types.h"
-#include "awake.h"
-#include "db.h"
-#include "comm.h"
-#include "constants.h"
-#include "interpreter.h"
-#include "structs.h"
-#include "utils.h"
-#include "handler.h"
-#include "bullet_pants.h"
+#include "types.hpp"
+#include "awake.hpp"
+#include "db.hpp"
+#include "comm.hpp"
+#include "constants.hpp"
+#include "interpreter.hpp"
+#include "structs.hpp"
+#include "utils.hpp"
+#include "handler.hpp"
+#include "bullet_pants.hpp"
 
 extern MYSQL *mysql;
 

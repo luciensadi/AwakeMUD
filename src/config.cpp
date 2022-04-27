@@ -1,5 +1,5 @@
-#include "structs.h"
-#include "awake.h"
+#include "structs.hpp"
+#include "awake.hpp"
 
 int max_exp_gain = 250; /* max gainable per kill */
 int max_npc_corpse_time = 3;

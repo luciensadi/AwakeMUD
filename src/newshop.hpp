@@ -1,4 +1,4 @@
-#include "bitfield.h"
+#include "bitfield.hpp"
 
 #define SELL_ALWAYS  0
 #define SELL_AVAIL  1
@@ -28,7 +28,7 @@ struct shop_data
   int etiquette;
   struct shop_sell_data *selling;
   struct shop_order_data *order;
-  
+
   shop_data() :
     vnum(NOTHING), keeper(NOBODY), profit_buy(0), profit_sell(0), random_amount(0),
     random_current(0), open(0), close(0), type(0), no_such_itemk(NULL),

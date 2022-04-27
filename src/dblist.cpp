@@ -9,18 +9,18 @@
 #include <dirent.h>
 #include <sys/time.h>
 
-#include "structs.h"
-#include "awake.h"
-#include "comm.h"
-#include "db.h"
-#include "utils.h"
-#include "dblist.h"
-#include "handler.h"
-#include "file.h"
-#include "newdb.h"
-#include "perfmon.h"
-#include "config.h"
-#include "newmatrix.h"
+#include "structs.hpp"
+#include "awake.hpp"
+#include "comm.hpp"
+#include "db.hpp"
+#include "utils.hpp"
+#include "dblist.hpp"
+#include "handler.hpp"
+#include "file.hpp"
+#include "newdb.hpp"
+#include "perfmon.hpp"
+#include "config.hpp"
+#include "newmatrix.hpp"
 
 // extern vars
 extern class helpList Help;

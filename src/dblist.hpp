@@ -4,7 +4,7 @@
 //  Copyright (c) 1996 by Chris Dickey,
 //  some parts Copyright (c) 1998 by Andrew Hynek
 
-#include "list.h"
+#include "list.hpp"
 
 class objList : public List<struct obj_data *>
 {

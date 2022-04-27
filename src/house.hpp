@@ -4,8 +4,8 @@
 #define HOUSE_PRIVATE 0
 #define MAX_GUESTS 10
 
-#include "types.h"
-#include "bitfield.h"
+#include "types.hpp"
+#include "bitfield.hpp"
 
 struct house_control_rec
 {
@@ -17,19 +17,19 @@ struct house_control_rec
   long owner;                  /* idnum of house's owner       */
   long date;                   /* date rent is paid to        */
   long guests[MAX_GUESTS];     /* idnums of house's guests     */
-  char *name;  
-  struct house_control_rec *next;  
+  char *name;
+  struct house_control_rec *next;
 
   house_control_rec() :
     vnum(NOWHERE), atrium(NOWHERE), key(0), owner(0), name(NULL), next(NULL)
-  {}   
+  {}
 };
 
-struct landlord 
+struct landlord
 {
   vnum_t vnum;     /* vnum of landlord mob */
   Bitfield race;   /* Races landlord will NOT deal with */
-  int basecost;    /* Base cost for low lifestyle rooms */  
+  int basecost;    /* Base cost for low lifestyle rooms */
   int num_room;
   struct house_control_rec *rooms;
   struct landlord *next;

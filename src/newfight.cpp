@@ -6,20 +6,20 @@
 #include <time.h>
 #include <queue>
 
-#include "structs.h"
-#include "awake.h"
-#include "utils.h"
-#include "comm.h"
-#include "handler.h"
-#include "interpreter.h"
-#include "db.h"
-#include "screen.h"
-#include "newmagic.h"
-#include "constants.h"
-#include "config.h"
-#include "memory.h"
-#include "bullet_pants.h"
-#include "newfight.h"
+#include "structs.hpp"
+#include "awake.hpp"
+#include "utils.hpp"
+#include "comm.hpp"
+#include "handler.hpp"
+#include "interpreter.hpp"
+#include "db.hpp"
+#include "screen.hpp"
+#include "newmagic.hpp"
+#include "constants.hpp"
+#include "config.hpp"
+#include "memory.hpp"
+#include "bullet_pants.hpp"
+#include "newfight.hpp"
 
 extern int check_recoil(struct char_data *ch, struct obj_data *gun);
 extern void die(struct char_data * ch);
