@@ -2531,7 +2531,7 @@ const char *combat_modifiers[] =
   "Distance",
   "Visibility",
   "Position",
-  "Gyro",
+  "Gyro Recoil Comp",
   "Net Reach",
   "VehDamaged",
   "Defender Moving",

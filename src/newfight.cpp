@@ -356,7 +356,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     }
 
     // Calculate and display pre-success-test information.
-    snprintf(rbuf, sizeof(rbuf), "%s's burst/compensation info is ^c%d^n/^c%d^n. Additional modifiers: ",
+    snprintf(rbuf, sizeof(rbuf), "%s's burst/compensation info (excluding gyros) is ^c%d^n/^c%d^n. Additional modifiers: ",
              GET_CHAR_NAME( att->ch ),
              att->ranged->burst_count,
              MOB_FLAGGED(att->ch, MOB_EMPLACED) ? 10 : att->ranged->recoil_comp);
