@@ -169,7 +169,7 @@ void _handle_gyro_recoil_comp(struct combat_data *att) {
 }
 
 void _apply_modifiers_to_att(struct combat_data *att, char *rbuf, size_t rbuf_len) {
-  snprintf(rbuf, rbuf_len, "%s's burst/compensation info (excluding gyros) is ^c%d^n/^c%d^n. Additional modifiers: "
+  snprintf(rbuf, rbuf_len, "%s's burst/compensation info (excluding gyros) is ^c%d^n/^c%d^n. Additional modifiers: ",
            GET_CHAR_NAME( att->ch ),
            att->ranged->burst_count,
            MOB_FLAGGED(att->ch, MOB_EMPLACED) ? 10 : att->ranged->recoil_comp);
