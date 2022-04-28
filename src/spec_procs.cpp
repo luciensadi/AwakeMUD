@@ -64,6 +64,7 @@ extern bool install_ware_in_target_character(struct obj_data *obj, struct char_d
 extern struct obj_data *shop_package_up_ware(struct obj_data *obj);
 extern const char *get_plaintext_score_essence(struct char_data *ch);
 extern void diag_char_to_char(struct char_data * i, struct char_data * ch);
+extern bool deactivate_power(struct char_data *ch, int power);
 
 
 extern struct command_info cmd_info[];
@@ -217,20 +218,20 @@ int ability_cost(int abil, int level)
   return 0;
 }
 
-int train_ability_cost(struct char_data *ch, int abil, int level) {
+int train_ability_cost(struct char_data *ch, int abil, int level, bool untrain) {
   int cost = ability_cost(abil, level);
 
   switch (abil) {
     case ADEPT_IMPROVED_BOD:
-      if (GET_REAL_BOD(ch) + GET_POWER_TOTAL(ch, ADEPT_IMPROVED_BOD) >= racial_limits[(int)GET_RACE(ch)][0][0] - GET_PERM_BOD_LOSS(ch))
+      if (GET_REAL_BOD(ch) + GET_POWER_TOTAL(ch, ADEPT_IMPROVED_BOD) + (untrain ? -1 : 0) >= racial_limits[(int)GET_RACE(ch)][0][0] - GET_PERM_BOD_LOSS(ch))
         cost *= 2;
       break;
     case ADEPT_IMPROVED_QUI:
-      if (GET_REAL_QUI(ch) + GET_POWER_TOTAL(ch, ADEPT_IMPROVED_QUI) >= racial_limits[(int)GET_RACE(ch)][0][1])
+      if (GET_REAL_QUI(ch) + GET_POWER_TOTAL(ch, ADEPT_IMPROVED_QUI) + (untrain ? -1 : 0) >= racial_limits[(int)GET_RACE(ch)][0][1])
         cost *= 2;
       break;
     case ADEPT_IMPROVED_STR:
-      if (GET_REAL_STR(ch) + GET_POWER_TOTAL(ch, ADEPT_IMPROVED_STR) >= racial_limits[(int)GET_RACE(ch)][0][2])
+      if (GET_REAL_STR(ch) + GET_POWER_TOTAL(ch, ADEPT_IMPROVED_STR) + (untrain ? -1 : 0) >= racial_limits[(int)GET_RACE(ch)][0][2])
         cost *= 2;
       break;
   }
@@ -1359,8 +1360,17 @@ SPECIAL(adept_trainer)
       return TRUE;
     }
 
+    // Purge all their active powers.
+    for (int i = 0; i < ADEPT_NUMPOWER; i++) {
+      // Bail out if they die.
+      if (deactivate_power(ch, i)) {
+        return TRUE;
+      }
+    }
+    GET_POWER_POINTS(ch) = 0;
+
     // Calculate the refund cost.
-    int cost = train_ability_cost(ch, power, GET_POWER_TOTAL(ch, power));
+    int cost = train_ability_cost(ch, power, GET_POWER_TOTAL(ch, power), TRUE);
 
     // Refund their PP and decrease their power level.
     GET_PP(ch) += cost;
@@ -1448,7 +1458,7 @@ SPECIAL(adept_trainer)
       for (i = 1; i < ADEPT_NUMPOWER; i++)
         if (adepts[ind].skills[i] && GET_POWER_TOTAL(ch, i) < max_ability(i) && GET_POWER_TOTAL(ch, i) < adepts[ind].skills[i])
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%30s (%0.2f points)\r\n", adept_powers[i],
-                  ((float) train_ability_cost(ch, i, GET_POWER_TOTAL(ch, i) + 1)/ 100));
+                  ((float) train_ability_cost(ch, i, GET_POWER_TOTAL(ch, i) + 1, FALSE)/ 100));
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nYou have %0.2f power point%s to "
               "distribute to your abilities.\r\n", ((float)GET_PP(ch) / 100),
               ((GET_PP(ch) != 100) ? "s" : ""));
@@ -1530,7 +1540,7 @@ SPECIAL(adept_trainer)
     }
 
     // Check to see if they can afford the cost of training the selected power.
-    int cost = train_ability_cost(ch, power, GET_POWER_TOTAL(ch, power) + 1);
+    int cost = train_ability_cost(ch, power, GET_POWER_TOTAL(ch, power) + 1, FALSE);
     if (GET_PP(ch) < cost) {
       send_to_char("You don't have enough power points to raise that ability.\r\n", ch);
       return TRUE;

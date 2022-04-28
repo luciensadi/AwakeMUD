@@ -3151,61 +3151,71 @@ ACMD(do_boost)
   }
 }
 
+bool process_single_boost(struct char_data *ch, int boost_attribute) {
+  const char *msg;
+  int power, damage;
+
+  if (GET_TRADITION(ch) != TRAD_ADEPT) {
+    mudlog("SYSERR: Got non-adept to process_single_boost!", ch, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+
+  switch (boost_attribute) {
+    case STR:
+      msg = "You feel weaker as your boost wears off.\r\n";
+      power = GET_STR(ch);
+      break;
+    case QUI:
+      msg = "You feel slower as your boost wears off.\r\n";
+      power = GET_QUI(ch);
+      break;
+    case BOD:
+      msg = "You feel less hardy as your boost wears off.\r\n";
+      power = GET_BOD(ch);
+      break;
+    default:
+      mudlog("SYSERR: Got unrecognized attribute to process_single_boost!", ch, LOG_SYSLOG, TRUE);
+      return FALSE;
+  }
+
+  // If they have an active boost for this attribute, decrement it by one and test.
+  if (BOOST(ch)[boost_attribute][0] > 0 && (--BOOST(ch)[boost_attribute][0]) == 0) {
+    send_to_char(ch, msg);
+    if (power <= racial_limits[(int)GET_RACE(ch)][0][2])
+      damage = LIGHT;
+    else if (power < racial_limits[(int)GET_RACE(ch)][1][2])
+      damage = MODERATE;
+    else
+      damage = SERIOUS;
+
+    // Return true on death.
+    if (spell_drain(ch, 0, power, damage))
+      return TRUE;
+
+    BOOST(ch)[boost_attribute][1] = 0;
+
+    // Otherwise, update their aff.
+    affect_total(ch);
+  }
+
+  // Character did not die.
+  return FALSE;
+}
+
 void process_boost()
 {
   PERF_PROF_SCOPE(pr_, __func__);
-  int power, damage;
   struct char_data *next;
+
   for (struct char_data *i = character_list; i; i = next) {
     next = i->next;
-    if (GET_TRADITION(i) == TRAD_ADEPT) {
-      if (BOOST(i)[STR][0] > 0) {
-        BOOST(i)[STR][0]--;
-        if (!BOOST(i)[STR][0]) {
-          send_to_char(i, "You feel weaker as your boost wears off.\r\n");
-          power = GET_STR(i);
-          if (GET_STR(i) <= racial_limits[(int)GET_RACE(i)][0][2])
-            damage = LIGHT;
-          else if (GET_STR(i) < racial_limits[(int)GET_RACE(i)][1][2])
-            damage = MODERATE;
-          else
-            damage = SERIOUS;
-          if (spell_drain(i, 0, power, damage))
-            continue;
-        }
-      }
-      if (BOOST(i)[QUI][0] > 0) {
-        BOOST(i)[QUI][0]--;
-        if (!BOOST(i)[QUI][0]) {
-          send_to_char(i, "You feel slower as your boost wears off.\r\n");
-          power = GET_QUI(i);
-          if (GET_QUI(i) <= racial_limits[(int)GET_RACE(i)][0][1])
-            damage = LIGHT;
-          else if (GET_QUI(i) < racial_limits[(int)GET_RACE(i)][1][1])
-            damage = MODERATE;
-          else
-            damage = SERIOUS;
-          if (spell_drain(i, 0, power, damage))
-            continue;
-        }
-      }
-      if (BOOST(i)[BOD][0] > 0) {
-        BOOST(i)[BOD][0]--;
-        if (!BOOST(i)[BOD][0]) {
-          send_to_char(i, "You feel less hardy as your boost wears off.\r\n");
-          power = GET_BOD(i);
-          if (GET_BOD(i) <= racial_limits[(int)GET_RACE(i)][0][0])
-            damage = LIGHT;
-          else if (GET_BOD(i) < racial_limits[(int)GET_RACE(i)][1][0])
-            damage = MODERATE;
-          else
-            damage = SERIOUS;
-          if (spell_drain(i, 0, power, damage))
-            continue;
-        }
-      }
-      if (i)
-        affect_total(i);
+
+    if (GET_TRADITION(i) != TRAD_ADEPT)
+      continue;
+
+    if (process_single_boost(i, STR) || process_single_boost(i, QUI) || process_single_boost(i, BOD)) {
+      // You died! RIP.
+      continue;
     }
   }
 }

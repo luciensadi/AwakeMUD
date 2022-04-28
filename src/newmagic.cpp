@@ -31,6 +31,7 @@ extern void send_mob_aggression_warnings(struct char_data *pc, struct char_data 
 extern bool mob_is_aggressive(struct char_data *ch, bool include_base_aggression);
 extern int modify_target_rbuf_magical(struct char_data *ch, char *rbuf, int rbuf_len);
 extern bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype, bool include_func_protections);
+extern bool process_single_boost(struct char_data *ch, int boost_attribute);
 
 char modify_target_rbuf_for_newmagic[MAX_STRING_LENGTH];
 
@@ -4872,10 +4873,16 @@ ACMD(do_domain)
   }
 }
 
-void deactivate_power(struct char_data *ch, int power)
+bool _purge_boost(struct char_data *ch, int attribute_index) {
+  // Set it to 1 tick left, then call the tick-down function.
+  BOOST(ch)[attribute_index][0] = 1;
+  return process_single_boost(ch, attribute_index);
+}
+
+bool deactivate_power(struct char_data *ch, int power)
 {
   if (GET_POWER_ACT(ch, power) == 0)
-    return;
+    return FALSE;
   GET_POWER_ACT(ch, power) = 0;
   switch (power) {
     case ADEPT_PERCEPTION:
@@ -4892,7 +4899,15 @@ void deactivate_power(struct char_data *ch, int power)
       if (GET_SUSTAINED_NUM(ch))
         adept_release_spell(ch, FALSE);
       break;
+    case ADEPT_BOOST_BOD:
+      return _purge_boost(ch, BOD);
+    case ADEPT_BOOST_QUI:
+      return _purge_boost(ch, QUI);
+    case ADEPT_BOOST_STR:
+      return _purge_boost(ch, STR);
   }
+
+  return FALSE;
 }
 
 ACMD(do_powerdown)
@@ -4901,8 +4916,11 @@ ACMD(do_powerdown)
     nonsensical_reply(ch, NULL, "standard");
     return;
   }
-  for (int i = 0; i < ADEPT_NUMPOWER; i++)
-    deactivate_power(ch, i);
+  for (int i = 0; i < ADEPT_NUMPOWER; i++) {
+    // This call returns TRUE if they die from it.
+    if (deactivate_power(ch, i))
+      return;
+  }
   GET_POWER_POINTS(ch) = 0;
   affect_total(ch);
   send_to_char("You totally deactivate all your powers.\r\n", ch);
@@ -4952,7 +4970,8 @@ ACMD(do_deactivate)
         for (int q = GET_POWER_ACT(ch, i); q > 0; q--)
           total += ability_cost(i, q);
         GET_POWER_POINTS(ch) -= total;
-        deactivate_power(ch, i);
+        if (deactivate_power(ch, i))
+          return;
         affect_total(ch);
         send_to_char(ch, "You completely deactivate your %s power.\r\n", adept_powers[i]);
       }
