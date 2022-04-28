@@ -349,6 +349,30 @@ int get_skill_price(struct char_data *ch, int i)
     return (int)((GET_SKILL(ch, i) + 1) * 2.5);
 }
 
+bool can_learn_metamagic(struct char_data *ch, int metamagic_idx) {
+  // You already know it.
+  if (GET_METAMAGIC(ch, metamagic_idx) == 2 || GET_METAMAGIC(ch, metamagic_idx) == 4)
+    return FALSE;
+
+  // Your tradition is not compatible.
+  switch (GET_TRADITION(ch)) {
+    case TRAD_ADEPT:
+      return metamagic_idx == META_MASKING || metamagic_idx == META_CENTERING;
+    case TRAD_MUNDANE:
+      return FALSE;
+    case TRAD_SHAMANIC:
+    case TRAD_HERMETIC:
+      return TRUE;
+    default:
+      {
+        char oopsbuf[500];
+        snprintf(oopsbuf, sizeof(oopsbuf), "SYSERR: Got unknown trad %d to can_learn_metamagic!", GET_TRADITION(ch));
+        mudlog(oopsbuf, ch, LOG_SYSLOG, TRUE);
+        return FALSE;
+      }
+  }
+}
+
 SPECIAL(metamagic_teacher)
 {
   struct char_data *master = (struct char_data *) me;
@@ -391,21 +415,38 @@ SPECIAL(metamagic_teacher)
     return FALSE;
 
   // This used to be based off of a die roll, but that's not easy to convey.
-  int cost = (int)((GET_MAG(ch) / 100) * 1000 * 14);
+  int cost = GET_GRADE(ch) * 14000;
 
+  // List trainables.
   if (!*argument) {
-    send_to_char(ch, "%s can teach you the following techniques for %d nuyen each: \r\n", GET_NAME(master), cost);
-    for (; i < NUM_TEACHER_SKILLS; i++)
-      if (metamagict[ind].s[i])
-        send_to_char(ch, "  %s\r\n", metamagic[metamagict[ind].s[i]]);
+    bool printed_something = FALSE;
+    for (i = 0; i < NUM_TEACHER_SKILLS; i++) {
+      if (metamagict[ind].s[i] && can_learn_metamagic(ch, metamagict[ind].s[i])) {
+        if (!printed_something) {
+          send_to_char(ch, "%s can teach you the following techniques for %d nuyen each: \r\n", GET_NAME(master), cost);
+          printed_something = TRUE;
+        }
+        send_to_char(ch, "  %s%s\r\n", metamagic[metamagict[ind].s[i]], !GET_METAMAGIC(ch, metamagict[ind].s[i]) ? " (locked)" : "");
+      }
+    }
+    if (!printed_something) {
+      send_to_char(ch, "There's nothing for %s to teach you.\r\n", GET_NAME(master));
+    }
     return TRUE;
   }
-  for (; i < META_MAX; i++)
+
+  // Find the selected metamagic.
+  for (i = 0; i < META_MAX; i++)
     if (is_abbrev(argument, metamagic[i]))
       break;
 
   if (i == META_MAX) {
     send_to_char("What metamagic technique do you wish to train?\r\n", ch);
+    return TRUE;
+  }
+
+  if (!can_learn_metamagic(ch, metamagict[ind].s[i])) {
+    send_to_char(ch, "You can't learn %s.\r\n", metamagic[i]);
     return TRUE;
   }
 
@@ -415,7 +456,7 @@ SPECIAL(metamagic_teacher)
   }
 
   if (!GET_METAMAGIC(ch, i)) {
-    send_to_char(ch, "You aren't close enough to the astral plane to learn %s.\r\n", metamagic[i]);
+    send_to_char(ch, "You aren't close enough to the astral plane to learn %s. You'll need to initiate and select that power first.\r\n", metamagic[i]);
     return TRUE;
   }
   /* "Hey, I have an idea!" "What?" "Let's arbitrarily restrict who can train where so that the builders have to do more work!"
@@ -434,7 +475,7 @@ SPECIAL(metamagic_teacher)
   }
 
   if (GET_NUYEN(ch) < cost) {
-    send_to_char(ch, "You don't have the %d nuyen required to learn %s.\r\n", cost, metamagic[i]);
+    send_to_char(ch, "You don't have the %d in cash nuyen required to learn %s.\r\n", cost, metamagic[i]);
     return TRUE;
   }
   lose_nuyen(ch, cost, NUYEN_OUTFLOW_METAMAGIC_TRAINING);

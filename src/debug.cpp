@@ -213,6 +213,14 @@ ACMD(do_debug) {
     }
   }
 
+  if (access_level(ch, LVL_PRESIDENT) && strn_cmp(arg1, "metapurge", strlen(arg1)) == 0) {
+    for (int i = 0; i < META_MAX; i++) {
+      SET_METAMAGIC(ch, i, 0);
+    }
+    send_to_char("Done-- all your metamagics are zeroed.\r\n", ch);
+    return;
+  }
+
   if (access_level(ch, LVL_BUILDER) && strn_cmp(arg1, "ansicolor-known", strlen(arg1)) == 0) {
     int old_val = 0;
     if (ch->desc && ch->desc->pProtocol && ch->desc->pProtocol->pVariables[eMSDP_XTERM_256_COLORS] && ch->desc->pProtocol->pVariables[eMSDP_XTERM_256_COLORS]->ValueInt) {
