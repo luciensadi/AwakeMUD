@@ -315,7 +315,7 @@ ACMD(do_rig)
     send_to_char("This vehicle is too much of a wreck to move!\r\n", ch);
     return;
   }
-  if (VEH->rigger || VEH->dest) {
+  if ((VEH->rigger && VEH->rigger != ch) || VEH->dest) {
     send_to_char("The system is unresponsive!\r\n", ch);
     return;
   }
@@ -339,6 +339,7 @@ ACMD(do_rig)
     AFF_FLAGS(ch).SetBits(AFF_PILOT, AFF_RIG, ENDBIT);
     VEH->cspeed = SPEED_IDLE;
     VEH->lastin[0] = VEH->in_room;
+    VEH->rigger = ch;
 
     stop_manning_weapon_mounts(ch, TRUE);
     send_to_char("As you jack in, your perception shifts.\r\n", ch);
@@ -482,7 +483,23 @@ void do_raw_ram(struct char_data *ch, struct veh_data *veh, struct veh_data *tve
       return;
   }
 
+  // Alarm all NPCs inside the ramming vehicle.
+  for (struct char_data *npc = veh->people; npc; npc = npc->next_in_veh) {
+    if (IS_NPC(npc)) {
+      GET_MOBALERT(npc) = MALERT_ALARM;
+      GET_MOBALERTTIME(npc) = 30;
+    }
+  }
+
   if (tveh) {
+    // Alarm all NPCs inside the targeted vehicle.
+    for (struct char_data *npc = tveh->people; npc; npc = npc->next_in_veh) {
+      if (IS_NPC(npc)) {
+        GET_MOBALERT(npc) = MALERT_ALARM;
+        GET_MOBALERTTIME(npc) = 30;
+      }
+    }
+
     target = get_vehicle_modifier(veh) + veh->handling + modify_target(ch);
     vehm = get_maneuver(veh);
     tvehm = get_maneuver(tveh);
@@ -1366,22 +1383,55 @@ ACMD(do_speed)
   }
 
   RIG_VEH(ch, veh);
+  bool is_mechanized = PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_RIG);
+
   if (veh->hood) {
     send_to_char("You can't move with the hood up.\r\n", ch);
     return;
   } else if (i < veh->cspeed) {
     if (i == 1) {
-      send_to_char("You bring the vehicle to a halt.\r\n", ch);
-      send_to_veh("The vehicle slows to a stop.\r\n", veh, ch, FALSE);
+      if (is_mechanized) {
+        if (!(veh->people)) {
+          send_to_char("You slow to a halt.\r\n", ch);
+        }
+      } else
+        send_to_char("You bring the vehicle to a halt.\r\n", ch);
+
+      if (veh->in_room) {
+        snprintf(buf, sizeof(buf), "%s slows to a stop.\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
+        send_to_room(buf, veh->in_room);
+      } else {
+        send_to_veh("The vehicle slows to a stop.\r\n", veh, ch, FALSE);
+      }
     } else {
-      if (!PLR_FLAGGED(ch, PLR_REMOTE) && !AFF_FLAGGED(ch, AFF_RIG))
+      if (is_mechanized) {
+        if (!(veh->people)) {
+          send_to_char("You slow down.\r\n", ch);
+        }
+      } else
         send_to_char("You put your foot on the brake.\r\n", ch);
-      send_to_veh("You slow down.", veh, ch, TRUE);
+
+      if (veh->in_room) {
+        snprintf(buf, sizeof(buf), "%s slows down.\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
+        send_to_room(buf, veh->in_room);
+      } else {
+        send_to_veh("You slow down.", veh, ch, FALSE);
+      }
     }
   } else if (i > veh->cspeed) {
-    if (!PLR_FLAGGED(ch, PLR_REMOTE) && !AFF_FLAGGED(ch, AFF_RIG))
+    if (is_mechanized) {
+      if (!(veh->people)) {
+        send_to_char("You speed up.\r\n", ch);
+      }
+    } else
       send_to_char("You put your foot on the accelerator.\r\n", ch);
-    send_to_veh("You speed up.", veh, ch, TRUE);
+      
+    if (veh->in_room) {
+      snprintf(buf, sizeof(buf), "%s speeds up.\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
+      send_to_room(buf, veh->in_room);
+    } else {
+      send_to_veh("You speed up.", veh, ch, FALSE);
+    }
   } else {
     send_to_char("But you're already traveling that fast!\r\n", ch);
     return;
