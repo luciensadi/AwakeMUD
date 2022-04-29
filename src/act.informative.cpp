@@ -346,7 +346,7 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
     else if (GET_OBJ_TYPE(object) == ITEM_FOCUS) {
       if (GET_FOCUS_ACTIVATED(object))
         strlcat(buf, " ^m(Activated Focus)^n", sizeof(buf));
-      if (GET_FOCUS_BONDED_TO(object) == GET_IDNUM(ch))
+      if (GET_FOCUS_BONDED_TO(object) == GET_IDNUM(ch) && GET_FOCUS_BOND_TIME_REMAINING(object) == GET_IDNUM(ch))
         strlcat(buf, " ^Y(Geas)^n", sizeof(buf));
     }
 
