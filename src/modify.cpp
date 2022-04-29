@@ -105,7 +105,7 @@ void format_string(struct descriptor_data *d, int indent)
       }
     }
 
-  char *format = new char[d->max_str];
+  char *format = new char[d->max_str + 1];
   memset(format, '\0', d->max_str * sizeof(char));
   snprintf(format, d->max_str, "%s%s\r\n", indent ? "   " : "", *d->str);
   int q = 0;
