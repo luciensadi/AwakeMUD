@@ -6,7 +6,8 @@
 // Set to the number of mags' worth of normal ammo you want to give to NPCs with weapons but no ammo data set. Remember that the first mag goes into the weapon.
 #define NUMBER_OF_MAGAZINES_TO_GIVE_TO_UNEQUIPPED_MOBS 4
 
-#define NPC_AMMO_USAGE_PREFERENCES_AMMO_NORMAL_INDEX 3
+// What is the index of AMMO_NORMAL in the ammo usage preference list?
+#define NPC_AMMO_USAGE_PREFERENCES_AMMO_NORMAL_INDEX 6
 
 // Give this a weapon type straight from the weapon-- ex WEAP_SMG. It will convert it for you.
 #define GET_BULLETPANTS_AMMO_AMOUNT(ch, weapon_type, ammo_type) ((ch)->bullet_pants[(weapon_type) - START_OF_AMMO_USING_WEAPONS][(ammo_type)])

@@ -1297,18 +1297,36 @@ enum {
 #define MAX_ITEM_EXTRA                32
 
 /* Ammo types */
-#define AMMO_NORMAL     0
-#define AMMO_APDS       1
-#define AMMO_EXPLOSIVE  2
-#define AMMO_EX         3
-#define AMMO_FLECHETTE  4
-#define AMMO_GEL        5
-#define AMMO_HARMLESS   6
-#define AMMO_AV         7
-#define NUM_AMMOTYPES   8
-// Adding a new ammo type? Make sure it's in npc_ammo_usage_preferences[].
+#define AMMO_NORMAL           0
+#define AMMO_APDS             1
+#define AMMO_EXPLOSIVE        2
+#define AMMO_EX               3
+#define AMMO_FLECHETTE        4
+#define AMMO_GEL              5
+#define AMMO_HARMLESS         6
+#define AMMO_AV               7
+#define NUM_AMMOTYPES         8
+// Adding a new ammo type? Make sure it's in bullet_pants.cpp's npc_ammo_usage_preferences[].
 // Make sure you also add a DB migration to include it in pfiles_ammo.
 // Save and load it in bullet_pants.cpp's save_bullet_pants and load_bullet_pants functions.
+
+/* Arrow types */
+#define AMMO_ARROW_NORMAL     0
+#define AMMO_ARROW_EXPLOSIVE  1
+#define AMMO_ARROW_EX         2
+#define AMMO_ARROW_HAMMERHEAD 3
+#define AMMO_ARROW_BARBED     4
+#define NUM_ARROWTYPES        5
+// Adding a new ammo type? Make sure it's in bullet_pants.cpp's npc_arrow_usage_preferences[].
+
+/* Bolt types */
+#define AMMO_BOLT_NORMAL      0
+#define AMMO_BOLT_EXPLOSIVE   1
+#define AMMO_BOLT_EX          2
+#define AMMO_BOLT_HAMMERHEAD  3
+#define AMMO_BOLT_BARBED      4
+#define NUM_BOLTTYPES         5
+// Adding a new ammo type? Make sure it's in bullet_pants.cpp's npc_arrow_usage_preferences[].
 
 /* Projectile types, for quivers */
 #define PROJECTILE_ARROW          0

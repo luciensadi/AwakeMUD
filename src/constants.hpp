@@ -72,6 +72,8 @@ extern const char *ic_type[];
 extern const char *ic_option[];
 extern const char *ic_option_long[];
 extern struct ammo_data ammo_type[];
+extern struct ammo_data arrow_type[];
+extern struct ammo_data bolt_type[];
 extern struct part_data parts[];
 extern struct program_data programs[];
 extern int attack_multiplier[];

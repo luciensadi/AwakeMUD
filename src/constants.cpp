@@ -1871,16 +1871,34 @@ const char *ic_option_long[] =
 // Weight and cost are PER ROUND now.
 struct ammo_data ammo_type[] =
   {
-    // name          tn   time   weight  cost   s. index
-    {"normal",        2,    1,    .025,    2,    0.75},
-    {"APDS",         14,   14,    .025,    7,    4.0 },
-    {"explosive",     3,  1.5,    .075,    5,    0.8 },
-    {"EX",            6,    3,    .075,   10,    1.5 },
-    {"flechette",     3,  1.5,    .05,    10,    0.8 },
-    {"gel",           4,    2,    .025,    3,    1.0 },
-    {"harmless",      1,  0.1,    .010,    1,    0.5 },
-    {"anti-vehicle", 16,   14,    .100,   20,    4.0 }
+    // name              tn   time   weight  cost   s. index
+    {"normal",            2,    1,    .025,    2,    0.75},
+    {"APDS",             14,   14,    .025,    7,    4.0 },
+    {"explosive",         3,  1.5,    .075,    5,    0.8 },
+    {"EX",                6,    3,    .075,   10,    1.5 },
+    {"flechette",         3,  1.5,    .05,    10,    0.8 },
+    {"gel",               4,    2,    .025,    3,    1.0 },
+    {"harmless",          1,  0.1,    .010,    1,    0.5 },
+    {"anti-vehicle",     16,   14,    .100,   20,    4.0 }
   };
+
+struct ammo_data arrows[] =
+{
+  {"arrow",            99,   99,    .100,   10,    1.0 },
+  {"explosive arrow",  99,   99,    .100,   30,    1.0 },
+  {"ex arrow",         99,   99,    .100,   70,    2.0 },
+  {"hammerhead arrow", 99,   99,    .100,   20,    1.0 },
+  {"barbed arrow",     99,   99,    .100,   12,    1.0 }
+}; // Remember to +8 nuyen Ranger-X arrows.
+
+struct ammo_data bolts[] =
+{
+  {"bolt",             99,   99,    .100,    3,    1.0 },
+  {"explosive bolt",   99,   99,    .100,   23,    1.0 },
+  {"ex bolt",          99,   99,    .100,   63,    2.0 },
+  {"hammerhead bolt",  99,   99,    .100,   13,    1.0 },
+  {"barbed bolt",      99,   99,    .100,    5,    1.0 }
+};
 
 /* House rule: Ammo costs for various weapons vary based on assumed caliber. */
 float weapon_type_ammo_cost_multipliers[] = {
