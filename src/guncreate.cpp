@@ -66,7 +66,7 @@ void aedit_disp_weapon_menu(struct descriptor_data *d)
 void aedit_disp_type_menu(struct descriptor_data *d)
 {
   CLS(CH);
-  for (int counter = 0; counter <= AMMO_GEL; counter++)
+  for (int counter = 0; counter <= AMMO_HARMLESS; counter++)
     send_to_char(CH, "  %2d) %s\r\n", counter, ammo_type[counter].name);
   send_to_char("Ammo type: ", d->character);
   d->edit_mode = AEDIT_TYPE;

@@ -514,6 +514,8 @@ int return_general(int skill_num)
     case SKILL_MISSILE_LAUNCHERS:
     case SKILL_ASSAULT_CANNON:
     case SKILL_ARTILLERY:
+    case SKILL_GUNNERY:
+    case SKILL_DEMOLITIONS:
       return (SKILL_FIREARMS);
     case SKILL_EDGED_WEAPONS:
     case SKILL_POLE_ARMS:
@@ -587,7 +589,7 @@ char *string_to_lowercase(const char *source) {
 char *decapitalize_a_an(const char *source)
 {
   static char dest[MAX_STRING_LENGTH];
-  strcpy(dest, source);
+  strlcpy(dest, source, sizeof(dest));
 
   int len = strlen(source);
   int index = 0;
@@ -3468,7 +3470,7 @@ bool LIGHT_OK_ROOM_SPECIFIED(struct char_data *sub, struct room_data *provided_r
 
   // Between LL and Normal, only LL can see in minlight.
   if (room_light_level == LIGHT_MINLIGHT)
-    return has_vision(sub, VISION_LOWLIGHT);
+    return has_vision(sub, VISION_LOWLIGHT) || MOB_FLAGGED(sub, MOB_GUARD);
 
   // Both LL and Normal can see in all other lighting conditions (partlight, etc).
   return TRUE;

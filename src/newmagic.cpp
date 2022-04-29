@@ -3519,7 +3519,7 @@ ACMD(do_conjure)
     send_to_char("You cannot conjure while projecting.\r\n", ch);
     return;
   }
-  if (ROOM_FLAGGED(ch->in_room, ROOM_PEACEFUL) || ROOM_FLAGGED(ch->in_room, ROOM_NOMAGIC)) {
+  if (get_ch_in_room(ch)->peaceful || ROOM_FLAGGED(ch->in_room, ROOM_NOMAGIC)) {
     send_to_char("You can't conjure here.\r\n", ch);
     return;
   }
@@ -4320,7 +4320,7 @@ POWER(spirit_binding)
     send_to_char(ch, "The %s refuses to perform that service.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
     if (ignoring)
       log_attempt_to_bypass_ic_ignore(ch, tch, "spirit_binding");
-  } else if (ROOM_FLAGGED(get_ch_in_room(spirit), ROOM_PEACEFUL))
+  } else if (get_ch_in_room(spirit)->peaceful)
     send_to_char("It's too peaceful here...\r\n", ch);
   else {
     act("$N suddenly becomes incapable of movement!", FALSE, spirit, 0, ch, TO_VICT);
@@ -4369,7 +4369,7 @@ POWER(spirit_confusion)
     send_to_char("Use confusion against which target?\r\n", ch);
   else if (tch == spirit || tch == ch || affected_by_power(tch, CONFUSION))
     send_to_char(ch, "The %s refuses to perform that service.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
-  else if (ROOM_FLAGGED(get_ch_in_room(spirit), ROOM_PEACEFUL))
+  else if (get_ch_in_room(spirit)->peaceful)
     send_to_char("It's too peaceful here...\r\n", ch);
   else if (!can_hurt(ch, tch, TYPE_HIT, TRUE) || (ignoring = IS_IGNORING(tch, is_blocking_ic_interaction_from, ch)) || would_become_killer(ch, tch)) {
     send_to_char(ch, "The %s refuses to perform that service.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
@@ -4396,7 +4396,7 @@ POWER(spirit_engulf)
     send_to_char("Use movement against which target?\r\n", ch);
   else if (tch == spirit || tch == ch || affected_by_power(tch, ENGULF))
     send_to_char(ch, "The %s refuses to perform that service.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
-  else if (ROOM_FLAGGED(get_ch_in_room(spirit), ROOM_PEACEFUL))
+  else if (get_ch_in_room(spirit)->peaceful)
     send_to_char("It's too peaceful here...\r\n", ch);
   else if (!can_hurt(ch, tch, TYPE_HIT, TRUE) || (ignoring = IS_IGNORING(tch, is_blocking_ic_interaction_from, ch)) || would_become_killer(ch, tch)) {
     send_to_char(ch, "The %s refuses to perform that service.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
@@ -4449,7 +4449,7 @@ POWER(spirit_fear)
     send_to_char("You cannot target yourself with that power.\r\n", ch);
   else if (tch == spirit)
     send_to_char(ch, "The %s refuses to harm itself.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
-  else if (ROOM_FLAGGED(get_ch_in_room(spirit), ROOM_PEACEFUL))
+  else if (get_ch_in_room(spirit)->peaceful)
     send_to_char("It's too peaceful here...\r\n", ch);
   else if (!can_hurt(ch, tch, TYPE_HIT, TRUE) || (ignoring = IS_IGNORING(tch, is_blocking_ic_interaction_from, ch)) || would_become_killer(ch, tch)) {
     send_to_char(ch, "The %s refuses to perform that service.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
@@ -4494,7 +4494,7 @@ POWER(spirit_flamethrower)
     send_to_char("You cannot target yourself with that power.\r\n", ch);
   else if (tch == spirit)
     send_to_char(ch, "The %s refuses to perform that service.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
-  else if (ROOM_FLAGGED(get_ch_in_room(spirit), ROOM_PEACEFUL))
+  else if (get_ch_in_room(spirit)->peaceful)
     send_to_char("It's too peaceful here...\r\n", ch);
   else if (!can_hurt(ch, tch, TYPE_HIT, TRUE) || (ignoring = IS_IGNORING(tch, is_blocking_ic_interaction_from, ch)) || would_become_killer(ch, tch)) {
     send_to_char(ch, "The %s refuses to perform that service.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
@@ -4559,7 +4559,7 @@ POWER(spirit_movement)
     stop_spirit_power(spirit, MOVEMENTDOWN);
     return;
   }
-  if (ROOM_FLAGGED(get_ch_in_room(spirit), ROOM_PEACEFUL)) {
+  if (get_ch_in_room(spirit)->peaceful) {
     send_to_char("It's too peaceful here...\r\n", ch);
     return;
   }
@@ -4607,7 +4607,7 @@ POWER(spirit_breath)
     send_to_char("You cannot target yourself with that power.\r\n", ch);
   else if (tch == spirit)
     send_to_char(ch, "The %s refuses to perform that service.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
-  else if (ROOM_FLAGGED(get_ch_in_room(spirit), ROOM_PEACEFUL))
+  else if (get_ch_in_room(spirit)->peaceful)
     send_to_char("It's too peaceful here...\r\n", ch);
   else if (!can_hurt(ch, tch, TYPE_HIT, TRUE) || (ignoring = IS_IGNORING(tch, is_blocking_ic_interaction_from, ch)) || would_become_killer(ch, tch)) {
     send_to_char(ch, "The %s refuses to perform that service.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
@@ -4640,7 +4640,7 @@ POWER(spirit_attack)
     send_to_char(ch, "Ordering your own %s to attack you is not a good idea.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
   else if (tch == spirit)
     send_to_char(ch, "The %s refuses to attack itself.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
-  else if (ROOM_FLAGGED(get_ch_in_room(spirit), ROOM_PEACEFUL))
+  else if (get_ch_in_room(spirit)->peaceful)
     send_to_char("It's too peaceful here...\r\n", ch);
   else if (!can_hurt(ch, tch, TYPE_HIT, TRUE) || (ignoring = IS_IGNORING(tch, is_blocking_ic_interaction_from, ch)) || would_become_killer(ch, tch)) {
     send_to_char(ch, "The %s refuses to perform that service.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");

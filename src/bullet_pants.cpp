@@ -828,6 +828,7 @@ const char *weapon_type_aliases[] =
 
 // The order in which an NPC will prefer to use ammo types.
 int npc_ammo_usage_preferences[] = {
+  AMMO_AV,
   AMMO_APDS,
   AMMO_EX,
   AMMO_EXPLOSIVE,

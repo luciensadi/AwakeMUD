@@ -1258,7 +1258,8 @@ enum {
 #define AMMO_FLECHETTE  4
 #define AMMO_GEL        5
 #define AMMO_HARMLESS   6
-#define NUM_AMMOTYPES   7
+#define AMMO_AV         7
+#define NUM_AMMOTYPES   8
 
 /* material type for item */
 #define ITEM_NONE                  0

@@ -1138,7 +1138,7 @@ void char_from_room(struct char_data * ch)
   }
 
   if (IS_WORKING(ch)) {
-    send_to_char("You stop working.\r\n", ch);
+    // send_to_char("You stop working.\r\n", ch);
     STOP_WORKING(ch);
   }
 

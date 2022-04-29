@@ -28,6 +28,7 @@
 
 ACMD_DECLARE(do_say);
 ACMD_DECLARE(do_prone);
+ACMD_DECLARE(do_reload);
 
 // Note: If you want mobact debugging, add -DMOBACT_DEBUG to your makefile.
 // #define MOBACT_DEBUG
@@ -575,7 +576,7 @@ bool mobact_process_in_vehicle_guard(struct char_data *ch) {
   in_room = get_ch_in_room(ch);
 
   // Peaceful room, or I'm not actually a guard? Bail out.
-  if (ROOM_FLAGGED(in_room, ROOM_PEACEFUL) || !(MOB_FLAGGED(ch, MOB_GUARD))) {
+  if (in_room->peaceful || !(MOB_FLAGGED(ch, MOB_GUARD))) {
 #ifdef MOBACT_DEBUG
     strncpy(buf3, "m_p_i_v_g: peaceful or not guard.", sizeof(buf));
     do_say(ch, buf3, 0, 0);
@@ -642,6 +643,12 @@ bool mobact_process_in_vehicle_guard(struct char_data *ch) {
   else if (AFF_FLAGGED(ch, AFF_MANNING)) {
     struct obj_data *mount = get_mount_manned_by_ch(ch);
     if (mount && mount_has_weapon(mount)) {
+      struct obj_data *ammobox = get_mount_ammo(mount);
+      if (!ammobox || GET_AMMOBOX_QUANTITY(ammobox) <= 0) {
+        char empty_argument[1];
+        *empty_argument = '\0';
+        do_reload(ch, empty_argument, 0, 0);
+      }
 #ifdef MOBACT_DEBUG
       strncpy(buf3, "m_p_i_v_g: Firing.", sizeof(buf));
       do_say(ch, buf3, 0, 0);
@@ -690,7 +697,7 @@ bool mobact_process_in_vehicle_aggro(struct char_data *ch) {
 
   in_room = get_ch_in_room(ch);
 
-  if (ROOM_FLAGGED(in_room, ROOM_PEACEFUL)) {
+  if (in_room->peaceful) {
 #ifdef MOBACT_DEBUG
     strncpy(buf3, "m_p_i_v_a: Room is peaceful.", sizeof(buf));
     do_say(ch, buf3, 0, 0);
@@ -1572,7 +1579,7 @@ void mobile_activity(void)
       continue;
 
     // All these aggressive checks require the character to not be in a peaceful room.
-    if (!ROOM_FLAGGED(current_room, ROOM_PEACEFUL)) {
+    if (current_room->peaceful) {
       // Handle aggressive mobs.
       if (mobact_process_aggro(ch, current_room)) {
         continue;
