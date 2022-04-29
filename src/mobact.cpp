@@ -768,6 +768,12 @@ bool mobact_process_in_vehicle_aggro(struct char_data *ch) {
   else if (AFF_FLAGGED(ch, AFF_MANNING)) {
     struct obj_data *mount = get_mount_manned_by_ch(ch);
     if (mount && mount_has_weapon(mount)) {
+      struct obj_data *ammobox = get_mount_ammo(mount);
+      if (!ammobox || GET_AMMOBOX_QUANTITY(ammobox) <= 0) {
+        char empty_argument[1];
+        *empty_argument = '\0';
+        do_reload(ch, empty_argument, 0, 0);
+      }
 #ifdef MOBACT_DEBUG
       strncpy(buf3, "m_p_i_v_a: Firing.", sizeof(buf));
       do_say(ch, buf3, 0, 0);
@@ -796,7 +802,7 @@ bool mobact_process_aggro(struct char_data *ch, struct room_data *room) {
       return FALSE;
   }
 
-  if (ROOM_FLAGGED(room, ROOM_PEACEFUL)) {
+  if (room->peaceful) {
 #ifdef MOBACT_DEBUG
     strncpy(buf3, "m_p_a: Room is peaceful.", sizeof(buf));
     do_say(ch, buf3, 0, 0);
@@ -1622,7 +1628,7 @@ void mobile_activity(void)
               }
 
               // No shooting into peaceful rooms.
-              if (ROOM_FLAGGED(current_room, ROOM_PEACEFUL))
+              if (current_room->peaceful)
                 continue;
 
               // Aggro sniper.

@@ -482,7 +482,23 @@ void do_raw_ram(struct char_data *ch, struct veh_data *veh, struct veh_data *tve
       return;
   }
 
+  // Alarm all NPCs inside the ramming vehicle.
+  for (struct char_data *npc = veh->people; npc; npc = npc->next_in_veh) {
+    if (IS_NPC(npc)) {
+      GET_MOBALERT(npc) = MALERT_ALARM;
+      GET_MOBALERTTIME(npc) = 30;
+    }
+  }
+
   if (tveh) {
+    // Alarm all NPCs inside the targeted vehicle.
+    for (struct char_data *npc = tveh->people; npc; npc = npc->next_in_veh) {
+      if (IS_NPC(npc)) {
+        GET_MOBALERT(npc) = MALERT_ALARM;
+        GET_MOBALERTTIME(npc) = 30;
+      }
+    }
+    
     target = get_vehicle_modifier(veh) + veh->handling + modify_target(ch);
     vehm = get_maneuver(veh);
     tvehm = get_maneuver(tveh);

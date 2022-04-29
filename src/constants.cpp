@@ -2538,6 +2538,7 @@ const char *combat_modifiers[] =
   "In Melee Combat",
   "Opponent Burst",
   "Foot Anchors",
+  "Vehicle Handling",
   "ERROR"
 };
 

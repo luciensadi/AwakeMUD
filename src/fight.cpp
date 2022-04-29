@@ -4219,8 +4219,8 @@ bool ranged_response(struct char_data *ch, struct char_data *vict)
   if (!vict
       || ch->in_room == vict->in_room
       || GET_POS(vict) <= POS_STUNNED
-      || (!ch->in_room || ROOM_FLAGGED(ch->in_room, ROOM_PEACEFUL))
-      || (!vict->in_room || ROOM_FLAGGED(vict->in_room, ROOM_PEACEFUL))
+      || (!ch->in_room || ch->in_room->peaceful)
+      || (!vict->in_room || vict->in_room->peaceful)
       || CH_IN_COMBAT(vict))
   {
     return FALSE;
@@ -5531,6 +5531,8 @@ void chkdmg(struct veh_data * veh)
         } else {
           snprintf(buf, sizeof(buf), "%s's occupants scramble to safety as it is wrecked!\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
         }
+      } else {
+        snprintf(buf, sizeof(buf), "Smoke belches from %s as it is wrecked!\r\n", GET_VEH_NAME(veh));
       }
       send_to_room(buf, veh->in_room);
 
@@ -5600,6 +5602,29 @@ bool vram(struct veh_data * veh, struct char_data * ch, struct veh_data * tveh)
 {
   int power, damage_total = 0, veh_dam = 0;
   int veh_resist = 0, ch_resist = 0, modbod = 0;
+
+  // Alarm all NPCs inside the ramming vehicle.
+  for (struct char_data *npc = veh->people; npc; npc = npc->next_in_veh) {
+    if (IS_NPC(npc)) {
+      GET_MOBALERT(npc) = MALERT_ALARM;
+      GET_MOBALERTTIME(npc) = 30;
+    }
+  }
+
+  if (ch && IS_NPC(ch)) {
+    GET_MOBALERT(ch) = MALERT_ALARM;
+    GET_MOBALERTTIME(ch) = 30;
+  }
+
+  // Alarm all NPCs inside the target vehicle.
+  if (tveh) {
+    for (struct char_data *npc = tveh->people; npc; npc = npc->next_in_veh) {
+      if (IS_NPC(npc)) {
+        GET_MOBALERT(npc) = MALERT_ALARM;
+        GET_MOBALERTTIME(npc) = 30;
+      }
+    }
+  }
 
   if (ch)
   {
