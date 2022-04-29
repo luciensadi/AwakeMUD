@@ -141,7 +141,7 @@ ACMD(do_copyover)
   FILE *fp;
   struct descriptor_data *d, *d_next;
   struct char_data *och;
-  int mesnum = number(0, 20);
+  int mesnum = number(0, 30);
 
   /* Old messages, preserved for posterity.
   // "I like copyovers, yes I do!  Eating player corpses in a copyover stew!\r\n",
@@ -162,7 +162,7 @@ ACMD(do_copyover)
       "My dog told me to copyover. Goood dog, good dog.\r\n",
       "It's called a changeover, the movie goes on, and nobody in the audience has any idea.\r\n",
       "Oh shit, I forgot to compile.  I'm gonna have to do this again!\r\n", // 5
-      "Someone says \x1B[0;35mOOCly\x1B[0m, \"I'm going to get fired for this.\"\r\n",
+      "An invisible staff member says \x1B[0;35mOOCly\x1B[0m, \"I'm going to get fired for this.\"\r\n",
       "Yum Yum Copyover Stew, out with the old code, in with the new!\r\n",
       "\x1B[0;35m[\x1B[0mSerge\x1B[0;35m] \x1B[0;31m(\x1B[0mOOC\x1B[0;31m)\x1B[0m, \"This porn's taking too long to download, needs more bandwidth. So the Mud'll be back up in a bit.\"\r\n",
       "\x1B[0;35m[\x1B[0mLucien\x1B[0;35m] \x1B[0;31m(\x1B[0mOOC\x1B[0;31m)\x1B[0m, \"Honestly, I give this new code a 30% chance of crashing outright.\"\r\n",
@@ -176,7 +176,17 @@ ACMD(do_copyover)
       "Your pocket secretary beeps, and you glance at it distractedly. But what's this? A notification of winning the lottery? A wire transfer of a hundred million nuyen?! You're finally free! You can retire from the shadows and live a normal life! You can--\r\n",
       "A bone-shaking rumble startles you, and your gaze flicks towards its source-- the rising sun on the horizon. But wait, the sun rose hours ago, and it's not usually shaped like a mushroom, is it...?\r\n",
       "You're one of the lucky ones-- you were looking at the night sky when it happened. Some barely-discernable speck flickered by, crossing the sky in the span of a second, and shattered the Moon into seven pieces...\r\n",
-      "Some indescribable force urges you to visit https://youtu.be/x31tDT-4fQw.\r\n" // 20
+      "Some indescribable force urges you to visit https://youtu.be/x31tDT-4fQw.\r\n", // 20
+      "A fuzz of static washes over your vision, and for a brief moment you realize that you're nothing more than a naked brain suspended in a jar, with electrodes plunging into you to carry a simulation of reality. You would scream, but you don't even have a mouth...\r\n",
+      "A vibrant cobalt flash cracks across the sky, and as one, all the electronics around you shut down.\r\n",
+      "You suddenly realize that you can't remember where you left your towel...!\r\n",
+      "The leathery flap of dragon wings fills the air, and as you spin to look in that direction, all you see is a ball of fire racing towards you...!\r\n",
+      "You're thrown from your feet as the Cascadia Fault ruptures! The scream of tortured steel fills the air as skyscrapers begin to collapse.\r\n", // 25
+      "Remember when these used to take upwards of five minutes? Pepperidge Farm remembers.\r\n",
+      "\"Right, see, the genre's called 'cyberpunk'. Sometimes you get cybered, and sometimes you get punked.\"\r\n",
+      "\x1B[0;35m[\x1B[0mVile\x1B[0;35m] \x1B[0;31m(\x1B[0mOOC\x1B[0;31m)\x1B[0m, \"This one's probably my fault, too.\"\r\n",
+      "\x1B[0;35m[\x1B[0mJank\x1B[0;35m] \x1B[0;31m(\x1B[0mOOC\x1B[0;31m)\x1B[0m, \"This is the perfect time to buy more NERPS!\"\r\n",
+      "This is the way the world ends: Not with a bang, but with a copyover.\r\n" // 30
     };
 
   fp = fopen (COPYOVER_FILE, "w");
