@@ -3054,8 +3054,6 @@ bool quiver_has_projectile(struct char_data *ch, struct obj_data *weapon, struct
 }
 
 bool process_has_ammo(struct char_data *ch, struct obj_data *wielded, bool deduct_one_round) {
-  bool found = FALSE;
-
   if (!ch) {
     mudlog("SYSERR: process_has_ammo received null value for ch. Returning TRUE.", ch, LOG_SYSLOG, TRUE);
     return TRUE;
@@ -3068,35 +3066,35 @@ bool process_has_ammo(struct char_data *ch, struct obj_data *wielded, bool deduc
 
   // Fireweapon code.
   if (GET_OBJ_TYPE(wielded) == ITEM_FIREWEAPON) {
+    // Search for a worn quiver.
     for (int i = 0; i < NUM_WEARS; i++) {
-      struct obj_data *quiver;
       struct obj_data *equipment = GET_EQ(ch, i);
 
       if (!equipment)
         continue;
 
-      if (GET_OBJ_TYPE(equipment) == ITEM_QUIVER) {
-        found = quiver_has_projectile(ch, wielded, equipment, deduct_one_round);
+      if (GET_OBJ_TYPE(equipment) == ITEM_QUIVER && quiver_has_projectile(ch, wielded, equipment, deduct_one_round)) {
+        return TRUE;
       }
 
       if (GET_OBJ_TYPE(equipment) == ITEM_WORN) {
-        for (quiver = equipment->contains; quiver; quiver = quiver->next_content) {
-          if (GET_OBJ_TYPE(quiver) == ITEM_QUIVER) {
-            found = quiver_has_projectile(ch, wielded, quiver, deduct_one_round);
+        for (struct obj_data *quiver = equipment->contains; quiver; quiver = quiver->next_content) {
+          if (GET_OBJ_TYPE(quiver) == ITEM_QUIVER && quiver_has_projectile(ch, wielded, quiver, deduct_one_round)) {
+            return TRUE;
           }
         }
       }
     }
-    if (found)
-      return TRUE;
+
+    // NPCs auto-switch weapons.
+    if (IS_NPC(ch)) {
+      switch_weapons(ch, wielded->worn_on);
+      return FALSE;
+    }
+    // Players just get the fireweapon version of *click*.
     else {
-      if (IS_NPC(ch)) {
-        switch_weapons(ch, wielded->worn_on);
-        return TRUE;
-      } else {
-        send_to_char("You're out of arrows!\r\n", ch);
-        return FALSE;
-      }
+      send_to_char("You're out of arrows!\r\n", ch);
+      return FALSE;
     }
   } // End fireweapon code.
 
