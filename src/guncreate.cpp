@@ -107,7 +107,7 @@ void aedit_parse(struct descriptor_data *d, const char *arg)
     }
     break;
   case AEDIT_TYPE:
-   if (number > AMMO_GEL || number < AMMO_NORMAL)
+   if (number > AMMO_HARMLESS || number < AMMO_NORMAL)
      send_to_char("Invalid selection.\r\nAmmo Type: ", CH);
    else {
      GET_AMMOBOX_TYPE(OBJ) = number;

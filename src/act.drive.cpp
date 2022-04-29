@@ -1685,9 +1685,9 @@ ACMD(do_mount)
     else
       snprintf(buf, sizeof(buf), "%2d) %-20s (Mounting Nothing)", i, GET_OBJ_NAME(obj));
     if (obj->worn_by)
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (Manned by %s)", (safe_found_mem(ch, obj->worn_by) ?
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (Manned by %s)", decapitalize_a_an((safe_found_mem(ch, obj->worn_by) ?
               (safe_found_mem(ch, obj->worn_by))->mem
-              : GET_NAME(obj->worn_by)));
+              : GET_NAME(obj->worn_by))));
     strlcat(buf, "\r\n", sizeof(buf));
     send_to_char(buf, ch);
     i++;

@@ -1579,7 +1579,7 @@ void mobile_activity(void)
       continue;
 
     // All these aggressive checks require the character to not be in a peaceful room.
-    if (current_room->peaceful) {
+    if (!current_room->peaceful) {
       // Handle aggressive mobs.
       if (mobact_process_aggro(ch, current_room)) {
         continue;

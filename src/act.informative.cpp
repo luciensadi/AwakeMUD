@@ -414,7 +414,7 @@ void show_veh_to_char(struct veh_data * vehicle, struct char_data * ch)
 
   if (vehicle->damage >= VEH_DAM_THRESHOLD_DESTROYED)
   {
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s lies here wrecked.", GET_VEH_NAME(vehicle));
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s lies here wrecked.", capitalize(GET_VEH_NAME_NOFORMAT(vehicle)));
   }
 
   else {
@@ -425,21 +425,21 @@ void show_veh_to_char(struct veh_data * vehicle, struct char_data * ch)
     switch (vehicle->cspeed) {
       case SPEED_OFF:
         if ((vehicle->type == VEH_BIKE && vehicle->people) || vehicle->restring)
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s waits here", GET_VEH_NAME(vehicle));
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s waits here", capitalize(GET_VEH_NAME_NOFORMAT(vehicle)));
         else
           strlcat(buf, vehicle->description, sizeof(buf));
         break;
       case SPEED_IDLE:
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s idles here", GET_VEH_NAME(vehicle));
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s idles here", capitalize(GET_VEH_NAME_NOFORMAT(vehicle)));
         break;
       case SPEED_CRUISING:
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s cruises through here", GET_VEH_NAME(vehicle));
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s cruises through here", capitalize(GET_VEH_NAME_NOFORMAT(vehicle)));
         break;
       case SPEED_SPEEDING:
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s speeds past you", GET_VEH_NAME(vehicle));
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s speeds past you", capitalize(GET_VEH_NAME_NOFORMAT(vehicle)));
         break;
       case SPEED_MAX:
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s zooms by you", GET_VEH_NAME(vehicle));
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s zooms by you", capitalize(GET_VEH_NAME_NOFORMAT(vehicle)));
         break;
     }
     if (vehicle->towing) {
@@ -1734,7 +1734,7 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
     send_to_char(blood_messages[(int) ch->in_room->blood], ch);
 
   if (ch->in_room->debris > 0) {
-    strncpy(buf, "^y", sizeof(buf));
+    strncpy(buf, "^t", sizeof(buf));
 
     if (ch->in_room->debris < 5) {
       strlcat(buf, "A few spent casings and empty mags are scattered here.", sizeof(buf));

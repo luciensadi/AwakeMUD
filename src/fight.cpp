@@ -5488,7 +5488,7 @@ void chkdmg(struct veh_data * veh)
   } else if (veh->damage <= VEH_DAM_THRESHOLD_MODERATE) {
     send_to_veh("You see some dings and scratches appear on the paintwork.\r\n", veh, NULL, TRUE);
   } else if (veh->damage <= VEH_DAM_THRESHOLD_SEVERE) {
-    send_to_veh("The wind screen shatters and the bumper falls off.\r\n", veh, NULL, TRUE);
+    send_to_veh("The windshield shatters and the bumper falls off.\r\n", veh, NULL, TRUE);
   } else if (veh->damage < VEH_DAM_THRESHOLD_DESTROYED) {
     send_to_veh("The engine starts spewing smoke and flames.\r\n", veh, NULL, TRUE);
   } else {
@@ -5527,9 +5527,9 @@ void chkdmg(struct veh_data * veh)
 
       if (veh->people) {
         if (veh->in_room && IS_WATER(veh->in_room)) {
-          snprintf(buf, sizeof(buf), "%s's occupants dive for safety as it is wrecked!\r\n", GET_VEH_NAME(veh));
+          snprintf(buf, sizeof(buf), "%s's occupants dive for safety as it is wrecked!\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
         } else {
-          snprintf(buf, sizeof(buf), "%s's occupants scramble to safety as it is wrecked!\r\n", GET_VEH_NAME(veh));
+          snprintf(buf, sizeof(buf), "%s's occupants scramble to safety as it is wrecked!\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
         }
       }
       send_to_room(buf, veh->in_room);

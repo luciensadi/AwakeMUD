@@ -60,6 +60,8 @@
 #include "bullet_pants.hpp"
 #include "lexicons.hpp"
 
+ACMD_DECLARE(do_reload);
+
 extern void calc_weight(struct char_data *ch);
 extern void read_spells(struct char_data *ch);
 extern struct obj_data *find_obj(int num);
@@ -76,6 +78,7 @@ extern void generate_archetypes();
 extern void populate_mobact_aggression_octets();
 extern void write_world_to_disk(int vnum);
 extern void handle_weapon_attachments(struct obj_data *obj);
+extern void ensure_mob_has_ammo_for_weapon(struct char_data *ch, struct obj_data *weapon);
 
 extern void auto_repair_obj(struct obj_data *obj);
 
@@ -451,6 +454,11 @@ void boot_world(void)
     exit(ERROR_PROTOCOL_BUFFER_EXCEEDS_INPUT_LENGTH);
   }
 
+  log("Checking to see if you added an ammo type and forgot to add it to npc_ammo_usage_preferences[]...");
+  for (int i = 0; i < NUM_AMMOTYPES; i++) {
+    assert(npc_ammo_usage_preferences[i] >= AMMO_NORMAL && npc_ammo_usage_preferences[i] < NUM_AMMOTYPES);
+  }
+
   log("Initializing libsodium for crypto functions.");
   if (sodium_init() < 0) {
     // The library could not be initialized. Fail.
@@ -612,9 +620,10 @@ void DBInit()
   log("Reloading consistency files.");
   load_consist();
 
-  log("Initializing transportation system:");
+  log("Initializing transportation system");
   TransportInit();
 
+  log_vfprintf("Resetting %d zones.", top_of_zone_table + 1);
   for (i = 0; i <= top_of_zone_table; i++) {
     log_vfprintf("Resetting %s (rooms %d-%d).", zone_table[i].name,
         (i ? (zone_table[i - 1].top + 1) : 0), zone_table[i].top);
@@ -900,6 +909,7 @@ void index_boot(int mode)
         break;
       case DB_BOOT_ZON:
         load_zones(in_file);
+        log_vfprintf(" - After loading zone %s, we have %d total zones.", buf2, top_of_zone_table + 1);
         break;
       }
       in_file.Close();
@@ -3495,9 +3505,15 @@ void reset_zone(int zone, int reboot)
           // Find an unmanned mount.
           for (mount = veh->mount; mount; mount = mount->next_content) {
             // Man the first unmanned mount we find, as long as it has a weapon in it.
-            if (!mount->worn_by && mount_has_weapon(mount)) {
+            struct obj_data *weapon = get_mount_weapon(mount);
+            if (!mount->worn_by && weapon) {
               mount->worn_by = mob;
               AFF_FLAGS(mob).SetBit(AFF_MANNING);
+
+              // Ensure this mob has ammo for that weapon.
+              ensure_mob_has_ammo_for_weapon(mob, weapon);
+              char empty_argument[1]; *empty_argument = '\0';
+              do_reload(mob, empty_argument, 0, 0);
               break;
             }
           }

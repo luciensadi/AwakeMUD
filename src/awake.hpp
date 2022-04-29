@@ -1260,6 +1260,7 @@ enum {
 #define AMMO_HARMLESS   6
 #define AMMO_AV         7
 #define NUM_AMMOTYPES   8
+// Adding a new ammo type? Make sure it's in npc_ammo_usage_preferences[].
 
 /* material type for item */
 #define ITEM_NONE                  0
