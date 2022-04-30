@@ -1176,7 +1176,7 @@ enum {
 #define ITEM_MOD                38
 #define ITEM_HOLSTER            39
 #define ITEM_DESIGN             40
-// AVAILABLE================================
+#define ITEM_QUEST              41
 #define ITEM_GUN_AMMO           42
 #define ITEM_KEYRING            43
 #define ITEM_SHOPCONTAINER      44
@@ -2098,9 +2098,9 @@ enum {
 /* Boards */
 
 #ifdef USE_PRIVATE_CE_WORLD
-#define NUM_OF_BOARDS           2
+#define NUM_OF_BOARDS           3
 #else
-#define NUM_OF_BOARDS           1 /* change if needed! */
+#define NUM_OF_BOARDS           2 /* change if needed! */
 #endif
 
 #define MAX_BOARD_MESSAGES      300     /* arbitrary -- change if needed */

@@ -188,7 +188,7 @@ bool should_tch_see_chs_movement_message(struct char_data *tch, struct char_data
     struct room_data *in_room = get_ch_in_room(ch);
 
     // Get the skill dice to roll.
-    snprintf(rbuf, sizeof(rbuf), "Sneak perception test: %s vs %s. get_skill: ", GET_CHAR_NAME(ch), GET_CHAR_NAME(ch));
+    snprintf(rbuf, sizeof(rbuf), "Sneak perception test: %s vs %s. get_skill: ", GET_CHAR_NAME(tch), GET_CHAR_NAME(ch));
     int skill_dice = get_skill(ch, SKILL_STEALTH, dummy_tn);
 
     // Make an open test to determine the TN for the perception test to notice you.
@@ -1345,6 +1345,8 @@ ACMD(do_gen_door)
           break;
     }
   }
+
+  // TODO: Short circuit directions would probably go here.
 
   // Check for an object or vehicle nearby that matches the keyword.
   if (!generic_find(type, FIND_OBJ_EQUIP | FIND_OBJ_INV | FIND_OBJ_ROOM, ch, &victim, &obj) && !veh &&

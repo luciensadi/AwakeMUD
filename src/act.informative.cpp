@@ -3203,6 +3203,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
     case ITEM_CAMERA:
     case ITEM_PHONE:
     case ITEM_KEYRING:
+    case ITEM_QUEST:
       strlcat(buf, "Nothing stands out about this item's OOC values. Try EXAMINE it instead.", sizeof(buf));
       break;
     case ITEM_SHOPCONTAINER:

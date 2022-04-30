@@ -58,7 +58,7 @@ struct board_info_type board_info[NUM_OF_BOARDS] =
 //  {4   , LVL_BUILDER, LVL_BUILDER, LVL_PRESIDENT, "etc/board.pook"},
 //  {12  , LVL_FIXER, LVL_FIXER, LVL_VICEPRES, "etc/board.dunkelzahn"},
 //  {22  , LVL_ADMIN, LVL_ADMIN, LVL_ADMIN, "etc/board.oldchange"},
-//  {26  , 0, 0, LVL_ADMIN, "etc/board.rp"},
+    {26  , 0, 0, LVL_ADMIN, "etc/board.rp"},
 //  {28  , 0, 0, LVL_ADMIN, "etc/board.quest"},
 //  {31  , LVL_BUILDER, LVL_BUILDER, LVL_VICEPRES, "etc/board.senate"},
 //  {50  , LVL_BUILDER, LVL_BUILDER, LVL_VICEPRES, "etc/board.harlequin"},

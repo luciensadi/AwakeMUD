@@ -851,6 +851,7 @@ void assign_objects(void)
   SPECIAL(toggled_voice_modulator);
   SPECIAL(initiative_tracker);
 
+  ASSIGNOBJ(26, gen_board);
   ASSIGNOBJ(10018, gen_board);  /* ImmHQ Board */
 #ifdef USE_PRIVATE_CE_WORLD
   ASSIGNOBJ(10034, gen_board); /* Mortal Relations Board */
