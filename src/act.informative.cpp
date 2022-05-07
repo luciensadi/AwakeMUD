@@ -4505,7 +4505,7 @@ void display_help(char *help, int help_len, const char *arg, struct char_data *c
   }
 
   // If we have too many rows, try to refine the search to just files starting with the search string.
-  else if (x > 5) {
+  else if (x > 2) {
     // Prepare a just-in-case response with the topics that were found in the overbroad search.
     snprintf(help, help_len, "%d articles returned, please narrow your search. The topics found were:\r\n", x);
     while ((row = mysql_fetch_row(res))) {
