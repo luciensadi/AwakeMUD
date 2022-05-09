@@ -272,7 +272,7 @@ static void init_char_strings(char_data *ch)
   }        /* race is undeterminable      */
 
   DELETE_ARRAY_IF_EXTANT(GET_PROMPT(ch));
-  GET_PROMPT(ch) = str_dup("< @pP @mM > ");
+  GET_PROMPT(ch) = str_dup("< @pP @mM > [@j TN]");
   DELETE_ARRAY_IF_EXTANT(ch->player.matrixprompt);
   ch->player.matrixprompt = str_dup("< @pP @mM > ");
 }
