@@ -3499,7 +3499,7 @@ ACMD(do_activate)
 
       int delta = ((int)(GET_REAL_MAG(ch) / 100) * 100) - GET_POWER_POINTS(ch);
       if (total > delta)
-        send_to_char(ch, "That costs %d points to activate, but you only have %d free.\r\n", total, delta);
+        send_to_char(ch, "That costs %d points to activate, but you only have %d free.\r\n", (total / 100), (delta / 100));
       else if (GET_POWER_ACT(ch, i) == x) {
         send_to_char(ch, "%s is already active at rank %d.\r\n", CAP(adept_powers[i]), x);
         return;
