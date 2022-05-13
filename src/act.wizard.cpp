@@ -1221,6 +1221,18 @@ void do_stat_veh(struct char_data *ch, struct veh_data * k)
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Sig: [^B%d^n]  Aut: [^B%d^n]  Pil: [^B%d^n]  Sea: [^B%d/%d^n]  Loa: [^B%d/%d^n]  Cos: [^B%d^n]\r\nFlags: [^B%s^n]\r\n",
           k->sig, k->autonav, k->pilot, k->seating[1], k->seating[0], (int)k->usedload, (int)k->load, k->cost, *flag_buf ? flag_buf : "none");
   send_to_char(buf, ch);
+
+  struct char_data *driver = NULL, *rigger = NULL;
+  for (struct char_data *tmp = k->people; tmp; tmp = tmp->next_in_veh) {
+    if (AFF_FLAGGED(tmp, AFF_PILOT))
+      driver = tmp;
+    if (AFF_FLAGGED(tmp, AFF_RIG))
+      rigger = tmp;
+  }
+  send_to_char(ch, "Driven by: ^c%s^n. Rigged by: ^c%s^n. Controlled by: ^c%s^n\r\n",
+               driver ? GET_CHAR_NAME(driver) : "nobody",
+               rigger ? GET_CHAR_NAME(rigger) : "nobody",
+               k->rigger ? GET_CHAR_NAME(k->rigger) : "nobody");
 }
 
 void do_stat_object(struct char_data * ch, struct obj_data * j)

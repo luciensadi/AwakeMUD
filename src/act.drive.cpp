@@ -155,7 +155,7 @@ void crash_test(struct char_data *ch)
   power = (int)(ceilf(get_speed(veh) / 10));
 
   snprintf(buf, sizeof(buf), "%s begins to lose control!\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
-  act(buf, FALSE, ch, NULL, NULL, TO_VEH_ROOM);
+  send_to_room(buf, get_veh_in_room(veh), veh);
 
   skill = veh_skill(ch, veh, &target) + veh->autonav;
 
@@ -175,7 +175,7 @@ void crash_test(struct char_data *ch)
     snprintf(buf, sizeof(buf), "%s careens off the road!\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
   }
   send_to_veh(crash_buf, veh, NULL, TRUE);
-  act(buf, FALSE, ch, NULL, NULL, TO_VEH_ROOM);
+  send_to_room(buf, get_veh_in_room(veh), veh);
 
   attack_resist = success_test(veh->body, power) * -1;
 
@@ -498,7 +498,7 @@ void do_raw_ram(struct char_data *ch, struct veh_data *veh, struct veh_data *tve
         GET_MOBALERTTIME(npc) = 30;
       }
     }
-    
+
     target = get_vehicle_modifier(veh) + veh->handling + modify_target(ch);
     vehm = get_maneuver(veh);
     tvehm = get_maneuver(tveh);
@@ -510,17 +510,17 @@ void do_raw_ram(struct char_data *ch, struct veh_data *veh, struct veh_data *tve
       target += 4;
     else if (vehm < tvehm)
       target += 2;
-    strcpy(buf3, GET_VEH_NAME(veh));
+    strcpy(buf3, capitalize(GET_VEH_NAME_NOFORMAT(veh)));
     snprintf(buf, sizeof(buf), "%s heads straight towards your ride.\r\n", buf3);
     snprintf(buf1, sizeof(buf1), "%s heads straight towards %s.\r\n", buf3, GET_VEH_NAME(tveh));
     snprintf(buf2, sizeof(buf2), "You attempt to ram %s.\r\n", GET_VEH_NAME(tveh));
     send_to_veh(buf, tveh, 0, TRUE);
-    send_to_room(buf1, veh->in_room);
+    send_to_room(buf1, veh->in_room, tveh);
     send_to_char(buf2, ch);
   } else {
     target = get_vehicle_modifier(veh) + veh->handling + modify_target(ch);
-    snprintf(buf, sizeof(buf), "%s heads straight towards you.", GET_VEH_NAME(veh));
-    snprintf(buf1, sizeof(buf1), "%s heads straight towards $n.", GET_VEH_NAME(veh));
+    snprintf(buf, sizeof(buf), "%s heads straight towards you.", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
+    snprintf(buf1, sizeof(buf1), "%s heads straight towards $n.", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
     act(buf, FALSE, vict, 0, 0, TO_CHAR);
     act(buf1, FALSE, vict, 0, 0, TO_ROOM);
     act("You head straight towards $N.", FALSE, ch, 0, vict, TO_CHAR);
@@ -1390,14 +1390,20 @@ ACMD(do_speed)
       send_to_char("You bring the vehicle to a halt.\r\n", ch);
       send_to_veh("The vehicle slows to a stop.\r\n", veh, ch, FALSE);
     } else {
-      if (!PLR_FLAGGED(ch, PLR_REMOTE) && !AFF_FLAGGED(ch, AFF_RIG))
+      if (!PLR_FLAGGED(ch, PLR_REMOTE) && !AFF_FLAGGED(ch, AFF_RIG)) {
         send_to_char("You put your foot on the brake.\r\n", ch);
-      send_to_veh("You slow down.", veh, ch, TRUE);
+        send_to_veh("You slow down.", veh, ch, TRUE);
+      } else {
+        send_to_veh("You slow down.", veh, NULL, TRUE);
+      }
     }
   } else if (i > veh->cspeed) {
-    if (!PLR_FLAGGED(ch, PLR_REMOTE) && !AFF_FLAGGED(ch, AFF_RIG))
+    if (!PLR_FLAGGED(ch, PLR_REMOTE) && !AFF_FLAGGED(ch, AFF_RIG)) {
       send_to_char("You put your foot on the accelerator.\r\n", ch);
-    send_to_veh("You speed up.", veh, ch, TRUE);
+      send_to_veh("You speed up.", veh, ch, TRUE);
+    } else {
+      send_to_veh("You speed up.", veh, NULL, TRUE);
+    }
   } else {
     send_to_char("But you're already traveling that fast!\r\n", ch);
     return;

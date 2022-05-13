@@ -2814,11 +2814,11 @@ void send_to_veh(const char *messg, struct veh_data *veh, struct char_data *ch, 
 
   if (messg)
   {
-    for (i = veh->people; i; i = i->next_in_veh)
+    for (i = veh->people; i; i = i->next_in_veh) {
       if (i != ch && i->desc) {
-        if (!(!torig && AFF_FLAGGED(i, AFF_RIG)))
-          SEND_TO_Q(messg, i->desc);
+        SEND_TO_Q(messg, i->desc);
       }
+    }
     if (torig && veh->rigger && veh->rigger->desc)
       SEND_TO_Q(messg, veh->rigger->desc);
   }
@@ -2847,7 +2847,7 @@ void send_to_veh(const char *messg, struct veh_data *veh, struct char_data *ch, 
   }
 }
 
-void send_to_room(const char *messg, struct room_data *room)
+void send_to_room(const char *messg, struct room_data *room, struct veh_data *exclude_veh)
 {
   struct char_data *i;
   struct veh_data *v;
@@ -2857,7 +2857,7 @@ void send_to_room(const char *messg, struct room_data *room)
         if (!(PLR_FLAGGED(i, PLR_REMOTE) || PLR_FLAGGED(i, PLR_MATRIX)) && AWAKE(i))
           SEND_TO_Q(messg, i->desc);
     for (v = room->vehicles; v; v = v->next_veh)
-      if (v->people)
+      if (v->people && v != exclude_veh)
         send_to_veh(messg, v, NULL, TRUE);
 
   }

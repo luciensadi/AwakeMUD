@@ -2070,7 +2070,7 @@ void docwagon(struct char_data *ch)
       }
     }
     if (ch->persona) {
-      snprintf(buf, sizeof(buf), "%s depixelizes and vanishes from the host.\r\n", ch->persona->name);
+      snprintf(buf, sizeof(buf), "%s depixelizes and vanishes from the host.\r\n", CAP(ch->persona->name));
       send_to_host(ch->persona->in_host, buf, ch->persona, TRUE);
       extract_icon(ch->persona);
       ch->persona = NULL;
@@ -3443,7 +3443,7 @@ bool astral_fight(struct char_data *ch, struct char_data *vict)
           && (attack_success < 0)
           && FIGHTING(vict) == ch
           && GET_POS(vict) > POS_SLEEPING) {
-        send_to_char(ch, "%s counters your attack!\r\n", GET_NAME(vict));
+        send_to_char(ch, "%s counters your attack!\r\n", CAP(GET_NAME(vict)));
         send_to_char(vict, "You counter %s's attack!\r\n", GET_NAME(ch));
         act("$n counters $N's attack!", 1, ch, NULL, vict, TO_ROOM);
         AFF_FLAGS(vict).SetBit(AFF_COUNTER_ATT);
@@ -5501,17 +5501,17 @@ void chkdmg(struct veh_data * veh)
       if (veh->people) {
         if (veh->in_room && IS_WATER(veh->in_room)) {
           send_to_veh("You are hurled into the water as your ride is wrecked!\r\n", veh, NULL, FALSE);
-          snprintf(buf, sizeof(buf), "%s bites deep into the water and flips, its occupants hurled into the water!\r\n", GET_VEH_NAME(veh));
+          snprintf(buf, sizeof(buf), "%s bites deep into the water and flips, its occupants hurled into the water!\r\n", CAP(GET_VEH_NAME_NOFORMAT(veh)));
         } else {
           send_to_veh("You are hurled into the street as your ride is wrecked!\r\n", veh, NULL, FALSE);
-          snprintf(buf, sizeof(buf), "%s careens off the road, its occupants hurled into the street!\r\n", GET_VEH_NAME(veh));
+          snprintf(buf, sizeof(buf), "%s careens off the road, its occupants hurled into the street!\r\n", CAP(GET_VEH_NAME_NOFORMAT(veh)));
         }
         act(buf, FALSE, veh->people, NULL, NULL, TO_VEH_ROOM);
       } else {
         if (veh->in_room && IS_WATER(veh->in_room)) {
-          snprintf(buf, sizeof(buf), "%s takes on too much water and is swamped!\r\n", GET_VEH_NAME(veh));
+          snprintf(buf, sizeof(buf), "%s takes on too much water and is swamped!\r\n", CAP(GET_VEH_NAME_NOFORMAT(veh)));
         } else {
-          snprintf(buf, sizeof(buf), "%s careens off the road!\r\n", GET_VEH_NAME(veh));
+          snprintf(buf, sizeof(buf), "%s careens off the road!\r\n", CAP(GET_VEH_NAME_NOFORMAT(veh)));
         }
         send_to_room(buf, get_veh_in_room(veh));
       }
@@ -5660,28 +5660,28 @@ bool vram(struct veh_data * veh, struct char_data * ch, struct veh_data * tveh)
 
     if (IS_NPC(ch) && MOB_FLAGGED(ch, MOB_NORAM)) {
       damage_total = -1;
-      snprintf(buf, sizeof(buf), "You can't seem to get close enough to run %s down!\r\n", thrdgenders[(int)GET_SEX(ch)]);
-      snprintf(buf1, sizeof(buf1), "%s can't seem to get close enough to $n to run $m down!", GET_VEH_NAME(veh));
-      snprintf(buf2, sizeof(buf2), "%s can't even get close to you!", GET_VEH_NAME(veh));
+      snprintf(buf, sizeof(buf), "You can't seem to get close enough to run %s down!\r\n", decapitalize_a_an(GET_NAME(ch)));
+      snprintf(buf1, sizeof(buf1), "%s can't seem to get close enough to $n to run $m down!", CAP(GET_VEH_NAME_NOFORMAT(veh)));
+      snprintf(buf2, sizeof(buf2), "%s can't even get close to you!", CAP(GET_VEH_NAME_NOFORMAT(veh)));
       send_to_driver(buf, veh);
     } else if (damage_total < LIGHT) {
-      snprintf(buf, sizeof(buf), "You ram into %s, but %s armor holds!", thrdgenders[(int)GET_SEX(ch)], HSHR(ch));
-      snprintf(buf1, sizeof(buf1), "%s rams into $n, but $s armor holds!", GET_VEH_NAME(veh));
-      snprintf(buf2, sizeof(buf2), "%s rams into you, but your armor holds!", GET_VEH_NAME(veh));
+      snprintf(buf, sizeof(buf), "You ram into %s, but %s armor holds!\r\n", decapitalize_a_an(GET_NAME(ch)), HSHR(ch));
+      snprintf(buf1, sizeof(buf1), "%s rams into $n, but $s armor holds!", CAP(GET_VEH_NAME_NOFORMAT(veh)));
+      snprintf(buf2, sizeof(buf2), "%s rams into you, but your armor holds!", CAP(GET_VEH_NAME_NOFORMAT(veh)));
       send_to_driver(buf, veh);
       will_damage_vehicle = TRUE;
     } else if (veh_dam > 0) {
       send_to_veh("THUMP!\r\n", veh, NULL, TRUE);
-      snprintf(buf, sizeof(buf), "You run %s down!\r\n", thrdgenders[(int)GET_SEX(ch)]);
-      snprintf(buf1, sizeof(buf1), "%s runs $n down!", GET_VEH_NAME(veh));
-      snprintf(buf2, sizeof(buf2), "%s runs you down!", GET_VEH_NAME(veh));
+      snprintf(buf, sizeof(buf), "You run %s down!\r\n", decapitalize_a_an(GET_NAME(ch)));
+      snprintf(buf1, sizeof(buf1), "%s runs $n down!", CAP(GET_VEH_NAME_NOFORMAT(veh)));
+      snprintf(buf2, sizeof(buf2), "%s runs you down!", CAP(GET_VEH_NAME_NOFORMAT(veh)));
       send_to_driver(buf, veh);
       will_damage_vehicle = TRUE;
     } else {
       send_to_veh("THUTHUMP!\r\n", veh, NULL, TRUE);
-      snprintf(buf, sizeof(buf), "You roll right over %s!\r\n", thrdgenders[(int)GET_SEX(ch)]);
-      snprintf(buf1, sizeof(buf1), "%s rolls right over $n!", GET_VEH_NAME(veh));
-      snprintf(buf2, sizeof(buf2), "%s runs right over you!", GET_VEH_NAME(veh));
+      snprintf(buf, sizeof(buf), "You roll right over %s!\r\n", decapitalize_a_an(GET_NAME(ch)));
+      snprintf(buf1, sizeof(buf1), "%s rolls right over $n!", CAP(GET_VEH_NAME_NOFORMAT(veh)));
+      snprintf(buf2, sizeof(buf2), "%s runs right over you!", CAP(GET_VEH_NAME_NOFORMAT(veh)));
       send_to_driver(buf, veh);
     }
     act(buf1, FALSE, ch, 0, 0, TO_ROOM);
@@ -5723,7 +5723,7 @@ bool vram(struct veh_data * veh, struct char_data * ch, struct veh_data * tveh)
     damage_total = convert_damage(staged_damage);
     tveh->damage += damage_total;
 
-    snprintf(buf, sizeof(buf), "A %s rams into you!\r\n", GET_VEH_NAME(veh));
+    snprintf(buf, sizeof(buf), "%s rams into you!\r\n", CAP(GET_VEH_NAME_NOFORMAT(veh)));
     send_to_veh(buf, tveh, NULL, TRUE);
 
     if (tveh->cspeed > SPEED_IDLE)
@@ -5751,9 +5751,9 @@ bool vram(struct veh_data * veh, struct char_data * ch, struct veh_data * tveh)
     veh->damage += damage_total;
 
     snprintf(buf, sizeof(buf), "You ram a %s!\r\n", GET_VEH_NAME(tveh));
-    snprintf(buf1, sizeof(buf1), "%s rams straight into your ride!\r\n", GET_VEH_NAME(veh));
+    snprintf(buf1, sizeof(buf1), "%s rams straight into your ride!\r\n", CAP(GET_VEH_NAME_NOFORMAT(tveh)));
     strcpy(buf3, GET_VEH_NAME(veh));
-    snprintf(buf2, sizeof(buf2), "%s rams straight into %s!\r\n", buf3, GET_VEH_NAME(tveh));
+    snprintf(buf2, sizeof(buf2), "%s rams straight into %s!\r\n", buf3, CAP(GET_VEH_NAME_NOFORMAT(tveh)));
     send_to_veh(buf, veh, NULL, TRUE);
     send_to_veh(buf1, tveh, NULL, TRUE);
     send_to_room(buf2, veh->in_room);
@@ -5953,11 +5953,11 @@ bool vcombat(struct char_data * ch, struct veh_data * veh)
     if (wielded) {
       snprintf(buf, sizeof(buf), "$n fires his $o at %s, but misses.", GET_VEH_NAME(veh));
       snprintf(buf1, sizeof(buf1), "You fire your $o at %s, but miss.", GET_VEH_NAME(veh));
-      snprintf(buf2, sizeof(buf2), "%s's %s misses you completely.\r\n", GET_NAME(ch), ammo_type);
+      snprintf(buf2, sizeof(buf2), "%s's %s misses you completely.\r\n", CAP(GET_NAME(ch)), ammo_type);
     } else {
       snprintf(buf, sizeof(buf), "$n swings at %s, but misses.", GET_VEH_NAME(veh));
       snprintf(buf1, sizeof(buf1), "You swing at %s, but miss.", GET_VEH_NAME(veh));
-      snprintf(buf2, sizeof(buf2), "%s's %s misses you completely.\r\n", GET_NAME(ch), ammo_type);
+      snprintf(buf2, sizeof(buf2), "%s's %s misses you completely.\r\n", CAP(GET_NAME(ch)), ammo_type);
     }
     act(buf, FALSE, ch, wielded, 0, TO_NOTVICT);
     act(buf1, FALSE, ch, wielded, 0, TO_CHAR);
@@ -6009,7 +6009,7 @@ bool vcombat(struct char_data * ch, struct veh_data * veh)
   if (veh->owner && !IS_NPC(ch))
   {
     char *cname = get_player_name(veh->owner);
-    snprintf(buf, sizeof(buf), "%s attacked vehicle (%s) owned by player %s (%ld).", GET_CHAR_NAME(ch), GET_VEH_NAME(veh), cname, veh->owner);
+    snprintf(buf, sizeof(buf), "%s attacked vehicle (%s) owned by player %s (%ld).", CAP(GET_CHAR_NAME(ch)), GET_VEH_NAME(veh), cname, veh->owner);
     delete [] cname;
     mudlog(buf, ch, LOG_WRECKLOG, TRUE);
   }
