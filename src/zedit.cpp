@@ -551,7 +551,6 @@ void zedit_parse(struct descriptor_data *d, const char *arg)
       ZON->name = str_dup("an unfinished zone");
       ZON->number = CH->player_specials->saved.zonenum;
       ZON->top = ZON->number * 100 + 99;
-      ZON->editor_ids[0] = GET_IDNUM(CH);
       zedit_disp_data_menu(d);
       break;
     case 'n':

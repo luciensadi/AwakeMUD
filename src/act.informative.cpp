@@ -3395,12 +3395,11 @@ ACMD(do_examine)
       }
     } else if ((GET_OBJ_TYPE(tmp_object) == ITEM_WEAPON) &&
                (IS_GUN(GET_OBJ_VAL(tmp_object, 3)))) {
-      for (i = 7; i < 10; ++i)
+      for (i = ACCESS_LOCATION_TOP; i <= ACCESS_LOCATION_UNDER; ++i)
         if (GET_OBJ_VAL(tmp_object, i) >= 0) {
-          snprintf(buf1, sizeof(buf1), "There is %s attached to the %s of it.\r\n",
-                  GET_OBJ_VAL(tmp_object, i) > 0 ? short_object(GET_OBJ_VAL(tmp_object, i), 2) : "nothing",
-                  (i == 7 ? "top" : (i == 8 ? "barrel" : "bottom")));
-          send_to_char(buf1, ch);
+          send_to_char(ch, "There is %s attached to the %s of it.\r\n",
+                       GET_OBJ_VAL(tmp_object, i) > 0 ? short_object(GET_OBJ_VAL(tmp_object, i), 2) : "nothing",
+                       gun_accessory_locations[i - ACCESS_LOCATION_TOP]);
         }
       if (tmp_object->contains)
         snprintf(buf, sizeof(buf), "It contains %d round%s of %s ammunition, and can hold %d round%s.\r\n",

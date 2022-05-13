@@ -1277,7 +1277,7 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
     int x = 0;
     for (sell = shop_table[shop_nr].selling; sell; sell = sell->next)
       x++;
-    if (x > 50) {
+    if (x > MAX_ITEMS_IN_SHOP_INVENTORY) {
       struct shop_sell_data *temp;
       x = number(1, x-1);
       for (sell = shop_table[shop_nr].selling; sell && x > 0; sell = sell->next)
@@ -1435,15 +1435,15 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
     }
   } else
   {
-    strcpy(buf, " **   Avail    Item                                                                          Price\r\n"
-                "----------------------------------------------------------------------------------------------------\r\n");
+    send_to_char(ch, " **   Avail    Item                                                                          Price\r\n"
+                     "----------------------------------------------------------------------------------------------------\r\n");
     for (struct shop_sell_data *sell = shop_table[shop_nr].selling; sell; sell = sell->next, i++) {
       obj = read_object(sell->vnum, VIRTUAL);
       if (!shop_can_sell_object(obj, keeper, shop_nr)) {
         i--;
         continue;
       }
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %2d)  ", i);
+      snprintf(buf, sizeof(buf), " %2d)  ", i);
       if (sell->type == SELL_ALWAYS || (sell->type == SELL_AVAIL && GET_OBJ_AVAILTN(obj) == 0))
         strlcat(buf, "Yes      ", sizeof(buf));
       else if (sell->type == SELL_AVAIL) {
@@ -1482,10 +1482,7 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), formatstr, GET_OBJ_NAME(obj),
                   buy_price(obj, shop_nr));
       }
-      if (strlen(buf) >= MAX_STRING_LENGTH - 200) {
-        snprintf(buf2, sizeof(buf2), "Shop %ld ('%s'): Aborting string composition due to length constraints.", shop_table[shop_nr].vnum, GET_NAME(keeper));
-        break;
-      }
+      send_to_char(buf, ch);
       extract_obj(obj);
       obj = NULL;
     }
@@ -1493,8 +1490,7 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
 
   // New characters get reminded about the probe and info commands.
   if (SHOULD_SEE_TIPS(ch))
-    strlcat(buf, "\r\nUse ^WPROBE^n for more details.\r\n", sizeof(buf));
-  page_string(ch->desc, buf, 1);
+    send_to_char("\r\nUse ^WPROBE^n for more details.\r\n", ch);
 }
 
 void shop_value(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t shop_nr)

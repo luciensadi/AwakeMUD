@@ -2581,7 +2581,7 @@ void matrix_update()
                 if (!--icon->ic.subtype) {
                   icon2->decker->located = TRUE;
                   send_to_icon(icon2, "Alarms start to ring in your head as %s finds your location.\r\n", icon->name);
-                  snprintf(buf, sizeof(buf), "%s located by Trace IC in host %ld (%s).", GET_CHAR_NAME(icon2->decker->ch), matrix[icon->in_host].vnum, matrix[icon->in_host].name);
+                  snprintf(buf, sizeof(buf), "%s located by Trace IC in host %ld (%s^g).", GET_CHAR_NAME(icon2->decker->ch), matrix[icon->in_host].vnum, matrix[icon->in_host].name);
                   mudlog(buf, icon2->decker->ch, LOG_GRIDLOG, TRUE);
                 }
               } else if (icon->ic.type != IC_TRACE || (icon->ic.type == IC_TRACE && !icon2->decker->located)) {

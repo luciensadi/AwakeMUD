@@ -235,6 +235,9 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 // Approximately how often should we see traffic messages? 1:(N+1) spec ticks where N is this number.
 #define TRAFFIC_INFREQUENCY_CONTROL                            10
 
+// After how many items will the shopkeep start silently destroying old sales?
+#define MAX_ITEMS_IN_SHOP_INVENTORY                            100
+
 /////////////// OLC permissions configuration /////////////////////////
 #define LVL_FOR_SETTING_ZONE_EDITOR_ID_NUMBERS                 LVL_VICEPRES
 #define LVL_FOR_SETTING_ZONE_CONNECTED_STATUS                  LVL_FIXER

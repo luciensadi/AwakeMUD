@@ -1790,6 +1790,17 @@ SPECIAL(car_dealer)
       send_to_char("There is no such vehicle for sale.\r\n", ch);
       return TRUE;
     }
+
+    // Restrict to single-keyword purchases.
+    skip_spaces(&argument);
+    if (*argument) {
+      send_to_char(ch, "You can only specify one keyword for this shop. If you really want to buy %s, "
+                       "you can use ^WBUY %s^n. Otherwise, you should pick a unique keyword (ex: if a "
+                       "GMC Bulldog and a GMC 4201 are for sale, you would 'buy bulldog' for the first"
+                       " or 'buy 4201' for the second.)\r\n", GET_VEH_NAME(veh), buf);
+      return TRUE;
+    }
+
     if (GET_NUYEN(ch) < veh->cost) {
       send_to_char("You aren't carrying enough nuyen for that, and this shop doesn't take credsticks.\r\n", ch);
       return TRUE;
@@ -5914,6 +5925,7 @@ SPECIAL(mageskill_nightwing)
     GET_SPARE1(mage) = 0;
   if (!cmd && time_info.hours == 8 && !GET_SPARE1(mage)) {
     int toroom = NOWHERE;
+    // TODO: Make it so that she can't go to the room she's already in.
     switch (number(0, 5)) {
       case 0:
         toroom = real_room(2496);

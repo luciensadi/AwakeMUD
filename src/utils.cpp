@@ -3085,7 +3085,7 @@ char *generate_new_loggable_representation(struct obj_data *obj) {
   // We explicitly have to exclude ITEM_PART here because these things 'contain' the deck while in progress.
   if (obj->contains && GET_OBJ_TYPE(obj) != ITEM_PART) {
     // I don't need to see "Containing a blank magazine (restring X) containing..."
-    if (GET_OBJ_TYPE(obj->contains) == ITEM_GUN_AMMO && !(obj->contains->next_content)) {
+    if (GET_OBJ_TYPE(obj->contains) == ITEM_GUN_MAGAZINE && !(obj->contains->next_content)) {
       snprintf(ENDOF(log_string), sizeof(log_string) - strlen(log_string), " (loaded with %d %s)",
                GET_MAGAZINE_AMMO_COUNT(obj),
                get_ammo_representation(GET_MAGAZINE_BONDED_ATTACKTYPE(obj), GET_MAGAZINE_AMMO_TYPE(obj), GET_MAGAZINE_AMMO_COUNT(obj)));

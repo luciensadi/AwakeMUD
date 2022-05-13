@@ -1903,6 +1903,10 @@ int process_elevator(struct room_data *room,
       }
     if ((number % elevator[num].columns) && !PRF_FLAGGED(ch, PRF_SCREENREADER))
       strcat(buf, "\r\n");
+
+    // Invert the lines of the panel.
+    // asdf todo-- while loop with strstr to find newline, then PREPEND to buf1 and advance the while loop ptr
+
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n(OPEN)%s(CLOSE)\r\n\r\n", PRF_FLAGGED(ch, PRF_SCREENREADER) ? "\r\n" : "  ");
     temp = room->rating + 1 - elevator[num].num_floors - elevator[num].start_floor;
     if (temp > 0)
