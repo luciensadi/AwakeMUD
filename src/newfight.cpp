@@ -141,6 +141,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     } else {
       mudlog("SYSERR: Entered hit() with an non-astrally-reachable character attacking an astral character.", att->ch, LOG_SYSLOG, TRUE);
       act("Unable to hit $N- $E's astral and $n can't touch that.", FALSE, att->ch, 0, def->ch, TO_ROLLS);
+      stop_fighting(att->ch);
     }
     return FALSE;
   }
@@ -152,6 +153,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     } else {
       mudlog("SYSERR: Entered hit() with an astral character attacking a non-astrally-reachable character.", att->ch, LOG_SYSLOG, TRUE);
       act("Unable to hit $N- $E's unreachable from the astral plane and $n can't touch that.", FALSE, att->ch, 0, def->ch, TO_ROLLS);
+      stop_fighting(att->ch);
     }
     return FALSE;
   }
