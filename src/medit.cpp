@@ -546,9 +546,10 @@ void medit_parse(struct descriptor_data *d, const char *arg)
         /* we also have to renumber all the mobiles currently    *
         *  existing in the world. This is because when I start   *
         * extracting mobiles, bad things will happen!           */
+        // We explicitly use the settable/raw version here since we're not using it for lookups.
         for (temp_mob = character_list; temp_mob; temp_mob = temp_mob->next)
-          if (GET_MOB_RNUM (temp_mob) >= d->edit_mob->nr)
-            GET_MOB_RNUM (temp_mob)++;
+          if (GET_SETTABLE_MOB_RNUM(temp_mob) >= d->edit_mob->nr)
+            GET_SETTABLE_MOB_RNUM(temp_mob)++;
 
         /* RENUMBER ZONE TABLES HERE, only              *
         *   because I ADDED a mobile!                   *

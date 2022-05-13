@@ -589,7 +589,8 @@ int get_armor_penalty_grade(struct char_data *ch);
 
 #define GET_CONGREGATION_BONUS(ch) ((ch)->congregation_bonus_pool)
 
-#define GET_MOB_RNUM(mob)       ((mob)->nr)
+#define GET_MOB_RNUM(mob)             ((mob)->nr >= 0 && (mob)->nr <= top_of_mobt ? (mob)->nr : 0)
+#define GET_SETTABLE_MOB_RNUM(mob)    ((mob)->nr)
 #define GET_MOB_VNUM(mob)       (IS_MOB(mob) ? mob_index[GET_MOB_RNUM(mob)].vnum : -1)
 #define MOB_VNUM_RNUM(rnum) ((mob_index[rnum]).vnum)
 #define GET_MOB_UNIQUE_ID(mob)  ((mob)->unique_id)
