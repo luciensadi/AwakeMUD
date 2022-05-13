@@ -174,7 +174,7 @@ void redit_disp_exit_menu(struct descriptor_data * d)
                CCNRM(CH, C_CMP), CCCYN(CH, C_CMP), DOOR->barrier, CCNRM(CH, C_CMP));
 
 
-  send_to_char(CH,       "9) Hidden Rating: %s%d%s\r\n"
+  send_to_char(CH,       "9) Hidden Rating (TN): %s%d%s\r\n"
                "a) Leaving-through-this-exit second-person custom message: %s%s%s\r\n"
                "b) Leaving-through-this-exit third-person custom message: %s%s%s\r\n"
                "c) Entering-from-this-exit third-person custom message: %s%s%s\r\n"
@@ -741,7 +741,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
       // new stuff here
     case 'm':
       if (ROOM->sector_type == SPIRIT_LAKE || ROOM->sector_type == SPIRIT_SEA || ROOM->sector_type == SPIRIT_RIVER || d->edit_room->room_flags.AreAnySet(ROOM_FALL, ROOM_RADIATION, ENDBIT)) {
-        send_to_char("Enter environmental difficulty rating (1 to 20): ", CH);
+        send_to_char("Enter environmental difficulty rating (TN) (1 to 20): ", CH);
         d->edit_mode = REDIT_LIBRARY_RATING;
       } else {
         redit_disp_menu(d);
@@ -1063,7 +1063,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
       break;
     case '9':
       d->edit_mode = REDIT_EXIT_HIDDEN;
-      send_to_char("Enter hidden rating of the exit: ", CH);
+      send_to_char("Enter hidden rating (TN) of the exit: ", CH);
       break;
     case 'a':
         d->edit_mode = REDIT_EXIT_ENTRY_STRING_SECONDPERSON;
