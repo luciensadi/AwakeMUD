@@ -461,28 +461,28 @@ void boot_world(void)
 
   log("Checking to see if you added a new flag and forgot to add it to constants.cpp...");
   for (int i = 0; i < MOB_MAX; i++) {
-    if (!str_str(action_bits[i], MAX_FLAG_MARKER)) {
+    if (str_str(action_bits[i], MAX_FLAG_MARKER)) {
       log("Error: You added a mob flag but didn't add it to action_bits in constants.cpp (or forgot a comma)!");
       exit(ERROR_FLAG_CONSTANT_MISSING);
     }
   }
 
   for (int i = 0; i < AFF_MAX; i++) {
-    if (!str_str(affected_bits[i], MAX_FLAG_MARKER)) {
+    if (str_str(affected_bits[i], MAX_FLAG_MARKER)) {
       log("Error: You added an aff flag but didn't add it to affected_bits in constants.cpp (or forgot a comma)!");
       exit(ERROR_FLAG_CONSTANT_MISSING);
     }
   }
 
   for (int i = 0; i < PLR_MAX; i++) {
-    if (!str_str(player_bits[i], MAX_FLAG_MARKER)) {
+    if (str_str(player_bits[i], MAX_FLAG_MARKER)) {
       log("Error: You added a plr flag but didn't add it to player_bits in constants.cpp (or forgot a comma)!");
       exit(ERROR_FLAG_CONSTANT_MISSING);
     }
   }
 
   for (int i = 0; i < PRF_MAX; i++) {
-    if (!str_str(preference_bits[i], MAX_FLAG_MARKER)) {
+    if (str_str(preference_bits[i], MAX_FLAG_MARKER)) {
       log("Error: You added a prf flag but didn't add it to preference_bits in constants.cpp (or forgot a comma)!");
       exit(ERROR_FLAG_CONSTANT_MISSING);
     }

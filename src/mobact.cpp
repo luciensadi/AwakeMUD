@@ -226,9 +226,9 @@ bool vict_is_valid_target(struct char_data *ch, struct char_data *vict) {
     }
 
     // Is this NPC protected by spec?
-    if (npc_is_protected_by_spec(vict)) {
+    if (npc_is_protected_by_spec(vict) || MOB_FLAGGED(vict, MOB_NOKILL) || vict->mob_specials.quest_id) {
       #ifdef MOBACT_DEBUG
-        snprintf(buf3, sizeof(buf3), "vict_is_valid_target: NPC %s is not a valid target (protected by spec).", GET_CHAR_NAME(vict));
+        snprintf(buf3, sizeof(buf3), "vict_is_valid_target: NPC %s is not a valid target (protected by spec, !kill, or quest flag).", GET_CHAR_NAME(vict));
         do_say(ch, buf3, 0, 0);
       #endif
       return FALSE;
