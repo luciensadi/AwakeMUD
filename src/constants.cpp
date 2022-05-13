@@ -276,7 +276,7 @@ const char *room_bits[] =
     "SMALL_DRONE_ONLY",
     "RADIOACTIVE",
     "ALL_VEH_ACCESS",
-    "\n"
+    MAX_FLAG_MARKER
   };
 
 
@@ -532,7 +532,8 @@ const char *action_bits[] =
     "TOTALINVIS",
     "INANIMATE",
     "EMPLACED",
-    "\n"
+    "RACE_AGGR_VS_MOBS",
+    MAX_FLAG_MARKER
   };
 
 /* PRF_x v2 */
@@ -677,7 +678,7 @@ const char *preference_bits[] =
     "AUTOSTAND",
     "AUTOKIPUP",
     "!WEATHER",
-    "\n"
+    MAX_FLAG_MARKER
   };
 
 /* AFF_x */
@@ -1016,7 +1017,7 @@ const char *extra_bits[] =
     "AIR_FILTRATION",
     "NBC_RESIST",
     "NBC_IMMUNE",
-    "\n"
+    MAX_FLAG_MARKER
   };
 
 const char *pc_readable_extra_bits[] =

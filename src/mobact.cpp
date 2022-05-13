@@ -68,6 +68,7 @@ bool vehicle_is_valid_mob_target(struct veh_data *veh, bool alarmed);
 void switch_weapons(struct char_data *mob, int pos);
 void send_mob_aggression_warnings(struct char_data *pc, struct char_data *mob);
 bool mob_cannot_be_aggressive(struct char_data *ch);
+bool mob_is_aggressive_towards_race(struct char_data *ch, int race);
 
 // This takes up a significant amount of processing time, so let's precompute it.
 #define NUM_AGGRO_OCTETS 3
@@ -124,12 +125,15 @@ bool mob_is_aggressive(struct char_data *ch, bool include_base_aggression) {
   act(buf2, FALSE, ch, NULL, NULL, TO_ROOM);
 #endif
 
+  // Escortees can never be aggressive.
   if (is_escortee(ch))
     return FALSE;
 
+  // If we're aggressive by nature, and the check calls for it, return true.
   if (include_base_aggression && MOB_FLAGS(ch).IsSet(MOB_AGGRESSIVE))
     return TRUE;
 
+  // Check for the racial aggression octets.
   for (int i = 0; i < NUM_AGGRO_OCTETS; i++) {
     if (MOB_FLAGS(ch).IsSetPrecomputed(i, AGGRESSION_OCTETS[i])) {
 #ifdef MOBACT_DEBUG
@@ -191,8 +195,24 @@ bool vict_is_valid_target(struct char_data *ch, struct char_data *vict) {
   }
 
   // Astral mismatch? Failure.
-  if ((IS_ASTRAL(ch) && (!IS_ASTRAL(vict) && !IS_DUAL(vict))) || (IS_ASTRAL(vict) && (!IS_ASTRAL(ch) && !IS_DUAL(ch))))
+  if ((IS_ASTRAL(ch) && !(IS_ASTRAL(vict) || IS_DUAL(vict))) || (IS_ASTRAL(vict) && !(IS_ASTRAL(ch) || IS_DUAL(ch)))) {
+    #ifdef MOBACT_DEBUG
+        snprintf(buf3, sizeof(buf3), "vict_is_valid_target: Skipping %s - astral states do not match.", GET_CHAR_NAME(vict));
+        do_say(ch, buf3, 0, 0);
+    #endif
     return FALSE;
+  }
+
+  // Vehicle state mismatch (vict in veh that ch is not in)? Failure and bug report.
+  if (vict->in_veh && vict->in_veh != ch->in_veh) {
+    #ifdef MOBACT_DEBUG
+      snprintf(buf3, sizeof(buf3), "vict_is_valid_target: %s is not a valid target-- they're in a vehicle I'm not in.", GET_CHAR_NAME(vict));
+      do_say(ch, buf3, 0, 0);
+    #endif
+    snprintf(buf3, sizeof(buf3), "SYSERR: %s is in a vehicle that %s is not in during NPC aggro check!", GET_CHAR_NAME(vict), GET_CHAR_NAME(ch));
+    mudlog(buf3, ch, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
 
   // Vict is an NPC.
   if (IS_NPC(vict)) {
@@ -205,13 +225,26 @@ bool vict_is_valid_target(struct char_data *ch, struct char_data *vict) {
       return TRUE;
     }
 
+    // Is this NPC protected by spec?
+    if (npc_is_protected_by_spec(vict)) {
+      #ifdef MOBACT_DEBUG
+        snprintf(buf3, sizeof(buf3), "vict_is_valid_target: NPC %s is not a valid target (protected by spec).", GET_CHAR_NAME(vict));
+        do_say(ch, buf3, 0, 0);
+      #endif
+      return FALSE;
+    }
+
     // Is this an astral projection?
     if (!IS_PROJECT(vict)) {
-#ifdef MOBACT_DEBUG
-      snprintf(buf3, sizeof(buf3), "vict_is_valid_target: Skipping NPC %s - neither hunted escortee nor projection.", GET_CHAR_NAME(vict));
-      do_say(ch, buf3, 0, 0);
-#endif
-      return FALSE;
+      // Nope. Is this a race I'm aggressive towards?
+      if (!MOB_FLAGGED(ch, MOB_RACIAL_AGGR_VS_MOBS) || !mob_is_aggressive_towards_race(ch, GET_RACE(vict))) {
+        #ifdef MOBACT_DEBUG
+              snprintf(buf3, sizeof(buf3), "vict_is_valid_target: Skipping NPC %s - not hunted escortee, projection, or racial target.", GET_CHAR_NAME(vict));
+              do_say(ch, buf3, 0, 0);
+        #endif
+
+        return FALSE;
+      }
     }
   }
 
@@ -240,8 +273,6 @@ bool vict_is_valid_target(struct char_data *ch, struct char_data *vict) {
     }
   }
 
-  // TODO: Return false if I am astral and they are not perceiving-- I cannot hurt them.
-
   // They're a valid target, but I don't feel like fighting.
 #ifdef MOBACT_DEBUG
   snprintf(buf3, sizeof(buf3), "vict_is_valid_target: %s is a valid target, provided I am aggressive.", GET_CHAR_NAME(vict));
@@ -254,41 +285,18 @@ bool vict_is_valid_aggro_target(struct char_data *ch, struct char_data *vict) {
   if (!vict_is_valid_target(ch, vict))
     return FALSE;
 
-  if (MOB_FLAGS(ch).IsSet(MOB_AGGRESSIVE)
-      || (MOB_FLAGGED(ch, MOB_GUARD) && GET_MOBALERT(ch) == MALERT_ALARM)
-      || (mob_is_aggressive(ch, FALSE)
-          && (GET_MOBALERT(ch) == MALERT_ALARM
-              ||  (
-                    // If NPC is aggro towards elves, and victim is an elf subrace, or...
-                    (MOB_FLAGGED(ch, MOB_AGGR_ELF) &&
-                     (GET_RACE(vict) == RACE_ELF || GET_RACE(vict) == RACE_WAKYAMBI || GET_RACE(vict) == RACE_NIGHTONE || GET_RACE(vict) == RACE_DRYAD)) ||
-                    // If NPC is aggro towards dwarves, and victim is a dwarf subrace, or...
-                    (MOB_FLAGGED(ch, MOB_AGGR_DWARF) &&
-                     (GET_RACE(vict) == RACE_DWARF || GET_RACE(vict) == RACE_GNOME || GET_RACE(vict) == RACE_MENEHUNE || GET_RACE(vict) == RACE_KOBOROKURU)) ||
-                    // If NPC is aggro towards humans, and victim is human, or...
-                    (MOB_FLAGGED(ch, MOB_AGGR_HUMAN) &&
-                     GET_RACE(vict) == RACE_HUMAN) ||
-                    // If NPC is aggro towards orks, and victim is an ork subrace, or...
-                    (MOB_FLAGGED(ch, MOB_AGGR_ORK) &&
-                     (GET_RACE(vict) == RACE_ORK || GET_RACE(vict) == RACE_HOBGOBLIN || GET_RACE(vict) == RACE_OGRE || GET_RACE(vict) == RACE_SATYR || GET_RACE(vict) == RACE_ONI)) ||
-                    // If NPC is aggro towards trolls, and victim is a troll subrace:
-                    (MOB_FLAGGED(ch, MOB_AGGR_TROLL) &&
-                     (GET_RACE(vict) == RACE_TROLL || GET_RACE(vict) == RACE_CYCLOPS || GET_RACE(vict) == RACE_FOMORI || GET_RACE(vict) == RACE_GIANT || GET_RACE(vict) == RACE_MINOTAUR))
-                  )
-              )
-          )
-      )
-    // Kick their ass.
-  {
+  bool is_aggressive = MOB_FLAGS(ch).IsSet(MOB_AGGRESSIVE);
+  bool is_alarmed_guard = MOB_FLAGGED(ch, MOB_GUARD) && GET_MOBALERT(ch) == MALERT_ALARM;
+  bool is_alarmed_racist = mob_is_aggressive(ch, FALSE) && GET_MOBALERT(ch) == MALERT_ALARM;
+  bool is_racially_motivated = mob_is_aggressive_towards_race(ch, GET_RACE(vict));
+
+  if (is_aggressive || is_alarmed_guard || is_alarmed_racist || is_racially_motivated) {
 #ifdef MOBACT_DEBUG
-    snprintf(buf3, sizeof(buf3), "vict_is_valid_aggro_target: Target found (conditions: %s/%s/%s/%s/%s/%s/%s): %s.",
-             MOB_FLAGS(ch).IsSet(MOB_AGGRESSIVE) ? "base aggro" : "",
-             (MOB_FLAGGED(ch, MOB_GUARD) && GET_MOBALERT(ch) == MALERT_ALARM) ? "alarmed guard" : "",
-             (MOB_FLAGGED(ch, MOB_AGGR_ELF)   && (GET_RACE(vict) == RACE_ELF || GET_RACE(vict) == RACE_WAKYAMBI || GET_RACE(vict) == RACE_NIGHTONE || GET_RACE(vict) == RACE_DRYAD)) ? "anti-elf" : "",
-             (MOB_FLAGGED(ch, MOB_AGGR_DWARF) && (GET_RACE(vict) == RACE_DWARF || GET_RACE(vict) == RACE_GNOME || GET_RACE(vict) == RACE_MENEHUNE || GET_RACE(vict) == RACE_KOBOROKURU)) ? "anti-dwarf" : "",
-             (MOB_FLAGGED(ch, MOB_AGGR_HUMAN) && GET_RACE(vict) == RACE_HUMAN) ? "anti-human" : "",
-             (MOB_FLAGGED(ch, MOB_AGGR_ORK)   && (GET_RACE(vict) == RACE_ORK || GET_RACE(vict) == RACE_HOBGOBLIN || GET_RACE(vict) == RACE_OGRE || GET_RACE(vict) == RACE_SATYR || GET_RACE(vict) == RACE_ONI)) ? "anti-ork" : "",
-             (MOB_FLAGGED(ch, MOB_AGGR_TROLL) && (GET_RACE(vict) == RACE_TROLL || GET_RACE(vict) == RACE_CYCLOPS || GET_RACE(vict) == RACE_FOMORI || GET_RACE(vict) == RACE_GIANT || GET_RACE(vict) == RACE_MINOTAUR)) ? "anti-troll" : "",
+    snprintf(buf3, sizeof(buf3), "vict_is_valid_aggro_target: Target found (conditions: %s/%s/%s/%s): %s.",
+             is_aggressive ? "base aggro" : "",
+             is_alarmed_guard ? "alarmed guard" : "",
+             is_alarmed_racist ? "alarmed racist" : "",
+             is_racially_motivated ? "racial violence" : "",
              GET_CHAR_NAME(vict));
     do_say(ch, buf3, 0, 0);
 #endif
@@ -1922,6 +1930,37 @@ bool mob_cannot_be_aggressive(struct char_data *ch) {
   // Escortees don't hit first.
   if (is_escortee(ch))
     return TRUE;
+
+  return FALSE;
+}
+
+bool mob_is_aggressive_towards_race(struct char_data *ch, int race) {
+  switch (race) {
+    case RACE_ELF:
+    case RACE_WAKYAMBI:
+    case RACE_NIGHTONE:
+    case RACE_DRYAD:
+      return MOB_FLAGGED(ch, MOB_AGGR_ELF);
+    case RACE_DWARF:
+    case RACE_GNOME:
+    case RACE_MENEHUNE:
+    case RACE_KOBOROKURU:
+      return MOB_FLAGGED(ch, MOB_AGGR_DWARF);
+    case RACE_HUMAN:
+      return MOB_FLAGGED(ch, MOB_AGGR_HUMAN);
+    case RACE_ORK:
+    case RACE_HOBGOBLIN:
+    case RACE_OGRE:
+    case RACE_SATYR:
+    case RACE_ONI:
+      return MOB_FLAGGED(ch, MOB_AGGR_ORK);
+    case RACE_TROLL:
+    case RACE_CYCLOPS:
+    case RACE_FOMORI:
+    case RACE_GIANT:
+    case RACE_MINOTAUR:
+      return MOB_FLAGGED(ch, MOB_AGGR_TROLL);
+  }
 
   return FALSE;
 }

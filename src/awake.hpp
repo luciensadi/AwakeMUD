@@ -326,41 +326,42 @@ enum {
 
 /* mobile flags: used by char_data.char_specials.act */
 
-#define MOB_SPEC                0  /* Mob has a callable spec-proc           */
-#define MOB_SENTINEL            1  /* Mob should not move                    */
-#define MOB_SCAVENGER           2  /* Mob picks up stuff on the ground       */
-#define MOB_ISNPC               3  /* (R) Automatically set on all Mobs      */
-#define MOB_AWARE               4  /* Mob can't be backstabbed               */
-#define MOB_AGGRESSIVE          5  /* Mob hits players in the room           */
-#define MOB_STAY_ZONE           6  /* Mob shouldn't wander out of zone       */
-#define MOB_WIMPY               7  /* Mob flees if severely injured          */
-#define MOB_AGGR_ORK            8  /* auto attack ork PC's                   */
-#define MOB_AGGR_ELF            9  /* auto attack elf PC's                   */
-#define MOB_AGGR_DWARF          10 /* auto attack dwarf PC's                 */
-#define MOB_MEMORY              11 /* remember attackers if attacked         */
-#define MOB_HELPER              12 /* attack PCs fighting other NPCs         */
-#define MOB_NORAM               13 /* Mob can't be charmed                   */
-#define MOB_DUAL_NATURE         14 /* mob is dual-natured                    */
-#define MOB_IMMEXPLODE          15 /* mob is immune to explosions            */
-#define MOB_AGGR_TROLL          16 /* auto attack troll PC's                 */
-#define MOB_NOBLIND             17 /* Mob can't be blinded                   */
-#define MOB_ASTRAL              18 /* Mob is solely in the astral plane      */
-#define MOB_GUARD               19 /* mob carries out security               */
-#define MOB_AGGR_HUMAN          20 /* auto attack human PC's                 */
-#define MOB_SNIPER              21 /* mob searches area for PCs              */
-#define MOB_PRIVATE             22 /* mob cannot be statted                  */
-#define MOB_TRACK               23 /* (R) for security routines              */
+#define MOB_SPEC                 0  /* Mob has a callable spec-proc           */
+#define MOB_SENTINEL             1  /* Mob should not move                    */
+#define MOB_SCAVENGER            2  /* Mob picks up stuff on the ground       */
+#define MOB_ISNPC                3  /* (R) Automatically set on all Mobs      */
+#define MOB_AWARE                4  /* Mob can't be backstabbed               */
+#define MOB_AGGRESSIVE           5  /* Mob hits players in the room           */
+#define MOB_STAY_ZONE            6  /* Mob shouldn't wander out of zone       */
+#define MOB_WIMPY                7  /* Mob flees if severely injured          */
+#define MOB_AGGR_ORK             8  /* auto attack ork PC's                   */
+#define MOB_AGGR_ELF             9  /* auto attack elf PC's                   */
+#define MOB_AGGR_DWARF           10 /* auto attack dwarf PC's                 */
+#define MOB_MEMORY               11 /* remember attackers if attacked         */
+#define MOB_HELPER               12 /* attack PCs fighting other NPCs         */
+#define MOB_NORAM                13 /* Mob can't be charmed                   */
+#define MOB_DUAL_NATURE          14 /* mob is dual-natured                    */
+#define MOB_IMMEXPLODE           15 /* mob is immune to explosions            */
+#define MOB_AGGR_TROLL           16 /* auto attack troll PC's                 */
+#define MOB_NOBLIND              17 /* Mob can't be blinded                   */
+#define MOB_ASTRAL               18 /* Mob is solely in the astral plane      */
+#define MOB_GUARD                19 /* mob carries out security               */
+#define MOB_AGGR_HUMAN           20 /* auto attack human PC's                 */
+#define MOB_SNIPER               21 /* mob searches area for PCs              */
+#define MOB_PRIVATE              22 /* mob cannot be statted                  */
+#define MOB_TRACK                23 /* (R) for security routines              */
 #define MOB_FLAMEAURA            24
 #define MOB_SPIRITGUARD          25
-#define MOB_STUDY               26 /* Saeder Krupp*/
-#define MOB_AIDSORCERY          27
-#define MOB_AZTECHNOLOGY        28 /* Azzies                                 */
-#define MOB_RENRAKU             29 /* Renraku   */
-#define MOB_NOKILL              30 /* Unkillable mob */
-#define MOB_TOTALINVIS          31 /* auto attack dragon PCs                 */
+#define MOB_STUDY                26 /* Saeder Krupp*/
+#define MOB_AIDSORCERY           27
+#define MOB_AZTECHNOLOGY         28 /* Azzies                                 */
+#define MOB_RENRAKU              29 /* Renraku   */
+#define MOB_NOKILL               30 /* Unkillable mob */
+#define MOB_TOTALINVIS           31 /* auto attack dragon PCs                 */
 #define MOB_INANIMATE            32
 #define MOB_EMPLACED             33 /* Won't close distance, can't be knocked down, has no recoil penalties, has unlimited ammo. Think emplaced turret. */
-#define MOB_MAX                  34
+#define MOB_RACIAL_AGGR_VS_MOBS  34 /* Will trigger racial aggro vs other NPCs */
+#define MOB_MAX                  35
 
 /* preference flags: used by char_data.player_specials.pref */
 
@@ -2512,6 +2513,7 @@ enum {
 #define ERROR_MISSING_ELEMENTALS                      51
 #define EXIT_CODE_REBOOTING                           52   /* what's so great about HHGTTG, anyhow? */
 #define ERROR_WORLD_BOOT_FORMAT_ERROR                 53
+#define ERROR_FLAG_CONSTANT_MISSING                   54
 
 // Materials.
 #define MATERIAL_PAPER        0
@@ -2692,6 +2694,9 @@ enum {
 #define SHOW_MODE_SOMEONE_ELSES_EQUIPMENT  9
 
 #define BOTCHED_ROLL_RESULT                -1
+
+// Set this at the end of every flag list in constants.cpp.
+#define MAX_FLAG_MARKER "\n"
 
 // This is to flag variables used eg in macros so that the compiler won't complain about unused variables
 // when they're actually used. Casting to void does nothing but the compiler will stop thinking it's
