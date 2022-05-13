@@ -1433,6 +1433,7 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
       extract_obj(obj);
       obj = NULL;
     }
+    send_to_char(buf, ch);
   } else
   {
     send_to_char(ch, " **   Avail    Item                                                                          Price\r\n"
