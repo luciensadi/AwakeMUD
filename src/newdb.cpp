@@ -735,10 +735,12 @@ bool load_char(const char *name, char_data *ch, bool logon)
           obj->photo = str_dup(row[4]);
         for (int x = 0; x < NUM_VALUES; x++)
           GET_OBJ_VAL(obj, x) = atoi(row[x + 5]);
-        if (GET_OBJ_VAL(obj, 0) == CYB_PHONE && GET_OBJ_VAL(obj, 7))
+        if (GET_CYBERWARE_TYPE(obj) == CYB_PHONE && GET_OBJ_VAL(obj, 7))
           add_phone_to_list(obj);
+        /* TODO: Not sure what this code used to do. It checked obj val 2 == 4 and obj val 7 as boolean, then disabled the ware if both were true.
         else if (GET_OBJ_VAL(obj, 2) == 4 && GET_OBJ_VAL(obj, 7))
-          GET_OBJ_VAL(obj, 9) = 1;
+          GET_CYBERWARE_IS_DISABLED(obj) = 1;
+        */
         inside = atoi(row[17]);
 
         auto_repair_obj(obj);
@@ -2352,7 +2354,8 @@ void auto_repair_obj(struct obj_data *obj) {
       FORCE_PROTO_VALUE("cyberware", GET_CYBERWARE_TYPE(obj), GET_CYBERWARE_TYPE(&obj_proto[rnum]));
       FORCE_PROTO_VALUE("cyberware", GET_CYBERWARE_RATING(obj), GET_CYBERWARE_RATING(&obj_proto[rnum]));
       FORCE_PROTO_VALUE("cyberware", GET_CYBERWARE_GRADE(obj), GET_CYBERWARE_GRADE(&obj_proto[rnum]));
-      FORCE_PROTO_VALUE("cyberware", GET_CYBERWARE_ESSENCE_COST(obj), GET_CYBERWARE_ESSENCE_COST(&obj_proto[rnum]));
+      if (GET_CYBERWARE_TYPE(obj) != CYB_CUSTOM_NERPS)
+        FORCE_PROTO_VALUE("cyberware", GET_CYBERWARE_ESSENCE_COST(obj), GET_CYBERWARE_ESSENCE_COST(&obj_proto[rnum]));
       break;
     case ITEM_GUN_ACCESSORY:
       FORCE_PROTO_VALUE("gun accessory", GET_ACCESSORY_ATTACH_LOCATION(obj), GET_ACCESSORY_ATTACH_LOCATION(&obj_proto[rnum]));

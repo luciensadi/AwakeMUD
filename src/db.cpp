@@ -6383,7 +6383,7 @@ void price_cyber(struct obj_data *obj)
 
 void price_bio(struct obj_data *obj)
 {
-  switch (GET_OBJ_VAL(obj, 0)) {
+  switch (GET_BIOWARE_TYPE(obj)) {
     case BIO_CUSTOM_NERPS:
       // Do absolutely nothing with it.
       return;
