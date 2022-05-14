@@ -54,33 +54,13 @@ TO ADD A NEW BOARD, simply follow our easy 4-step program:
 
 struct board_info_type board_info[NUM_OF_BOARDS] =
   {
-//  {3   , LVL_BUILDER, LVL_BUILDER, LVL_VICEPRES, "etc/board.rift"},
-//  {4   , LVL_BUILDER, LVL_BUILDER, LVL_PRESIDENT, "etc/board.pook"},
-//  {12  , LVL_FIXER, LVL_FIXER, LVL_VICEPRES, "etc/board.dunkelzahn"},
-//  {22  , LVL_ADMIN, LVL_ADMIN, LVL_ADMIN, "etc/board.oldchange"},
-    {26  , 0, 0, LVL_ADMIN, "etc/board.rp"},
-//  {28  , 0, 0, LVL_ADMIN, "etc/board.quest"},
-//  {31  , LVL_BUILDER, LVL_BUILDER, LVL_VICEPRES, "etc/board.senate"},
-//  {50  , LVL_BUILDER, LVL_BUILDER, LVL_VICEPRES, "etc/board.harlequin"},
-//  {1006, LVL_BUILDER, LVL_BUILDER, LVL_ADMIN, "etc/board.builder"},
-//  {1007, LVL_BUILDER, LVL_BUILDER, LVL_ADMIN, "etc/board.coder"},
-//  {66  , LVL_BUILDER, LVL_BUILDER, LVL_ADMIN, "etc/board.lofwyr"},
 #ifdef USE_PRIVATE_CE_WORLD
     {10018, LVL_BUILDER, LVL_BUILDER, LVL_ADMIN, "etc/board.immhq"},
-    {10034, LVL_BUILDER, LVL_BUILDER, LVL_ADMIN, "etc/board.immhq-rp"}
+    {10034, LVL_BUILDER, LVL_BUILDER, LVL_ADMIN, "etc/board.immhq-rp"},
 #else
-    {10018, LVL_BUILDER, LVL_BUILDER, LVL_ADMIN, "etc/board.immhq"}
+    {10018, LVL_BUILDER, LVL_BUILDER, LVL_ADMIN, "etc/board.immhq"},
 #endif
-//  {2104, 0, 0, LVL_ADMIN, "etc/board.mort"},
-//  {2106, LVL_BUILDER, LVL_BUILDER, LVL_ADMIN, "etc/board.immort"},
-//  {64900, 0, 0, LVL_BUILDER, "etc/board.rpe"},
-//  {65207, 0, 0, LVL_ADMIN, "etc/board.teamBackstage"},
-//  {4603, 0, 0, LVL_ADMIN, "etc/board.teamdds"},
-//  {65126, 0, 0, LVL_ADMIN, "etc/board.seattlevoice"},
-//  {26150, LVL_BUILDER, LVL_BUILDER, LVL_ADMIN, "etc/board.initiation"},
-//  {11482, 0, 0, LVL_BUILDER, "etc/board.hooligan"},
-//  {70405, 0, 0, LVL_BUILDER, "etc/board.marund"},
-//  {71025, 0, 0, LVL_BUILDER, "etc/board.shadowcourier"}
+    {26  , 0, 0, LVL_ADMIN, "etc/board.rp"}
   };
 
 

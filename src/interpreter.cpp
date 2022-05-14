@@ -912,7 +912,11 @@ struct command_info cmd_info[] =
     { "whisper"    , POS_LYING   , do_spec_comm, 0, SCMD_WHISPER, FALSE },
     { "wield"      , POS_RESTING , do_wield    , 0, 0, FALSE },
     { "wimpy"      , POS_DEAD    , do_wimpy    , 0, 0, TRUE },
+#ifdef IS_BUILDPORT
+    { "wizload"    , POS_RESTING , do_wizload  , LVL_BUILDER, 0, FALSE },
+#else
     { "wizload"    , POS_RESTING , do_wizload  , LVL_ADMIN, 0, FALSE },
+#endif
     { "wtell"      , POS_DEAD    , do_wiztell  , LVL_BUILDER, 0, FALSE },
     { "wtells"     , POS_DEAD    , do_switched_message_history, LVL_BUILDER, COMM_CHANNEL_WTELLS, TRUE },
     { "wts"        , POS_DEAD    , do_switched_message_history, LVL_BUILDER, COMM_CHANNEL_WTELLS, TRUE },
