@@ -860,6 +860,8 @@ void move_vehicle(struct char_data *ch, int dir)
   {
     crash_test(ch);
     chkdmg(veh);
+    if (!veh->people)
+      load_vehicle_brain(veh);
   }
 }
 

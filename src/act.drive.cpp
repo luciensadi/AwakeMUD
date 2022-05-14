@@ -1888,7 +1888,11 @@ ACMD(do_gridguide)
       DELETE_ARRAY_IF_EXTANT(grid->name);
       DELETE_AND_NULL(grid);
       send_to_char("You remove the destination from the system.\r\n", ch);
-      act("$n punches something into the autonav.", FALSE, ch, 0 , 0, TO_ROOM);
+      if (PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_RIG)) {
+        send_to_veh("The autonav flashes as a destination is deleted.\r\n", veh, NULL, FALSE);
+      } else {
+        act("$n punches something into the autonav.", FALSE, ch, 0 , 0, TO_ROOM);
+      }
     }
   } else if (is_abbrev(arg, "add")) {
     int i = 0;
@@ -1929,7 +1933,11 @@ ACMD(do_gridguide)
     grid->next = veh->grid;
     veh->grid = grid;
     send_to_char("You add the destination into the system.\r\n", ch);
-    act("$n punches something into the autonav.", FALSE, ch, 0 , 0, TO_ROOM);
+    if (PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_RIG)) {
+      send_to_veh("The autonav flashes as a destination is added.\r\n", veh, NULL, FALSE);
+    } else {
+      act("$n punches something into the autonav.", FALSE, ch, 0 , 0, TO_ROOM);
+    }
   }
   else {
     send_to_char("Sorry, that command wasn't recognized. You can 'gridguide add' or 'gridguide del'.\r\n", ch);
