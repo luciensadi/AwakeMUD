@@ -6539,14 +6539,13 @@ SPECIAL(medical_workshop) {
   // Parse out the victim targeting argument.
   argument = one_argument(argument, target_arg);
 
-  // Reject self-targeting.
-  if ((!str_cmp(target_arg, "self") || !str_cmp(target_arg, "me") || !str_cmp(target_arg, "myself"))) {
-    send_to_char("You can't operate on yourself!\r\n", ch);
-    return TRUE;
+  // Capture self-targeting to save cycles.
+  if (!str_cmp(target_arg, "self") || !str_cmp(target_arg, "me") || !str_cmp(target_arg, "myself")) {
+    found_char = ch;
+  } else {
+    // Identify the victim. Since this is first, this means our syntax is '[un]install <character> <ware>'.
+    generic_find(target_arg, FIND_CHAR_ROOM, ch, &found_char, &found_obj);
   }
-
-  // Identify the victim. Since this is first, this means our syntax is '[un]install <character> <ware>'.
-  generic_find(target_arg, FIND_CHAR_ROOM, ch, &found_char, &found_obj);
 
   if (!found_char) {
     send_to_char(ch, "You don't see anyone named '%s' here.\r\n", target_arg);
@@ -6555,8 +6554,12 @@ SPECIAL(medical_workshop) {
 
   // Reject self-targeting.
   if (found_char == ch) {
-    send_to_char("You can't operate on yourself!\r\n", ch);
-    return TRUE;
+    if (access_level(ch, LVL_ADMIN)) {
+      send_to_char("You grit your teeth and invoke staff privilege to allow you to operate on yourself... while awake.\r\n", ch);
+    } else {
+      send_to_char("You can't operate on yourself!\r\n", ch);
+      return TRUE;
+    }
   }
 
   if (IS_NPC(found_char) || IS_ASTRAL(found_char) || IS_PROJECT(found_char)) {
@@ -6576,8 +6579,12 @@ SPECIAL(medical_workshop) {
 
   // Ensure we have the target's permission.
   if (!PRF_FLAGGED(found_char, PRF_TOUCH_ME_DADDY)) {
-    send_to_char(ch, "You can't diagnose or operate on %s-- they need to use the ^WTOGGLE CYBERDOC^n command.\r\n", GET_CHAR_NAME(found_char));
-    return TRUE;
+    if (access_level(ch, LVL_ADMIN)) {
+      send_to_char(ch, "You use your staff privilege to bypass the lack of operating permission on %s.\r\n", GET_CHAR_NAME(found_char));
+    } else {
+      send_to_char(ch, "You can't diagnose or operate on %s-- they need to use the ^WTOGGLE CYBERDOC^n command.\r\n", GET_CHAR_NAME(found_char));
+      return TRUE;
+    }
   }
 
   // Diagnostics command.
@@ -6662,6 +6669,22 @@ SPECIAL(medical_workshop) {
 
   // Reject operations on anything that isn't 'ware.'
   if (GET_OBJ_TYPE(ware) != ITEM_BIOWARE && GET_OBJ_TYPE(ware) != ITEM_CYBERWARE) {
+    if (access_level(ch, LVL_ADMIN) && !mode_is_install) {
+      send_to_char(ch, "You bypass all checks and rip non-cyberware, non-bioware %s straight out of %s.", GET_OBJ_NAME(ware), GET_CHAR_NAME(found_char));
+      if (get_obj_in_list_vis(ch, argument, found_char->cyberware) == ware) {
+        int eh = GET_ESSHOLE(found_char);
+        int ess = GET_REAL_ESS(found_char);
+        obj_from_cyberware(ware);
+        GET_ESSHOLE(found_char) = eh;
+        GET_REAL_ESS(found_char) = ess;
+      } else {
+        int idx = GET_INDEX(found_char);
+        obj_from_bioware(ware);
+        GET_INDEX(found_char) = idx;
+      }
+      return TRUE;
+    }
+    
     send_to_char(ch, "You're standing in a medical %s, so you can only %sinstall 'ware! %s doesn't count.\r\n",
                  GET_WORKSHOP_GRADE(workshop) == TYPE_WORKSHOP ? "workshop" : "facility",
                  mode_is_install ? "" : "un",

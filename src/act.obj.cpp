@@ -1563,6 +1563,9 @@ ACMD(do_get)
             veh->sig += sig;
             veh->usedload -= load;
           } else {
+            if (GET_VEHICLE_MOD_TYPE(cont) == TYPE_AUTONAV) {
+              veh->autonav -= GET_VEHICLE_MOD_RATING(cont);
+            }
             veh->usedload -= GET_OBJ_VAL(cont, 1);
             GET_MOD(veh, found) = NULL;
             int rnum = real_vehicle(GET_VEH_VNUM(veh));

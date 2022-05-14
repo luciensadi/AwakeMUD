@@ -128,6 +128,9 @@ int     get_br_skill_for_veh(struct veh_data *veh);
 int     get_pilot_skill_for_veh(struct veh_data *veh);
 int     calculate_vehicle_weight(struct veh_data *veh);
 
+void load_vehicle_brain(struct veh_data *veh);
+void remove_vehicle_brain(struct veh_data *veh);
+
 long get_room_gridguide_x(vnum_t room_vnum);
 long get_room_gridguide_y(vnum_t room_vnum);
 vnum_t vnum_from_gridguide_coordinates(long x, long y, struct char_data *ch, struct veh_data *veh=NULL);

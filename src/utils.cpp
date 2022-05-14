@@ -4231,8 +4231,8 @@ vnum_t vnum_from_gridguide_coordinates(long x, long y, struct char_data *ch, str
     return -2;
 
   // -3: Room was not drivable, or not on the gridguide system.
-  if (!ROOM_FLAGS(&world[candidate_rnum]).AreAnySet(ROOM_ROAD, ROOM_GARAGE, ENDBIT) ||
-       ROOM_FLAGS(&world[candidate_rnum]).AreAnySet(ROOM_NOGRID, ROOM_STAFF_ONLY, ROOM_NOBIKE, ROOM_FALL, ENDBIT))
+  if (!ROOM_FLAGS(&world[candidate_rnum]).AreAnySet(ROOM_ROAD, ROOM_GARAGE, ENDBIT)
+      || ROOM_FLAGS(&world[candidate_rnum]).AreAnySet(ROOM_NOGRID, ROOM_STAFF_ONLY, ROOM_NOBIKE, ROOM_FALL, ENDBIT))
   {
     if (ch) {
       char susbuf[1000];
@@ -4243,7 +4243,7 @@ vnum_t vnum_from_gridguide_coordinates(long x, long y, struct char_data *ch, str
               );
       mudlog(susbuf, ch, LOG_CHEATLOG, TRUE);
 
-      send_to_char("^Y(FYI, if that had actually worked, it would have been an exploit!)^n\r\n", ch);
+      // send_to_char("^Y(FYI, if that had actually worked, it would have been an exploit!)^n\r\n", ch);
     }
 
     return -3;
@@ -4500,6 +4500,23 @@ int calculate_vehicle_weight(struct veh_data *veh) {
 
 int roll_default_initiative(struct char_data *ch) {
   return dice(1 + GET_INIT_DICE(ch), 6) + GET_REA(ch);
+}
+
+void load_vehicle_brain(struct veh_data *veh) {
+  if (!veh->people) {
+    char_to_veh(veh, read_mobile(MOB_BRAIN_IN_A_JAR, VIRTUAL));
+  } else {
+    mudlog("SYSERR: Called load_vehicle_brain on a vehicle that had occupants!", NULL, LOG_SYSLOG, TRUE);
+  }
+}
+
+void remove_vehicle_brain(struct veh_data *veh) {
+  for (struct char_data *tmp_next, *tmp = veh->people; tmp; tmp = tmp_next) {
+    tmp_next = tmp->next_in_veh;
+    if (GET_MOB_VNUM(tmp) == MOB_BRAIN_IN_A_JAR) {
+      extract_char(tmp);
+    }
+  }
 }
 
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.

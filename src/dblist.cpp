@@ -272,11 +272,19 @@ void objList::UpdateCounters(void)
       // If there were no characters in the room working on it, clear its pack/unpack counter.
       if (!ch) {
         // Only send a message if someone is there.
-        if (OBJ->in_room && OBJ->in_room->people) {
-          snprintf(buf, sizeof(buf), "A passerby rolls %s eyes and quickly re-%spacks the half-packed $p.",
+        if (OBJ->in_room) {
+          snprintf(buf, sizeof(buf), "A passerby rolls %s eyes and quickly re-%spacks the half-packed %s.",
                   number(0, 1) == 0 ? "his" : "her",
-                  GET_WORKSHOP_IS_SETUP(OBJ) ? "un" : "");
-          act(buf, FALSE, OBJ->in_room->people, OBJ, NULL, TO_ROOM);
+                  GET_WORKSHOP_IS_SETUP(OBJ) ? "un" : "",
+                  GET_OBJ_NAME(OBJ)
+                );
+          send_to_room(buf, OBJ->in_room);
+        } else if (OBJ->in_veh) {
+          snprintf(buf, sizeof(buf), "Huh, %s must have actually been %spacked this whole time.",
+                  GET_OBJ_NAME(OBJ),
+                  GET_WORKSHOP_IS_SETUP(OBJ) ? "un" : ""
+                );
+          send_to_veh(buf, OBJ->in_veh, NULL, FALSE);
         }
         GET_WORKSHOP_UNPACK_TICKS(OBJ) = 0;
       }

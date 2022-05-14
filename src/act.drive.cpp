@@ -803,6 +803,7 @@ ACMD(do_upgrade)
       veh->usedload += GET_VEHICLE_MOD_LOAD_SPACE_REQUIRED(mod);
       for (j = 0; j < MAX_OBJ_AFFECT; j++)
         affect_veh(veh, mod->affected[j].location, mod->affected[j].modifier);
+
       if (GET_VEHICLE_MOD_TYPE(mod) == TYPE_SEATS && GET_MOD(veh, GET_VEHICLE_MOD_LOCATION(mod))) {
         GET_MOD(veh, GET_VEHICLE_MOD_LOCATION(mod))->affected[0].modifier++;
         need_extract = TRUE;
@@ -811,6 +812,10 @@ ACMD(do_upgrade)
           extract_obj(GET_MOD(veh, GET_VEHICLE_MOD_LOCATION(mod)));
         GET_MOD(veh, GET_VEHICLE_MOD_LOCATION(mod)) = mod;
         obj_from_char(mod);
+
+        if (GET_VEHICLE_MOD_TYPE(mod) == TYPE_AUTONAV) {
+          veh->autonav += GET_VEHICLE_MOD_RATING(mod);
+        }
       }
     }
   }
@@ -1850,8 +1855,7 @@ ACMD(do_gridguide)
     }
 
     if (!veh->people) {
-      send_to_char("Safety regulations prevent you from dispatching an empty vehicle through Gridguide.\r\n", ch);
-      return;
+      load_vehicle_brain(veh);
     }
 
     veh->dest = &world[real_room(grid->room)];

@@ -81,7 +81,7 @@ It looks barely coherent as it waits to be created.
 ~
 ArriveMsg:	arrives from
 LeaveMsg:	leaves
-MobFlags:	10000001000000001010
+MobFlags:	10000000000000010010001000000001010
 AffFlags:	0
 Race:	Undef
 Gender:	Neutral
@@ -134,7 +134,6 @@ DefaultPos:	Standing
 	Weight:	80
 	Ballistic:	10000
 	Impact:	10000
-[SKILLS]
 BREAK
 #10005
 Keywords:	close passive target dummy
@@ -166,7 +165,6 @@ DefaultPos:	Standing
 	Weight:	0
 	Ballistic:	10
 	Impact:	10
-[SKILLS]
 BREAK
 #10006
 Keywords:	medium-range passive target dummy
@@ -198,7 +196,6 @@ DefaultPos:	Standing
 	Weight:	0
 	Ballistic:	10
 	Impact:	10
-[SKILLS]
 BREAK
 #10007
 Keywords:	long-range passive target dummy
@@ -230,7 +227,6 @@ DefaultPos:	Standing
 	Weight:	0
 	Ballistic:	10
 	Impact:	10
-[SKILLS]
 BREAK
 #10008
 Keywords:	extreme-range passive target dummy
@@ -262,7 +258,6 @@ DefaultPos:	Standing
 	Weight:	0
 	Ballistic:	10
 	Impact:	10
-[SKILLS]
 BREAK
 #10009
 Keywords:	transmitter small beacon immhq immortal headquarters hq
@@ -295,7 +290,6 @@ DefaultPos:	Standing
 	Level:	10
 	Ballistic:	30000
 	Impact:	30000
-[SKILLS]
 BREAK
 #10010
 Keywords:	trainer albus dumbledore wizened old man
@@ -367,7 +361,6 @@ DefaultPos:	Standing
 	Level:	10
 	Ballistic:	10000
 	Impact:	10000
-[SKILLS]
 BREAK
 #10012
 Keywords:	ammunition vendor vendomatic vend-o-matic
@@ -400,7 +393,6 @@ DefaultPos:	Standing
 	Weight:	0
 	Ballistic:	50
 	Impact:	50
-[SKILLS]
 BREAK
 #10013
 Keywords:	luminous figure coalesced light hovers hovering incarnation knowledge
@@ -472,11 +464,6 @@ AttackType:	Taser
 	Level:	10
 	Ballistic:	50
 	Impact:	50
-[SKILLS]
-	BR/Car:	50
-	BR/Bike:	50
-	BR/Truck:	50
-	BR/Drone:	50
 BREAK
 #10015
 Keywords:	road raging ganger
@@ -507,6 +494,8 @@ DefaultPos:	Standing
 	Height:	120
 	Weight:	50
 [SKILLS]
+	Driving Trucks:	4
+	Firearms:	5
 BREAK
 #10016
 Keywords:	amorphous blob shifting code george long-suffering suffering shopkeeper
@@ -538,6 +527,46 @@ DefaultPos:	Standing
 [POINTS]
 	Height:	0
 	Weight:	0
+BREAK
+#10050
+Keywords:	vehicle brain
+Name:	a brain in a jar
+RoomDesc:$
+A brain in a jar has been hooked into the vehicle's control systems. 
+
+~
+LookDesc:$
+It's the hackiest of hacks. "The pathfinding system only works with actual
+characters! Rewriting it to work with empty vehicles would be such a pain!"
+Well, now you don't have to: Introducing the BRAIN IN A JAR! Simply auto-load
+it into an empty vehicle right before a gridguide command is issued, and it
+will path for you. Convenient! 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1111000000000000000100000000001000
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	0
+[POINTS]
+	Height:	10
+	Weight:	10
+	Ballistic:	10000
+	Impact:	10000
 [SKILLS]
+	Repairing Hovercraft:	50
+	Driving Cars:	50
+	Piloting Fixed Wing Aircraft:	50
+	Piloting Lighter-than-Air Aircraft:	50
+	Repairing Ships:	50
 BREAK
 END

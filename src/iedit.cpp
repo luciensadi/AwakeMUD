@@ -686,13 +686,13 @@ void iedit_disp_val3_menu(struct descriptor_data * d)
             d->iedit_limit_edits++;
           iedit_disp_val4_menu(d);
           return;
-        case MOD_ENGINE:
+        case TYPE_ENGINECUST:
           CLS(CH);
           for (int engine_type = ENGINE_ELECTRIC; engine_type <= ENGINE_DIESEL; engine_type++)
             send_to_char(CH, " %d) %s\r\n", engine_type, engine_types[engine_type]);
           send_to_char("Engine type: ", CH);
           break;
-        case MOD_RADIO:
+        case TYPE_MISC:
           send_to_char("Radio Range (0-5): ", CH);
           break;
         default:

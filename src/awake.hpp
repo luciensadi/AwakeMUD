@@ -2434,6 +2434,8 @@ enum {
 
 #define QST_MAGE_INTRO                     5743
 
+#define MOB_BRAIN_IN_A_JAR                 10050
+
 // Misc defines from spec_procs.cpp
 #define LIBRARY_SKILL    3
 #define NEWBIE_SKILL    6

@@ -1183,6 +1183,9 @@ void char_to_veh(struct veh_data * veh, struct char_data * ch)
     if (ch->in_room || ch->in_veh)
       char_from_room(ch);
 
+    // Remove vehicle brain if one exists.
+    remove_vehicle_brain(veh);
+
     ch->next_in_veh = veh->people;
     veh->people = ch;
     ch->in_veh = veh;

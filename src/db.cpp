@@ -5160,6 +5160,8 @@ void load_saved_veh()
       GET_MOD(veh, GET_OBJ_VAL(obj, 6)) = obj;
       if (GET_VEHICLE_MOD_TYPE(obj) == TYPE_ENGINECUST)
         veh->engine = GET_VEHICLE_MOD_RATING(obj);
+      if (GET_VEHICLE_MOD_TYPE(obj) == TYPE_AUTONAV)
+        veh->autonav += GET_VEHICLE_MOD_RATING(obj);
       veh->usedload += GET_VEHICLE_MOD_LOAD_SPACE_REQUIRED(obj);
       for (int l = 0; l < MAX_OBJ_AFFECT; l++)
         affect_veh(veh, obj->affected[l].location, obj->affected[l].modifier);
