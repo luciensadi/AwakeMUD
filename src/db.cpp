@@ -5533,7 +5533,7 @@ void price_cyber(struct obj_data *obj)
   switch (GET_CYBERWARE_TYPE(obj)) {
     case CYB_CUSTOM_NERPS:
       // Do absolutely nothing with it.
-      break;
+      return;
     case CYB_CHIPJACK:
       GET_OBJ_VAL(obj, 1) = 0;
       GET_OBJ_COST(obj) = GET_OBJ_VAL(obj, 3) * 1000;
