@@ -978,6 +978,7 @@ enum {
 #define SKILL_PILOT_LTA           146
 
 #define MAX_SKILLS                147
+// Adding a pilot skill? Update utils.cpp's pilot_skills[].
 
 // Skill type definitions.
 #define SKILL_TYPE_ACTIVE         0

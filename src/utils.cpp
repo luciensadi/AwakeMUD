@@ -4502,9 +4502,29 @@ int roll_default_initiative(struct char_data *ch) {
   return dice(1 + GET_INIT_DICE(ch), 6) + GET_REA(ch);
 }
 
+int pilot_skills[] {
+  SKILL_PILOT_BIKE,
+  SKILL_PILOT_CAR,
+  SKILL_PILOT_TRUCK,
+  SKILL_PILOT_ROTORCRAFT,
+  SKILL_PILOT_FIXEDWING,
+  SKILL_PILOT_VECTORTHRUST,
+  SKILL_PILOT_HOVERCRAFT,
+  SKILL_PILOT_MOTORBOAT,
+  SKILL_PILOT_SHIP,
+  SKILL_PILOT_LTA
+};
+#define NUM_PILOT_SKILLS 10
+
 void load_vehicle_brain(struct veh_data *veh) {
   if (!veh->people) {
-    char_to_veh(veh, read_mobile(MOB_BRAIN_IN_A_JAR, VIRTUAL));
+    struct char_data *brain = read_mobile(MOB_BRAIN_IN_A_JAR, VIRTUAL);
+
+    // Vehicle's skills are autonav rating.
+    for (int idx = 0; idx < NUM_PILOT_SKILLS; idx++)
+      GET_SKILL(brain, pilot_skills[idx]) = veh->autonav;
+
+    char_to_veh(veh, brain);
   } else {
     mudlog("SYSERR: Called load_vehicle_brain on a vehicle that had occupants!", NULL, LOG_SYSLOG, TRUE);
   }

@@ -5483,9 +5483,6 @@ void order_list(struct matrix_icon *start)
 
 void chkdmg(struct veh_data * veh)
 {
-  // Remove any vehicle brains, we don't want them thrown into the street.
-  remove_vehicle_brain(veh);
-
   if (veh->damage <= VEH_DAM_THRESHOLD_LIGHT) {
     send_to_veh("A scratch appears on the paintwork.\r\n", veh, NULL, TRUE);
   } else if (veh->damage <= VEH_DAM_THRESHOLD_MODERATE) {
@@ -5499,6 +5496,8 @@ void chkdmg(struct veh_data * veh)
     struct obj_data *obj, *nextobj;
     int damage_rating, damage_tn;
 
+    // Remove any vehicle brains, we don't want them thrown into the street.
+    remove_vehicle_brain(veh);
 
     if (veh->cspeed >= SPEED_IDLE) {
       if (veh->people) {
