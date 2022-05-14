@@ -6386,7 +6386,7 @@ void price_bio(struct obj_data *obj)
   switch (GET_OBJ_VAL(obj, 0)) {
     case BIO_CUSTOM_NERPS:
       // Do absolutely nothing with it.
-      break;
+      return;
     case BIO_ADRENALPUMP:
       if (GET_OBJ_VAL(obj, 1) == 1)
         GET_OBJ_COST(obj) = 60000;
