@@ -1323,8 +1323,10 @@ void write_world_to_disk(int vnum)
     realcounter = real_room(counter);
 
     if (realcounter >= 0) {
+      /*
       if (!strcmp(STRING_ROOM_TITLE_UNFINISHED, RM.name))
         continue;
+      */
 
       wrote_something = TRUE;
       fprintf(fp, "#%ld\n", counter);

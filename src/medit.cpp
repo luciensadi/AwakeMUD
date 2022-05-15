@@ -1553,7 +1553,7 @@ void write_mobs_to_disk(int zone)
 
     if (realcounter >= 0) {
       mob = mob_proto+realcounter;
-      if (!mob || !(*(GET_NAME(mob))) || !strcmp("an unfinished mob", GET_NAME(mob)))
+      if (!mob || !(*(GET_NAME(mob))) /*|| !strcmp("an unfinished mob", GET_NAME(mob))*/)
         continue;
       fprintf(fp, "#%ld\n", GET_MOB_VNUM(mob));
 

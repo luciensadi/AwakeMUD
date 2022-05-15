@@ -3062,8 +3062,10 @@ void write_objs_to_disk(int zone)
     if (realcounter >= 0) {
       obj = obj_proto+realcounter;
 
+      /*
       if (!strcmp("an unfinished object", obj->text.name))
         continue;
+      */
 
       wrote_something = TRUE;
 
