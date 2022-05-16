@@ -133,4 +133,6 @@ extern const char *tradition_names[];
 extern const char *damage_type_names_must_subtract_300_first_and_must_not_be_greater_than_blackic[];
 
 extern const char *pc_race_types[];
+
+extern const char *mtx_subsystem_names[];
 #endif

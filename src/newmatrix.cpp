@@ -198,9 +198,7 @@ bool dumpshock(struct matrix_icon *icon)
 
 int system_test(rnum_t host, struct char_data *ch, int type, int software, int modifier)
 {
-  int detect = 0, target = modifier, skill = get_skill(ch, SKILL_COMPUTER, target) + MIN(GET_MAX_HACKING(ch), GET_REM_HACKING(ch));
-  GET_REM_HACKING(ch) -= skill - get_skill(ch, SKILL_COMPUTER, detect);
-  detect = 0;
+  int detect = 0;
   struct obj_data *prog = NULL;
 
   char rollbuf[5000];
@@ -209,11 +207,23 @@ int system_test(rnum_t host, struct char_data *ch, int type, int software, int m
   if (HOST.stats[type][MTX_STAT_ENCRYPTED] && software != SOFT_DECRYPT && software != SOFT_ANALYZE) {
     snprintf(rollbuf, sizeof(rollbuf), "Can't perform test against %s with software %s-- subsystem encrypted.", acifs_strings[type], programs[software].name);
     act(rollbuf, FALSE, ch, 0, 0, TO_ROLLS);
+    send_to_char(ch, "The %s subsystem seems to be encrypted.\r\n", mtx_subsystem_names[type]);
     return 0;
   }
 
-  target = HOST.stats[type][MTX_STAT_RATING];
+  int target = HOST.stats[type][MTX_STAT_RATING];
   snprintf(rollbuf, sizeof(rollbuf), "System test against %s with software %s: Starting TN %d", acifs_strings[type], programs[software].name, target);
+
+  int skill = get_skill(ch, SKILL_COMPUTER, target) + MIN(GET_MAX_HACKING(ch), GET_REM_HACKING(ch));
+  GET_REM_HACKING(ch) -= skill - get_skill(ch, SKILL_COMPUTER, detect);
+  detect = 0;
+
+  snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), ", after get_skill %d, plus called modifier %d is %d", target, modifier, target + modifier);
+
+  if (modifier) {
+    target += modifier;
+    snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), ", plus called modifier %d is %d", modifier, target);
+  }
 
   if (HOST.alert) {
     target += 2;
@@ -237,9 +247,19 @@ int system_test(rnum_t host, struct char_data *ch, int type, int software, int m
   detect -= DECKER->res_det;
   int tally = MAX(0, success_test(HOST.security, detect));
   int success = success_test(skill, target);
-  success -= tally;
+
+  snprintf(rollbuf, sizeof(rollbuf), "Rolled %d successes on %d dice vs TN %d",
+           success,
+           skill,
+           target);
   act(rollbuf, FALSE, ch, 0, 0, TO_ROLLS);
-  snprintf(rollbuf, sizeof(rollbuf), "Rolled %d successes on %d dice, then lost %d to tally (%d dice vs TN %d).", success, skill, tally, HOST.security, detect);
+
+  success -= tally;
+
+  snprintf(rollbuf, sizeof(rollbuf), ", then lost %d successes to tally (%d dice vs TN %d).",
+           tally,
+           HOST.security,
+           detect);
   act(rollbuf, FALSE, ch, 0, 0, TO_ROLLS);
 
   struct matrix_icon *temp;
@@ -2180,16 +2200,16 @@ ACMD(do_decrypt)
 
     // If there's nothing to decrypt, there's nothing to succeed at.
     if (!matrix[PERSONA->in_host].stats[mode][MTX_STAT_ENCRYPTED]) {
-      send_to_icon(PERSONA, "You fail to decrypt that subsystem.\r\n");
+      send_to_icon(PERSONA, "The %s subsystem doesn't seem to be encrypted.\r\n", mtx_subsystem_names[mode]);
       return;
     }
 
     int success = system_test(PERSONA->in_host, ch, mode, SOFT_DECRYPT, 0 );
     if (success > 0) {
       matrix[PERSONA->in_host].stats[mode][MTX_STAT_ENCRYPTED] = 0;
-      send_to_icon(PERSONA, "You decrypt the subsystem.\r\n");
+      send_to_icon(PERSONA, "You successfully decrypt the %s subsystem.\r\n", mtx_subsystem_names[mode]);
     } else {
-      send_to_icon(PERSONA, "You fail to decrypt that subsystem.\r\n");
+      send_to_icon(PERSONA, "You fail to decrypt the %s subsystem.\r\n", mtx_subsystem_names[mode]);
       if (mode == FILES && PERSONA->decker && PERSONA->decker->ch) {
         // Paydata is destroyed on failed tests per SR3 p228.
         if (success_test(matrix[PERSONA->in_host].stats[mode][MTX_STAT_RATING], GET_SKILL(PERSONA->decker->ch, SKILL_COMPUTER)) > 0) {

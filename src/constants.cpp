@@ -2810,3 +2810,11 @@ const char *ignored_bits_in_english[] =
     "calls",
     "ERROR: Coder forgot to add their new bit to ignored_bits_in_english!"
   };
+
+const char *mtx_subsystem_names[] = {
+  "access",
+  "control",
+  "index",
+  "files",
+  "slave"
+};
