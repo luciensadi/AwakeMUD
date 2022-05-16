@@ -3087,8 +3087,10 @@ char *generate_new_loggable_representation(struct obj_data *obj) {
     // I don't need to see "Containing a blank magazine (restring X) containing..."
     if (GET_OBJ_TYPE(obj->contains) == ITEM_GUN_MAGAZINE && !(obj->contains->next_content)) {
       snprintf(ENDOF(log_string), sizeof(log_string) - strlen(log_string), " (loaded with %d %s)",
-               GET_MAGAZINE_AMMO_COUNT(obj),
-               get_ammo_representation(GET_MAGAZINE_BONDED_ATTACKTYPE(obj), GET_MAGAZINE_AMMO_TYPE(obj), GET_MAGAZINE_AMMO_COUNT(obj)));
+               GET_MAGAZINE_AMMO_COUNT(obj->contains),
+               get_ammo_representation(GET_MAGAZINE_BONDED_ATTACKTYPE(obj->contains),
+                                       GET_MAGAZINE_AMMO_TYPE(obj->contains),
+                                       GET_MAGAZINE_AMMO_COUNT(obj->contains)));
     } else {
       snprintf(ENDOF(log_string), sizeof(log_string) - strlen(log_string), ", containing: [");
       for (struct obj_data *temp = obj->contains; temp; temp = temp->next_content) {
