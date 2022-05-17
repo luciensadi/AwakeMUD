@@ -1270,8 +1270,8 @@ ACMD(do_driveby)
   }
 
   if ((wielded = GET_EQ(ch, WEAR_WIELD))) {
-    if (!(GET_OBJ_VAL(wielded, 4) == SKILL_PISTOLS || GET_OBJ_VAL(wielded, 4) == SKILL_SMG)) {
-      send_to_char(ch, "You can only do a driveby with a pistol or SMG.\r\n");
+    if (!(GET_OBJ_VAL(wielded, 4) == SKILL_PISTOLS || GET_OBJ_VAL(wielded, 4) == SKILL_SMG || ((0 <= GET_OBJ_VAL(wielded, 3) <= 4)  && ch->in_veh->type = VEH_BIKE)))  {
+      send_to_char(ch, "You can only do a driveby with a pistol or SMG, or a melee weapon while on a bike.\r\n");
       return;
     }
     if (!IS_NPC(vict) && !PRF_FLAGGED(ch, PRF_PKER) && !PRF_FLAGGED(vict, PRF_PKER)) {
