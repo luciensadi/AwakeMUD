@@ -25,7 +25,7 @@ struct archetype_data *generate_street_samurai() {
   arch->difficulty_rating = str_dup("easiest to play");
 
   // correct for street sam
-  arch->start_room = 90500;
+  arch->start_room = 90599;
   arch->auth_room = 90529;
   arch->warning_room = 90526;
 
@@ -116,7 +116,7 @@ struct archetype_data *generate_adept() {
   arch->race = RACE_ORK;
   arch->difficulty_rating = str_dup("easy");
 
-  arch->start_room = 90600;
+  arch->start_room = 90699;
   arch->auth_room = 90629;
   arch->warning_room = 90626;
 
@@ -206,7 +206,7 @@ struct archetype_data *generate_shaman() {
   arch->difficulty_rating = str_dup("moderate");
 
   // checked for shamanic mage
-  arch->start_room = 90700;
+  arch->start_room = 90799;
   arch->auth_room = 90738;
   arch->warning_room = 90735;
 
@@ -285,7 +285,7 @@ struct archetype_data *generate_street_mage() {
   arch->difficulty_rating = str_dup("moderate");
 
   // kosher for hermetic mage
-  arch->start_room = 90700;
+  arch->start_room = 90799;
   arch->auth_room = 90738;
   arch->warning_room = 90735;
 
@@ -366,7 +366,7 @@ struct archetype_data *generate_decker() {
   arch->difficulty_rating = str_dup("difficult but rewarding");
 
   // correct for decker
-  arch->start_room = 91000;
+  arch->start_room = 91099;
   arch->auth_room = 91032;
   arch->warning_room = 91029;
 
@@ -473,7 +473,7 @@ struct archetype_data *generate_rigger() {
   arch->race = RACE_HUMAN;
 
   // correct for rigger
-  arch->start_room = 90900;
+  arch->start_room = 90999;
   arch->auth_room = 90933;
   arch->warning_room = 90930;
 
