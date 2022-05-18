@@ -1571,6 +1571,8 @@ ACMD(do_logoff)
     for (struct matrix_icon *icon = matrix[PERSONA->in_host].icons; PERSONA && icon; icon = icon->next_in_host)
       if (icon->fighting == PERSONA && icon->ic.type >= IC_LETHAL_BLACK) {
         send_to_icon(PERSONA, "The IC takes a final shot.\r\n");
+        // Remove the Matrix flag early so we don't get caught in a damage-disconnect loop.
+        PLR_FLAGS(ch).RemoveBit(PLR_MATRIX);
         matrix_fight(icon, PERSONA);
       }
     if (PERSONA)
