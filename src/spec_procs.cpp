@@ -130,6 +130,37 @@ int max_ability(int i)
   case ADEPT_LIVINGFOCUS:
   case ADEPT_LINGUISTICS:
   case ADEPT_EMPATHICHEAL:
+  case ADEPT_COMMANDING_VOICE:
+  case ADEPT_DEEP_ROOTING:
+  case ADEPT_DELAY_DAMAGE_OBVIOUS:
+  case ADEPT_DELAY_DAMAGE_SILENT:
+  case ADEPT_EIDETIC_MEMORY:
+  case ADEPT_ELEMENTAL_STRIKE:
+  case ADEPT_EMPATHIC_SENSE:
+  case ADEPT_ENTHRALLING_PERFORMANCE:
+  case ADEPT_FACIAL_SCULPT:
+  case ADEPT_GLIDING:
+  case ADEPT_FLARE:
+  case ADEPT_HIGH_FREQ:
+  case ADEPT_LOW_FREQ:
+  case ADEPT_DAMPENING:
+  case ADEPT_FILTERING:
+  case ADEPT_SPATIAL:
+  case ADEPT_HEARING:
+  case ADEPT_DIRECTIONAL:
+  case ADEPT_SCENT:
+  case ADEPT_TASTE:
+  case ADEPT_INTERIA_STRIKE:
+  case ADEPT_MAGIC_SENSE:
+  case ADEPT_MELANIN_CONTROL:
+  case ADEPT_MULTI_TASKING:
+  case ADEPT_NIMBLE_FINGERS:
+  case ADEPT_QUICK_DRAW:
+  case ADEPT_SUSPENDED_STATE:
+  case ADEPT_THREE_D_MEM:
+  case ADEPT_TRACELESS_WALK:
+  case ADEPT_VOICE_CONTROL:
+  case ADEPT_WALL_RUNNING:
     return 1;
   case ADEPT_PENETRATINGSTRIKE:
   case ADEPT_COMBAT_SENSE:
@@ -138,6 +169,18 @@ int max_ability(int i)
     return 3;
   case ADEPT_KILLING_HANDS:
     return 4;
+  case ADEPT_ANIMAL_EMPATHY:
+  case ADEPT_BODY_CONTROL:
+  case ADEPT_COOL_RESOLVE:
+  case ADEPT_EMPATHIC_READING:
+  case ADEPT_GREAT_LEAP:
+  case ADEPT_IRON_GUT:
+  case ADEPT_IRON_LUNGS:
+  case ADEPT_RESILIENCE:
+  case ADEPT_ROOTING:
+  case ADEPT_SIXTH_SENSE:
+  case ADEPT_SPRINT:
+    return 6;
   case ADEPT_PAIN_RESISTANCE:
     return 10;
   default:
@@ -163,6 +206,27 @@ int ability_cost(int abil, int level)
   case ADEPT_IMAGE_MAG:
   case ADEPT_LINGUISTICS:
   case ADEPT_SUSTENANCE:
+  case ADEPT_ANIMAL_EMPATHY:
+  case ADEPT_BODY_CONTROL:
+  case ADEPT_EMPATHIC_READING:
+  case ADEPT_GREAT_LEAP:
+  case ADEPT_FLARE:
+  case ADEPT_HIGH_FREQ:
+  case ADEPT_LOW_FREQ:
+  case ADEPT_DAMPENING:
+  case ADEPT_FILTERING:
+  case ADEPT_SPATIAL:
+  case ADEPT_HEARING:
+  case ADEPT_DIRECTIONAL:
+  case ADEPT_SCENT:
+  case ADEPT_TASTE:
+  case ADEPT_IRON_GUT:
+  case ADEPT_IRON_LUNGS:
+  case ADEPT_MELANIN_CONTROL:
+  case ADEPT_RESILIENCE:
+  case ADEPT_ROOTING:
+  case ADEPT_SIXTH_SENSE:
+  case ADEPT_SPRINT:
     return 25;
   case ADEPT_PAIN_RESISTANCE:
   case ADEPT_IMPROVED_PERCEPT:
@@ -177,6 +241,21 @@ int ability_cost(int abil, int level)
   case ADEPT_MOTIONSENSE:
   case ADEPT_SIDESTEP:
   case ADEPT_COUNTERSTRIKE:
+  case ADEPT_COMMANDING_VOICE:
+  case ADEPT_COOL_RESOLVE:
+  case ADEPT_DEEP_ROOTING:
+  case ADEPT_EIDETIC_MEMORY:
+  case ADEPT_ELEMENTAL_STRIKE:
+  case ADEPT_EMPATHIC_SENSE:
+  case ADEPT_ENTHRALLING_PERFORMANCE:
+  case ADEPT_INTERIA_STRIKE:
+  case ADEPT_MAGIC_SENSE:
+  case ADEPT_MULTI_TASKING:
+  case ADEPT_NIMBLE_FINGERS:
+  case ADEPT_QUICK_DRAW:
+  case ADEPT_THREE_D_MEM:
+  case ADEPT_TRACELESS_WALK:
+  case ADEPT_VOICE_CONTROL:
     return 50;
   case ADEPT_COMBAT_SENSE:
   case ADEPT_MAGIC_RESISTANCE:
@@ -188,9 +267,15 @@ int ability_cost(int abil, int level)
   case ADEPT_KINESICS:
   case ADEPT_LIVINGFOCUS:
   case ADEPT_PAINRELIEF:
+  case ADEPT_DELAY_DAMAGE_OBVIOUS:
+  case ADEPT_FACIAL_SCULPT:
+  case ADEPT_GLIDING:
+  case ADEPT_SUSPENDED_STATE:
+  case ADEPT_WALL_RUNNING:
     return 100;
   case ADEPT_PERCEPTION:
   case ADEPT_DISTANCE_STRIKE:
+  case ADEPT_DELAY_DAMAGE_SILENT:
     return 200;
   case ADEPT_QUICK_STRIKE:
     return 300;
@@ -204,6 +289,24 @@ int ability_cost(int abil, int level)
         return 200;
     }
     mudlog("SYSERR: Unknown value provided for ADEPT_REFLEXES!", NULL, LOG_SYSLOG, TRUE);
+    return 10000;
+  case ADEPT_ENHANCED_BALANCE:
+    switch(level) {
+      case 1:
+        return 50;
+      case 2:
+        return 100;
+    }
+    mudlog("SYSERR: Unknown value provided for ADEPT_ENHANCED_BALANCE!", NULL, LOG_SYSLOG, TRUE);
+    return 10000;
+  case ADEPT_FLEXIBILITY:
+    switch(level) {
+      case 1:
+        return 50;
+      case 2:
+        return 100;
+    }
+    mudlog("SYSERR: Unknown value provided for ADEPT_FLEXIBILITY!", NULL, LOG_SYSLOG, TRUE);
     return 10000;
   case ADEPT_KILLING_HANDS:
     if (level < 3)
