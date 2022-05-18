@@ -4541,6 +4541,91 @@ void remove_vehicle_brain(struct veh_data *veh) {
   }
 }
 
+struct obj_data *make_new_finished_part(int part_type, int mpcp, int rating=0) {
+  struct obj_data *part = read_object(OBJ_BLANK_PART_DESIGN, VIRTUAL);
+  GET_PART_TYPE(part) = part_type;
+  GET_PART_DESIGN_COMPLETION(part) = 0;
+  GET_PART_TARGET_MPCP(part) = mpcp;
+  GET_PART_PART_COST(part) = 0;
+  GET_PART_CHIP_COST(part) = 0;
+
+  if (!rating) {
+    extern int get_part_maximum_rating(struct obj_data *part);
+    rating = get_part_maximum_rating(part);
+  }
+  GET_PART_RATING(part) = rating;
+
+  part->obj_flags.extra_flags.SetBit(ITEM_EXTRA_WIZLOAD);
+  part->obj_flags.extra_flags.SetBit(ITEM_EXTRA_NORENT);
+  part->obj_flags.extra_flags.SetBit(ITEM_EXTRA_NOSELL);
+
+  char restring[500];
+  snprintf(restring, sizeof(restring), "a rating-%d %s part (MPCP %d)", rating, parts[part_type].name, mpcp);
+  part->restring = str_dup(restring);
+
+  return part;
+}
+
+struct obj_data *make_new_finished_program(int part_type, int mpcp, int rating=0) {
+  struct obj_data *prog = read_object(OBJ_BLANK_PROGRAM, VIRTUAL);
+
+  GET_PROGRAM_TYPE(prog) = part_type;
+  GET_PROGRAM_SIZE(prog) = 1;
+  GET_PROGRAM_ATTACK_DAMAGE(prog) = DEADLY;
+  GET_PROGRAM_IS_DEFAULTED(prog) = TRUE;
+  GET_OBJ_TIMER(prog) = 1;
+
+  if (!rating) {
+    rating = mpcp;
+  }
+  GET_PROGRAM_RATING(prog) = rating;
+
+  prog->obj_flags.extra_flags.SetBit(ITEM_EXTRA_WIZLOAD);
+  prog->obj_flags.extra_flags.SetBit(ITEM_EXTRA_NORENT);
+  prog->obj_flags.extra_flags.SetBit(ITEM_EXTRA_NOSELL);
+
+  char restring[500];
+  snprintf(restring, sizeof(restring), "a rating-%d %s program (MPCP %d)", rating, programs[part_type].name, mpcp);
+  prog->restring = str_dup(restring);
+
+  return prog;
+}
+
+struct obj_data *make_staff_deck_target_mpcp(int mpcp) {
+  struct obj_data *new_deck = read_object(OBJ_CUSTOM_CYBERDECK_SHELL, VIRTUAL);
+
+  // Add parts.
+  obj_to_obj(make_new_finished_part(PART_MPCP, mpcp, mpcp), new_deck);
+  obj_to_obj(make_new_finished_part(PART_BOD, mpcp, (int) (mpcp / 3)), new_deck);
+  obj_to_obj(make_new_finished_part(PART_SENSOR, mpcp, (int) (mpcp / 3)), new_deck);
+  obj_to_obj(make_new_finished_part(PART_MASKING, mpcp, (int) (mpcp / 3)), new_deck);
+  obj_to_obj(make_new_finished_part(PART_ASIST_HOT, mpcp), new_deck);
+  obj_to_obj(make_new_finished_part(PART_RAS_OVERRIDE, mpcp), new_deck);
+
+  // Add software.
+  for (int soft_type = SOFT_ATTACK; soft_type <= SOFT_LOCKON; soft_type++) {
+    obj_to_obj(make_new_finished_program(soft_type, mpcp), new_deck);
+  }
+
+  GET_CYBERDECK_MPCP(new_deck) = mpcp;
+  GET_CYBERDECK_HARDENING(new_deck) = mpcp;
+  GET_CYBERDECK_ACTIVE_MEMORY(new_deck) = mpcp * 250;
+  GET_CYBERDECK_TOTAL_STORAGE(new_deck) = mpcp * 600;
+  GET_CYBERDECK_RESPONSE_INCREASE(new_deck) = MIN(3, (int)(mpcp / 4));
+  GET_CYBERDECK_IO_RATING(new_deck) = mpcp * 100;
+  GET_CYBERDECK_IS_INCOMPLETE(new_deck) = FALSE;
+
+  new_deck->obj_flags.extra_flags.SetBit(ITEM_EXTRA_WIZLOAD);
+  new_deck->obj_flags.extra_flags.SetBit(ITEM_EXTRA_NORENT);
+  new_deck->obj_flags.extra_flags.SetBit(ITEM_EXTRA_NOSELL);
+
+  char restring[500];
+  snprintf(restring, sizeof(restring), "a staff-only MPCP-%d cyberdeck", mpcp);
+  new_deck->restring = str_dup(restring);
+
+  return new_deck;
+}
+
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.
 // Great for swapping out old Classic weapons, cyberware, etc for the new guaranteed-canon versions.
 #define PAIR(classic, current) case (classic): return (current);

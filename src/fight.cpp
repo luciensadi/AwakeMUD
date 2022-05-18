@@ -105,6 +105,7 @@ extern void send_mob_aggression_warnings(struct char_data *pc, struct char_data 
 extern bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *victim, struct obj_data *weap, struct obj_data *vict_weap, struct obj_data *weap_ammo, bool multi_weapon_modifier);
 
 extern void mobact_change_firemode(struct char_data *ch);
+extern bool dumpshock(struct matrix_icon *icon);
 
 /* Weapon attack texts */
 struct attack_hit_type attack_hit_text[] =
@@ -254,9 +255,8 @@ void update_pos(struct char_data * victim)
       do_return(victim, cmd_buf, 0, 0);
     }
 
-    if (PLR_FLAGGED(victim, PLR_MATRIX)) {
-      ACMD_DECLARE(do_logoff);
-      do_logoff(victim, cmd_buf, 0, 1);
+    if (PLR_FLAGGED(victim, PLR_MATRIX) && victim->persona) {
+      dumpshock(victim->persona);
     }
   }
 }

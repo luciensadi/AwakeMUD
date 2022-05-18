@@ -2329,3 +2329,55 @@ ACMD(do_follow)
     }
   }
 }
+
+ACMD(do_stuck) {
+  skip_spaces(&argument);
+
+  const char *reason = one_argument(argument, arg);
+
+  if (!*arg || !is_abbrev("confirm", arg)) {
+    send_to_char("You've invoked the ^WSTUCK^n command, which is designed to teleport you to safety if"
+                 " you end up trapped somewhere in the game. Note that usage of this command is"
+                 " logged and reviewed, so using it in any circumstances other than being legitimately"
+                 " trapped is not advisable. If you're sure you want to continue, type ^WSTUCK CONFIRM"
+                 " <reason for being trapped>^n (ex: stuck confirm the key despawned).\r\n", ch);
+    return;
+  }
+
+  if (!*reason) {
+    send_to_char("You must specify a reason for being stuck. Ex: ^WSTUCK CONFIRM the screwdriver key despawned while I was in here^n.\r\n", ch);
+    return;
+  }
+
+  if (!ch->in_room && !ch->in_veh) {
+    send_to_char(ch, "Wow, you really ARE stuck, aren't you?\r\n");
+    snprintf(buf, sizeof(buf), "STUCK COMMAND USED: %s ended up with no vehicle or room! Rationale given is '%s'. Will teleport to Mortal Relations.",
+             GET_CHAR_NAME(ch),
+             reason
+           );
+  } else {
+    struct room_data *room = get_ch_in_room(ch);
+    snprintf(buf, sizeof(buf), "STUCK COMMAND USED: %s claims to be stuck in %s'%s'^g (%ld). Rationale given is '%s'. Will teleport to Mortal Relations.",
+             GET_CHAR_NAME(ch),
+             ch->in_veh ? "a vehicle in " : "",
+             GET_ROOM_NAME(room),
+             GET_ROOM_VNUM(room),
+             reason
+           );
+  }
+
+  mudlog(buf, ch, LOG_CHEATLOG, TRUE);
+
+  rnum_t mortal_relations_rnum = real_room(RM_MORTAL_RELATIONS_CONFERENCE_ROOM);
+
+  if (mortal_relations_rnum == NOWHERE) {
+    mudlog("SYSERR: Mortal Relations conference room not defined! You must build it before the stuck command can be used.", ch, LOG_SYSLOG, TRUE);
+    return;
+  }
+
+  if (ch->in_room || ch->in_veh)
+    char_from_room(ch);
+  char_to_room(ch, &world[mortal_relations_rnum]);
+  send_to_char(ch, "Thanks for your error report! You have been teleported to the Mortal Relations Conference Room, and may leave after the ten-second delay passes.\r\n");
+  WAIT_STATE(ch, 10 RL_SEC);
+}

@@ -1571,8 +1571,6 @@ ACMD(do_logoff)
     for (struct matrix_icon *icon = matrix[PERSONA->in_host].icons; PERSONA && icon; icon = icon->next_in_host)
       if (icon->fighting == PERSONA && icon->ic.type >= IC_LETHAL_BLACK) {
         send_to_icon(PERSONA, "The IC takes a final shot.\r\n");
-        // Remove the Matrix flag early so we don't get caught in a damage-disconnect loop.
-        PLR_FLAGS(ch).RemoveBit(PLR_MATRIX);
         matrix_fight(icon, PERSONA);
       }
     if (PERSONA)
@@ -1685,8 +1683,19 @@ ACMD(do_connect)
     if (GET_EQ(ch, i) && (GET_OBJ_TYPE(GET_EQ(ch,i )) == ITEM_CYBERDECK || GET_OBJ_TYPE(GET_EQ(ch,i )) == ITEM_CUSTOM_DECK))
       cyberdeck = GET_EQ(ch, i);
   if (!cyberdeck) {
-    send_to_char(ch, "I don't recommend trying to do that without a cyberdeck.\r\n");
-    return;
+
+
+
+    if (access_level(ch, LVL_ADMIN)) {
+      // Create a !RENT staff-only deck from whole cloth.
+      extern struct obj_data *make_staff_deck_target_mpcp(int mpcp);
+      cyberdeck = make_staff_deck_target_mpcp(12);
+      obj_to_char(cyberdeck, ch);
+      send_to_char(ch, "You pull a deck out of thin air to connect with.\r\n");
+    } else {
+      send_to_char(ch, "I don't recommend trying to do that without a cyberdeck.\r\n");
+      return;
+    }
   }
 
   if (GET_CYBERDECK_MPCP(cyberdeck) == 0) {

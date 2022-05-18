@@ -2320,6 +2320,7 @@ enum {
 #define RM_MAGE_TRAINER              778
 #define RM_GUN_TRAINER               781
 #define RM_PORTABLE_VEHICLE_STORAGE  10097
+#define RM_MORTAL_RELATIONS_CONFERENCE_ROOM 10044
 
 // Chargen room defines
 #define RM_CHARGEN_PATH_OF_THE_MAGICIAN_SHAMANIC  60520
