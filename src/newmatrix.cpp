@@ -1672,8 +1672,10 @@ ACMD(do_connect)
           }
         }
       }
+#ifndef JACKPOINTS_ARE_ONE_PERSON_ONLY
       send_to_char("The jackpoint is already in use.\r\n", ch);
       return;
+#endif
     }
 
   for (cyber = ch->carrying; !cyberdeck && cyber; cyber = cyber->next_content)
