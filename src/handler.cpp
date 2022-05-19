@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <vector>
 
 #include "structs.hpp"
 #include "awake.hpp"
@@ -2661,24 +2662,30 @@ void extract_char(struct char_data * ch)
 
 struct char_data *get_player_vis(struct char_data * ch, char *name, int inroom)
 {
-  struct char_data *i;
+  std::vector<struct char_data *> pcs = {};
 
-  // Check for name matches (by memory or by actual name)
-  for (i = character_list; i; i = i->next) {
+  // Compile a list of PCs, checking for exact name matches as we go.
+  for (struct char_data *i = character_list; i; i = i->next) {
     if (IS_NPC(i) || (inroom && i->in_room != ch->in_room) || GET_LEVEL(ch) < GET_INCOG_LEV(i))
       continue;
 
-    if (isname(name, get_string_after_color_code_removal(GET_CHAR_NAME(i), NULL)) || recog(ch, i, name))
+    // Exact name match found-- we're done.
+    if (!str_cmp(GET_CHAR_NAME(i), name))
       return i;
+
+    pcs.push_back(i);
   }
 
-  // Check for loose matches by keywords.
-  for (i = character_list; i; i = i->next) {
-    if (IS_NPC(i) || (inroom && i->in_room != ch->in_room) || GET_LEVEL(ch) < GET_INCOG_LEV(i))
-      continue;
+  // Next, check for remember matches and partial name matches.
+  for (const auto& pc: pcs) {
+    if (isname(name, get_string_after_color_code_removal(GET_CHAR_NAME(pc), NULL)) || recog(ch, pc, name))
+      return pc;
+  }
 
-    if (isname(name, get_string_after_color_code_removal(GET_KEYWORDS(i), NULL)))
-      return i;
+  // Finally, check for loose keyword matches.
+  for (const auto& pc: pcs) {
+    if (isname(name, get_string_after_color_code_removal(GET_KEYWORDS(pc), NULL)))
+      return pc;
   }
 
   return NULL;

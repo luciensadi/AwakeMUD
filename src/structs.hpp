@@ -641,7 +641,7 @@ struct player_special_data_saved
 
   player_special_data_saved() :
     wimp_level(0), freeze_level(0), invis_level(0), incog_level(0), load_room(NOWHERE),
-    last_in(NOWHERE), last_veh(NOTHING), bad_pws(0), totem(0), totemspirit(0),
+    last_in(0), last_veh(NOTHING), bad_pws(0), totem(0), totemspirit(0),
     att_points(0), skill_points(0), force_points(0), restring_points(0), zonenum(0),
     archetype(0), archetypal(FALSE), system_points(0)
   {
