@@ -3770,6 +3770,48 @@ const char *get_plaintext_score_stats(struct char_data *ch) {
     if (GET_TRADITION(ch) == TRAD_SHAMANIC)
       snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "You follow %s.\r\n", totem_types[GET_TOTEM(ch)]);
 
+    switch (GET_ASPECT(ch)) {
+      case ASPECT_FULL:
+        strlcat(buf2, "You are a full mage.\r\n", sizeof(buf2));
+        break;
+      case ASPECT_CONJURER:
+        strlcat(buf2, "You are an aspected conjurer.\r\n", sizeof(buf2));
+        break;
+      case ASPECT_SHAMANIST:
+        strlcat(buf2, "You are an aspected shamanist.\r\n", sizeof(buf2));
+        break;
+      case ASPECT_SORCERER:
+        strlcat(buf2, "You are an aspected sorcerer.\r\n", sizeof(buf2));
+        break;
+      case ASPECT_ELEMEARTH:
+        strlcat(buf2, "You are an aspected elementalist specializing in Earth magic.\r\n", sizeof(buf2));
+        break;
+      case ASPECT_ELEMAIR:
+        strlcat(buf2, "You are an aspected elementalist specializing in Air magic.\r\n", sizeof(buf2));
+        break;
+      case ASPECT_ELEMFIRE:
+        strlcat(buf2, "You are an aspected elementalist specializing in Fire magic.\r\n", sizeof(buf2));
+        break;
+      case ASPECT_ELEMWATER:
+        strlcat(buf2, "You are an aspected elementalist specializing in Water magic.\r\n", sizeof(buf2));
+        break;
+      case ASPECT_EARTHMAGE:
+        strlcat(buf2, "You are a full mage specializing in Earth magic.\r\n", sizeof(buf2));
+        break;
+      case ASPECT_AIRMAGE:
+        strlcat(buf2, "You are a full mage specializing in Air magic.\r\n", sizeof(buf2));
+        break;
+      case ASPECT_FIREMAGE:
+        strlcat(buf2, "You are a full mage specializing in Fire magic.\r\n", sizeof(buf2));
+        break;
+      case ASPECT_WATERMAGE:
+        strlcat(buf2, "You are a full mage specializing in Water magic.\r\n", sizeof(buf2));
+        break;
+      default:
+        mudlog("SYSERR: Unrecognized aspect in full score-- update the switch statement.", ch, LOG_SYSLOG, TRUE);
+        break;
+    }
+
     snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Initiation grade: %d\r\n", GET_GRADE(ch));
   }
 
@@ -4109,11 +4151,57 @@ ACMD(do_score)
       strlcpy(invisibility_string, "", sizeof(invisibility_string));
 
 
-    char shaman_string[50];
-    if (GET_TRADITION(ch) == TRAD_SHAMANIC)
-      snprintf(shaman_string, sizeof(shaman_string), "You follow %s.", totem_types[GET_TOTEM(ch)]);
-    else
-      strlcpy(shaman_string, "", sizeof(shaman_string));
+    char mage_string[50];
+    strlcpy(mage_string, "", sizeof(mage_string));
+    if (GET_TRADITION(ch) == TRAD_HERMETIC || GET_TRADITION(ch) == TRAD_SHAMANIC) {
+      switch (GET_ASPECT(ch)) {
+        case ASPECT_FULL:
+          if (GET_TRADITION(ch) == TRAD_SHAMANIC)
+            strlcat(mage_string, "Full Shaman", sizeof(mage_string));
+          else
+            strlcat(mage_string, "Full Mage", sizeof(mage_string));
+          break;
+        case ASPECT_CONJURER:
+          strlcat(mage_string, "Conjurer", sizeof(mage_string));
+          break;
+        case ASPECT_SHAMANIST:
+          strlcat(mage_string, "Shamanist", sizeof(mage_string));
+          break;
+        case ASPECT_SORCERER:
+          strlcat(mage_string, "Sorcerer", sizeof(mage_string));
+          break;
+        case ASPECT_ELEMEARTH:
+          strlcat(mage_string, "Earth-Aspected Mage", sizeof(mage_string));
+          break;
+        case ASPECT_ELEMAIR:
+          strlcat(mage_string, "Air-Aspected Mage", sizeof(mage_string));
+          break;
+        case ASPECT_ELEMFIRE:
+          strlcat(mage_string, "Fire-Aspected Mage", sizeof(mage_string));
+          break;
+        case ASPECT_ELEMWATER:
+          strlcat(mage_string, "Water-Aspected Mage", sizeof(mage_string));
+          break;
+        case ASPECT_EARTHMAGE:
+          strlcat(mage_string, "Earth-Specialized Full Mage", sizeof(mage_string));
+          break;
+        case ASPECT_AIRMAGE:
+          strlcat(mage_string, "Air-Specialized Full Mage", sizeof(mage_string));
+          break;
+        case ASPECT_FIREMAGE:
+          strlcat(mage_string, "Fire-Specialized Full Mage", sizeof(mage_string));
+          break;
+        case ASPECT_WATERMAGE:
+          strlcat(mage_string, "Water-Specialized Full Mage", sizeof(mage_string));
+          break;
+        default:
+          mudlog("SYSERR: Unrecognized aspect in score sheet-- update the switch statement.", ch, LOG_SYSLOG, TRUE);
+          break;
+      }
+
+      if (GET_TRADITION(ch) == TRAD_SHAMANIC)
+        snprintf(ENDOF(mage_string), sizeof(mage_string) - strlen(mage_string), " following %s", totem_types[GET_TOTEM(ch)]);
+    }
 
     static char grade_string[50];
     if (GET_TRADITION(ch) != TRAD_MUNDANE)
@@ -4153,8 +4241,8 @@ ACMD(do_score)
                           MAX(0, ((int)ch->real_abils.mag / 100)), ((int)GET_MAG(ch) / 100), GET_COND(ch, COND_DRUNK) > 10 ? "You are intoxicated." : "");
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^L/^b/ ^nReaction      ^w%2d (^W%2d^w)    ^c%-41s^b/^L/\r\n",
                           GET_REAL_REA(ch), GET_REA(ch), out_of_body_string);
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^b/^L/ ^nInitiative^w   [^W%2d^w+^W%d^rd6^n]    ^n%-32s         ^L/^b/\r\n",
-                          GET_REA(ch), 1 + GET_INIT_DICE(ch), shaman_string);
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^b/^L/ ^nInitiative^w   [^W%2d^w+^W%d^rd6^n]    %-41s^L/^b/\r\n",
+                          GET_REA(ch), 1 + GET_INIT_DICE(ch), mage_string);
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^L/^b/ ^nArmor     ^w[ ^W%2d^rB^w/ ^W%2d^rI^w]    ^L%-17s^n                        ^b/^L/\r\n",
                           GET_BALLISTIC(ch), GET_IMPACT(ch), AFF_FLAGGED(ch, AFF_SNEAK) ? "You are sneaking." : "");
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^b/^L/ ^nNuyen     ^w[^W%'9ld^w]    %11s   Social Bonus: [^W%3d / %3d^n]  ^L/^b/\r\n",

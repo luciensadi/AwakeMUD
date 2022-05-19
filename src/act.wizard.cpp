@@ -141,7 +141,6 @@ ACMD(do_copyover)
   FILE *fp;
   struct descriptor_data *d, *d_next;
   struct char_data *och;
-  int mesnum = number(0, 30);
 
   /* Old messages, preserved for posterity.
   // "I like copyovers, yes I do!  Eating player corpses in a copyover stew!\r\n",
@@ -186,8 +185,10 @@ ACMD(do_copyover)
       "\"Right, see, the genre's called 'cyberpunk'. Sometimes you get cybered, and sometimes you get punked.\"\r\n",
       "\x1B[0;35m[\x1B[0mVile\x1B[0;35m] \x1B[0;31m(\x1B[0mOOC\x1B[0;31m)\x1B[0m, \"This one's probably my fault, too.\"\r\n",
       "\x1B[0;35m[\x1B[0mJank\x1B[0;35m] \x1B[0;31m(\x1B[0mOOC\x1B[0;31m)\x1B[0m, \"This is the perfect time to buy more NERPS!\"\r\n",
-      "This is the way the world ends: Not with a bang, but with a copyover.\r\n" // 30
+      "This is the way the world ends: Not with a bang, but with a copyover.\r\n", // 30
+      "Your vision is briefly encompassed by a ring of ten candles, which extinguish one by one. As the final one darkens, a voice intones, 'These things are true: The world is dark.'\r\n"
     };
+  int mesnum = number(0, 31);
 
   fp = fopen (COPYOVER_FILE, "w");
 
