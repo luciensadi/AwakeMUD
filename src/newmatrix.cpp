@@ -1660,7 +1660,7 @@ ACMD(do_connect)
           {
             for (struct char_data *temp2 = ch->in_room->people; temp2; temp2 = temp2->next_in_room) {
               if (temp2 != temp && PLR_FLAGGED(temp2, PLR_MATRIX)) {
-                send_to_char(ch, "The hitcher jack on that deck is already in use.\r\n");
+                act("The hitcher jack on $n's deck is already in use.", FALSE, temp, 0, ch, TO_VICT);
                 return;
               }
             }
