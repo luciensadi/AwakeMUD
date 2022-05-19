@@ -1635,7 +1635,7 @@ ACMD(do_reload)
 
       int weapontype = GET_WEAPON_ATTACK_TYPE(gun);
       ammotype = ammo ? GET_AMMOBOX_TYPE(ammo) : AMMO_NORMAL;
-      int max = GET_WEAPON_MAX_AMMO(gun) * 2;
+      int max = GET_WEAPON_MAX_AMMO(gun) * MOUNTED_GUN_AMMO_CAPACITY_MULTIPLIER;
 
       if (ammo_type_ptr && *ammo_type_ptr) {
         for (int i = NUM_AMMOTYPES - 1; i >= AMMO_NORMAL ; i--) {

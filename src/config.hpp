@@ -171,6 +171,9 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 // How much nuyen does it cost to paint (restring) your vehicle?
 #define PAINTER_COST                                           20000
 
+// How much extra ammo can you cram into a mounted weapon?
+#define MOUNTED_GUN_AMMO_CAPACITY_MULTIPLIER                   3
+
 // How much karma does it cost to learn close combat, and at what skill threshold do NPCs figure out how to use it?
 #define KARMA_COST_FOR_CLOSECOMBAT                             200
 #define NPC_SKILL_THRESHOLD_FOR_FREE_SWITCHING_OF_CLOSECOMBAT  8
