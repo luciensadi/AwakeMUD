@@ -397,7 +397,7 @@ ACMD(do_ram)
     return;
   }
   RIG_VEH(ch, veh);
-  if (get_speed(veh) <= SPEED_IDLE) {
+  if (veh->cspeed <= SPEED_IDLE) {
     send_to_char("You're moving far too slowly.\r\n", ch);
     return;
   }

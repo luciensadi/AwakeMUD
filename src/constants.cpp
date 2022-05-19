@@ -2862,3 +2862,11 @@ const char *mtx_subsystem_names[] = {
   "files",
   "slave"
 };
+
+const char *veh_speeds[] = {
+  "off",
+  "idle",
+  "cruising",
+  "speeding",
+  "max"
+};

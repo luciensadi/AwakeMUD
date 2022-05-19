@@ -135,4 +135,5 @@ extern const char *damage_type_names_must_subtract_300_first_and_must_not_be_gre
 extern const char *pc_race_types[];
 
 extern const char *mtx_subsystem_names[];
+extern const char *veh_speeds[];
 #endif

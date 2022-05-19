@@ -1177,14 +1177,16 @@ int get_speed(struct veh_data *veh)
   switch (veh->cspeed)
   {
     case SPEED_OFF:
-    case SPEED_IDLE:
       speed = 0;
+      break;
+    case SPEED_IDLE:
+      speed = MIN(maxspeed, 1);
       break;
     case SPEED_CRUISING:
       if (ROOM_FLAGGED(in_room, ROOM_INDOORS))
         speed = MIN(maxspeed, 3);
       else
-        speed = MIN(maxspeed, 55);
+        speed = MIN(maxspeed * .5, 55);
       break;
     case SPEED_SPEEDING:
       if (ROOM_FLAGGED(in_room, ROOM_INDOORS))

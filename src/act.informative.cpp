@@ -3959,14 +3959,16 @@ ACMD(do_score)
               "Armor:%3d\r\n"
               "Autonav:%3d\r\n"
               "Handling:%3d\r\n"
-              "Speed:%3d\r\n"
+              "Speed: %s @ %3d km/h\r\n"
               "Accel:%3d\r\n"
               "Sig:%3d\r\n"
               "Sensors:%3d\r\n",
               GET_VEH_NAME(veh), veh->damage, (int)(GET_MENTAL(ch) / 100),
               (int)(GET_MAX_MENTAL(ch) / 100), GET_REA(ch), GET_INT(ch),
               GET_WIL(ch), veh->body, veh->armor, veh->autonav,
-              veh->handling, veh->speed, veh->accel, veh->sig,
+              veh->handling,
+              veh_speeds[veh->cspeed], get_speed(veh),
+              veh->accel, veh->sig,
               veh->sensor);
     } else {
       snprintf(buf, sizeof(buf), "You are rigging %s.\r\n", GET_VEH_NAME(veh));
@@ -3974,13 +3976,13 @@ ACMD(do_score)
               "  Reaction:%3d      Int:%3d\r\n"
               "       Wil:%3d      Bod:%3d\r\n"
               "     Armor:%3d  Autonav:%3d\r\n"
-              "  Handling:%3d    Speed:%3d\r\n"
+              "  Handling:%3d    Speed: %s @ %3d km/h\r\n"
               "     Accel:%3d      Sig:%3d\r\n"
               "   Sensors:%3d\r\n",
               veh->damage, (int)(GET_MENTAL(ch) / 100),
               (int)(GET_MAX_MENTAL(ch) / 100), GET_REA(ch), GET_INT(ch),
               GET_WIL(ch), veh->body, veh->armor, veh->autonav,
-              veh->handling, veh->speed, veh->accel, veh->sig,
+              veh->handling, veh_speeds[veh->cspeed], get_speed(veh), veh->accel, veh->sig,
               veh->sensor);
     }
   } else {
