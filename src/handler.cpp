@@ -563,7 +563,8 @@ void affect_total(struct char_data * ch)
       spell_modify(ch, sust, FALSE);
 
   // Because equipment-granted vision AFFs are notoriously sticky, clear them deliberately.
-  AFF_FLAGS(ch).RemoveBits(AFF_LOW_LIGHT, AFF_INFRAVISION, AFF_ULTRASOUND, AFF_VISION_MAG_1, AFF_VISION_MAG_2, AFF_VISION_MAG_3, ENDBIT);
+  if (!IS_NPC(ch))
+    AFF_FLAGS(ch).RemoveBits(AFF_LOW_LIGHT, AFF_INFRAVISION, AFF_ULTRASOUND, AFF_VISION_MAG_1, AFF_VISION_MAG_2, AFF_VISION_MAG_3, ENDBIT);
 
   // Wipe out vision bits, resetting them to race-only bits.
   clear_ch_vision_bits(ch);
