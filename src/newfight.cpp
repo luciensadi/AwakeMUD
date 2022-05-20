@@ -752,10 +752,10 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
         att->melee->damage_level = SERIOUS;
 
         // SR3 p121: Halve impact armor, but double barrier ratings. This approximates that.
-        if (!MOB_FLAGGED(def->ch, MOB_INANIMATE))
-          att->melee->power -= GET_IMPACT(def->ch) / 2;
-        else
+        if (MOB_FLAGGED(def->ch, MOB_INANIMATE))
           att->melee->power += GET_IMPACT(def->ch) * 2;
+        else
+          att->melee->power -= GET_IMPACT(def->ch) / 2;
       }
       // Because we swap att and def pointers if defender wins the clash we need to make sure attacker gets proper values
       // if they're using a ranged weapon in clash instead of setting their melee power to the damage code of the ranged
@@ -859,7 +859,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
 
   // Roll the bod test and apply necessary staging.
   if (att->ranged_combat_mode) {
-    bod_success = success_test(GET_BOD(def->ch) + bod_dice, att->ranged->power);
+    bod_success = success_test(bod_dice, att->ranged->power);
     att->ranged->successes -= bod_success;
 
     // Harmless ammo never deals damage.
@@ -898,13 +898,15 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     int damage_level = att->ranged_combat_mode ? att->ranged->damage_level : att->melee->damage_level;
     bool damage_is_physical = att->ranged_combat_mode ? att->ranged->is_physical : att->melee->is_physical;
 
-    snprintf(rbuf, sizeof(rbuf), "^cDefender rolls %d bod dice vs TN %d, getting %d success%s; attacker now has %d net success%s.\r\n^CDamage stages from %s(%d) to %s(%d), aka %d boxes of %c.^n",
+    snprintf(rbuf, sizeof(rbuf), "^cDefender rolls %d bod dice vs TN %d, getting %d success%s; attacker now has %d net success%s.\r\n",
              bod_dice,  // bod dice
              net_attack_power,  // TN
              bod_success, // success
              bod_success == 1 ? "" : "es", // success plural
              net_successes, // net success
-             net_successes == 1 ? "" : "es", // net success plural
+             net_successes == 1 ? "" : "es" // net success plural
+            );
+    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "^CDamage stages from %s(%d) to %s(%d), aka %d boxes of %c.^n",
              GET_WOUND_NAME(damage_level), // damage stage from (word)
              damage_level, // damage stage from (int)
              GET_WOUND_NAME(staged_damage), // damage stage to (word)
