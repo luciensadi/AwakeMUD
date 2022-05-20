@@ -1799,6 +1799,8 @@ void do_stat_mobile(struct char_data * ch, struct char_data * k)
   /* Showing the bitvector */
   AFF_FLAGS(k).PrintBits(buf2, MAX_STRING_LENGTH, affected_bits, AFF_MAX);
   send_to_char(ch, "%sAFF: ^y%s\r\n", buf, buf2);
+  strlcpy(buf2, write_vision_string_for_display(k, VISION_STRING_MODE_STAFF), sizeof(buf2));
+  send_to_char(ch, "%s\r\n", buf2);
 
   /* Equipment */
   if (k->cyberware) {
