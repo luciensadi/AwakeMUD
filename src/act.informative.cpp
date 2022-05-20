@@ -6148,8 +6148,10 @@ ACMD(do_status)
     send_to_char(ch, "Nothing.\r\n");
   }
 
-  send_to_char(ch, "\r\nYou have the following vision types:\r\n  %s\r\n",
-               write_vision_string_for_display(ch, VISION_STRING_MODE_STATUS));
+  send_to_char(ch, "\r\n%s %s the following vision types:\r\n  %s\r\n",
+               targ == ch ? "You" : GET_CHAR_NAME(targ),
+               targ == ch ? "have" : "has",
+               write_vision_string_for_display(targ, VISION_STRING_MODE_STATUS));
 
   if (GET_MAG(targ) > 0) {
     send_to_char("\r\n", ch);
