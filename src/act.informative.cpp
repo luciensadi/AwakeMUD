@@ -2500,7 +2500,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
         int standing_recoil_comp = GET_WEAPON_INTEGRAL_RECOIL_COMP(j);
         int prone_recoil_comp = 0;
         int real_obj;
-        bool has_laser_sight_already = FALSE;
+        bool has_laser_sight_already = FALSE, has_bayonet = FALSE;
         for (int i = ACCESS_LOCATION_TOP; i <= ACCESS_LOCATION_UNDER; i++) {
           if (GET_WEAPON_ATTACH_LOC(j, i) > 0
               && (real_obj = real_object(GET_WEAPON_ATTACH_LOC(j, i))) > 0
@@ -2662,6 +2662,11 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
               break;
           }
         }
+
+        // Info on how it strikes in melee.
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIf used in melee clashes, it is a ^c(STR)M %s^n with ^c%d^n reach.",
+                 has_bayonet ? "polearm" : "club",
+                 (GET_WEAPON_SKILL(j) == SKILL_PISTOLS ? 0 : 1) + (has_bayonet ? 1 : 0));
 
         // Heavy weapon? Warn the wielder.
         if (GET_WEAPON_SKILL(j) >= SKILL_MACHINE_GUNS && GET_WEAPON_SKILL(j) <= SKILL_ASSAULT_CANNON) {
