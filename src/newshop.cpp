@@ -1022,6 +1022,7 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
         case RACE_ORK:
         case RACE_TROLL:
         case RACE_DWARF:
+        case RACE_FOMORI:
           break;
         default:
           target += 4;
