@@ -116,9 +116,19 @@ void medit_disp_menu(struct descriptor_data *d)
   send_to_char("n) Skill menu.\r\n", CH);
   send_to_char(CH, "o) Arrive text: ^c%s^n,  p) Leave text: ^c%s^n\r\n",
                MOB->char_specials.arrive, MOB->char_specials.leave);
-  send_to_char("r) Edit Cyberware\r\n", CH);
-  send_to_char("s) Edit Bioware\r\n", CH);
-  send_to_char("t) Edit Equipment\r\n", CH);
+
+  int cyber_total = 0;
+  for (struct obj_data *ware = MOB->cyberware; ware; ware = ware->next_content) {cyber_total++;}
+  send_to_char(CH, "r) Edit Cyberware (%d piece%s)\r\n", cyber_total, cyber_total == 1 ? "" : "s");
+
+  int bio_total = 0;
+  for (struct obj_data *ware = MOB->bioware; ware; ware = ware->next_content) {bio_total++;}
+  send_to_char(CH, "s) Edit Bioware (%d piece%s)\r\n", bio_total, bio_total == 1 ? "" : "s");
+
+  int eq_total = 0;
+  for (int wear_idx = 0; wear_idx < NUM_WEARS; wear_idx++) {if (GET_EQ(MOB, wear_idx)) {eq_total++;}}
+  send_to_char(CH, "t) Edit Equipment (%d piece%s)\r\n", eq_total, eq_total == 1 ? "" : "s");
+
   send_to_char("q) Quit and save\r\n", CH);
   send_to_char("x) Exit and abort\r\n", CH);
   send_to_char("Enter your choice:\r\n", CH);

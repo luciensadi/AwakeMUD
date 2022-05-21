@@ -1467,6 +1467,21 @@ ACMD(do_mclone)
   if (mob_proto[mob_num1].player_specials)
     mob->player_specials = &dummy_mob;
 
+  // Drop all references to the mob_proto's equipment etc and make a new set.
+  mob->cyberware = NULL;
+  for (struct obj_data *ware = mob_proto[mob_num1].cyberware; ware; ware = ware->next_content) {
+    obj_to_cyberware(read_object(GET_OBJ_VNUM(ware), VIRTUAL), mob);
+  }
+
+  mob->bioware = NULL;
+  for (struct obj_data *ware = mob_proto[mob_num1].bioware; ware; ware = ware->next_content) {
+    obj_to_bioware(read_object(GET_OBJ_VNUM(ware), VIRTUAL), mob);
+  }
+
+  for (int wear_idx = 0; wear_idx < NUM_WEARS; wear_idx++)
+    if (GET_EQ(mob, wear_idx))
+      GET_EQ(mob, wear_idx) = read_object(GET_OBJ_VNUM(GET_EQ(mob, wear_idx)), VIRTUAL);
+
   // put guy into editing mode
   PLR_FLAGS(ch).SetBit(PLR_EDITING);
   STATE (ch->desc) = CON_MEDIT;
