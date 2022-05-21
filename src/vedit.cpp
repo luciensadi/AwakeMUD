@@ -191,7 +191,9 @@ void vedit_parse(struct descriptor_data * d, const char *arg)
               for (int c = 0; c < NUM_MODS; c++)
                 i->mod[c] = temp->mod[c];
               i->owner = temp->owner;
-              Mem->ClearVehicle(temp);
+
+              clear_vehicle(temp);
+              delete temp;
             }
           }
           // this function updates pointers to the active list of vehicles
@@ -301,8 +303,10 @@ if (d->edit_veh->ITEM && veh_proto[veh_number].ITEM && d->edit_veh->ITEM != veh_
         send_to_char("Writing vehicle to disk..", d->character);
         write_vehs_to_disk(d->character->player_specials->saved.zonenum);
         // don't wanna nuke the strings, so we use ClearVehicle
-        if (d->edit_veh)
-          Mem->ClearVehicle(d->edit_veh);
+        if (d->edit_veh) {
+          clear_vehicle(d->edit_veh);
+          delete d->edit_veh;
+        }
         d->edit_veh = NULL;
         STATE(d) = CON_PLAYING;
         PLR_FLAGS(d->character).RemoveBit(PLR_EDITING);
@@ -740,6 +744,7 @@ void write_vehs_to_disk(int zone)
   fprintf(fp, "END\n");
   fclose(fp);
   /* nuke temp vehicle, but not the strings */
-  Mem->ClearVehicle(veh);
+  clear_vehicle(veh);
+  delete veh;
   write_index_file("veh");
 }

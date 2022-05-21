@@ -212,8 +212,13 @@ int  VTable::GetInt(const char *where, int defawlt)
 {
   field *ptr = find_field(where);
 
-  if (!ptr)
+  if (!ptr) {
+    #ifdef DEBUG_VTABLE
+    log_vfprintf("Failed to find INT entry %s, using default %d.", where, defawlt);
+    #endif
+
     return defawlt;
+  }
 
   return atoi(ptr->line);
 }
@@ -222,8 +227,13 @@ long VTable::GetLong(const char *where, long defawlt)
 {
   field *ptr = find_field(where);
 
-  if (!ptr)
+  if (!ptr) {
+    #ifdef DEBUG_VTABLE
+    log_vfprintf("Failed to find LONG entry %s, using default %ld.", where, defawlt);
+    #endif
+
     return defawlt;
+  }
 
   return atol(ptr->line);
 }

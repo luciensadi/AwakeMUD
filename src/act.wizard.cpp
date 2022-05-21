@@ -2348,7 +2348,7 @@ ACMD(do_vstat)
       return;
     }
     mob = read_mobile(r_num, REAL);
-    char_to_room(mob, 0);
+    char_to_room(mob, &world[0]);
     do_stat_mobile(ch, mob);
     extract_char(mob);
   } else if (is_abbrev(buf, "obj")) {

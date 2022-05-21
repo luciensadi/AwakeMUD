@@ -2424,12 +2424,16 @@ void unrestrict_game(int Empty)
 
 void free_up_memory(int Empty)
 {
-  mudlog("Warning: Received signal, Freeing up Memory", NULL, LOG_SYSLOG, TRUE);
-  if (!Mem->ClearStacks()) {
-    std::cerr << "SYSERR: Unable to free enough memory, shutting down...\n";
-    House_save_all();
-    exit(ERROR_UNABLE_TO_FREE_MEMORY_IN_CLEARSTACKS);
+  std::cerr << "SYSERR: Out of memory, saving houses and shutting down...\n";
+  // Blow away characters to try and free up enough to let us write houses.
+  for (struct char_data *next_ch, *ch = character_list; ch; ch = next_ch) {
+    next_ch = ch->next;
+    delete ch;
   }
+  // Write houses.
+  House_save_all();
+  // Die.
+  exit(ERROR_UNABLE_TO_FREE_MEMORY_IN_CLEARSTACKS);
 }
 
 void hupsig(int Empty)

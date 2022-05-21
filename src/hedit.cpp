@@ -263,7 +263,8 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
         send_to_char("Writing host to disk.\r\n", d->character);
         write_host_to_disk(d->character->player_specials->saved.zonenum);
         send_to_char("Saved.\r\n", CH);
-        Mem->ClearHost(d->edit_host);
+        clear_host(d->edit_host);
+        delete d->edit_host;
         d->edit_host = NULL;
         PLR_FLAGS(d->character).RemoveBit(PLR_EDITING);
         STATE(d) = CON_PLAYING;

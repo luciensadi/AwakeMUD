@@ -9,6 +9,13 @@
 *  (c) 2001 The AwakeMUD Consortium                                    *
 ********************************************************************* */
 
+/* Edit 2022: Chris and Andrew, I'm sure you had a good reason for writing
+   this stack code the way you did, but it's been the cause of endless
+   memory issues stemming from values not being cleared before reuse.
+   Modern computers are now fast enough that I don't care about the overhead
+   of allocating new memory every time, so I'm going that route instead.
+   I've gutted this class to make that happen. -- LS */
+
 #include <assert.h>
 #include <stdio.h>
 
@@ -22,98 +29,56 @@
 #include "perception_tests.hpp"
 
 memoryClass::memoryClass()
-{
-  Room = new stackClass<struct room_data>;
-  Obj = new stackClass<struct obj_data>;
-  Ch = new stackClass<struct char_data>;
-  Veh = new stackClass<struct veh_data>;
-  Host = new stackClass<struct host_data>;
-  Icon = new stackClass<struct matrix_icon>;
-}
+{}
 
 memoryClass::memoryClass(const memoryClass & mClass)
-{
-  //Obj = new stackClass<obj_data>;
-  Obj = mClass.Obj;
-  //Ch = new stackClass<char_data>;
-  Ch = mClass.Ch;
-  //Veh = new stackClass<veh_data>;
-  Veh = mClass.Veh;
-  //Host = new stackClass<host_data>;
-  Host = mClass.Host;
-  //Icon = new stackClass<matrix_icon>;
-  Icon = mClass.Icon;
-}
+{}
 
 memoryClass::~memoryClass()
 {}
 
 struct obj_data *memoryClass::GetObject()
 {
-  if (Obj->StackIsEmpty())
-  {
-    struct obj_data *temp = new obj_data;
-    clear_object(temp);
-    return temp;
-  } else
-    return Obj->Pop();
+  struct obj_data *temp = new obj_data;
+  clear_object(temp);
+  return temp;
 }
 
 struct veh_data *memoryClass::GetVehicle()
 {
-  if (Veh->StackIsEmpty())
-  {
-    struct veh_data *temp = new veh_data;
-    clear_vehicle(temp);
-    return temp;
-  } else
-    return Veh->Pop();
+  struct veh_data *temp = new veh_data;
+  clear_vehicle(temp);
+  return temp;
 }
 
 struct host_data *memoryClass::GetHost()
 {
-  if (Host->StackIsEmpty())
-  {
-    struct host_data *temp = new host_data;
-    clear_host(temp);
-    return temp;
-  } else
-    return Host->Pop();
+  struct host_data *temp = new host_data;
+  clear_host(temp);
+  return temp;
 }
 
 struct matrix_icon *memoryClass::GetIcon()
 {
-  if (Icon->StackIsEmpty())
-  {
-    struct matrix_icon *temp = new matrix_icon;
-    clear_icon(temp);
-    return temp;
-  } else
-    return Icon->Pop();
+  struct matrix_icon *temp = new matrix_icon;
+  clear_icon(temp);
+  return temp;
 }
 
 struct char_data *memoryClass::GetCh()
 {
-  if (Ch->StackIsEmpty())
-  {
-    struct char_data *temp = new char_data;
-    clear_char(temp);
-    return temp;
-  } else
-    return Ch->Pop();
+  struct char_data *temp = new char_data;
+  clear_char(temp);
+  return temp;
 }
 
 struct room_data *memoryClass::GetRoom()
 {
-  if (Room->StackIsEmpty())
-  {
-    struct room_data *temp = new room_data;
-    // clear room just zeros the room structure, which is all we need to
-    // do since it is fresh
-    clear_room(temp);
-    return temp;
-  } else
-    return Room->Pop();
+  struct room_data *temp = new room_data;
+  // clear room just zeros the room structure, which is all we need to
+  // do since it is fresh
+  clear_room(temp);
+  return temp;
 }
 
 void memoryClass::DeleteObject(struct obj_data *obj)
@@ -178,80 +143,24 @@ void memoryClass::DeleteCh(struct char_data *ch)
 void memoryClass::DeleteRoom(struct room_data *room)
 {
   free_room(room);
-  Room->Push(room);
+  delete room;
 }
 
 void memoryClass::DeleteHost(struct host_data *host)
 {
   free_host(host);
-  Host->Push(host);
+  delete host;
 }
 
 void memoryClass::DeleteIcon(struct matrix_icon *icon)
 {
   free_icon(icon);
-  Icon->Push(icon);
+  delete icon;
 }
 
 
 void memoryClass::DeleteVehicle(struct veh_data *veh)
 {
   free_veh(veh);
-  Veh->Push(veh);
-}
-
-void memoryClass::ClearObject(struct obj_data *obj)
-{
-  clear_object(obj);
-  delete obj;
-  // Obj->Push(obj);
-}
-
-void memoryClass::ClearVehicle(struct veh_data *veh)
-{
-  clear_vehicle(veh);
-  Veh->Push(veh);
-}
-
-void memoryClass::ClearHost(struct host_data *host)
-{
-  clear_host(host);
-  Host->Push(host);
-}
-
-void memoryClass::ClearIcon(struct matrix_icon *icon)
-{
-  clear_icon(icon);
-  Icon->Push(icon);
-}
-
-void memoryClass::ClearCh(struct char_data *ch)
-{
-  clear_char(ch);
-  Ch->Push(ch);
-}
-
-void memoryClass::ClearRoom(struct room_data *room)
-{
-  clear_room(room);
-  Room->Push(room);
-}
-
-bool memoryClass::ClearStacks()
-{
-  // if all the stacks are empty, return FALSE
-  if (Obj->StackIsEmpty() && Ch->StackIsEmpty() && Room->StackIsEmpty())
-    return FALSE;
-
-  // and here we just clean up the stacks, hoping to free some memory
-  while (!Obj->StackIsEmpty())
-    Obj->PopDelete();
-
-  while (!Ch->StackIsEmpty())
-    Ch->PopDelete();
-
-  while (!Room->StackIsEmpty())
-    Room->PopDelete();
-
-  return TRUE;
+  delete veh;
 }

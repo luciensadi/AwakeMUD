@@ -1601,9 +1601,11 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
 
           send_to_char("Writing object to disk..", d->character);
           write_objs_to_disk(d->character->player_specials->saved.zonenum);
-          // do not wanna nuke the strings, so we use ClearObject
-          if (d->edit_obj)
-            Mem->ClearObject(d->edit_obj);
+          // do not wanna nuke the strings, so we use ClearObject first
+          if (d->edit_obj) {
+            clear_object(d->edit_obj);
+            delete d->edit_obj;
+          }
           d->edit_obj = NULL;
           STATE(d) = CON_PLAYING;
           PLR_FLAGS(d->character).RemoveBit(PLR_EDITING);

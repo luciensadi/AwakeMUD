@@ -150,7 +150,8 @@ void icedit_parse(struct descriptor_data *d, const char *arg)
               i->in_host = temp->in_host;
               i->next = temp->next;
               i->next_in_host = temp->next_in_host;
-              Mem->ClearIcon(temp);
+              clear_icon(temp);
+              delete temp;
             }
           DELETE_ARRAY_IF_EXTANT(ic_proto[ic_num].name);
           DELETE_ARRAY_IF_EXTANT(ic_proto[ic_num].look_desc);
@@ -211,7 +212,8 @@ void icedit_parse(struct descriptor_data *d, const char *arg)
         send_to_char("Writing IC to disk.\r\n", CH);
         write_ic_to_disk(CH->player_specials->saved.zonenum);
         send_to_char("Saved.\r\n", CH);
-        Mem->ClearIcon(d->edit_icon);
+        clear_icon(d->edit_icon);
+        delete d->edit_icon;
         d->edit_icon = NULL;
         PLR_FLAGS(CH).RemoveBit(PLR_EDITING);
         STATE(d) = CON_PLAYING;

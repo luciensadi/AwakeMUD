@@ -1543,7 +1543,8 @@ ACMD(do_mdelete)
         *j = mob_proto[counter];
         j->nr = counter;
         copy_over_necessary_info(temp, j);
-        Mem->ClearCh(temp);
+        clear_char(temp);
+        delete temp;
       }
     }
   }

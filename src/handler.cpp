@@ -606,7 +606,7 @@ void affect_total(struct char_data * ch)
       GET_INNATE_IMPACT(ch) = GET_INNATE_BALLISTIC(ch) = GET_SPARE1(ch) * 2;
     } else if (ch_is_npc) {
       GET_INNATE_BALLISTIC(ch) = GET_INNATE_BALLISTIC(&mob_proto[GET_MOB_RNUM(ch)]);
-      GET_INNATE_IMPACT(ch) = GET_INNATE_BALLISTIC(&mob_proto[GET_MOB_RNUM(ch)]);
+      GET_INNATE_IMPACT(ch) = GET_INNATE_IMPACT(&mob_proto[GET_MOB_RNUM(ch)]);
     } else {
       GET_INNATE_BALLISTIC(ch) = GET_INNATE_IMPACT(ch) = 0;
     }

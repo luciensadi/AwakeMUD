@@ -389,7 +389,8 @@ void medit_parse(struct descriptor_data *d, const char *arg)
             /* copy game-time dependent vars over */
             copy_over_necessary_info(temp, i);
             // Clean up.
-            Mem->ClearCh(temp);
+            clear_char(temp);
+            delete temp;
           } // end if statement
 
         } // end for loop
@@ -402,6 +403,10 @@ void medit_parse(struct descriptor_data *d, const char *arg)
         DELETE_ARRAY_IF_EXTANT(mob_proto[mob_number].player.physical_text.look_desc);
         DELETE_ARRAY_IF_EXTANT(mob_proto[mob_number].char_specials.arrive);
         DELETE_ARRAY_IF_EXTANT(mob_proto[mob_number].char_specials.leave);
+
+        // Store the innate armor values before anything else-- we apply them later, otherwise handler.cpp will reset them.
+        int innate_impact = GET_INNATE_IMPACT(MOB);
+        int innate_ballistic = GET_INNATE_BALLISTIC(MOB);
 
         // Blow away the proto's gear. We do this to avoid leaking memory.
         struct obj_data *equipment[NUM_WEARS];
@@ -429,14 +434,17 @@ void medit_parse(struct descriptor_data *d, const char *arg)
               equipment[wearloc] = NULL;
             }
           }
-
-          // They're nude-- there should be no issue with us sanity-checking their ballistic and impact values.
-          GET_IMPACT(MOB) = GET_INNATE_IMPACT(MOB);
-          GET_BALLISTIC(MOB) = GET_INNATE_BALLISTIC(MOB);
         }
+
+        // Reset the armor numbers.
+        GET_IMPACT(MOB) = GET_INNATE_IMPACT(MOB) = innate_impact;
+        GET_BALLISTIC(MOB) = GET_INNATE_BALLISTIC(MOB) = innate_ballistic;
 
         mob_proto[mob_number] = *d->edit_mob;
         mob_proto[mob_number].nr = mob_number;
+
+        assert(GET_INNATE_IMPACT(&mob_proto[mob_number]) == innate_impact);
+        assert(GET_INNATE_BALLISTIC(&mob_proto[mob_number]) == innate_ballistic);
 
         // Re-equip our proto. It now has the edit mob's stats, and can be safely upgraded.
         for (int wearloc = 0; wearloc < NUM_WEARS; wearloc++) {
@@ -580,8 +588,10 @@ void medit_parse(struct descriptor_data *d, const char *arg)
 
       // again, here we don't delete it cause we don't want to end up
       // deleting the strings from the prototypes
-      if (d->edit_mob)
-        Mem->ClearCh(d->edit_mob);
+      if (d->edit_mob) {
+        clear_char(d->edit_mob);
+        delete d->edit_mob;
+      }
       d->edit_mob = NULL;
       STATE(d) = CON_PLAYING;
       PLR_FLAGS(d->character).RemoveBit(PLR_EDITING);

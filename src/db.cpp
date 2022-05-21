@@ -938,7 +938,6 @@ void index_boot(int mode)
         break;
       case DB_BOOT_ZON:
         load_zones(in_file);
-        log_vfprintf(" - After loading zone %s, we have %d total zones.", buf2, top_of_zone_table + 1);
         break;
       }
       in_file.Close();
@@ -1691,8 +1690,8 @@ void parse_mobile(File &in, long nr)
   GET_LEVEL(mob) = data.GetInt("POINTS/Level", 0);
   GET_MAX_PHYSICAL(mob) = data.GetInt("POINTS/MaxPhys", 10*100);
   GET_MAX_MENTAL(mob) = data.GetInt("POINTS/MaxMent", 10*100);
-  GET_BALLISTIC(mob) = GET_INNATE_BALLISTIC(mob) = data.GetInt("POINTS/Ballistic", 0);
-  GET_IMPACT(mob) = GET_INNATE_IMPACT(mob) = data.GetInt("POINTS/Impact", 0);
+  int innate_ballistic = data.GetInt("POINTS/Ballistic", 0);
+  int innate_impact = data.GetInt("POINTS/Impact", 0);
   GET_NUYEN_RAW(mob) = data.GetInt("POINTS/Cash", 0);
   GET_BANK_RAW(mob) = data.GetInt("POINTS/Bank", 0);
   GET_KARMA(mob) = data.GetInt("POINTS/Karma", 0);
@@ -1839,6 +1838,12 @@ void parse_mobile(File &in, long nr)
     }
   }
 
+  // Equipment messed with our armor rating-- make sure our innates are the same.
+  GET_INNATE_BALLISTIC(mob) = innate_ballistic;
+  GET_BALLISTIC(mob) += GET_INNATE_BALLISTIC(mob);
+
+  GET_INNATE_IMPACT(mob) = innate_impact;
+  GET_IMPACT(mob) += GET_INNATE_IMPACT(mob);
 
   top_of_mobt = rnum++;
 }

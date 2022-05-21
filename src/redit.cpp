@@ -604,7 +604,8 @@ void redit_parse(struct descriptor_data * d, const char *arg)
         write_world_to_disk(d->character->player_specials->saved.zonenum);
         send_to_char("Saved.\r\n", CH);
         /* do NOT free strings! just the room structure */
-        Mem->ClearRoom(d->edit_room);
+        clear_room(d->edit_room);
+        delete d->edit_room;
         char_to_room(CH, GET_WAS_IN(CH));
         GET_WAS_IN(CH) = NULL;
         STATE(d) = CON_PLAYING;

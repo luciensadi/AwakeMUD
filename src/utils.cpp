@@ -2836,17 +2836,33 @@ void set_character_skill(struct char_data *ch, int skill_num, int new_value, boo
   char msgbuf[500];
 
   if (!ch) {
-    mudlog("SYSERR: NULL character passed to set_character_skill.", ch, LOG_SYSLOG, TRUE);
+    snprintf(msgbuf, sizeof(msgbuf), "SYSERR: NULL character passed to set_character_skill(NULL, %d, %d, %s).",
+             skill_num,
+             new_value,
+             send_message ? "TRUE" : "FALSE");
+    mudlog(msgbuf, ch, LOG_SYSLOG, TRUE);
     return;
   }
 
   if (IS_NPC(ch)) {
-    mudlog("SYSERR: NPC passed to set_character_skill.", ch, LOG_SYSLOG, TRUE);
+    snprintf(msgbuf, sizeof(msgbuf), "SYSERR: NPC '%s' (%ld) passed to set_character_skill(ch, %d, %d, %s).",
+             GET_CHAR_NAME(ch),
+             GET_MOB_VNUM(ch),
+             skill_num,
+             new_value,
+             send_message ? "TRUE" : "FALSE"
+           );
+    mudlog(msgbuf, ch, LOG_SYSLOG, TRUE);
     return;
   }
 
   if (skill_num < MIN_SKILLS || skill_num >= MAX_SKILLS) {
-    snprintf(msgbuf, sizeof(msgbuf), "SYSERR: Invalid skill number %d passed to set_character_skill.", skill_num);
+    snprintf(msgbuf, sizeof(msgbuf), "SYSERR: Invalid skill number %d passed to set_character_skill(%s, %d, %d, %s).",
+             skill_num,
+             GET_CHAR_NAME(ch),
+             skill_num,
+             new_value,
+             send_message ? "TRUE" : "FALSE");
     mudlog(msgbuf, ch, LOG_SYSLOG, TRUE);
     return;
   }
