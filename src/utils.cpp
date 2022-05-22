@@ -3944,6 +3944,7 @@ bool npc_can_see_in_any_situation(struct char_data *npc) {
           || CHECK_FUNC_AND_SFUNC_FOR(taxi)
           || CHECK_FUNC_AND_SFUNC_FOR(nerp_skills_teacher)
           || CHECK_FUNC_AND_SFUNC_FOR(shop_keeper)
+          || CHECK_FUNC_AND_SFUNC_FOR(landlord_spec)
         );
 }
 #undef CHECK_FUNC_AND_SFUNC_FOR

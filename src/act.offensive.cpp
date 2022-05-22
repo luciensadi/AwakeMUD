@@ -807,68 +807,151 @@ ACMD(do_retract)
   affect_total(ch);
 }
 
+void display_firemodes_to_character(struct char_data *ch, struct obj_data *weapon) {
+  send_to_char(ch, "%s's available fire modes: \r\n", CAP(GET_OBJ_NAME(weapon)));
+  if (WEAPON_CAN_USE_FIREMODE(weapon, MODE_SS))
+    send_to_char(ch, "%s%s^n\r\n", GET_WEAPON_FIREMODE(weapon) == MODE_SS ? "^R" : "", fire_mode[MODE_SS]);
+  if (WEAPON_CAN_USE_FIREMODE(weapon, MODE_SA))
+    send_to_char(ch, "%s%s^n\r\n", GET_WEAPON_FIREMODE(weapon) == MODE_SA ? "^R" : "", fire_mode[MODE_SA]);
+  if (WEAPON_CAN_USE_FIREMODE(weapon, MODE_BF))
+    send_to_char(ch, "%s%s^n\r\n", GET_WEAPON_FIREMODE(weapon) == MODE_BF ? "^R" : "", fire_mode[MODE_BF]);
+  if (WEAPON_CAN_USE_FIREMODE(weapon, MODE_FA))
+    send_to_char(ch, "%s%s (%d rounds)^n\r\n", GET_WEAPON_FIREMODE(weapon) == MODE_FA ? "^R" : "", fire_mode[MODE_FA], GET_WEAPON_FULL_AUTO_COUNT(weapon));
+}
+
 ACMD(do_mode)
 {
-  struct obj_data *weapon = NULL;
+  skip_spaces(&argument);
 
-  if (!(weapon = GET_EQ(ch, WEAR_WIELD)) || GET_OBJ_TYPE(weapon) != ITEM_WEAPON || !IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon)))
-    send_to_char("You aren't wielding a firearm.\r\n", ch);
-  else if (!*argument) {
-    send_to_char(ch, "%s's available fire modes: \r\n", CAP(GET_OBJ_NAME(weapon)));
-    if (WEAPON_CAN_USE_FIREMODE(weapon, MODE_SS))
-      send_to_char(ch, "%s%s^n\r\n", GET_WEAPON_FIREMODE(weapon) == MODE_SS ? "^R" : "", fire_mode[MODE_SS]);
-    if (WEAPON_CAN_USE_FIREMODE(weapon, MODE_SA))
-      send_to_char(ch, "%s%s^n\r\n", GET_WEAPON_FIREMODE(weapon) == MODE_SA ? "^R" : "", fire_mode[MODE_SA]);
-    if (WEAPON_CAN_USE_FIREMODE(weapon, MODE_BF))
-      send_to_char(ch, "%s%s^n\r\n", GET_WEAPON_FIREMODE(weapon) == MODE_BF ? "^R" : "", fire_mode[MODE_BF]);
-    if (WEAPON_CAN_USE_FIREMODE(weapon, MODE_FA))
-      send_to_char(ch, "%s%s (%d rounds)^n\r\n", GET_WEAPON_FIREMODE(weapon) == MODE_FA ? "^R" : "", fire_mode[MODE_FA], GET_WEAPON_FULL_AUTO_COUNT(weapon));
-  } else {
-    skip_spaces(&argument);
-    two_arguments(argument, arg, buf1);
-    if ((!str_cmp(arg, "SS") || str_str(fire_mode[MODE_SS], arg))) {
-      if (!WEAPON_CAN_USE_FIREMODE(weapon, MODE_SS)) {
-        send_to_char(ch, "%s is more advanced than that! Single Shot is for revolvers, bolt-action rifles, etc.\r\n", capitalize(GET_OBJ_NAME(weapon)));
-        return;
-      }
-      GET_WEAPON_FIREMODE(weapon) = MODE_SS;
-    }
-    else if ((!str_cmp(arg, "SA") || str_str(fire_mode[MODE_SA], arg))) {
-      if (!WEAPON_CAN_USE_FIREMODE(weapon, MODE_SA)) {
-        send_to_char(ch, "%s isn't capable of semi-automatic fire.\r\n", capitalize(GET_OBJ_NAME(weapon)));
-        return;
-      }
-      GET_WEAPON_FIREMODE(weapon) = MODE_SA;
-    }
-    else if ((!str_cmp(arg, "BF") || str_str(fire_mode[MODE_BF], arg))) {
-      if (!WEAPON_CAN_USE_FIREMODE(weapon, MODE_BF)) {
-        send_to_char(ch, "%s isn't capable of burst fire.\r\n", capitalize(GET_OBJ_NAME(weapon)));
-        return;
-      }
-      GET_WEAPON_FIREMODE(weapon) = MODE_BF;
-    }
-    else if ((!str_cmp(arg, "FA") || str_str(fire_mode[MODE_FA], arg))) {
-      if (!WEAPON_CAN_USE_FIREMODE(weapon, MODE_FA)) {
-        send_to_char(ch, "%s isn't capable of full auto.\r\n", capitalize(GET_OBJ_NAME(weapon)));
-        return;
-      }
+  // Always try to take their wielded weapon.
+  struct obj_data *weapon = GET_EQ(ch, WEAR_WIELD), *mount = NULL;
 
-      if (*buf1)
-        GET_WEAPON_FULL_AUTO_COUNT(weapon) = MIN(10, MAX(3, atoi(buf1)));
-      else {
-        GET_WEAPON_FULL_AUTO_COUNT(weapon) = 10;
-        send_to_char("Using default FA value of 10. You can change this with 'mode FA X' where X is the number of bullets to fire.\r\n", ch);
-      }
-      GET_WEAPON_FIREMODE(weapon) = MODE_FA;
+  // Override: You're in a vehicle and manning a mount. Take that mount's weapon.
+  if (ch->in_veh && AFF_FLAGGED(ch, AFF_MANNING)) {
+    struct obj_data *mount = get_mount_manned_by_ch(ch);
+    if (mount) {
+      weapon = get_mount_weapon(mount);
+    } else {
+      mudlog("SYSERR: AFF_MANNING but no mount manned!", ch, LOG_SYSLOG, TRUE);
+      AFF_FLAGS(ch).RemoveBit(AFF_MANNING);
     }
 
-    // Message them about the change.
-    if (GET_WEAPON_FIREMODE(weapon) == MODE_FA)
-      send_to_char(ch, "You set %s to %s (%d rounds per firing).\r\n", GET_OBJ_NAME(weapon), fire_mode[MODE_FA], GET_WEAPON_FULL_AUTO_COUNT(weapon));
-    else
-      send_to_char(ch, "You set %s to %s.\r\n", GET_OBJ_NAME(weapon), fire_mode[GET_WEAPON_FIREMODE(weapon)]);
-    act("$n flicks the fire selector switch on $p.", TRUE, ch, weapon, 0, TO_ROOM);
+    if (!weapon) {
+      send_to_char("Your mount has no weapon.\r\n", ch);
+      return;
+    }
   }
+
+  // Override: You're rigging/remote controlling. You have access to all mounts.
+  else if (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE)) {
+    struct veh_data *veh;
+    int num_mounts = 0, mount_num;
+
+    RIG_VEH(ch, veh);
+
+    for (mount = veh->mount; mount; mount = mount->next_content) {
+      num_mounts++;
+    }
+
+    if (!num_mounts) {
+      send_to_char("This vehicle has no mounts.\r\n", ch);
+      return;
+    }
+
+    if (!*argument) {
+      send_to_char("Syntax: MODE <mount number> [mode]\r\n", ch);
+      return;
+    } else {
+      char mount_num_string[MAX_INPUT_LENGTH];
+      argument = one_argument(argument, mount_num_string);
+      mount_num = atoi(mount_num_string);
+
+      if (mount_num < 0 || !isdigit(*mount_num_string)) {
+        send_to_char("Syntax: MODE <mount number> [mode]\r\n", ch);
+        return;
+      }
+    }
+
+    for (mount = veh->mount; mount && mount_num > 0; mount = mount->next_content) {
+      mount_num--;
+    }
+
+    if (!mount) {
+      send_to_char("There aren't that many mounts in the vehicle.\r\n", ch);
+      return;
+    }
+
+    weapon = get_mount_weapon(mount);
+
+    if (!weapon) {
+      send_to_char("That mount has no weapon.\r\n", ch);
+      return;
+    }
+  }
+
+  if (!weapon) {
+    send_to_char("You're not wielding a firearm.\r\n", ch);
+    return;
+  }
+
+  if (GET_OBJ_TYPE(weapon) != ITEM_WEAPON || !IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon))) {
+    send_to_char(ch, "%s isn't a firearm.\r\n", CAP(GET_OBJ_NAME(weapon)));
+    return;
+  }
+
+  if (!*argument) {
+    display_firemodes_to_character(ch, weapon);
+    return;
+  }
+
+  two_arguments(argument, arg, buf1);
+  if ((!str_cmp(arg, "SS") || str_str(fire_mode[MODE_SS], arg))) {
+    if (!WEAPON_CAN_USE_FIREMODE(weapon, MODE_SS)) {
+      send_to_char(ch, "%s is more advanced than that! Single Shot is for revolvers, bolt-action rifles, etc.\r\n", capitalize(GET_OBJ_NAME(weapon)));
+      return;
+    }
+    GET_WEAPON_FIREMODE(weapon) = MODE_SS;
+  }
+  else if ((!str_cmp(arg, "SA") || str_str(fire_mode[MODE_SA], arg))) {
+    if (!WEAPON_CAN_USE_FIREMODE(weapon, MODE_SA)) {
+      send_to_char(ch, "%s isn't capable of semi-automatic fire.\r\n", capitalize(GET_OBJ_NAME(weapon)));
+      return;
+    }
+    GET_WEAPON_FIREMODE(weapon) = MODE_SA;
+  }
+  else if ((!str_cmp(arg, "BF") || str_str(fire_mode[MODE_BF], arg))) {
+    if (!WEAPON_CAN_USE_FIREMODE(weapon, MODE_BF)) {
+      send_to_char(ch, "%s isn't capable of burst fire.\r\n", capitalize(GET_OBJ_NAME(weapon)));
+      return;
+    }
+    GET_WEAPON_FIREMODE(weapon) = MODE_BF;
+  }
+  else if ((!str_cmp(arg, "FA") || str_str(fire_mode[MODE_FA], arg))) {
+    if (!WEAPON_CAN_USE_FIREMODE(weapon, MODE_FA)) {
+      send_to_char(ch, "%s isn't capable of full auto.\r\n", capitalize(GET_OBJ_NAME(weapon)));
+      return;
+    }
+
+    if (*buf1)
+      GET_WEAPON_FULL_AUTO_COUNT(weapon) = MIN(10, MAX(3, atoi(buf1)));
+    else {
+      GET_WEAPON_FULL_AUTO_COUNT(weapon) = 10;
+      send_to_char("Using default FA value of 10. You can change this with 'mode FA X' where X is the number of bullets to fire.\r\n", ch);
+    }
+    GET_WEAPON_FIREMODE(weapon) = MODE_FA;
+  }
+  else {
+    send_to_char("That's not a recognized mode.\r\n", ch);
+    display_firemodes_to_character(ch, weapon);
+    return;
+  }
+
+  // Message them about the change.
+  if (GET_WEAPON_FIREMODE(weapon) == MODE_FA)
+    send_to_char(ch, "You set %s to %s (%d rounds per firing).\r\n", decapitalize_a_an(GET_OBJ_NAME(weapon)), fire_mode[MODE_FA], GET_WEAPON_FULL_AUTO_COUNT(weapon));
+  else
+    send_to_char(ch, "You set %s to %s.\r\n", decapitalize_a_an(GET_OBJ_NAME(weapon)), fire_mode[GET_WEAPON_FIREMODE(weapon)]);
+  act("$n flicks the fire selector switch on $p.", TRUE, ch, weapon, 0, TO_ROOM);
 }
 
 ACMD(do_prone)
