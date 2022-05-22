@@ -1063,6 +1063,8 @@ void affect_total(struct char_data * ch)
     // Ranged weapons grant 0 reach if pistol, 2 reach if anything else with a bayonet, 1 reach for all other categories.
     else {
       if (GET_WEAPON_SKILL(weapon) != SKILL_PISTOLS)
+      if (GET_WEAPON_SKILL(weapon) != SKILL_TASERS) // Anything smaller than rifle-sized (shotguns/ARs/rifles) has 0 reach. - Vile
+      if (GET_WEAPON_SKILL(weapon) != SKILL_SMG) // That goes for you too, SMG's. - Vile
         GET_REACH(ch)++;
       struct obj_data *attach = get_obj_proto_for_vnum(GET_WEAPON_ATTACH_UNDER_VNUM(weapon));
       if (attach && GET_ACCESSORY_TYPE(attach) == ACCESS_BAYONET)
