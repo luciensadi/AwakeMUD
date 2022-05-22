@@ -230,7 +230,7 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 #define NUMBER_OF_TKE_POINTS_PER_REAL_DAY_OF_EXTRA_IDLE_DELETE_GRACE_PERIOD  10
 
 // If you don't think the same-room +6 TN penalty for using a sniper rifle is appropriate, adjust here.
-#define SAME_ROOM_SNIPER_RIFLE_PENALTY                         6
+#define SAME_ROOM_SNIPER_RIFLE_PENALTY                         0
 
 // How many slots should a gridguide have?
 #define GET_VEH_MAX_AUTONAV_SLOTS(veh)                         (veh->autonav * 10)
