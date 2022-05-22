@@ -197,9 +197,11 @@ struct melee_combat_data {
     if (weapon) {
       if (ranged_combat_mode) {
         if (does_weapon_have_bayonet(weapon)) {
+          power += 2;
           dam_type = TYPE_PIERCE;
           skill = SKILL_POLE_ARMS;
         } else {
+          power += 2;
           dam_type = TYPE_POUND;
           skill = SKILL_CLUBS;
         }
