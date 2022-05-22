@@ -1899,7 +1899,7 @@ ACMD(do_shutdown)
 {
   ACMD_CONST(do_not_here);
 
-  if (IS_NPC(ch) || !access_level(ch, LVL_DEVELOPER)) {
+  if (IS_NPC(ch) || !access_level(ch, LVL_PRESIDENT)) {
     do_not_here(ch, "", 0, 0);
     return;
   }
