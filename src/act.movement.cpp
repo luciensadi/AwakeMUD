@@ -1749,12 +1749,18 @@ ACMD(do_enter)
       return;
     }
 
-    if (ch->in_veh && !AFF_FLAGGED(ch, AFF_PILOT)) {
-      // We are in a vehicle-in-a-room, but not driving it. Look for vehicles to enter.
-      found_veh = get_veh_list(buf, ch->in_veh->carriedvehs, ch);
+    struct veh_data *veh;
+    RIG_VEH(ch, veh);
+    if (veh) {
+      found_veh = get_veh_list(buf, veh->in_veh ? veh->in_veh->carriedvehs : veh->in_room->vehicles, ch);
     } else {
-      // We are either in a vehicle-in-a-room and are driving it, or are not in a vehicle. Either way, look in the room.
-      found_veh = get_veh_list(buf, get_ch_in_room(ch)->vehicles, ch);
+      if (ch->in_veh && !AFF_FLAGGED(ch, AFF_PILOT)) {
+        // We are in a vehicle-in-a-room, but not driving it. Look for vehicles to enter.
+        found_veh = get_veh_list(buf, ch->in_veh->carriedvehs, ch);
+      } else {
+        // We are either in a vehicle-in-a-room and are driving it, or are not in a vehicle. Either way, look in the room.
+        found_veh = get_veh_list(buf, get_ch_in_room(ch)->vehicles, ch);
+      }
     }
 
     if (found_veh) {
