@@ -2875,6 +2875,51 @@ int vnum_object_weapons(char *searchname, struct char_data * ch)
   return (found);
 }
 
+int vnum_object_weapons_fa_pro(char *searchname, struct char_data * ch)
+{
+  char buf[MAX_STRING_LENGTH*8];
+  extern const char *wound_arr[];
+  int nr, found = 0;
+  buf[0] = '\0';
+
+  for(int power = 21; power >= 0; power-- ) {
+    for (nr = 0; nr <= top_of_objt; nr++) {
+      if (GET_OBJ_TYPE(&obj_proto[nr]) != ITEM_WEAPON)
+        continue;
+      if (!IS_GUN(GET_WEAPON_ATTACK_TYPE(&obj_proto[nr])))
+        continue;
+      if (GET_WEAPON_POWER(&obj_proto[nr]) < power && power != 0)
+        continue;
+      if (GET_WEAPON_POWER(&obj_proto[nr]) > power && power != 21)
+        continue;
+      if (IS_OBJ_STAT(&obj_proto[nr], ITEM_EXTRA_STAFF_ONLY))
+        continue;
+      if (vnum_from_non_connected_zone(OBJ_VNUM_RNUM(nr)))
+        continue;
+      if (!WEAPON_CAN_USE_FIREMODE(&obj_proto[nr], MODE_FA))
+        continue;
+
+      ++found;
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%5ld -%2d] ^c%2d%s ^y+%d^n %s (^W%s^n, ^c%d^n rounds, modes:^c%s%s%s%s^n)%s\r\n",
+              OBJ_VNUM_RNUM(nr),
+              ObjList.CountObj(nr),
+              GET_OBJ_VAL(&obj_proto[nr], 0),
+              wound_arr[GET_OBJ_VAL(&obj_proto[nr], 1)],
+              GET_OBJ_VAL(&obj_proto[nr], 2),
+              obj_proto[nr].text.name,
+              weapon_type[GET_OBJ_VAL(&obj_proto[nr], 3)],
+              GET_OBJ_VAL(&obj_proto[nr], 5),
+              WEAPON_CAN_USE_FIREMODE(&obj_proto[nr], MODE_SS) ? " SS" : "",
+              WEAPON_CAN_USE_FIREMODE(&obj_proto[nr], MODE_SA) ? " SA" : "",
+              WEAPON_CAN_USE_FIREMODE(&obj_proto[nr], MODE_BF) ? " BF" : "",
+              WEAPON_CAN_USE_FIREMODE(&obj_proto[nr], MODE_FA) ? " FA" : "",
+              obj_proto[nr].source_info ? "  ^g(canon)^n" : "");
+    }
+  }
+  page_string(ch->desc, buf, 1);
+  return (found);
+}
+
 int vnum_object_armors(char *searchname, struct char_data * ch)
 {
   char buf[MAX_STRING_LENGTH*8];
@@ -3119,6 +3164,8 @@ int vnum_object(char *searchname, struct char_data * ch)
 
   if (!strcmp(searchname,"weaponslist"))
     return vnum_object_weapons(searchname,ch);
+  if (!strcmp(searchname,"faweaponslist"))
+    return vnum_object_weapons_fa_pro(searchname,ch);
   if (!strcmp(searchname,"armorslist"))
     return vnum_object_armors(searchname,ch);
   if (!strcmp(searchname,"magazineslist"))
