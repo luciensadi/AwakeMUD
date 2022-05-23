@@ -200,7 +200,9 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     if (!IS_NPC(att->ch)
         && !att->ranged->using_mounted_gun
         && !att->ranged->gyro
-        && !att->cyber->cyberarm_gyromount
+        && (!att->cyber->cyberarm_gyromount || (GET_WEAPON_ATTACK_TYPE(att->weapon) == WEAP_MMG
+                                                || GET_WEAPON_ATTACK_TYPE(att->weapon) == WEAP_HMG
+                                                || GET_WEAPON_ATTACK_TYPE(att->weapon) == WEAP_CANNON))
         && (att->ranged->skill >= SKILL_MACHINE_GUNS && att->ranged->skill <= SKILL_ASSAULT_CANNON)
         && (GET_STR(att->ch) < 8 || GET_BOD(att->ch) < 8)
         && !(AFF_FLAGGED(att->ch, AFF_PRONE)))
@@ -349,6 +351,9 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
           case WEAP_MMG:
           case WEAP_HMG:
           case WEAP_CANNON:
+            send_to_char(att->ch, "Your cyberarm gyro locks up-- %s is too heavy for it to compensate recoil for!\r\n", decapitalize_a_an(GET_OBJ_NAME(att->weapon)));
+            snprintf(rbuf, sizeof(rbuf), "%s's cyberarm gyro not activating-- weapon too heavy.", GET_CHAR_NAME( att->ch ));
+            SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
             break;
           default:
             att->ranged->modifiers[COMBAT_MOD_GYRO] -= MIN(maximum_recoil_comp_from_gyros, 3);
