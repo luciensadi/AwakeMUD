@@ -1893,7 +1893,7 @@ ACMD(do_attach)
       send_to_char(ch, "%s would put %s over its load limit!\r\n", capitalize(GET_OBJ_NAME(item)), GET_VEH_NAME(veh));
       return;
     }
-    switch (GET_OBJ_VAL(item, 4)) {
+    switch (GET_WEAPON_SKILL(item)) {
       case SKILL_GUNNERY:
       case SKILL_MACHINE_GUNS:
       case SKILL_MISSILE_LAUNCHERS:
@@ -1902,6 +1902,11 @@ ACMD(do_attach)
           send_to_char("You need a hardpoint or larger to mount this weapon in.\r\n", ch);
           return;
         }
+        if (veh->type == VEH_DRONE && GUN_IS_HEAVY_WEAPON(item) && !find_workshop(ch, TYPE_VEHICLE)) {
+          send_to_char("That mounting system is complex! You can only mount heavy weapons with the help of a vehicle workshop.\r\n", ch);
+          return;
+        }
+        break;
     }
     veh->usedload += GET_OBJ_WEIGHT(item);
     obj_from_char(item);
@@ -1971,7 +1976,7 @@ ACMD(do_unattach)
 
   argument = any_one_arg(argument, buf1);
   argument = any_one_arg(argument, buf2);
-  if (!ch->in_veh && (veh = get_veh_list(buf1, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch))) {
+  if ((veh = get_veh_list(buf1, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch))) {
     if (veh->type != VEH_DRONE) {
       send_to_char("You have to be inside to unattach that.\r\n", ch);
       return;

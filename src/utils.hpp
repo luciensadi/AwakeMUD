@@ -888,6 +888,9 @@ bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struc
 #define GET_WEAPON_ATTACH_LOC(weapon, loc)     (((loc) >= ACCESS_LOCATION_TOP && (loc) <= ACCESS_LOCATION_UNDER) ? \
                                                     GET_OBJ_VAL((weapon), (loc)) : 0)
 
+#define GUN_IS_CYBER_GYRO_MOUNTABLE(gun)       (GET_WEAPON_ATTACK_TYPE((gun)) != WEAP_MMG && GET_WEAPON_ATTACK_TYPE((gun)) != WEAP_HMG && GET_WEAPON_ATTACK_TYPE((gun)) != WEAP_CANNON)
+#define GUN_IS_HEAVY_WEAPON(gun)               (GET_WEAPON_SKILL((gun)) >= SKILL_MACHINE_GUNS && GET_WEAPON_SKILL((gun)) <= SKILL_ARTILLERY)
+
 #define WEAPON_IS_FOCUS(obj)                   (GET_OBJ_TYPE((obj)) == ITEM_WEAPON && !IS_GUN(GET_WEAPON_ATTACK_TYPE((obj))) && GET_WEAPON_FOCUS_RATING((obj)) > 0)
 bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 
