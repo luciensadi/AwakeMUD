@@ -41,7 +41,7 @@ extern bool has_ammo(struct char_data *ch, struct obj_data *wielded);
 extern void damage_door(struct char_data *ch, struct room_data *room, int dir, int power, int type);
 extern void perform_get_from_container(struct char_data *, struct obj_data *, struct obj_data *, int);
 extern int can_wield_both(struct char_data *, struct obj_data *, struct obj_data *);
-extern void draw_weapon(struct char_data *);
+extern void find_and_draw_weapon(struct char_data *);
 extern bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype, bool include_func_protections);
 extern bool does_weapon_have_bayonet(struct obj_data *weapon);
 
@@ -202,7 +202,7 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
     else if (GET_EQ(ch, WEAR_HOLD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_HOLD)) == ITEM_WEAPON)
       wielded = GET_EQ(ch, WEAR_HOLD);
     if (!wielded) {
-      draw_weapon(ch);
+      find_and_draw_weapon(ch);
       if (GET_EQ(ch, WEAR_WIELD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_WEAPON)
         wielded = GET_EQ(ch, WEAR_WIELD);
       else if (GET_EQ(ch, WEAR_HOLD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_HOLD)) == ITEM_WEAPON)
@@ -318,7 +318,7 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
       return TRUE;
 
     if (!(GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD)))
-      draw_weapon(ch);
+      find_and_draw_weapon(ch);
 
     if (GET_EQ(ch, WEAR_WIELD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_WEAPON) {
       send_to_char(ch, "You aim %s at %s!\r\n", GET_OBJ_NAME(GET_EQ(ch, WEAR_WIELD)), GET_VEH_NAME(veh));
@@ -376,7 +376,7 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
 #endif
 
     if (!(GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD)))
-      draw_weapon(ch);
+      find_and_draw_weapon(ch);
 
     if (IS_AFFECTED(ch, AFF_CHARM) && IS_SPIRIT(ch) && ch->master && !IS_NPC(ch->master))
       GET_ACTIVE(ch)--;

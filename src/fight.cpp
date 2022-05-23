@@ -83,7 +83,7 @@ extern int return_general(int);
 extern struct zone_data *zone_table;
 extern void perform_tell(struct char_data *, struct char_data *, char *);
 extern int can_wield_both(struct char_data *, struct obj_data *, struct obj_data *);
-extern void draw_weapon(struct char_data *);
+extern void find_and_draw_weapon(struct char_data *);
 extern void crash_test(struct char_data *ch);
 extern int get_vehicle_modifier(struct veh_data *veh);
 extern bool mob_magic(struct char_data *ch);
@@ -357,7 +357,7 @@ void set_fighting(struct char_data * ch, struct char_data * vict, ...)
   if (!(AFF_FLAGGED(ch, AFF_MANNING) || PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_RIG)))
   {
     if (!(GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD)))
-      draw_weapon(ch);
+      find_and_draw_weapon(ch);
 
     if (item_should_be_treated_as_melee_weapon(GET_EQ(ch, WEAR_WIELD)) && item_should_be_treated_as_melee_weapon(GET_EQ(ch, WEAR_HOLD)))
       AFF_FLAGS(ch).SetBit(AFF_APPROACH);
@@ -407,7 +407,7 @@ void set_fighting(struct char_data * ch, struct veh_data * vict)
   GET_POS(ch) = POS_FIGHTING;
 
   if (!(GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD)))
-    draw_weapon(ch);
+    find_and_draw_weapon(ch);
 
   if (IS_NPC(ch))
     strcpy(buf, GET_NAME(ch));

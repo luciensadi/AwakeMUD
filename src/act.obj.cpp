@@ -3855,7 +3855,7 @@ int draw_from_readied_holster(struct char_data *ch, struct obj_data *holster) {
   return 0;
 }
 
-int draw_weapon(struct char_data *ch)
+int find_and_draw_weapon(struct char_data *ch)
 {
   struct obj_data *potential_holster, *obj;
   int i = 0;
@@ -4115,12 +4115,57 @@ ACMD(do_ready)
 
 ACMD(do_draw)
 {
-  if (GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD))
+  if (GET_EQ(ch, WEAR_WIELD) && (IS_OBJ_STAT(GET_EQ(ch, WEAR_WIELD), ITEM_EXTRA_TWOHANDS) || GET_EQ(ch, WEAR_HOLD))) {
     send_to_char(ch, "Your hands are full.\r\n");
-  else {
-    int i = draw_weapon(ch);
-    if (i == 0)
-      send_to_char(ch, "You have nothing to draw, or you're trying to draw a two-handed weapon with something in your hands. Make sure you're wearing a sheath or holster with a weapon in it, and that you've used the ^WREADY^n command on the sheath or holster.\r\n");
+    return;
+  }
+
+  skip_spaces(&argument);
+  if (*argument) {
+    struct obj_data *holster = NULL, *finger = NULL;
+    struct char_data *tmp_char;
+
+    // Draw from a specific holster.
+    if ((finger = get_obj_in_list_vis(ch, argument, ch->cyberware)) && GET_CYBERWARE_TYPE(finger) == CYB_FINGERTIP) {
+      holster = finger;
+    } else {
+      if (!(generic_find(argument, FIND_OBJ_EQUIP, ch, &tmp_char, &holster))) {
+        /* TODO: Eventually I'll add code to let you draw specific weapons by name.
+        // Search all worn holsters for a weapon matching the name.
+        for (int wearslot = 0; wearslot < NUM_WEARS; wearslot++) {
+          struct obj_data *eq = GET_EQ(ch, wearslot);
+          if (GET_OBJ_TYPE(eq) == ITEM_HOLSTER && asdf)
+          // problem here is we have to recurse a bit-- worn holsters, and also worn items containing holsters
+        }
+        */
+        send_to_char(ch, "You don't seem to be using %s %s.\r\n", AN(argument), argument);
+        return;
+      }
+
+      if (GET_OBJ_TYPE(holster) != ITEM_HOLSTER) {
+        send_to_char(ch, "%s is not a weapons holster.\r\n", capitalize(GET_OBJ_NAME(holster)));
+        return;
+      }
+    }
+
+    if (!holster->contains) {
+      send_to_char(ch, "There is nothing in %s.\r\n", GET_OBJ_NAME(holster));
+      return;
+    }
+
+    if (!draw_from_readied_holster(ch, holster)) {
+      send_to_char(ch, "%s isn't compatible with your current loadout.\r\n", GET_OBJ_NAME(holster->contains));
+    }
+    return;
+  }
+
+  if (find_and_draw_weapon(ch) == 0) {
+    send_to_char(ch, "You have nothing to draw, or you're trying to draw a "
+                     "two-handed weapon with something in your hands. Make sure "
+                     "you're wearing a sheath or holster with a weapon in it, "
+                     "and that you've used the ^WREADY^n command on the sheath "
+                     "or holster.\r\n");
+    return;
   }
 }
 

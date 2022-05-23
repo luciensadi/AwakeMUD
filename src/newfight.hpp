@@ -196,16 +196,23 @@ struct melee_combat_data {
 
     if (weapon) {
       if (ranged_combat_mode) {
+        switch (GET_WEAPON_SKILL(weapon)) {
+          case SKILL_PISTOLS:
+          case SKILL_TASERS:
+          case SKILL_SMG:
+            // These weapons all grant +1 power per CC p11.
+            power += 1;
+            break;
+          default:
+            // All others are presumed rifle-size, and get +2 power.
+            power += 2;
+            break;
+        }
+        
         if (does_weapon_have_bayonet(weapon)) {
-          power += 2; // Cannon Companion page 33 table, bayonet is listed as +2 Power (or errata if misprinted) -Vile
           dam_type = TYPE_PIERCE;
           skill = SKILL_POLE_ARMS;
-        if (GET_WEAPON_SKILL(weapon) == SKILL_PISTOLS && GET_WEAPON_SKILL(weapon) == SKILL_TASERS && GET_WEAPON_SKILL(weapon) == SKILL_SMG)
-          power += 1; // Cannon Companion page 11 table, pistol is listed as +1 Power. -Vile
-          dam_type = TYPE_POUND;
-          skill = SKILL_CLUBS;
         } else {
-          power += 2; // Cannon Companion page 11 table, rifle-butt is listed as +2 Power. -Vile
           dam_type = TYPE_POUND;
           skill = SKILL_CLUBS;
         }
