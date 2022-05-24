@@ -190,7 +190,7 @@ void crash_test(struct char_data *ch)
     for (tch = veh->people; tch; tch = next) {
       next = tch->next_in_veh;
       char_from_room(tch);
-      char_to_room(tch, veh->in_room);
+      char_to_room(tch, get_veh_in_room(veh));
       damage_total = convert_damage(stage(0 - success_test(GET_BOD(tch), power), MODERATE));
       send_to_char(tch, "You are thrown from the %s!\r\n", veh->type == VEH_BIKE ? "bike" : "boat");
       if (damage(tch, tch, damage_total, TYPE_CRASH, PHYSICAL)) {
@@ -1226,6 +1226,12 @@ ACMD(do_driveby)
     send_to_char(ch, "You must be in a vehicle to perform a driveby.\r\n");
     return;
   }
+
+  if (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE)) {
+    send_to_char("You don't have a pistol to point at anyone...\r\n", ch);
+    return;
+  }
+
   if (!AFF_FLAGGED(ch, AFF_PILOT)) {
     if (PLR_FLAGGED(ch, PLR_DRIVEBY))
       send_to_char(ch, "You will no longer perform a drive-by.\r\n");
@@ -2113,7 +2119,7 @@ ACMD(do_tow)
     return;
   }
   skip_spaces(&argument);
-  if (!(tveh = get_veh_list(argument, veh->in_room->vehicles, ch))) {
+  if (!(tveh = get_veh_list(argument, veh->in_room ? veh->in_room->vehicles : veh->in_veh->carriedvehs, ch))) {
     send_to_char(ch, "You don't see any vehicles named '%s' here.\r\n", argument);
     return;
   }
