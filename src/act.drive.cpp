@@ -1714,7 +1714,7 @@ ACMD(do_mount)
         bin = x; */
     if (gun)
       snprintf(buf, sizeof(buf), "%2d) %-20s (Mounting %s) (Ammo %d/%d)", i, GET_OBJ_NAME(obj),
-              GET_OBJ_NAME(gun), ammo ? GET_OBJ_VAL(ammo, 0) : 0, GET_OBJ_VAL(gun, 5) * 2);
+              GET_OBJ_NAME(gun), ammo ? GET_OBJ_VAL(ammo, 0) : 0, GET_OBJ_VAL(gun, 5) * MOUNTED_GUN_AMMO_CAPACITY_MULTIPLIER);
     else
       snprintf(buf, sizeof(buf), "%2d) %-20s (Mounting Nothing)", i, GET_OBJ_NAME(obj));
     if (obj->worn_by)
