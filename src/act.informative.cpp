@@ -1646,6 +1646,8 @@ void look_in_veh(struct char_data * ch)
       list_obj_to_char(veh->in_veh->contents, ch, SHOW_MODE_ON_GROUND, FALSE, TRUE);
       list_char_to_char(veh->in_veh->people, ch);
       ch->vfront = ov;
+      CCHAR = "^y";
+      list_veh_to_char(veh->in_veh->carriedvehs, ch);
     } else {
       send_to_char(ch, "\r\n^CAround you is %s^n%s%s%s%s%s%s%s\r\n", GET_ROOM_NAME(veh->in_room),
                    ROOM_FLAGGED(veh->in_room, ROOM_GARAGE) ? " (Garage)" : "",

@@ -2088,7 +2088,7 @@ ACMD(do_tow)
     send_to_char("You don't have enough power to tow anything.\r\n", ch);
     return;
   }
-  if (veh->cspeed != SPEED_IDLE) {
+  if (veh->cspeed != SPEED_IDLE && veh->cspeed != SPEED_OFF) {
     send_to_char("You are moving too fast!\r\n", ch);
     return;
   }
