@@ -941,7 +941,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
         struct char_data *attacker = net_successes < 0 ? def->ch : att->ch;
         struct char_data *defender = net_successes < 0 ? att->ch : def->ch;
 
-        int target = 6 + modify_target(attacker);
+        int target = 4 + modify_target(attacker);
         int skill = get_skill(attacker, SKILL_WHIPS_FLAILS, target);
         int successes = success_test(skill, target);
         snprintf(rbuf, sizeof(rbuf), "Monowhip 'flailure' avoidance test: Skill of %d, target of %d, successes is %d.", skill, target, successes);

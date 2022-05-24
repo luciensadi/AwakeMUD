@@ -214,7 +214,8 @@ bool should_tch_see_chs_movement_message(struct char_data *tch, struct char_data
     // Roll the perception test.
     int perception_result = success_test(GET_INT(tch), test_tn);
     snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "Result: %d hits.", perception_result);
-    act(rbuf, FALSE, ch, 0, 0, TO_ROLLS);
+    if (GET_INVIS_LEV(tch) <= GET_LEVEL(ch))
+      act(rbuf, FALSE, ch, 0, 0, TO_ROLLS);
 
     // If the result met or beat the TN, we're good.
     return perception_result > 0;
