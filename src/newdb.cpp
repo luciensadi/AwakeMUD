@@ -2281,6 +2281,11 @@ void auto_repair_obj(struct obj_data *obj) {
           CLAMP_VALUE("weapon", GET_WEAPON_FIREMODE(obj), MODE_SS, MODE_FA, "firemode");
           CLAMP_VALUE("weapon", GET_WEAPON_FULL_AUTO_COUNT(obj), 0, 10, "full auto count");
 
+          // Specific edge case: Coerce the Victory/Vigilant autocannons to SA firemode.
+          if (GET_OBJ_VNUM(obj) == 901 || GET_OBJ_VNUM(obj) == 902 || GET_OBJ_VNUM(obj) == 903) {
+            GET_WEAPON_FIREMODE(obj) = MODE_SA;
+          }
+
           int attach_rnum;
 
           if (GET_WEAPON_ATTACH_TOP_VNUM(obj) != 0) {
