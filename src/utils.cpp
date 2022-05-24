@@ -338,7 +338,7 @@ int damage_modifier(struct char_data *ch, char *rbuf, int rbuf_size)
   {
     base_target += 2;
     buf_mod(rbuf, rbuf_size, "Physical damage (M)", 2 );
-  } else if (GET_PHYSICAL(ch) <= 9)
+  } else if (physical <= 9)
   {
     base_target += 1;
     buf_mod(rbuf, rbuf_size, "Physical damage (L)", 1 );
