@@ -2734,21 +2734,23 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
       switch (GET_OBJ_TYPE(d->edit_obj)) {
         case ITEM_WEAPON:
           if (IS_GUN(GET_WEAPON_ATTACK_TYPE(OBJ))) {
-            struct obj_data *accessory = read_object(number, VIRTUAL);
-            if (!accessory) {
-              send_to_char("Invalid vnum.\r\n", CH);
-              iedit_disp_val8_menu(d);
-              return;
-            } else {
-              // Cascade affects (take the first one and glue it to the weapon).
-              for (j = 0; (j < MAX_OBJ_AFFECT && !modified); j++) {
-                if (!(OBJ->affected[j].modifier)) {
-                  OBJ->affected[j].location = accessory->affected[0].location;
-                  OBJ->affected[j].modifier = accessory->affected[0].modifier;
-                  break;
+            if (number != -1) {
+              struct obj_data *accessory = read_object(number, VIRTUAL);
+              if (!accessory) {
+                send_to_char("Invalid vnum.\r\n", CH);
+                iedit_disp_val8_menu(d);
+                return;
+              } else {
+                // Cascade affects (take the first one and glue it to the weapon).
+                for (j = 0; (j < MAX_OBJ_AFFECT && !modified); j++) {
+                  if (!(OBJ->affected[j].modifier)) {
+                    OBJ->affected[j].location = accessory->affected[0].location;
+                    OBJ->affected[j].modifier = accessory->affected[0].modifier;
+                    break;
+                  }
                 }
+                extract_obj(accessory);
               }
-              extract_obj(accessory);
             }
           } else {
             if (number < 0 || number > 4) {
@@ -2770,21 +2772,23 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
       switch (GET_OBJ_TYPE(d->edit_obj)) {
         case ITEM_WEAPON:
           {
-            struct obj_data *accessory = read_object(number, VIRTUAL);
-            if (!accessory) {
-              send_to_char("Invalid vnum.\r\n", CH);
-              iedit_disp_val9_menu(d);
-              return;
-            } else {
-              // Cascade affects (take the first one and glue it to the weapon).
-              for (j = 0; (j < MAX_OBJ_AFFECT && !modified); j++) {
-                if (!(OBJ->affected[j].modifier)) {
-                  OBJ->affected[j].location = accessory->affected[0].location;
-                  OBJ->affected[j].modifier = accessory->affected[0].modifier;
-                  break;
+            if (number != -1) {
+              struct obj_data *accessory = read_object(number, VIRTUAL);
+              if (!accessory) {
+                send_to_char("Invalid vnum.\r\n", CH);
+                iedit_disp_val9_menu(d);
+                return;
+              } else {
+                // Cascade affects (take the first one and glue it to the weapon).
+                for (j = 0; (j < MAX_OBJ_AFFECT && !modified); j++) {
+                  if (!(OBJ->affected[j].modifier)) {
+                    OBJ->affected[j].location = accessory->affected[0].location;
+                    OBJ->affected[j].modifier = accessory->affected[0].modifier;
+                    break;
+                  }
                 }
+                extract_obj(accessory);
               }
-              extract_obj(accessory);
             }
           }
           break;
@@ -2800,21 +2804,23 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
       switch (GET_OBJ_TYPE(d->edit_obj)) {
         case ITEM_WEAPON:
           {
-            struct obj_data *accessory = read_object(number, VIRTUAL);
-            if (!accessory) {
-              send_to_char("Invalid vnum.\r\n", CH);
-              iedit_disp_val10_menu(d);
-              return;
-            } else {
-              // Cascade affects (take the first one and glue it to the weapon).
-              for (j = 0; (j < MAX_OBJ_AFFECT && !modified); j++) {
-                if (!(OBJ->affected[j].modifier)) {
-                  OBJ->affected[j].location = accessory->affected[0].location;
-                  OBJ->affected[j].modifier = accessory->affected[0].modifier;
-                  break;
+            if (number != -1) {
+              struct obj_data *accessory = read_object(number, VIRTUAL);
+              if (!accessory) {
+                send_to_char("Invalid vnum.\r\n", CH);
+                iedit_disp_val10_menu(d);
+                return;
+              } else {
+                // Cascade affects (take the first one and glue it to the weapon).
+                for (j = 0; (j < MAX_OBJ_AFFECT && !modified); j++) {
+                  if (!(OBJ->affected[j].modifier)) {
+                    OBJ->affected[j].location = accessory->affected[0].location;
+                    OBJ->affected[j].modifier = accessory->affected[0].modifier;
+                    break;
+                  }
                 }
+                extract_obj(accessory);
               }
-              extract_obj(accessory);
             }
           }
           break;
