@@ -346,7 +346,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       if (att->ranged->gyro) {
         att->ranged->modifiers[COMBAT_MOD_GYRO] -= MIN(maximum_recoil_comp_from_gyros, GET_OBJ_VAL(att->ranged->gyro, 0));
       } else if (att->cyber->cyberarm_gyromount) {
-        if (GUN_IS_CYBER_GYRO_MOUNTABLE(att->weapon)) {
+        if (!GUN_IS_CYBER_GYRO_MOUNTABLE(att->weapon)) {
           send_to_char(att->ch, "Your cyberarm gyro locks up-- %s is too heavy for it to compensate recoil for!\r\n", decapitalize_a_an(GET_OBJ_NAME(att->weapon)));
           snprintf(rbuf, sizeof(rbuf), "%s's cyberarm gyro not activating-- weapon too heavy.", GET_CHAR_NAME( att->ch ));
           SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
