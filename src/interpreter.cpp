@@ -1468,6 +1468,7 @@ void nonsensical_reply(struct char_data *ch, const char *arg, const char *mode)
  * then calls the appropriate function.
  */
 ACMD_DECLARE(quit_the_matrix_first);
+ACMD_DECLARE(stop_rigging_first);
 void command_interpreter(struct char_data * ch, char *argument, char *tcname)
 {
   int cmd, length;
@@ -1569,19 +1570,37 @@ void command_interpreter(struct char_data * ch, char *argument, char *tcname)
     for (length = strlen(arg), cmd = 0; *rig_info[cmd].command != '\n'; cmd++)
       if (!strncmp(rig_info[cmd].command, arg, length))
         break;
+
+    // If they have failed to enter a valid Rigging command, and we were unable to fix a typo in their command:
     if (*rig_info[cmd].command == '\n' && (cmd = fix_common_command_fuckups(arg, rig_info)) == -1) {
-      nonsensical_reply(ch, arg, "rigging");
-      return;
+      // If the command exists outside of the Matrix, let them know that it's not an option here.
+      for (length = strlen(arg), cmd = 0; *cmd_info[cmd].command != '\n'; cmd++)
+        if (!strncmp(cmd_info[cmd].command, arg, length))
+          if ((cmd_info[cmd].minimum_level < LVL_BUILDER) || access_level(ch, cmd_info[cmd].minimum_level))
+            break;
+
+      // Nothing was found? Give them the "wat" and bail.
+      if (*cmd_info[cmd].command == '\n' && (cmd = fix_common_command_fuckups(arg, cmd_info)) == -1) {
+        nonsensical_reply(ch, arg, "matrix");
+        return;
+      }
+
+      if (ch->desc)
+        ch->desc->invalid_command_counter = 0;
+
+      // Their command was valid in external context. Inform them.
+      stop_rigging_first(ch, line, 0, 0);
     } else {
       if (ch->desc)
         ch->desc->invalid_command_counter = 0;
-    }
-    verify_data(ch, line, cmd, rig_info[cmd].subcmd, "pre-rig");
-    if (!special(ch, cmd, line)) {
-      ((*rig_info[cmd].command_pointer) (ch, line, cmd, rig_info[cmd].subcmd));
-      verify_data(ch, line, cmd, rig_info[cmd].subcmd, "rig");
-    } else {
-      verify_data(ch, line, cmd, rig_info[cmd].subcmd, "rig special");
+
+      verify_data(ch, line, cmd, rig_info[cmd].subcmd, "pre-rig");
+      if (!special(ch, cmd, line)) {
+        ((*rig_info[cmd].command_pointer) (ch, line, cmd, rig_info[cmd].subcmd));
+        verify_data(ch, line, cmd, rig_info[cmd].subcmd, "rig");
+      } else {
+        verify_data(ch, line, cmd, rig_info[cmd].subcmd, "rig special");
+      }
     }
   } else
   {

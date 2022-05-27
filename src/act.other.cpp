@@ -1654,30 +1654,43 @@ ACMD(do_reload)
 
       // If the mount already has an ammo box, fill it.
       if (ammo) {
+        // Replace an existing box (fall through to the below code)
         if (GET_AMMOBOX_TYPE(ammo) != ammotype && GET_AMMOBOX_QUANTITY(ammo) > 0) {
-          send_to_char(ch, "%s is already loaded with %s. You'll have to unattach the weapon to empty it first.\r\n",
-                       capitalize(GET_OBJ_NAME(m)),
-                       get_ammo_representation(weapontype, ammotype, 0)
-                      );
+          if (GET_IDNUM(ch) != veh->owner && veh->locked) {
+            send_to_char("The ammo bin is locked-- you can't swap out ammo types.\r\n", ch);
+            return;
+          }
+
+          send_to_char("You swap out the existing ammo bin with a new one.\r\n", ch);
+          obj_from_obj(ammo);
+          obj_to_char(ammo, ch);
+
+          if (gun->contains && GET_OBJ_TYPE(gun->contains) == ITEM_GUN_MAGAZINE) {
+            struct obj_data *magazine = gun->contains;
+            update_bulletpants_ammo_quantity(ch, GET_MAGAZINE_BONDED_ATTACKTYPE(magazine), GET_MAGAZINE_AMMO_TYPE(magazine), GET_MAGAZINE_AMMO_COUNT(magazine));
+            obj_from_obj(magazine);
+            extract_obj(magazine);
+          }
+        }
+        // Refill existing box, then bail out
+        else {
+          if (pocket_quantity > 0) {
+            if ((max -= GET_AMMOBOX_QUANTITY(ammo)) < 1) {
+              send_to_char(ch, "The ammunition bin on %s is already full.\r\n", decapitalize_a_an(GET_OBJ_NAME(m)));
+            } else {
+              max = MIN(max, pocket_quantity);
+              update_ammobox_ammo_quantity(ammo, max);
+              update_bulletpants_ammo_quantity(ch, weapontype, ammotype, -max);
+              send_to_char(ch, "You insert %d %s into %s.\r\n",
+                           max,
+                           get_ammo_representation(weapontype, ammotype, max),
+                           decapitalize_a_an(GET_OBJ_NAME(m)));
+            }
+          } else {
+            send_to_char(ch, "You don't have any %s in your pockets.\r\n", get_ammo_representation(weapontype, ammotype, 0));
+          }
           return;
         }
-
-        if (pocket_quantity > 0) {
-          if ((max -= GET_AMMOBOX_QUANTITY(ammo)) < 1) {
-            send_to_char(ch, "The ammunition bin on %s is already full.\r\n", decapitalize_a_an(GET_OBJ_NAME(m)));
-          } else {
-            max = MIN(max, pocket_quantity);
-            update_ammobox_ammo_quantity(ammo, max);
-            update_bulletpants_ammo_quantity(ch, weapontype, ammotype, -max);
-            send_to_char(ch, "You insert %d %s into %s.\r\n",
-                         max,
-                         get_ammo_representation(weapontype, ammotype, max),
-                         decapitalize_a_an(GET_OBJ_NAME(m)));
-          }
-        } else {
-          send_to_char(ch, "You don't have any %s in your pockets.\r\n", get_ammo_representation(weapontype, ammotype, 0));
-        }
-        return;
       }
 
       // No ammo box found-- make a new one.
