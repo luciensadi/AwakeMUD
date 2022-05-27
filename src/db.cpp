@@ -2137,8 +2137,14 @@ void parse_object(File &fl, long nr)
               GET_WEAPON_ATTACK_TYPE(obj) = WEAP_CANNON;
               break;
           }
-        if (GET_WEAPON_SKILL(obj) > 100)
-          GET_WEAPON_SKILL(obj) -= 100;
+
+        if (GET_WEAPON_SKILL(obj) > 100) {
+          log_vfprintf("WARNING: get_weapon_skill for %s is %d. Prior logic would have made it %d.",
+                       GET_OBJ_NAME(obj),
+                       GET_WEAPON_SKILL(obj),
+                       GET_WEAPON_SKILL(obj) - 100);
+          // GET_WEAPON_SKILL(obj) -= 100;
+        }
 
         if (is_melee)
           GET_WEAPON_REACH(obj) = MAX(0, GET_WEAPON_REACH(obj));
