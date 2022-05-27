@@ -926,6 +926,7 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
       } else {
         snprintf(buf, sizeof(buf), "%s No Credstick, No Sale.", GET_CHAR_NAME(ch));
         do_say(keeper, buf, cmd_say, SCMD_SAYTO);
+        send_to_char("You need to have an activated credstick in your inventory to purchase that.\r\n", ch);
         if (obj)
           extract_obj(obj);
         return;
@@ -2047,6 +2048,7 @@ void shop_rec(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t 
         } else {
           snprintf(buf, sizeof(buf), "%s No Credstick, No Sale.", GET_CHAR_NAME(ch));
           do_say(keeper, buf, cmd_say, SCMD_SAYTO);
+          send_to_char("You need to have an activated credstick in your inventory to shop here.\r\n", ch);
           extract_obj(obj);
           return;
         }
