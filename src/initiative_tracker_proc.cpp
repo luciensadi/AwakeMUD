@@ -146,10 +146,9 @@ void _tracker_roll(struct obj_data *tracker, struct char_data *ch, bool reroll) 
   if (tracker->contains) {
     // Only allow 'tracker roll' if everyone is zero.
     for (struct obj_data *entry = tracker->contains; entry; entry = entry->next_content) {
-      if (GET_TRACKER_ENTRY_INIT_VALUE(entry) > 0) {
-        send_to_char("There are still people with initiative passes remaining."
-                     " You can either ^WTRACKER ADVANCE^n until they're all done,"
-                     " or ^WTRACKER REROLL^n to reroll everyone anyways.\r\n", ch);
+      if (GET_TRACKER_ENTRY_INIT_VALUE(entry) > 0 && GET_TRACKER_ENTRY_PLR_IDNUM(entry) != 0) {
+        send_to_char("There are still PCs with initiative passes remaining."
+                     " Use ^WTRACKER ADVANCE^n until they're all done, then try rerolling again.\r\n", ch);
         return;
       }
     }
