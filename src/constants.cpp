@@ -1043,7 +1043,7 @@ const char *pc_readable_extra_bits[] =
     "Can't be Used by Dwarves or Dwarf Metatypes",
     "Can't be Used by Orks or Ork Metatypes",
     "Can't be Used by Humans",
-    "Sniper Rifle (same-room combat penalty)",
+    "Sniper Rifle",
     "Loaded by Staff (!!)",
     "No Coded Effect (NERP)",
     "Prevents Wearing Other Armor",
