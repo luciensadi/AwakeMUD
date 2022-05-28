@@ -373,8 +373,8 @@ void save_bullet_pants(struct char_data *ch) {
     for (int am = AMMO_NORMAL; am < NUM_AMMOTYPES; am++) {
       // Do we need to save data for this particular weapon?
       if (GET_BULLETPANTS_AMMO_AMOUNT(ch, wp, am) > 0) {
-        snprintf(query_buf, sizeof(query_buf), "INSERT INTO pfiles_ammo (idnum, weapon, normal, apds, explosive, ex, flechette, gel) "
-                                               " VALUES (%ld, %d, %u, %u, %u, %u, %u, %u);",
+        snprintf(query_buf, sizeof(query_buf), "INSERT INTO pfiles_ammo (idnum, weapon, normal, apds, explosive, ex, flechette, gel, harmless, anti-vehicle) "
+                                               " VALUES (%ld, %d, %u, %u, %u, %u, %u, %u, %u, %u);",
                                                GET_IDNUM(ch),
                                                wp,
                                                GET_BULLETPANTS_AMMO_AMOUNT(ch, wp, AMMO_NORMAL),
@@ -382,7 +382,9 @@ void save_bullet_pants(struct char_data *ch) {
                                                GET_BULLETPANTS_AMMO_AMOUNT(ch, wp, AMMO_EXPLOSIVE),
                                                GET_BULLETPANTS_AMMO_AMOUNT(ch, wp, AMMO_EX),
                                                GET_BULLETPANTS_AMMO_AMOUNT(ch, wp, AMMO_FLECHETTE),
-                                               GET_BULLETPANTS_AMMO_AMOUNT(ch, wp, AMMO_GEL));
+                                               GET_BULLETPANTS_AMMO_AMOUNT(ch, wp, AMMO_GEL),
+                                               GET_BULLETPANTS_AMMO_AMOUNT(ch, wp, AMMO_HARMLESS),
+                                               GET_BULLETPANTS_AMMO_AMOUNT(ch, wp, AMMO_AV));
         mysql_wrapper(mysql, query_buf);
 
         // Done saving all ammo types for this weapon.
@@ -423,6 +425,8 @@ void load_bullet_pants(struct char_data *ch) {
     GET_BULLETPANTS_AMMO_AMOUNT(ch, weapon, AMMO_EX) = atoi(row[5]);
     GET_BULLETPANTS_AMMO_AMOUNT(ch, weapon, AMMO_FLECHETTE) = atoi(row[6]);
     GET_BULLETPANTS_AMMO_AMOUNT(ch, weapon, AMMO_GEL) = atoi(row[7]);
+    GET_BULLETPANTS_AMMO_AMOUNT(ch, weapon, AMMO_HARMLESS) = atoi(row[8]);
+    GET_BULLETPANTS_AMMO_AMOUNT(ch, weapon, AMMO_AV) = atoi(row[9]);
   }
 
   mysql_free_result(res);
