@@ -373,7 +373,7 @@ void save_bullet_pants(struct char_data *ch) {
     for (int am = AMMO_NORMAL; am < NUM_AMMOTYPES; am++) {
       // Do we need to save data for this particular weapon?
       if (GET_BULLETPANTS_AMMO_AMOUNT(ch, wp, am) > 0) {
-        snprintf(query_buf, sizeof(query_buf), "INSERT INTO pfiles_ammo (idnum, weapon, normal, apds, explosive, ex, flechette, gel, harmless, anti-vehicle) "
+        snprintf(query_buf, sizeof(query_buf), "INSERT INTO pfiles_ammo (idnum, weapon, normal, apds, explosive, ex, flechette, gel, harmless, `anti-vehicle`) "
                                                " VALUES (%ld, %d, %u, %u, %u, %u, %u, %u, %u, %u);",
                                                GET_IDNUM(ch),
                                                wp,

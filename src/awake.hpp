@@ -1307,6 +1307,8 @@ enum {
 #define AMMO_AV         7
 #define NUM_AMMOTYPES   8
 // Adding a new ammo type? Make sure it's in npc_ammo_usage_preferences[].
+// Make sure you also add a DB migration to include it in pfiles_ammo.
+// Save and load it in bullet_pants.cpp's save_bullet_pants and load_bullet_pants functions.
 
 /* material type for item */
 #define ITEM_NONE                  0
