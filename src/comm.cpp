@@ -600,8 +600,12 @@ int get_max_players(void)
 }
 
 void alarm_handler(int signal) {
+#ifdef __CYGWIN__
+  log("IGNORING alarm handler due to Cygwin usage! The program may be stuck, feel free to ctrl-C out of it.");
+#else
   log("alarm_handler: Alarm signal has been triggered. Killing the MUD to break out of a suspected infinite loop.\r\n");
   raise(SIGSEGV);
+#endif
 }
 
 /*
