@@ -2378,7 +2378,10 @@ const char *cyber_types[] = {
   "Paired Set of Cyber Legs",
   "Tactical Computer",
   "Custom NERPS Cyberware",
-  "Cranial Remote Deck"
+  "Cranial Remote Deck",
+  "Spatial Recognizer (Cyberears)",
+  "High Frequency (Cyberears)",
+  "Sound Filter (Cyberears)"
 };
 
 const char *decap_cyber_types[] = {
@@ -2433,7 +2436,10 @@ const char *decap_cyber_types[] = {
   "paired set of cyber legs",
   "tactical computer",
   "custom NERPS cyberware",
-  "cranial remote deck"
+  "cranial remote deck",
+  "spatial recognizer (cyberears)",
+  "high frequency (cyberears)",
+  "sound filter (cyberears)"
 };
 
 const char *bio_types[] = {
