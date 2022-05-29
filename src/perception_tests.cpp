@@ -153,6 +153,28 @@ bool can_see_through_invis(struct char_data *ch, struct char_data *vict) {
     buf_mod(resistance_test_rbuf, sizeof(resistance_test_rbuf), "Conceal", conceal_rating);
   }
 
+  // House rule: Reduce the TN by 2 with Spatial Recognizer cyberears, but only for mundanes. - Vile
+  if (GET_MAG(ch) <= 0) {
+    for (struct obj_data *cyber = ch->cyberware; cyber; cyber = cyber->next_content) {
+      if (GET_CYBERWARE_TYPE(cyber) == CYB_SPATIAL) {
+        tn -= 2;
+        buf_mod(resistance_test_rbuf, sizeof(resistance_test_rbuf), ", Spatial", -2);
+        break;
+      }
+    }
+  }
+
+  // House rule: Reduce the TN by 1 with High Frequency cyberears, but only for mundanes. - Vile
+  if (GET_MAG(ch) <= 0) {
+    for (struct obj_data *cyber = ch->cyberware; cyber; cyber = cyber->next_content) {
+      if (GET_CYBERWARE_TYPE(cyber) == CYB_HIGHFREQ) {
+        tn -= 1;
+        buf_mod(resistance_test_rbuf, sizeof(resistance_test_rbuf), ", HighFreq", -1);
+        break;
+      }
+    }
+  }
+
   // Next, figure out how many dice they're rolling. We don't get task pool because this isn't a skill.
   int dice = GET_INT(ch);
   snprintf(ENDOF(resistance_test_rbuf), sizeof(resistance_test_rbuf) - strlen(resistance_test_rbuf), "\r\nDice: %d (int)", GET_INT(ch));
@@ -163,6 +185,17 @@ bool can_see_through_invis(struct char_data *ch, struct char_data *vict) {
       if (GET_CYBERWARE_TYPE(cyber) == CYB_TACTICALCOMPUTER) {
         dice += GET_CYBERWARE_RATING(cyber);
         buf_mod(resistance_test_rbuf, sizeof(resistance_test_rbuf), ", TacComp", GET_CYBERWARE_RATING(cyber));
+        break;
+      }
+    }
+  }
+
+  // House rule: Add cyberear sound filter rating as perception dice, but only for mundanes - Vile
+  if (GET_MAG(ch) <= 0) {
+    for (struct obj_data *cyber = ch->cyberware; cyber; cyber = cyber->next_content) {
+      if (GET_CYBERWARE_TYPE(cyber) == CYB_SOUNDFILTER) {
+        dice += GET_CYBERWARE_RATING(cyber);
+        buf_mod(resistance_test_rbuf, sizeof(resistance_test_rbuf), ", SoundFilter", GET_CYBERWARE_RATING(cyber));
         break;
       }
     }
