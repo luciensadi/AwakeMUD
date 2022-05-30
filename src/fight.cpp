@@ -22,7 +22,7 @@
 #include "newmagic.hpp"
 #include "bullet_pants.hpp"
 #include "ignore_system.hpp"
-#include "perception_tests.hpp"
+#include "invis_resistance_tests.hpp"
 
 /* Structures */
 struct char_data *combat_list = NULL;   /* head of l-list of fighting chars */

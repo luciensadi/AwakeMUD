@@ -14,7 +14,7 @@
 #include "olc.hpp"
 #include "config.hpp"
 #include "ignore_system.hpp"
-#include "perception_tests.hpp"
+#include "invis_resistance_tests.hpp"
 
 #define POWER(name) void (name)(struct char_data *ch, struct char_data *spirit, struct spirit_data *spiritdata, char *arg)
 #define FAILED_CAST "You fail to bind the mana to your will.\r\n"
@@ -112,7 +112,7 @@ void end_sustained_spell(struct char_data *ch, struct sustain_data *sust)
       }
     if (sust->spell == SPELL_INVIS || sust->spell == SPELL_IMP_INVIS) {
       act("You blink and suddenly $n appears!", FALSE, sust->caster ? sust->other : ch, 0, 0, TO_ROOM);
-      purge_invis_perception_records(sust->caster ? sust->other : ch);
+      purge_invis_invis_resistance_records(sust->caster ? sust->other : ch);
     }
   }
   spell_modify(sust->caster ? sust->other : ch, sust, FALSE);
@@ -1821,7 +1821,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       if (!check_spell_victim(ch, vict, spell, arg))
         return;
 
-      // Anti-cheese: No having a baller spell on yourself, then casting and releasing a weak one to reset your perception table.
+      // Anti-cheese: No having a baller spell on yourself, then casting and releasing a weak one to reset your invis resistance table.
       for (struct sustain_data *sust = GET_SUSTAINED(vict); sust; sust = sust->next) {
         if (!sust->caster && (sust->spell == SPELL_IMP_INVIS || sust->spell == SPELL_INVIS)) {
           send_to_char("They're already invisible.\r\n", ch);

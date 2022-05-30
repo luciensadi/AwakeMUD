@@ -1,16 +1,3 @@
-/* what we actually need to do:
-  - add unordered map to all characters
-  - add invis-changing function that is called whenever invis level shifts
-  - link it in to releasing invis spell and toggling invis on thermoptic/ruthenium
-  - add invis resistance function
-  - link in invis resistance function on activities that could induce it (movement after breaking sneak, attacks, etc)
-  - add function for stripping an idnum from maps, link it in extract_char
-  - add houseruled limiter for invis / impinvis: no more successes than force of spell
-*/
-
-// unordered_map<idnum_t, bool> pc_perception_test_results;
-// unordered_map<idnum_t, bool> mob_perception_test_results;
-
 #include "structs.hpp"
 #include "comm.hpp"
 #include "newmagic.hpp"
@@ -18,22 +5,22 @@
 #include "db.hpp"
 #include "config.hpp"
 
-// Helper function for remove_ch_from_pc_perception_records().
-void _remove_ch_from_pc_perception_records(struct char_data *ch, struct char_data *vict) {
+// Helper function for remove_ch_from_pc_invis_resistance_records().
+void _remove_ch_from_pc_invis_resistance_records(struct char_data *ch, struct char_data *vict) {
   std::unordered_map<idnum_t, bool> *map_to_operate_on = NULL;
   std::unordered_map<idnum_t, bool>::const_iterator found;
   idnum_t idnum;
 
   // Find the map they belong to, bailing out if the map doesn't exist.
   if (IS_NPC(ch)) {
-    if (!vict->mob_perception_test_results)
+    if (!vict->mob_invis_resistance_test_results)
       return;
-    map_to_operate_on = vict->mob_perception_test_results;
+    map_to_operate_on = vict->mob_invis_resistance_test_results;
     idnum = GET_MOB_UNIQUE_ID(ch);
   } else {
-    if (!vict->pc_perception_test_results)
+    if (!vict->pc_invis_resistance_test_results)
       return;
-    map_to_operate_on = vict->pc_perception_test_results;
+    map_to_operate_on = vict->pc_invis_resistance_test_results;
     idnum = GET_IDNUM(ch);
   }
 
@@ -42,28 +29,28 @@ void _remove_ch_from_pc_perception_records(struct char_data *ch, struct char_dat
     return;
 
   // They were there-- erase them from it.
-  vict->pc_perception_test_results->erase(idnum);
+  vict->pc_invis_resistance_test_results->erase(idnum);
 }
 
-// Remove the given character from all PC's perception test results. Used when ch is destroyed (death, quit, etc).
-void remove_ch_from_pc_perception_records(struct char_data *ch) {
+// Remove the given character from all PC's invis resistance test results. Used when ch is destroyed (death, quit, etc).
+void remove_ch_from_pc_invis_resistance_records(struct char_data *ch) {
   for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
     if (d->character) {
-      _remove_ch_from_pc_perception_records(ch, d->character);
+      _remove_ch_from_pc_invis_resistance_records(ch, d->character);
     }
     if (d->original) {
-      _remove_ch_from_pc_perception_records(ch, d->original);
+      _remove_ch_from_pc_invis_resistance_records(ch, d->original);
     }
   }
 }
 
-// Blow away the invis perception records. Used when ch is about to be deleted.
-void purge_invis_perception_records(struct char_data *ch) {
-  delete ch->mob_perception_test_results;
-  ch->mob_perception_test_results = NULL;
+// Blow away the invis resistance records. Used when ch is about to be deleted.
+void purge_invis_invis_resistance_records(struct char_data *ch) {
+  delete ch->mob_invis_resistance_test_results;
+  ch->mob_invis_resistance_test_results = NULL;
 
-  delete ch->pc_perception_test_results;
-  ch->pc_perception_test_results = NULL;
+  delete ch->pc_invis_resistance_test_results;
+  ch->pc_invis_resistance_test_results = NULL;
 }
 
 // Returns TRUE if we're alarmed, FALSE otherwise.
@@ -84,7 +71,6 @@ bool process_spotted_invis(struct char_data *ch, struct char_data *vict, bool ju
   }
 }
 
-// Despite the name of this file etc, this is actually a spell resistance test, not a perception test.
 bool can_see_through_invis(struct char_data *ch, struct char_data *vict) {
   std::unordered_map<idnum_t, bool> *map_to_operate_on = NULL;
   std::unordered_map<idnum_t, bool>::const_iterator found;
@@ -98,14 +84,14 @@ bool can_see_through_invis(struct char_data *ch, struct char_data *vict) {
 
   // NPCs and PCs have their own separate maps.
   if (IS_NPC(ch)) {
-    if (!vict->mob_perception_test_results)
-      vict->mob_perception_test_results = new std::unordered_map<idnum_t, bool>;
-    map_to_operate_on = vict->mob_perception_test_results;
+    if (!vict->mob_invis_resistance_test_results)
+      vict->mob_invis_resistance_test_results = new std::unordered_map<idnum_t, bool>;
+    map_to_operate_on = vict->mob_invis_resistance_test_results;
     idnum = GET_MOB_UNIQUE_ID(ch);
   } else {
-    if (!vict->pc_perception_test_results)
-      vict->pc_perception_test_results = new std::unordered_map<idnum_t, bool>;
-    map_to_operate_on = vict->pc_perception_test_results;
+    if (!vict->pc_invis_resistance_test_results)
+      vict->pc_invis_resistance_test_results = new std::unordered_map<idnum_t, bool>;
+    map_to_operate_on = vict->pc_invis_resistance_test_results;
     idnum = GET_IDNUM(ch);
   }
 

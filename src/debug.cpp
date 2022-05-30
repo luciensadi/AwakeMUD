@@ -18,7 +18,7 @@
 #include "playergroups.hpp"
 #include "structs.hpp"
 #include "handler.hpp"
-#include "perception_tests.hpp"
+#include "invis_resistance_tests.hpp"
 
 // The linked list of loaded playergroups.
 extern Playergroup *loaded_playergroups;

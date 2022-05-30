@@ -24,7 +24,7 @@
 #include "newmagic.hpp"
 #include "config.hpp"
 #include "ignore_system.hpp"
-#include "perception_tests.hpp"
+#include "invis_resistance_tests.hpp"
 
 /* external functs */
 int special(struct char_data * ch, int cmd, char *arg);

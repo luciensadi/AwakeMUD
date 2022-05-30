@@ -42,7 +42,7 @@
 #include "newdb.hpp"
 #include "config.hpp"
 #include "bullet_pants.hpp"
-#include "perception_tests.hpp"
+#include "invis_resistance_tests.hpp"
 #include "vision_overhaul.hpp"
 
 extern class memoryClass *Mem;
