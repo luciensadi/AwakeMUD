@@ -2646,7 +2646,9 @@ void nanny(struct descriptor_data * d, char *arg)
           SEND_TO_Q("Wrong password... disconnecting.\r\n", d);
           STATE(d) = CON_CLOSE;
         } else {
-          SEND_TO_Q("Wrong password.\r\nPassword: ", d);
+          char oopsbuf[500];
+          snprintf(oopsbuf, sizeof(oopsbuf), "That's not the right password for the character '%s'.\r\nEnter your password, or type ABORT: ", GET_CHAR_NAME(d->character));
+          SEND_TO_Q(oopsbuf, d);
         }
         return;
       }
@@ -2728,7 +2730,7 @@ void nanny(struct descriptor_data * d, char *arg)
       mudlog(buf, d->character, LOG_CONNLOG, TRUE);
       log_vfprintf("[CONNLOG: %s connecting from %s]", GET_CHAR_NAME(d->character), d->host);
       if (load_result) {
-        snprintf(buf, sizeof(buf), "\r\n\r\n\007\007\007"
+        snprintf(buf, sizeof(buf), "\r\n\r\n"
                 "%s%d LOGIN FAILURE%s SINCE LAST SUCCESSFUL LOGIN.%s\r\n",
                 CCRED(d->character, C_SPR), load_result,
                 (load_result > 1) ? "S" : "", CCNRM(d->character, C_SPR));
