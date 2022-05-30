@@ -1242,6 +1242,7 @@ struct command_info mtx_info[] =
     { "RESERVED", 0, 0, 0, 0
     , FALSE },
     { "abort", 0, do_abort, 0, 0, FALSE },
+    { "alias", 0, do_alias, 0, 0, FALSE },
     { "analyze", 0, do_analyze, 0, 0, FALSE },
     { "answer", 0, do_comcall, 0, SCMD_ANSWER, FALSE },
     { "asist", 0, do_asist, 0, 0, FALSE },
