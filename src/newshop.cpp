@@ -655,7 +655,7 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
       send_to_char("You can't carry any more items.\r\n", ch);
       return FALSE;
     }
-    if (IS_CARRYING_W(ch) + GET_OBJ_WEIGHT(obj) > CAN_CARRY_W(ch)) {
+    if (GET_OBJ_WEIGHT(obj) > CAN_CARRY_W(ch)) {
       send_to_char("It weighs too much!\r\n", ch);
       return FALSE;
     }
@@ -674,7 +674,7 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
 
         // Prevent taking more than you can carry.
         current_obj_weight += GET_OBJ_WEIGHT(obj);
-        if (IS_CARRYING_W(ch) + current_obj_weight > CAN_CARRY_W(ch)) {
+        if (current_obj_weight > CAN_CARRY_W(ch)) {
           if (--bought <= 0) {
             send_to_char("It weighs too much.\r\n", ch);
             return FALSE;
@@ -707,7 +707,7 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
         GET_OBJ_WEIGHT(obj) *= bought;
 
         // In theory this is dead code now after the 'you can only carry x' code change above. Will see.
-        if (IS_CARRYING_W(ch) + GET_OBJ_WEIGHT(obj) > CAN_CARRY_W(ch)) {
+        if (GET_OBJ_WEIGHT(obj) > CAN_CARRY_W(ch)) {
           send_to_char("You start gathering up the ammo you paid for, but realize you can't carry it all! The shopkeeper gives you a /look/, then refunds you in cash.\r\n", ch);
           // In this specific instance, we not only assign raw nuyen, we also decrement the purchase nuyen counter. It's a refund, after all.
           long refund_amount = price * bought;
@@ -777,7 +777,7 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
     else {
       while (obj && (bought < buynum
                      && IS_CARRYING_N(ch) < CAN_CARRY_N(ch)
-                     && IS_CARRYING_W(ch) + GET_OBJ_WEIGHT(obj) <= CAN_CARRY_W(ch)
+                     && GET_OBJ_WEIGHT(obj) <= CAN_CARRY_W(ch)
                      && (cred ? GET_ITEM_MONEY_VALUE(cred) : GET_NUYEN(ch)) >= price)) {
         // Visas are ID-locked to the purchaser.
         if (GET_OBJ_VNUM(obj) == OBJ_MULTNOMAH_VISA || GET_OBJ_VNUM(obj) == OBJ_CARIBBEAN_VISA)
@@ -827,7 +827,7 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
       strcpy(buf, GET_CHAR_NAME(ch));
       if (IS_CARRYING_N(ch) >= CAN_CARRY_N(ch))
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " You can only carry %d.", bought);
-      else if (GET_OBJ_WEIGHT(ch->carrying) + IS_CARRYING_W(ch) > CAN_CARRY_W(ch))
+      else if (GET_OBJ_WEIGHT(ch->carrying) > CAN_CARRY_W(ch))
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " You can only carry %d.", bought);
       else if ((cash ? GET_NUYEN(ch) : GET_ITEM_MONEY_VALUE(cred)) < price)
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " You can only afford %d.", bought);
