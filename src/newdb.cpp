@@ -2359,8 +2359,14 @@ void auto_repair_obj(struct obj_data *obj) {
       FORCE_PROTO_VALUE("cyberware", GET_CYBERWARE_TYPE(obj), GET_CYBERWARE_TYPE(&obj_proto[rnum]));
       FORCE_PROTO_VALUE("cyberware", GET_CYBERWARE_RATING(obj), GET_CYBERWARE_RATING(&obj_proto[rnum]));
       FORCE_PROTO_VALUE("cyberware", GET_CYBERWARE_GRADE(obj), GET_CYBERWARE_GRADE(&obj_proto[rnum]));
-      if (GET_CYBERWARE_TYPE(obj) != CYB_CUSTOM_NERPS)
+
+      if (GET_CYBERWARE_TYPE(obj) != CYB_CUSTOM_NERPS) {
         FORCE_PROTO_VALUE("cyberware", GET_CYBERWARE_ESSENCE_COST(obj), GET_CYBERWARE_ESSENCE_COST(&obj_proto[rnum]));
+      }
+
+      if (GET_CYBERWARE_TYPE(obj) == CYB_EYES) {
+        FORCE_PROTO_VALUE("cybereyes", GET_CYBERWARE_FLAGS(obj), GET_CYBERWARE_FLAGS(&obj_proto[rnum]));
+      }
       break;
     case ITEM_GUN_ACCESSORY:
       FORCE_PROTO_VALUE("gun accessory", GET_ACCESSORY_ATTACH_LOCATION(obj), GET_ACCESSORY_ATTACH_LOCATION(&obj_proto[rnum]));
