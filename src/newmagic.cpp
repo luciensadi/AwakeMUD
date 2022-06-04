@@ -4895,6 +4895,12 @@ bool deactivate_power(struct char_data *ch, int power)
     case ADEPT_THERMO:
       remove_vision_bit(ch, VISION_THERMOGRAPHIC, VISION_BIT_IS_ADEPT_POWER);
       break;
+    case ADEPT_FLARE:
+      remove_vision_bit(ch, EYE_FLARECOMP, VISION_BIT_IS_ADEPT_POWER);
+      break;
+    case ADEPT_IMAGE_MAG:
+      AFF_FLAGS(ch).RemoveBit(AFF_VISION_MAG_2);
+      break;
     case ADEPT_LIVINGFOCUS:
       if (GET_SUSTAINED_NUM(ch))
         adept_release_spell(ch, FALSE);

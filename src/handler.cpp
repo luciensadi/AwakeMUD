@@ -842,8 +842,12 @@ void affect_total(struct char_data * ch)
     if (GET_POWER(ch, ADEPT_THERMO)) {
       set_vision_bit(ch, VISION_THERMOGRAPHIC, VISION_BIT_IS_ADEPT_POWER);
     }
-    if (GET_POWER(ch, ADEPT_IMAGE_MAG))
+    if (GET_POWER(ch, ADEPT_FLARE)) {
+      set_vision_bit(ch, EYE_FLARECOMP, VISION_BIT_IS_ADEPT_POWER);
+    }
+    if (GET_POWER(ch, ADEPT_IMAGE_MAG)) {
       AFF_FLAGS(ch).SetBit(AFF_VISION_MAG_2);
+    }
   }
   if (!AFF_FLAGGED(ch, AFF_DETOX)) {
     if (GET_DRUG_STAGE(ch) == 1)
