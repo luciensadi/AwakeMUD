@@ -2239,7 +2239,7 @@ enum {
 #define MAX_SOCK_BUF              4194304 /* hand-picked from `cat /proc/sys/net/ipv4/tcp_wmem` */
 #else
 // You can probably change this value (see example above)-- it was set in the dark ages where the max sock buf was 12288.
-#define MAX_SOCK_BUF              (12 * 1024) /* Size of kernel's sock buf   */
+#define MAX_SOCK_BUF              (48 * 1024) /* Size of kernel's sock buf   */
 #endif
 
 #define MAX_PROMPT_LENGTH         1000          /* Max length of prompt        */

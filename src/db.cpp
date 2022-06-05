@@ -1583,9 +1583,6 @@ void renum_zone_table(void)
         case 'C':
         case 'U':
         case 'I':
-          a = ZCMD.arg1 = real_object(ZCMD.arg1);
-          ENSURE_OBJECT_IS_KOSHER(a);
-          break;
         case 'E':
           a = ZCMD.arg1 = real_object(ZCMD.arg1);
           ENSURE_OBJECT_IS_KOSHER(a);

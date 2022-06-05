@@ -115,7 +115,13 @@ extern int mother_desc, port;
 /* Prototypes. */
 void restore_character(struct char_data *vict, bool reset_staff_stats);
 bool is_invalid_ending_punct(char candidate);
-
+bool vnum_is_from_zone(vnum_t vnum, int zone_num);
+int _error_on_invalid_real_mob(rnum_t rnum, int zone_num, char *buf, size_t buf_len);
+int _error_on_invalid_real_room(rnum_t rnum, int zone_num, char *buf, size_t buf_len);
+int _error_on_invalid_real_obj(rnum_t rnum, int zone_num, char *buf, size_t buf_len);
+int _error_on_invalid_real_host(rnum_t rnum, int zone_num, char *buf, size_t buf_len);
+int _error_on_invalid_real_veh(rnum_t rnum, int zone_num, char *buf, size_t buf_len);
+bool vnum_is_from_canon_zone(vnum_t vnum);
 
 #define EXE_FILE "bin/awake" /* maybe use argv[0] but it's not reliable */
 
@@ -5341,6 +5347,12 @@ ACMD(do_logwatch)
   return;
 }
 
+#define ZCMD zone_table[zonenum].cmd[nr]
+#define MOB(rnum) MOB_VNUM_RNUM(rnum)
+#define OBJ(rnum) OBJ_VNUM_RNUM(rnum)
+#define ROOM(rnum) world[rnum].number
+#define VEH(rnum) VEH_VNUM_RNUM(rnum)
+#define HOST(rnum) matrix[rnum].vnum
 ACMD(do_zlist)
 {
   int first, last, nr, zonenum = 0;
@@ -5376,12 +5388,6 @@ ACMD(do_zlist)
           zone_table[zonenum].num_cmds);
 
   int last_mob = 0, last_veh = 0;
-  #define ZCMD zone_table[zonenum].cmd[nr]
-  #define MOB(rnum) MOB_VNUM_RNUM(rnum)
-  #define OBJ(rnum) OBJ_VNUM_RNUM(rnum)
-  #define ROOM(rnum) world[rnum].number
-  #define VEH(rnum) VEH_VNUM_RNUM(rnum)
-  #define HOST(rnum) matrix[rnum].vnum
 
   for (nr = first; nr < last; nr++) {
     if (ZCMD.if_flag)
@@ -5477,6 +5483,12 @@ ACMD(do_zlist)
   page_string(ch->desc, buf, 1);
 
 }
+#undef ZCMD
+#undef MOB
+#undef OBJ
+#undef ROOM
+#undef VEH
+#undef HOST
 
 ACMD(do_mlist)
 {
@@ -6869,6 +6881,17 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
         if (GET_EQ(mob, wearloc)) {
           total_value += GET_OBJ_COST(GET_EQ(mob, wearloc));
           total_items++;
+
+          vnum_t vnum = GET_OBJ_VNUM(GET_EQ(mob, wearloc));
+
+          if (vnum < zone_table[zone_num].number * 100 || vnum > zone_table[zone_num].top) {
+            // The canon zones are 800-899, and we don't care if someone uses something from there.
+            if ((vnum / 100) < 800 || (vnum / 100) > 899) {
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - is equipped with %sexternal item %ld.\r\n", // *immature giggle*
+                       vnum_from_non_connected_zone(vnum) ? "non-connected " : "",
+                       vnum);
+            }
+          }
         }
       }
 
@@ -7428,6 +7451,7 @@ int audit_zone_ics_(struct char_data *ch, int zone_num, bool verbose) {
   return issues;
 }
 
+#define ZCMD zone_table[zone_num].cmd[cmd_no]
 int audit_zone_commands_(struct char_data *ch, int zone_num, bool verbose) {
   int issues = 0;
 
@@ -7442,7 +7466,7 @@ int audit_zone_commands_(struct char_data *ch, int zone_num, bool verbose) {
     return 0;
 
   if (zone_table[zone_num].lifespan > 10) {
-    send_to_char(ch, "\r\nZone ^c%d^n (%s^n): Lifespan is high (^c%d^n > 10)",
+    send_to_char(ch, "\r\nZone ^c%d^n (%s^n): Lifespan is high (^c%d^n > 10)\r\n",
                  zone_table[zone_num].number,
                  zone_table[zone_num].name,
                  zone_table[zone_num].lifespan);
@@ -7450,18 +7474,70 @@ int audit_zone_commands_(struct char_data *ch, int zone_num, bool verbose) {
   }
 
   if (zone_table[zone_num].reset_mode == 0) {
-    send_to_char(ch, "\r\nZone ^c%d^n (%s^n): Zone ^ydoes not reset^n",
+    send_to_char(ch, "\r\nZone ^c%d^n (%s^n): Zone ^ydoes not reset^n\r\n",
                  zone_table[zone_num].number,
                  zone_table[zone_num].name);
     issues += 1;
   }
 
   for (int cmd_no = 0; cmd_no < zone_table[zone_num].num_cmds; cmd_no++) {
-    // TODO-- but what would we even check for?
+    int num_found = 0;
+
+    snprintf(buf, sizeof(buf), "^c[z%d cmd #%3d]^n:\r\n", zone_table[zone_num].number, cmd_no);
+
+    // Parse the command and check for validity of rnums.
+    switch (ZCMD.command) {
+      case 'M':
+        num_found += _error_on_invalid_real_mob(ZCMD.arg1, zone_num, buf, sizeof(buf));
+        num_found += _error_on_invalid_real_room(ZCMD.arg3, zone_num, buf, sizeof(buf));
+        break;
+      case 'H':
+        num_found += _error_on_invalid_real_obj(ZCMD.arg1, zone_num, buf, sizeof(buf));
+        num_found += _error_on_invalid_real_host(ZCMD.arg3, zone_num, buf, sizeof(buf));
+        break;
+      case 'O':
+        num_found += _error_on_invalid_real_obj(ZCMD.arg1, zone_num, buf, sizeof(buf));
+        num_found += _error_on_invalid_real_room(ZCMD.arg3, zone_num, buf, sizeof(buf));
+        break;
+      case 'V': /* Vehicles */
+        num_found += _error_on_invalid_real_veh(ZCMD.arg1, zone_num, buf, sizeof(buf));
+        num_found += _error_on_invalid_real_room(ZCMD.arg3, zone_num, buf, sizeof(buf));
+        break;
+      case 'S':
+        num_found += _error_on_invalid_real_mob(ZCMD.arg1, zone_num, buf, sizeof(buf));
+        break;
+      case 'G':
+      case 'C':
+      case 'U':
+      case 'I':
+      case 'E':
+        num_found += _error_on_invalid_real_obj(ZCMD.arg1, zone_num, buf, sizeof(buf));
+        break;
+      case 'P':
+        num_found += _error_on_invalid_real_obj(ZCMD.arg1, zone_num, buf, sizeof(buf));
+        num_found += _error_on_invalid_real_obj(ZCMD.arg3, zone_num, buf, sizeof(buf));
+        break;
+      case 'D':
+        num_found += _error_on_invalid_real_room(ZCMD.arg1, zone_num, buf, sizeof(buf));
+        break;
+      case 'R':
+        num_found += _error_on_invalid_real_room(ZCMD.arg1, zone_num, buf, sizeof(buf));
+        num_found += _error_on_invalid_real_obj(ZCMD.arg2, zone_num, buf, sizeof(buf));
+        break;
+      case 'N':
+        num_found += _error_on_invalid_real_obj(ZCMD.arg1, zone_num, buf, sizeof(buf));
+        break;
+    }
+
+    if (num_found > 0) {
+      send_to_char(buf, ch);
+      issues += num_found;
+    }
   }
 
   return issues;
 }
+#undef ZCMD
 
 ACMD(do_audit) {
   int number, zonenum;
@@ -7734,4 +7810,60 @@ ACMD(do_makenerps) {
                GET_OBJ_TYPE(ware) == ITEM_CYBERWARE ? "essence" : "index",
                nuyen_cost
               );
+}
+
+bool vnum_is_from_zone(vnum_t vnum, int zone_num) {
+  return vnum >= zone_table[zone_num].number * 100 && vnum < zone_table[zone_num].top;
+}
+
+bool vnum_is_from_canon_zone(vnum_t vnum) {
+  return (vnum / 100) >= 800 && (vnum / 100) <= 899;
+}
+
+int _check_for_zone_error(vnum_t vnum, int zone_num, char *buf, size_t buf_len, const char *error_type) {
+  // Require that the vnum is from this zone or a canon zone.
+  if (!vnum_is_from_zone(vnum, zone_num) && !vnum_is_from_canon_zone(vnum)) {
+    snprintf(ENDOF(buf), buf_len - strlen(buf), "  - %s %ld from %sexternal zone.\r\n",
+             error_type,
+             vnum,
+             vnum_from_non_connected_zone(vnum) ? "non-connected " : ""
+            );
+    return 1;
+  }
+  return 0;
+}
+
+int _error_on_invalid_real_mob(rnum_t rnum, int zone_num, char *buf, size_t buf_len) {
+  // Parse the vnum from the rnum.
+  if (rnum >= 0)
+    return _check_for_zone_error(GET_MOB_VNUM(&mob_proto[rnum]), zone_num, buf, buf_len, "mob");
+  return 0;
+}
+
+int _error_on_invalid_real_room(rnum_t rnum, int zone_num, char *buf, size_t buf_len) {
+  // Parse the vnum from the rnum.
+  if (rnum >= 0)
+    return _check_for_zone_error(GET_ROOM_VNUM(&world[rnum]), zone_num, buf, buf_len, "room");
+  return 0;
+}
+
+int _error_on_invalid_real_obj(rnum_t rnum, int zone_num, char *buf, size_t buf_len) {
+  // Parse the vnum from the rnum.
+  if (rnum >= 0)
+    return _check_for_zone_error(GET_OBJ_VNUM(&obj_proto[rnum]), zone_num, buf, buf_len, "obj");
+  return 0;
+}
+
+int _error_on_invalid_real_host(rnum_t rnum, int zone_num, char *buf, size_t buf_len) {
+  // Parse the vnum from the rnum.
+  if (rnum >= 0)
+    return _check_for_zone_error(matrix[rnum].vnum, zone_num, buf, buf_len, "host");
+  return 0;
+}
+
+int _error_on_invalid_real_veh(rnum_t rnum, int zone_num, char *buf, size_t buf_len) {
+  // Parse the vnum from the rnum.
+  if (rnum >= 0)
+    return _check_for_zone_error(GET_VEH_VNUM(&veh_proto[rnum]), zone_num, buf, buf_len, "veh");
+  return 0;
 }
