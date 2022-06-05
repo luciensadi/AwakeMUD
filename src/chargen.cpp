@@ -795,51 +795,22 @@ void priority_menu(struct descriptor_data *d)
       strlcpy(buf2, buf3, sizeof(buf2));
       break;
     case PR_RACE:
-      if (GET_RACE(d->character) == RACE_ELF)
-        strlcat(buf2, "Elf         -            -         -\r\n", sizeof(buf2));
-      else if (GET_RACE(d->character) == RACE_DRAGON)
-        strlcat(buf2, "Dragon     -            -        -\r\n", sizeof(buf2));
-      else if (GET_RACE(d->character) == RACE_TROLL)
-        strlcat(buf2, "Troll       -            -         -\r\n", sizeof(buf2));
-      else if (GET_RACE(d->character) == RACE_ORK)
-        strlcat(buf2, "Ork         -            -         -\r\n", sizeof(buf2));
-      else if (GET_RACE(d->character) == RACE_DWARF)
-        strlcat(buf2, "Dwarf       -            -         -\r\n", sizeof(buf2));
-      else if (GET_RACE(d->character) == RACE_CYCLOPS)
-        strlcat(buf2, "Cyclops     -            -         -\r\n", sizeof(buf2));
-      else if (GET_RACE(d->character) == RACE_KOBOROKURU)
-        strlcat(buf2, "Koborokuru  -            -         -\r\n", sizeof(buf2));
-      else if (GET_RACE(d->character) == RACE_FOMORI)
-        strlcat(buf2, "Fomori      -            -         -\r\n", sizeof(buf2));
-      else if (GET_RACE(d->character) == RACE_MENEHUNE)
-        strlcat(buf2, "Menehune    -            -         -\r\n", sizeof(buf2));
-      else if (GET_RACE(d->character) == RACE_HOBGOBLIN)
-        strlcat(buf2, "Hobgoblin   -            -         -\r\n", sizeof(buf2));
-      else if (GET_RACE(d->character) == RACE_GIANT)
-        strlcat(buf2, "Giant       -            -         -\r\n", sizeof(buf2));
-      else if (GET_RACE(d->character) == RACE_GNOME)
-        strlcat(buf2, "Gnome       -            -         -\r\n", sizeof(buf2));
-      else if (GET_RACE(d->character) == RACE_ONI)
-        strlcat(buf2, "Oni         -            -         -\r\n", sizeof(buf2));
-      else if (GET_RACE(d->character) == RACE_WAKYAMBI)
-        strlcat(buf2, "Wakyambi    -            -         -\r\n", sizeof(buf2));
-      else if (GET_RACE(d->character) == RACE_OGRE)
-        strlcat(buf2, "Ogre        -            -         -\r\n", sizeof(buf2));
-      else if (GET_RACE(d->character) == RACE_MINOTAUR)
-        strlcat(buf2, "Minotaur    -            -         -\r\n", sizeof(buf2));
-      else if (GET_RACE(d->character) == RACE_SATYR)
-        strlcat(buf2, "Satyr       -            -         -\r\n", sizeof(buf2));
-      else if (GET_RACE(d->character) == RACE_NIGHTONE)
-        strlcat(buf2, "Night-One   -            -         -\r\n", sizeof(buf2));
-      else
-        strlcat(buf2, "Human       -            -         -\r\n", sizeof(buf2));
+      snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%-11s -            -         -\r\n", pc_race_types[(int) GET_RACE(d->character)]);
       break;
     case PR_MAGIC:
-      if ( i == 0 )
-        strlcat(buf2, "Full Mage   -            -         -\r\n", sizeof(buf2));
-      else if ( i == 1 )
-        strlcat(buf2, "Adept/Aspect-            -         -\r\n", sizeof(buf2));
-      else
+      if ( i == 0 ) {
+        if (GET_RACE(CH) == RACE_GNOME) {
+          strlcat(buf2, "Full Shaman -            -         -\r\n", sizeof(buf2));
+        } else {
+          strlcat(buf2, "Full Mage   -            -         -\r\n", sizeof(buf2));
+        }
+      } else if ( i == 1 ) {
+        if (GET_RACE(CH) == RACE_GNOME) {
+          strlcat(buf2, "Asp. Shaman -            -         -\r\n", sizeof(buf2));
+        } else {
+          strlcat(buf2, "Adept/Aspect-            -         -\r\n", sizeof(buf2));
+        }
+      } else
         strlcat(buf2, "Mundane     -            -         -\r\n", sizeof(buf2));
       break;
     case PR_ATTRIB:
@@ -1691,9 +1662,10 @@ void create_parse(struct descriptor_data *d, const char *arg)
     case 'c':
     case 'd':
     case 'e':
-      if (d->ccr.pr[(int)(LOWER(*arg)-'a')] == PR_RACE)
+      if (d->ccr.pr[(int)(LOWER(*arg)-'a')] == PR_RACE) {
+        send_to_char(CH, "Sorry, your race choice is locked due to code limitations. If you need to change it, please reconnect and restart creation.\r\n");
         priority_menu(d);
-      else {
+      } else {
         d->ccr.temp = (int)(LOWER(*arg)-'a');
         SEND_TO_Q(assign_menu, d);
         SEND_TO_Q("\r\nPriority to assign (c to clear): ", d);
@@ -1727,8 +1699,10 @@ void create_parse(struct descriptor_data *d, const char *arg)
         } else
           GET_TRADITION(d->character) = TRAD_MUNDANE;
         start_game(d);
-      } else
+      } else {
+        send_to_char("You need to finish setting your priorities first.\r\n", CH);
         priority_menu(d);
+      }
       break;
     case '?':
       display_help(buf2, MAX_STRING_LENGTH, "priorities", d->character);
