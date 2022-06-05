@@ -12,6 +12,7 @@
 #include <string.h>
 #include <vector>
 #include <utility>
+#include <algorithm>
 
 #include "structs.hpp"
 #include "utils.hpp"
