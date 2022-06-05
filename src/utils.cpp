@@ -4647,6 +4647,23 @@ struct obj_data *make_staff_deck_target_mpcp(int mpcp) {
   return new_deck;
 }
 
+// Replaces ^n with ^y for example. Only works with two-character codes.
+char *replace_neutral_color_codes(const char *input, const char *replacement_code) {
+  static char internal_buf[MAX_STRING_LENGTH];
+  char *internal_buf_ptr = internal_buf;
+
+  for (const char *ptr = input; *ptr; ptr++) {
+    if (*ptr == '^' && (*(ptr + 1) == 'n' || *(ptr + 1) == 'N')) {
+      *(internal_buf_ptr++) = *(ptr++);
+      *(internal_buf_ptr++) = *(replacement_code + 1);
+    } else {
+      *(internal_buf_ptr++) = *ptr;
+    }
+  }
+
+  return internal_buf;
+}
+
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.
 // Great for swapping out old Classic weapons, cyberware, etc for the new guaranteed-canon versions.
 #define PAIR(classic, current) case (classic): return (current);

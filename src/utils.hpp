@@ -127,6 +127,7 @@ bool    veh_can_traverse_air(struct veh_data *veh);
 int     get_br_skill_for_veh(struct veh_data *veh);
 int     get_pilot_skill_for_veh(struct veh_data *veh);
 int     calculate_vehicle_weight(struct veh_data *veh);
+char *  replace_neutral_color_codes(const char *input, const char *replacement_code);
 
 void load_vehicle_brain(struct veh_data *veh);
 void remove_vehicle_brain(struct veh_data *veh);
