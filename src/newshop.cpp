@@ -853,8 +853,14 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
   replace_substring(arg, buf3, "%d", price_buf);
 
   // Compose the sayto string for the keeper.
-  snprintf(buf, sizeof(buf), "%s %s", GET_CHAR_NAME(ch), buf3);
-  do_say(keeper, buf, cmd_say, SCMD_SAYTO);
+  if (MOB_FLAGGED(keeper, MOB_INANIMATE)) {
+    snprintf(buf, sizeof(buf), "displays, \"%s\"", buf3);
+    do_new_echo(keeper, buf, cmd_echo, 0);
+  } else {
+    snprintf(buf, sizeof(buf), "%s %s", GET_CHAR_NAME(ch), buf3);
+    do_say(keeper, buf, cmd_say, SCMD_SAYTO);
+  }
+
   if (bought > 1 && print_multiples_at_end)
     snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " (x%d)", bought);
   send_to_char(buf2, ch);
