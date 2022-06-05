@@ -7814,7 +7814,9 @@ bool vnum_is_from_zone(vnum_t vnum, int zone_num) {
 }
 
 bool vnum_is_from_canon_zone(vnum_t vnum) {
-  return (vnum / 100) >= 800 && (vnum / 100) <= 899;
+  bool vnum_is_from_800s = (vnum / 100) >= 800 && (vnum / 100) <= 899;
+  bool vnum_is_from_classic_canon = vnum < 1000;
+  return vnum_is_from_800s || vnum_is_from_classic_canon;
 }
 
 int _check_for_zone_error(vnum_t vnum, int zone_num, char *buf, size_t buf_len, const char *error_type) {
