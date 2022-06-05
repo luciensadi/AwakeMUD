@@ -3239,8 +3239,9 @@ bool shop_will_buy_item_from_ch(rnum_t shop_nr, struct obj_data *obj, struct cha
              GET_OBJ_NAME(obj),
              GET_OBJ_VNUM(obj));
     mudlog(oopsbuf, ch, LOG_SYSLOG, TRUE);
-    send_to_char(ch, "%s is bugged!\r\n", capitalize(GET_OBJ_NAME(obj)));
-    return FALSE;
+    // Disabling this rejection code for now until we fix all these. -LS
+//    send_to_char(ch, "%s is bugged!\r\n", capitalize(GET_OBJ_NAME(obj)));
+//    return FALSE;
   }
 
   // If this shop doesn't buy this item type at all, bail out. We don't send a message for this one-- the shopkeeper has a flavor line to say.
