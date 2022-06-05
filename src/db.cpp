@@ -5216,8 +5216,14 @@ void load_saved_veh()
     int num_mods = data.NumFields("MODIS");
     for (int i = 0; i < num_mods; i++) {
       snprintf(buf, sizeof(buf), "MODIS/Mod%d", i);
-      obj = read_object(data.GetLong(buf, 0), VIRTUAL);
-      GET_MOD(veh, GET_OBJ_VAL(obj, 6)) = obj;
+      vnum_t vnum = data.GetLong(buf, 0);
+
+      if (!(obj = read_object(vnum, VIRTUAL))) {
+        log_vfprintf("ERROR: Unknown vnum %ld in veh file! Skipping.", vnum);
+        continue;
+      }
+
+      GET_MOD(veh, GET_VEHICLE_MOD_LOCATION(obj)) = obj;
       if (GET_VEHICLE_MOD_TYPE(obj) == TYPE_ENGINECUST)
         veh->engine = GET_VEHICLE_MOD_RATING(obj);
       if (GET_VEHICLE_MOD_TYPE(obj) == TYPE_AUTONAV)

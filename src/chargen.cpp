@@ -521,6 +521,7 @@ int magic_cost[4] = { 0, 30, 25, 25 };
 #define CCR_MAGIC_ASPECTED 2
 #define CCR_MAGIC_ADEPT    3
 const char *magic_table[4] = { "None", "Full Magician", "Aspected Magician", "Adept" };
+const char *gnome_magic_table[4] = { "None", "Full Shaman", "Aspected Shaman", "ERROR" };
 
 void set_attributes(struct char_data *ch, int magic)
 {
@@ -1042,16 +1043,22 @@ void ccr_type_menu(struct descriptor_data *d)
 
 void points_menu(struct descriptor_data *d)
 {
+  const char **magic_table_ptr;
   d->ccr.mode = CCR_POINTS;
-  snprintf(buf, sizeof(buf), "  1) Attributes: ^c%14d^n (^c%3d^n Points)\r\n"
-               "  2) Skills    : ^c%14d^n (^c%3d^n Points)\r\n"
-               "  3) Resources : ^c%14d^n (^c%3d^n Points)\r\n"
-               "  4) Magic     : ^c%14s^n (^c%3d^n Points)\r\n"
-               "     Race      : ^c%14s^n (^c%3d^n Points)\r\n"
+  if (GET_RACE(CH) == RACE_GNOME) {
+    magic_table_ptr = gnome_magic_table;
+  } else {
+    magic_table_ptr = magic_table;
+  }
+  snprintf(buf, sizeof(buf), "  1) Attributes: ^c%15d^n (^c%3d^n Points)\r\n"
+               "  2) Skills    : ^c%15d^n (^c%3d^n Points)\r\n"
+               "  3) Resources : ^c%15d^n (^c%3d^n Points)\r\n"
+               "  4) Magic     : ^c%15s^n (^c%3d^n Points)\r\n"
+               "     Race      : ^c%15s^n (^c%3d^n Points)\r\n"
                "  Points Remaining: ^c%d^n\r\n"
                "Choose an area to change points on(p to continue): ", d->ccr.pr[PO_ATTR]/2, d->ccr.pr[PO_ATTR],
                d->ccr.pr[PO_SKILL], d->ccr.pr[PO_SKILL], resource_table[0][d->ccr.pr[PO_RESOURCES]],
-               resource_table[1][d->ccr.pr[PO_RESOURCES]], magic_table[d->ccr.pr[PO_MAGIC]],
+               resource_table[1][d->ccr.pr[PO_RESOURCES]], magic_table_ptr[d->ccr.pr[PO_MAGIC]],
                magic_cost[d->ccr.pr[PO_MAGIC]], pc_race_types[(int)GET_RACE(d->character)], d->ccr.pr[PO_RACE], d->ccr.points);
   SEND_TO_Q(buf, d);
 }
@@ -1142,7 +1149,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
     break;
   case CCR_PO_MAGIC:
     i--;
-    if (i > CCR_MAGIC_ADEPT || i < CCR_MAGIC_NONE)
+    if (i > (GET_RACE(CH) == RACE_GNOME ? CCR_MAGIC_ASPECTED : CCR_MAGIC_ADEPT) || i < CCR_MAGIC_NONE)
       send_to_char(CH, "Invalid number. Enter desired type of magic (^c%d^n points available): ", d->ccr.points);
     else if (magic_cost[i] > d->ccr.points)
       send_to_char(CH, "You do not have enough points for that. Enter desired type of magic (^c%d^n points available):", d->ccr.points);
@@ -1184,8 +1191,13 @@ void create_parse(struct descriptor_data *d, const char *arg)
       case '4':
         d->ccr.points += magic_cost[d->ccr.pr[PO_MAGIC]];
         snprintf(buf, sizeof(buf), " ");
-        for (int x = 0; x < 4; x++)
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %d) %18s (%2d points)\r\n ", x+1, magic_table[x], magic_cost[x]);
+        if (GET_RACE(CH) == RACE_GNOME) {
+          for (int x = 0; x < 3; x++)
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %d) %18s (%2d points)\r\n ", x+1, gnome_magic_table[x], magic_cost[x]);
+        } else {
+          for (int x = 0; x < 4; x++)
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %d) %18s (%2d points)\r\n ", x+1, magic_table[x], magic_cost[x]);
+        }
         SEND_TO_Q(buf, d);
         send_to_char(CH, "Enter desired type of magic (^c%d^n points available): ", d->ccr.points);
         d->ccr.mode = CCR_PO_MAGIC;
