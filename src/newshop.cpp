@@ -2046,8 +2046,13 @@ void shop_check(char *arg, struct char_data *ch, struct char_data *keeper, vnum_
     }
   if (i == 0)
   {
-    snprintf(buf, sizeof(buf), "%s You don't have anything on order here.", GET_CHAR_NAME(ch));
-    do_say(keeper, buf, cmd_say, SCMD_SAYTO);
+    if (MOB_FLAGGED(keeper, MOB_INANIMATE)) {
+      snprintf(buf, sizeof(buf), "displays, \"NO ORDERS FOUND.\"");
+      do_new_echo(keeper, buf, cmd_echo, 0);
+    } else {
+      snprintf(buf, sizeof(buf), "%s You don't have anything on order here.", GET_CHAR_NAME(ch));
+      do_say(keeper, buf, cmd_say, SCMD_SAYTO);
+    }
   } else
     send_to_char(buf, ch);
 }
