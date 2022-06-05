@@ -6886,7 +6886,7 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
 
           if (!vnum_is_from_zone(vnum, zone_num) && !vnum_is_from_canon_zone(vnum)) {
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - is equipped with %sexternal item %ld.\r\n", // *immature giggle*
-                     vnum_from_non_connected_zone(vnum) ? "non-connected " : "",
+                     vnum_from_non_connected_zone(vnum) ? "^ynon-connected^n " : "",
                      vnum);
           }
         }
@@ -7823,7 +7823,7 @@ int _check_for_zone_error(vnum_t vnum, int zone_num, char *buf, size_t buf_len, 
     snprintf(ENDOF(buf), buf_len - strlen(buf), "  - %s %ld from %sexternal zone.\r\n",
              error_type,
              vnum,
-             vnum_from_non_connected_zone(vnum) ? "non-connected " : ""
+             vnum_from_non_connected_zone(vnum) ? "^ynon-connected^n " : ""
             );
     return 1;
   }
