@@ -826,30 +826,33 @@ ACMD(do_build) {
                         else if (!GET_DECK_ACCESSORY_IS_CHIPS(find) && GET_OBJ_COST(find) >= GET_OBJ_VAL(obj, 8))
                             part = find;
                     }
+
+                if (GET_OBJ_VAL(obj, 8) && !part) {
+                  send_to_char(ch, "You don't have enough materials for that part; you need %d nuyen's worth in the same container.\r\n", GET_OBJ_VAL(obj, 8));
+                  return;
+                }
+                if (GET_OBJ_VAL(obj, 9) && !chips) {
+                  send_to_char(ch, "You don't have enough optical chips for that part; you need %d nuyen's worth in the same container.\r\n", GET_OBJ_VAL(obj, 9));
+                  return;
+                }
+
                 if (GET_OBJ_VAL(obj, 8)) {
-                    if (!part) {
-                        send_to_char(ch, "You don't have enough materials for that part; you need %d nuyen's worth in the same container.\r\n", GET_OBJ_VAL(obj, 8));
-                        return;
-                    } else {
-                        GET_OBJ_COST(part) -= GET_OBJ_VAL(obj, 8);
-                        if (!GET_OBJ_COST(part)) {
-                          send_to_char(ch, "You use up the last of the parts in %s.\r\n", GET_OBJ_NAME(part));
-                          extract_obj(part);
-                        }
-                    }
+                  GET_OBJ_COST(part) -= GET_OBJ_VAL(obj, 8);
+                  if (!GET_OBJ_COST(part)) {
+                    send_to_char(ch, "You use up the last of the parts in %s.\r\n", GET_OBJ_NAME(part));
+                    extract_obj(part);
+                  }
                 }
+
                 if (GET_OBJ_VAL(obj, 9)) {
-                    if (!chips) {
-                        send_to_char(ch, "You don't have enough optical chips for that part; you need %d nuyen's worth in the same container.\r\n", GET_OBJ_VAL(obj, 9));
-                        return;
-                    } else {
-                        GET_OBJ_COST(chips) -= GET_OBJ_VAL(obj, 9);
-                        if (!GET_OBJ_COST(chips)) {
-                          send_to_char(ch, "You use up the last of the chips in %s.\r\n", GET_OBJ_NAME(chips));
-                          extract_obj(chips);
-                        }
-                    }
+                  GET_OBJ_COST(chips) -= GET_OBJ_VAL(obj, 9);
+                  if (!GET_OBJ_COST(chips)) {
+                    send_to_char(ch, "You use up the last of the chips in %s.\r\n", GET_OBJ_NAME(chips));
+                    extract_obj(chips);
+                  }
                 }
+
+
                 if (soft)
                     extract_obj(soft);
             }
