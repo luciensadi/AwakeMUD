@@ -6862,7 +6862,7 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
     }
 
     if (IS_PC_CONJURED_ELEMENTAL(mob)) {
-      strlcat(buf, "  - is a PC Conjured Elemental.\r\n", sizeof(buf));
+      strlcat(buf, "  - is a PC Conjured Elemental (change the race!)\r\n", sizeof(buf));
       printed = TRUE;
       issues++;
     }
@@ -6884,13 +6884,10 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
 
           vnum_t vnum = GET_OBJ_VNUM(GET_EQ(mob, wearloc));
 
-          if (vnum < zone_table[zone_num].number * 100 || vnum > zone_table[zone_num].top) {
-            // The canon zones are 800-899, and we don't care if someone uses something from there.
-            if ((vnum / 100) < 800 || (vnum / 100) > 899) {
-              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - is equipped with %sexternal item %ld.\r\n", // *immature giggle*
-                       vnum_from_non_connected_zone(vnum) ? "non-connected " : "",
-                       vnum);
-            }
+          if (!vnum_is_from_zone(vnum, zone_num) && !vnum_is_from_canon_zone(vnum)) {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - is equipped with %sexternal item %ld.\r\n", // *immature giggle*
+                     vnum_from_non_connected_zone(vnum) ? "non-connected " : "",
+                     vnum);
           }
         }
       }
