@@ -2276,7 +2276,7 @@ ACMD(do_vfind) {
     return;
   }
 
-  for (struct veh_data *veh = veh_list; veh; veh = veh->next_veh) {
+  for (struct veh_data *veh = veh_list; veh; veh = veh->next) {
     room = get_veh_in_room(veh);
 
     if (veh->owner == idnum) {

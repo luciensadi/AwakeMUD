@@ -4660,6 +4660,7 @@ char *replace_neutral_color_codes(const char *input, const char *replacement_cod
       *(internal_buf_ptr++) = *ptr;
     }
   }
+  *internal_buf_ptr = '\0';
 
   return internal_buf;
 }
