@@ -6620,7 +6620,7 @@ SPECIAL(medical_workshop) {
     return FALSE;
 
   // Require that the medical workshop be unpacked.
-  if (!GET_WORKSHOP_IS_SETUP(workshop))
+  if (!GET_WORKSHOP_IS_SETUP(workshop) && GET_WORKSHOP_GRADE(workshop) != TYPE_FACILITY)
     return FALSE;
 
   // Preliminary skill check.
@@ -6787,7 +6787,7 @@ SPECIAL(medical_workshop) {
       }
       return TRUE;
     }
-    
+
     send_to_char(ch, "You're standing in a medical %s, so you can only %sinstall 'ware! %s doesn't count.\r\n",
                  GET_WORKSHOP_GRADE(workshop) == TYPE_WORKSHOP ? "workshop" : "facility",
                  mode_is_install ? "" : "un",
