@@ -4804,9 +4804,17 @@ void roll_individual_initiative(struct char_data *ch)
 {
   if (AWAKE(ch))
   {
-    // TODO: SR3: While rigging, riggers receive only the modifications given them by the vehicle control rig (see Vehicles and Drones, p. 130) they are using.
-    if (AFF_FLAGGED(ch, AFF_PILOT))
-      GET_INIT_ROLL(ch) = dice(1, 6) + GET_REA(ch);
+    // While rigging, riggers receive only the modifications given them by the vehicle control rig (see Vehicles and Drones, p. 130) they are using.
+    if (AFF_FLAGGED(ch, AFF_PILOT) || PLR_FLAGGED(ch, PLR_REMOTE)) {
+      GET_INIT_ROLL(ch) = GET_REAL_REA(ch);
+
+      for (struct obj_data *rig = ch->cyberware; rig; rig = rig->next_content) {
+        if (GET_CYBERWARE_TYPE(rig) == CYB_VCR) {
+          GET_INIT_ROLL(ch) = GET_CYBERWARE_RATING(rig) + dice(1 + GET_CYBERWARE_RATING(rig), 6);
+          break;
+        }
+      }
+    }
     else
       GET_INIT_ROLL(ch) = roll_default_initiative(ch);
     GET_INIT_ROLL(ch) -= damage_modifier(ch, buf, sizeof(buf));
