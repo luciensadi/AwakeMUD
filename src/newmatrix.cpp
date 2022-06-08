@@ -745,16 +745,18 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
         // Oh shit, they died. Guess they don't take MPCP damage, since their struct is zeroed out now.
         return;
       }
-      if (targ && targ->decker->ch && !AWAKE(targ->decker->ch)) {
-        success = success_test(iconrating * 2, targ->decker->mpcp + targ->decker->hardening);
-        fry_mpcp(icon, targ, success);
-        dumpshock(targ);
-        return;
-      } else if (!targ->decker->ch) {
-        success = success_test(iconrating * 2, targ->decker->mpcp + targ->decker->hardening);
-        fry_mpcp(icon, targ, success);
-        extract_icon(targ);
-        return;
+      if (targ && targ->decker) {
+        if (targ->decker->ch && !AWAKE(targ->decker->ch)) {
+          success = success_test(iconrating * 2, targ->decker->mpcp + targ->decker->hardening);
+          fry_mpcp(icon, targ, success);
+          dumpshock(targ);
+          return;
+        } else if (!targ->decker->ch) {
+          success = success_test(iconrating * 2, targ->decker->mpcp + targ->decker->hardening);
+          fry_mpcp(icon, targ, success);
+          extract_icon(targ);
+          return;
+        }
       }
     } else {
       switch(dam) {
