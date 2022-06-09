@@ -2764,7 +2764,7 @@ void send_to_all(const char *messg)
       }
 }
 
-void send_to_outdoor(const char *messg)
+void send_to_outdoor(const char *messg, bool is_weather)
 {
   struct descriptor_data *i;
 
@@ -2779,6 +2779,14 @@ void send_to_outdoor(const char *messg)
           PLR_FLAGGED(i->character, PLR_MATRIX) ||
           PLR_FLAGGED(i->character, PLR_REMOTE)) &&
         OUTSIDE(i->character)) {
+
+      if (is_weather &&
+          (PRF_FLAGGED(i->character, PRF_NO_WEATHER) ||
+           (i->original && PRF_FLAGGED(i->original, PRF_NO_WEATHER))))
+      {
+        continue;
+      }
+
       SEND_TO_Q(messg, i);
     }
 }

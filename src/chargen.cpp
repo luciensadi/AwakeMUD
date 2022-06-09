@@ -1204,7 +1204,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
             } else {
               GET_FORCE_POINTS(CH) = 35;
               ccr_aspect_menu(d);
-             }
+            }
           } else if (d->ccr.pr[PO_MAGIC] == CCR_MAGIC_ADEPT) {
             GET_TRADITION(CH) = TRAD_ADEPT;
             GET_PP(CH) = 600;

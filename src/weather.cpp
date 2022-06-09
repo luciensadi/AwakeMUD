@@ -49,7 +49,7 @@ void another_hour(void)
     else
       temp = "^L";
     snprintf(buf, sizeof(buf), "%sThe sun rises in the east.^n\r\n", temp);
-    send_to_outdoor(buf);
+    send_to_outdoor(buf, TRUE);
     for (ch = character_list; ch; ch = next) {
       next = ch->next;
       if (IS_SPIRIT(ch)) {
@@ -80,7 +80,7 @@ void another_hour(void)
       break;
     }
     snprintf(buf, sizeof(buf), "%sThe day has begun.^n\r\n", temp);
-    send_to_outdoor(buf);
+    send_to_outdoor(buf, TRUE);
     break;
   case 18:
     weather_info.sunlight = SUN_SET;
@@ -102,7 +102,7 @@ void another_hour(void)
       break;
     }
     snprintf(buf, sizeof(buf), "%sThe sun slowly disappears in the west.^n\r\n", temp);
-    send_to_outdoor(buf);
+    send_to_outdoor(buf, TRUE);
     for (ch = character_list; ch; ch = next) {
       next = ch->next;
       if (IS_SPIRIT(ch)) {
@@ -118,7 +118,7 @@ void another_hour(void)
     else
       snprintf(buf, sizeof(buf), "^LThe night has begun.^n\r\n");
 
-    send_to_outdoor(buf);
+    send_to_outdoor(buf, TRUE);
     break;
   }
 
@@ -238,28 +238,28 @@ void weather_change(void)
   case 0:
     break;
   case 1:
-    send_to_outdoor("^LThe sky starts to get cloudy.^n\r\n");
+    send_to_outdoor("^LThe sky starts to get cloudy.^n\r\n", TRUE);
     weather_info.sky = SKY_CLOUDY;
     break;
   case 2:
-    send_to_outdoor("^BIt starts to rain.^n\r\n");
+    send_to_outdoor("^BIt starts to rain.^n\r\n", TRUE);
     weather_info.sky = SKY_RAINING;
     break;
   case 3:
-    send_to_outdoor("^CThe clouds disappear.^n\r\n");
+    send_to_outdoor("^CThe clouds disappear.^n\r\n", TRUE);
     weather_info.sky = SKY_CLOUDLESS;
     break;
   case 4:
-    send_to_outdoor("^WLightning^L starts to show in the sky.^n\r\n");
+    send_to_outdoor("^WLightning^L starts to show in the sky.^n\r\n", TRUE);
     weather_info.sky = SKY_LIGHTNING;
     break;
   case 5:
-    send_to_outdoor("^cThe rain stops.^n\r\n");
+    send_to_outdoor("^cThe rain stops.^n\r\n", TRUE);
     weather_info.sky = SKY_CLOUDY;
     weather_info.lastrain = 0;
     break;
   case 6:
-    send_to_outdoor("^cThe ^Wlightning^c stops.^n\r\n");
+    send_to_outdoor("^cThe ^Wlightning^c stops.^n\r\n", TRUE);
     weather_info.sky = SKY_RAINING;
     break;
   default:
