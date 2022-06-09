@@ -1882,6 +1882,29 @@ struct ammo_data ammo_type[] =
     {"anti-vehicle", 16,   14,    .100,   20,    4.0 }
   };
 
+/* House rule: Ammo costs for various weapons vary based on assumed caliber. */
+float weapon_type_ammo_cost_multipliers[] = {
+  0, 0, 0, 0, 0, // melee weapons have a multiplier of 0 (edged, club, polearm, whip, glove)
+  1.0,  // holdout pistol
+  1.0,  // light pistol
+  1.0,  // machine pistol
+  1.0,  // heavy pistol
+  1.0,  // taser
+  1.0,  // smg
+  1.0,  // sport rifle
+  1.0,  // sniper rifle
+  1.0,  // assault rifle
+  1.0,  // shotgun
+  1.0,  // lmg
+  1.0,  // mmg
+  1.0,  // hmg
+  9.0,  // cannon (per SR3 p281, derived from 45 / explosive cost)
+  1.0,  // minigun
+  1.0,  // grenade launcher (placeholder value)
+  1.0,  // missile launcher (placeholder value)
+  1.0   // revolver
+};
+
 const char *positions[] =
   {
     "is lying here, dead",

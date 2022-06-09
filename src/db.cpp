@@ -2007,20 +2007,18 @@ void parse_object(File &fl, long nr)
 
           // Set values according to Assault Cannon ammo (SR3 p281).
           GET_OBJ_WEIGHT(obj) = (((float) GET_AMMOBOX_QUANTITY(obj)) * 1.25) / 10;
-          GET_OBJ_COST(obj) = GET_AMMOBOX_QUANTITY(obj) * 45;
           GET_OBJ_AVAILDAY(obj) = 3;
           GET_OBJ_AVAILTN(obj) = 5;
           GET_OBJ_STREET_INDEX(obj) = 2;
 
-          // They also may only be explosive (SR3 p279).
+          // Assault Cannon ammo may only ever be explosive (SR3 p279).
           GET_AMMOBOX_TYPE(obj) = AMMO_EXPLOSIVE;
         } else {
           // Max size 1000-- otherwise it's too heavy to carry.
           GET_AMMOBOX_QUANTITY(obj) = MAX(MIN(GET_AMMOBOX_QUANTITY(obj), 1000), 10);
 
-          // Update weight and cost.
+          // Update weight.
           GET_OBJ_WEIGHT(obj) = GET_AMMOBOX_QUANTITY(obj) * ammo_type[GET_AMMOBOX_TYPE(obj)].weight;
-          GET_OBJ_COST(obj) = GET_AMMOBOX_QUANTITY(obj) * ammo_type[GET_AMMOBOX_TYPE(obj)].cost;
 
           // Set the TNs for this ammo per the default values.
           GET_OBJ_AVAILDAY(obj) = ammo_type[GET_AMMOBOX_TYPE(obj)].time;
@@ -2029,6 +2027,9 @@ void parse_object(File &fl, long nr)
           // Set the street index.
           GET_OBJ_STREET_INDEX(obj) = ammo_type[GET_AMMOBOX_TYPE(obj)].street_index;
         }
+
+        // Calculate ammo cost from its quantity, type, and weapon type (this last bit is a house rule).
+        GET_OBJ_COST(obj) = GET_AMMOBOX_QUANTITY(obj) * ammo_type[GET_AMMOBOX_TYPE(obj)].cost * weapon_type_ammo_cost_multipliers[GET_AMMOBOX_WEAPON(obj)];
 
         // Set the strings-- we want all these things to match for simplicity's sake.
         type_as_string = get_weapon_ammo_name_as_string(GET_AMMOBOX_WEAPON(obj));

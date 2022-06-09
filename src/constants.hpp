@@ -75,6 +75,7 @@ extern struct ammo_data ammo_type[];
 extern struct part_data parts[];
 extern struct program_data programs[];
 extern int attack_multiplier[];
+extern float weapon_type_ammo_cost_multipliers[];
 extern const char *positions[];
 extern int racial_limits[][2][6];
 extern int racial_attribute_modifiers[][6];
