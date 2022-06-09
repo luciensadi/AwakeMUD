@@ -3784,46 +3784,50 @@ const char *get_plaintext_score_stats(struct char_data *ch) {
     if (GET_TRADITION(ch) == TRAD_SHAMANIC)
       snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "You follow %s.\r\n", totem_types[GET_TOTEM(ch)]);
 
-    switch (GET_ASPECT(ch)) {
-      case ASPECT_FULL:
-        strlcat(buf2, "You are a full mage.\r\n", sizeof(buf2));
-        break;
-      case ASPECT_CONJURER:
-        strlcat(buf2, "You are an aspected conjurer.\r\n", sizeof(buf2));
-        break;
-      case ASPECT_SHAMANIST:
-        strlcat(buf2, "You are an aspected shamanist.\r\n", sizeof(buf2));
-        break;
-      case ASPECT_SORCERER:
-        strlcat(buf2, "You are an aspected sorcerer.\r\n", sizeof(buf2));
-        break;
-      case ASPECT_ELEMEARTH:
-        strlcat(buf2, "You are an aspected elementalist specializing in Earth magic.\r\n", sizeof(buf2));
-        break;
-      case ASPECT_ELEMAIR:
-        strlcat(buf2, "You are an aspected elementalist specializing in Air magic.\r\n", sizeof(buf2));
-        break;
-      case ASPECT_ELEMFIRE:
-        strlcat(buf2, "You are an aspected elementalist specializing in Fire magic.\r\n", sizeof(buf2));
-        break;
-      case ASPECT_ELEMWATER:
-        strlcat(buf2, "You are an aspected elementalist specializing in Water magic.\r\n", sizeof(buf2));
-        break;
-      case ASPECT_EARTHMAGE:
-        strlcat(buf2, "You are a full mage specializing in Earth magic.\r\n", sizeof(buf2));
-        break;
-      case ASPECT_AIRMAGE:
-        strlcat(buf2, "You are a full mage specializing in Air magic.\r\n", sizeof(buf2));
-        break;
-      case ASPECT_FIREMAGE:
-        strlcat(buf2, "You are a full mage specializing in Fire magic.\r\n", sizeof(buf2));
-        break;
-      case ASPECT_WATERMAGE:
-        strlcat(buf2, "You are a full mage specializing in Water magic.\r\n", sizeof(buf2));
-        break;
-      default:
-        mudlog("SYSERR: Unrecognized aspect in full score-- update the switch statement.", ch, LOG_SYSLOG, TRUE);
-        break;
+    if (GET_TRADITION(ch) == TRAD_ADEPT) {
+      strlcat(buf2, "You are a physical adept.\r\n", sizeof(buf2));
+    } else {
+      switch (GET_ASPECT(ch)) {
+        case ASPECT_FULL:
+          strlcat(buf2, "You are a full mage.\r\n", sizeof(buf2));
+          break;
+        case ASPECT_CONJURER:
+          strlcat(buf2, "You are an aspected conjurer.\r\n", sizeof(buf2));
+          break;
+        case ASPECT_SHAMANIST:
+          strlcat(buf2, "You are an aspected shamanist.\r\n", sizeof(buf2));
+          break;
+        case ASPECT_SORCERER:
+          strlcat(buf2, "You are an aspected sorcerer.\r\n", sizeof(buf2));
+          break;
+        case ASPECT_ELEMEARTH:
+          strlcat(buf2, "You are an aspected elementalist specializing in Earth magic.\r\n", sizeof(buf2));
+          break;
+        case ASPECT_ELEMAIR:
+          strlcat(buf2, "You are an aspected elementalist specializing in Air magic.\r\n", sizeof(buf2));
+          break;
+        case ASPECT_ELEMFIRE:
+          strlcat(buf2, "You are an aspected elementalist specializing in Fire magic.\r\n", sizeof(buf2));
+          break;
+        case ASPECT_ELEMWATER:
+          strlcat(buf2, "You are an aspected elementalist specializing in Water magic.\r\n", sizeof(buf2));
+          break;
+        case ASPECT_EARTHMAGE:
+          strlcat(buf2, "You are a full mage specializing in Earth magic.\r\n", sizeof(buf2));
+          break;
+        case ASPECT_AIRMAGE:
+          strlcat(buf2, "You are a full mage specializing in Air magic.\r\n", sizeof(buf2));
+          break;
+        case ASPECT_FIREMAGE:
+          strlcat(buf2, "You are a full mage specializing in Fire magic.\r\n", sizeof(buf2));
+          break;
+        case ASPECT_WATERMAGE:
+          strlcat(buf2, "You are a full mage specializing in Water magic.\r\n", sizeof(buf2));
+          break;
+        default:
+          mudlog("SYSERR: Unrecognized aspect in full score-- update the switch statement.", ch, LOG_SYSLOG, TRUE);
+          break;
+      }
     }
 
     snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Initiation grade: %d\r\n", GET_GRADE(ch));
