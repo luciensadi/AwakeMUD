@@ -69,7 +69,7 @@ void ccr_race_menu(struct descriptor_data *d) {
             "\r\n  [4] Ork         ( 5 points / slot D)"
             "\r\n  [5] Troll       (10 points / slot C)"
             "\r\n"
-            "\r\n Metatypes (shop penalties):"
+            "\r\n Metavariants (shop penalties):"
             "\r\n  [6] Cyclops     (15 points / slot B)"
             "\r\n  [7] Koborokuru  (10 points / slot C)"
             "\r\n  [8] Fomori      (15 points / slot B)"
