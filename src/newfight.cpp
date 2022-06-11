@@ -478,95 +478,59 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       return target_died;
     }
 
-    // Calculate the power of the attack.
-    att->ranged->power = GET_WEAPON_POWER(att->weapon) + att->ranged->burst_count;
-    att->ranged->damage_level = GET_WEAPON_DAMAGE_CODE(att->weapon) + (int)(att->ranged->burst_count / 3);
+    if (att->ranged->is_fireweapon) {
+      att->ranged->power -= GET_IMPACT(def->ch);
+    } else {
+      // Calculate the power of the attack.
+      att->ranged->power = GET_WEAPON_POWER(att->weapon) + att->ranged->burst_count;
+      att->ranged->damage_level = GET_WEAPON_DAMAGE_CODE(att->weapon) + (int)(att->ranged->burst_count / 3);
 
-    // Calculate effects of armor on the power of the attack.
-    if (att->ranged->magazine) {
       if (GET_WEAPON_ATTACK_TYPE(att->weapon) == WEAP_TASER) {
         // SR3 p124.
         att->ranged->power -= (int)(GET_IMPACT(def->ch) / 2);
       } else {
-        switch (GET_MAGAZINE_AMMO_TYPE(att->ranged->magazine)) {
-          case AMMO_APDS:
-            att->ranged->power -= (int)(GET_BALLISTIC(def->ch) / 2);
-            break;
-          case AMMO_EX:
-            att->ranged->power++;
-            // fall through
-          case AMMO_EXPLOSIVE:
-            att->ranged->power++;
-            att->ranged->power -= GET_BALLISTIC(def->ch);
-            break;
-          case AMMO_FLECHETTE:
-            if (!GET_IMPACT(def->ch) && !GET_BALLISTIC(def->ch))
-              att->ranged->damage_level++;
-            else {
-              att->ranged->power -= MAX(GET_BALLISTIC(def->ch), GET_IMPACT(def->ch) * 2);
-            }
-            break;
-          case AMMO_HARMLESS:
-            att->ranged->power = 0;
-            // fall through
-          case AMMO_GEL:
-            // Errata: Add the following after the third line: "Impact armor, not Ballistic, applies."
-            att->ranged->power -= GET_IMPACT(def->ch) + 2;
-            att->ranged->is_gel = TRUE;
-            break;
-          default:
-            att->ranged->power -= GET_BALLISTIC(def->ch);
+        // Calculate effects of armor on the power of the attack.
+        if (att->ranged->magazine) {
+          switch (GET_MAGAZINE_AMMO_TYPE(att->ranged->magazine)) {
+            case AMMO_APDS:
+              att->ranged->power -= (int)(GET_BALLISTIC(def->ch) / 2);
+              break;
+            case AMMO_EX:
+              att->ranged->power++;
+              // fall through
+            case AMMO_EXPLOSIVE:
+              att->ranged->power++;
+              att->ranged->power -= GET_BALLISTIC(def->ch);
+              break;
+            case AMMO_FLECHETTE:
+              if (!GET_IMPACT(def->ch) && !GET_BALLISTIC(def->ch))
+                att->ranged->damage_level++;
+              else {
+                att->ranged->power -= MAX(GET_BALLISTIC(def->ch), GET_IMPACT(def->ch) * 2);
+              }
+              break;
+            case AMMO_HARMLESS:
+              att->ranged->power = 0;
+              // fall through
+            case AMMO_GEL:
+              // Errata: Add the following after the third line: "Impact armor, not Ballistic, applies."
+              att->ranged->power -= GET_IMPACT(def->ch) + 2;
+              att->ranged->is_gel = TRUE;
+              break;
+            default:
+              att->ranged->power -= GET_BALLISTIC(def->ch);
+          }
+        }
+        // Weapon fired without a magazine (probably by an NPC)-- we assume its ammo type is normal.
+        else {
+          att->ranged->power -= GET_BALLISTIC(def->ch);
+        }
+
+        // Increment character's shots_fired. This is used for internal tracking of eligibility for a skill quest.
+        if (GET_SKILL(att->ch, att->ranged->skill) >= 8 && SHOTS_FIRED(att->ch) < 10000) {
+          SHOTS_FIRED(att->ch)++;
         }
       }
-    }
-    // Weapon fired without a magazine (probably by an NPC)-- we assume its ammo type is normal.
-    else {
-      att->ranged->power -= GET_BALLISTIC(def->ch);
-    }
-
-    if (att->ranged->is_fireweapon) {
-      att->ranged->power -= GET_IMPACT(def->ch);
-    } else {
-      // Calculate effects of armor on the power of the attack.
-      if (att->ranged->magazine) {
-        switch (GET_MAGAZINE_AMMO_TYPE(att->ranged->magazine)) {
-          case AMMO_APDS:
-            att->ranged->power -= (int)(GET_BALLISTIC(def->ch) / 2);
-            break;
-          case AMMO_EX:
-            att->ranged->power++;
-            // fall through
-          case AMMO_EXPLOSIVE:
-            att->ranged->power++;
-            att->ranged->power -= GET_BALLISTIC(def->ch);
-            break;
-          case AMMO_FLECHETTE:
-            if (!GET_IMPACT(def->ch) && !GET_BALLISTIC(def->ch))
-              att->ranged->damage_level++;
-            else {
-              att->ranged->power -= MAX(GET_BALLISTIC(def->ch), GET_IMPACT(def->ch) * 2);
-            }
-            break;
-          case AMMO_HARMLESS:
-            att->ranged->power = 0;
-            // fall through
-          case AMMO_GEL:
-            // Errata: Add the following after the third line: "Impact armor, not Ballistic, applies."
-            att->ranged->power -= GET_IMPACT(def->ch) + 2;
-            att->ranged->is_gel = TRUE;
-            break;
-          default:
-            att->ranged->power -= GET_BALLISTIC(def->ch);
-        }
-      }
-      // Weapon fired without a magazine (probably by an NPC)-- we assume its ammo type is normal.
-      else {
-        att->ranged->power -= GET_BALLISTIC(def->ch);
-      }
-
-      // Increment character's shots_fired. This is used for internal tracking of eligibility for a skill quest.
-      if (GET_SKILL(att->ch, att->ranged->skill) >= 8 && SHOTS_FIRED(att->ch) < 10000)
-        SHOTS_FIRED(att->ch)++;
     }
 
     // The power of an attack can't be below 2 from ammo changes.

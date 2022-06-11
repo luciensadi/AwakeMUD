@@ -500,7 +500,7 @@ ACMD(do_shoot)
       int weapon_range = find_weapon_range(ch, weapon);
       if (weapon_range > range) {
         range = weapon_range;
-        weapon = GET_EQ(ch, i);
+        break;
       }
     }
   }

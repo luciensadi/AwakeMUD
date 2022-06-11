@@ -245,7 +245,7 @@ struct melee_combat_data {
             power += 2;
             break;
         }
-        
+
         if (does_weapon_have_bayonet(weapon)) {
           dam_type = TYPE_PIERCE;
           skill = SKILL_POLE_ARMS;
@@ -389,17 +389,32 @@ struct combat_data
     too_tall = is_char_too_tall(ch);
 
     weapon = weap;
-    ranged_combat_mode = weapon
-                    && IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon))
-                    && (GET_WEAPON_SKILL(weapon) >= SKILL_PISTOLS
-                        && GET_WEAPON_SKILL(weapon) <= SKILL_ASSAULT_CANNON);
+
+    if (weapon) {
+      // Check for a fireweapon (bow, crossbow)
+      if (GET_OBJ_TYPE(weapon) == ITEM_FIREWEAPON) {
+        ranged_combat_mode = TRUE;
+      }
+
+      // Check for a gun
+      else if (IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon))
+               && (GET_WEAPON_SKILL(weapon) >= SKILL_PISTOLS && GET_WEAPON_SKILL(weapon) <= SKILL_ASSAULT_CANNON))
+      {
+        ranged_combat_mode = TRUE;
+      }
+
+      // Neither succeeded, we are not in ranged combat mode.
+      else {
+        ranged_combat_mode = FALSE;
+      }
+    }
 
     cyber = new struct cyberware_data(ch);
     ranged = new struct ranged_combat_data(ch, weapon, ranged_combat_mode);
     melee = new struct melee_combat_data(ch, weapon, ranged_combat_mode, cyber);
 
     // Special case: Bayonet charge.
-    if (ranged_combat_mode && !weapon->contains && does_weapon_have_bayonet(weapon))
+    if (ranged_combat_mode && GET_OBJ_TYPE(weapon) != ITEM_FIREWEAPON && !weapon->contains && does_weapon_have_bayonet(weapon))
       ranged_combat_mode = FALSE;
   }
 

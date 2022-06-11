@@ -4262,6 +4262,9 @@ int find_sight(struct char_data *ch)
   return sight;
 }
 
+// Readability define. Not intended to be configurable, so it's not in config.hpp.
+#define BOW_MINIMUM_FIRE_RANGE 1
+
 int find_weapon_range(struct char_data *ch, struct obj_data *weapon)
 {
   if ( weapon == NULL )
@@ -4283,15 +4286,16 @@ int find_weapon_range(struct char_data *ch, struct obj_data *weapon)
       // Pistol crossbows are same-room.
       return 0;
     }
+
     // Otherwise, it's a bow; your strength influences how far you can draw the bow.
-    int str_component = MAX(1, (int)(GET_STR(ch) / 3));
+    int str_component = (int)(GET_STR(ch) / 3);
 
     // The bow's construction dictates the maximum force it can put behind an arrow.
     // The maximum str_min is 10, so this means we cap out at 2 rooms of distance.
-    int bow_component = MAX(1, (int)(GET_FIREWEAPON_STR_MINIMUM(weapon) / 4));
+    int bow_component = (int)(GET_FIREWEAPON_STR_MINIMUM(weapon) / 4);
 
     // Take the lesser of those two and call it good.
-    return MIN(str_component, bow_component);
+    return MAX(BOW_MINIMUM_FIRE_RANGE, MIN(str_component, bow_component));
   }
 
   switch(GET_WEAPON_ATTACK_TYPE(weapon))
