@@ -2083,71 +2083,90 @@ void parse_object(File &fl, long nr)
         break;
       case ITEM_WEAPON:
         // Attempt to automatically rectify broken weapons.
-        bool is_melee = FALSE;
-        if (GET_WEAPON_ATTACK_TYPE(obj) > MAX_WEAP)
-          switch (GET_WEAPON_SKILL(obj)) {
-            case SKILL_EDGED_WEAPONS:
-              GET_WEAPON_ATTACK_TYPE(obj) = WEAP_EDGED;
-              is_melee = TRUE;
-              break;
-            case SKILL_POLE_ARMS:
-              GET_WEAPON_ATTACK_TYPE(obj) = WEAP_POLEARM;
-              is_melee = TRUE;
-              break;
-            case SKILL_WHIPS_FLAILS:
-              GET_WEAPON_ATTACK_TYPE(obj) = WEAP_WHIP;
-              is_melee = TRUE;
-              break;
-            case SKILL_CLUBS:
-              GET_WEAPON_ATTACK_TYPE(obj) = WEAP_CLUB;
-              is_melee = TRUE;
-              break;
-            case SKILL_UNARMED_COMBAT:
-              GET_WEAPON_ATTACK_TYPE(obj) = WEAP_GLOVE;
-              is_melee = TRUE;
-              break;
-            case SKILL_PISTOLS:
-              GET_WEAPON_ATTACK_TYPE(obj) = WEAP_HEAVY_PISTOL;
-              break;
-            case SKILL_RIFLES:
-              GET_WEAPON_ATTACK_TYPE(obj) = WEAP_SPORT_RIFLE;
-              break;
-            case SKILL_SHOTGUNS:
-              GET_WEAPON_ATTACK_TYPE(obj) = WEAP_SHOTGUN;
-              break;
-            case SKILL_ASSAULT_RIFLES:
-              GET_WEAPON_ATTACK_TYPE(obj) = WEAP_ASSAULT_RIFLE;
-              break;
-            case SKILL_SMG:
-              GET_WEAPON_ATTACK_TYPE(obj) = WEAP_SMG;
-              break;
-            case SKILL_GRENADE_LAUNCHERS:
-              GET_WEAPON_ATTACK_TYPE(obj) = WEAP_GREN_LAUNCHER;
-              break;
-            case SKILL_MISSILE_LAUNCHERS:
-              GET_WEAPON_ATTACK_TYPE(obj) = WEAP_MISS_LAUNCHER;
-              break;
-            case SKILL_TASERS:
-              GET_WEAPON_ATTACK_TYPE(obj) = WEAP_TASER;
-              break;
-            case SKILL_MACHINE_GUNS:
-              GET_WEAPON_ATTACK_TYPE(obj) = WEAP_LMG;
-              break;
-            case SKILL_ASSAULT_CANNON:
-              GET_WEAPON_ATTACK_TYPE(obj) = WEAP_CANNON;
-              break;
+        {
+          bool is_melee = FALSE;
+          if (GET_WEAPON_ATTACK_TYPE(obj) > MAX_WEAP) {
+            switch (GET_WEAPON_SKILL(obj)) {
+              case SKILL_EDGED_WEAPONS:
+                GET_WEAPON_ATTACK_TYPE(obj) = WEAP_EDGED;
+                is_melee = TRUE;
+                break;
+              case SKILL_POLE_ARMS:
+                GET_WEAPON_ATTACK_TYPE(obj) = WEAP_POLEARM;
+                is_melee = TRUE;
+                break;
+              case SKILL_WHIPS_FLAILS:
+                GET_WEAPON_ATTACK_TYPE(obj) = WEAP_WHIP;
+                is_melee = TRUE;
+                break;
+              case SKILL_CLUBS:
+                GET_WEAPON_ATTACK_TYPE(obj) = WEAP_CLUB;
+                is_melee = TRUE;
+                break;
+              case SKILL_UNARMED_COMBAT:
+                GET_WEAPON_ATTACK_TYPE(obj) = WEAP_GLOVE;
+                is_melee = TRUE;
+                break;
+              case SKILL_PISTOLS:
+                GET_WEAPON_ATTACK_TYPE(obj) = WEAP_HEAVY_PISTOL;
+                break;
+              case SKILL_RIFLES:
+                GET_WEAPON_ATTACK_TYPE(obj) = WEAP_SPORT_RIFLE;
+                break;
+              case SKILL_SHOTGUNS:
+                GET_WEAPON_ATTACK_TYPE(obj) = WEAP_SHOTGUN;
+                break;
+              case SKILL_ASSAULT_RIFLES:
+                GET_WEAPON_ATTACK_TYPE(obj) = WEAP_ASSAULT_RIFLE;
+                break;
+              case SKILL_SMG:
+                GET_WEAPON_ATTACK_TYPE(obj) = WEAP_SMG;
+                break;
+              case SKILL_GRENADE_LAUNCHERS:
+                GET_WEAPON_ATTACK_TYPE(obj) = WEAP_GREN_LAUNCHER;
+                break;
+              case SKILL_MISSILE_LAUNCHERS:
+                GET_WEAPON_ATTACK_TYPE(obj) = WEAP_MISS_LAUNCHER;
+                break;
+              case SKILL_TASERS:
+                GET_WEAPON_ATTACK_TYPE(obj) = WEAP_TASER;
+                break;
+              case SKILL_MACHINE_GUNS:
+                GET_WEAPON_ATTACK_TYPE(obj) = WEAP_LMG;
+                break;
+              case SKILL_ASSAULT_CANNON:
+                GET_WEAPON_ATTACK_TYPE(obj) = WEAP_CANNON;
+                break;
+            }
           }
 
-        if (GET_WEAPON_SKILL(obj) > 100) {
-          log_vfprintf("WARNING: get_weapon_skill for %s is %d. Prior logic would have made it %d.",
-                       GET_OBJ_NAME(obj),
-                       GET_WEAPON_SKILL(obj),
-                       GET_WEAPON_SKILL(obj) - 100);
-          // GET_WEAPON_SKILL(obj) -= 100;
-        }
+          if (GET_WEAPON_SKILL(obj) > 100) {
+            log_vfprintf("WARNING: get_weapon_skill for %s is %d. Prior logic would have made it %d.",
+                         GET_OBJ_NAME(obj),
+                         GET_WEAPON_SKILL(obj),
+                         GET_WEAPON_SKILL(obj) - 100);
+            // GET_WEAPON_SKILL(obj) -= 100;
+          }
 
-        if (is_melee)
-          GET_WEAPON_REACH(obj) = MAX(0, GET_WEAPON_REACH(obj));
+          if (is_melee)
+            GET_WEAPON_REACH(obj) = MAX(0, GET_WEAPON_REACH(obj));
+        }
+        break;
+      case ITEM_FIREWEAPON:
+        GET_FIREWEAPON_SKILL(obj) = SKILL_PROJECTILES;
+
+        switch (GET_FIREWEAPON_TYPE(obj)) {
+          case FIREWEAPON_BOW:
+          case FIREWEAPON_RANGER_X_BOW:
+            GET_FIREWEAPON_ATTACK_TYPE(obj) = WEAP_BOW;
+            break;
+          case FIREWEAPON_CROSSBOW:
+            GET_FIREWEAPON_ATTACK_TYPE(obj) = WEAP_CROSSBOW;
+            break;
+          default:
+            log_vfprintf("ERROR: Fireweapon %s (%ld) is not a bow or crossbow!", GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj));
+            break;
+        }
 
         break;
     }

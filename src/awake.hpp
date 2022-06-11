@@ -1163,7 +1163,11 @@ enum {
 #define WEAP_GREN_LAUNCHER  20
 #define WEAP_MISS_LAUNCHER  21
 #define WEAP_REVOLVER       22
-#define MAX_WEAP            23
+#define WEAP_BOW            23
+#define WEAP_CROSSBOW       24
+#define MAX_WEAP            25
+// Adding a weapon type? Update the weapon_type array in constants.cpp.
+// Also update weapon_type_ammo_cost_multipliers in that file.
 
 // Defines our weapon ranges for bullet pants. Holdout -> revolver.
 #define START_OF_AMMO_USING_WEAPONS 5

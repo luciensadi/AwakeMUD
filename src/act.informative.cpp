@@ -2106,9 +2106,9 @@ void look_in_obj(struct char_data * ch, char *arg, bool exa)
             break;
         }
         list_obj_to_char(obj->contains, ch, SHOW_MODE_INSIDE_CONTAINER, TRUE, FALSE);
+      } else {
+        list_obj_to_char(obj->contains, ch, 2, TRUE, FALSE);
       }
-
-      list_obj_to_char(obj->contains, ch, 2, TRUE, FALSE);
     } else {            /* item must be a fountain or drink container */
       if (GET_OBJ_VAL(obj, 1) <= 0)
         send_to_char("It is empty.\r\n", ch);

@@ -438,6 +438,8 @@ const char *weapon_type[] =
     "grenade launcher",
     "missile launcher",
     "revolver",
+    "bow",
+    "crossbow",
     "\n"
   };
 
@@ -1920,7 +1922,9 @@ float weapon_type_ammo_cost_multipliers[] = {
   1.0,  // minigun
   1.0,  // grenade launcher (placeholder value)
   1.0,  // missile launcher (placeholder value)
-  1.0   // revolver
+  1.0,  // revolver
+  1.0,  // bow
+  1.0   // crossbow
 };
 
 const char *positions[] =
