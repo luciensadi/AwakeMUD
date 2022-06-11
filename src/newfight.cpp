@@ -468,34 +468,39 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
 
     // Calculate effects of armor on the power of the attack.
     if (att->ranged->magazine) {
-      switch (GET_MAGAZINE_AMMO_TYPE(att->ranged->magazine)) {
-        case AMMO_APDS:
-          att->ranged->power -= (int)(GET_BALLISTIC(def->ch) / 2);
-          break;
-        case AMMO_EX:
-          att->ranged->power++;
-          // fall through
-        case AMMO_EXPLOSIVE:
-          att->ranged->power++;
-          att->ranged->power -= GET_BALLISTIC(def->ch);
-          break;
-        case AMMO_FLECHETTE:
-          if (!GET_IMPACT(def->ch) && !GET_BALLISTIC(def->ch))
-            att->ranged->damage_level++;
-          else {
-            att->ranged->power -= MAX(GET_BALLISTIC(def->ch), GET_IMPACT(def->ch) * 2);
-          }
-          break;
-        case AMMO_HARMLESS:
-          att->ranged->power = 0;
-          // fall through
-        case AMMO_GEL:
-          // Errata: Add the following after the third line: "Impact armor, not Ballistic, applies."
-          att->ranged->power -= GET_IMPACT(def->ch) + 2;
-          att->ranged->is_gel = TRUE;
-          break;
-        default:
-          att->ranged->power -= GET_BALLISTIC(def->ch);
+      if (GET_WEAPON_ATTACK_TYPE(att->weapon) == WEAP_TASER) {
+        // SR3 p124.
+        att->ranged->power -= (int)(GET_IMPACT(def->ch) / 2);
+      } else {
+        switch (GET_MAGAZINE_AMMO_TYPE(att->ranged->magazine)) {
+          case AMMO_APDS:
+            att->ranged->power -= (int)(GET_BALLISTIC(def->ch) / 2);
+            break;
+          case AMMO_EX:
+            att->ranged->power++;
+            // fall through
+          case AMMO_EXPLOSIVE:
+            att->ranged->power++;
+            att->ranged->power -= GET_BALLISTIC(def->ch);
+            break;
+          case AMMO_FLECHETTE:
+            if (!GET_IMPACT(def->ch) && !GET_BALLISTIC(def->ch))
+              att->ranged->damage_level++;
+            else {
+              att->ranged->power -= MAX(GET_BALLISTIC(def->ch), GET_IMPACT(def->ch) * 2);
+            }
+            break;
+          case AMMO_HARMLESS:
+            att->ranged->power = 0;
+            // fall through
+          case AMMO_GEL:
+            // Errata: Add the following after the third line: "Impact armor, not Ballistic, applies."
+            att->ranged->power -= GET_IMPACT(def->ch) + 2;
+            att->ranged->is_gel = TRUE;
+            break;
+          default:
+            att->ranged->power -= GET_BALLISTIC(def->ch);
+        }
       }
     }
     // Weapon fired without a magazine (probably by an NPC)-- we assume its ammo type is normal.
