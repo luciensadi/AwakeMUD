@@ -507,7 +507,7 @@ void check_idling(void)
         }
         */
 
-      else if (!ch->desc && ch->char_specials.timer > NUM_MINUTES_BEFORE_LINKDEAD_EXTRACTION) {
+      else if (!ch->desc && !PLR_FLAGGED(ch, PLR_PROJECT) && ch->char_specials.timer > NUM_MINUTES_BEFORE_LINKDEAD_EXTRACTION) {
         snprintf(buf, sizeof(buf), "%s removed from game (no link).", GET_CHAR_NAME(ch));
         mudlog(buf, ch, LOG_CONNLOG, TRUE);
         extract_char(ch);
@@ -980,8 +980,11 @@ void point_update(void)
         extract_char(i);
 
         // Deal the damage instead of setting it.
-        if (damage(victim, victim, (GET_BOD(victim) - 1) * 100, TYPE_SUFFERING, TRUE))
+        if (damage(victim, victim, GET_BOD(victim) - 1, TYPE_SUFFERING, TRUE))
           continue;
+
+        // Continue regardless- i no longer exists.
+        continue;
       } else if (GET_ESS(i) <= 100)
         send_to_char("You feel memories of your physical body slipping away.\r\n", i);
     }

@@ -2431,14 +2431,15 @@ void extract_char(struct char_data * ch)
 
     // Save the player.
     playerDB.SaveChar(ch, GET_LOADROOM(ch));
-  }
 
-  if (!IS_NPC(ch) && !ch->desc)
-  {
-    for (t_desc = descriptor_list; t_desc; t_desc = t_desc->next)
-      if (t_desc->original == ch)
-        do_return(t_desc->character, "", 0, 0);
+    // Hollow player body? Figure out who this was supposed to belong to and return them.
+    if (!ch->desc) {
+      for (t_desc = descriptor_list; t_desc; t_desc = t_desc->next)
+        if (t_desc->original == ch)
+          do_return(t_desc->character, "", 0, 0);
+    }
   }
+  
   if (ch->followers)
   {
     struct follow_type *nextfollow;
