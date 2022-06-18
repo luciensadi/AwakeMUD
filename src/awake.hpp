@@ -2359,14 +2359,12 @@ enum {
 #define OBJ_SPECIAL_PC_CORPSE              43
 #define OBJ_COLT_M23                       838
 #define OBJ_NICAMI_SCOPE                   28702
-#define OBJ_VENT_IV                        80403
 #define OBJ_SMARTLINK_II                   31111
 #define OBJ_DOCWAGON_BASIC_MOD             16206
 #define OBJ_DOCWAGON_GOLD_MODULATOR        16207
 #define OBJ_DOCWAGON_PLATINUM_MODULATOR    16208
 #define OBJ_BLACK_TRENCH_COAT              1833
 #define OBJ_100_PCT_COTTON_SHIRT           64903
-#define OBJ_FORMFIT_III                    80734
 #define OBJ_FOREARM_GUARDS                 700
 #define OBJ_RIFLE_STRAP                    2059
 #define OBJ_BLACK_LEATHER_DUTY_BELT        9402
@@ -2395,7 +2393,6 @@ enum {
 #define OBJ_ORICHALCUM_BRACELET            4906
 #define OBJ_TITLE_TO_AMERICAR              891
 #define OBJ_SCK_MODEL_100                  786
-#define OBJ_TOP_MOUNTED_SMARTGUN_LINK      80422
 #define OBJ_FOREGRIP                       28618
 #define OBJ_PAIR_OF_WHITE_TRAINERS         22691
 #define OBJ_CYBERDECK_REPAIR_KIT           38041
@@ -2417,7 +2414,19 @@ enum {
 #define OBJ_UNFINISHED_EQUATION            1015
 #define OBJ_SCANEYE                        3817
 
+#ifdef USE_PRIVATE_CE_WORLD
+#define OBJ_GAS_VENT_IV                    80403
 #define OBJ_CMT_AVATAR                     80004
+#define OBJ_TOP_MOUNTED_SMARTGUN_LINK      80422
+#define OBJ_FORMFIT_III                    80734
+#else
+#define OBJ_GAS_VENT_IV                    691
+#define OBJ_CMT_AVATAR                     29005
+#define OBJ_TOP_MOUNTED_SMARTGUN_LINK      60554
+#define OBJ_FORMFIT_III                    711
+#endif
+
+
 #define OBJ_NOVATECH_SIX_SENSORS           17116
 #define OBJ_NOVATECH_SIX_MASKING           17115
 #define OBJ_NOVATECH_SIX_BOD               17113
@@ -2430,24 +2439,47 @@ enum {
 #define OBJ_TRANSYS_ARMOR                  1139
 #define OBJ_MATRIX_SWORD                   387
 
+#ifdef USE_PRIVATE_CE_WORLD
 #define OBJ_CYB_CERAMIC_BONE_LACING        85066
 #define OBJ_CYB_DATAJACK                   85012
 #define OBJ_CYB_BOOSTED_REFLEXES_III_ALPHA 85270
 #define OBJ_CYB_THERMOGRAPHIC_VISION       85053
 #define OBJ_CYB_SMARTLINK_II_ALPHA         85318
-#define OBJ_CYB_ENCEPHALON_II 85014
-#define OBJ_CYB_MATH_SPU_III 85019
-#define OBJ_CYB_SMARTLINK_II 85118
+#define OBJ_CYB_ENCEPHALON_II              85014
+#define OBJ_CYB_MATH_SPU_III               85019
+#define OBJ_CYB_SMARTLINK_II               85118
+#else
+#define OBJ_CYB_CERAMIC_BONE_LACING        463
+#define OBJ_CYB_DATAJACK                   304
+#define OBJ_CYB_BOOSTED_REFLEXES_III_ALPHA 327
+#define OBJ_CYB_THERMOGRAPHIC_VISION       307
+#define OBJ_CYB_SMARTLINK_II_ALPHA         548
+#define OBJ_CYB_ENCEPHALON_II              1107
+#define OBJ_CYB_MATH_SPU_III               1110
+#define OBJ_CYB_SMARTLINK_II               302
+#endif
+
 #define OBJ_CYB_EYE_PACKAGE_LL_TH_FC_ALPHA 566
 
+#ifdef USE_PRIVATE_CE_WORLD
 #define OBJ_BIO_MUSCLE_TONER_III           85811
+#define OBJ_BIO_MUSCLE_TONER_IV            85812
 #define OBJ_BIO_CEREBRAL_BOOSTER_II        85927
 #define OBJ_BIO_MUSCLE_AUGMENTATION_II     85806
 #define OBJ_BIO_ENHANCED_ARTICULATION      85803
-#define OBJ_BIO_MUSCLE_TONER_IV            85812
 #define OBJ_BIO_TRAUMA_DAMPER              85940
 #define OBJ_BIO_SYNAPTIC_ACCELERATOR_II    85939
 #define OBJ_BIO_CEREBRAL_BOOSTER_II        85927
+#else
+#define OBJ_BIO_MUSCLE_TONER_III           60609
+#define OBJ_BIO_MUSCLE_TONER_IV            60610
+#define OBJ_BIO_CEREBRAL_BOOSTER_II        411
+#define OBJ_BIO_MUSCLE_AUGMENTATION_II     417
+#define OBJ_BIO_ENHANCED_ARTICULATION      415
+#define OBJ_BIO_TRAUMA_DAMPER              60611
+#define OBJ_BIO_SYNAPTIC_ACCELERATOR_II    414
+#define OBJ_BIO_CEREBRAL_BOOSTER_II        411
+#endif
 
 
 #define OBJ_OLD_BLANK_MAGAZINE_FROM_CLASSIC 601

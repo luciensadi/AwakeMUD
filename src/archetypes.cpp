@@ -55,7 +55,7 @@ struct archetype_data *generate_street_samurai() {
   // Inventory.
   arch->weapon = OBJ_COLT_M23; // colt m-23, TODO: should be set to burst fire
   arch->weapon_top = OBJ_NICAMI_SCOPE; // nicami scope
-  arch->weapon_barrel = OBJ_VENT_IV; // vent IV
+  arch->weapon_barrel = OBJ_GAS_VENT_IV; // vent IV
   arch->weapon_under = OBJ_SMARTLINK_II; // smartlink II
 
   arch->ammo_q = 500;
@@ -156,7 +156,7 @@ struct archetype_data *generate_adept() {
   // Inventory.
   arch->weapon = OBJ_COLT_M23; // colt m-23, should be set to burst fire
   arch->weapon_top = OBJ_TOP_LASER_SIGHT; // laser sight
-  arch->weapon_barrel = OBJ_VENT_IV; // vent IV
+  arch->weapon_barrel = OBJ_GAS_VENT_IV; // vent IV
   arch->weapon_under = OBJ_BAYONET; // bayonet
 
   arch->ammo_q = 500;
@@ -401,7 +401,7 @@ struct archetype_data *generate_decker() {
 
   // Inventory.
   arch->weapon = OBJ_SCK_MODEL_100;
-  arch->weapon_barrel = OBJ_VENT_IV;
+  arch->weapon_barrel = OBJ_GAS_VENT_IV;
   arch->ammo_q = 500;
 
   arch->nuyen = 22660;
@@ -494,9 +494,9 @@ struct archetype_data *generate_rigger() {
 
   // Inventory.
   arch->weapon = 838; // colt m-23, should be set to burst fire
-  arch->weapon_top = 28702; // nicami scope
-  arch->weapon_barrel = 80403; // vent IV
-  arch->weapon_under = 31111; // smartlink II
+  arch->weapon_top = OBJ_NICAMI_SCOPE; // nicami scope
+  arch->weapon_barrel = OBJ_GAS_VENT_IV; // vent IV
+  arch->weapon_under = OBJ_SMARTLINK_II; // smartlink II
   arch->ammo_q = 500;
 
   arch->nuyen = 22660;
@@ -511,12 +511,12 @@ struct archetype_data *generate_rigger() {
 
   // Cyberware.
   i = 0;
-  arch->cyberware[i++] = 85066; // ceramic bone lacing
+  arch->cyberware[i++] = OBJ_CYB_CERAMIC_BONE_LACING; // ceramic bone lacing
   assert(i < NUM_ARCHETYPE_CYBERWARE);
 
   // Bioware.
   i = 0;
-  arch->bioware[i++] = 85803; // enhanced articulation
+  arch->bioware[i++] = OBJ_BIO_ENHANCED_ARTICULATION; // enhanced articulation
   assert(i < NUM_ARCHETYPE_BIOWARE);
 
   return arch;
