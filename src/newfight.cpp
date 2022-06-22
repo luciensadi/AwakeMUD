@@ -672,17 +672,25 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     att->melee->tn = MAX(att->melee->tn, 2);
     def->melee->tn = MAX(def->melee->tn, 2);
 
+    // Canary check-- this value is set to zero during initialization and should not have been touched yet.
+    if (def->melee->successes != 0) {
+      mudlog("FIGHT MEMORY ERROR: def->melee->successes was not zero!", def->ch, LOG_SYSLOG, TRUE);
+    }
+    if (att->melee->successes != 0) {
+      mudlog("FIGHT MEMORY ERROR: att->melee->successes was not zero!", def->ch, LOG_SYSLOG, TRUE);
+    }
+
     // Calculate the clash, unless there's some surprise involved (hitting someone unconscious is technically surprising for them)
     if (AWAKE(def->ch) && !AFF_FLAGGED(def->ch, AFF_SURPRISE)) {
       att->melee->successes = success_test(att->melee->dice, att->melee->tn);
       def->melee->successes = success_test(def->melee->dice, def->melee->tn);
-      net_successes = att->melee->successes - def->melee->successes;
     } else {
       strlcpy(rbuf, "Surprised-- defender gets no roll.", sizeof(rbuf));
       SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
       att->melee->successes = MAX(1, success_test(att->melee->dice, att->melee->tn));
-      net_successes = att->melee->successes;
+      def->melee->successes = 0;
     }
+    net_successes = att->melee->successes - def->melee->successes;
 
     // Store our successes for the monowhip test, since there's a chance it'll be flipped in counterattack.
     successes_for_use_in_monowhip_test_check = att->melee->successes;
@@ -710,8 +718,9 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
 
     if (net_successes < 0) {
       snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "^yNet successes is ^W%d^y, which will cause a counterattack.^n\r\n", net_successes);
-    } else
+    } else {
       snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "Net successes is ^W%d^n.\r\n", net_successes);
+    }
     SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
 
     act("$n clashes with $N in melee combat.", FALSE, att->ch, 0, def->ch, TO_ROOM);

@@ -2780,6 +2780,8 @@ enum {
 // Set this at the end of every flag list in constants.cpp.
 #define MAX_FLAG_MARKER "\n"
 
+#define MAX_VISIBILITY_PENALTY             8
+
 // This is to flag variables used eg in macros so that the compiler won't complain about unused variables
 // when they're actually used. Casting to void does nothing but the compiler will stop thinking it's
 // unused. This is the same way Q_UNUSED is used in Qt. -- Nodens

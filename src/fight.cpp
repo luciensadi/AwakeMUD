@@ -234,6 +234,7 @@ void update_pos(struct char_data * victim)
     GET_POS(victim) = POS_DEAD;
   } else {
     GET_POS(victim) = POS_MORTALLYW;
+    AFF_FLAGS(victim).RemoveBit(AFF_PRONE);
   }
 
   GET_INIT_ROLL(victim) = 0;
@@ -3953,10 +3954,10 @@ bool vehicle_has_ultrasound_sensors(struct veh_data *veh) {
   return FALSE;
 }
 
-#define INVIS_CODE_STAFF 321
-#define INVIS_CODE_TOTALINVIS 123
-#define BLIND_FIGHTING_MAX 4
-#define BLIND_FIRE_PENALTY 8
+#define INVIS_CODE_STAFF       321
+#define INVIS_CODE_TOTALINVIS  123
+#define BLIND_FIGHTING_MAX     (MAX_VISIBILITY_PENALTY / 2)
+#define BLIND_FIRE_PENALTY     MAX_VISIBILITY_PENALTY
 int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
   int modifier = 0;
   char rbuf[2048];

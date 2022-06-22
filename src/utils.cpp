@@ -411,18 +411,29 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int c
     temp_room = get_veh_in_room(veh);
   }
 
+  // If you're astrally perceiving, you don't take additional vision penalties, and shouldn't have any coming in here.
   if (!is_rigging && (PLR_FLAGGED(ch, PLR_PERCEIVE) || MOB_FLAGGED(ch, MOB_DUAL_NATURE) || IS_ASTRAL(ch)))
   {
     if (!skill_is_magic && PLR_FLAGGED(ch, PLR_PERCEIVE)) {
       base_target += 2;
       buf_mod(rbuf, rbuf_len, "AstralPercep", 2);
     }
-  } else {
+  }
+  // Otherwise, check to see if you've exceeded the vision pen max coming in here. This only happens for totalinvis and staff opponents.
+  else if (current_visibility_penalty >= MAX_VISIBILITY_PENALTY) {
+    int new_visibility_penalty = MAX_VISIBILITY_PENALTY - current_visibility_penalty;
+    buf_mod(rbuf, rbuf_len, "PreconditionVisPenaltyMax8", new_visibility_penalty);
+    base_target += new_visibility_penalty;
+  }
+  // If we're within the allowed amount, calculate the remaining vision penalty, capping at 8.
+  else {
     int visibility_penalty = get_vision_penalty(ch, temp_room, rbuf, rbuf_len);
 
-    if (current_visibility_penalty + visibility_penalty > 8) {
-      buf_mod(rbuf, rbuf_len, "VisPenaltyMax8", 8 - (current_visibility_penalty + visibility_penalty));
-      visibility_penalty = 8;
+    if (current_visibility_penalty + visibility_penalty > MAX_VISIBILITY_PENALTY) {
+      // We already printed all their modifiers, so we need to apply a negative modifier to clamp them back to 8.
+      int new_visibility_penalty = MAX_VISIBILITY_PENALTY - (current_visibility_penalty + visibility_penalty);
+      buf_mod(rbuf, rbuf_len, "VisPenaltyMax8", new_visibility_penalty);
+      visibility_penalty = new_visibility_penalty;
     }
 
     base_target += visibility_penalty;
