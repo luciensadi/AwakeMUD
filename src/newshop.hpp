@@ -46,7 +46,9 @@ struct shop_sell_data {
 
   shop_sell_data() :
     next(NULL)
-  {}
+  {
+    memset(lastidnum, 0, SHOP_LAST_IDNUM_LIST_SIZE * sizeof(int));
+  }
 };
 
 struct shop_order_data {

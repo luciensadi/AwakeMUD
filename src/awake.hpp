@@ -1139,6 +1139,7 @@ enum {
 #define TYPE_ELEVATOR         413
 #define TYPE_MEDICAL_MISHAP   414
 #define TYPE_SPELL_DRAIN      415
+#define TYPE_DRUGS            416
 
 #define WEAP_EDGED          0
 #define WEAP_CLUB           1
@@ -1337,6 +1338,10 @@ enum {
 #define DRUG_NOVACOKE  10
 #define DRUG_ZEN  11
 #define NUM_DRUGS       12
+
+#define DRUG_STAGE_UNAFFECTED 0
+#define DRUG_STAGE_ONSET      1
+#define DRUG_STAGE_COMEDOWN   2
 
 /* vehicle types table */
 #define VEH_DRONE 0
@@ -2055,6 +2060,9 @@ enum {
 /* do_crash_mud */
 #define SCMD_NOOP 0 // AKA 'this invocation does nothing'.
 #define SCMD_BOOM 1337
+
+/* do_get */
+#define SCMD_TAKE 1
 
 /* END SUBCOMMANDS SECTION */
 

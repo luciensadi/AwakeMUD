@@ -1509,8 +1509,13 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
   switch (spell) {
     case SPELL_DETOX:
       base_target = 0;
-      if ((GET_DRUG_STAGE(vict) == 1 || GET_DRUG_STAGE(vict) == 2) && GET_DRUG_AFFECT(vict))
-        base_target = drug_types[GET_DRUG_AFFECT(vict)].power;
+      for (int i = MIN_DRUG; i < NUM_DRUGS; i++) {
+        if (GET_DRUG_STAGE(vict, i) != DRUG_STAGE_UNAFFECTED) {
+          base_target = drug_types[i].power;
+          break;
+        }
+      }
+
       if (!base_target) {
         send_to_char("They aren't affected by any drugs.\r\n", ch);
         return;

@@ -496,6 +496,8 @@ void affect_total_veh(struct veh_data * veh)
   }
 }
 
+int noop_var_for_perception_test = 0;
+#define GET_PERCEPTION_TEST_DICE_MOD(ch) noop_var_for_perception_test /* does nothing-- I added this to track the work we need to eventually do around drug perception tests.*/
 void affect_total(struct char_data * ch)
 {
   struct obj_data *cyber, *obj;
@@ -813,6 +815,8 @@ void affect_total(struct char_data * ch)
   GET_MAX_MENTAL(ch) = 1000;
   GET_MAX_PHYSICAL(ch) = 1000;
   GET_TARGET_MOD(ch) = 0;
+  GET_PERCEPTION_TEST_DICE_MOD(ch) = 0;
+  GET_CONCENTRATION_TARGET_MOD(ch) = 0;
   GET_MAX_MENTAL(ch) -= GET_MENTAL_LOSS(ch) * 100;
   GET_MAX_PHYSICAL(ch) -= GET_PHYSICAL_LOSS(ch) * 100;
 
@@ -850,63 +854,69 @@ void affect_total(struct char_data * ch)
     }
   }
   if (!AFF_FLAGGED(ch, AFF_DETOX)) {
-    if (GET_DRUG_STAGE(ch) == 1)
-    {
-      switch (GET_DRUG_AFFECT(ch)) {
-        case DRUG_HYPER:
-          GET_TARGET_MOD(ch)++;
-          break;
-        case DRUG_JAZZ:
-          GET_QUI(ch) += 2;
-          GET_INIT_DICE(ch)++;
-          break;
-        case DRUG_KAMIKAZE:
-          GET_BOD(ch)++;
-          GET_QUI(ch)++;
-          GET_STR(ch) += 2;
-          GET_WIL(ch)++;
-          GET_INIT_DICE(ch)++;
-          break;
-        case DRUG_PSYCHE:
-          GET_INT(ch)++;
-          break;
-        case DRUG_BLISS:
-          GET_TARGET_MOD(ch)++;
-          GET_REA(ch)--;
-          break;
-        case DRUG_CRAM:
-          GET_REA(ch)++;
-          GET_INIT_DICE(ch)++;
-          break;
-        case DRUG_NITRO:
-          GET_STR(ch) += 2;
-          GET_WIL(ch) += 2;
-          break;
-        case DRUG_NOVACOKE:
-          GET_REA(ch)++;
-          GET_CHA(ch)++;
-          break;
-        case DRUG_ZEN:
-          GET_REA(ch) -= 2;
-          GET_TARGET_MOD(ch)++;
-          GET_WIL(ch)++;
-          break;
-      }
-    } else if (GET_DRUG_STAGE(ch) == 2)
-    {
-      switch (GET_DRUG_AFFECT(ch)) {
-        case DRUG_JAZZ:
-          GET_TARGET_MOD(ch)++;
-          GET_QUI(ch)--;
-          break;
-        case DRUG_KAMIKAZE:
-          GET_QUI(ch)--;
-          GET_WIL(ch)--;
-          break;
-        case DRUG_NOVACOKE:
-          GET_CHA(ch) = 1;
-          GET_WIL(ch) /= 2;
-          break;
+    for (int i = MIN_DRUG; i < NUM_DRUGS; i++) {
+      if (GET_DRUG_STAGE(ch, i) == DRUG_STAGE_ONSET) {
+        switch (i) {
+          case DRUG_HYPER:
+            GET_TARGET_MOD(ch)++;
+            GET_CONCENTRATION_TARGET_MOD(ch) += 3; // should be 4, but it already includes the general target mod above
+            break;
+          case DRUG_JAZZ:
+            GET_QUI(ch) += 2;
+            GET_INIT_DICE(ch)++;
+            break;
+          case DRUG_KAMIKAZE:
+            GET_BOD(ch)++;
+            GET_QUI(ch)++;
+            GET_STR(ch) += 2;
+            GET_WIL(ch)++;
+            GET_INIT_DICE(ch)++;
+            break;
+          case DRUG_PSYCHE:
+            GET_INT(ch)++;
+            break;
+          case DRUG_BLISS:
+            GET_TARGET_MOD(ch)++;
+            GET_REA(ch)--;
+            // Pain resistance is handled directly in the relevant function.
+            break;
+          case DRUG_CRAM:
+            GET_REA(ch)++;
+            GET_INIT_DICE(ch)++;
+            break;
+          case DRUG_NITRO:
+            GET_STR(ch) += 2;
+            GET_WIL(ch) += 2;
+            // Pain resistance is handled directly in the relevant function.
+            GET_PERCEPTION_TEST_DICE_MOD(ch) += 2;
+            break;
+          case DRUG_NOVACOKE:
+            GET_REA(ch)++;
+            GET_CHA(ch)++;
+            // Pain resistance is handled directly in the relevant function.
+            GET_PERCEPTION_TEST_DICE_MOD(ch)++;
+            break;
+          case DRUG_ZEN:
+            GET_REA(ch) -= 2;
+            GET_TARGET_MOD(ch)++;
+            GET_WIL(ch)++;
+            break;
+        }
+      } else if (GET_DRUG_STAGE(ch, i) == DRUG_STAGE_COMEDOWN) {
+        switch (i) {
+          case DRUG_JAZZ:
+            GET_CONCENTRATION_TARGET_MOD(ch)++;
+            GET_QUI(ch)--;
+            break;
+          case DRUG_KAMIKAZE:
+            GET_QUI(ch)--;
+            GET_WIL(ch)--;
+            break;
+          case DRUG_NOVACOKE:
+            GET_CHA(ch) = 1;
+            GET_WIL(ch) /= 2;
+            break;
+        }
       }
     }
   }
@@ -1074,6 +1084,7 @@ void affect_total(struct char_data * ch)
     }
   }
 }
+#undef GET_PERCEPTION_TEST_DICE_MOD
 
 /*
  * Return if a char is affected by a spell (SPELL_XXX), NULL indicates
@@ -2439,7 +2450,7 @@ void extract_char(struct char_data * ch)
           do_return(t_desc->character, "", 0, 0);
     }
   }
-  
+
   if (ch->followers)
   {
     struct follow_type *nextfollow;

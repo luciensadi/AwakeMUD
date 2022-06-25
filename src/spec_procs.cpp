@@ -326,7 +326,7 @@ int train_ability_cost(struct char_data *ch, int abil, int level, bool untrain) 
 
   switch (abil) {
     case ADEPT_IMPROVED_BOD:
-      if (GET_REAL_BOD(ch) + GET_POWER_TOTAL(ch, ADEPT_IMPROVED_BOD) + (untrain ? -1 : 0) >= racial_limits[(int)GET_RACE(ch)][0][0] - GET_PERM_BOD_LOSS(ch))
+      if (GET_REAL_BOD(ch) + GET_POWER_TOTAL(ch, ADEPT_IMPROVED_BOD) + (untrain ? -1 : 0) >= racial_limits[(int)GET_RACE(ch)][0][0])
         cost *= 2;
       break;
     case ADEPT_IMPROVED_QUI:
@@ -1045,7 +1045,7 @@ int calculate_training_raw_cost(struct char_data *ch, int attribute) {
 bool attribute_below_maximums(struct char_data *ch, int attribute) {
   // Special case: Bod can have permanent loss.
   if (attribute == BOD)
-    return GET_REAL_BOD(ch) + GET_PERM_BOD_LOSS(ch) < racial_limits[(int)GET_RACE(ch)][0][BOD];
+    return GET_REAL_BOD(ch) < racial_limits[(int)GET_RACE(ch)][0][BOD];
 
   return GET_REAL_ATT(ch, attribute) < racial_limits[(int)GET_RACE(ch)][0][attribute];
 }

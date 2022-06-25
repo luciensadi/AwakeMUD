@@ -1,3 +1,4 @@
+
 /* ************************************************************************
  *   File: limits.c                                      Part of CircleMUD *
  *  Usage: limits & gain funcs for HMV, exp, hunger/thirst, idle time      *
@@ -903,8 +904,6 @@ void point_update(void)
                                                   (drug_types[x].physical_addiction && success_test(GET_BOD(i), drug_types[x].physical_addiction + GET_DRUG_EDGE(i, x)) < 1))) {
             if (GET_REAL_BOD(i) > 1)
               GET_REAL_BOD(i)--;
-            else if (GET_PERM_BOD_LOSS(i) < racial_limits[(int)GET_RACE(i)][0][0])
-              GET_PERM_BOD_LOSS(i)++;
             send_to_char(i, "Your health suffers at the hand of your %s addiction.\r\n", drug_types[x].name);
           }
           if (AFF_FLAGGED(i, AFF_WITHDRAWAL)) {
@@ -939,9 +938,9 @@ void point_update(void)
               } else
                 snprintf(buf, sizeof(buf), "You crave some %s.\r\n", drug_types[x].name);
               for (struct obj_data *obj = i->carrying; obj; obj = obj->next_content) {
-                if (GET_OBJ_TYPE(obj) == ITEM_DRUG && GET_OBJ_VAL(obj, 0) == x) {
+                if (GET_OBJ_TYPE(obj) == ITEM_DRUG && GET_OBJ_DRUG_TYPE(obj) == x) {
                   do_use(i, obj->text.keywords, 0, 0);
-                  if (GET_DRUG_DOSE(i) > GET_DRUG_TOLERANT(i, x))
+                  if (GET_DRUG_DOSE(i, x) > GET_DRUG_TOLERANT(i, x))
                     snprintf(buf, sizeof(buf), "You satisfy your craving for %s.\r\n", drug_types[x].name);
                   else
                     snprintf(buf, sizeof(buf), "You attempt to satisfy your craving for %s.\r\n", drug_types[x].name);
@@ -1473,122 +1472,165 @@ void misc_update(void)
     }
 
     if (!IS_NPC(ch)) {
-      if (!CH_IN_COMBAT(ch))
-        if (check_adrenaline(ch, 0))
-          continue;
-      if (GET_DRUG_DOSE(ch) && --GET_DRUG_DURATION(ch) < 0 && !GET_DRUG_STAGE(ch)) {
-        bool physical = TRUE;
-        if (GET_DRUG_AFFECT(ch) == DRUG_HYPER || GET_DRUG_AFFECT(ch) == DRUG_BURN)
-          physical = FALSE;
-        if (drug_types[GET_DRUG_AFFECT(ch)].level > 0) {
-          dam = drug_types[GET_DRUG_AFFECT(ch)].level + (GET_DRUG_DOSE(ch) > 1 ? 1 : 0);
-          power = drug_types[GET_DRUG_AFFECT(ch)].power + (GET_DRUG_DOSE(ch) > 2 ? GET_DRUG_DOSE(ch) - 2 : 0);
-          dam = convert_damage(stage(-success_test(GET_REAL_BOD(ch) - (GET_BIOOVER(ch) > 0 ? GET_BIOOVER(ch) / 2 : 0), power), dam));
-          if (damage(ch, ch, dam, TYPE_BIOWARE, physical))
-            continue;
+      // Burn down adrenaline. This can kill the target, so break out if it returns true.
+      if (check_adrenaline(ch, 0))
+        continue;
+
+      // Apply new doses of everything.
+      bool character_died = FALSE;
+      for (int i = MIN_DRUG; i < NUM_DRUGS && !character_died; i++) {
+        // send_to_char(ch, "%s: stage %d, dose %d, duration %d\r\n", drug_types[i].name, GET_DRUG_STAGE(ch, i), GET_DRUG_DOSE(ch, i), GET_DRUG_DURATION(ch, i));
+
+        // All drugs are ticked down as long as you're on them.
+        if (GET_DRUG_STAGE(ch, i) != DRUG_STAGE_UNAFFECTED)
+          GET_DRUG_DURATION(ch, i) -= 1;
+
+        // Transition from no drug to having it, assuming you've passed your tolerance threshold.
+        if (GET_DRUG_STAGE(ch, i) == DRUG_STAGE_UNAFFECTED && GET_DRUG_DOSE(ch, i) > GET_DRUG_TOLERANT(ch, i)) {
+          bool physical = (i != DRUG_HYPER && i != DRUG_BURN);
+
+          if (drug_types[i].level > 0) {
+            dam = drug_types[i].level + (GET_DRUG_DOSE(ch, i) > 1 ? 1 : 0);
+            power = drug_types[i].power + (GET_DRUG_DOSE(ch, i) > 2 ? GET_DRUG_DOSE(ch, i) - 2 : 0);
+            dam = convert_damage(stage(-success_test(GET_REAL_BOD(ch) - (GET_BIOOVER(ch) > 0 ? GET_BIOOVER(ch) / 2 : 0), power), dam));
+            if (damage(ch, ch, dam, TYPE_DRUGS, physical)) {
+              character_died = TRUE;
+              break;
+            }
+          }
+
+          GET_DRUG_STAGE(ch, i) = DRUG_STAGE_ONSET;
+          GET_DRUG_LASTFIX(ch, i) = time(0);
+
+          switch (i) {
+            case DRUG_ACTH:
+              snprintf(buf, sizeof(buf), "You feel a brief moment of vertigo.\r\n");
+              if (check_adrenaline(ch, 1)) {
+                character_died = TRUE;
+                break;
+              }
+              reset_drug_for_char(ch, i);
+              break;
+            case DRUG_HYPER:
+              snprintf(buf, sizeof(buf), "The world seems to swirl around you as your mind is bombarded with feedback.\r\n");
+              GET_DRUG_DURATION(ch, i) = dam * 100;
+              break;
+            case DRUG_JAZZ:
+              snprintf(buf, sizeof(buf), "The world slows down around you.\r\n");
+              GET_DRUG_DURATION(ch, i) = 100 * srdice();
+              break;
+            case DRUG_KAMIKAZE:
+              snprintf(buf, sizeof(buf), "Your body feels alive with energy and the desire to fight.\r\n");
+              GET_DRUG_DURATION(ch, i) = 100 * srdice();
+              break;
+            case DRUG_PSYCHE:
+              snprintf(buf, sizeof(buf), "Your feel your mind racing.\r\n");
+              GET_DRUG_DURATION(ch, i) = MAX(1, 12 - GET_REAL_BOD(ch)) * 600;
+              break;
+            case DRUG_BLISS:
+              snprintf(buf, sizeof(buf), "The world fades into bliss as your body becomes sluggish.\r\n");
+              GET_DRUG_DURATION(ch, i) = MAX(1, 6 - GET_REAL_BOD(ch)) * 600;
+              break;
+            case DRUG_BURN:
+              snprintf(buf, sizeof(buf), "You suddenly feel very intoxicated.\r\n");
+              reset_drug_for_char(ch, i);
+              GET_COND(ch, COND_DRUNK) = FOOD_DRINK_MAX;
+              break;
+            case DRUG_CRAM:
+              snprintf(buf, sizeof(buf), "Your body feels alive with energy.\r\n");
+              GET_DRUG_DURATION(ch, i) = MAX(1, 12 - GET_REAL_BOD(ch)) * 600;
+              break;
+            case DRUG_NITRO:
+              snprintf(buf, sizeof(buf), "You lose sense of yourself as your entire body comes alive with energy.\r\n");
+              GET_DRUG_DURATION(ch, i) = 100 * srdice();
+              break;
+            case DRUG_NOVACOKE:
+              snprintf(buf, sizeof(buf), "You feel euphoric and alert.\r\n");
+              GET_DRUG_DURATION(ch, i) = MAX(1, 10 - GET_REAL_BOD(ch)) * 600;
+              break;
+            case DRUG_ZEN:
+              snprintf(buf, sizeof(buf), "You start to lose your sense of reality as your sight fills with hallucinations.\r\n");
+              GET_DRUG_DURATION(ch, i) = 100 * srdice();
+              break;
+            default:
+              snprintf(buf, sizeof(buf), "SYSERR: Unknown drug type %d when printing drug-start message!", i);
+              mudlog(buf, ch, LOG_SYSLOG, TRUE);
+              break;
+          }
+          if (character_died)
+            break;
+          send_to_char(buf, ch);
         }
-        GET_DRUG_STAGE(ch) = 1;
-        GET_DRUG_LASTFIX(ch, GET_DRUG_AFFECT(ch)) = time(0);
-        switch (GET_DRUG_AFFECT(ch)) {
-          case DRUG_ACTH:
-            snprintf(buf, sizeof(buf), "You feel a brief moment of vertigo.\r\n");
-            if (check_adrenaline(ch, 1))
-              continue;
-            GET_DRUG_AFFECT(ch) = GET_DRUG_DOSE(ch) = GET_DRUG_DURATION(ch) = 0;
+        else if (GET_DRUG_STAGE(ch, i) == DRUG_STAGE_ONSET && GET_DRUG_DURATION(ch, i) <= 0) {
+          int toxin = 0;
+          for (struct obj_data *obj = ch->bioware; obj && !toxin; obj = obj->next_content)
+            if (GET_BIOWARE_TYPE(obj) == BIO_TOXINEXTRACTOR)
+              toxin = GET_BIOWARE_RATING(obj);
+
+          send_to_char(ch, "You begin to feel drained as the %s wears off.\r\n", drug_types[i].name);
+          GET_DRUG_STAGE(ch, i) = DRUG_STAGE_COMEDOWN;
+
+          int bod_for_success_test = GET_REAL_BOD(ch) - (GET_BIOOVER(ch) > 0 ? GET_BIOOVER(ch) / 2 : 0);
+          switch (i) {
+            case DRUG_JAZZ:
+              GET_DRUG_DURATION(ch, i) = 100 * srdice();
+              if (damage(ch, ch, convert_damage(stage(-success_test(bod_for_success_test, 8 - toxin), LIGHT)), TYPE_BIOWARE, 0)) {
+                character_died = TRUE;
+                break;
+              }
+              break;
+            case DRUG_KAMIKAZE:
+              GET_DRUG_DURATION(ch, i) = 100 * srdice();
+              // Canonically, this should not hurt this much-- but we don't have a concept of cyberware/bioware system damage here,
+              // so instead of applying permanent subsystem damage, we just deal CHONKY physical damage.
+              if (damage(ch, ch, convert_damage(stage(-success_test(bod_for_success_test, 12 - toxin), DEADLY)), TYPE_BIOWARE, 0)) {
+                character_died = TRUE;
+                break;
+              }
+              break;
+            case DRUG_CRAM:
+              GET_DRUG_DURATION(ch, i) = MAX(1, 12 - bod_for_success_test) * 600;
+              break;
+            case DRUG_NITRO:
+              if (damage(ch, ch, convert_damage(stage(-success_test(bod_for_success_test, 8 - toxin), DEADLY)), TYPE_BIOWARE, 0)) {
+                character_died = TRUE;
+                break;
+              }
+              reset_drug_for_char(ch, i);
+              break;
+            case DRUG_NOVACOKE:
+              GET_DRUG_DURATION(ch, i) = MAX(1, 10 - bod_for_success_test) * 600;
+              break;
+            default:
+              reset_drug_for_char(ch, i);
+              if (AFF_FLAGGED(ch, AFF_DETOX))
+                AFF_FLAGS(ch).RemoveBit(AFF_DETOX);
+          }
+          if (character_died)
             break;
-          case DRUG_HYPER:
-            snprintf(buf, sizeof(buf), "The world seems to swirl around you as your mind is bombarded with feedback.\r\n");
-            GET_DRUG_DURATION(ch) = dam * 100;
-            break;
-          case DRUG_JAZZ:
-            snprintf(buf, sizeof(buf), "The world slows down around you.\r\n");
-            GET_DRUG_DURATION(ch) = 100 * srdice();
-            break;
-          case DRUG_KAMIKAZE:
-            snprintf(buf, sizeof(buf), "Your body feels alive with energy and the desire to fight.\r\n");
-            GET_DRUG_DURATION(ch) = 100 * srdice();
-            break;
-          case DRUG_PSYCHE:
-            snprintf(buf, sizeof(buf), "Your feel your mind racing.\r\n");
-            GET_DRUG_DURATION(ch) = MAX(1, 12 - GET_REAL_BOD(ch)) * 600;
-            break;
-          case DRUG_BLISS:
-            snprintf(buf, sizeof(buf), "The world fades into bliss as your body becomes sluggish.\r\n");
-            GET_DRUG_DURATION(ch) = MAX(1, 6 - GET_REAL_BOD(ch)) * 600;
-            break;
-          case DRUG_BURN:
-            snprintf(buf, sizeof(buf), "You suddenly feel very intoxicated.\r\n");
-            GET_DRUG_AFFECT(ch) = GET_DRUG_DOSE(ch) = GET_DRUG_DURATION(ch) = 0;
-            GET_COND(ch, COND_DRUNK) = FOOD_DRINK_MAX;
-            break;
-          case DRUG_CRAM:
-            snprintf(buf, sizeof(buf), "Your body feels alive with energy.\r\n");
-            GET_DRUG_DURATION(ch) = MAX(1, 12 - GET_REAL_BOD(ch)) * 600;
-            break;
-          case DRUG_NITRO:
-            snprintf(buf, sizeof(buf), "You lose sense of yourself as your entire body comes alive with energy.\r\n");
-            GET_DRUG_DURATION(ch) = 100 * srdice();
-            break;
-          case DRUG_NOVACOKE:
-            snprintf(buf, sizeof(buf), "You feel euphoric and alert.\r\n");
-            GET_DRUG_DURATION(ch) = MAX(1, 10 - GET_REAL_BOD(ch)) * 600;
-            break;
-          case DRUG_ZEN:
-            snprintf(buf, sizeof(buf), "You start to loose your sense of reality as your sight fills with hallucinations.\r\n");
-            GET_DRUG_DURATION(ch) = 100 * srdice();
-            break;
+
+          if (drug_types[i].tolerance) {
+            if (GET_DRUG_DOSES(ch, i) == 1 && success_test(bod_for_success_test, drug_types[i].tolerance) < 1)
+              GET_DRUG_TOLERANT(ch, i)++;
+            if (((!GET_DRUG_ADDICT(ch, i) && !(drug_types[i].edge_preadd % ++GET_DRUG_DOSES(ch, i))) ||
+                 (GET_DRUG_ADDICT(ch, i) && !(drug_types[i].edge_posadd % ++GET_DRUG_DOSES(ch, i)))) &&
+                success_test(GET_REAL_BOD(ch), drug_types[i].tolerance + GET_DRUG_EDGE(ch, i)))
+              GET_DRUG_TOLERANT(ch, i)++;
+          }
         }
-        send_to_char(buf, ch);
+        else if (GET_DRUG_STAGE(ch, i) == DRUG_STAGE_COMEDOWN && GET_DRUG_DURATION(ch, i) <= 0) {
+          send_to_char(ch, "The aftereffects of the %s wear off.\r\n", drug_types[i].name);
+          reset_drug_for_char(ch, i);
+          if (AFF_FLAGGED(ch, AFF_DETOX))
+            AFF_FLAGS(ch).RemoveBit(AFF_DETOX);
+        }
+
+        if (character_died)
+          break;
       }
-      else if (GET_DRUG_STAGE(ch) == 1) {
-        int toxin = 0;
-        for (struct obj_data *obj = ch->bioware; obj && !toxin; obj = obj->next_content)
-          if (GET_BIOWARE_TYPE(obj) == BIO_TOXINEXTRACTOR)
-            toxin = GET_BIOWARE_RATING(obj);
-        if (GET_DRUG_AFFECT(ch) > 0)
-          send_to_char(ch, "You begin to feel drained as the %s wears off.\r\n", drug_types[GET_DRUG_AFFECT(ch)].name);
-        GET_DRUG_STAGE(ch) = 2;
-        switch (GET_DRUG_AFFECT(ch)) {
-          case DRUG_JAZZ:
-            GET_DRUG_DURATION(ch) = 100 * srdice();
-            if (damage(ch, ch, convert_damage(stage(-success_test(GET_REAL_BOD(ch) - (GET_BIOOVER(ch) > 0 ? GET_BIOOVER(ch) / 2 : 0), 8 - toxin), LIGHT)), TYPE_BIOWARE, 0))
-              continue;
-            break;
-          case DRUG_KAMIKAZE:
-            GET_DRUG_DURATION(ch) = 100 * srdice();
-            if (damage(ch, ch, convert_damage(stage(-success_test(GET_REAL_BOD(ch) - (GET_BIOOVER(ch) > 0 ? GET_BIOOVER(ch) / 2 : 0), 6 - toxin), MODERATE)), TYPE_BIOWARE, 0))
-              continue;
-            break;
-          case DRUG_CRAM:
-            GET_DRUG_DURATION(ch) = MAX(1, 12 - GET_REAL_BOD(ch) - (GET_BIOOVER(ch) > 0 ? GET_BIOOVER(ch) / 2 : 0)) * 600;
-            break;
-          case DRUG_NITRO:
-            if (damage(ch, ch, convert_damage(stage(-success_test(GET_REAL_BOD(ch) - (GET_BIOOVER(ch) > 0 ? GET_BIOOVER(ch) / 2 : 0), 8 - toxin), DEADLY)), TYPE_BIOWARE, 0))
-              continue;
-            GET_DRUG_STAGE(ch) = GET_DRUG_DOSE(ch) = GET_DRUG_AFFECT(ch) = 0;
-            break;
-          case DRUG_NOVACOKE:
-            GET_DRUG_DURATION(ch) = MAX(1, 10 - GET_REAL_BOD(ch) - (GET_BIOOVER(ch) > 0 ? GET_BIOOVER(ch) / 2 : 0)) * 600;
-            break;
-          default:
-            GET_DRUG_STAGE(ch) = GET_DRUG_DOSE(ch) = GET_DRUG_AFFECT(ch) = 0;
-            if (AFF_FLAGGED(ch, AFF_DETOX))
-              AFF_FLAGS(ch).RemoveBit(AFF_DETOX);
-        }
-        if (drug_types[GET_DRUG_AFFECT(ch)].tolerance) {
-          if (GET_DRUG_DOSES(ch, GET_DRUG_AFFECT(ch)) == 1 && success_test(GET_REAL_BOD(ch), drug_types[GET_DRUG_AFFECT(ch)].tolerance) < 1)
-            GET_DRUG_TOLERANT(ch, GET_DRUG_AFFECT(ch))++;
-          if (((!GET_DRUG_ADDICT(ch, GET_DRUG_AFFECT(ch)) && !(drug_types[GET_DRUG_AFFECT(ch)].edge_preadd % ++GET_DRUG_DOSES(ch, GET_DRUG_AFFECT(ch)))) ||
-               (GET_DRUG_ADDICT(ch, GET_DRUG_AFFECT(ch)) && !(drug_types[GET_DRUG_AFFECT(ch)].edge_posadd % ++GET_DRUG_DOSES(ch, GET_DRUG_AFFECT(ch))))) &&
-              success_test(GET_REAL_BOD(ch), drug_types[GET_DRUG_AFFECT(ch)].tolerance + GET_DRUG_EDGE(ch, GET_DRUG_AFFECT(ch))))
-            GET_DRUG_TOLERANT(ch, GET_DRUG_AFFECT(ch))++;
-        }
-      } else if (GET_DRUG_STAGE(ch) == 2) {
-        send_to_char(ch, "The aftereffects of the %s begin to wear off.\r\n", drug_types[GET_DRUG_AFFECT(ch)].name);
-        GET_DRUG_STAGE(ch) = GET_DRUG_DOSE(ch) = GET_DRUG_AFFECT(ch) = 0;
-        if (AFF_FLAGGED(ch, AFF_DETOX))
-          AFF_FLAGS(ch).RemoveBit(AFF_DETOX);
-      }
+      if (character_died)
+        continue;
+
       affect_total(ch);
     }
     else { // NPC checks.

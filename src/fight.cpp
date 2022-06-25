@@ -801,7 +801,8 @@ void raw_kill(struct char_data * ch)
             GET_BIOWARE_IS_ACTIVATED(bio) = 0;
             break;
         }
-      GET_DRUG_AFFECT(ch) = GET_DRUG_DURATION(ch) = GET_DRUG_STAGE(ch) = 0;
+
+      reset_all_drugs_for_char(ch);
 
       if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
         i = real_room(RM_CHARGEN_START_ROOM);
@@ -2134,20 +2135,30 @@ void docwagon(struct char_data *ch)
   return;
 }
 
-
+// M&M p.63-64
+// Mode 1 for activation, mode 0 for reducing duration in turns.
 bool check_adrenaline(struct char_data *ch, int mode)
 {
   int i, dam;
   struct obj_data *pump = NULL;
+  bool early_activation = FALSE;
 
-  for (pump = ch->bioware; pump && GET_OBJ_VAL(pump, 0) != BIO_ADRENALPUMP; pump = pump->next_content)
+  for (pump = ch->bioware; pump && GET_BIOWARE_TYPE(pump) != BIO_ADRENALPUMP; pump = pump->next_content)
     ;
   if (!pump)
     return FALSE;
-  if (GET_OBJ_VAL(pump, 5) == 0 && mode == 1)
-  {
-    GET_OBJ_VAL(pump, 5) = dice(GET_OBJ_VAL(pump, 1), 6);
-    GET_OBJ_VAL(pump, 6) = GET_OBJ_VAL(pump, 5);
+  if (mode && GET_BIOWARE_PUMP_ADRENALINE(pump) <= 0) {
+    if (GET_BIOWARE_PUMP_ADRENALINE(pump) < 0)
+      early_activation = TRUE;
+
+    // We want to increase the pump duration without increasing the TN test so we're doing the duration roll in the
+    // TN value directly and multiply that. Previous possible duration was 2-12 seconds per pump level and there was
+    // a bug decreasing it twice too. Multiplying the roll x10 and we'll see how that pans out.
+    GET_BIOWARE_PUMP_TEST_TN(pump) = GET_BIOWARE_RATING(pump) == 2 ? srdice() + srdice() : srdice();
+    GET_BIOWARE_PUMP_ADRENALINE(pump)  = GET_BIOWARE_PUMP_TEST_TN(pump) * 10;
+    // Reactivation before the adrenaline sack is completely full?
+    if (early_activation)
+      GET_BIOWARE_PUMP_ADRENALINE(pump) /= 2;
     if (!IS_JACKED_IN(ch))
       send_to_char("Your body is wracked with renewed vitality as adrenaline pumps into your bloodstream.\r\n", ch);
     for (i = 0; i < MAX_OBJ_AFFECT; i++)
@@ -2155,28 +2166,31 @@ bool check_adrenaline(struct char_data *ch, int mode)
                     pump->affected[i].location,
                     pump->affected[i].modifier,
                     pump->obj_flags.bitvector, TRUE);
-  } else if (GET_OBJ_VAL(pump, 5) > 0 && !mode)
-  {
-    GET_OBJ_VAL(pump, 5)--;
-    if (GET_OBJ_VAL(pump, 5) == 0) {
+  }
+  else if (GET_OBJ_VAL(pump, 5) > 0 && !mode) {
+    GET_BIOWARE_PUMP_ADRENALINE(pump)--;
+    if (GET_BIOWARE_PUMP_ADRENALINE(pump) == 0) {
       for (i = 0; i < MAX_OBJ_AFFECT; i++)
         affect_modify(ch,
                       pump->affected[i].location,
                       pump->affected[i].modifier,
                       pump->obj_flags.bitvector, FALSE);
-      GET_OBJ_VAL(pump, 5) = -number(80, 100);
+      GET_BIOWARE_PUMP_ADRENALINE(pump) = -number(60, 90);
       if (!IS_JACKED_IN(ch))
         send_to_char("Your body softens and relaxes as the adrenaline wears off.\r\n", ch);
       dam = convert_damage(stage(-success_test(GET_BOD(ch) + GET_BODY(ch),
-                                               (int)(GET_OBJ_VAL(pump, 6) / 2)), DEADLY));
-      GET_OBJ_VAL(pump, 6) = 0;
+                                 (int)(GET_BIOWARE_PUMP_TEST_TN(pump) / 2)), DEADLY));
+      GET_BIOWARE_PUMP_TEST_TN(pump) = 0;
       if (damage(ch, ch, dam, TYPE_BIOWARE, FALSE)) {
         // Died-- RIP
         return TRUE;
       }
     }
-  } else if (GET_OBJ_VAL(pump, 5) < 0 && !mode)
-    GET_OBJ_VAL(pump, 5)++;
+  } else if (!mode && GET_BIOWARE_PUMP_ADRENALINE(pump) < 0) {
+    GET_BIOWARE_PUMP_ADRENALINE(pump)++;
+    if (GET_BIOWARE_PUMP_ADRENALINE(pump) == 0)
+      send_to_char("Your feel your adrenaline pump is full.\r\n", ch);
+  }
   return FALSE;
 }
 
@@ -2312,6 +2326,16 @@ void gen_death_msg(struct char_data *ch, struct char_data *vict, int attacktype)
           break;
         case 4:
           WRITE_DEATH_MESSAGE("Maybe %s got a defective piece of bioware... {%s (%ld)}");
+          break;
+      }
+      break;
+    case TYPE_DRUGS:
+      switch (number(0, 1)) {
+        case 0:
+          WRITE_DEATH_MESSAGE("%s failed to graduate from the school of hard knocks. {%s (%ld)}");
+          break;
+        case 1:
+          WRITE_DEATH_MESSAGE("%s didn't survive the drugs. {%s (%ld)}");
           break;
       }
       break;
@@ -2563,6 +2587,10 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
   if (ch == victim) {
     if (attacktype == TYPE_SPELL_DRAIN) {
       snprintf(rbuf, sizeof(rbuf), "Drain damage (%s: ", GET_CHAR_NAME(ch));
+    } else if (attacktype == TYPE_DRUGS) {
+      snprintf(rbuf, sizeof(rbuf), "Drug damage (%s: ", GET_CHAR_NAME(ch));
+    } else if (attacktype == TYPE_BIOWARE) {
+      snprintf(rbuf, sizeof(rbuf), "Bioware damage (%s: ", GET_CHAR_NAME(ch));
     } else {
       snprintf(rbuf, sizeof(rbuf), "Self-damage (%s: ", GET_CHAR_NAME(ch));
     }
@@ -2703,7 +2731,7 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
   if (IS_PROJECT(victim) && victim->desc && victim->desc->original)
     real_body = victim->desc->original;
 
-  if (attacktype != TYPE_BIOWARE) {
+  if (attacktype != TYPE_BIOWARE && attacktype != TYPE_DRUGS) {
     for (bio = real_body->bioware; bio; bio = bio->next_content) {
       if (GET_BIOWARE_TYPE(bio) == BIO_PLATELETFACTORY && dam >= 3 && is_physical)
         dam--;
@@ -2781,6 +2809,13 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
           GET_MENTAL(victim) = 0;
           GET_PHYSICAL(victim) -= overflow;
         }
+      }
+    }
+
+    // Under Hyper, you take 50% more damage as stun damage, rounded up.
+    if (GET_DRUG_STAGE(victim, DRUG_HYPER) == DRUG_STAGE_ONSET && attacktype != TYPE_DRUGS) {
+      if (damage_without_message(victim, victim, dam / 2 + dam % 2, TYPE_DRUGS, FALSE)) {
+        return TRUE;
       }
     }
   }

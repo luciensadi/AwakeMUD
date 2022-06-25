@@ -308,25 +308,24 @@ int damage_modifier(struct char_data *ch, char *rbuf, int rbuf_size)
       mental += GET_POWER(ch, ADEPT_PAIN_RESISTANCE);
     }
 
-    if (ch->player_specials && GET_DRUG_STAGE(ch) == 1)
-      switch (GET_DRUG_AFFECT(ch)) {
-        case DRUG_NITRO:
-          physical += 6;
-          mental += 6;
-          break;
-        case DRUG_NOVACOKE:
-          physical += 1;
-          mental += 1;
-          break;
-        case DRUG_BLISS:
-          physical += 3;
-          mental += 3;
-          break;
-        case DRUG_KAMIKAZE:
-          physical += 4;
-          mental += 4;
-          break;
+    if (ch->player_specials) {
+      if (GET_DRUG_STAGE(ch, DRUG_NITRO) == DRUG_STAGE_ONSET) {
+        physical += 6;
+        mental += 6;
       }
+      else if (GET_DRUG_STAGE(ch, DRUG_KAMIKAZE) == DRUG_STAGE_ONSET) {
+        physical += 4;
+        mental += 4;
+      }
+      else if (GET_DRUG_STAGE(ch, DRUG_BLISS) == DRUG_STAGE_ONSET) {
+        physical += 3;
+        mental += 3;
+      }
+      else if (GET_DRUG_STAGE(ch, DRUG_NOVACOKE) == DRUG_STAGE_ONSET) {
+        physical += 1;
+        mental += 1;
+      }
+    }
   }
 
   // first apply physical damage modifiers
@@ -409,6 +408,12 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int c
     struct veh_data *veh;
     RIG_VEH(ch, veh);
     temp_room = get_veh_in_room(veh);
+  }
+
+  // Magic skill with certain drugs? Take a penalty.
+  if (skill_is_magic && GET_CONCENTRATION_TARGET_MOD(ch)) {
+    base_target += GET_CONCENTRATION_TARGET_MOD(ch);
+    buf_mod(rbuf, rbuf_len, "DrugConcTN", GET_CONCENTRATION_TARGET_MOD(ch));
   }
 
   // If you're astrally perceiving, you don't take additional vision penalties, and shouldn't have any coming in here.
@@ -4674,6 +4679,17 @@ char *replace_neutral_color_codes(const char *input, const char *replacement_cod
   *internal_buf_ptr = '\0';
 
   return internal_buf;
+}
+
+void reset_drug_for_char(struct char_data *ch, int drugval) {
+  GET_DRUG_DOSE(ch, drugval) = GET_DRUG_DURATION(ch, drugval) = 0;
+  GET_DRUG_STAGE(ch, drugval) = DRUG_STAGE_UNAFFECTED;
+}
+
+void reset_all_drugs_for_char(struct char_data *ch) {
+  for (int i = MIN_DRUG; i < NUM_DRUGS; i++) {
+    reset_drug_for_char(ch, i);
+  }
 }
 
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.

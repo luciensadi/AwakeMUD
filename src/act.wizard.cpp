@@ -2745,10 +2745,23 @@ void restore_character(struct char_data *vict, bool reset_staff_stats) {
   GET_PHYSICAL(vict) = GET_MAX_PHYSICAL(vict);
   GET_MENTAL(vict) = GET_MAX_MENTAL(vict);
 
+  // Clear their qui loss.
   GET_TEMP_QUI_LOSS(vict) = 0;
 
   // Non-NPCs get further consideration.
   if (!IS_NPC(vict)) {
+    // Clear drugs.
+    reset_all_drugs_for_char(vict);
+
+    // Staff? Clear your addiction levels too.
+    if (GET_LEVEL(vict) > LVL_MORTAL) {
+      for (int drug = MIN_DRUG; drug < NUM_DRUGS; drug++) {
+        for (int x = 0; x <= 10; x++) {
+          vict->player_specials->drugs[drug][x] = 0;
+        }
+      }
+    }
+
     // Touch up their hunger, thirst, etc.
     for (int i = COND_DRUNK; i <= COND_THIRST; i++){
       // Staff don't deal with hunger, etc-- disable it for them.
@@ -2775,7 +2788,6 @@ void restore_character(struct char_data *vict, bool reset_staff_stats) {
         }
       }
     }
-
 
     // Staff members get their skills set to max, and also their stats boosted.
     if (IS_SENATOR(vict) && reset_staff_stats) {

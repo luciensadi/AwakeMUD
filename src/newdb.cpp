@@ -483,7 +483,6 @@ bool load_char(const char *name, char_data *ch, bool logon)
   GET_PHYSICAL_LOSS(ch) = atoi(row[55]);
   GET_MENTAL(ch) = atoi(row[56]);
   GET_MENTAL_LOSS(ch) = atoi(row[57]);
-  GET_PERM_BOD_LOSS(ch) = atoi(row[58]);
   ch->char_specials.saved.left_handed = atoi(row[59]);
   GET_LANGUAGE(ch) = atoi(row[60]);
   ch->player_specials->saved.wimp_level = atoi(row[61]);
@@ -512,7 +511,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
   if (GET_LEVEL(ch) <= 1) {
     for (int i = 0; i <= WIL; i++) {
       bool exceeding_limits = FALSE;
-      if (i == BOD && (GET_REAL_BOD(ch) + GET_PERM_BOD_LOSS(ch)) > racial_limits[(int)GET_RACE(ch)][0][i]) {
+      if (i == BOD && (GET_REAL_BOD(ch)) > racial_limits[(int)GET_RACE(ch)][0][i]) {
         exceeding_limits = TRUE;
       }
 
@@ -529,13 +528,11 @@ bool load_char(const char *name, char_data *ch, bool logon)
         mudlog(buf, ch, LOG_SYSLOG, TRUE);
 
         GET_REAL_ATT(ch, i) = racial_limits[(int)GET_RACE(ch)][0][i];
-        if (i == BOD)
-          GET_REAL_ATT(ch, i) -= GET_PERM_BOD_LOSS(ch);
       }
     }
   }
 
-  if (GET_LEVEL(ch) > 0) {
+  if (GET_LEVEL(ch) > LVL_MORTAL) {
     snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_immortdata WHERE idnum=%ld;", GET_IDNUM(ch));
     mysql_wrapper(mysql, buf);
     res = mysql_use_result(mysql);
@@ -546,7 +543,11 @@ bool load_char(const char *name, char_data *ch, bool logon)
       POOFIN(ch) = str_dup((strcmp(row[4], "(null)") == 0 ? DEFAULT_POOFIN_STRING : row[4]));
       POOFOUT(ch) = str_dup((strcmp(row[5], "(null)") == 0 ? DEFAULT_POOFOUT_STRING : row[5]));
     }
-  } else {
+    mysql_free_result(res);
+  }
+
+  // Pull drug info.
+  {
     snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_drugs WHERE idnum=%ld;", GET_IDNUM(ch));
     mysql_wrapper(mysql, buf);
     res = mysql_use_result(mysql);
@@ -560,10 +561,12 @@ bool load_char(const char *name, char_data *ch, bool logon)
       GET_DRUG_ADDTIME(ch, x) = atoi(row[6]);
       GET_DRUG_TOLERANT(ch, x) = atoi(row[7]);
       GET_DRUG_LASTWITH(ch, x) = atoi(row[8]);
+      GET_DRUG_DURATION(ch, x) = atoi(row[9]);
+      GET_DRUG_DOSE(ch, x) = atoi(row[10]);
+      GET_DRUG_STAGE(ch, x) = atoi(row[11]);
     }
+    mysql_free_result(res);
   }
-  mysql_free_result(res);
-
 
   if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
     snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_chargendata WHERE idnum=%ld;", GET_IDNUM(ch));
@@ -703,17 +706,6 @@ bool load_char(const char *name, char_data *ch, bool logon)
   res = mysql_use_result(mysql);
   while ((row = mysql_fetch_row(res)))
     GET_LQUEST(ch, atoi(row[1])) = atoi(row[2]);
-  mysql_free_result(res);
-
-  snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_drugdata WHERE idnum=%ld;", GET_IDNUM(ch));
-  mysql_wrapper(mysql, buf);
-  res = mysql_use_result(mysql);
-  if ((row = mysql_fetch_row(res))) {
-    GET_DRUG_AFFECT(ch) = atoi(row[1]);
-    GET_DRUG_STAGE(ch) = atoi(row[2]);
-    GET_DRUG_DURATION(ch) = atoi(row[3]);
-    GET_DRUG_DOSE(ch) = atoi(row[4]);
-  }
   mysql_free_result(res);
 
   {
@@ -1245,7 +1237,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
                GET_DEFENSE(player), GET_NUYEN(player), GET_BANK(player), GET_KARMA(player),
                GET_REP(player), GET_NOT(player), GET_TKE(player),
                PLR_FLAGGED(player, PLR_JUST_DIED), MAX(0, GET_PHYSICAL(player)), GET_PHYSICAL_LOSS(player),
-               MAX(0, GET_MENTAL(player)), GET_MENTAL_LOSS(player), GET_PERM_BOD_LOSS(player), GET_WIMP_LEV(player),
+               MAX(0, GET_MENTAL(player)), GET_MENTAL_LOSS(player), 0, GET_WIMP_LEV(player),
                GET_LOADROOM(player), GET_LAST_IN(player), time(0), GET_COND(player, COND_FULL),
                GET_COND(player, COND_THIRST), GET_COND(player, COND_DRUNK),
                SHOTS_FIRED(player), SHOTS_TRIGGERED(player), GET_TRADITION(player), pgroup_num,
@@ -1293,12 +1285,6 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
 
   /* Save skills, if they've changed their skills since last save. */
   SAVE_IF_DIRTY_BIT_SET(GET_SKILL_DIRTY_BIT, save_skills_to_db);
-
-  /* Save drug info. */
-  snprintf(buf, sizeof(buf), "UPDATE pfiles_drugdata SET Affect=%d, Stage=%d, Duration=%d, Dose=%d WHERE idnum=%ld;",
-               GET_DRUG_AFFECT(player), GET_DRUG_STAGE(player), GET_DRUG_DURATION(player), GET_DRUG_DOSE(player),
-               GET_IDNUM(player));
-  mysql_wrapper(mysql, buf);
 
   // SAVE_IF_DIRTY_BIT_SET(GET_DRUG_DIRTY_BIT, save_drug_data_to_db);
   save_drug_data_to_db(player);
@@ -2502,16 +2488,20 @@ void save_pc_memory_to_db(struct char_data *player) {
 void save_drug_data_to_db(struct char_data *player) {
   snprintf(buf, sizeof(buf), "DELETE FROM pfiles_drugs WHERE idnum=%ld", GET_IDNUM(player));
   mysql_wrapper(mysql, buf);
-  strcpy(buf, "INSERT INTO pfiles_drugs (idnum, DrugType, Addict, Doses, Edge, LastFix, Addtime, Tolerant, LastWith) VALUES (");
+  strcpy(buf, "INSERT INTO pfiles_drugs (idnum, DrugType, Addict, Doses, Edge, LastFix, Addtime, Tolerant, LastWith, Duration, Dose, Stage) VALUES (");
   int q = 0;
-  for (int i = 1; i < NUM_DRUGS; i++) {
+  for (int i = MIN_DRUG; i < NUM_DRUGS; i++) {
     if (GET_DRUG_DOSES(player, i) || GET_DRUG_EDGE(player, i) || GET_DRUG_ADDICT(player, i) || GET_DRUG_LASTFIX(player, i) ||
-        GET_DRUG_ADDTIME(player, i) || GET_DRUG_TOLERANT(player, i) || GET_DRUG_LASTWITH(player, i)) {
+        GET_DRUG_ADDTIME(player, i) || GET_DRUG_TOLERANT(player, i) || GET_DRUG_LASTWITH(player, i) || GET_DRUG_DURATION(player, i) ||
+        GET_DRUG_DOSE(player, i) || GET_DRUG_STAGE(player, i))
+    {
       if (q)
         strcat(buf, "), (");
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %d, %d, %d, %d, %d, %d, %d, %d", GET_IDNUM(player), i, GET_DRUG_ADDICT(player, i),
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d", GET_IDNUM(player), i, GET_DRUG_ADDICT(player, i),
                           GET_DRUG_DOSES(player, i), GET_DRUG_EDGE(player, i), GET_DRUG_LASTFIX(player, i),
-                          GET_DRUG_ADDTIME(player, i), GET_DRUG_TOLERANT(player, i), GET_DRUG_LASTWITH(player, i));
+                          GET_DRUG_ADDTIME(player, i), GET_DRUG_TOLERANT(player, i), GET_DRUG_LASTWITH(player, i),
+                          GET_DRUG_DURATION(player, i), GET_DRUG_DOSE(player, i), GET_DRUG_STAGE(player, i)
+                        );
       q = 1;
     }
   }

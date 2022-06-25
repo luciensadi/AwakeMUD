@@ -3034,7 +3034,48 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "You should EXAMINE this deck, or jack in and view its SOFTWARE.");
       break;
     case ITEM_DRUG:
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a dose of ^c%s^n.", drug_types[GET_OBJ_VAL(j, 0)].name);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a dose of ^c%s^n, which ", drug_types[GET_OBJ_DRUG_TYPE(j)].name);
+
+      switch (GET_OBJ_DRUG_TYPE(j)) {
+        case DRUG_ACTH:
+          strlcat(buf, "activates adrenal pumps.", sizeof(buf));
+          break;
+        case DRUG_HYPER:
+          strlcat(buf, "induces vertigo and sensory overload.", sizeof(buf));
+          break;
+        case DRUG_JAZZ:
+          strlcat(buf, "increases your Quickness by 2 and initiative by +1d6.", sizeof(buf));
+          break;
+        case DRUG_KAMIKAZE:
+          strlcat(buf, "is a battle stimulant, granting +1 to Body, Quickness, Willpower; +2 to Strength; and +1d6 initiative.", sizeof(buf));
+          break;
+        case DRUG_PSYCHE:
+          strlcat(buf, "grants +1 Intelligence for a long time.", sizeof(buf));
+          break;
+        case DRUG_BLISS:
+          strlcat(buf, "is a tranquilizing narcotic that reduces Reaction by 1, adds 1 to all target numbers, and grants pain resistance.", sizeof(buf));
+          break;
+        case DRUG_BURN:
+          strlcat(buf, "is a synthahol intoxicant beverage.", sizeof(buf));
+          break;
+        case DRUG_CRAM:
+          strlcat(buf, "is an amphetamine that adds 1 to Reaction and 1d6 to initiative.", sizeof(buf));
+          break;
+        case DRUG_NITRO:
+          strlcat(buf, "is a powerful intoxicant that can easily kill its user. It grants +2 Strength and Willpower, as well as greater pain resistance.", sizeof(buf));
+          break;
+        case DRUG_NOVACOKE:
+          strlcat(buf, "a highly-addictive coca-derived stimulant. It grants +1 Reaction and Charisma and minor pain resistance.", sizeof(buf));
+          break;
+        case DRUG_ZEN:
+          strlcat(buf, "a psychedelic hallucinogen. It causes -2 Reaction and +1 physical TNs, but also grants +1 Willpower.", sizeof(buf));
+          break;
+        default:
+          snprintf(buf, sizeof(buf), "SYSERR: Unknown drug type %d in probe!", GET_OBJ_DRUG_TYPE(j));
+          mudlog(buf, ch, LOG_SYSLOG, TRUE);
+          break;
+      }
+
       break;
     case ITEM_MAGIC_TOOL:
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^crating-^c%d %s^n.", GET_OBJ_VAL(j, 1), magic_tool_types[GET_OBJ_VAL(j, 0)]);
@@ -4376,10 +4417,18 @@ ACMD(do_bioware)
 
   send_to_char("You have the following bioware:\r\n", ch);
   for (obj = ch->bioware; obj != NULL; obj = obj->next_content) {
-    snprintf(buf, sizeof(buf), "%-40s Rating: %-2d     Bioware Index: %0.2f\r\n",
-            GET_OBJ_NAME(obj),
-            GET_BIOWARE_RATING(obj), ((float)GET_BIOWARE_ESSENCE_COST(obj) / 100));
-    send_to_char(buf, ch);
+    if (GET_BIOWARE_TYPE(obj) == BIO_ADRENALPUMP && GET_BIOWARE_PUMP_ADRENALINE(obj) != 0) {
+      send_to_char(ch, "%-33s (%4d) Rating: %-2d     Bioware Index: %0.2f\r\n",
+                   GET_OBJ_NAME(obj),
+                   GET_BIOWARE_PUMP_ADRENALINE(obj) *2,
+                   GET_BIOWARE_RATING(obj),
+                   ((float)GET_BIOWARE_ESSENCE_COST(obj) / 100));
+    } else {
+      send_to_char(ch, "%-40s Rating: %-2d     Bioware Index: %0.2f\r\n",
+                   GET_OBJ_NAME(obj),
+                   GET_BIOWARE_RATING(obj),
+                   ((float)GET_BIOWARE_ESSENCE_COST(obj) / 100));
+    }
   }
 }
 
@@ -6105,10 +6154,97 @@ ACMD(do_status)
     send_to_char(ch, "  Extra Reach (%dm)\r\n", GET_REACH(targ));
     printed = TRUE;
   }
-  if (GET_DRUG_AFFECT(targ) && GET_DRUG_STAGE(targ) > 0) {
-    send_to_char(ch, "  %s (%s)\r\n", drug_types[GET_DRUG_AFFECT(targ)].name, GET_DRUG_STAGE(targ) == 1 ? "Up" : "Down");
-    printed = TRUE;
+
+  for (int i = MIN_DRUG; i < NUM_DRUGS; i++) {
+    if (GET_DRUG_STAGE(targ, i) != DRUG_STAGE_UNAFFECTED) {
+      send_to_char(ch, "  %s (%s): %ds",
+                   drug_types[i].name,
+                   GET_DRUG_STAGE(targ, i) == DRUG_STAGE_ONSET ? "Onset" : "Comedown",
+                   GET_DRUG_DURATION(targ, i)*2);
+      switch (i) {
+        case DRUG_ACTH:
+          // Has no long-lasting effects. Nothing to display here.
+          send_to_char("\r\n", ch);
+          break;
+        case DRUG_HYPER:
+          if (GET_DRUG_STAGE(targ, i) == DRUG_STAGE_ONSET) {
+            send_to_char(" (+4 spellcasting TNs, +1 other TNs, take 50% bonus damage)\r\n", ch);
+          } else {
+            send_to_char("\r\n", ch);
+          }
+          break;
+        case DRUG_JAZZ:
+          if (GET_DRUG_STAGE(targ, i) == DRUG_STAGE_ONSET) {
+            send_to_char(" (+2 qui, +1d6 initiative)\r\n", ch);
+          } else {
+            send_to_char(" (+1 spellcasting TNs, -1 qui)\r\n", ch);
+          }
+          break;
+        case DRUG_KAMIKAZE:
+          if (GET_DRUG_STAGE(targ, i) == DRUG_STAGE_ONSET) {
+            send_to_char(" (+2 str, +1 bod/qui/wil, +1d6 initiative)\r\n", ch);
+          } else {
+            send_to_char(" (-1 qui/wil)\r\n", ch);
+          }
+          break;
+        case DRUG_PSYCHE:
+          if (GET_DRUG_STAGE(targ, i) == DRUG_STAGE_ONSET) {
+            send_to_char(" (+1 int)\r\n", ch);
+          } else {
+            send_to_char("\r\n", ch);
+          }
+          break;
+        case DRUG_BLISS:
+          if (GET_DRUG_STAGE(targ, i) == DRUG_STAGE_ONSET) {
+            send_to_char(" (-1 rea, +1 TNs, 3 levels of pain resistance)\r\n", ch);
+          } else {
+            send_to_char("\r\n", ch);
+          }
+          break;
+        case DRUG_BURN:
+          if (GET_DRUG_STAGE(targ, i) == DRUG_STAGE_ONSET) {
+            send_to_char(" (intoxicated)\r\n", ch);
+          } else {
+            send_to_char(" (hung over)\r\n", ch);
+          }
+          break;
+        case DRUG_CRAM:
+          if (GET_DRUG_STAGE(targ, i) == DRUG_STAGE_ONSET) {
+            send_to_char(" (+1 rea, +1d6 initiative)\r\n", ch);
+          } else {
+            send_to_char("\r\n", ch);
+          }
+          break;
+        case DRUG_NITRO:
+          if (GET_DRUG_STAGE(targ, i) == DRUG_STAGE_ONSET) {
+            send_to_char(" (+2 str/wil, 6 levels of pain resistance, +2 to perception tests)\r\n", ch);
+          } else {
+            send_to_char("\r\n", ch);
+          }
+          break;
+        case DRUG_NOVACOKE:
+          if (GET_DRUG_STAGE(targ, i) == DRUG_STAGE_ONSET) {
+            send_to_char(" (+1 rea/cha, 1 level of pain resistance)\r\n", ch);
+          } else {
+            send_to_char(" (crashed cha, halved wil)\r\n", ch);
+          }
+          break;
+        case DRUG_ZEN:
+          if (GET_DRUG_STAGE(targ, i) == DRUG_STAGE_ONSET) {
+            send_to_char(" (-2 rea, +1 TNs, +1 wil)\r\n", ch);
+          } else {
+            send_to_char("\r\n", ch);
+          }
+          break;
+        default:
+          snprintf(buf, sizeof(buf), "SYSERR: Unknown drug type %d in aff!", i);
+          mudlog(buf, ch, LOG_SYSLOG, TRUE);
+          break;
+      }
+      printed = TRUE;
+    }
   }
+
 
   for (struct obj_data *bio = targ->bioware; bio; bio = bio->next_content) {
     if (GET_BIOWARE_TYPE(bio) == BIO_PAINEDITOR && GET_BIOWARE_IS_ACTIVATED(bio)) {

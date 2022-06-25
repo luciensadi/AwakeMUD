@@ -1417,6 +1417,15 @@ ACMD(do_get)
       act("$n removes $p from a body compartment.", TRUE, ch, 0, obj, TO_ROOM);
     }
   } else if (!*arg2 || download) {
+    // Prevent ambiguous 'take drug' command.
+    if (subcmd == SCMD_TAKE) {
+      for (int i = MIN_DRUG; i < NUM_DRUGS; i++) {
+        if (!str_cmp(drug_types[i].name, arg1)) {
+          send_to_char("Command ambiguous-- please either ^WGET^n or ^WUSE^n drugs.\r\n", ch);
+          return;
+        }
+      }
+    }
     get_from_room(ch, arg1, download);
   } else {
     cont_dotmode = find_all_dots(arg2, sizeof(arg2));
@@ -4181,10 +4190,17 @@ ACMD(do_break)
   else if (!(contents = obj->contains))
     send_to_char("Your tooth compartment is empty, so breaking it now would be a waste.\r\n", ch);
   else {
+    if (GET_OBJ_TYPE(contents) != ITEM_DRUG) {
+      send_to_char(ch, "Your tooth compartment contains something that isn't drugs! Aborting.\r\n");
+      snprintf(buf, sizeof(buf), "%s's tooth compartment contains non-drug item %s!", GET_CHAR_NAME(ch), GET_OBJ_NAME(contents));
+      mudlog(buf, ch, LOG_SYSLOG, TRUE);
+      return;
+    }
+
     extern void do_drug_take(struct char_data *ch, struct obj_data *obj);
     send_to_char("You bite down hard on the tooth compartment, breaking it open.\r\n", ch);
     obj_from_cyberware(obj);
-    GET_ESSHOLE(ch) += GET_OBJ_VAL(obj, 4);
+    GET_ESSHOLE(ch) += GET_CYBERWARE_ESSENCE_COST(obj);
     do_drug_take(ch, contents);
     extract_obj(obj);
   }

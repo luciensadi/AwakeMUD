@@ -848,7 +848,7 @@ struct command_info cmd_info[] =
     { "talk"       , POS_LYING   , do_phone    , 0, SCMD_TALK, FALSE },
     { "tell"       , POS_DEAD    , do_tell     , 0, 0, TRUE },
     { "tells"      , POS_DEAD    , do_switched_message_history, 0, COMM_CHANNEL_TELLS, TRUE },
-    { "take"       , POS_RESTING , do_get      , 0, 0, FALSE },
+    { "take"       , POS_RESTING , do_get      , 0, SCMD_TAKE, FALSE },
     { "target"     , POS_SITTING , do_target   , 0, 0, FALSE },
     { "taste"      , POS_RESTING , do_eat      , 0, SCMD_TASTE, FALSE },
     { "tail"       , POS_DEAD    , do_tail     , LVL_DEVELOPER, 0, FALSE },

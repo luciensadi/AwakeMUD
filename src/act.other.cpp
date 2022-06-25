@@ -660,13 +660,16 @@ ACMD(do_patch)
 
 void do_drug_take(struct char_data *ch, struct obj_data *obj)
 {
-    int drugval = GET_OBJ_VAL(obj, 0);
-    if ((GET_DRUG_AFFECT(ch) && GET_DRUG_DOSE(ch) > GET_DRUG_TOLERANT(ch, drugval)) || GET_DRUG_STAGE(ch) > 1) {
-      send_to_char(ch, "Maybe you should wait.\r\n");
+    int drugval = GET_OBJ_DRUG_TYPE(obj);
+    if (GET_DRUG_STAGE(ch, drugval) == DRUG_STAGE_ONSET) {
+      send_to_char(ch, "You're already high on %s, it would be a bad idea to take more right now.\r\n", drug_types[drugval].name);
       return;
     }
+
     act("$n takes $p.", TRUE, ch, obj, 0, TO_ROOM);
-    GET_DRUG_AFFECT(ch) = drugval;
+    send_to_char(ch, "You take %s.\r\n", GET_OBJ_NAME(obj));
+
+    // Process addiction checks.
     GET_DRUG_DOSES(ch, drugval)++;
     if (GET_DRUG_DOSES(ch, drugval) == 1) {
       if ((GET_DRUG_ADDICT(ch, drugval) != 1 || GET_DRUG_ADDICT(ch, drugval) != 3) &&
@@ -697,38 +700,29 @@ void do_drug_take(struct char_data *ch, struct obj_data *obj)
         GET_DRUG_EDGE(ch, drugval) = 1;
       }
     }
-    send_to_char(ch, "You take %s.\r\n", GET_OBJ_NAME(obj));
-    GET_DRUG_DOSE(ch)++;
-    if (GET_DRUG_DOSE(ch) > GET_DRUG_TOLERANT(ch, drugval)) {
-      GET_DRUG_STAGE(ch) = 0;
+
+    // Enqueue the drug for limits.cpp.
+    if ((++GET_DRUG_DOSE(ch, drugval)) > GET_DRUG_TOLERANT(ch, drugval)) {
+      GET_DRUG_STAGE(ch, drugval) = DRUG_STAGE_UNAFFECTED;
       if (AFF_FLAGS(ch).AreAnySet(AFF_WITHDRAWAL, AFF_WITHDRAWAL_FORCE, ENDBIT) && GET_DRUG_ADDICT(ch, drugval)) {
         GET_DRUG_EDGE(ch, drugval)++;
         AFF_FLAGS(ch).RemoveBits(AFF_WITHDRAWAL, AFF_WITHDRAWAL_FORCE, ENDBIT);
       }
-      // Drug tick is every 2 seconds (a MUD minute), so most of these were over in a flash. Let's crank it up so that these values are in IRL minutes instead.
-      switch (drugval) {
-      case DRUG_PSYCHE:
-      case DRUG_CRAM:
-      case DRUG_BURN:
-        GET_DRUG_DURATION(ch) = 50 * (60 / SECS_PER_MUD_MINUTE);
-        break;
-      case DRUG_ZEN:
-        GET_DRUG_DURATION(ch) = 25 * srdice() * (60 / SECS_PER_MUD_MINUTE);
-        break;
-      default:
-        GET_DRUG_DURATION(ch) = 0;
-        break;
-      }
     } else {
-      GET_DRUG_STAGE(ch) = -1;
-      GET_DRUG_DURATION(ch) = 20;
+      send_to_char("...but it doesn't kick in. Your tolerance is high, you'll need to take more to have any effect!\r\n", ch);
     }
     extract_obj(obj);
 }
+
 ACMD(do_use)
 {
   struct obj_data *obj, *corpse;
   struct char_data *tmp_char;
+
+  if (IS_ASTRAL(ch)) {
+    send_to_char("You cannot interact with physical objects.\r\n", ch);
+    return;
+  }
 
   half_chop(argument, arg, buf);
   if (!*arg) {

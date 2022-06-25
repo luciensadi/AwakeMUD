@@ -578,6 +578,7 @@ struct char_special_data
   char *leave;             // leave keywords 'mob flies south'
   char *arrive;            // arrive keywords
   int target_mod;
+  int concentration_target_mod;
 
   float carry_weight;           /* Carried weight                       */
   byte carry_items;            /* Number of items carried              */
@@ -602,8 +603,8 @@ struct char_special_data
       fight_veh(NULL), fighting(NULL), hunting(NULL), programming(NULL), num_spirits(0), idnum(0),
       nervestrike(FALSE), tempquiloss(0), cost_breakup(0), avail_offset(0), shooting_dir(0),
       position(POS_STANDING), defined_position(NULL), leave(NULL), arrive(NULL), target_mod(0),
-      carry_weight(0), carry_items(0), foci(0), last_healed(0), timer(0), last_timer(0),
-      last_social_action(0), actions(0), subscribe(NULL), rigging(NULL),
+      concentration_target_mod(0), carry_weight(0), carry_items(0), foci(0), last_healed(0), timer(0),
+      last_timer(0), last_social_action(0), actions(0), subscribe(NULL), rigging(NULL),
       mindlink(NULL), spirits(NULL)
   {
     ZERO_OUT_ARRAY(conjure, 4);
@@ -660,8 +661,7 @@ struct player_special_data
   sh_int *obj_complete;
   sh_int *mob_complete;
   long last_quest[QUEST_TIMER];
-  ush_int drugs[NUM_DRUGS+1][7];
-  sh_int drug_affect[5];
+  ush_int drugs[NUM_DRUGS+1][10];
   ubyte mental_loss;
   ubyte physical_loss;
   ubyte perm_bod;
@@ -674,10 +674,8 @@ struct player_special_data
     ZERO_OUT_ARRAY(last_quest, QUEST_TIMER);
 
     for (int i = 0; i < NUM_DRUGS+1; i++) {
-      ZERO_OUT_ARRAY(drugs[i], 7);
+      ZERO_OUT_ARRAY(drugs[i], 10);
     }
-
-    ZERO_OUT_ARRAY(drug_affect, 5);
   }
 }
 ;

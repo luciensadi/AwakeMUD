@@ -525,6 +525,7 @@ void boot_world(void)
   require_that_sql_table_exists("pfiles_ignore_v2", "SQL/ignore_system_v2.sql");
   require_that_field_exists_in_table("harmless", "pfiles_ammo", "SQL/Migrations/add_harmless_and_anti_vehicle.sql");
   require_that_field_exists_in_table("anti-vehicle", "pfiles_ammo", "SQL/Migrations/add_harmless_and_anti_vehicle.sql");
+  require_that_field_exists_in_table("Duration", "pfiles_drugs", "SQL/Migrations/drug_overhaul.sql");
 
   log("Calculating lexicon data.");
   populate_lexicon_size_table();

@@ -126,15 +126,6 @@ CREATE TABLE `pfiles_magic` (
   PRIMARY KEY (`idnum`)
 );
 
-CREATE TABLE `pfiles_drugdata` (
-  `idnum` mediumint(5) unsigned unique default '0',
-  `Affect` tinyint(2) unsigned default '0',
-  `Stage` tinyint(2) unsigned default '0',
-  `Duration` smallint(2) unsigned default '0',
-  `Dose` tinyint(2) unsigned default '0',
-  PRIMARY KEY(`idnum`)
-);
-
 CREATE TABLE `pfiles_drugs` (
   `idnum` mediumint(5) unsigned default '0',
   `DrugType` smallint(2) unsigned default '0',
@@ -145,6 +136,9 @@ CREATE TABLE `pfiles_drugs` (
   `Addtime` smallint(2) unsigned default '0',
   `Tolerant` smallint(2) unsigned default '0',
   `LastWith` smallint(2) unsigned default '0',
+  `Duration` smallint(2) unsigned default '0',
+  `Dose` tinyint(2) unsigned default '0',
+  `Stage` tinyint(2) unsigned default '0',
   KEY(`idnum`)
 );
 
