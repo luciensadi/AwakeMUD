@@ -1562,8 +1562,8 @@ void misc_update(void)
           send_to_char(buf, ch);
 
           if (GET_LEVEL(ch) > LVL_MORTAL && GET_DRUG_DURATION(ch, i) > 0) {
-            send_to_char(ch, "Accelerating drug onset duration from %d to 10s for easier testing.", GET_DRUG_DURATION(ch, i));
-            GET_DRUG_DURATION(ch, i) = 10;
+            send_to_char(ch, "Accelerating drug onset duration from %d to 4s for easier testing.", GET_DRUG_DURATION(ch, i));
+            GET_DRUG_DURATION(ch, i) = 2;
           }
         }
         else if (GET_DRUG_STAGE(ch, i) == DRUG_STAGE_ONSET && GET_DRUG_DURATION(ch, i) <= 0) {
@@ -1615,8 +1615,8 @@ void misc_update(void)
             break;
 
           if (GET_LEVEL(ch) > LVL_MORTAL && GET_DRUG_DURATION(ch, i) > 0) {
-            send_to_char(ch, "Accelerating drug comedown duration from %d to 10s for easier testing.", GET_DRUG_DURATION(ch, i));
-            GET_DRUG_DURATION(ch, i) = 10;
+            send_to_char(ch, "Accelerating drug comedown duration from %d to 4s for easier testing.", GET_DRUG_DURATION(ch, i));
+            GET_DRUG_DURATION(ch, i) = 2;
           }
 
           if (drug_types[i].tolerance) {

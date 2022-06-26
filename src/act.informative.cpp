@@ -6341,6 +6341,25 @@ ACMD(do_status)
       else
         send_to_char(ch, "%s is using a total of %d points of foci. If this gets above %d, they'll be at risk of geas.\r\n", GET_CHAR_NAME(targ), force, (GET_REAL_MAG(targ) / 100) * 2);
     }
+
+    if (GET_LEVEL(ch) > LVL_MORTAL) {
+      // Send drug info
+      send_to_char("\r\nDrug info: \r\n", ch);
+      for (int i = MIN_DRUG; i < NUM_DRUGS; i++) {
+        send_to_char(ch, " - %s (edge %d, addict %d, doses %d, lastfix %d, addtime %d, tolerant %d, lastwith %d, duration %d, current dose %d, current stage %d)",
+                     drug_types[i].name,
+                     GET_DRUG_EDGE(targ, i)    ,
+                     GET_DRUG_ADDICT(targ, i)  ,
+                     GET_DRUG_DOSES(targ, i)   ,
+                     GET_DRUG_LASTFIX(targ, i) ,
+                     GET_DRUG_ADDTIME(targ, i) ,
+                     GET_DRUG_TOLERANT(targ, i),
+                     GET_DRUG_LASTWITH(targ, i),
+                     GET_DRUG_DURATION(targ, i),
+                     GET_DRUG_DOSE(targ, i)    ,
+                     GET_DRUG_STAGE(targ, i));
+      }
+    }
   }
 }
 

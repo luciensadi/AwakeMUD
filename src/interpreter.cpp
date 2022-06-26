@@ -742,7 +742,7 @@ struct command_info cmd_info[] =
     { "prone"      , POS_FIGHTING, do_prone    , 0, 0, FALSE },
     { "praise"     , POS_DEAD    , do_gen_write, 0, SCMD_PRAISE, TRUE },
     { "push"       , POS_SITTING , do_push     , 0, 0, FALSE },
-    { "playerrolls", POS_DEAD    , do_playerrolls, LVL_PRESIDENT, 0, FALSE },
+    { "playerrolls", POS_DEAD    , do_playerrolls, LVL_ADMIN, 0, FALSE },
   #ifdef IS_BUILDPORT
     { "purge"      , POS_DEAD    , do_purge    , LVL_BUILDER, 0, FALSE },
   #else

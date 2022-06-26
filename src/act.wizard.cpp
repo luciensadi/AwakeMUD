@@ -1659,10 +1659,6 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
     }
   }
   strlcat(buf, "\r\n", sizeof(buf));
-
-  /* Showing the bitvector */
-  AFF_FLAGS(k).PrintBits(buf2, MAX_STRING_LENGTH, affected_bits, AFF_MAX);
-  printf(ENDOF(buf), "AFF: ^y%s\r\n", buf2);
   send_to_char(buf, ch);
 }
 
