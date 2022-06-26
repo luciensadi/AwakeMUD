@@ -1268,10 +1268,10 @@ ACMD(do_driveby)
     send_to_char("How do you expect to driveby from a stationary vehicle?\r\n", ch);
     return;
   }
-
+ 
   if ((wielded = GET_EQ(ch, WEAR_WIELD))) {
-    if (!(GET_OBJ_VAL(wielded, 4) == SKILL_PISTOLS || GET_OBJ_VAL(wielded, 4) == SKILL_SMG || ((0 <= GET_OBJ_VAL(wielded, 3) <= 4)  && ch->in_veh->type = VEH_BIKE)))  {
-      send_to_char(ch, "You can only do a driveby with a pistol or SMG, or a melee weapon while on a bike.\r\n");
+    if ((IS_OBJ_STAT(wielded, ITEM_EXTRA_TWOHANDS) && WEAPON_IS_GUN(wielded)) || (!WEAPON_IS_GUN(wielded) && ch->in_veh->type = VEH_BIKE))  {
+      send_to_char(ch, "You can only do a driveby with a one handed gun in a vehicle and/or a melee weapon while on a bike!\r\n");
       return;
     }
     if (!IS_NPC(vict) && !PRF_FLAGGED(ch, PRF_PKER) && !PRF_FLAGGED(vict, PRF_PKER)) {
@@ -1279,8 +1279,8 @@ ACMD(do_driveby)
       return;
     }
 
-    send_to_char(ch, "You point %s towards %s and open fire!\r\n", GET_OBJ_NAME(wielded), GET_NAME(vict));
-    snprintf(buf, sizeof(buf), "%s aims %s towards %s and opens fire!\r\n", GET_NAME(ch), GET_OBJ_NAME(wielded), GET_NAME(vict));
+    send_to_char(ch, "You swing %s towards %s and attack!\r\n", GET_OBJ_NAME(wielded), GET_NAME(vict));
+    snprintf(buf, sizeof(buf), "%s aims %s towards %s and attacks!\r\n", GET_NAME(ch), GET_OBJ_NAME(wielded), GET_NAME(vict));
     send_to_veh(buf, ch->in_veh, ch, FALSE);
     list = ch;
     roll_individual_initiative(ch);
