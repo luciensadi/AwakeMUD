@@ -885,6 +885,16 @@ void point_update(void)
         if (check_bioware(i))
           continue;
 
+      int num_simultaneous_withdraw = 0;
+      for (int x = MIN_DRUG; x < NUM_DRUGS; x++) {
+        if (GET_DRUG_ADDICT(i, x) > 0 && GET_DRUG_STAGE(i, x) == DRUG_STAGE_UNAFFECTED) {
+          num_simultaneous_withdraw++;
+        }
+      }
+
+      int ticks_between_body_loss = MAX(60, 820 - (num_simultaneous_withdraw * 100));
+      int ticks_between_all_attr_loss = MAX(30, 168 - (num_simultaneous_withdraw * 10));
+
       for (int x = MIN_DRUG; x < NUM_DRUGS; x++) {
         if (GET_DRUG_ADDICT(i, x) > 0 && GET_DRUG_STAGE(i, x) == DRUG_STAGE_UNAFFECTED) {
           int tsl = (time(0) - GET_DRUG_LASTFIX(i, x)) / SECS_PER_MUD_DAY;
@@ -893,8 +903,10 @@ void point_update(void)
           // Above our body minimum, tests only happen every 720 ticks.
           if (GET_REAL_BOD(i) > 1 + racial_attribute_modifiers[(int) GET_RACE(i)][BOD]) {
             // Test to see if we lose body.
-            if (!(GET_DRUG_ADDTIME(i ,x) % 720) && ((drug_types[x].mental_addiction && success_test(GET_WIL(i), drug_types[x].mental_addiction + GET_DRUG_EDGE(i, x)) < 1)  ||
-                                                    (drug_types[x].physical_addiction && success_test(GET_BOD(i), drug_types[x].physical_addiction + GET_DRUG_EDGE(i, x)) < 1))) {
+            if (!(GET_DRUG_ADDTIME(i ,x) % ticks_between_body_loss)
+                && ((drug_types[x].mental_addiction && success_test(GET_WIL(i), drug_types[x].mental_addiction + GET_DRUG_EDGE(i, x)) < 1)
+                    || (drug_types[x].physical_addiction && success_test(GET_BOD(i), drug_types[x].physical_addiction + GET_DRUG_EDGE(i, x)) < 1)))
+            {
               GET_REAL_BOD(i)--;
               send_to_char(i, "Your health suffers at the hand of your %s addiction.\r\n", drug_types[x].name);
               send_to_char("You've lost a point of Body, but you can re-train it at a trainer.\r\n", i);
@@ -903,7 +915,7 @@ void point_update(void)
           // We're at body minimum-- time to start chunking away other stats.
           else {
             // This happens much faster.
-            if (!(GET_DRUG_ADDTIME(i ,x) % 168)) {
+            if (!(GET_DRUG_ADDTIME(i ,x) % ticks_between_all_attr_loss)) {
               int raw_stat_loss(struct char_data *);
 
               send_to_char(i, "Your meager health suffers at the hand of your %s addiction.\r\n", drug_types[x].name);
