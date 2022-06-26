@@ -906,10 +906,10 @@ void point_update(void)
             if (!(GET_DRUG_ADDTIME(i ,x) % 168)) {
               int raw_stat_loss(struct char_data *);
 
-              send_to_char(i, "Your health suffers at the hand of your %s addiction.\r\n", drug_types[x].name);
+              send_to_char(i, "Your meager health suffers at the hand of your %s addiction.\r\n", drug_types[x].name);
               int lost_attribute = raw_stat_loss(i);
               if (lost_attribute >= BOD) {
-                send_to_char(i, "You've lost a point of %s, but you can re-train it at a trainer.\r\n", attributes[lost_attribute]);
+                send_to_char(i, "You've lost a point of %s, but you can re-train it at a trainer. You should raise your Body quickly to avoid losing further stats!\r\n", attributes[lost_attribute]);
               }
             }
           }

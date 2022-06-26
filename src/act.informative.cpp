@@ -6243,6 +6243,9 @@ ACMD(do_status)
       }
       printed = TRUE;
     }
+    else if (GET_DRUG_ADDICT(targ, i) > 0) {
+      send_to_char(ch, "  ^y%s withdrawal^n\r\n", drug_types[i]);
+    }
   }
 
 
