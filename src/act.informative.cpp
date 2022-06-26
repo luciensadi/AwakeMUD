@@ -6346,7 +6346,7 @@ ACMD(do_status)
       // Send drug info
       send_to_char("\r\nDrug info: \r\n", ch);
       for (int i = MIN_DRUG; i < NUM_DRUGS; i++) {
-        send_to_char(ch, " - %s (edge %d, addict %d, doses %d, lastfix %d, addtime %d, tolerant %d, lastwith %d, duration %d, current dose %d, current stage %d)",
+        send_to_char(ch, " - ^c%s^n (edg %d, add %d, doses %d, lstfx %d, addt %d, toler %d, lstwith %d, dur %d, current dose %d, stage %d)\r\n",
                      drug_types[i].name,
                      GET_DRUG_EDGE(targ, i)    ,
                      GET_DRUG_ADDICT(targ, i)  ,

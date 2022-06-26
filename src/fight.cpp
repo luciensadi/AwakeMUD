@@ -861,42 +861,47 @@ void raw_kill(struct char_data * ch)
   else extract_char(ch);
 }
 
-void death_penalty(struct char_data *ch)
-{
-  int attribute = 0;
+int raw_stat_loss(struct char_data *ch) {
   int old_tke = GET_TKE( ch );
 
+  for (int limiter = 100; limiter > 0; limiter--) {
+    int attribute = number(BOD, WIL);
+
+    if (GET_REAL_ATT(ch, attribute) > MAX(1, 1 + racial_attribute_modifiers[(int)GET_RACE(ch)][attribute])) {
+      // We can safely knock down the attribute since we've guaranteed it's above their racial minimum.
+      int karma_to_lose = MIN(GET_TKE(ch), 2 * GET_REAL_ATT(ch, attribute));
+
+      // Take the full amount from TKE.
+      GET_TKE(ch) -= karma_to_lose;
+
+      // Take half of the amount from notoriety and reputation each.
+      GET_NOT(ch) -= karma_to_lose / 2;
+      GET_REP(ch) -= karma_to_lose / 2;
+
+      // Knock down the attribute.
+      GET_REAL_ATT(ch, attribute)--;
+      snprintf(buf, sizeof(buf),"%s lost a point of %s.  Total Karma Earned from %d to %d.",
+              GET_CHAR_NAME(ch), short_attributes[attribute], old_tke, GET_TKE( ch ) );
+      mudlog(buf, ch, LOG_DEATHLOG, TRUE);
+      return attribute;
+    }
+  }
+  mudlog("Note: Would have lost attribute point, but couldn't find one to lose.", ch, LOG_DEATHLOG, TRUE);
+  return -1;
+}
+
+void death_penalty(struct char_data *ch)
+{
   if(!IS_NPC(ch)
      && !PLR_FLAGGED(ch, PLR_NEWBIE)
      && !number(0, DEATH_PENALTY_CHANCE)) // a 1:25 chance of incurring death penalty.
   {
-    for (int limiter = 100; limiter > 0; limiter--) {
-      attribute = number(0,5);
-
-      if (GET_REAL_ATT(ch, attribute) > MAX(1, 1 + racial_attribute_modifiers[(int)GET_RACE(ch)][attribute])) {
-        // We can safely knock down the attribute since we've guaranteed it's above their racial minimum.
-        int karma_to_lose = MIN(GET_TKE(ch), 2 * GET_REAL_ATT(ch, attribute));
-
-        // Take the full amount from TKE.
-        GET_TKE(ch) -= karma_to_lose;
-
-        // Take half of the amount from notoriety and reputation each.
-        GET_NOT(ch) -= karma_to_lose / 2;
-        GET_REP(ch) -= karma_to_lose / 2;
-
-        // Knock down the attribute.
-        GET_REAL_ATT(ch, attribute)--;
-        snprintf(buf, sizeof(buf),"%s lost a point of %s.  Total Karma Earned from %d to %d.",
-                GET_CHAR_NAME(ch), short_attributes[attribute], old_tke, GET_TKE( ch ) );
-        mudlog(buf, ch, LOG_DEATHLOG, TRUE);
-
-        send_to_char(ch, "^yThere are some things even the DocWagon can't fix :(^n\r\n"
-                         "You've lost a point of %s from that death. You can re-train it at a trainer.\r\n",
-                         attributes[attribute]);
-        return;
-      }
+    int lost_attribute = raw_stat_loss(ch);
+    if (lost_attribute >= BOD) {
+      send_to_char(ch, "^yThere are some things even the DocWagon can't fix :(^n\r\n"
+                       "You've lost a point of %s from that death. You can re-train it at a trainer.\r\n",
+                       attributes[lost_attribute]);
     }
-    mudlog("Note: Would have lost attribute point, but couldn't find one to lose.", ch, LOG_DEATHLOG, TRUE);
   }
 }
 
