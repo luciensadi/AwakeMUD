@@ -886,7 +886,7 @@ void point_update(void)
           continue;
 
       for (int x = MIN_DRUG; x < NUM_DRUGS; x++) {
-        if (GET_DRUG_ADDICT(i, x) > 0) {
+        if (GET_DRUG_ADDICT(i, x) > 0 && GET_DRUG_STAGE(i, x) == DRUG_STAGE_UNAFFECTED) {
           int tsl = (time(0) - GET_DRUG_LASTFIX(i, x)) / SECS_PER_MUD_DAY;
           GET_DRUG_ADDTIME(i, x)++;
           if (!(GET_DRUG_ADDTIME(i ,x) % 168) && GET_REAL_BOD(i) == 1) {
@@ -1560,6 +1560,11 @@ void misc_update(void)
           if (character_died)
             break;
           send_to_char(buf, ch);
+
+          if (GET_LEVEL(ch) > LVL_MORTAL && GET_DRUG_DURATION(ch, i) > 0) {
+            send_to_char(ch, "Accelerating drug onset duration from %d to 10s for easier testing.", GET_DRUG_DURATION(ch, i));
+            GET_DRUG_DURATION(ch, i) = 10;
+          }
         }
         else if (GET_DRUG_STAGE(ch, i) == DRUG_STAGE_ONSET && GET_DRUG_DURATION(ch, i) <= 0) {
           int toxin = 0;
@@ -1608,6 +1613,11 @@ void misc_update(void)
           }
           if (character_died)
             break;
+
+          if (GET_LEVEL(ch) > LVL_MORTAL && GET_DRUG_DURATION(ch, i) > 0) {
+            send_to_char(ch, "Accelerating drug comedown duration from %d to 10s for easier testing.", GET_DRUG_DURATION(ch, i));
+            GET_DRUG_DURATION(ch, i) = 10;
+          }
 
           if (drug_types[i].tolerance) {
             if (GET_DRUG_DOSES(ch, i) == 1 && success_test(bod_for_success_test, drug_types[i].tolerance) < 1)
