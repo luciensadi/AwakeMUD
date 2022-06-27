@@ -730,6 +730,7 @@ enum {
 
 #define SPELL_DESIGN_FAILED_CODE -3
 
+#define META_UNDEFINED    0
 #define META_CENTERING    1
 #define META_CLEANSING    2
 #define META_INVOKING    3
