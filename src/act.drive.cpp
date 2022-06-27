@@ -1294,7 +1294,7 @@ ACMD(do_driveby)
   for (pass = ch->in_veh->people; pass; pass = pass->next_in_veh) {
     if (pass != ch) {
       if (PLR_FLAGGED(pass, PLR_DRIVEBY) && AWAKE(pass) && GET_EQ(pass, WEAR_WIELD) &&
-          GET_OBJ_VAL(GET_EQ(pass, WEAR_WIELD),4) >= SKILL_FIREARMS) {
+          (WEAPON_IS_GUN(wielded) || !WEAPON_IS_GUN(wielded) && ch->in_veh->type = VEH_BIKE) ) {
         if (!IS_NPC(vict) && !PRF_FLAGGED(pass, PRF_PKER) && !PRF_FLAGGED(vict, PRF_PKER))
           continue;
         send_to_char(pass, "You follow %s lead and take aim.\r\n", HSHR(ch));
@@ -1317,9 +1317,9 @@ ACMD(do_driveby)
   order_list(list);
   roll_individual_initiative(vict);
   if (GET_INIT_ROLL(vict) < 12)
-    send_to_char(vict, "You suddenly feel a cap busted in your ass as %s zooms past!\r\n", GET_VEH_NAME(ch->in_veh));
+    send_to_char(vict, "You suddenly feel force slamming into your hoop as %s zooms past!\r\n", GET_VEH_NAME(ch->in_veh));
   else
-    send_to_char(vict, "A hail of bullets flies from %s as it zooms past!\r\n", GET_VEH_NAME(ch->in_veh));
+    send_to_char(vict, "A flurry of attacks flies from %s as it zooms past!\r\n", GET_VEH_NAME(ch->in_veh));
 
   for (int i = 2; i > 0; i--) {
     for (pass = list; pass && vict->in_room == ch->in_veh->in_room; pass = pass->next_fighting) {
@@ -1342,7 +1342,7 @@ ACMD(do_driveby)
   }
 
   if (GET_INIT_ROLL(vict) >= 12) {
-    if (GET_EQ(vict, WEAR_WIELD) && GET_OBJ_VAL(GET_EQ(vict, WEAR_WIELD),4) >= SKILL_FIREARMS) {
+    if (WEAPON_IS_GUN(GET_EQ(vict, WEAR_WIELD))) {
       send_to_char(vict, "You swing around and take aim at %s.\r\n", GET_VEH_NAME(ch->in_veh));
       snprintf(buf, sizeof(buf), "%s swings around and takes aim at your ride.\r\n", GET_NAME(vict));
       send_to_veh(buf, ch->in_veh, NULL, TRUE);
