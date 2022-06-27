@@ -1226,7 +1226,7 @@ void do_stat_veh(struct char_data *ch, struct veh_data * k)
   k->flags.PrintBits(flag_buf, sizeof(flag_buf), veh_flag, NUM_VFLAGS);
 
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Sig: [^B%d^n]  Aut: [^B%d^n]  Pil: [^B%d^n]  Sea: [^B%d/%d^n]  Loa: [^B%d/%d^n]  Cos: [^B%d^n]\r\nFlags: [^B%s^n]\r\n",
-          k->sig, k->autonav, k->pilot, k->seating[1], k->seating[0], (int)k->usedload, (int)k->load, k->cost, *flag_buf ? flag_buf : "none");
+          k->sig, k->autonav, k->pilot, k->seating[SEATING_FRONT], k->seating[SEATING_REAR], (int)k->usedload, (int)k->load, k->cost, *flag_buf ? flag_buf : "none");
   send_to_char(buf, ch);
 
   struct char_data *driver = NULL, *rigger = NULL;

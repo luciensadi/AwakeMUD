@@ -950,9 +950,16 @@ void point_update(void)
                   GET_DRUG_LASTWITH(i ,x)++;
                   GET_DRUG_EDGE(i, x)--;
                   if (!GET_DRUG_EDGE(i ,x)) {
-                    AFF_FLAGS(i).RemoveBit(AFF_WITHDRAWAL_FORCE);
-                    GET_DRUG_ADDICT(i, x) = 0;
-                    continue;
+                    int the_next_drug_addicted_to;
+                    for (the_next_drug_addicted_to = MIN_DRUG; the_next_drug_addicted_to < NUM_DRUGS; the_next_drug_addicted_to++) {
+                      if (GET_DRUG_EDGE(i, the_next_drug_addicted_to))
+                        break;
+                    }
+                    if (the_next_drug_addicted_to == NUM_DRUGS) {
+                      AFF_FLAGS(i).RemoveBit(AFF_WITHDRAWAL_FORCE);
+                      GET_DRUG_ADDICT(i, x) = 0;
+                      continue;
+                    }
                   }
                 }
               } else

@@ -312,10 +312,10 @@ void affect_veh(struct veh_data *veh, byte loc, sbyte mod)
       veh->autonav = mod;
       break;
     case VAFF_SEAF:
-      veh->seating[1] += mod;
+      veh->seating[SEATING_FRONT] += mod;
       break;
     case VAFF_SEAB:
-      veh->seating[0] += mod;
+      veh->seating[SEATING_REAR] += mod;
       break;
     case VAFF_LOAD:
       veh->load += mod;

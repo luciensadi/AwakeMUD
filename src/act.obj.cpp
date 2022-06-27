@@ -1858,7 +1858,7 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
         send_to_char("There is too much in the vehicle already!\r\n", ch);
         return 0;
       }
-      if (ch->vfront && ch->in_veh->seating[0] && ch->in_veh->usedload + GET_OBJ_WEIGHT(obj) > ch->in_veh->load / 10) {
+      if (ch->vfront && ch->in_veh->seating[SEATING_REAR] > 0 && ch->in_veh->usedload + GET_OBJ_WEIGHT(obj) > ch->in_veh->load / 10) {
         send_to_char("There is too much in the front of the vehicle!\r\n", ch);
         return 0;
       }

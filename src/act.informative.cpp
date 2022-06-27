@@ -2349,12 +2349,13 @@ void look_at_veh(struct char_data *ch, struct veh_data *veh, int success)
 
 void do_probe_veh(struct char_data *ch, struct veh_data * k)
 {
+  repair_vehicle_seating(k);
   snprintf(buf, sizeof(buf), "Name: '^y%s^n', Aliases: %s\r\n",
           k->short_description, k->name);
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%s^n with handling ^c%d^n, a top speed of ^c%d^n, and raw acceleration of ^c%d^n.\r\n",
           veh_types[k->type], k->handling, k->speed, k->accel);
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It has a body rating of ^c%d^n and rating-^c%d^n vehicular armor. It seats ^c%d^n up front and ^c%d^n in the back.\r\n",
-          k->body, k->armor, k->seating[1], k->seating[0]);
+          k->body, k->armor, k->seating[SEATING_FRONT], k->seating[SEATING_REAR]);
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Its signature rating is ^c%d^n, and its NERP pilot rating is ^c%d^n.\r\n",
           k->sig, k->pilot);
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It has ^c%d^n slots in its autonav and carrying capacity of ^c%d^n (%d in use).\r\n",

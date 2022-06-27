@@ -130,6 +130,7 @@ int     calculate_vehicle_weight(struct veh_data *veh);
 char *  replace_neutral_color_codes(const char *input, const char *replacement_code);
 void    reset_drug_for_char(struct char_data *ch, int drugval);
 void    reset_all_drugs_for_char(struct char_data *ch);
+bool    repair_vehicle_seating(struct veh_data *veh);
 
 void load_vehicle_brain(struct veh_data *veh);
 void remove_vehicle_brain(struct veh_data *veh);

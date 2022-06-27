@@ -58,7 +58,7 @@ void vedit_disp_menu(struct descriptor_data * d)
                d->edit_veh->handling, d->edit_veh->speed, d->edit_veh->accel, d->edit_veh->body,
                d->edit_veh->armor);
   send_to_char(CH, "   Sig(^c%d^n) Au(^c%d^n) P(^c%d^n) Seat(^c%d/%d^n) Load(^c%d^n) Cost(^c%d^n)\r\n",
-               d->edit_veh->sig, d->edit_veh->autonav, d->edit_veh->pilot, d->edit_veh->seating[1], d->edit_veh->seating[0],
+               d->edit_veh->sig, d->edit_veh->autonav, d->edit_veh->pilot, d->edit_veh->seating[SEATING_FRONT], d->edit_veh->seating[SEATING_REAR],
                (int)d->edit_veh->load, d->edit_veh->cost);
   send_to_char(CH, "b) Type: ^C%s^n\r\n", veh_types[d->edit_veh->type]);
   send_to_char(CH, "c) Stock Engine: ^C%s^n\r\n", engine_types[d->edit_veh->engine]);
@@ -83,7 +83,7 @@ void vedit_disp_att(struct descriptor_data * d)
   send_to_char(CH, "6) Signature:  ^c%d^n\r\n", d->edit_veh->sig);
   send_to_char(CH, "7) AutoNav:  ^c%d^n\r\n", d->edit_veh->autonav);
   send_to_char(CH, "8) Pilot:  ^c%d^n\r\n", d->edit_veh->pilot);
-  send_to_char(CH, "9) Seating:  ^c%d/%d^n\r\n", d->edit_veh->seating[1], d->edit_veh->seating[0]);
+  send_to_char(CH, "9) Seating:  ^c%d/%d^n\r\n", d->edit_veh->seating[SEATING_FRONT], d->edit_veh->seating[SEATING_REAR]);
   send_to_char(CH, "0) Load:  ^c%d^n\r\n", (int)d->edit_veh->load);
   send_to_char(CH, "a) Cost:  ^c%d^n\r\n", d->edit_veh->cost);
   send_to_char(CH, "q) Quit\r\n");
@@ -185,8 +185,8 @@ void vedit_parse(struct descriptor_data * d, const char *arg)
               i->people = temp->people;
               i->damage = temp->damage;
               i->cspeed = temp->cspeed;
-              i->seating[0] = temp->seating[0];
-              i->seating[1] = temp->seating[1];
+              i->seating[SEATING_FRONT] = temp->seating[SEATING_FRONT];
+              i->seating[SEATING_REAR] = temp->seating[SEATING_REAR];
               i->next = temp->next;
               for (int c = 0; c < NUM_MODS; c++)
                 i->mod[c] = temp->mod[c];
@@ -613,7 +613,7 @@ if (d->edit_veh->ITEM && veh_proto[veh_number].ITEM && d->edit_veh->ITEM != veh_
       send_to_char("Value must range between 0 and 50.\r\n", CH);
       send_to_char("Enter Seating (Front) attribute: ", CH);
     } else {
-      d->edit_veh->seating[1] = number;
+      d->edit_veh->seating[SEATING_FRONT] = number;
       send_to_char("Enter Seating (Rear) attribute: ", CH);
       d->edit_mode = VEDIT_SEAT2;
     }
@@ -624,7 +624,7 @@ if (d->edit_veh->ITEM && veh_proto[veh_number].ITEM && d->edit_veh->ITEM != veh_
       send_to_char("Value must range between 0 and 50.\r\n", CH);
       send_to_char("Enter Seating (Rear) attribute: ", CH);
     } else {
-      d->edit_veh->seating[0] = number;
+      d->edit_veh->seating[SEATING_REAR] = number;
       vedit_disp_att(d);
     }
     break;
@@ -735,7 +735,7 @@ void write_vehs_to_disk(int zone)
               "Type:\t%d\n"
               "Flags:\t%s\n"
               "Engine:\t%d\n",
-              veh->sig, veh->autonav, veh->seating[1], veh->seating[0], (int)veh->load, veh->cost, veh->type,
+              veh->sig, veh->autonav, veh->seating[SEATING_FRONT], veh->seating[SEATING_REAR], (int)veh->load, veh->cost, veh->type,
               veh->flags.ToString(), veh->engine);
       fprintf(fp, "BREAK\n");
     }

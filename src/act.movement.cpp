@@ -1581,7 +1581,7 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
   }
 
   // No space? Can't (unless admin)
-  if (!found_veh->seating[front]) {
+  if (!found_veh->seating[front] && !(repair_vehicle_seating(found_veh) && found_veh->seating[front])) {
     if (access_level(ch, LVL_ADMIN)) {
       send_to_char("You use your staff powers to force your way in despite the lack of seating.\r\n", ch);
     } else {

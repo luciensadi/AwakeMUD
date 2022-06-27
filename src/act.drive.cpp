@@ -2003,7 +2003,7 @@ ACMD(do_switch)
     return;
   }
 
-  else if (!ch->in_veh->seating[!ch->vfront]) {
+  else if (!ch->in_veh->seating[!ch->vfront] && !(repair_vehicle_seating(ch->in_veh) && ch->in_veh->seating[!ch->vfront])) {
     if (access_level(ch, LVL_ADMIN)) {
       send_to_char("You use your staff powers to bypass the lack of seating.\r\n", ch);
     } else {

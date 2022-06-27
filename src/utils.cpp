@@ -4692,6 +4692,53 @@ void reset_all_drugs_for_char(struct char_data *ch) {
   }
 }
 
+// Fix a vehicle's seating amounts. Returns TRUE on change, FALSE otherwise.
+bool repair_vehicle_seating(struct veh_data *veh) {
+  struct obj_data *mod;
+
+  // First, calculate the expected seating for front and back.
+  int front = veh_proto[veh->veh_number].seating[SEATING_FRONT];
+  int rear = veh_proto[veh->veh_number].seating[SEATING_REAR];
+
+  // Next, subtract seating due to people in the vehicle. Skip staff.
+  for (struct char_data *ch = veh->people; ch; ch = ch->next_in_veh) {
+    if (GET_LEVEL(ch) <= LVL_MORTAL) {
+      if (ch->vfront)
+        front--;
+      else
+        rear--;
+    }
+  }
+
+  // Then add in any seating mods.
+  for (int slot = 0; slot < NUM_MODS; slot++) {
+    if (!(mod = GET_MOD(veh, slot)))
+      continue;
+
+    // Read the affects of the mod.
+    for (int aff_slot = 0; aff_slot < MAX_OBJ_AFFECT; aff_slot++) {
+      switch (mod->affected[aff_slot].location) {
+        case VAFF_SEAF:
+          front += mod->affected[aff_slot].modifier;
+          break;
+        case VAFF_SEAB:
+          rear += mod->affected[aff_slot].modifier;
+          break;
+      }
+    }
+  }
+
+  // Finally, apply this to the vehicle if needed.
+  if (veh->seating[SEATING_FRONT] != front || veh->seating[SEATING_REAR] != rear) {
+    veh->seating[SEATING_FRONT] = front;
+    veh->seating[SEATING_REAR] = rear;
+    return TRUE;
+  }
+
+  // No changes made.
+  return FALSE;
+}
+
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.
 // Great for swapping out old Classic weapons, cyberware, etc for the new guaranteed-canon versions.
 #define PAIR(classic, current) case (classic): return (current);

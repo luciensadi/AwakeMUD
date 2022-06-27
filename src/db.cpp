@@ -1055,8 +1055,8 @@ void parse_veh(File &fl, long virtual_nr)
   veh_proto[veh_nr].pilot = data.GetInt("Pilot", 0);
   veh_proto[veh_nr].sig = data.GetInt("Sig", 0);
   veh_proto[veh_nr].autonav = data.GetInt("Autonav", 0);
-  veh_proto[veh_nr].seating[1] = data.GetInt("Seating", 0);
-  veh_proto[veh_nr].seating[0] = data.GetInt("SeatingBack", 0);
+  veh_proto[veh_nr].seating[SEATING_FRONT] = data.GetInt("Seating", 0);
+  veh_proto[veh_nr].seating[SEATING_REAR] = data.GetInt("SeatingBack", 0);
   veh_proto[veh_nr].load = data.GetFloat("Load", 0);
   veh_proto[veh_nr].cost = data.GetInt("Cost", 0);
   veh_proto[veh_nr].type = data.GetInt("Type", 0);

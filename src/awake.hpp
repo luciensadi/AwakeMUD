@@ -1836,6 +1836,9 @@ enum {
 #define ENGINE_DIESEL      5
 #define NUM_ENGINE_TYPES  6
 
+#define SEATING_REAR      0
+#define SEATING_FRONT     1
+
 /* house value defines */
 #define MAX_HOUSES      100
 #define MAX_GUESTS      10
