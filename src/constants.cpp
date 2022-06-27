@@ -415,9 +415,9 @@ const char *attack_types[] =
 
 const char *weapon_type[] =
   {
-    "edged weapon",
+    "slashing weapon",
     "club",
-    "pole arm",
+    "piercing weapon",
     "whip",
     "glove",
     "hold-out pistol",

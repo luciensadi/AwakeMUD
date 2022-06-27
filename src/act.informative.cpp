@@ -2691,13 +2691,12 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       // Melee weapons.
       else {
         if (obj_index[GET_OBJ_RNUM(j)].wfunc == monowhip) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%s^n that uses the ^c%s^n skill to attack with. Its damage code is ^c10%s%s^n.",
-                  weapon_type[GET_OBJ_VAL(j, 3)],
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^cmonowhip^n that uses the ^c%s^n skill to attack with. Its damage code is ^c10%s%s^n.",
                   skills[GET_OBJ_VAL(j, 4)].name,
                   wound_arr[GET_OBJ_VAL(j, 1)],
                   !IS_DAMTYPE_PHYSICAL(get_weapon_damage_type(j)) ? " (stun)" : "");
         }
-        else if (GET_OBJ_VAL(j, 2) != 0) {
+        else if (GET_WEAPON_STR_BONUS(j) != 0) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%s^n that uses the ^c%s^n skill to attack with. Its damage code is ^c(STR%s%d)%s%s^n.",
                   weapon_type[GET_OBJ_VAL(j, 3)],
                   skills[GET_OBJ_VAL(j, 4)].name,
