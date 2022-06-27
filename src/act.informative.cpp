@@ -2631,6 +2631,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
                 } else {
                   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nThe bayonet attached to the %s allows you to use the Pole Arms skill when defending from melee attacks. It also lets you ^WEJECT^n your magazine to do a bayonet charge.",
                           gun_accessory_locations[mount_location]);
+                  has_bayonet = TRUE;
                 }
                 break;
               default:
