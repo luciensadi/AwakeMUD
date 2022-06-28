@@ -1270,7 +1270,7 @@ ACMD(do_driveby)
   }
  
   if ((wielded = GET_EQ(ch, WEAR_WIELD))) {
-    if ((IS_OBJ_STAT(wielded, ITEM_EXTRA_TWOHANDS) || (!WEAPON_IS_GUN(wielded) && ch->in_veh->type = !VEH_BIKE))  {
+    if ((IS_OBJ_STAT(wielded, ITEM_EXTRA_TWOHANDS) || (!WEAPON_IS_GUN(wielded) && ch->in_veh->type = !VEH_BIKE)))  {
       send_to_char(ch, "You can only do a driveby with a one handed weapon in a vehicle and a melee weapon while on a bike!\r\n");
       return;
     }
