@@ -1270,6 +1270,10 @@ ACMD(do_driveby)
   }
  
   if ((wielded = GET_EQ(ch, WEAR_WIELD))) {
+    if (GET_OBJ_TYPE(wielded) != ITEM_WEAPON) {
+      send_to_char(ch, "You have to be wielding a weapon!"
+      return;
+    }
     if ((IS_OBJ_STAT(wielded, ITEM_EXTRA_TWOHANDS) || (!WEAPON_IS_GUN(wielded) && ch->in_veh->type = !VEH_BIKE)))  {
       send_to_char(ch, "You can only do a driveby with a one handed weapon in a vehicle and a melee weapon while on a bike!\r\n");
       return;
@@ -1293,6 +1297,10 @@ ACMD(do_driveby)
 
   for (pass = ch->in_veh->people; pass; pass = pass->next_in_veh) {
     if (pass != ch && (wielded = GET_EQ(pass, WEAR_WIELD))) {
+      if (GET_OBJ_TYPE(wielded) != ITEM_WEAPON) {
+        send_to_char(pass, "You have to be wielding a weapon!")
+        return;
+      }
       if (PLR_FLAGGED(pass, PLR_DRIVEBY) && AWAKE(pass) &&
           (WEAPON_IS_GUN(wielded) || !(IS_OBJ_STAT(wielded), ITEM_EXTRA_TWOHANDS) && pass->in_veh->type = VEH_BIKE) ) {
         if (!IS_NPC(vict) && !PRF_FLAGGED(pass, PRF_PKER) && !PRF_FLAGGED(vict, PRF_PKER))
