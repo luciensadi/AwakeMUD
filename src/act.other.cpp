@@ -1509,7 +1509,7 @@ ACMD(do_skills)
         continue;
 
       if (GET_POWER_TOTAL(ch, i) > 0) {
-        snprintf(ENDOF(buf), sizeof(buf), "PP      Ability              Level")
+        snprintf(ENDOF(buf), sizeof(buf), "\r\nPP      Ability              Level\r\n")
         snprintf(buf2, sizeof(buf2), "%-20s", train_ability_cost[i], adept_powers[i]);
         if (max_ability(i) > 1)
           switch (i) {
