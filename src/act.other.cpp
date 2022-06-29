@@ -1509,7 +1509,8 @@ ACMD(do_skills)
         continue;
 
       if (GET_POWER_TOTAL(ch, i) > 0) {
-        snprintf(buf2, sizeof(buf2), "%-20s", adept_powers[i]);
+        snprintf(ENDOF(buf), sizeof(buf), "%-20s", "PP", "Ability", "Level")
+        snprintf(buf2, sizeof(buf2), "%-20s", train_ability_cost[i], adept_powers[i]);
         if (max_ability(i) > 1)
           switch (i) {
           case ADEPT_KILLING_HANDS:
@@ -1521,7 +1522,7 @@ ACMD(do_skills)
           default:
             snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " +%d", GET_POWER_TOTAL(ch, i));
             if (GET_POWER_ACT(ch, i))
-              snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " ^Y(%d)^n", GET_POWER_ACT(ch, i));
+              snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " ^Y(%.2d)^n", GET_POWER_ACT(ch, i));
             strlcat(buf2, "\r\n", sizeof(buf2));
             break;
           }
