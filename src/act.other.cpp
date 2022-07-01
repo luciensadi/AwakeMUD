@@ -2091,14 +2091,8 @@ ACMD(do_treat)
     return;
   }
 
-  if (vict == ch) {
-    send_to_char("You can't treat yourself!\r\n", ch);
-    return;
-  } else if (CH_IN_COMBAT(vict)) {
+  if (CH_IN_COMBAT(vict)) {
     act("Not while $E's fighting!", FALSE, ch, 0, vict, TO_CHAR);
-    return;
-  } else if (GET_POS(vict) > POS_LYING && !subcmd) {
-    act("$N must at least be lying down to receive first aid.", FALSE, ch, 0, vict, TO_CHAR);
     return;
   } else if (LAST_HEAL(vict) != 0
              || (!IS_NPC(vict)
