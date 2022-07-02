@@ -1326,24 +1326,6 @@ enum {
 #define TYPE_PARTS       3
 #define TYPE_COOKER       4
 
-#define MIN_DRUG 1
-#define DRUG_ACTH  1
-#define DRUG_HYPER  2
-#define DRUG_JAZZ  3
-#define DRUG_KAMIKAZE  4
-#define DRUG_PSYCHE  5
-#define DRUG_BLISS  6
-#define DRUG_BURN  7
-#define DRUG_CRAM  8
-#define DRUG_NITRO  9
-#define DRUG_NOVACOKE  10
-#define DRUG_ZEN  11
-#define NUM_DRUGS       12
-
-#define DRUG_STAGE_UNAFFECTED 0
-#define DRUG_STAGE_ONSET      1
-#define DRUG_STAGE_COMEDOWN   2
-
 /* vehicle types table */
 #define VEH_DRONE 0
 #define VEH_BIKE 1

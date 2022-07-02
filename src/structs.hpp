@@ -1139,18 +1139,6 @@ struct program_data {
   unsigned char multiplier;
 };
 
-struct drug_data {
-  char name[9];
-  unsigned char power;
-  unsigned char level;
-  unsigned char mental_addiction;
-  unsigned char physical_addiction;
-  unsigned char tolerance;
-  unsigned char edge_preadd;
-  unsigned char edge_posadd;
-  unsigned char fix;
-};
-
 struct spirit_table {
   char name[50];
   vnum_t vnum;

@@ -1987,24 +1987,6 @@ const char *short_attributes[] =
   "rea"
 };
 
-struct drug_data drug_types[] =
-  {
-    // name,   power,  level, m_add, p_add, toler, edge_preadd, edge_posadd, fix
-    { "Nothing", 0, 0, 0, 0, 0, 0, 0, 0
-    },
-    { "ACTH",     0,   LIGHT,   0,   0,   3,   10,  0,    0 },
-    { "Hyper",    6, SERIOUS,   0,   0,   0,   0,   0,    0 },
-    { "Jazz",     0,       0,   4,   5,   2,   2,   8,    3 },
-    { "Kamikaze", 0,       0,   0,   5,   2,   2,   10,   2 },
-    { "Psyche",   0,       4,   0,   2,   10,  20,  7,    0 },
-    { "Bliss",    0,       0,   5,   5,   2,   2,   30,   2 },
-    { "Burn",     3,  DEADLY,   2,   0,   2,   20,  100,  1 },
-    { "Cram",     0,       0,   4,   0,   2,   5,   50,   2 },
-    { "Nitro",    4,  DEADLY,   5,   8,   3,   2,   5,    3 },
-    { "Novacoke", 0,       0,   6,   5,   2,   3,   50,   2 },
-    { "Zen",      0,       0,   3,   0,   2,   5,   50,   2 }
-  };
-
 struct spell_types spells[] =
   {
     // name, category, vector, target, duration, drainpower, draindamage

@@ -853,81 +853,8 @@ void affect_total(struct char_data * ch)
       AFF_FLAGS(ch).SetBit(AFF_VISION_MAG_2);
     }
   }
-  if (!AFF_FLAGGED(ch, AFF_DETOX)) {
-    for (int i = MIN_DRUG; i < NUM_DRUGS; i++) {
-      if (GET_DRUG_STAGE(ch, i) == DRUG_STAGE_ONSET) {
-        switch (i) {
-          case DRUG_HYPER:
-            GET_TARGET_MOD(ch)++;
-            GET_CONCENTRATION_TARGET_MOD(ch) += 3; // should be 4, but it already includes the general target mod above
-            break;
-          case DRUG_JAZZ:
-            GET_QUI(ch) += 2;
-            GET_INIT_DICE(ch)++;
-            break;
-          case DRUG_KAMIKAZE:
-            GET_BOD(ch)++;
-            GET_QUI(ch)++;
-            GET_STR(ch) += 2;
-            GET_WIL(ch)++;
-            GET_INIT_DICE(ch)++;
-            break;
-          case DRUG_PSYCHE:
-            GET_INT(ch)++;
-            break;
-          case DRUG_BLISS:
-            GET_TARGET_MOD(ch)++;
-            GET_REA(ch)--;
-            // Pain resistance is handled directly in the relevant function.
-            break;
-          case DRUG_CRAM:
-            GET_REA(ch)++;
-            GET_INIT_DICE(ch)++;
-            break;
-          case DRUG_NITRO:
-            GET_STR(ch) += 2;
-            GET_WIL(ch) += 2;
-            // Pain resistance is handled directly in the relevant function.
-            GET_PERCEPTION_TEST_DICE_MOD(ch) += 2;
-            break;
-          case DRUG_NOVACOKE:
-            GET_REA(ch)++;
-            GET_CHA(ch)++;
-            // Pain resistance is handled directly in the relevant function.
-            GET_PERCEPTION_TEST_DICE_MOD(ch)++;
-            break;
-          case DRUG_ZEN:
-            GET_REA(ch) -= 2;
-            GET_TARGET_MOD(ch)++;
-            GET_WIL(ch)++;
-            break;
-        }
-      } else if (GET_DRUG_STAGE(ch, i) == DRUG_STAGE_COMEDOWN) {
-        switch (i) {
-          case DRUG_JAZZ:
-            GET_CONCENTRATION_TARGET_MOD(ch)++;
-            GET_QUI(ch)--;
-            break;
-          case DRUG_KAMIKAZE:
-            GET_QUI(ch)--;
-            GET_WIL(ch)--;
-            break;
-          case DRUG_NOVACOKE:
-            GET_CHA(ch) = 1;
-            GET_WIL(ch) /= 2;
-            break;
-        }
-      }
-    }
-  }
-  if (AFF_FLAGGED(ch, AFF_WITHDRAWAL_FORCE))
-  {
-    GET_MAX_MENTAL(ch) -= 300;
-    GET_TARGET_MOD(ch) += 6;
-  } else if (AFF_FLAGGED(ch, AFF_WITHDRAWAL))
-  {
-    GET_TARGET_MOD(ch) += 4;
-  }
+
+  apply_drug_modifiers_to_ch(ch);
 
   skill_dice = get_skill_dice_in_use_for_weapons(ch);
 

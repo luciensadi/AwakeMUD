@@ -304,28 +304,14 @@ int damage_modifier(struct char_data *ch, char *rbuf, int rbuf_size)
   if (!IS_NPC(ch)) {
     if (GET_TRADITION(ch) == TRAD_ADEPT && GET_POWER(ch, ADEPT_PAIN_RESISTANCE) > 0)
     {
+      asdf does this need to be *100?
       physical += GET_POWER(ch, ADEPT_PAIN_RESISTANCE);
       mental += GET_POWER(ch, ADEPT_PAIN_RESISTANCE);
     }
 
-    if (ch->player_specials) {
-      if (GET_DRUG_STAGE(ch, DRUG_NITRO) == DRUG_STAGE_ONSET) {
-        physical += 6;
-        mental += 6;
-      }
-      else if (GET_DRUG_STAGE(ch, DRUG_KAMIKAZE) == DRUG_STAGE_ONSET) {
-        physical += 4;
-        mental += 4;
-      }
-      else if (GET_DRUG_STAGE(ch, DRUG_BLISS) == DRUG_STAGE_ONSET) {
-        physical += 3;
-        mental += 3;
-      }
-      else if (GET_DRUG_STAGE(ch, DRUG_NOVACOKE) == DRUG_STAGE_ONSET) {
-        physical += 1;
-        mental += 1;
-      }
-    }
+    int drug_pain_resist = get_drug_pain_resist_level(ch);
+    physical += drug_pain_resist;
+    mental += drug_pain_resist;
   }
 
   // first apply physical damage modifiers
@@ -4679,17 +4665,6 @@ char *replace_neutral_color_codes(const char *input, const char *replacement_cod
   *internal_buf_ptr = '\0';
 
   return internal_buf;
-}
-
-void reset_drug_for_char(struct char_data *ch, int drugval) {
-  GET_DRUG_DOSE(ch, drugval) = GET_DRUG_DURATION(ch, drugval) = 0;
-  GET_DRUG_STAGE(ch, drugval) = DRUG_STAGE_UNAFFECTED;
-}
-
-void reset_all_drugs_for_char(struct char_data *ch) {
-  for (int i = MIN_DRUG; i < NUM_DRUGS; i++) {
-    reset_drug_for_char(ch, i);
-  }
 }
 
 // Fix a vehicle's seating amounts. Returns TRUE on change, FALSE otherwise.

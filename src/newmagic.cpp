@@ -1511,8 +1511,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       base_target = 0;
       for (int i = MIN_DRUG; i < NUM_DRUGS; i++) {
         if (GET_DRUG_STAGE(vict, i) != DRUG_STAGE_UNAFFECTED) {
-          base_target = drug_types[i].power;
-          break;
+          base_target = MAX(base_target, drug_types[i].power);
         }
       }
 
