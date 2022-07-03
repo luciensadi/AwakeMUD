@@ -885,7 +885,7 @@ void point_update(void)
         if (check_bioware(i))
           continue;
 
-      process_drugs(i);
+      process_drug_limit_tick(i);
     }
 
     if (i->desc && IS_PROJECT(i)) {
@@ -1291,7 +1291,7 @@ void misc_update(void)
   PERF_PROF_SCOPE(pr_, __func__);
   struct char_data *ch, *next_ch;
   struct obj_data *obj, *o = NULL;
-  int i, dam = 0, power = 0;
+  int i;
 
   // loop through all the characters
   for (ch = character_list; ch; ch = next_ch) {

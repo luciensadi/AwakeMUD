@@ -555,12 +555,12 @@ bool load_char(const char *name, char_data *ch, bool logon)
     while ((row = mysql_fetch_row(res))) {
       x = atoi(row[1]);
       GET_DRUG_ADDICT(ch, x) = atoi(row[2]);
-      GET_DRUG_DOSES(ch, x) = atoi(row[3]);
-      GET_DRUG_EDGE(ch, x) = atoi(row[4]);
-      GET_DRUG_LASTFIX(ch, x) = atol(row[5]);
-      GET_DRUG_ADDTIME(ch, x) = atoi(row[6]);
-      GET_DRUG_TOLERANT(ch, x) = atoi(row[7]);
-      GET_DRUG_LASTWITH(ch, x) = atoi(row[8]);
+      GET_DRUG_LIFETIME_DOSES(ch, x) = atoi(row[3]);
+      GET_DRUG_ADDICTION_EDGE(ch, x) = atoi(row[4]);
+      GET_DRUG_LAST_FIX(ch, x) = atol(row[5]);
+      GET_DRUG_ADDICTION_TICK_COUNTER(ch, x) = atoi(row[6]);
+      GET_DRUG_TOLERANCE_LEVEL(ch, x) = atoi(row[7]);
+      GET_DRUG_LAST_WITHDRAWAL_TICK(ch, x) = atoi(row[8]);
       GET_DRUG_DURATION(ch, x) = atoi(row[9]);
       GET_DRUG_DOSE(ch, x) = atoi(row[10]);
       GET_DRUG_STAGE(ch, x) = atoi(row[11]);
@@ -2491,15 +2491,15 @@ void save_drug_data_to_db(struct char_data *player) {
   strcpy(buf, "INSERT INTO pfiles_drugs (idnum, DrugType, Addict, Doses, Edge, LastFix, Addtime, Tolerant, LastWith, Duration, Dose, Stage) VALUES (");
   int q = 0;
   for (int i = MIN_DRUG; i < NUM_DRUGS; i++) {
-    if (GET_DRUG_DOSES(player, i) || GET_DRUG_EDGE(player, i) || GET_DRUG_ADDICT(player, i) || GET_DRUG_LASTFIX(player, i) ||
-        GET_DRUG_ADDTIME(player, i) || GET_DRUG_TOLERANT(player, i) || GET_DRUG_LASTWITH(player, i) || GET_DRUG_DURATION(player, i) ||
+    if (GET_DRUG_LIFETIME_DOSES(player, i) || GET_DRUG_ADDICTION_EDGE(player, i) || GET_DRUG_ADDICT(player, i) || GET_DRUG_LAST_FIX(player, i) ||
+        GET_DRUG_ADDICTION_TICK_COUNTER(player, i) || GET_DRUG_TOLERANCE_LEVEL(player, i) || GET_DRUG_LAST_WITHDRAWAL_TICK(player, i) || GET_DRUG_DURATION(player, i) ||
         GET_DRUG_DOSE(player, i) || GET_DRUG_STAGE(player, i))
     {
       if (q)
         strcat(buf, "), (");
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d", GET_IDNUM(player), i, GET_DRUG_ADDICT(player, i),
-                          GET_DRUG_DOSES(player, i), GET_DRUG_EDGE(player, i), GET_DRUG_LASTFIX(player, i),
-                          GET_DRUG_ADDTIME(player, i), GET_DRUG_TOLERANT(player, i), GET_DRUG_LASTWITH(player, i),
+                          GET_DRUG_LIFETIME_DOSES(player, i), GET_DRUG_ADDICTION_EDGE(player, i), GET_DRUG_LAST_FIX(player, i),
+                          GET_DRUG_ADDICTION_TICK_COUNTER(player, i), GET_DRUG_TOLERANCE_LEVEL(player, i), GET_DRUG_LAST_WITHDRAWAL_TICK(player, i),
                           GET_DRUG_DURATION(player, i), GET_DRUG_DOSE(player, i), GET_DRUG_STAGE(player, i)
                         );
       q = 1;

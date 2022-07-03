@@ -6245,9 +6245,10 @@ ACMD(do_status)
       printed = TRUE;
     }
     else if (GET_DRUG_ADDICT(targ, i) > 0) {
-      int tsl = (time(0) - GET_DRUG_LASTFIX(targ, i)) / SECS_PER_MUD_DAY;
-      if (tsl >= drug_types[i].fix + 1 || AFF_FLAGGED(targ, AFF_WITHDRAWAL_FORCE) || AFF_FLAGGED(targ, AFF_WITHDRAWAL)) {
+      if (GET_DRUG_STAGE(targ, i) == DRUG_STAGE_GUIDED_WITHDRAWAL) {
         send_to_char(ch, "  ^y%s Withdrawal^n\r\n", drug_types[i].name);
+      } else if (GET_DRUG_STAGE(targ, i) == DRUG_STAGE_FORCED_WITHDRAWAL) {
+        send_to_char(ch, "  ^Y%s Withdrawal (Forced)^n\r\n", drug_types[i].name);
       }
     }
   }
@@ -6350,22 +6351,7 @@ ACMD(do_status)
     }
 
     if (GET_LEVEL(ch) > LVL_MORTAL) {
-      // Send drug info
-      send_to_char("\r\nDrug info: \r\n", ch);
-      for (int i = MIN_DRUG; i < NUM_DRUGS; i++) {
-        send_to_char(ch, " - ^c%s^n (edg %d, add %d, doses %d, lstfx %d, addt %d, toler %d, lstwith %d, dur %d, current dose %d, stage %d)\r\n",
-                     drug_types[i].name,
-                     GET_DRUG_EDGE(targ, i)    ,
-                     GET_DRUG_ADDICT(targ, i)  ,
-                     GET_DRUG_DOSES(targ, i)   ,
-                     GET_DRUG_LASTFIX(targ, i) ,
-                     GET_DRUG_ADDTIME(targ, i) ,
-                     GET_DRUG_TOLERANT(targ, i),
-                     GET_DRUG_LASTWITH(targ, i),
-                     GET_DRUG_DURATION(targ, i),
-                     GET_DRUG_DOSE(targ, i)    ,
-                     GET_DRUG_STAGE(targ, i));
-      }
+      render_drug_info_for_targ(ch, targ);
     }
   }
 }

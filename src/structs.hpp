@@ -17,6 +17,7 @@
 #include "protocol.hpp"
 #include "chargen.hpp"
 #include "vision_overhaul.hpp"
+#include "drugs.hpp"
 
 #define SPECIAL(name) \
    int (name)(struct char_data *ch, void *me, int cmd, char *argument)
@@ -661,7 +662,7 @@ struct player_special_data
   sh_int *obj_complete;
   sh_int *mob_complete;
   long last_quest[QUEST_TIMER];
-  ush_int drugs[NUM_DRUGS+1][10];
+  ush_int drugs[NUM_DRUGS][NUM_DRUG_PLAYER_SPECIAL_FIELDS];
   ubyte mental_loss;
   ubyte physical_loss;
   ubyte perm_bod;
@@ -673,7 +674,7 @@ struct player_special_data
   {
     ZERO_OUT_ARRAY(last_quest, QUEST_TIMER);
 
-    for (int i = 0; i < NUM_DRUGS+1; i++) {
+    for (int i = 0; i < NUM_DRUGS; i++) {
       ZERO_OUT_ARRAY(drugs[i], 10);
     }
   }

@@ -294,7 +294,7 @@ int damage_modifier(struct char_data *ch, char *rbuf, int rbuf_size)
       physical += GET_BIOWARE_RATING(obj);
       mental += GET_BIOWARE_RATING(obj);
     } else if (GET_BIOWARE_TYPE(obj) == BIO_PAINEDITOR && GET_BIOWARE_IS_ACTIVATED(obj))
-      mental = 1000;
+      mental = 10;
   }
   if (AFF_FLAGGED(ch, AFF_RESISTPAIN))
   {
@@ -304,7 +304,6 @@ int damage_modifier(struct char_data *ch, char *rbuf, int rbuf_size)
   if (!IS_NPC(ch)) {
     if (GET_TRADITION(ch) == TRAD_ADEPT && GET_POWER(ch, ADEPT_PAIN_RESISTANCE) > 0)
     {
-      asdf does this need to be *100?
       physical += GET_POWER(ch, ADEPT_PAIN_RESISTANCE);
       mental += GET_POWER(ch, ADEPT_PAIN_RESISTANCE);
     }

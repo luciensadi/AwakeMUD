@@ -1,8 +1,15 @@
-#include "structs.h"
+#include "awake.hpp"
+#include "structs.hpp"
+#include "comm.hpp"
+#include "db.hpp"
+#include "utils.hpp"
+#include "handler.hpp"
+#include "constants.hpp"
+#include "interpreter.hpp"
 
 /* Houserules:
   - We don't have drug families / immunities, so we model tolerance as increasing the number of doses you must take to get high.
-  - We do not permanently reduce anything, although you can lose stats down to racial minimum from withdrawal.
+  - We do not reduce any maximums, although you can lose stats down to racial minimum from withdrawal.
   - Hyper deals up-front damage because we don't model the increased damage otherwise.
   - Kamikaze damages you when you come down.
 */
@@ -11,13 +18,22 @@
    Trigger do_drug_take to consume the object and start this process, otherwise start it manually with apply_doses_of_drug_to_char.
 
    - wait for limit tick, where we call process_drug_limit_tick(), which transitions between onset/comedown/idle
-   - on X tick, process_withdrawal inflicts withdrawal symptoms
+   - on X tick, process_withdrawal inflicts withdrawal symptoms, and also induces withdrawal for those who have gone without a fix
    - on X tick, apply_drug_modifiers_to_ch modifiers char stats
 */
 
-// TODO: Invert the tolerance check: The lower your body is, the harder it should be to become tolerant to a drug. Or, remove body entirely and test on something static.
-
 extern int raw_stat_loss(struct char_data *);
+extern bool check_adrenaline(struct char_data *, int);
+
+ACMD_DECLARE(do_use);
+
+// ----------------- Helper Prototypes
+void _apply_doses_of_drug_to_char(int doses, int drug_id, struct char_data *ch);
+bool _drug_dose_exceeds_tolerance(struct char_data *ch, int drug_id);
+bool _specific_addiction_test(struct char_data *ch, int drug_id, bool is_mental, const char *test_identifier);
+bool _combined_addiction_test(struct char_data *ch, int drug_id, const char *test_identifier);
+
+
 
 // Given a character and a drug object, dose the character with that drug object, then extract it if needed. Effects apply at next limit tick.
 void do_drug_take(struct char_data *ch, struct obj_data *obj) {
@@ -43,7 +59,7 @@ void do_drug_take(struct char_data *ch, struct obj_data *obj) {
   }
 
   // Right now, we apply maximum doses from the object. Later, we'll be smarter about this.
-  // Many drugs exist without doses set, so we assume 0 doses means the drug is an old drug.
+  // Many drugs exist without doses set, so we assume 0 doses means the drug is an old-style drug.
   // TODO: When variable doses are implemented in iedit etc, have a conversion pass in db that sets all 0-dose drugs to 1 dose.
   int drug_doses = GET_OBJ_DRUG_DOSES(obj) > 0 ? GET_OBJ_DRUG_DOSES(obj) : 1;
 
@@ -75,40 +91,40 @@ void do_drug_take(struct char_data *ch, struct obj_data *obj) {
 bool process_drug_limit_tick(struct char_data *ch) {
   char roll_buf[500];
 
-  for (int i = MIN_DRUG; i < NUM_DRUGS; i++) {
-    // send_to_char(ch, "%s: stage %d, dose %d, duration %d\r\n", drug_types[i].name, GET_DRUG_STAGE(ch, i), GET_DRUG_DOSE(ch, i), GET_DRUG_DURATION(ch, i));
+  for (int drug_id = MIN_DRUG; drug_id < NUM_DRUGS; drug_id++) {
+    int damage_boxes = 0;
 
     // All drugs are ticked down as long as you're on them.
-    if (GET_DRUG_STAGE(ch, i) == DRUG_STAGE_ONSET || GET_DRUG_STAGE(ch, i) == DRUG_STAGE_COMEDOWN)
-      GET_DRUG_DURATION(ch, i) -= 1;
+    if (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_ONSET || GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_COMEDOWN)
+      GET_DRUG_DURATION(ch, drug_id) -= 1;
 
     // Transition from no drug to having it, assuming you've passed your tolerance threshold.
-    if (GET_DRUG_STAGE(ch, i) == DRUG_STAGE_UNAFFECTED && _drug_dose_exceeds_tolerance(ch, i)) {
-      bool damage_is_physical = (i != DRUG_HYPER && i != DRUG_BURN);
+    if (GET_DRUG_STAGE(ch, drug_id) != DRUG_STAGE_ONSET && _drug_dose_exceeds_tolerance(ch, drug_id)) {
+      bool damage_is_physical = (drug_id != DRUG_HYPER && drug_id != DRUG_BURN);
 
       // Some drugs hurt when they kick in.
-      if (drug_types[i].damage_level > 0) {
+      if (drug_types[drug_id].damage_level > 0) {
         // Your damage level is dictated by the drug's base damage level, leveled up once if you've taken multiple doses.
-        int damage_level = drug_types[i].damage_level;
-        if (GET_DRUG_DOSE(ch, i) > 1) {
+        int damage_level = drug_types[drug_id].damage_level;
+        if (GET_DRUG_DOSE(ch, drug_id) > 1) {
           damage_level++;
         }
 
         // The power of the damage is specified by the drug, and influenced by the doses taken.
-        int power = drug_types[i].power;
-        if (GET_DRUG_DOSE(ch, i) > 2) {
-          power += GET_DRUG_DOSE(ch, i) - 2;
+        int power = drug_types[drug_id].power;
+        if (GET_DRUG_DOSE(ch, drug_id) > 2) {
+          power += GET_DRUG_DOSE(ch, drug_id) - 2;
         }
 
         // How many successes did we roll to stage down the damage?
         int resist_test_successes = success_test(GET_REAL_BOD(ch) - (GET_BIOOVER(ch) / 2), power);
 
         // Calculate the boxes of damage to apply.
-        int damage_boxes = convert_damage(stage(-resist_test_successes, damage_level));
+        damage_boxes = convert_damage(stage(-resist_test_successes, damage_level));
 
         snprintf(roll_buf, sizeof(roll_buf), "%s's %s onset damage: Power %d, DL %d, resist success %d, staged and converted to %d boxes of %s damage.",
                  GET_CHAR_NAME(ch),
-                 drug_types[i].name,
+                 drug_types[drug_id].name,
                  power,
                  damage_level,
                  resist_test_successes,
@@ -123,11 +139,11 @@ bool process_drug_limit_tick(struct char_data *ch) {
       }
 
       // Onset them and set when their last fix was (used for withdrawal calculations).
-      GET_DRUG_STAGE(ch, i) = DRUG_STAGE_ONSET;
-      GET_DRUG_LASTFIX(ch, i) = time(0);
+      GET_DRUG_STAGE(ch, drug_id) = DRUG_STAGE_ONSET;
+      GET_DRUG_LAST_FIX(ch, drug_id) = time(0);
 
       // Send message, set duration, and apply instant effects.
-      switch (i) {
+      switch (drug_id) {
         case DRUG_ACTH:
           snprintf(buf, sizeof(buf), "You feel a brief moment of vertigo.\r\n");
           if (check_adrenaline(ch, 1)) {
@@ -135,88 +151,88 @@ bool process_drug_limit_tick(struct char_data *ch) {
             return TRUE;
           }
           // ACTH has no long-term effects, so we take them off it immediately.
-          reset_drug_for_char(ch, i);
+          reset_drug_for_char(ch, drug_id);
           break;
         case DRUG_HYPER:
           send_to_char(ch, "The world seems to swirl around you as your mind is bombarded with feedback.\r\n");
-          GET_DRUG_DURATION(ch, i) = dam * 100;
+          GET_DRUG_DURATION(ch, drug_id) = damage_boxes * 100;
           break;
         case DRUG_JAZZ:
           send_to_char(ch,  "The world slows down around you.\r\n");
-          GET_DRUG_DURATION(ch, i) = 100 * srdice();
+          GET_DRUG_DURATION(ch, drug_id) = 100 * srdice();
           break;
         case DRUG_KAMIKAZE:
           send_to_char(ch,  "Your body feels alive with energy and the desire to fight.\r\n");
-          GET_DRUG_DURATION(ch, i) = 100 * srdice();
+          GET_DRUG_DURATION(ch, drug_id) = 100 * srdice();
           break;
         case DRUG_PSYCHE:
           send_to_char(ch,  "Your feel your mind racing.\r\n");
-          GET_DRUG_DURATION(ch, i) = MAX(1, 12 - GET_REAL_BOD(ch)) * 600;
+          GET_DRUG_DURATION(ch, drug_id) = MAX(1, 12 - GET_REAL_BOD(ch)) * 600;
           break;
         case DRUG_BLISS:
           send_to_char(ch,  "The world fades into bliss as your body becomes sluggish.\r\n");
-          GET_DRUG_DURATION(ch, i) = MAX(1, 6 - GET_REAL_BOD(ch)) * 600;
+          GET_DRUG_DURATION(ch, drug_id) = MAX(1, 6 - GET_REAL_BOD(ch)) * 600;
           break;
         case DRUG_BURN:
           send_to_char(ch,  "You suddenly feel very intoxicated.\r\n");
           // Burn's long-term effects are done through the drunk code.
-          reset_drug_for_char(ch, i);
+          reset_drug_for_char(ch, drug_id);
           GET_COND(ch, COND_DRUNK) = FOOD_DRINK_MAX;
           break;
         case DRUG_CRAM:
           send_to_char(ch,  "Your body feels alive with energy.\r\n");
-          GET_DRUG_DURATION(ch, i) = MAX(1, 12 - GET_REAL_BOD(ch)) * 600;
+          GET_DRUG_DURATION(ch, drug_id) = MAX(1, 12 - GET_REAL_BOD(ch)) * 600;
           break;
         case DRUG_NITRO:
           send_to_char(ch,  "You lose sense of yourself as your entire body comes alive with energy.\r\n");
-          GET_DRUG_DURATION(ch, i) = 100 * srdice();
+          GET_DRUG_DURATION(ch, drug_id) = 100 * srdice();
           break;
         case DRUG_NOVACOKE:
           send_to_char(ch,  "You feel euphoric and alert.\r\n");
-          GET_DRUG_DURATION(ch, i) = MAX(1, 10 - GET_REAL_BOD(ch)) * 600;
+          GET_DRUG_DURATION(ch, drug_id) = MAX(1, 10 - GET_REAL_BOD(ch)) * 600;
           break;
         case DRUG_ZEN:
           send_to_char(ch,  "You start to lose your sense of reality as your sight fills with hallucinations.\r\n");
-          GET_DRUG_DURATION(ch, i) = 100 * srdice();
+          GET_DRUG_DURATION(ch, drug_id) = 100 * srdice();
           break;
         default:
-          snprintf(buf, sizeof(buf), "SYSERR: Unknown drug type %d when printing drug-start message!", i);
+          snprintf(buf, sizeof(buf), "SYSERR: Unknown drug type %d when printing drug-start message!", drug_id);
           mudlog(buf, ch, LOG_SYSLOG, TRUE);
           break;
       }
 
       // Staff get short uptimes for testing.
-      if (GET_LEVEL(ch) > LVL_MORTAL && GET_DRUG_DURATION(ch, i) > 0) {
-        send_to_char(ch, "Staff: Accelerating drug onset duration from %d to 4s for easier testing.", GET_DRUG_DURATION(ch, i));
-        GET_DRUG_DURATION(ch, i) = 2;
+      if (GET_LEVEL(ch) > LVL_MORTAL && GET_DRUG_DURATION(ch, drug_id) > 0) {
+        send_to_char(ch, "Staff: Accelerating drug onset duration from %d to 4s for easier testing.", GET_DRUG_DURATION(ch, drug_id));
+        GET_DRUG_DURATION(ch, drug_id) = 2;
       }
     }
 
     // They're already on it and lost their last tick of uptime. Switch to comedown.
-    else if (GET_DRUG_STAGE(ch, i) == DRUG_STAGE_ONSET && GET_DRUG_DURATION(ch, i) <= 0) {
+    else if (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_ONSET && GET_DRUG_DURATION(ch, drug_id) <= 0) {
       int toxin_extractor_rating = 0;
-      for (struct obj_data *obj = ch->bioware; obj && !toxin; obj = obj->next_content)
+      for (struct obj_data *obj = ch->bioware; obj; obj = obj->next_content)
         if (GET_BIOWARE_TYPE(obj) == BIO_TOXINEXTRACTOR)
           toxin_extractor_rating = MAX(toxin_extractor_rating, GET_BIOWARE_RATING(obj));
 
-      if (i == DRUG_KAMIKAZE) {
+      if (drug_id == DRUG_KAMIKAZE) {
         send_to_char("You shudder and twitch as the combat drugs start to leave your system.\r\n", ch);
       } else {
-        send_to_char(ch, "You begin to feel drained as the %s wears off.\r\n", drug_types[i].name);
+        send_to_char(ch, "You begin to feel drained as the %s wears off.\r\n", drug_types[drug_id].name);
       }
-      GET_DRUG_STAGE(ch, i) = DRUG_STAGE_COMEDOWN;
+      GET_DRUG_STAGE(ch, drug_id) = DRUG_STAGE_COMEDOWN;
 
       // Apply comedown durations and instant effects (damage etc).
       int bod_for_success_test = GET_REAL_BOD(ch) - (GET_BIOOVER(ch) / 2);
-      switch (i) {
+      switch (drug_id) {
         case DRUG_JAZZ:
-          GET_DRUG_DURATION(ch, i) = 100 * srdice();
+          GET_DRUG_DURATION(ch, drug_id) = 100 * srdice();
           if (damage(ch, ch, convert_damage(stage(-success_test(bod_for_success_test, 8 - toxin_extractor_rating), LIGHT)), TYPE_BIOWARE, 0)) {
             return TRUE;
           }
           break;
         case DRUG_KAMIKAZE:
-          GET_DRUG_DURATION(ch, i) = 100 * srdice();
+          GET_DRUG_DURATION(ch, drug_id) = 100 * srdice();
           {
             // Canonically, this should not hurt this much-- but we don't have a concept of cyberware/bioware system damage here,
             // so instead of applying permanent subsystem damage, we just deal CHONKY damage that increases based on the number of doses you took.
@@ -227,7 +243,7 @@ bool process_drug_limit_tick(struct char_data *ch) {
 
             snprintf(roll_buf, sizeof(roll_buf), "%s's %s comedown damage: Power %d, DL %d, resist success %d, staged and converted to %d boxes of mental damage.",
                      GET_CHAR_NAME(ch),
-                     drug_types[i].name,
+                     drug_types[drug_id].name,
                      power,
                      damage_level,
                      resist_test_successes,
@@ -240,7 +256,7 @@ bool process_drug_limit_tick(struct char_data *ch) {
           }
           break;
         case DRUG_CRAM:
-          GET_DRUG_DURATION(ch, i) = MAX(1, 12 - bod_for_success_test) * 600;
+          GET_DRUG_DURATION(ch, drug_id) = MAX(1, 12 - bod_for_success_test) * 600;
           break;
         case DRUG_NITRO:
           {
@@ -251,7 +267,7 @@ bool process_drug_limit_tick(struct char_data *ch) {
 
             snprintf(roll_buf, sizeof(roll_buf), "%s's %s comedown damage: Power %d, DL %d, resist success %d, staged and converted to %d boxes of mental damage.",
                      GET_CHAR_NAME(ch),
-                     drug_types[i].name,
+                     drug_types[drug_id].name,
                      power,
                      damage_level,
                      resist_test_successes,
@@ -262,51 +278,46 @@ bool process_drug_limit_tick(struct char_data *ch) {
               return TRUE;
             }
           }
-          reset_drug_for_char(ch, i);
+          reset_drug_for_char(ch, drug_id);
           break;
         case DRUG_NOVACOKE:
-          GET_DRUG_DURATION(ch, i) = MAX(1, 10 - bod_for_success_test) * 600;
+          GET_DRUG_DURATION(ch, drug_id) = MAX(1, 10 - bod_for_success_test) * 600;
           break;
         default:
-          reset_drug_for_char(ch, i);
+          reset_drug_for_char(ch, drug_id);
           if (AFF_FLAGGED(ch, AFF_DETOX))
             AFF_FLAGS(ch).RemoveBit(AFF_DETOX);
       }
 
       // Staff get accelerated comedowns.
-      if (GET_LEVEL(ch) > LVL_MORTAL && GET_DRUG_DURATION(ch, i) > 0) {
-        send_to_char(ch, "Staff; Accelerating drug comedown duration from %d to 4s for easier testing.", GET_DRUG_DURATION(ch, i));
-        GET_DRUG_DURATION(ch, i) = 2;
-      }
-
-      // If it's possible to develop a tolerance for this drug, tick that up.
-      if (drug_types[i].tolerance) {
-        // asdf todo didn't review this yet
-        if (GET_DRUG_DOSES(ch, i) == 1 && success_test(bod_for_success_test, drug_types[i].tolerance) < 1)
-          GET_DRUG_TOLERANT(ch, i)++;
-        if (((!GET_DRUG_ADDICT(ch, i) && !(drug_types[i].edge_preadd % ++GET_DRUG_DOSES(ch, i))) ||
-             (GET_DRUG_ADDICT(ch, i) && !(drug_types[i].edge_posadd % ++GET_DRUG_DOSES(ch, i)))) &&
-            success_test(GET_REAL_BOD(ch), drug_types[i].tolerance + GET_DRUG_EDGE(ch, i)))
-          GET_DRUG_TOLERANT(ch, i)++;
+      if (GET_LEVEL(ch) > LVL_MORTAL && GET_DRUG_DURATION(ch, drug_id) > 0) {
+        send_to_char(ch, "Staff; Accelerating drug comedown duration from %d to 4s for easier testing.", GET_DRUG_DURATION(ch, drug_id));
+        GET_DRUG_DURATION(ch, drug_id) = 2;
       }
     }
 
     // Your comedown has worn off. TODO: Where do we put people into withdrawal?
-    else if (GET_DRUG_STAGE(ch, i) == DRUG_STAGE_COMEDOWN && GET_DRUG_DURATION(ch, i) <= 0) {
-      send_to_char(ch, "The aftereffects of the %s wear off.\r\n", drug_types[i].name);
-      reset_drug_for_char(ch, i);
+    else if (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_COMEDOWN && GET_DRUG_DURATION(ch, drug_id) <= 0) {
+      send_to_char(ch, "The aftereffects of the %s wear off.\r\n", drug_types[drug_id].name);
+      reset_drug_for_char(ch, drug_id);
       if (AFF_FLAGGED(ch, AFF_DETOX))
         AFF_FLAGS(ch).RemoveBit(AFF_DETOX);
     }
   }
+
+  return FALSE;
 }
 
 // Apply the onset / comedown modifiers to the selected character.
+int noop_var_for_perception_test = 0;
+#define GET_PERCEPTION_TEST_DICE_MOD(ch) noop_var_for_perception_test /* does nothing-- I added this to track the work we need to eventually do around drug perception tests.*/
 void apply_drug_modifiers_to_ch(struct char_data *ch) {
+  GET_PERCEPTION_TEST_DICE_MOD(ch) = 0;
+
   if (!AFF_FLAGGED(ch, AFF_DETOX)) {
-    for (int i = MIN_DRUG; i < NUM_DRUGS; i++) {
-      if (GET_DRUG_STAGE(ch, i) == DRUG_STAGE_ONSET) {
-        switch (i) {
+    for (int drug_id = MIN_DRUG; drug_id < NUM_DRUGS; drug_id++) {
+      if (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_ONSET) {
+        switch (drug_id) {
           case DRUG_HYPER:
             GET_TARGET_MOD(ch)++;
             GET_CONCENTRATION_TARGET_MOD(ch) += 3; // should be 4, but it already includes the general target mod above
@@ -352,8 +363,8 @@ void apply_drug_modifiers_to_ch(struct char_data *ch) {
             GET_WIL(ch)++;
             break;
         }
-      } else if (GET_DRUG_STAGE(ch, i) == DRUG_STAGE_COMEDOWN) {
-        switch (i) {
+      } else if (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_COMEDOWN) {
+        switch (drug_id) {
           case DRUG_JAZZ:
             GET_CONCENTRATION_TARGET_MOD(ch)++;
             GET_QUI(ch)--;
@@ -378,95 +389,48 @@ void apply_drug_modifiers_to_ch(struct char_data *ch) {
     GET_TARGET_MOD(ch) += 4;
   }
 }
+#undef GET_PERCEPTION_TEST_DICE_MOD
 
 // Apply withdrawal state and penalties to character. Entering withdrawal here puts you in Forced which is faster but sucks harder.
 void process_withdrawal(struct char_data *ch) {
-  // Calculate the number of drugs they're simultaneously withdrawing from. The more you're withdrawing from, the more withdrawal hurts.
-  int num_withdraw = 0;
-  for (int drug_id = MIN_DRUG; drug_id < NUM_DRUGS; drug_id++) {
-    if (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_GUIDED_WITHDRAWAL || GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_FORCED_WITHDRAWAL) {
-      num_withdraw++;
-      // Make sure we have the correct withdrawal flag set. TODO: Is it an error state to have both set?
-      if (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_FORCED_WITHDRAWAL) {
-        AFF_FLAGS(ch).SetBit(AFF_WITHDRAWAL_FORCE);
-      } else {
-        AFF_FLAGS(ch).SetBit(AFF_WITHDRAWAL);
-      }
-    }
-  }
-
-  // Calculate the ticks between attribute losses. We first drain body, then we drain other attributes at a faster rate when body zeroes.
-  int ticks_between_body_loss = MAX(60, 820 - (num_simultaneous_withdraw * 100));
-
   // Iterate through all drugs.
   for (int drug_id = MIN_DRUG; drug_id < NUM_DRUGS; drug_id++) {
     // TODO: Detox spell? Other magical / power effects?
     // TODO: Don't you test less here if you're in guided withdrawal? Or not test at all? idk
     // TODO: Make sure the withdrawal effects tick is once per in-game MONTH.
+    // TODO: Set and remove withdrawal flags in affect_total.
 
     // Tick up addiction / withdrawal stat losses. Houseruled from Addiction Effects (M&M p109).
-    if (ch_is_in_withdrawal_from_drug(ch, drug_id)) {
+    if (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_GUIDED_WITHDRAWAL || GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_FORCED_WITHDRAWAL) {
       // Calculate time since last fix. (What is this used for?)
-      int time_since_last_fix = (time(0) - GET_DRUG_LASTFIX(ch, drug_id)) / SECS_PER_MUD_DAY;
+      int time_since_last_fix = (time(0) - GET_DRUG_LAST_FIX(ch, drug_id)) / SECS_PER_MUD_DAY;
 
       // Increment our addiction tick counter.
       GET_DRUG_ADDICTION_TICK_COUNTER(ch, drug_id)++;
 
       // Process stat loss as appropriate.
-      {
-        bool body_is_above_racial_minimums = GET_REAL_BOD(i) > 1 + racial_attribute_modifiers[(int) GET_RACE(i)][BOD];
-        bool should_test_for_stat_loss = GET_DRUG_ADDICTION_TICK_COUNTER(ch, drug_id) % ticks_between_body_loss == 0;
+      if (GET_DRUG_STAGE(ch, drug_id == DRUG_STAGE_FORCED_WITHDRAWAL)) {
+        bool body_is_above_racial_minimums = GET_REAL_BOD(ch) > 1 + racial_attribute_modifiers[(int) GET_RACE(ch)][BOD];
+        bool should_test_for_stat_loss = GET_DRUG_ADDICTION_TICK_COUNTER(ch, drug_id) % (24 * 30 /* aka once a month, tested IG hourly */) == 0;
 
         // If the timer is expired, we check for loss.
         if (should_test_for_stat_loss) {
-          bool mental_addiction_passed = TRUE, physical_addiction_passed = TRUE;
-
-          if (drug_types[drug_id].mental_addiction) {
-            int num_successes = success_test(GET_WIL(ch), drug_types[drug_id].mental_addiction + GET_DRUG_EDGE(ch, drug_id));
-            mental_addiction_passed = (num_successes > 0);
-            snprintf(buf, sizeof(buf), "%s's %s mental addiction damage test: wil(%d) vs addiction factor(%d) + edge(%d) = %d hits (%s).",
-                     GET_CHAR_NAME(ch),
-                     drug_types[drug_id].name,
-                     GET_WIL(ch),
-                     drug_types[drug_id].mental_addiction,
-                     GET_DRUG_EDGE(ch, drug_id),
-                     num_successes,
-                     mental_addiction_passed ? "passed" : "failed, RIP"
-                   );
-            act(buf, FALSE, ch, 0, 0, TO_ROLLS);
-          }
-
-          if (drug_types[drug_id].physical_addiction) {
-            int num_successes = success_test(GET_BOD(ch), drug_types[drug_id].physical_addiction + GET_DRUG_EDGE(ch, drug_id));
-            physical_addiction_passed = (num_successes > 0);
-            snprintf(buf, sizeof(buf), "%s's %s physical addiction damage test: wil(%d) vs addiction factor(%d) + edge(%d) = %d hits (%s).",
-                     GET_CHAR_NAME(ch),
-                     drug_types[drug_id].name,
-                     GET_BOD(ch),
-                     drug_types[drug_id].physical_addiction,
-                     GET_DRUG_EDGE(ch, drug_id),
-                     num_successes,
-                     physical_addiction_passed ? "passed" : "failed, RIP"
-                   );
-            act(buf, FALSE, ch, 0, 0, TO_ROLLS);
-          }
-
-          if (!mental_addiction_passed || !physical_addiction_passed) {
+          if (!_combined_addiction_test(ch, drug_id, "damage")) {
             send_to_char(ch, "Your health suffers at the hand of your %s addiction.\r\n", drug_types[drug_id].name);
 
-            int att_lost;
+            int lost_attribute;
 
             // We always decrease body first.
             if (body_is_above_racial_minimums) {
-              att_lost = BOD;
+              lost_attribute = BOD;
               GET_REAL_BOD(ch)--;
             }
             // No more body? Decrease other stats.
             else {
-              att_lost = raw_stat_loss(ch);
+              lost_attribute = raw_stat_loss(ch);
             }
 
-            send_to_char(i, "You've lost a point of %s, but you can re-train it at a trainer. You should raise your Body quickly to avoid losing further stats!\r\n", attributes[lost_attribute]);
+            send_to_char(ch, "You've lost a point of %s, but you can re-train it at a trainer. You should raise your Body quickly to avoid losing further stats!\r\n", attributes[lost_attribute]);
 
             snprintf(buf, sizeof(buf), "%s lost a point of %s (%d->%d) to %s addiction.",
                      GET_CHAR_NAME(ch),
@@ -479,91 +443,102 @@ void process_withdrawal(struct char_data *ch) {
         }
       }
 
-      // Next, tick down their addiction rating. (look this up and implement it, the existing code doesn't make sense)
-    }
-
-    // todo stopped here
-    asdf
-
-      if (AFF_FLAGGED(i, AFF_WITHDRAWAL)) {
-        if (tsl > GET_DRUG_LASTWITH(i, x) + 1) {
-          GET_DRUG_LASTWITH(i, x) += 2;
-          GET_DRUG_EDGE(i, x)--;
-          if (!GET_DRUG_EDGE(i ,x)) {
-            AFF_FLAGS(i).RemoveBit(AFF_WITHDRAWAL);
-            GET_DRUG_ADDICT(i, x) = 0;
+      // Tick down their addiction rating as they withdraw. Speed varies based on whether this is forced or not.
+      if (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_GUIDED_WITHDRAWAL || GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_FORCED_WITHDRAWAL) {
+        // Decrement their edge, allowing their addiction rating to decrease (TODO: shouldn't addiction rating be decreasing instead of going to zero?)
+        // TODO: How frequently are we testing here? Does the frequency here need to be different than the other things done in this function?
+        if (time_since_last_fix > GET_DRUG_LAST_WITHDRAWAL_TICK(ch, drug_id) + 1) {
+          GET_DRUG_LAST_WITHDRAWAL_TICK(ch, drug_id) += (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_GUIDED_WITHDRAWAL ? 2 : 1);
+          if (--GET_DRUG_ADDICTION_EDGE(ch, drug_id) <= 0) {
+            GET_DRUG_STAGE(ch, drug_id) = DRUG_STAGE_UNAFFECTED;
+            GET_DRUG_ADDICT(ch, drug_id) = 0;
+            send_to_char(ch, "The last of the trembles from your %s%s withdrawal wear off.\r\n",
+                         GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_FORCED_WITHDRAWAL ? "forced " : "",
+                         drug_types[drug_id].name);
             continue;
           }
+          send_to_char(ch, "Your body cries out for some %s.\r\n", drug_types[drug_id].name);
         }
-        send_to_char(i, "Your body cries out for some %s.\r\n", drug_types[x].name);
-      } else if (tsl >= drug_types[x].fix + 1 && !AFF_FLAGGED(i, AFF_WITHDRAWAL_FORCE)) {
-        send_to_char(i, "You begin to go into %s withdrawal.\r\n", drug_types[x].name);
-        AFF_FLAGS(i).SetBit(AFF_WITHDRAWAL_FORCE);
-        affect_total(i);
-      } else if (tsl >= drug_types[x].fix) {
-        if (drug_types[x].mental_addiction ? success_test(GET_WIL(i), drug_types[x].mental_addiction + GET_DRUG_EDGE(i, x)) : 1 < 1 ||
-            drug_types[x].physical_addiction ? success_test(GET_REAL_BOD(i), drug_types[x].physical_addiction + GET_DRUG_EDGE(i, x)) : 1 < 1) {
-          if (AFF_FLAGGED(i, AFF_WITHDRAWAL_FORCE)) {
-            snprintf(buf, sizeof(buf), "Your lack of %s is causing you great pain and discomfort.\r\n", drug_types[x].name);
-            if (tsl > GET_DRUG_LASTWITH(i, x)) {
-              GET_DRUG_LASTWITH(i ,x)++;
-              GET_DRUG_EDGE(i, x)--;
-              if (!GET_DRUG_EDGE(i ,x)) {
-                int the_next_drug_addicted_to;
-                for (the_next_drug_addicted_to = MIN_DRUG; the_next_drug_addicted_to < NUM_DRUGS; the_next_drug_addicted_to++) {
-                  if (GET_DRUG_EDGE(i, the_next_drug_addicted_to))
-                    break;
-                }
-                if (the_next_drug_addicted_to == NUM_DRUGS) {
-                  AFF_FLAGS(i).RemoveBit(AFF_WITHDRAWAL_FORCE);
-                  GET_DRUG_ADDICT(i, x) = 0;
-                  continue;
-                }
+
+        // If they got here, they're still addicted. Check to see if they're weak-willed enough to auto-take it.
+        if (time_since_last_fix >= drug_types[drug_id].fix_factor) {
+          if (!_combined_addiction_test(ch, drug_id, "auto-take resistance")) {
+            // Compose message, which is replaced by craving messages if they're carrying drugs.
+            if (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_FORCED_WITHDRAWAL) {
+              snprintf(buf, sizeof(buf), "Your lack of %s is causing you great pain and discomfort.\r\n", drug_types[drug_id].name);
+            } else {
+              snprintf(buf, sizeof(buf), "You crave some %s.\r\n", drug_types[drug_id].name);
+            }
+
+            // Auto-use drugs if available in inventory.
+            for (struct obj_data *obj = ch->carrying; obj; obj = obj->next_content) {
+              if (GET_OBJ_TYPE(obj) == ITEM_DRUG && GET_OBJ_DRUG_TYPE(obj) == drug_id) {
+                do_use(ch, obj->text.keywords, 0, 0);
+                if (GET_DRUG_DOSE(ch, drug_id) > GET_DRUG_TOLERANCE_LEVEL(ch, drug_id))
+                  snprintf(buf, sizeof(buf), "You satisfy your craving for %s.\r\n", drug_types[drug_id].name);
+                else
+                  snprintf(buf, sizeof(buf), "You attempt to satisfy your craving for %s.\r\n", drug_types[drug_id].name);
+                break;
               }
             }
-          } else
-            snprintf(buf, sizeof(buf), "You crave some %s.\r\n", drug_types[x].name);
-          for (struct obj_data *obj = i->carrying; obj; obj = obj->next_content) {
-            if (GET_OBJ_TYPE(obj) == ITEM_DRUG && GET_OBJ_DRUG_TYPE(obj) == x) {
-              do_use(i, obj->text.keywords, 0, 0);
-              if (GET_DRUG_DOSE(i, x) > GET_DRUG_TOLERANT(i, x))
-                snprintf(buf, sizeof(buf), "You satisfy your craving for %s.\r\n", drug_types[x].name);
-              else
-                snprintf(buf, sizeof(buf), "You attempt to satisfy your craving for %s.\r\n", drug_types[x].name);
-              break;
-            }
+            send_to_char(buf, ch);
           }
-          send_to_char(buf, i);
         }
+      }
+
+      // They weren't in withdrawal: Put them into that state if they've passed their fix limit.
+      else if (time_since_last_fix > drug_types[drug_id].fix_factor) {
+        send_to_char(ch, "You begin to go into forced %s withdrawal.\r\n", drug_types[drug_id].name);
+        GET_DRUG_STAGE(ch, drug_id) = DRUG_STAGE_FORCED_WITHDRAWAL;
+        affect_total(ch);
       }
     }
   }
 }
 
+void render_drug_info_for_targ(struct char_data *ch, struct char_data *targ) {
+  // Send drug info
+  send_to_char("\r\nDrug info: \r\n", ch);
+  for (int drug_id = MIN_DRUG; drug_id < NUM_DRUGS; drug_id++) {
+    send_to_char(ch, " - ^c%s^n (edg %d, add %d, doses %d, lstfx %d, addt %d, toler %d, lstwith %d, dur %d, current dose %d, stage %d)\r\n",
+                 drug_types[drug_id].name,
+                 GET_DRUG_ADDICTION_EDGE(targ, drug_id),
+                 GET_DRUG_ADDICT(targ, drug_id),
+                 GET_DRUG_LIFETIME_DOSES(targ, drug_id),
+                 GET_DRUG_LAST_FIX(targ, drug_id),
+                 GET_DRUG_ADDICTION_TICK_COUNTER(targ, drug_id),
+                 GET_DRUG_TOLERANCE_LEVEL(targ, drug_id),
+                 GET_DRUG_LAST_WITHDRAWAL_TICK(targ, drug_id),
+                 GET_DRUG_DURATION(targ, drug_id),
+                 GET_DRUG_DOSE(targ, drug_id),
+                 GET_DRUG_STAGE(targ, drug_id));
+  }
+}
+
 // ----------------- Helpers
 // Take a character off of a drug without changing their addiction values etc.
-void _reset_drug_for_char(struct char_data *ch, int drugval) {
+void reset_drug_for_char(struct char_data *ch, int drugval) {
   GET_DRUG_DOSE(ch, drugval) = GET_DRUG_DURATION(ch, drugval) = 0;
   GET_DRUG_STAGE(ch, drugval) = DRUG_STAGE_UNAFFECTED;
 }
 
 // Take a character off of all drugs without changing addiction values etc.
-void _reset_all_drugs_for_char(struct char_data *ch) {
-  for (int i = MIN_DRUG; i < NUM_DRUGS; i++) {
-    reset_drug_for_char(ch, i);
+void reset_all_drugs_for_char(struct char_data *ch) {
+  for (int drug_id = MIN_DRUG; drug_id < NUM_DRUGS; drug_id++) {
+    reset_drug_for_char(ch, drug_id);
   }
 }
 
 // Wipe out ALL drug data including tolerance, addiction etc-- used for staff only.
-void _clear_all_drug_data_for_char(struct char_data *ch) {
-  for (int drug = MIN_DRUG; drug < NUM_DRUGS; drug++) {
+void clear_all_drug_data_for_char(struct char_data *ch) {
+  for (int drug_id = MIN_DRUG; drug_id < NUM_DRUGS; drug_id++) {
     for (int x = 0; x <= 10; x++) {
-      vict->player_specials->drugs[drug][x] = 0;
+      ch->player_specials->drugs[drug_id][x] = 0;
     }
   }
 }
 
-int _get_drug_pain_resist_level(struct char_data *ch) {
+int get_drug_pain_resist_level(struct char_data *ch) {
   if (ch->player_specials) {
     if (GET_DRUG_STAGE(ch, DRUG_NITRO) == DRUG_STAGE_ONSET) {
       return 6;
@@ -584,21 +559,77 @@ int _get_drug_pain_resist_level(struct char_data *ch) {
 
 void _apply_doses_of_drug_to_char(int doses, int drug_id, struct char_data *ch) {
   /* Every time you take a drug:
-     - Add one to the number of active doses and the total number of doses taken.
      - Check if total number of doses taken exceeds the appropriate Edge (pre- or post-addiction, as applicable).
        - If it does, -= it down until it's below the Edge rating, and add the number of times you decreased it to both Addiction and Tolerance.
-     -
+     - Add one to the number of active doses and the total number of doses taken.
   */
+
+  // Increase our tolerance and addiction levels if we've passed the edge value.
+  int edge_value = (GET_DRUG_ADDICT(ch, drug_id) ? drug_types[drug_id].edge_posadd : drug_types[drug_id].edge_preadd);
+  int edge_delta = ((GET_DRUG_DOSE(ch, drug_id) % edge_value) + doses) / edge_value;
+  if (edge_delta > 0) {
+    GET_DRUG_ADDICTION_EDGE(ch, drug_id)++;
+    GET_DRUG_TOLERANCE_LEVEL(ch, drug_id)++;
+  }
+
+  // Check to see if they become addicted.
+  if (GET_DRUG_ADDICT(ch, drug_id) == NOT_ADDICTED && (edge_delta > 0 || GET_DRUG_LIFETIME_DOSES(ch, drug_id) <= 0)) {
+    // It's their first dose, or they've taken more than Edge doses.
+    if (!_combined_addiction_test(ch, drug_id, "application-time")) {
+      // Character failed their addiction check and has become addicted.
+      GET_DRUG_ADDICT(ch, drug_id) = IS_ADDICTED;
+      GET_DRUG_ADDICTION_EDGE(ch, drug_id) = 1;
+    }
+  }
+
+  // Check to see if their tolerance increases. KNOWN ISSUE: This can cause your first dose to not have an effect.
+  if (drug_types[drug_id].tolerance > 0 && (GET_DRUG_LIFETIME_DOSES(ch, drug_id) == 1 || edge_delta > 0)) {
+    if (!_combined_addiction_test(ch, drug_id, "tolerance"))
+      GET_DRUG_TOLERANCE_LEVEL(ch, drug_id)++;
+  }
 
   // Add the number of doses to both the current and lifetime doses.
   GET_DRUG_LIFETIME_DOSES(ch, drug_id) += doses;
-  GET_DRUG_DOSE(ch) += doses;
-
-  //
+  GET_DRUG_DOSE(ch, drug_id) += doses;
 }
 
 bool _drug_dose_exceeds_tolerance(struct char_data *ch, int drug_id) {
   return GET_DRUG_DOSE(ch, drug_id) > 0 && GET_DRUG_DOSE(ch, drug_id) > GET_DRUG_TOLERANCE_LEVEL(ch, drug_id);
+}
+
+// Perform a test against mental or physical ratings.
+bool _specific_addiction_test(struct char_data *ch, int drug_id, bool is_mental, const char *test_identifier) {
+  int dice, base_addiction_rating;
+
+  // M&M p108: Use unaugmented wil or body for these tests.
+  if (is_mental) {
+    dice = GET_REAL_WIL(ch);
+    base_addiction_rating = drug_types[drug_id].mental_addiction_rating;
+  } else {
+    dice = GET_REAL_BOD(ch) + (GET_RACE(ch) == RACE_DWARF ? 2 : 0);
+    base_addiction_rating = drug_types[drug_id].physical_addiction_rating;
+  }
+
+  int num_successes = success_test(dice, base_addiction_rating + GET_DRUG_ADDICTION_EDGE(ch, drug_id));
+  bool addiction_passed = (num_successes > 0);
+
+  snprintf(buf, sizeof(buf), "%s's %s %s addiction %s test: wil(%d) vs addiction factor(%d) + edge(%d) = %d hits (%s).",
+           GET_CHAR_NAME(ch),
+           drug_types[drug_id].name,
+           is_mental ? "mental" : "physical",
+           test_identifier,
+           dice,
+           base_addiction_rating,
+           GET_DRUG_ADDICTION_EDGE(ch, drug_id),
+           num_successes,
+           addiction_passed ? "passed" : "failed, RIP");
+  act(buf, FALSE, ch, 0, 0, TO_ROLLS);
+
+  return addiction_passed;
+}
+
+bool _combined_addiction_test(struct char_data *ch, int drug_id, const char *test_identifier) {
+  return _specific_addiction_test(ch, drug_id, FALSE, test_identifier) && _specific_addiction_test(ch, drug_id, TRUE, test_identifier);
 }
 
 // ----------------- Definitions for Drugs
@@ -619,58 +650,3 @@ struct drug_data drug_types[] =
     { "Novacoke",  0,       0,     6,     5,     2,           3,          50,    2 },
     { "Zen",       0,       0,     3,     0,     2,           5,          50,    2 }
   };
-
-
-
-/* scratch / scrap code
-
-
-
-
-
-
-    send_to_char(ch, "You take %s.\r\n", GET_OBJ_NAME(obj));
-
-
-
-
-    // Process addiction checks.
-
-    // If this is the first time you've ever taken the drug...
-    if (GET_DRUG_DOSES(ch, drugval) == 1) {
-      if ((GET_DRUG_ADDICT(ch, drugval) != 1 || GET_DRUG_ADDICT(ch, drugval) != 3) &&
-          (drug_types[drugval].mental_addiction ? success_test(GET_WIL(ch), drug_types[drugval].mental_addiction) : 1) < 1) {
-        if (GET_DRUG_ADDICT(ch, drugval) == 2)
-          GET_DRUG_ADDICT(ch, drugval) = 3;
-        else
-          GET_DRUG_ADDICT(ch, drugval) = 1;
-        GET_DRUG_EDGE(ch, drugval) = 1;
-      }
-      if ((GET_DRUG_ADDICT(ch, drugval) != 2 || GET_DRUG_ADDICT(ch, drugval) != 3) &&
-          (drug_types[drugval].physical_addiction ? success_test(GET_REAL_BOD(ch), drug_types[drugval].physical_addiction) : 1) < 1) {
-        if (GET_DRUG_ADDICT(ch, drugval) == 1)
-          GET_DRUG_ADDICT(ch, drugval) = 3;
-        else
-          GET_DRUG_ADDICT(ch, drugval) = 2;
-        GET_DRUG_EDGE(ch, drugval) = 1;
-      }
-    }
-    // Otherwise, if you've taken it before, and you're not addicted(?)
-    else if ((GET_DRUG_DOSES(ch, drugval) > 0 && ((!GET_DRUG_ADDICT(ch, drugval) && !(GET_DRUG_DOSES(ch, drugval) % drug_types[drugval].edge_preadd)))) ||
-               (GET_DRUG_ADDICT(ch, drugval) && !(GET_DRUG_DOSES(ch, drugval) % drug_types[drugval].edge_posadd))) {
-      GET_DRUG_EDGE(ch, drugval)++;
-      if ((drug_types[drugval].mental_addiction ? success_test(GET_WIL(ch), drug_types[drugval].mental_addiction + GET_DRUG_EDGE(ch, drugval)): 1) < 1) {
-        GET_DRUG_ADDICT(ch,drugval) = 1;
-        GET_DRUG_EDGE(ch, drugval) = 1;
-      }
-      if ((drug_types[drugval].physical_addiction ? success_test(GET_REAL_BOD(ch), drug_types[drugval].physical_addiction + GET_DRUG_EDGE(ch, drugval)) : 1) < 1) {
-        GET_DRUG_ADDICT(ch, drugval) = 2;
-        GET_DRUG_EDGE(ch, drugval) = 1;
-      }
-    }
-
-    // Set the drug dose here, which is consumed in process_drug_limit_tick(). Also clear withdrawal status now.
-
-}
-
-*/

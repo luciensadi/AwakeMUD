@@ -2748,10 +2748,10 @@ void restore_character(struct char_data *vict, bool reset_staff_stats) {
   if (!IS_NPC(vict)) {
     if (GET_LEVEL(vict) > LVL_MORTAL) {
       // Staff? Purge all drug-related data including addiction, tolerance etc.
-      _clear_all_drug_data_for_char(vict);
+      clear_all_drug_data_for_char(vict);
     } else {
       // Otherwise, take them off the drugs and remove withdrawal state.
-      _reset_all_drugs_for_char(vict);
+      reset_all_drugs_for_char(vict);
     }
 
     // Touch up their hunger, thirst, etc.

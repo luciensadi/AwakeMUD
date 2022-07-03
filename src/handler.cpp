@@ -496,8 +496,6 @@ void affect_total_veh(struct veh_data * veh)
   }
 }
 
-int noop_var_for_perception_test = 0;
-#define GET_PERCEPTION_TEST_DICE_MOD(ch) noop_var_for_perception_test /* does nothing-- I added this to track the work we need to eventually do around drug perception tests.*/
 void affect_total(struct char_data * ch)
 {
   struct obj_data *cyber, *obj;
@@ -815,7 +813,6 @@ void affect_total(struct char_data * ch)
   GET_MAX_MENTAL(ch) = 1000;
   GET_MAX_PHYSICAL(ch) = 1000;
   GET_TARGET_MOD(ch) = 0;
-  GET_PERCEPTION_TEST_DICE_MOD(ch) = 0;
   GET_CONCENTRATION_TARGET_MOD(ch) = 0;
   GET_MAX_MENTAL(ch) -= GET_MENTAL_LOSS(ch) * 100;
   GET_MAX_PHYSICAL(ch) -= GET_PHYSICAL_LOSS(ch) * 100;
@@ -1011,7 +1008,6 @@ void affect_total(struct char_data * ch)
     }
   }
 }
-#undef GET_PERCEPTION_TEST_DICE_MOD
 
 /*
  * Return if a char is affected by a spell (SPELL_XXX), NULL indicates
