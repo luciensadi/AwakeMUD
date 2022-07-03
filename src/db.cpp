@@ -1941,6 +1941,10 @@ void parse_object(File &fl, long nr)
           GET_OBJ_AVAILTN(obj) = 5;
         }
         break;
+      case ITEM_DRUG:
+        if (GET_OBJ_DRUG_DOSES(obj) <= 0)
+          GET_OBJ_DRUG_DOSES(obj) = 1;
+        break;
       case ITEM_CYBERWARE:
         price_cyber(obj);
         break;

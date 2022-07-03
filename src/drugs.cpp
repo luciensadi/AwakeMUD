@@ -23,7 +23,6 @@
 */
 
 // TODO: Add guided withdrawal sequence.
-// TODO: Add a conversion pass in parse_obj that sets all 0-dose drugs to 1 dose.
 
 extern int raw_stat_loss(struct char_data *);
 extern bool check_adrenaline(struct char_data *, int);

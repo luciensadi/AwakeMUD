@@ -1789,6 +1789,7 @@ void shop_info(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
              GET_OBJ_DRUG_DOSES(obj),
              GET_OBJ_DRUG_DOSES(obj) != 1 ? "s" : "",
              drug_types[GET_OBJ_DRUG_TYPE(obj)].name);
+    break;
   case ITEM_CYBERDECK:
     if (GET_OBJ_VAL(obj, 0) < 4)
       strcat(buf, " a beginners cyberdeck");
