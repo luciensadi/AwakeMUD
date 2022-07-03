@@ -1508,11 +1508,11 @@ ACMD(do_skills)
     }
     extern int max_ability(int i);
     for (i = 1; i < ADEPT_NUMPOWER; i++) {
-      if (!mode_all && *arg && !is_abbrev(arg, train_ability_cost[i], adept_powers[i]))
+      if (!mode_all && *arg && !is_abbrev(arg, ability_cost[i], adept_powers[i]))
         continue;
 
       if (GET_POWER_TOTAL(ch, i) > 0) {
-        snprintf(buf2, sizeof(buf2), "%-20s", train_ability_cost[i], adept_powers[i]);
+        snprintf(buf2, sizeof(buf2), "%-20s", ability_cost[i], adept_powers[i]);
         if (max_ability(i) > 1)
           switch (i) {
           case ADEPT_KILLING_HANDS:
