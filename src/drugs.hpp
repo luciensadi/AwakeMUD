@@ -9,6 +9,7 @@ bool    process_drug_point_update_tick(struct char_data *ch);
 void    apply_drug_modifiers_to_ch(struct char_data *ch);
 void    render_drug_info_for_targ(struct char_data *ch, struct char_data *targ);
 void    process_withdrawal(struct char_data *ch);
+void    attempt_safe_withdrawal(struct char_data *ch, const char *target_arg);
 
 void    reset_all_drugs_for_char(struct char_data *ch);
 void    clear_all_drug_data_for_char(struct char_data *ch);

@@ -6160,7 +6160,7 @@ ACMD(do_status)
   }
 
   for (int i = MIN_DRUG; i < NUM_DRUGS; i++) {
-    if (GET_DRUG_STAGE(targ, i) != DRUG_STAGE_UNAFFECTED) {
+    if (GET_DRUG_STAGE(targ, i) == DRUG_STAGE_ONSET || GET_DRUG_STAGE(targ, i) == DRUG_STAGE_COMEDOWN) {
       send_to_char(ch, "  %s (%s): %ds",
                    drug_types[i].name,
                    GET_DRUG_STAGE(targ, i) == DRUG_STAGE_ONSET ? "Onset" : "Comedown",
@@ -6252,6 +6252,8 @@ ACMD(do_status)
         send_to_char(ch, "  ^y%s Withdrawal^n\r\n", drug_types[i].name);
       } else if (GET_DRUG_STAGE(targ, i) == DRUG_STAGE_FORCED_WITHDRAWAL) {
         send_to_char(ch, "  ^Y%s Withdrawal (Forced)^n\r\n", drug_types[i].name);
+      } else {
+        send_to_char(ch, "  Addicted to %s\r\n", drug_types[i].name);
       }
     }
   }

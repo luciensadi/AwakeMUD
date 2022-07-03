@@ -2290,6 +2290,12 @@ enum {
 #define RM_DANTES_GARAGE             35693
 #define RM_DANTES_GARAGE_RANDOM      (35693 + number(0,4))
 #define RM_DANTES_DESCENT            35502
+#define RM_AGGIES_DRUG_STORE         14649
+#define RM_DETENTION_CELL_A          3726
+#define RM_HEARL_STREET              9915
+#define RM_ALONG_THIRD_STREET        62267
+#define RM_MASSAGE_PARLOR            7226
+#define RM_ABANDONED_CLOTHING_STORE  4985
 #ifdef USE_PRIVATE_CE_WORLD
 #define RM_TEMPORARY_DOCWAGON        10097
 #define RM_SEATTLE_DOCWAGON          RM_TEMPORARY_DOCWAGON
