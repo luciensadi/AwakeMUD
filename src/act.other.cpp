@@ -1503,16 +1503,17 @@ ACMD(do_skills)
       send_to_char("You do not have any abilities.\r\n", ch);
       return;
     }
-    if(subcmd == SCDM_ABILITIES) {
-      snprintf(buf, sizeof(buf), "\r\nPP      Ability              Level\r\n");
+    if(subcmd == SCMD_ABILITIES) {
+      snprintf(ENDOF(buf), sizeof(buf), "PP      Ability              Level (Active)\r\n");
     }
     extern int max_ability(int i);
     for (i = 1; i < ADEPT_NUMPOWER; i++) {
-      if (!mode_all && *arg && !is_abbrev(arg, ability_cost[i], adept_powers[i]))
+      if (!mode_all && *arg && !is_abbrev(arg, adept_powers[i]))
         continue;
 
       if (GET_POWER_TOTAL(ch, i) > 0) {
-        snprintf(buf2, sizeof(buf2), "%-20s", ability_cost[i], adept_powers[i]);
+        extern int ability_cost(int abil, int level);
+        snprintf(buf2, sizeof(buf2), "%0.2f    %-20s", ((float)ability_cost(i, 1))/100, adept_powers[i]);
         if (max_ability(i) > 1)
           switch (i) {
           case ADEPT_KILLING_HANDS:
@@ -1524,12 +1525,12 @@ ACMD(do_skills)
           default:
             snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " +%d", GET_POWER_TOTAL(ch, i));
             if (GET_POWER_ACT(ch, i))
-              snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " ^Y(%.2d)^n", GET_POWER_ACT(ch, i));
+              snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " ^Y(%d)^n", GET_POWER_ACT(ch, i));
             strlcat(buf2, "\r\n", sizeof(buf2));
             break;
           }
         else if (GET_POWER_ACT(ch, i))
-          strlcat(buf2, " ^Y(active)^n\r\n", sizeof(buf2));
+          strlcat(buf2, " ^Y(Active)^n\r\n", sizeof(buf2));
         else
           strlcat(buf2, "\r\n", sizeof(buf2));
         strlcat(buf, buf2, sizeof(buf));
