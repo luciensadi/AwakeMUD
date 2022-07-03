@@ -1784,6 +1784,11 @@ void shop_info(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " a rating %d %s program, that is %dMp in size.", GET_OBJ_VAL(obj, 1),
             programs[GET_OBJ_VAL(obj, 0)].name, GET_OBJ_VAL(obj, 2));
     break;
+  case ITEM_DRUG:
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %d dose%s of the drug %s.",
+             GET_OBJ_DRUG_DOSES(obj),
+             GET_OBJ_DRUG_DOSES(obj) != 1 ? "s" : "",
+             drug_types[GET_OBJ_DRUG_TYPE(obj)].name);
   case ITEM_CYBERDECK:
     if (GET_OBJ_VAL(obj, 0) < 4)
       strcat(buf, " a beginners cyberdeck");

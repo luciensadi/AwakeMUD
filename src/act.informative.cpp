@@ -3035,7 +3035,10 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "You should EXAMINE this deck, or jack in and view its SOFTWARE.");
       break;
     case ITEM_DRUG:
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a dose of ^c%s^n, which ", drug_types[GET_OBJ_DRUG_TYPE(j)].name);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It contains %d dose%s of ^c%s^n, which ",
+               GET_OBJ_DRUG_DOSES(j),
+               GET_OBJ_DRUG_DOSES(j) != 1 ? "s" : "",
+               drug_types[GET_OBJ_DRUG_TYPE(j)].name);
 
       switch (GET_OBJ_DRUG_TYPE(j)) {
         case DRUG_ACTH:
