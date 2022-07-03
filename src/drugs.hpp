@@ -5,9 +5,10 @@ void    do_drug_take(struct char_data *ch, struct obj_data *obj);
 void    reset_drug_for_char(struct char_data *ch, int drugval);
 void    reset_all_drugs_for_char(struct char_data *ch);
 int     get_drug_pain_resist_level(struct char_data *ch);
-bool    process_drug_limit_tick(struct char_data *ch);
+bool    process_drug_point_update_tick(struct char_data *ch);
 void    apply_drug_modifiers_to_ch(struct char_data *ch);
 void    render_drug_info_for_targ(struct char_data *ch, struct char_data *targ);
+void    process_withdrawal(struct char_data *ch);
 
 void    reset_all_drugs_for_char(struct char_data *ch);
 void    clear_all_drug_data_for_char(struct char_data *ch);

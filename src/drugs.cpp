@@ -17,10 +17,14 @@
 /* When taking drugs:
    Trigger do_drug_take to consume the object and start this process, otherwise start it manually with apply_doses_of_drug_to_char.
 
-   - wait for limit tick, where we call process_drug_limit_tick(), which transitions between onset/comedown/idle
+   - wait for limit tick, where we call process_drug_point_update_tick(), which transitions between onset/comedown/idle
    - on X tick, process_withdrawal inflicts withdrawal symptoms, and also induces withdrawal for those who have gone without a fix
    - on X tick, apply_drug_modifiers_to_ch modifiers char stats
 */
+
+// TODO: Add guided withdrawal sequence.
+// TODO: Add dosage to iedit, probe, and shop info.
+// TODO: Add a conversion pass in parse_obj that sets all 0-dose drugs to 1 dose.
 
 extern int raw_stat_loss(struct char_data *);
 extern bool check_adrenaline(struct char_data *, int);
@@ -60,7 +64,6 @@ void do_drug_take(struct char_data *ch, struct obj_data *obj) {
 
   // Right now, we apply maximum doses from the object. Later, we'll be smarter about this.
   // Many drugs exist without doses set, so we assume 0 doses means the drug is an old-style drug.
-  // TODO: When variable doses are implemented in iedit etc, have a conversion pass in db that sets all 0-dose drugs to 1 dose.
   int drug_doses = GET_OBJ_DRUG_DOSES(obj) > 0 ? GET_OBJ_DRUG_DOSES(obj) : 1;
 
   // Add doses to their current on-board as well as their lifetime total.
@@ -87,12 +90,16 @@ void do_drug_take(struct char_data *ch, struct obj_data *obj) {
   // That's it! All other checks are done when the drug kicks in.
 }
 
-// Tick down all drugs for a given character. Induces onset/comedown etc.
-bool process_drug_limit_tick(struct char_data *ch) {
+// Tick down all drugs for a given character. Induces onset/comedown etc. Called once per IG minute.
+bool process_drug_point_update_tick(struct char_data *ch) {
   char roll_buf[500];
+  bool is_on_anything = FALSE;
 
   for (int drug_id = MIN_DRUG; drug_id < NUM_DRUGS; drug_id++) {
     int damage_boxes = 0;
+
+    if (GET_DRUG_STAGE(ch, drug_id) != DRUG_STAGE_UNAFFECTED)
+      is_on_anything = TRUE;
 
     // All drugs are ticked down as long as you're on them.
     if (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_ONSET || GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_COMEDOWN)
@@ -285,8 +292,6 @@ bool process_drug_limit_tick(struct char_data *ch) {
           break;
         default:
           reset_drug_for_char(ch, drug_id);
-          if (AFF_FLAGGED(ch, AFF_DETOX))
-            AFF_FLAGS(ch).RemoveBit(AFF_DETOX);
       }
 
       // Staff get accelerated comedowns.
@@ -296,7 +301,7 @@ bool process_drug_limit_tick(struct char_data *ch) {
       }
     }
 
-    // Your comedown has worn off. TODO: Where do we put people into withdrawal?
+    // Your comedown has worn off.
     else if (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_COMEDOWN && GET_DRUG_DURATION(ch, drug_id) <= 0) {
       send_to_char(ch, "The aftereffects of the %s wear off.\r\n", drug_types[drug_id].name);
       reset_drug_for_char(ch, drug_id);
@@ -304,6 +309,10 @@ bool process_drug_limit_tick(struct char_data *ch) {
         AFF_FLAGS(ch).RemoveBit(AFF_DETOX);
     }
   }
+
+  // Once you're clean of all drugs, you lose the detox aff.
+  if (!is_on_anything)
+    AFF_FLAGS(ch).RemoveBit(AFF_DETOX);
 
   return FALSE;
 }
@@ -392,14 +401,10 @@ void apply_drug_modifiers_to_ch(struct char_data *ch) {
 #undef GET_PERCEPTION_TEST_DICE_MOD
 
 // Apply withdrawal state and penalties to character. Entering withdrawal here puts you in Forced which is faster but sucks harder.
+// Called once per in-game hour.
 void process_withdrawal(struct char_data *ch) {
   // Iterate through all drugs.
   for (int drug_id = MIN_DRUG; drug_id < NUM_DRUGS; drug_id++) {
-    // TODO: Detox spell? Other magical / power effects?
-    // TODO: Don't you test less here if you're in guided withdrawal? Or not test at all? idk
-    // TODO: Make sure the withdrawal effects tick is once per in-game MONTH.
-    // TODO: Set and remove withdrawal flags in affect_total.
-
     // Tick up addiction / withdrawal stat losses. Houseruled from Addiction Effects (M&M p109).
     if (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_GUIDED_WITHDRAWAL || GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_FORCED_WITHDRAWAL) {
       // Calculate time since last fix. (What is this used for?)
@@ -445,13 +450,13 @@ void process_withdrawal(struct char_data *ch) {
 
       // Tick down their addiction rating as they withdraw. Speed varies based on whether this is forced or not.
       if (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_GUIDED_WITHDRAWAL || GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_FORCED_WITHDRAWAL) {
-        // Decrement their edge, allowing their addiction rating to decrease (TODO: shouldn't addiction rating be decreasing instead of going to zero?)
-        // TODO: How frequently are we testing here? Does the frequency here need to be different than the other things done in this function?
+        // Decrement their edge, allowing their addiction rating to decrease
         if (time_since_last_fix > GET_DRUG_LAST_WITHDRAWAL_TICK(ch, drug_id) + 1) {
           GET_DRUG_LAST_WITHDRAWAL_TICK(ch, drug_id) += (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_GUIDED_WITHDRAWAL ? 2 : 1);
           if (--GET_DRUG_ADDICTION_EDGE(ch, drug_id) <= 0) {
             GET_DRUG_STAGE(ch, drug_id) = DRUG_STAGE_UNAFFECTED;
             GET_DRUG_ADDICT(ch, drug_id) = 0;
+            GET_DRUG_ADDICTION_EDGE(ch, drug_id) = 0;
             send_to_char(ch, "The last of the trembles from your %s%s withdrawal wear off.\r\n",
                          GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_FORCED_WITHDRAWAL ? "forced " : "",
                          drug_types[drug_id].name);
@@ -493,6 +498,15 @@ void process_withdrawal(struct char_data *ch) {
         affect_total(ch);
       }
     }
+  }
+
+  // Re-apply withdrawal flags as appropriate.
+  AFF_FLAGS(ch).RemoveBits(AFF_WITHDRAWAL_FORCE, AFF_WITHDRAWAL, ENDBIT);
+  for (int drug_id = MIN_DRUG; drug_id < NUM_DRUGS; drug_id++) {
+    if (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_GUIDED_WITHDRAWAL)
+      AFF_FLAGS(ch).SetBit(AFF_WITHDRAWAL);
+    else if (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_FORCED_WITHDRAWAL)
+      AFF_FLAGS(ch).SetBit(AFF_WITHDRAWAL_FORCE);
   }
 }
 

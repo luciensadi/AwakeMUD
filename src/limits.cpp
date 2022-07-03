@@ -885,7 +885,8 @@ void point_update(void)
         if (check_bioware(i))
           continue;
 
-      process_drug_limit_tick(i);
+      // Every hour, we check for withdrawal.
+      process_withdrawal(i);
     }
 
     if (i->desc && IS_PROJECT(i)) {
@@ -1396,7 +1397,7 @@ void misc_update(void)
         continue;
 
       // Apply new doses of everything. If they die, bail out.
-      if (process_drug_limit_tick(ch))
+      if (process_drug_point_update_tick(ch))
         continue;
 
       affect_total(ch);
