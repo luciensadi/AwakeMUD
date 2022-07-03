@@ -658,62 +658,6 @@ ACMD(do_patch)
   }
 }
 
-void do_drug_take(struct char_data *ch, struct obj_data *obj)
-{
-    int drugval = GET_OBJ_DRUG_TYPE(obj);
-    if (GET_DRUG_STAGE(ch, drugval) == DRUG_STAGE_ONSET) {
-      send_to_char(ch, "You're already high on %s, it would be a bad idea to take more right now.\r\n", drug_types[drugval].name);
-      return;
-    }
-
-    act("$n takes $p.", TRUE, ch, obj, 0, TO_ROOM);
-    send_to_char(ch, "You take %s.\r\n", GET_OBJ_NAME(obj));
-
-    // Process addiction checks.
-    GET_DRUG_DOSES(ch, drugval)++;
-    if (GET_DRUG_DOSES(ch, drugval) == 1) {
-      if ((GET_DRUG_ADDICT(ch, drugval) != 1 || GET_DRUG_ADDICT(ch, drugval) != 3) &&
-          (drug_types[drugval].mental_addiction ? success_test(GET_WIL(ch), drug_types[drugval].mental_addiction) : 1) < 1) {
-        if (GET_DRUG_ADDICT(ch, drugval) == 2)
-          GET_DRUG_ADDICT(ch, drugval) = 3;
-        else
-          GET_DRUG_ADDICT(ch, drugval) = 1;
-        GET_DRUG_EDGE(ch, drugval) = 1;
-      }
-      if ((GET_DRUG_ADDICT(ch, drugval) != 2 || GET_DRUG_ADDICT(ch, drugval) != 3) &&
-          (drug_types[drugval].physical_addiction ? success_test(GET_REAL_BOD(ch), drug_types[drugval].physical_addiction) : 1) < 1) {
-        if (GET_DRUG_ADDICT(ch, drugval) == 1)
-          GET_DRUG_ADDICT(ch, drugval) = 3;
-        else
-          GET_DRUG_ADDICT(ch, drugval) = 2;
-        GET_DRUG_EDGE(ch, drugval) = 1;
-      }
-    } else if ((GET_DRUG_DOSES(ch, drugval) > 0 && ((!GET_DRUG_ADDICT(ch, drugval) && !(GET_DRUG_DOSES(ch, drugval) % drug_types[drugval].edge_preadd)))) ||
-               (GET_DRUG_ADDICT(ch, drugval) && !(GET_DRUG_DOSES(ch, drugval) % drug_types[drugval].edge_posadd))) {
-      GET_DRUG_EDGE(ch, drugval)++;
-      if ((drug_types[drugval].mental_addiction ? success_test(GET_WIL(ch), drug_types[drugval].mental_addiction + GET_DRUG_EDGE(ch, drugval)): 1) < 1) {
-        GET_DRUG_ADDICT(ch,drugval) = 1;
-        GET_DRUG_EDGE(ch, drugval) = 1;
-      }
-      if ((drug_types[drugval].physical_addiction ? success_test(GET_REAL_BOD(ch), drug_types[drugval].physical_addiction + GET_DRUG_EDGE(ch, drugval)) : 1) < 1) {
-        GET_DRUG_ADDICT(ch, drugval) = 2;
-        GET_DRUG_EDGE(ch, drugval) = 1;
-      }
-    }
-
-    // Enqueue the drug for limits.cpp.
-    if ((++GET_DRUG_DOSE(ch, drugval)) > GET_DRUG_TOLERANT(ch, drugval)) {
-      GET_DRUG_STAGE(ch, drugval) = DRUG_STAGE_UNAFFECTED;
-      if (AFF_FLAGS(ch).AreAnySet(AFF_WITHDRAWAL, AFF_WITHDRAWAL_FORCE, ENDBIT) && GET_DRUG_ADDICT(ch, drugval)) {
-        GET_DRUG_EDGE(ch, drugval)++;
-        AFF_FLAGS(ch).RemoveBits(AFF_WITHDRAWAL, AFF_WITHDRAWAL_FORCE, ENDBIT);
-      }
-    } else {
-      send_to_char("...but it doesn't kick in. Your tolerance is high, you'll need to take more to have any effect!\r\n", ch);
-    }
-    extract_obj(obj);
-}
-
 ACMD(do_use)
 {
   struct obj_data *obj, *corpse;

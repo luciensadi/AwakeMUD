@@ -1508,11 +1508,15 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
   bool cyber = TRUE;
   switch (spell) {
     case SPELL_DETOX:
+      if (AFF_FLAGGED(vict, AFF_DETOX)) {
+        send_to_char(ch, "They're already affected by that spell.\r\n");
+        return;
+      }
+
       base_target = 0;
       for (int i = MIN_DRUG; i < NUM_DRUGS; i++) {
         if (GET_DRUG_STAGE(vict, i) != DRUG_STAGE_UNAFFECTED) {
-          base_target = drug_types[i].power;
-          break;
+          base_target = MAX(base_target, drug_types[i].power);
         }
       }
 
@@ -1522,7 +1526,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       }
       WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
       success = success_test(skill, base_target + target_modifiers);
-      if (success > 0 && !AFF_FLAGGED(vict, AFF_DETOX)) {
+      if (success > 0) {
         direct_sustain = create_sustained(ch, vict, spell, force, 0, success, spells[SPELL_STABILIZE].draindamage);
         send_to_char("You notice the effects of the drugs suddenly wear off.\r\n", vict);
         act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);

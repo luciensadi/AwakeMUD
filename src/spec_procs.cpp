@@ -6604,7 +6604,7 @@ SPECIAL(floor_usable_radio) {
 
 // Override the 'install' command in the presence of an unpacked medical workshop or facility.
 SPECIAL(medical_workshop) {
-  bool mode_is_install = FALSE, mode_is_diagnose = FALSE;
+  bool mode_is_install = FALSE, mode_is_diagnose = FALSE, mode_is_withdraw = FALSE;
   struct obj_data *workshop = (struct obj_data *) me;
   struct obj_data *ware, *found_obj = NULL;
   struct char_data *found_char = NULL;
@@ -6616,7 +6616,11 @@ SPECIAL(medical_workshop) {
     return FALSE;
 
   // Skip anything that's not an expected command.
-  if (!((mode_is_install = CMD_IS("install")) || CMD_IS("uninstall") || (mode_is_diagnose = CMD_IS("diagnose"))))
+  if (!(   (mode_is_install = CMD_IS("install"))
+        || CMD_IS("uninstall")
+        || (mode_is_diagnose = CMD_IS("diagnose"))
+        || (mode_is_withdraw = CMD_IS("withdraw"))
+      ))
     return FALSE;
 
   // Require that the medical workshop be unpacked.
@@ -6635,12 +6639,24 @@ SPECIAL(medical_workshop) {
   }
 
   if (!*arg) {
-    send_to_char(ch, "Syntax: %sinstall <target character> <'ware>\r\n", mode_is_install ? "" : "un");
+    if (mode_is_diagnose) {
+      send_to_char("Syntax: diagnose <target character>\r\n", ch);
+    } else if (mode_is_withdraw) {
+      send_to_char("Syntax: withdraw <drug to enter guided withdraw from>\r\n", ch);
+    } else {
+      send_to_char(ch, "Syntax: %sinstall <target character> <'ware>\r\n", mode_is_install ? "" : "un");
+    }
     return TRUE;
   }
 
   // Parse out the victim targeting argument.
   argument = one_argument(argument, target_arg);
+
+  // Withdrawal is almost entirely different from the other cases here, so it's handled separately in this block.
+  if (mode_is_withdraw) {
+    attempt_safe_withdrawal(ch, (const char *) target_arg);
+    return TRUE;
+  }
 
   // Capture self-targeting to save cycles.
   if (!str_cmp(target_arg, "self") || !str_cmp(target_arg, "me") || !str_cmp(target_arg, "myself")) {

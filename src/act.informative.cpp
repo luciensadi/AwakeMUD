@@ -3035,7 +3035,10 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "You should EXAMINE this deck, or jack in and view its SOFTWARE.");
       break;
     case ITEM_DRUG:
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a dose of ^c%s^n, which ", drug_types[GET_OBJ_DRUG_TYPE(j)].name);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It contains %d dose%s of ^c%s^n, which ",
+               GET_OBJ_DRUG_DOSES(j),
+               GET_OBJ_DRUG_DOSES(j) != 1 ? "s" : "",
+               drug_types[GET_OBJ_DRUG_TYPE(j)].name);
 
       switch (GET_OBJ_DRUG_TYPE(j)) {
         case DRUG_ACTH:
@@ -6157,7 +6160,7 @@ ACMD(do_status)
   }
 
   for (int i = MIN_DRUG; i < NUM_DRUGS; i++) {
-    if (GET_DRUG_STAGE(targ, i) != DRUG_STAGE_UNAFFECTED) {
+    if (GET_DRUG_STAGE(targ, i) == DRUG_STAGE_ONSET || GET_DRUG_STAGE(targ, i) == DRUG_STAGE_COMEDOWN) {
       send_to_char(ch, "  %s (%s): %ds",
                    drug_types[i].name,
                    GET_DRUG_STAGE(targ, i) == DRUG_STAGE_ONSET ? "Onset" : "Comedown",
@@ -6245,9 +6248,12 @@ ACMD(do_status)
       printed = TRUE;
     }
     else if (GET_DRUG_ADDICT(targ, i) > 0) {
-      int tsl = (time(0) - GET_DRUG_LASTFIX(targ, i)) / SECS_PER_MUD_DAY;
-      if (tsl >= drug_types[i].fix + 1 || AFF_FLAGGED(targ, AFF_WITHDRAWAL_FORCE) || AFF_FLAGGED(targ, AFF_WITHDRAWAL)) {
+      if (GET_DRUG_STAGE(targ, i) == DRUG_STAGE_GUIDED_WITHDRAWAL) {
         send_to_char(ch, "  ^y%s Withdrawal^n\r\n", drug_types[i].name);
+      } else if (GET_DRUG_STAGE(targ, i) == DRUG_STAGE_FORCED_WITHDRAWAL) {
+        send_to_char(ch, "  ^Y%s Withdrawal (Forced)^n\r\n", drug_types[i].name);
+      } else {
+        send_to_char(ch, "  Addicted to %s\r\n", drug_types[i].name);
       }
     }
   }
@@ -6350,22 +6356,7 @@ ACMD(do_status)
     }
 
     if (GET_LEVEL(ch) > LVL_MORTAL) {
-      // Send drug info
-      send_to_char("\r\nDrug info: \r\n", ch);
-      for (int i = MIN_DRUG; i < NUM_DRUGS; i++) {
-        send_to_char(ch, " - ^c%s^n (edg %d, add %d, doses %d, lstfx %d, addt %d, toler %d, lstwith %d, dur %d, current dose %d, stage %d)\r\n",
-                     drug_types[i].name,
-                     GET_DRUG_EDGE(targ, i)    ,
-                     GET_DRUG_ADDICT(targ, i)  ,
-                     GET_DRUG_DOSES(targ, i)   ,
-                     GET_DRUG_LASTFIX(targ, i) ,
-                     GET_DRUG_ADDTIME(targ, i) ,
-                     GET_DRUG_TOLERANT(targ, i),
-                     GET_DRUG_LASTWITH(targ, i),
-                     GET_DRUG_DURATION(targ, i),
-                     GET_DRUG_DOSE(targ, i)    ,
-                     GET_DRUG_STAGE(targ, i));
-      }
+      render_drug_info_for_targ(ch, targ);
     }
   }
 }

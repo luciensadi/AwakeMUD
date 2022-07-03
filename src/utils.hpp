@@ -128,8 +128,6 @@ int     get_br_skill_for_veh(struct veh_data *veh);
 int     get_pilot_skill_for_veh(struct veh_data *veh);
 int     calculate_vehicle_weight(struct veh_data *veh);
 char *  replace_neutral_color_codes(const char *input, const char *replacement_code);
-void    reset_drug_for_char(struct char_data *ch, int drugval);
-void    reset_all_drugs_for_char(struct char_data *ch);
 bool    repair_vehicle_seating(struct veh_data *veh);
 
 void load_vehicle_brain(struct veh_data *veh);
@@ -632,16 +630,6 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define GET_TOTEM(ch)                              (ch->player_specials->saved.totem)
 #define GET_TOTEMSPIRIT(ch)                        (ch->player_specials->saved.totemspirit)
 
-#define GET_DRUG_EDGE(ch, i)                       (ch->player_specials->drugs[i][0])
-#define GET_DRUG_ADDICT(ch, i)                     (ch->player_specials->drugs[i][1])
-#define GET_DRUG_DOSES(ch, i)                      (ch->player_specials->drugs[i][2])
-#define GET_DRUG_LASTFIX(ch, i)                    (ch->player_specials->drugs[i][3])
-#define GET_DRUG_ADDTIME(ch, i)                    (ch->player_specials->drugs[i][4])
-#define GET_DRUG_TOLERANT(ch, i)                   (ch->player_specials->drugs[i][5])
-#define GET_DRUG_LASTWITH(ch, i)                   (ch->player_specials->drugs[i][6])
-#define GET_DRUG_DURATION(ch, i)                   (ch->player_specials->drugs[i][7])
-#define GET_DRUG_DOSE(ch, i)                       (ch->player_specials->drugs[i][8])
-#define GET_DRUG_STAGE(ch, i)                      (ch->player_specials->drugs[i][9])
 #define GET_MENTAL_LOSS(ch)                        (ch->player_specials->mental_loss)
 #define GET_PHYSICAL_LOSS(ch)                      (ch->player_specials->physical_loss)
 #define GET_NUYEN_PAID_FOR_WHERES_MY_CAR(ch)       (ch->desc->nuyen_paid_for_wheres_my_car)
@@ -913,6 +901,7 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 // ITEM_DRUG convenience defines. Yes, I know this violates the naming convention, but someone named all the
 // character drug references 'get_drug_x' already, so this one was extra confusing.
 #define GET_OBJ_DRUG_TYPE(drug)                   (GET_OBJ_VAL((drug), 0))
+#define GET_OBJ_DRUG_DOSES(drug)                  (GET_OBJ_VAL((drug), 1))
 
 // ITEM_WORN convenience defines
 #define GET_WORN_POCKETS_HOLSTERS(worn)           (GET_OBJ_VAL((worn), 0))

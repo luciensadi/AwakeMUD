@@ -241,6 +241,10 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 // After how many items will the shopkeep start silently destroying old sales?
 #define MAX_ITEMS_IN_SHOP_INVENTORY                            100
 
+// What does it cost to begin the guided withdrawal process?
+#define GUIDED_WITHDRAWAL_ATTEMPT_NUYEN_COST                   5000
+#define INVOLUNTARY_DRUG_PURCHASE_COST_PER_DOSE                250
+
 /////////////// OLC permissions configuration /////////////////////////
 #define LVL_FOR_SETTING_ZONE_EDITOR_ID_NUMBERS                 LVL_VICEPRES
 #define LVL_FOR_SETTING_ZONE_CONNECTED_STATUS                  LVL_FIXER

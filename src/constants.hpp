@@ -81,7 +81,6 @@ extern int racial_limits[][2][6];
 extern int racial_attribute_modifiers[][6];
 extern const char *attributes[];
 extern const char *short_attributes[];
-extern struct drug_data drug_types[];
 extern struct spell_types spells[];
 extern const char *totem_types[];
 extern const char *spell_category[5];
