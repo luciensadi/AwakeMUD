@@ -393,9 +393,11 @@ void apply_drug_modifiers_to_ch(struct char_data *ch) {
 
   if (AFF_FLAGGED(ch, AFF_WITHDRAWAL_FORCE)) {
     GET_MAX_MENTAL(ch) -= 300;
-    GET_TARGET_MOD(ch) += 6;
+    GET_TARGET_MOD(ch) += 3;
+    GET_CONCENTRATION_TARGET_MOD(ch) += 6;
   } else if (AFF_FLAGGED(ch, AFF_WITHDRAWAL)) {
-    GET_TARGET_MOD(ch) += 4;
+    GET_TARGET_MOD(ch) += 2;
+    GET_CONCENTRATION_TARGET_MOD(ch) += 4;
   }
 }
 #undef GET_PERCEPTION_TEST_DICE_MOD
