@@ -1530,7 +1530,7 @@ ACMD(do_skills)
             break;
           }
         else if (GET_POWER_ACT(ch, i))
-          strlcat(buf2, " ^Y(Active)^n\r\n", sizeof(buf2));
+          strlcat(buf2, " ^Y(active)^n\r\n", sizeof(buf2));
         else
           strlcat(buf2, "\r\n", sizeof(buf2));
         strlcat(buf, buf2, sizeof(buf));
