@@ -2103,8 +2103,8 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
       number = atoi(arg);
       switch (GET_OBJ_TYPE(d->edit_obj)) {
         case ITEM_DRUG:
-          if (number < 1 || number > 100) {
-            send_to_char(CH, "You must specify a dose quantity between 1 and 100. Doses: ");
+          if (number < 1 || number > MAX_DRUG_DOSE_COUNT) {
+            send_to_char(CH, "You must specify a dose quantity between 1 and %d. Doses: ", MAX_DRUG_DOSE_COUNT);
             return;
           }
           break;

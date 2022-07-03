@@ -39,6 +39,8 @@ void    clear_all_drug_data_for_char(struct char_data *ch);
 #define DRUG_ZEN                     11
 #define NUM_DRUGS                    12
 
+#define MAX_DRUG_DOSE_COUNT         100
+
 #define DRUG_STAGE_UNAFFECTED        0
 #define DRUG_STAGE_ONSET             1
 #define DRUG_STAGE_COMEDOWN          2

@@ -2212,6 +2212,13 @@ void auto_repair_obj(struct obj_data *obj) {
 
   // Now that any changes have bubbled up, rectify this object too.
   switch (GET_OBJ_TYPE(obj)) {
+    case ITEM_DRUG:
+      {
+        int prior_data;
+        FORCE_PROTO_VALUE("drug", GET_OBJ_DRUG_TYPE(obj), GET_OBJ_DRUG_TYPE(&obj_proto[rnum]));
+        CLAMP_VALUE("drug", GET_OBJ_DRUG_DOSES(obj), 1, MAX_DRUG_DOSE_COUNT, "doses");
+      }
+      break;
     case ITEM_CYBERDECK:
       // Rectify the memory.
       old_storage = GET_CYBERDECK_USED_STORAGE(obj);
