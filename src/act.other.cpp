@@ -1504,11 +1504,11 @@ ACMD(do_skills)
       return;
     }
     if(subcmd == SCDM_ABILITIES) {
-      snprintf(buf, sizeof(buf), "\r\nPP      Ability              Level\r\n")
+      snprintf(buf, sizeof(buf), "\r\nPP      Ability              Level\r\n");
     }
     extern int max_ability(int i);
     for (i = 1; i < ADEPT_NUMPOWER; i++) {
-      if (!mode_all && *arg && !is_abbrev(arg, adept_powers[i]))
+      if (!mode_all && *arg && !is_abbrev(arg, train_ability_cost[i], adept_powers[i]))
         continue;
 
       if (GET_POWER_TOTAL(ch, i) > 0) {
