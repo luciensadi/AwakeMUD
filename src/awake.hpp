@@ -730,7 +730,7 @@ enum {
 
 #define SPELL_DESIGN_FAILED_CODE -3
 
-#define META_ANCHORING    0
+#define META_UNDEFINED    0
 #define META_CENTERING    1
 #define META_CLEANSING    2
 #define META_INVOKING    3
@@ -739,7 +739,8 @@ enum {
 #define META_QUICKENING    6
 #define META_REFLECTING    7
 #define META_SHIELDING    8
-#define META_MAX    9
+#define META_ANCHORING    9
+#define META_MAX    10
 
 #define MASK_INIT    (1 << 1)
 #define MASK_DUAL    (1 << 2)

@@ -2521,7 +2521,7 @@ const char *decap_bio_types[] = {
 };
 
 const char *metamagic[] = {
-  "Anchoring",
+  "UNDEFINED",
   "Centering",
   "Cleansing",
   "Invoking",
@@ -2529,7 +2529,8 @@ const char *metamagic[] = {
   "Possessing",
   "Quickening",
   "Reflecting",
-  "Shielding"
+  "Shielding",
+  "Anchoring"
 };
 
 const char *legality_codes[][2] = {
