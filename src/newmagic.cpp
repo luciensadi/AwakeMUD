@@ -1509,7 +1509,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
   switch (spell) {
     case SPELL_DETOX:
       if (AFF_FLAGGED(vict, AFF_DETOX)) {
-        send_to_char(ch, "They're already affected by that spell.\r\n");
+        send_to_char(ch, "They're already undergoing detox.\r\n");
         return;
       }
 
@@ -1679,7 +1679,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       if (!check_spell_victim(ch, vict, spell, arg))
         return;
 
-#ifdef DIES_IRAE  // note: if defined
+
       if (GET_SUSTAINED(vict)) {
         for (struct sustain_data *sus = GET_SUSTAINED(vict); sus; sus = sus->next) {
           /*  Q: Can you cast Decrease Attribute, followed by Increase Attribute (which is easier because the attribute TN is smaller),
@@ -1696,17 +1696,25 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
             continue;
 
           if (sus->subtype == sub && (sus->spell == SPELL_INCATTR || sus->spell == SPELL_INCCYATTR || sus->spell == SPELL_DECATTR || sus->spell == SPELL_DECCYATTR || sus->spell == SPELL_INCREA)) {
+#ifdef DIES_IRAE
             send_to_char(ch, "%s is already affected by a similar spell.\r\n", GET_CHAR_NAME(vict));
             return;
+#else
+            target_modifiers += MAX(1, MIN(sus->force, sus->success) / TN_INCREASE_DIVISOR_FOR_ATTRIBUTE_SPELL_STACKING);
+#endif
           }
 
           if (spell == SPELL_INCREA && (sus->spell == SPELL_INCREF1 || sus->spell == SPELL_INCREF2 || sus->spell == SPELL_INCREF3)) {
+#ifdef DIES_IRAE
             send_to_char(ch, "%s's reflexes have already been modified, so this spell can't take effect.\r\n", GET_CHAR_NAME(vict));
             return;
+#else
+            target_modifiers += MAX(1, MIN(sus->force, sus->success) / TN_INCREASE_DIVISOR_FOR_ATTRIBUTE_SPELL_STACKING);
+#endif
           }
         }
       }
-#endif
+
       if (GET_ATT(vict, sub) != GET_REAL_ATT(vict, sub)) {
         if (GET_TRADITION(vict) == TRAD_ADEPT && sub < CHA) {
           switch (sub) {

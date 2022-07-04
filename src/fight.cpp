@@ -2613,7 +2613,7 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
   if (victim != ch)
   {
 #ifdef IGNORING_IC_ALSO_IGNORES_COMBAT
-    if (IS_IGNORING(victim, is_blocking_ic_interaction_from, ch)) {
+    if (ch != victim && IS_IGNORING(victim, is_blocking_ic_interaction_from, ch)) {
       char oopsbuf[5000];
       snprintf(oopsbuf, sizeof(oopsbuf), "SUPER SYSERR: Somehow, we made it all the way to damage() with the victim ignoring the attacker! "
                                          "%s ch, %s victim, %d dam, %d attacktype, %d is_physical, %d send_message.",
@@ -2623,7 +2623,7 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
       return 0;
     }
 
-    if (IS_IGNORING(ch, is_blocking_ic_interaction_from, victim)) {
+    if (ch != victim && IS_IGNORING(ch, is_blocking_ic_interaction_from, victim)) {
       char oopsbuf[5000];
       snprintf(oopsbuf, sizeof(oopsbuf), "SUPER SYSERR: Somehow, we made it all the way to damage() with the attacker ignoring the victim! "
                                          "%s ch, %s victim, %d dam, %d attacktype, %d is_physical, %d send_message.",
@@ -2822,6 +2822,11 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
       if (damage_without_message(victim, victim, dam / 2 + dam % 2, TYPE_DRUGS, FALSE)) {
         return TRUE;
       }
+    }
+
+    // Drug damage can't kill you.
+    if (attacktype == TYPE_DRUGS) {
+      GET_PHYSICAL(real_body) = MAX(GET_PHYSICAL(real_body), 100);
     }
   }
   if (!awake && GET_PHYSICAL(victim) <= 0)

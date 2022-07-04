@@ -734,7 +734,7 @@ const char *render_ware_for_viewer(struct obj_data *ware, bool privileged, bool 
     if (GET_OBJ_TYPE(ware) == ITEM_CYBERWARE)
       strlcpy(render_buf, cyber_types[GET_CYBERWARE_TYPE(ware)], sizeof(render_buf));
     else
-      strlcpy(render_buf, cyber_types[GET_CYBERWARE_TYPE(ware)], sizeof(render_buf));
+      strlcpy(render_buf, bio_types[GET_BIOWARE_TYPE(ware)], sizeof(render_buf));
   }
 
   strlcat(render_buf, "\r\n", sizeof(render_buf));

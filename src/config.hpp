@@ -205,6 +205,8 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 #define MAX_MOB_COMBAT_MAGIC_WOUND                             SERIOUS
 #define MIN_MOB_COMBAT_MAGIC_WOUND                             MODERATE
 
+#define TN_INCREASE_DIVISOR_FOR_ATTRIBUTE_SPELL_STACKING       3
+
 // How many sunrises (currently spans of 48 minutes) are spirits good for?
 #define NUMBER_OF_IG_DAYS_FOR_SPIRIT_TO_LAST                   4
 

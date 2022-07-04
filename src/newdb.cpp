@@ -2504,7 +2504,7 @@ void save_drug_data_to_db(struct char_data *player) {
     {
       if (q)
         strcat(buf, "), (");
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d", GET_IDNUM(player), i, GET_DRUG_ADDICT(player, i),
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %d, %d, %d, %d, %ld, %d, %d, %d, %d, %d, %d", GET_IDNUM(player), i, GET_DRUG_ADDICT(player, i),
                           GET_DRUG_LIFETIME_DOSES(player, i), GET_DRUG_ADDICTION_EDGE(player, i), GET_DRUG_LAST_FIX(player, i),
                           GET_DRUG_ADDICTION_TICK_COUNTER(player, i), GET_DRUG_TOLERANCE_LEVEL(player, i), GET_DRUG_LAST_WITHDRAWAL_TICK(player, i),
                           GET_DRUG_DURATION(player, i), GET_DRUG_DOSE(player, i), GET_DRUG_STAGE(player, i)

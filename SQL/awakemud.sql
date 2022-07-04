@@ -132,7 +132,7 @@ CREATE TABLE `pfiles_drugs` (
   `Addict` smallint(2) unsigned default '0',
   `Doses` smallint(2) unsigned default '0',
   `Edge` smallint(2) unsigned default '0',
-  `LastFix` mediumint(2) unsigned default '0',
+  `LastFix` bigint(12) unsigned default '0',
   `Addtime` smallint(2) unsigned default '0',
   `Tolerant` smallint(2) unsigned default '0',
   `LastWith` smallint(2) unsigned default '0',

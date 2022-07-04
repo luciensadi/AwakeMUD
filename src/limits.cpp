@@ -64,12 +64,10 @@ void mental_gain(struct char_data * ch)
 
   switch (GET_POS(ch))
   {
-    case POS_STUNNED:
-      gain = 20;
-      break;
     case POS_SLEEPING:
       gain = 25;
       break;
+    case POS_STUNNED:
     case POS_LYING:
     case POS_RESTING:
       gain = 20;
@@ -77,16 +75,20 @@ void mental_gain(struct char_data * ch)
     case POS_SITTING:
       gain = 15;
       break;
-    case POS_FIGHTING:
-      gain = 5;
-      break;
     case POS_STANDING:
       gain = 10;
       break;
+    case POS_FIGHTING:
+      gain = 5;
+      break;
   }
 
-  if (IS_NPC(ch))
+  if (IS_NPC(ch)) {
     gain *= 2;
+  } else {
+    gain *= get_drug_heal_multiplier(ch);
+  }
+
   if (find_workshop(ch, TYPE_MEDICAL))
     gain = (int)(gain * 1.5);
 
@@ -158,7 +160,7 @@ void physical_gain(struct char_data * ch)
   else
   {
     gain = MAX(1, gain);
-    for (bio = ch->bioware; bio; bio = bio->next_content)
+    for (bio = ch->bioware; bio; bio = bio->next_content) {
       if (GET_BIOWARE_TYPE(bio) == BIO_SYMBIOTES) {
         switch (GET_BIOWARE_RATING(bio)) {
           case 1:
@@ -173,6 +175,9 @@ void physical_gain(struct char_data * ch)
         }
         break;
       }
+    }
+
+    gain *= get_drug_heal_multiplier(ch);
   }
   if (GET_TRADITION(ch) == TRAD_ADEPT)
     gain *= GET_POWER(ch, ADEPT_HEALING) + 1;

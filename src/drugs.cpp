@@ -94,13 +94,10 @@ void do_drug_take(struct char_data *ch, struct obj_data *obj) {
 // Tick down all drugs for a given character. Induces onset/comedown etc. Called once per IG minute.
 bool process_drug_point_update_tick(struct char_data *ch) {
   char roll_buf[500];
-  bool is_on_anything = FALSE;
+  time_t current_time = time(0);
 
   for (int drug_id = MIN_DRUG; drug_id < NUM_DRUGS; drug_id++) {
     int damage_boxes = 0;
-
-    if (GET_DRUG_STAGE(ch, drug_id) != DRUG_STAGE_UNAFFECTED)
-      is_on_anything = TRUE;
 
     // All drugs are ticked down as long as you're on them.
     if (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_ONSET || GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_COMEDOWN)
@@ -199,8 +196,6 @@ bool process_drug_point_update_tick(struct char_data *ch) {
     else if (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_COMEDOWN && GET_DRUG_DURATION(ch, drug_id) <= 0) {
       send_to_char(ch, "The aftereffects of the %s wear off.\r\n", drug_types[drug_id].name);
       reset_drug_for_char(ch, drug_id);
-      if (AFF_FLAGGED(ch, AFF_DETOX))
-        AFF_FLAGS(ch).RemoveBit(AFF_DETOX);
     }
 
     // Transition from no drug to having it, assuming you've passed your tolerance threshold.
@@ -245,7 +240,7 @@ bool process_drug_point_update_tick(struct char_data *ch) {
 
       // Onset them and set when their last fix was (used for withdrawal calculations).
       GET_DRUG_STAGE(ch, drug_id) = DRUG_STAGE_ONSET;
-      GET_DRUG_LAST_FIX(ch, drug_id) = time(0);
+      GET_DRUG_LAST_FIX(ch, drug_id) = current_time;
 
       // Send message, set duration, and apply instant effects.
       switch (drug_id) {
@@ -259,51 +254,59 @@ bool process_drug_point_update_tick(struct char_data *ch) {
           reset_drug_for_char(ch, drug_id);
           break;
         case DRUG_HYPER:
-          send_to_char(ch, "The world seems to swirl around you as your mind is bombarded with feedback.\r\n");
+          snprintf(buf, sizeof(buf), "The world seems to swirl around you as your mind is bombarded with feedback.\r\n");
           GET_DRUG_DURATION(ch, drug_id) = damage_boxes * 100;
           break;
         case DRUG_JAZZ:
-          send_to_char(ch,  "The world slows down around you.\r\n");
+          snprintf(buf, sizeof(buf), "The world slows down around you.\r\n");
           GET_DRUG_DURATION(ch, drug_id) = 100 * srdice();
           break;
         case DRUG_KAMIKAZE:
-          send_to_char(ch,  "Your body feels alive with energy and the desire to fight.\r\n");
+          snprintf(buf, sizeof(buf), "Your body feels alive with energy and the desire to fight.\r\n");
           GET_DRUG_DURATION(ch, drug_id) = 100 * srdice();
           break;
         case DRUG_PSYCHE:
-          send_to_char(ch,  "Your feel your mind racing.\r\n");
+          snprintf(buf, sizeof(buf), "Your feel your mind racing.\r\n");
           GET_DRUG_DURATION(ch, drug_id) = MAX(1, 12 - GET_REAL_BOD(ch)) * 600;
           break;
         case DRUG_BLISS:
-          send_to_char(ch,  "The world fades into bliss as your body becomes sluggish.\r\n");
+          snprintf(buf, sizeof(buf), "The world fades into bliss as your body becomes sluggish.\r\n");
           GET_DRUG_DURATION(ch, drug_id) = MAX(1, 6 - GET_REAL_BOD(ch)) * 600;
           break;
         case DRUG_BURN:
-          send_to_char(ch,  "You suddenly feel very intoxicated.\r\n");
+          snprintf(buf, sizeof(buf), "You suddenly feel very intoxicated.\r\n");
           // Burn's long-term effects are done through the drunk code.
           reset_drug_for_char(ch, drug_id);
           GET_COND(ch, COND_DRUNK) = FOOD_DRINK_MAX;
           break;
         case DRUG_CRAM:
-          send_to_char(ch,  "Your body feels alive with energy.\r\n");
+          snprintf(buf, sizeof(buf), "Your body feels alive with energy.\r\n");
           GET_DRUG_DURATION(ch, drug_id) = MAX(1, 12 - GET_REAL_BOD(ch)) * 600;
           break;
         case DRUG_NITRO:
-          send_to_char(ch,  "You lose sense of yourself as your entire body comes alive with energy.\r\n");
+          snprintf(buf, sizeof(buf), "You lose sense of yourself as your entire body comes alive with energy.\r\n");
           GET_DRUG_DURATION(ch, drug_id) = 100 * srdice();
           break;
         case DRUG_NOVACOKE:
-          send_to_char(ch,  "You feel euphoric and alert.\r\n");
+          snprintf(buf, sizeof(buf), "You feel euphoric and alert.\r\n");
           GET_DRUG_DURATION(ch, drug_id) = MAX(1, 10 - GET_REAL_BOD(ch)) * 600;
           break;
         case DRUG_ZEN:
-          send_to_char(ch,  "You start to lose your sense of reality as your sight fills with hallucinations.\r\n");
+          snprintf(buf, sizeof(buf), "You start to lose your sense of reality as your sight fills with hallucinations.\r\n");
           GET_DRUG_DURATION(ch, drug_id) = 100 * srdice();
           break;
         default:
           snprintf(buf, sizeof(buf), "SYSERR: Unknown drug type %d when printing drug-start message!", drug_id);
           mudlog(buf, ch, LOG_SYSLOG, TRUE);
-          break;
+          GET_DRUG_DURATION(ch, drug_id) = 10;
+          return FALSE;
+      }
+
+      int detox_force = affected_by_spell(ch, SPELL_DETOX);
+      if (!detox_force || detox_force < drug_types[drug_id].power) {
+        send_to_char(buf, ch);
+      } else {
+        send_to_char("The sensation of the drugs moving through your system is muted by a detox effect.\r\n", ch);
       }
 
       // Staff get short uptimes for testing.
@@ -314,13 +317,7 @@ bool process_drug_point_update_tick(struct char_data *ch) {
     }
   }
 
-  // Once you're clean of all drugs, you lose the detox aff.
-  if (!is_on_anything)
-    AFF_FLAGS(ch).RemoveBit(AFF_DETOX);
-  else {
-    update_withdrawal_flags(ch);
-  }
-
+  update_withdrawal_flags(ch);
   return FALSE;
 }
 
@@ -331,70 +328,73 @@ void apply_drug_modifiers_to_ch(struct char_data *ch) {
   // Note: You CANNOT use update_withdrawal_flags() in this function. This is called from affect_total, and update_withdrawal_flags calls affect_total.
   GET_PERCEPTION_TEST_DICE_MOD(ch) = 0;
 
-  if (!AFF_FLAGGED(ch, AFF_DETOX)) {
-    for (int drug_id = MIN_DRUG; drug_id < NUM_DRUGS; drug_id++) {
-      if (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_ONSET) {
-        switch (drug_id) {
-          case DRUG_HYPER:
-            GET_TARGET_MOD(ch)++;
-            GET_CONCENTRATION_TARGET_MOD(ch) += 3; // should be 4, but it already includes the general target mod above
-            break;
-          case DRUG_JAZZ:
-            GET_QUI(ch) += 2;
-            GET_INIT_DICE(ch)++;
-            break;
-          case DRUG_KAMIKAZE:
-            GET_BOD(ch)++;
-            GET_QUI(ch)++;
-            GET_STR(ch) += 2;
-            GET_WIL(ch)++;
-            GET_INIT_DICE(ch)++;
-            break;
-          case DRUG_PSYCHE:
-            GET_INT(ch)++;
-            break;
-          case DRUG_BLISS:
-            GET_TARGET_MOD(ch)++;
-            GET_REA(ch)--;
-            // Pain resistance is handled directly in the relevant function.
-            break;
-          case DRUG_CRAM:
-            GET_REA(ch)++;
-            GET_INIT_DICE(ch)++;
-            break;
-          case DRUG_NITRO:
-            GET_STR(ch) += 2;
-            GET_WIL(ch) += 2;
-            // Pain resistance is handled directly in the relevant function.
-            GET_PERCEPTION_TEST_DICE_MOD(ch) += 2;
-            break;
-          case DRUG_NOVACOKE:
-            GET_REA(ch)++;
-            GET_CHA(ch)++;
-            // Pain resistance is handled directly in the relevant function.
-            GET_PERCEPTION_TEST_DICE_MOD(ch)++;
-            break;
-          case DRUG_ZEN:
-            GET_REA(ch) -= 2;
-            GET_TARGET_MOD(ch)++;
-            GET_WIL(ch)++;
-            break;
-        }
-      } else if (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_COMEDOWN) {
-        switch (drug_id) {
-          case DRUG_JAZZ:
-            GET_CONCENTRATION_TARGET_MOD(ch)++;
-            GET_QUI(ch)--;
-            break;
-          case DRUG_KAMIKAZE:
-            GET_QUI(ch)--;
-            GET_WIL(ch)--;
-            break;
-          case DRUG_NOVACOKE:
-            GET_CHA(ch) = 1;
-            GET_WIL(ch) /= 2;
-            break;
-        }
+  int detox_force = affected_by_spell(ch, SPELL_DETOX);
+
+  for (int drug_id = MIN_DRUG; drug_id < NUM_DRUGS; drug_id++) {
+    if (detox_force >= drug_types[drug_id].power)
+      continue;
+
+    if (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_ONSET) {
+      switch (drug_id) {
+        case DRUG_HYPER:
+          GET_TARGET_MOD(ch)++;
+          GET_CONCENTRATION_TARGET_MOD(ch) += 3; // should be 4, but it already includes the general target mod above
+          break;
+        case DRUG_JAZZ:
+          GET_QUI(ch) += 2;
+          GET_INIT_DICE(ch)++;
+          break;
+        case DRUG_KAMIKAZE:
+          GET_BOD(ch)++;
+          GET_QUI(ch)++;
+          GET_STR(ch) += 2;
+          GET_WIL(ch)++;
+          GET_INIT_DICE(ch)++;
+          break;
+        case DRUG_PSYCHE:
+          GET_INT(ch)++;
+          break;
+        case DRUG_BLISS:
+          GET_TARGET_MOD(ch)++;
+          GET_REA(ch)--;
+          // Pain resistance is handled directly in the relevant function.
+          break;
+        case DRUG_CRAM:
+          GET_REA(ch)++;
+          GET_INIT_DICE(ch)++;
+          break;
+        case DRUG_NITRO:
+          GET_STR(ch) += 2;
+          GET_WIL(ch) += 2;
+          // Pain resistance is handled directly in the relevant function.
+          GET_PERCEPTION_TEST_DICE_MOD(ch) += 2;
+          break;
+        case DRUG_NOVACOKE:
+          GET_REA(ch)++;
+          GET_CHA(ch)++;
+          // Pain resistance is handled directly in the relevant function.
+          GET_PERCEPTION_TEST_DICE_MOD(ch)++;
+          break;
+        case DRUG_ZEN:
+          GET_REA(ch) -= 2;
+          GET_TARGET_MOD(ch)++;
+          GET_WIL(ch)++;
+          break;
+      }
+    } else if (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_COMEDOWN) {
+      switch (drug_id) {
+        case DRUG_JAZZ:
+          GET_CONCENTRATION_TARGET_MOD(ch)++;
+          GET_QUI(ch)--;
+          break;
+        case DRUG_KAMIKAZE:
+          GET_QUI(ch)--;
+          GET_WIL(ch)--;
+          break;
+        case DRUG_NOVACOKE:
+          GET_CHA(ch) = 1;
+          GET_WIL(ch) /= 2;
+          break;
       }
     }
   }
@@ -414,10 +414,11 @@ void apply_drug_modifiers_to_ch(struct char_data *ch) {
 // Called once per in-game hour.
 void process_withdrawal(struct char_data *ch) {
   time_t current_time = time(0);
+  send_to_char(ch, "process_withdrawal ticking\r\n");
   // Iterate through all drugs.
   for (int drug_id = MIN_DRUG; drug_id < NUM_DRUGS; drug_id++) {
     // Calculate time since last fix.
-    time_t time_since_last_fix = (current_time - GET_DRUG_LAST_FIX(ch, drug_id)) / SECS_PER_MUD_DAY;
+    time_t time_since_last_fix = (current_time - GET_DRUG_LAST_FIX(ch, drug_id)) / (IS_SENATOR(ch) ? 5 : SECS_PER_MUD_DAY);
 
     // Tick up addiction / withdrawal stat losses. Houseruled from Addiction Effects (M&M p109).
     if (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_GUIDED_WITHDRAWAL || GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_FORCED_WITHDRAWAL) {
@@ -508,7 +509,13 @@ void process_withdrawal(struct char_data *ch) {
           }
         }
       }
-    } else {
+    } else if (GET_DRUG_ADDICT(ch, drug_id)) {
+      send_to_char(ch, "%s process_withdrawal while addicted: tsl %ld, f_f %d, >? %s\r\n",
+                   drug_types[drug_id].name,
+                   time_since_last_fix,
+                   drug_types[drug_id].fix_factor,
+                   time_since_last_fix > drug_types[drug_id].fix_factor ? "TRUE" : "FALSE"
+                 );
       // They weren't in withdrawal: Put them into that state if they've passed their fix limit.
       if (time_since_last_fix > drug_types[drug_id].fix_factor) {
         send_to_char(ch, "You begin to go into forced %s withdrawal.\r\n", drug_types[drug_id].name);
@@ -613,6 +620,38 @@ void attempt_safe_withdrawal(struct char_data *ch, const char *target_arg) {
   update_withdrawal_flags(ch);
 
   return;
+}
+
+// The more drugs you're on, the slower your healing.
+float get_drug_heal_multiplier(struct char_data *ch) {
+  char oopsbuf[500];
+  int divisor = 1;
+
+  for (int drug_id = MIN_DRUG; drug_id < NUM_DRUGS; drug_id++) {
+    switch (GET_DRUG_STAGE(ch, drug_id)) {
+      case DRUG_STAGE_UNAFFECTED:
+        break;
+      case DRUG_STAGE_ONSET:
+        divisor += 1;
+        break;
+      case DRUG_STAGE_COMEDOWN:
+        divisor += 2;
+        break;
+      case DRUG_STAGE_GUIDED_WITHDRAWAL:
+        divisor += 3;
+        break;
+      case DRUG_STAGE_FORCED_WITHDRAWAL:
+        divisor += 5;
+        break;
+      default:
+        snprintf(oopsbuf, sizeof(oopsbuf), "SYSERR: Unknown drug state %d to get_drug_heal_multiplier()!", GET_DRUG_STAGE(ch, drug_id));
+        mudlog(oopsbuf, ch, LOG_SYSLOG, TRUE);
+        return 1.0;
+    }
+  }
+
+  // Returns a value in range 0.1 ≤ X ≤ 1.0.
+  return MIN(1.0, MAX(0.1, 2 / divisor));
 }
 
 // ----------------- Helpers
@@ -767,12 +806,23 @@ struct room_data *_get_random_drug_seller_room() {
 }
 
 void seek_drugs(struct char_data *ch, int drug_id) {
+  if (GET_PHYSICAL(ch) <= 0 || GET_MENTAL(ch) <= 0) {
+    // Skip-- stunned or morted.
+    return;
+  }
+
+  if (GET_POS(ch) <= POS_SITTING) {
+    GET_POS(ch) = POS_STANDING;
+  }
+
   send_to_char("You enter a fugue state! By the time you recover, you're somewhere else entirely, with a familiar feeling running through your veins...\r\n", ch);
 
   int sought_dosage = GET_DRUG_TOLERANCE_LEVEL(ch, drug_id) + 2;
 
   lose_nuyen(ch, INVOLUNTARY_DRUG_PURCHASE_COST_PER_DOSE * sought_dosage, NUYEN_OUTFLOW_GENERIC_SPEC_PROC);
   _apply_doses_of_drug_to_char(sought_dosage, drug_id, ch);
+  GET_DRUG_STAGE(ch, drug_id) = DRUG_STAGE_ONSET;
+  update_withdrawal_flags(ch);
 
   char_from_room(ch);
   char_to_room(ch, _get_random_drug_seller_room());

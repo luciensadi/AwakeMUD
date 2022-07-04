@@ -1767,7 +1767,11 @@ ACMD(do_enter)
     }
 
     if (found_veh) {
-      enter_veh(ch, found_veh, buf2, FALSE);
+      if (veh == found_veh) {
+        send_to_char("You can't re-enter the same vehicle!\r\n", ch);
+      } else {
+        enter_veh(ch, found_veh, buf2, FALSE);
+      }
       return;
     }
 
