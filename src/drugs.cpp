@@ -413,20 +413,21 @@ void apply_drug_modifiers_to_ch(struct char_data *ch) {
 // Apply withdrawal state and penalties to character. Entering withdrawal here puts you in Forced which is faster but sucks harder.
 // Called once per in-game hour.
 void process_withdrawal(struct char_data *ch) {
+  time_t current_time = time(0);
   // Iterate through all drugs.
   for (int drug_id = MIN_DRUG; drug_id < NUM_DRUGS; drug_id++) {
+    // Calculate time since last fix.
+    time_t time_since_last_fix = (current_time - GET_DRUG_LAST_FIX(ch, drug_id)) / SECS_PER_MUD_DAY;
+
     // Tick up addiction / withdrawal stat losses. Houseruled from Addiction Effects (M&M p109).
     if (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_GUIDED_WITHDRAWAL || GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_FORCED_WITHDRAWAL) {
-      // Calculate time since last fix. (What is this used for?)
-      int time_since_last_fix = (time(0) - GET_DRUG_LAST_FIX(ch, drug_id)) / SECS_PER_MUD_DAY;
-
       // Increment our addiction tick counter.
       GET_DRUG_ADDICTION_TICK_COUNTER(ch, drug_id)++;
 
       // Process stat loss as appropriate.
       if (GET_DRUG_STAGE(ch, drug_id == DRUG_STAGE_FORCED_WITHDRAWAL)) {
         bool body_is_above_racial_minimums = GET_REAL_BOD(ch) > 1 + racial_attribute_modifiers[(int) GET_RACE(ch)][BOD];
-        bool should_test_for_stat_loss = GET_DRUG_ADDICTION_TICK_COUNTER(ch, drug_id) % (24 * 30 /* aka once a month, tested IG hourly */) == 0;
+        bool should_test_for_stat_loss = GET_DRUG_ADDICTION_TICK_COUNTER(ch, drug_id) % (24 /* aka per in-game day, tested IG hourly */) == 0;
 
         // If the timer is expired, we check for loss.
         if (should_test_for_stat_loss) {
@@ -461,6 +462,7 @@ void process_withdrawal(struct char_data *ch) {
       // Tick down their addiction rating as they withdraw. Speed varies based on whether this is forced or not.
       if (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_GUIDED_WITHDRAWAL || GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_FORCED_WITHDRAWAL) {
         // Decrement their edge, allowing their addiction rating to decrease
+        // TODO: When is last_with_tick set with an actual value? What happens if it's a while in the past?
         if (time_since_last_fix > GET_DRUG_LAST_WITHDRAWAL_TICK(ch, drug_id) + 1) {
           GET_DRUG_LAST_WITHDRAWAL_TICK(ch, drug_id) += (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_GUIDED_WITHDRAWAL ? 2 : 1);
           if (--GET_DRUG_ADDICTION_EDGE(ch, drug_id) <= 0) {
@@ -506,9 +508,9 @@ void process_withdrawal(struct char_data *ch) {
           }
         }
       }
-
+    } else {
       // They weren't in withdrawal: Put them into that state if they've passed their fix limit.
-      else if (time_since_last_fix > drug_types[drug_id].fix_factor) {
+      if (time_since_last_fix > drug_types[drug_id].fix_factor) {
         send_to_char(ch, "You begin to go into forced %s withdrawal.\r\n", drug_types[drug_id].name);
         GET_DRUG_STAGE(ch, drug_id) = DRUG_STAGE_FORCED_WITHDRAWAL;
         update_withdrawal_flags(ch);
@@ -538,7 +540,7 @@ void render_drug_info_for_targ(struct char_data *ch, struct char_data *targ) {
       continue;
 
     printed_something = TRUE;
-    send_to_char(ch, " - ^c%s^n (edg %d, add %d, doses %d, lstfx %d, addt %d, toler %d, lstwith %d, dur %d, current dose %d, stage %d)\r\n",
+    send_to_char(ch, " - ^c%s^n (edg %d, add %d, doses %d, lstfx %ld, addt %d, toler %d, lstwith %d, dur %d, current dose %d, stage %d)\r\n",
                  drug_types[drug_id].name,
                  GET_DRUG_ADDICTION_EDGE(targ, drug_id),
                  GET_DRUG_ADDICT(targ, drug_id),

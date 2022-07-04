@@ -17,14 +17,15 @@ void    clear_all_drug_data_for_char(struct char_data *ch);
 #define GET_DRUG_ADDICTION_EDGE(ch, i)             (ch->player_specials->drugs[i][0])
 #define GET_DRUG_ADDICT(ch, i)                     (ch->player_specials->drugs[i][1])
 #define GET_DRUG_LIFETIME_DOSES(ch, i)             (ch->player_specials->drugs[i][2])
-#define GET_DRUG_LAST_FIX(ch, i)                   (ch->player_specials->drugs[i][3])
-#define GET_DRUG_ADDICTION_TICK_COUNTER(ch, i)     (ch->player_specials->drugs[i][4])
-#define GET_DRUG_TOLERANCE_LEVEL(ch, i)            (ch->player_specials->drugs[i][5])
-#define GET_DRUG_LAST_WITHDRAWAL_TICK(ch, i)       (ch->player_specials->drugs[i][6])
-#define GET_DRUG_DURATION(ch, i)                   (ch->player_specials->drugs[i][7])
-#define GET_DRUG_DOSE(ch, i)                       (ch->player_specials->drugs[i][8])
-#define GET_DRUG_STAGE(ch, i)                      (ch->player_specials->drugs[i][9])
-#define NUM_DRUG_PLAYER_SPECIAL_FIELDS                                            10
+#define GET_DRUG_ADDICTION_TICK_COUNTER(ch, i)     (ch->player_specials->drugs[i][3])
+#define GET_DRUG_TOLERANCE_LEVEL(ch, i)            (ch->player_specials->drugs[i][4])
+#define GET_DRUG_LAST_WITHDRAWAL_TICK(ch, i)       (ch->player_specials->drugs[i][5])
+#define GET_DRUG_DURATION(ch, i)                   (ch->player_specials->drugs[i][6])
+#define GET_DRUG_DOSE(ch, i)                       (ch->player_specials->drugs[i][7])
+#define GET_DRUG_STAGE(ch, i)                      (ch->player_specials->drugs[i][8])
+#define NUM_DRUG_PLAYER_SPECIAL_FIELDS                                            9
+
+#define GET_DRUG_LAST_FIX(ch, i)                   (ch->player_specials->drug_last_fix[i])
 
 #define MIN_DRUG                     1
 #define DRUG_ACTH                    1

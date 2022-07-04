@@ -663,6 +663,7 @@ struct player_special_data
   sh_int *mob_complete;
   long last_quest[QUEST_TIMER];
   ush_int drugs[NUM_DRUGS][NUM_DRUG_PLAYER_SPECIAL_FIELDS];
+  time_t drug_last_fix[NUM_DRUGS];
   ubyte mental_loss;
   ubyte physical_loss;
   ubyte perm_bod;
@@ -670,12 +671,14 @@ struct player_special_data
 
   player_special_data() :
       aliases(NULL), remem(NULL), last_tell(0), questnum(0), obj_complete(NULL),
-      mob_complete(NULL), mental_loss(0), physical_loss(0), perm_bod(0), watching(NULL)
+      mob_complete(NULL), mental_loss(0), physical_loss(0),
+      perm_bod(0), watching(NULL)
   {
     ZERO_OUT_ARRAY(last_quest, QUEST_TIMER);
+    ZERO_OUT_ARRAY(drug_last_fix, NUM_DRUGS);
 
     for (int i = 0; i < NUM_DRUGS; i++) {
-      ZERO_OUT_ARRAY(drugs[i], 10);
+      ZERO_OUT_ARRAY(drugs[i], NUM_DRUG_PLAYER_SPECIAL_FIELDS);
     }
   }
 }
