@@ -1785,7 +1785,8 @@ enum {
 #define MOD_PHONE    25
 #define MOD_RADIO    26
 #define MOD_MOUNT    27
-#define NUM_MODS    28
+#define MOD_POKEYSTICK  28
+#define NUM_MODS    29
 
 #define TYPE_ENGINECUST    1
 #define TYPE_NOS    2
