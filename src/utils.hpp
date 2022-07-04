@@ -130,6 +130,8 @@ int     calculate_vehicle_weight(struct veh_data *veh);
 char *  replace_neutral_color_codes(const char *input, const char *replacement_code);
 bool    repair_vehicle_seating(struct veh_data *veh);
 
+struct obj_data *has_obj_with_vnum(struct char_data *ch, vnum_t vnum);
+
 void load_vehicle_brain(struct veh_data *veh);
 void remove_vehicle_brain(struct veh_data *veh);
 

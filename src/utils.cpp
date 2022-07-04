@@ -3088,6 +3088,37 @@ struct char_data *get_obj_possessor(struct obj_data *obj) {
   return get_obj_worn_by_recursive(obj);
 }
 
+// Given a character and a vnum, returns true if it's in their inventory, worn, or in the top level of a container in either slot.
+// Does not unequip the object, so be careful about extracting etc!
+struct obj_data *has_obj_with_vnum(struct char_data *ch, vnum_t vnum) {
+  for (struct obj_data *recom = ch->carrying; recom; recom = recom->next_content) {
+    if (GET_OBJ_VNUM(recom) == vnum) {
+      return recom;
+    }
+    if (recom->contains) {
+      for (struct obj_data *child = recom->contains; child; child = child->next_content) {
+        if (GET_OBJ_VNUM(child) == OBJ_MAGE_LETTER) {
+          return child;
+        }
+      }
+    }
+  }
+  for (int i = 0; i < NUM_WEARS; i++) {
+    struct obj_data *recom = GET_EQ(ch, i);
+    if (GET_OBJ_VNUM(recom) == OBJ_MAGE_LETTER) {
+      return recom;
+    }
+    if (recom->contains) {
+      for (struct obj_data *child = recom->contains; child; child = child->next_content) {
+        if (GET_OBJ_VNUM(child) == OBJ_MAGE_LETTER) {
+          return child;
+        }
+      }
+    }
+  }
+  return NULL;
+}
+
 // Creates a NEW loggable string from an object. YOU MUST DELETE [] THE OUTPUT OF THIS.
 char *generate_new_loggable_representation(struct obj_data *obj) {
   char log_string[MAX_STRING_LENGTH];

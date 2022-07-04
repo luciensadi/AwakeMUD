@@ -1052,12 +1052,8 @@ void list_one_char(struct char_data * i, struct char_data * ch)
       || mob_index[GET_MOB_RNUM(i)].func == mageskill_nightwing
       || mob_index[GET_MOB_RNUM(i)].sfunc == mageskill_nightwing
     ) {
-      for (struct obj_data *recom = ch->carrying; recom; recom = recom->next_content) {
-        if (GET_OBJ_VNUM(recom) == OBJ_MAGE_LETTER) {
-          strlcat(buf, "^Y(Skill Quest)^n ", sizeof(buf));
-          break;
-        }
-      }
+      if (has_obj_with_vnum(ch, OBJ_MAGE_LETTER))
+        strlcat(buf, "^Y(Skill Quest)^n ", sizeof(buf));
     }
 #ifdef USE_PRIVATE_CE_WORLD
     else if (
@@ -1072,11 +1068,8 @@ void list_one_char(struct char_data * i, struct char_data * ch)
       || mob_index[GET_MOB_RNUM(i)].func == marksmanship_master
       || mob_index[GET_MOB_RNUM(i)].sfunc == marksmanship_master
     ) {
-      for (struct obj_data *recom = ch->carrying; recom; recom = recom->next_content) {
-        if (GET_OBJ_VNUM(recom) == OBJ_MARKSMAN_LETTER) {
-          strlcat(buf, "^Y(Skill Quest)^n ", sizeof(buf));
-          break;
-        }
+      if (has_obj_with_vnum(ch, OBJ_MARKSMAN_LETTER)) {
+        strlcat(buf, "^Y(Skill Quest)^n ", sizeof(buf));
       }
     }
 #endif
