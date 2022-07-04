@@ -414,7 +414,6 @@ void apply_drug_modifiers_to_ch(struct char_data *ch) {
 // Called once per in-game hour.
 void process_withdrawal(struct char_data *ch) {
   time_t current_time = time(0);
-  send_to_char(ch, "process_withdrawal ticking\r\n");
   // Iterate through all drugs.
   for (int drug_id = MIN_DRUG; drug_id < NUM_DRUGS; drug_id++) {
     // Calculate time since last fix.
@@ -510,12 +509,6 @@ void process_withdrawal(struct char_data *ch) {
         }
       }
     } else if (GET_DRUG_ADDICT(ch, drug_id)) {
-      send_to_char(ch, "%s process_withdrawal while addicted: tsl %ld, f_f %d, >? %s\r\n",
-                   drug_types[drug_id].name,
-                   time_since_last_fix,
-                   drug_types[drug_id].fix_factor,
-                   time_since_last_fix > drug_types[drug_id].fix_factor ? "TRUE" : "FALSE"
-                 );
       // They weren't in withdrawal: Put them into that state if they've passed their fix limit.
       if (time_since_last_fix > drug_types[drug_id].fix_factor) {
         send_to_char(ch, "You begin to go into forced %s withdrawal.\r\n", drug_types[drug_id].name);
