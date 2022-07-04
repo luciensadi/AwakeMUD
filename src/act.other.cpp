@@ -1447,13 +1447,17 @@ ACMD(do_skills)
       send_to_char("You do not have any abilities.\r\n", ch);
       return;
     }
+    if(subcmd == SCMD_ABILITIES) {
+      snprintf(ENDOF(buf), sizeof(buf), "PP      Ability              Level (Active)\r\n");
+    }
     extern int max_ability(int i);
     for (i = 1; i < ADEPT_NUMPOWER; i++) {
       if (!mode_all && *arg && !is_abbrev(arg, adept_powers[i]))
         continue;
 
       if (GET_POWER_TOTAL(ch, i) > 0) {
-        snprintf(buf2, sizeof(buf2), "%-20s", adept_powers[i]);
+        extern int ability_cost(int abil, int level);
+        snprintf(buf2, sizeof(buf2), "%0.2f    %-20s", ((float)ability_cost(i, 1))/100, adept_powers[i]);
         if (max_ability(i) > 1)
           switch (i) {
           case ADEPT_KILLING_HANDS:
