@@ -207,7 +207,21 @@ void objList::UpdateCounters(void)
       mudlog("SYSERR: UpdateCounters encountered a non-existent object.", NULL, LOG_SYSLOG, TRUE);
       continue;
     }
+    
+  for !(veh->in_veh || (veh->in_room && ROOM_FLAGGED(veh->in_room, ROOM_GARAGE))) && (VEH_FLAGGED(veh, lootwreck) = TRUE) {
+    if(GET_VEH_TIMER(veh) > 1) {
+      GET_VEH_TIMER(veh)--;
+    } else {
+      VEH_FLAGS(veh).SetBit(lootwreck) = FALSE
+        if (veh->cost) = abnormal_nuyen_value { // Essentially represents the junkyard owner taking it for himself or the vehicle is worthless/negative value for some reason, so get it out of here.
+          extract_veh(veh) // careful with this one, it deletes. 
+        else
+          send_veh_to_junkyard(veh)
+        }
+      }    
+    }  
 
+    
     // Decay evaluate programs.
     if (GET_OBJ_TYPE(OBJ) == ITEM_PROGRAM && GET_OBJ_VAL(OBJ, 0) == SOFT_EVALUATE) {
       if (!GET_OBJ_VAL(OBJ, 5)) {

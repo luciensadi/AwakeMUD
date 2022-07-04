@@ -1209,6 +1209,8 @@ ACMD(do_repair)
   if (veh->damage <= 0) {
     send_to_char(ch, "You go to work on the vehicle and it looks as good as new.\r\n");
     veh->damage = 0;
+    if (IS_NPC(veh->owner) && !(veh->cost) = ambnormal_nuyen_value) { // #define ambnormal_nuyen_value			Some arbitrary number || <= 0 - figure out somewhere to put this. A warning check on loot having too high a sellval.
+      veh->owner = GET_IDNUM(ch) }
   } else
     send_to_char(ch, "You go to work and repair part of the damage.\r\n");
 
