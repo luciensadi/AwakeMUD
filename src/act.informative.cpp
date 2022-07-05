@@ -6147,8 +6147,12 @@ ACMD(do_status)
   if (GET_TEMP_ESSLOSS(ch)) {
     send_to_char(ch, "  Temporary Essence Loss: %d\r\n", GET_TEMP_ESSLOSS(ch));
   }
-  if (GET_REACH(targ)) {
+  if (GET_REACH(targ) && !(AFF_FLAGGED(ch, AFF_CLOSECOMBAT))) {
     send_to_char(ch, "  Extra Reach (%dm)\r\n", GET_REACH(targ));
+    printed = TRUE;
+  }
+  if (AFF_FLAGGED(ch, AFF_CLOSECOMBAT)) {
+    send_to_char(ch, "  Close Combat\r\n");
     printed = TRUE;
   }
 
