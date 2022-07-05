@@ -2530,19 +2530,24 @@ void matrix_update()
       host.payreset = FALSE;
     if (time_info.hours == 0) {
       if (host.type == HOST_DATASTORE && host.found <= 0 && !host.payreset) {
+        int rand_result;
         switch (host.colour) {
           case HOST_SECURITY_BLUE:
-            host.found = MIN(number(1, 6) - 1, MAX_PAYDATA_QTY_BLUE);
+            rand_result = number(1, 6) - 1;
+            host.found = MIN(rand_result, MAX_PAYDATA_QTY_BLUE);
             break;
           case HOST_SECURITY_GREEN:
-            host.found = MIN(number(1, 6) + number(1, 6) - 2, MAX_PAYDATA_QTY_GREEN);
+            rand_result = number(1, 6) + number(1, 6) - 2;
+            host.found = MIN(rand_result, MAX_PAYDATA_QTY_GREEN);
             break;
           case HOST_SECURITY_ORANGE:
-            host.found = MIN(number(1, 6) + number(1, 6), MAX_PAYDATA_QTY_ORANGE);
+            rand_result = number(1, 6) + number(1, 6);
+            host.found = MIN(rand_result, MAX_PAYDATA_QTY_ORANGE);
             break;
           case HOST_SECURITY_RED:
           case HOST_SECURITY_BLACK:
-            host.found = MIN(number(1, 6) + number(1, 6) + 2, MAX_PAYDATA_QTY_RED_BLACK);
+            rand_result = number(1, 6) + number(1, 6) + 2;
+            host.found = MIN(rand_result, MAX_PAYDATA_QTY_RED_BLACK);
             break;
           default:
             char oopsbuf[500];

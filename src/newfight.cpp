@@ -423,7 +423,9 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       // Minimum TN is 2.
       def->ranged->tn = MAX(def->ranged->tn, 2);
 
-      def->ranged->successes = MAX(success_test(def->ranged->dice, def->ranged->tn), 0);
+      // No, you CANNOT collapse these two lines into MAX(0, s_t()), because it calls s_t() twice.
+      def->ranged->successes = success_test(def->ranged->dice, def->ranged->tn);
+      def->ranged->successes = MAX(0, def->ranged->successes);
       att->ranged->successes -= def->ranged->successes;
 
       snprintf(rbuf, sizeof(rbuf), "Dodge: Dice %d (%d pool + %d sidestep), TN %d, Successes ^c%d^n.  This means attacker's net successes = ^c%d^n.",
@@ -687,11 +689,9 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     } else {
       strlcpy(rbuf, "Surprised-- defender gets no roll.", sizeof(rbuf));
       SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
-      att->melee->successes = MAX(1, success_test(att->melee->dice, att->melee->tn));
-      if (att->melee->successes < 1) {
-        mudlog("SUPER FUCKY ERR: despite surprising the defender, att->melee->successes was < 1.", att->ch, LOG_SYSLOG, TRUE);
-        att->melee->successes = 1;
-      }
+      // No, you CANNOT collapse these two lines into MAX(1, success_test()), because it calls s_t() twice.
+      att->melee->successes = success_test(att->melee->dice, att->melee->tn);
+      att->melee->successes = MAX(1, att->melee->successes);
       def->melee->successes = 0;
     }
     net_successes = att->melee->successes - def->melee->successes;
@@ -708,7 +708,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     if (GET_POS(def->ch) <= POS_STUNNED) {
       strlcpy(rbuf, "Defender stunned/morted-- cannot win clash. Net will go no lower than 0.", sizeof(rbuf));
       SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
-      net_successes = MAX(1, net_successes);
+      net_successes = MAX(0, net_successes);
     }
 
     // Compose and send various messages.

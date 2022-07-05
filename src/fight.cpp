@@ -2125,7 +2125,9 @@ void docwagon(struct char_data *ch)
     }
     char_from_room(ch);
     char_to_room(ch, &world[i]);
-    creds = MAX((number(8, 12) * 500 / GET_DOCWAGON_CONTRACT_GRADE(docwagon)), (int)(GET_NUYEN(ch) / 10));
+
+    int dw_random_cost = number(8, 12) * 500 / GET_DOCWAGON_CONTRACT_GRADE(docwagon);
+    creds = MAX(dw_random_cost, (int)(GET_NUYEN(ch) / 10));
     send_to_char(ch, "DocWagon demands %d nuyen for your rescue.\r\n", creds);
     if ((GET_NUYEN(ch) + GET_BANK(ch)) < creds) {
       send_to_char("Not finding sufficient payment, your DocWagon contract was retracted.\r\n", ch);

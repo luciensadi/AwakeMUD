@@ -60,7 +60,8 @@ int get_maneuver(struct veh_data *veh)
     // TODO: What is this passage for? -LS
     int dummy_target = 0;
     for (skill = veh_skill(ch, veh, &dummy_target); skill > 0; skill--) {
-      x = MAX(x, srdice());
+      int sr_dice = srdice();
+      x = MAX(x, sr_dice);
     }
     score += x;
   }
