@@ -688,6 +688,10 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       strlcpy(rbuf, "Surprised-- defender gets no roll.", sizeof(rbuf));
       SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
       att->melee->successes = MAX(1, success_test(att->melee->dice, att->melee->tn));
+      if (att->melee->successes < 1) {
+        mudlog("SUPER FUCKY ERR: despite surprising the defender, att->melee->successes was < 1.", att->ch, LOG_SYSLOG, TRUE);
+        att->melee->successes = 1;
+      }
       def->melee->successes = 0;
     }
     net_successes = att->melee->successes - def->melee->successes;
@@ -701,10 +705,10 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
       net_successes = MAX(0, net_successes);
     }
-    else if (GET_POS(def->ch) <= POS_STUNNED) {
+    if (GET_POS(def->ch) <= POS_STUNNED) {
       strlcpy(rbuf, "Defender stunned/morted-- cannot win clash. Net will go no lower than 0.", sizeof(rbuf));
       SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
-      net_successes = MAX(0, net_successes);
+      net_successes = MAX(1, net_successes);
     }
 
     // Compose and send various messages.

@@ -106,6 +106,12 @@ ACMD(do_debug) {
 
   if (strn_cmp(arg1, "pgroups", strlen(arg1)) == 0) {
     do_pgroup_debug(ch, rest_of_argument);
+    return;
+  }
+
+  if (strn_cmp(arg1, "maxfunc", strlen(arg1)) == 0) {
+    send_to_char(ch, "MAX(-1, 1) = %d", MAX(-1, 1));
+    return;
   }
 
   if (access_level(ch, LVL_PRESIDENT) && is_abbrev(arg1, "invis")) {
