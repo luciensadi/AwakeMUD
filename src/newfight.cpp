@@ -697,7 +697,12 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
 
     if (def->weapon && GET_OBJ_TYPE(def->weapon) != ITEM_WEAPON) {
       // Defender's wielding a non-weapon? Whoops, net successes will never be less than 0.
-      strlcpy(rbuf, "Defender wielding non-weapon-- cannot win clash.", sizeof(rbuf));
+      strlcpy(rbuf, "Defender wielding non-weapon-- cannot win clash. Net will go no lower than 0.", sizeof(rbuf));
+      SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
+      net_successes = MAX(0, net_successes);
+    }
+    else if (GET_POS(def->ch) <= POS_STUNNED) {
+      strlcpy(rbuf, "Defender stunned/morted-- cannot win clash. Net will go no lower than 0.", sizeof(rbuf));
       SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
       net_successes = MAX(0, net_successes);
     }
