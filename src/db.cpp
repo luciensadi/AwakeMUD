@@ -1946,7 +1946,7 @@ void parse_object(File &fl, long nr)
         if (GET_OBJ_DRUG_DOSES(obj) <= 0)
           GET_OBJ_DRUG_DOSES(obj) = 1;
         if (GET_OBJ_DRUG_TYPE(obj) < MIN_DRUG || GET_OBJ_DRUG_TYPE(obj) >= NUM_DRUGS) {
-          log_vfprintf("BUILD ERROR: Drug vnum %ld had invalid type %d!", OBJ_VNUM_RNUM(nr), GET_OBJ_DRUG_TYPE(obj));
+          log_vfprintf("BUILD ERROR: Drug %s had invalid type %d!", GET_OBJ_NAME(obj), GET_OBJ_DRUG_TYPE(obj));
           GET_OBJ_COST(obj) = 0;
         } else {
           GET_OBJ_COST(obj) = GET_OBJ_DRUG_DOSES(obj) * drug_types[GET_OBJ_DRUG_TYPE(obj)].cost;
