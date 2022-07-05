@@ -182,7 +182,7 @@ bool process_drug_point_update_tick(struct char_data *ch) {
 
       // Staff get accelerated comedowns.
       if (GET_LEVEL(ch) > LVL_MORTAL && GET_DRUG_DURATION(ch, drug_id) > 0) {
-        send_to_char(ch, "Staff; Accelerating drug comedown duration from %d to 4s for easier testing.", GET_DRUG_DURATION(ch, drug_id));
+        send_to_char(ch, "Staff; Accelerating drug comedown duration from %d to 4s for easier testing.\r\n", GET_DRUG_DURATION(ch, drug_id));
         GET_DRUG_DURATION(ch, drug_id) = 2;
       }
 
@@ -309,7 +309,7 @@ bool process_drug_point_update_tick(struct char_data *ch) {
 
       // Staff get short uptimes for testing.
       if (GET_LEVEL(ch) > LVL_MORTAL && GET_DRUG_DURATION(ch, drug_id) > 0) {
-        send_to_char(ch, "Staff: Accelerating drug onset duration from %d to 4s for easier testing.", GET_DRUG_DURATION(ch, drug_id));
+        send_to_char(ch, "Staff: Accelerating drug onset duration from %d to 4s for easier testing.\r\n", GET_DRUG_DURATION(ch, drug_id));
         GET_DRUG_DURATION(ch, drug_id) = 2;
       }
     }
@@ -420,7 +420,7 @@ void process_withdrawal(struct char_data *ch) {
     time_t time_since_last_fix = (current_time - GET_DRUG_LAST_FIX(ch, drug_id)) / (IS_SENATOR(ch) ? 5 : SECS_PER_MUD_DAY);
 
     // If they're not currently high / coming down, tick down their dose (it metabolizes away).
-    if (GET_DRUG_STAGE(ch, drug_id) != DRUG_STAGE_ONSET && GET_DRUG_STAGE(ch, drug_id) != DRUG_STAGE_COMEDOWN)
+    if (GET_DRUG_DOSE(ch, drug_id) > 0 && (GET_DRUG_STAGE(ch, drug_id) != DRUG_STAGE_ONSET && GET_DRUG_STAGE(ch, drug_id) != DRUG_STAGE_COMEDOWN))
       GET_DRUG_DOSE(ch, drug_id)--;
 
     // Tick up addiction / withdrawal stat losses. Houseruled from Addiction Effects (M&M p109).
