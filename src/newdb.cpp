@@ -431,7 +431,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
   // Unset the cyberdoc flag on load.
   PRF_FLAGS(ch).RemoveBit(PRF_TOUCH_ME_DADDY);
 
-  ch->player.physical_text.room_desc = str_dup(row[9]);
+  ch->player.physical_text.room_desc = str_dup(get_string_after_color_code_removal(row[9], ch));
   ch->player.background = str_dup(row[10]);
   ch->player.physical_text.keywords = str_dup(row[11]);
   ch->player.physical_text.name = str_dup(row[12]);

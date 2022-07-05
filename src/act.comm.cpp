@@ -898,8 +898,9 @@ ACMD(do_broadcast)
   else
     crypt = 0;
 
-  char untouched_message[MAX_STRING_LENGTH], capitalized_and_punctuated[MAX_STRING_LENGTH];
-  snprintf(capitalized_and_punctuated, sizeof(capitalized_and_punctuated), "%s%s", capitalize(argument), ispunct(get_final_character_from_string(argument)) ? "" : ".");
+  char untouched_message[MAX_STRING_LENGTH], capitalized_and_punctuated[MAX_STRING_LENGTH], color_stripped_arg[MAX_STRING_LENGTH];
+  strlcpy(color_stripped_arg, get_string_after_color_code_removal(argument, ch), sizeof(color_stripped_arg));
+  snprintf(capitalized_and_punctuated, sizeof(capitalized_and_punctuated), "%s%s", capitalize(color_stripped_arg), ispunct(get_final_character_from_string(argument)) ? "" : ".");
   if (frequency > 0) {
     if (crypt)
       snprintf(untouched_message, sizeof(untouched_message), "^y\\%s^y/[%d MHz, %s](CRYPTO-%d): %s^N", voice, frequency, skills[language].name, crypt, capitalized_and_punctuated);
@@ -973,7 +974,7 @@ ACMD(do_broadcast)
 
           // Copy in the message body, mangling it as needed for language skill issues.
           snprintf(message, sizeof(message), "%s%s",
-                   capitalize(replace_too_long_words(d->character, ch, argument, language, "^y", PRF_FLAGGED(d->character, PRF_SUPPRESS_STAFF_RADIO))),
+                   capitalize(replace_too_long_words(d->character, ch, color_stripped_arg, language, "^y", PRF_FLAGGED(d->character, PRF_SUPPRESS_STAFF_RADIO))),
                    ispunct(get_final_character_from_string(argument)) ? "" : ".");
 
           // Add in interference if there is any.

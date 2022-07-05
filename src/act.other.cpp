@@ -2461,7 +2461,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
         snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), ", Physical_Name='%s'", prepare_quotes(buf3, CH->player.physical_text.name, sizeof(buf3) / sizeof(buf3[0])));
 
         DELETE_ARRAY_IF_EXTANT(CH->player.physical_text.room_desc);
-        CH->player.physical_text.room_desc = str_dup(d->edit_mob->player.physical_text.room_desc);
+        CH->player.physical_text.room_desc = str_dup(get_string_after_color_code_removal(d->edit_mob->player.physical_text.room_desc, CH));
         snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), ", Voice='%s'", prepare_quotes(buf3, CH->player.physical_text.room_desc, sizeof(buf3) / sizeof(buf3[0])));
 
         DELETE_ARRAY_IF_EXTANT(CH->player.physical_text.look_desc);
@@ -2658,7 +2658,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
     }
 
     DELETE_ARRAY_IF_EXTANT(d->edit_mob->player.physical_text.room_desc);
-    d->edit_mob->player.physical_text.room_desc = str_dup(arg);
+    d->edit_mob->player.physical_text.room_desc = str_dup(get_string_after_color_code_removal(arg, CH));
     cedit_disp_menu(d, 0);
 
     break;
