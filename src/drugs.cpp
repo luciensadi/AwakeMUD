@@ -99,7 +99,8 @@ bool process_drug_point_update_tick(struct char_data *ch) {
 
     // All drugs are ticked down as long as you're on them.
     if (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_ONSET || GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_COMEDOWN)
-      GET_DRUG_DURATION(ch, drug_id) -= 1;
+      if (GET_DRUG_DURATION(ch, drug_id) > 0)
+        GET_DRUG_DURATION(ch, drug_id)--;
 
     // They're already on it and lost their last tick of uptime. Switch to comedown.
     if (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_ONSET && GET_DRUG_DURATION(ch, drug_id) <= 0) {
@@ -414,6 +415,7 @@ void apply_drug_modifiers_to_ch(struct char_data *ch) {
 // Called once per in-game hour.
 void process_withdrawal(struct char_data *ch) {
   time_t current_time = time(0);
+
   // Iterate through all drugs.
   for (int drug_id = MIN_DRUG; drug_id < NUM_DRUGS; drug_id++) {
     // Calculate time since last fix.
@@ -422,6 +424,15 @@ void process_withdrawal(struct char_data *ch) {
     // If they're not currently high / coming down, tick down their dose (it metabolizes away).
     if (GET_DRUG_DOSE(ch, drug_id) > 0 && (GET_DRUG_STAGE(ch, drug_id) != DRUG_STAGE_ONSET && GET_DRUG_STAGE(ch, drug_id) != DRUG_STAGE_COMEDOWN))
       GET_DRUG_DOSE(ch, drug_id)--;
+
+    // If they're currently unaffected but have a tolerance, tick down tolerance-- speed configurable in config.hpp.
+    if (!GET_DRUG_ADDICT(ch, drug_id)
+        && GET_DRUG_TOLERANCE_LEVEL(ch, drug_id) > 0
+        && GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_UNAFFECTED
+        && number(0, AVG_HOURS_PER_TOLERANCE_TICKDOWN) == 0)
+    {
+      GET_DRUG_TOLERANCE_LEVEL(ch, drug_id)--;
+    }
 
     // Tick up addiction / withdrawal stat losses. Houseruled from Addiction Effects (M&M p109).
     if (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_GUIDED_WITHDRAWAL || GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_FORCED_WITHDRAWAL) {
@@ -817,11 +828,10 @@ void seek_drugs(struct char_data *ch, int drug_id) {
 
   send_to_char("You enter a fugue state! By the time you recover, you're somewhere else entirely, with a familiar feeling running through your veins...\r\n", ch);
 
-  int sought_dosage = GET_DRUG_TOLERANCE_LEVEL(ch, drug_id) + 2;
+  int sought_dosage = GET_DRUG_TOLERANCE_LEVEL(ch, drug_id) * 1.5;
 
   lose_nuyen(ch, INVOLUNTARY_DRUG_PURCHASE_COST_PER_DOSE * sought_dosage, NUYEN_OUTFLOW_GENERIC_SPEC_PROC);
   _apply_doses_of_drug_to_char(sought_dosage, drug_id, ch);
-  GET_DRUG_STAGE(ch, drug_id) = DRUG_STAGE_ONSET;
   update_withdrawal_flags(ch);
 
   char_from_room(ch);
