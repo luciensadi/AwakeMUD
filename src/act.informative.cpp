@@ -1977,6 +1977,30 @@ void look_in_direction(struct char_data * ch, int dir)
       char_from_room(ch);
       char_to_room(ch, original_loc);
     }
+    if (ROOM_FLAGGED(EXIT(ch, door)->to_room, ROOM_CAGE)){
+      /* You can see through cage bars. */
+      struct room_data *original_loc = ch->in_room;
+      struct room_data *targ_loc = EXIT(ch, dir)->to_room;
+      send_to_char("Through the cage bars, you see:\r\n", ch);
+
+      char_from_room(ch);
+      char_to_room(ch, targ_loc);
+      look_at_room(ch, 1, 0);
+      char_from_room(ch);
+      char_to_room(ch, original_loc);
+    }
+    if EXIT(ch, door)->exit_info, EX_WINDOWED)){
+      /* You can see through windows. */
+      struct room_data *original_loc = ch->in_room;
+      struct room_data *targ_loc = EXIT(ch, dir)->to_room;
+      send_to_char("Through the window, you see:\r\n", ch);
+
+      char_from_room(ch);
+      char_to_room(ch, targ_loc);
+      look_at_room(ch, 1, 0);
+      char_from_room(ch);
+      char_to_room(ch, original_loc);
+    }
   } else
     send_to_char("You see nothing special.\r\n", ch);
 }
