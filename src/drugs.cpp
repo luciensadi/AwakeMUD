@@ -25,7 +25,11 @@
    - on X tick, apply_drug_modifiers_to_ch modifiers char stats
 */
 
-// TODO: Re-evaluate penalties-- what stops someone from using drugs, going guided, and abusing them?
+// TODO: Balance pass on drugs / penalties / withdrawal costs
+// TODO: Drug quantities and USE X Y
+// TODO: Combinable drugs, also separatable
+// TODO: Auto-use should use up all the doses you have until you hit the right amount
+// TODO: Deal an extra box of damage every (body) dose taken at once; this can kill
 
 extern int raw_stat_loss(struct char_data *);
 extern bool check_adrenaline(struct char_data *, int);
@@ -38,6 +42,7 @@ void _apply_doses_of_drug_to_char(int doses, int drug_id, struct char_data *ch);
 bool _drug_dose_exceeds_tolerance(struct char_data *ch, int drug_id);
 bool _specific_addiction_test(struct char_data *ch, int drug_id, bool is_mental, const char *test_identifier);
 bool _combined_addiction_test(struct char_data *ch, int drug_id, const char *test_identifier, bool is_guided_withdrawal_check=FALSE);
+int _seek_drugs_purchase_cost(struct char_data *ch, int drug_id);
 void seek_drugs(struct char_data *ch, int drug_id);
 void update_withdrawal_flags(struct char_data *ch);
 
@@ -534,6 +539,8 @@ void process_withdrawal(struct char_data *ch) {
         GET_DRUG_LAST_WITHDRAWAL_TICK(ch, drug_id) = 0;
         GET_DRUG_ADDICTION_TICK_COUNTER(ch, drug_id) = 0;
         update_withdrawal_flags(ch);
+      } else if (number(0, 2) == 0) {
+        send_to_char(ch, "You crave %s.\r\n", drug_types[drug_id].name);
       }
     }
   }
@@ -613,15 +620,12 @@ void attempt_safe_withdrawal(struct char_data *ch, const char *target_arg) {
 
   // Charge them for it.
   int treatment_cost = GUIDED_WITHDRAWAL_ATTEMPT_NUYEN_COST_PER_EDGE * GET_DRUG_ADDICTION_EDGE(ch, drug_id);
-  int involuntary_dose_qty = 1 + GET_DRUG_TOLERANCE_LEVEL(ch, drug_id) * 1.5;
-  int involuntary_purchase_cost_per_dose = drug_types[drug_id].cost * drug_types[drug_id].street_idx;
-  int involuntary_purchase_total = INVOLUNTARY_DRUG_PURCHASE_COST_MULTIPLIER * involuntary_purchase_cost_per_dose * involuntary_dose_qty;
-  int total_cost_to_begin = treatment_cost + involuntary_purchase_total;
+  int total_cost_to_begin = treatment_cost + _seek_drugs_purchase_cost(ch, drug_id);
   if (GET_NUYEN(ch) < total_cost_to_begin) {
     send_to_char(ch, "You can't afford the chems to start the process. You need %d cash nuyen-- no credsticks allowed.\r\n", total_cost_to_begin);
     return;
   } else {
-    lose_nuyen(ch, treatment_cost, NUYEN_OUTFLOW_GENERIC_SPEC_PROC);
+    lose_nuyen(ch, treatment_cost, NUYEN_OUTFLOW_DRUGS);
   }
 
   // Test for success. If they fail, they immediately seek out drugs.
@@ -834,12 +838,24 @@ void seek_drugs(struct char_data *ch, int drug_id) {
     GET_POS(ch) = POS_STANDING;
   }
 
+  int sought_dosage = 1 + GET_DRUG_TOLERANCE_LEVEL(ch, drug_id) * 1.5;
+  int dosage_cost = _seek_drugs_purchase_cost(ch, drug_id);
+
+  if (GET_NUYEN(ch) < dosage_cost) {
+    send_to_char("You enter a fugue state, but without enough cash nuyen in your pockets to cover your drug habit, things take a turn for the worse...\r\n", ch);
+    lose_nuyen(ch, GET_NUYEN(ch), NUYEN_OUTFLOW_DRUGS);
+
+    char_from_room(ch);
+    char_to_room(ch, _get_random_drug_seller_room());
+    WAIT_STATE(ch, 5 RL_SEC);
+
+    damage(ch, ch, 10, TYPE_DRUGS, FALSE);
+    return;
+  }
+
   send_to_char("You enter a fugue state! By the time you recover, you're somewhere else entirely, with a familiar feeling running through your veins...\r\n", ch);
 
-  int sought_dosage = 1 + GET_DRUG_TOLERANCE_LEVEL(ch, drug_id) * 1.5;
-  int dosage_cost = INVOLUNTARY_DRUG_PURCHASE_COST_MULTIPLIER * sought_dosage * drug_types[drug_id].street_idx;
-
-  lose_nuyen(ch, dosage_cost, NUYEN_OUTFLOW_GENERIC_SPEC_PROC);
+  lose_nuyen(ch, dosage_cost, NUYEN_OUTFLOW_DRUGS);
   _apply_doses_of_drug_to_char(sought_dosage, drug_id, ch);
   update_withdrawal_flags(ch);
 
@@ -877,6 +893,14 @@ const char *get_time_until_withdrawal_ends(struct char_data *ch, int drug_id) {
 
   snprintf(time_buf, sizeof(time_buf), "%dh %dm %ds", rl_hours, rl_minutes, rl_secs);
   return (const char *) time_buf;
+}
+
+int _seek_drugs_purchase_cost(struct char_data *ch, int drug_id) {
+  int involuntary_dose_qty = 1 + GET_DRUG_TOLERANCE_LEVEL(ch, drug_id) * 1.5;
+  int involuntary_purchase_cost_per_dose = drug_types[drug_id].cost * drug_types[drug_id].street_idx;
+  int involuntary_purchase_total = INVOLUNTARY_DRUG_PURCHASE_COST_MULTIPLIER * involuntary_purchase_cost_per_dose * involuntary_dose_qty;
+
+  return involuntary_purchase_total;
 }
 
 // ----------------- Definitions for Drugs

@@ -2731,8 +2731,9 @@ enum {
 #define NUYEN_OUTFLOW_TRADE_COMMAND         24
 #define NUYEN_OUTFLOW_CREDSTICK_CRACKER     25
 #define NUYEN_OUTFLOW_DEATH_PENALTY         26
+#define NUYEN_OUTFLOW_DRUGS                 27
 
-#define NUM_OF_TRACKED_NUYEN_INCOME_SOURCES 27
+#define NUM_OF_TRACKED_NUYEN_INCOME_SOURCES 28
 // Make sure you update constants.cpp's nuyen_faucets_and_sinks[] too!
 
 #define NI_IS_SINK   0
