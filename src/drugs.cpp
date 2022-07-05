@@ -23,8 +23,6 @@
    - on X tick, apply_drug_modifiers_to_ch modifiers char stats
 */
 
-// TODO: Make sure that taking a drug removes the withdrawal status.
-
 extern int raw_stat_loss(struct char_data *);
 extern bool check_adrenaline(struct char_data *, int);
 
@@ -400,7 +398,9 @@ void apply_drug_modifiers_to_ch(struct char_data *ch) {
   }
 
   if (AFF_FLAGGED(ch, AFF_WITHDRAWAL_FORCE)) {
-    GET_MAX_MENTAL(ch) -= 300;
+    // M&M p110
+    GET_MAX_MENTAL(ch) = MIN(600, GET_MAX_MENTAL(ch));
+    GET_MENTAL(ch) = MIN(GET_MENTAL(ch), GET_MAX_MENTAL(ch));
     GET_TARGET_MOD(ch) += 3;
     GET_CONCENTRATION_TARGET_MOD(ch) += 6;
   } else if (AFF_FLAGGED(ch, AFF_WITHDRAWAL)) {
@@ -418,6 +418,10 @@ void process_withdrawal(struct char_data *ch) {
   for (int drug_id = MIN_DRUG; drug_id < NUM_DRUGS; drug_id++) {
     // Calculate time since last fix.
     time_t time_since_last_fix = (current_time - GET_DRUG_LAST_FIX(ch, drug_id)) / (IS_SENATOR(ch) ? 5 : SECS_PER_MUD_DAY);
+
+    // If they're not currently high / coming down, tick down their dose (it metabolizes away).
+    if (GET_DRUG_STAGE(ch, drug_id) != DRUG_STAGE_ONSET && GET_DRUG_STAGE(ch, drug_id) != DRUG_STAGE_COMEDOWN)
+      GET_DRUG_DOSE(ch, drug_id)--;
 
     // Tick up addiction / withdrawal stat losses. Houseruled from Addiction Effects (M&M p109).
     if (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_GUIDED_WITHDRAWAL || GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_FORCED_WITHDRAWAL) {
@@ -461,8 +465,7 @@ void process_withdrawal(struct char_data *ch) {
 
       // Tick down their addiction rating as they withdraw. Speed varies based on whether this is forced or not.
       if (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_GUIDED_WITHDRAWAL || GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_FORCED_WITHDRAWAL) {
-        // Decrement their edge, allowing their addiction rating to decrease
-        // TODO: When is last_with_tick set with an actual value? What happens if it's a while in the past?
+        // Decrement their edge, allowing their addiction rating to decrease.
         if (time_since_last_fix > GET_DRUG_LAST_WITHDRAWAL_TICK(ch, drug_id) + 1) {
           GET_DRUG_LAST_WITHDRAWAL_TICK(ch, drug_id) += (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_GUIDED_WITHDRAWAL ? 2 : 1);
           if (--GET_DRUG_ADDICTION_EDGE(ch, drug_id) <= 0) {
@@ -513,6 +516,8 @@ void process_withdrawal(struct char_data *ch) {
       if (time_since_last_fix > drug_types[drug_id].fix_factor) {
         send_to_char(ch, "You begin to go into forced %s withdrawal.\r\n", drug_types[drug_id].name);
         GET_DRUG_STAGE(ch, drug_id) = DRUG_STAGE_FORCED_WITHDRAWAL;
+        GET_DRUG_LAST_WITHDRAWAL_TICK(ch, drug_id) = 0;
+        GET_DRUG_ADDICTION_TICK_COUNTER(ch, drug_id) = 0;
         update_withdrawal_flags(ch);
       }
     }
@@ -610,6 +615,8 @@ void attempt_safe_withdrawal(struct char_data *ch, const char *target_arg) {
   // Put them in safe withdrawal.
   send_to_char(ch, "With the aid of a few chemical inducements, you begin the process of withdrawal from %s.\r\n", drug_types[drug_id].name);
   GET_DRUG_STAGE(ch, drug_id) = DRUG_STAGE_GUIDED_WITHDRAWAL;
+  GET_DRUG_LAST_WITHDRAWAL_TICK(ch, drug_id) = 0;
+  GET_DRUG_ADDICTION_TICK_COUNTER(ch, drug_id) = 0;
   update_withdrawal_flags(ch);
 
   return;
