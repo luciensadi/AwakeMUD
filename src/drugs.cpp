@@ -417,7 +417,7 @@ void process_withdrawal(struct char_data *ch) {
   // Iterate through all drugs.
   for (int drug_id = MIN_DRUG; drug_id < NUM_DRUGS; drug_id++) {
     // Calculate time since last fix.
-    time_t time_since_last_fix = (current_time - GET_DRUG_LAST_FIX(ch, drug_id)) / (IS_SENATOR(ch) ? 5 : SECS_PER_MUD_DAY);
+    time_t time_since_last_fix = (current_time - GET_DRUG_LAST_FIX(ch, drug_id)) / SECS_PER_MUD_DAY;
 
     // If they're not currently high / coming down, tick down their dose (it metabolizes away).
     if (GET_DRUG_DOSE(ch, drug_id) > 0 && (GET_DRUG_STAGE(ch, drug_id) != DRUG_STAGE_ONSET && GET_DRUG_STAGE(ch, drug_id) != DRUG_STAGE_COMEDOWN))
