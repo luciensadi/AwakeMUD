@@ -13,6 +13,8 @@
   - We do not reduce any maximums, although you can lose stats down to racial minimum from withdrawal.
   - Hyper deals up-front damage because we don't model the increased damage otherwise.
   - Kamikaze damages you when you come down.
+  - Decreased edge values (they were initially set based on tolerance being crippling)
+  A bunch more that I've forgotten to write down.
 */
 
 /* When taking drugs:
@@ -22,6 +24,8 @@
    - on X tick, process_withdrawal inflicts withdrawal symptoms, and also induces withdrawal for those who have gone without a fix
    - on X tick, apply_drug_modifiers_to_ch modifiers char stats
 */
+
+// TODO: Re-evaluate penalties-- what stops someone from using drugs, going guided, and abusing them?
 
 extern int raw_stat_loss(struct char_data *);
 extern bool check_adrenaline(struct char_data *, int);
@@ -74,7 +78,7 @@ void do_drug_take(struct char_data *ch, struct obj_data *obj) {
   // The message we give the character depends on if they've passed their tolerance dose yet.
   if (!_drug_dose_exceeds_tolerance(ch, drug_id)) {
     // They didn't take enough. Give the appropriate message.
-    send_to_char(ch, "You take %s, but it doesn't kick in-- you'll need to take more to surpass your tolerance.\r\n", GET_OBJ_NAME(obj));
+    send_to_char(ch, "You take %s, but it doesn't kick in-- you'll need to take more to surpass your tolerance of %d.\r\n", GET_OBJ_NAME(obj), GET_DRUG_TOLERANCE_LEVEL(ch, drug_id));
   } else {
     send_to_char(ch, "You take %s.\r\n", GET_OBJ_NAME(obj));
   }
@@ -556,17 +560,17 @@ void render_drug_info_for_targ(struct char_data *ch, struct char_data *targ) {
       continue;
 
     printed_something = TRUE;
-    send_to_char(ch, " - ^c%s^n (edg %d, add %d, doses %d, lstfx %ld, addt %d, toler %d, lstwith %d, dur %d, current dose %d, stage %d)\r\n",
+    send_to_char(ch, " - ^c%s^n (edg %d, add %s, lstfx %lds ago, addt %d, lstwith %d, dur %d, current dose %d/%d (%d lifetime), stage %d)\r\n",
                  drug_types[drug_id].name,
                  GET_DRUG_ADDICTION_EDGE(targ, drug_id),
-                 GET_DRUG_ADDICT(targ, drug_id),
-                 GET_DRUG_LIFETIME_DOSES(targ, drug_id),
-                 GET_DRUG_LAST_FIX(targ, drug_id),
+                 GET_DRUG_ADDICT(targ, drug_id) ? "Y" : "N",
+                 time(0) - GET_DRUG_LAST_FIX(targ, drug_id),
                  GET_DRUG_ADDICTION_TICK_COUNTER(targ, drug_id),
-                 GET_DRUG_TOLERANCE_LEVEL(targ, drug_id),
                  GET_DRUG_LAST_WITHDRAWAL_TICK(targ, drug_id),
                  GET_DRUG_DURATION(targ, drug_id),
                  GET_DRUG_DOSE(targ, drug_id),
+                 GET_DRUG_TOLERANCE_LEVEL(targ, drug_id),
+                 GET_DRUG_LIFETIME_DOSES(targ, drug_id),
                  GET_DRUG_STAGE(targ, drug_id));
   }
 
@@ -608,12 +612,16 @@ void attempt_safe_withdrawal(struct char_data *ch, const char *target_arg) {
   }
 
   // Charge them for it.
-  int total_cost_to_begin = GUIDED_WITHDRAWAL_ATTEMPT_NUYEN_COST + (INVOLUNTARY_DRUG_PURCHASE_COST_PER_DOSE * (GET_DRUG_TOLERANCE_LEVEL(ch, drug_id) + 1));
+  int treatment_cost = GUIDED_WITHDRAWAL_ATTEMPT_NUYEN_COST_PER_EDGE * GET_DRUG_ADDICTION_EDGE(ch, drug_id);
+  int involuntary_dose_qty = 1 + GET_DRUG_TOLERANCE_LEVEL(ch, drug_id) * 1.5;
+  int involuntary_purchase_cost_per_dose = drug_types[drug_id].cost * drug_types[drug_id].street_idx;
+  int involuntary_purchase_total = INVOLUNTARY_DRUG_PURCHASE_COST_MULTIPLIER * involuntary_purchase_cost_per_dose * involuntary_dose_qty;
+  int total_cost_to_begin = treatment_cost + involuntary_purchase_total;
   if (GET_NUYEN(ch) < total_cost_to_begin) {
     send_to_char(ch, "You can't afford the chems to start the process. You need %d cash nuyen-- no credsticks allowed.\r\n", total_cost_to_begin);
     return;
   } else {
-    lose_nuyen(ch, GUIDED_WITHDRAWAL_ATTEMPT_NUYEN_COST, NUYEN_OUTFLOW_GENERIC_SPEC_PROC);
+    lose_nuyen(ch, treatment_cost, NUYEN_OUTFLOW_GENERIC_SPEC_PROC);
   }
 
   // Test for success. If they fail, they immediately seek out drugs.
@@ -828,9 +836,10 @@ void seek_drugs(struct char_data *ch, int drug_id) {
 
   send_to_char("You enter a fugue state! By the time you recover, you're somewhere else entirely, with a familiar feeling running through your veins...\r\n", ch);
 
-  int sought_dosage = GET_DRUG_TOLERANCE_LEVEL(ch, drug_id) * 1.5;
+  int sought_dosage = 1 + GET_DRUG_TOLERANCE_LEVEL(ch, drug_id) * 1.5;
+  int dosage_cost = INVOLUNTARY_DRUG_PURCHASE_COST_MULTIPLIER * sought_dosage * drug_types[drug_id].street_idx;
 
-  lose_nuyen(ch, INVOLUNTARY_DRUG_PURCHASE_COST_PER_DOSE * sought_dosage, NUYEN_OUTFLOW_GENERIC_SPEC_PROC);
+  lose_nuyen(ch, dosage_cost, NUYEN_OUTFLOW_GENERIC_SPEC_PROC);
   _apply_doses_of_drug_to_char(sought_dosage, drug_id, ch);
   update_withdrawal_flags(ch);
 
@@ -855,21 +864,36 @@ void update_withdrawal_flags(struct char_data *ch) {
   affect_total(ch);
 }
 
+const char *get_time_until_withdrawal_ends(struct char_data *ch, int drug_id) {
+  static char time_buf[20];
+
+  int ig_days = GET_DRUG_ADDICTION_EDGE(ch, drug_id) - 1;
+  int rl_secs = time(0) - GET_DRUG_LAST_FIX(ch, drug_id) + (ig_days * SECS_PER_MUD_DAY);
+
+  int rl_hours = rl_secs / SECS_PER_REAL_HOUR;
+  rl_secs %= SECS_PER_REAL_HOUR;
+  int rl_minutes = rl_secs / SECS_PER_REAL_MIN;
+  rl_secs %= SECS_PER_REAL_MIN;
+
+  snprintf(time_buf, sizeof(time_buf), "%dh %dm %ds", rl_hours, rl_minutes, rl_secs);
+  return (const char *) time_buf;
+}
+
 // ----------------- Definitions for Drugs
 struct drug_data drug_types[] =
   {
-    // name,   power,   level, m_add, p_add, toler, edge_preadd, edge_posadd,  fix
-    { "Nothing",   0,       0,     0,     0,     0,           0,           0,    0
+    // name,   power,   level, m_add, p_add, toler, edge_preadd, edge_posadd,  fix, cost, street_idx
+    { "Nothing",   0,       0,     0,     0,     0,           0,           0,    0,    0,          0
     },
-    { "ACTH",      0,   LIGHT,     0,     0,     3,          10,           0,    0 },
-    { "Hyper",     6, SERIOUS,     0,     0,     0,           0,           0,    0 },
-    { "Jazz",      0,       0,     4,     5,     2,           2,           8,    3 },
-    { "Kamikaze",  0,       0,     0,     5,     2,           2,          10,    2 },
-    { "Psyche",    0,       4,     0,     2,    10,          20,           7,    0 },
-    { "Bliss",     0,       0,     5,     5,     2,           2,          30,    2 },
-    { "Burn",      3,  DEADLY,     2,     0,     2,          20,         100,    1 },
-    { "Cram",      0,       0,     4,     0,     2,           5,          50,    2 },
-    { "Nitro",     4,  DEADLY,     5,     8,     3,           2,           5,    3 },
-    { "Novacoke",  0,       0,     6,     5,     2,           3,          50,    2 },
-    { "Zen",       0,       0,     3,     0,     2,           5,          50,    2 }
+    { "ACTH",      0,   LIGHT,     0,     0,     3,          10,           0,    0,  100,          1 },
+    { "Hyper",     6, SERIOUS,     0,     0,     0,           0,           0,    0,  180,        0.9 },
+    { "Jazz",      0,       0,     4,     5,     2,           2,           5,    3,   40,          3  },
+    { "Kamikaze",  0,       0,     0,     5,     2,           2,           6,    2,   50,          5 },
+    { "Psyche",    0,       4,     0,     2,    10,           8,           4,    0,  500,          2 },
+    { "Bliss",     0,       0,     5,     5,     2,           2,          10,    2,   15,          2 },
+    { "Burn",      3,  DEADLY,     2,     0,     2,          10,         100,    1,    5,          1 },
+    { "Cram",      0,       0,     4,     0,     2,           5,          25,    2,   20,          1 },
+    { "Nitro",     4,  DEADLY,     5,     8,     3,           2,           3,    3,  100,          1 },
+    { "Novacoke",  0,       0,     6,     5,     2,           3,          25,    2,   20,          1 },
+    { "Zen",       0,       0,     3,     0,     2,           5,          25,    2,    5,          1 }
   };

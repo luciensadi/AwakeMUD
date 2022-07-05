@@ -1945,6 +1945,13 @@ void parse_object(File &fl, long nr)
       case ITEM_DRUG:
         if (GET_OBJ_DRUG_DOSES(obj) <= 0)
           GET_OBJ_DRUG_DOSES(obj) = 1;
+        if (GET_OBJ_DRUG_TYPE(obj) < MIN_DRUG || GET_OBJ_DRUG_TYPE(obj) >= NUM_DRUGS) {
+          log_vfprintf("BUILD ERROR: Drug vnum %ld had invalid type %d!", OBJ_VNUM_RNUM(nr), GET_OBJ_DRUG_TYPE(obj));
+          GET_OBJ_COST(obj) = 0;
+        } else {
+          GET_OBJ_COST(obj) = GET_OBJ_DRUG_DOSES(obj) * drug_types[GET_OBJ_DRUG_TYPE(obj)].cost;
+          GET_OBJ_STREET_INDEX(obj) = drug_types[GET_OBJ_DRUG_TYPE(obj)].street_idx;
+        }
         break;
       case ITEM_CYBERWARE:
         price_cyber(obj);

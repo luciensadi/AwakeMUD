@@ -6242,9 +6242,9 @@ ACMD(do_status)
     }
     else if (GET_DRUG_ADDICT(targ, i) > 0) {
       if (GET_DRUG_STAGE(targ, i) == DRUG_STAGE_GUIDED_WITHDRAWAL) {
-        send_to_char(ch, "  ^y%s Withdrawal (Guided)^n\r\n", drug_types[i].name);
+        send_to_char(ch, "  ^y%s Withdrawal (Guided): %s remaining^n\r\n", drug_types[i].name, get_time_until_withdrawal_ends(ch, i));
       } else if (GET_DRUG_STAGE(targ, i) == DRUG_STAGE_FORCED_WITHDRAWAL) {
-        send_to_char(ch, "  ^Y%s Withdrawal (Forced)^n\r\n", drug_types[i].name);
+        send_to_char(ch, "  ^Y%s Withdrawal (Forced): %s remaining^n\r\n", drug_types[i].name, get_time_until_withdrawal_ends(ch, i));
       } else {
         send_to_char(ch, "  Addicted to %s\r\n", drug_types[i].name);
       }

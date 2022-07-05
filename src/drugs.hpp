@@ -11,6 +11,7 @@ void    render_drug_info_for_targ(struct char_data *ch, struct char_data *targ);
 void    process_withdrawal(struct char_data *ch);
 void    attempt_safe_withdrawal(struct char_data *ch, const char *target_arg);
 float   get_drug_heal_multiplier(struct char_data *ch);
+const char* get_time_until_withdrawal_ends(struct char_data *ch, int drug_id);
 
 void    reset_all_drugs_for_char(struct char_data *ch);
 void    clear_all_drug_data_for_char(struct char_data *ch);
@@ -65,6 +66,8 @@ struct drug_data {
   unsigned char edge_preadd;
   unsigned char edge_posadd;
   unsigned char fix_factor;
+  int cost;
+  float street_idx;
 };
 
 extern struct drug_data drug_types[];
