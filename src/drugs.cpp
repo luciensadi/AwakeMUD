@@ -809,7 +809,7 @@ struct room_data *_get_random_drug_seller_room() {
     RM_AGGIES_DRUG_STORE,
     RM_DETENTION_CELL_A,
     RM_HEARL_STREET,
-    RM_ALONG_THIRD_STREET,
+    // RM_ALONG_THIRD_STREET,  /* not unless visa-free return is available */
     RM_ENTRANCE_TO_DANTES,
     RM_MASSAGE_PARLOR,
     RM_ABANDONED_CLOTHING_STORE
