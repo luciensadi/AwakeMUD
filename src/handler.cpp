@@ -817,6 +817,12 @@ void affect_total(struct char_data * ch)
   GET_MAX_MENTAL(ch) -= GET_MENTAL_LOSS(ch) * 100;
   GET_MAX_PHYSICAL(ch) -= GET_PHYSICAL_LOSS(ch) * 100;
 
+  // M&M p110
+  if (AFF_FLAGGED(ch, AFF_WITHDRAWAL_FORCE)) {
+    GET_MAX_MENTAL(ch) = MIN(600, GET_MAX_MENTAL(ch));
+    GET_MENTAL(ch) = MIN(GET_MENTAL(ch), GET_MAX_MENTAL(ch));
+  }
+
   if (GET_TRADITION(ch) == TRAD_ADEPT)
   {
     if (GET_INIT_DICE(ch) == 0)

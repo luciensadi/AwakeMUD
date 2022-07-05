@@ -110,6 +110,7 @@ void mental_gain(struct char_data * ch)
   gain = MAX(1, gain);
 
   GET_MENTAL(ch) = MIN(GET_MAX_MENTAL(ch), GET_MENTAL(ch) + gain);
+
   update_pos(ch);
 }
 

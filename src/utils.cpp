@@ -290,11 +290,6 @@ int damage_modifier(struct char_data *ch, char *rbuf, int rbuf_size)
   int mental = GET_MENTAL(ch) / 100;
   int base_target = 0;
 
-  // M&M p110
-  if (AFF_FLAGGED(ch, AFF_WITHDRAWAL_FORCE)) {
-    mental = MIN(mental, 6);
-  }
-
   for (struct obj_data *obj = ch->bioware; obj; obj = obj->next_content) {
     if (GET_BIOWARE_TYPE(obj) == BIO_DAMAGECOMPENSATOR) {
       physical += GET_BIOWARE_RATING(obj);
