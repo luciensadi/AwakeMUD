@@ -30,6 +30,7 @@
 // TODO: Combinable drugs, also separatable
 // TODO: Auto-use should use up all the doses you have until you hit the right amount
 // TODO: Deal an extra box of damage every (body) dose taken at once; this can kill
+// TODO: Make withdrawal happen faster, it currently takes IRL hours to begin- or figure out a way to make it feel better (start sooner and ramp up?)
 
 extern int raw_stat_loss(struct char_data *);
 extern bool check_adrenaline(struct char_data *, int);

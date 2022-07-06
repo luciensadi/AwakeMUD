@@ -1045,30 +1045,22 @@ void list_one_char(struct char_data * i, struct char_data * ch)
       }
     } else if (
       (i->in_room && (GET_ROOM_SPEC(i->in_room) == mageskill_moore || GET_ROOM_SPEC(i->in_room) == mageskill_hermes))
-      || mob_index[GET_MOB_RNUM(i)].func == mageskill_herbie
-      || mob_index[GET_MOB_RNUM(i)].sfunc == mageskill_herbie
-      || mob_index[GET_MOB_RNUM(i)].func == mageskill_anatoly
-      || mob_index[GET_MOB_RNUM(i)].sfunc == mageskill_anatoly
-      || mob_index[GET_MOB_RNUM(i)].func == mageskill_nightwing
-      || mob_index[GET_MOB_RNUM(i)].sfunc == mageskill_nightwing
+      || CHECK_FUNC_AND_SFUNC_FOR(i, mageskill_herbie)
+      || CHECK_FUNC_AND_SFUNC_FOR(i, mageskill_anatoly)
+      || CHECK_FUNC_AND_SFUNC_FOR(i, mageskill_nightwing)
     ) {
-      if (has_obj_with_vnum(ch, OBJ_MAGE_LETTER))
+      if (ch_has_obj_with_vnum(ch, OBJ_MAGE_LETTER))
         strlcat(buf, "^Y(Skill Quest)^n ", sizeof(buf));
     }
 #ifdef USE_PRIVATE_CE_WORLD
     else if (
-      mob_index[GET_MOB_RNUM(i)].func == marksmanship_first
-      || mob_index[GET_MOB_RNUM(i)].sfunc == marksmanship_first
-      || mob_index[GET_MOB_RNUM(i)].func == marksmanship_second
-      || mob_index[GET_MOB_RNUM(i)].sfunc == marksmanship_second
-      || mob_index[GET_MOB_RNUM(i)].func == marksmanship_third
-      || mob_index[GET_MOB_RNUM(i)].sfunc == marksmanship_third
-      || mob_index[GET_MOB_RNUM(i)].func == marksmanship_fourth
-      || mob_index[GET_MOB_RNUM(i)].sfunc == marksmanship_fourth
-      || mob_index[GET_MOB_RNUM(i)].func == marksmanship_master
-      || mob_index[GET_MOB_RNUM(i)].sfunc == marksmanship_master
+      CHECK_FUNC_AND_SFUNC_FOR(i, marksmanship_first)
+      || CHECK_FUNC_AND_SFUNC_FOR(i, marksmanship_second)
+      || CHECK_FUNC_AND_SFUNC_FOR(i, marksmanship_third)
+      || CHECK_FUNC_AND_SFUNC_FOR(i, marksmanship_fourth)
+      || CHECK_FUNC_AND_SFUNC_FOR(i, marksmanship_master)
     ) {
-      if (has_obj_with_vnum(ch, OBJ_MARKSMAN_LETTER)) {
+      if (ch_has_obj_with_vnum(ch, OBJ_MARKSMAN_LETTER)) {
         strlcat(buf, "^Y(Skill Quest)^n ", sizeof(buf));
       }
     }

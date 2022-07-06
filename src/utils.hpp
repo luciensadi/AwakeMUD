@@ -130,7 +130,8 @@ int     calculate_vehicle_weight(struct veh_data *veh);
 char *  replace_neutral_color_codes(const char *input, const char *replacement_code);
 bool    repair_vehicle_seating(struct veh_data *veh);
 
-struct obj_data *has_obj_with_vnum(struct char_data *ch, vnum_t vnum);
+struct obj_data *obj_is_or_contains_obj_with_vnum(struct obj_data *obj, vnum_t vnum);
+struct obj_data *ch_has_obj_with_vnum(struct char_data *ch, vnum_t vnum);
 
 void load_vehicle_brain(struct veh_data *veh);
 void remove_vehicle_brain(struct veh_data *veh);
@@ -1111,6 +1112,8 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 
 
 /* Misc utils ************************************************************/
+#define CHECK_FUNC_AND_SFUNC_FOR(npc, function) (mob_index[GET_MOB_RNUM(npc)].func == (function) || mob_index[GET_MOB_RNUM(npc)].sfunc == (function))
+
 #define IS_DAMTYPE_PHYSICAL(type) \
   !((type) == TYPE_HIT || (type) == TYPE_BLUDGEON || (type) == TYPE_PUNCH || (type) == TYPE_TASER || (type) == TYPE_CRUSH || (type) == TYPE_POUND)
 

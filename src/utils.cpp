@@ -3085,34 +3085,45 @@ struct char_data *get_obj_possessor(struct obj_data *obj) {
   return get_obj_worn_by_recursive(obj);
 }
 
+struct obj_data *obj_is_or_contains_obj_with_vnum(struct obj_data *obj, vnum_t vnum) {
+  if (!obj) {
+    return NULL;
+  }
+
+  if (GET_OBJ_VNUM(obj) == vnum) {
+    return obj;
+  }
+
+  if (obj->contains) {
+    for (struct obj_data *child = obj->contains; child; child = child->next_content) {
+      if (GET_OBJ_VNUM(child) == OBJ_MAGE_LETTER) {
+        return child;
+      }
+    }
+  }
+
+  return NULL;
+}
+
 // Given a character and a vnum, returns true if it's in their inventory, worn, or in the top level of a container in either slot.
 // Does not unequip the object, so be careful about extracting etc!
-struct obj_data *has_obj_with_vnum(struct char_data *ch, vnum_t vnum) {
-  for (struct obj_data *recom = ch->carrying; recom; recom = recom->next_content) {
-    if (GET_OBJ_VNUM(recom) == vnum) {
-      return recom;
-    }
-    if (recom->contains) {
-      for (struct obj_data *child = recom->contains; child; child = child->next_content) {
-        if (GET_OBJ_VNUM(child) == OBJ_MAGE_LETTER) {
-          return child;
-        }
-      }
+struct obj_data *ch_has_obj_with_vnum(struct char_data *ch, vnum_t vnum) {
+  struct obj_data *result = NULL;
+
+  // Check their carried objects.
+  for (struct obj_data *carried = ch->carrying; carried; carried = carried->next_content) {
+    if ((result = obj_is_or_contains_obj_with_vnum(carried, vnum))) {
+      return result;
     }
   }
+
+  // Check their equipped objects.
   for (int i = 0; i < NUM_WEARS; i++) {
-    struct obj_data *recom = GET_EQ(ch, i);
-    if (GET_OBJ_VNUM(recom) == OBJ_MAGE_LETTER) {
-      return recom;
-    }
-    if (recom->contains) {
-      for (struct obj_data *child = recom->contains; child; child = child->next_content) {
-        if (GET_OBJ_VNUM(child) == OBJ_MAGE_LETTER) {
-          return child;
-        }
-      }
+    if ((result = obj_is_or_contains_obj_with_vnum(GET_EQ(ch, i), vnum))) {
+      return result;
     }
   }
+
   return NULL;
 }
 
@@ -3945,44 +3956,42 @@ char *get_obj_name_with_padding(struct obj_data *obj, int padding) {
   return namestr;
 }
 
-#define CHECK_FUNC_AND_SFUNC_FOR(function) (mob_index[GET_MOB_RNUM(npc)].func == (function) || mob_index[GET_MOB_RNUM(npc)].sfunc == (function))
 // Returns TRUE if the NPC has a spec that should protect it from damage, FALSE otherwise.
 bool npc_is_protected_by_spec(struct char_data *npc) {
-  return (CHECK_FUNC_AND_SFUNC_FOR(shop_keeper)
-          || CHECK_FUNC_AND_SFUNC_FOR(johnson)
-          || CHECK_FUNC_AND_SFUNC_FOR(landlord_spec)
-          || CHECK_FUNC_AND_SFUNC_FOR(postmaster)
-          || CHECK_FUNC_AND_SFUNC_FOR(teacher)
-          || CHECK_FUNC_AND_SFUNC_FOR(metamagic_teacher)
-          || CHECK_FUNC_AND_SFUNC_FOR(trainer)
-          || CHECK_FUNC_AND_SFUNC_FOR(adept_trainer)
-          || CHECK_FUNC_AND_SFUNC_FOR(spell_trainer)
-          || CHECK_FUNC_AND_SFUNC_FOR(receptionist)
-          || CHECK_FUNC_AND_SFUNC_FOR(fixer)
-          || CHECK_FUNC_AND_SFUNC_FOR(fence)
-          || CHECK_FUNC_AND_SFUNC_FOR(taxi)
-          || CHECK_FUNC_AND_SFUNC_FOR(painter)
-          || CHECK_FUNC_AND_SFUNC_FOR(nerp_skills_teacher)
-          || CHECK_FUNC_AND_SFUNC_FOR(hacker));
+  return (CHECK_FUNC_AND_SFUNC_FOR(npc, shop_keeper)
+          || CHECK_FUNC_AND_SFUNC_FOR(npc, johnson)
+          || CHECK_FUNC_AND_SFUNC_FOR(npc, landlord_spec)
+          || CHECK_FUNC_AND_SFUNC_FOR(npc, postmaster)
+          || CHECK_FUNC_AND_SFUNC_FOR(npc, teacher)
+          || CHECK_FUNC_AND_SFUNC_FOR(npc, metamagic_teacher)
+          || CHECK_FUNC_AND_SFUNC_FOR(npc, trainer)
+          || CHECK_FUNC_AND_SFUNC_FOR(npc, adept_trainer)
+          || CHECK_FUNC_AND_SFUNC_FOR(npc, spell_trainer)
+          || CHECK_FUNC_AND_SFUNC_FOR(npc, receptionist)
+          || CHECK_FUNC_AND_SFUNC_FOR(npc, fixer)
+          || CHECK_FUNC_AND_SFUNC_FOR(npc, fence)
+          || CHECK_FUNC_AND_SFUNC_FOR(npc, taxi)
+          || CHECK_FUNC_AND_SFUNC_FOR(npc, painter)
+          || CHECK_FUNC_AND_SFUNC_FOR(npc, nerp_skills_teacher)
+          || CHECK_FUNC_AND_SFUNC_FOR(npc, hacker));
 }
 // Returns TRUE if the NPC should be able to see in any situation.
 bool npc_can_see_in_any_situation(struct char_data *npc) {
   if (!IS_NPC(npc))
     return FALSE;
 
-  return (CHECK_FUNC_AND_SFUNC_FOR(johnson)
-          || CHECK_FUNC_AND_SFUNC_FOR(teacher)
-          || CHECK_FUNC_AND_SFUNC_FOR(metamagic_teacher)
-          || CHECK_FUNC_AND_SFUNC_FOR(trainer)
-          || CHECK_FUNC_AND_SFUNC_FOR(adept_trainer)
-          || CHECK_FUNC_AND_SFUNC_FOR(spell_trainer)
-          || CHECK_FUNC_AND_SFUNC_FOR(taxi)
-          || CHECK_FUNC_AND_SFUNC_FOR(nerp_skills_teacher)
-          || CHECK_FUNC_AND_SFUNC_FOR(shop_keeper)
-          || CHECK_FUNC_AND_SFUNC_FOR(landlord_spec)
+  return (CHECK_FUNC_AND_SFUNC_FOR(npc, johnson)
+          || CHECK_FUNC_AND_SFUNC_FOR(npc, teacher)
+          || CHECK_FUNC_AND_SFUNC_FOR(npc, metamagic_teacher)
+          || CHECK_FUNC_AND_SFUNC_FOR(npc, trainer)
+          || CHECK_FUNC_AND_SFUNC_FOR(npc, adept_trainer)
+          || CHECK_FUNC_AND_SFUNC_FOR(npc, spell_trainer)
+          || CHECK_FUNC_AND_SFUNC_FOR(npc, taxi)
+          || CHECK_FUNC_AND_SFUNC_FOR(npc, nerp_skills_teacher)
+          || CHECK_FUNC_AND_SFUNC_FOR(npc, shop_keeper)
+          || CHECK_FUNC_AND_SFUNC_FOR(npc, landlord_spec)
         );
 }
-#undef CHECK_FUNC_AND_SFUNC_FOR
 
 bool can_damage_vehicle(struct char_data *ch, struct veh_data *veh) {
   if (veh->owner && GET_IDNUM(ch) != veh->owner) {
