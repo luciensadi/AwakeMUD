@@ -1939,6 +1939,18 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
   list_veh_to_char(ch->in_room->vehicles, ch);
 }
 
+void peek_into_adjacent(struct char_data * ch, int dir)
+{
+      struct room_data *original_loc = ch->in_room;
+      struct room_data *targ_loc = EXIT(ch, dir)->to_room;
+
+      char_from_room(ch);
+      char_to_room(ch, targ_loc);
+      look_at_room(ch, 1, 0);
+      char_from_room(ch);
+      char_to_room(ch, original_loc);
+}
+
 void look_in_direction(struct char_data * ch, int dir)
 {
   if (EXIT(ch, dir))
@@ -1967,39 +1979,18 @@ void look_in_direction(struct char_data * ch, int dir)
 
     if (ROOM_FLAGGED(ch->in_room, ROOM_HOUSE)){
       /* Apartments have peepholes. */
-      struct room_data *original_loc = ch->in_room;
-      struct room_data *targ_loc = EXIT(ch, dir)->to_room;
       send_to_char("Through the peephole, you see:\r\n", ch);
-
-      char_from_room(ch);
-      char_to_room(ch, targ_loc);
-      look_at_room(ch, 1, 0);
-      char_from_room(ch);
-      char_to_room(ch, original_loc);
+      peek_into_adjacent(ch, dir);
     }
-    if (ROOM_FLAGGED(EXIT(ch, door)->to_room, ROOM_CAGE)){
+    if (ROOM_FLAGGED(EXIT(ch, dir)->to_room, ROOM_CAGE)){
       /* You can see through cage bars. */
-      struct room_data *original_loc = ch->in_room;
-      struct room_data *targ_loc = EXIT(ch, dir)->to_room;
       send_to_char("Through the cage bars, you see:\r\n", ch);
-
-      char_from_room(ch);
-      char_to_room(ch, targ_loc);
-      look_at_room(ch, 1, 0);
-      char_from_room(ch);
-      char_to_room(ch, original_loc);
+      peek_into_adjacent(ch, dir);
     }
-    if EXIT(ch, door)->exit_info, EX_WINDOWED)){
+    if (IS_SET(EXIT(ch, dir)->exit_info, EX_WINDOWED)){
       /* You can see through windows. */
-      struct room_data *original_loc = ch->in_room;
-      struct room_data *targ_loc = EXIT(ch, dir)->to_room;
       send_to_char("Through the window, you see:\r\n", ch);
-
-      char_from_room(ch);
-      char_to_room(ch, targ_loc);
-      look_at_room(ch, 1, 0);
-      char_from_room(ch);
-      char_to_room(ch, original_loc);
+      peek_into_adjacent(ch, dir);
     }
   } else
     send_to_char("You see nothing special.\r\n", ch);
