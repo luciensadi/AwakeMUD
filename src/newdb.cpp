@@ -588,7 +588,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
     mysql_wrapper(mysql, buf);
     res = mysql_use_result(mysql);
     if ((row = mysql_fetch_row(res))) {
-      GET_REAL_MAG(ch) = atoi(row[1]);
+      GET_SETTABLE_REAL_MAG(ch) = atoi(row[1]);
       ch->real_abils.casting_pool = atoi(row[2]);
       ch->real_abils.spell_defense_pool = atoi(row[3]);
       ch->real_abils.drain_pool = atoi(row[4]);
@@ -1291,8 +1291,9 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
 
   /* Save magic info. */
   if (GET_TRADITION(player) != TRAD_MUNDANE) {
+    // The use of GET_SETTABLE_REAL_MAG() is intentional here, we don't want to cap the saved value to 20 magic.
     snprintf(buf, sizeof(buf), "UPDATE pfiles_magic SET Mag=%d, Pool_Casting=%d, Pool_SpellDefense=%d, Pool_Drain=%d, Pool_Reflecting=%d,"\
-                 "UsedGrade=%d, ExtraPower=%d, PowerPoints=%d, Sig=%d, Masking=%d, Totem=%d, TotemSpirit=%d, Aspect=%d WHERE idnum=%ld;", GET_REAL_MAG(player), GET_CASTING(player),
+                 "UsedGrade=%d, ExtraPower=%d, PowerPoints=%d, Sig=%d, Masking=%d, Totem=%d, TotemSpirit=%d, Aspect=%d WHERE idnum=%ld;", GET_SETTABLE_REAL_MAG(player), GET_CASTING(player),
                  GET_SDEFENSE(player), GET_DRAIN(player), GET_REFLECT(player), GET_GRADE(player), player->points.extrapp,
                  GET_PP(player), GET_SIG(player), GET_MASKING(player), GET_TOTEM(player), GET_TOTEMSPIRIT(player), GET_ASPECT(player),
                  GET_IDNUM(player));
@@ -2725,7 +2726,7 @@ void fix_character_essence_after_cybereye_migration(struct char_data *ch) {
           // Next, handle magic restoration if needed.
           if (GET_TRADITION(ch) != TRAD_MUNDANE) {
             total_magic_delta += essence_delta;
-            GET_REAL_MAG(ch) += essence_delta;
+            GET_SETTABLE_REAL_MAG(ch) += essence_delta;
           }
         }
 
@@ -2756,7 +2757,7 @@ void fix_character_essence_after_cybereye_migration(struct char_data *ch) {
             // Cause magic loss, BUT not in the standard way. Instead of stripping powers etc, we just reduce their magic stat.
             if (GET_TRADITION(ch) != TRAD_MUNDANE) {
               total_magic_delta -= ess_cost_after_esshole;
-              GET_REAL_MAG(ch) -= ess_cost_after_esshole;
+              GET_SETTABLE_REAL_MAG(ch) -= ess_cost_after_esshole;
             }
           }
         }

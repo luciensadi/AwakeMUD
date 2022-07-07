@@ -1817,7 +1817,7 @@ void magic_loss(struct char_data *ch, int magic, bool msg)
   if (GET_TRADITION(ch) == TRAD_MUNDANE)
     return;
 
-  GET_REAL_MAG(ch) = MAX(0, GET_REAL_MAG(ch) - magic);
+  GET_SETTABLE_REAL_MAG(ch) = MAX(0, GET_REAL_MAG(ch) - magic);
 
   if (GET_REAL_MAG(ch) < 100) {
     send_to_char(ch, "You feel the last of your magic leave your body.\r\n", ch);

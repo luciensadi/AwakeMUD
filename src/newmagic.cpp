@@ -5448,8 +5448,8 @@ void disp_geas_menu(struct descriptor_data *d)
 void disp_meta_menu(struct descriptor_data *d)
 {
   CLS(CH);
-  for (int i = 0; i < META_MAX; i++)
-    send_to_char(CH, "%d) %s%s^n\r\n", i + 1, can_metamagic(CH, i) ? "" : "^r", metamagic[i]);
+  for (int i = 1; i < META_MAX; i++)
+    send_to_char(CH, "%d) %s%s^n\r\n", i, can_metamagic(CH, i) ? "" : "^r", metamagic[i]);
   send_to_char("q) Quit Initiation\r\nSelect ability to learn: ", CH);
   d->edit_mode = INIT_META;
 }
@@ -5586,7 +5586,7 @@ void init_parse(struct descriptor_data *d, char *arg)
           init_cost(CH, TRUE);
           GET_SIG(CH)++;
           GET_GRADE(CH)++;
-          GET_REAL_MAG(CH) += 100;
+          GET_SETTABLE_REAL_MAG(CH) += 100;
           if (GET_TRADITION(CH) == TRAD_ADEPT)
             GET_PP(CH) += 100;
           send_to_char("You feel your astral reflection shift and mold itself closer to the astral plane.\r\n", CH);
@@ -5628,7 +5628,7 @@ void init_parse(struct descriptor_data *d, char *arg)
         }
         init_cost(CH, TRUE);
         GET_GRADE(CH)++;
-        GET_REAL_MAG(CH) += 100;
+        GET_SETTABLE_REAL_MAG(CH) += 100;
         GET_OBJ_VAL(obj, 9) = 0;
         if (GET_TRADITION(CH) == TRAD_ADEPT)
           GET_PP(CH) += 100;
@@ -5642,7 +5642,7 @@ void init_parse(struct descriptor_data *d, char *arg)
       if (!number) {
         STATE(d) = CON_PLAYING;
         send_to_char("Initiation cancelled.\r\n", CH);
-      } else if (--number > META_MAX) {
+      } else if (number > META_MAX) {
         send_to_char("Invalid Response. Select ability to learn: ", CH);
       } else if (!can_metamagic(CH, number)) {
         send_to_char("Your tradition/apect/initiation combination isn't able to learn that metamagic technique. Select ability to learn: ", CH);
@@ -5650,7 +5650,7 @@ void init_parse(struct descriptor_data *d, char *arg)
         init_cost(CH, TRUE);
         SET_METAMAGIC(CH, number, GET_METAMAGIC(CH, number) + 1);
         GET_GRADE(CH)++;
-        GET_REAL_MAG(CH) += 100;
+        GET_SETTABLE_REAL_MAG(CH) += 100;
         if (GET_TRADITION(CH) == TRAD_ADEPT)
           GET_PP(CH) += 100;
         send_to_char(CH, "You feel yourself grow closer to the astral plane as you become ready to learn %s.\r\n", metamagic[number]);

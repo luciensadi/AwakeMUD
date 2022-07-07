@@ -4197,7 +4197,6 @@ ACMD(do_break)
       return;
     }
 
-    extern void do_drug_take(struct char_data *ch, struct obj_data *obj);
     send_to_char("You bite down hard on the tooth compartment, breaking it open.\r\n", ch);
     obj_from_cyberware(obj);
     GET_ESSHOLE(ch) += GET_CYBERWARE_ESSENCE_COST(obj);

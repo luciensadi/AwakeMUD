@@ -5,7 +5,7 @@ extern int max_exp_gain;
 extern int max_pc_corpse_time;
 extern int max_npc_corpse_time;
 extern int DFLT_PORT;
-extern char *DFLT_DIR;
+extern const char *DFLT_DIR;
 extern int MAX_PLAYERS;
 extern int max_filesize;
 extern int max_bad_pws;
@@ -198,6 +198,9 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 #define OFFENSIVE_SPELL_WAIT_STATE_TIME                        (0.2  RL_SEC)
 #define FAILED_SPELL_LEARNING_WAIT_STATE                       (0.25 RL_SEC)
 #define INITIATION_CAP                                         50
+
+// This stat is x100 when stored, so the cap is 20 * 100 = 2000 aka 20 magic.
+#define MAGIC_CAP                                              2000
 
 #define MAX_MOB_COMBAT_MAGIC_FORCE                             10
 #define MIN_MOB_COMBAT_MAGIC_FORCE                             4

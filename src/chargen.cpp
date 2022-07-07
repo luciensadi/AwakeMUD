@@ -214,7 +214,7 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
 
   // Set magic data.
   GET_TRADITION(CH) = archetypes[i]->tradition;
-  GET_REAL_MAG(CH) = archetypes[i]->magic;
+  GET_SETTABLE_REAL_MAG(CH) = archetypes[i]->magic;
   GET_ASPECT(CH) = archetypes[i]->aspect;
 
   if (GET_TRADITION(CH) == TRAD_SHAMANIC) {
@@ -531,9 +531,9 @@ void set_attributes(struct char_data *ch, int magic)
 {
   // If the character is a magic user, their magic is equal to their essence (this is free).
   if (magic) {
-    GET_REAL_MAG(ch) = 600;
+    GET_SETTABLE_REAL_MAG(ch) = 600;
   } else {
-    GET_REAL_MAG(ch) = 0;
+    GET_SETTABLE_REAL_MAG(ch) = 0;
   }
 
   // Everyone starts with 0 bioware index and 6.00 essence.

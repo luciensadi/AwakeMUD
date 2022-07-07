@@ -4848,7 +4848,7 @@ ACMD(do_set)
       RANGE(0, 5000);
     else
       RANGE(0, 3000);
-    GET_REAL_MAG(vict) = value;
+    GET_SETTABLE_REAL_MAG(vict) = value;
     affect_total(vict);
     break;
   case 43:

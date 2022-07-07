@@ -26,9 +26,8 @@
 */
 
 // TODO: Balance pass on drugs / penalties / withdrawal costs
-// TODO: Drug quantities and USE X Y
-// TODO: Combinable drugs, also separatable
-// TODO: Auto-use should use up all the doses you have until you hit the right amount
+// TODO: Combinable drugs
+// TODO: TEST: Auto-use should use up all the doses you have until you hit the right amount
 // TODO: Deal an extra box of damage every (body) dose taken at once; this can kill
 // TODO: Make withdrawal happen faster, it currently takes IRL hours to begin- or figure out a way to make it feel better (start sooner and ramp up?)
 
@@ -73,10 +72,15 @@ void do_drug_take(struct char_data *ch, struct obj_data *obj) {
 
   // Right now, we apply maximum doses from the object. Later, we'll be smarter about this.
   // Many drugs exist without doses set, so we assume 0 doses means the drug is an old-style drug.
-  int drug_doses = GET_OBJ_DRUG_DOSES(obj) > 0 ? GET_OBJ_DRUG_DOSES(obj) : 1;
+  int available_drug_doses = GET_OBJ_DRUG_DOSES(obj) > 0 ? GET_OBJ_DRUG_DOSES(obj) : 1;
+  int taken_drug_doses = 0;
 
-  // Add doses to their current on-board as well as their lifetime total.
-  _apply_doses_of_drug_to_char(drug_doses, drug_id, ch);
+  // Onboard doses until the object runs out or they end up high (whichever comes first)
+  while (available_drug_doses && GET_DRUG_DOSE(ch, drug_id) <= GET_DRUG_TOLERANCE_LEVEL(ch, drug_id)) {
+    _apply_doses_of_drug_to_char(1, drug_id, ch);
+    available_drug_doses--;
+    taken_drug_doses++;
+  }
 
   // Message the room.
   act("$n takes $p.", TRUE, ch, obj, 0, TO_ROOM);
@@ -90,7 +94,7 @@ void do_drug_take(struct char_data *ch, struct obj_data *obj) {
   }
 
   // Remove the doses from the drug.
-  GET_OBJ_DRUG_DOSES(obj) -= drug_doses;
+  GET_OBJ_DRUG_DOSES(obj) -= taken_drug_doses;
   if (GET_OBJ_DRUG_DOSES(obj) <= 0) {
     // The drug has been finished off.
     extract_obj(obj);

@@ -75,7 +75,6 @@ const unsigned perfmon::kPulsePerSecond = PASSES_PER_SEC;
 extern int restrict_mud;
 /* extern FILE *player_fl; */
 extern int DFLT_PORT;
-extern char *DFLT_DIR;
 extern int MAX_PLAYERS;
 extern int MAX_DESCRIPTORS_AVAILABLE;
 extern bool _OVERRIDE_ALLOW_PLAYERS_TO_USE_ROLLS_;
@@ -199,7 +198,7 @@ int main(int argc, char **argv)
 #endif
 {
   int pos = 1;
-  char *dir;
+  const char *dir;
   port = DFLT_PORT;
   dir = DFLT_DIR;
   while ((pos < argc) && (*(argv[pos]) == '-')) {

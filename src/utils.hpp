@@ -13,6 +13,7 @@
 
 #include <stdio.h>
 #include "bitfield.hpp"
+#include "config.hpp"
 
 #if defined(osx)
 /* crypt() is defined in unistd.h in OSX. */
@@ -435,8 +436,9 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define GET_REAL_BOD(ch)           (GET_REAL_ATT((ch), BOD))
 #define GET_REAL_CHA(ch)           (GET_REAL_ATT((ch), CHA))
 #define GET_REAL_REA(ch)           (GET_REAL_ATT((ch), REA))
-#define GET_REAL_MAG(ch)           ((ch)->real_abils.mag)
+#define GET_REAL_MAG(ch)           (MIN((ch)->real_abils.mag, MAGIC_CAP))
 #define GET_REAL_ESS(ch)           ((ch)->real_abils.ess)
+#define GET_SETTABLE_REAL_MAG(ch)  ((ch)->real_abils.mag)
 
 #define GET_KARMA(ch)         ((ch)->points.karma)
 #define GET_REP(ch)           ((ch)->points.rep)

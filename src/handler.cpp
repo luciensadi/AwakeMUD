@@ -256,11 +256,11 @@ void affect_modify(struct char_data * ch,
 
 void apply_focus_effect( struct char_data *ch, struct obj_data *object )
 {
-  if (GET_OBJ_VAL(object, 2) != GET_IDNUM(ch) || !GET_OBJ_VAL(object, 4))
+  if (GET_FOCUS_BONDED_TO(object) != GET_IDNUM(ch) || !GET_FOCUS_ACTIVATED(object))
     return;
   if (GET_OBJ_VAL(object, 9) == GET_IDNUM(ch))
     GET_MAG(ch) += 100;
-  if (GET_OBJ_VAL(object, 0) == FOCI_POWER)
+  if (GET_FOCUS_TYPE(object) == FOCI_POWER)
   {
     GET_MAG(ch) += GET_OBJ_VAL(object, 1) * 100;
     GET_MAGIC(ch) += GET_OBJ_VAL(object, 1);
@@ -269,11 +269,11 @@ void apply_focus_effect( struct char_data *ch, struct obj_data *object )
 
 void remove_focus_effect( struct char_data *ch, struct obj_data *object )
 {
-  if (GET_OBJ_VAL(object, 2) != GET_IDNUM(ch) || !GET_OBJ_VAL(object, 4))
+  if (GET_FOCUS_BONDED_TO(object) != GET_IDNUM(ch) || !GET_FOCUS_ACTIVATED(object))
     return;
   if (GET_OBJ_VAL(object, 9) == GET_IDNUM(ch))
     GET_MAG(ch) -= 100;
-  if (GET_OBJ_VAL(object, 0) == FOCI_POWER)
+  if (GET_FOCUS_TYPE(object) == FOCI_POWER)
   {
     GET_MAG(ch) -= GET_OBJ_VAL(object, 1) * 100;
     GET_MAGIC(ch) -= GET_OBJ_VAL(object, 1);
