@@ -38,28 +38,28 @@ ACMD_DECLARE(do_use);
 ACMD_DECLARE(do_look);
 
 // ----------------- Helper Prototypes
-void _apply_doses_of_drug_to_char(int doses, int drug_id, struct char_data *ch);
+bool _apply_doses_of_drug_to_char(int doses, int drug_id, struct char_data *ch);
 bool _drug_dose_exceeds_tolerance(struct char_data *ch, int drug_id);
 bool _specific_addiction_test(struct char_data *ch, int drug_id, bool is_mental, const char *test_identifier);
 bool _combined_addiction_test(struct char_data *ch, int drug_id, const char *test_identifier, bool is_guided_withdrawal_check=FALSE);
 int _seek_drugs_purchase_cost(struct char_data *ch, int drug_id);
-void seek_drugs(struct char_data *ch, int drug_id);
+bool seek_drugs(struct char_data *ch, int drug_id);
 void update_withdrawal_flags(struct char_data *ch);
 
 
 // Given a character and a drug object, dose the character with that drug object, then extract it if needed. Effects apply at next limit tick.
-void do_drug_take(struct char_data *ch, struct obj_data *obj) {
+bool do_drug_take(struct char_data *ch, struct obj_data *obj) {
   char oopsbuf[500];
 
   if (!ch) {
     mudlog("SYSERR: Received NULL character to do_drug_take()!", ch, LOG_SYSLOG, TRUE);
-    return;
+    return FALSE;
   }
 
   if (!obj || GET_OBJ_TYPE(obj) != ITEM_DRUG) {
     snprintf(oopsbuf, sizeof(oopsbuf), "SYSERR: Received non-drug object %s to do_drug_take!", obj ? GET_OBJ_NAME(obj) : "NULL");
     mudlog(oopsbuf, ch, LOG_SYSLOG, TRUE);
-    return;
+    return FALSE;
   }
 
   int drug_id = GET_OBJ_DRUG_TYPE(obj);
@@ -67,7 +67,7 @@ void do_drug_take(struct char_data *ch, struct obj_data *obj) {
   // You can't take more of a drug you're already high on.
   if (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_ONSET) {
     send_to_char(ch, "You're already high on %s, it would be a bad idea to take more right now.\r\n", drug_types[drug_id].name);
-    return;
+    return FALSE;
   }
 
   // Right now, we apply maximum doses from the object. Later, we'll be smarter about this.
@@ -77,7 +77,8 @@ void do_drug_take(struct char_data *ch, struct obj_data *obj) {
 
   // Onboard doses until the object runs out or they end up high (whichever comes first)
   while (available_drug_doses && GET_DRUG_DOSE(ch, drug_id) <= GET_DRUG_TOLERANCE_LEVEL(ch, drug_id)) {
-    _apply_doses_of_drug_to_char(1, drug_id, ch);
+    if (_apply_doses_of_drug_to_char(1, drug_id, ch))
+      return TRUE;
     available_drug_doses--;
     taken_drug_doses++;
   }
@@ -101,6 +102,7 @@ void do_drug_take(struct char_data *ch, struct obj_data *obj) {
   }
 
   // That's it! All other checks are done when the drug kicks in.
+  return FALSE;
 }
 
 // Tick down all drugs for a given character. Induces onset/comedown etc. Called once per IG minute.
@@ -725,7 +727,7 @@ int get_drug_pain_resist_level(struct char_data *ch) {
   return 0;
 }
 
-void _apply_doses_of_drug_to_char(int doses, int drug_id, struct char_data *ch) {
+bool _apply_doses_of_drug_to_char(int doses, int drug_id, struct char_data *ch) {
   /* Every time you take a drug:
      - Check if total number of doses taken exceeds the appropriate Edge (pre- or post-addiction, as applicable).
        - If it does, -= it down until it's below the Edge rating, and add the number of times you decreased it to both Addiction and Tolerance.
@@ -759,9 +761,19 @@ void _apply_doses_of_drug_to_char(int doses, int drug_id, struct char_data *ch) 
       GET_DRUG_TOLERANCE_LEVEL(ch, drug_id)++;
   }
 
+  // Deal a box of damage every time they onboard at least Body rating in doses.
+  if (((GET_DRUG_DOSE(ch, drug_id) + doses) / GET_REAL_BOD(ch)) != (GET_DRUG_DOSE(ch, drug_id) / GET_REAL_BOD(ch))) {
+    send_to_char("You cough from the heavy dose.\r\n", ch);
+    if (damage(ch, ch, 1, TYPE_DRUGS, TRUE)) {
+      return TRUE;
+    }
+  }
+
   // Add the number of doses to both the current and lifetime doses.
   GET_DRUG_LIFETIME_DOSES(ch, drug_id) += doses;
   GET_DRUG_DOSE(ch, drug_id) += doses;
+
+  return FALSE;
 }
 
 bool _drug_dose_exceeds_tolerance(struct char_data *ch, int drug_id) {
@@ -833,10 +845,10 @@ struct room_data *_get_random_drug_seller_room() {
   return &world[rnum];
 }
 
-void seek_drugs(struct char_data *ch, int drug_id) {
+bool seek_drugs(struct char_data *ch, int drug_id) {
   if (GET_PHYSICAL(ch) <= 0 || GET_MENTAL(ch) <= 0) {
     // Skip-- stunned or morted.
-    return;
+    return FALSE;
   }
 
   if (GET_POS(ch) <= POS_SITTING) {
@@ -846,31 +858,36 @@ void seek_drugs(struct char_data *ch, int drug_id) {
   int sought_dosage = 1 + GET_DRUG_TOLERANCE_LEVEL(ch, drug_id) * 1.5;
   int dosage_cost = _seek_drugs_purchase_cost(ch, drug_id);
 
+  send_to_char(ch, "You enter a fugue state, wandering the streets in search of more %s!\r\n", drug_types[drug_id].name);
+
   if (GET_NUYEN(ch) < dosage_cost) {
-    send_to_char("You enter a fugue state, but without enough cash nuyen in your pockets to cover your drug habit, things take a turn for the worse...\r\n", ch);
+    send_to_char("Without enough cash nuyen in your pockets to cover your drug habit, things take a turn for the worse...\r\n", ch);
     lose_nuyen(ch, GET_NUYEN(ch), NUYEN_OUTFLOW_DRUGS);
 
     char_from_room(ch);
     char_to_room(ch, _get_random_drug_seller_room());
     WAIT_STATE(ch, 5 RL_SEC);
 
-    damage(ch, ch, 10, TYPE_DRUGS, FALSE);
-    return;
+    return damage(ch, ch, 10, TYPE_DRUGS, FALSE);
+  } else {
+    lose_nuyen(ch, dosage_cost, NUYEN_OUTFLOW_DRUGS);
+
+    if (_apply_doses_of_drug_to_char(sought_dosage, drug_id, ch)) {
+      return TRUE;
+    }
+
+    send_to_char("By the time you recover, you're somewhere else entirely, with a familiar feeling running through your veins...\r\n", ch);
+    update_withdrawal_flags(ch);
+
+    char_from_room(ch);
+    char_to_room(ch, _get_random_drug_seller_room());
+    WAIT_STATE(ch, 2 RL_SEC);
+
+    char blank_buf[10];
+    strlcpy(blank_buf, "", sizeof(blank_buf));
+    do_look(ch, blank_buf, 0, 0);
   }
-
-  send_to_char("You enter a fugue state! By the time you recover, you're somewhere else entirely, with a familiar feeling running through your veins...\r\n", ch);
-
-  lose_nuyen(ch, dosage_cost, NUYEN_OUTFLOW_DRUGS);
-  _apply_doses_of_drug_to_char(sought_dosage, drug_id, ch);
-  update_withdrawal_flags(ch);
-
-  char_from_room(ch);
-  char_to_room(ch, _get_random_drug_seller_room());
-  WAIT_STATE(ch, 2 RL_SEC);
-
-  char blank_buf[10];
-  strlcpy(blank_buf, "", sizeof(blank_buf));
-  do_look(ch, blank_buf, 0, 0);
+  return FALSE;
 }
 
 void update_withdrawal_flags(struct char_data *ch) {

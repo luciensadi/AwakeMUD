@@ -717,7 +717,8 @@ ACMD(do_use)
     }
     return;
   } else if (GET_OBJ_TYPE(obj) == ITEM_DRUG) {
-    do_drug_take(ch, obj);
+    if (do_drug_take(ch, obj))
+      return;
   } else if (GET_OBJ_SPEC(obj) && GET_OBJ_SPEC(obj) == anticoagulant) {
     for (struct obj_data *cyber = ch->bioware; cyber; cyber = cyber->next_content) {
       if (GET_OBJ_VAL(cyber, 0) == BIO_PLATELETFACTORY) {

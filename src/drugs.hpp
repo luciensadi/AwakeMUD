@@ -1,7 +1,7 @@
 #ifndef _drugs_h_
 #define _drugs_h_
 
-void    do_drug_take(struct char_data *ch, struct obj_data *obj);
+bool    do_drug_take(struct char_data *ch, struct obj_data *obj);
 void    reset_drug_for_char(struct char_data *ch, int drugval);
 void    reset_all_drugs_for_char(struct char_data *ch);
 int     get_drug_pain_resist_level(struct char_data *ch);
