@@ -182,6 +182,7 @@ bool    circle_follow(struct char_data *ch, struct char_data * victim);
 
 /* in act.informative.c */
 void    look_at_room(struct char_data *ch, int mode, int is_quicklook);
+void    peek_into_adjacent(struct char_data * ch, int dir);
 
 /* in act.movmement.c */
 int     do_simple_move(struct char_data *ch, int dir, int extra, struct
