@@ -289,7 +289,11 @@ const char *exit_bits[] =
     "PICKPROOF",
     "DESTROYED",
     "HIDDEN",
-    "\n"
+    "WARDED",
+    "TEMPORARY",
+    "WINDOW",
+    "BARRED_WINDOW",
+    MAX_FLAG_MARKER
   };
 
 
@@ -299,7 +303,7 @@ const char *genders[] =
     "Neutral",
     "Male",
     "Female",
-    "\n"
+    MAX_FLAG_MARKER
   };
 
 const char *thrdgenders[] =
@@ -307,7 +311,7 @@ const char *thrdgenders[] =
     "it",
     "him",
     "her",
-    "\n"
+    MAX_FLAG_MARKER
   };
 
 struct spirit_table spirits[] =

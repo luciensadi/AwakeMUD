@@ -1945,7 +1945,7 @@ void peek_into_adjacent(struct char_data * ch, int dir)
 
 void look_in_direction(struct char_data * ch, int dir)
 {
-  if (EXIT(ch, dir))
+  if (EXIT(ch, dir) && EXIT(ch, dir)->to_room)
   {
     if (IS_SET(EXIT(ch, dir)->exit_info, EX_HIDDEN)) {
       if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), EXIT(ch, dir)->hidden) <= 0) {
@@ -1974,16 +1974,17 @@ void look_in_direction(struct char_data * ch, int dir)
       send_to_char("Through the peephole, you see:\r\n", ch);
       peek_into_adjacent(ch, dir);
     }
-    if (ROOM_FLAGGED(EXIT(ch, dir)->to_room, ROOM_CAGE)){
-      /* You can see through cage bars. */
-      send_to_char("Through the cage bars, you see:\r\n", ch);
-      peek_into_adjacent(ch, dir);
-    }
-    if (IS_SET(EXIT(ch, dir)->exit_info, EX_WINDOWED)){
+    else if (IS_SET(EXIT(ch, dir)->exit_info, EX_WINDOWED)){
       /* You can see through windows. */
       send_to_char("Through the window, you see:\r\n", ch);
       peek_into_adjacent(ch, dir);
     }
+    else if (IS_SET(EXIT(ch, dir)->exit_info, EX_BARRED_WINDOW)){
+      /* You can see through bars as well. */
+      send_to_char("Through the bars, you see:\r\n", ch);
+      peek_into_adjacent(ch, dir);
+    }
+
   } else
     send_to_char("You see nothing special.\r\n", ch);
 }

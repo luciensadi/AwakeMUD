@@ -602,8 +602,7 @@ enum {
 #define ROOM_TOO_CRAMPED_FOR_CHARACTERS 35 // Prevents you from entering if you're not a projection or tiny drone.
 #define ROOM_RADIATION                  36 // You take radiation damage while you're here, scaled by Rating.
 #define ROOM_ALL_VEHICLE_ACCESS         37 // Bypasses land/air/water constraints.
-#define ROOM_CAGE                       38 // Room is a cage.
-#define ROOM_MAX                        39
+#define ROOM_MAX                        38
 
 #define VISION_NORMAL         0
 #define VISION_LOWLIGHT       1
@@ -632,6 +631,7 @@ enum {
 #define EX_ASTRALLY_WARDED      (1 << 6)   /* Exit blocks passage of astral beings */
 #define EX_IS_TEMPORARY         (1 << 7)   /* Created temporarily by code */
 #define EX_WINDOWED             (1 << 8)   /* Exit has a window.        */
+#define EX_BARRED_WINDOW        (1 << 9)   /* Exit has a barred window. */
 
 /* spirit powers */
 
