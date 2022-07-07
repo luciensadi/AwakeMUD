@@ -4969,7 +4969,7 @@ void purge_unowned_vehs() {
 
     // This vehicle is owned by an invalid player. Delete.
 
-    // Step 1: Dump its contents.
+    // Step 1: Dump its contained vehicles, since those can belong to other players.
     snprintf(buf, sizeof(buf), "Purging contents of vehicle '%s' (%ld), owner %ld (nonexistant).", veh->short_description, veh->idnum, veh->owner);
     log(buf);
 
@@ -5007,7 +5007,14 @@ void purge_unowned_vehs() {
       }
     }
 
-    // Step 2: Purge the vehicle itself. `veh` now points to garbage.
+    // Step 2: Destroy its contents.
+    struct obj_data *nextobj;
+    for (struct obj_data *obj = veh->contents; obj; obj = nextobj) {
+      nextobj = obj->next_content;
+      extract_obj(obj);
+    }
+
+    // Step 3: Purge the vehicle itself. `veh` now points to garbage.
     extract_veh(veh);
 
     // Critically, we don't iterate prior_veh if we removed veh-- that would skip the next veh in the list.
