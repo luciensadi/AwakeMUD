@@ -684,7 +684,7 @@ void move_vehicle(struct char_data *ch, int dir)
     send_to_char(CANNOT_GO_THAT_WAY, ch);
     return;
   }
-  if (IS_SET(EXIT(veh, dir)->exit_info, EX_CLOSED) && (can_enter_closed_apartment == TRUE) )
+  if (IS_SET(EXIT(veh, dir)->exit_info, EX_CLOSED) && (can_enter_closed_apartment == TRUE) ){
     send_to_char("The garage door opener on your key beeps, allowing the door to swing open briefly enough to slide through.\r\n", ch);
   }
 
