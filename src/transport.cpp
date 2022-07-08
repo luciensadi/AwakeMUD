@@ -1482,7 +1482,7 @@ SPECIAL(call_elevator)
 {
   int i = 0, j, index = -1;
   long rnum;
-  if (!cmd || !ch || !ch->in_room)
+  if (!cmd || !ch || !ch->in_room && !ch->in_veh->in_room)
     return FALSE;
 
   for (i = 0; i < num_elevators && index < 0; i++)
