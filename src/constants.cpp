@@ -496,6 +496,7 @@ const char *player_bits[] =
     "NO_AUTO_SYSP",
     "RADIO_MUTED",
     "SITE_HIDDEN",
+    "ENABLED_DRUGS",
     "\n"
   };
 

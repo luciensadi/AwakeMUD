@@ -1200,6 +1200,12 @@ ACMD(do_toggle)
     );
     send_to_char(buf, ch);
   } else {
+    if (!PLR_FLAGGED(ch, PLR_ENABLED_DRUGS) && !str_cmp(argument, "druguse")) {
+      send_to_char("You have permanently enabled drug usage. Enjoy!\r\n", ch);
+      PLR_FLAGS(ch).SetBit(PLR_ENABLED_DRUGS);
+      return;
+    }
+
     if (is_abbrev(argument, "afk"))
       result = PRF_TOG_CHK(ch, PRF_AFK);
     else if (is_abbrev(argument, "autoexits")) {

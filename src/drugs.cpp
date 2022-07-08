@@ -29,7 +29,9 @@
 // TODO: Combinable drugs
 // TODO: TEST: Auto-use should use up all the doses you have until you hit the right amount
 // TODO: Make withdrawal happen faster, it currently takes IRL hours to begin- or figure out a way to make it feel better (start sooner and ramp up?)
-// TODO: Don't let newbies take drugs due to danger, or warn them and require confirmation first
+// TODO: The withdrawal timer in act.inf is currently backwards somehow, it goes up with time instead of down.
+// TODO: Only raise tolerance AFTER the drugs kick in. Nobody wants to take 5 doses to beat 4 tolerance, only to have tolerance edge up to 6 in the process.
+// TODO: Add appropriate modifiers to the guided withdrawal check if they're not already added
 
 extern int raw_stat_loss(struct char_data *);
 extern bool check_adrenaline(struct char_data *, int);
@@ -62,6 +64,12 @@ bool do_drug_take(struct char_data *ch, struct obj_data *obj) {
     return FALSE;
   }
 
+  if (!PLR_FLAGGED(ch, PLR_ENABLED_DRUGS)) {
+    send_to_char("^YWARNING:^n Drugs in Shadowrun are highly addictive and, while granting powerful bonuses, can also have negative effects on your character! You should only proceed if you are FULLY comfortable with the ramifications of taking drugs.\r\n", ch);
+    send_to_char("\r\nIn order to enable drug usage for your character, you must ##^WTOGGLE DRUGUSE^n. Note that this is a permanent choice.\r\n", ch);
+    return FALSE;
+  }
+
   int drug_id = GET_OBJ_DRUG_TYPE(obj);
 
   // You can't take more of a drug you're already high on.
@@ -73,29 +81,26 @@ bool do_drug_take(struct char_data *ch, struct obj_data *obj) {
   // Right now, we apply maximum doses from the object. Later, we'll be smarter about this.
   // Many drugs exist without doses set, so we assume 0 doses means the drug is an old-style drug.
   int available_drug_doses = GET_OBJ_DRUG_DOSES(obj) > 0 ? GET_OBJ_DRUG_DOSES(obj) : 1;
-  int taken_drug_doses = 0;
 
   // Onboard doses until the object runs out or they end up high (whichever comes first)
-  while (available_drug_doses && GET_DRUG_DOSE(ch, drug_id) <= GET_DRUG_TOLERANCE_LEVEL(ch, drug_id)) {
-    if (_apply_doses_of_drug_to_char(1, drug_id, ch))
-      return TRUE;
-    available_drug_doses--;
-    taken_drug_doses++;
+  int doses_to_take = MIN(available_drug_doses, GET_DRUG_TOLERANCE_LEVEL(ch, drug_id) + 1);
+  GET_OBJ_DRUG_DOSES(obj) -= doses_to_take;
+  if (_apply_doses_of_drug_to_char(doses_to_take, drug_id, ch)) {
+    return TRUE;
   }
 
   // Message the room.
-  act("$n takes $p.", TRUE, ch, obj, 0, TO_ROOM);
+  act("$n takes a hit from $p.", TRUE, ch, obj, 0, TO_ROOM);
 
   // The message we give the character depends on if they've passed their tolerance dose yet.
   if (!_drug_dose_exceeds_tolerance(ch, drug_id)) {
     // They didn't take enough. Give the appropriate message.
-    send_to_char(ch, "You take %s, but it doesn't kick in-- you'll need to take more to surpass your tolerance of %d.\r\n", GET_OBJ_NAME(obj), GET_DRUG_TOLERANCE_LEVEL(ch, drug_id));
+    send_to_char(ch, "You take a hit from %s, but it doesn't kick in-- you'll need to take more to surpass your tolerance of %d.\r\n", GET_OBJ_NAME(obj), GET_DRUG_TOLERANCE_LEVEL(ch, drug_id));
   } else {
-    send_to_char(ch, "You take %s.\r\n", GET_OBJ_NAME(obj));
+    send_to_char(ch, "You take a hit from %s.\r\n", GET_OBJ_NAME(obj));
   }
 
   // Remove the doses from the drug.
-  GET_OBJ_DRUG_DOSES(obj) -= taken_drug_doses;
   if (GET_OBJ_DRUG_DOSES(obj) <= 0) {
     // The drug has been finished off.
     extract_obj(obj);
@@ -109,6 +114,10 @@ bool do_drug_take(struct char_data *ch, struct obj_data *obj) {
 bool process_drug_point_update_tick(struct char_data *ch) {
   char roll_buf[500];
   time_t current_time = time(0);
+
+  // We skip anyone who has not enabled drugs. Saves on processing time.
+  if (!PLR_FLAGGED(ch, PLR_ENABLED_DRUGS))
+    return FALSE;
 
   for (int drug_id = MIN_DRUG; drug_id < NUM_DRUGS; drug_id++) {
     int damage_boxes = 0;
@@ -343,6 +352,11 @@ void apply_drug_modifiers_to_ch(struct char_data *ch) {
   // Note: You CANNOT use update_withdrawal_flags() in this function. This is called from affect_total, and update_withdrawal_flags calls affect_total.
   GET_PERCEPTION_TEST_DICE_MOD(ch) = 0;
 
+  // Skip anyone who has not enabled drugs.
+  if (!PLR_FLAGGED(ch, PLR_ENABLED_DRUGS)) {
+    return;
+  }
+
   int detox_force = affected_by_spell(ch, SPELL_DETOX);
 
   for (int drug_id = MIN_DRUG; drug_id < NUM_DRUGS; drug_id++) {
@@ -432,10 +446,15 @@ void apply_drug_modifiers_to_ch(struct char_data *ch) {
 void process_withdrawal(struct char_data *ch) {
   time_t current_time = time(0);
 
+  // Skip anyone who has not enabled drugs.
+  if (!PLR_FLAGGED(ch, PLR_ENABLED_DRUGS)) {
+    return;
+  }
+
   // Iterate through all drugs.
   for (int drug_id = MIN_DRUG; drug_id < NUM_DRUGS; drug_id++) {
     // Calculate time since last fix.
-    time_t time_since_last_fix = (current_time - GET_DRUG_LAST_FIX(ch, drug_id)) / SECS_PER_MUD_DAY;
+    time_t days_since_last_fix = (current_time - GET_DRUG_LAST_FIX(ch, drug_id)) / SECS_PER_MUD_DAY;
 
     // If they're not currently high / coming down, tick down their dose (it metabolizes away).
     if (GET_DRUG_DOSE(ch, drug_id) > 0 && (GET_DRUG_STAGE(ch, drug_id) != DRUG_STAGE_ONSET && GET_DRUG_STAGE(ch, drug_id) != DRUG_STAGE_COMEDOWN))
@@ -493,7 +512,7 @@ void process_withdrawal(struct char_data *ch) {
       // Tick down their addiction rating as they withdraw. Speed varies based on whether this is forced or not.
       if (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_GUIDED_WITHDRAWAL || GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_FORCED_WITHDRAWAL) {
         // Decrement their edge, allowing their addiction rating to decrease.
-        if (time_since_last_fix > GET_DRUG_LAST_WITHDRAWAL_TICK(ch, drug_id) + 1) {
+        if (days_since_last_fix > GET_DRUG_LAST_WITHDRAWAL_TICK(ch, drug_id) + 1) {
           GET_DRUG_LAST_WITHDRAWAL_TICK(ch, drug_id) += (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_GUIDED_WITHDRAWAL ? 2 : 1);
           if (--GET_DRUG_ADDICTION_EDGE(ch, drug_id) <= 0) {
             GET_DRUG_STAGE(ch, drug_id) = DRUG_STAGE_UNAFFECTED;
@@ -508,31 +527,29 @@ void process_withdrawal(struct char_data *ch) {
         }
 
         // If they got here, they're still addicted. Check to see if they're weak-willed enough to auto-take it.
-        if (time_since_last_fix >= drug_types[drug_id].fix_factor) {
+        if (days_since_last_fix >= drug_types[drug_id].fix_factor) {
           if (!_combined_addiction_test(ch, drug_id, "auto-take resistance")) {
             // Compose message, which is replaced by craving messages if they're carrying drugs.
             if (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_FORCED_WITHDRAWAL) {
               snprintf(buf, sizeof(buf), "Your lack of %s is causing you great pain and discomfort.\r\n", drug_types[drug_id].name);
             } else {
               snprintf(buf, sizeof(buf), "You crave some %s.\r\n", drug_types[drug_id].name);
+              // TODO: There's no benefit to guided withdrawal here, should there be?
             }
 
             // Auto-use drugs if available in inventory.
-            bool found_drugs = FALSE;
-            for (struct obj_data *obj = ch->carrying; obj; obj = obj->next_content) {
+            send_to_char(ch, "You attempt to satisfy your craving for %s.\r\n", drug_types[drug_id].name);
+            for (struct obj_data *obj = ch->carrying, *next_content; obj; obj = next_content) {
+              next_content = obj->next_content;
               if (GET_OBJ_TYPE(obj) == ITEM_DRUG && GET_OBJ_DRUG_TYPE(obj) == drug_id) {
-                found_drugs = TRUE;
-                do_use(ch, obj->text.keywords, 0, 0);
-                if (GET_DRUG_DOSE(ch, drug_id) > GET_DRUG_TOLERANCE_LEVEL(ch, drug_id))
-                  snprintf(buf, sizeof(buf), "You satisfy your craving for %s.\r\n", drug_types[drug_id].name);
-                else
-                  snprintf(buf, sizeof(buf), "You attempt to satisfy your craving for %s.\r\n", drug_types[drug_id].name);
-                break;
+                do_drug_take(ch, obj); // obj is potentially extracted at this point
+                if (GET_DRUG_DOSE(ch, drug_id) > GET_DRUG_TOLERANCE_LEVEL(ch, drug_id)) {
+                  return;
+                }
               }
             }
-            send_to_char(buf, ch);
 
-            if (!found_drugs) {
+            if (GET_DRUG_DOSE(ch, drug_id) <= GET_DRUG_TOLERANCE_LEVEL(ch, drug_id)) {
               seek_drugs(ch, drug_id);
             }
           }
@@ -540,7 +557,7 @@ void process_withdrawal(struct char_data *ch) {
       }
     } else if (GET_DRUG_ADDICT(ch, drug_id)) {
       // They weren't in withdrawal: Put them into that state if they've passed their fix limit.
-      if (time_since_last_fix > drug_types[drug_id].fix_factor) {
+      if (days_since_last_fix > drug_types[drug_id].fix_factor) {
         send_to_char(ch, "You begin to go into forced %s withdrawal.\r\n", drug_types[drug_id].name);
         GET_DRUG_STAGE(ch, drug_id) = DRUG_STAGE_FORCED_WITHDRAWAL;
         GET_DRUG_LAST_WITHDRAWAL_TICK(ch, drug_id) = 0;
@@ -557,6 +574,11 @@ void process_withdrawal(struct char_data *ch) {
 }
 
 void render_drug_info_for_targ(struct char_data *ch, struct char_data *targ) {
+  if (!PLR_FLAGGED(ch, PLR_ENABLED_DRUGS)) {
+    send_to_char("\r\nDrug usage not enabled.\r\n", ch);
+    return;
+  }
+
   bool printed_something = FALSE;
   // Send drug info
   send_to_char("\r\nDrug info: \r\n", ch);
@@ -593,6 +615,11 @@ void render_drug_info_for_targ(struct char_data *ch, struct char_data *targ) {
 }
 
 void attempt_safe_withdrawal(struct char_data *ch, const char *target_arg) {
+  if (!PLR_FLAGGED(ch, PLR_ENABLED_DRUGS)) {
+    send_to_char("You haven't enabled the drug system.\r\n", ch);
+    return;
+  }
+
   // Identify which drug they're withdrawing from.
   int drug_id;
   for (drug_id = MIN_DRUG; drug_id < NUM_DRUGS; drug_id++) {
@@ -622,6 +649,12 @@ void attempt_safe_withdrawal(struct char_data *ch, const char *target_arg) {
   // If you're already withdrawing, no need to be here.
   if (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_GUIDED_WITHDRAWAL) {
     send_to_char(ch, "You're already undergoing safe withdrawal from %s.\r\n", drug_types[drug_id].name);
+    return;
+  }
+
+  // You can't begin guided while undergoing forced.
+  if (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_FORCED_WITHDRAWAL) {
+    send_to_char(ch, "Your craving for %s is too great for you to stomach this process. You have to find a fix before you can begin guided withdrawal.\r\n", drug_types[drug_id].name);
     return;
   }
 
@@ -656,6 +689,10 @@ void attempt_safe_withdrawal(struct char_data *ch, const char *target_arg) {
 float get_drug_heal_multiplier(struct char_data *ch) {
   char oopsbuf[500];
   int divisor = 1;
+
+  if (!PLR_FLAGGED(ch, PLR_ENABLED_DRUGS)) {
+    return 1;
+  }
 
   for (int drug_id = MIN_DRUG; drug_id < NUM_DRUGS; drug_id++) {
     switch (GET_DRUG_STAGE(ch, drug_id)) {
@@ -735,6 +772,11 @@ bool _apply_doses_of_drug_to_char(int doses, int drug_id, struct char_data *ch) 
   */
   char rbuf[1000];
 
+  if (!PLR_FLAGGED(ch, PLR_ENABLED_DRUGS)) {
+    mudlog("SYSERR: Got to _apply_doses_of_drug_to_char() for character who did not enable the drug system!", ch, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+
   // Increase our tolerance and addiction levels if we've passed the edge value.
   int edge_value = (GET_DRUG_ADDICT(ch, drug_id) ? drug_types[drug_id].edge_posadd : drug_types[drug_id].edge_preadd);
   int edge_delta = ((GET_DRUG_LIFETIME_DOSES(ch, drug_id) % edge_value) + doses) / edge_value;
@@ -762,7 +804,8 @@ bool _apply_doses_of_drug_to_char(int doses, int drug_id, struct char_data *ch) 
   }
 
   // Deal a box of damage every time they onboard at least Body rating in doses.
-  if (((GET_DRUG_DOSE(ch, drug_id) + doses) / GET_REAL_BOD(ch)) != (GET_DRUG_DOSE(ch, drug_id) / GET_REAL_BOD(ch))) {
+  int bod_vs_doses = (GET_DRUG_DOSE(ch, drug_id) + doses) / GET_REAL_BOD(ch);
+  if (bod_vs_doses > 1 && bod_vs_doses != (GET_DRUG_DOSE(ch, drug_id) / GET_REAL_BOD(ch))) {
     send_to_char("You cough from the heavy dose.\r\n", ch);
     if (damage(ch, ch, 1, TYPE_DRUGS, TRUE)) {
       return TRUE;
