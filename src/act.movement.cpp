@@ -661,6 +661,7 @@ void move_vehicle(struct char_data *ch, int dir)
   struct veh_follow *v, *nextv;
   extern void crash_test(struct char_data *);
   char empty_argument = '\0';
+  bool can_enter_closed_apartment = (ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_HOUSE) && House_can_enter(ch, EXIT(veh, dir)->to_room->number) && has_key(ch, (EXIT(veh, dir)->key)))
 
   RIG_VEH(ch, veh);
   if (!veh || veh->damage >= VEH_DAM_THRESHOLD_DESTROYED)
@@ -679,10 +680,12 @@ void move_vehicle(struct char_data *ch, int dir)
     send_to_char("You aren't the Kool-Aid Man, so you decide against ramming your way out of here.\r\n", ch);
     return;
   }
-  if (!EXIT(veh, dir) || !EXIT(veh, dir)->to_room || EXIT(veh, dir)->to_room == &world[0] || (IS_SET(EXIT(veh, dir)->exit_info, EX_CLOSED) &&
-  !(ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_HOUSE) && House_can_enter(ch, EXIT(veh, dir)->to_room->number) && has_key(ch, (EXIT(veh, dir)->key))))) {
+  if (!EXIT(veh, dir) || !EXIT(veh, dir)->to_room || EXIT(veh, dir)->to_room == &world[0] || (IS_SET(EXIT(veh, dir)->exit_info, EX_CLOSED) && (can_enter_closed_apartment == FALSE)) ) {
     send_to_char(CANNOT_GO_THAT_WAY, ch);
     return;
+  }
+  if (IS_SET(EXIT(veh, dir)->exit_info, EX_CLOSED) && (can_enter_closed_apartment == TRUE) )
+    send_to_char("The garage door opener on your key beeps, allowing the door to swing open briefly enough to slide through.\r\n", ch);
   }
 
 #ifdef DEATH_FLAGS
