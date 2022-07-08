@@ -1497,7 +1497,7 @@ SPECIAL(call_elevator)
                         !strcasecmp("call", argument)))
       send_to_char("Press what?\r\n", ch);
     else {
-      if ((ch->in_veh) && ((ch->in_veh->type = !VEH_BIKE) || !(ch->in_veh->type = VEH_DRONE && GET_MOD(ch->in_veh, MOD_POKEYSTICK))))
+      if ((ch->in_veh) && (!(ch->in_veh->type == VEH_BIKE) || !(ch->in_veh->type == VEH_DRONE && ch->in_veh GET_VEHICLE_MOD_TYPE(TYPE_POKEYSTICK)))) // this needs to be a proper check or something
         return FALSE;
       if (IS_ASTRAL(ch)) {
         send_to_char("You can't do that in your current state.\r\n", ch);

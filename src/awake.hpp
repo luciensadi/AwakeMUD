@@ -1785,8 +1785,7 @@ enum {
 #define MOD_PHONE    25
 #define MOD_RADIO    26
 #define MOD_MOUNT    27
-#define MOD_POKEYSTICK  28
-#define NUM_MODS    29
+#define NUM_MODS    28
 
 #define TYPE_ENGINECUST    1
 #define TYPE_NOS    2
@@ -1810,7 +1809,8 @@ enum {
 #define TYPE_TIRES    20
 #define TYPE_MISC    21
 #define TYPE_AMMOBIN    22
-#define NUM_MODTYPES    23
+#define TYPE_POKEYSTICK 23
+#define NUM_MODTYPES    24
 
 #define ENGINE_NONE        0
 #define ENGINE_ELECTRIC    1
