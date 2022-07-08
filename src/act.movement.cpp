@@ -661,7 +661,7 @@ void move_vehicle(struct char_data *ch, int dir)
   struct veh_follow *v, *nextv;
   extern void crash_test(struct char_data *);
   char empty_argument = '\0';
-  bool can_enter_closed_apartment = (ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_HOUSE) && House_can_enter(ch, EXIT(veh, dir)->to_room->number) && has_key(ch, (EXIT(veh, dir)->key)))
+  bool can_enter_closed_apartment = (ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_HOUSE) && House_can_enter(ch, EXIT(veh, dir)->to_room->number) && has_key(ch, (EXIT(veh, dir)->key)));
 
   RIG_VEH(ch, veh);
   if (!veh || veh->damage >= VEH_DAM_THRESHOLD_DESTROYED)

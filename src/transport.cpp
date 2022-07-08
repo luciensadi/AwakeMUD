@@ -1482,7 +1482,7 @@ SPECIAL(call_elevator)
 {
   int i = 0, j, index = -1;
   long rnum;
-  if (!cmd || !ch || !ch->in_room && !ch->in_veh->in_room)
+  if (!cmd || !ch || (!ch->in_room && !ch->in_veh->in_room))
     return FALSE;
 
   for (i = 0; i < num_elevators && index < 0; i++)
@@ -1497,7 +1497,7 @@ SPECIAL(call_elevator)
                         !strcasecmp("call", argument)))
       send_to_char("Press what?\r\n", ch);
     else {
-      if ((ch->in_veh) && (!(ch->in_veh->type == VEH_BIKE) || !(ch->in_veh->type == VEH_DRONE && GET_MOD(veh, (GET_VEHICLE_MOD_TYPE(mod) == TYPE_POKEYSTICK))) ) )
+      if ((ch->in_veh) && (!(ch->in_veh->type == VEH_BIKE) || !(ch->in_veh->type == VEH_DRONE && GET_MOD(ch->in_veh, (GET_VEHICLE_MOD_TYPE(obj) == TYPE_POKEYSTICK))) ) )
         return FALSE;
       if (IS_ASTRAL(ch)) {
         send_to_char("You can't do that in your current state.\r\n", ch);
