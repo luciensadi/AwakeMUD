@@ -5554,7 +5554,12 @@ void chkdmg(struct veh_data * veh)
 
     // Remove any vehicle brains, we don't want them thrown into the street.
     remove_vehicle_brain(veh);
-
+    
+    if (IS_NPC(veh->owner) || !does_player_exist(veh->owner)) {
+     VEH_FLAGS(veh).SetBit(lootwreck) = TRUE
+     GET_VEH_TIMER(veh) = max_npc_vehicle_lootwreck_time
+     }
+    
     if (veh->cspeed >= SPEED_IDLE) {
       if (veh->people) {
         if (veh->in_room && IS_WATER(veh->in_room)) {

@@ -207,6 +207,15 @@ void objList::UpdateCounters(void)
       mudlog("SYSERR: UpdateCounters encountered a non-existent object.", NULL, LOG_SYSLOG, TRUE);
       continue;
     }
+    // Decay smashed NPC/unowned vehicles.
+    for (!((veh->in_veh) || (veh->in_room && ROOM_FLAGGED(veh->in_room, ROOM_GARAGE))) && (VEH_FLAGGED(veh, VFLAG_LOOTWRECK) == TRUE) ) {
+       if(GET_VEH_TIMER(veh) > 1) {
+         GET_VEH_TIMER(veh)--;
+       } else {
+         VEH_FLAGS(veh).SetBit(VFLAG_LOOTWRECK) = FALSE;
+           extract_veh(veh);
+           }
+         }
 
     // Decay evaluate programs.
     if (GET_OBJ_TYPE(OBJ) == ITEM_PROGRAM && GET_OBJ_VAL(OBJ, 0) == SOFT_EVALUATE) {

@@ -1779,6 +1779,7 @@ const char *veh_flag[] =
     "Workshop",
     "Newbie",
     "Ultrasound"
+    "Lootwreck"
   };
 
 const char *jurid[] =
