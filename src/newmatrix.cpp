@@ -2039,7 +2039,7 @@ ACMD(do_download)
         if (GET_DECK_ACCESSORY_FILE_PROTECTION(soft) == FILE_PROTECTION_SCRAMBLED
             && GET_OBJ_TYPE(soft) != ITEM_PROGRAM)
         {
-          send_to_icon(PERSONA, "A Scramble IC blocks your attempts to download the file.\r\n");
+          send_to_icon(PERSONA, "A Scramble IC blocks your attempts to download %s. You'll have to decrypt it first!\r\n", GET_OBJ_NAME(soft));
         } else if (GET_OBJ_VAL(soft, 5) > FILE_PROTECTION_SCRAMBLED // file bomb
                    && GET_OBJ_TYPE(soft) != ITEM_PROGRAM)
         {
