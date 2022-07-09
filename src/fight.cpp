@@ -5551,13 +5551,14 @@ void chkdmg(struct veh_data * veh)
     struct char_data *i, *next;
     struct obj_data *obj, *nextobj;
     int damage_rating, damage_tn;
-
+    extern int max_npc_vehicle_lootwreck_time;
+      
     // Remove any vehicle brains, we don't want them thrown into the street.
     remove_vehicle_brain(veh);
     
-    if (IS_NPC(veh->owner) || !does_player_exist(veh->owner)) {
+    if (veh->owner <= 0) {
      veh->flags.SetBit(VFLAG_LOOTWRECK);
-     GET_VEH_TIMER(veh) = max_npc_vehicle_lootwreck_time;
+     GET_VEH_DESTRUCTION_TIMER(veh) = max_npc_vehicle_lootwreck_time;
      }
     
     if (veh->cspeed >= SPEED_IDLE) {
