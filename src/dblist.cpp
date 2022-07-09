@@ -209,15 +209,15 @@ void objList::UpdateCounters(void)
     }
 
     // Decay evaluate programs.
-    if (GET_OBJ_TYPE(OBJ) == ITEM_PROGRAM && GET_OBJ_VAL(OBJ, 0) == SOFT_EVALUATE) {
+    if (GET_OBJ_TYPE(OBJ) == ITEM_PROGRAM && GET_PROGRAM_TYPE(OBJ) == SOFT_EVALUATE) {
       if (!GET_OBJ_VAL(OBJ, 5)) {
         GET_OBJ_VAL(OBJ, 5) = time(0);
         GET_OBJ_VAL(OBJ, 6) = GET_OBJ_VAL(OBJ, 5);
       } else if (GET_OBJ_VAL(OBJ, 5) < time(0) - SECS_PER_REAL_DAY && !(OBJ->carried_by && IS_NPC(OBJ->carried_by))) {
-        GET_OBJ_VAL(OBJ, 1) -= number(0, 3);
+        GET_PROGRAM_RATING(OBJ) -= 2;
         GET_OBJ_VAL(OBJ, 5) = time(0);
-        if (GET_OBJ_VAL(OBJ, 1) < 0)
-          GET_OBJ_VAL(OBJ, 1) = 0;
+        if (GET_PROGRAM_RATING(OBJ) < 0)
+          GET_PROGRAM_RATING(OBJ) = 0;
       }
       continue;
     }
