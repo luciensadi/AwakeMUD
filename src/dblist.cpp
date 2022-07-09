@@ -198,6 +198,8 @@ void objList::UpdateCounters(void)
     mysql_free_result(res);
   }
 
+  time_t current_time = time(0);
+
   // Iterate through the list.
   for (temp = head; temp; temp = next) {
     next = temp->next;
@@ -208,14 +210,16 @@ void objList::UpdateCounters(void)
       continue;
     }
 
-    // Decay evaluate programs.
+    // Decay evaluate programs. This only fires when they're completed, as non-finished software is ITEM_DESIGN instead.
     if (GET_OBJ_TYPE(OBJ) == ITEM_PROGRAM && GET_PROGRAM_TYPE(OBJ) == SOFT_EVALUATE) {
       if (!GET_OBJ_VAL(OBJ, 5)) {
-        GET_OBJ_VAL(OBJ, 5) = time(0);
+        GET_OBJ_VAL(OBJ, 5) = current_time;
         GET_OBJ_VAL(OBJ, 6) = GET_OBJ_VAL(OBJ, 5);
-      } else if (GET_OBJ_VAL(OBJ, 5) < time(0) - SECS_PER_REAL_DAY && !(OBJ->carried_by && IS_NPC(OBJ->carried_by))) {
-        GET_PROGRAM_RATING(OBJ) -= 2;
-        GET_OBJ_VAL(OBJ, 5) = time(0);
+      }
+      // Decay Evaluate program ratings by one every two IRL days.
+      else if (GET_OBJ_VAL(OBJ, 5) < current_time - (SECS_PER_REAL_DAY * 2) && !(OBJ->carried_by && IS_NPC(OBJ->carried_by))) {
+        GET_PROGRAM_RATING(OBJ)--;
+        GET_OBJ_VAL(OBJ, 5) = current_time;
         if (GET_PROGRAM_RATING(OBJ) < 0)
           GET_PROGRAM_RATING(OBJ) = 0;
       }
