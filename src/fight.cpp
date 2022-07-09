@@ -5556,8 +5556,8 @@ void chkdmg(struct veh_data * veh)
     remove_vehicle_brain(veh);
     
     if (IS_NPC(veh->owner) || !does_player_exist(veh->owner)) {
-     VEH_FLAGS(veh).SetBit(lootwreck) = TRUE
-     GET_VEH_TIMER(veh) = max_npc_vehicle_lootwreck_time
+     veh->flags.SetBit(VFLAG_LOOTWRECK);
+     GET_VEH_TIMER(veh) = max_npc_vehicle_lootwreck_time;
      }
     
     if (veh->cspeed >= SPEED_IDLE) {

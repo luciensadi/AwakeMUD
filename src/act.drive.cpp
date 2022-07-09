@@ -1174,7 +1174,7 @@ ACMD(do_repair)
   skill = get_skill(ch, get_br_skill_for_veh(veh), target);
   target += (veh->damage - 2) / 2;
   target += modify_target(ch);
-  VEH_FLAGS(veh).SetBit(VFLAG_LOOTWRECK) = FALSE; // we don't want people messing with a vehicle that's planning to despawn.
+  veh->flags.RemoveBit(VFLAG_LOOTWRECK); // we don't want people messing with a vehicle that's planning to despawn.
 
   if (!access_level(ch, LVL_ADMIN)) {
     for (obj = ch->carrying; obj && !mod; obj = obj->next_content)

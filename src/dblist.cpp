@@ -208,12 +208,12 @@ void objList::UpdateCounters(void)
       continue;
     }
     // Decay smashed NPC/unowned vehicles.
-    for (!((veh->in_veh) || (veh->in_room && ROOM_FLAGGED(veh->in_room, ROOM_GARAGE))) && (VEH_FLAGGED(veh, VFLAG_LOOTWRECK) == TRUE) ) {
+    for (!((veh->in_veh) || (veh->in_room && ROOM_FLAGGED(veh->in_room, ROOM_GARAGE))) && (VEH_FLAGGED(*veh, VFLAG_LOOTWRECK)) ) {
        if(GET_VEH_TIMER(veh) > 1) {
          GET_VEH_TIMER(veh)--;
        } else {
-         VEH_FLAGS(veh).SetBit(VFLAG_LOOTWRECK) = FALSE;
-           extract_veh(veh);
+          veh->flags.RemoveBit(VFLAG_LOOTWRECK);
+          extract_veh(veh);
            }
          }
 
