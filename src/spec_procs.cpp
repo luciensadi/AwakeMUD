@@ -3063,7 +3063,7 @@ SPECIAL(Trogatron)
 
   switch (GET_ACTIVE(ch)) {
     case 7:
-      do_say(ch, "This is pewALLop, FOR REAL, you got to KNOW/", 0, 0);
+      do_say(ch, "This is pewALLup, FOR REAL, yo, you got to KNOW/", 0, 0);
       do_say(ch, "It'll WALLop, leave DOLLops of blood in the SNOW/", 0, 0);
       do_say(ch, "CAUGHT up and SHOT up, and if you then GOT up/", 0, 0);
       do_say(ch, "We gonna go STOCK up and put it on LOCK up/", 0, 0);
