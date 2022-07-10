@@ -748,7 +748,7 @@ void assign_mobiles(void)
   ASSIGNMOB(9913, receptionist);
 
   /* Puyallup */
-  ASSIGNMOB(35200, Trogatron)
+  ASSIGNMOB(35200, Trogatron);
 
   /* Crime Mall */
   ASSIGNMOB(100022, crime_mall_guard);
