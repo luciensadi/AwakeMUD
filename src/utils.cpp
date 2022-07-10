@@ -3411,6 +3411,34 @@ bool combine_ammo_boxes(struct char_data *ch, struct obj_data *from, struct obj_
   return TRUE;
 }
 
+bool combine_drugs(struct char_data *ch, struct obj_data *from, struct obj_data *into, bool print_messages) {
+  if (!ch || !from || !into) {
+    mudlog("SYSERR: combine_drugs received a null value.", ch, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+
+  if (GET_OBJ_TYPE(from) != ITEM_DRUG || GET_OBJ_TYPE(into) != ITEM_DRUG) {
+    mudlog("SYSERR: combine_drugs received something that was not a drug.", ch, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+
+  if (GET_OBJ_DRUG_TYPE(from) != GET_OBJ_DRUG_TYPE(into)) {
+    mudlog("SYSERR: combine_drug received non-matching drugs.", ch, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+
+  GET_OBJ_DRUG_DOSES(into) += GET_OBJ_DRUG_DOSES(from);
+  GET_OBJ_DRUG_DOSES(from) = 0;
+
+  if (print_messages) {
+    send_to_char(ch, "You dump the doses into %s.\r\n", GET_OBJ_NAME(into));
+  }
+  extract_obj(from);
+
+  // Everything succeeded.
+  return TRUE;
+}
+
 void destroy_door(struct room_data *room, int dir) {
   if (!room || dir < NORTH || dir > DOWN)
     return;

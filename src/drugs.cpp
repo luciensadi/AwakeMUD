@@ -30,8 +30,6 @@
 // TODO: TEST: Auto-use should use up all the doses you have until you hit the right amount
 // TODO: Make withdrawal happen faster, it currently takes IRL hours to begin- or figure out a way to make it feel better (start sooner and ramp up?)
 // TODO: The withdrawal timer in act.inf is currently backwards somehow, it goes up with time instead of down.
-// TODO: Only raise tolerance AFTER the drugs kick in. Nobody wants to take 5 doses to beat 4 tolerance, only to have tolerance edge up to 6 in the process.
-// TODO: Add appropriate modifiers to the guided withdrawal check if they're not already added
 
 extern int raw_stat_loss(struct char_data *);
 extern bool check_adrenaline(struct char_data *, int);
@@ -40,6 +38,7 @@ ACMD_DECLARE(do_use);
 ACMD_DECLARE(do_look);
 
 // ----------------- Helper Prototypes
+bool _process_edge_and_tolerance_changes_for_applied_dose(struct char_data *ch, int drug_id);
 bool _apply_doses_of_drug_to_char(int doses, int drug_id, struct char_data *ch);
 bool _drug_dose_exceeds_tolerance(struct char_data *ch, int drug_id);
 bool _specific_addiction_test(struct char_data *ch, int drug_id, bool is_mental, const char *test_identifier);
@@ -265,6 +264,11 @@ bool process_drug_point_update_tick(struct char_data *ch) {
       // Onset them and set when their last fix was (used for withdrawal calculations).
       GET_DRUG_STAGE(ch, drug_id) = DRUG_STAGE_ONSET;
       GET_DRUG_LAST_FIX(ch, drug_id) = current_time;
+
+      // Process increases to addiction and tolerance, and also deal bod damage.
+      if (_process_edge_and_tolerance_changes_for_applied_dose(ch, drug_id)) {
+        return TRUE;
+      }
 
       // Send message, set duration, and apply instant effects.
       switch (drug_id) {
@@ -764,31 +768,23 @@ int get_drug_pain_resist_level(struct char_data *ch) {
   return 0;
 }
 
-bool _apply_doses_of_drug_to_char(int doses, int drug_id, struct char_data *ch) {
-  /* Every time you take a drug:
-     - Check if total number of doses taken exceeds the appropriate Edge (pre- or post-addiction, as applicable).
-       - If it does, -= it down until it's below the Edge rating, and add the number of times you decreased it to both Addiction and Tolerance.
-     - Add one to the number of active doses and the total number of doses taken.
-  */
+bool _process_edge_and_tolerance_changes_for_applied_dose(struct char_data *ch, int drug_id) {
   char rbuf[1000];
 
-  if (!PLR_FLAGGED(ch, PLR_ENABLED_DRUGS)) {
-    mudlog("SYSERR: Got to _apply_doses_of_drug_to_char() for character who did not enable the drug system!", ch, LOG_SYSLOG, TRUE);
-    return FALSE;
-  }
+  bool is_first_time_taking = (GET_DRUG_LIFETIME_DOSES(ch, drug_id) - GET_DRUG_DOSE(ch, drug_id) <= 0);
 
   // Increase our tolerance and addiction levels if we've passed the edge value.
   int edge_value = (GET_DRUG_ADDICT(ch, drug_id) ? drug_types[drug_id].edge_posadd : drug_types[drug_id].edge_preadd);
-  int edge_delta = ((GET_DRUG_LIFETIME_DOSES(ch, drug_id) % edge_value) + doses) / edge_value;
+  int edge_delta = ((GET_DRUG_LIFETIME_DOSES(ch, drug_id) % edge_value) + GET_DRUG_DOSE(ch, drug_id)) / edge_value;
   if (edge_delta > 0) {
-    GET_DRUG_ADDICTION_EDGE(ch, drug_id)++;
-    GET_DRUG_TOLERANCE_LEVEL(ch, drug_id)++;
+    GET_DRUG_ADDICTION_EDGE(ch, drug_id) += edge_delta;
+    GET_DRUG_TOLERANCE_LEVEL(ch, drug_id) += edge_delta;
   }
   snprintf(rbuf, sizeof(rbuf), "Edge rating: %d, edge delta: %d.", edge_value, edge_delta);
   act(rbuf, FALSE, ch, 0, 0, TO_ROLLS);
 
   // Check to see if they become addicted.
-  if (GET_DRUG_ADDICT(ch, drug_id) == NOT_ADDICTED && (edge_delta > 0 || GET_DRUG_LIFETIME_DOSES(ch, drug_id) <= 0)) {
+  if (GET_DRUG_ADDICT(ch, drug_id) == NOT_ADDICTED && (edge_delta > 0 || is_first_time_taking)) {
     // It's their first dose, or they've taken more than Edge doses.
     if (!_combined_addiction_test(ch, drug_id, "application-time")) {
       // Character failed their addiction check and has become addicted.
@@ -797,19 +793,28 @@ bool _apply_doses_of_drug_to_char(int doses, int drug_id, struct char_data *ch) 
     }
   }
 
-  // Check to see if their tolerance increases. KNOWN ISSUE: This can cause your first dose to not have an effect.
-  if (drug_types[drug_id].tolerance > 0 && (GET_DRUG_LIFETIME_DOSES(ch, drug_id) == 1 || edge_delta > 0)) {
+  // Check to see if their tolerance increases.
+  if (drug_types[drug_id].tolerance > 0 && (edge_delta > 0 || is_first_time_taking)) {
     if (!_combined_addiction_test(ch, drug_id, "tolerance"))
       GET_DRUG_TOLERANCE_LEVEL(ch, drug_id)++;
   }
 
-  // Deal a box of damage every time they onboard at least Body rating in doses.
-  int bod_vs_doses = (GET_DRUG_DOSE(ch, drug_id) + doses) / GET_REAL_BOD(ch);
-  if (bod_vs_doses > 1 && bod_vs_doses != (GET_DRUG_DOSE(ch, drug_id) / GET_REAL_BOD(ch))) {
-    send_to_char("You cough from the heavy dose.\r\n", ch);
-    if (damage(ch, ch, 1, TYPE_DRUGS, TRUE)) {
+  // Deal a box of damage every time you onboard at least 2*Body rating in doses, and one additional per Bod doses past that.
+  int bod_vs_doses = (GET_DRUG_DOSE(ch, drug_id) / GET_REAL_BOD(ch)) - 1;
+  if (bod_vs_doses > 0) {
+    send_to_char(ch, "You cough from the heavy dose of %s.\r\n", drug_types[drug_id].name);
+    if (damage(ch, ch, bod_vs_doses, TYPE_DRUGS, TRUE)) {
       return TRUE;
     }
+  }
+
+  return FALSE;
+}
+
+bool _apply_doses_of_drug_to_char(int doses, int drug_id, struct char_data *ch) {
+  if (!PLR_FLAGGED(ch, PLR_ENABLED_DRUGS)) {
+    mudlog("SYSERR: Got to _apply_doses_of_drug_to_char() for character who did not enable the drug system!", ch, LOG_SYSLOG, TRUE);
+    return FALSE;
   }
 
   // Add the number of doses to both the current and lifetime doses.
@@ -903,17 +908,25 @@ bool seek_drugs(struct char_data *ch, int drug_id) {
 
   send_to_char(ch, "You enter a fugue state, wandering the streets in search of more %s!\r\n", drug_types[drug_id].name);
 
-  if (GET_NUYEN(ch) < dosage_cost) {
+  if (GET_NUYEN(ch) < dosage_cost && GET_BANK(ch) + GET_NUYEN(ch) < dosage_cost) {
     send_to_char("Without enough cash nuyen in your pockets to cover your drug habit, things take a turn for the worse...\r\n", ch);
     lose_nuyen(ch, GET_NUYEN(ch), NUYEN_OUTFLOW_DRUGS);
 
     char_from_room(ch);
     char_to_room(ch, _get_random_drug_seller_room());
-    WAIT_STATE(ch, 5 RL_SEC);
+    WAIT_STATE(ch, 10 RL_SEC);
 
-    return damage(ch, ch, 10, TYPE_DRUGS, FALSE);
+    GET_PHYSICAL(ch) = MIN(GET_PHYSICAL(ch), 100);
+    GET_MENTAL(ch) = MIN(GET_MENTAL(ch), 0);
+    update_pos(ch);
+    return FALSE;
   } else {
-    lose_nuyen(ch, dosage_cost, NUYEN_OUTFLOW_DRUGS);
+    if (GET_NUYEN(ch) >= dosage_cost) {
+      lose_nuyen(ch, dosage_cost, NUYEN_OUTFLOW_DRUGS);
+    } else {
+      lose_bank(ch, dosage_cost - GET_NUYEN(ch), NUYEN_OUTFLOW_DRUGS);
+      lose_nuyen(ch, GET_NUYEN(ch), NUYEN_OUTFLOW_DRUGS);
+    }
 
     if (_apply_doses_of_drug_to_char(sought_dosage, drug_id, ch)) {
       return TRUE;

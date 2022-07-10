@@ -499,6 +499,31 @@ ACMD(do_put)
     return;
   }
 
+  // Combine drugs.
+  if (GET_OBJ_TYPE(cont) == ITEM_DRUG) {
+    if (!(obj = get_obj_in_list_vis(ch, arg1, ch->carrying))) {
+      send_to_char(ch, "You aren't carrying %s %s.\r\n", AN(arg1), arg1);
+      return;
+    }
+
+    if (obj == cont) {
+      send_to_char(ch, "You cannot combine %s with itself.\r\n", GET_OBJ_NAME(obj));
+      return;
+    }
+
+    if (GET_OBJ_TYPE(obj) != ITEM_DRUG || GET_OBJ_DRUG_TYPE(obj) != GET_OBJ_DRUG_TYPE(cont)) {
+      send_to_char(ch, "You can only combine %s with other doses of %s, and %s doesn't qualify.\r\n",
+        decapitalize_a_an(GET_OBJ_NAME(cont)),
+        drug_types[GET_OBJ_DRUG_TYPE(cont)].name,
+        GET_OBJ_NAME(obj)
+      );
+      return;
+    }
+
+    combine_drugs(ch, obj, cont, TRUE);
+    return;
+  }
+
   // Combine ammo boxes.
   if (GET_OBJ_TYPE(cont) == ITEM_GUN_AMMO) {
     if (!(obj = get_obj_in_list_vis(ch, arg1, ch->carrying))) {
