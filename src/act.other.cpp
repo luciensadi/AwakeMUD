@@ -4455,7 +4455,7 @@ ACMD(do_spray)
         return;
       }
       struct obj_data *paint = read_object(OBJ_GRAFFITI, VIRTUAL);
-      if (existing_graffiti_count => 1) {
+      if (existing_graffiti_count > 0) {
         snprintf(buf, sizeof(buf), "Sprayed here,", argument);
       } snprintf(buf, sizeof(buf), "   %s^n", argument);
       paint->restring = str_dup(buf);
