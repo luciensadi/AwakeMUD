@@ -47,7 +47,6 @@ struct obj_data *memoryClass::GetObject()
 struct veh_data *memoryClass::GetVehicle()
 {
   struct veh_data *temp = new veh_data;
-  int veh_destruction_timer
   clear_vehicle(temp);
   return temp;
 }

@@ -777,6 +777,7 @@ struct veh_data
   ubyte type;
   int damage;
   sh_int cspeed;
+  int veh_destruction_timer;
 
   struct veh_follow *followers;
   struct veh_data *following;
