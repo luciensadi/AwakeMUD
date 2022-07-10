@@ -592,6 +592,7 @@ void assign_mobiles(void)
   SPECIAL(crime_mall_guard);
   SPECIAL(doctor_scriptshaw);
   SPECIAL(huge_troll);
+  SPECIAL(Trogatron);
 //  SPECIAL(roots_receptionist);
   SPECIAL(aegnor);
   SPECIAL(purple_haze_bartender);
@@ -745,6 +746,9 @@ void assign_mobiles(void)
 
   /* Ork Underground */
   ASSIGNMOB(9913, receptionist);
+
+  /* Puyallup */
+  ASSIGNMOB(35200, Trogatron)
 
   /* Crime Mall */
   ASSIGNMOB(100022, crime_mall_guard);

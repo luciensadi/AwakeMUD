@@ -3053,6 +3053,27 @@ SPECIAL(doctor_scriptshaw)
   return FALSE;
 }
 
+SPECIAL(Trogatron)
+{
+  if (cmd || FIGHTING(ch) || GET_POS(ch) <= POS_SLEEPING)
+    return FALSE;
+
+  if (GET_ACTIVE(ch) < 0 || GET_ACTIVE(ch) > 12)
+    GET_ACTIVE(ch) = 0;
+
+  switch (GET_ACTIVE(ch)) {
+    case 7:
+      do_say(ch, "This is pewALLop, FOR REAL, you got to KNOW/", 0, 0);
+      do_say(ch, "It'll WALLop, leave DOLLops of blood in the SNOW/", 0, 0);
+      do_say(ch, "CAUGHT up and SHOT up, and if you then GOT up/", 0, 0);
+      do_say(ch, "We gonna go STOCK up and put it on LOCK up/", 0, 0);
+      do_say(ch, "Mana warp POP up 'round where we CHALK up your SKULL!-", 0, 0);
+      break;
+  }
+  GET_ACTIVE(ch)++;
+  return FALSE;
+}
+
 SPECIAL(huge_troll) {
   NO_DRAG_BULLSHIT;
 
