@@ -222,9 +222,8 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
     GET_TOTEMSPIRIT(CH) = archetypes[i]->totemspirit;
   }
 
-
-  // Grant forcepoints for bonding purposes.
-  GET_FORCE_POINTS(CH) = archetypes[i]->forcepoints;
+  // Foci are auto-bonded, so no need to give force points for this.
+  GET_FORCE_POINTS(CH) = 0;
 
   // Set spells, if any.
   for (int spell_idx = 0; spell_idx < NUM_ARCHETYPE_SPELLS; spell_idx++)

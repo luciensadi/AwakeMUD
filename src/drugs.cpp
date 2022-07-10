@@ -26,9 +26,6 @@
 */
 
 // TODO: Balance pass on drugs / penalties / withdrawal costs
-// TODO: Combinable drugs
-// TODO: TEST: Auto-use should use up all the doses you have until you hit the right amount
-// TODO: Make withdrawal happen faster, it currently takes IRL hours to begin- or figure out a way to make it feel better (start sooner and ramp up?)
 // TODO: The withdrawal timer in act.inf is currently backwards somehow, it goes up with time instead of down.
 
 extern int raw_stat_loss(struct char_data *);
@@ -961,8 +958,8 @@ void update_withdrawal_flags(struct char_data *ch) {
 const char *get_time_until_withdrawal_ends(struct char_data *ch, int drug_id) {
   static char time_buf[20];
 
-  int ig_days = GET_DRUG_ADDICTION_EDGE(ch, drug_id) - 1;
-  int rl_secs = time(0) - GET_DRUG_LAST_FIX(ch, drug_id) + (ig_days * SECS_PER_MUD_DAY);
+  int ig_days = GET_DRUG_ADDICTION_EDGE(ch, drug_id);
+  int rl_secs = (ig_days * SECS_PER_MUD_DAY) - (time(0) - GET_DRUG_LAST_FIX(ch, drug_id));
 
   int rl_hours = rl_secs / SECS_PER_REAL_HOUR;
   rl_secs %= SECS_PER_REAL_HOUR;
