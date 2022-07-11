@@ -693,7 +693,8 @@ void move_vehicle(struct char_data *ch, int dir)
           && has_key(ch, (EXIT(veh, dir)->key)))
       {
           send_to_char("The remote on your key beeps, allowing the door to swing open briefly enough to slide through.\r\n", ch);
-          act("A door beeps before swinging open electronically to allow $n through in the brief moment.\r\n", TRUE, veh, 0, 0, TO_ROOM);
+          snprintf(buf, sizeof(buf), "A door beeps before swinging open electronically to allow %s through in that brief moment.\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
+          send_to_room(buf, get_veh_in_room(veh), veh);
       } else {
           send_to_char(CANNOT_GO_THAT_WAY, ch);
           return;
