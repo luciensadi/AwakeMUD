@@ -4435,8 +4435,9 @@ ACMD(do_spray)
     send_to_char("What do you want to spray?\r\n", ch);
     return;
   }
-  int existing_graffiti_count = 0;
+
   {
+    int existing_graffiti_count = 0;
     struct obj_data *obj;
     FOR_ITEMS_AROUND_CH(ch, obj) {
       if (GET_OBJ_VNUM(obj) == OBJ_GRAFFITI)
@@ -4455,14 +4456,13 @@ ACMD(do_spray)
         return;
       }
       struct obj_data *paint = read_object(OBJ_GRAFFITI, VIRTUAL);
-      if (existing_graffiti_count > 0) {
-        snprintf(buf, sizeof(buf), "Sprayed here,", argument);
-      } snprintf(buf, sizeof(buf), "   %s^n", argument);
+      snprintf(buf, sizeof(buf), "^g   %s^n", argument);
       paint->restring = str_dup(buf);
-      snprintf(buf, sizeof(buf), "   %s^n", argument);
+      snprintf(buf, sizeof(buf), "^g   %s^n", argument);
       paint->graffiti = str_dup(buf);
       obj_to_room(paint, ch->in_room);
 
+      send_to_char("You spray graffiti into the room.\r\n", ch);
       snprintf(buf, sizeof(buf), "%s sprayed graffiti: %s.", GET_CHAR_NAME(ch), GET_OBJ_NAME(paint));
       mudlog(buf, ch, LOG_GRIDLOG, TRUE);
 
