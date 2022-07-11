@@ -5556,10 +5556,10 @@ void chkdmg(struct veh_data * veh)
     // Remove any vehicle brains, we don't want them thrown into the street.
     remove_vehicle_brain(veh);
     
-    if (veh->owner <= 0) {
-      veh->flags.SetBit(VFLAG_LOOTWRECK);
-      GET_VEH_DESTRUCTION_TIMER(veh) = max_npc_vehicle_lootwreck_time;
-     }
+      if (veh->owner <= 0) {
+        veh->flags.SetBit(VFLAG_LOOTWRECK);
+        GET_VEH_DESTRUCTION_TIMER(veh) = max_npc_vehicle_lootwreck_time;
+      }
     
     if (veh->cspeed >= SPEED_IDLE) {
       if (veh->people) {
