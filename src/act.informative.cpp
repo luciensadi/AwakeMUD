@@ -62,6 +62,7 @@ extern int same_obj(struct obj_data * obj1, struct obj_data * obj2);
 extern int find_sight(struct char_data *ch);
 extern int belongs_to(struct char_data *ch, struct obj_data *obj);
 extern int calculate_vehicle_entry_load(struct veh_data *veh);
+extern unsigned int get_johnson_overall_max_rep(struct char_data *johnson);
 
 extern int get_weapon_damage_type(struct obj_data* weapon);
 
@@ -1150,10 +1151,16 @@ void list_one_char(struct char_data * i, struct char_data * ch)
           }
         }
         if (MOB_HAS_SPEC(i, johnson)) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might have a job for you.%s^n\r\n",
-                   HSSH(i),
-                   already_printed ? " also" : "",
-                   SHOULD_SEE_TIPS(ch) ? " See ^YHELP JOB^y for instructions." : "");
+          if (get_johnson_overall_max_rep(i) >= GET_REP(ch)) {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might have a job for you.%s^n\r\n",
+                     HSSH(i),
+                     already_printed ? " also" : "",
+                     SHOULD_SEE_TIPS(ch) ? " See ^YHELP JOB^y for instructions." : "");
+          } else {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s has work for less-experienced 'runners.^n\r\n",
+                     HSSH(i),
+                     already_printed ? " also" : "");
+          }
           already_printed = TRUE;
         }
         if (MOB_HAS_SPEC(i, shop_keeper) || MOB_HAS_SPEC(i, terell_davis)) {
