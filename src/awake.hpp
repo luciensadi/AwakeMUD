@@ -1167,7 +1167,11 @@ enum {
 #define WEAP_GREN_LAUNCHER  20
 #define WEAP_MISS_LAUNCHER  21
 #define WEAP_REVOLVER       22
-#define MAX_WEAP            23
+#define WEAP_BOW            23
+#define WEAP_CROSSBOW       24
+#define MAX_WEAP            25
+// Adding a weapon type? Update the weapon_type array in constants.cpp.
+// Also update weapon_type_ammo_cost_multipliers in that file.
 
 // Defines our weapon ranges for bullet pants. Holdout -> revolver.
 #define START_OF_AMMO_USING_WEAPONS 5
@@ -1301,18 +1305,47 @@ enum {
 #define MAX_ITEM_EXTRA                32
 
 /* Ammo types */
-#define AMMO_NORMAL     0
-#define AMMO_APDS       1
-#define AMMO_EXPLOSIVE  2
-#define AMMO_EX         3
-#define AMMO_FLECHETTE  4
-#define AMMO_GEL        5
-#define AMMO_HARMLESS   6
-#define AMMO_AV         7
-#define NUM_AMMOTYPES   8
-// Adding a new ammo type? Make sure it's in npc_ammo_usage_preferences[].
+#define AMMO_NORMAL           0
+#define AMMO_APDS             1
+#define AMMO_EXPLOSIVE        2
+#define AMMO_EX               3
+#define AMMO_FLECHETTE        4
+#define AMMO_GEL              5
+#define AMMO_HARMLESS         6
+#define AMMO_AV               7
+#define NUM_AMMOTYPES         8
+// Adding a new ammo type? Make sure it's in bullet_pants.cpp's npc_ammo_usage_preferences[].
 // Make sure you also add a DB migration to include it in pfiles_ammo.
 // Save and load it in bullet_pants.cpp's save_bullet_pants and load_bullet_pants functions.
+
+/* Arrow types */
+#define AMMO_ARROW_NORMAL     0
+#define AMMO_ARROW_EXPLOSIVE  1
+#define AMMO_ARROW_EX         2
+#define AMMO_ARROW_HAMMERHEAD 3
+#define AMMO_ARROW_BARBED     4
+#define NUM_ARROWTYPES        5
+// Adding a new ammo type? Make sure it's in bullet_pants.cpp's npc_arrow_usage_preferences[].
+
+/* Bolt types */
+#define AMMO_BOLT_NORMAL      0
+#define AMMO_BOLT_EXPLOSIVE   1
+#define AMMO_BOLT_EX          2
+#define AMMO_BOLT_HAMMERHEAD  3
+#define AMMO_BOLT_BARBED      4
+#define NUM_BOLTTYPES         5
+// Adding a new ammo type? Make sure it's in bullet_pants.cpp's npc_arrow_usage_preferences[].
+
+/* Projectile types, for quivers */
+#define PROJECTILE_ARROW          0
+#define PROJECTILE_BOLT           1
+#define PROJECTILE_SHURIKEN       2
+#define PROJECTILE_THROWING_KNIFE 3
+
+#define FIREWEAPON_BOW            0
+#define FIREWEAPON_CROSSBOW       1
+#define FIREWEAPON_RANGER_X_BOW   2
+#define NUM_FIREWEAPON_TYPES      3
 
 /* material type for item */
 #define ITEM_NONE                  0
@@ -2261,22 +2294,23 @@ enum {
 #define IDENT_LENGTH              8
 
 // New combat modifiers used in the rework of hit().
-#define COMBAT_MOD_RECOIL                0
-#define COMBAT_MOD_MOVEMENT              1
-#define COMBAT_MOD_DUAL_WIELDING         2
-#define COMBAT_MOD_SMARTLINK             3
-#define COMBAT_MOD_DISTANCE              4
-#define COMBAT_MOD_VISIBILITY            5
-#define COMBAT_MOD_POSITION              6
-#define COMBAT_MOD_GYRO                  7
-#define COMBAT_MOD_REACH                 8
-#define COMBAT_MOD_VEHICLE_DAMAGE        9
-#define COMBAT_MOD_DEFENDER_MOVING       10
-#define COMBAT_MOD_IN_MELEE_COMBAT       11
-#define COMBAT_MOD_OPPONENT_BURST_COUNT  12
-#define COMBAT_MOD_FOOTANCHORS           13
-#define COMBAT_MOD_VEHICLE_HANDLING      14
-#define NUM_COMBAT_MODIFIERS             15
+#define COMBAT_MOD_RECOIL                  0
+#define COMBAT_MOD_MOVEMENT                1
+#define COMBAT_MOD_DUAL_WIELDING           2
+#define COMBAT_MOD_SMARTLINK               3
+#define COMBAT_MOD_DISTANCE                4
+#define COMBAT_MOD_VISIBILITY              5
+#define COMBAT_MOD_POSITION                6
+#define COMBAT_MOD_GYRO                    7
+#define COMBAT_MOD_REACH                   8
+#define COMBAT_MOD_VEHICLE_DAMAGE          9
+#define COMBAT_MOD_DEFENDER_MOVING         10
+#define COMBAT_MOD_IN_MELEE_COMBAT         11
+#define COMBAT_MOD_OPPONENT_BURST_COUNT    12
+#define COMBAT_MOD_FOOTANCHORS             13
+#define COMBAT_MOD_VEHICLE_HANDLING        14
+#define COMBAT_MOD_FIREWEAPON_LOW_STRENGTH 15
+#define NUM_COMBAT_MODIFIERS               16
 // End new combat modifiers.
 
 #define JURISDICTION_SEATTLE   0
