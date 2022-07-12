@@ -1088,7 +1088,9 @@ void group_gain(struct char_data * ch, struct char_data * victim)
 
   for (f = k->followers; f; f = f->next)
     if (IS_AFFECTED(f->follower, AFF_GROUP)
-        && f->follower->in_room == ch->in_room) {
+        && f->follower->in_room == ch->in_room
+        && !IS_PC_CONJURED_ELEMENTAL(f->follower) && !IS_SPIRIT(f->follower))
+    {
       if (GET_NOT(high) < GET_NOT(f->follower))
         high = f->follower;
       tot_members++;
