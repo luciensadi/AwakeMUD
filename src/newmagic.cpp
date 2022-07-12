@@ -5440,14 +5440,16 @@ void disp_init_menu(struct descriptor_data *d)
   d->edit_mode = INIT_MAIN;
 }
 
-bool can_metamagic(struct char_data *ch, int i)
+bool can_select_metamagic(struct char_data *ch, int i)
 {
   if (GET_TRADITION(ch) == TRAD_ADEPT) {
     if (i != META_CENTERING && i != META_MASKING)
       return FALSE;
-    if (i == META_CENTERING && GET_METAMAGIC(ch, i) == 2)
+    // Centering can go up an arbitrary number of levels.
+    if (i == META_CENTERING && GET_METAMAGIC(ch, i) % METAMAGIC_STAGE_LEARNED == 0)
       return TRUE;
   }
+  // All other metamagics can only be unlocked from 0.
   if (GET_METAMAGIC(ch, i))
     return FALSE;
   if (GET_ASPECT(ch) == ASPECT_CONJURER && (i == META_QUICKENING || i == META_REFLECTING || i == META_ANCHORING || i == META_SHIELDING))
@@ -5473,8 +5475,14 @@ void disp_geas_menu(struct descriptor_data *d)
 void disp_meta_menu(struct descriptor_data *d)
 {
   CLS(CH);
-  for (int i = 1; i < META_MAX; i++)
-    send_to_char(CH, "%d) %s%s^n\r\n", i, can_metamagic(CH, i) ? "" : "^r", metamagic[i]);
+  for (int i = 1; i < META_MAX; i++) {
+    if (PRF_FLAGGED(CH, PRF_SCREENREADER)) {
+      send_to_char(CH, "%d) %s%s^n\r\n", i, metamagic[i], can_select_metamagic(CH, i) ? " (can learn)" : " (cannot learn)");
+    } else {
+      send_to_char(CH, "%d) %s%s^n\r\n", i, can_select_metamagic(CH, i) ? "" : "^r", metamagic[i]);
+    }
+  }
+
   send_to_char("q) Quit Initiation\r\nSelect ability to learn: ", CH);
   d->edit_mode = INIT_META;
 }
@@ -5668,9 +5676,11 @@ void init_parse(struct descriptor_data *d, char *arg)
         STATE(d) = CON_PLAYING;
         send_to_char("Initiation cancelled.\r\n", CH);
       } else if (number > META_MAX) {
-        send_to_char("Invalid Response. Select ability to learn: ", CH);
-      } else if (!can_metamagic(CH, number)) {
-        send_to_char("Your tradition/apect/initiation combination isn't able to learn that metamagic technique. Select ability to learn: ", CH);
+        send_to_char("Invalid Response. Select another metamagic to unlock: ", CH);
+      } else if (GET_METAMAGIC(CH, number) >= METAMAGIC_STAGE_UNLOCKED) {
+        send_to_char(CH, "You've already unlocked %s. Select another metamagic to unlock: ", metamagic[number]);
+      } else if (!can_select_metamagic(CH, number)) {
+        send_to_char("Your tradition/apect/initiation combination isn't able to learn that metamagic technique. Select another metamagic to learn: ", CH);
       } else {
         init_cost(CH, TRUE);
         SET_METAMAGIC(CH, number, GET_METAMAGIC(CH, number) + 1);
@@ -5689,7 +5699,7 @@ void init_parse(struct descriptor_data *d, char *arg)
 
 ACMD(do_masking)
 {
-  if (GET_METAMAGIC(ch, META_MASKING) < 2) {
+  if (GET_METAMAGIC(ch, META_MASKING) < METAMAGIC_STAGE_LEARNED) {
     nonsensical_reply(ch, NULL, "standard");
     return;
   }
@@ -5778,7 +5788,20 @@ ACMD(do_metamagic)
   for (int x = 0; x < META_MAX; x++)
     if (GET_METAMAGIC(ch, x)) {
       i++;
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  %s%s^n\r\n", GET_METAMAGIC(ch, x) == 2 ? "" : "^r", metamagic[x]);
+      if (GET_METAMAGIC(ch, x) == METAMAGIC_STAGE_LOCKED) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  ^r%s^n (locked)^n\r\n", metamagic[x]);
+      } else if (GET_METAMAGIC(ch, x) == METAMAGIC_STAGE_UNLOCKED) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  ^y%s^n (not learned)^n\r\n", metamagic[x]);
+      } else {
+        if (x == META_CENTERING && GET_TRADITION(ch) == TRAD_ADEPT) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  ^y%s^n (learned %d/%d)^n\r\n",
+                   metamagic[x],
+                   GET_METAMAGIC(ch, x) / METAMAGIC_STAGE_LEARNED,
+                   (GET_METAMAGIC(ch, x) / METAMAGIC_STAGE_LEARNED) + GET_METAMAGIC(ch, x) % METAMAGIC_STAGE_LEARNED);
+        } else {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  ^y%s^n (learned)^n\r\n", metamagic[x]);
+        }
+      }
     }
   if (i > 0)
     send_to_char(ch, "You know the following metamagic techniques:\r\n%s", buf);
@@ -5787,7 +5810,7 @@ ACMD(do_metamagic)
 
 ACMD(do_cleanse)
 {
-  if (GET_METAMAGIC(ch, META_CLEANSING) < 2) {
+  if (GET_METAMAGIC(ch, META_CLEANSING) < METAMAGIC_STAGE_LEARNED) {
     nonsensical_reply(ch, NULL, "standard");
     return;
   }

@@ -104,6 +104,10 @@
 #define ASPECT_FIREMAGE  10
 #define ASPECT_WATERMAGE  11
 
+#define METAMAGIC_STAGE_LOCKED   0
+#define METAMAGIC_STAGE_UNLOCKED 1
+#define METAMAGIC_STAGE_LEARNED  2
+
 
 /* totems */
 
@@ -2259,6 +2263,11 @@ enum {
 #define MAX_AFFECT                32  /* Used in char_file_u *DO*NOT*CHANGE* */
 #define MAX_OBJ_AFFECT            6 /* Used in obj_file_elem *DO*NOT*CHANGE* */
 #define IDENT_LENGTH              8
+
+// Update the DB if you change these.
+#define MAX_KEYWORDS_LEN          200
+#define MAX_MOVEMENT_LEN          200
+#define MAX_SHORTDESC_LEN         200
 
 // New combat modifiers used in the rework of hit().
 #define COMBAT_MOD_RECOIL                0

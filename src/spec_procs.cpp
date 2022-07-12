@@ -453,8 +453,8 @@ int get_skill_price(struct char_data *ch, int i)
 }
 
 bool can_learn_metamagic(struct char_data *ch, int metamagic_idx) {
-  // You already know it.
-  if (GET_METAMAGIC(ch, metamagic_idx) == 2 || GET_METAMAGIC(ch, metamagic_idx) == 4)
+  // You already know it, or haven't unlocked it at all.
+  if (GET_METAMAGIC(ch, metamagic_idx) % METAMAGIC_STAGE_LEARNED == 0)
     return FALSE;
 
   // Your tradition is not compatible.
@@ -529,7 +529,24 @@ SPECIAL(metamagic_teacher)
           send_to_char(ch, "%s can teach you the following techniques for %d nuyen each: \r\n", GET_NAME(master), cost);
           printed_something = TRUE;
         }
-        send_to_char(ch, "  %s%s\r\n", metamagic[metamagict[ind].s[i]], !GET_METAMAGIC(ch, metamagict[ind].s[i]) ? " (locked)" : "");
+        switch (GET_METAMAGIC(ch, metamagict[ind].s[i])) {
+          case METAMAGIC_STAGE_LOCKED:
+            send_to_char(ch, "  ^r%s^n (locked)\r\n", metamagic[metamagict[ind].s[i]]);
+            break;
+          case METAMAGIC_STAGE_UNLOCKED:
+            send_to_char(ch, "  %s\r\n", metamagic[metamagict[ind].s[i]]);
+            break;
+          case METAMAGIC_STAGE_LEARNED:
+            send_to_char(ch, "  ^g%s^n (already known)\r\n", metamagic[metamagict[ind].s[i]]);
+            break;
+          default:
+            if (GET_METAMAGIC(ch, metamagict[ind].s[i]) % 2 == 1) {
+              send_to_char(ch, "  %s\r\n", metamagic[metamagict[ind].s[i]]);
+            } else {
+              send_to_char(ch, "  ^g%s^n (already known)\r\n", metamagic[metamagict[ind].s[i]]);
+            }
+            break;
+        }
       }
     }
     if (!printed_something) {
@@ -548,18 +565,18 @@ SPECIAL(metamagic_teacher)
     return TRUE;
   }
 
-  if (!can_learn_metamagic(ch, metamagict[ind].s[i])) {
-    send_to_char(ch, "You can't learn %s.\r\n", metamagic[i]);
-    return TRUE;
-  }
-
-  if (GET_METAMAGIC(ch, i) == 2 || GET_METAMAGIC(ch, i) == 4) {
+  if (GET_METAMAGIC(ch, i) && GET_METAMAGIC(ch, i) % 2 == 0) {
     send_to_char(ch, "You already know how to use %s.\r\n", metamagic[i]);
     return TRUE;
   }
 
   if (!GET_METAMAGIC(ch, i)) {
     send_to_char(ch, "You aren't close enough to the astral plane to learn %s. You'll need to initiate and select that power first.\r\n", metamagic[i]);
+    return TRUE;
+  }
+
+  if (!can_learn_metamagic(ch, metamagict[ind].s[i])) {
+    send_to_char(ch, "You can't learn %s.\r\n", metamagic[i]);
     return TRUE;
   }
   /* "Hey, I have an idea!" "What?" "Let's arbitrarily restrict who can train where so that the builders have to do more work!"

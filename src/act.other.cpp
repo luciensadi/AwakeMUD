@@ -2647,7 +2647,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
     cedit_disp_menu(d, 0);
     break;
   case CEDIT_ALIAS:
-    if (strlen(arg) >= LINE_LENGTH || strlen(arg) < 5) {
+    if (strlen(arg) >= MAX_KEYWORDS_LEN || get_string_length_after_color_code_removal(arg, CH) >= LINE_LENGTH || strlen(arg) < 5) {
       cedit_disp_menu(d, 1);
       return;
     }
@@ -2659,7 +2659,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
     break;
 
   case CEDIT_VOICE:
-    if (strlen(arg) >= LINE_LENGTH || strlen(arg) < 5) {
+    if (get_string_length_after_color_code_removal(arg, CH) >= LINE_LENGTH || strlen(arg) < 5) {
       cedit_disp_menu(d, 1);
       return;
     }
@@ -2670,7 +2670,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
 
     break;
   case CEDIT_ARRIVE:
-    if (strlen(arg) >= LINE_LENGTH || strlen(arg) < 5) {
+    if (strlen(arg) >= MAX_MOVEMENT_LEN || get_string_length_after_color_code_removal(arg, CH) >= LINE_LENGTH || strlen(arg) < 5) {
       cedit_disp_menu(d, 1);
       return;
     }
@@ -2679,7 +2679,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
     cedit_disp_menu(d, 0);
     break;
   case CEDIT_LEAVE:
-    if (strlen(arg) >= LINE_LENGTH || strlen(arg) < 5) {
+    if (strlen(arg) >= MAX_MOVEMENT_LEN || get_string_length_after_color_code_removal(arg, CH) >= LINE_LENGTH || strlen(arg) < 5) {
       cedit_disp_menu(d, 1);
       return;
     }
@@ -2688,7 +2688,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
     cedit_disp_menu(d, 0);
     break;
   case CEDIT_SHORT_DESC:
-    if (strlen(arg) >= LINE_LENGTH || strlen(arg) < 5) {
+    if (strlen(arg) >= MAX_SHORTDESC_LEN || get_string_length_after_color_code_removal(arg, CH) >= LINE_LENGTH || strlen(arg) < 5) {
       cedit_disp_menu(d, 1);
       return;
     }
@@ -4499,6 +4499,8 @@ ACMD(do_cleanup)
 
   send_to_char(ch, "You spend a few moments scrubbing away %s. Community service, good for you!\r\n", GET_OBJ_NAME(target_obj));
   act("$n spends a few moments scrubbing away $p.", TRUE, ch, target_obj, NULL, TO_ROOM);
+
+  WAIT_STATE(ch, 3 RL_SEC);
 
   snprintf(buf, sizeof(buf), "%s cleaned up graffiti: ^n%s^g.", GET_CHAR_NAME(ch), GET_OBJ_NAME(target_obj));
   mudlog(buf, ch, LOG_GRIDLOG, TRUE);
