@@ -13,6 +13,7 @@
 #include <ctype.h>
 #include <sys/types.h>
 #include <vector>
+#include <algorithm>
 
 #if defined(WIN32) && !defined(__CYGWIN__)
 #define strcasecmp(x, y) _stricmp(x,y)

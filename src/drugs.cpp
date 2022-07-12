@@ -553,7 +553,6 @@ void process_withdrawal(struct char_data *ch) {
               snprintf(buf, sizeof(buf), "Your lack of %s is causing you great pain and discomfort.\r\n", drug_types[drug_id].name);
             } else {
               snprintf(buf, sizeof(buf), "You crave some %s.\r\n", drug_types[drug_id].name);
-              // TODO: There's no benefit to guided withdrawal here, should there be?
             }
 
             // Auto-use drugs if available in inventory.

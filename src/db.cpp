@@ -109,14 +109,14 @@ struct char_data *character_list = NULL; /* global linked list of chars  */
 struct index_data *mob_index; /* index table for mobile file  */
 struct char_data *mob_proto; /* prototypes for mobs   */
 rnum_t top_of_mobt = 0; /* top of mobile index table  */
-int mob_chunk_size = 100;       // default to 100
+int mob_chunk_size = 250;       // default to 100
 int top_of_mob_array = 0;
 
 struct index_data *obj_index; /* index table for object file  */
 struct obj_data *obj_proto; /* prototypes for objs   */
 rnum_t top_of_objt = 0; /* top of object index table  */
 int top_of_obj_array = 0;
-int obj_chunk_size = 100;       // default to 100
+int obj_chunk_size = 250;       // default to 100
 
 struct zone_data *zone_table; /* zone table    */
 rnum_t top_of_zone_table = 0;/* top element of zone tab  */
@@ -125,17 +125,17 @@ struct message_list fight_messages[MAX_MESSAGES]; /* fighting messages  */
 struct quest_data *quest_table = NULL; // array of quests
 rnum_t top_of_questt = 0;
 int top_of_quest_array = 0;
-int quest_chunk_size = 25;
+int quest_chunk_size = 50;
 
 struct shop_data *shop_table = NULL;   // array of shops
 rnum_t top_of_shopt = 0;            // ref to top element of shop_table
 int top_of_shop_array = 0;
-int shop_chunk_size = 25;
+int shop_chunk_size = 50;
 
 int top_of_matrix_array = 0;
 int top_of_ic_array = 0;
 int top_of_world_array = 0;
-int world_chunk_size = 100;     /* size of world to add on each reallocation */
+int world_chunk_size = 250;     /* size of world to add on each reallocation */
 int olc_state = 1;              /* current olc state */
 int _NO_OOC_  = 0;  /* Disable the OOC Channel */
 
