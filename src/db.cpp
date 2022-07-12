@@ -82,6 +82,9 @@ extern void ensure_mob_has_ammo_for_weapon(struct char_data *ch, struct obj_data
 
 extern void auto_repair_obj(struct obj_data *obj);
 
+// transport.cpp
+extern void boot_escalators();
+
 
 /**************************************************************************
 *  declarations of most of the 'global' variables                         *
@@ -682,6 +685,9 @@ void DBInit()
 
   log("Setting up mobact aggression octets.");
   populate_mobact_aggression_octets();
+
+  log("Building escalator vector.");
+  boot_escalators();
 
   log("DBInit -- DONE.");
 }

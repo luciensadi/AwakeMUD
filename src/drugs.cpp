@@ -26,7 +26,6 @@
 */
 
 // TODO: Balance pass on drugs / penalties / withdrawal costs
-// TODO: The withdrawal timer in act.inf is currently backwards somehow, it goes up with time instead of down.
 
 extern int raw_stat_loss(struct char_data *);
 extern bool check_adrenaline(struct char_data *, int);
@@ -44,6 +43,7 @@ int _seek_drugs_purchase_cost(struct char_data *ch, int drug_id);
 bool seek_drugs(struct char_data *ch, int drug_id);
 void update_withdrawal_flags(struct char_data *ch);
 void _put_char_in_withdrawal(struct char_data *ch, int drug_id, bool is_guided);
+bool _take_anti_drug_chems(struct char_data *ch, int drug_id);
 
 
 // Given a character and a drug object, dose the character with that drug object, then extract it if needed. Effects apply at next limit tick.
@@ -542,6 +542,11 @@ void process_withdrawal(struct char_data *ch) {
 
         // If they got here, they're still addicted. Check to see if they're weak-willed enough to auto-take it.
         if (days_since_last_fix >= drug_types[drug_id].fix_factor) {
+          // If you're undergoing guided withdrawal AND have the right chems on you, you skip the test (consumes chems though)
+          if (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_GUIDED_WITHDRAWAL && _take_anti_drug_chems(ch, drug_id)) {
+            continue;
+          }
+
           if (!_combined_addiction_test(ch, drug_id, "auto-take resistance")) {
             // Compose message, which is replaced by craving messages if they're carrying drugs.
             if (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_FORCED_WITHDRAWAL) {
@@ -994,6 +999,45 @@ void _put_char_in_withdrawal(struct char_data *ch, int drug_id, bool is_guided) 
   GET_DRUG_LAST_WITHDRAWAL_TICK(ch, drug_id) = 1; // Set to 1 so we don't tick on the first day.
   GET_DRUG_ADDICTION_TICK_COUNTER(ch, drug_id) = 0;
   update_withdrawal_flags(ch);
+}
+
+bool _take_anti_drug_chems(struct char_data *ch, int drug_id) {
+  int doses_required = GET_DRUG_ADDICTION_EDGE(ch, drug_id);
+  struct obj_data *next_obj;
+
+  for (struct obj_data *chems = ch->carrying; chems; chems = next_obj) {
+    next_obj = chems->next_content;
+
+    if (GET_OBJ_VNUM(chems) == OBJ_ANTI_DRUG_CHEMS) {
+      int chems_avail = GET_CHEMS_QTY(chems);
+
+      if (chems_avail >= doses_required) {
+        GET_CHEMS_QTY(chems) -= doses_required;
+        if (GET_CHEMS_QTY(chems) <= 0) {
+          send_to_char(ch, "You take the edge off your %s addiction with the last dose from %s.\r\n", drug_types[drug_id].name, GET_OBJ_NAME(chems));
+          extract_obj(chems);
+        } else {
+          send_to_char(ch, "You take the edge off your %s addiction with a dose of %s.\r\n", drug_types[drug_id].name, GET_OBJ_NAME(chems));
+        }
+        return TRUE;
+      } else {
+        doses_required -= GET_CHEMS_QTY(chems);
+        send_to_char(ch, "You knock back the last dose%s from %s, but it's%snot quite enough.\r\n",
+                     GET_CHEMS_QTY(chems) == 1 ? "" : "s",
+                     doses_required != GET_DRUG_ADDICTION_EDGE(ch, drug_id) ? " still" : " ",
+                     GET_OBJ_NAME(chems));
+        GET_CHEMS_QTY(chems) = 0;
+        extract_obj(chems);
+      }
+    }
+  }
+
+  if (doses_required != GET_DRUG_ADDICTION_EDGE(ch, drug_id)) {
+    send_to_char("You weren't able to find enough chems to stave off the itching in your veins...\r\n", ch);
+  } else {
+    send_to_char("You could really use some anti-craving chems right about now.\r\n", ch);
+  }
+  return FALSE;
 }
 
 // ----------------- Definitions for Drugs

@@ -2513,6 +2513,7 @@ enum {
 #define OBJ_BLANK_MAGAZINE                 127
 
 #define OBJ_DOCWAGON_PAPER_GOWN            16201
+#define OBJ_ANTI_DRUG_CHEMS                44
 
 #define QST_MAGE_INTRO                     5743
 

@@ -12,6 +12,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <sys/types.h>
+#include <vector>
 
 #if defined(WIN32) && !defined(__CYGWIN__)
 #define strcasecmp(x, y) _stricmp(x,y)
@@ -1971,35 +1972,53 @@ SPECIAL(escalator)
 // processing funcs
 // ______________________________
 
+std::vector<struct room_data *> escalator_list = {};
+void boot_escalators() {
+  escalator_list.clear();
+
+  for (rnum_t i = 0; i <= top_of_world; i++) {
+    if (world[i].func && world[i].func == escalator) {
+      // TODO: Won't this break if we renumber the world / expand the room array?
+      escalator_list.push_back(&world[i]);
+      log_vfprintf("- Added escalator room %s (%ld)", GET_ROOM_NAME(&world[i]), GET_ROOM_VNUM(&world[i]));
+    }
+  }
+}
+
+void process_single_escalator(struct room_data *escalator_room) {
+  struct char_data *next, *temp;
+  int dir;
+
+  for (temp = escalator_room->people; temp; temp = next) {
+    next = temp->next_in_room;
+    if (GET_LASTROOM(temp) > 0 || GET_LASTROOM(temp) < -3) {
+      GET_LASTROOM(temp) = -3;
+    } else if (GET_LASTROOM(temp) < 0) {
+      GET_LASTROOM(temp)++;
+    } else {
+      for (dir = NORTH; dir <= DOWN; dir++) {
+        if (escalator_room->dir_option[dir] &&
+            escalator_room->dir_option[dir]->to_room) {
+          act("As you reach the end, you step off the escalator.",
+              FALSE, temp, 0, 0, TO_CHAR);
+          act("$n steps off of the escalator.", TRUE, temp, 0, 0, TO_ROOM);
+          char_from_room(temp);
+          GET_LASTROOM(temp) = escalator_room->number;
+          char_to_room(temp, escalator_room->dir_option[dir]->to_room);
+          if (temp->desc)
+            look_at_room(temp, 0, 0);
+          break;
+        }
+      }
+    }
+  }
+}
+
 void EscalatorProcess(void)
 {
   PERF_PROF_SCOPE(pr_, __func__);
-  int i, dir;
-  struct char_data *temp, *next;
 
-  for (i = 0; i <= top_of_world; i++)
-    if (world[i].func && world[i].func == escalator)
-      for (temp = world[i].people; temp; temp = next) {
-        next = temp->next_in_room;
-        if (GET_LASTROOM(temp) > 0 || GET_LASTROOM(temp) < -3)
-          GET_LASTROOM(temp) = -3;
-        else if (GET_LASTROOM(temp) < 0)
-          GET_LASTROOM(temp)++;
-        else
-          for (dir = NORTH; dir <= DOWN; dir++)
-            if (world[i].dir_option[dir] &&
-                world[i].dir_option[dir]->to_room) {
-              act("As you reach the end, you step off the escalator.",
-                  FALSE, temp, 0, 0, TO_CHAR);
-              act("$n steps off of the escalator.", TRUE, temp, 0, 0, TO_ROOM);
-              char_from_room(temp);
-              GET_LASTROOM(temp) = world[i].number;
-              char_to_room(temp, world[i].dir_option[dir]->to_room);
-              if (temp->desc)
-                look_at_room(temp, 0, 0);
-              break;
-            }
-      }
+  std::for_each(escalator_list.begin(), escalator_list.end(), process_single_escalator);
 }
 
 // ______________________________

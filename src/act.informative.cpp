@@ -3256,11 +3256,17 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
         break;
       }
       if (GET_OBJ_VNUM(j) == OBJ_VEHCONTAINER) {
-        strlcat(buf, "\r\nIt's a carried vehicle. You can DROP it on any road or garage.", sizeof(buf));
+        strlcat(buf, "\r\nIt's a carried vehicle. You can ##^WDROP^n it on any road or garage.", sizeof(buf));
         break;
       }
       if (GET_OBJ_VNUM(j) == OBJ_SHOPCONTAINER) {
-        strlcat(buf, "\r\nIt's a packaged-up bit of cyberware or bioware. See HELP CYBERDOC for what you can do with it.", sizeof(buf));
+        strlcat(buf, "\r\nIt's a packaged-up bit of cyberware or bioware. See ##^WHELP CYBERDOC^n for what you can do with it.", sizeof(buf));
+        break;
+      }
+      if (GET_OBJ_VNUM(j) == OBJ_ANTI_DRUG_CHEMS) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt's a bottle of anti-craving chemicals with %d dose%s left. If you have it on you during guided withdrawal, you won't risk a fugue state. See ##^WHELP ADDICTION^n for more.",
+                 GET_CHEMS_QTY(j),
+                 GET_CHEMS_QTY(j) == 1 ? "" : "s");
         break;
       }
       // fallthrough

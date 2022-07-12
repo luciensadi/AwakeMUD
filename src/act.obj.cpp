@@ -500,7 +500,7 @@ ACMD(do_put)
   }
 
   // Combine drugs.
-  if (GET_OBJ_TYPE(cont) == ITEM_DRUG) {
+  if (GET_OBJ_TYPE(cont) == ITEM_DRUG || GET_OBJ_VNUM(cont) == OBJ_ANTI_DRUG_CHEMS) {
     if (!(obj = get_obj_in_list_vis(ch, arg1, ch->carrying))) {
       send_to_char(ch, "You aren't carrying %s %s.\r\n", AN(arg1), arg1);
       return;
@@ -511,13 +511,26 @@ ACMD(do_put)
       return;
     }
 
-    if (GET_OBJ_TYPE(obj) != ITEM_DRUG || GET_OBJ_DRUG_TYPE(obj) != GET_OBJ_DRUG_TYPE(cont)) {
-      send_to_char(ch, "You can only combine %s with other doses of %s, and %s doesn't qualify.\r\n",
-        decapitalize_a_an(GET_OBJ_NAME(cont)),
-        drug_types[GET_OBJ_DRUG_TYPE(cont)].name,
-        GET_OBJ_NAME(obj)
-      );
+    if (GET_OBJ_VNUM(cont) == OBJ_ANTI_DRUG_CHEMS) {
+      if (GET_OBJ_VNUM(obj) != OBJ_ANTI_DRUG_CHEMS) {
+        send_to_char("You can only combine chems with other chems.\r\n", ch);
+        return;
+      }
+
+      send_to_char("You combine the chems.\r\n", ch);
+      GET_CHEMS_QTY(cont) += GET_CHEMS_QTY(obj);
+      GET_CHEMS_QTY(obj) = 0;
+      extract_obj(obj);
       return;
+    } else {
+      if (GET_OBJ_TYPE(obj) != ITEM_DRUG || GET_OBJ_DRUG_TYPE(obj) != GET_OBJ_DRUG_TYPE(cont)) {
+        send_to_char(ch, "You can only combine %s with other doses of %s, and %s doesn't qualify.\r\n",
+          decapitalize_a_an(GET_OBJ_NAME(cont)),
+          drug_types[GET_OBJ_DRUG_TYPE(cont)].name,
+          GET_OBJ_NAME(obj)
+        );
+        return;
+      }
     }
 
     combine_drugs(ch, obj, cont, TRUE);

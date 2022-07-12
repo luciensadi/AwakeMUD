@@ -910,6 +910,8 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 #define GET_OBJ_DRUG_TYPE(drug)                   (GET_OBJ_VAL((drug), 0))
 #define GET_OBJ_DRUG_DOSES(drug)                  (GET_OBJ_VAL((drug), 1))
 
+#define GET_CHEMS_QTY(chems)                      (GET_OBJ_VAL((chems), 0))
+
 // ITEM_WORN convenience defines
 #define GET_WORN_POCKETS_HOLSTERS(worn)           (GET_OBJ_VAL((worn), 0))
 #define GET_WORN_POCKETS_MISC(worn)               (GET_OBJ_VAL((worn), 4))
