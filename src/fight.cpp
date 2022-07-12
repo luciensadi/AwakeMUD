@@ -1988,23 +1988,37 @@ void damage_obj(struct char_data *ch, struct obj_data *obj, int power, int type)
     mudlog(buf, ch, LOG_SYSLOG, TRUE);
     delete [] representation;
 
-    // Disgorge contents, except for pocsecs.
-    if (GET_OBJ_SPEC(obj) != pocket_sec) {
-      for (temp = obj->contains; temp; temp = next) {
-        next = temp->next_content;
-        obj_from_obj(temp);
-        if ((IS_OBJ_STAT(obj, ITEM_EXTRA_CORPSE) && !GET_OBJ_VAL(obj, 4) && GET_OBJ_TYPE(temp) != ITEM_MONEY)
-            || GET_OBJ_VNUM(obj) == OBJ_POCKET_SECRETARY_FOLDER)
-        {
-          extract_obj(temp);
-        } else if (vict)
-          obj_to_char(temp, vict);
-        else if (obj->in_room)
-          obj_to_room(temp, obj->in_room);
-        else
-          extract_obj(temp);
-      }
+    // Disgorge contents.
+    switch (GET_OBJ_TYPE(obj)) {
+      case ITEM_WEAPON:
+      case ITEM_FIREWEAPON:
+      case ITEM_CUSTOM_DECK:
+      case ITEM_CYBERDECK:
+      case ITEM_VEHCONTAINER:
+      case ITEM_SHOPCONTAINER:
+      case ITEM_PART:
+        // We don't disgorge these. Doing so causes bugs.
+        break;
+      default:
+        if (GET_OBJ_SPEC(obj) != pocket_sec) {
+          for (temp = obj->contains; temp; temp = next) {
+            next = temp->next_content;
+            obj_from_obj(temp);
+            if ((IS_OBJ_STAT(obj, ITEM_EXTRA_CORPSE) && !GET_OBJ_VAL(obj, 4) && GET_OBJ_TYPE(temp) != ITEM_MONEY)
+                || GET_OBJ_VNUM(obj) == OBJ_POCKET_SECRETARY_FOLDER)
+            {
+              extract_obj(temp);
+            } else if (vict)
+              obj_to_char(temp, vict);
+            else if (obj->in_room)
+              obj_to_room(temp, obj->in_room);
+            else
+              extract_obj(temp);
+          }
+        }
+        break;
     }
+
     extract_obj(obj);
   }
 }
