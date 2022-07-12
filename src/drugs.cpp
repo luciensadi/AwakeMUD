@@ -43,6 +43,7 @@ bool _combined_addiction_test(struct char_data *ch, int drug_id, const char *tes
 int _seek_drugs_purchase_cost(struct char_data *ch, int drug_id);
 bool seek_drugs(struct char_data *ch, int drug_id);
 void update_withdrawal_flags(struct char_data *ch);
+void _put_char_in_withdrawal(struct char_data *ch, int drug_id, bool is_guided);
 
 
 // Given a character and a drug object, dose the character with that drug object, then extract it if needed. Effects apply at next limit tick.
@@ -513,8 +514,20 @@ void process_withdrawal(struct char_data *ch) {
       // Tick down their addiction rating as they withdraw. Speed varies based on whether this is forced or not.
       if (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_GUIDED_WITHDRAWAL || GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_FORCED_WITHDRAWAL) {
         // Decrement their edge, allowing their addiction rating to decrease.
-        if (days_since_last_fix > GET_DRUG_LAST_WITHDRAWAL_TICK(ch, drug_id) + 1) {
-          GET_DRUG_LAST_WITHDRAWAL_TICK(ch, drug_id) += (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_GUIDED_WITHDRAWAL ? 2 : 1);
+        if (days_since_last_fix > GET_DRUG_LAST_WITHDRAWAL_TICK(ch, drug_id)) {
+          if (GET_LEVEL(ch) > LVL_MORTAL) {
+            send_to_char(ch, "%s withdrawal: d_s_l_f %d > l_w_t %d, ticking down edge.\r\n",
+                         GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_FORCED_WITHDRAWAL ? "Forced" : "Guided",
+                         days_since_last_fix,
+                         GET_DRUG_LAST_WITHDRAWAL_TICK(ch, drug_id));
+          }
+          GET_DRUG_LAST_WITHDRAWAL_TICK(ch, drug_id) = days_since_last_fix + (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_GUIDED_WITHDRAWAL ? 2 : 1);
+          if (GET_LEVEL(ch) > LVL_MORTAL) {
+            send_to_char(ch, " - New l_w_t = %d. Edge goes from %d to %d.\r\n",
+                         GET_DRUG_LAST_WITHDRAWAL_TICK(ch, drug_id),
+                         GET_DRUG_ADDICTION_EDGE(ch, drug_id),
+                         GET_DRUG_ADDICTION_EDGE(ch, drug_id) - 1);
+          }
           if (--GET_DRUG_ADDICTION_EDGE(ch, drug_id) <= 0) {
             GET_DRUG_STAGE(ch, drug_id) = DRUG_STAGE_UNAFFECTED;
             GET_DRUG_ADDICT(ch, drug_id) = 0;
@@ -560,10 +573,7 @@ void process_withdrawal(struct char_data *ch) {
       // They weren't in withdrawal: Put them into that state if they've passed their fix limit.
       if (days_since_last_fix > drug_types[drug_id].fix_factor) {
         send_to_char(ch, "You begin to go into forced %s withdrawal.\r\n", drug_types[drug_id].name);
-        GET_DRUG_STAGE(ch, drug_id) = DRUG_STAGE_FORCED_WITHDRAWAL;
-        GET_DRUG_LAST_WITHDRAWAL_TICK(ch, drug_id) = 0;
-        GET_DRUG_ADDICTION_TICK_COUNTER(ch, drug_id) = 0;
-        update_withdrawal_flags(ch);
+        _put_char_in_withdrawal(ch, drug_id, FALSE);
       } else if (number(0, 2) == 0) {
         send_to_char(ch, "You crave %s.\r\n", drug_types[drug_id].name);
       }
@@ -678,10 +688,7 @@ void attempt_safe_withdrawal(struct char_data *ch, const char *target_arg) {
 
   // Put them in safe withdrawal.
   send_to_char(ch, "With the aid of a few chemical inducements, you begin the process of withdrawal from %s.\r\n", drug_types[drug_id].name);
-  GET_DRUG_STAGE(ch, drug_id) = DRUG_STAGE_GUIDED_WITHDRAWAL;
-  GET_DRUG_LAST_WITHDRAWAL_TICK(ch, drug_id) = 0;
-  GET_DRUG_ADDICTION_TICK_COUNTER(ch, drug_id) = 0;
-  update_withdrawal_flags(ch);
+  _put_char_in_withdrawal(ch, drug_id, TRUE);
 
   return;
 }
@@ -958,15 +965,14 @@ void update_withdrawal_flags(struct char_data *ch) {
 const char *get_time_until_withdrawal_ends(struct char_data *ch, int drug_id) {
   static char time_buf[20];
 
+  // How many days must elapse in total before we're off the drug?
   int ig_days = GET_DRUG_ADDICTION_EDGE(ch, drug_id);
-  int rl_secs = (ig_days * SECS_PER_MUD_DAY) - (time(0) - GET_DRUG_LAST_FIX(ch, drug_id));
 
-  int rl_hours = rl_secs / SECS_PER_REAL_HOUR;
-  rl_secs %= SECS_PER_REAL_HOUR;
-  int rl_minutes = rl_secs / SECS_PER_REAL_MIN;
-  rl_secs %= SECS_PER_REAL_MIN;
+  if (ig_days > 0)
+    snprintf(time_buf, sizeof(time_buf), "%d day%s", ig_days, ig_days != 1 ? "s" : "");
+  else
+    strlcpy(time_buf, "<1 day", sizeof(time_buf));
 
-  snprintf(time_buf, sizeof(time_buf), "%dh %dm %ds", rl_hours, rl_minutes, rl_secs);
   return (const char *) time_buf;
 }
 
@@ -978,21 +984,33 @@ int _seek_drugs_purchase_cost(struct char_data *ch, int drug_id) {
   return involuntary_purchase_total;
 }
 
+void _put_char_in_withdrawal(struct char_data *ch, int drug_id, bool is_guided) {
+  if (is_guided) {
+    GET_DRUG_STAGE(ch, drug_id) = DRUG_STAGE_GUIDED_WITHDRAWAL;
+  } else {
+    GET_DRUG_STAGE(ch, drug_id) = DRUG_STAGE_FORCED_WITHDRAWAL;
+  }
+
+  GET_DRUG_LAST_WITHDRAWAL_TICK(ch, drug_id) = 1; // Set to 1 so we don't tick on the first day.
+  GET_DRUG_ADDICTION_TICK_COUNTER(ch, drug_id) = 0;
+  update_withdrawal_flags(ch);
+}
+
 // ----------------- Definitions for Drugs
 struct drug_data drug_types[] =
   {
-    // name,   power,   level, m_add, p_add, toler, edge_preadd, edge_posadd,  fix, cost, street_idx
-    { "Nothing",   0,       0,     0,     0,     0,           0,           0,    0,    0,          0
+    // name,   power,   level, m_add, p_add, toler, edge_preadd, edge_posadd,  fix, cost, street_idx, d_method
+    { "Nothing",   0,       0,     0,     0,     0,           0,           0,    0,    0,          0,       ""
     },
-    { "ACTH",      0,   LIGHT,     0,     0,     3,          10,           0,    0,  100,          1 },
-    { "Hyper",     6, SERIOUS,     0,     0,     0,           0,           0,    0,  180,        0.9 },
-    { "Jazz",      0,       0,     4,     5,     2,           2,           5,    3,   40,          3  },
-    { "Kamikaze",  0,       0,     0,     5,     2,           2,           6,    2,   50,          5 },
-    { "Psyche",    0,       4,     0,     2,    10,           8,           4,    0,  500,          2 },
-    { "Bliss",     0,       0,     5,     5,     2,           2,          10,    2,   15,          2 },
-    { "Burn",      3,  DEADLY,     2,     0,     2,          10,         100,    1,    5,          1 },
-    { "Cram",      0,       0,     4,     0,     2,           5,          25,    2,   20,          1 },
-    { "Nitro",     4,  DEADLY,     5,     8,     3,           2,           3,    3,  100,          1 },
-    { "Novacoke",  0,       0,     6,     5,     2,           3,          25,    2,   20,          1 },
-    { "Zen",       0,       0,     3,     0,     2,           5,          25,    2,    5,          1 }
+    { "ACTH",      0,   LIGHT,     0,     0,     3,          10,           0,    0,  100,          1,  "tablet" },
+    { "Hyper",     6, SERIOUS,     0,     0,     0,           0,           0,    0,  180,        0.9,    "pill" },
+    { "Jazz",      0,       0,     4,     5,     2,           2,           5,    3,   40,          3, "inhaler" },
+    { "Kamikaze",  0,       0,     0,     5,     2,           2,           6,    2,   50,          5, "inhaler" },
+    { "Psyche",    0,       4,     0,     2,    10,           8,           4,    0,  500,          2,    "pill" },
+    { "Bliss",     0,       0,     5,     5,     2,           2,          10,    2,   15,          2, "syringe" },
+    { "Burn",      3,  DEADLY,     2,     0,     2,          10,         100,    1,    5,          1,  "bottle" },
+    { "Cram",      0,       0,     4,     0,     2,           5,          25,    2,   20,          1, "capsule" },
+    { "Nitro",     4,  DEADLY,     5,     8,     3,           2,           3,    3,  100,          1,    "dose" },
+    { "Novacoke",  0,       0,     6,     5,     2,           3,          25,    2,   20,          1,  "baggie" },
+    { "Zen",       0,       0,     3,     0,     2,           5,          25,    2,    5,          1,   "blunt" }
   };

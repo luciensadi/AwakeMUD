@@ -3387,24 +3387,21 @@ bool combine_ammo_boxes(struct char_data *ch, struct obj_data *from, struct obj_
     }
   }
 
-  // Restring it, as long as it's not already restrung. Use n_s_b so we don't accidentally donk someone's buf.
+  // Restring it, as long as it's not already restrung.
   if (!into->restring) {
-    char notification_string_buf[500];
-
     // Compose the new name.
     const char *restring = get_ammobox_default_restring(into);
 
     // Compose the notification string.
-    snprintf(notification_string_buf, sizeof(notification_string_buf), "The name '%s' probably doesn't fit anymore, so we'll call it '%s'.\r\n",
-      GET_OBJ_NAME(into),
-      restring
-    );
+    if (print_messages) {
+      send_to_char(ch, "The name '%s' probably doesn't fit anymore, so we'll call it '%s'.\r\n",
+        GET_OBJ_NAME(into),
+        restring
+      );
+    }
 
-    // Commit the change and notify the player.
+    // Commit the change.
     into->restring = str_dup(restring);
-
-    if (print_messages)
-      send_to_char(notification_string_buf, ch);
   }
 
   // Everything succeeded.
@@ -3422,18 +3419,45 @@ bool combine_drugs(struct char_data *ch, struct obj_data *from, struct obj_data 
     return FALSE;
   }
 
-  if (GET_OBJ_DRUG_TYPE(from) != GET_OBJ_DRUG_TYPE(into)) {
+  int drug_id = GET_OBJ_DRUG_TYPE(from);
+
+  if (drug_id != GET_OBJ_DRUG_TYPE(into)) {
     mudlog("SYSERR: combine_drug received non-matching drugs.", ch, LOG_SYSLOG, TRUE);
     return FALSE;
+  }
+
+  if (print_messages) {
+    send_to_char(ch, "You mix the dose%s from %s into %s.\r\n",
+                 GET_OBJ_DRUG_DOSES(from) == 1 ? "" : "s",
+                 GET_OBJ_NAME(from),
+                 GET_OBJ_NAME(into));
   }
 
   GET_OBJ_DRUG_DOSES(into) += GET_OBJ_DRUG_DOSES(from);
   GET_OBJ_DRUG_DOSES(from) = 0;
 
-  if (print_messages) {
-    send_to_char(ch, "You dump the doses into %s.\r\n", GET_OBJ_NAME(into));
-  }
   extract_obj(from);
+
+  // Restring it, as long as it's not already restrung.
+  if (!into->restring) {
+    // Compose the new name.
+    char restring[500];
+
+    snprintf(restring, sizeof(restring), "a box of %s %ss",
+      drug_types[drug_id].name,
+      drug_types[drug_id].delivery_method
+    );
+
+    if (print_messages) {
+      send_to_char(ch, "The name '%s' probably doesn't fit anymore, so we'll call it '%s'.\r\n",
+        GET_OBJ_NAME(into),
+        restring
+      );
+    }
+
+    // Commit the change.
+    into->restring = str_dup(restring);
+  }
 
   // Everything succeeded.
   return TRUE;
