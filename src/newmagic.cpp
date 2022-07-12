@@ -5079,13 +5079,14 @@ ACMD(do_deactivate)
 ACMD(do_destroy)
 {
   if (!*argument) {
-    send_to_char("Destroy which magic construct?\r\n", ch);
+    send_to_char("Destroy which lodge or circle?\r\n", ch);
     return;
   }
   skip_spaces(&argument);
   struct obj_data *obj;
   if (ch->in_veh || !(obj = get_obj_in_list_vis(ch, argument, ch->in_room->contents))) {
-    send_to_char(ch, "'%s' isn't here.\r\n", argument);
+    send_to_char(ch, "You don't see a lodge or circle named '%s' %s.\r\n", argument, ch->in_room ? "anywhere around you" : "in this vehicle");
+    send_to_char(ch, "(Are you looking for the ##^WJUNK^n command?)\r\n");
     return;
   }
   if (GET_OBJ_TYPE(obj) == ITEM_MAGIC_TOOL && (GET_OBJ_VAL(obj, 0) == TYPE_LODGE || GET_OBJ_VAL(obj, 0) == TYPE_CIRCLE)) {

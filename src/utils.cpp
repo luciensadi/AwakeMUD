@@ -4808,6 +4808,19 @@ bool repair_vehicle_seating(struct veh_data *veh) {
   return FALSE;
 }
 
+bool is_voice_masked(struct char_data *ch) {
+  for (struct obj_data *obj = ch->cyberware; obj; obj = obj->next_content) {
+    if (GET_CYBERWARE_TYPE(obj) == CYB_VOICEMOD && GET_CYBERWARE_FLAGS(obj)) {
+      return TRUE;
+    }
+  }
+  if (AFF_FLAGGED(ch, AFF_VOICE_MODULATOR)) {
+    return TRUE;
+  }
+
+  return FALSE;
+}
+
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.
 // Great for swapping out old Classic weapons, cyberware, etc for the new guaranteed-canon versions.
 #define PAIR(classic, current) case (classic): return (current);

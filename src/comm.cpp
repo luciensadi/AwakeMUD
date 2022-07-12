@@ -2904,21 +2904,18 @@ const char *get_voice_perceived_by(struct char_data *speaker, struct char_data *
   if (IS_NPC(speaker))
     return GET_NAME(speaker);
   else {
+    bool voice_masked = is_voice_masked(speaker);
+
     // $z mode: Identify staff members.
     if (invis_staff_should_be_identified && IS_SENATOR(speaker) && !CAN_SEE(listener, speaker))
       strlcpy(voice_buf, "an invisible staff member", sizeof(voice_buf));
 
     // Otherwise, compose a voice as usual-- start off with their normal voice, then replace with mask if modulated.
     else {
-      strlcpy(voice_buf, speaker->player.physical_text.room_desc, sizeof(voice_buf));
-      for (struct obj_data *obj = speaker->cyberware; obj; obj = obj->next_content) {
-        if (GET_CYBERWARE_TYPE(obj) == CYB_VOICEMOD && GET_CYBERWARE_FLAGS(obj)) {
-          strlcpy(voice_buf, "a masked voice", sizeof(voice_buf));
-          break;
-        }
-      }
-      if (AFF_FLAGGED(speaker, AFF_VOICE_MODULATOR)) {
+      if (voice_masked) {
         strlcpy(voice_buf, "a masked voice", sizeof(voice_buf));
+      } else {
+        strlcpy(voice_buf, speaker->player.physical_text.room_desc, sizeof(voice_buf));
       }
     }
 
@@ -2927,7 +2924,7 @@ const char *get_voice_perceived_by(struct char_data *speaker, struct char_data *
       snprintf(ENDOF(voice_buf), sizeof(voice_buf) - strlen(voice_buf), "(%s)", GET_CHAR_NAME(speaker));
 
     // Non-staff, but remembered the speaker? You see their remembered name.
-    else if ((mem = safe_found_mem(listener, speaker)))
+    else if (!voice_masked && (mem = safe_found_mem(listener, speaker)))
       snprintf(ENDOF(voice_buf), sizeof(voice_buf) - strlen(voice_buf), "(%s)", CAP(mem->mem));
 
     // Return our string. If no checks were passed, it just gives their voice desc with no special frills.
