@@ -172,6 +172,7 @@ void show_string(struct descriptor_data * d, char *input);
 extern void update_paydata_market();
 extern void warn_about_apartment_deletion();
 void process_wheres_my_car();
+void process_vehicle_decay();
 extern int calculate_distance_between_rooms(vnum_t start_room_vnum, vnum_t target_room_vnum, bool ignore_roads);
 void set_descriptor_canaries(struct descriptor_data *newd);
 
@@ -917,6 +918,7 @@ void game_loop(int mother_desc)
         process_regeneration(0);
       taxi_leaves();
       process_wheres_my_car();
+      process_vehicle_decay();
     }
 
     // Every 29 MUD minutes
@@ -3616,3 +3618,16 @@ void process_wheres_my_car() {
     mudlog(buf2, d->character, LOG_SYSLOG, TRUE);
   }
 }
+
+void void process_vehicle_decay() {
+  struct veh_data *veh;
+  // Decay smashed NPC/unowned vehicles.
+  for (!((veh->in_veh) || (veh->in_room && ROOM_FLAGGED(veh->in_room, ROOM_GARAGE))) && (VEH_FLAGGED(veh, VFLAG_LOOTWRECK)) ) {
+     if(GET_VEH_TIMER(veh) < max_npc_vehicle_lootwreck_time ) {
+       GET_VEH_TIMER(veh)++;
+     } else {
+        veh->flags.RemoveBit(VFLAG_LOOTWRECK);
+        extract_veh(veh);
+         }
+       }
+  }
