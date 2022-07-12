@@ -4821,6 +4821,67 @@ bool is_voice_masked(struct char_data *ch) {
   return FALSE;
 }
 
+// Forces a character to perceive if they can.
+bool force_perception(struct char_data *ch) {
+  // No need to do this if they're already perceiving.
+  if (IS_ASTRAL(ch) || IS_DUAL(ch))
+    return TRUE;
+
+  switch (GET_TRADITION(ch)) {
+    case TRAD_SHAMANIC:
+    case TRAD_HERMETIC:
+      break;
+    case TRAD_ADEPT:
+      if (GET_POWER(ch, ADEPT_PERCEPTION) <= 0) {
+        send_to_char("You have no sense of the astral plane.\r\n", ch);
+        return FALSE;
+      }
+      break;
+    default:
+      if (!access_level(ch, LVL_ADMIN)) {
+        send_to_char("You have no sense of the astral plane.\r\n", ch);
+        return FALSE;
+      } else {
+        send_to_char("You abuse your staff powers to open your third eye.\r\n", ch);
+      }
+      break;
+  }
+
+  PLR_FLAGS(ch).SetBit(PLR_PERCEIVE);
+  send_to_char("Your physical body seems distant, as the astral plane slides into view.\r\n", ch);
+  return TRUE;
+}
+
+int get_focus_bond_cost(struct obj_data *obj) {
+  if (GET_OBJ_TYPE(obj) == ITEM_WEAPON) {
+    return (3 + GET_WEAPON_REACH(obj)) * GET_WEAPON_FOCUS_RATING(obj);
+  }
+
+  else if (GET_OBJ_TYPE(obj) == ITEM_FOCUS) {
+    switch (GET_FOCUS_TYPE(obj)) {
+      case FOCI_EXPENDABLE:
+        return 0;
+      case FOCI_SPEC_SPELL:
+      case FOCI_SUSTAINED:
+        return GET_FOCUS_FORCE(obj);
+      case FOCI_SPIRIT:
+        return GET_FOCUS_FORCE(obj) * 2;
+      case FOCI_SPELL_CAT:
+      case FOCI_SPELL_DEFENSE:
+        return GET_FOCUS_FORCE(obj) * 3;
+      case FOCI_POWER:
+        return GET_FOCUS_FORCE(obj) * 5;
+      default:
+        return 10000000;
+    }
+  }
+
+  else {
+    mudlog("SYSERR: Received non-focus to get_focus_bond_cost!", NULL, LOG_SYSLOG, TRUE);
+    return 1000000;
+  }
+}
+
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.
 // Great for swapping out old Classic weapons, cyberware, etc for the new guaranteed-canon versions.
 #define PAIR(classic, current) case (classic): return (current);

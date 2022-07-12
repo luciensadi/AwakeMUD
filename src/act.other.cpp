@@ -3190,10 +3190,8 @@ ACMD(do_assense)
     send_to_char(ch, "Who's aura do you wish to assense?\r\n");
     return;
   }
-  if (!PLR_FLAGS(ch).AreAnySet(PLR_PERCEIVE, PLR_PROJECT, ENDBIT) && !IS_PROJECT(ch)) {
-    send_to_char(ch, "You have no sense of the astral plane.\r\n");
+  if (!force_perception(ch))
     return;
-  }
   skip_spaces(&argument);
   if (!generic_find(argument,  FIND_OBJ_INV | FIND_OBJ_ROOM | FIND_OBJ_EQUIP |
                     FIND_CHAR_ROOM, ch, &vict, &obj)) {

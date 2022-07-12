@@ -3102,6 +3102,35 @@ ACMD(do_unbond)
     send_to_char(ch, "You don't have a '%s'.\r\n", argument);
     return;
   }
+
+  // Newbies get to refund their force points.
+  if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
+    switch (GET_OBJ_TYPE(obj)) {
+      case ITEM_FOCUS:
+        if (GET_FOCUS_BONDED_TO(obj) != GET_IDNUM(ch)) {
+          send_to_char(ch, "%s is not bonded to you.\r\n", GET_OBJ_NAME(obj));
+          return;
+        }
+
+        GET_FOCUS_BONDED_TO(obj) = GET_FOCUS_BONDED_SPIRIT_OR_SPELL(obj) = GET_FOCUS_TRADITION(obj) = 0;
+        GET_FORCE_POINTS(ch) += get_focus_bond_cost(obj);
+        break;
+      case ITEM_WEAPON:
+        if (!WEAPON_IS_FOCUS(obj) || !WEAPON_FOCUS_USABLE_BY(obj, ch)) {
+          send_to_char(ch, "%s is not bonded to you.\r\n", GET_OBJ_NAME(obj));
+          return;
+        }
+
+        GET_WEAPON_FOCUS_BONDED_BY(obj) = GET_WEAPON_FOCUS_BOND_STATUS(obj) = 0;
+        GET_FORCE_POINTS(ch) += get_focus_bond_cost(obj);
+        break;
+      default:
+        send_to_char(ch, "You can't unbond %s.\r\n", GET_OBJ_NAME(obj));
+        break;
+    }
+    return;
+  }
+
   if (GET_OBJ_TYPE(obj) == ITEM_FOCUS && GET_FOCUS_BONDED_TO(obj)) {
     send_to_char("You sever the focus's bond with the astral plane.\r\n", ch);
     GET_FOCUS_BONDED_TO(obj) = GET_FOCUS_BONDED_SPIRIT_OR_SPELL(obj) = GET_FOCUS_TRADITION(obj) = 0;
@@ -3199,7 +3228,7 @@ ACMD(do_bond)
       return;
     }
 
-    karma = (3 + GET_WEAPON_REACH(obj)) * GET_WEAPON_FOCUS_RATING(obj);
+    karma = get_focus_bond_cost(obj);
 
     if (GET_KARMA(ch) < karma * 100) {
       send_to_char(ch, "You don't have enough karma to bond that (Need %d).\r\n", karma);
@@ -3264,6 +3293,7 @@ ACMD(do_bond)
       } else
         send_to_char(ch, "You have already bonded %s.\r\n", GET_OBJ_NAME(obj));
     } else {
+      karma = get_focus_bond_cost(obj);
       switch (GET_FOCUS_TYPE(obj)) {
         case FOCI_SPEC_SPELL:
           karma = GET_FOCUS_FORCE(obj);
@@ -3274,15 +3304,14 @@ ACMD(do_bond)
             send_to_char("Bond which spell category?\r\n", ch);
             return;
           }
-          for (; spirit <= MANIPULATION; spirit++)
+          for (; spirit <= MANIPULATION; spirit++) {
             if (is_abbrev(buf2, spell_category[spirit]))
               break;
+          }
           if (spirit > MANIPULATION) {
             send_to_char("That is not a valid category.\r\n", ch);
             return;
           }
-          if (GET_FOCUS_TYPE(obj) == FOCI_SPELL_CAT)
-            karma = GET_FOCUS_FORCE(obj) * 3;
           break;
         case FOCI_SPIRIT:
           if (!*buf2) {
@@ -3293,24 +3322,19 @@ ACMD(do_bond)
             for (; spirit < NUM_ELEMENTS; spirit++)
               if (is_abbrev(buf2, elements[spirit].name))
                 break;
-          } else
+          } else {
             for (; spirit < NUM_SPIRITS; spirit++)
               if (is_abbrev(buf2, spirits[spirit].name))
                 break;
+          }
           if (GET_TRADITION(ch) == TRAD_HERMETIC ? spirit == NUM_ELEMENTS : spirit == NUM_SPIRITS) {
             send_to_char(ch, "That is not a valid %s.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
             return;
           }
-          karma = GET_FOCUS_FORCE(obj) * 2;
           break;
         case FOCI_POWER:
-          karma = GET_FOCUS_FORCE(obj) * 5;
-          break;
         case FOCI_SUSTAINED:
-          karma = GET_FOCUS_FORCE(obj);
-          break;
         case FOCI_SPELL_DEFENSE:
-          karma = GET_FOCUS_FORCE(obj) * 3;
           break;
         default:
           snprintf(buf, sizeof(buf), "SYSERR: Unknown focus type %d in bonding switch.", GET_FOCUS_TYPE(obj));
@@ -3338,7 +3362,7 @@ ACMD(do_bond)
       }
       if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
         if (GET_FORCE_POINTS(ch) < karma) {
-          send_to_char(ch, "You don't have enough force points to bond that (Need %d). You can get more force points by returning to the talismonger or the spell trainers and typing ^WLEARN FORCE^n.\r\n", karma);
+          send_to_char(ch, "You don't have enough force points to bond that (Need %d). You can get more force points by returning to the talismonger or the spell trainers and typing ##^WLEARN FORCE^n.\r\n", karma);
           return;
         }
         GET_FORCE_POINTS(ch) -= karma;
@@ -5767,8 +5791,9 @@ ACMD(do_cleanse)
     nonsensical_reply(ch, NULL, "standard");
     return;
   }
-  if (!(IS_ASTRAL(ch) || IS_DUAL(ch)))
-    send_to_char("You have no sense of the astral plane.\r\n", ch);
+
+  if (!force_perception(ch))
+    return;
   else if (!GET_SKILL(ch, SKILL_SORCERY))
     send_to_char("You need practical knowledge of sorcery to cleanse the astral plane.\r\n", ch);
   else if (ch->in_veh)
