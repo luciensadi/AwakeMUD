@@ -5947,10 +5947,12 @@ ACMD(do_scan)
               char desc_line[200];
               strlcpy(desc_line, "", sizeof(desc_line));
 
-              if (list->mob_specials.quest_id == GET_IDNUM(ch)) {
-                strlcat(desc_line, "(quest) ", sizeof(desc_line));
-              } else if (list->mob_specials.quest_id != 0) {
-                strlcat(desc_line, "(protected) ", sizeof(desc_line));
+              if (list->mob_specials.quest_id) {
+                if (list->mob_specials.quest_id == GET_IDNUM(ch)) {
+                  strlcat(desc_line, "(quest) ", sizeof(desc_line));
+                } else {
+                  strlcat(desc_line, "(protected) ", sizeof(desc_line));
+                }
               }
 
               if (IS_AFFECTED(list, AFF_INVISIBLE) || IS_AFFECTED(list, AFF_IMP_INVIS) || IS_AFFECTED(list, AFF_SPELLINVIS) || IS_AFFECTED(list, AFF_SPELLIMPINVIS)) {
