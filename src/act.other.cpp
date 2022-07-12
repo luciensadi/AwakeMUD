@@ -4701,7 +4701,7 @@ ACMD(do_syspoints) {
       row = mysql_fetch_row(res);
       if (!row && mysql_field_count(mysql)) {
         mysql_free_result(res);
-        send_to_char("There is no such player.\r\n", ch);
+        send_to_char(ch, "Could not find a PC named %s.\r\n", buf);
         return;
       }
       send_to_char(ch, "%s has %s system point(s).\r\n", row[0], row[1]);
@@ -4756,7 +4756,7 @@ ACMD(do_syspoints) {
     row = mysql_fetch_row(res);
     if (!row && mysql_field_count(mysql)) {
       mysql_free_result(res);
-      send_to_char("There is no such player.\r\n", ch);
+      send_to_char(ch, "Could not find a PC named %s.\r\n", target);
       return;
     }
     long idnum = atol(row[0]);
