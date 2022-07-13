@@ -3055,6 +3055,12 @@ void shop_uninstall(char *argument, struct char_data *ch, struct char_data *keep
     return;
   }
 
+  // Can't uninstall in chargen.
+  if (shop_table[shop_nr].flags.IsSet(SHOP_CHARGEN)) {
+    send_to_char(ch, "Sorry, you can't do that in character generation.\r\n");
+    return;
+  }
+
   if (!access_level(ch, LVL_ADMIN) && !(CAN_SEE(keeper, ch))) {
     strlcpy(buf, "How am I supposed to work on someone I can't see?", sizeof(buf));
     do_say(keeper, buf, cmd_say, 0);
