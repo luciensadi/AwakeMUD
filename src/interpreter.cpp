@@ -909,7 +909,7 @@ struct command_info cmd_info[] =
     { "who"        , POS_DEAD    , do_who      , 0, 0, TRUE },
     { "whoami"     , POS_DEAD    , do_gen_ps   , 0, SCMD_WHOAMI, TRUE },
     { "whotitle"   , POS_DEAD    , do_wiztitle , LVL_BUILDER, SCMD_WHOTITLE, TRUE },
-    { "where"      , POS_DEAD    , do_where    , 1, LVL_PRESIDENT, TRUE }, // todo: why is lvl_president in the scmd slot?
+    { "where"      , POS_DEAD    , do_where    , 1, 0, TRUE },
     { "wheresmycar", POS_RESTING , do_wheresmycar, 1, 0, FALSE },
     { "whisper"    , POS_LYING   , do_spec_comm, 0, SCMD_WHISPER, FALSE },
     { "wield"      , POS_RESTING , do_wield    , 0, 0, FALSE },
