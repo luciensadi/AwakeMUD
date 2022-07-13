@@ -637,6 +637,7 @@ enum {
 #define EX_IS_TEMPORARY         (1 << 7)   /* Created temporarily by code */
 #define EX_WINDOWED             (1 << 8)   /* Exit has a window.        */
 #define EX_BARRED_WINDOW        (1 << 9)   /* Exit has a barred window. */
+#define NUM_EXFLAGS             11
 
 /* spirit powers */
 
