@@ -3583,7 +3583,7 @@ ACMD(do_conjure)
   }
   if (GET_TRADITION(ch) == TRAD_HERMETIC) {
     if (GET_NUM_SPIRITS(ch) >= GET_CHA(ch)) {
-      send_to_char(ch, "You have too many elementals summoned-- you can have a maximum of %d.\r\n", GET_CHA(ch));
+      send_to_char(ch, "You can't conjure any more elementals-- you can have a maximum of %d.\r\n", GET_CHA(ch));
       return;
     }
     for (spirit = 0; spirit < NUM_ELEMENTS; spirit++)
