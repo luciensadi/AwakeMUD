@@ -2191,23 +2191,27 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
         send_to_char("The flames rapidly disperse around you, causing only mild discomfort.\r\n", vict);
       }
 
-      if (IS_NPC(ch) || IS_NPC(vict)) {
-        damage_equip(ch, vict, force, TYPE_FIRE);
-      }
-      if (!damage(ch, vict, dam, TYPE_MANIPULATION_SPELL, PHYSICAL)) {
-        if (number(0, 6) <= basedamage + 1) {
-          act("^RThe flames continue to burn around $m!^N", TRUE, vict, 0, 0, TO_ROOM);
-          send_to_char("^RYou continue to burn!\r\n", vict);
-          vict->points.fire[0] = srdice();
-          vict->points.fire[1] = 0;
+      if (dam > 0) {
+        if (IS_NPC(ch) || IS_NPC(vict)) {
+          damage_equip(ch, vict, force, TYPE_FIRE);
         }
+        if (!damage(ch, vict, dam, TYPE_MANIPULATION_SPELL, PHYSICAL)) {
+          if (number(0, 8) <= basedamage + 1) {
+            act("^RThe flames continue to burn around $m!^N", TRUE, vict, 0, 0, TO_ROOM);
+            send_to_char("^RYou continue to burn!\r\n", vict);
+            int rolled_fire_duration = srdice() + 1;
+            GET_CHAR_FIRE_DURATION(vict) = MIN(force, rolled_fire_duration);
+            GET_CHAR_FIRE_BONUS_DAMAGE(vict) = (int) (force / 6);
+            GET_CHAR_FIRE_CAUSED_BY_PC(vict) = !IS_NPC(ch);
+          }
 
-        if (IS_NPC(vict) && !IS_NPC(ch))
-          GET_LASTHIT(vict) = GET_IDNUM(ch);
-      }
-      else if (cast_by_npc) {
-        // Janky crash avoidance: If we killed our target and we're an NPC, bail out immediately.
-        return;
+          if (IS_NPC(vict) && !IS_NPC(ch))
+            GET_LASTHIT(vict) = GET_IDNUM(ch);
+        }
+        else if (cast_by_npc) {
+          // Janky crash avoidance: If we killed our target and we're an NPC, bail out immediately.
+          return;
+        }
       }
     }
     spell_drain(reflected ? vict : ch, spell, force, basedamage);
@@ -2758,7 +2762,7 @@ bool mob_magic(struct char_data *ch)
       case 20:
       case 21:
       case 22:
-        if (!affected_by_spell(FIGHTING(ch), SPELL_IGNITE) && !ch->points.fire[0])
+        if (!affected_by_spell(FIGHTING(ch), SPELL_IGNITE) && !GET_CHAR_FIRE_DURATION(FIGHTING(ch)))
           spell = SPELL_IGNITE;
         break;
       case 23:

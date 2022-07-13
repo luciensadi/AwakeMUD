@@ -3065,7 +3065,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
           strlcat(buf, "grants +1 Intelligence for a long time.", sizeof(buf));
           break;
         case DRUG_BLISS:
-          strlcat(buf, "is a tranquilizing narcotic that reduces Reaction by 1, adds 1 to all target numbers, and grants pain resistance.", sizeof(buf));
+          strlcat(buf, "is a tranquilizing narcotic that reduces Reaction by 1, adds +1 to all target numbers (lower is better), and grants pain resistance.", sizeof(buf));
           break;
         case DRUG_BURN:
           strlcat(buf, "is a synthahol intoxicant beverage.", sizeof(buf));

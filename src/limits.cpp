@@ -1333,8 +1333,9 @@ void misc_update(void)
             if (sus->spell == SPELL_IGNITE) {
               send_to_char("Your body erupts in flames!\r\n", sus->other);
               act("$n's body suddenly bursts into flames!\r\n", TRUE, sus->other, 0, 0, TO_ROOM);
-              sus->other->points.fire[0] = srdice();
-              sus->other->points.fire[1] = 0;
+              GET_CHAR_FIRE_DURATION(sus->other) = srdice();
+              GET_CHAR_FIRE_BONUS_DAMAGE(sus->other) = 0;
+              GET_CHAR_FIRE_CAUSED_BY_PC(sus->other) = !IS_NPC(ch);
             } else {
               strcpy(buf, spells[sus->spell].name);
               send_to_char(ch, "The effects of %s become permanent.\r\n", buf);
@@ -1436,25 +1437,39 @@ void misc_update(void)
       }
     }
 
-    if (ch->points.fire[0] > 0) {
-      // If you're outside and it's raining, you get less fire. TODO: This should happen for being in water, too.
-      if (ch->in_room && ch->in_room->sector_type != SPIRIT_HEARTH && !ROOM_FLAGGED(ch->in_room, ROOM_INDOORS) && weather_info.sky >= SKY_RAINING)
-        ch->points.fire[0] -= 3;
-      else
-        ch->points.fire[0]--;
-      if (ch->points.fire[0] < 1) {
+    if (GET_CHAR_FIRE_DURATION(ch) > 0) {
+      GET_CHAR_FIRE_DURATION(ch)--;
+      // If you're outside and it's raining, you get less fire.
+      if (ch->in_room) {
+        // Outdoors in the rain? Fire goes out faster.
+        if (ch->in_room->sector_type != SPIRIT_HEARTH && !ROOM_FLAGGED(ch->in_room, ROOM_INDOORS) && weather_info.sky >= SKY_RAINING) {
+          GET_CHAR_FIRE_DURATION(ch) -= 2;
+        }
+
+        // In water? Fire goes out much faster.
+        if (IS_WATER(ch->in_room)) {
+          GET_CHAR_FIRE_DURATION(ch) -= 4;
+        }
+      }
+
+      if (GET_CHAR_FIRE_DURATION(ch) < 1) {
         act("The flames around $n die down.", FALSE, ch, 0, 0, TO_ROOM);
         act("The flames surrounding you die down.", FALSE, ch, 0, 0, TO_CHAR);
-        ch->points.fire[0] = 0;
-      } else {
-        act("Flames continue to burn around $n!", FALSE, ch, 0, 0, TO_ROOM);
-        act("^RYour body is surrounded in flames!", FALSE, ch, 0, 0, TO_CHAR);
+        GET_CHAR_FIRE_DURATION(ch) = 0;
+        GET_CHAR_FIRE_CAUSED_BY_PC(ch) = FALSE;
+        continue;
       }
-      // Restore this when it's possible to tell if your fire damage was caused by a PC or NPC.
-      // damage_equip(ch, ch, 6 + ch->points.fire[1], TYPE_FIRE);
 
-      int dam = convert_damage(stage(-success_test(GET_BOD(ch) + GET_POWER(ch, ADEPT_TEMPERATURE_TOLERANCE), 6 + ch->points.fire[1]++ - GET_IMPACT(ch)), MODERATE));
-      ch->points.fire[1]++;
+      act("Flames continue to burn around $n!", FALSE, ch, 0, 0, TO_ROOM);
+      act("^RYour body is surrounded in flames!", FALSE, ch, 0, 0, TO_CHAR);
+
+      // Only damage equipment in PvE scenarios.
+      if (IS_NPC(ch) || !GET_CHAR_FIRE_CAUSED_BY_PC(ch)) {
+        damage_equip(ch, ch, 6 + GET_CHAR_FIRE_BONUS_DAMAGE(ch), TYPE_FIRE);
+      }
+
+      int dam = convert_damage(stage(-success_test(GET_BOD(ch) + GET_BODY(ch) + GET_POWER(ch, ADEPT_TEMPERATURE_TOLERANCE), 6 + GET_CHAR_FIRE_BONUS_DAMAGE(ch) - GET_IMPACT(ch)), MODERATE));
+      GET_CHAR_FIRE_BONUS_DAMAGE(ch)++;
       if (damage(ch, ch, dam, TYPE_SUFFERING, PHYSICAL))
         continue;
     }

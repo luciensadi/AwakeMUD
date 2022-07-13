@@ -783,13 +783,16 @@ bool _process_edge_and_tolerance_changes_for_applied_dose(struct char_data *ch, 
 
   // Increase our tolerance and addiction levels if we've passed the edge value.
   int edge_value = (GET_DRUG_ADDICT(ch, drug_id) ? drug_types[drug_id].edge_posadd : drug_types[drug_id].edge_preadd);
-  int edge_delta = ((GET_DRUG_LIFETIME_DOSES(ch, drug_id) % edge_value) + GET_DRUG_DOSE(ch, drug_id)) / edge_value;
-  if (edge_delta > 0) {
-    GET_DRUG_ADDICTION_EDGE(ch, drug_id) += edge_delta;
-    GET_DRUG_TOLERANCE_LEVEL(ch, drug_id) += edge_delta;
+  int edge_delta = 0;
+  if (edge_value > 0) {
+    edge_delta = ((GET_DRUG_LIFETIME_DOSES(ch, drug_id) % edge_value) + GET_DRUG_DOSE(ch, drug_id)) / edge_value;
+    if (edge_delta > 0) {
+      GET_DRUG_ADDICTION_EDGE(ch, drug_id) += edge_delta;
+      GET_DRUG_TOLERANCE_LEVEL(ch, drug_id) += edge_delta;
+    }
+    snprintf(rbuf, sizeof(rbuf), "Edge rating: %d, edge delta: %d.", edge_value, edge_delta);
+    act(rbuf, FALSE, ch, 0, 0, TO_ROLLS);
   }
-  snprintf(rbuf, sizeof(rbuf), "Edge rating: %d, edge delta: %d.", edge_value, edge_delta);
-  act(rbuf, FALSE, ch, 0, 0, TO_ROLLS);
 
   // Check to see if they become addicted.
   if (GET_DRUG_ADDICT(ch, drug_id) == NOT_ADDICTED && (edge_delta > 0 || is_first_time_taking)) {

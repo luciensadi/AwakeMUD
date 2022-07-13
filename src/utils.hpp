@@ -397,6 +397,10 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define SETTABLE_EMAIL(ch)   ((ch)->player.email)
 #define GET_CHAR_MULTIPLIER(ch) ((ch)->player.multiplier)
 
+#define GET_CHAR_FIRE_DURATION(ch)      ((ch)->points.fire[0])
+#define GET_CHAR_FIRE_BONUS_DAMAGE(ch)  ((ch)->points.fire[1])
+#define GET_CHAR_FIRE_CAUSED_BY_PC(ch)  ((ch)->points.fire[2])
+
 /*
  * I wonder if this definition of GET_REAL_LEVEL should be the definition
  * of GET_LEVEL?  JE

@@ -586,7 +586,7 @@ ACMD(do_spellset)
   {
     // Check for the argument.
     if (!*argument) {
-      send_to_char("You must supply one of 'bod', 'qui', 'str', 'int', 'wil', 'cha', 'rea'.\r\n", ch);
+      send_to_char("You must supply one of 'bod', 'qui', 'str', 'int', 'wil', 'cha', 'rea'. (ex: spellset X 'increase' 6 wil)\r\n", ch);
       return;
     }
 
