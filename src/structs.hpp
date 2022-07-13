@@ -501,7 +501,7 @@ struct char_point_data
   ubyte lastdamage;
   int track[2];
   Bitfield vision[NUM_VISION_TYPES];
-  ubyte fire[2];
+  ubyte fire[3];
   ubyte binding;
   ubyte reach[2];
   int extras[2];
@@ -515,7 +515,7 @@ struct char_point_data
     ZERO_OUT_ARRAY(impact, 3);
     ZERO_OUT_ARRAY(sustained, 3);
     ZERO_OUT_ARRAY(track, 2);
-    ZERO_OUT_ARRAY(fire, 2);
+    ZERO_OUT_ARRAY(fire, 3);
     ZERO_OUT_ARRAY(reach, 2);
     ZERO_OUT_ARRAY(extras, 2);
   }
