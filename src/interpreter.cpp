@@ -663,7 +663,7 @@ struct command_info cmd_info[] =
     { "lay"        , POS_RESTING , do_lay      , 0, 0, FALSE },
     { "language"   , POS_DEAD    , do_language , 0, 0, TRUE },
     { "last"       , POS_DEAD    , do_last     , LVL_BUILDER, 0, FALSE },
-    { "leaderboards", POS_DEAD  , do_leaderboard, LVL_BUILDER, 0, FALSE },
+    { "leaderboards", POS_DEAD  , do_leaderboard, LVL_MORTAL, 0, FALSE },
     { "learn"      , POS_RESTING , do_learn    , 0, 0, FALSE },
     { "leave"      , POS_SITTING , do_leave    , 0, 0, FALSE },
     { "link"       , POS_SLEEPING, do_link     , 0, 0, FALSE },

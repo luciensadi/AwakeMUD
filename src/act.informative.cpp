@@ -6438,88 +6438,110 @@ ACMD(do_karma){
   send_to_char(ch, "Your current TKE is %d, and you have %d reputation and %d notoriety.\r\n", GET_TKE(ch), GET_REP(ch), GET_NOT(ch));
 }
 
-#define LEADERBOARD_SYNTAX_STRING "Syntax: leaderboard <option>, where option is one of: tke, reputation, notoriety, nuyen, syspoints, blocks\r\n"
+#define STAFF_LEADERBOARD_SYNTAX_STRING "Syntax: leaderboard <option>, where option is one of: tke, reputation, notoriety, nuyen, syspoints, blocks, hardcore\r\n"
+#define MORT_LEADERBOARD_SYNTAX_STRING "Syntax: leaderboard <option>, where option is one of: hardcore\r\n"
 ACMD(do_leaderboard) {
   MYSQL_RES *res;
   MYSQL_ROW row;
+  int counter = 1;
 
-  // leaderboard <tke|rep|notor|nuyen|sysp>
+  // leaderboard <tke|rep|notor|nuyen|sysp|blocks>
   skip_spaces(&argument);
   if (!*argument) {
-    send_to_char(LEADERBOARD_SYNTAX_STRING, ch);
+    send_to_char(GET_LEVEL(ch) > LVL_MORTAL ? STAFF_LEADERBOARD_SYNTAX_STRING : MORT_LEADERBOARD_SYNTAX_STRING, ch);
+    return;
+  }
+
+  if (!strncmp(argument, "hardcore", strlen(argument))) {
+    mysql_wrapper(mysql, "SELECT name, tke FROM pfiles "
+                         "  WHERE tke > 0 "
+                         "  AND rank = 1 "
+                         "  AND hardcore = 1 "
+                         "  AND name != 'deleted' "
+                         "ORDER BY tke DESC LIMIT 10;");
+
+    if (!(res = mysql_use_result(mysql))) {
+      send_to_char(ch, "Sorry, the leaderboard system is offline at the moment.\r\n");
+      return;
+    }
+
+    send_to_char(ch, "^CTop 10 hardcore characters by TKE:^n\r\n");
+
+    while ((row = mysql_fetch_row(res))) {
+      send_to_char(ch, "%2d) %-20s: %-15s\r\n", counter++, row[0], row[1]);
+    }
+    if (counter == 1)
+      send_to_char(ch, "...Nobody! Looks like a great place to make your mark.\r\n");
+
+    mysql_free_result(res);
     return;
   }
 
   const char *display_string = NULL, *query_string = NULL;
 
-  if (!strncmp(argument, "tke", strlen(argument))) {
-    display_string = "TKE";
-    query_string = "tke";
-  }
+  if (GET_LEVEL(ch) > LVL_MORTAL) {
+    if (!strncmp(argument, "tke", strlen(argument))) {
+      display_string = "TKE";
+      query_string = "tke";
+    }
 
-  else if (!strncmp(argument, "reputation", strlen(argument))) {
-    display_string = "reputation";
-    query_string = "rep";
-  }
+    else if (!strncmp(argument, "reputation", strlen(argument))) {
+      display_string = "reputation";
+      query_string = "rep";
+    }
 
-  else if (!strncmp(argument, "notoriety", strlen(argument))) {
-    display_string = "notoriety";
-    query_string = "notor";
-  }
+    else if (!strncmp(argument, "notoriety", strlen(argument))) {
+      display_string = "notoriety";
+      query_string = "notor";
+    }
 
-  else if (!strncmp(argument, "nuyen", strlen(argument))) {
-    display_string = "nuyen";
-    query_string = "bank + cash";
-  }
+    else if (!strncmp(argument, "nuyen", strlen(argument))) {
+      display_string = "nuyen";
+      query_string = "bank + cash";
+    }
 
-  else if (!strncmp(argument, "syspoints", strlen(argument))) {
-    display_string = "syspoints";
-    query_string = "syspoints";
-  }
+    else if (!strncmp(argument, "syspoints", strlen(argument))) {
+      display_string = "syspoints";
+      query_string = "syspoints";
+    }
 
-  else if (!strncmp(argument, "blocks", strlen(argument))) {
-    // Open the second DB connection for concurrent lookups.
-    MYSQL *mysqlextra = mysql_init(NULL);
-    if (!mysql_real_connect(mysqlextra, mysql_host, mysql_user, mysql_password, mysql_db, 0, NULL, 0)) {
-      send_to_char("Couldn't open extra DB connection-- aborting.\r\n", ch);
+    else if (!strncmp(argument, "blocks", strlen(argument)) || !strncmp(argument, "ignores", strlen(argument))) {
+      mysql_wrapper(mysql, "SELECT p.name, i.vict_idnum, COUNT(i.vict_idnum) AS `value_occurrence`"
+                           "  FROM pfiles_ignore_v2 AS i"
+                           "  JOIN pfiles AS p"
+                           "    ON i.vict_idnum = p.idnum"
+                           "  GROUP BY vict_idnum"
+                           "  ORDER BY `value_occurrence` DESC LIMIT 10;");
+      if (!(res = mysql_use_result(mysql))) {
+        send_to_char(ch, "Sorry, the leaderboard system is offline at the moment.\r\n");
+        return;
+      }
+
+      send_to_char(ch, "^CTop 10 most-blocked characters:^n\r\n");
+      while ((row = mysql_fetch_row(res))) {
+        int blocks = atoi(row[2]);
+
+        send_to_char(ch, "%2d) %-20s: %d block%s.\r\n", counter++, row[0], blocks, blocks != 1 ? "s" : "");
+      }
+
+      mysql_free_result(res);
       return;
     }
-
-    mysql_wrapper(mysqlextra, "SELECT vict_idnum, COUNT(vict_idnum) AS `value_occurrence` FROM pfiles_ignore_v2 GROUP BY vict_idnum ORDER BY `value_occurrence` DESC LIMIT 10");
-    if (!(res = mysql_use_result(mysqlextra))) {
-      send_to_char(ch, "Sorry, the leaderboard system is offline at the moment.\r\n");
-      return;
-    }
-
-    send_to_char(ch, "^CTop 10 most-blocked characters:^n\r\n");
-    int counter = 1;
-    while ((row = mysql_fetch_row(res))) {
-      long idnum = atol(row[0]);
-      int blocks = atoi(row[1]);
-
-      const char *name = get_player_name(idnum);
-      send_to_char(ch, "%2d) %-20s: %d block%s.\r\n", counter++, name, blocks, blocks != 1 ? "s" : "");
-      delete [] name;
-    }
-
-    mysql_free_result(res);
-    mysql_close(mysqlextra);
-    return;
   }
 
-  else {
-    send_to_char(LEADERBOARD_SYNTAX_STRING, ch);
+  if (!display_string || !query_string){
+    send_to_char(GET_LEVEL(ch) > LVL_MORTAL ? STAFF_LEADERBOARD_SYNTAX_STRING : MORT_LEADERBOARD_SYNTAX_STRING, ch);
     return;
   }
 
   // Sanitization not required here-- they're constant strings.
   snprintf(buf, sizeof(buf), "SELECT name, %s FROM pfiles "
-               "  WHERE %s > 0 "
-               "  AND rank = 1 "
-               "  AND TKE > 0 "
-               "  AND name != 'deleted' "
-               "ORDER BY %s DESC LIMIT 10;",
-               query_string, query_string, query_string);
+                             "  WHERE %s > 0 "
+                             "  AND rank = 1 "
+                             "  AND TKE > 0 "
+                             "  AND name != 'deleted' "
+                             "ORDER BY %s DESC LIMIT 10;",
+                             query_string, query_string, query_string);
 
   mysql_wrapper(mysql, buf);
   if (!(res = mysql_use_result(mysql))) {
@@ -6530,7 +6552,6 @@ ACMD(do_leaderboard) {
   }
 
   send_to_char(ch, "^CTop 10 characters by %s:^n\r\n", display_string);
-  int counter = 1;
   while ((row = mysql_fetch_row(res))) {
     send_to_char(ch, "%2d) %-20s: %-15s\r\n", counter++, row[0], row[1]);
   }
