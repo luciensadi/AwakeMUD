@@ -668,11 +668,12 @@ struct player_special_data
   ubyte physical_loss;
   ubyte perm_bod;
   struct room_data *watching;
+  int wherelist_checks;
 
   player_special_data() :
       aliases(NULL), remem(NULL), last_tell(0), questnum(0), obj_complete(NULL),
       mob_complete(NULL), mental_loss(0), physical_loss(0),
-      perm_bod(0), watching(NULL)
+      perm_bod(0), watching(NULL), wherelist_checks(0)
   {
     ZERO_OUT_ARRAY(last_quest, QUEST_TIMER);
     ZERO_OUT_ARRAY(drug_last_fix, NUM_DRUGS);

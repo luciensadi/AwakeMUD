@@ -5426,6 +5426,12 @@ void perform_mortal_where(struct char_data * ch, char *arg)
 
       send_to_char(")\r\n", ch);
     }
+
+    if (ch->in_room && ROOM_FLAGGED(ch->in_room, ROOM_ENCOURAGE_CONGREGATION)) {
+      GET_PLAYER_WHERE_COMMANDS(ch) = 0;
+    } else if ((++GET_PLAYER_WHERE_COMMANDS(ch)) % 5 == 0) {
+      send_to_char(ch, "(OOC: You've been checking the wherelist a lot-- why not go join in?)\r\n");
+    }
   }
 }
 

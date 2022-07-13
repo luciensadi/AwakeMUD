@@ -552,6 +552,7 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define GET_QUEST(ch)		((ch)->desc && (ch)->desc->original ? (ch)->desc->original->player_specials->questnum : \
                                                                       (ch)->player_specials->questnum)
 #define GET_LQUEST(ch, i)	      ((ch)->player_specials->last_quest[i])
+#define GET_PLAYER_WHERE_COMMANDS(ch) ((ch)->player_specials->wherelist_checks)
 #define POOFIN(ch)              ((ch)->player.poofin)
 #define POOFOUT(ch)             ((ch)->player.poofout)
 #define GET_PROMPT(ch)          ((PLR_FLAGGED((ch), PLR_MATRIX) ? (ch)->player.matrixprompt : (ch)->player.prompt))
