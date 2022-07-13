@@ -2054,7 +2054,11 @@ ACMD(do_treat)
                  && !IS_SENATOR(vict)
                  && IS_SENATOR(ch)
                  && !access_level(ch, LVL_ADMIN))) {
-    act("Treating $N will not do $M any good.", FALSE, ch, 0, vict, TO_CHAR);
+    if (ch == vict) {
+      send_to_char(ch, "You're not able to treat your wounds right now.\r\n");
+    } else {
+      act("Treating $N will not do $M any good.", FALSE, ch, 0, vict, TO_CHAR);
+    }
     return;
   }
 
@@ -2067,7 +2071,12 @@ ACMD(do_treat)
   else if (GET_PHYSICAL(vict) <= (GET_MAX_PHYSICAL(vict) * 9/10))
     target = 4;
   else {
-    act("$N doesn't need to be treated.", FALSE, ch, 0, vict, TO_CHAR);
+    if (ch == vict) {
+      send_to_char(ch, "You don't need treatment.\r\n");
+    } else {
+      act("$N doesn't need to be treated.", FALSE, ch, 0, vict, TO_CHAR);
+    }
+
     if (subcmd) {
       char buf[400];
       snprintf(buf, sizeof(buf), "%s Treatment will do you no good.", GET_CHAR_NAME(vict));
@@ -2102,11 +2111,19 @@ ACMD(do_treat)
   if (vict->real_abils.mag > 0)
     target += 2;
 
-  act("$n begins to treat $N.", TRUE, ch, 0, vict, TO_NOTVICT);
+  if (ch == vict) {
+    act("$n begins to treat $mself.", TRUE, ch, 0, vict, TO_NOTVICT);
+  } else {
+    act("$n begins to treat $N.", TRUE, ch, 0, vict, TO_NOTVICT);
+  }
   if (success_test(i, target) > 0) {
     act("$N appears better.", FALSE, ch, 0, vict, TO_CHAR);
-    act("The pain seems significantly less after $n's treatment.",
-        FALSE, ch, 0, vict, TO_VICT);
+    if (ch == vict) {
+      send_to_char(ch, "The pain seems significantly better.\r\n");
+    } else {
+      act("The pain seems significantly less after $n's treatment.",
+          FALSE, ch, 0, vict, TO_VICT);
+    }
     if (GET_PHYSICAL(vict) < 100) {
       GET_PHYSICAL(vict) = MIN(GET_MAX_PHYSICAL(vict), 100);
       GET_MENTAL(vict) = 0;
@@ -2123,8 +2140,12 @@ ACMD(do_treat)
       LAST_HEAL(vict) = (int)(GET_MAX_PHYSICAL(vict) / 1000);
     }
   } else {
-    act("Your treatment does nothing for $N.", FALSE, ch, 0, vict, TO_CHAR);
-    act("$n's treatment doesn't help your wounds.", FALSE, ch, 0, vict, TO_VICT);
+    if (ch == vict) {
+      send_to_char(ch, "Your treatment does nothing for your wounds.\r\n");
+    } else {
+      act("Your treatment does nothing for $N.", FALSE, ch, 0, vict, TO_CHAR);
+      act("$n's treatment doesn't help your wounds.", FALSE, ch, 0, vict, TO_VICT);
+    }
     LAST_HEAL(vict) = 3;
   }
 }
