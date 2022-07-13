@@ -296,6 +296,7 @@ bool uninstall_ware_from_target_character(struct obj_data *obj, struct char_data
 
 bool install_ware_in_target_character(struct obj_data *ware, struct char_data *installer, struct char_data *recipient, bool damage_on_operation) {
   struct obj_data *check;
+  char buf[1000];
 
   if (installer == recipient) {
     send_to_char(installer, "You can't operate on yourself!\r\n");
