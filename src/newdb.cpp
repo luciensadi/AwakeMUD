@@ -2458,20 +2458,22 @@ void save_metamagic_to_db(struct char_data *player) {
 }
 
 void save_elementals_to_db(struct char_data *player) {
-  if (GET_SPIRIT(player) && GET_TRADITION(player) == TRAD_HERMETIC) {
+  if (GET_TRADITION(player) == TRAD_HERMETIC) {
     snprintf(buf, sizeof(buf), "DELETE FROM pfiles_spirits WHERE idnum=%ld", GET_IDNUM(player));
     mysql_wrapper(mysql, buf);
-    strcpy(buf, "INSERT INTO pfiles_spirits (idnum, Type, Rating, Services, SpiritID) VALUES (");
-    int q = 0;
-    for (struct spirit_data *spirit = GET_SPIRIT(player); spirit; spirit = spirit->next, q++) {
-      if (q)
-        strcat(buf, "), (");
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %d, %d, %d, %d", GET_IDNUM(player), spirit->type, spirit->force, spirit->services, spirit->id);
-      q = 1;
-    }
-    if (q) {
-      strcat(buf, ");");
-      mysql_wrapper(mysql, buf);
+    if (GET_SPIRIT(player)) {
+      strcpy(buf, "INSERT INTO pfiles_spirits (idnum, Type, Rating, Services, SpiritID) VALUES (");
+      int q = 0;
+      for (struct spirit_data *spirit = GET_SPIRIT(player); spirit; spirit = spirit->next, q++) {
+        if (q)
+          strcat(buf, "), (");
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %d, %d, %d, %d", GET_IDNUM(player), spirit->type, spirit->force, spirit->services, spirit->id);
+        q = 1;
+      }
+      if (q) {
+        strcat(buf, ");");
+        mysql_wrapper(mysql, buf);
+      }
     }
   }
 }

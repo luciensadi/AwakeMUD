@@ -15,6 +15,7 @@
 #include "config.hpp"
 #include "ignore_system.hpp"
 #include "invis_resistance_tests.hpp"
+#include "newdb.hpp"
 
 #define POWER(name) void (name)(struct char_data *ch, struct char_data *spirit, struct spirit_data *spiritdata, char *arg)
 #define FAILED_CAST "You fail to bind the mana to your will.\r\n"
@@ -3058,8 +3059,10 @@ ACMD(do_contest)
       act("$n becomes uncontrolled!", TRUE, mob, 0, 0, TO_ROOM);
       GET_ACTIVE(mob) = 0;
     }
-    conjuring_drain(caster, GET_LEVEL(mob));
-    conjuring_drain(ch, GET_LEVEL(mob));
+    if (conjuring_drain(caster, GET_LEVEL(mob)))
+      return;
+    if (conjuring_drain(ch, GET_LEVEL(mob)))
+      return;
   } else if (chsuc > casuc) {
     send_to_char(ch, "You steal control of %s!\r\n", GET_NAME(mob));
     snprintf(buf, sizeof(buf), "$n steals control of %s!", GET_NAME(mob));
@@ -3077,13 +3080,16 @@ ACMD(do_contest)
         break;
       }
     GET_ACTIVE(mob) = GET_IDNUM(ch);
-    conjuring_drain(caster, GET_LEVEL(mob));
-    conjuring_drain(ch, GET_LEVEL(mob));
+    if (conjuring_drain(caster, GET_LEVEL(mob)))
+      return;
+    if (conjuring_drain(ch, GET_LEVEL(mob)))
+      return;
   } else {
     send_to_char("You fail to gain control!\r\n", ch);
     snprintf(buf, sizeof(buf), "$n tries to steal control of %s!", GET_NAME(mob));
     act(buf, FALSE, ch, 0, caster, TO_VICT);
-    conjuring_drain(ch, GET_LEVEL(mob));
+    if (conjuring_drain(ch, GET_LEVEL(mob)))
+      return;
   }
 }
 ACMD(do_unbond)
@@ -3443,6 +3449,7 @@ ACMD(do_release)
         REMOVE_FROM_LIST(spirit, GET_SPIRIT(ch), next);
         delete spirit;
         GET_NUM_SPIRITS(ch)--;
+        playerDB.SaveChar(ch, GET_LOADROOM(ch));
         return;
       }
     }
@@ -3662,9 +3669,9 @@ ACMD(do_conjure)
       ch->char_specials.conjure[2] = 1;
     } else {
 #ifdef ACCELERATE_FOR_TESTING
-      ch->char_specials.conjure[2] = force;
+      ch->char_specials.conjure[2] = 1;
 #else
-      ch->char_specials.conjure[2] = force * 30;
+      ch->char_specials.conjure[2] = 20;
 #endif
     }
     // Max tracking for PROGRESS command.
@@ -4007,10 +4014,13 @@ ACMD(do_elemental)
                (real_mob = real_mobile(spirits[elem->type].vnum)) >= 0 ? GET_NAME(&mob_proto[real_mob]) : "a spirit",
                elem->force, elem->services);
     else
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%d) %-30s (Force %d) Services: %d%10s\r\n",
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%d) %-30s (Force %d [id %d]) Services: %d%10s\r\n",
                i,
                (real_mob = real_mobile(elements[elem->type].vnum)) >= 0 ? GET_NAME(&mob_proto[real_mob]) : "an elemental",
-               elem->force, elem->services, elem->called ? " Present" : " ");
+               elem->force,
+               elem->id,
+               elem->services,
+               elem->called ? " Present" : " ");
   }
   send_to_char(buf, ch);
 }
@@ -4302,6 +4312,11 @@ POWER(spirit_sustain)
         snprintf(buf, sizeof(buf), "SYSERR: Unexpected elemental type %d in spirit_sustain.", spiritdata->type);
         mudlog(buf, ch, LOG_SYSLOG, TRUE);
         break;
+    }
+
+    if (spiritdata->force < sust->force) {
+      send_to_char(ch, "%s can only sustain spells at force %d or lower.\r\n", CAP(GET_NAME(spirit)), spiritdata->force);
+      return;
     }
 
     sust->spirit = spirit;

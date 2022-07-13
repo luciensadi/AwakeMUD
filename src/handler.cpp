@@ -2379,8 +2379,10 @@ void extract_char(struct char_data * ch)
     struct follow_type *nextfollow;
     for (struct follow_type *follow = ch->followers; follow; follow = nextfollow) {
       nextfollow = follow->next;
-      if (IS_SPIRIT(follow->follower) || IS_PC_CONJURED_ELEMENTAL(follow->follower))
+      if (IS_SPIRIT(follow->follower) || IS_PC_CONJURED_ELEMENTAL(follow->follower)) {
+        act("$n vanishes with a sound like a bursting bubble.", TRUE, follow->follower, 0, 0, TO_ROOM);
         extract_char(follow->follower);
+      }
     }
   }
   if (ch->followers || ch->master)
