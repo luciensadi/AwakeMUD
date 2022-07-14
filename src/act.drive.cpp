@@ -2354,11 +2354,12 @@ ACMD(stop_rigging_first) {
 }
 
 process_vehicle_decay() {
+  struct room_data *room;
   struct veh_data *veh = NULL;
-    if VEH_FLAGGED((*veh, VFLAG_LOOTWRECK) && !((veh->in_veh) || ROOM_FLAGGED(veh->in_room, ROOM_GARAGE)) ) {
+    if (VEH_FLAGGED(*veh, VFLAG_LOOTWRECK) && !((veh->in_veh) || ROOM_FLAGGED(veh->in_room, ROOM_GARAGE)) ) {
       if (veh->spare <= time(0)) {
-        snprintf(buf, sizeof(buf), "A hulking utility forklift drives up, lifts the remains of %s up, and drives off to the junkyard.\r\n", veh)
-        send_to_room(buf, room)
+        snprintf(buf, sizeof(buf), "A hulking utility forklift drives up, lifts the remains of %s up, and drives off to the junkyard.\r\n", veh);
+        send_to_room(buf, room);
         veh->flags.RemoveBit(VFLAG_LOOTWRECK);
         extract_veh(veh);
       }

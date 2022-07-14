@@ -172,7 +172,6 @@ void show_string(struct descriptor_data * d, char *input);
 extern void update_paydata_market();
 extern void warn_about_apartment_deletion();
 void process_wheres_my_car();
-void process_vehicle_decay();
 extern int calculate_distance_between_rooms(vnum_t start_room_vnum, vnum_t target_room_vnum, bool ignore_roads);
 void set_descriptor_canaries(struct descriptor_data *newd);
 
@@ -918,7 +917,6 @@ void game_loop(int mother_desc)
         process_regeneration(0);
       taxi_leaves();
       process_wheres_my_car();
-      process_vehicle_decay();
     }
 
     // Every 29 MUD minutes
