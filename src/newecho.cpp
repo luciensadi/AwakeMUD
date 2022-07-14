@@ -23,6 +23,9 @@ char storage_string[MAX_STRING_LENGTH];
 // #define SPEECH_COLOR_CODE_DEBUG(ch, ...) send_to_char((ch), ##__VA_ARGS__)
 #define SPEECH_COLOR_CODE_DEBUG(...)
 
+// #define PSEUDOLANGUAGE_REPLACEMENT_DEBUG(ch, ...) send_to_char((ch), ##__VA_ARGS__)
+#define PSEUDOLANGUAGE_REPLACEMENT_DEBUG(ch, ...)
+
 const char *allowed_abbreviations[] = {
   "Mr", "Ms", "Mrs", "Mz"
   , "\n"
@@ -568,7 +571,7 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
     // We're now inside a quote block, with the language for the quote identified. 'i' is the start of the speech.
     char speech_buf[MAX_STRING_LENGTH];
 
-    // First, add the language tag string.
+    // First, add the language tag string. This is for visual representation only and is used to clarify which language is in use.
     if (language_in_use != SKILL_ENGLISH && (IS_NPC(viewer) || GET_SKILL(viewer, language_in_use) > 0)) {
       snprintf(speech_buf, sizeof(speech_buf), "(%s) ", capitalize(skills[language_in_use].name));
     } else {
@@ -611,6 +614,8 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
     } else if (!ispunct(get_final_character_from_string(replacement))){
       quote_termination = ".^n";
     }
+
+    NEW_EMOTE_DEBUG_SPEECH(actor, "\r\nProposed replacement: '%s'\r\n", replacement ? double_up_color_codes(replacement) : "n/a");
 
     // Known bug: Capitalization does not work after a language word is retained.
     if (replacement) {
@@ -912,11 +917,6 @@ const char *replace_too_long_words(struct char_data *ch, struct char_data *speak
   if (IS_NPC(ch))
     return message;
 
-  const char *viewer_highlight = GET_CHAR_COLOR_HIGHLIGHT(ch);
-
-  if (!strcmp((viewer_highlight = string_to_uppercase(viewer_highlight)), terminal_code))
-    viewer_highlight = string_to_lowercase(viewer_highlight);
-
   if (!message) {
     mudlog("SYSERR: Received NULL message to replace_too_long_words().", ch, LOG_SYSLOG, TRUE);
     return message;
@@ -933,6 +933,15 @@ const char *replace_too_long_words(struct char_data *ch, struct char_data *speak
     return message;
   }
 
+  PSEUDOLANGUAGE_REPLACEMENT_DEBUG(ch, "Received message for pseudolanguage mangle: '%s'\r\n", double_up_color_codes(message));
+
+  const char *viewer_highlight = GET_CHAR_COLOR_HIGHLIGHT(ch);
+
+  // We always want the viewer's name to stand out, so we make sure it never matches the background/terminal code.
+  // KNOWN ISSUE: This does not work with xterm256 codes. Anyone want to write that logic?
+  if (!strcmp((viewer_highlight = string_to_uppercase(viewer_highlight)), terminal_code))
+    viewer_highlight = string_to_lowercase(viewer_highlight);
+
   // Calculate their max allowable word length.
   int max_allowable = max_allowable_word_length_at_language_level(GET_SKILL(ch, language_skill));
   // Override it if that's been configured. Used only for the Discord bot.
@@ -942,7 +951,10 @@ const char *replace_too_long_words(struct char_data *ch, struct char_data *speak
   // If they don't want pseudolanguage strings, reflect that here.
   bool no_pseudolanguage = PRF_FLAGGED(ch, PRF_NOPSEUDOLANGUAGE);
 
-  strlcpy(replaced_message, message, sizeof(replaced_message));
+  // Before doing any operations on the string, we strip out color codes (we'll apply our own as needed).
+  strlcpy(replaced_message, get_string_after_color_code_removal(message, NULL), sizeof(replaced_message));
+
+  PSEUDOLANGUAGE_REPLACEMENT_DEBUG(ch, "After color code removal: '%s'\r\n", replaced_message);
 
   // If the speech starts with a single parenthezised word, and that word is a language name, we don't touch it.
   char *ptr = replaced_message;
@@ -950,15 +962,16 @@ const char *replace_too_long_words(struct char_data *ch, struct char_data *speak
     char *verification_ptr = ptr + 1;
     // Scan the whole ptr looking for a close-parens without illegal characters.
     for (; *verification_ptr; verification_ptr++) {
-      // send_to_char(ch, "^y%c^n", *verification_ptr);
+      PSEUDOLANGUAGE_REPLACEMENT_DEBUG(ch, "^y%c^n", *verification_ptr);
       if (*verification_ptr == ')')
         break;
 
+      // Apostrophe is allowed due to Or'zet being a language.
       if (!isalpha(*verification_ptr) && *verification_ptr != '\'')
         break;
     }
 
-    // Found a closing parens with no illegal characters before it? Skip the whole thing.
+    // Found a closing parens with no illegal characters before it? Skip the whole thing, it's a language tag.
     if (*verification_ptr == ')')
       ptr = ++verification_ptr;
   }
@@ -969,7 +982,7 @@ const char *replace_too_long_words(struct char_data *ch, struct char_data *speak
   for (; ptr && (ptr - replaced_message) <= (int) strlen(replaced_message); ptr++) {
     random_word = NULL;
     need_caps = FALSE;
-    // send_to_char(ch, "^y%c^n", *ptr);
+    PSEUDOLANGUAGE_REPLACEMENT_DEBUG(ch, "^y%c^n", *ptr);
 
     // We only care about characters commonly found in words.
     if (isalpha(*ptr) || *ptr == '\'' || *ptr == '-') {
@@ -977,23 +990,22 @@ const char *replace_too_long_words(struct char_data *ch, struct char_data *speak
       bool yelling = isupper(*ptr) && isupper(*(ptr + 1));
       bool capital_word = !yelling && isupper(*ptr) && isalpha(*(ptr + 1));
 
-      /*
-      if (capital_word)
-        send_to_char(ch, "^r^^^n", *ptr);
-      if (yelling)
-        send_to_char(ch, "^M!^n", *ptr);
-      */
+      if (capital_word) {
+        PSEUDOLANGUAGE_REPLACEMENT_DEBUG(ch, "^r^^^n", *ptr);
+      } if (yelling) {
+        PSEUDOLANGUAGE_REPLACEMENT_DEBUG(ch, "^M!^n", *ptr);
+      }
 
       if (at_start_of_new_sentence) {
         at_start_of_new_sentence = FALSE;
         need_caps = TRUE;
       }
 
-      // Skim to the end of the word.
+      // Skim to the end of the word. Words must match [a-zA-Z'\-]+
       char *word_ptr = ptr;
       while (isalpha(*(word_ptr)) || *word_ptr == '\'' || *word_ptr == '-') {
         word_ptr++;
-        // send_to_char(ch, "^g%c^n", *word_ptr);
+        PSEUDOLANGUAGE_REPLACEMENT_DEBUG(ch, "^g%c^n", *word_ptr);
       }
       // word_ptr now points at the character after the end of the word.
 
@@ -1031,6 +1043,11 @@ const char *replace_too_long_words(struct char_data *ch, struct char_data *speak
                     tag_check_string,
                     terminal_code);
             random_word = name_buf;
+            PSEUDOLANGUAGE_REPLACEMENT_DEBUG(ch, "\r\nName identified. name_buf='%s' (composed from v_h='%s', t_c_s='%s', t_c='%s')\r\n",
+                                                 name_buf,
+                                                 viewer_highlight,
+                                                 tag_check_string,
+                                                 terminal_code);
           } else {
             if (!need_caps)
               random_word = tag_check_string;
@@ -1046,7 +1063,7 @@ const char *replace_too_long_words(struct char_data *ch, struct char_data *speak
                 at_start_of_new_sentence = FALSE;
           }
 
-          // send_to_char(ch, "\r\nAfter '%s' (v2), sentence mode is now %s\r\n", tag_check_string, at_start_of_new_sentence ? "on" : "off");
+          PSEUDOLANGUAGE_REPLACEMENT_DEBUG(ch, "\r\nAfter '%s' (v2), sentence mode is now %s\r\n", tag_check_string, at_start_of_new_sentence ? "on" : "off");
         }
       }
 
