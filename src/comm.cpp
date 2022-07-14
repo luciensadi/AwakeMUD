@@ -3618,23 +3618,3 @@ void process_wheres_my_car() {
     mudlog(buf2, d->character, LOG_SYSLOG, TRUE);
   }
 }
-
-void process_vehicle_decay() {
-  PERF_PROF_SCOPE(pr_vehicle_decay, "vehicle decay");
-  // Decay smashed NPC/unowned vehicles.
-  for (struct veh_data *veh = veh_list; veh; veh = veh->next) {
-    if VEH_FLAGGED(*veh, VFLAG_LOOTWRECK) {
-      extern int max_npc_vehicle_lootwreck_time;
-    
-      if ((veh->in_veh) || ROOM_FLAGGED(veh->in_room, ROOM_GARAGE) ) {
-        continue;
-    } else if (GET_VEH_DESTRUCTION_TIMER(veh) < max_npc_vehicle_lootwreck_time) {
-        GET_VEH_DESTRUCTION_TIMER(veh)++;
-        continue;
-    } else {
-        veh->flags.RemoveBit(VFLAG_LOOTWRECK);
-        extract_veh(veh);
-      }
-    }   
-  }
-}

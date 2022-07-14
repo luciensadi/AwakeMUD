@@ -5557,8 +5557,9 @@ void chkdmg(struct veh_data * veh)
     remove_vehicle_brain(veh);
     
       if (veh->owner <= 0) {
+        veh->locked = TRUE; // Keeps players from messing around with it.
         veh->flags.SetBit(VFLAG_LOOTWRECK);
-        GET_VEH_DESTRUCTION_TIMER(veh) = max_npc_vehicle_lootwreck_time;
+        veh->spare = time(0) + max_npc_vehicle_lootwreck_time; // Bogarts the same vars and flags special(painter) uses, vehicle is locked + you don't own it, so nonissue.
       }
     
     if (veh->cspeed >= SPEED_IDLE) {
