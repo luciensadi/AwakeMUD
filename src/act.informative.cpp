@@ -266,8 +266,9 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
   *buf = '\0';
   if ((mode == SHOW_MODE_ON_GROUND) && object->text.room_desc) {
     strlcpy(buf, CCHAR ? CCHAR : "", sizeof(buf));
-    if (object->graffiti)
+    if (object->graffiti) {
       strlcat(buf, object->graffiti, sizeof(buf));
+    }
     else {
       // Gun magazines get special consideration.
       if (GET_OBJ_TYPE(object) == ITEM_GUN_MAGAZINE && GET_MAGAZINE_BONDED_MAXAMMO(object)) {
@@ -537,9 +538,11 @@ list_obj_to_char(struct obj_data * list, struct char_data * ch, int mode,
   struct obj_data *i;
   int num = 1;
   bool found;
+  bool found_graffiti;
 
   found = FALSE;
-
+  found_graffiti = FALSE;
+  
   for (i = list; i; i = i->next_content)
   {
     if ((i->in_veh && ch->in_veh) && i->vfront != ch->vfront)
@@ -599,6 +602,10 @@ list_obj_to_char(struct obj_data * list, struct char_data * ch, int mode,
         show_obj_to_char(i, ch, mode);
       } else
         if (!corpse && !mode && !IS_OBJ_STAT(i, ITEM_EXTRA_CORPSE)) {
+          if ((GET_OBJ_VNUM(i) == OBJ_GRAFFITI) && (!found_graffiti) ) {
+            found_graffiti = TRUE;
+            send_to_char(ch, "^gSprayed here,^n\r\n");
+          }
           if (num > 1) {
             send_to_char(ch, "(%d) ", num);
           }
