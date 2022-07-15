@@ -876,6 +876,7 @@ void game_loop(int mother_desc)
       zone_update();
       phone_check();
       process_autonav();
+      process_vehicle_decay();
     }
 
     if (!(pulse % PULSE_SPECIAL)) {
