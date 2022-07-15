@@ -133,6 +133,7 @@ struct dest_data seattle_taxi_destinations[] =
   { "touristville", "", "Touristville", 25313, TAXI_DEST_TYPE_AREA_OF_TOWN , TRUE },
   { "bank", "ucasbank", "UCASBank", 30524, TAXI_DEST_TYPE_OTHER, TRUE },
   { "yoshi", "sushi", "Yoshi's Sushi Bar", 32751, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
+  { "docwagon", "doc", "Docwagon", 32688, TAXI_DEST_TYPE_HOSPITALS, TRUE },
 #ifdef USE_PRIVATE_CE_WORLD
     { "slitch", "pit", "The Slitch Pit", 32660, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
     { "planetary", "", "Planetary Corporation", 72503, TAXI_DEST_TYPE_CORPORATE_PARK, FALSE },
