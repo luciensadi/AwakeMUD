@@ -1997,10 +1997,11 @@ enum {
 /* do_use */
 #define SCMD_USE        0
 
-/* do_echo */
+/* do_new_emote */
 #define SCMD_ECHO       0
 #define SCMD_EMOTE      1
-#define SCMD_AECHO  3
+#define SCMD_VEMOTE     2
+#define SCMD_AECHO      3
 
 /* do_gen_door */
 #define SCMD_OPEN       0

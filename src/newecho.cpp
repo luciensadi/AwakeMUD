@@ -114,6 +114,11 @@ const char *generate_display_string_for_character(struct char_data *actor, struc
   bool should_highlight = !PRF_FLAGGED(viewer, PRF_NOHIGHLIGHT) && !PRF_FLAGGED(viewer, PRF_NOCOLOR);
   const char *viewer_highlight = should_highlight ? GET_CHAR_COLOR_HIGHLIGHT(viewer) : "";
 
+  struct veh_data *viewer_veh = NULL, *target_veh = NULL;
+  RIG_VEH(viewer, viewer_veh);
+
+  // TODO: This logic isn't quite right-- what if I am in the room with a meat body that is rigging, and I target the meat body?
+  RIG_VEH(target_ch, target_veh);
 
   if (terminate_with_actors_color_code && should_highlight) {
     SPEECH_COLOR_CODE_DEBUG(actor, "Terminating with your color code.\r\n");
@@ -124,46 +129,57 @@ const char *generate_display_string_for_character(struct char_data *actor, struc
       if (!strcmp((viewer_highlight = string_to_uppercase(viewer_highlight)), terminal_code))
         viewer_highlight = string_to_lowercase(viewer_highlight);
       SPEECH_COLOR_CODE_DEBUG(actor, "Viewer code changed from %s*^n to %s*^n for %s.\r\n",
-                   GET_CHAR_COLOR_HIGHLIGHT(viewer), viewer_highlight, GET_CHAR_NAME(viewer));
+                                     GET_CHAR_COLOR_HIGHLIGHT(viewer),
+                                     viewer_highlight,
+                                     GET_CHAR_NAME(viewer));
     }
   }
 
   // If the target is the viewer, we don't process their name into a desc, but we do highlight.
   if (target_ch == viewer) {
     // Insert the color code sequence for the viewing character's speech color.
-    if (IS_ASTRAL(viewer))
+    if (viewer_veh) {
+      snprintf(result_string, sizeof(result_string), "%syour vehicle%s",
+               viewer_highlight,
+               terminal_code);
+    } else if (IS_ASTRAL(viewer)) {
       snprintf(result_string, sizeof(result_string), "%s%s's reflection%s",
                viewer_highlight,
                GET_CHAR_NAME(viewer),
                terminal_code);
-    else if (PLR_FLAGGED(viewer, PLR_MATRIX))
+    } else if (PLR_FLAGGED(viewer, PLR_MATRIX)) {
       snprintf(result_string, sizeof(result_string), "%s%s's persona%s",
                viewer_highlight,
                GET_CHAR_NAME(viewer),
                terminal_code);
-    else if (viewer->desc && viewer->desc->original)
+    } else if (viewer->desc && viewer->desc->original) {
       snprintf(result_string, sizeof(result_string), "%s%s (you)%s",
                viewer_highlight,
                decapitalize_a_an(GET_NAME(viewer)),
                terminal_code);
-    else
+    } else {
       snprintf(result_string, sizeof(result_string), "%s%s%s",
                viewer_highlight,
                GET_CHAR_NAME(viewer),
                terminal_code);
+    }
   }
 
   // If the target is not the viewer, we process it as normal.
   else {
     const char *display_string;
 
-    // Switch between display strings based on if the viewer can see and knows the target character.
-    if (!CAN_SEE(viewer, target_ch))
-      display_string = "someone";
-    else if (!IS_NPC(viewer) && (mem_record = safe_found_mem(viewer, target_ch)))
-      display_string = CAP(mem_record->mem);
-    else
-      display_string = decapitalize_a_an(GET_NAME(target_ch));
+    if (target_veh) {
+      display_string = GET_VEH_NAME(target_veh);
+    } else {
+      // Switch between display strings based on if the viewer can see and knows the target character.
+      if (!CAN_SEE(viewer, target_ch))
+        display_string = "someone";
+      else if (!IS_NPC(viewer) && (mem_record = safe_found_mem(viewer, target_ch)))
+        display_string = CAP(mem_record->mem);
+      else
+        display_string = decapitalize_a_an(GET_NAME(target_ch));
+    }
 
     // Insert the display string into the mutable string in place of the tag. No terminal_code here-- this always happens outside of speech.
     snprintf(result_string, sizeof(result_string), "%s^n", display_string);
@@ -210,6 +226,16 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
   // Don't bother processing emotes for those who can't appreciate them.
   if (!viewer->desc)
     return;
+
+  struct veh_data *veh = NULL, *in_veh = actor->in_veh;
+  struct room_data *in_room = actor->in_room;
+
+  RIG_VEH(actor, veh);
+
+  if (veh) {
+    in_room = veh->in_room;
+    in_veh = veh->in_veh;
+  }
 
   bool should_highlight = !PRF_FLAGGED(viewer, PRF_NOHIGHLIGHT) && !PRF_FLAGGED(viewer, PRF_NOCOLOR);
 
@@ -289,7 +315,7 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
   if (require_char_name
       && ((name_ptr = strstr(echo_string, GET_CHAR_NAME(actor))) == NULL || !isalpha(*(name_ptr + strlen(GET_CHAR_NAME(actor)))))
       && str_str(echo_string, "@self") == NULL) {
-
+    // TODO: What's the point of this ifblock?
   }
 
   NEW_EMOTE_DEBUG(actor, "\r\nAfter first pass, mutable_echo_string is '%s'. Evaluating...\r\n", mutable_echo_string);
@@ -337,9 +363,9 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
 
       // Compare it to bystanders' memorized names. Try for exact matches first.
       if (!target_ch) {
-        for (target_ch = actor->in_room ? actor->in_room->people : actor->in_veh->people;
+        for (target_ch = in_room ? in_room->people : in_veh->people;
              target_ch;
-             target_ch = actor->in_room ? target_ch->next_in_room : target_ch->next_in_veh)
+             target_ch = in_room ? target_ch->next_in_room : target_ch->next_in_veh)
         {
           // No such thing as remembering an NPC, and you can't target someone you can't see.
           if (IS_NPC(target_ch) || !CAN_SEE(actor, target_ch))
@@ -356,9 +382,9 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
 
       // Compare it to bystanders' memorized names. Now that exact matches mode is out of the way, go for imprecise.
       if (!target_ch && !require_exact_match) {
-        for (target_ch = actor->in_room ? actor->in_room->people : actor->in_veh->people;
+        for (target_ch = in_room ? in_room->people : actor->in_veh->people;
              target_ch;
-             target_ch = actor->in_room ? target_ch->next_in_room : target_ch->next_in_veh)
+             target_ch = in_room ? target_ch->next_in_room : target_ch->next_in_veh)
         {
           // No such thing as remembering an NPC, and you can't target someone you can't see.
           if (IS_NPC(target_ch) || !CAN_SEE(actor, target_ch))
@@ -375,9 +401,9 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
 
       // Didn't find anyone by that memorized name? Check PC names, trying for exact match first.
       if (!target_ch) {
-        for (target_ch = actor->in_room ? actor->in_room->people : actor->in_veh->people;
+        for (target_ch = in_room ? in_room->people : actor->in_veh->people;
              target_ch;
-             target_ch = actor->in_room ? target_ch->next_in_room : target_ch->next_in_veh)
+             target_ch = in_room ? target_ch->next_in_room : target_ch->next_in_veh)
         {
           // NPCs don't have player data to check, and you can't target someone you can't see.
           if (IS_NPC(target_ch) || !CAN_SEE(actor, target_ch))
@@ -392,9 +418,9 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
       }
 
       if (!target_ch && !require_exact_match) {
-        for (target_ch = actor->in_room ? actor->in_room->people : actor->in_veh->people;
+        for (target_ch = in_room ? in_room->people : actor->in_veh->people;
              target_ch;
-             target_ch = actor->in_room ? target_ch->next_in_room : target_ch->next_in_veh)
+             target_ch = in_room ? target_ch->next_in_room : target_ch->next_in_veh)
         {
           // NPCs don't have player data to check, and you can't target someone you can't see.
           if (IS_NPC(target_ch) || !CAN_SEE(actor, target_ch))
@@ -410,9 +436,9 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
 
       // Didn't find anyone by their PC name? Check keywords (only if not in exact-match mode).
       if (!target_ch && !require_exact_match) {
-        for (target_ch = actor->in_room ? actor->in_room->people : actor->in_veh->people;
+        for (target_ch = in_room ? in_room->people : in_veh->people;
              target_ch;
-             target_ch = actor->in_room ? target_ch->next_in_room : target_ch->next_in_veh)
+             target_ch = in_room ? target_ch->next_in_room : target_ch->next_in_veh)
         {
           // Can't target someone you can't see.
           if (!CAN_SEE(actor, target_ch))
@@ -430,9 +456,9 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
 
       // Didn't find anyone by their keywords? Check in short description (only if not in exact-match mode).
       if (!target_ch && !require_exact_match) {
-        for (target_ch = actor->in_room ? actor->in_room->people : actor->in_veh->people;
+        for (target_ch = in_room ? in_room->people : actor->in_veh->people;
              target_ch;
-             target_ch = actor->in_room ? target_ch->next_in_room : target_ch->next_in_veh)
+             target_ch = in_room ? target_ch->next_in_room : target_ch->next_in_veh)
         {
           // Can't target someone you can't see.
           if (!CAN_SEE(actor, target_ch))
@@ -445,6 +471,26 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
         }
         if (target_ch) {
           NEW_EMOTE_DEBUG(actor, "\r\nWith target string '%s', found %s by alias.\r\n", tag_check_string, GET_CHAR_NAME(target_ch));
+        }
+      }
+
+      // Still nobody? Alright, check vehicles for keywords.
+      if (!target_ch && !require_exact_match) {
+        // TODO.
+        for (struct veh_data *tveh = in_room ? in_room->vehicles : in_veh->carriedvehs;
+             tveh;
+             tveh = tveh->next_veh)
+        {
+          if (str_str(GET_VEH_NAME(tveh), tag_check_string)) {
+            // Found a valid vehicle, stop looking.
+            target_ch = get_driver(tveh);
+
+            if (target_ch) {
+              // TODO: This means you can only target a vehicle that is actively controlled by someone. Empty and non-controlled vehicles are skipped.
+              NEW_EMOTE_DEBUG(actor, "\r\nWith target string '%s', found %s by vehicle keyword.\r\n", tag_check_string, GET_CHAR_NAME(target_ch));
+              break;
+            }
+          }
         }
       }
 
@@ -463,9 +509,9 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
 
         // Fetch the representation of this character. Edge case: actor is viewer and @self: just give your name.
         const char *display_string;
-        if (self_mode && viewer == target_ch && viewer == actor)
-          display_string = GET_CHAR_NAME(actor);
-        else {
+        if (self_mode && viewer == target_ch && viewer == actor) {
+          display_string = veh ? GET_VEH_NAME(veh) : GET_CHAR_NAME(actor);
+        } else {
           if (quote_mode) {
             snprintf(scratch_space, sizeof(scratch_space), "%s%s%s", GET_CHAR_COLOR_HIGHLIGHT(viewer), tag_check_string, GET_CHAR_COLOR_HIGHLIGHT(actor));
             display_string = scratch_space;
@@ -506,7 +552,7 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
       continue;
 
     // It's a quote mark. Set up our vars and increment i by one so it's pointing at the start of the speech.
-    language_in_use = !SKILL_IS_LANGUAGE(GET_LANGUAGE(actor)) ? SKILL_ENGLISH : GET_LANGUAGE(actor);
+    language_in_use = GET_VIABLE_LANGUAGE(actor);
     i++;
 
     // We only accept parenthetical language as the very first thing in the sentence.
@@ -547,7 +593,7 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
       if (SKILL_IS_LANGUAGE(skill_num))
         language_in_use = skill_num;
       else
-        language_in_use = !SKILL_IS_LANGUAGE(GET_LANGUAGE(actor)) ? SKILL_ENGLISH : GET_LANGUAGE(actor);
+        language_in_use = GET_VIABLE_LANGUAGE(actor);
 
       NEW_EMOTE_DEBUG_SPEECH(actor, "\r\nLanguage in use for $n is now %s (target: '%s').\r\n", skills[language_in_use].name, language_string);
 
@@ -655,29 +701,34 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
 
 ACMD(do_new_echo) {
   char storage_buf[MAX_INPUT_LENGTH * 2 + 1];
+  struct veh_data *veh = NULL;
+
+  struct room_data *in_room = ch->in_room;
+  struct veh_data *in_veh = ch->in_veh;
+
+  // Reject vemoters without a vehicle.
+  if (subcmd == SCMD_VEMOTE) {
+    RIG_VEH(ch, veh);
+
+    FAILURE_CASE(!veh, "You can only use the vemote command while controlling a vehicle.\r\n");
+
+    in_room = veh->in_room;
+    in_veh = veh->in_veh;
+  }
 
   // Reject hitchers. They have no body and would break things.
-  if (PLR_FLAGGED(ch, PLR_MATRIX) && !ch->persona) {
-    send_to_char(ch, "You can't do that while hitching.\r\n");
-    return;
-  }
+  FAILURE_CASE(PLR_FLAGGED(ch, PLR_MATRIX) && !ch->persona, "You can't do that while hitching.\r\n");
 
   skip_spaces(&argument);
   delete_doubledollar(argument);
 
   // Require an argument.
-  if (!*argument) {
-    send_to_char("Yes... but what?\r\n", ch);
-    return;
-  }
+  FAILURE_CASE(!*argument, "Yes... but what?\r\n");
 
-  // Can't speak? No emote speech for you.
-  if (strchr(argument, '"') != NULL && !char_can_make_noise(ch)) {
-    send_to_char("You can't seem to make any noise.\r\n", ch);
-    return;
-  }
+  // Can't speak? No emote speech for you. NOTE: Wrapping your speech in single quotes to avoid this is a punishable exploit.
+  FAILURE_CASE(strchr(argument, '"') != NULL && !char_can_make_noise(ch), "You can't seem to make any noise.\r\n");
 
-  // Double up percentages.
+  // Double up percentages. This is necessary to prevent unexpected insertion of data during format runs.
   char *pct_reader = argument;
   char *pct_writer = storage_buf;
   while (*pct_reader && (pct_writer - storage_buf) < (int) sizeof(storage_buf)) {
@@ -685,12 +736,12 @@ ACMD(do_new_echo) {
       *(pct_writer++) = '%';
     *(pct_writer++) = *(pct_reader++);
   }
-  if ((pct_writer - storage_buf) >= (int) sizeof(storage_buf)) {
-    send_to_char(ch, "Sorry, your emote was too long. Please shorten it.\r\n");
-    return;
-  } else {
-    *pct_writer = '\0';
-  }
+
+  // Reject lines that would overflow the buffer.
+  FAILURE_CASE((pct_writer - storage_buf) >= (int) sizeof(storage_buf), "Sorry, your emote was too long. Please shorten it.\r\n");
+
+  // Null-terminate the buffer.
+  *pct_writer = '\0';
 
   // Scan for mismatching quotes or mismatching parens. Reject if found.
   int quotes = 0, parens = 0;
@@ -702,16 +753,17 @@ ACMD(do_new_echo) {
     else if (storage_buf[i] == ')')
       parens--;
   }
-  if (quotes % 2) {
-    send_to_char("There's an error in your emote: You need to close a quote.\r\n", ch);
-    return;
-  }
+
+  // Require that we have an even number of quotes.
+  FAILURE_CASE(quotes % 2 != 0, "There's an error in your emote: You need to close a quote.\r\n");
+
+  // Require that we have an equal number of open and close parens.
   if (parens != 0) {
-    send_to_char("There's an error in your emote: You need to close a parenthetical.\r\n", ch);
+    send_to_char(ch, "There's an error in your emote: %s.\r\n", parens < 0 ? "You have too many close-parens." : "You need to close a parenthetical");
     return;
   }
 
-  // Prevent forgery of the dice command.
+  // Prevent forgery of the dice command (3 dice are rolled...)
   bool is_carat = FALSE;
   bool has_valid_content = FALSE;
   for (const char *ptr = storage_buf; *ptr; ptr++) {
@@ -732,14 +784,15 @@ ACMD(do_new_echo) {
     else if (isalpha(*ptr))
       has_valid_content = TRUE;
   }
-  if (!has_valid_content) {
-    send_to_char(ch, "You can't begin your emote with blank space.\r\n");
-    return;
-  }
+
+  // If we didn't find any valid first-word content after anti-forgery processing, bail out.
+  FAILURE_CASE(!has_valid_content, "You can't begin your emote with blank space.\r\n");
 
   // Scan the emote for language values. You can only use languages you know, and only up to certain word lengths.
   if (!IS_NPC(ch)) {
-    int language_in_use = !SKILL_IS_LANGUAGE(GET_LANGUAGE(ch)) ? SKILL_ENGLISH : GET_LANGUAGE(ch);
+    // Use the language you're speaking, unless it's somehow invalid-- then use English.
+    int language_in_use = GET_VIABLE_LANGUAGE(ch);
+
     for (int i = 0; i < (int) strlen(storage_buf); i++) {
       // Skip everything that's not speech.
       if (storage_buf[i] != '"')
@@ -761,7 +814,7 @@ ACMD(do_new_echo) {
         // Null-terminate language buffer.
         language_string[language_idx - i] = '\0';
 
-        // We expect that the M_E_S pointer is at the closing parens. If this is not true, we ran out of buf
+        // We expect that the language_idx pointer is at the closing parens. If this is not true, we ran out of buf
         // space-- that means this is not a language! Just bail out.
         if (storage_buf[language_idx] != ')') {
           continue;
@@ -812,10 +865,10 @@ ACMD(do_new_echo) {
 
   ch->char_specials.last_social_action = 0;
 
-  // Iterate over the viewers in the room.
-  for (struct char_data *viewer = ch->in_room ? ch->in_room->people : ch->in_veh->people;
+  // Iterate over the viewers in the room or vehicle.
+  for (struct char_data *viewer = in_room ? in_room->people : in_veh->people;
        viewer;
-       viewer = ch->in_room ? viewer->next_in_room : viewer->next_in_veh)
+       viewer = in_room ? viewer->next_in_room : viewer->next_in_veh)
   {
     // If they've ignored you, no luck.
     if (IS_IGNORING(viewer, is_blocking_ic_interaction_from, ch))
@@ -834,7 +887,7 @@ ACMD(do_new_echo) {
   }
 
   // Send it to anyone who's rigging a vehicle here.
-  for (struct veh_data *veh = ch->in_room ? ch->in_room->vehicles : ch->in_veh->carriedvehs;
+  for (struct veh_data *veh = in_room ? in_room->vehicles : in_veh->carriedvehs;
        veh;
        veh = veh->next_veh)
   {

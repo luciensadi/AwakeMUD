@@ -5564,8 +5564,6 @@ void chkdmg(struct veh_data * veh)
   } else if (veh->damage < VEH_DAM_THRESHOLD_DESTROYED) {
     send_to_veh("The engine starts spewing smoke and flames.\r\n", veh, NULL, TRUE);
   } else {
-    struct char_data *i, *next;
-    struct obj_data *obj, *nextobj;
     int damage_rating, damage_tn;
 
     // Remove any vehicle brains, we don't want them thrown into the street.
@@ -5614,6 +5612,7 @@ void chkdmg(struct veh_data * veh)
       damage_tn = 4;
     }
 
+    // Write purgelogs for player vehicle kills.
     if (veh->owner) {
       mudlog("Writing player vehicle contents to purgelog-- destroyed via standard damage.", NULL, LOG_WRECKLOG, TRUE);
       mudlog("Writing player vehicle contents to purgelog-- destroyed via standard damage.", NULL, LOG_PURGELOG, TRUE);
@@ -5635,16 +5634,31 @@ void chkdmg(struct veh_data * veh)
     veh->dest = 0;
 
     if (veh->towing) {
-      veh_to_room(veh->towing, veh->in_room);
+      if (veh->in_room) {
+        veh_to_room(veh->towing, veh->in_room);
+      } else if (veh->in_veh) {
+        veh_to_veh(veh->towing, veh->in_veh);
+      } else {
+        mudlog("SYSERR: Vehicle with a towed veh was neither in room nor veh! Sending towed vehicle to Dante's.", NULL, LOG_SYSLOG, TRUE);
+        veh_to_room(veh->towing, &world[real_room(RM_DANTES_GARAGE)]);
+      }
       veh->towing = NULL;
     }
 
     // Dump out the people in the vehicle and set their relevant values.
-    for (i = veh->people; i; i = next) {
+    for (struct char_data *i = veh->people, *next; i; i = next) {
       next = i->next_in_veh;
       stop_manning_weapon_mounts(i, FALSE);
       char_from_room(i);
-      char_to_room(i, veh->in_room);
+      if (veh->in_room) {
+        char_to_room(i, veh->in_room);
+      } else if (veh->in_veh) {
+        char_to_veh(veh->in_veh, i);
+      } else {
+        mudlog("SYSERR: Destroyed vehicle had no in_room or in_veh! Disgorging occupant to Dante's.", i, LOG_SYSLOG, TRUE);
+        char_to_room(i, &world[real_room(RM_DANTES_GARAGE)]);
+      }
+
       // TODO: What about the other flags for people who are sitting in the back working on something?
       AFF_FLAGS(i).RemoveBits(AFF_PILOT, AFF_RIG, ENDBIT);
 
@@ -5655,13 +5669,22 @@ void chkdmg(struct veh_data * veh)
     }
 
     // Dump out and destroy objects.
-    for (obj = veh->contents; obj; obj = nextobj) {
+    for (struct obj_data *obj = veh->contents, *nextobj; obj; obj = nextobj) {
       nextobj = obj->next_content;
       switch(number(0, 2)) {
           /* case 0: the item stays in the vehicle */
+        case 0:
+          break;
         case 1:
           obj_from_room(obj);
-          obj_to_room(obj, veh->in_room);
+          if (veh->in_room) {
+            obj_to_room(obj, veh->in_room);
+          } else if (veh->in_veh) {
+            obj_to_veh(obj, veh->in_veh);
+          } else {
+            mudlog("SYSERR: Destroyed veh had no in_room or in_veh! Disgorging object to Dante's.", NULL, LOG_SYSLOG, TRUE);
+            obj_to_room(obj, &world[real_room(RM_DANTES_GARAGE)]);
+          }
           break;
         case 2:
           extract_obj(obj);

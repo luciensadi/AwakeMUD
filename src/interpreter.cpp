@@ -893,7 +893,7 @@ struct command_info cmd_info[] =
     { "users"      , POS_DEAD    , do_users    , LVL_BUILDER, 0, FALSE },
 
     { "version"    , POS_DEAD    , do_gen_ps   , 0, SCMD_VERSION, TRUE },
-    { "vemote"     , POS_SLEEPING, do_vemote   , 0 , 0, FALSE },
+    { "vemote"     , POS_SLEEPING, do_new_echo , 0 , SCMD_VEMOTE, FALSE }, // was do_vemote
     { "visible"    , POS_RESTING , do_visible  , LVL_BUILDER, 0, FALSE },
     { "view"       , POS_LYING   , do_imagelink, 0, 0, FALSE },
     { "vfind"      , POS_DEAD    , do_vfind    , LVL_BUILDER, 0, FALSE },
@@ -1365,7 +1365,7 @@ struct command_info rig_info[] =
     { "tow", 0, do_tow , 0, 0 , FALSE },
     { "typo", 0, do_gen_write, 0, SCMD_TYPO, FALSE },
     { "unlock", 0, do_gen_door , 0, SCMD_UNLOCK , FALSE },
-    { "vemote", 0, do_vemote, 0, 0, FALSE },
+    { "vemote", 0, do_new_echo, 0, SCMD_VEMOTE, FALSE },
     { "where", 0, do_where, 0, 0, FALSE },
     { "who", 0, do_who, 0, 0, FALSE },
     { "wtell", 0, do_wiztell, LVL_BUILDER, 0, FALSE },

@@ -510,9 +510,10 @@ int get_armor_penalty_grade(struct char_data *ch);
 
 #define SHOOTING_DIR(ch)        ((ch)->char_specials.shooting_dir)
 
-#define GET_LANGUAGE(ch)      ((ch)->char_specials.saved.cur_lang)
-#define GET_NUM_FIGHTING(ch)  ((ch)->char_specials.fightList.NumItems())
-#define GET_NUM_ATTACKING(ch) ((ch)->char_specials.defendList.NumItems())
+#define GET_LANGUAGE(ch)        ((ch)->char_specials.saved.cur_lang)
+#define GET_VIABLE_LANGUAGE(ch) (SKILL_IS_LANGUAGE(GET_LANGUAGE((ch))) ? GET_LANGUAGE((ch)) : SKILL_ENGLISH)
+#define GET_NUM_FIGHTING(ch)    ((ch)->char_specials.fightList.NumItems())
+#define GET_NUM_ATTACKING(ch)   ((ch)->char_specials.defendList.NumItems())
 
 #define GET_COND(ch, i)         ((ch)->player_specials->saved.conditions[(i)])
 #define GET_LOADROOM(ch)        ((ch)->player_specials->saved.load_room)
