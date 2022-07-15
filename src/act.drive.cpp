@@ -2353,16 +2353,18 @@ ACMD(stop_rigging_first) {
   send_to_char(ch, "You'll need to stop rigging by using the %s command before you can do that.\r\n", AFF_FLAGGED(ch, AFF_RIG) ? "^WRIG^n" : "^WRETURN^n");
 }
 
-process_vehicle_decay() {
-  struct room_data *room;
-  struct veh_data *veh = NULL;
-    if (VEH_FLAGGED(*veh, VFLAG_LOOTWRECK) && !((veh->in_veh) || ROOM_FLAGGED(veh->in_room, ROOM_GARAGE)) ) {
-      if (veh->spare <= time(0)) {
-        snprintf(buf, sizeof(buf), "A hulking utility forklift drives up, lifts the remains of %s up, and drives off to the junkyard.\r\n", veh);
-        send_to_room(buf, room);
-        veh->flags.RemoveBit(VFLAG_LOOTWRECK);
-        extract_veh(veh);
-      }
-    save_vehicles(FALSE);
+void process_vehicle_decay(void) {
+  PERF_PROF_SCOPE(pr_, __func__);
+  for (struct veh_data *veh = veh_list; veh; veh = veh->next) {
+    struct room_data *room;
+      if (VEH_FLAGGED(*veh, VFLAG_LOOTWRECK) && !((veh->in_veh) || ROOM_FLAGGED(veh->in_room, ROOM_GARAGE)) ) {
+        if (veh->spare <= time(0)) {
+          snprintf(buf, sizeof(buf), "A hulking utility forklift drives up, lifts the remains of %s up, and drives off into the sunset.\r\n", veh);
+          send_to_room(buf, room);
+          veh->flags.RemoveBit(VFLAG_LOOTWRECK);
+          extract_veh(veh);
+        }
+      save_vehicles(FALSE);
+    }
   }
 }

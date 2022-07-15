@@ -165,6 +165,7 @@ void free_shop(struct shop_data *shop);
 void free_quest(struct quest_data *quest);
 void randomize_shop_prices(void);
 void process_autonav(void);
+void process_vehicle_decay(void);
 void update_buildrepair(void);
 void process_boost(void);
 class memoryClass *Mem = new memoryClass();
