@@ -2355,7 +2355,7 @@ ACMD(stop_rigging_first) {
 
 void process_vehicle_decay(void)
   {
-    struct veh_data *veh = veh_list
+    struct veh_data *veh = veh_list;
     struct room_data *room;
     if (VEH_FLAGGED(*veh, VFLAG_LOOTWRECK) && !((veh->in_veh) || ROOM_FLAGGED(veh->in_room, ROOM_GARAGE)) ) {
       if (veh->spare <= time(0)) {
