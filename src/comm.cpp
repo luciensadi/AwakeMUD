@@ -2872,7 +2872,7 @@ void send_to_room(const char *messg, struct room_data *room, struct veh_data *ex
         if (!(PLR_FLAGGED(i, PLR_REMOTE) || PLR_FLAGGED(i, PLR_MATRIX)) && AWAKE(i))
           SEND_TO_Q(messg, i->desc);
     for (v = room->vehicles; v; v = v->next_veh)
-      if (v->people && v != exclude_veh)
+      if (v != exclude_veh)
         send_to_veh(messg, v, NULL, TRUE);
 
   }
