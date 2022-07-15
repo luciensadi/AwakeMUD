@@ -864,8 +864,6 @@ void init_char_sql(struct char_data *ch)
                "('%ld', '%d', '%d', '%d');", GET_IDNUM(ch), GET_TOTEM(ch), GET_TOTEMSPIRIT(ch), GET_ASPECT(ch));
     mysql_wrapper(mysql, buf);
   }
-  snprintf(buf, sizeof(buf), "INSERT INTO pfiles_drugdata (idnum) VALUES (%ld)", GET_IDNUM(ch));
-  mysql_wrapper(mysql, buf);
   if (GET_LEVEL(ch) > 0) {
     snprintf(buf, sizeof(buf), "INSERT INTO pfiles_immortdata (idnum, InvisLevel, IncogLevel, Zonenumber, Poofin, Poofout) VALUES ("\
                  "%ld, %d, %d, %d, '%s', '%s');",

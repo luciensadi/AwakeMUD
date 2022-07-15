@@ -1527,7 +1527,6 @@ vnum_t get_highest_idnum_in_use() {
     "pfiles_bioware",
     "pfiles_chargendata",
     "pfiles_cyberware",
-    "pfiles_drugdata",
     "pfiles_drugs",
     "pfiles_ignore",
     "pfiles_immortdata",
@@ -1544,7 +1543,7 @@ vnum_t get_highest_idnum_in_use() {
     "you-deleted-something-and-didn't-change-the-table-length-dumbass" // must be last for obvious reasons
   };
 
-  #define NUM_IDNUM_TABLES 20
+  #define NUM_IDNUM_TABLES 19
 
   vnum_t highest_pfiles_idnum = get_one_number_from_query("SELECT idnum FROM pfiles ORDER BY idnum DESC LIMIT 1;");
 
@@ -1992,7 +1991,6 @@ void DeleteChar(long idx)
     "pfiles_bioware     ",
     "pfiles_chargendata ", // 5
     "pfiles_cyberware   ",
-    "pfiles_drugdata    ",
     "pfiles_drugs       ",
     "pfiles_ignore      ", // IF YOU CHANGE THIS, CHANGE PFILES_IGNORE_INDEX
     "pfiles_immortdata  ", // 10
@@ -2008,11 +2006,11 @@ void DeleteChar(long idx)
     "pfiles_worn        ",  // 20
     "pfiles_ignore_v2   "   // IF YOU CHANGE THIS, CHANGE PFILES_IGNORE_V2_INDEX
   };
-  #define NUM_SQL_TABLE_NAMES     22
+  #define NUM_SQL_TABLE_NAMES     21
   #define PFILES_INDEX            0
-  #define PFILES_IGNORE_INDEX     9
-  #define PFILES_MEMORY_INDEX     14
-  #define PFILES_IGNORE_V2_INDEX  21
+  #define PFILES_IGNORE_INDEX     8
+  #define PFILES_MEMORY_INDEX     13
+  #define PFILES_IGNORE_V2_INDEX  20
 
   // Figure out the filename for this character.
   const char *name = get_player_name(idx);
