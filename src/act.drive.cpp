@@ -617,6 +617,7 @@ ACMD(do_upgrade)
       case TYPE_ROLLBARS:
       case TYPE_TIRES:
       case TYPE_MISC:
+      case TYPE_POKEYSTICK:
         target = 3;
         break;
       default:

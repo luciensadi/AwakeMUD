@@ -679,10 +679,27 @@ void move_vehicle(struct char_data *ch, int dir)
     send_to_char("You aren't the Kool-Aid Man, so you decide against ramming your way out of here.\r\n", ch);
     return;
   }
-  if (!EXIT(veh, dir) || !EXIT(veh, dir)->to_room || EXIT(veh, dir)->to_room == &world[0] || IS_SET(EXIT(veh, dir)->exit_info, EX_CLOSED)) {
-    send_to_char(CANNOT_GO_THAT_WAY, ch);
-    return;
+  if (!EXIT(veh, dir) 
+      || !EXIT(veh, dir)->to_room 
+      || EXIT(veh, dir)->to_room == &world[0])
+  {
+      send_to_char(CANNOT_GO_THAT_WAY, ch);
+      return;
   }
+  
+  if (IS_SET(EXIT(veh, dir)->exit_info, EX_CLOSED)) {
+      if (ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_HOUSE) // It only checks house, not garage, so drones can enter/leave apts.
+          && House_can_enter(ch, EXIT(veh, dir)->to_room->number)
+          && has_key(ch, (EXIT(veh, dir)->key)))
+      {
+          send_to_char("The remote on your key beeps, allowing the door to swing open briefly enough to slide through.\r\n", ch);
+          snprintf(buf, sizeof(buf), "A door beeps before swinging open electronically to allow %s through in that brief moment.\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
+          send_to_room(buf, get_veh_in_room(veh), veh);
+      } else {
+          send_to_char(CANNOT_GO_THAT_WAY, ch);
+          return;
+      }
+  } 
 
 #ifdef DEATH_FLAGS
   if (ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_DEATH)) {
@@ -1090,45 +1107,6 @@ int find_door(struct char_data *ch, const char *type, char *dir, const char *cmd
       return -1;
     }
   }
-}
-
-int has_key(struct char_data *ch, int key_vnum)
-{
-  struct obj_data *o, *key;
-
-  // Check carried items.
-  for (o = ch->carrying; o; o = o->next_content) {
-    if (GET_OBJ_VNUM(o) == key_vnum)
-      return 1;
-
-    if (GET_OBJ_TYPE(o) == ITEM_KEYRING) {
-      for (key = o->contains; key; key = key->next_content) {
-        if (GET_OBJ_VNUM(key) == key_vnum)
-          return 1;
-      }
-    }
-  }
-
-  // Check worn items.
-  for (int x = 0; x < NUM_WEARS; x++) {
-    // Must exist.
-    if (!GET_EQ(ch, x))
-      continue;
-
-    // Direct match?
-    if (GET_OBJ_VNUM(GET_EQ(ch, x)) == key_vnum)
-      return 1;
-
-    // Keyring match?
-    if (GET_OBJ_TYPE(GET_EQ(ch, x)) == ITEM_KEYRING) {
-      for (key = GET_EQ(ch, x)->contains; key; key = key->next_content) {
-        if (GET_OBJ_VNUM(key) == key_vnum)
-          return 1;
-      }
-    }
-  }
-
-  return 0;
 }
 
 #define NEED_OPEN       1

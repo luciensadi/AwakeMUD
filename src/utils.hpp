@@ -74,6 +74,7 @@ int     light_level(struct room_data *room);
 bool    biocyber_compatibility(struct obj_data *obj1, struct obj_data *obj2, struct char_data *ch);
 void    magic_loss(struct char_data *ch, int magic, bool msg);
 bool    has_kit(struct char_data *ch, int type);
+int     has_key(struct char_data *ch, int key_vnum);
 struct  obj_data *find_workshop(struct char_data *ch, int type);
 void    add_workshop_to_room(struct obj_data *obj);
 void    remove_workshop_from_room(struct obj_data *obj);

@@ -1527,6 +1527,7 @@ ACMD(do_get)
             case TYPE_ROLLBARS:
             case TYPE_TIRES:
             case TYPE_MISC:
+            case TYPE_POKEYSTICK:
               target = 3;
               break;
             default:

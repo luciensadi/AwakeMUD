@@ -1816,7 +1816,8 @@ enum {
 #define TYPE_TIRES    20
 #define TYPE_MISC    21
 #define TYPE_AMMOBIN    22
-#define NUM_MODTYPES    23
+#define TYPE_POKEYSTICK 23
+#define NUM_MODTYPES    24
 
 #define ENGINE_NONE        0
 #define ENGINE_ELECTRIC    1

@@ -1866,6 +1866,45 @@ bool has_kit(struct char_data * ch, int type)
   return FALSE;
 }
 
+// Return true if the character has a key of the given number, false otherwise.
+int has_key(struct char_data *ch, int key_vnum)
+{
+  struct obj_data *o, *key;
+
+  // Check carried items.
+  for (o = ch->carrying; o; o = o->next_content) {
+    if (GET_OBJ_VNUM(o) == key_vnum)
+      return 1;
+
+    if (GET_OBJ_TYPE(o) == ITEM_KEYRING) {
+      for (key = o->contains; key; key = key->next_content) {
+        if (GET_OBJ_VNUM(key) == key_vnum)
+          return 1;
+      }
+    }
+  }
+
+  // Check worn items.
+  for (int x = 0; x < NUM_WEARS; x++) {
+    // Must exist.
+    if (!GET_EQ(ch, x))
+      continue;
+
+    // Direct match?
+    if (GET_OBJ_VNUM(GET_EQ(ch, x)) == key_vnum)
+      return 1;
+
+    // Keyring match?
+    if (GET_OBJ_TYPE(GET_EQ(ch, x)) == ITEM_KEYRING) {
+      for (key = GET_EQ(ch, x)->contains; key; key = key->next_content) {
+        if (GET_OBJ_VNUM(key) == key_vnum)
+          return 1;
+      }
+    }
+  }
+
+  return 0;
+}
 // Returns a pointer to the best workshop/facility of the requested type.
 struct obj_data *find_workshop(struct char_data * ch, int type)
 {
