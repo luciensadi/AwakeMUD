@@ -2139,6 +2139,20 @@ ACMD(do_tow)
   else if (veh->towing)
     send_to_char("Towing a vehicle that's towing another vehicle isn't very safe!\r\n", ch);
   else {
+    // If anyone is attacking the vehicle, you can't tow it.
+    for (struct char_data *check = tveh->in_room ? tveh->in_room->people : tveh->in_veh->people;
+         check;
+         check = tveh->in_room ? check->next_in_room : check->next_in_veh)
+    {
+      if (FIGHTING_VEH(check) == veh) {
+        send_to_char(ch, "You can't tow something while under fire!\r\n");
+        return;
+      }
+      if (FIGHTING_VEH(check) == tveh) {
+        send_to_char(ch, "You can't tow a vehicle that's under fire!\r\n");
+        return;
+      }
+    }
     send_to_char(ch, "You pick up %s with your towing equipment.\r\n", GET_VEH_NAME(tveh));
     strcpy(buf3, GET_VEH_NAME(veh));
     snprintf(buf, sizeof(buf), "%s picks up %s with its towing equipment.\r\n", buf3, GET_VEH_NAME(tveh));

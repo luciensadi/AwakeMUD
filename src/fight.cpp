@@ -5622,8 +5622,11 @@ void chkdmg(struct veh_data * veh)
     if (veh->rigger) {
       send_to_char("Your mind is blasted with pain as your vehicle is wrecked.\r\n", veh->rigger);
       if (!damage(veh->rigger, veh->rigger, convert_damage(stage(-success_test(GET_WIL(veh->rigger), 6), SERIOUS)), TYPE_CRASH, MENTAL)) {
-        veh->rigger->char_specials.rigging = NULL;
-        PLR_FLAGS(veh->rigger).RemoveBit(PLR_REMOTE);
+        // If they got knocked out, they've already broken off from rigging.
+        if (veh->rigger) {
+          veh->rigger->char_specials.rigging = NULL;
+          PLR_FLAGS(veh->rigger).RemoveBit(PLR_REMOTE);
+        }
       }
       veh->rigger = NULL;
     }
