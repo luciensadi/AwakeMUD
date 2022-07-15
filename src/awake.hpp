@@ -1355,6 +1355,7 @@ enum {
 #define VEH_TRACKED       13
 #define VEH_WALKER        14
 #define NUM_VEH_TYPES     15
+// Adding a type? Change constants.cpp's veh_types[]
 
 /* vehicle affection table */
 #define VAFF_NONE  0

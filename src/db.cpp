@@ -1934,6 +1934,15 @@ void parse_object(File &fl, long nr)
     int mult;
     const char *type_as_string = NULL;
     switch (GET_OBJ_TYPE(obj)) {
+      case ITEM_MOD:
+        // Weapon mounts go on all vehicle types.
+        if (GET_VEHICLE_MOD_TYPE(obj) == TYPE_MOUNT) {
+          for (int bit = 0; bit < NUM_VEH_TYPES; bit++) {
+            GET_VEHICLE_MOD_DESIGNED_FOR_FLAGS(obj) |= 1 << bit;
+          }
+          GET_VEHICLE_MOD_LOCATION(obj) = MOD_MOUNT;
+        }
+        break;
       case ITEM_CHIP:
         GET_OBJ_VAL(obj, 2) = (GET_OBJ_VAL(obj, 1) * GET_OBJ_VAL(obj, 1)) * 3;
         GET_OBJ_AVAILTN(obj) = 6;

@@ -542,7 +542,7 @@ list_obj_to_char(struct obj_data * list, struct char_data * ch, int mode,
 
   found = FALSE;
   found_graffiti = FALSE;
-  
+
   for (i = list; i; i = i->next_content)
   {
     if ((i->in_veh && ch->in_veh) && i->vfront != ch->vfront)
@@ -1676,7 +1676,7 @@ void look_in_veh(struct char_data * ch)
       do_auto_exits(ch);
       CCHAR = "^g";
       CGLOB = KGRN;
-      list_obj_to_char(veh->in_room->contents, ch, SHOW_MODE_ON_GROUND, FALSE, FALSE);
+      list_obj_to_char(veh->in_room->contents, ch, SHOW_MODE_ON_GROUND, FALSE, TRUE);
       CGLOB = KNRM;
       CCHAR = NULL;
       list_char_to_char(veh->in_room->people, ch);
@@ -2016,11 +2016,10 @@ void look_in_obj(struct char_data * ch, char *arg, bool exa)
   }
 
   // Find the specified thing. Vehicle will take priority over object.
+  bits = generic_find(arg, FIND_OBJ_INV | FIND_OBJ_ROOM | FIND_OBJ_EQUIP, ch, &dummy, &obj);
   if (ch->in_veh) {
-    bits = generic_find(arg, FIND_OBJ_INV | FIND_OBJ_ROOM | FIND_OBJ_EQUIP, ch, &dummy, &obj);
     veh = get_veh_list(arg, ch->in_veh->carriedvehs, ch);
   } else {
-    bits = generic_find(arg, FIND_OBJ_INV | FIND_OBJ_ROOM | FIND_OBJ_EQUIP, ch, &dummy, &obj);
     veh = get_veh_list(arg, ch->in_room->vehicles, ch);
   }
 
@@ -3227,9 +3226,14 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
 
       // Vals 4 and 6
       sprintbit(GET_VEHICLE_MOD_DESIGNED_FOR_FLAGS(j), veh_types, buf2, sizeof(buf2));
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt has been designed to fit vehicles of type: ^c%s^n, and installs to the ^c%s^n.",
-               buf2,
-               mod_name[GET_VEHICLE_MOD_LOCATION(j)]);
+      if (GET_VEHICLE_MOD_TYPE(j) == TYPE_MOUNT) {
+        strlcat(buf, "\r\nIt fits all vehicles and installs to the mount slot.\r\n", sizeof(buf));
+      } else {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt has been designed to fit vehicles of type: ^c%s^n, and installs to the ^c%s^n.",
+                 buf2,
+                 mod_name[GET_VEHICLE_MOD_LOCATION(j)]);
+      }
+
       break;
     case ITEM_DESIGN:
       if (GET_OBJ_VAL(j, 0) == 5) {

@@ -1688,8 +1688,13 @@ const char *veh_types[NUM_VEH_TYPES] =
     "Hovercraft",
     "Motorboat",
     "Ship",
-    "Lighter Than Air"
+    "Lighter Than Air",
+    "Semi-Ballistic",
+    "Sub-Orbital",
+    "Tracked Vehicle",
+    "Walker"
   };
+  
 struct mod_data mod_types[NUM_MODTYPES] =
   {
     { "NOTHING", 0 },

@@ -6153,10 +6153,13 @@ bool mount_fire(struct char_data *ch)
       // If nobody's manning it and it has a gun...
       if (!mount->worn_by && (gun = get_mount_weapon(mount))) {
         // Fire at the enemy, assuming we're fighting it.
-        if (mount->targ && FIGHTING(ch) == mount->targ)
-          return hit_with_multiweapon_toggle(ch, mount->targ, gun, NULL, get_mount_ammo(mount), num_mounts > 1);
+        if (mount->targ && FIGHTING(ch) == mount->targ) {
+          if (hit_with_multiweapon_toggle(ch, mount->targ, gun, NULL, get_mount_ammo(mount), num_mounts > 1))
+            return TRUE;
+        }
         else if (mount->tveh && FIGHTING_VEH(ch) == mount->tveh) {
-          return vcombat(ch, mount->tveh);
+          if (vcombat(ch, mount->tveh))
+            return TRUE;
         }
       }
     }

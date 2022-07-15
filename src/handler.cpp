@@ -3022,6 +3022,7 @@ int generic_find(char *arg, int bitvector, struct char_data * ch,
 
   *tar_ch = NULL;
   *tar_obj = NULL;
+  struct veh_data *rigged_veh = (ch)->char_specials.rigging;
 
   one_argument(arg, name);
 
@@ -3090,16 +3091,40 @@ int generic_find(char *arg, int bitvector, struct char_data * ch,
   }
   if (IS_SET(bitvector, FIND_OBJ_ROOM))
   {
-    if (ch->in_veh) {
-      if ((*tar_obj = get_obj_in_list_vis(ch, name, ch->in_veh->contents)))
+    if (rigged_veh) {
+      if (rigged_veh->in_veh) {
+        if ((*tar_obj = get_obj_in_list_vis(ch, name, rigged_veh->in_veh->contents)))
+          return (FIND_OBJ_ROOM);
+      } else if (rigged_veh->in_room) {
+        if ((*tar_obj = get_obj_in_list_vis(ch, name, rigged_veh->in_room->contents))) {
+          return (FIND_OBJ_ROOM);
+        }
+      } else {
+        mudlog("SYSERR: Rigged_veh had no in_veh or in_room in generic_find()!", ch, LOG_SYSLOG, TRUE);
+      }
+    }
+    else {
+      if (ch->in_veh) {
+        if ((*tar_obj = get_obj_in_list_vis(ch, name, ch->in_veh->contents)))
+          return (FIND_OBJ_ROOM);
+      }
+      else if ((*tar_obj = get_obj_in_list_vis(ch, name, ch->in_room->contents))) {
         return (FIND_OBJ_ROOM);
-    } else if ((*tar_obj = get_obj_in_list_vis(ch, name, ch->in_room->contents)))
-      return (FIND_OBJ_ROOM);
+      }
+    }
   }
   if (IS_SET(bitvector, FIND_OBJ_VEH_ROOM))
   {
-    if (ch->in_veh && (*tar_obj = get_obj_in_list_vis(ch, name, (get_ch_in_room(ch))->contents)))
-      return (FIND_OBJ_VEH_ROOM);
+    if (rigged_veh) {
+      if ((*tar_obj = get_obj_in_list_vis(ch, name, get_veh_in_room(rigged_veh)->contents))) {
+        return (FIND_OBJ_VEH_ROOM);
+      }
+    }
+    else {
+      if ((*tar_obj = get_obj_in_list_vis(ch, name, get_ch_in_room(ch)->contents))) {
+        return (FIND_OBJ_VEH_ROOM);
+      }
+    }
   }
   if (IS_SET(bitvector, FIND_OBJ_WORLD))
   {
