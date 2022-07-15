@@ -227,7 +227,7 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
   if (!viewer->desc)
     return;
 
-  struct veh_data *veh = NULL, *in_veh = actor->in_veh;
+  struct veh_data *veh = NULL, *in_veh = actor->in_veh, *unpiloted_vehicle = NULL;
   struct room_data *in_room = actor->in_room;
 
   RIG_VEH(actor, veh);
@@ -476,7 +476,6 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
 
       // Still nobody? Alright, check vehicles for keywords.
       if (!target_ch && !require_exact_match) {
-        // TODO.
         for (struct veh_data *tveh = in_room ? in_room->vehicles : in_veh->carriedvehs;
              tveh;
              tveh = tveh->next_veh)
@@ -492,32 +491,55 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
             }
           }
         }
+
+        // If we didn't find any piloted vehicles, we now look for unpiloted ones.
+        for (struct veh_data *tveh = in_room ? in_room->vehicles : in_veh->carriedvehs;
+             tveh;
+             tveh = tveh->next_veh)
+        {
+          if (str_str(GET_VEH_NAME(tveh), tag_check_string)) {
+            unpiloted_vehicle = tveh;
+            break;
+          }
+        }
       }
 
       // Found someone.
-      if (target_ch) {
-        // If the viewer is the actor, and it's not @self, just stop-- we don't self-highlight.
-        if (viewer == target_ch && viewer == actor && !self_mode)
-          continue;
-
-        // In quote mode, we only do viewer highlights. @-targets are considered invalid in quotes.
-        if (quote_mode && target_ch != viewer)
-          continue;
+      if (target_ch || unpiloted_vehicle) {
+        const char *display_string;
 
         // Copy out the rest of the string-- we're inserting something here.
         strncpy(storage_string, mutable_echo_string + tag_index, sizeof(storage_string) - 1);
 
-        // Fetch the representation of this character. Edge case: actor is viewer and @self: just give your name.
-        const char *display_string;
-        if (self_mode && viewer == target_ch && viewer == actor) {
-          display_string = veh ? GET_VEH_NAME(veh) : GET_CHAR_NAME(actor);
-        } else {
-          if (quote_mode) {
-            snprintf(scratch_space, sizeof(scratch_space), "%s%s%s", GET_CHAR_COLOR_HIGHLIGHT(viewer), tag_check_string, GET_CHAR_COLOR_HIGHLIGHT(actor));
-            display_string = scratch_space;
+        if (target_ch) {
+          // If the viewer is the actor, and it's not @self, just stop-- we don't self-highlight.
+          if (viewer == target_ch && viewer == actor && !self_mode)
+            continue;
+
+          // In quote mode, we only do viewer highlights. @-targets are considered invalid in quotes.
+          if (quote_mode && target_ch != viewer)
+            continue;
+
+          // Fetch the representation of this character. Edge case: actor is viewer and @self: just give your name.
+          if (self_mode && viewer == target_ch && viewer == actor) {
+            display_string = veh ? GET_VEH_NAME(veh) : GET_CHAR_NAME(actor);
           } else {
-            display_string = generate_display_string_for_character(actor, viewer, target_ch, FALSE);
+            if (quote_mode) {
+              snprintf(scratch_space, sizeof(scratch_space), "%s%s%s", GET_CHAR_COLOR_HIGHLIGHT(viewer), tag_check_string, GET_CHAR_COLOR_HIGHLIGHT(actor));
+              display_string = scratch_space;
+            } else {
+              display_string = generate_display_string_for_character(actor, viewer, target_ch, FALSE);
+            }
           }
+        }
+
+        else if (unpiloted_vehicle) {
+          display_string = GET_VEH_NAME(unpiloted_vehicle);
+        }
+
+        else {
+          mudlog("SYSERR: Entered the found-someone block of newecho without either target_ch or unpiloted_vehicle!", actor, LOG_SYSLOG, TRUE);
+          continue;
         }
 
         // Put it into the mutable echo string, replacing the tag, and then append the rest of the storage string.
@@ -525,9 +547,8 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
 
         // Since we added X known-good characters starting at i, increase i by X-- but decrement by 1 since we'll be incrementing on loop.
         i += strlen(display_string) - 1;
-        NEW_EMOTE_DEBUG(actor, "'%s' resolved to %s.\r\n", tag_check_string, display_string);
+        NEW_EMOTE_DEBUG(actor, "'%s' resolved to %s %s.\r\n", tag_check_string, target_ch ? "character" : "vehicle", display_string);
       }
-
       else {
         NEW_EMOTE_DEBUG(actor, "\r\nTag string '%s' found nobody.\r\n", tag_check_string);
         i += strlen(tag_check_string) - 1;
