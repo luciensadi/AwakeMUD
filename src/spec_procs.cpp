@@ -676,7 +676,7 @@ SPECIAL(nerp_skills_teacher) {
             found_a_skill_already = TRUE;
             snprintf(buf, sizeof(buf), "%s can teach you the following:\r\n", GET_NAME(master));
           }
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  %-24s (%d karma %d nuyen)\r\n", skills[skill].name, get_skill_price(ch, skill),
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  %-35s (%d karma %d nuyen)\r\n", skills[skill].name, get_skill_price(ch, skill),
                   MAX(1000, (GET_SKILL(ch, skill) * 5000)));
         }
       }

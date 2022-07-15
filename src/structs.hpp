@@ -1130,6 +1130,7 @@ struct skill_data {
   sh_int attribute;
   bool type;
   bool requires_magic;
+  sh_int group;
 };
 
 struct part_data {
