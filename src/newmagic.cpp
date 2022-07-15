@@ -901,7 +901,8 @@ bool spell_drain(struct char_data *ch, int spell_idx, int force, int drain_damag
   act(buf, FALSE, ch, NULL, NULL, TO_ROLLS);
 
   // Allow others to see that you're casting.
-  magic_perception(ch, force, spell_idx);
+  if (GET_TRADITION(ch) != TRAD_ADEPT)
+    magic_perception(ch, force, spell_idx);
 
   // Write our rolls info.
   int original_damage = drain_damage;
