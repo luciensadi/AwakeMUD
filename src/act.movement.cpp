@@ -679,14 +679,14 @@ void move_vehicle(struct char_data *ch, int dir)
     send_to_char("You aren't the Kool-Aid Man, so you decide against ramming your way out of here.\r\n", ch);
     return;
   }
-  if (!EXIT(veh, dir) 
-      || !EXIT(veh, dir)->to_room 
+  if (!EXIT(veh, dir)
+      || !EXIT(veh, dir)->to_room
       || EXIT(veh, dir)->to_room == &world[0])
   {
       send_to_char(CANNOT_GO_THAT_WAY, ch);
       return;
   }
-  
+
   if (IS_SET(EXIT(veh, dir)->exit_info, EX_CLOSED)) {
       if (ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_HOUSE) // It only checks house, not garage, so drones can enter/leave apts.
           && House_can_enter(ch, EXIT(veh, dir)->to_room->number)
@@ -699,7 +699,7 @@ void move_vehicle(struct char_data *ch, int dir)
           send_to_char(CANNOT_GO_THAT_WAY, ch);
           return;
       }
-  } 
+  }
 
 #ifdef DEATH_FLAGS
   if (ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_DEATH)) {
@@ -774,12 +774,7 @@ void move_vehicle(struct char_data *ch, int dir)
   snprintf(buf2, sizeof(buf2), "%s %s from %s.", GET_VEH_NAME(veh), veh->arrive, thedirs[rev_dir[dir]]);
   snprintf(buf1, sizeof(buf1), "%s %s to %s.", GET_VEH_NAME(veh), veh->leave, thedirs[dir]);
 
-  /* Known issue: If you are in a vehicle, and nobody is in the room, and another vehicle drives in, you won't see it. */
-  if (veh->in_room->people)
-  {
-    act(buf1, FALSE, veh->in_room->people, 0, 0, TO_ROOM);
-    act(buf1, FALSE, veh->in_room->people, 0, 0, TO_CHAR);
-  }
+  send_to_room(buf1, veh->in_room, veh);
 
   for (struct char_data *tch = veh->in_room->watching; tch; tch = tch->next_watching)
     act(buf2, FALSE, ch, 0, 0, TO_CHAR);
@@ -792,10 +787,9 @@ void move_vehicle(struct char_data *ch, int dir)
   veh_from_room(veh);
   veh_to_room(veh, was_in);
   veh->lastin[0] = veh->in_room;
-  if (veh->in_room->people) {
-    act(buf2, FALSE, veh->in_room->people, 0, 0, TO_ROOM);
-    act(buf2, FALSE, veh->in_room->people, 0, 0, TO_CHAR);
-  }
+
+  send_to_room(buf2, veh->in_room, veh);
+
   for (struct char_data *tch = veh->in_room->watching; tch; tch = tch->next_watching)
     act(buf2, FALSE, ch, 0, 0, TO_CHAR);
   stop_fighting(ch);
