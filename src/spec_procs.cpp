@@ -575,7 +575,7 @@ SPECIAL(metamagic_teacher)
     return TRUE;
   }
 
-  if (!can_learn_metamagic(ch, metamagict[ind].s[i])) {
+  if (!can_learn_metamagic(ch, i)) {
     send_to_char(ch, "You can't learn %s.\r\n", metamagic[i]);
     return TRUE;
   }
