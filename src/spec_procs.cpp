@@ -454,7 +454,7 @@ int get_skill_price(struct char_data *ch, int i)
 
 bool can_learn_metamagic(struct char_data *ch, int metamagic_idx) {
   // You already know it, or haven't unlocked it at all.
-  if (GET_METAMAGIC(ch, metamagic_idx) % METAMAGIC_STAGE_LEARNED == 0)
+  if (GET_METAMAGIC(ch, metamagic_idx) % 2 == 0)
     return FALSE;
 
   // Your tradition is not compatible.

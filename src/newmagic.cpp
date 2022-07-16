@@ -5463,11 +5463,15 @@ void disp_init_menu(struct descriptor_data *d)
 bool can_select_metamagic(struct char_data *ch, int i)
 {
   if (GET_TRADITION(ch) == TRAD_ADEPT) {
-    if (i != META_CENTERING && i != META_MASKING)
-      return FALSE;
-    // Centering can go up an arbitrary number of levels.
-    if (i == META_CENTERING && GET_METAMAGIC(ch, i) % METAMAGIC_STAGE_LEARNED == 0)
-      return TRUE;
+    switch (i) {
+      case META_CENTERING:
+        // Centering can go up an arbitrary number of levels.
+        return GET_METAMAGIC(ch, i) % 2 == 0;
+      case META_MASKING:
+        return GET_METAMAGIC(ch, i) == 0;
+      default:
+        return FALSE;
+    }
   }
   // All other metamagics can only be unlocked from 0.
   if (GET_METAMAGIC(ch, i))
@@ -5697,7 +5701,7 @@ void init_parse(struct descriptor_data *d, char *arg)
         send_to_char("Initiation cancelled.\r\n", CH);
       } else if (number > META_MAX) {
         send_to_char("Invalid Response. Select another metamagic to unlock: ", CH);
-      } else if (GET_METAMAGIC(CH, number) >= METAMAGIC_STAGE_UNLOCKED) {
+      } else if (GET_METAMAGIC(CH, number) >= METAMAGIC_STAGE_UNLOCKED && !(number == META_CENTERING && GET_TRADITION(CH) == TRAD_ADEPT)) {
         send_to_char(CH, "You've already unlocked %s. Select another metamagic to unlock: ", metamagic[number]);
       } else if (!can_select_metamagic(CH, number)) {
         send_to_char("Your tradition/apect/initiation combination isn't able to learn that metamagic technique. Select another metamagic to learn: ", CH);
