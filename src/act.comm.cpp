@@ -1205,16 +1205,17 @@ ACMD(do_gen_comm)
       }
     }
 
+    snprintf(buf1, sizeof(buf1),  "%sYou shout in %s, \"%s%s%s\"^n",
+            com_msgs[subcmd][3],
+            skills[language].name,
+            capitalize(argument),
+            ispunct(get_final_character_from_string(argument)) ? "" : "!",
+            com_msgs[subcmd][3]);
+
     if (PRF_FLAGGED(ch, PRF_NOREPEAT)) {
       store_message_to_history(ch->desc, COMM_CHANNEL_SHOUTS, buf1);
       send_to_char(OK, ch);
     } else {
-      snprintf(buf1, MAX_STRING_LENGTH,  "%sYou shout in %s, \"%s%s%s\"^n",
-              com_msgs[subcmd][3],
-              skills[language].name,
-              capitalize(argument),
-              ispunct(get_final_character_from_string(argument)) ? "" : "!",
-              com_msgs[subcmd][3]);
       // Note that this line invokes act().
       store_message_to_history(ch->desc, COMM_CHANNEL_SHOUTS, act(buf1, FALSE, ch, 0, 0, TO_CHAR));
     }
@@ -1247,8 +1248,16 @@ ACMD(do_gen_comm)
         for (tmp = ch->in_veh->people; tmp; tmp = tmp->next_in_veh) {
           // Replicate act() in a way that lets us capture the message.
           if (can_send_act_to_target(ch, FALSE, NULL, NULL, tmp, TO_ROOM) && !IS_IGNORING(tmp, is_blocking_ic_interaction_from, ch)) {
+            snprintf(buf1, sizeof(buf1), "%s$z%s shouts in %s, \"%s%s%s\"^n",
+                     com_msgs[subcmd][3],
+                     com_msgs[subcmd][3],
+                     (IS_NPC(tmp) || GET_SKILL(tmp, language) > 0) ? skills[language].name : "an unknown language",
+                     capitalize(replace_too_long_words(tmp, ch, argument, language, com_msgs[subcmd][3])),
+                     ispunct(get_final_character_from_string(argument)) ? "" : "!",
+                     com_msgs[subcmd][3]);
+
             // They're a valid target, so send the message with a raw perform_act() call.
-            store_message_to_history(tmp->desc, COMM_CHANNEL_SHOUTS, perform_act(buf, ch, NULL, NULL, tmp));
+            store_message_to_history(tmp->desc, COMM_CHANNEL_SHOUTS, perform_act(buf1, ch, NULL, NULL, tmp));
           }
         }
         ch->in_veh = NULL;

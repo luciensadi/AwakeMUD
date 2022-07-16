@@ -40,6 +40,7 @@ extern void check_quest_destroy(struct char_data *ch, struct obj_data *obj);
 extern void dominator_mode_switch(struct char_data *ch, struct obj_data *obj, int mode);
 extern float get_bulletpants_weight(struct char_data *ch);
 extern int calculate_vehicle_weight(struct veh_data *veh);
+extern bool House_can_enter(struct char_data *ch, vnum_t house);
 
 // Corpse saving externs.
 extern void write_world_to_disk(int vnum);
@@ -1812,7 +1813,7 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
     // It'd be great if we could allow drones and bikes to be dropped anywhere not flagged !BIKE, but this
     // would cause issues with the current world-- the !bike flag is placed at entrances to zones, not
     // spread throughout the whole thing. People would just carry their bikes in, drop them, and do drivebys.
-    if (!(ROOM_FLAGGED(ch->in_room, ROOM_ROAD) || ROOM_FLAGGED(ch->in_room, ROOM_GARAGE))) {
+    if (!(ROOM_FLAGGED(ch->in_room, ROOM_ROAD) || ROOM_FLAGGED(ch->in_room, ROOM_GARAGE) || House_can_enter(ch, GET_ROOM_VNUM(ch->in_room)))) {
       send_to_char("You can only drop vehicles on roads or in garages.\r\n", ch);
       return 0;
     }
