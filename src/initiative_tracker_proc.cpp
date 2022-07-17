@@ -105,7 +105,8 @@ void _send_tracker_help_to_ch(struct obj_data *tracker, struct char_data *ch) {
 
 void _append_tracker_list_to_string(struct obj_data *tracker, char *str, size_t str_size) {
   for (struct obj_data *entry = tracker->contains; entry; entry = entry->next_content) {
-    snprintf(ENDOF(str), str_size - strlen(str), "(%2d) ^c%s^n%s\r\n",
+    snprintf(ENDOF(str), str_size - strlen(str), "(%s%2d^n) ^c%s^n%s\r\n",
+             GET_TRACKER_ENTRY_INIT_VALUE(entry) <= 0 ? "^y" : "",
              GET_TRACKER_ENTRY_INIT_VALUE(entry),
              GET_OBJ_NAME(entry),
              GET_TRACKER_ENTRY_PLR_IDNUM(entry) ? "" : " (NPC)"

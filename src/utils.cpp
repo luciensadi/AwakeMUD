@@ -1353,7 +1353,7 @@ int get_skill(struct char_data *ch, int skill, int &target)
   int increase = 0;
   int defaulting_tn = 0;
 
-  snprintf(gskbuf, sizeof(gskbuf), "get_skill(%s, %s):", GET_CHAR_NAME(ch), skills[skill].name);
+  snprintf(gskbuf, sizeof(gskbuf), "get_skill(%s, %s): ", GET_CHAR_NAME(ch), skills[skill].name);
 
   // Convert NPCs so that they use the correct base skill for fighting (Armed Combat etc)
   if (IS_NPC(ch))
@@ -1362,14 +1362,14 @@ int get_skill(struct char_data *ch, int skill, int &target)
   if (GET_SKILL(ch, skill) <= 0) {
     // If the base TN is 8 or more and you'd default, you fail instead.
     if (target >= 8) {
-      strlcat(gskbuf, " failed to default (TN 8+), returning 0 dice.", sizeof(gskbuf));
+      strlcat(gskbuf, "failed to default (TN 8+), returning 0 dice. ", sizeof(gskbuf));
       act(gskbuf, 1, ch, NULL, NULL, TO_ROLLS);
       return 0;
     }
 
     // Some skills cannot be defaulted on.
     if (skill == SKILL_AURA_READING || skill == SKILL_SORCERY || skill == SKILL_CONJURING) {
-      strlcat(gskbuf, " failed to default (skill prohibits default), returning 0 dice.", sizeof(gskbuf));
+      strlcat(gskbuf, "failed to default (skill prohibits default), returning 0 dice. ", sizeof(gskbuf));
       act(gskbuf, 1, ch, NULL, NULL, TO_ROLLS);
       return 0;
     }
@@ -1386,14 +1386,14 @@ int get_skill(struct char_data *ch, int skill, int &target)
       if (max_defaultable_skill != skill) {
         skill = max_defaultable_skill;
         defaulting_tn = 2;
-        snprintf(ENDOF(gskbuf), sizeof(gskbuf) - strlen(gskbuf), " defaulting to %s (+2 TN). ", skills[skill].name);
+        snprintf(ENDOF(gskbuf), sizeof(gskbuf) - strlen(gskbuf), "defaulting to %s (+2 TN). ", skills[skill].name);
       }
     }
 
     // If we haven't successfully defaulted to a skill, default to an attribute. This is represented by TN 4.
     if (defaulting_tn == 0) {
       defaulting_tn = 4;
-      snprintf(ENDOF(gskbuf), sizeof(gskbuf) - strlen(gskbuf), " defaulting to %s (+4 TN). ", short_attributes[skills[skill].attribute]);
+      snprintf(ENDOF(gskbuf), sizeof(gskbuf) - strlen(gskbuf), "defaulting to %s (+4 TN). ", short_attributes[skills[skill].attribute]);
     }
   }
 
@@ -1441,7 +1441,7 @@ int get_skill(struct char_data *ch, int skill, int &target)
 
     if (pool_dice > 0) {
       skill_dice += pool_dice;
-      snprintf(ENDOF(gskbuf), sizeof(gskbuf) - strlen(gskbuf), " +%d dice (task pool). ", pool_dice);
+      snprintf(ENDOF(gskbuf), sizeof(gskbuf) - strlen(gskbuf), "+%d dice (task pool). ", pool_dice);
     } else {
       strlcat(gskbuf, "No task pool avail. ", sizeof(gskbuf));
     }
@@ -1454,25 +1454,40 @@ int get_skill(struct char_data *ch, int skill, int &target)
   // Iterate through their cyberware, looking for anything important.
   if (ch->cyberware) {
     int expert = 0;
-    bool chip = FALSE;;
-    for (struct obj_data *obj = ch->cyberware; obj; obj = obj->next_content)
-      if (should_gain_physical_boosts && GET_CYBERWARE_TYPE(obj) == CYB_MOVEBYWIRE)
-        mbw = GET_CYBERWARE_RATING(obj);
-      else if (GET_CYBERWARE_TYPE(obj) == CYB_CHIPJACKEXPERT)
-        expert = GET_CYBERWARE_RATING(obj);
-      else if (GET_CYBERWARE_TYPE(obj) == CYB_CHIPJACK) {
-        rnum_t real_obj;
-        for (int i = 5; i < 10; i++) {
-          if ((real_obj = real_object(GET_OBJ_VAL(obj, i))) > 0 && obj_proto[real_obj].obj_flags.value[0] == skill)
-            chip = TRUE;
-        }
+    bool chip = FALSE;
+    for (struct obj_data *obj = ch->cyberware; obj; obj = obj->next_content) {
+      switch (GET_CYBERWARE_TYPE(obj)) {
+        case CYB_MOVEBYWIRE:
+          mbw = should_gain_physical_boosts ? GET_CYBERWARE_RATING(obj) : 0;
+          break;
+        case CYB_CHIPJACKEXPERT:
+          expert = GET_CYBERWARE_RATING(obj);
+          break;
+        case CYB_CHIPJACK:
+          // Since the chipjack expert driver influences the _chipjack_, we don't account for memory skills here.
+          for (struct obj_data *chip_obj = obj->contains; chip_obj; chip_obj = chip_obj->next_content) {
+            if (GET_CHIP_SKILL(chip_obj) == skill)
+              chip = TRUE;
+          }
+          break;
       }
+    }
 
     // If they have both a chipjack with the correct chip loaded and a Chipjack Expert, add the rating to their skill as task pool dice (up to skill max).
     if (chip && expert) {
-      increase = MIN(REAL_SKILL(ch, skill), expert);
-      skill_dice += increase;
-      snprintf(ENDOF(gskbuf), sizeof(gskbuf) - strlen(gskbuf), "Chip & Expert Skill Increase: %d. ", increase);
+      if (defaulting_tn == 4) {
+        strlcat(gskbuf, "Ignored expert driver (S2A default). ", sizeof(gskbuf));
+      } else if (defaulting_tn == 2) {
+        increase = (int) (MIN(GET_SKILL(ch, skill), expert) / 2);
+        skill_dice += increase;
+        snprintf(ENDOF(gskbuf), sizeof(gskbuf) - strlen(gskbuf), "Chip & Expert Skill Increase (S2S default): %d. ", increase);
+      } else {
+        increase = MIN(GET_SKILL(ch, skill), expert);
+        skill_dice += increase;
+        snprintf(ENDOF(gskbuf), sizeof(gskbuf) - strlen(gskbuf), "Chip & Expert Skill Increase: %d. ", increase);
+      }
+    } else if (expert) {
+      strlcat(gskbuf, "Ignored expert driver (no chip). ", sizeof(gskbuf));
     }
   }
 
@@ -1582,7 +1597,7 @@ int get_skill(struct char_data *ch, int skill, int &target)
       case SKILL_PILOT_TRUCK:
         // Enhanced articulation only matters if you're actually using your body for the thing.
         if (!AFF_FLAGGED(ch, AFF_RIG) && !PLR_FLAGGED(ch, PLR_REMOTE)) {
-          act("Enhanced Articulation skill increase: +1", 1, ch, NULL, NULL, TO_ROLLS);
+          strlcat(gskbuf, "Enhanced Articulation skill increase: +1 ", sizeof(gskbuf));
           skill_dice++;
         }
         break;
@@ -1599,9 +1614,11 @@ int get_skill(struct char_data *ch, int skill, int &target)
 
   // Synthacardium.
   if (skill == SKILL_ATHLETICS && synth) {
-    snprintf(ENDOF(gskbuf), sizeof(gskbuf) - strlen(gskbuf), "Synthacardium Skill Increase: %d.", synth);
+    snprintf(ENDOF(gskbuf), sizeof(gskbuf) - strlen(gskbuf), "Synthacardium Skill Increase: %d. ", synth);
     skill_dice += synth;
   }
+
+  snprintf(ENDOF(gskbuf), sizeof(gskbuf) - strlen(gskbuf), "Final total: %d.", skill_dice);
 
   act(gskbuf, 1, ch, NULL, NULL, TO_ROLLS);
 
@@ -4671,9 +4688,18 @@ int get_br_skill_for_veh(struct veh_data *veh) {
 
 // Rigger 3 p.61-62
 int calculate_vehicle_weight(struct veh_data *veh) {
+  int body = veh->body;
   int load;
 
-  switch (veh->body) {
+  // Try to parse out the prototype's body.
+  {
+    rnum_t real_veh = real_vehicle(veh->veh_number);
+    if (real_veh >= 0) {
+      body = veh_proto[real_veh].body;
+    }
+  }
+
+  switch (body) {
     case 0:
       load = 2;
       break;
