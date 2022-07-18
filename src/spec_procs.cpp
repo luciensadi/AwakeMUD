@@ -4785,12 +4785,17 @@ SPECIAL(floor_has_glass_shards) {
   if (ch->in_veh || IS_NPC(ch) || IS_ASTRAL(ch) || PRF_FLAGGED(ch, PRF_NOHASSLE) || GET_EQ(ch, WEAR_FEET) || AFF_FLAGGED(ch, AFF_SNEAK))
     return FALSE;
 
+  // Don't tear up people who are rigging.
+  if (PLR_FLAGGED(ch, PLR_REMOTE))
+    return FALSE;
+
   // If they attempt to leave the room and are not in a vehicle, wearing shoes, or sneaking, they get cut up.
   for (int dir_index = NORTH; dir_index <= DOWN; dir_index++) {
     if (CMD_IS(exitdirs[dir_index]) || CMD_IS(fulldirs[dir_index])) {
       send_to_char("^rAs you walk away, the glass shards tear at your bare feet!^n\r\n\r\n", ch);
       act("The glass shards tear at $n's bare feet as $e leaves!", TRUE, ch, NULL, NULL, TO_ROOM);
-      damage(ch, ch, LIGHT, 0, TRUE);
+      if (damage(ch, ch, LIGHT, 0, TRUE) || GET_POS(ch) <= POS_STUNNED)
+        return TRUE;
       break;
     }
   }
