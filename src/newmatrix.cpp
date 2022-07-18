@@ -745,16 +745,18 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
         // Oh shit, they died. Guess they don't take MPCP damage, since their struct is zeroed out now.
         return;
       }
-      if (targ && targ->decker->ch && !AWAKE(targ->decker->ch)) {
-        success = success_test(iconrating * 2, targ->decker->mpcp + targ->decker->hardening);
-        fry_mpcp(icon, targ, success);
-        dumpshock(targ);
-        return;
-      } else if (!targ->decker->ch) {
-        success = success_test(iconrating * 2, targ->decker->mpcp + targ->decker->hardening);
-        fry_mpcp(icon, targ, success);
-        extract_icon(targ);
-        return;
+      if (targ && targ->decker) {
+        if (targ->decker->ch && !AWAKE(targ->decker->ch)) {
+          success = success_test(iconrating * 2, targ->decker->mpcp + targ->decker->hardening);
+          fry_mpcp(icon, targ, success);
+          dumpshock(targ);
+          return;
+        } else if (!targ->decker->ch) {
+          success = success_test(iconrating * 2, targ->decker->mpcp + targ->decker->hardening);
+          fry_mpcp(icon, targ, success);
+          extract_icon(targ);
+          return;
+        }
       }
     } else {
       switch(dam) {
@@ -1942,39 +1944,63 @@ ACMD(do_load)
       }
       temp = soft;
     }
-  } else
-    for (struct obj_data *soft = DECKER->deck->contains; soft; soft = soft->next_content)
-      if ((isname(argument, soft->text.keywords) || isname(argument, soft->restring) || isname(argument, soft->text.name))
-          && (GET_OBJ_VAL(soft, 0) > SOFT_SENSOR ||
-              (GET_OBJ_TYPE(soft) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(soft, 0) == TYPE_FILE))) {
-        if (subcmd == SCMD_SWAP && GET_OBJ_VAL(soft, 2) > DECKER->active) {
-          send_to_icon(PERSONA, "You don't have enough active memory to load that program.\r\n");
-        } else if (subcmd == SCMD_SWAP && GET_OBJ_VAL(soft, 1) > DECKER->mpcp) {
-          send_to_icon(PERSONA, "Your deck is not powerful enough to run that program.\r\n");
-        } else {
-          int success = 1;
-          if (subcmd == SCMD_UPLOAD) {
-            if (GET_OBJ_VAL(soft, 8)) {
-              send_to_char(ch, "%s is already being uploaded.\r\n", GET_OBJ_NAME(soft));
-              return;
-            }
+  } else {
+    // What is with the absolute fascination with non-bracketed if/for/else/etc statements in this codebase? This was enormously hard to read. - LS
+    for (struct obj_data *soft = DECKER->deck->contains; soft; soft = soft->next_content) {
+      // Look for a name match.
+      if (!isname(argument, soft->text.keywords) && !isname(argument, soft->restring) && !isname(argument, soft->text.name))
+        continue;
 
-            success = system_test(PERSONA->in_host, ch, TEST_FILES, SOFT_READ, 0);
-          }
-          if (success > 0) {
-            // TODO: This is accurately transcribed, but feels like a bug.
-            GET_OBJ_VAL(soft, 9) = GET_DECK_ACCESSORY_FILE_SIZE(soft);
-            if (subcmd == SCMD_UPLOAD) {
-              GET_OBJ_VAL(soft, 8) = 1;
-              GET_OBJ_ATTEMPT(soft) = matrix[PERSONA->in_host].vnum;
-            } else
-              DECKER->active -= GET_DECK_ACCESSORY_FILE_SIZE(soft);
-            send_to_icon(PERSONA, "You begin to upload %s to %s.\r\n", GET_OBJ_NAME(soft), (subcmd ? "the host" : "your icon"));
-          } else
-            send_to_icon(PERSONA, "Your commands fail to execute.\r\n");
+      if (GET_OBJ_TYPE(soft) != ITEM_DECK_ACCESSORY && GET_OBJ_TYPE(soft) != ITEM_PROGRAM)
+        continue;
+
+      if (subcmd == SCMD_UPLOAD) {
+        if (GET_OBJ_TYPE(soft) == ITEM_PROGRAM && (GET_PROGRAM_TYPE(soft) <= SOFT_SENSOR || GET_PROGRAM_TYPE(soft) == SOFT_EVALUATE)) {
+          send_to_icon(PERSONA, "You can't upload %s.\r\n", GET_OBJ_NAME(soft));
+          return;
         }
-        return;
+
+        if (GET_OBJ_TYPE(soft) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(soft) != TYPE_FILE) {
+          send_to_icon(PERSONA, "You can't upload %s.\r\n", GET_OBJ_NAME(soft));
+          return;
+        }
+      } else {
+        if (GET_OBJ_TYPE(soft) == ITEM_DECK_ACCESSORY) {
+          send_to_icon(PERSONA, "You can't upload %s to your icon.\r\n", GET_OBJ_NAME(soft));
+          return;
+        }
       }
+
+      if (subcmd == SCMD_SWAP && GET_OBJ_VAL(soft, 2) > DECKER->active) {
+        send_to_icon(PERSONA, "You don't have enough active memory to load that program.\r\n");
+      } else if (subcmd == SCMD_SWAP && GET_OBJ_VAL(soft, 1) > DECKER->mpcp) {
+        send_to_icon(PERSONA, "Your deck is not powerful enough to run that program.\r\n");
+      } else {
+        int success = 1;
+        if (subcmd == SCMD_UPLOAD) {
+          if (GET_OBJ_VAL(soft, 8)) {
+            send_to_char(ch, "%s is already being uploaded.\r\n", GET_OBJ_NAME(soft));
+            return;
+          }
+
+          success = system_test(PERSONA->in_host, ch, TEST_FILES, SOFT_READ, 0);
+        }
+        if (success > 0) {
+          // TODO: This is accurately transcribed, but feels like a bug.
+          GET_OBJ_VAL(soft, 9) = GET_DECK_ACCESSORY_FILE_SIZE(soft);
+          if (subcmd == SCMD_UPLOAD) {
+            GET_OBJ_VAL(soft, 8) = 1;
+            GET_OBJ_ATTEMPT(soft) = matrix[PERSONA->in_host].vnum;
+          } else
+            DECKER->active -= GET_DECK_ACCESSORY_FILE_SIZE(soft);
+          send_to_icon(PERSONA, "You begin to upload %s to %s.\r\n", GET_OBJ_NAME(soft), (subcmd ? "the host" : "your icon"));
+        } else
+          send_to_icon(PERSONA, "Your commands fail to execute.\r\n");
+      }
+      return;
+    }
+  }
+
   send_to_icon(PERSONA, "You don't have that file.\r\n");
 }
 
@@ -2037,7 +2063,7 @@ ACMD(do_download)
         if (GET_DECK_ACCESSORY_FILE_PROTECTION(soft) == FILE_PROTECTION_SCRAMBLED
             && GET_OBJ_TYPE(soft) != ITEM_PROGRAM)
         {
-          send_to_icon(PERSONA, "A Scramble IC blocks your attempts to download the file.\r\n");
+          send_to_icon(PERSONA, "A Scramble IC blocks your attempts to download %s. You'll have to decrypt it first!\r\n", GET_OBJ_NAME(soft));
         } else if (GET_OBJ_VAL(soft, 5) > FILE_PROTECTION_SCRAMBLED // file bomb
                    && GET_OBJ_TYPE(soft) != ITEM_PROGRAM)
         {
@@ -2528,19 +2554,24 @@ void matrix_update()
       host.payreset = FALSE;
     if (time_info.hours == 0) {
       if (host.type == HOST_DATASTORE && host.found <= 0 && !host.payreset) {
+        int rand_result;
         switch (host.colour) {
           case HOST_SECURITY_BLUE:
-            host.found = MIN(number(1, 6) - 1, MAX_PAYDATA_QTY_BLUE);
+            rand_result = number(1, 6) - 1;
+            host.found = MIN(rand_result, MAX_PAYDATA_QTY_BLUE);
             break;
           case HOST_SECURITY_GREEN:
-            host.found = MIN(number(1, 6) + number(1, 6) - 2, MAX_PAYDATA_QTY_GREEN);
+            rand_result = number(1, 6) + number(1, 6) - 2;
+            host.found = MIN(rand_result, MAX_PAYDATA_QTY_GREEN);
             break;
           case HOST_SECURITY_ORANGE:
-            host.found = MIN(number(1, 6) + number(1, 6), MAX_PAYDATA_QTY_ORANGE);
+            rand_result = number(1, 6) + number(1, 6);
+            host.found = MIN(rand_result, MAX_PAYDATA_QTY_ORANGE);
             break;
           case HOST_SECURITY_RED:
           case HOST_SECURITY_BLACK:
-            host.found = MIN(number(1, 6) + number(1, 6) + 2, MAX_PAYDATA_QTY_RED_BLACK);
+            rand_result = number(1, 6) + number(1, 6) + 2;
+            host.found = MIN(rand_result, MAX_PAYDATA_QTY_RED_BLACK);
             break;
           default:
             char oopsbuf[500];

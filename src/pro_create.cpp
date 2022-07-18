@@ -607,7 +607,7 @@ void update_buildrepair(void)
         char rollbuf[5000];
         snprintf(rollbuf, sizeof(rollbuf), "Conjure check: initial skill %d, initial target %d", skill, target);
 
-        for (int i = 0; i < NUM_WEARS; i++)
+        for (int i = 0; i < NUM_WEARS; i++) {
           if (GET_EQ(CH, i) && GET_OBJ_TYPE(GET_EQ(CH, i)) == ITEM_FOCUS && GET_OBJ_VAL(GET_EQ(CH, i), 0) == FOCI_SPIRIT
               && GET_OBJ_VAL(GET_EQ(CH, i), 2) == GET_IDNUM(CH) && GET_OBJ_VAL(GET_EQ(CH, i), 3) == CH->char_specials.conjure[0]
               && GET_OBJ_VAL(GET_EQ(CH, i), 4)) {
@@ -615,6 +615,7 @@ void update_buildrepair(void)
             skill += GET_OBJ_VAL(GET_EQ(CH, i), 1);
             break;
           }
+        }
 
         if (GET_BACKGROUND_AURA(CH->in_room) == AURA_POWERSITE) {
           skill += GET_BACKGROUND_COUNT(CH->in_room);
@@ -632,11 +633,19 @@ void update_buildrepair(void)
           send_to_char(CH, "You fail to conjure the %s elemental.\r\n", elements[CH->char_specials.conjure[0]].name);
           continue;
         }
-        int idnum = number(0, 1000);
+
         send_to_char(CH, "You summon a %s elemental.\r\n", elements[CH->char_specials.conjure[0]].name);
+
+        if (conjuring_drain(CH, CH->char_specials.conjure[1])) {
+          // Conjurer died. Elemental is not viable.
+          continue;
+        }
+
+        int idnum = number(0, 1000);
         struct char_data *mob = create_elemental(CH, CH->char_specials.conjure[0], CH->char_specials.conjure[1], idnum, TRAD_HERMETIC);
         act("$n appears just outside of the hermetic circle.", FALSE, mob, 0, 0, TO_ROOM);
-        if (conjuring_drain(CH, CH->char_specials.conjure[1]) || !AWAKE(CH)) {
+
+        if (!AWAKE(CH)) {
           if (success_test(GET_LEVEL(mob), 6) > 0)
             extract_char(mob);
           else {

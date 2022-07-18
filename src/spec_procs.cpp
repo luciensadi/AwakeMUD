@@ -326,7 +326,7 @@ int train_ability_cost(struct char_data *ch, int abil, int level, bool untrain) 
 
   switch (abil) {
     case ADEPT_IMPROVED_BOD:
-      if (GET_REAL_BOD(ch) + GET_POWER_TOTAL(ch, ADEPT_IMPROVED_BOD) + (untrain ? -1 : 0) >= racial_limits[(int)GET_RACE(ch)][0][0] - GET_PERM_BOD_LOSS(ch))
+      if (GET_REAL_BOD(ch) + GET_POWER_TOTAL(ch, ADEPT_IMPROVED_BOD) + (untrain ? -1 : 0) >= racial_limits[(int)GET_RACE(ch)][0][0])
         cost *= 2;
       break;
     case ADEPT_IMPROVED_QUI:
@@ -453,8 +453,8 @@ int get_skill_price(struct char_data *ch, int i)
 }
 
 bool can_learn_metamagic(struct char_data *ch, int metamagic_idx) {
-  // You already know it.
-  if (GET_METAMAGIC(ch, metamagic_idx) == 2 || GET_METAMAGIC(ch, metamagic_idx) == 4)
+  // You already know it, or haven't unlocked it at all.
+  if (GET_METAMAGIC(ch, metamagic_idx) % 2 == 0)
     return FALSE;
 
   // Your tradition is not compatible.
@@ -529,7 +529,24 @@ SPECIAL(metamagic_teacher)
           send_to_char(ch, "%s can teach you the following techniques for %d nuyen each: \r\n", GET_NAME(master), cost);
           printed_something = TRUE;
         }
-        send_to_char(ch, "  %s%s\r\n", metamagic[metamagict[ind].s[i]], !GET_METAMAGIC(ch, metamagict[ind].s[i]) ? " (locked)" : "");
+        switch (GET_METAMAGIC(ch, metamagict[ind].s[i])) {
+          case METAMAGIC_STAGE_LOCKED:
+            send_to_char(ch, "  ^r%s^n (locked)\r\n", metamagic[metamagict[ind].s[i]]);
+            break;
+          case METAMAGIC_STAGE_UNLOCKED:
+            send_to_char(ch, "  %s\r\n", metamagic[metamagict[ind].s[i]]);
+            break;
+          case METAMAGIC_STAGE_LEARNED:
+            send_to_char(ch, "  ^g%s^n (already known)\r\n", metamagic[metamagict[ind].s[i]]);
+            break;
+          default:
+            if (GET_METAMAGIC(ch, metamagict[ind].s[i]) % 2 == 1) {
+              send_to_char(ch, "  %s\r\n", metamagic[metamagict[ind].s[i]]);
+            } else {
+              send_to_char(ch, "  ^g%s^n (already known)\r\n", metamagic[metamagict[ind].s[i]]);
+            }
+            break;
+        }
       }
     }
     if (!printed_something) {
@@ -548,18 +565,18 @@ SPECIAL(metamagic_teacher)
     return TRUE;
   }
 
-  if (!can_learn_metamagic(ch, metamagict[ind].s[i])) {
-    send_to_char(ch, "You can't learn %s.\r\n", metamagic[i]);
-    return TRUE;
-  }
-
-  if (GET_METAMAGIC(ch, i) == 2 || GET_METAMAGIC(ch, i) == 4) {
+  if (GET_METAMAGIC(ch, i) && GET_METAMAGIC(ch, i) % 2 == 0) {
     send_to_char(ch, "You already know how to use %s.\r\n", metamagic[i]);
     return TRUE;
   }
 
   if (!GET_METAMAGIC(ch, i)) {
     send_to_char(ch, "You aren't close enough to the astral plane to learn %s. You'll need to initiate and select that power first.\r\n", metamagic[i]);
+    return TRUE;
+  }
+
+  if (!can_learn_metamagic(ch, i)) {
+    send_to_char(ch, "You can't learn %s.\r\n", metamagic[i]);
     return TRUE;
   }
   /* "Hey, I have an idea!" "What?" "Let's arbitrarily restrict who can train where so that the builders have to do more work!"
@@ -659,7 +676,7 @@ SPECIAL(nerp_skills_teacher) {
             found_a_skill_already = TRUE;
             snprintf(buf, sizeof(buf), "%s can teach you the following:\r\n", GET_NAME(master));
           }
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  %-24s (%d karma %d nuyen)\r\n", skills[skill].name, get_skill_price(ch, skill),
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  %-35s (%d karma %d nuyen)\r\n", skills[skill].name, get_skill_price(ch, skill),
                   MAX(1000, (GET_SKILL(ch, skill) * 5000)));
         }
       }
@@ -1045,7 +1062,7 @@ int calculate_training_raw_cost(struct char_data *ch, int attribute) {
 bool attribute_below_maximums(struct char_data *ch, int attribute) {
   // Special case: Bod can have permanent loss.
   if (attribute == BOD)
-    return GET_REAL_BOD(ch) + GET_PERM_BOD_LOSS(ch) < racial_limits[(int)GET_RACE(ch)][0][BOD];
+    return GET_REAL_BOD(ch) < racial_limits[(int)GET_RACE(ch)][0][BOD];
 
   return GET_REAL_ATT(ch, attribute) < racial_limits[(int)GET_RACE(ch)][0][attribute];
 }
@@ -3047,6 +3064,27 @@ SPECIAL(doctor_scriptshaw)
       act("You cackle gleefully.", FALSE, ch, 0, 0, TO_CHAR);
       act("$n throws back his head and cackles with insane glee!",
           TRUE, ch, 0, 0, TO_ROOM);
+      break;
+  }
+  GET_ACTIVE(ch)++;
+  return FALSE;
+}
+
+SPECIAL(Trogatron)
+{
+  if (cmd || FIGHTING(ch) || GET_POS(ch) <= POS_SLEEPING)
+    return FALSE;
+
+  if (GET_ACTIVE(ch) < 0 || GET_ACTIVE(ch) > 12)
+    GET_ACTIVE(ch) = 0;
+
+  switch (GET_ACTIVE(ch)) {
+    case 7:
+      do_say(ch, "This is pewALLup, FOR REAL, yo, you got to KNOW/", 0, 0);
+      do_say(ch, "It'll WALLop, leave DOLLops of blood in the SNOW/", 0, 0);
+      do_say(ch, "CAUGHT up and SHOT up, and if you then GOT up/", 0, 0);
+      do_say(ch, "We gonna go STOCK up and put it on LOCK up/", 0, 0);
+      do_say(ch, "Mana warp POP up 'round where we CHALK up your SKULL!-", 0, 0);
       break;
   }
   GET_ACTIVE(ch)++;
@@ -6604,7 +6642,7 @@ SPECIAL(floor_usable_radio) {
 
 // Override the 'install' command in the presence of an unpacked medical workshop or facility.
 SPECIAL(medical_workshop) {
-  bool mode_is_install = FALSE, mode_is_diagnose = FALSE;
+  bool mode_is_install = FALSE, mode_is_diagnose = FALSE, mode_is_withdraw = FALSE;
   struct obj_data *workshop = (struct obj_data *) me;
   struct obj_data *ware, *found_obj = NULL;
   struct char_data *found_char = NULL;
@@ -6616,11 +6654,15 @@ SPECIAL(medical_workshop) {
     return FALSE;
 
   // Skip anything that's not an expected command.
-  if (!((mode_is_install = CMD_IS("install")) || CMD_IS("uninstall") || (mode_is_diagnose = CMD_IS("diagnose"))))
+  if (!(   (mode_is_install = CMD_IS("install"))
+        || CMD_IS("uninstall")
+        || (mode_is_diagnose = CMD_IS("diagnose"))
+        || (mode_is_withdraw = CMD_IS("withdraw"))
+      ))
     return FALSE;
 
   // Require that the medical workshop be unpacked.
-  if (!GET_WORKSHOP_IS_SETUP(workshop))
+  if (!GET_WORKSHOP_IS_SETUP(workshop) && GET_WORKSHOP_GRADE(workshop) != TYPE_FACILITY)
     return FALSE;
 
   // Preliminary skill check.
@@ -6635,12 +6677,24 @@ SPECIAL(medical_workshop) {
   }
 
   if (!*arg) {
-    send_to_char(ch, "Syntax: %sinstall <target character> <'ware>\r\n", mode_is_install ? "" : "un");
+    if (mode_is_diagnose) {
+      send_to_char("Syntax: diagnose <target character>\r\n", ch);
+    } else if (mode_is_withdraw) {
+      send_to_char("Syntax: withdraw <drug to enter guided withdraw from>\r\n", ch);
+    } else {
+      send_to_char(ch, "Syntax: %sinstall <target character> <'ware>\r\n", mode_is_install ? "" : "un");
+    }
     return TRUE;
   }
 
   // Parse out the victim targeting argument.
   argument = one_argument(argument, target_arg);
+
+  // Withdrawal is almost entirely different from the other cases here, so it's handled separately in this block.
+  if (mode_is_withdraw) {
+    attempt_safe_withdrawal(ch, (const char *) target_arg);
+    return TRUE;
+  }
 
   // Capture self-targeting to save cycles.
   if (!str_cmp(target_arg, "self") || !str_cmp(target_arg, "me") || !str_cmp(target_arg, "myself")) {
@@ -6787,7 +6841,7 @@ SPECIAL(medical_workshop) {
       }
       return TRUE;
     }
-    
+
     send_to_char(ch, "You're standing in a medical %s, so you can only %sinstall 'ware! %s doesn't count.\r\n",
                  GET_WORKSHOP_GRADE(workshop) == TYPE_WORKSHOP ? "workshop" : "facility",
                  mode_is_install ? "" : "un",

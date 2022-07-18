@@ -60,7 +60,8 @@ int get_maneuver(struct veh_data *veh)
     // TODO: What is this passage for? -LS
     int dummy_target = 0;
     for (skill = veh_skill(ch, veh, &dummy_target); skill > 0; skill--) {
-      x = MAX(x, srdice());
+      int sr_dice = srdice();
+      x = MAX(x, sr_dice);
     }
     score += x;
   }
@@ -616,6 +617,7 @@ ACMD(do_upgrade)
       case TYPE_ROLLBARS:
       case TYPE_TIRES:
       case TYPE_MISC:
+      case TYPE_POKEYSTICK:
         target = 3;
         break;
       default:
@@ -2003,7 +2005,7 @@ ACMD(do_switch)
     return;
   }
 
-  else if (!ch->in_veh->seating[!ch->vfront]) {
+  else if (!ch->in_veh->seating[!ch->vfront] && !(repair_vehicle_seating(ch->in_veh) && ch->in_veh->seating[!ch->vfront])) {
     if (access_level(ch, LVL_ADMIN)) {
       send_to_char("You use your staff powers to bypass the lack of seating.\r\n", ch);
     } else {
@@ -2138,6 +2140,20 @@ ACMD(do_tow)
   else if (veh->towing)
     send_to_char("Towing a vehicle that's towing another vehicle isn't very safe!\r\n", ch);
   else {
+    // If anyone is attacking the vehicle, you can't tow it.
+    for (struct char_data *check = tveh->in_room ? tveh->in_room->people : tveh->in_veh->people;
+         check;
+         check = tveh->in_room ? check->next_in_room : check->next_in_veh)
+    {
+      if (FIGHTING_VEH(check) == veh) {
+        send_to_char(ch, "You can't tow something while under fire!\r\n");
+        return;
+      }
+      if (FIGHTING_VEH(check) == tveh) {
+        send_to_char(ch, "You can't tow a vehicle that's under fire!\r\n");
+        return;
+      }
+    }
     send_to_char(ch, "You pick up %s with your towing equipment.\r\n", GET_VEH_NAME(tveh));
     strcpy(buf3, GET_VEH_NAME(veh));
     snprintf(buf, sizeof(buf), "%s picks up %s with its towing equipment.\r\n", buf3, GET_VEH_NAME(tveh));

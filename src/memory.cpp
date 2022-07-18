@@ -26,7 +26,7 @@
 #include "utils.hpp"
 #include "newmatrix.hpp"
 #include "ignore_system.hpp"
-#include "perception_tests.hpp"
+#include "invis_resistance_tests.hpp"
 
 memoryClass::memoryClass()
 {}
@@ -131,9 +131,9 @@ void memoryClass::DeleteCh(struct char_data *ch)
   if (ch->ignore_data)
     delete ch->ignore_data;
 
-  // Delete their perception data, then remove them from all other PC's perception records.
-  purge_invis_perception_records(ch);
-  remove_ch_from_pc_perception_records(ch);
+  // Delete their invis resistance data, then remove them from all other PC's invis resistance records.
+  purge_invis_invis_resistance_records(ch);
+  remove_ch_from_pc_invis_resistance_records(ch);
 
   free_char(ch);
   delete ch;

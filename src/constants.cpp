@@ -289,7 +289,11 @@ const char *exit_bits[] =
     "PICKPROOF",
     "DESTROYED",
     "HIDDEN",
-    "\n"
+    "WARDED",
+    "TEMPORARY",
+    "WINDOW",
+    "BARRED_WINDOW",
+    MAX_FLAG_MARKER
   };
 
 
@@ -299,7 +303,7 @@ const char *genders[] =
     "Neutral",
     "Male",
     "Female",
-    "\n"
+    MAX_FLAG_MARKER
   };
 
 const char *thrdgenders[] =
@@ -307,7 +311,7 @@ const char *thrdgenders[] =
     "it",
     "him",
     "her",
-    "\n"
+    MAX_FLAG_MARKER
   };
 
 struct spirit_table spirits[] =
@@ -415,9 +419,9 @@ const char *attack_types[] =
 
 const char *weapon_type[] =
   {
-    "edged weapon",
+    "slashing weapon",
     "club",
-    "pole arm",
+    "piercing weapon",
     "whip",
     "glove",
     "hold-out pistol",
@@ -492,6 +496,7 @@ const char *player_bits[] =
     "NO_AUTO_SYSP",
     "RADIO_MUTED",
     "SITE_HIDDEN",
+    "ENABLED_DRUGS",
     "\n"
   };
 
@@ -1463,154 +1468,160 @@ const char *adept_powers[] =
 
 struct skill_data skills[] =
   {
-    // name, linked attribute, active/knowledge, requires magic
-    {"OMGWTFBBQ", BOD, SKILL_TYPE_ACTIVE, FALSE},
-    {"Athletics", BOD, SKILL_TYPE_ACTIVE, FALSE},
-    {"Armed Combat", STR, SKILL_TYPE_ACTIVE, FALSE},
-    {"Edged Weapons", STR, SKILL_TYPE_ACTIVE, FALSE},
-    {"Pole Arms", STR, SKILL_TYPE_ACTIVE, FALSE},
-    {"Whips and Flails", QUI, SKILL_TYPE_ACTIVE, FALSE},
-    {"Clubs", STR, SKILL_TYPE_ACTIVE, FALSE},
-    {"Brawling", STR, SKILL_TYPE_ACTIVE, FALSE},
-    {"Centering", WIL, SKILL_TYPE_ACTIVE, TRUE},
-    {"Cyber Implants", STR, SKILL_TYPE_ACTIVE, FALSE},
-    {"Firearms", STR, SKILL_TYPE_ACTIVE, FALSE},
-    {"Pistols", QUI, SKILL_TYPE_ACTIVE, FALSE},
-    {"Rifles", QUI, SKILL_TYPE_ACTIVE, FALSE},
-    {"Shotguns", QUI, SKILL_TYPE_ACTIVE, FALSE},
-    {"Assault Rifles", QUI, SKILL_TYPE_ACTIVE, FALSE},
-    {"Submachine Guns", QUI, SKILL_TYPE_ACTIVE, FALSE},
-    {"Grenade Launchers", INT, SKILL_TYPE_ACTIVE, FALSE},
-    {"Tasers", QUI, SKILL_TYPE_ACTIVE, FALSE},
-    {"Mounted Gunnery", INT, SKILL_TYPE_ACTIVE, FALSE},
-    {"Machine Guns", STR, SKILL_TYPE_ACTIVE, FALSE},
-    {"Missile Launchers", INT, SKILL_TYPE_ACTIVE, FALSE},
-    {"Assault Cannons", STR, SKILL_TYPE_ACTIVE, FALSE},
-    {"Artillery", STR, SKILL_TYPE_ACTIVE, FALSE},
-    {"Projectiles", STR, SKILL_TYPE_ACTIVE, FALSE},
-    {"Oral Strike", QUI, SKILL_TYPE_ACTIVE, FALSE},
-    {"Spell Design", INT, SKILL_TYPE_KNOWLEDGE, TRUE},
-    {"Throwing Weapons", STR, SKILL_TYPE_ACTIVE, FALSE},
-    {"Enchanting", WIL, SKILL_TYPE_ACTIVE, TRUE},
-    {"Cyberterminal Design", INT, SKILL_TYPE_KNOWLEDGE, FALSE},
-    {"Demolitions", INT, SKILL_TYPE_ACTIVE, FALSE},
-    {"Computers", INT, SKILL_TYPE_ACTIVE, FALSE},
-    {"Electronics", INT, SKILL_TYPE_ACTIVE, FALSE},
-    {"Computer Building and Repair", INT, SKILL_TYPE_ACTIVE, FALSE},
-    {"Biotech", INT, SKILL_TYPE_ACTIVE, FALSE},
-    {"Electronics Building and Repair", INT, SKILL_TYPE_ACTIVE, FALSE},
-    {"Talismongering", INT, SKILL_TYPE_KNOWLEDGE, TRUE},
-    {"Police Procedures", INT, SKILL_TYPE_KNOWLEDGE, FALSE},
-    {"Leadership", CHA, SKILL_TYPE_ACTIVE, FALSE},
-    {"Interrogation", CHA, SKILL_TYPE_ACTIVE, FALSE},
-    {"Negotiation", CHA, SKILL_TYPE_ACTIVE, FALSE},
-    {"Chanting", CHA, SKILL_TYPE_ACTIVE, TRUE},
-    {"Conjuring", WIL, SKILL_TYPE_ACTIVE, TRUE},
-    {"Sorcery", WIL, SKILL_TYPE_ACTIVE, TRUE},
-    {"Legerdemain", QUI, SKILL_TYPE_ACTIVE, FALSE},
-    {"Corporate Etiquette", CHA, SKILL_TYPE_ACTIVE, FALSE},
-    {"Media Etiquette", CHA, SKILL_TYPE_ACTIVE, FALSE},
-    {"Street Etiquette", CHA, SKILL_TYPE_ACTIVE, FALSE},
-    {"Tribal Etiquette", CHA, SKILL_TYPE_ACTIVE, FALSE},
-    {"Elf Etiquette", CHA, SKILL_TYPE_ACTIVE, FALSE},
-    {"Combat Program Design", INT, SKILL_TYPE_KNOWLEDGE, FALSE},
-    {"Defensive Program Design", INT, SKILL_TYPE_KNOWLEDGE, FALSE},
-    {"Operational Program Design", INT, SKILL_TYPE_KNOWLEDGE, FALSE},
-    {"Special Program Design", INT, SKILL_TYPE_KNOWLEDGE, FALSE},
-    {"Cyberterminal Program Design", INT, SKILL_TYPE_KNOWLEDGE, FALSE},
-    {"Data Brokerage", INT, SKILL_TYPE_KNOWLEDGE, FALSE},
-    {"Aura Reading", INT, SKILL_TYPE_ACTIVE, TRUE},
-    {"Stealth", QUI, SKILL_TYPE_ACTIVE, FALSE},
-    {"Steal", QUI, SKILL_TYPE_ACTIVE, FALSE},
-    {"Track", INT, SKILL_TYPE_ACTIVE, FALSE},
-    {"Climbing", BOD, SKILL_TYPE_ACTIVE, FALSE},
-    {"Driving Motorcycles", REA, SKILL_TYPE_ACTIVE, FALSE},
-    {"zzzzzzzzzzzzzz", REA, SKILL_TYPE_ACTIVE, FALSE}, // unused skill
-    {"Driving Cars", REA, SKILL_TYPE_ACTIVE, FALSE},
-    {"Driving Trucks", REA, SKILL_TYPE_ACTIVE, FALSE},
-    {"Repairing Motorcycles", INT, SKILL_TYPE_ACTIVE, FALSE},
-    {"Repairing Cars", INT, SKILL_TYPE_ACTIVE, FALSE},
-    {"Repairing Drones", INT, SKILL_TYPE_ACTIVE, FALSE},
-    {"Repairing Trucks", INT, SKILL_TYPE_ACTIVE, FALSE},
-    {"Dancing", QUI, SKILL_TYPE_ACTIVE, FALSE},
-    {"Singing", INT, SKILL_TYPE_ACTIVE, FALSE},
-    {"Instrument", INT, SKILL_TYPE_ACTIVE, FALSE},
-    {"Arcane Language", INT, SKILL_TYPE_KNOWLEDGE, TRUE},
-    {"Meditation", WIL, SKILL_TYPE_ACTIVE, TRUE},
-    {"English", INT, SKILL_TYPE_KNOWLEDGE, FALSE},
-    {"Sperethiel", INT, SKILL_TYPE_KNOWLEDGE, FALSE},
-    {"Spanish", INT, SKILL_TYPE_KNOWLEDGE, FALSE},
-    {"Japanese", INT, SKILL_TYPE_KNOWLEDGE, FALSE},
-    {"Chinese", INT, SKILL_TYPE_KNOWLEDGE, FALSE},
-    {"Korean", INT, SKILL_TYPE_KNOWLEDGE, FALSE},
-    {"Italian", INT, SKILL_TYPE_KNOWLEDGE, FALSE},
-    {"Russian", INT, SKILL_TYPE_KNOWLEDGE, FALSE},
-    {"Sioux", INT, SKILL_TYPE_KNOWLEDGE, FALSE},
-    {"Makaw", INT, SKILL_TYPE_KNOWLEDGE, FALSE},
-    {"Crow", INT, SKILL_TYPE_KNOWLEDGE, FALSE},
-    {"Salish", INT, SKILL_TYPE_KNOWLEDGE, FALSE},
-    {"Ute", INT, SKILL_TYPE_KNOWLEDGE, FALSE},
-    {"Navajo", INT, SKILL_TYPE_KNOWLEDGE, FALSE},
-    {"German", INT, SKILL_TYPE_KNOWLEDGE, FALSE},
-    {"Or'zet", INT, SKILL_TYPE_KNOWLEDGE, FALSE},
-    {"Arabic", INT, SKILL_TYPE_KNOWLEDGE, FALSE},
-    {"Latin", INT, SKILL_TYPE_KNOWLEDGE, FALSE},
-    {"Gaelic", INT, SKILL_TYPE_KNOWLEDGE, FALSE},
-    {"French", INT, SKILL_TYPE_KNOWLEDGE, FALSE},
-    {"Animal Handling", CHA, SKILL_TYPE_ACTIVE, FALSE},
-    {"Animal Taming", CHA, SKILL_TYPE_ACTIVE, FALSE},
-    {"Edged Weapon Repair", INT, SKILL_TYPE_ACTIVE, FALSE},
-    {"Polearm Repair", INT, SKILL_TYPE_ACTIVE, FALSE},
-    {"Club Repair", INT, SKILL_TYPE_ACTIVE, FALSE},
-    {"Throwing Weapon Repair", INT, SKILL_TYPE_ACTIVE, FALSE},
-    {"Whips/Flail Repair", INT, SKILL_TYPE_ACTIVE, FALSE},
-    {"Projectile Repair", INT, SKILL_TYPE_ACTIVE, FALSE},
-    {"Pistol Repair and Ammo Crafting", INT, SKILL_TYPE_ACTIVE, FALSE},
-    {"Shotgun Repair and Ammo Crafting", INT, SKILL_TYPE_ACTIVE, FALSE},
-    {"Rifle Repair and Ammo Crafting", INT, SKILL_TYPE_ACTIVE, FALSE},
-    {"Heavy Weapon Repair and Ammo Crafting", INT, SKILL_TYPE_ACTIVE, FALSE},
-    {"Submachine Gun Repair and Ammo Crafting", INT, SKILL_TYPE_ACTIVE, FALSE},
-    {"Armor Repair", INT, SKILL_TYPE_ACTIVE, FALSE},
-    {"Off-hand Edged Weapons", STR, SKILL_TYPE_ACTIVE, FALSE},
-    {"Off-hand Clubs", STR, SKILL_TYPE_ACTIVE, FALSE},
-    {"Off-hand Cyber Implants", STR, SKILL_TYPE_ACTIVE, FALSE},
-    {"Off-hand Whips/Flails", QUI, SKILL_TYPE_ACTIVE, FALSE},
-    {"Survival", INT, SKILL_TYPE_ACTIVE, FALSE},
-    {"Land Navigation", INT, SKILL_TYPE_ACTIVE, FALSE},
-    {"Water Navigation", INT, SKILL_TYPE_ACTIVE, FALSE},
-    {"Air Navigation", INT, SKILL_TYPE_ACTIVE, FALSE},
-    {"Small Unit Tactics", INT, SKILL_TYPE_ACTIVE, FALSE},
-    {"Chemistry", INT, SKILL_TYPE_ACTIVE, FALSE},
-    {"Diving", BOD, SKILL_TYPE_ACTIVE, FALSE},
-    {"Parachuting", BOD, SKILL_TYPE_ACTIVE, FALSE},
-    {"Underwater Combat", STR, SKILL_TYPE_ACTIVE, FALSE},
-    {"Piloting Rotorcraft", REA, SKILL_TYPE_ACTIVE, FALSE},
-    {"Piloting Fixed Wing Aircraft", REA, SKILL_TYPE_ACTIVE, FALSE},
-    {"Piloting Vector Thrust Aircraft", REA, SKILL_TYPE_ACTIVE, FALSE},
-    {"Acting", CHA, SKILL_TYPE_ACTIVE, FALSE},
-    {"Disguise", INT, SKILL_TYPE_ACTIVE, FALSE},
-    {"Lock Picking", QUI, SKILL_TYPE_ACTIVE, FALSE},
-    {"Riding", QUI, SKILL_TYPE_ACTIVE, FALSE},
-    {"Spray Weapons", QUI, SKILL_TYPE_ACTIVE, FALSE},
-    {"Intimidation", CHA, SKILL_TYPE_ACTIVE, FALSE},
-    {"Gun Cane", QUI, SKILL_TYPE_ACTIVE, FALSE},
-    {"Bracer Gun", QUI, SKILL_TYPE_ACTIVE, FALSE},
-    {"Blowgun", QUI, SKILL_TYPE_ACTIVE, FALSE},
-    {"Pharmaceuticals", INT, SKILL_TYPE_ACTIVE, FALSE},
-    {"Hebrew", INT, SKILL_TYPE_KNOWLEDGE, FALSE},
-    {"Iroquois", INT, SKILL_TYPE_KNOWLEDGE, FALSE},
-    {"Medicine", INT, SKILL_TYPE_KNOWLEDGE, FALSE},
-    {"Repairing Fixed Wing Aircraft", INT, SKILL_TYPE_ACTIVE, FALSE},
-    {"Repairing Rotorcraft", INT, SKILL_TYPE_ACTIVE, FALSE},
-    {"Repairing Vector Thrust Aircraft", INT, SKILL_TYPE_ACTIVE, FALSE},
-    {"Repairing Hovercraft", INT, SKILL_TYPE_ACTIVE, FALSE},
-    {"Repairing Motorboats", INT, SKILL_TYPE_ACTIVE, FALSE},
-    {"Repairing Ships", INT, SKILL_TYPE_ACTIVE, FALSE},
-    {"Repairing Lighter-than-Air Aircraft", INT, SKILL_TYPE_ACTIVE, FALSE},
-    {"Piloting Hovercraft", REA, SKILL_TYPE_ACTIVE, FALSE},
-    {"Piloting Motorboats", REA, SKILL_TYPE_ACTIVE, FALSE},
-    {"Piloting Ships", REA, SKILL_TYPE_ACTIVE, FALSE},
-    {"Piloting Lighter-than-Air Aircraft", REA, SKILL_TYPE_ACTIVE, FALSE}
+    // name,                       linked attribute, active/knowledge,     magic, group
+    {"OMGWTFBBQ",                               BOD, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Athletics",                               BOD, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Armed Combat",                            STR, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Edged Weapons",                           STR, SKILL_TYPE_ACTIVE,    FALSE,  2 },
+    {"Pole Arms",                               STR, SKILL_TYPE_ACTIVE,    FALSE,  2 },
+    {"Whips and Flails",                        QUI, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Clubs",                                   STR, SKILL_TYPE_ACTIVE,    FALSE,  2 },
+    {"Brawling",                                STR, SKILL_TYPE_ACTIVE,    FALSE,  4 },
+    {"Centering",                               WIL, SKILL_TYPE_ACTIVE,    TRUE , 99 },
+    {"Cyber Implants",                          STR, SKILL_TYPE_ACTIVE,    FALSE,  4 },
+    {"Firearms",                                STR, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Pistols",                                 QUI, SKILL_TYPE_ACTIVE,    FALSE,  5 },
+    {"Rifles",                                  QUI, SKILL_TYPE_ACTIVE,    FALSE,  5 },
+    {"Shotguns",                                QUI, SKILL_TYPE_ACTIVE,    FALSE,  5 },
+    {"Assault Rifles",                          QUI, SKILL_TYPE_ACTIVE,    FALSE,  5 },
+    {"Submachine Guns",                         QUI, SKILL_TYPE_ACTIVE,    FALSE,  5 },
+    {"Grenade Launchers",                       INT, SKILL_TYPE_ACTIVE,    FALSE,  6 },
+    {"Tasers",                                  QUI, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Mounted Gunnery",                         INT, SKILL_TYPE_ACTIVE,    FALSE,  6 },
+    {"Machine Guns",                            STR, SKILL_TYPE_ACTIVE,    FALSE,  1 },
+    {"Missile Launchers",                       INT, SKILL_TYPE_ACTIVE,    FALSE,  6 },
+    {"Assault Cannons",                         STR, SKILL_TYPE_ACTIVE,    FALSE,  1 },
+    {"Artillery",                               STR, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Projectile Weapons",                      STR, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Oral Strike",                             QUI, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Spell Design",                            INT, SKILL_TYPE_KNOWLEDGE, TRUE , 99 },
+    {"Throwing Weapons",                        STR, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Enchanting",                              WIL, SKILL_TYPE_ACTIVE,    TRUE , 99 },
+    {"Cyberterminal Design",                    INT, SKILL_TYPE_KNOWLEDGE, FALSE, 99 },
+    {"Demolitions",                             INT, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Computers",                               INT, SKILL_TYPE_ACTIVE,    FALSE,  7 },
+    {"Electronics",                             INT, SKILL_TYPE_ACTIVE,    FALSE,  7 },
+    {"Computer Building and Repair",            INT, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Biotech",                                 INT, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Electronics Building and Repair",         INT, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Talismongering",                          INT, SKILL_TYPE_KNOWLEDGE, TRUE , 99 },
+    {"Police Procedures",                       INT, SKILL_TYPE_KNOWLEDGE, FALSE, 99 },
+    {"Leadership",                              CHA, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Interrogation",                           CHA, SKILL_TYPE_ACTIVE,    FALSE,  8 },
+    {"Negotiation",                             CHA, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Chanting",                                CHA, SKILL_TYPE_ACTIVE,    TRUE , 99 },
+    {"Conjuring",                               WIL, SKILL_TYPE_ACTIVE,    TRUE , 99 },
+    {"Sorcery",                                 WIL, SKILL_TYPE_ACTIVE,    TRUE , 99 },
+    {"Legerdemain",                             QUI, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Corporate Etiquette",                     CHA, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Media Etiquette",                         CHA, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Street Etiquette",                        CHA, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Tribal Etiquette",                        CHA, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Elf Etiquette",                           CHA, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Combat Program Design",                   INT, SKILL_TYPE_KNOWLEDGE, FALSE, 99 },
+    {"Defensive Program Design",                INT, SKILL_TYPE_KNOWLEDGE, FALSE, 99 },
+    {"Operational Program Design",              INT, SKILL_TYPE_KNOWLEDGE, FALSE, 99 },
+    {"Special Program Design",                  INT, SKILL_TYPE_KNOWLEDGE, FALSE, 99 },
+    {"Cyberterminal Program Design",            INT, SKILL_TYPE_KNOWLEDGE, FALSE, 99 },
+    {"Data Brokerage",                          INT, SKILL_TYPE_KNOWLEDGE, FALSE, 99 },
+    {"Aura Reading",                            INT, SKILL_TYPE_ACTIVE,    TRUE , 99 },
+    {"Stealth",                                 QUI, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Steal",                                   QUI, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Track",                                   INT, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Climbing",                                BOD, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Driving Motorcycles",                     REA, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"zzzzzzzzzzzzzz",                          REA, SKILL_TYPE_ACTIVE,    FALSE, 99 }, // unused skill
+    {"Driving Cars",                            REA, SKILL_TYPE_ACTIVE,    FALSE, 10 },
+    {"Driving Trucks",                          REA, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Repairing Motorcycles",                   INT, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Repairing Cars",                          INT, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Repairing Drones",                        INT, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Repairing Trucks",                        INT, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Dancing",                                 QUI, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Singing",                                 INT, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Instrument",                              INT, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Arcane Language",                         INT, SKILL_TYPE_KNOWLEDGE, TRUE , 99 },
+    {"Meditation",                              WIL, SKILL_TYPE_ACTIVE,    TRUE , 99 },
+    {"English",                                 INT, SKILL_TYPE_KNOWLEDGE, FALSE, 99 },
+    {"Sperethiel",                              INT, SKILL_TYPE_KNOWLEDGE, FALSE, 99 },
+    {"Spanish",                                 INT, SKILL_TYPE_KNOWLEDGE, FALSE, 99 },
+    {"Japanese",                                INT, SKILL_TYPE_KNOWLEDGE, FALSE, 99 },
+    {"Chinese",                                 INT, SKILL_TYPE_KNOWLEDGE, FALSE, 99 },
+    {"Korean",                                  INT, SKILL_TYPE_KNOWLEDGE, FALSE, 99 },
+    {"Italian",                                 INT, SKILL_TYPE_KNOWLEDGE, FALSE, 99 },
+    {"Russian",                                 INT, SKILL_TYPE_KNOWLEDGE, FALSE, 99 },
+    {"Sioux",                                   INT, SKILL_TYPE_KNOWLEDGE, FALSE, 99 },
+    {"Makaw",                                   INT, SKILL_TYPE_KNOWLEDGE, FALSE, 99 },
+    {"Crow",                                    INT, SKILL_TYPE_KNOWLEDGE, FALSE, 99 },
+    {"Salish",                                  INT, SKILL_TYPE_KNOWLEDGE, FALSE, 99 },
+    {"Ute",                                     INT, SKILL_TYPE_KNOWLEDGE, FALSE, 99 },
+    {"Navajo",                                  INT, SKILL_TYPE_KNOWLEDGE, FALSE, 99 },
+    {"German",                                  INT, SKILL_TYPE_KNOWLEDGE, FALSE, 99 },
+    {"Or'zet",                                  INT, SKILL_TYPE_KNOWLEDGE, FALSE, 99 },
+    {"Arabic",                                  INT, SKILL_TYPE_KNOWLEDGE, FALSE, 99 },
+    {"Latin",                                   INT, SKILL_TYPE_KNOWLEDGE, FALSE, 99 },
+    {"Gaelic",                                  INT, SKILL_TYPE_KNOWLEDGE, FALSE, 99 },
+    {"French",                                  INT, SKILL_TYPE_KNOWLEDGE, FALSE, 99 },
+    {"Animal Handling",                         CHA, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Animal Taming",                           CHA, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Edged Weapon Repair",                     INT, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Polearm Repair",                          INT, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Club Repair",                             INT, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Throwing Weapon Repair",                  INT, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Whips/Flail Repair",                      INT, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Projectile Repair",                       INT, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Pistol Repair and Ammo Crafting",         INT, SKILL_TYPE_ACTIVE,    FALSE, 13 },
+    {"Shotgun Repair and Ammo Crafting",        INT, SKILL_TYPE_ACTIVE,    FALSE, 13 },
+    {"Rifle Repair and Ammo Crafting",          INT, SKILL_TYPE_ACTIVE,    FALSE, 13 },
+    {"Heavy Weapon Repair and Ammo Crafting",   INT, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Submachine Gun Repair and Ammo Crafting", INT, SKILL_TYPE_ACTIVE,    FALSE, 13 },
+    {"Armor Repair",                            INT, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Off-hand Edged Weapons",                  STR, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Off-hand Clubs",                          STR, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Off-hand Cyber Implants",                 STR, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Off-hand Whips/Flails",                   QUI, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Survival",                                INT, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Land Navigation",                         INT, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Water Navigation",                        INT, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Air Navigation",                          INT, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Small Unit Tactics",                      INT, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Chemistry",                               INT, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Diving",                                  BOD, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Parachuting",                             BOD, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Underwater Combat",                       STR, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Piloting Rotorcraft",                     REA, SKILL_TYPE_ACTIVE,    FALSE,  9 },
+    {"Piloting Fixed Wing Aircraft",            REA, SKILL_TYPE_ACTIVE,    FALSE,  9 },
+    {"Piloting Vector Thrust Aircraft",         REA, SKILL_TYPE_ACTIVE,    FALSE,  9 },
+    {"Acting",                                  CHA, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Disguise",                                INT, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Lock Picking",                            QUI, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Riding",                                  QUI, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Spray Weapons",                           QUI, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Intimidation",                            CHA, SKILL_TYPE_ACTIVE,    FALSE,  8 },
+    {"Gun Cane",                                QUI, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Bracer Gun",                              QUI, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Blowgun",                                 QUI, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Pharmaceuticals",                         INT, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Hebrew",                                  INT, SKILL_TYPE_KNOWLEDGE, FALSE, 99 },
+    {"Iroquois",                                INT, SKILL_TYPE_KNOWLEDGE, FALSE, 99 },
+    {"Medicine",                                INT, SKILL_TYPE_KNOWLEDGE, FALSE, 99 },
+    {"Repairing Fixed Wing Aircraft",           INT, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Repairing Rotorcraft",                    INT, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Repairing Vector Thrust Aircraft",        INT, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Repairing Hovercraft",                    INT, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Repairing Motorboats",                    INT, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Repairing Ships",                         INT, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Repairing Lighter-than-Air Aircraft",     INT, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Piloting Hovercraft",                     REA, SKILL_TYPE_ACTIVE,    FALSE, 99 },
+    {"Piloting Motorboats",                     REA, SKILL_TYPE_ACTIVE,    FALSE, 12 },
+    {"Piloting Ships",                          REA, SKILL_TYPE_ACTIVE,    FALSE, 12 },
+    {"Piloting Lighter-than-Air Aircraft",      REA, SKILL_TYPE_ACTIVE,    FALSE,  9 },
+    {"Mechanical Arm Operation",                REA, SKILL_TYPE_ACTIVE,    FALSE, 11 },
+    {"Piloting Semiballistic Aircraft",         REA, SKILL_TYPE_ACTIVE,    FALSE,  9 },
+    {"Piloting Suborbital Craft",               REA, SKILL_TYPE_ACTIVE,    FALSE,  9 },
+    {"Piloting Tracked Vehicles",               REA, SKILL_TYPE_ACTIVE,    FALSE, 10 },
+    {"Piloting Walkers",                        REA, SKILL_TYPE_ACTIVE,    FALSE, 11 }
+
   };
 
 int rev_dir[] =
@@ -1677,8 +1688,13 @@ const char *veh_types[NUM_VEH_TYPES] =
     "Hovercraft",
     "Motorboat",
     "Ship",
-    "Lighter Than Air"
+    "Lighter Than Air",
+    "Semi-Ballistic",
+    "Sub-Orbital",
+    "Tracked Vehicle",
+    "Walker"
   };
+  
 struct mod_data mod_types[NUM_MODTYPES] =
   {
     { "NOTHING", 0 },
@@ -1703,7 +1719,8 @@ struct mod_data mod_types[NUM_MODTYPES] =
     { "Seats", TYPE_WORKSHOP },
     { "Tires", TYPE_KIT },
     { "Other", TYPE_KIT },
-    { "Ammo Bin", TYPE_KIT }
+    { "Ammo Bin", TYPE_KIT },
+    { "Pokeystick", TYPE_WORKSHOP }
 
   };
 const char *mod_name[NUM_MODS] =
@@ -1882,6 +1899,29 @@ struct ammo_data ammo_type[] =
     {"anti-vehicle", 16,   14,    .100,   20,    4.0 }
   };
 
+/* House rule: Ammo costs for various weapons vary based on assumed caliber. */
+float weapon_type_ammo_cost_multipliers[] = {
+  0, 0, 0, 0, 0, // melee weapons have a multiplier of 0 (edged, club, polearm, whip, glove)
+  1.0,  // holdout pistol
+  1.0,  // light pistol
+  1.0,  // machine pistol
+  1.0,  // heavy pistol
+  1.0,  // taser
+  1.0,  // smg
+  1.0,  // sport rifle
+  1.0,  // sniper rifle
+  1.0,  // assault rifle
+  1.0,  // shotgun
+  1.0,  // lmg
+  1.0,  // mmg
+  1.0,  // hmg
+  9.0,  // cannon (per SR3 p281, derived from 45 / explosive cost)
+  1.0,  // minigun
+  1.0,  // grenade launcher (placeholder value)
+  1.0,  // missile launcher (placeholder value)
+  1.0   // revolver
+};
+
 const char *positions[] =
   {
     "is lying here, dead",
@@ -1963,23 +2003,6 @@ const char *short_attributes[] =
   "wil",
   "rea"
 };
-
-struct drug_data drug_types[] =
-  {
-    { "Nothing", 0, 0, 0, 0, 0, 0, 0, 0
-    },
-    { "ACTH", 0, LIGHT, 0, 0, 3, 10, 0, 0 },
-    { "Hyper", 6, SERIOUS, 0, 0, 0, 0, 0, 0 },
-    { "Jazz", 0, 0, 4, 5, 2, 2, 8, 3 },
-    { "Kamikaze", 0, 0, 0, 5, 2, 2, 10, 2 },
-    { "Psyche", 0, 4, 0, 2, 10, 20, 7, 0 },
-    { "Bliss", 0, 0, 5, 5, 2, 2, 30, 2 },
-    { "Burn", 3, DEADLY, 2, 0, 2, 20, 100, 1 },
-    { "Cram", 0, 0, 4, 0, 2, 5, 50, 2 },
-    { "Nitro", 4, DEADLY, 5, 8, 3, 2, 5, 3 },
-    { "Novacoke", 0, 0, 6, 5, 2, 3, 50, 2 },
-    { "Zen", 0, 0, 3, 0, 2, 5, 50, 2 }
-  };
 
 struct spell_types spells[] =
   {
@@ -2503,7 +2526,7 @@ const char *decap_bio_types[] = {
 };
 
 const char *metamagic[] = {
-  "Anchoring",
+  "UNDEFINED",
   "Centering",
   "Cleansing",
   "Invoking",
@@ -2511,7 +2534,8 @@ const char *metamagic[] = {
   "Possessing",
   "Quickening",
   "Reflecting",
-  "Shielding"
+  "Shielding",
+  "Anchoring"
 };
 
 const char *legality_codes[][2] = {
@@ -2844,7 +2868,8 @@ struct nuyen_faucet_or_sink nuyen_faucets_and_sinks[NUM_OF_TRACKED_NUYEN_INCOME_
     {"Playergroups", NI_IS_SINK},
     {"Trade Command (n->k)", NI_IS_SINK},
     {"Credstick Cracker", NI_IS_SINK},
-    {"Death Penalty", NI_IS_SINK}
+    {"Death Penalty", NI_IS_SINK},
+    {"Drug Withdrawal / Fugue", NI_IS_SINK}
   };
 
 const char *ignored_bits_in_english[] =

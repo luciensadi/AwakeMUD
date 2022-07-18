@@ -12,6 +12,8 @@
 #include <string.h>
 #include <ctype.h>
 #include <sys/types.h>
+#include <vector>
+#include <algorithm>
 
 #if defined(WIN32) && !defined(__CYGWIN__)
 #define strcasecmp(x, y) _stricmp(x,y)
@@ -58,81 +60,79 @@ extern int ELEVATOR_SHAFT_FALL_RATING;
 static const int NUM_SEATAC_STATIONS = 6;
 
 struct dest_data seattle_taxi_destinations[] =
-  {
+{
   { "action", "electronics", "Action Computers", 32650, TAXI_DEST_TYPE_SHOPPING, TRUE },
-  { "afterlife", "", "The Afterlife", 2072, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
+  { "microdeck", "", "Auburn Microdeck Outlet", 29010, TAXI_DEST_TYPE_SHOPPING, TRUE },
   { "aztech", "pyramid",  "Aztechnology Pyramid", 30539, TAXI_DEST_TYPE_CORPORATE_PARK , TRUE },
   { "auburn", "", "Auburn", 29011, TAXI_DEST_TYPE_AREA_OF_TOWN , TRUE },
+  { "beacon", "", "Beacon Mall Everett", 39253, TAXI_DEST_TYPE_SHOPPING, TRUE },
+  { "bicson", "", "Bicson Biomedical", 39285, TAXI_DEST_TYPE_HOSPITALS, TRUE },
   { "biohyde", "", "Biohyde Complex", 4201, TAXI_DEST_TYPE_CORPORATE_PARK , TRUE },
-  { "wyvern", "blue", "The Blue Wyvern", 4909, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
   { "puyallup", "", "Central Puyallup", 2457, TAXI_DEST_TYPE_AREA_OF_TOWN , TRUE },
-  { "chinatown", "", "ChinaTown", 2527, TAXI_DEST_TYPE_AREA_OF_TOWN, TRUE },
+  { "chinatown", "", "Chinatown", 2527, TAXI_DEST_TYPE_AREA_OF_TOWN, TRUE },
   { "penumbra", "", "Club Penumbra", 32587, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
+  { "council", "island", "Council Island", 9149, TAXI_DEST_TYPE_AREA_OF_TOWN , TRUE },
+  { "hospital", "", "Council Island Hospital", 9161, TAXI_DEST_TYPE_HOSPITALS, TRUE },
+  { "dante", "dante's", "Dante's Inferno", 32661, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
+  { "diver", "easy", "Easy Diver Coffin Hotel", 32644, TAXI_DEST_TYPE_ACCOMMODATIONS, TRUE },
   { "evergreen", "", "Evergreen Complex", 2201, TAXI_DEST_TYPE_ACCOMMODATIONS, TRUE },
+  { "everett", "", "Everett", 39263, TAXI_DEST_TYPE_AREA_OF_TOWN , TRUE },
   { "epicenter", "", "The Epicenter", 2418, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
+  { "hellhound", "bus", "Hellhound Bus Stop",  32501, TAXI_DEST_TYPE_TRANSPORTATION, TRUE },
+  { "homewood", "suites", "Homewood Suites", 30512, TAXI_DEST_TYPE_ACCOMMODATIONS, TRUE },
+  { "humana", "", "Humana Hospital", 2536, TAXI_DEST_TYPE_HOSPITALS, TRUE },
+  { "errant", "", "KE Training Facility", 30127, TAXI_DEST_TYPE_CORPORATE_PARK , TRUE},
   { "knight", "center", "Knight Center", 1519, TAXI_DEST_TYPE_CORPORATE_PARK, TRUE },
+  { "kristin's", "kristin", "Kristin's", 30578, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
   { "charne", "", "La Charne", 30548, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, FALSE },
   { "cinema", "vieux", "Le Cinema Vieux", 32588, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE},
+  { "chiba", "", "Little Chiba", 32686, TAXI_DEST_TYPE_SHOPPING, TRUE },
+  { "lysleul", "plaza", "Lysleul Plaza", 30551, TAXI_DEST_TYPE_SHOPPING, TRUE },
   { "platinum", "", "Platinum Club", 32685, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
+  { "pooks", "pook's", "Pook's Place", 1530, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
   { "apartment", "", "Redmond Apartment Block", 14337, TAXI_DEST_TYPE_ACCOMMODATIONS, TRUE },
+  { "marksman", "firing", "Marksman Indoor Firing Range", 32682, TAXI_DEST_TYPE_OTHER, TRUE },
+  { "matchsticks", "", "Matchsticks", 30579, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
+  { "mitsuhama", "", "Mitsuhama Towers", 32722, TAXI_DEST_TYPE_CORPORATE_PARK, TRUE },
+  { "modern", "magik", "Modern Magik", 30514, TAXI_DEST_TYPE_SHOPPING, TRUE },
+  { "moonlight", "", "Moonlight Mall", 14373, TAXI_DEST_TYPE_SHOPPING, TRUE },
+  { "novatech", "", "Novatech Seattle", 32541, TAXI_DEST_TYPE_CORPORATE_PARK, TRUE },
   { "nybbles", "bytes", "Nybbles and Bytes", 2057, TAXI_DEST_TYPE_SHOPPING, TRUE },
-  { "reaper", "", "The Reaper", 32517, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
+  { "quinns", "quinn's", "Quinn's", 32521, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
+  { "racespec", "", "Racespec Performance", 30573, TAXI_DEST_TYPE_SHOPPING, TRUE },
   { "redmond", "", "Redmond", 14310, TAXI_DEST_TYPE_AREA_OF_TOWN , TRUE },
+  { "sculleys", "", "Sculleys", 30591, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
   { "seattle", "", "Seattle", 32679, TAXI_DEST_TYPE_AREA_OF_TOWN, TRUE },
+  { "docks", "dockyards", "Seattle Dockyards", 32500, TAXI_DEST_TYPE_AREA_OF_TOWN , TRUE },
+  { "methodist", "church", "Seattle First Methodist", 30565, TAXI_DEST_TYPE_OTHER, TRUE },
+  { "formal", "", "Seattle Formal Wear", 32746, TAXI_DEST_TYPE_SHOPPING, TRUE },
+  { "zoo", "", "Seattle Municipal Zoo", 32569, TAXI_DEST_TYPE_OTHER, TRUE },
+  { "garage", "parking", "Seattle Parking Garage", 32720, TAXI_DEST_TYPE_OTHER , TRUE },
   { "park", "", "Seattle State Park", 4000, TAXI_DEST_TYPE_AREA_OF_TOWN , TRUE },
+  { "library", "", "Seattle Public Library", 30600, TAXI_DEST_TYPE_OTHER, TRUE },
   { "airport", "seatac", "Seattle-Tacoma Airport", 19410, TAXI_DEST_TYPE_AREA_OF_TOWN , TRUE },
+  { "shintaru", "", "Shintaru", 32513, TAXI_DEST_TYPE_CORPORATE_PARK , TRUE },
+  { "smiths", "pub", "Smith's Pub", 32566, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
+  { "syberspace", "", "SyberSpace", 30612, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
   { "tarislar", "", "Tarislar", 4965, TAXI_DEST_TYPE_AREA_OF_TOWN , TRUE },
   { "tacoma", "", "Tacoma", 2000, TAXI_DEST_TYPE_AREA_OF_TOWN, TRUE },
+  { "coffin", "motel", "Tacoma Coffin Motel", 2045, TAXI_DEST_TYPE_ACCOMMODATIONS, TRUE },
+  { "mall", "", "Tacoma Mall", 2093, TAXI_DEST_TYPE_SHOPPING, TRUE },
   { "TWE", "", "Tacoma Weapons Emporium", 2514, TAXI_DEST_TYPE_SHOPPING, TRUE },
-  // TODO: Stopped alphabetizing by title here.
-    // { "vieux", "Le Cinema Vieux", 32588 },
-    { "rhino", "big", "The Big Rhino", 32635, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
-    { "yoshi", "sushi", "Yoshi's Sushi Bar", 32751, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
-    { "garage", "parking", "Seattle Parking Garage", 32720, TAXI_DEST_TYPE_OTHER , TRUE },
-    { "formal", "", "Seattle Formal Wear", 32746, TAXI_DEST_TYPE_SHOPPING, TRUE },
-    { "muscovite", "lounge", "The Muscovite Lounge", 30548, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS , FALSE },
-    { "dante", "dante's", "Dante's Inferno", 32661, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
-    { "quinns", "quinn's", "Quinn's", 32521, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
-    { "shintaru", "", "Shintaru", 32513, TAXI_DEST_TYPE_CORPORATE_PARK , TRUE },
-    { "docks", "dockyards", "Seattle Dockyards", 32500, TAXI_DEST_TYPE_AREA_OF_TOWN , TRUE },
-    { "modern", "magik", "Modern Magik", 30514, TAXI_DEST_TYPE_SHOPPING, TRUE },
-    { "methodist", "church", "Seattle First Methodist", 30565, TAXI_DEST_TYPE_OTHER, TRUE },
-    { "sculleys", "", "Sculleys", 30591, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
-    { "council", "island", "Council Island", 9149, TAXI_DEST_TYPE_AREA_OF_TOWN , TRUE },
-    { "moonlight", "", "Moonlight Mall", 14373, TAXI_DEST_TYPE_SHOPPING, TRUE },
-    { "library", "", "Seattle Public Library", 30600, TAXI_DEST_TYPE_OTHER, TRUE },
-    { "kristin's", "kristin", "Kristin's", 30578, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
-    { "mitsuhama", "", "Mitsuhama Towers", 32722, TAXI_DEST_TYPE_CORPORATE_PARK, TRUE },
-    { "chiba", "", "Little Chiba", 32686, TAXI_DEST_TYPE_SHOPPING, TRUE },
-    { "stop", "gap", "The Stop Gap", 32708, TAXI_DEST_TYPE_SHOPPING, TRUE },
-    { "humana", "", "Humana Hospital", 2536, TAXI_DEST_TYPE_HOSPITALS, TRUE },
-    { "hospital", "", "Council Island Hospital", 9161, TAXI_DEST_TYPE_HOSPITALS, TRUE },
-    { "coffin", "hotel", "Tacoma Coffin Hotel", 2045, TAXI_DEST_TYPE_ACCOMMODATIONS, TRUE },
-    { "diver", "easy", "Easy Diver Coffin Hotel", 32644, TAXI_DEST_TYPE_ACCOMMODATIONS, TRUE },
-    { "hellhound", "bus", "Hellhound Bus Stop",  32501, TAXI_DEST_TYPE_TRANSPORTATION, TRUE },
-    { "lysleul", "plaza", "Lysleul Plaza", 30551, TAXI_DEST_TYPE_SHOPPING, TRUE },
-    { "microdeck", "", "Auburn Microdeck Outlet", 29010, TAXI_DEST_TYPE_SHOPPING, TRUE },
-    { "novatech", "", "Novatech Seattle", 32541, TAXI_DEST_TYPE_CORPORATE_PARK, TRUE },
-    { "syberspace", "", "SyberSpace", 30612, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
-    { "pooks", "pook's", "Pook's Place", 1530, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
-    { "errant", "", "KE Training Facility", 30127, TAXI_DEST_TYPE_CORPORATE_PARK , TRUE},
-    { "italiano", "", "The Italiano", 30149, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
-    { "bank", "ucasbank", "UCASBank", 30524, TAXI_DEST_TYPE_OTHER, TRUE },
-    { "matchsticks", "", "Matchsticks", 30579, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
-    { "homewood", "suites", "Homewood Suites", 30512, TAXI_DEST_TYPE_ACCOMMODATIONS, TRUE },
-    { "mall", "", "Tacoma Mall", 2093, TAXI_DEST_TYPE_SHOPPING, TRUE },
-    { "racespec", "", "Racespec Performance", 30573, TAXI_DEST_TYPE_SHOPPING, TRUE },
-    { "smiths", "pub", "Smith's Pub", 32566, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
-    { "marksman", "firing", "Marksman Indoor Firing Range", 32682, TAXI_DEST_TYPE_OTHER, TRUE },
-    { "sapphire", "star", "The Star Sapphire", 70301, TAXI_DEST_TYPE_ACCOMMODATIONS, TRUE },
-    { "everett", "", "Everett", 39263, TAXI_DEST_TYPE_AREA_OF_TOWN , TRUE },
-    { "beacon", "", "Beacon Mall Everett", 39253, TAXI_DEST_TYPE_SHOPPING, TRUE },
-    { "touristville", "", "Touristville", 25313, TAXI_DEST_TYPE_AREA_OF_TOWN , TRUE },
-    { "skeleton", "", "The Skeleton", 25308, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
-    { "junkyard", "",  "The Tacoma Junkyard", 2070, TAXI_DEST_TYPE_AREA_OF_TOWN, TRUE },
-    { "neophyte", "guild",  "The Neophyte Guild", 32679, TAXI_DEST_TYPE_OTHER, TRUE },
-    { "zoo", "", "Seattle Municipal Zoo", 32569, TAXI_DEST_TYPE_OTHER, TRUE },
-    { "bicson", "", "Bicson Biomedical", 39285, TAXI_DEST_TYPE_HOSPITALS, TRUE },
+  { "afterlife", "", "The Afterlife", 2072, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
+  { "rhino", "big", "The Big Rhino", 32635, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
+  { "wyvern", "blue", "The Blue Wyvern", 4909, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
+  { "italiano", "", "The Italiano", 30149, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
+  { "muscovite", "lounge", "The Muscovite Lounge", 30548, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS , FALSE },
+  { "neophyte", "guild",  "The Neophyte Guild", 32679, TAXI_DEST_TYPE_OTHER, TRUE },
+  { "skeleton", "", "The Skeleton", 25308, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
+  { "sapphire", "star", "The Star Sapphire", 70301, TAXI_DEST_TYPE_ACCOMMODATIONS, TRUE },
+  { "stop", "gap", "The Stop Gap", 32708, TAXI_DEST_TYPE_SHOPPING, TRUE },
+  { "junkyard", "",  "The Tacoma Junkyard", 2070, TAXI_DEST_TYPE_AREA_OF_TOWN, TRUE },
+  { "reaper", "", "The Reaper", 32517, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
+  { "touristville", "", "Touristville", 25313, TAXI_DEST_TYPE_AREA_OF_TOWN , TRUE },
+  { "bank", "ucasbank", "UCASBank", 30524, TAXI_DEST_TYPE_OTHER, TRUE },
+  { "yoshi", "sushi", "Yoshi's Sushi Bar", 32751, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
 #ifdef USE_PRIVATE_CE_WORLD
     { "slitch", "pit", "The Slitch Pit", 32660, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
     { "planetary", "", "Planetary Corporation", 72503, TAXI_DEST_TYPE_CORPORATE_PARK, FALSE },
@@ -1973,35 +1973,53 @@ SPECIAL(escalator)
 // processing funcs
 // ______________________________
 
+std::vector<struct room_data *> escalator_list = {};
+void boot_escalators() {
+  escalator_list.clear();
+
+  for (rnum_t i = 0; i <= top_of_world; i++) {
+    if (world[i].func && world[i].func == escalator) {
+      // TODO: Won't this break if we renumber the world / expand the room array?
+      escalator_list.push_back(&world[i]);
+      log_vfprintf("- Added escalator room %s (%ld)", GET_ROOM_NAME(&world[i]), GET_ROOM_VNUM(&world[i]));
+    }
+  }
+}
+
+void process_single_escalator(struct room_data *escalator_room) {
+  struct char_data *next, *temp;
+  int dir;
+
+  for (temp = escalator_room->people; temp; temp = next) {
+    next = temp->next_in_room;
+    if (GET_LASTROOM(temp) > 0 || GET_LASTROOM(temp) < -3) {
+      GET_LASTROOM(temp) = -3;
+    } else if (GET_LASTROOM(temp) < 0) {
+      GET_LASTROOM(temp)++;
+    } else {
+      for (dir = NORTH; dir <= DOWN; dir++) {
+        if (escalator_room->dir_option[dir] &&
+            escalator_room->dir_option[dir]->to_room) {
+          act("As you reach the end, you step off the escalator.",
+              FALSE, temp, 0, 0, TO_CHAR);
+          act("$n steps off of the escalator.", TRUE, temp, 0, 0, TO_ROOM);
+          char_from_room(temp);
+          GET_LASTROOM(temp) = escalator_room->number;
+          char_to_room(temp, escalator_room->dir_option[dir]->to_room);
+          if (temp->desc)
+            look_at_room(temp, 0, 0);
+          break;
+        }
+      }
+    }
+  }
+}
+
 void EscalatorProcess(void)
 {
   PERF_PROF_SCOPE(pr_, __func__);
-  int i, dir;
-  struct char_data *temp, *next;
 
-  for (i = 0; i <= top_of_world; i++)
-    if (world[i].func && world[i].func == escalator)
-      for (temp = world[i].people; temp; temp = next) {
-        next = temp->next_in_room;
-        if (GET_LASTROOM(temp) > 0 || GET_LASTROOM(temp) < -3)
-          GET_LASTROOM(temp) = -3;
-        else if (GET_LASTROOM(temp) < 0)
-          GET_LASTROOM(temp)++;
-        else
-          for (dir = NORTH; dir <= DOWN; dir++)
-            if (world[i].dir_option[dir] &&
-                world[i].dir_option[dir]->to_room) {
-              act("As you reach the end, you step off the escalator.",
-                  FALSE, temp, 0, 0, TO_CHAR);
-              act("$n steps off of the escalator.", TRUE, temp, 0, 0, TO_ROOM);
-              char_from_room(temp);
-              GET_LASTROOM(temp) = world[i].number;
-              char_to_room(temp, world[i].dir_option[dir]->to_room);
-              if (temp->desc)
-                look_at_room(temp, 0, 0);
-              break;
-            }
-      }
+  std::for_each(escalator_list.begin(), escalator_list.end(), process_single_escalator);
 }
 
 // ______________________________

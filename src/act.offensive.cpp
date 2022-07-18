@@ -10,6 +10,9 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <vector>
+#include <utility>
+#include <algorithm>
 
 #include "structs.hpp"
 #include "utils.hpp"
@@ -638,6 +641,10 @@ bool passed_flee_success_check(struct char_data *ch) {
 
   }
 
+bool _sort_pairs_by_weight(std::pair<int, int> a, std::pair<int, int> b) {
+  return std::get<1>(a) > std::get<1>(b);
+}
+
 ACMD(do_flee)
 {
   if (AFF_FLAGGED(ch, AFF_PRONE)) {
@@ -645,39 +652,50 @@ ACMD(do_flee)
     return;
   }
 
+  std::vector<std::pair<int, int>> valid_directions = {};
+
   for (int dir = 0; dir <= DOWN; dir++) {
     if (CAN_GO(ch, dir)
         && (!IS_NPC(ch) || !ROOM_FLAGGED(ch->in_room->dir_option[dir]->to_room, ROOM_NOMOB))
         && (!ROOM_FLAGGED(ch->in_room->dir_option[dir]->to_room, ROOM_FALL)))
     {
-      // Supply messaging and put the character into a wait state to match wait state in perform_move.
-      act("$n panics, and attempts to flee!", TRUE, ch, 0, 0, TO_ROOM);
-      WAIT_STATE(ch, PULSE_VIOLENCE * 2);
-
-      // If the character is fighting in melee combat with someone they can hurt, they must pass a test to escape.
-      if (!passed_flee_success_check(ch)) {
-        act("$N cuts you off as you try to escape!", TRUE, ch, 0, FIGHTING(ch), TO_CHAR);
-        act("You lunge forward and block $n's escape.", TRUE, ch, 0, FIGHTING(ch), TO_VICT);
-        act("$N lunges forward and blocks $n's escape.", TRUE, ch, 0, FIGHTING(ch), TO_NOTVICT);
-        return;
-      }
-
-      // Attempt to move through the selected exit.
-      if (do_simple_move(ch, dir, CHECK_SPECIAL | LEADER, NULL)) {
-        send_to_char("You flee head over heels.\r\n", ch);
-      } else {
-        act("$n tries to flee, but can't!", TRUE, ch, 0, 0, TO_ROOM);
-        send_to_char("You can't get away!\r\n", ch);
-        snprintf(buf, sizeof(buf), "Error case in do_flee: do_simple_move failure for %s exit.", dirs[dir]);
-        mudlog(buf, ch, LOG_SYSLOG, TRUE);
-      }
-
-      return;
+      // Add it to our valid directions list with a random weight.
+      valid_directions.push_back(std::pair<int, int>(dir, number(0, 10000)));
     }
   }
 
-  send_to_char("PANIC! There's nowhere you can flee to!\r\n", ch);
-  WAIT_STATE(ch, PULSE_VIOLENCE * 2);
+  if (valid_directions.empty()) {
+    send_to_char("PANIC! There's nowhere you can flee to!\r\n", ch);
+    WAIT_STATE(ch, PULSE_VIOLENCE * 2);
+  } else {
+    // Sort our list of valid directions by weight.
+    std::sort(valid_directions.begin(), valid_directions.end(), _sort_pairs_by_weight);
+
+    // Get the first valid direction from the sorted list.
+    int dir = std::get<0>(valid_directions.front());
+
+    // Supply messaging and put the character into a wait state to match wait state in perform_move.
+    act("$n panics, and attempts to flee!", TRUE, ch, 0, 0, TO_ROOM);
+    WAIT_STATE(ch, PULSE_VIOLENCE * 2);
+
+    // If the character is fighting in melee combat with someone they can hurt, they must pass a test to escape.
+    if (!passed_flee_success_check(ch)) {
+      act("$N cuts you off as you try to escape!", TRUE, ch, 0, FIGHTING(ch), TO_CHAR);
+      act("You lunge forward and block $n's escape.", TRUE, ch, 0, FIGHTING(ch), TO_VICT);
+      act("$N lunges forward and blocks $n's escape.", TRUE, ch, 0, FIGHTING(ch), TO_NOTVICT);
+      return;
+    }
+
+    // Attempt to move through the selected exit.
+    if (do_simple_move(ch, dir, CHECK_SPECIAL | LEADER, NULL)) {
+      send_to_char("You flee head over heels.\r\n", ch);
+    } else {
+      act("$n tries to flee, but can't!", TRUE, ch, 0, 0, TO_ROOM);
+      send_to_char("You can't get away!\r\n", ch);
+      snprintf(buf, sizeof(buf), "Error case in do_flee: do_simple_move failure for %s exit.", dirs[dir]);
+      mudlog(buf, ch, LOG_SYSLOG, TRUE);
+    }
+  }
 }
 
 ACMD(do_kick)

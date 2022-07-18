@@ -36,12 +36,12 @@ struct train_data trainers[] = {
 /* if they teach < 5 skills, put a 0 in the remaining skill slots    */
 /* available levels are NEWBIE (4), AMATEUR (6/7), and ADVANCED (10/11)   */
 struct teach_data metamagict[] = {
-                       { 24806, { META_REFLECTING, 0, 0, 0, 0, 0, 0, 0 }, "", 0 },
-                         { 4250, { META_CLEANSING, 0, 0, 0, 0, 0, 0, 0 }, "", 0 },
-                         { 4251, { META_MASKING, 0, 0, 0, 0, 0, 0, 0 }, "", 0 },
+                       { 24806, { META_MASKING, 0, 0, 0, 0, 0, 0, 0 }, "", 0 },
+                         { 4250, { META_REFLECTING, 0, 0, 0, 0, 0, 0, 0 }, "", 0 },
+                         { 4251, { META_REFLECTING, 0, 0, 0, 0, 0, 0, 0 }, "", 0 },
                          { 10010, { META_ANCHORING, META_CENTERING, META_CLEANSING, META_INVOKING, META_MASKING, META_POSSESSING, META_QUICKENING, META_REFLECTING, META_SHIELDING }, "", 0},
                          { 35538, { META_MASKING, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "", 0},
-                         { 27426, { META_REFLECTING, 0, 0, 0, 0, 0, 0, 0 }, "", 0},
+                         { 27426, { META_CLEANSING, 0, 0, 0, 0, 0, 0, 0 }, "", 0},
 #ifdef USE_PRIVATE_CE_WORLD
                          { 94313, { META_ANCHORING, META_CENTERING, META_INVOKING, META_POSSESSING, META_QUICKENING, META_SHIELDING, 0, 0 }, "", 0}, // NERP metamagic trainer
 #endif
@@ -72,7 +72,7 @@ struct teach_data teachers[] = {
                        { 1008, { SKILL_DEMOLITIONS, SKILL_DIVING, SKILL_PARACHUTING, SKILL_UNDERWATER_COMBAT, SKILL_LOCK_PICKING,
                          SKILL_RIDING, SKILL_THROWING_WEAPONS, SKILL_PROJECTILES, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "After about an hour of shuffling slides you feel you can now do your job "
                          "safer.\r\n", ADVANCED },
-                       { 1009, { SKILL_CENTERING, SKILL_ENCHANTING, 0, 0, 0,
+                       { 1009, { SKILL_CENTERING, SKILL_ENCHANTING, SKILL_PILOT_SUBORBITAL, SKILL_PILOT_SEMIBALLISTIC, 0,
                          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "After about an hour of shuffling slides you feel you can now do your job "
                          "safer.\r\n", ADVANCED },
                       // End NERP teachers.
@@ -92,7 +92,7 @@ struct teach_data teachers[] = {
            SKILL_PILOT_ROTORCRAFT, SKILL_PILOT_FIXEDWING, SKILL_PILOT_VECTORTHRUST,
            SKILL_BR_FIXEDWING, SKILL_BR_ROTORCRAFT, SKILL_BR_VECTORTHRUST, SKILL_BR_HOVERCRAFT,
            SKILL_BR_MOTORBOAT, SKILL_BR_SHIP, SKILL_BR_LTA, SKILL_PILOT_HOVERCRAFT,
-           SKILL_PILOT_MOTORBOAT, SKILL_PILOT_SHIP, SKILL_PILOT_LTA, 0, 0, 0 },
+           SKILL_PILOT_MOTORBOAT, SKILL_PILOT_SHIP, SKILL_PILOT_LTA, SKILL_PILOT_WALKER, SKILL_PILOT_TRACKED, 0 },
 #else
            0, 0, 0,
            0, 0, 0, 0,
@@ -154,8 +154,8 @@ struct teach_data teachers[] = {
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
     "After hours of study and practice, you feel like you've learned something.\r\n", NEWBIE },
 
-  { 60502, { SKILL_COMPUTER, SKILL_BR_COMPUTER, SKILL_DATA_BROKERAGE, SKILL_CYBERTERM_DESIGN, SKILL_ELECTRONICS, SKILL_BR_ELECTRONICS,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 60502, { SKILL_COMPUTER, SKILL_BR_COMPUTER, SKILL_DATA_BROKERAGE, SKILL_CYBERTERM_DESIGN, SKILL_ELECTRONICS,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
     "After hours of study and practice, you feel like you've learned something.\r\n", NEWBIE },
 
   { 60503, { SKILL_ARABIC, SKILL_CHINESE, SKILL_CROW, SKILL_ENGLISH, SKILL_FRENCH, SKILL_GAELIC, SKILL_GERMAN,
@@ -256,7 +256,7 @@ struct teach_data teachers[] = {
               SKILL_PILOT_ROTORCRAFT, SKILL_PILOT_FIXEDWING, SKILL_PILOT_VECTORTHRUST,
               SKILL_BR_FIXEDWING, SKILL_BR_ROTORCRAFT, SKILL_BR_VECTORTHRUST, SKILL_BR_HOVERCRAFT,
               SKILL_BR_MOTORBOAT, SKILL_BR_SHIP, SKILL_BR_LTA, SKILL_PILOT_HOVERCRAFT,
-              SKILL_PILOT_MOTORBOAT, SKILL_PILOT_SHIP, SKILL_PILOT_LTA, 0, 0, 0},
+              SKILL_PILOT_MOTORBOAT, SKILL_PILOT_SHIP, SKILL_PILOT_LTA, SKILL_PILOT_TRACKED, SKILL_PILOT_WALKER, 0},
      "You read through trade magazines and come away with a better understanding of vehicles.\r\n", LIBRARY },
 #endif
 
@@ -290,10 +290,10 @@ struct adept_data adepts[] = {//0   1   2   3   4   5   6   7   8   9  10  11  1
                      { 10011,{  0,  1, 50,  1,  1, 50,  1,  1,  1, 50, 50, 50, 50, 50, 50, 50, 50,  1,  1,  1, 50, 50, 50, 50, 50,  1,  1, 50, 50, 50, 50, 50,  1, 50,  1,  1,  1,  1, 50, 50, 50, 50, 50, 50,  1, 50,  1,  1,  1,  1,  1, 50,  1, 50,  1,  1, 50,  1, 50,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1, 50, 50,  1,  1,  1,  1,  1, 50, 50, 50,  1,  1,  1,  1,  1}, 0 },
                      { 60507,{  0,  1,  3,  1,  1,  4,  1,  1,  1,  3,  6,  6,  6,  6,  6,  6,  3,  1,  1,  1,  3, 10,  3,  0,  3,  0,  0,  6,  6,  6,  0,  0,  1,  3,  0,  1,  0,  1,  3,  6,  0,  3,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0}, 1 },
                      { 7223, {  0,  1,  3,  0,  1,  4,  1,  0,  0,  3,  0,  6,  0,  0,  6,  0,  6,  0,  0,  0,  0, 10,  0,  0,  6,  0,  0,  2,  0,  6,  0,  0,  0,  0,  0,  0,  0,  0,  3,  6,  0,  6,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0}, 0 },
-                     { 2701, {  0,  1,  3,  0,  0,  4,  0,  1,  1,  0,  6,  0,  6,  6,  0,  6,  0,  1,  1,  1,  4,  0,  3,  0,  0,  0,  0,  6,  6,  0,  0,  0,  1,  0,  0,  1,  0,  1,  2,  0,  0,  6,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0}, 0 },
-                     { 3603, {  0,  0,  3,  1,  1,  4,  1,  1,  1,  3,  6,  0,  0,  0,  0,  6,  0,  1,  1,  1,  4, 10,  6,  0,  0,  0,  0,  6,  0,  0,  0,  0,  1,  3,  0,  1,  0,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0}, 0 },
+                     { 2701, {  0,  1,  3,  0,  0,  4,  0,  1,  1,  0,  6,  0,  6,  6,  0,  6,  0,  1,  1,  1,  4,  0,  3,  0,  0,  0,  0,  6,  6,  0,  0,  0,  1,  0,  0,  1,  0,  1,  2,  0,  0,  6,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0}, 0 },
+                     { 3603, {  0,  0,  3,  1,  1,  4,  1,  1,  1,  3,  6,  0,  0,  0,  0,  6,  0,  1,  1,  1,  4, 10,  6,  0,  0,  0,  0,  6,  0,  0,  0,  0,  1,  3,  0,  1,  0,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0}, 0 },
 #ifdef USE_PRIVATE_CE_WORLD
-                     { 1011, {  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  3,  0,  1,  1,  0,  0,  0,  6,  6,  0,  0,  0,  0,  1,  0,  0,  0,  3,  0,  6,  6,  1,  6,  1,  1,  1,  1,  1,  6,  1,  2,  1,  1,  2,  1,  6,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  6,  6,  1,  1,  1,  1,  1,  6,  6,  6,  1,  1,  1,  1,  1}, 0 },
+                     { 1011, {  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  3,  0,  1,  1,  0,  0,  0,  6,  6,  0,  0,  0,  0,  1,  0,  0,  0,  3,  0,  6,  6,  1,  6,  1,  1,  1,  1,  1,  6,  1,  2,  1,  1,  2,  1,  6,  0,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  6,  6,  1,  1,  1,  1,  1,  6,  6,  6,  1,  1,  1,  1,  1}, 0 },
 #endif
 //                     { 20326,{ 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 4,  5, 2, 2, 2, 0, 1, 2, 1, 2, 6, 3, 0, 2, 1, 0, 1, 0, 3, 0, 1, 0}, 0 },
                      { 0, { 0, 0, 0, 0 }, 0 } // this MUST be last
@@ -592,6 +592,7 @@ void assign_mobiles(void)
   SPECIAL(crime_mall_guard);
   SPECIAL(doctor_scriptshaw);
   SPECIAL(huge_troll);
+  SPECIAL(Trogatron);
 //  SPECIAL(roots_receptionist);
   SPECIAL(aegnor);
   SPECIAL(purple_haze_bartender);
@@ -745,6 +746,9 @@ void assign_mobiles(void)
 
   /* Ork Underground */
   ASSIGNMOB(9913, receptionist);
+
+  /* Puyallup */
+  ASSIGNMOB(35200, Trogatron);
 
   /* Crime Mall */
   ASSIGNMOB(100022, crime_mall_guard);

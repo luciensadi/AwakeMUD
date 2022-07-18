@@ -821,6 +821,11 @@ SPECIAL(johnson)
   if (!IS_NPC(johnson))
     return FALSE;
 
+  if (!johnson->in_room) {
+    mudlog("SYSERR: Johnson not in a room!", johnson, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+
   if (!cmd) {
     if (GET_SPARE1(johnson) >= 0) {
       for (temp = johnson->in_room->people; temp; temp = temp->next_in_room)

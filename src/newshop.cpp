@@ -27,7 +27,8 @@ extern struct obj_data *get_first_credstick(struct char_data *ch, const char *ar
 extern void reduce_abilities(struct char_data *vict);
 extern void do_probe_object(struct char_data * ch, struct obj_data * j);
 extern void wire_nuyen(struct char_data *ch, int amount, vnum_t character_id);
-ACMD_CONST(do_say);
+ACMD_DECLARE(do_say);
+ACMD_DECLARE(do_new_echo);
 
 bool shop_can_sell_object(struct obj_data *obj, struct char_data *keeper, int shop_nr);
 bool shop_will_buy_item_from_ch(rnum_t shop_nr, struct obj_data *obj, struct char_data *ch);
@@ -36,6 +37,7 @@ void shop_uninstall(char *argument, struct char_data *ch, struct char_data *keep
 struct obj_data *shop_package_up_ware(struct obj_data *obj);
 
 int cmd_say;
+int cmd_echo;
 
 const char *shop_flags[] =
   {
@@ -92,7 +94,8 @@ bool is_ok_char(struct char_data * keeper, struct char_data * ch, vnum_t shop_nr
   char buf[400];
 
   if (!access_level(ch, LVL_ADMIN) && !(CAN_SEE(keeper, ch))) {
-    do_say(keeper, "I don't trade with someone I can't see.", cmd_say, 0);
+    strlcpy(buf, "I don't trade with someone I can't see.", sizeof(buf));
+    do_say(keeper, buf, cmd_say, 0);
     return FALSE;
   }
   if (IS_PROJECT(ch)) {
@@ -229,6 +232,8 @@ struct shop_sell_data *find_obj_shop(char *arg, vnum_t shop_nr, struct obj_data 
 }
 
 bool uninstall_ware_from_target_character(struct obj_data *obj, struct char_data *remover, struct char_data *victim, bool damage_on_operation) {
+  char buf[MAX_STRING_LENGTH], buf3[MAX_STRING_LENGTH];
+
   if (remover == victim) {
     send_to_char(remover, "You can't operate on yourself!\r\n");
     mudlog("SYSERR: remover = victim in uninstall_ware_from_target_character(). That's not supposed to happen!", remover, LOG_SYSLOG, TRUE);
@@ -293,6 +298,7 @@ bool uninstall_ware_from_target_character(struct obj_data *obj, struct char_data
 
 bool install_ware_in_target_character(struct obj_data *ware, struct char_data *installer, struct char_data *recipient, bool damage_on_operation) {
   struct obj_data *check;
+  char buf[MAX_STRING_LENGTH], buf3[MAX_STRING_LENGTH];
 
   if (installer == recipient) {
     send_to_char(installer, "You can't operate on yourself!\r\n");
@@ -601,8 +607,13 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
   // Character must have enough nuyen for it.
   if ((cred && GET_ITEM_MONEY_VALUE(cred) < price) || (!cred && GET_NUYEN(ch) < price))
   {
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %s", shop_table[shop_nr].not_enough_nuyen);
-    do_say(keeper, buf, cmd_say, SCMD_SAYTO);
+    if (MOB_FLAGGED(keeper, MOB_INANIMATE)) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "displays, \"%s\"", shop_table[shop_nr].not_enough_nuyen);
+      do_new_echo(keeper, buf, cmd_echo, 0);
+    } else {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s %s", GET_CHAR_NAME(ch), shop_table[shop_nr].not_enough_nuyen);
+      do_say(keeper, buf, cmd_say, SCMD_SAYTO);
+    }
     return FALSE;
   }
 
@@ -655,7 +666,7 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
       send_to_char("You can't carry any more items.\r\n", ch);
       return FALSE;
     }
-    if (IS_CARRYING_W(ch) + GET_OBJ_WEIGHT(obj) > CAN_CARRY_W(ch)) {
+    if (GET_OBJ_WEIGHT(obj) > CAN_CARRY_W(ch)) {
       send_to_char("It weighs too much!\r\n", ch);
       return FALSE;
     }
@@ -674,7 +685,7 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
 
         // Prevent taking more than you can carry.
         current_obj_weight += GET_OBJ_WEIGHT(obj);
-        if (IS_CARRYING_W(ch) + current_obj_weight > CAN_CARRY_W(ch)) {
+        if (current_obj_weight > CAN_CARRY_W(ch)) {
           if (--bought <= 0) {
             send_to_char("It weighs too much.\r\n", ch);
             return FALSE;
@@ -707,7 +718,7 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
         GET_OBJ_WEIGHT(obj) *= bought;
 
         // In theory this is dead code now after the 'you can only carry x' code change above. Will see.
-        if (IS_CARRYING_W(ch) + GET_OBJ_WEIGHT(obj) > CAN_CARRY_W(ch)) {
+        if (GET_OBJ_WEIGHT(obj) > CAN_CARRY_W(ch)) {
           send_to_char("You start gathering up the ammo you paid for, but realize you can't carry it all! The shopkeeper gives you a /look/, then refunds you in cash.\r\n", ch);
           // In this specific instance, we not only assign raw nuyen, we also decrement the purchase nuyen counter. It's a refund, after all.
           long refund_amount = price * bought;
@@ -777,7 +788,7 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
     else {
       while (obj && (bought < buynum
                      && IS_CARRYING_N(ch) < CAN_CARRY_N(ch)
-                     && IS_CARRYING_W(ch) + GET_OBJ_WEIGHT(obj) <= CAN_CARRY_W(ch)
+                     && GET_OBJ_WEIGHT(obj) <= CAN_CARRY_W(ch)
                      && (cred ? GET_ITEM_MONEY_VALUE(cred) : GET_NUYEN(ch)) >= price)) {
         // Visas are ID-locked to the purchaser.
         if (GET_OBJ_VNUM(obj) == OBJ_MULTNOMAH_VISA || GET_OBJ_VNUM(obj) == OBJ_CARIBBEAN_VISA)
@@ -827,7 +838,7 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
       strcpy(buf, GET_CHAR_NAME(ch));
       if (IS_CARRYING_N(ch) >= CAN_CARRY_N(ch))
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " You can only carry %d.", bought);
-      else if (GET_OBJ_WEIGHT(ch->carrying) + IS_CARRYING_W(ch) > CAN_CARRY_W(ch))
+      else if (GET_OBJ_WEIGHT(ch->carrying) > CAN_CARRY_W(ch))
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " You can only carry %d.", bought);
       else if ((cash ? GET_NUYEN(ch) : GET_ITEM_MONEY_VALUE(cred)) < price)
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " You can only afford %d.", bought);
@@ -845,8 +856,14 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
   replace_substring(arg, buf3, "%d", price_buf);
 
   // Compose the sayto string for the keeper.
-  snprintf(buf, sizeof(buf), "%s %s", GET_CHAR_NAME(ch), buf3);
-  do_say(keeper, buf, cmd_say, SCMD_SAYTO);
+  if (MOB_FLAGGED(keeper, MOB_INANIMATE)) {
+    snprintf(buf, sizeof(buf), "displays, \"%s\"", buf3);
+    do_new_echo(keeper, buf, cmd_echo, 0);
+  } else {
+    snprintf(buf, sizeof(buf), "%s %s", GET_CHAR_NAME(ch), buf3);
+    do_say(keeper, buf, cmd_say, SCMD_SAYTO);
+  }
+
   if (bought > 1 && print_multiples_at_end)
     snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " (x%d)", bought);
   send_to_char(buf2, ch);
@@ -889,8 +906,7 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
   // Prevent negative transactions.
   if ((buynum = transaction_amt(arg, arg_len)) < 0)
   {
-    snprintf(buf, sizeof(buf), "%s A negative amount?  Try selling me something.", GET_CHAR_NAME(ch));
-    do_say(keeper, buf, cmd_say, SCMD_SAYTO);
+    send_to_char("You can't specify a negative amount. Use the SELL command instead for that.\r\n", ch);
     return;
   }
 
@@ -904,8 +920,13 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
       sell = find_obj_shop(oopsbuf, shop_nr, &obj);
     }
     if (!sell) {
-      snprintf(buf, sizeof(buf), "%s %s", GET_CHAR_NAME(ch), shop_table[shop_nr].no_such_itemk);
-      do_say(keeper, buf, cmd_say, SCMD_SAYTO);
+      if (MOB_FLAGGED(keeper, MOB_INANIMATE)) {
+        snprintf(buf, sizeof(buf), "displays, \"%s\"", shop_table[shop_nr].no_such_itemk);
+        do_new_echo(keeper, buf, cmd_echo, 0);
+      } else {
+        snprintf(buf, sizeof(buf), "%s %s", GET_CHAR_NAME(ch), shop_table[shop_nr].no_such_itemk);
+        do_say(keeper, buf, cmd_say, SCMD_SAYTO);
+      }
       return;
     }
   }
@@ -1170,8 +1191,13 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
   }
 
   if (!obj) {
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %s", shop_table[shop_nr].no_such_itemp);
-    do_say(keeper, buf, cmd_say, SCMD_SAYTO);
+    if (MOB_FLAGGED(keeper, MOB_INANIMATE)) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "displays, \"%s\"", shop_table[shop_nr].no_such_itemp);
+      do_new_echo(keeper, buf, cmd_echo, 0);
+    } else {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s %s", GET_CHAR_NAME(ch), shop_table[shop_nr].no_such_itemp);
+      do_say(keeper, buf, cmd_say, SCMD_SAYTO);
+    }
     return;
   }
 
@@ -1199,8 +1225,13 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
 
   if (!shop_will_buy_item_from_ch(shop_nr, obj, ch))
   {
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %s", shop_table[shop_nr].doesnt_buy);
-    do_say(keeper, buf, cmd_say, SCMD_SAYTO);
+    if (MOB_FLAGGED(keeper, MOB_INANIMATE)) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "displays, \"%s\"", shop_table[shop_nr].doesnt_buy);
+      do_new_echo(keeper, buf, cmd_echo, 0);
+    } else {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s %s", GET_CHAR_NAME(ch), shop_table[shop_nr].doesnt_buy);
+      do_say(keeper, buf, cmd_say, SCMD_SAYTO);
+    }
     return;
   }
 
@@ -1380,7 +1411,7 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
         i--;
         continue;
       }
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %2d)  ", i);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %3d)  ", i);
       if (sell->type == SELL_ALWAYS || (sell->type == SELL_AVAIL && GET_OBJ_AVAILTN(obj) == 0))
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Yes      ");
       else if (sell->type == SELL_AVAIL) {
@@ -1756,6 +1787,12 @@ void shop_info(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " a rating %d %s program, that is %dMp in size.", GET_OBJ_VAL(obj, 1),
             programs[GET_OBJ_VAL(obj, 0)].name, GET_OBJ_VAL(obj, 2));
     break;
+  case ITEM_DRUG:
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %d dose%s of the drug %s.",
+             GET_OBJ_DRUG_DOSES(obj),
+             GET_OBJ_DRUG_DOSES(obj) != 1 ? "s" : "",
+             drug_types[GET_OBJ_DRUG_TYPE(obj)].name);
+    break;
   case ITEM_CYBERDECK:
     if (GET_OBJ_VAL(obj, 0) < 4)
       strcat(buf, " a beginners cyberdeck");
@@ -2018,8 +2055,13 @@ void shop_check(char *arg, struct char_data *ch, struct char_data *keeper, vnum_
     }
   if (i == 0)
   {
-    snprintf(buf, sizeof(buf), "%s You don't have anything on order here.", GET_CHAR_NAME(ch));
-    do_say(keeper, buf, cmd_say, SCMD_SAYTO);
+    if (MOB_FLAGGED(keeper, MOB_INANIMATE)) {
+      snprintf(buf, sizeof(buf), "displays, \"NO ORDERS FOUND.\"");
+      do_new_echo(keeper, buf, cmd_echo, 0);
+    } else {
+      snprintf(buf, sizeof(buf), "%s You don't have anything on order here.", GET_CHAR_NAME(ch));
+      do_say(keeper, buf, cmd_say, SCMD_SAYTO);
+    }
   } else
     send_to_char(buf, ch);
 }
@@ -2111,6 +2153,7 @@ void shop_cancel(char *arg, struct char_data *ch, struct char_data *keeper, vnum
 void shop_hours(struct char_data *ch, vnum_t shop_nr)
 {
 #ifdef USE_SHOP_OPEN_CLOSE_TIMES
+  char buf[MAX_STRING_LENGTH];
   strcpy(buf, "This shop is ");
   if (!shop_table[shop_nr].open && shop_table[shop_nr].close == 24)
     strcat(buf, "always open");
@@ -2187,6 +2230,7 @@ void assign_shopkeepers(void)
 {
   int index, rnum;
   cmd_say = find_command("say");
+  cmd_echo = find_command("echo");
   for (index = 0; index <= top_of_shopt; index++) {
     if (shop_table[index].keeper <= 0)
       continue;
@@ -2216,6 +2260,7 @@ void randomize_shop_prices(void)
 
 void list_detailed_shop(struct char_data *ch, vnum_t shop_nr)
 {
+  char buf[MAX_STRING_LENGTH];
   char formatstr[MAX_STRING_LENGTH];
   char paddingnumberstr[12];
 
@@ -2918,15 +2963,18 @@ bool shop_can_sell_object(struct obj_data *obj, struct char_data *keeper, int sh
 
 void shop_install(char *argument, struct char_data *ch, struct char_data *keeper, vnum_t shop_nr) {
   struct obj_data *obj;
+  char buf[MAX_STRING_LENGTH];
 
   // Non-docs won't install things.
   if (!shop_table[shop_nr].flags.IsSet(SHOP_DOCTOR)) {
-    do_say(keeper, "Hold on now, I'm not a doctor! Find someone else to install your 'ware.", cmd_say, 0);
+    strlcpy(buf, "Hold on now, I'm not a doctor! Find someone else to install your 'ware.", sizeof(buf));
+    do_say(keeper, buf, cmd_say, 0);
     return;
   }
 
   if (!access_level(ch, LVL_ADMIN) && !(CAN_SEE(keeper, ch))) {
-    do_say(keeper, "How am I supposed to work on someone I can't see?", cmd_say, 0);
+    strlcpy(buf, "How am I supposed to work on someone I can't see?", sizeof(buf));
+    do_say(keeper, buf, cmd_say, 0);
     return;
   }
 
@@ -2998,15 +3046,24 @@ void shop_install(char *argument, struct char_data *ch, struct char_data *keeper
 
 void shop_uninstall(char *argument, struct char_data *ch, struct char_data *keeper, vnum_t shop_nr) {
   struct obj_data *obj;
+  char buf[MAX_STRING_LENGTH];
 
   // Non-docs won't uninstall things.
   if (!shop_table[shop_nr].flags.IsSet(SHOP_DOCTOR)) {
-    do_say(keeper, "Hold on now, I'm not a doctor! Find someone else to uninstall your 'ware.", cmd_say, 0);
+    strlcpy(buf, "Hold on now, I'm not a doctor! Find someone else to uninstall your 'ware.", sizeof(buf));
+    do_say(keeper, buf, cmd_say, 0);
+    return;
+  }
+
+  // Can't uninstall in chargen.
+  if (shop_table[shop_nr].flags.IsSet(SHOP_CHARGEN)) {
+    send_to_char(ch, "Sorry, you can't do that in character generation.\r\n");
     return;
   }
 
   if (!access_level(ch, LVL_ADMIN) && !(CAN_SEE(keeper, ch))) {
-    do_say(keeper, "How am I supposed to work on someone I can't see?", cmd_say, 0);
+    strlcpy(buf, "How am I supposed to work on someone I can't see?", sizeof(buf));
+    do_say(keeper, buf, cmd_say, 0);
     return;
   }
 
@@ -3239,8 +3296,9 @@ bool shop_will_buy_item_from_ch(rnum_t shop_nr, struct obj_data *obj, struct cha
              GET_OBJ_NAME(obj),
              GET_OBJ_VNUM(obj));
     mudlog(oopsbuf, ch, LOG_SYSLOG, TRUE);
-    send_to_char(ch, "%s is bugged!\r\n", capitalize(GET_OBJ_NAME(obj)));
-    return FALSE;
+    // Disabling this rejection code for now until we fix all these. -LS
+//    send_to_char(ch, "%s is bugged!\r\n", capitalize(GET_OBJ_NAME(obj)));
+//    return FALSE;
   }
 
   // If this shop doesn't buy this item type at all, bail out. We don't send a message for this one-- the shopkeeper has a flavor line to say.

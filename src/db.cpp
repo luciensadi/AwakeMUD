@@ -82,6 +82,9 @@ extern void ensure_mob_has_ammo_for_weapon(struct char_data *ch, struct obj_data
 
 extern void auto_repair_obj(struct obj_data *obj);
 
+// transport.cpp
+extern void boot_escalators();
+
 
 /**************************************************************************
 *  declarations of most of the 'global' variables                         *
@@ -106,14 +109,14 @@ struct char_data *character_list = NULL; /* global linked list of chars  */
 struct index_data *mob_index; /* index table for mobile file  */
 struct char_data *mob_proto; /* prototypes for mobs   */
 rnum_t top_of_mobt = 0; /* top of mobile index table  */
-int mob_chunk_size = 100;       // default to 100
+int mob_chunk_size = 250;       // default to 100
 int top_of_mob_array = 0;
 
 struct index_data *obj_index; /* index table for object file  */
 struct obj_data *obj_proto; /* prototypes for objs   */
 rnum_t top_of_objt = 0; /* top of object index table  */
 int top_of_obj_array = 0;
-int obj_chunk_size = 100;       // default to 100
+int obj_chunk_size = 250;       // default to 100
 
 struct zone_data *zone_table; /* zone table    */
 rnum_t top_of_zone_table = 0;/* top element of zone tab  */
@@ -122,17 +125,17 @@ struct message_list fight_messages[MAX_MESSAGES]; /* fighting messages  */
 struct quest_data *quest_table = NULL; // array of quests
 rnum_t top_of_questt = 0;
 int top_of_quest_array = 0;
-int quest_chunk_size = 25;
+int quest_chunk_size = 50;
 
 struct shop_data *shop_table = NULL;   // array of shops
 rnum_t top_of_shopt = 0;            // ref to top element of shop_table
 int top_of_shop_array = 0;
-int shop_chunk_size = 25;
+int shop_chunk_size = 50;
 
 int top_of_matrix_array = 0;
 int top_of_ic_array = 0;
 int top_of_world_array = 0;
-int world_chunk_size = 100;     /* size of world to add on each reallocation */
+int world_chunk_size = 250;     /* size of world to add on each reallocation */
 int olc_state = 1;              /* current olc state */
 int _NO_OOC_  = 0;  /* Disable the OOC Channel */
 
@@ -525,6 +528,8 @@ void boot_world(void)
   require_that_sql_table_exists("pfiles_ignore_v2", "SQL/ignore_system_v2.sql");
   require_that_field_exists_in_table("harmless", "pfiles_ammo", "SQL/Migrations/add_harmless_and_anti_vehicle.sql");
   require_that_field_exists_in_table("anti-vehicle", "pfiles_ammo", "SQL/Migrations/add_harmless_and_anti_vehicle.sql");
+  require_that_field_exists_in_table("Duration", "pfiles_drugs", "SQL/Migrations/drug_overhaul.sql");
+  require_that_field_meets_constraints("LastFix", "pfiles_drugs", "SQL/Migrations/lastfix_bigint.sql", 12, "bigint", TRUE);
 
   log("Calculating lexicon data.");
   populate_lexicon_size_table();
@@ -680,6 +685,9 @@ void DBInit()
 
   log("Setting up mobact aggression octets.");
   populate_mobact_aggression_octets();
+
+  log("Building escalator vector.");
+  boot_escalators();
 
   log("DBInit -- DONE.");
 }
@@ -1054,8 +1062,8 @@ void parse_veh(File &fl, long virtual_nr)
   veh_proto[veh_nr].pilot = data.GetInt("Pilot", 0);
   veh_proto[veh_nr].sig = data.GetInt("Sig", 0);
   veh_proto[veh_nr].autonav = data.GetInt("Autonav", 0);
-  veh_proto[veh_nr].seating[1] = data.GetInt("Seating", 0);
-  veh_proto[veh_nr].seating[0] = data.GetInt("SeatingBack", 0);
+  veh_proto[veh_nr].seating[SEATING_FRONT] = data.GetInt("Seating", 0);
+  veh_proto[veh_nr].seating[SEATING_REAR] = data.GetInt("SeatingBack", 0);
   veh_proto[veh_nr].load = data.GetFloat("Load", 0);
   veh_proto[veh_nr].cost = data.GetInt("Cost", 0);
   veh_proto[veh_nr].type = data.GetInt("Type", 0);
@@ -1583,9 +1591,6 @@ void renum_zone_table(void)
         case 'C':
         case 'U':
         case 'I':
-          a = ZCMD.arg1 = real_object(ZCMD.arg1);
-          ENSURE_OBJECT_IS_KOSHER(a);
-          break;
         case 'E':
           a = ZCMD.arg1 = real_object(ZCMD.arg1);
           ENSURE_OBJECT_IS_KOSHER(a);
@@ -1929,6 +1934,15 @@ void parse_object(File &fl, long nr)
     int mult;
     const char *type_as_string = NULL;
     switch (GET_OBJ_TYPE(obj)) {
+      case ITEM_MOD:
+        // Weapon mounts go on all vehicle types.
+        if (GET_VEHICLE_MOD_TYPE(obj) == TYPE_MOUNT) {
+          for (int bit = 0; bit < NUM_VEH_TYPES; bit++) {
+            GET_VEHICLE_MOD_DESIGNED_FOR_FLAGS(obj) |= 1 << bit;
+          }
+          GET_VEHICLE_MOD_LOCATION(obj) = MOD_MOUNT;
+        }
+        break;
       case ITEM_CHIP:
         GET_OBJ_VAL(obj, 2) = (GET_OBJ_VAL(obj, 1) * GET_OBJ_VAL(obj, 1)) * 3;
         GET_OBJ_AVAILTN(obj) = 6;
@@ -1941,6 +1955,17 @@ void parse_object(File &fl, long nr)
         } else {
           GET_OBJ_COST(obj) = GET_OBJ_VAL(obj, 2) * 150;
           GET_OBJ_AVAILTN(obj) = 5;
+        }
+        break;
+      case ITEM_DRUG:
+        if (GET_OBJ_DRUG_DOSES(obj) <= 0)
+          GET_OBJ_DRUG_DOSES(obj) = 1;
+        if (GET_OBJ_DRUG_TYPE(obj) < MIN_DRUG || GET_OBJ_DRUG_TYPE(obj) >= NUM_DRUGS) {
+          log_vfprintf("BUILD ERROR: Drug %s had invalid type %d!", GET_OBJ_NAME(obj), GET_OBJ_DRUG_TYPE(obj));
+          GET_OBJ_COST(obj) = 0;
+        } else {
+          GET_OBJ_COST(obj) = GET_OBJ_DRUG_DOSES(obj) * drug_types[GET_OBJ_DRUG_TYPE(obj)].cost;
+          GET_OBJ_STREET_INDEX(obj) = drug_types[GET_OBJ_DRUG_TYPE(obj)].street_idx;
         }
         break;
       case ITEM_CYBERWARE:
@@ -2010,20 +2035,18 @@ void parse_object(File &fl, long nr)
 
           // Set values according to Assault Cannon ammo (SR3 p281).
           GET_OBJ_WEIGHT(obj) = (((float) GET_AMMOBOX_QUANTITY(obj)) * 1.25) / 10;
-          GET_OBJ_COST(obj) = GET_AMMOBOX_QUANTITY(obj) * 45;
           GET_OBJ_AVAILDAY(obj) = 3;
           GET_OBJ_AVAILTN(obj) = 5;
           GET_OBJ_STREET_INDEX(obj) = 2;
 
-          // They also may only be explosive (SR3 p279).
+          // Assault Cannon ammo may only ever be explosive (SR3 p279).
           GET_AMMOBOX_TYPE(obj) = AMMO_EXPLOSIVE;
         } else {
           // Max size 1000-- otherwise it's too heavy to carry.
           GET_AMMOBOX_QUANTITY(obj) = MAX(MIN(GET_AMMOBOX_QUANTITY(obj), 1000), 10);
 
-          // Update weight and cost.
+          // Update weight.
           GET_OBJ_WEIGHT(obj) = GET_AMMOBOX_QUANTITY(obj) * ammo_type[GET_AMMOBOX_TYPE(obj)].weight;
-          GET_OBJ_COST(obj) = GET_AMMOBOX_QUANTITY(obj) * ammo_type[GET_AMMOBOX_TYPE(obj)].cost;
 
           // Set the TNs for this ammo per the default values.
           GET_OBJ_AVAILDAY(obj) = ammo_type[GET_AMMOBOX_TYPE(obj)].time;
@@ -2032,6 +2055,9 @@ void parse_object(File &fl, long nr)
           // Set the street index.
           GET_OBJ_STREET_INDEX(obj) = ammo_type[GET_AMMOBOX_TYPE(obj)].street_index;
         }
+
+        // Calculate ammo cost from its quantity, type, and weapon type (this last bit is a house rule).
+        GET_OBJ_COST(obj) = GET_AMMOBOX_QUANTITY(obj) * ammo_type[GET_AMMOBOX_TYPE(obj)].cost * weapon_type_ammo_cost_multipliers[GET_AMMOBOX_WEAPON(obj)];
 
         // Set the strings-- we want all these things to match for simplicity's sake.
         type_as_string = get_weapon_ammo_name_as_string(GET_AMMOBOX_WEAPON(obj));
@@ -4958,7 +4984,7 @@ void purge_unowned_vehs() {
 
     // This vehicle is owned by an invalid player. Delete.
 
-    // Step 1: Dump its contents.
+    // Step 1: Dump its contained vehicles, since those can belong to other players.
     snprintf(buf, sizeof(buf), "Purging contents of vehicle '%s' (%ld), owner %ld (nonexistant).", veh->short_description, veh->idnum, veh->owner);
     log(buf);
 
@@ -4996,7 +5022,14 @@ void purge_unowned_vehs() {
       }
     }
 
-    // Step 2: Purge the vehicle itself. `veh` now points to garbage.
+    // Step 2: Destroy its contents.
+    struct obj_data *nextobj;
+    for (struct obj_data *obj = veh->contents; obj; obj = nextobj) {
+      nextobj = obj->next_content;
+      extract_obj(obj);
+    }
+
+    // Step 3: Purge the vehicle itself. `veh` now points to garbage.
     extract_veh(veh);
 
     // Critically, we don't iterate prior_veh if we removed veh-- that would skip the next veh in the list.
@@ -5216,8 +5249,14 @@ void load_saved_veh()
     int num_mods = data.NumFields("MODIS");
     for (int i = 0; i < num_mods; i++) {
       snprintf(buf, sizeof(buf), "MODIS/Mod%d", i);
-      obj = read_object(data.GetLong(buf, 0), VIRTUAL);
-      GET_MOD(veh, GET_OBJ_VAL(obj, 6)) = obj;
+      vnum_t vnum = data.GetLong(buf, 0);
+
+      if (!(obj = read_object(vnum, VIRTUAL))) {
+        log_vfprintf("ERROR: Unknown vnum %ld in veh file! Skipping.", vnum);
+        continue;
+      }
+
+      GET_MOD(veh, GET_VEHICLE_MOD_LOCATION(obj)) = obj;
       if (GET_VEHICLE_MOD_TYPE(obj) == TYPE_ENGINECUST)
         veh->engine = GET_VEHICLE_MOD_RATING(obj);
       if (GET_VEHICLE_MOD_TYPE(obj) == TYPE_AUTONAV)

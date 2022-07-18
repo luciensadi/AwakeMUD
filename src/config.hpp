@@ -5,7 +5,7 @@ extern int max_exp_gain;
 extern int max_pc_corpse_time;
 extern int max_npc_corpse_time;
 extern int DFLT_PORT;
-extern char *DFLT_DIR;
+extern const char *DFLT_DIR;
 extern int MAX_PLAYERS;
 extern int max_filesize;
 extern int max_bad_pws;
@@ -199,11 +199,16 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 #define FAILED_SPELL_LEARNING_WAIT_STATE                       (0.25 RL_SEC)
 #define INITIATION_CAP                                         50
 
+// This stat is x100 when stored, so the cap is 20 * 100 = 2000 aka 20 magic.
+#define MAGIC_CAP                                              2000
+
 #define MAX_MOB_COMBAT_MAGIC_FORCE                             10
 #define MIN_MOB_COMBAT_MAGIC_FORCE                             4
 
 #define MAX_MOB_COMBAT_MAGIC_WOUND                             SERIOUS
 #define MIN_MOB_COMBAT_MAGIC_WOUND                             MODERATE
+
+#define TN_INCREASE_DIVISOR_FOR_ATTRIBUTE_SPELL_STACKING       3
 
 // How many sunrises (currently spans of 48 minutes) are spirits good for?
 #define NUMBER_OF_IG_DAYS_FOR_SPIRIT_TO_LAST                   4
@@ -240,6 +245,11 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 
 // After how many items will the shopkeep start silently destroying old sales?
 #define MAX_ITEMS_IN_SHOP_INVENTORY                            100
+
+// What does it cost to begin the guided withdrawal process?
+#define GUIDED_WITHDRAWAL_ATTEMPT_NUYEN_COST_PER_EDGE          3000
+#define INVOLUNTARY_DRUG_PURCHASE_COST_MULTIPLIER              3
+#define AVG_HOURS_PER_TOLERANCE_TICKDOWN                       (24 * 7)
 
 /////////////// OLC permissions configuration /////////////////////////
 #define LVL_FOR_SETTING_ZONE_EDITOR_ID_NUMBERS                 LVL_VICEPRES

@@ -62,25 +62,29 @@ void ccr_pronoun_menu(struct descriptor_data *d) {
 
 void ccr_race_menu(struct descriptor_data *d) {
   SEND_TO_Q("\r\nSelect a race:"
-            "\r\n  [1] Human"
-            "\r\n  [2] Dwarf"
-            "\r\n  [3] Elf"
-            "\r\n  [4] Ork"
-            "\r\n  [5] Troll"
-            "\r\n  [6] Cyclops"
-            "\r\n  [7] Koborokuru"
-            "\r\n  [8] Fomori"
-            "\r\n  [9] Menehune"
-            "\r\n  [A] Hobgoblin"
-            "\r\n  [B] Giant"
-            "\r\n  [C] Gnome"
-            "\r\n  [D] Oni"
-            "\r\n  [E] Wakyambi"
-            "\r\n  [F] Ogre"
-            "\r\n  [G] Minotaur"
-            "\r\n  [H] Satyr"
-            "\r\n  [I] Night-One"
-            "\r\n  ?# (for help on a particular race)"
+            "\r\n Base Races (no shop penalties):"
+            "\r\n  [1] Human       ( 0 points / slot E)"
+            "\r\n  [2] Dwarf       ( 5 points / slot D)"
+            "\r\n  [3] Elf         (10 points / slot C)"
+            "\r\n  [4] Ork         ( 5 points / slot D)"
+            "\r\n  [5] Troll       (10 points / slot C)"
+            "\r\n"
+            "\r\n Metavariants (shop penalties):"
+            "\r\n  [6] Cyclops     (15 points / slot B)"
+            "\r\n  [7] Koborokuru  (10 points / slot C)"
+            "\r\n  [8] Fomori      (15 points / slot B)"
+            "\r\n  [9] Menehune    (10 points / slot C)"
+            "\r\n  [A] Hobgoblin   (10 points / slot C)"
+            "\r\n  [B] Giant       (15 points / slot B)"
+            "\r\n  [C] Gnome       (10 points / slot C)"
+            "\r\n  [D] Oni         (10 points / slot C)"
+            "\r\n  [E] Wakyambi    (15 points / slot B)"
+            "\r\n  [F] Ogre        (10 points / slot C)"
+            "\r\n  [G] Minotaur    (15 points / slot B)"
+            "\r\n  [H] Satyr       (10 points / slot C)"
+            "\r\n  [I] Night-One   (15 points / slot B)"
+            "\r\n"
+            "\r\n  ?# (for help on a particular race), ex: ?A"
             "\r\n"
             "\r\nRace: ", d);
   d->ccr.mode = CCR_RACE;
@@ -210,7 +214,7 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
 
   // Set magic data.
   GET_TRADITION(CH) = archetypes[i]->tradition;
-  GET_REAL_MAG(CH) = archetypes[i]->magic;
+  GET_SETTABLE_REAL_MAG(CH) = archetypes[i]->magic;
   GET_ASPECT(CH) = archetypes[i]->aspect;
 
   if (GET_TRADITION(CH) == TRAD_SHAMANIC) {
@@ -218,9 +222,8 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
     GET_TOTEMSPIRIT(CH) = archetypes[i]->totemspirit;
   }
 
-
-  // Grant forcepoints for bonding purposes.
-  GET_FORCE_POINTS(CH) = archetypes[i]->forcepoints;
+  // Foci are auto-bonded, so no need to give force points for this.
+  GET_FORCE_POINTS(CH) = 0;
 
   // Set spells, if any.
   for (int spell_idx = 0; spell_idx < NUM_ARCHETYPE_SPELLS; spell_idx++)
@@ -477,6 +480,7 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
 
   // Set up the character and save them.
   do_start(CH, FALSE);
+  GET_LOADROOM(d->character) = archetypes[i]->start_room;
   playerDB.SaveChar(d->character, archetypes[i]->start_room);
 }
 
@@ -521,14 +525,15 @@ int magic_cost[4] = { 0, 30, 25, 25 };
 #define CCR_MAGIC_ASPECTED 2
 #define CCR_MAGIC_ADEPT    3
 const char *magic_table[4] = { "None", "Full Magician", "Aspected Magician", "Adept" };
+const char *gnome_magic_table[4] = { "None", "Full Shaman", "Aspected Shaman", "ERROR" };
 
 void set_attributes(struct char_data *ch, int magic)
 {
   // If the character is a magic user, their magic is equal to their essence (this is free).
   if (magic) {
-    GET_REAL_MAG(ch) = 600;
+    GET_SETTABLE_REAL_MAG(ch) = 600;
   } else {
-    GET_REAL_MAG(ch) = 0;
+    GET_SETTABLE_REAL_MAG(ch) = 0;
   }
 
   // Everyone starts with 0 bioware index and 6.00 essence.
@@ -794,51 +799,22 @@ void priority_menu(struct descriptor_data *d)
       strlcpy(buf2, buf3, sizeof(buf2));
       break;
     case PR_RACE:
-      if (GET_RACE(d->character) == RACE_ELF)
-        strlcat(buf2, "Elf         -            -         -\r\n", sizeof(buf2));
-      else if (GET_RACE(d->character) == RACE_DRAGON)
-        strlcat(buf2, "Dragon     -            -        -\r\n", sizeof(buf2));
-      else if (GET_RACE(d->character) == RACE_TROLL)
-        strlcat(buf2, "Troll       -            -         -\r\n", sizeof(buf2));
-      else if (GET_RACE(d->character) == RACE_ORK)
-        strlcat(buf2, "Ork         -            -         -\r\n", sizeof(buf2));
-      else if (GET_RACE(d->character) == RACE_DWARF)
-        strlcat(buf2, "Dwarf       -            -         -\r\n", sizeof(buf2));
-      else if (GET_RACE(d->character) == RACE_CYCLOPS)
-        strlcat(buf2, "Cyclops     -            -         -\r\n", sizeof(buf2));
-      else if (GET_RACE(d->character) == RACE_KOBOROKURU)
-        strlcat(buf2, "Koborokuru  -            -         -\r\n", sizeof(buf2));
-      else if (GET_RACE(d->character) == RACE_FOMORI)
-        strlcat(buf2, "Fomori      -            -         -\r\n", sizeof(buf2));
-      else if (GET_RACE(d->character) == RACE_MENEHUNE)
-        strlcat(buf2, "Menehune    -            -         -\r\n", sizeof(buf2));
-      else if (GET_RACE(d->character) == RACE_HOBGOBLIN)
-        strlcat(buf2, "Hobgoblin   -            -         -\r\n", sizeof(buf2));
-      else if (GET_RACE(d->character) == RACE_GIANT)
-        strlcat(buf2, "Giant       -            -         -\r\n", sizeof(buf2));
-      else if (GET_RACE(d->character) == RACE_GNOME)
-        strlcat(buf2, "Gnome       -            -         -\r\n", sizeof(buf2));
-      else if (GET_RACE(d->character) == RACE_ONI)
-        strlcat(buf2, "Oni         -            -         -\r\n", sizeof(buf2));
-      else if (GET_RACE(d->character) == RACE_WAKYAMBI)
-        strlcat(buf2, "Wakyambi    -            -         -\r\n", sizeof(buf2));
-      else if (GET_RACE(d->character) == RACE_OGRE)
-        strlcat(buf2, "Ogre        -            -         -\r\n", sizeof(buf2));
-      else if (GET_RACE(d->character) == RACE_MINOTAUR)
-        strlcat(buf2, "Minotaur    -            -         -\r\n", sizeof(buf2));
-      else if (GET_RACE(d->character) == RACE_SATYR)
-        strlcat(buf2, "Satyr       -            -         -\r\n", sizeof(buf2));
-      else if (GET_RACE(d->character) == RACE_NIGHTONE)
-        strlcat(buf2, "Night-One   -            -         -\r\n", sizeof(buf2));
-      else
-        strlcat(buf2, "Human       -            -         -\r\n", sizeof(buf2));
+      snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%-11s -            -         -\r\n", pc_race_types[(int) GET_RACE(d->character)]);
       break;
     case PR_MAGIC:
-      if ( i == 0 )
-        strlcat(buf2, "Full Mage   -            -         -\r\n", sizeof(buf2));
-      else if ( i == 1 )
-        strlcat(buf2, "Adept/Aspect-            -         -\r\n", sizeof(buf2));
-      else
+      if ( i == 0 ) {
+        if (GET_RACE(CH) == RACE_GNOME) {
+          strlcat(buf2, "Full Shaman -            -         -\r\n", sizeof(buf2));
+        } else {
+          strlcat(buf2, "Full Mage   -            -         -\r\n", sizeof(buf2));
+        }
+      } else if ( i == 1 ) {
+        if (GET_RACE(CH) == RACE_GNOME) {
+          strlcat(buf2, "Asp. Shaman -            -         -\r\n", sizeof(buf2));
+        } else {
+          strlcat(buf2, "Adept/Aspect-            -         -\r\n", sizeof(buf2));
+        }
+      } else
         strlcat(buf2, "Mundane     -            -         -\r\n", sizeof(buf2));
       break;
     case PR_ATTRIB:
@@ -880,7 +856,7 @@ void init_char_sql(struct char_data *ch)
   mysql_wrapper(mysql, buf);
   if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
     snprintf(buf, sizeof(buf), "INSERT INTO pfiles_chargendata (idnum, AttPoints, SkillPoints, ForcePoints, archetypal, archetype) VALUES"\
-               "('%ld', '%d', '%d', '%d', '%d', '%d');", GET_IDNUM(ch), GET_ATT_POINTS(ch), GET_SKILL_POINTS(ch), GET_FORCE_POINTS(ch), GET_ARCHETYPAL_MODE(ch), GET_ARCHETYPAL_TYPE(ch));
+               "('%ld', '%d', '%d', '%d', '%d', '%d');", GET_IDNUM(ch), GET_ATT_POINTS(ch), GET_SKILL_POINTS(ch), GET_FORCE_POINTS(ch), GET_ARCHETYPAL_MODE(ch) ? 1 : 0, GET_ARCHETYPAL_TYPE(ch));
     mysql_wrapper(mysql, buf);
   }
   if (GET_TRADITION(ch) != TRAD_MUNDANE) {
@@ -888,8 +864,6 @@ void init_char_sql(struct char_data *ch)
                "('%ld', '%d', '%d', '%d');", GET_IDNUM(ch), GET_TOTEM(ch), GET_TOTEMSPIRIT(ch), GET_ASPECT(ch));
     mysql_wrapper(mysql, buf);
   }
-  snprintf(buf, sizeof(buf), "INSERT INTO pfiles_drugdata (idnum) VALUES (%ld)", GET_IDNUM(ch));
-  mysql_wrapper(mysql, buf);
   if (GET_LEVEL(ch) > 0) {
     snprintf(buf, sizeof(buf), "INSERT INTO pfiles_immortdata (idnum, InvisLevel, IncogLevel, Zonenumber, Poofin, Poofout) VALUES ("\
                  "%ld, %d, %d, %d, '%s', '%s');",
@@ -908,7 +882,12 @@ static void start_game(descriptor_data *d)
   set_character_skill(d->character, SKILL_ENGLISH, STARTING_LANGUAGE_SKILL_LEVEL, FALSE);
   GET_LANGUAGE(d->character) = SKILL_ENGLISH;
   GET_RESTRING_POINTS(d->character) = STARTING_RESTRING_POINTS;
-  GET_LOADROOM(d->character) = RM_CHARGEN_START_ROOM;
+
+  if (GET_ARCHETYPAL_MODE(CH)) {
+    GET_LOADROOM(d->character) = archetypes[GET_ARCHETYPAL_TYPE(CH)]->start_room;
+  } else {
+    GET_LOADROOM(d->character) = RM_CHARGEN_START_ROOM;
+  }
 
   init_char_sql(d->character);
   GET_CHAR_MULTIPLIER(d->character) = 100;
@@ -1042,16 +1021,22 @@ void ccr_type_menu(struct descriptor_data *d)
 
 void points_menu(struct descriptor_data *d)
 {
+  const char **magic_table_ptr;
   d->ccr.mode = CCR_POINTS;
-  snprintf(buf, sizeof(buf), "  1) Attributes: ^c%14d^n (^c%3d^n Points)\r\n"
-               "  2) Skills    : ^c%14d^n (^c%3d^n Points)\r\n"
-               "  3) Resources : ^c%14d^n (^c%3d^n Points)\r\n"
-               "  4) Magic     : ^c%14s^n (^c%3d^n Points)\r\n"
-               "     Race      : ^c%14s^n (^c%3d^n Points)\r\n"
+  if (GET_RACE(CH) == RACE_GNOME) {
+    magic_table_ptr = gnome_magic_table;
+  } else {
+    magic_table_ptr = magic_table;
+  }
+  snprintf(buf, sizeof(buf), "  1) Attributes: ^c%15d^n (^c%3d^n Points)\r\n"
+               "  2) Skills    : ^c%15d^n (^c%3d^n Points)\r\n"
+               "  3) Resources : ^c%15d^n (^c%3d^n Points)\r\n"
+               "  4) Magic     : ^c%15s^n (^c%3d^n Points)\r\n"
+               "     Race      : ^c%15s^n (^c%3d^n Points)\r\n"
                "  Points Remaining: ^c%d^n\r\n"
                "Choose an area to change points on(p to continue): ", d->ccr.pr[PO_ATTR]/2, d->ccr.pr[PO_ATTR],
                d->ccr.pr[PO_SKILL], d->ccr.pr[PO_SKILL], resource_table[0][d->ccr.pr[PO_RESOURCES]],
-               resource_table[1][d->ccr.pr[PO_RESOURCES]], magic_table[d->ccr.pr[PO_MAGIC]],
+               resource_table[1][d->ccr.pr[PO_RESOURCES]], magic_table_ptr[d->ccr.pr[PO_MAGIC]],
                magic_cost[d->ccr.pr[PO_MAGIC]], pc_race_types[(int)GET_RACE(d->character)], d->ccr.pr[PO_RACE], d->ccr.points);
   SEND_TO_Q(buf, d);
 }
@@ -1142,7 +1127,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
     break;
   case CCR_PO_MAGIC:
     i--;
-    if (i > CCR_MAGIC_ADEPT || i < CCR_MAGIC_NONE)
+    if (i > (GET_RACE(CH) == RACE_GNOME ? CCR_MAGIC_ASPECTED : CCR_MAGIC_ADEPT) || i < CCR_MAGIC_NONE)
       send_to_char(CH, "Invalid number. Enter desired type of magic (^c%d^n points available): ", d->ccr.points);
     else if (magic_cost[i] > d->ccr.points)
       send_to_char(CH, "You do not have enough points for that. Enter desired type of magic (^c%d^n points available):", d->ccr.points);
@@ -1184,8 +1169,13 @@ void create_parse(struct descriptor_data *d, const char *arg)
       case '4':
         d->ccr.points += magic_cost[d->ccr.pr[PO_MAGIC]];
         snprintf(buf, sizeof(buf), " ");
-        for (int x = 0; x < 4; x++)
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %d) %18s (%2d points)\r\n ", x+1, magic_table[x], magic_cost[x]);
+        if (GET_RACE(CH) == RACE_GNOME) {
+          for (int x = 0; x < 3; x++)
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %d) %18s (%2d points)\r\n ", x+1, gnome_magic_table[x], magic_cost[x]);
+        } else {
+          for (int x = 0; x < 4; x++)
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %d) %18s (%2d points)\r\n ", x+1, magic_table[x], magic_cost[x]);
+        }
         SEND_TO_Q(buf, d);
         send_to_char(CH, "Enter desired type of magic (^c%d^n points available): ", d->ccr.points);
         d->ccr.mode = CCR_PO_MAGIC;
@@ -1221,7 +1211,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
             } else {
               GET_FORCE_POINTS(CH) = 35;
               ccr_aspect_menu(d);
-             }
+            }
           } else if (d->ccr.pr[PO_MAGIC] == CCR_MAGIC_ADEPT) {
             GET_TRADITION(CH) = TRAD_ADEPT;
             GET_PP(CH) = 600;
@@ -1679,9 +1669,10 @@ void create_parse(struct descriptor_data *d, const char *arg)
     case 'c':
     case 'd':
     case 'e':
-      if (d->ccr.pr[(int)(LOWER(*arg)-'a')] == PR_RACE)
+      if (d->ccr.pr[(int)(LOWER(*arg)-'a')] == PR_RACE) {
+        send_to_char(CH, "Sorry, your race choice is locked due to code limitations. If you need to change it, please reconnect and restart creation.\r\n");
         priority_menu(d);
-      else {
+      } else {
         d->ccr.temp = (int)(LOWER(*arg)-'a');
         SEND_TO_Q(assign_menu, d);
         SEND_TO_Q("\r\nPriority to assign (c to clear): ", d);
@@ -1715,8 +1706,10 @@ void create_parse(struct descriptor_data *d, const char *arg)
         } else
           GET_TRADITION(d->character) = TRAD_MUNDANE;
         start_game(d);
-      } else
+      } else {
+        send_to_char("You need to finish setting your priorities first.\r\n", CH);
         priority_menu(d);
+      }
       break;
     case '?':
       display_help(buf2, MAX_STRING_LENGTH, "priorities", d->character);

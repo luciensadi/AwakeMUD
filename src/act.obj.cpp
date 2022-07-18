@@ -40,6 +40,7 @@ extern void check_quest_destroy(struct char_data *ch, struct obj_data *obj);
 extern void dominator_mode_switch(struct char_data *ch, struct obj_data *obj, int mode);
 extern float get_bulletpants_weight(struct char_data *ch);
 extern int calculate_vehicle_weight(struct veh_data *veh);
+extern bool House_can_enter(struct char_data *ch, vnum_t house);
 
 // Corpse saving externs.
 extern void write_world_to_disk(int vnum);
@@ -496,6 +497,44 @@ ACMD(do_put)
     } else {
       send_to_char(ch, "You don't see %s %s here.\r\n", AN(arg2), arg2);
     }
+    return;
+  }
+
+  // Combine drugs.
+  if (GET_OBJ_TYPE(cont) == ITEM_DRUG || GET_OBJ_VNUM(cont) == OBJ_ANTI_DRUG_CHEMS) {
+    if (!(obj = get_obj_in_list_vis(ch, arg1, ch->carrying))) {
+      send_to_char(ch, "You aren't carrying %s %s.\r\n", AN(arg1), arg1);
+      return;
+    }
+
+    if (obj == cont) {
+      send_to_char(ch, "You cannot combine %s with itself.\r\n", GET_OBJ_NAME(obj));
+      return;
+    }
+
+    if (GET_OBJ_VNUM(cont) == OBJ_ANTI_DRUG_CHEMS) {
+      if (GET_OBJ_VNUM(obj) != OBJ_ANTI_DRUG_CHEMS) {
+        send_to_char("You can only combine chems with other chems.\r\n", ch);
+        return;
+      }
+
+      send_to_char("You combine the chems.\r\n", ch);
+      GET_CHEMS_QTY(cont) += GET_CHEMS_QTY(obj);
+      GET_CHEMS_QTY(obj) = 0;
+      extract_obj(obj);
+      return;
+    } else {
+      if (GET_OBJ_TYPE(obj) != ITEM_DRUG || GET_OBJ_DRUG_TYPE(obj) != GET_OBJ_DRUG_TYPE(cont)) {
+        send_to_char(ch, "You can only combine %s with other doses of %s, and %s doesn't qualify.\r\n",
+          decapitalize_a_an(GET_OBJ_NAME(cont)),
+          drug_types[GET_OBJ_DRUG_TYPE(cont)].name,
+          GET_OBJ_NAME(obj)
+        );
+        return;
+      }
+    }
+
+    combine_drugs(ch, obj, cont, TRUE);
     return;
   }
 
@@ -1417,6 +1456,15 @@ ACMD(do_get)
       act("$n removes $p from a body compartment.", TRUE, ch, 0, obj, TO_ROOM);
     }
   } else if (!*arg2 || download) {
+    // Prevent ambiguous 'take drug' command.
+    if (subcmd == SCMD_TAKE) {
+      for (int i = MIN_DRUG; i < NUM_DRUGS; i++) {
+        if (!str_cmp(drug_types[i].name, arg1)) {
+          send_to_char("Command ambiguous-- please either ^WGET^n or ^WUSE^n drugs.\r\n", ch);
+          return;
+        }
+      }
+    }
     get_from_room(ch, arg1, download);
   } else {
     cont_dotmode = find_all_dots(arg2, sizeof(arg2));
@@ -1480,6 +1528,7 @@ ACMD(do_get)
             case TYPE_ROLLBARS:
             case TYPE_TIRES:
             case TYPE_MISC:
+            case TYPE_POKEYSTICK:
               target = 3;
               break;
             default:
@@ -1764,7 +1813,7 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
     // It'd be great if we could allow drones and bikes to be dropped anywhere not flagged !BIKE, but this
     // would cause issues with the current world-- the !bike flag is placed at entrances to zones, not
     // spread throughout the whole thing. People would just carry their bikes in, drop them, and do drivebys.
-    if (!(ROOM_FLAGGED(ch->in_room, ROOM_ROAD) || ROOM_FLAGGED(ch->in_room, ROOM_GARAGE))) {
+    if (!(ROOM_FLAGGED(ch->in_room, ROOM_ROAD) || ROOM_FLAGGED(ch->in_room, ROOM_GARAGE) || House_can_enter(ch, GET_ROOM_VNUM(ch->in_room)))) {
       send_to_char("You can only drop vehicles on roads or in garages.\r\n", ch);
       return 0;
     }
@@ -1849,7 +1898,7 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
         send_to_char("There is too much in the vehicle already!\r\n", ch);
         return 0;
       }
-      if (ch->vfront && ch->in_veh->seating[0] && ch->in_veh->usedload + GET_OBJ_WEIGHT(obj) > ch->in_veh->load / 10) {
+      if (ch->vfront && ch->in_veh->seating[SEATING_REAR] > 0 && ch->in_veh->usedload + GET_OBJ_WEIGHT(obj) > ch->in_veh->load / 10) {
         send_to_char("There is too much in the front of the vehicle!\r\n", ch);
         return 0;
       }
@@ -3502,7 +3551,7 @@ ACMD(do_activate)
 
       int delta = ((int)(GET_REAL_MAG(ch) / 100) * 100) - GET_POWER_POINTS(ch);
       if (total > delta)
-        send_to_char(ch, "That costs %d points to activate, but you only have %d free.\r\n", (total / 100), (delta / 100));
+        send_to_char(ch, "That costs %.2f points to activate, but you only have %.2f free.\r\n", (float)(total / 100), (float)(delta / 100));
       else if (GET_POWER_ACT(ch, i) == x) {
         send_to_char(ch, "%s is already active at rank %d.\r\n", CAP(adept_powers[i]), x);
         return;
@@ -4181,12 +4230,20 @@ ACMD(do_break)
   else if (!(contents = obj->contains))
     send_to_char("Your tooth compartment is empty, so breaking it now would be a waste.\r\n", ch);
   else {
-    extern void do_drug_take(struct char_data *ch, struct obj_data *obj);
+    if (GET_OBJ_TYPE(contents) != ITEM_DRUG) {
+      send_to_char(ch, "Your tooth compartment contains something that isn't drugs! Aborting.\r\n");
+      snprintf(buf, sizeof(buf), "%s's tooth compartment contains non-drug item %s!", GET_CHAR_NAME(ch), GET_OBJ_NAME(contents));
+      mudlog(buf, ch, LOG_SYSLOG, TRUE);
+      return;
+    }
+
     send_to_char("You bite down hard on the tooth compartment, breaking it open.\r\n", ch);
     obj_from_cyberware(obj);
-    GET_ESSHOLE(ch) += GET_OBJ_VAL(obj, 4);
-    do_drug_take(ch, contents);
+    GET_ESSHOLE(ch) += GET_CYBERWARE_ESSENCE_COST(obj);
+    obj_from_obj(contents);
     extract_obj(obj);
+    if (do_drug_take(ch, contents))
+      return;
   }
 }
 

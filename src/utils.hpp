@@ -13,6 +13,7 @@
 
 #include <stdio.h>
 #include "bitfield.hpp"
+#include "config.hpp"
 
 #if defined(osx)
 /* crypt() is defined in unistd.h in OSX. */
@@ -73,6 +74,7 @@ int     light_level(struct room_data *room);
 bool    biocyber_compatibility(struct obj_data *obj1, struct obj_data *obj2, struct char_data *ch);
 void    magic_loss(struct char_data *ch, int magic, bool msg);
 bool    has_kit(struct char_data *ch, int type);
+int     has_key(struct char_data *ch, int key_vnum);
 struct  obj_data *find_workshop(struct char_data *ch, int type);
 void    add_workshop_to_room(struct obj_data *obj);
 void    remove_workshop_from_room(struct obj_data *obj);
@@ -98,6 +100,7 @@ char *  generate_new_loggable_representation(struct obj_data *obj);
 void    purgelog(struct veh_data *veh);
 char *  replace_substring(char *source, char *dest, const char *replace_target, const char *replacement);
 bool    combine_ammo_boxes(struct char_data *ch, struct obj_data *from, struct obj_data *into, bool print_messages);
+bool    combine_drugs(struct char_data *ch, struct obj_data *from, struct obj_data *into, bool print_messages);
 void    update_ammobox_ammo_quantity(struct obj_data *ammobox, int amount);
 void    destroy_door(struct room_data *room, int dir);
 bool    spell_is_nerp(int spell_num);
@@ -127,6 +130,14 @@ bool    veh_can_traverse_air(struct veh_data *veh);
 int     get_br_skill_for_veh(struct veh_data *veh);
 int     get_pilot_skill_for_veh(struct veh_data *veh);
 int     calculate_vehicle_weight(struct veh_data *veh);
+char *  replace_neutral_color_codes(const char *input, const char *replacement_code);
+bool    repair_vehicle_seating(struct veh_data *veh);
+bool    is_voice_masked(struct char_data *ch);
+bool    force_perception(struct char_data *ch);
+int     get_focus_bond_cost(struct obj_data *obj);
+
+struct obj_data *obj_is_or_contains_obj_with_vnum(struct obj_data *obj, vnum_t vnum);
+struct obj_data *ch_has_obj_with_vnum(struct char_data *ch, vnum_t vnum);
 
 void load_vehicle_brain(struct veh_data *veh);
 void remove_vehicle_brain(struct veh_data *veh);
@@ -178,6 +189,7 @@ bool    circle_follow(struct char_data *ch, struct char_data * victim);
 
 /* in act.informative.c */
 void    look_at_room(struct char_data *ch, int mode, int is_quicklook);
+void    peek_into_adjacent(struct char_data * ch, int dir);
 
 /* in act.movmement.c */
 int     do_simple_move(struct char_data *ch, int dir, int extra, struct
@@ -386,6 +398,10 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define SETTABLE_EMAIL(ch)   ((ch)->player.email)
 #define GET_CHAR_MULTIPLIER(ch) ((ch)->player.multiplier)
 
+#define GET_CHAR_FIRE_DURATION(ch)      ((ch)->points.fire[0])
+#define GET_CHAR_FIRE_BONUS_DAMAGE(ch)  ((ch)->points.fire[1])
+#define GET_CHAR_FIRE_CAUSED_BY_PC(ch)  ((ch)->points.fire[2])
+
 /*
  * I wonder if this definition of GET_REAL_LEVEL should be the definition
  * of GET_LEVEL?  JE
@@ -430,8 +446,9 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define GET_REAL_BOD(ch)           (GET_REAL_ATT((ch), BOD))
 #define GET_REAL_CHA(ch)           (GET_REAL_ATT((ch), CHA))
 #define GET_REAL_REA(ch)           (GET_REAL_ATT((ch), REA))
-#define GET_REAL_MAG(ch)           ((ch)->real_abils.mag)
+#define GET_REAL_MAG(ch)           (MIN((ch)->real_abils.mag, MAGIC_CAP))
 #define GET_REAL_ESS(ch)           ((ch)->real_abils.ess)
+#define GET_SETTABLE_REAL_MAG(ch)  ((ch)->real_abils.mag)
 
 #define GET_KARMA(ch)         ((ch)->points.karma)
 #define GET_REP(ch)           ((ch)->points.rep)
@@ -494,9 +511,10 @@ int get_armor_penalty_grade(struct char_data *ch);
 
 #define SHOOTING_DIR(ch)        ((ch)->char_specials.shooting_dir)
 
-#define GET_LANGUAGE(ch)      ((ch)->char_specials.saved.cur_lang)
-#define GET_NUM_FIGHTING(ch)  ((ch)->char_specials.fightList.NumItems())
-#define GET_NUM_ATTACKING(ch) ((ch)->char_specials.defendList.NumItems())
+#define GET_LANGUAGE(ch)        ((ch)->char_specials.saved.cur_lang)
+#define GET_VIABLE_LANGUAGE(ch) (SKILL_IS_LANGUAGE(GET_LANGUAGE((ch))) ? GET_LANGUAGE((ch)) : SKILL_ENGLISH)
+#define GET_NUM_FIGHTING(ch)    ((ch)->char_specials.fightList.NumItems())
+#define GET_NUM_ATTACKING(ch)   ((ch)->char_specials.defendList.NumItems())
 
 #define GET_COND(ch, i)         ((ch)->player_specials->saved.conditions[(i)])
 #define GET_LOADROOM(ch)        ((ch)->player_specials->saved.load_room)
@@ -533,12 +551,14 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define GET_RESTRING_POINTS(ch)	((ch)->player_specials->saved.restring_points)
 #define GET_ARCHETYPAL_TYPE(ch)	((ch)->player_specials->saved.archetype)
 #define GET_ARCHETYPAL_MODE(ch)	((ch)->player_specials->saved.archetypal)
-#define GET_TARGET_MOD(ch)	((ch)->char_specials.target_mod)
+#define GET_TARGET_MOD(ch)	    ((ch)->char_specials.target_mod)
+#define GET_CONCENTRATION_TARGET_MOD(ch)	((ch)->char_specials.concentration_target_mod)
 #define LAST_HEAL(ch)		((ch)->char_specials.last_healed)
 #define GET_FOCI(ch)		((ch)->char_specials.foci)
 #define GET_QUEST(ch)		((ch)->desc && (ch)->desc->original ? (ch)->desc->original->player_specials->questnum : \
                                                                       (ch)->player_specials->questnum)
 #define GET_LQUEST(ch, i)	      ((ch)->player_specials->last_quest[i])
+#define GET_PLAYER_WHERE_COMMANDS(ch) ((ch)->player_specials->wherelist_checks)
 #define POOFIN(ch)              ((ch)->player.poofin)
 #define POOFOUT(ch)             ((ch)->player.poofout)
 #define GET_PROMPT(ch)          ((PLR_FLAGGED((ch), PLR_MATRIX) ? (ch)->player.matrixprompt : (ch)->player.prompt))
@@ -587,7 +607,6 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define GET_METAMAGIC_DIRTY_BIT(ch)     ((ch)->char_specials.dirty_bits[DIRTY_BIT_METAMAGIC])
 #define GET_ELEMENTALS_DIRTY_BIT(ch)    ((ch)->char_specials.dirty_bits[DIRTY_BIT_ELEMENTALS])
 #define GET_MEMORY_DIRTY_BIT(ch)        ((ch)->char_specials.dirty_bits[DIRTY_BIT_MEMORY])
-// #define GET_DRUG_DIRTY_BIT(ch)          ((ch)->char_specials.dirty_bits[DIRTY_BIT_DRUG])
 #define GET_ALIAS_DIRTY_BIT(ch)         ((ch)->char_specials.dirty_bits[DIRTY_BIT_ALIAS])
 
 #define GET_CONGREGATION_BONUS(ch) ((ch)->congregation_bonus_pool)
@@ -628,20 +647,8 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define GET_TOTEM(ch)                              (ch->player_specials->saved.totem)
 #define GET_TOTEMSPIRIT(ch)                        (ch->player_specials->saved.totemspirit)
 
-#define GET_DRUG_AFFECT(ch)                        (ch->player_specials->drug_affect[0])
-#define GET_DRUG_DURATION(ch)                      (ch->player_specials->drug_affect[1])
-#define GET_DRUG_DOSE(ch)                          (ch->player_specials->drug_affect[2])
-#define GET_DRUG_STAGE(ch)                         (ch->player_specials->drug_affect[3])
-#define GET_DRUG_EDGE(ch, i)                       (ch->player_specials->drugs[i][0])
-#define GET_DRUG_ADDICT(ch, i)                     (ch->player_specials->drugs[i][1])
-#define GET_DRUG_DOSES(ch, i)                      (ch->player_specials->drugs[i][2])
-#define GET_DRUG_LASTFIX(ch, i)                    (ch->player_specials->drugs[i][3])
-#define GET_DRUG_ADDTIME(ch, i)                    (ch->player_specials->drugs[i][4])
-#define GET_DRUG_TOLERANT(ch, i)                   (ch->player_specials->drugs[i][5])
-#define GET_DRUG_LASTWITH(ch, i)                   (ch->player_specials->drugs[i][6])
 #define GET_MENTAL_LOSS(ch)                        (ch->player_specials->mental_loss)
 #define GET_PHYSICAL_LOSS(ch)                      (ch->player_specials->physical_loss)
-#define GET_PERM_BOD_LOSS(ch)                      (ch->player_specials->perm_bod)
 #define GET_NUYEN_PAID_FOR_WHERES_MY_CAR(ch)       (ch->desc->nuyen_paid_for_wheres_my_car)
 #define GET_NUYEN_INCOME_THIS_PLAY_SESSION(ch, i)  (ch->desc->nuyen_income_this_play_session[i])
 /* descriptor-based utils ************************************************/
@@ -908,7 +915,12 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 
 // ITEM_GYRO convenience defines
 
-// ITEM_DRUG convenience defines
+// ITEM_DRUG convenience defines. Yes, I know this violates the naming convention, but someone named all the
+// character drug references 'get_drug_x' already, so this one was extra confusing.
+#define GET_OBJ_DRUG_TYPE(drug)                   (GET_OBJ_VAL((drug), 0))
+#define GET_OBJ_DRUG_DOSES(drug)                  (GET_OBJ_VAL((drug), 1))
+
+#define GET_CHEMS_QTY(chems)                      (GET_OBJ_VAL((chems), 0))
 
 // ITEM_WORN convenience defines
 #define GET_WORN_POCKETS_HOLSTERS(worn)           (GET_OBJ_VAL((worn), 0))
@@ -959,14 +971,12 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 
 
 // ITEM_BIOWARE convenience defines
-
 #define GET_BIOWARE_TYPE(bioware)                    (GET_OBJ_VAL((bioware), 0))
 #define GET_BIOWARE_RATING(bioware)                  (GET_OBJ_VAL((bioware), 1))
-#define GET_BIOWARE_IS_CULTURED(bioware)             (GET_OBJ_VAL((bioware), 2) || GET_BIOWARE_TYPE((bioware)) >= BIO_CEREBRALBOOSTER)
+#define GET_BIOWARE_IS_CULTURED(bioware)             (GET_OBJ_VAL((bioware), 2) || (GET_BIOWARE_TYPE((bioware)) >= BIO_CEREBRALBOOSTER && GET_BIOWARE_TYPE(bioware) <= BIO_TRAUMADAMPER))
 #define GET_SETTABLE_BIOWARE_IS_CULTURED(bioware)    (GET_OBJ_VAL((bioware), 2))
 #define GET_BIOWARE_IS_ACTIVATED(bioware)            (GET_OBJ_VAL((bioware), 3))
 #define GET_BIOWARE_ESSENCE_COST(bioware)            (GET_OBJ_VAL((bioware), 4))
-
 #define GET_BIOWARE_FLAGS(bioware)                   (GET_OBJ_VAL((bioware), 11))
 
 // Platelet factory extra data.
@@ -975,6 +985,11 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 
 // Symbiote extra data.
 #define GET_BIOWARE_SYMBIOTE_CONDITION_DATA(bioware)    (GET_OBJ_VAL((bioware), 6))
+
+// Adrenaline pump extra data.
+#define GET_BIOWARE_PUMP_ADRENALINE(bioware)         (GET_OBJ_VAL((bioware), 5)) //Adrenaline in the Adrenaline Pump sack. Controls duration.
+#define GET_BIOWARE_PUMP_TEST_TN(bioware)            (GET_OBJ_VAL((bioware), 6)) //TN for Adrenaline Pump crash test, set when activating the pump the the value of GET_BIOWARE_PUMP_ADRENALINE()
+
 
 // ITEM_FOUNTAIN convenience defines
 
@@ -1113,6 +1128,8 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 
 
 /* Misc utils ************************************************************/
+#define CHECK_FUNC_AND_SFUNC_FOR(npc, function) (mob_index[GET_MOB_RNUM(npc)].func == (function) || mob_index[GET_MOB_RNUM(npc)].sfunc == (function))
+
 #define IS_DAMTYPE_PHYSICAL(type) \
   !((type) == TYPE_HIT || (type) == TYPE_BLUDGEON || (type) == TYPE_PUNCH || (type) == TYPE_TASER || (type) == TYPE_CRUSH || (type) == TYPE_POUND)
 

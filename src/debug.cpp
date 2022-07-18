@@ -18,10 +18,12 @@
 #include "playergroups.hpp"
 #include "structs.hpp"
 #include "handler.hpp"
-#include "perception_tests.hpp"
+#include "invis_resistance_tests.hpp"
 
 // The linked list of loaded playergroups.
 extern Playergroup *loaded_playergroups;
+
+extern void _put_char_in_withdrawal(struct char_data *ch, int drug_id, bool is_guided);
 
 // We're looking to verify that everything is kosher. Validate canaries, etc.
 void verify_data(struct char_data *ch, const char *line, int cmd, int subcmd, const char *section) {
@@ -106,10 +108,32 @@ ACMD(do_debug) {
 
   if (strn_cmp(arg1, "pgroups", strlen(arg1)) == 0) {
     do_pgroup_debug(ch, rest_of_argument);
+    return;
+  }
+
+  if (strn_cmp(arg1, "maxfunc", strlen(arg1)) == 0) {
+    send_to_char(ch, "MAX(-1, 1) = %d", MAX(-1, 1));
+    return;
   }
 
   if (access_level(ch, LVL_PRESIDENT) && is_abbrev(arg1, "invis")) {
     can_see_through_invis(ch, ch);
+    return;
+  }
+
+  if (access_level(ch, LVL_PRESIDENT) && is_abbrev(arg1, "drugs")) {
+    int drug_id = DRUG_KAMIKAZE;
+
+    send_to_char(ch, "OK, setting you as addicted to %s and putting you just before withdrawal starts.\r\n", drug_types[drug_id].name);
+    PLR_FLAGS(ch).SetBit(PLR_ENABLED_DRUGS);
+
+    GET_DRUG_ADDICT(ch, drug_id) = IS_ADDICTED;
+    GET_DRUG_DOSE(ch, drug_id) = 0;
+    GET_DRUG_ADDICTION_EDGE(ch, drug_id) = 3;
+    GET_DRUG_TOLERANCE_LEVEL(ch, drug_id) = 3;
+
+    GET_DRUG_STAGE(ch, drug_id) = DRUG_STAGE_UNAFFECTED;
+    GET_DRUG_LAST_FIX(ch, drug_id) = time(0) - (60 * 60 * 24 * 90);
     return;
   }
 

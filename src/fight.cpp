@@ -22,7 +22,7 @@
 #include "newmagic.hpp"
 #include "bullet_pants.hpp"
 #include "ignore_system.hpp"
-#include "perception_tests.hpp"
+#include "invis_resistance_tests.hpp"
 
 /* Structures */
 struct char_data *combat_list = NULL;   /* head of l-list of fighting chars */
@@ -234,6 +234,7 @@ void update_pos(struct char_data * victim)
     GET_POS(victim) = POS_DEAD;
   } else {
     GET_POS(victim) = POS_MORTALLYW;
+    AFF_FLAGS(victim).RemoveBit(AFF_PRONE);
   }
 
   GET_INIT_ROLL(victim) = 0;
@@ -800,7 +801,8 @@ void raw_kill(struct char_data * ch)
             GET_BIOWARE_IS_ACTIVATED(bio) = 0;
             break;
         }
-      GET_DRUG_AFFECT(ch) = GET_DRUG_DURATION(ch) = GET_DRUG_STAGE(ch) = 0;
+
+      reset_all_drugs_for_char(ch);
 
       if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
         i = real_room(RM_CHARGEN_START_ROOM);
@@ -859,42 +861,47 @@ void raw_kill(struct char_data * ch)
   else extract_char(ch);
 }
 
-void death_penalty(struct char_data *ch)
-{
-  int attribute = 0;
+int raw_stat_loss(struct char_data *ch) {
   int old_tke = GET_TKE( ch );
 
+  for (int limiter = 100; limiter > 0; limiter--) {
+    int attribute = number(BOD, WIL);
+
+    if (GET_REAL_ATT(ch, attribute) > MAX(1, 1 + racial_attribute_modifiers[(int)GET_RACE(ch)][attribute])) {
+      // We can safely knock down the attribute since we've guaranteed it's above their racial minimum.
+      int karma_to_lose = MIN(GET_TKE(ch), 2 * GET_REAL_ATT(ch, attribute));
+
+      // Take the full amount from TKE.
+      GET_TKE(ch) -= karma_to_lose;
+
+      // Take half of the amount from notoriety and reputation each.
+      GET_NOT(ch) -= karma_to_lose / 2;
+      GET_REP(ch) -= karma_to_lose / 2;
+
+      // Knock down the attribute.
+      GET_REAL_ATT(ch, attribute)--;
+      snprintf(buf, sizeof(buf),"%s lost a point of %s.  Total Karma Earned from %d to %d.",
+              GET_CHAR_NAME(ch), short_attributes[attribute], old_tke, GET_TKE( ch ) );
+      mudlog(buf, ch, LOG_DEATHLOG, TRUE);
+      return attribute;
+    }
+  }
+  mudlog("Note: Would have lost attribute point, but couldn't find one to lose.", ch, LOG_DEATHLOG, TRUE);
+  return -1;
+}
+
+void death_penalty(struct char_data *ch)
+{
   if(!IS_NPC(ch)
      && !PLR_FLAGGED(ch, PLR_NEWBIE)
      && !number(0, DEATH_PENALTY_CHANCE)) // a 1:25 chance of incurring death penalty.
   {
-    for (int limiter = 100; limiter > 0; limiter--) {
-      attribute = number(0,5);
-
-      if (GET_REAL_ATT(ch, attribute) > MAX(1, 1 + racial_attribute_modifiers[(int)GET_RACE(ch)][attribute])) {
-        // We can safely knock down the attribute since we've guaranteed it's above their racial minimum.
-        int karma_to_lose = MIN(GET_TKE(ch), 2 * GET_REAL_ATT(ch, attribute));
-
-        // Take the full amount from TKE.
-        GET_TKE(ch) -= karma_to_lose;
-
-        // Take half of the amount from notoriety and reputation each.
-        GET_NOT(ch) -= karma_to_lose / 2;
-        GET_REP(ch) -= karma_to_lose / 2;
-
-        // Knock down the attribute.
-        GET_REAL_ATT(ch, attribute)--;
-        snprintf(buf, sizeof(buf),"%s lost a point of %s.  Total Karma Earned from %d to %d.",
-                GET_CHAR_NAME(ch), short_attributes[attribute], old_tke, GET_TKE( ch ) );
-        mudlog(buf, ch, LOG_DEATHLOG, TRUE);
-
-        send_to_char(ch, "^yThere are some things even the DocWagon can't fix :(^n\r\n"
-                         "You've lost a point of %s from that death. You can re-train it at a trainer.\r\n",
-                         attributes[attribute]);
-        return;
-      }
+    int lost_attribute = raw_stat_loss(ch);
+    if (lost_attribute >= BOD) {
+      send_to_char(ch, "^yThere are some things even the DocWagon can't fix :(^n\r\n"
+                       "You've lost a point of %s from that death. You can re-train it at a trainer.\r\n",
+                       attributes[lost_attribute]);
     }
-    mudlog("Note: Would have lost attribute point, but couldn't find one to lose.", ch, LOG_DEATHLOG, TRUE);
   }
 }
 
@@ -1081,7 +1088,9 @@ void group_gain(struct char_data * ch, struct char_data * victim)
 
   for (f = k->followers; f; f = f->next)
     if (IS_AFFECTED(f->follower, AFF_GROUP)
-        && f->follower->in_room == ch->in_room) {
+        && f->follower->in_room == ch->in_room
+        && !IS_PC_CONJURED_ELEMENTAL(f->follower) && !IS_SPIRIT(f->follower))
+    {
       if (GET_NOT(high) < GET_NOT(f->follower))
         high = f->follower;
       tot_members++;
@@ -1981,23 +1990,37 @@ void damage_obj(struct char_data *ch, struct obj_data *obj, int power, int type)
     mudlog(buf, ch, LOG_SYSLOG, TRUE);
     delete [] representation;
 
-    // Disgorge contents, except for pocsecs.
-    if (GET_OBJ_SPEC(obj) != pocket_sec) {
-      for (temp = obj->contains; temp; temp = next) {
-        next = temp->next_content;
-        obj_from_obj(temp);
-        if ((IS_OBJ_STAT(obj, ITEM_EXTRA_CORPSE) && !GET_OBJ_VAL(obj, 4) && GET_OBJ_TYPE(temp) != ITEM_MONEY)
-            || GET_OBJ_VNUM(obj) == OBJ_POCKET_SECRETARY_FOLDER)
-        {
-          extract_obj(temp);
-        } else if (vict)
-          obj_to_char(temp, vict);
-        else if (obj->in_room)
-          obj_to_room(temp, obj->in_room);
-        else
-          extract_obj(temp);
-      }
+    // Disgorge contents.
+    switch (GET_OBJ_TYPE(obj)) {
+      case ITEM_WEAPON:
+      case ITEM_FIREWEAPON:
+      case ITEM_CUSTOM_DECK:
+      case ITEM_CYBERDECK:
+      case ITEM_VEHCONTAINER:
+      case ITEM_SHOPCONTAINER:
+      case ITEM_PART:
+        // We don't disgorge these. Doing so causes bugs.
+        break;
+      default:
+        if (GET_OBJ_SPEC(obj) != pocket_sec) {
+          for (temp = obj->contains; temp; temp = next) {
+            next = temp->next_content;
+            obj_from_obj(temp);
+            if ((IS_OBJ_STAT(obj, ITEM_EXTRA_CORPSE) && !GET_OBJ_VAL(obj, 4) && GET_OBJ_TYPE(temp) != ITEM_MONEY)
+                || GET_OBJ_VNUM(obj) == OBJ_POCKET_SECRETARY_FOLDER)
+            {
+              extract_obj(temp);
+            } else if (vict)
+              obj_to_char(temp, vict);
+            else if (obj->in_room)
+              obj_to_room(temp, obj->in_room);
+            else
+              extract_obj(temp);
+          }
+        }
+        break;
     }
+
     extract_obj(obj);
   }
 }
@@ -2118,7 +2141,9 @@ void docwagon(struct char_data *ch)
     }
     char_from_room(ch);
     char_to_room(ch, &world[i]);
-    creds = MAX((number(8, 12) * 500 / GET_DOCWAGON_CONTRACT_GRADE(docwagon)), (int)(GET_NUYEN(ch) / 10));
+
+    int dw_random_cost = number(8, 12) * 500 / GET_DOCWAGON_CONTRACT_GRADE(docwagon);
+    creds = MAX(dw_random_cost, (int)(GET_NUYEN(ch) / 10));
     send_to_char(ch, "DocWagon demands %d nuyen for your rescue.\r\n", creds);
     if ((GET_NUYEN(ch) + GET_BANK(ch)) < creds) {
       send_to_char("Not finding sufficient payment, your DocWagon contract was retracted.\r\n", ch);
@@ -2133,20 +2158,30 @@ void docwagon(struct char_data *ch)
   return;
 }
 
-
+// M&M p.63-64
+// Mode 1 for activation, mode 0 for reducing duration in turns.
 bool check_adrenaline(struct char_data *ch, int mode)
 {
   int i, dam;
   struct obj_data *pump = NULL;
+  bool early_activation = FALSE;
 
-  for (pump = ch->bioware; pump && GET_OBJ_VAL(pump, 0) != BIO_ADRENALPUMP; pump = pump->next_content)
+  for (pump = ch->bioware; pump && GET_BIOWARE_TYPE(pump) != BIO_ADRENALPUMP; pump = pump->next_content)
     ;
   if (!pump)
     return FALSE;
-  if (GET_OBJ_VAL(pump, 5) == 0 && mode == 1)
-  {
-    GET_OBJ_VAL(pump, 5) = dice(GET_OBJ_VAL(pump, 1), 6);
-    GET_OBJ_VAL(pump, 6) = GET_OBJ_VAL(pump, 5);
+  if (mode && GET_BIOWARE_PUMP_ADRENALINE(pump) <= 0) {
+    if (GET_BIOWARE_PUMP_ADRENALINE(pump) < 0)
+      early_activation = TRUE;
+
+    // We want to increase the pump duration without increasing the TN test so we're doing the duration roll in the
+    // TN value directly and multiply that. Previous possible duration was 2-12 seconds per pump level and there was
+    // a bug decreasing it twice too. Multiplying the roll x10 and we'll see how that pans out.
+    GET_BIOWARE_PUMP_TEST_TN(pump) = GET_BIOWARE_RATING(pump) == 2 ? srdice() + srdice() : srdice();
+    GET_BIOWARE_PUMP_ADRENALINE(pump)  = GET_BIOWARE_PUMP_TEST_TN(pump) * 10;
+    // Reactivation before the adrenaline sack is completely full?
+    if (early_activation)
+      GET_BIOWARE_PUMP_ADRENALINE(pump) /= 2;
     if (!IS_JACKED_IN(ch))
       send_to_char("Your body is wracked with renewed vitality as adrenaline pumps into your bloodstream.\r\n", ch);
     for (i = 0; i < MAX_OBJ_AFFECT; i++)
@@ -2154,28 +2189,31 @@ bool check_adrenaline(struct char_data *ch, int mode)
                     pump->affected[i].location,
                     pump->affected[i].modifier,
                     pump->obj_flags.bitvector, TRUE);
-  } else if (GET_OBJ_VAL(pump, 5) > 0 && !mode)
-  {
-    GET_OBJ_VAL(pump, 5)--;
-    if (GET_OBJ_VAL(pump, 5) == 0) {
+  }
+  else if (GET_OBJ_VAL(pump, 5) > 0 && !mode) {
+    GET_BIOWARE_PUMP_ADRENALINE(pump)--;
+    if (GET_BIOWARE_PUMP_ADRENALINE(pump) == 0) {
       for (i = 0; i < MAX_OBJ_AFFECT; i++)
         affect_modify(ch,
                       pump->affected[i].location,
                       pump->affected[i].modifier,
                       pump->obj_flags.bitvector, FALSE);
-      GET_OBJ_VAL(pump, 5) = -number(80, 100);
+      GET_BIOWARE_PUMP_ADRENALINE(pump) = -number(60, 90);
       if (!IS_JACKED_IN(ch))
         send_to_char("Your body softens and relaxes as the adrenaline wears off.\r\n", ch);
       dam = convert_damage(stage(-success_test(GET_BOD(ch) + GET_BODY(ch),
-                                               (int)(GET_OBJ_VAL(pump, 6) / 2)), DEADLY));
-      GET_OBJ_VAL(pump, 6) = 0;
+                                 (int)(GET_BIOWARE_PUMP_TEST_TN(pump) / 2)), DEADLY));
+      GET_BIOWARE_PUMP_TEST_TN(pump) = 0;
       if (damage(ch, ch, dam, TYPE_BIOWARE, FALSE)) {
         // Died-- RIP
         return TRUE;
       }
     }
-  } else if (GET_OBJ_VAL(pump, 5) < 0 && !mode)
-    GET_OBJ_VAL(pump, 5)++;
+  } else if (!mode && GET_BIOWARE_PUMP_ADRENALINE(pump) < 0) {
+    GET_BIOWARE_PUMP_ADRENALINE(pump)++;
+    if (GET_BIOWARE_PUMP_ADRENALINE(pump) == 0)
+      send_to_char("Your feel your adrenaline pump is full.\r\n", ch);
+  }
   return FALSE;
 }
 
@@ -2311,6 +2349,16 @@ void gen_death_msg(struct char_data *ch, struct char_data *vict, int attacktype)
           break;
         case 4:
           WRITE_DEATH_MESSAGE("Maybe %s got a defective piece of bioware... {%s (%ld)}");
+          break;
+      }
+      break;
+    case TYPE_DRUGS:
+      switch (number(0, 1)) {
+        case 0:
+          WRITE_DEATH_MESSAGE("%s failed to graduate from the school of hard knocks. {%s (%ld)}");
+          break;
+        case 1:
+          WRITE_DEATH_MESSAGE("%s didn't survive the drugs. {%s (%ld)}");
           break;
       }
       break;
@@ -2562,6 +2610,10 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
   if (ch == victim) {
     if (attacktype == TYPE_SPELL_DRAIN) {
       snprintf(rbuf, sizeof(rbuf), "Drain damage (%s: ", GET_CHAR_NAME(ch));
+    } else if (attacktype == TYPE_DRUGS) {
+      snprintf(rbuf, sizeof(rbuf), "Drug damage (%s: ", GET_CHAR_NAME(ch));
+    } else if (attacktype == TYPE_BIOWARE) {
+      snprintf(rbuf, sizeof(rbuf), "Bioware damage (%s: ", GET_CHAR_NAME(ch));
     } else {
       snprintf(rbuf, sizeof(rbuf), "Self-damage (%s: ", GET_CHAR_NAME(ch));
     }
@@ -2579,7 +2631,7 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
   if (victim != ch)
   {
 #ifdef IGNORING_IC_ALSO_IGNORES_COMBAT
-    if (IS_IGNORING(victim, is_blocking_ic_interaction_from, ch)) {
+    if (ch != victim && IS_IGNORING(victim, is_blocking_ic_interaction_from, ch)) {
       char oopsbuf[5000];
       snprintf(oopsbuf, sizeof(oopsbuf), "SUPER SYSERR: Somehow, we made it all the way to damage() with the victim ignoring the attacker! "
                                          "%s ch, %s victim, %d dam, %d attacktype, %d is_physical, %d send_message.",
@@ -2589,7 +2641,7 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
       return 0;
     }
 
-    if (IS_IGNORING(ch, is_blocking_ic_interaction_from, victim)) {
+    if (ch != victim && IS_IGNORING(ch, is_blocking_ic_interaction_from, victim)) {
       char oopsbuf[5000];
       snprintf(oopsbuf, sizeof(oopsbuf), "SUPER SYSERR: Somehow, we made it all the way to damage() with the attacker ignoring the victim! "
                                          "%s ch, %s victim, %d dam, %d attacktype, %d is_physical, %d send_message.",
@@ -2702,7 +2754,7 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
   if (IS_PROJECT(victim) && victim->desc && victim->desc->original)
     real_body = victim->desc->original;
 
-  if (attacktype != TYPE_BIOWARE) {
+  if (attacktype != TYPE_BIOWARE && attacktype != TYPE_DRUGS) {
     for (bio = real_body->bioware; bio; bio = bio->next_content) {
       if (GET_BIOWARE_TYPE(bio) == BIO_PLATELETFACTORY && dam >= 3 && is_physical)
         dam--;
@@ -2781,6 +2833,18 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
           GET_PHYSICAL(victim) -= overflow;
         }
       }
+    }
+
+    // Under Hyper, you take 50% more damage as stun damage, rounded up.
+    if (GET_DRUG_STAGE(victim, DRUG_HYPER) == DRUG_STAGE_ONSET && attacktype != TYPE_DRUGS) {
+      if (damage_without_message(victim, victim, dam / 2 + dam % 2, TYPE_DRUGS, FALSE)) {
+        return TRUE;
+      }
+    }
+
+    // Drug damage can't kill you.
+    if (attacktype == TYPE_DRUGS) {
+      GET_PHYSICAL(real_body) = MAX(GET_PHYSICAL(real_body), 100);
     }
   }
   if (!awake && GET_PHYSICAL(victim) <= 0)
@@ -3953,10 +4017,10 @@ bool vehicle_has_ultrasound_sensors(struct veh_data *veh) {
   return FALSE;
 }
 
-#define INVIS_CODE_STAFF 321
-#define INVIS_CODE_TOTALINVIS 123
-#define BLIND_FIGHTING_MAX 4
-#define BLIND_FIRE_PENALTY 8
+#define INVIS_CODE_STAFF       321
+#define INVIS_CODE_TOTALINVIS  123
+#define BLIND_FIGHTING_MAX     (MAX_VISIBILITY_PENALTY / 2)
+#define BLIND_FIRE_PENALTY     MAX_VISIBILITY_PENALTY
 int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
   int modifier = 0;
   char rbuf[2048];
@@ -4804,9 +4868,17 @@ void roll_individual_initiative(struct char_data *ch)
 {
   if (AWAKE(ch))
   {
-    // TODO: SR3: While rigging, riggers receive only the modifications given them by the vehicle control rig (see Vehicles and Drones, p. 130) they are using.
-    if (AFF_FLAGGED(ch, AFF_PILOT))
-      GET_INIT_ROLL(ch) = dice(1, 6) + GET_REA(ch);
+    // While rigging, riggers receive only the modifications given them by the vehicle control rig (see Vehicles and Drones, p. 130) they are using.
+    if (AFF_FLAGGED(ch, AFF_PILOT) || PLR_FLAGGED(ch, PLR_REMOTE)) {
+      GET_INIT_ROLL(ch) = GET_REAL_REA(ch);
+
+      for (struct obj_data *rig = ch->cyberware; rig; rig = rig->next_content) {
+        if (GET_CYBERWARE_TYPE(rig) == CYB_VCR) {
+          GET_INIT_ROLL(ch) = GET_CYBERWARE_RATING(rig) + dice(1 + GET_CYBERWARE_RATING(rig), 6);
+          break;
+        }
+      }
+    }
     else
       GET_INIT_ROLL(ch) = roll_default_initiative(ch);
     GET_INIT_ROLL(ch) -= damage_modifier(ch, buf, sizeof(buf));
@@ -5492,8 +5564,6 @@ void chkdmg(struct veh_data * veh)
   } else if (veh->damage < VEH_DAM_THRESHOLD_DESTROYED) {
     send_to_veh("The engine starts spewing smoke and flames.\r\n", veh, NULL, TRUE);
   } else {
-    struct char_data *i, *next;
-    struct obj_data *obj, *nextobj;
     int damage_rating, damage_tn;
 
     // Remove any vehicle brains, we don't want them thrown into the street.
@@ -5542,6 +5612,7 @@ void chkdmg(struct veh_data * veh)
       damage_tn = 4;
     }
 
+    // Write purgelogs for player vehicle kills.
     if (veh->owner) {
       mudlog("Writing player vehicle contents to purgelog-- destroyed via standard damage.", NULL, LOG_WRECKLOG, TRUE);
       mudlog("Writing player vehicle contents to purgelog-- destroyed via standard damage.", NULL, LOG_PURGELOG, TRUE);
@@ -5551,8 +5622,11 @@ void chkdmg(struct veh_data * veh)
     if (veh->rigger) {
       send_to_char("Your mind is blasted with pain as your vehicle is wrecked.\r\n", veh->rigger);
       if (!damage(veh->rigger, veh->rigger, convert_damage(stage(-success_test(GET_WIL(veh->rigger), 6), SERIOUS)), TYPE_CRASH, MENTAL)) {
-        veh->rigger->char_specials.rigging = NULL;
-        PLR_FLAGS(veh->rigger).RemoveBit(PLR_REMOTE);
+        // If they got knocked out, they've already broken off from rigging.
+        if (veh->rigger) {
+          veh->rigger->char_specials.rigging = NULL;
+          PLR_FLAGS(veh->rigger).RemoveBit(PLR_REMOTE);
+        }
       }
       veh->rigger = NULL;
     }
@@ -5563,16 +5637,31 @@ void chkdmg(struct veh_data * veh)
     veh->dest = 0;
 
     if (veh->towing) {
-      veh_to_room(veh->towing, veh->in_room);
+      if (veh->in_room) {
+        veh_to_room(veh->towing, veh->in_room);
+      } else if (veh->in_veh) {
+        veh_to_veh(veh->towing, veh->in_veh);
+      } else {
+        mudlog("SYSERR: Vehicle with a towed veh was neither in room nor veh! Sending towed vehicle to Dante's.", NULL, LOG_SYSLOG, TRUE);
+        veh_to_room(veh->towing, &world[real_room(RM_DANTES_GARAGE)]);
+      }
       veh->towing = NULL;
     }
 
     // Dump out the people in the vehicle and set their relevant values.
-    for (i = veh->people; i; i = next) {
+    for (struct char_data *i = veh->people, *next; i; i = next) {
       next = i->next_in_veh;
       stop_manning_weapon_mounts(i, FALSE);
       char_from_room(i);
-      char_to_room(i, veh->in_room);
+      if (veh->in_room) {
+        char_to_room(i, veh->in_room);
+      } else if (veh->in_veh) {
+        char_to_veh(veh->in_veh, i);
+      } else {
+        mudlog("SYSERR: Destroyed vehicle had no in_room or in_veh! Disgorging occupant to Dante's.", i, LOG_SYSLOG, TRUE);
+        char_to_room(i, &world[real_room(RM_DANTES_GARAGE)]);
+      }
+
       // TODO: What about the other flags for people who are sitting in the back working on something?
       AFF_FLAGS(i).RemoveBits(AFF_PILOT, AFF_RIG, ENDBIT);
 
@@ -5583,13 +5672,22 @@ void chkdmg(struct veh_data * veh)
     }
 
     // Dump out and destroy objects.
-    for (obj = veh->contents; obj; obj = nextobj) {
+    for (struct obj_data *obj = veh->contents, *nextobj; obj; obj = nextobj) {
       nextobj = obj->next_content;
       switch(number(0, 2)) {
           /* case 0: the item stays in the vehicle */
+        case 0:
+          break;
         case 1:
           obj_from_room(obj);
-          obj_to_room(obj, veh->in_room);
+          if (veh->in_room) {
+            obj_to_room(obj, veh->in_room);
+          } else if (veh->in_veh) {
+            obj_to_veh(obj, veh->in_veh);
+          } else {
+            mudlog("SYSERR: Destroyed veh had no in_room or in_veh! Disgorging object to Dante's.", NULL, LOG_SYSLOG, TRUE);
+            obj_to_room(obj, &world[real_room(RM_DANTES_GARAGE)]);
+          }
           break;
         case 2:
           extract_obj(obj);
@@ -6055,10 +6153,13 @@ bool mount_fire(struct char_data *ch)
       // If nobody's manning it and it has a gun...
       if (!mount->worn_by && (gun = get_mount_weapon(mount))) {
         // Fire at the enemy, assuming we're fighting it.
-        if (mount->targ && FIGHTING(ch) == mount->targ)
-          return hit_with_multiweapon_toggle(ch, mount->targ, gun, NULL, get_mount_ammo(mount), num_mounts > 1);
+        if (mount->targ && FIGHTING(ch) == mount->targ) {
+          if (hit_with_multiweapon_toggle(ch, mount->targ, gun, NULL, get_mount_ammo(mount), num_mounts > 1))
+            return TRUE;
+        }
         else if (mount->tveh && FIGHTING_VEH(ch) == mount->tveh) {
-          return vcombat(ch, mount->tveh);
+          if (vcombat(ch, mount->tveh))
+            return TRUE;
         }
       }
     }

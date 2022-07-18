@@ -431,7 +431,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
   // Unset the cyberdoc flag on load.
   PRF_FLAGS(ch).RemoveBit(PRF_TOUCH_ME_DADDY);
 
-  ch->player.physical_text.room_desc = str_dup(row[9]);
+  ch->player.physical_text.room_desc = str_dup(get_string_after_color_code_removal(row[9], ch));
   ch->player.background = str_dup(row[10]);
   ch->player.physical_text.keywords = str_dup(row[11]);
   ch->player.physical_text.name = str_dup(row[12]);
@@ -483,7 +483,6 @@ bool load_char(const char *name, char_data *ch, bool logon)
   GET_PHYSICAL_LOSS(ch) = atoi(row[55]);
   GET_MENTAL(ch) = atoi(row[56]);
   GET_MENTAL_LOSS(ch) = atoi(row[57]);
-  GET_PERM_BOD_LOSS(ch) = atoi(row[58]);
   ch->char_specials.saved.left_handed = atoi(row[59]);
   GET_LANGUAGE(ch) = atoi(row[60]);
   ch->player_specials->saved.wimp_level = atoi(row[61]);
@@ -512,7 +511,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
   if (GET_LEVEL(ch) <= 1) {
     for (int i = 0; i <= WIL; i++) {
       bool exceeding_limits = FALSE;
-      if (i == BOD && (GET_REAL_BOD(ch) + GET_PERM_BOD_LOSS(ch)) > racial_limits[(int)GET_RACE(ch)][0][i]) {
+      if (i == BOD && (GET_REAL_BOD(ch)) > racial_limits[(int)GET_RACE(ch)][0][i]) {
         exceeding_limits = TRUE;
       }
 
@@ -529,13 +528,11 @@ bool load_char(const char *name, char_data *ch, bool logon)
         mudlog(buf, ch, LOG_SYSLOG, TRUE);
 
         GET_REAL_ATT(ch, i) = racial_limits[(int)GET_RACE(ch)][0][i];
-        if (i == BOD)
-          GET_REAL_ATT(ch, i) -= GET_PERM_BOD_LOSS(ch);
       }
     }
   }
 
-  if (GET_LEVEL(ch) > 0) {
+  if (GET_LEVEL(ch) > LVL_MORTAL) {
     snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_immortdata WHERE idnum=%ld;", GET_IDNUM(ch));
     mysql_wrapper(mysql, buf);
     res = mysql_use_result(mysql);
@@ -546,7 +543,11 @@ bool load_char(const char *name, char_data *ch, bool logon)
       POOFIN(ch) = str_dup((strcmp(row[4], "(null)") == 0 ? DEFAULT_POOFIN_STRING : row[4]));
       POOFOUT(ch) = str_dup((strcmp(row[5], "(null)") == 0 ? DEFAULT_POOFOUT_STRING : row[5]));
     }
-  } else {
+    mysql_free_result(res);
+  }
+
+  // Pull drug info.
+  {
     snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_drugs WHERE idnum=%ld;", GET_IDNUM(ch));
     mysql_wrapper(mysql, buf);
     res = mysql_use_result(mysql);
@@ -554,16 +555,18 @@ bool load_char(const char *name, char_data *ch, bool logon)
     while ((row = mysql_fetch_row(res))) {
       x = atoi(row[1]);
       GET_DRUG_ADDICT(ch, x) = atoi(row[2]);
-      GET_DRUG_DOSES(ch, x) = atoi(row[3]);
-      GET_DRUG_EDGE(ch, x) = atoi(row[4]);
-      GET_DRUG_LASTFIX(ch, x) = atol(row[5]);
-      GET_DRUG_ADDTIME(ch, x) = atoi(row[6]);
-      GET_DRUG_TOLERANT(ch, x) = atoi(row[7]);
-      GET_DRUG_LASTWITH(ch, x) = atoi(row[8]);
+      GET_DRUG_LIFETIME_DOSES(ch, x) = atoi(row[3]);
+      GET_DRUG_ADDICTION_EDGE(ch, x) = atoi(row[4]);
+      GET_DRUG_LAST_FIX(ch, x) = atol(row[5]);
+      GET_DRUG_ADDICTION_TICK_COUNTER(ch, x) = atoi(row[6]);
+      GET_DRUG_TOLERANCE_LEVEL(ch, x) = atoi(row[7]);
+      GET_DRUG_LAST_WITHDRAWAL_TICK(ch, x) = atoi(row[8]);
+      GET_DRUG_DURATION(ch, x) = atoi(row[9]);
+      GET_DRUG_DOSE(ch, x) = atoi(row[10]);
+      GET_DRUG_STAGE(ch, x) = atoi(row[11]);
     }
+    mysql_free_result(res);
   }
-  mysql_free_result(res);
-
 
   if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
     snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_chargendata WHERE idnum=%ld;", GET_IDNUM(ch));
@@ -585,7 +588,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
     mysql_wrapper(mysql, buf);
     res = mysql_use_result(mysql);
     if ((row = mysql_fetch_row(res))) {
-      GET_REAL_MAG(ch) = atoi(row[1]);
+      GET_SETTABLE_REAL_MAG(ch) = atoi(row[1]);
       ch->real_abils.casting_pool = atoi(row[2]);
       ch->real_abils.spell_defense_pool = atoi(row[3]);
       ch->real_abils.drain_pool = atoi(row[4]);
@@ -703,17 +706,6 @@ bool load_char(const char *name, char_data *ch, bool logon)
   res = mysql_use_result(mysql);
   while ((row = mysql_fetch_row(res)))
     GET_LQUEST(ch, atoi(row[1])) = atoi(row[2]);
-  mysql_free_result(res);
-
-  snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_drugdata WHERE idnum=%ld;", GET_IDNUM(ch));
-  mysql_wrapper(mysql, buf);
-  res = mysql_use_result(mysql);
-  if ((row = mysql_fetch_row(res))) {
-    GET_DRUG_AFFECT(ch) = atoi(row[1]);
-    GET_DRUG_STAGE(ch) = atoi(row[2]);
-    GET_DRUG_DURATION(ch) = atoi(row[3]);
-    GET_DRUG_DOSE(ch) = atoi(row[4]);
-  }
   mysql_free_result(res);
 
   {
@@ -1245,7 +1237,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
                GET_DEFENSE(player), GET_NUYEN(player), GET_BANK(player), GET_KARMA(player),
                GET_REP(player), GET_NOT(player), GET_TKE(player),
                PLR_FLAGGED(player, PLR_JUST_DIED), MAX(0, GET_PHYSICAL(player)), GET_PHYSICAL_LOSS(player),
-               MAX(0, GET_MENTAL(player)), GET_MENTAL_LOSS(player), GET_PERM_BOD_LOSS(player), GET_WIMP_LEV(player),
+               MAX(0, GET_MENTAL(player)), GET_MENTAL_LOSS(player), 0, GET_WIMP_LEV(player),
                GET_LOADROOM(player), GET_LAST_IN(player), time(0), GET_COND(player, COND_FULL),
                GET_COND(player, COND_THIRST), GET_COND(player, COND_DRUNK),
                SHOTS_FIRED(player), SHOTS_TRIGGERED(player), GET_TRADITION(player), pgroup_num,
@@ -1294,19 +1286,14 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
   /* Save skills, if they've changed their skills since last save. */
   SAVE_IF_DIRTY_BIT_SET(GET_SKILL_DIRTY_BIT, save_skills_to_db);
 
-  /* Save drug info. */
-  snprintf(buf, sizeof(buf), "UPDATE pfiles_drugdata SET Affect=%d, Stage=%d, Duration=%d, Dose=%d WHERE idnum=%ld;",
-               GET_DRUG_AFFECT(player), GET_DRUG_STAGE(player), GET_DRUG_DURATION(player), GET_DRUG_DOSE(player),
-               GET_IDNUM(player));
-  mysql_wrapper(mysql, buf);
-
   // SAVE_IF_DIRTY_BIT_SET(GET_DRUG_DIRTY_BIT, save_drug_data_to_db);
   save_drug_data_to_db(player);
 
   /* Save magic info. */
   if (GET_TRADITION(player) != TRAD_MUNDANE) {
+    // The use of GET_SETTABLE_REAL_MAG() is intentional here, we don't want to cap the saved value to 20 magic.
     snprintf(buf, sizeof(buf), "UPDATE pfiles_magic SET Mag=%d, Pool_Casting=%d, Pool_SpellDefense=%d, Pool_Drain=%d, Pool_Reflecting=%d,"\
-                 "UsedGrade=%d, ExtraPower=%d, PowerPoints=%d, Sig=%d, Masking=%d, Totem=%d, TotemSpirit=%d, Aspect=%d WHERE idnum=%ld;", GET_REAL_MAG(player), GET_CASTING(player),
+                 "UsedGrade=%d, ExtraPower=%d, PowerPoints=%d, Sig=%d, Masking=%d, Totem=%d, TotemSpirit=%d, Aspect=%d WHERE idnum=%ld;", GET_SETTABLE_REAL_MAG(player), GET_CASTING(player),
                  GET_SDEFENSE(player), GET_DRAIN(player), GET_REFLECT(player), GET_GRADE(player), player->points.extrapp,
                  GET_PP(player), GET_SIG(player), GET_MASKING(player), GET_TOTEM(player), GET_TOTEMSPIRIT(player), GET_ASPECT(player),
                  GET_IDNUM(player));
@@ -1540,7 +1527,6 @@ vnum_t get_highest_idnum_in_use() {
     "pfiles_bioware",
     "pfiles_chargendata",
     "pfiles_cyberware",
-    "pfiles_drugdata",
     "pfiles_drugs",
     "pfiles_ignore",
     "pfiles_immortdata",
@@ -1557,7 +1543,7 @@ vnum_t get_highest_idnum_in_use() {
     "you-deleted-something-and-didn't-change-the-table-length-dumbass" // must be last for obvious reasons
   };
 
-  #define NUM_IDNUM_TABLES 20
+  #define NUM_IDNUM_TABLES 19
 
   vnum_t highest_pfiles_idnum = get_one_number_from_query("SELECT idnum FROM pfiles ORDER BY idnum DESC LIMIT 1;");
 
@@ -2005,7 +1991,6 @@ void DeleteChar(long idx)
     "pfiles_bioware     ",
     "pfiles_chargendata ", // 5
     "pfiles_cyberware   ",
-    "pfiles_drugdata    ",
     "pfiles_drugs       ",
     "pfiles_ignore      ", // IF YOU CHANGE THIS, CHANGE PFILES_IGNORE_INDEX
     "pfiles_immortdata  ", // 10
@@ -2021,11 +2006,11 @@ void DeleteChar(long idx)
     "pfiles_worn        ",  // 20
     "pfiles_ignore_v2   "   // IF YOU CHANGE THIS, CHANGE PFILES_IGNORE_V2_INDEX
   };
-  #define NUM_SQL_TABLE_NAMES     22
+  #define NUM_SQL_TABLE_NAMES     21
   #define PFILES_INDEX            0
-  #define PFILES_IGNORE_INDEX     9
-  #define PFILES_MEMORY_INDEX     14
-  #define PFILES_IGNORE_V2_INDEX  21
+  #define PFILES_IGNORE_INDEX     8
+  #define PFILES_MEMORY_INDEX     13
+  #define PFILES_IGNORE_V2_INDEX  20
 
   // Figure out the filename for this character.
   const char *name = get_player_name(idx);
@@ -2226,6 +2211,13 @@ void auto_repair_obj(struct obj_data *obj) {
 
   // Now that any changes have bubbled up, rectify this object too.
   switch (GET_OBJ_TYPE(obj)) {
+    case ITEM_DRUG:
+      {
+        int prior_data;
+        FORCE_PROTO_VALUE("drug", GET_OBJ_DRUG_TYPE(obj), GET_OBJ_DRUG_TYPE(&obj_proto[rnum]));
+        CLAMP_VALUE("drug", GET_OBJ_DRUG_DOSES(obj), 1, MAX_DRUG_DOSE_COUNT, "doses");
+      }
+      break;
     case ITEM_CYBERDECK:
       // Rectify the memory.
       old_storage = GET_CYBERDECK_USED_STORAGE(obj);
@@ -2359,8 +2351,14 @@ void auto_repair_obj(struct obj_data *obj) {
       FORCE_PROTO_VALUE("cyberware", GET_CYBERWARE_TYPE(obj), GET_CYBERWARE_TYPE(&obj_proto[rnum]));
       FORCE_PROTO_VALUE("cyberware", GET_CYBERWARE_RATING(obj), GET_CYBERWARE_RATING(&obj_proto[rnum]));
       FORCE_PROTO_VALUE("cyberware", GET_CYBERWARE_GRADE(obj), GET_CYBERWARE_GRADE(&obj_proto[rnum]));
-      if (GET_CYBERWARE_TYPE(obj) != CYB_CUSTOM_NERPS)
+
+      if (GET_CYBERWARE_TYPE(obj) != CYB_CUSTOM_NERPS) {
         FORCE_PROTO_VALUE("cyberware", GET_CYBERWARE_ESSENCE_COST(obj), GET_CYBERWARE_ESSENCE_COST(&obj_proto[rnum]));
+      }
+
+      if (GET_CYBERWARE_TYPE(obj) == CYB_EYES) {
+        FORCE_PROTO_VALUE("cybereyes", GET_CYBERWARE_FLAGS(obj), GET_CYBERWARE_FLAGS(&obj_proto[rnum]));
+      }
       break;
     case ITEM_GUN_ACCESSORY:
       FORCE_PROTO_VALUE("gun accessory", GET_ACCESSORY_ATTACH_LOCATION(obj), GET_ACCESSORY_ATTACH_LOCATION(&obj_proto[rnum]));
@@ -2458,20 +2456,22 @@ void save_metamagic_to_db(struct char_data *player) {
 }
 
 void save_elementals_to_db(struct char_data *player) {
-  if (GET_SPIRIT(player) && GET_TRADITION(player) == TRAD_HERMETIC) {
+  if (GET_TRADITION(player) == TRAD_HERMETIC) {
     snprintf(buf, sizeof(buf), "DELETE FROM pfiles_spirits WHERE idnum=%ld", GET_IDNUM(player));
     mysql_wrapper(mysql, buf);
-    strcpy(buf, "INSERT INTO pfiles_spirits (idnum, Type, Rating, Services, SpiritID) VALUES (");
-    int q = 0;
-    for (struct spirit_data *spirit = GET_SPIRIT(player); spirit; spirit = spirit->next, q++) {
-      if (q)
-        strcat(buf, "), (");
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %d, %d, %d, %d", GET_IDNUM(player), spirit->type, spirit->force, spirit->services, spirit->id);
-      q = 1;
-    }
-    if (q) {
-      strcat(buf, ");");
-      mysql_wrapper(mysql, buf);
+    if (GET_SPIRIT(player)) {
+      strcpy(buf, "INSERT INTO pfiles_spirits (idnum, Type, Rating, Services, SpiritID) VALUES (");
+      int q = 0;
+      for (struct spirit_data *spirit = GET_SPIRIT(player); spirit; spirit = spirit->next, q++) {
+        if (q)
+          strcat(buf, "), (");
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %d, %d, %d, %d", GET_IDNUM(player), spirit->type, spirit->force, spirit->services, spirit->id);
+        q = 1;
+      }
+      if (q) {
+        strcat(buf, ");");
+        mysql_wrapper(mysql, buf);
+      }
     }
   }
 }
@@ -2496,16 +2496,20 @@ void save_pc_memory_to_db(struct char_data *player) {
 void save_drug_data_to_db(struct char_data *player) {
   snprintf(buf, sizeof(buf), "DELETE FROM pfiles_drugs WHERE idnum=%ld", GET_IDNUM(player));
   mysql_wrapper(mysql, buf);
-  strcpy(buf, "INSERT INTO pfiles_drugs (idnum, DrugType, Addict, Doses, Edge, LastFix, Addtime, Tolerant, LastWith) VALUES (");
+  strcpy(buf, "INSERT INTO pfiles_drugs (idnum, DrugType, Addict, Doses, Edge, LastFix, Addtime, Tolerant, LastWith, Duration, Dose, Stage) VALUES (");
   int q = 0;
-  for (int i = 1; i < NUM_DRUGS; i++) {
-    if (GET_DRUG_DOSES(player, i) || GET_DRUG_EDGE(player, i) || GET_DRUG_ADDICT(player, i) || GET_DRUG_LASTFIX(player, i) ||
-        GET_DRUG_ADDTIME(player, i) || GET_DRUG_TOLERANT(player, i) || GET_DRUG_LASTWITH(player, i)) {
+  for (int i = MIN_DRUG; i < NUM_DRUGS; i++) {
+    if (GET_DRUG_LIFETIME_DOSES(player, i) || GET_DRUG_ADDICTION_EDGE(player, i) || GET_DRUG_ADDICT(player, i) || GET_DRUG_LAST_FIX(player, i) ||
+        GET_DRUG_ADDICTION_TICK_COUNTER(player, i) || GET_DRUG_TOLERANCE_LEVEL(player, i) || GET_DRUG_LAST_WITHDRAWAL_TICK(player, i) || GET_DRUG_DURATION(player, i) ||
+        GET_DRUG_DOSE(player, i) || GET_DRUG_STAGE(player, i))
+    {
       if (q)
         strcat(buf, "), (");
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %d, %d, %d, %d, %d, %d, %d, %d", GET_IDNUM(player), i, GET_DRUG_ADDICT(player, i),
-                          GET_DRUG_DOSES(player, i), GET_DRUG_EDGE(player, i), GET_DRUG_LASTFIX(player, i),
-                          GET_DRUG_ADDTIME(player, i), GET_DRUG_TOLERANT(player, i), GET_DRUG_LASTWITH(player, i));
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %d, %d, %d, %d, %ld, %d, %d, %d, %d, %d, %d", GET_IDNUM(player), i, GET_DRUG_ADDICT(player, i),
+                          GET_DRUG_LIFETIME_DOSES(player, i), GET_DRUG_ADDICTION_EDGE(player, i), GET_DRUG_LAST_FIX(player, i),
+                          GET_DRUG_ADDICTION_TICK_COUNTER(player, i), GET_DRUG_TOLERANCE_LEVEL(player, i), GET_DRUG_LAST_WITHDRAWAL_TICK(player, i),
+                          GET_DRUG_DURATION(player, i), GET_DRUG_DOSE(player, i), GET_DRUG_STAGE(player, i)
+                        );
       q = 1;
     }
   }
@@ -2722,7 +2726,7 @@ void fix_character_essence_after_cybereye_migration(struct char_data *ch) {
           // Next, handle magic restoration if needed.
           if (GET_TRADITION(ch) != TRAD_MUNDANE) {
             total_magic_delta += essence_delta;
-            GET_REAL_MAG(ch) += essence_delta;
+            GET_SETTABLE_REAL_MAG(ch) += essence_delta;
           }
         }
 
@@ -2753,7 +2757,7 @@ void fix_character_essence_after_cybereye_migration(struct char_data *ch) {
             // Cause magic loss, BUT not in the standard way. Instead of stripping powers etc, we just reduce their magic stat.
             if (GET_TRADITION(ch) != TRAD_MUNDANE) {
               total_magic_delta -= ess_cost_after_esshole;
-              GET_REAL_MAG(ch) -= ess_cost_after_esshole;
+              GET_SETTABLE_REAL_MAG(ch) -= ess_cost_after_esshole;
             }
           }
         }

@@ -256,11 +256,11 @@ void affect_modify(struct char_data * ch,
 
 void apply_focus_effect( struct char_data *ch, struct obj_data *object )
 {
-  if (GET_OBJ_VAL(object, 2) != GET_IDNUM(ch) || !GET_OBJ_VAL(object, 4))
+  if (GET_FOCUS_BONDED_TO(object) != GET_IDNUM(ch) || !GET_FOCUS_ACTIVATED(object))
     return;
   if (GET_OBJ_VAL(object, 9) == GET_IDNUM(ch))
     GET_MAG(ch) += 100;
-  if (GET_OBJ_VAL(object, 0) == FOCI_POWER)
+  if (GET_FOCUS_TYPE(object) == FOCI_POWER)
   {
     GET_MAG(ch) += GET_OBJ_VAL(object, 1) * 100;
     GET_MAGIC(ch) += GET_OBJ_VAL(object, 1);
@@ -269,11 +269,11 @@ void apply_focus_effect( struct char_data *ch, struct obj_data *object )
 
 void remove_focus_effect( struct char_data *ch, struct obj_data *object )
 {
-  if (GET_OBJ_VAL(object, 2) != GET_IDNUM(ch) || !GET_OBJ_VAL(object, 4))
+  if (GET_FOCUS_BONDED_TO(object) != GET_IDNUM(ch) || !GET_FOCUS_ACTIVATED(object))
     return;
   if (GET_OBJ_VAL(object, 9) == GET_IDNUM(ch))
     GET_MAG(ch) -= 100;
-  if (GET_OBJ_VAL(object, 0) == FOCI_POWER)
+  if (GET_FOCUS_TYPE(object) == FOCI_POWER)
   {
     GET_MAG(ch) -= GET_OBJ_VAL(object, 1) * 100;
     GET_MAGIC(ch) -= GET_OBJ_VAL(object, 1);
@@ -312,10 +312,10 @@ void affect_veh(struct veh_data *veh, byte loc, sbyte mod)
       veh->autonav = mod;
       break;
     case VAFF_SEAF:
-      veh->seating[1] += mod;
+      veh->seating[SEATING_FRONT] += mod;
       break;
     case VAFF_SEAB:
-      veh->seating[0] += mod;
+      veh->seating[SEATING_REAR] += mod;
       break;
     case VAFF_LOAD:
       veh->load += mod;
@@ -813,6 +813,7 @@ void affect_total(struct char_data * ch)
   GET_MAX_MENTAL(ch) = 1000;
   GET_MAX_PHYSICAL(ch) = 1000;
   GET_TARGET_MOD(ch) = 0;
+  GET_CONCENTRATION_TARGET_MOD(ch) = 0;
   GET_MAX_MENTAL(ch) -= GET_MENTAL_LOSS(ch) * 100;
   GET_MAX_PHYSICAL(ch) -= GET_PHYSICAL_LOSS(ch) * 100;
 
@@ -842,78 +843,15 @@ void affect_total(struct char_data * ch)
     if (GET_POWER(ch, ADEPT_THERMO)) {
       set_vision_bit(ch, VISION_THERMOGRAPHIC, VISION_BIT_IS_ADEPT_POWER);
     }
-    if (GET_POWER(ch, ADEPT_IMAGE_MAG))
+    if (GET_POWER(ch, ADEPT_FLARE)) {
+      set_vision_bit(ch, EYE_FLARECOMP, VISION_BIT_IS_ADEPT_POWER);
+    }
+    if (GET_POWER(ch, ADEPT_IMAGE_MAG)) {
       AFF_FLAGS(ch).SetBit(AFF_VISION_MAG_2);
-  }
-  if (!AFF_FLAGGED(ch, AFF_DETOX)) {
-    if (GET_DRUG_STAGE(ch) == 1)
-    {
-      switch (GET_DRUG_AFFECT(ch)) {
-        case DRUG_HYPER:
-          GET_TARGET_MOD(ch)++;
-          break;
-        case DRUG_JAZZ:
-          GET_QUI(ch) += 2;
-          GET_INIT_DICE(ch)++;
-          break;
-        case DRUG_KAMIKAZE:
-          GET_BOD(ch)++;
-          GET_QUI(ch)++;
-          GET_STR(ch) += 2;
-          GET_WIL(ch)++;
-          GET_INIT_DICE(ch)++;
-          break;
-        case DRUG_PSYCHE:
-          GET_INT(ch)++;
-          break;
-        case DRUG_BLISS:
-          GET_TARGET_MOD(ch)++;
-          GET_REA(ch)--;
-          break;
-        case DRUG_CRAM:
-          GET_REA(ch)++;
-          GET_INIT_DICE(ch)++;
-          break;
-        case DRUG_NITRO:
-          GET_STR(ch) += 2;
-          GET_WIL(ch) += 2;
-          break;
-        case DRUG_NOVACOKE:
-          GET_REA(ch)++;
-          GET_CHA(ch)++;
-          break;
-        case DRUG_ZEN:
-          GET_REA(ch) -= 2;
-          GET_TARGET_MOD(ch)++;
-          GET_WIL(ch)++;
-          break;
-      }
-    } else if (GET_DRUG_STAGE(ch) == 2)
-    {
-      switch (GET_DRUG_AFFECT(ch)) {
-        case DRUG_JAZZ:
-          GET_TARGET_MOD(ch)++;
-          GET_QUI(ch)--;
-          break;
-        case DRUG_KAMIKAZE:
-          GET_QUI(ch)--;
-          GET_WIL(ch)--;
-          break;
-        case DRUG_NOVACOKE:
-          GET_CHA(ch) = 1;
-          GET_WIL(ch) /= 2;
-          break;
-      }
     }
   }
-  if (AFF_FLAGGED(ch, AFF_WITHDRAWAL_FORCE))
-  {
-    GET_MAX_MENTAL(ch) -= 300;
-    GET_TARGET_MOD(ch) += 6;
-  } else if (AFF_FLAGGED(ch, AFF_WITHDRAWAL))
-  {
-    GET_TARGET_MOD(ch) += 4;
-  }
+
+  apply_drug_modifiers_to_ch(ch);
 
   skill_dice = get_skill_dice_in_use_for_weapons(ch);
 
@@ -2427,21 +2365,24 @@ void extract_char(struct char_data * ch)
 
     // Save the player.
     playerDB.SaveChar(ch, GET_LOADROOM(ch));
+
+    // Hollow player body? Figure out who this was supposed to belong to and return them.
+    if (!ch->desc) {
+      for (t_desc = descriptor_list; t_desc; t_desc = t_desc->next)
+        if (t_desc->original == ch)
+          do_return(t_desc->character, "", 0, 0);
+    }
   }
 
-  if (!IS_NPC(ch) && !ch->desc)
-  {
-    for (t_desc = descriptor_list; t_desc; t_desc = t_desc->next)
-      if (t_desc->original == ch)
-        do_return(t_desc->character, "", 0, 0);
-  }
   if (ch->followers)
   {
     struct follow_type *nextfollow;
     for (struct follow_type *follow = ch->followers; follow; follow = nextfollow) {
       nextfollow = follow->next;
-      if (IS_SPIRIT(follow->follower) || IS_PC_CONJURED_ELEMENTAL(follow->follower))
+      if (IS_SPIRIT(follow->follower) || IS_PC_CONJURED_ELEMENTAL(follow->follower)) {
+        act("$n vanishes with a sound like a bursting bubble.", TRUE, follow->follower, 0, 0, TO_ROOM);
         extract_char(follow->follower);
+      }
     }
   }
   if (ch->followers || ch->master)
@@ -3081,6 +3022,7 @@ int generic_find(char *arg, int bitvector, struct char_data * ch,
 
   *tar_ch = NULL;
   *tar_obj = NULL;
+  struct veh_data *rigged_veh = (ch)->char_specials.rigging;
 
   one_argument(arg, name);
 
@@ -3149,16 +3091,40 @@ int generic_find(char *arg, int bitvector, struct char_data * ch,
   }
   if (IS_SET(bitvector, FIND_OBJ_ROOM))
   {
-    if (ch->in_veh) {
-      if ((*tar_obj = get_obj_in_list_vis(ch, name, ch->in_veh->contents)))
+    if (rigged_veh) {
+      if (rigged_veh->in_veh) {
+        if ((*tar_obj = get_obj_in_list_vis(ch, name, rigged_veh->in_veh->contents)))
+          return (FIND_OBJ_ROOM);
+      } else if (rigged_veh->in_room) {
+        if ((*tar_obj = get_obj_in_list_vis(ch, name, rigged_veh->in_room->contents))) {
+          return (FIND_OBJ_ROOM);
+        }
+      } else {
+        mudlog("SYSERR: Rigged_veh had no in_veh or in_room in generic_find()!", ch, LOG_SYSLOG, TRUE);
+      }
+    }
+    else {
+      if (ch->in_veh) {
+        if ((*tar_obj = get_obj_in_list_vis(ch, name, ch->in_veh->contents)))
+          return (FIND_OBJ_ROOM);
+      }
+      else if ((*tar_obj = get_obj_in_list_vis(ch, name, ch->in_room->contents))) {
         return (FIND_OBJ_ROOM);
-    } else if ((*tar_obj = get_obj_in_list_vis(ch, name, ch->in_room->contents)))
-      return (FIND_OBJ_ROOM);
+      }
+    }
   }
   if (IS_SET(bitvector, FIND_OBJ_VEH_ROOM))
   {
-    if (ch->in_veh && (*tar_obj = get_obj_in_list_vis(ch, name, (get_ch_in_room(ch))->contents)))
-      return (FIND_OBJ_VEH_ROOM);
+    if (rigged_veh) {
+      if ((*tar_obj = get_obj_in_list_vis(ch, name, get_veh_in_room(rigged_veh)->contents))) {
+        return (FIND_OBJ_VEH_ROOM);
+      }
+    }
+    else {
+      if ((*tar_obj = get_obj_in_list_vis(ch, name, get_ch_in_room(ch)->contents))) {
+        return (FIND_OBJ_VEH_ROOM);
+      }
+    }
   }
   if (IS_SET(bitvector, FIND_OBJ_WORLD))
   {

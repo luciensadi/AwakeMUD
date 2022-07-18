@@ -104,6 +104,10 @@
 #define ASPECT_FIREMAGE  10
 #define ASPECT_WATERMAGE  11
 
+#define METAMAGIC_STAGE_LOCKED   0
+#define METAMAGIC_STAGE_UNLOCKED 1
+#define METAMAGIC_STAGE_LEARNED  2
+
 
 /* totems */
 
@@ -320,7 +324,8 @@ enum {
 #define PLR_NO_AUTO_SYSP_AWARDS             45 /* Player abuses typo etc for automatic sysp awards. */
 #define PLR_RADIO_MUTED                     46
 #define PLR_SITE_HIDDEN                     47 /* For staff who really don't want people knowing who their alt is. */
-#define PLR_MAX                             48
+#define PLR_ENABLED_DRUGS                   48
+#define PLR_MAX                             49
 
 
 
@@ -630,7 +635,9 @@ enum {
 #define EX_HIDDEN               (1 << 5)   /* exit is hidden            */
 #define EX_ASTRALLY_WARDED      (1 << 6)   /* Exit blocks passage of astral beings */
 #define EX_IS_TEMPORARY         (1 << 7)   /* Created temporarily by code */
-
+#define EX_WINDOWED             (1 << 8)   /* Exit has a window.        */
+#define EX_BARRED_WINDOW        (1 << 9)   /* Exit has a barred window. */
+#define NUM_EXFLAGS             11
 
 /* spirit powers */
 
@@ -730,7 +737,7 @@ enum {
 
 #define SPELL_DESIGN_FAILED_CODE -3
 
-#define META_ANCHORING    0
+#define META_UNDEFINED    0
 #define META_CENTERING    1
 #define META_CLEANSING    2
 #define META_INVOKING    3
@@ -739,7 +746,8 @@ enum {
 #define META_QUICKENING    6
 #define META_REFLECTING    7
 #define META_SHIELDING    8
-#define META_MAX    9
+#define META_ANCHORING    9
+#define META_MAX    10
 
 #define MASK_INIT    (1 << 1)
 #define MASK_DUAL    (1 << 2)
@@ -875,109 +883,114 @@ enum {
 #define SKILL_STREET_ETIQUETTE       46
 #define SKILL_TRIBAL_ETIQUETTE       47
 #define SKILL_ELF_ETIQUETTE          48
-#define SKILL_PROGRAM_COMBAT      49
+#define SKILL_PROGRAM_COMBAT         49
 #define SKILL_PROGRAM_DEFENSIVE      50
-#define SKILL_PROGRAM_OPERATIONAL   51
-#define SKILL_PROGRAM_SPECIAL      52
+#define SKILL_PROGRAM_OPERATIONAL    51
+#define SKILL_PROGRAM_SPECIAL        52
 #define SKILL_PROGRAM_CYBERTERM      53
-#define SKILL_DATA_BROKERAGE        54
-#define SKILL_AURA_READING          55
-#define SKILL_STEALTH               56
-#define SKILL_STEAL                 57
-#define SKILL_TRACK                 58
-#define SKILL_UNUSED_WAS_CLIMBING   59
-#define SKILL_PILOT_BIKE    60
+#define SKILL_DATA_BROKERAGE         54
+#define SKILL_AURA_READING           55
+#define SKILL_STEALTH                56
+#define SKILL_STEAL                  57
+#define SKILL_TRACK                  58
+#define SKILL_UNUSED_WAS_CLIMBING    59
+#define SKILL_PILOT_BIKE             60
 #define SKILL_UNUSED_WAS_PILOT_FIXED_WING   61
-#define SKILL_PILOT_CAR     62
-#define SKILL_PILOT_TRUCK   63
-#define SKILL_BR_BIKE     64
-#define SKILL_BR_CAR     65
-#define SKILL_BR_DRONE     66
-#define SKILL_BR_TRUCK        67
-#define SKILL_DANCING    68
-#define SKILL_SINGING    69
-#define SKILL_INSTRUMENT  70
-#define SKILL_ARCANELANGUAGE  71
-#define SKILL_MEDITATION  72
+#define SKILL_PILOT_CAR              62
+#define SKILL_PILOT_TRUCK            63
+#define SKILL_BR_BIKE                64
+#define SKILL_BR_CAR                 65
+#define SKILL_BR_DRONE               66
+#define SKILL_BR_TRUCK               67
+#define SKILL_DANCING                68
+#define SKILL_SINGING                69
+#define SKILL_INSTRUMENT             70
+#define SKILL_ARCANELANGUAGE         71
+#define SKILL_MEDITATION             72
 
-#define SKILL_ENGLISH       73
-#define SKILL_SPERETHIEL     74
-#define SKILL_SPANISH      75
-#define SKILL_JAPANESE      76
-#define SKILL_CHINESE      77
-#define SKILL_KOREAN      78
-#define SKILL_ITALIAN      79
-#define SKILL_RUSSIAN      80
-#define SKILL_SIOUX      81
-#define SKILL_MAKAW      82
-#define SKILL_CROW      83
-#define SKILL_SALISH      84
-#define SKILL_UTE      85
-#define SKILL_NAVAJO      86
-#define SKILL_GERMAN      87
-#define SKILL_ORZET      88
-#define SKILL_ARABIC      89
-#define SKILL_LATIN      90
-#define SKILL_GAELIC              91
-#define SKILL_FRENCH            92
+#define SKILL_ENGLISH                73
+#define SKILL_SPERETHIEL             74
+#define SKILL_SPANISH                75
+#define SKILL_JAPANESE               76
+#define SKILL_CHINESE                77
+#define SKILL_KOREAN                 78
+#define SKILL_ITALIAN                79
+#define SKILL_RUSSIAN                80
+#define SKILL_SIOUX                  81
+#define SKILL_MAKAW                  82
+#define SKILL_CROW                   83
+#define SKILL_SALISH                 84
+#define SKILL_UTE                    85
+#define SKILL_NAVAJO                 86
+#define SKILL_GERMAN                 87
+#define SKILL_ORZET                  88
+#define SKILL_ARABIC                 89
+#define SKILL_LATIN                  90
+#define SKILL_GAELIC                 91
+#define SKILL_FRENCH                 92
 // Also see SKILL_SIGN_LANGUAGE and the other language additions below.
 
-#define SKILL_ANIMAL_HANDLING     93
-#define SKILL_ANIMAL_TAMING       94
-#define SKILL_BR_EDGED            95
-#define SKILL_BR_POLEARM          96
-#define SKILL_BR_CLUB             97
-#define SKILL_BR_THROWINGWEAPONS  98
-#define SKILL_BR_WHIPS            99
-#define SKILL_BR_PROJECTILES      100
-#define SKILL_BR_PISTOL           101
-#define SKILL_BR_SHOTGUN          102
-#define SKILL_BR_RIFLE            103
-#define SKILL_BR_HEAVYWEAPON      104
-#define SKILL_BR_SMG              105
-#define SKILL_BR_ARMOR           106
-#define SKILL_OFFHAND_EDGED       107
-#define SKILL_OFFHAND_CLUB        108
-#define SKILL_OFFHAND_CYBERIMPLANTS 109
-#define SKILL_OFFHAND_WHIP        110
-#define SKILL_SURVIVAL            111
-#define SKILL_NAVI_LAND           112
-#define SKILL_NAVI_WATER          113
-#define SKILL_NAVI_AIR            114
-#define SKILL_SMALL_UNIT_TACTICS  115
-#define SKILL_CHEMISTRY           116
-#define SKILL_DIVING              117
-#define SKILL_PARACHUTING         118
-#define SKILL_UNDERWATER_COMBAT   119
-#define SKILL_PILOT_ROTORCRAFT    120
-#define SKILL_PILOT_FIXEDWING     121
-#define SKILL_PILOT_VECTORTHRUST  122
-#define SKILL_ACTING              123
-#define SKILL_DISGUISE            124
-#define SKILL_LOCK_PICKING        125
-#define SKILL_RIDING              126
-#define SKILL_SPRAY_WEAPONS       127
-#define SKILL_INTIMIDATION        128
-#define SKILL_GUNCANE             129
-#define SKILL_BRACERGUN           130
-#define SKILL_BLOWGUN             131
-#define SKILL_PHARMA              132
-#define SKILL_HEBREW              133
-#define SKILL_IROQUOIS            134
-#define SKILL_MEDICINE            135
-#define SKILL_BR_FIXEDWING        136
-#define SKILL_BR_ROTORCRAFT       137
-#define SKILL_BR_VECTORTHRUST     138
-#define SKILL_BR_HOVERCRAFT       139
-#define SKILL_BR_MOTORBOAT        140
-#define SKILL_BR_SHIP             141
-#define SKILL_BR_LTA              142
-#define SKILL_PILOT_HOVERCRAFT    143
-#define SKILL_PILOT_MOTORBOAT     144
-#define SKILL_PILOT_SHIP          145
-#define SKILL_PILOT_LTA           146
+#define SKILL_ANIMAL_HANDLING           93
+#define SKILL_ANIMAL_TAMING             94
+#define SKILL_BR_EDGED                  95
+#define SKILL_BR_POLEARM                96
+#define SKILL_BR_CLUB                   97
+#define SKILL_BR_THROWINGWEAPONS        98
+#define SKILL_BR_WHIPS                  99
+#define SKILL_BR_PROJECTILES            100
+#define SKILL_BR_PISTOL                 101
+#define SKILL_BR_SHOTGUN                102
+#define SKILL_BR_RIFLE                  103
+#define SKILL_BR_HEAVYWEAPON            104
+#define SKILL_BR_SMG                    105
+#define SKILL_BR_ARMOR                  106
+#define SKILL_OFFHAND_EDGED             107
+#define SKILL_OFFHAND_CLUB              108
+#define SKILL_OFFHAND_CYBERIMPLANTS     109
+#define SKILL_OFFHAND_WHIP              110
+#define SKILL_SURVIVAL                  111
+#define SKILL_NAVI_LAND                 112
+#define SKILL_NAVI_WATER                113
+#define SKILL_NAVI_AIR                  114
+#define SKILL_SMALL_UNIT_TACTICS        115
+#define SKILL_CHEMISTRY                 116
+#define SKILL_DIVING                    117
+#define SKILL_PARACHUTING               118
+#define SKILL_UNDERWATER_COMBAT         119
+#define SKILL_PILOT_ROTORCRAFT          120
+#define SKILL_PILOT_FIXEDWING           121
+#define SKILL_PILOT_VECTORTHRUST        122
+#define SKILL_ACTING                    123
+#define SKILL_DISGUISE                  124
+#define SKILL_LOCK_PICKING              125
+#define SKILL_RIDING                    126
+#define SKILL_SPRAY_WEAPONS             127
+#define SKILL_INTIMIDATION              128
+#define SKILL_GUNCANE                   129
+#define SKILL_BRACERGUN                 130
+#define SKILL_BLOWGUN                   131
+#define SKILL_PHARMA                    132
+#define SKILL_HEBREW                    133
+#define SKILL_IROQUOIS                  134
+#define SKILL_MEDICINE                  135
+#define SKILL_BR_FIXEDWING              136
+#define SKILL_BR_ROTORCRAFT             137
+#define SKILL_BR_VECTORTHRUST           138
+#define SKILL_BR_HOVERCRAFT             139
+#define SKILL_BR_MOTORBOAT              140
+#define SKILL_BR_SHIP                   141
+#define SKILL_BR_LTA                    142
+#define SKILL_PILOT_HOVERCRAFT          143
+#define SKILL_PILOT_MOTORBOAT           144
+#define SKILL_PILOT_SHIP                145
+#define SKILL_PILOT_LTA                 146
+#define SKILL_MECHANICAL_ARM_OPERATION  147
+#define SKILL_PILOT_SEMIBALLISTIC       148
+#define SKILL_PILOT_SUBORBITAL          149
+#define SKILL_PILOT_TRACKED             150
+#define SKILL_PILOT_WALKER              151
 
-#define MAX_SKILLS                147
+#define MAX_SKILLS                152
 // Adding a pilot skill? Update utils.cpp's pilot_skills[].
 
 // Skill type definitions.
@@ -1139,6 +1152,7 @@ enum {
 #define TYPE_ELEVATOR         413
 #define TYPE_MEDICAL_MISHAP   414
 #define TYPE_SPELL_DRAIN      415
+#define TYPE_DRUGS            416
 
 #define WEAP_EDGED          0
 #define WEAP_CLUB           1
@@ -1324,33 +1338,24 @@ enum {
 #define TYPE_PARTS       3
 #define TYPE_COOKER       4
 
-#define MIN_DRUG 1
-#define DRUG_ACTH  1
-#define DRUG_HYPER  2
-#define DRUG_JAZZ  3
-#define DRUG_KAMIKAZE  4
-#define DRUG_PSYCHE  5
-#define DRUG_BLISS  6
-#define DRUG_BURN  7
-#define DRUG_CRAM  8
-#define DRUG_NITRO  9
-#define DRUG_NOVACOKE  10
-#define DRUG_ZEN  11
-#define NUM_DRUGS       12
-
 /* vehicle types table */
-#define VEH_DRONE 0
-#define VEH_BIKE 1
-#define VEH_CAR 2
-#define VEH_TRUCK 3
-#define VEH_FIXEDWING 4
-#define VEH_ROTORCRAFT 5
-#define VEH_VECTORTHRUST 6
-#define VEH_HOVERCRAFT 7
-#define VEH_MOTORBOAT 8
-#define VEH_SHIP 9
-#define VEH_LTA 10
-#define NUM_VEH_TYPES 11
+#define VEH_DRONE         0
+#define VEH_BIKE          1
+#define VEH_CAR           2
+#define VEH_TRUCK         3
+#define VEH_FIXEDWING     4
+#define VEH_ROTORCRAFT    5
+#define VEH_VECTORTHRUST  6
+#define VEH_HOVERCRAFT    7
+#define VEH_MOTORBOAT     8
+#define VEH_SHIP          9
+#define VEH_LTA           10
+#define VEH_SEMIBALLISTIC 11
+#define VEH_SUBORBITAL    12
+#define VEH_TRACKED       13
+#define VEH_WALKER        14
+#define NUM_VEH_TYPES     15
+// Adding a type? Change constants.cpp's veh_types[]
 
 /* vehicle affection table */
 #define VAFF_NONE  0
@@ -1824,7 +1829,8 @@ enum {
 #define TYPE_TIRES    20
 #define TYPE_MISC    21
 #define TYPE_AMMOBIN    22
-#define NUM_MODTYPES    23
+#define TYPE_POKEYSTICK 23
+#define NUM_MODTYPES    24
 
 #define ENGINE_NONE        0
 #define ENGINE_ELECTRIC    1
@@ -1833,6 +1839,9 @@ enum {
 #define ENGINE_METHANE    4
 #define ENGINE_DIESEL      5
 #define NUM_ENGINE_TYPES  6
+
+#define SEATING_REAR      0
+#define SEATING_FRONT     1
 
 /* house value defines */
 #define MAX_HOUSES      100
@@ -2002,10 +2011,11 @@ enum {
 /* do_use */
 #define SCMD_USE        0
 
-/* do_echo */
+/* do_new_emote */
 #define SCMD_ECHO       0
 #define SCMD_EMOTE      1
-#define SCMD_AECHO  3
+#define SCMD_VEMOTE     2
+#define SCMD_AECHO      3
 
 /* do_gen_door */
 #define SCMD_OPEN       0
@@ -2058,6 +2068,9 @@ enum {
 /* do_crash_mud */
 #define SCMD_NOOP 0 // AKA 'this invocation does nothing'.
 #define SCMD_BOOM 1337
+
+/* do_get */
+#define SCMD_TAKE 1
 
 /* END SUBCOMMANDS SECTION */
 
@@ -2242,7 +2255,7 @@ enum {
 #define MAX_SOCK_BUF              4194304 /* hand-picked from `cat /proc/sys/net/ipv4/tcp_wmem` */
 #else
 // You can probably change this value (see example above)-- it was set in the dark ages where the max sock buf was 12288.
-#define MAX_SOCK_BUF              (12 * 1024) /* Size of kernel's sock buf   */
+#define MAX_SOCK_BUF              (48 * 1024) /* Size of kernel's sock buf   */
 #endif
 
 #define MAX_PROMPT_LENGTH         1000          /* Max length of prompt        */
@@ -2266,6 +2279,11 @@ enum {
 #define MAX_AFFECT                32  /* Used in char_file_u *DO*NOT*CHANGE* */
 #define MAX_OBJ_AFFECT            6 /* Used in obj_file_elem *DO*NOT*CHANGE* */
 #define IDENT_LENGTH              8
+
+// Update the DB if you change these.
+#define MAX_KEYWORDS_LEN          200
+#define MAX_MOVEMENT_LEN          200
+#define MAX_SHORTDESC_LEN         200
 
 // New combat modifiers used in the rework of hit().
 #define COMBAT_MOD_RECOIL                0
@@ -2299,6 +2317,12 @@ enum {
 #define RM_DANTES_GARAGE             35693
 #define RM_DANTES_GARAGE_RANDOM      (35693 + number(0,4))
 #define RM_DANTES_DESCENT            35502
+#define RM_AGGIES_DRUG_STORE         14649
+#define RM_DETENTION_CELL_A          3726
+#define RM_HEARL_STREET              9915
+#define RM_ALONG_THIRD_STREET        62267
+#define RM_MASSAGE_PARLOR            7226
+#define RM_ABANDONED_CLOTHING_STORE  4985
 #ifdef USE_PRIVATE_CE_WORLD
 #define RM_TEMPORARY_DOCWAGON        10097
 #define RM_SEATTLE_DOCWAGON          RM_TEMPORARY_DOCWAGON
@@ -2362,14 +2386,12 @@ enum {
 #define OBJ_SPECIAL_PC_CORPSE              43
 #define OBJ_COLT_M23                       838
 #define OBJ_NICAMI_SCOPE                   28702
-#define OBJ_VENT_IV                        80403
 #define OBJ_SMARTLINK_II                   31111
 #define OBJ_DOCWAGON_BASIC_MOD             16206
 #define OBJ_DOCWAGON_GOLD_MODULATOR        16207
 #define OBJ_DOCWAGON_PLATINUM_MODULATOR    16208
 #define OBJ_BLACK_TRENCH_COAT              1833
 #define OBJ_100_PCT_COTTON_SHIRT           64903
-#define OBJ_FORMFIT_III                    80734
 #define OBJ_FOREARM_GUARDS                 700
 #define OBJ_RIFLE_STRAP                    2059
 #define OBJ_BLACK_LEATHER_DUTY_BELT        9402
@@ -2398,7 +2420,6 @@ enum {
 #define OBJ_ORICHALCUM_BRACELET            4906
 #define OBJ_TITLE_TO_AMERICAR              891
 #define OBJ_SCK_MODEL_100                  786
-#define OBJ_TOP_MOUNTED_SMARTGUN_LINK      80422
 #define OBJ_FOREGRIP                       28618
 #define OBJ_PAIR_OF_WHITE_TRAINERS         22691
 #define OBJ_CYBERDECK_REPAIR_KIT           38041
@@ -2420,7 +2441,19 @@ enum {
 #define OBJ_UNFINISHED_EQUATION            1015
 #define OBJ_SCANEYE                        3817
 
+#ifdef USE_PRIVATE_CE_WORLD
+#define OBJ_GAS_VENT_IV                    80403
 #define OBJ_CMT_AVATAR                     80004
+#define OBJ_TOP_MOUNTED_SMARTGUN_LINK      80422
+#define OBJ_FORMFIT_III                    80734
+#else
+#define OBJ_GAS_VENT_IV                    691
+#define OBJ_CMT_AVATAR                     29005
+#define OBJ_TOP_MOUNTED_SMARTGUN_LINK      60554
+#define OBJ_FORMFIT_III                    711
+#endif
+
+
 #define OBJ_NOVATECH_SIX_SENSORS           17116
 #define OBJ_NOVATECH_SIX_MASKING           17115
 #define OBJ_NOVATECH_SIX_BOD               17113
@@ -2433,24 +2466,47 @@ enum {
 #define OBJ_TRANSYS_ARMOR                  1139
 #define OBJ_MATRIX_SWORD                   387
 
+#ifdef USE_PRIVATE_CE_WORLD
 #define OBJ_CYB_CERAMIC_BONE_LACING        85066
 #define OBJ_CYB_DATAJACK                   85012
 #define OBJ_CYB_BOOSTED_REFLEXES_III_ALPHA 85270
 #define OBJ_CYB_THERMOGRAPHIC_VISION       85053
 #define OBJ_CYB_SMARTLINK_II_ALPHA         85318
-#define OBJ_CYB_ENCEPHALON_II 85014
-#define OBJ_CYB_MATH_SPU_III 85019
-#define OBJ_CYB_SMARTLINK_II 85118
+#define OBJ_CYB_ENCEPHALON_II              85014
+#define OBJ_CYB_MATH_SPU_III               85019
+#define OBJ_CYB_SMARTLINK_II               85118
+#else
+#define OBJ_CYB_CERAMIC_BONE_LACING        463
+#define OBJ_CYB_DATAJACK                   304
+#define OBJ_CYB_BOOSTED_REFLEXES_III_ALPHA 327
+#define OBJ_CYB_THERMOGRAPHIC_VISION       307
+#define OBJ_CYB_SMARTLINK_II_ALPHA         548
+#define OBJ_CYB_ENCEPHALON_II              1107
+#define OBJ_CYB_MATH_SPU_III               1110
+#define OBJ_CYB_SMARTLINK_II               302
+#endif
+
 #define OBJ_CYB_EYE_PACKAGE_LL_TH_FC_ALPHA 566
 
+#ifdef USE_PRIVATE_CE_WORLD
 #define OBJ_BIO_MUSCLE_TONER_III           85811
+#define OBJ_BIO_MUSCLE_TONER_IV            85812
 #define OBJ_BIO_CEREBRAL_BOOSTER_II        85927
 #define OBJ_BIO_MUSCLE_AUGMENTATION_II     85806
 #define OBJ_BIO_ENHANCED_ARTICULATION      85803
-#define OBJ_BIO_MUSCLE_TONER_IV            85812
 #define OBJ_BIO_TRAUMA_DAMPER              85940
 #define OBJ_BIO_SYNAPTIC_ACCELERATOR_II    85939
 #define OBJ_BIO_CEREBRAL_BOOSTER_II        85927
+#else
+#define OBJ_BIO_MUSCLE_TONER_III           60609
+#define OBJ_BIO_MUSCLE_TONER_IV            60610
+#define OBJ_BIO_CEREBRAL_BOOSTER_II        411
+#define OBJ_BIO_MUSCLE_AUGMENTATION_II     417
+#define OBJ_BIO_ENHANCED_ARTICULATION      415
+#define OBJ_BIO_TRAUMA_DAMPER              60611
+#define OBJ_BIO_SYNAPTIC_ACCELERATOR_II    414
+#define OBJ_BIO_CEREBRAL_BOOSTER_II        411
+#endif
 
 
 #define OBJ_OLD_BLANK_MAGAZINE_FROM_CLASSIC 601
@@ -2482,6 +2538,7 @@ enum {
 #define OBJ_BLANK_MAGAZINE                 127
 
 #define OBJ_DOCWAGON_PAPER_GOWN            16201
+#define OBJ_ANTI_DRUG_CHEMS                44
 
 #define QST_MAGE_INTRO                     5743
 
@@ -2702,8 +2759,9 @@ enum {
 #define NUYEN_OUTFLOW_TRADE_COMMAND         24
 #define NUYEN_OUTFLOW_CREDSTICK_CRACKER     25
 #define NUYEN_OUTFLOW_DEATH_PENALTY         26
+#define NUYEN_OUTFLOW_DRUGS                 27
 
-#define NUM_OF_TRACKED_NUYEN_INCOME_SOURCES 27
+#define NUM_OF_TRACKED_NUYEN_INCOME_SOURCES 28
 // Make sure you update constants.cpp's nuyen_faucets_and_sinks[] too!
 
 #define NI_IS_SINK   0
@@ -2750,6 +2808,8 @@ enum {
 
 // Set this at the end of every flag list in constants.cpp.
 #define MAX_FLAG_MARKER "\n"
+
+#define MAX_VISIBILITY_PENALTY             8
 
 // This is to flag variables used eg in macros so that the compiler won't complain about unused variables
 // when they're actually used. Casting to void does nothing but the compiler will stop thinking it's

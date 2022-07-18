@@ -658,77 +658,15 @@ ACMD(do_patch)
   }
 }
 
-void do_drug_take(struct char_data *ch, struct obj_data *obj)
-{
-    int drugval = GET_OBJ_VAL(obj, 0);
-    if ((GET_DRUG_AFFECT(ch) && GET_DRUG_DOSE(ch) > GET_DRUG_TOLERANT(ch, drugval)) || GET_DRUG_STAGE(ch) > 1) {
-      send_to_char(ch, "Maybe you should wait.\r\n");
-      return;
-    }
-    act("$n takes $p.", TRUE, ch, obj, 0, TO_ROOM);
-    GET_DRUG_AFFECT(ch) = drugval;
-    GET_DRUG_DOSES(ch, drugval)++;
-    if (GET_DRUG_DOSES(ch, drugval) == 1) {
-      if ((GET_DRUG_ADDICT(ch, drugval) != 1 || GET_DRUG_ADDICT(ch, drugval) != 3) &&
-          (drug_types[drugval].mental_addiction ? success_test(GET_WIL(ch), drug_types[drugval].mental_addiction) : 1) < 1) {
-        if (GET_DRUG_ADDICT(ch, drugval) == 2)
-          GET_DRUG_ADDICT(ch, drugval) = 3;
-        else
-          GET_DRUG_ADDICT(ch, drugval) = 1;
-        GET_DRUG_EDGE(ch, drugval) = 1;
-      }
-      if ((GET_DRUG_ADDICT(ch, drugval) != 2 || GET_DRUG_ADDICT(ch, drugval) != 3) &&
-          (drug_types[drugval].physical_addiction ? success_test(GET_REAL_BOD(ch), drug_types[drugval].physical_addiction) : 1) < 1) {
-        if (GET_DRUG_ADDICT(ch, drugval) == 1)
-          GET_DRUG_ADDICT(ch, drugval) = 3;
-        else
-          GET_DRUG_ADDICT(ch, drugval) = 2;
-        GET_DRUG_EDGE(ch, drugval) = 1;
-      }
-    } else if ((GET_DRUG_DOSES(ch, drugval) > 0 && ((!GET_DRUG_ADDICT(ch, drugval) && !(GET_DRUG_DOSES(ch, drugval) % drug_types[drugval].edge_preadd)))) ||
-               (GET_DRUG_ADDICT(ch, drugval) && !(GET_DRUG_DOSES(ch, drugval) % drug_types[drugval].edge_posadd))) {
-      GET_DRUG_EDGE(ch, drugval)++;
-      if ((drug_types[drugval].mental_addiction ? success_test(GET_WIL(ch), drug_types[drugval].mental_addiction + GET_DRUG_EDGE(ch, drugval)): 1) < 1) {
-        GET_DRUG_ADDICT(ch,drugval) = 1;
-        GET_DRUG_EDGE(ch, drugval) = 1;
-      }
-      if ((drug_types[drugval].physical_addiction ? success_test(GET_REAL_BOD(ch), drug_types[drugval].physical_addiction + GET_DRUG_EDGE(ch, drugval)) : 1) < 1) {
-        GET_DRUG_ADDICT(ch, drugval) = 2;
-        GET_DRUG_EDGE(ch, drugval) = 1;
-      }
-    }
-    send_to_char(ch, "You take %s.\r\n", GET_OBJ_NAME(obj));
-    GET_DRUG_DOSE(ch)++;
-    if (GET_DRUG_DOSE(ch) > GET_DRUG_TOLERANT(ch, drugval)) {
-      GET_DRUG_STAGE(ch) = 0;
-      if (AFF_FLAGS(ch).AreAnySet(AFF_WITHDRAWAL, AFF_WITHDRAWAL_FORCE, ENDBIT) && GET_DRUG_ADDICT(ch, drugval)) {
-        GET_DRUG_EDGE(ch, drugval)++;
-        AFF_FLAGS(ch).RemoveBits(AFF_WITHDRAWAL, AFF_WITHDRAWAL_FORCE, ENDBIT);
-      }
-      // Drug tick is every 2 seconds (a MUD minute), so most of these were over in a flash. Let's crank it up so that these values are in IRL minutes instead.
-      switch (drugval) {
-      case DRUG_PSYCHE:
-      case DRUG_CRAM:
-      case DRUG_BURN:
-        GET_DRUG_DURATION(ch) = 50 * (60 / SECS_PER_MUD_MINUTE);
-        break;
-      case DRUG_ZEN:
-        GET_DRUG_DURATION(ch) = 25 * srdice() * (60 / SECS_PER_MUD_MINUTE);
-        break;
-      default:
-        GET_DRUG_DURATION(ch) = 0;
-        break;
-      }
-    } else {
-      GET_DRUG_STAGE(ch) = -1;
-      GET_DRUG_DURATION(ch) = 20;
-    }
-    extract_obj(obj);
-}
 ACMD(do_use)
 {
   struct obj_data *obj, *corpse;
   struct char_data *tmp_char;
+
+  if (IS_ASTRAL(ch)) {
+    send_to_char("You cannot interact with physical objects.\r\n", ch);
+    return;
+  }
 
   half_chop(argument, arg, buf);
   if (!*arg) {
@@ -779,7 +717,8 @@ ACMD(do_use)
     }
     return;
   } else if (GET_OBJ_TYPE(obj) == ITEM_DRUG) {
-    do_drug_take(ch, obj);
+    if (do_drug_take(ch, obj))
+      return;
   } else if (GET_OBJ_SPEC(obj) && GET_OBJ_SPEC(obj) == anticoagulant) {
     for (struct obj_data *cyber = ch->bioware; cyber; cyber = cyber->next_content) {
       if (GET_OBJ_VAL(cyber, 0) == BIO_PLATELETFACTORY) {
@@ -1261,6 +1200,12 @@ ACMD(do_toggle)
     );
     send_to_char(buf, ch);
   } else {
+    if (!PLR_FLAGGED(ch, PLR_ENABLED_DRUGS) && !str_cmp(argument, "druguse")) {
+      send_to_char("You have permanently enabled drug usage. Enjoy!\r\n", ch);
+      PLR_FLAGS(ch).SetBit(PLR_ENABLED_DRUGS);
+      return;
+    }
+
     if (is_abbrev(argument, "afk"))
       result = PRF_TOG_CHK(ch, PRF_AFK);
     else if (is_abbrev(argument, "autoexits")) {
@@ -1509,13 +1454,17 @@ ACMD(do_skills)
       send_to_char("You do not have any abilities.\r\n", ch);
       return;
     }
+    if(subcmd == SCMD_ABILITIES) {
+      snprintf(ENDOF(buf), sizeof(buf), "PP      Ability              Level (Active)\r\n");
+    }
     extern int max_ability(int i);
     for (i = 1; i < ADEPT_NUMPOWER; i++) {
       if (!mode_all && *arg && !is_abbrev(arg, adept_powers[i]))
         continue;
 
       if (GET_POWER_TOTAL(ch, i) > 0) {
-        snprintf(buf2, sizeof(buf2), "%-20s", adept_powers[i]);
+        extern int ability_cost(int abil, int level);
+        snprintf(buf2, sizeof(buf2), "%0.2f    %-20s", ((float)ability_cost(i, 1))/100, adept_powers[i]);
         if (max_ability(i) > 1)
           switch (i) {
           case ADEPT_KILLING_HANDS:
@@ -2097,21 +2046,19 @@ ACMD(do_treat)
     return;
   }
 
-  if (vict == ch) {
-    send_to_char("You can't treat yourself!\r\n", ch);
-    return;
-  } else if (CH_IN_COMBAT(vict)) {
+  if (CH_IN_COMBAT(vict)) {
     act("Not while $E's fighting!", FALSE, ch, 0, vict, TO_CHAR);
-    return;
-  } else if (GET_POS(vict) > POS_LYING && !subcmd) {
-    act("$N must at least be lying down to receive first aid.", FALSE, ch, 0, vict, TO_CHAR);
     return;
   } else if (LAST_HEAL(vict) != 0
              || (!IS_NPC(vict)
                  && !IS_SENATOR(vict)
                  && IS_SENATOR(ch)
                  && !access_level(ch, LVL_ADMIN))) {
-    act("Treating $N will not do $M any good.", FALSE, ch, 0, vict, TO_CHAR);
+    if (ch == vict) {
+      send_to_char(ch, "You're not able to treat your wounds right now.\r\n");
+    } else {
+      act("Treating $N will not do $M any good.", FALSE, ch, 0, vict, TO_CHAR);
+    }
     return;
   }
 
@@ -2124,7 +2071,12 @@ ACMD(do_treat)
   else if (GET_PHYSICAL(vict) <= (GET_MAX_PHYSICAL(vict) * 9/10))
     target = 4;
   else {
-    act("$N doesn't need to be treated.", FALSE, ch, 0, vict, TO_CHAR);
+    if (ch == vict) {
+      send_to_char(ch, "You don't need treatment.\r\n");
+    } else {
+      act("$N doesn't need to be treated.", FALSE, ch, 0, vict, TO_CHAR);
+    }
+
     if (subcmd) {
       char buf[400];
       snprintf(buf, sizeof(buf), "%s Treatment will do you no good.", GET_CHAR_NAME(vict));
@@ -2159,11 +2111,19 @@ ACMD(do_treat)
   if (vict->real_abils.mag > 0)
     target += 2;
 
-  act("$n begins to treat $N.", TRUE, ch, 0, vict, TO_NOTVICT);
+  if (ch == vict) {
+    act("$n begins to treat $mself.", TRUE, ch, 0, vict, TO_NOTVICT);
+  } else {
+    act("$n begins to treat $N.", TRUE, ch, 0, vict, TO_NOTVICT);
+  }
   if (success_test(i, target) > 0) {
     act("$N appears better.", FALSE, ch, 0, vict, TO_CHAR);
-    act("The pain seems significantly less after $n's treatment.",
-        FALSE, ch, 0, vict, TO_VICT);
+    if (ch == vict) {
+      send_to_char(ch, "The pain seems significantly better.\r\n");
+    } else {
+      act("The pain seems significantly less after $n's treatment.",
+          FALSE, ch, 0, vict, TO_VICT);
+    }
     if (GET_PHYSICAL(vict) < 100) {
       GET_PHYSICAL(vict) = MIN(GET_MAX_PHYSICAL(vict), 100);
       GET_MENTAL(vict) = 0;
@@ -2180,8 +2140,12 @@ ACMD(do_treat)
       LAST_HEAL(vict) = (int)(GET_MAX_PHYSICAL(vict) / 1000);
     }
   } else {
-    act("Your treatment does nothing for $N.", FALSE, ch, 0, vict, TO_CHAR);
-    act("$n's treatment doesn't help your wounds.", FALSE, ch, 0, vict, TO_VICT);
+    if (ch == vict) {
+      send_to_char(ch, "Your treatment does nothing for your wounds.\r\n");
+    } else {
+      act("Your treatment does nothing for $N.", FALSE, ch, 0, vict, TO_CHAR);
+      act("$n's treatment doesn't help your wounds.", FALSE, ch, 0, vict, TO_VICT);
+    }
     LAST_HEAL(vict) = 3;
   }
 }
@@ -2525,7 +2489,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
         snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), ", Physical_Name='%s'", prepare_quotes(buf3, CH->player.physical_text.name, sizeof(buf3) / sizeof(buf3[0])));
 
         DELETE_ARRAY_IF_EXTANT(CH->player.physical_text.room_desc);
-        CH->player.physical_text.room_desc = str_dup(d->edit_mob->player.physical_text.room_desc);
+        CH->player.physical_text.room_desc = str_dup(get_string_after_color_code_removal(d->edit_mob->player.physical_text.room_desc, CH));
         snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), ", Voice='%s'", prepare_quotes(buf3, CH->player.physical_text.room_desc, sizeof(buf3) / sizeof(buf3[0])));
 
         DELETE_ARRAY_IF_EXTANT(CH->player.physical_text.look_desc);
@@ -2704,7 +2668,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
     cedit_disp_menu(d, 0);
     break;
   case CEDIT_ALIAS:
-    if (strlen(arg) >= LINE_LENGTH || strlen(arg) < 5) {
+    if (strlen(arg) >= MAX_KEYWORDS_LEN || get_string_length_after_color_code_removal(arg, CH) >= LINE_LENGTH || strlen(arg) < 5) {
       cedit_disp_menu(d, 1);
       return;
     }
@@ -2716,18 +2680,18 @@ void cedit_parse(struct descriptor_data *d, char *arg)
     break;
 
   case CEDIT_VOICE:
-    if (strlen(arg) >= LINE_LENGTH || strlen(arg) < 5) {
+    if (get_string_length_after_color_code_removal(arg, CH) >= LINE_LENGTH || strlen(arg) < 5) {
       cedit_disp_menu(d, 1);
       return;
     }
 
     DELETE_ARRAY_IF_EXTANT(d->edit_mob->player.physical_text.room_desc);
-    d->edit_mob->player.physical_text.room_desc = str_dup(arg);
+    d->edit_mob->player.physical_text.room_desc = str_dup(get_string_after_color_code_removal(arg, CH));
     cedit_disp_menu(d, 0);
 
     break;
   case CEDIT_ARRIVE:
-    if (strlen(arg) >= LINE_LENGTH || strlen(arg) < 5) {
+    if (strlen(arg) >= MAX_MOVEMENT_LEN || get_string_length_after_color_code_removal(arg, CH) >= LINE_LENGTH || strlen(arg) < 5) {
       cedit_disp_menu(d, 1);
       return;
     }
@@ -2736,7 +2700,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
     cedit_disp_menu(d, 0);
     break;
   case CEDIT_LEAVE:
-    if (strlen(arg) >= LINE_LENGTH || strlen(arg) < 5) {
+    if (strlen(arg) >= MAX_MOVEMENT_LEN || get_string_length_after_color_code_removal(arg, CH) >= LINE_LENGTH || strlen(arg) < 5) {
       cedit_disp_menu(d, 1);
       return;
     }
@@ -2745,7 +2709,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
     cedit_disp_menu(d, 0);
     break;
   case CEDIT_SHORT_DESC:
-    if (strlen(arg) >= LINE_LENGTH || strlen(arg) < 5) {
+    if (strlen(arg) >= MAX_SHORTDESC_LEN || get_string_length_after_color_code_removal(arg, CH) >= LINE_LENGTH || strlen(arg) < 5) {
       cedit_disp_menu(d, 1);
       return;
     }
@@ -3247,10 +3211,8 @@ ACMD(do_assense)
     send_to_char(ch, "Who's aura do you wish to assense?\r\n");
     return;
   }
-  if (!PLR_FLAGS(ch).AreAnySet(PLR_PERCEIVE, PLR_PROJECT, ENDBIT) && !IS_PROJECT(ch)) {
-    send_to_char(ch, "You have no sense of the astral plane.\r\n");
+  if (!force_perception(ch))
     return;
-  }
   skip_spaces(&argument);
   if (!generic_find(argument,  FIND_OBJ_INV | FIND_OBJ_ROOM | FIND_OBJ_EQUIP |
                     FIND_CHAR_ROOM, ch, &vict, &obj)) {
@@ -4515,10 +4477,11 @@ ACMD(do_spray)
       struct obj_data *paint = read_object(OBJ_GRAFFITI, VIRTUAL);
       snprintf(buf, sizeof(buf), "a piece of graffiti that says \"%s^n\"", argument);
       paint->restring = str_dup(buf);
-      snprintf(buf, sizeof(buf), "\"%s^g\" is sprayed here.", argument);
+      snprintf(buf, sizeof(buf), "^g   %s^n", argument);
       paint->graffiti = str_dup(buf);
       obj_to_room(paint, ch->in_room);
 
+      send_to_char("You tag the area with your spray.\r\n", ch);
       snprintf(buf, sizeof(buf), "%s sprayed graffiti: %s.", GET_CHAR_NAME(ch), GET_OBJ_NAME(paint));
       mudlog(buf, ch, LOG_GRIDLOG, TRUE);
 
@@ -4558,6 +4521,8 @@ ACMD(do_cleanup)
 
   send_to_char(ch, "You spend a few moments scrubbing away %s. Community service, good for you!\r\n", GET_OBJ_NAME(target_obj));
   act("$n spends a few moments scrubbing away $p.", TRUE, ch, target_obj, NULL, TO_ROOM);
+
+  WAIT_STATE(ch, 3 RL_SEC);
 
   snprintf(buf, sizeof(buf), "%s cleaned up graffiti: ^n%s^g.", GET_CHAR_NAME(ch), GET_OBJ_NAME(target_obj));
   mudlog(buf, ch, LOG_GRIDLOG, TRUE);
@@ -4758,7 +4723,7 @@ ACMD(do_syspoints) {
       row = mysql_fetch_row(res);
       if (!row && mysql_field_count(mysql)) {
         mysql_free_result(res);
-        send_to_char("There is no such player.\r\n", ch);
+        send_to_char(ch, "Could not find a PC named %s.\r\n", buf);
         return;
       }
       send_to_char(ch, "%s has %s system point(s).\r\n", row[0], row[1]);
@@ -4813,7 +4778,7 @@ ACMD(do_syspoints) {
     row = mysql_fetch_row(res);
     if (!row && mysql_field_count(mysql)) {
       mysql_free_result(res);
-      send_to_char("There is no such player.\r\n", ch);
+      send_to_char(ch, "Could not find a PC named %s.\r\n", target);
       return;
     }
     long idnum = atol(row[0]);

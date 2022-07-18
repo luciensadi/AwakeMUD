@@ -734,6 +734,29 @@ Material:	metal
 [POINTS]
 	Barrier:	32
 BREAK
+#44
+Keywords:	willbooster booster chems anti-craving anti craving anticraving bottle
+Name:	a bottle of WillBooster anti-craving chems
+RoomDesc:$
+A bottle of withdrawal aids has been left here.~
+LookDesc:$
+The cheery cartoon figure on the label of this off-white bottle clashes rather
+spectacularly with the small-print warnings that clutter the label.
+Apparently, use of these chems is correlated with something called
+"instantaneous small-intestine inversion" and "growth of extraneous
+appendages" in lab rats? Regardless, it's still your best bet for suppressing
+withdrawal cravings. 
+~
+Type:	Other
+WearFlags:	1
+Material:	plastic
+[POINTS]
+	Weight:	0.10
+	Barrier:	4
+	Cost:	1000
+[VALUES]
+	Val0:	10
+BREAK
 #50
 Keywords:	flat panel display monitor terminal board floating
 Name:	A Floating Display Panel
@@ -1207,7 +1230,6 @@ Material:	metal
 [POINTS]
 	Weight:	0.25
 	Barrier:	32
-	Cost:	20
 	AvailTN:	2
 	AvailDay:	1.00
 	StreetIndex:	0.75
@@ -1224,7 +1246,7 @@ Created by staff on an individual basis.
 ~
 Type:	Cyberware
 WearFlags:	1
-ExtraFlags:	100000001000000000000000
+ExtraFlags:	100100000001000000000000000
 Material:	metal
 [POINTS]
 	Weight:	1.00
@@ -1242,7 +1264,7 @@ Created by staff on an individual basis.
 ~
 Type:	Bioware
 WearFlags:	1
-ExtraFlags:	100000001000000000000000
+ExtraFlags:	100100000001000000000000000
 Material:	metal
 [POINTS]
 	Weight:	1.00

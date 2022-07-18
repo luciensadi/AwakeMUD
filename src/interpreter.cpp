@@ -663,7 +663,7 @@ struct command_info cmd_info[] =
     { "lay"        , POS_RESTING , do_lay      , 0, 0, FALSE },
     { "language"   , POS_DEAD    , do_language , 0, 0, TRUE },
     { "last"       , POS_DEAD    , do_last     , LVL_BUILDER, 0, FALSE },
-    { "leaderboards", POS_DEAD  , do_leaderboard, LVL_BUILDER, 0, FALSE },
+    { "leaderboards", POS_DEAD  , do_leaderboard, LVL_MORTAL, 0, FALSE },
     { "learn"      , POS_RESTING , do_learn    , 0, 0, FALSE },
     { "leave"      , POS_SITTING , do_leave    , 0, 0, FALSE },
     { "link"       , POS_SLEEPING, do_link     , 0, 0, FALSE },
@@ -742,7 +742,7 @@ struct command_info cmd_info[] =
     { "prone"      , POS_FIGHTING, do_prone    , 0, 0, FALSE },
     { "praise"     , POS_DEAD    , do_gen_write, 0, SCMD_PRAISE, TRUE },
     { "push"       , POS_SITTING , do_push     , 0, 0, FALSE },
-    { "playerrolls", POS_DEAD    , do_playerrolls, LVL_PRESIDENT, 0, FALSE },
+    { "playerrolls", POS_DEAD    , do_playerrolls, LVL_ADMIN, 0, FALSE },
   #ifdef IS_BUILDPORT
     { "purge"      , POS_DEAD    , do_purge    , LVL_BUILDER, 0, FALSE },
   #else
@@ -848,7 +848,7 @@ struct command_info cmd_info[] =
     { "talk"       , POS_LYING   , do_phone    , 0, SCMD_TALK, FALSE },
     { "tell"       , POS_DEAD    , do_tell     , 0, 0, TRUE },
     { "tells"      , POS_DEAD    , do_switched_message_history, 0, COMM_CHANNEL_TELLS, TRUE },
-    { "take"       , POS_RESTING , do_get      , 0, 0, FALSE },
+    { "take"       , POS_RESTING , do_get      , 0, SCMD_TAKE, FALSE },
     { "target"     , POS_SITTING , do_target   , 0, 0, FALSE },
     { "taste"      , POS_RESTING , do_eat      , 0, SCMD_TASTE, FALSE },
     { "tail"       , POS_DEAD    , do_tail     , LVL_DEVELOPER, 0, FALSE },
@@ -893,7 +893,7 @@ struct command_info cmd_info[] =
     { "users"      , POS_DEAD    , do_users    , LVL_BUILDER, 0, FALSE },
 
     { "version"    , POS_DEAD    , do_gen_ps   , 0, SCMD_VERSION, TRUE },
-    { "vemote"     , POS_SLEEPING, do_vemote   , 0 , 0, FALSE },
+    { "vemote"     , POS_SLEEPING, do_new_echo , 0 , SCMD_VEMOTE, FALSE }, // was do_vemote
     { "visible"    , POS_RESTING , do_visible  , LVL_BUILDER, 0, FALSE },
     { "view"       , POS_LYING   , do_imagelink, 0, 0, FALSE },
     { "vfind"      , POS_DEAD    , do_vfind    , LVL_BUILDER, 0, FALSE },
@@ -909,7 +909,7 @@ struct command_info cmd_info[] =
     { "who"        , POS_DEAD    , do_who      , 0, 0, TRUE },
     { "whoami"     , POS_DEAD    , do_gen_ps   , 0, SCMD_WHOAMI, TRUE },
     { "whotitle"   , POS_DEAD    , do_wiztitle , LVL_BUILDER, SCMD_WHOTITLE, TRUE },
-    { "where"      , POS_DEAD    , do_where    , 1, LVL_PRESIDENT, TRUE }, // todo: why is lvl_president in the scmd slot?
+    { "where"      , POS_DEAD    , do_where    , 1, 0, TRUE },
     { "wheresmycar", POS_RESTING , do_wheresmycar, 1, 0, FALSE },
     { "whisper"    , POS_LYING   , do_spec_comm, 0, SCMD_WHISPER, FALSE },
     { "wield"      , POS_RESTING , do_wield    , 0, 0, FALSE },
@@ -1242,6 +1242,7 @@ struct command_info mtx_info[] =
     { "RESERVED", 0, 0, 0, 0
     , FALSE },
     { "abort", 0, do_abort, 0, 0, FALSE },
+    { "alias", 0, do_alias, 0, 0, FALSE },
     { "analyze", 0, do_analyze, 0, 0, FALSE },
     { "answer", 0, do_comcall, 0, SCMD_ANSWER, FALSE },
     { "asist", 0, do_asist, 0, 0, FALSE },
@@ -1339,8 +1340,9 @@ struct command_info rig_info[] =
     { "help", 0, do_help, 0, 0, FALSE },
     { "ht", 0, do_gen_comm , 0, SCMD_HIREDTALK, FALSE },
     { "idea", 0, do_gen_write, 0, SCMD_IDEA, FALSE },
-    { "index", 0, do_index, 0, 0, FALSE },
     { "look", 0, do_look, 0, 0, FALSE },
+    { "index", 0, do_index, 0, 0, FALSE },
+    { "languages", 0, do_language, 0, 0, FALSE },
     { "leave", 0, do_leave, 0 ,0 , FALSE },
     { "lock", 0, do_gen_door , 0, SCMD_LOCK , FALSE },
     { "mode", 0, do_mode, 0, 0, FALSE },
@@ -1357,6 +1359,7 @@ struct command_info rig_info[] =
     { "score", 0, do_score, 0, 0, FALSE },
     { "scan", 0, do_scan, 0, 0, FALSE },
     { "speed", 0, do_speed, 0, 0, FALSE },
+    { "speak", 0, do_language, 0, 0, FALSE },
     { "subscribe", 0, do_subscribe, 0, 0, FALSE },
     { "target", 0, do_target, 0, 0, FALSE },
     { "tell", 0, do_tell, 0, 0 , FALSE },
@@ -1364,7 +1367,7 @@ struct command_info rig_info[] =
     { "tow", 0, do_tow , 0, 0 , FALSE },
     { "typo", 0, do_gen_write, 0, SCMD_TYPO, FALSE },
     { "unlock", 0, do_gen_door , 0, SCMD_UNLOCK , FALSE },
-    { "vemote", 0, do_vemote, 0, 0, FALSE },
+    { "vemote", 0, do_new_echo, 0, SCMD_VEMOTE, FALSE },
     { "where", 0, do_where, 0, 0, FALSE },
     { "who", 0, do_who, 0, 0, FALSE },
     { "wtell", 0, do_wiztell, LVL_BUILDER, 0, FALSE },
@@ -2646,7 +2649,9 @@ void nanny(struct descriptor_data * d, char *arg)
           SEND_TO_Q("Wrong password... disconnecting.\r\n", d);
           STATE(d) = CON_CLOSE;
         } else {
-          SEND_TO_Q("Wrong password.\r\nPassword: ", d);
+          char oopsbuf[500];
+          snprintf(oopsbuf, sizeof(oopsbuf), "That's not the right password for the character '%s'.\r\nEnter your password, or type ABORT: ", GET_CHAR_NAME(d->character));
+          SEND_TO_Q(oopsbuf, d);
         }
         return;
       }
@@ -2728,7 +2733,7 @@ void nanny(struct descriptor_data * d, char *arg)
       mudlog(buf, d->character, LOG_CONNLOG, TRUE);
       log_vfprintf("[CONNLOG: %s connecting from %s]", GET_CHAR_NAME(d->character), d->host);
       if (load_result) {
-        snprintf(buf, sizeof(buf), "\r\n\r\n\007\007\007"
+        snprintf(buf, sizeof(buf), "\r\n\r\n"
                 "%s%d LOGIN FAILURE%s SINCE LAST SUCCESSFUL LOGIN.%s\r\n",
                 CCRED(d->character, C_SPR), load_result,
                 (load_result > 1) ? "S" : "", CCNRM(d->character, C_SPR));

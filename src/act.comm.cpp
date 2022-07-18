@@ -898,8 +898,9 @@ ACMD(do_broadcast)
   else
     crypt = 0;
 
-  char untouched_message[MAX_STRING_LENGTH], capitalized_and_punctuated[MAX_STRING_LENGTH];
-  snprintf(capitalized_and_punctuated, sizeof(capitalized_and_punctuated), "%s%s", capitalize(argument), ispunct(get_final_character_from_string(argument)) ? "" : ".");
+  char untouched_message[MAX_STRING_LENGTH], capitalized_and_punctuated[MAX_STRING_LENGTH], color_stripped_arg[MAX_STRING_LENGTH];
+  strlcpy(color_stripped_arg, get_string_after_color_code_removal(argument, ch), sizeof(color_stripped_arg));
+  snprintf(capitalized_and_punctuated, sizeof(capitalized_and_punctuated), "%s%s", capitalize(color_stripped_arg), ispunct(get_final_character_from_string(argument)) ? "" : ".");
   if (frequency > 0) {
     if (crypt)
       snprintf(untouched_message, sizeof(untouched_message), "^y\\%s^y/[%d MHz, %s](CRYPTO-%d): %s^N", voice, frequency, skills[language].name, crypt, capitalized_and_punctuated);
@@ -973,7 +974,7 @@ ACMD(do_broadcast)
 
           // Copy in the message body, mangling it as needed for language skill issues.
           snprintf(message, sizeof(message), "%s%s",
-                   capitalize(replace_too_long_words(d->character, ch, argument, language, "^y", PRF_FLAGGED(d->character, PRF_SUPPRESS_STAFF_RADIO))),
+                   capitalize(replace_too_long_words(d->character, ch, color_stripped_arg, language, "^y", PRF_FLAGGED(d->character, PRF_SUPPRESS_STAFF_RADIO))),
                    ispunct(get_final_character_from_string(argument)) ? "" : ".");
 
           // Add in interference if there is any.
@@ -1204,16 +1205,17 @@ ACMD(do_gen_comm)
       }
     }
 
+    snprintf(buf1, sizeof(buf1),  "%sYou shout in %s, \"%s%s%s\"^n",
+            com_msgs[subcmd][3],
+            skills[language].name,
+            capitalize(argument),
+            ispunct(get_final_character_from_string(argument)) ? "" : "!",
+            com_msgs[subcmd][3]);
+
     if (PRF_FLAGGED(ch, PRF_NOREPEAT)) {
       store_message_to_history(ch->desc, COMM_CHANNEL_SHOUTS, buf1);
       send_to_char(OK, ch);
     } else {
-      snprintf(buf1, MAX_STRING_LENGTH,  "%sYou shout in %s, \"%s%s%s\"^n",
-              com_msgs[subcmd][3],
-              skills[language].name,
-              capitalize(argument),
-              ispunct(get_final_character_from_string(argument)) ? "" : "!",
-              com_msgs[subcmd][3]);
       // Note that this line invokes act().
       store_message_to_history(ch->desc, COMM_CHANNEL_SHOUTS, act(buf1, FALSE, ch, 0, 0, TO_CHAR));
     }
@@ -1246,8 +1248,16 @@ ACMD(do_gen_comm)
         for (tmp = ch->in_veh->people; tmp; tmp = tmp->next_in_veh) {
           // Replicate act() in a way that lets us capture the message.
           if (can_send_act_to_target(ch, FALSE, NULL, NULL, tmp, TO_ROOM) && !IS_IGNORING(tmp, is_blocking_ic_interaction_from, ch)) {
+            snprintf(buf1, sizeof(buf1), "%s$z%s shouts in %s, \"%s%s%s\"^n",
+                     com_msgs[subcmd][3],
+                     com_msgs[subcmd][3],
+                     (IS_NPC(tmp) || GET_SKILL(tmp, language) > 0) ? skills[language].name : "an unknown language",
+                     capitalize(replace_too_long_words(tmp, ch, argument, language, com_msgs[subcmd][3])),
+                     ispunct(get_final_character_from_string(argument)) ? "" : "!",
+                     com_msgs[subcmd][3]);
+
             // They're a valid target, so send the message with a raw perform_act() call.
-            store_message_to_history(tmp->desc, COMM_CHANNEL_SHOUTS, perform_act(buf, ch, NULL, NULL, tmp));
+            store_message_to_history(tmp->desc, COMM_CHANNEL_SHOUTS, perform_act(buf1, ch, NULL, NULL, tmp));
           }
         }
         ch->in_veh = NULL;

@@ -1185,11 +1185,11 @@ $n whistles innocently.
 wave 0 0
 You wave.
 $n waves happily.
-You wave goodbye to $N.
-$n waves goodbye to $N.
-$n waves goodbye to you.  Have a good journey.
-They didn't wait for you to wave goodbye.
-Been reading "Final Exit"?
+You wave to $N.
+$n waves to $N.
+$n waves to you.
+They didn't wait for you to wave.
+You wave to yourself.
 $n waves goodbye to $mself.
 
 whine 0 0

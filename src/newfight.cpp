@@ -45,7 +45,7 @@ bool handle_flame_aura(struct combat_data *att, struct combat_data *def);
 bool does_weapon_have_bayonet(struct obj_data *weapon);
 bool perform_nerve_strike(struct combat_data *att, struct combat_data *def, char *rbuf, size_t rbuf_len);
 
-#define SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER {act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS ); if (att->ch->in_room != def->ch->in_room) act( rbuf, 1, def->ch, NULL, NULL, TO_ROLLS );}
+#define SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER {act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS ); if (att->ch->in_room != def->ch->in_room && !PLR_FLAGGED(att->ch, PLR_REMOTE)) act( rbuf, 1, def->ch, NULL, NULL, TO_ROLLS );}
 
 #define IS_RANGED(eq)   (GET_OBJ_TYPE(eq) == ITEM_FIREWEAPON || \
 (GET_OBJ_TYPE(eq) == ITEM_WEAPON && \
@@ -423,7 +423,9 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       // Minimum TN is 2.
       def->ranged->tn = MAX(def->ranged->tn, 2);
 
-      def->ranged->successes = MAX(success_test(def->ranged->dice, def->ranged->tn), 0);
+      // No, you CANNOT collapse these two lines into MAX(0, s_t()), because it calls s_t() twice.
+      def->ranged->successes = success_test(def->ranged->dice, def->ranged->tn);
+      def->ranged->successes = MAX(0, def->ranged->successes);
       att->ranged->successes -= def->ranged->successes;
 
       snprintf(rbuf, sizeof(rbuf), "Dodge: Dice %d (%d pool + %d sidestep), TN %d, Successes ^c%d^n.  This means attacker's net successes = ^c%d^n.",
@@ -468,34 +470,39 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
 
     // Calculate effects of armor on the power of the attack.
     if (att->ranged->magazine) {
-      switch (GET_MAGAZINE_AMMO_TYPE(att->ranged->magazine)) {
-        case AMMO_APDS:
-          att->ranged->power -= (int)(GET_BALLISTIC(def->ch) / 2);
-          break;
-        case AMMO_EX:
-          att->ranged->power++;
-          // fall through
-        case AMMO_EXPLOSIVE:
-          att->ranged->power++;
-          att->ranged->power -= GET_BALLISTIC(def->ch);
-          break;
-        case AMMO_FLECHETTE:
-          if (!GET_IMPACT(def->ch) && !GET_BALLISTIC(def->ch))
-            att->ranged->damage_level++;
-          else {
-            att->ranged->power -= MAX(GET_BALLISTIC(def->ch), GET_IMPACT(def->ch) * 2);
-          }
-          break;
-        case AMMO_HARMLESS:
-          att->ranged->power = 0;
-          // fall through
-        case AMMO_GEL:
-          // Errata: Add the following after the third line: "Impact armor, not Ballistic, applies."
-          att->ranged->power -= GET_IMPACT(def->ch) + 2;
-          att->ranged->is_gel = TRUE;
-          break;
-        default:
-          att->ranged->power -= GET_BALLISTIC(def->ch);
+      if (GET_WEAPON_ATTACK_TYPE(att->weapon) == WEAP_TASER) {
+        // SR3 p124.
+        att->ranged->power -= (int)(GET_IMPACT(def->ch) / 2);
+      } else {
+        switch (GET_MAGAZINE_AMMO_TYPE(att->ranged->magazine)) {
+          case AMMO_APDS:
+            att->ranged->power -= (int)(GET_BALLISTIC(def->ch) / 2);
+            break;
+          case AMMO_EX:
+            att->ranged->power++;
+            // fall through
+          case AMMO_EXPLOSIVE:
+            att->ranged->power++;
+            att->ranged->power -= GET_BALLISTIC(def->ch);
+            break;
+          case AMMO_FLECHETTE:
+            if (!GET_IMPACT(def->ch) && !GET_BALLISTIC(def->ch))
+              att->ranged->damage_level++;
+            else {
+              att->ranged->power -= MAX(GET_BALLISTIC(def->ch), GET_IMPACT(def->ch) * 2);
+            }
+            break;
+          case AMMO_HARMLESS:
+            att->ranged->power = 0;
+            // fall through
+          case AMMO_GEL:
+            // Errata: Add the following after the third line: "Impact armor, not Ballistic, applies."
+            att->ranged->power -= GET_IMPACT(def->ch) + 2;
+            att->ranged->is_gel = TRUE;
+            break;
+          default:
+            att->ranged->power -= GET_BALLISTIC(def->ch);
+        }
       }
     }
     // Weapon fired without a magazine (probably by an NPC)-- we assume its ammo type is normal.
@@ -667,24 +674,39 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     att->melee->tn = MAX(att->melee->tn, 2);
     def->melee->tn = MAX(def->melee->tn, 2);
 
+    // Canary check-- this value is set to zero during initialization and should not have been touched yet.
+    if (def->melee->successes != 0) {
+      mudlog("FIGHT MEMORY ERROR: def->melee->successes was not zero!", def->ch, LOG_SYSLOG, TRUE);
+    }
+    if (att->melee->successes != 0) {
+      mudlog("FIGHT MEMORY ERROR: att->melee->successes was not zero!", def->ch, LOG_SYSLOG, TRUE);
+    }
+
     // Calculate the clash, unless there's some surprise involved (hitting someone unconscious is technically surprising for them)
     if (AWAKE(def->ch) && !AFF_FLAGGED(def->ch, AFF_SURPRISE)) {
       att->melee->successes = success_test(att->melee->dice, att->melee->tn);
       def->melee->successes = success_test(def->melee->dice, def->melee->tn);
-      net_successes = att->melee->successes - def->melee->successes;
     } else {
       strlcpy(rbuf, "Surprised-- defender gets no roll.", sizeof(rbuf));
       SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
-      att->melee->successes = MAX(1, success_test(att->melee->dice, att->melee->tn));
-      net_successes = att->melee->successes;
+      // No, you CANNOT collapse these two lines into MAX(1, success_test()), because it calls s_t() twice.
+      att->melee->successes = success_test(att->melee->dice, att->melee->tn);
+      att->melee->successes = MAX(1, att->melee->successes);
+      def->melee->successes = 0;
     }
+    net_successes = att->melee->successes - def->melee->successes;
 
     // Store our successes for the monowhip test, since there's a chance it'll be flipped in counterattack.
     successes_for_use_in_monowhip_test_check = att->melee->successes;
 
     if (def->weapon && GET_OBJ_TYPE(def->weapon) != ITEM_WEAPON) {
       // Defender's wielding a non-weapon? Whoops, net successes will never be less than 0.
-      strlcpy(rbuf, "Defender wielding non-weapon-- cannot win clash.", sizeof(rbuf));
+      strlcpy(rbuf, "Defender wielding non-weapon-- cannot win clash. Net will go no lower than 0.", sizeof(rbuf));
+      SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
+      net_successes = MAX(0, net_successes);
+    }
+    if (GET_POS(def->ch) <= POS_STUNNED) {
+      strlcpy(rbuf, "Defender stunned/morted-- cannot win clash. Net will go no lower than 0.", sizeof(rbuf));
       SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
       net_successes = MAX(0, net_successes);
     }
@@ -705,8 +727,9 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
 
     if (net_successes < 0) {
       snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "^yNet successes is ^W%d^y, which will cause a counterattack.^n\r\n", net_successes);
-    } else
+    } else {
       snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "Net successes is ^W%d^n.\r\n", net_successes);
+    }
     SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
 
     act("$n clashes with $N in melee combat.", FALSE, att->ch, 0, def->ch, TO_ROOM);

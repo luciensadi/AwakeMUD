@@ -1,3 +1,4 @@
+
 /* ************************************************************************
  *   File: limits.c                                      Part of CircleMUD *
  *  Usage: limits & gain funcs for HMV, exp, hunger/thirst, idle time      *
@@ -63,12 +64,10 @@ void mental_gain(struct char_data * ch)
 
   switch (GET_POS(ch))
   {
-    case POS_STUNNED:
-      gain = 20;
-      break;
     case POS_SLEEPING:
       gain = 25;
       break;
+    case POS_STUNNED:
     case POS_LYING:
     case POS_RESTING:
       gain = 20;
@@ -76,16 +75,20 @@ void mental_gain(struct char_data * ch)
     case POS_SITTING:
       gain = 15;
       break;
-    case POS_FIGHTING:
-      gain = 5;
-      break;
     case POS_STANDING:
       gain = 10;
       break;
+    case POS_FIGHTING:
+      gain = 5;
+      break;
   }
 
-  if (IS_NPC(ch))
+  if (IS_NPC(ch)) {
     gain *= 2;
+  } else {
+    gain *= get_drug_heal_multiplier(ch);
+  }
+
   if (find_workshop(ch, TYPE_MEDICAL))
     gain = (int)(gain * 1.5);
 
@@ -107,6 +110,7 @@ void mental_gain(struct char_data * ch)
   gain = MAX(1, gain);
 
   GET_MENTAL(ch) = MIN(GET_MAX_MENTAL(ch), GET_MENTAL(ch) + gain);
+
   update_pos(ch);
 }
 
@@ -157,7 +161,7 @@ void physical_gain(struct char_data * ch)
   else
   {
     gain = MAX(1, gain);
-    for (bio = ch->bioware; bio; bio = bio->next_content)
+    for (bio = ch->bioware; bio; bio = bio->next_content) {
       if (GET_BIOWARE_TYPE(bio) == BIO_SYMBIOTES) {
         switch (GET_BIOWARE_RATING(bio)) {
           case 1:
@@ -172,6 +176,9 @@ void physical_gain(struct char_data * ch)
         }
         break;
       }
+    }
+
+    gain *= get_drug_heal_multiplier(ch);
   }
   if (GET_TRADITION(ch) == TRAD_ADEPT)
     gain *= GET_POWER(ch, ADEPT_HEALING) + 1;
@@ -507,7 +514,7 @@ void check_idling(void)
         }
         */
 
-      else if (!ch->desc && ch->char_specials.timer > NUM_MINUTES_BEFORE_LINKDEAD_EXTRACTION) {
+      else if (!ch->desc && !PLR_FLAGGED(ch, PLR_PROJECT) && ch->char_specials.timer > NUM_MINUTES_BEFORE_LINKDEAD_EXTRACTION) {
         snprintf(buf, sizeof(buf), "%s removed from game (no link).", GET_CHAR_NAME(ch));
         mudlog(buf, ch, LOG_CONNLOG, TRUE);
         extract_char(ch);
@@ -884,75 +891,8 @@ void point_update(void)
         if (check_bioware(i))
           continue;
 
-      for (int x = MIN_DRUG; x < NUM_DRUGS; x++) {
-        if (GET_DRUG_ADDICT(i, x) > 0) {
-          int tsl = (time(0) - GET_DRUG_LASTFIX(i, x)) / SECS_PER_MUD_DAY;
-          GET_DRUG_ADDTIME(i, x)++;
-          if (!(GET_DRUG_ADDTIME(i ,x) % 168) && GET_REAL_BOD(i) == 1) {
-            switch (number(0, 1)) {
-              case 0:
-                GET_MENTAL_LOSS(i)++;
-                break;
-              case 1:
-                GET_PHYSICAL_LOSS(i)++;
-                break;
-            }
-            send_to_char(i, "Your health suffers at the hand of your %s addiction.\r\n", drug_types[x].name);
-          }
-          if (!(GET_DRUG_ADDTIME(i ,x) % 720) && ((drug_types[x].mental_addiction && success_test(GET_WIL(i), drug_types[x].mental_addiction + GET_DRUG_EDGE(i, x)) < 1)  ||
-                                                  (drug_types[x].physical_addiction && success_test(GET_BOD(i), drug_types[x].physical_addiction + GET_DRUG_EDGE(i, x)) < 1))) {
-            if (GET_REAL_BOD(i) > 1)
-              GET_REAL_BOD(i)--;
-            else if (GET_PERM_BOD_LOSS(i) < racial_limits[(int)GET_RACE(i)][0][0])
-              GET_PERM_BOD_LOSS(i)++;
-            send_to_char(i, "Your health suffers at the hand of your %s addiction.\r\n", drug_types[x].name);
-          }
-          if (AFF_FLAGGED(i, AFF_WITHDRAWAL)) {
-            if (tsl > GET_DRUG_LASTWITH(i, x) + 1) {
-              GET_DRUG_LASTWITH(i, x) += 2;
-              GET_DRUG_EDGE(i, x)--;
-              if (!GET_DRUG_EDGE(i ,x)) {
-                AFF_FLAGS(i).RemoveBit(AFF_WITHDRAWAL);
-                GET_DRUG_ADDICT(i, x) = 0;
-                continue;
-              }
-            }
-            send_to_char(i, "Your body cries out for some %s.\r\n", drug_types[x].name);
-          } else if (tsl >= drug_types[x].fix + 1 && !AFF_FLAGGED(i, AFF_WITHDRAWAL_FORCE)) {
-            send_to_char(i, "You begin to go into %s withdrawal.\r\n", drug_types[x].name);
-            AFF_FLAGS(i).SetBit(AFF_WITHDRAWAL_FORCE);
-            affect_total(i);
-          } else if (tsl >= drug_types[x].fix) {
-            if (drug_types[x].mental_addiction ? success_test(GET_WIL(i), drug_types[x].mental_addiction + GET_DRUG_EDGE(i, x)) : 1 < 1 ||
-                drug_types[x].physical_addiction ? success_test(GET_REAL_BOD(i), drug_types[x].physical_addiction + GET_DRUG_EDGE(i, x)) : 1 < 1) {
-              if (AFF_FLAGGED(i, AFF_WITHDRAWAL_FORCE)) {
-                snprintf(buf, sizeof(buf), "Your lack of %s is causing you great pain and discomfort.\r\n", drug_types[x].name);
-                if (tsl > GET_DRUG_LASTWITH(i, x)) {
-                  GET_DRUG_LASTWITH(i ,x)++;
-                  GET_DRUG_EDGE(i, x)--;
-                  if (!GET_DRUG_EDGE(i ,x)) {
-                    AFF_FLAGS(i).RemoveBit(AFF_WITHDRAWAL_FORCE);
-                    GET_DRUG_ADDICT(i, x) = 0;
-                    continue;
-                  }
-                }
-              } else
-                snprintf(buf, sizeof(buf), "You crave some %s.\r\n", drug_types[x].name);
-              for (struct obj_data *obj = i->carrying; obj; obj = obj->next_content) {
-                if (GET_OBJ_TYPE(obj) == ITEM_DRUG && GET_OBJ_VAL(obj, 0) == x) {
-                  do_use(i, obj->text.keywords, 0, 0);
-                  if (GET_DRUG_DOSE(i) > GET_DRUG_TOLERANT(i, x))
-                    snprintf(buf, sizeof(buf), "You satisfy your craving for %s.\r\n", drug_types[x].name);
-                  else
-                    snprintf(buf, sizeof(buf), "You attempt to satisfy your craving for %s.\r\n", drug_types[x].name);
-                  break;
-                }
-              }
-              send_to_char(buf, i);
-            }
-          }
-        }
-      }
+      // Every hour, we check for withdrawal.
+      process_withdrawal(i);
     }
 
     if (i->desc && IS_PROJECT(i)) {
@@ -980,8 +920,11 @@ void point_update(void)
         extract_char(i);
 
         // Deal the damage instead of setting it.
-        if (damage(victim, victim, (GET_BOD(victim) - 1) * 100, TYPE_SUFFERING, TRUE))
+        if (damage(victim, victim, GET_BOD(victim) - 1, TYPE_SUFFERING, TRUE))
           continue;
+
+        // Continue regardless- i no longer exists.
+        continue;
       } else if (GET_ESS(i) <= 100)
         send_to_char("You feel memories of your physical body slipping away.\r\n", i);
     }
@@ -1071,35 +1014,17 @@ void save_vehicles(bool fromCopyover)
   struct obj_data *obj;
   int num_veh = 0;
 
-  for (veh = veh_list; veh; veh = veh->next)
-    if (should_save_this_vehicle(veh))
-      num_veh++;
-
-  // log_vfprintf("We have %d vehicles to save.", num_veh);
-
-  // Write the count of vehicles to the file.
-  if (!(fl = fopen("veh/vfile", "w"))) {
-    mudlog("SYSERR: Can't Open Vehicle File For Write.", NULL, LOG_SYSLOG, FALSE);
-    return;
-  }
-  fprintf(fl, "%d\n", num_veh);
-  fclose(fl);
-
   for (veh = veh_list, v = 0; veh; veh = veh->next) {
     // Skip disqualified vehicles.
-    if (veh->owner <= 0)
+    if (!should_save_this_vehicle(veh))
       continue;
+
+    num_veh++;
 
     bool send_veh_to_junkyard = FALSE;
     if (veh->damage >= VEH_DAM_THRESHOLD_DESTROYED && !(fromCopyover || veh->in_veh || (veh->in_room && ROOM_FLAGGED(veh->in_room, ROOM_GARAGE)))) {
-      // If the vehicle is wrecked and is in neither a containing vehicle nor a garage...
-      if (veh_is_in_junkyard(veh)) {
-        // If it's already in the junkyard, we don't save it-- they should have come and fixed it.
-        continue;
-      } else {
-        // If it's not in the junkyard yet, flag it for moving to the junkyard.
-        send_veh_to_junkyard = TRUE;
-      }
+      // If we've gotten here, the vehicle is not in the Junkyard-- save it and send it there.
+      send_veh_to_junkyard = TRUE;
     }
 
     /* Disabling this code-- we want to save ownerless vehicles so that they can disgorge their contents when they load in next.
@@ -1316,10 +1241,13 @@ void save_vehicles(bool fromCopyover)
     fclose(fl);
   }
 
-  if (v != num_veh) {
-    snprintf(buf, sizeof(buf), "SYSERR: LOST VEHICLES: %d != %d in save_vehicles, so some vehicles ARE NOT SAVED.", v, num_veh);
-    mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+  // Write the count of vehicles to the file.
+  if (!(fl = fopen("veh/vfile", "w"))) {
+    mudlog("SYSERR: Can't Open Vehicle File For Write.", NULL, LOG_SYSLOG, FALSE);
+    return;
   }
+  fprintf(fl, "%d\n", num_veh);
+  fclose(fl);
 }
 
 void update_paydata_market() {
@@ -1370,7 +1298,7 @@ void misc_update(void)
   PERF_PROF_SCOPE(pr_, __func__);
   struct char_data *ch, *next_ch;
   struct obj_data *obj, *o = NULL;
-  int i, dam = 0, power = 0;
+  int i;
 
   // loop through all the characters
   for (ch = character_list; ch; ch = next_ch) {
@@ -1405,8 +1333,9 @@ void misc_update(void)
             if (sus->spell == SPELL_IGNITE) {
               send_to_char("Your body erupts in flames!\r\n", sus->other);
               act("$n's body suddenly bursts into flames!\r\n", TRUE, sus->other, 0, 0, TO_ROOM);
-              sus->other->points.fire[0] = srdice();
-              sus->other->points.fire[1] = 0;
+              GET_CHAR_FIRE_DURATION(sus->other) = srdice();
+              GET_CHAR_FIRE_BONUS_DAMAGE(sus->other) = 0;
+              GET_CHAR_FIRE_CAUSED_BY_PC(sus->other) = !IS_NPC(ch);
             } else {
               strcpy(buf, spells[sus->spell].name);
               send_to_char(ch, "The effects of %s become permanent.\r\n", buf);
@@ -1470,122 +1399,14 @@ void misc_update(void)
     }
 
     if (!IS_NPC(ch)) {
-      if (!CH_IN_COMBAT(ch))
-        if (check_adrenaline(ch, 0))
-          continue;
-      if (GET_DRUG_DOSE(ch) && --GET_DRUG_DURATION(ch) < 0 && !GET_DRUG_STAGE(ch)) {
-        bool physical = TRUE;
-        if (GET_DRUG_AFFECT(ch) == DRUG_HYPER || GET_DRUG_AFFECT(ch) == DRUG_BURN)
-          physical = FALSE;
-        if (drug_types[GET_DRUG_AFFECT(ch)].level > 0) {
-          dam = drug_types[GET_DRUG_AFFECT(ch)].level + (GET_DRUG_DOSE(ch) > 1 ? 1 : 0);
-          power = drug_types[GET_DRUG_AFFECT(ch)].power + (GET_DRUG_DOSE(ch) > 2 ? GET_DRUG_DOSE(ch) - 2 : 0);
-          dam = convert_damage(stage(-success_test(GET_REAL_BOD(ch) - (GET_BIOOVER(ch) > 0 ? GET_BIOOVER(ch) / 2 : 0), power), dam));
-          if (damage(ch, ch, dam, TYPE_BIOWARE, physical))
-            continue;
-        }
-        GET_DRUG_STAGE(ch) = 1;
-        GET_DRUG_LASTFIX(ch, GET_DRUG_AFFECT(ch)) = time(0);
-        switch (GET_DRUG_AFFECT(ch)) {
-          case DRUG_ACTH:
-            snprintf(buf, sizeof(buf), "You feel a brief moment of vertigo.\r\n");
-            if (check_adrenaline(ch, 1))
-              continue;
-            GET_DRUG_AFFECT(ch) = GET_DRUG_DOSE(ch) = GET_DRUG_DURATION(ch) = 0;
-            break;
-          case DRUG_HYPER:
-            snprintf(buf, sizeof(buf), "The world seems to swirl around you as your mind is bombarded with feedback.\r\n");
-            GET_DRUG_DURATION(ch) = dam * 100;
-            break;
-          case DRUG_JAZZ:
-            snprintf(buf, sizeof(buf), "The world slows down around you.\r\n");
-            GET_DRUG_DURATION(ch) = 100 * srdice();
-            break;
-          case DRUG_KAMIKAZE:
-            snprintf(buf, sizeof(buf), "Your body feels alive with energy and the desire to fight.\r\n");
-            GET_DRUG_DURATION(ch) = 100 * srdice();
-            break;
-          case DRUG_PSYCHE:
-            snprintf(buf, sizeof(buf), "Your feel your mind racing.\r\n");
-            GET_DRUG_DURATION(ch) = MAX(1, 12 - GET_REAL_BOD(ch)) * 600;
-            break;
-          case DRUG_BLISS:
-            snprintf(buf, sizeof(buf), "The world fades into bliss as your body becomes sluggish.\r\n");
-            GET_DRUG_DURATION(ch) = MAX(1, 6 - GET_REAL_BOD(ch)) * 600;
-            break;
-          case DRUG_BURN:
-            snprintf(buf, sizeof(buf), "You suddenly feel very intoxicated.\r\n");
-            GET_DRUG_AFFECT(ch) = GET_DRUG_DOSE(ch) = GET_DRUG_DURATION(ch) = 0;
-            GET_COND(ch, COND_DRUNK) = FOOD_DRINK_MAX;
-            break;
-          case DRUG_CRAM:
-            snprintf(buf, sizeof(buf), "Your body feels alive with energy.\r\n");
-            GET_DRUG_DURATION(ch) = MAX(1, 12 - GET_REAL_BOD(ch)) * 600;
-            break;
-          case DRUG_NITRO:
-            snprintf(buf, sizeof(buf), "You lose sense of yourself as your entire body comes alive with energy.\r\n");
-            GET_DRUG_DURATION(ch) = 100 * srdice();
-            break;
-          case DRUG_NOVACOKE:
-            snprintf(buf, sizeof(buf), "You feel euphoric and alert.\r\n");
-            GET_DRUG_DURATION(ch) = MAX(1, 10 - GET_REAL_BOD(ch)) * 600;
-            break;
-          case DRUG_ZEN:
-            snprintf(buf, sizeof(buf), "You start to loose your sense of reality as your sight fills with hallucinations.\r\n");
-            GET_DRUG_DURATION(ch) = 100 * srdice();
-            break;
-        }
-        send_to_char(buf, ch);
-      }
-      else if (GET_DRUG_STAGE(ch) == 1) {
-        int toxin = 0;
-        for (struct obj_data *obj = ch->bioware; obj && !toxin; obj = obj->next_content)
-          if (GET_BIOWARE_TYPE(obj) == BIO_TOXINEXTRACTOR)
-            toxin = GET_BIOWARE_RATING(obj);
-        if (GET_DRUG_AFFECT(ch) > 0)
-          send_to_char(ch, "You begin to feel drained as the %s wears off.\r\n", drug_types[GET_DRUG_AFFECT(ch)].name);
-        GET_DRUG_STAGE(ch) = 2;
-        switch (GET_DRUG_AFFECT(ch)) {
-          case DRUG_JAZZ:
-            GET_DRUG_DURATION(ch) = 100 * srdice();
-            if (damage(ch, ch, convert_damage(stage(-success_test(GET_REAL_BOD(ch) - (GET_BIOOVER(ch) > 0 ? GET_BIOOVER(ch) / 2 : 0), 8 - toxin), LIGHT)), TYPE_BIOWARE, 0))
-              continue;
-            break;
-          case DRUG_KAMIKAZE:
-            GET_DRUG_DURATION(ch) = 100 * srdice();
-            if (damage(ch, ch, convert_damage(stage(-success_test(GET_REAL_BOD(ch) - (GET_BIOOVER(ch) > 0 ? GET_BIOOVER(ch) / 2 : 0), 6 - toxin), MODERATE)), TYPE_BIOWARE, 0))
-              continue;
-            break;
-          case DRUG_CRAM:
-            GET_DRUG_DURATION(ch) = MAX(1, 12 - GET_REAL_BOD(ch) - (GET_BIOOVER(ch) > 0 ? GET_BIOOVER(ch) / 2 : 0)) * 600;
-            break;
-          case DRUG_NITRO:
-            if (damage(ch, ch, convert_damage(stage(-success_test(GET_REAL_BOD(ch) - (GET_BIOOVER(ch) > 0 ? GET_BIOOVER(ch) / 2 : 0), 8 - toxin), DEADLY)), TYPE_BIOWARE, 0))
-              continue;
-            GET_DRUG_STAGE(ch) = GET_DRUG_DOSE(ch) = GET_DRUG_AFFECT(ch) = 0;
-            break;
-          case DRUG_NOVACOKE:
-            GET_DRUG_DURATION(ch) = MAX(1, 10 - GET_REAL_BOD(ch) - (GET_BIOOVER(ch) > 0 ? GET_BIOOVER(ch) / 2 : 0)) * 600;
-            break;
-          default:
-            GET_DRUG_STAGE(ch) = GET_DRUG_DOSE(ch) = GET_DRUG_AFFECT(ch) = 0;
-            if (AFF_FLAGGED(ch, AFF_DETOX))
-              AFF_FLAGS(ch).RemoveBit(AFF_DETOX);
-        }
-        if (drug_types[GET_DRUG_AFFECT(ch)].tolerance) {
-          if (GET_DRUG_DOSES(ch, GET_DRUG_AFFECT(ch)) == 1 && success_test(GET_REAL_BOD(ch), drug_types[GET_DRUG_AFFECT(ch)].tolerance) < 1)
-            GET_DRUG_TOLERANT(ch, GET_DRUG_AFFECT(ch))++;
-          if (((!GET_DRUG_ADDICT(ch, GET_DRUG_AFFECT(ch)) && !(drug_types[GET_DRUG_AFFECT(ch)].edge_preadd % ++GET_DRUG_DOSES(ch, GET_DRUG_AFFECT(ch)))) ||
-               (GET_DRUG_ADDICT(ch, GET_DRUG_AFFECT(ch)) && !(drug_types[GET_DRUG_AFFECT(ch)].edge_posadd % ++GET_DRUG_DOSES(ch, GET_DRUG_AFFECT(ch))))) &&
-              success_test(GET_REAL_BOD(ch), drug_types[GET_DRUG_AFFECT(ch)].tolerance + GET_DRUG_EDGE(ch, GET_DRUG_AFFECT(ch))))
-            GET_DRUG_TOLERANT(ch, GET_DRUG_AFFECT(ch))++;
-        }
-      } else if (GET_DRUG_STAGE(ch) == 2) {
-        send_to_char(ch, "The aftereffects of the %s begin to wear off.\r\n", drug_types[GET_DRUG_AFFECT(ch)].name);
-        GET_DRUG_STAGE(ch) = GET_DRUG_DOSE(ch) = GET_DRUG_AFFECT(ch) = 0;
-        if (AFF_FLAGGED(ch, AFF_DETOX))
-          AFF_FLAGS(ch).RemoveBit(AFF_DETOX);
-      }
+      // Burn down adrenaline. This can kill the target, so break out if it returns true.
+      if (check_adrenaline(ch, 0))
+        continue;
+
+      // Apply new doses of everything. If they die, bail out.
+      if (process_drug_point_update_tick(ch))
+        continue;
+
       affect_total(ch);
     }
     else { // NPC checks.
@@ -1616,25 +1437,39 @@ void misc_update(void)
       }
     }
 
-    if (ch->points.fire[0] > 0) {
-      // If you're outside and it's raining, you get less fire. TODO: This should happen for being in water, too.
-      if (ch->in_room && ch->in_room->sector_type != SPIRIT_HEARTH && !ROOM_FLAGGED(ch->in_room, ROOM_INDOORS) && weather_info.sky >= SKY_RAINING)
-        ch->points.fire[0] -= 3;
-      else
-        ch->points.fire[0]--;
-      if (ch->points.fire[0] < 1) {
+    if (GET_CHAR_FIRE_DURATION(ch) > 0) {
+      GET_CHAR_FIRE_DURATION(ch)--;
+      // If you're outside and it's raining, you get less fire.
+      if (ch->in_room) {
+        // Outdoors in the rain? Fire goes out faster.
+        if (ch->in_room->sector_type != SPIRIT_HEARTH && !ROOM_FLAGGED(ch->in_room, ROOM_INDOORS) && weather_info.sky >= SKY_RAINING) {
+          GET_CHAR_FIRE_DURATION(ch) -= 2;
+        }
+
+        // In water? Fire goes out much faster.
+        if (IS_WATER(ch->in_room)) {
+          GET_CHAR_FIRE_DURATION(ch) -= 4;
+        }
+      }
+
+      if (GET_CHAR_FIRE_DURATION(ch) < 1) {
         act("The flames around $n die down.", FALSE, ch, 0, 0, TO_ROOM);
         act("The flames surrounding you die down.", FALSE, ch, 0, 0, TO_CHAR);
-        ch->points.fire[0] = 0;
-      } else {
-        act("Flames continue to burn around $n!", FALSE, ch, 0, 0, TO_ROOM);
-        act("^RYour body is surrounded in flames!", FALSE, ch, 0, 0, TO_CHAR);
+        GET_CHAR_FIRE_DURATION(ch) = 0;
+        GET_CHAR_FIRE_CAUSED_BY_PC(ch) = FALSE;
+        continue;
       }
-      // Restore this when it's possible to tell if your fire damage was caused by a PC or NPC.
-      // damage_equip(ch, ch, 6 + ch->points.fire[1], TYPE_FIRE);
 
-      int dam = convert_damage(stage(-success_test(GET_BOD(ch) + GET_POWER(ch, ADEPT_TEMPERATURE_TOLERANCE), 6 + ch->points.fire[1]++ - GET_IMPACT(ch)), MODERATE));
-      ch->points.fire[1]++;
+      act("Flames continue to burn around $n!", FALSE, ch, 0, 0, TO_ROOM);
+      act("^RYour body is surrounded in flames!", FALSE, ch, 0, 0, TO_CHAR);
+
+      // Only damage equipment in PvE scenarios.
+      if (IS_NPC(ch) || !GET_CHAR_FIRE_CAUSED_BY_PC(ch)) {
+        damage_equip(ch, ch, 6 + GET_CHAR_FIRE_BONUS_DAMAGE(ch), TYPE_FIRE);
+      }
+
+      int dam = convert_damage(stage(-success_test(GET_BOD(ch) + GET_BODY(ch) + GET_POWER(ch, ADEPT_TEMPERATURE_TOLERANCE), 6 + GET_CHAR_FIRE_BONUS_DAMAGE(ch) - GET_IMPACT(ch)), MODERATE));
+      GET_CHAR_FIRE_BONUS_DAMAGE(ch)++;
       if (damage(ch, ch, dam, TYPE_SUFFERING, PHYSICAL))
         continue;
     }

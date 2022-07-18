@@ -17,6 +17,7 @@
 #include "protocol.hpp"
 #include "chargen.hpp"
 #include "vision_overhaul.hpp"
+#include "drugs.hpp"
 
 #define SPECIAL(name) \
    int (name)(struct char_data *ch, void *me, int cmd, char *argument)
@@ -500,7 +501,7 @@ struct char_point_data
   ubyte lastdamage;
   int track[2];
   Bitfield vision[NUM_VISION_TYPES];
-  ubyte fire[2];
+  ubyte fire[3];
   ubyte binding;
   ubyte reach[2];
   int extras[2];
@@ -514,7 +515,7 @@ struct char_point_data
     ZERO_OUT_ARRAY(impact, 3);
     ZERO_OUT_ARRAY(sustained, 3);
     ZERO_OUT_ARRAY(track, 2);
-    ZERO_OUT_ARRAY(fire, 2);
+    ZERO_OUT_ARRAY(fire, 3);
     ZERO_OUT_ARRAY(reach, 2);
     ZERO_OUT_ARRAY(extras, 2);
   }
@@ -578,6 +579,7 @@ struct char_special_data
   char *leave;             // leave keywords 'mob flies south'
   char *arrive;            // arrive keywords
   int target_mod;
+  int concentration_target_mod;
 
   float carry_weight;           /* Carried weight                       */
   byte carry_items;            /* Number of items carried              */
@@ -602,8 +604,8 @@ struct char_special_data
       fight_veh(NULL), fighting(NULL), hunting(NULL), programming(NULL), num_spirits(0), idnum(0),
       nervestrike(FALSE), tempquiloss(0), cost_breakup(0), avail_offset(0), shooting_dir(0),
       position(POS_STANDING), defined_position(NULL), leave(NULL), arrive(NULL), target_mod(0),
-      carry_weight(0), carry_items(0), foci(0), last_healed(0), timer(0), last_timer(0),
-      last_social_action(0), actions(0), subscribe(NULL), rigging(NULL),
+      concentration_target_mod(0), carry_weight(0), carry_items(0), foci(0), last_healed(0), timer(0),
+      last_timer(0), last_social_action(0), actions(0), subscribe(NULL), rigging(NULL),
       mindlink(NULL), spirits(NULL)
   {
     ZERO_OUT_ARRAY(conjure, 4);
@@ -660,24 +662,25 @@ struct player_special_data
   sh_int *obj_complete;
   sh_int *mob_complete;
   long last_quest[QUEST_TIMER];
-  ush_int drugs[NUM_DRUGS+1][7];
-  sh_int drug_affect[5];
+  ush_int drugs[NUM_DRUGS][NUM_DRUG_PLAYER_SPECIAL_FIELDS];
+  time_t drug_last_fix[NUM_DRUGS];
   ubyte mental_loss;
   ubyte physical_loss;
   ubyte perm_bod;
   struct room_data *watching;
+  int wherelist_checks;
 
   player_special_data() :
       aliases(NULL), remem(NULL), last_tell(0), questnum(0), obj_complete(NULL),
-      mob_complete(NULL), mental_loss(0), physical_loss(0), perm_bod(0), watching(NULL)
+      mob_complete(NULL), mental_loss(0), physical_loss(0),
+      perm_bod(0), watching(NULL), wherelist_checks(0)
   {
     ZERO_OUT_ARRAY(last_quest, QUEST_TIMER);
+    ZERO_OUT_ARRAY(drug_last_fix, NUM_DRUGS);
 
-    for (int i = 0; i < NUM_DRUGS+1; i++) {
-      ZERO_OUT_ARRAY(drugs[i], 7);
+    for (int i = 0; i < NUM_DRUGS; i++) {
+      ZERO_OUT_ARRAY(drugs[i], NUM_DRUG_PLAYER_SPECIAL_FIELDS);
     }
-
-    ZERO_OUT_ARRAY(drug_affect, 5);
   }
 }
 ;
@@ -875,9 +878,9 @@ struct char_data
 
   unsigned long last_violence_loop;
 
-  // See perception_tests.cpp for details.
-  std::unordered_map<idnum_t, bool> *pc_perception_test_results;
-  std::unordered_map<idnum_t, bool> *mob_perception_test_results;
+  // See invis_resistance_tests.cpp for details.
+  std::unordered_map<idnum_t, bool> *pc_invis_resistance_test_results;
+  std::unordered_map<idnum_t, bool> *mob_invis_resistance_test_results;
 
   bool alias_dirty_bit;
 
@@ -891,8 +894,8 @@ struct char_data
       persona(NULL), squeue(NULL), sustained(NULL), ssust(NULL), carrying(NULL), desc(NULL), cyberware(NULL),
       bioware(NULL), next_in_room(NULL), next(NULL), next_fighting(NULL), next_in_zone(NULL), next_in_veh(NULL),
       next_watching(NULL), followers(NULL), master(NULL), spells(NULL), ignore_data(NULL), pgroup(NULL),
-      pgroup_invitations(NULL), congregation_bonus_pool(0), last_violence_loop(0), pc_perception_test_results(NULL),
-       mob_perception_test_results(NULL), alias_dirty_bit(FALSE)
+      pgroup_invitations(NULL), congregation_bonus_pool(0), last_violence_loop(0), pc_invis_resistance_test_results(NULL),
+       mob_invis_resistance_test_results(NULL), alias_dirty_bit(FALSE)
   {
     ZERO_OUT_ARRAY(equipment, NUM_WEARS);
 
@@ -1127,6 +1130,7 @@ struct skill_data {
   sh_int attribute;
   bool type;
   bool requires_magic;
+  sh_int group;
 };
 
 struct part_data {
@@ -1139,18 +1143,6 @@ struct part_data {
 struct program_data {
   char name[30];
   unsigned char multiplier;
-};
-
-struct drug_data {
-  char name[9];
-  unsigned char power;
-  unsigned char level;
-  unsigned char mental_addiction;
-  unsigned char physical_addiction;
-  unsigned char tolerance;
-  unsigned char edge_preadd;
-  unsigned char edge_posadd;
-  unsigned char fix;
 };
 
 struct spirit_table {

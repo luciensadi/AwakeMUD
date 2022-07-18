@@ -123,19 +123,27 @@ void redit_disp_extradesc_menu(struct descriptor_data * d)
 }
 
 const char *render_door_type_string(struct room_direction_data *door) {
+  static char desc_buf[100];
+  int bits_printed = 0;
+
   if (!IS_SET(door->exit_info, EX_ISDOOR))
     return "No door";
 
-  if (IS_SET(door->exit_info, EX_PICKPROOF)) {
-    if (IS_SET(door->exit_info, EX_ASTRALLY_WARDED))
-      return "Pickproof, astrally-warded door";
-    else
-      return "Pickproof";
+  strlcpy(desc_buf, "Door: ", sizeof(desc_buf));
+
+  if (IS_SET(door->exit_info, EX_PICKPROOF))
+    snprintf(ENDOF(desc_buf), sizeof(desc_buf) - strlen(desc_buf), "%sPickproof", bits_printed++ ? ", " : "");
+  if (IS_SET(door->exit_info, EX_ASTRALLY_WARDED))
+    snprintf(ENDOF(desc_buf), sizeof(desc_buf) - strlen(desc_buf), "%sAstrally Warded", bits_printed++ ? ", " : "");
+  if (IS_SET(door->exit_info, EX_WINDOWED))
+    snprintf(ENDOF(desc_buf), sizeof(desc_buf) - strlen(desc_buf), "%sWindowed", bits_printed++ ? ", " : "");
+  if (IS_SET(door->exit_info, EX_BARRED_WINDOW))
+    snprintf(ENDOF(desc_buf), sizeof(desc_buf) - strlen(desc_buf), "%sBarred", bits_printed++ ? ", " : "");
+
+  if (bits_printed <= 0) {
+    return "Regular door";
   } else {
-    if (IS_SET(door->exit_info, EX_ASTRALLY_WARDED))
-      return "Astrally-warded regular door";
-    else
-      return "Regular door";
+    return desc_buf;
   }
 }
 
@@ -159,7 +167,7 @@ void redit_disp_exit_menu(struct descriptor_data * d)
                (DOOR->general_description ? DOUBLE_UP_COLOR_CODES_IF_NEEDED(DOOR->general_description) : "(None)"));
   send_to_char(CH,      "3) Door keywords (first one is its name too): %s%s%s\r\n"
                "4) Key vnum: %s%d%s\r\n"
-               "5) Door flag: %s%s%s\r\n",
+               "5) Door flags: %s%s%s\r\n",
                CCCYN(CH, C_CMP), (DOOR->keyword ? DOOR->keyword : "(none)"),
                CCNRM(CH, C_CMP), CCCYN(CH, C_CMP), DOOR->key, CCNRM(CH, C_CMP),
                CCCYN(CH, C_CMP), render_door_type_string(DOOR), CCNRM(CH, C_CMP));
@@ -191,12 +199,18 @@ void redit_disp_exit_menu(struct descriptor_data * d)
 /* For exit flags */
 void redit_disp_exit_flag_menu(struct descriptor_data * d)
 {
-  send_to_char( "0) No door\r\n"
-                "1) Closeable door\r\n"
-                "2) Pickproof\r\n"
-                "3) Astrally-warded closeable door\r\n"
-                "4) Astrally-warded pickproof door\r\n"
-                "Enter choice:", CH);
+  send_to_char(CH, "0) No door\r\n"
+                   "1) Standard door (clear all other flags)\r\n"
+                   "2) Pickproof (%s)\r\n"
+                   "3) Warded (%s)\r\n"
+                   "4) Glass Window (%s)\r\n"
+                   "5) Barred Window (%s)\r\n"
+                   "Enter choice:",
+                   DOOR->exit_info & EX_PICKPROOF ? "^con^n" : "off",
+                   DOOR->exit_info & EX_ASTRALLY_WARDED ? "^con^n" : "off",
+                   DOOR->exit_info & EX_WINDOWED ? "^con^n" : "off",
+                   DOOR->exit_info & EX_BARRED_WINDOW ? "^con^n" : "off"
+                 );
 }
 
 /* For jackpoint */
@@ -1202,22 +1216,38 @@ void redit_parse(struct descriptor_data * d, const char *arg)
 
   case REDIT_EXIT_DOORFLAGS:
     number = atoi(arg);
-    if ((number < 0) || (number > 4)) {
+    if ((number < 0) || (number > 5)) {
       send_to_char("That's not a valid choice!\r\n", d->character);
       redit_disp_exit_flag_menu(d);
     } else {
       /* doors are a bit idiotic, don't you think? :) */
       /* yep -LS */
-      if (number == 0)
+      if (number == 0) {
+        // No door at all.
         DOOR->exit_info = 0;
-      else if (number == 1)
-        DOOR->exit_info = EX_ISDOOR;
-      else if (number == 2)
-        DOOR->exit_info = EX_ISDOOR | EX_PICKPROOF;
-      else if (number == 3)
-        DOOR->exit_info = EX_ISDOOR | EX_ASTRALLY_WARDED;
-      else if (number == 4)
-        DOOR->exit_info = EX_ISDOOR | EX_PICKPROOF | EX_ASTRALLY_WARDED;
+      } else {
+        // Must always have a door.
+        DOOR->exit_info |= EX_ISDOOR;
+
+        if (number == 1) {
+          // Purge all other flags.
+          DOOR->exit_info = EX_ISDOOR;
+        } else if (number == 2) {
+          // Toggle pickproof.
+          DOOR->exit_info ^= EX_PICKPROOF;
+        } else if (number == 3) {
+          // Toggle ward.
+          DOOR->exit_info ^= EX_ASTRALLY_WARDED;
+        } else if (number == 4) {
+          // Toggle window, unset bar.
+          DOOR->exit_info ^= EX_WINDOWED;
+          DOOR->exit_info &= ~EX_BARRED_WINDOW;
+        } else if (number == 5) {
+          // Toggle bar, unset window.
+          DOOR->exit_info ^= EX_BARRED_WINDOW;
+          DOOR->exit_info &= ~EX_WINDOWED;
+        }
+      }
       /* jump out to menu */
       redit_disp_exit_menu(d);
     }
