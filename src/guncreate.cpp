@@ -223,7 +223,7 @@ void ammo_build(struct char_data *ch, struct obj_data *obj)
       if (GET_OBJ_TYPE(workshop) == ITEM_WORKSHOP && GET_WORKSHOP_TYPE(workshop) == TYPE_AMMO &&
           GET_WORKSHOP_GRADE(workshop) == TYPE_KIT) {
         // Ensure that, if a kit was found, the kit is of the right type.
-        if (GET_AMMOBOX_TYPE(obj) == AMMO_NORMAL || (GET_AMMOBOX_TYPE(obj) == GET_WORKSHOP_AMMOKIT_TYPE(workshop)))
+        if (GET_AMMOBOX_TYPE(obj) == AMMO_NORMAL || GET_AMMOBOX_TYPE(obj) == AMMO_HARMLESS || (GET_AMMOBOX_TYPE(obj) == GET_WORKSHOP_AMMOKIT_TYPE(workshop)))
           break;
         else
           kitwarn = TRUE;
