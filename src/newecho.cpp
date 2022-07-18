@@ -487,20 +487,56 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
 
             if (target_ch) {
               // TODO: This means you can only target a vehicle that is actively controlled by someone. Empty and non-controlled vehicles are skipped.
-              NEW_EMOTE_DEBUG(actor, "\r\nWith target string '%s', found %s by vehicle keyword.\r\n", tag_check_string, GET_CHAR_NAME(target_ch));
+              NEW_EMOTE_DEBUG(actor, "\r\nWith target string '%s', found %s by vehicle name.\r\n", tag_check_string, GET_CHAR_NAME(target_ch));
               break;
             }
           }
         }
 
-        // If we didn't find any piloted vehicles, we now look for unpiloted ones.
-        for (struct veh_data *tveh = in_room ? in_room->vehicles : in_veh->carriedvehs;
-             tveh;
-             tveh = tveh->next_veh)
-        {
-          if (str_str(GET_VEH_NAME(tveh), tag_check_string)) {
-            unpiloted_vehicle = tveh;
-            break;
+        // Didn't find a piloted vehicle by name? Look by room desc.
+        if (!target_ch) {
+          for (struct veh_data *tveh = in_room ? in_room->vehicles : in_veh->carriedvehs;
+               tveh;
+               tveh = tveh->next_veh)
+          {
+            if (str_str(GET_VEH_ROOM_DESC(tveh), tag_check_string)) {
+              // Found a valid vehicle, stop looking.
+              target_ch = get_driver(tveh);
+
+              if (target_ch) {
+                // TODO: This means you can only target a vehicle that is actively controlled by someone. Empty and non-controlled vehicles are skipped.
+                NEW_EMOTE_DEBUG(actor, "\r\nWith target string '%s', found %s by vehicle room desc.\r\n", tag_check_string, GET_CHAR_NAME(target_ch));
+                break;
+              }
+            }
+          }
+        }
+
+        // Didn't find a piloted vehicle by room desc? Look for unpiloted by name.
+        if (!target_ch) {
+          for (struct veh_data *tveh = in_room ? in_room->vehicles : in_veh->carriedvehs;
+               tveh;
+               tveh = tveh->next_veh)
+          {
+            if (str_str(GET_VEH_NAME(tveh), tag_check_string)) {
+              unpiloted_vehicle = tveh;
+              NEW_EMOTE_DEBUG(actor, "\r\nWith target string '%s', found unpiloted %s by vehicle name.\r\n", tag_check_string, GET_VEH_NAME(tveh));
+              break;
+            }
+          }
+        }
+
+        // Didn't find unpiloted by name? Unpiloted by room desc.
+        if (!unpiloted_vehicle) {
+          for (struct veh_data *tveh = in_room ? in_room->vehicles : in_veh->carriedvehs;
+               tveh;
+               tveh = tveh->next_veh)
+          {
+            if (str_str(GET_VEH_ROOM_DESC(tveh), tag_check_string)) {
+              unpiloted_vehicle = tveh;
+              NEW_EMOTE_DEBUG(actor, "\r\nWith target string '%s', found unpiloted %s by vehicle room desc.\r\n", tag_check_string, GET_VEH_NAME(tveh));
+              break;
+            }
           }
         }
       }

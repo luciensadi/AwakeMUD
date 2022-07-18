@@ -436,7 +436,7 @@ void show_veh_to_char(struct veh_data * vehicle, struct char_data * ch)
         if ((vehicle->type == VEH_BIKE && vehicle->people) || vehicle->restring)
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s waits here", should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name));
         else
-          strlcat(buf, vehicle->description, sizeof(buf));
+          strlcat(buf, GET_VEH_ROOM_DESC(vehicle), sizeof(buf));
         break;
       case SPEED_IDLE:
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s idles here", should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name));
