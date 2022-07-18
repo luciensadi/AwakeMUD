@@ -2452,7 +2452,8 @@ SPECIAL(adept_guard)
             FALSE, ch, 0, vict, TO_NOTVICT);
         act("You grab $N and let energy flow through him.",
             FALSE, ch, 0, vict, TO_CHAR);
-        damage(ch, vict, number(0, 2), 0, PHYSICAL);
+        if (damage(ch, vict, number(0, 2), 0, PHYSICAL))
+          return TRUE;
         return FALSE;
     }
   }
@@ -6965,7 +6966,7 @@ SPECIAL(medical_workshop) {
     PRF_FLAGS(found_char).RemoveBit(PRF_TOUCH_ME_DADDY);
 
     // Damage the character. This damage type does not result in a killer check.
-    if (damage(ch, found_char, SERIOUS, TYPE_MEDICAL_MISHAP, PHYSICAL)) {
+    if (ch != found_char && damage(ch, found_char, SERIOUS, TYPE_MEDICAL_MISHAP, PHYSICAL)) {
       send_to_char(ch, "Seems your scalpel cut something critical... your patient has died.\r\n");
     }
 
