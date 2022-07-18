@@ -4781,6 +4781,8 @@ void remove_vehicle_brain(struct veh_data *veh) {
       extract_char(tmp);
     }
   }
+
+  repair_vehicle_seating(veh);
 }
 
 struct obj_data *make_new_finished_part(int part_type, int mpcp, int rating=0) {

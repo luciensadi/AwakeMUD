@@ -2125,6 +2125,10 @@ ACMD(do_tow)
     send_to_char(ch, "You don't see any vehicles named '%s' here.\r\n", argument);
     return;
   }
+
+  // Purge the vehicle brain if one exists (otherwise it can't be towed)
+  remove_vehicle_brain(tveh);
+
   if (tveh->type == VEH_BIKE)
     send_to_char("Try as you might, you can't seem to balance it. You'll have to ^WPUSH^n that into the back instead.\r\n", ch);
   else if (tveh->locked && tveh->type != VEH_DRONE)
