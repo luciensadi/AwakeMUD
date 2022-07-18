@@ -361,6 +361,7 @@ ACMD_DECLARE(do_unpack);
 ACMD_DECLARE(do_upgrade);
 ACMD_DECLARE(do_use);
 ACMD_DECLARE(do_users);
+ACMD_DECLARE(do_vehicle_osay);
 ACMD_DECLARE(do_vset);
 ACMD_DECLARE(do_vemote);
 ACMD_DECLARE(do_visible);
@@ -1349,6 +1350,7 @@ struct command_info rig_info[] =
     { "mount", 0, do_mount, 0, 0, FALSE },
     { "newbie", 0, do_gen_comm, 0, SCMD_NEWBIE, FALSE },
     { "ooc", 0, do_gen_comm, 0, SCMD_OOC, FALSE },
+    { "osay", 0, do_vehicle_osay, 0, 0, FALSE },
     { "pools", 0, do_pool, 0, 0 , FALSE },
     { "ram", 0, do_ram, 0, 0, FALSE },
     { "recap", 0, do_recap, 0, 0 , FALSE },
