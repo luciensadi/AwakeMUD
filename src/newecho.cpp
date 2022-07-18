@@ -355,6 +355,7 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
       }
 
       target_ch = NULL;
+      unpiloted_vehicle = NULL;
 
       // Short-circuit check: @self.
       bool self_mode = at_mode && (!str_cmp("self", tag_check_string) || !str_cmp("me", tag_check_string) || !str_cmp("myself", tag_check_string));
