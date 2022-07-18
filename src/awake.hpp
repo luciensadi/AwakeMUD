@@ -2398,8 +2398,6 @@ enum {
 #define OBJ_VEHICLE_TOOLKIT                37597
 #define OBJ_ELECTRONICS_KIT                60532
 #define OBJ_CELL_PHONE                     60530
-#define OBJ_TITLE_TO_SCORPION              892
-#define OBJ_TITLE_TO_BISON                 897
 #define OBJ_POCKET_SECRETARY               31542
 #define OBJ_NEOPHYTE_DUFFELBAG             60535
 #define OBJ_POLEARM_STRAP                  64989
@@ -2415,7 +2413,6 @@ enum {
 #define OBJ_LONDON_FOG_COUNT               8435
 #define OBJ_ASH_LEAF_ANKLET                60565
 #define OBJ_ORICHALCUM_BRACELET            4906
-#define OBJ_TITLE_TO_AMERICAR              891
 #define OBJ_SCK_MODEL_100                  786
 #define OBJ_FOREGRIP                       28618
 #define OBJ_PAIR_OF_WHITE_TRAINERS         22691
@@ -2437,6 +2434,28 @@ enum {
 #define OBJ_OPTICAL_CHIP_KEY               4600
 #define OBJ_UNFINISHED_EQUATION            1015
 #define OBJ_SCANEYE                        3817
+
+#define OBJ_TITLE_TO_AMERICAR              891
+#define OBJ_TITLE_TO_SCORPION              892
+#define OBJ_TITLE_TO_JACKRABBIT            893
+#define OBJ_TITLE_TO_RUNABOUT              894
+#define OBJ_TITLE_TO_RAPIER                895
+#define OBJ_TITLE_TO_BISON                 897
+#define OBJ_TITLE_TO_WESTWIND              898
+#define OBJ_TITLE_TO_DOBERMAN              904
+#define OBJ_TITLE_TO_SNOOPER               905
+#define OBJ_TITLE_TO_SURVEILLANCE          906
+#define OBJ_TITLE_TO_ROTODRONE             907
+#define OBJ_TITLE_TO_DALMATION             908
+#define OBJ_TITLE_TO_SUPERCOMBI_RV         961
+#define OBJ_TITLE_TO_NOMAD_SUV             962
+#define OBJ_TITLE_TO_BRUMBY_SUV            963
+#define OBJ_TITLE_TO_GOPHER_PICKUP         964
+#define OBJ_TITLE_TO_TRANSPORT_PICKUP      965
+#define OBJ_TITLE_TO_GMC_4201              966
+#define OBJ_TITLE_TO_GMC_BULLDOG           967
+#define OBJ_TITLE_TO_ARES_ROADMASTER       968
+#define OBJ_TITLE_TO_WHITE_EAGLE_BIKE      969
 
 #ifdef USE_PRIVATE_CE_WORLD
 #define OBJ_GAS_VENT_IV                    80403
@@ -2540,6 +2559,29 @@ enum {
 #define QST_MAGE_INTRO                     5743
 
 #define MOB_BRAIN_IN_A_JAR                 10050
+
+#define VEHICLE_JACKRABBIT_E               1302
+#define VEHICLE_EUROCAR_WESTWIND_2000      1303
+#define VEHICLE_FORD_AMERICAR              1305
+#define VEHICLE_HARLEY_SCORPION            1307
+#define VEHICLE_YAMAHA_RAPIER              1308
+#define VEHICLE_FORD_BISON                 1309
+#define VEHICLE_GMC_4201                   1321
+#define VEHICLE_ARES_ROADMASTER            1322
+#define VEHICLE_GMC_BULLDOG                1323
+#define VEHICLE_TRANSPORT_PICKUP           1327
+#define VEHICLE_RUNABOUT                   1320
+#define VEHICLE_NOMAD_SUV                  12300
+#define VEHICLE_BRUMBY_SUV                 12301
+#define VEHICLE_GOPHER_PICKUP              12302
+#define VEHICLE_WHITE_EAGLE_BIKE           12303
+#define VEHICLE_DOBERMAN                   37500
+#define VEHICLE_SNOOPER                    37501
+#define VEHICLE_SURVEILLANCE               37502
+#define VEHICLE_ROTODRONE                  37503
+#define VEHICLE_DALMATION                  37504
+#define VEHICLE_SUPERCOMBI_RV              39205
+
 
 // Misc defines from spec_procs.cpp
 #define LIBRARY_SKILL    3

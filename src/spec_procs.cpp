@@ -3806,69 +3806,69 @@ SPECIAL(newbie_car)
       return TRUE;
     }
     switch (GET_OBJ_VNUM(obj)) {
-      case 891:
-        num = 1305;
+      case OBJ_TITLE_TO_AMERICAR:
+        num = VEHICLE_FORD_AMERICAR;
         break;
-      case 892:
-        num = 1307;
+      case OBJ_TITLE_TO_SCORPION:
+        num = VEHICLE_HARLEY_SCORPION;
         break;
-      case 893:
-        num = 1302;
+      case OBJ_TITLE_TO_JACKRABBIT:
+        num = VEHICLE_JACKRABBIT_E;
         break;
-      case 894:
-        num = 1320;
+      case OBJ_TITLE_TO_RUNABOUT:
+        num = VEHICLE_RUNABOUT;
         break;
-      case 895:
-        num = 1308;
+      case OBJ_TITLE_TO_RAPIER:
+        num = VEHICLE_YAMAHA_RAPIER;
         break;
-      case 897:
-        num = 1309;
+      case OBJ_TITLE_TO_BISON:
+        num = VEHICLE_FORD_BISON;
         break;
-      case 898:
-        num = 1303;
+      case OBJ_TITLE_TO_WESTWIND:
+        num = VEHICLE_EUROCAR_WESTWIND_2000;
         break;
 #ifdef USE_PRIVATE_CE_WORLD
-      case 904:
-        num = 37500;
+      case OBJ_TITLE_TO_DOBERMAN:
+        num = VEHICLE_DOBERMAN;
         break;
-      case 905:
-        num = 37501;
+      case OBJ_TITLE_TO_SNOOPER:
+        num = VEHICLE_SNOOPER;
         break;
-      case 906:
-        num = 37502;
+      case OBJ_TITLE_TO_SURVEILLANCE:
+        num = VEHICLE_SURVEILLANCE;
         break;
-      case 907:
-        num = 37503;
+      case OBJ_TITLE_TO_ROTODRONE:
+        num = VEHICLE_ROTODRONE;
         break;
-      case 908:
-        num = 37504;
+      case OBJ_TITLE_TO_DALMATION:
+        num = VEHICLE_DALMATION;
         break;
-      case 961:
-        num = 39205;
+      case OBJ_TITLE_TO_SUPERCOMBI_RV:
+        num = VEHICLE_SUPERCOMBI_RV;
         break;
-      case 962:
-        num = 12300;
+      case OBJ_TITLE_TO_NOMAD_SUV:
+        num = VEHICLE_NOMAD_SUV;
         break;
-      case 963:
-        num = 12301;
+      case OBJ_TITLE_TO_BRUMBY_SUV:
+        num = VEHICLE_BRUMBY_SUV;
         break;
-      case 964:
-        num = 12302;
+      case OBJ_TITLE_TO_GOPHER_PICKUP:
+        num = VEHICLE_GOPHER_PICKUP;
         break;
-      case 965:
-        num = 1327;
+      case OBJ_TITLE_TO_TRANSPORT_PICKUP:
+        num = VEHICLE_TRANSPORT_PICKUP;
         break;
-      case 966:
-        num = 1321;
+      case OBJ_TITLE_TO_GMC_4201:
+        num = VEHICLE_GMC_4201;
         break;
-      case 967:
-        num = 1323;
+      case OBJ_TITLE_TO_GMC_BULLDOG:
+        num = VEHICLE_GMC_BULLDOG;
         break;
-      case 968:
-        num = 1322;
+      case OBJ_TITLE_TO_ARES_ROADMASTER:
+        num = VEHICLE_ARES_ROADMASTER;
         break;
-      case 969:
-        num = 12303;
+      case OBJ_TITLE_TO_WHITE_EAGLE_BIKE:
+        num = VEHICLE_WHITE_EAGLE_BIKE;
         break;
 #endif
       default:
