@@ -6391,10 +6391,10 @@ ACMD(do_status)
       else
         send_to_char(ch, "%s is using a total of %d points of foci. If this gets above %d, they'll be at risk of geas.\r\n", GET_CHAR_NAME(targ), force, (GET_REAL_MAG(targ) / 100) * 2);
     }
+  }
 
-    if (GET_LEVEL(ch) > LVL_MORTAL) {
-      render_drug_info_for_targ(ch, targ);
-    }
+  if (GET_LEVEL(ch) > LVL_MORTAL) {
+    render_drug_info_for_targ(ch, targ);
   }
 }
 
