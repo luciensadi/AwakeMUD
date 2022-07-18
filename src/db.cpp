@@ -6454,45 +6454,6 @@ void price_cyber(struct obj_data *obj)
           break;
       }
       break;
-    case CYB_SPATIAL:
-      GET_CYBERWARE_RATING(obj) = 0;
-      GET_CYBERWARE_ESSENCE_COST(obj) = 20;
-      GET_OBJ_COST(obj) = 12000;
-      GET_OBJ_AVAILTN(obj) = 4;
-      GET_OBJ_AVAILDAY(obj) = 2;
-      obj->obj_flags.extra_flags.SetBit(ITEM_EXTRA_MAGIC_INCOMPATIBLE);
-      break;
-    case CYB_HIGHFREQ:
-      GET_CYBERWARE_RATING(obj) = 0;
-      GET_CYBERWARE_ESSENCE_COST(obj) = 20;
-      GET_OBJ_COST(obj) = 3000;
-      GET_OBJ_AVAILTN(obj) = 4;
-      GET_OBJ_AVAILDAY(obj) = 2;
-      obj->obj_flags.extra_flags.SetBit(ITEM_EXTRA_MAGIC_INCOMPATIBLE);
-      break;
-    case CYB_SOUNDFILTER:
-      GET_CYBERWARE_ESSENCE_COST(obj) = 20;
-      GET_OBJ_AVAILTN(obj) = 6;
-      GET_OBJ_AVAILDAY(obj) = 2;
-      obj->obj_flags.extra_flags.SetBit(ITEM_EXTRA_MAGIC_INCOMPATIBLE);
-      switch (GET_CYBERWARE_RATING(obj)) {
-        case 1:
-          GET_OBJ_COST(obj) = 10000;
-          break;
-        case 2:
-          GET_OBJ_COST(obj) = 20000;
-          break;
-        case 3:
-          GET_OBJ_COST(obj) = 30000;
-          break;
-        case 4:
-          GET_OBJ_COST(obj) = 40000;
-          break;
-        case 5:
-          GET_OBJ_COST(obj) = 50000;
-          break;
-      }
-      break;
   }
   float grade_essence_modifier = 1.0;
   switch (GET_CYBERWARE_GRADE(obj)) {
