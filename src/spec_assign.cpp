@@ -72,7 +72,7 @@ struct teach_data teachers[] = {
                        { 1008, { SKILL_DEMOLITIONS, SKILL_DIVING, SKILL_PARACHUTING, SKILL_UNDERWATER_COMBAT, SKILL_LOCK_PICKING,
                          SKILL_RIDING, SKILL_THROWING_WEAPONS, SKILL_PROJECTILES, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "After about an hour of shuffling slides you feel you can now do your job "
                          "safer.\r\n", ADVANCED },
-                       { 1009, { SKILL_CENTERING, SKILL_ENCHANTING, SKILL_PILOT_SUBORBITAL, SKILL_PILOT_SEMIBALLISTIC, 0,
+                       { 1009, { SKILL_CENTERING, SKILL_ENCHANTING, SKILL_PILOT_SUBORBITAL, SKILL_PILOT_SEMIBALLISTIC, SKILL_MECHANICAL_ARM_OPERATION,
                          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "After about an hour of shuffling slides you feel you can now do your job "
                          "safer.\r\n", ADVANCED },
                       // End NERP teachers.
