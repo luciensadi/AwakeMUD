@@ -3007,7 +3007,7 @@ ACMD(do_photo)
       }
       if (num > 1)
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "(%d) ", num);
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^g%s^n\r\n", obj->text.room_desc);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^g%s^n\r\n", obj->graffiti ? obj->graffiti : obj->text.room_desc);
     }
 
     for (struct veh_data *vehicle = ch->in_room->vehicles; vehicle; vehicle = vehicle->next_veh) {
