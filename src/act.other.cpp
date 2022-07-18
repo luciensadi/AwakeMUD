@@ -2176,7 +2176,7 @@ ACMD(do_astral)
       && GET_ASPECT(ch) != ASPECT_FULL
       && !(GET_TRADITION(ch) == TRAD_HERMETIC && (GET_ASPECT(ch) >= ASPECT_EARTHMAGE && GET_ASPECT(ch) <= ASPECT_WATERMAGE)))
   {
-    send_to_char("You do not have enough control over the astral plane to do that.\r\n", ch);
+    send_to_char(ch, "As %s %s, you do not have enough control over the astral plane to do that.\r\n", AN(aspect_names[GET_ASPECT(ch)]), aspect_names[GET_ASPECT(ch)]);
     return;
   }
 

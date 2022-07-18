@@ -587,86 +587,98 @@ void reward(struct char_data *ch, struct char_data *johnson)
 
   struct follow_type *f;
   struct obj_data *obj;
-  int i, nuyen = 0, karma = 0, num, all = 1, old;
-  UNUSED(old);
+  bool completed_all_objectives = TRUE;
+  int nuyen = 0, karma = 0, multiplier;
 
-  for (i = 0; i < quest_table[GET_QUEST(ch)].num_objs; i++)
-    if (ch->player_specials->obj_complete[i])
-    {
+  // Check object objectives.
+  for (int i = 0; i < quest_table[GET_QUEST(ch)].num_objs; i++) {
+    if (ch->player_specials->obj_complete[i]) {
       if (quest_table[GET_QUEST(ch)].obj[i].objective == QOO_DSTRY_MANY) {
-        nuyen += quest_table[GET_QUEST(ch)].obj[i].nuyen *
-                 ch->player_specials->obj_complete[i];
-        karma += quest_table[GET_QUEST(ch)].obj[i].karma *
-                 ch->player_specials->obj_complete[i];
+        multiplier = ch->player_specials->obj_complete[i];
       } else {
-        nuyen += quest_table[GET_QUEST(ch)].obj[i].nuyen;
-        karma += quest_table[GET_QUEST(ch)].obj[i].karma;
+        multiplier = 1;
       }
-    } else
-      all = 0;
-  for (i = 0; i < quest_table[GET_QUEST(ch)].num_mobs; i++)
-    if (ch->player_specials->mob_complete[i])
-    {
+      nuyen += quest_table[GET_QUEST(ch)].obj[i].nuyen * multiplier;
+      karma += quest_table[GET_QUEST(ch)].obj[i].karma * multiplier;
+    } else {
+      completed_all_objectives = FALSE;
+    }
+  }
+
+  // Check mob objectives.
+  for (int i = 0; i < quest_table[GET_QUEST(ch)].num_mobs; i++) {
+    if (ch->player_specials->mob_complete[i]) {
       if (quest_table[GET_QUEST(ch)].mob[i].objective == QMO_KILL_MANY) {
-        nuyen += quest_table[GET_QUEST(ch)].mob[i].nuyen *
-                 ch->player_specials->mob_complete[i];
-        karma += quest_table[GET_QUEST(ch)].mob[i].karma *
-                 ch->player_specials->mob_complete[i];
+        multiplier = ch->player_specials->mob_complete[i];
       } else {
-        nuyen += quest_table[GET_QUEST(ch)].mob[i].nuyen;
-        karma += quest_table[GET_QUEST(ch)].mob[i].karma;
+        multiplier = 1;
       }
-    } else
-      all = 0;
-  if (all)
-  {
+      nuyen += quest_table[GET_QUEST(ch)].mob[i].nuyen * multiplier;
+      karma += quest_table[GET_QUEST(ch)].mob[i].karma * multiplier;
+    } else {
+      completed_all_objectives = FALSE;
+    }
+  }
+
+  if (completed_all_objectives) {
+    // You get the bonus karma/nuyen for all-objective completion.
     nuyen += quest_table[GET_QUEST(ch)].nuyen;
     karma += quest_table[GET_QUEST(ch)].karma;
-    if ((num = real_object(quest_table[GET_QUEST(ch)].reward)) > 0) {
-      obj = read_object(num, REAL);
+
+    // You also only get the object reward for completing all objectives.
+    rnum_t rnum = real_object(quest_table[GET_QUEST(ch)].reward);
+    if (rnum > 0) {
+      obj = read_object(rnum, REAL);
       obj_to_char(obj, ch);
       act("You give $p to $N.", FALSE, johnson, obj, ch, TO_CHAR);
       act("$n gives you $p.", FALSE, johnson, obj, ch, TO_VICT);
       act("$n gives $p to $N.", TRUE, johnson, obj, ch, TO_NOTVICT);
     }
   }
+
   nuyen = negotiate(ch, johnson, 0, nuyen, 0, FALSE, FALSE) * NUYEN_GAIN_MULTIPLIER * ((float) GET_CHAR_MULTIPLIER(ch) / 100);
 
-  if (AFF_FLAGGED(ch, AFF_GROUP))
-  {
-    num = 1;
-    for (f = ch->followers; f; f = f->next)
-      if (!IS_NPC(f->follower) && AFF_FLAGGED(f->follower, AFF_GROUP) && !(rep_too_low(f->follower, GET_QUEST(ch)) || rep_too_high(f->follower, GET_QUEST(ch))))
-        num++;
+  // If you're grouped, distribute the karma and nuyen equally.
+  if (AFF_FLAGGED(ch, AFF_GROUP)) {
+    int num_chars_to_give_award_to = 1;
+    for (f = ch->followers; f; f = f->next) {
+      if (!IS_NPC(f->follower)
+          && AFF_FLAGGED(f->follower, AFF_GROUP)
+          && !(IS_PC_CONJURED_ELEMENTAL(f->follower) || IS_SPIRIT(f->follower))
+          && !(rep_too_low(f->follower, GET_QUEST(ch)) || rep_too_high(f->follower, GET_QUEST(ch))))
+      {
+        num_chars_to_give_award_to++;
+      }
+    }
 
-    nuyen = (int)(nuyen / num);
-    karma = (int)(karma / num);
+    nuyen = (int)(nuyen / num_chars_to_give_award_to);
+    karma = (int)(karma / num_chars_to_give_award_to);
 
     for (f = ch->followers; f; f = f->next) {
-      if (IS_NPC(f->follower))
+      if (IS_NPC(f->follower) || IS_PC_CONJURED_ELEMENTAL(f->follower) || IS_SPIRIT(f->follower))
         continue;
 
-      if (AFF_FLAGGED(f->follower, AFF_GROUP) && !(rep_too_low(f->follower, GET_QUEST(ch)) || rep_too_high(f->follower, GET_QUEST(ch)))) {
-        if (f->follower->in_room != ch->in_room) {
-          snprintf(buf, sizeof(buf), "^YGroup room mismatch for %s and %s.", GET_CHAR_NAME(ch), GET_CHAR_NAME(f->follower));
-          mudlog(buf, ch, LOG_SYSLOG, TRUE);
-        } else {
-          old = (int)(GET_KARMA(f->follower) / 100);
-          gain_nuyen(f->follower, nuyen, NUYEN_INCOME_AUTORUNS);
-          int gained = gain_karma(f->follower, karma, TRUE, FALSE, TRUE);
-          send_to_char(f->follower, "You gain %0.2f karma and %d nuyen for being in %s's group.\r\n", (float) gained * 0.01, nuyen, GET_CHAR_NAME(ch));
-        }
-      } else if (!AFF_FLAGGED(f->follower, AFF_GROUP)) {
+      if (rep_too_low(f->follower, GET_QUEST(ch)) || rep_too_high(f->follower, GET_QUEST(ch))) {
+        send_to_char(ch, "^y(OOC note: %s didn't meet the qualifications for this run, so %s didn't get a cut of the pay.)^n\r\n", GET_CHAR_NAME(f->follower), HSSH(f->follower));
+        send_to_char("^y(OOC note: You didn't meet the qualifications for this run, so you didn't get a cut of the pay.)^n\r\n", f->follower);
+        continue;
+      }
+
+      if (!AFF_FLAGGED(f->follower, AFF_GROUP)) {
         send_to_char(ch, "^y(OOC note: %s wasn't grouped, so didn't get a cut of the pay.)^n\r\n",
                      GET_CHAR_NAME(f->follower), HSSH(f->follower));
-        send_to_char("^y(OOC note: You didn't meet the qualifications for this run, so you didn't get a cut of the pay.)^n\r\n", f->follower);
-      } else {
-        send_to_char(ch, "^y(OOC note: %s didn't meet the qualifications for this run, so %s didn't get a cut of the pay.)^n\r\n",
-                     GET_CHAR_NAME(f->follower), HSSH(f->follower));
-        send_to_char("^y(OOC note: You didn't meet the qualifications for this run, so you didn't get a cut of the pay.)^n\r\n", f->follower);
+        send_to_char(f->follower, "^y(OOC note: You aren't part of %s's group, so you didn't get a cut of the pay.)^n\r\n", GET_CHAR_NAME(ch));
+        continue;
+      }
+
+      if (f->follower->in_room == ch->in_room) {
+        gain_nuyen(f->follower, nuyen, NUYEN_INCOME_AUTORUNS);
+        int gained = gain_karma(f->follower, karma, TRUE, FALSE, TRUE);
+        send_to_char(f->follower, "You gain %0.2f karma and %d nuyen for being in %s's group.\r\n", (float) gained * 0.01, nuyen, GET_CHAR_NAME(ch));
       }
     }
   }
+
   gain_nuyen(ch, nuyen, NUYEN_INCOME_AUTORUNS);
   int gained = gain_karma(ch, karma, TRUE, FALSE, TRUE);
   act("$n gives some nuyen to $N.", TRUE, johnson, 0, ch, TO_NOTVICT);
