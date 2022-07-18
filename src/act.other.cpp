@@ -4482,8 +4482,8 @@ ACMD(do_spray)
       obj_to_room(paint, ch->in_room);
 
       send_to_char("You tag the area with your spray.\r\n", ch);
-      snprintf(buf, sizeof(buf), "%s sprayed graffiti: %s.", GET_CHAR_NAME(ch), GET_OBJ_NAME(paint));
-      mudlog(buf, ch, LOG_GRIDLOG, TRUE);
+      snprintf(buf, sizeof(buf), "[SPRAYLOG]: %s sprayed graffiti: %s.", GET_CHAR_NAME(ch), GET_OBJ_NAME(paint));
+      mudlog(buf, ch, LOG_MISCLOG, TRUE);
 
       if (++GET_OBJ_TIMER(obj) >= 3) {
         send_to_char("The spray can is now empty, so you throw it away.\r\n", ch);
@@ -4524,8 +4524,8 @@ ACMD(do_cleanup)
 
   WAIT_STATE(ch, 3 RL_SEC);
 
-  snprintf(buf, sizeof(buf), "%s cleaned up graffiti: ^n%s^g.", GET_CHAR_NAME(ch), GET_OBJ_NAME(target_obj));
-  mudlog(buf, ch, LOG_GRIDLOG, TRUE);
+  snprintf(buf, sizeof(buf), "[SPRAYLOG]: %s cleaned up graffiti: ^n%s^g.", GET_CHAR_NAME(ch), GET_OBJ_NAME(target_obj));
+  mudlog(buf, ch, LOG_MISCLOG, TRUE);
   extract_obj(target_obj);
 }
 
