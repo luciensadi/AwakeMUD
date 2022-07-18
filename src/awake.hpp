@@ -1528,10 +1528,7 @@ enum {
 #define CYB_TACTICALCOMPUTER 49
 #define CYB_CUSTOM_NERPS     50
 #define CYB_CRD              51
-#define CYB_SPATIAL          52
-#define CYB_HIGHFREQ         53
-#define CYB_SOUNDFILTER      54
-#define NUM_CYBER            55
+#define NUM_CYBER            52
 
 #define BIO_ADRENALPUMP    0
 #define BIO_CATSEYES    1
