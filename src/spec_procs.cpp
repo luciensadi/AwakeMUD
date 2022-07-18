@@ -3794,13 +3794,6 @@ SPECIAL(newbie_car)
       send_to_char(ch, "You don't have a deed for that.\r\n");
       return TRUE;
     }
-    if (!((GET_OBJ_VNUM(obj) >= 891 && GET_OBJ_VNUM(obj) <= 898)
-           || (GET_OBJ_VNUM(obj) >= 904 && GET_OBJ_VNUM(obj) <= 908))
-        || GET_OBJ_VNUM(obj) == 896)
-    {
-      send_to_char(ch, "You can't collect anything with that.\r\n");
-      return TRUE;
-    }
     if (ch->in_veh) {
       send_to_char("You cannot collect a vehicle while in another vehicle.\r\n", ch);
       return TRUE;
@@ -3872,8 +3865,13 @@ SPECIAL(newbie_car)
         break;
 #endif
       default:
-        mudlog("SYSERR: Attempting to 'collect' a mis-assigned title!", ch, LOG_SYSLOG, TRUE);
-        return FALSE;
+        {
+          char oopsbuf[500];
+          snprintf(oopsbuf, sizeof(oopsbuf), "Failed attempt to collect obj %ld from newbie car park-- is it coded correctly?", GET_OBJ_VNUM(obj));
+          mudlog(oopsbuf, ch, LOG_SYSLOG, TRUE);
+          send_to_char(ch, "You can't collect anything with %s.\r\n", GET_OBJ_NAME(obj));
+        }
+        return TRUE;
     }
     veh = read_vehicle(num, VIRTUAL);
     veh->locked = TRUE;
