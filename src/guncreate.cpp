@@ -153,6 +153,7 @@ int gunsmith_skill(int weapon_type)
     case WEAP_LIGHT_PISTOL:
     case WEAP_MACHINE_PISTOL:
     case WEAP_HEAVY_PISTOL:
+    case WEAP_TASER:
       return SKILL_BR_PISTOL;
     case WEAP_SMG:
       return SKILL_BR_SMG;
@@ -167,8 +168,14 @@ int gunsmith_skill(int weapon_type)
     case WEAP_HMG:
     case WEAP_MINIGUN:
       return SKILL_BR_HEAVYWEAPON;
+    default:
+      {
+        char oopsbuf[500];
+        snprintf(oopsbuf, sizeof(oopsbuf), "SYSERR: Unknown weapon type %d to gunsmith_skill!", weapon_type);
+        mudlog(oopsbuf, NULL, LOG_SYSLOG, TRUE);
+        return SKILL_BR_PISTOL;
+      }
   }
-  return -1;
 }
 
 bool ammo_test(struct char_data *ch, struct obj_data *obj)
