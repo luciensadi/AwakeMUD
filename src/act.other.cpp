@@ -4519,6 +4519,25 @@ ACMD(do_cleanup)
     return;
   }
 
+  // If you're not a staff member, you need an item to clean it up.
+  if (!access_level(ch, LVL_BUILDER)) {
+    struct obj_data *cleaner = NULL;
+    for (cleaner = ch->carrying; cleaner; cleaner = cleaner->next_content) {
+      if (GET_OBJ_TYPE(cleaner) == ITEM_DRINKCON && GET_DRINKCON_LIQ_TYPE(cleaner) == LIQ_CLEANER && GET_DRINKCON_AMOUNT(cleaner) > 0) {
+        break;
+      }
+    }
+    if (!cleaner) {
+      send_to_char("You don't have any cleaning solution to remove the paint with.\r\n", ch);
+      return;
+    }
+
+    // Decrement contents.
+    if ((--GET_DRINKCON_AMOUNT(cleaner)) <= 0) {
+      send_to_char(ch, "You spray the last of the cleaner from %s over the graffiti.\r\n", decapitalize_a_an(GET_OBJ_NAME(cleaner)));
+    }
+  }
+
   send_to_char(ch, "You spend a few moments scrubbing away %s. Community service, good for you!\r\n", GET_OBJ_NAME(target_obj));
   act("$n spends a few moments scrubbing away $p.", TRUE, ch, target_obj, NULL, TO_ROOM);
 

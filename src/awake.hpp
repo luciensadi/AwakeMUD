@@ -1727,6 +1727,9 @@ enum {
 #define LIQ_PISS       31
 #define LIQ_LOCAL      32
 #define LIQ_FUCKUP     33
+#define LIQ_CLEANER    34
+
+#define NUM_DRINK_TYPES         35
 
 /* focus values */
 

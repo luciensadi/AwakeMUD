@@ -953,6 +953,10 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 // ITEM_RADIO convenience defines
 
 // ITEM_DRINKCON convenience defines
+#define GET_DRINKCON_AMOUNT(cont)                 (GET_OBJ_VAL((cont), 0))
+#define GET_DRINKCON_MAX_AMOUNT(cont)             (GET_OBJ_VAL((cont), 1))
+#define GET_DRINKCON_LIQ_TYPE(cont)               (GET_OBJ_VAL((cont), 2))
+#define GET_DRINKCON_POISON_RATING(cont)          (GET_OBJ_VAL((cont), 3))
 
 // ITEM_KEY convenience defines
 

@@ -1248,6 +1248,7 @@ const char *drinks[] =
     "piss",
     "local speciality",
     "fuckup juice",
+    "cleaning solution",
     "\n"
   };
 
@@ -1694,7 +1695,7 @@ const char *veh_types[NUM_VEH_TYPES] =
     "Tracked Vehicle",
     "Walker"
   };
-  
+
 struct mod_data mod_types[NUM_MODTYPES] =
   {
     { "NOTHING", 0 },
