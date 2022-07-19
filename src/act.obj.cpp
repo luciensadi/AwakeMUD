@@ -2505,23 +2505,23 @@ ACMD(do_drink)
     return;
   }
 #endif
-  if (!GET_OBJ_VAL(temp, 1)) {
+  if (GET_DRINKCON_AMOUNT(temp) <= 0) {
     send_to_char("It's empty.\r\n", ch);
     return;
   }
   if (subcmd == SCMD_DRINK) {
-    snprintf(buf, sizeof(buf), "$n drinks %s from $p.", drinknames[GET_OBJ_VAL(temp, 2)]);
+    snprintf(buf, sizeof(buf), "$n drinks %s from $p.", drinknames[GET_DRINKCON_LIQ_TYPE(temp)]);
     act(buf, TRUE, ch, temp, 0, TO_ROOM);
 
-    send_to_char(ch, "You drink the %s.\r\n", drinknames[GET_OBJ_VAL(temp, 2)]);
+    send_to_char(ch, "You drink the %s.\r\n", drinknames[GET_DRINKCON_LIQ_TYPE(temp)]);
     amount = number(3, 10);
   } else {
     act("$n sips from $p.", TRUE, ch, temp, 0, TO_ROOM);
-    send_to_char(ch, "It tastes like %s.\r\n", drinknames[GET_OBJ_VAL(temp, 2)]);
+    send_to_char(ch, "It tastes like %s.\r\n", drinknames[GET_DRINKCON_LIQ_TYPE(temp)]);
     amount = 1;
   }
 
-  amount = MIN(amount, GET_OBJ_VAL(temp, 1));
+  amount = MIN(amount, GET_DRINKCON_AMOUNT(temp));
 
   /* You can't subtract more than the object weighs */
   weight = (float)(MIN(amount * 100, (int)(GET_OBJ_WEIGHT(temp) * 100)) / 100);
@@ -2529,14 +2529,14 @@ ACMD(do_drink)
   weight_change_object(temp, -weight);  /* Subtract amount */
 
   gain_condition(ch, COND_DRUNK,
-                 (int) ((int) drink_aff[GET_OBJ_VAL(temp, 2)][COND_DRUNK] * amount) / 4);
+                 (int) ((int) drink_aff[GET_DRINKCON_LIQ_TYPE(temp)][COND_DRUNK] * amount) / 4);
 
 #ifdef ENABLE_HUNGER
   gain_condition(ch, COND_FULL,
-                 (int) ((int) drink_aff[GET_OBJ_VAL(temp, 2)][COND_FULL] * amount) / 4);
+                 (int) ((int) drink_aff[GET_DRINKCON_LIQ_TYPE(temp)][COND_FULL] * amount) / 4);
 
   gain_condition(ch, COND_THIRST,
-                 (int) ((int) drink_aff[GET_OBJ_VAL(temp, 2)][COND_THIRST] * amount) / 4);
+                 (int) ((int) drink_aff[GET_DRINKCON_LIQ_TYPE(temp)][COND_THIRST] * amount) / 4);
 #endif
 
   if (GET_COND(ch, COND_DRUNK) > MAX_DRUNK)
@@ -2551,10 +2551,29 @@ ACMD(do_drink)
 #endif
 
   /* empty the container, and no longer poison. */
-  GET_OBJ_VAL(temp, 1) -= amount;
-  if (!GET_OBJ_VAL(temp, 1)) {  /* The last bit */
+  GET_DRINKCON_AMOUNT(temp) -= amount;
+  if (GET_DRINKCON_AMOUNT(temp) <= 0) {  /* The last bit */
     //name_from_drinkcon(temp); // do this first
-    GET_OBJ_VAL(temp, 2) = 0;
+    GET_DRINKCON_LIQ_TYPE(temp) = LIQ_WATER;
+  }
+
+  // Deal poison damage.
+  int poison_rating = MAX(0, MIN(DEADLY, (GET_DRINKCON_LIQ_TYPE(temp) == LIQ_CLEANER ? DEADLY : GET_DRINKCON_POISON_RATING(temp))));
+  if (poison_rating > 0) {
+    int damage_resist_dice = GET_BOD(ch);
+    int tn = 6 + amount;
+    int successes = success_test(damage_resist_dice, tn);
+    int staged_damage = stage(-successes, poison_rating);
+    int dam_total = convert_damage(staged_damage);
+    char rollbuf[500];
+    snprintf(rollbuf, sizeof(rollbuf), "Poison resistance test: %d dice vs TN %d gave %d successes to stage down damage.",
+             damage_resist_dice,
+             tn,
+             successes);
+    act(rollbuf, FALSE, ch, 0, 0, TO_ROLLS);
+
+    if (damage(ch, ch, dam_total, TYPE_ALLERGY, TRUE))
+      return;
   }
   return;
 }
