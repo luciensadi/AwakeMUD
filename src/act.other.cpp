@@ -4485,6 +4485,8 @@ ACMD(do_spray)
       snprintf(buf, sizeof(buf), "[SPRAYLOG]: %s sprayed graffiti: %s.", GET_CHAR_NAME(ch), GET_OBJ_NAME(paint));
       mudlog(buf, ch, LOG_MISCLOG, TRUE);
 
+      WAIT_STATE(ch, 3 RL_SEC);
+
       if (++GET_OBJ_TIMER(obj) >= 3) {
         send_to_char("The spray can is now empty, so you throw it away.\r\n", ch);
         extract_obj(obj);
