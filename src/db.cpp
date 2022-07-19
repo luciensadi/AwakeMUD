@@ -1966,6 +1966,7 @@ void parse_object(File &fl, long nr)
         } else {
           GET_OBJ_COST(obj) = GET_OBJ_DRUG_DOSES(obj) * drug_types[GET_OBJ_DRUG_TYPE(obj)].cost;
           GET_OBJ_STREET_INDEX(obj) = drug_types[GET_OBJ_DRUG_TYPE(obj)].street_idx;
+          GET_OBJ_WEIGHT(obj) = 0.01 * GET_OBJ_DRUG_DOSES(obj);
         }
         break;
       case ITEM_CYBERWARE:

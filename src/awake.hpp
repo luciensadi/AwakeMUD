@@ -1153,6 +1153,7 @@ enum {
 #define TYPE_MEDICAL_MISHAP   414
 #define TYPE_SPELL_DRAIN      415
 #define TYPE_DRUGS            416
+#define TYPE_POISON           417
 
 #define WEAP_EDGED          0
 #define WEAP_CLUB           1

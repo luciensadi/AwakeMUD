@@ -2440,6 +2440,9 @@ void gen_death_msg(struct char_data *ch, struct char_data *vict, int attacktype)
           break;
       }
       break;
+    case TYPE_POISON:
+      WRITE_DEATH_MESSAGE("%s drank themself to death. {%s (%ld)}");
+      break;
     default:
       if (ch == vict)
         snprintf(buf2, sizeof(buf2), "%s died (cause uncertain-- damage type %d). {%s (%ld)}",
@@ -2633,6 +2636,8 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
       snprintf(rbuf, sizeof(rbuf), "Drug damage (%s: ", GET_CHAR_NAME(ch));
     } else if (attacktype == TYPE_BIOWARE) {
       snprintf(rbuf, sizeof(rbuf), "Bioware damage (%s: ", GET_CHAR_NAME(ch));
+    } else if (attacktype == TYPE_POISON) {
+      snprintf(rbuf, sizeof(rbuf), "Poison damage (%s: ", GET_CHAR_NAME(ch));
     } else {
       snprintf(rbuf, sizeof(rbuf), "Self-damage (%s: ", GET_CHAR_NAME(ch));
     }
@@ -2773,7 +2778,7 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
   if (IS_PROJECT(victim) && victim->desc && victim->desc->original)
     real_body = victim->desc->original;
 
-  if (attacktype != TYPE_BIOWARE && attacktype != TYPE_DRUGS) {
+  if (attacktype != TYPE_BIOWARE && attacktype != TYPE_DRUGS && attacktype != TYPE_POISON) {
     for (bio = real_body->bioware; bio; bio = bio->next_content) {
       if (GET_BIOWARE_TYPE(bio) == BIO_PLATELETFACTORY && dam >= 3 && is_physical)
         dam--;
@@ -2855,7 +2860,7 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
     }
 
     // Under Hyper, you take 50% more damage as stun damage, rounded up.
-    if (GET_DRUG_STAGE(victim, DRUG_HYPER) == DRUG_STAGE_ONSET && attacktype != TYPE_DRUGS) {
+    if (GET_DRUG_STAGE(victim, DRUG_HYPER) == DRUG_STAGE_ONSET && (attacktype != TYPE_DRUGS && attacktype != TYPE_BIOWARE && attacktype != TYPE_POISON)) {
       if (damage_without_message(victim, victim, dam / 2 + dam % 2, TYPE_DRUGS, FALSE)) {
         return TRUE;
       }

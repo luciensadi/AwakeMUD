@@ -521,6 +521,7 @@ ACMD(do_put)
       send_to_char("You combine the chems.\r\n", ch);
       GET_CHEMS_QTY(cont) += GET_CHEMS_QTY(obj);
       GET_CHEMS_QTY(obj) = 0;
+      // TODO: Update weight as well.
       extract_obj(obj);
       return;
     } else {
@@ -2572,7 +2573,7 @@ ACMD(do_drink)
              successes);
     act(rollbuf, FALSE, ch, 0, 0, TO_ROLLS);
 
-    if (damage(ch, ch, dam_total, TYPE_ALLERGY, TRUE))
+    if (damage(ch, ch, dam_total, TYPE_BIOWARE, TRUE))
       return;
   }
   return;
