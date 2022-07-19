@@ -3275,7 +3275,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
         break;
       }
       if (GET_OBJ_VNUM(j) == OBJ_ANTI_DRUG_CHEMS) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt's a bottle of anti-craving chemicals with %d dose%s left. If you have it on you during guided withdrawal, you won't risk a fugue state. See ##^WHELP ADDICTION^n for more.",
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt's a bottle of anti-craving chemicals with ^c%d^n dose%s left. If you have it on you during guided withdrawal, you won't risk a fugue state. See ##^WHELP ADDICTION^n for more.",
                  GET_CHEMS_QTY(j),
                  GET_CHEMS_QTY(j) == 1 ? "" : "s");
         break;
@@ -6286,11 +6286,17 @@ ACMD(do_status)
     }
     else if (GET_DRUG_ADDICT(targ, i) > 0) {
       if (GET_DRUG_STAGE(targ, i) == DRUG_STAGE_GUIDED_WITHDRAWAL) {
-        send_to_char(ch, "  ^y%s Withdrawal (Guided): %s remaining^n\r\n", drug_types[i].name, get_time_until_withdrawal_ends(ch, i));
+        send_to_char(ch, "  ^y%s Withdrawal (Guided, Edge %d): %s remaining^n\r\n",
+                     drug_types[i].name,
+                     GET_DRUG_ADDICTION_EDGE(targ, i),
+                     get_time_until_withdrawal_ends(targ, i));
       } else if (GET_DRUG_STAGE(targ, i) == DRUG_STAGE_FORCED_WITHDRAWAL) {
-        send_to_char(ch, "  ^Y%s Withdrawal (Forced): %s remaining^n\r\n", drug_types[i].name, get_time_until_withdrawal_ends(ch, i));
+        send_to_char(ch, "  ^Y%s Withdrawal (Forced, Edge %d): %s remaining^n\r\n",
+                     drug_types[i].name,
+                     GET_DRUG_ADDICTION_EDGE(targ, i),
+                     get_time_until_withdrawal_ends(targ, i));
       } else {
-        send_to_char(ch, "  Addicted to %s\r\n", drug_types[i].name);
+        send_to_char(ch, "  Addicted to %s (Edge: %d)\r\n", drug_types[i].name, GET_DRUG_ADDICTION_EDGE(targ, i));
       }
       printed = TRUE;
     }
