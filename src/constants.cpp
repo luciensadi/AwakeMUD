@@ -1234,6 +1234,7 @@ const char *drinks[] =
     "cocktail",
     "margarita",
     "liquor",
+    "grain alcohol",
     "vodka",
     "tequila",
     "brandy",
@@ -1274,6 +1275,7 @@ const char *drinknames[] =
     "cocktail",
     "margarita",
     "liquor",
+    "everclear",
     "vodka",
     "tequila",
     "brandy",
@@ -1288,6 +1290,7 @@ const char *drinknames[] =
     "piss",
     "local",
     "fuckup",
+    "cleaner",
     "\n"
   };
 
@@ -1313,6 +1316,7 @@ int drink_aff[][3] = {
                        {6, 0, 1},      // Cocktail
                        {6, 0, 1},      // Margarita
                        {8, 0, 1},      // Liquor
+                       {12,0, -1},     // Everclear
                        {8, 0, 1},      // Vodka
                        {9, 0, 0},      // Tequila
                        {7, 0, -1},      // Brandy
@@ -1326,7 +1330,8 @@ int drink_aff[][3] = {
                        {0, 1, -1},     // Hot Sauce
                        {0, 1, -4},     // Urine
                        {6, 0, -1},     // Local
-                       {12, 0, -1}     // Fuckup Juice
+                       {12, 0, -1},    // Fuckup Juice
+                       {24, -24, -24}  // Cleaning Fluid
                      };
 
 
@@ -1353,6 +1358,7 @@ const char *color_liquid[] =
     "colourful",   // Cocktail
     "colourful",   // Margarita
     "clear",    // Liquor
+    "clear",    // Everclear
     "clear",    // Vodka
     "golden brown", // Tequila
     "amber",    // Brandy
@@ -1366,7 +1372,8 @@ const char *color_liquid[] =
     "blazing red",  // Hot Sauce
     "bright yellow", // Urine
     "dark amber",    //Local
-    "thick"          //fuckup juice
+    "thick",          //fuckup juice
+    "clear"           // cleaning solution
   };
 
 const char *fullness[] =
