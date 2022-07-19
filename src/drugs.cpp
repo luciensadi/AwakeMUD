@@ -588,20 +588,20 @@ void process_withdrawal(struct char_data *ch) {
   update_withdrawal_flags(ch);
 }
 
-void render_drug_info_for_targ(struct char_data *ch, struct char_data *targ) {
-  if (!PLR_FLAGGED(ch, PLR_ENABLED_DRUGS)) {
-    send_to_char("\r\nDrug usage not enabled.\r\n", ch);
+void render_drug_info_for_targ(struct char_data *viewer, struct char_data *target) {
+  if (!PLR_FLAGGED(target, PLR_ENABLED_DRUGS)) {
+    send_to_char("\r\nDrug usage not enabled.\r\n", viewer);
     return;
   }
 
   bool printed_something = FALSE;
   // Send drug info
-  send_to_char("\r\nDrug info: \r\n", ch);
+  send_to_char("\r\nDrug info: \r\n", viewer);
 
   for (int drug_id = MIN_DRUG; drug_id < NUM_DRUGS; drug_id++) {
     bool should_show_this_drug = FALSE;
     for (int chk = 0; chk < NUM_DRUG_PLAYER_SPECIAL_FIELDS; chk++) {
-      if (ch->player_specials->drugs[drug_id][chk]) {
+      if (target->player_specials->drugs[drug_id][chk]) {
         should_show_this_drug = TRUE;
         break;
       }
@@ -611,22 +611,22 @@ void render_drug_info_for_targ(struct char_data *ch, struct char_data *targ) {
       continue;
 
     printed_something = TRUE;
-    send_to_char(ch, " - ^c%s^n (edg %d, add %s, lstfx %lds ago, addt %d, lstwith %d, dur %d, current dose %d/%d (%d lifetime), stage %d)\r\n",
+    send_to_char(viewer, " - ^c%s^n (edg %d, add %s, lstfx %lds ago, addt %d, lstwith %d, dur %d, current dose %d/%d (%d lifetime), stage %d)\r\n",
                  drug_types[drug_id].name,
-                 GET_DRUG_ADDICTION_EDGE(targ, drug_id),
-                 GET_DRUG_ADDICT(targ, drug_id) ? "Y" : "N",
-                 time(0) - GET_DRUG_LAST_FIX(targ, drug_id),
-                 GET_DRUG_ADDICTION_TICK_COUNTER(targ, drug_id),
-                 GET_DRUG_LAST_WITHDRAWAL_TICK(targ, drug_id),
-                 GET_DRUG_DURATION(targ, drug_id),
-                 GET_DRUG_DOSE(targ, drug_id),
-                 GET_DRUG_TOLERANCE_LEVEL(targ, drug_id),
-                 GET_DRUG_LIFETIME_DOSES(targ, drug_id),
-                 GET_DRUG_STAGE(targ, drug_id));
+                 GET_DRUG_ADDICTION_EDGE(target, drug_id),
+                 GET_DRUG_ADDICT(target, drug_id) ? "Y" : "N",
+                 time(0) - GET_DRUG_LAST_FIX(target, drug_id),
+                 GET_DRUG_ADDICTION_TICK_COUNTER(target, drug_id),
+                 GET_DRUG_LAST_WITHDRAWAL_TICK(target, drug_id),
+                 GET_DRUG_DURATION(target, drug_id),
+                 GET_DRUG_DOSE(target, drug_id),
+                 GET_DRUG_TOLERANCE_LEVEL(target, drug_id),
+                 GET_DRUG_LIFETIME_DOSES(target, drug_id),
+                 GET_DRUG_STAGE(target, drug_id));
   }
 
   if (!printed_something)
-    send_to_char(" - Nothing.\r\n", ch);
+    send_to_char(" - Nothing.\r\n", viewer);
 }
 
 void attempt_safe_withdrawal(struct char_data *ch, const char *target_arg) {

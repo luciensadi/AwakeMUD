@@ -6292,6 +6292,7 @@ ACMD(do_status)
       } else {
         send_to_char(ch, "  Addicted to %s\r\n", drug_types[i].name);
       }
+      printed = TRUE;
     }
   }
 
