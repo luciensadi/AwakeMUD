@@ -162,7 +162,8 @@ bool dumpshock(struct matrix_icon *icon)
 
     // Clean out downloads involving them.
     for (struct obj_data *file = matrix[icon->in_host].file; file; file = file->next_content) {
-      if (GET_DECK_ACCESSORY_FILE_REMAINING(file)
+      if (GET_OBJ_TYPE(file) == ITEM_DECK_ACCESSORY
+          && GET_DECK_ACCESSORY_FILE_REMAINING(file)
           && find_icon_by_id(GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(file)) == icon)
       {
         GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(file) = 0;
@@ -1331,7 +1332,7 @@ ACMD(do_matrix_look)
       send_to_icon(PERSONA, "^Y%s^n\r\n", icon->look_desc);
 
   for (struct obj_data *obj = matrix[PERSONA->in_host].file; obj; obj = obj->next_content) {
-    if (GET_OBJ_VAL(obj, 7) == PERSONA->idnum)
+    if (GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_FILE_FOUND_BY(obj) == PERSONA->idnum)
     {
       if (GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(obj)) {
         send_to_icon(PERSONA, "^yA file named %s floats here (Downloading - %d%%).^n\r\n",
@@ -1455,7 +1456,7 @@ ACMD(do_analyze)
     return;
   } else {
     struct obj_data *obj = NULL;
-    if ((obj = get_obj_in_list_vis(ch, arg, matrix[PERSONA->in_host].file)) && GET_OBJ_VAL(obj, 7) == PERSONA->idnum) {
+    if ((obj = get_obj_in_list_vis(ch, arg, matrix[PERSONA->in_host].file)) && GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_FILE_FOUND_BY(obj) == PERSONA->idnum) {
       int success = system_test(PERSONA->in_host, ch, TEST_CONTROL, SOFT_ANALYZE, 0);
       if (success > 0) {
         send_to_icon(PERSONA, "You analyze the file:\r\n");
@@ -1605,7 +1606,8 @@ ACMD(do_logoff)
 
   // Clean out downloads involving them.
   for (struct obj_data *file = matrix[PERSONA->in_host].file; file; file = file->next_content) {
-    if (GET_DECK_ACCESSORY_FILE_REMAINING(file)
+    if (GET_OBJ_TYPE(file) == ITEM_DECK_ACCESSORY
+        && GET_DECK_ACCESSORY_FILE_REMAINING(file)
         && find_icon_by_id(GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(file)) == PERSONA)
     {
       GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(file) = 0;
@@ -2665,14 +2667,8 @@ void matrix_update()
           next = NULL;
         }
         if (GET_OBJ_TYPE(file) != ITEM_DECK_ACCESSORY && GET_OBJ_TYPE(file) != ITEM_PROGRAM) {
-          snprintf(buf, sizeof(buf), "SYSERR: Found non-file, non-program object '%s' (%ld, quest=%s) in Matrix file list for host %ld! Terminating iteration immediately.",
-                   GET_OBJ_NAME(file),
-                   GET_OBJ_VNUM(file),
-                   file->obj_flags.quest_id != 0 ? "TRUE" : "FALSE",
-                   host.vnum
-                 );
-          mudlog(buf, NULL, LOG_SYSLOG, TRUE);
-          return;
+          // We allow for things like Shadowlands terminals in Matrix hosts, so just skip.
+          continue;
         }
         if (file->next_content && (GET_OBJ_TYPE(file->next_content) != ITEM_DECK_ACCESSORY && GET_OBJ_TYPE(file->next_content) != ITEM_PROGRAM)) {
           snprintf(buf, sizeof(buf), "SYSERR: Found non-file, non-program object '%s' (%ld) in Matrix file->next_content! Striking that link, object will be orphaned if not located elsewhere.", GET_OBJ_NAME(file), GET_OBJ_VNUM(file));
