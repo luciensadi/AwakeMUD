@@ -2828,7 +2828,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       if (GET_PROGRAM_TYPE(j) == SOFT_ATTACK)
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " Its damage code is ^c%s^n.", GET_WOUND_NAME(GET_OBJ_VAL(j, 3)));
 
-      if (GET_PROGRAM_TYPE(j) >= SOFT_ASIST_COLD || GET_PROGRAM_TYPE(j) < SOFT_SENSOR) {
+      if (GET_OBJ_VNUM(j) == OBJ_BLANK_PROGRAM && (GET_PROGRAM_TYPE(j) >= SOFT_ASIST_COLD || GET_PROGRAM_TYPE(j) < SOFT_SENSOR)) {
         if (GET_OBJ_TIMER(j) < 0)
           strlcat(buf, " It was ruined in cooking and is useless.\r\n", sizeof(buf));
         else if (!GET_OBJ_TIMER(j))
