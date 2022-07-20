@@ -7133,9 +7133,9 @@ SPECIAL(graffiti_cleaner) {
   for (struct obj_data *obj = ch->in_room->contents, *next; obj; obj = next) {
     next = obj->next_content;
 
-    if (GET_OBJ_VNUM(obj) == OBJ_GRAFFITI && ++graffiti_count >= 3) {
+    if (GET_OBJ_VNUM(obj) == OBJ_GRAFFITI && ++graffiti_count >= MAXIMUM_GRAFFITI_IN_ROOM) {
       char msgbuf[500];
-      
+
       snprintf(msgbuf, sizeof(msgbuf), "$n mutters something under $s breath as $e scrub%s away some graffiti.", HSSH_SHOULD_PLURAL(ch) ? "s" : "");
       act(msgbuf, TRUE, ch, 0, 0, TO_ROOM);
 
