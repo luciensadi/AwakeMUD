@@ -1478,7 +1478,7 @@ int get_skill(struct char_data *ch, int skill, int &target)
 
     // If they have both a chipjack with the correct chip loaded and a Chipjack Expert, add the rating to their skill as task pool dice (up to skill max).
     if (chip && expert) {
-      if (chip == GET_SKILL(ch, skill)) {
+      if (chip != GET_SKILL(ch, skill)) {
         strlcat(gskbuf, "Ignored expert driver (ch skill not equal to chip rating). ", sizeof(gskbuf));
       } else if (defaulting_tn == 4) {
         strlcat(gskbuf, "Ignored expert driver (S2A default). ", sizeof(gskbuf));
