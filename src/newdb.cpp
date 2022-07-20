@@ -1098,7 +1098,9 @@ bool load_char(const char *name, char_data *ch, bool logon)
   set_natural_vision_for_race(ch);
   affect_total(ch);
 
-  if ((((long) (time(0) - ch->player.time.lastdisc)) >= SECS_PER_REAL_HOUR)) {
+  long time_since_last_disconnect = time(0) - ch->player.time.lastdisc;
+
+  if (time_since_last_disconnect >= SECS_PER_REAL_HOUR) {
     GET_PHYSICAL(ch) = GET_MAX_PHYSICAL(ch);
     GET_MENTAL(ch) = GET_MAX_MENTAL(ch);
     if (AFF_FLAGS(ch).IsSet(AFF_HEALED))
@@ -1107,12 +1109,14 @@ bool load_char(const char *name, char_data *ch, bool logon)
   if ( !IS_SENATOR(ch) )
     PRF_FLAGS(ch).RemoveBit(PRF_ROLLS);
 
-  if (((long) (time(0) - ch->player.time.lastdisc) >= SECS_PER_REAL_HOUR * 2) ||
-      (GET_LAST_IN(ch) > 599 && GET_LAST_IN(ch) < 700)) {
+  // If you logged out in a cab or have been away more than 2 hours, snap back to home.
+  if ((time_since_last_disconnect  >= SECS_PER_REAL_HOUR * 2) ||
+      (GET_LAST_IN(ch) > 599 && GET_LAST_IN(ch) < 670)) {
     GET_LAST_IN(ch) = GET_LOADROOM(ch);
     GET_PHYSICAL(ch) = GET_MAX_PHYSICAL(ch);
     GET_MENTAL(ch) = GET_MAX_MENTAL(ch);
   }
+
   // initialization for imms
   if(IS_SENATOR(ch)) {
     GET_COND(ch, COND_FULL) = -1;
@@ -1153,6 +1157,9 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
     mysql_free_result(res);
   }
 
+  // Set their last disconnect time as right now.
+  player->player.time.lastdisc = time(0);
+
   /* Remove their worn equipment to inventory. */
   for (i = 0; i < NUM_WEARS; i++) {
     if (player->equipment[i])
@@ -1187,18 +1194,18 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
 
   /* Figure out what room to load them in. */
   if (player->in_room) {
-    if (player->in_room->number <= 1) {
+    if (GET_ROOM_VNUM(player->in_room) <= 1) {
       // If their current room is invalid for save/load:
       if (player->was_in_room) {
-        if (player->was_in_room->number <= 1) {
+        if (GET_ROOM_VNUM(player->was_in_room) <= 1) {
           // Their was_in_room is invalid; put them at Dante's.
           snprintf(buf, sizeof(buf), "SYSERR: save_char(): %s is at %ld and has was_in_room (world array index) %ld.",
-                  GET_CHAR_NAME(player), player->in_room->number, player->was_in_room->number);
+                  GET_CHAR_NAME(player), GET_ROOM_VNUM(player->in_room), GET_ROOM_VNUM(player->was_in_room));
           mudlog(buf, NULL, LOG_SYSLOG, TRUE);
           GET_LAST_IN(player) = RM_ENTRANCE_TO_DANTES;
         } else {
           // Their was_in_room is valid, so put them there.
-          GET_LAST_IN(player) = player->was_in_room->number;
+          GET_LAST_IN(player) = GET_ROOM_VNUM(player->was_in_room);
         }
       } else {
         // They have no was_in_room, so put them at Dante's.
@@ -1206,7 +1213,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
       }
     } else {
       // Their in_room is valid, so put them there.
-      GET_LAST_IN(player) = player->in_room->number;
+      GET_LAST_IN(player) = GET_ROOM_VNUM(player->in_room);
     }
   }
 

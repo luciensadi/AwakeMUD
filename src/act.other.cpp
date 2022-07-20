@@ -131,7 +131,7 @@ ACMD(do_quit)
     else {
       snprintf(buf, sizeof(buf), "%s has left the game.\r\n", GET_NAME(ch));
       send_to_veh(buf, ch->in_veh, ch, FALSE);
-      if (AFF_FLAGGED(ch, AFF_PILOT)) {
+      if (AFF_FLAGGED(ch, AFF_PILOT) || AFF_FLAGGED(ch, AFF_RIG)) {
         send_to_veh("You get a mild case of whiplash as you come to a sudden stop.\r\n",
                     ch->in_veh, ch, FALSE);
         ch->in_veh->cspeed = SPEED_OFF;
