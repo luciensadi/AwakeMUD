@@ -246,18 +246,19 @@ int system_test(rnum_t host, struct char_data *ch, int type, int software, int m
   detect += DECKER->masking;
   detect = detect / 2;
   detect -= DECKER->res_det;
+
   int tally = MAX(0, success_test(HOST.security, detect));
+  target = MAX(target, 2);
   int success = success_test(skill, target);
 
-  snprintf(rollbuf, sizeof(rollbuf), "Rolled %d successes on %d dice vs TN %d",
+  snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), "\r\nRolled %d successes on %d dice vs TN %d",
            success,
            skill,
            target);
-  act(rollbuf, FALSE, ch, 0, 0, TO_ROLLS);
 
   success -= tally;
 
-  snprintf(rollbuf, sizeof(rollbuf), ", then lost %d successes to tally (%d dice vs TN %d).",
+  snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), ", then lost %d successes to tally (%d dice vs TN %d).",
            tally,
            HOST.security,
            detect);
@@ -2671,7 +2672,7 @@ void matrix_update()
           continue;
         }
         if (file->next_content && (GET_OBJ_TYPE(file->next_content) != ITEM_DECK_ACCESSORY && GET_OBJ_TYPE(file->next_content) != ITEM_PROGRAM)) {
-          snprintf(buf, sizeof(buf), "SYSERR: Found non-file, non-program object '%s' (%ld) in Matrix file->next_content! Striking that link, object will be orphaned if not located elsewhere.", GET_OBJ_NAME(file), GET_OBJ_VNUM(file));
+          snprintf(buf, sizeof(buf), "SYSERR: Found non-file, non-program object '%s' (%ld) in Matrix file->next_content! Striking that link, object will be orphaned if not located elsewhere.", GET_OBJ_NAME(file->next_content), GET_OBJ_VNUM(file->next_content));
           mudlog(buf, NULL, LOG_SYSLOG, TRUE);
           file->next_content = next = NULL;
         }
