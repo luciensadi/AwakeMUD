@@ -2125,6 +2125,10 @@ ACMD(do_tow)
     send_to_char(ch, "You don't see any vehicles named '%s' here.\r\n", argument);
     return;
   }
+
+  // Purge the vehicle brain if one exists (otherwise it can't be towed)
+  remove_vehicle_brain(tveh);
+
   if (tveh->type == VEH_BIKE)
     send_to_char("Try as you might, you can't seem to balance it. You'll have to ^WPUSH^n that into the back instead.\r\n", ch);
   else if (tveh->locked && tveh->type != VEH_DRONE)
@@ -2365,4 +2369,24 @@ int calculate_vehicle_entry_load(struct veh_data *veh) {
 
 ACMD(stop_rigging_first) {
   send_to_char(ch, "You'll need to stop rigging by using the %s command before you can do that.\r\n", AFF_FLAGGED(ch, AFF_RIG) ? "^WRIG^n" : "^WRETURN^n");
+}
+
+ACMD(do_vehicle_osay) {
+  struct veh_data *veh;
+  RIG_VEH(ch, veh);
+
+  if (!veh) {
+    return;
+  }
+
+  skip_spaces(&argument);
+
+  snprintf(buf, sizeof(buf), "%s^n says ^mOOCly^n, \"%s^n\"\r\n", GET_VEH_NAME(veh), capitalize(argument));
+
+  if (veh->in_room)
+    send_to_room(buf, veh->in_room, veh);
+  else
+    send_to_veh(buf, veh->in_veh, ch, TRUE);
+
+  send_to_char(ch, "You say ^mOOCly^n, \"%s^n\".\r\n", capitalize(argument));
 }

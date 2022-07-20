@@ -370,7 +370,14 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     }
 
     // Calculate the attacker's total skill (this modifies TN)
-    att->ranged->dice = get_skill(att->ch, att->ranged->skill, att->ranged->tn);
+    {
+      int prior_tn = att->ranged->tn;
+      att->ranged->dice = get_skill(att->ch, att->ranged->skill, att->ranged->tn);
+      if (att->ranged->tn != prior_tn) {
+        snprintf(rbuf, sizeof(rbuf), "TN modified in get_skill() to %d.", att->ranged->tn);
+        SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
+      }
+    }
 
     // Minimum TN is 2.
     att->ranged->tn = MAX(att->ranged->tn, 2);
@@ -591,15 +598,30 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
 
     strlcpy(rbuf, "Computing dice for attacker...", sizeof(rbuf));
     SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
-    att->melee->dice = att->melee->skill_bonus + get_skill(att->ch, att->melee->skill, att->melee->tn);
+    {
+      int prior_tn = att->melee->tn;
+      att->melee->dice = att->melee->skill_bonus + get_skill(att->ch, att->melee->skill, att->melee->tn);
+      if (att->melee->tn != prior_tn) {
+        snprintf(rbuf, sizeof(rbuf), "TN modified in get_skill() to %d.", att->melee->tn);
+        SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
+      }
+    }
     if (!att->too_tall)
       att->melee->dice += MIN(GET_SKILL(att->ch, att->melee->skill) + att->melee->skill_bonus, GET_OFFENSE(att->ch));
 
     strlcpy(rbuf, "Computing dice for defender...", sizeof(rbuf));
     SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
-    def->melee->dice = def->melee->skill_bonus + get_skill(def->ch, def->melee->skill, def->melee->tn);
+    {
+      int prior_tn = def->melee->tn;
+      def->melee->dice = def->melee->skill_bonus + get_skill(def->ch, def->melee->skill, def->melee->tn);
+      if (def->melee->tn != prior_tn) {
+        snprintf(rbuf, sizeof(rbuf), "TN modified in get_skill() to %d.", def->melee->tn);
+        SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
+      }
+    }
     if (!def->too_tall)
       def->melee->dice += MIN(GET_SKILL(def->ch, def->melee->skill) + def->melee->skill_bonus, GET_OFFENSE(def->ch));
+
 
     // }
 
@@ -963,9 +985,17 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       if (successes_for_use_in_monowhip_test_check <= 0 && (net_successes < 0 ? def->melee->is_monowhip : att->melee->is_monowhip)) {
         struct char_data *attacker = net_successes < 0 ? def->ch : att->ch;
         struct char_data *defender = net_successes < 0 ? att->ch : def->ch;
+        int skill;
 
         int target = 4 + modify_target(attacker);
-        int skill = get_skill(attacker, SKILL_WHIPS_FLAILS, target);
+        {
+          int prior_tn = target;
+          skill = get_skill(attacker, SKILL_WHIPS_FLAILS, target);
+          if (target != prior_tn) {
+            snprintf(rbuf, sizeof(rbuf), "TN modified in get_skill() to %d.", target);
+            SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
+          }
+        }
         int successes = success_test(skill, target);
         snprintf(rbuf, sizeof(rbuf), "Monowhip 'flailure' avoidance test: Skill of %d, target of %d, successes is %d.", skill, target, successes);
         SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
@@ -1291,7 +1321,15 @@ bool perform_nerve_strike(struct combat_data *att, struct combat_data *def, char
   SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
 
   // Calculate the attacker's total skill and execute a success test.
-  att->melee->dice = get_skill(att->ch, SKILL_UNARMED_COMBAT, att->melee->tn);
+  {
+    int prior_tn = att->melee->tn;
+    att->melee->dice = get_skill(att->ch, SKILL_UNARMED_COMBAT, att->melee->tn);
+    if (att->melee->tn != prior_tn) {
+      snprintf(rbuf, sizeof(rbuf), "TN modified in get_skill() to %d.", att->melee->tn);
+      SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
+    }
+  }
+
   if (!att->too_tall) {
     int bonus = MIN(GET_SKILL(att->ch, SKILL_UNARMED_COMBAT), GET_OFFENSE(att->ch));
     snprintf(rbuf, rbuf_len, "Attacker is rolling %d + %d dice", att->melee->dice, bonus);

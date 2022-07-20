@@ -1415,6 +1415,9 @@ int get_skill(struct char_data *ch, int skill, int &target)
   if (target < 2)
     target = 2;
 
+  // Add the defaulting TN.
+  target += defaulting_tn;
+
   // If you ever implement the Adept power Improved Ability, it would go here. See Core p169 for details.
 
   bool should_gain_physical_boosts = !PLR_FLAGGED(ch, PLR_MATRIX) && !PLR_FLAGGED(ch, PLR_REMOTE);
@@ -4781,6 +4784,8 @@ void remove_vehicle_brain(struct veh_data *veh) {
       extract_char(tmp);
     }
   }
+
+  repair_vehicle_seating(veh);
 }
 
 struct obj_data *make_new_finished_part(int part_type, int mpcp, int rating=0) {

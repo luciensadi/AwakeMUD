@@ -382,6 +382,7 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define GET_VEH_DESC(veh) ((veh)->restring_long ? (veh)->restring_long : (veh)->long_description)
 #define GET_VEH_RNUM(veh) ((veh)->veh_number)
 #define GET_VEH_VNUM(veh) (GET_VEH_RNUM(veh) >= 0 ? veh_index[GET_VEH_RNUM(veh)].vnum : -1)
+#define GET_VEH_ROOM_DESC(veh) ((veh)->description)
 #define GET_OBJ_NAME(obj) ((obj)->restring ? (obj)->restring : (obj)->text.name)
 #define GET_OBJ_DESC(obj) ((obj)->photo ? (obj)->photo : (obj)->text.look_desc)
 #define GET_KEYWORDS(ch)  ((ch)->player.physical_text.keywords)
@@ -952,6 +953,10 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 // ITEM_RADIO convenience defines
 
 // ITEM_DRINKCON convenience defines
+#define GET_DRINKCON_AMOUNT(cont)                 (GET_OBJ_VAL((cont), 0))
+#define GET_DRINKCON_MAX_AMOUNT(cont)             (GET_OBJ_VAL((cont), 1))
+#define GET_DRINKCON_LIQ_TYPE(cont)               (GET_OBJ_VAL((cont), 2))
+#define GET_DRINKCON_POISON_RATING(cont)          (GET_OBJ_VAL((cont), 3))
 
 // ITEM_KEY convenience defines
 

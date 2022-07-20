@@ -436,7 +436,7 @@ void show_veh_to_char(struct veh_data * vehicle, struct char_data * ch)
         if ((vehicle->type == VEH_BIKE && vehicle->people) || vehicle->restring)
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s waits here", should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name));
         else
-          strlcat(buf, vehicle->description, sizeof(buf));
+          strlcat(buf, GET_VEH_ROOM_DESC(vehicle), sizeof(buf));
         break;
       case SPEED_IDLE:
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s idles here", should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name));
@@ -2828,7 +2828,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       if (GET_PROGRAM_TYPE(j) == SOFT_ATTACK)
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " Its damage code is ^c%s^n.", GET_WOUND_NAME(GET_OBJ_VAL(j, 3)));
 
-      if (GET_PROGRAM_TYPE(j) >= SOFT_ASIST_COLD || GET_PROGRAM_TYPE(j) < SOFT_SENSOR) {
+      if (GET_OBJ_VNUM(j) == OBJ_BLANK_PROGRAM && (GET_PROGRAM_TYPE(j) >= SOFT_ASIST_COLD || GET_PROGRAM_TYPE(j) < SOFT_SENSOR)) {
         if (GET_OBJ_TIMER(j) < 0)
           strlcat(buf, " It was ruined in cooking and is useless.\r\n", sizeof(buf));
         else if (!GET_OBJ_TIMER(j))
@@ -3275,7 +3275,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
         break;
       }
       if (GET_OBJ_VNUM(j) == OBJ_ANTI_DRUG_CHEMS) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt's a bottle of anti-craving chemicals with %d dose%s left. If you have it on you during guided withdrawal, you won't risk a fugue state. See ##^WHELP ADDICTION^n for more.",
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt's a bottle of anti-craving chemicals with ^c%d^n dose%s left. If you have it on you during guided withdrawal, you won't risk a fugue state. See ##^WHELP ADDICTION^n for more.",
                  GET_CHEMS_QTY(j),
                  GET_CHEMS_QTY(j) == 1 ? "" : "s");
         break;
@@ -4870,7 +4870,7 @@ ACMD(do_who)
   struct descriptor_data *d;
   struct char_data *tch;
   int sort = LVL_MAX, num_can_see = 0, level = GET_LEVEL(ch);
-  bool mortal = FALSE, hardcore = FALSE, quest = FALSE, pker = FALSE, immort = FALSE, ooc = FALSE, newbie = FALSE;
+  bool mortal = FALSE, hardcore = FALSE, quest = FALSE, pker = FALSE, immort = FALSE, ooc = FALSE, newbie = FALSE, drugs = FALSE;
   int output_header;
   int num_in_socialization_rooms = 0;
 
@@ -4897,6 +4897,8 @@ ACMD(do_who)
       ooc = 1;
     else if (is_abbrev(arg, "newbie"))
       newbie = 1;
+    else if (access_level(ch, LVL_BUILDER) && is_abbrev(arg, "drugs"))
+      drugs = 1;
     else {
       send_to_char(WHO_FORMAT, ch);
       return;
@@ -4933,6 +4935,8 @@ ACMD(do_who)
       if (ooc && (PRF_FLAGGED(tch, PRF_NOOOC) || PLR_FLAGGED(tch, PLR_NOT_YET_AUTHED)))
         continue;
       if (newbie && !PLR_FLAGGED(tch, PLR_NEWBIE))
+        continue;
+      if (drugs && !PLR_FLAGGED(tch, PLR_ENABLED_DRUGS))
         continue;
       if (GET_INCOG_LEV(tch) > GET_LEVEL(ch))
         continue;
@@ -6286,12 +6290,19 @@ ACMD(do_status)
     }
     else if (GET_DRUG_ADDICT(targ, i) > 0) {
       if (GET_DRUG_STAGE(targ, i) == DRUG_STAGE_GUIDED_WITHDRAWAL) {
-        send_to_char(ch, "  ^y%s Withdrawal (Guided): %s remaining^n\r\n", drug_types[i].name, get_time_until_withdrawal_ends(ch, i));
+        send_to_char(ch, "  ^y%s Withdrawal (Guided, Edge %d): %s remaining^n\r\n",
+                     drug_types[i].name,
+                     GET_DRUG_ADDICTION_EDGE(targ, i),
+                     get_time_until_withdrawal_ends(targ, i));
       } else if (GET_DRUG_STAGE(targ, i) == DRUG_STAGE_FORCED_WITHDRAWAL) {
-        send_to_char(ch, "  ^Y%s Withdrawal (Forced): %s remaining^n\r\n", drug_types[i].name, get_time_until_withdrawal_ends(ch, i));
+        send_to_char(ch, "  ^Y%s Withdrawal (Forced, Edge %d): %s remaining^n\r\n",
+                     drug_types[i].name,
+                     GET_DRUG_ADDICTION_EDGE(targ, i),
+                     get_time_until_withdrawal_ends(targ, i));
       } else {
-        send_to_char(ch, "  Addicted to %s\r\n", drug_types[i].name);
+        send_to_char(ch, "  Addicted to %s (Edge: %d)\r\n", drug_types[i].name, GET_DRUG_ADDICTION_EDGE(targ, i));
       }
+      printed = TRUE;
     }
   }
 
@@ -6391,10 +6402,10 @@ ACMD(do_status)
       else
         send_to_char(ch, "%s is using a total of %d points of foci. If this gets above %d, they'll be at risk of geas.\r\n", GET_CHAR_NAME(targ), force, (GET_REAL_MAG(targ) / 100) * 2);
     }
+  }
 
-    if (GET_LEVEL(ch) > LVL_MORTAL) {
-      render_drug_info_for_targ(ch, targ);
-    }
+  if (GET_LEVEL(ch) > LVL_MORTAL) {
+    render_drug_info_for_targ(ch, targ);
   }
 }
 

@@ -1038,6 +1038,22 @@ int calc_karma(struct char_data *ch, struct char_data *vict)
   return base;
 }
 
+bool eligible_for_karma_gain(struct char_data *ch) {
+  if (!ch) {
+    mudlog("SYSERR: Received NULL character to eligible_for_karma_gain()!", ch, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+
+  if (IS_PC_CONJURED_ELEMENTAL(ch) || IS_SPIRIT(ch))
+    return FALSE;
+
+  // Chargen characters don't get karma.
+  if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED))
+    return FALSE;
+
+  return TRUE;
+}
+
 void perform_group_gain(struct char_data * ch, int base, struct char_data * victim)
 {
   int share;
@@ -1047,8 +1063,10 @@ void perform_group_gain(struct char_data * ch, int base, struct char_data * vict
     return;
 
   share = MIN(max_exp_gain, MAX(1, base));
-  if (!IS_NPC(ch))
+  if (!IS_NPC(ch)) {
+    // Cap XP gain to 0.20 karma if you're a newbie, otherwise notor * 2
     share = MIN(base, (int) (PLR_FLAGGED(ch, PLR_NEWBIE) ? 20 : GET_NOT(ch) * 2));
+  }
 
   /* psuedo-fix of the group with a newbie to get more exp exploit */
   if ( !PLR_FLAGGED(ch, PLR_NEWBIE) )
@@ -1058,12 +1076,13 @@ void perform_group_gain(struct char_data * ch, int base, struct char_data * vict
 
   if ( share >= (200) || access_level(ch, LVL_BUILDER) )
   {
-    snprintf(buf, sizeof(buf),"%s gains %.2f karma from killing %s.", GET_CHAR_NAME(ch),
+    snprintf(buf, sizeof(buf),"%s gains %.2f karma from killing %s (group share).", GET_CHAR_NAME(ch),
             (double)share/100.0, GET_CHAR_NAME(victim));
     mudlog(buf, ch, LOG_DEATHLOG, TRUE);
   }
   if ( IS_NPC( victim ) )
   {
+    // TODO: If you end up implementing value_death_karma (what even is this?), check to make sure there are no exploits around farming projections/spirits
     extern struct char_data *mob_proto;
     mob_proto[GET_MOB_RNUM(victim)].mob_specials.value_death_karma += share;
   }
@@ -1089,7 +1108,7 @@ void group_gain(struct char_data * ch, struct char_data * victim)
   for (f = k->followers; f; f = f->next)
     if (IS_AFFECTED(f->follower, AFF_GROUP)
         && f->follower->in_room == ch->in_room
-        && !IS_PC_CONJURED_ELEMENTAL(f->follower) && !IS_SPIRIT(f->follower))
+        && eligible_for_karma_gain(f->follower))
     {
       if (GET_NOT(high) < GET_NOT(f->follower))
         high = f->follower;
@@ -2421,6 +2440,9 @@ void gen_death_msg(struct char_data *ch, struct char_data *vict, int attacktype)
           break;
       }
       break;
+    case TYPE_POISON:
+      WRITE_DEATH_MESSAGE("%s drank themself to death. {%s (%ld)}");
+      break;
     default:
       if (ch == vict)
         snprintf(buf2, sizeof(buf2), "%s died (cause uncertain-- damage type %d). {%s (%ld)}",
@@ -2614,6 +2636,8 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
       snprintf(rbuf, sizeof(rbuf), "Drug damage (%s: ", GET_CHAR_NAME(ch));
     } else if (attacktype == TYPE_BIOWARE) {
       snprintf(rbuf, sizeof(rbuf), "Bioware damage (%s: ", GET_CHAR_NAME(ch));
+    } else if (attacktype == TYPE_POISON) {
+      snprintf(rbuf, sizeof(rbuf), "Poison damage (%s: ", GET_CHAR_NAME(ch));
     } else {
       snprintf(rbuf, sizeof(rbuf), "Self-damage (%s: ", GET_CHAR_NAME(ch));
     }
@@ -2754,7 +2778,7 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
   if (IS_PROJECT(victim) && victim->desc && victim->desc->original)
     real_body = victim->desc->original;
 
-  if (attacktype != TYPE_BIOWARE && attacktype != TYPE_DRUGS) {
+  if (attacktype != TYPE_BIOWARE && attacktype != TYPE_DRUGS && attacktype != TYPE_POISON) {
     for (bio = real_body->bioware; bio; bio = bio->next_content) {
       if (GET_BIOWARE_TYPE(bio) == BIO_PLATELETFACTORY && dam >= 3 && is_physical)
         dam--;
@@ -2836,7 +2860,7 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
     }
 
     // Under Hyper, you take 50% more damage as stun damage, rounded up.
-    if (GET_DRUG_STAGE(victim, DRUG_HYPER) == DRUG_STAGE_ONSET && attacktype != TYPE_DRUGS) {
+    if (GET_DRUG_STAGE(victim, DRUG_HYPER) == DRUG_STAGE_ONSET && (attacktype != TYPE_DRUGS && attacktype != TYPE_BIOWARE && attacktype != TYPE_POISON)) {
       if (damage_without_message(victim, victim, dam / 2 + dam % 2, TYPE_DRUGS, FALSE)) {
         return TRUE;
       }
@@ -3058,9 +3082,16 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
       if (!PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
         bool need_group_gain = FALSE;
         if (IS_AFFECTED(ch, AFF_GROUP)) {
-          for (struct follow_type *f = ch->followers; f && !need_group_gain; f = f->next)
-            if (IS_AFFECTED(f->follower, AFF_GROUP) && f->follower->in_room == ch->in_room)
+          for (struct follow_type *f = ch->followers; f; f = f->next) {
+            if (IS_AFFECTED(f->follower, AFF_GROUP)
+                && f->follower->in_room == ch->in_room
+                && !IS_PC_CONJURED_ELEMENTAL(f->follower)
+                && !IS_SPIRIT(f->follower))
+            {
               need_group_gain = TRUE;
+              break;
+            }
+          }
         }
 
         if (need_group_gain) {

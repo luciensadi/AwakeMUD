@@ -2176,7 +2176,7 @@ ACMD(do_astral)
       && GET_ASPECT(ch) != ASPECT_FULL
       && !(GET_TRADITION(ch) == TRAD_HERMETIC && (GET_ASPECT(ch) >= ASPECT_EARTHMAGE && GET_ASPECT(ch) <= ASPECT_WATERMAGE)))
   {
-    send_to_char("You do not have enough control over the astral plane to do that.\r\n", ch);
+    send_to_char(ch, "As %s %s, you do not have enough control over the astral plane to do that.\r\n", AN(aspect_names[GET_ASPECT(ch)]), aspect_names[GET_ASPECT(ch)]);
     return;
   }
 
@@ -3007,7 +3007,7 @@ ACMD(do_photo)
       }
       if (num > 1)
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "(%d) ", num);
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^g%s^n\r\n", obj->text.room_desc);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^g%s^n\r\n", obj->graffiti ? obj->graffiti : obj->text.room_desc);
     }
 
     for (struct veh_data *vehicle = ch->in_room->vehicles; vehicle; vehicle = vehicle->next_veh) {
@@ -4463,7 +4463,7 @@ ACMD(do_spray)
         existing_graffiti_count++;
     }
     if (existing_graffiti_count >= MAXIMUM_GRAFFITI_IN_ROOM) {
-      send_to_char("There's too much graffiti here, you can't find a spare place to paint!\r\n(OOC: You'll have to ^WCLEANUP GRAFFITI^n before you can paint here.)\r\n", ch);
+      send_to_char("There's too much graffiti here, you can't find a spare place to paint!\r\n(OOC: You'll have to ##^WCLEANUP GRAFFITI^n before you can paint here.)\r\n", ch);
       return;
     }
   }
@@ -4477,13 +4477,15 @@ ACMD(do_spray)
       struct obj_data *paint = read_object(OBJ_GRAFFITI, VIRTUAL);
       snprintf(buf, sizeof(buf), "a piece of graffiti that says \"%s^n\"", argument);
       paint->restring = str_dup(buf);
-      snprintf(buf, sizeof(buf), "^g   %s^n", argument);
+      snprintf(buf, sizeof(buf), "   ^n%s^n", argument);
       paint->graffiti = str_dup(buf);
       obj_to_room(paint, ch->in_room);
 
       send_to_char("You tag the area with your spray.\r\n", ch);
-      snprintf(buf, sizeof(buf), "%s sprayed graffiti: %s.", GET_CHAR_NAME(ch), GET_OBJ_NAME(paint));
-      mudlog(buf, ch, LOG_GRIDLOG, TRUE);
+      snprintf(buf, sizeof(buf), "[SPRAYLOG]: %s sprayed graffiti: %s.", GET_CHAR_NAME(ch), GET_OBJ_NAME(paint));
+      mudlog(buf, ch, LOG_MISCLOG, TRUE);
+
+      WAIT_STATE(ch, 3 RL_SEC);
 
       if (++GET_OBJ_TIMER(obj) >= 3) {
         send_to_char("The spray can is now empty, so you throw it away.\r\n", ch);
@@ -4519,13 +4521,32 @@ ACMD(do_cleanup)
     return;
   }
 
+  // If you're not a staff member, you need an item to clean it up.
+  if (!access_level(ch, LVL_BUILDER)) {
+    struct obj_data *cleaner = NULL;
+    for (cleaner = ch->carrying; cleaner; cleaner = cleaner->next_content) {
+      if (GET_OBJ_TYPE(cleaner) == ITEM_DRINKCON && GET_DRINKCON_LIQ_TYPE(cleaner) == LIQ_CLEANER && GET_DRINKCON_AMOUNT(cleaner) > 0) {
+        break;
+      }
+    }
+    if (!cleaner) {
+      send_to_char("You don't have any cleaning solution to remove the paint with.\r\n", ch);
+      return;
+    }
+
+    // Decrement contents.
+    if ((--GET_DRINKCON_AMOUNT(cleaner)) <= 0) {
+      send_to_char(ch, "You spray the last of the cleaner from %s over the graffiti.\r\n", decapitalize_a_an(GET_OBJ_NAME(cleaner)));
+    }
+  }
+
   send_to_char(ch, "You spend a few moments scrubbing away %s. Community service, good for you!\r\n", GET_OBJ_NAME(target_obj));
   act("$n spends a few moments scrubbing away $p.", TRUE, ch, target_obj, NULL, TO_ROOM);
 
   WAIT_STATE(ch, 3 RL_SEC);
 
-  snprintf(buf, sizeof(buf), "%s cleaned up graffiti: ^n%s^g.", GET_CHAR_NAME(ch), GET_OBJ_NAME(target_obj));
-  mudlog(buf, ch, LOG_GRIDLOG, TRUE);
+  snprintf(buf, sizeof(buf), "[SPRAYLOG]: %s cleaned up graffiti: ^n%s^g.", GET_CHAR_NAME(ch), GET_OBJ_NAME(target_obj));
+  mudlog(buf, ch, LOG_MISCLOG, TRUE);
   extract_obj(target_obj);
 }
 

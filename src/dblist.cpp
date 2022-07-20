@@ -356,8 +356,13 @@ void objList::UpdateCounters(void)
         else if (temp->data->worn_by)
           act("$p decays in your hands.", FALSE, temp->data->worn_by, temp->data, 0, TO_CHAR);
         else if (temp->data->in_room && temp->data->in_room->people) {
-          act("$p is taken away by the coroner.", TRUE, temp->data->in_room->people, temp->data, 0, TO_ROOM);
-          act("$p is taken away by the coroner.", TRUE, temp->data->in_room->people, temp->data, 0, TO_CHAR);
+          if (str_str("remains of", temp->data->text.room_desc)) {
+            act("$p are taken away by the coroner.", TRUE, temp->data->in_room->people, temp->data, 0, TO_ROOM);
+            act("$p are taken away by the coroner.", TRUE, temp->data->in_room->people, temp->data, 0, TO_CHAR);
+          } else {
+            act("$p is taken away by the coroner.", TRUE, temp->data->in_room->people, temp->data, 0, TO_ROOM);
+            act("$p is taken away by the coroner.", TRUE, temp->data->in_room->people, temp->data, 0, TO_CHAR);
+          }
 
           if (ROOM_FLAGGED(temp->data->in_room, ROOM_CORPSE_SAVE_HACK)) {
             bool should_clear_flag = TRUE;

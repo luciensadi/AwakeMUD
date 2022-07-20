@@ -247,7 +247,7 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 #define MAX_ITEMS_IN_SHOP_INVENTORY                            100
 
 // What does it cost to begin the guided withdrawal process?
-#define GUIDED_WITHDRAWAL_ATTEMPT_NUYEN_COST_PER_EDGE          3000
+#define GUIDED_WITHDRAWAL_ATTEMPT_NUYEN_COST_PER_EDGE          2000
 #define INVOLUNTARY_DRUG_PURCHASE_COST_MULTIPLIER              3
 #define AVG_HOURS_PER_TOLERANCE_TICKDOWN                       (24 * 7)
 

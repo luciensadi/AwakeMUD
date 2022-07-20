@@ -688,9 +688,10 @@ void move_vehicle(struct char_data *ch, int dir)
   }
 
   if (IS_SET(EXIT(veh, dir)->exit_info, EX_CLOSED)) {
-      if (ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_HOUSE) // It only checks house, not garage, so drones can enter/leave apts.
-          && House_can_enter(ch, EXIT(veh, dir)->to_room->number)
-          && has_key(ch, (EXIT(veh, dir)->key)))
+      if ((ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_HOUSE) // It only checks house, not garage, so drones can enter/leave apts.
+             && House_can_enter(ch, EXIT(veh, dir)->to_room->number)
+             && has_key(ch, (EXIT(veh, dir)->key)))
+          || (ROOM_FLAGGED(veh->in_room, ROOM_HOUSE)))
       {
           send_to_char("The remote on your key beeps, allowing the door to swing open briefly enough to slide through.\r\n", ch);
           snprintf(buf, sizeof(buf), "A door beeps before swinging open electronically to allow %s through in that brief moment.\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));

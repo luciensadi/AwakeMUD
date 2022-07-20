@@ -2452,7 +2452,8 @@ SPECIAL(adept_guard)
             FALSE, ch, 0, vict, TO_NOTVICT);
         act("You grab $N and let energy flow through him.",
             FALSE, ch, 0, vict, TO_CHAR);
-        damage(ch, vict, number(0, 2), 0, PHYSICAL);
+        if (damage(ch, vict, number(0, 2), 0, PHYSICAL))
+          return TRUE;
         return FALSE;
     }
   }
@@ -3794,54 +3795,74 @@ SPECIAL(newbie_car)
       send_to_char(ch, "You don't have a deed for that.\r\n");
       return TRUE;
     }
-    if (!((GET_OBJ_VNUM(obj) >= 891 && GET_OBJ_VNUM(obj) <= 898)
-           || (GET_OBJ_VNUM(obj) >= 904 && GET_OBJ_VNUM(obj) <= 908))
-        || GET_OBJ_VNUM(obj) == 896)
-    {
-      send_to_char(ch, "You can't collect anything with that.\r\n");
-      return TRUE;
-    }
     if (ch->in_veh) {
       send_to_char("You cannot collect a vehicle while in another vehicle.\r\n", ch);
       return TRUE;
     }
     switch (GET_OBJ_VNUM(obj)) {
-      case 891:
-        num = 1305;
+      case OBJ_TITLE_TO_AMERICAR:
+        num = VEHICLE_FORD_AMERICAR;
         break;
-      case 892:
-        num = 1307;
+      case OBJ_TITLE_TO_SCORPION:
+        num = VEHICLE_HARLEY_SCORPION;
         break;
-      case 893:
-        num = 1302;
+      case OBJ_TITLE_TO_JACKRABBIT:
+        num = VEHICLE_JACKRABBIT_E;
         break;
-      case 894:
-        num = 1320;
+      case OBJ_TITLE_TO_RUNABOUT:
+        num = VEHICLE_RUNABOUT;
         break;
-      case 895:
-        num = 1308;
+      case OBJ_TITLE_TO_RAPIER:
+        num = VEHICLE_YAMAHA_RAPIER;
         break;
-      case 897:
-        num = 1309;
+      case OBJ_TITLE_TO_BISON:
+        num = VEHICLE_FORD_BISON;
         break;
-      case 898:
-        num = 1303;
+      case OBJ_TITLE_TO_WESTWIND:
+        num = VEHICLE_EUROCAR_WESTWIND_2000;
         break;
 #ifdef USE_PRIVATE_CE_WORLD
-      case 904:
-        num = 37500;
+      case OBJ_TITLE_TO_DOBERMAN:
+        num = VEHICLE_DOBERMAN;
         break;
-      case 905:
-        num = 37501;
+      case OBJ_TITLE_TO_SNOOPER:
+        num = VEHICLE_SNOOPER;
         break;
-      case 906:
-        num = 37502;
+      case OBJ_TITLE_TO_SURVEILLANCE:
+        num = VEHICLE_SURVEILLANCE;
         break;
-      case 907:
-        num = 37503;
+      case OBJ_TITLE_TO_ROTODRONE:
+        num = VEHICLE_ROTODRONE;
         break;
-      case 908:
-        num = 37504;
+      case OBJ_TITLE_TO_DALMATION:
+        num = VEHICLE_DALMATION;
+        break;
+      case OBJ_TITLE_TO_SUPERCOMBI_RV:
+        num = VEHICLE_SUPERCOMBI_RV;
+        break;
+      case OBJ_TITLE_TO_NOMAD_SUV:
+        num = VEHICLE_NOMAD_SUV;
+        break;
+      case OBJ_TITLE_TO_BRUMBY_SUV:
+        num = VEHICLE_BRUMBY_SUV;
+        break;
+      case OBJ_TITLE_TO_GOPHER_PICKUP:
+        num = VEHICLE_GOPHER_PICKUP;
+        break;
+      case OBJ_TITLE_TO_TRANSPORT_PICKUP:
+        num = VEHICLE_TRANSPORT_PICKUP;
+        break;
+      case OBJ_TITLE_TO_GMC_4201:
+        num = VEHICLE_GMC_4201;
+        break;
+      case OBJ_TITLE_TO_GMC_BULLDOG:
+        num = VEHICLE_GMC_BULLDOG;
+        break;
+      case OBJ_TITLE_TO_ARES_ROADMASTER:
+        num = VEHICLE_ARES_ROADMASTER;
+        break;
+      case OBJ_TITLE_TO_WHITE_EAGLE_BIKE:
+        num = VEHICLE_WHITE_EAGLE_BIKE;
         break;
       case 961:
         num = 39205;
@@ -3872,8 +3893,13 @@ SPECIAL(newbie_car)
         break;
 #endif
       default:
-        mudlog("SYSERR: Attempting to 'collect' a mis-assigned title!", ch, LOG_SYSLOG, TRUE);
-        return FALSE;
+        {
+          char oopsbuf[500];
+          snprintf(oopsbuf, sizeof(oopsbuf), "Failed attempt to collect obj %ld from newbie car park-- is it coded correctly?", GET_OBJ_VNUM(obj));
+          mudlog(oopsbuf, ch, LOG_SYSLOG, TRUE);
+          send_to_char(ch, "You can't collect anything with %s.\r\n", GET_OBJ_NAME(obj));
+        }
+        return TRUE;
     }
     veh = read_vehicle(num, VIRTUAL);
     veh->locked = TRUE;
@@ -4787,12 +4813,17 @@ SPECIAL(floor_has_glass_shards) {
   if (ch->in_veh || IS_NPC(ch) || IS_ASTRAL(ch) || PRF_FLAGGED(ch, PRF_NOHASSLE) || GET_EQ(ch, WEAR_FEET) || AFF_FLAGGED(ch, AFF_SNEAK))
     return FALSE;
 
+  // Don't tear up people who are rigging.
+  if (PLR_FLAGGED(ch, PLR_REMOTE))
+    return FALSE;
+
   // If they attempt to leave the room and are not in a vehicle, wearing shoes, or sneaking, they get cut up.
   for (int dir_index = NORTH; dir_index <= DOWN; dir_index++) {
     if (CMD_IS(exitdirs[dir_index]) || CMD_IS(fulldirs[dir_index])) {
       send_to_char("^rAs you walk away, the glass shards tear at your bare feet!^n\r\n\r\n", ch);
       act("The glass shards tear at $n's bare feet as $e leaves!", TRUE, ch, NULL, NULL, TO_ROOM);
-      damage(ch, ch, LIGHT, 0, TRUE);
+      if (damage(ch, ch, LIGHT, 0, TRUE) || GET_POS(ch) <= POS_STUNNED)
+        return TRUE;
       break;
     }
   }
@@ -6962,7 +6993,7 @@ SPECIAL(medical_workshop) {
     PRF_FLAGS(found_char).RemoveBit(PRF_TOUCH_ME_DADDY);
 
     // Damage the character. This damage type does not result in a killer check.
-    if (damage(ch, found_char, SERIOUS, TYPE_MEDICAL_MISHAP, PHYSICAL)) {
+    if (ch != found_char && damage(ch, found_char, SERIOUS, TYPE_MEDICAL_MISHAP, PHYSICAL)) {
       send_to_char(ch, "Seems your scalpel cut something critical... your patient has died.\r\n");
     }
 
