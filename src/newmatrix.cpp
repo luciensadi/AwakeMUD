@@ -1554,7 +1554,7 @@ ACMD(do_logon)
       return;
     }
   }
-  send_to_icon(PERSONA, "You haven't located any hosts with that address.\r\n");
+  send_to_icon(PERSONA, "You haven't located any hosts with the address '%s'.\r\n", argument);
 }
 
 ACMD(do_logoff)
@@ -1963,9 +1963,16 @@ ACMD(do_load)
           return;
         }
 
-        if (GET_OBJ_TYPE(soft) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(soft) != TYPE_FILE) {
-          send_to_icon(PERSONA, "You can't upload %s.\r\n", GET_OBJ_NAME(soft));
-          return;
+        if (GET_OBJ_TYPE(soft) == ITEM_DECK_ACCESSORY) {
+          if (GET_DECK_ACCESSORY_TYPE(soft) != TYPE_FILE) {
+            send_to_icon(PERSONA, "You can't upload %s.\r\n", GET_OBJ_NAME(soft));
+            return;
+          }
+
+          if (GET_DECK_ACCESSORY_FILE_HOST_VNUM(soft)) {
+            send_to_icon(PERSONA, "Action aborted: Re-uploading paydata like %s would be a great way to get caught with it!\r\n", GET_OBJ_NAME(soft));
+            return;
+          }
         }
       } else {
         if (GET_OBJ_TYPE(soft) == ITEM_DECK_ACCESSORY) {

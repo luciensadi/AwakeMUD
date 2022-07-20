@@ -1219,8 +1219,12 @@ void icon_from_host(struct matrix_icon *icon)
           GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(soft) = 0;
           GET_DECK_ACCESSORY_FILE_REMAINING(soft) = 0;
 
-          // If it's paydata, we extract it entirely.
-          if (GET_DECK_ACCESSORY_FILE_HOST_VNUM(soft)) {
+          // If it's paydata, we extract it entirely, then potentially put it back in the paydata queue to re-find.
+          if (GET_DECK_ACCESSORY_FILE_HOST_VNUM(soft) == icon->in_host) {
+            // 66% chance of being rediscoverable.
+            if (number(0, 2))
+              matrix[icon->in_host].found++;
+
             extract_obj(soft);
             continue;
           }

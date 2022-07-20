@@ -6003,13 +6003,30 @@ SPECIAL(mageskill_moore)
 SPECIAL(mageskill_herbie)
 {
   struct char_data *mage = (struct char_data *) me;
-  struct obj_data *recom = NULL, *obj = NULL;
+  struct obj_data *recom = NULL, *obj = NULL, *next_obj = NULL;
 
-  for (recom = ch->carrying; recom; recom = recom->next_content)
-    if (GET_OBJ_VNUM(recom) == OBJ_MAGE_LETTER)
-      break;
-  if (!recom || GET_OBJ_VAL(recom, 0) != GET_IDNUM(ch))
+  if (!cmd)
     return FALSE;
+
+  for (recom = ch->carrying; recom; recom = next_obj) {
+    next_obj = recom->next_content;
+    if (GET_OBJ_VNUM(recom) == OBJ_MAGE_LETTER) {
+      if (GET_OBJ_VAL(recom, 0) != GET_IDNUM(ch)) {
+        send_to_room("Herbie distractedly lets someone else's recommendation letter slip from his fingers.\r\n", mage->in_room);
+        obj_from_char(recom);
+        if (mage->in_room)
+          obj_to_room(recom, mage->in_room);
+        else
+          obj_to_veh(recom, mage->in_veh);
+      } else {
+        break;
+      }
+    }
+  }
+
+  if (!recom)
+    return FALSE;
+
   if (CMD_IS("say") || CMD_IS("'") || CMD_IS("ask")) {
     skip_spaces(&argument);
     if (!*argument || !(str_str(argument, "recommendation") || str_str(argument, "letter")))
