@@ -604,7 +604,7 @@ list_obj_to_char(struct obj_data * list, struct char_data * ch, int mode,
         if (!corpse && !mode && !IS_OBJ_STAT(i, ITEM_EXTRA_CORPSE)) {
           if ((GET_OBJ_VNUM(i) == OBJ_GRAFFITI) && (!found_graffiti) ) {
             found_graffiti = TRUE;
-            send_to_char(ch, "^gSprayed here,^n\r\n");
+            send_to_char(ch, "^gSomeone has tagged the area:^n\r\n");
           }
           if (num > 1) {
             send_to_char(ch, "(%d) ", num);

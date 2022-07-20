@@ -932,7 +932,7 @@ ACMD(do_new_echo) {
   }
 
   // Only questors and staff can echo without their names.
-  bool must_echo_with_name = !(access_level(ch, LVL_BUILDER) || PRF_FLAGGED(ch, PRF_QUESTOR));
+  bool must_echo_with_name = !(!(ch->desc) || access_level(ch, LVL_BUILDER) || PRF_FLAGGED(ch, PRF_QUESTOR));
 
   // All checks done, we're clear to emote. We know that storage_buf gets reused later, so let's save our emote from that fate.
   char emote_buf[strlen(storage_buf) + 1];

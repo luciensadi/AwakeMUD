@@ -630,6 +630,8 @@ void assign_mobiles(void)
   SPECIAL(marksmanship_fourth);
   SPECIAL(marksmanship_master);
   SPECIAL(marksmanship_trainer);
+  SPECIAL(receptionist_95902);
+  SPECIAL(graffiti_cleaner);
 
   ASSIGNMOB(22870, marksmanship_first);
   ASSIGNMOB(4101, marksmanship_second);
@@ -637,6 +639,8 @@ void assign_mobiles(void)
   ASSIGNMOB(3722, marksmanship_fourth);
   ASSIGNMOB(5914, marksmanship_master);
   ASSIGNMOB(779, marksmanship_trainer);
+  ASSIGNMOB(95902, receptionist_95902);
+  ASSIGNMOB(31135, graffiti_cleaner);
 #endif
 
   /* trainers */
