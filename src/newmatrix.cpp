@@ -2217,26 +2217,28 @@ ACMD(do_decrypt)
     return;
   }
   WAIT_STATE(ch, (int) (DECKING_WAIT_STATE_TIME));
-  struct obj_data *obj = NULL;
-  if ((obj = get_obj_in_list_vis(ch, argument, matrix[PERSONA->in_host].file)) && GET_OBJ_VAL(obj, 7) == PERSONA->idnum) {
-    if (!GET_OBJ_VAL(obj, 5) || (GET_OBJ_VAL(obj, 5) == 1 && subcmd) || (GET_OBJ_VAL(obj, 5) > 1 && !subcmd) ||
-        GET_OBJ_TYPE(obj) == ITEM_PROGRAM) {
-      send_to_icon(PERSONA, "There is no need to %s that file.\r\n", subcmd ? "disarm" : "decrypt");
+  {
+    struct obj_data *obj = NULL;
+    if ((obj = get_obj_in_list_vis(ch, argument, matrix[PERSONA->in_host].file)) && GET_OBJ_VAL(obj, 7) == PERSONA->idnum) {
+      if (!GET_OBJ_VAL(obj, 5) || (GET_OBJ_VAL(obj, 5) == 1 && subcmd) || (GET_OBJ_VAL(obj, 5) > 1 && !subcmd) ||
+          GET_OBJ_TYPE(obj) == ITEM_PROGRAM) {
+        send_to_icon(PERSONA, "There is no need to %s that file.\r\n", subcmd ? "disarm" : "decrypt");
+        return;
+      }
+      int success = system_test(PERSONA->in_host, ch, TEST_FILES, subcmd ? SOFT_DEFUSE : SOFT_DECRYPT, 0);
+      if (success > 0) {
+        send_to_icon(PERSONA, "You successfully %s the file.\r\n", subcmd ? "disarm" : "decrypt");
+        GET_OBJ_VAL(obj, 5) = 0;
+      } else if (PERSONA) {
+        send_to_icon(PERSONA, "You fail to %s the IC protecting that file.\r\n", subcmd ? "disarm" : "decrypt");
+        if (GET_OBJ_VAL(obj, 5) == 1)
+          if (success_test(GET_OBJ_VAL(obj, 6), GET_SKILL(ch, SKILL_COMPUTER)) > 0) {
+            send_to_icon(PERSONA, "The Scramble IC destroys the file!\r\n");
+            extract_obj(obj);
+          }
+      }
       return;
     }
-    int success = system_test(PERSONA->in_host, ch, TEST_FILES, subcmd ? SOFT_DEFUSE : SOFT_DECRYPT, 0);
-    if (success > 0) {
-      send_to_icon(PERSONA, "You successfully %s the file.\r\n", subcmd ? "disarm" : "decrypt");
-      GET_OBJ_VAL(obj, 5) = 0;
-    } else if (PERSONA) {
-      send_to_icon(PERSONA, "You fail to %s the IC protecting that file.\r\n", subcmd ? "disarm" : "decrypt");
-      if (GET_OBJ_VAL(obj, 5) == 1)
-        if (success_test(GET_OBJ_VAL(obj, 6), GET_SKILL(ch, SKILL_COMPUTER)) > 0) {
-          send_to_icon(PERSONA, "The Scramble IC destroys the file!\r\n");
-          extract_obj(obj);
-        }
-    }
-    return;
   }
   if (is_abbrev(argument, "slave") || is_abbrev(argument, "files") || is_abbrev(argument, "access")) {
     int mode = 0;
@@ -2273,12 +2275,12 @@ ACMD(do_decrypt)
             next = current->next_content;
 
             // Skip non-paydata.
-            if (GET_OBJ_TYPE(obj) != ITEM_DECK_ACCESSORY || GET_DECK_ACCESSORY_TYPE(obj) != TYPE_FILE || GET_DECK_ACCESSORY_FILE_HOST_VNUM(obj) != matrix[PERSONA->in_host].vnum)
+            if (GET_OBJ_TYPE(current) != ITEM_DECK_ACCESSORY || GET_DECK_ACCESSORY_TYPE(current) != TYPE_FILE || GET_DECK_ACCESSORY_FILE_HOST_VNUM(current) != matrix[PERSONA->in_host].vnum)
               continue;
 
             // The file is paydata-- delete it.
-            obj_from_host(obj);
-            extract_obj(obj);
+            obj_from_host(current);
+            extract_obj(current);
           }
         }
       }
