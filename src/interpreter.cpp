@@ -361,6 +361,7 @@ ACMD_DECLARE(do_unpack);
 ACMD_DECLARE(do_upgrade);
 ACMD_DECLARE(do_use);
 ACMD_DECLARE(do_users);
+ACMD_DECLARE(do_vehicle_osay);
 ACMD_DECLARE(do_vset);
 ACMD_DECLARE(do_vemote);
 ACMD_DECLARE(do_visible);
@@ -663,7 +664,7 @@ struct command_info cmd_info[] =
     { "lay"        , POS_RESTING , do_lay      , 0, 0, FALSE },
     { "language"   , POS_DEAD    , do_language , 0, 0, TRUE },
     { "last"       , POS_DEAD    , do_last     , LVL_BUILDER, 0, FALSE },
-    { "leaderboards", POS_DEAD  , do_leaderboard, LVL_BUILDER, 0, FALSE },
+    { "leaderboards", POS_DEAD  , do_leaderboard, LVL_MORTAL, 0, FALSE },
     { "learn"      , POS_RESTING , do_learn    , 0, 0, FALSE },
     { "leave"      , POS_SITTING , do_leave    , 0, 0, FALSE },
     { "link"       , POS_SLEEPING, do_link     , 0, 0, FALSE },
@@ -893,7 +894,7 @@ struct command_info cmd_info[] =
     { "users"      , POS_DEAD    , do_users    , LVL_BUILDER, 0, FALSE },
 
     { "version"    , POS_DEAD    , do_gen_ps   , 0, SCMD_VERSION, TRUE },
-    { "vemote"     , POS_SLEEPING, do_vemote   , 0 , 0, FALSE },
+    { "vemote"     , POS_SLEEPING, do_new_echo , 0 , SCMD_VEMOTE, FALSE }, // was do_vemote
     { "visible"    , POS_RESTING , do_visible  , LVL_BUILDER, 0, FALSE },
     { "view"       , POS_LYING   , do_imagelink, 0, 0, FALSE },
     { "vfind"      , POS_DEAD    , do_vfind    , LVL_BUILDER, 0, FALSE },
@@ -909,7 +910,7 @@ struct command_info cmd_info[] =
     { "who"        , POS_DEAD    , do_who      , 0, 0, TRUE },
     { "whoami"     , POS_DEAD    , do_gen_ps   , 0, SCMD_WHOAMI, TRUE },
     { "whotitle"   , POS_DEAD    , do_wiztitle , LVL_BUILDER, SCMD_WHOTITLE, TRUE },
-    { "where"      , POS_DEAD    , do_where    , 1, LVL_PRESIDENT, TRUE }, // todo: why is lvl_president in the scmd slot?
+    { "where"      , POS_DEAD    , do_where    , 1, 0, TRUE },
     { "wheresmycar", POS_RESTING , do_wheresmycar, 1, 0, FALSE },
     { "whisper"    , POS_LYING   , do_spec_comm, 0, SCMD_WHISPER, FALSE },
     { "wield"      , POS_RESTING , do_wield    , 0, 0, FALSE },
@@ -1340,14 +1341,16 @@ struct command_info rig_info[] =
     { "help", 0, do_help, 0, 0, FALSE },
     { "ht", 0, do_gen_comm , 0, SCMD_HIREDTALK, FALSE },
     { "idea", 0, do_gen_write, 0, SCMD_IDEA, FALSE },
-    { "index", 0, do_index, 0, 0, FALSE },
     { "look", 0, do_look, 0, 0, FALSE },
+    { "index", 0, do_index, 0, 0, FALSE },
+    { "languages", 0, do_language, 0, 0, FALSE },
     { "leave", 0, do_leave, 0 ,0 , FALSE },
     { "lock", 0, do_gen_door , 0, SCMD_LOCK , FALSE },
     { "mode", 0, do_mode, 0, 0, FALSE },
     { "mount", 0, do_mount, 0, 0, FALSE },
     { "newbie", 0, do_gen_comm, 0, SCMD_NEWBIE, FALSE },
     { "ooc", 0, do_gen_comm, 0, SCMD_OOC, FALSE },
+    { "osay", 0, do_vehicle_osay, 0, 0, FALSE },
     { "pools", 0, do_pool, 0, 0 , FALSE },
     { "ram", 0, do_ram, 0, 0, FALSE },
     { "recap", 0, do_recap, 0, 0 , FALSE },
@@ -1358,6 +1361,7 @@ struct command_info rig_info[] =
     { "score", 0, do_score, 0, 0, FALSE },
     { "scan", 0, do_scan, 0, 0, FALSE },
     { "speed", 0, do_speed, 0, 0, FALSE },
+    { "speak", 0, do_language, 0, 0, FALSE },
     { "subscribe", 0, do_subscribe, 0, 0, FALSE },
     { "target", 0, do_target, 0, 0, FALSE },
     { "tell", 0, do_tell, 0, 0 , FALSE },
@@ -1365,7 +1369,7 @@ struct command_info rig_info[] =
     { "tow", 0, do_tow , 0, 0 , FALSE },
     { "typo", 0, do_gen_write, 0, SCMD_TYPO, FALSE },
     { "unlock", 0, do_gen_door , 0, SCMD_UNLOCK , FALSE },
-    { "vemote", 0, do_vemote, 0, 0, FALSE },
+    { "vemote", 0, do_new_echo, 0, SCMD_VEMOTE, FALSE },
     { "where", 0, do_where, 0, 0, FALSE },
     { "who", 0, do_who, 0, 0, FALSE },
     { "wtell", 0, do_wiztell, LVL_BUILDER, 0, FALSE },

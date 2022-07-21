@@ -4053,12 +4053,20 @@ ACMD(do_show)
       send_to_char(ch, "You can't see anyone named '%s'.\r\n", value);
       return;
     }
-    send_to_char(ch, "%s's metamagic abilities:", GET_NAME(vict));
+    send_to_char(ch, "%s's metamagic abilities:\r\n", GET_NAME(vict));
     j = 0;
     snprintf(buf, sizeof(buf), "\r\n");
     for (i = 0; i < META_MAX; i++)
-      if (GET_METAMAGIC(vict, i))
+      if (GET_METAMAGIC(vict, i)) {
+        if (i == META_CENTERING) {
+          send_to_char(ch, "  %s%s^n (learned %d/%d)^n\r\n",
+                   GET_METAMAGIC(vict, i) == 2 ? "" : "^r",
+                   metamagic[i],
+                   GET_METAMAGIC(ch, i) / METAMAGIC_STAGE_LEARNED,
+                   (GET_METAMAGIC(ch, i) / METAMAGIC_STAGE_LEARNED) + GET_METAMAGIC(ch, i) % METAMAGIC_STAGE_LEARNED);
+        }
         send_to_char(ch, "  %s%s^n\r\n", GET_METAMAGIC(vict, i) == 2 ? "" : "^r", metamagic[i]);
+      }
     send_to_char("\r\n", ch);
     break;
   case 17:

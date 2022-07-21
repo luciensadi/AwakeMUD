@@ -131,7 +131,7 @@ ACMD(do_quit)
     else {
       snprintf(buf, sizeof(buf), "%s has left the game.\r\n", GET_NAME(ch));
       send_to_veh(buf, ch->in_veh, ch, FALSE);
-      if (AFF_FLAGGED(ch, AFF_PILOT)) {
+      if (AFF_FLAGGED(ch, AFF_PILOT) || AFF_FLAGGED(ch, AFF_RIG)) {
         send_to_veh("You get a mild case of whiplash as you come to a sudden stop.\r\n",
                     ch->in_veh, ch, FALSE);
         ch->in_veh->cspeed = SPEED_OFF;
@@ -2054,7 +2054,11 @@ ACMD(do_treat)
                  && !IS_SENATOR(vict)
                  && IS_SENATOR(ch)
                  && !access_level(ch, LVL_ADMIN))) {
-    act("Treating $N will not do $M any good.", FALSE, ch, 0, vict, TO_CHAR);
+    if (ch == vict) {
+      send_to_char(ch, "You're not able to treat your wounds right now.\r\n");
+    } else {
+      act("Treating $N will not do $M any good.", FALSE, ch, 0, vict, TO_CHAR);
+    }
     return;
   }
 
@@ -2067,7 +2071,12 @@ ACMD(do_treat)
   else if (GET_PHYSICAL(vict) <= (GET_MAX_PHYSICAL(vict) * 9/10))
     target = 4;
   else {
-    act("$N doesn't need to be treated.", FALSE, ch, 0, vict, TO_CHAR);
+    if (ch == vict) {
+      send_to_char(ch, "You don't need treatment.\r\n");
+    } else {
+      act("$N doesn't need to be treated.", FALSE, ch, 0, vict, TO_CHAR);
+    }
+
     if (subcmd) {
       char buf[400];
       snprintf(buf, sizeof(buf), "%s Treatment will do you no good.", GET_CHAR_NAME(vict));
@@ -2102,11 +2111,19 @@ ACMD(do_treat)
   if (vict->real_abils.mag > 0)
     target += 2;
 
-  act("$n begins to treat $N.", TRUE, ch, 0, vict, TO_NOTVICT);
+  if (ch == vict) {
+    act("$n begins to treat $mself.", TRUE, ch, 0, vict, TO_NOTVICT);
+  } else {
+    act("$n begins to treat $N.", TRUE, ch, 0, vict, TO_NOTVICT);
+  }
   if (success_test(i, target) > 0) {
     act("$N appears better.", FALSE, ch, 0, vict, TO_CHAR);
-    act("The pain seems significantly less after $n's treatment.",
-        FALSE, ch, 0, vict, TO_VICT);
+    if (ch == vict) {
+      send_to_char(ch, "The pain seems significantly better.\r\n");
+    } else {
+      act("The pain seems significantly less after $n's treatment.",
+          FALSE, ch, 0, vict, TO_VICT);
+    }
     if (GET_PHYSICAL(vict) < 100) {
       GET_PHYSICAL(vict) = MIN(GET_MAX_PHYSICAL(vict), 100);
       GET_MENTAL(vict) = 0;
@@ -2123,8 +2140,12 @@ ACMD(do_treat)
       LAST_HEAL(vict) = (int)(GET_MAX_PHYSICAL(vict) / 1000);
     }
   } else {
-    act("Your treatment does nothing for $N.", FALSE, ch, 0, vict, TO_CHAR);
-    act("$n's treatment doesn't help your wounds.", FALSE, ch, 0, vict, TO_VICT);
+    if (ch == vict) {
+      send_to_char(ch, "Your treatment does nothing for your wounds.\r\n");
+    } else {
+      act("Your treatment does nothing for $N.", FALSE, ch, 0, vict, TO_CHAR);
+      act("$n's treatment doesn't help your wounds.", FALSE, ch, 0, vict, TO_VICT);
+    }
     LAST_HEAL(vict) = 3;
   }
 }
@@ -2155,7 +2176,7 @@ ACMD(do_astral)
       && GET_ASPECT(ch) != ASPECT_FULL
       && !(GET_TRADITION(ch) == TRAD_HERMETIC && (GET_ASPECT(ch) >= ASPECT_EARTHMAGE && GET_ASPECT(ch) <= ASPECT_WATERMAGE)))
   {
-    send_to_char("You do not have enough control over the astral plane to do that.\r\n", ch);
+    send_to_char(ch, "As %s %s, you do not have enough control over the astral plane to do that.\r\n", AN(aspect_names[GET_ASPECT(ch)]), aspect_names[GET_ASPECT(ch)]);
     return;
   }
 
@@ -2647,7 +2668,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
     cedit_disp_menu(d, 0);
     break;
   case CEDIT_ALIAS:
-    if (strlen(arg) >= LINE_LENGTH || strlen(arg) < 5) {
+    if (strlen(arg) >= MAX_KEYWORDS_LEN || get_string_length_after_color_code_removal(arg, CH) >= LINE_LENGTH || strlen(arg) < 5) {
       cedit_disp_menu(d, 1);
       return;
     }
@@ -2659,7 +2680,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
     break;
 
   case CEDIT_VOICE:
-    if (strlen(arg) >= LINE_LENGTH || strlen(arg) < 5) {
+    if (get_string_length_after_color_code_removal(arg, CH) >= LINE_LENGTH || strlen(arg) < 5) {
       cedit_disp_menu(d, 1);
       return;
     }
@@ -2670,7 +2691,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
 
     break;
   case CEDIT_ARRIVE:
-    if (strlen(arg) >= LINE_LENGTH || strlen(arg) < 5) {
+    if (strlen(arg) >= MAX_MOVEMENT_LEN || get_string_length_after_color_code_removal(arg, CH) >= LINE_LENGTH || strlen(arg) < 5) {
       cedit_disp_menu(d, 1);
       return;
     }
@@ -2679,7 +2700,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
     cedit_disp_menu(d, 0);
     break;
   case CEDIT_LEAVE:
-    if (strlen(arg) >= LINE_LENGTH || strlen(arg) < 5) {
+    if (strlen(arg) >= MAX_MOVEMENT_LEN || get_string_length_after_color_code_removal(arg, CH) >= LINE_LENGTH || strlen(arg) < 5) {
       cedit_disp_menu(d, 1);
       return;
     }
@@ -2688,7 +2709,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
     cedit_disp_menu(d, 0);
     break;
   case CEDIT_SHORT_DESC:
-    if (strlen(arg) >= LINE_LENGTH || strlen(arg) < 5) {
+    if (strlen(arg) >= MAX_SHORTDESC_LEN || get_string_length_after_color_code_removal(arg, CH) >= LINE_LENGTH || strlen(arg) < 5) {
       cedit_disp_menu(d, 1);
       return;
     }
@@ -2986,7 +3007,7 @@ ACMD(do_photo)
       }
       if (num > 1)
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "(%d) ", num);
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^g%s^n\r\n", obj->text.room_desc);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^g%s^n\r\n", obj->graffiti ? obj->graffiti : obj->text.room_desc);
     }
 
     for (struct veh_data *vehicle = ch->in_room->vehicles; vehicle; vehicle = vehicle->next_veh) {
@@ -3190,10 +3211,8 @@ ACMD(do_assense)
     send_to_char(ch, "Who's aura do you wish to assense?\r\n");
     return;
   }
-  if (!PLR_FLAGS(ch).AreAnySet(PLR_PERCEIVE, PLR_PROJECT, ENDBIT) && !IS_PROJECT(ch)) {
-    send_to_char(ch, "You have no sense of the astral plane.\r\n");
+  if (!force_perception(ch))
     return;
-  }
   skip_spaces(&argument);
   if (!generic_find(argument,  FIND_OBJ_INV | FIND_OBJ_ROOM | FIND_OBJ_EQUIP |
                     FIND_CHAR_ROOM, ch, &vict, &obj)) {
@@ -4444,7 +4463,7 @@ ACMD(do_spray)
         existing_graffiti_count++;
     }
     if (existing_graffiti_count >= MAXIMUM_GRAFFITI_IN_ROOM) {
-      send_to_char("There's too much graffiti here, you can't find a spare place to paint!\r\n(OOC: You'll have to ^WCLEANUP GRAFFITI^n before you can paint here.)\r\n", ch);
+      send_to_char("There's too much graffiti here, you can't find a spare place to paint!\r\n(OOC: You'll have to ##^WCLEANUP GRAFFITI^n before you can paint here.)\r\n", ch);
       return;
     }
   }
@@ -4458,12 +4477,15 @@ ACMD(do_spray)
       struct obj_data *paint = read_object(OBJ_GRAFFITI, VIRTUAL);
       snprintf(buf, sizeof(buf), "a piece of graffiti that says \"%s^n\"", argument);
       paint->restring = str_dup(buf);
-      snprintf(buf, sizeof(buf), "\"%s^g\" is sprayed here.", argument);
+      snprintf(buf, sizeof(buf), "   ^n%s^n", argument);
       paint->graffiti = str_dup(buf);
       obj_to_room(paint, ch->in_room);
 
-      snprintf(buf, sizeof(buf), "%s sprayed graffiti: %s.", GET_CHAR_NAME(ch), GET_OBJ_NAME(paint));
-      mudlog(buf, ch, LOG_GRIDLOG, TRUE);
+      send_to_char("You tag the area with your spray.\r\n", ch);
+      snprintf(buf, sizeof(buf), "[SPRAYLOG]: %s sprayed graffiti: %s.", GET_CHAR_NAME(ch), GET_OBJ_NAME(paint));
+      mudlog(buf, ch, LOG_MISCLOG, TRUE);
+
+      WAIT_STATE(ch, 3 RL_SEC);
 
       if (++GET_OBJ_TIMER(obj) >= 3) {
         send_to_char("The spray can is now empty, so you throw it away.\r\n", ch);
@@ -4499,11 +4521,32 @@ ACMD(do_cleanup)
     return;
   }
 
+  // If you're not a staff member, you need an item to clean it up.
+  if (!access_level(ch, LVL_BUILDER)) {
+    struct obj_data *cleaner = NULL;
+    for (cleaner = ch->carrying; cleaner; cleaner = cleaner->next_content) {
+      if (GET_OBJ_TYPE(cleaner) == ITEM_DRINKCON && GET_DRINKCON_LIQ_TYPE(cleaner) == LIQ_CLEANER && GET_DRINKCON_AMOUNT(cleaner) > 0) {
+        break;
+      }
+    }
+    if (!cleaner) {
+      send_to_char("You don't have any cleaning solution to remove the paint with.\r\n", ch);
+      return;
+    }
+
+    // Decrement contents.
+    if ((--GET_DRINKCON_AMOUNT(cleaner)) <= 0) {
+      send_to_char(ch, "You spray the last of the cleaner from %s over the graffiti.\r\n", decapitalize_a_an(GET_OBJ_NAME(cleaner)));
+    }
+  }
+
   send_to_char(ch, "You spend a few moments scrubbing away %s. Community service, good for you!\r\n", GET_OBJ_NAME(target_obj));
   act("$n spends a few moments scrubbing away $p.", TRUE, ch, target_obj, NULL, TO_ROOM);
 
-  snprintf(buf, sizeof(buf), "%s cleaned up graffiti: ^n%s^g.", GET_CHAR_NAME(ch), GET_OBJ_NAME(target_obj));
-  mudlog(buf, ch, LOG_GRIDLOG, TRUE);
+  WAIT_STATE(ch, 3 RL_SEC);
+
+  snprintf(buf, sizeof(buf), "[SPRAYLOG]: %s cleaned up graffiti: ^n%s^g.", GET_CHAR_NAME(ch), GET_OBJ_NAME(target_obj));
+  mudlog(buf, ch, LOG_MISCLOG, TRUE);
   extract_obj(target_obj);
 }
 
@@ -4701,7 +4744,7 @@ ACMD(do_syspoints) {
       row = mysql_fetch_row(res);
       if (!row && mysql_field_count(mysql)) {
         mysql_free_result(res);
-        send_to_char("There is no such player.\r\n", ch);
+        send_to_char(ch, "Could not find a PC named %s.\r\n", buf);
         return;
       }
       send_to_char(ch, "%s has %s system point(s).\r\n", row[0], row[1]);
@@ -4756,7 +4799,7 @@ ACMD(do_syspoints) {
     row = mysql_fetch_row(res);
     if (!row && mysql_field_count(mysql)) {
       mysql_free_result(res);
-      send_to_char("There is no such player.\r\n", ch);
+      send_to_char(ch, "Could not find a PC named %s.\r\n", target);
       return;
     }
     long idnum = atol(row[0]);

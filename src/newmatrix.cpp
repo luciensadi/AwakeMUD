@@ -162,7 +162,8 @@ bool dumpshock(struct matrix_icon *icon)
 
     // Clean out downloads involving them.
     for (struct obj_data *file = matrix[icon->in_host].file; file; file = file->next_content) {
-      if (GET_DECK_ACCESSORY_FILE_REMAINING(file)
+      if (GET_OBJ_TYPE(file) == ITEM_DECK_ACCESSORY
+          && GET_DECK_ACCESSORY_FILE_REMAINING(file)
           && find_icon_by_id(GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(file)) == icon)
       {
         GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(file) = 0;
@@ -245,18 +246,19 @@ int system_test(rnum_t host, struct char_data *ch, int type, int software, int m
   detect += DECKER->masking;
   detect = detect / 2;
   detect -= DECKER->res_det;
+
   int tally = MAX(0, success_test(HOST.security, detect));
+  target = MAX(target, 2);
   int success = success_test(skill, target);
 
-  snprintf(rollbuf, sizeof(rollbuf), "Rolled %d successes on %d dice vs TN %d",
+  snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), "\r\nRolled %d successes on %d dice vs TN %d",
            success,
            skill,
            target);
-  act(rollbuf, FALSE, ch, 0, 0, TO_ROLLS);
 
   success -= tally;
 
-  snprintf(rollbuf, sizeof(rollbuf), ", then lost %d successes to tally (%d dice vs TN %d).",
+  snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), ", then lost %d successes to tally (%d dice vs TN %d).",
            tally,
            HOST.security,
            detect);
@@ -1331,7 +1333,7 @@ ACMD(do_matrix_look)
       send_to_icon(PERSONA, "^Y%s^n\r\n", icon->look_desc);
 
   for (struct obj_data *obj = matrix[PERSONA->in_host].file; obj; obj = obj->next_content) {
-    if (GET_OBJ_VAL(obj, 7) == PERSONA->idnum)
+    if (GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_FILE_FOUND_BY(obj) == PERSONA->idnum)
     {
       if (GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(obj)) {
         send_to_icon(PERSONA, "^yA file named %s floats here (Downloading - %d%%).^n\r\n",
@@ -1455,7 +1457,7 @@ ACMD(do_analyze)
     return;
   } else {
     struct obj_data *obj = NULL;
-    if ((obj = get_obj_in_list_vis(ch, arg, matrix[PERSONA->in_host].file)) && GET_OBJ_VAL(obj, 7) == PERSONA->idnum) {
+    if ((obj = get_obj_in_list_vis(ch, arg, matrix[PERSONA->in_host].file)) && GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_FILE_FOUND_BY(obj) == PERSONA->idnum) {
       int success = system_test(PERSONA->in_host, ch, TEST_CONTROL, SOFT_ANALYZE, 0);
       if (success > 0) {
         send_to_icon(PERSONA, "You analyze the file:\r\n");
@@ -1552,7 +1554,7 @@ ACMD(do_logon)
       return;
     }
   }
-  send_to_icon(PERSONA, "You haven't located any hosts with that address.\r\n");
+  send_to_icon(PERSONA, "You haven't located any hosts with the address '%s'.\r\n", argument);
 }
 
 ACMD(do_logoff)
@@ -1605,7 +1607,8 @@ ACMD(do_logoff)
 
   // Clean out downloads involving them.
   for (struct obj_data *file = matrix[PERSONA->in_host].file; file; file = file->next_content) {
-    if (GET_DECK_ACCESSORY_FILE_REMAINING(file)
+    if (GET_OBJ_TYPE(file) == ITEM_DECK_ACCESSORY
+        && GET_DECK_ACCESSORY_FILE_REMAINING(file)
         && find_icon_by_id(GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(file)) == PERSONA)
     {
       GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(file) = 0;
@@ -1944,39 +1947,70 @@ ACMD(do_load)
       }
       temp = soft;
     }
-  } else
-    for (struct obj_data *soft = DECKER->deck->contains; soft; soft = soft->next_content)
-      if ((isname(argument, soft->text.keywords) || isname(argument, soft->restring) || isname(argument, soft->text.name))
-          && (GET_OBJ_VAL(soft, 0) > SOFT_SENSOR ||
-              (GET_OBJ_TYPE(soft) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(soft, 0) == TYPE_FILE))) {
-        if (subcmd == SCMD_SWAP && GET_OBJ_VAL(soft, 2) > DECKER->active) {
-          send_to_icon(PERSONA, "You don't have enough active memory to load that program.\r\n");
-        } else if (subcmd == SCMD_SWAP && GET_OBJ_VAL(soft, 1) > DECKER->mpcp) {
-          send_to_icon(PERSONA, "Your deck is not powerful enough to run that program.\r\n");
-        } else {
-          int success = 1;
-          if (subcmd == SCMD_UPLOAD) {
-            if (GET_OBJ_VAL(soft, 8)) {
-              send_to_char(ch, "%s is already being uploaded.\r\n", GET_OBJ_NAME(soft));
-              return;
-            }
+  } else {
+    // What is with the absolute fascination with non-bracketed if/for/else/etc statements in this codebase? This was enormously hard to read. - LS
+    for (struct obj_data *soft = DECKER->deck->contains; soft; soft = soft->next_content) {
+      // Look for a name match.
+      if (!isname(argument, soft->text.keywords) && !isname(argument, soft->restring) && !isname(argument, soft->text.name))
+        continue;
 
-            success = system_test(PERSONA->in_host, ch, TEST_FILES, SOFT_READ, 0);
-          }
-          if (success > 0) {
-            // TODO: This is accurately transcribed, but feels like a bug.
-            GET_OBJ_VAL(soft, 9) = GET_DECK_ACCESSORY_FILE_SIZE(soft);
-            if (subcmd == SCMD_UPLOAD) {
-              GET_OBJ_VAL(soft, 8) = 1;
-              GET_OBJ_ATTEMPT(soft) = matrix[PERSONA->in_host].vnum;
-            } else
-              DECKER->active -= GET_DECK_ACCESSORY_FILE_SIZE(soft);
-            send_to_icon(PERSONA, "You begin to upload %s to %s.\r\n", GET_OBJ_NAME(soft), (subcmd ? "the host" : "your icon"));
-          } else
-            send_to_icon(PERSONA, "Your commands fail to execute.\r\n");
+      if (GET_OBJ_TYPE(soft) != ITEM_DECK_ACCESSORY && GET_OBJ_TYPE(soft) != ITEM_PROGRAM)
+        continue;
+
+      if (subcmd == SCMD_UPLOAD) {
+        if (GET_OBJ_TYPE(soft) == ITEM_PROGRAM && (GET_PROGRAM_TYPE(soft) <= SOFT_SENSOR || GET_PROGRAM_TYPE(soft) == SOFT_EVALUATE)) {
+          send_to_icon(PERSONA, "You can't upload %s.\r\n", GET_OBJ_NAME(soft));
+          return;
         }
-        return;
+
+        if (GET_OBJ_TYPE(soft) == ITEM_DECK_ACCESSORY) {
+          if (GET_DECK_ACCESSORY_TYPE(soft) != TYPE_FILE) {
+            send_to_icon(PERSONA, "You can't upload %s.\r\n", GET_OBJ_NAME(soft));
+            return;
+          }
+
+          if (GET_DECK_ACCESSORY_FILE_HOST_VNUM(soft)) {
+            send_to_icon(PERSONA, "Action aborted: Re-uploading paydata like %s would be a great way to get caught with it!\r\n", GET_OBJ_NAME(soft));
+            return;
+          }
+        }
+      } else {
+        if (GET_OBJ_TYPE(soft) == ITEM_DECK_ACCESSORY) {
+          send_to_icon(PERSONA, "You can't upload %s to your icon.\r\n", GET_OBJ_NAME(soft));
+          return;
+        }
       }
+
+      if (subcmd == SCMD_SWAP && GET_OBJ_VAL(soft, 2) > DECKER->active) {
+        send_to_icon(PERSONA, "You don't have enough active memory to load that program.\r\n");
+      } else if (subcmd == SCMD_SWAP && GET_OBJ_VAL(soft, 1) > DECKER->mpcp) {
+        send_to_icon(PERSONA, "Your deck is not powerful enough to run that program.\r\n");
+      } else {
+        int success = 1;
+        if (subcmd == SCMD_UPLOAD) {
+          if (GET_OBJ_VAL(soft, 8)) {
+            send_to_char(ch, "%s is already being uploaded.\r\n", GET_OBJ_NAME(soft));
+            return;
+          }
+
+          success = system_test(PERSONA->in_host, ch, TEST_FILES, SOFT_READ, 0);
+        }
+        if (success > 0) {
+          // TODO: This is accurately transcribed, but feels like a bug.
+          GET_OBJ_VAL(soft, 9) = GET_DECK_ACCESSORY_FILE_SIZE(soft);
+          if (subcmd == SCMD_UPLOAD) {
+            GET_OBJ_VAL(soft, 8) = 1;
+            GET_OBJ_ATTEMPT(soft) = matrix[PERSONA->in_host].vnum;
+          } else
+            DECKER->active -= GET_DECK_ACCESSORY_FILE_SIZE(soft);
+          send_to_icon(PERSONA, "You begin to upload %s to %s.\r\n", GET_OBJ_NAME(soft), (subcmd ? "the host" : "your icon"));
+        } else
+          send_to_icon(PERSONA, "Your commands fail to execute.\r\n");
+      }
+      return;
+    }
+  }
+
   send_to_icon(PERSONA, "You don't have that file.\r\n");
 }
 
@@ -2183,26 +2217,28 @@ ACMD(do_decrypt)
     return;
   }
   WAIT_STATE(ch, (int) (DECKING_WAIT_STATE_TIME));
-  struct obj_data *obj = NULL;
-  if ((obj = get_obj_in_list_vis(ch, argument, matrix[PERSONA->in_host].file)) && GET_OBJ_VAL(obj, 7) == PERSONA->idnum) {
-    if (!GET_OBJ_VAL(obj, 5) || (GET_OBJ_VAL(obj, 5) == 1 && subcmd) || (GET_OBJ_VAL(obj, 5) > 1 && !subcmd) ||
-        GET_OBJ_TYPE(obj) == ITEM_PROGRAM) {
-      send_to_icon(PERSONA, "There is no need to %s that file.\r\n", subcmd ? "disarm" : "decrypt");
+  {
+    struct obj_data *obj = NULL;
+    if ((obj = get_obj_in_list_vis(ch, argument, matrix[PERSONA->in_host].file)) && GET_OBJ_VAL(obj, 7) == PERSONA->idnum) {
+      if (!GET_OBJ_VAL(obj, 5) || (GET_OBJ_VAL(obj, 5) == 1 && subcmd) || (GET_OBJ_VAL(obj, 5) > 1 && !subcmd) ||
+          GET_OBJ_TYPE(obj) == ITEM_PROGRAM) {
+        send_to_icon(PERSONA, "There is no need to %s that file.\r\n", subcmd ? "disarm" : "decrypt");
+        return;
+      }
+      int success = system_test(PERSONA->in_host, ch, TEST_FILES, subcmd ? SOFT_DEFUSE : SOFT_DECRYPT, 0);
+      if (success > 0) {
+        send_to_icon(PERSONA, "You successfully %s the file.\r\n", subcmd ? "disarm" : "decrypt");
+        GET_OBJ_VAL(obj, 5) = 0;
+      } else if (PERSONA) {
+        send_to_icon(PERSONA, "You fail to %s the IC protecting that file.\r\n", subcmd ? "disarm" : "decrypt");
+        if (GET_OBJ_VAL(obj, 5) == 1)
+          if (success_test(GET_OBJ_VAL(obj, 6), GET_SKILL(ch, SKILL_COMPUTER)) > 0) {
+            send_to_icon(PERSONA, "The Scramble IC destroys the file!\r\n");
+            extract_obj(obj);
+          }
+      }
       return;
     }
-    int success = system_test(PERSONA->in_host, ch, TEST_FILES, subcmd ? SOFT_DEFUSE : SOFT_DECRYPT, 0);
-    if (success > 0) {
-      send_to_icon(PERSONA, "You successfully %s the file.\r\n", subcmd ? "disarm" : "decrypt");
-      GET_OBJ_VAL(obj, 5) = 0;
-    } else if (PERSONA) {
-      send_to_icon(PERSONA, "You fail to %s the IC protecting that file.\r\n", subcmd ? "disarm" : "decrypt");
-      if (GET_OBJ_VAL(obj, 5) == 1)
-        if (success_test(GET_OBJ_VAL(obj, 6), GET_SKILL(ch, SKILL_COMPUTER)) > 0) {
-          send_to_icon(PERSONA, "The Scramble IC destroys the file!\r\n");
-          extract_obj(obj);
-        }
-    }
-    return;
   }
   if (is_abbrev(argument, "slave") || is_abbrev(argument, "files") || is_abbrev(argument, "access")) {
     int mode = 0;
@@ -2239,12 +2275,12 @@ ACMD(do_decrypt)
             next = current->next_content;
 
             // Skip non-paydata.
-            if (GET_OBJ_TYPE(obj) != ITEM_DECK_ACCESSORY || GET_DECK_ACCESSORY_TYPE(obj) != TYPE_FILE || GET_DECK_ACCESSORY_FILE_HOST_VNUM(obj) != matrix[PERSONA->in_host].vnum)
+            if (GET_OBJ_TYPE(current) != ITEM_DECK_ACCESSORY || GET_DECK_ACCESSORY_TYPE(current) != TYPE_FILE || GET_DECK_ACCESSORY_FILE_HOST_VNUM(current) != matrix[PERSONA->in_host].vnum)
               continue;
 
             // The file is paydata-- delete it.
-            obj_from_host(obj);
-            extract_obj(obj);
+            obj_from_host(current);
+            extract_obj(current);
           }
         }
       }
@@ -2641,17 +2677,11 @@ void matrix_update()
           next = NULL;
         }
         if (GET_OBJ_TYPE(file) != ITEM_DECK_ACCESSORY && GET_OBJ_TYPE(file) != ITEM_PROGRAM) {
-          snprintf(buf, sizeof(buf), "SYSERR: Found non-file, non-program object '%s' (%ld, quest=%s) in Matrix file list for host %ld! Terminating iteration immediately.",
-                   GET_OBJ_NAME(file),
-                   GET_OBJ_VNUM(file),
-                   file->obj_flags.quest_id != 0 ? "TRUE" : "FALSE",
-                   host.vnum
-                 );
-          mudlog(buf, NULL, LOG_SYSLOG, TRUE);
-          return;
+          // We allow for things like Shadowlands terminals in Matrix hosts, so just skip.
+          continue;
         }
         if (file->next_content && (GET_OBJ_TYPE(file->next_content) != ITEM_DECK_ACCESSORY && GET_OBJ_TYPE(file->next_content) != ITEM_PROGRAM)) {
-          snprintf(buf, sizeof(buf), "SYSERR: Found non-file, non-program object '%s' (%ld) in Matrix file->next_content! Striking that link, object will be orphaned if not located elsewhere.", GET_OBJ_NAME(file), GET_OBJ_VNUM(file));
+          snprintf(buf, sizeof(buf), "SYSERR: Found non-file, non-program object '%s' (%ld) in Matrix file->next_content! Striking that link, object will be orphaned if not located elsewhere.", GET_OBJ_NAME(file->next_content), GET_OBJ_VNUM(file->next_content));
           mudlog(buf, NULL, LOG_SYSLOG, TRUE);
           file->next_content = next = NULL;
         }

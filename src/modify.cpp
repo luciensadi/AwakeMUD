@@ -586,7 +586,7 @@ ACMD(do_spellset)
   {
     // Check for the argument.
     if (!*argument) {
-      send_to_char("You must supply one of 'bod', 'qui', 'str', 'int', 'wil', 'cha', 'rea'.\r\n", ch);
+      send_to_char("You must supply one of 'bod', 'qui', 'str', 'int', 'wil', 'cha', 'rea'. (ex: spellset X 'increase' 6 wil)\r\n", ch);
       return;
     }
 
@@ -779,12 +779,12 @@ ACMD(do_skillset)
   }
 
   snprintf(buf2, sizeof(buf2), "%s changed %s's %s from %d to %d.",
-          GET_CHAR_NAME(ch), GET_NAME(vict),
+          GET_CHAR_NAME(ch), GET_CHAR_NAME(vict),
           skills[skill].name,
           GET_SKILL(vict, skill), value);
   mudlog(buf2, ch, LOG_WIZLOG, TRUE);
 
-  send_to_char(ch, "You change %s's %s from %d to %d.\r\n", GET_NAME(vict), skills[skill].name, GET_SKILL(vict, skill), value);
+  send_to_char(ch, "You change %s's %s from %d to %d.\r\n", GET_CHAR_NAME(vict), skills[skill].name, GET_SKILL(vict, skill), value);
   send_to_char(vict, "Your skill in %s has been altered by the game's administration.\r\n", skills[skill].name);
   set_character_skill(vict, skill, value, TRUE);
 }
@@ -875,13 +875,13 @@ ACMD(do_abilityset)
   }
 
   snprintf(buf2, sizeof(buf2), "%s changed %s's %s from %d to %d.",
-          GET_CHAR_NAME(ch), GET_NAME(vict),
+          GET_CHAR_NAME(ch), GET_CHAR_NAME(vict),
           adept_powers[ability],
           GET_POWER_TOTAL(vict, ability),
           value);
   mudlog(buf2, ch, LOG_WIZLOG, TRUE);
 
-  send_to_char(ch, "You change %s's %s from %d to %d.\r\n", GET_NAME(vict), adept_powers[ability], GET_POWER_TOTAL(vict, ability), value);
+  send_to_char(ch, "You change %s's %s from %d to %d.\r\n", GET_CHAR_NAME(vict), adept_powers[ability], GET_POWER_TOTAL(vict, ability), value);
   send_to_char(vict, "Your abilities in %s has been altered by the game's administration (%d to %d).\r\n",
                adept_powers[ability], GET_POWER_TOTAL(vict, ability), value);
   SET_POWER_TOTAL(vict, ability, value);

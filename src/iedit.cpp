@@ -39,7 +39,6 @@ extern char *cleanup(char *dest, const char *src);
 
 #define NUM_WEAPON_TYPES        27
 #define NUM_SKILL_TYPES         20
-#define NUM_DRINK_TYPES         33
 #define NUM_PATCHES             4
 void iedit_disp_container_flags_menu(struct descriptor_data * d);
 void iedit_disp_extradesc_menu(struct descriptor_data * d);
@@ -2276,12 +2275,12 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
           break;
         case ITEM_DRINKCON:
         case ITEM_FOUNTAIN:
-          if (number < 1 || number > NUM_DRINK_TYPES) {
+          number--;
+          if (number < 0 || number >= NUM_DRINK_TYPES) {
             send_to_char("Invalid choice.\r\n", CH);
-            iedit_disp_val4_menu(d);
+            iedit_disp_drinktype_menu(d);
             return;
           }
-          number--; // to give the correct value to the object
           break;
         case ITEM_WEAPON:
         case ITEM_FIREWEAPON:

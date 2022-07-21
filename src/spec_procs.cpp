@@ -77,6 +77,7 @@ ACMD_DECLARE(do_wield);
 ACMD_DECLARE(do_draw);
 ACMD_DECLARE(do_holster);
 ACMD_DECLARE(do_remove);
+ACMD_DECLARE(do_new_echo);
 
 struct social_type
 {
@@ -453,8 +454,8 @@ int get_skill_price(struct char_data *ch, int i)
 }
 
 bool can_learn_metamagic(struct char_data *ch, int metamagic_idx) {
-  // You already know it.
-  if (GET_METAMAGIC(ch, metamagic_idx) == 2 || GET_METAMAGIC(ch, metamagic_idx) == 4)
+  // You already know it, or haven't unlocked it at all.
+  if (GET_METAMAGIC(ch, metamagic_idx) % 2 == 0)
     return FALSE;
 
   // Your tradition is not compatible.
@@ -529,7 +530,24 @@ SPECIAL(metamagic_teacher)
           send_to_char(ch, "%s can teach you the following techniques for %d nuyen each: \r\n", GET_NAME(master), cost);
           printed_something = TRUE;
         }
-        send_to_char(ch, "  %s%s\r\n", metamagic[metamagict[ind].s[i]], !GET_METAMAGIC(ch, metamagict[ind].s[i]) ? " (locked)" : "");
+        switch (GET_METAMAGIC(ch, metamagict[ind].s[i])) {
+          case METAMAGIC_STAGE_LOCKED:
+            send_to_char(ch, "  ^r%s^n (locked)\r\n", metamagic[metamagict[ind].s[i]]);
+            break;
+          case METAMAGIC_STAGE_UNLOCKED:
+            send_to_char(ch, "  %s\r\n", metamagic[metamagict[ind].s[i]]);
+            break;
+          case METAMAGIC_STAGE_LEARNED:
+            send_to_char(ch, "  ^g%s^n (already known)\r\n", metamagic[metamagict[ind].s[i]]);
+            break;
+          default:
+            if (GET_METAMAGIC(ch, metamagict[ind].s[i]) % 2 == 1) {
+              send_to_char(ch, "  %s\r\n", metamagic[metamagict[ind].s[i]]);
+            } else {
+              send_to_char(ch, "  ^g%s^n (already known)\r\n", metamagic[metamagict[ind].s[i]]);
+            }
+            break;
+        }
       }
     }
     if (!printed_something) {
@@ -548,18 +566,18 @@ SPECIAL(metamagic_teacher)
     return TRUE;
   }
 
-  if (!can_learn_metamagic(ch, metamagict[ind].s[i])) {
-    send_to_char(ch, "You can't learn %s.\r\n", metamagic[i]);
-    return TRUE;
-  }
-
-  if (GET_METAMAGIC(ch, i) == 2 || GET_METAMAGIC(ch, i) == 4) {
+  if (GET_METAMAGIC(ch, i) && GET_METAMAGIC(ch, i) % 2 == 0) {
     send_to_char(ch, "You already know how to use %s.\r\n", metamagic[i]);
     return TRUE;
   }
 
   if (!GET_METAMAGIC(ch, i)) {
     send_to_char(ch, "You aren't close enough to the astral plane to learn %s. You'll need to initiate and select that power first.\r\n", metamagic[i]);
+    return TRUE;
+  }
+
+  if (!can_learn_metamagic(ch, i)) {
+    send_to_char(ch, "You can't learn %s.\r\n", metamagic[i]);
     return TRUE;
   }
   /* "Hey, I have an idea!" "What?" "Let's arbitrarily restrict who can train where so that the builders have to do more work!"
@@ -659,7 +677,7 @@ SPECIAL(nerp_skills_teacher) {
             found_a_skill_already = TRUE;
             snprintf(buf, sizeof(buf), "%s can teach you the following:\r\n", GET_NAME(master));
           }
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  %-24s (%d karma %d nuyen)\r\n", skills[skill].name, get_skill_price(ch, skill),
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  %-35s (%d karma %d nuyen)\r\n", skills[skill].name, get_skill_price(ch, skill),
                   MAX(1000, (GET_SKILL(ch, skill) * 5000)));
         }
       }
@@ -2435,7 +2453,8 @@ SPECIAL(adept_guard)
             FALSE, ch, 0, vict, TO_NOTVICT);
         act("You grab $N and let energy flow through him.",
             FALSE, ch, 0, vict, TO_CHAR);
-        damage(ch, vict, number(0, 2), 0, PHYSICAL);
+        if (damage(ch, vict, number(0, 2), 0, PHYSICAL))
+          return TRUE;
         return FALSE;
     }
   }
@@ -3047,6 +3066,27 @@ SPECIAL(doctor_scriptshaw)
       act("You cackle gleefully.", FALSE, ch, 0, 0, TO_CHAR);
       act("$n throws back his head and cackles with insane glee!",
           TRUE, ch, 0, 0, TO_ROOM);
+      break;
+  }
+  GET_ACTIVE(ch)++;
+  return FALSE;
+}
+
+SPECIAL(Trogatron)
+{
+  if (cmd || FIGHTING(ch) || GET_POS(ch) <= POS_SLEEPING)
+    return FALSE;
+
+  if (GET_ACTIVE(ch) < 0 || GET_ACTIVE(ch) > 12)
+    GET_ACTIVE(ch) = 0;
+
+  switch (GET_ACTIVE(ch)) {
+    case 7:
+      do_say(ch, "This is pewALLup, FOR REAL, yo, you got to KNOW/", 0, 0);
+      do_say(ch, "It'll WALLop, leave DOLLops of blood in the SNOW/", 0, 0);
+      do_say(ch, "CAUGHT up and SHOT up, and if you then GOT up/", 0, 0);
+      do_say(ch, "We gonna go STOCK up and put it on LOCK up/", 0, 0);
+      do_say(ch, "Mana warp POP up 'round where we CHALK up your SKULL!-", 0, 0);
       break;
   }
   GET_ACTIVE(ch)++;
@@ -3756,59 +3796,84 @@ SPECIAL(newbie_car)
       send_to_char(ch, "You don't have a deed for that.\r\n");
       return TRUE;
     }
-    if (!((GET_OBJ_VNUM(obj) >= 891 && GET_OBJ_VNUM(obj) <= 898)
-           || (GET_OBJ_VNUM(obj) >= 904 && GET_OBJ_VNUM(obj) <= 908))
-        || GET_OBJ_VNUM(obj) == 896)
-    {
-      send_to_char(ch, "You can't collect anything with that.\r\n");
-      return TRUE;
-    }
     if (ch->in_veh) {
       send_to_char("You cannot collect a vehicle while in another vehicle.\r\n", ch);
       return TRUE;
     }
     switch (GET_OBJ_VNUM(obj)) {
-      case 891:
-        num = 1305;
+      case OBJ_TITLE_TO_AMERICAR:
+        num = VEHICLE_FORD_AMERICAR;
         break;
-      case 892:
-        num = 1307;
+      case OBJ_TITLE_TO_SCORPION:
+        num = VEHICLE_HARLEY_SCORPION;
         break;
-      case 893:
-        num = 1302;
+      case OBJ_TITLE_TO_JACKRABBIT:
+        num = VEHICLE_JACKRABBIT_E;
         break;
-      case 894:
-        num = 1320;
+      case OBJ_TITLE_TO_RUNABOUT:
+        num = VEHICLE_RUNABOUT;
         break;
-      case 895:
-        num = 1308;
+      case OBJ_TITLE_TO_RAPIER:
+        num = VEHICLE_YAMAHA_RAPIER;
         break;
-      case 897:
-        num = 1309;
+      case OBJ_TITLE_TO_BISON:
+        num = VEHICLE_FORD_BISON;
         break;
-      case 898:
-        num = 1303;
+      case OBJ_TITLE_TO_WESTWIND:
+        num = VEHICLE_EUROCAR_WESTWIND_2000;
         break;
 #ifdef USE_PRIVATE_CE_WORLD
-      case 904:
-        num = 37500;
+      case OBJ_TITLE_TO_DOBERMAN:
+        num = VEHICLE_DOBERMAN;
         break;
-      case 905:
-        num = 37501;
+      case OBJ_TITLE_TO_SNOOPER:
+        num = VEHICLE_SNOOPER;
         break;
-      case 906:
-        num = 37502;
+      case OBJ_TITLE_TO_SURVEILLANCE:
+        num = VEHICLE_SURVEILLANCE;
         break;
-      case 907:
-        num = 37503;
+      case OBJ_TITLE_TO_ROTODRONE:
+        num = VEHICLE_ROTODRONE;
         break;
-      case 908:
-        num = 37504;
+      case OBJ_TITLE_TO_DALMATION:
+        num = VEHICLE_DALMATION;
+        break;
+      case OBJ_TITLE_TO_SUPERCOMBI_RV:
+        num = VEHICLE_SUPERCOMBI_RV;
+        break;
+      case OBJ_TITLE_TO_NOMAD_SUV:
+        num = VEHICLE_NOMAD_SUV;
+        break;
+      case OBJ_TITLE_TO_BRUMBY_SUV:
+        num = VEHICLE_BRUMBY_SUV;
+        break;
+      case OBJ_TITLE_TO_GOPHER_PICKUP:
+        num = VEHICLE_GOPHER_PICKUP;
+        break;
+      case OBJ_TITLE_TO_TRANSPORT_PICKUP:
+        num = VEHICLE_TRANSPORT_PICKUP;
+        break;
+      case OBJ_TITLE_TO_GMC_4201:
+        num = VEHICLE_GMC_4201;
+        break;
+      case OBJ_TITLE_TO_GMC_BULLDOG:
+        num = VEHICLE_GMC_BULLDOG;
+        break;
+      case OBJ_TITLE_TO_ARES_ROADMASTER:
+        num = VEHICLE_ARES_ROADMASTER;
+        break;
+      case OBJ_TITLE_TO_WHITE_EAGLE_BIKE:
+        num = VEHICLE_WHITE_EAGLE_BIKE;
         break;
 #endif
       default:
-        mudlog("SYSERR: Attempting to 'collect' a mis-assigned title!", ch, LOG_SYSLOG, TRUE);
-        return FALSE;
+        {
+          char oopsbuf[500];
+          snprintf(oopsbuf, sizeof(oopsbuf), "Failed attempt to collect obj %ld from newbie car park-- is it coded correctly?", GET_OBJ_VNUM(obj));
+          mudlog(oopsbuf, ch, LOG_SYSLOG, TRUE);
+          send_to_char(ch, "You can't collect anything with %s.\r\n", GET_OBJ_NAME(obj));
+        }
+        return TRUE;
     }
     veh = read_vehicle(num, VIRTUAL);
     veh->locked = TRUE;
@@ -4722,12 +4787,17 @@ SPECIAL(floor_has_glass_shards) {
   if (ch->in_veh || IS_NPC(ch) || IS_ASTRAL(ch) || PRF_FLAGGED(ch, PRF_NOHASSLE) || GET_EQ(ch, WEAR_FEET) || AFF_FLAGGED(ch, AFF_SNEAK))
     return FALSE;
 
+  // Don't tear up people who are rigging.
+  if (PLR_FLAGGED(ch, PLR_REMOTE))
+    return FALSE;
+
   // If they attempt to leave the room and are not in a vehicle, wearing shoes, or sneaking, they get cut up.
   for (int dir_index = NORTH; dir_index <= DOWN; dir_index++) {
     if (CMD_IS(exitdirs[dir_index]) || CMD_IS(fulldirs[dir_index])) {
       send_to_char("^rAs you walk away, the glass shards tear at your bare feet!^n\r\n\r\n", ch);
       act("The glass shards tear at $n's bare feet as $e leaves!", TRUE, ch, NULL, NULL, TO_ROOM);
-      damage(ch, ch, LIGHT, 0, TRUE);
+      if (damage(ch, ch, LIGHT, 0, TRUE) || GET_POS(ch) <= POS_STUNNED)
+        return TRUE;
       break;
     }
   }
@@ -5933,13 +6003,30 @@ SPECIAL(mageskill_moore)
 SPECIAL(mageskill_herbie)
 {
   struct char_data *mage = (struct char_data *) me;
-  struct obj_data *recom = NULL, *obj = NULL;
+  struct obj_data *recom = NULL, *obj = NULL, *next_obj = NULL;
 
-  for (recom = ch->carrying; recom; recom = recom->next_content)
-    if (GET_OBJ_VNUM(recom) == OBJ_MAGE_LETTER)
-      break;
-  if (!recom || GET_OBJ_VAL(recom, 0) != GET_IDNUM(ch))
+  if (!cmd)
     return FALSE;
+
+  for (recom = ch->carrying; recom; recom = next_obj) {
+    next_obj = recom->next_content;
+    if (GET_OBJ_VNUM(recom) == OBJ_MAGE_LETTER) {
+      if (GET_OBJ_VAL(recom, 0) != GET_IDNUM(ch)) {
+        send_to_room("Herbie distractedly lets someone else's recommendation letter slip from his fingers.\r\n", mage->in_room);
+        obj_from_char(recom);
+        if (mage->in_room)
+          obj_to_room(recom, mage->in_room);
+        else
+          obj_to_veh(recom, mage->in_veh);
+      } else {
+        break;
+      }
+    }
+  }
+
+  if (!recom)
+    return FALSE;
+
   if (CMD_IS("say") || CMD_IS("'") || CMD_IS("ask")) {
     skip_spaces(&argument);
     if (!*argument || !(str_str(argument, "recommendation") || str_str(argument, "letter")))
@@ -6897,7 +6984,7 @@ SPECIAL(medical_workshop) {
     PRF_FLAGS(found_char).RemoveBit(PRF_TOUCH_ME_DADDY);
 
     // Damage the character. This damage type does not result in a killer check.
-    if (damage(ch, found_char, SERIOUS, TYPE_MEDICAL_MISHAP, PHYSICAL)) {
+    if (ch != found_char && damage(ch, found_char, SERIOUS, TYPE_MEDICAL_MISHAP, PHYSICAL)) {
       send_to_char(ch, "Seems your scalpel cut something critical... your patient has died.\r\n");
     }
 
@@ -6987,6 +7074,98 @@ SPECIAL(toggled_voice_modulator)
   }
 
   return FALSE;
+}
+
+// Use this as a template for other random-speech mobs. It's the latest as of Jul 2022.
+SPECIAL(template_speech) {
+  static int last_said = -1;
+
+  int message_num;
+  const char *messages[] = {
+    "Runners these days don't realize how valuable keeping notes on their pocket secretary is. Like where Johnsons hang out.",
+    "Best to keep your phone and radio in hand. In a box, you won't hear it, and in your coat pocket, it'll just get shot.",
+    "Seems like every day I hear about another wanna-be runner getting gunned down by the Star for walking around with their gun or cyberdeck in hand.",
+    "Back in my day, we didn't have anything like the 8 MHz band available. Being able to talk to runners is a blessing.",
+    "When in doubt, just take a cab back to somewhere familiar.",
+    "If you're on a job and you just can't get it done, call your Johnson and tell them you quit. Easier than hoofing it all the way back.",
+    "It's dangerous to go alone. Make friends.",
+    "Keep your eyes and ears open. You never know when you'll make an unfair weather friend."
+  };
+#define NUM_PROC_MESSAGES       8
+#define PROC_FREQUENCY_DIVISOR  20
+
+  if (cmd || FIGHTING(ch) || !AWAKE(ch))
+    return FALSE;
+
+  if ((message_num = number(0, NUM_PROC_MESSAGES * PROC_FREQUENCY_DIVISOR)) >= NUM_PROC_MESSAGES || message_num == last_said)
+    return FALSE;
+
+  do_say(ch, messages[message_num], 0, 0);
+  last_said = message_num;
+
+  return TRUE;
+
+#undef PROC_FREQUENCY_DIVISOR
+#undef NUM_PROC_MESSAGES
+}
+
+// Use this as a template for other random-emote mobs. It's the latest as of Jul 2022.
+SPECIAL(receptionist_95902) {
+  static int last_done = -1;
+
+  int message_num;
+  const char *emotes[] = {
+    "The nervous looking receptionist mutters under her breath, \"It's a good opportunity, they said. The man's a genius, they said. Wish I'd stayed in Denver...\"",
+    "The nervous looking receptionist shifts uncomfortably in her chair and looks at the office door. \"I'm sure his meeting will be over soon, I think. Right?\"",
+    "The nervous looking receptionist looks ready to bolt from the room. \"I just can't stand it anymore!\" She stands up, hesitates, and then sits back down. \"Then again, the pay...\"",
+    "The nervous looking receptionist seems to be practicing her pronunciation. \"Senor Antonio... Seen yor Ahn Tonyo... Seeeenyo- no, that's just bad.\""
+  };
+#define NUM_PROC_MESSAGES       4
+#define PROC_FREQUENCY_DIVISOR  20
+
+  if (cmd || FIGHTING(ch) || !AWAKE(ch))
+    return FALSE;
+
+  if ((message_num = number(0, NUM_PROC_MESSAGES * PROC_FREQUENCY_DIVISOR)) >= NUM_PROC_MESSAGES || message_num == last_done)
+    return FALSE;
+
+  char tmp_buf[strlen(emotes[message_num]) + 1];
+  strlcpy(tmp_buf, emotes[message_num], sizeof(tmp_buf));
+
+  do_new_echo(ch, tmp_buf, 0, 0);
+  last_done = message_num;
+
+  return TRUE;
+
+#undef PROC_FREQUENCY_DIVISOR
+#undef NUM_PROC_MESSAGES
+}
+
+SPECIAL(graffiti_cleaner) {
+  if (cmd || FIGHTING(ch) || !AWAKE(ch))
+    return FALSE;
+
+  int graffiti_count = 0;
+
+  for (struct obj_data *obj = ch->in_room->contents, *next; obj; obj = next) {
+    next = obj->next_content;
+
+    if (GET_OBJ_VNUM(obj) == OBJ_GRAFFITI && ++graffiti_count >= MAXIMUM_GRAFFITI_IN_ROOM) {
+      char msgbuf[500];
+
+      snprintf(msgbuf, sizeof(msgbuf), "$n mutters something under $s breath as $e scrub%s away some graffiti.", HSSH_SHOULD_PLURAL(ch) ? "s" : "");
+      act(msgbuf, TRUE, ch, 0, 0, TO_ROOM);
+
+      snprintf(msgbuf, sizeof(msgbuf), "[SPRAYLOG] Auto-cleaned '%s' from newbie spray location.", GET_OBJ_NAME(obj));
+      mudlog(msgbuf, ch, LOG_SYSLOG, TRUE);
+
+      obj_from_room(obj);
+      extract_obj(obj);
+      graffiti_count--;
+    }
+  }
+
+  return TRUE;
 }
 
 /*

@@ -72,7 +72,7 @@ struct teach_data teachers[] = {
                        { 1008, { SKILL_DEMOLITIONS, SKILL_DIVING, SKILL_PARACHUTING, SKILL_UNDERWATER_COMBAT, SKILL_LOCK_PICKING,
                          SKILL_RIDING, SKILL_THROWING_WEAPONS, SKILL_PROJECTILES, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "After about an hour of shuffling slides you feel you can now do your job "
                          "safer.\r\n", ADVANCED },
-                       { 1009, { SKILL_CENTERING, SKILL_ENCHANTING, 0, 0, 0,
+                       { 1009, { SKILL_CENTERING, SKILL_ENCHANTING, SKILL_PILOT_SUBORBITAL, SKILL_PILOT_SEMIBALLISTIC, SKILL_MECHANICAL_ARM_OPERATION,
                          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "After about an hour of shuffling slides you feel you can now do your job "
                          "safer.\r\n", ADVANCED },
                       // End NERP teachers.
@@ -92,7 +92,7 @@ struct teach_data teachers[] = {
            SKILL_PILOT_ROTORCRAFT, SKILL_PILOT_FIXEDWING, SKILL_PILOT_VECTORTHRUST,
            SKILL_BR_FIXEDWING, SKILL_BR_ROTORCRAFT, SKILL_BR_VECTORTHRUST, SKILL_BR_HOVERCRAFT,
            SKILL_BR_MOTORBOAT, SKILL_BR_SHIP, SKILL_BR_LTA, SKILL_PILOT_HOVERCRAFT,
-           SKILL_PILOT_MOTORBOAT, SKILL_PILOT_SHIP, SKILL_PILOT_LTA, 0, 0, 0 },
+           SKILL_PILOT_MOTORBOAT, SKILL_PILOT_SHIP, SKILL_PILOT_LTA, SKILL_PILOT_WALKER, SKILL_PILOT_TRACKED, 0 },
 #else
            0, 0, 0,
            0, 0, 0, 0,
@@ -256,7 +256,7 @@ struct teach_data teachers[] = {
               SKILL_PILOT_ROTORCRAFT, SKILL_PILOT_FIXEDWING, SKILL_PILOT_VECTORTHRUST,
               SKILL_BR_FIXEDWING, SKILL_BR_ROTORCRAFT, SKILL_BR_VECTORTHRUST, SKILL_BR_HOVERCRAFT,
               SKILL_BR_MOTORBOAT, SKILL_BR_SHIP, SKILL_BR_LTA, SKILL_PILOT_HOVERCRAFT,
-              SKILL_PILOT_MOTORBOAT, SKILL_PILOT_SHIP, SKILL_PILOT_LTA, 0, 0, 0},
+              SKILL_PILOT_MOTORBOAT, SKILL_PILOT_SHIP, SKILL_PILOT_LTA, SKILL_PILOT_TRACKED, SKILL_PILOT_WALKER, 0},
      "You read through trade magazines and come away with a better understanding of vehicles.\r\n", LIBRARY },
 #endif
 
@@ -592,6 +592,7 @@ void assign_mobiles(void)
   SPECIAL(crime_mall_guard);
   SPECIAL(doctor_scriptshaw);
   SPECIAL(huge_troll);
+  SPECIAL(Trogatron);
 //  SPECIAL(roots_receptionist);
   SPECIAL(aegnor);
   SPECIAL(purple_haze_bartender);
@@ -629,6 +630,8 @@ void assign_mobiles(void)
   SPECIAL(marksmanship_fourth);
   SPECIAL(marksmanship_master);
   SPECIAL(marksmanship_trainer);
+  SPECIAL(receptionist_95902);
+  SPECIAL(graffiti_cleaner);
 
   ASSIGNMOB(22870, marksmanship_first);
   ASSIGNMOB(4101, marksmanship_second);
@@ -636,6 +639,8 @@ void assign_mobiles(void)
   ASSIGNMOB(3722, marksmanship_fourth);
   ASSIGNMOB(5914, marksmanship_master);
   ASSIGNMOB(779, marksmanship_trainer);
+  ASSIGNMOB(95902, receptionist_95902);
+  ASSIGNMOB(31135, graffiti_cleaner);
 #endif
 
   /* trainers */
@@ -745,6 +750,9 @@ void assign_mobiles(void)
 
   /* Ork Underground */
   ASSIGNMOB(9913, receptionist);
+
+  /* Puyallup */
+  ASSIGNMOB(35200, Trogatron);
 
   /* Crime Mall */
   ASSIGNMOB(100022, crime_mall_guard);

@@ -1351,8 +1351,51 @@ int get_skill(struct char_data *ch, int skill, int &target)
 {
   char gskbuf[MAX_STRING_LENGTH];
   int increase = 0;
+  int defaulting_tn = 0;
 
-  snprintf(gskbuf, sizeof(gskbuf), "get_skill(%s, %s):", GET_CHAR_NAME(ch), skills[skill].name);
+  snprintf(gskbuf, sizeof(gskbuf), "get_skill(%s, %s): ", GET_CHAR_NAME(ch), skills[skill].name);
+
+  // Convert NPCs so that they use the correct base skill for fighting (Armed Combat etc)
+  if (IS_NPC(ch))
+    skill = GET_SKILL(ch, skill) >= GET_SKILL(ch, return_general(skill)) ? skill : return_general(skill);
+
+  if (GET_SKILL(ch, skill) <= 0) {
+    // If the base TN is 8 or more and you'd default, you fail instead.
+    if (target >= 8) {
+      strlcat(gskbuf, "failed to default (TN 8+), returning 0 dice. ", sizeof(gskbuf));
+      act(gskbuf, 1, ch, NULL, NULL, TO_ROLLS);
+      return 0;
+    }
+
+    // Some skills cannot be defaulted on.
+    if (skill == SKILL_AURA_READING || skill == SKILL_SORCERY || skill == SKILL_CONJURING) {
+      strlcat(gskbuf, "failed to default (skill prohibits default), returning 0 dice. ", sizeof(gskbuf));
+      act(gskbuf, 1, ch, NULL, NULL, TO_ROLLS);
+      return 0;
+    }
+
+    // If we've gotten here, we're able to default. First, check for in-group defaults.
+    if (skills[skill].group != 99) {
+      int max_defaultable_skill = skill;
+      for (int skill_idx = MIN_SKILLS; skill_idx < MAX_SKILLS; skill_idx++) {
+        if (skills[skill_idx].group == skills[skill].group && GET_SKILL(ch, skill_idx) > GET_SKILL(ch, max_defaultable_skill)) {
+          max_defaultable_skill = skill_idx;
+        }
+      }
+
+      if (max_defaultable_skill != skill) {
+        skill = max_defaultable_skill;
+        defaulting_tn = 2;
+        snprintf(ENDOF(gskbuf), sizeof(gskbuf) - strlen(gskbuf), "defaulting to %s (+2 TN). ", skills[skill].name);
+      }
+    }
+
+    // If we haven't successfully defaulted to a skill, default to an attribute. This is represented by TN 4.
+    if (defaulting_tn == 0) {
+      defaulting_tn = 4;
+      snprintf(ENDOF(gskbuf), sizeof(gskbuf) - strlen(gskbuf), "defaulting to %s (+4 TN). ", short_attributes[skills[skill].attribute]);
+    }
+  }
 
   // Wearing too much armor? That'll hurt.
   if (skills[skill].attribute == QUI) {
@@ -1367,193 +1410,224 @@ int get_skill(struct char_data *ch, int skill, int &target)
       target += increase;
     }
   }
-  act(gskbuf, 1, ch, NULL, NULL, TO_ROLLS);
 
   // Core p38
   if (target < 2)
     target = 2;
 
-  // TODO: Adept power Improved Ability. This ability is not currently in the game, but would be factored in here. See Core p169 for details.
+  // Add the defaulting TN.
+  target += defaulting_tn;
 
-  // Convert NPCs so that they use the correct base skill for fighting.
-  if (IS_NPC(ch))
-    skill = GET_SKILL(ch, skill) > GET_SKILL(ch, return_general(skill)) ? skill : return_general(skill);
+  // If you ever implement the Adept power Improved Ability, it would go here. See Core p169 for details.
 
-  if (GET_SKILL(ch, skill))
-  {
-    int mbw = 0, enhan = 0, synth = 0;
-    int totalskill = GET_SKILL(ch, skill);
-    bool should_gain_physical_boosts = !PLR_FLAGGED(ch, PLR_MATRIX) && !PLR_FLAGGED(ch, PLR_REMOTE);
+  bool should_gain_physical_boosts = !PLR_FLAGGED(ch, PLR_MATRIX) && !PLR_FLAGGED(ch, PLR_REMOTE);
+  int mbw = 0, enhan = 0, synth = 0;
 
-    // If their skill in this area has not been boosted, they get to add their task pool up to the skill's learned level.
-    if (REAL_SKILL(ch, skill) == GET_SKILL(ch, skill))
-      totalskill += MIN(REAL_SKILL(ch, skill), GET_TASK_POOL(ch, skills[skill].attribute));
+  // Calculate our starting skill dice.
+  int skill_dice = defaulting_tn == 4 ? GET_ATT(ch, skills[skill].attribute) : GET_SKILL(ch, skill);
 
-    // Iterate through their cyberware, looking for anything important.
-    if (ch->cyberware) {
-      int expert = 0;
-      bool chip = FALSE;;
-      for (struct obj_data *obj = ch->cyberware; obj; obj = obj->next_content)
-        if (should_gain_physical_boosts && GET_OBJ_VAL(obj, 0) == CYB_MOVEBYWIRE)
-          mbw = GET_OBJ_VAL(obj, 1);
-        else if (GET_OBJ_VAL(obj, 0) == CYB_CHIPJACKEXPERT)
-          expert = GET_OBJ_VAL(obj, 1);
-        else if (GET_OBJ_VAL(obj, 0) == CYB_CHIPJACK) {
-          int real_obj;
-          for (int i = 5; i < 10; i++) {
-            if ((real_obj = real_object(GET_OBJ_VAL(obj, i))) > 0 && obj_proto[real_obj].obj_flags.value[0] == skill)
-              chip = TRUE;
+  // If their skill in this area has not been boosted, they get to add their task pool up to the skill's learned level.
+  int pool_dice = MIN(REAL_SKILL(ch, skill), GET_TASK_POOL(ch, skills[skill].attribute));
+  if (REAL_SKILL(ch, skill) == GET_SKILL(ch, skill)) {
+    // This is capped by defaulting, if any.
+    if (defaulting_tn == 4) {
+      // You get no dice.
+      pool_dice = 0;
+    }
+    else if (defaulting_tn == 2) {
+      // You get pool dice up to half your skill, round down.
+      pool_dice = (int) (pool_dice / 2);
+    }
+    else {
+      // You get all the pool dice.
+    }
+
+    if (pool_dice > 0) {
+      skill_dice += pool_dice;
+      snprintf(ENDOF(gskbuf), sizeof(gskbuf) - strlen(gskbuf), "+%d dice (task pool). ", pool_dice);
+    } else {
+      strlcat(gskbuf, "No task pool avail. ", sizeof(gskbuf));
+    }
+  } else {
+    if (pool_dice > 0) {
+      strlcat(gskbuf, "Task pool blocked (skill modified). ", sizeof(gskbuf));
+    }
+  }
+
+  // Iterate through their cyberware, looking for anything important.
+  if (ch->cyberware) {
+    int expert = 0;
+    int chip = 0;
+    for (struct obj_data *obj = ch->cyberware; obj; obj = obj->next_content) {
+      switch (GET_CYBERWARE_TYPE(obj)) {
+        case CYB_MOVEBYWIRE:
+          mbw = should_gain_physical_boosts ? GET_CYBERWARE_RATING(obj) : 0;
+          break;
+        case CYB_CHIPJACKEXPERT:
+          expert = GET_CYBERWARE_RATING(obj);
+          break;
+        case CYB_CHIPJACK:
+          // Since the chipjack expert driver influences the _chipjack_, we don't account for memory skills here.
+          for (struct obj_data *chip_obj = obj->contains; chip_obj; chip_obj = chip_obj->next_content) {
+            if (GET_CHIP_SKILL(chip_obj) == skill)
+              chip = GET_CHIP_RATING(chip_obj);
           }
+          break;
+      }
+    }
+
+    // If they have both a chipjack with the correct chip loaded and a Chipjack Expert, add the rating to their skill as task pool dice (up to skill max).
+    if (chip && expert) {
+      if (chip != GET_SKILL(ch, skill)) {
+        strlcat(gskbuf, "Ignored expert driver (ch skill not equal to chip rating). ", sizeof(gskbuf));
+      } else if (defaulting_tn == 4) {
+        strlcat(gskbuf, "Ignored expert driver (S2A default). ", sizeof(gskbuf));
+      } else if (defaulting_tn == 2) {
+        increase = (int) (MIN(GET_SKILL(ch, skill), expert) / 2);
+        skill_dice += increase;
+        snprintf(ENDOF(gskbuf), sizeof(gskbuf) - strlen(gskbuf), "Chip & Expert Skill Increase (S2S default): %d. ", increase);
+      } else {
+        increase = MIN(GET_SKILL(ch, skill), expert);
+        skill_dice += increase;
+        snprintf(ENDOF(gskbuf), sizeof(gskbuf) - strlen(gskbuf), "Chip & Expert Skill Increase: %d. ", increase);
+      }
+    } else if (expert) {
+      strlcat(gskbuf, "Ignored expert driver (no chip). ", sizeof(gskbuf));
+    }
+  }
+
+  // Iterate through their bioware, looking for anything important.
+  if (should_gain_physical_boosts && ch->bioware) {
+    for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content) {
+      if (GET_BIOWARE_TYPE(bio) == BIO_REFLEXRECORDER && GET_OBJ_VAL(bio, 3) == skill) {
+        strlcat(gskbuf, "Reflex Recorder skill increase: 1. ", sizeof(gskbuf));
+        skill_dice++;
+      } else if (GET_BIOWARE_TYPE(bio) == BIO_ENHANCEDARTIC)
+        enhan = TRUE;
+      else if (GET_BIOWARE_TYPE(bio) == BIO_SYNTHACARDIUM)
+        synth = GET_BIOWARE_RATING(bio);
+    }
+  }
+
+  /* Enhanced Articulation: Possessors roll an additional die when making Success Tests involving any Combat, Physical, Technical and B/R Skills.
+   Bonus also applies to physical use of Vehicle Skills. */
+  if (enhan) {
+    switch (skill) {
+        // Combat skills
+      case SKILL_ARMED_COMBAT:
+      case SKILL_EDGED_WEAPONS:
+      case SKILL_POLE_ARMS:
+      case SKILL_WHIPS_FLAILS:
+      case SKILL_CLUBS:
+      case SKILL_UNARMED_COMBAT:
+      case SKILL_CYBER_IMPLANTS:
+      case SKILL_FIREARMS:
+      case SKILL_PISTOLS:
+      case SKILL_RIFLES:
+      case SKILL_SHOTGUNS:
+      case SKILL_ASSAULT_RIFLES:
+      case SKILL_SMG:
+      case SKILL_GRENADE_LAUNCHERS:
+      case SKILL_TASERS:
+      case SKILL_GUNNERY:
+      case SKILL_MACHINE_GUNS:
+      case SKILL_MISSILE_LAUNCHERS:
+      case SKILL_ASSAULT_CANNON:
+      case SKILL_ARTILLERY:
+      case SKILL_PROJECTILES:
+      case SKILL_ORALSTRIKE:
+      case SKILL_THROWING_WEAPONS:
+      case SKILL_OFFHAND_EDGED:
+      case SKILL_OFFHAND_CLUB:
+      case SKILL_OFFHAND_CYBERIMPLANTS:
+      case SKILL_OFFHAND_WHIP:
+      case SKILL_UNDERWATER_COMBAT:
+      case SKILL_SPRAY_WEAPONS:
+      case SKILL_GUNCANE:
+      case SKILL_BRACERGUN:
+      case SKILL_BLOWGUN:
+        // Physical skills
+      case SKILL_ATHLETICS:
+      case SKILL_DIVING:
+      case SKILL_PARACHUTING:
+      case SKILL_STEALTH:
+      case SKILL_STEAL:
+      case SKILL_DANCING:
+      case SKILL_INSTRUMENT:
+      case SKILL_LOCK_PICKING:
+      case SKILL_RIDING:
+        // Technical skills
+      case SKILL_COMPUTER:
+      case SKILL_ELECTRONICS:
+      case SKILL_DEMOLITIONS:
+      case SKILL_BIOTECH:
+      case SKILL_CHEMISTRY:
+      case SKILL_DISGUISE:
+        // B/R skills
+      case SKILL_CYBERTERM_DESIGN:
+      case SKILL_BR_BIKE:
+      case SKILL_BR_CAR:
+      case SKILL_BR_DRONE:
+      case SKILL_BR_TRUCK:
+      case SKILL_BR_ELECTRONICS:
+      case SKILL_BR_COMPUTER:
+      case SKILL_BR_EDGED:
+      case SKILL_BR_POLEARM:
+      case SKILL_BR_CLUB:
+      case SKILL_BR_THROWINGWEAPONS:
+      case SKILL_BR_WHIPS:
+      case SKILL_BR_PROJECTILES:
+      case SKILL_BR_PISTOL:
+      case SKILL_BR_SHOTGUN:
+      case SKILL_BR_RIFLE:
+      case SKILL_BR_HEAVYWEAPON:
+      case SKILL_BR_SMG:
+      case SKILL_BR_ARMOR:
+      case SKILL_BR_FIXEDWING:
+      case SKILL_BR_ROTORCRAFT:
+      case SKILL_BR_VECTORTHRUST:
+      case SKILL_BR_HOVERCRAFT:
+      case SKILL_BR_MOTORBOAT:
+      case SKILL_BR_SHIP:
+      case SKILL_BR_LTA:
+      case SKILL_PILOT_HOVERCRAFT:
+      case SKILL_PILOT_MOTORBOAT:
+      case SKILL_PILOT_SHIP:
+      case SKILL_PILOT_LTA:
+      case SKILL_PILOT_ROTORCRAFT:
+      case SKILL_PILOT_FIXEDWING:
+      case SKILL_PILOT_VECTORTHRUST:
+      case SKILL_PILOT_BIKE:
+      case SKILL_PILOT_CAR:
+      case SKILL_PILOT_TRUCK:
+        // Enhanced articulation only matters if you're actually using your body for the thing.
+        if (!AFF_FLAGGED(ch, AFF_RIG) && !PLR_FLAGGED(ch, PLR_REMOTE)) {
+          strlcat(gskbuf, "Enhanced Articulation skill increase: +1 ", sizeof(gskbuf));
+          skill_dice++;
         }
-
-      // If they have both a chipjack with the correct chip loaded and a Chipjack Expert, add the rating to their skill as task pool dice (up to skill max).
-      if (chip && expert) {
-        increase = MIN(REAL_SKILL(ch, skill), expert);
-        totalskill += increase;
-        snprintf(gskbuf, sizeof(gskbuf), "Chip & Expert Skill Increase: %d", increase);
-        act(gskbuf, 1, ch, NULL, NULL, TO_ROLLS);
-      }
+        break;
+      default:
+        break;
     }
-
-    // Iterate through their bioware, looking for anything important.
-    if (should_gain_physical_boosts && ch->bioware) {
-      for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content) {
-        if (GET_OBJ_VAL(bio, 0) == BIO_REFLEXRECORDER && GET_OBJ_VAL(bio, 3) == skill) {
-          act("Reflex Recorder skill increase: 1", 1, ch, NULL, NULL, TO_ROLLS);
-          totalskill++;
-        } else if (GET_OBJ_VAL(bio, 0) == BIO_ENHANCEDARTIC)
-          enhan = TRUE;
-        else if (GET_OBJ_VAL(bio, 0) == BIO_SYNTHACARDIUM)
-          synth = GET_OBJ_VAL(bio, 1);
-      }
-    }
-
-    /* Enhanced Articulation: Possessors roll an additional die when making Success Tests involving any Combat, Physical, Technical and B/R Skills.
-     Bonus also applies to physical use of Vehicle Skills. */
-    if (enhan) {
-      switch (skill) {
-          // Combat skills
-        case SKILL_ARMED_COMBAT:
-        case SKILL_EDGED_WEAPONS:
-        case SKILL_POLE_ARMS:
-        case SKILL_WHIPS_FLAILS:
-        case SKILL_CLUBS:
-        case SKILL_UNARMED_COMBAT:
-        case SKILL_CYBER_IMPLANTS:
-        case SKILL_FIREARMS:
-        case SKILL_PISTOLS:
-        case SKILL_RIFLES:
-        case SKILL_SHOTGUNS:
-        case SKILL_ASSAULT_RIFLES:
-        case SKILL_SMG:
-        case SKILL_GRENADE_LAUNCHERS:
-        case SKILL_TASERS:
-        case SKILL_GUNNERY:
-        case SKILL_MACHINE_GUNS:
-        case SKILL_MISSILE_LAUNCHERS:
-        case SKILL_ASSAULT_CANNON:
-        case SKILL_ARTILLERY:
-        case SKILL_PROJECTILES:
-        case SKILL_ORALSTRIKE:
-        case SKILL_THROWING_WEAPONS:
-        case SKILL_OFFHAND_EDGED:
-        case SKILL_OFFHAND_CLUB:
-        case SKILL_OFFHAND_CYBERIMPLANTS:
-        case SKILL_OFFHAND_WHIP:
-        case SKILL_UNDERWATER_COMBAT:
-        case SKILL_SPRAY_WEAPONS:
-        case SKILL_GUNCANE:
-        case SKILL_BRACERGUN:
-        case SKILL_BLOWGUN:
-          // Physical skills
-        case SKILL_ATHLETICS:
-        case SKILL_DIVING:
-        case SKILL_PARACHUTING:
-        case SKILL_STEALTH:
-        case SKILL_STEAL:
-        case SKILL_DANCING:
-        case SKILL_INSTRUMENT:
-        case SKILL_LOCK_PICKING:
-        case SKILL_RIDING:
-          // Technical skills
-        case SKILL_COMPUTER:
-        case SKILL_ELECTRONICS:
-        case SKILL_DEMOLITIONS:
-        case SKILL_BIOTECH:
-        case SKILL_CHEMISTRY:
-        case SKILL_DISGUISE:
-          // B/R skills
-        case SKILL_CYBERTERM_DESIGN:
-        case SKILL_BR_BIKE:
-        case SKILL_BR_CAR:
-        case SKILL_BR_DRONE:
-        case SKILL_BR_TRUCK:
-        case SKILL_BR_ELECTRONICS:
-        case SKILL_BR_COMPUTER:
-        case SKILL_BR_EDGED:
-        case SKILL_BR_POLEARM:
-        case SKILL_BR_CLUB:
-        case SKILL_BR_THROWINGWEAPONS:
-        case SKILL_BR_WHIPS:
-        case SKILL_BR_PROJECTILES:
-        case SKILL_BR_PISTOL:
-        case SKILL_BR_SHOTGUN:
-        case SKILL_BR_RIFLE:
-        case SKILL_BR_HEAVYWEAPON:
-        case SKILL_BR_SMG:
-        case SKILL_BR_ARMOR:
-        case SKILL_BR_FIXEDWING:
-        case SKILL_BR_ROTORCRAFT:
-        case SKILL_BR_VECTORTHRUST:
-        case SKILL_BR_HOVERCRAFT:
-        case SKILL_BR_MOTORBOAT:
-        case SKILL_BR_SHIP:
-        case SKILL_BR_LTA:
-        case SKILL_PILOT_HOVERCRAFT:
-        case SKILL_PILOT_MOTORBOAT:
-        case SKILL_PILOT_SHIP:
-        case SKILL_PILOT_LTA:
-        case SKILL_PILOT_ROTORCRAFT:
-        case SKILL_PILOT_FIXEDWING:
-        case SKILL_PILOT_VECTORTHRUST:
-        case SKILL_PILOT_BIKE:
-        case SKILL_PILOT_CAR:
-        case SKILL_PILOT_TRUCK:
-          // Enhanced articulation only matters if you're actually using your body for the thing.
-          if (!AFF_FLAGGED(ch, AFF_RIG) && !PLR_FLAGGED(ch, PLR_REMOTE)) {
-            act("Enhanced Articulation skill increase: +1", 1, ch, NULL, NULL, TO_ROLLS);
-            totalskill++;
-          }
-          break;
-        default:
-          break;
-      }
-    }
-
-    // Move-by-wire.
-    if ((skill == SKILL_STEALTH || skill == SKILL_ATHLETICS) && mbw) {
-      snprintf(gskbuf, sizeof(gskbuf), "Move-By-Wire Skill Increase: %d", mbw);
-      act(gskbuf, 1, ch, NULL, NULL, TO_ROLLS);
-      totalskill += mbw;
-    }
-
-    // Synthacardium.
-    if (skill == SKILL_ATHLETICS && synth) {
-      snprintf(gskbuf, sizeof(gskbuf), "Synthacardium Skill Increase: %d", synth);
-      act(gskbuf, 1, ch, NULL, NULL, TO_ROLLS);
-      totalskill += synth;
-    }
-
-    return totalskill;
   }
-  else {
-    if (target >= 8)
-      return 0;
-    target += 4;
-    snprintf(gskbuf, sizeof(gskbuf), "$n (%s) defaulting on %s = %d(%d): +4 TN, will have %d dice.", GET_CHAR_NAME(ch), skills[skill].name, GET_SKILL(ch, skill), REAL_SKILL(ch, skill), GET_ATT(ch, skills[skill].attribute));
-    act(gskbuf, 1, ch, NULL, NULL, TO_ROLLS);
-    return GET_ATT(ch, skills[skill].attribute);
+
+  // Move-by-wire.
+  if ((skill == SKILL_STEALTH || skill == SKILL_ATHLETICS) && mbw) {
+    snprintf(ENDOF(gskbuf), sizeof(gskbuf) - strlen(gskbuf), "Move-By-Wire Skill Increase: %d. ", mbw);
+    skill_dice += mbw;
   }
+
+  // Synthacardium.
+  if (skill == SKILL_ATHLETICS && synth) {
+    snprintf(ENDOF(gskbuf), sizeof(gskbuf) - strlen(gskbuf), "Synthacardium Skill Increase: %d. ", synth);
+    skill_dice += synth;
+  }
+
+  snprintf(ENDOF(gskbuf), sizeof(gskbuf) - strlen(gskbuf), "Final total: %d.", skill_dice);
+
+  act(gskbuf, 1, ch, NULL, NULL, TO_ROLLS);
+
+  return skill_dice;
 }
 
 bool biocyber_compatibility(struct obj_data *obj1, struct obj_data *obj2, struct char_data *ch)
@@ -1866,6 +1940,45 @@ bool has_kit(struct char_data * ch, int type)
   return FALSE;
 }
 
+// Return true if the character has a key of the given number, false otherwise.
+int has_key(struct char_data *ch, int key_vnum)
+{
+  struct obj_data *o, *key;
+
+  // Check carried items.
+  for (o = ch->carrying; o; o = o->next_content) {
+    if (GET_OBJ_VNUM(o) == key_vnum)
+      return 1;
+
+    if (GET_OBJ_TYPE(o) == ITEM_KEYRING) {
+      for (key = o->contains; key; key = key->next_content) {
+        if (GET_OBJ_VNUM(key) == key_vnum)
+          return 1;
+      }
+    }
+  }
+
+  // Check worn items.
+  for (int x = 0; x < NUM_WEARS; x++) {
+    // Must exist.
+    if (!GET_EQ(ch, x))
+      continue;
+
+    // Direct match?
+    if (GET_OBJ_VNUM(GET_EQ(ch, x)) == key_vnum)
+      return 1;
+
+    // Keyring match?
+    if (GET_OBJ_TYPE(GET_EQ(ch, x)) == ITEM_KEYRING) {
+      for (key = GET_EQ(ch, x)->contains; key; key = key->next_content) {
+        if (GET_OBJ_VNUM(key) == key_vnum)
+          return 1;
+      }
+    }
+  }
+
+  return 0;
+}
 // Returns a pointer to the best workshop/facility of the requested type.
 struct obj_data *find_workshop(struct char_data * ch, int type)
 {
@@ -3387,24 +3500,76 @@ bool combine_ammo_boxes(struct char_data *ch, struct obj_data *from, struct obj_
     }
   }
 
-  // Restring it, as long as it's not already restrung. Use n_s_b so we don't accidentally donk someone's buf.
+  // Restring it, as long as it's not already restrung.
   if (!into->restring) {
-    char notification_string_buf[500];
-
     // Compose the new name.
     const char *restring = get_ammobox_default_restring(into);
 
     // Compose the notification string.
-    snprintf(notification_string_buf, sizeof(notification_string_buf), "The name '%s' probably doesn't fit anymore, so we'll call it '%s'.\r\n",
-      GET_OBJ_NAME(into),
-      restring
+    if (print_messages) {
+      send_to_char(ch, "The name '%s' probably doesn't fit anymore, so we'll call it '%s'.\r\n",
+        GET_OBJ_NAME(into),
+        restring
+      );
+    }
+
+    // Commit the change.
+    into->restring = str_dup(restring);
+  }
+
+  // Everything succeeded.
+  return TRUE;
+}
+
+bool combine_drugs(struct char_data *ch, struct obj_data *from, struct obj_data *into, bool print_messages) {
+  if (!ch || !from || !into) {
+    mudlog("SYSERR: combine_drugs received a null value.", ch, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+
+  if (GET_OBJ_TYPE(from) != ITEM_DRUG || GET_OBJ_TYPE(into) != ITEM_DRUG) {
+    mudlog("SYSERR: combine_drugs received something that was not a drug.", ch, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+
+  int drug_id = GET_OBJ_DRUG_TYPE(from);
+
+  if (drug_id != GET_OBJ_DRUG_TYPE(into)) {
+    mudlog("SYSERR: combine_drug received non-matching drugs.", ch, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+
+  if (print_messages) {
+    send_to_char(ch, "You mix the dose%s from %s into %s.\r\n",
+                 GET_OBJ_DRUG_DOSES(from) == 1 ? "" : "s",
+                 GET_OBJ_NAME(from),
+                 GET_OBJ_NAME(into));
+  }
+
+  GET_OBJ_DRUG_DOSES(into) += GET_OBJ_DRUG_DOSES(from);
+  GET_OBJ_DRUG_DOSES(from) = 0;
+
+  extract_obj(from);
+
+  // Restring it, as long as it's not already restrung.
+  if (!into->restring) {
+    // Compose the new name.
+    char restring[500];
+
+    snprintf(restring, sizeof(restring), "a box of %s %ss",
+      drug_types[drug_id].name,
+      drug_types[drug_id].delivery_method
     );
 
-    // Commit the change and notify the player.
-    into->restring = str_dup(restring);
+    if (print_messages) {
+      send_to_char(ch, "The name '%s' probably doesn't fit anymore, so we'll call it '%s'.\r\n",
+        GET_OBJ_NAME(into),
+        restring
+      );
+    }
 
-    if (print_messages)
-      send_to_char(notification_string_buf, ch);
+    // Commit the change.
+    into->restring = str_dup(restring);
   }
 
   // Everything succeeded.
@@ -4469,6 +4634,14 @@ int get_pilot_skill_for_veh(struct veh_data *veh) {
       return SKILL_PILOT_SHIP;
     case VEH_LTA:
       return SKILL_PILOT_LTA;
+    case VEH_SEMIBALLISTIC:
+      return SKILL_PILOT_SEMIBALLISTIC;
+    case VEH_SUBORBITAL:
+      return SKILL_PILOT_SUBORBITAL;
+    case VEH_TRACKED:
+      return SKILL_PILOT_TRACKED;
+    case VEH_WALKER:
+      return SKILL_PILOT_WALKER;
     default:
       {
         char oopsbuf[500];
@@ -4520,9 +4693,18 @@ int get_br_skill_for_veh(struct veh_data *veh) {
 
 // Rigger 3 p.61-62
 int calculate_vehicle_weight(struct veh_data *veh) {
+  int body = veh->body;
   int load;
 
-  switch (veh->body) {
+  // Try to parse out the prototype's body.
+  {
+    rnum_t real_veh = real_vehicle(veh->veh_number);
+    if (real_veh >= 0) {
+      body = veh_proto[real_veh].body;
+    }
+  }
+
+  switch (body) {
     case 0:
       load = 2;
       break;
@@ -4604,6 +4786,8 @@ void remove_vehicle_brain(struct veh_data *veh) {
       extract_char(tmp);
     }
   }
+
+  repair_vehicle_seating(veh);
 }
 
 struct obj_data *make_new_finished_part(int part_type, int mpcp, int rating=0) {
@@ -4754,6 +4938,80 @@ bool repair_vehicle_seating(struct veh_data *veh) {
 
   // No changes made.
   return FALSE;
+}
+
+bool is_voice_masked(struct char_data *ch) {
+  for (struct obj_data *obj = ch->cyberware; obj; obj = obj->next_content) {
+    if (GET_CYBERWARE_TYPE(obj) == CYB_VOICEMOD && GET_CYBERWARE_FLAGS(obj)) {
+      return TRUE;
+    }
+  }
+  if (AFF_FLAGGED(ch, AFF_VOICE_MODULATOR)) {
+    return TRUE;
+  }
+
+  return FALSE;
+}
+
+// Forces a character to perceive if they can.
+bool force_perception(struct char_data *ch) {
+  // No need to do this if they're already perceiving.
+  if (IS_ASTRAL(ch) || IS_DUAL(ch))
+    return TRUE;
+
+  switch (GET_TRADITION(ch)) {
+    case TRAD_SHAMANIC:
+    case TRAD_HERMETIC:
+      break;
+    case TRAD_ADEPT:
+      if (GET_POWER(ch, ADEPT_PERCEPTION) <= 0) {
+        send_to_char("You have no sense of the astral plane.\r\n", ch);
+        return FALSE;
+      }
+      break;
+    default:
+      if (!access_level(ch, LVL_ADMIN)) {
+        send_to_char("You have no sense of the astral plane.\r\n", ch);
+        return FALSE;
+      } else {
+        send_to_char("You abuse your staff powers to open your third eye.\r\n", ch);
+      }
+      break;
+  }
+
+  PLR_FLAGS(ch).SetBit(PLR_PERCEIVE);
+  send_to_char("Your physical body seems distant, as the astral plane slides into view.\r\n", ch);
+  return TRUE;
+}
+
+int get_focus_bond_cost(struct obj_data *obj) {
+  if (GET_OBJ_TYPE(obj) == ITEM_WEAPON) {
+    return (3 + GET_WEAPON_REACH(obj)) * GET_WEAPON_FOCUS_RATING(obj);
+  }
+
+  else if (GET_OBJ_TYPE(obj) == ITEM_FOCUS) {
+    switch (GET_FOCUS_TYPE(obj)) {
+      case FOCI_EXPENDABLE:
+        return 0;
+      case FOCI_SPEC_SPELL:
+      case FOCI_SUSTAINED:
+        return GET_FOCUS_FORCE(obj);
+      case FOCI_SPIRIT:
+        return GET_FOCUS_FORCE(obj) * 2;
+      case FOCI_SPELL_CAT:
+      case FOCI_SPELL_DEFENSE:
+        return GET_FOCUS_FORCE(obj) * 3;
+      case FOCI_POWER:
+        return GET_FOCUS_FORCE(obj) * 5;
+      default:
+        return 10000000;
+    }
+  }
+
+  else {
+    mudlog("SYSERR: Received non-focus to get_focus_bond_cost!", NULL, LOG_SYSLOG, TRUE);
+    return 1000000;
+  }
 }
 
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.

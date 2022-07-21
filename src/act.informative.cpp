@@ -62,6 +62,7 @@ extern int same_obj(struct obj_data * obj1, struct obj_data * obj2);
 extern int find_sight(struct char_data *ch);
 extern int belongs_to(struct char_data *ch, struct obj_data *obj);
 extern int calculate_vehicle_entry_load(struct veh_data *veh);
+extern unsigned int get_johnson_overall_max_rep(struct char_data *johnson);
 
 extern int get_weapon_damage_type(struct obj_data* weapon);
 
@@ -265,8 +266,9 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
   *buf = '\0';
   if ((mode == SHOW_MODE_ON_GROUND) && object->text.room_desc) {
     strlcpy(buf, CCHAR ? CCHAR : "", sizeof(buf));
-    if (object->graffiti)
+    if (object->graffiti) {
       strlcat(buf, object->graffiti, sizeof(buf));
+    }
     else {
       // Gun magazines get special consideration.
       if (GET_OBJ_TYPE(object) == ITEM_GUN_MAGAZINE && GET_MAGAZINE_BONDED_MAXAMMO(object)) {
@@ -434,7 +436,7 @@ void show_veh_to_char(struct veh_data * vehicle, struct char_data * ch)
         if ((vehicle->type == VEH_BIKE && vehicle->people) || vehicle->restring)
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s waits here", should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name));
         else
-          strlcat(buf, vehicle->description, sizeof(buf));
+          strlcat(buf, GET_VEH_ROOM_DESC(vehicle), sizeof(buf));
         break;
       case SPEED_IDLE:
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s idles here", should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name));
@@ -536,8 +538,10 @@ list_obj_to_char(struct obj_data * list, struct char_data * ch, int mode,
   struct obj_data *i;
   int num = 1;
   bool found;
+  bool found_graffiti;
 
   found = FALSE;
+  found_graffiti = FALSE;
 
   for (i = list; i; i = i->next_content)
   {
@@ -598,6 +602,10 @@ list_obj_to_char(struct obj_data * list, struct char_data * ch, int mode,
         show_obj_to_char(i, ch, mode);
       } else
         if (!corpse && !mode && !IS_OBJ_STAT(i, ITEM_EXTRA_CORPSE)) {
+          if ((GET_OBJ_VNUM(i) == OBJ_GRAFFITI) && (!found_graffiti) ) {
+            found_graffiti = TRUE;
+            send_to_char(ch, "^gSomeone has tagged the area:^n\r\n");
+          }
           if (num > 1) {
             send_to_char(ch, "(%d) ", num);
           }
@@ -1150,10 +1158,16 @@ void list_one_char(struct char_data * i, struct char_data * ch)
           }
         }
         if (MOB_HAS_SPEC(i, johnson)) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might have a job for you.%s^n\r\n",
-                   HSSH(i),
-                   already_printed ? " also" : "",
-                   SHOULD_SEE_TIPS(ch) ? " See ^YHELP JOB^y for instructions." : "");
+          if (get_johnson_overall_max_rep(i) >= GET_REP(ch)) {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might have a job for you.%s^n\r\n",
+                     HSSH(i),
+                     already_printed ? " also" : "",
+                     SHOULD_SEE_TIPS(ch) ? " See ^YHELP JOB^y for instructions." : "");
+          } else {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s has work for less-experienced 'runners.^n\r\n",
+                     HSSH(i),
+                     already_printed ? " also" : "");
+          }
           already_printed = TRUE;
         }
         if (MOB_HAS_SPEC(i, shop_keeper) || MOB_HAS_SPEC(i, terell_davis)) {
@@ -1662,7 +1676,7 @@ void look_in_veh(struct char_data * ch)
       do_auto_exits(ch);
       CCHAR = "^g";
       CGLOB = KGRN;
-      list_obj_to_char(veh->in_room->contents, ch, SHOW_MODE_ON_GROUND, FALSE, FALSE);
+      list_obj_to_char(veh->in_room->contents, ch, SHOW_MODE_ON_GROUND, FALSE, TRUE);
       CGLOB = KNRM;
       CCHAR = NULL;
       list_char_to_char(veh->in_room->people, ch);
@@ -2002,11 +2016,10 @@ void look_in_obj(struct char_data * ch, char *arg, bool exa)
   }
 
   // Find the specified thing. Vehicle will take priority over object.
+  bits = generic_find(arg, FIND_OBJ_INV | FIND_OBJ_ROOM | FIND_OBJ_EQUIP, ch, &dummy, &obj);
   if (ch->in_veh) {
-    bits = generic_find(arg, FIND_OBJ_INV | FIND_OBJ_ROOM | FIND_OBJ_EQUIP, ch, &dummy, &obj);
     veh = get_veh_list(arg, ch->in_veh->carriedvehs, ch);
   } else {
-    bits = generic_find(arg, FIND_OBJ_INV | FIND_OBJ_ROOM | FIND_OBJ_EQUIP, ch, &dummy, &obj);
     veh = get_veh_list(arg, ch->in_room->vehicles, ch);
   }
 
@@ -2815,7 +2828,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       if (GET_PROGRAM_TYPE(j) == SOFT_ATTACK)
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " Its damage code is ^c%s^n.", GET_WOUND_NAME(GET_OBJ_VAL(j, 3)));
 
-      if (GET_PROGRAM_TYPE(j) >= SOFT_ASIST_COLD || GET_PROGRAM_TYPE(j) < SOFT_SENSOR) {
+      if (GET_OBJ_VNUM(j) == OBJ_BLANK_PROGRAM && (GET_PROGRAM_TYPE(j) >= SOFT_ASIST_COLD || GET_PROGRAM_TYPE(j) < SOFT_SENSOR)) {
         if (GET_OBJ_TIMER(j) < 0)
           strlcat(buf, " It was ruined in cooking and is useless.\r\n", sizeof(buf));
         else if (!GET_OBJ_TIMER(j))
@@ -3058,7 +3071,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
           strlcat(buf, "grants +1 Intelligence for a long time.", sizeof(buf));
           break;
         case DRUG_BLISS:
-          strlcat(buf, "is a tranquilizing narcotic that reduces Reaction by 1, adds 1 to all target numbers, and grants pain resistance.", sizeof(buf));
+          strlcat(buf, "is a tranquilizing narcotic that reduces Reaction by 1, adds +1 to all target numbers (lower is better), and grants pain resistance.", sizeof(buf));
           break;
         case DRUG_BURN:
           strlcat(buf, "is a synthahol intoxicant beverage.", sizeof(buf));
@@ -3213,9 +3226,14 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
 
       // Vals 4 and 6
       sprintbit(GET_VEHICLE_MOD_DESIGNED_FOR_FLAGS(j), veh_types, buf2, sizeof(buf2));
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt has been designed to fit vehicles of type: ^c%s^n, and installs to the ^c%s^n.",
-               buf2,
-               mod_name[GET_VEHICLE_MOD_LOCATION(j)]);
+      if (GET_VEHICLE_MOD_TYPE(j) == TYPE_MOUNT) {
+        strlcat(buf, "\r\nIt fits all vehicles and installs to the mount slot.\r\n", sizeof(buf));
+      } else {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt has been designed to fit vehicles of type: ^c%s^n, and installs to the ^c%s^n.",
+                 buf2,
+                 mod_name[GET_VEHICLE_MOD_LOCATION(j)]);
+      }
+
       break;
     case ITEM_DESIGN:
       if (GET_OBJ_VAL(j, 0) == 5) {
@@ -3249,11 +3267,17 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
         break;
       }
       if (GET_OBJ_VNUM(j) == OBJ_VEHCONTAINER) {
-        strlcat(buf, "\r\nIt's a carried vehicle. You can DROP it on any road or garage.", sizeof(buf));
+        strlcat(buf, "\r\nIt's a carried vehicle. You can ##^WDROP^n it on any road or garage.", sizeof(buf));
         break;
       }
       if (GET_OBJ_VNUM(j) == OBJ_SHOPCONTAINER) {
-        strlcat(buf, "\r\nIt's a packaged-up bit of cyberware or bioware. See HELP CYBERDOC for what you can do with it.", sizeof(buf));
+        strlcat(buf, "\r\nIt's a packaged-up bit of cyberware or bioware. See ##^WHELP CYBERDOC^n for what you can do with it.", sizeof(buf));
+        break;
+      }
+      if (GET_OBJ_VNUM(j) == OBJ_ANTI_DRUG_CHEMS) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt's a bottle of anti-craving chemicals with ^c%d^n dose%s left. If you have it on you during guided withdrawal, you won't risk a fugue state. See ##^WHELP ADDICTION^n for more.",
+                 GET_CHEMS_QTY(j),
+                 GET_CHEMS_QTY(j) == 1 ? "" : "s");
         break;
       }
       // fallthrough
@@ -4846,7 +4870,7 @@ ACMD(do_who)
   struct descriptor_data *d;
   struct char_data *tch;
   int sort = LVL_MAX, num_can_see = 0, level = GET_LEVEL(ch);
-  bool mortal = FALSE, hardcore = FALSE, quest = FALSE, pker = FALSE, immort = FALSE, ooc = FALSE, newbie = FALSE;
+  bool mortal = FALSE, hardcore = FALSE, quest = FALSE, pker = FALSE, immort = FALSE, ooc = FALSE, newbie = FALSE, drugs = FALSE;
   int output_header;
   int num_in_socialization_rooms = 0;
 
@@ -4873,6 +4897,8 @@ ACMD(do_who)
       ooc = 1;
     else if (is_abbrev(arg, "newbie"))
       newbie = 1;
+    else if (access_level(ch, LVL_BUILDER) && is_abbrev(arg, "drugs"))
+      drugs = 1;
     else {
       send_to_char(WHO_FORMAT, ch);
       return;
@@ -4909,6 +4935,8 @@ ACMD(do_who)
       if (ooc && (PRF_FLAGGED(tch, PRF_NOOOC) || PLR_FLAGGED(tch, PLR_NOT_YET_AUTHED)))
         continue;
       if (newbie && !PLR_FLAGGED(tch, PLR_NEWBIE))
+        continue;
+      if (drugs && !PLR_FLAGGED(tch, PLR_ENABLED_DRUGS))
         continue;
       if (GET_INCOG_LEV(tch) > GET_LEVEL(ch))
         continue;
@@ -5412,6 +5440,12 @@ void perform_mortal_where(struct char_data * ch, char *arg)
       }
 
       send_to_char(")\r\n", ch);
+    }
+
+    if (ch->in_room && ROOM_FLAGGED(ch->in_room, ROOM_ENCOURAGE_CONGREGATION)) {
+      GET_PLAYER_WHERE_COMMANDS(ch) = 0;
+    } else if ((++GET_PLAYER_WHERE_COMMANDS(ch)) % 5 == 0) {
+      send_to_char(ch, "(OOC: You've been checking the wherelist a lot-- why not go join in?)\r\n");
     }
   }
 }
@@ -5934,10 +5968,12 @@ ACMD(do_scan)
               char desc_line[200];
               strlcpy(desc_line, "", sizeof(desc_line));
 
-              if (list->mob_specials.quest_id == GET_IDNUM(ch)) {
-                strlcat(desc_line, "(quest) ", sizeof(desc_line));
-              } else if (list->mob_specials.quest_id != 0) {
-                strlcat(desc_line, "(protected) ", sizeof(desc_line));
+              if (list->mob_specials.quest_id) {
+                if (list->mob_specials.quest_id == GET_IDNUM(ch)) {
+                  strlcat(desc_line, "(quest) ", sizeof(desc_line));
+                } else {
+                  strlcat(desc_line, "(protected) ", sizeof(desc_line));
+                }
               }
 
               if (IS_AFFECTED(list, AFF_INVISIBLE) || IS_AFFECTED(list, AFF_IMP_INVIS) || IS_AFFECTED(list, AFF_SPELLINVIS) || IS_AFFECTED(list, AFF_SPELLIMPINVIS)) {
@@ -6254,12 +6290,19 @@ ACMD(do_status)
     }
     else if (GET_DRUG_ADDICT(targ, i) > 0) {
       if (GET_DRUG_STAGE(targ, i) == DRUG_STAGE_GUIDED_WITHDRAWAL) {
-        send_to_char(ch, "  ^y%s Withdrawal (Guided): %s remaining^n\r\n", drug_types[i].name, get_time_until_withdrawal_ends(ch, i));
+        send_to_char(ch, "  ^y%s Withdrawal (Guided, Edge %d): %s remaining^n\r\n",
+                     drug_types[i].name,
+                     GET_DRUG_ADDICTION_EDGE(targ, i),
+                     get_time_until_withdrawal_ends(targ, i));
       } else if (GET_DRUG_STAGE(targ, i) == DRUG_STAGE_FORCED_WITHDRAWAL) {
-        send_to_char(ch, "  ^Y%s Withdrawal (Forced): %s remaining^n\r\n", drug_types[i].name, get_time_until_withdrawal_ends(ch, i));
+        send_to_char(ch, "  ^Y%s Withdrawal (Forced, Edge %d): %s remaining^n\r\n",
+                     drug_types[i].name,
+                     GET_DRUG_ADDICTION_EDGE(targ, i),
+                     get_time_until_withdrawal_ends(targ, i));
       } else {
-        send_to_char(ch, "  Addicted to %s\r\n", drug_types[i].name);
+        send_to_char(ch, "  Addicted to %s (Edge: %d)\r\n", drug_types[i].name, GET_DRUG_ADDICTION_EDGE(targ, i));
       }
+      printed = TRUE;
     }
   }
 
@@ -6359,10 +6402,10 @@ ACMD(do_status)
       else
         send_to_char(ch, "%s is using a total of %d points of foci. If this gets above %d, they'll be at risk of geas.\r\n", GET_CHAR_NAME(targ), force, (GET_REAL_MAG(targ) / 100) * 2);
     }
+  }
 
-    if (GET_LEVEL(ch) > LVL_MORTAL) {
-      render_drug_info_for_targ(ch, targ);
-    }
+  if (GET_LEVEL(ch) > LVL_MORTAL) {
+    render_drug_info_for_targ(ch, targ);
   }
 }
 
@@ -6417,88 +6460,110 @@ ACMD(do_karma){
   send_to_char(ch, "Your current TKE is %d, and you have %d reputation and %d notoriety.\r\n", GET_TKE(ch), GET_REP(ch), GET_NOT(ch));
 }
 
-#define LEADERBOARD_SYNTAX_STRING "Syntax: leaderboard <option>, where option is one of: tke, reputation, notoriety, nuyen, syspoints, blocks\r\n"
+#define STAFF_LEADERBOARD_SYNTAX_STRING "Syntax: leaderboard <option>, where option is one of: tke, reputation, notoriety, nuyen, syspoints, blocks, hardcore\r\n"
+#define MORT_LEADERBOARD_SYNTAX_STRING "Syntax: leaderboard <option>, where option is one of: hardcore\r\n"
 ACMD(do_leaderboard) {
   MYSQL_RES *res;
   MYSQL_ROW row;
+  int counter = 1;
 
-  // leaderboard <tke|rep|notor|nuyen|sysp>
+  // leaderboard <tke|rep|notor|nuyen|sysp|blocks>
   skip_spaces(&argument);
   if (!*argument) {
-    send_to_char(LEADERBOARD_SYNTAX_STRING, ch);
+    send_to_char(GET_LEVEL(ch) > LVL_MORTAL ? STAFF_LEADERBOARD_SYNTAX_STRING : MORT_LEADERBOARD_SYNTAX_STRING, ch);
+    return;
+  }
+
+  if (!strncmp(argument, "hardcore", strlen(argument))) {
+    mysql_wrapper(mysql, "SELECT name, tke FROM pfiles "
+                         "  WHERE tke > 0 "
+                         "  AND rank = 1 "
+                         "  AND hardcore = 1 "
+                         "  AND name != 'deleted' "
+                         "ORDER BY tke DESC LIMIT 10;");
+
+    if (!(res = mysql_use_result(mysql))) {
+      send_to_char(ch, "Sorry, the leaderboard system is offline at the moment.\r\n");
+      return;
+    }
+
+    send_to_char(ch, "^CTop 10 hardcore characters by TKE:^n\r\n");
+
+    while ((row = mysql_fetch_row(res))) {
+      send_to_char(ch, "%2d) %-20s: %-15s\r\n", counter++, row[0], row[1]);
+    }
+    if (counter == 1)
+      send_to_char(ch, "...Nobody! Looks like a great place to make your mark.\r\n");
+
+    mysql_free_result(res);
     return;
   }
 
   const char *display_string = NULL, *query_string = NULL;
 
-  if (!strncmp(argument, "tke", strlen(argument))) {
-    display_string = "TKE";
-    query_string = "tke";
-  }
+  if (GET_LEVEL(ch) > LVL_MORTAL) {
+    if (!strncmp(argument, "tke", strlen(argument))) {
+      display_string = "TKE";
+      query_string = "tke";
+    }
 
-  else if (!strncmp(argument, "reputation", strlen(argument))) {
-    display_string = "reputation";
-    query_string = "rep";
-  }
+    else if (!strncmp(argument, "reputation", strlen(argument))) {
+      display_string = "reputation";
+      query_string = "rep";
+    }
 
-  else if (!strncmp(argument, "notoriety", strlen(argument))) {
-    display_string = "notoriety";
-    query_string = "notor";
-  }
+    else if (!strncmp(argument, "notoriety", strlen(argument))) {
+      display_string = "notoriety";
+      query_string = "notor";
+    }
 
-  else if (!strncmp(argument, "nuyen", strlen(argument))) {
-    display_string = "nuyen";
-    query_string = "bank + cash";
-  }
+    else if (!strncmp(argument, "nuyen", strlen(argument))) {
+      display_string = "nuyen";
+      query_string = "bank + cash";
+    }
 
-  else if (!strncmp(argument, "syspoints", strlen(argument))) {
-    display_string = "syspoints";
-    query_string = "syspoints";
-  }
+    else if (!strncmp(argument, "syspoints", strlen(argument))) {
+      display_string = "syspoints";
+      query_string = "syspoints";
+    }
 
-  else if (!strncmp(argument, "blocks", strlen(argument))) {
-    // Open the second DB connection for concurrent lookups.
-    MYSQL *mysqlextra = mysql_init(NULL);
-    if (!mysql_real_connect(mysqlextra, mysql_host, mysql_user, mysql_password, mysql_db, 0, NULL, 0)) {
-      send_to_char("Couldn't open extra DB connection-- aborting.\r\n", ch);
+    else if (!strncmp(argument, "blocks", strlen(argument)) || !strncmp(argument, "ignores", strlen(argument))) {
+      mysql_wrapper(mysql, "SELECT p.name, i.vict_idnum, COUNT(i.vict_idnum) AS `value_occurrence`"
+                           "  FROM pfiles_ignore_v2 AS i"
+                           "  JOIN pfiles AS p"
+                           "    ON i.vict_idnum = p.idnum"
+                           "  GROUP BY vict_idnum"
+                           "  ORDER BY `value_occurrence` DESC LIMIT 10;");
+      if (!(res = mysql_use_result(mysql))) {
+        send_to_char(ch, "Sorry, the leaderboard system is offline at the moment.\r\n");
+        return;
+      }
+
+      send_to_char(ch, "^CTop 10 most-blocked characters:^n\r\n");
+      while ((row = mysql_fetch_row(res))) {
+        int blocks = atoi(row[2]);
+
+        send_to_char(ch, "%2d) %-20s: %d block%s.\r\n", counter++, row[0], blocks, blocks != 1 ? "s" : "");
+      }
+
+      mysql_free_result(res);
       return;
     }
-
-    mysql_wrapper(mysqlextra, "SELECT vict_idnum, COUNT(vict_idnum) AS `value_occurrence` FROM pfiles_ignore_v2 GROUP BY vict_idnum ORDER BY `value_occurrence` DESC LIMIT 10");
-    if (!(res = mysql_use_result(mysqlextra))) {
-      send_to_char(ch, "Sorry, the leaderboard system is offline at the moment.\r\n");
-      return;
-    }
-
-    send_to_char(ch, "^CTop 10 most-blocked characters:^n\r\n");
-    int counter = 1;
-    while ((row = mysql_fetch_row(res))) {
-      long idnum = atol(row[0]);
-      int blocks = atoi(row[1]);
-
-      const char *name = get_player_name(idnum);
-      send_to_char(ch, "%2d) %-20s: %d block%s.\r\n", counter++, name, blocks, blocks != 1 ? "s" : "");
-      delete [] name;
-    }
-
-    mysql_free_result(res);
-    mysql_close(mysqlextra);
-    return;
   }
 
-  else {
-    send_to_char(LEADERBOARD_SYNTAX_STRING, ch);
+  if (!display_string || !query_string){
+    send_to_char(GET_LEVEL(ch) > LVL_MORTAL ? STAFF_LEADERBOARD_SYNTAX_STRING : MORT_LEADERBOARD_SYNTAX_STRING, ch);
     return;
   }
 
   // Sanitization not required here-- they're constant strings.
   snprintf(buf, sizeof(buf), "SELECT name, %s FROM pfiles "
-               "  WHERE %s > 0 "
-               "  AND rank = 1 "
-               "  AND TKE > 0 "
-               "  AND name != 'deleted' "
-               "ORDER BY %s DESC LIMIT 10;",
-               query_string, query_string, query_string);
+                             "  WHERE %s > 0 "
+                             "  AND rank = 1 "
+                             "  AND TKE > 0 "
+                             "  AND name != 'deleted' "
+                             "ORDER BY %s DESC LIMIT 10;",
+                             query_string, query_string, query_string);
 
   mysql_wrapper(mysql, buf);
   if (!(res = mysql_use_result(mysql))) {
@@ -6509,7 +6574,6 @@ ACMD(do_leaderboard) {
   }
 
   send_to_char(ch, "^CTop 10 characters by %s:^n\r\n", display_string);
-  int counter = 1;
   while ((row = mysql_fetch_row(res))) {
     send_to_char(ch, "%2d) %-20s: %-15s\r\n", counter++, row[0], row[1]);
   }

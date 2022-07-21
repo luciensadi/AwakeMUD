@@ -85,6 +85,9 @@ int get_part_maximum_rating(struct obj_data *part) {
     case PART_CELLULAR:
     case PART_SATELLITE:
       return mpcp;
+    case PART_ASIST_HOT:
+    case PART_RAS_OVERRIDE:
+      return 0;
   }
 
   char oopsbuf[1000];

@@ -198,6 +198,8 @@ void objList::UpdateCounters(void)
     mysql_free_result(res);
   }
 
+  time_t current_time = time(0);
+
   // Iterate through the list.
   for (temp = head; temp; temp = next) {
     next = temp->next;
@@ -208,16 +210,18 @@ void objList::UpdateCounters(void)
       continue;
     }
 
-    // Decay evaluate programs.
-    if (GET_OBJ_TYPE(OBJ) == ITEM_PROGRAM && GET_OBJ_VAL(OBJ, 0) == SOFT_EVALUATE) {
+    // Decay evaluate programs. This only fires when they're completed, as non-finished software is ITEM_DESIGN instead.
+    if (GET_OBJ_TYPE(OBJ) == ITEM_PROGRAM && GET_PROGRAM_TYPE(OBJ) == SOFT_EVALUATE) {
       if (!GET_OBJ_VAL(OBJ, 5)) {
-        GET_OBJ_VAL(OBJ, 5) = time(0);
+        GET_OBJ_VAL(OBJ, 5) = current_time;
         GET_OBJ_VAL(OBJ, 6) = GET_OBJ_VAL(OBJ, 5);
-      } else if (GET_OBJ_VAL(OBJ, 5) < time(0) - SECS_PER_REAL_DAY && !(OBJ->carried_by && IS_NPC(OBJ->carried_by))) {
-        GET_OBJ_VAL(OBJ, 1) -= number(0, 3);
-        GET_OBJ_VAL(OBJ, 5) = time(0);
-        if (GET_OBJ_VAL(OBJ, 1) < 0)
-          GET_OBJ_VAL(OBJ, 1) = 0;
+      }
+      // Decay Evaluate program ratings by one every two IRL days.
+      else if (GET_OBJ_VAL(OBJ, 5) < current_time - (SECS_PER_REAL_DAY * 2) && !(OBJ->carried_by && IS_NPC(OBJ->carried_by))) {
+        GET_PROGRAM_RATING(OBJ)--;
+        GET_OBJ_VAL(OBJ, 5) = current_time;
+        if (GET_PROGRAM_RATING(OBJ) < 0)
+          GET_PROGRAM_RATING(OBJ) = 0;
       }
       continue;
     }
@@ -352,8 +356,13 @@ void objList::UpdateCounters(void)
         else if (temp->data->worn_by)
           act("$p decays in your hands.", FALSE, temp->data->worn_by, temp->data, 0, TO_CHAR);
         else if (temp->data->in_room && temp->data->in_room->people) {
-          act("$p is taken away by the coroner.", TRUE, temp->data->in_room->people, temp->data, 0, TO_ROOM);
-          act("$p is taken away by the coroner.", TRUE, temp->data->in_room->people, temp->data, 0, TO_CHAR);
+          if (str_str("remains of", temp->data->text.room_desc)) {
+            act("$p are taken away by the coroner.", TRUE, temp->data->in_room->people, temp->data, 0, TO_ROOM);
+            act("$p are taken away by the coroner.", TRUE, temp->data->in_room->people, temp->data, 0, TO_CHAR);
+          } else {
+            act("$p is taken away by the coroner.", TRUE, temp->data->in_room->people, temp->data, 0, TO_ROOM);
+            act("$p is taken away by the coroner.", TRUE, temp->data->in_room->people, temp->data, 0, TO_CHAR);
+          }
 
           if (ROOM_FLAGGED(temp->data->in_room, ROOM_CORPSE_SAVE_HACK)) {
             bool should_clear_flag = TRUE;

@@ -1038,6 +1038,22 @@ int calc_karma(struct char_data *ch, struct char_data *vict)
   return base;
 }
 
+bool eligible_for_karma_gain(struct char_data *ch) {
+  if (!ch) {
+    mudlog("SYSERR: Received NULL character to eligible_for_karma_gain()!", ch, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+
+  if (IS_PC_CONJURED_ELEMENTAL(ch) || IS_SPIRIT(ch))
+    return FALSE;
+
+  // Chargen characters don't get karma.
+  if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED))
+    return FALSE;
+
+  return TRUE;
+}
+
 void perform_group_gain(struct char_data * ch, int base, struct char_data * victim)
 {
   int share;
@@ -1047,8 +1063,10 @@ void perform_group_gain(struct char_data * ch, int base, struct char_data * vict
     return;
 
   share = MIN(max_exp_gain, MAX(1, base));
-  if (!IS_NPC(ch))
+  if (!IS_NPC(ch)) {
+    // Cap XP gain to 0.20 karma if you're a newbie, otherwise notor * 2
     share = MIN(base, (int) (PLR_FLAGGED(ch, PLR_NEWBIE) ? 20 : GET_NOT(ch) * 2));
+  }
 
   /* psuedo-fix of the group with a newbie to get more exp exploit */
   if ( !PLR_FLAGGED(ch, PLR_NEWBIE) )
@@ -1058,12 +1076,13 @@ void perform_group_gain(struct char_data * ch, int base, struct char_data * vict
 
   if ( share >= (200) || access_level(ch, LVL_BUILDER) )
   {
-    snprintf(buf, sizeof(buf),"%s gains %.2f karma from killing %s.", GET_CHAR_NAME(ch),
+    snprintf(buf, sizeof(buf),"%s gains %.2f karma from killing %s (group share).", GET_CHAR_NAME(ch),
             (double)share/100.0, GET_CHAR_NAME(victim));
     mudlog(buf, ch, LOG_DEATHLOG, TRUE);
   }
   if ( IS_NPC( victim ) )
   {
+    // TODO: If you end up implementing value_death_karma (what even is this?), check to make sure there are no exploits around farming projections/spirits
     extern struct char_data *mob_proto;
     mob_proto[GET_MOB_RNUM(victim)].mob_specials.value_death_karma += share;
   }
@@ -1088,7 +1107,9 @@ void group_gain(struct char_data * ch, struct char_data * victim)
 
   for (f = k->followers; f; f = f->next)
     if (IS_AFFECTED(f->follower, AFF_GROUP)
-        && f->follower->in_room == ch->in_room) {
+        && f->follower->in_room == ch->in_room
+        && eligible_for_karma_gain(f->follower))
+    {
       if (GET_NOT(high) < GET_NOT(f->follower))
         high = f->follower;
       tot_members++;
@@ -1988,23 +2009,37 @@ void damage_obj(struct char_data *ch, struct obj_data *obj, int power, int type)
     mudlog(buf, ch, LOG_SYSLOG, TRUE);
     delete [] representation;
 
-    // Disgorge contents, except for pocsecs.
-    if (GET_OBJ_SPEC(obj) != pocket_sec) {
-      for (temp = obj->contains; temp; temp = next) {
-        next = temp->next_content;
-        obj_from_obj(temp);
-        if ((IS_OBJ_STAT(obj, ITEM_EXTRA_CORPSE) && !GET_OBJ_VAL(obj, 4) && GET_OBJ_TYPE(temp) != ITEM_MONEY)
-            || GET_OBJ_VNUM(obj) == OBJ_POCKET_SECRETARY_FOLDER)
-        {
-          extract_obj(temp);
-        } else if (vict)
-          obj_to_char(temp, vict);
-        else if (obj->in_room)
-          obj_to_room(temp, obj->in_room);
-        else
-          extract_obj(temp);
-      }
+    // Disgorge contents.
+    switch (GET_OBJ_TYPE(obj)) {
+      case ITEM_WEAPON:
+      case ITEM_FIREWEAPON:
+      case ITEM_CUSTOM_DECK:
+      case ITEM_CYBERDECK:
+      case ITEM_VEHCONTAINER:
+      case ITEM_SHOPCONTAINER:
+      case ITEM_PART:
+        // We don't disgorge these. Doing so causes bugs.
+        break;
+      default:
+        if (GET_OBJ_SPEC(obj) != pocket_sec) {
+          for (temp = obj->contains; temp; temp = next) {
+            next = temp->next_content;
+            obj_from_obj(temp);
+            if ((IS_OBJ_STAT(obj, ITEM_EXTRA_CORPSE) && !GET_OBJ_VAL(obj, 4) && GET_OBJ_TYPE(temp) != ITEM_MONEY)
+                || GET_OBJ_VNUM(obj) == OBJ_POCKET_SECRETARY_FOLDER)
+            {
+              extract_obj(temp);
+            } else if (vict)
+              obj_to_char(temp, vict);
+            else if (obj->in_room)
+              obj_to_room(temp, obj->in_room);
+            else
+              extract_obj(temp);
+          }
+        }
+        break;
     }
+
     extract_obj(obj);
   }
 }
@@ -2405,6 +2440,9 @@ void gen_death_msg(struct char_data *ch, struct char_data *vict, int attacktype)
           break;
       }
       break;
+    case TYPE_POISON:
+      WRITE_DEATH_MESSAGE("%s drank themself to death. {%s (%ld)}");
+      break;
     default:
       if (ch == vict)
         snprintf(buf2, sizeof(buf2), "%s died (cause uncertain-- damage type %d). {%s (%ld)}",
@@ -2598,6 +2636,8 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
       snprintf(rbuf, sizeof(rbuf), "Drug damage (%s: ", GET_CHAR_NAME(ch));
     } else if (attacktype == TYPE_BIOWARE) {
       snprintf(rbuf, sizeof(rbuf), "Bioware damage (%s: ", GET_CHAR_NAME(ch));
+    } else if (attacktype == TYPE_POISON) {
+      snprintf(rbuf, sizeof(rbuf), "Poison damage (%s: ", GET_CHAR_NAME(ch));
     } else {
       snprintf(rbuf, sizeof(rbuf), "Self-damage (%s: ", GET_CHAR_NAME(ch));
     }
@@ -2738,7 +2778,7 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
   if (IS_PROJECT(victim) && victim->desc && victim->desc->original)
     real_body = victim->desc->original;
 
-  if (attacktype != TYPE_BIOWARE && attacktype != TYPE_DRUGS) {
+  if (attacktype != TYPE_BIOWARE && attacktype != TYPE_DRUGS && attacktype != TYPE_POISON) {
     for (bio = real_body->bioware; bio; bio = bio->next_content) {
       if (GET_BIOWARE_TYPE(bio) == BIO_PLATELETFACTORY && dam >= 3 && is_physical)
         dam--;
@@ -2820,7 +2860,7 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
     }
 
     // Under Hyper, you take 50% more damage as stun damage, rounded up.
-    if (GET_DRUG_STAGE(victim, DRUG_HYPER) == DRUG_STAGE_ONSET && attacktype != TYPE_DRUGS) {
+    if (GET_DRUG_STAGE(victim, DRUG_HYPER) == DRUG_STAGE_ONSET && (attacktype != TYPE_DRUGS && attacktype != TYPE_BIOWARE && attacktype != TYPE_POISON)) {
       if (damage_without_message(victim, victim, dam / 2 + dam % 2, TYPE_DRUGS, FALSE)) {
         return TRUE;
       }
@@ -3042,9 +3082,16 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
       if (!PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
         bool need_group_gain = FALSE;
         if (IS_AFFECTED(ch, AFF_GROUP)) {
-          for (struct follow_type *f = ch->followers; f && !need_group_gain; f = f->next)
-            if (IS_AFFECTED(f->follower, AFF_GROUP) && f->follower->in_room == ch->in_room)
+          for (struct follow_type *f = ch->followers; f; f = f->next) {
+            if (IS_AFFECTED(f->follower, AFF_GROUP)
+                && f->follower->in_room == ch->in_room
+                && !IS_PC_CONJURED_ELEMENTAL(f->follower)
+                && !IS_SPIRIT(f->follower))
+            {
               need_group_gain = TRUE;
+              break;
+            }
+          }
         }
 
         if (need_group_gain) {
@@ -5548,8 +5595,6 @@ void chkdmg(struct veh_data * veh)
   } else if (veh->damage < VEH_DAM_THRESHOLD_DESTROYED) {
     send_to_veh("The engine starts spewing smoke and flames.\r\n", veh, NULL, TRUE);
   } else {
-    struct char_data *i, *next;
-    struct obj_data *obj, *nextobj;
     int damage_rating, damage_tn;
     extern int max_npc_vehicle_lootwreck_time;
       
@@ -5605,6 +5650,7 @@ void chkdmg(struct veh_data * veh)
       damage_tn = 4;
     }
 
+    // Write purgelogs for player vehicle kills.
     if (veh->owner) {
       mudlog("Writing player vehicle contents to purgelog-- destroyed via standard damage.", NULL, LOG_WRECKLOG, TRUE);
       mudlog("Writing player vehicle contents to purgelog-- destroyed via standard damage.", NULL, LOG_PURGELOG, TRUE);
@@ -5614,8 +5660,11 @@ void chkdmg(struct veh_data * veh)
     if (veh->rigger) {
       send_to_char("Your mind is blasted with pain as your vehicle is wrecked.\r\n", veh->rigger);
       if (!damage(veh->rigger, veh->rigger, convert_damage(stage(-success_test(GET_WIL(veh->rigger), 6), SERIOUS)), TYPE_CRASH, MENTAL)) {
-        veh->rigger->char_specials.rigging = NULL;
-        PLR_FLAGS(veh->rigger).RemoveBit(PLR_REMOTE);
+        // If they got knocked out, they've already broken off from rigging.
+        if (veh->rigger) {
+          veh->rigger->char_specials.rigging = NULL;
+          PLR_FLAGS(veh->rigger).RemoveBit(PLR_REMOTE);
+        }
       }
       veh->rigger = NULL;
     }
@@ -5626,16 +5675,31 @@ void chkdmg(struct veh_data * veh)
     veh->dest = 0;
 
     if (veh->towing) {
-      veh_to_room(veh->towing, veh->in_room);
+      if (veh->in_room) {
+        veh_to_room(veh->towing, veh->in_room);
+      } else if (veh->in_veh) {
+        veh_to_veh(veh->towing, veh->in_veh);
+      } else {
+        mudlog("SYSERR: Vehicle with a towed veh was neither in room nor veh! Sending towed vehicle to Dante's.", NULL, LOG_SYSLOG, TRUE);
+        veh_to_room(veh->towing, &world[real_room(RM_DANTES_GARAGE)]);
+      }
       veh->towing = NULL;
     }
 
     // Dump out the people in the vehicle and set their relevant values.
-    for (i = veh->people; i; i = next) {
+    for (struct char_data *i = veh->people, *next; i; i = next) {
       next = i->next_in_veh;
       stop_manning_weapon_mounts(i, FALSE);
       char_from_room(i);
-      char_to_room(i, veh->in_room);
+      if (veh->in_room) {
+        char_to_room(i, veh->in_room);
+      } else if (veh->in_veh) {
+        char_to_veh(veh->in_veh, i);
+      } else {
+        mudlog("SYSERR: Destroyed vehicle had no in_room or in_veh! Disgorging occupant to Dante's.", i, LOG_SYSLOG, TRUE);
+        char_to_room(i, &world[real_room(RM_DANTES_GARAGE)]);
+      }
+
       // TODO: What about the other flags for people who are sitting in the back working on something?
       AFF_FLAGS(i).RemoveBits(AFF_PILOT, AFF_RIG, ENDBIT);
 
@@ -5646,13 +5710,22 @@ void chkdmg(struct veh_data * veh)
     }
 
     // Dump out and destroy objects.
-    for (obj = veh->contents; obj; obj = nextobj) {
+    for (struct obj_data *obj = veh->contents, *nextobj; obj; obj = nextobj) {
       nextobj = obj->next_content;
       switch(number(0, 2)) {
           /* case 0: the item stays in the vehicle */
+        case 0:
+          break;
         case 1:
           obj_from_room(obj);
-          obj_to_room(obj, veh->in_room);
+          if (veh->in_room) {
+            obj_to_room(obj, veh->in_room);
+          } else if (veh->in_veh) {
+            obj_to_veh(obj, veh->in_veh);
+          } else {
+            mudlog("SYSERR: Destroyed veh had no in_room or in_veh! Disgorging object to Dante's.", NULL, LOG_SYSLOG, TRUE);
+            obj_to_room(obj, &world[real_room(RM_DANTES_GARAGE)]);
+          }
           break;
         case 2:
           extract_obj(obj);
@@ -6118,10 +6191,13 @@ bool mount_fire(struct char_data *ch)
       // If nobody's manning it and it has a gun...
       if (!mount->worn_by && (gun = get_mount_weapon(mount))) {
         // Fire at the enemy, assuming we're fighting it.
-        if (mount->targ && FIGHTING(ch) == mount->targ)
-          return hit_with_multiweapon_toggle(ch, mount->targ, gun, NULL, get_mount_ammo(mount), num_mounts > 1);
+        if (mount->targ && FIGHTING(ch) == mount->targ) {
+          if (hit_with_multiweapon_toggle(ch, mount->targ, gun, NULL, get_mount_ammo(mount), num_mounts > 1))
+            return TRUE;
+        }
         else if (mount->tveh && FIGHTING_VEH(ch) == mount->tveh) {
-          return vcombat(ch, mount->tveh);
+          if (vcombat(ch, mount->tveh))
+            return TRUE;
         }
       }
     }

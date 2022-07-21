@@ -617,6 +617,7 @@ ACMD(do_upgrade)
       case TYPE_ROLLBARS:
       case TYPE_TIRES:
       case TYPE_MISC:
+      case TYPE_POKEYSTICK:
         target = 3;
         break;
       default:
@@ -2125,6 +2126,10 @@ ACMD(do_tow)
     send_to_char(ch, "You don't see any vehicles named '%s' here.\r\n", argument);
     return;
   }
+
+  // Purge the vehicle brain if one exists (otherwise it can't be towed)
+  remove_vehicle_brain(tveh);
+
   if (tveh->type == VEH_BIKE)
     send_to_char("Try as you might, you can't seem to balance it. You'll have to ^WPUSH^n that into the back instead.\r\n", ch);
   else if (tveh->locked && tveh->type != VEH_DRONE)
@@ -2140,6 +2145,20 @@ ACMD(do_tow)
   else if (veh->towing)
     send_to_char("Towing a vehicle that's towing another vehicle isn't very safe!\r\n", ch);
   else {
+    // If anyone is attacking the vehicle, you can't tow it.
+    for (struct char_data *check = tveh->in_room ? tveh->in_room->people : tveh->in_veh->people;
+         check;
+         check = tveh->in_room ? check->next_in_room : check->next_in_veh)
+    {
+      if (FIGHTING_VEH(check) == veh) {
+        send_to_char(ch, "You can't tow something while under fire!\r\n");
+        return;
+      }
+      if (FIGHTING_VEH(check) == tveh) {
+        send_to_char(ch, "You can't tow a vehicle that's under fire!\r\n");
+        return;
+      }
+    }
     send_to_char(ch, "You pick up %s with your towing equipment.\r\n", GET_VEH_NAME(tveh));
     strcpy(buf3, GET_VEH_NAME(veh));
     snprintf(buf, sizeof(buf), "%s picks up %s with its towing equipment.\r\n", buf3, GET_VEH_NAME(tveh));
@@ -2367,4 +2386,24 @@ void process_vehicle_decay(void)
       }
     }
   }
+}
+
+ACMD(do_vehicle_osay) {
+  struct veh_data *veh;
+  RIG_VEH(ch, veh);
+
+  if (!veh) {
+    return;
+  }
+
+  skip_spaces(&argument);
+
+  snprintf(buf, sizeof(buf), "%s^n says ^mOOCly^n, \"%s^n\"\r\n", GET_VEH_NAME(veh), capitalize(argument));
+
+  if (veh->in_room)
+    send_to_room(buf, veh->in_room, veh);
+  else
+    send_to_veh(buf, veh->in_veh, ch, TRUE);
+
+  send_to_char(ch, "You say ^mOOCly^n, \"%s^n\".\r\n", capitalize(argument));
 }

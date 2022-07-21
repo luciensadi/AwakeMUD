@@ -40,6 +40,7 @@ extern void check_quest_destroy(struct char_data *ch, struct obj_data *obj);
 extern void dominator_mode_switch(struct char_data *ch, struct obj_data *obj, int mode);
 extern float get_bulletpants_weight(struct char_data *ch);
 extern int calculate_vehicle_weight(struct veh_data *veh);
+extern bool House_can_enter(struct char_data *ch, vnum_t house);
 
 // Corpse saving externs.
 extern void write_world_to_disk(int vnum);
@@ -496,6 +497,45 @@ ACMD(do_put)
     } else {
       send_to_char(ch, "You don't see %s %s here.\r\n", AN(arg2), arg2);
     }
+    return;
+  }
+
+  // Combine drugs.
+  if (GET_OBJ_TYPE(cont) == ITEM_DRUG || GET_OBJ_VNUM(cont) == OBJ_ANTI_DRUG_CHEMS) {
+    if (!(obj = get_obj_in_list_vis(ch, arg1, ch->carrying))) {
+      send_to_char(ch, "You aren't carrying %s %s.\r\n", AN(arg1), arg1);
+      return;
+    }
+
+    if (obj == cont) {
+      send_to_char(ch, "You cannot combine %s with itself.\r\n", GET_OBJ_NAME(obj));
+      return;
+    }
+
+    if (GET_OBJ_VNUM(cont) == OBJ_ANTI_DRUG_CHEMS) {
+      if (GET_OBJ_VNUM(obj) != OBJ_ANTI_DRUG_CHEMS) {
+        send_to_char("You can only combine chems with other chems.\r\n", ch);
+        return;
+      }
+
+      send_to_char("You combine the chems.\r\n", ch);
+      GET_CHEMS_QTY(cont) += GET_CHEMS_QTY(obj);
+      GET_CHEMS_QTY(obj) = 0;
+      // TODO: Update weight as well.
+      extract_obj(obj);
+      return;
+    } else {
+      if (GET_OBJ_TYPE(obj) != ITEM_DRUG || GET_OBJ_DRUG_TYPE(obj) != GET_OBJ_DRUG_TYPE(cont)) {
+        send_to_char(ch, "You can only combine %s with other doses of %s, and %s doesn't qualify.\r\n",
+          decapitalize_a_an(GET_OBJ_NAME(cont)),
+          drug_types[GET_OBJ_DRUG_TYPE(cont)].name,
+          GET_OBJ_NAME(obj)
+        );
+        return;
+      }
+    }
+
+    combine_drugs(ch, obj, cont, TRUE);
     return;
   }
 
@@ -1489,6 +1529,7 @@ ACMD(do_get)
             case TYPE_ROLLBARS:
             case TYPE_TIRES:
             case TYPE_MISC:
+            case TYPE_POKEYSTICK:
               target = 3;
               break;
             default:
@@ -1773,7 +1814,7 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
     // It'd be great if we could allow drones and bikes to be dropped anywhere not flagged !BIKE, but this
     // would cause issues with the current world-- the !bike flag is placed at entrances to zones, not
     // spread throughout the whole thing. People would just carry their bikes in, drop them, and do drivebys.
-    if (!(ROOM_FLAGGED(ch->in_room, ROOM_ROAD) || ROOM_FLAGGED(ch->in_room, ROOM_GARAGE))) {
+    if (!(ROOM_FLAGGED(ch->in_room, ROOM_ROAD) || ROOM_FLAGGED(ch->in_room, ROOM_GARAGE) || House_can_enter(ch, GET_ROOM_VNUM(ch->in_room)))) {
       send_to_char("You can only drop vehicles on roads or in garages.\r\n", ch);
       return 0;
     }
@@ -2465,23 +2506,23 @@ ACMD(do_drink)
     return;
   }
 #endif
-  if (!GET_OBJ_VAL(temp, 1)) {
+  if (GET_DRINKCON_AMOUNT(temp) <= 0) {
     send_to_char("It's empty.\r\n", ch);
     return;
   }
   if (subcmd == SCMD_DRINK) {
-    snprintf(buf, sizeof(buf), "$n drinks %s from $p.", drinknames[GET_OBJ_VAL(temp, 2)]);
+    snprintf(buf, sizeof(buf), "$n drinks %s from $p.", drinknames[GET_DRINKCON_LIQ_TYPE(temp)]);
     act(buf, TRUE, ch, temp, 0, TO_ROOM);
 
-    send_to_char(ch, "You drink the %s.\r\n", drinknames[GET_OBJ_VAL(temp, 2)]);
+    send_to_char(ch, "You drink the %s.\r\n", drinknames[GET_DRINKCON_LIQ_TYPE(temp)]);
     amount = number(3, 10);
   } else {
     act("$n sips from $p.", TRUE, ch, temp, 0, TO_ROOM);
-    send_to_char(ch, "It tastes like %s.\r\n", drinknames[GET_OBJ_VAL(temp, 2)]);
+    send_to_char(ch, "It tastes like %s.\r\n", drinknames[GET_DRINKCON_LIQ_TYPE(temp)]);
     amount = 1;
   }
 
-  amount = MIN(amount, GET_OBJ_VAL(temp, 1));
+  amount = MIN(amount, GET_DRINKCON_AMOUNT(temp));
 
   /* You can't subtract more than the object weighs */
   weight = (float)(MIN(amount * 100, (int)(GET_OBJ_WEIGHT(temp) * 100)) / 100);
@@ -2489,14 +2530,14 @@ ACMD(do_drink)
   weight_change_object(temp, -weight);  /* Subtract amount */
 
   gain_condition(ch, COND_DRUNK,
-                 (int) ((int) drink_aff[GET_OBJ_VAL(temp, 2)][COND_DRUNK] * amount) / 4);
+                 (int) ((int) drink_aff[GET_DRINKCON_LIQ_TYPE(temp)][COND_DRUNK] * amount) / 4);
 
 #ifdef ENABLE_HUNGER
   gain_condition(ch, COND_FULL,
-                 (int) ((int) drink_aff[GET_OBJ_VAL(temp, 2)][COND_FULL] * amount) / 4);
+                 (int) ((int) drink_aff[GET_DRINKCON_LIQ_TYPE(temp)][COND_FULL] * amount) / 4);
 
   gain_condition(ch, COND_THIRST,
-                 (int) ((int) drink_aff[GET_OBJ_VAL(temp, 2)][COND_THIRST] * amount) / 4);
+                 (int) ((int) drink_aff[GET_DRINKCON_LIQ_TYPE(temp)][COND_THIRST] * amount) / 4);
 #endif
 
   if (GET_COND(ch, COND_DRUNK) > MAX_DRUNK)
@@ -2511,10 +2552,29 @@ ACMD(do_drink)
 #endif
 
   /* empty the container, and no longer poison. */
-  GET_OBJ_VAL(temp, 1) -= amount;
-  if (!GET_OBJ_VAL(temp, 1)) {  /* The last bit */
+  GET_DRINKCON_AMOUNT(temp) -= amount;
+  if (GET_DRINKCON_AMOUNT(temp) <= 0) {  /* The last bit */
     //name_from_drinkcon(temp); // do this first
-    GET_OBJ_VAL(temp, 2) = 0;
+    GET_DRINKCON_LIQ_TYPE(temp) = LIQ_WATER;
+  }
+
+  // Deal poison damage.
+  int poison_rating = MAX(0, MIN(DEADLY, (GET_DRINKCON_LIQ_TYPE(temp) == LIQ_CLEANER ? DEADLY : GET_DRINKCON_POISON_RATING(temp))));
+  if (poison_rating > 0) {
+    int damage_resist_dice = GET_BOD(ch);
+    int tn = 6 + amount;
+    int successes = success_test(damage_resist_dice, tn);
+    int staged_damage = stage(-successes, poison_rating);
+    int dam_total = convert_damage(staged_damage);
+    char rollbuf[500];
+    snprintf(rollbuf, sizeof(rollbuf), "Poison resistance test: %d dice vs TN %d gave %d successes to stage down damage.",
+             damage_resist_dice,
+             tn,
+             successes);
+    act(rollbuf, FALSE, ch, 0, 0, TO_ROLLS);
+
+    if (damage(ch, ch, dam_total, TYPE_BIOWARE, TRUE))
+      return;
   }
   return;
 }

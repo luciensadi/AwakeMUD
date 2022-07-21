@@ -74,6 +74,7 @@ int     light_level(struct room_data *room);
 bool    biocyber_compatibility(struct obj_data *obj1, struct obj_data *obj2, struct char_data *ch);
 void    magic_loss(struct char_data *ch, int magic, bool msg);
 bool    has_kit(struct char_data *ch, int type);
+int     has_key(struct char_data *ch, int key_vnum);
 struct  obj_data *find_workshop(struct char_data *ch, int type);
 void    add_workshop_to_room(struct obj_data *obj);
 void    remove_workshop_from_room(struct obj_data *obj);
@@ -99,6 +100,7 @@ char *  generate_new_loggable_representation(struct obj_data *obj);
 void    purgelog(struct veh_data *veh);
 char *  replace_substring(char *source, char *dest, const char *replace_target, const char *replacement);
 bool    combine_ammo_boxes(struct char_data *ch, struct obj_data *from, struct obj_data *into, bool print_messages);
+bool    combine_drugs(struct char_data *ch, struct obj_data *from, struct obj_data *into, bool print_messages);
 void    update_ammobox_ammo_quantity(struct obj_data *ammobox, int amount);
 void    destroy_door(struct room_data *room, int dir);
 bool    spell_is_nerp(int spell_num);
@@ -130,6 +132,9 @@ int     get_pilot_skill_for_veh(struct veh_data *veh);
 int     calculate_vehicle_weight(struct veh_data *veh);
 char *  replace_neutral_color_codes(const char *input, const char *replacement_code);
 bool    repair_vehicle_seating(struct veh_data *veh);
+bool    is_voice_masked(struct char_data *ch);
+bool    force_perception(struct char_data *ch);
+int     get_focus_bond_cost(struct obj_data *obj);
 
 struct obj_data *obj_is_or_contains_obj_with_vnum(struct obj_data *obj, vnum_t vnum);
 struct obj_data *ch_has_obj_with_vnum(struct char_data *ch, vnum_t vnum);
@@ -377,6 +382,7 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define GET_VEH_DESC(veh) ((veh)->restring_long ? (veh)->restring_long : (veh)->long_description)
 #define GET_VEH_RNUM(veh) ((veh)->veh_number)
 #define GET_VEH_VNUM(veh) (GET_VEH_RNUM(veh) >= 0 ? veh_index[GET_VEH_RNUM(veh)].vnum : -1)
+#define GET_VEH_ROOM_DESC(veh) ((veh)->description)
 #define GET_OBJ_NAME(obj) ((obj)->restring ? (obj)->restring : (obj)->text.name)
 #define GET_OBJ_DESC(obj) ((obj)->photo ? (obj)->photo : (obj)->text.look_desc)
 #define GET_KEYWORDS(ch)  ((ch)->player.physical_text.keywords)
@@ -392,6 +398,10 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define GET_EMAIL(ch)   ((ch)->player.email ? (ch)->player.email : "not set")
 #define SETTABLE_EMAIL(ch)   ((ch)->player.email)
 #define GET_CHAR_MULTIPLIER(ch) ((ch)->player.multiplier)
+
+#define GET_CHAR_FIRE_DURATION(ch)      ((ch)->points.fire[0])
+#define GET_CHAR_FIRE_BONUS_DAMAGE(ch)  ((ch)->points.fire[1])
+#define GET_CHAR_FIRE_CAUSED_BY_PC(ch)  ((ch)->points.fire[2])
 
 /*
  * I wonder if this definition of GET_REAL_LEVEL should be the definition
@@ -502,9 +512,10 @@ int get_armor_penalty_grade(struct char_data *ch);
 
 #define SHOOTING_DIR(ch)        ((ch)->char_specials.shooting_dir)
 
-#define GET_LANGUAGE(ch)      ((ch)->char_specials.saved.cur_lang)
-#define GET_NUM_FIGHTING(ch)  ((ch)->char_specials.fightList.NumItems())
-#define GET_NUM_ATTACKING(ch) ((ch)->char_specials.defendList.NumItems())
+#define GET_LANGUAGE(ch)        ((ch)->char_specials.saved.cur_lang)
+#define GET_VIABLE_LANGUAGE(ch) (SKILL_IS_LANGUAGE(GET_LANGUAGE((ch))) ? GET_LANGUAGE((ch)) : SKILL_ENGLISH)
+#define GET_NUM_FIGHTING(ch)    ((ch)->char_specials.fightList.NumItems())
+#define GET_NUM_ATTACKING(ch)   ((ch)->char_specials.defendList.NumItems())
 
 #define GET_COND(ch, i)         ((ch)->player_specials->saved.conditions[(i)])
 #define GET_LOADROOM(ch)        ((ch)->player_specials->saved.load_room)
@@ -548,6 +559,7 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define GET_QUEST(ch)		((ch)->desc && (ch)->desc->original ? (ch)->desc->original->player_specials->questnum : \
                                                                       (ch)->player_specials->questnum)
 #define GET_LQUEST(ch, i)	      ((ch)->player_specials->last_quest[i])
+#define GET_PLAYER_WHERE_COMMANDS(ch) ((ch)->player_specials->wherelist_checks)
 #define POOFIN(ch)              ((ch)->player.poofin)
 #define POOFOUT(ch)             ((ch)->player.poofout)
 #define GET_PROMPT(ch)          ((PLR_FLAGGED((ch), PLR_MATRIX) ? (ch)->player.matrixprompt : (ch)->player.prompt))
@@ -909,6 +921,8 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 #define GET_OBJ_DRUG_TYPE(drug)                   (GET_OBJ_VAL((drug), 0))
 #define GET_OBJ_DRUG_DOSES(drug)                  (GET_OBJ_VAL((drug), 1))
 
+#define GET_CHEMS_QTY(chems)                      (GET_OBJ_VAL((chems), 0))
+
 // ITEM_WORN convenience defines
 #define GET_WORN_POCKETS_HOLSTERS(worn)           (GET_OBJ_VAL((worn), 0))
 #define GET_WORN_POCKETS_MISC(worn)               (GET_OBJ_VAL((worn), 4))
@@ -939,6 +953,10 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 // ITEM_RADIO convenience defines
 
 // ITEM_DRINKCON convenience defines
+#define GET_DRINKCON_AMOUNT(cont)                 (GET_OBJ_VAL((cont), 0))
+#define GET_DRINKCON_MAX_AMOUNT(cont)             (GET_OBJ_VAL((cont), 1))
+#define GET_DRINKCON_LIQ_TYPE(cont)               (GET_OBJ_VAL((cont), 2))
+#define GET_DRINKCON_POISON_RATING(cont)          (GET_OBJ_VAL((cont), 3))
 
 // ITEM_KEY convenience defines
 

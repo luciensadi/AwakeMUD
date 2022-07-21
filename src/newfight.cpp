@@ -45,7 +45,7 @@ bool handle_flame_aura(struct combat_data *att, struct combat_data *def);
 bool does_weapon_have_bayonet(struct obj_data *weapon);
 bool perform_nerve_strike(struct combat_data *att, struct combat_data *def, char *rbuf, size_t rbuf_len);
 
-#define SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER {act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS ); if (att->ch->in_room != def->ch->in_room) act( rbuf, 1, def->ch, NULL, NULL, TO_ROLLS );}
+#define SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER {act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS ); if (att->ch->in_room != def->ch->in_room && !PLR_FLAGGED(att->ch, PLR_REMOTE)) act( rbuf, 1, def->ch, NULL, NULL, TO_ROLLS );}
 
 #define IS_RANGED(eq)   (GET_OBJ_TYPE(eq) == ITEM_FIREWEAPON || \
 (GET_OBJ_TYPE(eq) == ITEM_WEAPON && \
@@ -73,6 +73,37 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
   snprintf(rbuf, sizeof(rbuf), ">> ^cCombat eval: %s vs %s.", GET_CHAR_NAME(attacker), GET_CHAR_NAME(victim));
   SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
 
+  // Precondition: If your foe is astral (ex: a non-manifested projection, a dematerialized spirit), you don't belong here.
+  if (IS_ASTRAL(def->ch)) {
+    if (IS_DUAL(att->ch) || IS_ASTRAL(att->ch)) {
+      return astral_fight(att->ch, def->ch);
+    } else {
+      mudlog("SYSERR: Entered hit() with an non-astrally-reachable character attacking an astral character.", att->ch, LOG_SYSLOG, TRUE);
+      act("Unable to hit $N- $E's astral and $n can't touch that.", FALSE, att->ch, 0, def->ch, TO_ROLLS);
+      stop_fighting(att->ch);
+    }
+    return FALSE;
+  }
+
+  // Precondition: Same for if you're an astral being and your target isn't.
+  if (IS_ASTRAL(att->ch)) {
+    if (IS_DUAL(def->ch) || IS_ASTRAL(def->ch)) {
+      astral_fight(att->ch, def->ch);
+    } else {
+      mudlog("SYSERR: Entered hit() with an astral character attacking a non-astrally-reachable character.", att->ch, LOG_SYSLOG, TRUE);
+      act("Unable to hit $N- $E's unreachable from the astral plane and $n can't touch that.", FALSE, att->ch, 0, def->ch, TO_ROLLS);
+      stop_fighting(att->ch);
+    }
+    return FALSE;
+  }
+
+  // Precondition: If you're in melee combat and your foe isn't present, stop fighting.
+  if (!att->ranged_combat_mode && att->ch->in_room != def->ch->in_room) {
+    send_to_char(att->ch, "You relax with the knowledge that your opponent is no longer present.\r\n");
+    stop_fighting(att->ch);
+    return FALSE;
+  }
+
   // Short-circuit: If you're wielding an activated Dominator, you don't care about all these pesky rules.
   if (att->weapon && GET_OBJ_SPEC(att->weapon) == weapon_dominator) {
     if (GET_LEVEL(def->ch) > GET_LEVEL(att->ch)) {
@@ -87,6 +118,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
         act("A crackling shot of energy erupts from $n's Dominator and slams into $N, disabling $M!", FALSE, att->ch, 0, def->ch, TO_NOTVICT);
         act("A crackling shot of energy erupts from $n's Dominator and slams into you! Your vision fades as your muscles lock up.", FALSE, att->ch, 0, def->ch, TO_VICT);
         GET_MENTAL(def->ch) = -10;
+        update_pos(def->ch);
         return FALSE;
       case WEAP_HEAVY_PISTOL:
         // Lethal? Kill your target.
@@ -133,37 +165,6 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
   // Precondition: If you're out of ammo, you don't get to fight. Note the use of the deducting has_ammo here.
   if (att->weapon && !has_ammo(att->ch, att->weapon))
     return FALSE;
-
-  // Precondition: If your foe is astral (ex: a non-manifested projection, a dematerialized spirit), you don't belong here.
-  if (IS_ASTRAL(def->ch)) {
-    if (IS_DUAL(att->ch) || IS_ASTRAL(att->ch)) {
-      return astral_fight(att->ch, def->ch);
-    } else {
-      mudlog("SYSERR: Entered hit() with an non-astrally-reachable character attacking an astral character.", att->ch, LOG_SYSLOG, TRUE);
-      act("Unable to hit $N- $E's astral and $n can't touch that.", FALSE, att->ch, 0, def->ch, TO_ROLLS);
-      stop_fighting(att->ch);
-    }
-    return FALSE;
-  }
-
-  // Precondition: Same for if you're an astral being and your target isn't.
-  if (IS_ASTRAL(att->ch)) {
-    if (IS_DUAL(def->ch) || IS_ASTRAL(def->ch)) {
-      astral_fight(att->ch, def->ch);
-    } else {
-      mudlog("SYSERR: Entered hit() with an astral character attacking a non-astrally-reachable character.", att->ch, LOG_SYSLOG, TRUE);
-      act("Unable to hit $N- $E's unreachable from the astral plane and $n can't touch that.", FALSE, att->ch, 0, def->ch, TO_ROLLS);
-      stop_fighting(att->ch);
-    }
-    return FALSE;
-  }
-
-  // Precondition: If you're in melee combat and your foe isn't present, stop fighting.
-  if (!att->ranged_combat_mode && att->ch->in_room != def->ch->in_room) {
-    send_to_char(att->ch, "You relax with the knowledge that your opponent is no longer present.\r\n");
-    stop_fighting(att->ch);
-    return FALSE;
-  }
 
   // Remove closing flags if both are melee.
   if ((!att->ranged_combat_mode || AFF_FLAGGED(att->ch, AFF_APPROACH))
@@ -370,7 +371,14 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     }
 
     // Calculate the attacker's total skill (this modifies TN)
-    att->ranged->dice = get_skill(att->ch, att->ranged->skill, att->ranged->tn);
+    {
+      int prior_tn = att->ranged->tn;
+      att->ranged->dice = get_skill(att->ch, att->ranged->skill, att->ranged->tn);
+      if (att->ranged->tn != prior_tn) {
+        snprintf(rbuf, sizeof(rbuf), "TN modified in get_skill() to %d.", att->ranged->tn);
+        SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
+      }
+    }
 
     // Minimum TN is 2.
     att->ranged->tn = MAX(att->ranged->tn, 2);
@@ -591,15 +599,30 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
 
     strlcpy(rbuf, "Computing dice for attacker...", sizeof(rbuf));
     SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
-    att->melee->dice = att->melee->skill_bonus + get_skill(att->ch, att->melee->skill, att->melee->tn);
+    {
+      int prior_tn = att->melee->tn;
+      att->melee->dice = att->melee->skill_bonus + get_skill(att->ch, att->melee->skill, att->melee->tn);
+      if (att->melee->tn != prior_tn) {
+        snprintf(rbuf, sizeof(rbuf), "TN modified in get_skill() to %d.", att->melee->tn);
+        SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
+      }
+    }
     if (!att->too_tall)
       att->melee->dice += MIN(GET_SKILL(att->ch, att->melee->skill) + att->melee->skill_bonus, GET_OFFENSE(att->ch));
 
     strlcpy(rbuf, "Computing dice for defender...", sizeof(rbuf));
     SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
-    def->melee->dice = def->melee->skill_bonus + get_skill(def->ch, def->melee->skill, def->melee->tn);
+    {
+      int prior_tn = def->melee->tn;
+      def->melee->dice = def->melee->skill_bonus + get_skill(def->ch, def->melee->skill, def->melee->tn);
+      if (def->melee->tn != prior_tn) {
+        snprintf(rbuf, sizeof(rbuf), "TN modified in get_skill() to %d.", def->melee->tn);
+        SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
+      }
+    }
     if (!def->too_tall)
       def->melee->dice += MIN(GET_SKILL(def->ch, def->melee->skill) + def->melee->skill_bonus, GET_OFFENSE(def->ch));
+
 
     // }
 
@@ -963,9 +986,17 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       if (successes_for_use_in_monowhip_test_check <= 0 && (net_successes < 0 ? def->melee->is_monowhip : att->melee->is_monowhip)) {
         struct char_data *attacker = net_successes < 0 ? def->ch : att->ch;
         struct char_data *defender = net_successes < 0 ? att->ch : def->ch;
+        int skill;
 
         int target = 4 + modify_target(attacker);
-        int skill = get_skill(attacker, SKILL_WHIPS_FLAILS, target);
+        {
+          int prior_tn = target;
+          skill = get_skill(attacker, SKILL_WHIPS_FLAILS, target);
+          if (target != prior_tn) {
+            snprintf(rbuf, sizeof(rbuf), "TN modified in get_skill() to %d.", target);
+            SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
+          }
+        }
         int successes = success_test(skill, target);
         snprintf(rbuf, sizeof(rbuf), "Monowhip 'flailure' avoidance test: Skill of %d, target of %d, successes is %d.", skill, target, successes);
         SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
@@ -1291,7 +1322,15 @@ bool perform_nerve_strike(struct combat_data *att, struct combat_data *def, char
   SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
 
   // Calculate the attacker's total skill and execute a success test.
-  att->melee->dice = get_skill(att->ch, SKILL_UNARMED_COMBAT, att->melee->tn);
+  {
+    int prior_tn = att->melee->tn;
+    att->melee->dice = get_skill(att->ch, SKILL_UNARMED_COMBAT, att->melee->tn);
+    if (att->melee->tn != prior_tn) {
+      snprintf(rbuf, sizeof(rbuf), "TN modified in get_skill() to %d.", att->melee->tn);
+      SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
+    }
+  }
+
   if (!att->too_tall) {
     int bonus = MIN(GET_SKILL(att->ch, SKILL_UNARMED_COMBAT), GET_OFFENSE(att->ch));
     snprintf(rbuf, rbuf_len, "Attacker is rolling %d + %d dice", att->melee->dice, bonus);

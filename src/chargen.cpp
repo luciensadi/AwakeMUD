@@ -222,9 +222,8 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
     GET_TOTEMSPIRIT(CH) = archetypes[i]->totemspirit;
   }
 
-
-  // Grant forcepoints for bonding purposes.
-  GET_FORCE_POINTS(CH) = archetypes[i]->forcepoints;
+  // Foci are auto-bonded, so no need to give force points for this.
+  GET_FORCE_POINTS(CH) = 0;
 
   // Set spells, if any.
   for (int spell_idx = 0; spell_idx < NUM_ARCHETYPE_SPELLS; spell_idx++)
@@ -481,6 +480,7 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
 
   // Set up the character and save them.
   do_start(CH, FALSE);
+  GET_LOADROOM(d->character) = archetypes[i]->start_room;
   playerDB.SaveChar(d->character, archetypes[i]->start_room);
 }
 
@@ -856,7 +856,7 @@ void init_char_sql(struct char_data *ch)
   mysql_wrapper(mysql, buf);
   if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
     snprintf(buf, sizeof(buf), "INSERT INTO pfiles_chargendata (idnum, AttPoints, SkillPoints, ForcePoints, archetypal, archetype) VALUES"\
-               "('%ld', '%d', '%d', '%d', '%d', '%d');", GET_IDNUM(ch), GET_ATT_POINTS(ch), GET_SKILL_POINTS(ch), GET_FORCE_POINTS(ch), GET_ARCHETYPAL_MODE(ch), GET_ARCHETYPAL_TYPE(ch));
+               "('%ld', '%d', '%d', '%d', '%d', '%d');", GET_IDNUM(ch), GET_ATT_POINTS(ch), GET_SKILL_POINTS(ch), GET_FORCE_POINTS(ch), GET_ARCHETYPAL_MODE(ch) ? 1 : 0, GET_ARCHETYPAL_TYPE(ch));
     mysql_wrapper(mysql, buf);
   }
   if (GET_TRADITION(ch) != TRAD_MUNDANE) {
@@ -864,8 +864,6 @@ void init_char_sql(struct char_data *ch)
                "('%ld', '%d', '%d', '%d');", GET_IDNUM(ch), GET_TOTEM(ch), GET_TOTEMSPIRIT(ch), GET_ASPECT(ch));
     mysql_wrapper(mysql, buf);
   }
-  snprintf(buf, sizeof(buf), "INSERT INTO pfiles_drugdata (idnum) VALUES (%ld)", GET_IDNUM(ch));
-  mysql_wrapper(mysql, buf);
   if (GET_LEVEL(ch) > 0) {
     snprintf(buf, sizeof(buf), "INSERT INTO pfiles_immortdata (idnum, InvisLevel, IncogLevel, Zonenumber, Poofin, Poofout) VALUES ("\
                  "%ld, %d, %d, %d, '%s', '%s');",
@@ -884,7 +882,12 @@ static void start_game(descriptor_data *d)
   set_character_skill(d->character, SKILL_ENGLISH, STARTING_LANGUAGE_SKILL_LEVEL, FALSE);
   GET_LANGUAGE(d->character) = SKILL_ENGLISH;
   GET_RESTRING_POINTS(d->character) = STARTING_RESTRING_POINTS;
-  GET_LOADROOM(d->character) = RM_CHARGEN_START_ROOM;
+
+  if (GET_ARCHETYPAL_MODE(CH)) {
+    GET_LOADROOM(d->character) = archetypes[GET_ARCHETYPAL_TYPE(CH)]->start_room;
+  } else {
+    GET_LOADROOM(d->character) = RM_CHARGEN_START_ROOM;
+  }
 
   init_char_sql(d->character);
   GET_CHAR_MULTIPLIER(d->character) = 100;

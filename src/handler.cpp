@@ -1207,6 +1207,32 @@ void icon_from_host(struct matrix_icon *icon)
       REMOVE_FROM_LIST(icon2, matrix[icon->in_host].fighting, next_fighting);
     }
   }
+
+  // Unlink any files that have been claimed by this icon.
+  if (icon->idnum) {
+    for (struct obj_data *soft = matrix[icon->in_host].file, *next_file; soft; soft = next_file) {
+      next_file = soft->next_content;
+
+      if (GET_OBJ_TYPE(soft) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(soft) == TYPE_FILE) {
+        if (GET_DECK_ACCESSORY_FILE_FOUND_BY(soft) == icon->idnum) {
+          GET_DECK_ACCESSORY_FILE_FOUND_BY(soft) = 0;
+          GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(soft) = 0;
+          GET_DECK_ACCESSORY_FILE_REMAINING(soft) = 0;
+
+          // If it's paydata, we extract it entirely, then potentially put it back in the paydata queue to re-find.
+          if (GET_DECK_ACCESSORY_FILE_HOST_VNUM(soft) == icon->in_host) {
+            // 66% chance of being rediscoverable.
+            if (number(0, 2))
+              matrix[icon->in_host].found++;
+
+            extract_obj(soft);
+            continue;
+          }
+        }
+      }
+    }
+  }
+
   icon->in_host = NOWHERE;
   icon->next_in_host = NULL;
   icon->fighting = NULL;
@@ -2379,8 +2405,10 @@ void extract_char(struct char_data * ch)
     struct follow_type *nextfollow;
     for (struct follow_type *follow = ch->followers; follow; follow = nextfollow) {
       nextfollow = follow->next;
-      if (IS_SPIRIT(follow->follower) || IS_PC_CONJURED_ELEMENTAL(follow->follower))
+      if (IS_SPIRIT(follow->follower) || IS_PC_CONJURED_ELEMENTAL(follow->follower)) {
+        act("$n vanishes with a sound like a bursting bubble.", TRUE, follow->follower, 0, 0, TO_ROOM);
         extract_char(follow->follower);
+      }
     }
   }
   if (ch->followers || ch->master)
@@ -3020,6 +3048,7 @@ int generic_find(char *arg, int bitvector, struct char_data * ch,
 
   *tar_ch = NULL;
   *tar_obj = NULL;
+  struct veh_data *rigged_veh = (ch)->char_specials.rigging;
 
   one_argument(arg, name);
 
@@ -3088,16 +3117,40 @@ int generic_find(char *arg, int bitvector, struct char_data * ch,
   }
   if (IS_SET(bitvector, FIND_OBJ_ROOM))
   {
-    if (ch->in_veh) {
-      if ((*tar_obj = get_obj_in_list_vis(ch, name, ch->in_veh->contents)))
+    if (rigged_veh) {
+      if (rigged_veh->in_veh) {
+        if ((*tar_obj = get_obj_in_list_vis(ch, name, rigged_veh->in_veh->contents)))
+          return (FIND_OBJ_ROOM);
+      } else if (rigged_veh->in_room) {
+        if ((*tar_obj = get_obj_in_list_vis(ch, name, rigged_veh->in_room->contents))) {
+          return (FIND_OBJ_ROOM);
+        }
+      } else {
+        mudlog("SYSERR: Rigged_veh had no in_veh or in_room in generic_find()!", ch, LOG_SYSLOG, TRUE);
+      }
+    }
+    else {
+      if (ch->in_veh) {
+        if ((*tar_obj = get_obj_in_list_vis(ch, name, ch->in_veh->contents)))
+          return (FIND_OBJ_ROOM);
+      }
+      else if ((*tar_obj = get_obj_in_list_vis(ch, name, ch->in_room->contents))) {
         return (FIND_OBJ_ROOM);
-    } else if ((*tar_obj = get_obj_in_list_vis(ch, name, ch->in_room->contents)))
-      return (FIND_OBJ_ROOM);
+      }
+    }
   }
   if (IS_SET(bitvector, FIND_OBJ_VEH_ROOM))
   {
-    if (ch->in_veh && (*tar_obj = get_obj_in_list_vis(ch, name, (get_ch_in_room(ch))->contents)))
-      return (FIND_OBJ_VEH_ROOM);
+    if (rigged_veh) {
+      if ((*tar_obj = get_obj_in_list_vis(ch, name, get_veh_in_room(rigged_veh)->contents))) {
+        return (FIND_OBJ_VEH_ROOM);
+      }
+    }
+    else {
+      if ((*tar_obj = get_obj_in_list_vis(ch, name, get_ch_in_room(ch)->contents))) {
+        return (FIND_OBJ_VEH_ROOM);
+      }
+    }
   }
   if (IS_SET(bitvector, FIND_OBJ_WORLD))
   {

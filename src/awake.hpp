@@ -104,6 +104,10 @@
 #define ASPECT_FIREMAGE  10
 #define ASPECT_WATERMAGE  11
 
+#define METAMAGIC_STAGE_LOCKED   0
+#define METAMAGIC_STAGE_UNLOCKED 1
+#define METAMAGIC_STAGE_LEARNED  2
+
 
 /* totems */
 
@@ -633,6 +637,7 @@ enum {
 #define EX_IS_TEMPORARY         (1 << 7)   /* Created temporarily by code */
 #define EX_WINDOWED             (1 << 8)   /* Exit has a window.        */
 #define EX_BARRED_WINDOW        (1 << 9)   /* Exit has a barred window. */
+#define NUM_EXFLAGS             11
 
 /* spirit powers */
 
@@ -878,109 +883,114 @@ enum {
 #define SKILL_STREET_ETIQUETTE       46
 #define SKILL_TRIBAL_ETIQUETTE       47
 #define SKILL_ELF_ETIQUETTE          48
-#define SKILL_PROGRAM_COMBAT      49
+#define SKILL_PROGRAM_COMBAT         49
 #define SKILL_PROGRAM_DEFENSIVE      50
-#define SKILL_PROGRAM_OPERATIONAL   51
-#define SKILL_PROGRAM_SPECIAL      52
+#define SKILL_PROGRAM_OPERATIONAL    51
+#define SKILL_PROGRAM_SPECIAL        52
 #define SKILL_PROGRAM_CYBERTERM      53
-#define SKILL_DATA_BROKERAGE        54
-#define SKILL_AURA_READING          55
-#define SKILL_STEALTH               56
-#define SKILL_STEAL                 57
-#define SKILL_TRACK                 58
-#define SKILL_UNUSED_WAS_CLIMBING   59
-#define SKILL_PILOT_BIKE    60
+#define SKILL_DATA_BROKERAGE         54
+#define SKILL_AURA_READING           55
+#define SKILL_STEALTH                56
+#define SKILL_STEAL                  57
+#define SKILL_TRACK                  58
+#define SKILL_UNUSED_WAS_CLIMBING    59
+#define SKILL_PILOT_BIKE             60
 #define SKILL_UNUSED_WAS_PILOT_FIXED_WING   61
-#define SKILL_PILOT_CAR     62
-#define SKILL_PILOT_TRUCK   63
-#define SKILL_BR_BIKE     64
-#define SKILL_BR_CAR     65
-#define SKILL_BR_DRONE     66
-#define SKILL_BR_TRUCK        67
-#define SKILL_DANCING    68
-#define SKILL_SINGING    69
-#define SKILL_INSTRUMENT  70
-#define SKILL_ARCANELANGUAGE  71
-#define SKILL_MEDITATION  72
+#define SKILL_PILOT_CAR              62
+#define SKILL_PILOT_TRUCK            63
+#define SKILL_BR_BIKE                64
+#define SKILL_BR_CAR                 65
+#define SKILL_BR_DRONE               66
+#define SKILL_BR_TRUCK               67
+#define SKILL_DANCING                68
+#define SKILL_SINGING                69
+#define SKILL_INSTRUMENT             70
+#define SKILL_ARCANELANGUAGE         71
+#define SKILL_MEDITATION             72
 
-#define SKILL_ENGLISH       73
-#define SKILL_SPERETHIEL     74
-#define SKILL_SPANISH      75
-#define SKILL_JAPANESE      76
-#define SKILL_CHINESE      77
-#define SKILL_KOREAN      78
-#define SKILL_ITALIAN      79
-#define SKILL_RUSSIAN      80
-#define SKILL_SIOUX      81
-#define SKILL_MAKAW      82
-#define SKILL_CROW      83
-#define SKILL_SALISH      84
-#define SKILL_UTE      85
-#define SKILL_NAVAJO      86
-#define SKILL_GERMAN      87
-#define SKILL_ORZET      88
-#define SKILL_ARABIC      89
-#define SKILL_LATIN      90
-#define SKILL_GAELIC              91
-#define SKILL_FRENCH            92
+#define SKILL_ENGLISH                73
+#define SKILL_SPERETHIEL             74
+#define SKILL_SPANISH                75
+#define SKILL_JAPANESE               76
+#define SKILL_CHINESE                77
+#define SKILL_KOREAN                 78
+#define SKILL_ITALIAN                79
+#define SKILL_RUSSIAN                80
+#define SKILL_SIOUX                  81
+#define SKILL_MAKAW                  82
+#define SKILL_CROW                   83
+#define SKILL_SALISH                 84
+#define SKILL_UTE                    85
+#define SKILL_NAVAJO                 86
+#define SKILL_GERMAN                 87
+#define SKILL_ORZET                  88
+#define SKILL_ARABIC                 89
+#define SKILL_LATIN                  90
+#define SKILL_GAELIC                 91
+#define SKILL_FRENCH                 92
 // Also see SKILL_SIGN_LANGUAGE and the other language additions below.
 
-#define SKILL_ANIMAL_HANDLING     93
-#define SKILL_ANIMAL_TAMING       94
-#define SKILL_BR_EDGED            95
-#define SKILL_BR_POLEARM          96
-#define SKILL_BR_CLUB             97
-#define SKILL_BR_THROWINGWEAPONS  98
-#define SKILL_BR_WHIPS            99
-#define SKILL_BR_PROJECTILES      100
-#define SKILL_BR_PISTOL           101
-#define SKILL_BR_SHOTGUN          102
-#define SKILL_BR_RIFLE            103
-#define SKILL_BR_HEAVYWEAPON      104
-#define SKILL_BR_SMG              105
-#define SKILL_BR_ARMOR           106
-#define SKILL_OFFHAND_EDGED       107
-#define SKILL_OFFHAND_CLUB        108
-#define SKILL_OFFHAND_CYBERIMPLANTS 109
-#define SKILL_OFFHAND_WHIP        110
-#define SKILL_SURVIVAL            111
-#define SKILL_NAVI_LAND           112
-#define SKILL_NAVI_WATER          113
-#define SKILL_NAVI_AIR            114
-#define SKILL_SMALL_UNIT_TACTICS  115
-#define SKILL_CHEMISTRY           116
-#define SKILL_DIVING              117
-#define SKILL_PARACHUTING         118
-#define SKILL_UNDERWATER_COMBAT   119
-#define SKILL_PILOT_ROTORCRAFT    120
-#define SKILL_PILOT_FIXEDWING     121
-#define SKILL_PILOT_VECTORTHRUST  122
-#define SKILL_ACTING              123
-#define SKILL_DISGUISE            124
-#define SKILL_LOCK_PICKING        125
-#define SKILL_RIDING              126
-#define SKILL_SPRAY_WEAPONS       127
-#define SKILL_INTIMIDATION        128
-#define SKILL_GUNCANE             129
-#define SKILL_BRACERGUN           130
-#define SKILL_BLOWGUN             131
-#define SKILL_PHARMA              132
-#define SKILL_HEBREW              133
-#define SKILL_IROQUOIS            134
-#define SKILL_MEDICINE            135
-#define SKILL_BR_FIXEDWING        136
-#define SKILL_BR_ROTORCRAFT       137
-#define SKILL_BR_VECTORTHRUST     138
-#define SKILL_BR_HOVERCRAFT       139
-#define SKILL_BR_MOTORBOAT        140
-#define SKILL_BR_SHIP             141
-#define SKILL_BR_LTA              142
-#define SKILL_PILOT_HOVERCRAFT    143
-#define SKILL_PILOT_MOTORBOAT     144
-#define SKILL_PILOT_SHIP          145
-#define SKILL_PILOT_LTA           146
+#define SKILL_ANIMAL_HANDLING           93
+#define SKILL_ANIMAL_TAMING             94
+#define SKILL_BR_EDGED                  95
+#define SKILL_BR_POLEARM                96
+#define SKILL_BR_CLUB                   97
+#define SKILL_BR_THROWINGWEAPONS        98
+#define SKILL_BR_WHIPS                  99
+#define SKILL_BR_PROJECTILES            100
+#define SKILL_BR_PISTOL                 101
+#define SKILL_BR_SHOTGUN                102
+#define SKILL_BR_RIFLE                  103
+#define SKILL_BR_HEAVYWEAPON            104
+#define SKILL_BR_SMG                    105
+#define SKILL_BR_ARMOR                  106
+#define SKILL_OFFHAND_EDGED             107
+#define SKILL_OFFHAND_CLUB              108
+#define SKILL_OFFHAND_CYBERIMPLANTS     109
+#define SKILL_OFFHAND_WHIP              110
+#define SKILL_SURVIVAL                  111
+#define SKILL_NAVI_LAND                 112
+#define SKILL_NAVI_WATER                113
+#define SKILL_NAVI_AIR                  114
+#define SKILL_SMALL_UNIT_TACTICS        115
+#define SKILL_CHEMISTRY                 116
+#define SKILL_DIVING                    117
+#define SKILL_PARACHUTING               118
+#define SKILL_UNDERWATER_COMBAT         119
+#define SKILL_PILOT_ROTORCRAFT          120
+#define SKILL_PILOT_FIXEDWING           121
+#define SKILL_PILOT_VECTORTHRUST        122
+#define SKILL_ACTING                    123
+#define SKILL_DISGUISE                  124
+#define SKILL_LOCK_PICKING              125
+#define SKILL_RIDING                    126
+#define SKILL_SPRAY_WEAPONS             127
+#define SKILL_INTIMIDATION              128
+#define SKILL_GUNCANE                   129
+#define SKILL_BRACERGUN                 130
+#define SKILL_BLOWGUN                   131
+#define SKILL_PHARMA                    132
+#define SKILL_HEBREW                    133
+#define SKILL_IROQUOIS                  134
+#define SKILL_MEDICINE                  135
+#define SKILL_BR_FIXEDWING              136
+#define SKILL_BR_ROTORCRAFT             137
+#define SKILL_BR_VECTORTHRUST           138
+#define SKILL_BR_HOVERCRAFT             139
+#define SKILL_BR_MOTORBOAT              140
+#define SKILL_BR_SHIP                   141
+#define SKILL_BR_LTA                    142
+#define SKILL_PILOT_HOVERCRAFT          143
+#define SKILL_PILOT_MOTORBOAT           144
+#define SKILL_PILOT_SHIP                145
+#define SKILL_PILOT_LTA                 146
+#define SKILL_MECHANICAL_ARM_OPERATION  147
+#define SKILL_PILOT_SEMIBALLISTIC       148
+#define SKILL_PILOT_SUBORBITAL          149
+#define SKILL_PILOT_TRACKED             150
+#define SKILL_PILOT_WALKER              151
 
-#define MAX_SKILLS                147
+#define MAX_SKILLS                152
 // Adding a pilot skill? Update utils.cpp's pilot_skills[].
 
 // Skill type definitions.
@@ -1143,6 +1153,7 @@ enum {
 #define TYPE_MEDICAL_MISHAP   414
 #define TYPE_SPELL_DRAIN      415
 #define TYPE_DRUGS            416
+#define TYPE_POISON           417
 
 #define WEAP_EDGED          0
 #define WEAP_CLUB           1
@@ -1329,18 +1340,23 @@ enum {
 #define TYPE_COOKER       4
 
 /* vehicle types table */
-#define VEH_DRONE 0
-#define VEH_BIKE 1
-#define VEH_CAR 2
-#define VEH_TRUCK 3
-#define VEH_FIXEDWING 4
-#define VEH_ROTORCRAFT 5
-#define VEH_VECTORTHRUST 6
-#define VEH_HOVERCRAFT 7
-#define VEH_MOTORBOAT 8
-#define VEH_SHIP 9
-#define VEH_LTA 10
-#define NUM_VEH_TYPES 11
+#define VEH_DRONE         0
+#define VEH_BIKE          1
+#define VEH_CAR           2
+#define VEH_TRUCK         3
+#define VEH_FIXEDWING     4
+#define VEH_ROTORCRAFT    5
+#define VEH_VECTORTHRUST  6
+#define VEH_HOVERCRAFT    7
+#define VEH_MOTORBOAT     8
+#define VEH_SHIP          9
+#define VEH_LTA           10
+#define VEH_SEMIBALLISTIC 11
+#define VEH_SUBORBITAL    12
+#define VEH_TRACKED       13
+#define VEH_WALKER        14
+#define NUM_VEH_TYPES     15
+// Adding a type? Change constants.cpp's veh_types[]
 
 /* vehicle affection table */
 #define VAFF_NONE  0
@@ -1713,6 +1729,9 @@ enum {
 #define LIQ_PISS       31
 #define LIQ_LOCAL      32
 #define LIQ_FUCKUP     33
+#define LIQ_CLEANER    34
+
+#define NUM_DRINK_TYPES         35
 
 /* focus values */
 
@@ -1812,7 +1831,8 @@ enum {
 #define TYPE_TIRES    20
 #define TYPE_MISC    21
 #define TYPE_AMMOBIN    22
-#define NUM_MODTYPES    23
+#define TYPE_POKEYSTICK 23
+#define NUM_MODTYPES    24
 
 #define ENGINE_NONE        0
 #define ENGINE_ELECTRIC    1
@@ -1993,10 +2013,11 @@ enum {
 /* do_use */
 #define SCMD_USE        0
 
-/* do_echo */
+/* do_new_emote */
 #define SCMD_ECHO       0
 #define SCMD_EMOTE      1
-#define SCMD_AECHO  3
+#define SCMD_VEMOTE     2
+#define SCMD_AECHO      3
 
 /* do_gen_door */
 #define SCMD_OPEN       0
@@ -2261,6 +2282,11 @@ enum {
 #define MAX_OBJ_AFFECT            6 /* Used in obj_file_elem *DO*NOT*CHANGE* */
 #define IDENT_LENGTH              8
 
+// Update the DB if you change these.
+#define MAX_KEYWORDS_LEN          200
+#define MAX_MOVEMENT_LEN          200
+#define MAX_SHORTDESC_LEN         200
+
 // New combat modifiers used in the rework of hit().
 #define COMBAT_MOD_RECOIL                0
 #define COMBAT_MOD_MOVEMENT              1
@@ -2377,8 +2403,6 @@ enum {
 #define OBJ_VEHICLE_TOOLKIT                37597
 #define OBJ_ELECTRONICS_KIT                60532
 #define OBJ_CELL_PHONE                     60530
-#define OBJ_TITLE_TO_SCORPION              892
-#define OBJ_TITLE_TO_BISON                 897
 #define OBJ_POCKET_SECRETARY               31542
 #define OBJ_NEOPHYTE_DUFFELBAG             60535
 #define OBJ_POLEARM_STRAP                  64989
@@ -2394,7 +2418,6 @@ enum {
 #define OBJ_LONDON_FOG_COUNT               8435
 #define OBJ_ASH_LEAF_ANKLET                60565
 #define OBJ_ORICHALCUM_BRACELET            4906
-#define OBJ_TITLE_TO_AMERICAR              891
 #define OBJ_SCK_MODEL_100                  786
 #define OBJ_FOREGRIP                       28618
 #define OBJ_PAIR_OF_WHITE_TRAINERS         22691
@@ -2416,6 +2439,28 @@ enum {
 #define OBJ_OPTICAL_CHIP_KEY               4600
 #define OBJ_UNFINISHED_EQUATION            1015
 #define OBJ_SCANEYE                        3817
+
+#define OBJ_TITLE_TO_AMERICAR              891
+#define OBJ_TITLE_TO_SCORPION              892
+#define OBJ_TITLE_TO_JACKRABBIT            893
+#define OBJ_TITLE_TO_RUNABOUT              894
+#define OBJ_TITLE_TO_RAPIER                895
+#define OBJ_TITLE_TO_BISON                 897
+#define OBJ_TITLE_TO_WESTWIND              898
+#define OBJ_TITLE_TO_DOBERMAN              904
+#define OBJ_TITLE_TO_SNOOPER               905
+#define OBJ_TITLE_TO_SURVEILLANCE          906
+#define OBJ_TITLE_TO_ROTODRONE             907
+#define OBJ_TITLE_TO_DALMATION             908
+#define OBJ_TITLE_TO_SUPERCOMBI_RV         961
+#define OBJ_TITLE_TO_NOMAD_SUV             962
+#define OBJ_TITLE_TO_BRUMBY_SUV            963
+#define OBJ_TITLE_TO_GOPHER_PICKUP         964
+#define OBJ_TITLE_TO_TRANSPORT_PICKUP      965
+#define OBJ_TITLE_TO_GMC_4201              966
+#define OBJ_TITLE_TO_GMC_BULLDOG           967
+#define OBJ_TITLE_TO_ARES_ROADMASTER       968
+#define OBJ_TITLE_TO_WHITE_EAGLE_BIKE      969
 
 #ifdef USE_PRIVATE_CE_WORLD
 #define OBJ_GAS_VENT_IV                    80403
@@ -2514,10 +2559,34 @@ enum {
 #define OBJ_BLANK_MAGAZINE                 127
 
 #define OBJ_DOCWAGON_PAPER_GOWN            16201
+#define OBJ_ANTI_DRUG_CHEMS                44
 
 #define QST_MAGE_INTRO                     5743
 
 #define MOB_BRAIN_IN_A_JAR                 10050
+
+#define VEHICLE_JACKRABBIT_E               1302
+#define VEHICLE_EUROCAR_WESTWIND_2000      1303
+#define VEHICLE_FORD_AMERICAR              1305
+#define VEHICLE_HARLEY_SCORPION            1307
+#define VEHICLE_YAMAHA_RAPIER              1308
+#define VEHICLE_FORD_BISON                 1309
+#define VEHICLE_GMC_4201                   1321
+#define VEHICLE_ARES_ROADMASTER            1322
+#define VEHICLE_GMC_BULLDOG                1323
+#define VEHICLE_TRANSPORT_PICKUP           1327
+#define VEHICLE_RUNABOUT                   1320
+#define VEHICLE_NOMAD_SUV                  12300
+#define VEHICLE_BRUMBY_SUV                 12301
+#define VEHICLE_GOPHER_PICKUP              12302
+#define VEHICLE_WHITE_EAGLE_BIKE           12303
+#define VEHICLE_DOBERMAN                   37500
+#define VEHICLE_SNOOPER                    37501
+#define VEHICLE_SURVEILLANCE               37502
+#define VEHICLE_ROTODRONE                  37503
+#define VEHICLE_DALMATION                  37504
+#define VEHICLE_SUPERCOMBI_RV              39205
+
 
 // Misc defines from spec_procs.cpp
 #define LIBRARY_SKILL    3

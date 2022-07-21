@@ -232,6 +232,8 @@ struct shop_sell_data *find_obj_shop(char *arg, vnum_t shop_nr, struct obj_data 
 }
 
 bool uninstall_ware_from_target_character(struct obj_data *obj, struct char_data *remover, struct char_data *victim, bool damage_on_operation) {
+  char buf[MAX_STRING_LENGTH], buf3[MAX_STRING_LENGTH];
+
   if (remover == victim) {
     send_to_char(remover, "You can't operate on yourself!\r\n");
     mudlog("SYSERR: remover = victim in uninstall_ware_from_target_character(). That's not supposed to happen!", remover, LOG_SYSLOG, TRUE);
@@ -296,6 +298,7 @@ bool uninstall_ware_from_target_character(struct obj_data *obj, struct char_data
 
 bool install_ware_in_target_character(struct obj_data *ware, struct char_data *installer, struct char_data *recipient, bool damage_on_operation) {
   struct obj_data *check;
+  char buf[MAX_STRING_LENGTH], buf3[MAX_STRING_LENGTH];
 
   if (installer == recipient) {
     send_to_char(installer, "You can't operate on yourself!\r\n");
@@ -1408,7 +1411,7 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
         i--;
         continue;
       }
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %2d)  ", i);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %3d)  ", i);
       if (sell->type == SELL_ALWAYS || (sell->type == SELL_AVAIL && GET_OBJ_AVAILTN(obj) == 0))
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Yes      ");
       else if (sell->type == SELL_AVAIL) {
@@ -2150,6 +2153,7 @@ void shop_cancel(char *arg, struct char_data *ch, struct char_data *keeper, vnum
 void shop_hours(struct char_data *ch, vnum_t shop_nr)
 {
 #ifdef USE_SHOP_OPEN_CLOSE_TIMES
+  char buf[MAX_STRING_LENGTH];
   strcpy(buf, "This shop is ");
   if (!shop_table[shop_nr].open && shop_table[shop_nr].close == 24)
     strcat(buf, "always open");
@@ -2256,6 +2260,7 @@ void randomize_shop_prices(void)
 
 void list_detailed_shop(struct char_data *ch, vnum_t shop_nr)
 {
+  char buf[MAX_STRING_LENGTH];
   char formatstr[MAX_STRING_LENGTH];
   char paddingnumberstr[12];
 
@@ -2958,7 +2963,7 @@ bool shop_can_sell_object(struct obj_data *obj, struct char_data *keeper, int sh
 
 void shop_install(char *argument, struct char_data *ch, struct char_data *keeper, vnum_t shop_nr) {
   struct obj_data *obj;
-  char buf[500];
+  char buf[MAX_STRING_LENGTH];
 
   // Non-docs won't install things.
   if (!shop_table[shop_nr].flags.IsSet(SHOP_DOCTOR)) {
@@ -3041,12 +3046,18 @@ void shop_install(char *argument, struct char_data *ch, struct char_data *keeper
 
 void shop_uninstall(char *argument, struct char_data *ch, struct char_data *keeper, vnum_t shop_nr) {
   struct obj_data *obj;
-  char buf[500];
+  char buf[MAX_STRING_LENGTH];
 
   // Non-docs won't uninstall things.
   if (!shop_table[shop_nr].flags.IsSet(SHOP_DOCTOR)) {
     strlcpy(buf, "Hold on now, I'm not a doctor! Find someone else to uninstall your 'ware.", sizeof(buf));
     do_say(keeper, buf, cmd_say, 0);
+    return;
+  }
+
+  // Can't uninstall in chargen.
+  if (shop_table[shop_nr].flags.IsSet(SHOP_CHARGEN)) {
+    send_to_char(ch, "Sorry, you can't do that in character generation.\r\n");
     return;
   }
 

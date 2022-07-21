@@ -222,7 +222,6 @@ struct archetype_data *generate_shaman() {
   // Set magic stats.
   arch->magic = 600;
   arch->tradition = TRAD_SHAMANIC;
-  arch->forcepoints = 25;
   arch->totem = TOTEM_WOLF;
   arch->totemspirit = SPIRIT_FOREST;
 
@@ -301,16 +300,12 @@ struct archetype_data *generate_street_mage() {
   // Set magic stats.
   arch->magic = 600;
   arch->tradition = TRAD_HERMETIC;
-  arch->forcepoints = 25;
 
   // Set skills.
   arch->skills[SKILL_SORCERY] = 6;
-  arch->skills[SKILL_CONJURING] = 4;
-  arch->skills[SKILL_AURA_READING] = 3;
-  arch->skills[SKILL_STREET_ETIQUETTE] = 1;
-  arch->skills[SKILL_CORPORATE_ETIQUETTE] = 2;
-  arch->skills[SKILL_NEGOTIATION] = 2;
-  arch->skills[SKILL_STEALTH] = 3;
+  arch->skills[SKILL_CONJURING] = 2;
+  arch->skills[SKILL_NEGOTIATION] = 3;
+  arch->skills[SKILL_STEALTH] = 1;
   arch->skills[SKILL_SPELLDESIGN] = 4;
   arch->skills[SKILL_PILOT_CAR] = 1;
 

@@ -55,6 +55,7 @@ void    clear_all_drug_data_for_char(struct char_data *ch);
 #define IS_ADDICTED                  1
 
 #define MAX_DRUG_NAME_LENGTH         12
+#define MAX_DELIVERY_METHOD_LENGTH   10
 
 struct drug_data {
   char name[MAX_DRUG_NAME_LENGTH];
@@ -68,6 +69,7 @@ struct drug_data {
   unsigned char fix_factor;
   int cost;
   float street_idx;
+  char delivery_method[MAX_DELIVERY_METHOD_LENGTH];
 };
 
 extern struct drug_data drug_types[];

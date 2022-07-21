@@ -1098,7 +1098,9 @@ bool load_char(const char *name, char_data *ch, bool logon)
   set_natural_vision_for_race(ch);
   affect_total(ch);
 
-  if ((((long) (time(0) - ch->player.time.lastdisc)) >= SECS_PER_REAL_HOUR)) {
+  long time_since_last_disconnect = time(0) - ch->player.time.lastdisc;
+
+  if (time_since_last_disconnect >= SECS_PER_REAL_HOUR) {
     GET_PHYSICAL(ch) = GET_MAX_PHYSICAL(ch);
     GET_MENTAL(ch) = GET_MAX_MENTAL(ch);
     if (AFF_FLAGS(ch).IsSet(AFF_HEALED))
@@ -1107,12 +1109,14 @@ bool load_char(const char *name, char_data *ch, bool logon)
   if ( !IS_SENATOR(ch) )
     PRF_FLAGS(ch).RemoveBit(PRF_ROLLS);
 
-  if (((long) (time(0) - ch->player.time.lastdisc) >= SECS_PER_REAL_HOUR * 2) ||
-      (GET_LAST_IN(ch) > 599 && GET_LAST_IN(ch) < 700)) {
+  // If you logged out in a cab or have been away more than 2 hours, snap back to home.
+  if ((time_since_last_disconnect  >= SECS_PER_REAL_HOUR * 2) ||
+      (GET_LAST_IN(ch) > 599 && GET_LAST_IN(ch) < 670)) {
     GET_LAST_IN(ch) = GET_LOADROOM(ch);
     GET_PHYSICAL(ch) = GET_MAX_PHYSICAL(ch);
     GET_MENTAL(ch) = GET_MAX_MENTAL(ch);
   }
+
   // initialization for imms
   if(IS_SENATOR(ch)) {
     GET_COND(ch, COND_FULL) = -1;
@@ -1153,6 +1157,9 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
     mysql_free_result(res);
   }
 
+  // Set their last disconnect time as right now.
+  player->player.time.lastdisc = time(0);
+
   /* Remove their worn equipment to inventory. */
   for (i = 0; i < NUM_WEARS; i++) {
     if (player->equipment[i])
@@ -1187,18 +1194,18 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
 
   /* Figure out what room to load them in. */
   if (player->in_room) {
-    if (player->in_room->number <= 1) {
+    if (GET_ROOM_VNUM(player->in_room) <= 1) {
       // If their current room is invalid for save/load:
       if (player->was_in_room) {
-        if (player->was_in_room->number <= 1) {
+        if (GET_ROOM_VNUM(player->was_in_room) <= 1) {
           // Their was_in_room is invalid; put them at Dante's.
           snprintf(buf, sizeof(buf), "SYSERR: save_char(): %s is at %ld and has was_in_room (world array index) %ld.",
-                  GET_CHAR_NAME(player), player->in_room->number, player->was_in_room->number);
+                  GET_CHAR_NAME(player), GET_ROOM_VNUM(player->in_room), GET_ROOM_VNUM(player->was_in_room));
           mudlog(buf, NULL, LOG_SYSLOG, TRUE);
           GET_LAST_IN(player) = RM_ENTRANCE_TO_DANTES;
         } else {
           // Their was_in_room is valid, so put them there.
-          GET_LAST_IN(player) = player->was_in_room->number;
+          GET_LAST_IN(player) = GET_ROOM_VNUM(player->was_in_room);
         }
       } else {
         // They have no was_in_room, so put them at Dante's.
@@ -1206,7 +1213,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
       }
     } else {
       // Their in_room is valid, so put them there.
-      GET_LAST_IN(player) = player->in_room->number;
+      GET_LAST_IN(player) = GET_ROOM_VNUM(player->in_room);
     }
   }
 
@@ -1527,7 +1534,6 @@ vnum_t get_highest_idnum_in_use() {
     "pfiles_bioware",
     "pfiles_chargendata",
     "pfiles_cyberware",
-    "pfiles_drugdata",
     "pfiles_drugs",
     "pfiles_ignore",
     "pfiles_immortdata",
@@ -1544,7 +1550,7 @@ vnum_t get_highest_idnum_in_use() {
     "you-deleted-something-and-didn't-change-the-table-length-dumbass" // must be last for obvious reasons
   };
 
-  #define NUM_IDNUM_TABLES 20
+  #define NUM_IDNUM_TABLES 19
 
   vnum_t highest_pfiles_idnum = get_one_number_from_query("SELECT idnum FROM pfiles ORDER BY idnum DESC LIMIT 1;");
 
@@ -1992,7 +1998,6 @@ void DeleteChar(long idx)
     "pfiles_bioware     ",
     "pfiles_chargendata ", // 5
     "pfiles_cyberware   ",
-    "pfiles_drugdata    ",
     "pfiles_drugs       ",
     "pfiles_ignore      ", // IF YOU CHANGE THIS, CHANGE PFILES_IGNORE_INDEX
     "pfiles_immortdata  ", // 10
@@ -2008,11 +2013,11 @@ void DeleteChar(long idx)
     "pfiles_worn        ",  // 20
     "pfiles_ignore_v2   "   // IF YOU CHANGE THIS, CHANGE PFILES_IGNORE_V2_INDEX
   };
-  #define NUM_SQL_TABLE_NAMES     22
+  #define NUM_SQL_TABLE_NAMES     21
   #define PFILES_INDEX            0
-  #define PFILES_IGNORE_INDEX     9
-  #define PFILES_MEMORY_INDEX     14
-  #define PFILES_IGNORE_V2_INDEX  21
+  #define PFILES_IGNORE_INDEX     8
+  #define PFILES_MEMORY_INDEX     13
+  #define PFILES_IGNORE_V2_INDEX  20
 
   // Figure out the filename for this character.
   const char *name = get_player_name(idx);
@@ -2458,20 +2463,22 @@ void save_metamagic_to_db(struct char_data *player) {
 }
 
 void save_elementals_to_db(struct char_data *player) {
-  if (GET_SPIRIT(player) && GET_TRADITION(player) == TRAD_HERMETIC) {
+  if (GET_TRADITION(player) == TRAD_HERMETIC) {
     snprintf(buf, sizeof(buf), "DELETE FROM pfiles_spirits WHERE idnum=%ld", GET_IDNUM(player));
     mysql_wrapper(mysql, buf);
-    strcpy(buf, "INSERT INTO pfiles_spirits (idnum, Type, Rating, Services, SpiritID) VALUES (");
-    int q = 0;
-    for (struct spirit_data *spirit = GET_SPIRIT(player); spirit; spirit = spirit->next, q++) {
-      if (q)
-        strcat(buf, "), (");
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %d, %d, %d, %d", GET_IDNUM(player), spirit->type, spirit->force, spirit->services, spirit->id);
-      q = 1;
-    }
-    if (q) {
-      strcat(buf, ");");
-      mysql_wrapper(mysql, buf);
+    if (GET_SPIRIT(player)) {
+      strcpy(buf, "INSERT INTO pfiles_spirits (idnum, Type, Rating, Services, SpiritID) VALUES (");
+      int q = 0;
+      for (struct spirit_data *spirit = GET_SPIRIT(player); spirit; spirit = spirit->next, q++) {
+        if (q)
+          strcat(buf, "), (");
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %d, %d, %d, %d", GET_IDNUM(player), spirit->type, spirit->force, spirit->services, spirit->id);
+        q = 1;
+      }
+      if (q) {
+        strcat(buf, ");");
+        mysql_wrapper(mysql, buf);
+      }
     }
   }
 }

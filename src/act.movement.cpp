@@ -679,9 +679,27 @@ void move_vehicle(struct char_data *ch, int dir)
     send_to_char("You aren't the Kool-Aid Man, so you decide against ramming your way out of here.\r\n", ch);
     return;
   }
-  if (!EXIT(veh, dir) || !EXIT(veh, dir)->to_room || EXIT(veh, dir)->to_room == &world[0] || IS_SET(EXIT(veh, dir)->exit_info, EX_CLOSED)) {
-    send_to_char(CANNOT_GO_THAT_WAY, ch);
-    return;
+  if (!EXIT(veh, dir)
+      || !EXIT(veh, dir)->to_room
+      || EXIT(veh, dir)->to_room == &world[0])
+  {
+      send_to_char(CANNOT_GO_THAT_WAY, ch);
+      return;
+  }
+
+  if (IS_SET(EXIT(veh, dir)->exit_info, EX_CLOSED)) {
+      if ((ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_HOUSE) // It only checks house, not garage, so drones can enter/leave apts.
+             && House_can_enter(ch, EXIT(veh, dir)->to_room->number)
+             && has_key(ch, (EXIT(veh, dir)->key)))
+          || (ROOM_FLAGGED(veh->in_room, ROOM_HOUSE)))
+      {
+          send_to_char("The remote on your key beeps, allowing the door to swing open briefly enough to slide through.\r\n", ch);
+          snprintf(buf, sizeof(buf), "A door beeps before swinging open electronically to allow %s through in that brief moment.\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
+          send_to_room(buf, get_veh_in_room(veh), veh);
+      } else {
+          send_to_char(CANNOT_GO_THAT_WAY, ch);
+          return;
+      }
   }
 
 #ifdef DEATH_FLAGS
@@ -757,12 +775,7 @@ void move_vehicle(struct char_data *ch, int dir)
   snprintf(buf2, sizeof(buf2), "%s %s from %s.", GET_VEH_NAME(veh), veh->arrive, thedirs[rev_dir[dir]]);
   snprintf(buf1, sizeof(buf1), "%s %s to %s.", GET_VEH_NAME(veh), veh->leave, thedirs[dir]);
 
-  /* Known issue: If you are in a vehicle, and nobody is in the room, and another vehicle drives in, you won't see it. */
-  if (veh->in_room->people)
-  {
-    act(buf1, FALSE, veh->in_room->people, 0, 0, TO_ROOM);
-    act(buf1, FALSE, veh->in_room->people, 0, 0, TO_CHAR);
-  }
+  send_to_room(buf1, veh->in_room, veh);
 
   for (struct char_data *tch = veh->in_room->watching; tch; tch = tch->next_watching)
     act(buf2, FALSE, ch, 0, 0, TO_CHAR);
@@ -775,10 +788,9 @@ void move_vehicle(struct char_data *ch, int dir)
   veh_from_room(veh);
   veh_to_room(veh, was_in);
   veh->lastin[0] = veh->in_room;
-  if (veh->in_room->people) {
-    act(buf2, FALSE, veh->in_room->people, 0, 0, TO_ROOM);
-    act(buf2, FALSE, veh->in_room->people, 0, 0, TO_CHAR);
-  }
+
+  send_to_room(buf2, veh->in_room, veh);
+
   for (struct char_data *tch = veh->in_room->watching; tch; tch = tch->next_watching)
     act(buf2, FALSE, ch, 0, 0, TO_CHAR);
   stop_fighting(ch);
@@ -1090,45 +1102,6 @@ int find_door(struct char_data *ch, const char *type, char *dir, const char *cmd
       return -1;
     }
   }
-}
-
-int has_key(struct char_data *ch, int key_vnum)
-{
-  struct obj_data *o, *key;
-
-  // Check carried items.
-  for (o = ch->carrying; o; o = o->next_content) {
-    if (GET_OBJ_VNUM(o) == key_vnum)
-      return 1;
-
-    if (GET_OBJ_TYPE(o) == ITEM_KEYRING) {
-      for (key = o->contains; key; key = key->next_content) {
-        if (GET_OBJ_VNUM(key) == key_vnum)
-          return 1;
-      }
-    }
-  }
-
-  // Check worn items.
-  for (int x = 0; x < NUM_WEARS; x++) {
-    // Must exist.
-    if (!GET_EQ(ch, x))
-      continue;
-
-    // Direct match?
-    if (GET_OBJ_VNUM(GET_EQ(ch, x)) == key_vnum)
-      return 1;
-
-    // Keyring match?
-    if (GET_OBJ_TYPE(GET_EQ(ch, x)) == ITEM_KEYRING) {
-      for (key = GET_EQ(ch, x)->contains; key; key = key->next_content) {
-        if (GET_OBJ_VNUM(key) == key_vnum)
-          return 1;
-      }
-    }
-  }
-
-  return 0;
 }
 
 #define NEED_OPEN       1

@@ -15,6 +15,7 @@
 #include "config.hpp"
 #include "ignore_system.hpp"
 #include "invis_resistance_tests.hpp"
+#include "newdb.hpp"
 
 #define POWER(name) void (name)(struct char_data *ch, struct char_data *spirit, struct spirit_data *spiritdata, char *arg)
 #define FAILED_CAST "You fail to bind the mana to your will.\r\n"
@@ -900,7 +901,8 @@ bool spell_drain(struct char_data *ch, int spell_idx, int force, int drain_damag
   act(buf, FALSE, ch, NULL, NULL, TO_ROLLS);
 
   // Allow others to see that you're casting.
-  magic_perception(ch, force, spell_idx);
+  if (GET_TRADITION(ch) != TRAD_ADEPT)
+    magic_perception(ch, force, spell_idx);
 
   // Write our rolls info.
   int original_damage = drain_damage;
@@ -2190,23 +2192,27 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
         send_to_char("The flames rapidly disperse around you, causing only mild discomfort.\r\n", vict);
       }
 
-      if (IS_NPC(ch) || IS_NPC(vict)) {
-        damage_equip(ch, vict, force, TYPE_FIRE);
-      }
-      if (!damage(ch, vict, dam, TYPE_MANIPULATION_SPELL, PHYSICAL)) {
-        if (number(0, 6) <= basedamage + 1) {
-          act("^RThe flames continue to burn around $m!^N", TRUE, vict, 0, 0, TO_ROOM);
-          send_to_char("^RYou continue to burn!\r\n", vict);
-          vict->points.fire[0] = srdice();
-          vict->points.fire[1] = 0;
+      if (dam > 0) {
+        if (IS_NPC(ch) || IS_NPC(vict)) {
+          damage_equip(ch, vict, force, TYPE_FIRE);
         }
+        if (!damage(ch, vict, dam, TYPE_MANIPULATION_SPELL, PHYSICAL)) {
+          if (number(0, 8) <= basedamage + 1) {
+            act("^RThe flames continue to burn around $m!^N", TRUE, vict, 0, 0, TO_ROOM);
+            send_to_char("^RYou continue to burn!\r\n", vict);
+            int rolled_fire_duration = srdice() + 1;
+            GET_CHAR_FIRE_DURATION(vict) = MIN(force, rolled_fire_duration);
+            GET_CHAR_FIRE_BONUS_DAMAGE(vict) = (int) (force / 6);
+            GET_CHAR_FIRE_CAUSED_BY_PC(vict) = !IS_NPC(ch);
+          }
 
-        if (IS_NPC(vict) && !IS_NPC(ch))
-          GET_LASTHIT(vict) = GET_IDNUM(ch);
-      }
-      else if (cast_by_npc) {
-        // Janky crash avoidance: If we killed our target and we're an NPC, bail out immediately.
-        return;
+          if (IS_NPC(vict) && !IS_NPC(ch))
+            GET_LASTHIT(vict) = GET_IDNUM(ch);
+        }
+        else if (cast_by_npc) {
+          // Janky crash avoidance: If we killed our target and we're an NPC, bail out immediately.
+          return;
+        }
       }
     }
     spell_drain(reflected ? vict : ch, spell, force, basedamage);
@@ -2757,7 +2763,7 @@ bool mob_magic(struct char_data *ch)
       case 20:
       case 21:
       case 22:
-        if (!affected_by_spell(FIGHTING(ch), SPELL_IGNITE) && !ch->points.fire[0])
+        if (!affected_by_spell(FIGHTING(ch), SPELL_IGNITE) && !GET_CHAR_FIRE_DURATION(FIGHTING(ch)))
           spell = SPELL_IGNITE;
         break;
       case 23:
@@ -3058,8 +3064,10 @@ ACMD(do_contest)
       act("$n becomes uncontrolled!", TRUE, mob, 0, 0, TO_ROOM);
       GET_ACTIVE(mob) = 0;
     }
-    conjuring_drain(caster, GET_LEVEL(mob));
-    conjuring_drain(ch, GET_LEVEL(mob));
+    if (conjuring_drain(caster, GET_LEVEL(mob)))
+      return;
+    if (conjuring_drain(ch, GET_LEVEL(mob)))
+      return;
   } else if (chsuc > casuc) {
     send_to_char(ch, "You steal control of %s!\r\n", GET_NAME(mob));
     snprintf(buf, sizeof(buf), "$n steals control of %s!", GET_NAME(mob));
@@ -3077,13 +3085,16 @@ ACMD(do_contest)
         break;
       }
     GET_ACTIVE(mob) = GET_IDNUM(ch);
-    conjuring_drain(caster, GET_LEVEL(mob));
-    conjuring_drain(ch, GET_LEVEL(mob));
+    if (conjuring_drain(caster, GET_LEVEL(mob)))
+      return;
+    if (conjuring_drain(ch, GET_LEVEL(mob)))
+      return;
   } else {
     send_to_char("You fail to gain control!\r\n", ch);
     snprintf(buf, sizeof(buf), "$n tries to steal control of %s!", GET_NAME(mob));
     act(buf, FALSE, ch, 0, caster, TO_VICT);
-    conjuring_drain(ch, GET_LEVEL(mob));
+    if (conjuring_drain(ch, GET_LEVEL(mob)))
+      return;
   }
 }
 ACMD(do_unbond)
@@ -3102,6 +3113,35 @@ ACMD(do_unbond)
     send_to_char(ch, "You don't have a '%s'.\r\n", argument);
     return;
   }
+
+  // Newbies get to refund their force points.
+  if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
+    switch (GET_OBJ_TYPE(obj)) {
+      case ITEM_FOCUS:
+        if (GET_FOCUS_BONDED_TO(obj) != GET_IDNUM(ch)) {
+          send_to_char(ch, "%s is not bonded to you.\r\n", GET_OBJ_NAME(obj));
+          return;
+        }
+
+        GET_FOCUS_BONDED_TO(obj) = GET_FOCUS_BONDED_SPIRIT_OR_SPELL(obj) = GET_FOCUS_TRADITION(obj) = 0;
+        GET_FORCE_POINTS(ch) += get_focus_bond_cost(obj);
+        break;
+      case ITEM_WEAPON:
+        if (!WEAPON_IS_FOCUS(obj) || !WEAPON_FOCUS_USABLE_BY(obj, ch)) {
+          send_to_char(ch, "%s is not bonded to you.\r\n", GET_OBJ_NAME(obj));
+          return;
+        }
+
+        GET_WEAPON_FOCUS_BONDED_BY(obj) = GET_WEAPON_FOCUS_BOND_STATUS(obj) = 0;
+        GET_FORCE_POINTS(ch) += get_focus_bond_cost(obj);
+        break;
+      default:
+        send_to_char(ch, "You can't unbond %s.\r\n", GET_OBJ_NAME(obj));
+        break;
+    }
+    return;
+  }
+
   if (GET_OBJ_TYPE(obj) == ITEM_FOCUS && GET_FOCUS_BONDED_TO(obj)) {
     send_to_char("You sever the focus's bond with the astral plane.\r\n", ch);
     GET_FOCUS_BONDED_TO(obj) = GET_FOCUS_BONDED_SPIRIT_OR_SPELL(obj) = GET_FOCUS_TRADITION(obj) = 0;
@@ -3199,7 +3239,7 @@ ACMD(do_bond)
       return;
     }
 
-    karma = (3 + GET_WEAPON_REACH(obj)) * GET_WEAPON_FOCUS_RATING(obj);
+    karma = get_focus_bond_cost(obj);
 
     if (GET_KARMA(ch) < karma * 100) {
       send_to_char(ch, "You don't have enough karma to bond that (Need %d).\r\n", karma);
@@ -3264,6 +3304,7 @@ ACMD(do_bond)
       } else
         send_to_char(ch, "You have already bonded %s.\r\n", GET_OBJ_NAME(obj));
     } else {
+      karma = get_focus_bond_cost(obj);
       switch (GET_FOCUS_TYPE(obj)) {
         case FOCI_SPEC_SPELL:
           karma = GET_FOCUS_FORCE(obj);
@@ -3274,15 +3315,14 @@ ACMD(do_bond)
             send_to_char("Bond which spell category?\r\n", ch);
             return;
           }
-          for (; spirit <= MANIPULATION; spirit++)
+          for (; spirit <= MANIPULATION; spirit++) {
             if (is_abbrev(buf2, spell_category[spirit]))
               break;
+          }
           if (spirit > MANIPULATION) {
             send_to_char("That is not a valid category.\r\n", ch);
             return;
           }
-          if (GET_FOCUS_TYPE(obj) == FOCI_SPELL_CAT)
-            karma = GET_FOCUS_FORCE(obj) * 3;
           break;
         case FOCI_SPIRIT:
           if (!*buf2) {
@@ -3293,24 +3333,19 @@ ACMD(do_bond)
             for (; spirit < NUM_ELEMENTS; spirit++)
               if (is_abbrev(buf2, elements[spirit].name))
                 break;
-          } else
+          } else {
             for (; spirit < NUM_SPIRITS; spirit++)
               if (is_abbrev(buf2, spirits[spirit].name))
                 break;
+          }
           if (GET_TRADITION(ch) == TRAD_HERMETIC ? spirit == NUM_ELEMENTS : spirit == NUM_SPIRITS) {
             send_to_char(ch, "That is not a valid %s.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
             return;
           }
-          karma = GET_FOCUS_FORCE(obj) * 2;
           break;
         case FOCI_POWER:
-          karma = GET_FOCUS_FORCE(obj) * 5;
-          break;
         case FOCI_SUSTAINED:
-          karma = GET_FOCUS_FORCE(obj);
-          break;
         case FOCI_SPELL_DEFENSE:
-          karma = GET_FOCUS_FORCE(obj) * 3;
           break;
         default:
           snprintf(buf, sizeof(buf), "SYSERR: Unknown focus type %d in bonding switch.", GET_FOCUS_TYPE(obj));
@@ -3338,7 +3373,7 @@ ACMD(do_bond)
       }
       if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
         if (GET_FORCE_POINTS(ch) < karma) {
-          send_to_char(ch, "You don't have enough force points to bond that (Need %d). You can get more force points by returning to the talismonger or the spell trainers and typing ^WLEARN FORCE^n.\r\n", karma);
+          send_to_char(ch, "You don't have enough force points to bond that (Need %d). You can get more force points by returning to the talismonger or the spell trainers and typing ##^WLEARN FORCE^n.\r\n", karma);
           return;
         }
         GET_FORCE_POINTS(ch) -= karma;
@@ -3419,6 +3454,7 @@ ACMD(do_release)
         REMOVE_FROM_LIST(spirit, GET_SPIRIT(ch), next);
         delete spirit;
         GET_NUM_SPIRITS(ch)--;
+        playerDB.SaveChar(ch, GET_LOADROOM(ch));
         return;
       }
     }
@@ -3552,7 +3588,7 @@ ACMD(do_conjure)
   }
   if (GET_TRADITION(ch) == TRAD_HERMETIC) {
     if (GET_NUM_SPIRITS(ch) >= GET_CHA(ch)) {
-      send_to_char(ch, "You have too many elementals summoned-- you can have a maximum of %d.\r\n", GET_CHA(ch));
+      send_to_char(ch, "You can't conjure any more elementals-- you can have a maximum of %d.\r\n", GET_CHA(ch));
       return;
     }
     for (spirit = 0; spirit < NUM_ELEMENTS; spirit++)
@@ -3638,9 +3674,9 @@ ACMD(do_conjure)
       ch->char_specials.conjure[2] = 1;
     } else {
 #ifdef ACCELERATE_FOR_TESTING
-      ch->char_specials.conjure[2] = force;
+      ch->char_specials.conjure[2] = 1;
 #else
-      ch->char_specials.conjure[2] = force * 30;
+      ch->char_specials.conjure[2] = 20;
 #endif
     }
     // Max tracking for PROGRESS command.
@@ -3983,10 +4019,13 @@ ACMD(do_elemental)
                (real_mob = real_mobile(spirits[elem->type].vnum)) >= 0 ? GET_NAME(&mob_proto[real_mob]) : "a spirit",
                elem->force, elem->services);
     else
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%d) %-30s (Force %d) Services: %d%10s\r\n",
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%d) %-30s (Force %d [id %d]) Services: %d%10s\r\n",
                i,
                (real_mob = real_mobile(elements[elem->type].vnum)) >= 0 ? GET_NAME(&mob_proto[real_mob]) : "an elemental",
-               elem->force, elem->services, elem->called ? " Present" : " ");
+               elem->force,
+               elem->id,
+               elem->services,
+               elem->called ? " Present" : " ");
   }
   send_to_char(buf, ch);
 }
@@ -4278,6 +4317,11 @@ POWER(spirit_sustain)
         snprintf(buf, sizeof(buf), "SYSERR: Unexpected elemental type %d in spirit_sustain.", spiritdata->type);
         mudlog(buf, ch, LOG_SYSLOG, TRUE);
         break;
+    }
+
+    if (spiritdata->force < sust->force) {
+      send_to_char(ch, "%s can only sustain spells at force %d or lower.\r\n", CAP(GET_NAME(spirit)), spiritdata->force);
+      return;
     }
 
     sust->spirit = spirit;
@@ -5079,13 +5123,14 @@ ACMD(do_deactivate)
 ACMD(do_destroy)
 {
   if (!*argument) {
-    send_to_char("Destroy which magic construct?\r\n", ch);
+    send_to_char("Destroy which lodge or circle?\r\n", ch);
     return;
   }
   skip_spaces(&argument);
   struct obj_data *obj;
   if (ch->in_veh || !(obj = get_obj_in_list_vis(ch, argument, ch->in_room->contents))) {
-    send_to_char(ch, "'%s' isn't here.\r\n", argument);
+    send_to_char(ch, "You don't see a lodge or circle named '%s' %s.\r\n", argument, ch->in_room ? "anywhere around you" : "in this vehicle");
+    send_to_char(ch, "(Are you looking for the ##^WJUNK^n command?)\r\n");
     return;
   }
   if (GET_OBJ_TYPE(obj) == ITEM_MAGIC_TOOL && (GET_OBJ_VAL(obj, 0) == TYPE_LODGE || GET_OBJ_VAL(obj, 0) == TYPE_CIRCLE)) {
@@ -5415,14 +5460,20 @@ void disp_init_menu(struct descriptor_data *d)
   d->edit_mode = INIT_MAIN;
 }
 
-bool can_metamagic(struct char_data *ch, int i)
+bool can_select_metamagic(struct char_data *ch, int i)
 {
   if (GET_TRADITION(ch) == TRAD_ADEPT) {
-    if (i != META_CENTERING && i != META_MASKING)
-      return FALSE;
-    if (i == META_CENTERING && GET_METAMAGIC(ch, i) == 2)
-      return TRUE;
+    switch (i) {
+      case META_CENTERING:
+        // Centering can go up an arbitrary number of levels.
+        return GET_METAMAGIC(ch, i) % 2 == 0;
+      case META_MASKING:
+        return GET_METAMAGIC(ch, i) == 0;
+      default:
+        return FALSE;
+    }
   }
+  // All other metamagics can only be unlocked from 0.
   if (GET_METAMAGIC(ch, i))
     return FALSE;
   if (GET_ASPECT(ch) == ASPECT_CONJURER && (i == META_QUICKENING || i == META_REFLECTING || i == META_ANCHORING || i == META_SHIELDING))
@@ -5448,8 +5499,14 @@ void disp_geas_menu(struct descriptor_data *d)
 void disp_meta_menu(struct descriptor_data *d)
 {
   CLS(CH);
-  for (int i = 1; i < META_MAX; i++)
-    send_to_char(CH, "%d) %s%s^n\r\n", i, can_metamagic(CH, i) ? "" : "^r", metamagic[i]);
+  for (int i = 1; i < META_MAX; i++) {
+    if (PRF_FLAGGED(CH, PRF_SCREENREADER)) {
+      send_to_char(CH, "%d) %s%s^n\r\n", i, metamagic[i], can_select_metamagic(CH, i) ? " (can learn)" : " (cannot learn)");
+    } else {
+      send_to_char(CH, "%d) %s%s^n\r\n", i, can_select_metamagic(CH, i) ? "" : "^r", metamagic[i]);
+    }
+  }
+
   send_to_char("q) Quit Initiation\r\nSelect ability to learn: ", CH);
   d->edit_mode = INIT_META;
 }
@@ -5643,9 +5700,11 @@ void init_parse(struct descriptor_data *d, char *arg)
         STATE(d) = CON_PLAYING;
         send_to_char("Initiation cancelled.\r\n", CH);
       } else if (number > META_MAX) {
-        send_to_char("Invalid Response. Select ability to learn: ", CH);
-      } else if (!can_metamagic(CH, number)) {
-        send_to_char("Your tradition/apect/initiation combination isn't able to learn that metamagic technique. Select ability to learn: ", CH);
+        send_to_char("Invalid Response. Select another metamagic to unlock: ", CH);
+      } else if (GET_METAMAGIC(CH, number) >= METAMAGIC_STAGE_UNLOCKED && !(number == META_CENTERING && GET_TRADITION(CH) == TRAD_ADEPT)) {
+        send_to_char(CH, "You've already unlocked %s. Select another metamagic to unlock: ", metamagic[number]);
+      } else if (!can_select_metamagic(CH, number)) {
+        send_to_char("Your tradition/apect/initiation combination isn't able to learn that metamagic technique. Select another metamagic to learn: ", CH);
       } else {
         init_cost(CH, TRUE);
         SET_METAMAGIC(CH, number, GET_METAMAGIC(CH, number) + 1);
@@ -5664,7 +5723,7 @@ void init_parse(struct descriptor_data *d, char *arg)
 
 ACMD(do_masking)
 {
-  if (GET_METAMAGIC(ch, META_MASKING) < 2) {
+  if (GET_METAMAGIC(ch, META_MASKING) < METAMAGIC_STAGE_LEARNED) {
     nonsensical_reply(ch, NULL, "standard");
     return;
   }
@@ -5753,7 +5812,20 @@ ACMD(do_metamagic)
   for (int x = 0; x < META_MAX; x++)
     if (GET_METAMAGIC(ch, x)) {
       i++;
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  %s%s^n\r\n", GET_METAMAGIC(ch, x) == 2 ? "" : "^r", metamagic[x]);
+      if (GET_METAMAGIC(ch, x) == METAMAGIC_STAGE_LOCKED) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  ^r%s^n (locked)^n\r\n", metamagic[x]);
+      } else if (GET_METAMAGIC(ch, x) == METAMAGIC_STAGE_UNLOCKED) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  ^y%s^n (not learned)^n\r\n", metamagic[x]);
+      } else {
+        if (x == META_CENTERING && GET_TRADITION(ch) == TRAD_ADEPT) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  ^y%s^n (learned %d/%d)^n\r\n",
+                   metamagic[x],
+                   GET_METAMAGIC(ch, x) / METAMAGIC_STAGE_LEARNED,
+                   (GET_METAMAGIC(ch, x) / METAMAGIC_STAGE_LEARNED) + GET_METAMAGIC(ch, x) % METAMAGIC_STAGE_LEARNED);
+        } else {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  ^y%s^n (learned)^n\r\n", metamagic[x]);
+        }
+      }
     }
   if (i > 0)
     send_to_char(ch, "You know the following metamagic techniques:\r\n%s", buf);
@@ -5762,12 +5834,13 @@ ACMD(do_metamagic)
 
 ACMD(do_cleanse)
 {
-  if (GET_METAMAGIC(ch, META_CLEANSING) < 2) {
+  if (GET_METAMAGIC(ch, META_CLEANSING) < METAMAGIC_STAGE_LEARNED) {
     nonsensical_reply(ch, NULL, "standard");
     return;
   }
-  if (!(IS_ASTRAL(ch) || IS_DUAL(ch)))
-    send_to_char("You have no sense of the astral plane.\r\n", ch);
+
+  if (!force_perception(ch))
+    return;
   else if (!GET_SKILL(ch, SKILL_SORCERY))
     send_to_char("You need practical knowledge of sorcery to cleanse the astral plane.\r\n", ch);
   else if (ch->in_veh)

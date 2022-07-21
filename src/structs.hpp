@@ -501,7 +501,7 @@ struct char_point_data
   ubyte lastdamage;
   int track[2];
   Bitfield vision[NUM_VISION_TYPES];
-  ubyte fire[2];
+  ubyte fire[3];
   ubyte binding;
   ubyte reach[2];
   int extras[2];
@@ -515,7 +515,7 @@ struct char_point_data
     ZERO_OUT_ARRAY(impact, 3);
     ZERO_OUT_ARRAY(sustained, 3);
     ZERO_OUT_ARRAY(track, 2);
-    ZERO_OUT_ARRAY(fire, 2);
+    ZERO_OUT_ARRAY(fire, 3);
     ZERO_OUT_ARRAY(reach, 2);
     ZERO_OUT_ARRAY(extras, 2);
   }
@@ -668,11 +668,12 @@ struct player_special_data
   ubyte physical_loss;
   ubyte perm_bod;
   struct room_data *watching;
+  int wherelist_checks;
 
   player_special_data() :
       aliases(NULL), remem(NULL), last_tell(0), questnum(0), obj_complete(NULL),
       mob_complete(NULL), mental_loss(0), physical_loss(0),
-      perm_bod(0), watching(NULL)
+      perm_bod(0), watching(NULL), wherelist_checks(0)
   {
     ZERO_OUT_ARRAY(last_quest, QUEST_TIMER);
     ZERO_OUT_ARRAY(drug_last_fix, NUM_DRUGS);
@@ -1129,6 +1130,7 @@ struct skill_data {
   sh_int attribute;
   bool type;
   bool requires_magic;
+  sh_int group;
 };
 
 struct part_data {
