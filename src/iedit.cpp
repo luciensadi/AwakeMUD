@@ -31,7 +31,7 @@
 #define OBJ     d->edit_obj
 
 
-void write_objs_to_disk(int zone);
+void write_objs_to_disk(vnum_t zone);
 
 
 // extern funcs
@@ -3052,14 +3052,14 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
 
 #define WRITE_IF_CHANGED(string, thing, default) if ((thing) != (default)) { fprintf(fp, (string), (thing)); }
 #define WRITE_IF_CHANGED_STR(string, thing, default) if (str_cmp((thing), (default))) { fprintf(fp, (string), (thing)); }
-void write_objs_to_disk(int zone)
+void write_objs_to_disk(vnum_t zonenum)
 {
   int counter, counter2, realcounter, count = 0;
   FILE *fp;
   struct obj_data *obj;
   struct extra_descr_data *ex_desc;
 
-  zone = real_zone(zone);
+  rnum_t zone = real_zone(zonenum);
 
   // ideally, this would just fill a VTable with vals...maybe one day
 
