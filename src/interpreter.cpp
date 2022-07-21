@@ -95,6 +95,8 @@ void cedit_parse(struct descriptor_data *d, char *arg);
 extern void affect_total(struct char_data * ch);
 extern void mag_menu_system(struct descriptor_data * d, char *arg);
 extern void ccr_pronoun_menu(struct descriptor_data *d);
+extern void disable_xterm_256(descriptor_t *apDescriptor);
+extern void enable_xterm_256(descriptor_t *apDescriptor);
 
 /* prototypes for all do_x functions. */
 ACMD_DECLARE(do_olcon);
@@ -2536,6 +2538,7 @@ void nanny(struct descriptor_data * d, char *arg)
       if (does_player_exist(tmp_name)) {
         d->character = playerDB.LoadChar(tmp_name, TRUE);
         d->character->desc = d;
+
         if (PRF_FLAGGED(d->character, PRF_HARDCORE) && PLR_FLAGGED(d->character, PLR_JUST_DIED)) {
           SEND_TO_Q("The Reaper has claimed this one...\r\n", d);
           STATE(d) = CON_CLOSE;
@@ -2881,6 +2884,14 @@ void nanny(struct descriptor_data * d, char *arg)
       d->character->next = character_list;
       character_list = d->character;
       d->character->player.time.logon = time(0);
+
+      if (PRF_FLAGGED(d->character, PRF_DISABLE_XTERM)) {
+        disable_xterm_256(d);
+      }
+
+      if (PRF_FLAGGED(d->character, PRF_COERCE_ANSI) && d->pProtocol) {
+        d->pProtocol->do_coerce_ansi_capable_colors_to_ansi = TRUE;
+      }
 
       // Rewrote the entire janky-ass load room tree.
       // First: Frozen characters. They go to the frozen start room.

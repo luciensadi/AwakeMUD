@@ -3679,12 +3679,24 @@ ACMD(do_pool)
   if (GET_HACKING(ch) > 0)
     snprintf(ENDOF(pools), sizeof(pools) - strlen(pools), "  Hacking: %d\r\n", GET_HACKING(ch));
   if (GET_MAGIC(ch) > 0) {
+    bool over_spellpool_limit = GET_CASTING(ch) > GET_SKILL(ch, SKILL_SORCERY);
+
     if (PRF_FLAGGED(ch, PRF_SCREENREADER)) {
-      snprintf(ENDOF(pools), sizeof(pools) - strlen(pools), "  Spell: %d\r\n  Casting: %d\r\n  Drain: %d\r\n  Defense: %d\r\n", GET_MAGIC(ch), GET_CASTING(ch), GET_DRAIN(ch), GET_SDEFENSE(ch));
+      snprintf(ENDOF(pools), sizeof(pools) - strlen(pools), "  Spell: %d\r\n  Casting: %d%s\r\n  Drain: %d\r\n  Defense: %d\r\n",
+               GET_MAGIC(ch),
+               GET_CASTING(ch),
+               over_spellpool_limit ? " (warning: exceeds sorcery skill!)" : "",
+               GET_DRAIN(ch),
+               GET_SDEFENSE(ch));
       if (GET_METAMAGIC(ch, META_REFLECTING) == 2)
         snprintf(ENDOF(pools), sizeof(pools) - strlen(pools), "  Reflecting: %d\r\n", GET_REFLECT(ch));
     } else {
-      snprintf(ENDOF(pools), sizeof(pools) - strlen(pools), "  Spell: %d      (Casting: %d    Drain: %d    Defense: %d", GET_MAGIC(ch), GET_CASTING(ch), GET_DRAIN(ch), GET_SDEFENSE(ch));
+      snprintf(ENDOF(pools), sizeof(pools) - strlen(pools), "  Spell: %d      (Casting: %d %s   Drain: %d    Defense: %d",
+               GET_MAGIC(ch),
+               GET_CASTING(ch),
+               over_spellpool_limit ? " (warning: exceeds sorcery skill!)" : "",
+               GET_DRAIN(ch),
+               GET_SDEFENSE(ch));
       if (GET_METAMAGIC(ch, META_REFLECTING) == 2)
         snprintf(ENDOF(pools), sizeof(pools) - strlen(pools), "    Reflecting: %d", GET_REFLECT(ch));
       strlcat(pools, ")\r\n", sizeof(pools));

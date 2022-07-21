@@ -612,6 +612,8 @@ struct preference_bit_struct preference_bits_v2[] = {
   { "AutoStand"            , FALSE, TRUE  },
   { "AutoKipUp"            , FALSE, TRUE  },
   { "No Weather"           , FALSE, TRUE  },
+  { "No XTERM-256 Color"   , FALSE, TRUE  },
+  { "Client-Configurable Color", FALSE, TRUE  },
   { "\n"                   , 0    , 0     }
 };
 
@@ -683,6 +685,8 @@ const char *preference_bits[] =
     "AUTOSTAND",
     "AUTOKIPUP",
     "!WEATHER",
+    "!XTERM256",
+    "COERCE_ANSI",
     MAX_FLAG_MARKER
   };
 

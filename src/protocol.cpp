@@ -322,6 +322,7 @@ protocol_t *ProtocolCreate( void )
    pProtocol->pMXPVersion = AllocString("Unknown");
    pProtocol->pLastTTYPE = NULL;
    pProtocol->canary = 31337;
+   pProtocol->do_coerce_ansi_capable_colors_to_ansi = FALSE;
    pProtocol->pVariables = new MSDP_t*[eMSDP_MAX];
 
    for ( i = 0; i < eMSDP_MAX; ++i )
@@ -584,94 +585,94 @@ const char *ProtocolOutput( descriptor_t *apDescriptor, const char *apData, int 
                pCopyFrom = s_Clean;
                break;
             case 'r': /* dark red */
-               pCopyFrom = ColourRGB(apDescriptor, "F300");
+               pCopyFrom = ColourRGB(apDescriptor, "F300", COERCE_ANSI);
                break;
             case 'R': /* light red */
-               pCopyFrom = ColourRGB(apDescriptor, "F500");
+               pCopyFrom = ColourRGB(apDescriptor, "F500", COERCE_ANSI);
                break;
             case 'g': /* dark green */
-               pCopyFrom = ColourRGB(apDescriptor, "F030");
+               pCopyFrom = ColourRGB(apDescriptor, "F030", COERCE_ANSI);
                break;
             case 'G': /* light green */
-               pCopyFrom = ColourRGB(apDescriptor, "F050");
+               pCopyFrom = ColourRGB(apDescriptor, "F050", COERCE_ANSI);
                break;
             case 'y': /* dark yellow */
-               pCopyFrom = ColourRGB(apDescriptor, "F330");
+               pCopyFrom = ColourRGB(apDescriptor, "F330", COERCE_ANSI);
                break;
             case 'Y': /* light yellow */
-               pCopyFrom = ColourRGB(apDescriptor, "F550");
+               pCopyFrom = ColourRGB(apDescriptor, "F550", COERCE_ANSI);
                break;
             case 'b': /* dark blue */
-               pCopyFrom = ColourRGB(apDescriptor, "F025");
+               pCopyFrom = ColourRGB(apDescriptor, "F025", COERCE_ANSI);
                break;
             case 'B': /* light blue */
-               pCopyFrom = ColourRGB(apDescriptor, "F035");
+               pCopyFrom = ColourRGB(apDescriptor, "F035", COERCE_ANSI);
                break;
             case 'm': /* dark magenta */
-               pCopyFrom = ColourRGB(apDescriptor, "F303");
+               pCopyFrom = ColourRGB(apDescriptor, "F303", COERCE_ANSI);
                break;
             case 'M': /* light magenta */
-               pCopyFrom = ColourRGB(apDescriptor, "F505");
+               pCopyFrom = ColourRGB(apDescriptor, "F505", COERCE_ANSI);
                break;
             case 'c': /* dark cyan */
-               pCopyFrom = ColourRGB(apDescriptor, "F033");
+               pCopyFrom = ColourRGB(apDescriptor, "F033", COERCE_ANSI);
                break;
             case 'C': /* light cyan */
-               pCopyFrom = ColourRGB(apDescriptor, "F055");
+               pCopyFrom = ColourRGB(apDescriptor, "F055", COERCE_ANSI);
                break;
             case 'w': /* dark white */
-               pCopyFrom = ColourRGB(apDescriptor, "F333");
+               pCopyFrom = ColourRGB(apDescriptor, "F333", COERCE_ANSI);
                break;
             case 'W': /* light white */
-               pCopyFrom = ColourRGB(apDescriptor, "F555");
+               pCopyFrom = ColourRGB(apDescriptor, "F555", COERCE_ANSI);
                break;
             case 'a': /* dark azure */
-               pCopyFrom = ColourRGB(apDescriptor, "F014");
+               pCopyFrom = ColourRGB(apDescriptor, "F014", NO_COERCION);
                break;
             case 'A': /* light azure */
-               pCopyFrom = ColourRGB(apDescriptor, "F025");
+               pCopyFrom = ColourRGB(apDescriptor, "F025", NO_COERCION);
                break;
             case 'j': /* dark jade */
-               pCopyFrom = ColourRGB(apDescriptor, "F031");
+               pCopyFrom = ColourRGB(apDescriptor, "F031", NO_COERCION);
                break;
             case 'J': /* light jade */
-               pCopyFrom = ColourRGB(apDescriptor, "F052");
+               pCopyFrom = ColourRGB(apDescriptor, "F052", NO_COERCION);
                break;
             case 'e': /* dark electric lime */
-               pCopyFrom = ColourRGB(apDescriptor, "F140");
+               pCopyFrom = ColourRGB(apDescriptor, "F140", NO_COERCION);
                break;
             case 'E': /* light electric lime */
-               pCopyFrom = ColourRGB(apDescriptor, "F250");
+               pCopyFrom = ColourRGB(apDescriptor, "F250", NO_COERCION);
                break;
             case 'l': /* dark black, AKA you're a dick for using this color when most clients have black backgrounds */
-               pCopyFrom = ColourRGB(apDescriptor, "F111");
+               pCopyFrom = ColourRGB(apDescriptor, "F111", COERCE_ANSI);
                break;
             case 'L': /* grey */
-               pCopyFrom = ColourRGB(apDescriptor, "F222");
+               pCopyFrom = ColourRGB(apDescriptor, "F222", COERCE_ANSI);
                break;
             case 'o': /* dark orange */
-               pCopyFrom = ColourRGB(apDescriptor, "F520");
+               pCopyFrom = ColourRGB(apDescriptor, "F520", NO_COERCION);
                break;
             case 'O': /* light orange */
-               pCopyFrom = ColourRGB(apDescriptor, "F530");
+               pCopyFrom = ColourRGB(apDescriptor, "F530", NO_COERCION);
                break;
             case 'p': /* dark pink */
-               pCopyFrom = ColourRGB(apDescriptor, "F301");
+               pCopyFrom = ColourRGB(apDescriptor, "F301", NO_COERCION);
                break;
             case 'P': /* light pink */
-               pCopyFrom = ColourRGB(apDescriptor, "F502");
+               pCopyFrom = ColourRGB(apDescriptor, "F502", NO_COERCION);
                break;
             case 't': /* dark tan */
-               pCopyFrom = ColourRGB(apDescriptor, "F210");
+               pCopyFrom = ColourRGB(apDescriptor, "F210", NO_COERCION);
                break;
             case 'T': /* light tan */
-               pCopyFrom = ColourRGB(apDescriptor, "F321");
+               pCopyFrom = ColourRGB(apDescriptor, "F321", NO_COERCION);
                break;
             case 'v': /* dark violet */
-               pCopyFrom = ColourRGB(apDescriptor, "F104");
+               pCopyFrom = ColourRGB(apDescriptor, "F104", NO_COERCION);
                break;
             case 'V': /* light violet */
-               pCopyFrom = ColourRGB(apDescriptor, "F205");
+               pCopyFrom = ColourRGB(apDescriptor, "F205", NO_COERCION);
                break;
             case '(': /* MXP link */
                if ( !pProtocol->bBlockMXP && (pProtocol->pVariables[eMSDP_MXP] && pProtocol->pVariables[eMSDP_MXP]->ValueInt) ) {
@@ -795,7 +796,7 @@ const char *ProtocolOutput( descriptor_t *apDescriptor, const char *apData, int 
                   }
                   else /* Success */
                   {
-                     pCopyFrom = ColourRGB(apDescriptor, Buffer);
+                     pCopyFrom = ColourRGB(apDescriptor, Buffer, NO_COERCION);
                   }
                }
                else if ( tolower(apData[j]) == 'x' )
@@ -891,94 +892,94 @@ const char *ProtocolOutput( descriptor_t *apDescriptor, const char *apData, int 
                pCopyFrom = s_Clean;
                break;
             case 'r': /* dark red */
-               pCopyFrom = ColourRGB(apDescriptor, "F300");
+               pCopyFrom = ColourRGB(apDescriptor, "F300", COERCE_ANSI);
                break;
             case 'R': /* light red */
-               pCopyFrom = ColourRGB(apDescriptor, "F500");
+               pCopyFrom = ColourRGB(apDescriptor, "F500", COERCE_ANSI);
                break;
             case 'g': /* dark green */
-               pCopyFrom = ColourRGB(apDescriptor, "F030");
+               pCopyFrom = ColourRGB(apDescriptor, "F030", COERCE_ANSI);
                break;
             case 'G': /* light green */
-               pCopyFrom = ColourRGB(apDescriptor, "F050");
+               pCopyFrom = ColourRGB(apDescriptor, "F050", COERCE_ANSI);
                break;
             case 'y': /* dark yellow */
-               pCopyFrom = ColourRGB(apDescriptor, "F330");
+               pCopyFrom = ColourRGB(apDescriptor, "F330", COERCE_ANSI);
                break;
             case 'Y': /* light yellow */
-               pCopyFrom = ColourRGB(apDescriptor, "F550");
+               pCopyFrom = ColourRGB(apDescriptor, "F550", COERCE_ANSI);
                break;
             case 'b': /* dark blue */
-               pCopyFrom = ColourRGB(apDescriptor, "F025");
+               pCopyFrom = ColourRGB(apDescriptor, "F025", COERCE_ANSI);
                break;
             case 'B': /* light blue */
-               pCopyFrom = ColourRGB(apDescriptor, "F035");
+               pCopyFrom = ColourRGB(apDescriptor, "F035", COERCE_ANSI);
                break;
             case 'm': /* dark magenta */
-               pCopyFrom = ColourRGB(apDescriptor, "F303");
+               pCopyFrom = ColourRGB(apDescriptor, "F303", COERCE_ANSI);
                break;
             case 'M': /* light magenta */
-               pCopyFrom = ColourRGB(apDescriptor, "F505");
+               pCopyFrom = ColourRGB(apDescriptor, "F505", COERCE_ANSI);
                break;
             case 'c': /* dark cyan */
-               pCopyFrom = ColourRGB(apDescriptor, "F033");
+               pCopyFrom = ColourRGB(apDescriptor, "F033", COERCE_ANSI);
                break;
             case 'C': /* light cyan */
-               pCopyFrom = ColourRGB(apDescriptor, "F055");
+               pCopyFrom = ColourRGB(apDescriptor, "F055", COERCE_ANSI);
                break;
             case 'w': /* dark white */
-               pCopyFrom = ColourRGB(apDescriptor, "F333");
+               pCopyFrom = ColourRGB(apDescriptor, "F333", COERCE_ANSI);
                break;
             case 'W': /* light white */
-               pCopyFrom = ColourRGB(apDescriptor, "F555");
+               pCopyFrom = ColourRGB(apDescriptor, "F555", COERCE_ANSI);
                break;
             case 'a': /* dark azure */
-               pCopyFrom = ColourRGB(apDescriptor, "F014");
+               pCopyFrom = ColourRGB(apDescriptor, "F014", NO_COERCION);
                break;
             case 'A': /* light azure */
-               pCopyFrom = ColourRGB(apDescriptor, "F025");
+               pCopyFrom = ColourRGB(apDescriptor, "F025", NO_COERCION);
                break;
             case 'j': /* dark jade */
-               pCopyFrom = ColourRGB(apDescriptor, "F031");
+               pCopyFrom = ColourRGB(apDescriptor, "F031", NO_COERCION);
                break;
             case 'J': /* light jade */
-               pCopyFrom = ColourRGB(apDescriptor, "F052");
+               pCopyFrom = ColourRGB(apDescriptor, "F052", NO_COERCION);
                break;
             case 'e': /* dark electric lime */
-               pCopyFrom = ColourRGB(apDescriptor, "F140");
+               pCopyFrom = ColourRGB(apDescriptor, "F140", NO_COERCION);
                break;
             case 'E': /* light electric lime */
-               pCopyFrom = ColourRGB(apDescriptor, "F250");
+               pCopyFrom = ColourRGB(apDescriptor, "F250", NO_COERCION);
                break;
             case 'l': /* black, AKA you're a dick for using this color when most clients have black backgrounds */
-               pCopyFrom = ColourRGB(apDescriptor, "F111");
+               pCopyFrom = ColourRGB(apDescriptor, "F111", COERCE_ANSI);
                break;
             case 'L': /* grey */
-               pCopyFrom = ColourRGB(apDescriptor, "F222");
+               pCopyFrom = ColourRGB(apDescriptor, "F222", COERCE_ANSI);
                break;
             case 'o': /* dark orange */
-               pCopyFrom = ColourRGB(apDescriptor, "F520");
+               pCopyFrom = ColourRGB(apDescriptor, "F520", NO_COERCION);
                break;
             case 'O': /* light orange */
-               pCopyFrom = ColourRGB(apDescriptor, "F530");
+               pCopyFrom = ColourRGB(apDescriptor, "F530", NO_COERCION);
                break;
             case 'p': /* dark pink */
-               pCopyFrom = ColourRGB(apDescriptor, "F301");
+               pCopyFrom = ColourRGB(apDescriptor, "F301", NO_COERCION);
                break;
             case 'P': /* light pink */
-               pCopyFrom = ColourRGB(apDescriptor, "F502");
+               pCopyFrom = ColourRGB(apDescriptor, "F502", NO_COERCION);
                break;
             case 't': /* dark tan */
-               pCopyFrom = ColourRGB(apDescriptor, "F210");
+               pCopyFrom = ColourRGB(apDescriptor, "F210", NO_COERCION);
                break;
             case 'T': /* light tan */
-               pCopyFrom = ColourRGB(apDescriptor, "F321");
+               pCopyFrom = ColourRGB(apDescriptor, "F321", NO_COERCION);
                break;
             case 'v': /* dark violet */
-               pCopyFrom = ColourRGB(apDescriptor, "F104");
+               pCopyFrom = ColourRGB(apDescriptor, "F104", NO_COERCION);
                break;
             case 'V': /* light violet */
-               pCopyFrom = ColourRGB(apDescriptor, "F205");
+               pCopyFrom = ColourRGB(apDescriptor, "F205", NO_COERCION);
                break;
             case '\0':
                bTerminate = TRUE;
@@ -1013,7 +1014,7 @@ const char *ProtocolOutput( descriptor_t *apDescriptor, const char *apData, int 
 #endif
 
                   if ( bDone && bValid && IsValidColour(Buffer) )
-                     pCopyFrom = ColourRGB(apDescriptor, Buffer);
+                     pCopyFrom = ColourRGB(apDescriptor, Buffer, NO_COERCION);
                }
                break;
 #endif /* EXTENDED_COLOUR */
@@ -1658,7 +1659,7 @@ void SoundSend( descriptor_t *apDescriptor, const char *apTrigger )
  Colour global functions.
  ******************************************************************************/
 
-const char *ColourRGB( descriptor_t *apDescriptor, const char *apRGB )
+const char *ColourRGB( descriptor_t *apDescriptor, const char *apRGB, bool coerce_to_ansi )
 {
    protocol_t *pProtocol = apDescriptor ? apDescriptor->pProtocol : NULL;
 
@@ -1686,10 +1687,14 @@ const char *ColourRGB( descriptor_t *apDescriptor, const char *apRGB )
            Blue += 1;
         }
 
-         if ( pProtocol->pVariables[eMSDP_XTERM_256_COLORS] && pProtocol->pVariables[eMSDP_XTERM_256_COLORS]->ValueInt )
+        // We only coerce ANSI colors if the player has indicated they want this.
+        coerce_to_ansi &= pProtocol->do_coerce_ansi_capable_colors_to_ansi;
+
+         if ( !coerce_to_ansi && pProtocol->pVariables[eMSDP_XTERM_256_COLORS] && pProtocol->pVariables[eMSDP_XTERM_256_COLORS]->ValueInt ) {
             return GetRGBColour( bBackground, Red, Green, Blue );
-         else /* Use regular ANSI colour */
+         } else { /* Use regular ANSI colour */
             return GetAnsiColour( bBackground, Red, Green, Blue );
+         }
       }
       else /* Invalid colour - use this to clear any existing colour. */
       {
@@ -1700,6 +1705,28 @@ const char *ColourRGB( descriptor_t *apDescriptor, const char *apRGB )
    {
       return "";
    }
+}
+
+void disable_xterm_256(descriptor_t *apDescriptor) {
+  protocol_t *pProtocol = apDescriptor ? apDescriptor->pProtocol : NULL;
+
+  if ( pProtocol && pProtocol->pVariables[eMSDP_XTERM_256_COLORS]) {
+    if ( pProtocol->pVariables[eMSDP_XTERM_256_COLORS]->ValueInt ) {
+      pProtocol->pVariables[eMSDP_XTERM_256_COLORS]->ValueInt = 0;
+    }
+  } else {
+    mudlog("SYSERR: Unable to disable xterm256 colors for descriptor.", NULL, LOG_SYSLOG, TRUE);
+  }
+}
+
+void enable_xterm_256(descriptor_t *apDescriptor) {
+  protocol_t *pProtocol = apDescriptor ? apDescriptor->pProtocol : NULL;
+
+  if ( pProtocol && pProtocol->pVariables[eMSDP_XTERM_256_COLORS]) {
+    pProtocol->pVariables[eMSDP_XTERM_256_COLORS]->ValueInt = 1;
+  } else {
+    mudlog("SYSERR: Unable to enable xterm256 colors for descriptor.", NULL, LOG_SYSLOG, TRUE);
+  }
 }
 
 /******************************************************************************
