@@ -7041,6 +7041,18 @@ int audit_zone_objects_(struct char_data *ch, int zone_num, bool verbose) {
       }
     }
 
+    if (GET_OBJ_TYPE(obj) == ITEM_DRINKCON && GET_DRINKCON_POISON_RATING(obj) > 0) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^yis poisoned^n (^y%d^n)^n.\r\n", GET_DRINKCON_POISON_RATING(obj));
+      printed = TRUE;
+      issues++;
+    }
+
+    else if (GET_OBJ_TYPE(obj) == ITEM_FOUNTAIN && GET_FOUNTAIN_POISON_RATING(obj) > 0) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^yis poisoned^n (^y%d^n)^n.\r\n", GET_FOUNTAIN_POISON_RATING(obj));
+      printed = TRUE;
+      issues++;
+    }
+
     if (printed) {
       send_to_char(ch, "%s\r\n", buf);
     }

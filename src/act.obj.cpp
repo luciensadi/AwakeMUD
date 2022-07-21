@@ -2573,7 +2573,7 @@ ACMD(do_drink)
              successes);
     act(rollbuf, FALSE, ch, 0, 0, TO_ROLLS);
 
-    if (damage(ch, ch, dam_total, TYPE_BIOWARE, TRUE))
+    if (damage(ch, ch, dam_total, TYPE_POISON, TRUE))
       return;
   }
   return;

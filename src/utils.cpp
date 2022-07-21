@@ -206,7 +206,7 @@ int convert_damage(int damage)
   if (damage < 0)
     damage = 0;
   else
-    damage = damage_array[MIN(DEADLY, damage)];
+    damage = damage_array[MAX(0, MIN(DEADLY, damage))];
 
   return damage;
 }
