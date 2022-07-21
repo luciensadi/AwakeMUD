@@ -2377,17 +2377,18 @@ void process_vehicle_decay(void)
   PERF_PROF_SCOPE(pr_, __func__);
   for (struct veh_data *veh = veh_list; veh; veh = veh->next) {
     struct room_data *room;
-    if (VEH_FLAGGED(*veh, VFLAG_LOOTWRECK) && !((veh->in_veh) || ROOM_FLAGGED(veh->in_room, ROOM_GARAGE)) ) {
-      extern int max_npc_vehicle_lootwreck_time;
-        if (GET_VEH_DESTRUCTION_TIMER(veh) < max_npc_vehicle_lootwreck_time) {
-          GET_VEH_DESTRUCTION_TIMER(veh)++;
-          break;
-        } else {
-        veh->flags.RemoveBit(VFLAG_LOOTWRECK);
-        snprintf(buf, sizeof(buf), "A hulking utility forklift drives up, lifts the remains of %s up, and drives off into the sunset.\r\n", GET_VEH_NAME(veh));
-        extract_veh(veh);
+    if (!veh->flags.IsSet(VFLAG_LOOTWRECK) || (veh->in_veh) || ROOM_FLAGGED(veh->in_room, ROOM_GARAGE) )
+      return;
+      else {
+        extern int max_npc_vehicle_lootwreck_time;
+          if (GET_VEH_DESTRUCTION_TIMER(veh) < max_npc_vehicle_lootwreck_time) {
+            GET_VEH_DESTRUCTION_TIMER(veh)++;
+          } else {
+            veh->flags.RemoveBit(VFLAG_LOOTWRECK);
+            snprintf(buf, sizeof(buf), "A hulking utility forklift drives up, lifts the remains of %s up, and drives off into the sunset.\r\n", GET_VEH_NAME(veh));
+            extract_veh(veh);
+          }
       }
-    }
   }
 }
 

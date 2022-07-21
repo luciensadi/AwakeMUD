@@ -5596,7 +5596,6 @@ void chkdmg(struct veh_data * veh)
     send_to_veh("The engine starts spewing smoke and flames.\r\n", veh, NULL, TRUE);
   } else {
     int damage_rating, damage_tn;
-    extern int max_npc_vehicle_lootwreck_time;
       
     // Remove any vehicle brains, we don't want them thrown into the street.
     remove_vehicle_brain(veh);
@@ -5604,7 +5603,6 @@ void chkdmg(struct veh_data * veh)
       if (veh->owner <= 0) {
         veh->locked = TRUE; // Keeps players from messing around with it.
         veh->flags.SetBit(VFLAG_LOOTWRECK);
-        GET_VEH_DESTRUCTION_TIMER(veh) = 0; // Bogarts the same vars and flags special(painter) uses, vehicle is locked + you don't own it, so nonissue.
       }
     
     if (veh->cspeed >= SPEED_IDLE) {
