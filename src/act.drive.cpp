@@ -1175,7 +1175,6 @@ ACMD(do_repair)
   skill = get_skill(ch, get_br_skill_for_veh(veh), target);
   target += (veh->damage - 2) / 2;
   target += modify_target(ch);
-  veh->flags.RemoveBit(VFLAG_LOOTWRECK); // we don't want people messing with a vehicle that's planning to despawn.
 
   if (!access_level(ch, LVL_ADMIN)) {
     for (obj = ch->carrying; obj && !mod; obj = obj->next_content)
@@ -2377,9 +2376,9 @@ void process_vehicle_decay(void)
   PERF_PROF_SCOPE(pr_, __func__);
   for (struct veh_data *veh = veh_list; veh; veh = veh->next) {
     struct room_data *room;
-    if (!veh->flags.IsSet(VFLAG_LOOTWRECK) || (veh->in_veh) || ROOM_FLAGGED(veh->in_room, ROOM_GARAGE) )
+    if ( !(veh->flags.IsSet(VFLAG_LOOTWRECK)) || (veh->in_veh) || ROOM_FLAGGED(veh->in_room, ROOM_GARAGE) ) {
       return;
-      else {
+    } else {
         extern int max_npc_vehicle_lootwreck_time;
           if (GET_VEH_DESTRUCTION_TIMER(veh) < max_npc_vehicle_lootwreck_time) {
             GET_VEH_DESTRUCTION_TIMER(veh)++;
