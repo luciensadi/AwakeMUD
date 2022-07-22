@@ -2374,8 +2374,9 @@ ACMD(stop_rigging_first) {
 void process_vehicle_decay(void)
 {
   PERF_PROF_SCOPE(pr_, __func__);
+  struct veh_data *next_veh;
   for (struct veh_data *veh = veh_list; veh; veh = veh->next) {
-    struct room_data *room;
+    next_veh = veh->next;
     if ( !(veh->flags.IsSet(VFLAG_LOOTWRECK)) || (veh->in_veh) || ROOM_FLAGGED(veh->in_room, ROOM_GARAGE) ) {
       continue;
     } else {
