@@ -1784,6 +1784,40 @@ void damage_door(struct char_data *ch, struct room_data *room, int dir, int powe
   } else
     rating = room->dir_option[dir]->barrier * 2;
 
+  switch (room->dir_option[dir]->material) {
+    // Model weak materials.
+    case MATERIAL_PAPER       :
+      rating /= 4;
+      break;
+    case MATERIAL_ELECTRONICS :
+    case MATERIAL_GLASS       :
+    case MATERIAL_FABRIC      :
+    case MATERIAL_COMPUTERS   :
+    case MATERIAL_TOXIC_WASTES:
+      rating /= 2;
+      break;
+    case MATERIAL_ORGANIC     :
+    case MATERIAL_LEATHER     :
+      rating--;
+      break;
+    case MATERIAL_WOOD        :
+    case MATERIAL_PLASTIC     :
+    case MATERIAL_CERAMIC     :
+      // no-op
+      break;
+    case MATERIAL_ADV_PLASTICS:
+    case MATERIAL_ORICHALCUM  :
+    case MATERIAL_BRICK       :
+    case MATERIAL_STONE       :
+    case MATERIAL_METAL       :
+    case MATERIAL_CONCRETE    :
+      rating++;
+      break;
+    default:
+      mudlog("SYSERR: Unknown material type in door-damage switch-- update it!", ch, LOG_SYSLOG, TRUE);
+      break;
+  }
+
   half = MAX(1, rating >> 1);
 
   if (ch && IS_SET(type, DAMOBJ_CRUSH) && GET_TRADITION(ch) == TRAD_ADEPT && GET_POWER(ch, ADEPT_SMASHING_BLOW))
