@@ -5603,7 +5603,6 @@ void chkdmg(struct veh_data * veh)
       if (!veh->owner) {
         veh->locked = TRUE; // Keeps players from messing around with it.
         veh->flags.SetBit(VFLAG_LOOTWRECK);
-        GET_VEH_DESTRUCTION_TIMER(veh) = 0
       }
     
     if (veh->cspeed >= SPEED_IDLE) {
