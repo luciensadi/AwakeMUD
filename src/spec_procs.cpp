@@ -4136,6 +4136,7 @@ void process_auth_room(struct char_data *ch) {
     GET_OBJ_COST(obj) = 1;
   char_from_room(ch);
   char_to_room(ch, &world[real_room(RM_NEWBIE_LOBBY)]);
+  GET_LOADROOM(ch) = RM_NEWBIE_LOADROOM;
   send_to_char(ch, "^YYou are now Authorized. Welcome to Awakened Worlds.^n\r\n");
 
   for (struct obj_data *obj = ch->cyberware; obj; obj = obj->next_content)
@@ -4211,7 +4212,7 @@ SPECIAL(auth_room)
     if (!str_cmp("have read the rules and policies, understand them, and agree to abide by them during my stay here.", argument))
       process_auth_room(ch);
     else {
-      send_to_char(ch, "You should use the SAY command here, and be careful about line breaks. Example: ^Wsay I have read the rules and policies, understand them, and agree to abide by them during my stay here.^n\r\n^n");
+      send_to_char(ch, "You should use the SAY command here, and be careful about line breaks. Example: ##^Wsay I have read the rules and policies, understand them, and agree to abide by them during my stay here.^n\r\n^n");
       return TRUE;
     }
   }
