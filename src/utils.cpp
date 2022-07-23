@@ -4698,9 +4698,12 @@ int calculate_vehicle_weight(struct veh_data *veh) {
 
   // Try to parse out the prototype's body.
   {
-    rnum_t real_veh = real_vehicle(veh->veh_number);
+    rnum_t real_veh = real_vehicle(GET_VEH_VNUM(veh));
     if (real_veh >= 0) {
+      // log_vfprintf("Overwriting veh body %d with proto's %d in calculate_vehicle_weight()", body, veh_proto[real_veh].body);
       body = veh_proto[real_veh].body;
+    } else {
+      // log_vfprintf("Unable to find proto for veh %ld in calculate_vehicle_weight()", GET_VEH_VNUM(veh));
     }
   }
 

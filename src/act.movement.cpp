@@ -1609,7 +1609,7 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
 ACMD(do_drag)
 {
   struct char_data *vict = NULL;
-  struct veh_data *veh = NULL;
+  struct veh_data *veh, *drag_veh = NULL;
   int dir;
 
   two_arguments(argument, buf1, buf2);
@@ -1619,16 +1619,31 @@ ACMD(do_drag)
     return;
   }
 
-  if (IS_ASTRAL(ch)) {
-    send_to_char("Astral projections aren't really known for their ability to drag things.\r\n", ch);
-    return;
+  FAILURE_CASE(IS_ASTRAL(ch), "Astral projections aren't really known for their ability to drag things.\r\n");
+  FAILURE_CASE(IS_WORKING(ch), "You're too busy to do that.\r\n");
+
+  // First check for a character to drag.
+  if (!(vict = get_char_room_vis(ch, buf1)) || IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)) {
+    // No character? Try for a vehicle.
+    if (ch->in_room && (drag_veh = get_veh_list(buf1, ch->in_room->vehicles, ch))) {
+      if (drag_veh->owner != GET_IDNUM(ch) && drag_veh->locked) {
+        send_to_char(ch, "%s's anti-theft measures beep loudly.\r\n", capitalize(GET_VEH_NAME_NOFORMAT(drag_veh)));
+        return;
+      }
+
+      if ((IS_CARRYING_W(ch) + calculate_vehicle_weight(drag_veh)) > CAN_CARRY_W(ch) * 2) {
+        send_to_char(ch, "%s is too heavy for you to move!\r\n", capitalize(GET_VEH_NAME_NOFORMAT(drag_veh)));
+        return;
+      }
+    } else {
+      // Found no vehicle either.
+      send_to_char(ch, "You don't see anyone named '%s' here.\r\n", buf1);
+      return;
+    }
   }
 
-  if (!(vict = get_char_room_vis(ch, buf1)) || IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)) {
-    send_to_char(ch, "You don't see anyone named '%s' here.\r\n", buf1);
-    return;
-  }
-  if (AFF_FLAGGED(vict, AFF_BINDING)) {
+  // Attempt to break bindings.
+  if (vict && AFF_FLAGGED(vict, AFF_BINDING)) {
     act("$n grabs a hold of $N and attempts to help break the bindings!", FALSE, vict, 0, ch, TO_ROOM);
     act("You attempt to break $n's bindings!", FALSE, vict, 0, ch, TO_VICT);
     if (success_test(GET_STR(ch) + (GET_STR(vict) / 2), vict->points.binding) > 0) {
@@ -1641,12 +1656,12 @@ ACMD(do_drag)
     }
     return;
   }
+
   dir = search_block(buf2, lookdirs, FALSE);
   if (ch->in_veh) {
     dir = -1;
     veh = get_veh_list(buf2, ch->in_veh->carriedvehs, ch);
   } else {
-    dir = search_block(buf2, lookdirs, FALSE);
     veh = get_veh_list(buf2, ch->in_room->vehicles, ch);
   }
   if (dir == -1 && !veh) {
@@ -1656,30 +1671,66 @@ ACMD(do_drag)
   if (!veh)
     dir = convert_look[dir];
 
-  if (IS_NPC(vict) && vict->master != ch) {
-    // You may only drag friendly NPCs. This prevents a whole lot of abuse options.
-    send_to_char("You may only drag NPCs who are following you already.\r\n", ch);
+  if (vict) {
+    if (IS_NPC(vict) && vict->master != ch) {
+      // You may only drag friendly NPCs. This prevents a whole lot of abuse options.
+      send_to_char("You may only drag NPCs who are following you already.\r\n", ch);
+      return;
+    }
+
+    if (GET_POS(vict) > POS_LYING) {
+      act("You can't drag $M off in $S condition!", FALSE, ch, 0, vict, TO_CHAR);
+      return;
+    }
+
+    if ((int)((GET_STR(ch)*10) * 3/2) < (GET_WEIGHT(vict) + IS_CARRYING_W(vict))) {
+      act("$N is too heavy for you to drag!", FALSE, ch, 0, vict, TO_CHAR);
+      return;
+    }
+
+    if (veh) {
+      enter_veh(ch, veh, "rear", FALSE);
+      enter_veh(vict, veh, "rear", TRUE);
+    } else {
+      perform_move(ch, dir, LEADER, vict);
+      char_from_room(vict);
+      char_to_room(vict, ch->in_room);
+    }
     return;
   }
 
-  if (GET_POS(vict) > POS_LYING) {
-    act("You can't drag $M off in $S condition!", FALSE, ch, 0, vict, TO_CHAR);
-    return;
-  }
+  else if (drag_veh) {
+    if (drag_veh && drag_veh == veh) {
+      send_to_char(ch, "...into itself?\r\n");
+      return;
+    }
 
-  if ((int)((GET_STR(ch)*10) * 3/2) < (GET_WEIGHT(vict) +
-                                       IS_CARRYING_W(vict))) {
-    act("$N is too heavy for you to drag!", FALSE, ch, 0, vict, TO_CHAR);
-    return;
-  }
+    const char *drag_veh_name = GET_VEH_NAME(drag_veh);
+    char act_buf[1000];
 
-  if (veh) {
-    enter_veh(ch, veh, "rear", FALSE);
-    enter_veh(vict, veh, "rear", TRUE);
-  } else {
-    perform_move(ch, dir, LEADER, vict);
-    char_from_room(vict);
-    char_to_room(vict, ch->in_room);
+    veh_from_room(drag_veh);
+
+    if (dir == -1 && veh) {
+      enter_veh(ch, veh, "rear", FALSE);
+      if (ch->in_veh == veh) {
+        send_to_char(ch, "Heaving and straining, you drag %s into %s.\r\n", drag_veh_name, GET_VEH_NAME(veh));
+        snprintf(act_buf, sizeof(act_buf), "Heaving and straining, $n drags %s into %s.\r\n", drag_veh_name, GET_VEH_NAME(veh));
+        act(act_buf, TRUE, ch, 0, 0, TO_ROOM);
+      }
+      veh_to_veh(drag_veh, veh);
+    } else {
+      struct room_data *in_room = ch->in_room;
+      perform_move(ch, dir, 0, NULL);
+      // Message only if we succeeded.
+      if (in_room != ch->in_room) {
+        send_to_char(ch, "Heaving and straining, you drag %s along with you.\r\n", drag_veh_name);
+        snprintf(act_buf, sizeof(act_buf), "Heaving and straining, $n drags %s into the room.\r\n", drag_veh_name);
+        act(act_buf, TRUE, ch, 0, 0, TO_ROOM);
+      }
+      veh_to_room(drag_veh, ch->in_room);
+    }
+    WAIT_STATE(ch, 3 RL_SEC);
+    return;
   }
 }
 

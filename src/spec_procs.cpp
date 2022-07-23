@@ -4848,7 +4848,9 @@ SPECIAL(bouncer_gentle)
 }
 
 SPECIAL(bouncer_troll) {
-  NO_DRAG_BULLSHIT;
+  // I've disabled no-drag for this since it's not a particularly sensitive proc but would block vehicle movement.
+  // If you decide to abuse this and drag through bouncers, it's code exploitation, and will be punished accordingly. -LS
+  // NO_DRAG_BULLSHIT;
 
   if (!cmd)
     return FALSE;
