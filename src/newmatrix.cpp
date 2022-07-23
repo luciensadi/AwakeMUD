@@ -246,18 +246,19 @@ int system_test(rnum_t host, struct char_data *ch, int type, int software, int m
   detect += DECKER->masking;
   detect = detect / 2;
   detect -= DECKER->res_det;
+
   int tally = MAX(0, success_test(HOST.security, detect));
+  target = MAX(target, 2);
   int success = success_test(skill, target);
 
-  snprintf(rollbuf, sizeof(rollbuf), "Rolled %d successes on %d dice vs TN %d",
+  snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), "\r\nRolled %d successes on %d dice vs TN %d",
            success,
            skill,
            target);
-  act(rollbuf, FALSE, ch, 0, 0, TO_ROLLS);
 
   success -= tally;
 
-  snprintf(rollbuf, sizeof(rollbuf), ", then lost %d successes to tally (%d dice vs TN %d).",
+  snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), ", then lost %d successes to tally (%d dice vs TN %d).",
            tally,
            HOST.security,
            detect);
@@ -1553,7 +1554,7 @@ ACMD(do_logon)
       return;
     }
   }
-  send_to_icon(PERSONA, "You haven't located any hosts with that address.\r\n");
+  send_to_icon(PERSONA, "You haven't located any hosts with the address '%s'.\r\n", argument);
 }
 
 ACMD(do_logoff)
@@ -1962,9 +1963,16 @@ ACMD(do_load)
           return;
         }
 
-        if (GET_OBJ_TYPE(soft) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(soft) != TYPE_FILE) {
-          send_to_icon(PERSONA, "You can't upload %s.\r\n", GET_OBJ_NAME(soft));
-          return;
+        if (GET_OBJ_TYPE(soft) == ITEM_DECK_ACCESSORY) {
+          if (GET_DECK_ACCESSORY_TYPE(soft) != TYPE_FILE) {
+            send_to_icon(PERSONA, "You can't upload %s.\r\n", GET_OBJ_NAME(soft));
+            return;
+          }
+
+          if (GET_DECK_ACCESSORY_FILE_HOST_VNUM(soft)) {
+            send_to_icon(PERSONA, "Action aborted: Re-uploading paydata like %s would be a great way to get caught with it!\r\n", GET_OBJ_NAME(soft));
+            return;
+          }
         }
       } else {
         if (GET_OBJ_TYPE(soft) == ITEM_DECK_ACCESSORY) {
@@ -2209,26 +2217,28 @@ ACMD(do_decrypt)
     return;
   }
   WAIT_STATE(ch, (int) (DECKING_WAIT_STATE_TIME));
-  struct obj_data *obj = NULL;
-  if ((obj = get_obj_in_list_vis(ch, argument, matrix[PERSONA->in_host].file)) && GET_OBJ_VAL(obj, 7) == PERSONA->idnum) {
-    if (!GET_OBJ_VAL(obj, 5) || (GET_OBJ_VAL(obj, 5) == 1 && subcmd) || (GET_OBJ_VAL(obj, 5) > 1 && !subcmd) ||
-        GET_OBJ_TYPE(obj) == ITEM_PROGRAM) {
-      send_to_icon(PERSONA, "There is no need to %s that file.\r\n", subcmd ? "disarm" : "decrypt");
+  {
+    struct obj_data *obj = NULL;
+    if ((obj = get_obj_in_list_vis(ch, argument, matrix[PERSONA->in_host].file)) && GET_OBJ_VAL(obj, 7) == PERSONA->idnum) {
+      if (!GET_OBJ_VAL(obj, 5) || (GET_OBJ_VAL(obj, 5) == 1 && subcmd) || (GET_OBJ_VAL(obj, 5) > 1 && !subcmd) ||
+          GET_OBJ_TYPE(obj) == ITEM_PROGRAM) {
+        send_to_icon(PERSONA, "There is no need to %s that file.\r\n", subcmd ? "disarm" : "decrypt");
+        return;
+      }
+      int success = system_test(PERSONA->in_host, ch, TEST_FILES, subcmd ? SOFT_DEFUSE : SOFT_DECRYPT, 0);
+      if (success > 0) {
+        send_to_icon(PERSONA, "You successfully %s the file.\r\n", subcmd ? "disarm" : "decrypt");
+        GET_OBJ_VAL(obj, 5) = 0;
+      } else if (PERSONA) {
+        send_to_icon(PERSONA, "You fail to %s the IC protecting that file.\r\n", subcmd ? "disarm" : "decrypt");
+        if (GET_OBJ_VAL(obj, 5) == 1)
+          if (success_test(GET_OBJ_VAL(obj, 6), GET_SKILL(ch, SKILL_COMPUTER)) > 0) {
+            send_to_icon(PERSONA, "The Scramble IC destroys the file!\r\n");
+            extract_obj(obj);
+          }
+      }
       return;
     }
-    int success = system_test(PERSONA->in_host, ch, TEST_FILES, subcmd ? SOFT_DEFUSE : SOFT_DECRYPT, 0);
-    if (success > 0) {
-      send_to_icon(PERSONA, "You successfully %s the file.\r\n", subcmd ? "disarm" : "decrypt");
-      GET_OBJ_VAL(obj, 5) = 0;
-    } else if (PERSONA) {
-      send_to_icon(PERSONA, "You fail to %s the IC protecting that file.\r\n", subcmd ? "disarm" : "decrypt");
-      if (GET_OBJ_VAL(obj, 5) == 1)
-        if (success_test(GET_OBJ_VAL(obj, 6), GET_SKILL(ch, SKILL_COMPUTER)) > 0) {
-          send_to_icon(PERSONA, "The Scramble IC destroys the file!\r\n");
-          extract_obj(obj);
-        }
-    }
-    return;
   }
   if (is_abbrev(argument, "slave") || is_abbrev(argument, "files") || is_abbrev(argument, "access")) {
     int mode = 0;
@@ -2265,12 +2275,12 @@ ACMD(do_decrypt)
             next = current->next_content;
 
             // Skip non-paydata.
-            if (GET_OBJ_TYPE(obj) != ITEM_DECK_ACCESSORY || GET_DECK_ACCESSORY_TYPE(obj) != TYPE_FILE || GET_DECK_ACCESSORY_FILE_HOST_VNUM(obj) != matrix[PERSONA->in_host].vnum)
+            if (GET_OBJ_TYPE(current) != ITEM_DECK_ACCESSORY || GET_DECK_ACCESSORY_TYPE(current) != TYPE_FILE || GET_DECK_ACCESSORY_FILE_HOST_VNUM(current) != matrix[PERSONA->in_host].vnum)
               continue;
 
             // The file is paydata-- delete it.
-            obj_from_host(obj);
-            extract_obj(obj);
+            obj_from_host(current);
+            extract_obj(current);
           }
         }
       }
@@ -2671,7 +2681,7 @@ void matrix_update()
           continue;
         }
         if (file->next_content && (GET_OBJ_TYPE(file->next_content) != ITEM_DECK_ACCESSORY && GET_OBJ_TYPE(file->next_content) != ITEM_PROGRAM)) {
-          snprintf(buf, sizeof(buf), "SYSERR: Found non-file, non-program object '%s' (%ld) in Matrix file->next_content! Striking that link, object will be orphaned if not located elsewhere.", GET_OBJ_NAME(file), GET_OBJ_VNUM(file));
+          snprintf(buf, sizeof(buf), "SYSERR: Found non-file, non-program object '%s' (%ld) in Matrix file->next_content! Striking that link, object will be orphaned if not located elsewhere.", GET_OBJ_NAME(file->next_content), GET_OBJ_VNUM(file->next_content));
           mudlog(buf, NULL, LOG_SYSLOG, TRUE);
           file->next_content = next = NULL;
         }

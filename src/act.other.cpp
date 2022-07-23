@@ -68,6 +68,8 @@ extern char *make_desc(struct char_data *ch, struct char_data *i, char *buf, int
 extern void weight_change_object(struct obj_data * obj, float weight);
 extern bool does_weapon_have_bayonet(struct obj_data *weapon);
 extern void turn_hardcore_on_for_character(struct char_data *ch);
+extern void disable_xterm_256(descriptor_t *apDescriptor);
+extern void enable_xterm_256(descriptor_t *apDescriptor);
 
 extern bool restring_with_args(struct char_data *ch, char *argument, bool using_sysp);
 
@@ -131,7 +133,7 @@ ACMD(do_quit)
     else {
       snprintf(buf, sizeof(buf), "%s has left the game.\r\n", GET_NAME(ch));
       send_to_veh(buf, ch->in_veh, ch, FALSE);
-      if (AFF_FLAGGED(ch, AFF_PILOT)) {
+      if (AFF_FLAGGED(ch, AFF_PILOT) || AFF_FLAGGED(ch, AFF_RIG)) {
         send_to_veh("You get a mild case of whiplash as you come to a sudden stop.\r\n",
                     ch->in_veh, ch, FALSE);
         ch->in_veh->cspeed = SPEED_OFF;
@@ -1125,7 +1127,11 @@ const char *tog_messages[][2] = {
                             {"You will no longer automatically attempt to kip-up when knocked down.\r\n",
                              "You will now automatically attempt to kip-up when knocked down.\r\n"},
                             {"You will now see weather and lighting messages in rooms.\r\n",
-                             "You will no longer see weather and lighting messages in rooms.\r\n"}
+                             "You will no longer see weather and lighting messages in rooms.\r\n"},
+                            {"You will now receive XTERM256 colors.\r\n",
+                             "You will no longer receive XTERM256 colors. All colors will be coerced to ANSI.\r\n"},
+                            {"ANSI colors will no longer be enforced. You'll see the MUD in the intended colors.\r\n",
+                             "You can now configure ANSI colors in your client.\r\n"}
                           };
 
 ACMD(do_toggle)
@@ -1378,6 +1384,24 @@ ACMD(do_toggle)
     } else if (is_abbrev(argument, "weather") || is_abbrev(argument, "rain") || is_abbrev(argument, "noweather") || is_abbrev(argument, "no weather")) {
       result = PRF_TOG_CHK(ch, PRF_NO_WEATHER);
       mode = 45;
+    } else if (is_abbrev(argument, "xterm256") || is_abbrev(argument, "xterm-256") || is_abbrev(argument, "no xterm-256 color") || is_abbrev(argument, "!xterm256")) {
+      result = PRF_TOG_CHK(ch, PRF_DISABLE_XTERM);
+      mode = 46;
+      if (result) {
+        disable_xterm_256(ch->desc);
+      } else {
+        enable_xterm_256(ch->desc);
+      }
+    } else if (is_abbrev(argument, "client-configurable colors") || is_abbrev(argument, "coerce ansi") || is_abbrev(argument, "color coercion")) {
+      result = PRF_TOG_CHK(ch, PRF_COERCE_ANSI);
+      mode = 47;
+      if (result) {
+        if (ch->desc->pProtocol)
+          ch->desc->pProtocol->do_coerce_ansi_capable_colors_to_ansi = TRUE;
+      } else {
+        if (ch->desc->pProtocol)
+          ch->desc->pProtocol->do_coerce_ansi_capable_colors_to_ansi = FALSE;
+      }
     } else {
       send_to_char("That is not a valid toggle option.\r\n", ch);
       return;

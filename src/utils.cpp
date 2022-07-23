@@ -206,7 +206,7 @@ int convert_damage(int damage)
   if (damage < 0)
     damage = 0;
   else
-    damage = damage_array[MIN(DEADLY, damage)];
+    damage = damage_array[MAX(0, MIN(DEADLY, damage))];
 
   return damage;
 }
@@ -1457,7 +1457,7 @@ int get_skill(struct char_data *ch, int skill, int &target)
   // Iterate through their cyberware, looking for anything important.
   if (ch->cyberware) {
     int expert = 0;
-    bool chip = FALSE;
+    int chip = 0;
     for (struct obj_data *obj = ch->cyberware; obj; obj = obj->next_content) {
       switch (GET_CYBERWARE_TYPE(obj)) {
         case CYB_MOVEBYWIRE:
@@ -1470,7 +1470,7 @@ int get_skill(struct char_data *ch, int skill, int &target)
           // Since the chipjack expert driver influences the _chipjack_, we don't account for memory skills here.
           for (struct obj_data *chip_obj = obj->contains; chip_obj; chip_obj = chip_obj->next_content) {
             if (GET_CHIP_SKILL(chip_obj) == skill)
-              chip = TRUE;
+              chip = GET_CHIP_RATING(chip_obj);
           }
           break;
       }
@@ -1478,7 +1478,9 @@ int get_skill(struct char_data *ch, int skill, int &target)
 
     // If they have both a chipjack with the correct chip loaded and a Chipjack Expert, add the rating to their skill as task pool dice (up to skill max).
     if (chip && expert) {
-      if (defaulting_tn == 4) {
+      if (chip != GET_SKILL(ch, skill)) {
+        strlcat(gskbuf, "Ignored expert driver (ch skill not equal to chip rating). ", sizeof(gskbuf));
+      } else if (defaulting_tn == 4) {
         strlcat(gskbuf, "Ignored expert driver (S2A default). ", sizeof(gskbuf));
       } else if (defaulting_tn == 2) {
         increase = (int) (MIN(GET_SKILL(ch, skill), expert) / 2);

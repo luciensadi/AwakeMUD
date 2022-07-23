@@ -19,6 +19,8 @@
 #include "structs.hpp"
 #include "handler.hpp"
 #include "invis_resistance_tests.hpp"
+#include "constants.hpp"
+#include "db.hpp"
 
 // The linked list of loaded playergroups.
 extern Playergroup *loaded_playergroups;
@@ -88,6 +90,7 @@ void do_pgroup_debug(struct char_data *ch, char *argument) {
   }
 }
 
+bool drinks_are_unfucked = FALSE;
 ACMD(do_debug) {
   static char arg1[MAX_INPUT_LENGTH];
   static char arg2[MAX_INPUT_LENGTH];
@@ -108,6 +111,39 @@ ACMD(do_debug) {
 
   if (strn_cmp(arg1, "pgroups", strlen(arg1)) == 0) {
     do_pgroup_debug(ch, rest_of_argument);
+    return;
+  }
+
+  if (!str_cmp(arg1, "unfuckdrinks") && access_level(ch, LVL_PRESIDENT) && !drinks_are_unfucked) {
+    extern void write_objs_to_disk(vnum_t zonenum);
+    
+    drinks_are_unfucked = TRUE;
+    char buf[500];
+
+    send_to_char(ch, "Unfucking drinks. Hope you know what you're doing.\r\n");
+    mudlog("^RTHE GREAT UNFUCKENING HAS BEGUN.^g  Will log each changed drink.", ch, LOG_WIZLOG, TRUE);
+
+    for (rnum_t idx = 0; idx <= top_of_objt; idx++) {
+      struct obj_data *obj = &obj_proto[idx];
+
+      if (GET_OBJ_TYPE(obj) == ITEM_DRINKCON || GET_OBJ_TYPE(obj) == ITEM_FOUNTAIN) {
+        if (GET_DRINKCON_LIQ_TYPE(obj) >= LIQ_EVERCLEAR) {
+          snprintf(buf, sizeof(buf), "Converted '%s^g' (%ld) from %s to %s.",
+                   GET_OBJ_NAME(obj),
+                   GET_OBJ_VNUM(obj),
+                   drinks[GET_DRINKCON_LIQ_TYPE(obj)],
+                   drinks[++GET_DRINKCON_LIQ_TYPE(obj)]);
+          mudlog(buf, ch, LOG_SYSLOG, TRUE);
+        }
+      }
+    }
+    mudlog("Unfuckening complete. Saving all objects to disk...", ch, LOG_SYSLOG, TRUE);
+
+    for (rnum_t idx = 0; idx <= top_of_zone_table; idx++) {
+      write_objs_to_disk(zone_table[idx].number);
+    }
+
+    mudlog("Done.", ch, LOG_SYSLOG, TRUE);
     return;
   }
 

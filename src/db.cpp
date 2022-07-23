@@ -3189,6 +3189,38 @@ int vnum_object_affflag(int type, struct char_data * ch)
   return (found);
 }
 
+int vnum_object_poison(struct char_data * ch)
+{
+  char buf[MAX_STRING_LENGTH * 8];
+  int nr, found = 0;
+
+  buf[0] = 0;
+
+  for (nr = 0; nr <= top_of_objt; nr++)
+  {
+    if (GET_OBJ_TYPE(&obj_proto[nr]) == ITEM_FOUNTAIN && GET_FOUNTAIN_POISON_RATING(&obj_proto[nr]) > 0) {
+      ++found;
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%5ld -%2d] %s %s^n  poison rating: %d\r\n",
+              OBJ_VNUM_RNUM(nr),
+              ObjList.CountObj(nr),
+              vnum_from_non_connected_zone(OBJ_VNUM_RNUM(nr)) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(connected)" : "*"),
+              obj_proto[nr].text.name,
+              GET_FOUNTAIN_POISON_RATING(&obj_proto[nr]));
+    }
+    else if (GET_OBJ_TYPE(&obj_proto[nr]) == ITEM_DRINKCON && GET_DRINKCON_POISON_RATING(&obj_proto[nr]) > 0) {
+      ++found;
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%5ld -%2d] %s %s^n  poison rating: %d\r\n",
+              OBJ_VNUM_RNUM(nr),
+              ObjList.CountObj(nr),
+              vnum_from_non_connected_zone(OBJ_VNUM_RNUM(nr)) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(connected)" : "*"),
+              obj_proto[nr].text.name,
+              GET_DRINKCON_POISON_RATING(&obj_proto[nr]));
+    }
+  }
+  page_string(ch->desc, buf, 1);
+  return (found);
+}
+
 int vnum_object(char *searchname, struct char_data * ch)
 {
   int nr, found = 0;
@@ -3215,6 +3247,8 @@ int vnum_object(char *searchname, struct char_data * ch)
     return vnum_object_affects(ch);
   if (!strcmp(arg1,"affflag"))
     return vnum_object_affflag(atoi(arg2),ch);
+  if (!strcmp(arg1, "poison"))
+    return vnum_object_poison(ch);
 
   // Make it easier for people to find specific types of things.
   for (int index = ITEM_LIGHT; index < NUM_ITEMS; index++) {

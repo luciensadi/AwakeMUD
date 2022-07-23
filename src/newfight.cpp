@@ -73,6 +73,37 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
   snprintf(rbuf, sizeof(rbuf), ">> ^cCombat eval: %s vs %s.", GET_CHAR_NAME(attacker), GET_CHAR_NAME(victim));
   SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
 
+  // Precondition: If your foe is astral (ex: a non-manifested projection, a dematerialized spirit), you don't belong here.
+  if (IS_ASTRAL(def->ch)) {
+    if (IS_DUAL(att->ch) || IS_ASTRAL(att->ch)) {
+      return astral_fight(att->ch, def->ch);
+    } else {
+      mudlog("SYSERR: Entered hit() with an non-astrally-reachable character attacking an astral character.", att->ch, LOG_SYSLOG, TRUE);
+      act("Unable to hit $N- $E's astral and $n can't touch that.", FALSE, att->ch, 0, def->ch, TO_ROLLS);
+      stop_fighting(att->ch);
+    }
+    return FALSE;
+  }
+
+  // Precondition: Same for if you're an astral being and your target isn't.
+  if (IS_ASTRAL(att->ch)) {
+    if (IS_DUAL(def->ch) || IS_ASTRAL(def->ch)) {
+      astral_fight(att->ch, def->ch);
+    } else {
+      mudlog("SYSERR: Entered hit() with an astral character attacking a non-astrally-reachable character.", att->ch, LOG_SYSLOG, TRUE);
+      act("Unable to hit $N- $E's unreachable from the astral plane and $n can't touch that.", FALSE, att->ch, 0, def->ch, TO_ROLLS);
+      stop_fighting(att->ch);
+    }
+    return FALSE;
+  }
+
+  // Precondition: If you're in melee combat and your foe isn't present, stop fighting.
+  if (!att->ranged_combat_mode && att->ch->in_room != def->ch->in_room) {
+    send_to_char(att->ch, "You relax with the knowledge that your opponent is no longer present.\r\n");
+    stop_fighting(att->ch);
+    return FALSE;
+  }
+
   // Short-circuit: If you're wielding an activated Dominator, you don't care about all these pesky rules.
   if (att->weapon && GET_OBJ_SPEC(att->weapon) == weapon_dominator) {
     if (GET_LEVEL(def->ch) > GET_LEVEL(att->ch)) {
@@ -87,6 +118,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
         act("A crackling shot of energy erupts from $n's Dominator and slams into $N, disabling $M!", FALSE, att->ch, 0, def->ch, TO_NOTVICT);
         act("A crackling shot of energy erupts from $n's Dominator and slams into you! Your vision fades as your muscles lock up.", FALSE, att->ch, 0, def->ch, TO_VICT);
         GET_MENTAL(def->ch) = -10;
+        update_pos(def->ch);
         return FALSE;
       case WEAP_HEAVY_PISTOL:
         // Lethal? Kill your target.
@@ -133,37 +165,6 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
   // Precondition: If you're out of ammo, you don't get to fight. Note the use of the deducting has_ammo here.
   if (att->weapon && !has_ammo(att->ch, att->weapon))
     return FALSE;
-
-  // Precondition: If your foe is astral (ex: a non-manifested projection, a dematerialized spirit), you don't belong here.
-  if (IS_ASTRAL(def->ch)) {
-    if (IS_DUAL(att->ch) || IS_ASTRAL(att->ch)) {
-      return astral_fight(att->ch, def->ch);
-    } else {
-      mudlog("SYSERR: Entered hit() with an non-astrally-reachable character attacking an astral character.", att->ch, LOG_SYSLOG, TRUE);
-      act("Unable to hit $N- $E's astral and $n can't touch that.", FALSE, att->ch, 0, def->ch, TO_ROLLS);
-      stop_fighting(att->ch);
-    }
-    return FALSE;
-  }
-
-  // Precondition: Same for if you're an astral being and your target isn't.
-  if (IS_ASTRAL(att->ch)) {
-    if (IS_DUAL(def->ch) || IS_ASTRAL(def->ch)) {
-      astral_fight(att->ch, def->ch);
-    } else {
-      mudlog("SYSERR: Entered hit() with an astral character attacking a non-astrally-reachable character.", att->ch, LOG_SYSLOG, TRUE);
-      act("Unable to hit $N- $E's unreachable from the astral plane and $n can't touch that.", FALSE, att->ch, 0, def->ch, TO_ROLLS);
-      stop_fighting(att->ch);
-    }
-    return FALSE;
-  }
-
-  // Precondition: If you're in melee combat and your foe isn't present, stop fighting.
-  if (!att->ranged_combat_mode && att->ch->in_room != def->ch->in_room) {
-    send_to_char(att->ch, "You relax with the knowledge that your opponent is no longer present.\r\n");
-    stop_fighting(att->ch);
-    return FALSE;
-  }
 
   // Remove closing flags if both are melee.
   if ((!att->ranged_combat_mode || AFF_FLAGGED(att->ch, AFF_APPROACH))

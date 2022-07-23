@@ -1207,6 +1207,32 @@ void icon_from_host(struct matrix_icon *icon)
       REMOVE_FROM_LIST(icon2, matrix[icon->in_host].fighting, next_fighting);
     }
   }
+
+  // Unlink any files that have been claimed by this icon.
+  if (icon->idnum) {
+    for (struct obj_data *soft = matrix[icon->in_host].file, *next_file; soft; soft = next_file) {
+      next_file = soft->next_content;
+
+      if (GET_OBJ_TYPE(soft) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(soft) == TYPE_FILE) {
+        if (GET_DECK_ACCESSORY_FILE_FOUND_BY(soft) == icon->idnum) {
+          GET_DECK_ACCESSORY_FILE_FOUND_BY(soft) = 0;
+          GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(soft) = 0;
+          GET_DECK_ACCESSORY_FILE_REMAINING(soft) = 0;
+
+          // If it's paydata, we extract it entirely, then potentially put it back in the paydata queue to re-find.
+          if (GET_DECK_ACCESSORY_FILE_HOST_VNUM(soft) == icon->in_host) {
+            // 66% chance of being rediscoverable.
+            if (number(0, 2))
+              matrix[icon->in_host].found++;
+
+            extract_obj(soft);
+            continue;
+          }
+        }
+      }
+    }
+  }
+
   icon->in_host = NOWHERE;
   icon->next_in_host = NULL;
   icon->fighting = NULL;

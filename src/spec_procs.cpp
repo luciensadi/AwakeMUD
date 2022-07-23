@@ -77,6 +77,7 @@ ACMD_DECLARE(do_wield);
 ACMD_DECLARE(do_draw);
 ACMD_DECLARE(do_holster);
 ACMD_DECLARE(do_remove);
+ACMD_DECLARE(do_new_echo);
 
 struct social_type
 {
@@ -4162,6 +4163,7 @@ void process_auth_room(struct char_data *ch) {
     GET_OBJ_COST(obj) = 1;
   char_from_room(ch);
   char_to_room(ch, &world[real_room(RM_NEWBIE_LOBBY)]);
+  GET_LOADROOM(ch) = RM_NEWBIE_LOADROOM;
   send_to_char(ch, "^YYou are now Authorized. Welcome to Awakened Worlds.^n\r\n");
 
   for (struct obj_data *obj = ch->cyberware; obj; obj = obj->next_content)
@@ -4237,7 +4239,7 @@ SPECIAL(auth_room)
     if (!str_cmp("have read the rules and policies, understand them, and agree to abide by them during my stay here.", argument))
       process_auth_room(ch);
     else {
-      send_to_char(ch, "You should use the SAY command here, and be careful about line breaks. Example: ^Wsay I have read the rules and policies, understand them, and agree to abide by them during my stay here.^n\r\n^n");
+      send_to_char(ch, "You should use the SAY command here, and be careful about line breaks. Example: ##^Wsay I have read the rules and policies, understand them, and agree to abide by them during my stay here.^n\r\n^n");
       return TRUE;
     }
   }
@@ -6029,13 +6031,30 @@ SPECIAL(mageskill_moore)
 SPECIAL(mageskill_herbie)
 {
   struct char_data *mage = (struct char_data *) me;
-  struct obj_data *recom = NULL, *obj = NULL;
+  struct obj_data *recom = NULL, *obj = NULL, *next_obj = NULL;
 
-  for (recom = ch->carrying; recom; recom = recom->next_content)
-    if (GET_OBJ_VNUM(recom) == OBJ_MAGE_LETTER)
-      break;
-  if (!recom || GET_OBJ_VAL(recom, 0) != GET_IDNUM(ch))
+  if (!cmd)
     return FALSE;
+
+  for (recom = ch->carrying; recom; recom = next_obj) {
+    next_obj = recom->next_content;
+    if (GET_OBJ_VNUM(recom) == OBJ_MAGE_LETTER) {
+      if (GET_OBJ_VAL(recom, 0) != GET_IDNUM(ch)) {
+        send_to_room("Herbie distractedly lets someone else's recommendation letter slip from his fingers.\r\n", mage->in_room);
+        obj_from_char(recom);
+        if (mage->in_room)
+          obj_to_room(recom, mage->in_room);
+        else
+          obj_to_veh(recom, mage->in_veh);
+      } else {
+        break;
+      }
+    }
+  }
+
+  if (!recom)
+    return FALSE;
+
   if (CMD_IS("say") || CMD_IS("'") || CMD_IS("ask")) {
     skip_spaces(&argument);
     if (!*argument || !(str_str(argument, "recommendation") || str_str(argument, "letter")))
@@ -7083,6 +7102,98 @@ SPECIAL(toggled_voice_modulator)
   }
 
   return FALSE;
+}
+
+// Use this as a template for other random-speech mobs. It's the latest as of Jul 2022.
+SPECIAL(template_speech) {
+  static int last_said = -1;
+
+  int message_num;
+  const char *messages[] = {
+    "Runners these days don't realize how valuable keeping notes on their pocket secretary is. Like where Johnsons hang out.",
+    "Best to keep your phone and radio in hand. In a box, you won't hear it, and in your coat pocket, it'll just get shot.",
+    "Seems like every day I hear about another wanna-be runner getting gunned down by the Star for walking around with their gun or cyberdeck in hand.",
+    "Back in my day, we didn't have anything like the 8 MHz band available. Being able to talk to runners is a blessing.",
+    "When in doubt, just take a cab back to somewhere familiar.",
+    "If you're on a job and you just can't get it done, call your Johnson and tell them you quit. Easier than hoofing it all the way back.",
+    "It's dangerous to go alone. Make friends.",
+    "Keep your eyes and ears open. You never know when you'll make an unfair weather friend."
+  };
+#define NUM_PROC_MESSAGES       8
+#define PROC_FREQUENCY_DIVISOR  20
+
+  if (cmd || FIGHTING(ch) || !AWAKE(ch))
+    return FALSE;
+
+  if ((message_num = number(0, NUM_PROC_MESSAGES * PROC_FREQUENCY_DIVISOR)) >= NUM_PROC_MESSAGES || message_num == last_said)
+    return FALSE;
+
+  do_say(ch, messages[message_num], 0, 0);
+  last_said = message_num;
+
+  return TRUE;
+
+#undef PROC_FREQUENCY_DIVISOR
+#undef NUM_PROC_MESSAGES
+}
+
+// Use this as a template for other random-emote mobs. It's the latest as of Jul 2022.
+SPECIAL(receptionist_95902) {
+  static int last_done = -1;
+
+  int message_num;
+  const char *emotes[] = {
+    "The nervous looking receptionist mutters under her breath, \"It's a good opportunity, they said. The man's a genius, they said. Wish I'd stayed in Denver...\"",
+    "The nervous looking receptionist shifts uncomfortably in her chair and looks at the office door. \"I'm sure his meeting will be over soon, I think. Right?\"",
+    "The nervous looking receptionist looks ready to bolt from the room. \"I just can't stand it anymore!\" She stands up, hesitates, and then sits back down. \"Then again, the pay...\"",
+    "The nervous looking receptionist seems to be practicing her pronunciation. \"Senor Antonio... Seen yor Ahn Tonyo... Seeeenyo- no, that's just bad.\""
+  };
+#define NUM_PROC_MESSAGES       4
+#define PROC_FREQUENCY_DIVISOR  20
+
+  if (cmd || FIGHTING(ch) || !AWAKE(ch))
+    return FALSE;
+
+  if ((message_num = number(0, NUM_PROC_MESSAGES * PROC_FREQUENCY_DIVISOR)) >= NUM_PROC_MESSAGES || message_num == last_done)
+    return FALSE;
+
+  char tmp_buf[strlen(emotes[message_num]) + 1];
+  strlcpy(tmp_buf, emotes[message_num], sizeof(tmp_buf));
+
+  do_new_echo(ch, tmp_buf, 0, 0);
+  last_done = message_num;
+
+  return TRUE;
+
+#undef PROC_FREQUENCY_DIVISOR
+#undef NUM_PROC_MESSAGES
+}
+
+SPECIAL(graffiti_cleaner) {
+  if (cmd || FIGHTING(ch) || !AWAKE(ch))
+    return FALSE;
+
+  int graffiti_count = 0;
+
+  for (struct obj_data *obj = ch->in_room->contents, *next; obj; obj = next) {
+    next = obj->next_content;
+
+    if (GET_OBJ_VNUM(obj) == OBJ_GRAFFITI && ++graffiti_count >= MAXIMUM_GRAFFITI_IN_ROOM) {
+      char msgbuf[500];
+
+      snprintf(msgbuf, sizeof(msgbuf), "$n mutters something under $s breath as $e scrub%s away some graffiti.", HSSH_SHOULD_PLURAL(ch) ? "s" : "");
+      act(msgbuf, TRUE, ch, 0, 0, TO_ROOM);
+
+      snprintf(msgbuf, sizeof(msgbuf), "[SPRAYLOG] Auto-cleaned '%s' from newbie spray location.", GET_OBJ_NAME(obj));
+      mudlog(msgbuf, ch, LOG_SYSLOG, TRUE);
+
+      obj_from_room(obj);
+      extract_obj(obj);
+      graffiti_count--;
+    }
+  }
+
+  return TRUE;
 }
 
 /*

@@ -95,6 +95,8 @@ void cedit_parse(struct descriptor_data *d, char *arg);
 extern void affect_total(struct char_data * ch);
 extern void mag_menu_system(struct descriptor_data * d, char *arg);
 extern void ccr_pronoun_menu(struct descriptor_data *d);
+extern void disable_xterm_256(descriptor_t *apDescriptor);
+extern void enable_xterm_256(descriptor_t *apDescriptor);
 
 /* prototypes for all do_x functions. */
 ACMD_DECLARE(do_olcon);
@@ -2430,7 +2432,8 @@ void nanny(struct descriptor_data * d, char *arg)
   extern vnum_t newbie_start_room;
   extern int max_bad_pws;
   extern bool House_can_enter(struct char_data *ch, vnum_t vnum);
-  vnum_t load_room = NOWHERE;
+  vnum_t load_room_vnum;
+  rnum_t load_room_rnum;
   bool dirty_password = FALSE;
 
   int parse_class(struct descriptor_data *d, char *arg);
@@ -2536,6 +2539,7 @@ void nanny(struct descriptor_data * d, char *arg)
       if (does_player_exist(tmp_name)) {
         d->character = playerDB.LoadChar(tmp_name, TRUE);
         d->character->desc = d;
+
         if (PRF_FLAGGED(d->character, PRF_HARDCORE) && PLR_FLAGGED(d->character, PLR_JUST_DIED)) {
           SEND_TO_Q("The Reaper has claimed this one...\r\n", d);
           STATE(d) = CON_CLOSE;
@@ -2829,22 +2833,22 @@ void nanny(struct descriptor_data * d, char *arg)
       if (!GET_LEVEL(d->character)) {
         // Copypasta of char init code to prevent them from showing up with no stats, paralyzed in front of Dante's.
         if (GET_ARCHETYPAL_MODE(d->character)) {
-          load_room = archetypes[GET_ARCHETYPAL_TYPE(d->character)]->start_room;
+          load_room_vnum = archetypes[GET_ARCHETYPAL_TYPE(d->character)]->start_room;
           // Correct for invalid archetype start rooms.
-          if (real_room(load_room) == NOWHERE) {
+          if (real_room(load_room_vnum) == NOWHERE) {
             snprintf(buf, sizeof(buf), "WARNING: Start room %ld for archetype %s does not exist!",
-                     load_room,
+                     load_room_vnum,
                      archetypes[GET_ARCHETYPAL_TYPE(d->character)]->name);
             mudlog(buf, NULL, LOG_SYSLOG, TRUE);
-            load_room = newbie_start_room;
+            load_room_vnum = newbie_start_room;
           }
           do_start(d->character, FALSE);
         } else {
-          load_room = newbie_start_room;
+          load_room_vnum = newbie_start_room;
           do_start(d->character, TRUE);
         }
 
-        playerDB.SaveChar(d->character, load_room);
+        playerDB.SaveChar(d->character, load_room_vnum);
       }
       close_socket(d);
       break;
@@ -2882,72 +2886,110 @@ void nanny(struct descriptor_data * d, char *arg)
       character_list = d->character;
       d->character->player.time.logon = time(0);
 
+      if (PRF_FLAGGED(d->character, PRF_DISABLE_XTERM)) {
+        disable_xterm_256(d);
+      }
+
+      if (PRF_FLAGGED(d->character, PRF_COERCE_ANSI) && d->pProtocol) {
+        d->pProtocol->do_coerce_ansi_capable_colors_to_ansi = TRUE;
+      }
+
       // Rewrote the entire janky-ass load room tree.
       // First: Frozen characters. They go to the frozen start room.
       if (PLR_FLAGGED(d->character, PLR_FROZEN))
-        load_room = real_room(frozen_start_room);
+        load_room_vnum = frozen_start_room;
 
       // Next: Unauthed (chargen) characters. They go to the start of their chargen areas.
       else if (PLR_FLAGGED(d->character, PLR_NOT_YET_AUTHED)) {
-        if (!GET_ARCHETYPAL_MODE(d->character) || (load_room = real_room(archetypes[GET_ARCHETYPAL_TYPE(d->character)]->start_room)) == NOWHERE)
-          load_room = real_room(newbie_start_room);
+        if (GET_ARCHETYPAL_MODE(d->character)) {
+          load_room_vnum = archetypes[GET_ARCHETYPAL_TYPE(d->character)]->start_room;
+          if (real_room(load_room_vnum) == NOWHERE) {
+            char oopsbuf[500];
+            snprintf(oopsbuf, sizeof(oopsbuf), "SYSERR: Archetypal start room %ld for arch %d did not exist! Redirecting to standard CG.", load_room_vnum, GET_ARCHETYPAL_TYPE(d->character));
+            mudlog(oopsbuf, d->character, LOG_SYSLOG, TRUE);
+
+            load_room_vnum = RM_CHARGEN_START_ROOM;
+          }
+        } else {
+          load_room_vnum = RM_CHARGEN_START_ROOM;
+        }
       }
 
       // Next: Characters who have GET_LAST_IN rooms load in there.
-      else if ((load_room = GET_LAST_IN(d->character)) != NOWHERE)
-        load_room = real_room(load_room);
+      else if (GET_LAST_IN(d->character) != NOWHERE)
+        load_room_vnum = GET_LAST_IN(d->character);
 
       // Next: Characters who have load rooms rooms load in there.
-      else if ((load_room = GET_LOADROOM(d->character)) != NOWHERE)
-        load_room = real_room(load_room);
+      else if (GET_LOADROOM(d->character) != NOWHERE) {
+        load_room_vnum = GET_LOADROOM(d->character);
+      }
 
-      // Fallthrough: No start room? Mortal start room. Functions like an ELSE to the above, but also catches invalid rooms from above.
-      if (load_room == NOWHERE)
-        load_room = real_room(mortal_start_room);
+      // Non-chargens don't get to start in chargen.
+      if (!PLR_FLAGGED(d->character, PLR_NOT_YET_AUTHED)) {
+        for (int arch_idx = 0; arch_idx < NUM_CCR_ARCHETYPES; arch_idx++) {
+          if (load_room_vnum == archetypes[arch_idx]->start_room) {
+            mudlog("SYSERR: Non-chargen character would have started in arch chargen! Sending to mortal start.", d->character, LOG_SYSLOG, TRUE);
+            load_room_vnum = mortal_start_room;
+          }
+        }
 
-      // Post-processing: Non-newbies don't get to start in the newbie loadroom-- rewrite their loadroom value.
-      if (load_room == real_room(RM_NEWBIE_LOADROOM) && !PLR_FLAGGED(d->character, PLR_NEWBIE))
-        load_room = real_room(mortal_start_room);
+        if (load_room_vnum == RM_CHARGEN_START_ROOM) {
+          mudlog("SYSERR: Non-chargen character would have started in standard chargen! Sending to mortal start.", d->character, LOG_SYSLOG, TRUE);
+          load_room_vnum = mortal_start_room;
+        }
+      }
 
-      /*
-      // Post-processing: Staff with invalid or mort-start-room loadrooms instead load in at their defined loadroom.
-      if (IS_SENATOR(d->character) && (load_room <= 0 || load_room == real_room(mortal_start_room)))
-        load_room = real_room(GET_LOADROOM(d->character));
-      */
-
-      // Post-processing: Characters who are trying to load into a house get rejected if they're not allowed in there.
-      if (ROOM_FLAGGED(&world[load_room], ROOM_HOUSE) && !House_can_enter(d->character, world[load_room].number))
-        load_room = real_room(mortal_start_room);
+      // Non-newbies don't get to start in the newbie loadroom-- rewrite their loadroom value.
+      if (load_room_vnum == RM_NEWBIE_LOADROOM && !PLR_FLAGGED(d->character, PLR_NEWBIE)) {
+        mudlog("Moving character from newbie loadroom to mortal start (they're no longer a newbie)", d->character, LOG_SYSLOG, TRUE);
+        load_room_vnum = mortal_start_room;
+      }
 
       // Post-processing: Invalid load room characters go to the newbie or mortal start rooms.
-      if (load_room == NOWHERE) {
+      if (load_room_vnum == NOWHERE || (load_room_rnum = real_room(load_room_vnum)) < 0) {
         if (PLR_FLAGGED(d->character, PLR_NEWBIE)) {
-          load_room = real_room(RM_NEWBIE_LOADROOM);
-        } else
-          load_room = real_room(mortal_start_room);
+          load_room_vnum = RM_NEWBIE_LOADROOM;
+        } else {
+          load_room_vnum = mortal_start_room;
+        }
+        load_room_rnum = real_room(load_room_vnum);
+      }
+
+      // Post-processing: Characters who are trying to load into a house get rejected if they're not allowed in there.
+      if (ROOM_FLAGGED(&world[load_room_rnum], ROOM_HOUSE) && !House_can_enter(d->character, world[load_room_rnum].number)) {
+        load_room_vnum = mortal_start_room;
+        load_room_rnum = real_room(mortal_start_room);
       }
 
       // First-time login. This overrides the above, but it's for a good cause.
       if (!GET_LEVEL(d->character)) {
         if (GET_ARCHETYPAL_MODE(d->character)) {
-          load_room = real_room(archetypes[GET_ARCHETYPAL_TYPE(d->character)]->start_room);
+          load_room_vnum = archetypes[GET_ARCHETYPAL_TYPE(d->character)]->start_room;
+          load_room_rnum = real_room(load_room_vnum);
           // Correct for invalid archetype start rooms.
-          if (load_room == NOWHERE) {
+          if (load_room_rnum < 0) {
             snprintf(buf, sizeof(buf), "WARNING: Start room %ld for archetype %s does not exist!",
                      archetypes[GET_ARCHETYPAL_TYPE(d->character)]->start_room,
                      archetypes[GET_ARCHETYPAL_TYPE(d->character)]->name);
             mudlog(buf, NULL, LOG_SYSLOG, TRUE);
-            load_room = real_room(newbie_start_room);
+            load_room_vnum = newbie_start_room;
+            load_room_rnum = real_room(load_room_vnum);
           }
           do_start(d->character, FALSE);
         } else {
-          load_room = real_room(newbie_start_room);
+          load_room_vnum = newbie_start_room;
+          load_room_rnum = real_room(load_room_vnum);
           do_start(d->character, TRUE);
         }
 
-        playerDB.SaveChar(d->character, GET_ROOM_VNUM(&world[load_room]));
+        playerDB.SaveChar(d->character, GET_ROOM_VNUM(&world[load_room_rnum]));
         send_to_char(START_MESSG, d->character);
       } else {
+        // Save their updated load room.
+        if (GET_LOADROOM(d->character) != load_room_vnum && load_room_vnum != GET_LAST_IN(d->character)) {
+          playerDB.SaveChar(d->character, GET_ROOM_VNUM(&world[load_room_rnum]));
+        }
+
         send_to_char(WELC_MESSG, d->character);
       }
       if (d->character->player_specials->saved.last_veh) {
@@ -2960,7 +3002,7 @@ void nanny(struct descriptor_data * d, char *arg)
           }
       }
       if (!d->character->in_veh)
-        char_to_room(d->character, &world[load_room]);
+        char_to_room(d->character, &world[load_room_rnum]);
       act("$n has entered the game.", TRUE, d->character, 0, 0, TO_ROOM);
       snprintf(buf, sizeof(buf), "%s has entered the game.", GET_CHAR_NAME(d->character));
       mudlog(buf, d->character, LOG_CONNLOG, TRUE);

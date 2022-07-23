@@ -91,7 +91,7 @@ extern int num_elevators;
 
 extern int write_quests_to_disk(int zone);
 extern void write_world_to_disk(int vnum);
-extern void write_objs_to_disk(int zone);
+extern void write_objs_to_disk(vnum_t zone);
 extern void alarm_handler(int signal);
 extern bool can_edit_zone(struct char_data *ch, rnum_t real_zone);
 extern const char *render_door_type_string(struct room_direction_data *door);
@@ -7041,6 +7041,18 @@ int audit_zone_objects_(struct char_data *ch, int zone_num, bool verbose) {
       }
     }
 
+    if (GET_OBJ_TYPE(obj) == ITEM_DRINKCON && GET_DRINKCON_POISON_RATING(obj) > 0) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^yis poisoned^n (^y%d^n)^n.\r\n", GET_DRINKCON_POISON_RATING(obj));
+      printed = TRUE;
+      issues++;
+    }
+
+    else if (GET_OBJ_TYPE(obj) == ITEM_FOUNTAIN && GET_FOUNTAIN_POISON_RATING(obj) > 0) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^yis poisoned^n (^y%d^n)^n.\r\n", GET_FOUNTAIN_POISON_RATING(obj));
+      printed = TRUE;
+      issues++;
+    }
+
     if (printed) {
       send_to_char(ch, "%s\r\n", buf);
     }
@@ -7548,37 +7560,67 @@ int audit_zone_commands_(struct char_data *ch, int zone_num, bool verbose) {
 }
 #undef ZCMD
 
+#define AUDIT_ALL_ZONES(func_suffix)                           \
+if (!str_cmp(arg1, #func_suffix)) {                            \
+  for (zonenum = 0; zonenum <= top_of_zone_table; zonenum++) { \
+    if (!zone_table[zonenum].connected                         \
+        || zone_table[zonenum].number == 0                     \
+        || zone_table[zonenum].number == 10                    \
+        || zone_table[zonenum].number == 100)                  \
+      continue;                                                \
+    audit_zone_ ## func_suffix ## _(ch, zonenum, FALSE);       \
+  }                                                            \
+  return;                                                      \
+}
+
+#define AUDIT_CATEGORY(compare_string, unquoted_category)      \
+if (!strcmp(arg1, compare_string)) {                           \
+  if (number <= 0) {                                           \
+    AUDIT_ALL_ZONES(unquoted_category);                        \
+  } else {                                                     \
+    audit_zone_ ## unquoted_category ## _(ch, zonenum, TRUE);  \
+  }                                                            \
+  return;                                                      \
+}
+
 ACMD(do_audit) {
-  int number, zonenum;
   char arg1[MAX_INPUT_LENGTH];
+  rnum_t zonenum;
+  vnum_t number;
 
-  // we just wanna check the zone number they want to switch to
-  any_one_arg(argument, arg1);
+  char *remainder = any_one_arg(argument, arg1);
 
-  // convert the arg to an int
+  // First form: `audit <zonenum>`
   number = atoi(arg1);
-  // find the real zone number
-  zonenum = real_zone(number);
+  if (number > 0) {
+    // Parse it into the real zone num.
+    zonenum = real_zone(number);
 
-  if (zonenum < 0 || zonenum > top_of_zone_table) {
-    send_to_char(ch, "That's not a zone.\r\n");
+    // Make sure it's valid.
+    if (zonenum < 0 || zonenum > top_of_zone_table) {
+      send_to_char(ch, "That's not a zone.\r\n");
+      return;
+    }
+
+    // Audit all entries in the zone.
+    int issues = 0;
+    issues += audit_zone_rooms_(ch, zonenum, TRUE);
+    issues += audit_zone_mobs_(ch, zonenum, TRUE);
+    issues += audit_zone_objects_(ch, zonenum, TRUE);
+    issues += audit_zone_quests_(ch, zonenum, TRUE);
+    issues += audit_zone_shops_(ch, zonenum, TRUE);
+    issues += audit_zone_vehicles_(ch, zonenum, TRUE);
+    issues += audit_zone_hosts_(ch, zonenum, TRUE);
+    issues += audit_zone_ics_(ch, zonenum, TRUE);
+    issues += audit_zone_commands_(ch, zonenum, TRUE);
+
+    send_to_char(ch, "\r\nDone. Found a total of %d potential issue%s. Note that something being in this list does not disqualify the zone from approval-- it just requires extra scrutiny. Conversely, something not being flagged here doesn't mean it's kosher, it just means we didn't write a coded check for it yet.\r\n",
+                 issues, issues != 1 ? "s" : "");
     return;
   }
 
-  #define AUDIT_ALL_ZONES(func_suffix)                           \
-  if (!str_cmp(arg1, #func_suffix)) {                            \
-    for (zonenum = 0; zonenum <= top_of_zone_table; zonenum++) { \
-      if (!zone_table[zonenum].connected                         \
-          || zone_table[zonenum].number == 0                     \
-          || zone_table[zonenum].number == 10                    \
-          || zone_table[zonenum].number == 100)                  \
-        continue;                                                \
-      audit_zone_ ## func_suffix ## _(ch, zonenum, FALSE);       \
-    }                                                            \
-    return;                                                      \
-  }
-
-  if (zonenum == 0) {
+  // Second form: `audit all`
+  if (is_abbrev(arg1, "all")) {
     AUDIT_ALL_ZONES(rooms);
     AUDIT_ALL_ZONES(mobs);
     AUDIT_ALL_ZONES(objects);
@@ -7588,32 +7630,43 @@ ACMD(do_audit) {
     AUDIT_ALL_ZONES(hosts);
     AUDIT_ALL_ZONES(ics);
     AUDIT_ALL_ZONES(commands);
-
-    send_to_char("That's not a valid zone number.\r\n", ch);
     return;
   }
 
-  // and see if they can edit it
-  if (!can_edit_zone(ch, zonenum)) {
-    send_to_char("Sorry, you don't have access to audit this zone.\r\n", ch);
+  // Third form: `audit (rooms|mobs|objects|quests|shops...) [zonenum]`
+  if (*remainder) {
+    number = atoi(remainder);
+    if (number <= 0 || ((zonenum = real_zone(number)) < 0 || zonenum > top_of_zone_table)) {
+      send_to_char(ch, "'%s' is not a zone number. Syntax: AUDIT (rooms|mobs|objects|...) [zonenum]\r\n", remainder);
+      return;
+    }
+  }
+
+  AUDIT_CATEGORY("rooms", rooms);
+  AUDIT_CATEGORY("mobs", mobs);
+  AUDIT_CATEGORY("quests", quests);
+  AUDIT_CATEGORY("shops", shops);
+  AUDIT_CATEGORY("vehicles", vehicles);
+  AUDIT_CATEGORY("hosts", hosts);
+  AUDIT_CATEGORY("ics", ics);
+  AUDIT_CATEGORY("commands", commands);
+
+  // This one can have multiple valid forms, so it's separate.
+  if (is_abbrev(arg1, "objects") || is_abbrev(arg1, "items")) {
+    if (number <= 0) {
+      AUDIT_ALL_ZONES(objects);
+    } else {
+      audit_zone_objects_(ch, zonenum, TRUE);
+    }
     return;
   }
 
-  // Perform auditing of the zone.
-  int issues = 0;
-  issues += audit_zone_rooms_(ch, zonenum, TRUE);
-  issues += audit_zone_mobs_(ch, zonenum, TRUE);
-  issues += audit_zone_objects_(ch, zonenum, TRUE);
-  issues += audit_zone_quests_(ch, zonenum, TRUE);
-  issues += audit_zone_shops_(ch, zonenum, TRUE);
-  issues += audit_zone_vehicles_(ch, zonenum, TRUE);
-  issues += audit_zone_hosts_(ch, zonenum, TRUE);
-  issues += audit_zone_ics_(ch, zonenum, TRUE);
-  issues += audit_zone_commands_(ch, zonenum, TRUE);
-
-  send_to_char(ch, "\r\nDone. Found a total of %d potential issue%s. Note that something being in this list does not disqualify the zone from approval-- it just requires extra scrutiny. Conversely, something not being flagged here doesn't mean it's kosher, it just means we didn't write a coded check for it yet.\r\n",
-               issues, issues != 1 ? "s" : "");
+  send_to_char(ch, "Invalid command syntax. Expected: AUDIT <zonenum> | AUDIT (rooms|mobs|objects|...) [zonenum] | AUDIT ALL\r\n");
+  return;
 }
+
+#undef AUDIT_ALL_ZONES
+#undef AUDIT_CATEGORY
 
 int create_dump(void)
 {
