@@ -2963,6 +2963,9 @@ void nanny(struct descriptor_data * d, char *arg)
 
       // First-time login. This overrides the above, but it's for a good cause.
       if (!GET_LEVEL(d->character)) {
+        snprintf(buf, sizeof(buf), "Overriding new character %s'd loadroom to chargen/arch-cg.", GET_CHAR_NAME(d->character));
+        mudlog(buf, d->character, LOG_SYSLOG, TRUE);
+
         if (GET_ARCHETYPAL_MODE(d->character)) {
           load_room_vnum = archetypes[GET_ARCHETYPAL_TYPE(d->character)]->start_room;
           load_room_rnum = real_room(load_room_vnum);
