@@ -1076,7 +1076,7 @@ enum {
 #define ADEPT_DIRECTIONAL    66
 #define ADEPT_SCENT    67
 #define ADEPT_TASTE    68
-#define ADEPT_INTERIA_STRIKE    69
+#define ADEPT_INERTIA_STRIKE    69
 #define ADEPT_IRON_GUT    70
 #define ADEPT_IRON_LUNGS    71
 #define ADEPT_MAGIC_SENSE    72
