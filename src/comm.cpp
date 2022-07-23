@@ -2868,15 +2868,27 @@ void send_to_room(const char *messg, struct room_data *room, struct veh_data *ex
 {
   struct char_data *i;
   struct veh_data *v;
+
   if (messg && room) {
-    for (i = room->people; i; i = i->next_in_room)
+    for (i = room->people; i; i = i->next_in_room) {
       if (i->desc)
         if (!(PLR_FLAGGED(i, PLR_REMOTE) || PLR_FLAGGED(i, PLR_MATRIX)) && AWAKE(i))
           SEND_TO_Q(messg, i->desc);
-    for (v = room->vehicles; v; v = v->next_veh)
+
+      if (i == i->next_in_room) {
+        mudlog("SYSERR: I = I->next_in_room in send_to_room! Truncating list. We will likely crash soon.", NULL, LOG_SYSLOG, TRUE);
+        i->next_in_room = NULL;
+      }
+    }
+    for (v = room->vehicles; v; v = v->next_veh) {
       if (v != exclude_veh)
         send_to_veh(messg, v, NULL, TRUE);
 
+      if (v == v->next_veh) {
+        mudlog("SYSERR: V = V->next_veh in send_to_room! Truncating list. We may crash soon.", NULL, LOG_SYSLOG, TRUE);
+        v->next_veh = NULL;
+      }
+    }
   }
 }
 
