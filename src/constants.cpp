@@ -1390,92 +1390,93 @@ const char *fullness[] =
 
 const char *adept_powers[] =
   {
-    "None",
+    "None",  // 0
     "Astral Perception",
     "Combat Sense",
     "Blind Fighting",
     "Quick Strike",
-    "Killing Hands",
+    "Killing Hands",  // 5
     "Nerve Strike",
     "Smashing Blow",
     "Distance Strike",
     "Increased Reflexes",
-    "Boosted Strength",
+    "Boosted Strength",  // 10
     "Boosted Quickness",
     "Boosted Body",
     "Improved Strength",
     "Improved Quickness",
-    "Improved Body",
+    "Improved Body",    // 15
     "Improved Perception",
     "Improved Sense (Low Light)",
     "Improved Sense (Thermographic)",
     "Improved Sense (Magnification)",
-    "Magic Resistance",
+    "Magic Resistance",  // 20
     "Pain Resistance",
     "Temperature Tolerance",
     "Spell Shroud",
     "True Sight",
-    "Missile Parry",
+    "Missile Parry",  // 25
     "Missile Mastery",
     "Mystic Armor",
     "Rapid Healing",
     "Freefall",
-    "Iron Will",
+    "Iron Will",  // 30
     "Aid Spell",
     "Empathic Healing",
     "Kinesics",
     "Linguistics",
-    "Living Focus",
+    "Living Focus",  // 35
     "Motion Sense",
     "Pain Relief",
     "Penetrating Strike",
     "Side Step",
-    "Sustenance",
+    "Sustenance",  // 40
     "Counterstrike",
     "Animal Empathy", // NERP Adept Powers from here on - Vile
     "Body Control",
     "Commanding Voice",
-    "Cool Resolve",
+    "Cool Resolve",  // 45
     "Deep Rooting",
     "Delay Damage (Obvious)",
     "Delay Damage (Silent)",
     "Eidetic Sense Memory",
-    "Elemental Strike",
+    "Elemental Strike",  // 50
     "Empathic Reading",
     "Empathic Sense",
     "Enhanced Balance",
     "Enthralling Performance",
-    "Facial Sculpt",
+    "Facial Sculpt",  // 55
     "Flexibility",
     "Gliding",
     "Great Leap",
     "Improved Sense (Flare Compensation)",
-    "Improved Sense (High Freq Hearing)",
+    "Improved Sense (High Freq Hearing)", // 60
     "Improved Sense (Low Freq Hearing)",
     "Improved Sense (Sound Dampening)",
     "Improved Sense (Sound Filtering)",
     "Improved Sense (Spatial Recognition)",
-    "Improved Sense (Enhanced Hearing)",
+    "Improved Sense (Enhanced Hearing)",  // 65
     "Improved Sense (Directional Sense)",
     "Improved Sense (Improved Scent)",
     "Improved Sense (Taste)",
     "Inertia Strike",
-    "Iron Gut",
+    "Iron Gut",  // 70
     "Iron Lungs",
     "Magic Sense",
     "Melanin Control",
     "Multi Tasking",
-    "Nimble Fingers",
+    "Nimble Fingers",  // 75
     "Quick Draw",
     "Resilience",
     "Rooting",
     "Sixth Sense",
-    "Sprint",
+    "Sprint",  // 80
     "Suspended State",
     "Three Dimensional Memory",
     "Traceless Walk",
     "Voice Control",
-    "Wall Running"
+    "Wall Running",  // 85
+    "\n"
   };
 
 struct skill_data skills[] =
@@ -1802,8 +1803,7 @@ const char *veh_flag[] =
     "Amphibious",
     "Workshop",
     "Newbie",
-    "Ultrasound",
-    "Lootwreck"
+    "Ultrasound"
   };
 
 const char *jurid[] =

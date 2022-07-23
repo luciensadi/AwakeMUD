@@ -25,6 +25,8 @@ extern int find_first_step(vnum_t src, vnum_t target, bool ignore_roads);
 int move_vehicle(struct char_data *ch, int dir);
 ACMD_CONST(do_return);
 
+extern int max_npc_vehicle_lootwreck_time;
+
 #define VEH ch->in_veh
 
 int get_maneuver(struct veh_data *veh)
@@ -2371,26 +2373,34 @@ ACMD(stop_rigging_first) {
   send_to_char(ch, "You'll need to stop rigging by using the %s command before you can do that.\r\n", AFF_FLAGGED(ch, AFF_RIG) ? "^WRIG^n" : "^WRETURN^n");
 }
 
-void process_vehicle_decay(void)
-{
+// Iterates over all vehicles, removing NPC ones that have been destroyed and sitting around for a while.
+void process_vehicle_decay(void) {
+  // Add instrumentation for easier tracking.
   PERF_PROF_SCOPE(pr_, __func__);
+
+  // Declare our tracking variable to help us maintain loop cohesion while removing elements we're iterating over.
   struct veh_data *next_veh;
-  for (struct veh_data *veh = veh_list; veh; veh = veh->next) {
+
+  // Loop over all the vehicles in the game.
+  for (struct veh_data *veh = veh_list; veh; veh = next_veh) {
+    // We know we're extracting vehicles in this loop, so track veh->next in a lasting manner.
     next_veh = veh->next;
-    if ( !(veh->flags.IsSet(VFLAG_LOOTWRECK)) || (veh->in_veh) || ROOM_FLAGGED(veh->in_room, ROOM_GARAGE) ) {
+
+    // If the vehicle we're looking at doesn't meet our preconditions, go to the next vehicle.
+    if (veh->owner || veh->in_veh || !veh->in_room || ROOM_FLAGGED(veh->in_room, ROOM_GARAGE)) {
       continue;
-    } else {
-        extern int max_npc_vehicle_lootwreck_time;
-          if (GET_VEH_DESTRUCTION_TIMER(veh) < max_npc_vehicle_lootwreck_time) {
-            GET_VEH_DESTRUCTION_TIMER(veh)++;
-            break;
-          } else {
-            snprintf(buf, sizeof(buf), "A hulking utility forklift drives up, lifts the remains of %s up, and drives off into the sunset.\r\n", GET_VEH_NAME(veh));
-            send_to_room(buf, get_veh_in_room(veh));
-            extract_veh(veh);
-            return;
-          }
-      }
+    }
+
+    // Check to see if the vehicle is still decaying. If so, increment but do nothing else.
+    if (GET_VEH_DESTRUCTION_TIMER(veh) < max_npc_vehicle_lootwreck_time) {
+      GET_VEH_DESTRUCTION_TIMER(veh)++;
+    }
+    // Vehicle has finished decaying. Extract it.
+    else {
+      snprintf(buf, sizeof(buf), "A hulking utility forklift drives up, lifts the remains of %s up, and drives off into the sunset.\r\n", GET_VEH_NAME(veh));
+      send_to_room(buf, get_veh_in_room(veh));
+      extract_veh(veh);
+    }
   }
 }
 

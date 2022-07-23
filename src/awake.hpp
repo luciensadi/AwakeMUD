@@ -1008,6 +1008,7 @@ enum {
 // Defines the size of the teach_t array. Changing this means you have to change every teacher too.
 #define NUM_TEACHER_SKILLS 25
 
+#define ADEPT_MIN_POWER   1
 #define ADEPT_PERCEPTION  1
 #define ADEPT_COMBAT_SENSE  2
 #define ADEPT_BLIND_FIGHTING  3
@@ -1385,8 +1386,7 @@ enum {
 #define VFLAG_WORKSHOP   3
 #define VFLAG_NEWBIE     4
 #define VFLAG_ULTRASOUND 5
-#define VFLAG_LOOTWRECK  6
-#define NUM_VFLAGS       7
+#define NUM_VFLAGS       6
 /* vehicle speed table */
 #define SPEED_OFF 0
 #define SPEED_IDLE 1

@@ -816,7 +816,7 @@ struct veh_data
   veh_data() :
       in_room(NULL), name(NULL), description(NULL), short_description(NULL), restring(NULL),
       long_description(NULL), restring_long(NULL), inside_description(NULL), rear_description(NULL),
-      followers(NULL), following(NULL), followch(NULL), mount(NULL),
+      veh_destruction_timer(0), followers(NULL), following(NULL), followch(NULL), mount(NULL),
       idnum(0), owner(0), spare(0), spare2(0), dest(NULL),
       contents(NULL), people(NULL), rigger(NULL), fighting(NULL), fight_veh(NULL), next_veh(NULL),
       next_sub(NULL), prev_sub(NULL), carriedvehs(NULL), in_veh(NULL), towing(NULL), grid(NULL),

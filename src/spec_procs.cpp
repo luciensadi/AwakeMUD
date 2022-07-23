@@ -1613,17 +1613,30 @@ SPECIAL(adept_trainer)
     // List the powers available to train if they don't supply an argument.
     if (!*argument) {
       int num = 0;
-      for (i = 1; i < ADEPT_NUMPOWER; i++)
+      for (i = ADEPT_MIN_POWER; i < ADEPT_NUMPOWER && num < 2; i++)
         if (adepts[ind].skills[i])
           num++;
       snprintf(buf, sizeof(buf), "You can learn the following abilit%s:\r\n", num == 1 ? "y" : "ies");
-      for (i = 1; i < ADEPT_NUMPOWER; i++)
-        if (adepts[ind].skills[i] && GET_POWER_TOTAL(ch, i) < max_ability(i) && GET_POWER_TOTAL(ch, i) < adepts[ind].skills[i])
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%30s (%0.2f points)\r\n", adept_powers[i],
-                  ((float) train_ability_cost(ch, i, GET_POWER_TOTAL(ch, i) + 1, FALSE)/ 100));
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nYou have %0.2f power point%s to "
-              "distribute to your abilities.\r\n", ((float)GET_PP(ch) / 100),
-              ((GET_PP(ch) != 100) ? "s" : ""));
+      for (i = ADEPT_MIN_POWER; i < ADEPT_NUMPOWER; i++) {
+        if (adepts[ind].skills[i] && GET_POWER_TOTAL(ch, i) < max_ability(i) && GET_POWER_TOTAL(ch, i) < adepts[ind].skills[i]) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%30s (%0.2f points)\r\n",
+                   adept_powers[i],
+                   ((float) train_ability_cost(ch, i, GET_POWER_TOTAL(ch, i) + 1, FALSE) / 100));
+        } else {
+          send_to_char(ch, "Skipping %s: teacher %d, your %d %s max %d, your %d %s teacher %d",
+                       adept_powers[i],
+                       adepts[ind].skills[i],
+                       GET_POWER_TOTAL(ch, i),
+                       GET_POWER_TOTAL(ch, i) < max_ability(i) ? "<" : ">=",
+                       max_ability(i),
+                       GET_POWER_TOTAL(ch, i),
+                       GET_POWER_TOTAL(ch, i) < adepts[ind].skills[i] ? "<" : ">=",
+                       adepts[ind].skills[i]);
+        }
+      }
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nYou have %0.2f power point%s to distribute to your abilities.\r\n",
+               ((float)GET_PP(ch) / 100),
+               ((GET_PP(ch) != 100) ? "s" : ""));
       send_to_char(buf, ch);
 
       if (!paid_for_cc && !paid_for_kipup) {

@@ -3,7 +3,7 @@
 
 int max_exp_gain = 250; /* max gainable per kill */
 int max_npc_corpse_time = 3;
-int max_npc_vehicle_lootwreck_time = 30;
+int max_npc_vehicle_lootwreck_time = 100; // Ticks on the zone pulse (every 3 RL seconds)
 int max_pc_corpse_time = 10;
 const char *OK = "Okay.\r\n";
 const char *TOOBUSY = "You're too busy.\r\n";
