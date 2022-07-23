@@ -1459,7 +1459,7 @@ const char *adept_powers[] =
     "Improved Sense (Directional Sense)",
     "Improved Sense (Improved Scent)",
     "Improved Sense (Taste)",
-    "Interia Strike",
+    "Inertia Strike",
     "Iron Gut",
     "Iron Lungs",
     "Magic Sense",
