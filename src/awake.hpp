@@ -1076,7 +1076,7 @@ enum {
 #define ADEPT_DIRECTIONAL    66
 #define ADEPT_SCENT    67
 #define ADEPT_TASTE    68
-#define ADEPT_INTERIA_STRIKE    69
+#define ADEPT_INERTIA_STRIKE    69
 #define ADEPT_IRON_GUT    70
 #define ADEPT_IRON_LUNGS    71
 #define ADEPT_MAGIC_SENSE    72
@@ -1385,7 +1385,8 @@ enum {
 #define VFLAG_WORKSHOP   3
 #define VFLAG_NEWBIE     4
 #define VFLAG_ULTRASOUND 5
-#define NUM_VFLAGS       6
+#define VFLAG_LOOTWRECK  6
+#define NUM_VFLAGS       7
 /* vehicle speed table */
 #define SPEED_OFF 0
 #define SPEED_IDLE 1

@@ -5630,10 +5630,15 @@ void chkdmg(struct veh_data * veh)
     send_to_veh("The engine starts spewing smoke and flames.\r\n", veh, NULL, TRUE);
   } else {
     int damage_rating, damage_tn;
-
+      
     // Remove any vehicle brains, we don't want them thrown into the street.
     remove_vehicle_brain(veh);
-
+    
+      if (!veh->owner) {
+        veh->locked = TRUE; // Keeps players from messing around with it.
+        veh->flags.SetBit(VFLAG_LOOTWRECK);
+      }
+    
     if (veh->cspeed >= SPEED_IDLE) {
       if (veh->people) {
         if (veh->in_room && IS_WATER(veh->in_room)) {
