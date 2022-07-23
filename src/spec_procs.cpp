@@ -1622,16 +1622,6 @@ SPECIAL(adept_trainer)
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%30s (%0.2f points)\r\n",
                    adept_powers[i],
                    ((float) train_ability_cost(ch, i, GET_POWER_TOTAL(ch, i) + 1, FALSE) / 100));
-        } else {
-          send_to_char(ch, "Skipping %s: teacher %d, your %d %s max %d, your %d %s teacher %d",
-                       adept_powers[i],
-                       adepts[ind].skills[i],
-                       GET_POWER_TOTAL(ch, i),
-                       GET_POWER_TOTAL(ch, i) < max_ability(i) ? "<" : ">=",
-                       max_ability(i),
-                       GET_POWER_TOTAL(ch, i),
-                       GET_POWER_TOTAL(ch, i) < adepts[ind].skills[i] ? "<" : ">=",
-                       adepts[ind].skills[i]);
         }
       }
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nYou have %0.2f power point%s to distribute to your abilities.\r\n",
