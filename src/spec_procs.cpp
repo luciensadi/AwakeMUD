@@ -3865,33 +3865,6 @@ SPECIAL(newbie_car)
       case OBJ_TITLE_TO_WHITE_EAGLE_BIKE:
         num = VEHICLE_WHITE_EAGLE_BIKE;
         break;
-      case 961:
-        num = 39205;
-        break;
-      case 962:
-        num = 12300;
-        break;
-      case 963:
-        num = 12301;
-        break;
-      case 964:
-        num = 12302;
-        break;
-      case 965:
-        num = 1327;
-        break;
-      case 966:
-        num = 1321;
-        break;
-      case 967:
-        num = 1323;
-        break;
-      case 968:
-        num = 1322;
-        break;
-      case 969:
-        num = 12303;
-        break;
 #endif
       default:
         {
