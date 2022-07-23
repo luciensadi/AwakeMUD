@@ -531,19 +531,17 @@ bool items_are_visually_similar(struct obj_data *first, struct obj_data *second)
   return TRUE;
 }
 
-void
-list_obj_to_char(struct obj_data * list, struct char_data * ch, int mode,
-                 bool show, bool corpse)
+void list_obj_to_char(struct obj_data * list, struct char_data * ch, int mode,
+                      bool show, bool corpse)
 {
-  struct obj_data *i;
-  int num = 1;
+  int num = 1, missed_items = 0;
   bool found;
   bool found_graffiti;
 
   found = FALSE;
   found_graffiti = FALSE;
 
-  for (i = list; i; i = i->next_content)
+  for (struct obj_data *i = list; i; i = i->next_content)
   {
     if ((i->in_veh && ch->in_veh) && i->vfront != ch->vfront)
       continue;
@@ -562,8 +560,10 @@ list_obj_to_char(struct obj_data * list, struct char_data * ch, int mode,
           success_test_tn = 3;
         }
 
-        if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), success_test_tn) <= 0)
+        if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), success_test_tn) <= 0) {
+          missed_items++;
           continue;
+        }
       }
     } else if (ch->in_veh && i->in_room && i->in_room == ch->in_veh->in_room) {
       if (ch->in_veh->cspeed > SPEED_IDLE) {
@@ -579,8 +579,10 @@ list_obj_to_char(struct obj_data * list, struct char_data * ch, int mode,
           success_test_tn = 4;
         }
 
-        if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), success_test_tn) <= 0)
+        if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), success_test_tn) <= 0) {
+          missed_items++;
           continue;
+        }
       }
     }
 
@@ -610,7 +612,7 @@ list_obj_to_char(struct obj_data * list, struct char_data * ch, int mode,
             send_to_char(ch, "(%d) ", num);
           }
           show_obj_to_char(i, ch, mode);
-        } else if (mode) {
+        } else if (mode || (ch->char_specials.rigging || ch->in_veh)) {
           if (num > 1) {
             send_to_char(ch, "(%d) ", num);
           }
@@ -621,8 +623,13 @@ list_obj_to_char(struct obj_data * list, struct char_data * ch, int mode,
     }
   }
 
-  if (!found && show)
-    send_to_char(" Nothing.\r\n", ch);
+  if (!found) {
+    if (missed_items) {
+      send_to_char("You're moving too fast to see everything here!\r\n", ch);
+    } else if (show) {
+      send_to_char(" Nothing.\r\n", ch);
+    }
+  }
 }
 
 void diag_char_to_char(struct char_data * i, struct char_data * ch)
@@ -1669,6 +1676,8 @@ void look_in_veh(struct char_data * ch)
           send_to_char(veh->in_room->night_desc, ch);
         else
           send_to_char(veh->in_room->description, ch);
+      } else {
+        send_to_char("Your surroundings blur past.\r\n", ch);
       }
       if (PLR_FLAGGED(ch, PLR_REMOTE))
         was_in = ch->in_room;
