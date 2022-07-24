@@ -5757,7 +5757,10 @@ void chkdmg(struct veh_data * veh)
     // Dump out the people in the vehicle and set their relevant values.
     for (struct char_data *i = veh->people, *next; i; i = next) {
       next = i->next_in_veh;
+
       stop_manning_weapon_mounts(i, FALSE);
+      STOP_WORKING(i);
+
       char_from_room(i);
       if (veh->in_room) {
         char_to_room(i, veh->in_room);
@@ -5770,6 +5773,8 @@ void chkdmg(struct veh_data * veh)
 
       // TODO: What about the other flags for people who are sitting in the back working on something?
       AFF_FLAGS(i).RemoveBits(AFF_PILOT, AFF_RIG, ENDBIT);
+
+      GET_POS(i) = POS_STANDING;
 
       // Deal damage.
       damage_rating = convert_damage(stage(-success_test(GET_BOD(i), damage_tn), damage_rating));
