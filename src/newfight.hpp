@@ -2,7 +2,7 @@
 #define __newfight_h_
 
 extern int get_weapon_damage_type(struct obj_data* weapon);
-extern int check_recoil(struct char_data *ch, struct obj_data *gun);
+extern int check_recoil(struct char_data *ch, struct obj_data *gun, bool is_using_gyromount=FALSE);
 extern int check_smartlink(struct char_data *ch, struct obj_data *weapon);
 extern bool is_char_too_tall(struct char_data *ch);
 
@@ -208,7 +208,7 @@ struct melee_combat_data {
             power += 2;
             break;
         }
-        
+
         if (does_weapon_have_bayonet(weapon)) {
           dam_type = TYPE_PIERCE;
           skill = SKILL_POLE_ARMS;

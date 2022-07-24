@@ -2386,8 +2386,9 @@ void process_vehicle_decay(void) {
     // We know we're extracting vehicles in this loop, so track veh->next in a lasting manner.
     next_veh = veh->next;
 
-    // If the vehicle we're looking at doesn't meet our preconditions, go to the next vehicle.
-    if (veh->owner || veh->in_veh || !veh->in_room || ROOM_FLAGGED(veh->in_room, ROOM_GARAGE)) {
+    // If the vehicle we're looking at doesn't meet our preconditions, reset its timer and go to the next vehicle.
+    if (veh->damage < VEH_DAM_THRESHOLD_DESTROYED || veh->owner || veh->in_veh || !veh->in_room || ROOM_FLAGGED(veh->in_room, ROOM_GARAGE)) {
+      GET_VEH_DESTRUCTION_TIMER(veh) = 0;
       continue;
     }
 

@@ -21,7 +21,6 @@
 #include "bullet_pants.hpp"
 #include "newfight.hpp"
 
-extern int check_recoil(struct char_data *ch, struct obj_data *gun);
 extern void die(struct char_data * ch);
 extern bool astral_fight(struct char_data *ch, struct char_data *vict);
 extern void dominator_mode_switch(struct char_data *ch, struct obj_data *obj, int mode);
@@ -1051,7 +1050,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       && att->ranged_combat_mode
       && !att->ranged->using_mounted_gun
       && !att->ranged->gyro
-      && !att->cyber->cyberarm_gyromount
+      && (!att->cyber->cyberarm_gyromount || !GUN_IS_CYBER_GYRO_MOUNTABLE(att->weapon))
       && (att->ranged->skill >= SKILL_MACHINE_GUNS && att->ranged->skill <= SKILL_ARTILLERY)
       && !AFF_FLAGGED(att->ch, AFF_PRONE))
   {

@@ -916,6 +916,7 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 // ITEM_CUSTOM_DECK convenience defines
 
 // ITEM_GYRO convenience defines
+#define GET_GYRO_RECOIL_COMP(gyro)                (GET_OBJ_VAL((gyro), 0))
 
 // ITEM_DRUG convenience defines. Yes, I know this violates the naming convention, but someone named all the
 // character drug references 'get_drug_x' already, so this one was extra confusing.

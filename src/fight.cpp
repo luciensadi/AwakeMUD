@@ -46,7 +46,7 @@ void stop_follower(struct char_data * ch);
 ACMD_DECLARE(do_assist);
 ACMD_CONST(do_flee);
 ACMD_DECLARE(do_action);
-void docwagon(struct char_data *ch);
+bool docwagon(struct char_data *ch);
 void roll_individual_initiative(struct char_data *ch);
 bool ranged_response(struct char_data *ch, struct char_data *vict);
 int find_weapon_range(struct char_data *ch, struct obj_data *weapon);
@@ -2106,13 +2106,13 @@ void docwagon_message(struct char_data *ch)
   mudlog(buf, ch, LOG_DEATHLOG, TRUE);
 }
 
-void docwagon(struct char_data *ch)
+bool docwagon(struct char_data *ch)
 {
   int i, creds;
   struct obj_data *docwagon = NULL;
 
   if (IS_NPC(ch) || PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED) || GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD)
-    return;
+    return FALSE;
 
   // Find the best docwagon contract they're wearing.
   for (i = 0; i < NUM_WEARS; i++)
@@ -2121,12 +2121,12 @@ void docwagon(struct char_data *ch)
       docwagon = GET_EQ(ch, i);
 
   if (!docwagon)
-    return;
+    return FALSE;
 
   struct room_data *room = get_ch_in_room(ch);
 
   if (!room)
-    return;
+    return FALSE;
 
   // In an area with 4 or less security level: Basic has a 75% chance of rescue, Gold has 87.5% rescue, Plat has 93.8% chance.
   if (success_test(GET_DOCWAGON_CONTRACT_GRADE(docwagon) + 1,
@@ -2208,7 +2208,7 @@ void docwagon(struct char_data *ch)
       lose_bank(ch, creds, NUYEN_OUTFLOW_DOCWAGON);
     }
   }
-  return;
+  return TRUE;
 }
 
 // M&M p.63-64
@@ -2642,7 +2642,7 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
   memset(rbuf, 0, sizeof(rbuf));
 
   int exp;
-  bool total_miss = FALSE, awake = TRUE;
+  bool total_miss = FALSE, awake = TRUE, did_docwagon = FALSE;
   struct obj_data *bio;
   ACMD_DECLARE(do_disconnect);
   ACMD_CONST(do_return);
@@ -3007,7 +3007,7 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
                      "aided.\r\n", victim);
       }
       if (!IS_NPC(victim))
-        docwagon(victim);
+        did_docwagon = docwagon(victim);
       break;
     case POS_STUNNED:
       if (IS_NPC(victim) && MOB_FLAGGED(victim, MOB_INANIMATE)) {
@@ -3154,9 +3154,9 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
         forget(ch, victim);
     }
     die(victim);
-    return 1;
+    return TRUE;
   }
-  return 0;
+  return did_docwagon;
 }
 
 bool process_has_ammo(struct char_data *ch, struct obj_data *wielded, bool deduct_one_round) {
@@ -3342,12 +3342,14 @@ int check_smartlink(struct char_data *ch, struct obj_data *weapon)
   return 0;
 }
 
-int check_recoil(struct char_data *ch, struct obj_data *gun)
+// TODO: Remove the default and populate this properly.
+int check_recoil(struct char_data *ch, struct obj_data *gun, bool is_using_gyromount=FALSE)
 {
   struct obj_data *obj;
   int rnum, comp = 0;
 
-  bool can_use_bipods_and_tripods = !(PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_RIG) || AFF_FLAGGED(ch, AFF_MANNING));
+  // Can't use bipods/tripods if you're controlling a vehicle weapon.
+  bool can_use_bipods_and_tripods = !is_using_gyromount && !PLR_FLAGGED(ch, PLR_REMOTE) && !AFF_FLAGGED(ch, AFF_RIG) && !AFF_FLAGGED(ch, AFF_MANNING);
 
   if (!gun || GET_OBJ_TYPE(gun) != ITEM_WEAPON)
     return 0;
