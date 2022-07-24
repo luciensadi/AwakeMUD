@@ -372,10 +372,15 @@ int perform_group(struct char_data *ch, struct char_data *vict)
     return 0;
 
   AFF_FLAGS(vict).SetBit(AFF_GROUP);
-  if (ch != vict)
+  
+  if (ch == vict) {
+    send_to_char("You are now a member of your own group.\r\n", ch);
+  } else {
     act("$N is now a member of your group.", FALSE, ch, 0, vict, TO_CHAR);
-  act("You are now a member of $n's group.", FALSE, ch, 0, vict, TO_VICT);
-  act("$N is now a member of $n's group.", FALSE, ch, 0, vict, TO_NOTVICT);
+    act("You are now a member of $n's group.", FALSE, ch, 0, vict, TO_VICT);
+    act("$N is now a member of $n's group.", FALSE, ch, 0, vict, TO_NOTVICT);
+  }
+
   return 1;
 }
 
