@@ -1242,7 +1242,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
                GET_REAL_ESS(player), player->real_abils.esshole, GET_INDEX(player),
                player->real_abils.highestindex, GET_MAX_HACKING(player), GET_BODY(player),
                GET_DEFENSE(player), GET_NUYEN(player), GET_BANK(player), GET_KARMA(player),
-               GET_REP(player), GET_NOT(player), GET_TKE(player),
+               MAX(0, GET_REP(player)), MAX(0, GET_NOT(player)), MAX(0, GET_TKE(player)),
                PLR_FLAGGED(player, PLR_JUST_DIED), MAX(0, GET_PHYSICAL(player)), GET_PHYSICAL_LOSS(player),
                MAX(0, GET_MENTAL(player)), GET_MENTAL_LOSS(player), 0, GET_WIMP_LEV(player),
                GET_LOADROOM(player), GET_LAST_IN(player), time(0), GET_COND(player, COND_FULL),

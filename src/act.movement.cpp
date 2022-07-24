@@ -772,8 +772,8 @@ void move_vehicle(struct char_data *ch, int dir)
     return;
   }
 
-  snprintf(buf2, sizeof(buf2), "%s %s from %s.", GET_VEH_NAME(veh), veh->arrive, thedirs[rev_dir[dir]]);
-  snprintf(buf1, sizeof(buf1), "%s %s to %s.", GET_VEH_NAME(veh), veh->leave, thedirs[dir]);
+  snprintf(buf2, sizeof(buf2), "%s %s from %s.\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)), veh->arrive, thedirs[rev_dir[dir]]);
+  snprintf(buf1, sizeof(buf1), "%s %s to %s.\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)), veh->leave, thedirs[dir]);
 
   send_to_room(buf1, veh->in_room, veh);
 

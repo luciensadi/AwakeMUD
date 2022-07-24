@@ -173,7 +173,7 @@ bool dumpshock(struct matrix_icon *icon)
 
     int resist = -success_test(GET_WIL(icon->decker->ch), matrix[icon->in_host].security);
     int dam = convert_damage(stage(resist, matrix[icon->in_host].colour));
-    for (struct obj_data *cyber = icon->decker->ch->cyberware; cyber; cyber = cyber->next_content)
+    for (struct obj_data *cyber = icon->decker->ch->cyberware; cyber; cyber = cyber->next_content) {
       if (GET_OBJ_VAL(cyber, 0) == CYB_DATAJACK) {
         if (GET_OBJ_VAL(cyber, 3) == DATA_INDUCTION)
           snprintf(buf, sizeof(buf), "$n's hand suddenly recoils from $s induction pad, electricity arcing between the two surfaces!");
@@ -183,6 +183,7 @@ bool dumpshock(struct matrix_icon *icon)
         snprintf(buf, sizeof(buf), "$n suddenly jerks forward and rips the jack out of $s eye!");
         break;
       }
+    }
     act(buf, FALSE, icon->decker->ch, NULL, NULL, TO_ROOM);
     PLR_FLAGS(icon->decker->ch).RemoveBit(PLR_MATRIX);
     icon->decker->PERSONA = NULL;
@@ -190,10 +191,14 @@ bool dumpshock(struct matrix_icon *icon)
       act("Smoke emerges from $n's $p.", FALSE, icon->decker->ch, icon->decker->deck, NULL, TO_ROOM);
       act("Smoke emerges from $p.", FALSE, icon->decker->ch, icon->decker->deck, NULL, TO_CHAR);
     }
-    if (damage(icon->decker->ch, icon->decker->ch, dam, TYPE_DUMPSHOCK, MENTAL))
+    struct char_data *ch = icon->decker->ch;
+    extract_icon(icon);
+
+    if (damage(ch, ch, dam, TYPE_DUMPSHOCK, MENTAL))
       return TRUE;
+  } else {
+    extract_icon(icon);
   }
-  extract_icon(icon);
   return FALSE;
 }
 
@@ -743,8 +748,14 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
                  : success_test(resist, power);
       dam = convert_damage(stage(success, dam));
       send_to_icon(targ, "You smell something burning.\r\n");
+
+      struct char_data *ch = targ->decker->ch;
       if (damage(targ->decker->ch, targ->decker->ch, dam, TYPE_BLACKIC, lethal ? PHYSICAL : MENTAL)) {
         // Oh shit, they died. Guess they don't take MPCP damage, since their struct is zeroed out now.
+        return;
+      }
+      // If they're not still connected to the matrix, bail.
+      if (!ch->persona) {
         return;
       }
       if (targ && targ->decker) {

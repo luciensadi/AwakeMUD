@@ -208,7 +208,7 @@ void    set_pretitle(struct char_data *ch, const char *title);
 void    set_whotitle(struct char_data *ch, const char *title);
 int     gain_karma(struct char_data * ch, int gain, bool rep, bool limits, bool multiplier);
 void    gain_condition(struct char_data *ch, int condition, int value);
-void    update_pos(struct char_data *victim);
+bool    update_pos(struct char_data *victim);
 
 
 /* various constants *****************************************************/

@@ -217,19 +217,19 @@ void load_messages(void)
   fclose(fl);
 }
 
-void update_pos(struct char_data * victim)
+bool update_pos(struct char_data * victim)
 {
   if ((GET_MENTAL(victim) < 100) && (GET_PHYSICAL(victim) >= 100)) {
     for (struct obj_data *bio = victim->bioware; bio; bio = bio->next_content)
       if (GET_BIOWARE_TYPE(bio) == BIO_PAINEDITOR && GET_BIOWARE_IS_ACTIVATED(bio))
-        return;
+        return FALSE;
     GET_POS(victim) = POS_STUNNED;
     GET_INIT_ROLL(victim) = 0;
   } else if ((GET_PHYSICAL(victim) >= 100) && (GET_POS(victim) > POS_STUNNED)) {
-    return;
+    return FALSE;
   } else if (GET_PHYSICAL(victim) >= 100) {
     GET_POS(victim) = POS_STANDING;
-    return;
+    return FALSE;
   } else if ((int)(GET_PHYSICAL(victim) / 100) <= -GET_REAL_BOD(victim) + (GET_BIOOVER(victim) > 0 ? GET_BIOOVER(victim) : 0)) {
     GET_POS(victim) = POS_DEAD;
   } else {
@@ -256,10 +256,11 @@ void update_pos(struct char_data * victim)
       do_return(victim, cmd_buf, 0, 0);
     }
 
-    if (PLR_FLAGGED(victim, PLR_MATRIX) && victim->persona) {
-      dumpshock(victim->persona);
+    if (GET_POS(victim) > POS_DEAD && PLR_FLAGGED(victim, PLR_MATRIX) && victim->persona) {
+      return dumpshock(victim->persona);
     }
   }
+  return FALSE;
 }
 
 /* blood blood blood, root */
@@ -457,7 +458,8 @@ void stop_fighting(struct char_data * ch)
   }
   else
     GET_POS(ch) = POS_STANDING;
-  update_pos(ch);
+
+
   GET_INIT_ROLL(ch) = 0;
   SHOOTING_DIR(ch) = NOWHERE;
 
@@ -471,6 +473,8 @@ void stop_fighting(struct char_data * ch)
         end_sustained_spell(ch, sust);
     }
   }
+
+  update_pos(ch);
 }
 
 void make_corpse(struct char_data * ch)
@@ -804,6 +808,8 @@ void raw_kill(struct char_data * ch)
 
       reset_all_drugs_for_char(ch);
 
+      GET_COND(ch, COND_DRUNK) = 0;
+
       if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
         i = real_room(RM_CHARGEN_START_ROOM);
       } else {
@@ -840,6 +846,25 @@ void raw_kill(struct char_data * ch)
         stop_chase(veh);
         if (!veh->dest)
           veh->cspeed = SPEED_OFF;
+      }
+
+      if (ch->persona) {
+        if (access_level(ch, LVL_PRESIDENT))
+          send_to_char(ch, "^YExtracted icon from host.\r\n");
+        snprintf(buf, sizeof(buf), "%s depixelizes and vanishes from the host.\r\n", CAP(ch->persona->name));
+        send_to_host(ch->persona->in_host, buf, ch->persona, TRUE);
+        extract_icon(ch->persona);
+        ch->persona = NULL;
+        PLR_FLAGS(ch).RemoveBit(PLR_MATRIX);
+      } else if (PLR_FLAGGED(ch, PLR_MATRIX) && ch->in_room) {
+        if (access_level(ch, LVL_PRESIDENT))
+          send_to_char(ch, "^YPLR_MATRIX set, but not in mtx.\r\n");
+        for (struct char_data *temp = ch->in_room->people; temp; temp = temp->next_in_room)
+          if (PLR_FLAGGED(temp, PLR_MATRIX))
+            temp->persona->decker->hitcher = NULL;
+      } else {
+        if (access_level(ch, LVL_PRESIDENT))
+          send_to_char(ch, "^YYou're not in the Matrix.\r\n");
       }
 
       char_from_room(ch);
@@ -2129,8 +2154,9 @@ bool docwagon(struct char_data *ch)
     return FALSE;
 
   // In an area with 4 or less security level: Basic has a 75% chance of rescue, Gold has 87.5% rescue, Plat has 93.8% chance.
-  if (success_test(GET_DOCWAGON_CONTRACT_GRADE(docwagon) + 1,
-                   MAX(GET_SECURITY_LEVEL(room), 4)) > 0)
+  if ((access_level(ch, LVL_BUILDER) && PRF_FLAGGED(ch, PRF_PACIFY))
+      || success_test(GET_DOCWAGON_CONTRACT_GRADE(docwagon) + 1,
+                      MAX(GET_SECURITY_LEVEL(room), 4)) > 0)
   {
     if (FIGHTING(ch) && FIGHTING(FIGHTING(ch)) == ch)
       stop_fighting(FIGHTING(ch));
@@ -2656,6 +2682,11 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
     return FALSE;
   }
 
+  if (GET_POS(victim) == POS_DEAD) {
+    mudlog("SYSERR: Refusing to damage an already-dead victim!", victim, LOG_SYSLOG, TRUE);
+    return TRUE;
+  }
+
   if (!can_hurt(ch, victim, attacktype, TRUE)) {
     dam = -1;
     buf_mod(rbuf, sizeof(rbuf), "Can'tHurt",dam);
@@ -2908,7 +2939,16 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
   if (!awake && GET_PHYSICAL(victim) <= 0)
     victim->points.lastdamage = time(0);
 
-  update_pos(victim);
+  // Statement added for debugging. TODO: Remove.
+  if (GET_LEVEL(victim) == LVL_PRESIDENT && (attacktype == TYPE_BLACKIC || attacktype == TYPE_DUMPSHOCK)) {
+    send_to_char(ch, "^YMortally wounding you for debugging.\r\n");
+    GET_PHYSICAL(real_body) = 0;
+  }
+
+  if (update_pos(victim)) {
+    // They died from dumpshock.
+    return TRUE;
+  }
 
   if (GET_SUSTAINED_NUM(victim))
   {
@@ -3046,9 +3086,9 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
       if (docwagon_biomonitor) {
         send_to_char("You feel the vibration of your DocWagon biomonitor sending out an alert, but as the world slips into darkness you realize it's too little, too late.\r\n", victim);
       } else if (unbonded_docwagon) {
-        send_to_char("Your last conscious thought involves wondering why your DocWagon biomonitor didn't work-- maybe you forgot to bond it? The world slips into darkness, and you hope a wandering DocWagon finds you.\r\n", victim);
+        send_to_char("Your last conscious thought involves wondering why your DocWagon biomonitor didn't work-- maybe you forgot to ##^WBOND^n it? The world slips into darkness, and you hope a wandering DocWagon finds you.\r\n", victim);
       } else {
-        send_to_char("You feel the world slip in to darkness, you'd better hope a wandering DocWagon finds you.\r\n", victim);
+        send_to_char("You feel the world slip into darkness, you'd better hope a wandering DocWagon finds you.\r\n", victim);
       }
 
       break;
