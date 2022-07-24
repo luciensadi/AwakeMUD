@@ -328,7 +328,7 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
   if (mode == SHOW_MODE_SOMEONE_ELSES_EQUIPMENT) {
     if (GET_OBJ_TYPE(object) == ITEM_HOLSTER) {
       if (object->contains) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (Holding %s)", GET_OBJ_NAME(object->contains));
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (Holding %s^n)", GET_OBJ_NAME(object->contains));
       }
     }
     if (GET_OBJ_CONDITION(object) * 100 / MAX(1, GET_OBJ_BARRIER(object)) < 100) {
@@ -338,7 +338,7 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
   else if (mode == SHOW_MODE_OWN_EQUIPMENT || mode == SHOW_MODE_CONTAINED_OBJ) {
     if (GET_OBJ_TYPE(object) == ITEM_HOLSTER) {
       if (object->contains)
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (Holding %s)", GET_OBJ_NAME(object->contains));
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (Holding %s^n)", GET_OBJ_NAME(object->contains));
       if (GET_HOLSTER_READY_STATUS(object) == 1 && get_obj_possessor(object) == ch)
         strlcat(buf, " ^Y(Ready)", sizeof(buf));
     }
@@ -353,7 +353,7 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
     }
 
     if (GET_OBJ_CONDITION(object) * 100 / MAX(1, GET_OBJ_BARRIER(object)) < 100)
-      strlcat(buf, " (damaged)", sizeof(buf));
+      strlcat(buf, " ^r(damaged)^n", sizeof(buf));
 
     if (IS_OBJ_STAT(object, ITEM_EXTRA_KEPT)) {
       strlcat(buf, " ^c(kept)^n", sizeof(buf));
