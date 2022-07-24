@@ -2919,8 +2919,8 @@ SPECIAL(fixer)
       return TRUE;
     }
     if (GET_OBJ_CONDITION(obj) >= GET_OBJ_BARRIER(obj)) {
-      snprintf(arg, sizeof(arg), "%s %s doesn't need to be repaired!",
-              GET_CHAR_NAME(ch), CAP(obj->text.name));
+      snprintf(arg, sizeof(arg), "%s %s^n doesn't need to be repaired!",
+              GET_CHAR_NAME(ch), GET_OBJ_NAME(obj));
       do_say(fixer, arg, 0, SCMD_SAYTO);
       return TRUE;
     }

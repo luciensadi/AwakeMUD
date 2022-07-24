@@ -538,6 +538,7 @@ const char *action_bits[] =
     "INANIMATE",
     "EMPLACED",
     "RACE_AGGR_VS_MOBS",
+    "BROKE_ASS",
     MAX_FLAG_MARKER
   };
 

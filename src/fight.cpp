@@ -507,7 +507,6 @@ void make_corpse(struct char_data * ch)
     }
   }
 
-
   if (IS_NPC(ch))
   {
     if (MOB_FLAGGED(ch, MOB_INANIMATE)) {
@@ -593,10 +592,15 @@ void make_corpse(struct char_data * ch)
   /* transfer nuyen & credstick */
   if (IS_NPC(ch))
   {
-    nuyen = (int)(GET_NUYEN(ch) / 10);
-    nuyen = number(GET_NUYEN(ch) - nuyen, GET_NUYEN(ch) + nuyen) * NUYEN_GAIN_MULTIPLIER;
-    credits = (int)(GET_BANK(ch) / 10);
-    credits = number(GET_BANK(ch) - credits, GET_BANK(ch) + credits) * NUYEN_GAIN_MULTIPLIER;
+    if (MOB_FLAGGED(ch, MOB_NO_NUYEN_LOOT_DROPS) || vnum_from_non_connected_zone(GET_MOB_VNUM(ch))) {
+      nuyen = 0;
+      credits = 0;
+    } else {
+      nuyen = (int)(GET_NUYEN(ch) / 10);
+      nuyen = number(GET_NUYEN(ch) - nuyen, GET_NUYEN(ch) + nuyen) * NUYEN_GAIN_MULTIPLIER;
+      credits = (int)(GET_BANK(ch) / 10);
+      credits = number(GET_BANK(ch) - credits, GET_BANK(ch) + credits) * NUYEN_GAIN_MULTIPLIER;
+    }
   } else
   {
 #ifdef DIES_IRAE
@@ -606,20 +610,12 @@ void make_corpse(struct char_data * ch)
     credits = 0;
   }
 
-  if (IS_NPC(ch) && (nuyen > 0 || credits > 0))
-    if (vnum_from_non_connected_zone(GET_MOB_VNUM(ch)))
-    {
-      nuyen = 0;
-      credits = 0;
-    }
-
   if (nuyen > 0)
   {
     money = create_nuyen(nuyen);
     obj_to_obj(money, corpse);
     GET_NUYEN_RAW(ch) = 0;
   }
-
 
   if (credits > 0 && !number(0, CREDSTICK_RARITY_FACTOR - 1))
   {

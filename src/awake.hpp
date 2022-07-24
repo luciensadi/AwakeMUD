@@ -366,7 +366,8 @@ enum {
 #define MOB_INANIMATE            32
 #define MOB_EMPLACED             33 /* Won't close distance, can't be knocked down, has no recoil penalties, has unlimited ammo. Think emplaced turret. */
 #define MOB_RACIAL_AGGR_VS_MOBS  34 /* Will trigger racial aggro vs other NPCs */
-#define MOB_MAX                  35
+#define MOB_NO_NUYEN_LOOT_DROPS  35 /* Will never drop nuyen on death. */
+#define MOB_MAX                  36
 
 /* preference flags: used by char_data.player_specials.pref */
 
