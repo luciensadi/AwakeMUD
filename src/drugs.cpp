@@ -362,8 +362,9 @@ void apply_drug_modifiers_to_ch(struct char_data *ch) {
   int detox_force = affected_by_spell(ch, SPELL_DETOX);
 
   for (int drug_id = MIN_DRUG; drug_id < NUM_DRUGS; drug_id++) {
-    if (detox_force >= drug_types[drug_id].power)
+    if (detox_force && detox_force >= drug_types[drug_id].power) {
       continue;
+    }
 
     if (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_ONSET) {
       switch (drug_id) {
