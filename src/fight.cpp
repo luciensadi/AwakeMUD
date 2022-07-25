@@ -5801,6 +5801,11 @@ void chkdmg(struct veh_data * veh)
           }
           break;
         case 2:
+        {
+          char purgebuf[500];
+          snprintf(purgebuf, sizeof(purgebuf), "Destroying vehicle-held %s (%ld): Wreck loss", GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj));
+          mudlog(purgebuf, NULL, LOG_WRECKLOG, TRUE);
+        }
           extract_obj(obj);
           break;
       }

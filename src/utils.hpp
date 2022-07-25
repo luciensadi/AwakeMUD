@@ -146,6 +146,8 @@ long get_room_gridguide_x(vnum_t room_vnum);
 long get_room_gridguide_y(vnum_t room_vnum);
 vnum_t vnum_from_gridguide_coordinates(long x, long y, struct char_data *ch, struct veh_data *veh=NULL);
 
+struct veh_data *get_veh_controlled_by_char(struct char_data *ch);
+
 // Skill-related.
 char *how_good(int skill, int rank);
 const char *skill_rank_name(int rank, bool knowledge);
@@ -384,6 +386,7 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define GET_VEH_VNUM(veh) (GET_VEH_RNUM(veh) >= 0 ? veh_index[GET_VEH_RNUM(veh)].vnum : -1)
 #define GET_VEH_DESTRUCTION_TIMER(veh) ((veh)->veh_destruction_timer)
 #define GET_VEH_ROOM_DESC(veh) ((veh)->description)
+#define GET_VEH_DEFPOS(veh) ((veh)->defined_position)
 #define GET_OBJ_NAME(obj) ((obj)->restring ? (obj)->restring : (obj)->text.name)
 #define GET_OBJ_DESC(obj) ((obj)->photo ? (obj)->photo : (obj)->text.look_desc)
 #define GET_KEYWORDS(ch)  ((ch)->player.physical_text.keywords)
@@ -572,8 +575,9 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define HOURS_SINCE_TRACK(ch)	((ch)->points.track[1])
 #define SHOTS_FIRED(ch)		((ch)->points.extras[0])
 #define SHOTS_TRIGGERED(ch)	((ch)->points.extras[1])
-#define RIG_VEH(ch, veh)	((veh) = ((ch)->char_specials.rigging ? (ch)->char_specials.rigging : (ch)->in_veh));
 
+// Changing this? You probably need to change get_veh_controlled_by_char() as well.
+#define RIG_VEH(ch, veh)	((veh) = ((ch)->char_specials.rigging ? (ch)->char_specials.rigging : (ch)->in_veh));
 
 /* the skills structure was moved to char_specials so that mobs could
  * have access to them also, ie load them up from mob files and use

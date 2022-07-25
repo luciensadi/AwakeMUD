@@ -1368,6 +1368,8 @@ ACMD(do_speed)
   struct veh_data *veh;
   int i = 0;
 
+  RIG_VEH(ch, veh);
+
   if (!(AFF_FLAGGED(ch, AFF_PILOT) || PLR_FLAGGED(ch, PLR_REMOTE))) {
     send_to_char("You must be driving a vehicle to do that.\r\n", ch);
     return;
@@ -1396,7 +1398,11 @@ ACMD(do_speed)
     return;
   }
 
-  RIG_VEH(ch, veh);
+  // Clear vehicle position.
+  if (i > SPEED_IDLE) {
+    DELETE_AND_NULL_ARRAY(GET_VEH_DEFPOS(veh));
+  }
+
   if (veh->hood) {
     send_to_char("You can't move with the hood up.\r\n", ch);
     return;

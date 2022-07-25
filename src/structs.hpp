@@ -795,6 +795,7 @@ struct veh_data
   bool locked;
   struct room_data *dest;
   Bitfield flags;
+  char *defined_position;
 
   struct obj_data *contents;
   struct char_data *people;
@@ -817,7 +818,7 @@ struct veh_data
       in_room(NULL), name(NULL), description(NULL), short_description(NULL), restring(NULL),
       long_description(NULL), restring_long(NULL), inside_description(NULL), rear_description(NULL),
       veh_destruction_timer(0), followers(NULL), following(NULL), followch(NULL), mount(NULL),
-      idnum(0), owner(0), spare(0), spare2(0), dest(NULL),
+      idnum(0), owner(0), spare(0), spare2(0), dest(NULL), defined_position(NULL),
       contents(NULL), people(NULL), rigger(NULL), fighting(NULL), fight_veh(NULL), next_veh(NULL),
       next_sub(NULL), prev_sub(NULL), carriedvehs(NULL), in_veh(NULL), towing(NULL), grid(NULL),
       leave(NULL), arrive(NULL), next(NULL)

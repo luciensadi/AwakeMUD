@@ -433,13 +433,20 @@ void show_veh_to_char(struct veh_data * vehicle, struct char_data * ch)
 
     switch (vehicle->cspeed) {
       case SPEED_OFF:
-        if ((vehicle->type == VEH_BIKE && vehicle->people) || vehicle->restring)
+        if ((vehicle->type == VEH_BIKE && vehicle->people) || vehicle->restring) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s waits here", should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name));
-        else
+        } else if (GET_VEH_DEFPOS(vehicle)) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s %s", should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name), GET_VEH_DEFPOS(vehicle));
+        } else {
           strlcat(buf, GET_VEH_ROOM_DESC(vehicle), sizeof(buf));
+        }
         break;
       case SPEED_IDLE:
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s idles here", should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name));
+        if (GET_VEH_DEFPOS(vehicle)) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s %s", should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name), GET_VEH_DEFPOS(vehicle));
+        } else {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s idles here", should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name));
+        }
         break;
       case SPEED_CRUISING:
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s cruises through here", should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name));
@@ -6139,24 +6146,45 @@ ACMD(do_scan)
 
 ACMD(do_position)
 {
+  struct veh_data *veh = get_veh_controlled_by_char(ch);
+
   skip_spaces(&argument);
   if (!*argument) {
     send_to_char("Your current position is:\r\n  ", ch);
-    list_one_char(ch, ch);
+    if (veh) {
+      send_to_char(ch, "%s %s.\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)), GET_VEH_DEFPOS(veh));
+    } else {
+      list_one_char(ch, ch);
+    }
     return;
   }
-  if (!strncmp(argument, "clear", strlen(argument))) {
-    DELETE_ARRAY_IF_EXTANT(GET_DEFPOS(ch));
-    send_to_char(ch, "Position cleared.\r\n");
+
+  if (is_abbrev(argument, "clear")) {
+    DELETE_ARRAY_IF_EXTANT(veh ? GET_VEH_DEFPOS(veh) : GET_DEFPOS(ch));
+    send_to_char("Position cleared.\r\n", ch);
     return;
   }
+
   if (GET_POS(ch) == POS_FIGHTING) {
-    send_to_char(ch, "You can't set your position while fighting.\r\n");
+    send_to_char("You can't set your position while fighting.\r\n", ch);
     return;
   }
-  DELETE_ARRAY_IF_EXTANT(GET_DEFPOS(ch));
-  GET_DEFPOS(ch) = str_dup(argument);
-  send_to_char(ch, "Position set. You will appear as '(your character) %s^n'\r\n", GET_DEFPOS(ch));
+
+  if (veh && veh->cspeed > SPEED_IDLE) {
+    send_to_char("You can only set a vehicle's position while it's idle.\r\n", ch);
+    return;
+  }
+
+  if (veh) {
+    DELETE_ARRAY_IF_EXTANT(GET_VEH_DEFPOS(veh));
+    GET_VEH_DEFPOS(veh) = str_dup(argument);
+    send_to_char(ch, "Position set. Your vehicle will appear as '(your vehicle) %s^n.'\r\n", GET_VEH_DEFPOS(veh));
+  } else {
+    DELETE_ARRAY_IF_EXTANT(GET_DEFPOS(ch));
+    GET_DEFPOS(ch) = str_dup(argument);
+    send_to_char(ch, "Position set. You will appear as '(your character) %s^n.'\r\n", GET_DEFPOS(ch));
+  }
+
 }
 
 ACMD(do_status)

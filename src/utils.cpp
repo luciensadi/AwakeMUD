@@ -5017,6 +5017,22 @@ int get_focus_bond_cost(struct obj_data *obj) {
   }
 }
 
+struct veh_data *get_veh_controlled_by_char(struct char_data *ch) {
+  if (!ch) {
+    mudlog("SYSERR: NULL char received to get_veh_controlled_by_char!", ch, LOG_SYSLOG, TRUE);
+    return NULL;
+  }
+
+  // You must be flagged as controlling a vehicle to continue.
+  if (!PLR_FLAGGED(ch, PLR_REMOTE) && !AFF_FLAGGED(ch, AFF_RIG) && !AFF_FLAGGED(ch, AFF_PILOT))
+    return NULL;
+
+  if (ch->char_specials.rigging)
+    return ch->char_specials.rigging;
+
+  return ch->in_veh;
+}
+
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.
 // Great for swapping out old Classic weapons, cyberware, etc for the new guaranteed-canon versions.
 #define PAIR(classic, current) case (classic): return (current);

@@ -1354,6 +1354,7 @@ struct command_info rig_info[] =
     { "ooc", 0, do_gen_comm, 0, SCMD_OOC, FALSE },
     { "osay", 0, do_vehicle_osay, 0, 0, FALSE },
     { "pools", 0, do_pool, 0, 0 , FALSE },
+    { "position", 0, do_position, 0, 0, TRUE },
     { "ram", 0, do_ram, 0, 0, FALSE },
     { "recap", 0, do_recap, 0, 0 , FALSE },
     { "rig", POS_SITTING , do_rig, 0, 0 , FALSE },
@@ -1588,7 +1589,7 @@ void command_interpreter(struct char_data * ch, char *argument, char *tcname)
 
       // Nothing was found? Give them the "wat" and bail.
       if (*cmd_info[cmd].command == '\n' && (cmd = fix_common_command_fuckups(arg, cmd_info)) == -1) {
-        nonsensical_reply(ch, arg, "matrix");
+        nonsensical_reply(ch, arg, "rigging");
         return;
       }
 
