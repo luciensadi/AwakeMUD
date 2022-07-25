@@ -2737,6 +2737,10 @@ ACMD(do_penalize)
 
 // Restores a character to peak physical condition.
 void restore_character(struct char_data *vict, bool reset_staff_stats) {
+  if (!vict) {
+    mudlog("SYSERR: Received NULL victim to restore_character!", vict, LOG_SYSLOG, TRUE);
+    return;
+  }
   // Restore their physical and mental damage levels.
   GET_PHYSICAL(vict) = GET_MAX_PHYSICAL(vict);
   GET_MENTAL(vict) = GET_MAX_MENTAL(vict);
@@ -2832,8 +2836,13 @@ ACMD(do_restore)
   // Restore-all mode.
   if (*buf == '*') {
     for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
-      restore_character(d->character, FALSE);
-      act("A wave of healing ripples over all online characters.\r\nYou have been fully healed by $N!", FALSE, d->character, 0, ch, TO_CHAR);
+      if (d->character) {
+        restore_character(d->character, FALSE);
+        act("A wave of healing ripples over all online characters.\r\nYou have been fully healed by $N!", FALSE, d->character, 0, ch, TO_CHAR);
+      }
+      if (d->original) {
+        restore_character(d->original, FALSE);
+      }
     }
     snprintf(buf2, sizeof(buf2), "%s restored all players.", GET_CHAR_NAME(ch));
     mudlog(buf2, ch, LOG_WIZLOG, TRUE);
