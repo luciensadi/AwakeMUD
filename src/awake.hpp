@@ -1452,7 +1452,8 @@ enum {
 #define LEGS_MOD_QUICKNESS_MOD1    (1 << 6)
 #define LEGS_MOD_QUICKNESS_MOD2    (1 << 7)
 #define LEGS_MOD_QUICKNESS_MOD3    (1 << 8)
-#define NUM_LEGS_MODS    9
+#define LEGS_MOD_KIDSTEALTH        (1 << 9)
+#define NUM_LEGS_MODS    10
 
 #define SKULL_MOD_OBVIOUS    (1 << 0)
 #define SKULL_MOD_SYNTHETIC    (1 << 1)

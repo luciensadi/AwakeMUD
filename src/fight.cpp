@@ -5417,20 +5417,24 @@ void perform_violence(void)
             && !(GET_EQ(ch, WEAR_WIELD) || GET_EQ(ch, WEAR_HOLD)))
           target -= (int)GET_REAL_MAG(ch) / 150;
 
-        // Hydraulic jack and foot anchor - charger
+        // Hydraulic jack, foot anchor, Kid Stealth - charger
         for (struct obj_data *cyber = ch->cyberware; cyber; cyber = cyber->next_content) {
           if (GET_CYBERWARE_TYPE(cyber) == CYB_HYDRAULICJACK)
             quickness += GET_CYBERWARE_RATING(cyber);
           else if (GET_CYBERWARE_TYPE(cyber) == CYB_FOOTANCHOR && !GET_CYBERWARE_IS_DISABLED(cyber))
             footanchor = TRUE;
+          else if (GET_CYBERWARE_TYPE(cyber) == CYB_LEGS && IS_SET(GET_CYBERWARE_FLAGS(cyber), LEGS_MOD_KIDSTEALTH))
+            target--;
         }
 
-        // Hydraulic jack and foot anchor - defender
+        // Hydraulic jack, foot anchor, Kid Stealth - defender
         for (struct obj_data *cyber = FIGHTING(ch)->cyberware; cyber; cyber = cyber->next_content) {
           if (GET_CYBERWARE_TYPE(cyber) == CYB_HYDRAULICJACK)
             defender_attribute += GET_CYBERWARE_RATING(cyber);
           else if (GET_CYBERWARE_TYPE(cyber) == CYB_FOOTANCHOR && !GET_CYBERWARE_IS_DISABLED(cyber))
             defender_footanchor = TRUE;
+          else if (GET_CYBERWARE_TYPE(cyber) == CYB_LEGS && IS_SET(GET_CYBERWARE_FLAGS(cyber), LEGS_MOD_KIDSTEALTH))
+            target++;
         }
 
         // Movement modifications via spells - charger

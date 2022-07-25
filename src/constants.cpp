@@ -2322,6 +2322,7 @@ const char *legsmods[] = {
   "Quickness Mod1",
   "Quickness Mod2",
   "Quickness Mod3",
+  "Kid Stealth",
   "\n"
 };
 
