@@ -433,10 +433,10 @@ void show_veh_to_char(struct veh_data * vehicle, struct char_data * ch)
 
     switch (vehicle->cspeed) {
       case SPEED_OFF:
-        if ((vehicle->type == VEH_BIKE && vehicle->people) || vehicle->restring) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s waits here", should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name));
-        } else if (GET_VEH_DEFPOS(vehicle)) {
+        if (GET_VEH_DEFPOS(vehicle)) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s %s", should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name), GET_VEH_DEFPOS(vehicle));
+        } else if ((vehicle->type == VEH_BIKE && vehicle->people) || vehicle->restring) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s waits here", should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name));
         } else {
           strlcat(buf, GET_VEH_ROOM_DESC(vehicle), sizeof(buf));
         }
