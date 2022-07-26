@@ -1688,7 +1688,7 @@ ACMD(do_connect)
           }
         }
       }
-#ifndef JACKPOINTS_ARE_ONE_PERSON_ONLY
+#ifdef JACKPOINTS_ARE_ONE_PERSON_ONLY
       send_to_char("The jackpoint is already in use.\r\n", ch);
       return;
 #endif
