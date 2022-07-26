@@ -449,9 +449,7 @@ void check_quest_destination(struct char_data *ch, struct char_data *mob)
   if (!ch || IS_NPC(ch) || !IS_NPC(mob) || !GET_QUEST(ch))
     return;
 
-  int i;
-
-  for (i = 0; i < quest_table[GET_QUEST(ch)].num_mobs; i++)
+  for (int i = 0; i < quest_table[GET_QUEST(ch)].num_mobs; i++) {
     if (quest_table[GET_QUEST(ch)].mob[i].objective == QMO_LOCATION &&
         mob->in_room->number == quest_table[GET_QUEST(ch)].mob[i].o_data)
     {
@@ -460,6 +458,7 @@ void check_quest_destination(struct char_data *ch, struct char_data *mob)
       do_say(mob, "Thanks for the escort.", 0, 0);
       return;
     }
+  }
 }
 
 void check_quest_destroy(struct char_data *ch, struct obj_data *obj)
@@ -467,17 +466,23 @@ void check_quest_destroy(struct char_data *ch, struct obj_data *obj)
   if (!ch || IS_NPC(ch) || !GET_QUEST(ch))
     return;
 
-  int i;
-
-  for (i = 0; i < quest_table[GET_QUEST(ch)].num_objs; i++)
-    if (GET_OBJ_VNUM(obj) == quest_table[GET_QUEST(ch)].obj[i].vnum)
-      switch (quest_table[GET_QUEST(ch)].obj[i].objective)
-      {
-      case QOO_DSTRY_ONE:
-      case QOO_DSTRY_MANY:
-        ch->player_specials->obj_complete[i]++;
-        return;
+  for (int i = 0; i < quest_table[GET_QUEST(ch)].num_objs; i++) {
+    if (GET_OBJ_VNUM(obj) == quest_table[GET_QUEST(ch)].obj[i].vnum) {
+      switch (quest_table[GET_QUEST(ch)].obj[i].objective) {
+        case QOO_DSTRY_ONE:
+        case QOO_DSTRY_MANY:
+          ch->player_specials->obj_complete[i]++;
+          if (access_level(ch, LVL_BUILDER)) {
+            send_to_char(ch, "[check_quest_destroy for %s: +1 completion for a total of %d.]\r\n", GET_OBJ_NAME(obj), ch->player_specials->obj_complete[i]);
+          }
+          return;
       }
+    }
+  }
+
+  if (access_level(ch, LVL_BUILDER)) {
+    send_to_char(ch, "[check_quest_destroy for %s: did not count]\r\n", GET_OBJ_NAME(obj));
+  }
 }
 
 void check_quest_kill(struct char_data *ch, struct char_data *victim)

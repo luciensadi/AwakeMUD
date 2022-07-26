@@ -70,6 +70,7 @@ extern bool does_weapon_have_bayonet(struct obj_data *weapon);
 extern void turn_hardcore_on_for_character(struct char_data *ch);
 extern void disable_xterm_256(descriptor_t *apDescriptor);
 extern void enable_xterm_256(descriptor_t *apDescriptor);
+extern void check_quest_destroy(struct char_data *ch, struct obj_data *obj);
 
 extern bool restring_with_args(struct char_data *ch, char *argument, bool using_sysp);
 
@@ -4550,6 +4551,11 @@ ACMD(do_cleanup)
     return;
   }
 
+  if (target_obj->obj_flags.quest_id && target_obj->obj_flags.quest_id != GET_IDNUM(ch)) {
+    send_to_char(ch, "%s isn't yours-- better leave it be.\r\n", capitalize(GET_OBJ_NAME(target_obj)));
+    return;
+  }
+
   // If you're not a staff member, you need an item to clean it up.
   if (!access_level(ch, LVL_BUILDER)) {
     struct obj_data *cleaner = NULL;
@@ -4574,8 +4580,17 @@ ACMD(do_cleanup)
 
   WAIT_STATE(ch, 3 RL_SEC);
 
-  snprintf(buf, sizeof(buf), "[SPRAYLOG]: %s cleaned up graffiti: ^n%s^g.", GET_CHAR_NAME(ch), GET_OBJ_NAME(target_obj));
-  mudlog(buf, ch, LOG_MISCLOG, TRUE);
+  // Log it, but only if it's player-generated content.
+  if (GET_OBJ_VNUM(target_obj) == OBJ_DYNAMIC_GRAFFITI) {
+    snprintf(buf, sizeof(buf), "[SPRAYLOG]: %s cleaned up graffiti: ^n%s^g.", GET_CHAR_NAME(ch), GET_OBJ_NAME(target_obj));
+    mudlog(buf, ch, LOG_MISCLOG, TRUE);
+  }
+
+  if (!IS_NPC(ch) && GET_QUEST(ch))
+    check_quest_destroy(ch, target_obj);
+  else if (AFF_FLAGGED(ch, AFF_GROUP) && ch->master && !IS_NPC(ch->master) && GET_QUEST(ch->master))
+    check_quest_destroy(ch->master, target_obj);
+
   extract_obj(target_obj);
 }
 
