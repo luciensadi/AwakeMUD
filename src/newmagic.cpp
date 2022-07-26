@@ -3721,16 +3721,33 @@ ACMD(do_conjure)
     }
 
     // Modify the skill rating by foci.
-    for (int i = 0; i < NUM_WEARS; i++)
-      if (GET_EQ(ch, i)
-          && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_FOCUS
-          && GET_OBJ_VAL(GET_EQ(ch, i), 0) == FOCI_SPIRIT
-          && focus_is_usable_by_ch(GET_EQ(ch, i), ch)
-          && GET_OBJ_VAL(GET_EQ(ch, i), 3) == ch->char_specials.conjure[0]
-          && GET_OBJ_VAL(GET_EQ(ch, i), 4)) {
-        skill += GET_OBJ_VAL(GET_EQ(ch, i), 1);
-        break;
+    bool used_spirit_focus = FALSE, used_power_focus = FALSE;
+    for (int i = 0; i < NUM_WEARS; i++) {
+      struct obj_data *eq = GET_EQ(ch, i);
+
+      if (!eq || GET_OBJ_TYPE(eq) != ITEM_FOCUS)
+        continue;
+
+      if (!used_spirit_focus
+          && GET_FOCUS_TYPE(eq) == FOCI_SPIRIT
+          && focus_is_usable_by_ch(eq, ch)
+          && GET_FOCUS_BONDED_SPIRIT_OR_SPELL(eq) == ch->char_specials.conjure[0]
+          && GET_FOCUS_ACTIVATED(eq))
+      {
+        used_spirit_focus = TRUE;
+        skill += GET_FOCUS_FORCE(eq);
       }
+
+      else if (!used_power_focus
+               && GET_FOCUS_TYPE(eq) == FOCI_POWER
+               && focus_is_usable_by_ch(eq, ch)
+               && GET_FOCUS_ACTIVATED(eq))
+      {
+        used_power_focus = TRUE;
+        skill += GET_FOCUS_FORCE(eq);
+      }
+    }
+
 
     // Modify the TN for wound penalties and sustains.
     strlcpy(buf3, "", sizeof(buf3)); strlcpy(buf2, "", sizeof(buf2));

@@ -24,6 +24,7 @@ extern void part_design(struct char_data *ch, struct obj_data *design);
 extern void spell_design(struct char_data *ch, struct obj_data *design);
 extern void ammo_test(struct char_data *ch, struct obj_data *obj);
 extern void weight_change_object(struct obj_data * obj, float weight);
+extern bool focus_is_usable_by_ch(struct obj_data *focus, struct char_data *ch);
 
 void pedit_disp_menu(struct descriptor_data *d)
 {
@@ -607,13 +608,33 @@ void update_buildrepair(void)
         char rollbuf[5000];
         snprintf(rollbuf, sizeof(rollbuf), "Conjure check: initial skill %d, initial target %d", skill, target);
 
+        // Modify the skill rating by foci.
+        bool used_spirit_focus = FALSE, used_power_focus = FALSE;
         for (int i = 0; i < NUM_WEARS; i++) {
-          if (GET_EQ(CH, i) && GET_OBJ_TYPE(GET_EQ(CH, i)) == ITEM_FOCUS && GET_OBJ_VAL(GET_EQ(CH, i), 0) == FOCI_SPIRIT
-              && GET_OBJ_VAL(GET_EQ(CH, i), 2) == GET_IDNUM(CH) && GET_OBJ_VAL(GET_EQ(CH, i), 3) == CH->char_specials.conjure[0]
-              && GET_OBJ_VAL(GET_EQ(CH, i), 4)) {
-            snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), ", +%d skill from focus", GET_OBJ_VAL(GET_EQ(CH, i), 1));
-            skill += GET_OBJ_VAL(GET_EQ(CH, i), 1);
-            break;
+          struct obj_data *eq = GET_EQ(CH, i);
+
+          if (!eq || GET_OBJ_TYPE(eq) != ITEM_FOCUS)
+            continue;
+
+          if (!used_spirit_focus
+              && GET_FOCUS_TYPE(eq) == FOCI_SPIRIT
+              && focus_is_usable_by_ch(eq, CH)
+              && GET_FOCUS_BONDED_SPIRIT_OR_SPELL(eq) == CH->char_specials.conjure[0]
+              && GET_FOCUS_ACTIVATED(eq))
+          {
+            used_spirit_focus = TRUE;
+            skill += GET_FOCUS_FORCE(eq);
+            snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), ", +%d skill from spirit focus", GET_FOCUS_FORCE(eq));
+          }
+
+          else if (!used_power_focus
+                   && GET_FOCUS_TYPE(eq) == FOCI_POWER
+                   && focus_is_usable_by_ch(eq, CH)
+                   && GET_FOCUS_ACTIVATED(eq))
+          {
+            used_power_focus = TRUE;
+            skill += GET_FOCUS_FORCE(eq);
+            snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), ", +%d skill from power focus", GET_FOCUS_FORCE(eq));
           }
         }
 
