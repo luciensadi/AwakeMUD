@@ -372,7 +372,7 @@ int perform_group(struct char_data *ch, struct char_data *vict)
     return 0;
 
   AFF_FLAGS(vict).SetBit(AFF_GROUP);
-  
+
   if (ch == vict) {
     send_to_char("You are now a member of your own group.\r\n", ch);
   } else {
@@ -4488,7 +4488,7 @@ ACMD(do_spray)
     int existing_graffiti_count = 0;
     struct obj_data *obj;
     FOR_ITEMS_AROUND_CH(ch, obj) {
-      if (GET_OBJ_VNUM(obj) == OBJ_GRAFFITI)
+      if (OBJ_IS_GRAFFITI(obj))
         existing_graffiti_count++;
     }
     if (existing_graffiti_count >= MAXIMUM_GRAFFITI_IN_ROOM) {
@@ -4503,7 +4503,7 @@ ACMD(do_spray)
         send_to_char("There isn't that much paint in there.\r\n", ch);
         return;
       }
-      struct obj_data *paint = read_object(OBJ_GRAFFITI, VIRTUAL);
+      struct obj_data *paint = read_object(OBJ_DYNAMIC_GRAFFITI, VIRTUAL);
       snprintf(buf, sizeof(buf), "a piece of graffiti that says \"%s^n\"", argument);
       paint->restring = str_dup(buf);
       snprintf(buf, sizeof(buf), "   ^n%s^n", argument);
@@ -4545,7 +4545,7 @@ ACMD(do_cleanup)
     return;
   }
 
-  if (GET_OBJ_VNUM(target_obj) != OBJ_GRAFFITI) {
+  if (!OBJ_IS_GRAFFITI(target_obj)) {
     send_to_char(ch, "%s is not graffiti.\r\n", capitalize(GET_OBJ_NAME(target_obj)));
     return;
   }

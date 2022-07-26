@@ -35,7 +35,7 @@ struct obj_data *_find_name_in_tracker(struct obj_data *tracker, const char *nam
 
 void _add_to_initiative_tracker(struct obj_data *tracker, const char *name, int value, vnum_t idnum) {
   // Create the new initiative object.
-  struct obj_data *head, *initiative = read_object(OBJ_GRAFFITI, VIRTUAL);
+  struct obj_data *head, *initiative = read_object(OBJ_POCKET_SECRETARY_FOLDER, VIRTUAL);
 
   if (!initiative) {
     mudlog("SYSERR: Unable to create new entry for initiative tracker!", NULL, LOG_SYSLOG, TRUE);

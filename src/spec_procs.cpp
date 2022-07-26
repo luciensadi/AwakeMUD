@@ -4788,18 +4788,28 @@ SPECIAL(floor_has_glass_shards) {
     return FALSE;
 
   // If they're safe from shards, we don't care what they do.
-  if (ch->in_veh || IS_NPC(ch) || IS_ASTRAL(ch) || PRF_FLAGGED(ch, PRF_NOHASSLE) || GET_EQ(ch, WEAR_FEET) || AFF_FLAGGED(ch, AFF_SNEAK))
+  if (ch->in_veh || IS_NPC(ch) || IS_ASTRAL(ch) || PRF_FLAGGED(ch, PRF_NOHASSLE) || GET_EQ(ch, WEAR_FEET) || AFF_FLAGGED(ch, AFF_SNEAK) || get_spell_affected_successes(ch, SPELL_LEVITATE) > 0)
     return FALSE;
 
   // Don't tear up people who are rigging.
   if (PLR_FLAGGED(ch, PLR_REMOTE))
     return FALSE;
 
+  const char *floor_material;
+
+  if (GET_ROOM_VNUM(get_ch_in_room(ch)) == RM_CAIROS_APARTMENT)
+    floor_material = "ceramic";
+  else
+    floor_material = "glass";
+
+  char act_buf[500];
+  snprintf(act_buf, sizeof(act_buf), "The %s shards tear at $n's bare feet as $e leave%s!", floor_material, HSSH_SHOULD_PLURAL(ch) ? "s" : "");
+
   // If they attempt to leave the room and are not in a vehicle, wearing shoes, or sneaking, they get cut up.
   for (int dir_index = NORTH; dir_index <= DOWN; dir_index++) {
     if (CMD_IS(exitdirs[dir_index]) || CMD_IS(fulldirs[dir_index])) {
-      send_to_char("^rAs you walk away, the glass shards tear at your bare feet!^n\r\n\r\n", ch);
-      act("The glass shards tear at $n's bare feet as $e leaves!", TRUE, ch, NULL, NULL, TO_ROOM);
+      send_to_char(ch, "^rAs you walk away, the %s shards tear at your bare feet!^n\r\n\r\n", floor_material);
+      act(act_buf, TRUE, ch, NULL, NULL, TO_ROOM);
       if (damage(ch, ch, LIGHT, 0, TRUE) || GET_POS(ch) <= POS_STUNNED)
         return TRUE;
       break;
@@ -7156,7 +7166,7 @@ SPECIAL(graffiti_cleaner) {
   for (struct obj_data *obj = ch->in_room->contents, *next; obj; obj = next) {
     next = obj->next_content;
 
-    if (GET_OBJ_VNUM(obj) == OBJ_GRAFFITI && ++graffiti_count >= MAXIMUM_GRAFFITI_IN_ROOM) {
+    if (OBJ_IS_GRAFFITI(obj) && ++graffiti_count >= MAXIMUM_GRAFFITI_IN_ROOM) {
       char msgbuf[500];
 
       snprintf(msgbuf, sizeof(msgbuf), "$n mutters something under $s breath as $e scrub%s away some graffiti.", HSSH_SHOULD_PLURAL(ch) ? "s" : "");

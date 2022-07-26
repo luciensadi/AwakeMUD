@@ -658,11 +658,13 @@ void reward(struct char_data *ch, struct char_data *johnson)
       if (IS_NPC(f->follower) || IS_PC_CONJURED_ELEMENTAL(f->follower) || IS_SPIRIT(f->follower))
         continue;
 
+      /*  Removed -- this doesn't feel great for the players and isn't well telegraphed beforehand. -LS
       if (rep_too_low(f->follower, GET_QUEST(ch)) || rep_too_high(f->follower, GET_QUEST(ch))) {
         send_to_char(ch, "^y(OOC note: %s didn't meet the qualifications for this run, so %s didn't get a cut of the pay.)^n\r\n", GET_CHAR_NAME(f->follower), HSSH(f->follower));
         send_to_char("^y(OOC note: You didn't meet the qualifications for this run, so you didn't get a cut of the pay.)^n\r\n", f->follower);
         continue;
       }
+      */
 
       if (!AFF_FLAGGED(f->follower, AFF_GROUP)) {
         send_to_char(ch, "^y(OOC note: %s wasn't grouped, so didn't get a cut of the pay.)^n\r\n",

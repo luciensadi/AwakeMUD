@@ -1246,7 +1246,9 @@ enum {
 #define ITEM_KEYRING            43
 #define ITEM_SHOPCONTAINER      44
 #define ITEM_VEHCONTAINER       45
-#define NUM_ITEMS               46
+#define ITEM_GRAFFITI           46
+#define NUM_ITEMS               47
+// Adding something? Add convenience definees to utils.hpp and put the type's name in constants.cpp.
 
 
 /* take/wear flags: used by obj_data.obj_flags.wear_flags */
@@ -2329,6 +2331,7 @@ enum {
 #define RM_ALONG_THIRD_STREET        62267
 #define RM_MASSAGE_PARLOR            7226
 #define RM_ABANDONED_CLOTHING_STORE  4985
+#define RM_CAIROS_APARTMENT          96100
 #ifdef USE_PRIVATE_CE_WORLD
 #define RM_TEMPORARY_DOCWAGON        10097
 #define RM_SEATTLE_DOCWAGON          RM_TEMPORARY_DOCWAGON
@@ -2554,7 +2557,7 @@ enum {
 #define OBJ_BLANK_SPELL_FORMULA            117
 #define OBJ_POCKET_SECRETARY_FOLDER        118
 #define OBJ_NEOPHYTE_SUBSIDY_CARD          119
-#define OBJ_GRAFFITI                       120
+#define OBJ_DYNAMIC_GRAFFITI               120
 #define OBJ_BLANK_AMMOBOX                  121
 #define OBJ_CUSTOM_NERPS_CYBERWARE         122
 #define OBJ_CUSTOM_NERPS_BIOWARE           123

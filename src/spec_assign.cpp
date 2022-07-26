@@ -1125,6 +1125,9 @@ void assign_rooms(void)
   // Wither's troll_barrier
   ASSIGNROOM(15600, troll_barrier);
 
+  // Cairo's room
+  ASSIGNROOM(RM_CAIROS_APARTMENT, floor_has_glass_shards);
+
   // Read the secrets file to learn more about these.
   perform_secret_room_assignments();
 #endif

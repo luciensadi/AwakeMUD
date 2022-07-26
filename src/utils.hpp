@@ -1141,6 +1141,13 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 
 // ITEM_KEYRING convenience defines
 
+// ITEM_SHOPCONTAINER convenience defines
+
+// ITEM_VEHCONTAINER convenience defines
+
+// ITEM_GRAFFITI convenience defines
+#define OBJ_IS_GRAFFITI(obj)       (GET_OBJ_TYPE((obj)) == ITEM_GRAFFITI || GET_OBJ_VNUM((obj)) == OBJ_DYNAMIC_GRAFFITI)
+
 
 /* Misc utils ************************************************************/
 #define CHECK_FUNC_AND_SFUNC_FOR(npc, function) (mob_index[GET_MOB_RNUM(npc)].func == (function) || mob_index[GET_MOB_RNUM(npc)].sfunc == (function))

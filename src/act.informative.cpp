@@ -604,14 +604,19 @@ void list_obj_to_char(struct obj_data * list, struct char_data * ch, int mode,
     }
 
     if (CAN_SEE_OBJ(ch, i)) {
-      if (corpse && IS_OBJ_STAT(i, ITEM_EXTRA_CORPSE)) {
-        if (num > 1) {
-          send_to_char(ch, "(%d) ", num);
+      if (corpse) {
+        if (IS_OBJ_STAT(i, ITEM_EXTRA_CORPSE)) {
+          if (num > 1) {
+            send_to_char(ch, "(%d) ", num);
+          }
+          show_obj_to_char(i, ch, mode);
         }
-        show_obj_to_char(i, ch, mode);
-      } else
-        if (!corpse && !mode && !IS_OBJ_STAT(i, ITEM_EXTRA_CORPSE)) {
-          if ((GET_OBJ_VNUM(i) == OBJ_GRAFFITI) && (!found_graffiti) ) {
+      } else {
+        if (IS_OBJ_STAT(i, ITEM_EXTRA_CORPSE))
+          continue;
+
+        if (!mode) {
+          if (OBJ_IS_GRAFFITI(i) && (!found_graffiti) ) {
             found_graffiti = TRUE;
             send_to_char(ch, "^gSomeone has tagged the area:^n\r\n");
           }
@@ -619,14 +624,16 @@ void list_obj_to_char(struct obj_data * list, struct char_data * ch, int mode,
             send_to_char(ch, "(%d) ", num);
           }
           show_obj_to_char(i, ch, mode);
-        } else if (mode || (ch->char_specials.rigging || ch->in_veh)) {
+        } else if (mode || ch->char_specials.rigging || ch->in_veh) {
           if (num > 1) {
             send_to_char(ch, "(%d) ", num);
           }
           show_obj_to_char(i, ch, mode);
         }
-      found = TRUE;
-      num = 1;
+
+        found = TRUE;
+        num = 1;
+      }
     }
   }
 
@@ -1633,9 +1640,11 @@ void look_in_veh(struct char_data * ch)
     send_to_char(ch->vfront ? ch->in_veh->inside_description : ch->in_veh->rear_description, ch);
     CCHAR = "^g";
     CGLOB = KGRN;
+    // Show non-corpses.
     list_obj_to_char(ch->in_veh->contents, ch, SHOW_MODE_ON_GROUND, FALSE, FALSE);
     CGLOB = KNRM;
     CCHAR = NULL;
+    // Show corpses.
     list_obj_to_char(ch->in_veh->contents, ch, SHOW_MODE_ON_GROUND, FALSE, TRUE);
     list_char_to_char(ch->in_veh->people, ch);
     if (!ch->vfront) {
@@ -1660,9 +1669,11 @@ void look_in_veh(struct char_data * ch)
       send_to_char(veh->in_veh->rear_description, ch);
       CCHAR = "^g";
       CGLOB = KGRN;
+      // Show non-corpses.
       list_obj_to_char(veh->in_veh->contents, ch, SHOW_MODE_ON_GROUND, FALSE, FALSE);
       CGLOB = KNRM;
       CCHAR = NULL;
+      // Show corpses.
       list_obj_to_char(veh->in_veh->contents, ch, SHOW_MODE_ON_GROUND, FALSE, TRUE);
       list_char_to_char(veh->in_veh->people, ch);
       ch->vfront = ov;
@@ -1692,9 +1703,12 @@ void look_in_veh(struct char_data * ch)
       do_auto_exits(ch);
       CCHAR = "^g";
       CGLOB = KGRN;
-      list_obj_to_char(veh->in_room->contents, ch, SHOW_MODE_ON_GROUND, FALSE, TRUE);
+      // Show non-corpses.
+      list_obj_to_char(veh->in_room->contents, ch, SHOW_MODE_ON_GROUND, FALSE, FALSE);
       CGLOB = KNRM;
       CCHAR = NULL;
+      // Show corpses.
+      list_obj_to_char(veh->in_room->contents, ch, SHOW_MODE_ON_GROUND, FALSE, TRUE);
       list_char_to_char(veh->in_room->people, ch);
       CCHAR = "^y";
       list_veh_to_char(veh->in_room->vehicles, ch);
@@ -1952,9 +1966,11 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
   // what fun just to get a colorized listing
   CCHAR = "^g";
   CGLOB = KGRN;
+  // Show non-corpses.
   list_obj_to_char(ch->in_room->contents, ch, SHOW_MODE_ON_GROUND, FALSE, FALSE);
   CGLOB = KNRM;
   CCHAR = NULL;
+  // Show corpses.
   list_obj_to_char(ch->in_room->contents, ch, SHOW_MODE_ON_GROUND, FALSE, TRUE);
   list_char_to_char(ch->in_room->people, ch);
   CCHAR = "^y";
