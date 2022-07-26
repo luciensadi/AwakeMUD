@@ -6264,6 +6264,9 @@ ACMD(do_status)
     send_to_char(ch, "  Close Combat\r\n");
     printed = TRUE;
   }
+  if (PLR_FLAGGED(ch, PLR_PERCEIVE)) {
+    send_to_char("  Astral Perception (^yincreased TNs^n)\r\n", ch);
+  }
 
   for (int i = MIN_DRUG; i < NUM_DRUGS; i++) {
     if (GET_DRUG_STAGE(targ, i) == DRUG_STAGE_ONSET || GET_DRUG_STAGE(targ, i) == DRUG_STAGE_COMEDOWN) {
