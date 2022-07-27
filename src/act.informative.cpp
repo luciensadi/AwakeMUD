@@ -2395,6 +2395,7 @@ void look_at_veh(struct char_data *ch, struct veh_data *veh, int success)
 
 void do_probe_veh(struct char_data *ch, struct veh_data * k)
 {
+  remove_vehicle_brain(k);
   repair_vehicle_seating(k);
   snprintf(buf, sizeof(buf), "Name: '^y%s^n', Aliases: %s\r\n",
           k->short_description, k->name);

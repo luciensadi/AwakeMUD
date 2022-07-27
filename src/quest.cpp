@@ -774,15 +774,8 @@ int new_quest(struct char_data *mob, struct char_data *ch)
   }
   // Sort vector by reputation and return a quest if vector is not empty.
   if (!qlist.empty()) {
-    if (access_level(ch, LVL_BUILDER)) {
-      send_to_char("[Found at least one valid quest. Sorting by rep and pulling the lowest one...]\r\n", ch);
-    }
     sort(qlist.begin(), qlist.end(), compareRep);
     return qlist[0].index;
-  }
-
-  if (access_level(ch, LVL_BUILDER)) {
-    send_to_char("[No viable quests found, oddly enough.]\r\n", ch);
   }
   return 0;
 }
@@ -811,7 +804,6 @@ void handle_info(struct char_data *johnson, int num, struct char_data *target)
     display_emotes_for_quest(johnson, quest_table[num].info_emotes, target);
     return;
   }
-  log_vfprintf("debug: handle_info says q_t[n].info_emotes is %s and %s", quest_table[num].info_emotes ? "set" : "NULL", quest_table[num].info_emotes && !quest_table[num].info_emotes->empty() ? "populated" : "EMPTY");
 
   int allowed, pos, i, speech_index = 0;
 
@@ -1196,6 +1188,9 @@ SPECIAL(johnson)
     case CMD_JOB_YES:
       // Precondition: If I'm not talking right now, don't react.
       if (GET_SPARE1(johnson) == -1) {
+        if (access_level(ch, LVL_BUILDER)) {
+          send_to_char(ch, "Johnson won't react-- GET_SPARE1 is -1.\r\n");
+        }
         return TRUE;
       }
 
@@ -1225,14 +1220,21 @@ SPECIAL(johnson)
         return TRUE;
       }
       if (new_q == -1) {
+        if (access_level(ch, LVL_BUILDER)) {
+          send_to_char(ch, "Johnson won't react-- they're broken!\r\n");
+        }
         return TRUE;
       }
 
       // Precondition: You may not have an active quest.
       if (GET_QUEST(ch)) {
         // If it's the same quest, just bail out without a message.
-        if (GET_QUEST(ch) == new_q)
+        if (GET_QUEST(ch) == new_q) {
+          if (access_level(ch, LVL_BUILDER)) {
+            send_to_char(ch, "Johnson won't react-- you're already on this quest.\r\n");
+          }
           return TRUE;
+        }
 
         do_say(johnson, "Maybe when you've finished what you're doing.", 0, 0);
         send_to_char("(OOC note: You're currently on another run. You can hit RECAP to see the details for it.)\r\n", ch);
@@ -2782,7 +2784,6 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
             // Essentially, delete the existing and write a new one.
             for (auto it = emote_vector->begin(); it != emote_vector->end(); it++) {
               if ((number)-- == 0) {
-                send_to_char(CH, "DEBUG: Erasing emote %s\r\n", *it);
                 DELETE_ENTRY_FROM_VECTOR_PTR(it, emote_vector);
                 break;
               }
@@ -2805,7 +2806,6 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
           case QEDIT_EMOTE__AWAIT_NUMBER_FOR_DELETION:
             for (auto it = emote_vector->begin(); it != emote_vector->end(); it++) {
               if ((number)-- == 0) {
-                send_to_char(CH, "DEBUG: Erasing emote %s\r\n", *it);
                 DELETE_ENTRY_FROM_VECTOR_PTR(it, emote_vector);
                 break;
               }

@@ -3339,12 +3339,12 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("serach", "search");
   COMMAND_ALIAS("shot", "shoot");
   COMMAND_ALIAS("trian", "train");
-  COMMAND_ALIAS("opne", "open");
   COMMAND_ALIAS("recpa", "recap");
   COMMAND_ALIAS("scoe", "score");
   COMMAND_ALIAS("hial", "hail");
   COMMAND_ALIAS("haul", "hail");
   COMMAND_ALIAS("clsoe", "close");
+  COMMAND_ALIAS("swithc", "switch");
 
   // Combat stuff.
   COMMAND_ALIAS("attack", "kill");
@@ -3386,6 +3386,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("loko", "look");
   COMMAND_ALIAS("loook", "look");
   COMMAND_ALIAS("ook", "look");
+  COMMAND_ALIAS("ll", "look");
 
   // equipment seems to give people a lot of trouble
   COMMAND_ALIAS("unwield", "remove");
@@ -3397,6 +3398,8 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("hack", "bypass");
   COMMAND_ALIAS("poen", "open");
   COMMAND_ALIAS("oepn", "open");
+  COMMAND_ALIAS("opne", "open");
+  COMMAND_ALIAS("oen", "open");
 
   // Must be after 'pick'
   COMMAND_ALIAS("pickup", "get");
