@@ -349,6 +349,8 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
   else
     snprintf(buf2, sizeof(buf2), "$n arrives from %s.", thedirs[rev_dir[dir]]);
 
+  // Clear their position string, if any.
+  DELETE_AND_NULL_ARRAY(GET_DEFPOS(ch));
 
   // People in the room.
   for (tch = ch->in_room->people; tch; tch = tch->next_in_room) {
