@@ -737,7 +737,7 @@ int new_quest(struct char_data *mob, struct char_data *ch)
   // done or max_rep is below character rep. We include those with min_rep
   // higher than character rep because we want johnsons to hint to available
   // runs at higher character rep.
-  for (i = 0; i < top_of_questt; i++) {
+  for (i = 0; i <= top_of_questt; i++) {
     if (quest_table[i].johnson == GET_MOB_VNUM(mob)) {
       if (!allow_disconnected && vnum_from_non_connected_zone(quest_table[i].vnum)) {
         if (access_level(ch, LVL_BUILDER)) {
