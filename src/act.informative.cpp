@@ -5253,7 +5253,7 @@ ACMD(do_who)
     }
     fprintf(fl, "<HTML><BODY bgcolor=#11191C><PRE>%s</PRE></BODY></HTML>\r\n", &buffer[0]);
     fclose(fl);
-  } else page_string(ch->desc, buf2, 1);
+  } else send_to_char(buf2, ch);
 }
 
 #define USERS_FORMAT "format: users [-n name] [-h host] [-o] [-p]\r\n"
