@@ -4904,6 +4904,9 @@ bool repair_vehicle_seating(struct veh_data *veh) {
   int front = veh_proto[veh->veh_number].seating[SEATING_FRONT];
   int rear = veh_proto[veh->veh_number].seating[SEATING_REAR];
 
+  // Next, remove the vehicle brain (if any).
+  remove_vehicle_brain(veh);
+
   // Next, subtract seating due to people in the vehicle. Skip staff.
   for (struct char_data *ch = veh->people; ch; ch = ch->next_in_veh) {
     if (GET_LEVEL(ch) <= LVL_MORTAL) {
