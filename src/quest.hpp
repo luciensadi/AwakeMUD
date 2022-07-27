@@ -6,6 +6,10 @@
 #ifndef _quest_h_
 #define _quest_h_
 
+#include <vector>
+
+typedef  std::vector<const char *>  emote_vector_t;
+
 #define QUEST_NONE        0
 
 #define QOL_JOHNSON       1
@@ -24,7 +28,7 @@
 #define QOO_DSTRY_ONE     4
 #define QOO_DSTRY_MANY    5
 #define QOO_RETURN_PAY	  6
-#define QOO_UPLOAD	  7
+#define QOO_UPLOAD	      7
 
 #define QMO_LOCATION      1
 #define QMO_KILL_ONE      2
@@ -64,17 +68,23 @@ struct quest_data
 #ifdef USE_QUEST_LOCATION_CODE
   char *location;
 #endif
+  emote_vector_t *intro_emotes;
+  emote_vector_t *decline_emotes;
+  emote_vector_t *quit_emotes;
+  emote_vector_t *finish_emotes;
+  emote_vector_t *info_emotes;
 
   quest_data() :
       vnum(-1), johnson(-1), time(0), num_objs(0), num_mobs(0),
       s_time(0), e_time(0), s_room(0), min_rep(0), max_rep(0),
       nuyen(0), karma(0), reward(-1), obj(NULL), mob(NULL), intro(NULL),
       decline(NULL), quit(NULL), finish(NULL), info(NULL),
+      s_string(NULL), e_string(NULL), done(NULL),
 #ifdef USE_QUEST_LOCATION_CODE
-      s_string(NULL), e_string(NULL), done(NULL), location(NULL)
-#else
-      s_string(NULL), e_string(NULL), done(NULL)
+      location(NULL),
 #endif
+      intro_emotes(NULL), decline_emotes(NULL), quit_emotes(NULL),
+      finish_emotes(NULL), info_emotes(NULL)
   {}
 }
 ;
@@ -92,6 +102,6 @@ struct quest_entry {
 #define CMD_JOB_NO  5
 
 void load_quest_targets(struct char_data *johnson, struct char_data *ch);
-void handle_info(struct char_data *johnson, int num);
+void handle_info(struct char_data *johnson, int num, struct char_data *target);
 
 #endif

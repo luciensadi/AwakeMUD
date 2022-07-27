@@ -1686,6 +1686,20 @@ ACMD(do_qedit)
     if (quest_table[rnum].e_string)
       qst->e_string = str_dup(quest_table[rnum].e_string);
 
+#define CLONE_EMOTE_VECTOR(from, into) {         \
+  if ((from) && !((from)->empty())) {            \
+    (into) = new emote_vector_t;                 \
+    for (size_t i = 0; i < (from)->size(); i++)  \
+      (into)->push_back(str_dup((from)->at(i))); \
+  }                                              \
+}
+
+    CLONE_EMOTE_VECTOR(quest_table[rnum].intro_emotes, qst->intro_emotes);
+    CLONE_EMOTE_VECTOR(quest_table[rnum].decline_emotes, qst->decline_emotes);
+    CLONE_EMOTE_VECTOR(quest_table[rnum].quit_emotes, qst->quit_emotes);
+    CLONE_EMOTE_VECTOR(quest_table[rnum].finish_emotes, qst->finish_emotes);
+    CLONE_EMOTE_VECTOR(quest_table[rnum].info_emotes, qst->info_emotes);
+
     d->edit_quest = qst;
 #ifdef CONFIRM_EXISTING
 
@@ -2212,3 +2226,7 @@ ACMD(do_icedit)
     return;
   }
 }
+
+// asdf todo:
+//- writing emotes and then saving the quest does not update the world copy of the quest
+//- we leak memory from all the str_dups

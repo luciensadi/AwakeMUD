@@ -2247,17 +2247,20 @@ void parse_object(File &fl, long nr)
 void parse_quest(File &fl, long virtual_nr)
 {
   static long quest_nr = 0;
-  long j, t[12];
+  long j, t[20];
   char line[256];
+
+  memset(t, 0, sizeof(t));
 
   quest_table[quest_nr].vnum = virtual_nr;
 
   fl.GetLine(line, 256, FALSE);
-  if (sscanf(line, "%ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld",
-             t, t + 1, t + 2, t + 3, t+4, t+5,
-             t + 6, t + 7, t + 8, t + 9, t + 10, t + 11) != 12) {
-    fprintf(stderr, "FATAL ERROR: Format error in quest #%ld, expecting twelve numbers like '# # # # # # # # # # # #'.\n",
-            quest_nr);
+  // log_vfprintf("%d: getline resulted in '%s'", virtual_nr, line);
+  if (sscanf(line, "%ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld",
+             t, t + 1, t + 2, t + 3, t + 4, t + 5,
+             t + 6, t + 7, t + 8, t + 9, t + 10, t + 11, t+12, t+13, t+14, t+15, t+16) < 12) {
+    fprintf(stderr, "FATAL ERROR: Format error in quest #%ld, expecting 12-15 numbers like '# # # # # # # # # # # #'. Got '%s' instead.\n",
+            quest_nr, line);
     exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
   }
   quest_table[quest_nr].johnson = t[0];
@@ -2272,6 +2275,12 @@ void parse_quest(File &fl, long virtual_nr)
   quest_table[quest_nr].s_time = t[9];
   quest_table[quest_nr].e_time = t[10];
   quest_table[quest_nr].s_room = t[11];
+
+  int num_intro_emotes = t[12];
+  int num_decline_emotes = t[13];
+  int num_quit_emotes = t[14];
+  int num_finish_emotes = t[15];
+  int num_info_emotes = t[16];
 
   if (quest_table[quest_nr].num_objs > 0) {
     quest_table[quest_nr].obj = new quest_om_data[quest_table[quest_nr].num_objs];
@@ -2314,8 +2323,25 @@ void parse_quest(File &fl, long virtual_nr)
       quest_table[quest_nr].mob[j].l_data2 = t[6];
       quest_table[quest_nr].mob[j].o_data = t[7];
     }
-  } else
+  } else {
     quest_table[quest_nr].mob = NULL;
+  }
+
+  #define READ_EMOTES(type)                                                               \
+  if (num_ ## type ## _emotes > 0) {                                                      \
+    quest_table[quest_nr]. type ## _emotes = new emote_vector_t;                          \
+    while (num_ ## type ## _emotes-- > 0) {                                               \
+      quest_table[quest_nr]. type ## _emotes->push_back(fl.ReadString("##type##_emote")); \
+    }                                                                                     \
+  }
+
+  READ_EMOTES(intro);
+  READ_EMOTES(decline);
+  READ_EMOTES(quit);
+  READ_EMOTES(finish);
+  READ_EMOTES(info);
+
+  #undef READ_EMOTES
 
   quest_table[quest_nr].intro = fl.ReadString("intro");
   quest_table[quest_nr].decline = fl.ReadString("decline");

@@ -626,7 +626,7 @@ void zedit_parse(struct descriptor_data *d, const char *arg)
       break; // end of 'n' case in confirm savestring
     default:
       send_to_char("Please enter yes or no.\r\n"
-                   "Do you wish to save this zone internally?\r\n", CH);
+                   "Do you wish to save any changes?\r\n", CH);
       break;
     }
     break; // end of confirm savestring
@@ -697,7 +697,7 @@ void zedit_parse(struct descriptor_data *d, const char *arg)
     switch (*arg) {
     case 'q':
     case 'Q':
-      send_to_char("Do you wish to save this zone internally?\r\n", CH);
+      send_to_char("Do you wish to save any changes?\r\n", CH);
       d->edit_mode = ZEDIT_CONFIRM_SAVEDATA;
       break;
     case '1':
@@ -764,7 +764,7 @@ void zedit_parse(struct descriptor_data *d, const char *arg)
     switch (*arg) {
     case 'q':
     case 'Q':
-      send_to_char("Do you wish to save this zone command internally?\r\n", CH);
+      send_to_char("Do you wish to save any changes?\r\n", CH);
       d->edit_mode = ZEDIT_CONFIRM_SAVECMDS;
       break;
     case '1':
@@ -954,7 +954,7 @@ void zedit_parse(struct descriptor_data *d, const char *arg)
       break; // for 'n' case
     default:
       send_to_char("That's not a valid choice.\r\n", CH);
-      send_to_char("Do you wish to save this zone command internally?\r\n", CH);
+      send_to_char("Do you wish to save any changes?\r\n", CH);
       break;
     } // for switch in confirm save cmds
     break; // for ZEDIT_CONFIRM_SAVECMDS

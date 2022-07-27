@@ -4592,7 +4592,7 @@ SPECIAL(quest_debug_scanner)
 
       //Load targets and give the details.
       load_quest_targets(to, ch);
-      handle_info(to, i);
+      handle_info(to, i, ch);
 
       return TRUE;
     }

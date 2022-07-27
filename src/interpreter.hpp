@@ -54,6 +54,7 @@ int     find_command(const char *command);
 int     find_mcommand(const char *command);
 void    skip_spaces(char **string);
 char    *delete_doubledollar(char *string);
+void    replace_word(const char *input, char *output, size_t output_size, const char *replace_from, const char *replace_to);
 
 struct command_info
 {

@@ -50,7 +50,7 @@ unsigned int get_johnson_overall_min_rep(struct char_data *johnson);
 ACMD_CONST(do_say);
 ACMD_DECLARE(do_action);
 SPECIAL(johnson);
-ACMD_DECLARE(do_echo);
+ACMD_DECLARE(do_new_echo);
 
 #define QUEST          d->edit_quest
 
@@ -58,6 +58,8 @@ ACMD_DECLARE(do_echo);
 #define NUM_MOB_LOADS            3
 #define NUM_OBJ_OBJECTIVES       8
 #define NUM_MOB_OBJECTIVES       5
+
+#define DELETE_ENTRY_FROM_VECTOR_PTR(iterator, vector_ptr) {delete [] *(iterator); *(iterator) = NULL; (vector_ptr)->erase((iterator));}
 
 const char *obj_loads[] =
   {
@@ -709,6 +711,7 @@ bool compareRep(const quest_entry &a, const quest_entry &b)
 int new_quest(struct char_data *mob, struct char_data *ch)
 {
   int i, num = 0;
+  bool allow_disconnected = vnum_from_non_connected_zone(GET_MOB_VNUM(mob));
 
   quest_entry temp_entry;
   std::vector<quest_entry> qlist;
@@ -733,12 +736,13 @@ int new_quest(struct char_data *mob, struct char_data *ch)
   // higher than character rep because we want johnsons to hint to available
   // runs at higher character rep.
   for (i = 0;i < top_of_questt;i++) {
-    bool allow_disconnected = vnum_from_non_connected_zone(quest_table[i].johnson);
-
     if (quest_table[i].johnson == GET_MOB_VNUM(mob)
       && (allow_disconnected || !vnum_from_non_connected_zone(quest_table[i].vnum)))
     {
         if (GET_REP(ch) > quest_table[i].max_rep) {
+          if (access_level(ch, LVL_BUILDER)) {
+            send_to_char(ch, "[Skipping quest %ld: You exceed rep cap of %d.]\r\n", quest_table[i].vnum, quest_table[i].max_rep);
+          }
           continue;
         }
 
@@ -750,6 +754,9 @@ int new_quest(struct char_data *mob, struct char_data *ch)
           }
         }
         if (found) {
+          if (access_level(ch, LVL_BUILDER)) {
+            send_to_char(ch, "[Skipping quest %ld: It exists in your LQUEST list. Use a diagnostic scanner and ^WCLEANSE^n yourself.]\r\n", quest_table[i].vnum);
+          }
           continue;
         } else {
           temp_entry.index = i;
@@ -767,8 +774,32 @@ int new_quest(struct char_data *mob, struct char_data *ch)
   return 0;
 }
 
-void handle_info(struct char_data *johnson, int num)
+void display_emotes_for_quest(struct char_data *johnson, int num, emote_vector_t *vec, struct char_data *target) {
+  char emote[MAX_STRING_LENGTH];
+  int pos = GET_SPARE1(johnson);
+
+  // Convert $N to an @target.
+  char target_at_string[100];
+  snprintf(target_at_string, sizeof(target_at_string), "@%s", GET_CHAR_NAME(target));
+  replace_word(vec->at(pos), emote, sizeof(emote), "$N", target_at_string);
+
+  // Increment our current-emote pointer.
+  if ((unsigned long) ++GET_SPARE1(johnson) >= vec->size())
+    GET_SPARE1(johnson) = -1;
+
+  // Send our emote.
+  do_new_echo(johnson, emote, 0, 0);
+}
+
+void handle_info(struct char_data *johnson, int num, struct char_data *target)
 {
+  // If there's an emote set available, print that.
+  if (quest_table[num].info_emotes && !quest_table[num].info_emotes->empty()) {
+    display_emotes_for_quest(johnson, num, quest_table[num].info_emotes, target);
+    return;
+  }
+  log_vfprintf("debug: handle_info says q_t[n].info_emotes is %s and %s", quest_table[num].info_emotes ? "set" : "NULL", quest_table[num].info_emotes && !quest_table[num].info_emotes->empty() ? "populated" : "EMPTY");
+
   int allowed, pos, i, speech_index = 0;
 
   // Want to control how much the Johnson says per tick? Change this magic number.
@@ -853,7 +884,7 @@ SPECIAL(johnson)
       if (!temp) {
         GET_SPARE1(johnson) = -1;
       } else if (GET_QUEST(temp)) {
-        handle_info(johnson, GET_QUEST(temp));
+        handle_info(johnson, GET_QUEST(temp), temp);
       } else {
         // We're in the gap between someone asking for a job and accepting it. Do nothing.
       }
@@ -1206,7 +1237,7 @@ SPECIAL(johnson)
       load_quest_targets(johnson, ch);
 
       // Go into my spiel.
-      handle_info(johnson, new_q);
+      handle_info(johnson, new_q, ch);
 
       return TRUE;
 
@@ -1461,6 +1492,11 @@ void boot_one_quest(struct quest_data *quest)
   quest_table[quest_nr].quit = str_dup(quest->quit);
   quest_table[quest_nr].finish = str_dup(quest->finish);
   quest_table[quest_nr].info = str_dup(quest->info);
+  quest_table[quest_nr].intro_emotes = quest->intro_emotes;
+  quest_table[quest_nr].decline_emotes = quest->decline_emotes;
+  quest_table[quest_nr].quit_emotes = quest->quit_emotes;
+  quest_table[quest_nr].finish_emotes = quest->finish_emotes;
+  quest_table[quest_nr].info_emotes = quest->info_emotes;
   quest_table[quest_nr].done = str_dup(quest->done);
   quest_table[quest_nr].s_string = str_dup(quest->s_string);
   quest_table[quest_nr].e_string = str_dup(quest->e_string);
@@ -1474,6 +1510,13 @@ void boot_one_quest(struct quest_data *quest)
     mob_index[i].sfunc = mob_index[i].func;
     mob_index[i].func = johnson;
     mob_proto[i].real_abils.attributes[QUI] = MAX(1, mob_proto[i].real_abils.attributes[QUI]);
+
+    // Ensure that all instances of this johnson don't have a spare1 value set
+    for (struct char_data *tmp = character_list; tmp; tmp = tmp->next) {
+      if (IS_NPC(tmp) && GET_MOB_VNUM(tmp) == quest_table[quest_nr].johnson) {
+        GET_SPARE1(tmp) = 0;
+      }
+    }
   }
 }
 
@@ -1492,11 +1535,15 @@ void reboot_quest(int rnum, struct quest_data *quest)
       return;
     }
 
-    if (mob_index[ojn].func == johnson) {
-      mob_index[ojn].func = mob_index[ojn].sfunc;
-      mob_index[ojn].sfunc = NULL;
-    } else if (mob_index[ojn].sfunc == johnson)
-      mob_index[ojn].sfunc = NULL;
+    // It's possible for ojn to be -1 in the case of the quest first being built.
+    if (ojn >= 0) {
+      if (mob_index[ojn].func == johnson) {
+        mob_index[ojn].func = mob_index[ojn].sfunc;
+        mob_index[ojn].sfunc = NULL;
+      } else if (mob_index[ojn].sfunc == johnson)
+        mob_index[ojn].sfunc = NULL;
+    }
+
     mob_index[njn].sfunc = mob_index[njn].func;
     mob_index[njn].func = johnson;
     quest_table[rnum].johnson = quest->johnson;
@@ -1555,6 +1602,41 @@ void reboot_quest(int rnum, struct quest_data *quest)
     delete [] quest_table[rnum].info;
   quest_table[rnum].info = str_dup(quest->info);
 
+#define DELETE_AND_NULL_EMOTE_VECTOR(vect) {                              \
+  if ((vect)) {                                                           \
+    /* Delete the existing strings, which were allocated with str_dup. */ \
+    for (auto it = (vect)->begin(); it != (vect)->end(); it++) {          \
+      delete [] *it;                                                      \
+      *it = NULL;                                                         \
+    }                                                                     \
+    /* Clear the vector entries containing the deleted strings. */        \
+    (vect)->clear();                                                      \
+    /* Delete the vector itself, since it was made with new. */           \
+    delete (vect);                                                        \
+  }                                                                       \
+  (vect) = NULL;                                                          \
+}
+
+  DELETE_AND_NULL_EMOTE_VECTOR(quest_table[rnum].intro_emotes);
+  quest_table[rnum].intro_emotes = quest->intro_emotes;
+  quest->intro_emotes = NULL;
+
+  DELETE_AND_NULL_EMOTE_VECTOR(quest_table[rnum].quit_emotes);
+  quest_table[rnum].quit_emotes = quest->quit_emotes;
+  quest->quit_emotes = NULL;
+
+  DELETE_AND_NULL_EMOTE_VECTOR(quest_table[rnum].decline_emotes);
+  quest_table[rnum].decline_emotes = quest->decline_emotes;
+  quest->decline_emotes = NULL;
+
+  DELETE_AND_NULL_EMOTE_VECTOR(quest_table[rnum].finish_emotes);
+  quest_table[rnum].finish_emotes = quest->finish_emotes;
+  quest->finish_emotes = NULL;
+
+  DELETE_AND_NULL_EMOTE_VECTOR(quest_table[rnum].info_emotes);
+  quest_table[rnum].info_emotes = quest->info_emotes;
+  quest->info_emotes = NULL;
+
   if (quest_table[rnum].done)
     delete [] quest_table[rnum].done;
   quest_table[rnum].done = str_dup(quest->done);
@@ -1576,6 +1658,7 @@ void reboot_quest(int rnum, struct quest_data *quest)
 
 int write_quests_to_disk(int zone)
 {
+  // asdf todo: write save/load for quest emotes
   long i, j, found = 0, counter;
   FILE *fp;
   zone = real_zone(zone);
@@ -1595,13 +1678,19 @@ int write_quests_to_disk(int zone)
     if ((i = real_quest(counter)) > -1) {
       wrote_something = TRUE;
       fprintf(fp, "#%ld\n", quest_table[i].vnum);
-      fprintf(fp, "%ld %d %d %d %d %d %d %d %d %d %d %d\n", quest_table[i].johnson,
+      fprintf(fp, "%ld %d %d %d %d %d %d %d %d %d %d %d %ld %ld %ld %ld %ld\n", quest_table[i].johnson,
               quest_table[i].time, quest_table[i].min_rep,
               quest_table[i].max_rep, quest_table[i].nuyen,
               quest_table[i].karma, quest_table[i].reward,
               quest_table[i].num_objs, quest_table[i].num_mobs,
               quest_table[i].s_time, quest_table[i].e_time,
-              quest_table[i].s_room);
+              quest_table[i].s_room,
+              quest_table[i].intro_emotes ? quest_table[i].intro_emotes->size() : 0,
+              quest_table[i].decline_emotes ? quest_table[i].decline_emotes->size() : 0,
+              quest_table[i].quit_emotes ? quest_table[i].quit_emotes->size() : 0,
+              quest_table[i].finish_emotes ? quest_table[i].finish_emotes->size() : 0,
+              quest_table[i].info_emotes ? quest_table[i].info_emotes->size() : 0
+            );
 
       for (j = 0; j < quest_table[i].num_objs; j++)
         fprintf(fp, "%ld %d %d %d %d %d %d %d\n", quest_table[i].obj[j].vnum,
@@ -1616,6 +1705,14 @@ int write_quests_to_disk(int zone)
                 quest_table[i].mob[j].load, quest_table[i].mob[j].objective,
                 quest_table[i].mob[j].l_data, quest_table[i].mob[j].l_data2,
                 quest_table[i].mob[j].o_data);
+
+      #define WRITE_EMOTES_TO_DISK(type) if (quest_table[i].type##_emotes) {for (auto a: *(quest_table[i].type##_emotes)) { fprintf(fp, "%s~\r\n", cleanup(buf2, a)); }}
+
+      WRITE_EMOTES_TO_DISK(intro);
+      WRITE_EMOTES_TO_DISK(decline);
+      WRITE_EMOTES_TO_DISK(quit);
+      WRITE_EMOTES_TO_DISK(finish);
+      WRITE_EMOTES_TO_DISK(info);
 
       fprintf(fp, "%s~\n", cleanup(buf2, quest_table[i].intro));
       fprintf(fp, "%s~\n", cleanup(buf2, quest_table[i].decline));
@@ -1839,6 +1936,93 @@ void qedit_list_mob_objectives(struct descriptor_data *d)
   send_to_char(buf, CH);
 }
 
+void qedit_disp_emote_menu(struct descriptor_data *d, int mode)
+{
+  emote_vector_t *vect;
+
+  #define EMOTE_MENU_SWITCH_CASE(case_qualifier, emote_vector) \
+     case (case_qualifier):                                    \
+       if (!(emote_vector)) {                                  \
+         (emote_vector) = new emote_vector_t;                  \
+       }                                                       \
+       vect = (emote_vector);                                  \
+       break;                                                  \
+
+  switch (mode) {
+    EMOTE_MENU_SWITCH_CASE(QEDIT_EMOTE_MENU__INTRO_EMOTES, QUEST->intro_emotes)
+    EMOTE_MENU_SWITCH_CASE(QEDIT_EMOTE_MENU__QUIT_EMOTES, QUEST->quit_emotes)
+    EMOTE_MENU_SWITCH_CASE(QEDIT_EMOTE_MENU__DECLINE_EMOTES, QUEST->decline_emotes)
+    EMOTE_MENU_SWITCH_CASE(QEDIT_EMOTE_MENU__FINISH_EMOTES, QUEST->finish_emotes)
+    EMOTE_MENU_SWITCH_CASE(QEDIT_EMOTE_MENU__INFO_EMOTES, QUEST->info_emotes)
+    default:
+      mudlog("SYSERR: Got unknown mode to qedit_disp_emote_menu()!", CH, LOG_SYSLOG, TRUE);
+      return;
+  }
+  #undef EMOTE_MENU_SWITCH_CASE
+
+  if (vect->empty()) {
+    send_to_char("No emotes currently defined.\r\n", CH);
+  } else {
+    int i = 0;
+
+    send_to_char("Emotes list:\r\n", CH);
+    for (auto a: *(vect)) {
+      send_to_char(CH, "%d)  %s\r\n", ++i, a);
+    }
+    send_to_char("\r\n", CH);
+  }
+
+  send_to_char(" a) Add a new emote to the end of the list\r\n"
+               " d) Delete an existing emote\r\n"
+               " e) Edit (replace) an existing emote\r\n"
+               " i) Insert a new emote before another\r\n"
+               " q) Return to main menu\r\n"
+               "Enter your choice: ", CH);
+
+  d->edit_number2 = 0;
+  d->edit_number3 = mode;
+  d->edit_mode = QEDIT_EMOTE_MENU;
+}
+
+void insert_or_append_emote_at_position(struct descriptor_data *d, char *string) {
+  emote_vector_t *emote_vector;
+
+  switch (d->edit_number3) {
+    case QEDIT_EMOTE_MENU__INFO_EMOTES:
+      emote_vector = QUEST->info_emotes;
+      break;
+    case QEDIT_EMOTE_MENU__QUIT_EMOTES:
+      emote_vector = QUEST->quit_emotes;
+      break;
+    case QEDIT_EMOTE_MENU__FINISH_EMOTES:
+      emote_vector = QUEST->finish_emotes;
+      break;
+    case QEDIT_EMOTE_MENU__INTRO_EMOTES:
+      emote_vector = QUEST->intro_emotes;
+      break;
+    case QEDIT_EMOTE_MENU__DECLINE_EMOTES:
+      emote_vector = QUEST->decline_emotes;
+      break;
+    default:
+      mudlog("SYSERR: Unknown emote menu mode in insert_or_append_emote_at_position(), extend switch!", CH, LOG_SYSLOG, TRUE);
+      return;
+  }
+
+  // Append mode.
+  if (d->edit_number2 == -1) {
+    emote_vector->push_back(str_dup(string));
+  }
+  // Replace mode.
+  else {
+    for (auto it = emote_vector->begin(); it != emote_vector->end(); it++) {
+      if ((d->edit_number2)-- == 0) {
+        emote_vector->insert(it, str_dup(string));
+        break;
+      }
+    }
+  }
+}
+
 void qedit_disp_obj_menu(struct descriptor_data *d)
 {
   send_to_char(CH, "Item objective menu:\r\n"
@@ -1958,21 +2142,27 @@ void qedit_disp_menu(struct descriptor_data *d)
                ((float)QUEST->karma / 100), CCNRM(CH, C_CMP));
   send_to_char(CH, "6) Item objective menu\r\n");
   send_to_char(CH, "7) Mobile objective menu\r\n");
-  send_to_char(CH, "8) Introductory text:  %s%s%s\r\n", CCCYN(CH, C_CMP),
-               QUEST->intro, CCNRM(CH, C_CMP));
-  send_to_char(CH, "9) Decline text:       %s%s%s\r\n", CCCYN(CH, C_CMP),
-               QUEST->decline, CCNRM(CH, C_CMP));
+  send_to_char(CH, "\r\n");
+  send_to_char(CH, "8a) Intro speech%s:      %s%s%s\r\n", QUEST->intro_emotes && !QUEST->intro_emotes->empty() ? " (overridden by emotes)" : "", CCCYN(CH, C_CMP), QUEST->intro, CCNRM(CH, C_CMP));
+  send_to_char(CH, "8b) Intro emotes:      %s%s%s\r\n", CCCYN(CH, C_CMP), (!QUEST->intro_emotes || QUEST->intro_emotes->empty()) ? "<not set>" : "<set>", CCNRM(CH, C_CMP));
+  send_to_char(CH, "\r\n");
+  send_to_char(CH, "9a) Decline speech%s:    %s%s%s\r\n", QUEST->decline_emotes && !QUEST->decline_emotes->empty() ? " (overridden by emotes)" : "", CCCYN(CH, C_CMP), QUEST->decline, CCNRM(CH, C_CMP));
+  send_to_char(CH, "9b) Decline emotes:    %s%s%s\r\n", CCCYN(CH, C_CMP), (!QUEST->decline_emotes || QUEST->decline_emotes->empty()) ? "<not set>" : "<set>", CCNRM(CH, C_CMP));
+  send_to_char(CH, "\r\n");
 #ifdef USE_QUEST_LOCATION_CODE
-  send_to_char(CH, "0) Location text:      %s%s%s\r\n", CCCYN(CH, C_CMP),
+  send_to_char(CH, "0) Location hint:      %s%s%s\r\n", CCCYN(CH, C_CMP),
                QUEST->decline, CCNRM(CH, C_CMP));
+  send_to_char(CH, "\r\n");
 #endif
-  send_to_char(CH, "a) Quit text:          %s%s%s\r\n", CCCYN(CH, C_CMP),
-               QUEST->quit, CCNRM(CH, C_CMP));
-  send_to_char(CH, "b) Completed text:     %s%s%s\r\n", CCCYN(CH, C_CMP),
-               QUEST->finish, CCNRM(CH, C_CMP));
-  send_to_char(CH, "c) Informational text:\r\n%s%s%s\r\n\r\n", CCCYN(CH, C_CMP),
-               QUEST->info, CCNRM(CH, C_CMP));
-
+  send_to_char(CH, "aa) Quit speech%s:       %s%s%s\r\n", QUEST->quit_emotes && !QUEST->quit_emotes->empty() ? " (overridden by emotes)" : "", CCCYN(CH, C_CMP), QUEST->quit, CCNRM(CH, C_CMP));
+  send_to_char(CH, "ab) Quit emotes:       %s%s%s\r\n", CCCYN(CH, C_CMP), (!QUEST->quit_emotes || QUEST->quit_emotes->empty()) ? "<not set>" : "<set>", CCNRM(CH, C_CMP));
+  send_to_char(CH, "\r\n");
+  send_to_char(CH, "ba) Completion speech%s: %s%s%s\r\n", QUEST->finish_emotes && !QUEST->finish_emotes->empty() ? " (overridden by emotes)" : "", CCCYN(CH, C_CMP), QUEST->finish, CCNRM(CH, C_CMP));
+  send_to_char(CH, "bb) Completion emotes: %s%s%s\r\n", CCCYN(CH, C_CMP), (!QUEST->finish_emotes || QUEST->finish_emotes->empty()) ? "<not set>" : "<set>", CCNRM(CH, C_CMP));
+  send_to_char(CH, "\r\n");
+  send_to_char(CH, "ca) Accepted text (%s):\r\n%s%s%s\r\n\r\n", QUEST->info_emotes && !QUEST->info_emotes->empty() ? "emotes set: recap only" : "speech/recap", CCCYN(CH, C_CMP), QUEST->info, CCNRM(CH, C_CMP));
+  send_to_char(CH, "cb) Accepted emotes (overrides speech if set):  %s%s%s\r\n", CCCYN(CH, C_CMP), (!QUEST->info_emotes || QUEST->info_emotes->empty()) ? "<not set>" : "<set>", CCNRM(CH, C_CMP));
+  send_to_char(CH, "\r\n");
   /*
    * Determine what to print for the times the Johnson is out
    */
@@ -2088,110 +2278,160 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
     break;
   case QEDIT_MAIN_MENU:
     switch (*arg) {
-    case 'q':
-    case 'Q':
-      d->edit_mode = QEDIT_CONFIRM_SAVESTRING;
-      qedit_parse(d, "y");
-      break;
-    case 'x':
-    case 'X':
-      d->edit_mode = QEDIT_CONFIRM_SAVESTRING;
-      qedit_parse(d, "n");
-      break;
-    case '1':
-      send_to_char("Enter Johnson's vnum: ", CH);
-      d->edit_mode = QEDIT_JOHNSON;
-      break;
-    case '2':
-      send_to_char("Enter allowed time (in mud minutes): ", CH);
-      d->edit_mode = QEDIT_TIME;
-      break;
-    case '3':
-      send_to_char("Enter minimum reputation: ", CH);
-      d->edit_mode = QEDIT_MIN_REP;
-      break;
-    case '4':
-      send_to_char("Enter bonus nuyen: ", CH);
-      d->edit_mode = QEDIT_NUYEN;
-      break;
-    case '5':
-      send_to_char("Enter bonus karma: ", CH);
-      d->edit_mode = QEDIT_KARMA;
-      break;
-    case '6':
-      CLS(CH);
-      qedit_disp_obj_menu(d);
-      break;
-    case '7':
-      CLS(CH);
-      qedit_disp_mob_menu(d);
-      break;
-    case '8':
-      send_to_char("Enter introductory text: ", d->character);
-      d->edit_mode = QEDIT_INTRO;
-      break;
-    case '9':
-      send_to_char("Enter decline text: ", d->character);
-      d->edit_mode = QEDIT_DECLINE;
-      break;
-#ifdef USE_QUEST_LOCATION_CODE
-    case '0':
-      send_to_char("Enter a description of the Johnson's location (ex: 'a booth on the second level of Dante's Inferno'): ", d->character);
-      d->edit_mode = QEDIT_LOCATION;
-      break;
-#endif
-    case 'a':
-    case 'A':
-      send_to_char("Enter quit text: ", d->character);
-      d->edit_mode = QEDIT_QUIT;
-      break;
-    case 'b':
-    case 'B':
-      send_to_char("Enter completed text: ", d->character);
-      d->edit_mode = QEDIT_FINISH;
-      break;
-    case 'c':
-    case 'C':
-      send_to_char("Enter informational text:\r\n", d->character);
-      d->edit_mode = QEDIT_INFO;
-      DELETE_D_STR_IF_EXTANT(d);
-      INITIALIZE_NEW_D_STR(d);
-      d->max_str = MAX_MESSAGE_LENGTH;
-      d->mail_to = 0;
-      break;
-    case 'd':
-    case 'D':
-      send_to_char("Enter hour for Johnson to start giving jobs: ", CH);
-      d->edit_mode = QEDIT_SHOUR;
-      break;
-    case 'e':
-    case 'E':
-      send_to_char("Enter the string that will be given when the Johnson comes to work:\r\n", CH);
-      d->edit_mode = QEDIT_SSTRING;
-      break;
-    case 'f':
-    case 'F':
-      send_to_char("Enter the string that will be given when the Johnson leaves work:\r\n", CH);
-      d->edit_mode = QEDIT_ESTRING;
-      break;
-    case 'g':
-    case 'G':
-      send_to_char("Enter the string that will be given if quest is already complete:\r\n", CH);
-      d->edit_mode = QEDIT_DONE;
-      break;
-    case 'h':
-    case 'H':
-      if (!access_level(CH, LVL_VICEPRES))
+      case 'q':
+      case 'Q':
+        d->edit_mode = QEDIT_CONFIRM_SAVESTRING;
+        qedit_parse(d, "y");
+        break;
+      case 'x':
+      case 'X':
+        d->edit_mode = QEDIT_CONFIRM_SAVESTRING;
+        qedit_parse(d, "n");
+        break;
+      case '1':
+        send_to_char("Enter Johnson's vnum: ", CH);
+        d->edit_mode = QEDIT_JOHNSON;
+        break;
+      case '2':
+        send_to_char("Enter allowed time (in mud minutes): ", CH);
+        d->edit_mode = QEDIT_TIME;
+        break;
+      case '3':
+        send_to_char("Enter minimum reputation: ", CH);
+        d->edit_mode = QEDIT_MIN_REP;
+        break;
+      case '4':
+        send_to_char("Enter bonus nuyen: ", CH);
+        d->edit_mode = QEDIT_NUYEN;
+        break;
+      case '5':
+        send_to_char("Enter bonus karma: ", CH);
+        d->edit_mode = QEDIT_KARMA;
+        break;
+      case '6':
+        CLS(CH);
+        qedit_disp_obj_menu(d);
+        break;
+      case '7':
+        CLS(CH);
+        qedit_disp_mob_menu(d);
+        break;
+      case '8':
+        switch(*(arg + 1)) {
+          case 'a':
+            send_to_char("Enter the intro text that will be spoken by the Johnson: ", d->character);
+            d->edit_mode = QEDIT_INTRO;
+            break;
+          case 'b':
+            qedit_disp_emote_menu(d, QEDIT_EMOTE_MENU__INTRO_EMOTES);
+            break;
+          default:
+            qedit_disp_menu(d);
+            break;
+        }
+        break;
+      case '9':
+        switch(*(arg + 1)) {
+          case 'a':
+            send_to_char("Enter the decline text that will be spoken by the Johnson: ", d->character);
+            d->edit_mode = QEDIT_DECLINE;
+            break;
+          case 'b':
+            qedit_disp_emote_menu(d, QEDIT_EMOTE_MENU__DECLINE_EMOTES);
+            break;
+          default:
+            qedit_disp_menu(d);
+            break;
+        }
+        break;
+  #ifdef USE_QUEST_LOCATION_CODE
+      case '0':
+        send_to_char("Enter a description of the Johnson's location (ex: 'a booth on the second level of Dante's Inferno'): ", d->character);
+        d->edit_mode = QEDIT_LOCATION;
+        break;
+  #endif
+      case 'a':
+      case 'A':
+        switch(*(arg + 1)) {
+          case 'a':
+            send_to_char("Enter the quit text that will be spoken by the Johnson: ", d->character);
+            d->edit_mode = QEDIT_QUIT;
+            break;
+          case 'b':
+            qedit_disp_emote_menu(d, QEDIT_EMOTE_MENU__QUIT_EMOTES);
+            break;
+          default:
+            qedit_disp_menu(d);
+            break;
+        }
+        break;
+      case 'b':
+      case 'B':
+        switch(*(arg + 1)) {
+          case 'a':
+            send_to_char("Enter the completion text that will be spoken by the Johnson: ", d->character);
+            d->edit_mode = QEDIT_FINISH;
+            break;
+          case 'b':
+            qedit_disp_emote_menu(d, QEDIT_EMOTE_MENU__FINISH_EMOTES);
+            break;
+          default:
+            qedit_disp_menu(d);
+            break;
+        }
+        break;
+      case 'c':
+      case 'C':
+        switch(*(arg + 1)) {
+          case 'a':
+            send_to_char("Enter informational text:\r\n", d->character);
+            d->edit_mode = QEDIT_INFO;
+            DELETE_D_STR_IF_EXTANT(d);
+            INITIALIZE_NEW_D_STR(d);
+            d->max_str = MAX_MESSAGE_LENGTH;
+            d->mail_to = 0;
+            break;
+          case 'b':
+            qedit_disp_emote_menu(d, QEDIT_EMOTE_MENU__INFO_EMOTES);
+            break;
+          default:
+            qedit_disp_menu(d);
+            break;
+        }
+        break;
+      case 'd':
+      case 'D':
+        send_to_char("Enter hour for Johnson to start giving jobs: ", CH);
+        d->edit_mode = QEDIT_SHOUR;
+        break;
+      case 'e':
+      case 'E':
+        send_to_char("Enter the string that will be given when the Johnson comes to work:\r\n", CH);
+        d->edit_mode = QEDIT_SSTRING;
+        break;
+      case 'f':
+      case 'F':
+        send_to_char("Enter the string that will be given when the Johnson leaves work:\r\n", CH);
+        d->edit_mode = QEDIT_ESTRING;
+        break;
+      case 'g':
+      case 'G':
+        send_to_char("Enter the string that will be given if quest is already complete:\r\n", CH);
+        d->edit_mode = QEDIT_DONE;
+        break;
+      case 'h':
+      case 'H':
+        if (!access_level(CH, LVL_VICEPRES)) {
+          qedit_disp_menu(d);
+        } else {
+          send_to_char("Enter vnum of reward (-1 for nothing): ", CH);
+          d->edit_mode = QEDIT_REWARD;
+        }
+        break;
+      default:
         qedit_disp_menu(d);
-      else {
-        send_to_char("Enter vnum of reward (-1 for nothing): ", CH);
-        d->edit_mode = QEDIT_REWARD;
+        break;
       }
-      break;
-    default:
-      qedit_disp_menu(d);
-      break;
-    }
     break;
   case QEDIT_JOHNSON:
     number = atoi(arg);
@@ -2414,6 +2654,43 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
       break;
     }
     break;
+  case QEDIT_EMOTE_MENU:
+    switch (*arg) {
+      case 'a':
+        // add new at end
+        send_to_char("Write your new emote: ", CH);
+        d->edit_mode = QEDIT_EMOTE__INSERT_EMOTE_BEFORE;
+        d->edit_number2 = -1;
+        DELETE_D_STR_IF_EXTANT(d);
+        INITIALIZE_NEW_D_STR(d);
+        d->max_str = MAX_MESSAGE_LENGTH;
+        d->mail_to = 0;
+        break;
+      case 'd':
+        // delete existing
+        send_to_char("Enter emote number to delete: ", CH);
+        d->edit_mode = QEDIT_EMOTE__AWAIT_NUMBER_FOR_DELETION;
+        break;
+      case 'e':
+        // edit existing
+        send_to_char("Enter emote number to edit: ", CH);
+        d->edit_mode = QEDIT_EMOTE__AWAIT_NUMBER_FOR_EDIT;
+        break;
+      case 'i':
+        // insert new
+        send_to_char("Enter emote number to insert BEFORE: ", CH);
+        d->edit_mode = QEDIT_EMOTE__AWAIT_NUMBER_FOR_INSERT_BEFORE;
+        break;
+      case 'q':
+      case 'Q':
+        qedit_disp_menu(d);
+        break;
+      default:
+        CLS(CH);
+        qedit_disp_emote_menu(d, d->edit_number3);
+        break;
+    }
+    break;
   case QEDIT_O_MENU:
     switch (*arg) {
     case '1':
@@ -2443,6 +2720,84 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
       CLS(CH);
       qedit_disp_obj_menu(d);
       break;
+    }
+    break;
+  case QEDIT_EMOTE__INSERT_EMOTE_BEFORE:
+    // We should never get here. This is handled in modify.cpp.
+    break;
+  case QEDIT_EMOTE__AWAIT_NUMBER_FOR_EDIT:
+  case QEDIT_EMOTE__AWAIT_NUMBER_FOR_DELETION:
+  case QEDIT_EMOTE__AWAIT_NUMBER_FOR_INSERT_BEFORE:
+    {
+      emote_vector_t *emote_vector;
+      switch (d->edit_number3) {
+        case QEDIT_EMOTE_MENU__INFO_EMOTES:
+          emote_vector = QUEST->info_emotes;
+          break;
+        case QEDIT_EMOTE_MENU__QUIT_EMOTES:
+          emote_vector = QUEST->quit_emotes;
+          break;
+        case QEDIT_EMOTE_MENU__FINISH_EMOTES:
+          emote_vector = QUEST->finish_emotes;
+          break;
+        case QEDIT_EMOTE_MENU__INTRO_EMOTES:
+          emote_vector = QUEST->intro_emotes;
+          break;
+        case QEDIT_EMOTE_MENU__DECLINE_EMOTES:
+          emote_vector = QUEST->decline_emotes;
+          break;
+        default:
+          mudlog("SYSERR: Unknown emote menu mode in qedit, extend switch!", CH, LOG_SYSLOG, TRUE);
+          return;
+      }
+
+      number = atoi(arg);
+      if (number == 0) {
+        CLS(CH);
+        qedit_disp_emote_menu(d, d->edit_number3);
+      }
+      else if (number < 1 || number > (int) emote_vector->size()) {
+        send_to_char(CH, "Invalid number. Enter emote between 1-%d, or 0 to abort: ", emote_vector->size());
+      } else {
+        d->edit_number2 = (number -= 1);
+        switch (d->edit_mode) {
+          case QEDIT_EMOTE__AWAIT_NUMBER_FOR_EDIT:
+            // Essentially, delete the existing and write a new one.
+            for (auto it = emote_vector->begin(); it != emote_vector->end(); it++) {
+              if ((number)-- == 0) {
+                send_to_char(CH, "DEBUG: Erasing emote %s\r\n", *it);
+                DELETE_ENTRY_FROM_VECTOR_PTR(it, emote_vector);
+                break;
+              }
+            }
+            send_to_char("Write your revised emote: ", CH);
+            d->edit_mode = QEDIT_EMOTE__INSERT_EMOTE_BEFORE;
+            DELETE_D_STR_IF_EXTANT(d);
+            INITIALIZE_NEW_D_STR(d);
+            d->max_str = MAX_MESSAGE_LENGTH;
+            d->mail_to = 0;
+            break;
+          case QEDIT_EMOTE__AWAIT_NUMBER_FOR_INSERT_BEFORE:
+            send_to_char("Write your new emote: ", CH);
+            d->edit_mode = QEDIT_EMOTE__INSERT_EMOTE_BEFORE;
+            DELETE_D_STR_IF_EXTANT(d);
+            INITIALIZE_NEW_D_STR(d);
+            d->max_str = MAX_MESSAGE_LENGTH;
+            d->mail_to = 0;
+            break;
+          case QEDIT_EMOTE__AWAIT_NUMBER_FOR_DELETION:
+            for (auto it = emote_vector->begin(); it != emote_vector->end(); it++) {
+              if ((number)-- == 0) {
+                send_to_char(CH, "DEBUG: Erasing emote %s\r\n", *it);
+                DELETE_ENTRY_FROM_VECTOR_PTR(it, emote_vector);
+                break;
+              }
+            }
+            d->edit_number2 = 0;
+            qedit_disp_emote_menu(d, d->edit_number3);
+            break;
+        }
+      }
     }
     break;
   case QEDIT_O_AWAIT_NUMBER:

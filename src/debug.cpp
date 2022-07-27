@@ -114,9 +114,18 @@ ACMD(do_debug) {
     return;
   }
 
+  if (is_abbrev(arg1, "replace_word")) {
+    char input[21], output[10], replacement[10];
+    strlcpy(replacement, "1234", sizeof(replacement));
+    strlcpy(input, "12345678901234567890", sizeof(input));
+    replace_word(input, output, sizeof(output), replacement, "xxxxxx");
+    send_to_char(ch, "Replacement of %s in %s yielded %s\r\n", replacement, input, output);
+    return;
+  }
+
   if (!str_cmp(arg1, "unfuckdrinks") && access_level(ch, LVL_PRESIDENT) && !drinks_are_unfucked) {
     extern void write_objs_to_disk(vnum_t zonenum);
-    
+
     drinks_are_unfucked = TRUE;
     char buf[500];
 

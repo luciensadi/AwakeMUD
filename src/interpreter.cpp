@@ -1995,6 +1995,52 @@ int reserved_word(char *argument)
   return (search_block(argument, reserved, TRUE) >= 0);
 }
 
+void replace_word(const char *input, char *output, size_t output_size, const char *replace_from, const char *replace_to) {
+  char *output_anchor = output;
+
+  // Loop over input.
+  while (*(input) && (output - output_anchor < (long) (output_size - 1))) {
+    // Skim until we see the first instance of a replace_from character.
+    while (*(input) && *(input) != *(replace_from) && (output - output_anchor < (long) (output_size - 1)))
+      *(output++) = *(input++);
+
+    // Break if over length
+    if (!*(input) || output - output_anchor >= (long) (output_size - 1))
+      break;
+
+    // Found a first-character match. We'll want to read until we find the end of it.
+    const char *read_ptr = input;
+    const char *from_ptr = replace_from;
+
+    // Read until we no longer match.
+    while (*(read_ptr) == *(from_ptr)) {
+      read_ptr++;
+      from_ptr++;
+    }
+
+    // We hit the end of from_ptr? Perfect, write in the replacement.
+    if (!*(from_ptr)) {
+      const char *to_ptr = replace_to;
+      while (*(to_ptr) && (output - output_anchor < (long) (output_size - 1)))
+        *(output++) = *(to_ptr++);
+
+      // Break if over length
+      if (output - output_anchor >= (long) (output_size - 1))
+        break;
+
+      // Clear the replacement word from the input.
+      from_ptr = replace_from;
+      while (*(input++) == *(from_ptr++));
+      input--;
+    }
+    // Otherwise, we didn't have a complete match. Carry on.
+    else {
+      *(output++) = *(input++);
+    }
+  }
+  // Null-terminate output.
+  *output = '\0';
+}
 
 /*
  * copy the first non-fill-word, space-delimited argument of 'argument'

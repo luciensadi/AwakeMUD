@@ -37,7 +37,10 @@
 
 void show_string(struct descriptor_data *d, char *input);
 void qedit_disp_menu(struct descriptor_data *d);
+void qedit_disp_emote_menu(struct descriptor_data *d, int mode);
 void format_tabs(struct descriptor_data *d);
+
+extern void insert_or_append_emote_at_position(struct descriptor_data *d, char *string);
 
 /* ************************************************************************
 *  modification of new'ed strings                                      *
@@ -159,10 +162,11 @@ void string_add(struct descriptor_data *d, char *str)
 
   /* determine if this is the terminal string, and truncate if so */
   /* changed to only accept '@' at the beginning of line - J. Elson 1/17/94 */
+  /* changed further to only accept it if the character after it is not alphabetical - LS 2022 */
 
   delete_doubledollar(str);
 
-  if ((terminator = (*str == '@')))
+  if ((terminator = (*str == '@' && !isalpha(*(str + 1)))))
     *str = '\0';
   else if (*str == '$')
   {
@@ -347,9 +351,21 @@ void string_add(struct descriptor_data *d, char *str)
         redit_disp_exit_menu(d);
         break;
       }
-    } else if (STATE(d) == CON_QEDIT && d->edit_mode == QEDIT_INFO) {
-      REPLACE_STRING(d->edit_quest->info);
-      qedit_disp_menu(d);
+    } else if (STATE(d) == CON_QEDIT) {
+      switch (d->edit_mode) {
+        case QEDIT_INFO:
+          REPLACE_STRING(d->edit_quest->info);
+          qedit_disp_menu(d);
+          break;
+        case QEDIT_EMOTE__INSERT_EMOTE_BEFORE:
+          if ((d->str)) {
+            format_string(d, DONT_FORMAT_INDENT);
+            insert_or_append_emote_at_position(d, *d->str);
+            DELETE_D_STR_IF_EXTANT(d);
+          }
+          qedit_disp_emote_menu(d, d->edit_number3);
+          break;
+      }
     } else if (STATE(d) == CON_BCUSTOMIZE && d->edit_mode == CEDIT_DESC) {
       REPLACE_STRING(d->edit_mob->player.background);
       cedit_disp_menu(d, 0);
