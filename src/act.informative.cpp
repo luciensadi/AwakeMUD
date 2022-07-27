@@ -3069,8 +3069,8 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       }
       break;
     case ITEM_PART:
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a%s rating-^C%d^n ^c%s^n designed for MPCP ^c%d^n decks. It will cost %d nuyen in parts and %d nuyen in chips to build.",
-               !GET_PART_DESIGN_COMPLETION(j) ? " not-yet-designed" : AN(parts[GET_PART_TYPE(j)].name),
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is %s rating-^C%d^n ^c%s^n designed for MPCP ^c%d^n decks. It will cost %d nuyen in parts and %d nuyen in chips to build.",
+               !GET_PART_DESIGN_COMPLETION(j) ? "a not-yet-designed" : AN(parts[GET_PART_TYPE(j)].name),
                GET_PART_RATING(j),
                parts[GET_PART_TYPE(j)].name,
                GET_PART_TARGET_MPCP(j),
