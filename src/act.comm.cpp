@@ -1936,7 +1936,7 @@ void send_message_history_to_descriptor(struct descriptor_data *d, int channel, 
 
     snprintf(buf, sizeof(buf), "  %s", currnode->data);
     int size = strlen(buf);
-    write_to_output(ProtocolOutput(d, buf, &size), d);
+    write_to_output(ProtocolOutput(d, buf, &size, DONT_APPEND_GA), d);
   }
 }
 

@@ -1455,7 +1455,7 @@ int make_prompt(struct descriptor_data * d)
       }
       temp[i] = '\0';
       int size = strlen(temp);
-      const char *final_str = ProtocolOutput(d, temp, &size);
+      const char *final_str = ProtocolOutput(d, temp, &size, DO_APPEND_GA);
       data = final_str;
     }
   }
@@ -1539,7 +1539,7 @@ void write_to_output(const char *unmodified_txt, struct descriptor_data *t)
   #endif
 
   // Process text per KaVir's protocol snippet.
-  const char *txt = ProtocolOutput(t, unmodified_txt, &size);
+  const char *txt = ProtocolOutput(t, unmodified_txt, &size, DONT_APPEND_GA);
   if (t->pProtocol->WriteOOB > 0) {
     #ifdef PROTO_DEBUG
     log_vfprintf("Decrementing WriteOOB (%d to %d).", t->pProtocol->WriteOOB, --t->pProtocol->WriteOOB);
@@ -1794,7 +1794,7 @@ int new_descriptor(int s)
   ProtocolNegotiate(newd);
 
   int size = strlen(GREETINGS);
-  SEND_TO_Q(ProtocolOutput(newd, GREETINGS, &size), newd);
+  SEND_TO_Q(ProtocolOutput(newd, GREETINGS, &size, DO_APPEND_GA), newd);
   return 0;
 }
 

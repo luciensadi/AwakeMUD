@@ -529,7 +529,7 @@ void ProtocolInput( descriptor_t *apDescriptor, char *apData, int aSize, char *a
    strlcat( apOut, CmdBuf, apOutSize );
 }
 
-const char *ProtocolOutput( descriptor_t *apDescriptor, const char *apData, int *apLength )
+const char *ProtocolOutput( descriptor_t *apDescriptor, const char *apData, int *apLength, bool appendGA )
 {
    static char Result[MAX_OUTPUT_BUFFER+1];
    const char Tab[] = "\t";
@@ -1075,6 +1075,12 @@ const char *ProtocolOutput( descriptor_t *apDescriptor, const char *apData, int 
 
    /* Terminate the string */
    Result[i] = '\0';
+
+   /* Append GA to prompts */
+   if (appendGA && i + 2 < MAX_OUTPUT_BUFFER) {
+     Result[++i] = (char) IAC;
+     Result[++i] = (char) TELOPT_GA;
+   }
 
    /* Store the length */
    if ( apLength )
@@ -2766,7 +2772,7 @@ static void SendMSSP( descriptor_t *apDescriptor )
       /* Generic */
       { "CRAWL DELAY",        "-1", NULL },
 
-      { "HOSTNAME",           "mudtest.mooo.com", NULL },
+      { "HOSTNAME",           "awakemud.com", NULL },
       { "PORT",               "4000", NULL },
       { "CODEBASE",           *awakemud_version, NULL },
       { "CONTACT",            "luciensadi@gmail.com", NULL },
@@ -2784,7 +2790,7 @@ static void SendMSSP( descriptor_t *apDescriptor )
       { "GAMEPLAY",           "Player versus Environment", NULL },
       { "STATUS",             "Open Beta", NULL },
       { "GAMESYSTEM",         "Shadowrun 3rd Edition", NULL },
-      { "INTERMUD",           "Gossip", NULL },
+//      { "INTERMUD",           "Gossip", NULL },
       { "SUBGENRE",           "Cyberpunk", NULL },
 
       /* World */

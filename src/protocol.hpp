@@ -79,6 +79,7 @@ typedef struct descriptor_data descriptor_t;
 #define TELOPT_MSP                     90
 #define TELOPT_MXP                     91
 #define TELOPT_ATCP                    200
+#define TELOPT_GA                      249
 
 #define MSDP_VAR                       1
 #define MSDP_VAL                       2
@@ -371,7 +372,9 @@ void ProtocolInput( descriptor_t *apDescriptor, char *apData, int aSize, char *a
  * Note that the MXP tags will automatically be removed if the user doesn't
  * support MXP, but it's very important you remember to close the tags.
  */
-const char *ProtocolOutput( descriptor_t *apDescriptor, const char *apData, int *apLength );
+const char *ProtocolOutput( descriptor_t *apDescriptor, const char *apData, int *apLength, bool appendGA );
+#define DO_APPEND_GA   1
+#define DONT_APPEND_GA 0
 
 /******************************************************************************
  Copyover save/load functions.
