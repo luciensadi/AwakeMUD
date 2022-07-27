@@ -183,15 +183,15 @@ void helpedit_parse_main_menu(struct descriptor_data *d, const char *arg) {
       if (HELPFILE->title && HELPFILE->original_title && strcmp(HELPFILE->title, HELPFILE->original_title) != 0) {
         // Updated existing and changed name.
         snprintf(buf, sizeof(buf), "%s wrote new helpfile '%s' (renamed from '%s').", GET_CHAR_NAME(CH), HELPFILE->title, HELPFILE->original_title);
-        mudlog(buf, CH, LOG_SYSLOG, TRUE);
+        mudlog(buf, CH, LOG_WIZLOG, TRUE);
       } else if (HELPFILE->original_title && !HELPFILE->title) {
         // Updated existing.
         snprintf(buf, sizeof(buf), "%s wrote new helpfile '%s'.", GET_CHAR_NAME(CH), HELPFILE->original_title);
-        mudlog(buf, CH, LOG_SYSLOG, TRUE);
+        mudlog(buf, CH, LOG_WIZLOG, TRUE);
       } else {
         // Created new.
         snprintf(buf, sizeof(buf), "%s wrote new helpfile '%s'.", GET_CHAR_NAME(CH), HELPFILE->title ? HELPFILE->title : HELPFILE->original_title);
-        mudlog(buf, CH, LOG_SYSLOG, TRUE);
+        mudlog(buf, CH, LOG_WIZLOG, TRUE);
       }
 
       if (HELPFILE->original_title) {
