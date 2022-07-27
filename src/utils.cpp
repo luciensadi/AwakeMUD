@@ -3209,7 +3209,7 @@ struct obj_data *obj_is_or_contains_obj_with_vnum(struct obj_data *obj, vnum_t v
 
   if (obj->contains) {
     for (struct obj_data *child = obj->contains; child; child = child->next_content) {
-      if (GET_OBJ_VNUM(child) == OBJ_MAGE_LETTER) {
+      if (GET_OBJ_VNUM(child) == vnum) {
         return child;
       }
     }
