@@ -720,13 +720,15 @@ int new_quest(struct char_data *mob, struct char_data *ch)
     if (quest_table[i].johnson == GET_MOB_VNUM(mob))
       num++;
 
-  if (num < 1)
-  {
-    if (mob_index[mob->nr].func == johnson)
+  if (num < 1) {
+    if (mob_index[mob->nr].func == johnson) {
       mob_index[mob->nr].func = mob_index[mob->nr].sfunc;
-    mob_index[mob->nr].sfunc = NULL;
+      mob_index[mob->nr].sfunc = NULL;
+    } else if (mob_index[mob->nr].sfunc == johnson) {
+      mob_index[mob->nr].sfunc = NULL;
+    }
     snprintf(buf, sizeof(buf), "Stripping Johnson status from %s (%ld) due to mob not having any quests to assign.",
-            GET_NAME(mob), GET_MOB_VNUM(mob));
+             GET_NAME(mob), GET_MOB_VNUM(mob));
     mudlog(buf, NULL, LOG_SYSLOG, true);
     return -1;
   }
@@ -735,7 +737,7 @@ int new_quest(struct char_data *mob, struct char_data *ch)
   // done or max_rep is below character rep. We include those with min_rep
   // higher than character rep because we want johnsons to hint to available
   // runs at higher character rep.
-  for (i = 0;i < top_of_questt; i++) {
+  for (i = 0; i < top_of_questt; i++) {
     if (quest_table[i].johnson == GET_MOB_VNUM(mob)) {
       if (!allow_disconnected && vnum_from_non_connected_zone(quest_table[i].vnum)) {
         if (access_level(ch, LVL_BUILDER)) {
@@ -763,19 +765,25 @@ int new_quest(struct char_data *mob, struct char_data *ch)
           send_to_char(ch, "[Skipping quest %ld: It exists in your LQUEST list. Use a diagnostic scanner and ^WCLEANSE^n yourself.]\r\n", quest_table[i].vnum);
         }
         continue;
-      } else {
-        temp_entry.index = i;
-        temp_entry.rep = quest_table[i].min_rep;
-        qlist.push_back(temp_entry);
       }
+
+      temp_entry.index = i;
+      temp_entry.rep = quest_table[i].min_rep;
+      qlist.push_back(temp_entry);
     }
   }
   // Sort vector by reputation and return a quest if vector is not empty.
   if (!qlist.empty()) {
+    if (access_level(ch, LVL_BUILDER)) {
+      send_to_char("[Found at least one valid quest. Sorting by rep and pulling the lowest one...]\r\n", ch);
+    }
     sort(qlist.begin(), qlist.end(), compareRep);
     return qlist[0].index;
   }
 
+  if (access_level(ch, LVL_BUILDER)) {
+    send_to_char("[No viable quests found, oddly enough.]\r\n", ch);
+  }
   return 0;
 }
 
