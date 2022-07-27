@@ -735,34 +735,39 @@ int new_quest(struct char_data *mob, struct char_data *ch)
   // done or max_rep is below character rep. We include those with min_rep
   // higher than character rep because we want johnsons to hint to available
   // runs at higher character rep.
-  for (i = 0;i < top_of_questt;i++) {
-    if (quest_table[i].johnson == GET_MOB_VNUM(mob)
-      && (allow_disconnected || !vnum_from_non_connected_zone(quest_table[i].vnum)))
-    {
-        if (GET_REP(ch) > quest_table[i].max_rep) {
-          if (access_level(ch, LVL_BUILDER)) {
-            send_to_char(ch, "[Skipping quest %ld: You exceed rep cap of %d.]\r\n", quest_table[i].vnum, quest_table[i].max_rep);
-          }
-          continue;
+  for (i = 0;i < top_of_questt; i++) {
+    if (quest_table[i].johnson == GET_MOB_VNUM(mob)) {
+      if (!allow_disconnected && vnum_from_non_connected_zone(quest_table[i].vnum)) {
+        if (access_level(ch, LVL_BUILDER)) {
+          send_to_char(ch, "[Skipping quest %ld: vnum from non-connected zone.]\r\n", quest_table[i].vnum);
         }
+        continue;
+      }
 
-        bool found = FALSE;
-        for (int q = QUEST_TIMER - 1; q >= 0; q--) {
-          if (GET_LQUEST(ch, q) == quest_table[i].vnum) {
-            found = TRUE;
-            break;
-          }
+      if (GET_REP(ch) > quest_table[i].max_rep) {
+        if (access_level(ch, LVL_BUILDER)) {
+          send_to_char(ch, "[Skipping quest %ld: You exceed rep cap of %d.]\r\n", quest_table[i].vnum, quest_table[i].max_rep);
         }
-        if (found) {
-          if (access_level(ch, LVL_BUILDER)) {
-            send_to_char(ch, "[Skipping quest %ld: It exists in your LQUEST list. Use a diagnostic scanner and ^WCLEANSE^n yourself.]\r\n", quest_table[i].vnum);
-          }
-          continue;
-        } else {
-          temp_entry.index = i;
-          temp_entry.rep = quest_table[i].min_rep;
-          qlist.push_back(temp_entry);
+        continue;
+      }
+
+      bool found = FALSE;
+      for (int q = QUEST_TIMER - 1; q >= 0; q--) {
+        if (GET_LQUEST(ch, q) == quest_table[i].vnum) {
+          found = TRUE;
+          break;
         }
+      }
+      if (found) {
+        if (access_level(ch, LVL_BUILDER)) {
+          send_to_char(ch, "[Skipping quest %ld: It exists in your LQUEST list. Use a diagnostic scanner and ^WCLEANSE^n yourself.]\r\n", quest_table[i].vnum);
+        }
+        continue;
+      } else {
+        temp_entry.index = i;
+        temp_entry.rep = quest_table[i].min_rep;
+        qlist.push_back(temp_entry);
+      }
     }
   }
   // Sort vector by reputation and return a quest if vector is not empty.
@@ -774,7 +779,7 @@ int new_quest(struct char_data *mob, struct char_data *ch)
   return 0;
 }
 
-void display_emotes_for_quest(struct char_data *johnson, int num, emote_vector_t *vec, struct char_data *target) {
+void display_emotes_for_quest(struct char_data *johnson, emote_vector_t *vec, struct char_data *target) {
   char emote[MAX_STRING_LENGTH];
   int pos = GET_SPARE1(johnson);
 
@@ -795,7 +800,7 @@ void handle_info(struct char_data *johnson, int num, struct char_data *target)
 {
   // If there's an emote set available, print that.
   if (quest_table[num].info_emotes && !quest_table[num].info_emotes->empty()) {
-    display_emotes_for_quest(johnson, num, quest_table[num].info_emotes, target);
+    display_emotes_for_quest(johnson, quest_table[num].info_emotes, target);
     return;
   }
   log_vfprintf("debug: handle_info says q_t[n].info_emotes is %s and %s", quest_table[num].info_emotes ? "set" : "NULL", quest_table[num].info_emotes && !quest_table[num].info_emotes->empty() ? "populated" : "EMPTY");
@@ -1163,8 +1168,12 @@ SPECIAL(johnson)
 
       // Assign the quest.
       GET_SPARE1(johnson) = 0;
-      if (quest_table[new_q].intro)
+      if (quest_table[new_q].intro_emotes && !quest_table[new_q].intro_emotes->empty()) {
+        display_emotes_for_quest(johnson, quest_table[new_q].intro_emotes, ch);
+      }
+      else if (quest_table[new_q].intro) {
         do_say(johnson, quest_table[new_q].intro, 0, 0);
+      }
       else {
         snprintf(buf, sizeof(buf), "WARNING: Null string in quest %ld!", quest_table[new_q].vnum);
         mudlog(buf, ch, LOG_SYSLOG, TRUE);
