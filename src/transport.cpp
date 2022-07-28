@@ -648,7 +648,10 @@ ACMD(do_hail)
       dest_data_list = seattle_taxi_destinations;
     }
   }
-  else {
+  else if (room_is_a_taxicab(ch->in_room->number)) {
+    send_to_char("Your cab driver sighs. \"Had too much to drink, chummer? Pick a destination off the sign.\"\r\n", ch);
+    return;
+  } else {
     // Cabs can always be caught from the freeway. Realistic? Nah, but keeps people from being stranded.
     if (!ROOM_FLAGGED(ch->in_room, ROOM_FREEWAY)
         && (ch->in_room->sector_type != SPIRIT_CITY
