@@ -1142,7 +1142,7 @@ void get_from_container(struct char_data * ch, struct obj_data * cont,
 int perform_get_from_room(struct char_data * ch, struct obj_data * obj, bool download)
 {
   if (GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY) {
-    switch (GET_OBJ_VAL(obj, 0)) {
+    switch (GET_DECK_ACCESSORY_TYPE(obj)) {
       case TYPE_COMPUTER:
         for (struct char_data *vict = ch->in_veh ? ch->in_veh->people : ch->in_room->people; vict; vict = ch->in_veh ? vict->next_in_veh : vict->next_in_room)
           if (vict->char_specials.programming && vict->char_specials.programming->in_obj == obj) {
@@ -1157,6 +1157,32 @@ int perform_get_from_room(struct char_data * ch, struct obj_data * obj, bool dow
         if (GET_OBJ_VAL(obj, 9)) {
           send_to_char(ch, "%s is in the middle of encoding a chip, leave it alone.\r\n", capitalize(GET_OBJ_NAME(obj)));
           return FALSE;
+        }
+        break;
+    }
+  }
+  else if (GET_OBJ_TYPE(obj) == ITEM_MAGIC_TOOL) {
+    switch (GET_MAGIC_TOOL_TYPE(obj)) {
+      case TYPE_LIBRARY_SPELL:
+        for (struct char_data *vict = ch->in_veh ? ch->in_veh->people : ch->in_room->people; vict; vict = ch->in_veh ? vict->next_in_veh : vict->next_in_room) {
+          if (AFF_FLAGGED(vict, AFF_SPELLDESIGN)) {
+            if (vict == ch)
+              send_to_char(ch, "You are using %s to design your spell.\r\n", GET_OBJ_NAME(obj));
+            else
+              act("$N seems to be using $p.", FALSE, ch, obj, vict, TO_CHAR);
+            return FALSE;
+          }
+        }
+        break;
+      case TYPE_LIBRARY_CONJURE:
+        for (struct char_data *vict = ch->in_veh ? ch->in_veh->people : ch->in_room->people; vict; vict = ch->in_veh ? vict->next_in_veh : vict->next_in_room) {
+          if (AFF_FLAGGED(vict, AFF_CONJURE)) {
+            if (vict == ch)
+              send_to_char(ch, "You are using %s to conjure.\r\n", GET_OBJ_NAME(obj));
+            else
+              act("$N seems to be using $p.", FALSE, ch, obj, vict, TO_CHAR);
+            return FALSE;
+          }
         }
         break;
     }
