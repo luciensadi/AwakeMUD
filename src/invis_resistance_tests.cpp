@@ -148,7 +148,7 @@ bool can_see_through_invis(struct char_data *ch, struct char_data *vict) {
     for (struct obj_data *cyber = ch->cyberware; cyber; cyber = cyber->next_content) {
       if (GET_CYBERWARE_TYPE(cyber) == CYB_TACTICALCOMPUTER) {
         dice += GET_CYBERWARE_RATING(cyber);
-        buf_mod(resistance_test_rbuf, sizeof(resistance_test_rbuf), ", TacComp", GET_CYBERWARE_RATING(cyber));
+        buf_mod(resistance_test_rbuf, sizeof(resistance_test_rbuf), "TacComp", GET_CYBERWARE_RATING(cyber));
         break;
       }
     }
@@ -162,12 +162,18 @@ bool can_see_through_invis(struct char_data *ch, struct char_data *vict) {
   if (GET_TRADITION(ch) == TRAD_ADEPT) {
     if (GET_POWER(ch, ADEPT_TRUE_SIGHT)) {
       dice += GET_POWER(ch, ADEPT_TRUE_SIGHT);
-      buf_mod(resistance_test_rbuf, sizeof(resistance_test_rbuf), "TrueSight", ADEPT_TRUE_SIGHT);
+      buf_mod(resistance_test_rbuf, sizeof(resistance_test_rbuf), "TrueSight", GET_POWER(ch, ADEPT_TRUE_SIGHT));
     }
     if (GET_POWER(ch, ADEPT_MAGIC_RESISTANCE)) {
       dice += GET_POWER(ch, ADEPT_MAGIC_RESISTANCE);
-      buf_mod(resistance_test_rbuf, sizeof(resistance_test_rbuf), "MagicResist", ADEPT_MAGIC_RESISTANCE);
+      buf_mod(resistance_test_rbuf, sizeof(resistance_test_rbuf), "MagicResist", GET_POWER(ch, ADEPT_MAGIC_RESISTANCE));
     }
+  }
+
+  int magic_pool_dice = GET_SDEFENSE(ch) + GET_REFLECT(ch);
+  if (magic_pool_dice > 0) {
+    dice += magic_pool_dice;
+    buf_mod(resistance_test_rbuf, sizeof(resistance_test_rbuf), "SpellDefense/Reflect", magic_pool_dice);
   }
 
   // Figure out how many successes they need to have to beat this spell.

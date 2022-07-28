@@ -1159,6 +1159,14 @@ enum {
 #define TYPE_DRUGS            416
 #define TYPE_POISON           417
 
+/* magic attack types */
+#define TYPE_MANABOLT_OR_STUNBOLT       500
+#define TYPE_POWERBOLT                  501
+#define TYPE_MANIPULATION_SPELL         502
+
+/* used in void hit, for counter attacks */
+#define TYPE_MELEE 1234
+
 #define WEAP_EDGED          0
 #define WEAP_CLUB           1
 #define WEAP_POLEARM        2
@@ -1190,14 +1198,6 @@ enum {
 
 /* all those attack types can be used plus these for damage types to
 * objects */
-
-/* magic attack types */
-#define TYPE_COMBAT_SPELL               500
-#define TYPE_MANIPULATION_SPELL         501
-
-
-/* used in void hit, for counter attacks */
-#define TYPE_MELEE 1234
 
 /* item types: used by obj_data.obj_flags.type_flag */
 

@@ -1038,26 +1038,33 @@ void spell_bonus(struct char_data *ch, int spell, int &skill, int &target)
   bool used_expendable = FALSE;
   if (GET_FOCI(ch) > 0)
   {
-    for (int i = 0; i < NUM_WEARS; i++)
-      if (GET_EQ(ch, i) && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_FOCUS && focus_is_usable_by_ch(GET_EQ(ch, i), ch))
-        switch (GET_FOCUS_TYPE(GET_EQ(ch, i))) {
+    for (int wearloc = 0; wearloc < NUM_WEARS; wearloc++) {
+      struct obj_data *eq = GET_EQ(ch, wearloc);
+      if (eq
+          && GET_OBJ_TYPE(eq) == ITEM_FOCUS
+          && focus_is_usable_by_ch(eq, ch)
+          && GET_FOCUS_ACTIVATED(eq))
+      {
+        switch (GET_FOCUS_TYPE(eq)) {
           case FOCI_EXPENDABLE:
-            if (!used_expendable && spells[spell].category == GET_FOCUS_BONDED_SPIRIT_OR_SPELL(GET_EQ(ch, i))) {
-              skill += GET_FOCUS_FORCE(GET_EQ(ch, i));
-              send_to_char(ch, "Its energies expended, %s crumbles away.\r\n", decapitalize_a_an(GET_OBJ_NAME(GET_EQ(ch, i))));
-              extract_obj(GET_EQ(ch, i));
+            if (!used_expendable && spells[spell].category == GET_FOCUS_BONDED_SPIRIT_OR_SPELL(eq)) {
+              skill += GET_FOCUS_FORCE(eq);
+              send_to_char(ch, "Its energies expended, %s crumbles away.\r\n", decapitalize_a_an(GET_OBJ_NAME(eq)));
+              extract_obj(eq);
               used_expendable = TRUE;
             }
             break;
           case FOCI_SPEC_SPELL:
-            if (spell == GET_FOCUS_BONDED_SPIRIT_OR_SPELL(GET_EQ(ch, i)))
-              max_specific_spell = MAX(max_specific_spell, GET_FOCUS_FORCE(GET_EQ(ch, i)));
+            if (spell == GET_FOCUS_BONDED_SPIRIT_OR_SPELL(eq))
+              max_specific_spell = MAX(max_specific_spell, GET_FOCUS_FORCE(eq));
             break;
           case FOCI_SPELL_CAT:
-            if (spells[spell].category == GET_FOCUS_BONDED_SPIRIT_OR_SPELL(GET_EQ(ch, i)))
-              max_spell_category = MAX(max_spell_category, GET_FOCUS_FORCE(GET_EQ(ch, i)));
+            if (spells[spell].category == GET_FOCUS_BONDED_SPIRIT_OR_SPELL(eq))
+              max_spell_category = MAX(max_spell_category, GET_FOCUS_FORCE(eq));
             break;
         }
+      }
+    }
   }
   skill += max_spell_category + max_specific_spell;
 }
@@ -1158,43 +1165,81 @@ int reflect_spell(struct char_data *ch, struct char_data *vict, int spell, int f
 int resist_spell(struct char_data *ch, int spell, int force, int sub)
 {
   int skill = 0;
-  if (sub)
-    skill = GET_ATT(ch, sub);
-  else if (spell == SPELL_CHAOS)
-    skill = GET_INT(ch);
-  else if (spells[spell].physical)
-    skill = GET_BOD(ch);
-  else
-    skill = GET_WIL(ch);
-  if (GET_TRADITION(ch) == TRAD_SHAMANIC) {
-    if (GET_TOTEM(ch) == TOTEM_HORSE && spells[spell].category == GET_TOTEMSPIRIT(ch))
-      skill--;
-    else if (GET_TOTEM(ch) == TOTEM_LEOPARD && spells[spell].category == ILLUSION)
-      skill--;
-  }
-  if (GET_TRADITION(ch) == TRAD_ADEPT)
-  {
-    if (GET_POWER(ch, ADEPT_MAGIC_RESISTANCE))
-      skill += GET_POWER(ch, ADEPT_MAGIC_RESISTANCE);
-    if (GET_POWER(ch, ADEPT_SPELL_SHROUD) && spells[spell].category == DETECTION)
-      skill += GET_POWER(ch, ADEPT_SPELL_SHROUD);
-    if (GET_POWER(ch, ADEPT_TRUE_SIGHT) && spells[spell].category == ILLUSION)
-      skill += GET_POWER(ch, ADEPT_TRUE_SIGHT);
 
-    if (GET_FOCI(ch) > 0) {
-      for (int i = 0; i < NUM_WEARS; i++) {
-        if (GET_EQ(ch, i)
-            && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_FOCUS
-            && GET_FOCUS_TYPE(GET_EQ(ch, i)) == FOCI_SPELL_DEFENSE
-            && focus_is_usable_by_ch(GET_EQ(ch, i), ch))
-        {
-          skill += GET_FOCUS_FORCE(GET_EQ(ch, i));
+  char rbuf[2000];
+
+  // Select behavior based on spell type and subtype.
+  if (sub) {
+    skill = GET_ATT(ch, sub);
+  } else if (spell == SPELL_CHAOS) {
+    skill = GET_INT(ch);
+  } else if (spells[spell].physical) {
+    skill = GET_BOD(ch);
+  } else {
+    skill = GET_WIL(ch);
+  }
+  snprintf(rbuf, sizeof(rbuf), "[Spell resist test for %s: %d skill to start.\r\n", GET_CHAR_NAME(ch), skill);
+
+  // Apply totem modifiers for the resistance test.
+  if (GET_TRADITION(ch) == TRAD_SHAMANIC) {
+    if (GET_TOTEM(ch) == TOTEM_HORSE && spells[spell].category == GET_TOTEMSPIRIT(ch)) {
+      skill--;
+      snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), " - Horse shaman vs disapproved spell: -1 skill.\r\n");
+    } else if (GET_TOTEM(ch) == TOTEM_LEOPARD && spells[spell].category == ILLUSION) {
+      skill--;
+      snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), " - Leopard shaman vs illusion: -1 skill.\r\n");
+    }
+  }
+
+  // Apply adept skill modifiers.
+  if (GET_TRADITION(ch) == TRAD_ADEPT) {
+    if (GET_POWER(ch, ADEPT_MAGIC_RESISTANCE)) {
+      skill += GET_POWER(ch, ADEPT_MAGIC_RESISTANCE);
+      snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), " - Adept magic resist: +%d skill.\r\n", GET_POWER(ch, ADEPT_MAGIC_RESISTANCE));
+    }
+
+    if (GET_POWER(ch, ADEPT_SPELL_SHROUD) && spells[spell].category == DETECTION) {
+      skill += GET_POWER(ch, ADEPT_SPELL_SHROUD);
+      snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), " - Adept spell shroud: +%d skill.\r\n", GET_POWER(ch, ADEPT_SPELL_SHROUD));
+    }
+
+    if (GET_POWER(ch, ADEPT_TRUE_SIGHT) && spells[spell].category == ILLUSION) {
+      skill += GET_POWER(ch, ADEPT_TRUE_SIGHT);
+      snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), " - Adept true sight: +%d skill.\r\n", GET_POWER(ch, ADEPT_TRUE_SIGHT));
+    }
+  }
+
+  if (GET_FOCI(ch) > 0) {
+    for (int wearslot = 0; wearslot < NUM_WEARS; wearslot++) {
+      struct obj_data *eq = GET_EQ(ch, wearslot);
+      if (eq
+          && GET_OBJ_TYPE(eq) == ITEM_FOCUS
+          && GET_FOCUS_TYPE(eq) == FOCI_SPELL_DEFENSE)
+      {
+        if (focus_is_usable_by_ch(eq, ch) && GET_FOCUS_ACTIVATED(eq)) {
+          skill += GET_FOCUS_FORCE(eq);
+          snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), " - Using spell defense focus %s (%ld) for +%d skill.\r\n",
+                   GET_OBJ_NAME(eq),
+                   GET_OBJ_VNUM(eq),
+                   GET_FOCUS_FORCE(eq));
+        } else {
+          snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), " - Skipping spell defense focus %s (%ld): %s, %s\r\n",
+                   GET_OBJ_NAME(eq),
+                   GET_OBJ_VNUM(eq),
+                   !GET_FOCUS_ACTIVATED(eq) ? "^rnot activated^n" : "activated",
+                   !focus_is_usable_by_ch(eq, ch) ? "^runusable^n" : "usable"
+                  );
         }
       }
     }
   }
+
   skill += GET_SDEFENSE(ch);
-  return success_test(skill, force);
+  int successes = success_test(skill, force);
+  snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "After adding spell defense pool: Total of %d dice vs TN %d: %d hit%s.]",
+           skill, force, successes, successes == 1 ? "" : "s");
+  act(rbuf, FALSE, ch, 0, 0, TO_ROLLS);
+  return successes;
 }
 
 void cast_combat_spell(struct char_data *ch, int spell, int force, char *arg)
@@ -1246,6 +1291,8 @@ void cast_combat_spell(struct char_data *ch, int spell, int force, char *arg)
   int skill = GET_SKILL(ch, SKILL_SORCERY) + MIN(GET_SKILL(ch, SKILL_SORCERY), GET_CASTING(ch));
   int success = 0;
   spell_bonus(ch, spell, skill, target_modifiers);
+  snprintf(rbuf, sizeof(rbuf), "after spell_bonus, skill = %d, target_modifiers = %d", skill, target_modifiers);
+  act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
 
   if (skill == -1)
     return;
@@ -1267,11 +1314,17 @@ void cast_combat_spell(struct char_data *ch, int spell, int force, char *arg)
     SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST;
 
     success = success_test(skill, GET_WIL(vict) + target_modifiers);
+    snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
+    act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
     if (success > 0 && GET_REFLECT(vict) && (reflected = reflect_spell(ch, vict, spell, force, 0, GET_WIL(ch), success))) {
       vict = ch;
       ch = temp;
     }
+    snprintf(rbuf, sizeof(rbuf), "reflected: %s", reflected ? "yes" : "no");
+    act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
     success -= resist_spell(vict, spell, force, 0);
+    snprintf(rbuf, sizeof(rbuf), "after spell resist: %d", success);
+    act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
     if (success > 0) {
       int dam = convert_damage(stage(success, basedamage));
       if (GET_MENTAL(vict) - (dam * 100) <= 0) {
@@ -1287,14 +1340,15 @@ void cast_combat_spell(struct char_data *ch, int spell, int force, char *arg)
         act("$n seems to flinch slightly as blood trickles from $s nose.", TRUE, vict, 0, 0, TO_ROOM);
         send_to_char("Slight pain fills your mind from an unknown source.\r\n", vict);
       }
-      if (damage(ch, vict, dam, TYPE_COMBAT_SPELL, PHYSICAL) && (reflected || cast_by_npc)) {
+
+      if (IS_NPC(vict) && !IS_NPC(ch))
+        GET_LASTHIT(vict) = GET_IDNUM(ch);
+
+      if (damage(ch, vict, dam, TYPE_MANABOLT_OR_STUNBOLT, PHYSICAL) && (reflected || cast_by_npc)) {
         // Vict was killed by their own reflected spell. Stop processing-- we don't want to calculate drain on a nulled struct.
         // Alternatively, we as an NPC just killed someone: bail out in case we're their quest target. Janky fix.
         return;
       }
-
-      if (IS_NPC(vict) && !IS_NPC(ch))
-        GET_LASTHIT(vict) = GET_IDNUM(ch);
     } else
       send_to_char(FAILED_CAST, reflected ? vict : ch);
     spell_drain(reflected ? vict : ch, spell, force, basedamage);
@@ -1327,12 +1381,12 @@ void cast_combat_spell(struct char_data *ch, int spell, int force, char *arg)
         act("$n recoils slightly as though hit by an invisible force.", TRUE, vict, 0, 0, TO_ROOM);
         send_to_char("You mind goes slightly hazy as though you had just been punched.\r\n", vict);
       }
-      if (damage(ch, vict, dam, TYPE_COMBAT_SPELL, MENTAL) && (reflected || cast_by_npc)) {
+      if (IS_NPC(vict) && !IS_NPC(ch))
+        GET_LASTHIT(vict) = GET_IDNUM(ch);
+      if (damage(ch, vict, dam, TYPE_MANABOLT_OR_STUNBOLT, MENTAL) && (reflected || cast_by_npc)) {
         // Vict was killed by their own reflected spell. Stop processing-- we don't want to calculate drain on a nulled struct.
         return;
       }
-      if (IS_NPC(vict) && !IS_NPC(ch))
-        GET_LASTHIT(vict) = GET_IDNUM(ch);
     } else
       send_to_char(FAILED_CAST, reflected ? vict : ch);
     spell_drain(reflected ? vict : ch, spell, force, basedamage);
@@ -1365,12 +1419,12 @@ void cast_combat_spell(struct char_data *ch, int spell, int force, char *arg)
         act("$n grimaces, obviously afflicted with mild pain.", TRUE, vict, 0, 0, TO_ROOM);
         send_to_char("You feel a dull throb of pain flow through your body.\r\n", vict);
       }
-      if (damage(ch, vict, dam, TYPE_COMBAT_SPELL, MENTAL) && (reflected || cast_by_npc)) {
+      if (IS_NPC(vict) && !IS_NPC(ch))
+        GET_LASTHIT(vict) = GET_IDNUM(ch);
+      if (damage(ch, vict, dam, TYPE_POWERBOLT, PHYSICAL) && (reflected || cast_by_npc)) {
         // Vict was killed by their own reflected spell. Stop processing-- we don't want to calculate drain on a nulled struct.
         return;
       }
-      if (IS_NPC(vict) && !IS_NPC(ch))
-        GET_LASTHIT(vict) = GET_IDNUM(ch);
     } else
       send_to_char(FAILED_CAST, reflected ? vict : ch);
     spell_drain(reflected ? vict : ch, spell, force, basedamage);
@@ -2196,6 +2250,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
         if (IS_NPC(ch) || IS_NPC(vict)) {
           damage_equip(ch, vict, force, TYPE_FIRE);
         }
+
         if (!damage(ch, vict, dam, TYPE_MANIPULATION_SPELL, PHYSICAL)) {
           if (number(0, 8) <= basedamage + 1) {
             act("^RThe flames continue to burn around $m!^N", TRUE, vict, 0, 0, TO_ROOM);
@@ -2209,7 +2264,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
           if (IS_NPC(vict) && !IS_NPC(ch))
             GET_LASTHIT(vict) = GET_IDNUM(ch);
         }
-        else if (cast_by_npc) {
+        else if (reflected || cast_by_npc) {
           // Janky crash avoidance: If we killed our target and we're an NPC, bail out immediately.
           return;
         }
@@ -2273,12 +2328,13 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       if (IS_NPC(ch) || IS_NPC(vict)) {
         damage_equip(ch, vict, force, TYPE_ACID);
       }
+
       AFF_FLAGS(vict).SetBit(AFF_ACID);
       if (!damage(ch, vict, dam, TYPE_MANIPULATION_SPELL, PHYSICAL)) {
         if (IS_NPC(vict) && !IS_NPC(ch))
           GET_LASTHIT(vict) = GET_IDNUM(ch);
       }
-      else if (cast_by_npc) {
+      else if (reflected || cast_by_npc) {
         // Janky crash avoidance: If we killed our target and we're an NPC, bail out immediately.
         return;
       }
@@ -2338,20 +2394,20 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
         act("The lightning hits $n, but seems to be easily absorbed.", FALSE, vict, 0, ch, TO_ROOM);
         send_to_char("Your body absorbs the lightning without harm.\r\n", vict);
       }
+
+      // Lightning cascades to all electronic/computerized items worn (50% chance of damage for each).
       for (int i = 0; i < NUM_WEARS; i++) {
-        if (number(0, 1)
-            && GET_EQ(vict, i)
-            && (GET_OBJ_MATERIAL(GET_EQ(vict, i)) == 10
-                || GET_OBJ_MATERIAL(GET_EQ(vict, i)) == 11))
-        {
-          damage_obj(vict, GET_EQ(vict, i), force, DAMOBJ_LIGHTNING);
+        struct obj_data *eq = GET_EQ(vict, i);
+        if (number(0, 1) && eq && (GET_OBJ_MATERIAL(eq) == MATERIAL_ELECTRONICS || GET_OBJ_MATERIAL(eq) == MATERIAL_COMPUTERS)) {
+          damage_obj(vict, eq, force, DAMOBJ_LIGHTNING);
         }
       }
+
       if (!damage(ch, vict, dam, TYPE_MANIPULATION_SPELL, PHYSICAL)) {
         if (IS_NPC(vict) && !IS_NPC(ch))
           GET_LASTHIT(vict) = GET_IDNUM(ch);
       }
-      else if (cast_by_npc) {
+      else if (reflected || cast_by_npc) {
         // Janky crash avoidance: If we killed our target and we're an NPC, bail out immediately.
         return;
       }
@@ -2411,14 +2467,19 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
         act("The laser beam strikes $n, but seems to be easily absorbed.", FALSE, vict, 0, ch, TO_ROOM);
         send_to_char("Your body absorbs the laser beam without injury.\r\n", vict);
       }
-      for (int i = 0; i < NUM_WEARS; i++)
-        if (!number(0, 50))
-          damage_obj(vict, GET_EQ(vict, i), force, DAMOBJ_PIERCE);
+
+      // Lasers can pierce multiple worn objects. 1/51 chance per item.
+      for (int i = 0; i < NUM_WEARS; i++) {
+        struct obj_data *eq = GET_EQ(vict, i);
+        if (eq && !number(0, 50))
+          damage_obj(vict, eq, force, DAMOBJ_PIERCE);
+      }
+
       if (!damage(ch, vict, dam, TYPE_MANIPULATION_SPELL, PHYSICAL)) {
         if (IS_NPC(vict) && !IS_NPC(ch))
           GET_LASTHIT(vict) = GET_IDNUM(ch);
       }
-      else if (cast_by_npc) {
+      else if (reflected || cast_by_npc) {
         // Janky crash avoidance: If we killed our target and we're an NPC, bail out immediately.
         return;
       }
@@ -2480,7 +2541,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
         if (IS_NPC(vict) && !IS_NPC(ch))
           GET_LASTHIT(vict) = GET_IDNUM(ch);
       }
-      else if (cast_by_npc) {
+      else if (reflected || cast_by_npc) {
         // Janky crash avoidance: If we killed our target and we're an NPC, bail out immediately.
         return;
       }
@@ -2542,7 +2603,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
         if (IS_NPC(vict) && !IS_NPC(ch))
           GET_LASTHIT(vict) = GET_IDNUM(ch);
       }
-      else if (cast_by_npc) {
+      else if (reflected || cast_by_npc) {
         // Janky crash avoidance: If we killed our target and we're an NPC, bail out immediately.
         return;
       }
@@ -2604,7 +2665,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
         if (IS_NPC(vict) && !IS_NPC(ch))
           GET_LASTHIT(vict) = GET_IDNUM(ch);
       }
-      else if (cast_by_npc) {
+      else if (reflected || cast_by_npc) {
         // Janky crash avoidance: If we killed our target and we're an NPC, bail out immediately.
         return;
       }
@@ -3023,26 +3084,18 @@ ACMD(do_contest)
     return;
   }
   int chskill = GET_SKILL(ch, SKILL_CONJURING), caskill = GET_SKILL(ch, SKILL_CONJURING) + GET_CHA(ch);
-  for (int i = 0; i < NUM_WEARS; i++)
-    if (GET_EQ(ch, i)
-        && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_FOCUS
-        && GET_FOCUS_TYPE(GET_EQ(ch, i)) == FOCI_SPIRIT
-        && focus_is_usable_by_ch(GET_EQ(ch, i), ch)
-        && GET_OBJ_VAL(GET_EQ(ch, i), 3) == GET_SPARE1(mob)
-        && GET_OBJ_VAL(GET_EQ(ch, i), 4)) {
-      chskill += GET_OBJ_VAL(GET_EQ(ch, i), 1);
-      break;
-    }
-  for (int i = 0; i < NUM_WEARS; i++)
+
+  for (int i = 0; i < NUM_WEARS; i++) {
     if (GET_EQ(caster, i)
         && GET_OBJ_TYPE(GET_EQ(caster, i)) == ITEM_FOCUS
         && GET_FOCUS_TYPE(GET_EQ(caster, i)) == FOCI_SPIRIT
         && focus_is_usable_by_ch(GET_EQ(caster, i), caster)
-        && GET_OBJ_VAL(GET_EQ(caster, i), 3) == GET_SPARE1(mob)
-        && GET_OBJ_VAL(GET_EQ(caster, i), 4)) {
+        && GET_FOCUS_BONDED_SPIRIT_OR_SPELL(GET_EQ(caster, i)) == GET_SPARE1(mob)
+        && GET_FOCUS_ACTIVATED(GET_EQ(caster, i))) {
       caskill += GET_OBJ_VAL(GET_EQ(caster, i), 1);
       break;
     }
+  }
 
   int tn = GET_LEVEL(mob) + modify_target(ch);
   int chsuc = success_test(chskill, tn);
@@ -4695,6 +4748,7 @@ POWER(spirit_breath)
   else {
     act("$n turns towards $N as a cloud of noxious fumes forms around $S.", TRUE, spirit, 0, tch, TO_NOTVICT);
     act("$n lets forth a stream of noxious fumes in your direction.", FALSE, spirit, 0, tch, TO_VICT);
+    spiritdata->services--;
     int dam = convert_damage(stage(-success_test(MAX(GET_WIL(tch), GET_BOD(tch)), GET_SPARE2(spirit)), SERIOUS));
     if (dam > 0) {
       act("$n chokes and coughs.", TRUE, tch, 0, 0, TO_ROOM);
@@ -4704,7 +4758,6 @@ POWER(spirit_breath)
       act("$n waves $s hand in front of $s face, dispersing the fumes.", TRUE, tch, 0, 0, TO_ROOM);
       send_to_char("You easily resist the noxious fumes.\r\n", tch);
     }
-    spiritdata->services--;
   }
 }
 
@@ -5941,4 +5994,38 @@ bool focus_is_usable_by_ch(struct obj_data *focus, struct char_data *ch) {
     return FALSE;
 
   return TRUE;
+}
+
+const char *warn_if_spell_under_potential(struct sustain_data *sust) {
+  static char warnbuf[100];
+  int required_successes;
+
+  strlcpy(warnbuf, "", sizeof(warnbuf));
+
+  switch (sust->spell) {
+    case SPELL_IMP_INVIS:
+    case SPELL_INVIS:
+    case SPELL_STEALTH:
+    case SPELL_CONFUSION:
+    case SPELL_CHAOS:
+    case SPELL_HEAL:
+    case SPELL_TREAT:
+    case SPELL_INCREA:
+      required_successes = sust->force;
+      break;
+    case SPELL_COMBATSENSE:
+    case SPELL_DECATTR:
+    case SPELL_DECCYATTR:
+      required_successes = 2 * sust->force;
+      break;
+    default:
+      // This spell isn't affected by under-proofing, so we return no warning.
+      return warnbuf;
+  }
+
+  if (sust->success < required_successes) {
+    snprintf(warnbuf, sizeof(warnbuf), " ^y(under-strength: successes < %d)^n", required_successes);
+  }
+
+  return warnbuf;
 }
