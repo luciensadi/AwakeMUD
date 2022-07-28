@@ -472,31 +472,36 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     }
 
     // Calculate the power of the attack.
-    att->ranged->power = GET_WEAPON_POWER(att->weapon) + att->ranged->burst_count;
+    att->ranged->power_before_armor = GET_WEAPON_POWER(att->weapon) + att->ranged->burst_count;
     att->ranged->damage_level = GET_WEAPON_DAMAGE_CODE(att->weapon) + (int)(att->ranged->burst_count / 3);
 
     // Calculate effects of armor on the power of the attack.
     if (att->ranged->magazine) {
       if (GET_WEAPON_ATTACK_TYPE(att->weapon) == WEAP_TASER) {
         // SR3 p124.
-        att->ranged->power -= (int)(GET_IMPACT(def->ch) / 2);
+        att->ranged->power = att->ranged->power_before_armor - (int)(GET_IMPACT(def->ch) / 2);
       } else {
         switch (GET_MAGAZINE_AMMO_TYPE(att->ranged->magazine)) {
           case AMMO_APDS:
-            att->ranged->power -= (int)(GET_BALLISTIC(def->ch) / 2);
+            if (IS_SPIRIT(def->ch) || IS_ANY_ELEMENTAL(def->ch)) {
+              // APDS, AV, and other armor-piercing munitions are treated as normal VS spirits/elementals.
+              att->ranged->power = att->ranged->power_before_armor - GET_BALLISTIC(def->ch);
+            } else {
+              att->ranged->power = att->ranged->power_before_armor - (int)(GET_BALLISTIC(def->ch) / 2);
+            }
             break;
           case AMMO_EX:
-            att->ranged->power++;
+            att->ranged->power_before_armor++;
             // fall through
           case AMMO_EXPLOSIVE:
-            att->ranged->power++;
-            att->ranged->power -= GET_BALLISTIC(def->ch);
+            att->ranged->power_before_armor++;
+            att->ranged->power = att->ranged->power_before_armor - GET_BALLISTIC(def->ch);
             break;
           case AMMO_FLECHETTE:
             if (!GET_IMPACT(def->ch) && !GET_BALLISTIC(def->ch))
               att->ranged->damage_level++;
             else {
-              att->ranged->power -= MAX(GET_BALLISTIC(def->ch), GET_IMPACT(def->ch) * 2);
+              att->ranged->power = att->ranged->power_before_armor - MAX(GET_BALLISTIC(def->ch), GET_IMPACT(def->ch) * 2);
             }
             break;
           case AMMO_HARMLESS:
@@ -504,17 +509,17 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
             // fall through
           case AMMO_GEL:
             // Errata: Add the following after the third line: "Impact armor, not Ballistic, applies."
-            att->ranged->power -= GET_IMPACT(def->ch) + 2;
+            att->ranged->power = att->ranged->power_before_armor - GET_IMPACT(def->ch) + 2;
             att->ranged->is_gel = TRUE;
             break;
           default:
-            att->ranged->power -= GET_BALLISTIC(def->ch);
+            att->ranged->power = att->ranged->power_before_armor - GET_BALLISTIC(def->ch);
         }
       }
     }
     // Weapon fired without a magazine (probably by an NPC)-- we assume its ammo type is normal.
     else {
-      att->ranged->power -= GET_BALLISTIC(def->ch);
+      att->ranged->power = att->ranged->power_before_armor - GET_BALLISTIC(def->ch);
     }
 
     // Increment character's shots_fired. This is used for internal tracking of eligibility for a skill quest.
@@ -530,15 +535,15 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     // There's no checking for weapon foci here since there are no ranged weapon foci.
     if (IS_SPIRIT(def->ch) || IS_ANY_ELEMENTAL(def->ch)) {
       int minimum_power_to_damage_opponent = (GET_LEVEL(def->ch) * 2) + 1;
-      if (att->ranged->power < minimum_power_to_damage_opponent) {
+      if (att->ranged->power_before_armor < minimum_power_to_damage_opponent) {
         bool target_died = 0;
 
         combat_message(att->ch, def->ch, att->weapon, 0, att->ranged->burst_count, att->ranged->modifiers[COMBAT_MOD_VISIBILITY]);
-        send_to_char(att->ch, "^o(OOC: %s is immune to normal weapons! You need at least ^O%d^o weapon power to damage %s, and you only have %d.)^n\r\n",
+        send_to_char(att->ch, "^o(OOC: %s is immune to normal weapons! You need at least ^O%d^o pre-armor weapon power to damage %s, and you only have %d.)^n\r\n",
                      decapitalize_a_an(GET_CHAR_NAME(def->ch)),
                      minimum_power_to_damage_opponent,
                      HMHR(def->ch),
-                     att->ranged->power
+                     att->ranged->power_before_armor
                     );
         target_died = damage(att->ch, def->ch, 0, att->ranged->dam_type, att->ranged->is_physical);
 
@@ -551,8 +556,10 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
           GET_MOBALERTTIME(def->ch) = 30;
         }
         return target_died;
-      } else
+      } else {
+        // SR3 p264: Grant armor equal to twice its essence rating.
         att->ranged->power -= GET_LEVEL(def->ch) * 2;
+      }
     }
 
     // Core p113.

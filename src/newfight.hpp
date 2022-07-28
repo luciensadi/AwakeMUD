@@ -90,7 +90,7 @@ struct cyberware_data {
 struct ranged_combat_data {
   int skill;
   int power;
-  int unaugmented_power;
+  int power_before_armor;
   int dam_type;
   int damage_level;
   int unaugmented_damage_level;
@@ -111,7 +111,7 @@ struct ranged_combat_data {
   struct obj_data *gyro;
 
   ranged_combat_data(struct char_data *ch, struct obj_data *weapon, bool ranged_combat_mode) :
-    skill(0), power(0), unaugmented_power(0), dam_type(0), damage_level(0), unaugmented_damage_level(0),
+    skill(0), power(0), power_before_armor(0), dam_type(0), damage_level(0), unaugmented_damage_level(0),
     is_physical(FALSE), tn(4), dice(0), successes(0), is_gel(FALSE), burst_count(0), recoil_comp(0),
     using_mounted_gun(FALSE), magazine(NULL), gyro(NULL)
   {
