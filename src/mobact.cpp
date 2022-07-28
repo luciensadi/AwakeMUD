@@ -271,6 +271,15 @@ bool vict_is_valid_target(struct char_data *ch, struct char_data *vict) {
         }
       }
     }
+
+    // Am I a quest mob and they're not part of it?
+    if (GET_MOB_QUEST_CHAR_ID(ch) && GET_IDNUM(vict) != GET_MOB_QUEST_CHAR_ID(ch)) {
+#ifdef MOBACT_DEBUG
+      snprintf(buf3, sizeof(buf3), "vict_is_valid_target: PC %s is not on the quest that spawned me, skipping.", GET_CHAR_NAME(vict));
+      do_say(ch, buf3, 0, 0);
+#endif
+      return FALSE;
+    }
   }
 
   // They're a valid target, but I don't feel like fighting.
@@ -610,7 +619,7 @@ bool mobact_process_in_vehicle_guard(struct char_data *ch) {
         continue;
 
       // Check for our usual conditions.
-      if (vehicle_is_valid_mob_target(tveh, GET_MOBALERT(ch) == MALERT_ALARM)) {
+      if (vehicle_is_valid_mob_target(tveh, GET_MOBALERT(ch) == MALERT_ALARM) && (!GET_MOB_QUEST_CHAR_ID(ch) || !tveh->owner || tveh->owner == GET_MOB_QUEST_CHAR_ID(ch))) {
         // Found a target, stop processing vehicles.
 #ifdef MOBACT_DEBUG
         snprintf(buf3, sizeof(buf), "m_p_i_v_g: Target found, attacking veh %s.", GET_VEH_NAME(tveh));
@@ -722,7 +731,7 @@ bool mobact_process_in_vehicle_aggro(struct char_data *ch) {
   }
 
   // Attack vehicles (but not for aggr-to-race)
-  if (MOB_FLAGGED(ch, MOB_AGGRESSIVE) || GET_MOBALERT(ch) == MALERT_ALARM) {
+  if (MOB_FLAGGED(ch, MOB_AGGRESSIVE) || (GET_MOBALERT(ch) == MALERT_ALARM && !MOB_FLAGGED(ch, MOB_WIMPY))) {
     bool area_has_pc_occupants = FALSE;
     for (struct char_data *check_ch = in_room->people; !area_has_pc_occupants && check_ch; check_ch = check_ch->next_in_room)
       area_has_pc_occupants = !IS_NPC(check_ch);
@@ -736,7 +745,7 @@ bool mobact_process_in_vehicle_aggro(struct char_data *ch) {
       if (tveh->type != VEH_DRONE && !area_has_pc_occupants && !tveh->people && !tveh->rigger)
         continue;
 
-      if (vehicle_is_valid_mob_target(tveh, TRUE)) {
+      if (vehicle_is_valid_mob_target(tveh, TRUE) && (!GET_MOB_QUEST_CHAR_ID(ch) || !tveh->owner || tveh->owner == GET_MOB_QUEST_CHAR_ID(ch))) {
         // Found a valid target, stop looking.
 #ifdef MOBACT_DEBUG
         snprintf(buf3, sizeof(buf), "m_p_i_v_a: Target found, attacking veh %s.", GET_VEH_NAME(tveh));
@@ -849,7 +858,7 @@ bool mobact_process_aggro(struct char_data *ch, struct room_data *room) {
           continue;
 
         // Aggros don't care about road/garage status, so they act as if always alarmed.
-        if (vehicle_is_valid_mob_target(veh, TRUE)) {
+        if (vehicle_is_valid_mob_target(veh, TRUE) && (!GET_MOB_QUEST_CHAR_ID(ch) || !veh->owner || veh->owner == GET_MOB_QUEST_CHAR_ID(ch))) {
           stop_fighting(ch);
 
           if (MOB_FLAGGED(ch, MOB_INANIMATE)) {

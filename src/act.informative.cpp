@@ -1066,8 +1066,8 @@ void list_one_char(struct char_data * i, struct char_data * ch)
     *buf = '\0';
 
     // Note quest or nokill protection.
-    if (i->mob_specials.quest_id) {
-      if (i->mob_specials.quest_id == GET_IDNUM(ch)) {
+    if (GET_MOB_QUEST_CHAR_ID(i)) {
+      if (GET_MOB_QUEST_CHAR_ID(i) == GET_IDNUM(ch)) {
         strlcat(buf, "^Y(Quest)^n ", sizeof(buf));
       } else {
         strlcat(buf, "^m(Protected)^n ", sizeof(buf));
@@ -6013,8 +6013,8 @@ ACMD(do_scan)
               char desc_line[200];
               strlcpy(desc_line, "", sizeof(desc_line));
 
-              if (list->mob_specials.quest_id) {
-                if (list->mob_specials.quest_id == GET_IDNUM(ch)) {
+              if (GET_MOB_QUEST_CHAR_ID(list)) {
+                if (GET_MOB_QUEST_CHAR_ID(list) == GET_IDNUM(ch)) {
                   strlcat(desc_line, "(quest) ", sizeof(desc_line));
                 } else {
                   strlcat(desc_line, "(protected) ", sizeof(desc_line));
@@ -6108,9 +6108,9 @@ ACMD(do_scan)
               char desc_line[200];
               strlcpy(desc_line, "", sizeof(desc_line));
 
-              if (list->mob_specials.quest_id == GET_IDNUM(ch)) {
+              if (GET_MOB_QUEST_CHAR_ID(list) == GET_IDNUM(ch)) {
                 strlcat(desc_line, "(quest) ", sizeof(desc_line));
-              } else if (list->mob_specials.quest_id != 0) {
+              } else if (GET_MOB_QUEST_CHAR_ID(list) != 0) {
                 strlcat(desc_line, "(protected) ", sizeof(desc_line));
               }
 
