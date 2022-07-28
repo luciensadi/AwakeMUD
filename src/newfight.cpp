@@ -558,6 +558,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
         return target_died;
       } else {
         // SR3 p264: Grant armor equal to twice its essence rating.
+        // Specifically -= because this has already been set previously.
         att->ranged->power -= GET_LEVEL(def->ch) * 2;
       }
     }
@@ -799,27 +800,25 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     if (att->weapon) {
       // Monowhips deal flat damage.
       if (GET_OBJ_RNUM(att->weapon) >= 0 && att->melee->is_monowhip) {
-        att->melee->power = 10;
+        att->melee->power_before_armor = 10;
         att->melee->damage_level = SERIOUS;
 
         // SR3 p121: Halve impact armor, but double barrier ratings. This approximates that.
-        if (MOB_FLAGGED(def->ch, MOB_INANIMATE))
-          att->melee->power += GET_IMPACT(def->ch) * 2;
-        else
-          att->melee->power -= GET_IMPACT(def->ch) / 2;
+        if (MOB_FLAGGED(def->ch, MOB_INANIMATE)) {
+          att->melee->power = att->melee->power_before_armor - GET_IMPACT(def->ch) * 2;
+        } else {
+          att->melee->power = att->melee->power_before_armor - GET_IMPACT(def->ch) / 2;
+        }
       }
       // Because we swap att and def pointers if defender wins the clash we need to make sure attacker gets proper values
       // if they're using a ranged weapon in clash instead of setting their melee power to the damage code of the ranged
       // weapon as it was happening.
       else if (IS_RANGED(att->weapon)) {
-        att->melee->power = GET_STR(att->ch);
-        att->melee->damage_level = MODERATE;
-        att->melee->power -= GET_IMPACT(def->ch);
+        att->melee->power = att->melee->power_before_armor - GET_IMPACT(def->ch);
       }
       // Non-monowhips behave normally.
       else {
-        att->melee->power = GET_WEAPON_STR_BONUS(att->weapon) + GET_STR(att->ch);
-        att->melee->power -= GET_IMPACT(def->ch);
+        att->melee->power = att->melee->power_before_armor - GET_IMPACT(def->ch);
       }
     }
     // Cyber and unarmed combat.
@@ -829,9 +828,9 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
           && GET_POWER(att->ch, ADEPT_PENETRATINGSTRIKE)
           && !GET_POWER(att->ch, ADEPT_DISTANCE_STRIKE))
       {
-        att->melee->power -= MAX(0, GET_IMPACT(def->ch) - GET_POWER(att->ch, ADEPT_PENETRATINGSTRIKE));
+        att->melee->power = att->melee->power_before_armor - MAX(0, GET_IMPACT(def->ch) - GET_POWER(att->ch, ADEPT_PENETRATINGSTRIKE));
       } else {
-        att->melee->power -= GET_IMPACT(def->ch);
+        att->melee->power = att->melee->power_before_armor - GET_IMPACT(def->ch);
       }
     }
 
@@ -842,14 +841,14 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
         && (!att->weapon || GET_WEAPON_FOCUS_RATING(att->weapon) == 0 || !WEAPON_FOCUS_USABLE_BY(att->weapon, att->ch)))
     {
       int minimum_power_to_damage_opponent = (GET_LEVEL(def->ch) * 2) + 1;
-      if (att->melee->power < minimum_power_to_damage_opponent) {
+      if (att->melee->power_before_armor < minimum_power_to_damage_opponent) {
         bool target_died = 0;
 
         send_to_char(att->ch, "^o(OOC: %s is immune to normal weapons! You need at least ^O%d^o weapon power to damage %s, and you only have %d.)^n\r\n",
                      decapitalize_a_an(GET_CHAR_NAME(def->ch)),
                      minimum_power_to_damage_opponent,
                      HMHR(def->ch),
-                     att->melee->power
+                     att->melee->power_before_armor
                     );
         target_died = damage(att->ch, def->ch, 0, att->melee->dam_type, att->melee->is_physical);
 
@@ -866,6 +865,8 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
         }
         return target_died;
       } else {
+        // SR3 p264: Spirits/elementals get 2*essence armor against normal weapons.
+        // This is specifically a -= because we expect that this power has already been set.
         att->melee->power -= GET_LEVEL(def->ch) * 2;
       }
     }

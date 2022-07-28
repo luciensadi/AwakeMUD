@@ -127,7 +127,7 @@ struct ranged_combat_data {
     if (weapon && ranged_combat_mode) {
       // Extract our various fields from the weapon.
       skill = GET_WEAPON_SKILL(weapon);
-      power = GET_WEAPON_POWER(weapon);
+      power_before_armor = GET_WEAPON_POWER(weapon);
       dam_type = get_weapon_damage_type(weapon);
       damage_level = GET_WEAPON_DAMAGE_CODE(weapon);
       is_physical = IS_DAMTYPE_PHYSICAL(dam_type);
@@ -170,6 +170,7 @@ struct melee_combat_data {
   int skill;
   int skill_bonus;
   int power;
+  int power_before_armor;
   int dam_type;
   int damage_level;
   bool is_physical;
@@ -181,7 +182,7 @@ struct melee_combat_data {
   int modifiers[NUM_COMBAT_MODIFIERS];
 
   melee_combat_data(struct char_data *ch, struct obj_data *weapon, bool ranged_combat_mode, struct cyberware_data *cyber) :
-    skill(0), skill_bonus(0), power(0), dam_type(0), damage_level(0), is_physical(FALSE), tn(4), dice(0), successes(0), is_monowhip(FALSE)
+    skill(0), skill_bonus(0), power(0), power_before_armor(0), dam_type(0), damage_level(0), is_physical(FALSE), tn(4), dice(0), successes(0), is_monowhip(FALSE)
   {
     assert(ch != NULL);
 
@@ -190,7 +191,7 @@ struct melee_combat_data {
 
     // Set up melee combat data. This holds true for all melee combat, but can be overwritten later on.
     skill = SKILL_UNARMED_COMBAT;
-    power = GET_STR(ch);
+    power_before_armor = GET_STR(ch);
     dam_type = TYPE_HIT;
     damage_level = MODERATE;
 
@@ -201,11 +202,11 @@ struct melee_combat_data {
           case SKILL_TASERS:
           case SKILL_SMG:
             // These weapons all grant +1 power per CC p11.
-            power += 1;
+            power_before_armor += 1;
             break;
           default:
             // All others are presumed rifle-size, and get +2 power.
-            power += 2;
+            power_before_armor += 2;
             break;
         }
 
@@ -219,7 +220,7 @@ struct melee_combat_data {
       } else {
         dam_type = get_weapon_damage_type(weapon);
         skill = GET_WEAPON_SKILL(weapon);
-        power = GET_WEAPON_POWER(weapon);
+        power_before_armor += GET_WEAPON_STR_BONUS(weapon);
         damage_level = GET_WEAPON_DAMAGE_CODE(weapon);
 
         // Weapon foci. NPC use them implicitly.
@@ -235,7 +236,7 @@ struct melee_combat_data {
 
       // Select the best cyberweapon and use its stats.
       if (cyber->handblades) {
-        power += 3;
+        power_before_armor += 3;
         damage_level = LIGHT;
         dam_type = TYPE_STAB;
         is_physical = TRUE;
@@ -247,18 +248,18 @@ struct melee_combat_data {
 
         if (cyber->handspurs >= 2) {
           // Dual cyberweapons gives a power bonus per Core p121.
-          power += (int) (GET_STR(ch) / 2);
+          power_before_armor += (int) (GET_STR(ch) / 2);
         }
       }
       else if (cyber->improved_handrazors) {
-        power += 2;
+        power_before_armor += 2;
         damage_level = LIGHT;
         dam_type = TYPE_STAB;
         is_physical = TRUE;
 
         if (cyber->improved_handrazors >= 2) {
           // Dual cyberweapons gives a power bonus per Core p121.
-          power += (int) (GET_STR(ch) / 2);
+          power_before_armor += (int) (GET_STR(ch) / 2);
         }
       }
       else if (cyber->handrazors) {
@@ -268,17 +269,17 @@ struct melee_combat_data {
 
         if (cyber->handrazors >= 2) {
           // Dual cyberweapons gives a power bonus per Core p121.
-          power += (int) (GET_STR(ch) / 2);
+          power_before_armor += (int) (GET_STR(ch) / 2);
         }
       }
       else if (cyber->fins || cyber->climbingclaws) {
-        power -= 1;
+        power_before_armor -= 1;
         damage_level = LIGHT;
         dam_type = TYPE_SLASH;
         is_physical = TRUE;
       }
       else if (cyber->footanchors) {
-        power -= 1;
+        power_before_armor -= 1;
         damage_level = LIGHT;
         dam_type = TYPE_STAB;
         is_physical = TRUE;
@@ -291,19 +292,19 @@ struct melee_combat_data {
       // TODO: Implement option to use bone lacing to cause physical damage at half power.
       // No cyberweapons active-- check for bone lacing, then proceed with adept/standard slapping.
       if (cyber->bone_lacing_power) {
-        power += cyber->bone_lacing_power;
+        power_before_armor += cyber->bone_lacing_power;
         damage_level = MODERATE;
         is_physical = FALSE;
       }
 
       // Add +2 to unarmed attack power for having cyberarms, per M&M p32.
       if (cyber->cyberarms) {
-        power += 2;
+        power_before_armor += 2;
       }
 
       // Add +2 power to unarmed/melee, per MitS p147. -Vile
       if (AFF_FLAGGED(ch, AFF_FLAME_AURA) || MOB_FLAGGED(ch, MOB_FLAMEAURA)) {
-        power += 2;
+        power_before_armor += 2;
       }
 
       // Check for Adept powers.
