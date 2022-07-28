@@ -1184,8 +1184,7 @@ bool mobact_process_self_buff(struct char_data *ch) {
 
     // If not invisible already, apply an invisibility spell based on my magic rating and sorcery skill.
     if (!imp_invis && !std_invis && !IS_ASTRAL(ch)) {
-      // Changed cast ratings to 1-- if PCs are going to cheese with rating 1, NPCs should too. -- LS
-      if (MIN(GET_SKILL(ch, SKILL_SORCERY), GET_MAG(ch)/100) <= 5) {
+      if (MIN(GET_SKILL(ch, SKILL_SORCERY), GET_MAG(ch)/100) <= 6) {
         // Lower skill means standard invisibility. Gotta make thermographic vision useful somehow.
         cast_illusion_spell(ch, SPELL_INVIS, number(min_force, max_force), NULL, ch);
       } else {
