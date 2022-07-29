@@ -1736,6 +1736,9 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
     send_to_char("Your mind is blasted by the eldritch horrors of the unknown void you're drifting in.\r\n", ch);
     snprintf(buf, sizeof(buf), "SYSERR: %s tried to look at their room but is nowhere!", GET_CHAR_NAME(ch));
     mudlog(buf, ch, LOG_SYSLOG, TRUE);
+
+    // Emergency rescue attempt.
+    char_to_room(ch, &world[0]);
     return;
   }
 
@@ -1849,6 +1852,7 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
       send_to_char("^RThe mana is warping here!^n\r\n", ch);
     }
   }
+
   if (ch->in_room->vision[1]) {
     switch (ch->in_room->vision[1]) {
       case LIGHT_GLARE:
@@ -1934,6 +1938,8 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
     send_to_char("^cAn invisible force is whipping small objects around the area.^n\r\n", ch);
   if (ch->in_room->icesheet[0])
     send_to_char("^CIce covers the floor.^n\r\n", ch);
+  if (ch->in_room->silence[0])
+    send_to_char("^LAn unnatural hush stills the air.^n\r\n", ch);
 
   // Is there an elevator car here?
   if (ROOM_FLAGGED(ch->in_room, ROOM_ELEVATOR_SHAFT)) {
@@ -1960,6 +1966,14 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
     }
 
     // TODO: Add any other relevant funcs with room displays here.
+  }
+
+  // Show a training info string for totalinvis trainers.
+  for (struct char_data *trainer = ch->in_room->people; trainer; trainer = trainer->next_in_room) {
+    if (MOB_HAS_SPEC(trainer, teacher) && MOB_FLAGGED(trainer, MOB_TOTALINVIS)) {
+      send_to_char("^y...You can practice skills here.^n\r\n", ch);
+      break;
+    }
   }
 
   /* now list characters & objects */
