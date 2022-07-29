@@ -1017,13 +1017,16 @@ SPECIAL(johnson)
       // Precondition: You must have gotten the quest from me.
       if (!memory(johnson, ch)) {
         do_say(johnson, "Whoever you got your job from, it wasn't me. What, do we all look alike to you?", 0 , 0);
-        send_to_char("(OOC note: You can hit RECAP to see who gave you your current job.)\r\n", ch);
+        send_to_char("^L(OOC note: You can hit RECAP to see who gave you your current job.)^n\r\n", ch);
         return TRUE;
       }
 
       // Drop the quest.
-      if (quest_table[GET_QUEST(ch)].quit_emote)
-        display_single_emote_for_quest(johnson, quest_table[GET_QUEST(ch)].quit_emote, ch);
+      if (quest_table[GET_QUEST(ch)].quit_emote) {
+        char emote_with_carriage_return[MAX_STRING_LENGTH];
+        snprintf(emote_with_carriage_return, sizeof(emote_with_carriage_return), "\r\n%s\r\n", quest_table[GET_QUEST(ch)].quit_emote);
+        display_single_emote_for_quest(johnson, emote_with_carriage_return, ch);
+      }
       else if (quest_table[GET_QUEST(ch)].quit)
         do_say(johnson, quest_table[GET_QUEST(ch)].quit, 0, 0);
       else {
@@ -1056,7 +1059,7 @@ SPECIAL(johnson)
       // Precondition: You must have gotten the quest from me.
       if (!memory(johnson, ch)) {
         do_say(johnson, "Whoever you got your job from, it wasn't me. What, do we all look alike to you?", 0 , 0);
-        send_to_char("(OOC note: You can hit RECAP to see who gave you your current job.)\r\n", ch);
+        send_to_char("^L(OOC note: You can hit RECAP to see who gave you your current job.)^n\r\n", ch);
         return TRUE;
       }
 
@@ -1079,8 +1082,11 @@ SPECIAL(johnson)
           return TRUE;
         }
 
-        if (quest_table[GET_QUEST(ch)].finish_emote)
-          display_single_emote_for_quest(johnson, quest_table[GET_QUEST(ch)].finish_emote, ch);
+        if (quest_table[GET_QUEST(ch)].finish_emote) {
+          char emote_with_carriage_return[MAX_STRING_LENGTH];
+          snprintf(emote_with_carriage_return, sizeof(emote_with_carriage_return), "\r\n%s\r\n", quest_table[GET_QUEST(ch)].finish_emote);
+          display_single_emote_for_quest(johnson, emote_with_carriage_return, ch);
+        }
         else if (quest_table[GET_QUEST(ch)].finish)
           do_say(johnson, quest_table[GET_QUEST(ch)].finish, 0, 0);
         else {
@@ -1142,7 +1148,7 @@ SPECIAL(johnson)
       // Precondition: You may not have an active quest.
       if (GET_QUEST(ch)) {
         do_say(johnson, "Maybe when you've finished what you're doing.", 0, 0);
-        send_to_char("(OOC note: You're currently on another run. You can hit RECAP to see the details for it.)\r\n", ch);
+        send_to_char("^L(OOC note: You're currently on another run. You can hit RECAP to see the details for it.)^n\r\n", ch);
         return TRUE;
       }
 
@@ -1255,7 +1261,7 @@ SPECIAL(johnson)
         }
 
         do_say(johnson, "Maybe when you've finished what you're doing.", 0, 0);
-        send_to_char("(OOC note: You're currently on another run. You can hit RECAP to see the details for it.)\r\n", ch);
+        send_to_char("^L(OOC note: You're currently on another run. You can hit RECAP to see the details for it.)^n\r\n", ch);
         return TRUE;
       }
 
