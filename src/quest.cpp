@@ -1185,7 +1185,9 @@ SPECIAL(johnson)
       // Assign the quest.
       GET_SPARE1(johnson) = 0;
       if (quest_table[new_q].intro_emote) {
-        display_single_emote_for_quest(johnson, quest_table[new_q].intro_emote, ch);
+        char intro_emote_with_carriage_return[MAX_STRING_LENGTH];
+        snprintf(intro_emote_with_carriage_return, sizeof(intro_emote_with_carriage_return), "\r\n%s\r\n", quest_table[new_q].intro_emote);
+        display_single_emote_for_quest(johnson, intro_emote_with_carriage_return, ch);
       }
       else if (quest_table[new_q].intro) {
         do_say(johnson, quest_table[new_q].intro, 0, 0);
