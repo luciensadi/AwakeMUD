@@ -2248,6 +2248,14 @@ ACMD(do_wizload)
     mob = read_mobile(r_num, REAL);
     char_to_room(mob, get_ch_in_room(ch));
 
+    // Reset questgivers so they talk to you faster.
+    {
+      SPECIAL(johnson);
+      if (CHECK_FUNC_AND_SFUNC_FOR(mob, johnson)) {
+        GET_SPARE1(mob) = -1;
+      }
+    }
+
     act("$n makes a quaint, magical gesture with one hand.", TRUE, ch,
         0, 0, TO_ROOM);
     act("$n has created $N!", TRUE, ch, 0, mob, TO_ROOM);

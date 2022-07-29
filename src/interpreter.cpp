@@ -762,7 +762,7 @@ struct command_info cmd_info[] =
     { "qlist"      , POS_DEAD    , do_qlist    , LVL_FIXER, 0, FALSE },
     { "qedit"      , POS_DEAD    , do_qedit    , LVL_FIXER, 0, FALSE },
 
-    { "reply"      , POS_LYING   , do_reply    , 0, 0, TRUE },
+    { "reply"      , POS_DEAD    , do_reply    , 0, 0, TRUE },
     { "ram"        , POS_SITTING , do_ram      , 0, 0, FALSE },
     { "radio"      , POS_LYING   , do_radio    , 0, 0, FALSE },
     { "rig"        , POS_SITTING , do_rig      , 0, 0, FALSE },

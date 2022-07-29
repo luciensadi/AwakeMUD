@@ -37,7 +37,6 @@
 
 void show_string(struct descriptor_data *d, char *input);
 void qedit_disp_menu(struct descriptor_data *d);
-void qedit_disp_emote_menu(struct descriptor_data *d, int mode);
 void format_tabs(struct descriptor_data *d);
 
 extern void insert_or_append_emote_at_position(struct descriptor_data *d, char *string);

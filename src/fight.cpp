@@ -5264,7 +5264,7 @@ void perform_violence(void)
     }
 
     // You get no action if you're out of init.
-    if (GET_INIT_ROLL(ch) <= 0 && !IS_JACKED_IN(ch)) {
+    if (GET_INIT_ROLL(ch) <= 0 && !IS_JACKED_IN(ch) && PRF_FLAGGED(ch, PRF_SEE_TIPS)) {
       send_to_char("^L(OOC: You're out of initiative! Waiting for combat round reset.)^n\r\n", ch);
       continue;
     }

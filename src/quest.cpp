@@ -802,6 +802,11 @@ void display_emotes_for_quest(struct char_data *johnson, emote_vector_t *vec, st
 
   // Convert and display the emote.
   display_single_emote_for_quest(johnson, vec->at(pos), target);
+
+  // Let them know there's more to come.
+  if (GET_SPARE1(johnson) >= 0 && PRF_FLAGGED(target, PRF_SEE_TIPS)) {
+    send_to_char(target, "^L(%s is still acting...)^n\r\n", GET_CHAR_NAME(johnson));
+  }
 }
 
 void handle_info(struct char_data *johnson, int num, struct char_data *target)
@@ -1074,7 +1079,9 @@ SPECIAL(johnson)
           return TRUE;
         }
 
-        if (quest_table[GET_QUEST(ch)].finish)
+        if (quest_table[GET_QUEST(ch)].finish_emote)
+          display_single_emote_for_quest(johnson, quest_table[GET_QUEST(ch)].finish_emote, ch);
+        else if (quest_table[GET_QUEST(ch)].finish)
           do_say(johnson, quest_table[GET_QUEST(ch)].finish, 0, 0);
         else {
           snprintf(buf, sizeof(buf), "WARNING: Null string in quest %ld!", quest_table[GET_QUEST(ch)].vnum);
@@ -2000,17 +2007,17 @@ void qedit_disp_emote_menu(struct descriptor_data *d, int mode)
 
     send_to_char("Emotes list:\r\n", CH);
     for (auto a: *(vect)) {
-      send_to_char(CH, "%d)  %s\r\n", ++i, a);
+      send_to_char(CH, "%d)  %s\r\n\r\n", ++i, a);
     }
     send_to_char("\r\n", CH);
   }
 
-  send_to_char(" a) Add a new emote to the end of the list\r\n"
+  send_to_char(CH, " a) %s\r\n"
                " d) Delete an existing emote\r\n"
                " e) Edit (replace) an existing emote\r\n"
                " i) Insert a new emote before another\r\n"
                " q) Return to main menu\r\n"
-               "Enter your choice: ", CH);
+               "Enter your choice: ", vect->empty() ? "Add the first emote" : "Append a new emote to the end of the list");
 
   d->edit_number2 = 0;
   d->edit_number3 = mode;
@@ -2019,6 +2026,11 @@ void qedit_disp_emote_menu(struct descriptor_data *d, int mode)
 
 void insert_or_append_emote_at_position(struct descriptor_data *d, const char *string) {
   emote_vector_t *emote_vector;
+
+  log_vfprintf("Entered insert_or_append_emote_at_position with '%s', edit_number2 = %d, edit_number3 = %d.",
+               string,
+               d->edit_number2,
+               d->edit_number3);
 
   switch (d->edit_number3) {
     case QEDIT_EMOTE_MENU__INFO_EMOTES:
@@ -2030,18 +2042,24 @@ void insert_or_append_emote_at_position(struct descriptor_data *d, const char *s
   }
 
   // Append mode.
-  if (d->edit_number2 == -1) {
+  if (d->edit_number2 == -1 || emote_vector->empty()) {
+    log("Pushing back.");
     emote_vector->push_back(str_dup(string));
+    return;
   }
+
   // Replace mode.
-  else {
-    for (auto it = emote_vector->begin(); it != emote_vector->end(); it++) {
-      if ((d->edit_number2)-- == 0) {
-        emote_vector->insert(it, str_dup(string));
-        break;
-      }
+  for (auto it = emote_vector->begin(); it != emote_vector->end(); it++) {
+    if ((d->edit_number2)-- == 0) {
+      log("Inserting.");
+      emote_vector->insert(it, str_dup(string));
+      return;
     }
   }
+
+  // If we got here, we found nothing to replace.
+  log_vfprintf("Pushing back (fallthrough case). edit_number2: %d", d->edit_number2);
+  emote_vector->push_back(str_dup(string));
 }
 
 void qedit_disp_obj_menu(struct descriptor_data *d)
@@ -2682,24 +2700,30 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
   case QEDIT_EMOTE_MENU:
     switch (*arg) {
       case 'a':
+      case 'A':
         // add new at end
         send_to_char("Write your new emote: ", CH);
         d->edit_mode = QEDIT_EMOTE__INSERT_EMOTE_BEFORE;
         d->edit_number2 = -1;
         break;
       case 'd':
+      case 'D':
         // delete existing
-        send_to_char("Enter emote number to delete: ", CH);
+        send_to_char("Enter emote number to delete (0 to abort): ", CH);
         d->edit_mode = QEDIT_EMOTE__AWAIT_NUMBER_FOR_DELETION;
         break;
       case 'e':
+      case 'E':
+      case 'r':
+      case 'R':
         // edit existing
-        send_to_char("Enter emote number to edit: ", CH);
+        send_to_char("Enter emote number to edit (0 to abort): ", CH);
         d->edit_mode = QEDIT_EMOTE__AWAIT_NUMBER_FOR_EDIT;
         break;
       case 'i':
+      case 'I':
         // insert new
-        send_to_char("Enter emote number to insert BEFORE: ", CH);
+        send_to_char("Enter emote number to insert BEFORE (0 to abort): ", CH);
         d->edit_mode = QEDIT_EMOTE__AWAIT_NUMBER_FOR_INSERT_BEFORE;
         break;
       case 'q':
@@ -2770,6 +2794,12 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
       else if (number < 1 || number > (int) emote_vector->size()) {
         send_to_char(CH, "Invalid number. Enter emote between 1-%d, or 0 to abort: ", emote_vector->size());
       } else {
+        if (number == 0) {
+          d->edit_number2 = 0;
+          qedit_disp_emote_menu(d, d->edit_number3);
+          break;
+        }
+
         d->edit_number2 = (number -= 1);
         switch (d->edit_mode) {
           case QEDIT_EMOTE__AWAIT_NUMBER_FOR_EDIT:
