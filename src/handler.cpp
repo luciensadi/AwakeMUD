@@ -903,25 +903,52 @@ void affect_total(struct char_data * ch)
       GET_BODY(ch) += GET_DEFENSE(ch);
       GET_DEFENSE(ch) = 0;
     }
+
+    // NPC spirits set their astral pools here as well.
+    if (IS_SPIRIT(ch) || IS_ANY_ELEMENTAL(ch)) {
+      GET_ASTRAL(ch) = 1.5 * GET_LEVEL(ch);
+    }
   }
 
   // Set up magic pool info correctly.
-  if (ch_is_npc && (IS_SPIRIT(ch) || IS_ANY_ELEMENTAL(ch))) {
-    GET_ASTRAL(ch) = 1.5 * GET_LEVEL(ch);
-  } else if ((ch_is_npc && GET_MAG(ch) > 0) || (GET_TRADITION(ch) == TRAD_SHAMANIC || GET_TRADITION(ch) == TRAD_HERMETIC)) {
+  if (GET_MAG(ch) > 0) {
+    // Astral pools are based off their init grade.
     GET_ASTRAL(ch) += GET_GRADE(ch);
+
+    // Set magic pools from (int + wil + mag) / 3.
     GET_MAGIC(ch) += (GET_INT(ch) + GET_WIL(ch) + (int)(GET_MAG(ch) / 100))/3;
+
     if (ch_is_npc) {
-      if (GET_SKILL(ch, SKILL_SORCERY))
-        GET_DRAIN(ch) = GET_SDEFENSE(ch) = GET_MAGIC(ch) / 3;
-      else
+      // For NPCs, we zero all the components of the magic pool, then re-set them.
+      GET_REFLECT(ch) = GET_CASTING(ch) = GET_DRAIN(ch) = GET_SDEFENSE(ch) = 0;
+
+      // If they plan to cast, they split their dice evenly.
+      if (GET_SKILL(ch, SKILL_SORCERY)) {
+        GET_CASTING(ch) = GET_DRAIN(ch) = GET_SDEFENSE(ch) = GET_MAGIC(ch) / 3;
+      }
+      // Otherwise, they put it all in defense.
+      else {
         GET_SDEFENSE(ch) = GET_MAGIC(ch);
+      }
+
+      // High-grade NPC mages get reflect instead of spell defense.
+      if (MAX(GET_SKILL(ch, SKILL_SORCERY), (int) (GET_MAGIC(ch) / 100)) >= 9) {
+        GET_REFLECT(ch) = GET_SDEFENSE(ch);
+        GET_SDEFENSE(ch) = 0;
+      }
     } else {
-      GET_SDEFENSE(ch) = MIN(GET_MAGIC(ch), GET_SDEFENSE(ch));
-      GET_DRAIN(ch) = MIN(GET_MAGIC(ch), GET_DRAIN(ch));
-      GET_REFLECT(ch) = MIN(GET_MAGIC(ch), GET_REFLECT(ch));
+      // Only Shamans and Hermetics get these pools.
+      if (GET_TRADITION(ch) == TRAD_SHAMANIC || GET_TRADITION(ch) == TRAD_HERMETIC) {
+        GET_SDEFENSE(ch) = MIN(GET_MAGIC(ch), GET_SDEFENSE(ch));
+        GET_DRAIN(ch) = MIN(GET_MAGIC(ch), GET_DRAIN(ch));
+        GET_REFLECT(ch) = MIN(GET_MAGIC(ch), GET_REFLECT(ch));
+
+        // Chuck the remaining dice into the casting pool.
+        GET_CASTING(ch) = MAX(0, GET_MAGIC(ch) - GET_DRAIN(ch) - GET_REFLECT(ch) - GET_SDEFENSE(ch));
+      } else {
+        GET_CASTING(ch) = GET_MAGIC(ch) = GET_SDEFENSE(ch) = GET_DRAIN(ch) = GET_REFLECT(ch) = 0;
+      }
     }
-    GET_CASTING(ch) = MAX(0, GET_MAGIC(ch) - GET_DRAIN(ch) - GET_REFLECT(ch) - GET_SDEFENSE(ch));
   }
 
   if (REAL_SKILL(ch, SKILL_COMPUTER) > 0)
