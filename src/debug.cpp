@@ -137,6 +137,17 @@ ACMD(do_debug) {
       send_to_char(ch, "Replacement of $N in %s yielded %s\r\n", input, output);
     }
 
+    {
+      char input[1000], output[1000];
+      strlcpy(input, "@self salvages a scrap of paper from the detritus and scribbles a quick note. "
+                     "\"Could you take this to Natalia downstairs, please? It's just letting her know "
+                     "what happened here and that I'll handle the repairs and whatnot.\" She hands $N "
+                     "the note with a tiny shrug, adding, \"After all she's done for me, I don't want "
+                     "to put her out any more than I have to.\"", sizeof(input));
+      replace_word(input, output, sizeof(output), "$N", "@Lucien");
+      send_to_char(ch, "Replacement yielded: %s\r\n", output);
+    }
+
     return;
   }
 

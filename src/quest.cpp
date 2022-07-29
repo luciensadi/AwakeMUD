@@ -781,15 +781,15 @@ int new_quest(struct char_data *mob, struct char_data *ch)
 }
 
 void display_single_emote_for_quest(struct char_data *johnson, emote_t emote_to_display, struct char_data *target) {
-  char emote[MAX_STRING_LENGTH];
+  char output[MAX_STRING_LENGTH];
 
   // Convert $N to an @target.
   char target_at_string[100];
   snprintf(target_at_string, sizeof(target_at_string), "@%s", GET_CHAR_NAME(target));
-  replace_word(emote_to_display, emote, sizeof(emote), "$N", target_at_string);
+  replace_word(emote_to_display, output, sizeof(output), "$N", target_at_string);
 
   // Send our emote.
-  do_new_echo(johnson, emote, 0, 0);
+  do_new_echo(johnson, output, 0, 0);
 }
 
 void display_emotes_for_quest(struct char_data *johnson, emote_vector_t *vec, struct char_data *target) {
@@ -2769,8 +2769,12 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
     break;
   case QEDIT_EMOTE__INSERT_EMOTE_BEFORE:
     // We only ever get here when writing an intro emote. Just plop it in and go.
-    insert_or_append_emote_at_position(d, arg);
-    qedit_disp_emote_menu(d, d->edit_number3);
+    {
+      char mutable_arg[MAX_STRING_LENGTH];
+      strlcpy(mutable_arg, arg, sizeof(mutable_arg));
+      insert_or_append_emote_at_position(d, delete_doubledollar(mutable_arg));
+      qedit_disp_emote_menu(d, d->edit_number3);
+    }
     break;
   case QEDIT_EMOTE__AWAIT_NUMBER_FOR_EDIT:
   case QEDIT_EMOTE__AWAIT_NUMBER_FOR_DELETION:
