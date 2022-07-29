@@ -1556,7 +1556,7 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
     else {
       strcpy(buf3, GET_VEH_NAME(inveh));
       snprintf(buf, sizeof(buf), "%s drives into the back of %s.", buf3, GET_VEH_NAME(found_veh));
-      snprintf(buf2, sizeof(buf2), "You drive into the back of %s. Use the PUSH or LEAVE command to get the vehicle out after.\r\n", GET_VEH_NAME(found_veh));
+      snprintf(buf2, sizeof(buf2), "You drive into the back of %s. (Use the PUSH or LEAVE command to get the vehicle out later.)\r\n", GET_VEH_NAME(found_veh));
       if (inveh->in_room->people)
         act(buf, 0, inveh->in_room->people, 0, 0, TO_ROOM);
       send_to_veh(buf2, inveh, NULL, TRUE);

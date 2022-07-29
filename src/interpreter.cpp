@@ -1999,29 +1999,29 @@ void replace_word(const char *input, char *output, size_t output_size, const cha
   char *output_anchor = output;
 
   // Loop over input.
-  while (*(input) && (output - output_anchor < (long) (output_size - 1))) {
+  while (TRUE) {
     // Skim until we see the first instance of a replace_from character.
-    while (*(input) && *(input) != *(replace_from) && (output - output_anchor < (long) (output_size - 1)))
+    while (*input && *input != *replace_from && (output - output_anchor < (long) (output_size - 1)))
       *(output++) = *(input++);
 
-    // Break if over length
-    if (!*(input) || output - output_anchor >= (long) (output_size - 1))
+    // Break if no more input or if over length.
+    if (!*input || output - output_anchor >= (long) (output_size - 1))
       break;
 
     // Found a first-character match. We'll want to read until we find the end of it.
     const char *read_ptr = input;
     const char *from_ptr = replace_from;
 
-    // Read until we no longer match.
-    while (*(read_ptr) == *(from_ptr)) {
+    // Read until we run out of input, run out of replace_from, or no longer match.
+    while (*read_ptr && *from_ptr && *read_ptr == *from_ptr) {
       read_ptr++;
       from_ptr++;
     }
 
     // We hit the end of from_ptr? Perfect, write in the replacement.
-    if (!*(from_ptr)) {
+    if (!*from_ptr) {
       const char *to_ptr = replace_to;
-      while (*(to_ptr) && (output - output_anchor < (long) (output_size - 1)))
+      while (*to_ptr && (output - output_anchor < (long) (output_size - 1)))
         *(output++) = *(to_ptr++);
 
       // Break if over length
@@ -2030,8 +2030,10 @@ void replace_word(const char *input, char *output, size_t output_size, const cha
 
       // Clear the replacement word from the input.
       from_ptr = replace_from;
-      while (*(input++) == *(from_ptr++));
-      input--;
+      while (*input && *input == *from_ptr) {
+        input++;
+        from_ptr++;
+      }
     }
     // Otherwise, we didn't have a complete match. Carry on.
     else {

@@ -8,7 +8,8 @@
 
 #include <vector>
 
-typedef  std::vector<const char *>  emote_vector_t;
+typedef  const char *           emote_t;
+typedef  std::vector<emote_t>   emote_vector_t;
 
 #define QUEST_NONE        0
 
@@ -68,10 +69,10 @@ struct quest_data
 #ifdef USE_QUEST_LOCATION_CODE
   char *location;
 #endif
-  emote_vector_t *intro_emotes;
-  emote_vector_t *decline_emotes;
-  emote_vector_t *quit_emotes;
-  emote_vector_t *finish_emotes;
+  emote_t intro_emote;
+  emote_t decline_emote;
+  emote_t quit_emote;
+  emote_t finish_emote;
   emote_vector_t *info_emotes;
 
   quest_data() :
@@ -83,8 +84,8 @@ struct quest_data
 #ifdef USE_QUEST_LOCATION_CODE
       location(NULL),
 #endif
-      intro_emotes(NULL), decline_emotes(NULL), quit_emotes(NULL),
-      finish_emotes(NULL), info_emotes(NULL)
+      intro_emote(NULL), decline_emote(NULL), quit_emote(NULL),
+      finish_emote(NULL), info_emotes(NULL)
   {}
 }
 ;

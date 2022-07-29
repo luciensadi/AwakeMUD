@@ -115,11 +115,28 @@ ACMD(do_debug) {
   }
 
   if (is_abbrev(arg1, "replace_word")) {
-    char input[21], output[10], replacement[10];
-    strlcpy(replacement, "1234", sizeof(replacement));
-    strlcpy(input, "12345678901234567890", sizeof(input));
-    replace_word(input, output, sizeof(output), replacement, "xxxxxx");
-    send_to_char(ch, "Replacement of %s in %s yielded %s\r\n", replacement, input, output);
+    {
+      char input[21], output[10], replacement[10];
+      strlcpy(replacement, "1234", sizeof(replacement));
+      strlcpy(input, "12345678901234567890", sizeof(input));
+      replace_word(input, output, sizeof(output), replacement, "xxxxxx");
+      send_to_char(ch, "Replacement of %s in %s yielded %s\r\n", replacement, input, output);
+    }
+
+    {
+      char input[21], output[100];
+      strlcpy(input, "test emote, $N", sizeof(input));
+      replace_word(input, output, sizeof(output), "$N", "@Lucien");
+      send_to_char(ch, "Replacement of $N in %s yielded %s\r\n", input, output);
+    }
+
+    {
+      char input[30], output[100];
+      strlcpy(input, "$N: test emote, $N!", sizeof(input));
+      replace_word(input, output, sizeof(output), "$N", "@Lucien");
+      send_to_char(ch, "Replacement of $N in %s yielded %s\r\n", input, output);
+    }
+
     return;
   }
 

@@ -357,14 +357,6 @@ void string_add(struct descriptor_data *d, char *str)
           REPLACE_STRING(d->edit_quest->info);
           qedit_disp_menu(d);
           break;
-        case QEDIT_EMOTE__INSERT_EMOTE_BEFORE:
-          if ((d->str)) {
-            format_string(d, DONT_FORMAT_INDENT);
-            insert_or_append_emote_at_position(d, *d->str);
-            DELETE_D_STR_IF_EXTANT(d);
-          }
-          qedit_disp_emote_menu(d, d->edit_number3);
-          break;
       }
     } else if (STATE(d) == CON_BCUSTOMIZE && d->edit_mode == CEDIT_DESC) {
       REPLACE_STRING(d->edit_mob->player.background);

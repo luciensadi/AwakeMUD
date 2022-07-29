@@ -2276,10 +2276,10 @@ void parse_quest(File &fl, long virtual_nr)
   quest_table[quest_nr].e_time = t[10];
   quest_table[quest_nr].s_room = t[11];
 
-  int num_intro_emotes = t[12];
-  int num_decline_emotes = t[13];
-  int num_quit_emotes = t[14];
-  int num_finish_emotes = t[15];
+  int num_intro_emote = t[12];
+  int num_decline_emote = t[13];
+  int num_quit_emote = t[14];
+  int num_finish_emote = t[15];
   int num_info_emotes = t[16];
 
   if (quest_table[quest_nr].num_objs > 0) {
@@ -2335,10 +2335,19 @@ void parse_quest(File &fl, long virtual_nr)
     }                                                                                     \
   }
 
-  READ_EMOTES(intro);
-  READ_EMOTES(decline);
-  READ_EMOTES(quit);
-  READ_EMOTES(finish);
+  if (num_intro_emote > 0) {
+    quest_table[quest_nr].intro_emote = fl.ReadString("intro_emote");
+  }
+  if (num_decline_emote > 0) {
+    quest_table[quest_nr].decline_emote = fl.ReadString("decline_emote");
+  }
+  if (num_quit_emote > 0) {
+    quest_table[quest_nr].quit_emote = fl.ReadString("quit_emote");
+  }
+  if (num_finish_emote > 0) {
+    quest_table[quest_nr].finish_emote = fl.ReadString("finish_emote");
+  }
+
   READ_EMOTES(info);
 
   #undef READ_EMOTES

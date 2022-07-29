@@ -1694,10 +1694,14 @@ ACMD(do_qedit)
   }                                              \
 }
 
-    CLONE_EMOTE_VECTOR(quest_table[rnum].intro_emotes, qst->intro_emotes);
-    CLONE_EMOTE_VECTOR(quest_table[rnum].decline_emotes, qst->decline_emotes);
-    CLONE_EMOTE_VECTOR(quest_table[rnum].quit_emotes, qst->quit_emotes);
-    CLONE_EMOTE_VECTOR(quest_table[rnum].finish_emotes, qst->finish_emotes);
+    if (quest_table[rnum].intro_emote)
+      qst->intro_emote = str_dup(quest_table[rnum].intro_emote);
+    if (quest_table[rnum].decline_emote)
+      qst->decline_emote = str_dup(quest_table[rnum].decline_emote);
+    if (quest_table[rnum].quit_emote)
+      qst->quit_emote = str_dup(quest_table[rnum].quit_emote);
+    if (quest_table[rnum].finish_emote)
+      qst->finish_emote = str_dup(quest_table[rnum].finish_emote);
     CLONE_EMOTE_VECTOR(quest_table[rnum].info_emotes, qst->info_emotes);
 
     d->edit_quest = qst;

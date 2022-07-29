@@ -301,10 +301,10 @@ extern void write_index_file(const char *suffix);
 #define QEDIT_EMOTE__AWAIT_NUMBER_FOR_DELETION       43
 #define QEDIT_EMOTE__AWAIT_NUMBER_FOR_EDIT           44
 #define QEDIT_EMOTE__AWAIT_NUMBER_FOR_INSERT_BEFORE  45
-#define QEDIT_EMOTE_MENU__INTRO_EMOTES               46
-#define QEDIT_EMOTE_MENU__QUIT_EMOTES                47
-#define QEDIT_EMOTE_MENU__DECLINE_EMOTES             48
-#define QEDIT_EMOTE_MENU__FINISH_EMOTES              49
+#define QEDIT_INTRO_EMOTE                            46
+#define QEDIT_QUIT_EMOTE                             47
+#define QEDIT_DECLINE_EMOTE                          48
+#define QEDIT_FINISH_EMOTE                           49
 #define QEDIT_EMOTE_MENU__INFO_EMOTES                50
 
 // zone defines
