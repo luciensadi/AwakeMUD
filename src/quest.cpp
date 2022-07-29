@@ -1023,8 +1023,10 @@ SPECIAL(johnson)
 
       // Drop the quest.
       if (quest_table[GET_QUEST(ch)].quit_emote) {
+        // Don't @ me about this, it's the only way to reliably display a newline in this context.
+        act("^n", FALSE, johnson, 0, 0, TO_ROOM);
         char emote_with_carriage_return[MAX_STRING_LENGTH];
-        snprintf(emote_with_carriage_return, sizeof(emote_with_carriage_return), "\r\n%s\r\n", quest_table[GET_QUEST(ch)].quit_emote);
+        snprintf(emote_with_carriage_return, sizeof(emote_with_carriage_return), "%s\r\n", quest_table[GET_QUEST(ch)].quit_emote);
         display_single_emote_for_quest(johnson, emote_with_carriage_return, ch);
       }
       else if (quest_table[GET_QUEST(ch)].quit)
@@ -1083,8 +1085,10 @@ SPECIAL(johnson)
         }
 
         if (quest_table[GET_QUEST(ch)].finish_emote) {
+          // Don't @ me about this, it's the only way to reliably display a newline in this context.
+          act("^n", FALSE, johnson, 0, 0, TO_ROOM);
           char emote_with_carriage_return[MAX_STRING_LENGTH];
-          snprintf(emote_with_carriage_return, sizeof(emote_with_carriage_return), "\r\n%s\r\n", quest_table[GET_QUEST(ch)].finish_emote);
+          snprintf(emote_with_carriage_return, sizeof(emote_with_carriage_return), "%s\r\n", quest_table[GET_QUEST(ch)].finish_emote);
           display_single_emote_for_quest(johnson, emote_with_carriage_return, ch);
         }
         else if (quest_table[GET_QUEST(ch)].finish)
@@ -1191,8 +1195,10 @@ SPECIAL(johnson)
       // Assign the quest.
       GET_SPARE1(johnson) = 0;
       if (quest_table[new_q].intro_emote) {
+        // Don't @ me about this, it's the only way to reliably display a newline in this context.
+        act("^n", FALSE, johnson, 0, 0, TO_ROOM);
         char intro_emote_with_carriage_return[MAX_STRING_LENGTH];
-        snprintf(intro_emote_with_carriage_return, sizeof(intro_emote_with_carriage_return), "\r\n%s\r\n", quest_table[new_q].intro_emote);
+        snprintf(intro_emote_with_carriage_return, sizeof(intro_emote_with_carriage_return), "%s\r\n", quest_table[new_q].intro_emote);
         display_single_emote_for_quest(johnson, intro_emote_with_carriage_return, ch);
       }
       else if (quest_table[new_q].intro) {
@@ -1280,6 +1286,7 @@ SPECIAL(johnson)
       load_quest_targets(johnson, ch);
 
       // Go into my spiel.
+      act("^n", FALSE, johnson, 0, 0, TO_ROOM);
       handle_info(johnson, new_q, ch);
 
       return TRUE;
@@ -1324,8 +1331,13 @@ SPECIAL(johnson)
       GET_SPARE1(johnson) = -1;
       GET_QUEST(ch) = 0;
       forget(johnson, ch);
-      if (quest_table[new_q].decline_emote)
-        display_single_emote_for_quest(johnson, quest_table[new_q].decline_emote, ch);
+      if (quest_table[new_q].decline_emote) {
+        // Don't @ me about this, it's the only way to reliably display a newline in this context.
+        act("^n", FALSE, johnson, 0, 0, TO_ROOM);
+        char emote_with_carriage_return[MAX_STRING_LENGTH];
+        snprintf(emote_with_carriage_return, sizeof(emote_with_carriage_return), "%s\r\n", quest_table[new_q].decline_emote);
+        display_single_emote_for_quest(johnson, emote_with_carriage_return, ch);
+      }
       else if (quest_table[new_q].decline)
         do_say(johnson, quest_table[new_q].decline, 0, 0);
       else {
