@@ -408,7 +408,6 @@ struct char_player_data
   char *prompt, *matrixprompt;              /* PC's customized prompt               */
   char *poofin, *poofout;    /* PC's poofin/poofout                  */
 
-  const char *highlight_color_code;
   const char *email;
 
   int multiplier;
@@ -426,7 +425,7 @@ struct char_player_data
 
   char_player_data() :
       char_name(NULL), background(NULL), title(NULL), pretitle(NULL), whotitle(NULL),
-      prompt(NULL), matrixprompt(NULL), poofin(NULL), poofout(NULL), highlight_color_code(NULL),
+      prompt(NULL), matrixprompt(NULL), poofin(NULL), poofout(NULL),
       email(NULL), multiplier(0), sex(YES_PLEASE), level(0), last_room(NOWHERE),
       weight(0), height(0), race(0), tradition(TRAD_MUNDANE), aspect(0), host(NULL)
   {
@@ -600,13 +599,15 @@ struct char_special_data
 
   struct char_special_data_saved saved; /* constants saved in plrfile  */
 
+  const char *highlight_color_code;
+
   char_special_data() :
       fight_veh(NULL), fighting(NULL), hunting(NULL), programming(NULL), num_spirits(0), idnum(0),
       nervestrike(FALSE), tempquiloss(0), cost_breakup(0), avail_offset(0), shooting_dir(0),
       position(POS_STANDING), defined_position(NULL), leave(NULL), arrive(NULL), target_mod(0),
       concentration_target_mod(0), carry_weight(0), carry_items(0), foci(0), last_healed(0), timer(0),
       last_timer(0), last_social_action(0), actions(0), subscribe(NULL), rigging(NULL),
-      mindlink(NULL), spirits(NULL)
+      mindlink(NULL), spirits(NULL), highlight_color_code(NULL)
   {
     ZERO_OUT_ARRAY(conjure, 4);
     ZERO_OUT_ARRAY(coord, 3);

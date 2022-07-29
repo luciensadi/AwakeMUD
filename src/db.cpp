@@ -1663,6 +1663,16 @@ void parse_mobile(File &in, long nr)
     str_dup(data.GetString("ArriveMsg", "arrives from"));
   mob->char_specials.leave =
     str_dup(data.GetString("LeaveMsg", "leaves"));
+
+  {
+    const char *highlight = str_dup(data.GetString("SpeechHighlight", "nothing"));
+    if (!strcmp(highlight, "nothing")) {
+      delete [] highlight;
+    } else {
+      SETTABLE_CHAR_COLOR_HIGHLIGHT(mob) = highlight;
+    }
+  }
+
   GET_TITLE(mob) = NULL;
 
   MOB_FLAGS(mob).FromString(data.GetString("MobFlags", "0"));
@@ -4397,7 +4407,7 @@ void free_char(struct char_data * ch)
     DELETE_ARRAY_IF_EXTANT(ch->player.poofout);
     DELETE_ARRAY_IF_EXTANT(ch->char_specials.arrive);
     DELETE_ARRAY_IF_EXTANT(ch->char_specials.leave);
-    DELETE_ARRAY_IF_EXTANT(ch->player.highlight_color_code);
+    DELETE_ARRAY_IF_EXTANT(SETTABLE_CHAR_COLOR_HIGHLIGHT(ch));
     DELETE_ARRAY_IF_EXTANT(ch->player.email);
 
     if(!IS_NPC(ch))
@@ -4465,6 +4475,10 @@ void free_char(struct char_data * ch)
 
     if (ch->char_specials.leave && ch->char_specials.leave != proto->char_specials.leave) {
       DELETE_AND_NULL_ARRAY(ch->char_specials.leave);
+    }
+
+    if (SETTABLE_CHAR_COLOR_HIGHLIGHT(ch) && SETTABLE_CHAR_COLOR_HIGHLIGHT(ch) != SETTABLE_CHAR_COLOR_HIGHLIGHT(ch)) {
+      DELETE_AND_NULL_ARRAY(SETTABLE_CHAR_COLOR_HIGHLIGHT(ch));
     }
   }
 

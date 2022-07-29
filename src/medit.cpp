@@ -129,6 +129,8 @@ void medit_disp_menu(struct descriptor_data *d)
   for (int wear_idx = 0; wear_idx < NUM_WEARS; wear_idx++) {if (GET_EQ(MOB, wear_idx)) {eq_total++;}}
   send_to_char(CH, "t) Edit Equipment (%d piece%s)\r\n", eq_total, eq_total == 1 ? "" : "s");
 
+  send_to_char(CH, "u) Speech Highlight: \"%s%s^n\"\r\n", GET_CHAR_COLOR_HIGHLIGHT(MOB), SETTABLE_CHAR_COLOR_HIGHLIGHT(MOB) ? "Example speech." : "<not set>");
+
   send_to_char("q) Quit and save\r\n", CH);
   send_to_char("x) Exit and abort\r\n", CH);
   send_to_char("Enter your choice:\r\n", CH);
@@ -413,6 +415,7 @@ void medit_parse(struct descriptor_data *d, const char *arg)
         DELETE_ARRAY_IF_EXTANT(mob_proto[mob_number].player.physical_text.look_desc);
         DELETE_ARRAY_IF_EXTANT(mob_proto[mob_number].char_specials.arrive);
         DELETE_ARRAY_IF_EXTANT(mob_proto[mob_number].char_specials.leave);
+        DELETE_ARRAY_IF_EXTANT(SETTABLE_CHAR_COLOR_HIGHLIGHT(&mob_proto[mob_number]));
 
         // Store the innate armor values before anything else-- we apply them later, otherwise handler.cpp will reset them.
         int innate_impact = GET_INNATE_IMPACT(MOB);
@@ -754,6 +757,10 @@ void medit_parse(struct descriptor_data *d, const char *arg)
     case 't':
       medit_display_equipment_menu(d);
       break;
+    case 'u':
+      send_to_char("Enter speech highlight: ", CH);
+      d->edit_mode = MEDIT_HIGHLIGHT;
+      break;
     default:
       medit_disp_menu(d);
       break;
@@ -781,6 +788,12 @@ void medit_parse(struct descriptor_data *d, const char *arg)
   case MEDIT_LEAVE_MSG:
     DELETE_ARRAY_IF_EXTANT(MOB->char_specials.leave);
     MOB->char_specials.leave = str_dup(arg);
+    medit_disp_menu(d);
+    break;
+
+  case MEDIT_HIGHLIGHT:
+    DELETE_ARRAY_IF_EXTANT(SETTABLE_CHAR_COLOR_HIGHLIGHT(MOB));
+    SETTABLE_CHAR_COLOR_HIGHLIGHT(MOB) = str_dup(arg);
     medit_disp_menu(d);
     break;
 
@@ -1597,6 +1610,8 @@ void write_mobs_to_disk(int zone)
         fprintf(fp, "ArriveMsg:\t%s\n", mob->char_specials.arrive);
       if (mob->char_specials.leave)
         fprintf(fp, "LeaveMsg:\t%s\n", mob->char_specials.leave);
+      if (SETTABLE_CHAR_COLOR_HIGHLIGHT(mob))
+        fprintf(fp, "SpeechHighlight:\t%s\n", SETTABLE_CHAR_COLOR_HIGHLIGHT(mob));
 
       fprintf(fp,
               "MobFlags:\t%s\n"

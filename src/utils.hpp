@@ -1159,8 +1159,8 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 // If d->edit_convert_color_codes is true, doubles up ^ marks to not print color codes to the user in the specified string. Uses a static buf, so only one invocation per snprintf()!
 #define DOUBLE_UP_COLOR_CODES_IF_NEEDED(str) (d ? (d->edit_convert_color_codes ? double_up_color_codes((str)) : (str)) : (str))
 
-#define GET_CHAR_COLOR_HIGHLIGHT(ch) ((ch)->player.highlight_color_code ? (ch)->player.highlight_color_code : "^n")
-#define SETTABLE_CHAR_COLOR_HIGHLIGHT(ch) ((ch)->player.highlight_color_code)
+#define GET_CHAR_COLOR_HIGHLIGHT(ch) ((ch)->char_specials.highlight_color_code ? (ch)->char_specials.highlight_color_code : "^n")
+#define SETTABLE_CHAR_COLOR_HIGHLIGHT(ch) ((ch)->char_specials.highlight_color_code)
 
 /*
  * Some systems such as Sun's don't have prototyping in their header files.

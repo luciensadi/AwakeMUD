@@ -1313,6 +1313,8 @@ ACMD(do_medit)
       mob->char_specials.arrive = str_dup(mob_proto[mob_num].char_specials.arrive);
     if (mob_proto[mob_num].char_specials.leave)
       mob->char_specials.leave = str_dup(mob_proto[mob_num].char_specials.leave);
+    if (SETTABLE_CHAR_COLOR_HIGHLIGHT(mob))
+      SETTABLE_CHAR_COLOR_HIGHLIGHT(mob) = str_dup(SETTABLE_CHAR_COLOR_HIGHLIGHT(&mob_proto[mob_num]));
     if (mob_proto[mob_num].player_specials)
       mob->player_specials = &dummy_mob;
 
