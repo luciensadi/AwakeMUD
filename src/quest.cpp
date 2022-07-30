@@ -925,7 +925,7 @@ SPECIAL(johnson)
     else if (str_str(argument, "yes") || str_str(argument, "accept") || str_str(argument, "yeah")
             || str_str(argument, "sure") || str_str(argument, "okay"))
       comm = CMD_JOB_YES;
-    else if (strstr(argument, "no"))
+    else if (str_str(argument, "no"))
       comm = CMD_JOB_NO;
     else if (access_level(ch, LVL_BUILDER) && !str_cmp(argument, "clear")) {
       for (int i = QUEST_TIMER - 1; i >= 0; i--)
