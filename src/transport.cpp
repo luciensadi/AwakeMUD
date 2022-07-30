@@ -2684,32 +2684,32 @@ void process_grenada_plane(void)
   static int where = 0;
   int bus, stop, ind;
 
-  if (where >= 168)
+  if (where >= 84)
     where = 0;
 
-  ind = (where >= 84 ? 1 : 0);
+  ind = (where >= 42 ? 1 : 0);
 
   bus = real_room(grenada[ind].transport);
   stop = real_room(grenada[ind].room);
 
   switch (where) {
   case 0:
-  case 84:
+  case 42:
     send_to_room("A Hawker-Ridley HS-895 Skytruck lands on the main runway and moves towards the departure gate.\r\n", &world[stop]);
     break;
   case 4:
-  case 92:
+  case 46:
     grenada_extend(bus, grenada[ind].to, stop, grenada[ind].from);
     break;
-  case 32:
-  case 112:
+  case 16:
+  case 56:
     grenada_retract(bus, grenada[ind].to, stop, grenada[ind].from);
     break;
-  case 72:
+  case 36:
     send_to_room("The voice of the pilot speaks over the intercom, "
                  "\"We'll be landing in Grenada shortly ladies and gentlemen.\"\r\n", &world[bus]);
     break;
-  case 152:
+  case 76:
     send_to_room("The voice of the pilot speaks over the intercom, "
                  "\"We'll be landing in Everett shortly ladies and gentlemen.\"\r\n", &world[bus]);
     break;
