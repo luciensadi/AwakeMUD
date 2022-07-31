@@ -117,7 +117,7 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 #define MAX_GRIDGUIDE_ROOMS_PER_PULSE                          10
 
 // How often do NPCs press elevator buttons? 1:x ratio, where X is the number you put here.
-#define ELEVATOR_BUTTON_PRESS_CHANCE                           20
+#define ELEVATOR_BUTTON_PRESS_CHANCE                           200
 
 // Wizlock message.
 #define WIZLOCK_MSG "Sorry, the game is currently locked. While you wait for it to open, feel free to join our Discord at https://discord.gg/q5VCMkv!"
