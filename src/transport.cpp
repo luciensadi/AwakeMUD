@@ -2684,33 +2684,93 @@ void process_grenada_plane(void)
   static int where = 0;
   int bus, stop, ind;
 
-  if (where >= 168)
+  if (where >= 84)
     where = 0;
 
-  ind = (where >= 84 ? 1 : 0);
+  ind = (where >= 42 ? 1 : 0);
 
   bus = real_room(grenada[ind].transport);
   stop = real_room(grenada[ind].room);
 
   switch (where) {
   case 0:
-  case 84:
+  case 42:
     send_to_room("A Hawker-Ridley HS-895 Skytruck lands on the main runway and moves towards the departure gate.\r\n", &world[stop]);
     break;
   case 4:
-  case 92:
+  case 46:
     grenada_extend(bus, grenada[ind].to, stop, grenada[ind].from);
     break;
-  case 32:
-  case 112:
+  case 16:
+  case 56:
     grenada_retract(bus, grenada[ind].to, stop, grenada[ind].from);
     break;
-  case 72:
+  case 36:
     send_to_room("The voice of the pilot speaks over the intercom, "
                  "\"We'll be landing in Grenada shortly ladies and gentlemen.\"\r\n", &world[bus]);
     break;
-  case 152:
+  case 76:
     send_to_room("The voice of the pilot speaks over the intercom, "
+                 "\"We'll be landing in Everett shortly ladies and gentlemen.\"\r\n", &world[bus]);
+    break;
+  }
+  where++;
+}
+
+struct transport_type sauteurs[2] =
+  {
+    { 8899, NORTH, 8897, SOUTH },
+    { 8899, SOUTH, 8898, NORTH },
+  };
+
+void sauteurs_extend(int bus, int to, int room, int from)
+{
+  create_linked_exit(bus, to, room, from, "sauteurs_extend");
+
+  send_to_room("The Lockheed C-260 Transport plane docks with the platform and begins loading passengers and cargo.\r\n", &world[room]);
+  send_to_room("The Lockheed C-260 Transport plane docks with the platform and begins loading passengers and cargo.\r\n", &world[bus]);
+}
+
+void sauteurs_retract(int bus, int to, int room, int from)
+{
+  delete_linked_exit(bus, to, room, from, "sauteurs_retract");
+
+  send_to_room("The transport plane taxis into position on the runway before throttling up and taking off.\r\n", &world[room]);
+  send_to_room("The transport plane taxis into position on the runway before throttling up and taking off.\r\n", &world[bus]);
+}
+
+void process_sauteurs_plane(void)
+{
+  static int where = 0;
+  int bus, stop, ind;
+
+  if (where >= 168)
+    where = 0;
+
+  ind = (where >= 84 ? 1 : 0);
+
+  bus = real_room(sauteurs[ind].transport);
+  stop = real_room(sauteurs[ind].room);
+
+  switch (where) {
+  case 0:
+  case 84:
+    send_to_room("A Lockheed C-260 Transport plane lands on the auxiliary runway and moves towards the cargo dock.\r\n", &world[stop]);
+    break;
+  case 4:
+  case 92:
+    sauteurs_extend(bus, sauteurs[ind].to, stop, sauteurs[ind].from);
+    break;
+  case 32:
+  case 112:
+    sauteurs_retract(bus, sauteurs[ind].to, stop, sauteurs[ind].from);
+    break;
+  case 72:
+    send_to_room("The gruff voice of the pilot speaks over the intercom, "
+                 "\"We'll be landing in Grenada shortly ladies and gentlemen.\"\r\n", &world[bus]);
+    break;
+  case 152:
+    send_to_room("The gruff voice of the pilot speaks over the intercom, "
                  "\"We'll be landing in Everett shortly ladies and gentlemen.\"\r\n", &world[bus]);
     break;
   }
@@ -2740,6 +2800,7 @@ void MonorailProcess(void)
   process_grenada_plane();
   process_victoria_ferry();
   process_sugarloaf_ferry();
+  process_sauteurs_plane();
 }
 
 bool room_is_a_taxicab(vnum_t vnum) {

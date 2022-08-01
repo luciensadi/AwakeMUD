@@ -2271,14 +2271,14 @@ ACMD(do_astral)
   GET_PHYSICAL(astral) = GET_PHYSICAL(ch);
   GET_MENTAL(astral) = GET_MENTAL(ch);
 
-  GET_REAL_STR(astral) = GET_REAL_CHA(ch);
-  GET_STR(astral) = GET_REAL_CHA(ch);
-  GET_REAL_QUI(astral) = GET_REAL_INT(ch);
-  GET_QUI(astral) = GET_REAL_INT(ch);
-  GET_REAL_BOD(astral) = GET_REAL_WIL(ch);
-  GET_BOD(astral) = GET_REAL_WIL(ch);
-  GET_REAL_REA(astral) = GET_REAL_INT(ch);
-  GET_REA(astral) = GET_REAL_INT(ch);
+  GET_REAL_STR(astral) = GET_CHA(ch);
+  GET_STR(astral) = GET_CHA(ch);
+  GET_REAL_QUI(astral) = GET_INT(ch);
+  GET_QUI(astral) = GET_INT(ch);
+  GET_REAL_BOD(astral) = GET_WIL(ch);
+  GET_BOD(astral) = GET_WIL(ch);
+  GET_REAL_REA(astral) = GET_INT(ch);
+  GET_REA(astral) = GET_INT(ch);
   astral->real_abils.mag = GET_MAG(ch);
   GET_MAG(astral) = GET_MAG(ch);
   GET_REAL_INT(astral) = GET_INT(ch);
