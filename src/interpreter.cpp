@@ -407,7 +407,7 @@ ACMD_DECLARE(do_zdelete);
 ACMD_DECLARE(do_zlist);
 ACMD_DECLARE(do_index);
 ACMD_DECLARE(do_zswitch);
-ACMD_DECLARE(do_penalize);
+ACMD_DECLARE(do_deduct);
 ACMD_DECLARE(do_holster);
 ACMD_DECLARE(do_draw);
 ACMD_DECLARE(do_copyover);
@@ -550,6 +550,7 @@ struct command_info cmd_info[] =
     { "decline"    , POS_LYING   , do_decline  , 0, 0, FALSE },
     { "decompress" , POS_LYING  , do_compact  , 0, 1, FALSE },
     { "decorate"   , POS_DEAD    , do_decorate , 0, 0, TRUE },
+    { "deduct"     , POS_DEAD    , do_deduct   , LVL_FIXER, 0, FALSE },
     { "delete"     , POS_SLEEPING, do_delete   , 0, 0, FALSE },
     { "default"    , POS_RESTING , do_default  , 0, 0, FALSE },
 //  { "dennis"     , POS_SITTING, do_move     , 0, SCMD_DOWN, FALSE },
@@ -717,7 +718,6 @@ struct command_info cmd_info[] =
     { "page"       , POS_DEAD    , do_page     , LVL_ARCHITECT, 0, FALSE },
     { "pages"      , POS_DEAD    , do_switched_message_history, LVL_ARCHITECT, COMM_CHANNEL_PAGES, TRUE },
     { "pardon"     , POS_DEAD    , do_wizutil  , LVL_CONSPIRATOR, SCMD_PARDON, FALSE },
-    { "penalize"   , POS_DEAD    , do_penalize , LVL_FIXER, 0, FALSE },
     { "perceive"   , POS_LYING   , do_astral   , 0, SCMD_PERCEIVE, FALSE },
     { "perfmon"    , POS_DEAD    , do_perfmon  , LVL_ADMIN, 0, FALSE },
     { "pgroup"     , POS_LYING   , do_pgroup   , 0, 0, FALSE },
@@ -746,6 +746,7 @@ struct command_info cmd_info[] =
     { "praise"     , POS_DEAD    , do_gen_write, 0, SCMD_PRAISE, TRUE },
     { "push"       , POS_SITTING , do_push     , 0, 0, FALSE },
     { "playerrolls", POS_DEAD    , do_playerrolls, LVL_ADMIN, 0, FALSE },
+    { "pur"        , POS_RESTING , do_put      , 0, 0, FALSE }, // special case aliasing- this use case is not covered by fuckups below
   #ifdef IS_BUILDPORT
     { "purge"      , POS_DEAD    , do_purge    , LVL_BUILDER, 0, FALSE },
   #else

@@ -4759,11 +4759,11 @@ ACMD(do_syspoints) {
     return;
   }
 
-  // Viable modes: award penalize show
+  // Viable modes: award deduct show
   half_chop(argument, arg, buf);
 
   if (!*arg) {
-    send_to_char("Syntax: syspoints <award|penalize|show> <target>\r\n", ch);
+    send_to_char("Syntax: syspoints <award|deduct|show> <target>\r\n", ch);
     return;
   }
 
@@ -4805,7 +4805,7 @@ ACMD(do_syspoints) {
     return;
   }
 
-  // Penalize and award modes.
+  // deduct and award modes.
   half_chop(buf, target, buf2);
   half_chop(buf2, amt, reason);
 
@@ -4813,7 +4813,7 @@ ACMD(do_syspoints) {
 
   // Require all arguments.
   if (!*arg || !*target || !*amt || !*reason || k <= 0 ) {
-    send_to_char(ch, "Syntax: syspoints <award|penalize> <player> <%samount> <Reason for award>\r\n", k < 0 ? "POSITIVE " : "");
+    send_to_char(ch, "Syntax: syspoints <award|deduct> <player> <%samount> <Reason for award>\r\n", k < 0 ? "POSITIVE " : "");
     return;
   }
 
@@ -4821,11 +4821,11 @@ ACMD(do_syspoints) {
   bool award_mode;
   if (!str_cmp(arg, "award")) {
     award_mode = TRUE;
-  } else if (!str_cmp(arg, "penalize")) {
+  } else if (!str_cmp(arg, "deduct")) {
     award_mode = FALSE;
     k *= -1;
   } else {
-    send_to_char("Syntax: syspoints <award|penalize> <player> <amount> <Reason for award>\r\n", ch);
+    send_to_char("Syntax: syspoints <award|deduct> <player> <amount> <Reason for award>\r\n", ch);
     return;
   }
 
@@ -4859,7 +4859,7 @@ ACMD(do_syspoints) {
 
     // Mail the victim.
     snprintf(buf, sizeof(buf), "You have been %s %d system point%s for %s%s^n\r\n",
-            (award_mode ? "awarded" : "penalized"),
+            (award_mode ? "awarded" : "deducted"),
             k,
             k == 1 ? "" : "s",
             reason,
@@ -4868,7 +4868,7 @@ ACMD(do_syspoints) {
 
     // Notify the actor.
     send_to_char(ch, "You %s %d system point%s %s %s for %s%s^n\r\n",
-                (award_mode ? "awarded" : "penalized"),
+                (award_mode ? "awarded" : "deducted"),
                 k,
                 k == 1 ? "" : "s",
                 (award_mode ? "to" : "from"),
@@ -4879,7 +4879,7 @@ ACMD(do_syspoints) {
     // Log it.
     snprintf(buf, sizeof(buf), "%s %s %d system point%s %s %s for %s^g (%d to %d).",
             GET_CHAR_NAME(ch),
-            (award_mode ? "awarded" : "penalized"),
+            (award_mode ? "awarded" : "deducted"),
             k,
             k == 1 ? "" : "s",
             (award_mode ? "to" : "from"),
@@ -4905,14 +4905,14 @@ ACMD(do_syspoints) {
 
     // Notify the actor and the victim, then log it.
     send_to_char(vict, "You have been %s %d system point%s for %s%s^n\r\n",
-                 (award_mode ? "awarded" : "penalized"),
+                 (award_mode ? "awarded" : "deducted"),
                  k,
                  k == 1 ? "" : "s",
                  reason,
                  ispunct(get_final_character_from_string(reason)) ? "" : ".");
 
     send_to_char(ch, "You %s %d system point%s %s %s for %s%s^n\r\n",
-                (award_mode ? "awarded" : "penalized"),
+                (award_mode ? "awarded" : "deducted"),
                 k,
                 k == 1 ? "" : "s",
                 (award_mode ? "to" : "from"),
@@ -4922,7 +4922,7 @@ ACMD(do_syspoints) {
 
     snprintf(buf, sizeof(buf), "%s %s %d system point%s %s %s for %s^g (%d to %d).",
             GET_CHAR_NAME(ch),
-            (award_mode ? "awarded" : "penalized"),
+            (award_mode ? "awarded" : "deducted"),
             k,
             k == 1 ? "" : "s",
             (award_mode ? "to" : "from"),
