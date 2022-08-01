@@ -1683,7 +1683,7 @@ float power_multiplier(int type, int material)
           return 2.0;
         case 10:
         case 11:
-          return 5.0;
+          return 2.0;
         default:
           return 0.7;
       }
@@ -1692,7 +1692,7 @@ float power_multiplier(int type, int material)
       switch (material) {
         case 10:
         case 11:
-          return 3.0;
+          return 2.0;
         default:
           return 0.5;
       }
@@ -1706,7 +1706,7 @@ float power_multiplier(int type, int material)
         case 13:
           return 1.3;
         case 2:
-          return 3.0;
+          return 2.0;
         default:
           return 1.1;
       }
@@ -1714,7 +1714,7 @@ float power_multiplier(int type, int material)
     case DAMOBJ_PROJECTILE:
       switch (material) {
         case 2:
-          return 3.0;
+          return 2.0;
         case 10:
         case 11:
           return 1.1;
@@ -1729,7 +1729,7 @@ float power_multiplier(int type, int material)
         case 7:
           return 1.4;
         case 2:
-          return 4.0;
+          return 2.0;
         case 5:
         case 14:
         case 15:
