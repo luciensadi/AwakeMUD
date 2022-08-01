@@ -615,6 +615,7 @@ struct preference_bit_struct preference_bits_v2[] = {
   { "No Weather"           , FALSE, TRUE  },
   { "No XTERM-256 Color"   , FALSE, TRUE  },
   { "Client-Configurable Color", FALSE, TRUE  },
+  { "Visibility on WHERE"  , FALSE, FALSE },
   { "\n"                   , 0    , 0     }
 };
 

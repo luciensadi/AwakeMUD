@@ -3418,7 +3418,7 @@ bool ch_is_eligible_to_receive_socialization_bonus(struct char_data *ch) {
        || IS_AFFECTED(ch, AFF_SPELLIMPINVIS)
        || IS_AFFECTED(ch, AFF_INVISIBLE)
        || IS_AFFECTED(ch, AFF_SPELLINVIS)
-       || !AFF_FLAGGED(ch, PRF_VISIBLE))
+       || !AFF_FLAGGED(ch, PRF_HIDDEN_FROM_WHERE))
     return FALSE;
 
   // You must be present.

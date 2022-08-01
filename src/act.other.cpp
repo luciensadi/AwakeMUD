@@ -1408,8 +1408,8 @@ ACMD(do_toggle)
         if (ch->desc->pProtocol)
           ch->desc->pProtocol->do_coerce_ansi_capable_colors_to_ansi = FALSE;
       }
-    } else if (is_abbrev(argument, "RP") || is_abbrev(argument, "RPING") || is_abbrev(argument, "roleplay") || is_abbrev(argument, "visible")) {
-      result = PRF_TOG_CHK(ch, PRF_VISIBLE);
+    } else if (is_abbrev(argument, "nosocialization") || is_abbrev(argument, "socialization") || is_abbrev(argument, "roleplay") || is_abbrev(argument, "visible")) {
+      result = PRF_TOG_CHK(ch, PRF_HIDDEN_FROM_WHERE);
       mode = 48;
       } else {
       send_to_char("That is not a valid toggle option.\r\n", ch);

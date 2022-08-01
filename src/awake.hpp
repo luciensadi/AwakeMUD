@@ -439,7 +439,7 @@ enum {
 #define PRF_NO_WEATHER                   64
 #define PRF_DISABLE_XTERM                65
 #define PRF_COERCE_ANSI                  66
-#define PRF_VISIBLE                      67
+#define PRF_HIDDEN_FROM_WHERE            67
 #define PRF_MAX                          68
 
 /* log watch */
