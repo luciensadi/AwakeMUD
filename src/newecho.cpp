@@ -178,7 +178,11 @@ const char *generate_display_string_for_character(struct char_data *actor, struc
       display_string = GET_VEH_NAME(target_veh);
     } else {
       // Switch between display strings based on if the viewer can see and knows the target character.
-      if (!CAN_SEE(viewer, target_ch))
+
+      // If the viewer is ignoring the target, we make it clear that an ignored person is being addressed.
+      if (IS_IGNORING(viewer, is_blocking_ic_interaction_from, target_ch))
+        display_string = "(ignored)";
+      else if (!CAN_SEE(viewer, target_ch))
         display_string = "someone";
       else if (!IS_NPC(viewer) && (mem_record = safe_found_mem(viewer, target_ch)))
         display_string = CAP(mem_record->mem);

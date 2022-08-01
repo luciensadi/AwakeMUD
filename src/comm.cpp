@@ -67,6 +67,7 @@
 #include "protocol.hpp"
 #include "perfmon.hpp"
 #include "config.hpp"
+#include "ignore_system.hpp"
 
 
 const unsigned perfmon::kPulsePerSecond = PASSES_PER_SEC;
@@ -2963,6 +2964,11 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
   // No need to go through all this junk if the to-char has no descriptor.
   if (!to || !to->desc)
     return NULL;
+
+  // We can also skip if the to-char is fully ignoring the actor.
+  if (IS_IGNORING(to, is_blocking_ic_interaction_from, ch)) {
+    return NULL;
+  }
 
   // Prep for error case catching.
   strlcpy(lbuf, "An erroneous voice (alert staff!)", sizeof(lbuf));

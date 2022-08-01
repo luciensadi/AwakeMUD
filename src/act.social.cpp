@@ -80,19 +80,21 @@ ACMD(do_action)
     *buf = '\0';
 
   if (!*buf) {
-    send_to_char(action->char_no_arg, ch);
-    send_to_char("\r\n", ch);
+    send_to_char(ch, "%s\r\n", action->char_no_arg);
     act(action->others_no_arg, action->hide, ch, 0, 0, TO_ROOM);
     return;
   }
   if (!(vict = get_char_room_vis(ch, buf))) {
-    send_to_char(action->not_found, ch);
-    send_to_char("\r\n", ch);
+    send_to_char(ch, "%s\r\n", action->not_found);
   } else if (vict == ch) {
-    send_to_char(action->char_auto, ch);
-    send_to_char("\r\n", ch);
+    send_to_char(ch, "%s\r\n", action->char_auto);
     act(action->others_auto, action->hide, ch, 0, 0, TO_ROOM);
   } else {
+    if (IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)) {
+      send_to_char(ch, "%s\r\n", action->not_found);
+      return;
+    }
+
     if (GET_POS(vict) < action->min_victim_position)
       act("$N is not in a proper position for that.",
           FALSE, ch, 0, vict, TO_CHAR | TO_SLEEP);
