@@ -2425,7 +2425,7 @@ enum {
 #define OBJ_LONDON_FOG_COUNT               8435
 #define OBJ_ASH_LEAF_ANKLET                60565
 #define OBJ_ORICHALCUM_BRACELET            4906
-#define OBJ_SCK_MODEL_100                  786
+#define OBJ_SCK_MODEL_100                  91000
 #define OBJ_FOREGRIP                       28618
 #define OBJ_PAIR_OF_WHITE_TRAINERS         22691
 #define OBJ_CYBERDECK_REPAIR_KIT           38041
