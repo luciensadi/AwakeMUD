@@ -5457,7 +5457,7 @@ void perform_mortal_where(struct char_data * ch, char *arg)
       struct char_data *i = (d->original ? d->original : d->character);
 
       // Skip them if they aren't in a social-bonus room.
-      if (!i || !i->in_room || !ROOM_FLAGGED(i->in_room, ROOM_ENCOURAGE_CONGREGATION))
+      if (!i || !i->in_room || !AFF_FLAGGED(ch, PRF_VISIBLE))
         continue;
 
       // Skip them if you can't see them for various reasons.
