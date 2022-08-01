@@ -270,7 +270,6 @@ int system_test(rnum_t host, struct char_data *ch, int type, int software, int m
   act(rollbuf, FALSE, ch, 0, 0, TO_ROLLS);
 
   struct matrix_icon *temp;
-  bool tarred = FALSE;
   for (struct matrix_icon *ic = HOST.icons; ic; ic = temp)
   {
     temp = ic->next_in_host;
@@ -280,8 +279,11 @@ int system_test(rnum_t host, struct char_data *ch, int type, int software, int m
     if (ic->number && ic->ic.target == PERSONA->idnum) {
       if (ic->ic.type == IC_PROBE || ic->ic.type == IC_SCOUT)
         tally += MAX(0, success_test(target, detect));
-      else if (prog && (ic->ic.type == IC_TARBABY || ic->ic.type == IC_TARPIT) && ic->ic.subtype == 0 && !tarred)
-        tarred = tarbaby(prog, ch, ic);
+      else if (prog && (ic->ic.type == IC_TARBABY || ic->ic.type == IC_TARPIT) && ic->ic.subtype == 0) {
+        // Here's hoping this didn't extract the program they used...
+        if (tarbaby(prog, ch, ic))
+          break;
+      }
     }
   }
   DECKER->tally += tally;
@@ -2142,71 +2144,90 @@ ACMD(do_run)
       break;
   if (soft) {
     WAIT_STATE(ch, (int) (DECKING_WAIT_STATE_TIME));
-    switch (GET_OBJ_VAL(soft, 0)) {
-    case SOFT_ATTACK:
-      struct matrix_icon *icon;
-      for (icon = matrix[PERSONA->in_host].icons; icon; icon = icon->next_in_host)
-        if ((isname(arg, icon->name) || isname(arg, icon->look_desc)) && has_spotted(PERSONA, icon))
-          break;
-      if (!icon)
-        send_to_icon(PERSONA, "You can't see that icon in this host.\r\n");
-      else {
-        send_to_icon(PERSONA, "You start running %s against %s.\r\n", GET_OBJ_NAME(soft), icon->name);
-        if (!PERSONA->fighting) {
-          PERSONA->next_fighting = matrix[icon->in_host].fighting;
-          matrix[icon->in_host].fighting = PERSONA;
-          roll_matrix_init(PERSONA);
+    switch (GET_PROGRAM_TYPE(soft)) {
+      case SOFT_ATTACK:
+        {
+          struct matrix_icon *icon;
+
+          if (!*arg) {
+            send_to_icon(PERSONA, "You'll need to specify a target, like ^WRUN ATTACK DRONE^n.\r\n");
+            return;
+          }
+
+          for (icon = matrix[PERSONA->in_host].icons; icon; icon = icon->next_in_host)
+            if ((isname(arg, icon->name) || isname(arg, icon->look_desc)) && has_spotted(PERSONA, icon))
+              break;
+
+          if (!icon) {
+            send_to_icon(PERSONA, "You can't see an icon named '%s' in this host.\r\n", arg);
+            return;
+          }
+
+          send_to_icon(PERSONA, "You start running %s against %s.\r\n", GET_OBJ_NAME(soft), icon->name);
+          if (!PERSONA->fighting) {
+            PERSONA->next_fighting = matrix[icon->in_host].fighting;
+            matrix[icon->in_host].fighting = PERSONA;
+            roll_matrix_init(PERSONA);
+          }
+
+          PERSONA->fighting = icon;
+          if (!icon->fighting && IS_PROACTIVE(icon)) {
+            icon->fighting = PERSONA;
+            icon->next_fighting = matrix[icon->in_host].fighting;
+            matrix[icon->in_host].fighting = icon;
+            roll_matrix_init(icon);
+          }
+
+          order_list(matrix[icon->in_host].fighting);
+          send_to_icon(icon, "%s begins to run an attack program aimed at you.\r\n", PERSONA->name);
+
+          for (struct matrix_icon *ic = matrix[PERSONA->in_host].icons; ic; ic = temp) {
+            temp = ic->next_in_host;
+            if ((ic->ic.type == IC_TARBABY || ic->ic.type == IC_TARPIT) && ic->ic.subtype == 1) {
+              send_to_icon(PERSONA, "%s's surface ripples and yawns open, reaching towards you!\r\n", CAP(ic->name));
+              // We return after tarbaby succeeds, as it might delete the program we're using.
+              if (tarbaby(soft, ch, ic))
+                return;
+            }
+          }
         }
-        PERSONA->fighting = icon;
-        if (!icon->fighting && IS_PROACTIVE(icon)) {
-          icon->fighting = PERSONA;
-          icon->next_fighting = matrix[icon->in_host].fighting;
-          matrix[icon->in_host].fighting = icon;
-          roll_matrix_init(icon);
+        break;
+      case SOFT_MEDIC:
+        if (PERSONA->condition == 10) {
+          send_to_icon(PERSONA, "You're already at optimal condition.\r\n");
+        } else if (GET_OBJ_VAL(soft, 1) <= 0) {
+          send_to_icon(PERSONA, "That program is no longer usable!\r\n");
+        } else {
+          for (struct matrix_icon *ic = matrix[PERSONA->in_host].icons; ic; ic = temp) {
+            temp = ic->next_in_host;
+            if ((ic->ic.type == IC_TARBABY || ic->ic.type == IC_TARPIT) && ic->ic.subtype == 1) {
+              send_to_icon(PERSONA, "%s's surface ripples and yawns open, reaching towards you!\r\n", CAP(ic->name));
+              // We return after tarbaby succeeds, as it might delete the program we're using.
+              if (tarbaby(soft, ch, ic)) {
+                send_to_icon(PERSONA, "You break off your medic run to regroup.\r\n");
+                return;
+              }
+            }
+          }
+          send_to_icon(PERSONA, "You run a medic program.\r\n");
+          int targ = 0;
+          if (PERSONA->condition < 2)
+            targ = 6;
+          else if (PERSONA->condition < 7)
+            targ = 5;
+          else if (PERSONA->condition < 9)
+            targ = 4;
+          int success = success_test(GET_OBJ_VAL(soft, 1), targ);
+          if (success < 1)
+            send_to_icon(PERSONA, "It fails to execute.\r\n");
+          else {
+            PERSONA->condition = MIN(10, success + PERSONA->condition);
+            send_to_icon(PERSONA, "It repairs your icon.\r\n");
+          }
+          PERSONA->initiative -= 10;
+          GET_OBJ_VAL(soft, 1)--;
         }
-        order_list(matrix[icon->in_host].fighting);
-        send_to_icon(icon, "%s begins to run an attack program aimed at you.\r\n", PERSONA->name);
-        bool tarred = FALSE;
-        for (struct matrix_icon *ic = matrix[PERSONA->in_host].icons; ic && !tarred; ic = temp) {
-          temp = ic->next_in_host;
-          if ((ic->ic.type == IC_TARBABY || ic->ic.type == IC_TARPIT) && ic->ic.subtype == 1)
-            tarred = tarbaby(soft, ch, ic);
-        }
-      }
-      break;
-    case SOFT_MEDIC:
-      if (PERSONA->condition == 10) {
-        send_to_icon(PERSONA, "You're already at optimal condition.\r\n");
-      } else if (GET_OBJ_VAL(soft, 1) <= 0) {
-        send_to_icon(PERSONA, "That program is no longer usable!\r\n");
-      } else {
-        bool tarred = FALSE;
-        for (struct matrix_icon *ic = matrix[PERSONA->in_host].icons; ic && !tarred; ic = temp) {
-          temp = ic->next_in_host;
-          if ((ic->ic.type == IC_TARBABY || ic->ic.type == IC_TARPIT) && ic->ic.subtype == 1)
-            tarred = tarbaby(soft, ch, ic);
-        }
-        if (tarred)
-          return;
-        send_to_icon(PERSONA, "You run a medic program.\r\n");
-        int targ = 0;
-        if (PERSONA->condition < 2)
-          targ = 6;
-        else if (PERSONA->condition < 7)
-          targ = 5;
-        else if (PERSONA->condition < 9)
-          targ = 4;
-        int success = success_test(GET_OBJ_VAL(soft, 1), targ);
-        if (success < 1)
-          send_to_icon(PERSONA, "It fails to execute.\r\n");
-        else {
-          PERSONA->condition = MIN(10, success + PERSONA->condition);
-          send_to_icon(PERSONA, "It repairs your icon.\r\n");
-        }
-        PERSONA->initiative -= 10;
-        GET_OBJ_VAL(soft, 1)--;
-      }
-      return;
+        return;
     default:
       send_to_icon(PERSONA, "You don't need to manually run %s.\r\n", GET_OBJ_NAME(soft));
       break;
