@@ -2752,6 +2752,9 @@ void process_sauteurs_plane(void)
   bus = real_room(sauteurs[ind].transport);
   stop = real_room(sauteurs[ind].room);
 
+  if (bus < 0 || stop < 0)
+    return;
+
   switch (where) {
   case 0:
   case 84:
