@@ -6714,34 +6714,40 @@ SPECIAL(medical_workshop) {
 
   char target_arg[MAX_INPUT_LENGTH];
 
-  // No argument given, no character available, no problem. Skip it.
-  if (!*argument || !ch || !workshop || GET_OBJ_TYPE(workshop) != ITEM_WORKSHOP)
+  // No command, no character available, no problem. Skip it.
+  if (!cmd || !ch || !workshop || GET_OBJ_TYPE(workshop) != ITEM_WORKSHOP) {
+    log_vfprintf("precon failure cmd=%d, ch=%s, workshop=%s, valid=%s", cmd, ch ? "Y": "N", workshop ? "Y":"N", GET_OBJ_TYPE(workshop) == ITEM_WORKSHOP ? "Y":"N");
     return FALSE;
+  }
 
   // Skip anything that's not an expected command.
   if (!(   (mode_is_install = CMD_IS("install"))
         || CMD_IS("uninstall")
         || (mode_is_diagnose = CMD_IS("diagnose"))
         || (mode_is_withdraw = CMD_IS("withdraw"))
-      ))
+      )) {
+        log("mode failure");
     return FALSE;
+  }
 
   // Require that the medical workshop be unpacked.
-  if (!GET_WORKSHOP_IS_SETUP(workshop) && GET_WORKSHOP_GRADE(workshop) != TYPE_FACILITY)
+  if (!GET_WORKSHOP_IS_SETUP(workshop) && GET_WORKSHOP_GRADE(workshop) != TYPE_FACILITY) {
+    log("workshop failure");
     return FALSE;
-
-  // Preliminary skill check.
-  if (GET_SKILL(ch, SKILL_BIOTECH) < 4 || GET_SKILL(ch, SKILL_MEDICINE) < 4) {
-    send_to_char("You have no idea where to even start with surgeries. Better leave it to the professionals.\r\n", ch);
-    return TRUE;
   }
 
-  if (!PLR_FLAGGED(ch, PLR_CYBERDOC) && !access_level(ch, LVL_ADMIN)) {
-    send_to_char("The cyberdoc role is currently application-only. Please contact staff to request the ability to be a cyberdoc.\r\n", ch);
-    return TRUE;
-  }
+  if (!*argument) {
+    // Preliminary skill check.
+    if (GET_SKILL(ch, SKILL_BIOTECH) < 4 || GET_SKILL(ch, SKILL_MEDICINE) < 4) {
+      send_to_char("You have no idea where to even start with surgeries. Better leave it to the professionals.\r\n", ch);
+      return TRUE;
+    }
 
-  if (!*arg) {
+    if (!PLR_FLAGGED(ch, PLR_CYBERDOC) && !access_level(ch, LVL_ADMIN)) {
+      send_to_char("The cyberdoc role is currently application-only. Please contact staff to request the ability to be a cyberdoc.\r\n", ch);
+      return TRUE;
+    }
+
     if (mode_is_diagnose) {
       send_to_char("Syntax: diagnose <target character>\r\n", ch);
     } else if (mode_is_withdraw) {
@@ -6758,6 +6764,17 @@ SPECIAL(medical_workshop) {
   // Withdrawal is almost entirely different from the other cases here, so it's handled separately in this block.
   if (mode_is_withdraw) {
     attempt_safe_withdrawal(ch, (const char *) target_arg);
+    return TRUE;
+  }
+
+  // Preliminary skill check.
+  if (GET_SKILL(ch, SKILL_BIOTECH) < 4 || GET_SKILL(ch, SKILL_MEDICINE) < 4) {
+    send_to_char("You have no idea where to even start with surgeries. Better leave it to the professionals.\r\n", ch);
+    return TRUE;
+  }
+
+  if (!PLR_FLAGGED(ch, PLR_CYBERDOC) && !access_level(ch, LVL_ADMIN)) {
+    send_to_char("The cyberdoc role is currently application-only. Please contact staff to request the ability to be a cyberdoc.\r\n", ch);
     return TRUE;
   }
 
