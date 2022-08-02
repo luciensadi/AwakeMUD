@@ -5521,34 +5521,34 @@ void print_object_location(int num, struct obj_data *obj, struct char_data *ch,
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%33s", " - ");
 
   if (obj->in_room)
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%5ld] %s", GET_ROOM_VNUM(obj->in_room), GET_ROOM_NAME(obj->in_room));
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%5ld] %s^n", GET_ROOM_VNUM(obj->in_room), GET_ROOM_NAME(obj->in_room));
   else if (obj->carried_by) {
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "carried by %s", GET_CHAR_NAME(obj->carried_by));
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "carried by %s^n", GET_CHAR_NAME(obj->carried_by));
     if (obj->carried_by->in_room) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " @ room %ld (%s)", GET_ROOM_VNUM(obj->carried_by->in_room), GET_ROOM_NAME(obj->carried_by->in_room));
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " @ room %ld (%s^n)", GET_ROOM_VNUM(obj->carried_by->in_room), GET_ROOM_NAME(obj->carried_by->in_room));
     } else if (obj->carried_by->in_veh) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " @ veh %ld (%s)", GET_VEH_VNUM(obj->carried_by->in_veh), GET_VEH_NAME(obj->carried_by->in_veh));
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " @ veh %ld (%s^n)", GET_VEH_VNUM(obj->carried_by->in_veh), GET_VEH_NAME(obj->carried_by->in_veh));
     } else {
       strlcat(buf, " ^Rnowhere^n", sizeof(buf));
     }
   }
   else if (obj->worn_by) {
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "worn by %s", GET_CHAR_NAME(obj->worn_by));
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "worn by %s^n", GET_CHAR_NAME(obj->worn_by));
     if (obj->worn_by->in_room) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " @ room %ld (%s)", GET_ROOM_VNUM(obj->worn_by->in_room), GET_ROOM_NAME(obj->worn_by->in_room));
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " @ room %ld (%s^n)", GET_ROOM_VNUM(obj->worn_by->in_room), GET_ROOM_NAME(obj->worn_by->in_room));
     } else if (obj->worn_by->in_veh) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " @ veh %ld (%s)", GET_VEH_VNUM(obj->worn_by->in_veh), GET_VEH_NAME(obj->worn_by->in_veh));
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " @ veh %ld (%s^n)", GET_VEH_VNUM(obj->worn_by->in_veh), GET_VEH_NAME(obj->worn_by->in_veh));
     } else {
       strlcat(buf, " ^Rnowhere^n", sizeof(buf));
     }
   } else if (obj->in_obj) {
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "inside %s%s",
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "inside %s%s^n",
             GET_OBJ_NAME(obj->in_obj),
             (recur ? ", which is\r\n" : " "));
     if (recur)
       print_object_location(0, obj->in_obj, ch, recur);
   } else if (obj->in_veh) {
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "in %s @ %ld%s", GET_VEH_NAME(obj->in_veh), GET_ROOM_VNUM(get_obj_in_room(obj)), obj->in_veh->in_veh ? " (nested veh)" : "");
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "in %s @ %ld%s^n", GET_VEH_NAME(obj->in_veh), GET_ROOM_VNUM(get_obj_in_room(obj)), obj->in_veh->in_veh ? " (nested veh)" : "");
   } else
     strlcat(buf, " in an unknown location.", sizeof(buf));
 
@@ -5583,11 +5583,11 @@ void perform_immort_where(struct char_data * ch, char *arg)
                   );
 
           if (d->character->in_veh) {
-            snprintf(ENDOF(buf1), sizeof(buf1), " (in %s)", GET_VEH_NAME(d->character->in_veh));
+            snprintf(ENDOF(buf1), sizeof(buf1), " (in %s^n)", GET_VEH_NAME(d->character->in_veh));
           }
 
           if (d->original) {
-            snprintf(ENDOF(buf1), sizeof(buf1), " (switched as %s)", GET_NAME(d->character));
+            snprintf(ENDOF(buf1), sizeof(buf1), " (switched as %s^n)", GET_NAME(d->character));
           }
 
           strlcat(buf, buf1, sizeof(buf));
