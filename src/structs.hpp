@@ -814,6 +814,9 @@ struct veh_data
   char *arrive;
   struct veh_data *next;
 
+#ifdef USE_DEBUG_CANARIES
+  int canary;
+#endif
 
   veh_data() :
       in_room(NULL), name(NULL), description(NULL), short_description(NULL), restring(NULL),
@@ -826,6 +829,10 @@ struct veh_data
   {
     for (int i = 0; i < NUM_MODS; i++)
       mod[i] = NULL;
+
+#ifdef USE_DEBUG_CANARIES
+    canary = CANARY_VALUE;
+#endif
   }
 }
 ;
@@ -891,6 +898,9 @@ struct char_data
   unsigned short bullet_pants[(END_OF_AMMO_USING_WEAPONS + 1) - START_OF_AMMO_USING_WEAPONS][NUM_AMMOTYPES];
 
   /* Adding a field here? If it's a pointer, add it to utils.cpp's copy_over_necessary_info() to avoid breaking mdelete etc. */
+#ifdef USE_DEBUG_CANARIES
+  int canary;
+#endif
 
   char_data() :
       nr(0), unique_id(0), in_room(NULL), was_in_room(NULL), player_specials(NULL), in_veh(NULL), vfront(FALSE),
@@ -906,6 +916,10 @@ struct char_data
     for (int wp = 0; wp <= END_OF_AMMO_USING_WEAPONS - START_OF_AMMO_USING_WEAPONS; wp++) {
       ZERO_OUT_ARRAY(bullet_pants[wp], NUM_AMMOTYPES);
     }
+
+#ifdef USE_DEBUG_CANARIES
+    canary = CANARY_VALUE;
+#endif
   }
 };
 /* ====================================================================== */
