@@ -72,14 +72,14 @@ typedef struct descriptor_data descriptor_t;
 #define ACCEPTED                       2
 #define REJECTED                       3
 
-#define TELOPT_CHARSET                 42
-#define TELOPT_MSDP                    69
-#define TELOPT_MSSP                    70
-#define TELOPT_MCCP                    86 /* This is MCCP version 2 */
-#define TELOPT_MSP                     90
-#define TELOPT_MXP                     91
-#define TELOPT_ATCP                    200
-#define TELOPT_GA                      249
+#define TELOPT_CHARSET                 ((const unsigned char) 42)
+#define TELOPT_MSDP                    ((const unsigned char) 69)
+#define TELOPT_MSSP                    ((const unsigned char) 70)
+#define TELOPT_MCCP                    ((const unsigned char) 86) /* This is MCCP version 2 */
+#define TELOPT_MSP                     ((const unsigned char) 90)
+#define TELOPT_MXP                     ((const unsigned char) 91)
+#define TELOPT_ATCP                    ((const unsigned char) 200)
+#define TELOPT_GA                      ((const unsigned char) 249)
 
 #define MSDP_VAR                       1
 #define MSDP_VAL                       2
