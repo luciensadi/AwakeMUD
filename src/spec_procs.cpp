@@ -6716,7 +6716,6 @@ SPECIAL(medical_workshop) {
 
   // No command, no character available, no problem. Skip it.
   if (!cmd || !ch || !workshop || GET_OBJ_TYPE(workshop) != ITEM_WORKSHOP) {
-    log_vfprintf("precon failure cmd=%d, ch=%s, workshop=%s, valid=%s", cmd, ch ? "Y": "N", workshop ? "Y":"N", GET_OBJ_TYPE(workshop) == ITEM_WORKSHOP ? "Y":"N");
     return FALSE;
   }
 
@@ -6726,13 +6725,11 @@ SPECIAL(medical_workshop) {
         || (mode_is_diagnose = CMD_IS("diagnose"))
         || (mode_is_withdraw = CMD_IS("withdraw"))
       )) {
-        log("mode failure");
     return FALSE;
   }
 
   // Require that the medical workshop be unpacked.
   if (!GET_WORKSHOP_IS_SETUP(workshop) && GET_WORKSHOP_GRADE(workshop) != TYPE_FACILITY) {
-    log("workshop failure");
     return FALSE;
   }
 
