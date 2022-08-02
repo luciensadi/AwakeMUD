@@ -6699,6 +6699,10 @@ ACMD(do_wheresmycar) {
   The distance they're willing to travel depends on how much you spend.
   */
 
+  if (!ch->desc) {
+    return;
+  }
+
   if (GET_NUYEN_PAID_FOR_WHERES_MY_CAR(ch) != 0) {
     send_to_char("You've got a group out searching already. You'll have to wait until they return.\r\n", ch);
     return;

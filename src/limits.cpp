@@ -294,7 +294,7 @@ void _raw_gain_nuyen(struct char_data *ch, long amount, int category, bool bank,
   }
 
   // Track the nuyen gain for metrics.
-  if (!IS_NPC(ch))
+  if (ch->desc)
     GET_NUYEN_INCOME_THIS_PLAY_SESSION(ch, category) += abs(amount);
 
   // Apply the change
