@@ -4500,10 +4500,26 @@ ACMD(do_spray)
 
   for (struct obj_data *obj = ch->carrying; obj; obj = obj->next_content)
     if (GET_OBJ_SPEC(obj) && GET_OBJ_SPEC(obj) == spraypaint) {
-      if (strlen(argument) >= LINE_LENGTH) {
+      if (get_string_length_after_color_code_removal(argument, ch) >= LINE_LENGTH) {
         send_to_char("There isn't that much paint in there.\r\n", ch);
         return;
       }
+
+      {
+        int alpha = 0, nonalpha = 0;
+        for (const char *ptr = argument; *ptr; ptr++) {
+          if (isalpha(*ptr)) {
+            alpha++;
+          } else if (*ptr != '^' && *ptr != '[' && *ptr != ']') {
+            nonalpha++;
+          }
+        }
+        if (alpha / 5 < nonalpha) {
+          send_to_char("ASCII art doesn't play well with screenreaders, please write things out!\r\n", ch);
+          return;
+        }
+      }
+
       struct obj_data *paint = read_object(OBJ_DYNAMIC_GRAFFITI, VIRTUAL);
       snprintf(buf, sizeof(buf), "a piece of graffiti that says \"%s^n\"", argument);
       paint->restring = str_dup(buf);
