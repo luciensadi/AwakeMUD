@@ -68,6 +68,7 @@
 #include "perfmon.hpp"
 #include "config.hpp"
 #include "ignore_system.hpp"
+#include "dblist.hpp"
 
 
 const unsigned perfmon::kPulsePerSecond = PASSES_PER_SEC;
@@ -872,6 +873,15 @@ void game_loop(int mother_desc)
     /* Note: pulse now changes every 0.10 seconds  */
 
     pulse++;
+
+#ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
+    // Every RL second.
+    if (!(pulse % PASSES_PER_SEC)) {
+      void verify_every_pointer_we_can_think_of();
+
+      verify_every_pointer_we_can_think_of();
+    }
+#endif
 
     if (!(pulse % PULSE_ZONE)) {
       zone_update();
@@ -1865,7 +1875,11 @@ int write_to_descriptor(int desc, const char *txt) {
   char the_bullshit_buf[total * 10];
   for (int txt_idx = 0; txt[txt_idx]; txt_idx++) {
     if ((txt[txt_idx] < ' ' || txt[txt_idx] > '~')) {
-      snprintf(ENDOF(the_bullshit_buf), sizeof(the_bullshit_buf), "@%d", txt[txt_idx]);
+      if (txt[txt_idx] == 27) {
+        strlcat(the_bullshit_buf, "@ESC", sizeof(the_bullshit_buf));
+      } else {
+        snprintf(ENDOF(the_bullshit_buf), sizeof(the_bullshit_buf), "@%d", (unsigned char) txt[txt_idx]);
+      }
     } else {
       snprintf(ENDOF(the_bullshit_buf), sizeof(the_bullshit_buf), "%c", txt[txt_idx]);
     }
@@ -3633,3 +3647,178 @@ void process_wheres_my_car() {
     mudlog(buf2, d->character, LOG_SYSLOG, TRUE);
   }
 }
+
+#ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
+void verify_vehicle_validity(struct veh_data *veh, bool go_deep=FALSE);
+void verify_room_validity(struct room_data *room, bool go_deep=FALSE);
+void verify_obj_validity(struct obj_data *obj, bool go_deep=FALSE);
+void verify_character_validity(struct char_data *ch, bool go_deep=FALSE);
+
+void verify_vehicle_validity(struct veh_data *veh, bool go_deep) {
+  if (veh == NULL)
+    return;
+
+  assert(veh->canary == CANARY_VALUE);
+
+  if (!go_deep)
+    return;
+
+  verify_room_validity(veh->in_room);
+  verify_room_validity(veh->dest);
+
+  for (int i = 0; i < 3; i++)
+    verify_room_validity(veh->lastin[i]);
+
+  verify_character_validity(veh->followch);
+  verify_character_validity(veh->people);
+  verify_character_validity(veh->rigger);
+  verify_character_validity(veh->fighting);
+
+  verify_obj_validity(veh->mount);
+  verify_obj_validity(veh->contents);
+
+  for (int i = 0; i < NUM_MODS; i++)
+    verify_obj_validity(veh->mod[i]);
+
+  verify_vehicle_validity(veh->following);
+  verify_vehicle_validity(veh->fight_veh);
+  verify_vehicle_validity(veh->next_veh);
+  verify_vehicle_validity(veh->next_sub);
+  verify_vehicle_validity(veh->prev_sub);
+  verify_vehicle_validity(veh->carriedvehs);
+  verify_vehicle_validity(veh->in_veh);
+  verify_vehicle_validity(veh->towing);
+}
+
+void verify_room_validity(struct room_data *room, bool go_deep) {
+  if (room == NULL)
+    return;
+
+  assert(room->canary == CANARY_VALUE);
+
+  if (!go_deep)
+    return;
+
+  for (int dir = 0; dir < NUM_OF_DIRS; dir++) {
+    if ((room)->dir_option[dir]) {
+      assert((room)->dir_option[dir]->canary == CANARY_VALUE);
+    }
+    if ((room)->temporary_stored_exit[dir]) {
+      assert((room)->temporary_stored_exit[dir]->canary == CANARY_VALUE);
+    }
+  }
+
+  verify_obj_validity(room->contents);
+
+  verify_character_validity(room->people);
+  verify_character_validity(room->watching);
+
+  verify_vehicle_validity(room->vehicles);
+
+  for (int i = 0; i < NUM_WORKSHOP_TYPES; i++)
+    verify_obj_validity(room->best_workshop[i]);
+}
+
+void verify_obj_validity(struct obj_data *obj, bool go_deep) {
+  if (obj == NULL)
+    return;
+
+  assert(obj->canary == CANARY_VALUE);
+
+  if (!go_deep)
+    return;
+
+  verify_room_validity(obj->in_room);
+  verify_vehicle_validity(obj->in_veh);
+
+  verify_character_validity(obj->carried_by);
+  verify_character_validity(obj->worn_by);
+  verify_character_validity(obj->targ);
+
+  assert(obj->in_obj != obj);
+  verify_obj_validity(obj->in_obj);
+  verify_obj_validity(obj->contains);      /* Contains objects                 */
+  verify_obj_validity(obj->next_content);  /* For 'contains' lists             */
+
+  // verify_host_validity(obj->in_host);
+
+  verify_vehicle_validity(obj->tveh);
+}
+
+void verify_character_validity(struct char_data *ch, bool go_deep) {
+  if (ch == NULL)
+    return;
+
+  assert(ch->canary == CANARY_VALUE);
+
+  if (!go_deep)
+    return;
+
+  verify_room_validity(ch->in_room);
+  verify_room_validity(ch->was_in_room);
+
+  verify_vehicle_validity(ch->in_veh);
+
+  verify_obj_validity(ch->carrying);
+  verify_obj_validity(ch->cyberware);
+  verify_obj_validity(ch->bioware);
+  for (int i = 0; i < NUM_WEARS; i++)
+    verify_obj_validity(ch->equipment[i]);
+
+  verify_character_validity(ch->next_in_room);
+  verify_character_validity(ch->next);
+  verify_character_validity(ch->next_fighting);
+  verify_character_validity(ch->next_in_zone);
+  verify_character_validity(ch->next_in_veh);
+  verify_character_validity(ch->next_watching);
+  verify_character_validity(ch->master);
+
+  /*
+  struct char_player_data player;
+  struct char_ability_data real_abils;
+  struct char_ability_data aff_abils;
+  struct char_point_data points;
+  struct char_special_data char_specials;
+  struct player_special_data *player_specials;
+  struct mob_special_data mob_specials;
+  struct matrix_icon *persona;
+  struct spell_queue *squeue;
+  struct sustain_data *sustained;
+  struct spirit_sustained *ssust;
+  struct descriptor_data *desc;
+  struct follow_type *followers;
+  struct spell_data *spells;
+  IgnoreData *ignore_data;
+  Pgroup_data *pgroup;
+  Pgroup_invitation *pgroup_invitations;
+  */
+}
+
+void verify_every_pointer_we_can_think_of() {
+  /* Huh, looks like you want to hate your life. Welcome to the shitshow!
+     We will now:
+       - Iterate over everything I can think of to check for pointer validity
+       - Check all the canaries I can think of
+       - Probably bog down the machine and cause hella problems
+  */
+  extern class objList ObjList;
+
+  // First, objects: Are their location pointers valid?
+  ObjList.CheckPointers();
+
+  // Next, characters.
+  for (struct char_data *ptr = character_list; ptr; ptr = ptr->next) {
+    verify_character_validity(ptr, TRUE);
+  }
+
+  // Next, vehicles.
+  for (struct veh_data *veh = veh_list; veh; veh = veh->next) {
+    verify_vehicle_validity(veh, TRUE);
+  }
+
+  // Finally, rooms.
+  for (int i = 0; i < top_of_world; i++) {
+    verify_room_validity(&world[i], TRUE);
+  }
+}
+#endif

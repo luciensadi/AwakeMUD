@@ -51,6 +51,16 @@ void objList::Traverse(void (*func)(struct obj_data *))
     func(temp->data);
 }
 
+#ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
+void objList::CheckPointers()
+{
+  extern void verify_obj_validity(struct obj_data *obj, bool go_deep=FALSE);
+
+  for (nodeStruct<struct obj_data *> *temp = head; temp; temp = temp->next)
+    verify_obj_validity(temp->data, TRUE);
+}
+#endif
+
 // this function searches through the list and returns a count of objects
 // with the specified virtual number.
 int objList::CountObj(int num)

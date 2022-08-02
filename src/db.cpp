@@ -904,6 +904,11 @@ void index_boot(int mode)
     veh_index = new struct index_data[rec_count + veh_chunk_size];
     memset((char *) veh_index, 0, (sizeof(struct index_data) * (rec_count + veh_chunk_size)));
     top_of_veh_array = rec_count + veh_chunk_size;
+
+#ifdef USE_DEBUG_CANARIES
+    for (int i = 0; i < rec_count + veh_chunk_size; i++)
+      veh_proto[i].canary = CANARY_VALUE;
+#endif
     break;
 
   case DB_BOOT_ZON:
@@ -4725,6 +4730,10 @@ void clear_char(struct char_data * ch)
   if (ch->points.max_mental < 1000)
     ch->points.max_mental = 1000;
   ch->player.time.logon = time(0);
+
+#ifdef USE_DEBUG_CANARIES
+  ch->canary = CANARY_VALUE;
+#endif
 }
 
 /* Clear ALL the vars of an object; don't free up space though */
@@ -4735,6 +4744,10 @@ void clear_object(struct obj_data * obj)
   memset((char *) obj, 0, sizeof(struct obj_data));
   obj->item_number = NOTHING;
   obj->in_room = NULL;
+
+  #ifdef USE_DEBUG_CANARIES
+    obj->canary = CANARY_VALUE;
+  #endif
 }
 
 void clear_room(struct room_data *room)
@@ -4751,6 +4764,10 @@ void clear_vehicle(struct veh_data *veh)
   DELETE_ARRAY_IF_EXTANT(veh->restring_long);
   memset((char *) veh, 0, sizeof(struct veh_data));
   veh->in_room = NULL;
+
+#ifdef USE_DEBUG_CANARIES
+  veh->canary = CANARY_VALUE;
+#endif
 }
 
 void clear_host(struct host_data *host)
@@ -5164,6 +5181,11 @@ void load_saved_veh()
     else
       continue;
 
+#ifdef USE_DEBUG_CANARIES
+    veh->canary = CANARY_VALUE;
+    assert(veh->canary == CANARY_VALUE);
+#endif
+
     veh->damage = data.GetInt("VEHICLE/Damage", 0);
     veh->owner = owner;
     veh->idnum = data.GetLong("VEHICLE/Idnum", number(0, INT_MAX));
@@ -5424,14 +5446,25 @@ void load_saved_veh()
       veh->mount = obj;
     }
   }
-  for (veh = veh_list; veh; veh = veh->next)
+
+  #ifdef USE_DEBUG_CANARIES
+    assert(veh->canary == CANARY_VALUE);
+  #endif
+
+  for (veh = veh_list; veh; veh = veh->next) {
     if (veh->spare2) {
-      for (veh2 = veh_list; veh2 && !veh->in_veh; veh2 = veh2->next)
+      for (veh2 = veh_list; veh2 && !veh->in_veh; veh2 = veh2->next) {
         if (veh->spare2 == veh2->idnum) {
           veh_to_veh(veh, veh2);
           veh->spare2 = 0;
           veh->locked = FALSE;
+
+          #ifdef USE_DEBUG_CANARIES
+            assert(veh->canary == CANARY_VALUE);
+            assert(veh2->canary == CANARY_VALUE);
+          #endif
         }
+      }
       if (!veh->in_veh) {
         // Failure case: The containing vehicle did not exist.
         if (veh_room > 0 && real_room(veh_room) > 0) {
@@ -5445,9 +5478,13 @@ void load_saved_veh()
         mudlog(buf, NULL, LOG_SYSLOG, TRUE);
         veh->spare2 = 0;
         veh_to_room(veh, &world[real_room(veh_room)]);
+
+        #ifdef USE_DEBUG_CANARIES
+          assert(veh->canary == CANARY_VALUE);
+        #endif
       }
     }
-
+  }
 }
 
 void load_consist(void)
