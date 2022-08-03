@@ -396,7 +396,6 @@ struct archetype_data *generate_decker() {
 
   // Inventory.
   arch->weapon = OBJ_SCK_MODEL_100;
-  arch->weapon_barrel = OBJ_GAS_VENT_IV;
   arch->ammo_q = 500;
 
   arch->nuyen = 22660;

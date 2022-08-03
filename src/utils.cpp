@@ -2931,6 +2931,10 @@ char *double_up_color_codes(const char *string) {
   while (*read_ptr) {
     if (*read_ptr == '^')
       *(write_ptr++) = '^';
+    else if (*read_ptr == '#') {
+      *(write_ptr++) = '^';
+      *(write_ptr++) = '^';
+    }
     *(write_ptr++) = *(read_ptr++);
   }
   *(write_ptr++) = '\0';

@@ -939,6 +939,7 @@ void assign_objects(void)
   ASSIGNOBJ(6997, nerpcorpolis_button);
   ASSIGNOBJ(16298, floor_usable_radio);
   ASSIGNOBJ(26104, toggled_voice_modulator);
+  ASSIGNOBJ(14799, bank);
 
   perform_secret_obj_assignments();
 #endif
