@@ -401,7 +401,7 @@ void print_group(struct char_data *ch)
     if (IS_AFFECTED(k, AFF_GROUP)) {
       snprintf(buf, sizeof(buf), "     [%3dP %3dM] %-20s (Head of group)\r\n",
               (int)(GET_PHYSICAL(k) / 100), (int)(GET_MENTAL(k) / 100),
-              GET_NAME(k));
+              k == ch ? "You" : GET_NAME(k));
       send_to_char(buf, ch);
     }
 
@@ -409,10 +409,16 @@ void print_group(struct char_data *ch)
       if (!IS_AFFECTED(f->follower, AFF_GROUP))
         continue;
 
-      snprintf(buf, sizeof(buf), "     [%3dP %3dM] $N",
-              (int)(GET_PHYSICAL(f->follower) / 100),
-              (int)(GET_MENTAL(f->follower) / 100));
-      act(buf, FALSE, ch, 0, f->follower, TO_CHAR);
+      if (f->follower == ch) {
+        send_to_char(ch, "     [%3dP %3dM] You",
+                     (int)(GET_PHYSICAL(f->follower) / 100),
+                     (int)(GET_MENTAL(f->follower) / 100));
+      } else {
+        snprintf(buf, sizeof(buf), "     [%3dP %3dM] $N",
+                (int)(GET_PHYSICAL(f->follower) / 100),
+                (int)(GET_MENTAL(f->follower) / 100));
+        act(buf, FALSE, ch, 0, f->follower, TO_CHAR);
+      }
     }
   }
 }

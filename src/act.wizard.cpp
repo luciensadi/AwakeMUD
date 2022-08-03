@@ -2048,6 +2048,14 @@ ACMD(do_return)
   struct char_data *vict;
 
   if (PLR_FLAGGED(ch, PLR_REMOTE)) {
+    PLR_FLAGS(ch).RemoveBit(PLR_REMOTE);
+    ch->char_specials.rigging->rigger = NULL;
+    ch->char_specials.rigging->cspeed = SPEED_OFF;
+    stop_chase(ch->char_specials.rigging);
+    send_to_veh("You slow to a halt.\r\n", ch->char_specials.rigging, NULL, 0);
+    ch->char_specials.rigging = NULL;
+    stop_fighting(ch);
+
     send_to_char("You return to your senses.\r\n", ch);
     for (struct obj_data *cyber = ch->cyberware; cyber; cyber = cyber->next_content)
       if (GET_OBJ_VAL(cyber, 0) == CYB_DATAJACK) {
@@ -2060,13 +2068,6 @@ ACMD(do_return)
         break;
       }
     act(buf, TRUE, ch, 0, 0, TO_ROOM);
-    PLR_FLAGS(ch).RemoveBit(PLR_REMOTE);
-    ch->char_specials.rigging->rigger = NULL;
-    ch->char_specials.rigging->cspeed = SPEED_OFF;
-    stop_chase(ch->char_specials.rigging);
-    send_to_veh("You slow to a halt.\r\n", ch->char_specials.rigging, NULL, 0);
-    ch->char_specials.rigging = NULL;
-    stop_fighting(ch);
     return;
   }
   if (ch->desc) {
@@ -2762,7 +2763,7 @@ ACMD(do_deduct)
 {
   MYSQL_ROW row;
   MYSQL_RES *res;
-  
+
   struct char_data *vict;
   char amt[MAX_STRING_LENGTH];
   char reason[MAX_STRING_LENGTH];
