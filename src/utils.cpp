@@ -2554,19 +2554,25 @@ bool attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data *w
   // Handling for silencer and suppressor restrictions.
   if (GET_ACCESSORY_TYPE(attachment) == ACCESS_SILENCER || GET_ACCESSORY_TYPE(attachment) == ACCESS_SOUNDSUPP) {
     // Weapon cannot be a revolver or shotgun.
-    if (GET_WEAPON_ATTACK_TYPE(weapon) == WEAP_REVOLVER || GET_WEAPON_ATTACK_TYPE(weapon) == WEAP_SHOTGUN) {
-      if (ch) {
-        send_to_char(ch, "%ss can't use silencers or suppressors.\r\n", CAP(weapon_type[GET_WEAPON_ATTACK_TYPE(weapon)]));
-      } else {
-        snprintf(buf, sizeof(buf), "SYSERR: Attempting to attach silencer/suppressor '%s' (%ld) to %s '%s' (%ld).",
-                GET_OBJ_NAME(attachment),
-                GET_OBJ_VNUM(attachment),
-                weapon_type[GET_WEAPON_ATTACK_TYPE(weapon)],
-                GET_OBJ_NAME(weapon),
-                GET_OBJ_VNUM(weapon));
-        mudlog(buf, ch, LOG_SYSLOG, TRUE);
-      }
-      return FALSE;
+    switch (GET_WEAPON_ATTACK_TYPE(weapon)) {
+      case WEAP_REVOLVER:
+      case WEAP_SHOTGUN:
+      case WEAP_GREN_LAUNCHER:
+      case WEAP_CANNON:
+      case WEAP_MINIGUN:
+      case WEAP_MISS_LAUNCHER:
+        if (ch) {
+          send_to_char(ch, "%ss can't use silencers or suppressors.\r\n", CAP(weapon_types[GET_WEAPON_ATTACK_TYPE(weapon)]));
+        } else {
+          snprintf(buf, sizeof(buf), "SYSERR: Attempting to attach silencer/suppressor '%s' (%ld) to %s '%s' (%ld).",
+                  GET_OBJ_NAME(attachment),
+                  GET_OBJ_VNUM(attachment),
+                  weapon_types[GET_WEAPON_ATTACK_TYPE(weapon)],
+                  GET_OBJ_NAME(weapon),
+                  GET_OBJ_VNUM(weapon));
+          mudlog(buf, ch, LOG_SYSLOG, TRUE);
+        }
+        return FALSE;
     }
 
     // Silencers.

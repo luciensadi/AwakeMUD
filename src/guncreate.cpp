@@ -23,7 +23,7 @@
 void aedit_disp_menu(struct descriptor_data *d)
 {
   CLS(CH);
-  send_to_char(CH, "1) Weapon: ^c%s^n\r\n", weapon_type[GET_AMMOBOX_WEAPON(OBJ)]);
+  send_to_char(CH, "1) Weapon: ^c%s^n\r\n", weapon_types[GET_AMMOBOX_WEAPON(OBJ)]);
   send_to_char(CH, "2) Type: ^c%s^n\r\n", ammo_type[GET_AMMOBOX_TYPE(OBJ)].name);
   send_to_char(CH, "3) Amount: ^c%d^n  (^c%d^n nuyen)\r\n", GET_AMMOBOX_INTENDED_QUANTITY(OBJ), get_ammo_cost(GET_AMMOBOX_WEAPON(OBJ), GET_AMMOBOX_TYPE(OBJ)) * GET_AMMOBOX_INTENDED_QUANTITY(OBJ));
   send_to_char(CH, "q) Quit\r\nEnter your choice: ");
@@ -55,7 +55,7 @@ void aedit_disp_weapon_menu(struct descriptor_data *d)
 
     send_to_char(CH, "  %2d) %-18s%s",
                  index,
-                 weapon_type[counter],
+                 weapon_types[counter],
                  index % 2 == 0 || PRF_FLAGGED(CH, PRF_SCREENREADER) ? "\r\n" : ""
                );
   }
@@ -97,7 +97,7 @@ void aedit_parse(struct descriptor_data *d, const char *arg)
       break;
     case 'q':
       send_to_char(CH, "Ammo design saved!\r\n");
-      snprintf(buf, sizeof(buf), "a box of %s %s ammunition", ammo_type[GET_AMMOBOX_TYPE(OBJ)].name, weapon_type[GET_AMMOBOX_WEAPON(OBJ)]);
+      snprintf(buf, sizeof(buf), "a box of %s %s ammunition", ammo_type[GET_AMMOBOX_TYPE(OBJ)].name, weapon_types[GET_AMMOBOX_WEAPON(OBJ)]);
       OBJ->restring = str_dup(buf);
       GET_AMMOBOX_CREATOR(OBJ) = GET_IDNUM(CH);
       obj_to_char(OBJ, CH);

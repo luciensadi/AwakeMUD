@@ -574,8 +574,8 @@ ACMD(do_put)
     // If the weapons don't match, no good.
     if (GET_AMMOBOX_WEAPON(cont) != GET_AMMOBOX_WEAPON(obj)) {
       send_to_char(ch, "You can't combine %s ammo with %s ammo.\r\n",
-        weapon_type[GET_AMMOBOX_WEAPON(cont)],
-        weapon_type[GET_AMMOBOX_WEAPON(obj)]
+        weapon_types[GET_AMMOBOX_WEAPON(cont)],
+        weapon_types[GET_AMMOBOX_WEAPON(obj)]
       );
       return;
     }

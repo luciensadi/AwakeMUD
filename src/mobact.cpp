@@ -1564,8 +1564,8 @@ void mobile_activity(void)
         snprintf(build_err_msg, sizeof(build_err_msg), "CONTENT ERROR: %s (%ld) is wielding %s %s, but has no weapon skill in %s!",
                  GET_CHAR_NAME(ch),
                  GET_MOB_VNUM(ch),
-                 AN(weapon_type[indexed_attack_type]),
-                 weapon_type[indexed_attack_type],
+                 AN(weapon_types[indexed_attack_type]),
+                 weapon_types[indexed_attack_type],
                  skills[GET_WEAPON_SKILL(GET_EQ(ch, WEAR_WIELD))].name
                );
         mudlog(build_err_msg, ch, LOG_MISCLOG, TRUE);
@@ -1577,8 +1577,8 @@ void mobile_activity(void)
         snprintf(build_err_msg, sizeof(build_err_msg), "CONTENT ERROR: Skilled mob %s (%ld) is wielding %s %s%s, but has no melee skill in %s!",
                  GET_CHAR_NAME(ch),
                  GET_MOB_VNUM(ch),
-                 AN(weapon_type[indexed_attack_type]),
-                 weapon_type[indexed_attack_type],
+                 AN(weapon_types[indexed_attack_type]),
+                 weapon_types[indexed_attack_type],
                  melee_skill == SKILL_POLE_ARMS ? " (with bayonet)" : "",
                  skills[melee_skill].name
                );

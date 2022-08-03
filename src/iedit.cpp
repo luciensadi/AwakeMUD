@@ -187,8 +187,8 @@ void iedit_disp_weapon_menu(struct descriptor_data * d)
   CLS(CH);
   for (int counter = 0; counter < MAX_WEAP; counter += 2)
     send_to_char(CH, "%2d) %-18s %2d) %-18s\r\n",
-                 counter, weapon_type[counter],
-                 counter + 1, counter + 1 < MAX_WEAP ? weapon_type[counter + 1] : "");
+                 counter, weapon_types[counter],
+                 counter + 1, counter + 1 < MAX_WEAP ? weapon_types[counter + 1] : "");
 
   send_to_char("Enter weapon type:\r\n", CH);
 }

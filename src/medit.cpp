@@ -1484,7 +1484,7 @@ void medit_parse(struct descriptor_data *d, const char *arg)
         break;
       case '1':
         for (int i = START_OF_AMMO_USING_WEAPONS; i <= END_OF_AMMO_USING_WEAPONS; i++)
-          send_to_char(CH, "%d) %s\r\n", (i + 1) - START_OF_AMMO_USING_WEAPONS, weapon_type[i]);
+          send_to_char(CH, "%d) %s\r\n", (i + 1) - START_OF_AMMO_USING_WEAPONS, weapon_types[i]);
         send_to_char("\r\nSelect the weapon to edit: ", CH);
         d->edit_mode = MEDIT_AMMO_SELECT_WEAPON;
         break;

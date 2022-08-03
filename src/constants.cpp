@@ -417,7 +417,7 @@ const char *attack_types[] =
     "\n"
   };
 
-const char *weapon_type[] =
+const char *weapon_types[] =
   {
     "slashing weapon",
     "club",

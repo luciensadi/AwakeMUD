@@ -54,15 +54,15 @@ ACMD(do_pockets) {
   * pockets <weapontype>: display ammo of that type *
   ***************************************************/
   for (int i = START_OF_AMMO_USING_WEAPONS; i <= END_OF_AMMO_USING_WEAPONS; i++) {
-    if (!strn_cmp(argument, weapon_type[i], strlen(argument))
+    if (!strn_cmp(argument, weapon_types[i], strlen(argument))
         || (*(weapon_type_aliases[i]) && !str_cmp(argument, weapon_type_aliases[i]))) {
       if (print_one_weapontypes_ammo_to_string(ch, i, buf, sizeof(buf)))
         send_to_char(ch, "You have the following %s ammunition secreted about your person:%s%s\r\n",
-                     weapon_type[i],
+                     weapon_types[i],
                      PRF_FLAGGED(ch, PRF_SCREENREADER) ? " " : "\r\n",
                      buf);
       else
-        send_to_char(ch, "You don't have any %s ammunition secreted about your person.\r\n", weapon_type[i]);
+        send_to_char(ch, "You don't have any %s ammunition secreted about your person.\r\n", weapon_types[i]);
       return;
     }
   }
@@ -219,7 +219,7 @@ ACMD(do_pockets) {
 
   int weapon = -1;
   for (int i = START_OF_AMMO_USING_WEAPONS; i <= END_OF_AMMO_USING_WEAPONS; i++) {
-    if (!strn_cmp(weapon_buf, weapon_type[i], strlen(weapon_buf))
+    if (!strn_cmp(weapon_buf, weapon_types[i], strlen(weapon_buf))
         || (*(weapon_type_aliases[i]) && str_cmp(weapon_buf, weapon_type_aliases[i]) == 0)) {
       weapon = i;
       break;
@@ -229,7 +229,7 @@ ACMD(do_pockets) {
     send_to_char(ch, "'%s' is not a recognized weapon type. Valid types are: ", weapon_buf);
     bool is_first = TRUE;
     for (int i = START_OF_AMMO_USING_WEAPONS; i <= END_OF_AMMO_USING_WEAPONS; i++) {
-      send_to_char(ch, "%s%s", is_first ? "" : ", ", weapon_type[i]);
+      send_to_char(ch, "%s%s", is_first ? "" : ", ", weapon_types[i]);
       if (*(weapon_type_aliases[i]))
         send_to_char(ch, " (%s)", weapon_type_aliases[i]);
       is_first = FALSE;
@@ -511,7 +511,7 @@ const char *get_ammo_representation(int weapon, int ammotype, int quantity) {
 
   snprintf(results_buf, sizeof(results_buf), "%s %s %s%s",
            ammo_type[ammotype].name,
-           weapon_type[weapon],
+           weapon_types[weapon],
            get_weapon_ammo_name_as_string(weapon),
            quantity != 1 ? "s" : "");
 
@@ -566,7 +566,7 @@ void display_pockets_to_char(struct char_data *ch, struct char_data *vict) {
   for (int wp = START_OF_AMMO_USING_WEAPONS; wp <= END_OF_AMMO_USING_WEAPONS; wp++) {
     if (print_one_weapontypes_ammo_to_string(vict, wp, buf2, sizeof(buf2) - 1)) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  ^c%s^n:%s%s\r\n",
-               weapon_type[wp],
+               weapon_types[wp],
                PRF_FLAGGED(ch, PRF_SCREENREADER) ? " " : "\r\n",
                buf2);
       have_something_to_print = TRUE;
@@ -593,7 +593,7 @@ const char *get_ammobox_default_restring(struct obj_data *ammobox) {
   static char restring[500];
   snprintf(restring, sizeof(restring), "a box of %s %s ammunition",
     ammo_type[GET_AMMOBOX_TYPE(ammobox)].name,
-    weapon_type[GET_AMMOBOX_WEAPON(ammobox)]
+    weapon_types[GET_AMMOBOX_WEAPON(ammobox)]
   );
   return restring;
 }
@@ -626,7 +626,7 @@ bool reload_weapon_from_bulletpants(struct char_data *ch, struct obj_data *weapo
     GET_MAGAZINE_AMMO_TYPE(magazine) = (ammotype == -1 ? AMMO_NORMAL : ammotype);
 
     // Restring it, although I don't think anyone will ever see the restring. Better safe than sorry.
-    snprintf(buf, sizeof(buf), "a %d-round %s magazine", GET_MAGAZINE_BONDED_MAXAMMO(magazine), weapon_type[GET_MAGAZINE_BONDED_ATTACKTYPE(magazine)]);
+    snprintf(buf, sizeof(buf), "a %d-round %s magazine", GET_MAGAZINE_BONDED_MAXAMMO(magazine), weapon_types[GET_MAGAZINE_BONDED_ATTACKTYPE(magazine)]);
     DELETE_ARRAY_IF_EXTANT(magazine->restring);
     magazine->restring = str_dup(buf);
 

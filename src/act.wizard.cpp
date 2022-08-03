@@ -1345,7 +1345,7 @@ void do_stat_object(struct char_data * ch, struct obj_data * j)
   case ITEM_WEAPON:
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Power: %d, Wound: %s, Str+: %d, WeapType: %s, Skill: %s\r\nMax Ammo: %d, Range: %d",
             GET_OBJ_VAL(j, 0), wound_arr[GET_OBJ_VAL(j, 1)], GET_OBJ_VAL(j, 2),
-            weapon_type[GET_OBJ_VAL(j, 3)],
+            weapon_types[GET_OBJ_VAL(j, 3)],
             skills[GET_OBJ_VAL(j, 4)].name, GET_OBJ_VAL(j, 5), GET_OBJ_VAL(j, 6));
     if (GET_OBJ_VAL(j, 3) >= WEAP_HOLDOUT)
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", Top: %d, Barrel: %d, Under: %d", GET_OBJ_VAL(j, 7), GET_OBJ_VAL(j, 8), GET_OBJ_VAL(j, 9));

@@ -2081,7 +2081,7 @@ void parse_object(File &fl, long nr)
         if (GET_AMMOBOX_WEAPON(obj)) {
           snprintf(buf, sizeof(buf), "metal ammo ammunition box %s %s %d-%s %s%s",
                   GET_AMMOBOX_WEAPON(obj) == WEAP_CANNON ? "normal" : ammo_type[GET_AMMOBOX_TYPE(obj)].name,
-                  weapon_type[GET_AMMOBOX_WEAPON(obj)],
+                  weapon_types[GET_AMMOBOX_WEAPON(obj)],
                   GET_AMMOBOX_QUANTITY(obj),
                   type_as_string,
                   type_as_string,
@@ -2098,7 +2098,7 @@ void parse_object(File &fl, long nr)
                   GET_AMMOBOX_QUANTITY(obj),
                   type_as_string,
                   ammo_type[GET_AMMOBOX_TYPE(obj)].name,
-                  weapon_type[GET_AMMOBOX_WEAPON(obj)]);
+                  weapon_types[GET_AMMOBOX_WEAPON(obj)]);
         } else {
           strlcpy(buf, "a nondescript box of ammunition", sizeof(buf));
         }
@@ -2110,7 +2110,7 @@ void parse_object(File &fl, long nr)
         if (GET_AMMOBOX_WEAPON(obj)) {
           snprintf(buf, sizeof(buf), "A metal box of %s %s %s%s has been left here.",
                   GET_AMMOBOX_WEAPON(obj) == WEAP_CANNON ? "normal" : ammo_type[GET_AMMOBOX_TYPE(obj)].name,
-                  weapon_type[GET_AMMOBOX_WEAPON(obj)],
+                  weapon_types[GET_AMMOBOX_WEAPON(obj)],
                   type_as_string,
                   GET_AMMOBOX_QUANTITY(obj) > 1 ? "s" : "");
         } else {
@@ -2947,7 +2947,7 @@ int vnum_object_weapons(char *searchname, struct char_data * ch)
                   wound_arr[GET_OBJ_VAL(&obj_proto[nr], 1)],
                   GET_OBJ_VAL(&obj_proto[nr], 2),
                   obj_proto[nr].text.name,
-                  weapon_type[GET_OBJ_VAL(&obj_proto[nr], 3)],
+                  weapon_types[GET_OBJ_VAL(&obj_proto[nr], 3)],
                   GET_OBJ_VAL(&obj_proto[nr], 5),
                   WEAPON_CAN_USE_FIREMODE(&obj_proto[nr], MODE_SS) ? " SS" : "",
                   WEAPON_CAN_USE_FIREMODE(&obj_proto[nr], MODE_SA) ? " SA" : "",
@@ -2992,13 +2992,85 @@ int vnum_object_weapons_fa_pro(char *searchname, struct char_data * ch)
               wound_arr[GET_WEAPON_DAMAGE_CODE(&obj_proto[nr])],
               GET_WEAPON_INTEGRAL_RECOIL_COMP(&obj_proto[nr]),
               obj_proto[nr].text.name,
-              weapon_type[GET_WEAPON_ATTACK_TYPE(&obj_proto[nr])],
+              weapon_types[GET_WEAPON_ATTACK_TYPE(&obj_proto[nr])],
               GET_WEAPON_MAX_AMMO(&obj_proto[nr]),
               WEAPON_CAN_USE_FIREMODE(&obj_proto[nr], MODE_SS) ? " SS" : "",
               WEAPON_CAN_USE_FIREMODE(&obj_proto[nr], MODE_SA) ? " SA" : "",
               WEAPON_CAN_USE_FIREMODE(&obj_proto[nr], MODE_BF) ? " BF" : "",
               WEAPON_CAN_USE_FIREMODE(&obj_proto[nr], MODE_FA) ? " FA" : "",
               obj_proto[nr].source_info ? "  ^g(canon)^n" : "");
+    }
+  }
+  page_string(ch->desc, buf, 1);
+  return (found);
+}
+
+int vnum_object_weapons_by_type(char *searchname, struct char_data * ch)
+{
+  char buf[MAX_STRING_LENGTH*8];
+  extern const char *wound_arr[];
+  int found = 0;
+  buf[0] = '\0';
+
+  for (int weapon_type = 0; weapon_type < MAX_WEAP; weapon_type++) {
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n[^c%s^n]:\r\n", weapon_types[weapon_type]);
+
+    int found_of_type = 0;
+
+    for (int power = 21; power >= 0; power-- ) {
+      for (int damage_code = DEADLY; damage_code >= LIGHT; damage_code--) {
+        for (rnum_t nr = 0; nr <= top_of_objt; nr++) {
+          struct obj_data *weapon = &obj_proto[nr];
+
+          if (GET_OBJ_TYPE(weapon) != ITEM_WEAPON)
+            continue;
+          if (GET_WEAPON_ATTACK_TYPE(weapon) != weapon_type || GET_WEAPON_DAMAGE_CODE(weapon) != damage_code)
+            continue;
+          if (GET_WEAPON_POWER(weapon) < power && power != 0)
+            continue;
+          if (GET_WEAPON_POWER(weapon) > power && power != 21)
+            continue;
+          if (IS_OBJ_STAT(weapon, ITEM_EXTRA_STAFF_ONLY))
+            continue;
+          if (vnum_from_non_connected_zone(OBJ_VNUM_RNUM(nr)))
+            continue;
+
+          found++;
+          found_of_type++;
+
+          if (IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon))) {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%6ld :%3d] ^c%2d%s ^yIRC:%d^n %s (^W%s^n, ^c%d^n rounds, modes:^c%s%s%s%s^n)%s\r\n",
+                    OBJ_VNUM_RNUM(nr),
+                    ObjList.CountObj(nr),
+                    GET_WEAPON_POWER(weapon),
+                    wound_arr[GET_WEAPON_DAMAGE_CODE(weapon)],
+                    GET_WEAPON_INTEGRAL_RECOIL_COMP(weapon),
+                    obj_proto[nr].text.name,
+                    weapon_types[GET_WEAPON_ATTACK_TYPE(weapon)],
+                    GET_WEAPON_MAX_AMMO(weapon),
+                    WEAPON_CAN_USE_FIREMODE(weapon, MODE_SS) ? " SS" : "",
+                    WEAPON_CAN_USE_FIREMODE(weapon, MODE_SA) ? " SA" : "",
+                    WEAPON_CAN_USE_FIREMODE(weapon, MODE_BF) ? " BF" : "",
+                    WEAPON_CAN_USE_FIREMODE(weapon, MODE_FA) ? " FA" : "",
+                    obj_proto[nr].source_info ? "  ^g(canon)^n" : "");
+          } else {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%6ld :%3d] ^cSTR+%d %s^n ^%sRCH:%2d^n %s (^W%s, focus rating %d^n)%s\r\n",
+                    OBJ_VNUM_RNUM(nr),
+                    ObjList.CountObj(nr),
+                    GET_WEAPON_STR_BONUS(weapon),
+                    wound_arr[GET_WEAPON_DAMAGE_CODE(weapon)],
+                    GET_WEAPON_REACH(weapon) > 2 ? "r" : (GET_WEAPON_REACH(weapon) > 1 ? "y" : "n"),
+                    GET_WEAPON_REACH(weapon),
+                    obj_proto[nr].text.name,
+                    weapon_types[GET_WEAPON_ATTACK_TYPE(weapon)],
+                    GET_WEAPON_FOCUS_RATING(weapon),
+                    obj_proto[nr].source_info ? "  ^g(canon)^n" : "");
+          }
+        }
+      }
+    }
+    if (!found_of_type) {
+      strlcat(buf, "  - nothing\r\n", sizeof(buf));
     }
   }
   page_string(ch->desc, buf, 1);
@@ -3283,6 +3355,8 @@ int vnum_object(char *searchname, struct char_data * ch)
     return vnum_object_weapons(searchname,ch);
   if (!strcmp(searchname,"faweaponslist"))
     return vnum_object_weapons_fa_pro(searchname,ch);
+  if (!strcmp(searchname,"weaponsbytype"))
+    return vnum_object_weapons_by_type(searchname,ch);
   if (!strcmp(searchname,"armorslist"))
     return vnum_object_armors(searchname,ch);
   if (!strcmp(searchname,"magazineslist"))

@@ -749,7 +749,7 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
             // Compose the new name.
             snprintf(new_name_buf, sizeof(new_name_buf), "a box of %s %s ammunition",
               ammo_type[GET_AMMOBOX_TYPE(obj)].name,
-              weapon_type[GET_AMMOBOX_WEAPON(obj)]
+              weapon_types[GET_AMMOBOX_WEAPON(obj)]
             );
 
             // Commit the change.
@@ -1674,7 +1674,7 @@ void shop_info(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
         strcat(buf, " burst-fire");
       else if (IS_SET(GET_OBJ_VAL(obj, 10), 1 << MODE_SA))
         strcat(buf, " semi-automatic");
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %s", weapon_type[GET_OBJ_VAL(obj, 3)]);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %s", weapon_types[GET_OBJ_VAL(obj, 3)]);
       if (IS_OBJ_STAT(obj, ITEM_EXTRA_TWOHANDS))
         strcat(buf, " and requires two hands to wield correctly");
       if (GET_WEAPON_INTEGRAL_RECOIL_COMP(obj))
@@ -1718,7 +1718,7 @@ void shop_info(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
                 GET_WEAPON_DAMAGE_CODE(obj), GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj));
         mudlog(buf1, NULL, LOG_SYSLOG, TRUE);
       }
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %s", weapon_type[GET_OBJ_VAL(obj, 3)]);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %s", weapon_types[GET_OBJ_VAL(obj, 3)]);
 
       // Two-handed weapon?
       if (IS_OBJ_STAT(obj, ITEM_EXTRA_TWOHANDS))
@@ -1903,7 +1903,7 @@ void shop_info(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
     break;
   case ITEM_GUN_AMMO:
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " a box of ammunition for reloading %s magazines. It contains %d rounds of %s ammo.",
-            weapon_type[GET_AMMOBOX_WEAPON(obj)],
+            weapon_types[GET_AMMOBOX_WEAPON(obj)],
             GET_AMMOBOX_QUANTITY(obj),
             ammo_type[GET_AMMOBOX_TYPE(obj)].name);
     break;

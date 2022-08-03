@@ -276,7 +276,7 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
           GET_MAGAZINE_AMMO_COUNT(object) <= 0 ? "n empty" : "",
           GET_MAGAZINE_BONDED_MAXAMMO(object),
           ammo_type[GET_MAGAZINE_AMMO_TYPE(object)].name,
-          weapon_type[GET_MAGAZINE_BONDED_ATTACKTYPE(object)]
+          weapon_types[GET_MAGAZINE_BONDED_ATTACKTYPE(object)]
         );
       // As do ammo boxes.
       } else if (GET_OBJ_TYPE(object) == ITEM_GUN_AMMO) {
@@ -2488,12 +2488,12 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
           if (GET_WEAPON_MAX_AMMO(j) > 0) {
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%d-round %s^n that uses the ^c%s^n skill to fire.",
                     GET_WEAPON_MAX_AMMO(j),
-                    weapon_type[GET_WEAPON_ATTACK_TYPE(j)],
+                    weapon_types[GET_WEAPON_ATTACK_TYPE(j)],
                     skills[GET_WEAPON_SKILL(j)].name);
           } else {
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is %s ^c%s^n that uses the ^c%s^n skill to fire.",
-                    AN(weapon_type[GET_WEAPON_ATTACK_TYPE(j)]),
-                    weapon_type[GET_WEAPON_ATTACK_TYPE(j)],
+                    AN(weapon_types[GET_WEAPON_ATTACK_TYPE(j)]),
+                    weapon_types[GET_WEAPON_ATTACK_TYPE(j)],
                     skills[GET_WEAPON_SKILL(j)].name);
           }
           // Damage code.
@@ -2759,7 +2759,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
         }
         else if (GET_WEAPON_STR_BONUS(j) != 0) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%s^n that uses the ^c%s^n skill to attack with. Its damage code is ^c(STR%s%d)%s%s^n.",
-                  weapon_type[GET_OBJ_VAL(j, 3)],
+                  weapon_types[GET_OBJ_VAL(j, 3)],
                   skills[GET_OBJ_VAL(j, 4)].name,
                   GET_OBJ_VAL(j, 2) < 0 ? "" : "+",
                   GET_OBJ_VAL(j, 2),
@@ -2767,7 +2767,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
                   !IS_DAMTYPE_PHYSICAL(get_weapon_damage_type(j)) ? " (stun)" : "");
         } else {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%s^n that uses the ^c%s^n skill to attack with. Its damage code is ^c(STR)%s%s^n.",
-                  weapon_type[GET_OBJ_VAL(j, 3)], skills[GET_OBJ_VAL(j, 4)].name, wound_arr[GET_OBJ_VAL(j, 1)],
+                  weapon_types[GET_OBJ_VAL(j, 3)], skills[GET_OBJ_VAL(j, 4)].name, wound_arr[GET_OBJ_VAL(j, 1)],
                   !IS_DAMTYPE_PHYSICAL(get_weapon_damage_type(j)) ? " (stun)" : "");
         }
         if (GET_WEAPON_REACH(j)) {
@@ -3300,11 +3300,11 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       if (GET_OBJ_VAL(j, 3))
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It has %d/%d %s round%s of %s ammunition left.\r\n", GET_OBJ_VAL(j, 0), GET_OBJ_VAL(j, 0) +
                      GET_OBJ_VAL(j, 3), ammo_type[GET_OBJ_VAL(j, 2)].name,GET_OBJ_VAL(j, 0) != 1 ? "s" : "",
-                     weapon_type[GET_OBJ_VAL(j, 1)]);
+                     weapon_types[GET_OBJ_VAL(j, 1)]);
       else
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It has %d %s round%s of %s ammunition left.\r\n", GET_OBJ_VAL(j, 0),
                      ammo_type[GET_OBJ_VAL(j, 2)].name,GET_OBJ_VAL(j, 0) != 1 ? "s" : "",
-                     weapon_type[GET_OBJ_VAL(j, 1)]);
+                     weapon_types[GET_OBJ_VAL(j, 1)]);
       break;
     case ITEM_OTHER:
       if (GET_OBJ_VNUM(j) == OBJ_NEOPHYTE_SUBSIDY_CARD) {
@@ -3558,17 +3558,17 @@ ACMD(do_examine)
     } else if (GET_OBJ_TYPE(tmp_object) == ITEM_GUN_MAGAZINE) {
       send_to_char(ch, "It has %d %s round%s left.\r\n", GET_OBJ_VAL(tmp_object, 9),
                    ammo_type[GET_OBJ_VAL(tmp_object, 2)].name,GET_OBJ_VAL(tmp_object, 9) != 1 ? "s" : "");
-      send_to_char(ch, "It can hold a maximum of %d %s round%s.\r\n", GET_OBJ_VAL(tmp_object, 0), weapon_type[GET_OBJ_VAL(tmp_object, 1)],
+      send_to_char(ch, "It can hold a maximum of %d %s round%s.\r\n", GET_OBJ_VAL(tmp_object, 0), weapon_types[GET_OBJ_VAL(tmp_object, 1)],
                    GET_OBJ_VAL(tmp_object, 0) != 1 ? "s" : "");
     } else if (GET_OBJ_TYPE(tmp_object) == ITEM_GUN_AMMO) {
       if (GET_OBJ_VAL(tmp_object, 3))
         send_to_char(ch, "It has %d/%d %s round%s of %s ammunition left.\r\n", GET_OBJ_VAL(tmp_object, 0), GET_OBJ_VAL(tmp_object, 0) +
                      GET_OBJ_VAL(tmp_object, 3), ammo_type[GET_OBJ_VAL(tmp_object, 2)].name,GET_OBJ_VAL(tmp_object, 0) != 1 ? "s" : "",
-                     weapon_type[GET_OBJ_VAL(tmp_object, 1)]);
+                     weapon_types[GET_OBJ_VAL(tmp_object, 1)]);
       else
         send_to_char(ch, "It has %d %s round%s of %s ammunition left.\r\n", GET_OBJ_VAL(tmp_object, 0),
                      ammo_type[GET_OBJ_VAL(tmp_object, 2)].name,GET_OBJ_VAL(tmp_object, 0) != 1 ? "s" : "",
-                     weapon_type[GET_OBJ_VAL(tmp_object, 1)]);
+                     weapon_types[GET_OBJ_VAL(tmp_object, 1)]);
     } else if (GET_OBJ_VNUM(tmp_object) == 119 && GET_OBJ_VAL(tmp_object, 0) == GET_IDNUM(ch))
       snprintf(buf, sizeof(buf), "The card contains %d nuyen.\r\n", GET_OBJ_VAL(tmp_object, 1));
     else if (GET_OBJ_TYPE(tmp_object) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(tmp_object, 0) == TYPE_COOKER) {
