@@ -4460,14 +4460,14 @@ ACMD(do_tridlog)
   }
   two_arguments(argument, arg, buf2);
   if (is_abbrev(arg, "display")) {
-    send_to_char("Idnum	Author		Message\r\n"
+    send_to_char("Idnum   Author   Message\r\n"
                  "--------------------------------------------------------------------------------------\r\n", ch);
     if (mysql_wrapper(mysql, "SELECT * FROM trideo_broadcast ORDER BY idnum"))
       return;
     if (!(res = mysql_use_result(mysql)))
       return;
     while ((row = mysql_fetch_row(res)))
-      send_to_char(ch, "%ld	%ld		%s\r\n", atol(row[0]), atol(row[1]), row[2]);
+      send_to_char(ch, "%6ld  %6ld  %s\r\n", atol(row[0]), atol(row[1]), row[2]);
     mysql_free_result(res);
   } else if (is_abbrev(arg, "add")) {
     send_to_char("Enter message to be displayed. (Insert Line Breaks With \\r\\n):\r\n", ch);

@@ -2985,15 +2985,15 @@ int vnum_object_weapons_fa_pro(char *searchname, struct char_data * ch)
         continue;
 
       ++found;
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%5ld -%2d] ^c%2d%s ^y+%d^n %s (^W%s^n, ^c%d^n rounds, modes:^c%s%s%s%s^n)%s\r\n",
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%6ld :%3d] ^c%2d%s ^yIRC:%d^n %s (^W%s^n, ^c%d^n rounds, modes:^c%s%s%s%s^n)%s\r\n",
               OBJ_VNUM_RNUM(nr),
               ObjList.CountObj(nr),
-              GET_OBJ_VAL(&obj_proto[nr], 0),
-              wound_arr[GET_OBJ_VAL(&obj_proto[nr], 1)],
-              GET_OBJ_VAL(&obj_proto[nr], 2),
+              GET_WEAPON_POWER(&obj_proto[nr]),
+              wound_arr[GET_WEAPON_DAMAGE_CODE(&obj_proto[nr])],
+              GET_WEAPON_INTEGRAL_RECOIL_COMP(&obj_proto[nr]),
               obj_proto[nr].text.name,
-              weapon_type[GET_OBJ_VAL(&obj_proto[nr], 3)],
-              GET_OBJ_VAL(&obj_proto[nr], 5),
+              weapon_type[GET_WEAPON_ATTACK_TYPE(&obj_proto[nr])],
+              GET_WEAPON_MAX_AMMO(&obj_proto[nr]),
               WEAPON_CAN_USE_FIREMODE(&obj_proto[nr], MODE_SS) ? " SS" : "",
               WEAPON_CAN_USE_FIREMODE(&obj_proto[nr], MODE_SA) ? " SA" : "",
               WEAPON_CAN_USE_FIREMODE(&obj_proto[nr], MODE_BF) ? " BF" : "",
