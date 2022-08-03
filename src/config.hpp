@@ -250,6 +250,7 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 #define GUIDED_WITHDRAWAL_ATTEMPT_NUYEN_COST_PER_EDGE          2000
 #define INVOLUNTARY_DRUG_PURCHASE_COST_MULTIPLIER              3
 #define AVG_HOURS_PER_TOLERANCE_TICKDOWN                       (24 * 7)
+#define MAX_ADDICTION_TEST_DIFFICULTY                          12
 
 /////////////// OLC permissions configuration /////////////////////////
 #define LVL_FOR_SETTING_ZONE_EDITOR_ID_NUMBERS                 LVL_VICEPRES

@@ -857,10 +857,13 @@ bool _specific_addiction_test(struct char_data *ch, int drug_id, bool is_mental,
       base_addiction_rating += 3;
   }
 
-  int num_successes = success_test(dice, base_addiction_rating + GET_DRUG_ADDICTION_EDGE(ch, drug_id));
+  // Being trapped in a drug addiction loop is not fun, so we cap the TN here.
+  int tn = MIN(MAX_ADDICTION_TEST_DIFFICULTY, base_addiction_rating + GET_DRUG_ADDICTION_EDGE(ch, drug_id));
+
+  int num_successes = success_test(dice, tn);
   bool addiction_passed = (num_successes > 0);
 
-  snprintf(buf, sizeof(buf), "%s's %s %s addiction %s test: %s(%d) vs addiction factor(%d) + edge(%d) = %d hits (%s).",
+  snprintf(buf, sizeof(buf), "%s's %s %s addiction %s test: %s(%d) vs addiction factor(%d) + edge(%d) (capped: %s) = %d hits (%s).",
            GET_CHAR_NAME(ch),
            drug_types[drug_id].name,
            is_mental ? "mental" : "physical",
@@ -869,6 +872,7 @@ bool _specific_addiction_test(struct char_data *ch, int drug_id, bool is_mental,
            dice,
            base_addiction_rating,
            GET_DRUG_ADDICTION_EDGE(ch, drug_id),
+           tn != base_addiction_rating + GET_DRUG_ADDICTION_EDGE(ch, drug_id) ? "yes" : "no",
            num_successes,
            addiction_passed ? "passed" : "failed, RIP");
   act(buf, FALSE, ch, 0, 0, TO_ROLLS);
@@ -899,6 +903,7 @@ struct room_data *_get_random_drug_seller_room() {
   if (rnum < 0) {
     char oopsbuf[500];
     snprintf(oopsbuf, sizeof(oopsbuf), "SYSERR: Invalid vnum %ld specified in _get_random_drug_seller_room()!", vnum);
+    mudlog(oopsbuf, NULL, LOG_SYSLOG, TRUE);
     rnum = real_room(RM_ENTRANCE_TO_DANTES);
   }
 
