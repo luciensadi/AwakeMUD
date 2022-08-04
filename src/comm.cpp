@@ -2980,7 +2980,7 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
     return NULL;
 
   // We can also skip if the to-char is fully ignoring the actor.
-  if (IS_IGNORING(to, is_blocking_ic_interaction_from, ch)) {
+  if (ch && IS_IGNORING(to, is_blocking_ic_interaction_from, ch)) {
     return NULL;
   }
 

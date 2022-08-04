@@ -74,47 +74,47 @@ public:
   // Don't display OOC-channel messages from the target.
   bool toggle_blocking_oocs(long vict_idnum, const char *vict_name, int mode);
   bool is_blocking_oocs_from(long vict_idnum) { return _ignore_bit_is_set_for(IGNORE_BIT_OOC_CHANNELS, vict_idnum); }
-  bool is_blocking_oocs_from(struct char_data *vict) { return is_blocking_oocs_from(GET_IDNUM_EVEN_IF_PROJECTING(vict)); }
+  bool is_blocking_oocs_from(struct char_data *vict) { return vict && is_blocking_oocs_from(GET_IDNUM_EVEN_IF_PROJECTING(vict)); }
 
   // Don't display messages from the targeted character on your radio output.
   bool toggle_blocking_radios(long vict_idnum, const char *vict_name, int mode);
   bool is_blocking_radios_from(long vict_idnum) { return _ignore_bit_is_set_for(IGNORE_BIT_RADIO, vict_idnum); }
-  bool is_blocking_radios_from(struct char_data *vict) { return is_blocking_radios_from(GET_IDNUM_EVEN_IF_PROJECTING(vict)); }
+  bool is_blocking_radios_from(struct char_data *vict) { return vict && is_blocking_radios_from(GET_IDNUM_EVEN_IF_PROJECTING(vict)); }
 
   // Don't allow the targeted character to call you.
   bool toggle_blocking_calls(long vict_idnum, const char *vict_name, int mode);
   bool is_blocking_calls_from(long vict_idnum) { return _ignore_bit_is_set_for(IGNORE_BIT_CALLS, vict_idnum); }
-  bool is_blocking_calls_from(struct char_data *vict) { return is_blocking_calls_from(GET_IDNUM_EVEN_IF_PROJECTING(vict)); }
+  bool is_blocking_calls_from(struct char_data *vict) { return vict && is_blocking_calls_from(GET_IDNUM_EVEN_IF_PROJECTING(vict)); }
 
   // Prevent the target from sending you mindlinks, and breaks the mindlink if it's set.
   bool toggle_blocking_mindlinks(long vict_idnum, const char *vict_name, int mode);
   bool is_blocking_mindlinks_from(long vict_idnum) { return _ignore_bit_is_set_for(IGNORE_BIT_MINDLINK, vict_idnum); }
-  bool is_blocking_mindlinks_from(struct char_data *vict) { return is_blocking_mindlinks_from(GET_IDNUM_EVEN_IF_PROJECTING(vict)); }
+  bool is_blocking_mindlinks_from(struct char_data *vict) { return vict && is_blocking_mindlinks_from(GET_IDNUM_EVEN_IF_PROJECTING(vict)); }
 
   // Prevent the target from sending you tells.
   bool toggle_blocking_tells(long vict_idnum, const char *vict_name, int mode);
   bool is_blocking_tells_from(long vict_idnum) { return _ignore_bit_is_set_for(IGNORE_BIT_TELLS, vict_idnum); }
-  bool is_blocking_tells_from(struct char_data *vict) { return is_blocking_tells_from(GET_IDNUM_EVEN_IF_PROJECTING(vict)); }
+  bool is_blocking_tells_from(struct char_data *vict) { return vict && is_blocking_tells_from(GET_IDNUM_EVEN_IF_PROJECTING(vict)); }
 
   // Don't display the target's osays.
   bool toggle_blocking_osays(long vict_idnum, const char *vict_name, int mode);
   bool is_blocking_osays_from(long vict_idnum) { return _ignore_bit_is_set_for(IGNORE_BIT_OSAYS, vict_idnum); }
-  bool is_blocking_osays_from(struct char_data *vict) { return is_blocking_osays_from(GET_IDNUM_EVEN_IF_PROJECTING(vict)); }
+  bool is_blocking_osays_from(struct char_data *vict) { return vict && is_blocking_osays_from(GET_IDNUM_EVEN_IF_PROJECTING(vict)); }
 
   // Prevent the target from interacting with you ICly (forces on several other toggles). Includes socials, emotes/echoes, vemotes, says, shouts.
   bool toggle_blocking_ic_interaction(long vict_idnum, const char *vict_name, int mode);
   bool is_blocking_ic_interaction_from(long vict_idnum) { return _ignore_bit_is_set_for(IGNORE_BIT_IC_INTERACTION, vict_idnum); }
-  bool is_blocking_ic_interaction_from(struct char_data *vict) { return is_blocking_ic_interaction_from(GET_IDNUM_EVEN_IF_PROJECTING(vict)); }
+  bool is_blocking_ic_interaction_from(struct char_data *vict) { return vict && is_blocking_ic_interaction_from(GET_IDNUM_EVEN_IF_PROJECTING(vict)); }
 
   // Prevent the target from following you, and unfollow them if they are. (Abusable in PvP)
   bool toggle_blocking_following(long vict_idnum, const char *vict_name, int mode);
   bool is_blocking_following_from(long vict_idnum) { return _ignore_bit_is_set_for(IGNORE_BIT_FOLLOWING, vict_idnum); }
-  bool is_blocking_following_from(struct char_data *vict) { return is_blocking_following_from(GET_IDNUM_EVEN_IF_PROJECTING(vict)); }
+  bool is_blocking_following_from(struct char_data *vict) { return vict && is_blocking_following_from(GET_IDNUM_EVEN_IF_PROJECTING(vict)); }
 
   // Used to block the target from seeing you with the WHERE command.
   bool toggle_blocking_where_visibility(long vict_idnum, const char *vict_name, int mode);
   bool is_blocking_where_visibility_for(long vict_idnum) { return _ignore_bit_is_set_for(IGNORE_BIT_WHERE, vict_idnum); }
-  bool is_blocking_where_visibility_for(struct char_data *vict) { return is_blocking_where_visibility_for(GET_IDNUM_EVEN_IF_PROJECTING(vict)); }
+  bool is_blocking_where_visibility_for(struct char_data *vict) { return vict && is_blocking_where_visibility_for(GET_IDNUM_EVEN_IF_PROJECTING(vict)); }
 
   // Internal-use helper functions. I can almost guarantee you want to be using one of the above functions instead.
   bool _ignore_bit_is_set_for(int ignore_bit, long vict_idnum);
