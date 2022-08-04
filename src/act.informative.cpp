@@ -2862,7 +2862,21 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       }
       break;
     case ITEM_PATCH:
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^crating-%d %s^n patch.", GET_OBJ_VAL(j, 1), patch_names[GET_OBJ_VAL(j, 0)]);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^crating-%d %s^n patch", GET_PATCH_RATING(j), patch_names[GET_PATCH_TYPE(j)]);
+      switch (GET_PATCH_TYPE(j)) {
+        case PATCH_STIM:
+          strlcat(buf, ", which restores mental damage but can only be used by mundanes.", sizeof(buf));
+          break;
+        case PATCH_TRANQ:
+          strlcat(buf, ", which causes mental damage.", sizeof(buf));
+          break;
+        case PATCH_TRAUMA:
+          strlcat(buf, ", which causes mental damage.", sizeof(buf));
+          break;
+        case PATCH_ANTIDOTE:
+          strlcat(buf, ", which lessens the effect of drugs and toxins. (not yet implemented)", sizeof(buf));
+          break;
+      }
       break;
     case ITEM_CYBERDECK:
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "MPCP: ^c%d^n, Hardening: ^c%d^n, Active: ^c%d^n, Storage: ^c%d^n, Load: ^c%d^n.",
@@ -3617,7 +3631,9 @@ ACMD(do_examine)
             int initial_build_time = MAX(1, GET_MAGIC_TOOL_RATING(tmp_object) * 60);
             float completion_percentage = ((float)(initial_build_time - GET_MAGIC_TOOL_BUILD_TIME_LEFT(tmp_object)) / initial_build_time) * 100;
 
-            send_to_char(ch, "It is built around the element of %s.\r\n", elements[GET_MAGIC_TOOL_TOTEM_OR_ELEMENT(tmp_object)].name);
+            send_to_char(ch, "It is a rating-%d circle built around the element of %s.\r\n",
+                         GET_MAGIC_TOOL_RATING(tmp_object),
+                         elements[GET_MAGIC_TOOL_TOTEM_OR_ELEMENT(tmp_object)].name);
 
             if (GET_MAGIC_TOOL_BUILD_TIME_LEFT(tmp_object) && GET_MAGIC_TOOL_OWNER(tmp_object) == GET_IDNUM(ch)) {
               send_to_char(ch, "It looks like you've completed around %.02f%% of it.\r\n", completion_percentage);
@@ -3629,7 +3645,9 @@ ACMD(do_examine)
             int initial_build_time = MAX(1, GET_MAGIC_TOOL_RATING(tmp_object) * 300);
             float completion_percentage = ((float)(initial_build_time - GET_MAGIC_TOOL_BUILD_TIME_LEFT(tmp_object)) / initial_build_time) * 100;
 
-            send_to_char(ch, "It has been dedicated to %s.\r\n", totem_types[GET_MAGIC_TOOL_TOTEM_OR_ELEMENT(tmp_object)]);
+            send_to_char(ch, "It is a rating%d lodge dedicated to %s.\r\n",
+                         GET_MAGIC_TOOL_RATING(tmp_object),
+                         totem_types[GET_MAGIC_TOOL_TOTEM_OR_ELEMENT(tmp_object)]);
 
             if (GET_MAGIC_TOOL_BUILD_TIME_LEFT(tmp_object) && GET_MAGIC_TOOL_OWNER(tmp_object) == GET_IDNUM(ch)) {
               send_to_char(ch, "It looks like you've completed around %.02f%% of it.\r\n", completion_percentage);

@@ -560,7 +560,7 @@ ACMD(do_patch)
     send_to_char(ch, "You don't seem to have a '%s'.\r\n", arg);
     return;
   }
-  if (!(vict = get_char_room_vis(ch, buf))) {
+  if (!(vict = get_char_room_vis(ch, buf)) || IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)) {
     send_to_char(ch, "There doesn't seem to be a '%s' here.\r\n", buf);
     return;
   }
@@ -581,7 +581,7 @@ ACMD(do_patch)
     send_to_char("You can't patch that...\r\n", ch);
     return;
   }
-  if (GET_OBJ_VAL(patch, 1) < 1) {
+  if (GET_PATCH_RATING(patch) < 1) {
     send_to_char(ch, "%s seems to be defective...\r\n", capitalize(GET_OBJ_NAME(patch)));
     return;
   }
@@ -589,8 +589,8 @@ ACMD(do_patch)
     send_to_char(ch, "%s is not a patch.\r\n", capitalize(GET_OBJ_NAME(patch)));
     return;
   }
-  switch (GET_OBJ_VAL(patch, 0)) {
-  case 0:                          // antidote
+  switch (GET_PATCH_TYPE(patch)) {
+  case PATCH_ANTIDOTE:                          // antidote
     if (vict == ch)
       act("You slap $p on your shoulder.", FALSE, ch, patch, 0, TO_CHAR);
     else {
@@ -603,21 +603,26 @@ ACMD(do_patch)
     patch->worn_by = vict;
     patch->worn_on = WEAR_PATCH;
     break;
-  case 1:                          // stim
+  case PATCH_STIM:                          // stim
     if (vict != ch) {
       send_to_char("You can only use stim patches on yourself.\r\n", ch);
       return;
     }
+    if (GET_MAG(vict) > 0) {
+      send_to_char("Magically-active beings can lose magic from stim patches, so stim patches are only for mundane characters.\r\n", ch);
+      return;
+    }
+
     act("You slap $p on your shoulder and feel more aware.", FALSE, ch, patch, 0, TO_CHAR);
     act("$n slaps $p on $s shoulder and appears more aware.", TRUE, ch, patch, 0, TO_ROOM);
-    GET_OBJ_VAL(patch,5) = GET_MENTAL(ch);
+    GET_PATCH_STIMPATCH_ORIGINAL_MENTAL(patch) = GET_MENTAL(ch);
     GET_MENTAL(ch) = MIN(GET_MAX_MENTAL(ch), GET_MENTAL(ch) + (GET_OBJ_VAL(patch, 1) * 100));
     obj_from_char(patch);
     GET_EQ(vict, WEAR_PATCH) = patch;
     patch->worn_by = vict;
     patch->worn_on = WEAR_PATCH;
     break;
-  case 2:                          // tranq
+  case PATCH_TRANQ:                          // tranq
     if (GET_POS(vict) == POS_FIGHTING) {
       send_to_char("You can't put a tranq patch on a fighting person!\r\n", ch);
       return;
@@ -652,7 +657,7 @@ ACMD(do_patch)
     patch->worn_by = vict;
     patch->worn_on = WEAR_PATCH;
     break;
-  case 3:                          // trauma
+  case PATCH_TRAUMA:                          // trauma
     if (GET_POS(vict) >= POS_STUNNED) {
       send_to_char("Now where's the sense in that?\r\n", ch);
       return;

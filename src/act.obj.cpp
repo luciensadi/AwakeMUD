@@ -3463,9 +3463,9 @@ void perform_remove(struct char_data * ch, int pos)
   /* add damage back from stim patches */
   /* it doesn't do anything to keep track, */
   /* so I'm just makeing it a mod mental damage to it */
-  else if ( GET_OBJ_TYPE(obj) == ITEM_PATCH && GET_OBJ_VAL(obj, 0) == 1 ) {
-    GET_MENTAL(ch) = GET_OBJ_VAL(obj,5);
-    GET_OBJ_VAL(obj,5) = 0;
+  else if ( GET_OBJ_TYPE(obj) == ITEM_PATCH && GET_PATCH_TYPE(obj) == PATCH_STIM ) {
+    GET_MENTAL(ch) = GET_PATCH_STIMPATCH_ORIGINAL_MENTAL(obj);
+    GET_PATCH_STIMPATCH_ORIGINAL_MENTAL(obj) = 0;
   }
 
   return;

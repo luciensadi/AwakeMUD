@@ -1250,6 +1250,11 @@ enum {
 #define NUM_ITEMS               47
 // Adding something? Add convenience definees to utils.hpp and put the type's name in constants.cpp.
 
+#define PATCH_ANTIDOTE          0
+#define PATCH_STIM              1
+#define PATCH_TRANQ             2
+#define PATCH_TRAUMA            3
+#define NUM_PATCHES             4
 
 /* take/wear flags: used by obj_data.obj_flags.wear_flags */
 

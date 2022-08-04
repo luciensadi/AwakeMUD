@@ -979,7 +979,13 @@ bool has_required_language_ability_for_sentence(struct char_data *ch, const char
   if (IS_NPC(ch))
     return TRUE;
 
-  int max_allowable = max_allowable_word_length_at_language_level(GET_SKILL(ch, language_skill));
+  int skill_level = GET_SKILL(ch, language_skill);
+
+  // Masters of the language can say anything.
+  if (skill_level >= 12)
+    return TRUE;
+
+  int max_allowable = max_allowable_word_length_at_language_level(skill_level);
 
   char current_word[500];
   char too_long_words[MAX_STRING_LENGTH];

@@ -2677,7 +2677,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       return;
 
     // No double-aura-ing.
-    if (MOB_FLAGGED(ch, MOB_FLAMEAURA)) {
+    if (MOB_FLAGGED(vict, MOB_FLAMEAURA)) {
       send_to_char("They already have a flame aura.\r\n", ch);
       return;
     }
@@ -2706,7 +2706,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
     if (!check_spell_victim(ch, vict, spell, arg))
       return;
 
-    if (AFF_FLAGGED(ch, AFF_LEVITATE)) {
+    if (AFF_FLAGGED(vict, AFF_LEVITATE)) {
       act("$N is already affected by the levitate spell.", FALSE, ch, 0, vict, TO_CHAR);
       return;
     }

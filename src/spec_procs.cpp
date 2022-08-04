@@ -2727,7 +2727,7 @@ SPECIAL(hacker)
     }
     if (GET_OBJ_TYPE(obj) != ITEM_MONEY || !GET_OBJ_VAL(obj, 1) || GET_ITEM_MONEY_VALUE(obj) <= 0 ||
         !GET_ITEM_MONEY_CREDSTICK_ACTIVATED(obj) || belongs_to(ch, obj)) {
-      snprintf(arg, sizeof(arg), "%s Why are you bringing this to me?", GET_CHAR_NAME(ch));
+      snprintf(arg, sizeof(arg), "%s I wouldn't take that. Why are you bringing it to me anyways?", GET_CHAR_NAME(ch));
       do_say(hacker, arg, 0, SCMD_SAYTO);
       return TRUE;
     }

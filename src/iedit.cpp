@@ -39,7 +39,6 @@ extern char *cleanup(char *dest, const char *src);
 
 #define NUM_WEAPON_TYPES        27
 #define NUM_SKILL_TYPES         20
-#define NUM_PATCHES             4
 void iedit_disp_container_flags_menu(struct descriptor_data * d);
 void iedit_disp_extradesc_menu(struct descriptor_data * d);
 void iedit_disp_weapon_menu(struct descriptor_data * d);

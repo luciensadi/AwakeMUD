@@ -986,8 +986,8 @@ ACMD(do_matrix_score)
   for (struct obj_data *soft = DECKER->software; soft; soft = soft->next_content)
     if (GET_OBJ_VAL(soft, 0) == SOFT_SLEAZE)
       detect = GET_OBJ_VAL(soft, 1);
-  detect += DECKER->masking;
-  detect = detect / 2;
+  detect += DECKER->masking + 1; // +1 because we round up
+  detect /= 2;
 
   if (*argument) {
     skip_spaces(&argument);
@@ -3169,8 +3169,8 @@ ACMD(do_restrict)
   for (struct obj_data *soft = targ->decker->software; soft; soft = soft->next_content)
     if (GET_OBJ_VAL(soft, 0) == SOFT_SLEAZE)
       detect = GET_OBJ_VAL(soft, 1);
-  detect += targ->decker->masking;
-  detect = detect / 2;
+  detect += targ->decker->masking + 1; // +1 because we round up
+  detect /= 2;
 
   if (is_abbrev(buf, "detection")) {
     success = system_test(PERSONA->in_host, ch, TEST_CONTROL, SOFT_VALIDATE, detect);

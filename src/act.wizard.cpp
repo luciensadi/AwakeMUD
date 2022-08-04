@@ -1392,8 +1392,7 @@ void do_stat_object(struct char_data * ch, struct obj_data * j)
                                                 (GET_OBJ_VAL(j, 1) == 3 ? "Throwing knife" : "Undefined")))));
     break;
   case ITEM_PATCH:
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Type: %s, Rating: %d", patch_names[GET_OBJ_VAL(j, 0)],
-            GET_OBJ_VAL(j, 1));
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Type: %s, Rating: %d", patch_names[GET_PATCH_TYPE(j)], GET_PATCH_RATING(j));
     break;
   case ITEM_CYBERDECK:
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "MPCP: %d, Hardening: %d, Active: %d, Storage: %d, Load: %d",
