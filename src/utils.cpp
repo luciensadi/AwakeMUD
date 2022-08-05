@@ -3646,10 +3646,13 @@ char get_final_character_from_string(const char *str) {
 }
 
 bool CAN_SEE(struct char_data *subj, struct char_data *obj) {
-  if (get_ch_in_room(subj) == NULL)
+  struct room_data *subj_in_room = get_ch_in_room(subj);
+  struct room_data *obj_in_room = get_ch_in_room(obj);
+
+  if (!subj_in_room || !obj_in_room)
     return FALSE;
 
-  return CAN_SEE_ROOM_SPECIFIED(subj, obj, get_ch_in_room(subj));
+  return CAN_SEE_ROOM_SPECIFIED(subj, obj, subj_in_room) && (subj_in_room == obj_in_room || CAN_SEE_ROOM_SPECIFIED(subj, obj, obj_in_room));
 }
 
 bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struct room_data *room_specified) {
@@ -3679,42 +3682,73 @@ bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struc
 }
 
 bool LIGHT_OK_ROOM_SPECIFIED(struct char_data *sub, struct room_data *provided_room) {
+  // #define DEBUG_LIGHT_OK(msg) {act(msg, 0, sub, 0, 0, TO_ROLLS);}
+  #define DEBUG_LIGHT_OK(msg)
+
   // Fix the ruh-rohs.
   if (!sub || !provided_room)
     return FALSE;
 
   // If you can see on the astral plane, light means nothing to you.
-  if (IS_ASTRAL(sub) || IS_DUAL(sub))
+  if (IS_ASTRAL(sub) || IS_DUAL(sub)) {
+    DEBUG_LIGHT_OK("- L_O_R_S: $n is astral or dual.");
     return TRUE;
+  }
 
   // If you have ultrasonic or thermographic vision or holy light, you're good.
-  if (has_vision(sub, VISION_ULTRASONIC) || has_vision(sub, VISION_THERMOGRAPHIC) || HOLYLIGHT_OK(sub))
+  if (has_vision(sub, VISION_THERMOGRAPHIC)) {
+    DEBUG_LIGHT_OK("- L_O_R_S: $n has thermographic vision, can see.");
     return TRUE;
+  }
+  if (has_vision(sub, VISION_ULTRASONIC)) {
+    DEBUG_LIGHT_OK("- L_O_R_S: $n has ultrasonic vision, can see.");
+    return TRUE;
+  }
+  if (HOLYLIGHT_OK(sub)) {
+    DEBUG_LIGHT_OK("- L_O_R_S: $n has holylight, can see.");
+    return TRUE;
+  }
 
   // If you're in a vehicle, we assume you have headlights and interior lights.
-  if (sub->in_veh)
+  if (sub->in_veh) {
+    DEBUG_LIGHT_OK("- L_O_R_S: $n is in a vehicle and can see a minimal amount.");
     return TRUE;
+  }
 
+  /*  removed-- this is theoretically covered by the headlight code in light_level(). - LS
   // We also give allowances for people in rooms with player-occupied cars.
   for (struct veh_data *veh = provided_room->vehicles; veh; veh = veh->next_veh) {
     for (struct char_data *tch = veh->people; tch; tch = tch->next_in_veh)
       if (!IS_NPC(tch))
         return TRUE;
   }
+  */
 
-  // Otherwise, fetch the room's light level. Note that light_level already handles flashlights etc.
+  // Fetch the room's light level. Note that light_level already handles flashlights etc.
   int room_light_level = light_level(provided_room);
 
-  // At this point, we know that we're using ultrasonic, low-light, or normal vision.
-  // We already checked for thermo and ultra above, which means you have LL or Normal vision. You can't see in full darkness.
-  if (room_light_level == LIGHT_FULLDARK)
+  // We already checked for thermo and ultra above, which means at that this point you have LL or Normal vision. You can't see in full darkness.
+  if (room_light_level == LIGHT_FULLDARK) {
+    DEBUG_LIGHT_OK("- L_O_R_S: $n is in fulldark w/o thermo/ultra: no vision.");
     return FALSE;
+  }
 
   // Between LL and Normal, only LL can see in minlight.
-  if (room_light_level == LIGHT_MINLIGHT)
-    return has_vision(sub, VISION_LOWLIGHT) || MOB_FLAGGED(sub, MOB_GUARD);
+  if (room_light_level == LIGHT_MINLIGHT) {
+    if (has_vision(sub, VISION_LOWLIGHT)) {
+      DEBUG_LIGHT_OK("- L_O_R_S: $n in minlight with LL vision, can see.");
+      return TRUE;
+    }
+    if (MOB_FLAGGED(sub, MOB_GUARD)) {
+      DEBUG_LIGHT_OK("- L_O_R_S: $n in minlight and is a guard, can see.");
+      return TRUE;
+    }
+    DEBUG_LIGHT_OK("- L_O_R_S: $n in minlight w/o LL/flag: no vision.");
+    return FALSE;
+  }
 
   // Both LL and Normal can see in all other lighting conditions (partlight, etc).
+  DEBUG_LIGHT_OK("- L_O_R_S: $n can see (fallthrough case).");
   return TRUE;
 }
 

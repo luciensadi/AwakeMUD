@@ -4230,7 +4230,7 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
   }
 
   // If we can't see due to light levels, bail out.
-  if (!LIGHT_OK_ROOM_SPECIFIED(ch, get_ch_in_room(ch))) {
+  if (!LIGHT_OK_ROOM_SPECIFIED(ch, get_ch_in_room(ch)) || (ch->in_room != victim->in_room && !LIGHT_OK_ROOM_SPECIFIED(ch, get_ch_in_room(victim)))) {
     modifier = MAX_VISIBILITY_PENALTY;
     snprintf(rbuf, sizeof(rbuf), "%s: Cannot see target due to light level, so final char-to-char visibility TN is ^c%d^n.", GET_CHAR_NAME(ch), modifier);
     act(rbuf, 0, victim, 0, ch, TO_ROLLS);
