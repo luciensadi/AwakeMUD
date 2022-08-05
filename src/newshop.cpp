@@ -781,6 +781,7 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
         } else {
           obj_to_char(obj, ch);
         }
+        send_to_char("[OOC: Your purchase has been bundled up into one unit with the appropriate value.]\r\n", ch);
       }
     }
 
