@@ -764,6 +764,7 @@ void update_buildrepair(void)
             default:
               send_to_char(CH, "You realise you have lost your inspiration for %s.\r\n", GET_OBJ_NAME(PROG));
           }
+          send_to_char(CH, "With your work wasted, you trash the unfinishable %s.\r\n", GET_OBJ_NAME(PROG));
           extract_obj(PROG);
         } else {
           send_to_char(CH, "You successfully finish designing %s.\r\n", GET_OBJ_NAME(PROG));
