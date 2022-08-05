@@ -891,6 +891,17 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
   return TRUE;
 }
 
+// block negotiation for things like chips, parts, conjuring materials, etc-- these should have a flat cost
+bool can_negotiate_for_item(struct obj_data *obj) {
+  if (GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(obj) == TYPE_PARTS)
+    return FALSE;
+
+  if (GET_OBJ_TYPE(obj) == ITEM_MAGIC_TOOL && GET_MAGIC_TOOL_TYPE(obj) == TYPE_SUMMONING)
+    return FALSE;
+
+  return TRUE;
+}
+
 void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data *keeper, vnum_t shop_nr)
 {
   char buf[MAX_STRING_LENGTH];
@@ -983,7 +994,7 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
   // Calculate the price.
   price = buy_price(obj, shop_nr);
   int bprice = price / 10;
-  if (!shop_table[shop_nr].flags.IsSet(SHOP_WONT_NEGO))
+  if (!shop_table[shop_nr].flags.IsSet(SHOP_WONT_NEGO) && can_negotiate_for_item(obj))
     price = negotiate(ch, keeper, 0, price, 0, TRUE);
   if (sell->type == SELL_AVAIL && GET_AVAIL_OFFSET(ch))
     price += bprice * GET_AVAIL_OFFSET(ch);
