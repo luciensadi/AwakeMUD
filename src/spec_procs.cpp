@@ -6733,18 +6733,20 @@ SPECIAL(medical_workshop) {
     return FALSE;
   }
 
-  if (!*argument) {
-    // Preliminary skill check.
-    if (GET_SKILL(ch, SKILL_BIOTECH) < 4 || GET_SKILL(ch, SKILL_MEDICINE) < 4) {
-      send_to_char("You have no idea where to even start with surgeries. Better leave it to the professionals.\r\n", ch);
-      return TRUE;
-    }
-
+  // Preliminary skill check.
+  if (!mode_is_withdraw) {
     if (!PLR_FLAGGED(ch, PLR_CYBERDOC) && !access_level(ch, LVL_ADMIN)) {
       send_to_char("The cyberdoc role is currently application-only. Please contact staff to request the ability to be a cyberdoc.\r\n", ch);
       return TRUE;
     }
 
+    if (GET_SKILL(ch, SKILL_BIOTECH) < 4 || GET_SKILL(ch, SKILL_MEDICINE) < 4) {
+      send_to_char("You have no idea where to even start with surgeries. Better leave it to the professionals.\r\n", ch);
+      return TRUE;
+    }
+  }
+
+  if (!*argument) {
     if (mode_is_diagnose) {
       send_to_char("Syntax: diagnose <target character>\r\n", ch);
     } else if (mode_is_withdraw) {
@@ -6761,17 +6763,6 @@ SPECIAL(medical_workshop) {
   // Withdrawal is almost entirely different from the other cases here, so it's handled separately in this block.
   if (mode_is_withdraw) {
     attempt_safe_withdrawal(ch, (const char *) target_arg);
-    return TRUE;
-  }
-
-  // Preliminary skill check.
-  if (GET_SKILL(ch, SKILL_BIOTECH) < 4 || GET_SKILL(ch, SKILL_MEDICINE) < 4) {
-    send_to_char("You have no idea where to even start with surgeries. Better leave it to the professionals.\r\n", ch);
-    return TRUE;
-  }
-
-  if (!PLR_FLAGGED(ch, PLR_CYBERDOC) && !access_level(ch, LVL_ADMIN)) {
-    send_to_char("The cyberdoc role is currently application-only. Please contact staff to request the ability to be a cyberdoc.\r\n", ch);
     return TRUE;
   }
 
