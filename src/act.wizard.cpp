@@ -7013,16 +7013,30 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
       int total_items = 0;
 
       for (int wearloc = 0; wearloc < NUM_WEARS; wearloc++) {
-        if (GET_EQ(mob, wearloc)) {
-          total_value += GET_OBJ_COST(GET_EQ(mob, wearloc));
+        struct obj_data *worn = GET_EQ(mob, wearloc);
+        if (worn) {
+          total_value += GET_OBJ_COST(worn);
           total_items++;
 
-          vnum_t vnum = GET_OBJ_VNUM(GET_EQ(mob, wearloc));
+          vnum_t vnum = GET_OBJ_VNUM(worn);
 
           if (!vnum_is_from_zone(vnum, zone_num) && !vnum_is_from_canon_zone(vnum)) {
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - is equipped with %sexternal item %ld.\r\n", // *immature giggle*
                      vnum_from_non_connected_zone(vnum) ? "^ynon-connected^n " : "",
                      vnum);
+          }
+
+          if (wearloc == WEAR_WIELD) {
+            if (GET_OBJ_TYPE(worn) == ITEM_WEAPON) {
+              if (GET_SKILL(mob, GET_WEAPON_SKILL(worn)) <= 0 && GET_SKILL(mob, return_general(GET_WEAPON_SKILL(worn))) <= 0) {
+                snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - has no ^c%s^n or ^c%s^n skill, which is needed for wielded weapon.\r\n",
+                         skills[GET_WEAPON_SKILL(worn)].name, skills[return_general(GET_WEAPON_SKILL(worn))].name);
+              }
+            } else if (GET_OBJ_TYPE(worn) == ITEM_FIREWEAPON) {
+              strlcat(buf, "  - is wielding a non-implemented fireweapon.\r\n", sizeof(buf));
+            } else {
+              strlcat(buf, "  - is wielding a non-weapon item.\r\n", sizeof(buf));
+            }
           }
         }
       }

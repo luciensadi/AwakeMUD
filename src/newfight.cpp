@@ -350,7 +350,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       } else if (att->cyber->cyberarm_gyromount) {
         if (!GUN_IS_CYBER_GYRO_MOUNTABLE(att->weapon)) {
           send_to_char(att->ch, "Your cyberarm gyro locks up-- %s is too heavy for it to compensate recoil for!\r\n", decapitalize_a_an(GET_OBJ_NAME(att->weapon)));
-          snprintf(rbuf, sizeof(rbuf), "%s's cyberarm gyro not activating-- weapon too heavy.", GET_CHAR_NAME( att->ch ));
+          snprintf(rbuf, sizeof(rbuf), "^Y%s's cyberarm gyro not activating-- weapon too heavy.^n", GET_CHAR_NAME( att->ch ));
           SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
         } else {
           att->ranged->modifiers[COMBAT_MOD_GYRO] -= MIN(maximum_recoil_comp_from_gyros, 3);
@@ -359,7 +359,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     }
 
     // Calculate and display pre-success-test information.
-    snprintf(rbuf, sizeof(rbuf), "%s's burst/compensation info (excluding gyros) is ^c%d^n/^c%d^n. Additional modifiers: ",
+    snprintf(rbuf, sizeof(rbuf), "^j%s's burst/compensation info (excluding gyros) is ^c%d^n/^c%d^n. Additional modifiers: ",
              GET_CHAR_NAME( att->ch ),
              att->ranged->burst_count,
              MOB_FLAGGED(att->ch, MOB_EMPLACED) ? 10 : att->ranged->recoil_comp);
@@ -371,7 +371,8 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
         buf_mod(rbuf, sizeof(rbuf), combat_modifiers[mod_index], att->ranged->modifiers[mod_index]);
         att->ranged->tn += att->ranged->modifiers[mod_index];
       }
-      snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "\r\nTotal TN after modifiers: %d.", att->ranged->tn);
+      snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "\r\n^jTotal ranged attack roll TN after modifiers: %d.^n", att->ranged->tn);
+      SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
     }
 
 
@@ -380,19 +381,21 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       int prior_tn = att->ranged->tn;
       att->ranged->dice = get_skill(att->ch, att->ranged->skill, att->ranged->tn);
       if (att->ranged->tn != prior_tn) {
-        snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "\r\nTN modified in get_skill() to %d.", att->ranged->tn);
+        snprintf(rbuf, sizeof(rbuf), "^jRanged attack roll TN modified in get_skill() to ^c%d^j.^n", att->ranged->tn);
       } else {
-        strlcat(rbuf, "\r\nTN not modified in get_skill().", sizeof(rbuf));
+        strlcpy(rbuf, "\r\n^jRanged attack roll TN not modified in get_skill().^n", sizeof(rbuf));
       }
+      SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
     }
 
     // Minimum TN is 2.
     if (att->ranged->tn < 2) {
       att->ranged->tn = 2;
-      snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "\r\nTN raised to minimum %d.", att->ranged->tn);
+      snprintf(rbuf, sizeof(rbuf), "\r\n^jRanged attack roll TN raised to minimum ^c%d^j.^n", att->ranged->tn);
+      SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
     }
 
-    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "\r\nAfter get_skill(), attacker's ranged TN is ^c%d^n.", att->ranged->tn);
+    snprintf(rbuf, sizeof(rbuf), "\r\n^jAfter get_skill(), attacker's ranged attack roll TN is ^c%d^n.", att->ranged->tn);
     SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
 
     int bonus_if_not_too_tall = MIN(GET_SKILL(att->ch, att->ranged->skill), GET_OFFENSE(att->ch));
@@ -406,11 +409,11 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     }
 #else
     att->ranged->dice += bonus_if_not_too_tall;
-    snprintf(rbuf, sizeof(rbuf), "Rolling %d + %d dice... ", att->ranged->dice, bonus_if_not_too_tall);
+    snprintf(rbuf, sizeof(rbuf), "^JAttack: Rolling %d + %d dice VS TN %d... ", att->ranged->dice, bonus_if_not_too_tall, att->ranged->tn);
 #endif
 
     att->ranged->successes = success_test(att->ranged->dice, att->ranged->tn);
-    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "%d successes.", att->ranged->successes);
+    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "^c%d^J successes.^n", att->ranged->successes);
     SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
 
     // Dodge test.
@@ -429,7 +432,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       def->ranged->modifiers[COMBAT_MOD_FOOTANCHORS] = def->cyber->footanchors;
 
       // Set up the defender's TN. Apply their modifiers.
-      strlcpy(rbuf, "Defender's dodge roll modifiers: ", sizeof(rbuf));
+      strlcpy(rbuf, "^eDefender's dodge roll modifiers: ", sizeof(rbuf));
       def->ranged->tn += modify_target_rbuf_raw(def->ch, rbuf, sizeof(rbuf), def->ranged->modifiers[COMBAT_MOD_VISIBILITY], FALSE);
       for (int mod_index = 0; mod_index < NUM_COMBAT_MODIFIERS; mod_index++) {
         switch (mod_index) {
@@ -450,7 +453,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       def->ranged->successes = MAX(0, def->ranged->successes);
       att->ranged->successes -= def->ranged->successes;
 
-      snprintf(rbuf, sizeof(rbuf), "Dodge: Dice %d (%d pool + %d sidestep), TN %d, Successes ^c%d^n.  This means attacker's net successes = ^c%d^n.",
+      snprintf(rbuf, sizeof(rbuf), "^eDodge: Dice %d (%d pool + %d sidestep), TN %d, Successes ^c%d^e.  This means attacker's net successes = ^c%d^e.^n",
                def->ranged->dice,
                GET_DEFENSE(def->ch),
                GET_POWER(def->ch, ADEPT_SIDESTEP),
@@ -460,7 +463,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     } else {
       // Surprised, oversized, unconscious, or prone? No dodge test for you.
       att->ranged->successes = MAX(att->ranged->successes, 0);
-      snprintf(rbuf, sizeof(rbuf), "Opponent unable to dodge, attacker's successes will remain at ^c%d^n.", att->ranged->successes);
+      snprintf(rbuf, sizeof(rbuf), "^eOpponent unable to dodge, attacker's successes will remain at ^c%d^e.^n", att->ranged->successes);
       if (GET_DEFENSE(def->ch) > 0 && AFF_FLAGGED(def->ch, AFF_PRONE) && !IS_JACKED_IN(def->ch))
         send_to_char(def->ch, "^yYou're unable to dodge while prone!^n\r\n");
     }
@@ -468,7 +471,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
 
     // If the ranged attack failed, print the relevant message and terminate.
     if (att->ranged->successes < 1) {
-      snprintf(rbuf, sizeof(rbuf), "%s failed to achieve any net successes, so we're bailing out.", GET_CHAR_NAME(attacker));
+      snprintf(rbuf, sizeof(rbuf), "^W%s failed to achieve any net successes on attack roll, so we're bailing out.^n", GET_CHAR_NAME(attacker));
       SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
 
       combat_message(att->ch, def->ch, att->weapon, -1, att->ranged->burst_count, att->ranged->modifiers[COMBAT_MOD_VISIBILITY]);
@@ -489,6 +492,9 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     // Calculate the power of the attack.
     att->ranged->power_before_armor = GET_WEAPON_POWER(att->weapon) + att->ranged->burst_count;
     att->ranged->damage_level = GET_WEAPON_DAMAGE_CODE(att->weapon) + (int)(att->ranged->burst_count / 3);
+
+    snprintf(rbuf, sizeof(rbuf), "^bBefore armor and ammo, attack code is ^c%d %s^b.^n", att->ranged->power_before_armor, GET_WOUND_NAME(att->ranged->damage_level));
+    SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
 
     // Calculate effects of armor on the power of the attack.
     if (att->ranged->magazine) {
@@ -544,6 +550,9 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     // The power of an attack can't be below 2 from ammo changes.
     att->ranged->power = MAX(att->ranged->power, 2);
 
+    snprintf(rbuf, sizeof(rbuf), "^bAfter armor and ammo, attack code is ^c%d %s^b.^n", att->ranged->power, GET_WOUND_NAME(att->ranged->damage_level));
+    SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
+
     // Handle spirits and elementals being divas, AKA having Immunity to Normal Weapons (SR3 p188, 264).
     // Namely: We require that the attack's power is greater than double the spirit's force, otherwise it takes no damage.
     // If the attack's power is greater, subtract double the level from it.
@@ -575,6 +584,9 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
         // SR3 p264: Grant armor equal to twice its essence rating.
         // Specifically -= because this has already been set previously.
         att->ranged->power -= GET_LEVEL(def->ch) * 2;
+
+        snprintf(rbuf, sizeof(rbuf), "^bAfter spirit level decrease, attack code is ^c%d %s^b (min 2).^n", att->ranged->power, GET_WOUND_NAME(att->ranged->damage_level));
+        SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
       }
     }
 
