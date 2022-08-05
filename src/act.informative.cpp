@@ -6454,7 +6454,7 @@ ACMD(do_status)
         if (sust->focus)
           send_to_char(ch, "(Sustained by %s)", GET_OBJ_NAME(sust->focus));
         if (sust->spirit && sust->spirit != ch)
-          send_to_char(ch, "(Sustained by %s)", GET_NAME(sust->spirit));
+          send_to_char(ch, "(Sustained by %s [id %d])", GET_NAME(sust->spirit), GET_GRADE(sust->spirit));
         send_to_char("\r\n", ch);
         i++;
       }
