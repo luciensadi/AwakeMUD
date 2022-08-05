@@ -1527,7 +1527,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
               new_obj_index[top_of_objt + 1].number = 0;
               new_obj_index[top_of_objt + 1].func = NULL;
 
-              clear_object(&new_obj_proto[top_of_objt + 1]);
+              clear_object(new_obj_proto + top_of_objt + 1);
               new_obj_proto[top_of_objt + 1] = *(d->edit_obj);
               new_obj_proto[top_of_objt + 1].in_room = NULL;
               new_obj_proto[top_of_objt + 1].item_number = top_of_objt + 1;

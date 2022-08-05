@@ -452,7 +452,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
 
           // we use free_room here because we are not ready to turn it over
           // to the stack just yet as we are gonna use it immediately
-          free_room(&world[room_num]);
+          free_room(world + room_num);
           /* now copy everything over! */
           world[room_num] = *d->edit_room;
         } else {
