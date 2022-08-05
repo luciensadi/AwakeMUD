@@ -2707,11 +2707,11 @@ void process_grenada_plane(void)
     break;
   case 36:
     send_to_room("The voice of the pilot speaks over the intercom, "
-                 "\"We'll be landing in Grenada shortly ladies and gentlemen.\"\r\n", &world[bus]);
+                 "\"We'll be landing in Everett shortly ladies and gentlemen.\"\r\n", &world[bus]);
     break;
   case 76:
     send_to_room("The voice of the pilot speaks over the intercom, "
-                 "\"We'll be landing in Everett shortly ladies and gentlemen.\"\r\n", &world[bus]);
+                 "\"We'll be landing in Grenada shortly ladies and gentlemen.\"\r\n", &world[bus]);
     break;
   }
   where++;
