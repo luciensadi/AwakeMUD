@@ -4224,9 +4224,17 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
 
   // Shortcut: If they're not invisible, you can see them. Ezpz.
   if (CAN_SEE(ch, victim)) {
-    snprintf(rbuf, sizeof(rbuf), "%s: Can see target, so final char-to-char visibility TN is ^c%d^n.", GET_CHAR_NAME(ch), modifier);
+    snprintf(rbuf, sizeof(rbuf), "%s: Can see target, so final char-to-char visibility TN is ^c0^n.", GET_CHAR_NAME(ch));
     act(rbuf, 0, victim, 0, ch, TO_ROLLS);
     return 0;
+  }
+
+  // If we can't see due to light levels, bail out.
+  if (!LIGHT_OK_ROOM_SPECIFIED(ch, get_ch_in_room(ch))) {
+    modifier = MAX_VISIBILITY_PENALTY;
+    snprintf(rbuf, sizeof(rbuf), "%s: Cannot see target due to light level, so final char-to-char visibility TN is ^c%d^n.", GET_CHAR_NAME(ch), modifier);
+    act(rbuf, 0, victim, 0, ch, TO_ROLLS);
+    return modifier;
   }
 
   // If they're in an invis staffer above your level, you done goofed by fighting them. Return special code so we know what caused this in rolls.
