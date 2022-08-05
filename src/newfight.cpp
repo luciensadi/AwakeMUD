@@ -383,7 +383,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       if (att->ranged->tn != prior_tn) {
         snprintf(rbuf, sizeof(rbuf), "^jRanged attack roll TN modified in get_skill() to ^c%d^j.^n", att->ranged->tn);
       } else {
-        strlcpy(rbuf, "\r\n^jRanged attack roll TN not modified in get_skill().^n", sizeof(rbuf));
+        strlcpy(rbuf, "^jRanged attack roll TN not modified in get_skill().^n", sizeof(rbuf));
       }
       SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
     }
@@ -391,11 +391,11 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     // Minimum TN is 2.
     if (att->ranged->tn < 2) {
       att->ranged->tn = 2;
-      snprintf(rbuf, sizeof(rbuf), "\r\n^jRanged attack roll TN raised to minimum ^c%d^j.^n", att->ranged->tn);
+      snprintf(rbuf, sizeof(rbuf), "^jRanged attack roll TN raised to minimum ^c%d^j.^n", att->ranged->tn);
       SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
     }
 
-    snprintf(rbuf, sizeof(rbuf), "\r\n^jAfter get_skill(), attacker's ranged attack roll TN is ^c%d^n.", att->ranged->tn);
+    snprintf(rbuf, sizeof(rbuf), "^jAfter get_skill(), attacker's ranged attack roll TN is ^c%d^n.", att->ranged->tn);
     SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
 
     int bonus_if_not_too_tall = MIN(GET_SKILL(att->ch, att->ranged->skill), GET_OFFENSE(att->ch));
