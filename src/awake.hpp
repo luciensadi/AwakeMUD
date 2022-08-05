@@ -2299,6 +2299,7 @@ enum {
 #define MAX_SHORTDESC_LEN         200
 
 // New combat modifiers used in the rework of hit().
+// Adding an additional one? Make sure you list it in the dodge check switch case if appropriate.
 #define COMBAT_MOD_RECOIL                0
 #define COMBAT_MOD_MOVEMENT              1
 #define COMBAT_MOD_DUAL_WIELDING         2

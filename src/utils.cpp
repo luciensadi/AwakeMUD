@@ -1412,8 +1412,9 @@ int get_skill(struct char_data *ch, int skill, int &target)
   }
 
   // Core p38
-  if (target < 2)
+  if (target < 2) {
     target = 2;
+  }
 
   // Add the defaulting TN.
   target += defaulting_tn;
@@ -1623,7 +1624,7 @@ int get_skill(struct char_data *ch, int skill, int &target)
     skill_dice += synth;
   }
 
-  snprintf(ENDOF(gskbuf), sizeof(gskbuf) - strlen(gskbuf), "Final total: %d.", skill_dice);
+  snprintf(ENDOF(gskbuf), sizeof(gskbuf) - strlen(gskbuf), "Final total skill: %d dice.", skill_dice);
 
   act(gskbuf, 1, ch, NULL, NULL, TO_ROLLS);
 

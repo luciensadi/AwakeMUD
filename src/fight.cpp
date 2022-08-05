@@ -4304,7 +4304,7 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
       // Invisibility penalty, we're at the full +8 from not being able to see them. This overwrites weather effects etc.
       // We don't apply the Adept blind fighting max here, as that's calculated later on.
       modifier = BLIND_FIRE_PENALTY;
-      snprintf(rbuf, sizeof(rbuf), "%s: Ultrasound-using character fighting improved invis: %d", GET_CHAR_NAME(ch), modifier);
+      snprintf(rbuf, sizeof(rbuf), "%s: Ultrasound-using character fighting improved invis: TN %d", GET_CHAR_NAME(ch), modifier);
     } else {
       snprintf(rbuf, sizeof(rbuf), "%s: Ultrasound-using character", GET_CHAR_NAME(ch));
     }
@@ -4318,13 +4318,13 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
     // We don't have that test, so it seems reasonable to just shoehorn the TN increase in here.
     if (silence_level > 0) {
       modifier += silence_level;
-      snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "- silence level adds %d", silence_level);
+      snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), ", silence/stealth level adds %d", silence_level);
     }
 
     // Finally, apply ultrasound division. We add one since the system expects us to round up and we're using truncating integer math.
     if (modifier > 0) {
       modifier = (modifier + 1) / 2;
-      snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), ", /2 (round up) = %d", modifier);
+      snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "; /2 (round up) = %d", modifier);
 
       act(rbuf, 0, ch, 0, 0, TO_ROLLS);
       if (ch->in_room != victim->in_room)
@@ -4390,6 +4390,12 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
         act(rbuf, 0, victim, 0, 0, TO_ROLLS);
     }
   }
+
+  snprintf(rbuf, sizeof(rbuf), "%s: Final char-to-char visibility TN: %d", GET_CHAR_NAME(ch), modifier);
+
+  act(rbuf, 0, ch, 0, 0, TO_ROLLS);
+  if (ch->in_room != victim->in_room)
+    act(rbuf, 0, victim, 0, 0, TO_ROLLS);
 
   return modifier;
 }

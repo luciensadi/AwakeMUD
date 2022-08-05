@@ -174,10 +174,12 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
   }
 
   // Setup: Calculate sight penalties.
-  att->melee->modifiers[COMBAT_MOD_VISIBILITY] += calculate_vision_penalty(att->ch, def->ch);
-  att->ranged->modifiers[COMBAT_MOD_VISIBILITY] += calculate_vision_penalty(att->ch, def->ch);
-  def->melee->modifiers[COMBAT_MOD_VISIBILITY] += calculate_vision_penalty(def->ch, att->ch);
-  def->ranged->modifiers[COMBAT_MOD_VISIBILITY] += calculate_vision_penalty(def->ch, att->ch);
+  int attacker_vision_penalty = calculate_vision_penalty(att->ch, def->ch);
+  int defender_vision_penalty = calculate_vision_penalty(def->ch, att->ch);
+  att->melee->modifiers[COMBAT_MOD_VISIBILITY] += attacker_vision_penalty;
+  att->ranged->modifiers[COMBAT_MOD_VISIBILITY] += attacker_vision_penalty;
+  def->melee->modifiers[COMBAT_MOD_VISIBILITY] += defender_vision_penalty;
+  def->ranged->modifiers[COMBAT_MOD_VISIBILITY] += defender_vision_penalty;
 
   // Setup: If the character is rigging a vehicle or is in a vehicle, set veh to that vehicle.
   RIG_VEH(att->ch, att->veh);
@@ -205,7 +207,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
         && (GET_STR(att->ch) < 8 || GET_BOD(att->ch) < 8)
         && !(AFF_FLAGGED(att->ch, AFF_PRONE)))
     {
-      send_to_char(att->ch, "You can't lift the barrel high enough to fire! You'll have to go ^WPRONE^n to use %s.\r\n", decapitalize_a_an(GET_OBJ_NAME(att->weapon)));
+      send_to_char(att->ch, "You can't lift the barrel high enough to fire! You'll have to go ##^WPRONE^n to use %s.\r\n", decapitalize_a_an(GET_OBJ_NAME(att->weapon)));
       return FALSE;
     }
 
@@ -362,25 +364,33 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
              att->ranged->burst_count,
              MOB_FLAGGED(att->ch, MOB_EMPLACED) ? 10 : att->ranged->recoil_comp);
 
-    att->ranged->tn += modify_target_rbuf_raw(att->ch, rbuf, sizeof(rbuf), att->ranged->modifiers[COMBAT_MOD_VISIBILITY], FALSE);
-    for (int mod_index = 0; mod_index < NUM_COMBAT_MODIFIERS; mod_index++) {
-      // Ranged-specific modifiers.
-      buf_mod(rbuf, sizeof(rbuf), combat_modifiers[mod_index], att->ranged->modifiers[mod_index]);
-      att->ranged->tn += att->ranged->modifiers[mod_index];
+    {
+      att->ranged->tn += modify_target_rbuf_raw(att->ch, rbuf, sizeof(rbuf), att->ranged->modifiers[COMBAT_MOD_VISIBILITY], FALSE);
+      for (int mod_index = 0; mod_index < NUM_COMBAT_MODIFIERS; mod_index++) {
+        // Ranged-specific modifiers.
+        buf_mod(rbuf, sizeof(rbuf), combat_modifiers[mod_index], att->ranged->modifiers[mod_index]);
+        att->ranged->tn += att->ranged->modifiers[mod_index];
+      }
+      snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "\r\nTotal TN after modifiers: %d.", att->ranged->tn);
     }
+
 
     // Calculate the attacker's total skill (this modifies TN)
     {
       int prior_tn = att->ranged->tn;
       att->ranged->dice = get_skill(att->ch, att->ranged->skill, att->ranged->tn);
       if (att->ranged->tn != prior_tn) {
-        snprintf(rbuf, sizeof(rbuf), "TN modified in get_skill() to %d.", att->ranged->tn);
-        SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
+        snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "\r\nTN modified in get_skill() to %d.", att->ranged->tn);
+      } else {
+        strlcat(rbuf, "\r\nTN not modified in get_skill().", sizeof(rbuf));
       }
     }
 
     // Minimum TN is 2.
-    att->ranged->tn = MAX(att->ranged->tn, 2);
+    if (att->ranged->tn < 2) {
+      att->ranged->tn = 2;
+      snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "\r\nTN raised to minimum %d.", att->ranged->tn);
+    }
 
     snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "\r\nAfter get_skill(), attacker's ranged TN is ^c%d^n.", att->ranged->tn);
     SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
@@ -422,8 +432,13 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       strlcpy(rbuf, "Defender's dodge roll modifiers: ", sizeof(rbuf));
       def->ranged->tn += modify_target_rbuf_raw(def->ch, rbuf, sizeof(rbuf), def->ranged->modifiers[COMBAT_MOD_VISIBILITY], FALSE);
       for (int mod_index = 0; mod_index < NUM_COMBAT_MODIFIERS; mod_index++) {
-        buf_mod(rbuf, sizeof(rbuf), combat_modifiers[mod_index], def->ranged->modifiers[mod_index]);
-        def->ranged->tn += def->ranged->modifiers[mod_index];
+        switch (mod_index) {
+          case COMBAT_MOD_OPPONENT_BURST_COUNT:
+          case COMBAT_MOD_FOOTANCHORS:
+            buf_mod(rbuf, sizeof(rbuf), combat_modifiers[mod_index], def->ranged->modifiers[mod_index]);
+            def->ranged->tn += def->ranged->modifiers[mod_index];
+            break;
+        }
       }
       SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
 
