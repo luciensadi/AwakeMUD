@@ -2249,8 +2249,13 @@ bool docwagon(struct char_data *ch)
     } else {
       lose_bank(ch, creds, NUYEN_OUTFLOW_DOCWAGON);
     }
+
+    return TRUE;
+  } else {
+    send_to_char(ch, "%s^n vibrates, sending out a trauma call that will hopefully be answered.\r\n", CAP(GET_OBJ_NAME(docwagon)));
   }
-  return TRUE;
+
+  return FALSE;
 }
 
 // M&M p.63-64
