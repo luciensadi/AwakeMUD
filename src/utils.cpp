@@ -48,7 +48,6 @@
 extern class memoryClass *Mem;
 extern struct time_info_data time_info;
 
-extern void die(struct char_data * ch);
 extern const char *log_types[];
 extern long beginning_of_time;
 extern int ability_cost(int abil, int level);

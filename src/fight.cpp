@@ -230,7 +230,7 @@ bool update_pos(struct char_data * victim)
   } else if (GET_PHYSICAL(victim) >= 100) {
     GET_POS(victim) = POS_STANDING;
     return FALSE;
-  } else if ((int)(GET_PHYSICAL(victim) / 100) <= -GET_REAL_BOD(victim) + (GET_BIOOVER(victim) > 0 ? GET_BIOOVER(victim) : 0)) {
+  } else if ((int)(GET_PHYSICAL(victim) / 100) <= -GET_BOD(victim) + (GET_BIOOVER(victim) > 0 ? GET_BIOOVER(victim) : 0)) {
     GET_POS(victim) = POS_DEAD;
   } else {
     GET_POS(victim) = POS_MORTALLYW;
