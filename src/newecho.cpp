@@ -998,7 +998,7 @@ bool has_required_language_ability_for_sentence(struct char_data *ch, const char
   for (int i = 0; i <= (int) strlen(message); i++) {
     if (isalpha(message[i])) {
       // Skip capitalized words like Aztechnology.
-      if (isupper(message[i]) && (i+1 < (int) strlen(message) && isalpha(message[i+1]) && !isupper(message[i+1]))) {
+      if ((i == 0 || (!isalpha(message[i-1]))) && isupper(message[i]) && (i+1 < (int) strlen(message) && isalpha(message[i+1]) && !isupper(message[i+1]))) {
         while (isalpha(message[++i]) && i < (int) strlen(message));
         continue;
       } else {
