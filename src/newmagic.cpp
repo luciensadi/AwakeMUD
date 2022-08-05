@@ -33,6 +33,8 @@ extern bool mob_is_aggressive(struct char_data *ch, bool include_base_aggression
 extern int modify_target_rbuf_magical(struct char_data *ch, char *rbuf, int rbuf_len);
 extern bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype, bool include_func_protections);
 extern bool process_single_boost(struct char_data *ch, int boost_attribute);
+extern void _char_with_spell_from_room(struct char_data *ch, int spell_num, room_spell_t *room_spell_tracker);
+extern void _char_with_spell_to_room(struct char_data *ch, int spell_num, room_spell_t *room_spell_tracker);
 
 char modify_target_rbuf_for_newmagic[MAX_STRING_LENGTH];
 
@@ -93,6 +95,17 @@ void adept_release_spell(struct char_data *ch, bool end_spell)
 
 void end_sustained_spell(struct char_data *ch, struct sustain_data *sust)
 {
+  switch (sust->spell) {
+    case SPELL_SILENCE:
+    case SPELL_SHADOW:
+    case SPELL_LIGHT:
+    case SPELL_POLTERGEIST:
+      if (ch->in_room) {
+        _char_with_spell_from_room(ch, sust->spell, ch->in_room->silence);
+      }
+      break;
+  }
+
   struct sustain_data *temp, *vsust;
   if (sust->other) {
     for (vsust = GET_SUSTAINED(sust->other); vsust; vsust = vsust->next)
@@ -133,12 +146,14 @@ void end_sustained_spell(struct char_data *ch, struct sustain_data *sust)
   GET_SUSTAINED_NUM(sust->caster ? ch : sust->other)--;
 
   strcpy(buf, spells[sust->spell].name);
-  if (sust->spell == SPELL_INCATTR
-      || sust->spell == SPELL_INCCYATTR
-      || sust->spell == SPELL_DECATTR
-      || sust->spell == SPELL_DECCYATTR)
-  {
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s", attributes[sust->subtype]);
+
+  switch (sust->spell) {
+    case SPELL_INCATTR:
+    case SPELL_INCCYATTR:
+    case SPELL_DECATTR:
+    case SPELL_DECCYATTR:
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s", attributes[sust->subtype]);
+      break;
   }
 
   send_to_char(sust->caster ? ch : sust->other, "You stop sustaining %s.\r\n", buf);
