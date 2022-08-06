@@ -3294,7 +3294,7 @@ ACMD(do_assense)
                 strlcat(buf, " cast at a force lower than your magic", sizeof(buf));
             }
             if (success >= 3) {
-              if (GET_IDNUM(ch) == GET_IDNUM(sus->other))
+              if (GET_IDNUM_EVEN_IF_PROJECTING(ch) == GET_IDNUM(sus->other))
                 strlcat(buf, ". It was cast by you", sizeof(buf));
               else {
                 for (mem = GET_PLAYER_MEMORY(ch); mem; mem = mem->next)

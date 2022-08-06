@@ -498,7 +498,7 @@ int get_armor_penalty_grade(struct char_data *ch);
 
 #define GET_POS(ch)             ((ch)->char_specials.position)
 #define GET_DEFPOS(ch)          ((ch)->char_specials.defined_position)
-#define GET_IDNUM(ch)           ((ch)->char_specials.idnum)
+#define GET_IDNUM(ch)           ((ch)->char_specials.idnum)  /* question: in what circumstance would we want to return id 0 while projecting? */
 #define GET_IDNUM_EVEN_IF_PROJECTING(ch)  ((((ch) && (ch)->desc && (ch)->desc->original) ? (ch)->desc->original : (ch))->char_specials.idnum)
 #define IS_CARRYING_W(ch)       ((ch)->char_specials.carry_weight)
 #define IS_CARRYING_N(ch)       ((ch)->char_specials.carry_items)
