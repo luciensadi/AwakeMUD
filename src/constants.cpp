@@ -1256,6 +1256,10 @@ const char *drinks[] =
     "local speciality",
     "fuckup juice",
     "cleaning solution",
+    "hot cocoa",
+    "coolant",
+    "motor oil",
+    "battery acid",
     "\n"
   };
 
@@ -1297,6 +1301,10 @@ const char *drinknames[] =
     "local",
     "fuckup",
     "cleaner",
+    "cocoa",
+    "coolant",
+    "oil",
+    "pain",
     "\n"
   };
 
@@ -1325,9 +1333,9 @@ int drink_aff[][3] = {
                        {12,0, -1},     // Everclear
                        {8, 0, 1},      // Vodka
                        {9, 0, 0},      // Tequila
-                       {7, 0, -1},      // Brandy
+                       {7, 0, -1},     // Brandy
                        {8, 0, 0},      // Rum
-                       {8, 0, -1},      // Whiskey
+                       {8, 0, -1},     // Whiskey
                        {7, 0, 1},      // Gin
                        {5, 0, 1},      // Champagne
                        {4, 1, 2},      // Red Wine
@@ -1337,14 +1345,17 @@ int drink_aff[][3] = {
                        {0, 1, -4},     // Urine
                        {6, 0, -1},     // Local
                        {12, 0, -1},    // Fuckup Juice
-                       {24, -24, -24}  // Cleaning Fluid
+                       {24, -24, -24}, // Cleaning Fluid
+                       {0, 1, 5},      // Hot Cocoa
+                       {10, 1, 1},     // Coolant
+                       {0, -10, 10},   // Motor Oil
+                       {24, -24, -24}  // Battery Acid
                      };
 
 
 /* color of the various drinks */
 const char *color_liquid[] =
   {
-
     "clear",    // Water
     "dark",    // Soda
     "dark brown",   // Coffee
@@ -1377,9 +1388,13 @@ const char *color_liquid[] =
     "dark red",   // Blood
     "blazing red",  // Hot Sauce
     "bright yellow", // Urine
-    "dark amber",    //Local
-    "thick",          //fuckup juice
-    "clear"           // cleaning solution
+    "dark amber",    // Local
+    "thick",         // fuckup juice
+    "clear",         // cleaning solution
+    "rich brown",    // Cocoa
+    "vivid blue",    // coolant
+    "thick yellow",  // motor oil
+    "acrid yellow",  // battery acid
   };
 
 const char *fullness[] =

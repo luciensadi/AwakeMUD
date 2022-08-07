@@ -2477,9 +2477,9 @@ void name_to_drinkcon(struct obj_data *obj, int type)
   if (!obj || (GET_OBJ_TYPE(obj) != ITEM_DRINKCON && GET_OBJ_TYPE(obj) != ITEM_FOUNTAIN))
     return;
 
-  size_t length = strlen(obj->text.keywords) + strlen(drinknames[type]) + 2;
+  size_t length = strlen(obj->text.keywords) + strlen(drinknames[type]) + strlen(drinks[type]) + 10;
   new_name = new char[length];
-  snprintf(new_name, length, "%s %s", obj->text.keywords, drinknames[type]);
+  snprintf(new_name, length, "%s %s %s", obj->text.keywords, drinknames[type], drinks[type]);
 
   if (GET_OBJ_RNUM(obj) == NOTHING ||
       obj->text.keywords != obj_proto[GET_OBJ_RNUM(obj)].text.keywords)
@@ -2537,14 +2537,13 @@ ACMD(do_drink)
     return;
   }
   if (subcmd == SCMD_DRINK) {
-    snprintf(buf, sizeof(buf), "$n drinks %s from $p.", drinknames[GET_DRINKCON_LIQ_TYPE(temp)]);
-    act(buf, TRUE, ch, temp, 0, TO_ROOM);
+    act("$n drinks from $p.", TRUE, ch, temp, 0, TO_ROOM);
 
-    send_to_char(ch, "You drink the %s.\r\n", drinknames[GET_DRINKCON_LIQ_TYPE(temp)]);
-    amount = number(3, 10);
+    send_to_char(ch, "You drink the %s.\r\n", drinks[GET_DRINKCON_LIQ_TYPE(temp)]);
+    amount = 3;
   } else {
     act("$n sips from $p.", TRUE, ch, temp, 0, TO_ROOM);
-    send_to_char(ch, "It tastes like %s.\r\n", drinknames[GET_DRINKCON_LIQ_TYPE(temp)]);
+    send_to_char(ch, "It tastes like %s.\r\n", drinks[GET_DRINKCON_LIQ_TYPE(temp)]);
     amount = 1;
   }
 
@@ -2585,7 +2584,21 @@ ACMD(do_drink)
   }
 
   // Deal poison damage.
-  int poison_rating = MAX(0, MIN(DEADLY, (GET_DRINKCON_LIQ_TYPE(temp) == LIQ_CLEANER ? DEADLY : GET_DRINKCON_POISON_RATING(temp))));
+  int poison_rating = MAX(0, GET_DRINKCON_POISON_RATING(temp));
+
+  switch (GET_DRINKCON_LIQ_TYPE(temp)) {
+    case LIQ_CLEANER:
+    case LIQ_BATTERY_ACID:
+      poison_rating = MAX(poison_rating, DEADLY);
+      break;
+    case LIQ_COOLANT:
+    case LIQ_MOTOR_OIL:
+      poison_rating = MAX(poison_rating, SERIOUS);
+      break;
+  }
+
+  poison_rating = MIN(poison_rating, DEADLY);
+
   if (poison_rating > 0) {
     int damage_resist_dice = GET_BOD(ch);
     int tn = 6 + amount;
@@ -2593,7 +2606,7 @@ ACMD(do_drink)
     int staged_damage = stage(-successes, poison_rating);
     int dam_total = convert_damage(staged_damage);
     char rollbuf[500];
-    snprintf(rollbuf, sizeof(rollbuf), "Poison resistance test: %d dice vs TN %d gave %d successes to stage down damage.",
+    snprintf(rollbuf, sizeof(rollbuf), "Poison resistance test: %d dice vs TN %d gave %d successes to stage down physical damage.",
              damage_resist_dice,
              tn,
              successes);

@@ -1741,8 +1741,18 @@ enum {
 #define LIQ_LOCAL      32
 #define LIQ_FUCKUP     33
 #define LIQ_CLEANER    34
+#define LIQ_HOT_COCOA  35
+#define LIQ_COOLANT    36
+#define LIQ_MOTOR_OIL  37
+#define LIQ_BATTERY_ACID 38
+/* Adding a liquid type? You must modify FOUR things in constants.cpp:
+   - color_liquid
+   - drinks
+   - drinknames
+   - drink_aff
+*/
 
-#define NUM_DRINK_TYPES         35
+#define NUM_DRINK_TYPES         39
 
 /* focus values */
 
