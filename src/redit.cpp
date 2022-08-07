@@ -156,6 +156,9 @@ void redit_disp_exit_menu(struct descriptor_data * d)
   {
     DOOR = new room_direction_data;
     memset((char *) DOOR, 0, sizeof (struct room_direction_data));
+#ifdef USE_DEBUG_CANARIES
+    DOOR->canary = CANARY_VALUE;
+#endif
     DOOR->barrier = 4;
     DOOR->condition = DOOR->barrier;
     DOOR->material = 5;

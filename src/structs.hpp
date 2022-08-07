@@ -708,7 +708,7 @@ struct mob_special_data
 
   mob_special_data() :
     last_direction(NORTH), attack_type(0), default_pos(POS_STANDING),
-    active(0), memory(NULL), wait_state(0), value_death_nuyen(0),
+    active(0), memory(NULL), wait_state(0), quest_id(0), value_death_nuyen(0),
     value_death_items(0), value_death_karma(0), count_death(0),
     alert(0), alerttime(0), spare1(0), spare2(0), lasthit(0)
   {

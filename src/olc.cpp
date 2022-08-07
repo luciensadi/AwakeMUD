@@ -557,20 +557,20 @@ ACMD(do_dig)
 
   if (subcmd == SCMD_DIG) {
     in_room->dir_option[dir] = new room_direction_data;
-    memset((char *) in_room->dir_option[dir], 0, sizeof (struct room_direction_data));
     in_room->dir_option[dir]->to_room = &world[room];
     in_room->dir_option[dir]->barrier = 4;
     in_room->dir_option[dir]->material = 5;
     in_room->dir_option[dir]->exit_info = 0;
     in_room->dir_option[dir]->to_room_vnum = world[room].number;
+
     dir = rev_dir[dir];
     world[room].dir_option[dir] = new room_direction_data;
-    memset((char *) world[room].dir_option[dir], 0, sizeof (struct room_direction_data));
     world[room].dir_option[dir]->to_room = in_room;
     world[room].dir_option[dir]->barrier = 4;
     world[room].dir_option[dir]->material = 5;
     world[room].dir_option[dir]->exit_info = 0;
     world[room].dir_option[dir]->to_room_vnum = in_room->number;
+
     if (zone1 == zone2)
       write_world_to_disk(zone_table[zone1].number);
     else {
@@ -1294,6 +1294,10 @@ ACMD(do_medit)
     mob = Mem->GetCh();
 
     *mob = mob_proto[mob_num]; // the RNUM
+
+#ifdef USE_DEBUG_CANARIES
+    mob->canary = CANARY_VALUE;
+#endif
 
     // copy all strings over
     if (mob_proto[mob_num].player.physical_text.keywords)

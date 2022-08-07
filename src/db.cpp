@@ -849,6 +849,11 @@ void index_boot(int mode)
     world = new struct room_data[rec_count + world_chunk_size];
     memset((char *) world, 0, (sizeof(struct room_data) *
                                (rec_count + world_chunk_size)));
+#ifdef USE_DEBUG_CANARIES
+   for (int i = 0; i < rec_count + world_chunk_size; i++)
+     world[i].canary = CANARY_VALUE;
+#endif
+
     top_of_world_array = rec_count + world_chunk_size; // assign the real size of the array
     break;
   case DB_BOOT_MTX:
@@ -873,6 +878,11 @@ void index_boot(int mode)
     mob_proto = new struct char_data[rec_count + mob_chunk_size];
     memset((char *) mob_proto, 0, (sizeof(struct char_data) *
                                    (rec_count + mob_chunk_size)));
+
+#ifdef USE_DEBUG_CANARIES
+  for (int i = 0; i < rec_count + mob_chunk_size; i++)
+    mob_proto[i].canary = CANARY_VALUE;
+#endif
 
     mob_index = new struct index_data[rec_count + mob_chunk_size];
     memset((char *) mob_index, 0, (sizeof(struct index_data) *
@@ -4819,14 +4829,17 @@ void clear_object(struct obj_data * obj)
   obj->item_number = NOTHING;
   obj->in_room = NULL;
 
-  #ifdef USE_DEBUG_CANARIES
-    obj->canary = CANARY_VALUE;
-  #endif
+#ifdef USE_DEBUG_CANARIES
+  obj->canary = CANARY_VALUE;
+#endif
 }
 
 void clear_room(struct room_data *room)
 {
   memset((char *) room, 0, sizeof(struct room_data));
+#ifdef USE_DEBUG_CANARIES
+  room->canary = CANARY_VALUE;
+#endif
 }
 
 void clear_vehicle(struct veh_data *veh)
@@ -4847,12 +4860,20 @@ void clear_vehicle(struct veh_data *veh)
 void clear_host(struct host_data *host)
 {
   memset((char *) host, 0, sizeof(struct host_data));
+
+#ifdef USE_DEBUG_CANARIES
+  host->canary = CANARY_VALUE;
+#endif
 }
 
 void clear_icon(struct matrix_icon *icon)
 {
   memset((char *) icon, 0, sizeof(struct matrix_icon));
   icon->in_host = NOWHERE;
+
+#ifdef USE_DEBUG_CANARIES
+  icon->canary = CANARY_VALUE;
+#endif
 }
 
 /* returns the real number of the room with given virtual number */

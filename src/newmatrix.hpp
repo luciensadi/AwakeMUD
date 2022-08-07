@@ -70,6 +70,10 @@ struct host_data {
   int shutdown_mpcp;
   bool payreset;
 
+#ifdef USE_DEBUG_CANARIES
+  int canary;
+#endif
+
   struct trigger_step *trigger;
   struct matrix_icon *icons;
   struct matrix_icon *fighting;
@@ -79,7 +83,11 @@ struct host_data {
     name(NULL), keywords(NULL), desc(NULL), shutdown_start(NULL), shutdown_stop(NULL),
     type(0), reset(0), found(0), alert(0), pass(0), shutdown(0), shutdown_success(0), shutdown_mpcp(0),
     payreset(TRUE), trigger(NULL), icons(NULL), fighting(NULL), exit(NULL), file(NULL)
-  {}
+  {
+#ifdef USE_DEBUG_CANARIES
+    canary = CANARY_VALUE;
+#endif
+  }
 };
 
 struct exit_data {
@@ -88,9 +96,18 @@ struct exit_data {
   char *roomstring;
   bool hidden;
   struct exit_data *next;
+
+#ifdef USE_DEBUG_CANARIES
+  int canary;
+#endif
+
   exit_data():
     host(0), addresses(NULL), roomstring(NULL), hidden(FALSE), next(NULL)
-  {}
+  {
+#ifdef USE_DEBUG_CANARIES
+    canary = CANARY_VALUE;
+#endif
+  }
 };
 
 struct trigger_step {
@@ -122,9 +139,18 @@ struct ic_info {
   int expert;
   int cascade;
   int targ_evasion;
+
+#ifdef USE_DEBUG_CANARIES
+  int canary;
+#endif
+
   ic_info():
     rating(0), type(0), subtype(0), target(0), supressed(FALSE), trap(0), expert(0), cascade(0), targ_evasion(0)
-  {}
+  {
+#ifdef USE_DEBUG_CANARIES
+    canary = CANARY_VALUE;
+#endif
+  }
 };
 
 struct deck_info {
@@ -154,6 +180,10 @@ struct deck_info {
   long *redirectedon;
   long mxp;
 
+#ifdef USE_DEBUG_CANARIES
+  int canary;
+#endif
+
   struct char_data *hitcher;
   struct obj_data *software;
   struct obj_data *deck;
@@ -168,6 +198,10 @@ struct deck_info {
     seen(NULL), ch(NULL), phone(NULL)
    {
      ZERO_OUT_ARRAY(asist, 2);
+
+ #ifdef USE_DEBUG_CANARIES
+     canary = CANARY_VALUE;
+ #endif
    }
 };
 
@@ -191,11 +225,19 @@ struct matrix_icon {
   struct matrix_icon *next_in_host;
   struct matrix_icon *next_fighting;
 
+#ifdef USE_DEBUG_CANARIES
+  int canary;
+#endif
+
   matrix_icon():
     name(NULL), long_desc(NULL), look_desc(NULL), idnum(0), number(0), condition(10),
     initiative(0), parry(0), evasion(0), position(0),
     decker(NULL), fighting(NULL), next(NULL), next_in_host(NULL), next_fighting(NULL)
-  {}
+  {
+#ifdef USE_DEBUG_CANARIES
+    canary = CANARY_VALUE;
+#endif
+  }
 };
 
 extern bool has_spotted(struct matrix_icon *icons, struct matrix_icon *targ);

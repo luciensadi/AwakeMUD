@@ -5742,8 +5742,6 @@ SPECIAL(orkish_truckdriver)
     char_to_room(driver, &world[real_room(REST_STOP_VNUM)]);
     if (!driver->in_room->dir_option[WEST]) {
       driver->in_room->dir_option[WEST] = new room_direction_data;
-      memset((char *) driver->in_room->dir_option[WEST], 0,
-             sizeof (struct room_direction_data));
       driver->in_room->dir_option[WEST]->to_room = &world[real_room(REST_STOP_TRUCK_CARGO_AREA)];
     }
     act("A GMC 4201 pulls into the rest stop, the orkish truck driver getting out and going over the coffee stand.", FALSE, driver, 0, 0, TO_ROOM);

@@ -83,6 +83,10 @@ void vehcust_parse(struct descriptor_data *d, char *arg);
 void pocketsec_parse(struct descriptor_data *d, char *arg);
 int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info);
 
+#ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
+extern void verify_every_pointer_we_can_think_of();
+#endif
+
 void verify_data(struct char_data *ch, const char *line, int cmd, int subcmd, const char *section);
 
 #ifdef LOG_COMMANDS
@@ -1578,6 +1582,9 @@ void command_interpreter(struct char_data * ch, char *argument, char *tcname)
         verify_data(ch, line, cmd, mtx_info[cmd].subcmd, "matrix special");
       }
     }
+#ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
+    verify_every_pointer_we_can_think_of();
+#endif
   } else if (PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_RIG))
   {
     for (length = strlen(arg), cmd = 0; *rig_info[cmd].command != '\n'; cmd++)
@@ -1615,6 +1622,9 @@ void command_interpreter(struct char_data * ch, char *argument, char *tcname)
         verify_data(ch, line, cmd, rig_info[cmd].subcmd, "rig special");
       }
     }
+#ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
+    verify_every_pointer_we_can_think_of();
+#endif
   } else
   {
     for (length = strlen(arg), cmd = 0; *cmd_info[cmd].command != '\n'; cmd++)
@@ -1712,6 +1722,9 @@ void command_interpreter(struct char_data * ch, char *argument, char *tcname)
     } else {
       verify_data(ch, line, cmd, cmd_info[cmd].subcmd, "command special");
     }
+#ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
+    verify_every_pointer_we_can_think_of();
+#endif
   }
 }
 
