@@ -1066,13 +1066,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
     *buf = '\0';
 
     // Note quest or nokill protection.
-    if (GET_MOB_QUEST_CHAR_ID(i)) {
-      if (GET_MOB_QUEST_CHAR_ID(i) == GET_IDNUM(ch)) {
-        strlcat(buf, "^Y(Quest)^n ", sizeof(buf));
-      } else {
-        strlcat(buf, "^m(Protected)^n ", sizeof(buf));
-      }
-    } else if (
+    if (
       (i->in_room && (GET_ROOM_SPEC(i->in_room) == mageskill_moore || GET_ROOM_SPEC(i->in_room) == mageskill_hermes))
       || CHECK_FUNC_AND_SFUNC_FOR(i, mageskill_herbie)
       || CHECK_FUNC_AND_SFUNC_FOR(i, mageskill_anatoly)
@@ -1094,6 +1088,14 @@ void list_one_char(struct char_data * i, struct char_data * ch)
       }
     }
 #endif
+
+    if (GET_MOB_QUEST_CHAR_ID(i)) {
+      if (GET_MOB_QUEST_CHAR_ID(i) == GET_IDNUM(ch)) {
+        strlcat(buf, "^Y(Quest)^n ", sizeof(buf));
+      } else {
+        strlcat(buf, "^m(Protected)^n ", sizeof(buf));
+      }
+    }
 
     // Make sure they always display flags that are relevant to the player.
     if (IS_AFFECTED(i, AFF_INVISIBLE) || IS_AFFECTED(i, AFF_IMP_INVIS) || IS_AFFECTED(i, AFF_SPELLINVIS) || IS_AFFECTED(i, AFF_SPELLIMPINVIS))
@@ -1269,8 +1271,16 @@ void list_one_char(struct char_data * i, struct char_data * ch)
     return;
   }
 
-
   make_desc(ch, i, buf, FALSE, FALSE, sizeof(buf));
+
+  if (GET_MOB_QUEST_CHAR_ID(i)) {
+    if (GET_MOB_QUEST_CHAR_ID(i) == GET_IDNUM(ch)) {
+      strlcat(buf, " ^Y(Quest)^n", sizeof(buf));
+    } else {
+      strlcat(buf, " ^m(Protected)^n", sizeof(buf));
+    }
+  }
+
   if (PRF_FLAGGED(i, PRF_AFK))
     strlcat(buf, " (AFK)", sizeof(buf));
   if (PLR_FLAGGED(i, PLR_SWITCHED))
