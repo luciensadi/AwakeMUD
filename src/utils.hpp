@@ -136,12 +136,15 @@ bool    is_voice_masked(struct char_data *ch);
 bool    force_perception(struct char_data *ch);
 int     get_focus_bond_cost(struct obj_data *obj);
 
+struct obj_data *find_best_active_docwagon_modulator(struct char_data *ch);
+
 struct obj_data *obj_is_or_contains_obj_with_vnum(struct obj_data *obj, vnum_t vnum);
 struct obj_data *ch_has_obj_with_vnum(struct char_data *ch, vnum_t vnum);
 
 void load_vehicle_brain(struct veh_data *veh);
 void remove_vehicle_brain(struct veh_data *veh);
 
+const char *get_gridguide_coordinates_for_room(struct room_data *room);
 long get_room_gridguide_x(vnum_t room_vnum);
 long get_room_gridguide_y(vnum_t room_vnum);
 vnum_t vnum_from_gridguide_coordinates(long x, long y, struct char_data *ch, struct veh_data *veh=NULL);

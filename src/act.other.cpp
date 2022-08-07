@@ -1148,7 +1148,9 @@ const char *tog_messages[][2] = {
                             {"You will now receive XTERM256 colors.\r\n",
                              "You will no longer receive XTERM256 colors. All colors will be coerced to ANSI.\r\n"},
                             {"ANSI colors will no longer be enforced. You'll see the MUD in the intended colors.\r\n",
-                             "You can now configure ANSI colors in your client.\r\n"}
+                             "You can now configure ANSI colors in your client.\r\n"},
+                            {"Your modulator will now send alerts to all player doctors when you are mortally wounded.\r\n",
+                             "Your modulator will no longer send alerts to all player doctors when you go down.\r\n"}
                           };
 
 ACMD(do_toggle)
@@ -1200,10 +1202,10 @@ ACMD(do_toggle)
 
       // Compose and append our line.
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf),
-              "%22s: %-3s%s",
+              "%30s: %-3s%s",
               preference_bits_v2[i].name,
               buf2,
-              printed%3 == 2 || PRF_FLAGGED(ch, PRF_SCREENREADER) ? "\r\n" : "");
+              printed%2 == 1 || PRF_FLAGGED(ch, PRF_SCREENREADER) ? "\r\n" : "");
 
       // Increment our spacer.
       printed++;
@@ -1419,6 +1421,9 @@ ACMD(do_toggle)
         if (ch->desc->pProtocol)
           ch->desc->pProtocol->do_coerce_ansi_capable_colors_to_ansi = FALSE;
       }
+    } else if (is_abbrev(argument, "alert doctors on mort") || is_abbrev(argument, "don't alert doctors on mort") || is_abbrev(argument, "doctors") || is_abbrev(argument, "docwagon")) {
+      result = PRF_TOG_CHK(ch, PRF_DONT_ALERT_PLAYER_DOCTORS_ON_MORT);
+      mode = 48;
     } else {
       send_to_char("That is not a valid toggle option.\r\n", ch);
       return;
@@ -4521,7 +4526,7 @@ ACMD(do_spray)
       {
         int alpha = 0, nonalpha = 0;
         for (const char *ptr = argument; *ptr; ptr++) {
-          if (isalpha(*ptr)) {
+          if (isalnum(*ptr)) {
             alpha++;
           } else if (*ptr != '^' && *ptr != '[' && *ptr != ']') {
             nonalpha++;

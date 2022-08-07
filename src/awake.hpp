@@ -325,7 +325,9 @@ enum {
 #define PLR_RADIO_MUTED                     46
 #define PLR_SITE_HIDDEN                     47 /* For staff who really don't want people knowing who their alt is. */
 #define PLR_ENABLED_DRUGS                   48
-#define PLR_MAX                             49
+#define PLR_SENT_DOCWAGON_PLAYER_ALERT      49
+#define PLR_MAX                             50
+// Adding something here? Add it to constants.cpp's player_bits too.
 
 
 
@@ -372,74 +374,75 @@ enum {
 /* preference flags: used by char_data.player_specials.pref */
 
 // If you add to this list, also add to constant.cpp's preference_bits[].
-#define PRF_PACIFY                       0
-#define PRF_COMPACT                      1
-#define PRF_AUTOEXIT                     2  /* Display exits in a room       */
-#define PRF_FIGHTGAG                     3  /* Gag extra fight messages  */
-#define PRF_MOVEGAG                      4  /* Gag extra movement messages    */
-#define PRF_DEAF                         5  /* Can't hear shouts     */
-#define PRF_NOTELL                       6  /* Can't receive tells     */
-#define PRF_NORADIO                      7  /* Can't hear radio frequencies     */
-#define PRF_NONEWBIE                     8  /* Can't hear newbie channel    */
-#define PRF_NOREPEAT                     9  /* No repetition of comm commands  */
-#define PRF_HARDCORE                     10
-#define PRF_PKER                         11 /* is able to pk/be pked        */
-#define PRF_QUEST                        12 /* On quest        */
-#define PRF_AFK                          13 /* Afk   */
-#define PRF_SUPPRESS_STAFF_RADIO         14 /* EMPTY SPACE, FILL ME! */
-#define PRF_UNUSED2_PLS_REPLACE          15 /* EMPTY SPACE, FILL ME!        15 */
-#define PRF_NOHASSLE                     16 /* Aggr mobs won't attack  */
-#define PRF_ROOMFLAGS                    17 /* Can see room flags (ROOM_x) */
-#define PRF_HOLYLIGHT                    18 /* Can see in dark   */
-#define PRF_CONNLOG                      19 /* Views ConnLog      */
-#define PRF_DEATHLOG                     20 /* Views DeathLog        */
-#define PRF_MISCLOG                      21 /* Views MiscLog          */
-#define PRF_WIZLOG                       22 /* Views WizLog          */
-#define PRF_SYSLOG                       23 /* Views SysLog         */
-#define PRF_ZONELOG                      24 /* Views ZoneLog          */
-#define PRF_LONGEXITS                    25
-#define PRF_ROLLS                        26 /* sees details on rolls        */
-#define PRF_NOOOC                        27 /* can't hear ooc channel      */
-#define PRF_AUTOINVIS                    28 /* to toggle auto-invis for immortals    */
-#define PRF_CHEATLOG                     29 /* Views CheatLog         */
-#define PRF_ASSIST                       30 /* auto assist */
-#define PRF_BANLOG                       31
-#define PRF_NORPE                        32
-#define PRF_NOHIRED                      33
-#define PRF_GRIDLOG                      34
-#define PRF_WRECKLOG                     35
-#define PRF_QUESTOR                      36
-#define PRF_NEWBIEHELPER                 37
-#define PRF_MENUGAG                      38
-#define PRF_LONGWEAPON                   39
-#define PRF_PGROUPLOG                    40
-#define PRF_SHOWGROUPTAG                 41
-#define PRF_KEEPALIVE                    42
-#define PRF_SCREENREADER                 43
-#define PRF_NOCOLOR                      44
-#define PRF_NOPROMPT                     45
-#define PRF_HELPLOG                      46
-#define PRF_PURGELOG                     47
-#define PRF_NOAUTOKILL                   48
-#define PRF_NO_RADIO_NAMES               49
-#define PRF_FUCKUPLOG                    50
-#define PRF_ECONLOG                      51
-#define PRF_BRIEF                        52
-#define PRF_NOHIGHLIGHT                  53
-#define PRF_NOPSEUDOLANGUAGE             54
-#define PRF_NO_IDLE_NUYEN_REWARD_MESSAGE 55
-#define PRF_TOUCH_ME_DADDY               56 /* Allows player cyberdocs to operate on you. Don't @ me. */
-#define PRF_NO_VOID_ON_IDLE              57
-#define PRF_RADLOG                       58
-#define PRF_ANONYMOUS_ON_WHERE           59
-#define PRF_IGNORELOG                    60
-#define PRF_SEE_TIPS                     61
-#define PRF_AUTOSTAND                    62
-#define PRF_AUTOKIPUP                    63
-#define PRF_NO_WEATHER                   64
-#define PRF_DISABLE_XTERM                65
-#define PRF_COERCE_ANSI                  66
-#define PRF_MAX                          67
+#define PRF_PACIFY                             0
+#define PRF_COMPACT                            1
+#define PRF_AUTOEXIT                           2  /* Display exits in a room       */
+#define PRF_FIGHTGAG                           3  /* Gag extra fight messages  */
+#define PRF_MOVEGAG                            4  /* Gag extra movement messages    */
+#define PRF_DEAF                               5  /* Can't hear shouts     */
+#define PRF_NOTELL                             6  /* Can't receive tells     */
+#define PRF_NORADIO                            7  /* Can't hear radio frequencies     */
+#define PRF_NONEWBIE                           8  /* Can't hear newbie channel    */
+#define PRF_NOREPEAT                           9  /* No repetition of comm commands  */
+#define PRF_HARDCORE                           10
+#define PRF_PKER                               11 /* is able to pk/be pked        */
+#define PRF_QUEST                              12 /* On quest        */
+#define PRF_AFK                                13 /* Afk   */
+#define PRF_SUPPRESS_STAFF_RADIO               14 /* EMPTY SPACE, FILL ME! */
+#define PRF_UNUSED2_PLS_REPLACE                15 /* EMPTY SPACE, FILL ME!        15 */
+#define PRF_NOHASSLE                           16 /* Aggr mobs won't attack  */
+#define PRF_ROOMFLAGS                          17 /* Can see room flags (ROOM_x) */
+#define PRF_HOLYLIGHT                          18 /* Can see in dark   */
+#define PRF_CONNLOG                            19 /* Views ConnLog      */
+#define PRF_DEATHLOG                           20 /* Views DeathLog        */
+#define PRF_MISCLOG                            21 /* Views MiscLog          */
+#define PRF_WIZLOG                             22 /* Views WizLog          */
+#define PRF_SYSLOG                             23 /* Views SysLog         */
+#define PRF_ZONELOG                            24 /* Views ZoneLog          */
+#define PRF_LONGEXITS                          25
+#define PRF_ROLLS                              26 /* sees details on rolls        */
+#define PRF_NOOOC                              27 /* can't hear ooc channel      */
+#define PRF_AUTOINVIS                          28 /* to toggle auto-invis for immortals    */
+#define PRF_CHEATLOG                           29 /* Views CheatLog         */
+#define PRF_ASSIST                             30 /* auto assist */
+#define PRF_BANLOG                             31
+#define PRF_NORPE                              32
+#define PRF_NOHIRED                            33
+#define PRF_GRIDLOG                            34
+#define PRF_WRECKLOG                           35
+#define PRF_QUESTOR                            36
+#define PRF_NEWBIEHELPER                       37
+#define PRF_MENUGAG                            38
+#define PRF_LONGWEAPON                         39
+#define PRF_PGROUPLOG                          40
+#define PRF_SHOWGROUPTAG                       41
+#define PRF_KEEPALIVE                          42
+#define PRF_SCREENREADER                       43
+#define PRF_NOCOLOR                            44
+#define PRF_NOPROMPT                           45
+#define PRF_HELPLOG                            46
+#define PRF_PURGELOG                           47
+#define PRF_NOAUTOKILL                         48
+#define PRF_NO_RADIO_NAMES                     49
+#define PRF_FUCKUPLOG                          50
+#define PRF_ECONLOG                            51
+#define PRF_BRIEF                              52
+#define PRF_NOHIGHLIGHT                        53
+#define PRF_NOPSEUDOLANGUAGE                   54
+#define PRF_NO_IDLE_NUYEN_REWARD_MESSAGE       55
+#define PRF_TOUCH_ME_DADDY                     56 /* Allows player cyberdocs to operate on you. Don't @ me. */
+#define PRF_NO_VOID_ON_IDLE                    57
+#define PRF_RADLOG                             58
+#define PRF_ANONYMOUS_ON_WHERE                 59
+#define PRF_IGNORELOG                          60
+#define PRF_SEE_TIPS                           61
+#define PRF_AUTOSTAND                          62
+#define PRF_AUTOKIPUP                          63
+#define PRF_NO_WEATHER                         64
+#define PRF_DISABLE_XTERM                      65
+#define PRF_COERCE_ANSI                        66
+#define PRF_DONT_ALERT_PLAYER_DOCTORS_ON_MORT  67
+#define PRF_MAX                                68
 
 /* log watch */
 
@@ -540,7 +543,8 @@ enum {
 #define AFF_LEVITATE  52
 #define AFF_FLAME_AURA  53
 #define AFF_VOICE_MODULATOR  54
-#define AFF_MAX       55
+#define AFF_WEARING_ACTIVE_DOCWAGON_RECEIVER 55
+#define AFF_MAX       56
 // TODO: If you add another long-state action like building, designing, etc:
 // - Add it to the BR_TASK_AFF_FLAGS section below, which affects bioware_check and the B/R flag in the wholist
 // - Add it to the IS_WORKING and STOP_WORKING macros in utils.h
@@ -1255,6 +1259,11 @@ enum {
 #define PATCH_TRANQ             2
 #define PATCH_TRAUMA            3
 #define NUM_PATCHES             4
+
+#define DOCWAGON_GRADE_NOT_SET  0
+#define DOCWAGON_GRADE_BASIC    1
+#define DOCWAGON_GRADE_GOLD     2
+#define DOCWAGON_GRADE_PLATINUM 3
 
 /* take/wear flags: used by obj_data.obj_flags.wear_flags */
 

@@ -23,6 +23,7 @@
 #include "bullet_pants.hpp"
 #include "ignore_system.hpp"
 #include "invis_resistance_tests.hpp"
+#include "playerdoc.hpp"
 
 /* Structures */
 struct char_data *combat_list = NULL;   /* head of l-list of fighting chars */
@@ -219,15 +220,31 @@ void load_messages(void)
 
 bool update_pos(struct char_data * victim)
 {
+  bool was_morted = GET_POS(victim) == POS_MORTALLYW;
+
+  // Are they stunned?
   if ((GET_MENTAL(victim) < 100) && (GET_PHYSICAL(victim) >= 100)) {
+    // Pain editor prevents stunned condition.
     for (struct obj_data *bio = victim->bioware; bio; bio = bio->next_content)
       if (GET_BIOWARE_TYPE(bio) == BIO_PAINEDITOR && GET_BIOWARE_IS_ACTIVATED(bio))
         return FALSE;
     GET_POS(victim) = POS_STUNNED;
     GET_INIT_ROLL(victim) = 0;
-  } else if ((GET_PHYSICAL(victim) >= 100) && (GET_POS(victim) > POS_STUNNED)) {
+  }
+  // Are they doing fine?
+  else if ((GET_PHYSICAL(victim) >= 100) && (GET_POS(victim) > POS_STUNNED)) {
     return FALSE;
-  } else if (GET_PHYSICAL(victim) >= 100) {
+  }
+
+  // They were potentially morted and now are healed.
+  else if (GET_PHYSICAL(victim) >= 100) {
+    if (!IS_NPC(victim)) {
+      if (was_morted && !PRF_FLAGGED(victim, PRF_DONT_ALERT_PLAYER_DOCTORS_ON_MORT)) {
+        alert_player_doctors_of_contract_withdrawal(victim, FALSE);
+      }
+      PLR_FLAGS(victim).RemoveBit(PLR_SENT_DOCWAGON_PLAYER_ALERT);
+    }
+
     GET_POS(victim) = POS_STANDING;
     return FALSE;
   } else if ((int)(GET_PHYSICAL(victim) / 100) <= -GET_BOD(victim) + (GET_BIOOVER(victim) > 0 ? GET_BIOOVER(victim) : 0)) {
@@ -236,6 +253,8 @@ bool update_pos(struct char_data * victim)
     GET_POS(victim) = POS_MORTALLYW;
     AFF_FLAGS(victim).RemoveBit(AFF_PRONE);
   }
+
+  // To get here, you're stunned or morted.
 
   GET_INIT_ROLL(victim) = 0;
 
@@ -260,6 +279,7 @@ bool update_pos(struct char_data * victim)
       return dumpshock(victim->persona);
     }
   }
+
   return FALSE;
 }
 
@@ -945,6 +965,10 @@ void die(struct char_data * ch)
   if (!IS_NPC(ch)) {
     death_penalty(ch);
     PLR_FLAGS(ch).RemoveBit(PLR_WANTED);
+  }
+
+  if (!PRF_FLAGGED(ch, PRF_DONT_ALERT_PLAYER_DOCTORS_ON_MORT)) {
+    alert_player_doctors_of_contract_withdrawal(ch, TRUE);
   }
 
   raw_kill(ch);
@@ -2156,12 +2180,7 @@ bool docwagon(struct char_data *ch)
     return FALSE;
 
   // Find the best docwagon contract they're wearing.
-  for (i = 0; i < NUM_WEARS; i++)
-    if (GET_EQ(ch, i) && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_DOCWAGON && GET_DOCWAGON_BONDED_IDNUM(GET_EQ(ch, i)) == GET_IDNUM(ch))
-      if (docwagon == NULL || GET_DOCWAGON_CONTRACT_GRADE(GET_EQ(ch, i)) > GET_DOCWAGON_CONTRACT_GRADE(docwagon))
-      docwagon = GET_EQ(ch, i);
-
-  if (!docwagon)
+  if (!(docwagon = find_best_active_docwagon_modulator(ch)))
     return FALSE;
 
   struct room_data *room = get_ch_in_room(ch);
@@ -2253,6 +2272,16 @@ bool docwagon(struct char_data *ch)
     return TRUE;
   } else {
     send_to_char(ch, "%s^n vibrates, sending out a trauma call that will hopefully be answered.\r\n", CAP(GET_OBJ_NAME(docwagon)));
+
+    if ((ch->in_room || ch->in_veh) && !PRF_FLAGGED(ch, PRF_DONT_ALERT_PLAYER_DOCTORS_ON_MORT)) {
+      int num_responders = alert_player_doctors_of_mort(ch, docwagon);
+      if (num_responders > 0) {
+        send_to_char(ch, "^L[OOC: There %s %d player%s online who may be able to respond to your DocWagon call.]^n\r\n",
+                     num_responders == 1 ? "is" : "are",
+                     num_responders,
+                     num_responders == 1 ? "" : "s");
+      }
+    }
   }
 
   return FALSE;
@@ -3161,12 +3190,13 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
       } else
         act("$n slumps in a pile. You hear sirens as a DocWagon rushes in and grabs $m.", FALSE, victim, 0, 0, TO_ROOM);
 
-      for (int i = 0; i < NUM_WEARS && !docwagon_biomonitor; i++) {
+      for (int i = 0; i < NUM_WEARS; i++) {
         if (GET_EQ(victim, i) && GET_OBJ_TYPE(GET_EQ(victim, i)) == ITEM_DOCWAGON) {
           if (GET_DOCWAGON_BONDED_IDNUM(GET_EQ(victim, i)) != GET_IDNUM(victim)) {
             unbonded_docwagon = TRUE;
           } else {
             docwagon_biomonitor = GET_EQ(victim, i);
+            break;
           }
         }
       }
@@ -3174,7 +3204,8 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
       if (docwagon_biomonitor) {
         send_to_char("You feel the vibration of your DocWagon biomonitor sending out an alert, but as the world slips into darkness you realize it's too little, too late.\r\n", victim);
       } else if (unbonded_docwagon) {
-        send_to_char("Your last conscious thought involves wondering why your DocWagon biomonitor didn't work-- maybe you forgot to ##^WBOND^n it? The world slips into darkness, and you hope a wandering DocWagon finds you.\r\n", victim);
+        send_to_char("Your last conscious thought involves wondering why your DocWagon biomonitor didn't work-- maybe you forgot to ##^WBOND^n it?\r\n"
+                     "The world slips into darkness, and you hope a wandering DocWagon finds you.\r\n", victim);
       } else {
         send_to_char("You feel the world slip into darkness, you'd better hope a wandering DocWagon finds you.\r\n", victim);
       }

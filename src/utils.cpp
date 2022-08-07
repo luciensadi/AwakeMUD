@@ -4533,6 +4533,25 @@ vnum_t vnum_from_gridguide_coordinates(long x, long y, struct char_data *ch, str
   return candidate_vnum;
 }
 
+const char *get_gridguide_coordinates_for_room(struct room_data *room) {
+  static char coords[100];
+
+  if (!room) {
+    mudlog("SYSERR: Received NULL room to get_gridguide_coordinates_for_room()!", NULL, LOG_SYSLOG, TRUE);
+    return NULL;
+  }
+
+  long x_coord = get_room_gridguide_x(GET_ROOM_VNUM(room));
+  long y_coord = get_room_gridguide_y(GET_ROOM_VNUM(room));
+
+  if (vnum_from_gridguide_coordinates(x_coord, y_coord, NULL, NULL) > 0) {
+    snprintf(coords, sizeof(coords), "%ld, %ld", x_coord, y_coord);
+    return coords;
+  }
+
+  return NULL;
+}
+
 int get_zone_index_number_from_vnum(vnum_t vnum) {
   for (int counter = 0; counter <= top_of_zone_table; counter++) {
     if ((vnum >= (zone_table[counter].number * 100)) &&
@@ -4550,6 +4569,10 @@ bool room_accessible_to_vehicle_piloted_by_ch(struct room_data *room, struct veh
   if (!ROOM_FLAGGED(room, ROOM_ROAD) && !ROOM_FLAGGED(room, ROOM_GARAGE)) {
     if (veh->type != VEH_BIKE && veh->type != VEH_DRONE)
       return FALSE;
+  }
+
+  if (ROOM_FLAGGED(room, ROOM_HOUSE) && !House_can_enter(ch, GET_ROOM_VNUM(room))) {
+    return FALSE;
   }
 
   #ifdef DEATH_FLAGS
@@ -4581,11 +4604,13 @@ bool room_accessible_to_vehicle_piloted_by_ch(struct room_data *room, struct veh
     return FALSE;
   }
 
-  if (ROOM_FLAGGED(room, ROOM_STAFF_ONLY)) {
-    for (struct char_data *tch = veh->people; tch; tch = tch->next_in_veh) {
-      if (!IS_NPC(tch) && !access_level(tch, LVL_BUILDER)) {
-        return FALSE;
-      }
+  for (struct char_data *tch = veh->people; tch; tch = tch->next_in_veh) {
+    if (ROOM_FLAGGED(room, ROOM_STAFF_ONLY) && !IS_NPC(tch) && !access_level(tch, LVL_BUILDER)) {
+      return FALSE;
+    }
+
+    if (ROOM_FLAGGED(room, ROOM_HOUSE) && !House_can_enter(tch, GET_ROOM_VNUM(room))) {
+      return FALSE;
     }
   }
 
@@ -5075,6 +5100,22 @@ struct veh_data *get_veh_controlled_by_char(struct char_data *ch) {
     return ch->char_specials.rigging;
 
   return ch->in_veh;
+}
+
+struct obj_data *find_best_active_docwagon_modulator(struct char_data *ch) {
+  struct obj_data *docwagon = NULL;
+
+  for (int i = 0; i < NUM_WEARS; i++) {
+    struct obj_data *eq = GET_EQ(ch, i);
+
+    if (eq && GET_OBJ_TYPE(eq) == ITEM_DOCWAGON && GET_DOCWAGON_BONDED_IDNUM(eq) == GET_IDNUM(ch)) {
+      if (docwagon == NULL || GET_DOCWAGON_CONTRACT_GRADE(eq) > GET_DOCWAGON_CONTRACT_GRADE(docwagon)) {
+        docwagon = eq;
+      }
+    }
+  }
+
+  return docwagon;
 }
 
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.

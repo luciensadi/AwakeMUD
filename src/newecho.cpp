@@ -1168,7 +1168,7 @@ const char *replace_too_long_words(struct char_data *ch, struct char_data *speak
           }
 
           // Go through memory.
-          if (!should_highlight && !IS_NPC(speaker)) {
+          if (!should_highlight && speaker && !IS_NPC(speaker)) {
             struct remem *mem_record = safe_found_mem(speaker, ch);
             if (mem_record && !str_cmp(mem_record->mem, tag_check_string))
               should_highlight = TRUE;

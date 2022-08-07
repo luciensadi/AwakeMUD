@@ -1364,9 +1364,13 @@ void get_from_room(struct char_data * ch, char *arg, bool download)
       send_to_char(ch, "You don't see %s %s here.\r\n", AN(arg), arg);
     } else {
       if ( CAN_SEE_OBJ(ch, obj) ) {
-        if ( IS_OBJ_STAT(obj, ITEM_EXTRA_CORPSE) && GET_OBJ_VAL(obj, 4) == 1
-             && GET_OBJ_VAL(obj, 5) != GET_IDNUM(ch) && !IS_SENATOR(ch) )
-          send_to_char("It's not yours chummer...better leave it be.\r\n",ch);
+        if ( IS_OBJ_STAT(obj, ITEM_EXTRA_CORPSE) && GET_OBJ_VAL(obj, 4) == 1 && !IS_SENATOR(ch) ) {
+          if (GET_OBJ_VAL(obj, 5) != GET_IDNUM(ch)) {
+            send_to_char("It's not yours, chummer... better leave it be.\r\n",ch);
+          } else {
+            send_to_char("That's not movable-- use ##^WGET ALL BELONGINGS^n to empty it out!\r\n",ch);
+          }
+        }
         else {
           perform_get_from_room(ch, obj, FALSE);
         }

@@ -497,6 +497,7 @@ const char *player_bits[] =
     "RADIO_MUTED",
     "SITE_HIDDEN",
     "ENABLED_DRUGS",
+    "SENT_DOCWAGON",
     "\n"
   };
 
@@ -615,6 +616,7 @@ struct preference_bit_struct preference_bits_v2[] = {
   { "No Weather"           , FALSE, TRUE  },
   { "No XTERM-256 Color"   , FALSE, TRUE  },
   { "Client-Configurable Color", FALSE, TRUE  },
+  { "Don't Alert Doctors on Mort", FALSE, TRUE  },
   { "\n"                   , 0    , 0     }
 };
 
@@ -688,6 +690,7 @@ const char *preference_bits[] =
     "!WEATHER",
     "!XTERM256",
     "COERCE_ANSI",
+    "ALERT_DOCTORS_ON_MORT",
     MAX_FLAG_MARKER
   };
 
@@ -748,7 +751,8 @@ const char *affected_bits[] =
     "Tries for Close Combat",
     "Levitate",
     "Flame Aura",
-    "Voice Modulator"
+    "Voice Modulator",
+    "Wearing DocWagon Receiver"
   };
 
 /* CON_x */
