@@ -396,10 +396,18 @@ void medit_parse(struct descriptor_data *d, const char *arg)
             // alloc a temp mobile
             temp = Mem->GetCh();
             *temp = *i;
+
+            struct obj_data *mount = get_mount_manned_by_ch(i);
+
             *i = *d->edit_mob;
             i->nr = mob_number;
             /* copy game-time dependent vars over */
             copy_over_necessary_info(temp, i);
+
+            if (mount) {
+              mount->worn_by = i;
+            }
+
             // Clean up.
             clear_char(temp);
             delete temp;

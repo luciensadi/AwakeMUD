@@ -2908,6 +2908,9 @@ void copy_over_necessary_info(struct char_data *original, struct char_data *clon
   REPLICATE(points.sustained[0]);
   REPLICATE(points.sustained[1]);
 
+  REPLICATE(char_specials.position);
+  REPLICATE(vfront);
+
   copy_vision_from_original_to_clone(original, clone);
 
   REPLICATE(points.fire[0]);
@@ -2915,6 +2918,12 @@ void copy_over_necessary_info(struct char_data *original, struct char_data *clon
   REPLICATE(points.reach[0]);
   REPLICATE(points.reach[1]);
 #undef REPLICATE
+
+  // Also clone important flags.
+  if (AFF_FLAGGED(original, AFF_PILOT))
+    AFF_FLAGS(clone).SetBit(AFF_PILOT);
+  if (AFF_FLAGGED(original, AFF_MANNING))
+    AFF_FLAGS(clone).SetBit(AFF_MANNING);
 }
 
 // Uses static, so don't use it more than once per call (to snprintf, etc)
