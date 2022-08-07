@@ -630,10 +630,9 @@ void list_obj_to_char(struct obj_data * list, struct char_data * ch, int mode,
           }
           show_obj_to_char(i, ch, mode);
         }
-
-        found = TRUE;
-        num = 1;
       }
+      found = TRUE;
+      num = 1;
     }
   }
 
