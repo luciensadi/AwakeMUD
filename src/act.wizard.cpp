@@ -6836,10 +6836,13 @@ int audit_zone_rooms_(struct char_data *ch, int zone_num, bool verbose) {
             REMOVE_BIT(inbound, EX_HIDDEN);
 
             if (outbound != inbound) {
+              char extant_type[500];
+              strlcpy(extant_type, render_door_type_string(room->dir_option[k]), sizeof(extant_type));
+              
               snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - %s exit has flags that don't match the return direction's flags (%s from here: %s, %s from %ld: %s).\r\n",
                       dirs[k],
                       dirs[k],
-                      render_door_type_string(room->dir_option[k]),
+                      extant_type,
                       dirs[rev_dir[k]],
                       GET_ROOM_VNUM(room->dir_option[k]->to_room),
                       render_door_type_string(room->dir_option[k]->to_room->dir_option[rev_dir[k]])
