@@ -2176,7 +2176,7 @@ bool docwagon(struct char_data *ch)
   int i, creds;
   struct obj_data *docwagon = NULL;
 
-  if (IS_NPC(ch) || PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED) || GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD)
+  if (IS_NPC(ch))
     return FALSE;
 
   // Find the best docwagon contract they're wearing.
@@ -2256,17 +2256,21 @@ bool docwagon(struct char_data *ch)
     char_from_room(ch);
     char_to_room(ch, &world[i]);
 
-    int dw_random_cost = number(8, 12) * 500 / GET_DOCWAGON_CONTRACT_GRADE(docwagon);
-    creds = MAX(dw_random_cost, (int)(GET_NUYEN(ch) / 10));
-    send_to_char(ch, "DocWagon demands %d nuyen for your rescue.\r\n", creds);
-    if ((GET_NUYEN(ch) + GET_BANK(ch)) < creds) {
-      send_to_char("Not finding sufficient payment, your DocWagon contract was retracted.\r\n", ch);
-      extract_obj(docwagon);
-    } else if (GET_BANK(ch) < creds) {
-      lose_nuyen(ch, creds - GET_BANK(ch), NUYEN_OUTFLOW_DOCWAGON);
-      lose_bank(ch, GET_BANK(ch), NUYEN_OUTFLOW_DOCWAGON);
+    if (!PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED) && GET_TKE(ch) >= NEWBIE_KARMA_THRESHOLD) {
+      int dw_random_cost = number(8, 12) * 500 / GET_DOCWAGON_CONTRACT_GRADE(docwagon);
+      creds = MAX(dw_random_cost, (int)(GET_NUYEN(ch) / 10));
+      send_to_char(ch, "DocWagon demands %d nuyen for your rescue.\r\n", creds);
+      if ((GET_NUYEN(ch) + GET_BANK(ch)) < creds) {
+        send_to_char("Not finding sufficient payment, your DocWagon contract was retracted.\r\n", ch);
+        extract_obj(docwagon);
+      } else if (GET_BANK(ch) < creds) {
+        lose_nuyen(ch, creds - GET_BANK(ch), NUYEN_OUTFLOW_DOCWAGON);
+        lose_bank(ch, GET_BANK(ch), NUYEN_OUTFLOW_DOCWAGON);
+      } else {
+        lose_bank(ch, creds, NUYEN_OUTFLOW_DOCWAGON);
+      }
     } else {
-      lose_bank(ch, creds, NUYEN_OUTFLOW_DOCWAGON);
+      send_to_char("Your DocWagon rescue is free due to your newbie status.\r\n", ch);
     }
 
     return TRUE;
