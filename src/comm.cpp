@@ -1038,6 +1038,15 @@ void game_loop(int mother_desc)
       /* End MySQL keepalive ping section. */
     }
 
+#ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
+    // Every RL second, part II: Catching things AFTER pulse updates.
+    if (!(pulse % PASSES_PER_SEC)) {
+      void verify_every_pointer_we_can_think_of();
+
+      verify_every_pointer_we_can_think_of();
+    }
+#endif
+
     tics++;                     /* tics since last checkpoint signal */
   }
 }
