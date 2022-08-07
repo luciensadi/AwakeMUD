@@ -45,7 +45,7 @@ int alert_player_doctors_of_mort(struct char_data *ch, struct obj_data *docwagon
     if (IS_IGNORING(plr, is_blocking_ic_interaction_from, ch) || IS_IGNORING(ch, is_blocking_ic_interaction_from, plr))
       continue;
 
-    if (AFF_FLAGGED(plr, AFF_WEARING_ACTIVE_DOCWAGON_RECEIVER)) {
+    if (AFF_FLAGGED(plr, AFF_WEARING_ACTIVE_DOCWAGON_RECEIVER) && AWAKE(plr)) {
       const char *display_string = decapitalize_a_an(get_char_representation_for_docwagon(ch, plr));
 
       switch (GET_DOCWAGON_CONTRACT_GRADE(docwagon)) {
