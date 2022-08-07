@@ -736,7 +736,7 @@ void iedit_disp_val4_menu(struct descriptor_data * d)
     case ITEM_DRINKCON:
     case ITEM_FOUNTAIN:
     case ITEM_FOOD:
-      send_to_char("Poison Rating (0 = not poison): ", d->character);
+      send_to_char("Poison Damage (0 = none, 1 = Light, 2 = Moderate, 3 = Serious, 4 = Deadly): ", d->character);
       break;
     case ITEM_CYBERWARE:
       switch (GET_OBJ_VAL(OBJ, 0)) {
@@ -2410,6 +2410,11 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
     case IEDIT_VALUE_4:
       number = atoi(arg);
       switch (GET_OBJ_TYPE(d->edit_obj)) {
+        case ITEM_FOOD:
+          if (number < 0 || number > 4) {
+            send_to_char("Invalid choice! Poison damage: 0=none, 1=light, 2=moderate, 3=serious, 4=deadly: ", d->character);
+            return;
+          }
         case ITEM_WEAPON:
           if (number < 0 || number > MAX_WEAP) {
             send_to_char("Invalid choice!\r\n", d->character);
