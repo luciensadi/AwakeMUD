@@ -2270,7 +2270,14 @@ bool docwagon(struct char_data *ch)
         lose_bank(ch, creds, NUYEN_OUTFLOW_DOCWAGON);
       }
     } else {
-      send_to_char("Your DocWagon rescue is free due to your newbie status.\r\n", ch);
+      send_to_char("Your DocWagon rescue is free due to your newbie status, and you've been restored to full health.\r\n", ch);
+      GET_PHYSICAL(ch) = 1000;
+      GET_MENTAL(ch) = 1000;
+      GET_POS(ch) = POS_STANDING;
+    }
+
+    if (PLR_FLAGGED(ch, PLR_SENT_DOCWAGON_PLAYER_ALERT)) {
+      alert_player_doctors_of_contract_withdrawal(ch, FALSE);
     }
 
     return TRUE;
