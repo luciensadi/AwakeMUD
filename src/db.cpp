@@ -1379,6 +1379,14 @@ void parse_room(File &fl, long nr)
       else
         dir->exit_info = 0;
 
+      snprintf(field, sizeof(field), "%s/MoreFlags", sect);
+      int moreflags = data.GetInt(field, 0);
+
+      if (moreflags == 1)
+        dir->exit_info |= EX_WINDOWED;
+      else if (moreflags == 2)
+        dir->exit_info |= EX_BARRED_WINDOW;
+
       snprintf(field, sizeof(field), "%s/Material", sect);
       dir->material = data.LookupInt(field, material_names, DEFAULT_EXIT_MATERIAL);
 

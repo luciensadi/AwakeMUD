@@ -1435,6 +1435,7 @@ void write_world_to_disk(int vnum)
                     cleanup(buf2, ptr->general_description));
 
           /* door flags need special handling, unfortunately. argh! */
+          temp_door_flag = 0;
           if (IS_SET(ptr->exit_info, EX_ISDOOR)) {
             if (IS_SET(ptr->exit_info, EX_ASTRALLY_WARDED)) {
               if (IS_SET(ptr->exit_info, EX_PICKPROOF))
@@ -1447,12 +1448,22 @@ void write_world_to_disk(int vnum)
               else
                 temp_door_flag = 1;
             }
-          } else
-            temp_door_flag = 0;
+          }
 
           fprintf(fp, "\tToVnum:\t%ld\n", ptr->to_room_vnum);
 
           PRINT_TO_FILE_IF_TRUE("\tFlags:\t%d\n", temp_door_flag);
+
+          temp_door_flag = 0;
+          if (IS_SET(ptr->exit_info, EX_ISDOOR)) {
+            if (IS_SET(ptr->exit_info, EX_WINDOWED)) {
+              temp_door_flag = 1;
+            } else if (IS_SET(ptr->exit_info, EX_BARRED_WINDOW)) {
+              temp_door_flag = 2;
+            }
+          }
+
+          PRINT_TO_FILE_IF_TRUE("\tMoreFlags:\t%d\n", temp_door_flag);
 
           if (ptr->material != DEFAULT_EXIT_MATERIAL)
             fprintf(fp, "\tMaterial:\t%s\n", material_names[(int)ptr->material]);
