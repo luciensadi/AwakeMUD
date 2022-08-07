@@ -6811,19 +6811,23 @@ int audit_zone_rooms_(struct char_data *ch, int zone_num, bool verbose) {
       // to_room guaranteed to exist. Check if the exit on the other side comes back in our direction.
       else {
         if (!room->dir_option[k]->to_room->dir_option[rev_dir[k]]) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - %s exit is one-way: There is no return exit.\r\n", dirs[k]);
-          issues++;
-          printed = TRUE;
+          if (!IS_SET(room->dir_option[k]->exit_info, EX_WINDOWED) && !IS_SET(room->dir_option[k]->exit_info, EX_BARRED_WINDOW)) {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - %s exit is one-way: There is no return exit.\r\n", dirs[k]);
+            issues++;
+            printed = TRUE;
+          }
         }
         // Exit coming back in our direction is guaranteed to exist. Check if it comes to us, and if so, if the flags are kosher.
         else {
           if (room->dir_option[k]->to_room->dir_option[rev_dir[k]]->to_room != room) {
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - %s exit: Return exit %s from %ld does not point here.\r\n",
-                    dirs[k],
-                    dirs[rev_dir[k]],
-                    GET_ROOM_VNUM(room->dir_option[k]->to_room));
-            issues++;
-            printed = TRUE;
+            if (!IS_SET(room->dir_option[k]->exit_info, EX_WINDOWED) && !IS_SET(room->dir_option[k]->exit_info, EX_BARRED_WINDOW)) {
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - %s exit: Return exit %s from %ld does not point here.\r\n",
+                      dirs[k],
+                      dirs[rev_dir[k]],
+                      GET_ROOM_VNUM(room->dir_option[k]->to_room));
+              issues++;
+              printed = TRUE;
+            }
           }
           else {
             int outbound = room->dir_option[k]->to_room->dir_option[rev_dir[k]]->exit_info;
