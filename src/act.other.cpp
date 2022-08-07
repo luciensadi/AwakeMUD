@@ -4402,34 +4402,46 @@ ACMD(do_spool)
 
 ACMD(do_watch)
 {
+  if (!ch->in_room) {
+    send_to_char("You'll have to leave your vehicle first.\r\n", ch);
+    return;
+  }
+
   if (GET_WATCH(ch)) {
     send_to_char("You stop scanning into the distance.\r\n", ch);
     struct char_data *temp;
     REMOVE_FROM_LIST(ch, GET_WATCH(ch)->watching, next_watching);
     GET_WATCH(ch) = NULL;
-  } else {
-    int dir;
-    skip_spaces(&argument);
-    if ((dir = search_block(argument, lookdirs, FALSE)) == -1) {
-      send_to_char("What direction?\r\n", ch);
-      return;
-    }
-    dir = convert_look[dir];
+    return;
+  }
 
-    if (dir == NUM_OF_DIRS) {
-      send_to_char("What direction?\r\n", ch);
-      return;
-    }
+  int dir;
+  skip_spaces(&argument);
+  if ((dir = search_block(argument, lookdirs, FALSE)) == -1) {
+    send_to_char("What direction?\r\n", ch);
+    return;
+  }
+  dir = convert_look[dir];
 
-    if (!CAN_GO(ch, dir)) {
+  if (dir == NUM_OF_DIRS) {
+    send_to_char("What direction?\r\n", ch);
+    return;
+  }
+
+  if (!CAN_GO(ch, dir)) {
+    if (!ch->in_room->dir_option[dir]
+        || (!IS_SET(ch->in_room->dir_option[dir]->exit_info, EX_WINDOWED)
+            && !IS_SET(ch->in_room->dir_option[dir]->exit_info, EX_BARRED_WINDOW)))
+    {
       send_to_char("There seems to be something in the way...\r\n", ch);
       return;
     }
-    GET_WATCH(ch) = EXIT2(ch->in_room, dir)->to_room;
-    ch->next_watching = GET_WATCH(ch)->watching;
-    GET_WATCH(ch)->watching = ch;
-    send_to_char(ch, "You focus your attention to %s.\r\n", thedirs[dir]);
   }
+
+  GET_WATCH(ch) = EXIT2(ch->in_room, dir)->to_room;
+  ch->next_watching = GET_WATCH(ch)->watching;
+  GET_WATCH(ch)->watching = ch;
+  send_to_char(ch, "You focus your attention to %s.\r\n", thedirs[dir]);
 }
 
 ACMD(do_trade)
