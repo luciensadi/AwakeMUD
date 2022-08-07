@@ -338,7 +338,7 @@ void copyover_recover()
     } else /* ok! */
     {
       long load_room, last_room;
-      write_to_descriptor (desc, "\n\rCopyover recovery complete. If you were driving, your car is likely now at the Seattle Garage.\n\r");
+      write_to_descriptor (desc, "\n\rCopyover recovery complete. Welcome back!\n\r");
       d->connected = CON_PLAYING;
       reset_char(d->character);
       d->character->next = character_list;

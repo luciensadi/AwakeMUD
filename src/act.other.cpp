@@ -1428,6 +1428,8 @@ ACMD(do_toggle)
     else
       send_to_char(tog_messages[mode][0], ch);
   }
+
+  playerDB.SaveChar(ch);
 }
 
 ACMD(do_slowns)
