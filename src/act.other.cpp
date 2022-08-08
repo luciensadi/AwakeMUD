@@ -4380,13 +4380,17 @@ ACMD(do_spool)
     return;
   }
 
+  if (cast > GET_SKILL(ch, SKILL_SORCERY)) {
+    // This was always the case, but it was a hidden constraint that just wasted dice. Making it explicit here.
+    send_to_char(ch, "You can't allocate more than %d dice to your casting pool (limited by Sorcery skill).", GET_SKILL(ch, SKILL_SORCERY));
+    return;
+  }
+
   half_chop(buf, argument, arg);
   drain = atoi(argument);
   half_chop(arg, argument, buf);
   def = atoi(argument);
   reflect = atoi(buf);
-
-  // TODO: SR3 p182: No more Spell Pool dice can be added to the test than the Sorcery dice allocated.
 
   total -= ch->real_abils.casting_pool = GET_CASTING(ch) = MIN(cast, total);
   total -= ch->real_abils.drain_pool = GET_DRAIN(ch) = MIN(drain, total);
