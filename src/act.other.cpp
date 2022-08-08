@@ -2156,7 +2156,7 @@ ACMD(do_treat)
   else if (GET_REAL_BOD(vict) >= 4)
     target--;
 
-  if (vict->real_abils.mag > 0)
+  if (GET_REAL_MAG(vict) > 0)
     target += 2;
 
   if (ch == vict) {
@@ -2175,7 +2175,6 @@ ACMD(do_treat)
     if (GET_PHYSICAL(vict) < 100) {
       GET_PHYSICAL(vict) = MIN(GET_MAX_PHYSICAL(vict), 100);
       GET_MENTAL(vict) = 0;
-      GET_POS(vict) = POS_STUNNED;
       LAST_HEAL(vict) = MAX(1, (int)(GET_MAX_PHYSICAL(vict) / 100));
     } else if (GET_PHYSICAL(vict) <= (GET_MAX_PHYSICAL(vict) * 2/5)) {
       GET_PHYSICAL(vict) += (int)(GET_MAX_PHYSICAL(vict) * 3/1000);
@@ -2187,6 +2186,7 @@ ACMD(do_treat)
       GET_PHYSICAL(vict) += (int)(GET_MAX_PHYSICAL(vict) / 1000);
       LAST_HEAL(vict) = (int)(GET_MAX_PHYSICAL(vict) / 1000);
     }
+    update_pos(vict);
   } else {
     if (ch == vict) {
       send_to_char(ch, "Your treatment does nothing for your wounds.\r\n");
@@ -4540,11 +4540,11 @@ ACMD(do_spray)
         for (const char *ptr = argument; *ptr; ptr++) {
           if (isalnum(*ptr)) {
             alpha++;
-          } else if (*ptr != '^' && *ptr != '[' && *ptr != ']') {
+          } else if (*ptr != '^' && *ptr != '[' && *ptr != ']' && *ptr != ' ') {
             nonalpha++;
           }
         }
-        if (alpha / 5 < nonalpha) {
+        if (nonalpha > 5 && (alpha / 4 < nonalpha)) {
           send_to_char("ASCII art doesn't play well with screenreaders, please write things out!\r\n", ch);
           return;
         }
