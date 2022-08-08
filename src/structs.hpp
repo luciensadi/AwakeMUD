@@ -1197,14 +1197,14 @@ struct sustain_data {
   unsigned char success;
   int idnum; // This is distinct from caster idnum etc, so does not necessarily need to be idnum_t.
   int time;
-  unsigned char drain;
+  unsigned char time_to_take_effect;
   bool caster;
   struct obj_data *focus;
   struct char_data *spirit;
   struct char_data *other;
   struct sustain_data *next;
   sustain_data() :
-    spell(0), subtype(0), force(0), success(0), idnum(0), time(0), drain(0), caster(0),
+    spell(0), subtype(0), force(0), success(0), idnum(0), time(0), time_to_take_effect(0), caster(0),
     focus(NULL), spirit(NULL), other(NULL), next(NULL)
   {}
 };

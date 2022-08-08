@@ -650,8 +650,8 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define CAN_SEE_IN_DARK(ch)   ((IS_ASTRAL(ch) || IS_DUAL(ch) || \
     CURRENT_VISION(ch) == THERMOGRAPHIC || PRF_FLAGGED((ch), PRF_HOLYLIGHT)))
 #define GET_BUILDING(ch)	((ch)->char_specials.programming)
-#define IS_WORKING(ch)        ((AFF_FLAGS(ch).AreAnySet(AFF_PROGRAM, AFF_DESIGN, AFF_PART_BUILD, AFF_PART_DESIGN, AFF_PILOT, AFF_RIG, AFF_BONDING, AFF_CONJURE, AFF_PACKING, AFF_LODGE, AFF_CIRCLE, AFF_SPELLDESIGN, AFF_AMMOBUILD, ENDBIT)))
-#define STOP_WORKING(ch)      {AFF_FLAGS((ch)).RemoveBits(AFF_PROGRAM, AFF_DESIGN, AFF_PART_BUILD, AFF_PART_DESIGN, AFF_BONDING, AFF_CONJURE, AFF_PACKING, AFF_LODGE, AFF_CIRCLE, AFF_SPELLDESIGN, AFF_AMMOBUILD, ENDBIT); \
+#define IS_WORKING(ch)        ((AFF_FLAGS(ch).AreAnySet(BR_TASK_AFF_FLAGS, AFF_PILOT, AFF_RIG, AFF_BONDING, AFF_CONJURE, AFF_PACKING, ENDBIT)))
+#define STOP_WORKING(ch)      {AFF_FLAGS((ch)).RemoveBits(BR_TASK_AFF_FLAGS, AFF_BONDING, AFF_CONJURE, AFF_PACKING, ENDBIT); \
                                GET_BUILDING((ch)) = NULL;}
 
 #define GET_TOTEM(ch)                              (ch->player_specials->saved.totem)
@@ -946,6 +946,13 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 #define GET_VEHCONTAINER_VEH_IDNUM(cont)          (GET_OBJ_VAL((cont), 2))
 #define GET_VEHCONTAINER_VEH_OWNER(cont)          (GET_OBJ_VAL((cont), 3))
 #define GET_VEHCONTAINER_WEIGHT(cont)             (GET_OBJ_VAL((cont), 11))
+
+#define GET_RITUAL_COMPONENT_CASTER(components)   (GET_OBJ_VAL((components), 0))
+#define GET_RITUAL_COMPONENT_SPELL(components)    (GET_OBJ_VAL((components), 1))
+#define GET_RITUAL_COMPONENT_SUBTYPE(components)  (GET_OBJ_VAL((components), 2))
+#define GET_RITUAL_COMPONENT_FORCE(components)    (GET_OBJ_VAL((components), 3))
+#define GET_RITUAL_COMPONENT_TARGET(components)   (GET_OBJ_VAL((components), 4))
+#define GET_RITUAL_TICKS_LEFT(components)         (GET_OBJ_VAL((components), 5))
 
 // ITEM_MAGIC_TOOL convenience defines
 #define GET_MAGIC_TOOL_TYPE(tool)                 (GET_OBJ_VAL((tool), 0))

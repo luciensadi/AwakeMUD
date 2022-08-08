@@ -489,67 +489,67 @@ enum {
 /* affect bits: used in char_data.char_specials.saved.affected_by */
 /* WARNING: In the world files, NEVER set the bits marked "R" ("Reserved") */
 
-#define AFF_INVISIBLE     1  /* Char is invisible        */
-#define AFF_BANISH    2
-#define AFF_ULTRASOUND  3  /* Char can see invis chars    */
-#define AFF_PRONE               4
-#define AFF_MANIFEST    5
-#define AFF_HEALED    6
-#define AFF_GROUP               7  /* (R) Char is grouped       */
-#define AFF_DAMAGED    8
-#define AFF_INFRAVISION      9  /* Char can see in dark        */
-#define AFF_FEAR              10
-#define AFF_RESISTPAIN     11
-#define AFF_DETOX    12
-#define AFF_LOW_LIGHT        13 /* Char has low light eyes       */
-#define AFF_LASER_SIGHT      14 /* Char using laser sight       */
-#define AFF_SNEAK               15 /* Char can move quietly           */
-#define AFF_HIDE                16 /* Char is hidden                */
-#define AFF_VISION_MAG_1        17 /* Magnification level 1        */
-#define AFF_CHARM               18 /* Char is charmed              */
-#define AFF_ACTION              19 /* Player gets -10 on next init roll     */
-#define AFF_VISION_MAG_2        20 /* Magnification level 2         */
-#define AFF_VISION_MAG_3        21 /* Magnification level 3         */
-#define AFF_COUNTER_ATT      22 /* plr just attacked          */
-#define AFF_STABILIZE        23 /* player won't die due to phys loss */
-// UNUSED (previously AFF_PETRIFY)
-#define AFF_IMP_INVIS        25 /* char is improved invis         */
-#define AFF_ACID    26
-#define AFF_APPROACH      27 /* Character is using melee */
-#define AFF_PILOT    28 /* Char is piloting a vehicle */
-#define AFF_RIG           29
-#define AFF_MANNING       30 /* Char is in a (mini)turret */
-#define AFF_DESIGN      31
-#define AFF_PROGRAM     32
-#define AFF_PART_DESIGN    33
-#define AFF_PART_BUILD    34
-#define AFF_WITHDRAWAL_FORCE  35
-#define AFF_WITHDRAWAL    36
-#define AFF_BONDING    37
-#define AFF_CONJURE    38
-#define AFF_LODGE    39
-#define AFF_CIRCLE    40
-#define AFF_PACKING    41
-#define AFF_SPELLINVIS    42
-#define AFF_SPELLIMPINVIS  43
-#define AFF_TRACKING    44
-#define AFF_TRACKED    45
-#define AFF_BINDING    46
-#define AFF_SPELLDESIGN    47
-#define AFF_SURPRISE    48
-#define AFF_AMMOBUILD    49
-#define AFF_CLOSECOMBAT  50
+#define AFF_INVISIBLE                           1  /* Char is invisible        */
+#define AFF_BANISH                              2
+#define AFF_ULTRASOUND                          3  /* Char can see invis chars    */
+#define AFF_PRONE                               4
+#define AFF_MANIFEST                            5
+#define AFF_HEALED                              6
+#define AFF_GROUP                               7  /* (R) Char is grouped       */
+#define AFF_DAMAGED                             8
+#define AFF_INFRAVISION                         9  /* Char can see in dark        */
+#define AFF_FEAR                                10
+#define AFF_RESISTPAIN                          11
+#define AFF_DETOX                               12
+#define AFF_LOW_LIGHT                           13 /* Char has low light eyes       */
+#define AFF_LASER_SIGHT                         14 /* Char using laser sight       */
+#define AFF_SNEAK                               15 /* Char can move quietly           */
+#define AFF_HIDE                                16 /* Char is hidden                */
+#define AFF_VISION_MAG_1                        17 /* Magnification level 1        */
+#define AFF_CHARM                               18 /* Char is charmed              */
+#define AFF_ACTION                              19 /* Player gets -10 on next init roll     */
+#define AFF_VISION_MAG_2                        20 /* Magnification level 2         */
+#define AFF_VISION_MAG_3                        21 /* Magnification level 3         */
+#define AFF_COUNTER_ATT                         22 /* plr just attacked          */
+#define AFF_STABILIZE                           23 /* player won't die due to phys loss */
+#define AFF_RITUALCAST                          24
+#define AFF_IMP_INVIS                           25 /* char is improved invis         */
+#define AFF_ACID                                26
+#define AFF_APPROACH                            27 /* Character is using melee */
+#define AFF_PILOT                               28 /* Char is piloting a vehicle */
+#define AFF_RIG                                 29
+#define AFF_MANNING                             30 /* Char is in a (mini)turret */
+#define AFF_DESIGN                              31
+#define AFF_PROGRAM                             32
+#define AFF_PART_DESIGN                         33
+#define AFF_PART_BUILD                          34
+#define AFF_WITHDRAWAL_FORCE                    35
+#define AFF_WITHDRAWAL                          36
+#define AFF_BONDING                             37
+#define AFF_CONJURE                             38
+#define AFF_LODGE                               39
+#define AFF_CIRCLE                              40
+#define AFF_PACKING                             41
+#define AFF_SPELLINVIS                          42
+#define AFF_SPELLIMPINVIS                       43
+#define AFF_TRACKING                            44
+#define AFF_TRACKED                             45
+#define AFF_BINDING                             46
+#define AFF_SPELLDESIGN                         47
+#define AFF_SURPRISE                            48
+#define AFF_AMMOBUILD                           49
+#define AFF_CLOSECOMBAT                         50
 #define AFF_SMART_ENOUGH_TO_TOGGLE_CLOSECOMBAT  51
-#define AFF_LEVITATE  52
-#define AFF_FLAME_AURA  53
-#define AFF_VOICE_MODULATOR  54
-#define AFF_WEARING_ACTIVE_DOCWAGON_RECEIVER 55
-#define AFF_MAX       56
+#define AFF_LEVITATE                            52
+#define AFF_FLAME_AURA                          53
+#define AFF_VOICE_MODULATOR                     54
+#define AFF_WEARING_ACTIVE_DOCWAGON_RECEIVER    55
+#define AFF_MAX                                 56
 // TODO: If you add another long-state action like building, designing, etc:
 // - Add it to the BR_TASK_AFF_FLAGS section below, which affects bioware_check and the B/R flag in the wholist
 // - Add it to the IS_WORKING and STOP_WORKING macros in utils.h
 // - Check for anywhere I've missed in this comment
-#define BR_TASK_AFF_FLAGS AFF_DESIGN, AFF_PROGRAM, AFF_PART_DESIGN, AFF_PART_BUILD, AFF_SPELLDESIGN, AFF_AMMOBUILD
+#define BR_TASK_AFF_FLAGS AFF_DESIGN, AFF_PROGRAM, AFF_PART_DESIGN, AFF_PART_BUILD, AFF_SPELLDESIGN, AFF_AMMOBUILD, AFF_RITUALCAST, AFF_CIRCLE, AFF_LODGE
 
 
 /* room-related defines */
@@ -793,11 +793,11 @@ enum {
 #define TOUCH      2
 #define CASTER      3
 
-#define TYPE_LIBRARY_CONJURE  0
-#define TYPE_LIBRARY_SPELL  1
-#define TYPE_CIRCLE    2
-#define TYPE_LODGE    3
-#define TYPE_SUMMONING    4
+#define TYPE_LIBRARY_CONJURE    0
+#define TYPE_LIBRARY_SPELL      1
+#define TYPE_CIRCLE             2
+#define TYPE_LODGE              3
+#define TYPE_SUMMONING          4
 
 #define SPIRIT_HEARTH           0
 #define SPIRIT_CITY             1
@@ -1903,6 +1903,10 @@ enum {
 
 /* Subcommands section: Originally from interpreter.h */
 
+/* do_cast */
+#define SCMD_STANDARD_CAST  0
+#define SCMD_RITUAL_CAST    1
+
 /* do_exits */
 #define SCMD_LONGEXITS  0
 #define SCMD_SHORTEXITS 1
@@ -2588,7 +2592,8 @@ enum {
 #define OBJ_BLANK_AMMOBOX                  121
 #define OBJ_CUSTOM_NERPS_CYBERWARE         122
 #define OBJ_CUSTOM_NERPS_BIOWARE           123
-#define TOP_OF_TEMPLATE_ITEMS              123
+#define OBJ_RITUAL_SPELL_COMPONENTS        124
+#define TOP_OF_TEMPLATE_ITEMS              124
 
 #define OBJ_BLANK_MAGAZINE                 127
 
@@ -2838,8 +2843,9 @@ enum {
 #define NUYEN_OUTFLOW_CREDSTICK_CRACKER     25
 #define NUYEN_OUTFLOW_DEATH_PENALTY         26
 #define NUYEN_OUTFLOW_DRUGS                 27
+#define NUYEN_OUTFLOW_RITUAL_CASTING        38
 
-#define NUM_OF_TRACKED_NUYEN_INCOME_SOURCES 28
+#define NUM_OF_TRACKED_NUYEN_INCOME_SOURCES 29
 // Make sure you update constants.cpp's nuyen_faucets_and_sinks[] too!
 
 #define NI_IS_SINK   0

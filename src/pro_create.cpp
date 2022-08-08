@@ -25,6 +25,8 @@ extern void spell_design(struct char_data *ch, struct obj_data *design);
 extern void ammo_test(struct char_data *ch, struct obj_data *obj);
 extern void weight_change_object(struct obj_data * obj, float weight);
 extern bool focus_is_usable_by_ch(struct obj_data *focus, struct char_data *ch);
+extern bool vict_meets_spell_preconditions(struct char_data *vict, int spell, int subtype);
+extern bool create_sustained(struct char_data *ch, struct char_data *vict, int spell, int force, int sub, int success, int time_to_take_effect);
 
 void pedit_disp_menu(struct descriptor_data *d)
 {
@@ -587,6 +589,47 @@ void update_buildrepair(void)
           PROG = NULL;
           AFF_FLAGS(desc->character).RemoveBit(AFF_PROGRAM);
           CH->char_specials.timer = 0;
+        }
+      } else if (AFF_FLAGGED(CH, AFF_RITUALCAST)) {
+        if (--GET_RITUAL_TICKS_LEFT(PROG) <= 0) {
+          struct char_data *vict = NULL;
+
+          // Require that the target is present.
+          for (vict = CH->in_room->people; vict; vict = vict->next_in_room) {
+            if (GET_IDNUM(vict) == GET_RITUAL_COMPONENT_TARGET(PROG))
+              break;
+          }
+
+          if (!vict) {
+            send_to_char(CH, "Unable to find their target, the spiraling energies of your ritual scatter away.\r\n");
+            act("$n's ritual spell flares, then dissipates into motes of ineffectual light.", FALSE, CH, 0, 0, TO_ROOM);
+            // Don't return-- we have cleanup work to do below.
+          } else if (!vict_meets_spell_preconditions(vict, GET_RITUAL_COMPONENT_SPELL(PROG), GET_RITUAL_COMPONENT_SUBTYPE(PROG))) {
+            send_to_char(CH, "There's a vibrant clash of energies as your ritual fails to take hold.\r\n");
+            act("$n's ritual spell rebounds off of $N in a vibrant clash of energies.", FALSE, CH, 0, vict, TO_ROOM);
+            // Don't return-- we have cleanup work to do below.
+          } else {
+            // Message completion.
+            send_to_char(CH, "A rush of magic runs through you with the successful completion of your ritual.\r\n");
+
+            // Create the new spell on the target.
+            send_to_char(vict, "A palpable aura of magic settles about you as the ritual %s spell takes effect.\r\n",
+                         get_spell_name(GET_RITUAL_COMPONENT_SPELL(PROG), GET_RITUAL_COMPONENT_SUBTYPE(PROG)));
+
+            create_sustained(CH,
+                             vict,
+                             GET_RITUAL_COMPONENT_SPELL(PROG),
+                             GET_RITUAL_COMPONENT_FORCE(PROG),
+                             GET_RITUAL_COMPONENT_SUBTYPE(PROG),
+                             get_max_usable_spell_successes(GET_RITUAL_COMPONENT_SPELL(PROG), GET_RITUAL_COMPONENT_FORCE(PROG)),
+                             2);
+          }
+
+          // Destroy the components.
+          CH->char_specials.timer = 0;
+          STOP_WORKING(CH);
+          extract_obj(PROG);
+          PROG = NULL;
         }
       } else if (AFF_FLAGGED(CH, AFF_BONDING)) {
         if ((GET_OBJ_TYPE(PROG) == ITEM_WEAPON && --GET_WEAPON_FOCUS_BOND_STATUS(PROG) < 1)

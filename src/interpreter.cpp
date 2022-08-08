@@ -514,7 +514,7 @@ struct command_info cmd_info[] =
     { "bug"        , POS_DEAD    , do_gen_write, 0, SCMD_BUG, TRUE },
     { "bypass"     , POS_STANDING, do_gen_door , 0, SCMD_PICK, FALSE },
 
-    { "cast"       , POS_SITTING , do_cast     , 1, 0, FALSE },
+    { "cast"       , POS_SITTING , do_cast     , 1, SCMD_STANDARD_CAST, FALSE },
     { "call"       , POS_LYING   , do_phone    , 0, SCMD_RING, FALSE },
     { "chase"      , POS_SITTING , do_chase    , 0, 0, FALSE },
     { "cleanse"    , POS_LYING   , do_cleanse  , 0, 0, FALSE },
@@ -793,6 +793,9 @@ struct command_info cmd_info[] =
     { "restring"   , POS_DEAD    , do_restring , 0, 0, FALSE },
     { "retract"    , POS_SITTING , do_retract  , 0, 0, FALSE },
     { "return"     , POS_DEAD    , do_return   , 0, 0, FALSE },
+#ifdef IS_BUILDPORT
+    { "ritualcast" , POS_SITTING , do_cast     , 1, SCMD_RITUAL_CAST, FALSE },
+#endif
     { "rlist"      , POS_DEAD    , do_rlist    , LVL_BUILDER, 0, FALSE },
     { "room"       , POS_DEAD    , do_room     , LVL_BUILDER, 0, FALSE },
     { "roll"       , POS_DEAD    , do_dice     , 0, 0, FALSE },

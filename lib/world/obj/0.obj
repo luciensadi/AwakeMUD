@@ -1274,25 +1274,20 @@ Material:	metal
 	Val2:	1
 BREAK
 #124
-Keywords:	white cloak alien keyn jraye
-Name:	a white cloak covered in bizarre runes
+Keywords:	array ritual components
+Name:	an array of ritual components
 RoomDesc:$
-A white cloak, covered in indecipherable runes lies here in a heap.~
+^BAn array of ritual components has been spread out here.~
 LookDesc:$
-A white cloak, covered in runes that can not be found in any human or
-metahuman language, no matter how ancient or arcane.  It is made of a high
-quality, soft, but somewhat odd linen. 
+It's comprised of all the things one might need to cast a spell in a
+ritualistic fashion-- candles, incense, representations of totems and
+elements, and other useful magical things. 
 ~
-Type:	Worn
-WearFlags:	10000000001
-ExtraFlags:	1
-Material:	fabric
+Type:	Other
+Material:	metal
 [POINTS]
 	Weight:	1.00
 	Barrier:	32
-[VALUES]
-	Val5:	2
-	Val6:	1
 BREAK
 #125
 Keywords:	white tunic keyn jraye

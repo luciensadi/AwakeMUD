@@ -17,7 +17,11 @@ extern void stop_spirit_power(struct char_data *spirit, int type);
 extern char_data *find_spirit_by_id(int spiritid, long playerid);
 extern void elemental_fulfilled_services(struct char_data *ch, struct char_data *mob, struct spirit_data *spirit);
 extern int get_spell_affected_successes(struct char_data * ch, int type);
+extern int get_max_usable_spell_successes(int spell, int force);
 extern const char *warn_if_spell_under_potential(struct sustain_data *sust);
+extern const char *get_spell_name(int spell, int subtype);
+
+#define RITUAL_SPELL_COMPONENT_COST     100
 
 #define DAMOBJ_NONE                     0
 #define DAMOBJ_ACID                     1

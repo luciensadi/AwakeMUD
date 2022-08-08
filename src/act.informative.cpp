@@ -6451,19 +6451,9 @@ ACMD(do_status)
     send_to_char(ch, "%s %s sustaining:\r\n", ch == targ ? "You" : GET_CHAR_NAME(targ), ch == targ ? "are" : "is");
     printed = TRUE;
     int i = 1;
-    for (struct sustain_data *sust = GET_SUSTAINED(targ); sust; sust = sust->next)
+    for (struct sustain_data *sust = GET_SUSTAINED(targ); sust; sust = sust->next) {
       if (sust->caster || sust->spirit == targ) {
-        strlcpy(buf, spells[sust->spell].name, sizeof(buf));
-        if (sust->spell == SPELL_INCATTR
-            || sust->spell == SPELL_INCCYATTR
-            || sust->spell == SPELL_DECATTR
-            || sust->spell == SPELL_DECCYATTR)
-        {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s", attributes[sust->subtype]);
-        } else if (SPELL_HAS_SUBTYPE(sust->spell)) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (%s)", attributes[sust->subtype]);
-        }
-        send_to_char(ch, "%d) %s (force %d, %d successes%s)", i, buf, sust->force, sust->success, warn_if_spell_under_potential(sust));
+        send_to_char(ch, "%d) %s (force %d, %d successes%s)", i, get_spell_name(sust->spell, sust->subtype), sust->force, sust->success, warn_if_spell_under_potential(sust));
         if (sust->focus)
           send_to_char(ch, "(Sustained by %s)", GET_OBJ_NAME(sust->focus));
         if (sust->spirit && sust->spirit != ch)
@@ -6471,6 +6461,7 @@ ACMD(do_status)
         send_to_char("\r\n", ch);
         i++;
       }
+    }
   }
 
   if (!printed) {

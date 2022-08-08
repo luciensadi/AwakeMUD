@@ -960,7 +960,7 @@ struct char_data *find_target_at_range(struct char_data *ch, char *name, char *d
 {
   return NULL;
 }
-bool create_sustained(struct char_data *ch, struct char_data *vict, int spell, int force, int sub, int success, int drain)
+bool create_sustained(struct char_data *ch, struct char_data *vict, int spell, int force, int sub, int success, int time_to_take_effect)
 {
   /* Use to create a sustained spell structure on:
      - the ch (as caster)
@@ -971,7 +971,7 @@ bool create_sustained(struct char_data *ch, struct char_data *vict, int spell, i
      - vict (affected, may be the same as ch)
      - spell, force, sub: spell idx, force of casting, subtype (or 0 if none)
      - success: how many successes we rolled
-     - drain: ?
+     - time_to_take_effect: for certain spells, how long before it becomes permanent
 
      Returns TRUE if ch IS NOW SUSTAINING IT RAW DOG STYLE, otherwise returns FALSE (sustained by focus, spirit, adept, whatever)
   */
@@ -1019,7 +1019,7 @@ bool create_sustained(struct char_data *ch, struct char_data *vict, int spell, i
   sust->success = success;
   sust->other = vict;
   sust->caster = TRUE;
-  sust->drain = drain;
+  sust->time_to_take_effect = time_to_take_effect;
   sust->idnum = number(0, 100000);
   sust->next = GET_SUSTAINED(ch);
   sust->focus = focus;
@@ -1039,34 +1039,47 @@ bool create_sustained(struct char_data *ch, struct char_data *vict, int spell, i
 
 void spell_bonus(struct char_data *ch, int spell, int &skill, int &target)
 {
-  if (GET_BACKGROUND_AURA(get_ch_in_room(ch)) == AURA_POWERSITE)
-    skill += GET_BACKGROUND_COUNT(get_ch_in_room(ch));
-  else
-    target += GET_BACKGROUND_COUNT(get_ch_in_room(ch));
-  if (GET_TRADITION(ch) == TRAD_SHAMANIC)
-    totem_bonus(ch, SPELLCASTING, spell, target, skill);
-  else if (GET_TRADITION(ch) == TRAD_HERMETIC && GET_SPIRIT(ch) && spells[spell].category != HEALTH)
-  {
-    aspect_bonus(ch, SPELLCASTING, spell, target, skill);
-    for (struct spirit_data *spirit = GET_SPIRIT(ch); spirit; spirit = spirit->next)
-      if (((spells[spell].category == MANIPULATION && spirit->type == ELEM_EARTH) ||
-           (spells[spell].category == COMBAT && spirit->type == ELEM_FIRE) ||
-           (spells[spell].category == ILLUSION && spirit->type == ELEM_WATER) ||
-           (spells[spell].category == DETECTION && spirit->type == ELEM_AIR)) &&
-          spirit->called == TRUE) {
-        struct char_data *mob = find_spirit_by_id(spirit->id, GET_IDNUM(ch));
-        if (mob && MOB_FLAGGED(mob, MOB_AIDSORCERY)) {
-          send_to_char(ch, "%s aids your spell casting.\r\n", CAP(GET_NAME(mob)));
-          MOB_FLAGS(mob).RemoveBit(MOB_AIDSORCERY);
-          skill += GET_LEVEL(mob);
+  struct room_data *in_room = get_ch_in_room(ch);
+
+  if (GET_BACKGROUND_AURA(in_room) == AURA_POWERSITE) {
+    skill += GET_BACKGROUND_COUNT(in_room);
+  } else {
+    send_to_char("The tainted mana here resists your control.\r\n", ch);
+    target += GET_BACKGROUND_COUNT(in_room);
+  }
+
+  switch (GET_TRADITION(ch)) {
+    case TRAD_SHAMANIC:
+      totem_bonus(ch, SPELLCASTING, spell, target, skill);
+      break;
+    case TRAD_HERMETIC:
+      if (GET_SPIRIT(ch) && spells[spell].category != HEALTH) {
+        aspect_bonus(ch, SPELLCASTING, spell, target, skill);
+        for (struct spirit_data *spirit = GET_SPIRIT(ch); spirit; spirit = spirit->next) {
+          if ( (   (spells[spell].category == MANIPULATION && spirit->type == ELEM_EARTH)
+                || (spells[spell].category == COMBAT && spirit->type == ELEM_FIRE)
+                || (spells[spell].category == ILLUSION && spirit->type == ELEM_WATER)
+                || (spells[spell].category == DETECTION && spirit->type == ELEM_AIR))
+              && spirit->called == TRUE)
+            {
+            struct char_data *mob = find_spirit_by_id(spirit->id, GET_IDNUM(ch));
+            if (mob && MOB_FLAGGED(mob, MOB_AIDSORCERY)) {
+              send_to_char(ch, "%s aids your spell casting.\r\n", CAP(GET_NAME(mob)));
+              MOB_FLAGS(mob).RemoveBit(MOB_AIDSORCERY);
+              skill += GET_LEVEL(mob);
+            }
+          }
         }
       }
+    break;
+
   }
+
   int max_specific_spell = 0;
   int max_spell_category = 0;
   bool used_expendable = FALSE;
-  if (GET_FOCI(ch) > 0)
-  {
+
+  if (GET_FOCI(ch) > 0) {
     for (int wearloc = 0; wearloc < NUM_WEARS; wearloc++) {
       struct obj_data *eq = GET_EQ(ch, wearloc);
       if (eq
@@ -2766,7 +2779,7 @@ void cast_spell(struct char_data *ch, int spell, int sub, int force, char *arg)
   if (spells[spell].duration == SUSTAINED)
   {
     if (GET_SUSTAINED_NUM(ch) >= GET_SKILL(ch, SKILL_SORCERY)) {
-      send_to_char("You cannot sustain any more spells.\r\n", ch);
+      send_to_char("You cannot sustain any more spells: You're limited by your Sorcery skill.\r\n", ch);
       return;
     }
   }
@@ -3568,14 +3581,83 @@ ACMD(do_release)
   send_to_char("You'll want to specify an spell number, an elemental/spirit number, or 'all'. HELP RELEASE for more.\r\n", ch);
 }
 
+bool spell_is_valid_ritual_spell(int spell) {
+  switch (spell) {
+    case SPELL_COMBATSENSE:
+    case SPELL_DETOX:
+    case SPELL_HEAL:
+    case SPELL_TREAT:
+    case SPELL_HEALTHYGLOW:
+    case SPELL_INCATTR:
+    case SPELL_INCCYATTR:
+    case SPELL_INCREA:
+    case SPELL_INCREF1:
+    case SPELL_INCREF2:
+    case SPELL_INCREF3:
+    case SPELL_PROPHYLAXIS:
+    case SPELL_RESISTPAIN:
+    case SPELL_STABILIZE:
+    case SPELL_INVIS:
+    case SPELL_IMP_INVIS:
+    case SPELL_MASK:
+    case SPELL_PHYSMASK:
+    case SPELL_STEALTH:
+    case SPELL_ARMOR:
+    case SPELL_NIGHTVISION:
+    case SPELL_INFRAVISION:
+    case SPELL_LEVITATE:
+    case SPELL_FLAME_AURA:
+      // You may ritual-cast these spells.
+      return TRUE;
+  }
+  return FALSE;
+}
+
+// Helper function for ritual spells. Returns TRUE if you can have this spell cast on you, FALSE otherwise.
+bool vict_meets_spell_preconditions(struct char_data *vict, int spell, int subtype) {
+  switch (spell) {
+    case SPELL_COMBATSENSE:
+    case SPELL_DECATTR:
+    case SPELL_DECCYATTR:
+    case SPELL_DETOX:
+    case SPELL_HEAL:
+    case SPELL_TREAT:
+    case SPELL_HEALTHYGLOW:
+    case SPELL_INCATTR:
+    case SPELL_INCCYATTR:
+    case SPELL_INCREA:
+    case SPELL_INCREF1:
+    case SPELL_INCREF2:
+    case SPELL_INCREF3:
+    case SPELL_PROPHYLAXIS:
+    case SPELL_RESISTPAIN:
+    case SPELL_STABILIZE:
+    case SPELL_INVIS:
+    case SPELL_IMP_INVIS:
+    case SPELL_MASK:
+    case SPELL_PHYSMASK:
+    case SPELL_STEALTH:
+    case SPELL_ARMOR:
+    case SPELL_NIGHTVISION:
+    case SPELL_INFRAVISION:
+    case SPELL_LEVITATE:
+    case SPELL_FLAME_AURA:
+      // TODO: Enable constraints.
+      break;
+  }
+  return TRUE;
+}
+
 ACMD(do_cast)
 {
+  struct room_data *in_room = get_ch_in_room(ch);
+
   if (GET_ASPECT(ch) == ASPECT_CONJURER || GET_TRADITION(ch) == TRAD_ADEPT || GET_TRADITION(ch) == TRAD_MUNDANE || !GET_SKILL(ch, SKILL_SORCERY)) {
     send_to_char("You don't have the ability to do that.\r\n", ch);
     return;
   }
 
-  if (ROOM_FLAGGED(get_ch_in_room(ch), ROOM_NOMAGIC)) {
+  if (ROOM_FLAGGED(in_room, ROOM_NOMAGIC)) {
     send_to_char("The mana here refuses to heed your call.\r\n", ch);
     return;
   }
@@ -3622,9 +3704,63 @@ ACMD(do_cast)
     return;
   }
   if (spells[spell->type].physical && IS_PROJECT(ch)) {
-    send_to_char("You can only cast mana spells on the astral plane.\r\n", ch);
+    send_to_char("You can't cast physical spells on the astral plane.\r\n", ch);
     return;
   }
+
+  // Restrictions for the houseruled ritual spell system.
+  if (subcmd == SCMD_RITUAL_CAST) {
+    FAILURE_CASE(IS_WORKING(ch), "You're too busy to cast a ritual spell.\r\n");
+    FAILURE_CASE(CH_IN_COMBAT(ch), "Ritual cast while fighting?? You ARE mad!\r\n");
+    FAILURE_CASE(IS_PROJECT(ch), "You can't manipulate physical objects in this form, so setting up a ritual space will be hard.\r\n");
+    FAILURE_CASE(!ROOM_FLAGGED(in_room, ROOM_HOUSE), "Ritual casting requires an undisturbed place with room to move around-- you'll need to be in an apartment.\r\n");
+    FAILURE_CASE(ch->in_veh, "Ritual casting requires more space to move around-- you'll need to leave your vehicle.\r\n");
+    FAILURE_CASE(!spell_is_valid_ritual_spell(spell->type), "That spell isn't eligible for ritual casting. You can only ritual-cast buffs.\r\n");
+
+    // Only one ritual at a time.
+    for (struct obj_data *obj = ch->in_room->contents; obj; obj = obj->next_content) {
+      FAILURE_CASE(GET_OBJ_VNUM(obj) == OBJ_RITUAL_SPELL_COMPONENTS,
+                   "There's already a ritual in progress here. Either wait for it to finish, or ##^WDESTROY^n the components so you can begin your own.\r\n");
+    }
+
+    // Find the target.
+    struct char_data *vict = get_char_room_vis(ch, buf1);
+
+    if (!check_spell_victim(ch, vict, spell->type, buf1)) {
+      return;
+    }
+
+    FAILURE_CASE(IS_NPC(vict), "You can only cast ritual spells on player characters.\r\n");
+
+    // Charge them.
+    int cost = RITUAL_SPELL_COMPONENT_COST * spell->force;
+
+    if (GET_NUYEN(ch) < cost) {
+      send_to_char(ch, "You need at least %d nuyen on hand to pay for the ritual components.\r\n", cost);
+      return;
+    }
+    lose_nuyen(ch, cost, NUYEN_OUTFLOW_RITUAL_CASTING);
+
+    // Load the ritual casting tracking object.
+    AFF_FLAGS(ch).SetBit(AFF_RITUALCAST);
+    struct obj_data *components = read_object(OBJ_RITUAL_SPELL_COMPONENTS, VIRTUAL);
+
+    GET_RITUAL_COMPONENT_CASTER(components) = GET_IDNUM(ch);
+    GET_RITUAL_COMPONENT_SPELL(components) = spell->type;
+    GET_RITUAL_COMPONENT_SUBTYPE(components) = spell->subtype;
+    GET_RITUAL_COMPONENT_FORCE(components) = spell->force;
+    GET_RITUAL_COMPONENT_TARGET(components) = GET_IDNUM(vict);
+
+    GET_BUILDING(ch) = components;
+
+    obj_to_room(components, ch->in_room);
+
+    send_to_char(ch, "You set up candles, incense, and other ritual components, then settle in to cast %s.\r\n", spells[spell->type].name);
+    act("$n sets up candles, incense, and other ritual components, then settles in to cast a spell.", FALSE, ch, 0, 0, TO_ROOM);
+
+    return;
+  }
+
   if (CH_IN_COMBAT(ch)) {
     if (ch->squeue) {
       if (ch->squeue->arg)
@@ -3880,12 +4016,6 @@ ACMD(do_spells)
   // Adepts and Mundanes cannot cast spells.
   if (GET_TRADITION(ch) == TRAD_ADEPT || GET_TRADITION(ch) == TRAD_MUNDANE) {
     send_to_char(ch, "%ss don't have the aptitude for spells.\r\n", tradition_names[(int) GET_TRADITION(ch)]);
-    return;
-  }
-
-  // Character is of the right type to cast spells, but doesn't have the skill trained yet.
-  if (!GET_SKILL(ch, SKILL_SORCERY)) {
-    send_to_char(ch, "You need to learn the %s skill first.\r\n", skills[SKILL_SORCERY].name);
     return;
   }
 
@@ -5227,13 +5357,13 @@ ACMD(do_deactivate)
 ACMD(do_destroy)
 {
   if (!*argument) {
-    send_to_char("Destroy which lodge or circle?\r\n", ch);
+    send_to_char("Destroy which lodge, circle, or ritual component set?\r\n", ch);
     return;
   }
   skip_spaces(&argument);
   struct obj_data *obj;
   if (ch->in_veh || !(obj = get_obj_in_list_vis(ch, argument, ch->in_room->contents))) {
-    send_to_char(ch, "You don't see a lodge or circle named '%s' %s.\r\n", argument, ch->in_room ? "anywhere around you" : "in this vehicle");
+    send_to_char(ch, "You don't see a lodge, circle, or ritual component set named '%s' %s.\r\n", argument, ch->in_room ? "anywhere around you" : "in this vehicle");
     send_to_char(ch, "(Are you looking for the ##^WJUNK^n command?)\r\n");
     return;
   }
@@ -5246,8 +5376,13 @@ ACMD(do_destroy)
       act("$n uses $s feet to rub out $p.", TRUE, ch, obj, 0, TO_ROOM);
     }
     extract_obj(obj);
-  } else
-    send_to_char(ch, "You can't destroy %s. Maybe pick it up and JUNK it?\r\n", GET_OBJ_NAME(obj));
+  } else if (GET_OBJ_VNUM(obj) == OBJ_RITUAL_SPELL_COMPONENTS) {
+    send_to_char(ch, "You gather up the wasted ritual components and trash them.\r\n");
+    act("$n gathers up the ritual components and trashes them.", TRUE, ch, 0, 0, TO_ROOM);
+    extract_obj(obj);
+  } else {
+    send_to_char(ch, "You can't destroy %s. Maybe pick it up and ##^WJUNK^n it?\r\n", GET_OBJ_NAME(obj));
+  }
 }
 
 ACMD(do_track)
@@ -6030,13 +6165,8 @@ bool focus_is_usable_by_ch(struct obj_data *focus, struct char_data *ch) {
   return TRUE;
 }
 
-const char *warn_if_spell_under_potential(struct sustain_data *sust) {
-  static char warnbuf[100];
-  int required_successes;
-
-  strlcpy(warnbuf, "", sizeof(warnbuf));
-
-  switch (sust->spell) {
+int get_max_usable_spell_successes(int spell, int force) {
+  switch (spell) {
     case SPELL_IMP_INVIS:
     case SPELL_INVIS:
     case SPELL_STEALTH:
@@ -6045,21 +6175,47 @@ const char *warn_if_spell_under_potential(struct sustain_data *sust) {
     case SPELL_HEAL:
     case SPELL_TREAT:
     case SPELL_INCREA:
-      required_successes = sust->force;
+      return force;
       break;
     case SPELL_COMBATSENSE:
     case SPELL_DECATTR:
     case SPELL_DECCYATTR:
-      required_successes = 2 * sust->force;
+    case SPELL_INCATTR:
+    case SPELL_INCCYATTR:
+      return 2 * force;
       break;
     default:
-      // This spell isn't affected by under-proofing, so we return no warning.
-      return warnbuf;
+      return 1;
   }
+}
+
+const char *warn_if_spell_under_potential(struct sustain_data *sust) {
+  static char warnbuf[100];
+  int required_successes = get_max_usable_spell_successes(sust->spell, sust->force);
 
   if (sust->success < required_successes) {
     snprintf(warnbuf, sizeof(warnbuf), " ^y(under-strength: successes < %d)^n", required_successes);
+  } else {
+    strlcpy(warnbuf, "", sizeof(warnbuf));
   }
 
   return warnbuf;
+}
+
+const char *get_spell_name(int spell, int subtype) {
+  static char spell_name[100];
+
+  strlcpy(spell_name, spells[spell].name, sizeof(spell_name));
+
+  if (spell == SPELL_INCATTR
+      || spell == SPELL_INCCYATTR
+      || spell == SPELL_DECATTR
+      || spell == SPELL_DECCYATTR)
+  {
+    snprintf(ENDOF(spell_name), sizeof(spell_name) - strlen(spell_name), "%s", attributes[subtype]);
+  } else if (SPELL_HAS_SUBTYPE(spell)) {
+    snprintf(ENDOF(spell_name), sizeof(spell_name) - strlen(spell_name), " (%s)", attributes[subtype]);
+  }
+
+  return spell_name;
 }

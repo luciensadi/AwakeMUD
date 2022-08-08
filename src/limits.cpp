@@ -1334,8 +1334,17 @@ void misc_update(void)
           log(buf);
           continue;
         }
-        if (sus && sus->caster && spells[sus->spell].duration == PERMANENT)
-          if (++sus->time >= (sus->spell == SPELL_IGNITE ? sus->drain : (sus->spell == SPELL_TREAT ? sus->drain * 2.5 : sus->drain * 5))) {
+        if (sus && sus->caster && spells[sus->spell].duration == PERMANENT) {
+          int time_to_take_effect = sus->time_to_take_effect;
+          if (sus->spell == SPELL_IGNITE) {
+            // no-op
+          } else if (sus->spell == SPELL_TREAT) {
+            time_to_take_effect *= 2.5;
+          } else {
+            time_to_take_effect *= 5;
+          }
+          
+          if (++sus->time >= time_to_take_effect) {
             if (sus->spell == SPELL_IGNITE) {
               send_to_char("Your body erupts in flames!\r\n", sus->other);
               act("$n's body suddenly bursts into flames!\r\n", TRUE, sus->other, 0, 0, TO_ROOM);
@@ -1360,6 +1369,7 @@ void misc_update(void)
             REMOVE_FROM_LIST(sus, GET_SUSTAINED(ch), next);
             delete sus;
           }
+        }
       }
     }
 
