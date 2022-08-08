@@ -6678,6 +6678,7 @@ void price_cyber(struct obj_data *obj)
         case 3:
           GET_OBJ_COST(obj) = 75000;
           break;
+      }
     case CYB_FANGS:
       GET_CYBERWARE_RATING(obj) = 0;
       if (GET_CYBERWARE_FLAGS(obj)) {
