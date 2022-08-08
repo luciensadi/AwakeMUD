@@ -1122,7 +1122,7 @@ enum {
 #define TYPE_POUND            307
 #define TYPE_CLAW             308
 #define TYPE_MAUL             309
-#define TYPE_THRASH           310
+#define TYPE_GORE             310    // cyberhorns - Vile
 #define TYPE_PIERCE           311
 #define TYPE_PUNCH            312
 #define TYPE_STAB             313
@@ -1550,7 +1550,9 @@ enum {
 #define CYB_TACTICALCOMPUTER 49
 #define CYB_CUSTOM_NERPS     50
 #define CYB_CRD              51
-#define NUM_CYBER            52
+#define CYB_FANGS            52
+#define CYB_HORNS            53
+#define NUM_CYBER            54
 
 #define BIO_ADRENALPUMP    0
 #define BIO_CATSEYES    1
