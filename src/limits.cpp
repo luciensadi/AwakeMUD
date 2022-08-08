@@ -54,6 +54,7 @@ extern int get_paydata_market_maximum(int host_color);
 extern int get_paydata_market_minimum(int host_color);
 extern void wire_nuyen(struct char_data *ch, int amount, vnum_t character_id);
 extern void save_shop_orders();
+extern bool docwagon(struct char_data *ch);
 
 void mental_gain(struct char_data * ch)
 {
@@ -762,9 +763,14 @@ void process_regeneration(int half_hour)
           } else
             dam = FALSE;
         }
-      if (dam)
+      if (dam) {
         if (damage(ch, ch, 1, TYPE_SUFFERING, PHYSICAL))
           continue;
+      } else {
+        // Attempt to docwagon rescue without dealing damage.
+        if (docwagon(ch))
+          continue;
+      }
     }
   }
 
