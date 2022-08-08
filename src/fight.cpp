@@ -971,6 +971,8 @@ void die(struct char_data * ch)
     alert_player_doctors_of_contract_withdrawal(ch, TRUE);
   }
 
+  AFF_FLAGS(ch).RemoveBit(AFF_HEALED);
+
   raw_kill(ch);
 }
 
@@ -2175,6 +2177,7 @@ bool docwagon(struct char_data *ch)
 {
   int i, creds;
   struct obj_data *docwagon = NULL;
+  char rollbuf[500];
 
   if (IS_NPC(ch))
     return FALSE;
@@ -2188,10 +2191,20 @@ bool docwagon(struct char_data *ch)
   if (!room)
     return FALSE;
 
+  int docwagon_tn = MAX(GET_SECURITY_LEVEL(room), 4);
+  int docwagon_dice = GET_DOCWAGON_CONTRACT_GRADE(docwagon) + 1;
+  int successes = success_test(docwagon_dice, docwagon_tn);
+
+  snprintf(rollbuf, sizeof(rollbuf), "$n: DocWagon rescue roll: %d dice vs TN %d netted %d hit(s).", docwagon_dice, docwagon_tn, successes);
+  act(rollbuf, TRUE, ch, 0, 0, TO_ROLLS);
+
+  if (successes <= 0 && access_level(ch, LVL_BUILDER) && PRF_FLAGGED(ch, PRF_PACIFY)) {
+    act("$n: Overriding failed DocWagon roll due to pacified staff level.", TRUE, ch, 0, 0, TO_ROLLS);
+    successes = 1;
+  }
+
   // In an area with 4 or less security level: Basic has a 75% chance of rescue, Gold has 87.5% rescue, Plat has 93.8% chance.
-  if ((access_level(ch, LVL_BUILDER) && PRF_FLAGGED(ch, PRF_PACIFY))
-      || success_test(GET_DOCWAGON_CONTRACT_GRADE(docwagon) + 1,
-                      MAX(GET_SECURITY_LEVEL(room), 4)) > 0)
+  if (successes > 0)
   {
     if (FIGHTING(ch) && FIGHTING(FIGHTING(ch)) == ch)
       stop_fighting(FIGHTING(ch));
@@ -2221,7 +2234,7 @@ bool docwagon(struct char_data *ch)
     GET_PHYSICAL(ch) = 400;
     GET_MENTAL(ch) = 0;
     GET_POS(ch) = POS_STUNNED;
-    for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content)
+    for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content) {
       switch (GET_BIOWARE_TYPE(bio)) {
         case BIO_ADRENALPUMP:
           if (GET_OBJ_VAL(bio, 5) > 0) {
@@ -2237,6 +2250,8 @@ bool docwagon(struct char_data *ch)
           GET_BIOWARE_IS_ACTIVATED(bio) = 0;
           break;
       }
+    }
+
     ch->points.fire[0] = 0;
     send_to_char("\r\n\r\nYour last conscious memory is the arrival of a DocWagon.\r\n", ch);
     switch (GET_JURISDICTION(room)) {
