@@ -759,6 +759,8 @@ void iedit_disp_val4_menu(struct descriptor_data * d)
         case CYB_HANDBLADE:
         case CYB_HANDSPUR:
         case CYB_CLIMBINGCLAWS:
+        case CYB_FANGS:
+        case CYB_HORNS:
           send_to_char("Retractable? (1 for Yes, 0 for No): ", CH);
           break;
         case CYB_BONELACING:
@@ -2486,6 +2488,8 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
             case CYB_HANDBLADE:
             case CYB_HANDSPUR:
             case CYB_CLIMBINGCLAWS:
+            case CYB_FANGS:
+            case CYB_HORNS:
             case CYB_REFLEXTRIGGER:
               if (number < 0 || number > 1) {
                 send_to_char("Invalid Input! Enter 1 or 0: ", CH);
