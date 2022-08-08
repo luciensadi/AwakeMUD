@@ -2438,7 +2438,7 @@ const char *cyber_types[] = {
   "Custom NERPS Cyberware",
   "Cranial Remote Deck",
   "Cyber Fangs",
-  "Cyber Horns"
+  "Horn Implants"
 };
 
 const char *decap_cyber_types[] = {
@@ -2495,7 +2495,7 @@ const char *decap_cyber_types[] = {
   "custom NERPS cyberware",
   "cranial remote deck",
   "cyber fangs",
-  "cyber horns"
+  "horn implants"
 };
 
 const char *bio_types[] = {
