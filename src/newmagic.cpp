@@ -1652,6 +1652,11 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       }
       // fall through
     case SPELL_HEAL:
+      if (AFF_FLAGGED(vict, AFF_HEALED)) {
+        send_to_char(ch, "%s has been healed to recently for this spell.\r\n", GET_NAME(vict));
+        return;
+      }
+
       WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
       success = MIN(force, success_test(skill, 10 - (int)(GET_ESS(vict) / 100) + target_modifiers + (int)(GET_INDEX(ch) / 200)));
       if (GET_PHYSICAL(vict) <= 0)
@@ -1660,7 +1665,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
         drain = SERIOUS;
       else if (GET_PHYSICAL(vict) <= 700)
         drain = MODERATE;
-      if (success < 1 || AFF_FLAGGED(vict, AFF_HEALED) || GET_PHYSICAL(vict) == GET_MAX_PHYSICAL(vict)) {
+      if (success < 1 || GET_PHYSICAL(vict) == GET_MAX_PHYSICAL(vict)) {
         send_to_char(FAILED_CAST, ch);
       } else {
         AFF_FLAGS(vict).SetBit(AFF_HEALED);
