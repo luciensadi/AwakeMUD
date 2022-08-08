@@ -123,7 +123,7 @@ struct attack_hit_type attack_hit_text[] =
   {"pound", "pounds", "pound"},
   {"claw", "claws", "claw"},
   {"maul", "mauls", "maul"},
-  {"thrash", "thrashes", "thrash"},     /* 10 */
+  {"gore", "gores", "gore"},     /* 10 */
   {"pierce", "pierces", "pierce"},
   {"punch", "punches", "punch"},
   {"stab", "stabs", "stab"},
@@ -1636,7 +1636,7 @@ void damage_equip(struct char_data *ch, struct char_data *victim, int power,
     case TYPE_STING:
     case TYPE_SLASH:
     case TYPE_CLAW:
-    case TYPE_THRASH:
+    case TYPE_GORE:
     case TYPE_ARROW:
     case TYPE_THROWING_KNIFE:
     case TYPE_WHIP:
@@ -3123,7 +3123,7 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
       case TYPE_POUND:
       case TYPE_CLAW:
       case TYPE_MAUL:
-      case TYPE_THRASH:
+      case TYPE_GORE:
       case TYPE_PIERCE:
       case TYPE_PUNCH:
       case TYPE_STAB:

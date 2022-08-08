@@ -928,6 +928,8 @@ void look_at_char(struct char_data * i, struct char_data * ch)
       case CYB_FIN:
       case CYB_FOOTANCHOR:
       case CYB_CLIMBINGCLAWS:
+      case CYB_FANGS:
+      case CYB_HORNS:
         if (!GET_CYBERWARE_IS_DISABLED(tmp_obj)) {
           ware_is_internal = FALSE;
         }
@@ -2943,6 +2945,8 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
         break;
         case CYB_HANDSPUR:
         case CYB_HANDBLADE:
+        case CYB_FANGS:
+        case CYB_HORNS:
           if (GET_CYBERWARE_FLAGS(j))
             strlcpy(flag_parse, " retractable", sizeof(flag_parse));
           break;

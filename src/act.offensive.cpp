@@ -769,6 +769,8 @@ bool cyber_is_retractable(struct obj_data *cyber) {
     case CYB_HANDBLADE:
     case CYB_HANDSPUR:
     case CYB_CLIMBINGCLAWS:
+    case CYB_FANGS:
+    case CYB_HORNS:
       if (!IS_SET(GET_CYBERWARE_FLAGS(cyber), 1 << CYBERWEAPON_RETRACTABLE))
         return FALSE;
       // fallthrough

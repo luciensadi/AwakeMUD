@@ -20,6 +20,8 @@ struct cyberware_data {
   int improved_handrazors;
   int handspurs;
   int footanchors;
+  int cyberfangs;
+  int cyberhorns;
   bool cyberarms;
   int bone_lacing_power;
   int num_cyberweapons;
@@ -27,7 +29,7 @@ struct cyberware_data {
 
   cyberware_data(struct char_data *ch) :
     climbingclaws(0), fins(0), handblades(0), handrazors(0), improved_handrazors(0),
-    handspurs(0), footanchors(0), cyberarms(FALSE), bone_lacing_power(0), num_cyberweapons(0),
+    handspurs(0), footanchors(0), cyberfangs(0), cyberhorns(0), cyberarms(FALSE), bone_lacing_power(0), num_cyberweapons(0),
     cyberarm_gyromount(FALSE)
   {
     assert(ch != NULL);
@@ -79,6 +81,14 @@ struct cyberware_data {
             break;
           case CYB_FOOTANCHOR:
             footanchors++;
+            num_cyberweapons++;
+            break;
+          case CYB_FANGS:
+            cyberfangs++;
+            num_cyberweapons++;
+            break;
+          case CYB_HORNS:
+            cyberhorns++;
             num_cyberweapons++;
             break;
         }
@@ -264,7 +274,7 @@ struct melee_combat_data {
       }
       else if (cyber->handrazors) {
         damage_level = LIGHT;
-        dam_type = TYPE_STAB;
+        dam_type = TYPE_CLAW;
         is_physical = TRUE;
 
         if (cyber->handrazors >= 2) {
@@ -282,6 +292,17 @@ struct melee_combat_data {
         power_before_armor -= 1;
         damage_level = LIGHT;
         dam_type = TYPE_STAB;
+        is_physical = TRUE;
+      }
+      else if (cyber->cyberfangs) {
+        power_before_armor += 1;
+        damage_level = LIGHT;
+        dam_type = TYPE_BITE;
+        is_physical = TRUE;
+      }
+      else if (cyber->cyberhorns) {
+        damage_level = MODERATE;
+        dam_type = TYPE_GORE;
         is_physical = TRUE;
       }
       else {

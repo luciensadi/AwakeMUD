@@ -906,6 +906,36 @@ You dummy!  Not the claw, the claw!
 $n must be crazy - trying to claw at you!
 $n must be crazy - trying to claw at $N!
 
+* Gore
+M
+ 310
+You gore $N into a bloody mess with your horns!
+$n gores you into a bloody mess with their horns!
+$n gores $N into a bloody mess with their horns!
+You try to gore $N who jumps out of the way!
+$n tries to gore you but you jump out of the way!
+$n tries to gore $N who jumps out of the way!
+#
+#
+#
+You dummy!  Not the horns, the horns!
+$n must be crazy - trying to gore you!
+$n must be crazy - trying to gore $N!
+M
+ 310
+You savagely gore $N to death with your horns!
+$n's horns savagely gore you to death!
+$n's horns savagely gore $N to death!
+You try to gore $N but almost gore yourself instead!
+$n tries to gore you but nearly gores $mself instead!
+$n tries to gore $N but nearly gores $mself instead!
+#
+#
+#
+You dummy!  Not the horns, the horns!
+$n must be crazy - trying to gore you!
+$n must be crazy - trying to gore $N!
+
 * Pierce
 M
  311

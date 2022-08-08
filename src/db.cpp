@@ -6678,7 +6678,31 @@ void price_cyber(struct obj_data *obj)
         case 3:
           GET_OBJ_COST(obj) = 75000;
           break;
+    case CYB_FANGS:
+      GET_CYBERWARE_RATING(obj) = 0;
+      if (GET_CYBERWARE_FLAGS(obj)) {
+        GET_CYBERWARE_ESSENCE_COST(obj) = 15;
+        GET_OBJ_COST(obj) = 8000;
+        GET_OBJ_AVAILTN(obj) = 5;
+      } else {
+        GET_OBJ_COST(obj) = 5000;
+        GET_CYBERWARE_ESSENCE_COST(obj) = 10;
+        GET_OBJ_AVAILTN(obj) = 4;
       }
+      GET_OBJ_AVAILDAY(obj) = 2;
+      break;
+    case CYB_HORNS:
+      GET_CYBERWARE_RATING(obj) = 0;
+      if (GET_CYBERWARE_FLAGS(obj)) {
+        GET_CYBERWARE_ESSENCE_COST(obj) = 25;
+        GET_OBJ_COST(obj) = 16000;
+        GET_OBJ_AVAILTN(obj) = 5;
+      } else {
+        GET_OBJ_COST(obj) = 12000;
+        GET_CYBERWARE_ESSENCE_COST(obj) = 10;
+        GET_OBJ_AVAILTN(obj) = 4;
+      }
+      GET_OBJ_AVAILDAY(obj) = 2;
       break;
   }
   float grade_essence_modifier = 1.0;

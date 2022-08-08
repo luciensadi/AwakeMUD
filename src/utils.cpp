@@ -736,7 +736,7 @@ bool has_cyberweapon(struct char_data * ch)
   for (obj = ch->cyberware;
        obj ;
        obj = obj->next_content)
-    if ((GET_OBJ_VAL(obj, 0) == CYB_HANDSPUR || GET_OBJ_VAL(obj, 0) == CYB_HANDRAZOR || GET_OBJ_VAL(obj, 0) == CYB_HANDBLADE || GET_OBJ_VAL(obj, 0) == CYB_FIN || GET_OBJ_VAL(obj, 0) == CYB_CLIMBINGCLAWS)
+    if ((GET_OBJ_VAL(obj, 0) == CYB_HANDSPUR || GET_OBJ_VAL(obj, 0) == CYB_HANDRAZOR || GET_OBJ_VAL(obj, 0) == CYB_HANDBLADE || GET_OBJ_VAL(obj, 0) == CYB_FIN || GET_OBJ_VAL(obj, 0) == CYB_CLIMBINGCLAWS || GET_OBJ_VAL(obj, 0) == CYB_FANGS || GET_OBJ_VAL(obj, 0) == CYB_HORNS)
         && !GET_OBJ_VAL(obj, 9))
       return TRUE;
   return 0;
