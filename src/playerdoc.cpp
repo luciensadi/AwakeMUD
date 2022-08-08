@@ -39,7 +39,7 @@ int alert_player_doctors_of_mort(struct char_data *ch, struct obj_data *docwagon
   }
 
   for (struct char_data *plr = character_list; plr; plr = plr->next) {
-    if (IS_NPC(plr) || !plr->desc)
+    if (IS_NPC(plr) || !plr->desc || plr == ch)
       continue;
 
     if (IS_IGNORING(plr, is_blocking_ic_interaction_from, ch) || IS_IGNORING(ch, is_blocking_ic_interaction_from, plr))
@@ -58,7 +58,7 @@ int alert_player_doctors_of_mort(struct char_data *ch, struct obj_data *docwagon
 
           send_to_char(plr,
                        "Your DocWagon receiver emits a shrill alarm, followed by a brusque human voice: \"^Y%s^n\"\r\n",
-                       capitalize(replace_too_long_words(plr, NULL, speech_buf, SKILL_ENGLISH, "^n")));
+                       capitalize(replace_too_long_words(plr, NULL, speech_buf, SKILL_ENGLISH, "^Y")));
 
           if (plr->in_room) {
             act("$n's DocWagon receiver emits a shrill alarm.", TRUE, plr, 0, 0, TO_ROOM);
@@ -80,7 +80,7 @@ int alert_player_doctors_of_mort(struct char_data *ch, struct obj_data *docwagon
 
           send_to_char(plr,
                        "Your DocWagon receiver beeps loudly, followed by an automated voice: \"^y%s^n\"\r\n",
-                       capitalize(replace_too_long_words(plr, NULL, speech_buf, SKILL_ENGLISH, "^n")));
+                       capitalize(replace_too_long_words(plr, NULL, speech_buf, SKILL_ENGLISH, "^y")));
 
           if (plr->in_room) {
             act("$n's DocWagon receiver beeps loudly.", TRUE, plr, 0, 0, TO_ROOM);
@@ -108,7 +108,7 @@ int alert_player_doctors_of_mort(struct char_data *ch, struct obj_data *docwagon
 
           send_to_char(plr,
                        "Your DocWagon receiver vibrates, and text flashes up on its screen: \"^W%s^n\" An accompanying image of %s^n is displayed.\r\n",
-                       capitalize(replace_too_long_words(plr, NULL, speech_buf, SKILL_ENGLISH, "^n")),
+                       capitalize(replace_too_long_words(plr, NULL, speech_buf, SKILL_ENGLISH, "^W")),
                        display_string);
           break;
       }
@@ -142,7 +142,7 @@ void alert_player_doctors_of_contract_withdrawal(struct char_data *ch, bool with
   }
 
   for (struct char_data *plr = character_list; plr; plr = plr->next) {
-    if (IS_NPC(plr) || !plr->desc)
+    if (IS_NPC(plr) || !plr->desc || plr == ch)
       continue;
 
     if (IS_IGNORING(plr, is_blocking_ic_interaction_from, ch) || IS_IGNORING(ch, is_blocking_ic_interaction_from, plr))
@@ -156,7 +156,7 @@ void alert_player_doctors_of_contract_withdrawal(struct char_data *ch, bool with
 
         send_to_char(plr,
                      "Your DocWagon receiver emits a sad beep and displays: \"^r%s^n\"\r\n",
-                     capitalize(replace_too_long_words(plr, NULL, speech_buf, SKILL_ENGLISH, "^n")));
+                     capitalize(replace_too_long_words(plr, NULL, speech_buf, SKILL_ENGLISH, "^r")));
 
         if (plr->in_room) {
          act("$n's DocWagon receiver emits a sad beep.", TRUE, plr, 0, 0, TO_ROOM);
@@ -175,7 +175,7 @@ void alert_player_doctors_of_contract_withdrawal(struct char_data *ch, bool with
         send_to_char(plr,
                      "Your DocWagon receiver emits a cheery beep and displays: \"%s%s^n\"\r\n",
                      in_same_room ? "^c" : "^o",
-                     capitalize(replace_too_long_words(plr, NULL, speech_buf, SKILL_ENGLISH, "^n")));
+                     capitalize(replace_too_long_words(plr, NULL, speech_buf, SKILL_ENGLISH, "^c")));
 
         if (plr->in_room) {
          act("$n's DocWagon receiver emits a cheery beep.", TRUE, plr, 0, 0, TO_ROOM);
