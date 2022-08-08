@@ -16,6 +16,7 @@
 #include "ignore_system.hpp"
 #include "invis_resistance_tests.hpp"
 #include "newdb.hpp"
+#include "playerdoc.hpp"
 
 #define POWER(name) void (name)(struct char_data *ch, struct char_data *spirit, struct spirit_data *spiritdata, char *arg)
 #define FAILED_CAST "You fail to bind the mana to your will.\r\n"
@@ -106,6 +107,10 @@ void end_sustained_spell(struct char_data *ch, struct sustain_data *sust)
       break;
   }
 
+  // Var tracking for the heal spell.
+  bool spell_is_heal = sust->spell == SPELL_HEAL;
+  struct char_data *other = sust->other;
+
   struct sustain_data *temp, *vsust;
   if (sust->other) {
     for (vsust = GET_SUSTAINED(sust->other); vsust; vsust = vsust->next)
@@ -158,6 +163,15 @@ void end_sustained_spell(struct char_data *ch, struct sustain_data *sust)
 
   send_to_char(sust->caster ? ch : sust->other, "You stop sustaining %s.\r\n", buf);
   delete sust;
+
+  // Handle heal.
+  if (spell_is_heal) {
+    AFF_FLAGS(other).RemoveBit(AFF_HEALED);
+    update_pos(other);
+    if (GET_POS(other) == POS_MORTALLYW) {
+      alert_player_doctors_of_mort(other, NULL);
+    }
+  }
 }
 
 void totem_bonus(struct char_data *ch, int action, int type, int &target, int &skill)

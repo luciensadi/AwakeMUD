@@ -224,6 +224,13 @@ bool update_pos(struct char_data * victim)
 
   // Are they stunned?
   if ((GET_MENTAL(victim) < 100) && (GET_PHYSICAL(victim) >= 100)) {
+    if (!IS_NPC(victim)) {
+      if (was_morted && !PRF_FLAGGED(victim, PRF_DONT_ALERT_PLAYER_DOCTORS_ON_MORT)) {
+        alert_player_doctors_of_contract_withdrawal(victim, FALSE);
+      }
+      PLR_FLAGS(victim).RemoveBit(PLR_SENT_DOCWAGON_PLAYER_ALERT);
+    }
+
     // Pain editor prevents stunned condition.
     for (struct obj_data *bio = victim->bioware; bio; bio = bio->next_content)
       if (GET_BIOWARE_TYPE(bio) == BIO_PAINEDITOR && GET_BIOWARE_IS_ACTIVATED(bio))
@@ -231,6 +238,7 @@ bool update_pos(struct char_data * victim)
     GET_POS(victim) = POS_STUNNED;
     GET_INIT_ROLL(victim) = 0;
   }
+  
   // Are they doing fine?
   else if ((GET_PHYSICAL(victim) >= 100) && (GET_POS(victim) > POS_STUNNED)) {
     return FALSE;

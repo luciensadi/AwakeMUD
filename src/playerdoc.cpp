@@ -20,7 +20,7 @@ int alert_player_doctors_of_mort(struct char_data *ch, struct obj_data *docwagon
     return 0;
   }
 
-  if (!docwagon) {
+  if (!docwagon && !(docwagon = find_best_active_docwagon_modulator(ch))) {
     mudlog("SYSERR: NULL docwagon to alert_player_doctors_of_mort()!", ch, LOG_SYSLOG, TRUE);
     return 0;
   }
