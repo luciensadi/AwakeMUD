@@ -3424,6 +3424,8 @@ ACMD(do_assense)
             case CYB_MATHSSPU:
             case CYB_SKULL:
             case CYB_SMARTLINK:
+            case CYB_FANGS:
+            case CYB_HORNS:
               locs[0] = 1;
               break;
             case CYB_DERMALPLATING:
