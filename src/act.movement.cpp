@@ -1969,7 +1969,7 @@ ACMD(do_leave)
         char_to_room(ch, target_room);
 
         // Message the room.
-        snprintf(buf, sizeof(buf), "$n enters from %s.", thedirs[door]);
+        snprintf(buf, sizeof(buf), "$n enters from %s.", thedirs[rev_dir[door]]);
         act(buf, TRUE, ch, 0, 0, TO_ROOM);
 
         // If not screenreader, look.
