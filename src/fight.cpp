@@ -2238,7 +2238,7 @@ bool docwagon(struct char_data *ch)
         if (PLR_FLAGGED(temp, PLR_MATRIX))
           temp->persona->decker->hitcher = NULL;
     docwagon_message(ch);
-    death_penalty(ch);  /* Penalty for deadly wounds */
+    // death_penalty(ch);  /* Penalty for deadly wounds */
     GET_PHYSICAL(ch) = 400;
     GET_MENTAL(ch) = 0;
     GET_POS(ch) = POS_STUNNED;
