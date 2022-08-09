@@ -612,8 +612,10 @@ void list_obj_to_char(struct obj_data * list, struct char_data * ch, int mode,
           show_obj_to_char(i, ch, mode);
         }
       } else {
-        if (IS_OBJ_STAT(i, ITEM_EXTRA_CORPSE))
+        if (IS_OBJ_STAT(i, ITEM_EXTRA_CORPSE)) {
+          num = 1;
           continue;
+        }
 
         if (!mode) {
           if (OBJ_IS_GRAFFITI(i) && (!found_graffiti) ) {
