@@ -3588,7 +3588,7 @@ ACMD(do_assense)
     if (GET_OBJ_TYPE(obj) == ITEM_FOCUS) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "a %s focus", foci_type[GET_OBJ_VAL(obj, 0)]);
       if (GET_IDNUM(ch) == GET_FOCUS_BONDED_TO(obj) && (GET_FOCUS_TYPE(obj) == FOCI_SPEC_SPELL || GET_FOCUS_TYPE(obj) == FOCI_SUSTAINED)) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ". You bonded it to help with the spell '%s'", spells[GET_OBJ_VAL(obj, 3)].name);
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ". You bonded it to help with the spell '%s'", get_spell_name(GET_FOCUS_BONDED_SPIRIT_OR_SPELL(obj), -1));
       } else if (success >= 5) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ". It is of force %d", GET_OBJ_VAL(obj, 1));
         if (GET_OBJ_VAL(obj, 2)) {

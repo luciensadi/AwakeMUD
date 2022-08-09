@@ -6212,9 +6212,17 @@ const char *get_spell_name(int spell, int subtype) {
       || spell == SPELL_DECATTR
       || spell == SPELL_DECCYATTR)
   {
-    snprintf(ENDOF(spell_name), sizeof(spell_name) - strlen(spell_name), "%s", attributes[subtype]);
+    if (subtype == -1) {
+      strlcat(spell_name, "Attribute", sizeof(spell_name));
+    } else {
+      snprintf(ENDOF(spell_name), sizeof(spell_name) - strlen(spell_name), "%s", attributes[subtype]);
+    }
   } else if (SPELL_HAS_SUBTYPE(spell)) {
-    snprintf(ENDOF(spell_name), sizeof(spell_name) - strlen(spell_name), " (%s)", attributes[subtype]);
+    if (subtype == -1) {
+      strlcat(spell_name, "Attribute", sizeof(spell_name));
+    } else {
+      snprintf(ENDOF(spell_name), sizeof(spell_name) - strlen(spell_name), " (%s)", attributes[subtype]);
+    }
   }
 
   return spell_name;
