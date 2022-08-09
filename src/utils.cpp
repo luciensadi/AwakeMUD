@@ -2885,7 +2885,8 @@ void copy_over_necessary_info(struct char_data *original, struct char_data *clon
   // Equipment info.
   for (int pos = 0; pos < NUM_WEARS; pos++) {
     REPLICATE(equipment[pos]);
-    clone->equipment[pos]->worn_by = clone;
+    if (clone->equipment[pos])
+      clone->equipment[pos]->worn_by = clone;
   }
 
   REPLICATE(carrying);
