@@ -1287,7 +1287,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
   }
 
   if (GET_MOBALERT(i) == MALERT_ALARM && (MOB_FLAGGED(i, MOB_HELPER) || MOB_FLAGGED(i, MOB_GUARD))) {
-    strlcat(buf, "^r(alarmed)^n ", sizeof(buf));
+    strlcat(buf, " ^r(alarmed)^n", sizeof(buf));
   }
 
   if (PRF_FLAGGED(i, PRF_AFK))
@@ -6079,10 +6079,6 @@ ACMD(do_scan)
                 }
               }
 
-              if (GET_MOBALERT(list) == MALERT_ALARM && (MOB_FLAGGED(list, MOB_HELPER) || MOB_FLAGGED(list, MOB_GUARD))) {
-                strlcat(desc_line, "^r(alarmed)^n ", sizeof(desc_line));
-              }
-
               if (IS_AFFECTED(list, AFF_INVISIBLE) || IS_AFFECTED(list, AFF_IMP_INVIS) || IS_AFFECTED(list, AFF_SPELLINVIS) || IS_AFFECTED(list, AFF_SPELLIMPINVIS)) {
                 strlcat(desc_line, "(invisible) ", sizeof(desc_line));
               }
@@ -6091,7 +6087,11 @@ ACMD(do_scan)
                   strlcat(desc_line, "(astral) ", sizeof(desc_line));
               }
 
-              snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "  %s%s%s\r\n", desc_line, GET_NAME(list), FIGHTING(list) == ch ? " (fighting you!)" : "");
+              snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "  %s%s%s\r\n",
+                       desc_line,
+                       GET_NAME(list),
+                       FIGHTING(list) == ch ? " ^R(fighting you!)^n" : (GET_MOBALERT(list) == MALERT_ALARM && (MOB_FLAGGED(list, MOB_HELPER) || MOB_FLAGGED(list, MOB_GUARD)) ? " ^r(alarmed)^n" : ""));
+
               onethere = TRUE;
               anythere = TRUE;
             }
