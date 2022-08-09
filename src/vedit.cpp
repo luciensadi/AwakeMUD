@@ -191,6 +191,7 @@ void vedit_parse(struct descriptor_data * d, const char *arg)
               for (int c = 0; c < NUM_MODS; c++)
                 i->mod[c] = temp->mod[c];
               i->owner = temp->owner;
+              i->mount = temp->mount;
 
               clear_vehicle(temp);
               delete temp;
