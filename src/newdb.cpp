@@ -2046,7 +2046,7 @@ void DeleteChar(long idx)
     while ((row = mysql_fetch_row(res))) {
       // Describe the table schema into buf2.
       prepare_quotes(prepare_quotes_buf, row[0], sizeof(prepare_quotes_buf), TRUE);
-      snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%s%s", first_pass_of_table_description ? "" : ", ", prepare_quotes_buf);
+      snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%s`%s`", first_pass_of_table_description ? "" : ", ", prepare_quotes_buf);
       first_pass_of_table_description = FALSE;
     }
     mysql_free_result(res);
