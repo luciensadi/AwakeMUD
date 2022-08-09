@@ -576,19 +576,19 @@ void medit_parse(struct descriptor_data *d, const char *arg)
 
             {
               // Cyberware.
-              for (struct obj_data *obj = new_mob_proto[counter].cyberware; obj; obj = obj->next_content) {
-                obj->carried_by = &new_mob_proto[counter];
+              for (struct obj_data *obj = new_mob_proto[counter + 1].cyberware; obj; obj = obj->next_content) {
+                obj->carried_by = &new_mob_proto[counter + 1];
               }
 
               // Same for bioware.
-              for (struct obj_data *obj = new_mob_proto[counter].bioware; obj; obj = obj->next_content) {
-                obj->carried_by = &new_mob_proto[counter];
+              for (struct obj_data *obj = new_mob_proto[counter + 1].bioware; obj; obj = obj->next_content) {
+                obj->carried_by = &new_mob_proto[counter + 1];
               }
 
               // And then equipment.
               for (int wearloc = 0; wearloc < NUM_WEARS; wearloc++) {
-                if (GET_EQ(&new_mob_proto[counter], wearloc)) {
-                  GET_EQ(&new_mob_proto[counter], wearloc)->worn_by = &new_mob_proto[counter];
+                if (GET_EQ(&new_mob_proto[counter + 1], wearloc)) {
+                  GET_EQ(&new_mob_proto[counter + 1], wearloc)->worn_by = &new_mob_proto[counter];
                 }
               }
             }
