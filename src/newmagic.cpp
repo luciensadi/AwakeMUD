@@ -1403,11 +1403,17 @@ void cast_combat_spell(struct char_data *ch, int spell, int force, char *arg)
     SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST;
 
     success = success_test(skill, GET_WIL(vict) + target_modifiers);
+    snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
+    act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
     if (success > 0 && GET_REFLECT(vict) && (reflected = reflect_spell(ch, vict, spell, force, 0, GET_WIL(ch), success))) {
       vict = ch;
       ch = temp;
     }
+    snprintf(rbuf, sizeof(rbuf), "reflected: %s", reflected ? "yes" : "no");
+    act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
     success -= resist_spell(vict, spell, force, 0);
+    snprintf(rbuf, sizeof(rbuf), "after spell resist: %d", success);
+    act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
     if (success > 0) {
       int dam = convert_damage(stage(success, basedamage));
       if (GET_MENTAL(vict) - (dam * 100) <= 0) {
@@ -1441,11 +1447,18 @@ void cast_combat_spell(struct char_data *ch, int spell, int force, char *arg)
     SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST;
 
     success = success_test(skill, GET_BOD(vict) + target_modifiers);
+    snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
+    act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
     if (success > 0 && GET_REFLECT(vict) && (reflected = reflect_spell(ch, vict, spell, force, 0, GET_BOD(ch), success))) {
       vict = ch;
       ch = temp;
     }
     success -= resist_spell(vict, spell, force, 0);
+    snprintf(rbuf, sizeof(rbuf), "reflected: %s", reflected ? "yes" : "no");
+    act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
+    success -= resist_spell(vict, spell, force, 0);
+    snprintf(rbuf, sizeof(rbuf), "after spell resist: %d", success);
+    act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
     if (success > 0) {
       int dam = convert_damage(stage(success, basedamage));
       if (GET_MENTAL(vict) - (dam * 100) <= 0) {
