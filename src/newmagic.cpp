@@ -1938,6 +1938,8 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
     int skill = GET_SKILL(ch, SKILL_SORCERY) + MIN(GET_SKILL(ch, SKILL_SORCERY), GET_CASTING(ch));
     int success = 0;
     spell_bonus(ch, spell, skill, target_modifiers);
+    snprintf(rbuf, sizeof(rbuf), "after spell_bonus, skill = %d, target_modifiers = %d", skill, target_modifiers);
+    act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
     if (skill == -1)
       return;
     struct char_data *temp = vict;
@@ -1960,11 +1962,15 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
 
       success = success_test(skill, (spell == SPELL_CONFUSION ? GET_WIL(vict) : GET_INT(vict)) + target_modifiers);
+      snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
+      act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
       if (success > 0 && GET_REFLECT(vict) && (reflected = reflect_spell(ch, vict, spell, force, 0, (spell == SPELL_CONFUSION ? GET_WIL(ch) : GET_INT(ch)), success))) {
         vict = ch;
         ch = temp;
       }
       success -= resist_spell(vict, spell, force, 0);
+      snprintf(rbuf, sizeof(rbuf), "after spell resist: %d", success);
+      act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
       if (success > 0) {
         send_to_char("Coherent thought is suddenly a foreign concept.\r\n", vict);
         act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
@@ -1989,6 +1995,8 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
 
       success = success_test(skill, 4 + target_modifiers);
+      snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
+      act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
       if (success > 0) {
         act("You blink and suddenly $n is gone!", TRUE, vict, 0, 0, TO_ROOM);
         send_to_char("You feel your body tingle.\r\n", vict);
@@ -2008,6 +2016,8 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
 
       success = success_test(skill, 4 + target_modifiers);
+      snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
+      act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
       if (success > 0) {
         act("You successfully sustain that spell on $n.", FALSE, vict, 0, ch, TO_VICT);
         send_to_char("Your every move becomes silent.\r\n", vict);
@@ -2019,6 +2029,8 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
     case SPELL_SILENCE:
       WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
       success = success_test(skill, 4 + target_modifiers);
+      snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
+      act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
       if (success > 0) {
         act("The room falls silent.", FALSE, ch, 0, 0, TO_ROOM);
         act("The room falls silent.", FALSE, ch, 0, 0, TO_CHAR);
