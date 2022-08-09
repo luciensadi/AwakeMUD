@@ -2847,10 +2847,14 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It can hold a maximum of ^c%d^n kilograms.", GET_OBJ_VAL(j, 0));
       break;
     case ITEM_DRINKCON:
-    case ITEM_FOUNTAIN:
-      sprinttype(GET_OBJ_VAL(j, 2), drinks, buf2, sizeof(buf2));
+      sprinttype(GET_DRINKCON_LIQ_TYPE(j), drinks, buf2, sizeof(buf2));
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It currently contains ^c%d/%d^n units of ^c%s^n.",
-              GET_OBJ_VAL(j, 0), GET_OBJ_VAL(j, 1), buf2);
+               GET_DRINKCON_AMOUNT(j), GET_DRINKCON_MAX_AMOUNT(j), buf2);
+      break;
+    case ITEM_FOUNTAIN:
+      sprinttype(GET_FOUNTAIN_LIQ_TYPE(j), drinks, buf2, sizeof(buf2));
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It currently contains ^c%d/%d^n units of ^c%s^n.",
+               GET_FOUNTAIN_AMOUNT(j), GET_FOUNTAIN_MAX_AMOUNT(j), buf2);
       break;
     case ITEM_MONEY:
       if (!GET_OBJ_VAL(j, 1))

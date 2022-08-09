@@ -357,9 +357,36 @@ void medit_parse(struct descriptor_data *d, const char *arg)
     case 'n':
     case 'N':
       STATE(d) = CON_PLAYING;
+
       /* free up the editing mob */
-      if (d->edit_mob)
+      if (d->edit_mob) {
+        struct obj_data *next_obj;
+
+        /* Clear out cyberware etc */
+        for (struct obj_data *obj = d->edit_mob->cyberware; obj; obj = next_obj) {
+          next_obj = obj->next_content;
+          extract_obj(obj);
+        }
+        d->edit_mob->cyberware = NULL;
+
+        // Same for bioware.
+        for (struct obj_data *obj = d->edit_mob->bioware; obj; obj = obj->next_content) {
+          next_obj = obj->next_content;
+          extract_obj(obj);
+        }
+        d->edit_mob->bioware = NULL;
+
+        // Delete equipment too
+        for (int wearloc = 0; wearloc < NUM_WEARS; wearloc++) {
+          if (GET_EQ(d->edit_mob, wearloc)) {
+            extract_obj(GET_EQ(d->edit_mob, wearloc));
+          }
+          GET_EQ(d->edit_mob, wearloc) = NULL;
+        }
+
         Mem->DeleteCh(d->edit_mob);
+      }
+
       d->edit_mob = NULL;
       d->edit_number = 0;
       PLR_FLAGS(d->character).RemoveBit(PLR_EDITING);
