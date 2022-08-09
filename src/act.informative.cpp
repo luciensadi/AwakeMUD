@@ -6172,6 +6172,31 @@ ACMD(do_scan)
               anythere = TRUE;
             }
 
+          for (veh = EXIT(ch, i)->to_room->vehicles; veh; veh = veh->next_veh) {
+            if (in_veh) {
+              if (in_veh->cspeed > SPEED_IDLE) {
+                if (get_speed(in_veh) >= 200) {
+                  if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 7) < 1)
+                    continue;
+                  else if (get_speed(in_veh) < 200 && get_speed(in_veh) >= 120) {
+                    if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 6) < 1)
+                      continue;
+                    else if (get_speed(in_veh) < 120 && get_speed(in_veh) >= 60) {
+                      if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 5) < 1)
+                        continue;
+                      else
+                        if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 4) < 1)
+                          continue;
+                    }
+                  }
+                }
+              }
+            }
+            snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "  %s (%s)\r\n", GET_VEH_NAME(veh), (get_speed(veh) ? "Moving" : "Stationary"));
+            onethere = TRUE;
+            anythere = TRUE;
+          }
+
           ch->in_room = EXIT(ch, i)->to_room;
 
           if (onethere) {
