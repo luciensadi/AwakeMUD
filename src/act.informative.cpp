@@ -3658,7 +3658,7 @@ ACMD(do_examine)
             int initial_build_time = MAX(1, GET_MAGIC_TOOL_RATING(tmp_object) * 300);
             float completion_percentage = ((float)(initial_build_time - GET_MAGIC_TOOL_BUILD_TIME_LEFT(tmp_object)) / initial_build_time) * 100;
 
-            send_to_char(ch, "It is a rating%d lodge dedicated to %s.\r\n",
+            send_to_char(ch, "It is a rating-%d lodge dedicated to %s.\r\n",
                          GET_MAGIC_TOOL_RATING(tmp_object),
                          totem_types[GET_MAGIC_TOOL_TOTEM_OR_ELEMENT(tmp_object)]);
 
