@@ -2065,7 +2065,7 @@ void look_in_obj(struct char_data * ch, char *arg, bool exa)
   struct obj_data *obj = NULL;
   struct char_data *dummy = NULL;
   struct veh_data *veh = NULL;
-  int amt, bits;
+  int bits;
 
   if (!*arg) {
     send_to_char("Look in what?\r\n", ch);
