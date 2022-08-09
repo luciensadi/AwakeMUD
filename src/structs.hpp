@@ -505,6 +505,8 @@ struct char_point_data
   ubyte reach[2];
   int extras[2];
 
+  /* Adding a field to this struct? If it's a pointer, or if it's important, add it to utils.cpp's copy_over_necessary_info() to avoid breaking mdelete etc. */
+
   char_point_data() :
     mental(0), max_mental(0), physical(0), max_physical(10), nuyen(0), bank(0), karma(0), rep(0),
     noto(0), tke(0), sig(0), init_dice(0), init_roll(0), grade(0), extrapp(0), extra(0), magic_loss(0),
@@ -600,6 +602,7 @@ struct char_special_data
   struct char_special_data_saved saved; /* constants saved in plrfile  */
 
   const char *highlight_color_code;
+  /* Adding a field to this struct? If it's a pointer, or if it's important, add it to utils.cpp's copy_over_necessary_info() to avoid breaking mdelete etc. */
 
   char_special_data() :
       fight_veh(NULL), fighting(NULL), hunting(NULL), programming(NULL), num_spirits(0), idnum(0),
@@ -705,6 +708,8 @@ struct mob_special_data
   int alerttime;
   vnum_t spare1, spare2;
   long lasthit;
+
+  /* Adding a field to this struct? If it's a pointer, or if it's important, add it to utils.cpp's copy_over_necessary_info() to avoid breaking mdelete etc. */
 
   mob_special_data() :
     last_direction(NORTH), attack_type(0), default_pos(POS_STANDING),
@@ -897,7 +902,7 @@ struct char_data
   /* Named after 'magic bullet pants', the 'technology' in FPS games that allows you to never have to worry about which mag has how much ammo in it. */
   unsigned short bullet_pants[(END_OF_AMMO_USING_WEAPONS + 1) - START_OF_AMMO_USING_WEAPONS][NUM_AMMOTYPES];
 
-  /* Adding a field here? If it's a pointer, add it to utils.cpp's copy_over_necessary_info() to avoid breaking mdelete etc. */
+  /* Adding a field to this struct? If it's a pointer, or if it's important, add it to utils.cpp's copy_over_necessary_info() to avoid breaking mdelete etc. */
 #ifdef USE_DEBUG_CANARIES
   int canary;
 #endif

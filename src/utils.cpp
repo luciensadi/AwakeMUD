@@ -2863,18 +2863,46 @@ void copy_over_necessary_info(struct char_data *original, struct char_data *clon
   // Matrix info (null for NPCs)
   REPLICATE(persona);
 
+  // Descriptor data (null for non-possessed NPCs)
+  REPLICATE(desc);
+
   // Spell info.
   REPLICATE(squeue);
   REPLICATE(sustained);
+  for (struct sustain_data *sust = clone->sustained; sust; sust = sust->next) {
+    if (sust->other == original)
+      sust->other = clone;
+  }
+
   REPLICATE(ssust);
+  for (struct spirit_sustained *sust = clone->ssust; sust; sust = sust->next) {
+    if (sust->target == original)
+      sust->target = clone;
+  }
+
   REPLICATE(spells);
 
   // Equipment info.
-  for (int pos = 0; pos < NUM_WEARS; pos++)
+  for (int pos = 0; pos < NUM_WEARS; pos++) {
     REPLICATE(equipment[pos]);
+    clone->equipment[pos]->worn_by = clone;
+  }
+
   REPLICATE(carrying);
+  for (struct obj_data *obj = clone->carrying; obj; obj = obj->next_content) {
+    obj->carried_by = clone;
+  }
+
   REPLICATE(cyberware);
+  for (struct obj_data *obj = clone->cyberware; obj; obj = obj->next_content) {
+    obj->carried_by = clone;
+  }
+
+
   REPLICATE(bioware);
+  for (struct obj_data *obj = clone->bioware; obj; obj = obj->next_content) {
+    obj->carried_by = clone;
+  }
 
   // Linked lists.
   REPLICATE(next_in_room);
@@ -2888,35 +2916,58 @@ void copy_over_necessary_info(struct char_data *original, struct char_data *clon
   REPLICATE(followers);
   REPLICATE(master);
 
+  // Ignore data (null for NPCs)
+  REPLICATE(ignore_data);
+
   // Pgroup data (null for NPCs)
   REPLICATE(pgroup);
   REPLICATE(pgroup_invitations);
+
+  // Invis resistance test data
+  REPLICATE(pc_invis_resistance_test_results);
+  REPLICATE(mob_invis_resistance_test_results);
 
   // Nested data (pointers from included structs)
   REPLICATE(char_specials.fighting);
   REPLICATE(char_specials.fight_veh);
   REPLICATE(char_specials.hunting);
+  REPLICATE(char_specials.programming);
+  REPLICATE(char_specials.defined_position);
+  REPLICATE(char_specials.position);
+  REPLICATE(char_specials.subscribe);
+  REPLICATE(char_specials.rigging);
+  REPLICATE(char_specials.mindlink);
+  REPLICATE(char_specials.spirits);
+  REPLICATE(char_specials.highlight_color_code);
   REPLICATE(mob_specials.last_direction);
   REPLICATE(mob_specials.memory);
   REPLICATE(mob_specials.wait_state);
+  REPLICATE(mob_specials.quest_id);
+  REPLICATE(mob_specials.alert);
+  REPLICATE(mob_specials.alerttime);
+  REPLICATE(mob_specials.spare1);
+  REPLICATE(mob_specials.spare2);
   REPLICATE(points.mental);
   REPLICATE(points.max_mental);
   REPLICATE(points.physical);
   REPLICATE(points.max_physical);
-  REPLICATE(points.init_dice);
   REPLICATE(points.init_roll);
   REPLICATE(points.sustained[0]);
   REPLICATE(points.sustained[1]);
+  REPLICATE(points.track[0]);
+  REPLICATE(points.track[1]);
+  REPLICATE(points.fire[0]);
+  REPLICATE(points.fire[1]);
+  REPLICATE(points.fire[2]);
+  REPLICATE(points.reach[0]);
+  REPLICATE(points.reach[1]);
+  REPLICATE(points.extras[0]);
+  REPLICATE(points.extras[1]);
 
-  REPLICATE(char_specials.position);
   REPLICATE(vfront);
 
   copy_vision_from_original_to_clone(original, clone);
 
-  REPLICATE(points.fire[0]);
-  REPLICATE(points.fire[1]);
-  REPLICATE(points.reach[0]);
-  REPLICATE(points.reach[1]);
 #undef REPLICATE
 
   // Also clone important flags.

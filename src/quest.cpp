@@ -651,8 +651,7 @@ void reward(struct char_data *ch, struct char_data *johnson)
     for (f = ch->followers; f; f = f->next) {
       if (!IS_NPC(f->follower)
           && AFF_FLAGGED(f->follower, AFF_GROUP)
-          && !(IS_PC_CONJURED_ELEMENTAL(f->follower) || IS_SPIRIT(f->follower))
-          && !(rep_too_low(f->follower, GET_QUEST(ch)) || rep_too_high(f->follower, GET_QUEST(ch))))
+          && !(IS_PC_CONJURED_ELEMENTAL(f->follower) || IS_SPIRIT(f->follower)))
       {
         num_chars_to_give_award_to++;
       }
