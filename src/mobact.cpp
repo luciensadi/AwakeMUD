@@ -261,8 +261,11 @@ bool vict_is_valid_target(struct char_data *ch, struct char_data *vict) {
 
     // Are they our prior master (quest)? Failure.
     if (GET_QUEST(vict)) {
-      for (int j = 0; j < quest_table[GET_QUEST(vict)].num_mobs; j++) {
-        if (quest_table[GET_QUEST(vict)].mob[j].vnum == GET_MOB_VNUM(ch)) {
+      int quest_idx = GET_QUEST(vict);
+
+      for (int mob_idx = 0; mob_idx < quest_table[quest_idx].num_mobs; mob_idx++) {
+        if (quest_table[quest_idx].mob[mob_idx].vnum == GET_MOB_VNUM(ch)
+            && quest_table[quest_idx].mob[mob_idx].objective == QMO_LOCATION) {
 #ifdef MOBACT_DEBUG
           snprintf(buf3, sizeof(buf3), "vict_is_valid_target: I am a prior escortee of PC %s, skipping.", GET_CHAR_NAME(vict));
           do_say(ch, buf3, 0, 0);
@@ -278,6 +281,15 @@ bool vict_is_valid_target(struct char_data *ch, struct char_data *vict) {
       snprintf(buf3, sizeof(buf3), "vict_is_valid_target: PC %s is not on the quest that spawned me, skipping.", GET_CHAR_NAME(vict));
       do_say(ch, buf3, 0, 0);
 #endif
+      return FALSE;
+    }
+
+    // Can they hurt me?
+    if (!can_hurt(vict, ch, 0, TRUE)) {
+  #ifdef MOBACT_DEBUG
+      snprintf(buf3, sizeof(buf3), "vict_is_valid_target: PC %s cannot hurt me, skipping.", GET_CHAR_NAME(vict));
+      do_say(ch, buf3, 0, 0);
+  #endif
       return FALSE;
     }
   }
@@ -313,9 +325,9 @@ bool vict_is_valid_aggro_target(struct char_data *ch, struct char_data *vict) {
   }
 
   // We allow alarmed, non-aggro NPCs to attack, but only if the victim could otherwise hurt them, and only if they're otherwise aggressive (guard, helper, etc)
-  if (GET_MOBALERT(ch) == MALERT_ALARM && (MOB_FLAGGED(ch, MOB_HELPER) || MOB_FLAGGED(ch, MOB_GUARD)) && can_hurt(vict, ch, 0, TRUE)) {
+  if (GET_MOBALERT(ch) == MALERT_ALARM && (MOB_FLAGGED(ch, MOB_HELPER) || MOB_FLAGGED(ch, MOB_GUARD))) {
 #ifdef MOBACT_DEBUG
-    snprintf(buf3, sizeof(buf3), "vict_is_valid_aggro_target: I am alarmed and %s can hurt me, so they are a valid aggro target.", GET_CHAR_NAME(vict));
+    snprintf(buf3, sizeof(buf3), "vict_is_valid_aggro_target: I am alarmed, so %s is a valid aggro target.", GET_CHAR_NAME(vict));
     do_say(ch, buf3, 0, 0);
 #endif
     return TRUE;
@@ -326,22 +338,27 @@ bool vict_is_valid_aggro_target(struct char_data *ch, struct char_data *vict) {
 
 bool vict_is_valid_guard_target(struct char_data *ch, struct char_data *vict) {
   const char *guard_messages[] = {
-    "%s Hey! You can't have %s here!",
-    "%s Drop %s, slitch!",
-    "%s Get out of here with %s!",
-    "%s You can't have %s here!",
-    "%s %s isn't allowed here! Leave!",
-    "%s You're really bringing %s here? Really?",
-    "%s Bringing %s in here was the last mistake you'll ever make.",
-    "%s %s? Brave of you.",
-    "%s Call the DocWagon. Maybe they can use %s to scrape you off the ground.",
-    "%s You think %s is going to save you?",
-    "%s I hope %s was worth all this pain.",
-    "%s %s won't save you from me.",
-    "%s Who told you you could have %s here??",
-    "%s I'm keeping %s for myself, just watch."
+/*  0 */ "%s Hey! You can't have %s here!",
+         "%s Drop %s, slitch!",
+         "%s Get out of here with %s!",
+         "%s You can't have %s here!",
+         "%s %s isn't allowed here! Leave!",
+/*  5 */ "%s You're really bringing %s here? Really?",
+         "%s Bringing %s in here was the last mistake you'll ever make.",
+         "%s %s? Brave of you.",
+         "%s Call the DocWagon. Maybe they can use %s to scrape you off the ground.",
+         "%s You think %s is going to save you?",
+/* 10 */ "%s I hope %s was worth all this pain.",
+         "%s %s won't save you from me.",
+         "%s Who told you you could have %s here??",
+         "%s I'm keeping %s for myself, just watch.",
+         "%s %s?? What is that, your safety blanket? Shadows too scary for you?",
+/* 15 */ "%s If you think %s is going to make a difference here, you've got another think coming.",
+         "%s I'm gonna feed you %s!",
+         "%s I'm gonna break %s off in your hoop!",
+         "%s Frag off, and take %s with you!"
   };
-  #define NUM_GUARD_MESSAGES 14
+  #define NUM_GUARD_MESSAGES 19
 
   if (!vict_is_valid_target(ch, vict))
     return FALSE;
