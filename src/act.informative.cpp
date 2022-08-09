@@ -1098,6 +1098,10 @@ void list_one_char(struct char_data * i, struct char_data * ch)
       }
     }
 
+    if (GET_MOBALERT(i) == MALERT_ALARM && (MOB_FLAGGED(i, MOB_HELPER) || MOB_FLAGGED(i, MOB_GUARD))) {
+      strlcat(buf, "^r(alarmed)^n ", sizeof(buf));
+    }
+
     // Make sure they always display flags that are relevant to the player.
     if (IS_AFFECTED(i, AFF_INVISIBLE) || IS_AFFECTED(i, AFF_IMP_INVIS) || IS_AFFECTED(i, AFF_SPELLINVIS) || IS_AFFECTED(i, AFF_SPELLIMPINVIS))
       strlcat(buf, "(invisible) ", sizeof(buf));
@@ -1280,6 +1284,10 @@ void list_one_char(struct char_data * i, struct char_data * ch)
     } else {
       strlcat(buf, " ^m(Protected)^n", sizeof(buf));
     }
+  }
+
+  if (GET_MOBALERT(i) == MALERT_ALARM && (MOB_FLAGGED(i, MOB_HELPER) || MOB_FLAGGED(i, MOB_GUARD))) {
+    strlcat(buf, "^r(alarmed)^n ", sizeof(buf));
   }
 
   if (PRF_FLAGGED(i, PRF_AFK))
@@ -6071,6 +6079,10 @@ ACMD(do_scan)
                 }
               }
 
+              if (GET_MOBALERT(list) == MALERT_ALARM && (MOB_FLAGGED(list, MOB_HELPER) || MOB_FLAGGED(list, MOB_GUARD))) {
+                strlcat(desc_line, "^r(alarmed)^n ", sizeof(desc_line));
+              }
+
               if (IS_AFFECTED(list, AFF_INVISIBLE) || IS_AFFECTED(list, AFF_IMP_INVIS) || IS_AFFECTED(list, AFF_SPELLINVIS) || IS_AFFECTED(list, AFF_SPELLIMPINVIS)) {
                 strlcat(desc_line, "(invisible) ", sizeof(desc_line));
               }
@@ -6158,10 +6170,16 @@ ACMD(do_scan)
               char desc_line[200];
               strlcpy(desc_line, "", sizeof(desc_line));
 
-              if (GET_MOB_QUEST_CHAR_ID(list) == GET_IDNUM(ch)) {
-                strlcat(desc_line, "(quest) ", sizeof(desc_line));
-              } else if (GET_MOB_QUEST_CHAR_ID(list) != 0) {
-                strlcat(desc_line, "(protected) ", sizeof(desc_line));
+              if (GET_MOB_QUEST_CHAR_ID(list)) {
+                if (GET_MOB_QUEST_CHAR_ID(list) == GET_IDNUM(ch)) {
+                  strlcat(desc_line, "(quest) ", sizeof(desc_line));
+                } else {
+                  strlcat(desc_line, "(protected) ", sizeof(desc_line));
+                }
+              }
+
+              if (GET_MOBALERT(list) == MALERT_ALARM && (MOB_FLAGGED(list, MOB_HELPER) || MOB_FLAGGED(list, MOB_GUARD))) {
+                strlcat(desc_line, "^r(alarmed)^n ", sizeof(desc_line));
               }
 
               if (IS_AFFECTED(list, AFF_INVISIBLE) || IS_AFFECTED(list, AFF_IMP_INVIS) || IS_AFFECTED(list, AFF_SPELLINVIS) || IS_AFFECTED(list, AFF_SPELLIMPINVIS)) {
