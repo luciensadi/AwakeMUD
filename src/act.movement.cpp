@@ -88,10 +88,28 @@ int can_move(struct char_data *ch, int dir, int extra)
     send_to_char("Sorry, as a first-level builder you're only able to move to rooms you have edit access for.\r\n", ch);
     return 0;
   }
-  if (ROOM_FLAGGED(EXIT(ch, dir)->to_room, ROOM_FREEWAY) && GET_LEVEL(ch) == 1) {
-    send_to_char("Walking across the freeway would spell instant death.\r\n", ch);
-    return 0;
+
+  if (ROOM_FLAGGED(EXIT(ch, dir)->to_room, ROOM_FREEWAY) && !IS_PROJECT(ch)) {
+    if (GET_LEVEL(ch) > 1) {
+      send_to_char("You abuse your staff powers to part traffic around you.\r\n", ch);
+    } else {
+      bool has_vehicle_to_go_to = FALSE;
+
+      for (struct veh_data *veh = EXIT(ch, dir)->to_room->vehicles; veh; veh = veh->next_veh) {
+        if (veh->owner == GET_IDNUM(ch)) {
+          send_to_char("You hotfoot towards %s through the speeding traffic, playing the world's scariest game of Frogger.\r\n", ch);
+          has_vehicle_to_go_to = TRUE;
+          break;
+        }
+      }
+
+      if (!has_vehicle_to_go_to) {
+        send_to_char("Walking across the freeway would spell instant death.\r\n", ch);
+        return 0;
+      }
+    }
   }
+
   if (ROOM_FLAGGED(EXIT(ch, dir)->to_room, ROOM_HOUSE))
     if (!House_can_enter(ch, EXIT(ch, dir)->to_room->number))
     {
