@@ -3967,6 +3967,9 @@ void reset_zone(int zone, int reboot)
           if (obj->in_room)
             add_workshop_to_room(obj);
         }
+        else if (GET_OBJ_TYPE(obj) == ITEM_RADIO) {
+          GET_RADIO_CENTERED_FREQUENCY(obj) = 8;
+        }
         last_cmd = 1;
       } else
         last_cmd = 0;

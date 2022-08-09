@@ -2280,7 +2280,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
         act("$n is hit full force by the intense flames causing $m to fall to the ground, gurgling.", TRUE, vict, 0, 0, TO_ROOM);
         send_to_char("The flames burn intensely around you, your last memory before falling unconscious is the hideous pain.\r\n", vict);
       } else if (GET_MENTAL(vict) - (dam * 100) <= 300) {
-        act("Screams as the flames impact $s body, horribly burning $m.", TRUE, vict, 0, 0, TO_ROOM);
+        act("$n screams as the flames impact $s body, horribly burning $m.", TRUE, vict, 0, 0, TO_ROOM);
         send_to_char("The flames crash into you, causing you great pain as they horribly burn you.\r\n", vict);
       } else if (GET_MENTAL(vict) - (dam * 100) <= 700) {
         act("$n cringes as the flames hit, patting at the spots where the flame continues to burn.", TRUE, vict, 0, 0, TO_ROOM);
@@ -2289,7 +2289,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
         act("The flames burst around $m, causing seemingly little damage.", TRUE, vict, 0, 0, TO_ROOM);
         send_to_char("The flames burst around you causing you slight pain as it burns some of your hair.\r\n", vict);
       } else {
-        act("The flames impact $n, but disperse on impact.", FALSE, vict, 0, ch, TO_ROOM);
+        act("The flames impact $m, but disperse on impact.", FALSE, vict, 0, ch, TO_ROOM);
         send_to_char("The flames rapidly disperse around you, causing only mild discomfort.\r\n", vict);
       }
 
@@ -2429,7 +2429,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
         act("$n is propelled backwards by the force of the lightning bolt, $s body smoking as it lands, not a sign of life from it.", TRUE, vict, 0, 0, TO_ROOM);
         send_to_char("You feel your body begin to spasm as the huge charge of electricity fries your nervous system.\r\n", vict);
       } else if (GET_MENTAL(vict) - (dam * 100) <= 300) {
-        act("$n is almost lifted in the air by the lightning, spasms filling $s body, as a thin trail of smoke rise from $m.", TRUE, vict, 0, 0, TO_ROOM);
+        act("$n is almost lifted in the air by the lightning, spasms filling $s body, as a thin trail of smoke rises from $m.", TRUE, vict, 0, 0, TO_ROOM);
         send_to_char("Your body is filled with pain as the lightning hits you, your limbs going into an uncontrollable seizure.\r\n", vict);
       } else if (GET_MENTAL(vict) - (dam * 100) <= 700) {
         act("$n spasms as the lightning hits $m, $s body wracked with spasms as the lightning dissipates.", TRUE, vict, 0, 0, TO_ROOM);

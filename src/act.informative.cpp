@@ -2177,12 +2177,13 @@ void look_in_obj(struct char_data * ch, char *arg, bool exa)
         list_obj_to_char(obj->contains, ch, SHOW_MODE_INSIDE_CONTAINER, TRUE, FALSE);
       }
     } else {            /* item must be a fountain or drink container */
-      if (GET_OBJ_VAL(obj, 1) <= 0)
+      if (GET_DRINKCON_AMOUNT(obj) <= 0)
         send_to_char("It is empty.\r\n", ch);
       else {
-        amt = ((GET_OBJ_VAL(obj, 1) * 3) / MAX(1, GET_OBJ_VAL(obj, 0)));
+        float full_ratio = GET_DRINKCON_AMOUNT(obj) / (MAX(1, GET_DRINKCON_MAX_AMOUNT(obj)));
+        int amt = MIN(3, MAX(0, 3 * full_ratio));
         snprintf(buf, sizeof(buf), "It's %sfull of a %s liquid.\r\n", fullness[amt],
-                color_liquid[GET_OBJ_VAL(obj, 2)]);
+                color_liquid[GET_DRINKCON_LIQ_TYPE(obj)]);
         send_to_char(buf, ch);
       }
     }
