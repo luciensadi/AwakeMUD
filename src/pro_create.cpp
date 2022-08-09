@@ -626,10 +626,10 @@ void update_buildrepair(void)
           }
 
           // Destroy the components.
-          CH->char_specials.timer = 0;
-          STOP_WORKING(CH);
           extract_obj(PROG);
           PROG = NULL;
+          CH->char_specials.timer = 0;
+          STOP_WORKING(CH);
         }
       } else if (AFF_FLAGGED(CH, AFF_BONDING)) {
         if ((GET_OBJ_TYPE(PROG) == ITEM_WEAPON && --GET_WEAPON_FOCUS_BOND_STATUS(PROG) < 1)

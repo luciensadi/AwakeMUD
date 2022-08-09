@@ -197,7 +197,11 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 #define SPELL_WAIT_STATE_TIME                                  (0.2  RL_SEC)
 #define OFFENSIVE_SPELL_WAIT_STATE_TIME                        (0.2  RL_SEC)
 #define FAILED_SPELL_LEARNING_WAIT_STATE                       (0.25 RL_SEC)
+
 #define INITIATION_CAP                                         50
+
+#define RITUAL_SPELL_BASE_TIME                                 2
+#define RITUAL_SPELL_COMPONENT_COST                            100
 
 // This stat is x100 when stored, so the cap is 20 * 100 = 2000 aka 20 magic.
 #define MAGIC_CAP                                              2000

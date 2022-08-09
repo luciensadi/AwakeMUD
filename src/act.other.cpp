@@ -4399,6 +4399,12 @@ ACMD(do_spool)
     total -= ch->real_abils.reflection_pool = GET_REFLECT(ch) = MIN(reflect, total);
   if (total > 0)
     GET_CASTING(ch) += total;
+
+  if (GET_CASTING(ch) > GET_SKILL(ch, SKILL_SORCERY)) {
+    GET_DRAIN(ch) += GET_CASTING(ch) - GET_SKILL(ch, SKILL_SORCERY);
+    GET_CASTING(ch) = GET_SKILL(ch, SKILL_SORCERY);
+  }
+
   snprintf(buf, sizeof(buf), "Pools set as: Casting-%d Drain-%d Defense-%d", GET_CASTING(ch), GET_DRAIN(ch), GET_SDEFENSE(ch));
   if (GET_REFLECT(ch))
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " Reflect-%d", GET_REFLECT(ch));

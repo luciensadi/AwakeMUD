@@ -953,6 +953,7 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 #define GET_RITUAL_COMPONENT_FORCE(components)    (GET_OBJ_VAL((components), 3))
 #define GET_RITUAL_COMPONENT_TARGET(components)   (GET_OBJ_VAL((components), 4))
 #define GET_RITUAL_TICKS_LEFT(components)         (GET_OBJ_VAL((components), 5))
+#define GET_RITUAL_TICKS_AT_START(components)     (GET_OBJ_VAL((components), 6))
 
 // ITEM_MAGIC_TOOL convenience defines
 #define GET_MAGIC_TOOL_TYPE(tool)                 (GET_OBJ_VAL((tool), 0))

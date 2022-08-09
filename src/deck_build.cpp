@@ -1015,6 +1015,14 @@ ACMD(do_progress)
     return;
   }
 
+  if (AFF_FLAGS(ch).IsSet(AFF_RITUALCAST)) {
+    amount_left   = GET_RITUAL_TICKS_LEFT(GET_BUILDING(ch));
+    amount_needed = GET_RITUAL_TICKS_AT_START(GET_BUILDING(ch));
+    send_to_char(ch, "You are about %2.2f%% of the way through casting %s.\r\n",
+           (((float)(amount_needed - amount_left) * 100) / amount_needed), GET_OBJ_NAME(GET_BUILDING(ch)));
+    return;
+  }
+
   if (AFF_FLAGS(ch).IsSet(AFF_BONDING)) {
     if (GET_OBJ_TYPE(GET_BUILDING(ch)) == ITEM_WEAPON) {
       int initial_bond_time = MAX(1, GET_WEAPON_FOCUS_RATING(GET_BUILDING(ch)) * 60);

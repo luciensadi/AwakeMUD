@@ -2004,9 +2004,11 @@ void parse_object(File &fl, long nr)
         break;
       case ITEM_CYBERWARE:
         price_cyber(obj);
+        obj->obj_flags.wear_flags.SetBit(ITEM_WEAR_TAKE);
         break;
       case ITEM_BIOWARE:
         price_bio(obj);
+        obj->obj_flags.wear_flags.SetBit(ITEM_WEAR_TAKE);
         break;
       case ITEM_PROGRAM:
         if (GET_OBJ_VAL(obj, 0) == SOFT_ATTACK)

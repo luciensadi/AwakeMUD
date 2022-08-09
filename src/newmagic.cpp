@@ -1185,8 +1185,8 @@ int reflect_spell(struct char_data *ch, struct char_data *vict, int spell, int f
   int successes = success_test(GET_REFLECT(vict), force);
   success -= successes;
 
-  snprintf(rolls_buf, sizeof(rolls_buf), "Spell reflect: Rolling %d dice vs TN %d gave %d successes (net %d)%s\r\n",
-           GET_REFLECT(vict), force, successes, success, success < 0 ? "; reflect succeeded!" : "reflect failed.");
+  snprintf(rolls_buf, sizeof(rolls_buf), "Spell reflect: Rolling %d dice vs TN %d gave %d successes (net %d): %s\r\n",
+           GET_REFLECT(vict), force, successes, success, success < 0 ? "reflect succeeded!" : "reflect failed.");
 
   if (success < 0) {
     success *= -1;
@@ -3733,7 +3733,8 @@ ACMD(do_cast)
     FAILURE_CASE(IS_NPC(vict), "You can only cast ritual spells on player characters.\r\n");
 
     // Charge them.
-    int cost = RITUAL_SPELL_COMPONENT_COST * spell->force;
+    int cost = RITUAL_SPELL_COMPONENT_COST * spell->force * spells[spell->type].drainpower;
+    int time_in_ticks = (RITUAL_SPELL_BASE_TIME * spell->force * spells[spell->type].drainpower) / (GET_SKILL(ch, SKILL_SORCERY) + MIN(GET_SKILL(ch, SKILL_SORCERY), GET_CASTING(ch)));
 
     if (GET_NUYEN(ch) < cost) {
       send_to_char(ch, "You need at least %d nuyen on hand to pay for the ritual components.\r\n", cost);
@@ -3750,12 +3751,17 @@ ACMD(do_cast)
     GET_RITUAL_COMPONENT_SUBTYPE(components) = spell->subtype;
     GET_RITUAL_COMPONENT_FORCE(components) = spell->force;
     GET_RITUAL_COMPONENT_TARGET(components) = GET_IDNUM(vict);
+    GET_RITUAL_TICKS_AT_START(components) = GET_RITUAL_TICKS_LEFT(components) = time_in_ticks;
+
+    char restring_buf[500];
+    snprintf(restring_buf, sizeof(restring_buf), "a ritual invocation of %s", get_spell_name(spell->type, spell->subtype));
+    components->restring = str_dup(restring_buf);
 
     GET_BUILDING(ch) = components;
 
     obj_to_room(components, ch->in_room);
 
-    send_to_char(ch, "You set up candles, incense, and other ritual components, then settle in to cast %s.\r\n", spells[spell->type].name);
+    send_to_char(ch, "You set up candles, incense, and other ritual components, then settle in to cast %s.\r\n", get_spell_name(spell->type, spell->subtype));
     act("$n sets up candles, incense, and other ritual components, then settles in to cast a spell.", FALSE, ch, 0, 0, TO_ROOM);
 
     return;

@@ -21,8 +21,6 @@ extern int get_max_usable_spell_successes(int spell, int force);
 extern const char *warn_if_spell_under_potential(struct sustain_data *sust);
 extern const char *get_spell_name(int spell, int subtype);
 
-#define RITUAL_SPELL_COMPONENT_COST     100
-
 #define DAMOBJ_NONE                     0
 #define DAMOBJ_ACID                     1
 #define DAMOBJ_AIR                      2
