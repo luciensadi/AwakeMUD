@@ -4975,7 +4975,7 @@ ACMD(do_who)
   struct descriptor_data *d;
   struct char_data *tch;
   int sort = LVL_MAX, num_can_see = 0, level = GET_LEVEL(ch);
-  bool mortal = FALSE, hardcore = FALSE, quest = FALSE, pker = FALSE, immort = FALSE, ooc = FALSE, newbie = FALSE, drugs = FALSE;
+  bool mortal = FALSE, hardcore = FALSE, quest = FALSE, pker = FALSE, immort = FALSE, ooc = FALSE, newbie = FALSE, drugs = FALSE, br = FALSE;
   int output_header;
   int num_in_socialization_rooms = 0;
 
@@ -5002,6 +5002,8 @@ ACMD(do_who)
       ooc = 1;
     else if (is_abbrev(arg, "newbie"))
       newbie = 1;
+    else if (access_level(ch, LVL_BUILDER) && (is_abbrev(arg, "b/r") || is_abbrev(arg, "br")))
+      br = 1;
     else if (access_level(ch, LVL_BUILDER) && is_abbrev(arg, "drugs"))
       drugs = 1;
     else {
@@ -5042,6 +5044,8 @@ ACMD(do_who)
       if (newbie && !PLR_FLAGGED(tch, PLR_NEWBIE))
         continue;
       if (drugs && !PLR_FLAGGED(tch, PLR_ENABLED_DRUGS))
+        continue;
+      if (br && !AFF_FLAGS(tch).AreAnySet(BR_TASK_AFF_FLAGS, ENDBIT))
         continue;
       if (GET_INCOG_LEV(tch) > GET_LEVEL(ch))
         continue;
