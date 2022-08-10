@@ -4948,6 +4948,7 @@ SPECIAL(locker)
   struct obj_data *locker = ch->in_room->contents, *next = NULL;
   int num = 0, free = 0;
 
+  // Count the available and total lockers, and purge any that have expired.
   for (; locker; locker = locker->next_content) {
     if (GET_OBJ_VNUM(locker) == OBJ_LOCKER) {
       num++;
@@ -4963,50 +4964,71 @@ SPECIAL(locker)
     }
   }
 
-  if (!num)
+  if (!num) {
     return FALSE;
+  }
+
   if (CMD_IS("list")) {
     send_to_char(ch, "%d/%d lockers free. RENT to rent. TYPE <password> to open.\r\n", free, num);
-  } else if (CMD_IS("rent")) {
-    if (!free)
+    return TRUE;
+  }
+
+  if (CMD_IS("rent")) {
+    if (!free) {
       send_to_char("No lockers are currently free. Please try again later.\r\n", ch);
-    else {
-      num = 0;
-      FOR_ITEMS_AROUND_CH(ch, locker)
-        if (GET_OBJ_VNUM(locker) == OBJ_LOCKER) {
-          num++;
-          if (!GET_OBJ_VAL(locker, 9))
-            break;
-        }
-      send_to_char(ch, "%d.locker opens and the screen reads 'LOCK %d TO CONTINUE'.\r\n", num, num);
-      REMOVE_BIT(GET_OBJ_VAL(locker, 1), CONT_CLOSED);
-      REMOVE_BIT(GET_OBJ_VAL(locker, 1), CONT_LOCKED);
+      return TRUE;
     }
-  } else if (CMD_IS("type")) {
+
+    num = 0;
+    FOR_ITEMS_AROUND_CH(ch, locker)
+      if (GET_OBJ_VNUM(locker) == OBJ_LOCKER) {
+        num++;
+        if (!GET_OBJ_VAL(locker, 9))
+          break;
+      }
+    send_to_char(ch, "%d.locker opens and the screen reads 'LOCK %d TO CONTINUE'.\r\n", num, num);
+    REMOVE_BIT(GET_OBJ_VAL(locker, 1), CONT_CLOSED);
+    REMOVE_BIT(GET_OBJ_VAL(locker, 1), CONT_LOCKED);
+    return TRUE;
+  }
+
+  if (CMD_IS("type")) {
     free = atoi(argument);
     if (!free)
-      send_to_char("The system beeps loudly.\r\n", ch);
+      send_to_char("The system beeps loudly. (Syntax: TYPE <7-digit code>)\r\n", ch);
     else {
       num = 0;
-      FOR_ITEMS_AROUND_CH(ch, locker)
+      FOR_ITEMS_AROUND_CH(ch, locker) {
         if (GET_OBJ_VNUM(locker) == OBJ_LOCKER && ++num && GET_OBJ_VAL(locker, 9) == free) {
           int cost = (int)((((time(0) - GET_OBJ_VAL(locker, 8)) / SECS_PER_REAL_DAY) + 1) * 50);
-          if (GET_NUYEN(ch) < cost)
-            send_to_char(ch, "The system beeps loudly and the screen reads 'PLEASE INSERT %d NUYEN'.\r\n", cost);
-          else {
-            lose_nuyen(ch, cost, NUYEN_OUTFLOW_GENERIC_SPEC_PROC);
-            REMOVE_BIT(GET_OBJ_VAL(locker, 1), CONT_CLOSED);
-            REMOVE_BIT(GET_OBJ_VAL(locker, 1), CONT_LOCKED);
-            GET_OBJ_VAL(locker, 9) = GET_OBJ_VAL(locker, 8) = 0;
-            send_to_char(ch, "%d.locker pops open.\r\n", num);
+          if (GET_NUYEN(ch) < cost) {
+            send_to_char(ch, "The system beeps loudly and the screen reads 'UNLOCK COST IS %d NUYEN'.\r\n", cost);
+            return TRUE;
           }
+
+          lose_nuyen(ch, cost, NUYEN_OUTFLOW_GENERIC_SPEC_PROC);
+          REMOVE_BIT(GET_OBJ_VAL(locker, 1), CONT_CLOSED);
+          REMOVE_BIT(GET_OBJ_VAL(locker, 1), CONT_LOCKED);
+          GET_OBJ_VAL(locker, 9) = GET_OBJ_VAL(locker, 8) = 0;
+          send_to_char(ch, "%d.locker pops open.\r\n", num);
           return TRUE;
         }
-      send_to_char("The system beeps loudly.\r\n", ch);
+      }
+
+      // No valid locker found.
+      send_to_char("The system beeps loudly. Apparently that code wasn't recognized.\r\n", ch);
+
+      // Log so we can catch people who try to brute-force this.
+      char logbuf[500];
+      snprintf(logbuf, sizeof(logbuf), "%s failed locker unlock attempt with code %d.", GET_CHAR_NAME(ch), free);
+      mudlog(logbuf, ch, LOG_CHEATLOG, TRUE);
     }
-  } else if (CMD_IS("lock")) {
+    return TRUE;
+  }
+
+  if (CMD_IS("lock")) {
     num = atoi(argument);
-    FOR_ITEMS_AROUND_CH(ch, locker)
+    FOR_ITEMS_AROUND_CH(ch, locker) {
       if (GET_OBJ_VNUM(locker) == OBJ_LOCKER && !--num && !IS_SET(GET_OBJ_VAL(locker, 1), CONT_CLOSED)) {
         snprintf(buf, sizeof(buf), "%d%d%d%d%d%d%d", number(1, 9), number(1, 9), number(1, 9), number(1, 9), number(1, 9), number(1, 9), number(1, 9));
         GET_OBJ_VAL(locker, 8) = time(0);
@@ -5016,7 +5038,8 @@ SPECIAL(locker)
         SET_BIT(GET_OBJ_VAL(locker, 1), CONT_LOCKED);
         return TRUE;
       }
-    send_to_char("The system beeps loudly.\r\n", ch);
+    }
+    send_to_char("The system beeps loudly-- that locker wasn't found.\r\n", ch);
   } else return FALSE;
   return TRUE;
 }
