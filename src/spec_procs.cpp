@@ -4940,14 +4940,16 @@ SPECIAL(bouncer_troll) {
   return FALSE;
 }
 
+#define OBJ_LOCKER 9825
 SPECIAL(locker)
 {
   if (!ch || !cmd)
     return FALSE;
   struct obj_data *locker = ch->in_room->contents, *next = NULL;
   int num = 0, free = 0;
-  for (; locker; locker = locker->next_content)
-    if (GET_OBJ_VNUM(locker) == 9826) {
+
+  for (; locker; locker = locker->next_content) {
+    if (GET_OBJ_VNUM(locker) == OBJ_LOCKER) {
       num++;
       if (!GET_OBJ_VAL(locker, 9))
         free++;
@@ -4959,6 +4961,8 @@ SPECIAL(locker)
         }
       }
     }
+  }
+
   if (!num)
     return FALSE;
   if (CMD_IS("list")) {
@@ -4969,7 +4973,7 @@ SPECIAL(locker)
     else {
       num = 0;
       FOR_ITEMS_AROUND_CH(ch, locker)
-        if (GET_OBJ_VNUM(locker) == 9826) {
+        if (GET_OBJ_VNUM(locker) == OBJ_LOCKER) {
           num++;
           if (!GET_OBJ_VAL(locker, 9))
             break;
@@ -4985,7 +4989,7 @@ SPECIAL(locker)
     else {
       num = 0;
       FOR_ITEMS_AROUND_CH(ch, locker)
-        if (GET_OBJ_VNUM(locker) == 9826 && ++num && GET_OBJ_VAL(locker, 9) == free) {
+        if (GET_OBJ_VNUM(locker) == OBJ_LOCKER && ++num && GET_OBJ_VAL(locker, 9) == free) {
           int cost = (int)((((time(0) - GET_OBJ_VAL(locker, 8)) / SECS_PER_REAL_DAY) + 1) * 50);
           if (GET_NUYEN(ch) < cost)
             send_to_char(ch, "The system beeps loudly and the screen reads 'PLEASE INSERT %d NUYEN'.\r\n", cost);
@@ -5003,7 +5007,7 @@ SPECIAL(locker)
   } else if (CMD_IS("lock")) {
     num = atoi(argument);
     FOR_ITEMS_AROUND_CH(ch, locker)
-      if (GET_OBJ_VNUM(locker) == 9826 && !--num && !IS_SET(GET_OBJ_VAL(locker, 1), CONT_CLOSED)) {
+      if (GET_OBJ_VNUM(locker) == OBJ_LOCKER && !--num && !IS_SET(GET_OBJ_VAL(locker, 1), CONT_CLOSED)) {
         snprintf(buf, sizeof(buf), "%d%d%d%d%d%d%d", number(1, 9), number(1, 9), number(1, 9), number(1, 9), number(1, 9), number(1, 9), number(1, 9));
         GET_OBJ_VAL(locker, 8) = time(0);
         GET_OBJ_VAL(locker, 9) = atoi(buf);
@@ -5016,6 +5020,7 @@ SPECIAL(locker)
   } else return FALSE;
   return TRUE;
 }
+#undef OBJ_LOCKER
 
 struct obj_data *find_neophyte_housing_card(struct obj_data *obj) {
   struct obj_data *temp, *result;
