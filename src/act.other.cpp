@@ -2211,10 +2211,7 @@ ACMD(do_astral)
     send_to_char("You have no sense of the astral plane.\r\n", ch);
     return;
   }
-  if (IS_WORKING(ch)) {
-    send_to_char(TOOBUSY, ch);
-    return;
-  }
+
   if (IS_NPC(ch))
     return;
 
@@ -2230,10 +2227,7 @@ ACMD(do_astral)
     send_to_char("But you are already projecting!\r\n", ch);
     return;
   }
-  if (AFF_FLAGGED(ch, AFF_PILOT)) {
-    send_to_char("While driving? That would be a nice trick!\r\n", ch);
-    return;
-  }
+  
   if (subcmd == SCMD_PERCEIVE) {
     if (PLR_FLAGGED(ch, PLR_PERCEIVE)) {
       PLR_FLAGS(ch).RemoveBit(PLR_PERCEIVE);
@@ -2242,6 +2236,12 @@ ACMD(do_astral)
       PLR_FLAGS(ch).SetBit(PLR_PERCEIVE);
       send_to_char("Your physical body seems distant, as the astral plane slides into view.\r\n", ch);
     }
+    return;
+  }
+
+  // Having the check here means it applies only to projection, not to perceiving.
+  if (IS_WORKING(ch)) {
+    send_to_char(TOOBUSY, ch);
     return;
   }
 
