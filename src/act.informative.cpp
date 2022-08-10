@@ -3364,9 +3364,13 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
         break;
       }
       if (GET_OBJ_VNUM(j) == OBJ_ANTI_DRUG_CHEMS) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt's a bottle of anti-craving chemicals with ^c%d^n dose%s left. If you have it on you during guided withdrawal, you won't risk a fugue state. See ##^WHELP ADDICTION^n for more.",
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt's a bottle of anti-craving chemicals with ^c%d^n dose%s left. If you have it on you during ^Wguided^n withdrawal, you won't risk a fugue state. See ##^WHELP ADDICTION^n for more.",
                  GET_CHEMS_QTY(j),
                  GET_CHEMS_QTY(j) == 1 ? "" : "s");
+        break;
+      }
+      if (j->obj_flags.bitvector.IsSet(AFF_WEARING_ACTIVE_DOCWAGON_RECEIVER)) {
+        strlcat(buf, "\r\nIt allows you to tune in to the DocWagon emergency alert network and receive notifications of downed characters.", sizeof(buf));
         break;
       }
       // fallthrough
