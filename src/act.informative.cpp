@@ -3370,7 +3370,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
         break;
       }
       if (j->obj_flags.bitvector.IsSet(AFF_WEARING_ACTIVE_DOCWAGON_RECEIVER)) {
-        strlcat(buf, "\r\nIt allows you to tune in to the DocWagon emergency alert network and receive notifications of downed characters.", sizeof(buf));
+        strlcat(buf, "\r\nIt allows you to tune in to the DocWagon emergency alert network and receive notifications of downed characters. See ##^WHELP PLAYERDOC^n for more.", sizeof(buf));
         break;
       }
       // fallthrough
