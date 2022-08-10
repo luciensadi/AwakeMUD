@@ -3932,6 +3932,8 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
 
   if (vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY) {
     strlcpy(blindfire_buf, "blindly ", sizeof(blindfire_buf));
+  } else {
+    strlcpy(blindfire_buf, "", sizeof(blindfire_buf));
   }
 
   ch_room = get_ch_in_room(ch);

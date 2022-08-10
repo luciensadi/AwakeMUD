@@ -97,7 +97,7 @@ int can_move(struct char_data *ch, int dir, int extra)
 
       for (struct veh_data *veh = EXIT(ch, dir)->to_room->vehicles; veh; veh = veh->next_veh) {
         if (veh->owner == GET_IDNUM(ch)) {
-          send_to_char("You hotfoot towards %s through the speeding traffic, playing the world's scariest game of Frogger.\r\n", ch);
+          send_to_char(ch, "You hotfoot towards %s through the speeding traffic, playing the world's scariest game of Frogger.\r\n", GET_VEH_NAME(veh));
           has_vehicle_to_go_to = TRUE;
           break;
         }
