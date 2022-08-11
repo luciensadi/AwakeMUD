@@ -1899,27 +1899,51 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
     return 0;
   }
 
-  if (GET_OBJ_VNUM(obj) == OBJ_NEOPHYTE_SUBSIDY_CARD && GET_OBJ_VAL(obj, 1) > 0) {
-    // TODO: Make it so you can use partial amounts for rent payments- this will suck with 1 nuyen left.
-    send_to_char(ch, "You can't %s a subsidy card that still has nuyen on it!\r\n", sname);
-    return 0;
-  }
-
-  else if (GET_OBJ_TYPE(obj) == ITEM_CUSTOM_DECK || GET_OBJ_TYPE(obj) == ITEM_CYBERDECK) {
-    if (mode == SCMD_DONATE) {
-      send_to_char("You can't donate cyberdecks!\r\n", ch);
+  if (mode == SCMD_DONATE || mode == SCMD_JUNK) {
+    if (GET_OBJ_VNUM(obj) == OBJ_NEOPHYTE_SUBSIDY_CARD && GET_OBJ_VAL(obj, 1) > 0) {
+      // TODO: Make it so you can use partial amounts for rent payments- this will suck with 1 nuyen left.
+      send_to_char(ch, "You can't %s a subsidy card that still has nuyen on it!\r\n", sname);
       return 0;
     }
 
-    if (obj->contains && mode == SCMD_JUNK) {
-      send_to_char("You can't junk a cyberdeck that has components installed!\r\n", ch);
-      return 0;
+    switch (GET_OBJ_TYPE(obj)) {
+      case ITEM_CUSTOM_DECK:
+      case ITEM_CYBERDECK:
+        if (mode == SCMD_DONATE) {
+          send_to_char("You can't donate cyberdecks!\r\n", ch);
+          return 0;
+        }
+        if (obj->contains && mode == SCMD_JUNK) {
+          send_to_char("You can't junk a cyberdeck that has components installed!\r\n", ch);
+          return 0;
+        }
+        break;
+      case ITEM_CONTAINER:
+      case ITEM_KEYRING:
+      case ITEM_HOLSTER:
+      case ITEM_WORN:
+      case ITEM_QUIVER:
+        if (obj->contains) {
+          send_to_char(ch, "You'll have to empty %s before you can %s it.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)), sname);
+          return 0;
+        }
+        break;
+      case ITEM_MONEY:
+        if (GET_ITEM_MONEY_VALUE(obj) >= 200) {
+          send_to_char(ch, "There's too much nuyen on %s to %s it.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)), sname);
+          return 0;
+        }
+        break;
+      case ITEM_VEHCONTAINER:
+        send_to_char(ch, "You struggle to find a receptacle big enough to fit %s.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
+        return 0;
+      case ITEM_SHOPCONTAINER:
+        if (mode == SCMD_DONATE) {
+          send_to_char(ch, "That's very kind of you, but you can't donate %s.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
+          return 0;
+        }
+        break;
     }
-  }
-
-  else if ((mode == SCMD_DONATE || mode == SCMD_JUNK) && GET_OBJ_TYPE(obj) == ITEM_CONTAINER && obj->contains) {
-    send_to_char(ch, "You'll have to empty %s before you can %s it.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)), sname);
-    return 0;
   }
 
   if (ch->in_veh)
