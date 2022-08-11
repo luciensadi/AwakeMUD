@@ -1684,8 +1684,9 @@ ACMD(do_phone)
     if (AFF_FLAGGED(ch, AFF_VOICE_MODULATOR))
       strlcpy(voice, "A masked voice", VOICE_BUF_SIZE);
 
-    snprintf(buf3, MAX_STRING_LENGTH, "^YYou say into your phone, \"%s%s^Y\"\r\n",
+    snprintf(buf3, MAX_STRING_LENGTH, "^YYou say into your phone in %s, \"%s%s^Y\"\r\n",
              capitalize(argument),
+             skills[language].name,
              ispunct(get_final_character_from_string(argument)) ? "" : ".");
 
     send_to_char(buf3, ch);

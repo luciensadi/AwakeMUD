@@ -1351,7 +1351,7 @@ ACMD(do_matrix_look)
       if (GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(obj)) {
         send_to_icon(PERSONA, "^yA file named %s floats here (Downloading - %d%%).^n\r\n",
                      GET_OBJ_NAME(obj),
-                     (int) (GET_DECK_ACCESSORY_FILE_REMAINING(obj) - GET_DECK_ACCESSORY_FILE_SIZE(obj)) / GET_DECK_ACCESSORY_FILE_SIZE(obj)
+                     (int) (GET_DECK_ACCESSORY_FILE_REMAINING(obj) - GET_DECK_ACCESSORY_FILE_SIZE(obj)) / MAX(1, GET_DECK_ACCESSORY_FILE_SIZE(obj))
                    );
       } else {
         send_to_icon(PERSONA, "^yA file named %s floats here.^n\r\n", GET_OBJ_NAME(obj));
