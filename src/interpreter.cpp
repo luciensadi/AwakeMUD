@@ -462,7 +462,7 @@ struct command_info cmd_info[] =
     { "northwest"  , POS_SITTING, do_move     , 0, SCMD_NORTHWEST, FALSE },
 
     /* now, the main list -- note that spec-proc commands and socials come after this list. */
-    { "abilities"  , POS_SLEEPING, do_skills   , 0, SCMD_ABILITIES, TRUE },
+    { "abilities"  , POS_MORTALLYW, do_skills   , 0, SCMD_ABILITIES, TRUE },
     { "abilityset" , POS_SLEEPING, do_abilityset , LVL_DEVELOPER, 0, FALSE },
     { "activate"   , POS_LYING   , do_activate , 0, 0, FALSE },
     { "aecho"      , POS_SLEEPING, do_new_echo , LVL_ARCHITECT, SCMD_AECHO, FALSE },
@@ -585,7 +585,7 @@ struct command_info cmd_info[] =
     { ":"          , POS_LYING   , do_new_echo , 0, SCMD_EMOTE, FALSE },
     { "enter"      , POS_SITTING , do_enter    , 0, 0, FALSE },
     { "endrun"     , POS_RESTING , do_endrun   , 0, 0, FALSE },
-    { "equipment"  , POS_SLEEPING, do_equipment, 0, 0, TRUE },
+    { "equipment"  , POS_MORTALLYW, do_equipment, 0, 0, TRUE },
     { "exits"      , POS_LYING   , do_exits    , 0, SCMD_LONGEXITS, TRUE },
     { "examine"    , POS_RESTING , do_examine  , 0, SCMD_EXAMINE, TRUE },
     { "exclaim"    , POS_LYING   , do_exclaim  , 0, 0, FALSE },
