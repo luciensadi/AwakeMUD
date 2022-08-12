@@ -743,31 +743,45 @@ void process_regeneration(int half_hour)
       if (GET_POS(ch) == POS_STUNNED)
         update_pos(ch);
       if (GET_PHYSICAL(ch) >= GET_MAX_PHYSICAL(ch)) {
-        if (AFF_FLAGS(ch).IsSet(AFF_HEALED))
+        if (AFF_FLAGS(ch).IsSet(AFF_HEALED)) {
           AFF_FLAGS(ch).RemoveBit(AFF_HEALED);
-        if (AFF_FLAGS(ch).IsSet(AFF_RESISTPAIN))
+          send_to_char("You can now be affected by the heal spell again.\r\n", ch);
+        }
+        if (AFF_FLAGS(ch).IsSet(AFF_RESISTPAIN)) {
           AFF_FLAGS(ch).RemoveBit(AFF_RESISTPAIN);
+          send_to_char("Your magical pain resistance wears off.\r\n", ch);
+        }
       }
       if (GET_PHYSICAL(ch) > 0) {
         if (AFF_FLAGS(ch).IsSet(AFF_STABILIZE))
           AFF_FLAGS(ch).RemoveBit(AFF_STABILIZE);
       }
     }
-    if (GET_POS(ch) == POS_MORTALLYW && !AFF_FLAGS(ch).IsSet(AFF_STABILIZE) && half_hour) {
-      bool dam = TRUE;
-      for (struct obj_data *obj = ch->bioware; obj; obj = obj->next_content)
-        if (GET_BIOWARE_TYPE(obj) == BIO_METABOLICARRESTER) {
-          if (++GET_BIOWARE_IS_ACTIVATED(obj) == 5) {
-            GET_BIOWARE_IS_ACTIVATED(obj) = 0;
-            dam = TRUE;
-          } else
-            dam = FALSE;
-        }
+    if (GET_POS(ch) == POS_MORTALLYW && half_hour) {
+      bool dam = !AFF_FLAGS(ch).IsSet(AFF_STABILIZE);
+
       if (dam) {
+        // A ticking metabolic arrester prevents damage.
+        for (struct obj_data *obj = ch->bioware; obj; obj = obj->next_content) {
+          if (GET_BIOWARE_TYPE(obj) == BIO_METABOLICARRESTER) {
+            if (++GET_BIOWARE_IS_ACTIVATED(obj) == 5) {
+              // If it's hit 5 ticks, then it resets to 0 and doesn't prevent damage this tick.
+              GET_BIOWARE_IS_ACTIVATED(obj) = 0;
+            } else {
+              // Otherwise, prevent.
+              dam = FALSE;
+            }
+            break;
+          }
+        }
+      }
+
+      if (dam) {
+        // Deal a box of physical damage.
         if (damage(ch, ch, 1, TYPE_SUFFERING, PHYSICAL))
           continue;
       } else {
-        // Attempt to docwagon rescue without dealing damage.
+        // Otherwise, just try to docwagon you out.
         if (docwagon(ch))
           continue;
       }
