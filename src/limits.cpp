@@ -411,9 +411,9 @@ void remove_patch(struct char_data *ch)
   if (!patch)
     return;
 
-  switch (GET_OBJ_VAL(patch, 0))
+  switch (GET_PATCH_TYPE(patch))
   {
-    case 1:
+    case PATCH_STIM:
       act("The effects of $p wear off, leaving you exhausted!", FALSE, ch, patch, 0, TO_CHAR);
       GET_MENTAL(ch) = MAX(0, GET_MENTAL(ch) - (GET_OBJ_VAL(patch, 1) - 1) * 100);
       if ((GET_TRADITION(ch) == TRAD_HERMETIC || GET_TRADITION(ch) == TRAD_SHAMANIC) &&
@@ -423,7 +423,7 @@ void remove_patch(struct char_data *ch)
       }
       update_pos(ch);
       break;
-    case 2:
+    case PATCH_TRANQ:
       stun = resisted_test(GET_OBJ_VAL(patch, 1), GET_REAL_BOD(ch) - (GET_BIOOVER(ch) > 0 ? GET_BIOOVER(ch) / 2 : 0),
                            GET_REAL_BOD(ch) - (GET_BIOOVER(ch) > 0 ? GET_BIOOVER(ch) / 2 : 0), GET_OBJ_VAL(patch, 1));
       if (stun > 0) {
@@ -433,7 +433,7 @@ void remove_patch(struct char_data *ch)
       } else
         act("You resist the feeble effects of $p.", FALSE, ch, patch, 0, TO_CHAR);
       break;
-    case 3:
+    case PATCH_TRAUMA:
       if (success_test(GET_REAL_BOD(ch) - (GET_BIOOVER(ch) > 0 ? GET_BIOOVER(ch) / 2 : 0), GET_OBJ_VAL(patch, 1)) > 0)
         AFF_FLAGS(ch).RemoveBit(AFF_STABILIZE);
       break;
@@ -1343,7 +1343,7 @@ void misc_update(void)
           } else {
             time_to_take_effect *= 5;
           }
-          
+
           if (++sus->time >= time_to_take_effect) {
             if (sus->spell == SPELL_IGNITE) {
               send_to_char("Your body erupts in flames!\r\n", sus->other);

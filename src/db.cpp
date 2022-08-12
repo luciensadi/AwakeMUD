@@ -2002,6 +2002,22 @@ void parse_object(File &fl, long nr)
           GET_OBJ_WEIGHT(obj) = 0.01 * GET_OBJ_DRUG_DOSES(obj);
         }
         break;
+      case ITEM_PATCH:
+        switch (GET_PATCH_TYPE(obj)) {
+          case PATCH_ANTIDOTE:
+            // Antidote patches aren't implemented.
+            obj->obj_flags.extra_flags.SetBit(ITEM_EXTRA_NERPS);
+            break;
+          case PATCH_TRAUMA:
+            // Trauma patches are expected to apply the Stabilize flag.
+            obj->obj_flags.bitvector.SetBit(AFF_STABILIZE);
+            // fall through
+          default:
+            // All other patches are implemented, so make sure they're not flagged.
+            obj->obj_flags.extra_flags.RemoveBit(ITEM_EXTRA_NERPS);
+            break;
+        }
+        break;
       case ITEM_CYBERWARE:
         price_cyber(obj);
         obj->obj_flags.wear_flags.SetBit(ITEM_WEAR_TAKE);

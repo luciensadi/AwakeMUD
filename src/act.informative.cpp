@@ -2897,7 +2897,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
           strlcat(buf, ", which causes mental damage.", sizeof(buf));
           break;
         case PATCH_TRAUMA:
-          strlcat(buf, ", which can stabilize a mortally-wounded patient. (not yet implemented)", sizeof(buf));
+          strlcat(buf, ", which can stabilize a mortally-wounded patient.", sizeof(buf));
           break;
         case PATCH_ANTIDOTE:
           strlcat(buf, ", which lessens the effect of drugs and toxins. (not yet implemented)", sizeof(buf));

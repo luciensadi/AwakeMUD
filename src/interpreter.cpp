@@ -1800,7 +1800,7 @@ ACMD(do_alias)
       /* Should cover every possbile case of 'kill', 'hit', and 'murder' */
       else if ( (str_str(repl, "kill") || str_str(repl, "hit") || str_str(repl, "murder")) && strlen(arg) < 4 ) {
         send_to_char(
-          "If you alias contains the 'kill', 'hit', or 'murder' commands,"
+          "If your alias contains the 'kill', 'hit', or 'murder' commands,"
           " it must be accompanied by at least a 4 letter alias.\n\r",ch);
         return;
       } else if ( str_str(repl, "quit") ) {
