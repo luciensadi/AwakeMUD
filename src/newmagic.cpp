@@ -1453,7 +1453,6 @@ void cast_combat_spell(struct char_data *ch, int spell, int force, char *arg)
       vict = ch;
       ch = temp;
     }
-    success -= resist_spell(vict, spell, force, 0);
     snprintf(rbuf, sizeof(rbuf), "reflected: %s", reflected ? "yes" : "no");
     act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
     success -= resist_spell(vict, spell, force, 0);
