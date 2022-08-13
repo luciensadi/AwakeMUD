@@ -590,90 +590,90 @@ ACMD(do_patch)
     return;
   }
   switch (GET_PATCH_TYPE(patch)) {
-  case PATCH_ANTIDOTE:                          // antidote
-    if (vict == ch)
-      act("You slap $p on your shoulder.", FALSE, ch, patch, 0, TO_CHAR);
-    else {
-      act("You slap $p on $N's shoulder.", FALSE, ch, patch, vict, TO_CHAR);
-      act("$n slaps $p on your shoulder.", FALSE, ch, patch, vict, TO_VICT);
-      act("$n slaps $p on $N's shoulder.", FALSE, ch, patch, vict, TO_NOTVICT);
-    }
-    obj_from_char(patch);
-    GET_EQ(vict, WEAR_PATCH) = patch;
-    patch->worn_by = vict;
-    patch->worn_on = WEAR_PATCH;
-    break;
-  case PATCH_STIM:                          // stim
-    if (vict != ch) {
-      send_to_char("You can only use stim patches on yourself.\r\n", ch);
-      return;
-    }
-    if (GET_MAG(vict) > 0) {
-      send_to_char("Magically-active beings can lose magic from stim patches, so stim patches are only for mundane characters.\r\n", ch);
-      return;
-    }
-
-    act("You slap $p on your shoulder and feel more aware.", FALSE, ch, patch, 0, TO_CHAR);
-    act("$n slaps $p on $s shoulder and appears more aware.", TRUE, ch, patch, 0, TO_ROOM);
-    GET_PATCH_STIMPATCH_ORIGINAL_MENTAL(patch) = GET_MENTAL(ch);
-    GET_MENTAL(ch) = MIN(GET_MAX_MENTAL(ch), GET_MENTAL(ch) + (GET_OBJ_VAL(patch, 1) * 100));
-    obj_from_char(patch);
-    GET_EQ(vict, WEAR_PATCH) = patch;
-    patch->worn_by = vict;
-    patch->worn_on = WEAR_PATCH;
-    break;
-  case PATCH_TRANQ:                          // tranq
-    if (GET_POS(vict) == POS_FIGHTING) {
-      send_to_char("You can't put a tranq patch on a fighting person!\r\n", ch);
-      return;
-    }
-    if (vict == ch) {
-      send_to_char("Now why would you do that?\r\n", ch);
-      return;
-    }
-    if (GET_POS(vict) > POS_SLEEPING) {
-      if (resisted_test(GET_QUI(ch), GET_QUI(vict) - GET_POS(vict) + POS_STANDING, GET_QUI(vict),
-                        GET_QUI(ch) - GET_POS(ch) + POS_STANDING) <= 0) {
-        act("$N nimbly dodges your attempt to put $p on $M.", FALSE, ch, patch, vict, TO_CHAR);
-        act("You nimbly dodge $n's attempt to put $p on you.", FALSE, ch, patch, vict, TO_VICT);
-        act("$N nimbly dodges $n's attempt to put $p on $M.", FALSE, ch, patch, vict, TO_NOTVICT);
-        if (IS_NPC(vict) || (IS_NPC(ch) && !IS_NPC(vict))) {
-          set_fighting(vict, ch);
-          set_fighting(ch, vict);
-        }
+    case PATCH_ANTIDOTE:                          // antidote
+      if (vict == ch)
+        act("You slap $p on your shoulder.", FALSE, ch, patch, 0, TO_CHAR);
+      else {
+        act("You slap $p on $N's shoulder.", FALSE, ch, patch, vict, TO_CHAR);
+        act("$n slaps $p on your shoulder.", FALSE, ch, patch, vict, TO_VICT);
+        act("$n slaps $p on $N's shoulder.", FALSE, ch, patch, vict, TO_NOTVICT);
+      }
+      obj_from_char(patch);
+      GET_EQ(vict, WEAR_PATCH) = patch;
+      patch->worn_by = vict;
+      patch->worn_on = WEAR_PATCH;
+      break;
+    case PATCH_STIM:                          // stim
+      if (vict != ch) {
+        send_to_char("You can only use stim patches on yourself.\r\n", ch);
         return;
-      } else {
-        act("You slap $p on $N before $E has a chance to move!", FALSE, ch, patch, vict, TO_CHAR);
-        act("$n slaps $p on you before you can get out of the way!", FALSE, ch, patch, vict, TO_VICT);
-        act("$n slaps $p on $N before $E has a chance to move!", FALSE, ch, patch, vict, TO_NOTVICT);
-        if (IS_NPC(vict) || (IS_NPC(ch) && !IS_NPC(vict))) {
-          set_fighting(vict, ch);
-          set_fighting(ch, vict);
+      }
+      if (GET_MAG(vict) > 0) {
+        send_to_char("Magically-active beings can lose magic from stim patches, so stim patches are only for mundane characters.\r\n", ch);
+        return;
+      }
+
+      act("You slap $p on your shoulder and feel more aware.", FALSE, ch, patch, 0, TO_CHAR);
+      act("$n slaps $p on $s shoulder and appears more aware.", TRUE, ch, patch, 0, TO_ROOM);
+      GET_PATCH_STIMPATCH_ORIGINAL_MENTAL(patch) = GET_MENTAL(ch);
+      GET_MENTAL(ch) = MIN(GET_MAX_MENTAL(ch), GET_MENTAL(ch) + (GET_OBJ_VAL(patch, 1) * 100));
+      obj_from_char(patch);
+      GET_EQ(vict, WEAR_PATCH) = patch;
+      patch->worn_by = vict;
+      patch->worn_on = WEAR_PATCH;
+      break;
+    case PATCH_TRANQ:                          // tranq
+      if (GET_POS(vict) == POS_FIGHTING) {
+        send_to_char("You can't put a tranq patch on someone in combat!\r\n", ch);
+        return;
+      }
+      if (vict == ch) {
+        send_to_char("Tranq-patching yourself isn't the best idea.\r\n", ch);
+        return;
+      }
+      if (GET_POS(vict) > POS_SLEEPING) {
+        if (resisted_test(GET_QUI(ch), GET_QUI(vict) - GET_POS(vict) + POS_STANDING, GET_QUI(vict),
+                          GET_QUI(ch) - GET_POS(ch) + POS_STANDING) <= 0) {
+          act("$N nimbly dodges your attempt to put $p on $M.", FALSE, ch, patch, vict, TO_CHAR);
+          act("You nimbly dodge $n's attempt to put $p on you.", FALSE, ch, patch, vict, TO_VICT);
+          act("$N nimbly dodges $n's attempt to put $p on $M.", FALSE, ch, patch, vict, TO_NOTVICT);
+          if (IS_NPC(vict) || (IS_NPC(ch) && !IS_NPC(vict))) {
+            set_fighting(vict, ch);
+            set_fighting(ch, vict);
+          }
+          return;
+        } else {
+          act("You slap $p on $N before $E has a chance to move!", FALSE, ch, patch, vict, TO_CHAR);
+          act("$n slaps $p on you before you can get out of the way!", FALSE, ch, patch, vict, TO_VICT);
+          act("$n slaps $p on $N before $E has a chance to move!", FALSE, ch, patch, vict, TO_NOTVICT);
+          if (IS_NPC(vict) || (IS_NPC(ch) && !IS_NPC(vict))) {
+            set_fighting(vict, ch);
+            set_fighting(ch, vict);
+          }
         }
       }
-    }
-    obj_from_char(patch);
-    GET_EQ(vict, WEAR_PATCH) = patch;
-    patch->worn_by = vict;
-    patch->worn_on = WEAR_PATCH;
-    break;
-  case PATCH_TRAUMA:                          // trauma
-    if (GET_POS(vict) >= POS_STUNNED) {
-      send_to_char("Now where's the sense in that?\r\n", ch);
-      return;
-    }
-    act("You slap $p over $N's heart.", FALSE, ch, patch, vict, TO_CHAR);
-    act("$n slaps $p over $N's heart.", FALSE, ch, patch, vict, TO_NOTVICT);
-    obj_from_char(patch);
-    GET_EQ(vict, WEAR_PATCH) = patch;
-    patch->worn_by = vict;
-    patch->worn_on = WEAR_PATCH;
-    break;
-  default:
-    act("$p seems to be defective.", FALSE, ch, patch, 0, TO_CHAR);
-    snprintf(buf, sizeof(buf), "Illegal patch type - object #%ld", GET_OBJ_VNUM(patch));
-    mudlog(buf, ch, LOG_SYSLOG, FALSE);
-    break;
+      obj_from_char(patch);
+      GET_EQ(vict, WEAR_PATCH) = patch;
+      patch->worn_by = vict;
+      patch->worn_on = WEAR_PATCH;
+      break;
+    case PATCH_TRAUMA:                          // trauma
+      if (GET_POS(vict) >= POS_STUNNED) {
+        send_to_char("Now where's the sense in that?\r\n", ch);
+        return;
+      }
+      act("You slap $p over $N's heart.", FALSE, ch, patch, vict, TO_CHAR);
+      act("$n slaps $p over $N's heart.", FALSE, ch, patch, vict, TO_NOTVICT);
+      obj_from_char(patch);
+      GET_EQ(vict, WEAR_PATCH) = patch;
+      patch->worn_by = vict;
+      patch->worn_on = WEAR_PATCH;
+      break;
+    default:
+      act("$p seems to be defective.", FALSE, ch, patch, 0, TO_CHAR);
+      snprintf(buf, sizeof(buf), "Illegal patch type - object #%ld", GET_OBJ_VNUM(patch));
+      mudlog(buf, ch, LOG_SYSLOG, FALSE);
+      break;
   }
 }
 
@@ -2227,7 +2227,7 @@ ACMD(do_astral)
     send_to_char("But you are already projecting!\r\n", ch);
     return;
   }
-  
+
   if (subcmd == SCMD_PERCEIVE) {
     if (PLR_FLAGGED(ch, PLR_PERCEIVE)) {
       PLR_FLAGS(ch).RemoveBit(PLR_PERCEIVE);

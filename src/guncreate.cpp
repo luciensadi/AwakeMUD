@@ -83,7 +83,7 @@ void aedit_parse(struct descriptor_data *d, const char *arg)
       aedit_disp_weapon_menu(d);
       break;
     case '2':
-      if (GET_AMMOBOX_WEAPON(OBJ) == TYPE_TASER) {
+      if (GET_AMMOBOX_WEAPON(OBJ) == WEAP_TASER) {
         send_to_char("Only normal taser darts are available.\r\n", CH);
         GET_AMMOBOX_TYPE(OBJ) = AMMO_NORMAL;
         aedit_disp_menu(d);
