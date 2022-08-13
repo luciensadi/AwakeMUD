@@ -427,6 +427,14 @@ void load_bullet_pants(struct char_data *ch) {
     GET_BULLETPANTS_AMMO_AMOUNT(ch, weapon, AMMO_GEL) = atoi(row[7]);
     GET_BULLETPANTS_AMMO_AMOUNT(ch, weapon, AMMO_HARMLESS) = atoi(row[8]);
     GET_BULLETPANTS_AMMO_AMOUNT(ch, weapon, AMMO_AV) = atoi(row[9]);
+
+    // All taser ammo must be normal.
+    if (weapon == WEAP_TASER) {
+      for (int atype = AMMO_APDS; atype < NUM_AMMOTYPES; atype++) {
+        GET_BULLETPANTS_AMMO_AMOUNT(ch, weapon, AMMO_NORMAL) += GET_BULLETPANTS_AMMO_AMOUNT(ch, weapon, atype);
+        GET_BULLETPANTS_AMMO_AMOUNT(ch, weapon, atype) = 0;
+      }
+    }
   }
 
   mysql_free_result(res);

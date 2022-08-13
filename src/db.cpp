@@ -2079,6 +2079,11 @@ void parse_object(File &fl, long nr)
         if (GET_OBJ_VNUM(obj) == OBJ_BLANK_AMMOBOX)
           break;
 
+        // Force all taser ammo to be normal ammo.
+        if (GET_AMMOBOX_WEAPON(obj) == WEAP_TASER) {
+          GET_AMMOBOX_TYPE(obj) = AMMO_NORMAL;
+        }
+
         if (GET_AMMOBOX_WEAPON(obj) == WEAP_CANNON) {
           // Assault cannons have special ammo and special rules that aren't reflected in our normal table.
 
