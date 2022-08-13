@@ -27,7 +27,6 @@ extern void dominator_mode_switch(struct char_data *ch, struct obj_data *obj, in
 extern int calculate_vision_penalty(struct char_data *ch, struct char_data *victim);
 extern int find_sight(struct char_data *ch);
 extern int find_weapon_range(struct char_data *ch, struct obj_data *weapon);
-extern bool has_ammo(struct char_data *ch, struct obj_data *wielded);
 extern bool has_ammo_no_deduct(struct char_data *ch, struct obj_data *wielded);
 extern void combat_message(struct char_data *ch, struct char_data *victim, struct obj_data *weapon, int damage, int burst, int vision_penalty_for_messaging);
 extern int check_smartlink(struct char_data *ch, struct obj_data *weapon);
@@ -161,8 +160,8 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     return FALSE;
   }
 
-  // Precondition: If you're out of ammo, you don't get to fight. Note the use of the deducting has_ammo here.
-  if (att->weapon && !has_ammo(att->ch, att->weapon))
+  // Precondition: If you're out of ammo, you don't get to fight.
+  if (att->weapon && !has_ammo_no_deduct(att->ch, att->weapon))
     return FALSE;
 
   // Remove closing flags if both are melee.
@@ -212,38 +211,48 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     }
 
     // Setup: Limit the burst of the weapon to the available ammo, and decrement ammo appropriately.
-    // Emplaced mobs act as if they have unlimited ammo (technically draining 1 per shot) and no recoil.
-    if (att->ranged->burst_count && !MOB_FLAGGED(att->ch, MOB_EMPLACED)) {
-      if (weap_ammo || att->ranged->magazine) {
-        // When we called has_ammo() earlier, we decremented their ammo by one. Give it back to true up the equation.
-        int ammo_available = weap_ammo ? ++GET_AMMOBOX_QUANTITY(weap_ammo) : ++GET_MAGAZINE_AMMO_COUNT(att->ranged->magazine);
+    // Emplaced mobs have unlimited ammo and no recoil.
+    if (!MOB_FLAGGED(att->ch, MOB_EMPLACED)) {
+      if (att->ranged->burst_count) {
+        if (weap_ammo || att->ranged->magazine) {
+          int ammo_available = weap_ammo ? GET_AMMOBOX_QUANTITY(weap_ammo) : GET_MAGAZINE_AMMO_COUNT(att->ranged->magazine);
 
-        // Cap their burst to their magazine's ammo.
-        att->ranged->burst_count = MIN(att->ranged->burst_count, ammo_available);
+          // Cap their burst to their magazine's ammo.
+          att->ranged->burst_count = MIN(att->ranged->burst_count, ammo_available);
 
-        // Subtract the full ammo count.
-        if (weap_ammo) {
-          update_ammobox_ammo_quantity(weap_ammo, -(att->ranged->burst_count));
-        } else {
-          GET_MAGAZINE_AMMO_COUNT(att->ranged->magazine) -= (att->ranged->burst_count);
+          // Subtract the full ammo count.
+          if (weap_ammo) {
+            update_ammobox_ammo_quantity(weap_ammo, -(att->ranged->burst_count));
+          } else {
+            GET_MAGAZINE_AMMO_COUNT(att->ranged->magazine) -= (att->ranged->burst_count);
+          }
+        }
+
+        // SR3 p151: Mounted weapons get halved recoil.
+        int recoil = att->ranged->burst_count;
+        if (att->ranged->using_mounted_gun)
+          recoil /= 2;
+        att->ranged->modifiers[COMBAT_MOD_RECOIL] += MAX(0, recoil - att->ranged->recoil_comp);
+
+        switch (att->ranged->skill) {
+          case SKILL_SHOTGUNS:
+          case SKILL_MACHINE_GUNS:
+          case SKILL_ASSAULT_CANNON:
+          case SKILL_ARTILLERY:
+            // Uncompensated recoil from high-recoil weapons is doubled.
+            att->ranged->modifiers[COMBAT_MOD_RECOIL] *= 2;
         }
       }
-
-      // SR3 p151: Mounted weapons get halved recoil.
-      int recoil = att->ranged->burst_count;
-      if (att->ranged->using_mounted_gun)
-        recoil /= 2;
-      att->ranged->modifiers[COMBAT_MOD_RECOIL] += MAX(0, recoil - att->ranged->recoil_comp);
-
-      switch (att->ranged->skill) {
-        case SKILL_SHOTGUNS:
-        case SKILL_MACHINE_GUNS:
-        case SKILL_ASSAULT_CANNON:
-        case SKILL_ARTILLERY:
-          // Uncompensated recoil from high-recoil weapons is doubled.
-          att->ranged->modifiers[COMBAT_MOD_RECOIL] *= 2;
+      // Just deduct one round from their total.
+      else {
+        if (weap_ammo) {
+          GET_AMMOBOX_QUANTITY(weap_ammo)--;
+        } else if (att->ranged->magazine) {
+          GET_MAGAZINE_AMMO_COUNT(att->ranged->magazine)--;
+        }
       }
     }
+
 
     // Setup: Modify recoil based on vehicular stats.
     if (att->veh) {
