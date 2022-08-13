@@ -5814,7 +5814,7 @@ SPECIAL(Janis_Amer_Girl) {
       act("$n walks back towards the table and rests on it casually, \"Yeah, Geek the little fraggin' slitch, it'll be the last time he ever tries to frag us over.\"", FALSE, mob, 0, 0, TO_ROOM);
       break;
     case 10:
-      do_say(mob, "Newcomer, your job, ^WLight^n the fragger up.", 0, 0);
+      do_say(mob, "Newcomer, your job, ##^WLight^n the fragger up.", 0, 0);
       break;
     }
     GET_SPARE1(mob)++;

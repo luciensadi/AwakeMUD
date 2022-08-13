@@ -1677,6 +1677,7 @@ ACMD(do_reload)
             } else {
               max = MIN(max, pocket_quantity);
               update_ammobox_ammo_quantity(ammo, max);
+              GET_AMMOBOX_TYPE(ammo) = ammotype;
               update_bulletpants_ammo_quantity(ch, weapontype, ammotype, -max);
               send_to_char(ch, "You insert %d %s into %s.\r\n",
                            max,
@@ -4397,8 +4398,8 @@ ACMD(do_spool)
     GET_CASTING(ch) += total;
 
   if (GET_CASTING(ch) > GET_SKILL(ch, SKILL_SORCERY)) {
-    GET_DRAIN(ch) += GET_CASTING(ch) - GET_SKILL(ch, SKILL_SORCERY);
-    GET_CASTING(ch) = GET_SKILL(ch, SKILL_SORCERY);
+    ch->real_abils.drain_pool = (GET_DRAIN(ch) += (GET_CASTING(ch) - GET_SKILL(ch, SKILL_SORCERY)));
+    ch->real_abils.casting_pool = GET_CASTING(ch) = GET_SKILL(ch, SKILL_SORCERY);
   }
 
   snprintf(buf, sizeof(buf), "Pools set as: Casting-%d Drain-%d Defense-%d", GET_CASTING(ch), GET_DRAIN(ch), GET_SDEFENSE(ch));
