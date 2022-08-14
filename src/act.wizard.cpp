@@ -106,6 +106,7 @@ extern void display_characters_ignore_entries(struct char_data *viewer, struct c
 ACMD_DECLARE(do_goto);
 
 SPECIAL(fixer);
+SPECIAL(shop_keeper);
 
 /* Copyover Code, ported to Awake by Harlequin *
  * (c) 1996-97 Erwin S. Andreasen <erwin@andreasen.org> */
@@ -6838,7 +6839,7 @@ int audit_zone_rooms_(struct char_data *ch, int zone_num, bool verbose) {
             if (outbound != inbound) {
               char extant_type[500];
               strlcpy(extant_type, render_door_type_string(room->dir_option[k]), sizeof(extant_type));
-              
+
               snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - %s exit has flags that don't match the return direction's flags (%s from here: %s, %s from %ld: %s).\r\n",
                       dirs[k],
                       dirs[k],
@@ -6897,14 +6898,6 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
       issues++;
     }
 
-    if (GET_BALLISTIC(mob) > 10 || GET_IMPACT(mob) > 10) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - has high armor ratings %db / %di^n.\r\n",
-               GET_BALLISTIC(mob),
-               GET_IMPACT(mob));
-      printed = TRUE;
-      issues++;
-    }
-
     // Flag mobs with no stats
     if (total_stats == 0) {
       strlcat(buf, "  - has not had its attributes set yet.\r\n", sizeof(buf));
@@ -6923,11 +6916,19 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
         issues++;
       }
 
-    // Flag mobs with high nuyen.
-    if (GET_NUYEN(mob) >= 200 || GET_BANK(mob) >= 200) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - high grinding rewards (%ld/%ld)^n.\r\n", GET_NUYEN(mob), GET_BANK(mob));
-      printed = TRUE;
-      issues++;
+    // Flag shopkeepers with no negotiation or low int
+    if (CHECK_FUNC_AND_SFUNC_FOR(mob, shop_keeper)) {
+      if (GET_SKILL(mob, SKILL_NEGOTIATION) == 0) {
+        strlcat(buf, "  - is a shopkeeper with no negotiation skill.\r\n", sizeof(buf));
+        printed = TRUE;
+        issues++;
+      }
+
+      if (GET_INT(mob) <= 4) {
+        strlcat(buf, "  - is a shopkeeper with low int.\r\n", sizeof(buf));
+        printed = TRUE;
+        issues++;
+      }
     }
 
     // Flag mobs with no weight or height.
@@ -7009,49 +7010,67 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
       issues++;
     }
 
-    if (mob->cyberware || mob->bioware) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - has cyberware / bioware.\r\n");
-      printed = TRUE;
-      issues++;
-    }
+    // Alert on combat/equipment/bio/cyber, but only if they're killable.
+    if (!MOB_FLAGGED(mob, MOB_NOKILL) && !npc_is_protected_by_spec(mob)) {
+      if (GET_BALLISTIC(mob) > 10 || GET_IMPACT(mob) > 10) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - has high armor ratings %db / %di^n.\r\n",
+                 GET_BALLISTIC(mob),
+                 GET_IMPACT(mob));
+        printed = TRUE;
+        issues++;
+      }
 
-    {
-      int total_value = 0;
-      int total_items = 0;
+      // Flag mobs with high nuyen.
+      if (GET_NUYEN(mob) >= 200 || GET_BANK(mob) >= 200) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - high grinding rewards (%ld/%ld)^n.\r\n", GET_NUYEN(mob), GET_BANK(mob));
+        printed = TRUE;
+        issues++;
+      }
 
-      for (int wearloc = 0; wearloc < NUM_WEARS; wearloc++) {
-        struct obj_data *worn = GET_EQ(mob, wearloc);
-        if (worn) {
-          total_value += GET_OBJ_COST(worn);
-          total_items++;
+      if (mob->cyberware || mob->bioware) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - has cyberware / bioware.\r\n");
+        printed = TRUE;
+        issues++;
+      }
 
-          vnum_t vnum = GET_OBJ_VNUM(worn);
+      {
+        int total_value = 0;
+        int total_items = 0;
 
-          if (!vnum_is_from_zone(vnum, zone_num) && !vnum_is_from_canon_zone(vnum)) {
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - is equipped with %sexternal item %ld.\r\n", // *immature giggle*
-                     vnum_from_non_connected_zone(vnum) ? "^ynon-connected^n " : "",
-                     vnum);
-          }
+        for (int wearloc = 0; wearloc < NUM_WEARS; wearloc++) {
+          struct obj_data *worn = GET_EQ(mob, wearloc);
+          if (worn) {
+            total_value += GET_OBJ_COST(worn);
+            total_items++;
 
-          if (wearloc == WEAR_WIELD) {
-            if (GET_OBJ_TYPE(worn) == ITEM_WEAPON) {
-              if (GET_SKILL(mob, GET_WEAPON_SKILL(worn)) <= 0 && GET_SKILL(mob, return_general(GET_WEAPON_SKILL(worn))) <= 0) {
-                snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - has no ^c%s^n or ^c%s^n skill, which is needed for wielded weapon.\r\n",
-                         skills[GET_WEAPON_SKILL(worn)].name, skills[return_general(GET_WEAPON_SKILL(worn))].name);
+            vnum_t vnum = GET_OBJ_VNUM(worn);
+
+            if (!vnum_is_from_zone(vnum, zone_num) && !vnum_is_from_canon_zone(vnum)) {
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - is equipped with %sexternal item %ld.\r\n", // *immature giggle*
+                       vnum_from_non_connected_zone(vnum) ? "^ynon-connected^n " : "",
+                       vnum);
+            }
+
+            if (wearloc == WEAR_WIELD) {
+              if (GET_OBJ_TYPE(worn) == ITEM_WEAPON) {
+                if (GET_SKILL(mob, GET_WEAPON_SKILL(worn)) <= 0 && GET_SKILL(mob, return_general(GET_WEAPON_SKILL(worn))) <= 0) {
+                  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - has no ^c%s^n or ^c%s^n skill, which is needed for wielded weapon.\r\n",
+                           skills[GET_WEAPON_SKILL(worn)].name, skills[return_general(GET_WEAPON_SKILL(worn))].name);
+                }
+              } else if (GET_OBJ_TYPE(worn) == ITEM_FIREWEAPON) {
+                strlcat(buf, "  - is wielding a non-implemented fireweapon.\r\n", sizeof(buf));
+              } else {
+                strlcat(buf, "  - is wielding a non-weapon item.\r\n", sizeof(buf));
               }
-            } else if (GET_OBJ_TYPE(worn) == ITEM_FIREWEAPON) {
-              strlcat(buf, "  - is wielding a non-implemented fireweapon.\r\n", sizeof(buf));
-            } else {
-              strlcat(buf, "  - is wielding a non-weapon item.\r\n", sizeof(buf));
             }
           }
         }
-      }
 
-      if (total_items > 0) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - has %d piece%s of equipment (total value: ^c%d^n).\r\n", total_items, total_items == 1 ? "" : "s", total_value);
-        printed = TRUE;
-        issues++;
+        if (total_items > 0) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - has %d piece%s of equipment (total value: ^c%d^n).\r\n", total_items, total_items == 1 ? "" : "s", total_value);
+          printed = TRUE;
+          issues++;
+        }
       }
     }
 

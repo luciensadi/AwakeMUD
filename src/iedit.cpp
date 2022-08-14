@@ -1330,7 +1330,7 @@ void iedit_disp_menu(struct descriptor_data * d)
   send_to_char(CH, "Item number: ^c%d^n\r\n", d->edit_number);
   send_to_char(CH, "1) Item keywords: ^c%s^n\r\n", d->edit_obj->text.keywords);
   send_to_char(CH, "2) Item name: ^c%s^n\r\n", d->edit_obj->text.name);
-  send_to_char(CH, "3) Room description:\r\n^g%s^n\r\n", d->edit_obj->text.room_desc);
+  send_to_char(CH, "3) Room description (terminal color code unnecessary):\r\n^g%s^n\r\n", d->edit_obj->text.room_desc);
   send_to_char(CH, "4) Look description: \r\n%s\r\n",
                d->edit_obj->text.look_desc ? d->edit_obj->text.look_desc :
                "(not set)");

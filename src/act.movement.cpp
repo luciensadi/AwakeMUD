@@ -40,10 +40,10 @@ extern bool hunting_escortee(struct char_data *ch, struct char_data *vict);
 extern void death_penalty(struct char_data *ch);
 extern int get_vehicle_modifier(struct veh_data *veh);
 extern int calculate_vehicle_entry_load(struct veh_data *veh);
-extern bool passed_flee_success_check(struct char_data *ch);
 extern int calculate_swim_successes(struct char_data *ch);
 extern void send_mob_aggression_warnings(struct char_data *pc, struct char_data *mob);
 extern bool vict_is_valid_aggro_target(struct char_data *ch, struct char_data *vict);
+extern struct char_data *find_a_character_that_blocks_fleeing_for_ch(struct char_data *ch);
 
 extern sh_int mortal_start_room;
 extern sh_int frozen_start_room;
@@ -928,14 +928,16 @@ int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vic
 
   if (GET_POS(ch) >= POS_FIGHTING && FIGHTING(ch)) {
     WAIT_STATE(ch, PULSE_VIOLENCE * 2);
-    if (passed_flee_success_check(ch)
+    struct char_data *blocker = find_a_character_that_blocks_fleeing_for_ch(ch);
+    if (!blocker
         && (CAN_GO(ch, dir)
             && (!IS_NPC(ch) || !ROOM_FLAGGED(ch->in_room->dir_option[dir]->to_room, ROOM_NOMOB)))) {
       act("$n searches for a quick escape!", TRUE, ch, 0, 0, TO_ROOM);
       send_to_char("You start moving away for a clever escape.\r\n", ch);
     } else {
-      act("$n attempts a retreat, but fails.", TRUE, ch, 0, 0, TO_ROOM);
-      send_to_char("PANIC! You couldn't escape!\r\n", ch);
+      act("PANIC! $N caught you before you could escape!\r\n", FALSE, ch, 0, blocker, TO_CHAR);
+      act("You lunge forward and block $n's escape.", FALSE, ch, 0, blocker, TO_VICT);
+      act("$N lunges forward and blocks $n's escape.", FALSE, ch, 0, blocker, TO_NOTVICT);
       return 0;
     }
   }

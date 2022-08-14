@@ -610,22 +610,7 @@ ACMD_CONST(do_flee) {
   do_flee(ch, NULL, cmd, subcmd);
 }
 
-bool passed_flee_success_check(struct char_data *ch) {
-  if (GET_POS(ch) < POS_FIGHTING)
-    return TRUE;
-
-  if (!FIGHTING(ch))
-    return TRUE;
-
-  if (ch->in_room != FIGHTING(ch)->in_room)
-    return TRUE;
-
-  if (AFF_FLAGGED(ch, AFF_APPROACH) || AFF_FLAGGED(FIGHTING(ch), AFF_APPROACH))
-    return TRUE;
-
-  if (!can_hurt(ch, FIGHTING(ch), TRUE, 0))
-    return TRUE;
-
+struct char_data *find_a_character_that_blocks_fleeing_for_ch(struct char_data *ch) {
   int racial_flee_modifier = 0; // Satyrs have a x4 run multiplier and smaller races have x2, so we're houseruling a +1/-1 TN here.
   switch (GET_RACE(ch)) {
     case RACE_SATYR:
@@ -637,9 +622,31 @@ bool passed_flee_success_check(struct char_data *ch) {
       racial_flee_modifier++;
       break;
       }
-  return success_test(GET_QUI(ch), (GET_REA(FIGHTING(ch)) + racial_flee_modifier)) > 0;
 
+  // Iterate through people in the room and see if any of them will stop you.
+  for (struct char_data *combatant = get_ch_in_room(ch)->people; combatant; combatant = combatant->next_in_room) {
+    if (FIGHTING(combatant) == ch) {
+      // Unconscious people can't stop you.
+      if (!AWAKE(combatant))
+        continue;
+
+      // If they haven't closed the distance yet, you can break away.
+      if (AFF_FLAGGED(ch, AFF_APPROACH) || AFF_FLAGGED(combatant, AFF_APPROACH))
+        continue;
+
+      // If you can't hurt them, they can't stop you.
+      if (!can_hurt(ch, combatant, TRUE, 0))
+        continue;
+
+      // Make a test to see if they can stop you.
+      if (success_test(GET_QUI(ch) * 1.25, (GET_REA(combatant) + racial_flee_modifier)) <= 0)
+        return combatant;
+    }
   }
+
+  // Nobody stopped you.
+  return NULL;
+}
 
 bool _sort_pairs_by_weight(std::pair<int, int> a, std::pair<int, int> b) {
   return std::get<1>(a) > std::get<1>(b);
@@ -679,10 +686,11 @@ ACMD(do_flee)
     WAIT_STATE(ch, PULSE_VIOLENCE * 2);
 
     // If the character is fighting in melee combat with someone they can hurt, they must pass a test to escape.
-    if (!passed_flee_success_check(ch)) {
-      act("$N cuts you off as you try to escape!", TRUE, ch, 0, FIGHTING(ch), TO_CHAR);
-      act("You lunge forward and block $n's escape.", TRUE, ch, 0, FIGHTING(ch), TO_VICT);
-      act("$N lunges forward and blocks $n's escape.", TRUE, ch, 0, FIGHTING(ch), TO_NOTVICT);
+    struct char_data *blocker = find_a_character_that_blocks_fleeing_for_ch(ch);
+    if (blocker) {
+      act("$N cuts you off as you try to escape!", FALSE, ch, 0, blocker, TO_CHAR);
+      act("You lunge forward and block $n's escape.", FALSE, ch, 0, blocker, TO_VICT);
+      act("$N lunges forward and blocks $n's escape.", FALSE, ch, 0, blocker, TO_NOTVICT);
       return;
     }
 
