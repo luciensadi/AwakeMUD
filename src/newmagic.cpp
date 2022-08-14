@@ -1403,11 +1403,17 @@ void cast_combat_spell(struct char_data *ch, int spell, int force, char *arg)
     SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST;
 
     success = success_test(skill, GET_WIL(vict) + target_modifiers);
+    snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
+    act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
     if (success > 0 && GET_REFLECT(vict) && (reflected = reflect_spell(ch, vict, spell, force, 0, GET_WIL(ch), success))) {
       vict = ch;
       ch = temp;
     }
+    snprintf(rbuf, sizeof(rbuf), "reflected: %s", reflected ? "yes" : "no");
+    act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
     success -= resist_spell(vict, spell, force, 0);
+    snprintf(rbuf, sizeof(rbuf), "after spell resist: %d", success);
+    act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
     if (success > 0) {
       int dam = convert_damage(stage(success, basedamage));
       if (GET_MENTAL(vict) - (dam * 100) <= 0) {
@@ -1441,11 +1447,17 @@ void cast_combat_spell(struct char_data *ch, int spell, int force, char *arg)
     SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST;
 
     success = success_test(skill, GET_BOD(vict) + target_modifiers);
+    snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
+    act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
     if (success > 0 && GET_REFLECT(vict) && (reflected = reflect_spell(ch, vict, spell, force, 0, GET_BOD(ch), success))) {
       vict = ch;
       ch = temp;
     }
+    snprintf(rbuf, sizeof(rbuf), "reflected: %s", reflected ? "yes" : "no");
+    act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
     success -= resist_spell(vict, spell, force, 0);
+    snprintf(rbuf, sizeof(rbuf), "after spell resist: %d", success);
+    act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
     if (success > 0) {
       int dam = convert_damage(stage(success, basedamage));
       if (GET_MENTAL(vict) - (dam * 100) <= 0) {
@@ -1497,6 +1509,8 @@ void cast_detection_spell(struct char_data *ch, int spell, int force, char *arg,
   int skill = GET_SKILL(ch, SKILL_SORCERY) + MIN(GET_SKILL(ch, SKILL_SORCERY), GET_CASTING(ch));
   int success = 0;
   spell_bonus(ch, spell, skill, target_modifiers);
+  snprintf(rbuf, sizeof(rbuf), "after spell_bonus, skill = %d, target_modifiers = %d", skill, target_modifiers);
+  act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
   if (skill == -1)
     return;
   switch (spell)
@@ -1510,6 +1524,8 @@ void cast_detection_spell(struct char_data *ch, int spell, int force, char *arg,
 
       WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
       success = success_test(skill, 4 + target_modifiers);
+      snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
+      act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
       for (struct sustain_data *sust = GET_SUSTAINED(ch); sust; sust = sust->next)
         if (sust->spell == SPELL_MINDLINK) {
           send_to_char("You are already under the influence of a mindlink.\r\n", ch);
@@ -1531,6 +1547,8 @@ void cast_detection_spell(struct char_data *ch, int spell, int force, char *arg,
     case SPELL_COMBATSENSE:
       WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
       success = success_test(skill, 4 + target_modifiers);
+      snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
+      act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
       if (success > 0) {
         direct_sustain = create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
         send_to_char("The world seems to slow down around you as your sense of your surroundings becomes clearer.\r\n", vict);
@@ -1547,6 +1565,8 @@ void cast_detection_spell(struct char_data *ch, int spell, int force, char *arg,
 
       WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
       success = success_test(skill, 6 + target_modifiers);
+      snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
+      act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
       if (success > 0) {
         send_to_char("Your eyes tingle as the shadows around you become clearer.\r\n", vict);
         act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
@@ -1563,6 +1583,8 @@ void cast_detection_spell(struct char_data *ch, int spell, int force, char *arg,
 
       WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
       success = success_test(skill, 6 + target_modifiers);
+      snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
+      act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
       if (success > 0) {
         send_to_char("Your eyes tingle as you begin to see heat signatures around you.\r\n", vict);
         act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
@@ -1599,6 +1621,8 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
   int success = 0;
   int drain = LIGHT;
   spell_bonus(ch, spell, skill, target_modifiers);
+  snprintf(rbuf, sizeof(rbuf), "after spell_bonus, skill = %d, target_modifiers = %d", skill, target_modifiers);
+  act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
   int base_target;
 
   if (skill == -1)
@@ -1624,6 +1648,8 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       }
       WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
       success = success_test(skill, base_target + target_modifiers);
+      snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
+      act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
       if (success > 0) {
         direct_sustain = create_sustained(ch, vict, spell, force, 0, success, spells[SPELL_STABILIZE].draindamage);
         send_to_char("You notice the effects of the drugs suddenly wear off.\r\n", vict);
@@ -1635,6 +1661,8 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
     case SPELL_STABILIZE:
       WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
       success = success_test(skill, 4 + ((GET_LAST_DAMAGETIME(vict) - time(0)) / SECS_PER_MUD_HOUR) + target_modifiers);
+      snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
+      act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
       if (success > 0 && force >= (GET_PHYSICAL(vict) <= 0 ? -(GET_PHYSICAL(vict) / 100) : 50)) {
         direct_sustain = create_sustained(ch, vict, spell, force, 0, success, spells[SPELL_STABILIZE].draindamage);
         send_to_char("Your condition stabilizes, you manage to grab a thin hold on life.\r\n", vict);
@@ -1646,6 +1674,8 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
     case SPELL_RESISTPAIN:
       WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
       success = success_test(skill, 4 + target_modifiers);
+      snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
+      act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
       if (GET_PHYSICAL(vict) <= 0)
         drain = DEADLY;
       else if (GET_PHYSICAL(vict) <= 300)
@@ -1664,6 +1694,8 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
     case SPELL_HEALTHYGLOW:
       WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
       success = success_test(skill, 4 + target_modifiers);
+      snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
+      act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
       if (success > 0) {
         direct_sustain = create_sustained(ch, vict, spell, force, 0, success, spells[SPELL_HEALTHYGLOW].draindamage);
         send_to_char("You begin to feel healthier and more attractive.\r\n", vict);
@@ -1686,6 +1718,8 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
 
       WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
       success = MIN(force, success_test(skill, 10 - (int)(GET_ESS(vict) / 100) + target_modifiers + (int)(GET_INDEX(ch) / 200)));
+      snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
+      act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
       if (GET_PHYSICAL(vict) <= 0)
         drain = DEADLY;
       else if (GET_PHYSICAL(vict) <= 300)
@@ -1868,6 +1902,8 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
         target += 10 - (GET_ESS(vict) / 100);
       success = (int)(success_test(skill, target) -
                       ((spell == SPELL_DECATTR || spell == SPELL_DECCYATTR) ? resist_spell(vict, spell, force, sub) : 0));
+      snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
+      act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
       if (success > 1) {
         direct_sustain = create_sustained(ch, vict, spell, force, sub, success, spells[spell].draindamage);
         act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
@@ -1901,6 +1937,8 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
     int skill = GET_SKILL(ch, SKILL_SORCERY) + MIN(GET_SKILL(ch, SKILL_SORCERY), GET_CASTING(ch));
     int success = 0;
     spell_bonus(ch, spell, skill, target_modifiers);
+    snprintf(rbuf, sizeof(rbuf), "after spell_bonus, skill = %d, target_modifiers = %d", skill, target_modifiers);
+    act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
     if (skill == -1)
       return;
     struct char_data *temp = vict;
@@ -1923,11 +1961,15 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
 
       success = success_test(skill, (spell == SPELL_CONFUSION ? GET_WIL(vict) : GET_INT(vict)) + target_modifiers);
+      snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
+      act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
       if (success > 0 && GET_REFLECT(vict) && (reflected = reflect_spell(ch, vict, spell, force, 0, (spell == SPELL_CONFUSION ? GET_WIL(ch) : GET_INT(ch)), success))) {
         vict = ch;
         ch = temp;
       }
       success -= resist_spell(vict, spell, force, 0);
+      snprintf(rbuf, sizeof(rbuf), "after spell resist: %d", success);
+      act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
       if (success > 0) {
         send_to_char("Coherent thought is suddenly a foreign concept.\r\n", vict);
         act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
@@ -1952,6 +1994,8 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
 
       success = success_test(skill, 4 + target_modifiers);
+      snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
+      act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
       if (success > 0) {
         act("You blink and suddenly $n is gone!", TRUE, vict, 0, 0, TO_ROOM);
         send_to_char("You feel your body tingle.\r\n", vict);
@@ -1971,6 +2015,8 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
 
       success = success_test(skill, 4 + target_modifiers);
+      snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
+      act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
       if (success > 0) {
         act("You successfully sustain that spell on $n.", FALSE, vict, 0, ch, TO_VICT);
         send_to_char("Your every move becomes silent.\r\n", vict);
@@ -1982,6 +2028,8 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
     case SPELL_SILENCE:
       WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
       success = success_test(skill, 4 + target_modifiers);
+      snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
+      act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
       if (success > 0) {
         act("The room falls silent.", FALSE, ch, 0, 0, TO_ROOM);
         act("The room falls silent.", FALSE, ch, 0, 0, TO_CHAR);
