@@ -1063,8 +1063,10 @@ void stop_follower(struct char_data * ch)
 
   AFF_FLAGS(ch).RemoveBits(AFF_CHARM, AFF_GROUP, ENDBIT);
   act("You stop following $N.", FALSE, ch, 0, ch->master, TO_CHAR);
-  act("$n stops following $N.", TRUE, ch, 0, ch->master, TO_NOTVICT);
-  act("$n stops following you.", TRUE, ch, 0, ch->master, TO_VICT);
+  if (get_ch_in_room(ch->master) == get_ch_in_room(ch) && ch->master->in_veh == ch->in_veh) {
+    act("$n stops following $N.", TRUE, ch, 0, ch->master, TO_NOTVICT);
+    act("$n stops following you.", TRUE, ch, 0, ch->master, TO_VICT);
+  }
   ch->master = NULL;
 }
 
@@ -1099,9 +1101,10 @@ void add_follower(struct char_data * ch, struct char_data * leader)
   if (!IS_SPIRIT(ch) && !IS_PC_CONJURED_ELEMENTAL(ch))
   {
     act("You now follow $N.", FALSE, ch, 0, leader, TO_CHAR);
-    if (CAN_SEE(leader, ch))
+    if (get_ch_in_room(leader) == get_ch_in_room(ch) && leader->in_veh == ch->in_veh && CAN_SEE(leader, ch)) {
       act("$n starts following you.", TRUE, ch, 0, leader, TO_VICT);
-    act("$n starts to follow $N.", TRUE, ch, 0, leader, TO_NOTVICT);
+      act("$n starts to follow $N.", TRUE, ch, 0, leader, TO_NOTVICT);
+    }
   }
 }
 

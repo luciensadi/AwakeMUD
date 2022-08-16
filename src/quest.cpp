@@ -451,9 +451,13 @@ void check_quest_destination(struct char_data *ch, struct char_data *mob)
   if (!ch || IS_NPC(ch) || !IS_NPC(mob) || !GET_QUEST(ch))
     return;
 
+  if (mob->mob_specials.quest_id != GET_IDNUM(ch))
+    return;
+
   for (int i = 0; i < quest_table[GET_QUEST(ch)].num_mobs; i++) {
-    if (quest_table[GET_QUEST(ch)].mob[i].objective == QMO_LOCATION &&
-        mob->in_room->number == quest_table[GET_QUEST(ch)].mob[i].o_data)
+    if (quest_table[GET_QUEST(ch)].mob[i].objective == QMO_LOCATION
+        && mob->in_room->number == quest_table[GET_QUEST(ch)].mob[i].o_data
+        && GET_MOB_VNUM(mob) == quest_table[GET_QUEST(ch)].mob[i].vnum)
     {
       ch->player_specials->mob_complete[i] = 1;
       stop_follower(mob);
