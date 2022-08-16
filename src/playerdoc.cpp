@@ -20,11 +20,11 @@ int alert_player_doctors_of_mort(struct char_data *ch, struct obj_data *docwagon
     return 0;
   }
 
-  if (!docwagon && !(docwagon = find_best_active_docwagon_modulator(ch))) {
-    mudlog("SYSERR: NULL docwagon to alert_player_doctors_of_mort()!", ch, LOG_SYSLOG, TRUE);
+  // They don't have a modulator-- not an error, just bail.
+  if (!docwagon && !(docwagon = find_best_active_docwagon_modulator(ch)))
     return 0;
-  }
 
+  // They don't want to participate-- not an error, just bail.
   if (PRF_FLAGGED(ch, PRF_DONT_ALERT_PLAYER_DOCTORS_ON_MORT))
     return 0;
 
