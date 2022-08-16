@@ -625,23 +625,43 @@ struct char_data *find_a_character_that_blocks_fleeing_for_ch(struct char_data *
 
   // Iterate through people in the room and see if any of them will stop you.
   for (struct char_data *combatant = get_ch_in_room(ch)->people; combatant; combatant = combatant->next_in_room) {
-    if (FIGHTING(combatant) == ch) {
-      // Unconscious people can't stop you.
-      if (!AWAKE(combatant))
-        continue;
+    // No matter how hard you try, you can't stop yourself.
+    if (combatant == ch)
+      continue;
 
-      // If they haven't closed the distance yet, you can break away.
-      if (AFF_FLAGGED(ch, AFF_APPROACH) || AFF_FLAGGED(combatant, AFF_APPROACH))
-        continue;
+    // If they're not fighting you, skip.
+    if (FIGHTING(combatant) != ch)
+      continue;
 
-      // If you can't hurt them, they can't stop you.
-      if (!can_hurt(ch, combatant, TRUE, 0))
-        continue;
+    // Unconscious and paralyzed people can't stop you.
+    if (!AWAKE(combatant))
+      continue;
 
-      // Make a test to see if they can stop you.
-      if (success_test(GET_QUI(ch) * 1.25, (GET_REA(combatant) + racial_flee_modifier)) <= 0)
-        return combatant;
-    }
+    // If they haven't closed the distance yet, you can break away.
+    if (AFF_FLAGGED(combatant, AFF_APPROACH))
+      continue;
+
+    // If you can't hurt them, they can't stop you.
+    if (!can_hurt(ch, combatant, TRUE, 0))
+      continue;
+
+    // Make a test to see if they can stop you.
+    int dice = GET_QUI(ch) * 1.25;
+    int tn = (GET_REA(combatant) + racial_flee_modifier);
+    int successes = success_test(dice, tn);
+
+    char rbuf[500];
+    snprintf(rbuf, sizeof(rbuf), "Flee check: %s vs %s: rolled %d dice vs TN %d and got %d success%s.",
+             GET_CHAR_NAME(ch),
+             GET_CHAR_NAME(combatant),
+             dice,
+             tn,
+             successes,
+             successes == 1 ? "" : "s");
+    act(rbuf, TRUE, ch, 0, 0, TO_ROLLS);
+
+    if (successes <= 0)
+      return combatant;
   }
 
   // Nobody stopped you.

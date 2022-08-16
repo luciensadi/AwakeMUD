@@ -934,10 +934,13 @@ int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vic
             && (!IS_NPC(ch) || !ROOM_FLAGGED(ch->in_room->dir_option[dir]->to_room, ROOM_NOMOB)))) {
       act("$n searches for a quick escape!", TRUE, ch, 0, 0, TO_ROOM);
       send_to_char("You start moving away for a clever escape.\r\n", ch);
-    } else {
+    } else if (blocker) {
       act("PANIC! $N caught you before you could escape!\r\n", FALSE, ch, 0, blocker, TO_CHAR);
       act("You lunge forward and block $n's escape.", FALSE, ch, 0, blocker, TO_VICT);
       act("$N lunges forward and blocks $n's escape.", FALSE, ch, 0, blocker, TO_NOTVICT);
+      return 0;
+    } else {
+      act("PANIC! You couldn't escape!\r\n", FALSE, ch, 0, 0, TO_CHAR);
       return 0;
     }
   }
