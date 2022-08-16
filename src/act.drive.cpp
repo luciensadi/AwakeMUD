@@ -998,6 +998,8 @@ ACMD(do_control)
   PLR_FLAGS(ch).SetBit(PLR_REMOTE);
   send_to_char(ch, "You take control of %s.\r\n", GET_VEH_NAME(veh));
 
+  remove_vehicle_brain(veh);
+
   // Reallocate pools.
   int max_offense = MIN(GET_SKILL(ch, SKILL_GUNNERY), GET_COMBAT(ch));
   int remainder = MAX(0, GET_COMBAT(ch) - max_offense);
@@ -1990,12 +1992,14 @@ void process_autonav(void)
         send_to_veh("The autonav beeps and flashes a red 'ERROR' message before shutting off.\r\n", veh, 0, TRUE);
         veh->cspeed = SPEED_OFF;
         veh->dest = NULL;
+        remove_vehicle_brain(veh);
         return;
       }
       if (veh->in_room == veh->dest) {
         send_to_veh("Having reached its destination, the autonav shuts off.\r\n", veh, 0, TRUE);
         veh->cspeed = SPEED_OFF;
         veh->dest = NULL;
+        remove_vehicle_brain(veh);
       }
     }
   }
