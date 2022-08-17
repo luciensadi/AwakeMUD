@@ -3154,11 +3154,10 @@ SPECIAL(yukiya_dahoto)
 {
   char_data *yukiya = (char_data *) me;
 
-  if (!cmd || !yukiya || !AWAKE(yukiya))
+  if (!cmd || !yukiya || !AWAKE(yukiya) || !ch || !CAN_SEE(yukiya, ch) || yukiya->in_room->number != YUKIYA_OFFICE)
     return FALSE;
 
-  if ((CMD_IS("open") || CMD_IS("hit") || CMD_IS("shoot") || CMD_IS("up")) && CAN_SEE(yukiya, ch) &&
-      yukiya->in_room->number == YUKIYA_OFFICE) {
+  if (CMD_IS("open") || CMD_IS("hit") || CMD_IS("shoot")) {
     skip_spaces(&argument);
 
     if (str_str("vent", argument)) {
@@ -3173,6 +3172,19 @@ SPECIAL(yukiya_dahoto)
 
       return TRUE;
     }
+  }
+
+  if (CMD_IS("up")) {
+    act("$n attacks, saying, \"You will not pass!  YOU WILL DIE!\"",
+        FALSE, yukiya, 0, ch, TO_VICT);
+    act("$n attacks $N, saying, \"You will not pass!  YOU WILL DIE!\"",
+        FALSE, yukiya, 0, ch, TO_NOTVICT);
+    act("You notice $N trying to sneak into the vent, and attack!",
+        FALSE, yukiya, 0, ch, TO_CHAR);
+
+    set_fighting(yukiya, ch);
+
+    return TRUE;
   }
 
   return FALSE;
