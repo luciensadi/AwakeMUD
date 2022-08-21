@@ -1740,7 +1740,6 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
     case SPELL_INCREF1:
     case SPELL_INCREF2:
     case SPELL_INCREF3:
-    case SPELL_INCREA:
       {
         int int_with_just_bioware = GET_REAL_INT(vict);
         int qui_with_just_bioware = GET_REAL_QUI(vict);
@@ -1807,6 +1806,9 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
         send_to_char(FAILED_CAST, ch);
       spell_drain(ch, spell, force, 0, direct_sustain);
       break;
+    case SPELL_INCREA:
+      sub = REA;
+      // fall through
     case SPELL_DECATTR:
     case SPELL_DECCYATTR:
     case SPELL_INCATTR:
