@@ -417,8 +417,8 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       snprintf(rbuf, sizeof(rbuf), "Too tall, so will roll just %d dice... ", att->ranged->dice);
     }
 #else
-    att->ranged->dice += bonus_if_not_too_tall;
     snprintf(rbuf, sizeof(rbuf), "^JAttack: Rolling %d + %d dice VS TN %d... ", att->ranged->dice, bonus_if_not_too_tall, att->ranged->tn);
+    att->ranged->dice += bonus_if_not_too_tall;
 #endif
 
     att->ranged->successes = success_test(att->ranged->dice, att->ranged->tn);
