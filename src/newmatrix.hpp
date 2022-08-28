@@ -62,7 +62,7 @@ struct host_data {
 
   int type;
   int reset;
-  int found;
+  int undiscovered_paydata;
   int alert;
   int pass;
   int shutdown;
@@ -81,8 +81,9 @@ struct host_data {
   struct obj_data *file;
   host_data():
     name(NULL), keywords(NULL), desc(NULL), shutdown_start(NULL), shutdown_stop(NULL),
-    type(0), reset(0), found(0), alert(0), pass(0), shutdown(0), shutdown_success(0), shutdown_mpcp(0),
-    payreset(TRUE), trigger(NULL), icons(NULL), fighting(NULL), exit(NULL), file(NULL)
+    type(0), reset(0), undiscovered_paydata(0), alert(0), pass(0), shutdown(0),
+    shutdown_success(0), shutdown_mpcp(0), payreset(TRUE), trigger(NULL),
+    icons(NULL), fighting(NULL), exit(NULL), file(NULL)
   {
 #ifdef USE_DEBUG_CANARIES
     canary = CANARY_VALUE;

@@ -1193,17 +1193,17 @@ void parse_host(File &fl, long nr)
   if (!host->type)
     switch (host->colour) {
     case 0:
-      host->found = number(1, 6) - 1;
+      host->undiscovered_paydata = number(1, 6) - 1;
       break;
     case 1:
-      host->found = number(1, 6) + number(1, 6) - 2;
+      host->undiscovered_paydata = number(1, 6) + number(1, 6) - 2;
       break;
     case 2:
-      host->found = number(1, 6) + number(1, 6);
+      host->undiscovered_paydata = number(1, 6) + number(1, 6);
       break;
     case 3:
     case 4:
-      host->found = number(1, 6) + number(1, 6) + 2;
+      host->undiscovered_paydata = number(1, 6) + number(1, 6) + 2;
       break;
     }
   top_of_matrix = rnum++;

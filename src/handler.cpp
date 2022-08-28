@@ -1250,7 +1250,7 @@ void icon_from_host(struct matrix_icon *icon)
           if (GET_DECK_ACCESSORY_FILE_HOST_VNUM(soft) == icon->in_host) {
             // 66% chance of being rediscoverable.
             if (number(0, 2))
-              matrix[icon->in_host].found++;
+              matrix[icon->in_host].undiscovered_paydata++;
 
             extract_obj(soft);
             continue;

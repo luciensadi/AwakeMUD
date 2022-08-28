@@ -1176,9 +1176,9 @@ ACMD(do_locate)
       return;
     }
 
-    if (!matrix[PERSONA->in_host].type && matrix[PERSONA->in_host].found)
-      while (success && matrix[PERSONA->in_host].found) {
-        matrix[PERSONA->in_host].found--;
+    if (!matrix[PERSONA->in_host].type && matrix[PERSONA->in_host].undiscovered_paydata)
+      while (success && matrix[PERSONA->in_host].undiscovered_paydata) {
+        matrix[PERSONA->in_host].undiscovered_paydata--;
         success--;
         i++;
         struct obj_data *obj = read_object(OBJ_BLANK_OPTICAL_CHIP, VIRTUAL);
@@ -1245,9 +1245,27 @@ ACMD(do_locate)
         obj_to_host(obj, &matrix[PERSONA->in_host]);
       }
     if (!i)
-      send_to_icon(PERSONA, "You fail to find any paydata.\r\n");
-    else
-      send_to_icon(PERSONA, "You find %d piece%sof paydata.\r\n", i, i > 1 ? "s ": " ");
+      send_to_icon(PERSONA, "There's no paydata left to find.\r\n");
+    else {
+      switch (number(0, 100)) {
+        case 0:
+          send_to_icon(PERSONA, "Your interface highlights %d chunk%s of primo paydata.\r\n", i, i > 1 ? "s": "");
+          break;
+        case 1:
+          send_to_icon(PERSONA, "You find %d potentially-valuable file%s.\r\n", i, i > 1 ? "s": "");
+          break;
+        case 2:
+          send_to_icon(PERSONA, "Your search turns up %d bit%s of useful data.\r\n", i, i > 1 ? "s": "");
+          break;
+        case 3:
+          send_to_icon(PERSONA, "You are able to locate %d discrete unit%s of paydata.\r\n", i, i > 1 ? "s": "");
+          break;
+        default:
+          send_to_icon(PERSONA, "You find %d piece%s of paydata.\r\n", i, i > 1 ? "s": "");
+          break;
+      }
+
+    }
     return;
   }
   send_to_icon(PERSONA, "You can locate hosts, ICs, files, deckers, or paydata.\r\n");
@@ -2299,7 +2317,7 @@ ACMD(do_decrypt)
           send_to_host(PERSONA->in_host, "A wash of static sweeps over the host, tearing away at potential paydata!\r\n", NULL, FALSE);
 
           // Remove the not-yet-found data.
-          matrix[PERSONA->in_host].found = 0;
+          matrix[PERSONA->in_host].undiscovered_paydata = 0;
 
           // Remove the already-found data.
           struct obj_data *current, *next;
@@ -2597,31 +2615,31 @@ void matrix_update()
     if (time_info.hours == 2 && host.payreset)
       host.payreset = FALSE;
     if (time_info.hours == 0) {
-      if (host.type == HOST_DATASTORE && host.found <= 0 && !host.payreset) {
+      if (host.type == HOST_DATASTORE && host.undiscovered_paydata <= 0 && !host.payreset) {
         int rand_result;
         switch (host.colour) {
           case HOST_SECURITY_BLUE:
             rand_result = number(1, 6) - 1;
-            host.found = MIN(rand_result, MAX_PAYDATA_QTY_BLUE);
+            host.undiscovered_paydata = MIN(rand_result, MAX_PAYDATA_QTY_BLUE);
             break;
           case HOST_SECURITY_GREEN:
             rand_result = number(1, 6) + number(1, 6) - 2;
-            host.found = MIN(rand_result, MAX_PAYDATA_QTY_GREEN);
+            host.undiscovered_paydata = MIN(rand_result, MAX_PAYDATA_QTY_GREEN);
             break;
           case HOST_SECURITY_ORANGE:
             rand_result = number(1, 6) + number(1, 6);
-            host.found = MIN(rand_result, MAX_PAYDATA_QTY_ORANGE);
+            host.undiscovered_paydata = MIN(rand_result, MAX_PAYDATA_QTY_ORANGE);
             break;
           case HOST_SECURITY_RED:
           case HOST_SECURITY_BLACK:
             rand_result = number(1, 6) + number(1, 6) + 2;
-            host.found = MIN(rand_result, MAX_PAYDATA_QTY_RED_BLACK);
+            host.undiscovered_paydata = MIN(rand_result, MAX_PAYDATA_QTY_RED_BLACK);
             break;
           default:
             char oopsbuf[500];
             snprintf(oopsbuf, sizeof(oopsbuf), "SYSERR: Unknown host color %d for host %ld- can't generate paydata.", host.colour, host.vnum);
             mudlog(oopsbuf, NULL, LOG_SYSLOG, TRUE);
-            host.found = 0;
+            host.undiscovered_paydata = 0;
         }
         host.payreset = TRUE;
       } else {
