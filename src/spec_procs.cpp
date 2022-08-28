@@ -4194,10 +4194,10 @@ SPECIAL(chargen_points_check) {
   // Final check to make sure you're not wasting resources.
   if (ch) {
     if (GET_FORCE_POINTS(ch) > 0) {
-      send_to_char(ch, "^YWarning:^n You still have %d force point%s remaining to spend! They will be lost on graduation. You should go back and spend them on spells (HELP LEARN) and/or bonding foci (HELP BOND).\r\n", GET_FORCE_POINTS(ch), GET_FORCE_POINTS(ch) > 1 ? "s" : "");
+      send_to_char(ch, "^YWarning:^n You still have %d force point%s remaining to spend! They will be lost on graduation. You should go back and spend them on spells (^WHELP LEARN^n) and/or bonding foci (^WHELP BOND^n).\r\n", GET_FORCE_POINTS(ch), GET_FORCE_POINTS(ch) > 1 ? "s" : "");
     }
     if (GET_RESTRING_POINTS(ch) > 0) {
-      send_to_char(ch, "^YWarning:^n You still have %d restring point%s remaining to spend! They will be lost on graduation. See HELP RESTRING for details.\r\n", GET_FORCE_POINTS(ch), GET_RESTRING_POINTS(ch) > 1 ? "s" : "");
+      send_to_char(ch, "^YWarning:^n You still have %d restring point%s remaining to spend! They will be lost on graduation. See ^WHELP RESTRING^n for details.\r\n", GET_RESTRING_POINTS(ch), GET_RESTRING_POINTS(ch) > 1 ? "s" : "");
     }
   }
 
