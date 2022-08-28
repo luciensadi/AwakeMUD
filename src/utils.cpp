@@ -2385,7 +2385,7 @@ bool invis_ok(struct char_data *ch, struct char_data *vict) {
   }
 
   // Astral perception sees most things-- unless said thing is an inanimate mob with no spells on it.
-  if (has_astral && (!MOB_FLAGGED(vict, MOB_INANIMATE) || GET_SUSTAINED(vict)))
+  if (has_astral && !(MOB_FLAGGED(vict, MOB_INANIMATE) && !GET_SUSTAINED(vict)))
     return TRUE;
 
   // Ultrasound pierces all invis as long as it's in the same room and not blocked by silence or stealth.
