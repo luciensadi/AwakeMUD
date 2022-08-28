@@ -201,7 +201,7 @@ bool should_tch_see_chs_movement_message(struct char_data *tch, struct char_data
 
   // Check for stealth and other person-to-person modifiers.
   if (IS_AFFECTED(ch, AFF_SNEAK)) {
-    int dummy_tn = 0;
+    int dummy_tn = 2;
     char rbuf[1000];
     struct room_data *in_room = get_ch_in_room(ch);
 
@@ -209,9 +209,26 @@ bool should_tch_see_chs_movement_message(struct char_data *tch, struct char_data
     snprintf(rbuf, sizeof(rbuf), "Sneak perception test: %s vs %s. get_skill: ", GET_CHAR_NAME(tch), GET_CHAR_NAME(ch));
     int skill_dice = get_skill(ch, SKILL_STEALTH, dummy_tn);
 
+
+
     // Make an open test to determine the TN for the perception test to notice you.
     strlcat(rbuf, ". get_vision_penalty: ", sizeof(rbuf));
     int open_test_result = open_test(skill_dice);
+
+    // If we've defaulted, this is reflected by an increased TN-- if the TN went up, cap successes.
+    int defaulting_amount = (dummy_tn - 2);
+    if (defaulting_amount > 0) {
+      if (defaulting_amount <= 2) {
+        // +2 means we defaulted to a linked skill. Mild penalty.
+        open_test_result = MIN(open_test_result - 2, 10);
+        strlcat(rbuf, "(defaulted: OT -2, cap 10!)", sizeof(rbuf));
+      } else {
+        // +4 means we defaulted to an attribute. Harsh penalty.
+        open_test_result = MIN(open_test_result - 4, 6);
+        strlcat(rbuf, "(defaulted: OT -4, cap 6!)", sizeof(rbuf));
+      }
+    }
+
     int vision_penalty = get_vision_penalty(tch, in_room, rbuf, sizeof(rbuf));
     snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), ". TN is %d (OT) + %d (vis)", open_test_result, vision_penalty);
 
@@ -230,7 +247,7 @@ bool should_tch_see_chs_movement_message(struct char_data *tch, struct char_data
     }
 
     // Roll the perception test.
-    int perception_result = success_test(GET_INT(tch), test_tn);
+    int perception_result = success_test(GET_INT(tch) + GET_POWER(tch, ADEPT_IMPROVED_PERCEPT), test_tn);
     snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "Result: %d hits.", perception_result);
     if (GET_INVIS_LEV(tch) <= GET_LEVEL(ch))
       act(rbuf, FALSE, ch, 0, 0, TO_ROLLS);

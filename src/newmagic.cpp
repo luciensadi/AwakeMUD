@@ -1371,13 +1371,13 @@ void cast_combat_spell(struct char_data *ch, int spell, int force, char *arg)
       int dam = convert_damage(stage(success, basedamage));
       if (GET_MENTAL(vict) - (dam * 100) <= 0) {
         act("$n falls to the floor as ^Rblood^n erupts from every pore on $s head.", TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("Your world turns to red as you feel blood flow from every pore on your head.\r\n", vict);
+        send_to_char("^RYour world turns to red as you feel blood flow from every pore on your head.^n\r\n", vict);
       } else if (GET_MENTAL(vict) - (dam * 100) <= 300) {
         act("$n grabs $s head in pain as blood flows from $s ears.", TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("Your head is filled with immense pain as your ears begin to bleed.\r\n", vict);
+        send_to_char("^rYour head is filled with immense pain as your ears begin to bleed.^n\r\n", vict);
       } else if (GET_MENTAL(vict) - (dam * 100) <= 700) {
         act("$n grabs ahold of $s head in pain.", TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("A sudden flash of pain in your head causes you to reflexively grab it.\r\n", vict);
+        send_to_char("^yA sudden flash of pain in your head causes you to reflexively grab it.^n\r\n", vict);
       } else {
         act("$n seems to flinch slightly as blood trickles from $s nose.", TRUE, vict, 0, 0, TO_ROOM);
         send_to_char("Slight pain fills your mind from an unknown source.\r\n", vict);
@@ -1418,13 +1418,13 @@ void cast_combat_spell(struct char_data *ch, int spell, int force, char *arg)
       int dam = convert_damage(stage(success, basedamage));
       if (GET_MENTAL(vict) - (dam * 100) <= 0) {
         act("$n falls to the floor unconscious.", TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("The world turns black around you as you suddenly fall unconscious.\r\n", vict);
+        send_to_char("^RThe world turns black around you as you suddenly fall unconscious.^n\r\n", vict);
       } else if (GET_MENTAL(vict) - (dam * 100) <= 300) {
         act("$n grabs $s head and cringes.", TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("Your head is filled with an unbearable pressure as your vision begins to fade.\r\n", vict);
+        send_to_char("^rYour head is filled with an unbearable pressure as your vision begins to fade.^n\r\n", vict);
       } else if (GET_MENTAL(vict) - (dam * 100) <= 700) {
         act("$n shakes $s head forcibly as though trying to clear it.", TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("A wave of tiredness comes over you, but seems to clear slightly as you shake your head.\r\n", vict);
+        send_to_char("^yA wave of tiredness comes over you, but seems to clear slightly as you shake your head.^n\r\n", vict);
       } else  {
         act("$n recoils slightly as though hit by an invisible force.", TRUE, vict, 0, 0, TO_ROOM);
         send_to_char("You mind goes slightly hazy as though you had just been punched.\r\n", vict);
@@ -1462,13 +1462,13 @@ void cast_combat_spell(struct char_data *ch, int spell, int force, char *arg)
       int dam = convert_damage(stage(success, basedamage));
       if (GET_MENTAL(vict) - (dam * 100) <= 0) {
         act("$n screams loudly as $s body is torn asunder by magic.", FALSE, vict, 0, 0, TO_ROOM);
-        send_to_char("You begin to feel yourself tearing apart.\r\n", vict);
+        send_to_char("^RYou begin to feel yourself tearing apart!^n\r\n", vict);
       } else if (GET_MENTAL(vict) - (dam * 100) <= 300) {
         act("$n cries out in pain as $s begins to bleed from nearly every pore on $s body.", TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("You uncontrollably scream as an immense force tears at your body.\r\n", vict);
+        send_to_char("^rYou uncontrollably scream as an immense force tears at your body.^n\r\n", vict);
       } else if (GET_MENTAL(vict) - (dam * 100) <= 700) {
         act("$n grabs $s stomach as a trickle of blood comes from $s mouth.", TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("Your torso is filled with a sharp stabbing pain as you cough up some blood.\r\n", vict);
+        send_to_char("^yYour torso is filled with a sharp stabbing pain as you cough up some blood.^n\r\n", vict);
       } else {
         act("$n grimaces, obviously afflicted with mild pain.", TRUE, vict, 0, 0, TO_ROOM);
         send_to_char("You feel a dull throb of pain flow through your body.\r\n", vict);
