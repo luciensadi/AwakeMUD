@@ -1791,7 +1791,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
           if (ch == vict) {
             send_to_char(ch, "Your reflexes have already been modified, so the increased reflexes spell won't work for you.\r\n");
           } else {
-            act("$N's reflexes have already been modified, so you can't cast that spell on $m.", FALSE, ch, 0, vict, TO_CHAR);
+            act("$N's reflexes have already been modified, so you can't cast that spell on $M.", FALSE, ch, 0, vict, TO_CHAR);
           }
           return;
         }
