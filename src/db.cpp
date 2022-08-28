@@ -80,6 +80,8 @@ extern void write_world_to_disk(int vnum);
 extern void handle_weapon_attachments(struct obj_data *obj);
 extern void ensure_mob_has_ammo_for_weapon(struct char_data *ch, struct obj_data *weapon);
 
+extern bool House_can_enter_by_idnum(long idnum, vnum_t house);
+
 extern void auto_repair_obj(struct obj_data *obj);
 
 // transport.cpp
@@ -5275,7 +5277,7 @@ void load_saved_veh()
   struct veh_data *veh = NULL, *veh2 = NULL;
   long vnum, owner;
   struct obj_data *obj, *last_obj = NULL;
-  long veh_room = 0;
+  long veh_room_vnum = 0;
   int veh_version = 0;
   std::vector<nested_obj> contained_obj;
   struct nested_obj contained_obj_entry;
@@ -5324,14 +5326,20 @@ void load_saved_veh()
     veh->spare2 = data.GetLong("VEHICLE/InVeh", 0);
     veh->locked = TRUE;
     veh->sub = data.GetLong("VEHICLE/Subscribed", 0);
-    veh_room = data.GetLong("VEHICLE/InRoom", 0);
+    veh_room_vnum = data.GetLong("VEHICLE/InRoom", 0);
+
+    // Can't get there? Pull your veh out.
+    rnum_t veh_room_rnum = real_room(veh_room_vnum);
+    if (veh_room_rnum < 0 || (veh->owner > 0 && ROOM_FLAGGED(&world[veh_room_rnum], ROOM_HOUSE) && !House_can_enter_by_idnum(veh->owner, veh_room_vnum))) {
+      veh_room_vnum = RM_SEATTLE_PARKING_GARAGE;
+    }
 
     const char *veh_flag_string = data.GetString("VEHICLE/Flags", NULL);
     if (veh_flag_string)
       veh->flags.FromString(veh_flag_string);
 
     if (!veh->spare2)
-      veh_to_room(veh, &world[real_room(veh_room)]);
+      veh_to_room(veh, &world[veh_room_rnum]);
     veh->restring = str_dup(data.GetString("VEHICLE/VRestring", NULL));
     veh->restring_long = str_dup(data.GetString("VEHICLE/VRestringLong", NULL));
     int inside = 0, last_inside = 0;
@@ -5597,18 +5605,18 @@ void load_saved_veh()
         }
       }
       if (!veh->in_veh) {
-        // Failure case: The containing vehicle did not exist.
-        if (veh_room > 0 && real_room(veh_room) > 0) {
-          snprintf(buf, sizeof(buf), "SYSERR: Attempted to restore vehicle %s (%ld) inside nonexistent carrier! Dumping to room %ld.\r\n",
-                  veh->name, veh->veh_number, veh_room);
+        rnum_t veh_room_rnum = real_room(veh_room_vnum);
+        if (veh_room_rnum < 0 || (veh->owner > 0 && ROOM_FLAGGED(&world[veh_room_rnum], ROOM_HOUSE) && !House_can_enter_by_idnum(veh->owner, veh_room_vnum))) {
+          veh_room_vnum = RM_SEATTLE_PARKING_GARAGE;
+          snprintf(buf, sizeof(buf), "SYSERR: Attempted to restore vehicle %s (%ld) inside nonexistent carrier, and no valid room was found! Dumping to Seattle Garage (%ld).\r\n",
+                   veh->name, veh->veh_number, veh_room_vnum);
         } else {
-          veh_room = RM_SEATTLE_PARKING_GARAGE;
-          snprintf(buf, sizeof(buf), "SYSERR: Attempted to restore vehicle %s (%ld) inside nonexistent carrier, and no room was found! Dumping to Seattle Garage (%ld).\r\n",
-                  veh->name, veh->veh_number, veh_room);
+          snprintf(buf, sizeof(buf), "SYSERR: Attempted to restore vehicle %s (%ld) inside nonexistent carrier! Dumping to room %ld.\r\n",
+                  veh->name, veh->veh_number, veh_room_vnum);
         }
         mudlog(buf, NULL, LOG_SYSLOG, TRUE);
         veh->spare2 = 0;
-        veh_to_room(veh, &world[real_room(veh_room)]);
+        veh_to_room(veh, &world[veh_room_rnum]);
 
         #ifdef USE_DEBUG_CANARIES
           assert(veh->canary == CANARY_VALUE);
