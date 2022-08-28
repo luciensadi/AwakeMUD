@@ -248,7 +248,7 @@ int system_test(rnum_t host, struct char_data *ch, int type, int software, int m
     }
   }
 
-  detect += DECKER->masking;
+  detect += DECKER->masking + 1; // +1 because we round up
   detect = detect / 2;
   detect -= DECKER->res_det;
 
