@@ -874,14 +874,20 @@ ACMD(do_goto)
   else
     act("$n disappears in a puff of smoke.", TRUE, ch, 0, 0, TO_ROOM);
 
-  char_from_room(ch);
+  if (vict && vict->in_veh) {
+    // We must set this in case the character is using GOTO SELF from a vehicle.
+    struct veh_data *target_veh = vict->in_veh;
 
-  if (vict) {
-    char_to_veh(vict->in_veh, ch);
-    vict->in_veh->seating[ch->vfront]++;
+    char_from_room(ch);
+    char_to_veh(target_veh, ch);
+
+    // We always want to have the same vfront as the vict.
     ch->vfront = vict->vfront;
-    vict->in_veh->seating[ch->vfront]--;
+
+    // Swapping vfront messes with seating, so repair it.
+    repair_vehicle_seating(target_veh);
   } else {
+    char_from_room(ch);
     char_to_room(ch, location);
     GET_POS(ch) = POS_STANDING;
   }
