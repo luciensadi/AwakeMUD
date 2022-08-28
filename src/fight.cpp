@@ -326,7 +326,7 @@ void check_killer(struct char_data * ch, struct char_data * vict)
 
     snprintf(buf, sizeof(buf), "PC Killer bit set on %s for initiating attack on %s at %s.",
             GET_CHAR_NAME(attacker),
-            GET_CHAR_NAME(vict), vict->in_room->name);
+            GET_CHAR_NAME(vict), get_ch_in_room(vict)->name);
     mudlog(buf, ch, LOG_MISCLOG, TRUE);
 
     send_to_char(KILLER_FLAG_MESSAGE, ch);
@@ -746,11 +746,12 @@ void death_cry(struct char_data * ch)
     return;
   }
 
-  for (struct char_data *listener = ch->in_room->people; listener; listener = listener->next_in_room)
+  for (struct char_data *listener = get_ch_in_room(ch)->people; listener; listener = listener->next_in_room) {
     if (IS_NPC(listener)) {
       GET_MOBALERTTIME(listener) = 30;
       GET_MOBALERT(listener) = MALERT_ALARM;
     }
+  }
 
   struct room_data *was_in = ch->in_room;
   for (int door = 0; door < NUM_OF_DIRS; door++)
@@ -762,6 +763,7 @@ void death_cry(struct char_data * ch)
       } else {
         act("Somewhere close, you hear someone's death cry!", FALSE, ch, 0, 0, TO_ROOM);
       }
+      // This specific use of in_room is okay since it's set above and guaranteed to exist.
       for (struct char_data *listener = ch->in_room->people; listener; listener = listener->next_in_room)
         if (IS_NPC(listener)) {
           GET_MOBALERTTIME(listener) = 30;
@@ -883,7 +885,7 @@ void raw_kill(struct char_data * ch)
       } else if (PLR_FLAGGED(ch, PLR_MATRIX) && ch->in_room) {
         if (access_level(ch, LVL_PRESIDENT))
           send_to_char(ch, "^YPLR_MATRIX set, but not in mtx.\r\n");
-        for (struct char_data *temp = ch->in_room->people; temp; temp = temp->next_in_room)
+        for (struct char_data *temp = get_ch_in_room(ch)->people; temp; temp = temp->next_in_room)
           if (PLR_FLAGGED(temp, PLR_MATRIX))
             temp->persona->decker->hitcher = NULL;
       } else {
@@ -1338,11 +1340,11 @@ void dam_message(int dam, struct char_data * ch, struct char_data * victim, int 
   buf = replace_string(dam_weapons[msgnum].to_room,
                        attack_hit_text[w_type].singular, attack_hit_text[w_type].plural,
                        attack_hit_text[w_type].different);
-  for (witness = victim->in_room->people; witness; witness = witness->next_in_room)
+  for (witness = get_ch_in_room(victim)->people; witness; witness = witness->next_in_room)
     if (witness != ch && witness != victim && !PRF_FLAGGED(witness, PRF_FIGHTGAG) && SENDOK(witness))
       perform_act(buf, ch, NULL, victim, witness);
   if (ch->in_room != victim->in_room && !PLR_FLAGGED(ch, PLR_REMOTE))
-    for (witness = ch->in_room->people; witness; witness = witness->next_in_room)
+    for (witness = get_ch_in_room(ch)->people; witness; witness = witness->next_in_room)
       if (witness != ch && witness != victim && !PRF_FLAGGED(witness, PRF_FIGHTGAG) && SENDOK(witness))
         perform_act(buf, ch, NULL, victim, witness);
 
@@ -1435,7 +1437,7 @@ int find_orig_dir(struct char_data *ch, struct char_data *victim)
 
   for (dir = 0; dir < NUM_OF_DIRS; dir++)
   {
-    room = victim->in_room;
+    room = get_ch_in_room(victim);
 
     if (CAN_GO2(room, dir))
       nextroom = EXIT2(room, dir)->to_room;
@@ -1480,7 +1482,7 @@ void weapon_scatter(struct char_data *ch, struct char_data *victim, struct obj_d
   } else
     dir[0] = dir[2] = -1;
 
-  for (vict = victim->in_room->people; vict; vict = vict->next_in_room)
+  for (vict = get_ch_in_room(victim)->people; vict; vict = vict->next_in_room)
     if (vict != victim && !IS_ASTRAL(vict) && GET_POS(vict) > POS_SLEEPING)
       total++;
 
@@ -1519,7 +1521,7 @@ void weapon_scatter(struct char_data *ch, struct char_data *victim, struct obj_d
   i = number(1, MAX(20, total + door + 2));
   if (i <= total)
   { // hits a victim
-    for (vict = victim->in_room->people; vict; vict = vict->next_in_room)
+    for (vict = get_ch_in_room(victim)->people; vict; vict = vict->next_in_room)
       if (vict != victim && !IS_ASTRAL(vict) && GET_POS(vict) >= POS_MORTALLYW &&
           !number(0, total - 1))
         break;
@@ -1579,7 +1581,7 @@ void weapon_scatter(struct char_data *ch, struct char_data *victim, struct obj_d
               fname(EXIT(victim, dir[i])->keyword));
       act(buf, FALSE, victim, 0, 0, TO_ROOM);
       act(buf, FALSE, victim, 0, 0, TO_CHAR);
-      damage_door(NULL, victim->in_room, dir[i], GET_OBJ_VAL(weapon, 0), DAMOBJ_PROJECTILE);
+      damage_door(NULL, get_ch_in_room(victim), dir[i], GET_OBJ_VAL(weapon, 0), DAMOBJ_PROJECTILE);
       return;
     }
   }
@@ -4931,7 +4933,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
       return;
     }
 
-    if (vict->in_room->peaceful) {
+    if (get_ch_in_room(vict)->peaceful) {
       send_to_char("Nah - leave them in peace.\r\n", ch);
       return;
     }
@@ -5657,7 +5659,7 @@ void perform_violence(void)
 
         // Penalty from too-tall.
 #ifdef USE_SLOUCH_RULES
-        if (ROOM_FLAGGED(ch->in_room, ROOM_INDOORS)) {
+        if (ch->in_room && ROOM_FLAGGED(ch->in_room, ROOM_INDOORS)) {
           if (GET_HEIGHT(ch) > ch->in_room->z*100) {
             if (GET_HEIGHT(ch) > ch->in_room->z * 200) {
               send_to_char(ch, "You're bent over double in here, there's no way you'll close the distance like this!\r\n");
