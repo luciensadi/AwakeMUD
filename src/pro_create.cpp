@@ -778,8 +778,9 @@ void update_buildrepair(void)
           send_to_char("You have completed a batch of ammo.\r\n", CH);
           GET_AMMOBOX_QUANTITY(PROG) += AMMOBUILD_BATCH_SIZE;
 
-          // Add the weight of the completed ammo to the box.
-          weight_change_object(PROG, ammo_type[GET_AMMOBOX_TYPE(PROG)].weight * AMMOBUILD_BATCH_SIZE);
+          // Add the weight of the completed ammo to the box. Due to some ammo having miniscule weight, we must fully re-calc every time.
+          weight_change_object(PROG, -GET_OBJ_WEIGHT(PROG));
+          weight_change_object(PROG, ammo_type[GET_AMMOBOX_TYPE(PROG)].weight * GET_AMMOBOX_QUANTITY(PROG));
         }
         GET_AMMOBOX_INTENDED_QUANTITY(PROG) -= AMMOBUILD_BATCH_SIZE;
         if (GET_AMMOBOX_INTENDED_QUANTITY(PROG) <= 0) {
