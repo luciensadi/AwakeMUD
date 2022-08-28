@@ -916,7 +916,27 @@ SPECIAL(johnson)
 
   bool need_to_speak = FALSE;
   bool need_to_act = FALSE;
-  if (CMD_IS("say") || CMD_IS("'") || CMD_IS("sayto") || CMD_IS("\"")) {
+  bool is_sayto = CMD_IS("sayto") || CMD_IS("\"");
+
+  if (is_sayto) {
+    // Do some really janky stuff: copy-paste target finding logic from sayto and see if they're talking to me.
+    char mangled_argument[MAX_INPUT_LENGTH + 1];
+    struct char_data *to = NULL;
+
+    strlcpy(mangled_argument, argument, sizeof(mangled_argument));
+    half_chop(argument, buf, buf2);
+    if (ch->in_veh)
+      to = get_char_veh(ch, buf, ch->in_veh);
+    else
+      to = get_char_room_vis(ch, buf);
+
+    if (to != johnson)
+      return FALSE;
+
+    // They really are talking to us.
+  }
+
+  if (CMD_IS("say") || CMD_IS("") || is_sayto) {
     if (str_str(argument, "quit"))
       comm = CMD_JOB_QUIT;
     else if (str_str(argument, "collect") || str_str(argument, "complete") || str_str(argument, "done") || str_str(argument, "finish") || str_str(argument, "pay"))
@@ -994,7 +1014,7 @@ SPECIAL(johnson)
 
   // Hack to get around the fact that moving the failure check after the interact check would make you double-speak and double-act.
   if (need_to_speak)
-    do_say(ch, argument, 0, 0);
+    do_say(ch, argument, 0, is_sayto ? SCMD_SAYTO : 0);
   if (need_to_act)
     do_action(ch, argument, cmd, 0);
 
