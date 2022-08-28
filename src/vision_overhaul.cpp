@@ -2,6 +2,10 @@
    Vision-using code calls functions from here to see what level of vision they have.
    We also rip out the vision mods from the current penalty function and put them here for centralization. */
 
+// Eventual todo: MitS pg 82, "the light level on the physical plane has no effect on astral visibility",
+//  but also "semi-opaque things like water, fog, smoke, or fire can limit visibility and add modifiers"
+//  (see astral perception modifiers table on that page).
+
 #include <map>
 
 #include "structs.hpp"
