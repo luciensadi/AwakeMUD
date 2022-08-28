@@ -3589,7 +3589,7 @@ ACMD(do_activate)
   if (GET_TRADITION(ch) == TRAD_ADEPT && !str_str(argument, "Pain editor") && !str_str(argument, "voice modulator")) {
     char name[120], tokens[MAX_STRING_LENGTH], *s;
     extern int ability_cost(int abil, int level);
-    int x;
+    int desired_level;
     strncpy(tokens, argument, sizeof(tokens) - 1);
     if ((strtok(tokens, "\"") && (s = strtok(NULL, "\"")))
         || (strtok(tokens, "'") && (s = strtok(NULL, "'")))) {
@@ -3600,10 +3600,10 @@ ACMD(do_activate)
       } else
         *buf1 = '\0';
       one_argument(argument, buf);
-      x = atoi(buf);
+      desired_level = atoi(buf);
     } else {
       half_chop(argument, buf, buf1);
-      if (!(x = atoi(buf))) {
+      if (!(desired_level = atoi(buf))) {
         strncpy(name, buf, sizeof(name) - 1);
       } else {
         half_chop(buf1, buf2, buf1);
@@ -3625,25 +3625,30 @@ ACMD(do_activate)
           }
 
     if (i < ADEPT_NUMPOWER) {
-      if (x == 0)
-        x = GET_POWER_TOTAL(ch, i);
+      if (desired_level == 0)
+        desired_level = GET_POWER_TOTAL(ch, i);
       else
-        x = MIN(x, GET_POWER_TOTAL(ch, i));
+        desired_level = MIN(desired_level, GET_POWER_TOTAL(ch, i));
       int total = 0;
-      for (int q = x > GET_POWER_ACT(ch, i) ? x : GET_POWER_ACT(ch, i);
-                   x > GET_POWER_ACT(ch, i) ? GET_POWER_ACT(ch, i) < q : x < q; q--)
+
+      for (int q = desired_level > GET_POWER_ACT(ch, i) ? desired_level            : GET_POWER_ACT(ch, i);
+                   desired_level > GET_POWER_ACT(ch, i) ? GET_POWER_ACT(ch, i) < q : desired_level < q;
+                   q--)
+      {
         total += ability_cost(i, q);
-      if (x < GET_POWER_ACT(ch, i))
+      }
+
+      if (desired_level < GET_POWER_ACT(ch, i))
         total *= -1;
 
-      int delta = ((int)(GET_REAL_MAG(ch) / 100) * 100) - GET_POWER_POINTS(ch);
-      if (total > delta)
-        send_to_char(ch, "That costs %.2f points to activate, but you only have %.2f free.\r\n", (float)(total / 100), (float)(delta / 100));
-      else if (GET_POWER_ACT(ch, i) == x) {
-        send_to_char(ch, "%s is already active at rank %d.\r\n", CAP(adept_powers[i]), x);
+      int remaining_pp = ((int)(GET_REAL_MAG(ch) / 100) * 100) - GET_POWER_POINTS(ch);
+      if (total > remaining_pp)
+        send_to_char(ch, "That costs %.2f points to activate, but you only have %.2f free.\r\n", ((float) total / 100), ((float) remaining_pp / 100));
+      else if (GET_POWER_ACT(ch, i) == desired_level) {
+        send_to_char(ch, "%s is already active at rank %d.\r\n", CAP(adept_powers[i]), desired_level);
         return;
       } else {
-        GET_POWER_ACT(ch, i) = x;
+        GET_POWER_ACT(ch, i) = desired_level;
         GET_POWER_POINTS(ch) += total;
         if (i == ADEPT_BOOST_BOD || i == ADEPT_BOOST_QUI || i == ADEPT_BOOST_STR) {
           send_to_char(ch, "You activate %s. You'll need to use the ^WBOOST^n command to engage it.\r\n", adept_powers[i]);
