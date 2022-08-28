@@ -2670,7 +2670,7 @@ bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype, bo
       return false;
 
     // Quest target protection.
-    if (!IS_NPC(ch) && victim->mob_specials.quest_id && victim->mob_specials.quest_id != GET_IDNUM(ch)) {
+    if (!IS_NPC(ch) && victim->mob_specials.quest_id && victim->mob_specials.quest_id != GET_IDNUM_EVEN_IF_PROJECTING(ch)) {
       // Aggro mobs don't get this protection.
       if (!mob_is_aggressive(victim, TRUE)) {
         // If grouped, check to see if anyone in the group is the mob's owner.

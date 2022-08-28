@@ -379,7 +379,7 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
     }
 
     if (object->obj_flags.quest_id) {
-      if (object->obj_flags.quest_id == GET_IDNUM(ch))
+      if (object->obj_flags.quest_id == GET_IDNUM_EVEN_IF_PROJECTING(ch))
         strlcat(buf, " ^Y(Quest)^n", sizeof(buf));
       else
         strlcat(buf, " ^m(Protected)^n", sizeof(buf));
@@ -1093,7 +1093,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
 #endif
 
     if (GET_MOB_QUEST_CHAR_ID(i)) {
-      if (GET_MOB_QUEST_CHAR_ID(i) == GET_IDNUM(ch)) {
+      if (GET_MOB_QUEST_CHAR_ID(i) == GET_IDNUM_EVEN_IF_PROJECTING(ch)) {
         strlcat(buf, "^Y(Quest)^n ", sizeof(buf));
       } else {
         strlcat(buf, "^m(Protected)^n ", sizeof(buf));
@@ -1281,7 +1281,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
   make_desc(ch, i, buf, FALSE, FALSE, sizeof(buf));
 
   if (GET_MOB_QUEST_CHAR_ID(i)) {
-    if (GET_MOB_QUEST_CHAR_ID(i) == GET_IDNUM(ch)) {
+    if (GET_MOB_QUEST_CHAR_ID(i) == GET_IDNUM_EVEN_IF_PROJECTING(ch)) {
       strlcat(buf, " ^Y(Quest)^n", sizeof(buf));
     } else {
       strlcat(buf, " ^m(Protected)^n", sizeof(buf));
@@ -6084,7 +6084,7 @@ ACMD(do_scan)
               strlcpy(desc_line, "", sizeof(desc_line));
 
               if (GET_MOB_QUEST_CHAR_ID(list)) {
-                if (GET_MOB_QUEST_CHAR_ID(list) == GET_IDNUM(ch)) {
+                if (GET_MOB_QUEST_CHAR_ID(list) == GET_IDNUM_EVEN_IF_PROJECTING(ch)) {
                   strlcat(desc_line, "(quest) ", sizeof(desc_line));
                 } else {
                   strlcat(desc_line, "(protected) ", sizeof(desc_line));
@@ -6183,7 +6183,7 @@ ACMD(do_scan)
               strlcpy(desc_line, "", sizeof(desc_line));
 
               if (GET_MOB_QUEST_CHAR_ID(list)) {
-                if (GET_MOB_QUEST_CHAR_ID(list) == GET_IDNUM(ch)) {
+                if (GET_MOB_QUEST_CHAR_ID(list) == GET_IDNUM_EVEN_IF_PROJECTING(ch)) {
                   strlcat(desc_line, "(quest) ", sizeof(desc_line));
                 } else {
                   strlcat(desc_line, "(protected) ", sizeof(desc_line));

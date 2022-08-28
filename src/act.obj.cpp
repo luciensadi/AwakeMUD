@@ -736,7 +736,7 @@ bool can_take_obj(struct char_data * ch, struct obj_data * obj)
     }
   }
 
-  if (obj->obj_flags.quest_id && obj->obj_flags.quest_id != GET_IDNUM(ch)) {
+  if (obj->obj_flags.quest_id && obj->obj_flags.quest_id != GET_IDNUM_EVEN_IF_PROJECTING(ch)) {
     if (access_level(ch, LVL_PRESIDENT)) {
       act("You bypass the quest flag on $p.", FALSE, ch, obj, 0, TO_CHAR);
     } else {
