@@ -38,6 +38,7 @@ size_t  strlcat(char *buf, const char *src, size_t bufsz);
 void    log(const char *str);
 void    log_vfprintf(const char *format, ...);
 void    mudlog(const char *str, struct char_data *ch, int log, bool file);
+void    mudlog_vfprintf(struct char_data *ch, int log, const char *format, ...);
 void    log_death_trap(struct char_data *ch);
 int     number(int from, int to);
 int     dice(int number, int size);

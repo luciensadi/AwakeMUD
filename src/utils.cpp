@@ -896,6 +896,21 @@ void mudlog(const char *str, struct char_data *ch, int log, bool file)
         SEND_TO_Q(buf, i);
     }
 }
+
+void mudlog_vfprintf(struct char_data *ch, int log, const char *format, ...)
+{
+  va_list args;
+
+  size_t format_str_len = strlen(format) + 1;
+  char composed_string[format_str_len];
+
+  va_start(args, format);
+  snprintf(composed_string, format_str_len, format, args);
+  va_end(args);
+
+  mudlog(format, ch, log, TRUE);
+}
+
 // This is a function to reverse the order of an obj_data linked list.
 // I ended up not using it but I'm leaving it in because it may be handy at some point.
 void reverse_obj_list(struct obj_data **obj)
@@ -2468,95 +2483,89 @@ struct obj_data *find_matching_obj_in_container(struct obj_data *container, vnum
 bool attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data *weapon, struct char_data *ch, int location) {
   if (!attachment || !weapon) {
     if (ch)
-      send_to_char(ch, "Sorry, something went wrong. Staff have been notified.\r\n");
-    mudlog("SYSERR: NULL weapon or attachment passed to attach_attachment_to_weapon().", NULL, LOG_SYSLOG, TRUE);
+      send_to_char(ch, "Sorry, something went wrong. Staff have been notified.\r\n", ch);
+    mudlog("SYSERR: NULL weapon or attachment passed to attach_attachment_to_weapon().", ch, LOG_SYSLOG, TRUE);
     return FALSE;
   }
 
-  if (location < ACCESS_ACCESSORY_LOCATION_TOP
-      || location > ACCESS_ACCESSORY_LOCATION_UNDER) {
+  // The chosen location must be valid.
+  if (location < ACCESS_ACCESSORY_LOCATION_TOP || location > ACCESS_ACCESSORY_LOCATION_UNDER) {
     if (ch)
-      send_to_char(ch, "Sorry, something went wrong. Staff have been notified.\r\n");
-    snprintf(buf, sizeof(buf), "SYSERR: Accessory attachment location %d out of range for '%s' (%ld).",
-            location, GET_OBJ_NAME(attachment), GET_OBJ_VNUM(attachment));
-    mudlog(buf, ch, LOG_SYSLOG, TRUE);
+      send_to_char("Sorry, something went wrong. Staff have been notified.\r\n", ch);
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Accessory attachment location %d out of range for '%s' (%ld).", location, GET_OBJ_NAME(attachment), GET_OBJ_VNUM(attachment));
     return FALSE;
   }
 
+  // You can only attach weapon accessories in this function.
   if (GET_OBJ_TYPE(attachment) != ITEM_GUN_ACCESSORY) {
-    if (ch)
+    if (ch) {
       send_to_char(ch, "%s is not a gun accessory.\r\n", CAP(GET_OBJ_NAME(attachment)));
-    else {
-      snprintf(buf, sizeof(buf), "SYSERR: Attempting to attach non-attachment '%s' (%ld) to '%s' (%ld).",
-              GET_OBJ_NAME(attachment), GET_OBJ_VNUM(attachment), GET_OBJ_NAME(weapon), GET_OBJ_VNUM(weapon));
-      mudlog(buf, ch, LOG_SYSLOG, TRUE);
+    } else {
+      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Attempting to attach non-attachment '%s' (%ld) to '%s' (%ld).",
+                      GET_OBJ_NAME(attachment), GET_OBJ_VNUM(attachment), GET_OBJ_NAME(weapon), GET_OBJ_VNUM(weapon));
     }
     return FALSE;
   }
 
+  // You can only attach things to guns.
   if (GET_OBJ_TYPE(weapon) != ITEM_WEAPON || !IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon))) {
-    if (ch)
+    if (ch) {
       send_to_char(ch, "%s is not a gun.\r\n", CAP(GET_OBJ_NAME(weapon)));
-    else {
-      snprintf(buf, sizeof(buf), "SYSERR: Attempting to attach '%s' (%ld) to non-gun '%s' (%ld).",
-              GET_OBJ_NAME(attachment), GET_OBJ_VNUM(attachment), GET_OBJ_NAME(weapon), GET_OBJ_VNUM(weapon));
-      mudlog(buf, ch, LOG_SYSLOG, TRUE);
+    } else {
+      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Attempting to attach '%s' (%ld) to non-gun '%s' (%ld).",
+                      GET_OBJ_NAME(attachment), GET_OBJ_VNUM(attachment), GET_OBJ_NAME(weapon), GET_OBJ_VNUM(weapon));
     }
     return FALSE;
   }
 
+  // You can't attach smartgoggles to weapons.
   if (GET_ACCESSORY_TYPE(attachment) == ACCESS_SMARTGOGGLE) {
-    if (ch)
+    if (ch) {
       send_to_char(ch, "%s are for your eyes, not your gun.\r\n", CAP(GET_OBJ_NAME(attachment)));
-    else {
-      snprintf(buf, sizeof(buf), "SYSERR: Attempting to attach smartgoggle '%s' (%ld) to '%s' (%ld).",
-              GET_OBJ_NAME(attachment), GET_OBJ_VNUM(attachment), GET_OBJ_NAME(weapon), GET_OBJ_VNUM(weapon));
-      mudlog(buf, ch, LOG_SYSLOG, TRUE);
+    } else {
+      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Attempting to attach smartgoggle '%s' (%ld) to '%s' (%ld).",
+                      GET_OBJ_NAME(attachment), GET_OBJ_VNUM(attachment), GET_OBJ_NAME(weapon), GET_OBJ_VNUM(weapon));
     }
     return FALSE;
   }
 
-  if (   ((location == ACCESS_ACCESSORY_LOCATION_TOP) && (GET_WEAPON_ATTACH_TOP_VNUM(weapon)    > 0))
-      || ((location == ACCESS_ACCESSORY_LOCATION_BARREL) && (GET_WEAPON_ATTACH_BARREL_VNUM(weapon) > 0))
-      || ((location == ACCESS_ACCESSORY_LOCATION_UNDER) && (GET_WEAPON_ATTACH_UNDER_VNUM(weapon)  > 0))) {
+  // If something is already attached there, bail out.
+  if (GET_WEAPON_ATTACH_LOC(weapon, location + ACCESS_ACCESSORY_LOCATION_DELTA) > 0) {
     if (ch) {
       send_to_char(ch, "You cannot mount more than one attachment to the %s of %s.\r\n",
                    gun_accessory_locations[location],
                    GET_OBJ_NAME(weapon));
     } else {
-      snprintf(buf, sizeof(buf), "SYSERR: Attempting to attach '%s' (%ld) to already-filled %s location on '%s' (%ld).",
-              GET_OBJ_NAME(attachment),
-              GET_OBJ_VNUM(attachment),
-              gun_accessory_locations[location],
-              GET_OBJ_NAME(weapon),
-              GET_OBJ_VNUM(weapon));
-      mudlog(buf, ch, LOG_SYSLOG, TRUE);
+      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Attempting to attach '%s' (%ld) to already-filled %s location on '%s' (%ld).",
+                      GET_OBJ_NAME(attachment),
+                      GET_OBJ_VNUM(attachment),
+                      gun_accessory_locations[location],
+                      GET_OBJ_NAME(weapon),
+                      GET_OBJ_VNUM(weapon));
     }
     return FALSE;
   }
 
-  if (   ((location == ACCESS_ACCESSORY_LOCATION_TOP) && (GET_WEAPON_ATTACH_TOP_VNUM(weapon)    < 0))
-      || ((location == ACCESS_ACCESSORY_LOCATION_BARREL) && (GET_WEAPON_ATTACH_BARREL_VNUM(weapon) < 0))
-      || ((location == ACCESS_ACCESSORY_LOCATION_UNDER) && (GET_WEAPON_ATTACH_UNDER_VNUM(weapon)  < 0))) {
+  // A negative number in an attachment slot blocks that attachment.
+  if (GET_WEAPON_ATTACH_LOC(weapon, location + ACCESS_ACCESSORY_LOCATION_DELTA) < 0) {
     if (ch) {
       send_to_char(ch, "%s isn't compatible with %s-mounted attachments.\r\n",
                    CAP(GET_OBJ_NAME(weapon)),
                    gun_accessory_locations[location]);
     } else {
-      snprintf(buf, sizeof(buf), "SYSERR: Attempting to attach '%s' (%ld) to unacceptable %s location on '%s' (%ld).",
-              GET_OBJ_NAME(attachment),
-              GET_OBJ_VNUM(attachment),
-              gun_accessory_locations[location],
-              GET_OBJ_NAME(weapon),
-              GET_OBJ_VNUM(weapon));
-      mudlog(buf, ch, LOG_SYSLOG, TRUE);
+      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Attempting to attach '%s' (%ld) to unacceptable %s location on '%s' (%ld).",
+                      GET_OBJ_NAME(attachment),
+                      GET_OBJ_VNUM(attachment),
+                      gun_accessory_locations[location],
+                      GET_OBJ_NAME(weapon),
+                      GET_OBJ_VNUM(weapon));
     }
     return FALSE;
   }
 
   // Handling for silencer and suppressor restrictions.
   if (GET_ACCESSORY_TYPE(attachment) == ACCESS_SILENCER || GET_ACCESSORY_TYPE(attachment) == ACCESS_SOUNDSUPP) {
-    // Weapon cannot be a revolver or shotgun.
+    // Certain weapon types cannot take silencers / suppressors.
     switch (GET_WEAPON_ATTACK_TYPE(weapon)) {
       case WEAP_REVOLVER:
       case WEAP_SHOTGUN:
@@ -2567,66 +2576,52 @@ bool attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data *w
         if (ch) {
           send_to_char(ch, "%ss can't use silencers or suppressors.\r\n", CAP(weapon_types[GET_WEAPON_ATTACK_TYPE(weapon)]));
         } else {
-          snprintf(buf, sizeof(buf), "SYSERR: Attempting to attach silencer/suppressor '%s' (%ld) to %s '%s' (%ld).",
-                  GET_OBJ_NAME(attachment),
-                  GET_OBJ_VNUM(attachment),
-                  weapon_types[GET_WEAPON_ATTACK_TYPE(weapon)],
-                  GET_OBJ_NAME(weapon),
-                  GET_OBJ_VNUM(weapon));
-          mudlog(buf, ch, LOG_SYSLOG, TRUE);
+          mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Attempting to attach silencer/suppressor '%s' (%ld) to %s '%s' (%ld).",
+                          GET_OBJ_NAME(attachment),
+                          GET_OBJ_VNUM(attachment),
+                          weapon_types[GET_WEAPON_ATTACK_TYPE(weapon)],
+                          GET_OBJ_NAME(weapon),
+                          GET_OBJ_VNUM(weapon));
         }
         return FALSE;
     }
 
-    // Silencers.
+    // Restrictions for silencers:
     if (GET_ACCESSORY_TYPE(attachment) == ACCESS_SILENCER) {
       // Weapon cannot have BF or FA modes.
       if (WEAPON_CAN_USE_FIREMODE(weapon, MODE_BF) || WEAPON_CAN_USE_FIREMODE(weapon, MODE_FA)) {
         if (ch) {
           send_to_char(ch, "%s would tear your silencer apart-- it needs a sound suppressor.\r\n", CAP(GET_OBJ_NAME(weapon)));
         } else {
-          snprintf(buf, sizeof(buf), "SYSERR: Attempting to attach pistol silencer '%s' (%ld) to BF/FA weapon '%s' (%ld).",
-                  GET_OBJ_NAME(attachment),
-                  GET_OBJ_VNUM(attachment),
-                  GET_OBJ_NAME(weapon),
-                  GET_OBJ_VNUM(weapon));
-          mudlog(buf, ch, LOG_SYSLOG, TRUE);
+          mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Attempting to attach pistol silencer '%s' (%ld) to BF/FA weapon '%s' (%ld).",
+                          GET_OBJ_NAME(attachment),
+                          GET_OBJ_VNUM(attachment),
+                          GET_OBJ_NAME(weapon),
+                          GET_OBJ_VNUM(weapon));
         }
         return FALSE;
       }
     }
 
-    // Sound suppressors.
+    // Restrictions for sound suppressors:
     if (GET_ACCESSORY_TYPE(attachment) == ACCESS_SOUNDSUPP) {
       // Weapon must have BF or FA mode available.
       if (!(WEAPON_CAN_USE_FIREMODE(weapon, MODE_BF) || WEAPON_CAN_USE_FIREMODE(weapon, MODE_FA))) {
         if (ch) {
           send_to_char(ch, "Sound suppressors are too heavy-duty for %s-- it needs a silencer.\r\n", CAP(GET_OBJ_NAME(weapon)));
         } else {
-          snprintf(buf, sizeof(buf), "SYSERR: Attempting to attach rifle suppressor '%s' (%ld) to non-BF/FA weapon '%s' (%ld).",
-                  GET_OBJ_NAME(attachment),
-                  GET_OBJ_VNUM(attachment),
-                  GET_OBJ_NAME(weapon),
-                  GET_OBJ_VNUM(weapon));
-          mudlog(buf, ch, LOG_SYSLOG, TRUE);
+          mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Attempting to attach rifle suppressor '%s' (%ld) to non-BF/FA weapon '%s' (%ld).",
+                          GET_OBJ_NAME(attachment),
+                          GET_OBJ_VNUM(attachment),
+                          GET_OBJ_NAME(weapon),
+                          GET_OBJ_VNUM(weapon));
         }
         return FALSE;
       }
     }
-
-    // Vents on weapons with integral recoil.
-    if (GET_ACCESSORY_TYPE(attachment) == ACCESS_GASVENT) {
-      if (GET_ACCESSORY_RATING(attachment) < GET_WEAPON_INTEGRAL_RECOIL_COMP(weapon)) {
-        send_to_char(ch, "That would make it perform worse! The integral recoil comp is already better than the vent's rating.\r\n");
-        return FALSE;
-      }
-
-      if (GET_ACCESSORY_RATING(attachment) == GET_WEAPON_INTEGRAL_RECOIL_COMP(weapon)) {
-        send_to_char(ch, "That wouldn't provide any benefit. The integral recoil comp is already equal to the vent's rating.\r\n");
-        return FALSE;
-      }
-    }
   }
+
+  // We've cleared preconditions at this point. Proceed with attaching.
 
   // Transfer the first (and only the first) applies-affect from the attachment to the weapon.
   if (attachment->affected[0].modifier != 0) {
@@ -2640,33 +2635,32 @@ bool attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data *w
       }
     }
 
+    // Complain loudly if this operation failed.
     if (!successfully_modified) {
-      if (ch) {
-        snprintf(buf, sizeof(buf), "You seem unable to attach %s to %s.\r\n",
-                GET_OBJ_NAME(attachment), GET_OBJ_NAME(weapon));
-        send_to_char(buf, ch);
-      }
+      if (ch)
+        send_to_char(ch, "You seem unable to attach %s to %s.\r\n", GET_OBJ_NAME(attachment), GET_OBJ_NAME(weapon));
 
-      snprintf(buf, sizeof(buf), "WARNING: '%s' (%ld) attempted to attach '%s' (%ld) to '%s' (%ld), but the gun was full up on affects. Something needs revising."
-              " Gun's current top/barrel/bottom attachment vnums are %d / %d / %d.",
-              ch ? GET_CHAR_NAME(ch) : "An automated process", ch ? GET_IDNUM(ch) : -1,
-              GET_OBJ_NAME(attachment), GET_OBJ_VNUM(attachment),
-              GET_OBJ_NAME(weapon), GET_OBJ_VNUM(weapon),
-              GET_WEAPON_ATTACH_TOP_VNUM(weapon),
-              GET_WEAPON_ATTACH_BARREL_VNUM(weapon),
-              GET_WEAPON_ATTACH_UNDER_VNUM(weapon));
-      mudlog(buf, ch, LOG_SYSLOG, TRUE);
+      mudlog_vfprintf(ch, LOG_SYSLOG, "WARNING: '%s' (%ld) attempted to attach '%s' (%ld) to '%s' (%ld),"
+                      " but the gun was full up on affects. Something needs revising."
+                      " Gun's current top/barrel/bottom attachment vnums are %d / %d / %d.",
+                      ch ? GET_CHAR_NAME(ch) : "An automated process", ch ? GET_IDNUM(ch) : -1,
+                      GET_OBJ_NAME(attachment), GET_OBJ_VNUM(attachment),
+                      GET_OBJ_NAME(weapon), GET_OBJ_VNUM(weapon),
+                      GET_WEAPON_ATTACH_TOP_VNUM(weapon),
+                      GET_WEAPON_ATTACH_BARREL_VNUM(weapon),
+                      GET_WEAPON_ATTACH_UNDER_VNUM(weapon));
       return FALSE;
     }
   }
 
-  // Add the attachment's weight to the weapon's weight, but only if a player attached it.
-  if (ch)
+  // Several changes are needed if a player is directly attaching. These are skipped for auto-attach cases.
+  if (ch) {
+    // Add the attachment's weight to the weapon's weight.
     weight_change_object(weapon, GET_OBJ_WEIGHT(attachment));
 
-  // Add the attachment's cost to the weapon's cost, but only if a player attached it.
-  if (ch)
+    // Add the attachment's cost to the weapon's cost, but only if a player attached it.
     GET_OBJ_COST(weapon) = MAX(0, GET_OBJ_COST(weapon) + GET_OBJ_COST(attachment));
+  }
 
   // Update the weapon's aff flags.
   for (int waff_index = 0; acceptable_weapon_attachment_affects[waff_index] != -1; waff_index++) {
@@ -2705,30 +2699,29 @@ bool attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data *w
 }
 
 struct obj_data *unattach_attachment_from_weapon(int location, struct obj_data *weapon, struct char_data *ch) {
-  struct obj_data *workshop;
-
+  // The weapon must exist.
   if (!weapon) {
     if (ch)
-      send_to_char(ch, "Sorry, something went wrong. Staff have been notified.\r\n");
-    mudlog("SYSERR: NULL weapon passed to unattach_attachment_from_weapon().", NULL, LOG_SYSLOG, TRUE);
+      send_to_char("Sorry, something went wrong. Staff have been notified.\r\n", ch);
+    mudlog("SYSERR: NULL weapon passed to unattach_attachment_from_weapon().", ch, LOG_SYSLOG, TRUE);
     return NULL;
   }
 
+  // The location must be valid.
   if (location < ACCESS_LOCATION_TOP || location > ACCESS_LOCATION_UNDER) {
     if (ch)
-      send_to_char(ch, "Sorry, something went wrong. Staff have been notified.\r\n");
-    snprintf(buf, sizeof(buf), "SYSERR: Attempt to unattach item from invalid location %d on '%s' (%ld).",
-            location, GET_OBJ_NAME(weapon), GET_OBJ_VNUM(weapon));
+      send_to_char("Sorry, something went wrong. Staff have been notified.\r\n", ch);
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Attempt to unattach item from invalid location %d on '%s' (%ld).",
+                    location, GET_OBJ_NAME(weapon), GET_OBJ_VNUM(weapon));
     return NULL;
   }
 
-  if (GET_OBJ_TYPE(weapon) != ITEM_WEAPON) {
-    if (ch)
+  if (GET_OBJ_TYPE(weapon) != ITEM_WEAPON || !IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon))) {
+    if (ch) {
       send_to_char("You can only unattach accessories from weapons.\r\n", ch);
-    else {
-      snprintf(buf, sizeof(buf), "SYSERR: Attempting to unattach something from non-weapon '%s' (%ld).",
-              GET_OBJ_NAME(weapon), GET_OBJ_VNUM(weapon));
-      mudlog(buf, ch, LOG_SYSLOG, TRUE);
+    } else {
+      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Attempting to unattach something from non-gun '%s' (%ld).",
+                      GET_OBJ_NAME(weapon), GET_OBJ_VNUM(weapon));
     }
     return NULL;
   }
@@ -2740,9 +2733,11 @@ struct obj_data *unattach_attachment_from_weapon(int location, struct obj_data *
   if (!attachment) {
     if (ch)
       send_to_char("You accidentally break it as you remove it!\r\n", ch);
-    snprintf(buf, sizeof(buf), "SYSERR: Attempting to unattach invalid vnum %d from %s of weapon '%s' (%ld).",
-            GET_WEAPON_ATTACH_LOC(weapon, location), gun_accessory_locations[location - ACCESS_ACCESSORY_LOCATION_DELTA], GET_OBJ_NAME(weapon), GET_OBJ_VNUM(weapon));
-    mudlog(buf, ch, LOG_SYSLOG, TRUE);
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Attempting to unattach invalid vnum %d from %s of weapon '%s' (%ld).",
+                    GET_WEAPON_ATTACH_LOC(weapon, location),
+                    gun_accessory_locations[location - ACCESS_ACCESSORY_LOCATION_DELTA],
+                    GET_OBJ_NAME(weapon),
+                    GET_OBJ_VNUM(weapon));
 
     // We use a raw get_obj_val here so we can set it.
     GET_OBJ_VAL(weapon, location) = 0;
@@ -2750,10 +2745,11 @@ struct obj_data *unattach_attachment_from_weapon(int location, struct obj_data *
   }
 
   if (GET_ACCESSORY_TYPE(attachment) == ACCESS_GASVENT) {
-    if (ch) {
+    // Non-chargen chars have to pay and have a workshop to unattach gas vents.
+    if (ch && !PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
       int removal_cost = MAX(GET_OBJ_COST(weapon) / 10, MINIMUM_GAS_VENT_REMOVAL_COST);
 
-      if (!(workshop = find_workshop(ch, TYPE_GUNSMITHING))) {
+      if (!find_workshop(ch, TYPE_GUNSMITHING)) {
         send_to_char(ch, "That's a complex task! You'll need a gunsmithing workshop and %d nuyen on hand to do that.\r\n", removal_cost);
         return NULL;
       }
@@ -2782,11 +2778,14 @@ struct obj_data *unattach_attachment_from_weapon(int location, struct obj_data *
     }
 
     if (!successfully_modified) {
-      snprintf(buf, sizeof(buf), "WARNING: '%s' (%ld) unattached '%s' (%ld) from '%s' (%ld), but the gun was missing the attachment's affect. Something needs revising.",
-              ch ? GET_CHAR_NAME(ch) : "An automated process", ch ? GET_IDNUM(ch) : -1,
-              GET_OBJ_NAME(attachment), GET_OBJ_VNUM(attachment),
-              GET_OBJ_NAME(weapon), GET_OBJ_VNUM(weapon));
-      mudlog(buf, ch, LOG_SYSLOG, TRUE);
+      mudlog_vfprintf(ch, LOG_SYSLOG, "WARNING: '%s' (%ld) unattached '%s' (%ld) from '%s' (%ld), but"
+                      " the gun was missing the attachment's affect. Something needs revising.",
+                      ch ? GET_CHAR_NAME(ch) : "An automated process",
+                      ch ? GET_IDNUM(ch) : -1,
+                      GET_OBJ_NAME(attachment),
+                      GET_OBJ_VNUM(attachment),
+                      GET_OBJ_NAME(weapon),
+                      GET_OBJ_VNUM(weapon));
     }
   }
 
@@ -2816,7 +2815,7 @@ struct obj_data *unattach_attachment_from_weapon(int location, struct obj_data *
           continue;
 
         // Resolve the thing into a vnum and skip if it's not kosher.
-        long rnum = real_object(GET_WEAPON_ATTACH_LOC(weapon, attach_loc));
+        rnum_t rnum = real_object(GET_WEAPON_ATTACH_LOC(weapon, attach_loc));
         if (rnum < 0)
           continue;
 
@@ -2827,13 +2826,21 @@ struct obj_data *unattach_attachment_from_weapon(int location, struct obj_data *
         }
       }
 
+      // Check the weapon's own proto flags (we don't want to remove built-in flags).
+      if (!found_duplicate) {
+        rnum_t weapon_rnum = real_object(GET_OBJ_VNUM(weapon));
+        if ((&obj_proto[weapon_rnum])->obj_flags.bitvector.IsSet(acceptable_weapon_attachment_affects[waff_index])) {
+          found_duplicate = TRUE;
+        }
+      }
+
       // Didn't find another item with this flag, so un-set it.
       if (!found_duplicate)
         weapon->obj_flags.bitvector.RemoveBit(acceptable_weapon_attachment_affects[waff_index]);
     }
   }
 
-  // Update the weapon's attach location to reflect this item.
+  // Update the weapon's attach location to reflect the removal of this item.
   GET_OBJ_VAL(weapon, location) = 0;
 
   // Send the success message, assuming there's a character.
