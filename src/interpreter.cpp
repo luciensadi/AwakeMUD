@@ -737,6 +737,7 @@ struct command_info cmd_info[] =
     { "pour"       , POS_SITTING , do_pour     , 0, SCMD_POUR, FALSE },
     { "position"   , POS_DEAD    , do_position , 0, 0, TRUE },
     { "possess"    , POS_DEAD    , do_wizpossess, LVL_FIXER, 0, FALSE },
+    { "powers"     , POS_DEAD    , do_skills   , 0, SCMD_ABILITIES, TRUE },
     { "powerdown"  , POS_DEAD    , do_powerdown, 0, 0, FALSE },
     { "press"      , POS_SITTING , do_push     , 0, 0, FALSE },
     { "prompt"     , POS_DEAD    , do_display  , 0, 0, TRUE },
@@ -3468,8 +3469,6 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("board", "enter");
   COMMAND_ALIAS("gps", "gridguide");
   COMMAND_ALIAS("detach", "unattach");
-
-  COMMAND_ALIAS("powers", "abilities");
 
   COMMAND_ALIAS("scna", "scan");
   COMMAND_ALIAS("sacn", "scan");
