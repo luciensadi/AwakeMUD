@@ -1254,19 +1254,22 @@ void CopyoverSet( descriptor_t *apDescriptor, const char *apData )
 
 void MSDPUpdate( descriptor_t *apDescriptor )
 {
-  int i; /* Loop counter */
+  if (!apDescriptor) {
+    ReportBug("apDescriptor was NULL on entering MSDPUpdate()!");
+    return;
+  }
 
-  protocol_t *pProtocol = apDescriptor ? apDescriptor->pProtocol : NULL;
+  protocol_t *pProtocol = apDescriptor->pProtocol;
 
-  for ( i = eMSDP_NONE+1; i < eMSDP_MAX; ++i )
+  for ( int i = eMSDP_NONE+1; i < eMSDP_MAX; ++i )
   {
-    if ( pProtocol->pVariables[i] && pProtocol->pVariables[i]->bReport )
+    if ( !pProtocol->pVariables[i] )
+      continue;
+
+    if ( pProtocol->pVariables[i]->bReport && pProtocol->pVariables[i]->bDirty )
     {
-      if ( pProtocol->pVariables[i] && pProtocol->pVariables[i]->bDirty )
-      {
-        MSDPSend( apDescriptor, (variable_t)i );
-        pProtocol->pVariables[i]->bDirty = FALSE;
-      }
+      MSDPSend( apDescriptor, (variable_t)i );
+      pProtocol->pVariables[i]->bDirty = FALSE;
     }
   }
 }
