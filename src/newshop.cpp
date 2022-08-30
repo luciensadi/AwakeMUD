@@ -1200,6 +1200,10 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
     if (!(obj = get_obj_in_list_vis(ch, arg, ch->cyberware))) {
       obj = get_obj_in_list_vis(ch, arg, ch->bioware);
     }
+    if (obj && !shop_table[shop_nr].flags.IsSet(SHOP_CHARGEN)) {
+      send_to_char(ch, "You'll have to uninstall %s^n before you can sell it.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
+      return;
+    }
   }
 
   if (!obj) {
