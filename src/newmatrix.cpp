@@ -1122,15 +1122,14 @@ ACMD(do_locate)
       if (PERSONA) {
         for (struct obj_data *obj = matrix[PERSONA->in_host].file; obj && success > 0; obj = obj->next_content)
           if (GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY || GET_OBJ_TYPE(obj) == ITEM_PROGRAM) {
-            if (!GET_OBJ_VAL(obj, 7) && isname(arg, GET_OBJ_NAME(obj))) {
-              GET_OBJ_VAL(obj, 7) = GET_IDNUM(ch);
-              GET_OBJ_VAL(obj, 9) = 0;
-              success--;
-              i++;
-            } else if (GET_OBJ_VAL(obj, 7) == GET_IDNUM(ch) && GET_OBJ_VAL(obj, 9) && isname(arg, GET_OBJ_NAME(obj))) {
-              GET_OBJ_VAL(obj, 9) = 0;
-              success--;
-              i++;
+            if (isname(arg, get_string_after_color_code_removal(GET_OBJ_NAME(obj), NULL))
+                || isname(arg, GET_OBJ_KEYWORDS(obj)))
+            {
+              if (GET_DECK_ACCESSORY_FILE_FOUND_BY(obj) == 0 || GET_DECK_ACCESSORY_FILE_FOUND_BY(obj) == PERSONA->idnum) {
+                GET_DECK_ACCESSORY_FILE_FOUND_BY(obj) = PERSONA->idnum;
+                success--;
+                i++;
+              }
             }
           }
         if (!i)
@@ -1173,11 +1172,13 @@ ACMD(do_locate)
     success = system_test(PERSONA->in_host, ch, TEST_INDEX, SOFT_EVALUATE, 0);
     if (success <= 0) {
       send_to_icon(PERSONA, "You fumble your attempt to locate paydata.\r\n");
+
+      matrix[PERSONA->in_host].undiscovered_paydata = MAX(matrix[PERSONA->in_host].undiscovered_paydata - 1, 0);
       return;
     }
 
-    if (!matrix[PERSONA->in_host].type && matrix[PERSONA->in_host].undiscovered_paydata)
-      while (success && matrix[PERSONA->in_host].undiscovered_paydata) {
+    if (matrix[PERSONA->in_host].type == HOST_DATASTORE && matrix[PERSONA->in_host].undiscovered_paydata > 0) {
+      while (success && matrix[PERSONA->in_host].undiscovered_paydata > 0) {
         matrix[PERSONA->in_host].undiscovered_paydata--;
         success--;
         i++;
@@ -1244,9 +1245,11 @@ ACMD(do_locate)
         }
         obj_to_host(obj, &matrix[PERSONA->in_host]);
       }
-    if (!i)
+    }
+
+    if (!i) {
       send_to_icon(PERSONA, "There's no paydata left to find.\r\n");
-    else {
+    } else {
       switch (number(0, 100)) {
         case 0:
           send_to_icon(PERSONA, "Your interface highlights %d chunk%s of primo paydata.\r\n", i, i > 1 ? "s": "");
@@ -1364,7 +1367,7 @@ ACMD(do_matrix_look)
       send_to_icon(PERSONA, "^Y%s^n\r\n", icon->look_desc);
 
   for (struct obj_data *obj = matrix[PERSONA->in_host].file; obj; obj = obj->next_content) {
-    if (GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_FILE_FOUND_BY(obj) == PERSONA->idnum)
+    if ((GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY || GET_OBJ_TYPE(obj) == ITEM_PROGRAM) && GET_DECK_ACCESSORY_FILE_FOUND_BY(obj) == PERSONA->idnum)
     {
       if (GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(obj)) {
         send_to_icon(PERSONA, "^yA file named %s floats here (Downloading - %d%%).^n\r\n",
@@ -1629,23 +1632,7 @@ ACMD(do_logoff)
   snprintf(buf, sizeof(buf), "%s depixelates and vanishes from the host.\r\n", PERSONA->name);
   send_to_host(PERSONA->in_host, buf, PERSONA, FALSE);
 
-  // Clean up their uploads.
-  if (PERSONA->decker->deck) {
-    for (struct obj_data *soft = PERSONA->decker->deck->contains; soft; soft = soft->next_content)
-      if (GET_OBJ_TYPE(soft) != ITEM_PART && GET_OBJ_VAL(soft, 9) > 0 && GET_OBJ_VAL(soft, 8) == 1)
-        GET_OBJ_VAL(soft, 9) = GET_OBJ_VAL(soft, 8) = 0;
-  }
-
-  // Clean out downloads involving them.
-  for (struct obj_data *file = matrix[PERSONA->in_host].file; file; file = file->next_content) {
-    if (GET_OBJ_TYPE(file) == ITEM_DECK_ACCESSORY
-        && GET_DECK_ACCESSORY_FILE_REMAINING(file)
-        && find_icon_by_id(GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(file)) == PERSONA)
-    {
-      GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(file) = 0;
-      GET_DECK_ACCESSORY_FILE_REMAINING(file) = 0;
-    }
-  }
+  // Cleanup of uploads, downloads, etc is handled in icon_from_host, which is called in extract_icon.
 
   extract_icon(PERSONA);
   PERSONA = NULL;

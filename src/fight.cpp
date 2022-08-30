@@ -3027,12 +3027,6 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
   if (!awake && GET_PHYSICAL(victim) <= 0)
     victim->points.lastdamage = time(0);
 
-  // Statement added for debugging. TODO: Remove.
-  if (GET_LEVEL(victim) == LVL_PRESIDENT && (attacktype == TYPE_BLACKIC || attacktype == TYPE_DUMPSHOCK)) {
-    send_to_char(ch, "^YMortally wounding you for debugging.\r\n");
-    GET_PHYSICAL(real_body) = 0;
-  }
-
   if (update_pos(victim)) {
     // They died from dumpshock.
     return TRUE;

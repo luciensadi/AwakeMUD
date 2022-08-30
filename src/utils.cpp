@@ -901,14 +901,13 @@ void mudlog_vfprintf(struct char_data *ch, int log, const char *format, ...)
 {
   va_list args;
 
-  size_t format_str_len = strlen(format) + 1;
-  char composed_string[format_str_len];
+  char composed_string[10000];
 
   va_start(args, format);
-  snprintf(composed_string, format_str_len, format, args);
+  vsprintf(composed_string, format, args);
   va_end(args);
 
-  mudlog(format, ch, log, TRUE);
+  mudlog(composed_string, ch, log, TRUE);
 }
 
 // This is a function to reverse the order of an obj_data linked list.

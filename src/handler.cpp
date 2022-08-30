@@ -1235,22 +1235,40 @@ void icon_from_host(struct matrix_icon *icon)
     }
   }
 
+  // Clean up their uploads.
+  if (icon->decker && icon->decker->deck) {
+    for (struct obj_data *soft = icon->decker->deck->contains; soft; soft = soft->next_content)
+      if (GET_OBJ_TYPE(soft) != ITEM_PART && GET_OBJ_VAL(soft, 9) > 0 && GET_OBJ_VAL(soft, 8) == 1)
+        GET_OBJ_VAL(soft, 9) = GET_OBJ_VAL(soft, 8) = 0;
+  }
+
   // Unlink any files that have been claimed by this icon.
   if (icon->idnum) {
     for (struct obj_data *soft = matrix[icon->in_host].file, *next_file; soft; soft = next_file) {
       next_file = soft->next_content;
 
-      if (GET_OBJ_TYPE(soft) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(soft) == TYPE_FILE) {
+      if (GET_OBJ_TYPE(soft) == ITEM_DECK_ACCESSORY || GET_OBJ_TYPE(soft) == ITEM_PROGRAM) {
+        // Stop in-progress downloads.
+        if (GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(soft) == icon->idnum) {
+          GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(soft) = 0;
+          GET_DECK_ACCESSORY_FILE_REMAINING(soft) = 0;
+        }
+
+        // Unlock found items so others can find them.
         if (GET_DECK_ACCESSORY_FILE_FOUND_BY(soft) == icon->idnum) {
           GET_DECK_ACCESSORY_FILE_FOUND_BY(soft) = 0;
           GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(soft) = 0;
           GET_DECK_ACCESSORY_FILE_REMAINING(soft) = 0;
 
-          // If it's paydata, we extract it entirely, then potentially put it back in the paydata queue to re-find.
-          if (GET_DECK_ACCESSORY_FILE_HOST_VNUM(soft) == icon->in_host) {
+          // If it's paydata, we extract it entirely, then potentially put it back in the paydata queue to be rediscovered.
+          if (GET_OBJ_TYPE(soft) == ITEM_DECK_ACCESSORY
+              && GET_DECK_ACCESSORY_TYPE(soft) == TYPE_FILE
+              && GET_DECK_ACCESSORY_FILE_HOST_VNUM(soft) == matrix[icon->in_host].vnum)
+          {
             // 66% chance of being rediscoverable.
-            if (number(0, 2))
+            if (number(0, 2)) {
               matrix[icon->in_host].undiscovered_paydata++;
+            }
 
             extract_obj(soft);
             continue;
@@ -2090,7 +2108,9 @@ void obj_from_obj(struct obj_data * obj)
 void extract_icon(struct matrix_icon * icon)
 {
   struct matrix_icon *temp;
-  for (struct phone_data *k = phone_list; k; k = k->next)
+
+  // Clean up phone entries.
+  for (struct phone_data *k = phone_list; k; k = k->next) {
     if (k->persona == icon)
     {
       struct phone_data *temp;
@@ -2119,9 +2139,11 @@ void extract_icon(struct matrix_icon * icon)
       delete k;
       break;
     }
+  }
 
-  if (icon->in_host)
-  {
+  // Clean up host data.
+  if (icon->in_host) {
+    // Wipe out combat info.
     if (icon->fighting) {
       for (struct matrix_icon *vict = matrix[icon->in_host].icons; vict; vict = vict->next_in_host)
         if (vict->fighting == icon) {
@@ -2130,11 +2152,13 @@ void extract_icon(struct matrix_icon * icon)
         }
       REMOVE_FROM_LIST(icon, matrix[icon->in_host].fighting, next_fighting);
     }
+
+    // Extract from host.
     if (icon->in_host != NOWHERE)
       icon_from_host(icon);
   }
-  if (icon->decker)
-  {
+
+  if (icon->decker) {
     if (icon->decker->hitcher) {
       PLR_FLAGS(icon->decker->hitcher).RemoveBit(PLR_MATRIX);
       send_to_char(icon->decker->hitcher, "You return to your senses.\r\n");
@@ -2151,10 +2175,10 @@ void extract_icon(struct matrix_icon * icon)
       delete seen;
     }
     DELETE_AND_NULL(icon->decker);
-  } else
-  {
+  } else {
     ic_index[icon->number].number--;
   }
+
   REMOVE_FROM_LIST(icon, icon_list, next);
   Mem->DeleteIcon(icon);
 }
