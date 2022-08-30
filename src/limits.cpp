@@ -1123,9 +1123,6 @@ void save_vehicles(bool fromCopyover)
                    GET_VEH_NAME(veh), GET_ROOM_NAME(temp_room), GET_ROOM_VNUM(temp_room));
        log(buf); */
         switch (GET_JURISDICTION(temp_room)) {
-          case ZONE_PORTLAND:
-            temp_room = &world[real_room(RM_PORTLAND_PARKING_GARAGE)];
-            break;
           case ZONE_SEATTLE:
             temp_room = &world[real_room(RM_SEATTLE_PARKING_GARAGE)];
             break;
@@ -1134,6 +1131,23 @@ void save_vehicles(bool fromCopyover)
             break;
           case ZONE_OCEAN:
             temp_room = &world[real_room(RM_OCEAN_PARKING_GARAGE)];
+            break;
+          case ZONE_PORTLAND:
+#ifdef USE_PRIVATE_CE_WORLD
+            switch (number(0, 2)) {
+              case 0:
+                temp_room = &world[real_room(RM_PORTLAND_PARKING_GARAGE1)];
+                break;
+              case 1:
+                temp_room = &world[real_room(RM_PORTLAND_PARKING_GARAGE2)];
+                break;
+              case 2:
+                temp_room = &world[real_room(RM_PORTLAND_PARKING_GARAGE3)];
+                break;
+            }
+#else
+            temp_room = &world[real_room(RM_PORTLAND_PARKING_GARAGE)];
+#endif
             break;
         }
       }
