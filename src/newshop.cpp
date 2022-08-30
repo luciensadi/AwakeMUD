@@ -1131,13 +1131,37 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
     }
     send_to_char(ch, "You put down a %d nuyen deposit on your order.\r\n", preorder_cost_for_one_object * buynum);
 
-    if (totaltime < 1) {
-      int hours = MAX(1, (int)(24 * totaltime));
-      snprintf(buf, sizeof(buf), "%s That will take about %d hour%s to come in.", GET_CHAR_NAME(ch), hours, hours == 1 ? "" : "s");
+    if (MOB_FLAGGED(keeper, MOB_INANIMATE)) {
+      if (totaltime < 1) {
+        int hours = MAX(1, (int)(24 * totaltime));
+        snprintf(buf, sizeof(buf), "displays, \"ETA for %s: %d hour%s.\"",
+                 get_string_after_color_code_removal(GET_OBJ_NAME(obj), NULL),
+                 hours,
+                 hours == 1 ? "" : "s");
+      } else {
+        snprintf(buf, sizeof(buf), "displays, \"ETA for %s: %d day%s.\"",
+                 get_string_after_color_code_removal(GET_OBJ_NAME(obj), NULL),
+                 (int) totaltime,
+                 totaltime == 1 ? "" : "s");
+      }
+      do_new_echo(keeper, buf, cmd_echo, 0);
     } else {
-      snprintf(buf, sizeof(buf), "%s That will take about %d day%s to come in.", GET_CHAR_NAME(ch), (int) totaltime, totaltime == 1 ? "" : "s");
+      if (totaltime < 1) {
+        int hours = MAX(1, (int)(24 * totaltime));
+        snprintf(buf, sizeof(buf), "%s %s will take about %d hour%s to come in.",
+                 GET_CHAR_NAME(ch),
+                 get_string_after_color_code_removal(GET_OBJ_NAME(obj), NULL),
+                 hours,
+                 hours == 1 ? "" : "s");
+      } else {
+        snprintf(buf, sizeof(buf), "%s %s will take about %d day%s to come in.",
+                 GET_CHAR_NAME(ch),
+                 get_string_after_color_code_removal(GET_OBJ_NAME(obj), NULL),
+                 (int) totaltime,
+                 totaltime == 1 ? "" : "s");
+      }
+      do_say(keeper, buf, cmd_say, SCMD_SAYTO);
     }
-    do_say(keeper, buf, cmd_say, SCMD_SAYTO);
 
     // If they have a pre-existing order, just bump up the quantity and update the order time.
     struct shop_order_data *order = shop_table[shop_nr].order;
