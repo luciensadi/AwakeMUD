@@ -646,7 +646,7 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
       lose_nuyen(ch, price, NUYEN_OUTFLOW_SHOP_PURCHASES);
 
     // Log it.
-    snprintf(buf, sizeof(buf), "Purchased cyber/bio '%s' (%ld) for %d nuyen.", GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj), price);
+    snprintf(buf, sizeof(buf), "Purchased cyber/bio '%s' (%ld) for %d nuyen.", GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj), price + (order ? order->paid : 0));
     mudlog(buf, ch, LOG_GRIDLOG, TRUE);
 
     if (sell) {
