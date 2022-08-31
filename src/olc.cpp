@@ -1936,6 +1936,11 @@ ACMD(do_zedit)
 
   if (zonenum >= 0 && zonenum <= top_of_zone_table) {
     REQUIRE_ZONE_EDIT_ACCESS(zonenum);
+  } else {
+    if (!access_level(ch, LVL_EXECUTIVE)) {
+      send_to_char("Sorry, you're not able to create new zones.\r\n", ch);
+      return;
+    }
   }
 
   if (!*arg1) {
