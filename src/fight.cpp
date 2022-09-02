@@ -815,7 +815,7 @@ void raw_kill(struct char_data * ch)
       make_corpse(ch);
 
     if (!IS_NPC(ch)) {
-      for (bio = ch->bioware; bio; bio = bio->next_content)
+      for (bio = ch->bioware; bio; bio = bio->next_content) {
         switch (GET_BIOWARE_TYPE(bio)) {
           case BIO_ADRENALPUMP:
             if (GET_OBJ_VAL(bio, 5) > 0) {
@@ -831,6 +831,7 @@ void raw_kill(struct char_data * ch)
             GET_BIOWARE_IS_ACTIVATED(bio) = 0;
             break;
         }
+      }
 
       reset_all_drugs_for_char(ch);
 
@@ -888,22 +889,11 @@ void raw_kill(struct char_data * ch)
         for (struct char_data *temp = get_ch_in_room(ch)->people; temp; temp = temp->next_in_room)
           if (PLR_FLAGGED(temp, PLR_MATRIX))
             temp->persona->decker->hitcher = NULL;
-      } else {
-        if (access_level(ch, LVL_PRESIDENT))
-          send_to_char(ch, "^YYou're not in the Matrix.\r\n");
       }
 
       char_from_room(ch);
       char_to_room(ch, &world[i]);
       PLR_FLAGS(ch).SetBit(PLR_JUST_DIED);
-
-      // Since they didn't get docwagon'd and are naked now, give them clothes.
-      if (!PLR_FLAGGED(ch, PLR_NEWBIE)) {
-        struct obj_data *paper_gown = read_object(OBJ_DOCWAGON_PAPER_GOWN, VIRTUAL);
-        if (paper_gown) {
-          equip_char(ch, paper_gown, WEAR_BODY);
-        }
-      }
     }
   }
 

@@ -2950,6 +2950,25 @@ void nanny(struct descriptor_data * d, char *arg)
           GET_PHYSICAL(d->character) = (int)(GET_MAX_PHYSICAL(d->character) * .4);
           GET_MENTAL(d->character) = (int)(GET_MAX_MENTAL(d->character) * .4);
         }
+
+        {
+          // Check if they're naked.
+          int eq_idx = 0;
+          while (eq_idx < NUM_WEARS) {
+            if (GET_EQ(d->character, eq_idx++))
+              break;
+          }
+          // If they are, give them a hospital gown.
+          if (eq_idx >= NUM_WEARS) {
+            struct obj_data *paper_gown = read_object(OBJ_DOCWAGON_PAPER_GOWN, VIRTUAL);
+            if (paper_gown) {
+              equip_char(d->character, paper_gown, WEAR_BODY);
+            } else {
+              mudlog_vfprintf(d->character, LOG_SYSLOG, "SYSERR: Unabled to load DocWagon paper gown (object %ld)! You probably need to create it.", OBJ_DOCWAGON_PAPER_GOWN);
+            }
+          }
+        }
+
         playerDB.SaveChar(d->character, GET_LOADROOM(d->character));
       }
       // Wipe out various pointers related to game state and recalculate carry weight.
