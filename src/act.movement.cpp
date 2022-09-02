@@ -408,6 +408,15 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
         }
       }
     }
+
+    // Additionally, process these actions no matter if ch was seen or not.
+    {
+      if (tch->master == ch && is_escortee(tch)) {
+        act("$N begins following you.", FALSE, ch, 0, tch, TO_CHAR);
+        act("$N begins following $n.", FALSE, ch, 0, tch, TO_ROOM);
+        act("You begin following $n", FALSE, ch, 0, tch, TO_VICT);
+      }
+    }
   }
 
   // Vehicle occupants.
