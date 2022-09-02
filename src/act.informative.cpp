@@ -130,6 +130,9 @@ const char* blood_messages[] = {
 
 ACMD_DECLARE(do_examine);
 
+void display_room_name(struct char_data *ch);
+void display_room_desc(struct char_data *ch);
+
 /* end blood stuff */
 
 char *make_desc(struct char_data *ch, struct char_data *i, char *buf, int act, bool dont_capitalize_a_an, size_t buf_size)
@@ -1764,27 +1767,12 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
   }
 
   // Room title.
-  if ((PRF_FLAGGED(ch, PRF_ROOMFLAGS) && GET_REAL_LEVEL(ch) >= LVL_BUILDER)) {
-    ROOM_FLAGS(ch->in_room).PrintBits(buf, MAX_STRING_LENGTH, room_bits, ROOM_MAX);
-    send_to_char(ch, "^C[%5ld] %s [ %s ]^n\r\n", GET_ROOM_VNUM(ch->in_room), GET_ROOM_NAME(ch->in_room), buf);
-  } else {
-    send_to_char(ch, "^C%s^n%s%s%s%s%s%s%s\r\n", GET_ROOM_NAME(ch->in_room),
-                 ROOM_FLAGGED(ch->in_room, ROOM_GARAGE) ? " (Garage)" : "",
-                 ROOM_FLAGGED(ch->in_room, ROOM_STORAGE) && !ROOM_FLAGGED(ch->in_room, ROOM_CORPSE_SAVE_HACK) ? " (Storage)" : "",
-                 ROOM_FLAGGED(ch->in_room, ROOM_HOUSE) ? " (Apartment)" : "",
-                 ROOM_FLAGGED(ch->in_room, ROOM_STERILE) ? " (Sterile)" : "",
-                 ROOM_FLAGGED(ch->in_room, ROOM_ARENA) ? " ^y(Arena)^n" : "",
-                 ch->in_room->matrix && real_host(ch->in_room->matrix) >= 1 ? " (Jackpoint)" : "",
-                 ROOM_FLAGGED(ch->in_room, ROOM_ENCOURAGE_CONGREGATION) ? " ^W(Socialization Bonus)^n" : "");
-  }
+  display_room_name(ch);
 
   // TODO: Why is this code here? If you're in a vehicle, you do look_in_veh() above right?
   if (!(ch->in_veh && get_speed(ch->in_veh) > 200)) {
     if (!is_quicklook && (ignore_brief || !PRF_FLAGGED(ch, PRF_BRIEF))) {
-      if (ch->in_room->night_desc && weather_info.sunlight == SUN_DARK)
-        send_to_char(ch->in_room->night_desc, ch);
-      else
-        send_to_char(ch->in_room->description, ch);
+      display_room_desc(ch);
     }
   }
 
@@ -6989,4 +6977,37 @@ const char *get_command_hints_for_obj(struct obj_data *obj) {
   }
 
   return hint_string;
+}
+
+void display_room_name(struct char_data *ch) {
+  if (!ch || !ch->in_room) {
+    mudlog("SYSERR: Received invalid character to display_room_name()!", ch, LOG_SYSLOG, TRUE);
+    return;
+  }
+
+  if ((PRF_FLAGGED(ch, PRF_ROOMFLAGS) && GET_REAL_LEVEL(ch) >= LVL_BUILDER)) {
+    ROOM_FLAGS(ch->in_room).PrintBits(buf, MAX_STRING_LENGTH, room_bits, ROOM_MAX);
+    send_to_char(ch, "^C[%5ld] %s [ %s ]^n\r\n", GET_ROOM_VNUM(ch->in_room), GET_ROOM_NAME(ch->in_room), buf);
+  } else {
+    send_to_char(ch, "^C%s^n%s%s%s%s%s%s%s\r\n", GET_ROOM_NAME(ch->in_room),
+                 ROOM_FLAGGED(ch->in_room, ROOM_GARAGE) ? " (Garage)" : "",
+                 ROOM_FLAGGED(ch->in_room, ROOM_STORAGE) && !ROOM_FLAGGED(ch->in_room, ROOM_CORPSE_SAVE_HACK) ? " (Storage)" : "",
+                 ROOM_FLAGGED(ch->in_room, ROOM_HOUSE) ? " (Apartment)" : "",
+                 ROOM_FLAGGED(ch->in_room, ROOM_STERILE) ? " (Sterile)" : "",
+                 ROOM_FLAGGED(ch->in_room, ROOM_ARENA) ? " ^y(Arena)^n" : "",
+                 ch->in_room->matrix && real_host(ch->in_room->matrix) >= 1 ? " (Jackpoint)" : "",
+                 ROOM_FLAGGED(ch->in_room, ROOM_ENCOURAGE_CONGREGATION) ? " ^W(Socialization Bonus)^n" : "");
+  }
+}
+
+void display_room_desc(struct char_data *ch) {
+  if (!ch || !ch->in_room) {
+    mudlog("SYSERR: Received invalid character to display_room_desc()!", ch, LOG_SYSLOG, TRUE);
+    return;
+  }
+
+  if (ch->in_room->night_desc && weather_info.sunlight == SUN_DARK)
+    send_to_char(ch->in_room->night_desc, ch);
+  else
+    send_to_char(ch->in_room->description, ch);
 }

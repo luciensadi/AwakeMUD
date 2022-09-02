@@ -5,8 +5,14 @@
 #include "newecho.hpp"
 #include "ignore_system.hpp"
 #include "db.hpp"
+#include "interpreter.hpp"
 
 extern struct remem *safe_found_mem(struct char_data *rememberer, struct char_data *ch);
+extern void display_room_name(struct char_data *ch);
+extern void display_room_desc(struct char_data *ch);
+extern void disp_long_exits(struct char_data *ch, bool autom);
+extern int isname(const char *str, const char *namelist);
+
 const char *get_char_representation_for_docwagon(struct char_data *ch, struct char_data *plr);
 
 int alert_player_doctors_of_mort(struct char_data *ch, struct obj_data *docwagon) {
@@ -185,6 +191,47 @@ void alert_player_doctors_of_contract_withdrawal(struct char_data *ch, bool with
       }
     }
   }
+}
+
+bool handle_player_docwagon_track(struct char_data *ch, char *argument) {
+  skip_spaces(&argument);
+
+  // This only works for people with receivers.
+  if (!AFF_FLAGGED(ch, AFF_WEARING_ACTIVE_DOCWAGON_RECEIVER) || !AWAKE(ch))
+    return FALSE;
+
+  for (struct char_data *vict = character_list; vict; vict = vict->next) {
+    if (IS_NPC(vict) || !vict->desc || GET_POS(vict) != POS_MORTALLYW || !PLR_FLAGGED(vict, PLR_SENT_DOCWAGON_PLAYER_ALERT))
+      continue;
+
+    if (IS_IGNORING(vict, is_blocking_ic_interaction_from, ch) || IS_IGNORING(ch, is_blocking_ic_interaction_from, vict))
+      continue;
+
+    if (isname(argument, get_char_representation_for_docwagon(vict, ch))) {
+      send_to_char("You squint at the tiny screen on your DocWagon receiver to try and get a better idea of where your client is...\r\n", ch);
+
+      // Show them the room name, room description, and exits.
+      struct room_data *was_in_room = ch->in_room;
+      ch->in_room = get_ch_in_room(vict);
+
+      // Room name.
+      display_room_name(ch);
+
+      // Room desc.
+      display_room_desc(ch);
+
+      // Room exits.
+      disp_long_exits(ch, TRUE);
+
+      // Reset their in_room to the stored value.
+      ch->in_room = was_in_room;
+
+      return TRUE;
+    }
+  }
+
+  send_to_char(ch, "You don't see any DocWagon clients named '%s' available to be tracked.\r\n", argument);
+  return TRUE;
 }
 
 const char *get_char_representation_for_docwagon(struct char_data *ch, struct char_data *plr) {

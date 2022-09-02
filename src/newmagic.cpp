@@ -36,6 +36,7 @@ extern bool can_hurt(struct char_data *ch, struct char_data *victim, int attackt
 extern bool process_single_boost(struct char_data *ch, int boost_attribute);
 extern void _char_with_spell_from_room(struct char_data *ch, int spell_num, room_spell_t *room_spell_tracker);
 extern void _char_with_spell_to_room(struct char_data *ch, int spell_num, room_spell_t *room_spell_tracker);
+extern bool handle_player_docwagon_track(struct char_data *ch, char *argument);
 
 char modify_target_rbuf_for_newmagic[MAX_STRING_LENGTH];
 
@@ -5442,7 +5443,9 @@ ACMD(do_destroy)
 ACMD(do_track)
 {
   if (!IS_PROJECT(ch)) {
-    send_to_char("You have to be projecting to astrally track.\r\n", ch);
+    if (!handle_player_docwagon_track(ch, argument)) {
+      send_to_char("You have to be projecting to astrally track.\r\n", ch);
+    }
     return;
   }
   if (AFF_FLAGGED(ch->desc->original, AFF_TRACKING)) {
