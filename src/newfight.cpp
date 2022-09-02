@@ -222,7 +222,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
 
           // Subtract the full ammo count.
           if (weap_ammo) {
-            update_ammobox_ammo_quantity(weap_ammo, -(att->ranged->burst_count));
+            update_ammobox_ammo_quantity(weap_ammo, -(att->ranged->burst_count), "newfight burst deduction");
           } else {
             GET_MAGAZINE_AMMO_COUNT(att->ranged->magazine) -= (att->ranged->burst_count);
           }

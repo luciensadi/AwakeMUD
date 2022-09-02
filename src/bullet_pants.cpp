@@ -296,7 +296,7 @@ ACMD(do_pockets) {
     }
 
     // Deduct from the ammo box.
-    update_ammobox_ammo_quantity(ammobox, -quantity);
+    update_ammobox_ammo_quantity(ammobox, -quantity, "box-to-pants pt 1");
     update_bulletpants_ammo_quantity(ch, weapon, ammotype, quantity);
 
     // Message char, and ditch box if it's empty and not customized.
@@ -749,7 +749,7 @@ bool ammobox_to_bulletpants(struct char_data *ch, struct obj_data *ammobox) {
   }
 
   update_bulletpants_ammo_quantity(ch, weapontype, ammotype, quantity);
-  update_ammobox_ammo_quantity(ammobox, -quantity);
+  update_ammobox_ammo_quantity(ammobox, -quantity, "box-to-pants pt 2");
 
   if (GET_AMMOBOX_QUANTITY(ammobox) == 0 && (!ammobox->restring || strcmp(ammobox->restring, get_ammobox_default_restring(ammobox)) == 0)) {
     send_to_char(ch, "You take %d %s from %s and secrete them about your person, then junk the empty box.\r\n",
@@ -782,7 +782,7 @@ struct obj_data *generate_ammobox_from_pockets(struct char_data *ch, int weapont
   GET_AMMOBOX_QUANTITY(ammobox) = 0;
 
   // Fill it.
-  update_ammobox_ammo_quantity(ammobox, quantity);
+  update_ammobox_ammo_quantity(ammobox, quantity, "pants-to-box");
   update_bulletpants_ammo_quantity(ch, weapontype, ammotype, -quantity);
 
   // Restring the box.

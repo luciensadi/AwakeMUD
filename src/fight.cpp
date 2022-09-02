@@ -3411,7 +3411,7 @@ bool process_has_ammo(struct char_data *ch, struct obj_data *wielded, bool deduc
       struct obj_data *ammobox = get_mount_ammo(wielded->in_obj);
       if (ammobox && GET_AMMOBOX_QUANTITY(ammobox) > 0) {
         if (deduct_one_round)
-          update_ammobox_ammo_quantity(ammobox, -1);
+          update_ammobox_ammo_quantity(ammobox, -1, "combat round deduction");
         return TRUE;
       }
 

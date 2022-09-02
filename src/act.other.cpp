@@ -1676,7 +1676,7 @@ ACMD(do_reload)
               send_to_char(ch, "The ammunition bin on %s is already full.\r\n", decapitalize_a_an(GET_OBJ_NAME(m)));
             } else {
               max = MIN(max, pocket_quantity);
-              update_ammobox_ammo_quantity(ammo, max);
+              update_ammobox_ammo_quantity(ammo, max, "bin-reloading pt 1");
               GET_AMMOBOX_TYPE(ammo) = ammotype;
               update_bulletpants_ammo_quantity(ch, weapontype, ammotype, -max);
               send_to_char(ch, "You insert %d %s into %s.\r\n",
@@ -1697,7 +1697,7 @@ ACMD(do_reload)
       GET_AMMOBOX_WEAPON(ammo) = weapontype;
       GET_AMMOBOX_TYPE(ammo) = ammotype;
       GET_AMMOBOX_QUANTITY(ammo) = 0;
-      update_ammobox_ammo_quantity(ammo, max);
+      update_ammobox_ammo_quantity(ammo, max, "bin-reloading pt 2");
       update_bulletpants_ammo_quantity(ch, weapontype, ammotype, -max);
       ammo->restring = str_dup(get_ammobox_default_restring(ammo));
       obj_to_obj(ammo, m);

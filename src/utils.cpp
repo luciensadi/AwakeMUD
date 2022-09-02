@@ -3491,19 +3491,19 @@ char *replace_substring(char *source, char *dest, const char *replace_target, co
 }
 
 // Adds the amount to the ammobox, then processes its weight etc.
-void update_ammobox_ammo_quantity(struct obj_data *ammobox, int amount) {
+void update_ammobox_ammo_quantity(struct obj_data *ammobox, int amount, const char *caller) {
   if (!ammobox) {
-    mudlog("SYSERR: Null ammobox passed to update_ammobox_ammo_quantity.", ammobox->carried_by, LOG_SYSLOG, TRUE);
+    mudlog_vfprintf(ammobox->carried_by, LOG_SYSLOG, "SYSERR: Null ammobox passed to update_ammobox_ammo_quantity by %s.", caller);
     return;
   }
 
   if (amount == 0) {
-    mudlog("SYSERR: Zero amount passed to update_ammobox_ammo_quantity.", ammobox->carried_by, LOG_SYSLOG, TRUE);
+    mudlog_vfprintf(ammobox->carried_by, LOG_SYSLOG, "SYSERR: Zero amount passed to update_ammobox_ammo_quantity by %s.", caller);
     return;
   }
 
   if (GET_OBJ_TYPE(ammobox) != ITEM_GUN_AMMO) {
-    mudlog("SYSERR: Non-ammobox passed to update_ammobox_ammo_quantity.", ammobox->carried_by, LOG_SYSLOG, TRUE);
+    mudlog_vfprintf(ammobox->carried_by, LOG_SYSLOG, "SYSERR: Non-ammobox passed to update_ammobox_ammo_quantity by %s.", caller);
   }
 
   // Calculate what the new amount of ammo will be.
@@ -3562,8 +3562,8 @@ bool combine_ammo_boxes(struct char_data *ch, struct obj_data *from, struct obj_
     return FALSE;
   }
 
-  update_ammobox_ammo_quantity(into, GET_AMMOBOX_QUANTITY(from));
-  update_ammobox_ammo_quantity(from, -GET_AMMOBOX_QUANTITY(from));
+  update_ammobox_ammo_quantity(into, GET_AMMOBOX_QUANTITY(from), "combine into");
+  update_ammobox_ammo_quantity(from, -GET_AMMOBOX_QUANTITY(from), "combine from");
 
   // Notify the owner, then destroy the empty.
   if (!from->restring || strcmp(from->restring, get_ammobox_default_restring(from)) == 0) {
