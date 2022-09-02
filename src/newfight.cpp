@@ -220,9 +220,11 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
           // Cap their burst to their magazine's ammo.
           att->ranged->burst_count = MIN(att->ranged->burst_count, ammo_available);
 
-          // Subtract the full ammo count.
+          // Subtract the full ammo count. NPCs are the exception: Their manned weapons have unlimited ammo.
           if (weap_ammo) {
-            update_ammobox_ammo_quantity(weap_ammo, -(att->ranged->burst_count), "newfight burst deduction");
+            if (!IS_NPC(att->ch)) {
+              update_ammobox_ammo_quantity(weap_ammo, -(att->ranged->burst_count), "newfight burst deduction");
+            }
           } else {
             GET_MAGAZINE_AMMO_COUNT(att->ranged->magazine) -= (att->ranged->burst_count);
           }
