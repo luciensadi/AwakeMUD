@@ -260,6 +260,21 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
           top_of_matrix++;
           host_num = real_host(d->edit_number);
         }
+
+        {
+          #define UPDATE_VALUE(value) {(value) = ((value) >= host_num ? (value) + 1 : (value));}
+          for (int zone = 0; zone <= top_of_zone_table; zone++) {
+            for (int cmd_no = 0; cmd_no < zone_table[zone].num_cmds; cmd_no++) {
+              switch (ZCMD.command) {
+                case 'H':
+                  UPDATE_VALUE(ZCMD.arg3);
+                  break;
+              }
+            }
+          }
+          #undef UPDATE_VALUE
+        }
+
         send_to_char("Writing host to disk.\r\n", d->character);
         write_host_to_disk(d->character->player_specials->saved.zonenum);
         send_to_char("Saved.\r\n", CH);

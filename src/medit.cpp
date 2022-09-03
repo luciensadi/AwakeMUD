@@ -679,17 +679,20 @@ void medit_parse(struct descriptor_data *d, const char *arg)
         *   because I ADDED a mobile!                   *
         *   This code shamelessly ripped off from db.c */
 
-        int zone, cmd_no;
-        for (zone = 0; zone <= top_of_zone_table; zone++)
-          for (cmd_no = 0; cmd_no < zone_table[zone].num_cmds; cmd_no++) {
-            switch (ZCMD.command) {
-              case 'S':
-              case 'M':
-                if (ZCMD.arg1 >= d->edit_mob->nr)
-                  ZCMD.arg1++;
-                break;
+        {
+          #define UPDATE_VALUE(value) {(value) = ((value) >= d->edit_mob->nr ? (value) + 1 : (value));}
+          for (int zone = 0; zone <= top_of_zone_table; zone++) {
+            for (int cmd_no = 0; cmd_no < zone_table[zone].num_cmds; cmd_no++) {
+              switch (ZCMD.command) {
+                case 'S':
+                case 'M':
+                  UPDATE_VALUE(ZCMD.arg1);
+                  break;
+              }
             }
           }
+          #undef UPDATE_VALUE
+        }
 
         /* free and replace old tables */
         delete [] mob_proto;

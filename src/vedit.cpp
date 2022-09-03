@@ -293,6 +293,20 @@ if (d->edit_veh->ITEM && veh_proto[veh_number].ITEM && d->edit_veh->ITEM != veh_
             if (temp_veh->veh_number >= d->edit_veh->veh_number)
               temp_veh->veh_number++;
 
+          // Update all vehicle zone loads too.
+          {
+            #define UPDATE_VALUE(value) {(value) = ((value) >= d->edit_veh->veh_number ? (value) + 1 : (value));}
+            for (int zone = 0; zone <= top_of_zone_table; zone++) {
+              for (int cmd_no = 0; cmd_no < zone_table[zone].num_cmds; cmd_no++) {
+                switch (ZCMD.command) {
+                  case 'V':
+                    UPDATE_VALUE(ZCMD.arg1);
+                    break;
+                }
+              }
+            }
+            #undef UPDATE_VALUE
+          }
 
           /* free and replace old tables */
           delete [] veh_proto;

@@ -1589,6 +1589,11 @@ void renum_zone_table(void)
       a = b = 0;
       arg1 = ZCMD.arg1; arg2 = ZCMD.arg2; arg3 = ZCMD.arg3;
       switch (ZCMD.command) {
+        /* ADDING A real_object STATEMENT? YOU MUST UPDATE IEDIT'S ZONE TABLES SWITCH */
+        /* ADDING A real_mobile STATEMENT? YOU MUST UPDATE MEDIT'S ZONE TABLES SWITCH */
+        /* ADDING A real_room STATEMENT? YOU MUST UPDATE REDIT'S ZONE TABLES SWITCH */
+        /* ADDING A real_vehicle STATEMENT? YOU MUST UPDATE VEDIT'S ZONE TABLES SWITCH */
+        /* ADDING A real_host STATEMENT? YOU MUST UPDATE HEDIT'S ZONE TABLES SWITCH */
         case 'M':
           a = ZCMD.arg1 = real_mobile(ZCMD.arg1);
           b = ZCMD.arg3 = real_room(ZCMD.arg3);
@@ -1612,6 +1617,11 @@ void renum_zone_table(void)
         case 'S':
           a = ZCMD.arg1 = real_mobile(ZCMD.arg1);
           break;
+        /* ADDING A real_object STATEMENT? YOU MUST UPDATE IEDIT'S ZONE TABLES SWITCH */
+        /* ADDING A real_mobile STATEMENT? YOU MUST UPDATE MEDIT'S ZONE TABLES SWITCH */
+        /* ADDING A real_room STATEMENT? YOU MUST UPDATE REDIT'S ZONE TABLES SWITCH */
+        /* ADDING A real_vehicle STATEMENT? YOU MUST UPDATE VEDIT'S ZONE TABLES SWITCH */
+        /* ADDING A real_host STATEMENT? YOU MUST UPDATE HEDIT'S ZONE TABLES SWITCH */
         case 'G':
         case 'C':
         case 'U':
@@ -1638,6 +1648,11 @@ void renum_zone_table(void)
           a = ZCMD.arg1 = real_object(ZCMD.arg1);
           ENSURE_OBJECT_IS_KOSHER(a);
           break;
+        /* ADDING A real_object STATEMENT? YOU MUST UPDATE IEDIT'S ZONE TABLES SWITCH */
+        /* ADDING A real_mobile STATEMENT? YOU MUST UPDATE MEDIT'S ZONE TABLES SWITCH */
+        /* ADDING A real_room STATEMENT? YOU MUST UPDATE REDIT'S ZONE TABLES SWITCH */
+        /* ADDING A real_vehicle STATEMENT? YOU MUST UPDATE VEDIT'S ZONE TABLES SWITCH */
+        /* ADDING A real_host STATEMENT? YOU MUST UPDATE HEDIT'S ZONE TABLES SWITCH */
       }
       if (a < 0 || b < 0) {
         snprintf(buf, sizeof(buf), "Invalid vnum in command. Args were: %ld %ld %ld, which resolved to a=%ld and b=%ld.",
@@ -2610,8 +2625,7 @@ void load_zones(File &fl)
       if (sscanf(ptr, " %d %ld %ld ", &tmp, &ZCMD.arg1, &ZCMD.arg2) != 3)
         error = 1;
     } else {
-      if (sscanf(ptr, " %d %ld %ld %ld ", &tmp, &ZCMD.arg1, &ZCMD.arg2,
-                 &ZCMD.arg3) != 4)
+      if (sscanf(ptr, " %d %ld %ld %ld ", &tmp, &ZCMD.arg1, &ZCMD.arg2, &ZCMD.arg3) != 4)
         error = 1;
     }
 

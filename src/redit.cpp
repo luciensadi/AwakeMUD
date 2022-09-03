@@ -540,34 +540,27 @@ void redit_parse(struct descriptor_data * d, const char *arg)
           }
           /* update zone tables */
           {
-            int zone, cmd_no;
-
-            for (zone = 0; zone <= top_of_zone_table; zone++)
-              for (cmd_no = 0; cmd_no < zone_table[zone].num_cmds; cmd_no++)
-              {
+            #define UPDATE_VALUE(value) {(value) = ((value) >= room_num ? (value) + 1 : (value));}
+            for (int zone = 0; zone <= top_of_zone_table; zone++) {
+              for (int cmd_no = 0; cmd_no < zone_table[zone].num_cmds; cmd_no++) {
                 switch (ZCMD.command) {
-                case 'M':
-                  ZCMD.arg3 = (ZCMD.arg3 >= room_num ? ZCMD.arg3 + 1 :
-                               ZCMD.arg3);
-                  break;
-                case 'O':
-                  if (ZCMD.arg3 != NOWHERE)
-                    ZCMD.arg3 =
-                      (ZCMD.arg3 >= room_num ?
-                       ZCMD.arg3 + 1 : ZCMD.arg3);
-                  break;
-                case 'D':
-                  ZCMD.arg1 =
-                    (ZCMD.arg1 >= room_num ?
-                     ZCMD.arg1 + 1 : ZCMD.arg1);
-                  break;
-                case 'R': /* rem obj from room */
-                  ZCMD.arg1 =
-                    (ZCMD.arg1 >= room_num ?
-                     ZCMD.arg1 + 1 : ZCMD.arg1);
-                  break;
+                  case 'M':
+                  case 'V':
+                    UPDATE_VALUE(ZCMD.arg3);
+                    break;
+                  case 'O':
+                    if (ZCMD.arg3 != NOWHERE) {
+                      UPDATE_VALUE(ZCMD.arg3);
+                    }
+                    break;
+                  case 'D':
+                  case 'R': /* rem obj from room */
+                    UPDATE_VALUE(ZCMD.arg1);
+                    break;
                 }
               }
+            }
+            #undef UPDATE_VALUE
           }
 
           /* update load rooms, to fix creeping load room problem */

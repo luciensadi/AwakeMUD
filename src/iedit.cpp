@@ -1556,41 +1556,31 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
              because I ADDED an object!
              This code shamelessly ripped off from db.c */
             {
-              int zone, cmd_no;
-              for (zone = 0; zone <= top_of_zone_table; zone++)
-                for (cmd_no = 0; cmd_no < zone_table[zone].num_cmds; cmd_no++)
-                {
+              #define UPDATE_VALUE(value) {(value) = ((value) >= d->edit_obj->item_number ? (value) + 1 : (value));}
+              for (int zone = 0; zone <= top_of_zone_table; zone++) {
+                for (int cmd_no = 0; cmd_no < zone_table[zone].num_cmds; cmd_no++) {
                   switch (ZCMD.command) {
-                    case 'O':
-                      ZCMD.arg1 =
-                      (ZCMD.arg1 >= d->edit_obj->item_number ?
-                       ZCMD.arg1 + 1 : ZCMD.arg1);
-                      break;
                     case 'G':
-                      ZCMD.arg1 =
-                      (ZCMD.arg1 >= d->edit_obj->item_number ?
-                       ZCMD.arg1 + 1 : ZCMD.arg1);
-                      break;
+                    case 'O':
                     case 'E':
-                      ZCMD.arg1 =
-                      (ZCMD.arg1 >= d->edit_obj->item_number ?
-                       ZCMD.arg1 + 1 : ZCMD.arg1);
+                    case 'C':
+                    case 'U':
+                    case 'I':
+                    case 'H':
+                    case 'N':
+                      UPDATE_VALUE(ZCMD.arg1);
                       break;
                     case 'P':
-                      ZCMD.arg1 =
-                      (ZCMD.arg1 >= d->edit_obj->item_number ?
-                       ZCMD.arg1 + 1 : ZCMD.arg1);
-                      ZCMD.arg3 =
-                      (ZCMD.arg3 >= d->edit_obj->item_number ?
-                       ZCMD.arg3 + 1 : ZCMD.arg3);
+                      UPDATE_VALUE(ZCMD.arg1);
+                      UPDATE_VALUE(ZCMD.arg3);
                       break;
                     case 'R': /* rem obj from room */
-                      ZCMD.arg2 =
-                      (ZCMD.arg2 >= d->edit_obj->item_number ?
-                       ZCMD.arg2 + 1 : ZCMD.arg2);
+                      UPDATE_VALUE(ZCMD.arg2);
                       break;
                   }
                 }
+              }
+              #undef UPDATE_VALUE
             }
             /* this fixes the creeping board problems */
             // not needed since real nums are not used with boards anymore
