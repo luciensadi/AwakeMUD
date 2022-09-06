@@ -558,6 +558,7 @@ ACMD(do_spellset)
     send_to_char("Spell must be enclosed in: ''\r\n", ch);
     return;
   }
+
   strlcpy(help, (argument + 1), sizeof(help));
   help[qend - 1] = '\0';
   if ((spelltoset = find_spell_num(help)) <= 0) {
@@ -579,21 +580,20 @@ ACMD(do_spellset)
     send_to_char(ch, "%s can't learn spells. You can only delete them from them with Force = 0.\r\n", GET_CHAR_NAME(vict));
     return;
   }
-  // TODO Does the magic attribute or sorcery skill limit the force?
-  if (force > 100) {
-    send_to_char("Max value for force is 100.\r\n", ch);
+
+  if (force > GET_SKILL(vict, SKILL_SORCERY)) {
+    send_to_char(ch, "Max value for force for %s is %d.\r\n", GET_CHAR_NAME(vict), GET_SKILL(vict, SKILL_SORCERY));
     return;
   }
 
   int subtype = 0;
-  strlcpy(buf, spells[spelltoset].name, sizeof(buf));
   // Require that the attribute spells have an attribute specified (see spell->subtype comment).
   if (spelltoset == SPELL_INCATTR || spelltoset == SPELL_INCCYATTR ||
       spelltoset == SPELL_DECATTR || spelltoset == SPELL_DECCYATTR)
   {
     // Check for the argument.
     if (!*argument) {
-      send_to_char("You must supply one of 'bod', 'qui', 'str', 'int', 'wil', 'cha', 'rea'. (ex: spellset X 'increase' 6 wil)\r\n", ch);
+      send_to_char("You must supply one of 'bod', 'qui', 'str', 'int', 'wil', 'cha'. (ex: spellset X 'increase' 6 wil)\r\n", ch);
       return;
     }
 
@@ -601,15 +601,13 @@ ACMD(do_spellset)
     for (subtype = 0; subtype < 6; subtype++) {
       if (!strncmp(argument, short_attributes[subtype], strlen(argument))) {
         // The goal here is to find the index number the argument represents.
-        //  Once we find it, update the spell's name, then break.
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (%s)", attributes[subtype]);
         break;
       }
     }
 
     // If we hit 6, the argument did not match the list.
     if (subtype >= 6) {
-      send_to_char("You must supply one of 'bod', 'qui', 'str', 'int', 'wil', 'cha', 'rea'.\r\n", ch);
+      send_to_char("You must supply one of 'bod', 'qui', 'str', 'int', 'wil', 'cha'.\r\n", ch);
       return;
     }
   }
@@ -634,6 +632,14 @@ ACMD(do_spellset)
     }
   }
 
+  char spellname[500];
+  strlcpy(spellname, spells[spelltoset].name, sizeof(spellname));
+  if (spelltoset == SPELL_INCATTR || spelltoset == SPELL_INCCYATTR ||
+      spelltoset == SPELL_DECATTR || spelltoset == SPELL_DECCYATTR)
+  {
+    strlcat(spellname, attributes[subtype], sizeof(spellname));
+  }
+
   struct spell_data *spell = NULL;
 
   // Find the spell if they have it already.
@@ -652,10 +658,10 @@ ACMD(do_spellset)
         spell->force = force;
       }
 
-      send_to_char(ch, "%s's %s changed from force %d to %d.\r\n", GET_CHAR_NAME(vict), spells[spelltoset].name, old_force, force);
-      snprintf(buf, sizeof(buf), "$n has set your '%s' spell to Force %d (from %d).", spells[spelltoset].name, force, old_force);
+      send_to_char(ch, "%s's %s changed from force %d to %d.\r\n", GET_CHAR_NAME(vict), spellname, old_force, force);
+      snprintf(buf, sizeof(buf), "$n has set your '%s' spell to Force %d (from %d).", spellname, force, old_force);
       act(buf, TRUE, ch, NULL, vict, TO_VICT);
-      snprintf(buf, sizeof(buf), "%s set %s's '%s' spell to Force %d (was %d).", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), spells[spelltoset].name, force, old_force);
+      snprintf(buf, sizeof(buf), "%s set %s's '%s' spell to Force %d (was %d).", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), spellname, force, old_force);
       mudlog(buf, ch, LOG_WIZLOG, TRUE);
       GET_SPELLS_DIRTY_BIT(ch) = TRUE;
       return;
@@ -664,7 +670,7 @@ ACMD(do_spellset)
 
   // They didn't have it before, so we can just call it done.
   if (force <= 0) {
-    send_to_char(ch, "%s doesn't have the %s spell.\r\n", GET_CHAR_NAME(vict), spells[spelltoset].name);
+    send_to_char(ch, "%s doesn't have the %s spell.\r\n", GET_CHAR_NAME(vict), spellname);
     return;
   }
 
@@ -673,7 +679,7 @@ ACMD(do_spellset)
   /* spell->name is a pointer to a char, and other code (spell release etc) deletes what it points to
       on cleanup. Thus, you need to clone the spell_type's name into the spell_data to assign your
       new spell a name. */
-  spell->name = str_dup(spells[spelltoset].name);
+  spell->name = str_dup(spellname);
 
   /* The index of the spells[] table is a 1:1 mapping of the SPELL_ type, so you can just set the
       spell->type field to your spelltoset value. */
@@ -690,9 +696,9 @@ ACMD(do_spellset)
   GET_SPELLS_DIRTY_BIT(ch) = TRUE;
 
   send_to_char("OK.\r\n", ch);
-  snprintf(buf, sizeof(buf), "$n has given you the '%s' spell at Force %d.", spells[spelltoset].name, force);
+  snprintf(buf, sizeof(buf), "$n has given you the '%s' spell at Force %d.", spellname, force);
   act(buf, TRUE, ch, NULL, vict, TO_VICT);
-  snprintf(buf, sizeof(buf), "%s set %s's '%s' spell to Force %d (was 0).", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), spells[spelltoset].name, force);
+  snprintf(buf, sizeof(buf), "%s set %s's '%s' spell to Force %d (was 0).", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), spellname, force);
   mudlog(buf, ch, LOG_WIZLOG, TRUE);
 }
 
