@@ -344,13 +344,13 @@ void spell_modify(struct char_data *ch, struct sustain_data *sust, bool add)
   {
     case SPELL_INCATTR:
     case SPELL_INCCYATTR:
-      mod *= sust->success;
-      GET_ATT(ch, sust->subtype) += MIN(sust->force, mod / 2);
+      tmp = MIN(sust->force, sust->success / 2);
+      GET_ATT(ch, sust->subtype) += mod * tmp;
       break;
     case SPELL_DECATTR:
     case SPELL_DECCYATTR:
-      mod *= sust->success;
-      GET_ATT(ch, sust->subtype) -= MIN(sust->force, mod / 2);
+      tmp = MIN(sust->force, sust->success / 2);
+      GET_ATT(ch, sust->subtype) -= mod * tmp;
       break;
     case SPELL_HEAL:
     case SPELL_TREAT:
@@ -3024,11 +3024,15 @@ int find_spell_num(char *name)
       return index;
   }
 
-  // Fall back to abbreviation matching.
+  // Check for abbreviations next.
   for (int index = 0; index < MAX_SPELLS; index++) {
+    // Check for exact matches first.
     if (is_abbrev(name, spells[index].name))
       return index;
+  }
 
+  // Fall back to split abbreviation matching.
+  for (int index = 0; index < MAX_SPELLS; index++) {
     int ok = 1;
     const char *temp = any_one_arg_const(spells[index].name, first);
     const char *temp2 = any_one_arg(name, first2);
