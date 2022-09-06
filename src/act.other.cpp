@@ -5046,8 +5046,9 @@ ACMD(do_stop) {
 
   // Stop with arguments.
   skip_spaces(&argument);
+  one_argument(argument, buf);
 
-  if (is_abbrev(argument, "following")) {
+  if (is_abbrev(buf, "following")) {
     if (ch->master) {
       stop_follower(ch);
     } else {
