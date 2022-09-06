@@ -254,7 +254,7 @@ bool should_tch_see_chs_movement_message(struct char_data *tch, struct char_data
 
     if (spotted_movement && IS_NPC(tch) && GET_MOBALERT(tch) != MALERT_ALARM) {
       GET_MOBALERT(tch) = MALERT_ALERT;
-      GET_MOBALERTTIME(tch) = 10;
+      GET_MOBALERTTIME(tch) = MAX(GET_MOBALERTTIME(tch), 10);
     }
 
     // If the result met or beat the TN, we're good.
