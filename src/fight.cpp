@@ -4284,6 +4284,41 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
   int modifier = 0;
   char rbuf[2048];
 
+  // If we can't see due to light levels, bail out.
+  if (!LIGHT_OK_ROOM_SPECIFIED(ch, get_ch_in_room(ch)) || (ch->in_room != victim->in_room && !LIGHT_OK_ROOM_SPECIFIED(ch, get_ch_in_room(victim)))) {
+    modifier = MAX_VISIBILITY_PENALTY;
+
+    if (GET_POWER(ch, ADEPT_BLIND_FIGHTING) && modifier > BLIND_FIGHTING_MAX) {
+      modifier = BLIND_FIGHTING_MAX;
+
+      snprintf(rbuf, sizeof(rbuf), "%s: Vision penalty capped to %d by Blind Fighting", GET_CHAR_NAME(ch), modifier);
+
+      act(rbuf, 0, ch, 0, 0, TO_ROLLS);
+      if (ch->in_room != victim->in_room)
+        act(rbuf, 0, victim, 0, 0, TO_ROLLS);
+    }
+
+    snprintf(rbuf, sizeof(rbuf), "%s: Cannot see target due to light level, so final char-to-char visibility TN is ^c%d^n.", GET_CHAR_NAME(ch), modifier);
+    act(rbuf, 0, victim, 0, ch, TO_ROLLS);
+    return modifier;
+  }
+
+  // If they're in an invis staffer above your level, you done goofed by fighting them. Return special code so we know what caused this in rolls.
+  if (!IS_NPC(victim) && GET_INVIS_LEV(victim) > 0 && (IS_NPC(ch) || !access_level(ch, GET_INVIS_LEV(victim)))) {
+    act("$n: Maximum penalty- fighting invis staff.", 0, ch, 0, 0, TO_ROLLS);
+    if (ch->in_room != victim->in_room)
+      act("$N: Maximum penalty- fighting invis staff.", 0, victim, 0, ch, TO_ROLLS);
+    return INVIS_CODE_STAFF;
+  }
+
+  // If they're flagged totalinvis (library mobs etc), you shouldn't be fighting them anyways.
+  if (IS_NPC(victim) && MOB_FLAGGED(victim, MOB_TOTALINVIS)) {
+    act("$n: Maximum penalty- fighting total-invis mob.", 0, ch, 0, 0, TO_ROLLS);
+    if (ch->in_room != victim->in_room)
+      act("$N: Maximum penalty- fighting total-invis mob.", 0, victim, 0, ch, TO_ROLLS);
+    return INVIS_CODE_TOTALINVIS;
+  }
+
   // Pre-calculate the things we care about here. First, character vision info.
   bool ch_has_ultrasound = has_vision(ch, VISION_ULTRASONIC);
   bool ch_has_thermographic = has_vision(ch, VISION_THERMOGRAPHIC);
@@ -4307,45 +4342,6 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
   }
 
   bool vict_is_inanimate = MOB_FLAGGED(victim, MOB_INANIMATE);
-
-  // Shortcut: If they're not invisible, you can see them. Ezpz.
-  if (CAN_SEE(ch, victim)) {
-    // House rule: Since everyone and their dog has thermographic, now standard invis is actually a tiny bit useful.
-    // This deviates from canon, where thermographic can see through standard invis.
-    if (!(ch_sees_astral && !vict_is_inanimate) && !ch_has_ultrasound && ch_has_thermographic && vict_is_just_invis) {
-      modifier = 2;
-      snprintf(rbuf, sizeof(rbuf), "%s: Thermographic-using character fighting standard invis: %d", GET_CHAR_NAME(ch), modifier);
-      act(rbuf, FALSE, victim, 0, ch, TO_ROLLS);
-    }
-
-    snprintf(rbuf, sizeof(rbuf), "%s: Can see target, so final char-to-char visibility TN is ^c%d^n.", GET_CHAR_NAME(ch), modifier);
-    act(rbuf, FALSE, victim, 0, ch, TO_ROLLS);
-    return modifier;
-  }
-
-  // If we can't see due to light levels, bail out.
-  if (!LIGHT_OK_ROOM_SPECIFIED(ch, get_ch_in_room(ch)) || (ch->in_room != victim->in_room && !LIGHT_OK_ROOM_SPECIFIED(ch, get_ch_in_room(victim)))) {
-    modifier = MAX_VISIBILITY_PENALTY;
-    snprintf(rbuf, sizeof(rbuf), "%s: Cannot see target due to light level, so final char-to-char visibility TN is ^c%d^n.", GET_CHAR_NAME(ch), modifier);
-    act(rbuf, 0, victim, 0, ch, TO_ROLLS);
-    return modifier;
-  }
-
-  // If they're in an invis staffer above your level, you done goofed by fighting them. Return special code so we know what caused this in rolls.
-  if (!IS_NPC(victim) && GET_INVIS_LEV(victim) > 0 && (IS_NPC(ch) || !access_level(ch, GET_INVIS_LEV(victim)))) {
-    act("$n: Maximum penalty- fighting invis staff.", 0, ch, 0, 0, TO_ROLLS);
-    if (ch->in_room != victim->in_room)
-      act("$N: Maximum penalty- fighting invis staff.", 0, victim, 0, ch, TO_ROLLS);
-    return INVIS_CODE_STAFF;
-  }
-
-  // If they're flagged totalinvis (library mobs etc), you shouldn't be fighting them anyways.
-  if (IS_NPC(victim) && MOB_FLAGGED(victim, MOB_TOTALINVIS)) {
-    act("$n: Maximum penalty- fighting total-invis mob.", 0, ch, 0, 0, TO_ROLLS);
-    if (ch->in_room != victim->in_room)
-      act("$N: Maximum penalty- fighting total-invis mob.", 0, victim, 0, ch, TO_ROLLS);
-    return INVIS_CODE_TOTALINVIS;
-  }
 
   if (ch_sees_astral) {
     if (!vict_is_inanimate) {
@@ -4426,8 +4422,9 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
       snprintf(rbuf, sizeof(rbuf), "%s: Thermographic-using character fighting improved invis: %d", GET_CHAR_NAME(ch), modifier);
     }
 
+    // House rule: Since everyone and their dog has thermographic, now standard invis is actually a tiny bit useful.
+    // This deviates from canon, where thermographic can see through standard invis.
     else if (vict_is_just_invis) {
-      // We should never get here: This should have tripped above in CAN_SEE.
       modifier = 2;
       snprintf(rbuf, sizeof(rbuf), "%s: Thermographic-using character fighting invis (second stanza): %d", GET_CHAR_NAME(ch), modifier);
       mudlog("SYSERR: Hit second stanza of thermo-vs-standard-invis in calculate_vision_penalty()!", ch, LOG_SYSLOG, TRUE);
