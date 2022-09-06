@@ -5044,6 +5044,18 @@ ACMD(do_stop) {
     return;
   }
 
+  // Stop with arguments.
+  skip_spaces(&argument);
+
+  if (is_abbrev(argument, "following")) {
+    if (ch->master) {
+      stop_follower(ch);
+    } else {
+      send_to_char("You're not following anyone.\r\n", ch);
+    }
+    return;
+  }
+
   if (IS_WORKING(ch)) {
     STOP_WORKING(ch);
     send_to_char("You stop working.\r\n", ch);
