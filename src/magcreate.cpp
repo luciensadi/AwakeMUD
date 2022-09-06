@@ -57,8 +57,11 @@ void create_spell(struct char_data *ch)
   STATE(ch->desc) = CON_SPELL_CREATE;
   GET_OBJ_TIMER(design) = -2;
   GET_SPELLFORMULA_FORCE(design) = 1;
+  GET_SPELLFORMULA_SPELL(design) = SPELL_MANABOLT;
   GET_SPELLFORMULA_TRADITION(design) = GET_TRADITION(ch) == TRAD_SHAMANIC ? 1 : 0;
+  GET_SPELLFORMULA_SUBTYPE(design) = 0;
   GET_SPELLFORMULA_CREATOR_IDNUM(design) = GET_IDNUM(ch);
+  GET_SPELLFORMULA_CATEGORY(design) = COMBAT;
   design->restring = str_dup("A blank spell formula");
   design->photo = str_dup("It looks very blank.");
   ch->desc->edit_obj = design;
