@@ -1129,7 +1129,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     GET_SETTABLE_BACKGROUND_COUNT(room) = 1;
     GET_SETTABLE_BACKGROUND_AURA(room) = AURA_PLAYERCOMBAT;
   }
-  return FALSE;
+  return defender_died;
 }
 
 bool hit(struct char_data *attacker, struct char_data *victim, struct obj_data *weap, struct obj_data *vict_weap, struct obj_data *weap_ammo) {
