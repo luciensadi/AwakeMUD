@@ -6904,7 +6904,7 @@ void price_bio(struct obj_data *obj)
       GET_OBJ_AVAILTN(obj) = 4;
       GET_OBJ_AVAILDAY(obj) = 10;
       break;
-    case BIO_TAILOREDPHEREMONES:
+    case BIO_TAILOREDPHEROMONES:
       if (GET_OBJ_VAL(obj, 1) == 1) {
         GET_OBJ_COST(obj) = 20000;
         GET_OBJ_VAL(obj, 4) = 40;

@@ -1570,7 +1570,7 @@ enum {
 #define BIO_SUPRATHYROIDGLAND  13
 #define BIO_SYMBIOTES    14
 #define BIO_SYNTHACARDIUM  15
-#define BIO_TAILOREDPHEREMONES  16
+#define BIO_TAILOREDPHEROMONES  16
 #define BIO_TOXINEXTRACTOR  17
 #define BIO_TRACHEALFILTER  18
 // Everything past this line is assumed to be cultured by default. If you add more that's not cultured, change the cultured check in db.cpp.

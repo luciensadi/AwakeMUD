@@ -1064,11 +1064,11 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
     }
 
     // Calculate their skill level, including bioware.
-    bool pheremones = FALSE;
+    bool pheromones = FALSE;
     int skill = get_skill(ch, shop_table[shop_nr].etiquette, target);
     for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content)
-      if (GET_OBJ_VAL(bio, 0) == BIO_TAILOREDPHEREMONES) {
-        pheremones = TRUE;
+      if (GET_OBJ_VAL(bio, 0) == BIO_TAILOREDPHEROMONES) {
+        pheromones = TRUE;
         skill += GET_OBJ_VAL(bio, 2) ? GET_OBJ_VAL(bio, 1) * 2: GET_OBJ_VAL(bio, 1);
         break;
       }
@@ -1079,8 +1079,8 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
     // Failure case.
     if (success < 1) {
       if (GET_SKILL(ch, shop_table[shop_nr].etiquette) == 0) {
-        if (pheremones)
-          snprintf(buf, sizeof(buf), "Not even your tailored pheremones can soothe $N's annoyance at your lack of %s.\r\n",
+        if (pheromones)
+          snprintf(buf, sizeof(buf), "Not even your tailored pheromones can soothe $N's annoyance at your lack of %s.\r\n",
                    skills[shop_table[shop_nr].etiquette].name);
         else
           snprintf(buf, sizeof(buf), "$N seems annoyed that you don't even know the basics of %s.\r\n",
@@ -1088,7 +1088,7 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
       } else {
         snprintf(buf, sizeof(buf), "You exert every bit of %s you can muster, %sbut $N shakes $S head after calling a few contacts.\r\n",
                  skills[shop_table[shop_nr].etiquette].name,
-                 pheremones ? "aided by your tailored pheremones, " : "");
+                 pheromones ? "aided by your tailored pheromones, " : "");
       }
       act(buf, FALSE, ch, 0, keeper, TO_CHAR);
 
@@ -1107,11 +1107,11 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
     if (GET_SKILL(ch, shop_table[shop_nr].etiquette) == 0) {
       snprintf(buf, sizeof(buf), "$N seems annoyed that you don't even know the basics of %s, but %syou convince $M to call a few contacts anyways.\r\n",
               skills[shop_table[shop_nr].etiquette].name,
-              pheremones ? "aided by your tailored pheremones, " : "");
+              pheromones ? "aided by your tailored pheromones, " : "");
     } else {
       snprintf(buf, sizeof(buf), "You exert every bit of %s you can muster, %sand $N nods to you after calling a few contacts.\r\n",
                skills[shop_table[shop_nr].etiquette].name,
-               pheremones ? "aided by your tailored pheremones, " : "");
+               pheromones ? "aided by your tailored pheromones, " : "");
     }
     act(buf, FALSE, ch, 0, keeper, TO_CHAR);
 

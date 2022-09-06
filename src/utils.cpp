@@ -1291,20 +1291,20 @@ int negotiate(struct char_data *ch, struct char_data *tch, int comp, int baseval
 
 
   for (bio = ch->bioware; bio; bio = bio->next_content)
-    if (GET_BIOWARE_TYPE(bio) == BIO_TAILOREDPHEREMONES)
+    if (GET_BIOWARE_TYPE(bio) == BIO_TAILOREDPHEROMONES)
     {
       int delta = GET_BIOWARE_IS_CULTURED(bio) ? GET_BIOWARE_RATING(bio) * 2 : GET_BIOWARE_RATING(bio);
       cskill += delta;
-      snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), " Pheremone skill buff of %d for PC.", delta);
+      snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), " Pheromone skill buff of %d for PC.", delta);
       break;
     }
 
   for (bio = tch->bioware; bio; bio = bio->next_content)
-    if (GET_BIOWARE_TYPE(bio) == BIO_TAILOREDPHEREMONES)
+    if (GET_BIOWARE_TYPE(bio) == BIO_TAILOREDPHEROMONES)
     {
       int delta = GET_BIOWARE_IS_CULTURED(bio) ? GET_BIOWARE_RATING(bio) * 2: GET_BIOWARE_RATING(bio);
       tskill += delta;
-      snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), " Pheremone skill buff of %d for NPC.", delta);
+      snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), " Pheromone skill buff of %d for NPC.", delta);
       break;
     }
 
