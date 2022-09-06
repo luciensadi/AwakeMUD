@@ -1960,15 +1960,17 @@ void damage_obj(struct char_data *ch, struct obj_data *obj, int power, int type)
   }
 
   if (vict && GET_TKE(vict) <= NEWBIE_KARMA_THRESHOLD) {
-    send_to_char(vict, "^y(%s would have been damaged, but was shielded by newbie status!)^n\r\n", CAP(GET_OBJ_NAME(obj)));
+    send_to_char(vict, "^y(%s would have been damaged, but was shielded by your newbie status!)^n\r\n", CAP(GET_OBJ_NAME(obj)));
     return;
   }
 
+  /* Don't cascade down damage, it's unnecessarily punitive. -LS
   // Cascade damage down to everything except custom decks and parts (the latter due to breaking the game)
   if (GET_OBJ_TYPE(obj) != ITEM_CUSTOM_DECK && GET_OBJ_TYPE(obj) != ITEM_PART) {
     for (struct obj_data *cont = obj->contains; cont; cont = cont->next_content)
       damage_obj(ch, cont, power, type);
   }
+  */
 
   /* This whole block is a no-op due to the `success == 2` block. Success is not actually set anywhere... -LS
   switch (type) {
@@ -2127,7 +2129,7 @@ void damage_obj(struct char_data *ch, struct obj_data *obj, int power, int type)
             next = temp->next_content;
             obj_from_obj(temp);
             if ((IS_OBJ_STAT(obj, ITEM_EXTRA_CORPSE) && !GET_OBJ_VAL(obj, 4) && GET_OBJ_TYPE(temp) != ITEM_MONEY)
-                || GET_OBJ_VNUM(obj) == OBJ_POCKET_SECRETARY_FOLDER)
+                || GET_OBJ_VNUM(temp) == OBJ_POCKET_SECRETARY_FOLDER)
             {
               extract_obj(temp);
             } else if (vict)
