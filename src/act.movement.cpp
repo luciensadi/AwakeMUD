@@ -209,8 +209,6 @@ bool should_tch_see_chs_movement_message(struct char_data *tch, struct char_data
     snprintf(rbuf, sizeof(rbuf), "Sneak perception test: %s vs %s. get_skill: ", GET_CHAR_NAME(tch), GET_CHAR_NAME(ch));
     int skill_dice = get_skill(ch, SKILL_STEALTH, dummy_tn);
 
-
-
     // Make an open test to determine the TN for the perception test to notice you.
     strlcat(rbuf, ". get_vision_penalty: ", sizeof(rbuf));
     int open_test_result = open_test(skill_dice);
@@ -252,8 +250,15 @@ bool should_tch_see_chs_movement_message(struct char_data *tch, struct char_data
     if (GET_INVIS_LEV(tch) <= GET_LEVEL(ch))
       act(rbuf, FALSE, ch, 0, 0, TO_ROLLS);
 
+    bool spotted_movement = perception_result > 0;
+
+    if (spotted_movement && IS_NPC(tch) && GET_MOBALERT(tch) != MALERT_ALARM) {
+      GET_MOBALERT(tch) = MALERT_ALERT;
+      GET_MOBALERTTIME(tch) = 10;
+    }
+
     // If the result met or beat the TN, we're good.
-    return perception_result > 0;
+    return spotted_movement;
   }
 
   // If we got here, we can see it.
