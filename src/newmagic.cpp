@@ -158,7 +158,7 @@ void end_sustained_spell(struct char_data *ch, struct sustain_data *sust)
     case SPELL_INCCYATTR:
     case SPELL_DECATTR:
     case SPELL_DECCYATTR:
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s", attributes[sust->subtype]);
+      strlcat(buf, attributes[sust->subtype], sizeof(buf));
       break;
   }
 
@@ -1833,13 +1833,25 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
           if (sus->caster)
             continue;
 
-          if (sus->subtype == sub && (sus->spell == SPELL_INCATTR || sus->spell == SPELL_INCCYATTR || sus->spell == SPELL_DECATTR || sus->spell == SPELL_DECCYATTR || sus->spell == SPELL_INCREA)) {
+          if (sus->subtype == sub) {
+            switch (sus->spell) {
+              case SPELL_INCATTR:
+              case SPELL_INCCYATTR:
+                if (spell == SPELL_DECATTR || spell == SPELL_DECCYATTR) {
+                  send_to_char(ch, "You can't cast a decrease-attribute spell on someone who is affected by an increase spell for that attribute.\r\n");
+                  return;
+                }
+                // fall through
+              case SPELL_DECATTR:
+              case SPELL_DECCYATTR:
 #ifdef DIES_IRAE
-            send_to_char(ch, "%s is already affected by a similar spell.\r\n", GET_CHAR_NAME(vict));
-            return;
+                send_to_char(ch, "%s is already affected by a similar spell.\r\n", GET_CHAR_NAME(vict));
+                return;
 #else
-            target_modifiers += MAX(1, MIN(sus->force, sus->success) / TN_INCREASE_DIVISOR_FOR_ATTRIBUTE_SPELL_STACKING);
+                target_modifiers += MAX(1, MIN(sus->force, sus->success) / TN_INCREASE_DIVISOR_FOR_ATTRIBUTE_SPELL_STACKING);
 #endif
+                break;
+            }
           }
 
           if (spell == SPELL_INCREA && (sus->spell == SPELL_INCREF1 || sus->spell == SPELL_INCREF2 || sus->spell == SPELL_INCREF3)) {
@@ -1901,10 +1913,29 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
         target += GET_ATT(vict, sub);
       else
         target += 10 - (GET_ESS(vict) / 100);
-      success = (int)(success_test(skill, target) -
-                      ((spell == SPELL_DECATTR || spell == SPELL_DECCYATTR) ? resist_spell(vict, spell, force, sub) : 0));
+      success = success_test(skill, target);
+
+      if (spell == SPELL_DECATTR || spell == SPELL_DECCYATTR) {
+        success -= resist_spell(vict, spell, force, sub);
+
+        // Limiter code: We cannot apply decrease-attribute spells that would send the target into negatives.
+        int att_limit = GET_ATT(vict, sub) - 1;
+        if (success > 2 * att_limit || force > att_limit) {
+          success = MIN(success, 2 * att_limit);
+          force = MIN(force, att_limit);
+          snprintf(rbuf, sizeof(rbuf), "att limit: successes now %d, force now %d", success, force);
+          act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
+
+          if (success <= 0 || force <= 0) {
+            send_to_char(ch, "%s's %s is already at the minimum.\r\n", capitalize(GET_CHAR_NAME(vict)), attributes[sub]);
+            return;
+          }
+        }
+      }
+
       snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
       act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
+
       if (success > 1) {
         direct_sustain = create_sustained(ch, vict, spell, force, sub, success, spells[spell].draindamage);
         act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
