@@ -4284,11 +4284,43 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
   int modifier = 0;
   char rbuf[2048];
 
+  // Pre-calculate the things we care about here. First, character vision info.
+  bool ch_has_ultrasound = has_vision(ch, VISION_ULTRASONIC);
+  bool ch_has_thermographic = has_vision(ch, VISION_THERMOGRAPHIC);
+  bool ch_sees_astral = IS_ASTRAL(ch) || IS_DUAL(ch);
+
+  // EXCEPT: If you're rigging (not manning), things change.
+  if (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE)) {
+    struct veh_data *veh = get_veh_controlled_by_char(ch);
+    ch_has_ultrasound = vehicle_has_ultrasound_sensors(veh); // Eventually, we'll have ultrasonic sensors on vehicles too.
+    ch_has_thermographic = TRUE;
+    ch_sees_astral = FALSE;
+  }
+
+  // Next, vict invis info.
+  bool vict_is_imp_invis = IS_AFFECTED(victim, AFF_IMP_INVIS);
+  bool vict_is_just_invis = IS_AFFECTED(victim, AFF_INVISIBLE);
+  // This checks to see if we've resisted their spell (if any). If we haven't, add on their spell invis.
+  if (!can_see_through_invis(ch, victim)) {
+    vict_is_imp_invis  |= IS_AFFECTED(victim, AFF_SPELLIMPINVIS);
+    vict_is_just_invis |= IS_AFFECTED(victim, AFF_SPELLINVIS);
+  }
+
+  bool vict_is_inanimate = MOB_FLAGGED(victim, MOB_INANIMATE);
+
   // Shortcut: If they're not invisible, you can see them. Ezpz.
   if (CAN_SEE(ch, victim)) {
-    snprintf(rbuf, sizeof(rbuf), "%s: Can see target, so final char-to-char visibility TN is ^c0^n.", GET_CHAR_NAME(ch));
-    act(rbuf, 0, victim, 0, ch, TO_ROLLS);
-    return 0;
+    // House rule: Since everyone and their dog has thermographic, now standard invis is actually a tiny bit useful.
+    // This deviates from canon, where thermographic can see through standard invis.
+    if (!(ch_sees_astral && !vict_is_inanimate) && !ch_has_ultrasound && ch_has_thermographic && vict_is_just_invis) {
+      modifier = 2;
+      snprintf(rbuf, sizeof(rbuf), "%s: Thermographic-using character fighting standard invis: %d", GET_CHAR_NAME(ch), modifier);
+      act(rbuf, FALSE, victim, 0, ch, TO_ROLLS);
+    }
+
+    snprintf(rbuf, sizeof(rbuf), "%s: Can see target, so final char-to-char visibility TN is ^c%d^n.", GET_CHAR_NAME(ch), modifier);
+    act(rbuf, FALSE, victim, 0, ch, TO_ROLLS);
+    return modifier;
   }
 
   // If we can't see due to light levels, bail out.
@@ -4314,30 +4346,6 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
       act("$N: Maximum penalty- fighting total-invis mob.", 0, victim, 0, ch, TO_ROLLS);
     return INVIS_CODE_TOTALINVIS;
   }
-
-  // Pre-calculate the things we care about here. First, character vision info.
-  bool ch_has_ultrasound = has_vision(ch, VISION_ULTRASONIC);
-  bool ch_has_thermographic = has_vision(ch, VISION_THERMOGRAPHIC);
-  bool ch_sees_astral = IS_ASTRAL(ch) || IS_DUAL(ch);
-
-  // EXCEPT: If you're rigging (not manning), things change.
-  if (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE)) {
-    struct veh_data *veh = get_veh_controlled_by_char(ch);
-    ch_has_ultrasound = vehicle_has_ultrasound_sensors(veh); // Eventually, we'll have ultrasonic sensors on vehicles too.
-    ch_has_thermographic = TRUE;
-    ch_sees_astral = FALSE;
-  }
-
-  // Next, vict invis info.
-  bool vict_is_imp_invis = IS_AFFECTED(victim, AFF_IMP_INVIS);
-  bool vict_is_just_invis = IS_AFFECTED(victim, AFF_INVISIBLE);
-  // This checks to see if we've resisted their spell (if any). If we haven't, add on their spell invis.
-  if (!can_see_through_invis(ch, victim)) {
-    vict_is_imp_invis  |= IS_AFFECTED(victim, AFF_SPELLIMPINVIS);
-    vict_is_just_invis |= IS_AFFECTED(victim, AFF_SPELLINVIS);
-  }
-
-  bool vict_is_inanimate = MOB_FLAGGED(victim, MOB_INANIMATE);
 
   if (ch_sees_astral) {
     if (!vict_is_inanimate) {
@@ -4418,12 +4426,11 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
       snprintf(rbuf, sizeof(rbuf), "%s: Thermographic-using character fighting improved invis: %d", GET_CHAR_NAME(ch), modifier);
     }
 
-    // Standard invis? (This includes ruthenium, which currently has no rating and is just treated like the invis spell.)
-    // House rule: Since everyone and their dog has thermographic, now standard invis is actually a tiny bit useful.
-    // This deviates from canon, where thermographic can see through standard invis.
     else if (vict_is_just_invis) {
+      // We should never get here: This should have tripped above in CAN_SEE.
       modifier = 2;
-      snprintf(rbuf, sizeof(rbuf), "%s: Thermographic-using character fighting invis: %d", GET_CHAR_NAME(ch), modifier);
+      snprintf(rbuf, sizeof(rbuf), "%s: Thermographic-using character fighting invis (second stanza): %d", GET_CHAR_NAME(ch), modifier);
+      mudlog("SYSERR: Hit second stanza of thermo-vs-standard-invis in calculate_vision_penalty()!", ch, LOG_SYSLOG, TRUE);
     }
 
     if (modifier > 0) {
