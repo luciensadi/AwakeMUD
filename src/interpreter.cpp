@@ -2160,22 +2160,11 @@ int is_abbrev(const char *arg1, const char *arg2)
   if (!*arg1 || !*arg2)
     return 0;
 
-  /* This is theoretically a better way to write the code below. I don't have time to test it, so I won't put it in, but I wrote it anyways. -LS.
-
-  while (LOWER(*(arg1++)) == LOWER(*(arg2++)));
-
-  return !*arg1;
-
-  */
-
   for (; *arg1 && *arg2; arg1++, arg2++)
     if (LOWER(*arg1) != LOWER(*arg2))
       return 0;
 
-  if (!*arg1)
-    return 1;
-  else
-    return 0;
+  return !*arg1;
 }
 
 /* return first space-delimited token in arg1; remainder of string in arg2 */
