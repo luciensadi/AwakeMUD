@@ -47,6 +47,7 @@ extern int can_wield_both(struct char_data *, struct obj_data *, struct obj_data
 extern void find_and_draw_weapon(struct char_data *);
 extern bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype, bool include_func_protections);
 extern bool does_weapon_have_bayonet(struct obj_data *weapon);
+extern int calculate_vision_penalty(struct char_data *ch, struct char_data *victim);
 
 
 ACMD(do_assist)
@@ -626,39 +627,46 @@ struct char_data *find_a_character_that_blocks_fleeing_for_ch(struct char_data *
   // Iterate through people in the room and see if any of them will stop you.
   for (struct char_data *combatant = get_ch_in_room(ch)->people; combatant; combatant = combatant->next_in_room) {
     // No matter how hard you try, you can't stop yourself.
-    if (combatant == ch)
+    if (combatant == ch) {
       continue;
+    }
 
     // If they're not fighting you, skip.
-    if (FIGHTING(combatant) != ch)
+    if (FIGHTING(combatant) != ch) {
+      act("Flee check for $n: Skipping $N (not fighting $n)", TRUE, ch, 0, combatant, TO_ROLLS);
       continue;
+    }
 
     // Unconscious and paralyzed people can't stop you.
-    if (!AWAKE(combatant))
+    if (!AWAKE(combatant)) {
+      act("Flee check for $n: Skipping $N (unconscious / paralyzed)", TRUE, ch, 0, combatant, TO_ROLLS);
       continue;
+    }
 
     // If they haven't closed the distance yet, you can break away.
-    if (AFF_FLAGGED(combatant, AFF_APPROACH))
+    if (AFF_FLAGGED(combatant, AFF_APPROACH)) {
+      act("Flee check for $n: Skipping $N (hasn't closed distance)", TRUE, ch, 0, combatant, TO_ROLLS);
       continue;
+    }
 
     // If you can't hurt them, they can't stop you.
-    if (!can_hurt(ch, combatant, TRUE, 0))
+    if (!can_hurt(ch, combatant, TRUE, 0)) {
+      act("Flee check for $n: Skipping $N (can't be hurt)", TRUE, ch, 0, combatant, TO_ROLLS);
       continue;
+    }
 
-    // Make a test to see if they can stop you.
+    // Make a test to see if they can stop you. It's made harder by being invisible.
     int dice = GET_QUI(ch) * 1.25;
-    int tn = (GET_REA(combatant) + racial_flee_modifier);
+    int tn = (GET_REA(combatant) + racial_flee_modifier) + calculate_vision_penalty(combatant, ch);
     int successes = success_test(dice, tn);
 
     char rbuf[500];
-    snprintf(rbuf, sizeof(rbuf), "Flee check: %s vs %s: rolled %d dice vs TN %d and got %d success%s.",
-             GET_CHAR_NAME(ch),
-             GET_CHAR_NAME(combatant),
+    snprintf(rbuf, sizeof(rbuf), "Flee check for $n vs $N: rolled %d dice vs TN %d and got %d success%s.",
              dice,
              tn,
              successes,
              successes == 1 ? "" : "s");
-    act(rbuf, TRUE, ch, 0, 0, TO_ROLLS);
+    act(rbuf, TRUE, ch, 0, combatant, TO_ROLLS);
 
     if (successes <= 0)
       return combatant;
