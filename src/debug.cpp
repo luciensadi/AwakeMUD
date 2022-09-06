@@ -114,6 +114,18 @@ ACMD(do_debug) {
     return;
   }
 
+  if (strn_cmp(arg1, "eqdam", strlen(arg1)) == 0) {
+    send_to_char(ch, "OK, destroying your equipment.\r\n");
+    extern void damage_obj(struct char_data *ch, struct obj_data *obj, int power, int type);
+    for (int wearloc = 0; wearloc < NUM_WEARS; wearloc++) {
+      struct obj_data *eq = GET_EQ(ch, wearloc);
+      if (eq) {
+        damage_obj(ch, eq, 100, TYPE_ACID);
+      }
+    }
+    return;
+  }
+
   if (is_abbrev(arg1, "replace_word")) {
     {
       char input[21], output[10], replacement[10];
