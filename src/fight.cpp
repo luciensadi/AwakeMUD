@@ -3939,56 +3939,56 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
     if (damage < 0) {
       switch (number(1, 3)) {
         case 1:
-          snprintf(buf1, sizeof(buf1), "^r%s$n %sfires a %s^r at you but you manage to dodge.^n", vehicle_message, blindfire_buf, buf);
-          snprintf(buf2, sizeof(buf2), "^yYou %sfire a %s^y at $N but $E manage%s to dodge.^n", blindfire_buf, buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
+          snprintf(buf1, sizeof(buf1), "^r%s$n^r %sfires a %s^r at you but you manage to dodge.^n", vehicle_message, blindfire_buf, buf);
+          snprintf(buf2, sizeof(buf2), "^yYou %sfire a %s^y at $N^y but $E manage%s to dodge.^n", blindfire_buf, buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
           snprintf(buf3, sizeof(buf3), "%s$n %sfires a %s^n at $N but $E manage%s to dodge.", vehicle_message, blindfire_buf, buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
           break;
         case 2:
-          snprintf(buf1, sizeof(buf1), "^r%s$n %sfires a %s^r at you but you easily dodge.^n", vehicle_message, blindfire_buf, buf);
-          snprintf(buf2, sizeof(buf2), "^yYou %sfire a %s^y at $N but $E easily dodge%s.^n", blindfire_buf, buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
+          snprintf(buf1, sizeof(buf1), "^r%s$n^r %sfires a %s^r at you but you easily dodge.^n", vehicle_message, blindfire_buf, buf);
+          snprintf(buf2, sizeof(buf2), "^yYou %sfire a %s^y at $N^y but $E easily dodge%s.^n", blindfire_buf, buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
           snprintf(buf3, sizeof(buf3), "%s$n %sfires a %s^n at $N but $E easily dodge%s.", vehicle_message, blindfire_buf, buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
           break;
         case 3:
-          snprintf(buf1, sizeof(buf1), "^r%s$n %sfires a %s^r at you but you move out of the way.^n", vehicle_message, blindfire_buf, buf);
-          snprintf(buf2, sizeof(buf2), "^yYou %sfire a %s^y at $N but $E move%s out of the way.^n", blindfire_buf, buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
+          snprintf(buf1, sizeof(buf1), "^r%s$n^r %sfires a %s^r at you but you move out of the way.^n", vehicle_message, blindfire_buf, buf);
+          snprintf(buf2, sizeof(buf2), "^yYou %sfire a %s^y at $N^y but $E move%s out of the way.^n", blindfire_buf, buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
           snprintf(buf3, sizeof(buf3), "%s$n %sfires a %s^n at $N but $E move%s out of the way.", vehicle_message, blindfire_buf, buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
           break;
       }
     } else if (damage == 0) {
       switch (number(1, 2)) {
         case 1:
-          snprintf(buf1, sizeof(buf1), "^r%s$n %sfires a %s^r at you but your armor holds.^n", vehicle_message, blindfire_buf, buf);
-          snprintf(buf2, sizeof(buf2), "^yYou %sfire a %s^y at $N but it doesn't seem to hurt $M.^n", blindfire_buf, buf);
+          snprintf(buf1, sizeof(buf1), "^r%s$n^r %sfires a %s^r at you but your armor holds.^n", vehicle_message, blindfire_buf, buf);
+          snprintf(buf2, sizeof(buf2), "^yYou %sfire a %s^y at $N^y but it doesn't seem to hurt $M.^n", blindfire_buf, buf);
           snprintf(buf3, sizeof(buf3), "%s$n %sfires a %s^n at $N but it doesn't seem to hurt $M.", vehicle_message, blindfire_buf, buf);
           break;
         case 2:
-          snprintf(buf1, sizeof(buf1), "^r%s$n %sfires a %s^r at you but you roll with the impact.^n", vehicle_message, blindfire_buf, buf);
-          snprintf(buf2, sizeof(buf2), "^yYou %sfire a %s^y at $N but $E roll%s with the impact.^n", blindfire_buf, buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
+          snprintf(buf1, sizeof(buf1), "^r%s$n^r %sfires a %s^r at you but you roll with the impact.^n", vehicle_message, blindfire_buf, buf);
+          snprintf(buf2, sizeof(buf2), "^yYou %sfire a %s^y at $N^y but $E roll%s with the impact.^n", blindfire_buf, buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
           snprintf(buf3, sizeof(buf3), "%s$n %sfires a %s^n at $N but $E roll%s with the impact.", vehicle_message, blindfire_buf, buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
           break;
       }
     } else if (damage == LIGHT) {
-      snprintf(buf1, sizeof(buf1), "^r%s$n grazes you with a %s%s^r.^n", vehicle_message, vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY ? "blind-fired " : "", buf);
-      snprintf(buf2, sizeof(buf2), "^yYou graze $N with a %s%s^y.^n", vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY ? "blind-fired " : "", buf);
+      snprintf(buf1, sizeof(buf1), "^r%s$n^r grazes you with a %s%s^r.^n", vehicle_message, vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY ? "blind-fired " : "", buf);
+      snprintf(buf2, sizeof(buf2), "^yYou graze $N^y with a %s%s^y.^n", vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY ? "blind-fired " : "", buf);
       snprintf(buf3, sizeof(buf3), "%s$n grazes $N with a %s%s^n.", vehicle_message, vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY ? "blind-fired " : "", buf);
     } else if (damage == MODERATE) {
-      snprintf(buf1, sizeof(buf1), "^r%s$n hits you with a %s%s^r.^n", vehicle_message, vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY ? "blind-fired " : "", buf);
-      snprintf(buf2, sizeof(buf2), "^yYou hit $N with a %s%s^y.^n", vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY ? "blind-fired " : "", buf);
+      snprintf(buf1, sizeof(buf1), "^r%s$n^r hits you with a %s%s^r.^n", vehicle_message, vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY ? "blind-fired " : "", buf);
+      snprintf(buf2, sizeof(buf2), "^yYou hit $N^y with a %s%s^y.^n", vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY ? "blind-fired " : "", buf);
       snprintf(buf3, sizeof(buf3), "%s$n hits $N with a %s%s^n.", vehicle_message, vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY ? "blind-fired " : "", buf);
     } else if (damage == SERIOUS) {
-      snprintf(buf1, sizeof(buf1), "^r%s$n massacres you with a %s%s^r.^n", vehicle_message, vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY ? "blind-fired " : "", buf);
-      snprintf(buf2, sizeof(buf2), "^yYou massacre $N with a %s%s^y.^n", vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY ? "blind-fired " : "", buf);
+      snprintf(buf1, sizeof(buf1), "^r%s$n^r massacres you with a %s%s^r.^n", vehicle_message, vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY ? "blind-fired " : "", buf);
+      snprintf(buf2, sizeof(buf2), "^yYou massacre $N^y with a %s%s^y.^n", vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY ? "blind-fired " : "", buf);
       snprintf(buf3, sizeof(buf3), "%s$n massacres $N with a %s%s^n.", vehicle_message, vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY ? "blind-fired " : "", buf);
     } else if (damage >= DEADLY) {
       switch (number(1, 2)) {
         case 1:
-          snprintf(buf1, sizeof(buf1), "^r%s$n puts you down with a %sdeadly %s^r.^n", vehicle_message, vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY ? "blind-fired but still " : "", buf);
-          snprintf(buf2, sizeof(buf2), "^yYou put $N down with a %sdeadly %s^y.^n", vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY ? "blind-fired but still " : "", buf);
+          snprintf(buf1, sizeof(buf1), "^r%s$n^r puts you down with a %sdeadly %s^r.^n", vehicle_message, vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY ? "blind-fired but still " : "", buf);
+          snprintf(buf2, sizeof(buf2), "^yYou put $N^y down with a %sdeadly %s^y.^n", vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY ? "blind-fired but still " : "", buf);
           snprintf(buf3, sizeof(buf3), "%s$n puts $N down with a %sdeadly %s^n.", vehicle_message, vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY ? "blind-fired but still " : "", buf);
           break;
         case 2:
-          snprintf(buf1, sizeof(buf1), "^r%s$n sublimates you with a %sdeadly %s^r.^n", vehicle_message, vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY ? "blind-fired but still " : "", buf);
-          snprintf(buf2, sizeof(buf2), "^yYou sublimate $N with a %sdeadly %s^y.^n", vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY ? "blind-fired but still " : "", buf);
+          snprintf(buf1, sizeof(buf1), "^r%s$n^r sublimates you with a %sdeadly %s^r.^n", vehicle_message, vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY ? "blind-fired but still " : "", buf);
+          snprintf(buf2, sizeof(buf2), "^yYou sublimate $N^y with a %sdeadly %s^y.^n", vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY ? "blind-fired but still " : "", buf);
           snprintf(buf3, sizeof(buf3), "%s$n sublimates $N with a %sdeadly %s^n.", vehicle_message, vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY ? "blind-fired but still " : "", buf);
           break;
       }
@@ -4002,20 +4002,20 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
     if (damage < 0) {
       switch (number(1, 3)) {
         case 1:
-          snprintf(buf1, sizeof(buf1), "^r$n %sfires a %s^r at you but you manage to dodge.^n", blindfire_buf, buf);
-          snprintf(buf2, sizeof(buf2), "^yYou %sfire a %s^y at $N but $E manage%s to dodge.^n", blindfire_buf, buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
+          snprintf(buf1, sizeof(buf1), "^r$n^r %sfires a %s^r at you but you manage to dodge.^n", blindfire_buf, buf);
+          snprintf(buf2, sizeof(buf2), "^yYou %sfire a %s^y at $N^y but $E manage%s to dodge.^n", blindfire_buf, buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
           snprintf(buf3, sizeof(buf3), "$n %sfires a %s^n at $N but $E manage%s to dodge.", blindfire_buf, buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
           snprintf(buf4, sizeof(buf4), "$N %sfires a %s^n at $n but $e manage%s to dodge.", blindfire_buf, buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
           break;
         case 2:
-          snprintf(buf1, sizeof(buf1), "^r$n %sfires a %s^r at you but you easily dodge.^n", blindfire_buf, buf);
-          snprintf(buf2, sizeof(buf2), "^yYou %sfire a %s^y at $N but $E easily dodge%s.^n", blindfire_buf, buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
+          snprintf(buf1, sizeof(buf1), "^r$n^r %sfires a %s^r at you but you easily dodge.^n", blindfire_buf, buf);
+          snprintf(buf2, sizeof(buf2), "^yYou %sfire a %s^y at $N^y but $E easily dodge%s.^n", blindfire_buf, buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
           snprintf(buf3, sizeof(buf3), "$n %sfires a %s^n at $N but $E easily dodge%s.", blindfire_buf, buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
           snprintf(buf4, sizeof(buf4), "$N %sfires a %s^n at $n but $e easily dodge%s.", blindfire_buf, buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
           break;
         case 3:
-          snprintf(buf1, sizeof(buf1), "^r$n %sfires a %s^r at you but you move out of the way.^n", blindfire_buf, buf);
-          snprintf(buf2, sizeof(buf2), "^yYou %sfire a %s^y at $N but $E move%s out of the way.^n", blindfire_buf, buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
+          snprintf(buf1, sizeof(buf1), "^r$n^r %sfires a %s^r at you but you move out of the way.^n", blindfire_buf, buf);
+          snprintf(buf2, sizeof(buf2), "^yYou %sfire a %s^y at $N^y but $E move%s out of the way.^n", blindfire_buf, buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
           snprintf(buf3, sizeof(buf3), "$n %sfires a %s^n at $N but $E move%s out of the way.", blindfire_buf, buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
           snprintf(buf4, sizeof(buf4), "$N %sfires a %s^n at $n but $e move%s out of the way.", blindfire_buf, buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
           break;
@@ -4023,44 +4023,44 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
     } else if (damage == 0) {
       switch (number(1, 2)) {
         case 1:
-          snprintf(buf1, sizeof(buf1), "^r$n %sfires a %s^r at you but your armor holds.^n", blindfire_buf, buf);
-          snprintf(buf2, sizeof(buf2), "^yYou %sfire a %s^y at $N but it doesn't seem to hurt $M.^n", blindfire_buf, buf);
+          snprintf(buf1, sizeof(buf1), "^r$n^r %sfires a %s^r at you but your armor holds.^n", blindfire_buf, buf);
+          snprintf(buf2, sizeof(buf2), "^yYou %sfire a %s^y at $N^y but it doesn't seem to hurt $M.^n", blindfire_buf, buf);
           snprintf(buf3, sizeof(buf3), "$n %sfires a %s^n at $N but it doesn't seem to hurt $M.", blindfire_buf, buf);
           snprintf(buf4, sizeof(buf4), "$N %sfires a %s^n at $n but it doesn't seem to hurt $m.", blindfire_buf, buf);
           break;
         case 2:
-          snprintf(buf1, sizeof(buf1), "^r$n %sfires a %s^r at you but you roll with the impact.^n", blindfire_buf, buf);
-          snprintf(buf2, sizeof(buf2), "^yYou %sfire a %s^y at $N but $E roll%s with the impact.^n", blindfire_buf, buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
+          snprintf(buf1, sizeof(buf1), "^r$n^r %sfires a %s^r at you but you roll with the impact.^n", blindfire_buf, buf);
+          snprintf(buf2, sizeof(buf2), "^yYou %sfire a %s^y at $N^y but $E roll%s with the impact.^n", blindfire_buf, buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
           snprintf(buf3, sizeof(buf3), "$n %sfires a %s^n at $N but $E roll%s with the impact.", blindfire_buf, buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
           snprintf(buf4, sizeof(buf4), "$N %sfires a %s^n at $n but $e roll%s with the impact.", blindfire_buf, buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
           break;
       }
     } else if (damage == LIGHT) {
-      snprintf(buf1, sizeof(buf1), "^r$n grazes you with a %s%s^r.^n", vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY ? "blind-fired " : "", buf);
-      snprintf(buf2, sizeof(buf2), "^yYou graze $N with a %s%s^y.^n", vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY ? "blind-fired " : "", buf);
+      snprintf(buf1, sizeof(buf1), "^r$n^r grazes you with a %s%s^r.^n", vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY ? "blind-fired " : "", buf);
+      snprintf(buf2, sizeof(buf2), "^yYou graze $N^y with a %s%s^y.^n", vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY ? "blind-fired " : "", buf);
       snprintf(buf3, sizeof(buf3), "$n grazes $N with a %s%s^n.", vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY ? "blind-fired " : "", buf);
       snprintf(buf4, sizeof(buf4), "$N grazes $n with a %s%s^n.", vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY ? "blind-fired " : "", buf);
     } else if (damage == MODERATE) {
-      snprintf(buf1, sizeof(buf1), "^r$n hits you with a %s%s^r.^n", vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY ? "blind-fired " : "", buf);
-      snprintf(buf2, sizeof(buf2), "^yYou hit $N with a %s%s^y.^n", vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY ? "blind-fired " : "", buf);
+      snprintf(buf1, sizeof(buf1), "^r$n^r hits you with a %s%s^r.^n", vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY ? "blind-fired " : "", buf);
+      snprintf(buf2, sizeof(buf2), "^yYou hit $N^y with a %s%s^y.^n", vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY ? "blind-fired " : "", buf);
       snprintf(buf3, sizeof(buf3), "$n hits $N with a %s%s^n.", vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY ? "blind-fired " : "", buf);
       snprintf(buf4, sizeof(buf4), "$N hits $n with a %s%s^n.", vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY ? "blind-fired " : "", buf);
     } else if (damage == SERIOUS) {
-      snprintf(buf1, sizeof(buf1), "^r$n massacres you with a %s%s^r.^n", vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY ? "blind-fired " : "", buf);
-      snprintf(buf2, sizeof(buf2), "^yYou massacre $N with a %s%s^y.^n", vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY ? "blind-fired " : "", buf);
+      snprintf(buf1, sizeof(buf1), "^r$n^r massacres you with a %s%s^r.^n", vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY ? "blind-fired " : "", buf);
+      snprintf(buf2, sizeof(buf2), "^yYou massacre $N^y with a %s%s^y.^n", vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY ? "blind-fired " : "", buf);
       snprintf(buf3, sizeof(buf3), "$n massacres $N with a %s%s^n.", vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY ? "blind-fired " : "", buf);
       snprintf(buf4, sizeof(buf4), "$N massacres $n with a %s%s^n.", vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY ? "blind-fired " : "", buf);
     } else if (damage >= DEADLY) {
       switch (number(1, 2)) {
         case 1:
-          snprintf(buf1, sizeof(buf1), "^r$n puts you down with a %sdeadly %s^r.^n", vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY ? "blind-fired " : "", buf);
-          snprintf(buf2, sizeof(buf2), "^yYou put $N down with a %sdeadly %s^y.^n", vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY ? "blind-fired " : "", buf);
+          snprintf(buf1, sizeof(buf1), "^r$n^r puts you down with a %sdeadly %s^r.^n", vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY ? "blind-fired " : "", buf);
+          snprintf(buf2, sizeof(buf2), "^yYou put $N^y down with a %sdeadly %s^y.^n", vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY ? "blind-fired " : "", buf);
           snprintf(buf3, sizeof(buf3), "$n puts $N down with a %sdeadly %s^n.", vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY ? "blind-fired " : "", buf);
           snprintf(buf4, sizeof(buf4), "$N puts $n down with a %sdeadly %s^n.", vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY ? "blind-fired " : "", buf);
           break;
         case 2:
-          snprintf(buf1, sizeof(buf1), "^r$n sublimates you with a %sdeadly %s^r.^n", vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY ? "blind-fired " : "", buf);
-          snprintf(buf2, sizeof(buf2), "^yYou sublimate $N with a %sdeadly %s^y.^n", vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY ? "blind-fired " : "", buf);
+          snprintf(buf1, sizeof(buf1), "^r$n^r sublimates you with a %sdeadly %s^r.^n", vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY ? "blind-fired " : "", buf);
+          snprintf(buf2, sizeof(buf2), "^yYou sublimate $N^y with a %sdeadly %s^y.^n", vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY ? "blind-fired " : "", buf);
           snprintf(buf3, sizeof(buf3), "$n sublimates $N with a %sdeadly %s^n.", vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY ? "blind-fired " : "", buf);
           snprintf(buf4, sizeof(buf4), "$N sublimates $n with a %sdeadly %s^n.", vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY ? "blind-fired " : "", buf);
           break;
