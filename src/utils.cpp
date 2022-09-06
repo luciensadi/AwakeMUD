@@ -4470,7 +4470,7 @@ bool perform_knockdown_test(struct char_data *ch, int initial_tn, int successes_
         has_aug = TRUE;
         break;
       case CYB_FOOTANCHOR:
-        if (!GET_CYBERWARE_IS_DISABLED(cyb)):
+        if (!GET_CYBERWARE_IS_DISABLED(cyb))
           tn_modifiers += -1;
         buf_mod(rbuf, sizeof(rbuf), "foot anchors", GET_CYBERWARE_RATING(cyb));
         break;
