@@ -295,7 +295,7 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
       }
     }
   }
-  else if (GET_OBJ_NAME(object) && mode == SHOW_MODE_IN_INVENTORY) {
+  else if (GET_OBJ_NAME(object) && (mode == SHOW_MODE_IN_INVENTORY || mode == SHOW_MODE_INSIDE_CONTAINER)) {
     strlcpy(buf, GET_OBJ_NAME(object), sizeof(buf));
     if (GET_OBJ_TYPE(object) == ITEM_DESIGN)
       strlcat(buf, " (Plan)", sizeof(buf));
@@ -315,7 +315,7 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
       strlcat(buf, " ^c(kept)^n", sizeof(buf));
     }
   }
-  else if (GET_OBJ_NAME(object) && ((mode == SHOW_MODE_INSIDE_CONTAINER) || (mode == 3) || (mode == 4) || (mode == SHOW_MODE_OWN_EQUIPMENT) || (mode == SHOW_MODE_SOMEONE_ELSES_EQUIPMENT))) {
+  else if (GET_OBJ_NAME(object) && ((mode == 3) || (mode == 4) || (mode == SHOW_MODE_OWN_EQUIPMENT) || (mode == SHOW_MODE_SOMEONE_ELSES_EQUIPMENT))) {
     strlcpy(buf, GET_OBJ_NAME(object), sizeof(buf));
   }
   else if (mode == SHOW_MODE_JUST_DESCRIPTION) {
@@ -2127,9 +2127,9 @@ void look_in_obj(struct char_data * ch, char *arg, bool exa)
              (GET_OBJ_TYPE(obj) != ITEM_KEYRING) &&
              (GET_OBJ_TYPE(obj) != ITEM_GUN_AMMO) &&
              (GET_OBJ_TYPE(obj) != ITEM_SHOPCONTAINER)
-           )
+           ) {
     send_to_char("There's nothing inside that!\r\n", ch);
-  else
+  } else
   {
     if (GET_OBJ_TYPE(obj) == ITEM_GUN_AMMO) {
       send_to_char(ch, "It contains %d %s.\r\n",
@@ -3540,23 +3540,30 @@ ACMD(do_examine)
 #ifdef USE_PRIVATE_CE_WORLD
     display_secret_info_about_object(ch, tmp_object);
 #endif
-
     if (GET_OBJ_TYPE(tmp_object) == ITEM_CONTAINER ||
+        GET_OBJ_TYPE(tmp_object) == ITEM_KEYRING ||
+        GET_OBJ_TYPE(tmp_object) == ITEM_QUIVER ||
         (GET_OBJ_TYPE(tmp_object) == ITEM_WORN && tmp_object->contains)) {
       if (!tmp_object->contains)
         send_to_char("Looking inside reveals it to be empty.\r\n", ch);
       else {
-        float weight_when_full =get_proto_weight(tmp_object) + GET_OBJ_VAL(tmp_object, 0);
+        if (GET_OBJ_TYPE(tmp_object) == ITEM_KEYRING) {
+          send_to_char("Attached to the keyring is:\r\n", ch);
+        } else {
+          float weight_when_full =get_proto_weight(tmp_object) + GET_OBJ_VAL(tmp_object, 0);
 
-        if (GET_OBJ_WEIGHT(tmp_object) >= weight_when_full * .9)
-          send_to_char("It is bursting at the seams.\r\n", ch);
-        else if (GET_OBJ_WEIGHT(tmp_object) >= weight_when_full / 2)
-          send_to_char("It is more than half full.\r\n", ch);
-        else
-          send_to_char("It is less than half full.\r\n", ch);
+          if (GET_OBJ_WEIGHT(tmp_object) >= weight_when_full * .9)
+            send_to_char("It is bursting at the seams.\r\n", ch);
+          else if (GET_OBJ_WEIGHT(tmp_object) >= weight_when_full / 2)
+            send_to_char("It is more than half full.\r\n", ch);
+          else
+            send_to_char("It is less than half full.\r\n", ch);
 
-        send_to_char("When you look inside, you see:\r\n", ch);
+          send_to_char("When you look inside, you see:\r\n", ch);
+        }
+
         look_in_obj(ch, arg, TRUE);
+        send_to_char("\r\n", ch);
       }
     } else if ((GET_OBJ_TYPE(tmp_object) == ITEM_WEAPON) &&
                (IS_GUN(GET_OBJ_VAL(tmp_object, 3)))) {
