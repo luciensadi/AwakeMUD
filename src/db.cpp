@@ -2913,8 +2913,9 @@ int vnum_vehicles(char *searchname, struct char_data * ch)
   int nr, found = 0;
   for (nr = 0; nr <= top_of_veht; nr++)
   {
-    if (isname(searchname, veh_proto[nr].name)
-        ||isname(searchname, veh_proto[nr].short_description)) {
+    bool is_keyword = isname(searchname, get_string_after_color_code_removal(veh_proto[nr].name, NULL));
+    bool is_name = isname(searchname, get_string_after_color_code_removal(veh_proto[nr].short_description, NULL));
+    if (is_keyword || is_name) {
       snprintf(buf, sizeof(buf), "%3d. [%5ld] %s\r\n", ++found,
               veh_index[nr].vnum,
               veh_proto[nr].short_description == NULL ? "(BUG)" :
@@ -2949,8 +2950,9 @@ int vnum_mobile(char *searchname, struct char_data * ch)
     return vnum_mobile_affflag(atoi(arg2),ch);
   for (nr = 0; nr <= top_of_mobt; nr++)
   {
-    if (isname(searchname, mob_proto[nr].player.physical_text.keywords) ||
-        isname(searchname, mob_proto[nr].player.physical_text.name)) {
+    bool is_keyword = isname(searchname, get_string_after_color_code_removal(mob_proto[nr].player.physical_text.keywords, NULL));
+    bool is_name = isname(searchname, get_string_after_color_code_removal(mob_proto[nr].player.physical_text.name, NULL));
+    if (is_keyword || is_name) {
       snprintf(buf, sizeof(buf), "%3d. [%5ld] %s\r\n", ++found,
               MOB_VNUM_RNUM(nr),
               mob_proto[nr].player.physical_text.name == NULL ? "(BUG)" :
@@ -3439,8 +3441,9 @@ int vnum_object(char *searchname, struct char_data * ch)
 
   for (nr = 0; nr <= top_of_objt; nr++)
   {
-    if (isname(searchname, obj_proto[nr].text.keywords) ||
-        isname(searchname, obj_proto[nr].text.name)) {
+    bool is_keyword = isname(searchname, get_string_after_color_code_removal(obj_proto[nr].text.keywords, NULL));
+    bool is_name = isname(searchname, get_string_after_color_code_removal(obj_proto[nr].text.name, NULL));
+    if (is_keyword || is_name) {
       snprintf(buf, sizeof(buf), "%3d. [%5ld -%2d] %s %s%s\r\n", ++found,
               OBJ_VNUM_RNUM(nr),
               ObjList.CountObj(nr),
