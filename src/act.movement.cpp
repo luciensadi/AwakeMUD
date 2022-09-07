@@ -191,7 +191,7 @@ bool should_tch_see_chs_movement_message(struct char_data *tch, struct char_data
   }
 
   // Absolutely can't see for whatever reason.
-  if (tch == ch || PRF_FLAGGED(tch, PRF_MOVEGAG) || !AWAKE(tch) || !CAN_SEE(tch, ch) || IS_IGNORING(tch, is_blocking_ic_interaction_from, ch))
+  if (tch == ch || PRF_FLAGGED(tch, PRF_MOVEGAG) || !AWAKE(tch) || IS_IGNORING(tch, is_blocking_ic_interaction_from, ch))
     return FALSE;
 
   // Failed to see from vehicle.
@@ -252,17 +252,20 @@ bool should_tch_see_chs_movement_message(struct char_data *tch, struct char_data
 
     bool spotted_movement = perception_result > 0;
 
-    if (spotted_movement && IS_NPC(tch) && GET_MOBALERT(tch) != MALERT_ALARM) {
-      GET_MOBALERT(tch) = MALERT_ALERT;
-      GET_MOBALERTTIME(tch) = MAX(GET_MOBALERTTIME(tch), 10);
+    // We rolled at least one hit above our open test TN? NOW we check if we can see them.
+    if (spotted_movement && CAN_SEE(tch, ch)) {
+      // Spotting someone sneaking around puts NPCs on edge.
+      if (IS_NPC(tch) && GET_MOBALERT(tch) != MALERT_ALARM) {
+        GET_MOBALERT(tch) = MALERT_ALERT;
+        GET_MOBALERTTIME(tch) = MAX(GET_MOBALERTTIME(tch), 10);
+      }
+      return TRUE;
     }
-
-    // If the result met or beat the TN, we're good.
-    return spotted_movement;
+    return FALSE;
   }
 
-  // If we got here, we can see it.
-  return TRUE;
+  // If we got here, we can see it, as long as we can see them. Has to be after the sneak check.
+  return CAN_SEE(tch, ch);
 }
 
 /* do_simple_move assumes
