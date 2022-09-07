@@ -1037,8 +1037,8 @@ bool mobact_process_helper(struct char_data *ch) {
       if (ch == vict || !FIGHTING(vict) || ch == FIGHTING(vict))
         continue;
 
-      // If victim is an NPC who is fighting a player, and I can see the player, and the player can hurt me, assist the NPC.
-      if (IS_NPC(vict) && !IS_NPC(FIGHTING(vict)) && CAN_SEE(ch, FIGHTING(vict)) && can_hurt(FIGHTING(vict), ch, 0, TRUE)) {
+      // If victim is a visible NPC who is fighting a player, and the player can hurt me, assist the NPC.
+      if (IS_NPC(vict) && !IS_NPC(FIGHTING(vict)) && CAN_SEE(ch, vict) && can_hurt(FIGHTING(vict), ch, 0, TRUE)) {
         // The player is in my room, so I can fight them up-close.
         if (FIGHTING(vict)->in_room == ch->in_room) {
           act("$n jumps to the aid of $N!", FALSE, ch, 0, vict, TO_ROOM);
@@ -1061,8 +1061,8 @@ bool mobact_process_helper(struct char_data *ch) {
         return TRUE;
       }
 
-      // If the victim is a player who is fighting an NPC, and I can see the player, and the player can hurt me, assist the NPC.
-      if (!IS_NPC(vict) && IS_NPC(FIGHTING(vict)) && CAN_SEE(ch, vict) && can_hurt(vict, ch, 0, TRUE)) {
+      // If the victim is a player who is fighting a visible NPC, and the player can hurt me, assist the NPC.
+      if (!IS_NPC(vict) && IS_NPC(FIGHTING(vict)) && CAN_SEE(ch, FIGHTING(vict)) && can_hurt(vict, ch, 0, TRUE)) {
         // A player in my area is attacking an NPC.
         act("$n jumps to the aid of $N!", FALSE, ch, 0, FIGHTING(vict), TO_ROOM);
         stop_fighting(ch);
