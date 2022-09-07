@@ -5,6 +5,8 @@
 #include "db.hpp"
 #include "config.hpp"
 
+void send_npc_newly_alarmed_message(struct char_data *npc, struct char_data *vict);
+
 // Helper function for remove_ch_from_pc_invis_resistance_records().
 void _remove_ch_from_pc_invis_resistance_records(struct char_data *ch, struct char_data *vict) {
   std::unordered_map<idnum_t, bool> *map_to_operate_on = NULL;
@@ -54,21 +56,34 @@ void purge_invis_invis_resistance_records(struct char_data *ch) {
 }
 
 // Returns TRUE if we're alarmed, FALSE otherwise.
-bool process_spotted_invis(struct char_data *ch, struct char_data *vict, bool just_spotted) {
+bool process_spotted_invis(struct char_data *ch, struct char_data *vict) {
   // We don't get alarmed by invis NPCs.
   if (IS_NPC(vict))
     return FALSE;
 
-  // Higher-security zones have NPCs who are more on edge.
-  if (!just_spotted && number(0, 20) <= GET_SECURITY_LEVEL(get_ch_in_room(ch))) {
-    GET_MOBALERT(ch) = MALERT_ALARM;
-    GET_MOBALERTTIME(ch) = 10;
-    return TRUE;
-  } else {
-    GET_MOBALERT(ch) = MALERT_ALERT;
-    GET_MOBALERTTIME(ch) = 20;
-    return FALSE;
+  // Refresh alert time to 20 since we're seeing someone being shady.
+  GET_MOBALERTTIME(ch) = MAX(GET_MOBALERTTIME(ch), 20);
+
+  if (GET_MOBALERT(ch) != MALERT_ALARM) {
+    // The more secure an area is, the twitchier the guards are. This evaluates TRUE if a given guard is twitchy.
+    bool alert_state_should_be_alarm = number(0, MAX_ZONE_SECURITY_RATING * 4) * 5 <= GET_SECURITY_LEVEL(get_ch_in_room(ch)) * 5;
+
+    // Seeing someone walking around invis alarms you, or alerts you if you're not twitchy.
+    if (alert_state_should_be_alarm) {
+      GET_MOBALERT(ch) = MALERT_ALARM;
+      if (access_level(vict, LVL_PRESIDENT) && PRF_FLAGGED(vict, PRF_ROLLS)) {
+        send_to_char(vict, "^L[%s#%ld has become ^ralarmed^L due to seeing you while you're invis.]\r\n", GET_CHAR_NAME(ch), GET_MOB_UNIQUE_ID(ch));
+      }
+      return TRUE;
+    } else {
+      GET_MOBALERT(ch) = MALERT_ALERT;
+      if (access_level(vict, LVL_PRESIDENT) && PRF_FLAGGED(vict, PRF_ROLLS)) {
+        send_to_char(vict, "^L[%s#%ld has become ^yalert^L due to seeing you while you're invis.]\r\n", GET_CHAR_NAME(ch), GET_MOB_UNIQUE_ID(ch));
+      }
+      return FALSE;
+    }
   }
+  return FALSE;
 }
 
 bool can_see_through_invis(struct char_data *ch, struct char_data *vict) {
@@ -97,10 +112,17 @@ bool can_see_through_invis(struct char_data *ch, struct char_data *vict) {
 
   // If they're already in the map, return their prior result-- they already tested.
   if ((found = map_to_operate_on->find(idnum)) != map_to_operate_on->end()) {
-    // Anti-cheese: As long as you're invis, guard NPCs etc are going to continue to be alarmed by you if they see you.
-    // Prevents someone running in and out again, waiting for them to lose sight of us, and then going in while they're calm.
-    if (IS_NPC(ch)) {
-      process_spotted_invis(ch, vict, FALSE);
+    // Anti-cheese: Prevents someone running in and out again, waiting for them to lose memory of us, and then going in while they're calm.
+    if (IS_NPC(ch) && !IS_NPC(vict) && found->second) {
+      if (GET_MOBALERT(ch) == MALERT_CALM) {
+        // They timed out, so let's run the whole spotted check again.
+        if (process_spotted_invis(ch, vict)) {
+          send_npc_newly_alarmed_message(ch, vict);
+        }
+      } else {
+        // Just refresh their existing alert time.
+        GET_MOBALERTTIME(ch) = MAX(GET_MOBALERTTIME(ch), 20);
+      }
     }
 
     return found->second;
@@ -201,26 +223,9 @@ bool can_see_through_invis(struct char_data *ch, struct char_data *vict) {
     if (test_succeeded) {
       act("You squint at a hazy patch of air, and suddenly $N pops into view!", FALSE, ch, 0, vict, TO_CHAR);
 
-      // Spotting an invisible person alarms NPCs.
-      if (IS_NPC(ch)) {
-        bool is_alarmed = process_spotted_invis(ch, vict, TRUE);
-        if (is_alarmed && CAN_SEE(vict, ch)) {
-          if (vict->in_room == ch->in_room) {
-            if (MOB_FLAGGED(ch, MOB_INANIMATE)) {
-              send_to_char(vict, "^y%s swivels towards you with an alarmed chirp.^n\r\n", capitalize(GET_CHAR_NAME(ch)));
-            } else {
-              send_to_char(vict, "^y%s scowls at you, %s eyes focusing through your invisibility.^n\r\n", capitalize(GET_CHAR_NAME(ch)), HSHR(ch));
-            }
-            if (GET_NOT(vict) < NEWBIE_KARMA_THRESHOLD && number(0, MAX(1, GET_NOT(vict) / 5)) == 0) {
-              send_to_char(vict, "(OOC: Being invisible sets NPCs on edge! Be careful out there.)\r\n");
-            }
-          } else if (number(0, 5) == 0) {
-            send_to_char("You get an uneasy feeling...\r\n", vict);
-            if (GET_NOT(vict) < NEWBIE_KARMA_THRESHOLD && number(0, MAX(1, GET_NOT(vict) / 5)) == 0) {
-              send_to_char(vict, "(OOC: Being invisible sets NPCs on edge! Be careful out there.)\r\n");
-            }
-          }
-        }
+      // Spotting an invisible person can alarm NPCs.
+      if (IS_NPC(ch) && process_spotted_invis(ch, vict)) {
+        send_npc_newly_alarmed_message(ch, vict);
       }
     }
     else if (GET_EQ(vict, WEAR_LIGHT) && IS_NPC(ch)) {
@@ -232,4 +237,27 @@ bool can_see_through_invis(struct char_data *ch, struct char_data *vict) {
 
   // Return the result.
   return test_succeeded;
+}
+
+void send_npc_newly_alarmed_message(struct char_data *npc, struct char_data *vict) {
+  bool passed_check = success_test(GET_INT(vict) + GET_POWER(vict, ADEPT_IMPROVED_PERCEPT), GET_INT(npc)) > 0;
+
+  if (passed_check && CAN_SEE(vict, npc) && vict->in_room == npc->in_room) {
+    if (MOB_FLAGGED(npc, MOB_INANIMATE)) {
+      act("You swivel towards $N with an alarmed chirp as your sensors pierce $S invisibility.^n", TRUE, npc, 0, vict, TO_CHAR);
+      act("$n^n swivels towards $N with an alarmed chirp.", TRUE, npc, 0, vict, TO_NOTVICT);
+      act("^y$n^y swivels towards you with an alarmed chirp as its sensors pierce your invisibility.^n", TRUE, npc, 0, vict, TO_VICT);
+    } else {
+      act("You scowl at $N as your eyes focus through $S invisibility.^n", TRUE, npc, 0, vict, TO_CHAR);
+      act("$n^n scowls at $N as $s eyes focus through $S invisibility.", TRUE, npc, 0, vict, TO_NOTVICT);
+      act("^y$n^y scowls at you as $s eyes focus through your invisibility.^n", TRUE, npc, 0, vict, TO_VICT);
+    }
+  }
+  // Otherwise, you have a chance to get a feeling about it.
+  else if (number(0, 5) == 0) {
+    send_to_char("You get an uneasy feeling...\r\n", vict);
+    if (GET_NOT(vict) < NEWBIE_KARMA_THRESHOLD && number(0, MAX(1, GET_NOT(vict) / 5)) == 0) {
+      send_to_char(vict, "(Being invisible sets NPCs on edge! Be careful out there.)\r\n");
+    }
+  }
 }

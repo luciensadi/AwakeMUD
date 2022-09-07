@@ -7,6 +7,6 @@ extern void purge_invis_invis_resistance_records(struct char_data *ch);
 
 extern void remove_ch_from_pc_invis_resistance_records(struct char_data *ch);
 
-extern void process_spotted_invis(struct char_data *ch, struct char_data *vict, bool just_spotted=FALSE);
+extern void process_spotted_invis(struct char_data *ch, struct char_data *vict);
 
 #endif

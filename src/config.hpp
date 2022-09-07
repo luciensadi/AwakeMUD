@@ -214,6 +214,9 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 
 #define TN_INCREASE_DIVISOR_FOR_ATTRIBUTE_SPELL_STACKING       3
 
+// What's the maximum paranoia level for zones?
+#define MAX_ZONE_SECURITY_RATING                               15
+
 // How many sunrises (currently spans of 48 minutes) are spirits good for?
 #define NUMBER_OF_IG_DAYS_FOR_SPIRIT_TO_LAST                   4
 

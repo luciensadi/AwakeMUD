@@ -205,7 +205,7 @@ void zedit_disp_data_menu(struct descriptor_data *d)
   send_to_char(CH, "^G2^Y) ^WTop of zone: ^c%d^n\r\n", ZON->top );
   send_to_char(CH, "^G3^Y) ^WLifespan: ^c%d^n\r\n", ZON->lifespan );
   send_to_char(CH, "^G4^Y) ^WReset mode: ^c%s^n\r\n", reset_mode[ZON->reset_mode] );
-  send_to_char(CH, "^G5^Y) ^WSecurity level: ^c%d^n\r\n", ZON->security );
+  send_to_char(CH, "^G5^Y) ^WSecurity level (1-%d): ^c%d^n\r\n", MAX_ZONE_SECURITY_RATING, ZON->security );
   send_to_char(CH, "^G6^Y) ^WJurisdiction: ^c%s^n\r\n", jurid[ZON->jurisdiction]);
   if (access_level(CH, LVL_FOR_SETTING_ZONE_EDITOR_ID_NUMBERS)) {
     send_to_char("^G7^Y) ^WEditors: ", CH);
@@ -722,7 +722,7 @@ void zedit_parse(struct descriptor_data *d, const char *arg)
       d->edit_mode = ZEDIT_RESET_MODE;
       break;
     case '5':
-      send_to_char("Zone security (1 (none) - 15 (paranoid)):\r\n", CH);
+      send_to_char(CH, "Zone security (1 (none) - %d (paranoid)):\r\n", MAX_ZONE_SECURITY_RATING);
       d->edit_mode = ZEDIT_SECURITY;
       break;
     case '6':
@@ -1156,8 +1156,8 @@ void zedit_parse(struct descriptor_data *d, const char *arg)
 
   case ZEDIT_SECURITY:
     number = atoi(arg);
-    if (number < 1 || number > 15) {
-      send_to_char("Security rating must range from 1 to 15.\r\nZone security: ", CH);
+    if (number < 1 || number > MAX_ZONE_SECURITY_RATING) {
+      send_to_char(CH, "Security rating must range from 1 to %d.\r\nZone security: ", MAX_ZONE_SECURITY_RATING);
       return;
     }
     ZON->security = number;
