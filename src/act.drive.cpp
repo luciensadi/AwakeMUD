@@ -1996,6 +1996,10 @@ void process_autonav(void)
         return;
       }
       if (veh->in_room == veh->dest) {
+        // QoL - show destination room to vehicle occupants on arrival
+        for (struct char_data *ch = veh->people; ch; ch = ch->next_in_veh)
+          if (!IS_NPC(npc))
+            look_at_room(ch, 0, 0)
         send_to_veh("Having reached its destination, the autonav shuts off.\r\n", veh, 0, TRUE);
         veh->cspeed = SPEED_OFF;
         veh->dest = NULL;
