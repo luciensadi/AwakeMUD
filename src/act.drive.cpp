@@ -2037,6 +2037,7 @@ ACMD(do_switch)
   ch->vfront = !ch->vfront;
   snprintf(buf, sizeof(buf), "$n climbs into the %s.", ch->vfront ? "front" : "back");
   act(buf, TRUE, ch, 0, 0, TO_ROOM);
+  look_at_room(ch, 0, 0)
   send_to_char(ch, "You climb into the %s.\r\n", ch->vfront ? "front" : "back");
 }
 
