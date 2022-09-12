@@ -6518,7 +6518,7 @@ ACMD(do_status)
     }
   }
 
-  for (struct sustain_data *sust = GET_SUSTAINED(targ); sust; sust = sust->next)
+  for (struct sustain_data *sust = GET_SUSTAINED(targ); sust; sust = sust->next) {
     if (!sust->caster) {
       snprintf(buf, sizeof(buf), "  %s", spells[sust->spell].name);
       if (sust->spell == SPELL_INCATTR
@@ -6536,6 +6536,8 @@ ACMD(do_status)
         send_to_char(ch, "%s\r\n", buf);
       printed = TRUE;
     }
+  }
+
   if (GET_SUSTAINED_NUM(targ)) {
     send_to_char(ch, "%s %s sustaining:\r\n", ch == targ ? "You" : GET_CHAR_NAME(targ), ch == targ ? "are" : "is");
     printed = TRUE;
@@ -6543,10 +6545,15 @@ ACMD(do_status)
     for (struct sustain_data *sust = GET_SUSTAINED(targ); sust; sust = sust->next) {
       if (sust->caster || sust->spirit == targ) {
         send_to_char(ch, "%d) %s (force %d, %d successes%s)", i, get_spell_name(sust->spell, sust->subtype), sust->force, sust->success, warn_if_spell_under_potential(sust));
-        if (sust->focus)
-          send_to_char(ch, "(Sustained by %s)", GET_OBJ_NAME(sust->focus));
-        if (sust->spirit && sust->spirit != ch)
-          send_to_char(ch, "(Sustained by %s [id %d])", GET_NAME(sust->spirit), GET_GRADE(sust->spirit));
+        if (IS_SENATOR(ch) && sust->caster) {
+          send_to_char(ch, " (Cast on %s)", GET_CHAR_NAME(sust->other));
+        }
+        if (sust->focus) {
+          send_to_char(ch, " (Sustained by %s)", GET_OBJ_NAME(sust->focus));
+        }
+        if (sust->spirit && sust->spirit != ch) {
+          send_to_char(ch, " (Sustained by %s [id %d])", GET_NAME(sust->spirit), GET_GRADE(sust->spirit));
+        }
         send_to_char("\r\n", ch);
         i++;
       }
