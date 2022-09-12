@@ -42,9 +42,10 @@ extern const char *get_spell_name(int spell, int subtype);
 #define MOVEMENTUP	3
 #define MOVEMENTDOWN	4
 
-#define INIT_MAIN	0
-#define INIT_META	1
-#define INIT_GEAS	2
+#define INIT_MAIN	             0
+#define INIT_META	             1
+#define INIT_GEAS	             2
+#define INIT_CONFIRM_SIGNATURE 3
 
 #define SPELLCASTING 0
 #define CONJURING 1

@@ -4085,8 +4085,8 @@ ACMD(do_conjure)
 
         AFF_FLAGS(ch).SetBit(AFF_GROUP);
         AFF_FLAGS(mob).SetBit(AFF_GROUP);
-        
-        // this counter is doubled because it gets decremented at both sunrise and sunset 
+
+        // this counter is doubled because it gets decremented at both sunrise and sunset
         GET_SPARE2(mob) = NUMBER_OF_IG_DAYS_FOR_SPIRIT_TO_LAST * 2;
       }
     }
@@ -5782,7 +5782,7 @@ void disp_init_menu(struct descriptor_data *d)
 {
   CLS(CH);
   send_to_char("1) Increase magic and learn metamagic technique\r\n"
-               "2) Increase magic and change astral signature\r\n"
+               "2) Increase magic and change astral signature (^yno coded effect!^n)\r\n"
                "3) Shed a geas\r\n"
                "4) Return to game\r\n"
                "Enter initiation option: ", CH);
@@ -5961,6 +5961,18 @@ void init_parse(struct descriptor_data *d, char *arg)
   int number, i;
   switch (d->edit_mode)
   {
+    case INIT_CONFIRM_SIGNATURE:
+      STATE(d) = CON_PLAYING;
+      init_cost(CH, TRUE);
+      GET_SIG(CH)++;
+      GET_GRADE(CH)++;
+      GET_SETTABLE_REAL_MAG(CH) += 100;
+      if (GET_TRADITION(CH) == TRAD_ADEPT)
+        GET_PP(CH) += 100;
+      send_to_char("You feel your astral reflection shift and mold itself closer to the astral plane.\r\n", CH);
+      STATE(d) = CON_PLAYING;
+      PLR_FLAGS(CH).RemoveBit(PLR_INITIATE);
+      break;
     case INIT_MAIN:
       switch (*arg)
       {
@@ -5968,16 +5980,8 @@ void init_parse(struct descriptor_data *d, char *arg)
           disp_meta_menu(d);
           break;
         case '2':
-          STATE(d) = CON_PLAYING;
-          init_cost(CH, TRUE);
-          GET_SIG(CH)++;
-          GET_GRADE(CH)++;
-          GET_SETTABLE_REAL_MAG(CH) += 100;
-          if (GET_TRADITION(CH) == TRAD_ADEPT)
-            GET_PP(CH) += 100;
-          send_to_char("You feel your astral reflection shift and mold itself closer to the astral plane.\r\n", CH);
-          STATE(d) = CON_PLAYING;
-          PLR_FLAGS(CH).RemoveBit(PLR_INITIATE);
+          send_to_char("Are you sure? Beyond increasing your magic per usual, this will have no coded effect. Type 'y' to continue, anything else to abort.\r\n", CH);
+          STATE(d) = INIT_CONFIRM_SIGNATURE;
           break;
         case '3':
           disp_geas_menu(d);
