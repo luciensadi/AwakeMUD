@@ -1999,7 +1999,7 @@ void process_autonav(void)
         // QoL - show destination room to vehicle occupants on arrival
         for (struct char_data *ch = veh->people; ch; ch = ch->next_in_veh) {
           if (!IS_NPC(ch) && !PRF_FLAGGED(ch, PRF_SCREENREADER)) {
-            look_at_room(ch, 0, 0)
+            look_at_room(ch, 0, 0);
           }
         }
         send_to_veh("Having reached its destination, the autonav shuts off.\r\n", veh, 0, TRUE);
@@ -2038,7 +2038,7 @@ ACMD(do_switch)
   snprintf(buf, sizeof(buf), "$n climbs into the %s.", ch->vfront ? "front" : "back");
   act(buf, TRUE, ch, 0, 0, TO_ROOM);
   if (!PRF_FLAGGED(ch, PRF_SCREENREADER)) {
-    look_at_room(ch, 0, 0)
+    look_at_room(ch, 0, 0);
   }
   send_to_char(ch, "You've climbed into the %s.\r\n", ch->vfront ? "front" : "back");
 }
