@@ -4024,6 +4024,7 @@ const char *get_plaintext_score_stats(struct char_data *ch) {
             mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Unrecognized aspect %d in hermetic full score-- update the switch statement.", GET_ASPECT(ch));
             break;
         }
+        break;
       default:
         mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Received unknown tradition %d to score switch stanza 1!", GET_TRADITION(ch));
         break;
