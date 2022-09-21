@@ -5981,7 +5981,7 @@ void init_parse(struct descriptor_data *d, char *arg)
           break;
         case '2':
           send_to_char("Are you sure? Beyond increasing your magic per usual, this will have no coded effect. Type 'y' to continue, anything else to abort.\r\n", CH);
-          STATE(d) = INIT_CONFIRM_SIGNATURE;
+          d->edit_mode = INIT_CONFIRM_SIGNATURE;
           break;
         case '3':
           disp_geas_menu(d);
