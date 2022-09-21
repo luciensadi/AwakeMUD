@@ -185,14 +185,15 @@ bool dumpshock(struct matrix_icon *icon)
       }
     }
     act(buf, FALSE, icon->decker->ch, NULL, NULL, TO_ROOM);
-    PLR_FLAGS(icon->decker->ch).RemoveBit(PLR_MATRIX);
     icon->decker->PERSONA = NULL;
+    PLR_FLAGS(icon->decker->ch).RemoveBit(PLR_MATRIX);
     if (icon->decker->deck && GET_OBJ_VAL(icon->decker->deck, 0) == 0) {
       act("Smoke emerges from $n's $p.", FALSE, icon->decker->ch, icon->decker->deck, NULL, TO_ROOM);
       act("Smoke emerges from $p.", FALSE, icon->decker->ch, icon->decker->deck, NULL, TO_CHAR);
     }
     struct char_data *ch = icon->decker->ch;
     extract_icon(icon);
+    PLR_FLAGS(ch).RemoveBit(PLR_MATRIX);
 
     if (damage(ch, ch, dam, TYPE_DUMPSHOCK, MENTAL))
       return TRUE;
@@ -1771,6 +1772,7 @@ ACMD(do_connect)
         send_to_char("You need an ASIST interface to use that.\r\n", ch);
         extract_icon(PERSONA);
         PERSONA = NULL;
+        PLR_FLAGS(ch).RemoveBit(PLR_MATRIX);
         return;
       }
       DECKER->asist[1] = 0;
@@ -1905,6 +1907,7 @@ ACMD(do_connect)
     send_to_char(ch, "Your deck overloads on persona programs and crashes. You'll have to keep the combined bod, sensor, evasion, and masking rating less than or equal to %d.\r\n", DECKER->mpcp * 3);
     extract_icon(PERSONA);
     PERSONA = NULL;
+    PLR_FLAGS(ch).RemoveBit(PLR_MATRIX);
     return;
   }
 
@@ -1912,6 +1915,7 @@ ACMD(do_connect)
     send_to_char("You'll have a hard time forming a durable persona with no Body chip.\r\n", ch);
     extract_icon(PERSONA);
     PERSONA = NULL;
+    PLR_FLAGS(ch).RemoveBit(PLR_MATRIX);
     return;
   }
 
@@ -1919,6 +1923,7 @@ ACMD(do_connect)
     send_to_char("You'll have a hard time receiving Matrix data with no Sensor chip.\r\n", ch);
     extract_icon(PERSONA);
     PERSONA = NULL;
+    PLR_FLAGS(ch).RemoveBit(PLR_MATRIX);
     return;
   }
 

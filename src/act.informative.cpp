@@ -1117,6 +1117,8 @@ void list_one_char(struct char_data * i, struct char_data * ch)
     if (IS_ASTRAL(ch) || IS_DUAL(ch)) {
       if (IS_ASTRAL(i))
         strlcat(buf, "(astral) ", sizeof(buf));
+      else if (access_level(ch, LVL_BUILDER) && IS_PERCEIVING(i))
+        strlcat(buf, "(perceiving)", sizeof(buf));
       else if (IS_NPC(i))
         strlcat(buf, "(dual) ", sizeof(buf));
     }
@@ -1334,8 +1336,13 @@ void list_one_char(struct char_data * i, struct char_data * ch)
         else strlcat(buf, " ^W(Bright Aura)^n", sizeof(buf));
       }
     }
-    if (IS_DUAL(i) && dual)
-      strlcat(buf, " (dual)", sizeof(buf));
+    if (dual) {
+      if (IS_DUAL(i))
+        strlcat(buf, " (dual)", sizeof(buf));
+      if (access_level(ch, LVL_BUILDER) && IS_PERCEIVING(i))
+        strlcat(buf, " (perceiving)", sizeof(buf));
+    }
+
   }
   if (PLR_FLAGGED(i, PLR_WRITING))
     strlcat(buf, " (writing)", sizeof(buf));

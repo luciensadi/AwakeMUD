@@ -1549,6 +1549,12 @@ void command_interpreter(struct char_data * ch, char *argument, char *tcname)
     send_to_char("^RThe flames cause you to panic!^n\r\n", ch);
     return;
   }
+
+  if (PLR_FLAGGED(ch, PLR_MATRIX) && !ch->persona) {
+    mudlog("SYSERR: PLR_MATRIX-flagged character did not have a persona! Removing matrix flag.", ch, LOG_SYSLOG, TRUE);
+    PLR_FLAGS(ch).RemoveBit(PLR_MATRIX);
+  }
+
   /* otherwise, find the command */
   if (PLR_FLAGGED(ch, PLR_MATRIX))
   {
@@ -1577,7 +1583,7 @@ void command_interpreter(struct char_data * ch, char *argument, char *tcname)
       quit_the_matrix_first(ch, line, 0, 0);
     }
     else {
-      if (ch->persona && ch->persona->decker->hitcher) {
+      if (ch->persona->decker->hitcher) {
         send_to_char(ch->persona->decker->hitcher, "^y<OUTGOING> %s^n\r\n", argument);
       }
       verify_data(ch, line, cmd, mtx_info[cmd].subcmd, "pre-matrix");
