@@ -540,6 +540,7 @@ const char *action_bits[] =
     "EMPLACED",
     "RACE_AGGR_VS_MOBS",
     "BROKE_ASS",
+    "PERCEIVING",
     MAX_FLAG_MARKER
   };
 
