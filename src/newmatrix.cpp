@@ -1170,12 +1170,17 @@ ACMD(do_locate)
     }
     return;
   } else if (is_abbrev(buf, "paydata")) {
-    success = system_test(PERSONA->in_host, ch, TEST_INDEX, SOFT_EVALUATE, 0);
-    if (success <= 0) {
-      send_to_icon(PERSONA, "You fumble your attempt to locate paydata.\r\n");
+    {
+      // We use in_host here because system_test can result in you getting booted from the Matrix.
+      rnum_t in_host = PERSONA->in_host;
 
-      matrix[PERSONA->in_host].undiscovered_paydata = MAX(matrix[PERSONA->in_host].undiscovered_paydata - 1, 0);
-      return;
+      success = system_test(in_host, ch, TEST_INDEX, SOFT_EVALUATE, 0);
+      if (success <= 0) {
+        send_to_icon(PERSONA, "You fumble your attempt to locate paydata.\r\n");
+
+        matrix[in_host].undiscovered_paydata = MAX(matrix[in_host].undiscovered_paydata - 1, 0);
+        return;
+      }
     }
 
     if (matrix[PERSONA->in_host].type == HOST_DATASTORE && matrix[PERSONA->in_host].undiscovered_paydata > 0) {
@@ -2303,7 +2308,7 @@ ACMD(do_decrypt)
       send_to_icon(PERSONA, "You successfully decrypt the %s subsystem.\r\n", mtx_subsystem_names[mode]);
     } else {
       send_to_icon(PERSONA, "You fail to decrypt the %s subsystem.\r\n", mtx_subsystem_names[mode]);
-      if (mode == FILES && PERSONA->decker && PERSONA->decker->ch) {
+      if (mode == FILES && PERSONA && PERSONA->decker && PERSONA->decker->ch) {
         // Paydata is destroyed on failed tests per SR3 p228.
         if (success_test(matrix[PERSONA->in_host].stats[mode][MTX_STAT_RATING], GET_SKILL(PERSONA->decker->ch, SKILL_COMPUTER)) > 0) {
           send_to_host(PERSONA->in_host, "A wash of static sweeps over the host, tearing away at potential paydata!\r\n", NULL, FALSE);
@@ -3184,12 +3189,20 @@ ACMD(do_restrict)
 
   if (is_abbrev(buf, "detection")) {
     success = system_test(PERSONA->in_host, ch, TEST_CONTROL, SOFT_VALIDATE, detect);
-    targ->decker->res_det += success;
-    send_to_icon(PERSONA, "You successfully restrict their detection factor.\r\n");
+    if (success > 0) {
+      targ->decker->res_det += success;
+      send_to_icon(PERSONA, "You successfully restrict their detection factor.\r\n");
+    } else {
+      send_to_icon(PERSONA, "You fail to restrict their detection factor.\r\n");
+    }
   } else if (is_abbrev(buf, "tests")) {
     success = system_test(PERSONA->in_host, ch, TEST_CONTROL, SOFT_VALIDATE, detect);
-    targ->decker->res_test += success;
-    send_to_icon(PERSONA, "You successfully restrict their system tests.\r\n");
+    if (success > 0) {
+      targ->decker->res_test += success;
+      send_to_icon(PERSONA, "You successfully restrict their system tests.\r\n");
+    } else {
+      send_to_icon(PERSONA, "You fail to restrict their system tests.\r\n");
+    }
   } else
     send_to_icon(PERSONA, "You must specify wether you want to restrict their detection factor or systems test.");
 }
@@ -3208,8 +3221,8 @@ ACMD(do_trace)
   else {
     WAIT_STATE(ch, (int) (DECKING_WAIT_STATE_TIME));
     int success = system_test(PERSONA->in_host, ch, TEST_INDEX, SOFT_BROWSE, 0);
-    if (success > 0)
-      for (struct matrix_icon *icon = icon_list; icon; icon = icon->next)
+    if (success > 0) {
+      for (struct matrix_icon *icon = icon_list; icon; icon = icon->next) {
         if (icon->decker && icon->decker->mxp == addr) {
           if (matrix[PERSONA->in_host].vnum == icon->decker->phone->rtg)
             snprintf(buf, sizeof(buf), "Your search returns:\r\nOriginating Grid: %s\r\nSerial number: %ld\r\n",
@@ -3219,6 +3232,8 @@ ACMD(do_trace)
           send_to_icon(PERSONA, buf);
           return;
         }
+      }
+    }
     send_to_icon(PERSONA, "You fail to get any information on that request.\r\n");
   }
 }
