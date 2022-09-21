@@ -3741,7 +3741,7 @@ bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struc
     return TRUE;
 
   // Does the viewee have an astral state that makes them invisible to subj?
-  if (!IS_ASTRAL(obj) || AFF_FLAGGED(obj, AFF_MANIFEST) || SEES_ASTRAL(subj))
+  if (IS_ASTRAL(obj) && !AFF_FLAGGED(obj, AFF_MANIFEST) && !SEES_ASTRAL(subj))
     return FALSE;
 
   // Johnsons, trainers, and cab drivers can always see. Them going blind doesn't increase the fun.
