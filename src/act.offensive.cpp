@@ -353,11 +353,11 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
         FALSE, ch, 0, vict, TO_CHAR);
   else
   {
-    if (IS_ASTRAL(ch) && !(IS_DUAL(vict) || IS_ASTRAL(vict) || PLR_FLAGGED(vict, PLR_PERCEIVE))) {
+    if (IS_ASTRAL(ch) && !SEES_ASTRAL(vict)) {
       send_to_char("You can't attack someone who isn't astrally active.\r\n", ch);
       return TRUE;
     }
-    if (IS_ASTRAL(vict) && !(IS_DUAL(ch) || IS_ASTRAL(ch) || PLR_FLAGGED(ch, PLR_PERCEIVE))) {
+    if (IS_ASTRAL(vict) && !SEES_ASTRAL(ch)) {
       send_to_char("They are nothing but a figment of your imagination.\r\n", ch);
       return TRUE;
     }

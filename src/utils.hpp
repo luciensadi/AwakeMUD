@@ -315,7 +315,9 @@ bool    update_pos(struct char_data *victim);
 #define IS_WILD_ELEMENTAL(ch) (IS_NPC(ch) && GET_RACE(ch) == RACE_ELEMENTAL)
 #define IS_PC_CONJURED_ELEMENTAL(ch) (IS_NPC(ch) && GET_RACE(ch) == RACE_PC_CONJURED_ELEMENTAL)
 #define IS_ASTRAL(ch) (MOB_FLAGGED(ch, MOB_ASTRAL) || IS_PROJECT(ch))
-#define IS_DUAL(ch)   (MOB_FLAGGED(ch, MOB_DUAL_NATURE) || PLR_FLAGGED(ch, PLR_PERCEIVE) || access_level(ch, LVL_ADMIN))
+#define IS_DUAL(ch)   (MOB_FLAGGED(ch, MOB_DUAL_NATURE) || access_level(ch, LVL_ADMIN))
+#define IS_PERCEIVING(ch) (MOB_FLAGGED(ch, MOB_PERCEIVING) || PLR_FLAGGED(ch, PLR_PERCEIVE))
+#define SEES_ASTRAL(ch) (IS_ASTRAL(ch) || IS_DUAL(ch) || IS_PERCEIVING(ch))
 #define IS_SENATOR(ch) (access_level((ch), LVL_BUILDER))
 
 // ONLY for use on non-Bitfield bitvectors:
@@ -648,8 +650,7 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define CAN_CARRY_N(ch)       (8 + GET_QUI(ch) + (GET_REAL_LEVEL(ch)>=LVL_BUILDER?50:0))
 #define AWAKE(ch)             (GET_POS(ch) > POS_SLEEPING && GET_QUI(ch) > 0)
 #define IS_JACKED_IN(ch)      (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE) || PLR_FLAGGED(ch, PLR_MATRIX))
-#define CAN_SEE_IN_DARK(ch)   ((IS_ASTRAL(ch) || IS_DUAL(ch) || \
-    CURRENT_VISION(ch) == THERMOGRAPHIC || PRF_FLAGGED((ch), PRF_HOLYLIGHT)))
+#define CAN_SEE_IN_DARK(ch)   (SEES_ASTRAL(ch) || CURRENT_VISION(ch) == THERMOGRAPHIC || PRF_FLAGGED((ch), PRF_HOLYLIGHT))
 #define GET_BUILDING(ch)	((ch)->char_specials.programming)
 #define IS_WORKING(ch)        ((AFF_FLAGS(ch).AreAnySet(BR_TASK_AFF_FLAGS, AFF_PILOT, AFF_RIG, AFF_BONDING, AFF_CONJURE, AFF_PACKING, ENDBIT)))
 #define STOP_WORKING(ch)      {AFF_FLAGS((ch)).RemoveBits(BR_TASK_AFF_FLAGS, AFF_BONDING, AFF_CONJURE, AFF_PACKING, ENDBIT); \
@@ -754,18 +755,14 @@ bool LIGHT_OK_ROOM_SPECIFIED(struct char_data *sub, struct room_data *room);
 #define LIGHT_OK(sub)          LIGHT_OK_ROOM_SPECIFIED((sub), get_ch_in_room((sub)))
 #define SELF(sub, obj)         ((sub) == (obj))
 
-#define SEE_ASTRAL(sub, obj)   (!IS_ASTRAL(obj) || IS_ASTRAL(sub) || \
-                                IS_DUAL(sub) || AFF_FLAGGED(obj, AFF_MANIFEST))
-
 // Replaced these macros so we can actually get stack traces on failures.
 bool CAN_SEE(struct char_data *subj, struct char_data *obj);
 bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struct room_data *room_specified);
 
-#define CHAR_ONLY_SEES_VICT_WITH_ULTRASOUND(ch, vict) (ch != vict && (IS_AFFECTED((vict), AFF_IMP_INVIS) || IS_AFFECTED((vict), AFF_SPELLIMPINVIS)) && !(IS_DUAL((ch)) || IS_PROJECT((ch)) || IS_ASTRAL((ch))))
+#define CHAR_ONLY_SEES_VICT_WITH_ULTRASOUND(ch, vict) (ch != vict && (IS_AFFECTED((vict), AFF_IMP_INVIS) || IS_AFFECTED((vict), AFF_SPELLIMPINVIS)) && !(SEES_ASTRAL(ch)))
 
 #define INVIS_OK_OBJ(sub, obj) (!IS_OBJ_STAT((obj), ITEM_EXTRA_INVISIBLE) || \
-   has_vision(sub, VISION_ULTRASONIC) || IS_ASTRAL(sub) || \
-   IS_DUAL(sub) || HOLYLIGHT_OK(sub))
+   has_vision(sub, VISION_ULTRASONIC) || SEES_ASTRAL(sub) || HOLYLIGHT_OK(sub))
 
 #define CAN_SEE_CARRIER(sub, obj) \
    ((!(obj)->carried_by || CAN_SEE((sub), (obj)->carried_by)) || (!(obj)->worn_by || CAN_SEE((sub), (obj)->worn_by)))

@@ -5129,7 +5129,7 @@ SPECIAL(trideo)
     if ((isname(argument, trid->text.keywords) || isname(argument, trid->text.name) ||
        (trid->restring && isname(argument, trid->restring)))) {
       if (IS_ASTRAL(ch))
-        send_to_char("You just can't seem to activate it.\r\n", ch);
+        send_to_char("Your immaterial hands pass right through.\r\n", ch);
       else if (!(CAN_WEAR(trid, ITEM_WEAR_TAKE)))
         send_to_char("You don't have control over that unit.\r\n", ch);
       else if (GET_OBJ_VAL(trid, 0)) {

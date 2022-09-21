@@ -195,7 +195,7 @@ bool vict_is_valid_target(struct char_data *ch, struct char_data *vict) {
   }
 
   // Astral mismatch? Failure.
-  if ((IS_ASTRAL(ch) && !(IS_ASTRAL(vict) || IS_DUAL(vict))) || (IS_ASTRAL(vict) && !(IS_ASTRAL(ch) || IS_DUAL(ch)))) {
+  if ((IS_ASTRAL(ch) && !SEES_ASTRAL(vict)) || (IS_ASTRAL(vict) && !SEES_ASTRAL(ch))) {
     #ifdef MOBACT_DEBUG
         snprintf(buf3, sizeof(buf3), "vict_is_valid_target: Skipping %s - astral states do not match.", GET_CHAR_NAME(vict));
         do_say(ch, buf3, 0, 0);
@@ -1216,7 +1216,7 @@ bool mobact_process_self_buff(struct char_data *ch) {
 
     // If not invisible already, apply an invisibility spell based on my magic rating and sorcery skill.
     if (!imp_invis && !std_invis && !IS_ASTRAL(ch)) {
-      if (MIN(GET_SKILL(ch, SKILL_SORCERY), GET_MAG(ch)/100) <= 6) {
+      if (MIN(GET_SKILL(ch, SKILL_SORCERY), GET_MAG(ch)/100) < MOB_IMP_INVIS_MAGIC_FLOOR) {
         // Lower skill means standard invisibility. Gotta make thermographic vision useful somehow.
         cast_illusion_spell(ch, SPELL_INVIS, number(min_force, max_force), NULL, ch);
       } else {

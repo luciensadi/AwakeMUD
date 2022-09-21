@@ -227,7 +227,7 @@ void postmaster_send_mail(struct char_data * ch, struct char_data *mailman, int 
 
   /* Keep astral beings from using mail. */
   if (IS_ASTRAL(ch)) {
-    send_to_char("If the postal employee could detect the astral plane you still would be ignored!\n\r",ch);
+    send_to_char("If the postal employee could detect the astral plane... you would still be ignored!\n\r",ch);
     return;
   }
   one_argument(arg, buf);

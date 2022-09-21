@@ -568,10 +568,7 @@ ACMD(do_spec_comm)
     return;
   }
 
-  if (IS_ASTRAL(ch) && vict &&
-           !(IS_ASTRAL(vict) ||
-             PLR_FLAGGED(vict, PLR_PERCEIVE) ||
-             IS_DUAL(vict))) {
+  if (IS_ASTRAL(ch) && vict && !SEES_ASTRAL(vict)) {
     send_to_char(ch, "You don't see anyone named '%s' here.\r\n", buf);
     return;
   }

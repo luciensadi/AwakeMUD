@@ -212,6 +212,9 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 #define MAX_MOB_COMBAT_MAGIC_WOUND                             SERIOUS
 #define MIN_MOB_COMBAT_MAGIC_WOUND                             MODERATE
 
+// What magic score do NPCs need to cast improved invis?
+#define MOB_IMP_INVIS_MAGIC_FLOOR                              8
+
 #define TN_INCREASE_DIVISOR_FOR_ATTRIBUTE_SPELL_STACKING       3
 
 // What's the maximum paranoia level for zones?

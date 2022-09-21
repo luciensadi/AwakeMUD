@@ -3602,7 +3602,7 @@ bool astral_fight(struct char_data *ch, struct char_data *vict)
 
   // Find astral foci.
   struct obj_data *wielded = ch->equipment[WEAR_WIELD];
-  if ((IS_PROJECT(ch) || PLR_FLAGGED(ch, PLR_PERCEIVE))
+  if ((IS_ASTRAL(ch) || SEES_ASTRAL(ch))
       && wielded
       && GET_OBJ_TYPE(wielded) == ITEM_WEAPON
       && WEAPON_FOCUS_USABLE_BY(wielded, ch))
@@ -3618,7 +3618,7 @@ bool astral_fight(struct char_data *ch, struct char_data *vict)
     // return;
   }
 
-  if (IS_PROJECT(ch) && (ch != vict) && PLR_FLAGGED(vict, PLR_PERCEIVE) &&
+  if (IS_PROJECT(ch) && (ch != vict) && SEES_ASTRAL(vict) &&
       !PLR_FLAGGED(vict, PLR_KILLER) && !PLR_FLAGGED(vict,PLR_WANTED) &&
       (!PRF_FLAGGED(ch, PRF_PKER) || !PRF_FLAGGED(vict, PRF_PKER)) &&
       !PLR_FLAGGED(ch->desc->original, PLR_KILLER))
@@ -3715,7 +3715,7 @@ bool astral_fight(struct char_data *ch, struct char_data *vict)
   } else
   {
     power = GET_STR(ch) - GET_IMPACT(vict);
-    if (IS_PROJECT(ch) || PLR_FLAGGED(ch, PLR_PERCEIVE))
+    if (IS_PROJECT(ch) || SEES_ASTRAL(ch))
       dam = LIGHT;
     else
       dam = MODERATE;
@@ -4322,7 +4322,7 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
   // Pre-calculate the things we care about here. First, character vision info.
   bool ch_has_ultrasound = has_vision(ch, VISION_ULTRASONIC);
   bool ch_has_thermographic = has_vision(ch, VISION_THERMOGRAPHIC);
-  bool ch_sees_astral = IS_ASTRAL(ch) || IS_DUAL(ch);
+  bool ch_sees_astral = SEES_ASTRAL(ch);
 
   // EXCEPT: If you're rigging (not manning), things change.
   if (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE)) {
@@ -4358,9 +4358,13 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
     if (!vict_is_inanimate) {
       // If you're astrally perceiving, you see anything living with no vision penalty.
       // (You get penalties from perceiving, that's handled elsewhere.)
-      snprintf(rbuf, sizeof(rbuf), "$n: Perceiving vs living target, so final char-to-char visibility TN is ^c%d^n.", modifier);
+      snprintf(rbuf, sizeof(rbuf), "$n: %s vs living target, so final char-to-char visibility TN is ^c%d^n.",
+               MOB_FLAGGED(ch, MOB_DUAL_NATURE) ? "Dual-natured" : "Perceiving",
+               modifier);
       act(rbuf, 0, ch, 0, victim, TO_ROLLS);
       return 0;
+    } else {
+      act("$n: Astral sight ignored-- inanimate, non-spelled target.", 0, ch, 0, victim, TO_ROLLS);
     }
     // Otherwise, fall through.
   }

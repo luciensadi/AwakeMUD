@@ -3301,7 +3301,8 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
     return NULL;
   }
 
-  if (ch && IS_ASTRAL(ch) && !hide_invisible)
+  // Astral beings can't leave physical traces, so all invocations with astrals must be hidden from invisible chars.
+  if (ch && IS_ASTRAL(ch))
     hide_invisible = TRUE;
 
   if ( type == TO_ROLLS )

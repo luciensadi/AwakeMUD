@@ -333,7 +333,7 @@ ACMD(do_rig)
       return;
     }
 
-    // No perception while rigging.
+    // No perception while rigging. Specifically only checks player perception.
     if (PLR_FLAGGED(ch, PLR_PERCEIVE)) {
       ACMD_DECLARE(do_astral);
       do_astral(ch, buf, 0, SCMD_PERCEIVE);
@@ -967,7 +967,7 @@ ACMD(do_control)
     return;
   }
 
-  // No perception while controlling.
+  // No perception while controlling. Specifically only checks player perception.
   if (PLR_FLAGGED(ch, PLR_PERCEIVE)) {
     ACMD_DECLARE(do_astral);
     do_astral(ch, buf, 0, SCMD_PERCEIVE);

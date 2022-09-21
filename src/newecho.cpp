@@ -954,7 +954,7 @@ ACMD(do_new_echo) {
       continue;
 
     // If it's aecho, only send to people who see astral.
-    if (subcmd == SCMD_AECHO && !(IS_ASTRAL(viewer) || IS_DUAL(viewer)))
+    if (subcmd == SCMD_AECHO && !SEES_ASTRAL(viewer))
       continue;
 
     // If they're insensate, nvm.

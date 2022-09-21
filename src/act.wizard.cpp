@@ -434,7 +434,7 @@ ACMD(do_zecho)
     for (d = descriptor_list; d; d = d->next)
       if (!d->connected && d->character && d->character != ch)
         if (zone_table[get_ch_in_room(d->character)->zone].number == zone_table[room->zone].number &&
-            !(subcmd == SCMD_AECHO && !(IS_ASTRAL(d->character) || IS_DUAL(d->character))))
+            !(subcmd == SCMD_AECHO && !SEES_ASTRAL(d->character)))
           act(argument, FALSE, d->character, 0, 0, TO_CHAR);
     snprintf(buf, sizeof(buf), "%s zechoed %s in zone #%d",
             GET_CHAR_NAME(ch), argument,
@@ -446,7 +446,6 @@ ACMD(do_zecho)
 
 ACMD(do_echo)
 {
-  struct char_data *vict;
   struct veh_data *veh;
   skip_spaces(&argument);
 
@@ -497,86 +496,22 @@ ACMD(do_echo)
 
   if (subcmd == SCMD_AECHO) {
     if (ch->in_room) {
-      for (vict = ch->in_room->people; vict; vict = vict->next_in_room)
-        if (ch != vict && (IS_ASTRAL(vict) || IS_DUAL(vict)))
+      for (struct char_data *vict = ch->in_room->people; vict; vict = vict->next_in_room)
+        if (ch != vict && SEES_ASTRAL(vict))
           act(buf, FALSE, ch, 0, vict, TO_VICT);
     } else {
-      for (vict = ch->in_veh->people; vict; vict = vict->next_in_veh)
-        if (ch != vict && (IS_ASTRAL(vict) || IS_DUAL(vict)))
+      for (struct char_data *vict = ch->in_veh->people; vict; vict = vict->next_in_veh)
+        if (ch != vict && SEES_ASTRAL(vict))
           act(buf, FALSE, ch, 0, vict, TO_VICT);
     }
   } else {
     if (PLR_FLAGGED(ch, PLR_MATRIX))
       send_to_host(ch->persona->in_host, buf, ch->persona, TRUE);
     else {
-      /*
-      const char *parse_emote_by_x_for_y(const char *emote, struct char_data *ch, struct char_data *targ) {
-        char tmp_name[strlen(emote) + 1];
-        int tmp_index, buf2_index;
-        struct char_data *tmp_vict;
-
-        // Actor is recipient? Skip (they're handled elsewhere in logic).
-        if (targ == ch)
-          return NULL;
-
-        // Actor is intangible and invisible to recipient? Skip.
-        if ((IS_ASTRAL(ch) || IS_PROJECT(ch)) && !(IS_ASTRAL(targ) || IS_PROJECT(targ) || IS_DUAL(targ)))
-          return NULL;
-
-        // Scan the emote for @ character, which indicates targeting.
-        for (int i = 0; emote[i]; i++) {
-          if (emote[i] == '@') {
-            // Found an @. Set up for evaluation, and store current 'i' as marker.
-            tmp_index = 0;
-            marker = i;
-
-            // Copy out the target's name, null-terminating it.
-            while (isalpha(emote[++i]))
-              tmp_name[tmp_index++] = i;
-            tmp_name[tmp_index] = '\0';
-
-            // Move 'i' back one character so it is pointing at the last character of the @-name.
-            i--;
-
-            // Search the room for the target.
-            tmp_vict = get_char_room_vis(ch, tmp_name);
-            if (tmp_vict == targ) {
-              // Check for "@'s" -> "your"
-              if (i <= strlen(emote) - 3 && emote[i+1] == '\'' && emote[i+2] == 's') {
-                i += 1; // Advance to the "s".
-                snprintf(tmp_name, sizeof(tmp_name), "your");
-              } else {
-                snprintf(tmp_name, sizeof(tmp_name), "you");
-              }
-            } // End of targ == vict
-            else if (tmp_vict) {
-              // Check for visibility.
-              if (CAN_SEE(targ, vict)) {
-                if (safe_found_mem(targ, vict)) {
-                  strcpy(tmp_name, CAP(safe_found_mem(targ, vict)->mem));
-                } else {
-                  strcpy(tmp_name, GET_NAME(vict));
-                }
-              } else {
-                strcpy(tmp_name, "someone");
-              }
-            } // End of targ != vict
-            else {
-              // todo
-              broken compile here
-            }
-          } // End of char == '@'
-          else {
-            // No special character, copy it 1:1.
-            buf2[buf2_index++] = emote[i];
-          }
-        }
-      }
-       */
       struct char_data *vict;
       for (struct char_data *targ = ch->in_veh ? ch->in_veh->people : ch->in_room->people; targ; targ = ch->in_veh ? targ->next_in_veh : targ->next_in_room) {
         if (targ != ch) {
-          if ((IS_ASTRAL(ch) || IS_PROJECT(ch)) && !(IS_ASTRAL(targ) || IS_PROJECT(targ) || IS_DUAL(targ)))
+          if (IS_ASTRAL(ch) && !SEES_ASTRAL(targ))
             continue;
           int i = 0, newn = 0;
           memset(buf2, '\0', sizeof(buf2));
@@ -687,7 +622,7 @@ ACMD(do_gecho)
   else {
     for (d = descriptor_list; d; d = d->next)
       if (!d->connected && d->character && d->character != ch &&
-          !(subcmd == SCMD_AECHO && !(IS_ASTRAL(d->character) || IS_DUAL(d->character))))
+          !(subcmd == SCMD_AECHO && !SEES_ASTRAL(d->character)))
         act(argument, FALSE, d->character, 0, 0, TO_CHAR);
 
     if (PRF_FLAGGED(ch, PRF_NOREPEAT))

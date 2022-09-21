@@ -201,7 +201,7 @@ char *make_desc(struct char_data *ch, struct char_data *i, char *buf, int act, b
     else
       strlcpy(buf, dont_capitalize_a_an ? decapitalize_a_an(CAP(GET_NAME(i))) : CAP(GET_NAME(i)), buf_size);
   }
-  if (GET_SUSTAINED(i) && (IS_ASTRAL(ch) || IS_DUAL(ch)))
+  if (GET_SUSTAINED(i) && SEES_ASTRAL(ch))
   {
     bool has_aura = FALSE;
     for (struct sustain_data *sust = GET_SUSTAINED(i); sust; sust = sust->next) {
@@ -225,7 +225,7 @@ char *make_desc(struct char_data *ch, struct char_data *i, char *buf, int act, b
   if (!IS_NPC(i) && PRF_FLAGGED(ch, PRF_LONGWEAPON) && GET_EQ(i, WEAR_WIELD))
     snprintf(ENDOF(buf), buf_size - strlen(buf), ", wielding %s", decapitalize_a_an(GET_OBJ_NAME(GET_EQ(i, WEAR_WIELD))));
 
-  if (AFF_FLAGGED(i, AFF_MANIFEST) && !(IS_ASTRAL(ch) || IS_DUAL(ch)))
+  if (AFF_FLAGGED(i, AFF_MANIFEST) && !SEES_ASTRAL(ch))
   {
     snprintf(buf2, sizeof(buf2), "The ghostly image of %s", buf);
     strlcpy(buf, buf2, buf_size);
@@ -369,7 +369,7 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
     }
 
     if ((GET_OBJ_TYPE(object) == ITEM_FOCUS || IS_OBJ_STAT(object, ITEM_EXTRA_MAGIC))
-        && (IS_ASTRAL(ch) || IS_DUAL(ch))) {
+        && SEES_ASTRAL(ch)) {
       strlcat(buf, " ^Y(magic aura)", sizeof(buf));
     }
 
@@ -825,7 +825,7 @@ void look_at_char(struct char_data * i, struct char_data * ch)
       }
     }
     diag_char_to_char(i, ch);
-    if (IS_DUAL(ch) || IS_ASTRAL(ch)) {
+    if (SEES_ASTRAL(ch)) {
       bool dual = TRUE, init = TRUE;
       if (GET_GRADE(i)) {
         int targ = MAX(1, GET_GRADE(ch) - GET_GRADE(i));
@@ -1117,10 +1117,10 @@ void list_one_char(struct char_data * i, struct char_data * ch)
     if (IS_ASTRAL(ch) || IS_DUAL(ch)) {
       if (IS_ASTRAL(i))
         strlcat(buf, "(astral) ", sizeof(buf));
-      else if (IS_DUAL(i) && IS_NPC(i))
+      else if (IS_NPC(i))
         strlcat(buf, "(dual) ", sizeof(buf));
     }
-    if (AFF_FLAGGED(i, AFF_MANIFEST) && !(IS_ASTRAL(ch) || IS_DUAL(ch)))
+    if (AFF_FLAGGED(i, AFF_MANIFEST) && !SEES_ASTRAL(ch))
       strlcat(buf, "The ghostly image of ", sizeof(buf));
     strlcat(buf, i->player.physical_text.room_desc, sizeof(buf));
 
@@ -1314,7 +1314,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
   if (!IS_NPC(i) && !i->desc &&
       !PLR_FLAGS(i).AreAnySet(PLR_MATRIX, PLR_PROJECT, PLR_SWITCHED, ENDBIT))
     strlcat(buf, " (linkless)", sizeof(buf));
-  if (IS_ASTRAL(ch) || IS_DUAL(ch)) {
+  if (SEES_ASTRAL(ch)) {
     bool dual = TRUE;
     if (IS_ASTRAL(i))
       strlcat(buf, " (astral)", sizeof(buf));
@@ -1536,8 +1536,7 @@ void disp_long_exits(struct char_data *ch, bool autom)
         strlcat(buf, CAP(buf2), sizeof(buf));
       } else if (!IS_SET(EXIT(ch, door)->exit_info, EX_HIDDEN)) {
         snprintf(buf2, sizeof(buf2), "%-5s - ", dirs[door]);
-        if (!IS_ASTRAL(ch) &&
-            !LIGHT_OK(ch))
+        if (!SEES_ASTRAL(ch) && !LIGHT_OK(ch))
           strlcat(buf2, "Too dark to tell.\r\n", sizeof(buf2));
         else {
           if (IS_SET(EXIT(ch, door)->exit_info, EX_CLOSED)) {
@@ -1811,7 +1810,7 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
     send_to_char(buf, ch);
   }
 
-  if (GET_BACKGROUND_COUNT(ch->in_room) && (IS_ASTRAL(ch) || IS_DUAL(ch))) {
+  if (GET_BACKGROUND_COUNT(ch->in_room) && SEES_ASTRAL(ch)) {
     if (GET_BACKGROUND_AURA(ch->in_room) == AURA_POWERSITE) {
       switch (GET_BACKGROUND_COUNT(ch->in_room)) {
         case 1:
@@ -3852,7 +3851,7 @@ const char *get_position_string(struct char_data *ch) {
 }
 
 const char *get_vision_string(struct char_data *ch, bool ascii_friendly=FALSE) {
-  if (PLR_FLAGGED(ch, PLR_PERCEIVE) || IS_PROJECT(ch)) {
+  if (SEES_ASTRAL(ch)) {
     if (ascii_friendly)
       return "You are astrally perceiving.";
     else
@@ -6072,7 +6071,7 @@ ACMD(do_scan)
   infra = PRF_FLAGGED(ch, PRF_HOLYLIGHT) || has_vision(ch, VISION_THERMOGRAPHIC);
   lowlight = PRF_FLAGGED(ch, PRF_HOLYLIGHT) || has_vision(ch, VISION_LOWLIGHT);
 
-  if (!infra && IS_ASTRAL(ch))
+  if (!infra && SEES_ASTRAL(ch))
     infra = TRUE;
   if (!specific) {
     struct room_data *in_room = get_ch_in_room(ch);
@@ -6125,7 +6124,7 @@ ACMD(do_scan)
                 strlcat(desc_line, "(invisible) ", sizeof(desc_line));
               }
 
-              if ((IS_ASTRAL(ch) || IS_DUAL(ch)) && IS_ASTRAL(list)) {
+              if (SEES_ASTRAL(ch) && IS_ASTRAL(list)) {
                   strlcat(desc_line, "(astral) ", sizeof(desc_line));
               }
 
@@ -6228,7 +6227,7 @@ ACMD(do_scan)
                 strlcat(desc_line, "(invisible) ", sizeof(desc_line));
               }
 
-              if ((IS_ASTRAL(ch) || IS_DUAL(ch)) && IS_ASTRAL(list)) {
+              if (SEES_ASTRAL(ch) && IS_ASTRAL(list)) {
                   strlcat(desc_line, "(astral) ", sizeof(desc_line));
               }
 
@@ -6400,7 +6399,7 @@ ACMD(do_status)
     send_to_char(ch, "  Close Combat\r\n");
     printed = TRUE;
   }
-  if (PLR_FLAGGED(ch, PLR_PERCEIVE)) {
+  if (IS_PERCEIVING(ch)) {
     send_to_char("  Astral Perception (^yincreased TNs^n)\r\n", ch);
   }
 

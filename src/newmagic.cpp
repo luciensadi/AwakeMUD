@@ -834,10 +834,10 @@ void magic_perception(struct char_data *ch, int force, int spell)
     target = base;
     if (GET_MAG(vict) > 0)
       target -= 2;
-    if (IS_DUAL(vict) || IS_ASTRAL(vict))
+    if (SEES_ASTRAL(vict))
       target -= 2;
     if (success_test(GET_INT(ch) + (GET_TRADITION(ch) == TRAD_ADEPT ? GET_POWER(ch, ADEPT_IMPROVED_PERCEPT) : 0), target)) {
-      if (IS_DUAL(vict) || IS_ASTRAL(vict))
+      if (SEES_ASTRAL(vict))
         act("You notice $n manipulating the astral plane.", FALSE, ch, 0, vict, TO_VICT);
       else act("You notice $n performing magic.", TRUE, ch, 0, vict, TO_VICT);
 
@@ -1145,17 +1145,17 @@ bool check_spell_victim(struct char_data *ch, struct char_data *vict, int spell,
   }
 #endif
 
-  bool ch_is_astral = IS_PROJECT(ch) || IS_ASTRAL(ch);
-  bool vict_is_astral = IS_ASTRAL(vict) || IS_PROJECT(vict);
+  bool ch_is_astral = IS_ASTRAL(ch);
+  bool vict_is_astral = IS_ASTRAL(vict);
 
   // Don't allow astral characters to cast on beings with no astral presence.
-  if (ch_is_astral && !IS_DUAL(vict) && !vict_is_astral) {
+  if (ch_is_astral && !SEES_ASTRAL(vict)) {
     send_to_char(ch, "%s isn't accessible from the astral plane.\r\n", capitalize(GET_CHAR_NAME(vict)));
     return FALSE;
   }
 
   // Sanity check: If the victim is astral and the character cannot perceive astral, bail out and log the error.
-  if (vict_is_astral && !IS_DUAL(ch) && !ch_is_astral) {
+  if (vict_is_astral && !SEES_ASTRAL(ch)) {
     mudlog("SYSERR: check_spell_victim received a projecting/astral vict from a char who could not see them!", ch, LOG_SYSLOG, TRUE);
     send_to_char(ch, "You don't see anyone named '%s' here.\r\n", buf);
     return FALSE;
@@ -6199,7 +6199,7 @@ ACMD(do_cleanse)
         snprintf(buf, sizeof(buf), "The astral disturbances in the are seem to diminish slightly.\r\n");
       }
       for (struct char_data *targ = ch->in_room->people; targ; targ = targ->next_in_room)
-        if (ch != targ && (IS_ASTRAL(targ) || IS_DUAL(targ)))
+        if (ch != targ && SEES_ASTRAL(targ))
           send_to_char(buf, targ);
     }
     spell_drain(ch, 0, background, DEADLY);

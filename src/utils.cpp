@@ -404,9 +404,9 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int c
   }
 
   // If you're astrally perceiving, you don't take additional vision penalties, and shouldn't have any coming in here.
-  if (!is_rigging && (PLR_FLAGGED(ch, PLR_PERCEIVE) || MOB_FLAGGED(ch, MOB_DUAL_NATURE) || IS_ASTRAL(ch)))
+  if (!is_rigging && SEES_ASTRAL(ch))
   {
-    if (!skill_is_magic && PLR_FLAGGED(ch, PLR_PERCEIVE)) {
+    if (!skill_is_magic && IS_PERCEIVING(ch)) {
       base_target += 2;
       buf_mod(rbuf, rbuf_len, "AstralPercep", 2);
     }
@@ -2389,13 +2389,21 @@ bool invis_ok(struct char_data *ch, struct char_data *vict) {
 
     is_vehicle = TRUE;
     has_astral = FALSE;
-    has_ultrasound = veh->flags.IsSet(VFLAG_ULTRASOUND) && vict_room == veh->in_room;
+    has_ultrasound = veh->flags.IsSet(VFLAG_ULTRASOUND);
     has_thermographic = TRUE;
+
+#ifdef ULTRASOUND_REQUIRES_SAME_ROOM
+    has_ultrasound &= vict_room == veh->in_room;
+#endif
   } else {
     is_vehicle = FALSE;
-    has_astral = (IS_ASTRAL(ch) || IS_DUAL(ch));
-    has_ultrasound = (has_vision(ch, VISION_ULTRASONIC) && !affected_by_spell(ch, SPELL_STEALTH) && vict_room == ch_room);
+    has_astral = SEES_ASTRAL(ch);
+    has_ultrasound = has_vision(ch, VISION_ULTRASONIC) && !affected_by_spell(ch, SPELL_STEALTH);
     has_thermographic = has_vision(ch, VISION_THERMOGRAPHIC);
+
+#ifdef ULTRASOUND_REQUIRES_SAME_ROOM
+    has_ultrasound &= vict_room == ch_room;
+#endif
   }
 
   // Astral perception sees most things-- unless said thing is an inanimate mob with no spells on it.
@@ -3733,7 +3741,7 @@ bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struc
     return TRUE;
 
   // Does the viewee have an astral state that makes them invisible to subj?
-  if (!SEE_ASTRAL(subj, obj))
+  if (!IS_ASTRAL(obj) || AFF_FLAGGED(obj, AFF_MANIFEST) || SEES_ASTRAL(subj))
     return FALSE;
 
   // Johnsons, trainers, and cab drivers can always see. Them going blind doesn't increase the fun.
@@ -3760,7 +3768,7 @@ bool LIGHT_OK_ROOM_SPECIFIED(struct char_data *sub, struct room_data *provided_r
     return FALSE;
 
   // If you can see on the astral plane, light means nothing to you.
-  if (IS_ASTRAL(sub) || IS_DUAL(sub)) {
+  if (SEES_ASTRAL(sub)) {
     DEBUG_LIGHT_OK("- L_O_R_S: $n is astral or dual.");
     return TRUE;
   }
@@ -5100,7 +5108,7 @@ bool is_voice_masked(struct char_data *ch) {
 // Forces a character to perceive if they can.
 bool force_perception(struct char_data *ch) {
   // No need to do this if they're already perceiving.
-  if (IS_ASTRAL(ch) || IS_DUAL(ch))
+  if (SEES_ASTRAL(ch))
     return TRUE;
 
   switch (GET_TRADITION(ch)) {
