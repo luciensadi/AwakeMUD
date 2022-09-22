@@ -1214,14 +1214,18 @@ bool mobact_process_self_buff(struct char_data *ch) {
     int max_force = GET_MAG(ch) / 100;
     int min_force = MIN(4, max_force);
 
-    // If not invisible already, apply an invisibility spell based on my magic rating and sorcery skill.
-    if (!imp_invis && !std_invis && !IS_ASTRAL(ch)) {
-      if (MIN(GET_SKILL(ch, SKILL_SORCERY), GET_MAG(ch)/100) < MOB_IMP_INVIS_MAGIC_FLOOR) {
-        // Lower skill means standard invisibility. Gotta make thermographic vision useful somehow.
-        cast_illusion_spell(ch, SPELL_INVIS, number(min_force, max_force), NULL, ch);
+    // If not invisible or armored already, apply an invisibility spell based on my magic rating and sorcery skill or armor spell.
+    if (!imp_invis && !std_invis && !IS_ASTRAL(ch) && !affected_by_spell(ch, SPELL_ARMOR)) {
+      if (number(0,1) == 0) {
+        if (MIN(GET_SKILL(ch, SKILL_SORCERY), GET_MAG(ch)/100) < MOB_IMP_INVIS_MAGIC_FLOOR) {
+          // Lower skill means standard invisibility. Gotta make thermographic vision useful somehow.
+          cast_illusion_spell(ch, SPELL_INVIS, number(min_force, max_force), NULL, ch);
+        } else {
+          // Look out, we've got a badass over here.
+          cast_illusion_spell(ch, SPELL_IMP_INVIS, number(min_force, max_force), NULL, ch);
+        }
       } else {
-        // Look out, we've got a badass over here.
-        cast_illusion_spell(ch, SPELL_IMP_INVIS, number(min_force, max_force), NULL, ch);
+        cast_manipulation_spell(ch, SPELL_ARMOR, number(min_force, max_force), NULL, ch);
       }
       return TRUE;
     }
@@ -1236,19 +1240,13 @@ bool mobact_process_self_buff(struct char_data *ch) {
 #endif
 
     if (number(0, 10) == 0) {
-      // Apply armor to self.
-      if (!affected_by_spell(ch, SPELL_ARMOR) && !IS_ASTRAL(ch)) {
-        cast_manipulation_spell(ch, SPELL_ARMOR, number(min_force, max_force), NULL, ch);
+      // Apply combat sense to self.
+      if (GET_MAG(ch) >= 4 && !affected_by_spell(ch, SPELL_COMBATSENSE)) {
+        cast_detection_spell(ch, SPELL_COMBATSENSE, number(min_force, max_force), NULL, ch);
         return TRUE;
       }
 
       if (number(0, 5) == 0) {
-        // Apply combat sense to self.
-        if (GET_MAG(ch) >= 4 && !affected_by_spell(ch, SPELL_COMBATSENSE)) {
-          cast_detection_spell(ch, SPELL_COMBATSENSE, number(min_force, max_force), NULL, ch);
-          return TRUE;
-        }
-
         // Apply the appropriate increased reflexes spell.
         if (!affected_by_spell(ch, SPELL_INCREF3) && !affected_by_spell(ch, SPELL_INCREF2) && !affected_by_spell(ch, SPELL_INCREF1)) {
           if (GET_MAG(ch) >= 8) {
