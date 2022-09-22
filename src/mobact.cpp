@@ -1214,7 +1214,8 @@ bool mobact_process_self_buff(struct char_data *ch) {
     int max_force = GET_MAG(ch) / 100;
     int min_force = MIN(4, max_force);
 
-    // If not invisible or armored already, apply an invisibility spell based on my magic rating and sorcery skill or armor spell.
+    // NPC mages pursue a tanky or dodgy strategy, not both.
+    // If not invisible or armored already, apply either an invisibility spell based on my magic rating and sorcery skill or an armor spell.
     if (!imp_invis && !std_invis && !IS_ASTRAL(ch) && !affected_by_spell(ch, SPELL_ARMOR)) {
       if (number(0,1) == 0) {
         if (MIN(GET_SKILL(ch, SKILL_SORCERY), GET_MAG(ch)/100) < MOB_IMP_INVIS_MAGIC_FLOOR) {
