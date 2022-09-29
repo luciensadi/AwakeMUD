@@ -1074,7 +1074,7 @@ ACMD(do_gen_comm)
    *           [2] message if you're not on the channel
    *           [3] a color string.
    */
-  static const char *com_msgs[][6] = {
+  static const char *com_msgs[][7] = {
                                        {"You cannot shout!!\r\n",
                                         "shout",
                                         "Turn off your noshout flag first!\r\n",
@@ -1086,23 +1086,31 @@ ACMD(do_gen_comm)
                                         "newbie",
                                         "You've turned that channel off!\r\n",
                                         "^G",
-                                        B_GREEN},
+                                        B_GREEN,
+                                        "newbie",
+                                        "NEWBIE"
+                                       },
 
                                        {"You can't use the OOC channel!\r\n",
                                         "ooc",
                                         "You have the OOC channel turned off.\n\r",
                                         "^n",
-                                        KNUL},
+                                        KNUL,
+                                        "OOC",
+                                        "OOC"
+                                       },
 
                                        {"You can't use the RPE channel!\r\n",
                                         "rpe",
                                         "You have the RPE channel turned off.\r\n",
-                                        B_RED},
+                                        B_RED
+                                       },
 
                                        {"You can't use the hired channel!\r\n",
                                         "hired",
                                         "You have the hired channel turned off.\r\n",
-                                        B_YELLOW}
+                                        B_YELLOW
+                                       }
                                      };
 
   /* to keep pets, etc from being ordered to shout */
@@ -1112,6 +1120,28 @@ ACMD(do_gen_comm)
   if(PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED) && subcmd != SCMD_NEWBIE) {
     send_to_char(ch, "You must be Authorized to use that command. Until then, you can use the ^WNEWBIE^n channel if you need help.\r\n");
     return;
+  }
+
+  skip_spaces(&argument);
+
+  /* make sure that there is something there to say! */
+  if (!*argument) {
+    send_to_char(ch, "Yes, %s, fine, %s we must, but WHAT???\r\n", com_msgs[subcmd][1], com_msgs[subcmd][1]);
+    return;
+  }
+
+  // off/on toggles
+  if (subcmd == SCMD_NEWBIE || subcmd == SCMD_OOC) {
+    if (!str_cmp(argument, "off")) {
+      send_to_char(ch, "OK, your %s channel is now disabled. You can re-enable it with ^W%s ON^n.\r\n", com_msgs[subcmd][5], com_msgs[subcmd][6]);
+      PRF_FLAGS(ch).SetBit(channels[subcmd]);
+      return;
+    }
+    else if (!str_cmp(argument, "on")) {
+      send_to_char(ch, "OK, your %s channel is now enabled. You can disable it again with ^W%s OFF^n.\r\n", com_msgs[subcmd][5], com_msgs[subcmd][6]);
+      PRF_FLAGS(ch).RemoveBit(channels[subcmd]);
+      return;
+    }
   }
 
   if (subcmd == SCMD_SHOUT) {
@@ -1167,14 +1197,6 @@ ACMD(do_gen_comm)
       return;
     }
     */
-  }
-
-  skip_spaces(&argument);
-
-  /* make sure that there is something there to say! */
-  if (!*argument) {
-    send_to_char(ch, "Yes, %s, fine, %s we must, but WHAT???\r\n", com_msgs[subcmd][1], com_msgs[subcmd][1]);
-    return;
   }
 
   // Returning command to handle shout.
