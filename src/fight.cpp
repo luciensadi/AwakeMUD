@@ -4494,6 +4494,14 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
     }
   }
 
+  // With the recent bugfix that enabled the invis penalties that were supposed to be there, there's been a lot
+  // of concern about mundanes getting the short end of the stick-- they do not have the ability to perceive to
+  // get around invis penalties like awakened characters do. Thus, this decidedly non-canon hack:
+  if (IS_NPC(victim) && GET_TRADITION(ch) == TRAD_MUNDANE) {
+    snprintf(rbuf, sizeof(rbuf), "%s: Negating invis penalty due to mundane PC vs NPC.", GET_CHAR_NAME(ch));
+    modifier = 0;
+  }
+
   snprintf(rbuf, sizeof(rbuf), "%s: Final char-to-char visibility TN: ^c%d^n", GET_CHAR_NAME(ch), modifier);
 
   act(rbuf, 0, ch, 0, 0, TO_ROLLS);
