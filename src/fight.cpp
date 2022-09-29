@@ -4849,10 +4849,12 @@ void explode_antimagic_grenade(struct char_data *ch, struct obj_data *weapon, st
 
     snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), ". Final TN %d.", tn);
 
-    // Roll to see if they resist. You get a bonus from flare comp.
-    int successes = success_test(GET_BOD(victim), tn);
+    int dice = GET_BOD(victim);
 
-    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), " %d success%s.^n", successes, successes != 1 ? "es" : "");
+    // Roll to see if they resist. You get a bonus from flare comp.
+    int successes = success_test(dice, tn);
+
+    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "With %d dice, got %d success%s.^n", dice, successes, successes != 1 ? "es" : "");
     act(rbuf, FALSE, victim, 0, victim, TO_ROLLS);
     if (victim->in_room != ch->in_room) {
       act(rbuf, FALSE, ch, 0, victim, TO_ROLLS);
@@ -4871,7 +4873,7 @@ void explode_antimagic_grenade(struct char_data *ch, struct obj_data *weapon, st
       // Only affect spells with cast-by records, since this means that this is the effect portion of the spell record pair.
       if (sust->caster) {
         // House rule: Make an opposed WIL test. If net successes is negative, lose spell successes.
-        int grenade_tn = GET_WIL(victim);
+        int grenade_tn = GET_WIL(victim); // TODO: this should be caster's willpower
         int grenade_dice = power;
         int grenade_successes = success_test(grenade_dice, grenade_tn);
 
@@ -4901,7 +4903,7 @@ void explode_antimagic_grenade(struct char_data *ch, struct obj_data *weapon, st
             end_sustained_spell(victim, sust);
           } else {
             if (access_level(ch, LVL_BUILDER)) {
-              send_to_char(ch, "^y- Grenade weakened %s^y's %s from %d to %d.^n\r\n", GET_CHAR_NAME(victim), get_spell_name(sust->spell, sust->subtype), sust->success, successes);
+              send_to_char(ch, "^y- Grenade weakened %s^y's %s from %d to %d.^n\r\n", GET_CHAR_NAME(victim), get_spell_name(sust->spell, sust->subtype), sust->success, sust->success + net_successes);
             }
             send_to_char(ch, "Your control over %s weakens.\r\n", get_spell_name(sust->spell, sust->subtype));
             // Remember that net is negative, so we add it here to lower the sustain successes.
