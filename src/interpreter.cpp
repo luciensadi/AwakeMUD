@@ -847,7 +847,7 @@ struct command_info cmd_info[] =
     { "spray"      , POS_STANDING, do_spray    , 0, 0, FALSE },
     { "stand"      , POS_LYING   , do_stand    , 0, 0, FALSE },
     { "stat"       , POS_DEAD    , do_stat     , LVL_BUILDER, 0, FALSE },
-    { "status"     , POS_LYING   , do_status   , 0, 0, TRUE },
+    { "status"     , POS_MORTALLYW, do_status   , 0, 0, TRUE },
     { "steal"      , POS_LYING   , do_steal    , 0, 0, FALSE },
     { "stop"       , POS_LYING   , do_stop     , 0, 0, FALSE },
     { "stuck"      , POS_LYING   , do_stuck    , 0, 0, FALSE },
