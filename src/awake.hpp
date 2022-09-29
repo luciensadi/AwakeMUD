@@ -276,7 +276,10 @@ enum {
 #define WEAR_SOCK      36
 #define WEAR_FEET      37
 #define WEAR_PATCH     38
-#define NUM_WEARS      39
+#define WEAR_UNDERWEAR 39
+#define WEAR_CHEST     40
+#define WEAR_LAPEL     41
+#define NUM_WEARS      42
 
 /* player flags: used by char_data.char_specials.act */
 #define PLR_KILLER                          0  /* Player is a player-killer              */
@@ -1195,7 +1198,8 @@ enum {
 #define WEAP_GREN_LAUNCHER  20
 #define WEAP_MISS_LAUNCHER  21
 #define WEAP_REVOLVER       22
-#define MAX_WEAP            23
+#define WEAP_GRENADE        23
+#define MAX_WEAP            24
 
 // Defines our weapon ranges for bullet pants. Holdout -> revolver.
 #define START_OF_AMMO_USING_WEAPONS 5
@@ -1203,6 +1207,10 @@ enum {
 
 /* all those attack types can be used plus these for damage types to
 * objects */
+
+// Grenade types. MUST start from -3 and go DOWN from there for attachment compat reasons.
+#define GRENADE_TYPE_EXPLOSIVE  -3
+#define GRENADE_TYPE_ANTI_MAGIC -4
 
 /* item types: used by obj_data.obj_flags.type_flag */
 

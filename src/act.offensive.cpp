@@ -558,9 +558,9 @@ ACMD(do_throw)
 
   for (i = WEAR_WIELD; i <= WEAR_HOLD; i++)
     if ((weapon = GET_EQ(ch, i)) &&
-        (GET_WEAPON_ATTACK_TYPE(weapon) == TYPE_SHURIKEN ||
-         GET_WEAPON_ATTACK_TYPE(weapon) == TYPE_THROWING_KNIFE ||
-         GET_WEAPON_ATTACK_TYPE(weapon) == TYPE_HAND_GRENADE))
+        (// GET_WEAPON_ATTACK_TYPE(weapon) == TYPE_SHURIKEN ||
+         // GET_WEAPON_ATTACK_TYPE(weapon) == TYPE_THROWING_KNIFE ||
+         GET_WEAPON_ATTACK_TYPE(weapon) == WEAP_GRENADE))
       break;
 
   if (i > WEAR_HOLD || !weapon) {
@@ -568,7 +568,7 @@ ACMD(do_throw)
     return;
   }
 
-  if (GET_WEAPON_ATTACK_TYPE(weapon) == TYPE_HAND_GRENADE) {
+  if (GET_WEAPON_ATTACK_TYPE(weapon) == WEAP_GRENADE) {
     if (!*arg1) {
       send_to_char("Syntax: throw <direction>\r\n", ch);
       return;
@@ -600,7 +600,7 @@ ACMD(do_throw)
     send_to_char("There seems to be something in the way...\r\n", ch);
     return;
   }
-  if (GET_WEAPON_ATTACK_TYPE(weapon) == TYPE_HAND_GRENADE)
+  if (GET_WEAPON_ATTACK_TYPE(weapon) == WEAP_GRENADE)
     range_combat(ch, NULL, weapon, 1, dir);
   else
     range_combat(ch, arg1, weapon, 1, dir);

@@ -24,6 +24,7 @@
 #include "ignore_system.hpp"
 #include "invis_resistance_tests.hpp"
 #include "playerdoc.hpp"
+#include "sound_propagation.hpp"
 
 /* Structures */
 struct char_data *combat_list = NULL;   /* head of l-list of fighting chars */
@@ -53,7 +54,8 @@ bool ranged_response(struct char_data *ch, struct char_data *vict);
 int find_weapon_range(struct char_data *ch, struct obj_data *weapon);
 void weapon_scatter(struct char_data *ch, struct char_data *victim,
                     struct obj_data *weapon);
-void explode(struct char_data *ch, struct obj_data *weapon, struct room_data *room);
+void explode_explosive_grenade(struct char_data *ch, struct obj_data *weapon, struct room_data *room);
+void explode_antimagic_grenade(struct char_data *ch, struct obj_data *weapon, struct room_data *room);
 void target_explode(struct char_data *ch, struct obj_data *weapon,
                     struct room_data *room, int mode);
 void forget(struct char_data * ch, struct char_data * victim);
@@ -1592,7 +1594,7 @@ void damage_equip(struct char_data *ch, struct char_data *victim, int power,
     int limiter = 5;
 
     // Roll until we find an occupied slot OR run out of limiter.
-    while ((i = number(WEAR_HEAD, WEAR_PATCH - 1)) && !GET_EQ(victim, i)) {
+    while ((i = number(WEAR_HEAD, NUM_WEARS - 1)) && (!GET_EQ(victim, i) || i == WEAR_PATCH)) {
       if (--limiter <= 0)
         return;
     }
@@ -1605,7 +1607,7 @@ void damage_equip(struct char_data *ch, struct char_data *victim, int power,
   i = number(0, attacktype == TYPE_FIRE ? NUM_WEARS : 60);
 
   // Rolled too high of a slot, or the slot is empty? No damage.
-  if (i >= WEAR_PATCH || !GET_EQ(victim, i))
+  if (i == WEAR_PATCH || i >= NUM_WEARS || !GET_EQ(victim, i))
     return;
 
   if (attacktype == TYPE_FIRE) {
@@ -3810,80 +3812,84 @@ void remove_throwing(struct char_data *ch)
   }
 }
 
-void combat_message_process_ranged_response(struct char_data *ch, rnum_t rnum) {
-  for (struct char_data *tch = world[rnum].people; tch; tch = tch->next_in_room) {
-    if (IS_NPC(tch)) {
-      // Everyone ends up on edge when they hear gunfire nearby.
-      GET_MOBALERTTIME(tch) = 20;
-      GET_MOBALERT(tch) = MALERT_ALERT;
+void combat_message_process_single_ranged_response(struct char_data *ch, struct char_data *tch) {
+  if (IS_NPC(tch)) {
+    // Everyone ends up on edge when they hear gunfire nearby.
+    GET_MOBALERTTIME(tch) = 20;
+    GET_MOBALERT(tch) = MALERT_ALERT;
 
-      // Only guards and helpers who are not in combat can participate.
-      if (CH_IN_COMBAT(tch) || !(MOB_FLAGGED(tch, MOB_GUARD) || MOB_FLAGGED(tch, MOB_HELPER)))
-        continue;
+    // Only guards and helpers who are not in combat can participate.
+    if (CH_IN_COMBAT(tch) || !(MOB_FLAGGED(tch, MOB_GUARD) || MOB_FLAGGED(tch, MOB_HELPER)))
+      return;
 
-      // Guards and helpers will actively try to fire on a player using a gun.
-      if (!IS_NPC(ch) && (!FIGHTING(ch) || IS_NPC(FIGHTING(ch)))) {
-        if (number(0, 6) >= 2) {
-          GET_MOBALERTTIME(tch) = 30;
-          GET_MOBALERT(tch) = MALERT_ALARM;
-          struct room_data *was_in = tch->in_room;
-          if (ranged_response(ch, tch) && tch->in_room == was_in) {
-            act("$n aims $s weapon at a distant threat!",
-                FALSE, tch, 0, ch, TO_ROOM);
-            send_mob_aggression_warnings(ch, tch);
-          }
-        }
-      }
-
-      // They also try to fire on the target of a gun-wielder.
-      if (IS_NPC(ch) && CH_IN_COMBAT(ch) && FIGHTING(ch) && CAN_SEE(tch, FIGHTING(ch))) {
-        if (number(0, 8) == 1) {
-          bool found_target = FALSE;
-
-          // Make sure they have line of sight to the target.
-          if (GET_EQ(tch, WEAR_WIELD)) {
-            for (int dir = NORTH; !found_target && dir <= NORTHWEST; dir++) {
-              struct room_data *curr_room = tch->in_room;
-
-              // If there's no exit in this direction, stop immediately.
-              if (!curr_room->dir_option[dir] || IS_SET(curr_room->dir_option[dir]->exit_info, EX_CLOSED))
-                continue;
-
-              // Otherwise, scan down that exit up to weapon range.
-              for (int range = 1; !found_target && range <= find_weapon_range(tch, GET_EQ(tch, WEAR_WIELD)); range++) {
-                curr_room = curr_room->dir_option[dir]->to_room;
-
-                // Check for presence of target.
-                for (struct char_data *candidate = curr_room->people; candidate; candidate = candidate->next_in_room) {
-                  if (candidate == FIGHTING(ch)) {
-                    found_target = TRUE;
-                    break;
-                  }
-                }
-
-                // Stop further iteration if there are no further exits.
-                if (!curr_room->dir_option[dir] || IS_SET(curr_room->dir_option[dir]->exit_info, EX_CLOSED))
-                  break;
-              }
-            }
-          }
-
-          // No line of sight. Abort.
-          if (!found_target)
-            continue;
-
-          // Line of sight established, fire.
-          GET_MOBALERTTIME(tch) = 30;
-          GET_MOBALERT(tch) = MALERT_ALARM;
-          struct room_data *was_in = tch->in_room;
-          if (ranged_response(FIGHTING(ch), tch) && tch->in_room == was_in) {
-            act("$n aims $s weapon at a distant threat!",
-                FALSE, tch, 0, FIGHTING(ch), TO_ROOM);
-            send_mob_aggression_warnings(FIGHTING(ch), tch);
-          }
+    // Guards and helpers will actively try to fire on a player using a gun.
+    if (!IS_NPC(ch) && (!FIGHTING(ch) || IS_NPC(FIGHTING(ch)))) {
+      if (number(0, 6) >= 2) {
+        GET_MOBALERTTIME(tch) = 30;
+        GET_MOBALERT(tch) = MALERT_ALARM;
+        struct room_data *was_in = tch->in_room;
+        if (ranged_response(ch, tch) && tch->in_room == was_in) {
+          act("$n aims $s weapon at a distant threat!",
+              FALSE, tch, 0, ch, TO_ROOM);
+          send_mob_aggression_warnings(ch, tch);
         }
       }
     }
+
+    // They also try to fire on the target of a gun-wielder.
+    if (IS_NPC(ch) && CH_IN_COMBAT(ch) && FIGHTING(ch) && CAN_SEE(tch, FIGHTING(ch))) {
+      if (number(0, 8) == 1) {
+        bool found_target = FALSE;
+
+        // Make sure they have line of sight to the target.
+        if (GET_EQ(tch, WEAR_WIELD)) {
+          for (int dir = NORTH; !found_target && dir <= NORTHWEST; dir++) {
+            struct room_data *curr_room = tch->in_room;
+
+            // If there's no exit in this direction, stop immediately.
+            if (!curr_room->dir_option[dir] || IS_SET(curr_room->dir_option[dir]->exit_info, EX_CLOSED))
+              continue;
+
+            // Otherwise, scan down that exit up to weapon range.
+            for (int range = 1; !found_target && range <= find_weapon_range(tch, GET_EQ(tch, WEAR_WIELD)); range++) {
+              curr_room = curr_room->dir_option[dir]->to_room;
+
+              // Check for presence of target.
+              for (struct char_data *candidate = curr_room->people; candidate; candidate = candidate->next_in_room) {
+                if (candidate == FIGHTING(ch)) {
+                  found_target = TRUE;
+                  break;
+                }
+              }
+
+              // Stop further iteration if there are no further exits.
+              if (!curr_room->dir_option[dir] || IS_SET(curr_room->dir_option[dir]->exit_info, EX_CLOSED))
+                break;
+            }
+          }
+        }
+
+        // No line of sight. Abort.
+        if (!found_target)
+          return;
+
+        // Line of sight established, fire.
+        GET_MOBALERTTIME(tch) = 30;
+        GET_MOBALERT(tch) = MALERT_ALARM;
+        struct room_data *was_in = tch->in_room;
+        if (ranged_response(FIGHTING(ch), tch) && tch->in_room == was_in) {
+          act("$n aims $s weapon at a distant threat!",
+              FALSE, tch, 0, FIGHTING(ch), TO_ROOM);
+          send_mob_aggression_warnings(FIGHTING(ch), tch);
+        }
+      }
+    }
+  }
+}
+
+void combat_message_process_ranged_response(struct char_data *ch, rnum_t rnum) {
+  for (struct char_data *tch = world[rnum].people; tch; tch = tch->next_in_room) {
+    combat_message_process_single_ranged_response(ch, tch);
   }
 }
 
@@ -4698,7 +4704,7 @@ bool ranged_response(struct char_data *ch, struct char_data *vict)
   return is_responding;
 }
 
-void explode(struct char_data *ch, struct obj_data *weapon, struct room_data *room)
+void explode_explosive_grenade(struct char_data *ch, struct obj_data *weapon, struct room_data *room)
 {
   int damage_total, i, power, level;
   struct char_data *victim, *next_vict;
@@ -4709,22 +4715,36 @@ void explode(struct char_data *ch, struct obj_data *weapon, struct room_data *ro
 
   extract_obj(weapon);
 
+  if (ROOM_FLAGGED(room, ROOM_PEACEFUL) || ROOM_FLAGGED(room, ROOM_HOUSE)) {
+    mudlog_vfprintf(ch, LOG_CHEATLOG, "Somehow, %s got an explosive grenade into an invalid room!", GET_CHAR_NAME(ch));
+    return;
+  }
+
   if (room->people)
   {
     act("The room is lit by an explosion!", FALSE, room->people, 0, 0, TO_ROOM);
     act("The room is lit by an explosion!", FALSE, room->people, 0, 0, TO_CHAR);
   }
 
+  /*
   for (obj = room->contents; obj; obj = next)
   {
     next = obj->next_content;
     damage_obj(NULL, obj, level * 2 + (int)(power / 6), DAMOBJ_EXPLODE);
   }
+  */
 
   for (victim = room->people; victim; victim = next_vict)
   {
     next_vict = victim->next_in_room;
     if (IS_ASTRAL(victim))
+      continue;
+
+    if (!IS_NPC(victim) && victim != ch)
+      continue;
+
+    // Skip people you can't injure (Grog, etc)
+    if (!can_hurt(ch, victim, TYPE_EXPLOSION, TRUE) || MOB_FLAGGED(victim, MOB_IMMEXPLODE))
       continue;
 
     act("You are hit by the flames!", FALSE, victim, 0, 0, TO_CHAR);
@@ -4758,6 +4778,139 @@ void explode(struct char_data *ch, struct obj_data *weapon, struct room_data *ro
   for (i = 0; i < NUM_OF_DIRS; i++)
     if (room->dir_option[i] && IS_SET(room->dir_option[i]->exit_info, EX_CLOSED))
       damage_door(NULL, room, i, level * 2 + (int)(power / 6), DAMOBJ_EXPLODE);
+
+  propagate_sound_from_room(room,
+                            std::vector<const char *> {
+                              "The sharp *BANG* of an explosive grenade sounds from nearby!\r\n",
+                              "You hear an explosion from somewhere not far off!\r\n",
+                              "You hear a muffled explosion from somewhere in the distance.\r\n"
+                            },
+                            TRUE,
+                            ch);
+}
+
+void explode_antimagic_grenade(struct char_data *ch, struct obj_data *weapon, struct room_data *room)
+{
+  int power = GET_WEAPON_POWER(weapon);
+
+  extract_obj(weapon);
+
+  if (ROOM_FLAGGED(room, ROOM_PEACEFUL) || ROOM_FLAGGED(room, ROOM_HOUSE)) {
+    mudlog_vfprintf(ch, LOG_CHEATLOG, "Somehow, %s got an antimagic grenade into an invalid room!", GET_CHAR_NAME(ch));
+    return;
+  }
+
+  if (room->people)
+  {
+    send_to_room("^WAn enormous **BANG** leaves your ears ringing!^n\r\n", room);
+  }
+
+  for (struct char_data *next_vict, *victim = room->people; victim; victim = next_vict)
+  {
+    next_vict = victim->next_in_room;
+
+    // Cannot affect astral projections.
+    if (IS_ASTRAL(victim))
+      continue;
+
+    // Cannot affect players other than the thrower.
+    if (!IS_NPC(victim) && victim != ch)
+      continue;
+
+    // Skip people you can't injure (Grog, etc)
+    if (!can_hurt(ch, victim, TYPE_EXPLOSION, TRUE) || MOB_FLAGGED(victim, MOB_IMMEXPLODE))
+      continue;
+
+    char rbuf[1000];
+    int tn = power;
+
+    snprintf(rbuf, sizeof(rbuf), "^yAnti-magic grenade eval for $N^y: %d initial TN; ", tn);
+
+    if (has_flare_compensation(victim)) {
+      tn -= 4;
+      strlcat(rbuf, "-4 flare comp, ", sizeof(rbuf));
+    }
+
+    tn += modify_target_rbuf(victim, rbuf, sizeof(rbuf));
+
+    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), ". Final TN %d.", tn);
+
+    // Roll to see if they resist. You get a bonus from flare comp.
+    int successes = success_test(GET_BOD(victim), tn);
+
+    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), " %d success%s.^n", successes, successes != 1 ? "es" : "");
+    act(rbuf, FALSE, victim, 0, victim, TO_ROLLS);
+    if (victim->in_room != ch->in_room) {
+      act(rbuf, FALSE, ch, 0, victim, TO_ROLLS);
+    }
+
+    if (successes > 0) {
+      // We have to do the ranged response here since we won't get a chance later.
+      if (IS_NPC(victim))
+        ranged_response(ch, victim);
+      continue;
+    }
+
+    // Failed? Roll for each of their spells to see if they lose it.
+    for (struct sustain_data *next, *sust = GET_SUSTAINED(victim); sust; sust = next) {
+      next = sust->next;
+      // Only affect spells with cast-by records, since this means that this is the effect portion of the spell record pair.
+      if (sust->caster) {
+        // House rule: Make an opposed WIL test. If net successes is negative, lose spell successes.
+        int grenade_tn = GET_WIL(victim);
+        int grenade_dice = power;
+        int grenade_successes = success_test(grenade_dice, grenade_tn);
+
+        int char_tn = MAX(power, sust->force);
+        int char_dice = GET_WIL(victim);
+        int char_successes = success_test(char_dice, char_tn);
+
+        int net_successes = char_successes - grenade_successes;
+
+        if (access_level(ch, LVL_BUILDER)) {
+          snprintf(rbuf, sizeof(rbuf), "Spell sustain test for $N's %s: ch's %d dice at TN %d VS gren's %d @ %d: %d net success%s.",
+                   get_spell_name(sust->spell, sust->subtype),
+                   char_dice,
+                   char_tn,
+                   grenade_dice,
+                   grenade_tn,
+                   net_successes,
+                   net_successes != 1 ? "es" : "");
+          act(rbuf, TRUE, ch, 0, victim, TO_ROLLS);
+        }
+
+        if (net_successes <= 0) {
+          if (net_successes >= sust->success) {
+            if (access_level(ch, LVL_BUILDER)) {
+              send_to_char(ch, "^y- Grenade stripped %s from ^y%s.^n\r\n", get_spell_name(sust->spell, sust->subtype), GET_CHAR_NAME(victim));
+            }
+            end_sustained_spell(victim, sust);
+          } else {
+            if (access_level(ch, LVL_BUILDER)) {
+              send_to_char(ch, "^y- Grenade weakened %s^y's %s from %d to %d.^n\r\n", GET_CHAR_NAME(victim), get_spell_name(sust->spell, sust->subtype), sust->success, successes);
+            }
+            send_to_char(ch, "Your control over %s weakens.\r\n", get_spell_name(sust->spell, sust->subtype));
+            // Remember that net is negative, so we add it here to lower the sustain successes.
+            sust->success += net_successes;
+          }
+        }
+      }
+    }
+
+    // Have the NPC fire back.
+    if (IS_NPC(victim))
+      ranged_response(ch, victim);
+  }
+
+  propagate_sound_from_room(room,
+                            std::vector<const char *> {
+                              "The massive *BOOM* of a concussive blast sounds from nearby!\r\n",
+                              "You hear a loud concussive blast from somewhere not far off!\r\n",
+                              "You hear a concussive blast from somewhere in the area.\r\n",
+                              "You hear a muffled concussive blast from somewhere in the distance.\r\n"
+                            },
+                            TRUE,
+                            ch);
 }
 
 void target_explode(struct char_data *ch, struct obj_data *weapon, struct room_data *room, int mode)
@@ -4841,7 +4994,9 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
   for (int i = 0; i < 4; i++)
     scatter[i] = NULL;
 
-  if ((ch->char_specials.rigging ? ch->char_specials.rigging->in_room : ch->in_room)->peaceful)
+  struct room_data *in_room = ch->char_specials.rigging ? ch->char_specials.rigging->in_room : ch->in_room;
+
+  if (in_room->peaceful || ROOM_FLAGGED(in_room, ROOM_HOUSE))
   {
     send_to_char("This room just has a peaceful, easy feeling...\r\n", ch);
     return;
@@ -4849,23 +5004,18 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
 
   sight = find_sight(ch);
 
-  if (CAN_GO2(ch->in_room, dir))
-    nextroom = EXIT2(ch->in_room, dir)->to_room;
+  if (CAN_GO2(in_room, dir))
+    nextroom = EXIT2(in_room, dir)->to_room;
   else
     nextroom = NULL;
 
-  if (GET_OBJ_TYPE(weapon) == ITEM_WEAPON && GET_WEAPON_ATTACK_TYPE(weapon) == TYPE_HAND_GRENADE)
+  if (GET_OBJ_TYPE(weapon) == ITEM_WEAPON && GET_WEAPON_ATTACK_TYPE(weapon) == WEAP_GRENADE)
   {
-    if (!IS_NPC(ch) && !PRF_FLAGGED(ch, PRF_PKER)) {
-      send_to_char("You must be toggled PK to use grenades.\r\n", ch);
-      return;
-    }
-
     if (!nextroom) {
       send_to_char("There seems to be something in the way...\r\n", ch);
       return;
     }
-    if (nextroom->peaceful) {
+    if (nextroom->peaceful || ROOM_FLAGGED(nextroom, ROOM_HOUSE)) {
       send_to_char("Nah - leave them in peace.\r\n", ch);
       return;
     }
@@ -4878,11 +5028,45 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
 
     temp = MAX(1, GET_SKILL(ch, SKILL_THROWING_WEAPONS));
 
-    if (!number(0, 2)) {
-      snprintf(buf, sizeof(buf), "A defective grenade lands on the floor.\r\n");
-      send_to_room(buf, nextroom);
+    if (!number(0, GRENADE_DEFECTIVE_CHECK_DIVISOR)) {
+      send_to_room("A defective grenade lands on the floor.\r\n", nextroom);
+      send_to_char(ch, "You hear a *clink* as your defective grenade bounces away...\r\n");
+
+      for (struct char_data *vict = nextroom->people; vict; vict = vict->next_in_room) {
+        if (!IS_NPC(vict))
+          continue;
+
+        if (CAN_SEE(vict, ch)) {
+          ranged_response(ch, vict);
+        } else {
+          GET_MOBALERT(vict) = MALERT_ALARM;
+          GET_MOBALERTTIME(vict) = MAX(GET_MOBALERTTIME(vict), 30);
+        }
+      }
+
+      extract_obj(weapon);
       return;
-    } else if (!(success_test(temp+GET_OFFENSE(ch), 5) < 2)) {
+    }
+
+    int tn = 5;
+
+    char rbuf[1000];
+    snprintf(rbuf, sizeof(rbuf), "Grenade-throw check for $N: Starting TN %d, ", tn);
+
+    int dice = get_skill(ch, SKILL_THROWING_WEAPONS, tn);
+    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "after get_skill() %d, ", tn);
+
+    tn += modify_target_rbuf(ch, rbuf, sizeof(rbuf));
+    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "total %d. Rolling %d dice: ", tn, dice);
+
+    int successes = success_test(dice, tn);
+    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "%d success%s. Will%s scatter.", successes, successes == 1 ? "" : "es", successes > GRENADE_SCATTER_THRESHOLD ? " NOT" : "");
+
+    act(rbuf, FALSE, ch, 0, ch, TO_ROLLS);
+    if (nextroom->people)
+      act(rbuf, FALSE, nextroom->people, 0, ch, TO_ROLLS);
+
+    if (successes <= GRENADE_SCATTER_THRESHOLD) {
       left = -1;
       right = -1;
       if (dir < UP) {
@@ -4891,7 +5075,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
       }
 
       // Initialize scatter array.
-      scatter[0] = ch->in_room;
+      scatter[0] = in_room;
       scatter[1] = left >= 0 && CAN_GO(ch, left) ? EXIT(ch, left)->to_room : NULL;
       scatter[2] = right >= 0 && CAN_GO(ch, right) ? EXIT(ch, right)->to_room : NULL;
       scatter[3] = CAN_GO2(nextroom, dir) ? EXIT2(nextroom, dir)->to_room : NULL;
@@ -4909,12 +5093,34 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
           else
             snprintf(buf, sizeof(buf), "Your aim is slightly off, and $p veers to the %s.", dirs[temp2 == 1 ? left : right]);
           act(buf, FALSE, ch, weapon, 0, TO_CHAR);
-          explode(ch, weapon, scatter[temp2]);
+          switch (GET_WEAPON_GRENADE_TYPE(weapon)) {
+            case GRENADE_TYPE_EXPLOSIVE:
+              explode_explosive_grenade(ch, weapon, scatter[temp2]);
+              break;
+            case GRENADE_TYPE_ANTI_MAGIC:
+              explode_antimagic_grenade(ch, weapon, scatter[temp2]);
+              break;
+            default:
+              mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Unknown grenade type %d in range_combat()!", GET_WEAPON_GRENADE_TYPE(weapon));
+              break;
+          }
           return;
         }
       }
     }
-    explode(ch, weapon, nextroom);
+
+    switch (GET_WEAPON_GRENADE_TYPE(weapon)) {
+      case GRENADE_TYPE_EXPLOSIVE:
+        explode_explosive_grenade(ch, weapon, nextroom);
+        break;
+      case GRENADE_TYPE_ANTI_MAGIC:
+        explode_antimagic_grenade(ch, weapon, nextroom);
+        break;
+      default:
+        mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Unknown grenade type %d in range_combat()!", GET_WEAPON_GRENADE_TYPE(weapon));
+        break;
+    }
+
     return;
   }
 

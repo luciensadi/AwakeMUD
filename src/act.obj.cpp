@@ -113,7 +113,7 @@ void perform_put(struct char_data *ch, struct obj_data *obj, struct obj_data *co
         return;
       }
     } else if (GET_OBJ_TYPE(obj) == ITEM_WEAPON) {
-      if (GET_OBJ_VAL(obj, 3) == TYPE_HAND_GRENADE) {
+      if (GET_WEAPON_ATTACK_TYPE(obj) == WEAP_GRENADE) {
         if (GET_OBJ_VAL(cont, 2)) {
           GET_OBJ_VAL(cont, 2)--;
           GET_OBJ_TIMER(obj) = 2;

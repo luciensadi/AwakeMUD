@@ -1118,8 +1118,8 @@ void list_one_char(struct char_data * i, struct char_data * ch)
       if (IS_ASTRAL(i))
         strlcat(buf, "(astral) ", sizeof(buf));
       else if (access_level(ch, LVL_BUILDER) && IS_PERCEIVING(i))
-        strlcat(buf, "(perceiving)", sizeof(buf));
-      else if (IS_NPC(i))
+        strlcat(buf, "(perceiving) ", sizeof(buf));
+      else if (IS_NPC(i) && IS_DUAL(i))
         strlcat(buf, "(dual) ", sizeof(buf));
     }
     if (AFF_FLAGGED(i, AFF_MANIFEST) && !SEES_ASTRAL(ch))
@@ -1337,10 +1337,10 @@ void list_one_char(struct char_data * i, struct char_data * ch)
       }
     }
     if (dual) {
-      if (IS_DUAL(i))
-        strlcat(buf, " (dual)", sizeof(buf));
       if (access_level(ch, LVL_BUILDER) && IS_PERCEIVING(i))
         strlcat(buf, " (perceiving)", sizeof(buf));
+      if (IS_DUAL(i))
+        strlcat(buf, " (dual)", sizeof(buf));
     }
 
   }
@@ -2764,6 +2764,26 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
           strlcat(buf, "\r\n^yAs a heavy weapon, it has the potential to damage you when fired.^n", sizeof(buf));
         }
 
+      }
+      // Grenades second.
+      else if (GET_WEAPON_ATTACK_TYPE(j) == WEAP_GRENADE) {
+        switch (GET_WEAPON_GRENADE_TYPE(j)) {
+          case GRENADE_TYPE_ANTI_MAGIC:
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is an ^Wanti-magic grenade^n that uses the ^c%s^n skill to attack with.\r\n",
+                     skills[GET_WEAPON_SKILL(j)].name);
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Magically-active victims must roll against TN ^c%d^n to avoid spell degradation when hit by its blast.\r\n",
+                     GET_WEAPON_POWER(j));
+            strlcat(buf, "\r\nIt is ^ynon-canon^n and cannot be used in tabletop runs.", sizeof(buf));
+            break;
+          case GRENADE_TYPE_EXPLOSIVE:
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is an ^Wexplosive grenade^n that uses the ^c%s^n skill to attack with. It has not been fully implemented.",
+                     skills[GET_WEAPON_SKILL(j)].name);
+            break;
+          default:
+            mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Unknown grenade type %d in probe.", GET_WEAPON_GRENADE_TYPE(j));
+            strlcat(buf, "It's a BUGGED grenade. Alert staff!", sizeof(buf));
+            break;
+        }
       }
       // Melee weapons.
       else {

@@ -869,6 +869,12 @@ void iedit_disp_val5_menu(struct descriptor_data * d)
   {
     case ITEM_WEAPON:
     case ITEM_FIREWEAPON:
+      if (GET_WEAPON_ATTACK_TYPE(d->edit_obj) == WEAP_GRENADE) {
+        // Skipping this field while doing nothing? Re-increment our counter.
+        if (d->iedit_limit_edits)
+          d->iedit_limit_edits++;
+        iedit_disp_val6_menu(d);
+      }
       iedit_disp_skill_menu(d);
       break;
     case ITEM_CYBERDECK:
@@ -908,6 +914,12 @@ void iedit_disp_val6_menu(struct descriptor_data * d)
   switch (GET_OBJ_TYPE(d->edit_obj))
   {
     case ITEM_WEAPON:
+      if (GET_WEAPON_ATTACK_TYPE(d->edit_obj) == WEAP_GRENADE) {
+        // Skipping this field while doing nothing? Re-increment our counter.
+        if (d->iedit_limit_edits)
+          d->iedit_limit_edits++;
+        iedit_disp_val7_menu(d);
+      }
       send_to_char("Max Ammo (-1 if doesn't use ammo): ", CH);
       break;
     case ITEM_FIREWEAPON:
@@ -1009,6 +1021,8 @@ void iedit_disp_val8_menu(struct descriptor_data * d)
           iedit_disp_val9_menu(d);
           return;
         }
+      } else if (GET_WEAPON_ATTACK_TYPE(OBJ) == WEAP_GRENADE) {
+        send_to_char("Is this an IPE (-3) or Anti-Magic (-4) grenade?: ", CH);
       } else {
         send_to_char("Enter weapon focus rating (0 for no focus, up to 4): ", CH);
       }
@@ -2757,6 +2771,12 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
                 }
                 extract_obj(accessory);
               }
+            }
+          } else if (GET_WEAPON_ATTACK_TYPE(OBJ) == WEAP_GRENADE) {
+            if (number != GRENADE_TYPE_EXPLOSIVE && number != GRENADE_TYPE_ANTI_MAGIC) {
+              send_to_char(CH, "You must enter either %d for explosive or %d for anti-magic: ", GRENADE_TYPE_EXPLOSIVE, GRENADE_TYPE_ANTI_MAGIC);
+              iedit_disp_val8_menu(d);
+              return;
             }
           } else {
             if (number < 0 || number > 4) {

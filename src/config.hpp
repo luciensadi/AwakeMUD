@@ -237,6 +237,12 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 #define MAXIMUM_TN_FOR_CLOSING_CHECK                           10
 #define MINIMUM_TN_FOR_CLOSING_CHECK                           4
 
+// 1:X grenades are defective and won't detonate. Define X below.
+#define GRENADE_DEFECTIVE_CHECK_DIVISOR                        20
+
+// Grenades scatter if you don't roll at least X successes.
+#define GRENADE_SCATTER_THRESHOLD                              2
+
 // At what point do we consider someone to be too idle in a scene to get socialization bonuses?
 #define LAST_SOCIAL_ACTION_REQUIREMENT_FOR_CONGREGATION_BONUS                20
 #define SOCIAL_ACTION_GRACE_PERIOD_GRANTED_BY_SPEECH                         5

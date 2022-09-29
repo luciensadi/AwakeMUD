@@ -442,6 +442,7 @@ const char *weapon_types[] =
     "grenade launcher",
     "missile launcher",
     "revolver",
+    "grenade",
     "\n"
   };
 
@@ -852,6 +853,9 @@ const char *where[] =
     "<worn as socks>      ",
     "<worn on feet>       ",
     "<patch>              ",
+    "<worn as underwear>  ",
+    "<worn on the chest>  ",
+    "<lapel>              ",
     "\n"
   };
 
@@ -910,7 +914,10 @@ const char *short_where[] =
     "ANKLE2",
     "SOCK",
     "FEET",
-    "PATCH"
+    "PATCH",
+    "UNDERWEAR",
+    "CHEST/UNDER",
+    "LAPEL"
   };
 
 /* ITEM_x (ordinal object types) */
@@ -995,6 +1002,9 @@ const char *wear_bits[] =
     "FACE",
     "THIGH",
     "PATCH",
+    "UNDERWEAR",
+    "CHEST/UNDER",
+    "LAPEL",
     "\n"
   };
 
@@ -1954,7 +1964,8 @@ float weapon_type_ammo_cost_multipliers[] = {
   1.0,  // minigun
   1.0,  // grenade launcher (placeholder value)
   1.0,  // missile launcher (placeholder value)
-  1.0   // revolver
+  1.0,  // revolver
+  1.0   // grenade (placeholder value)
 };
 
 const char *positions[] =
