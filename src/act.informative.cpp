@@ -2770,14 +2770,14 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
         switch (GET_WEAPON_GRENADE_TYPE(j)) {
           case GRENADE_TYPE_ANTI_MAGIC:
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is an ^Wanti-magic grenade^n that uses the ^c%s^n skill to attack with.\r\n",
-                     skills[GET_WEAPON_SKILL(j)].name);
+                     skills[SKILL_THROWING_WEAPONS].name);
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Magically-active victims must roll against TN ^c%d^n to avoid spell degradation when hit by its blast.\r\n",
                      GET_WEAPON_POWER(j));
             strlcat(buf, "\r\nIt is ^ynon-canon^n and cannot be used in tabletop runs.", sizeof(buf));
             break;
           case GRENADE_TYPE_EXPLOSIVE:
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is an ^Wexplosive grenade^n that uses the ^c%s^n skill to attack with. It has not been fully implemented.",
-                     skills[GET_WEAPON_SKILL(j)].name);
+                     skills[SKILL_THROWING_WEAPONS].name);
             break;
           default:
             mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Unknown grenade type %d in probe.", GET_WEAPON_GRENADE_TYPE(j));
@@ -6963,6 +6963,8 @@ const char *get_command_hints_for_obj(struct obj_data *obj) {
     case ITEM_WEAPON:
       if (WEAPON_IS_GUN(obj)) {
         strlcat(hint_string, "\r\n^WWIELD^n it in combat for best results. You can also ^WHOLSTER^n it if you have the right equipment.\r\n", sizeof(hint_string));
+      } else if (GET_WEAPON_ATTACK_TYPE(obj) == WEAP_GRENADE) {
+        strlcat(hint_string, "\r\n^WWIELD^n it, then ^WTHROW^n it in a direction (ex: ^WTHROW NORTH^n).\r\n", sizeof(hint_string));
       } else {
         strlcat(hint_string, "\r\n^WWIELD^n it in combat for best results. You can also ^WSHEATHE^n it if you have the right equipment.\r\n", sizeof(hint_string));
       }
