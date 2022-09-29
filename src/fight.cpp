@@ -4895,8 +4895,8 @@ void explode_antimagic_grenade(struct char_data *ch, struct obj_data *weapon, st
           act(rbuf, TRUE, ch, 0, victim, TO_ROLLS);
         }
 
-        if (net_successes <= 0) {
-          if (net_successes >= sust->success) {
+        if (net_successes < 0) {
+          if (-1 * net_successes >= sust->success) {
             if (access_level(ch, LVL_BUILDER)) {
               send_to_char(ch, "^y- Grenade stripped %s from ^y%s.^n\r\n", get_spell_name(sust->spell, sust->subtype), GET_CHAR_NAME(victim));
             }
@@ -4905,7 +4905,7 @@ void explode_antimagic_grenade(struct char_data *ch, struct obj_data *weapon, st
             if (access_level(ch, LVL_BUILDER)) {
               send_to_char(ch, "^y- Grenade weakened %s^y's %s from %d to %d.^n\r\n", GET_CHAR_NAME(victim), get_spell_name(sust->spell, sust->subtype), sust->success, sust->success + net_successes);
             }
-            send_to_char(ch, "Your control over %s weakens.\r\n", get_spell_name(sust->spell, sust->subtype));
+            send_to_char(victim, "Your control over %s weakens.\r\n", get_spell_name(sust->spell, sust->subtype));
             // Remember that net is negative, so we add it here to lower the sustain successes.
             sust->success += net_successes;
           }
