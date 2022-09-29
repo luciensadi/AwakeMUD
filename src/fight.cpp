@@ -4818,16 +4818,22 @@ void explode_antimagic_grenade(struct char_data *ch, struct obj_data *weapon, st
     next_vict = victim->next_in_room;
 
     // Cannot affect astral projections.
-    if (IS_ASTRAL(victim))
+    if (IS_ASTRAL(victim)) {
+      act("Skipping $n: astral", TRUE, victim, 0, 0, TO_ROLLS);
       continue;
+    }
 
     // Cannot affect players other than the thrower.
-    if (!IS_NPC(victim) && victim != ch)
+    if (!IS_NPC(victim) && victim != ch) {
+      act("Skipping $n: player", TRUE, victim, 0, 0, TO_ROLLS);
       continue;
+    }
 
     // Skip people you can't injure (Grog, etc)
-    if (!can_hurt(ch, victim, TYPE_EXPLOSION, TRUE) || MOB_FLAGGED(victim, MOB_IMMEXPLODE))
+    if (!can_hurt(ch, victim, TYPE_EXPLOSION, TRUE) || MOB_FLAGGED(victim, MOB_IMMEXPLODE)) {
+      act("Skipping $n: can't be hurt", TRUE, victim, 0, 0, TO_ROLLS);
       continue;
+    }
 
     char rbuf[1000];
     int tn = power;
