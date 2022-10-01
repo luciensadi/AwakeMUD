@@ -144,7 +144,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
   }
 
   // Precondition: If you're wielding a non-weapon, back out.
-  if (att->weapon && (GET_OBJ_TYPE(att->weapon) != ITEM_WEAPON)) {
+  if (att->weapon && (GET_OBJ_TYPE(att->weapon) != ITEM_WEAPON || GET_WEAPON_ATTACK_TYPE(att->weapon) == WEAP_GRENADE)) {
     send_to_char(att->ch, "You struggle to figure out how to attack while using %s as a weapon!\r\n", decapitalize_a_an(GET_OBJ_NAME(att->weapon)));
     return FALSE;
   }

@@ -5044,6 +5044,9 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
 
     temp = MAX(1, GET_SKILL(ch, SKILL_THROWING_WEAPONS));
 
+    // todo: add a delay to prevent NPCs from immediately re-casting spells (maybe no casting for 30s after getting hit by an anti-magic?)
+    // TODO: confirm with a mort that they don't get spell outputs in rolls
+
     if (!number(0, GRENADE_DEFECTIVE_CHECK_DIVISOR)) {
       send_to_room("A defective grenade lands on the floor.\r\n", nextroom);
       send_to_char(ch, "You hear a *clink* as your defective grenade bounces away...\r\n");

@@ -2651,8 +2651,10 @@ void matrix_update()
             host.stats[x][MTX_STAT_ENCRYPTED] = 0;
           }
 
-          if (host.stats[x][MTX_STAT_SCRAMBLE_IC_RATING] && host.stats[x][MTX_STAT_ENCRYPTED] == 0)
+          if (host.stats[x][MTX_STAT_SCRAMBLE_IC_RATING] && host.stats[x][MTX_STAT_ENCRYPTED] == 0) {
+            mudlog_vfprintf(NULL, LOG_GRIDLOG, "Host %ld's %s-subsystem has scramble-%ld and is not encrypted: re-encrypting.", host.vnum, mtx_subsystem_names[x], host.stats[x][MTX_STAT_SCRAMBLE_IC_RATING]);
             host.stats[x][MTX_STAT_ENCRYPTED] = 1;
+          }
         }
       }
     }
