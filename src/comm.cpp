@@ -1195,9 +1195,9 @@ int make_prompt(struct descriptor_data * d)
 
   if (d->str) {
     if (D_PRF_FLAGGED(d, PRF_SCREENREADER)) {
-      data = "Compose mode, write the at symbol on new line to quit. ";
+      data = "Compose mode, press return twice on empty line for a new paragraph, write the at symbol on empty line to quit]: ";
     } else {
-      data = "Compose mode, write @ on new line to quit]: ";
+      data = "Compose mode, press <return> twice on empty line for a new paragraph, write @ on empty line to quit]: ";
     }
   }
   else if (d->showstr_point)

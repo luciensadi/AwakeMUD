@@ -107,8 +107,9 @@ void format_string(struct descriptor_data *d, int indent)
       }
     }
 
-  char *format = new char[d->max_str + 1];
-  memset(format, '\0', d->max_str * sizeof(char));
+  size_t format_len = d->max_str + 1;
+  char *format = new char[format_len];
+  memset(format, '\0', format_len * sizeof(char));
   snprintf(format, d->max_str, "%s%s\r\n", indent ? "   " : "", *d->str);
   int q = 0;
   for (k = 0; strlen(format) > (u_int) k && q < 1023; q++)
@@ -132,16 +133,21 @@ void format_string(struct descriptor_data *d, int indent)
         k = i + 1;
         break;
       }
-    for (i = MIN((unsigned)strlen(format) - 1, (unsigned)k + line); i > k && i > 0; i--)
+    for (i = MIN((unsigned)strlen(format) - 2, (unsigned)k + line); i > k && i > 0; i--)
       if (isspace(format[i]) && isprint(format[i-1]) && !isspace(format[i-1])) {
         format[i] = '\r';
         if (format[i+1] != ' ')
           add_spaces(format, d->max_str, i, 1);
         format[i+1] = '\n';
-        i += 2;
-        while (format[i] == ' ')
-          for (j = i; format[j]; j++)
-            format[j] = format[j+1];
+        format[format_len - 1] = '\0';
+
+        if (i + 2 < (int) strlen(format)) {
+          i += 2;
+          while (format[i] == ' ')
+            for (j = i; format[j]; j++)
+              format[j] = format[j+1];
+        }
+
         k = i;
         break;
       }
