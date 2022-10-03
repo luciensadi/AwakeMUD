@@ -943,7 +943,7 @@ SPECIAL(johnson)
       comm = CMD_JOB_DONE;
     else if (str_str(argument, "work") || str_str(argument, "business") ||
              str_str(argument, "run") || str_str(argument, "shadowrun") ||
-             str_str(argument, "job"))
+             str_str(argument, "job") || str_str(argument, "help"))
       comm = CMD_JOB_START;
     else if (str_str(argument, "yes") || str_str(argument, "accept") || str_str(argument, "yeah")
             || str_str(argument, "sure") || str_str(argument, "okay"))

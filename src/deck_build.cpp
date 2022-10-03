@@ -111,7 +111,6 @@ int get_part_cost(int type, int rating, int mpcp) {
     case PART_ICCM:
         return (35 * mpcp) + 1000;
     case PART_ICON:
-    case PART_MPCP:
     case PART_BOD:
     case PART_SENSOR:
     case PART_MASKING:
@@ -120,6 +119,8 @@ int get_part_cost(int type, int rating, int mpcp) {
     case PART_RADIO:
     case PART_SATELLITE:
         return 35 * (rating * rating);
+    case PART_MPCP:
+        return 35 * (mpcp * mpcp);
     case PART_IO:
         return 35 * (rating / 10);
     case PART_MASER:
@@ -159,10 +160,10 @@ int get_chip_cost(int type, int rating, int mpcp) {
     case PART_MASKING:
     case PART_EVASION:
     case PART_REALITY_FILTER:
+    case PART_MPCP:
         return mpcpcost;
     case PART_ICON:
     case PART_HARDENING:
-    case PART_MPCP:
         return ratingcost;
     case PART_RESPONSE:
         return (mpcp*mpcp) * (rating*2);
@@ -236,15 +237,25 @@ void pbuild_parse(struct descriptor_data *d, const char *arg) {
             break;
         case 'q':
         case 'Q':
-            GET_PART_CHIP_COST(PART) = get_chip_cost(GET_PART_TYPE(PART), GET_PART_RATING(PART), GET_PART_TARGET_MPCP(PART));
-            GET_PART_PART_COST(PART) = get_part_cost(GET_PART_TYPE(PART), GET_PART_RATING(PART), GET_PART_TARGET_MPCP(PART));
-            if (parts[GET_PART_TYPE(PART)].design == -1)
-                GET_OBJ_VAL(PART, 3) = 0;
-            else
-                GET_OBJ_VAL(PART, 3) = -1;
+            // Set design requirements (if needed)
+            if (parts[GET_PART_TYPE(PART)].design == -1) {
+                GET_PART_DESIGN_COMPLETION(PART) = 0;
+            } else {
+                GET_PART_DESIGN_COMPLETION(PART) = -1;
+            }
+
+            // ?
             GET_OBJ_VAL(PART, 4) = -1;
+
+            // True up part rating to MPCP if it's been nulled.
             if (!GET_PART_RATING(PART))
                 GET_PART_RATING(PART) = GET_PART_TARGET_MPCP(PART);
+
+            // Set the cost.
+            GET_PART_CHIP_COST(PART) = get_chip_cost(GET_PART_TYPE(PART), GET_PART_RATING(PART), GET_PART_TARGET_MPCP(PART));
+            GET_PART_PART_COST(PART) = get_part_cost(GET_PART_TYPE(PART), GET_PART_RATING(PART), GET_PART_TARGET_MPCP(PART));
+
+            // Hand it over.
             obj_to_char(PART, CH);
             PART = NULL;
             STATE(d) = CON_PLAYING;
