@@ -3620,7 +3620,7 @@ bool astral_fight(struct char_data *ch, struct char_data *vict)
     // return;
   }
 
-  if (IS_PROJECT(ch) && (ch != vict) && SEES_ASTRAL(vict) &&
+  if (IS_PROJECT(ch) && (ch != vict) && !IS_NPC(vict) && SEES_ASTRAL(vict) &&
       !PLR_FLAGGED(vict, PLR_KILLER) && !PLR_FLAGGED(vict,PLR_WANTED) &&
       (!PRF_FLAGGED(ch, PRF_PKER) || !PRF_FLAGGED(vict, PRF_PKER)) &&
       !PLR_FLAGGED(ch->desc->original, PLR_KILLER))
@@ -4326,9 +4326,13 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
   }
 
   // Pre-calculate the things we care about here. First, character vision info.
-  bool ch_has_ultrasound = has_vision(ch, VISION_ULTRASONIC);
+  bool ch_has_ultrasound = has_vision(ch, VISION_ULTRASONIC) && !affected_by_spell(ch, SPELL_STEALTH);
   bool ch_has_thermographic = has_vision(ch, VISION_THERMOGRAPHIC);
   bool ch_sees_astral = SEES_ASTRAL(ch);
+
+#ifdef ULTRASOUND_REQUIRES_SAME_ROOM
+  has_ultrasound &= ch->in_room == victim->in_room;
+#endif
 
   // EXCEPT: If you're rigging (not manning), things change.
   if (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE)) {
@@ -4336,6 +4340,10 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
     ch_has_ultrasound = vehicle_has_ultrasound_sensors(veh); // Eventually, we'll have ultrasonic sensors on vehicles too.
     ch_has_thermographic = TRUE;
     ch_sees_astral = FALSE;
+
+#ifdef ULTRASOUND_REQUIRES_SAME_ROOM
+    has_ultrasound &= veh->in_room == victim->in_room;
+#endif
   }
 
   // Next, vict invis info.
@@ -4448,7 +4456,6 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
     else if (vict_is_just_invis) {
       modifier = 2;
       snprintf(rbuf, sizeof(rbuf), "%s: Thermographic-using character fighting invis (second stanza): %d", GET_CHAR_NAME(ch), modifier);
-      mudlog("SYSERR: Hit second stanza of thermo-vs-standard-invis in calculate_vision_penalty()!", ch, LOG_SYSLOG, TRUE);
     }
 
     if (modifier > 0) {
