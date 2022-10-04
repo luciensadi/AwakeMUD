@@ -3272,7 +3272,7 @@ void nanny(struct descriptor_data * d, char *arg)
 
 #ifdef LOG_COMMANDS
 void log_command(struct char_data *ch, const char *argument, const char *tcname) {
-  if (!ch || IS_NPC(ch))
+  if (!ch)
     return;
 
   // Discard directional commands and other high-noise things that can't affect other players.
@@ -3291,9 +3291,9 @@ void log_command(struct char_data *ch, const char *argument, const char *tcname)
     "drive", "speed",
     "stand", "sit",
     "nod", "list", "info",
-    "open", "close", "give", "receive", "buy", "sell",
+    "open", "close", "receive", "buy", "sell",
     "wear", "remove", "draw", "holster",
-    "cast", "kill", "hit", "shoot", "kick", "get", "put",
+    "kill", "hit", "shoot", "kick",
     "\n"
   };
   for (int i = 0; *discard_commands[i] != '\n'; i++)
