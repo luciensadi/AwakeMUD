@@ -2598,7 +2598,6 @@ void matrix_update()
 {
   PERF_PROF_SCOPE(pr_, __func__);
   rnum_t rnum = 1;
-  struct matrix_icon *icon;
   extern struct time_info_data time_info;
   for (;rnum <= top_of_matrix; rnum++) {
     bool decker = FALSE;
@@ -2680,7 +2679,7 @@ void matrix_update()
         continue;
       }
     }
-    for (icon = host.icons; icon; icon = nexticon) {
+    for (struct matrix_icon *icon = host.icons; icon; icon = nexticon) {
       nexticon = icon->next_in_host;
       if (!icon->number) {
         process_upload(icon);
@@ -2698,7 +2697,7 @@ void matrix_update()
       }
     }
     if (decker) {
-      for (icon = host.icons; icon; icon = icon->next_in_host)
+      for (struct matrix_icon *icon = host.icons; icon; icon = icon->next_in_host)
         if (icon->number && IS_PROACTIVE(icon) && !icon->fighting)
           for (struct matrix_icon *icon2 = host.icons; icon2; icon2 = icon2->next_in_host)
             if (icon->ic.target == icon2->idnum && icon2->decker) {
@@ -2730,7 +2729,12 @@ void matrix_update()
           continue;
         }
         if (file->next_content && (GET_OBJ_TYPE(file->next_content) != ITEM_DECK_ACCESSORY && GET_OBJ_TYPE(file->next_content) != ITEM_PROGRAM)) {
-          snprintf(buf, sizeof(buf), "SYSERR: Found non-file, non-program object '%s' (%ld) in Matrix file->next_content! Striking that link, object will be orphaned if not located elsewhere.", GET_OBJ_NAME(file->next_content), GET_OBJ_VNUM(file->next_content));
+          snprintf(buf, sizeof(buf), "SYSERR: Found non-file, non-program object '%s' (%ld) in Matrix file->next_content for host %ld (%s)! Striking that link, object will be orphaned if not located elsewhere.",
+                   GET_OBJ_NAME(file->next_content),
+                   GET_OBJ_VNUM(file->next_content),
+                   host.vnum,
+                   host.name
+                 );
           mudlog(buf, NULL, LOG_SYSLOG, TRUE);
           file->next_content = next = NULL;
         }
