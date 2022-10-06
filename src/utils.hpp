@@ -311,6 +311,7 @@ bool    update_pos(struct char_data *victim);
   PLR_FLAGS(ch->desc->original).IsSet(PLR_PROJECT) && \
   GET_MOB_VNUM(ch) == 22)
 #define IS_SPIRIT(ch) (IS_NPC(ch) && GET_RACE(ch) == RACE_SPIRIT)
+#define IS_PC_CONJURED_SPIRIT(ch) (IS_SPIRIT((ch)) && GET_ACTIVE((ch)))
 #define IS_ANY_ELEMENTAL(ch) (IS_NPC(ch) && (GET_RACE(ch) == RACE_ELEMENTAL || GET_RACE(ch) == RACE_PC_CONJURED_ELEMENTAL))
 #define IS_WILD_ELEMENTAL(ch) (IS_NPC(ch) && GET_RACE(ch) == RACE_ELEMENTAL)
 #define IS_PC_CONJURED_ELEMENTAL(ch) (IS_NPC(ch) && GET_RACE(ch) == RACE_PC_CONJURED_ELEMENTAL)

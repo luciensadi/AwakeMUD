@@ -7909,13 +7909,13 @@ ACMD(do_makenerps) {
 
   // Parse out our float.
   double essence_cost = atof(buf2);
-  if (essence_cost <= 0) {
+  if (essence_cost < 0) {
     send_to_char(ch, "%f is not a valid essence cost. Please reference the book value.\r\n%s", essence_cost, NERPS_WARE_USAGE_STRING);
     return;
   }
 
   int nuyen_cost = atoi(buf3);
-  if (nuyen_cost <= 0) {
+  if (nuyen_cost < 0) {
     send_to_char(ch, "%d is not a valid nuyen cost. Please reference the book value.\r\n%s", nuyen_cost, NERPS_WARE_USAGE_STRING);
     return;
   }

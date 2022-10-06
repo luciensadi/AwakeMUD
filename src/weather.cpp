@@ -52,7 +52,7 @@ void another_hour(void)
     send_to_outdoor(buf, TRUE);
     for (ch = character_list; ch; ch = next) {
       next = ch->next;
-      if (IS_SPIRIT(ch)) {
+      if (IS_PC_CONJURED_SPIRIT(ch)) {
         if (--GET_SPARE2(ch) <= 0) {
           act("$n abruptly fades from existance.", TRUE, ch, 0, 0, TO_ROOM);
           end_spirit_existance(ch, FALSE);
@@ -105,7 +105,7 @@ void another_hour(void)
     send_to_outdoor(buf, TRUE);
     for (ch = character_list; ch; ch = next) {
       next = ch->next;
-      if (IS_SPIRIT(ch)) {
+      if (IS_PC_CONJURED_SPIRIT(ch)) {
         if (--GET_SPARE2(ch) <= 0) {
           act("$n abruptly fades from existance.", TRUE, ch, 0, 0, TO_ROOM);
           end_spirit_existance(ch, FALSE);
