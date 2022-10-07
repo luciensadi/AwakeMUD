@@ -873,6 +873,12 @@ bool spell_drain(struct char_data *ch, int spell_idx, int force, int drain_damag
   int target = (int)(force / 2);
   int success = 0;
 
+  // NPCs that are not in combat do not face spell drain.
+  if (IS_NPC(ch) && !ch->desc && !FIGHTING(ch)) {
+    act("$n: Skipping spell drain, NPC not in combat.", TRUE, ch, 0, 0, TO_ROLLS);
+    return FALSE;
+  }
+
   snprintf(buf, sizeof(buf), "spell_drain (%s, %d, %d, %d, %d): ", GET_CHAR_NAME(ch), spell_idx, force, drain_damage, minus_one_sustained);
   //  We don't use modify_target here since wound penalties don't apply to damage resistance tests. -LS
   // strlcpy(rbuf, "Spell drain modify_target results: ", sizeof(rbuf));
