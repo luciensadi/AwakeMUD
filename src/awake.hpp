@@ -1210,7 +1210,7 @@ enum {
 
 // Grenade types. MUST start from -3 and go DOWN from there for attachment compat reasons.
 #define GRENADE_TYPE_EXPLOSIVE  -3
-#define GRENADE_TYPE_ANTI_MAGIC -4
+#define GRENADE_TYPE_FLASHBANG -4
 
 /* item types: used by obj_data.obj_flags.type_flag */
 

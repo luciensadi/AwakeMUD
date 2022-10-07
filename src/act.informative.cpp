@@ -2768,8 +2768,8 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       // Grenades second.
       else if (GET_WEAPON_ATTACK_TYPE(j) == WEAP_GRENADE) {
         switch (GET_WEAPON_GRENADE_TYPE(j)) {
-          case GRENADE_TYPE_ANTI_MAGIC:
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is an ^Wanti-magic grenade^n that uses the ^c%s^n skill to attack with.\r\n",
+          case GRENADE_TYPE_FLASHBANG:
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^Wflashbang grenade^n that uses the ^c%s^n skill to throw.\r\n",
                      skills[SKILL_THROWING_WEAPONS].name);
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Magically-active victims must roll against TN ^c%d^n to avoid spell degradation when hit by its blast.\r\n",
                      GET_WEAPON_POWER(j));

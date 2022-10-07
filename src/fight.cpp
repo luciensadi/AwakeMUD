@@ -5120,7 +5120,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
             case GRENADE_TYPE_EXPLOSIVE:
               explode_explosive_grenade(ch, weapon, scatter[temp2]);
               break;
-            case GRENADE_TYPE_ANTI_MAGIC:
+            case GRENADE_TYPE_FLASHBANG:
               explode_antimagic_grenade(ch, weapon, scatter[temp2]);
               break;
             default:
@@ -5136,7 +5136,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
       case GRENADE_TYPE_EXPLOSIVE:
         explode_explosive_grenade(ch, weapon, nextroom);
         break;
-      case GRENADE_TYPE_ANTI_MAGIC:
+      case GRENADE_TYPE_FLASHBANG:
         explode_antimagic_grenade(ch, weapon, nextroom);
         break;
       default:

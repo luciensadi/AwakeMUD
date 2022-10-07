@@ -1022,7 +1022,7 @@ void iedit_disp_val8_menu(struct descriptor_data * d)
           return;
         }
       } else if (GET_WEAPON_ATTACK_TYPE(OBJ) == WEAP_GRENADE) {
-        send_to_char("Is this an IPE (-3) or Anti-Magic (-4) grenade?: ", CH);
+        send_to_char("Is this an IPE (-3) or a Flashbang (-4) grenade?: ", CH);
       } else {
         send_to_char("Enter weapon focus rating (0 for no focus, up to 4): ", CH);
       }
@@ -2773,8 +2773,8 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
               }
             }
           } else if (GET_WEAPON_ATTACK_TYPE(OBJ) == WEAP_GRENADE) {
-            if (number != GRENADE_TYPE_EXPLOSIVE && number != GRENADE_TYPE_ANTI_MAGIC) {
-              send_to_char(CH, "You must enter either %d for explosive or %d for anti-magic: ", GRENADE_TYPE_EXPLOSIVE, GRENADE_TYPE_ANTI_MAGIC);
+            if (number != GRENADE_TYPE_EXPLOSIVE && number != GRENADE_TYPE_FLASHBANG) {
+              send_to_char(CH, "You must enter either %d for explosive or %d for flashbang: ", GRENADE_TYPE_EXPLOSIVE, GRENADE_TYPE_FLASHBANG);
               iedit_disp_val8_menu(d);
               return;
             }
