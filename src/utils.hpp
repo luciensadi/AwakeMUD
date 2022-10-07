@@ -879,9 +879,13 @@ bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struc
 #define GET_PART_RATING(part)                  (GET_OBJ_VAL((part), 1))
 #define GET_PART_TARGET_MPCP(part)             (GET_OBJ_VAL((part), 2))
 #define GET_PART_DESIGN_COMPLETION(part)       (GET_OBJ_VAL((part), 3)) //0 = done, -1 = required ?
+#define GET_PART_BUILD_TICKS_REMAINING(part)   (GET_OBJ_VAL((part), 4))
+#define GET_PART_DESIGN_SUCCESSES(part)        (GET_OBJ_VAL((part), 5))
 #define GET_PART_BUILDER_IDNUM(part)           (GET_OBJ_VAL((part), 7))
 #define GET_PART_PART_COST(part)               (GET_OBJ_VAL((part), 8))
 #define GET_PART_CHIP_COST(part)               (GET_OBJ_VAL((part), 9))
+#define GET_PART_INITIAL_BUILD_TICKS(part)     (GET_OBJ_VAL((part), 10))
+#define GET_PART_BUILD_SUCCESSES_ROLLED(part)  (GET_OBJ_TIMER((part)))
 
 // ITEM_WEAPON convenience defines
 #define GET_WEAPON_POWER(weapon)               (GET_OBJ_VAL((weapon), 0))

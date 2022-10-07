@@ -593,17 +593,17 @@ void part_design(struct char_data *ch, struct obj_data *part) {
     } else {
         int target = GET_PART_TARGET_MPCP(part)/2, skill = get_skill(ch, SKILL_CYBERTERM_DESIGN, target);
         GET_PART_DESIGN_COMPLETION(part) = GET_PART_TARGET_MPCP(part) * 2;
-        GET_OBJ_VAL(part, 5) = success_test(skill, target) << 1;
+        GET_PART_DESIGN_SUCCESSES(part) = success_test(skill, target) << 1;
         GET_PART_BUILDER_IDNUM(part) = GET_IDNUM(ch);
         if (get_and_deduct_one_deckbuilding_token_from_char(ch)) {
           send_to_char("A deckbuilding token fuzzes into digital static, greatly accelerating the design process.\r\n", ch);
           GET_PART_DESIGN_COMPLETION(part) = 1;
-          GET_OBJ_VAL(part, 5) = 100;
+          GET_PART_DESIGN_SUCCESSES(part) = MAX(GET_PART_DESIGN_SUCCESSES(part), 2);
         }
         if (access_level(ch, LVL_ADMIN)) {
           send_to_char("You use your admin powers to greatly accelerate the design process.\r\n", ch);
           GET_PART_DESIGN_COMPLETION(part) = 1;
-          GET_OBJ_VAL(part, 5) = 100;
+          GET_PART_DESIGN_SUCCESSES(part) = 100;
         }
         send_to_char(ch, "You begin to design %s.\r\n", GET_OBJ_NAME(part));
         AFF_FLAGS(ch).SetBit(AFF_PART_DESIGN);
@@ -759,7 +759,7 @@ ACMD(do_build) {
         send_to_char(ch, "%s is not designed for the same MPCP as %s.\r\n", capitalize(GET_OBJ_NAME(obj)), decapitalize_a_an(GET_OBJ_NAME(deck)));
     else {
         struct obj_data *workshop = NULL;
-        int kit_rating = 0, target = -GET_OBJ_VAL(obj, 5), duration = 0, skill = 0;
+        int kit_rating = 0, target = -GET_PART_DESIGN_SUCCESSES(obj), duration_in_hours = 0, skill = 0;
         if (has_kit(ch, TYPE_MICROTRONIC))
             kit_rating = TYPE_KIT;
         if ((workshop = find_workshop(ch, TYPE_MICROTRONIC)) && GET_OBJ_VAL(workshop, 0) > kit_rating)
@@ -870,78 +870,79 @@ ACMD(do_build) {
                 if (soft)
                     extract_obj(soft);
             }
+            #define WORKING_DAYS * 24  /* eventually, this will be 12: hours required per working day (8), with fudge factor to account for inability to track overtime penalties etc */
             switch (GET_OBJ_VAL(obj, 0)) {
             case PART_ACTIVE:
                 target += 4;
-                duration = GET_OBJ_VAL(obj, 1) / 200;
+                duration_in_hours = GET_PART_RATING(obj) / 200;
                 break;
             case PART_ASIST_HOT:
             case PART_ASIST_COLD:
-                target += GET_OBJ_VAL(obj, 2);
-                duration = GET_OBJ_VAL(obj, 2) * 24;
+                target += GET_PART_TARGET_MPCP(obj);
+                duration_in_hours = GET_PART_TARGET_MPCP(obj) * 1 WORKING_DAYS;
                 break;
             case PART_HARDENING:
-                target += GET_OBJ_VAL(obj, 2);
-                duration = GET_OBJ_VAL(obj, 2) * GET_OBJ_VAL(obj, 1) * 24;
+                target += GET_PART_TARGET_MPCP(obj);
+                duration_in_hours = GET_PART_TARGET_MPCP(obj) * GET_PART_RATING(obj) * 1 WORKING_DAYS;
                 break;
             case PART_ICCM:
                 target += 4;
-                duration = GET_OBJ_VAL(obj, 2) * 48;
+                duration_in_hours = GET_PART_TARGET_MPCP(obj) * 2 WORKING_DAYS;
                 break;
             case PART_ICON:
-                target += GET_OBJ_VAL(obj, 1);
-                duration = 1;
+                target += GET_PART_RATING(obj);
+                duration_in_hours = 1;
                 break;
             case PART_IO:
-                target += (int)(GET_OBJ_VAL(obj, 1) / 100);
-                duration = (int)(GET_OBJ_VAL(obj, 1) / 100) * 24;
+                target += (int)(GET_PART_RATING(obj) / 100);
+                duration_in_hours = (int)(GET_PART_RATING(obj) / 100) * 1 WORKING_DAYS;
                 break;
             case PART_MASER:
-                target += GET_OBJ_VAL(obj, 2);
-                duration = GET_OBJ_VAL(obj, 2) + 4;
+                target += GET_PART_TARGET_MPCP(obj);
+                duration_in_hours = GET_PART_TARGET_MPCP(obj) + 4;
                 break;
             case PART_MATRIX_INTERFACE:
             case PART_PORTS:
             case PART_SIGNAL_AMP:
                 target += 4;
-                duration = 1;
+                duration_in_hours = 1;
                 break;
             case PART_MPCP:
-                target += GET_OBJ_VAL(obj, 1);
-                duration = GET_OBJ_VAL(obj, 1);
+                target += GET_PART_RATING(obj);
+                duration_in_hours = GET_PART_RATING(obj);
                 break;
             case PART_BOD:
             case PART_SENSOR:
             case PART_MASKING:
             case PART_EVASION:
-                target += GET_OBJ_VAL(obj, 1);
-                duration = 1;
+                target += GET_PART_RATING(obj);
+                duration_in_hours = 1;
                 break;
             case PART_RAS_OVERRIDE:
-                target += GET_OBJ_VAL(obj, 2);
-                duration = GET_OBJ_VAL(obj, 2) * 24;
+                target += GET_PART_TARGET_MPCP(obj);
+                duration_in_hours = GET_PART_TARGET_MPCP(obj) * 1 WORKING_DAYS;
                 break;
             case PART_RESPONSE:
-                target += GET_OBJ_VAL(obj, 1) * 2;
-                duration = GET_OBJ_VAL(obj, 1) + GET_OBJ_VAL(obj, 2);
+                target += GET_PART_RATING(obj) * 2;
+                duration_in_hours = GET_PART_RATING(obj) + GET_PART_TARGET_MPCP(obj);
                 break;
             case PART_STORAGE:
                 target += 4;
-                duration = GET_OBJ_VAL(obj, 1) / 200;
+                duration_in_hours = GET_PART_RATING(obj) / 200;
                 break;
             case PART_CELLULAR:
             case PART_RADIO:
             case PART_MICROWAVE:
-                target += GET_OBJ_VAL(obj, 2);
-                duration = GET_OBJ_VAL(obj, 1) + GET_OBJ_VAL(obj, 2);
+                target += GET_PART_TARGET_MPCP(obj);
+                duration_in_hours = GET_PART_RATING(obj) + GET_PART_TARGET_MPCP(obj);
                 break;
             case PART_LASER:
             case PART_SATELLITE:
-                target += GET_OBJ_VAL(obj, 2);
-                duration = GET_OBJ_VAL(obj, 2) + 4;
+                target += GET_PART_TARGET_MPCP(obj);
+                duration_in_hours = GET_PART_TARGET_MPCP(obj) + 4;
                 break;
             }
-            duration *= 60;
+            int duration_in_minutes = duration_in_hours * 60;
             skill = get_skill(ch, SKILL_BR_COMPUTER, target);
             int success = success_test(skill, target);
             target = 0;
@@ -949,7 +950,7 @@ ACMD(do_build) {
             switch(GET_OBJ_VAL(obj, 0)) {
             case PART_ICCM:
             case PART_REALITY_FILTER:
-                target = GET_OBJ_VAL(obj, 2);
+                target = GET_PART_TARGET_MPCP(obj);
                 skill = SKILL_COMPUTER;
                 break;
             case PART_MASER:
@@ -963,7 +964,7 @@ ACMD(do_build) {
             case PART_SATELLITE:
             case PART_SIGNAL_AMP:
             case PART_CELLULAR:
-                target = GET_OBJ_VAL(obj, 1);
+                target = GET_PART_RATING(obj);
                 skill = SKILL_BR_ELECTRONICS;
                 break;
             }
@@ -974,26 +975,26 @@ ACMD(do_build) {
             }
             if (success < 1) {
                 success = srdice() + srdice();
-                GET_OBJ_TIMER(obj) = -1;
+                GET_PART_BUILD_SUCCESSES_ROLLED(obj) = -1;
             }
-            GET_OBJ_VAL(obj, 10) = GET_OBJ_VAL(obj, 4) = duration / success;
+            GET_PART_INITIAL_BUILD_TICKS(obj) = GET_PART_BUILD_TICKS_REMAINING(obj) = duration_in_minutes / success;
 
             if (get_and_deduct_one_deckbuilding_token_from_char(ch)) {
               send_to_char("A deckbuilding token fuzzes into digital static, greatly accelerating the build time.\r\n", ch);
-              GET_OBJ_VAL(obj, 10) = GET_OBJ_VAL(obj, 4) = 1;
-              GET_OBJ_TIMER(obj) = 0;
+              GET_PART_INITIAL_BUILD_TICKS(obj) = GET_PART_BUILD_TICKS_REMAINING(obj) = 1;
+              GET_PART_BUILD_SUCCESSES_ROLLED(obj) = 1;
             }
             else if (access_level(ch, LVL_ADMIN)) {
               send_to_char("You use your admin powers to greatly accelerate the build time.\r\n", ch);
-              GET_OBJ_VAL(obj, 10) = GET_OBJ_VAL(obj, 4) = 1;
-              GET_OBJ_TIMER(obj) = 0;
+              GET_PART_INITIAL_BUILD_TICKS(obj) = GET_PART_BUILD_TICKS_REMAINING(obj) = 1;
+              GET_PART_BUILD_SUCCESSES_ROLLED(obj) = 1;
             }
             send_to_char(ch, "You start building %s.\r\n", GET_OBJ_NAME(obj));
             ch->char_specials.programming = obj;
             obj->contains = deck;
             AFF_FLAGS(ch).SetBit(AFF_PART_BUILD);
-            if (!GET_OBJ_VAL(deck, 0))
-                GET_OBJ_VAL(deck, 0) = GET_OBJ_VAL(obj, 2);
+            if (!GET_CYBERDECK_MPCP(deck))
+                GET_CYBERDECK_MPCP(deck) = GET_PART_TARGET_MPCP(obj);
         }
     }
 }

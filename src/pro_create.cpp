@@ -473,8 +473,8 @@ void update_buildrepair(void)
     next = desc->next;
     if (CH && STATE(desc) == CON_PLAYING) {
       if (AFF_FLAGGED(desc->character, AFF_PART_BUILD)) {
-        if (--GET_OBJ_VAL(PROG, 4) < 1) {
-          if (GET_OBJ_TIMER(PROG) < 0) {
+        if (--GET_PART_BUILD_TICKS_REMAINING(PROG) < 1) {
+          if (GET_PART_BUILD_SUCCESSES_ROLLED(PROG) < 0) {
             send_to_char(desc->character, "You realise you have botched installing %s.\r\n", GET_OBJ_NAME(PROG));
             extract_obj(PROG);
           } else {
