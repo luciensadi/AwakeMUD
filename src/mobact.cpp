@@ -1208,7 +1208,7 @@ bool mobact_process_self_buff(struct char_data *ch) {
   }
 
   // Buff self, but only act one out of every 11 ticks (on average), and only if we're not going to put ourselves in a drain death loop.
-  if (GET_MENTAL(ch) >= 1000 && GET_PHYSICAL(ch) >= 1000) {
+  if (GET_MENTAL(ch) >= 1000 && GET_PHYSICAL(ch) >= 1000 && GET_MOBALERT(ch) != MALERT_ALARM) {
     bool imp_invis = IS_AFFECTED(ch, AFF_SPELLIMPINVIS) || affected_by_spell(ch, SPELL_IMP_INVIS);
     bool std_invis = IS_AFFECTED(ch, AFF_SPELLINVIS) || affected_by_spell(ch, SPELL_INVIS);
     int max_force = GET_MAG(ch) / 100;
