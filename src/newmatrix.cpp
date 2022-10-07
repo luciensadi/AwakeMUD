@@ -2639,20 +2639,31 @@ void matrix_update()
         }
         host.payreset = TRUE;
       } else {
-        for (int x = 0; x < 5; x++) {
-          if (host.stats[x][MTX_STAT_ENCRYPTED] != 0 && host.stats[x][MTX_STAT_ENCRYPTED] != 1) {
-            char warnbuf[1000];
-            snprintf(warnbuf, sizeof(warnbuf), "WARNING: %s mtx_stat_encrypted on %ld is %ld (must be 1 or 0)!",
-                     acifs_strings[x],
-                     host.vnum,
-                     host.stats[x][MTX_STAT_ENCRYPTED]);
-            mudlog(warnbuf, NULL, LOG_SYSLOG, TRUE);
-            host.stats[x][MTX_STAT_ENCRYPTED] = 0;
+        // See if there are any deckers in here.
+        for (struct matrix_icon *icon = host.icons; icon; icon = icon->next_in_host) {
+          if (!icon->number) {
+            decker = TRUE;
+            break;
           }
+        }
 
-          if (host.stats[x][MTX_STAT_SCRAMBLE_IC_RATING] && host.stats[x][MTX_STAT_ENCRYPTED] == 0) {
-            mudlog_vfprintf(NULL, LOG_GRIDLOG, "Host %ld's %s-subsystem has scramble-%ld and is not encrypted: re-encrypting.", host.vnum, mtx_subsystem_names[x], host.stats[x][MTX_STAT_SCRAMBLE_IC_RATING]);
-            host.stats[x][MTX_STAT_ENCRYPTED] = 1;
+        // We only reset subsystem encryption ratings if there are no deckers.
+        if (!decker) {
+          for (int x = 0; x < 5; x++) {
+            if (host.stats[x][MTX_STAT_ENCRYPTED] != 0 && host.stats[x][MTX_STAT_ENCRYPTED] != 1) {
+              char warnbuf[1000];
+              snprintf(warnbuf, sizeof(warnbuf), "WARNING: %s mtx_stat_encrypted on %ld is %ld (must be 1 or 0)!",
+                       acifs_strings[x],
+                       host.vnum,
+                       host.stats[x][MTX_STAT_ENCRYPTED]);
+              mudlog(warnbuf, NULL, LOG_SYSLOG, TRUE);
+              host.stats[x][MTX_STAT_ENCRYPTED] = 0;
+            }
+
+            if (host.stats[x][MTX_STAT_SCRAMBLE_IC_RATING] && host.stats[x][MTX_STAT_ENCRYPTED] == 0) {
+              mudlog_vfprintf(NULL, LOG_GRIDLOG, "Host %ld's %s-subsystem has scramble-%ld and is not encrypted: re-encrypting.", host.vnum, mtx_subsystem_names[x], host.stats[x][MTX_STAT_SCRAMBLE_IC_RATING]);
+              host.stats[x][MTX_STAT_ENCRYPTED] = 1;
+            }
           }
         }
       }
