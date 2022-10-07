@@ -4845,7 +4845,7 @@ void explode_antimagic_grenade(struct char_data *ch, struct obj_data *weapon, st
     char rbuf[1000];
     int tn = power;
 
-    snprintf(rbuf, sizeof(rbuf), "^yAnti-magic grenade eval for $N^y: %d initial TN; ", tn);
+    snprintf(rbuf, sizeof(rbuf), "^yFlashbang eval for $N^y: %d initial TN; ", tn);
 
     if (has_flare_compensation(victim)) {
       tn -= 4;
@@ -4877,10 +4877,10 @@ void explode_antimagic_grenade(struct char_data *ch, struct obj_data *weapon, st
     // Failed? Roll for each of their spells to see if they lose it.
     for (struct sustain_data *next, *sust = GET_SUSTAINED(victim); sust; sust = next) {
       next = sust->next;
-      // Only affect spells with cast-by records, since this means that this is the effect portion of the spell record pair.
-      if (sust->caster) {
+      // Only affect spells that are victim records, since this means that this is the effect portion of the spell record pair.
+      if (!sust->caster) {
         // House rule: Make an opposed WIL test. If net successes is negative, lose spell successes.
-        int grenade_tn = GET_WIL(victim); // TODO: this should be caster's willpower
+        int grenade_tn = sust->other ? GET_WIL(sust->other) : 1;
         int grenade_dice = power;
         int grenade_successes = success_test(grenade_dice, grenade_tn);
 
@@ -5050,9 +5050,6 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
     WAIT_STATE(ch, PULSE_VIOLENCE);
 
     temp = MAX(1, GET_SKILL(ch, SKILL_THROWING_WEAPONS));
-
-    // todo: add a delay to prevent NPCs from immediately re-casting spells (maybe no casting for 30s after getting hit by an anti-magic?)
-    // TODO: confirm with a mort that they don't get spell outputs in rolls
 
     if (!number(0, GRENADE_DEFECTIVE_CHECK_DIVISOR)) {
       send_to_room("A defective grenade lands on the floor.\r\n", nextroom);
