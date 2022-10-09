@@ -591,7 +591,7 @@ struct command_info cmd_info[] =
     { "exclaim"    , POS_LYING   , do_exclaim  , 0, 0, FALSE },
     { "extend"     , POS_SITTING , do_retract  , 0, 0, FALSE },
 
-    { "force"      , POS_SLEEPING, do_force    , LVL_CONSPIRATOR, 0, FALSE },
+    { "force"      , POS_SLEEPING, do_force    , LVL_EXECUTIVE, 0, FALSE },
     { "forceget"   , POS_SLEEPING, do_forceget , LVL_PRESIDENT, 0, FALSE },
     { "forceput"   , POS_SLEEPING, do_forceput , LVL_PRESIDENT, 0, FALSE },
     { "forget"     , POS_DEAD    , do_forget   , 0, 0, FALSE },
@@ -618,7 +618,7 @@ struct command_info cmd_info[] =
     { "hail"       , POS_STANDING, do_hail     , 0, 0, FALSE },
     { "hangup"     , POS_LYING   , do_phone    , 0, SCMD_HANGUP, FALSE },
     { "handbook"   , POS_DEAD    , do_gen_ps   , LVL_BUILDER, SCMD_HANDBOOK, FALSE },
-    { "hcontrol"   , POS_DEAD    , do_hcontrol , LVL_CONSPIRATOR, 0, FALSE },
+    { "hcontrol"   , POS_DEAD    , do_hcontrol , LVL_EXECUTIVE, 0, FALSE },
     { "heal"       , POS_STANDING, do_heal     , 0, 0, FALSE },
     { "hedit"      , POS_DEAD    , do_hedit    , LVL_BUILDER, 0, FALSE },
     { "helpedit"   , POS_DEAD    , do_helpedit , LVL_FIXER, 0, FALSE },
@@ -721,7 +721,7 @@ struct command_info cmd_info[] =
     { "patch"      , POS_LYING   , do_patch    , 0, 0, FALSE },
     { "page"       , POS_DEAD    , do_page     , LVL_ARCHITECT, 0, FALSE },
     { "pages"      , POS_DEAD    , do_switched_message_history, LVL_ARCHITECT, COMM_CHANNEL_PAGES, TRUE },
-    { "pardon"     , POS_DEAD    , do_wizutil  , LVL_CONSPIRATOR, SCMD_PARDON, FALSE },
+    { "pardon"     , POS_DEAD    , do_wizutil  , LVL_BUILDER, SCMD_PARDON, FALSE },
     { "perceive"   , POS_LYING   , do_astral   , 0, SCMD_PERCEIVE, FALSE },
     { "perfmon"    , POS_DEAD    , do_perfmon  , LVL_ADMIN, 0, FALSE },
     { "pgroup"     , POS_LYING   , do_pgroup   , 0, 0, FALSE },
@@ -3222,6 +3222,8 @@ void nanny(struct descriptor_data * d, char *arg)
       snprintf(buf, sizeof(buf), "%s (lev %d) has self-deleted.",
               GET_CHAR_NAME(d->character), GET_LEVEL(d->character));
       mudlog(buf, d->character, LOG_MISCLOG, TRUE);
+
+      extract_char(d->character);
 
       d->character = NULL;
       STATE(d) = CON_CLOSE;
