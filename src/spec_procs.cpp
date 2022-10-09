@@ -1571,7 +1571,7 @@ SPECIAL(adept_trainer)
 
           if (GET_KARMA(ch) >= KARMA_COST_FOR_KIPUP) {
             send_to_char("You drill with your teacher on how to rise quickly after a fall.\r\n", ch);
-            send_to_char("(OOC: You'll now automatically attempt to kip-up after falling!)\r\n", ch);
+            send_to_char("(OOC: You'll now automatically attempt to kip-up after being knocked down! You can TOGGLE AUTOKIPUP to configure this.)\r\n", ch);
 
             GET_KARMA(ch) -= KARMA_COST_FOR_KIPUP;
             PLR_FLAGS(ch).SetBit(PLR_PAID_FOR_KIPUP);
