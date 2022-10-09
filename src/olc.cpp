@@ -37,7 +37,7 @@ extern sh_int immort_start_room;
 extern sh_int frozen_start_room;
 extern vnum_t newbie_start_room;
 extern void char_from_room(struct char_data * ch);
-extern void write_mobs_to_disk(int zone);
+extern void write_mobs_to_disk(vnum_t zone);
 extern void write_objs_to_disk(vnum_t zone);
 extern void write_shops_to_disk(int zone);
 extern void write_world_to_disk(int);

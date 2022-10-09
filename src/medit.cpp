@@ -22,7 +22,7 @@
 #include "constants.hpp"
 #include "bullet_pants.hpp"
 
-void write_mobs_to_disk(int zone);
+void write_mobs_to_disk(vnum_t zone);
 
 // extern vars
 extern int calc_karma(struct char_data *ch, struct char_data *vict);
@@ -681,7 +681,7 @@ void medit_parse(struct descriptor_data *d, const char *arg)
 
         {
           #define UPDATE_VALUE(value) {(value) = ((value) >= d->edit_mob->nr ? (value) + 1 : (value));}
-          for (int zone = 0; zone <= top_of_zone_table; zone++) {
+          for (rnum_t zone = 0; zone <= top_of_zone_table; zone++) {
             for (int cmd_no = 0; cmd_no < zone_table[zone].num_cmds; cmd_no++) {
               switch (ZCMD.command) {
                 case 'S':
@@ -1670,22 +1670,22 @@ void medit_parse(struct descriptor_data *d, const char *arg)
   }
 }
 
-void write_mobs_to_disk(int zone)
+void write_mobs_to_disk(vnum_t zone_num)
 {
   int counter, realcounter;
   FILE *fp;
   struct char_data *mob;
-  zone = real_zone(zone);
+  rnum_t znum = real_zone(zone_num);
   int i;
 
   // ideally, this would just fill a VTable with vals...maybe one day
 
-  snprintf(buf, sizeof(buf), "%s/%d.mob", MOB_PREFIX, zone_table[zone].number);
+  snprintf(buf, sizeof(buf), "%s/%d.mob", MOB_PREFIX, zone_table[znum].number);
   fp = fopen(buf, "w+");
 
   /* start running through all mobiles in this zone */
-  for (counter = zone_table[zone].number * 100;
-       counter <= zone_table[zone].top;
+  for (counter = zone_table[znum].number * 100;
+       counter <= zone_table[znum].top;
        counter++) {
     /* write mobile to disk */
     realcounter = real_mobile(counter);
