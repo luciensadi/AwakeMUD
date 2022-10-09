@@ -2952,9 +2952,9 @@ struct obj_data *create_credstick(struct char_data *ch, int amount)
 
   if (amount < 5000)
     num = 100;     // plastic credstick
-  else if (amount < 25000)
+  else if (amount < 20000)
     num = 101;     // steel credstick
-  else if (amount < 50000)
+  else if (amount < 40000)
     num = 102;     // silver credstick
   else if (amount < 150000)
     num = 103;     // titanium credstick
