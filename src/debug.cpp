@@ -27,6 +27,9 @@ extern Playergroup *loaded_playergroups;
 
 extern void _put_char_in_withdrawal(struct char_data *ch, int drug_id, bool is_guided);
 
+extern void write_objs_to_disk(vnum_t zonenum);
+extern void write_mobs_to_disk(vnum_t zonenum);
+
 // We're looking to verify that everything is kosher. Validate canaries, etc.
 void verify_data(struct char_data *ch, const char *line, int cmd, int subcmd, const char *section) {
   // Called by a character doing something.
@@ -114,6 +117,33 @@ ACMD(do_debug) {
     return;
   }
 
+  if (strn_cmp(arg1, "set-perception", strlen(arg1)) == 0) {
+    send_to_char(ch, "Alright, setting perception flag on every magical mob that's not a spirit or elemental.\r\n");
+    for (rnum_t rnum = 0; rnum <= top_of_mobt; rnum++) {
+      struct char_data *mob = &mob_proto[rnum];
+
+      // Skip non-magical mobs.
+      if (GET_REAL_MAG(mob) <= 0)
+        continue;
+
+      // Skip spirits and elementals.
+      if (IS_ANY_ELEMENTAL(mob) || IS_SPIRIT(mob))
+        continue;
+
+      // If they are dual, remove that flag and replace it with perception.
+      if (MOB_FLAGGED(mob, MOB_DUAL_NATURE)) {
+        MOB_FLAGS(mob).RemoveBit(MOB_DUAL_NATURE);
+        MOB_FLAGS(mob).SetBit(MOB_PERCEIVING);
+      }
+    }
+
+    for (rnum_t idx = 0; idx <= top_of_zone_table; idx++) {
+      write_mobs_to_disk(zone_table[idx].number);
+    }
+    
+    return;
+  }
+
   if (strn_cmp(arg1, "eqdam", strlen(arg1)) == 0) {
     send_to_char(ch, "OK, destroying your equipment.\r\n");
     extern void damage_obj(struct char_data *ch, struct obj_data *obj, int power, int type);
@@ -164,8 +194,6 @@ ACMD(do_debug) {
   }
 
   if (!str_cmp(arg1, "unfuckdrinks") && access_level(ch, LVL_PRESIDENT) && !drinks_are_unfucked) {
-    extern void write_objs_to_disk(vnum_t zonenum);
-
     drinks_are_unfucked = TRUE;
     char buf[500];
 
