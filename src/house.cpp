@@ -675,7 +675,7 @@ SPECIAL(landlord_spec)
   char buf3[MAX_STRING_LENGTH];
 
   if (!(CMD_IS("list") || CMD_IS("retrieve") || CMD_IS("lease")
-        || CMD_IS("leave") || CMD_IS("pay") || CMD_IS("status")))
+        || CMD_IS("leave") || CMD_IS("break") || CMD_IS("pay") || CMD_IS("status")))
     return FALSE;
 
   if (!CAN_SEE(recep, ch)) {
@@ -786,7 +786,7 @@ SPECIAL(landlord_spec)
       House_save_control();
     }
     return TRUE;
-  } else if (CMD_IS("leave")) {
+  } else if (CMD_IS("leave") || CMD_IS("break")) {
     if (!*arg) {
       do_say(recep, "Which room would you like to leave?", 0, 0);
       return TRUE;
