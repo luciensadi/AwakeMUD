@@ -2319,43 +2319,44 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
               send_to_char("Size must be greater than 0. File size in megapulses: ", CH);
               return;
             }
-          }
-          switch (GET_OBJ_VAL(OBJ, 1)) {
-            case 0:
-              if (number < 1 || number > 15) {
-                send_to_char("MPCP must be between 1 and 15.  MPCP Rating: ", CH);
-                return;
-              }
-              break;
-            case 1:
-              if (number < 1 || number > 1000) {
-                send_to_char("Invalid value!  Active memory increase: ", CH);
-                return;
-              }
-              break;
-            case 2:
-              if (number < 1 || number > 20000) {
-                send_to_char("Invalid value!  Storage memory increase: ", CH);
-                return;
-              }
-              break;
-            case 3:
-              if (number < 1 || number > 100) {
-                send_to_char("Invalid value!  Load speed increase: ", CH);
-                return;
-              }
-              break;
-            case 4:
-              if (number < 1 || number > 50) {
-                send_to_char("Invalid value!  I/O speed increase: ", CH);
-                return;
-              }
-              break;
-            case 5:
-              if (number < 1 || number > 3) {
-                send_to_char("Values must range from 1 to 3.  Reaction increase level: ", CH);
-                return;
-              }
+          } else {
+            switch (GET_OBJ_VAL(OBJ, 1)) {
+              case 0:
+                if (number < 1 || number > 15) {
+                  send_to_char("MPCP must be between 1 and 15.  MPCP Rating: ", CH);
+                  return;
+                }
+                break;
+              case 1:
+                if (number < 1 || number > 1000) {
+                  send_to_char("Invalid value!  Active memory increase: ", CH);
+                  return;
+                }
+                break;
+              case 2:
+                if (number < 1 || number > 20000) {
+                  send_to_char("Invalid value!  Storage memory increase: ", CH);
+                  return;
+                }
+                break;
+              case 3:
+                if (number < 1 || number > 100) {
+                  send_to_char("Invalid value!  Load speed increase: ", CH);
+                  return;
+                }
+                break;
+              case 4:
+                if (number < 1 || number > 50) {
+                  send_to_char("Invalid value!  I/O speed increase: ", CH);
+                  return;
+                }
+                break;
+              case 5:
+                if (number < 1 || number > 3) {
+                  send_to_char("Values must range from 1 to 3.  Reaction increase level: ", CH);
+                  return;
+                }
+            }
           }
           break;
         case ITEM_GUN_ACCESSORY:
