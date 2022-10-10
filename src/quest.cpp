@@ -2301,6 +2301,18 @@ void qedit_disp_menu(struct descriptor_data *d)
   d->edit_mode = QEDIT_MAIN_MENU;
 }
 
+#define SET_QUEST_EMOTE_IF_ARG_HAS_CONTENTS(emote_to_set) {  \
+  delete [] emote_to_set;                                    \
+  if (*arg) {                                                \
+    char arg_mutable[MAX_STRING_LENGTH];                     \
+    strlcpy(arg_mutable, arg, sizeof(arg_mutable));          \
+    delete_doubledollar(arg_mutable);                        \
+    emote_to_set = str_dup(arg_mutable);                     \
+  } else {                                                   \
+    emote_to_set = NULL;                                     \
+  }                                                          \
+}
+
 void qedit_parse(struct descriptor_data *d, const char *arg)
 {
   int number;
@@ -3119,26 +3131,12 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
     qedit_disp_menu(d);
     break;
   case QEDIT_INTRO_EMOTE:
-    {
-      if (QUEST->intro_emote)
-        delete [] QUEST->intro_emote;
-      char arg_mutable[MAX_STRING_LENGTH];
-      strlcpy(arg_mutable, arg, sizeof(arg_mutable));
-      delete_doubledollar(arg_mutable);
-      QUEST->intro_emote = str_dup(arg_mutable);
-      qedit_disp_menu(d);
-    }
+    SET_QUEST_EMOTE_IF_ARG_HAS_CONTENTS(QUEST->intro_emote);
+    qedit_disp_menu(d);
     break;
   case QEDIT_DECLINE_EMOTE:
-    {
-      if (QUEST->decline_emote)
-        delete [] QUEST->decline_emote;
-      char arg_mutable[MAX_STRING_LENGTH];
-      strlcpy(arg_mutable, arg, sizeof(arg_mutable));
-      delete_doubledollar(arg_mutable);
-      QUEST->decline_emote = str_dup(arg_mutable);
-      qedit_disp_menu(d);
-    }
+    SET_QUEST_EMOTE_IF_ARG_HAS_CONTENTS(QUEST->decline_emote);
+    qedit_disp_menu(d);
     break;
   case QEDIT_DECLINE:
     if (QUEST->decline)
@@ -3161,15 +3159,8 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
     qedit_disp_menu(d);
     break;
   case QEDIT_QUIT_EMOTE:
-    {
-      if (QUEST->quit_emote)
-        delete [] QUEST->quit_emote;
-      char arg_mutable[MAX_STRING_LENGTH];
-      strlcpy(arg_mutable, arg, sizeof(arg_mutable));
-      delete_doubledollar(arg_mutable);
-      QUEST->quit_emote = str_dup(arg_mutable);
-      qedit_disp_menu(d);
-    }
+    SET_QUEST_EMOTE_IF_ARG_HAS_CONTENTS(QUEST->quit_emote);
+    qedit_disp_menu(d);
     break;
   case QEDIT_FINISH:
     if (QUEST->finish)
@@ -3178,15 +3169,8 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
     qedit_disp_menu(d);
     break;
   case QEDIT_FINISH_EMOTE:
-    {
-      if (QUEST->finish_emote)
-        delete [] QUEST->finish_emote;
-      char arg_mutable[MAX_STRING_LENGTH];
-      strlcpy(arg_mutable, arg, sizeof(arg_mutable));
-      delete_doubledollar(arg_mutable);
-      QUEST->finish_emote = str_dup(arg_mutable);
-      qedit_disp_menu(d);
-    }
+    SET_QUEST_EMOTE_IF_ARG_HAS_CONTENTS(QUEST->finish_emote);
+    qedit_disp_menu(d);
     break;
   case QEDIT_INFO:
     break;               // we should never get here
