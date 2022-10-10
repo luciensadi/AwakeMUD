@@ -807,7 +807,7 @@ void display_emotes_for_quest(struct char_data *johnson, emote_vector_t *vec, st
   display_single_emote_for_quest(johnson, vec->at(pos), target);
 
   // Let them know there's more to come.
-  if (GET_SPARE1(johnson) >= 0 && PRF_FLAGGED(target, PRF_SEE_TIPS)) {
+  if (GET_SPARE1(johnson) >= 0) {
     send_to_char(target, "^L(%s is still acting...)^n\r\n", GET_CHAR_NAME(johnson));
   }
 }
