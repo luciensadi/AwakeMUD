@@ -7117,7 +7117,7 @@ int audit_zone_objects_(struct char_data *ch, int zone_num, bool verbose) {
         break;
       // Everything else: warn about !TAKE.
       default:
-        if (GET_OBJ_WEAR(obj).IsSet(ITEM_WEAR_TAKE)) {
+        if (!GET_OBJ_WEAR(obj).IsSet(ITEM_WEAR_TAKE)) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - cannot be picked up if dropped^n.\r\n");
           printed = TRUE;
           issues++;
