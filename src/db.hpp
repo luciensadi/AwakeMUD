@@ -95,6 +95,7 @@ void    free_room(struct room_data *room);
 long     real_object(long virt);
 struct obj_data *read_object(int nr, int type);
 int     vnum_object(char *searchname, struct char_data *ch);
+int     vnum_room(char *searchname, struct char_data *ch);
 
 void free_veh(struct veh_data *veh);
 void clear_vehicle(struct veh_data *veh);

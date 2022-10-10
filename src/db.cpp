@@ -3456,6 +3456,29 @@ int vnum_object(char *searchname, struct char_data * ch)
   return (found);
 }
 
+int vnum_room(char *searchname, struct char_data *ch) {
+  int nr, found = 0;
+  char arg1[MAX_STRING_LENGTH];
+  char arg2[MAX_STRING_LENGTH];
+
+  two_arguments(searchname, arg1, arg2);
+
+  for (nr = 0; nr <= top_of_world; nr++)
+  {
+    struct room_data *room = &world[nr];
+
+    bool is_name = isname(searchname, get_string_after_color_code_removal(GET_ROOM_NAME(room), NULL));
+
+    if (is_name) {
+      send_to_char(ch, "%3d. [%6ld] %s\r\n",
+                       ++found,
+                       GET_ROOM_VNUM(room),
+                       GET_ROOM_NAME(room));
+    }
+  }
+  return (found);
+}
+
 
 struct veh_data *read_vehicle(int nr, int type)
 {

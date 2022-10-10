@@ -980,8 +980,8 @@ ACMD(do_vnum)
   argument = one_argument(argument, buf);
   strcpy(buf2, argument);
 
-  if (!*buf || !*buf2 || (!is_abbrev(buf, "mob") && !is_abbrev(buf, "obj") && !is_abbrev(buf, "veh"))) {
-    send_to_char("Usage: vnum { obj | mob | veh } <name>\r\n", ch);
+  if (!*buf || !*buf2 || (!is_abbrev(buf, "mob") && !is_abbrev(buf, "obj") && !is_abbrev(buf, "veh") && !is_abbrev(buf, "room"))) {
+    send_to_char("Usage: vnum { obj | mob | veh | room } <name>\r\n", ch);
     return;
   }
   if (is_abbrev(buf, "veh"))
@@ -995,6 +995,10 @@ ACMD(do_vnum)
   if (is_abbrev(buf, "obj"))
     if (!vnum_object(buf2, ch))
       send_to_char("No objects by that name.\r\n", ch);
+
+  if (is_abbrev(buf, "room"))
+    if (!vnum_room(buf2, ch))
+      send_to_char("No rooms by that name.\r\n", ch);
 }
 
 void do_stat_room(struct char_data * ch)
