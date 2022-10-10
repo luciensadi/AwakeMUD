@@ -3456,12 +3456,54 @@ int vnum_object(char *searchname, struct char_data * ch)
   return (found);
 }
 
+int vnum_room_samename(struct char_data *ch) {
+  int found = 0;
+  std::unordered_map<std::string, std::vector<vnum_t>> seen_names = {};
+
+  send_to_char(ch, "Looking for connected rooms that share the same name...\r\n");
+
+  for (rnum_t nr = 0; nr <= top_of_world; nr++) {
+    struct room_data *room = &world[nr];
+
+    if (vnum_from_non_connected_zone(GET_ROOM_VNUM(room)))
+      continue;
+
+    std::string string_name = GET_ROOM_NAME(room);
+
+    // It wasn't there, add it.
+    auto iterator = seen_names.find(string_name);
+    if (iterator == seen_names.end()) {
+      seen_names.emplace(string_name, std::vector<vnum_t> {GET_ROOM_VNUM(room)});
+    } else {
+      iterator->second.emplace_back(GET_ROOM_VNUM(room));
+    }
+  }
+
+  for (auto iterator : seen_names) {
+    if (iterator.second.size() > 1) {
+      send_to_char(ch, "%3d. '^c%s^n' is shared among ", ++found, iterator.first.c_str());
+
+      bool printed_yet = FALSE;
+      for (auto vnum_it : iterator.second) {
+        send_to_char(ch, "%s^c%ld^n", printed_yet ? ", " : "", vnum_it);
+        printed_yet = TRUE;
+      }
+      send_to_char("\r\n", ch);
+    }
+  }
+
+  return found;
+}
+
 int vnum_room(char *searchname, struct char_data *ch) {
   int nr, found = 0;
   char arg1[MAX_STRING_LENGTH];
   char arg2[MAX_STRING_LENGTH];
 
   two_arguments(searchname, arg1, arg2);
+
+  if (!strcmp(arg1, "samename"))
+    return vnum_room_samename(ch);
 
   for (nr = 0; nr <= top_of_world; nr++)
   {

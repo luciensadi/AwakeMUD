@@ -117,6 +117,33 @@ ACMD(do_debug) {
     return;
   }
 
+  if (strn_cmp(arg1, "std-map", strlen(arg1)) == 0) {
+    std::unordered_map<std::string, bool> seen_names = {};
+
+    const char *first_a = str_dup("first");
+    const char *first_b = str_dup("first");
+    const char *second = "second";
+
+    std::string str_a = first_a;
+    std::string str_b = first_b;
+    std::string str_s = second;
+
+    seen_names.emplace(str_a, TRUE);
+    seen_names.emplace(str_b, TRUE);
+    seen_names.emplace(second, TRUE);
+
+    send_to_char(ch, "After emplacement, map has %d elements. first_a is%s in it, first_b is%s in it, second is%s in it.\r\n",
+                     seen_names.size(),
+                     seen_names.find(first_a) == seen_names.end() ? " NOT" : "",
+                     seen_names.find(first_b) == seen_names.end() ? " NOT" : "",
+                     seen_names.find(second) == seen_names.end() ? " NOT" : ""
+                   );
+
+    delete [] first_a;
+    delete [] first_b;
+    return;
+  }
+
   if (strn_cmp(arg1, "set-perception", strlen(arg1)) == 0) {
     send_to_char(ch, "Alright, setting perception flag on every magical mob that's not a spirit or elemental.\r\n");
     for (rnum_t rnum = 0; rnum <= top_of_mobt; rnum++) {
