@@ -462,7 +462,7 @@ void show_veh_to_char(struct veh_data * vehicle, struct char_data * ch)
         break;
     }
     if (vehicle->towing) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", towing %s", decapitalize_a_an(veh_name));
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", towing %s", GET_VEH_NAME(vehicle->towing));
     }
     strlcat(buf, ".", sizeof(buf));
   }
