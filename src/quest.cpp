@@ -918,6 +918,11 @@ SPECIAL(johnson)
   bool need_to_act = FALSE;
   bool is_sayto = CMD_IS("sayto") || CMD_IS("\"");
 
+  // If there's an astral state mismatch, bail out.
+  if ((IS_ASTRAL(johnson) && !SEES_ASTRAL(ch)) || (IS_ASTRAL(ch) && !SEES_ASTRAL(johnson))) {
+    return FALSE;
+  }
+
   if (is_sayto) {
     // Do some really janky stuff: copy-paste target finding logic from sayto and see if they're talking to me.
     char mangled_argument[MAX_INPUT_LENGTH + 1];
