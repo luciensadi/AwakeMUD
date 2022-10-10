@@ -123,24 +123,29 @@ ACMD(do_debug) {
       struct char_data *mob = &mob_proto[rnum];
 
       // Skip non-magical mobs.
-      if (GET_REAL_MAG(mob) <= 0)
+      if (GET_MAG(mob) <= 0) {
         continue;
+      }
 
       // Skip spirits and elementals.
-      if (IS_ANY_ELEMENTAL(mob) || IS_SPIRIT(mob))
+      if (IS_ANY_ELEMENTAL(mob) || IS_SPIRIT(mob)) {
         continue;
+      }
 
       // If they are dual, remove that flag and replace it with perception.
       if (MOB_FLAGGED(mob, MOB_DUAL_NATURE)) {
+        send_to_char(ch, "^GSet %s (%ld) to perceive.^n\r\n", GET_CHAR_NAME(mob), GET_MOB_VNUM(mob));
         MOB_FLAGS(mob).RemoveBit(MOB_DUAL_NATURE);
         MOB_FLAGS(mob).SetBit(MOB_PERCEIVING);
+      } else {
+        send_to_char(ch, "^YSkip %s (%ld): not dual^n\r\n", GET_CHAR_NAME(mob), GET_MOB_VNUM(mob));
       }
     }
 
     for (rnum_t idx = 0; idx <= top_of_zone_table; idx++) {
       write_mobs_to_disk(zone_table[idx].number);
     }
-    
+
     return;
   }
 
