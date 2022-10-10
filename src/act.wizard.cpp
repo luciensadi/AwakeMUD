@@ -7101,11 +7101,28 @@ int audit_zone_objects_(struct char_data *ch, int zone_num, bool verbose) {
       issues++;
     }
 
-    // Flag objects that can't be picked up-- except fountains, which are often flagged as such.
-    if (GET_OBJ_TYPE(obj) != ITEM_FOUNTAIN && !GET_OBJ_WEAR(obj).IsSet(ITEM_WEAR_TAKE)) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - cannot be picked up if dropped^n.\r\n");
-      printed = TRUE;
-      issues++;
+    // Flag objects that can't be picked up, other than the ones that we generally expect to be non-gettable.
+    switch (GET_OBJ_TYPE(obj)) {
+      // Fountains and graffiti should not be gettable.
+      case ITEM_FOUNTAIN:
+      case ITEM_GRAFFITI:
+        if (GET_OBJ_WEAR(obj).IsSet(ITEM_WEAR_TAKE)) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - CAN be picked up if dropped (should this be !TAKE?)^n.\r\n");
+          printed = TRUE;
+          issues++;
+        }
+        break;
+      // Workshops can be either, we don't care.
+      case ITEM_WORKSHOP:
+        break;
+      // Everything else: warn about !TAKE.
+      default:
+        if (GET_OBJ_WEAR(obj).IsSet(ITEM_WEAR_TAKE)) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - cannot be picked up if dropped^n.\r\n");
+          printed = TRUE;
+          issues++;
+        }
+        break;
     }
 
     if (!obj->text.name || !*obj->text.name || !strcmp(obj->text.name, STRING_OBJ_SDESC_UNFINISHED)) {
