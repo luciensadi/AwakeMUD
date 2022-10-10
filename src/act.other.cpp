@@ -3437,6 +3437,7 @@ ACMD(do_assense)
             case CYB_DERMALSHEATHING:
             case CYB_MOVEBYWIRE:
             case CYB_MUSCLEREP:
+            case CYB_ARMS:
               locs[1] = 1;
               break;
             case CYB_FINGERTIP:
@@ -3449,6 +3450,7 @@ ACMD(do_assense)
               break;
             case CYB_FOOTANCHOR:
             case CYB_HYDRAULICJACK:
+            case CYB_LEGS:
               locs[3] = 1;
               break;
             }
@@ -3484,7 +3486,7 @@ ACMD(do_assense)
               strlcat(buf, " and", sizeof(buf));
           }
           if (locs[3])
-            strlcat(buf, " feet", sizeof(buf));
+            strlcat(buf, " legs", sizeof(buf));
         }
         strlcat(buf, ".\r\n", sizeof(buf));
       } else {
