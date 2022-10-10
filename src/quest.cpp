@@ -2230,10 +2230,16 @@ void qedit_disp_menu(struct descriptor_data *d)
   send_to_char(CH, "6) Item objective menu\r\n");
   send_to_char(CH, "7) Mobile objective menu\r\n");
   send_to_char(CH, "\r\n");
-  send_to_char(CH, "8a) Intro speech%s:      %s%s%s\r\n", QUEST->intro_emote ? " (overridden by emotes)" : "", CCCYN(CH, C_CMP), QUEST->intro, CCNRM(CH, C_CMP));
+  send_to_char(CH, "8a) Intro speech:      %s%s%s\r\n",
+                    CCCYN(CH, C_CMP),
+                    QUEST->intro_emote ? "<overridden by emotes>" : QUEST->intro,
+                    CCNRM(CH, C_CMP));
   send_to_char(CH, "8b) Intro emote:       %s%s%s\r\n", CCCYN(CH, C_CMP), QUEST->intro_emote ? QUEST->intro_emote : "<not set>", CCNRM(CH, C_CMP));
   send_to_char(CH, "\r\n");
-  send_to_char(CH, "9a) Decline speech%s:    %s%s%s\r\n", QUEST->decline_emote ? " (overridden by emotes)" : "", CCCYN(CH, C_CMP), QUEST->decline, CCNRM(CH, C_CMP));
+  send_to_char(CH, "9a) Decline speech:    %s%s%s\r\n",
+                   CCCYN(CH, C_CMP),
+                   QUEST->decline_emote ?  "<overridden by emotes>" : QUEST->decline,
+                   CCNRM(CH, C_CMP));
   send_to_char(CH, "9b) Decline emote:     %s%s%s\r\n", CCCYN(CH, C_CMP), QUEST->decline_emote ? QUEST->decline_emote : "<not set>", CCNRM(CH, C_CMP));
   send_to_char(CH, "\r\n");
 #ifdef USE_QUEST_LOCATION_CODE
@@ -2241,13 +2247,19 @@ void qedit_disp_menu(struct descriptor_data *d)
                QUEST->decline, CCNRM(CH, C_CMP));
   send_to_char(CH, "\r\n");
 #endif
-  send_to_char(CH, "aa) Quit speech%s:       %s%s%s\r\n", QUEST->quit_emote ? " (overridden by emotes)" : "", CCCYN(CH, C_CMP), QUEST->quit, CCNRM(CH, C_CMP));
+  send_to_char(CH, "aa) Quit speech:       %s%s%s\r\n",
+                   CCCYN(CH, C_CMP),
+                   QUEST->quit_emote ? "<overridden by emotes>" : QUEST->quit,
+                   CCNRM(CH, C_CMP));
   send_to_char(CH, "ab) Quit emotes:       %s%s%s\r\n", CCCYN(CH, C_CMP), QUEST->quit_emote ? QUEST->quit_emote : "<not set>", CCNRM(CH, C_CMP));
   send_to_char(CH, "\r\n");
-  send_to_char(CH, "ba) Completion speech%s: %s%s%s\r\n", QUEST->finish_emote ? " (overridden by emotes)" : "", CCCYN(CH, C_CMP), QUEST->finish, CCNRM(CH, C_CMP));
+  send_to_char(CH, "ba) Completion speech: %s%s%s\r\n",
+                   CCCYN(CH, C_CMP),
+                   QUEST->finish_emote ? "<overridden by emotes>" : QUEST->finish,
+                   CCNRM(CH, C_CMP));
   send_to_char(CH, "bb) Completion emotes: %s%s%s\r\n", CCCYN(CH, C_CMP), QUEST->finish_emote ? QUEST->finish_emote : "<not set>", CCNRM(CH, C_CMP));
   send_to_char(CH, "\r\n");
-  send_to_char(CH, "ca) Accepted text (%s):\r\n%s%s%s\r\n\r\n", QUEST->info_emotes && !QUEST->info_emotes->empty() ? "emotes set: recap only" : "speech/recap", CCCYN(CH, C_CMP), QUEST->info, CCNRM(CH, C_CMP));
+  send_to_char(CH, "ca) Accepted text (%s):\r\n%s%s%s\r\n\r\n", QUEST->info_emotes && !QUEST->info_emotes->empty() ? "emotes set: this is recap only" : "speech and recap", CCCYN(CH, C_CMP), QUEST->info, CCNRM(CH, C_CMP));
   send_to_char(CH, "cb) Accepted emotes (overrides speech if set):  %s%s%s\r\n", CCCYN(CH, C_CMP), (!QUEST->info_emotes || QUEST->info_emotes->empty()) ? "<not set>" : "<set>", CCNRM(CH, C_CMP));
   send_to_char(CH, "\r\n");
   /*
