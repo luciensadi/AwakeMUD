@@ -1434,15 +1434,19 @@ int make_prompt(struct descriptor_data * d)
               snprintf(str, sizeof(str), "%d", GET_REFLECT(d->character));
               break;
             case 'v':
-              if (GET_REAL_LEVEL(d->character) >= LVL_BUILDER) {
+              {
                 struct room_data *room = get_ch_in_room(d->character);
-                if (room)
+
+                if (!room) {
+                  strlcpy(str, "@v", sizeof(str));
+                } else if (GET_REAL_LEVEL(d->character) >= LVL_BUILDER || PLR_FLAGGED(d->character, PLR_PAID_FOR_VNUMS)) {
                   snprintf(str, sizeof(str), "%ld", room->number);
-                else
-                  strlcpy(str, "(fuck if I know mate)", sizeof(str));
+                } else if (GET_REAL_LEVEL(d->character) <= LVL_MORTAL) {
+                  strlcpy(str, "^WHELP SYSPOINTS^n", sizeof(str));
+                } else {
+                  strlcpy(str, "@v", sizeof(str));
+                }
               }
-              else
-                strcpy(str, "@v");
               break;
             case 'w':
               snprintf(str, sizeof(str), "%d", GET_INVIS_LEV(d->character));

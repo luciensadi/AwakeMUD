@@ -329,7 +329,8 @@ enum {
 #define PLR_SITE_HIDDEN                     47 /* For staff who really don't want people knowing who their alt is. */
 #define PLR_ENABLED_DRUGS                   48
 #define PLR_SENT_DOCWAGON_PLAYER_ALERT      49
-#define PLR_MAX                             50
+#define PLR_PAID_FOR_VNUMS                  50
+#define PLR_MAX                             51
 // Adding something here? Add it to constants.cpp's player_bits too.
 
 

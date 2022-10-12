@@ -499,6 +499,7 @@ const char *player_bits[] =
     "SITE_HIDDEN",
     "ENABLED_DRUGS",
     "SENT_DOCWAGON",
+    "PAID_FOR_VNUMS",
     "\n"
   };
 

@@ -4812,6 +4812,35 @@ ACMD(do_syspoints) {
       return;
     }
 
+    if (is_abbrev(arg, "vnums")) {
+      // Already set.
+      if (PLR_FLAGGED(ch, PLR_PAID_FOR_VNUMS)) {
+        send_to_char("You've already purchased the ability to see room vnums! You can add them to your prompt with the ^W@v^n symbol.\r\n", ch);
+        return;
+      }
+
+      // Can they afford it?
+      if (GET_SYSTEM_POINTS(ch) >= SYSP_VNUMS_COST) {
+        // Have they entered the confirmation command?
+        if (is_abbrev(buf, "confirm")) {
+          GET_SYSTEM_POINTS(ch) -= SYSP_VNUMS_COST;
+          send_to_char(ch, "Congratulations, you can now see room vnums in your prompt! Just add the ^W@v^n symbol to it to begin. %d syspoints have been deducted from your total.\r\n", SYSP_VNUMS_COST);
+          PLR_FLAGS(ch).SetBit(PLR_PAID_FOR_VNUMS);
+          mudlog("Purchased vnums with syspoints.", ch, LOG_SYSLOG, TRUE);
+          playerDB.SaveChar(ch);
+          return;
+        }
+
+        // They can afford it, but didn't use the confirm form.
+        send_to_char(ch, "You can spend %d syspoints to purchase the ability to see room vnums. Type ^WSYSPOINTS VNUMS CONFIRM^n to do so.\r\n", SYSP_VNUMS_COST);
+        return;
+      }
+
+      // Too broke.
+      send_to_char(ch, "That costs %d syspoints, and you only have %d.\r\n", SYSP_VNUMS_COST, GET_SYSTEM_POINTS(ch));
+      return;
+    }
+
     send_to_char(ch, "'%s' is not a valid mode. See ^WHELP SYSPOINTS^n for command syntax.\r\n", arg);
     return;
   }
