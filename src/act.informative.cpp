@@ -5115,7 +5115,7 @@ ACMD(do_who)
 
       if (tch->in_room
           && !IS_SENATOR(tch)
-          && ROOM_FLAGGED(tch->in_room, ROOM_ENCOURAGE_CONGREGATION)
+          && char_is_in_social_room(tch)
           && CAN_SEE(ch, tch)
           && !IS_IGNORING(tch, is_blocking_where_visibility_for, ch)) {
         num_in_socialization_rooms++;
@@ -5569,7 +5569,7 @@ void perform_mortal_where(struct char_data * ch, char *arg)
       struct char_data *i = (d->original ? d->original : d->character);
 
       // Skip them if they aren't in a social-bonus room.
-      if (!i || !i->in_room || !ROOM_FLAGGED(i->in_room, ROOM_ENCOURAGE_CONGREGATION))
+      if (!i || !char_is_in_social_room(i))
         continue;
 
       // Skip them if you can't see them for various reasons.
@@ -5613,7 +5613,7 @@ void perform_mortal_where(struct char_data * ch, char *arg)
       send_to_char(")\r\n", ch);
     }
 
-    if (ch->in_room && ROOM_FLAGGED(ch->in_room, ROOM_ENCOURAGE_CONGREGATION)) {
+    if (char_is_in_social_room(ch)) {
       GET_PLAYER_WHERE_COMMANDS(ch) = 0;
     } else if ((++GET_PLAYER_WHERE_COMMANDS(ch)) % 5 == 0) {
       send_to_char(ch, "(OOC: You've been checking the wherelist a lot-- why not go join in?)\r\n");

@@ -5198,6 +5198,15 @@ struct obj_data *find_best_active_docwagon_modulator(struct char_data *ch) {
   return docwagon;
 }
 
+bool char_is_in_social_room(struct char_data *ch) {
+  if (!ch) {
+    mudlog("SYSERR: NULL character passed to char_is_in_social_room()!", ch, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+
+  return ch->in_room && ROOM_FLAGGED(ch->in_room, ROOM_ENCOURAGE_CONGREGATION);
+}
+
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.
 // Great for swapping out old Classic weapons, cyberware, etc for the new guaranteed-canon versions.
 #define PAIR(classic, current) case (classic): return (current);

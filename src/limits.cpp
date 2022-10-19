@@ -98,7 +98,7 @@ void mental_gain(struct char_data * ch)
     gain >>= 1;
 #endif
 
-  if (ch->in_room && ROOM_FLAGGED(ch->in_room, ROOM_ENCOURAGE_CONGREGATION))
+  if (char_is_in_social_room(ch))
     gain *= 2;
   else if (ch->in_room && ROOM_FLAGGED(ch->in_room, ROOM_STERILE))
     gain *= 1.5;
@@ -154,7 +154,7 @@ void physical_gain(struct char_data * ch)
   if (find_workshop(ch, TYPE_MEDICAL))
     gain = (int)(gain * 1.8);
 
-  if (ch->in_room && ROOM_FLAGGED(ch->in_room, ROOM_ENCOURAGE_CONGREGATION))
+  if (char_is_in_social_room(ch))
     gain *= 2;
 
   if (IS_NPC(ch))
@@ -535,6 +535,7 @@ bool check_bioware(struct char_data *ch)
       || ch->char_specials.timer >= 10
       || PLR_FLAGGED(ch, PLR_NEWBIE)
       || PRF_FLAGGED(ch, PRF_AFK)
+      || char_is_in_social_room(ch)
       || AFF_FLAGS(ch).AreAnySet(BR_TASK_AFF_FLAGS, ENDBIT) // See awake.h for the definition of these aff flags.
   ) {
     return FALSE;

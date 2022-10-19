@@ -3443,7 +3443,7 @@ bool ch_is_eligible_to_receive_socialization_bonus(struct char_data *ch) {
     return FALSE;
 
   // Not in a social room? Can't receive the bonus.
-  if (!ch->in_room || !ROOM_FLAGGED(ch->in_room, ROOM_ENCOURAGE_CONGREGATION))
+  if (!char_is_in_social_room(ch))
     return FALSE;
 
   // You're invisible? You can't get the bonus. Too easy to just idle in a bar watching Netflix for karma.

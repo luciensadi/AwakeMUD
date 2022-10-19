@@ -136,6 +136,7 @@ bool    repair_vehicle_seating(struct veh_data *veh);
 bool    is_voice_masked(struct char_data *ch);
 bool    force_perception(struct char_data *ch);
 int     get_focus_bond_cost(struct obj_data *obj);
+bool    char_is_in_social_room(struct char_data *ch);
 
 struct obj_data *find_best_active_docwagon_modulator(struct char_data *ch);
 
