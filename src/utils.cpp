@@ -5207,6 +5207,23 @@ bool char_is_in_social_room(struct char_data *ch) {
   return ch->in_room && ROOM_FLAGGED(ch->in_room, ROOM_ENCOURAGE_CONGREGATION);
 }
 
+bool is_custom_ware(struct obj_data *ware) {
+  if (!ware) {
+    mudlog("SYSERR: Received NULL ware to is_custom_ware()!", NULL, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+
+  switch (GET_OBJ_TYPE(ware)) {
+    case ITEM_CYBERWARE:
+      return GET_CYBERWARE_TYPE(ware) == CYB_CUSTOM_NERPS;
+    case ITEM_BIOWARE:
+      return GET_BIOWARE_TYPE(ware) == BIO_CUSTOM_NERPS;
+    default:
+      mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Got non-'ware obj %s (%ld) to is_custom_ware!", GET_OBJ_NAME(ware), GET_OBJ_VNUM(ware));
+      return FALSE;
+  }
+}
+
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.
 // Great for swapping out old Classic weapons, cyberware, etc for the new guaranteed-canon versions.
 #define PAIR(classic, current) case (classic): return (current);
