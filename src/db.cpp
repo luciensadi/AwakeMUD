@@ -2328,7 +2328,7 @@ void parse_quest(File &fl, long virtual_nr)
   quest_table[quest_nr].vnum = virtual_nr;
 
   fl.GetLine(line, 256, FALSE);
-  // log_vfprintf("%d: getline resulted in '%s'", virtual_nr, line);
+  log_vfprintf("%d: getline resulted in '%s'", virtual_nr, line);
   if (sscanf(line, "%ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld",
              t, t + 1, t + 2, t + 3, t + 4, t + 5,
              t + 6, t + 7, t + 8, t + 9, t + 10, t + 11, t+12, t+13, t+14, t+15, t+16) < 12) {
