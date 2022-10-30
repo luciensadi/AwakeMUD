@@ -6353,6 +6353,11 @@ ACMD(do_position)
     return;
   }
 
+  if (!ispunct(get_final_character_from_string(argument))) {
+    send_to_char(ch, "You need to specify punctuation too. Example: 'position %s.'\r\n", argument);
+    return;
+  }
+
   if (veh) {
     DELETE_ARRAY_IF_EXTANT(GET_VEH_DEFPOS(veh));
     GET_VEH_DEFPOS(veh) = str_dup(argument);
