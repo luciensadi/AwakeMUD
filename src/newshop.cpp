@@ -27,6 +27,7 @@ extern struct obj_data *get_first_credstick(struct char_data *ch, const char *ar
 extern void reduce_abilities(struct char_data *vict);
 extern void do_probe_object(struct char_data * ch, struct obj_data * j);
 extern void wire_nuyen(struct char_data *ch, int amount, vnum_t character_id);
+extern char *short_object(int virt, int where);
 ACMD_DECLARE(do_say);
 ACMD_DECLARE(do_new_echo);
 
@@ -2036,7 +2037,17 @@ void shop_info(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
   }
 
   do_say(keeper, buf, cmd_say, SCMD_SAYTO);
-  send_to_char(ch, "\r\n%s\r\n\r\n", obj->text.look_desc);
+  send_to_char(ch, "\r\n%s\r\n", obj->text.look_desc);
+
+  if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && WEAPON_IS_GUN(obj)) {
+    for (int i = ACCESS_LOCATION_TOP; i <= ACCESS_LOCATION_UNDER; ++i) {
+      if (GET_OBJ_VAL(obj, i) >= 0) {
+        send_to_char(ch, "There is %s attached to the %s of it.\r\n",
+                     GET_OBJ_VAL(obj, i) > 0 ? short_object(GET_OBJ_VAL(obj, i), 2) : "nothing",
+                     gun_accessory_locations[i - ACCESS_LOCATION_TOP]);
+      }
+    }
+  }
 }
 
 void shop_check(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t shop_nr)
