@@ -3437,7 +3437,6 @@ ACMD(do_assense)
             case CYB_DERMALSHEATHING:
             case CYB_MOVEBYWIRE:
             case CYB_MUSCLEREP:
-            case CYB_ARMS:
               locs[1] = 1;
               break;
             case CYB_FINGERTIP:
@@ -3446,6 +3445,7 @@ ACMD(do_assense)
             case CYB_HANDSPUR:
             case CYB_FIN:
             case CYB_CLIMBINGCLAWS:
+            case CYB_ARMS:
               locs[2] = 1;
               break;
             case CYB_FOOTANCHOR:
