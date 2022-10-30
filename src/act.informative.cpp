@@ -6330,7 +6330,7 @@ ACMD(do_position)
   if (!*argument) {
     send_to_char("Your current position is:\r\n  ", ch);
     if (veh) {
-      send_to_char(ch, "%s %s.\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)), GET_VEH_DEFPOS(veh));
+      send_to_char(ch, "%s %s\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)), GET_VEH_DEFPOS(veh));
     } else {
       list_one_char(ch, ch);
     }
@@ -6356,11 +6356,11 @@ ACMD(do_position)
   if (veh) {
     DELETE_ARRAY_IF_EXTANT(GET_VEH_DEFPOS(veh));
     GET_VEH_DEFPOS(veh) = str_dup(argument);
-    send_to_char(ch, "Position set. Your vehicle will appear as '(your vehicle) %s^n.'\r\n", GET_VEH_DEFPOS(veh));
+    send_to_char(ch, "Position set. Your vehicle will appear as '(your vehicle) %s^n'\r\n", GET_VEH_DEFPOS(veh));
   } else {
     DELETE_ARRAY_IF_EXTANT(GET_DEFPOS(ch));
     GET_DEFPOS(ch) = str_dup(argument);
-    send_to_char(ch, "Position set. You will appear as '(your character) %s^n.'\r\n", GET_DEFPOS(ch));
+    send_to_char(ch, "Position set. You will appear as '(your character) %s^n'\r\n", GET_DEFPOS(ch));
   }
 
 }
