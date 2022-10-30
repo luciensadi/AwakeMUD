@@ -4377,8 +4377,10 @@ ACMD(do_vset)
 
   if (is_abbrev(field, "owner")) {
     value = atoi(val_arg);
+    int old_owner = veh->owner;
     veh->owner = value;
     snprintf(buf, sizeof(buf), "%s's owner field set to %d.\r\n", GET_VEH_NAME(veh), value);
+    mudlog_vfprintf(ch, LOG_SYSLOG, "Set %s [%ld]'s owner field from %d to %d.", GET_VEH_NAME(veh), GET_VEH_VNUM(veh), old_owner, value);
   } else if (is_abbrev(field, "locked")) {
     if (!strcmp(val_arg, "on") || !strcmp(val_arg, "yes"))
       value = 2;
@@ -4391,6 +4393,7 @@ ACMD(do_vset)
     value--;
     veh->locked = value;
     snprintf(buf, sizeof(buf), "%s's lock was set to %s", GET_VEH_NAME(veh), ONOFF(value));
+    mudlog_vfprintf(ch, LOG_SYSLOG, "Set %s [%ld]'s lock to %s.", GET_VEH_NAME(veh), GET_VEH_VNUM(veh), ONOFF(value));
   } else if (is_abbrev(field, "subscribed")) {
     if (!strcmp(val_arg, "on") || !strcmp(val_arg, "yes"))
       value = 1;
@@ -4402,6 +4405,7 @@ ACMD(do_vset)
     }
     veh->sub = value;
     snprintf(buf, sizeof(buf), "%s's subscribed status was set to %s", GET_VEH_NAME(veh), ONOFF(value));
+    mudlog_vfprintf(ch, LOG_SYSLOG, "Set %s [%ld]'s subscribed status to %s.", GET_VEH_NAME(veh), GET_VEH_VNUM(veh), ONOFF(value));
   }
   send_to_char(buf, ch);
   return;
