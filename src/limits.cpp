@@ -736,8 +736,29 @@ void process_regeneration(int half_hour)
       affect_total(ch);
     }
     if (GET_POS(ch) >= POS_STUNNED) {
-      physical_gain(ch);
-      mental_gain(ch);
+      // Apply healing.
+      {
+        bool has_pedit = FALSE;
+        for (struct obj_data *obj = ch->bioware; obj; obj = obj->next_content) {
+          if (GET_BIOWARE_TYPE(obj) == BIO_PAINEDITOR) {
+            has_pedit = GET_BIOWARE_IS_ACTIVATED(obj);
+            break;
+          }
+        }
+
+        int old_phys = GET_PHYSICAL(ch), old_ment = GET_MENTAL(ch);
+
+        physical_gain(ch);
+        if (!has_pedit && old_phys != GET_MAX_PHYSICAL(ch) && GET_PHYSICAL(ch) == GET_MAX_PHYSICAL(ch)) {
+          send_to_char(ch, "The last of your injuries has healed.\r\n");
+        }
+
+        mental_gain(ch);
+        if (!has_pedit && old_ment != GET_MAX_MENTAL(ch) && GET_MENTAL(ch) == GET_MAX_MENTAL(ch)) {
+          send_to_char(ch, "You feel fully alert again.\r\n");
+        }
+      }
+
       if (!IS_NPC(ch) && IS_WATER(ch->in_room) && half_hour)
         if (check_swimming(ch))
           continue;
