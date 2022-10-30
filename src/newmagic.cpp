@@ -5968,16 +5968,20 @@ void init_parse(struct descriptor_data *d, char *arg)
   switch (d->edit_mode)
   {
     case INIT_CONFIRM_SIGNATURE:
-      STATE(d) = CON_PLAYING;
-      init_cost(CH, TRUE);
-      GET_SIG(CH)++;
-      GET_GRADE(CH)++;
-      GET_SETTABLE_REAL_MAG(CH) += 100;
-      if (GET_TRADITION(CH) == TRAD_ADEPT)
-        GET_PP(CH) += 100;
-      send_to_char("You feel your astral reflection shift and mold itself closer to the astral plane.\r\n", CH);
-      STATE(d) = CON_PLAYING;
-      PLR_FLAGS(CH).RemoveBit(PLR_INITIATE);
+      if (*arg == 'y') {
+        STATE(d) = CON_PLAYING;
+        init_cost(CH, TRUE);
+        GET_SIG(CH)++;
+        GET_GRADE(CH)++;
+        GET_SETTABLE_REAL_MAG(CH) += 100;
+        if (GET_TRADITION(CH) == TRAD_ADEPT)
+          GET_PP(CH) += 100;
+        send_to_char("You feel your astral reflection shift and mold itself closer to the astral plane.\r\n", CH);
+        STATE(d) = CON_PLAYING;
+        PLR_FLAGS(CH).RemoveBit(PLR_INITIATE);
+      } else {
+        disp_init_menu(d);
+      }
       break;
     case INIT_MAIN:
       switch (*arg)
