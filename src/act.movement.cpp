@@ -1108,24 +1108,27 @@ int find_door(struct char_data *ch, const char *type, char *dir, const char *cmd
 
   if (*dir)
   {                   /* a direction was specified */
-    if ((door = search_block(dir, lookdirs, FALSE)) == -1) {       /* Partial Match */
+    if ((door = search_block(dir, exitdirs, TRUE)) == -1
+        && (door = search_block(dir, fulldirs, TRUE)) == -1) {
       send_to_char("That's not a direction.\r\n", ch);
       return -1;
     }
-    door = convert_look[door];
-    if (EXIT(ch, door)) {
+    if (EXIT(ch, door) && !IS_SET(EXIT(ch, door)->exit_info, EX_HIDDEN)) {
+      if (IS_SET(EXIT(ch, door)->exit_info, EX_DESTROYED)) {
+        send_to_char(ch, "You're not going to have much luck-- the door to the %s has been destroyed.\r\n", fulldirs[door]);
+        return -1;
+      }
+
       if (EXIT(ch, door)->keyword) {
-        if (isname(type, EXIT(ch, door)->keyword) &&
-            !IS_SET(EXIT(ch, door)->exit_info, EX_DESTROYED) &&
-            !IS_SET(EXIT(ch, door)->exit_info, EX_HIDDEN))
+        if (isname(type, EXIT(ch, door)->keyword)) {
           return door;
-        else {
+        } else {
           send_to_char(ch, "I see no %s there.\r\n", type);
           return -1;
         }
-
-      } else
+      } else {
         return door;
+      }
     } else {
       send_to_char(ch, "I really don't see how you can %s anything there.\r\n",
                    cmdname);
@@ -1141,7 +1144,8 @@ int find_door(struct char_data *ch, const char *type, char *dir, const char *cmd
     // Check for directionals.
     char non_const_type[MAX_INPUT_LENGTH];
     strncpy(non_const_type, type, sizeof(non_const_type));
-    if ((door = search_block(non_const_type, lookdirs, FALSE)) == -1) {       /* Partial Match */
+    if ((door = search_block(non_const_type, exitdirs, TRUE)) == -1
+        && (door = search_block(non_const_type, fulldirs, TRUE)) == -1) {
       // No direction? Check for keywords.
       for (door = 0; door < NUM_OF_DIRS; door++)
         if (EXIT(ch, door))
@@ -1155,12 +1159,14 @@ int find_door(struct char_data *ch, const char *type, char *dir, const char *cmd
       return -1;
     }
 
-    door = convert_look[door];
-
-    if (EXIT(ch, door) && !IS_SET(EXIT(ch, door)->exit_info, EX_DESTROYED) && !IS_SET(EXIT(ch, door)->exit_info, EX_HIDDEN)) {
+    if (EXIT(ch, door) && !IS_SET(EXIT(ch, door)->exit_info, EX_HIDDEN)) {
+      if (IS_SET(EXIT(ch, door)->exit_info, EX_DESTROYED)) {
+        send_to_char(ch, "You're not going to have much luck-- the door to the %s has been destroyed.\r\n", fulldirs[door]);
+        return -1;
+      }
       return door;
     } else {
-      send_to_char(ch, "There doesn't appear to be a door to the %s.\r\n", dirs[door]);
+      send_to_char(ch, "There doesn't appear to be a door to the %s.\r\n", fulldirs[door]);
       return -1;
     }
   }
@@ -1386,12 +1392,24 @@ ACMD(do_gen_door)
     }
   }
 
-  // TODO: Short circuit directions would probably go here.
+  // If it's a cardinal direction, check for a door.
+  /* for (int dir_idx = NORTH; dir_idx <= DOWN; dir_idx++) {
+    if (!str_cmp(type, exit_dirs[dir_idx]) || !str_cmp(type, fulldirs[dir_idx])) {
+      asdf hidden destroyed
+      door = dir_idx;
+      break;
+    }
+  } */
 
   // Check for an object or vehicle nearby that matches the keyword.
-  if (!generic_find(type, FIND_OBJ_EQUIP | FIND_OBJ_INV | FIND_OBJ_ROOM, ch, &victim, &obj) && !veh &&
-           !(veh = get_veh_list(type, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch)))
-    door = find_door(ch, type, dir, cmd_door[subcmd]);
+  if (!generic_find(type, FIND_OBJ_EQUIP | FIND_OBJ_INV | FIND_OBJ_ROOM, ch, &victim, &obj)
+      && !veh
+      && !(veh = get_veh_list(type, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch))) {
+    if ((door = find_door(ch, type, dir, cmd_door[subcmd])) == -1) {
+      // Already gave an error message in find_door, bail out.
+      return;
+    }
+  }
 
   // Lock / unlock a vehicle. Can't open / close them.
   if (veh && subcmd != SCMD_OPEN && subcmd != SCMD_CLOSE) {
