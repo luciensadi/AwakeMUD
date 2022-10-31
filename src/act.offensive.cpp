@@ -107,7 +107,7 @@ int messageless_find_door(struct char_data *ch, char *type, char *dir, const cha
 
   if (*dir)
   {
-    if ((door = search_block(dir, lookdirs, FALSE)) == -1)
+    if ((door = search_block(dir, lookdirs, FALSE)) == -1 && (door = search_block(dir, fulllookdirs, FALSE)) == -1)
       return -1;
 
     door = convert_look[door];
@@ -523,7 +523,9 @@ ACMD(do_shoot)
     return;
   }
 
-  if ((dir = search_block(direction, lookdirs, FALSE)) == -1) {
+  if ((dir = search_block(direction, lookdirs, FALSE)) == -1
+      && (dir = search_block(direction, fulllookdirs, FALSE)) == -1)
+  {
     send_to_char("What direction?\r\n", ch);
     return;
   }
@@ -573,7 +575,9 @@ ACMD(do_throw)
       send_to_char("Syntax: throw <direction>\r\n", ch);
       return;
     }
-    if ((dir = search_block(arg1, lookdirs, FALSE)) == -1) {
+    if ((dir = search_block(arg1, lookdirs, FALSE)) == -1
+        && (dir = search_block(arg1, fulllookdirs, FALSE)) == -1)
+    {
       send_to_char("What direction?\r\n", ch);
       return;
     }
@@ -584,7 +588,9 @@ ACMD(do_throw)
       return;
     }
 
-    if ((dir = search_block(arg2, lookdirs, FALSE)) == -1) {
+    if ((dir = search_block(arg2, lookdirs, FALSE)) == -1
+        && (dir = search_block(arg2, fulllookdirs, FALSE)) == -1)
+    {
       send_to_char("What direction?\r\n", ch);
       return;
     }

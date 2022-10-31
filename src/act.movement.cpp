@@ -1745,6 +1745,9 @@ ACMD(do_drag)
   }
 
   dir = search_block(buf2, lookdirs, FALSE);
+  if (dir == -1)
+    dir = search_block(buf2, fulllookdirs, FALSE);
+
   if (ch->in_veh) {
     dir = -1;
     veh = get_veh_list(buf2, ch->in_veh->carriedvehs, ch);

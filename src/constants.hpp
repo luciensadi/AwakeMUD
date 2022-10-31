@@ -5,6 +5,7 @@ extern const char *awakemud_version[];
 extern const char *dirs[];
 extern const char *exitdirs[];
 extern const char *lookdirs[];
+extern const char *fulllookdirs[];
 extern const char *fulldirs[];
 extern const char *thedirs[];
 extern const char *exit_bits[];

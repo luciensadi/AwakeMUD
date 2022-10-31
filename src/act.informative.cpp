@@ -2389,7 +2389,7 @@ ACMD(do_look)
     else if (is_abbrev(arg, "in"))
       look_in_obj(ch, arg2, FALSE);
     /* did the char type 'look <direction>?' */
-    else if ((look_type = search_block(arg, lookdirs, FALSE)) >= 0)
+    else if ((look_type = search_block(arg, lookdirs, FALSE)) >= 0 || (look_type = search_block(arg, fulllookdirs, FALSE)) >= 0)
       look_in_direction(ch, convert_look[look_type]);
     else if (is_abbrev(arg, "at"))
       do_examine(ch, arg2, 0, SCMD_EXAMINE);

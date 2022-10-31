@@ -174,6 +174,21 @@ const char *lookdirs[] =
     "\n"
   };
 
+  const char *fulllookdirs[] =
+    {
+      "north",
+      "east",
+      "south",
+      "west",
+      "northeast",
+      "southeast",
+      "southwest",
+      "northwest",
+      "up",
+      "down",
+      "\n"
+    };
+
 int convert_look[] =
   {
     0,

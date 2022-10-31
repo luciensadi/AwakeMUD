@@ -4428,7 +4428,7 @@ ACMD(do_watch)
 
   int dir;
   skip_spaces(&argument);
-  if ((dir = search_block(argument, lookdirs, FALSE)) == -1) {
+  if ((dir = search_block(argument, lookdirs, FALSE)) == -1 && (dir = search_block(argument, fulllookdirs, FALSE)) == -1) {
     send_to_char("What direction?\r\n", ch);
     return;
   }
