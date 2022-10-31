@@ -2151,6 +2151,7 @@ void idle_delete()
 #ifndef IDLEDELETE_DRYRUN
       int tke = atoi(row[2]);
       time_t lastd = atoi(row[1]);
+      // Updating this formula? Also update it in do_karma.
       if (lastd < (time(0) - (SECS_PER_REAL_DAY * (50 + (tke / NUMBER_OF_TKE_POINTS_PER_REAL_DAY_OF_EXTRA_IDLE_DELETE_GRACE_PERIOD))))) {
         DeleteChar(atol(row[0]));
         deleted++;
