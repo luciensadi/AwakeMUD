@@ -6414,25 +6414,32 @@ ACMD(do_status)
       printed = TRUE;
       break;
   }
-  if (GET_TEMP_QUI_LOSS(ch)) {
-    send_to_char(ch, "  Temporary Quickness Loss: %d\r\n", GET_TEMP_QUI_LOSS(ch));
+  if (GET_TEMP_QUI_LOSS(targ)) {
+    send_to_char(ch, "  Temporary Quickness Loss: %d\r\n", GET_TEMP_QUI_LOSS(targ));
   }
-  if (GET_TEMP_MAGIC_LOSS(ch)) {
-    send_to_char(ch, "  Temporary Magic Loss: %d\r\n", GET_TEMP_MAGIC_LOSS(ch));
+  if (GET_TEMP_MAGIC_LOSS(targ)) {
+    send_to_char(ch, "  Temporary Magic Loss: %d\r\n", GET_TEMP_MAGIC_LOSS(targ));
   }
-  if (GET_TEMP_ESSLOSS(ch)) {
-    send_to_char(ch, "  Temporary Essence Loss: %d\r\n", GET_TEMP_ESSLOSS(ch));
+  if (GET_TEMP_ESSLOSS(targ)) {
+    send_to_char(ch, "  Temporary Essence Loss: %d\r\n", GET_TEMP_ESSLOSS(targ));
   }
-  if (GET_REACH(targ) && !(AFF_FLAGGED(ch, AFF_CLOSECOMBAT))) {
+  if (GET_REACH(targ) && !(AFF_FLAGGED(targ, AFF_CLOSECOMBAT))) {
     send_to_char(ch, "  Extra Reach (%dm)\r\n", GET_REACH(targ));
     printed = TRUE;
   }
-  if (AFF_FLAGGED(ch, AFF_CLOSECOMBAT)) {
+  if (AFF_FLAGGED(targ, AFF_CLOSECOMBAT)) {
     send_to_char(ch, "  Close Combat\r\n");
     printed = TRUE;
   }
-  if (IS_PERCEIVING(ch)) {
+  if (IS_PERCEIVING(targ)) {
     send_to_char("  Astral Perception (^yincreased TNs^n)\r\n", ch);
+  }
+
+  {
+    int conceal_rating = affected_by_power(targ, CONCEAL);
+    if (conceal_rating) {
+      send_to_char(ch, "  Spirit Concealment (%d)\r\n", conceal_rating);
+    }
   }
 
   for (int i = MIN_DRUG; i < NUM_DRUGS; i++) {
