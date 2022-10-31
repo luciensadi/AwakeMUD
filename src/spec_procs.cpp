@@ -3434,9 +3434,9 @@ SPECIAL(bank)
 
   if (CMD_IS("balance")) {
     if (GET_BANK(ch) > 0)
-      send_to_char(ch, "Your current balance is %ld nuyen.\r\n", GET_BANK(ch));
+      send_to_char(ch, "Your current bank balance is %ld nuyen.\r\n", GET_BANK(ch));
     else
-      send_to_char("Your account is empty!\r\n", ch);
+      send_to_char("Your bank account is empty!\r\n", ch);
     return 1;
   }
 

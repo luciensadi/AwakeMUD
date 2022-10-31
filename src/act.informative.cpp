@@ -3771,9 +3771,9 @@ ACMD(do_gold)
   if (GET_NUYEN(ch) == 0)
     send_to_char("You're broke!\r\n", ch);
   else if (GET_NUYEN(ch) == 1)
-    send_to_char("You have one miserable nuyen.\r\n", ch);
+    send_to_char("You are carrying one miserable nuyen.\r\n", ch);
   else {
-    send_to_char(ch, "You have %ld nuyen.\r\n", GET_NUYEN(ch));
+    send_to_char(ch, "You are carrying %ld nuyen.\r\n", GET_NUYEN(ch));
   }
 }
 
