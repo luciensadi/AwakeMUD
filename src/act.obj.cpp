@@ -3908,8 +3908,20 @@ int draw_from_readied_holster(struct char_data *ch, struct obj_data *holster) {
   if (!CAN_WEAR(contents, ITEM_WEAR_WIELD))
     return 0;
 
-  // Did we fill up our hands, or do we only have one free hand for a two-handed weapon? Skip.
-  if ((GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD)) || ((GET_EQ(ch, WEAR_WIELD) || GET_EQ(ch, WEAR_HOLD)) && IS_OBJ_STAT(contents, ITEM_EXTRA_TWOHANDS)))
+  // Our hands are full.
+  if (GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD))
+    return 0;
+
+  // We're wielding a 2H item.
+  if (GET_EQ(ch, WEAR_WIELD) && IS_OBJ_STAT(GET_EQ(ch, WEAR_WIELD), ITEM_EXTRA_TWOHANDS))
+    return 0;
+
+  // We're holding a 2H item.
+  if (GET_EQ(ch, WEAR_HOLD) && IS_OBJ_STAT(GET_EQ(ch, WEAR_HOLD), ITEM_EXTRA_TWOHANDS))
+    return 0;
+
+  // We're holding something and drawing a 2H item.
+  if ((GET_EQ(ch, WEAR_WIELD) || GET_EQ(ch, WEAR_HOLD)) && IS_OBJ_STAT(contents, ITEM_EXTRA_TWOHANDS))
     return 0;
 
   // TODO: What does this check mean? (ed: probably intended to prevent machine guns and assault cannons from being drawn. Nonfunctional.)
@@ -3972,11 +3984,18 @@ int draw_from_readied_holster(struct char_data *ch, struct obj_data *holster) {
     return 0;
   }
 
+  // Sanity check: We have at least one free hand.
+  if (GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD)) {
+    mudlog("SYSERR: Logical constraint failure-- we're wielding two items and trying to draw a third after safeguards!", ch, LOG_SYSLOG, TRUE);
+    return 0;
+  }
+
   int where = 0;
-  if (!GET_EQ(ch, WEAR_WIELD) && can_wield_both(ch, GET_EQ(ch, WEAR_HOLD), contents))
-    where = WEAR_WIELD;
-  else if (!GET_EQ(ch, WEAR_HOLD) && can_wield_both(ch, GET_EQ(ch, WEAR_WIELD), contents))
+  if (GET_EQ(ch, WEAR_WIELD) && can_wield_both(ch, GET_EQ(ch, WEAR_WIELD), contents))
     where = WEAR_HOLD;
+  else if (GET_EQ(ch, WEAR_HOLD) && can_wield_both(ch, GET_EQ(ch, WEAR_HOLD), contents))
+    where = WEAR_WIELD;
+    
   if (where) {
     obj_from_obj(contents);
     equip_char(ch, contents, where);
