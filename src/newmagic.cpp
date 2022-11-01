@@ -5292,7 +5292,7 @@ ACMD(do_domain)
 
 bool _purge_boost(struct char_data *ch, int attribute_index) {
   // Set it to 1 tick left, then call the tick-down function.
-  BOOST(ch)[attribute_index][0] = 1;
+  BOOST(ch)[attribute_index][0] = MIN(BOOST(ch)[attribute_index][0], 1);
   return process_single_boost(ch, attribute_index);
 }
 
