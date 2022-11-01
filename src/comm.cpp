@@ -1389,7 +1389,7 @@ int make_prompt(struct descriptor_data * d)
             case 'P':       // max physical
               snprintf(str, sizeof(str), "%d", (int)(GET_MAX_PHYSICAL(d->character) / 100));
               break;
-            case 'q':
+            case 'q': // Selected Domain, plus Sky if available
               {
                 struct room_data *room = get_ch_in_room(d->character);
                 if (room && SECT(room) != SPIRIT_FOREST && SECT(room) != SPIRIT_HEARTH && !ROOM_FLAGGED(room, ROOM_INDOORS)) {

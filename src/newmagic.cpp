@@ -4029,13 +4029,19 @@ ACMD(do_conjure)
       if (is_abbrev(buf1, spirits[spirit].name))
         break;
     if (spirit == NUM_SPIRITS) {
-      strcpy(buf, "Which spirit do you wish to conjure? In your current domain, you can conjure");
+      strcpy(buf, "Which spirit do you wish to conjure? In your currently-selected domain, you can conjure:");
       bool have_sent_text = FALSE;
       for (spirit = 0; spirit < NUM_SPIRITS; spirit++)
-        if (GET_DOMAIN(ch) == ((spirit == SPIRIT_MIST || spirit == SPIRIT_STORM || spirit == SPIRIT_WIND) ? SPIRIT_SKY : spirit)) {
+        if (GET_DOMAIN(ch) == spirit) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s %s", have_sent_text ? "," : "", spirits[spirit].name);
           have_sent_text = TRUE;
         }
+
+      if (GET_DOMAIN(ch) == SPIRIT_MIST || GET_DOMAIN(ch) == SPIRIT_STORM || GET_DOMAIN(ch) == SPIRIT_WIND) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s %s", have_sent_text ? "," : "", spirits[SPIRIT_SKY].name);
+        have_sent_text = TRUE;
+      }
+
       send_to_char(buf, ch);
       return;
     }
@@ -5245,7 +5251,7 @@ ACMD(do_domain)
   if (!*argument) {
     send_to_char(ch, "You are currently in the %s domain.\r\n", spirits[GET_DOMAIN(ch)].name);
     if (SECT(temp_room) != SPIRIT_FOREST && SECT(temp_room) != SPIRIT_HEARTH && !ROOM_FLAGGED(temp_room, ROOM_INDOORS)) {
-      send_to_char(ch, "You can switch to the following domains:\r\n  %s\r\n  Sky Spirit\r\n", spirits[SECT(temp_room)].name);
+      send_to_char(ch, "You can switch to the following domains:\r\n  %s\r\n  Sky spirit\r\n", spirits[SECT(temp_room)].name);
     }
   } else {
     struct spirit_data *next;
