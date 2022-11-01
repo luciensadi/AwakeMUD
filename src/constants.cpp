@@ -2931,7 +2931,9 @@ struct nuyen_faucet_or_sink nuyen_faucets_and_sinks[NUM_OF_TRACKED_NUYEN_INCOME_
     {"Credstick Cracker", NI_IS_SINK},
     {"Death Penalty", NI_IS_SINK},
     {"Drug Withdrawal / Fugue", NI_IS_SINK},
-    {"Ritual Casting", NI_IS_SINK}
+    {"Ritual Casting", NI_IS_SINK},
+    {"Staff Payout", NI_IS_FAUCET},
+    {"Staff Charge", NI_IS_SINK}
   };
 
 const char *ignored_bits_in_english[] =

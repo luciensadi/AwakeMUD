@@ -132,6 +132,7 @@ ACMD_DECLARE(do_break);
 ACMD_DECLARE(do_broadcast);
 ACMD_DECLARE(do_build);
 ACMD_DECLARE(do_cast);
+ACMD_DECLARE(do_charge);
 ACMD_DECLARE(do_chipload);
 ACMD_DECLARE(do_cleanup);
 ACMD_DECLARE(do_cleanse);
@@ -257,6 +258,7 @@ ACMD_DECLARE(do_order);
 ACMD_DECLARE(do_packup);
 ACMD_DECLARE(do_page);
 ACMD_DECLARE(do_patch);
+ACMD_DECLARE(do_payout);
 ACMD_DECLARE(do_perfmon);
 ACMD_DECLARE(do_pgroup);
 ACMD_DECLARE(do_photo);
@@ -517,6 +519,7 @@ struct command_info cmd_info[] =
     { "cast"       , POS_SITTING , do_cast     , 1, SCMD_STANDARD_CAST, FALSE },
     { "call"       , POS_LYING   , do_phone    , 0, SCMD_RING, FALSE },
     { "chase"      , POS_SITTING , do_chase    , 0, 0, FALSE },
+    { "charge"     , POS_DEAD    , do_charge   , LVL_FIXER, 0, FALSE },
     { "cleanse"    , POS_LYING   , do_cleanse  , 0, 0, FALSE },
     { "cleanup"    , POS_SITTING , do_cleanup  , 0, 0, FALSE },
     { "clear"      , POS_DEAD    , do_gen_ps   , 0, SCMD_CLEAR, TRUE },
@@ -722,6 +725,7 @@ struct command_info cmd_info[] =
     { "page"       , POS_DEAD    , do_page     , LVL_ARCHITECT, 0, FALSE },
     { "pages"      , POS_DEAD    , do_switched_message_history, LVL_ARCHITECT, COMM_CHANNEL_PAGES, TRUE },
     { "pardon"     , POS_DEAD    , do_wizutil  , LVL_BUILDER, SCMD_PARDON, FALSE },
+    { "payout"     , POS_DEAD    , do_payout   , LVL_FIXER, 0, FALSE },
     { "perceive"   , POS_LYING   , do_astral   , 0, SCMD_PERCEIVE, FALSE },
     { "perfmon"    , POS_DEAD    , do_perfmon  , LVL_ADMIN, 0, FALSE },
     { "pgroup"     , POS_LYING   , do_pgroup   , 0, 0, FALSE },

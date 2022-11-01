@@ -1757,6 +1757,11 @@ void perform_drop_gold(struct char_data * ch, int amount, byte mode, struct room
     return;
   }
 
+  if (GET_LEVEL(ch) > LVL_MORTAL && !access_level(ch, LVL_PRESIDENT)) {
+    send_to_char(ch, "Staff can't drop nuyen. Use the PAYOUT command to award a character.\r\n");
+    return;
+  }
+
   obj = read_object(OBJ_ROLL_OF_NUYEN, VIRTUAL);
   GET_OBJ_VAL(obj, 0) = amount;
 
@@ -2310,9 +2315,9 @@ void perform_give_gold(struct char_data *ch, struct char_data *vict, int amount)
     send_to_char("You don't have that much!\r\n", ch);
     return;
   }
-  if (IS_SENATOR(ch) && !access_level(ch, LVL_FREEZE) && !IS_SENATOR(vict))
+  if (IS_SENATOR(ch) && !access_level(ch, LVL_PRESIDENT) && !IS_SENATOR(vict) && !IS_NPC(vict))
   {
-    send_to_char("You're not a high-enough level of staffer to do that.\r\n", ch);
+    send_to_char("Staff must use the PAYOUT command instead.\r\n", ch);
     return;
   }
   send_to_char(OK, ch);
@@ -3995,7 +4000,7 @@ int draw_from_readied_holster(struct char_data *ch, struct obj_data *holster) {
     where = WEAR_HOLD;
   else if (GET_EQ(ch, WEAR_HOLD) && can_wield_both(ch, GET_EQ(ch, WEAR_HOLD), contents))
     where = WEAR_WIELD;
-    
+
   if (where) {
     obj_from_obj(contents);
     equip_char(ch, contents, where);

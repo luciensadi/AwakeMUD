@@ -2576,15 +2576,21 @@ void extract_char(struct char_data * ch)
       }
   }
 
-  /* clear any sustained spells */
+  /* clear any sustained spells (but only if they're not a conjured elemental) */
   else if (GET_SUSTAINED(ch))
   {
     struct sustain_data *next;
     for (struct sustain_data *sust = GET_SUSTAINED(ch); sust; sust = next) {
       next = sust->next;
-      if (next && sust->idnum == next->idnum)
+      if (next && sust->idnum == next->idnum) {
         next = next->next;
+      }
       end_sustained_spell(ch, sust);
+    }
+
+    // Sanity check: They must not have any spells left after this.
+    if (GET_SUSTAINED(ch)) {
+      mudlog("SYSERR: We still have spells after extract_char spell purge!!", ch, LOG_SYSLOG, TRUE);
     }
   }
 
@@ -3389,7 +3395,7 @@ int get_skill_dice_in_use_for_weapons(struct char_data *ch) {
 
 void _char_with_spell_to_room(struct char_data *ch, int spell_num, room_spell_t *room_spell_tracker) {
   if (affected_by_spell(ch, spell_num)) {
-    room_spell_tracker[ROOM_NUM_SPELLS_OF_TYPE]++;
+    room_spell_tracker[ROOM_NUM_SPELLS_OF_TYPE] = MIN(room_spell_tracker[ROOM_NUM_SPELLS_OF_TYPE] + 1, 1);
     for (struct sustain_data *sust = GET_SUSTAINED(ch); sust; sust = sust->next) {
       if (sust->spell == spell_num) {
         int force = MIN(sust->force, sust->success);
@@ -3402,7 +3408,7 @@ void _char_with_spell_to_room(struct char_data *ch, int spell_num, room_spell_t 
 void _char_with_spell_from_room(struct char_data *ch, int spell_num, room_spell_t *room_spell_tracker) {
   if (affected_by_spell(ch, spell_num)) {
     // Clear the room's spell value.
-    room_spell_tracker[ROOM_NUM_SPELLS_OF_TYPE]--;
+    room_spell_tracker[ROOM_NUM_SPELLS_OF_TYPE] = MAX(room_spell_tracker[ROOM_NUM_SPELLS_OF_TYPE] - 1, 0);
     room_spell_tracker[ROOM_HIGHEST_SPELL_FORCE] = 0;
 
     // If we still have a spell, search everyone here to re-establish it.
@@ -3412,7 +3418,7 @@ void _char_with_spell_from_room(struct char_data *ch, int spell_num, room_spell_
           continue;
 
         for (struct sustain_data *sust = GET_SUSTAINED(tmp_ch); sust; sust = sust->next) {
-          if (sust->spell == spell_num) {
+          if (sust->spell == spell_num && sust->caster) {
             int force = MIN(sust->force, sust->success);
             room_spell_tracker[ROOM_HIGHEST_SPELL_FORCE] = MAX(room_spell_tracker[ROOM_HIGHEST_SPELL_FORCE], force);
           }

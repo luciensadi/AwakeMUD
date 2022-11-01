@@ -1949,11 +1949,11 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
   }
   }
 
-  if (ch->in_room->poltergeist[0])
+  if (ch->in_room->poltergeist[0] > 0)
     send_to_char("^cAn invisible force is whipping small objects around the area.^n\r\n", ch);
-  if (ch->in_room->icesheet[0])
+  if (ch->in_room->icesheet[0] > 0)
     send_to_char("^CIce covers the floor.^n\r\n", ch);
-  if (ch->in_room->silence[0])
+  if (ch->in_room->silence[0] > 0)
     send_to_char("^LAn unnatural hush stills the air.^n\r\n", ch);
 
   // Is there an elevator car here?

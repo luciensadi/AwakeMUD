@@ -91,6 +91,7 @@ extern void do_secret_ticks(int pulse);
 /* local globals */
 int connection_rapidity_tracker_for_dos = 0;
 struct descriptor_data *descriptor_list = NULL; /* master desc list */
+bool global_descriptor_list_invalidated = FALSE;
 struct txt_block *bufpool = 0;  /* pool of large output buffers */
 int buf_largecount = 0;         /* # of large buffers which exist */
 int buf_overflows = 0;          /* # of overflows of output */
@@ -821,6 +822,13 @@ void game_loop(int mother_desc)
             }
             command_interpreter(d->character, comm, GET_CHAR_NAME(d->character)); /* send it to interpreter */
           }
+        }
+
+        // If we've invalidated the descriptor list in the process of an interpreted command, bail out.
+        if (global_descriptor_list_invalidated) {
+          global_descriptor_list_invalidated = FALSE;
+          mudlog("Global descriptor list was invalidated- skipping remaining inputs for this cycle.", NULL, LOG_SYSLOG, TRUE);
+          break;
         }
       }
     }
@@ -2361,6 +2369,7 @@ void close_socket(struct descriptor_data *d)
     d->original->desc = NULL;
 
   REMOVE_FROM_LIST(d, descriptor_list, next);
+  global_descriptor_list_invalidated = TRUE;
 
   DELETE_ARRAY_IF_EXTANT(d->showstr_head);
 

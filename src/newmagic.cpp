@@ -97,15 +97,37 @@ void adept_release_spell(struct char_data *ch, bool end_spell)
 
 void end_sustained_spell(struct char_data *ch, struct sustain_data *sust)
 {
-  switch (sust->spell) {
-    case SPELL_SILENCE:
-    case SPELL_SHADOW:
-    case SPELL_LIGHT:
-    case SPELL_POLTERGEIST:
-      if (ch->in_room) {
-        _char_with_spell_from_room(ch, sust->spell, ch->in_room->silence);
-      }
-      break;
+  if (sust->caster) {
+    switch (sust->spell) {
+      case SPELL_SILENCE:
+        if (ch->in_room) {
+          _char_with_spell_from_room(ch, sust->spell, ch->in_room->silence);
+        } else {
+          mudlog_vfprintf(ch, LOG_SYSLOG, "SYSWARN: Canceling %s spell on a character without a room!", spells[sust->spell].name);
+        }
+        break;
+      case SPELL_SHADOW:
+        if (ch->in_room) {
+          _char_with_spell_from_room(ch, sust->spell, ch->in_room->shadow);
+        } else {
+          mudlog_vfprintf(ch, LOG_SYSLOG, "SYSWARN: Canceling %s spell on a character without a room!", spells[sust->spell].name);
+        }
+        break;
+      case SPELL_LIGHT:
+        if (ch->in_room) {
+          _char_with_spell_from_room(ch, sust->spell, ch->in_room->light);
+        } else {
+          mudlog_vfprintf(ch, LOG_SYSLOG, "SYSWARN: Canceling %s spell on a character without a room!", spells[sust->spell].name);
+        }
+        break;
+      case SPELL_POLTERGEIST:
+        if (ch->in_room) {
+          _char_with_spell_from_room(ch, sust->spell, ch->in_room->poltergeist);
+        } else {
+          mudlog_vfprintf(ch, LOG_SYSLOG, "SYSWARN: Canceling %s spell on a character without a room!", spells[sust->spell].name);
+        }
+        break;
+    }
   }
 
   // Var tracking for the heal spell.
@@ -6177,6 +6199,19 @@ ACMD(do_metamagic)
 
 ACMD(do_cleanse)
 {
+  if (ch->in_room && IS_SENATOR(ch)) {
+    send_to_char(ch, "Purging all background spell storage vars...\r\n");
+    ch->in_room->silence[0] = 0;
+    ch->in_room->silence[1] = 0;
+    ch->in_room->shadow[0] = 0;
+    ch->in_room->shadow[1] = 0;
+    ch->in_room->light[0] = 0;
+    ch->in_room->light[1] = 0;
+    ch->in_room->poltergeist[0] = 0;
+    ch->in_room->poltergeist[1] = 0;
+    send_to_char(ch, "Done. Proceeding with standard cleanse command logic.\r\n");
+  }
+
   if (GET_METAMAGIC(ch, META_CLEANSING) < METAMAGIC_STAGE_LEARNED) {
     nonsensical_reply(ch, NULL, "standard");
     return;

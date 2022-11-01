@@ -2602,6 +2602,202 @@ ACMD(do_advance) {
   do_advance_with_mode(ch, argument, cmd, subcmd, FALSE);
 }
 
+ACMD(do_payout) {
+  MYSQL_RES *res;
+  MYSQL_ROW row;
+
+  struct char_data *vict;
+  char amt[MAX_STRING_LENGTH];
+  char reason[MAX_STRING_LENGTH];
+  int k;
+
+  half_chop(argument, arg, buf);
+  half_chop(buf, amt, reason);
+
+  k = atoi(amt);
+
+  if (!*arg || !*amt || !*reason || k <= 0 ) {
+    send_to_char("Syntax: payout <player> <nuyen> <Reason for the payout>\r\n", ch);
+    return;
+  }
+
+  if (!(vict = get_char_vis(ch, arg))) {
+    snprintf(buf, sizeof(buf), "SELECT idnum, cash FROM pfiles WHERE name='%s';", prepare_quotes(buf2, arg, sizeof(buf2) / sizeof(buf2[0])));
+    if (mysql_wrapper(mysql, buf)) {
+      send_to_char("An unexpected error occurred (query failed).\r\n", ch);
+      return;
+    }
+    if (!(res = mysql_use_result(mysql))) {
+      send_to_char("An unexpected error occurred (use_result failed).\r\n", ch);
+      return;
+    }
+    row = mysql_fetch_row(res);
+    if (!row && mysql_field_count(mysql)) {
+      mysql_free_result(res);
+      send_to_char(ch, "Could not find a PC named %s.\r\n", arg);
+      return;
+    }
+    long idnum = atol(row[0]);
+    int old_nuyen = atoi(row[1]);
+    mysql_free_result(res);
+
+    // Now that we've confirmed the player exists, update them.
+    snprintf(buf, sizeof(buf), "UPDATE pfiles SET cash = cash + %d WHERE idnum='%ld';", k, idnum);
+    if (mysql_wrapper(mysql, buf)) {
+      send_to_char("An unexpected error occurred on update (query failed).\r\n", ch);
+      return;
+    }
+
+    // Mail the victim.
+    snprintf(buf, sizeof(buf), "You have been paid %d nuyen for %s%s^n\r\n",
+             k,
+             reason,
+             ispunct(get_final_character_from_string(reason)) ? "" : ".");
+    store_mail(idnum, ch, buf);
+
+    // Notify the actor.
+    send_to_char(ch, "You pay %d nuyen to %s for %s%s^n\r\n",
+                 k,
+                 capitalize(arg),
+                 reason,
+                 ispunct(get_final_character_from_string(reason)) ? "" : ".");
+
+    // Log it.
+    snprintf(buf, sizeof(buf), "%s paid %d nuyen to %s for %s^g (%d to %d).",
+             GET_CHAR_NAME(ch),
+             k,
+             arg,
+             reason,
+             old_nuyen,
+             old_nuyen + k);
+    mudlog(buf, ch, LOG_WIZLOG, TRUE);
+    return;
+  }
+
+  if (IS_SENATOR(vict)) {
+    send_to_char(ch, "Staff can't receive nuyen this way. Use the SET command.\r\n", ch);
+    return;
+  }
+
+  if (GET_NUYEN(vict) + k > MYSQL_UNSIGNED_INT_MAX) {
+    send_to_char(ch, "That would put %s over the absolute nuyen maximum. You may award up to %d nuyen. Otherwise, tell %s to spend what %s has, or compensate %s some other way.\r\n",
+                 GET_CHAR_NAME(vict), MYSQL_UNSIGNED_INT_MAX - GET_NUYEN(vict), HMHR(vict), HSSH(vict), HMHR(vict));
+    return;
+  }
+
+  if (vict->desc && vict->desc->original)
+    gain_nuyen(vict->desc->original, k, NUYEN_INCOME_STAFF_PAYOUT);
+  else
+    gain_nuyen(vict, k, NUYEN_INCOME_STAFF_PAYOUT);
+
+  send_to_char(vict, "You have been paid %d nuyen for %s%s^n\r\n", k, reason, ispunct(get_final_character_from_string(reason)) ? "" : ".");
+
+  send_to_char(ch, "You paid %d nuyen to %s for %s%s^n\r\n", k, GET_CHAR_NAME(vict), reason, ispunct(get_final_character_from_string(reason)) ? "" : ".");
+
+  snprintf(buf2, sizeof(buf2), "%s paid %d nuyen to %s for %s^g (%ld to %ld).",
+          GET_CHAR_NAME(ch), k,
+          GET_CHAR_NAME(vict), reason, GET_NUYEN(vict) - k, GET_NUYEN(vict));
+  mudlog(buf2, ch, LOG_WIZLOG, TRUE);
+}
+
+ACMD(do_charge) {
+  MYSQL_RES *res;
+  MYSQL_ROW row;
+
+  struct char_data *vict;
+  char amt[MAX_STRING_LENGTH];
+  char reason[MAX_STRING_LENGTH];
+  int k;
+
+  half_chop(argument, arg, buf);
+  half_chop(buf, amt, reason);
+
+  k = atoi(amt);
+
+  if (!*arg || !*amt || !*reason || k <= 0 ) {
+    send_to_char("Syntax: charge <player> <nuyen> <Reason for the nuyen deduction>\r\n", ch);
+    return;
+  }
+
+  if (!(vict = get_char_vis(ch, arg))) {
+    snprintf(buf, sizeof(buf), "SELECT idnum, cash FROM pfiles WHERE name='%s' AND cash >= %d;", prepare_quotes(buf2, arg, sizeof(buf2) / sizeof(buf2[0])), k);
+    if (mysql_wrapper(mysql, buf)) {
+      send_to_char("An unexpected error occurred (query failed).\r\n", ch);
+      return;
+    }
+    if (!(res = mysql_use_result(mysql))) {
+      send_to_char("An unexpected error occurred (use_result failed).\r\n", ch);
+      return;
+    }
+    row = mysql_fetch_row(res);
+    if (!row && mysql_field_count(mysql)) {
+      mysql_free_result(res);
+      send_to_char(ch, "Could not find a PC named '%s' that had %d nuyen on them.\r\n", arg, k);
+      return;
+    }
+    long idnum = atol(row[0]);
+    int old_nuyen = atoi(row[1]);
+    mysql_free_result(res);
+
+    // Now that we've confirmed the player exists, update them.
+    snprintf(buf, sizeof(buf), "UPDATE pfiles SET cash = cash - %d WHERE idnum='%ld';", k, idnum);
+    if (mysql_wrapper(mysql, buf)) {
+      send_to_char("An unexpected error occurred on update (query failed).\r\n", ch);
+      return;
+    }
+
+    // Mail the victim.
+    snprintf(buf, sizeof(buf), "You have been charged %d nuyen for %s%s^n\r\n",
+             k,
+             reason,
+             ispunct(get_final_character_from_string(reason)) ? "" : ".");
+    store_mail(idnum, ch, buf);
+
+    // Notify the actor.
+    send_to_char(ch, "You charge %d nuyen from %s for %s%s^n\r\n",
+                 k,
+                 capitalize(arg),
+                 reason,
+                 ispunct(get_final_character_from_string(reason)) ? "" : ".");
+
+    // Log it.
+    snprintf(buf, sizeof(buf), "%s charged %d nuyen from %s for %s^g (%d to %d).",
+             GET_CHAR_NAME(ch),
+             k,
+             arg,
+             reason,
+             old_nuyen,
+             old_nuyen - k);
+    mudlog(buf, ch, LOG_WIZLOG, TRUE);
+    return;
+  }
+
+  if (IS_SENATOR(vict)) {
+    send_to_char(ch, "Staff can't lose nuyen this way. Use the SET command.\r\n", ch);
+    return;
+  }
+
+  if (GET_NUYEN(vict) - k < 0 || GET_NUYEN(vict) - k > GET_NUYEN(vict)) {
+    send_to_char(ch, "That would put %s at negative nuyen. You may charge up to %d nuyen from %s.\r\n",
+                 GET_CHAR_NAME(vict), GET_NUYEN(vict), HMHR(vict));
+    return;
+  }
+
+  if (vict->desc && vict->desc->original)
+    lose_nuyen(vict->desc->original, k, NUYEN_OUTFLOW_STAFF_CHARGE);
+  else
+    lose_nuyen(vict, k, NUYEN_OUTFLOW_STAFF_CHARGE);
+
+  send_to_char(vict, "You have been charged %d nuyen for %s%s^n\r\n", k, reason, ispunct(get_final_character_from_string(reason)) ? "" : ".");
+
+  send_to_char(ch, "You charged %d nuyen from %s for %s%s^n\r\n", k, GET_CHAR_NAME(vict), reason, ispunct(get_final_character_from_string(reason)) ? "" : ".");
+
+  snprintf(buf2, sizeof(buf2), "%s charged %d nuyen from %s for %s^g (%ld to %ld).",
+          GET_CHAR_NAME(ch), k,
+          GET_CHAR_NAME(vict), reason, GET_NUYEN(vict) + k, GET_NUYEN(vict));
+  mudlog(buf2, ch, LOG_WIZLOG, TRUE);
+}
+
 ACMD(do_award)
 {
   MYSQL_RES *res;

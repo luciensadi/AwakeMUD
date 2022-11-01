@@ -706,6 +706,9 @@ ACMD(do_spellset)
   act(buf, TRUE, ch, NULL, vict, TO_VICT);
   snprintf(buf, sizeof(buf), "%s set %s's '%s' spell to Force %d (was 0).", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), spellname, force);
   mudlog(buf, ch, LOG_WIZLOG, TRUE);
+
+  // Save them.
+  playerDB.SaveChar(vict);
 }
 
 
