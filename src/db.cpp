@@ -4047,12 +4047,21 @@ void reset_zone(int zone, int reboot)
         last_cmd = 0;
       break;
     case 'H':                 /* loads a Matrix file into a host */
-      if ((obj_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1) ||
-          (ZCMD.arg2 == 0 && reboot)) {
-        obj_to_host(read_object(ZCMD.arg1, REAL), &matrix[ZCMD.arg3]);
-        last_cmd = 1;
-      } else
-        last_cmd = 0;
+      // Count the existing items in this host
+      {
+        int already_there = 0;
+        for (struct obj_data *contents = matrix[ZCMD.arg3].file; contents; contents = contents->next_content) {
+          if (GET_OBJ_VNUM(contents) == GET_OBJ_VNUM(&obj_proto[ZCMD.arg1]))
+            already_there++;
+        }
+
+        if ((already_there < ZCMD.arg2) || (ZCMD.arg2 == -1) ||
+            (ZCMD.arg2 == 0 && reboot)) {
+          obj_to_host(read_object(ZCMD.arg1, REAL), &matrix[ZCMD.arg3]);
+          last_cmd = 1;
+        } else
+          last_cmd = 0;
+      }
       break;
     case 'O':                 /* read an object */
       if ((obj_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1) || (ZCMD.arg2 == 0 && reboot)) {
