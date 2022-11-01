@@ -1059,6 +1059,7 @@ const char *extra_bits[] =
     "AIR_FILTRATION",
     "NBC_RESIST",
     "NBC_IMMUNE",
+    "PURGE_ON_DEATH",
     MAX_FLAG_MARKER
   };
 
@@ -1096,6 +1097,7 @@ const char *pc_readable_extra_bits[] =
     "Filters Air (NERP)",
     "Resists Bio/Chemical Weapons (NERP)",
     "Immune to Bio/Chemical Weapons (NERP)",
+    "Vanishes on Death",
     "\n"
   };
 

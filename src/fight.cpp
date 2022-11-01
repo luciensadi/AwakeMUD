@@ -601,7 +601,11 @@ void make_corpse(struct char_data * ch)
     {
       obj = o->next_content;
       obj_from_char(o);
+      // Skip empty magazines.
       if (GET_OBJ_TYPE(o) == ITEM_GUN_MAGAZINE && !GET_OBJ_VAL(o, 1))
+        extract_obj(o);
+      // Skip gowns.
+      else if (IS_OBJ_STAT(o, ITEM_EXTRA_PURGE_ON_DEATH))
         extract_obj(o);
       else {
         obj_to_obj(o, corpse);
@@ -614,8 +618,12 @@ void make_corpse(struct char_data * ch)
   for (i = 0; i < NUM_WEARS; i++)
   {
     if (ch->equipment[i]) {
-      corpse_value += GET_OBJ_COST( ch->equipment[i] );
-      obj_to_obj(unequip_char(ch, i, TRUE), corpse);
+      if (IS_OBJ_STAT(ch->equipment[i], ITEM_EXTRA_PURGE_ON_DEATH)) {
+        extract_obj(unequip_char(ch, i, TRUE));
+      } else {
+        corpse_value += GET_OBJ_COST( ch->equipment[i] );
+        obj_to_obj(unequip_char(ch, i, TRUE), corpse);
+      }
     }
   }
 

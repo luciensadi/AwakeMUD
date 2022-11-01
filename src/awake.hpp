@@ -1339,7 +1339,8 @@ enum {
 #define ITEM_EXTRA_AIR_FILTRATION     29    // Provides the wearer with filtered air (gas mask, etc)
 #define ITEM_EXTRA_NBC_RESISTANT      30    // Gives a bonus on resistance tests for contact chemical/toxin damage.
 #define ITEM_EXTRA_NBC_IMMUNE         31    // Conveys immunity to contact chemical / toxin damage (full-body hazard suit, etc)
-#define MAX_ITEM_EXTRA                32
+#define ITEM_EXTRA_PURGE_ON_DEATH     32    // Vanishes when you die (won't make it to your corpse)
+#define MAX_ITEM_EXTRA                33
 
 /* Ammo types */
 #define AMMO_NORMAL     0
