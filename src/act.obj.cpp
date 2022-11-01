@@ -4016,10 +4016,10 @@ int draw_from_readied_holster(struct char_data *ch, struct obj_data *holster) {
   }
 
   int where = 0;
-  if (!GET_EQ(ch, WEAR_HOLD) && can_wield_both(ch, GET_EQ(ch, WEAR_WIELD), contents))
-    where = WEAR_HOLD;
-  else if (!GET_EQ(ch, WEAR_WIELD) && can_wield_both(ch, GET_EQ(ch, WEAR_HOLD), contents))
+  if (!GET_EQ(ch, WEAR_WIELD) && can_wield_both(ch, GET_EQ(ch, WEAR_HOLD), contents))
     where = WEAR_WIELD;
+  else if (!GET_EQ(ch, WEAR_HOLD) && can_wield_both(ch, GET_EQ(ch, WEAR_WIELD), contents))
+    where = WEAR_HOLD;
 
   if (where) {
     obj_from_obj(contents);
