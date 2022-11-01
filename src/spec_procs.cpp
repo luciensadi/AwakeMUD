@@ -4865,7 +4865,10 @@ SPECIAL(bouncer_gentle)
     char_from_room(ch);
     char_to_room(ch, &world[real_room(toroom)]);
     act("$n is escorted in by $N, who gives $m a stern look and departs.", FALSE, ch, 0, bouncer, TO_ROOM);
-    do_look(ch, "", 0, 0);
+
+    // If not screenreader, look.
+    if (!PRF_FLAGGED(ch, PRF_SCREENREADER))
+      look_at_room(ch, 0, 0);
     return TRUE;
   }
 
@@ -4946,6 +4949,9 @@ SPECIAL(bouncer_troll) {
     char_from_room(ch);
     char_to_room(ch, &world[real_room(toroom)]);
     act("$n comes flying out of the club, literally.", TRUE, ch, 0, 0, TO_ROOM);
+    // If not screenreader, look.
+    if (!PRF_FLAGGED(ch, PRF_SCREENREADER))
+      look_at_room(ch, 0, 0);
     DELETE_ARRAY_IF_EXTANT(dir);
     DELETE_ARRAY_IF_EXTANT(dir2);
     return TRUE;
@@ -5752,6 +5758,10 @@ void orkish_truckdriver_drive_away(struct room_data *drivers_room) {
     send_to_char("You jump off the truck as it takes off!\r\n", temp);
     char_from_room(temp);
     char_to_room(temp, drivers_room);
+
+    // If not screenreader, look.
+    if (!PRF_FLAGGED(temp, PRF_SCREENREADER))
+      look_at_room(temp, 0, 0);
   }
 }
 
@@ -6261,6 +6271,10 @@ SPECIAL(mageskill_trainer)
       act("$n passes through the field to the north.", TRUE, ch, 0, 0, TO_ROOM);
       char_from_room(ch);
       char_to_room(ch, &world[real_room(RM_MAGE_TRAINER)]);
+
+      // If not screenreader, look.
+      if (!PRF_FLAGGED(ch, PRF_SCREENREADER))
+        look_at_room(ch, 0, 0);
     }
   }
   return FALSE;
@@ -6436,6 +6450,10 @@ SPECIAL(airport_gate) {
     PLR_FLAGS(ch).RemoveBit(PLR_VISA);
     char_from_room(ch);
     char_to_room(ch, &world[to_room]);
+
+    // If not screenreader, look.
+    if (!PRF_FLAGGED(ch, PRF_SCREENREADER))
+      look_at_room(ch, 0, 0);
     return TRUE;
   }
 
@@ -6712,6 +6730,10 @@ SPECIAL(nerpcorpolis_button) {
   char_from_room(ch);
   char_to_room(ch, &world[teleport_rnum]);
   act("$n appears from the teleporter.", TRUE, ch, 0, 0, TO_ROOM);
+
+  // If not screenreader, look.
+  if (!PRF_FLAGGED(ch, PRF_SCREENREADER))
+    look_at_room(ch, 0, 0);
 
   return TRUE;
 }
