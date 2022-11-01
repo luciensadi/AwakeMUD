@@ -832,7 +832,7 @@ void game_loop(int mother_desc)
         // If we've invalidated the descriptor list in the process of an interpreted command, bail out.
         if (global_descriptor_list_invalidated) {
           global_descriptor_list_invalidated = FALSE;
-          mudlog("Global descriptor list was invalidated- skipping remaining inputs for this cycle.", NULL, LOG_SYSLOG, TRUE);
+          log("Global descriptor list was invalidated- skipping remaining inputs for this cycle.");
           break;
         }
       }
