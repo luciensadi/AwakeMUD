@@ -798,7 +798,7 @@ float get_ammo_weight(int weapontype, int ammotype) {
     return 0.125;
   }
 
-  return ammo_type[ammotype].weight;
+  return ammo_type[ammotype]._weight;
 }
 
 int get_ammo_cost(int weapontype, int ammotype) {

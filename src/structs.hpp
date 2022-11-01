@@ -1256,7 +1256,7 @@ struct ammo_data
   const char *name;
   unsigned char tn;
   float time;
-  float weight;
+  float _weight;  // Use bullet_pants.cpp's get_ammo_weight() instead.
   unsigned char cost;
   float street_index;
 };
