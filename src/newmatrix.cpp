@@ -2178,6 +2178,11 @@ ACMD(do_run)
             return;
           }
 
+          if (icon->decker && icon->decker->ch && (!PRF_FLAGGED(ch, PRF_PKER) || !PRF_FLAGGED(icon->decker->ch, PRF_PKER))) {
+            send_to_icon(PERSONA, "Both you and your target need to be flagged PK for that.\r\n");
+            return;
+          }
+
           send_to_icon(PERSONA, "You start running %s against %s.\r\n", GET_OBJ_NAME(soft), icon->name);
           if (!PERSONA->fighting) {
             PERSONA->next_fighting = matrix[icon->in_host].fighting;
@@ -3198,6 +3203,12 @@ ACMD(do_restrict)
     send_to_icon(PERSONA, "You can't find that icon here.\r\n");
     return;
   }
+
+  if (targ->decker && targ->decker->ch && (!PRF_FLAGGED(ch, PRF_PKER) || !PRF_FLAGGED(targ->decker->ch, PRF_PKER))) {
+    send_to_icon(PERSONA, "Both you and your target need to be flagged PK for that.\r\n");
+    return;
+  }
+
   for (struct obj_data *soft = targ->decker->software; soft; soft = soft->next_content)
     if (GET_OBJ_VAL(soft, 0) == SOFT_SLEAZE)
       detect = GET_OBJ_VAL(soft, 1);
