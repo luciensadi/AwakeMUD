@@ -429,7 +429,7 @@ bool install_ware_in_target_character(struct obj_data *ware, struct char_data *i
             return FALSE;
           }
 
-          if (GET_CYBERWARE_TYPE(ware) != CYB_EYES && GET_CYBERWARE_TYPE(ware) != CYB_FILTRATION) {
+          if (GET_CYBERWARE_TYPE(ware) != CYB_EYES && GET_CYBERWARE_TYPE(ware) != CYB_FILTRATION && !is_custom_ware(check)) {
             if (IS_NPC(installer)) {
               snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " You already have %s, and it's too similar to %s for them to work together.", GET_OBJ_NAME(check), GET_OBJ_NAME(ware));
               do_say(installer, buf, cmd_say, SCMD_SAYTO);
