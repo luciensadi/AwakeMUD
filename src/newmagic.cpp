@@ -37,6 +37,7 @@ extern bool process_single_boost(struct char_data *ch, int boost_attribute);
 extern void _char_with_spell_from_room(struct char_data *ch, int spell_num, room_spell_t *room_spell_tracker);
 extern void _char_with_spell_to_room(struct char_data *ch, int spell_num, room_spell_t *room_spell_tracker);
 extern bool handle_player_docwagon_track(struct char_data *ch, char *argument);
+extern void check_quest_destroy(struct char_data *ch, struct obj_data *obj);
 
 char modify_target_rbuf_for_newmagic[MAX_STRING_LENGTH];
 
@@ -5478,17 +5479,21 @@ ACMD(do_deactivate)
 
 ACMD(do_destroy)
 {
+  struct obj_data *obj;
+
   if (!*argument) {
-    send_to_char("Destroy which lodge, circle, or ritual component set?\r\n", ch);
+    send_to_char("Destroy which lodge, circle, object, or ritual component set?\r\n", ch);
     return;
   }
+
   skip_spaces(&argument);
-  struct obj_data *obj;
+
   if (ch->in_veh || !(obj = get_obj_in_list_vis(ch, argument, ch->in_room->contents))) {
-    send_to_char(ch, "You don't see a lodge, circle, or ritual component set named '%s' %s.\r\n", argument, ch->in_room ? "anywhere around you" : "in this vehicle");
+    send_to_char(ch, "You don't see a lodge, circle, breakable object, or ritual component set named '%s' %s.\r\n", argument, ch->in_room ? "anywhere around you" : "in this vehicle");
     send_to_char(ch, "(Are you looking for the ##^WJUNK^n command?)\r\n");
     return;
   }
+
   if (GET_OBJ_TYPE(obj) == ITEM_MAGIC_TOOL && (GET_OBJ_VAL(obj, 0) == TYPE_LODGE || GET_OBJ_VAL(obj, 0) == TYPE_CIRCLE)) {
     if (GET_OBJ_VAL(obj, 0) == TYPE_LODGE) {
       send_to_char(ch, "You kick at the supports and smash the talismans.\r\n");
@@ -5497,14 +5502,31 @@ ACMD(do_destroy)
       send_to_char(ch, "You rub your feet along the lines making up the hermetic circle, erasing them.\r\n");
       act("$n uses $s feet to rub out $p.", TRUE, ch, obj, 0, TO_ROOM);
     }
-    extract_obj(obj);
   } else if (GET_OBJ_VNUM(obj) == OBJ_RITUAL_SPELL_COMPONENTS) {
     send_to_char(ch, "You gather up the wasted ritual components and trash them.\r\n");
     act("$n gathers up the ritual components and trashes them.", TRUE, ch, 0, 0, TO_ROOM);
-    extract_obj(obj);
+  } else if (GET_OBJ_TYPE(obj) == ITEM_DESTROYABLE) {
+    if (obj->obj_flags.quest_id && obj->obj_flags.quest_id != GET_IDNUM(ch)) {
+      send_to_char(ch, "%s isn't yours-- better leave it be.\r\n", GET_OBJ_NAME(obj));
+      return;
+    }
+
+    send_to_char(ch, "You take a moment to wreck %s as thoroughly as you can.\r\n", GET_OBJ_NAME(obj));
+    act("$n takes a moment to wreck $p as thoroughly as $e can.", TRUE, ch, obj, 0, TO_ROOM);
   } else {
     send_to_char(ch, "You can't destroy %s. Maybe pick it up and ##^WJUNK^n it?\r\n", GET_OBJ_NAME(obj));
+    return;
   }
+
+  // If we've gotten here, we've sent a message and are ready to destroy the item.
+  // Check quest completion.
+  if (!IS_NPC(ch) && GET_QUEST(ch))
+    check_quest_destroy(ch, obj);
+  else if (AFF_FLAGGED(ch, AFF_GROUP) && ch->master && !IS_NPC(ch->master) && GET_QUEST(ch->master))
+    check_quest_destroy(ch->master, obj);
+
+  // Destroy it.
+  extract_obj(obj);
 }
 
 ACMD(do_track)
