@@ -424,7 +424,7 @@ void zedit_disp_command_menu(struct descriptor_data *d)
     send_to_char(CH, "^G3^Y) ^WLoad obj: ^c%s ^y(^B%d^y)^n\r\n",
                  obj_proto[COM->arg1].text.name,
                  OBJ(COM->arg1) );
-    send_to_char(CH, "^G4^Y) ^WMaximum number in game: ^c%d%s^n\r\n",
+    send_to_char(CH, "^G4^Y) ^WMaximum number in HOST: ^c%d%s^n\r\n",
                  COM->arg2, get_zedit_maximum_info_string(COM->arg2));
     send_to_char(CH, "^G5^Y) ^WLoad in host: ^c%s ^y(^B%d^y)^n\r\n",
                  matrix[COM->arg3].name, HOST(COM->arg3) );
