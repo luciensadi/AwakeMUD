@@ -74,7 +74,7 @@ void raw_store_mail(long to, long from_id, const char *from_name, const char *me
   // Notify pocket secretaries of online characters.
   #define IS_VALID_POCKET_SEC(obj) ((obj) && GET_OBJ_SPEC((obj)) == pocket_sec && (obj)->contains)
   for (struct descriptor_data *desc = descriptor_list; desc; desc = desc->next)
-    if (desc->character && GET_IDNUM(desc->character) == to) {
+    if (desc->character && GET_IDNUM(desc->character) == to && STATE(desc) == CON_PLAYING) {
       bool has_beeped = FALSE;
 
       for (struct obj_data *obj = desc->character->carrying; obj && !has_beeped; obj = obj->next_content) {
