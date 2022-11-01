@@ -128,7 +128,7 @@ ACMD(do_say)
 
   if (subcmd == SCMD_OSAY) {
     // No color highlights for osay.
-    snprintf(buf, sizeof(buf), "$n^n says ^mOOCly^n, \"%s^n\"", capitalize(argument));
+    snprintf(buf, sizeof(buf), "$n^n says ^mOOCly^n, \"%s%s^n\"", capitalize(argument), get_final_character_from_string(argument) == '^' ? "^" : "");
     for (tmp = ch->in_room ? ch->in_room->people : ch->in_veh->people; tmp; tmp = ch->in_room ? tmp->next_in_room : tmp->next_in_veh) {
       // Replicate act() in a way that lets us capture the message.
       if (can_send_act_to_target(ch, FALSE, NULL, NULL, tmp, TO_ROOM) && !IS_IGNORING(tmp, is_blocking_osays_from, ch)) {
@@ -1327,9 +1327,9 @@ ACMD(do_gen_comm)
 
       // No autopunct for channels.
       if (!access_level(d->character, GET_INCOG_LEV(ch)))
-        snprintf(buf, sizeof(buf), "^m[^nA Staff Member^m]^n ^R(^nOOC^R)^n, \"%s^n\"\r\n", capitalize(argument));
+        snprintf(buf, sizeof(buf), "^m[^nA Staff Member^m]^n ^R(^nOOC^R)^n, \"%s%s^n\"\r\n", capitalize(argument), get_final_character_from_string(argument) == '^' ? "^" : "");
       else
-        snprintf(buf, sizeof(buf), "^m[^n%s^m]^n ^R(^nOOC^R)^n, \"%s^n\"\r\n", IS_NPC(ch) ? GET_NAME(ch) : GET_CHAR_NAME(ch), capitalize(argument));
+        snprintf(buf, sizeof(buf), "^m[^n%s^m]^n ^R(^nOOC^R)^n, \"%s%s^n\"\r\n", IS_NPC(ch) ? GET_NAME(ch) : GET_CHAR_NAME(ch), capitalize(argument), get_final_character_from_string(argument) == '^' ? "^" : "");
 
       store_message_to_history(d, COMM_CHANNEL_OOC, buf);
 
