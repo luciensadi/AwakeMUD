@@ -2356,6 +2356,9 @@ void auto_repair_obj(struct obj_data *obj) {
 
       if (GET_CYBERWARE_TYPE(obj) != BIO_CUSTOM_NERPS) {
         FORCE_PROTO_VALUE("bioware", GET_BIOWARE_ESSENCE_COST(obj), GET_BIOWARE_ESSENCE_COST(&obj_proto[rnum]));
+      } else {
+        GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_WIZLOAD);
+        GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_NERPS);
       }
       break;
     case ITEM_CYBERWARE:
@@ -2365,6 +2368,9 @@ void auto_repair_obj(struct obj_data *obj) {
 
       if (GET_CYBERWARE_TYPE(obj) != CYB_CUSTOM_NERPS) {
         FORCE_PROTO_VALUE("cyberware", GET_CYBERWARE_ESSENCE_COST(obj), GET_CYBERWARE_ESSENCE_COST(&obj_proto[rnum]));
+      } else {
+        GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_WIZLOAD);
+        GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_NERPS);
       }
 
       if (GET_CYBERWARE_TYPE(obj) == CYB_EYES) {
