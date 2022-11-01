@@ -3910,28 +3910,40 @@ int draw_from_readied_holster(struct char_data *ch, struct obj_data *holster) {
   }
 
   // Check to see if it can be wielded.
-  if (!CAN_WEAR(contents, ITEM_WEAR_WIELD))
+  if (!CAN_WEAR(contents, ITEM_WEAR_WIELD)) {
+    act("Draw check: Skipping $p, can't be wielded.", FALSE, ch, contents, 0, TO_ROLLS);
     return 0;
+  }
 
   // Our hands are full.
-  if (GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD))
+  if (GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD)) {
+    act("Draw check: Skipping $p, hands are full.", FALSE, ch, contents, 0, TO_ROLLS);
     return 0;
+  }
 
   // We're wielding a 2H item.
-  if (GET_EQ(ch, WEAR_WIELD) && IS_OBJ_STAT(GET_EQ(ch, WEAR_WIELD), ITEM_EXTRA_TWOHANDS))
+  if (GET_EQ(ch, WEAR_WIELD) && IS_OBJ_STAT(GET_EQ(ch, WEAR_WIELD), ITEM_EXTRA_TWOHANDS)) {
+    act("Draw check: Skipping $p, wielding a 2H item already.", FALSE, ch, contents, 0, TO_ROLLS);
     return 0;
+  }
 
   // We're holding a 2H item.
-  if (GET_EQ(ch, WEAR_HOLD) && IS_OBJ_STAT(GET_EQ(ch, WEAR_HOLD), ITEM_EXTRA_TWOHANDS))
+  if (GET_EQ(ch, WEAR_HOLD) && IS_OBJ_STAT(GET_EQ(ch, WEAR_HOLD), ITEM_EXTRA_TWOHANDS)) {
+    act("Draw check: Skipping $p, holding a 2H item already.", FALSE, ch, contents, 0, TO_ROLLS);
     return 0;
+  }
 
   // We're holding something and drawing a 2H item.
-  if ((GET_EQ(ch, WEAR_WIELD) || GET_EQ(ch, WEAR_HOLD)) && IS_OBJ_STAT(contents, ITEM_EXTRA_TWOHANDS))
+  if ((GET_EQ(ch, WEAR_WIELD) || GET_EQ(ch, WEAR_HOLD)) && IS_OBJ_STAT(contents, ITEM_EXTRA_TWOHANDS)) {
+    act("Draw check: Skipping $p, have something in hand and drawing 2H item.", FALSE, ch, contents, 0, TO_ROLLS);
     return 0;
+  }
 
   // TODO: What does this check mean? (ed: probably intended to prevent machine guns and assault cannons from being drawn. Nonfunctional.)
-  if (GET_OBJ_VAL(holster, 4) >= SKILL_MACHINE_GUNS && GET_OBJ_VAL(holster, 4) <= SKILL_ASSAULT_CANNON)
+  if (GET_OBJ_VAL(holster, 4) >= SKILL_MACHINE_GUNS && GET_OBJ_VAL(holster, 4) <= SKILL_ASSAULT_CANNON) {
+    act("Draw check: Skipping $p, skill check failure.", FALSE, ch, contents, 0, TO_ROLLS);
     return 0;
+  }
 
   // Refuse to let someone draw a weapon focus that is stronger than twice their magic. At least, I think that's what this does?
   if (GET_OBJ_TYPE(contents) == ITEM_WEAPON
@@ -3939,6 +3951,7 @@ int draw_from_readied_holster(struct char_data *ch, struct obj_data *holster) {
            && GET_WEAPON_FOCUS_BONDED_BY(contents) == GET_IDNUM(ch)
            && GET_MAG(ch) * 2 < GET_WEAPON_FOCUS_RATING(contents))
   {
+    act("Draw check: Skipping $p, focus check failure.", FALSE, ch, contents, 0, TO_ROLLS);
     return 0;
   }
 
@@ -3949,6 +3962,7 @@ int draw_from_readied_holster(struct char_data *ch, struct obj_data *holster) {
     case RACE_ELF:
     case RACE_NIGHTONE:
       if (IS_OBJ_STAT(contents, ITEM_EXTRA_NOELF)) {
+        act("Draw check: Skipping $p, racial check failure (elf).", FALSE, ch, contents, 0, TO_ROLLS);
         return 0;
       }
       break;
@@ -3957,6 +3971,7 @@ int draw_from_readied_holster(struct char_data *ch, struct obj_data *holster) {
     case RACE_GNOME:
     case RACE_KOBOROKURU:
       if (IS_OBJ_STAT(contents, ITEM_EXTRA_NODWARF)) {
+        act("Draw check: Skipping $p, racial check failure (dwarf).", FALSE, ch, contents, 0, TO_ROLLS);
         return 0;
       }
       break;
@@ -3966,11 +3981,13 @@ int draw_from_readied_holster(struct char_data *ch, struct obj_data *holster) {
     case RACE_FOMORI:
     case RACE_CYCLOPS:
       if (IS_OBJ_STAT(contents, ITEM_EXTRA_NOTROLL)) {
+        act("Draw check: Skipping $p, racial check failure (troll).", FALSE, ch, contents, 0, TO_ROLLS);
         return 0;
       }
       break;
     case RACE_HUMAN:
       if (IS_OBJ_STAT(contents, ITEM_EXTRA_NOHUMAN)) {
+        act("Draw check: Skipping $p, racial check failure (human).", FALSE, ch, contents, 0, TO_ROLLS);
         return 0;
       }
       break;
@@ -3979,6 +3996,7 @@ int draw_from_readied_holster(struct char_data *ch, struct obj_data *holster) {
     case RACE_OGRE:
     case RACE_HOBGOBLIN:
       if (IS_OBJ_STAT(contents, ITEM_EXTRA_NOORK)) {
+        act("Draw check: Skipping $p, racial check failure (ork).", FALSE, ch, contents, 0, TO_ROLLS);
         return 0;
       }
       break;
@@ -3986,6 +4004,8 @@ int draw_from_readied_holster(struct char_data *ch, struct obj_data *holster) {
 
   // Staff-only limitations.
   if (IS_OBJ_STAT(contents, ITEM_EXTRA_STAFF_ONLY) && !access_level(ch, LVL_BUILDER)) {
+    act("Draw check: Skipping $p, racial check failure (staff limitation).", FALSE, ch, contents, 0, TO_ROLLS);
+    mudlog_vfprintf(ch, LOG_SYSLOG, "%s has STAFF-ONLY object %s (%ld) in a holster??", GET_CHAR_NAME(ch), GET_OBJ_NAME(contents), GET_OBJ_VNUM(contents));
     return 0;
   }
 
@@ -3996,9 +4016,9 @@ int draw_from_readied_holster(struct char_data *ch, struct obj_data *holster) {
   }
 
   int where = 0;
-  if (GET_EQ(ch, WEAR_WIELD) && can_wield_both(ch, GET_EQ(ch, WEAR_WIELD), contents))
+  if (!GET_EQ(ch, WEAR_HOLD) && can_wield_both(ch, GET_EQ(ch, WEAR_WIELD), contents))
     where = WEAR_HOLD;
-  else if (GET_EQ(ch, WEAR_HOLD) && can_wield_both(ch, GET_EQ(ch, WEAR_HOLD), contents))
+  else if (!GET_EQ(ch, WEAR_WIELD) && can_wield_both(ch, GET_EQ(ch, WEAR_HOLD), contents))
     where = WEAR_WIELD;
 
   if (where) {
@@ -4014,6 +4034,9 @@ int draw_from_readied_holster(struct char_data *ch, struct obj_data *holster) {
 
     // We wielded 1 weapon.
     return 1;
+  } else {
+    act("Draw check: Unable to draw $p, no viable slot?", FALSE, ch, contents, 0, TO_ROLLS);
+    return 0;
   }
 
   // We wielded 0 weapons.
@@ -4319,7 +4342,7 @@ ACMD(do_draw)
     }
 
     if (!draw_from_readied_holster(ch, holster)) {
-      send_to_char(ch, "%s isn't compatible with your current loadout.\r\n", GET_OBJ_NAME(holster->contains));
+      send_to_char(ch, "%s isn't compatible with your current loadout.\r\n", CAP(GET_OBJ_NAME(holster->contains)));
     }
     return;
   }
