@@ -780,6 +780,11 @@ void game_loop(int mother_desc)
 
     /* process commands we just read from process_input */
     {
+      // Clear the descriptor list invalidator, just in case it was set in the above code blocks.
+      // We only care about it in this block because some commands (ex: purge, dc) can alter the descriptor list
+      // and invalidate the NEXT descriptor instead of just the current one.
+      global_descriptor_list_invalidated = FALSE;
+
       PERF_PROF_SCOPE( pr_commands_, "process commands");
       for (d = descriptor_list; d; d = next_d) {
         next_d = d->next;
