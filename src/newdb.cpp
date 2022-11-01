@@ -2353,7 +2353,10 @@ void auto_repair_obj(struct obj_data *obj) {
       FORCE_PROTO_VALUE("bioware", GET_BIOWARE_TYPE(obj), GET_BIOWARE_TYPE(&obj_proto[rnum]));
       FORCE_PROTO_VALUE("bioware", GET_BIOWARE_RATING(obj), GET_BIOWARE_RATING(&obj_proto[rnum]));
       FORCE_PROTO_VALUE("bioware", GET_SETTABLE_BIOWARE_IS_CULTURED(obj), GET_SETTABLE_BIOWARE_IS_CULTURED(&obj_proto[rnum]));
-      FORCE_PROTO_VALUE("bioware", GET_BIOWARE_ESSENCE_COST(obj), GET_BIOWARE_ESSENCE_COST(&obj_proto[rnum]));
+
+      if (GET_CYBERWARE_TYPE(obj) != BIO_CUSTOM_NERPS) {
+        FORCE_PROTO_VALUE("bioware", GET_BIOWARE_ESSENCE_COST(obj), GET_BIOWARE_ESSENCE_COST(&obj_proto[rnum]));
+      }
       break;
     case ITEM_CYBERWARE:
       FORCE_PROTO_VALUE("cyberware", GET_CYBERWARE_TYPE(obj), GET_CYBERWARE_TYPE(&obj_proto[rnum]));

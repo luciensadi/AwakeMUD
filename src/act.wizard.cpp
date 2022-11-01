@@ -5183,9 +5183,9 @@ ACMD(do_set)
     break;
   case 54:
     if (IS_NPC(vict) || (IS_SENATOR(vict) && access_level(vict, LVL_ADMIN)))
-      RANGE(1, 1000);
+      RANGE(0, 1000);
     else
-      RANGE(1, 600);
+      RANGE(0, 600);
     vict->real_abils.bod_index = value;
     affect_total(vict);
     break;
