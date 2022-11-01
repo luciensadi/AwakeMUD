@@ -1416,6 +1416,8 @@ void list_one_char(struct char_data * i, struct char_data * ch)
     else
       snprintf(buf2, sizeof(buf2), " %s^n.", positions[(int) GET_POS(i)]);
     strlcat(buf, buf2, sizeof(buf));
+  } else if (affected_by_spell(ch, SPELL_LEVITATE)) {
+    strlcat(buf, " is here, hovering above the ground.", sizeof(buf));
   } else
   {
     if (FIGHTING(i)) {
