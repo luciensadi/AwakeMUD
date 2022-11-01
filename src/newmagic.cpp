@@ -3353,7 +3353,7 @@ ACMD(do_unbond)
   if (GET_OBJ_TYPE(obj) == ITEM_FOCUS && GET_FOCUS_BONDED_TO(obj)) {
     send_to_char("You sever the focus's bond with the astral plane.\r\n", ch);
     GET_FOCUS_BONDED_TO(obj) = GET_FOCUS_BONDED_SPIRIT_OR_SPELL(obj) = GET_FOCUS_TRADITION(obj) = 0;
-  } else if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && WEAPON_IS_FOCUS(obj) && WEAPON_FOCUS_USABLE_BY(obj, ch)) {
+  } else if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && WEAPON_IS_FOCUS(obj) && GET_WEAPON_FOCUS_BONDED_BY(obj) == GET_IDNUM(ch)) {
     send_to_char("You sever the weapon focus's bond with the astral plane.\r\n", ch);
     GET_WEAPON_FOCUS_BONDED_BY(obj) = GET_WEAPON_FOCUS_BOND_STATUS(obj) = 0;
   } else
@@ -3408,14 +3408,14 @@ ACMD(do_bond)
       send_to_char("Mundanes can't bond weapon foci.\r\n", ch);
       return;
     }
-    if (GET_WEAPON_FOCUS_BONDED_BY(obj) > 0) {
+    if (GET_WEAPON_FOCUS_BONDED_BY(obj) > 0 && GET_WEAPON_FOCUS_BOND_STATUS(obj) == 0) {
       send_to_char(ch, "%s is already bonded to %s.",
                    capitalize(GET_OBJ_NAME(obj)),
                    GET_WEAPON_FOCUS_BONDED_BY(obj) == GET_IDNUM(ch) ? "you" : "someone else");
       return;
     }
     if (((GET_MAG(ch) * 2) / 100) < GET_WEAPON_FOCUS_RATING(obj)) {
-      send_to_char(ch, "%s is too powerful for you to bond! You need at least %d magic to bond it, and you have %d.\r\n", capitalize(GET_OBJ_NAME(obj)), (int) ((GET_WEAPON_FOCUS_RATING(obj) + 1) / 2));
+      send_to_char(ch, "%s is too powerful for you to bond! You need at least %d magic to bond it, and you have %d.\r\n", capitalize(GET_OBJ_NAME(obj)), (int) ((GET_WEAPON_FOCUS_RATING(obj) + 1) / 2), (int) (GET_MAGIC(ch) / 100));
       return;
     }
 
