@@ -44,6 +44,7 @@
 #include "newmail.hpp"
 #include "ignore_system.hpp"
 #include "newmagic.hpp"
+#include "newmatrix.hpp"
 
 const char *CCHAR;
 
@@ -5663,6 +5664,8 @@ void print_object_location(int num, struct obj_data *obj, struct char_data *ch,
       print_object_location(0, obj->in_obj, ch, recur);
   } else if (obj->in_veh) {
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "in %s @ %ld%s^n", GET_VEH_NAME(obj->in_veh), GET_ROOM_VNUM(get_obj_in_room(obj)), obj->in_veh->in_veh ? " (nested veh)" : "");
+  } else if (obj->in_host) {
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "in host %s (%ld)^n", obj->in_host->name, obj->in_host->vnum);
   } else
     strlcat(buf, " in an unknown location.", sizeof(buf));
 
