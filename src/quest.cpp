@@ -2236,9 +2236,10 @@ void qedit_disp_menu(struct descriptor_data *d)
                     CCNRM(CH, C_CMP));
   send_to_char(CH, "8b) Intro emote:       %s%s%s\r\n", CCCYN(CH, C_CMP), QUEST->intro_emote ? QUEST->intro_emote : "<not set>", CCNRM(CH, C_CMP));
   send_to_char(CH, "\r\n");
-  send_to_char(CH, "9a) Decline speech:    %s%s%s\r\n",
+  send_to_char(CH, "9a) Decline speech%s%s%s%s\r\n",
+                   QUEST->decline_emote ?  " (overridden by emotes in person, still seen in ENDRUN):" : ":    ",
                    CCCYN(CH, C_CMP),
-                   QUEST->decline_emote ?  "<overridden by emotes>" : QUEST->decline,
+                   QUEST->decline,
                    CCNRM(CH, C_CMP));
   send_to_char(CH, "9b) Decline emote:     %s%s%s\r\n", CCCYN(CH, C_CMP), QUEST->decline_emote ? QUEST->decline_emote : "<not set>", CCNRM(CH, C_CMP));
   send_to_char(CH, "\r\n");

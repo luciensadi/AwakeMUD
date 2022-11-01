@@ -39,9 +39,9 @@ int alert_player_doctors_of_mort(struct char_data *ch, struct obj_data *docwagon
   PLR_FLAGS(ch).SetBit(PLR_SENT_DOCWAGON_PLAYER_ALERT);
 
   if ((gridguide_coords = get_gridguide_coordinates_for_room(in_room))) {
-    snprintf(location_info, sizeof(location_info), "GridGuide coordinates [%s], AKA '%s'", gridguide_coords, decapitalize_a_an(GET_ROOM_NAME(in_room)));
+    snprintf(location_info, sizeof(location_info), "GridGuide coordinates [%s], AKA '%s' (%ld)", gridguide_coords, decapitalize_a_an(GET_ROOM_NAME(in_room)), GET_ROOM_VNUM(in_room));
   } else {
-    snprintf(location_info, sizeof(location_info), "'%s'", decapitalize_a_an(GET_ROOM_NAME(in_room)));
+    snprintf(location_info, sizeof(location_info), "'%s' (%ld)", decapitalize_a_an(GET_ROOM_NAME(in_room)), GET_ROOM_VNUM(in_room));
   }
 
   for (struct char_data *plr = character_list; plr; plr = plr->next) {
