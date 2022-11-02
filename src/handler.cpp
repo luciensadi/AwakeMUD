@@ -3381,14 +3381,23 @@ int get_skill_num_in_use_for_weapons(struct char_data *ch) {
   return skill_num;
 }
 
+int _get_weapon_focus_bonus_dice(struct char_data *ch, struct obj_data *weapon) {
+  if (!ch || !weapon)
+    return 0;
+
+  if (weapon && GET_OBJ_TYPE(weapon) == ITEM_WEAPON && WEAPON_IS_FOCUS(weapon) && WEAPON_FOCUS_USABLE_BY(weapon, ch)) {
+    return GET_WEAPON_FOCUS_RATING(GET_EQ(ch, WEAR_WIELD));
+  }
+
+  return 0;
+}
+
 int get_skill_dice_in_use_for_weapons(struct char_data *ch) {
   int skill_num = get_skill_num_in_use_for_weapons(ch);
   int skill_dice = GET_SKILL(ch, skill_num);
-  struct obj_data *weapon = GET_EQ(ch, WEAR_WIELD);
 
-  if (weapon && GET_OBJ_TYPE(weapon) == ITEM_WEAPON && WEAPON_IS_FOCUS(weapon) && WEAPON_FOCUS_USABLE_BY(weapon, ch)) {
-    skill_dice += GET_WEAPON_FOCUS_RATING(GET_EQ(ch, WEAR_WIELD));
-  }
+  skill_dice += _get_weapon_focus_bonus_dice(ch, GET_EQ(ch, WEAR_WIELD));
+  skill_dice += _get_weapon_focus_bonus_dice(ch, GET_EQ(ch, WEAR_HOLD));
 
   return skill_dice;
 }
