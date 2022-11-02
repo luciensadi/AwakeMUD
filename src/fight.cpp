@@ -55,7 +55,7 @@ int find_weapon_range(struct char_data *ch, struct obj_data *weapon);
 void weapon_scatter(struct char_data *ch, struct char_data *victim,
                     struct obj_data *weapon);
 void explode_explosive_grenade(struct char_data *ch, struct obj_data *weapon, struct room_data *room);
-void explode_antimagic_grenade(struct char_data *ch, struct obj_data *weapon, struct room_data *room);
+void explode_flashbang_grenade(struct char_data *ch, struct obj_data *weapon, struct room_data *room);
 void target_explode(struct char_data *ch, struct obj_data *weapon,
                     struct room_data *room, int mode);
 void forget(struct char_data * ch, struct char_data * victim);
@@ -4812,14 +4812,14 @@ void explode_explosive_grenade(struct char_data *ch, struct obj_data *weapon, st
                             ch);
 }
 
-void explode_antimagic_grenade(struct char_data *ch, struct obj_data *weapon, struct room_data *room)
+void explode_flashbang_grenade(struct char_data *ch, struct obj_data *weapon, struct room_data *room)
 {
   int power = GET_WEAPON_POWER(weapon);
 
   extract_obj(weapon);
 
   if (ROOM_FLAGGED(room, ROOM_PEACEFUL) || ROOM_FLAGGED(room, ROOM_HOUSE)) {
-    mudlog_vfprintf(ch, LOG_CHEATLOG, "Somehow, %s got an antimagic grenade into an invalid room!", GET_CHAR_NAME(ch));
+    mudlog_vfprintf(ch, LOG_CHEATLOG, "Somehow, %s got a flashbang grenade into an invalid room!", GET_CHAR_NAME(ch));
     return;
   }
 
@@ -4875,6 +4875,7 @@ void explode_antimagic_grenade(struct char_data *ch, struct obj_data *weapon, st
       act(rbuf, FALSE, ch, 0, victim, TO_ROLLS);
     }
 
+    // They successfully resisted? Bail out.
     if (successes > 0) {
       // We have to do the ranged response here since we won't get a chance later.
       if (IS_NPC(victim))
@@ -4882,7 +4883,7 @@ void explode_antimagic_grenade(struct char_data *ch, struct obj_data *weapon, st
       continue;
     }
 
-    // Failed? Roll for each of their spells to see if they lose it.
+    // Failed to resist? Roll for each of their spells to see if they lose it.
     for (struct sustain_data *next, *sust = GET_SUSTAINED(victim); sust; sust = next) {
       next = sust->next;
       // Only affect spells that are victim records, since this means that this is the effect portion of the spell record pair.
@@ -4892,7 +4893,8 @@ void explode_antimagic_grenade(struct char_data *ch, struct obj_data *weapon, st
         int grenade_dice = power;
         int grenade_successes = success_test(grenade_dice, grenade_tn);
 
-        int char_tn = MAX(power, sust->force);
+        char rbuf[1000];
+        int char_tn = MAX(power, sust->force) + damage_modifier(victim, rbuf, sizeof(rbuf));
         int char_dice = GET_WIL(victim);
         int char_successes = success_test(char_dice, char_tn);
 
@@ -5091,13 +5093,13 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
     snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "total %d. Rolling %d dice: ", tn, dice);
 
     int successes = success_test(dice, tn);
-    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "%d success%s. Will%s scatter.", successes, successes == 1 ? "" : "es", successes > GRENADE_SCATTER_THRESHOLD ? " NOT" : "");
+    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "%d success%s. Will%s scatter.", successes, successes == 1 ? "" : "es", successes >= GRENADE_SCATTER_THRESHOLD ? " NOT" : "");
 
     act(rbuf, FALSE, ch, 0, ch, TO_ROLLS);
     if (nextroom->people)
       act(rbuf, FALSE, nextroom->people, 0, ch, TO_ROLLS);
 
-    if (successes <= GRENADE_SCATTER_THRESHOLD) {
+    if (successes < GRENADE_SCATTER_THRESHOLD) {
       left = -1;
       right = -1;
       if (dir < UP) {
@@ -5129,7 +5131,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
               explode_explosive_grenade(ch, weapon, scatter[temp2]);
               break;
             case GRENADE_TYPE_FLASHBANG:
-              explode_antimagic_grenade(ch, weapon, scatter[temp2]);
+              explode_flashbang_grenade(ch, weapon, scatter[temp2]);
               break;
             default:
               mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Unknown grenade type %d in range_combat()!", GET_WEAPON_GRENADE_TYPE(weapon));
@@ -5145,7 +5147,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
         explode_explosive_grenade(ch, weapon, nextroom);
         break;
       case GRENADE_TYPE_FLASHBANG:
-        explode_antimagic_grenade(ch, weapon, nextroom);
+        explode_flashbang_grenade(ch, weapon, nextroom);
         break;
       default:
         mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Unknown grenade type %d in range_combat()!", GET_WEAPON_GRENADE_TYPE(weapon));
