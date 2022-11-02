@@ -4869,7 +4869,7 @@ void explode_antimagic_grenade(struct char_data *ch, struct obj_data *weapon, st
     // Roll to see if they resist. You get a bonus from flare comp.
     int successes = success_test(dice, tn);
 
-    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "With %d dice, got %d success%s.^n", dice, successes, successes != 1 ? "es" : "");
+    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), " With %d dice, got %d success%s.^n", dice, successes, successes != 1 ? "es" : "");
     act(rbuf, FALSE, victim, 0, victim, TO_ROLLS);
     if (victim->in_room != ch->in_room) {
       act(rbuf, FALSE, ch, 0, victim, TO_ROLLS);

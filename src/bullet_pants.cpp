@@ -517,6 +517,19 @@ const char *get_ammo_representation(int weapon, int ammotype, int quantity) {
     return "ERROR";
   }
 
+  // Special case: Certain shotgun rounds are slugs or darts, not shells.
+  if (weapon == WEAP_SHOTGUN) {
+    switch (ammotype) {
+      case AMMO_APDS:
+      case AMMO_AV:
+        snprintf(results_buf, sizeof(results_buf), "%s %s slug%s",
+                 ammo_type[ammotype].name,
+                 weapon_types[weapon],
+                 quantity != 1 ? "s" : "");
+        return results_buf;
+    }
+  }
+
   snprintf(results_buf, sizeof(results_buf), "%s %s %s%s",
            ammo_type[ammotype].name,
            weapon_types[weapon],
