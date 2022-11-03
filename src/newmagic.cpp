@@ -103,29 +103,21 @@ void end_sustained_spell(struct char_data *ch, struct sustain_data *sust)
       case SPELL_SILENCE:
         if (ch->in_room) {
           _char_with_spell_from_room(ch, sust->spell, ch->in_room->silence);
-        } else {
-          mudlog_vfprintf(ch, LOG_SYSLOG, "SYSWARN: Canceling %s spell on a character without a room!", spells[sust->spell].name);
         }
         break;
       case SPELL_SHADOW:
         if (ch->in_room) {
           _char_with_spell_from_room(ch, sust->spell, ch->in_room->shadow);
-        } else {
-          mudlog_vfprintf(ch, LOG_SYSLOG, "SYSWARN: Canceling %s spell on a character without a room!", spells[sust->spell].name);
         }
         break;
       case SPELL_LIGHT:
         if (ch->in_room) {
           _char_with_spell_from_room(ch, sust->spell, ch->in_room->light);
-        } else {
-          mudlog_vfprintf(ch, LOG_SYSLOG, "SYSWARN: Canceling %s spell on a character without a room!", spells[sust->spell].name);
         }
         break;
       case SPELL_POLTERGEIST:
         if (ch->in_room) {
           _char_with_spell_from_room(ch, sust->spell, ch->in_room->poltergeist);
-        } else {
-          mudlog_vfprintf(ch, LOG_SYSLOG, "SYSWARN: Canceling %s spell on a character without a room!", spells[sust->spell].name);
         }
         break;
     }
