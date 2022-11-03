@@ -1311,11 +1311,27 @@ ACMD(do_locate)
     }
 
     if (!i) {
-      if (matrix[PERSONA->in_host].ic_bound_paydata > 0 && spawn_ic(PERSONA, -1, -1)) {
-        send_to_icon(PERSONA, "There's no free-floating paydata left to find, but you're able to locate a suspicious-looking IC.\r\n");
-      } else {
-        send_to_icon(PERSONA, "There's no paydata left to find.\r\n");
+      if (matrix[PERSONA->in_host].ic_bound_paydata > 0) {
+        // Search the host for existing ICs.
+        for (struct matrix_icon *ic_test = matrix[PERSONA->in_host].icons; ic_test; ic_test = ic_test->next_in_host) {
+          // If there's already an IC in the host...
+          if (!ic_test->decker) {
+            send_to_icon(PERSONA, "There's no free-floating paydata left to find, but you're pretty sure there's at least one piece bound up in an IC somewhere.\r\n");
+            return;
+          }
+        }
+
+        // No ICs in the host. Spawn one.
+        if (spawn_ic(PERSONA, -1, -1)) {
+          send_to_icon(PERSONA, "There's no free-floating paydata left to find, but you're able to locate a suspicious-looking IC.\r\n");
+          return;
+        }
+        // Fall through.
       }
+
+      // No IC-bound paydata exists, OR we were not able to locate or spawn an IC to carry it.
+      send_to_icon(PERSONA, "There's no paydata left to find.\r\n");
+      return;
     } else {
       switch (number(0, 100)) {
         case 0:
