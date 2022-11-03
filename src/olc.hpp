@@ -55,7 +55,7 @@ extern void write_index_file(const char *suffix);
 #define HEDIT_PARENT		4
 #define HEDIT_KEYWORDS		5
 #define HEDIT_DESC		6
-#define HEDIT_SECURITY_COLOUR	7
+#define HEDIT_SECURITY_COLOR	7
 #define HEDIT_SECURITY_RATING	8
 #define HEDIT_SECURITY_DIFF	9
 #define HEDIT_TYPE		10

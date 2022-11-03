@@ -2837,7 +2837,7 @@ SPECIAL(fence)
 
     snprintf(buf, sizeof(buf), "Paying %d nuyen for %s^g paydata (base %d, after roll %d, then time decay). Market going from %d to ",
              value,
-             host_sec[GET_DECK_ACCESSORY_FILE_HOST_COLOR(obj)],
+             host_color[GET_DECK_ACCESSORY_FILE_HOST_COLOR(obj)],
              market[GET_OBJ_VAL(obj, 4)],
              negotiated_value,
              market[GET_DECK_ACCESSORY_FILE_HOST_COLOR(obj)]);

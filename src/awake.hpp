@@ -2801,11 +2801,11 @@ enum {
 #define STRING_MOB_RDESC_UNFINISHED "An unfinished mob stands here."
 #define STRING_MOB_LDESC_UNFINISHED "It looks barely coherent as it waits to be created.\r\n"
 
-#define HOST_SECURITY_BLUE   0
-#define HOST_SECURITY_GREEN  1
-#define HOST_SECURITY_ORANGE 2
-#define HOST_SECURITY_RED    3
-#define HOST_SECURITY_BLACK  4
+#define HOST_COLOR_BLUE   0
+#define HOST_COLOR_GREEN  1
+#define HOST_COLOR_ORANGE 2
+#define HOST_COLOR_RED    3
+#define HOST_COLOR_BLACK  4
 
 #define MOUNT_FIRMPOINT_INTERNAL 0
 #define MOUNT_FIRMPOINT_EXTERNAL 1

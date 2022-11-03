@@ -55,7 +55,7 @@ struct host_data {
   char *shutdown_start;
   char *shutdown_stop;
 
-  sh_int colour;
+  sh_int color;
   int security;
   sh_int intrusion;
   long stats[5][6];
@@ -63,6 +63,7 @@ struct host_data {
   int type;
   int reset;
   int undiscovered_paydata;
+  int ic_bound_paydata;
   int alert;
   int pass;
   int shutdown;
@@ -81,8 +82,8 @@ struct host_data {
   struct obj_data *file;
   host_data():
     name(NULL), keywords(NULL), desc(NULL), shutdown_start(NULL), shutdown_stop(NULL),
-    type(0), reset(0), undiscovered_paydata(0), alert(0), pass(0), shutdown(0),
-    shutdown_success(0), shutdown_mpcp(0), payreset(TRUE), trigger(NULL),
+    type(0), reset(0), undiscovered_paydata(0), ic_bound_paydata(0), alert(0), pass(0),
+    shutdown(0), shutdown_success(0), shutdown_mpcp(0), payreset(TRUE), trigger(NULL),
     icons(NULL), fighting(NULL), exit(NULL), file(NULL)
   {
 #ifdef USE_DEBUG_CANARIES

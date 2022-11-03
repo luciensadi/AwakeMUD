@@ -1139,7 +1139,7 @@ void do_stat_host(struct char_data *ch, struct host_data *host)
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Vnum: [^g%8ld^n] Rnum: [%5ld] Parent: [%8ld]\r\n",
                host->vnum, real_host(host->vnum), host->parent);
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Type: [%10s] Security: [%s-%d^n] Alert: [%6s]\r\n", host_type[host->type],
-               host_sec[host->colour], host->security, alerts[host->alert]);
+               host_color[host->color], host->security, alerts[host->alert]);
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Shutdown: [%2d] Successes: [%2d] MPCP: [%2d]\r\n", host->shutdown,
                host->shutdown_success, host->shutdown_mpcp);
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Access: [^B%2ld^n] Control: [^B%2ld^n] Index: [^B%2ld^n] Files: [^B%2ld^n] Slave: [^B%2ld^n]\r\n",

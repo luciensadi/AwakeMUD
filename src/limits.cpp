@@ -1316,11 +1316,11 @@ void update_paydata_market() {
       market[m] = get_paydata_market_minimum(m);
 
     if (market[m] != old_market) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %s^g: %d to %d.", host_sec[m], old_market, market[m]);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %s^g: %d to %d.", host_color[m], old_market, market[m]);
       something_changed = TRUE;
     }
     else {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %s^g: stays at %d.", host_sec[m], market[m]);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %s^g: stays at %d.", host_color[m], market[m]);
     }
   }
 

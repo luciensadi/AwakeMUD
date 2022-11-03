@@ -1866,7 +1866,7 @@ const char *jurid[] =
     "\n"
   };
 
-const char *host_sec[] =
+const char *host_color[] =
   {
     "^BBlue",
     "^GGreen",

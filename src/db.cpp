@@ -79,6 +79,7 @@ extern void populate_mobact_aggression_octets();
 extern void write_world_to_disk(int vnum);
 extern void handle_weapon_attachments(struct obj_data *obj);
 extern void ensure_mob_has_ammo_for_weapon(struct char_data *ch, struct obj_data *weapon);
+extern void reset_host_paydata(rnum_t rnum);
 
 extern bool House_can_enter_by_idnum(long idnum, vnum_t house);
 
@@ -1127,7 +1128,7 @@ void parse_host(File &fl, long nr)
   host->keywords = str_dup(data.GetString("Keywords", "host"));
   host->shutdown_start = str_dup(data.GetString("ShutdownStart", "A deep echoing voice announces a host shutdown.\r\n"));
   host->shutdown_stop = str_dup(data.GetString("ShutdownStop", "A deep echoing voice announces the shutdown has been aborted.\r\n"));
-  host->colour = data.GetInt("Colour", 0);
+  host->color = data.GetInt("Colour", 0);
   host->security = data.GetInt("Security", 0);
   host->intrusion = data.GetInt("Difficulty", 0);
   host->stats[ACCESS][0] = data.GetLong("Access", 0);
@@ -1192,22 +1193,9 @@ void parse_host(File &fl, long nr)
     } else
       host->trigger = trigger;
   }
-  if (!host->type)
-    switch (host->colour) {
-    case 0:
-      host->undiscovered_paydata = number(1, 6) - 1;
-      break;
-    case 1:
-      host->undiscovered_paydata = number(1, 6) + number(1, 6) - 2;
-      break;
-    case 2:
-      host->undiscovered_paydata = number(1, 6) + number(1, 6);
-      break;
-    case 3:
-    case 4:
-      host->undiscovered_paydata = number(1, 6) + number(1, 6) + 2;
-      break;
-    }
+  if (host->type == HOST_DATASTORE) {
+    reset_host_paydata(rnum);
+  }
   top_of_matrix = rnum++;
 }
 void parse_ic(File &fl, long nr)
@@ -2328,7 +2316,6 @@ void parse_quest(File &fl, long virtual_nr)
   quest_table[quest_nr].vnum = virtual_nr;
 
   fl.GetLine(line, 256, FALSE);
-  log_vfprintf("%d: getline resulted in '%s'", virtual_nr, line);
   if (sscanf(line, "%ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld",
              t, t + 1, t + 2, t + 3, t + 4, t + 5,
              t + 6, t + 7, t + 8, t + 9, t + 10, t + 11, t+12, t+13, t+14, t+15, t+16) < 12) {

@@ -32,17 +32,17 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 #define MIN_PAYDATA_MARKET_INCREASE_PER_TICK                   -5
 
 // What should the paydata markets cap out at?
-#define HOST_SECURITY_BLUE_MARKET_MAXIMUM                      2000
-#define HOST_SECURITY_GREEN_MARKET_MAXIMUM                     4000
-#define HOST_SECURITY_ORANGE_MARKET_MAXIMUM                    6000
-#define HOST_SECURITY_RED_MARKET_MAXIMUM                       8000
-#define HOST_SECURITY_BLACK_MARKET_MAXIMUM                     10000
+#define HOST_COLOR_BLUE_MARKET_MAXIMUM                      2000
+#define HOST_COLOR_GREEN_MARKET_MAXIMUM                     4000
+#define HOST_COLOR_ORANGE_MARKET_MAXIMUM                    6000
+#define HOST_COLOR_RED_MARKET_MAXIMUM                       8000
+#define HOST_COLOR_BLACK_MARKET_MAXIMUM                     10000
 
-#define HOST_SECURITY_BLUE_MARKET_MINIMUM                      500
-#define HOST_SECURITY_GREEN_MARKET_MINIMUM                     1000
-#define HOST_SECURITY_ORANGE_MARKET_MINIMUM                    1500
-#define HOST_SECURITY_RED_MARKET_MINIMUM                       2000
-#define HOST_SECURITY_BLACK_MARKET_MINIMUM                     2500
+#define HOST_COLOR_BLUE_MARKET_MINIMUM                      500
+#define HOST_COLOR_GREEN_MARKET_MINIMUM                     1000
+#define HOST_COLOR_ORANGE_MARKET_MINIMUM                    1500
+#define HOST_COLOR_RED_MARKET_MINIMUM                       2000
+#define HOST_COLOR_BLACK_MARKET_MINIMUM                     2500
 
 #define MAX_PAYDATA_QTY_BLUE                                   4
 #define MAX_PAYDATA_QTY_GREEN                                  8

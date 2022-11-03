@@ -51,6 +51,141 @@ void make_seen(struct matrix_icon *icon, int idnum)
   icon->decker->seen = seen;
 }
 
+void spawn_paydata(struct matrix_icon *icon) {
+  struct obj_data *obj = read_object(OBJ_BLANK_OPTICAL_CHIP, VIRTUAL);
+  GET_DECK_ACCESSORY_TYPE(obj) = TYPE_FILE;
+  GET_DECK_ACCESSORY_FILE_CREATION_TIME(obj) = time(0);
+  GET_DECK_ACCESSORY_FILE_SIZE(obj) = (number(1, 6) + number(1, 6)) * MAX(5, (20 - (5 * matrix[icon->in_host].color)));
+  GET_DECK_ACCESSORY_FILE_HOST_VNUM(obj) = matrix[icon->in_host].vnum;
+  GET_DECK_ACCESSORY_FILE_HOST_COLOR(obj) = matrix[icon->in_host].color;
+  GET_DECK_ACCESSORY_FILE_FOUND_BY(obj) = icon->idnum;
+  snprintf(buf, sizeof(buf), "Paydata %s - %dMp", matrix[icon->in_host].name, GET_DECK_ACCESSORY_FILE_SIZE(obj));
+  obj->restring = str_dup(buf);
+  int defense[5][6] = {{ 0, 0, 0, 1, 1, 1 },
+                       { 0, 0, 1, 1, 2, 2 },
+                       { 0, 1, 1, 2, 2, 3 },
+                       { 1, 1, 2, 2, 3, 3 },
+                       { 1, 2, 2, 3, 3, 3 }};
+  int def = defense[matrix[icon->in_host].color][number(0, 5)];
+  if (def) {
+    int rate[4];
+    int rating = number(1, 6) + number(1, 6);
+    if (rating < 6) {
+      rate[0] = 4;
+      rate[1] = 5;
+      rate[2] = 6;
+      rate[3] = 8;
+    } else if (rating < 9) {
+      rate[0] = 5;
+      rate[1] = 7;
+      rate[2] = 8;
+      rate[3] = 10;
+    } else if (rating < 12) {
+      rate[0] = 6;
+      rate[1] = 9;
+      rate[2] = 10;
+      rate[3] = 11;
+    } else {
+      rate[0] = 7;
+      rate[1] = 10;
+      rate[2] = 12;
+      rate[3] = 12;
+    }
+    if (matrix[icon->in_host].security < 5)
+      GET_DECK_ACCESSORY_FILE_RATING(obj) = rate[0];
+    else if (matrix[icon->in_host].security < 8)
+      GET_DECK_ACCESSORY_FILE_RATING(obj) = rate[1];
+    else if (matrix[icon->in_host].security < 11)
+      GET_DECK_ACCESSORY_FILE_RATING(obj) = rate[2];
+    else
+      GET_DECK_ACCESSORY_FILE_RATING(obj) = rate[3];
+    switch (def) {
+    case 1:
+      GET_DECK_ACCESSORY_FILE_PROTECTION(obj) = FILE_PROTECTION_SCRAMBLED;
+      break;
+    case 2:
+    case 3:
+      // Bomb rating.
+      if (number(1, 6) > 4)
+        GET_DECK_ACCESSORY_FILE_PROTECTION(obj) = 4;
+      else
+        GET_DECK_ACCESSORY_FILE_PROTECTION(obj) = 2;
+      break;
+    }
+  }
+  obj_to_host(obj, &matrix[icon->in_host]);
+}
+
+// Spawns an IC to the host. Returns TRUE on successful spawn, FALSE otherwise.
+bool spawn_ic(struct matrix_icon *target, vnum_t ic_vnum, int triggerstep) {
+  rnum_t ic_rnum = real_ic(ic_vnum);
+
+  if (!target || !target->decker) {
+    mudlog("SYSERR: Precondition failure-- got an invalid target to spawn_ic()!", NULL, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+
+  if (ic_rnum < 0) {
+    vnum_t last_valid_ic = -1;
+
+    // Find a new one by seeking up the trigger list for this host until we encounter one.
+    for (struct trigger_step *trig = matrix[target->in_host].trigger; trig; trig = trig->next) {
+      if (trig->ic > 0) {
+        last_valid_ic = trig->ic;
+
+        // Stop when we have met/exceeded the last_trigger AND have an IC to spawn. This essentially spawns
+        // the next IC in the security sheaf.
+        if (trig->step >= target->decker->last_trigger && trig->ic > 0)
+          break;
+      }
+    }
+
+    // In order for us to trigger this code, there needs to have been zero valid ICs in the whole sheaf.
+    if (last_valid_ic < 0 || (ic_rnum = real_ic(last_valid_ic)) < 0) {
+      mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSWARN: Unable to find valid IC to spawn for host %ld. Decker's last trigger: %ld.", matrix[target->in_host].vnum, target->decker->last_trigger);
+      return FALSE;
+    }
+  }
+
+  // If we've gotten here, it's valid. Spawn it.
+  struct matrix_icon *ic = read_ic(ic_rnum, REAL);
+
+  // Sanity check: IC must exist.
+  if (!ic) {
+    snprintf(buf, sizeof(buf), "SYSERR: Attempted to process trigger for non-existent IC. Read failure caused on host %ld, trigger step %d, IC %ld.", matrix[target->in_host].vnum, triggerstep, ic_vnum);
+    mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+
+  ic->ic.target = target->idnum;
+  for (struct matrix_icon *icon = matrix[target->in_host].icons; icon; icon = icon->next_in_host) {
+    if (icon->decker) {
+      // Shortcut: If the icon is the target AND we're in locate-paydata spawn mode, make it visible with no fuss.
+      if (icon == target && triggerstep == -1) {
+        make_seen(icon, ic->idnum);
+      }
+      // Otherwise, do the standard 'X is triggered' routine.
+      else {
+        int tn = ic->ic.rating;
+        if (matrix[target->in_host].shutdown)
+          tn -= 2;
+        int success = success_test(icon->decker->sensor, tn);
+        if (success >= 3) {
+          send_to_icon(icon, "%s is triggered.\r\n", CAP(ic->name));
+          make_seen(icon, ic->idnum);
+        } else if (success == 2)
+          send_to_icon(icon, "%s is triggered, but it slips out of view almost immediately.\r\n", CAP(ic->name));
+        else if (success == 1)
+          send_to_icon(icon, "An IC has entered the host.\r\n");
+      }
+    }
+  }
+
+  icon_to_host(ic, target->in_host);
+
+  return TRUE;
+}
+
 void roll_matrix_init(struct matrix_icon *icon)
 {
   int x = 1;
@@ -63,7 +198,7 @@ void roll_matrix_init(struct matrix_icon *icon)
     icon->initiative = icon->ic.rating;
     if (matrix[icon->in_host].shutdown)
       icon->initiative--;
-    x += matrix[icon->in_host].colour;
+    x += matrix[icon->in_host].color;
   }
   icon->initiative += dice(x, 6);
   icon->initiative -= matrix[icon->in_host].pass * 10;
@@ -87,31 +222,9 @@ void check_trigger(rnum_t host, struct char_data *ch)
           break;
         }
       }
-      if (real_ic(trig->ic) > 0) {
-        struct matrix_icon *ic = read_ic(trig->ic, VIRTUAL);
-        if (!ic) {
-          snprintf(buf, sizeof(buf), "SYSERR: Attempted to process trigger for non-existent IC. Read failure caused on host %ld, trigger step %d, IC %ld.", host, trig->step, trig->ic);
-          mudlog(buf, NULL, LOG_SYSLOG, TRUE);
-          return;
-        }
 
-        ic->ic.target = PERSONA->idnum;
-        for (struct matrix_icon *icon = HOST.icons; icon; icon = icon->next_in_host)
-          if (icon->decker) {
-            int target = ic->ic.rating;
-            if (matrix[host].shutdown)
-              target -= 2;
-            int success = success_test(icon->decker->sensor, target);
-            if (success >= 3) {
-              send_to_icon(icon, "%s is triggered.\r\n", CAP(ic->name));
-              make_seen(icon, ic->idnum);
-            } else if (success == 2)
-              send_to_icon(icon, "%s is triggered.\r\n", CAP(ic->name));
-            else if (success == 1)
-              send_to_icon(icon, "An IC has entered the host.\r\n");
-          }
-        icon_to_host(ic, host);
-      }
+      // Attempt to spawn an IC. If the trigger's IC value is invalid, nothing will happen.
+      spawn_ic(PERSONA, trig->ic, trig->step);
     }
   DECKER->last_trigger = DECKER->tally;
 }
@@ -172,7 +285,7 @@ bool dumpshock(struct matrix_icon *icon)
     }
 
     int resist = -success_test(GET_WIL(icon->decker->ch), matrix[icon->in_host].security);
-    int dam = convert_damage(stage(resist, matrix[icon->in_host].colour));
+    int dam = convert_damage(stage(resist, matrix[icon->in_host].color));
     for (struct obj_data *cyber = icon->decker->ch->cyberware; cyber; cyber = cyber->next_content) {
       if (GET_OBJ_VAL(cyber, 0) == CYB_DATAJACK) {
         if (GET_OBJ_VAL(cyber, 3) == DATA_INDUCTION)
@@ -342,7 +455,7 @@ ACMD(do_fry_self) {
 
 void cascade(struct matrix_icon *icon)
 {
-  switch (matrix[icon->in_host].colour)
+  switch (matrix[icon->in_host].color)
   {
   case 0:
     icon->ic.cascade = 1;
@@ -481,33 +594,33 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
   if (targ->decker && !has_spotted(targ, icon))
     make_seen(targ, icon->idnum);
 
-  switch (matrix[icon->in_host].security)
+  switch (matrix[icon->in_host].color)
   {
-  case 0:
+  case HOST_COLOR_BLUE:
     if (targ->decker)
       target = 6;
     else
       target = 3;
     break;
-  case 1:
+  case HOST_COLOR_GREEN:
     if (targ->decker)
       target = 5;
     else
       target = 4;
     break;
-  case 2:
+  case HOST_COLOR_ORANGE:
     if (targ->decker)
       target = 4;
     else
       target = 5;
     break;
-  case 3:
+  case HOST_COLOR_RED:
     if (targ->decker)
       target = 3;
     else
       target = 6;
     break;
-  case 4:
+  case HOST_COLOR_BLACK:
     if (targ->decker)
       target = 2;
     else
@@ -543,16 +656,16 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
     }
     power = iconrating;
     if (icon->ic.type == IC_LETHAL_BLACK || icon->ic.type == IC_NON_LETHAL_BLACK) {
-      if (matrix[icon->in_host].colour == HOST_SECURITY_BLUE || matrix[icon->in_host].colour == HOST_SECURITY_GREEN)
+      if (matrix[icon->in_host].color == HOST_COLOR_BLUE || matrix[icon->in_host].color == HOST_COLOR_GREEN)
         dam = MODERATE;
-      else if (matrix[icon->in_host].colour >= HOST_SECURITY_ORANGE) {
-        if (matrix[icon->in_host].colour == HOST_SECURITY_BLACK)
+      else if (matrix[icon->in_host].color >= HOST_COLOR_ORANGE) {
+        if (matrix[icon->in_host].color == HOST_COLOR_BLACK)
           power += 2;
         dam = SERIOUS;
       }
     } else {
-      dam = MIN(matrix[icon->in_host].colour + 1, DEADLY);
-      if (matrix[icon->in_host].colour == HOST_SECURITY_BLACK)
+      dam = MIN(matrix[icon->in_host].color + 1, DEADLY);
+      if (matrix[icon->in_host].color == HOST_COLOR_BLACK)
         power += 2;
     }
   }
@@ -732,7 +845,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
       bool lethal = icon->ic.type == IC_LETHAL_BLACK ? TRUE : FALSE;
       if (!targ->decker->asist[0] && lethal)
         lethal = FALSE;
-      switch (matrix[icon->in_host].colour) {
+      switch (matrix[icon->in_host].color) {
       case 0:
       case 1:
         dam = MODERATE;
@@ -829,6 +942,11 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
         trap->ic.target = icon->idnum;
         icon_to_host(trap, icon->in_host);
       }
+      if (matrix[icon->in_host].ic_bound_paydata > 0 && !(number(0, MAX(0, matrix[icon->in_host].color - HOST_COLOR_ORANGE)))) {
+        matrix[icon->in_host].ic_bound_paydata--;
+        spawn_paydata(icon);
+        send_to_icon(icon, "A mote of paydata drifts away from your kill.\r\n");
+      }
       extract_icon(targ);
       check_trigger(icon->in_host, icon->decker->ch);
       return;
@@ -896,11 +1014,11 @@ void gain_matrix_karma(struct matrix_icon *icon, struct matrix_icon *targ) {
       ic_stats_total += 10;
 
       // Orange and up deal Serious damage.
-      if (matrix[icon->in_host].colour >= HOST_SECURITY_ORANGE)
+      if (matrix[icon->in_host].color >= HOST_COLOR_ORANGE)
         ic_stats_total += 2;
 
       // Black hosts additionally deal +2 power.
-      if (matrix[icon->in_host].colour == HOST_SECURITY_BLACK)
+      if (matrix[icon->in_host].color == HOST_COLOR_BLACK)
         ic_stats_total += 2;
       break;
     default:
@@ -1188,73 +1306,16 @@ ACMD(do_locate)
         matrix[PERSONA->in_host].undiscovered_paydata--;
         success--;
         i++;
-        struct obj_data *obj = read_object(OBJ_BLANK_OPTICAL_CHIP, VIRTUAL);
-        GET_DECK_ACCESSORY_TYPE(obj) = TYPE_FILE;
-        GET_DECK_ACCESSORY_FILE_CREATION_TIME(obj) = time(0);
-        GET_DECK_ACCESSORY_FILE_SIZE(obj) = (number(1, 6) + number(1, 6)) * MAX(5, (20 - (5 * matrix[PERSONA->in_host].colour)));
-        GET_DECK_ACCESSORY_FILE_HOST_VNUM(obj) = matrix[PERSONA->in_host].vnum;
-        GET_DECK_ACCESSORY_FILE_HOST_COLOR(obj) = matrix[PERSONA->in_host].colour;
-        GET_DECK_ACCESSORY_FILE_FOUND_BY(obj) = PERSONA->idnum;
-        snprintf(buf, sizeof(buf), "Paydata %s - %dMp", matrix[PERSONA->in_host].name, GET_DECK_ACCESSORY_FILE_SIZE(obj));
-        obj->restring = str_dup(buf);
-        int defense[5][6] = {{ 0, 0, 0, 1, 1, 1 },
-                             { 0, 0, 1, 1, 2, 2 },
-                             { 0, 1, 1, 2, 2, 3 },
-                             { 1, 1, 2, 2, 3, 3 },
-                             { 1, 2, 2, 3, 3, 3 }};
-        int def = defense[matrix[PERSONA->in_host].colour][number(0, 5)];
-        if (def) {
-          int rate[4];
-          int rating = number(1, 6) + number(1, 6);
-          if (rating < 6) {
-            rate[0] = 4;
-            rate[1] = 5;
-            rate[2] = 6;
-            rate[3] = 8;
-          } else if (rating < 9) {
-            rate[0] = 5;
-            rate[1] = 7;
-            rate[2] = 8;
-            rate[3] = 10;
-          } else if (rating < 12) {
-            rate[0] = 6;
-            rate[1] = 9;
-            rate[2] = 10;
-            rate[3] = 11;
-          } else {
-            rate[0] = 7;
-            rate[1] = 10;
-            rate[2] = 12;
-            rate[3] = 12;
-          }
-          if (matrix[PERSONA->in_host].security < 5)
-            GET_DECK_ACCESSORY_FILE_RATING(obj) = rate[0];
-          else if (matrix[PERSONA->in_host].security < 8)
-            GET_DECK_ACCESSORY_FILE_RATING(obj) = rate[1];
-          else if (matrix[PERSONA->in_host].security < 11)
-            GET_DECK_ACCESSORY_FILE_RATING(obj) = rate[2];
-          else
-            GET_DECK_ACCESSORY_FILE_RATING(obj) = rate[3];
-          switch (def) {
-          case 1:
-            GET_DECK_ACCESSORY_FILE_PROTECTION(obj) = FILE_PROTECTION_SCRAMBLED;
-            break;
-          case 2:
-          case 3:
-            // Bomb rating.
-            if (number(1, 6) > 4)
-              GET_DECK_ACCESSORY_FILE_PROTECTION(obj) = 4;
-            else
-              GET_DECK_ACCESSORY_FILE_PROTECTION(obj) = 2;
-            break;
-          }
-        }
-        obj_to_host(obj, &matrix[PERSONA->in_host]);
+        spawn_paydata(PERSONA);
       }
     }
 
     if (!i) {
-      send_to_icon(PERSONA, "There's no paydata left to find.\r\n");
+      if (matrix[PERSONA->in_host].ic_bound_paydata > 0 && spawn_ic(PERSONA, -1, -1)) {
+        send_to_icon(PERSONA, "There's no free-floating paydata left to find, but you're able to locate a suspicious-looking IC.\r\n");
+      } else {
+        send_to_icon(PERSONA, "There's no paydata left to find.\r\n");
+      }
     } else {
       switch (number(0, 100)) {
         case 0:
@@ -1278,7 +1339,6 @@ ACMD(do_locate)
     return;
   }
   send_to_icon(PERSONA, "You can locate hosts, ICs, files, deckers, or paydata.\r\n");
-
 }
 
 void show_icon_to_persona(struct matrix_icon *ch, struct matrix_icon *icon) {
@@ -1425,7 +1485,7 @@ ACMD(do_analyze)
           found[current] = 1;
         }
         if (found[0])
-          snprintf(buf, sizeof(buf), "%s-", host_sec[matrix[PERSONA->in_host].colour]);
+          snprintf(buf, sizeof(buf), "%s-", host_color[matrix[PERSONA->in_host].color]);
         else
           snprintf(buf, sizeof(buf), "?-");
         if (found[1])
@@ -1454,7 +1514,7 @@ ACMD(do_analyze)
           strcat(buf, "0");
         strcat(buf, "\r\n");
       } else
-        snprintf(buf, sizeof(buf), "%s-%d %ld/%ld/%ld/%ld/%ld\r\n", host_sec[matrix[PERSONA->in_host].colour],
+        snprintf(buf, sizeof(buf), "%s-%d %ld/%ld/%ld/%ld/%ld\r\n", host_color[matrix[PERSONA->in_host].color],
                 matrix[PERSONA->in_host].security, matrix[PERSONA->in_host].stats[ACCESS][MTX_STAT_RATING],
                 matrix[PERSONA->in_host].stats[CONTROL][MTX_STAT_RATING], matrix[PERSONA->in_host].stats[INDEX][MTX_STAT_RATING],
                 matrix[PERSONA->in_host].stats[FILES][MTX_STAT_RATING], matrix[PERSONA->in_host].stats[SLAVE][MTX_STAT_RATING]);
@@ -1466,7 +1526,7 @@ ACMD(do_analyze)
     success = system_test(PERSONA->in_host, ch, TEST_CONTROL, SOFT_ANALYZE, 0);
     if (success > 0) {
       send_to_icon(PERSONA, "You analyze the security of the host.\r\n");
-      snprintf(buf, sizeof(buf), "%s-%d Tally: %d Alert: %s\r\n", host_sec[matrix[PERSONA->in_host].colour],
+      snprintf(buf, sizeof(buf), "%s-%d Tally: %d Alert: %s\r\n", host_color[matrix[PERSONA->in_host].color],
               matrix[PERSONA->in_host].security, DECKER->tally,
               alerts[matrix[PERSONA->in_host].alert]);
       send_to_icon(PERSONA, buf);
@@ -2320,6 +2380,7 @@ ACMD(do_decrypt)
 
           // Remove the not-yet-found data.
           matrix[PERSONA->in_host].undiscovered_paydata = 0;
+          matrix[PERSONA->in_host].ic_bound_paydata = 0;
 
           // Remove the already-found data.
           struct obj_data *current, *next;
@@ -2598,7 +2659,50 @@ struct matrix_icon *find_icon_by_id(vnum_t idnum)
       return list;
   return NULL;
 }
+
 #define host matrix[rnum]
+void reset_host_paydata(rnum_t rnum) {
+  int rand_result;
+  switch (host.color) {
+    case HOST_COLOR_BLUE:
+      rand_result = number(1, 6) - 1;
+      host.undiscovered_paydata = MIN(rand_result, MAX_PAYDATA_QTY_BLUE);
+      host.ic_bound_paydata = 1;
+      break;
+    case HOST_COLOR_GREEN:
+      rand_result = number(1, 6) + number(1, 6) - 2;
+      host.undiscovered_paydata = MIN(rand_result, MAX_PAYDATA_QTY_GREEN);
+      host.ic_bound_paydata = MIN(host.undiscovered_paydata, MAX(2, host.undiscovered_paydata / 6));
+      host.undiscovered_paydata -= host.ic_bound_paydata;
+      break;
+    case HOST_COLOR_ORANGE:
+      rand_result = number(1, 6) + number(1, 6);
+      host.undiscovered_paydata = MIN(rand_result, MAX_PAYDATA_QTY_ORANGE);
+      host.ic_bound_paydata = MIN(host.undiscovered_paydata, MAX(3, host.undiscovered_paydata / 4));
+      host.undiscovered_paydata -= host.ic_bound_paydata;
+      break;
+    case HOST_COLOR_RED:
+      rand_result = number(1, 6) + number(1, 6) + 2;
+      host.undiscovered_paydata = MIN(rand_result, MAX_PAYDATA_QTY_RED_BLACK);
+      host.ic_bound_paydata = MIN(host.undiscovered_paydata, MAX(4, host.undiscovered_paydata / 2));
+      host.undiscovered_paydata -= host.ic_bound_paydata;
+      break;
+    case HOST_COLOR_BLACK:
+      rand_result = number(1, 6) + number(1, 6) + 2;
+      host.undiscovered_paydata = 1;
+      host.ic_bound_paydata = rand_result - host.undiscovered_paydata;
+      break;
+    default:
+      char oopsbuf[500];
+      snprintf(oopsbuf, sizeof(oopsbuf), "SYSERR: Unknown host color %d for host %ld- can't generate paydata.", host.color, host.vnum);
+      mudlog(oopsbuf, NULL, LOG_SYSLOG, TRUE);
+      host.undiscovered_paydata = 0;
+      host.ic_bound_paydata = 0;
+  }
+  mudlog_vfprintf(NULL, LOG_SYSLOG, "PD:%ld-%s: %d UD, %d IC-B", host.vnum, host_color[host.color], host.undiscovered_paydata, host.ic_bound_paydata);
+  host.payreset = TRUE;
+}
+
 void matrix_update()
 {
   PERF_PROF_SCOPE(pr_, __func__);
@@ -2617,32 +2721,7 @@ void matrix_update()
       host.payreset = FALSE;
     if (time_info.hours == 0) {
       if (host.type == HOST_DATASTORE && host.undiscovered_paydata <= 0 && !host.payreset) {
-        int rand_result;
-        switch (host.colour) {
-          case HOST_SECURITY_BLUE:
-            rand_result = number(1, 6) - 1;
-            host.undiscovered_paydata = MIN(rand_result, MAX_PAYDATA_QTY_BLUE);
-            break;
-          case HOST_SECURITY_GREEN:
-            rand_result = number(1, 6) + number(1, 6) - 2;
-            host.undiscovered_paydata = MIN(rand_result, MAX_PAYDATA_QTY_GREEN);
-            break;
-          case HOST_SECURITY_ORANGE:
-            rand_result = number(1, 6) + number(1, 6);
-            host.undiscovered_paydata = MIN(rand_result, MAX_PAYDATA_QTY_ORANGE);
-            break;
-          case HOST_SECURITY_RED:
-          case HOST_SECURITY_BLACK:
-            rand_result = number(1, 6) + number(1, 6) + 2;
-            host.undiscovered_paydata = MIN(rand_result, MAX_PAYDATA_QTY_RED_BLACK);
-            break;
-          default:
-            char oopsbuf[500];
-            snprintf(oopsbuf, sizeof(oopsbuf), "SYSERR: Unknown host color %d for host %ld- can't generate paydata.", host.colour, host.vnum);
-            mudlog(oopsbuf, NULL, LOG_SYSLOG, TRUE);
-            host.undiscovered_paydata = 0;
-        }
-        host.payreset = TRUE;
+        reset_host_paydata(rnum);
       } else {
         // See if there are any deckers in here.
         for (struct matrix_icon *icon = host.icons; icon; icon = icon->next_in_host) {
@@ -3550,22 +3629,22 @@ bool display_cyberdeck_issues(struct char_data *ch, struct obj_data *cyberdeck) 
 
 int get_paydata_market_maximum(int host_color) {
   switch (host_color) {
-    case HOST_SECURITY_BLUE:   return HOST_SECURITY_BLUE_MARKET_MAXIMUM;
-    case HOST_SECURITY_GREEN:  return HOST_SECURITY_GREEN_MARKET_MAXIMUM;
-    case HOST_SECURITY_ORANGE: return HOST_SECURITY_ORANGE_MARKET_MAXIMUM;
-    case HOST_SECURITY_RED:    return HOST_SECURITY_RED_MARKET_MAXIMUM;
-    case HOST_SECURITY_BLACK:  return HOST_SECURITY_BLACK_MARKET_MAXIMUM;
+    case HOST_COLOR_BLUE:   return HOST_COLOR_BLUE_MARKET_MAXIMUM;
+    case HOST_COLOR_GREEN:  return HOST_COLOR_GREEN_MARKET_MAXIMUM;
+    case HOST_COLOR_ORANGE: return HOST_COLOR_ORANGE_MARKET_MAXIMUM;
+    case HOST_COLOR_RED:    return HOST_COLOR_RED_MARKET_MAXIMUM;
+    case HOST_COLOR_BLACK:  return HOST_COLOR_BLACK_MARKET_MAXIMUM;
     default: return 0;
   }
 }
 
 int get_paydata_market_minimum(int host_color) {
   switch (host_color) {
-    case HOST_SECURITY_BLUE:   return HOST_SECURITY_BLUE_MARKET_MINIMUM;
-    case HOST_SECURITY_GREEN:  return HOST_SECURITY_GREEN_MARKET_MINIMUM;
-    case HOST_SECURITY_ORANGE: return HOST_SECURITY_ORANGE_MARKET_MINIMUM;
-    case HOST_SECURITY_RED:    return HOST_SECURITY_RED_MARKET_MINIMUM;
-    case HOST_SECURITY_BLACK:  return HOST_SECURITY_BLACK_MARKET_MINIMUM;
+    case HOST_COLOR_BLUE:   return HOST_COLOR_BLUE_MARKET_MINIMUM;
+    case HOST_COLOR_GREEN:  return HOST_COLOR_GREEN_MARKET_MINIMUM;
+    case HOST_COLOR_ORANGE: return HOST_COLOR_ORANGE_MARKET_MINIMUM;
+    case HOST_COLOR_RED:    return HOST_COLOR_RED_MARKET_MINIMUM;
+    case HOST_COLOR_BLACK:  return HOST_COLOR_BLACK_MARKET_MINIMUM;
     default: return 0;
   }
 }

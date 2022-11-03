@@ -45,7 +45,7 @@ void write_host_to_disk(int vnum)
       fprintf(fl, "ShutdownStart:\t%s\n", HT.shutdown_start);
       fprintf(fl, "ShutdownStop:\t%s\n", HT.shutdown_stop);
       fprintf(fl, "Parent:\t%ld\n", HT.parent);
-      fprintf(fl, "Colour:\t%d\n", HT.colour);
+      fprintf(fl, "Colour:\t%d\n", HT.color);
       fprintf(fl, "Security:\t%d\n", HT.security);
       fprintf(fl, "Difficulty:\t%d\n", HT.intrusion);
       fprintf(fl, "Access:\t%ld\n", HT.stats[ACCESS][0]);
@@ -104,7 +104,7 @@ void hedit_disp_data_menu(struct descriptor_data *d)
     send_to_char(CH, "^G2^Y) ^WParent Host: ^cNowhere(0)^n\r\n");
   send_to_char(CH, "^G3^Y) ^WKeywords: ^c%s^n\r\n", HOST->keywords);
   send_to_char(CH, "^G4^Y) ^WDescription: ^c%s^n\r\n", HOST->desc);
-  send_to_char(CH, "^G5^Y) ^WSecurity: ^c%s-%d^c(%s)^n\r\n", host_sec[HOST->colour], HOST->security,
+  send_to_char(CH, "^G5^Y) ^WSecurity: ^c%s-%d^c(%s)^n\r\n", host_color[HOST->color], HOST->security,
                intrusion[HOST->intrusion]);
   send_to_char(CH, "^G6^Y) ^WType: ^c%s^n\r\n", host_type[HOST->type]);
   send_to_char(CH, "^G7^Y) ^WRatings: A(^c%d^N) C(^c%d^N) I(^c%d^N) F(^c%d^N) S(^c%d^N)\r\n",
@@ -340,7 +340,7 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
                    "4) Red\r\n"
                    "5) Black\r\n"
                    "Enter security level: ");
-      d->edit_mode = HEDIT_SECURITY_COLOUR;
+      d->edit_mode = HEDIT_SECURITY_COLOR;
       break;
     case '6':
       CLS(CH);
@@ -557,13 +557,13 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
       hedit_disp_data_menu(d);
     }
     break;
-  case HEDIT_SECURITY_COLOUR:
+  case HEDIT_SECURITY_COLOR:
     number = atoi(arg);
     if (number <= 0 || number > 5) {
       send_to_char("Invalid choice!\r\n", d->character);
       send_to_char("Enter security level: ", CH);
     } else {
-      d->edit_host->colour = --number;
+      d->edit_host->color = --number;
       send_to_char(CH, "Enter security rating: ");
       d->edit_mode = HEDIT_SECURITY_RATING;
     }
