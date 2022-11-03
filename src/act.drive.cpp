@@ -250,11 +250,11 @@ ACMD(do_drive)
   }
   if (VEH->cspeed == SPEED_OFF || VEH->dest) {
     AFF_FLAGS(ch).SetBit(AFF_PILOT);
-    VEH->cspeed = SPEED_IDLE;
+    VEH->cspeed = SPEED_CRUISING;
     VEH->lastin[0] = VEH->in_room;
     stop_manning_weapon_mounts(ch, TRUE);
-    send_to_char("You take the wheel.\r\n", ch);
-    snprintf(buf1, sizeof(buf1), "%s takes the wheel.\r\n", capitalize(GET_NAME(ch)));
+    send_to_char("You take the wheel and accelerate to a cruise.\r\n", ch);
+    snprintf(buf1, sizeof(buf1), "%s takes the wheel and accelerates to a cruise.\r\n", capitalize(GET_NAME(ch)));
     send_to_veh(buf1, VEH, ch, FALSE);
   } else {
     AFF_FLAGS(ch).RemoveBit(AFF_PILOT);
