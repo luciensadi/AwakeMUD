@@ -210,7 +210,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       return FALSE;
     }
 
-    // Setup: Limit the burst of the weapon to the available ammo, and decrement ammo appropriately.
+    // Setup: Limit the burst of the weapon to the available ammo. Ammo is deducted later.
     // Emplaced mobs have unlimited ammo and no recoil.
     if (!MOB_FLAGGED(att->ch, MOB_EMPLACED)) {
       if (att->ranged->burst_count) {
@@ -219,15 +219,6 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
 
           // Cap their burst to their magazine's ammo.
           att->ranged->burst_count = MIN(att->ranged->burst_count, ammo_available);
-
-          // Subtract the full ammo count. NPCs are the exception: Their manned weapons have unlimited ammo.
-          if (weap_ammo) {
-            if (!IS_NPC(att->ch)) {
-              update_ammobox_ammo_quantity(weap_ammo, -(att->ranged->burst_count), "newfight burst deduction");
-            }
-          } else {
-            GET_MAGAZINE_AMMO_COUNT(att->ranged->magazine) -= (att->ranged->burst_count);
-          }
         }
 
         // SR3 p151: Mounted weapons get halved recoil.
@@ -245,16 +236,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
             att->ranged->modifiers[COMBAT_MOD_RECOIL] *= 2;
         }
       }
-      // Just deduct one round from their total.
-      else {
-        if (weap_ammo) {
-          GET_AMMOBOX_QUANTITY(weap_ammo)--;
-        } else if (att->ranged->magazine) {
-          GET_MAGAZINE_AMMO_COUNT(att->ranged->magazine)--;
-        }
-      }
     }
-
 
     // Setup: Modify recoil based on vehicular stats.
     if (att->veh) {
@@ -365,6 +347,30 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
           SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
         } else {
           att->ranged->modifiers[COMBAT_MOD_GYRO] -= MIN(maximum_recoil_comp_from_gyros, 3);
+        }
+      }
+    }
+
+    // Deduct ammo. THIS MUST BE THE LAST PRECONDITION CHECK.
+    if (!MOB_FLAGGED(att->ch, MOB_EMPLACED)) {
+      if (att->ranged->burst_count) {
+        if (weap_ammo || att->ranged->magazine) {
+          // Subtract the full ammo count. NPCs are the exception: Their manned weapons have unlimited ammo.
+          if (weap_ammo) {
+            if (!IS_NPC(att->ch)) {
+              update_ammobox_ammo_quantity(weap_ammo, -(att->ranged->burst_count), "newfight burst deduction");
+            }
+          } else {
+            GET_MAGAZINE_AMMO_COUNT(att->ranged->magazine) -= (att->ranged->burst_count);
+          }
+        }
+      }
+      // Just deduct one round from their total.
+      else {
+        if (weap_ammo) {
+          GET_AMMOBOX_QUANTITY(weap_ammo)--;
+        } else if (att->ranged->magazine) {
+          GET_MAGAZINE_AMMO_COUNT(att->ranged->magazine)--;
         }
       }
     }
