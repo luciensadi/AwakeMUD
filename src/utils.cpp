@@ -904,7 +904,7 @@ void mudlog_vfprintf(struct char_data *ch, int log, const char *format, ...)
   char composed_string[10000];
 
   va_start(args, format);
-  vsprintf(composed_string, format, args);
+  vsnprintf(composed_string, sizeof(composed_string), format, args);
   va_end(args);
 
   mudlog(composed_string, ch, log, TRUE);
