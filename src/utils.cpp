@@ -2446,7 +2446,7 @@ bool char_can_make_noise(struct char_data *ch, const char *message) {
     // Can't make noise.
     if (message) {
       send_to_char(message, ch);
-      send_to_char(ch, "(OOC: You're %s.\r\n)", is_stealth ? "under a stealth spell" : "in a silent room");
+      send_to_char(ch, "(OOC: You're %s.)\r\n", is_stealth ? "under a stealth spell" : "in a silent room");
     }
 
     return FALSE;
