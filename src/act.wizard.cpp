@@ -7710,42 +7710,36 @@ int audit_zone_vehicles_(struct char_data *ch, int zone_num, bool verbose) {
 }
 
 int audit_zone_hosts_(struct char_data *ch, int zone_num, bool verbose) {
-  int issues = 0, real_hst;
-  struct host_data *host;
-  bool printed = FALSE;
+  int issues = 0;
 
   if (verbose)
     send_to_char(ch, "\r\n^WAuditing hosts for zone %d...^n\r\n", zone_table[zone_num].number);
 
   for (int i = zone_table[zone_num].number * 100; i <= zone_table[zone_num].top; i++) {
+    rnum_t real_hst;
     if ((real_hst = real_host(i)) < 0)
       continue;
 
-    host = &matrix[real_hst];
+    struct host_data *host = &matrix[real_hst];
 
-    snprintf(buf, sizeof(buf), "[%8ld] ^n", host->vnum);
+    send_to_char(ch, "[%8ld] %s^n\r\n  Sheaf:\r\n", host->vnum, host->name);
+    bool printed_something = FALSE;
 
-    printed = FALSE;
-
-    /*
-    // Flag invalid sell multipliers
-    if (shop->profit_buy < 1.0) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " has too-low buy profit %0.2f < 1.0^n", shop->profit_buy);
-      printed = TRUE;
-      issues++;
+    for (struct trigger_step *trig = host->trigger; trig; trig = trig->next) {
+      char sheafbuf[500];
+      snprintf(sheafbuf, sizeof(sheafbuf), "   %d) Alert: ^c%d^n", trig->step, trig->alert);
+      if (trig->ic > 0) {
+        rnum_t ic_rnum = real_ic(trig->ic);
+        snprintf(ENDOF(sheafbuf), sizeof(sheafbuf) - strlen(sheafbuf), ", IC: ^y%ld^n (%s)",
+                 trig->ic,
+                 ic_rnum >= 0 ? ic_proto[ic_rnum].name : "^rinvalid^n");
+      }
+      send_to_char(ch, "%s\r\n", sheafbuf);
+      printed_something = TRUE;
     }
 
-    // Flag invalid strings
-    if (shop->profit_sell > 0.1) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s too-high sell profit %0.2f > 0.1^n", printed ? ";" : " has", shop->profit_sell);
-      printed = TRUE;
-      issues++;
-    }
-    */
-
-    if (printed) {
-      send_to_char(ch, "%s\r\n", buf);
-    }
+    if (!printed_something)
+      send_to_char(" <nothing>\r\n", ch);
   }
 
   // TODO: Make sure they've got all their strings set.

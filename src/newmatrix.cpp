@@ -126,23 +126,25 @@ bool spawn_ic(struct matrix_icon *target, vnum_t ic_vnum, int triggerstep) {
   }
 
   if (ic_rnum < 0) {
-    vnum_t last_valid_ic = -1;
+    vnum_t ic_to_spawn;
 
-    // Find a new one by seeking up the trigger list for this host until we encounter one.
+    // Find a new one by seeking down the trigger list for this host until we encounter one.
+    // Remember that trigger lists are ordered largest / highest first.
     for (struct trigger_step *trig = matrix[target->in_host].trigger; trig; trig = trig->next) {
-      if (trig->ic > 0) {
-        last_valid_ic = trig->ic;
+      // We refuse to spawn anything from a previous step in the security sheaf.
+      // We'll have to make do with the latest IC located.
+      if (trig->step < target->decker->last_trigger)
+        break;
 
-        // Stop when we have met/exceeded the last_trigger AND have an IC to spawn. This essentially spawns
-        // the next IC in the security sheaf.
-        if (trig->step >= target->decker->last_trigger && trig->ic > 0)
-          break;
-      }
+      // Overwrite the last IC we saw.
+      if (trig->ic > 0)
+        ic_to_spawn = trig->ic;
     }
 
-    // In order for us to trigger this code, there needs to have been zero valid ICs in the whole sheaf.
-    if (last_valid_ic < 0 || (ic_rnum = real_ic(last_valid_ic)) < 0) {
-      mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSWARN: Unable to find valid IC to spawn for host %ld. Decker's last trigger: %ld.", matrix[target->in_host].vnum, target->decker->last_trigger);
+    // At this point, ic_to_spawn contains the lowest IC vnum that is at or above their last trigger.
+
+    if (ic_to_spawn < 0 || (ic_rnum = real_ic(ic_to_spawn)) < 0) {
+      // In order for us to trigger this code, there needs to have been zero valid ICs at or above that trigger.
       return FALSE;
     }
   }
