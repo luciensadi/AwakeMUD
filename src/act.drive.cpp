@@ -340,7 +340,7 @@ ACMD(do_rig)
     }
 
     AFF_FLAGS(ch).SetBits(AFF_PILOT, AFF_RIG, ENDBIT);
-    VEH->cspeed = SPEED_IDLE;
+    VEH->cspeed = SPEED_CRUISING;
     VEH->lastin[0] = VEH->in_room;
 
     stop_manning_weapon_mounts(ch, TRUE);
@@ -999,6 +999,7 @@ ACMD(do_control)
   send_to_char(ch, "You take control of %s.\r\n", GET_VEH_NAME(veh));
 
   remove_vehicle_brain(veh);
+  veh->cspeed = SPEED_CRUISING;
 
   // Reallocate pools.
   int max_offense = MIN(GET_SKILL(ch, SKILL_GUNNERY), GET_COMBAT(ch));
