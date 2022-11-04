@@ -5816,11 +5816,11 @@ ACMD(do_nervestrike)
     send_to_char("You'll have to activate the Nerve Strike power first.\r\n", ch);
     return;
   }
-  if (IS_NERVE(ch)) {
-    IS_NERVE(ch) = FALSE;
+  if (DEPRECATED_IS_NERVE(ch)) {
+    DEPRECATED_IS_NERVE(ch) = FALSE;
     send_to_char("You will no longer use nerve strike.\r\n", ch);
   } else {
-    IS_NERVE(ch) = TRUE;
+    DEPRECATED_IS_NERVE(ch) = TRUE;
     send_to_char("You will now use nerve strike.\r\n", ch);
   }
 }

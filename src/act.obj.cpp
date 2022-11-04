@@ -3657,8 +3657,6 @@ ACMD(do_activate)
         GET_POWER_POINTS(ch) += total;
         if (i == ADEPT_BOOST_BOD || i == ADEPT_BOOST_QUI || i == ADEPT_BOOST_STR) {
           send_to_char(ch, "You activate %s. You'll need to use the ^WBOOST^n command to engage it.\r\n", adept_powers[i]);
-        } else if (i == ADEPT_NERVE_STRIKE) {
-          send_to_char(ch, "You activate %s. You'll need to use the ^WNERVESTRIKE^n command to engage it.\r\n", adept_powers[i]);
         } else if (i == ADEPT_LIVINGFOCUS) {
           send_to_char(ch, "You activate %s. You'll need to use the ^WFOCUS^n command to engage it.\r\n", adept_powers[i]);
         } else {

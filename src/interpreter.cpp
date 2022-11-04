@@ -253,7 +253,6 @@ ACMD_DECLARE(do_mode);
 ACMD_DECLARE(do_move);
 ACMD_DECLARE(do_mlist);
 ACMD_DECLARE(do_echo);
-ACMD_DECLARE(do_nervestrike);
 ACMD_DECLARE(do_not_here);
 ACMD_DECLARE(do_oocdisable);
 ACMD_DECLARE(do_order);
@@ -709,7 +708,6 @@ struct command_info cmd_info[] =
     { "newbie"     , POS_DEAD    , do_gen_comm , 0, SCMD_NEWBIE, FALSE },
     { "newbies"    , POS_DEAD    , do_switched_message_history, 0, COMM_CHANNEL_NEWBIE, TRUE },
     { "news"       , POS_SLEEPING, do_gen_ps   , 0, SCMD_NEWS, TRUE },
-    { "nervestrike", POS_DEAD    , do_nervestrike, 0, 0, FALSE },
     { "notitle"    , POS_DEAD    , do_wizutil  , LVL_FREEZE, SCMD_NOTITLE, FALSE },
 
     { "order"      , POS_LYING   , do_order    , 1, 0, FALSE },
