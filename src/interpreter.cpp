@@ -1312,7 +1312,7 @@ struct command_info mtx_info[] =
     { "score", 0, do_matrix_score, 0, 0, FALSE },
     { "scan", 0, do_matrix_scan, 0, 0, FALSE },
     { "skills", 0, do_skills   , 0, 0, FALSE },
-    // { "selffry", 0, do_fry_self, LVL_BUILDER, 0, FALSE },
+    { "selffry", 0, do_fry_self, LVL_PRESIDENT, 0, FALSE },
     { "talk", 0, do_talk, 0, 0, FALSE },
     { "tap", 0, do_tap, 0, 0, FALSE },
     { "tell", 0, do_tell, 0, 0 , FALSE },

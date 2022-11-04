@@ -2864,8 +2864,9 @@ SPECIAL(fixer)
 {
   struct char_data *fixer = (struct char_data *) me;
   struct obj_data *obj, *credstick = NULL;
-  int cost;
+  int cost = 0;
   sh_int extra, hour, day = 0, pm = 0;
+  int mpcp_delta = 0;
 
   if (cmd && !CMD_IS("repair") && !CMD_IS("list") && !CMD_IS("receive"))
     return FALSE;
@@ -2913,25 +2914,48 @@ SPECIAL(fixer)
       send_to_char(ch, "You don't seem to have %s %s.\r\n", AN(argument), argument);
       return TRUE;
     }
-    if (IS_OBJ_STAT(obj, ITEM_EXTRA_CORPSE) || IS_OBJ_STAT(obj, ITEM_EXTRA_WIZLOAD)) {
+    if (IS_OBJ_STAT(obj, ITEM_EXTRA_CORPSE) || (IS_OBJ_STAT(obj, ITEM_EXTRA_WIZLOAD) && !IS_SENATOR(ch))) {
       snprintf(arg, sizeof(arg), "%s I can't repair that.", GET_CHAR_NAME(ch));
       do_say(fixer, arg, 0, SCMD_SAYTO);
       return TRUE;
     }
-    if (GET_OBJ_CONDITION(obj) >= GET_OBJ_BARRIER(obj)) {
+
+    rnum_t obj_rnum = real_object(GET_OBJ_VNUM(obj));
+    switch (GET_OBJ_TYPE(obj)) {
+      case ITEM_CYBERDECK:
+        if (obj_rnum >= 0) {
+          mpcp_delta = GET_CYBERDECK_MPCP(&obj_proto[obj_rnum]) - GET_CYBERDECK_MPCP(obj);
+          int base_cost_per_unit_of_mpcp = MAX(1000, (GET_OBJ_COST(obj) / MAX(1, GET_CYBERDECK_MPCP(&obj_proto[obj_rnum]))));
+          cost += mpcp_delta * base_cost_per_unit_of_mpcp;
+        }
+        break;
+      case ITEM_CUSTOM_DECK:
+        if (GET_OBJ_CONDITION(obj) >= GET_OBJ_BARRIER(obj)) {
+          snprintf(arg, sizeof(arg), "%s I can't repair %s^n, it's too customized! Take it to whoever built it.",
+                  GET_CHAR_NAME(ch), GET_OBJ_NAME(obj));
+          do_say(fixer, arg, 0, SCMD_SAYTO);
+          return TRUE;
+        }
+        break;
+    }
+
+    if (GET_OBJ_CONDITION(obj) >= GET_OBJ_BARRIER(obj) && !cost) {
       snprintf(arg, sizeof(arg), "%s %s^n doesn't need to be repaired!",
               GET_CHAR_NAME(ch), GET_OBJ_NAME(obj));
       do_say(fixer, arg, 0, SCMD_SAYTO);
       return TRUE;
     }
+
     if ((IS_CARRYING_N(fixer) >= CAN_CARRY_N(fixer)) ||
         ((GET_OBJ_WEIGHT(obj) + IS_CARRYING_W(fixer)) > CAN_CARRY_W(fixer))) {
       snprintf(arg, sizeof(arg), "%s I've got my hands full...come back later.", GET_CHAR_NAME(ch));
       do_say(fixer, arg, 0, SCMD_SAYTO);
       return TRUE;
     }
-    cost = (int)((GET_OBJ_COST(obj) / (2 * (GET_OBJ_BARRIER(obj) > 0 ? GET_OBJ_BARRIER(obj) : 1)) *
-                 (GET_OBJ_BARRIER(obj) - GET_OBJ_CONDITION(obj))));
+
+    cost += (int)((GET_OBJ_COST(obj) / (2 * (GET_OBJ_BARRIER(obj) > 0 ? GET_OBJ_BARRIER(obj) : 1)) *
+                  (GET_OBJ_BARRIER(obj) - GET_OBJ_CONDITION(obj))));
+
     if ((credstick ? GET_ITEM_MONEY_VALUE(credstick) : GET_NUYEN(ch)) < cost) {
       snprintf(arg, sizeof(arg), "%s You can't afford to repair that! It'll cost %d nuyen.", GET_CHAR_NAME(ch), cost);
       do_say(fixer, arg, 0, SCMD_SAYTO);
@@ -2943,9 +2967,15 @@ SPECIAL(fixer)
       lose_nuyen_from_credstick(ch, credstick, cost, NUYEN_OUTFLOW_REPAIRS);
     else
       lose_nuyen(ch, cost, NUYEN_OUTFLOW_REPAIRS);
+
     extra = (int)((GET_OBJ_BARRIER(obj) - GET_OBJ_CONDITION(obj)) / 2);
     if (((GET_OBJ_BARRIER(obj) - GET_OBJ_CONDITION(obj)) % 2) > 0)
       extra++;
+
+    if (GET_OBJ_TYPE(obj) == ITEM_CYBERDECK) {
+      extra += mpcp_delta;
+    }
+
     if ((time_info.hours + extra) > 23)
       day = 1;
     else
@@ -2967,15 +2997,28 @@ SPECIAL(fixer)
           do_say(fixer, arg, 0, SCMD_SAYTO);
           found = TRUE;
         }
+
+        hour = 0;
+
         if (GET_OBJ_CONDITION(obj) < GET_OBJ_BARRIER(obj)) {
-          hour = (int)((GET_OBJ_BARRIER(obj) - GET_OBJ_CONDITION(obj)) / 2);
+          hour += (int)((GET_OBJ_BARRIER(obj) - GET_OBJ_CONDITION(obj)) / 2);
           if (((GET_OBJ_BARRIER(obj) - GET_OBJ_CONDITION(obj)) % 2) > 0)
             hour++;
-          send_to_char(ch, "%-59s Status: %d hour%s\r\n",
-                       obj->text.name, hour, hour == 1 ? "" : "s");
-        } else
-          send_to_char(ch, "%-59s Stats: Ready\r\n",
-                       obj->text.name);
+        }
+
+        if (GET_OBJ_TYPE(obj) == ITEM_CYBERDECK) {
+          rnum_t obj_rnum = real_object(GET_OBJ_VNUM(obj));
+          if (obj_rnum >= 0) {
+            int mpcp_delta = GET_CYBERDECK_MPCP(&obj_proto[obj_rnum]) - GET_CYBERDECK_MPCP(obj);
+            hour += mpcp_delta;
+          }
+        }
+
+        if (hour > 0) {
+          send_to_char(ch, "%-59s Status: %d hour%s\r\n", obj->text.name, hour, hour == 1 ? "" : "s");
+        } else {
+          send_to_char(ch, "%-59s Status: Ready\r\n", obj->text.name);
+        }
       }
     if (!found) {
       snprintf(arg, sizeof(arg), "%s I don't have anything of yours.", GET_CHAR_NAME(ch));
@@ -3007,6 +3050,19 @@ SPECIAL(fixer)
       do_say(fixer, arg, 0, SCMD_SAYTO);
       return TRUE;
     }
+
+    if (GET_OBJ_TYPE(obj) == ITEM_CYBERDECK) {
+      rnum_t obj_rnum = real_object(GET_OBJ_VNUM(obj));
+      if (obj_rnum >= 0) {
+        int mpcp_delta = GET_CYBERDECK_MPCP(&obj_proto[obj_rnum]) - GET_CYBERDECK_MPCP(obj);
+        if (mpcp_delta) {
+          snprintf(arg, sizeof(arg), "%s %s isn't ready yet.", GET_CHAR_NAME(ch), CAP(obj->text.name));
+          do_say(fixer, arg, 0, SCMD_SAYTO);
+          return TRUE;
+        }
+      }
+    }
+
     if (GET_OBJ_CONDITION(obj) < GET_OBJ_BARRIER(obj)) {
       snprintf(arg, sizeof(arg), "%s %s isn't ready yet.", GET_CHAR_NAME(ch), CAP(obj->text.name));
       do_say(fixer, arg, 0, SCMD_SAYTO);
@@ -3031,9 +3087,15 @@ SPECIAL(fixer)
 
   // update his objects every 60 rl seconds (30 mud minutes)
   if (GET_SPARE1(fixer) >= 6) {
-    for (obj = fixer->carrying; obj; obj = obj->next_content)
+    for (obj = fixer->carrying; obj; obj = obj->next_content) {
       if (GET_OBJ_CONDITION(obj) < GET_OBJ_BARRIER(obj))
         GET_OBJ_CONDITION(obj)++;
+
+      rnum_t obj_rnum = real_object(GET_OBJ_VNUM(obj));
+      if (obj_rnum >= 0 && GET_OBJ_TYPE(obj) == ITEM_CYBERDECK && GET_CYBERDECK_MPCP(obj) < GET_CYBERDECK_MPCP(&obj_proto[obj_rnum])) {
+        GET_CYBERDECK_MPCP(obj)++;
+      }
+    }
     GET_SPARE1(fixer) = 1;
     fixers_need_save = 1;
   } else
