@@ -1635,6 +1635,89 @@ ACMD(do_exits)
     disp_short_exits(ch);
 }
 
+ACMD(do_mobs) {
+  struct room_data *room = get_ch_in_room(ch);
+  const char *location_string = ch->in_veh ? "around your vehicle" : "around you";
+
+  if (PLR_FLAGGED(ch, PLR_REMOTE)) {
+    struct veh_data *veh;
+    RIG_VEH(ch, veh);
+    room = get_veh_in_room(veh);
+    location_string = "around your vehicle";
+  }
+
+  if (!room) {
+    send_to_char("You can't see anything!!\r\n", ch);
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: %s%s has no room in do_mobs!", GET_CHAR_NAME(ch), PLR_FLAGGED(ch, PLR_REMOTE) ? " (rigging)" : "");
+    return;
+  }
+
+  bool printed_something = FALSE;
+  for (struct char_data *mob = room->people; mob; mob = mob->next_in_room) {
+    if (IS_NPC(mob) && CAN_SEE(ch, mob)) {
+      if (!printed_something) {
+        printed_something = TRUE;
+        send_to_char(ch, "%s, you see:\r\n", CAP(location_string));
+      }
+      send_to_char(ch, "  %s\r\n", GET_CHAR_NAME(mob));
+    }
+  }
+
+  if (!printed_something)
+    send_to_char(ch, "You don't see any mobs %s.\r\n", location_string);
+}
+
+ACMD(do_items) {
+  struct veh_data *in_veh = ch->in_veh;
+  bool vfront = ch->vfront;
+  struct room_data *in_room = ch->in_room;
+
+  if (PLR_FLAGGED(ch, PLR_REMOTE)) {
+    struct veh_data *veh;
+    RIG_VEH(ch, veh);
+    in_veh = veh->in_veh;
+    in_room = veh->in_room;
+    vfront = FALSE;
+  }
+
+  if (!in_room && !in_veh) {
+    send_to_char("You can't see anything!!\r\n", ch);
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: %s%s has no room OR veh in do_items!", GET_CHAR_NAME(ch), PLR_FLAGGED(ch, PLR_REMOTE) ? " (rigging)" : "");
+    return;
+  }
+
+  bool printed_something = FALSE;
+  for (struct obj_data *obj = in_veh ? in_veh->contents : in_room->contents; obj; obj = obj->next_content) {
+    if (CAN_SEE_OBJ(ch, obj) && (!in_veh || obj->vfront == vfront)) {
+      int num = 1;
+
+      while (obj->next_content) {
+        if (!items_are_visually_similar(obj, obj->next_content))
+          break;
+
+        if (CAN_SEE_OBJ(ch, obj))
+          num++;
+
+        obj = obj->next_content;
+      }
+
+      if (!printed_something) {
+        printed_something = TRUE;
+        send_to_char("Around you, you see:\r\n", ch);
+      }
+
+      if (num > 1) {
+        send_to_char(ch, "  (%d) %s\r\n", num, GET_OBJ_NAME(obj));
+      } else {
+        send_to_char(ch, "  %s\r\n", GET_OBJ_NAME(obj));
+      }
+    }
+  }
+
+  if (!printed_something)
+    send_to_char(ch, "You don't see any items here.\r\n");
+}
+
 void update_blood(void)
 {
   int i;

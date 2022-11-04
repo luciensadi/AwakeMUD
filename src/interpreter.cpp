@@ -226,6 +226,7 @@ ACMD_DECLARE(do_initiate);
 ACMD_DECLARE(do_insult);
 ACMD_DECLARE(do_inventory);
 ACMD_DECLARE(do_invis);
+ACMD_DECLARE(do_items);
 ACMD_DECLARE(do_jack);
 ACMD_DECLARE(do_keep);
 ACMD_DECLARE(do_keepalive);
@@ -247,6 +248,7 @@ ACMD_DECLARE(do_makenerps);
 ACMD_DECLARE(do_memory);
 ACMD_DECLARE(do_message_history);
 ACMD_DECLARE(do_metamagic);
+ACMD_DECLARE(do_mobs);
 ACMD_DECLARE(do_mode);
 ACMD_DECLARE(do_move);
 ACMD_DECLARE(do_mlist);
@@ -657,7 +659,8 @@ struct command_info cmd_info[] =
     { "initiate"   , POS_DEAD    , do_initiate , 0, SCMD_INITIATE, FALSE },
     { "insult"     , POS_LYING   , do_insult   , 0, 0, FALSE },
     { "invis"      , POS_DEAD    , do_invis    , LVL_BUILDER, 0, FALSE },
-    { "invitations", POS_LYING , do_invitations, 0, 0, FALSE },
+    { "invitations", POS_LYING   , do_invitations, 0, 0, FALSE },
+    { "items"      , POS_LYING   , do_items    , 0, 0, FALSE },
 
     { "jack"       , POS_SITTING , do_jack     , 0, 0, FALSE },
     { "jobs"       , POS_DEAD    , do_recap    , 0, 0, FALSE },
@@ -691,6 +694,7 @@ struct command_info cmd_info[] =
     { "mdelete"    , POS_DEAD    , do_mdelete  , LVL_PRESIDENT, 0, FALSE },
     { "medit"      , POS_DEAD    , do_medit    , LVL_BUILDER, 0, FALSE },
     { "mlist"      , POS_DEAD    , do_mlist    , LVL_BUILDER, 0, FALSE },
+    { "mobs"       , POS_LYING   , do_mobs     , 0, 0, FALSE },
     { "mode"       , POS_LYING   , do_mode     , 0, 0, FALSE },
     { "motd"       , POS_DEAD    , do_gen_ps   , 0, SCMD_MOTD, FALSE },
     { "mount"      , POS_RESTING , do_mount    , 0, 0, FALSE },
