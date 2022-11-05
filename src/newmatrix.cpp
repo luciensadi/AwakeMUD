@@ -2729,7 +2729,7 @@ void reset_host_paydata(rnum_t rnum) {
       host.undiscovered_paydata = 0;
       host.ic_bound_paydata = 0;
   }
-  mudlog_vfprintf(NULL, LOG_SYSLOG, "PD:%ld-%s: %d UD, %d IC-B", host.vnum, host_color[host.color], host.undiscovered_paydata, host.ic_bound_paydata);
+  // mudlog_vfprintf(NULL, LOG_SYSLOG, "PD:%ld-%s: %d UD, %d IC-B", host.vnum, host_color[host.color], host.undiscovered_paydata, host.ic_bound_paydata);
   host.payreset = TRUE;
 }
 
