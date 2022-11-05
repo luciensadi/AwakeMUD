@@ -183,7 +183,7 @@ void end_sustained_spell(struct char_data *ch, struct sustain_data *sust)
   // Handle heal.
   if (spell_is_heal) {
     AFF_FLAGS(other).RemoveBit(AFF_HEALED);
-    update_pos(other);
+    update_pos(other, TRUE);
     if (GET_POS(other) == POS_MORTALLYW) {
       alert_player_doctors_of_mort(other, NULL);
     }

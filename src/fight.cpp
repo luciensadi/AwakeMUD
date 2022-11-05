@@ -220,7 +220,7 @@ void load_messages(void)
   fclose(fl);
 }
 
-bool update_pos(struct char_data * victim)
+bool update_pos(struct char_data * victim, bool protect_spells_from_purge)
 {
   bool was_morted = GET_POS(victim) == POS_MORTALLYW;
 
@@ -270,11 +270,13 @@ bool update_pos(struct char_data * victim)
 
   // SR3 p178
   if (GET_POS(victim) <= POS_SLEEPING) {
-    struct sustain_data *next;
-    for (struct sustain_data *sust = GET_SUSTAINED(victim); sust; sust = next) {
-      next = sust->next;
-      if (sust->caster && !sust->focus && !sust->spirit)
-        end_sustained_spell(victim, sust);
+    if (!protect_spells_from_purge) {
+      struct sustain_data *next;
+      for (struct sustain_data *sust = GET_SUSTAINED(victim); sust; sust = next) {
+        next = sust->next;
+        if (sust->caster && !sust->focus && !sust->spirit)
+          end_sustained_spell(victim, sust);
+      }
     }
 
     char cmd_buf[100];
