@@ -4766,7 +4766,7 @@ void free_host(struct host_data * host)
 
 void free_icon(struct matrix_icon * icon)
 {
-  if (icon->vnum) {
+  if (!icon->vnum) {
     DELETE_ARRAY_IF_EXTANT(icon->name);
     DELETE_ARRAY_IF_EXTANT(icon->long_desc);
     DELETE_ARRAY_IF_EXTANT(icon->look_desc);
