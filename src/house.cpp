@@ -202,8 +202,8 @@ bool House_load(struct house_control_rec *house)
             if (inside == 0)
               obj_to_room(obj, &world[rnum]);
 
-            auto it = std::find_if(contained_obj.begin(), contained_obj.end(), find_level(inside+1));
-            while (it != contained_obj.end()) {
+            auto it = contained_obj.end();
+            while ((it = std::find_if(contained_obj.begin(), contained_obj.end(), find_level(inside+1))) != contained_obj.end()) {
               obj_to_obj(it->obj, obj);
               contained_obj.erase(it);
             }
