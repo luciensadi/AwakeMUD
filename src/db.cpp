@@ -1216,7 +1216,8 @@ void parse_ic(File &fl, long nr)
 
   matrix_icon *ic = ic_proto+rnum;
   clear_icon(ic);
-  ic->number = rnum;
+  ic->rnum = rnum;
+  ic->vnum = nr;
 
   if (nr <= (zone ? zone_table[zone - 1].top : -1)) {
     log_vfprintf("FATAL ERROR: IC #%d is below zone %d.\n", nr, zone);
@@ -4765,7 +4766,7 @@ void free_host(struct host_data * host)
 
 void free_icon(struct matrix_icon * icon)
 {
-  if (!icon->number) {
+  if (icon->vnum) {
     DELETE_ARRAY_IF_EXTANT(icon->name);
     DELETE_ARRAY_IF_EXTANT(icon->long_desc);
     DELETE_ARRAY_IF_EXTANT(icon->look_desc);

@@ -213,7 +213,8 @@ struct matrix_icon {
   char *look_desc;
 
   int idnum;
-  vnum_t number;
+  rnum_t rnum;
+  vnum_t vnum;
   int condition;
   int initiative;
   int parry;
@@ -232,8 +233,8 @@ struct matrix_icon {
 #endif
 
   matrix_icon():
-    name(NULL), long_desc(NULL), look_desc(NULL), idnum(0), number(0), condition(10),
-    initiative(0), parry(0), evasion(0), position(0),
+    name(NULL), long_desc(NULL), look_desc(NULL), idnum(0), rnum(0), vnum(0),
+    condition(10), initiative(0), parry(0), evasion(0), position(0),
     decker(NULL), fighting(NULL), next(NULL), next_in_host(NULL), next_fighting(NULL)
   {
 #ifdef USE_DEBUG_CANARIES

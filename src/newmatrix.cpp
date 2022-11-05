@@ -24,6 +24,8 @@
 #define TEST_SLAVE 4
 struct ic_info dummy_ic;
 
+#define ICON_IS_IC(icon) (!(icon)->decker)
+
 extern void order_list(struct matrix_icon *start);
 extern void create_program(struct char_data *ch);
 extern void create_part(struct char_data *ch);
@@ -392,7 +394,7 @@ int system_test(rnum_t host, struct char_data *ch, int type, int software, int m
     target = ic->ic.rating;
     if (HOST.shutdown)
       target -= 2;
-    if (ic->number && ic->ic.target == PERSONA->idnum) {
+    if (ICON_IS_IC(ic) && ic->ic.target == PERSONA->idnum) {
       if (ic->ic.type == IC_PROBE || ic->ic.type == IC_SCOUT)
         tally += MAX(0, success_test(target, detect));
       else if (prog && (ic->ic.type == IC_TARBABY || ic->ic.type == IC_TARPIT) && ic->ic.subtype == 0) {
@@ -584,7 +586,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
   int iconrating = icon->ic.rating;
   if (!targ)
     return;
-  if (!targ->fighting && !(targ->number && (!IS_PROACTIVE(targ) || targ->ic.type == IC_SCOUT)))
+  if (!targ->fighting && !(ICON_IS_IC(targ) && (!IS_PROACTIVE(targ) || targ->ic.type == IC_SCOUT)))
   {
     targ->fighting = icon;
     targ->next_fighting = matrix[targ->in_host].fighting;
@@ -673,7 +675,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
   }
   if (targ->decker)
   {
-    if (icon->number && (icon->ic.type == IC_CRIPPLER || icon->ic.type == IC_RIPPER)) {
+    if (ICON_IS_IC(icon) && (icon->ic.type == IC_CRIPPLER || icon->ic.type == IC_RIPPER)) {
       if (!targ->decker->deck)
         return;
       extern const char *crippler[4];
@@ -758,7 +760,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
     if (!icon->decker->ras)
       target += 4;
   }
-  if (icon->number && icon->ic.type == IC_TRACE)
+  if (ICON_IS_IC(icon) && icon->ic.type == IC_TRACE)
     target += targ->decker->redirect;
   success = success_test(skill, target);
   if (success <= 0)
@@ -771,7 +773,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
   }
   success -= success_test(bod, power);
   dam = convert_damage(stage(success, dam));
-  if (icon->number) {
+  if (ICON_IS_IC(icon)) {
     if (icon->ic.type == IC_SCOUT)
     {
       if (success && targ->decker->scout < iconrating) {
@@ -842,7 +844,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
   }
   if (dam > 0 && targ->decker)
   {
-    if (icon->number && icon->ic.type >= IC_LETHAL_BLACK) {
+    if (ICON_IS_IC(icon) && icon->ic.type >= IC_LETHAL_BLACK) {
       int resist = 0;
       bool lethal = icon->ic.type == IC_LETHAL_BLACK ? TRUE : FALSE;
       if (!targ->decker->asist[0] && lethal)
@@ -912,7 +914,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
   if (targ->condition < 1)
   {
     if (targ->decker) {
-      if (icon->number) {
+      if (ICON_IS_IC(icon)) {
         switch (icon->ic.type) {
         case IC_SPARKY:
           send_to_icon(targ, "%s sends jolts of electricity into your deck!\r\n", CAP(icon->name));
@@ -1056,7 +1058,7 @@ void gain_matrix_karma(struct matrix_icon *icon, struct matrix_icon *targ) {
   ic_stats_total = MAX(MIN(max_exp_gain, ic_stats_total), 1);
 
   // Suppress rewards for unlinked zones.
-  if (vnum_from_non_connected_zone(targ->number))
+  if (vnum_from_non_connected_zone(targ->vnum))
     ic_stats_total = 0;
 
   int karma_gained = gain_karma(icon->decker->ch, ic_stats_total, FALSE, TRUE, TRUE);
@@ -1210,7 +1212,7 @@ ACMD(do_locate)
     success = system_test(PERSONA->in_host, ch, TEST_INDEX, SOFT_ANALYZE, 0);
     if (success > 0) {
       for (struct matrix_icon *icon = matrix[PERSONA->in_host].icons; icon; icon = icon->next_in_host)
-        if (icon->number > 0) {
+        if (ICON_IS_IC(icon)) {
           if (icon->evasion)
             icon->evasion = 0;
           make_seen(PERSONA, icon->idnum);
@@ -1598,7 +1600,7 @@ ACMD(do_analyze)
         int success = system_test(PERSONA->in_host, ch, TEST_CONTROL, SOFT_ANALYZE, 0);
         if (success > 0 ) {
           show_icon_to_persona(PERSONA, ic);
-          if (ic->number) {
+          if (ICON_IS_IC(ic)) {
             send_to_icon(PERSONA, "%s is a %s-%d\r\n", CAP(ic->name), ic_type[ic->ic.type],
                          matrix[PERSONA->in_host].shutdown ? ic->ic.rating - 2 : ic->ic.rating);
             if (ic->ic.options.AreAnySet(IC_ARMOR, IC_CASCADE, IC_EX_OFFENSE, IC_EX_DEFENSE, IC_TRAP, IC_SHIELD, IC_SHIFT, ENDBIT)) {
@@ -2600,8 +2602,8 @@ ACMD(do_software)
 
 void process_upload(struct matrix_icon *persona)
 {
-  if (persona->decker->deck)
-    for (struct obj_data *soft = persona->decker->deck->contains; soft; soft = soft->next_content)
+  if (persona && persona->decker && persona->decker->deck) {
+    for (struct obj_data *soft = persona->decker->deck->contains; soft; soft = soft->next_content) {
       if (GET_OBJ_TYPE(soft) != ITEM_PART && GET_OBJ_VAL(soft, 9) > 0)
       {
         // Require that we're on the same host as we started the upload on.
@@ -2667,6 +2669,8 @@ void process_upload(struct matrix_icon *persona)
         }
         break;
       }
+    }
+  }
 }
 
 struct matrix_icon *find_icon_by_id(vnum_t idnum)
@@ -2743,7 +2747,7 @@ void matrix_update()
       } else {
         // See if there are any deckers in here.
         for (struct matrix_icon *icon = host.icons; icon; icon = icon->next_in_host) {
-          if (!icon->number) {
+          if (!ICON_IS_IC(icon)) {
             decker = TRUE;
             break;
           }
@@ -2794,7 +2798,7 @@ void matrix_update()
     }
     for (struct matrix_icon *icon = host.icons; icon; icon = nexticon) {
       nexticon = icon->next_in_host;
-      if (!icon->number) {
+      if (!ICON_IS_IC(icon)) {
         process_upload(icon);
         decker = TRUE;
         if (!host.pass)
@@ -2811,7 +2815,7 @@ void matrix_update()
     }
     if (decker) {
       for (struct matrix_icon *icon = host.icons; icon; icon = icon->next_in_host)
-        if (icon->number && IS_PROACTIVE(icon) && !icon->fighting)
+        if (ICON_IS_IC(icon) && IS_PROACTIVE(icon) && !icon->fighting)
           for (struct matrix_icon *icon2 = host.icons; icon2; icon2 = icon2->next_in_host)
             if (icon->ic.target == icon2->idnum && icon2->decker) {
               if (icon->ic.type == IC_TRACE && icon->ic.subtype > 0) {

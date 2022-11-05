@@ -2176,7 +2176,7 @@ void extract_icon(struct matrix_icon * icon)
     }
     DELETE_AND_NULL(icon->decker);
   } else {
-    ic_index[icon->number].number--;
+    ic_index[icon->rnum].number--;
   }
 
   REMOVE_FROM_LIST(icon, icon_list, next);

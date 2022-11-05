@@ -49,7 +49,7 @@ void write_ic_to_disk(int vnum)
     if (realcounter >= 0) {
       if (!strcmp("An unfinished IC", ICON.name))
         continue;
-      fprintf(fl, "#%ld\n", ic_index[ICON.number].vnum);
+      fprintf(fl, "#%ld\n", ic_index[ICON.rnum].vnum);
       fprintf(fl, "Name:\t%s\n", ICON.name);
       fprintf(fl, "LongDesc:\t%s\n", ICON.look_desc);
       fprintf(fl, "Description:$\n%s~\n", cleanup(buf2, ICON.long_desc));
@@ -143,7 +143,7 @@ void icedit_parse(struct descriptor_data *d, const char *arg)
         if (ic_num > 0) {
           struct matrix_icon *i, *temp;
           for (i = icon_list; i; i = i->next)
-            if (i->number == ic_num) {
+            if (i->rnum == ic_num) {
               temp = Mem->GetIcon();
               *temp = *i;
               *i = *d->edit_icon;
@@ -175,12 +175,12 @@ void icedit_parse(struct descriptor_data *d, const char *arg)
                 new_ic_index[counter].func = NULL;
                 new_ic_proto[counter] = *(d->edit_icon);
                 new_ic_proto[counter].in_host = NOWHERE;
-                d->edit_icon->number = counter;
-                new_ic_proto[counter].number = counter;
+                d->edit_icon->rnum = counter;
+                new_ic_proto[counter].rnum = counter;
                 found = TRUE;
                 new_ic_index[counter + 1] = ic_index[counter];
                 new_ic_proto[counter + 1] = ic_proto[counter];
-                new_ic_proto[counter + 1].number = counter + 1;
+                new_ic_proto[counter + 1].rnum = counter + 1;
               } else {
                 new_ic_proto[counter] = ic_proto[counter];
                 new_ic_index[counter] = ic_index[counter];
@@ -188,7 +188,7 @@ void icedit_parse(struct descriptor_data *d, const char *arg)
             } else {
               new_ic_index[counter + 1] = ic_index[counter];
               new_ic_proto[counter + 1] = ic_proto[counter];
-              new_ic_proto[counter + 1].number = counter + 1;
+              new_ic_proto[counter + 1].rnum = counter + 1;
             }
           }
 
@@ -200,8 +200,8 @@ void icedit_parse(struct descriptor_data *d, const char *arg)
             clear_icon(new_ic_proto + top_of_ic + 1);
             new_ic_proto[top_of_ic + 1] = *(d->edit_icon);
             new_ic_proto[top_of_ic + 1].in_host = NOWHERE;
-            new_ic_proto[top_of_ic + 1].number = top_of_ic + 1;
-            d->edit_icon->number = top_of_ic + 1;
+            new_ic_proto[top_of_ic + 1].rnum = top_of_ic + 1;
+            d->edit_icon->rnum = top_of_ic + 1;
           }
           top_of_ic++;
           DELETE_ARRAY_IF_EXTANT(ic_proto);
