@@ -53,7 +53,7 @@ void make_seen(struct matrix_icon *icon, int idnum)
   icon->decker->seen = seen;
 }
 
-void spawn_paydata(struct matrix_icon *icon) {
+struct obj_data * spawn_paydata(struct matrix_icon *icon) {
   struct obj_data *obj = read_object(OBJ_BLANK_OPTICAL_CHIP, VIRTUAL);
   GET_DECK_ACCESSORY_TYPE(obj) = TYPE_FILE;
   GET_DECK_ACCESSORY_FILE_CREATION_TIME(obj) = time(0);
@@ -68,7 +68,7 @@ void spawn_paydata(struct matrix_icon *icon) {
                        { 0, 1, 1, 2, 2, 3 },
                        { 1, 1, 2, 2, 3, 3 },
                        { 1, 2, 2, 3, 3, 3 }};
-  int def = defense[matrix[icon->in_host].color][number(0, 5)];
+  int def = defense[matrix[icon->in_host].color][number(0, 4)];
   if (def) {
     int rate[4];
     int rating = number(1, 6) + number(1, 6);
@@ -116,6 +116,8 @@ void spawn_paydata(struct matrix_icon *icon) {
     }
   }
   obj_to_host(obj, &matrix[icon->in_host]);
+
+  return obj;
 }
 
 // Spawns an IC to the host. Returns TRUE on successful spawn, FALSE otherwise.
@@ -946,11 +948,17 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
         trap->ic.target = icon->idnum;
         icon_to_host(trap, icon->in_host);
       }
-      if (matrix[icon->in_host].ic_bound_paydata > 0 && !(number(0, MAX(0, matrix[icon->in_host].color - HOST_COLOR_ORANGE)))) {
-        matrix[icon->in_host].ic_bound_paydata--;
-        spawn_paydata(icon);
-        send_to_icon(icon, "A mote of paydata drifts away from your kill.\r\n");
+
+      if (matrix[icon->in_host].ic_bound_paydata > 0) {
+        if (!(number(0, MAX(0, matrix[icon->in_host].color - HOST_COLOR_ORANGE)))) {
+          matrix[icon->in_host].ic_bound_paydata--;
+          struct obj_data *paydata = spawn_paydata(icon);
+          send_to_icon(icon, "A mote labeled '%s' drifts away from your kill.\r\n", GET_OBJ_NAME(paydata));
+        } else  {
+          send_to_icon(icon, "The paydata you thought your kill was guarding turns out to have been junk.\r\n");
+        }
       }
+
       extract_icon(targ);
       check_trigger(icon->in_host, icon->decker->ch);
       return;
