@@ -108,11 +108,11 @@ const char *mob_objectives[] =
 const char *sol[] =
   {
     "DNL",
-    "Johnson",
-    "Give target",
-    "Equip target",
-    "Install target",
-    "Location",
+    "give to PC",
+    "give to target",
+    "equip on target",
+    "install in target",
+    "load at location",
     "\n"
   };
 
@@ -127,9 +127,9 @@ const char *sml[] =
 const char *soo[] =
   {
     "none",
-    "return",
-    "to target",
-    "to location",
+    "return to Johnson",
+    "deliver to target",
+    "deliver to location",
     "destroy one",
     "destroy many",
     "\n"
