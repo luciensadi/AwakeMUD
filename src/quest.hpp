@@ -13,6 +13,7 @@ typedef  std::vector<emote_t>   emote_vector_t;
 
 #define QUEST_NONE        0
 
+#define QOL_DONT_LOAD     0
 #define QOL_JOHNSON       1
 #define QOL_TARMOB_I      2
 #define QOL_TARMOB_E      3
@@ -20,9 +21,11 @@ typedef  std::vector<emote_t>   emote_vector_t;
 #define QOL_LOCATION      5
 #define QOL_HOST          6
 
+#define QML_DONT_LOAD     0
 #define QML_LOCATION      1
 #define QML_FOLQUESTER    2
 
+#define QOO_NO_OBJECTIVE  0
 #define QOO_JOHNSON       1
 #define QOO_TAR_MOB       2
 #define QOO_LOCATION      3
@@ -31,6 +34,7 @@ typedef  std::vector<emote_t>   emote_vector_t;
 #define QOO_RETURN_PAY	  6
 #define QOO_UPLOAD	      7
 
+#define QMO_NO_OBJECTIVE  0
 #define QMO_LOCATION      1
 #define QMO_KILL_ONE      2
 #define QMO_KILL_MANY     3
@@ -47,6 +51,10 @@ struct quest_om_data
   byte objective;
   int l_data, l_data2;
   int o_data;
+
+  quest_om_data() :
+    vnum(0), nuyen(0), karma(0), load(0), objective(0), l_data(0), l_data2(0), o_data(0)
+  {}
 };
 
 struct quest_data
@@ -91,9 +99,13 @@ struct quest_data
 ;
 
 struct quest_entry {
-      int index;
-      int rep;
-  };
+  int index;
+  int rep;
+
+  quest_entry() :
+    index(0), rep(0)
+  {}
+};
 
 #define CMD_JOB_NONE  0
 #define CMD_JOB_QUIT  1
