@@ -1819,7 +1819,7 @@ ACMD(do_connect)
     return;
   }
 
-  if (access_level(ch, LVL_ADMIN)) {
+  if (IS_SENATOR(ch)) {
     // As staff, you can also connect to specific host vnums from any jackpoint.
     if (*argument) {
       skip_spaces(&argument);
