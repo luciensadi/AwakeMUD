@@ -1968,19 +1968,31 @@ int search_block(const char *arg, const char **list, bool exact)
   for (l = 0; *(mutable_arg + l); l++)
     *(mutable_arg + l) = LOWER(*(mutable_arg + l));
 
-  if (exact) {
-    for (i = 0; **(list + i) != '\n'; i++)
-      if (!strcmp(mutable_arg, *(list + i)))
+  // For non-exact matching, avoid "" to match the first available * string.
+  if (!exact && !l)
+    l = 1;
+
+  char lowercase_item[500];
+
+  // Iterate over the list, converting to lower case.
+  for (i = 0; **(list + i) != '\n'; i++) {
+    strlcpy(lowercase_item, *(list + i), sizeof(lowercase_item));
+    for (int l = 0; l < (int) strlen(lowercase_item); l++)
+      lowercase_item[l] = LOWER(lowercase_item[l]);
+
+    // Compare.
+    if (exact) {
+      if (!strcmp(mutable_arg, *(list + i))) {
         return (i);
-  } else {
-    if (!l)
-      l = 1;                    /* Avoid "" to match the first available
-                                                                                     * string */
-    for (i = 0; **(list + i) != '\n'; i++)
-      if (!strncmp(mutable_arg, *(list + i), l))
+      }
+    } else {
+      if (!strncmp(mutable_arg, lowercase_item, l)) {
         return (i);
+      }
+    }
   }
 
+  // Failed to find anything.
   return -1;
 }
 
@@ -3330,7 +3342,7 @@ void log_command(struct char_data *ch, const char *argument, const char *tcname)
   if (ch->desc && ch->desc->original)
     snprintf(name_buf, sizeof(name_buf), "%s (as %s)", GET_CHAR_NAME(ch->desc->original), GET_NAME(ch));
   else
-    strncpy(name_buf, GET_CHAR_NAME(ch), sizeof(name_buf) - 1);
+    strlcpy(name_buf, GET_CHAR_NAME(ch), sizeof(name_buf) - 1);
 
   // Write the command to the buffer.
   char cmd_buf[MAX_INPUT_LENGTH * 3];

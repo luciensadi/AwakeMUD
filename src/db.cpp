@@ -3483,6 +3483,34 @@ int vnum_room_samename(struct char_data *ch) {
   return found;
 }
 
+int vnum_room_flag(char *flagname, struct char_data *ch) {
+  int found = 0;
+
+  // Identify the flag.
+  int flag = search_block(flagname, room_bits, FALSE);
+
+  if (flag >= ROOM_MAX || flag < 0) {
+    send_to_char(ch, "'%s' is not a valid room flag. Choices are:\r\n", flagname);
+    for (flag = 0; flag < ROOM_MAX; flag++) {
+      send_to_char(ch, "%s%s%s", flag == 0 ? "" : ", ", room_bits[flag], flag == ROOM_MAX-1 ? "\r\n" : "");
+    }
+    return 0;
+  }
+
+  for (rnum_t nr = 0; nr <= top_of_world; nr++) {
+    struct room_data *room = &world[nr];
+
+    if (ROOM_FLAGGED(room, flag)) {
+      send_to_char(ch, "%3d. [%6ld] %s^n%s\r\n",
+                       ++found,
+                       GET_ROOM_VNUM(room),
+                       GET_ROOM_NAME(room),
+                       ROOM_FLAGGED(room, ROOM_ENCOURAGE_CONGREGATION) ? " ^c(social)^n" : "");
+    }
+  }
+  return (found);
+}
+
 int vnum_room(char *searchname, struct char_data *ch) {
   int nr, found = 0;
   char arg1[MAX_STRING_LENGTH];
@@ -3492,6 +3520,8 @@ int vnum_room(char *searchname, struct char_data *ch) {
 
   if (!strcmp(arg1, "samename"))
     return vnum_room_samename(ch);
+  if (!strcmp(arg1, "flag"))
+    return vnum_room_flag(arg2, ch);
 
   for (nr = 0; nr <= top_of_world; nr++)
   {
