@@ -1802,9 +1802,6 @@ ACMD(do_connect)
     if (GET_EQ(ch, i) && (GET_OBJ_TYPE(GET_EQ(ch,i )) == ITEM_CYBERDECK || GET_OBJ_TYPE(GET_EQ(ch,i )) == ITEM_CUSTOM_DECK))
       cyberdeck = GET_EQ(ch, i);
   if (!cyberdeck) {
-
-
-
     if (access_level(ch, LVL_ADMIN)) {
       // Create a !RENT staff-only deck from whole cloth.
       extern struct obj_data *make_staff_deck_target_mpcp(int mpcp);
@@ -1821,6 +1818,29 @@ ACMD(do_connect)
     send_to_char("You cannot connect to the matrix with fried MPCP chips!\r\n", ch);
     return;
   }
+
+  if (access_level(ch, LVL_ADMIN)) {
+    // As staff, you can also connect to specific host vnums from any jackpoint.
+    if (*argument) {
+      skip_spaces(&argument);
+
+      vnum_t host_vnum = atoi(argument);
+      if (host_vnum <= 0) {
+        send_to_char("Invalid syntax! Either CONNECT with no arguments, or CONNECT <vnum> to connect directly to that host.\r\n", ch);
+        return;
+      }
+
+      rnum_t host_rnum = real_host(host_vnum);
+      if (host_rnum < 0) {
+        send_to_char(ch, "%s is not a valid host.\r\n", argument);
+        return;
+      }
+
+      send_to_char(ch, "You override your jackpoint to connect to host %ld.\r\n", host_vnum);
+      host = host_rnum;
+    }
+  }
+
   if (matrix[host].alert > 2) {
     send_to_char("It seems that host has been shut down.\r\n", ch);
     return;
