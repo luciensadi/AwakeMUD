@@ -501,6 +501,9 @@ ACMD(do_dig)
       ch->desc->edit_mode = REDIT_CONFIRM_SAVESTRING;
       redit_parse(ch->desc, "y");
 
+      // Update in_room since there's a chance we renumbered the world.
+      in_room = get_ch_in_room(ch);
+
       // And update the room variable to point to the room's index.
       room = real_room(atoi_buf);
 
