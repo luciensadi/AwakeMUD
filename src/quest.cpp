@@ -1468,11 +1468,11 @@ void list_detailed_quest(struct char_data *ch, long rnum)
   int i;
 
   {
-    int johnson = real_mobile(quest_table[rnum].johnson);
+    rnum_t johnson = real_mobile(quest_table[rnum].johnson);
 
     snprintf(buf, sizeof(buf), "Vnum: [%5ld], Rnum: [%ld], Johnson: [%s (%ld)]\r\n",
             quest_table[rnum].vnum, rnum,
-            johnson < 0 ? "none" : GET_NAME(mob_proto+johnson),
+            johnson < 0 ? "^ynone^n" : GET_NAME(mob_proto+johnson),
             quest_table[rnum].johnson);
   }
 
@@ -1482,16 +1482,16 @@ void list_detailed_quest(struct char_data *ch, long rnum)
     return;
   }
 
-  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Time allowed: [%d], Minimum reputation: [%d], "
-          "Maximum reputation: [%d]\r\n", quest_table[rnum].time,
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Time allowed: [^c%d^n], Minimum reputation: [^c%d^n], "
+          "Maximum reputation: [^c%d^n]\r\n", quest_table[rnum].time,
           quest_table[rnum].min_rep, quest_table[rnum].max_rep);
 
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Bonus nuyen: [%d], Bonus Karma: [%0.2f], "
-          "Reward: [%d]\r\n", quest_table[rnum].nuyen,
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Bonus nuyen: [^c%d^n], Bonus Karma: [^c%0.2f^n], "
+          "Reward: [^c%d^n]\r\n", quest_table[rnum].nuyen,
           ((float)quest_table[rnum].karma / 100), quest_table[rnum].reward);
 
   for (i = 0; i < quest_table[rnum].num_mobs; i++) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "M%2d) %d nuyen/%0.2f: V%ld; %s (%d); %s (%d)\r\n",
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^mM^n%2d) ^c%d^n nuyen/^c%0.2f^n karma: vnum %ld; %s (%d); %s (%d)\r\n",
             i, quest_table[rnum].mob[i].nuyen,
             ((float)quest_table[rnum].mob[i].karma / 100),
             quest_table[rnum].mob[i].vnum, sml[(int)quest_table[rnum].mob[i].load],
@@ -1502,7 +1502,7 @@ void list_detailed_quest(struct char_data *ch, long rnum)
 
 
   for (i = 0; i < quest_table[rnum].num_objs; i++) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "O%2d) %d nuyen/%0.2f: V%ld; %s (%d/%d); %s (%d)\r\n",
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^oO^n%2d) ^c%d^n nuyen/^c%0.2f^n karma: vnum %ld; %s (%d/%d); %s (%d)\r\n",
             i, quest_table[rnum].obj[i].nuyen,
             ((float)quest_table[rnum].obj[i].karma / 100),
             quest_table[rnum].obj[i].vnum, sol[(int)quest_table[rnum].obj[i].load],
