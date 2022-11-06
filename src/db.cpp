@@ -3390,6 +3390,57 @@ int vnum_object_poison(struct char_data * ch)
   return (found);
 }
 
+int vnum_object_weaponfocus(char *searchname, struct char_data * ch)
+{
+  char buf[MAX_STRING_LENGTH*8];
+  extern const char *wound_arr[];
+  int nr, found = 0;
+  int power, severity, strength;
+  buf[0] = '\0';
+
+  for( severity = DEADLY; severity >= LIGHT; severity -- )
+    for( power = 21; power >= 0; power-- )
+      for( strength = WEAPON_MAXIMUM_STRENGTH_BONUS; strength >= 0; strength-- ) {
+        for (nr = 0; nr <= top_of_objt; nr++) {
+          if (GET_OBJ_TYPE(&obj_proto[nr]) != ITEM_WEAPON)
+            continue;
+          if (WEAPON_IS_GUN(&obj_proto[nr]) || GET_WEAPON_FOCUS_RATING(&obj_proto[nr]) <= 0)
+            continue;
+          if (GET_WEAPON_POWER(&obj_proto[nr]) < power && power != 0)
+            continue;
+          if (GET_WEAPON_DAMAGE_CODE(&obj_proto[nr]) < severity && severity != 1)
+            continue;
+          if (GET_WEAPON_STR_BONUS(&obj_proto[nr]) < strength && strength != 0)
+            continue;
+          if (GET_WEAPON_POWER(&obj_proto[nr]) > power && power != 21)
+            continue;
+          if (GET_WEAPON_DAMAGE_CODE(&obj_proto[nr]) > severity && severity != DEADLY)
+            continue;
+          if (GET_WEAPON_STR_BONUS(&obj_proto[nr]) > strength && strength != 5)
+            continue;
+          if (IS_OBJ_STAT(&obj_proto[nr], ITEM_EXTRA_STAFF_ONLY))
+            continue;
+          if (vnum_from_non_connected_zone(OBJ_VNUM_RNUM(nr)))
+            continue;
+
+          ++found;
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%5ld -%2d] ^c%2d%s ^y+%d^n %s (^W%s^n, ^c%d^n reach, rating ^c%d^n)%s\r\n",
+                  OBJ_VNUM_RNUM(nr),
+                  ObjList.CountObj(nr),
+                  GET_WEAPON_POWER(&obj_proto[nr]),
+                  wound_arr[GET_WEAPON_DAMAGE_CODE(&obj_proto[nr])],
+                  GET_WEAPON_STR_BONUS(&obj_proto[nr]),
+                  obj_proto[nr].text.name,
+                  weapon_types[GET_WEAPON_ATTACK_TYPE(&obj_proto[nr])],
+                  GET_WEAPON_REACH(&obj_proto[nr]),
+                  GET_WEAPON_FOCUS_RATING(&obj_proto[nr]),
+                  obj_proto[nr].source_info ? "  ^g(canon)^n" : "");
+        }
+      }
+  page_string(ch->desc, buf, 1);
+  return (found);
+}
+
 int vnum_object(char *searchname, struct char_data * ch)
 {
   int nr, found = 0;
@@ -3410,6 +3461,8 @@ int vnum_object(char *searchname, struct char_data * ch)
     return vnum_object_magazines(searchname,ch);
   if (!strcmp(searchname,"focilist"))
     return vnum_object_foci(searchname,ch);
+  if (!strcmp(searchname, "weaponfocus"))
+    return vnum_object_weaponfocus(searchname, ch);
   if (!strcmp(arg1,"objtype"))
     return vnum_object_type(atoi(arg2),ch);
   if (!strcmp(arg1,"affectloc"))
