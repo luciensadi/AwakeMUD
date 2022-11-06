@@ -3500,10 +3500,11 @@ int vnum_room(char *searchname, struct char_data *ch) {
     bool is_name = isname(searchname, get_string_after_color_code_removal(GET_ROOM_NAME(room), NULL));
 
     if (is_name) {
-      send_to_char(ch, "%3d. [%6ld] %s\r\n",
+      send_to_char(ch, "%3d. [%6ld] %s^n%s\r\n",
                        ++found,
                        GET_ROOM_VNUM(room),
-                       GET_ROOM_NAME(room));
+                       GET_ROOM_NAME(room),
+                       ROOM_FLAGGED(room, ROOM_ENCOURAGE_CONGREGATION) ? " ^c(social)^n" : "");
     }
   }
   return (found);
