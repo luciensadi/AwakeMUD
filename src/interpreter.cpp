@@ -1269,6 +1269,7 @@ struct command_info mtx_info[] =
     { "bug", 0, do_gen_write, 0, SCMD_BUG, FALSE },
     { "call", 0, do_comcall, 0, SCMD_RING, FALSE },
   //{ "control", 0, do_control, 0, 0, FALSE },     // This is a rigging command?
+    { "connect", 0, do_logon, 0, 0, FALSE },
     { "commands", 0, do_commands, 0, SCMD_COMMANDS, FALSE },
     { "crash", 0, do_crash, 0, 0, FALSE },
     { "decrypt", 0, do_decrypt, 0, 0, FALSE },
