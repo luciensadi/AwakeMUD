@@ -3400,8 +3400,8 @@ int vnum_object_weaponfocus(char *searchname, struct char_data * ch)
   int severity, strength;
   buf[0] = '\0';
 
-  for( severity = DEADLY; severity >= LIGHT; severity -- ) {
-    for (int rating = max_weapon_focus_rating; rating >= 0; rating--) {
+  for (int rating = max_weapon_focus_rating; rating >= 0; rating--) {
+    for( severity = DEADLY; severity >= LIGHT; severity -- ) {
       for( strength = WEAPON_MAXIMUM_STRENGTH_BONUS; strength >= 0; strength-- ) {
         for (nr = 0; nr <= top_of_objt; nr++) {
           if (GET_OBJ_TYPE(&obj_proto[nr]) != ITEM_WEAPON)
