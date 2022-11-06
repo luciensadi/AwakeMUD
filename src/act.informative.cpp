@@ -1354,9 +1354,37 @@ void list_one_char(struct char_data * i, struct char_data * ch)
   if (PLR_FLAGGED(i, PLR_PROJECT))
     strlcat(buf, " (projecting)", sizeof(buf));
 
-  if (GET_QUI(i) <= 0)
+  if (GET_QUI(i) <= 0) {
     strlcat(buf, " is here, seemingly paralyzed.", sizeof(buf));
-  else if (PLR_FLAGGED(i, PLR_MATRIX))
+  } else if (GET_POS(i) == POS_FIGHTING) {
+    if (FIGHTING(i)) {
+      if (AFF_FLAGGED(ch, AFF_BANISH))
+        strlcat(buf, " is here, attempting to banish ", sizeof(buf));
+      else
+        strlcat(buf, " is here, fighting ", sizeof(buf));
+      if (FIGHTING(i) == ch)
+        strlcat(buf, "YOU!", sizeof(buf));
+      else {
+        if (i->in_room == FIGHTING(i)->in_room)
+          strlcat(buf, PERS(FIGHTING(i), ch), sizeof(buf));
+        else
+          strlcat(buf, "someone in the distance", sizeof(buf));
+        strlcat(buf, "!", sizeof(buf));
+      }
+    } else if (FIGHTING_VEH(i)) {
+      strlcat(buf, " is here, fighting ", sizeof(buf));
+      if ((ch->in_veh && ch->in_veh == FIGHTING_VEH(i)) || (ch->char_specials.rigging && ch->char_specials.rigging == FIGHTING_VEH(i)))
+        strlcat(buf, "YOU!", sizeof(buf));
+      else {
+        if (i->in_room == FIGHTING_VEH(i)->in_room)
+          strlcat(buf, GET_VEH_NAME(FIGHTING_VEH(i)), sizeof(buf));
+        else
+          strlcat(buf, "someone in the distance", sizeof(buf));
+        strlcat(buf, "!", sizeof(buf));
+      }
+    } else                      /* NIL fighting pointer */
+      strlcat(buf, " is here struggling with thin air.", sizeof(buf));
+  } else if (PLR_FLAGGED(i, PLR_MATRIX))
     strlcat(buf, " is here, jacked into a cyberdeck.", sizeof(buf));
   else if (PLR_FLAGGED(i, PLR_REMOTE))
     strlcat(buf, " is here, jacked into a remote control deck.", sizeof(buf));
@@ -1411,43 +1439,14 @@ void list_one_char(struct char_data * i, struct char_data * ch)
       strlcat(buf, " is sitting in the drivers seat.", sizeof(buf));
   } else if ((obj = get_mount_manned_by_ch(i))) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " is manning %s.", GET_OBJ_NAME(obj));
-  } else if (GET_POS(i) != POS_FIGHTING) {
+  } else if (affected_by_spell(ch, SPELL_LEVITATE)) {
+    strlcat(buf, " is here, hovering above the ground.", sizeof(buf));
+  } else {
     if (GET_DEFPOS(i))
       snprintf(buf2, sizeof(buf2), " %s^n", GET_DEFPOS(i));
     else
       snprintf(buf2, sizeof(buf2), " %s^n.", positions[(int) GET_POS(i)]);
     strlcat(buf, buf2, sizeof(buf));
-  } else if (affected_by_spell(ch, SPELL_LEVITATE)) {
-    strlcat(buf, " is here, hovering above the ground.", sizeof(buf));
-  } else
-  {
-    if (FIGHTING(i)) {
-      if (AFF_FLAGGED(ch, AFF_BANISH))
-        strlcat(buf, " is here, attempting to banish ", sizeof(buf));
-      else
-        strlcat(buf, " is here, fighting ", sizeof(buf));
-      if (FIGHTING(i) == ch)
-        strlcat(buf, "YOU!", sizeof(buf));
-      else {
-        if (i->in_room == FIGHTING(i)->in_room)
-          strlcat(buf, PERS(FIGHTING(i), ch), sizeof(buf));
-        else
-          strlcat(buf, "someone in the distance", sizeof(buf));
-        strlcat(buf, "!", sizeof(buf));
-      }
-    } else if (FIGHTING_VEH(i)) {
-      strlcat(buf, " is here, fighting ", sizeof(buf));
-      if ((ch->in_veh && ch->in_veh == FIGHTING_VEH(i)) || (ch->char_specials.rigging && ch->char_specials.rigging == FIGHTING_VEH(i)))
-        strlcat(buf, "YOU!", sizeof(buf));
-      else {
-        if (i->in_room == FIGHTING_VEH(i)->in_room)
-          strlcat(buf, GET_VEH_NAME(FIGHTING_VEH(i)), sizeof(buf));
-        else
-          strlcat(buf, "someone in the distance", sizeof(buf));
-        strlcat(buf, "!", sizeof(buf));
-      }
-    } else                      /* NIL fighting pointer */
-      strlcat(buf, " is here struggling with thin air.", sizeof(buf));
   }
 
   strlcat(buf, "\r\n", sizeof(buf));
