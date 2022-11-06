@@ -5,6 +5,7 @@ int max_exp_gain = 250; /* max gainable per kill */
 int max_npc_corpse_time = 3;
 int max_npc_vehicle_lootwreck_time = 100; // Ticks on the zone pulse (every 3 RL seconds)
 int max_pc_corpse_time = 10;
+int max_weapon_focus_rating = 4;
 const char *OK = "Okay.\r\n";
 const char *TOOBUSY = "You're too busy.\r\n";
 const char *YOU_NEED_OLC_FOR_THAT = "Please SET SELF OLC ON (or ask a higher-level staff member to do it).\r\n";

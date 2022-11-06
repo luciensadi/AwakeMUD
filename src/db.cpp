@@ -88,6 +88,8 @@ extern void auto_repair_obj(struct obj_data *obj);
 // transport.cpp
 extern void boot_escalators();
 
+extern int max_weapon_focus_rating;
+
 
 /**************************************************************************
 *  declarations of most of the 'global' variables                         *
@@ -3395,24 +3397,22 @@ int vnum_object_weaponfocus(char *searchname, struct char_data * ch)
   char buf[MAX_STRING_LENGTH*8];
   extern const char *wound_arr[];
   int nr, found = 0;
-  int power, severity, strength;
+  int severity, strength;
   buf[0] = '\0';
 
-  for( severity = DEADLY; severity >= LIGHT; severity -- )
-    for( power = 21; power >= 0; power-- )
+  for( severity = DEADLY; severity >= LIGHT; severity -- ) {
+    for (int rating = max_weapon_focus_rating; rating >= 0; rating--) {
       for( strength = WEAPON_MAXIMUM_STRENGTH_BONUS; strength >= 0; strength-- ) {
         for (nr = 0; nr <= top_of_objt; nr++) {
           if (GET_OBJ_TYPE(&obj_proto[nr]) != ITEM_WEAPON)
             continue;
           if (WEAPON_IS_GUN(&obj_proto[nr]) || GET_WEAPON_FOCUS_RATING(&obj_proto[nr]) <= 0)
             continue;
-          if (GET_WEAPON_POWER(&obj_proto[nr]) < power && power != 0)
+          if (GET_WEAPON_FOCUS_RATING(&obj_proto[nr]) != rating)
             continue;
           if (GET_WEAPON_DAMAGE_CODE(&obj_proto[nr]) < severity && severity != 1)
             continue;
           if (GET_WEAPON_STR_BONUS(&obj_proto[nr]) < strength && strength != 0)
-            continue;
-          if (GET_WEAPON_POWER(&obj_proto[nr]) > power && power != 21)
             continue;
           if (GET_WEAPON_DAMAGE_CODE(&obj_proto[nr]) > severity && severity != DEADLY)
             continue;
@@ -3424,12 +3424,11 @@ int vnum_object_weaponfocus(char *searchname, struct char_data * ch)
             continue;
 
           ++found;
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%5ld -%2d] ^c%2d%s ^y+%d^n %s (^W%s^n, ^c%d^n reach, rating ^c%d^n)%s\r\n",
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%5ld -%2d] (STR^c%+d^n)^c%s^n %s (^W%s^n, ^c%d^n reach, rating ^c%d^n)%s\r\n",
                   OBJ_VNUM_RNUM(nr),
                   ObjList.CountObj(nr),
-                  GET_WEAPON_POWER(&obj_proto[nr]),
-                  wound_arr[GET_WEAPON_DAMAGE_CODE(&obj_proto[nr])],
                   GET_WEAPON_STR_BONUS(&obj_proto[nr]),
+                  wound_arr[GET_WEAPON_DAMAGE_CODE(&obj_proto[nr])],
                   obj_proto[nr].text.name,
                   weapon_types[GET_WEAPON_ATTACK_TYPE(&obj_proto[nr])],
                   GET_WEAPON_REACH(&obj_proto[nr]),
@@ -3437,6 +3436,8 @@ int vnum_object_weaponfocus(char *searchname, struct char_data * ch)
                   obj_proto[nr].source_info ? "  ^g(canon)^n" : "");
         }
       }
+    }
+  }
   page_string(ch->desc, buf, 1);
   return (found);
 }

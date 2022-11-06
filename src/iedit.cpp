@@ -33,6 +33,8 @@
 
 void write_objs_to_disk(vnum_t zone);
 
+// extern vars
+extern int max_weapon_focus_rating;
 
 // extern funcs
 extern char *cleanup(char *dest, const char *src);
@@ -1024,7 +1026,7 @@ void iedit_disp_val8_menu(struct descriptor_data * d)
       } else if (GET_WEAPON_ATTACK_TYPE(OBJ) == WEAP_GRENADE) {
         send_to_char("Is this an IPE (-3) or a Flashbang (-4) grenade?: ", CH);
       } else {
-        send_to_char("Enter weapon focus rating (0 for no focus, up to 4): ", CH);
+        send_to_char(CH, "Enter weapon focus rating (0 for no focus, up to %d): ", max_weapon_focus_rating);
       }
       break;
     case ITEM_WORN:
@@ -2780,8 +2782,8 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
               return;
             }
           } else {
-            if (number < 0 || number > 4) {
-              send_to_char("Weapon focus rating must be between 0 (no focus) and 4.\r\n", CH);
+            if (number < 0 || number > max_weapon_focus_rating) {
+              send_to_char(CH, "Weapon focus rating must be between 0 (no focus) and %d.\r\n", max_weapon_focus_rating);
               iedit_disp_val8_menu(d);
               return;
             }
