@@ -735,35 +735,38 @@ ACMD(do_goto)
 
   half_chop(argument, buf, command);
 
-  // Look for taxi destinations - Seattle.
-  struct dest_data *dest_data_list = seattle_taxi_destinations;
+  // Only look for taxi destinations if our goto does not start with a digit.
+  if (*buf && !isdigit(*buf)) {
+    // Look for taxi destinations - Seattle.
+    struct dest_data *dest_data_list = seattle_taxi_destinations;
 
-  // Seattle taxi destinations, including deactivated and invalid ones.
-  for (int dest = 0; !location && *(dest_data_list[dest].keyword) != '\n'; dest++) {
-    if (str_str(buf, dest_data_list[dest].keyword) && (rnum = real_room(dest_data_list[dest].vnum)) >= 0) {
-      location = &world[rnum];
-      break;
-    }
-  }
-
-  // Portland taxi destinations.
-  if (!location) {
-    dest_data_list = portland_taxi_destinations;
+    // Seattle taxi destinations, including deactivated and invalid ones.
     for (int dest = 0; !location && *(dest_data_list[dest].keyword) != '\n'; dest++) {
       if (str_str(buf, dest_data_list[dest].keyword) && (rnum = real_room(dest_data_list[dest].vnum)) >= 0) {
         location = &world[rnum];
         break;
       }
     }
-  }
 
-  // Caribbean taxi destinations.
-  if (!location) {
-    dest_data_list = caribbean_taxi_destinations;
-    for (int dest = 0; !location && *(dest_data_list[dest].keyword) != '\n'; dest++) {
-      if (str_str(buf, dest_data_list[dest].keyword) && (rnum = real_room(dest_data_list[dest].vnum)) >= 0) {
-        location = &world[rnum];
-        break;
+    // Portland taxi destinations.
+    if (!location) {
+      dest_data_list = portland_taxi_destinations;
+      for (int dest = 0; !location && *(dest_data_list[dest].keyword) != '\n'; dest++) {
+        if (str_str(buf, dest_data_list[dest].keyword) && (rnum = real_room(dest_data_list[dest].vnum)) >= 0) {
+          location = &world[rnum];
+          break;
+        }
+      }
+    }
+
+    // Caribbean taxi destinations.
+    if (!location) {
+      dest_data_list = caribbean_taxi_destinations;
+      for (int dest = 0; !location && *(dest_data_list[dest].keyword) != '\n'; dest++) {
+        if (str_str(buf, dest_data_list[dest].keyword) && (rnum = real_room(dest_data_list[dest].vnum)) >= 0) {
+          location = &world[rnum];
+          break;
+        }
       }
     }
   }
