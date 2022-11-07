@@ -1555,7 +1555,7 @@ ACMD(do_reload)
   argument = two_arguments(argument, buf, buf1);
 
   // Disqualifying condition: If you're in combat and wielding an assault cannon, you don't get to reload it. (TODO: what stops someone from unwield, reload, wield?)
-  if (GET_POS(ch) == POS_FIGHTING && GET_EQ(ch, WEAR_WIELD) && GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 4) == SKILL_ASSAULT_CANNON) {
+  if (GET_POS(ch) == POS_FIGHTING && GET_EQ(ch, WEAR_WIELD) && GET_WEAPON_SKILL(GET_EQ(ch, WEAR_WIELD)) == SKILL_ASSAULT_CANNON) {
     send_to_char("You have no free hands to reload with.\r\n", ch);
     return;
   }
