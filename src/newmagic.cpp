@@ -2292,7 +2292,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       target_modifiers -= 2;
     else {
       // Dodge test: You must be awake.
-      success -= success_test(GET_DEFENSE(vict) + GET_DEFENSE(vict) ? GET_POWER(vict, ADEPT_SIDESTEP) : 0, 4 + damage_modifier(vict, buf, sizeof(buf)));
+      success -= success_test(GET_DEFENSE(vict) + GET_POWER(vict, ADEPT_SIDESTEP), 4 + damage_modifier(vict, buf, sizeof(buf)));
     }
     success += success_test(skill, 4 + target_modifiers);
 
@@ -2354,7 +2354,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
     if (!AWAKE(vict))
       target_modifiers -= 2;
     else
-      success -= success_test(GET_DEFENSE(vict) + GET_DEFENSE(vict) ? GET_POWER(vict, ADEPT_SIDESTEP) : 0, 4 + damage_modifier(vict, buf, sizeof(buf)));
+      success -= success_test(GET_DEFENSE(vict) + GET_POWER(vict, ADEPT_SIDESTEP), 4 + damage_modifier(vict, buf, sizeof(buf)));
     if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict)) {
       act("You have the KILLER flag, so you can't affect $N with flamethrower.", TRUE, ch, 0, vict, TO_CHAR);
       return;
@@ -2432,7 +2432,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
     if (!AWAKE(vict))
       target_modifiers -= 2;
     else
-      success -= success_test(GET_DEFENSE(vict) + GET_DEFENSE(vict) ? GET_POWER(vict, ADEPT_SIDESTEP) : 0, 4 + damage_modifier(vict, buf, sizeof(buf)));
+      success -= success_test(GET_DEFENSE(vict) + GET_POWER(vict, ADEPT_SIDESTEP), 4 + damage_modifier(vict, buf, sizeof(buf)));
 
     if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict)) {
       act("You have the KILLER flag, so you can't affect $N with acid stream.", TRUE, ch, 0, vict, TO_CHAR);
@@ -2502,7 +2502,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       target_modifiers -= 2;
     else {
       // NOTE: Added sidestep here. Not sure if you should be able to sidestep lightning, but if you can dodge it in the first place...
-      success -= success_test(GET_DEFENSE(vict) + GET_DEFENSE(vict) ? GET_POWER(vict, ADEPT_SIDESTEP) : 0, 4 + damage_modifier(vict, buf, sizeof(buf)));
+      success -= success_test(GET_DEFENSE(vict) + GET_POWER(vict, ADEPT_SIDESTEP), 4 + damage_modifier(vict, buf, sizeof(buf)));
     }
     if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict)) {
       act("You have the KILLER flag, so you can't affect $N with lightning bolt.", TRUE, ch, 0, vict, TO_CHAR);
@@ -2575,7 +2575,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       target_modifiers -= 2;
     else {
       // NOTE: Added sidestep here. Not sure if you should be able to sidestep lightning, but if you can dodge it in the first place...
-      success -= success_test(GET_DEFENSE(vict) + GET_DEFENSE(vict) ? GET_POWER(vict, ADEPT_SIDESTEP) : 0, 4 + damage_modifier(vict, buf, sizeof(buf)));
+      success -= success_test(GET_DEFENSE(vict) + GET_POWER(vict, ADEPT_SIDESTEP), 4 + damage_modifier(vict, buf, sizeof(buf)));
     }
     if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict)) {
       act("You have the KILLER flag, so you can't affect $N with your laser.", TRUE, ch, 0, vict, TO_CHAR);
@@ -2647,7 +2647,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       target_modifiers -= 2;
     else {
       // Dodge test: You must be awake.
-      success -= success_test(GET_DEFENSE(vict) + GET_DEFENSE(vict) ? GET_POWER(vict, ADEPT_SIDESTEP) : 0, 4 + damage_modifier(vict, buf, sizeof(buf)));
+      success -= success_test(GET_DEFENSE(vict) + GET_POWER(vict, ADEPT_SIDESTEP), 4 + damage_modifier(vict, buf, sizeof(buf)));
     }
     success += success_test(skill, 4 + target_modifiers);
 
@@ -2709,7 +2709,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       target_modifiers -= 2;
     else {
       // Dodge test: You must be awake.
-      success -= success_test(GET_DEFENSE(vict) + GET_DEFENSE(vict) ? GET_POWER(vict, ADEPT_SIDESTEP) : 0, 4 + damage_modifier(vict, buf, sizeof(buf)));
+      success -= success_test(GET_DEFENSE(vict) + GET_POWER(vict, ADEPT_SIDESTEP), 4 + damage_modifier(vict, buf, sizeof(buf)));
     }
     success += success_test(skill, 4 + target_modifiers);
 
@@ -2771,7 +2771,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       target_modifiers -= 2;
     else {
       // Dodge test: You must be awake.
-      success -= success_test(GET_DEFENSE(vict) + GET_DEFENSE(vict) ? GET_POWER(vict, ADEPT_SIDESTEP) : 0, 4 + damage_modifier(vict, buf, sizeof(buf)));
+      success -= success_test(GET_DEFENSE(vict) + GET_POWER(vict, ADEPT_SIDESTEP), 4 + damage_modifier(vict, buf, sizeof(buf)));
     }
     success += success_test(skill, 4 + target_modifiers);
 
