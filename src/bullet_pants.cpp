@@ -522,7 +522,9 @@ const char *get_ammo_representation(int weapon, int ammotype, int quantity) {
     switch (ammotype) {
       case AMMO_APDS:
       case AMMO_AV:
-        snprintf(results_buf, sizeof(results_buf), "%s %s slug%s",
+        snprintf(results_buf, sizeof(results_buf), "%s%s%s %s slug%s",
+                 quantity == 1 ? AN(ammo_type[ammotype].name) : "",
+                 quantity == 1 ? " " : "",
                  ammo_type[ammotype].name,
                  weapon_types[weapon],
                  quantity != 1 ? "s" : "");
@@ -530,7 +532,9 @@ const char *get_ammo_representation(int weapon, int ammotype, int quantity) {
     }
   }
 
-  snprintf(results_buf, sizeof(results_buf), "%s %s %s%s",
+  snprintf(results_buf, sizeof(results_buf), "%s%s%s %s %s%s",
+           quantity == 1 ? AN(ammo_type[ammotype].name) : "",
+           quantity == 1 ? " " : "",
            ammo_type[ammotype].name,
            weapon_types[weapon],
            get_weapon_ammo_name_as_string(weapon),
@@ -634,7 +638,11 @@ bool reload_weapon_from_bulletpants(struct char_data *ch, struct obj_data *weapo
     return FALSE;
   }
 
-  // TODO: Do prelim checks like 'is it a gun' etc
+  // Sanity check.
+  if (!WEAPON_IS_GUN(weapon)) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Received non-gun object %s (%ld) to reload_weapon_from_bulletpants()!", GET_OBJ_NAME(weapon), GET_OBJ_VNUM(weapon));
+    return FALSE;
+  }
 
   // Ensure it has a magazine.
   if (!(magazine = weapon->contains)) {
@@ -643,8 +651,21 @@ bool reload_weapon_from_bulletpants(struct char_data *ch, struct obj_data *weapo
     GET_MAGAZINE_BONDED_MAXAMMO(magazine) = GET_WEAPON_MAX_AMMO(weapon);
     GET_MAGAZINE_BONDED_ATTACKTYPE(magazine) = GET_WEAPON_ATTACK_TYPE(weapon);
 
-    // No specified ammotype means 'reload with whatever's in the gun'. In this case, nothing was there, so we go with normal.
-    GET_MAGAZINE_AMMO_TYPE(magazine) = (ammotype == -1 ? AMMO_NORMAL : ammotype);
+    // No specified ammotype means 'reload with whatever's in the gun'. In this case, nothing was there, so we go with whatever we have available.
+    if (ammotype == -1) {
+      // Set the fallback value for if we have no ammo available.
+      GET_MAGAZINE_AMMO_TYPE(magazine) = AMMO_NORMAL;
+
+      // Iterate through all ammo types and stop on the first one we have.
+      for (int am = AMMO_NORMAL; am < NUM_AMMOTYPES; am++) {
+        if (GET_BULLETPANTS_AMMO_AMOUNT(ch, GET_WEAPON_ATTACK_TYPE(weapon), am) > 0) {
+          GET_MAGAZINE_AMMO_TYPE(magazine) = am;
+          break;
+        }
+      }
+    } else {
+      GET_MAGAZINE_AMMO_TYPE(magazine) = ammotype;
+    }
 
     // Restring it, although I don't think anyone will ever see the restring. Better safe than sorry.
     snprintf(buf, sizeof(buf), "a %d-round %s magazine", GET_MAGAZINE_BONDED_MAXAMMO(magazine), weapon_types[GET_MAGAZINE_BONDED_ATTACKTYPE(magazine)]);
@@ -654,6 +675,11 @@ bool reload_weapon_from_bulletpants(struct char_data *ch, struct obj_data *weapo
     // Load the weapon with the magazine.
     obj_to_obj(magazine, weapon);
   } else {
+    // Check if the magazine is full and already matches our ammo type. If so, bail.
+    if ((ammotype == -1 || ammotype == GET_MAGAZINE_AMMO_TYPE(magazine)) && GET_MAGAZINE_BONDED_MAXAMMO(magazine) == GET_MAGAZINE_AMMO_COUNT(magazine)) {
+      send_to_char(ch, "%s doesn't need to be reloaded.\r\n", CAP(GET_OBJ_NAME(weapon)));
+      return FALSE;
+    }
     // Ejecting the existing magazine costs a simple action.
     GET_INIT_ROLL(ch) -= 5;
   }
@@ -689,7 +715,8 @@ bool reload_weapon_from_bulletpants(struct char_data *ch, struct obj_data *weapo
   // Try to fill it back up with bullets from pants.
   if (have_ammo_quantity >= required_ammo_quantity) {
     // ezpz, reload it and done.
-    send_to_char(ch, "You reload %s with %s.\r\n",
+    send_to_char(ch, "You %sreload %s with %s.\r\n",
+                 CH_IN_COMBAT(ch) ? "combat-" : "",
                  GET_OBJ_NAME(weapon),
                  get_ammo_representation(weapontype, ammotype, required_ammo_quantity));
     act("$n reloads $p.", TRUE, ch, weapon, NULL, TO_ROOM);
@@ -706,7 +733,7 @@ bool reload_weapon_from_bulletpants(struct char_data *ch, struct obj_data *weapo
   }
 
   // Update weapons debris, but only if in combat. Presumably they chuck it out the window if they're in a car.
-  if (FIGHTING(ch) || FIGHTING_VEH(ch)) {
+  if (CH_IN_COMBAT(ch)) {
     increase_debris(get_ch_in_room(ch));
     WAIT_STATE(ch, 0.5 RL_SEC);
 
