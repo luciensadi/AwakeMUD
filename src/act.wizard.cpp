@@ -7408,7 +7408,8 @@ int audit_zone_quests_(struct char_data *ch, int zone_num, bool verbose) {
 
     quest = &quest_table[real_qst];
 
-    snprintf(buf, sizeof(buf), "^c[%8ld]^n:\r\n", quest->vnum);
+    rnum_t johnson_rnum = real_mobile(quest->johnson);
+    snprintf(buf, sizeof(buf), "^c[%8ld]^n %s:\r\n", quest->vnum, johnson_rnum < 0 ? "" : GET_CHAR_NAME(&mob_proto[johnson_rnum]));
 
     printed = FALSE;
 
@@ -7416,7 +7417,7 @@ int audit_zone_quests_(struct char_data *ch, int zone_num, bool verbose) {
     payout_nuyen = quest_table[real_qst].nuyen;
 
     // Flag invalid Johnsons
-    if (quest->johnson <= 0 || real_mobile(quest->johnson) <= 0) {
+    if (quest->johnson <= 0 || johnson_rnum <= 0) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - invalid Johnson %ld^n.\r\n", quest->johnson);
       printed = TRUE;
       issues++;
@@ -7727,12 +7728,12 @@ int audit_zone_hosts_(struct char_data *ch, int zone_num, bool verbose) {
 
     struct host_data *host = &matrix[real_hst];
 
-    send_to_char(ch, "[%8ld] %s^n\r\n  Sheaf:\r\n", host->vnum, host->name);
+    send_to_char(ch, "^c[%8ld]^n %s^n\r\n  ^gSheaf:^n\r\n", host->vnum, host->name);
     bool printed_something = FALSE;
 
     for (struct trigger_step *trig = host->trigger; trig; trig = trig->next) {
       char sheafbuf[500];
-      snprintf(sheafbuf, sizeof(sheafbuf), "   %d) Alert: ^c%d^n", trig->step, trig->alert);
+      snprintf(sheafbuf, sizeof(sheafbuf), "   %3d) Alert: ^c%d^n", trig->step, trig->alert);
       if (trig->ic > 0) {
         rnum_t ic_rnum = real_ic(trig->ic);
         snprintf(ENDOF(sheafbuf), sizeof(sheafbuf) - strlen(sheafbuf), ", IC: ^y%ld^n (%s)",
@@ -7744,7 +7745,7 @@ int audit_zone_hosts_(struct char_data *ch, int zone_num, bool verbose) {
     }
 
     if (!printed_something)
-      send_to_char(" <nothing>\r\n", ch);
+      send_to_char(" ^Y<missing - specify trigger steps for host>^n\r\n", ch);
   }
 
   // TODO: Make sure they've got all their strings set.
