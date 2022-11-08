@@ -14,17 +14,17 @@ char mutable_echo_string[MAX_STRING_LENGTH];
 char tag_check_string[MAX_STRING_LENGTH];
 char storage_string[MAX_STRING_LENGTH];
 
-// #define NEW_EMOTE_DEBUG(ch, ...) send_to_char((ch), ##__VA_ARGS__)
-#define NEW_EMOTE_DEBUG(...)
+#define NEW_EMOTE_DEBUG(ch, ...) send_to_char((ch), ##__VA_ARGS__)
+// #define NEW_EMOTE_DEBUG(...)
 
-// #define NEW_EMOTE_DEBUG_SPEECH(ch, ...) send_to_char((ch), ##__VA_ARGS__)
-#define NEW_EMOTE_DEBUG_SPEECH(...)
+#define NEW_EMOTE_DEBUG_SPEECH(ch, ...) send_to_char((ch), ##__VA_ARGS__)
+// #define NEW_EMOTE_DEBUG_SPEECH(...)
 
-// #define SPEECH_COLOR_CODE_DEBUG(ch, ...) send_to_char((ch), ##__VA_ARGS__)
-#define SPEECH_COLOR_CODE_DEBUG(...)
+#define SPEECH_COLOR_CODE_DEBUG(ch, ...) send_to_char((ch), ##__VA_ARGS__)
+// #define SPEECH_COLOR_CODE_DEBUG(...)
 
-// #define PSEUDOLANGUAGE_REPLACEMENT_DEBUG(ch, ...) send_to_char((ch), ##__VA_ARGS__)
-#define PSEUDOLANGUAGE_REPLACEMENT_DEBUG(ch, ...)
+#define PSEUDOLANGUAGE_REPLACEMENT_DEBUG(ch, ...) send_to_char((ch), ##__VA_ARGS__)
+// #define PSEUDOLANGUAGE_REPLACEMENT_DEBUG(ch, ...)
 
 const char *allowed_abbreviations[] = {
   "Mr", "Ms", "Mrs", "Mz"
@@ -732,15 +732,20 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
       quote_termination = ".^n";
     }
 
-    // If the listener can't understand you, mangle it.
-    const char *replacement = replace_too_long_words(viewer, actor, speech_buf, language_in_use, GET_CHAR_COLOR_HIGHLIGHT(actor));
-    if (!strcmp(replacement, speech_buf)) {
-      replacement = NULL;
-    } else if (!ispunct(get_final_character_from_string(replacement))){
-      quote_termination = ".^n";
-    }
+    // If the listener is not the speaker and can't understand the speech, mangle it.
+    const char *replacement = NULL;
+    if (viewer != actor) {
+      replacement = replace_too_long_words(viewer, actor, speech_buf, language_in_use, GET_CHAR_COLOR_HIGHLIGHT(actor));
+      if (!strcmp(replacement, speech_buf)) {
+        replacement = NULL;
+      } else if (!ispunct(get_final_character_from_string(replacement))){
+        quote_termination = ".^n";
+      }
 
-    NEW_EMOTE_DEBUG_SPEECH(actor, "\r\nProposed replacement: '%s'\r\n", replacement ? double_up_color_codes(replacement) : "n/a");
+      NEW_EMOTE_DEBUG_SPEECH(actor, "\r\nProposed replacement: '%s'\r\n", replacement ? double_up_color_codes(replacement) : "n/a");
+    } else {
+      replacement = NULL;
+    }
 
     // Known bug: Capitalization does not work after a language word is retained.
     if (replacement) {
