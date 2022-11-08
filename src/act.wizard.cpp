@@ -78,7 +78,6 @@ extern int ViolencePulse;
 
 extern void list_detailed_shop(struct char_data *ch, long shop_nr);
 extern void list_detailed_quest(struct char_data *ch, long rnum);
-extern int vnum_vehicles(char *searchname, struct char_data * ch);
 extern void disp_init_menu(struct descriptor_data *d);
 extern struct obj_data *shop_package_up_ware(struct obj_data *obj);
 
@@ -978,31 +977,36 @@ ACMD(do_teleport)
   }
 }
 
+#define VNUM_LOOKUP(name) {                                            \
+  if (is_abbrev(buf, #name)) {                                         \
+    extern int vnum_ ## name(char *searchname, struct char_data * ch); \
+    if (!vnum_ ## name(buf2, ch)) {                                    \
+      send_to_char("No " #name "s by that name.\r\n", ch);             \
+    }                                                                  \
+    return;                                                            \
+  }                                                                    \
+}
+
+#define VNUM_USAGE_STRING "Usage: vnum { obj | mob | veh | room | host | ic } <name>\r\n"
 ACMD(do_vnum)
 {
-  argument = one_argument(argument, buf);
-  strcpy(buf2, argument);
+  two_arguments(argument, buf, buf2);
 
-  if (!*buf || !*buf2 || (!is_abbrev(buf, "mob") && !is_abbrev(buf, "obj") && !is_abbrev(buf, "veh") && !is_abbrev(buf, "room"))) {
-    send_to_char("Usage: vnum { obj | mob | veh | room } <name>\r\n", ch);
+  if (!*buf || !*buf2) {
+    send_to_char(VNUM_USAGE_STRING, ch);
     return;
   }
-  if (is_abbrev(buf, "veh"))
-    if (!vnum_vehicles(buf2, ch))
-      send_to_char("No vehicles by that name.\r\n", ch);
 
-  if (is_abbrev(buf, "mob"))
-    if (!vnum_mobile(buf2, ch))
-      send_to_char("No mobiles by that name.\r\n", ch);
+  VNUM_LOOKUP(vehicle);
+  VNUM_LOOKUP(mobile);
+  VNUM_LOOKUP(object);
+  VNUM_LOOKUP(room);
+  VNUM_LOOKUP(host);
+  VNUM_LOOKUP(ic);
 
-  if (is_abbrev(buf, "obj"))
-    if (!vnum_object(buf2, ch))
-      send_to_char("No objects by that name.\r\n", ch);
-
-  if (is_abbrev(buf, "room"))
-    if (!vnum_room(buf2, ch))
-      send_to_char("No rooms by that name.\r\n", ch);
+  send_to_char(VNUM_USAGE_STRING, ch);
 }
+#undef VNUM_USAGE_STRING
 
 void do_stat_room(struct char_data * ch)
 {

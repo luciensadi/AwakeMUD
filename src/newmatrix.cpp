@@ -1066,8 +1066,15 @@ void gain_matrix_karma(struct matrix_icon *icon, struct matrix_icon *targ) {
   ic_stats_total = MAX(MIN(max_exp_gain, ic_stats_total), 1);
 
   // Suppress rewards for unlinked zones.
-  if (vnum_from_non_connected_zone(targ->vnum))
+  if (vnum_from_non_connected_zone(targ->vnum)) {
+#ifndef IS_BUILDPORT
+    mudlog_vfprintf(icon->decker->ch, LOG_SYSLOG, "BUILD ERROR: %s encountered IC '%s' (%ld) from a non-connected zone!",
+                    GET_CHAR_NAME(icon->decker->ch),
+                    targ->name,
+                    targ->vnum);
+#endif
     ic_stats_total = 0;
+  }
 
   int karma_gained = gain_karma(icon->decker->ch, ic_stats_total, FALSE, TRUE, TRUE);
 

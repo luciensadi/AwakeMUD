@@ -2898,7 +2898,7 @@ int vnum_mobile_affflag(int i, struct char_data * ch)
   return (found);
 }
 
-int vnum_vehicles(char *searchname, struct char_data * ch)
+int vnum_vehicle(char *searchname, struct char_data * ch)
 {
   int nr, found = 0;
   for (nr = 0; nr <= top_of_veht; nr++)
@@ -2910,6 +2910,36 @@ int vnum_vehicles(char *searchname, struct char_data * ch)
               veh_index[nr].vnum,
               veh_proto[nr].short_description == NULL ? "(BUG)" :
               veh_proto[nr].short_description );
+      send_to_char(buf, ch);
+    }
+  }
+
+  return (found);
+}
+
+int vnum_host(char *searchname, struct char_data * ch)
+{
+  int nr, found = 0;
+  for (nr = 0; nr <= top_of_matrix; nr++) {
+    if (isname(searchname, get_string_after_color_code_removal(matrix[nr].name, NULL))) {
+      snprintf(buf, sizeof(buf), "%3d. [%5ld] %s\r\n", ++found,
+              matrix[nr].vnum,
+              matrix[nr].name);
+      send_to_char(buf, ch);
+    }
+  }
+
+  return (found);
+}
+
+int vnum_ic(char *searchname, struct char_data * ch)
+{
+  int nr, found = 0;
+  for (nr = 0; nr <= top_of_ic; nr++) {
+    if (isname(searchname, get_string_after_color_code_removal(ic_proto[nr].name, NULL))) {
+      snprintf(buf, sizeof(buf), "%3d. [%5ld] %s\r\n", ++found,
+              ic_proto[nr].vnum,
+              ic_proto[nr].name);
       send_to_char(buf, ch);
     }
   }
