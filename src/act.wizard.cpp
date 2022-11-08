@@ -7523,7 +7523,7 @@ int audit_zone_quests_(struct char_data *ch, int zone_num, bool verbose) {
     // Flag high payouts - karma.
     payout_karma *= KARMA_GAIN_MULTIPLIER;
     if (payout_karma > 600) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - karma payout is at least ^c%.2f^n.\r\n", ((float) payout_karma) / 100);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - karma payout after multiplier is at least ^c%.2f^n.\r\n", ((float) payout_karma) / 100);
       printed = TRUE;
       issues++;
     }
@@ -7531,7 +7531,7 @@ int audit_zone_quests_(struct char_data *ch, int zone_num, bool verbose) {
     // Flag high payouts - nuyen.
     payout_nuyen *= NUYEN_GAIN_MULTIPLIER;
     if (payout_nuyen > 10000) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - nuyen payout is at least ^c%d^n.\r\n", payout_nuyen);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - nuyen payout after multiplier is at least ^c%d^n.\r\n", payout_nuyen);
       printed = TRUE;
       issues++;
     }

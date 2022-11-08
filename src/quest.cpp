@@ -46,6 +46,7 @@ extern int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
 
 unsigned int get_johnson_overall_max_rep(struct char_data *johnson);
 unsigned int get_johnson_overall_min_rep(struct char_data *johnson);
+void display_single_emote_for_quest(struct char_data *johnson, emote_t emote_to_display, struct char_data *target);
 
 ACMD_CONST(do_say);
 ACMD_DECLARE(do_action);
@@ -146,6 +147,52 @@ const char *smo[] =
   };
 
 void end_quest(struct char_data *ch);
+
+bool attempt_quit_job(struct char_data *ch, struct char_data *johnson) {
+  // Precondition: I cannot be talking right now.
+  if (GET_SPARE1(johnson) == 0) {
+    if (!memory(johnson, ch)) {
+      do_say(johnson, "Hold on, I'm talking to someone else right now.", 0, 0);
+      return TRUE;
+    } else {
+      do_say(johnson, "I'm lookin' for a yes-or-no answer, chummer.", 0, 0);
+      return TRUE;
+    }
+  }
+
+  // Precondition: You must be on a quest.
+  if (!GET_QUEST(ch)) {
+    do_say(johnson, "You're not even on a run right now.", 0, 0);
+    return TRUE;
+  }
+
+  // Precondition: You must have gotten the quest from me.
+  if (!memory(johnson, ch)) {
+    do_say(johnson, "Whoever you got your job from, it wasn't me. What, do we all look alike to you?", 0 , 0);
+    send_to_char("^L(OOC note: You can hit RECAP to see who gave you your current job.)^n\r\n", ch);
+    return TRUE;
+  }
+
+  // Drop the quest.
+  if (quest_table[GET_QUEST(ch)].quit_emote) {
+    // Don't @ me about this, it's the only way to reliably display a newline in this context.
+    act("^n", FALSE, johnson, 0, 0, TO_ROOM);
+    char emote_with_carriage_return[MAX_STRING_LENGTH];
+    snprintf(emote_with_carriage_return, sizeof(emote_with_carriage_return), "%s\r\n", quest_table[GET_QUEST(ch)].quit_emote);
+    display_single_emote_for_quest(johnson, emote_with_carriage_return, ch);
+  }
+  else if (quest_table[GET_QUEST(ch)].quit)
+    do_say(johnson, quest_table[GET_QUEST(ch)].quit, 0, 0);
+  else {
+    snprintf(buf, sizeof(buf), "WARNING: Null string in quest %ld!", quest_table[GET_QUEST(ch)].vnum);
+    mudlog(buf, ch, LOG_SYSLOG, TRUE);
+    do_say(johnson, "Fine.", 0, 0);
+  }
+
+  end_quest(ch);
+  forget(johnson, ch);
+  return TRUE;
+}
 
 void load_quest_targets(struct char_data *johnson, struct char_data *ch)
 {
@@ -1025,49 +1072,7 @@ SPECIAL(johnson)
 
   switch (comm) {
     case CMD_JOB_QUIT:
-      // Precondition: I cannot be talking right now.
-      if (GET_SPARE1(johnson) == 0) {
-        if (!memory(johnson, ch)) {
-          do_say(johnson, "Hold on, I'm talking to someone else right now.", 0, 0);
-          return TRUE;
-        } else {
-          do_say(johnson, "I'm lookin' for a yes-or-no answer, chummer.", 0, 0);
-          return TRUE;
-        }
-      }
-
-      // Precondition: You must be on a quest.
-      if (!GET_QUEST(ch)) {
-        do_say(johnson, "You're not even on a run right now.", 0, 0);
-        return TRUE;
-      }
-
-      // Precondition: You must have gotten the quest from me.
-      if (!memory(johnson, ch)) {
-        do_say(johnson, "Whoever you got your job from, it wasn't me. What, do we all look alike to you?", 0 , 0);
-        send_to_char("^L(OOC note: You can hit RECAP to see who gave you your current job.)^n\r\n", ch);
-        return TRUE;
-      }
-
-      // Drop the quest.
-      if (quest_table[GET_QUEST(ch)].quit_emote) {
-        // Don't @ me about this, it's the only way to reliably display a newline in this context.
-        act("^n", FALSE, johnson, 0, 0, TO_ROOM);
-        char emote_with_carriage_return[MAX_STRING_LENGTH];
-        snprintf(emote_with_carriage_return, sizeof(emote_with_carriage_return), "%s\r\n", quest_table[GET_QUEST(ch)].quit_emote);
-        display_single_emote_for_quest(johnson, emote_with_carriage_return, ch);
-      }
-      else if (quest_table[GET_QUEST(ch)].quit)
-        do_say(johnson, quest_table[GET_QUEST(ch)].quit, 0, 0);
-      else {
-        snprintf(buf, sizeof(buf), "WARNING: Null string in quest %ld!", quest_table[GET_QUEST(ch)].vnum);
-        mudlog(buf, ch, LOG_SYSLOG, TRUE);
-        do_say(johnson, "Fine.", 0, 0);
-      }
-
-      end_quest(ch);
-      forget(johnson, ch);
-      return TRUE;
+      return attempt_quit_job(ch, johnson);
     case CMD_JOB_DONE:
       // Precondition: I cannot be talking right now.
       if (GET_SPARE1(johnson) == 0) {
@@ -1486,13 +1491,20 @@ void list_detailed_quest(struct char_data *ch, long rnum)
           "Maximum reputation: [^c%d^n]\r\n", quest_table[rnum].time,
           quest_table[rnum].min_rep, quest_table[rnum].max_rep);
 
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Bonus nuyen: [^c%d^n], Bonus Karma: [^c%0.2f^n], "
-          "Reward: [^c%d^n]\r\n", quest_table[rnum].nuyen,
-          ((float)quest_table[rnum].karma / 100), quest_table[rnum].reward);
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Bonus nuyen: [^c%d^n (%d)], Bonus Karma: [^c%0.2f^n (%0.2f)], "
+          "Reward: [^c%d^n]\r\n",
+          (int) (quest_table[rnum].nuyen * NUYEN_GAIN_MULTIPLIER),
+          quest_table[rnum].nuyen,
+          ((float)quest_table[rnum].karma / 100) * KARMA_GAIN_MULTIPLIER,
+          ((float)quest_table[rnum].karma / 100),
+          quest_table[rnum].reward);
 
   for (i = 0; i < quest_table[rnum].num_mobs; i++) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^mM^n%2d) ^c%d^n nuyen/^c%0.2f^n karma: vnum %ld; %s (%d); %s (%d)\r\n",
-            i, quest_table[rnum].mob[i].nuyen,
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^mM^n%2d) ^c%d^n (%d) nuyen/^c%0.2f^n (%0.2f) karma: vnum %ld; %s (%d); %s (%d)\r\n",
+            i,
+            (int) (quest_table[rnum].mob[i].nuyen * NUYEN_GAIN_MULTIPLIER),
+            quest_table[rnum].mob[i].nuyen,
+            ((float)quest_table[rnum].mob[i].karma / 100) * KARMA_GAIN_MULTIPLIER,
             ((float)quest_table[rnum].mob[i].karma / 100),
             quest_table[rnum].mob[i].vnum, sml[(int)quest_table[rnum].mob[i].load],
             quest_table[rnum].mob[i].l_data,
@@ -1502,8 +1514,11 @@ void list_detailed_quest(struct char_data *ch, long rnum)
 
 
   for (i = 0; i < quest_table[rnum].num_objs; i++) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^oO^n%2d) ^c%d^n nuyen/^c%0.2f^n karma: vnum %ld; %s (%d/%d); %s (%d)\r\n",
-            i, quest_table[rnum].obj[i].nuyen,
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^oO^n%2d) ^c%d^n (%d) nuyen/^c%0.2f^n (%0.2f) karma: vnum %ld; %s (%d/%d); %s (%d)\r\n",
+            i,
+            (int) (quest_table[rnum].obj[i].nuyen * NUYEN_GAIN_MULTIPLIER),
+            quest_table[rnum].obj[i].nuyen,
+            ((float)quest_table[rnum].obj[i].karma / 100) * KARMA_GAIN_MULTIPLIER,
             ((float)quest_table[rnum].obj[i].karma / 100),
             quest_table[rnum].obj[i].vnum, sol[(int)quest_table[rnum].obj[i].load],
             quest_table[rnum].obj[i].l_data, quest_table[rnum].obj[i].l_data2,
@@ -1914,8 +1929,10 @@ void qedit_list_obj_objectives(struct descriptor_data *d)
               QUEST->obj[i].l_data);
       break;
     }
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n    Award %d nuyen & %0.2f karma for ",
-            QUEST->obj[i].nuyen, ((float)QUEST->obj[i].karma / 100));
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n    Award %d (%d) nuyen & %0.2f (%0.2f) karma for ",
+            (int) (QUEST->obj[i].nuyen * NUYEN_GAIN_MULTIPLIER),
+            QUEST->obj[i].nuyen,
+            ((float)QUEST->obj[i].karma / 100) * KARMA_GAIN_MULTIPLIER, ((float)QUEST->obj[i].karma / 100));
     switch (QUEST->obj[i].objective) {
     case QUEST_NONE:
       strlcat(buf, "nothing\r\n", sizeof(buf));
@@ -1988,27 +2005,40 @@ void qedit_list_mob_objectives(struct descriptor_data *d)
     }
     switch (QUEST->mob[i].objective) {
     case QUEST_NONE:
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n    Award %d nuyen & %0.2f karma for "
-              "nothing\r\n", QUEST->mob[i].nuyen,
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n    Award %d (%d) nuyen & %0.2f (%0.2f) karma for "
+              "nothing\r\n",
+              (int) (QUEST->mob[i].nuyen * NUYEN_GAIN_MULTIPLIER),
+              QUEST->mob[i].nuyen,
+              ((float)QUEST->mob[i].karma / 100) * KARMA_GAIN_MULTIPLIER,
               ((float)QUEST->mob[i].karma / 100));
       break;
     case QMO_LOCATION:
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n    Award %d nuyen & %0.2f karma for "
-              "escorting target to room %d\r\n", QUEST->mob[i].nuyen,
-              ((float)QUEST->mob[i].karma / 100), QUEST->mob[i].o_data);
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n    Award %d (%d) nuyen & %0.2f (%0.2f) karma for "
+              "escorting target to room %d\r\n",
+              (int) (QUEST->mob[i].nuyen * NUYEN_GAIN_MULTIPLIER),
+              QUEST->mob[i].nuyen,
+              ((float)QUEST->mob[i].karma / 100) * KARMA_GAIN_MULTIPLIER,
+              ((float)QUEST->mob[i].karma / 100),
+              QUEST->mob[i].o_data);
       break;
     case QMO_KILL_ONE:
             if ((real_mob = real_mobile(QUEST->mob[i].vnum)) >= 0)
-              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n    Award %d nuyen & %0.2f karma for "
-                "killing target '%s' (%ld)\r\n", QUEST->mob[i].nuyen,
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n    Award %d (%d) nuyen & %0.2f (%0.2f) karma for "
+                "killing target '%s' (%ld)\r\n",
+                (int) (QUEST->mob[i].nuyen * NUYEN_GAIN_MULTIPLIER),
+                QUEST->mob[i].nuyen,
+                ((float)QUEST->mob[i].karma / 100) * KARMA_GAIN_MULTIPLIER,
                 ((float)QUEST->mob[i].karma / 100),
                 GET_CHAR_NAME(&mob_proto[real_mob]),
                 QUEST->mob[i].vnum);
       break;
     case QMO_KILL_MANY:
             if ((real_mob = real_mobile(QUEST->mob[i].vnum)) >= 0)
-              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n    Award %d nuyen & %0.2f karma for "
-                "each target '%s' (%ld) killed\r\n", QUEST->mob[i].nuyen,
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n    Award %d (%d) nuyen & %0.2f (%0.2f) karma for "
+                "each target '%s' (%ld) killed\r\n",
+                (int) (QUEST->mob[i].nuyen * NUYEN_GAIN_MULTIPLIER),
+                QUEST->mob[i].nuyen,
+                ((float)QUEST->mob[i].karma / 100) * KARMA_GAIN_MULTIPLIER,
                 ((float)QUEST->mob[i].karma / 100),
                 GET_CHAR_NAME(&mob_proto[real_mob]),
                 QUEST->mob[i].vnum);
@@ -3246,24 +3276,28 @@ ACMD(do_endrun) {
     for (phone = ch->cyberware; phone; phone = phone->next_content)
       if (GET_OBJ_VAL(phone, 0) == CYB_PHONE)
         break;
-  // No phone? Go away.
-  FAILURE_CASE(!phone, "How do you expect to contact your Johnson without a phone?");
 
   // Drop the quest.
   for (struct char_data *johnson = character_list; johnson; johnson = johnson->next) {
     if (IS_NPC(johnson) && (GET_MOB_VNUM(johnson) == quest_table[GET_QUEST(ch)].johnson)) {
-      send_to_char(ch, "You call your Johnson, and after a short wait the phone is picked up.\r\n"
-                       "^Y%s on the other end of the line says, \"%s\"^n\r\n"
-                       "With your run abandoned, you hang up the phone.\r\n",
-                       GET_CHAR_NAME(johnson),
-                       quest_table[GET_QUEST(ch)].quit);
-      if (ch->in_room)
-        act("$n makes a brief phone call to $s Johnson to quit $s current run. Scandalous.", FALSE, ch, 0, 0, TO_ROOM);
-      snprintf(buf, sizeof(buf), "$z's phone rings. $e answers, listens for a moment, then says into it, \"%s\"", quest_table[GET_QUEST(ch)].quit);
-      act(buf, FALSE, johnson, NULL, NULL, TO_ROOM);
+      if (phone) {
+        send_to_char(ch, "You call your Johnson, and after a short wait the phone is picked up.\r\n"
+                         "^Y%s on the other end of the line says, \"%s\"^n\r\n"
+                         "With your run abandoned, you hang up the phone.\r\n",
+                         GET_CHAR_NAME(johnson),
+                         quest_table[GET_QUEST(ch)].quit);
+        if (ch->in_room)
+          act("$n makes a brief phone call to $s Johnson to quit $s current run. Scandalous.", FALSE, ch, 0, 0, TO_ROOM);
+        snprintf(buf, sizeof(buf), "$z's phone rings. $e answers, listens for a moment, then says into it, \"%s\"", quest_table[GET_QUEST(ch)].quit);
+        act(buf, FALSE, johnson, NULL, NULL, TO_ROOM);
 
-      end_quest(ch);
-      forget(johnson, ch);
+        end_quest(ch);
+        forget(johnson, ch);
+      } else if (ch->in_room && ch->in_room == johnson->in_room) {
+        attempt_quit_job(ch, johnson);
+      } else {
+        send_to_char(ch, "You'll either need to head back and talk to %s^n in person or get a phone you can use to call %s.\r\n", GET_CHAR_NAME(johnson), HMHR(johnson));
+      }
       return;
     }
   }
