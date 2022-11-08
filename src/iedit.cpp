@@ -1869,6 +1869,18 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
         GET_OBJ_TYPE(d->edit_obj) = number;
         for (int index = 0; index < NUM_VALUES; index++)
           GET_OBJ_VAL(d->edit_obj, index) = 0;
+
+        switch (GET_OBJ_TYPE(d->edit_obj)) {
+          case ITEM_LOADED_DECORATION:
+          case ITEM_FOUNTAIN:
+          case ITEM_GRAFFITI:
+          case ITEM_DESTROYABLE:
+            if (GET_OBJ_WEAR(d->edit_obj).IsSet(ITEM_WEAR_TAKE)) {
+              GET_OBJ_WEAR(d->edit_obj).RemoveBit(ITEM_WEAR_TAKE);
+              send_to_char("Automatically made item !TAKE.\r\n", d->character);
+            }
+            break;
+        }
       }
 
       iedit_disp_menu(d);

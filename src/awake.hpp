@@ -1262,7 +1262,8 @@ enum {
 #define ITEM_VEHCONTAINER       45
 #define ITEM_GRAFFITI           46
 #define ITEM_DESTROYABLE        47
-#define NUM_ITEMS               48
+#define ITEM_LOADED_DECORATION  48
+#define NUM_ITEMS               49
 // Adding something? Add convenience definees to utils.hpp and put the type's name in constants.cpp.
 
 #define PATCH_ANTIDOTE          0

@@ -7310,9 +7310,11 @@ int audit_zone_objects_(struct char_data *ch, int zone_num, bool verbose) {
 
     // Flag objects that can't be picked up, other than the ones that we generally expect to be non-gettable.
     switch (GET_OBJ_TYPE(obj)) {
-      // Fountains and graffiti should not be gettable.
+      // Fountains, graffiti, and destroyables should not be gettable.
       case ITEM_FOUNTAIN:
       case ITEM_GRAFFITI:
+      case ITEM_DESTROYABLE:
+      case ITEM_LOADED_DECORATION:
         if (GET_OBJ_WEAR(obj).IsSet(ITEM_WEAR_TAKE)) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - CAN be picked up if dropped (should this be !TAKE?)^n.\r\n");
           printed = TRUE;
@@ -7450,9 +7452,8 @@ int audit_zone_quests_(struct char_data *ch, int zone_num, bool verbose) {
       // Invalid mob targets for delivery
       switch (quest->obj[obj_idx].objective) {
         case QOO_TAR_MOB:
-          if (quest->obj[obj_idx].o_data < 0
-              || quest->obj[obj_idx].o_data >= quest->num_mobs
-              || real_mobile(quest->mob[quest->obj[obj_idx].o_data].vnum) <= -1) {
+          if ((quest->obj[obj_idx].o_data < 0 || quest->obj[obj_idx].o_data >= quest->num_mobs)
+              && real_mobile(quest->mob[quest->obj[obj_idx].o_data].vnum) <= -1) {
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - obj objective #%d: invalid dest mobile M%d^n.\r\n", obj_idx, quest->obj[obj_idx].o_data);
             printed = TRUE;
             issues++;
