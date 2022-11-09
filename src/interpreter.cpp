@@ -3382,6 +3382,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("chekc", "check");
   COMMAND_ALIAS("opend", "open");
   COMMAND_ALIAS("leaev", "leave");
+  COMMAND_ALIAS("leve", "leave");
   COMMAND_ALIAS("lisy", "list");
   COMMAND_ALIAS("swith", "switch");
   COMMAND_ALIAS("drie", "drive");
@@ -3394,6 +3395,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("stnad", "stand");
   COMMAND_ALIAS("saerch", "search");
   COMMAND_ALIAS("serach", "search");
+  COMMAND_ALIAS("searcg", "search");
   COMMAND_ALIAS("shot", "shoot");
   COMMAND_ALIAS("trian", "train");
   COMMAND_ALIAS("recpa", "recap");
@@ -3440,6 +3442,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("resign", "endrun");
   COMMAND_ALIAS("work",   "recap");
   COMMAND_ALIAS("recao",  "recap");
+  COMMAND_ALIAS("reacp",  "recap");
 
   // one of the most common commands, although people eventually learn to just use 'l'
   COMMAND_ALIAS("olok", "look");
@@ -3448,6 +3451,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("loook", "look");
   COMMAND_ALIAS("ook", "look");
   COMMAND_ALIAS("ll", "look");
+  COMMAND_ALIAS("glance", "quicklook");
 
   // equipment seems to give people a lot of trouble
   COMMAND_ALIAS("unwield", "remove");
@@ -3483,6 +3487,8 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("stats", "score");
   COMMAND_ALIAS("attributes", "score");
   COMMAND_ALIAS("make", "create");
+  COMMAND_ALIAS("speak", "language");
+  COMMAND_ALIAS("pose", "emote");
 
   // Alternate spellings.
   COMMAND_ALIAS("customise", "customize");
@@ -3506,10 +3512,16 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("detach", "unattach");
 
   COMMAND_ALIAS("scna", "scan");
+  COMMAND_ALIAS("scab", "scan");
   COMMAND_ALIAS("sacn", "scan");
+
   COMMAND_ALIAS("sya", "say");
 
-  COMMAND_ALIAS("speak", "language");
+  COMMAND_ALIAS("proeb", "probe");
+
+  COMMAND_ALIAS("hep", "help");
+
+  COMMAND_ALIAS("psuh", "push");
 
 
   // Found nothing, return the failure code.
