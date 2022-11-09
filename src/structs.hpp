@@ -411,6 +411,7 @@ struct char_player_data
   const char *email;
 
   int multiplier;
+  int salvation_ticks;
 
   byte sex;                  /* PC / NPC's sex                       */
   byte level;
@@ -425,8 +426,8 @@ struct char_player_data
 
   char_player_data() :
       char_name(NULL), background(NULL), title(NULL), pretitle(NULL), whotitle(NULL),
-      prompt(NULL), matrixprompt(NULL), poofin(NULL), poofout(NULL),
-      email(NULL), multiplier(0), sex(YES_PLEASE), level(0), last_room(NOWHERE),
+      prompt(NULL), matrixprompt(NULL), poofin(NULL), poofout(NULL), email(NULL),
+      multiplier(0), salvation_ticks(5), sex(YES_PLEASE), level(0), last_room(NOWHERE),
       weight(0), height(0), race(0), tradition(TRAD_MUNDANE), aspect(0), host(NULL)
   {
     memset(passwd, 0, sizeof(passwd));

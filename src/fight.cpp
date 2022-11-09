@@ -220,9 +220,11 @@ void load_messages(void)
   fclose(fl);
 }
 
+#define MAKE_MORTALLY_WOUNDED(victim) {GET_POS(victim) = POS_MORTALLYW; AFF_FLAGS(victim).RemoveBit(AFF_PRONE);}
 bool update_pos(struct char_data * victim, bool protect_spells_from_purge)
 {
   bool was_morted = GET_POS(victim) == POS_MORTALLYW;
+  int min_body = -GET_BOD(victim) + (GET_BIOOVER(victim) > 0 ? GET_BIOOVER(victim) : 0);
 
   // Are they stunned?
   if ((GET_MENTAL(victim) < 100) && (GET_PHYSICAL(victim) >= 100)) {
@@ -257,11 +259,26 @@ bool update_pos(struct char_data * victim, bool protect_spells_from_purge)
 
     GET_POS(victim) = POS_STANDING;
     return FALSE;
-  } else if ((int)(GET_PHYSICAL(victim) / 100) <= -GET_BOD(victim) + (GET_BIOOVER(victim) > 0 ? GET_BIOOVER(victim) : 0)) {
-    GET_POS(victim) = POS_DEAD;
-  } else {
-    GET_POS(victim) = POS_MORTALLYW;
-    AFF_FLAGS(victim).RemoveBit(AFF_PRONE);
+  }
+
+  // They died from their injuries.
+  else if ((int)(GET_PHYSICAL(victim) / 100) <= min_body) {
+    if (!IS_NPC(victim) && (--GET_PC_SALVATION_TICKS(victim) > 0)) {
+      send_to_char("^yYou struggle to keep a grip on life!^n\r\n", victim);
+      GET_PHYSICAL(victim) = (min_body + 1) * 100;
+      MAKE_MORTALLY_WOUNDED(victim);
+    } else {
+      GET_POS(victim) = POS_DEAD;
+    }
+  }
+
+  // They're mortally wounded but not dead.
+  else {
+    // They were just morted. Give them some hits of damage invulnerability to let them last longer.
+    if (!was_morted) {
+      GET_PC_SALVATION_TICKS(victim) = 5;
+    }
+    MAKE_MORTALLY_WOUNDED(victim);
   }
 
   // To get here, you're stunned or morted.
@@ -294,6 +311,7 @@ bool update_pos(struct char_data * victim, bool protect_spells_from_purge)
 
   return FALSE;
 }
+#undef MAKE_MORTALLY_WOUNDED
 
 /* blood blood blood, root */
 void increase_blood(struct room_data *rm)

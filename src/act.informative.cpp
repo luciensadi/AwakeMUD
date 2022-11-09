@@ -6475,6 +6475,10 @@ ACMD(do_status)
     send_to_char("You are affected by:\r\n", ch);
   else send_to_char(ch, "%s is affected by:\r\n", GET_CHAR_NAME(targ));
 
+  if (!IS_NPC(targ) && GET_POS(targ) == POS_MORTALLYW) {
+    send_to_char(ch, "  ^RBleeding Out ^r(^R%d^r ticks left until death)^n\r\n", GET_PC_SALVATION_TICKS(targ));
+  }
+
   if (targ->real_abils.esshole) {
     send_to_char(ch, "  Essence Hole (%.2f)\r\n", (float)targ->real_abils.esshole / 100);
     printed = TRUE;

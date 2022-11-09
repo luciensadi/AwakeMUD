@@ -411,6 +411,7 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define GET_EMAIL(ch)   ((ch)->player.email ? (ch)->player.email : "not set")
 #define SETTABLE_EMAIL(ch)   ((ch)->player.email)
 #define GET_CHAR_MULTIPLIER(ch) ((ch)->player.multiplier)
+#define GET_PC_SALVATION_TICKS(ch) ((ch)->player.salvation_ticks)
 
 #define GET_CHAR_FIRE_DURATION(ch)      ((ch)->points.fire[0])
 #define GET_CHAR_FIRE_BONUS_DAMAGE(ch)  ((ch)->points.fire[1])
