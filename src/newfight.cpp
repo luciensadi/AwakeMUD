@@ -844,6 +844,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     if (att->weapon) {
       // Monowhips deal flat damage.
       if (GET_OBJ_RNUM(att->weapon) >= 0 && att->melee->is_monowhip) {
+        strlcpy(rbuf, "Using monowhip.", sizeof(rbuf));
         att->melee->power_before_armor = 10;
         att->melee->damage_level = SERIOUS;
 
@@ -858,10 +859,12 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       // if they're using a ranged weapon in clash instead of setting their melee power to the damage code of the ranged
       // weapon as it was happening.
       else if (IS_RANGED(att->weapon)) {
+        strlcpy(rbuf, "Using buttstroke.", sizeof(rbuf));
         att->melee->power = att->melee->power_before_armor - GET_IMPACT(def->ch);
       }
       // Non-monowhips behave normally.
       else {
+        strlcpy(rbuf, "Using weapon.", sizeof(rbuf));
         att->melee->power = att->melee->power_before_armor - GET_IMPACT(def->ch);
       }
     }
@@ -872,11 +875,17 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
           && GET_POWER(att->ch, ADEPT_PENETRATINGSTRIKE)
           && !GET_POWER(att->ch, ADEPT_DISTANCE_STRIKE))
       {
+        strlcpy(rbuf, "Using penetrating strike.", sizeof(rbuf));
         att->melee->power = att->melee->power_before_armor - MAX(0, GET_IMPACT(def->ch) - GET_POWER(att->ch, ADEPT_PENETRATINGSTRIKE));
       } else {
+        strlcpy(rbuf, "Using unarmed / cyberweapon.", sizeof(rbuf));
         att->melee->power = att->melee->power_before_armor - GET_IMPACT(def->ch);
       }
     }
+
+    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), " After armor: ^c%d%s^n.",
+             att->melee->power,
+             GET_SHORT_WOUND_NAME(att->melee->damage_level));
 
     // Handle spirits and elementals being divas, AKA having Immunity to Normal Weapons (SR3 p188, 264).
     // Namely: We require that the attack's power is greater than double the spirit's force, otherwise it takes no damage.
@@ -912,11 +921,20 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
         // SR3 p264: Spirits/elementals get 2*essence armor against normal weapons.
         // This is specifically a -= because we expect that this power has already been set.
         att->melee->power -= GET_LEVEL(def->ch) * 2;
+        snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), " After spirit resist: ^c%d%s^n.",
+                 att->melee->power,
+                 GET_WOUND_NAME(att->melee->damage_level));
       }
     }
 
     // Core p113.
     att->melee->power = MAX(att->melee->power, 2);
+    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), " Final damage code: ^C%d%s^n (from ^c%d%s^n).",
+             att->melee->power,
+             GET_SHORT_WOUND_NAME(att->melee->damage_level),
+             att->melee->power_before_armor,
+             GET_SHORT_WOUND_NAME(att->melee->damage_level));
+    SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
   }
   // End melee-only calculations. Code beyond here is unified for both ranged and melee.
 

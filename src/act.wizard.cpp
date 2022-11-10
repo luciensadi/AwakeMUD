@@ -1643,7 +1643,7 @@ void do_stat_mobile(struct char_data * ch, struct char_data * k)
     strcpy(buf, "ILLEGAL-SEX!!");
     break;
   }
-  send_to_char(ch, "%s ", pc_race_types[(int)GET_RACE(k)]);
+  send_to_char(ch, "^c%s^n ", pc_race_types[(int)GET_RACE(k)]);
   if (k->in_room)
     snprintf(buf2, sizeof(buf2), " %s '%s', In room [%8ld]\r\n", (!IS_MOB(k) ? "NPC" : "MOB"), GET_NAME(k), k->in_room->number);
   else if (k->in_veh)
@@ -1670,7 +1670,7 @@ void do_stat_mobile(struct char_data * ch, struct char_data * k)
           GET_REAL_BOD(k), GET_REAL_QUI(k), GET_REAL_STR(k), GET_REAL_CHA(k), GET_REAL_INT(k),
           GET_REAL_WIL(k), ((int)GET_REAL_MAG(k) / 100), GET_REAL_REA(k), ((float)GET_REAL_ESS(k) / 100));
 
-  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Physical p.:[^G%d/%d^n]  Mental p.:[^G%d/%d^n]; Ballistic / Impact [%d/%d]\r\n",
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Physical p.:[^G%d/%d^n]  Mental p.:[^G%d/%d^n]; Ballistic / Impact [^y%d/%d^n]\r\n",
           (int)(GET_PHYSICAL(k) / 100), (int)(GET_MAX_PHYSICAL(k) / 100),
           (int)(GET_MENTAL(k) / 100), (int)(GET_MAX_MENTAL(k) / 100),
           GET_BALLISTIC(k),

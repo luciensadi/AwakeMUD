@@ -1323,5 +1323,6 @@ void gain_nuyen_on_credstick(struct char_data *ch, struct obj_data *credstick, l
 void lose_nuyen_from_credstick(struct char_data *ch, struct obj_data *credstick, long amount, int category);
 
 #define GET_WOUND_NAME(damage_level) (wound_name[MIN(DEADLY, MAX(0, damage_level))])
+#define GET_SHORT_WOUND_NAME(damage_level) (wound_arr[MIN(DEADLY, MAX(0, damage_level))])
 
 #endif
