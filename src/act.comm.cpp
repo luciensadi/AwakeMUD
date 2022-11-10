@@ -1474,15 +1474,21 @@ ACMD(do_language)
     return;
   }
 
-  if ((lannum = find_skill_num(arg)) && SKILL_IS_LANGUAGE(lannum))
+  for (lannum = SKILL_ENGLISH; lannum < MAX_SKILLS; lannum++) {
+    if (SKILL_IS_LANGUAGE(lannum) && is_abbrev(arg, skills[lannum].name)) {
+      break;
+    }
+  }
+
+  if (lannum < MAX_SKILLS && SKILL_IS_LANGUAGE(lannum)) {
     if (GET_SKILL(ch, lannum) > 0 || IS_NPC(ch)) {
       GET_LANGUAGE(ch) = lannum;
       send_to_char(ch, "You will now speak %s.\r\n", skills[lannum].name);
     } else
       send_to_char("You don't know how to speak that language.\r\n", ch);
-  else
-    send_to_char("Invalid Language.\r\n", ch);
-
+  } else {
+    send_to_char(ch, "You don't know any language called '%s'.\r\n", arg);
+  }
 }
 
 void add_phone_to_list(struct obj_data *obj)
