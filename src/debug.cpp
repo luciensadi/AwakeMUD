@@ -5,6 +5,7 @@
 
 #include <time.h>
 #include <string.h>
+#include <mysql/mysql.h>
 
 #include "telnet.hpp"
 
@@ -21,6 +22,7 @@
 #include "invis_resistance_tests.hpp"
 #include "constants.hpp"
 #include "db.hpp"
+#include "newdb.hpp"
 
 // The linked list of loaded playergroups.
 extern Playergroup *loaded_playergroups;
@@ -114,6 +116,28 @@ ACMD(do_debug) {
 
   if (strn_cmp(arg1, "pgroups", strlen(arg1)) == 0) {
     do_pgroup_debug(ch, rest_of_argument);
+    return;
+  }
+
+  if (!str_cmp(arg1, "idledeletechar")) {
+    extern MYSQL *mysql;
+
+    if (GET_LEVEL(ch) != LVL_PRESIDENT) {
+      send_to_char("Sorry, only the game owner can do this.\r\n", ch);
+      return;
+    }
+
+    int idnum_int = atoi(rest_of_argument);
+
+    if (idnum_int <= 0) {
+      send_to_char(ch, "Syntax is 'idledeletechar <idnum>'\r\n");
+      return;
+    }
+
+    snprintf(buf, sizeof(buf), "UPDATE pfiles SET lastd=0 WHERE idnum=%d", idnum_int);
+    mysql_wrapper(mysql, buf);
+
+    send_to_char(ch, "Done - relog the char if you need to fix them, or use SET FILE.\r\n");
     return;
   }
 

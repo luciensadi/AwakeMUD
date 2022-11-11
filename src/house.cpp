@@ -919,6 +919,7 @@ void House_boot(void)
     return;
   }
 
+  // Go through each apartment complex entry.
   for (int i = 0; i < num_land; i++) {
     get_line(fl, line);
     if (sscanf(line, "%ld %s %d %d", &landlord_vnum, name, t, t + 1) != 4) {
@@ -936,6 +937,8 @@ void House_boot(void)
     templ->basecost = t[0];
     templ->num_room = t[1];
     struct house_control_rec *last = NULL, *first = NULL;
+
+    // Go through each room in the apartment complex entry.
     for (int x = 0; x < templ->num_room; x++) {
       get_line(fl, line);
       if (sscanf(line, "%ld %ld %d %d %s %ld %d %ld", &house_vnum, &key_vnum, t, t + 1, name,
@@ -943,15 +946,20 @@ void House_boot(void)
         fprintf(stderr, "Format error in landlord #%d room #%d.\r\n", i, x);
         return;
       }
-      if (real_room(house_vnum) < 0) {
+
+      rnum_t house_rnum = real_room(house_vnum);
+
+      if (house_rnum < 0) {
         log_vfprintf("SYSERR: House vnum %ld does not match up with a real room. Terminating.\r\n", landlord_vnum);
         exit(ERROR_CANNOT_RESOLVE_VNUM);
       }
 
+      struct room_data *apartment = &world[house_rnum];
+
       temp = new struct house_control_rec;
       temp->vnum = house_vnum;
       temp->key = key_vnum;
-      temp->atrium = TOROOM(real_room(house_vnum), t[0]);
+      temp->atrium = TOROOM(house_rnum, t[0]);
       if (temp->atrium == NOWHERE) {
         log_vfprintf("You have an error in your house control file-- there is no valid %s (%d) exit for room %ld.",
                      dirs[t[0]], t[0], temp->vnum);
@@ -963,16 +971,47 @@ void House_boot(void)
       temp->name = str_dup(name);
       for (int q = 0; q < MAX_GUESTS; q++)
         temp->guests[q] = 0;
+
       if (temp->owner) {
-        if (does_player_exist(temp->owner) && temp->date > time(0))
-          House_load(temp);
-        else {
+        // Regardless of whether or not the owner still exists, we load the house's contents.
+        House_load(temp);
+
+        // Now, if the owner is not valid, we purge the contents.
+        if (!does_player_exist(temp->owner) || temp->date <= time(0)) {
           temp->owner = 0;
           House_get_filename(temp->vnum, buf2, MAX_STRING_LENGTH);
           House_delete_file(temp->vnum, buf2);
 
           // Move all vehicles from this apartment to a public garage.
-          remove_vehicles_from_apartment(&world[real_room(temp->vnum)]);
+          remove_vehicles_from_apartment(apartment);
+
+
+
+          // Purge the apartment, logging it.
+          for (struct obj_data *obj = apartment->contents, *next_o; obj; obj = next_o) {
+            next_o = obj->next_content;
+            const char *representation = generate_new_loggable_representation(obj);
+            mudlog_vfprintf(NULL, LOG_PURGELOG, "Apartment cleanup for %ld has purged %s.", temp->vnum, representation);
+            delete [] representation;
+            extract_obj(obj);
+          }
+
+          // Purge attached storage rooms.
+          for (int dir = 0; dir < NUM_OF_DIRS; dir++) {
+            if (EXIT2(apartment, dir)) {
+              struct room_data *the_room = EXIT2(apartment, dir)->to_room;
+
+              if (the_room && ROOM_FLAGGED(the_room, ROOM_STORAGE)) {
+                for (struct obj_data *obj = the_room->contents, *next_o; obj; obj = next_o) {
+                  next_o = obj->next_content;
+                  const char *representation = generate_new_loggable_representation(obj);
+                  mudlog_vfprintf(NULL, LOG_PURGELOG, "Apartment cleanup for %ld (attached storage room: %ld) has purged %s.", temp->vnum, GET_ROOM_VNUM(the_room), representation);
+                  delete [] representation;
+                  extract_obj(obj);
+                }
+              }
+            }
+          }
         }
       }
       if (last)
@@ -980,7 +1019,7 @@ void House_boot(void)
       if (!first)
         first = temp;
       if (temp->owner) {
-        ROOM_FLAGS(&world[real_room(temp->vnum)]).SetBit(ROOM_HOUSE);
+        ROOM_FLAGS(apartment).SetBit(ROOM_HOUSE);
         ROOM_FLAGS(&world[temp->atrium]).SetBit(ROOM_ATRIUM);
       }
       last = temp;

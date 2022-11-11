@@ -4722,12 +4722,12 @@ ACMD(do_set)
   half_chop(argument, name, buf);
   if (!strcmp(name, "file")) {
     is_file = 1;
-    half_chop(buf, name, buf);
+    strlcpy(buf, one_argument(buf, name), sizeof(buf));
   } else if (!str_cmp(name, "player")) {
     is_player = 1;
-    half_chop(buf, name, buf);
+    strlcpy(buf, one_argument(buf, name), sizeof(buf));
   } else if (!str_cmp(name, "mob")) {
-    half_chop(buf, name, buf);
+    strlcpy(buf, one_argument(buf, name), sizeof(buf));
   }
   half_chop(buf, field, buf2);
   strcpy(val_arg, buf2);
