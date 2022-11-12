@@ -10,12 +10,18 @@
 #define NUM_GARAGE_STRINGS        3
 
 // The actual lifestyle number (ex LIFESTYLE_SQUATTER)
-#define GET_LIFESTYLE(ch) ((ch)->player_specials ? (ch)->player_specials->lifestyle : LIFESTYLE_STREETS)
-#define GET_SETTABLE_LIFESTYLE(ch) ((ch)->player_specials->lifestyle)
+#define GET_LIFESTYLE_SELECTION(ch) ((ch)->player_specials ? (ch)->player_specials->saved.selected_lifestyle : LIFESTYLE_STREETS)
+#define GET_SETTABLE_LIFESTYLE(ch) ((ch)->player_specials->saved.selected_lifestyle)
+// The original version of this.
+#define GET_ORIGINAL_LIFESTYLE(ch) ((ch)->player_specials ? (ch)->player_specials->original_lifestyle : LIFESTYLE_STREETS)
+#define GET_SETTABLE_ORIGINAL_LIFESTYLE(ch) ((ch)->player_specials->original_lifestyle)
 
 // Whether or not they live in a garage.
-#define GET_LIFESTYLE_IS_GARAGE(ch) ((ch)->player_specials ? (ch)->player_specials->lifestyle_is_garage : FALSE)
-#define GET_SETTABLE_LIFESTYLE_IS_GARAGE(ch) ((ch)->player_specials->lifestyle_is_garage)
+#define GET_LIFESTYLE_IS_GARAGE_SELECTION(ch) ((ch)->player_specials ? (ch)->player_specials->saved.selected_lifestyle_is_garage : FALSE)
+#define GET_SETTABLE_LIFESTYLE_IS_GARAGE(ch) ((ch)->player_specials->saved.selected_lifestyle_is_garage)
+// The original version of this.
+#define GET_ORIGINAL_LIFESTYLE_IS_GARAGE(ch) ((ch)->player_specials ? (ch)->player_specials->original_lifestyle_is_garage : FALSE)
+#define GET_SETTABLE_ORIGINAL_LIFESTYLE_IS_GARAGE(ch) ((ch)->player_specials->original_lifestyle_is_garage)
 
 // The amount of time left on their impersonation command, if any.
 #define GET_LIFESTYLE_DRESS_EXPIRATION_TICKS(ch) ((ch)->player_specials ? (ch)->player_specials->saved.lifestyle_dress_expiration_ticks : FALSE)

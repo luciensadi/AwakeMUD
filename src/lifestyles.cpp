@@ -3,6 +3,8 @@
 #include "lifestyles.hpp"
 #include "house.hpp"
 #include "db.hpp"
+#include "interpreter.hpp"
+#include "comm.hpp"
 
 extern struct landlord *landlords;
 
@@ -63,8 +65,8 @@ const char *get_lifestyle_string(struct char_data *ch) {
     return "";
   }
 
-  if (GET_LIFESTYLE(ch) < 0 || GET_LIFESTYLE(ch) >= NUM_LIFESTYLES) {
-    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Lifestyle %d is out of range in get_lifestyle_string().", GET_LIFESTYLE(ch));
+  if (GET_LIFESTYLE_SELECTION(ch) < 0 || GET_LIFESTYLE_SELECTION(ch) >= NUM_LIFESTYLES) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Lifestyle %d is out of range in get_lifestyle_string().", GET_LIFESTYLE_SELECTION(ch));
     return "";
   }
 
@@ -73,9 +75,9 @@ const char *get_lifestyle_string(struct char_data *ch) {
     return "";
   }
 
-  strlcpy(compiled_string, lifestyles[GET_LIFESTYLE(ch)].strings[GET_LIFESTYLE_STRING_SELECTION(ch)][GET_SEX(ch) == SEX_NEUTRAL ? 1 : 0], sizeof(compiled_string));
+  strlcpy(compiled_string, lifestyles[GET_LIFESTYLE_SELECTION(ch)].strings[GET_LIFESTYLE_STRING_SELECTION(ch)][GET_SEX(ch) == SEX_NEUTRAL ? 1 : 0], sizeof(compiled_string));
 
-  if (GET_LIFESTYLE_IS_GARAGE(ch)) {
+  if (GET_LIFESTYLE_IS_GARAGE_SELECTION(ch)) {
     snprintf(ENDOF(compiled_string),
                    sizeof(compiled_string) - strlen(compiled_string),
                    " %s",
@@ -119,13 +121,35 @@ void determine_lifestyle(struct char_data *ch) {
     }
   }
 
-  GET_SETTABLE_LIFESTYLE(ch) = best_lifestyle_found;
-  GET_SETTABLE_LIFESTYLE_IS_GARAGE(ch) = lifestyle_is_garage;
+  GET_SETTABLE_LIFESTYLE(ch) = GET_SETTABLE_ORIGINAL_LIFESTYLE(ch) = best_lifestyle_found;
+  GET_SETTABLE_LIFESTYLE_IS_GARAGE(ch) = GET_SETTABLE_ORIGINAL_LIFESTYLE_IS_GARAGE(ch) = lifestyle_is_garage;
 
   mudlog_vfprintf(ch, LOG_MISCLOG, "Assigned %s lifestyle: %d (%s), room %ld is%s garage.",
                   GET_CHAR_NAME(ch),
-                  GET_LIFESTYLE(ch),
-                  lifestyles[GET_LIFESTYLE(ch)].name,
+                  GET_LIFESTYLE_SELECTION(ch),
+                  lifestyles[GET_LIFESTYLE_SELECTION(ch)].name,
                   best_room,
-                  GET_LIFESTYLE_IS_GARAGE(ch) ? "" : " NOT");
+                  GET_LIFESTYLE_IS_GARAGE_SELECTION(ch) ? "" : " NOT");
+}
+
+// TODO: Add this to point_update(?) and fill out.
+void lifestyle_tick(struct char_data *ch) {}
+
+// TODO: Add lifestyle string selection to customize physical.
+// TODO: Rework so that lifestyle string selection is per tier (ex: squatter=1, low=3, etc)
+
+// TODO: Replace this with CUSTOMIZE LIFESTYLE.
+ACMD(do_lifestyle) {
+  FAILURE_CASE(IS_NPC(ch), "Only player characters can configure their lifestyle.\r\n");
+
+  // No argument? Display current.
+  if (!*argument) {
+    if (GET_ORIGINAL_LIFESTYLE(ch) != GET_LIFESTYLE_SELECTION(ch)) {
+      send_to_char(ch, "You currently present as leading a %s-class lifestyle, but your standard is %d-class.\r\n", GET_LIFESTYLE_SELECTION(ch), GET_ORIGINAL_LIFESTYLE(ch));
+    } else {
+      send_to_char(ch, "You lead a %s-class lifestyle.\r\n", GET_LIFESTYLE_SELECTION(ch));
+    }
+    send_to_char(ch, "Your lifestyle is represented as '%s'. Change this with ^WCUSTOMIZE LIFESTYLE^n.", get_lifestyle_string(ch));
+    return;
+  }
 }
