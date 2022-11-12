@@ -10,10 +10,10 @@
 #define NUM_GARAGE_STRINGS        3
 
 // The actual lifestyle number (ex LIFESTYLE_SQUATTER)
-#define GET_LIFESTYLE_SELECTION(ch) ((ch)->player_specials ? (ch)->player_specials->saved.selected_lifestyle : LIFESTYLE_STREETS)
+#define GET_LIFESTYLE_SELECTION(ch) ((ch)->player_specials ? (ch)->player_specials->saved.selected_lifestyle : LIFESTYLE_SQUATTER)
 #define GET_SETTABLE_LIFESTYLE(ch) ((ch)->player_specials->saved.selected_lifestyle)
 // The original version of this.
-#define GET_ORIGINAL_LIFESTYLE(ch) ((ch)->player_specials ? (ch)->player_specials->original_lifestyle : LIFESTYLE_STREETS)
+#define GET_ORIGINAL_LIFESTYLE(ch) ((ch)->player_specials ? (ch)->player_specials->original_lifestyle : LIFESTYLE_SQUATTER)
 #define GET_SETTABLE_ORIGINAL_LIFESTYLE(ch) ((ch)->player_specials->original_lifestyle)
 
 // Whether or not they live in a garage.

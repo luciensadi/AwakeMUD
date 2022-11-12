@@ -121,15 +121,20 @@ void determine_lifestyle(struct char_data *ch) {
     }
   }
 
+  if (best_lifestyle_found == -1) {
+    best_lifestyle_found = LIFESTYLE_SQUATTER;
+    lifestyle_is_garage = FALSE;
+  }
+
   GET_SETTABLE_LIFESTYLE(ch) = GET_SETTABLE_ORIGINAL_LIFESTYLE(ch) = best_lifestyle_found;
   GET_SETTABLE_LIFESTYLE_IS_GARAGE(ch) = GET_SETTABLE_ORIGINAL_LIFESTYLE_IS_GARAGE(ch) = lifestyle_is_garage;
 
-  mudlog_vfprintf(ch, LOG_MISCLOG, "Assigned %s lifestyle: %d (%s), room %ld is%s garage.",
-                  GET_CHAR_NAME(ch),
-                  GET_LIFESTYLE_SELECTION(ch),
-                  lifestyles[GET_LIFESTYLE_SELECTION(ch)].name,
-                  best_room,
-                  GET_LIFESTYLE_IS_GARAGE_SELECTION(ch) ? "" : " NOT");
+  log_vfprintf("Assigned %s lifestyle: %d (%s), room %ld is%s garage.",
+               GET_CHAR_NAME(ch),
+               GET_LIFESTYLE_SELECTION(ch),
+               lifestyles[GET_LIFESTYLE_SELECTION(ch)].name,
+               best_room,
+               GET_LIFESTYLE_IS_GARAGE_SELECTION(ch) ? "" : " NOT");
 }
 
 // TODO: Add this to point_update(?) and fill out.
