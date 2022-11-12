@@ -1272,23 +1272,37 @@ ACMD(do_hcontrol)
 ACMD(do_decorate)
 {
   extern void write_world_to_disk(int vnum);
-  struct house_control_rec *i;
-  if (!ROOM_FLAGGED(ch->in_room, ROOM_HOUSE))
-    send_to_char("You must be in your house to set the description.\r\n", ch);
-  else if ((i = find_house(GET_ROOM_VNUM(ch->in_room))) == NULL)
-    send_to_char("Um.. this house seems to be screwed up.\r\n", ch);
-  else if (GET_IDNUM(ch) != i->owner)
-    send_to_char("Only the primary owner can set the room description.\r\n", ch);
-  else {
-    PLR_FLAGS(ch).SetBit(PLR_WRITING);
-    send_to_char("Enter your new room description.  Terminate with a @ on a new line.\r\n", ch);
-    act("$n starts to move things around the room.", TRUE, ch, 0, 0, TO_ROOM);
-    STATE(ch->desc) = CON_DECORATE;
-    DELETE_D_STR_IF_EXTANT(ch->desc);
-    INITIALIZE_NEW_D_STR(ch->desc);
-    ch->desc->max_str = MAX_MESSAGE_LENGTH;
-    ch->desc->mail_to = 0;
+  struct house_control_rec *house_record = NULL;
+
+  FAILURE_CASE(!ch->in_room || ch->in_veh, "You can't decorate the interior of vehicles, but you can still customize the outside by visiting a painting booth.\r\n");
+
+  // You can perform this action from the house proper, or from a storage room attached to it.
+  if (!ROOM_FLAGGED(ch->in_room, ROOM_HOUSE)) {
+    FAILURE_CASE(!ROOM_FLAGGED(ch->in_room, ROOM_STORAGE), "You can only decorate apartments and garages.\r\n");
+
+    for (int dir = 0; dir < NUM_OF_DIRS; dir++) {
+      struct room_data *the_room = NULL;
+      if (EXIT2(ch->in_room, dir) && (the_room = EXIT2(ch->in_room, dir)->to_room) && ROOM_FLAGGED(the_room, ROOM_HOUSE)) {
+        house_record = find_house(GET_ROOM_VNUM(the_room));
+        break;
+      }
+    }
+  } else {
+    house_record = find_house(GET_ROOM_VNUM(ch->in_room));
   }
+
+  FAILURE_CASE(!house_record, "You must be in an apartment or garage to set the description.\r\n");
+
+  FAILURE_CASE(GET_IDNUM(ch) != house_record->owner, "Only the primary owner can set the room description.\r\n");
+
+  PLR_FLAGS(ch).SetBit(PLR_WRITING);
+  send_to_char("Enter your new room description.  Terminate with a @ on a new line.\r\n", ch);
+  act("$n starts to move things around the room.", TRUE, ch, 0, 0, TO_ROOM);
+  STATE(ch->desc) = CON_DECORATE;
+  DELETE_D_STR_IF_EXTANT(ch->desc);
+  INITIALIZE_NEW_D_STR(ch->desc);
+  ch->desc->max_str = MAX_MESSAGE_LENGTH;
+  ch->desc->mail_to = 0;
 }
 
 /* The house command, used by mortal house owners to assign guests */
