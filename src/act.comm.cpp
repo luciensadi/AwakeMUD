@@ -133,7 +133,7 @@ ACMD(do_say)
       // Replicate act() in a way that lets us capture the message.
       if (can_send_act_to_target(ch, FALSE, NULL, NULL, tmp, TO_ROOM) && !IS_IGNORING(tmp, is_blocking_osays_from, ch)) {
         // They're a valid target, so send the message with a raw perform_act() call.
-        store_message_to_history(tmp->desc, COMM_CHANNEL_OSAYS, perform_act(buf, ch, NULL, NULL, tmp));
+        store_message_to_history(tmp->desc, COMM_CHANNEL_OSAYS, perform_act(buf, ch, NULL, NULL, tmp, FALSE));
       }
     }
     // Send it to anyone who's rigging a vehicle here.
@@ -142,7 +142,7 @@ ACMD(do_say)
          veh = veh->next_veh)
     {
       if (veh->rigger && veh->rigger->desc && !IS_IGNORING(veh->rigger, is_blocking_osays_from, ch))
-        store_message_to_history(veh->rigger->desc, COMM_CHANNEL_OSAYS, perform_act(buf, ch, NULL, NULL, veh->rigger));
+        store_message_to_history(veh->rigger->desc, COMM_CHANNEL_OSAYS, perform_act(buf, ch, NULL, NULL, veh->rigger, FALSE));
     }
   } else {
     // Speech gives you 5 minutes of grace period. Emotes give you more.
@@ -191,7 +191,7 @@ ACMD(do_say)
                 capitalize(replace_too_long_words(veh->rigger, ch, argument, language, GET_CHAR_COLOR_HIGHLIGHT(ch))),
                 ispunct(get_final_character_from_string(argument)) ? "" : "."
               );
-        store_message_to_history(veh->rigger->desc, COMM_CHANNEL_SAYS, perform_act(buf, ch, NULL, NULL, veh->rigger));
+        store_message_to_history(veh->rigger->desc, COMM_CHANNEL_SAYS, perform_act(buf, ch, NULL, NULL, veh->rigger, FALSE));
       }
     }
   }
@@ -252,7 +252,7 @@ ACMD(do_exclaim)
                capitalize(replace_too_long_words(tmp, ch, argument, language, GET_CHAR_COLOR_HIGHLIGHT(ch))));
 
       // They're a valid target, so send the message with a raw perform_act() call.
-      store_message_to_history(tmp->desc, COMM_CHANNEL_SAYS, perform_act(buf, ch, NULL, NULL, tmp));
+      store_message_to_history(tmp->desc, COMM_CHANNEL_SAYS, perform_act(buf, ch, NULL, NULL, tmp, FALSE));
     }
   }
 
@@ -267,7 +267,7 @@ ACMD(do_exclaim)
                (PRF_FLAGGED(veh->rigger, PRF_NOHIGHLIGHT) || PRF_FLAGGED(veh->rigger, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch),
                capitalize(replace_too_long_words(veh->rigger, ch, argument, language, GET_CHAR_COLOR_HIGHLIGHT(ch))));
 
-      store_message_to_history(veh->rigger->desc, COMM_CHANNEL_SAYS, perform_act(buf, ch, NULL, NULL, veh->rigger));
+      store_message_to_history(veh->rigger->desc, COMM_CHANNEL_SAYS, perform_act(buf, ch, NULL, NULL, veh->rigger, FALSE));
     }
   }
 
@@ -445,7 +445,7 @@ ACMD(do_ask)
                capitalize(replace_too_long_words(tmp, ch, argument, language, GET_CHAR_COLOR_HIGHLIGHT(ch))));
 
       // They're a valid target, so send the message with a raw perform_act() call.
-      store_message_to_history(tmp->desc, COMM_CHANNEL_SAYS, perform_act(buf, ch, NULL, NULL, tmp));
+      store_message_to_history(tmp->desc, COMM_CHANNEL_SAYS, perform_act(buf, ch, NULL, NULL, tmp, FALSE));
     }
   }
 
@@ -460,7 +460,7 @@ ACMD(do_ask)
                (PRF_FLAGGED(veh->rigger, PRF_NOHIGHLIGHT) || PRF_FLAGGED(veh->rigger, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch),
                capitalize(replace_too_long_words(veh->rigger, ch, argument, language, GET_CHAR_COLOR_HIGHLIGHT(ch))));
 
-      store_message_to_history(veh->rigger->desc, COMM_CHANNEL_SAYS, perform_act(buf, ch, NULL, NULL, veh->rigger));
+      store_message_to_history(veh->rigger->desc, COMM_CHANNEL_SAYS, perform_act(buf, ch, NULL, NULL, veh->rigger, FALSE));
     }
   }
 
@@ -1257,7 +1257,7 @@ ACMD(do_gen_comm)
           // Replicate act() in a way that lets us capture the message.
           if (can_send_act_to_target(ch, FALSE, NULL, NULL, tmp, TO_ROOM)) {
             // They're a valid target, so send the message with a raw perform_act() call.
-            store_message_to_history(tmp->desc, COMM_CHANNEL_SHOUTS, perform_act(buf1, ch, NULL, NULL, tmp));
+            store_message_to_history(tmp->desc, COMM_CHANNEL_SHOUTS, perform_act(buf1, ch, NULL, NULL, tmp, FALSE));
           }
         }
       }
@@ -1276,7 +1276,7 @@ ACMD(do_gen_comm)
                      com_msgs[subcmd][3]);
 
             // They're a valid target, so send the message with a raw perform_act() call.
-            store_message_to_history(tmp->desc, COMM_CHANNEL_SHOUTS, perform_act(buf1, ch, NULL, NULL, tmp));
+            store_message_to_history(tmp->desc, COMM_CHANNEL_SHOUTS, perform_act(buf1, ch, NULL, NULL, tmp, FALSE));
           }
         }
         ch->in_veh = NULL;

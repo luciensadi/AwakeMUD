@@ -45,6 +45,7 @@
 #include "ignore_system.hpp"
 #include "newmagic.hpp"
 #include "newmatrix.hpp"
+#include "lifestyles.hpp"
 
 const char *CCHAR;
 
@@ -804,6 +805,10 @@ void look_at_char(struct char_data * i, struct char_data * ch)
       send_to_char(i->player.physical_text.look_desc, ch);
     else
       act("You see nothing special about $m.", FALSE, i, 0, ch, TO_VICT);
+
+    if (!IS_NPC(i) && GET_TKE(i) > NEWBIE_KARMA_THRESHOLD && GET_LEVEL(ch) >= GET_LEVEL(i)) {
+      act(get_lifestyle_string(i), FALSE, i, 0, ch, TO_VICT | SKIP_YOU_STANZAS);
+    }
 
     if (i != ch && GET_HEIGHT(i) > 0 && GET_WEIGHT(i) > 0) {
       if ((GET_HEIGHT(i) % 10) < 5)

@@ -2991,7 +2991,7 @@ const char *get_voice_perceived_by(struct char_data *speaker, struct char_data *
 /* higher-level communication: the act() function */
 // now returns the composed line, in case you need to capture it for some reason
 const char *perform_act(const char *orig, struct char_data * ch, struct obj_data * obj,
-                 void *vict_obj, struct char_data * to)
+                 void *vict_obj, struct char_data * to, bool skip_you_stanzas)
 {
   extern char *make_desc(char_data *ch, char_data *i, char *buf, int act, bool dont_capitalize_a_an, size_t buf_size);
   const char *i = NULL;
@@ -3026,7 +3026,7 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
           i = CHECK_NULL(vict_obj, SANA((struct obj_data *) vict_obj));
           break;
         case 'e':
-          if (to == ch)
+          if (to == ch && !skip_you_stanzas)
             i = "you";
           else if (CAN_SEE(to, ch))
             i = HSSH(ch);
@@ -3035,7 +3035,7 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
           break;
         case 'E':
           if (vict_obj) {
-            if (to == vict)
+            if (to == vict && !skip_you_stanzas)
               i = "you";
             else if (CAN_SEE(to, vict))
               i = HSSH(vict);
@@ -3047,7 +3047,7 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
           i = CHECK_NULL(vict_obj, fname((char *) vict_obj));
           break;
         case 'm':
-          if (to == ch)
+          if (to == ch && !skip_you_stanzas)
             i = "you";
           else if (CAN_SEE(to, ch))
             i = HMHR(ch);
@@ -3057,7 +3057,7 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
         case 'M':
           if (!vict)
             i = "someone";
-          else if (to == vict)
+          else if (to == vict && !skip_you_stanzas)
             i = "you";
           else if (CAN_SEE(to, vict))
             i = HMHR(vict);
@@ -3065,7 +3065,7 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
             i = "them";
           break;
         case 'n':
-          if (to == ch)
+          if (to == ch && !skip_you_stanzas)
             i = "you";
           else if (!IS_NPC(ch) && (IS_SENATOR(to) || IS_SENATOR(ch)))
             i = GET_CHAR_NAME(ch);
@@ -3084,7 +3084,7 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
         case 'N':
           if (!vict)
             i = "someone";
-          else if (to == vict)
+          else if (to == vict && !skip_you_stanzas)
             i = "you";
           else if (!IS_NPC(vict) && (IS_SENATOR(to) || IS_SENATOR(vict)))
             i = GET_CHAR_NAME(vict);
@@ -3113,7 +3113,7 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
           i = CHECK_NULL(vict_obj, OBJS((struct obj_data *) vict_obj, to));
           break;
         case 's':
-          if (to == ch)
+          if (to == ch && !skip_you_stanzas)
             i = "your";
           else if (CAN_SEE(to, ch))
             i = HSHR(ch);
@@ -3123,7 +3123,7 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
         case 'S':
           if (!vict_obj)
             i = "someone's";
-          else if (to == vict)
+          else if (to == vict && !skip_you_stanzas)
             i = "your";
           else if (CAN_SEE(to, vict))
             i = HSHR(vict);
@@ -3138,7 +3138,7 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
           break;
         case 'z': /* Desc if visible, voice if not */
           // You always know if it's you.
-          if (to == ch) {
+          if (to == ch && !skip_you_stanzas) {
             i = "you";
           }
 
@@ -3221,8 +3221,7 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
          struct obj_data * obj, void *vict_obj, int type)
 {
   struct char_data *to, *next, *tch;
-  int sleep;
-  bool remote;
+  bool sleep, remote, skip_you_stanzas;
   struct veh_data *rigger_check;
 
 #define SENDOK(ch) ((ch)->desc && (AWAKE(ch) || sleep) && !(PLR_FLAGGED((ch), PLR_WRITING) || PLR_FLAGGED((ch), PLR_EDITING) || PLR_FLAGGED((ch), PLR_MAILING) || PLR_FLAGGED((ch), PLR_CUSTOMIZE)) && (STATE(ch->desc) != CON_SPELL_CREATE))
@@ -3246,13 +3245,16 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
   if ((remote = (type & TO_REMOTE)))
     type &= ~TO_REMOTE;
 
+  if ((skip_you_stanzas = (type & SKIP_YOU_STANZAS)))
+    type &= ~SKIP_YOU_STANZAS;
+
   if ( type == TO_ROLLS )
     sleep = 1;
 
   if (type == TO_CHAR)
   {
     if (ch && SENDOK(ch) && (remote || !PLR_FLAGGED(ch, PLR_REMOTE)) && !PLR_FLAGGED(ch, PLR_MATRIX))
-      return perform_act(str, ch, obj, vict_obj, ch);
+      return perform_act(str, ch, obj, vict_obj, ch, skip_you_stanzas);
     return NULL;
   }
   if (type == TO_VICT)
@@ -3268,12 +3270,12 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
     if (hide_invisible && ch && !CAN_SEE(to, ch))
       return NULL;
 
-    return perform_act(str, ch, obj, vict_obj, to);
+    return perform_act(str, ch, obj, vict_obj, to, skip_you_stanzas);
   }
   if (type == TO_DECK)
   {
     if ((to = (struct char_data *) vict_obj) && SENDOK(to) && PLR_FLAGGED(to, PLR_MATRIX))
-      return perform_act(str, ch, obj, vict_obj, to);
+      return perform_act(str, ch, obj, vict_obj, to, skip_you_stanzas);
     return NULL;
   }
   /* ASSUMPTION: at this point we know type must be TO_NOTVICT
@@ -3336,7 +3338,7 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
           && !(hide_invisible
                && ch
                && !CAN_SEE(to, ch)))
-        perform_act(str, ch, obj, vict_obj, to);
+        perform_act(str, ch, obj, vict_obj, to, skip_you_stanzas);
     }
 
     // Send rolls to riggers.
@@ -3349,7 +3351,7 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
             && !(hide_invisible
                  && ch
                  && !CAN_SEE(tch, ch)))
-          perform_act(str, ch, obj, vict_obj, tch);
+          perform_act(str, ch, obj, vict_obj, tch, skip_you_stanzas);
         remove_vision_bit(tch, VISION_ULTRASONIC, VISION_BIT_OVERRIDE);
       }
     }
@@ -3378,7 +3380,7 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
       return NULL;
     }
     if (can_send_act_to_target(ch, hide_invisible, obj, vict_obj, to, type))
-      perform_act(str, ch, obj, vict_obj, to);
+      perform_act(str, ch, obj, vict_obj, to, skip_you_stanzas);
   }
 
   // Send to riggers.
@@ -3388,7 +3390,7 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
       // Since the check is done to the rigger, we have to apply det-invis to them directly, then remove it when done.
       set_vision_bit(tch, VISION_ULTRASONIC, VISION_BIT_OVERRIDE);
       if (can_send_act_to_target(ch, hide_invisible, obj, vict_obj, tch, type | TO_REMOTE))
-        perform_act(str, ch, obj, vict_obj, tch);
+        perform_act(str, ch, obj, vict_obj, tch, skip_you_stanzas);
       remove_vision_bit(tch, VISION_ULTRASONIC, VISION_BIT_OVERRIDE);
     }
   }
