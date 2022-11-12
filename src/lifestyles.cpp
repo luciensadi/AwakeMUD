@@ -12,33 +12,32 @@ struct lifestyle_data lifestyles[NUM_LIFESTYLES] =
      // The strings the player can select from to represent this lifestyle. First is he/she, second is they.
     {{"Judging by the smell, you're pretty sure $e's homeless.", "Judging by the smell, you're pretty sure they're homeless."},
      {"$s clothes are ragged and hole-filled.", "Their clothes are ragged and hole-filled."},
-     {"$e doesn't seem well-acquainted with hygeine.", "They don't seem well-acquainted with hygeine."}}
+     {"$e doesn't seem well-acquainted with hygiene.", "They don't seem well-acquainted with hygiene."}}
   },
-  // TODO: Rewrite these in a way that allows for them/they too.
   {"Squatter", 100,
-    {{"", ""},
-     {"sqb", ""},
-     {"sqc", ""}}
+    {{"You figure $e probably has a roof over $s head, but not much of one.", "You figure they probably have a roof over their head, but not much of one."},
+     {"The scent of burnt fry oil hangs about $m.", "The scent of burnt fry oil hangs about them."}, // Squatting behind a fast-food place.
+     {"$s wrinkled clothes suggest $e lives out of $s car.", "Their wrinkled clothes suggest they live out of their car."}}
   },
   {"Low"     , 1000,
     {{"$e looks like he's fallen on hard times.", "They look like they've fallen on hard times."},
-     {"lob", ""},
-     {"loc", ""}}
+     {"You get the feeling that $e leads a low-class lifestyle.", "You get the feeling that they lead a low-class lifestyle."},
+     {"$e probably has a few nuyen to rub together-- but only a few.", "They probably have a few nuyen to rub together-- but only a few."}}
   },
   {"Middle"  , 5000,
-    {{"$e seems like $e's been able to take care of $mself.", "They seem like they've been able to take care of themself."},
-     {"mib", ""},
-     {"mic", ""}}
+    {{"$e seems like $e's been able to take care of $mself.", "They seem like they've been able to take care of themselves."},
+     {"$e looks like $e probably leads a middle-class life.", "They look like they probably lead a middle-class life."},
+     {"$e's not doing badly at all for a shadowrunner.", "They're not doing badly at all for a shadowrunner."}}
   },
   {"High"    , 10000,
     {{"$e seems pretty well-off.", "They seem pretty well-off."},
-     {"hib", ""},
-     {"hic", ""}}
+     {"$e looks like he's living the high life.", "They look like they're living the high life."},
+     {"$e's doing well for himself.", "They're doing well for themselves."}}
   },
   {"Luxury"  , 100000,
     {{"You feel like $e probably rubs shoulders with the social elite.", "You feel like they probably rub shoulders with the social elite."},
-     {"lub", ""},
-     {"luc", ""}}
+     {"Sharply groomed and tailored, $e knows how take care of $mself.", "Sharply groomed and tailored, they know how take care of themselves."},
+     {"There's a sense of privileged wealth about $m.", "There's a sense of privileged wealth about them."}}
   },
 };
 

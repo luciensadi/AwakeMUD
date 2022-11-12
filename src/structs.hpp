@@ -646,18 +646,16 @@ struct player_special_data_saved
 
   int system_points;
 
-  int lifestyle;
-  bool lifestyle_is_garage;
   int lifestyle_string_selection;
   int lifestyle_garage_string_selection;
+  int lifestyle_dress_expiration_ticks;
 
   player_special_data_saved() :
     wimp_level(0), freeze_level(0), invis_level(0), incog_level(0), load_room(NOWHERE),
     last_in(0), last_veh(NOTHING), bad_pws(0), totem(0), totemspirit(0),
     att_points(0), skill_points(0), force_points(0), restring_points(0), zonenum(0),
-    archetype(0), archetypal(FALSE), system_points(0), lifestyle(0),
-    lifestyle_is_garage(FALSE), lifestyle_string_selection(0),
-    lifestyle_garage_string_selection(0)
+    archetype(0), archetypal(FALSE), system_points(0), lifestyle_string_selection(0),
+    lifestyle_garage_string_selection(0), lifestyle_dress_expiration_ticks(0)
   {
     ZERO_OUT_ARRAY(conditions, 3);
   }
@@ -682,10 +680,14 @@ struct player_special_data
   struct room_data *watching;
   int wherelist_checks;
 
+  int lifestyle;
+  bool lifestyle_is_garage;
+
   player_special_data() :
       aliases(NULL), remem(NULL), last_tell(0), questnum(0), obj_complete(NULL),
       mob_complete(NULL), mental_loss(0), physical_loss(0),
-      perm_bod(0), watching(NULL), wherelist_checks(0)
+      perm_bod(0), watching(NULL), wherelist_checks(0), lifestyle(0),
+      lifestyle_is_garage(FALSE)
   {
     ZERO_OUT_ARRAY(last_quest, QUEST_TIMER);
     ZERO_OUT_ARRAY(drug_last_fix, NUM_DRUGS);
