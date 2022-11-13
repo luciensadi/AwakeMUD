@@ -14,32 +14,56 @@ struct lifestyle_data lifestyles[NUM_LIFESTYLES] =
      // The strings the player can select from to represent this lifestyle. First is he/she, second is they.
     {{"Judging by the smell, you're pretty sure $e's homeless.", "Judging by the smell, you're pretty sure they're homeless."},
      {"$s clothes are ragged and hole-filled.", "Their clothes are ragged and hole-filled."},
-     {"$e doesn't seem well-acquainted with hygiene.", "They don't seem well-acquainted with hygiene."}}
+     {"$e doesn't seem well-acquainted with hygiene.", "They don't seem well-acquainted with hygiene."},
+     {"", ""},
+     {"", ""},
+     {"", ""}}
   },
   {"Squatter", 100,
-    {{"You figure $e probably has a roof over $s head, but not much of one.", "You figure they probably have a roof over their head, but not much of one."},
+    {{"You figure $e might have a roof over $s head, but not much of one.", "You figure $e might have a roof over their head, but not much of one."},
      {"The scent of burnt fry oil hangs about $m.", "The scent of burnt fry oil hangs about them."}, // Squatting behind a fast-food place.
-     {"$s wrinkled clothes suggest $e lives out of $s car.", "Their wrinkled clothes suggest they live out of their car."}}
+     {"$s wrinkled clothes suggest $e lives out of $s car.", "Their wrinkled clothes suggest they live out of their car."},
+     {"$e isn't emaciated, but still looks like $e's had to skip a meal or three.", "They aren't emaciated, but still look like they've had to skip a meal or three."},
+     {"The distinct scent of public transportation clings to $m.", "The distinct scent of public transportation clings to them."},
+     {"$e's got a smell about him-- eau de Coffin Motel?", "They've got a smell about them-- eau de Coffin Motel?"},
   },
   {"Low"     , 1000,
     {{"$e looks like he's fallen on hard times.", "They look like they've fallen on hard times."},
      {"You get the feeling that $e leads a low-class lifestyle.", "You get the feeling that they lead a low-class lifestyle."},
-     {"$e probably has a few nuyen to rub together-- but only a few.", "They probably have a few nuyen to rub together-- but only a few."}}
+     {"$e probably has a few nuyen to rub together-- but only a few.", "They probably have a few nuyen to rub together-- but only a few."},
+     {"$s clothing looks like a cheap knock-off, but it mostly fits and isn't falling apart.", "Their clothing looks like a cheap knock-off, but it mostly fits and isn't falling apart."},
+     {"$e doesn't look like he's had to miss any meals recently.", "They don't look like they've had to miss any meals recently."},
+     {"", ""}}
   },
   {"Middle"  , 5000,
     {{"$e seems like $e's been able to take care of $mself.", "They seem like they've been able to take care of themselves."},
      {"$e looks like $e probably leads a middle-class life.", "They look like they probably lead a middle-class life."},
-     {"$e's not doing badly at all for a shadowrunner.", "They're not doing badly at all for a shadowrunner."}}
+     {"$e's not doing badly at all for a shadowrunner.", "They're not doing badly at all for a shadowrunner."},
+     {"$e probably showers regularly, as $e smells lightly of cheap soap.", "They probably shower regularly, as they smell lightly of cheap soap."},
+     {"$e smells like soap, shampoo, and some sort of cologne or perfume.", "They smell like soap, shampoo, and some sort of cologne or perfume."},
+     {"", ""}}
+     Her outfit is clean and tailored to fit her, and even features a prominent brand.
+
+She smells like soap, shampoo and some sort of cologne or perfume. Her hygiene is impeccable.
+
+She looks like she's never missed a meal in her life, and has the healthy glow of someone that eats real food.
+
   },
   {"High"    , 10000,
     {{"$e seems pretty well-off.", "They seem pretty well-off."},
      {"$e looks like he's living the high life.", "They look like they're living the high life."},
-     {"$e's doing well for himself.", "They're doing well for themselves."}}
+     {"$e's doing well for himself.", "They're doing well for themselves."},
+     {"", ""},
+     {"", ""},
+     {"", ""}}
   },
   {"Luxury"  , 100000,
     {{"You feel like $e probably rubs shoulders with the social elite.", "You feel like they probably rub shoulders with the social elite."},
      {"Sharply groomed and tailored, $e knows how take care of $mself.", "Sharply groomed and tailored, they know how take care of themselves."},
-     {"There's a sense of privileged wealth about $m.", "There's a sense of privileged wealth about them."}}
+     {"There's a sense of privileged wealth about $m.", "There's a sense of privileged wealth about them."},
+     {"", ""},
+     {"", ""},
+     {"", ""}}
   },
 };
 

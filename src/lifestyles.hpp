@@ -6,7 +6,7 @@
 #define LIFESTYLE_LUXURY          5
 #define NUM_LIFESTYLES            6
 
-#define NUM_STRINGS_PER_LIFESTYLE 3
+#define NUM_STRINGS_PER_LIFESTYLE 6
 #define NUM_GARAGE_STRINGS        3
 
 // The actual lifestyle number (ex LIFESTYLE_SQUATTER)
