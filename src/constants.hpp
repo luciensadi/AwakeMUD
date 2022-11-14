@@ -84,7 +84,7 @@ extern const char *attributes[];
 extern const char *short_attributes[];
 extern struct spell_types spells[];
 extern const char *totem_types[];
-extern const char *spell_category[5];
+extern const char *spell_category[];
 extern const char *durations[3];
 extern const char *spirit_name[];
 extern const char *foci_type[];

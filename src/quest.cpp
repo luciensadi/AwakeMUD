@@ -472,18 +472,22 @@ void check_quest_delivery(struct char_data *ch, struct obj_data *obj)
   if (!ch || IS_NPC(ch) || !GET_QUEST(ch))
     return;
 
-  int i;
-  if (ch->in_room) {
-    for (i = 0; i < quest_table[GET_QUEST(ch)].num_objs; i++) {
-      if (quest_table[GET_QUEST(ch)].obj[i].objective == QOO_LOCATION &&
-          GET_OBJ_VNUM(obj) == quest_table[GET_QUEST(ch)].obj[i].vnum &&
-          ch->in_room->number == quest_table[GET_QUEST(ch)].obj[i].o_data)
-      {
-        ch->player_specials->obj_complete[i] = 1;
-        return;
-      }
+  if (!ch->in_room) {
+    // You can't complete a quest objective from a vehicle.
+    return;
+  }
+
+  int i = 0;
+  for (; i < quest_table[GET_QUEST(ch)].num_objs; i++) {
+    if (quest_table[GET_QUEST(ch)].obj[i].objective == QOO_LOCATION &&
+        GET_OBJ_VNUM(obj) == quest_table[GET_QUEST(ch)].obj[i].vnum &&
+        ch->in_room->number == quest_table[GET_QUEST(ch)].obj[i].o_data)
+    {
+      ch->player_specials->obj_complete[i] = 1;
+      return;
     }
   }
+  
   if (ch->persona && ch->persona->in_host && quest_table[GET_QUEST(ch)].obj[i].objective == QOO_UPLOAD &&
       GET_OBJ_VNUM(obj) == quest_table[GET_QUEST(ch)].obj[i].vnum &&
       matrix[ch->persona->in_host].vnum == quest_table[GET_QUEST(ch)].obj[i].o_data)

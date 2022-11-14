@@ -515,7 +515,7 @@ struct char_point_data
   {
     ZERO_OUT_ARRAY(ballistic, 3);
     ZERO_OUT_ARRAY(impact, 3);
-    ZERO_OUT_ARRAY(sustained, 3);
+    ZERO_OUT_ARRAY(sustained, 2);
     ZERO_OUT_ARRAY(track, 2);
     ZERO_OUT_ARRAY(fire, 3);
     ZERO_OUT_ARRAY(reach, 2);
@@ -1261,84 +1261,6 @@ struct ammo_data
   unsigned char cost;
   float street_index;
 };
-
-/* Combat data. */
-#ifdef USE_OLD_HIT
-struct combat_data
-{
-  // Generic combat data.
-  int modifiers[NUM_COMBAT_MODIFIERS];
-  bool too_tall;
-  int skill;
-  int tn;
-  int dice;
-  int successes;
-
-  // Weapon / unarmed damage data.
-  int dam_type;
-  bool is_physical;
-  int power;
-  int damage_level; // Light/Med/etc
-
-  // Gun data.
-  bool weapon_is_gun;
-  bool weapon_has_bayonet;
-  int burst_count;
-  int recoil_comp;
-  int weapon_skill;
-
-  // Cyberware data.
-  int climbingclaws;
-  int fins;
-  int handblades;
-  int handrazors;
-  int improved_handrazors;
-  int handspurs;
-  int footanchors;
-  int bone_lacing_power;
-  int num_cyberweapons;
-
-  // Pointers.
-  struct char_data *ch;
-  struct veh_data *veh;
-  struct obj_data *weapon;
-  struct obj_data *magazine;
-  struct obj_data *gyro;
-
-  combat_data(struct char_data *character, struct obj_data *weap) :
-    too_tall(FALSE), skill(0), tn(0), dice(0), successes(0), dam_type(0), is_physical(FALSE), power(0), damage_level(0),
-    weapon_is_gun(FALSE), weapon_has_bayonet(FALSE), burst_count(0), recoil_comp(0), climbingclaws(0), fins(0),
-    handblades(0), handrazors(0), improved_handrazors(0), handspurs(0), footanchors(0), bone_lacing_power(0), num_cyberweapons(0),
-    ch(NULL), veh(NULL), weapon(NULL), magazine(NULL), gyro(NULL)
-  {
-    for (int i = 0; i < NUM_COMBAT_MODIFIERS; i++)
-      modifiers[i] = 0;
-
-    ch = character;
-    weapon = weap;
-
-    weapon_is_gun = WEAPON_IS_GUN(weapon);
-
-    if (weapon_is_gun) {
-      /* if (PLR_FLAGGED(att->ch, PLR_REMOTE) || AFF_FLAGGED(att->ch, AFF_RIG) || AFF_FLAGGED(att->ch, AFF_MANNING))
-        magazine = get_mount_ammo(get_mount_manned_by_ch(att->ch));
-
-        // TODO asdf this needs to be fixed, it has no way to handle a rigged veh with multiple mounts in it
-        */
-
-      if (!magazine)
-        magazine = weapon->contains;
-    }
-
-    if (AFF_FLAGGED(ch, AFF_MANNING) || AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE))
-      weapon_skill = SKILL_GUNNERY;
-    else if (weapon)
-      weapon_skill = GET_WEAPON_SKILL(weapon);
-    else
-      weapon_skill = SKILL_UNARMED_COMBAT;
-  }
-};
-#endif
 
 struct help_data {
   // title: varchar 128

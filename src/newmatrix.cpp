@@ -130,7 +130,7 @@ bool spawn_ic(struct matrix_icon *target, vnum_t ic_vnum, int triggerstep) {
   }
 
   if (ic_rnum < 0) {
-    vnum_t ic_to_spawn;
+    vnum_t ic_to_spawn = -1;
 
     // Find a new one by seeking down the trigger list for this host until we encounter one.
     // Remember that trigger lists are ordered largest / highest first.

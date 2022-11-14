@@ -6425,7 +6425,11 @@ ACMD(do_position)
   }
 
   if (is_abbrev(argument, "clear")) {
-    DELETE_ARRAY_IF_EXTANT(veh ? GET_VEH_DEFPOS(veh) : GET_DEFPOS(ch));
+    if (veh) {
+      DELETE_ARRAY_IF_EXTANT(GET_VEH_DEFPOS(veh));
+    } else {
+      DELETE_ARRAY_IF_EXTANT(GET_DEFPOS(ch));
+    }
     send_to_char("Position cleared.\r\n", ch);
     return;
   }

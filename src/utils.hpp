@@ -1192,6 +1192,7 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
  * Much of this is from Merc 2.2, used with permission.
  */
 
+/* Commenting out some uncommon OSes to reduce cppcheck load. --LS
 #if defined(_AIX)
 char    *crypt(const char *key, const char *salt);
 #endif
@@ -1206,14 +1207,6 @@ char    *crypt( const char *key, const char *salt);
 char    *crypt(char *key, const char *salt);
 #endif
 
-#if defined(linux)
-extern "C" char *crypt(const char *key, const char *setting) throw ();
-#endif
-
-#if defined(freebsd)
-extern "C" char *crypt(const char *key, const char *setting);
-#endif
-
 #if defined(MIPS_OS)
 char    *crypt(const char *key, const char *salt);
 #endif
@@ -1222,6 +1215,15 @@ char    *crypt(const char *key, const char *salt);
 char    *crypt(const char *key, const char *salt);
 int     unlink(const char *path);
 int     getpid(void);
+#endif
+*/
+
+#if defined(linux)
+extern "C" char *crypt(const char *key, const char *setting) throw ();
+#endif
+
+#if defined(freebsd)
+extern "C" char *crypt(const char *key, const char *setting);
 #endif
 
 #if defined(WIN32)
@@ -1243,6 +1245,7 @@ extern "C" char    *crypt(const char *key, const char *salt);
  * -reni
  */
 
+/* Commenting out more rare OS / configs. -LS
 #if defined(sequent)
 char    *crypt(const char *key, const char *salt);
 int     fclose(FILE *stream);
@@ -1276,18 +1279,19 @@ int     system(const char *string);
 char    *crypt(const char *key, const char *salt);
 #endif
 
-#if defined(DGUX_TARGET) || (defined(WIN32) && !defined(__CYGWIN__))
-#ifndef NOCRYPT
-#include <crypt.h>
-#endif
-#define bzero(a, b) memset((a), 0, (b))
-#endif
-
 #if defined(sgi)
 #include <bstring.h>
 #ifndef NOCRYPT
 #include <crypt.h>
 #endif
+#endif
+*/
+
+#if defined(DGUX_TARGET) || (defined(WIN32) && !defined(__CYGWIN__))
+#ifndef NOCRYPT
+#include <crypt.h>
+#endif
+#define bzero(a, b) memset((a), 0, (b))
 #endif
 
 /*

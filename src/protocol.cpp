@@ -538,6 +538,7 @@ const char *ProtocolOutput( descriptor_t *apDescriptor, const char *apData, int 
   const char MXPStop[] = ">\033[7z";
   const char LinkStart[] = "\033[1z<send>\033[7z";
   const char LinkStop[] = "\033[1z</send>\033[7z";
+  char Buffer[8] = {'\0'};
   bool bTerminate = FALSE, bUseMXP = FALSE, bUseMSP = FALSE;
 #ifdef COLOUR_CHAR
   bool bColourOn = COLOUR_ON_BY_DEFAULT;
@@ -704,7 +705,8 @@ const char *ProtocolOutput( descriptor_t *apDescriptor, const char *apData, int 
         case '[':
           if ( tolower(apData[++j]) == 'u' )
           {
-            char Buffer[8] = {'\0'}, BugString[256];
+            memset(Buffer, '\0', sizeof(Buffer));
+            char BugString[256];
             int Index = 0;
             int Number = 0;
             bool bDone = FALSE, bValid = TRUE;
@@ -1280,10 +1282,8 @@ void MSDPFlush( descriptor_t *apDescriptor, variable_t aMSDP )
   {
     protocol_t *pProtocol = apDescriptor ? apDescriptor->pProtocol : NULL;
 
-    if ( pProtocol->pVariables[aMSDP] && pProtocol->pVariables[aMSDP]->bReport )
-    {
-      if ( pProtocol->pVariables[aMSDP] && pProtocol->pVariables[aMSDP]->bDirty )
-      {
+    if (pProtocol && pProtocol->pVariables[aMSDP]) {
+      if (pProtocol->pVariables[aMSDP]->bReport && pProtocol->pVariables[aMSDP]->bDirty) {
         MSDPSend( apDescriptor, aMSDP );
         pProtocol->pVariables[aMSDP]->bDirty = FALSE;
       }

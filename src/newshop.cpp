@@ -2958,7 +2958,7 @@ void shedit_parse(struct descriptor_data *d, const char *arg)
 
 bool shop_can_sell_object(struct obj_data *obj, struct char_data *keeper, int shop_nr) {
   if (!obj) {
-    snprintf(buf2, sizeof(buf2), "Shop %ld ('%s'): Hiding nonexistant item from sale.", shop_table[shop_nr].vnum, GET_NAME(keeper));
+    snprintf(buf2, sizeof(buf2), "Shop %ld ('%s'): Hiding nonexistant item from sale.", shop_table[shop_nr].vnum, keeper ? GET_NAME(keeper) : "NO_KEEPER");
     mudlog(buf2, keeper, LOG_SYSLOG, TRUE);
     return FALSE;
   }

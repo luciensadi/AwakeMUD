@@ -75,12 +75,12 @@ bool mob_is_aggressive_towards_race(struct char_data *ch, int race);
 int AGGRESSION_OCTETS[NUM_AGGRO_OCTETS];
 
 char bitbuffer[100];
-const char *print_bits(int bits)
+const char *print_bits(unsigned int bits)
 {
   char *buf_ptr = bitbuffer;
 
   for (int i = BITFIELD_BITS_PER_VAR-1; i >= 0; i--)
-    if (bits & (1 << i))
+    if (bits & ((unsigned int) 1 << i))
       *(buf_ptr++) = '1';
     else
       *(buf_ptr++) = '0';
@@ -1511,6 +1511,7 @@ void ensure_mob_has_ammo_for_weapon(struct char_data *ch, struct obj_data *weapo
   GET_BULLETPANTS_AMMO_AMOUNT(ch, GET_WEAPON_ATTACK_TYPE(weapon), AMMO_NORMAL) = GET_WEAPON_MAX_AMMO(weapon) * NUMBER_OF_MAGAZINES_TO_GIVE_TO_UNEQUIPPED_MOBS;
 }
 
+ACMD_DECLARE(do_get);
 void mobile_activity(void)
 {
   PERF_PROF_SCOPE(pr_, __func__);
@@ -1519,8 +1520,6 @@ void mobile_activity(void)
   struct room_data *current_room = NULL;
 
   extern int no_specials;
-
-  ACMD_DECLARE(do_get);
 
   // Iterate through all characters in the game.
   for (ch = character_list; ch; ch = next_ch) {

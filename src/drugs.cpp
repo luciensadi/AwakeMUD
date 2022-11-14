@@ -752,7 +752,7 @@ void reset_all_drugs_for_char(struct char_data *ch) {
 // Wipe out ALL drug data including tolerance, addiction etc-- used for staff only.
 void clear_all_drug_data_for_char(struct char_data *ch) {
   for (int drug_id = MIN_DRUG; drug_id < NUM_DRUGS; drug_id++) {
-    for (int x = 0; x <= 10; x++) {
+    for (int x = 0; x < NUM_DRUG_PLAYER_SPECIAL_FIELDS; x++) {
       ch->player_specials->drugs[drug_id][x] = 0;
     }
   }

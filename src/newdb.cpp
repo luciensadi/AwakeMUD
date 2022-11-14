@@ -1476,6 +1476,7 @@ bool PCIndex::Save()
   if (!tab) {
     if (entry_cnt > 0)
       log("--Error: no table when there should be?!  That's fucked up, man.");
+    fclose(index);
     return false;
   }
 
