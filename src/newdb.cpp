@@ -1944,6 +1944,29 @@ char *get_player_name(vnum_t id)
   return x;
 }
 
+bool player_is_dead_hardcore(long id) {
+  const char *name;
+  struct char_data *ch;
+  bool retval = FALSE;
+
+  // Retrieve the name and character based on the ID.
+  if (!(name = get_player_name(id)) || !(ch = playerDB.LoadChar(name, FALSE))) {
+    return FALSE;
+  }
+  // We're done with the name, so clean it up.
+  delete[] name;
+
+  // Check if they're a dead hardcore char.
+  if (PLR_FLAGGED(ch, PLR_JUST_DIED) && PRF_FLAGGED(ch, PRF_HARDCORE)) {
+    retval = TRUE;
+  }
+
+  // Clean up our loaded character.
+  extract_char(ch);
+
+  return retval;
+}
+
 bool _get_flag_is_set_by_idnum(int flag, vnum_t id, int mode) {
   char buf[MAX_STRING_LENGTH];
 

@@ -36,6 +36,7 @@ extern void weight_change_object(struct obj_data * obj, float weight);
 extern void auto_repair_obj(struct obj_data *obj);
 extern void handle_weapon_attachments(struct obj_data *obj);
 extern void raw_store_mail(long to, long from_id, const char *from_name, const char *message_pointer);
+extern bool player_is_dead_hardcore(long id);
 
 struct landlord *landlords = NULL;
 ACMD_CONST(do_say);
@@ -977,7 +978,7 @@ void House_boot(void)
         House_load(temp);
 
         // Now, if the owner is not valid, we purge the contents.
-        if (!does_player_exist(temp->owner) || temp->date <= time(0)) {
+        if (temp->date <= time(0) || !does_player_exist(temp->owner) || player_is_dead_hardcore(temp->owner)) {
           temp->owner = 0;
           House_get_filename(temp->vnum, buf2, MAX_STRING_LENGTH);
           House_delete_file(temp->vnum, buf2);
