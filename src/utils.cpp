@@ -1960,7 +1960,7 @@ bool has_kit(struct char_data * ch, int type)
     }
   }
 
-  for (i = 0; !found && i < (NUM_WEARS - 1); i++) {
+  for (int i = 0; !found && i < (NUM_WEARS - 1); i++) {
     if (GET_EQ(ch, i) && IS_KIT(GET_EQ(ch, i), type)) {
       found = TRUE;
     }
