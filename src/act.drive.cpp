@@ -1151,7 +1151,8 @@ ACMD(do_repair)
 {
   struct obj_data *obj, *shop = NULL;
   struct veh_data *veh;
-  int target = 4, skill = 0, success, mod = 0;
+  int target = 4, skill = 0, success = 0;
+  bool kit = FALSE;
 
   skip_spaces(&argument);
   if (IS_ASTRAL(ch)) {
@@ -1182,12 +1183,7 @@ ACMD(do_repair)
   target += modify_target(ch);
 
   if (!access_level(ch, LVL_ADMIN)) {
-    for (obj = ch->carrying; obj && !mod; obj = obj->next_content)
-      if (GET_OBJ_TYPE(obj) == ITEM_WORKSHOP && GET_WORKSHOP_TYPE(obj) == TYPE_VEHICLE && GET_WORKSHOP_GRADE(obj) == TYPE_KIT)
-        mod = TYPE_KIT;
-    for (int i = 0; i < NUM_WEARS && !mod; i++)
-      if ((obj = GET_EQ(ch, i)) && GET_OBJ_TYPE(obj) == ITEM_WORKSHOP && GET_WORKSHOP_TYPE(obj) == TYPE_VEHICLE && GET_WORKSHOP_GRADE(obj) == TYPE_KIT)
-        mod = TYPE_KIT;
+    kit = has_kit(ch, TYPE_VEHICLE);
     shop = find_workshop(ch, TYPE_VEHICLE);
     if (!shop) {
       if (veh->damage >= VEH_DAMAGE_NEEDS_WORKSHOP) {
@@ -1197,9 +1193,11 @@ ACMD(do_repair)
       target += 2;
     }
 
-    if (shop && GET_WORKSHOP_GRADE(shop) == TYPE_FACILITY) {
-      target -= 2;
-    } else if (mod == TYPE_KIT) {
+    if (shop) {
+      if (GET_WORKSHOP_GRADE(shop) == TYPE_FACILITY) {
+        target -= 2;
+      } // if TYPE_WORKSHOP, no target modifier
+    } else if (kit) {
       target += 2;
     } else {
       target += 4;
