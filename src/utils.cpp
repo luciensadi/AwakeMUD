@@ -143,7 +143,7 @@ int srdice(void)
 }
 
 // If supplying
-int success_test(int number, int target, struct char_data *ch, const char *note_for_rolls)
+int success_test(int number, int target, struct char_data *ch, const char *note_for_rolls, struct char_data *other)
 {
   if (number < 1)
     return BOTCHED_ROLL_RESULT;
@@ -166,13 +166,20 @@ int success_test(int number, int target, struct char_data *ch, const char *note_
 
   if (ch) {
     char msgbuf[1000];
-    snprintf(msgbuf, sizeof(msgbuf), "$n rolled %d dice VS TN %d: %d successes, %d ones. (%s)",
+    snprintf(msgbuf, sizeof(msgbuf), "^L%s rolled %d %s VS TN %d: %d %s, %d %s. (%s)^n",
+             GET_CHAR_NAME(ch),
              number,
+             number == 1 ? "die" : "dice",
              target,
              total,
+             total == 1 ? "success" : "successes",
              ones,
+             ones == 1 ? "one" : "ones",
              note_for_rolls ? note_for_rolls : "");
     act(msgbuf, TRUE, ch, 0, 0, TO_ROLLS);
+    if (other && ch->in_room != other->in_room && ch->in_veh != other->in_veh) {
+      act(msgbuf, TRUE, other, 0, 0, TO_ROLLS);
+    }
   }
 
   if (ones == number)

@@ -49,7 +49,7 @@ int     get_line(FILE *fl, char *buf);
 struct  time_info_data age(struct char_data *ch);
 int     convert_damage(int damage);
 int     srdice(void);
-int     success_test(int number, int target, struct char_data *ch=NULL, const char *note_for_rolls=NULL);
+int     success_test(int number, int target, struct char_data *ch=NULL, const char *note_for_rolls=NULL, struct char_data *other=NULL);
 int     resisted_test(int num4ch, int tar4ch, int num4vict, int tar4vict);
 int     open_test(int num_dice);
 int     stage(int successes, int wound);
