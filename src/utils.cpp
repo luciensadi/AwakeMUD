@@ -142,24 +142,40 @@ int srdice(void)
   return sum;
 }
 
-int success_test(int number, int target)
+// If supplying
+int success_test(int number, int target, struct char_data *ch, const char *note_for_rolls)
 {
   if (number < 1)
     return BOTCHED_ROLL_RESULT;
 
-  int total = 0, roll, one = 0;
-  int i;
+  int total = 0, ones = 0;
 
   target = MAX(target, 2);
 
-  for (i = 1; i <= number; i++) {
-    if ((roll = srdice()) == 1)
-      one++;
-    else if (roll >= target)
+  for (int i = 1; i <= number; i++) {
+    int roll = srdice();
+
+    // A 1 is always a failure, as no TN can be less than 2.
+    if (roll == 1) {
+      ones++;
+    }
+    else if (roll >= target) {
       total++;
+    }
   }
 
-  if (one == number)
+  if (ch) {
+    char msgbuf[1000];
+    snprintf(msgbuf, sizeof(msgbuf), "$n rolled %d dice VS TN %d: %d successes, %d ones. (%s)",
+             number,
+             target,
+             total,
+             ones,
+             note_for_rolls ? note_for_rolls : "");
+    act(msgbuf, TRUE, ch, 0, 0, TO_ROLLS);
+  }
+
+  if (ones == number)
     return BOTCHED_ROLL_RESULT;
   return total;
 }

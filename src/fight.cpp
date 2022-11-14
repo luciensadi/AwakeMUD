@@ -71,7 +71,6 @@ SPECIAL(weapon_dominator);
 SPECIAL(pocket_sec);
 WSPEC(monowhip);
 
-extern int success_test(int number, int target);
 extern int resisted_test(int num_for_ch, int tar_for_ch, int num_for_vict,
                          int tar_for_vict);
 extern int modify_target(struct char_data *ch);
