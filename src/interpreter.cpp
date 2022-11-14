@@ -2627,12 +2627,6 @@ void nanny(struct descriptor_data * d, char *arg)
         d->character = playerDB.LoadChar(tmp_name, TRUE);
         d->character->desc = d;
 
-        if (PRF_FLAGGED(d->character, PRF_HARDCORE) && PLR_FLAGGED(d->character, PLR_JUST_DIED)) {
-          SEND_TO_Q("The Reaper has claimed this one...\r\n", d);
-          STATE(d) = CON_CLOSE;
-          return;
-        }
-
         snprintf(buf, sizeof(buf), "Welcome back. Enter your password. Not %s? Enter 'abort' to try a different name. ", CAP(tmp_name));
         SEND_TO_Q(buf, d);
         echo_off(d);
