@@ -513,7 +513,7 @@ void do_raw_ram(struct char_data *ch, struct veh_data *veh, struct veh_data *tve
       target += 4;
     else if (vehm < tvehm)
       target += 2;
-    strcpy(buf3, capitalize(GET_VEH_NAME_NOFORMAT(veh)));
+    strlcpy(buf3, capitalize(GET_VEH_NAME_NOFORMAT(veh)), sizeof(buf3));
     snprintf(buf, sizeof(buf), "%s heads straight towards your ride.\r\n", buf3);
     snprintf(buf1, sizeof(buf1), "%s heads straight towards %s.\r\n", buf3, GET_VEH_NAME(tveh));
     snprintf(buf2, sizeof(buf2), "You attempt to ram %s.\r\n", GET_VEH_NAME(tveh));
@@ -1557,7 +1557,7 @@ ACMD(do_target)
       send_to_char("It has no weapon mounted.\r\n", ch);
       return;
     }
-    strcpy(arg, buf2);
+    strlcpy(arg, buf2, sizeof(arg));
   } else {
     if (!(AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_MANNING))) {
       send_to_char("You don't have control over any mounts.\r\n", ch);
@@ -1702,7 +1702,7 @@ void do_raw_target(struct char_data *ch, struct veh_data *veh, struct veh_data *
     if (AFF_FLAGGED(ch, AFF_MANNING)) {
       snprintf(buf, sizeof(buf), "%s's %s swivels towards your ride.\r\n", GET_VEH_NAME(ch->in_veh), GET_OBJ_NAME(obj));
       send_to_veh(buf, tveh, 0, TRUE);
-      strcpy(buf3, GET_VEH_NAME(ch->in_veh));
+      strlcpy(buf3, GET_VEH_NAME(ch->in_veh), sizeof(buf3));
       snprintf(buf, sizeof(buf), "%s's $p swivels towards %s.\r\n", buf3, GET_VEH_NAME(tveh));
       act(buf, FALSE, ch, obj, NULL, TO_VEH_ROOM);
     }
@@ -2131,7 +2131,7 @@ ACMD(do_tow)
   }
   if (veh->towing) {
     // Compose our release message, which is emitted if the release processes successfully.
-    strcpy(buf3, GET_VEH_NAME(veh));
+    strlcpy(buf3, GET_VEH_NAME(veh), sizeof(buf3));
     snprintf(buf, sizeof(buf), "%s releases %s from its towing equipment.\r\n", buf3, GET_VEH_NAME(veh->towing));
     send_to_char(ch, "You release %s from your towing equipment.\r\n", GET_VEH_NAME(veh->towing));
 
@@ -2194,7 +2194,7 @@ ACMD(do_tow)
       }
     }
     send_to_char(ch, "You pick up %s with your towing equipment.\r\n", GET_VEH_NAME(tveh));
-    strcpy(buf3, GET_VEH_NAME(veh));
+    strlcpy(buf3, GET_VEH_NAME(veh), sizeof(buf3));
     snprintf(buf, sizeof(buf), "%s picks up %s with its towing equipment.\r\n", buf3, GET_VEH_NAME(tveh));
     if (veh->in_room) {
       if (veh->in_room->people) {
@@ -2280,7 +2280,7 @@ ACMD(do_push)
     else if (!(veh = get_veh_list(argument, ch->in_veh->carriedvehs, ch)))
       send_to_char("That vehicle isn't in here.\r\n", ch);
     else {
-      strcpy(buf3, GET_VEH_NAME(veh));
+      strlcpy(buf3, GET_VEH_NAME(veh), sizeof(buf3));
       send_to_char(ch, "You push %s out of the back.\r\n", buf3);
       snprintf(buf, sizeof(buf), "$n pushes %s out of the back.", buf3);
       snprintf(buf2, sizeof(buf2), "$n pushes %s out of the back of %s.", buf3, GET_VEH_NAME(ch->in_veh));
@@ -2330,7 +2330,7 @@ ACMD(do_push)
     else if (veh->locked && veh->damage < VEH_DAM_THRESHOLD_DESTROYED)
       send_to_char("The wheels seem to be locked.\r\n", ch);
     else {
-      strcpy(buf2, GET_VEH_NAME(veh));
+      strlcpy(buf2, GET_VEH_NAME(veh), sizeof(buf2));
       snprintf(buf, sizeof(buf), "$n pushes %s into the back of %s.", buf2, GET_VEH_NAME(found_veh));
       send_to_char(ch, "You push %s into the back of %s.\r\n", buf2, GET_VEH_NAME(found_veh));
       act(buf, 0, ch, 0, 0, TO_ROOM);

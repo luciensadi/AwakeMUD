@@ -2534,7 +2534,7 @@ void do_probe_veh(struct char_data *ch, struct veh_data * k)
 void do_probe_object(struct char_data * ch, struct obj_data * j) {
   int i, found, mount_location, bal, imp;
   bool has_pockets = FALSE, added_extra_carriage_return = FALSE, has_smartlink = FALSE;
-  struct obj_data *access = NULL;
+  struct obj_data *accessory = NULL;
 
   if (j->restring) {
     snprintf(buf, sizeof(buf), "^MOOC^n statistics for '^y%s^n' (restrung from %s):\r\n", GET_OBJ_NAME(j), j->text.name);
@@ -2676,7 +2676,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
         for (int i = ACCESS_LOCATION_TOP; i <= ACCESS_LOCATION_UNDER; i++) {
           if (GET_WEAPON_ATTACH_LOC(j, i) > 0
               && (real_obj = real_object(GET_WEAPON_ATTACH_LOC(j, i))) > 0
-              && (access = &obj_proto[real_obj])) {
+              && (accessory = &obj_proto[real_obj])) {
             // mount_location: used for gun_accessory_locations[] lookup.
             mount_location = i - ACCESS_LOCATION_TOP;
 
@@ -2687,7 +2687,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
             }
 
             // parse and add the string for the accessory's special bonuses
-            switch (GET_ACCESSORY_TYPE(access)) {
+            switch (GET_ACCESSORY_TYPE(accessory)) {
               case ACCESS_SMARTLINK:
                 if (has_smartlink) {
                   strlcat(buf, "^Y\r\nIt has multiple smartlinks attached, and they do not stack. You should remove one and replace it with something else.^n", sizeof(buf));
@@ -2709,7 +2709,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
                     {
                       // Goggles limit you to 1/2 of the SL-1 rating.
                       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nThe Smartlink%s attached to the %s ^yis limited by your use of goggles^n and only provides ^c-1^n to target numbers (lower is better).",
-                               GET_ACCESSORY_RATING(access) == 2 ? "-II" : "",
+                               GET_ACCESSORY_RATING(accessory) == 2 ? "-II" : "",
                                gun_accessory_locations[mount_location]);
                     }
                     // No goggles either.
@@ -2720,7 +2720,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
 
                   // cyberware-1
                   else if (cyberware_rating == 1) {
-                    if (GET_ACCESSORY_RATING(access) == 1) {
+                    if (GET_ACCESSORY_RATING(accessory) == 1) {
                       // SL-1 and cyberware-1? Just fine.
                       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nThe Smartlink attached to the %s provides ^c%d^n to target numbers (lower is better).",
                                gun_accessory_locations[mount_location],
@@ -2736,14 +2736,14 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
                   // cyberware-2+
                   else {
                     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nThe Smartlink%s attached to the %s provides ^c%d^n to target numbers (lower is better).",
-                            GET_ACCESSORY_RATING(access) < 2 ? "" : "-II", gun_accessory_locations[mount_location],
-                            (GET_ACCESSORY_RATING(access) == 1 || GET_ACCESSORY_RATING(access) < 2) ? -SMARTLINK_I_MODIFIER : -SMARTLINK_II_MODIFIER);
+                            GET_ACCESSORY_RATING(accessory) < 2 ? "" : "-II", gun_accessory_locations[mount_location],
+                            (GET_ACCESSORY_RATING(accessory) == 1 || GET_ACCESSORY_RATING(accessory) < 2) ? -SMARTLINK_I_MODIFIER : -SMARTLINK_II_MODIFIER);
                   }
                 }
                 has_smartlink = TRUE;
                 break;
               case ACCESS_SCOPE:
-                if (GET_OBJ_AFFECT(access).IsSet(AFF_LASER_SIGHT)) {
+                if (GET_OBJ_AFFECT(accessory).IsSet(AFF_LASER_SIGHT)) {
                   if (has_laser_sight_already) {
                     strlcat(buf, "^Y\r\nIt has multiple laser sights attached, and they do not stack. You should remove one and replace it with something else.^n", sizeof(buf));
                   } else {
@@ -2758,8 +2758,8 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
                 break;
               case ACCESS_GASVENT:
                 snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nThe gas vent installed in the %s provides ^c%d^n round%s worth of recoil compensation.",
-                        gun_accessory_locations[mount_location], -GET_ACCESSORY_RATING(access), GET_ACCESSORY_RATING(access) > 1 ? "s'" : "'s");
-                standing_recoil_comp -= GET_ACCESSORY_RATING(access);
+                        gun_accessory_locations[mount_location], -GET_ACCESSORY_RATING(accessory), GET_ACCESSORY_RATING(accessory) > 1 ? "s'" : "'s");
+                standing_recoil_comp -= GET_ACCESSORY_RATING(accessory);
                 break;
               case ACCESS_SHOCKPAD:
                 snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nThe attachment installed on the %s provides ^c1^n round's worth of recoil compensation.",
@@ -2797,18 +2797,18 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
                 }
                 break;
               default:
-                snprintf(buf1, sizeof(buf1), "SYSERR: Unknown accessory type %d passed to do_probe_object()", GET_ACCESSORY_TYPE(access));
+                snprintf(buf1, sizeof(buf1), "SYSERR: Unknown accessory type %d passed to do_probe_object()", GET_ACCESSORY_TYPE(accessory));
                 log(buf1);
                 break;
             }
             // Tack on affect and extra flags to the attachment.
-            if (strcmp(GET_OBJ_AFFECT(access).ToString(), "0") != 0) {
-              GET_OBJ_AFFECT(access).PrintBits(buf2, MAX_STRING_LENGTH, affected_bits, AFF_MAX);
+            if (strcmp(GET_OBJ_AFFECT(accessory).ToString(), "0") != 0) {
+              GET_OBJ_AFFECT(accessory).PrintBits(buf2, MAX_STRING_LENGTH, affected_bits, AFF_MAX);
               snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n ^- It provides the following flags: ^c%s^n", buf2);
             }
 
-            if (strcmp(GET_OBJ_EXTRA(access).ToString(), "0") != 0) {
-              GET_OBJ_EXTRA(access).PrintBits(buf2, MAX_STRING_LENGTH, pc_readable_extra_bits, MAX_ITEM_EXTRA);
+            if (strcmp(GET_OBJ_EXTRA(accessory).ToString(), "0") != 0) {
+              GET_OBJ_EXTRA(accessory).PrintBits(buf2, MAX_STRING_LENGTH, pc_readable_extra_bits, MAX_ITEM_EXTRA);
               snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n ^- It provides the following extra features: ^c%s^n", buf2);
             }
           }
@@ -5571,14 +5571,17 @@ ACMD(do_users)
 
     if (d->character && GET_CHAR_NAME(d->character)) {
       if (d->original)
-        snprintf(line, sizeof(line), format, d->desc_num, GET_CHAR_NAME(d->original),
-                state, idletime, timeptr);
+        snprintf(line, sizeof(line), // Flawfinder: ignore
+                 format,
+                 d->desc_num, GET_CHAR_NAME(d->original), state, idletime, timeptr);
       else
-        snprintf(line, sizeof(line), format, d->desc_num, GET_CHAR_NAME(d->character),
-                state, idletime, timeptr);
+        snprintf(line, sizeof(line), // Flawfinder: ignore
+                 format,
+                 d->desc_num, GET_CHAR_NAME(d->character), state, idletime, timeptr);
     } else
-      snprintf(line, sizeof(line), format, d->desc_num, "UNDEFINED",
-              state, idletime, timeptr);
+      snprintf(line, sizeof(line), // Flawfinder: ignore
+               format,
+               d->desc_num, "UNDEFINED", state, idletime, timeptr);
 
     if (*d->host && GET_DESC_LEVEL(d) <= GET_LEVEL(ch))
       snprintf(ENDOF(line), sizeof(line) - strlen(line), "[%s]\r\n", d->host);

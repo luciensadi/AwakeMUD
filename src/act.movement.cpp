@@ -296,7 +296,7 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
     act(buf1, FALSE, ch, 0, vict, TO_CHAR);
   }
   else if (ch->in_room->dir_option[dir]->go_into_thirdperson)
-    strcpy(buf2, ch->in_room->dir_option[dir]->go_into_thirdperson);
+    strlcpy(buf2, ch->in_room->dir_option[dir]->go_into_thirdperson, sizeof(buf2));
   else if (IS_WATER(ch->in_room)) {
     if (!IS_WATER(EXIT(ch, dir)->to_room))
       snprintf(buf2, sizeof(buf2), "$n climbs out of the water to the %s.", fulldirs[dir]);
@@ -362,7 +362,7 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
       if (weather_info.sunlight == SUN_DARK && weather_info.sky == SKY_CLOUDLESS)
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "You see the %s moon in the cloudless sky.\r\n", moon[weather_info.moonphase]);
       else
-        strcat(buf, weather_line[weather_info.sky]);
+        strlcat(buf, weather_line[weather_info.sky], sizeof(buf));
     }
     send_to_char(buf, ch);
   }
@@ -378,7 +378,7 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
   else if (vict)
     snprintf(buf2, sizeof(buf2), "$n drags %s in from %s.", GET_NAME(vict), thedirs[rev_dir[dir]]);
   else if (ch->in_room->dir_option[rev_dir[dir]] && ch->in_room->dir_option[rev_dir[dir]]->come_out_of_thirdperson)
-    strcpy(buf2, ch->in_room->dir_option[rev_dir[dir]]->come_out_of_thirdperson);
+    strlcpy(buf2, ch->in_room->dir_option[rev_dir[dir]]->come_out_of_thirdperson, sizeof(buf2));
   else if (IS_WATER(was_in)) {
     if (!IS_WATER(ch->in_room))
       snprintf(buf2, sizeof(buf2), "$n climbs out of the water from %s.", thedirs[rev_dir[dir]]);
@@ -676,16 +676,16 @@ bool perform_fall(struct char_data *ch)
 
     if (character_died) {
       // RIP, they died!
-      strcpy(impact_noise, "sickeningly wet ");
+      strlcpy(impact_noise, "sickeningly wet ", sizeof(impact_noise));
     } else {
       if (dam < 2) {
-        strcpy(impact_noise, "muted ");
+        strlcpy(impact_noise, "muted ", sizeof(impact_noise));
       } else if (dam < 5) {
-        strcpy(impact_noise, "");
+        strlcpy(impact_noise, "", sizeof(impact_noise));
       } else if (dam < 8) {
-        strcpy(impact_noise, "loud ");
+        strlcpy(impact_noise, "loud ", sizeof(impact_noise));
       } else {
-        strcpy(impact_noise, "crunching ");
+        strlcpy(impact_noise, "crunching ", sizeof(impact_noise));
       }
     }
 
@@ -1263,10 +1263,10 @@ void do_doorcmd(struct char_data *ch, struct obj_data *obj, int door, int scmd, 
       LOCK_DOOR(other_room, obj, rev_dir[door]);
     if (DOOR_IS_UNLOCKED(ch, obj, door)) {
       send_to_char("The lights on the maglock switch from red to green.\r\n", ch);
-      strcpy(buf, "The lights on the maglock switch from red to green as $n bypasses ");
+      strlcpy(buf, "The lights on the maglock switch from red to green as $n bypasses ", sizeof(buf));
     } else {
       send_to_char("The lights on the maglock switch from green to red.\r\n", ch);
-      strcpy(buf, "The lights on the maglock switch from green to red as $n bypasses ");
+      strlcpy(buf, "The lights on the maglock switch from green to red as $n bypasses ", sizeof(buf));
     }
     break;
   case SCMD_KNOCK:
@@ -1343,7 +1343,7 @@ int ok_pick(struct char_data *ch, int keynum, int pickproof, int scmd, int lock_
 
 ACMD_CONST(do_gen_door) {
   char not_const[MAX_STRING_LENGTH];
-  strcpy(not_const, argument);
+  strlcpy(not_const, argument, sizeof(not_const));
   ACMD_DECLARE(do_gen_door);
   do_gen_door(ch, not_const, cmd, subcmd);
 }
@@ -1629,7 +1629,7 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
     else if (found_veh->load - found_veh->usedload < calculate_vehicle_entry_load(inveh))
       send_to_char("There is not enough room in there for that.\r\n", ch);
     else {
-      strcpy(buf3, GET_VEH_NAME(inveh));
+      strlcpy(buf3, GET_VEH_NAME(inveh), sizeof(buf3));
       snprintf(buf, sizeof(buf), "%s drives into the back of %s.", buf3, GET_VEH_NAME(found_veh));
       snprintf(buf2, sizeof(buf2), "You drive into the back of %s. (Use the PUSH or LEAVE command to get the vehicle out later.)\r\n", GET_VEH_NAME(found_veh));
       if (inveh->in_room->people)
@@ -1684,9 +1684,9 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
     if ((door && door == k->follower->in_room) && (GET_POS(k->follower) >= POS_STANDING)) {
       act("You follow $N.\r\n", FALSE, k->follower, 0, ch, TO_CHAR);
       if (!found_veh->seating[front]) {
-        strcpy(buf3, "rear");
+        strlcpy(buf3, "rear", sizeof(buf3));
       } else {
-        strcpy(buf3, argument);
+        strlcpy(buf3, argument, sizeof(buf3));
       }
       enter_veh(k->follower, found_veh, buf3, FALSE);
     }
@@ -1953,7 +1953,7 @@ void leave_veh(struct char_data *ch)
     snprintf(buf2, sizeof(buf2), "%s drives out of the back.", GET_VEH_NAME(veh));
     send_to_veh(buf, veh, NULL, TRUE);
     send_to_veh(buf2, veh->in_veh, NULL, FALSE);
-    strcpy(buf3, GET_VEH_NAME(veh));
+    strlcpy(buf3, GET_VEH_NAME(veh), sizeof(buf3));
     snprintf(buf, sizeof(buf), "%s drives out of the back of %s.", buf3, GET_VEH_NAME(veh->in_veh));
     // get_veh_in_room not needed here since the if-check guarantees that veh->in_veh->in_room is valid.
     struct room_data *room = veh->in_veh->in_room;

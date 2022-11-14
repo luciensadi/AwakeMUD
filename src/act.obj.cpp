@@ -2479,8 +2479,8 @@ void name_from_drinkcon(struct obj_data *obj)
   int i = 0;
   while (*token && strcasecmp(token, drinks[GET_OBJ_VAL(obj, 2)]))
   {
-    strcat(buf2, token);
-    strcat(buf2, " ");
+    strlcat(buf2, token, sizeof(buf2));
+    strlcat(buf2, " ", sizeof(buf2));
     temp = get_token(temp, token);
     ++i;
   }
@@ -2492,7 +2492,7 @@ void name_from_drinkcon(struct obj_data *obj)
 
   // now, we copy the remaining string onto the end of buf2
   if (temp)
-    strcat(buf2, temp);
+    strlcat(buf2, temp, sizeof(buf2));
 
   buf2[strlen(buf2)] = '\0'; // remove the trailing space
 

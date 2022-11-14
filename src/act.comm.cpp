@@ -46,7 +46,7 @@ ACMD_DECLARE(do_say);
 
 ACMD_CONST(do_say) {
   static char not_const[MAX_STRING_LENGTH];
-  strcpy(not_const, argument);
+  strlcpy(not_const, argument, sizeof(not_const));
   do_say(ch, not_const, cmd, subcmd);
 }
 
@@ -109,7 +109,7 @@ ACMD(do_say)
 
   if (subcmd == SCMD_SAYTO) {
     half_chop(argument, buf, buf2);
-    strcpy(argument, buf2);
+    strlcpy(argument, buf2, sizeof(argument));
 
     if (ch->in_veh)
       to = get_char_veh(ch, buf, ch->in_veh);
@@ -827,7 +827,7 @@ ACMD(do_broadcast)
 
   struct obj_data *radio = NULL;
   struct descriptor_data *d;
-  int i, j, frequency, crypt, decrypt;
+  int i, j, frequency, crypt_lvl, decrypt;
   char voice[16] = "$v";
   bool cyberware = FALSE, vehicle = FALSE;
 
@@ -891,21 +891,21 @@ ACMD(do_broadcast)
     return;
 
   if (radio && GET_OBJ_VAL(radio, (cyberware ? 6 : (vehicle ? 5 : 3))))
-    crypt = GET_OBJ_VAL(radio, (cyberware ? 6 : (vehicle ? 5 : 3)));
+    crypt_lvl = GET_OBJ_VAL(radio, (cyberware ? 6 : (vehicle ? 5 : 3)));
   else
-    crypt = 0;
+    crypt_lvl = 0;
 
   char untouched_message[MAX_STRING_LENGTH], capitalized_and_punctuated[MAX_STRING_LENGTH], color_stripped_arg[MAX_STRING_LENGTH];
   strlcpy(color_stripped_arg, get_string_after_color_code_removal(argument, ch), sizeof(color_stripped_arg));
   snprintf(capitalized_and_punctuated, sizeof(capitalized_and_punctuated), "%s%s", capitalize(color_stripped_arg), ispunct(get_final_character_from_string(argument)) ? "" : ".");
   if (frequency > 0) {
-    if (crypt)
-      snprintf(untouched_message, sizeof(untouched_message), "^y\\%s^y/[%d MHz, %s](CRYPTO-%d): %s^N", voice, frequency, skills[language].name, crypt, capitalized_and_punctuated);
+    if (crypt_lvl)
+      snprintf(untouched_message, sizeof(untouched_message), "^y\\%s^y/[%d MHz, %s](CRYPTO-%d): %s^N", voice, frequency, skills[language].name, crypt_lvl, capitalized_and_punctuated);
     else
       snprintf(untouched_message, sizeof(untouched_message), "^y\\%s^y/[%d MHz, %s]: %s^N", voice, frequency, skills[language].name, capitalized_and_punctuated);
   } else {
-    if (crypt)
-      snprintf(untouched_message, sizeof(untouched_message), "^y\\%s^y/[All Frequencies, %s](CRYPTO-%d): %s^N", voice, skills[language].name, crypt, capitalized_and_punctuated);
+    if (crypt_lvl)
+      snprintf(untouched_message, sizeof(untouched_message), "^y\\%s^y/[All Frequencies, %s](CRYPTO-%d): %s^N", voice, skills[language].name, crypt_lvl, capitalized_and_punctuated);
     else
       snprintf(untouched_message, sizeof(untouched_message), "^y\\%s^y/[All Frequencies, %s]: %s^N", voice, skills[language].name, capitalized_and_punctuated);
   }
@@ -919,7 +919,7 @@ ACMD(do_broadcast)
   snprintf(radlog_string, sizeof(radlog_string), "%s (%d MHz, crypt %d, in %s): %s^N",
            GET_CHAR_NAME(ch),
            frequency,
-           crypt,
+           crypt_lvl,
            skills[language].name,
            capitalized_and_punctuated
           );
@@ -959,11 +959,11 @@ ACMD(do_broadcast)
           char radio_string[1000];
 
           // If char's decrypt is insufficient, just give them the static.
-          if (decrypt < crypt) {
+          if (decrypt < crypt_lvl) {
             if (frequency <= 0) {
-              snprintf(message, sizeof(message), "^y\\Garbled Static^y/[All Frequencies, Unknown](CRYPTO-%d): ***ENCRYPTED DATA***", crypt);
+              snprintf(message, sizeof(message), "^y\\Garbled Static^y/[All Frequencies, Unknown](CRYPTO-%d): ***ENCRYPTED DATA***", crypt_lvl);
             } else {
-              snprintf(message, sizeof(message), "^y\\Garbled Static^y/[%d MHz, Unknown](CRYPTO-%d): ***ENCRYPTED DATA***", frequency, crypt);
+              snprintf(message, sizeof(message), "^y\\Garbled Static^y/[%d MHz, Unknown](CRYPTO-%d): ***ENCRYPTED DATA***", frequency, crypt_lvl);
             }
             store_message_to_history(d, COMM_CHANNEL_RADIO, act(message, FALSE, ch, 0, d->character, TO_VICT));
             continue;
@@ -1011,8 +1011,8 @@ ACMD(do_broadcast)
           }
 
           // Append crypt info to radio string (if any).
-          if (crypt) {
-            snprintf(ENDOF(radio_string), sizeof(radio_string) - strlen(radio_string), "(CRYPTO-%d)", crypt);
+          if (crypt_lvl) {
+            snprintf(ENDOF(radio_string), sizeof(radio_string) - strlen(radio_string), "(CRYPTO-%d)", crypt_lvl);
           }
 
           // If we have bad reception, add the static modifier.
