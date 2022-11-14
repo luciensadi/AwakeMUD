@@ -515,6 +515,7 @@ const char *player_bits[] =
     "ENABLED_DRUGS",
     "SENT_DOCWAGON",
     "PAID_FOR_VNUMS",
+    "DOCWAGON_READY",
     "\n"
   };
 
@@ -635,6 +636,7 @@ struct preference_bit_struct preference_bits_v2[] = {
   { "No XTERM-256 Color"   , FALSE, TRUE  },
   { "Client-Configurable Color", FALSE, TRUE  },
   { "Don't Alert Doctors on Mort", FALSE, TRUE  },
+  { "MailLog"              , TRUE , TRUE  },
   { "\n"                   , 0    , 0     }
 };
 
@@ -709,6 +711,7 @@ const char *preference_bits[] =
     "!XTERM256",
     "COERCE_ANSI",
     "ALERT_DOCTORS_ON_MORT",
+    "MAILLOG",
     MAX_FLAG_MARKER
   };
 
@@ -1238,6 +1241,7 @@ const char *log_types[] =
     "ECONLOG",
     "RADLOG",
     "IGNORELOG",
+    "MAILLOG",
     "\n"
   };
 

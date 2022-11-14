@@ -68,7 +68,7 @@ void raw_store_mail(long to, long from_id, const char *from_name, const char *me
   // Log it.
   if (from_id > 0) {
     snprintf(mail_query_buf, sizeof(mail_query_buf), "MAIL: '%s' (%ld) wrote to %ld: '^n%s^g'", from_name, from_id, to, message_pointer);
-    mudlog(mail_query_buf, NULL, LOG_MISCLOG, TRUE);
+    mudlog(mail_query_buf, NULL, LOG_MAILLOG, TRUE);
   }
 
   // Notify pocket secretaries of online characters.

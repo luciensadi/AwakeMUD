@@ -1182,7 +1182,7 @@ ACMD(do_toggle)
       // Skip log bits.
       if ((i >= PRF_CONNLOG && i <= PRF_ZONELOG) || i == PRF_CHEATLOG || i == PRF_BANLOG || i == PRF_GRIDLOG || i == PRF_WRECKLOG
           || i == PRF_PGROUPLOG || i == PRF_HELPLOG || i == PRF_PURGELOG || i == PRF_FUCKUPLOG || i == PRF_ECONLOG || i == PRF_RADLOG
-          || i == PRF_IGNORELOG)
+          || i == PRF_IGNORELOG || i == PRF_MAILLOG)
         continue;
 
       // Skip pgroup tag pref for non-grouped.

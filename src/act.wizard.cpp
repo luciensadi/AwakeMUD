@@ -5401,7 +5401,7 @@ ACMD(do_logwatch)
   */
 
   if (!*buf) {
-    snprintf(buf, sizeof(buf), "You are currently watching the following:\r\n%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s",
+    snprintf(buf, sizeof(buf), "You are currently watching the following:\r\n%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s",
             (PRF_FLAGGED(ch, PRF_CONNLOG) ? "  ConnLog\r\n" : ""),
             (PRF_FLAGGED(ch, PRF_DEATHLOG) ? "  DeathLog\r\n" : ""),
             (PRF_FLAGGED(ch, PRF_MISCLOG) ? "  MiscLog\r\n" : ""),
@@ -5418,7 +5418,8 @@ ACMD(do_logwatch)
             (PRF_FLAGGED(ch, PRF_FUCKUPLOG) ? "  FuckupLog\r\n" : ""),
             (PRF_FLAGGED(ch, PRF_ECONLOG) ? "  EconLog\r\n" : ""),
             (PRF_FLAGGED(ch, PRF_RADLOG) ? "  RadLog\r\n" : ""),
-            (PRF_FLAGGED(ch, PRF_IGNORELOG) ? "  IgnoreLog\r\n" : "")
+            (PRF_FLAGGED(ch, PRF_IGNORELOG) ? "  IgnoreLog\r\n" : ""),
+            (PRF_FLAGGED(ch, PRF_MAILLOG) ? "  MailLog\r\n" : "")
           );
 
     send_to_char(buf, ch);
@@ -5587,6 +5588,16 @@ ACMD(do_logwatch)
     } else {
       send_to_char("You aren't permitted to view that log at your level.\r\n", ch);
     }
+  } else if (is_abbrev(buf, "maillog")) {
+    if (PRF_FLAGGED(ch, PRF_MAILLOG)) {
+      send_to_char("You no longer watch the IgnoreLog.\r\n", ch);
+      PRF_FLAGS(ch).RemoveBit(PRF_MAILLOG);
+    } else if (access_level(ch, LVL_ADMIN)) {
+      send_to_char("You will now see the MailLog.\r\n", ch);
+      PRF_FLAGS(ch).SetBit(PRF_MAILLOG);
+    } else {
+      send_to_char("You aren't permitted to view that log at your level.\r\n", ch);
+    }
   } else if (is_abbrev(buf, "all")) {
     if (!PRF_FLAGGED(ch, PRF_CONNLOG))
       PRF_FLAGS(ch).SetBit(PRF_CONNLOG);
@@ -5622,12 +5633,14 @@ ACMD(do_logwatch)
       PRF_FLAGS(ch).SetBit(PRF_RADLOG);
     if (!PRF_FLAGGED(ch, PRF_IGNORELOG) && access_level(ch, LVL_ADMIN))
       PRF_FLAGS(ch).SetBit(PRF_IGNORELOG);
+    if (!PRF_FLAGGED(ch, PRF_MAILLOG) && access_level(ch, LVL_ADMIN))
+      PRF_FLAGS(ch).SetBit(PRF_MAILLOG);
     send_to_char("All available logs have been activated.\r\n", ch);
   } else if (is_abbrev(buf, "none")) {
     PRF_FLAGS(ch).RemoveBits(PRF_CONNLOG, PRF_DEATHLOG, PRF_MISCLOG, PRF_WIZLOG,
                              PRF_SYSLOG, PRF_ZONELOG, PRF_CHEATLOG, PRF_BANLOG, PRF_GRIDLOG,
                              PRF_WRECKLOG, PRF_PGROUPLOG, PRF_HELPLOG, PRF_PURGELOG,
-                             PRF_FUCKUPLOG, PRF_ECONLOG, PRF_RADLOG, PRF_IGNORELOG, ENDBIT);
+                             PRF_FUCKUPLOG, PRF_ECONLOG, PRF_RADLOG, PRF_IGNORELOG, PRF_MAILLOG, ENDBIT);
     send_to_char("All logs have been disabled.\r\n", ch);
   } else
     send_to_char("Watch what log?\r\n", ch);

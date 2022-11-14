@@ -330,7 +330,8 @@ enum {
 #define PLR_ENABLED_DRUGS                   48
 #define PLR_SENT_DOCWAGON_PLAYER_ALERT      49
 #define PLR_PAID_FOR_VNUMS                  50
-#define PLR_MAX                             51
+#define PLR_DOCWAGON_READY                  51 /* Flags if a player has rolled successfully for DocWagon. */
+#define PLR_MAX                             52
 // Adding something here? Add it to constants.cpp's player_bits too.
 
 
@@ -447,7 +448,8 @@ enum {
 #define PRF_DISABLE_XTERM                      65
 #define PRF_COERCE_ANSI                        66
 #define PRF_DONT_ALERT_PLAYER_DOCTORS_ON_MORT  67
-#define PRF_MAX                                68
+#define PRF_MAILLOG                            68
+#define PRF_MAX                                69
 
 /* log watch */
 
@@ -469,10 +471,14 @@ enum {
 #define LOG_ECONLOG        15
 #define LOG_RADLOG         16
 #define LOG_IGNORELOG      17
-#define NUM_LOGS           18
-// If you add to this list, add your bit to act.other.cpp's 'skip log bits' section.
-// If you add to this list, also add the name of your new log type to constants.cpp's log_types[].
-// Finally, add to utils.cpp's mudlog() switch.
+#define LOG_MAILLOG        18
+#define NUM_LOGS           19
+// If you add to this list:
+//  - add your bit to act.other.cpp's 'skip log bits' section.
+//  - add the name of your new log type to constants.cpp's log_types[].
+//  - add it to utils.cpp's mudlog() switch.
+//  - add it to act.wizard.cpp's do_logwatch().
+//  - Make sure there's a corresponding PRF for it.
 
 /* player conditions */
 
