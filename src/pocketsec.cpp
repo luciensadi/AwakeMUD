@@ -95,9 +95,8 @@ void wire_nuyen(struct char_data *ch, int amount, vnum_t character_id)
 
   // Log it.
   char *player_name = targ ? NULL : get_player_name(character_id);
-  snprintf(query_buf, sizeof(query_buf), "%s wired %d nuyen to %s.", ch ? GET_CHAR_NAME(ch) : "An NPC", amount, targ ? GET_CHAR_NAME(targ) : player_name);
+  mudlog_vfprintf(ch, LOG_GRIDLOG, "%s wired %d nuyen to %s.", ch ? GET_CHAR_NAME(ch) : "An NPC", amount, targ ? GET_CHAR_NAME(targ) : player_name);
   DELETE_ARRAY_IF_EXTANT(player_name);
-  mudlog(query_buf, ch, LOG_SYSLOG, TRUE);
 }
 
 void pocketsec_phonemenu(struct descriptor_data *d)
