@@ -80,6 +80,7 @@ extern void write_world_to_disk(int vnum);
 extern void handle_weapon_attachments(struct obj_data *obj);
 extern void ensure_mob_has_ammo_for_weapon(struct char_data *ch, struct obj_data *weapon);
 extern void reset_host_paydata(rnum_t rnum);
+extern bool player_is_dead_hardcore(long id);
 
 extern bool House_can_enter_by_idnum(long idnum, vnum_t house);
 
@@ -5398,7 +5399,7 @@ void purge_unowned_vehs() {
     }
 
     // This vehicle is owned by a valid player: Do not delete.
-    if (does_player_exist(veh->owner)) {
+    if (does_player_exist(veh->owner) && !player_is_dead_hardcore(veh->owner)) {
       //snprintf(buf, sizeof(buf), "Skipping vehicle '%s' (%ld) since its owner is a valid player.", veh->short_description, veh->idnum);
       //log(buf);
 
