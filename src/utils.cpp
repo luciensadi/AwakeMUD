@@ -1950,23 +1950,20 @@ void magic_loss(struct char_data *ch, int magic, bool msg)
 // Note: some kits may still have workshop grade of 0 instead of TYPE_KIT.
 #define IS_KIT(obj, type) ( GET_OBJ_TYPE((obj)) == ITEM_WORKSHOP && GET_WORKSHOP_TYPE((obj)) == type && (GET_WORKSHOP_GRADE((obj)) == TYPE_KIT || GET_WORKSHOP_GRADE((obj)) == 0) )
 bool has_kit(struct char_data * ch, int type)
-{
-  struct obj_data *obj;
-  bool found = FALSE;
-  
-  for (obj = ch->carrying; obj && !found; obj = obj->next_content) {
+{  
+  for (struct obj_data *obj = ch->carrying; obj; obj = obj->next_content) {
     if (IS_KIT(obj, type)) {
-      found = TRUE;
+      return TRUE;
     }
   }
 
-  for (int i = 0; !found && i < (NUM_WEARS - 1); i++) {
+  for (int i = 0; i < (NUM_WEARS - 1); i++) {
     if (GET_EQ(ch, i) && IS_KIT(GET_EQ(ch, i), type)) {
-      found = TRUE;
+      return TRUE;
     }
   }
-
-  return found;
+  
+  return FALSE;
 }
 
 // Return true if the character has a key of the given number, false otherwise.
