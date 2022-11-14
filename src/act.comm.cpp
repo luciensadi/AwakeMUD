@@ -772,7 +772,7 @@ ACMD(do_radio)
       send_to_char(ch, "Your radio is currently centered at %d MHz. You can change the mode with ^WRADIO SCAN^n, or turn it off with ^WRADIO OFF^n.\r\n",
                    GET_OBJ_VAL(radio, (cyberware ? 3 : (vehicle ? 4 : 0))));
   } else
-    send_to_char("That's not a valid option.\r\n", ch);
+    send_to_char("Valid commands are ^WRADIO OFF^n, ^WRADIO SCAN^n, ^WRADIO CENTER <frequency>^n, ^WRADIO CRYPT <level>^n, and ^WRADIO MODE^n. See ^WHELP RADIO^n for more.\r\n", ch);
 }
 
 struct obj_data *find_radio(struct char_data *ch, bool *is_cyberware, bool *is_vehicular, bool must_be_on=FALSE) {
