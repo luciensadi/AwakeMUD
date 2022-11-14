@@ -162,7 +162,7 @@ void crash_test(struct char_data *ch)
 
   skill = veh_skill(ch, veh, &target) + veh->autonav;
 
-  if (success_test(skill, target) > 0)
+  if (success_test(skill, target, ch, "crash_test vehicle skill test") > 0)
   {
     snprintf(crash_buf, sizeof(crash_buf), "^y%s shimmies sickeningly under you, but you manage to keep control.^n\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
     send_to_veh(crash_buf, veh, NULL, TRUE);
@@ -180,7 +180,7 @@ void crash_test(struct char_data *ch)
   send_to_veh(crash_buf, veh, NULL, TRUE);
   send_to_room(buf, get_veh_in_room(veh), veh);
 
-  attack_resist = success_test(veh->body, power) * -1;
+  attack_resist = success_test(veh->body, power, ch, "crash_test attack_resist") * -1;
 
   int staged_damage = stage(attack_resist, damage_total);
   damage_total = convert_damage(staged_damage);
@@ -194,7 +194,7 @@ void crash_test(struct char_data *ch)
       next = tch->next_in_veh;
       char_from_room(tch);
       char_to_room(tch, get_veh_in_room(veh));
-      damage_total = convert_damage(stage(0 - success_test(GET_BOD(tch), power), MODERATE));
+      damage_total = convert_damage(stage(0 - success_test(GET_BOD(tch), power, tch, "crash_test damage resist"), MODERATE));
       send_to_char(tch, "You are thrown from the %s!\r\n", veh->type == VEH_BIKE ? "bike" : "boat");
       if (damage(tch, tch, damage_total, TYPE_CRASH, PHYSICAL)) {
         continue;
@@ -527,7 +527,7 @@ void do_raw_ram(struct char_data *ch, struct veh_data *veh, struct veh_data *tve
     act(buf, FALSE, vict, 0, 0, TO_CHAR);
     act(buf1, FALSE, vict, 0, 0, TO_ROOM);
     act("You head straight towards $N.", FALSE, ch, 0, vict, TO_CHAR);
-    if (GET_POS(vict) > POS_RESTING && success_test(GET_REA(vict), 4)) {
+    if (GET_POS(vict) > POS_RESTING && success_test(GET_REA(vict), 4, vict, "do_raw_ram victim reaction", ch)) {
       send_to_char(vict, "You quickly let out an attack at it!\r\n");
       act("$n quickly lets an attack fly.", FALSE, vict, 0, 0, TO_ROOM);
       act("$N suddenly attacks!", FALSE, ch, 0, vict, TO_CHAR);
@@ -539,16 +539,28 @@ void do_raw_ram(struct char_data *ch, struct veh_data *veh, struct veh_data *tve
     }
   }
   int skill = veh_skill(ch, veh, &target);
-  int success = success_test(skill, target);
+  int success = success_test(skill, target, ch, "do_raw_ram driving test", vict);
   if (vict) {
-    target = 4 + damage_modifier(vict, buf, sizeof(buf));
-    success -= success_test(GET_DEFENSE(vict), target);
+    if (IS_NPC(vict)) {
+      // Swap all dice into dodge for this round.
+      GET_DEFENSE(vict) += GET_BODY(vict) + GET_OFFENSE(vict);
+      GET_BODY(vict) = GET_OFFENSE(vict) = 0;
+    }
+    int vict_dodge_dice = GET_DEFENSE(vict) + (GET_TRADITION(vict) == TRAD_ADEPT ? GET_POWER(vict, ADEPT_SIDESTEP) : 0);
+    if (vict_dodge_dice > 0) {
+      target = 4 + damage_modifier(vict, buf, sizeof(buf));
+      int vict_successes = success_test(vict_dodge_dice, target, vict, "do_raw_ram dodge test", ch);
+      success -= vict_successes;
+    } else {
+      act("$n has no dodge dice allocated- cannot dodge.", TRUE, vict, 0, 0, TO_ROLLS);
+    }
   }
-  if (success > 0)
+  if (success > 0) {
     if (vict)
       vram(veh, vict, NULL);
     else
       vram(veh, NULL, tveh);
+  }
   else {
     crash_test(ch);
     chkdmg(veh);
@@ -652,7 +664,7 @@ ACMD(do_upgrade)
     } else if (mod_types[GET_VEHICLE_MOD_TYPE(mod)].tools == TYPE_WORKSHOP && kit == TYPE_FACILITY)
       target--;
 
-    if ((skill = success_test(skill, target)) == BOTCHED_ROLL_RESULT) {
+    if ((skill = success_test(skill, target, ch, "do_upgrade success test")) == BOTCHED_ROLL_RESULT) {
       send_to_char(ch, "You botch up the upgrade completely, destroying %s.\r\n", GET_OBJ_NAME(mod));
       extract_obj(mod);
       return;
@@ -666,13 +678,13 @@ ACMD(do_upgrade)
     if (GET_VEHICLE_MOD_TYPE(mod) == TYPE_DRIVEBYWIRE) {
       target = 4;
       skill = get_skill(ch, SKILL_BR_COMPUTER, target);
-      if (success_test(skill, target) < 0) {
+      if (success_test(skill, target, ch, "do_upgrade computers b/r test") < 0) {
         send_to_char("You can't seem to get your head around the computers on this part.\r\n", ch);
         return;
       }
       target = 4;
       skill = get_skill(ch, SKILL_BR_ELECTRONICS, target);
-      if (success_test(skill, target) < 0) {
+      if (success_test(skill, target, ch, "do_upgrade electronics b/r test") < 0) {
         send_to_char("You can't seem to get your head around the wiring on this part.\r\n", ch);
         return;
       }
@@ -1208,7 +1220,7 @@ ACMD(do_repair)
     target = 1;
   }
 
-  if ((success = (GET_LEVEL(ch) > LVL_MORTAL ? 50 : success_test(skill, target))) < 1) {
+  if ((success = (GET_LEVEL(ch) > LVL_MORTAL ? 50 : success_test(skill, target, ch, "do_repair"))) < 1) {
     send_to_char(ch, "You tinker with it a bit, but don't make much headway.\r\n");
     return;
   }
@@ -2001,7 +2013,7 @@ void process_autonav(void)
         veh->cspeed = SPEED_OFF;
         veh->dest = NULL;
         remove_vehicle_brain(veh);
-        
+
         // QoL - show destination room to vehicle occupants on arrival
         for (struct char_data *ch = veh->people; ch; ch = ch->next_in_veh) {
           if (!IS_NPC(ch) && !PRF_FLAGGED(ch, PRF_SCREENREADER)) {
