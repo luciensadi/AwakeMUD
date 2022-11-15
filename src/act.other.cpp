@@ -2069,7 +2069,6 @@ ACMD(do_unattach)
 ACMD(do_treat)
 {
   struct char_data *vict;
-  struct obj_data *obj;
   int target = 0, skill = 0;
   bool kit = FALSE, shop = FALSE;
 

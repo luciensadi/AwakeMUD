@@ -1161,7 +1161,7 @@ ACMD(do_subscribe)
 
 ACMD(do_repair)
 {
-  struct obj_data *obj, *shop = NULL;
+  struct obj_data *shop = NULL;
   struct veh_data *veh;
   int target = 4, skill = 0, success = 0;
   bool kit = FALSE;
