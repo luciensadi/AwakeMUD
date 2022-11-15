@@ -1119,7 +1119,7 @@ enum {
 #define BAN_SELECT      2
 #define BAN_ALL         3
 
-#define BANNED_SITE_LENGTH    50
+#define BANNED_SITE_LENGTH    50 // if you change this, update fscanf in ban.cpp
 
 /* weapon attack types */
 
@@ -2324,7 +2324,7 @@ enum {
 #define MAX_INPUT_LENGTH          2048     /* Max length per *line* of input */
 #define MAX_RAW_INPUT_LENGTH      4096     /* Max size of *raw* input */
 #define MAX_MESSAGES              100
-#define MAX_NAME_LENGTH           20  /* Used in char_file_u *DO*NOT*CHANGE* */
+#define MAX_NAME_LENGTH           20  /* Used in char_file_u *DO*NOT*CHANGE* */ // if you change this, update the fscanf in ban.cpp
 #define MAX_RESTRING_LENGTH       256
 
 #define MAX_PWD_LENGTH            30  /* Relic of the past, do not change. Dictates max length of crypt() hashes. */
