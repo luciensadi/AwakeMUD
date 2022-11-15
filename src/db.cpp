@@ -827,7 +827,7 @@ void index_boot(int mode)
     exit(ERROR_OPENING_INDEX_FILE);
   }
   /* first, count the number of records in the file so we can calloc */
-  fscanf(index, "%s\n", buf1);
+  fscanf(index, "%32767s\n", buf1);
   while (*buf1 != '$') {
     snprintf(buf2, sizeof(buf2), "%s/%s", prefix, buf1);
     if (!(db_file = fopen(buf2, "r"))) {
@@ -841,7 +841,7 @@ void index_boot(int mode)
       fclose(db_file);
     }
 
-    fscanf(index, "%s\n", buf1);
+    fscanf(index, "%32767s\n", buf1);
   }
   if (!rec_count) {
     log("SYSERR: boot error - 0 records counted");
@@ -947,7 +947,7 @@ void index_boot(int mode)
   }
 
   rewind(index);
-  fscanf(index, "%s\n", buf1);
+  fscanf(index, "%32767s\n", buf1);
   while (*buf1 != '$') {
     snprintf(buf2, sizeof(buf2), "%s/%s", prefix, buf1);
     File in_file(buf2, "r");
@@ -973,7 +973,7 @@ void index_boot(int mode)
       }
       in_file.Close();
     }
-    fscanf(index, "%s\n", buf1);
+    fscanf(index, "%32767s\n", buf1);
   }
   // Always important to clean up after yourself.
   fclose(index);
@@ -2170,10 +2170,9 @@ void parse_object(File &fl, long nr)
         DELETE_ARRAY_IF_EXTANT(obj->text.room_desc);
         obj->text.room_desc = str_dup(buf);
 
-        strcpy(buf, "A hefty box of ammunition, banded in metal and secured with flip-down hasps for transportation and storage.");
         // log_vfprintf("Changing %s to %s for %ld.", obj->text.look_desc, buf, nr);
         DELETE_ARRAY_IF_EXTANT(obj->text.look_desc);
-        obj->text.look_desc = str_dup(buf);
+        obj->text.look_desc = str_dup("A hefty box of ammunition, banded in metal and secured with flip-down hasps for transportation and storage.");
         break;
       case ITEM_WEAPON:
         // Attempt to automatically rectify broken weapons.
@@ -4638,9 +4637,10 @@ char *fread_string(FILE * fl, char *error)
 
   /* allocate space for the new string and copy it */
   if (strlen(buf) > 0) {
-    rslt = new char[length + 1];
-    memset(rslt, 0, sizeof(char) * (length + 1));
-    strcpy(rslt, buf);
+    size_t rslt_size = length + 1;
+    rslt = new char[rslt_size];
+    memset(rslt, 0, sizeof(char) * (rslt_size));
+    strlcpy(rslt, buf, rslt_size);
   } else
     rslt = NULL;
 
@@ -5002,7 +5002,7 @@ int file_to_string(const char *name, char *buf)
   do {
     fgets(tmp, sizeof(tmp) - 1, fl);
     tmp[MAX(0, (int)(strlen(tmp)) - 1)] = '\0';/* take off the trailing \n */
-    strcat(tmp, "\r\n");
+    strlcat(tmp, "\r\n", sizeof(tmp));
 
     if (!feof(fl)) {
       if (strlen(buf) + strlen(tmp) + 1 > MAX_STRING_LENGTH) {
@@ -5010,7 +5010,7 @@ int file_to_string(const char *name, char *buf)
         *buf = '\0';
         return (-1);
       }
-      strcat(buf, tmp);
+      strlcat(buf, tmp, sizeof(buf));
     }
   } while (!feof(fl));
 

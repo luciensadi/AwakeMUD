@@ -272,7 +272,7 @@ void Board_write_message(int board_type, struct obj_data *terminal,
     msg_storage_taken[NEW_MSG_INDEX(board_type).slot_num] = 0;
     return;
   }
-  strcpy(NEW_MSG_INDEX(board_type).heading, buf);
+  strlcpy(NEW_MSG_INDEX(board_type).heading, buf, len);
   NEW_MSG_INDEX(board_type).heading[len - 1] = '\0';
   NEW_MSG_INDEX(board_type).level = GET_LEVEL(ch);
 
@@ -402,7 +402,7 @@ int Board_reply_message(int board_type, struct obj_data *terminal,
     msg_storage_taken[NEW_MSG_INDEX(board_type).slot_num] = 0;
     return 1;
   }
-  strcpy(NEW_MSG_INDEX(board_type).heading, buf);
+  strlcpy(NEW_MSG_INDEX(board_type).heading, buf, len);
   NEW_MSG_INDEX(board_type).heading[len - 1] = '\0';
   NEW_MSG_INDEX(board_type).level = GET_LEVEL(ch);
 
