@@ -318,8 +318,10 @@ char *fread_action(FILE * fl, int nr)
     return (NULL);
   else {
     *(buf + strlen(buf) - 1) = '\0';
-    rslt = new char[strlen(buf) + 1];
-    strcpy(rslt, buf);
+
+    size_t rslt_size = strlen(buf) + 1;
+    rslt = new char[rslt_size];
+    strlcpy(rslt, buf, rslt_size);
     return (rslt);
   }
 }
@@ -346,7 +348,7 @@ void boot_social_messages(void)
 
   /* now read 'em */
   for (;;) {
-    fscanf(fl, " %s ", next_soc);
+    fscanf(fl, " %249s ", next_soc);
     if (*next_soc == '$')
       break;
     if ((nr = find_command(next_soc)) < 0)
