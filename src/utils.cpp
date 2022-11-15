@@ -1970,16 +1970,22 @@ void magic_loss(struct char_data *ch, int magic, bool msg)
 }
 
 // Return true if the character has a kit of the given type, false otherwise.
-#define IS_KIT(obj, type) (GET_OBJ_TYPE((obj)) == ITEM_WORKSHOP && GET_WORKSHOP_TYPE((obj)) == type && GET_WORKSHOP_GRADE((obj)) == TYPE_KIT)
+// Note: some kits may still have workshop grade of 0 instead of TYPE_KIT.
+#define IS_KIT(obj, type) ( GET_OBJ_TYPE((obj)) == ITEM_WORKSHOP && GET_WORKSHOP_TYPE((obj)) == type && (GET_WORKSHOP_GRADE((obj)) == TYPE_KIT || GET_WORKSHOP_GRADE((obj)) == 0) )
 bool has_kit(struct char_data * ch, int type)
-{
-  for (struct obj_data *o = ch->carrying; o; o = o->next_content)
-    if (IS_KIT(o, type))
+{  
+  for (struct obj_data *obj = ch->carrying; obj; obj = obj->next_content) {
+    if (IS_KIT(obj, type)) {
       return TRUE;
+    }
+  }
 
-  if (GET_EQ(ch, WEAR_HOLD) && IS_KIT(GET_EQ(ch, WEAR_HOLD), type))
-    return TRUE;
-
+  for (int i = 0; i < (NUM_WEARS - 1); i++) {
+    if (GET_EQ(ch, i) && IS_KIT(GET_EQ(ch, i), type)) {
+      return TRUE;
+    }
+  }
+  
   return FALSE;
 }
 

@@ -2070,7 +2070,8 @@ ACMD(do_treat)
 {
   struct char_data *vict;
   struct obj_data *obj;
-  int target = 0, i, found = 0, shop = 0;
+  int target = 0, skill = 0;
+  bool kit = FALSE, shop = FALSE;
 
   if (subcmd && (!IS_NPC(ch) || !(GET_MOB_SPEC(ch) || GET_MOB_SPEC2(ch))))
     return;
@@ -2135,17 +2136,14 @@ ACMD(do_treat)
   }
   if (vict->in_room && ROOM_FLAGGED(vict->in_room, ROOM_STERILE))
     target -= 2;
-  i = get_skill(ch, SKILL_BIOTECH, target);
+  skill = get_skill(ch, SKILL_BIOTECH, target);
 
   if (find_workshop(ch, TYPE_MEDICAL))
-    shop = 1;
-  for (obj = ch->carrying; obj && !found; obj = obj->next_content)
-    if (GET_OBJ_TYPE(obj) == ITEM_WORKSHOP && GET_OBJ_VAL(obj, 1) == 0 && GET_OBJ_VAL(obj, 0) == 6)
-      found = 1;
-  for (i = 0; !found && i < (NUM_WEARS - 1); i++)
-    if ((obj = GET_EQ(ch, i)) && GET_OBJ_TYPE(obj) == ITEM_WORKSHOP && GET_OBJ_VAL(obj, 1) == 0 && GET_OBJ_VAL(obj, 0) == 6)
-      found = 1;
-  if (!found && !subcmd && !shop)
+    shop = TRUE;
+
+  kit = has_kit(ch, TYPE_MEDICAL);
+
+  if (!kit && !subcmd && !shop)
     target += 4;
 
   if (!shop)
@@ -2165,7 +2163,7 @@ ACMD(do_treat)
   } else {
     act("$n begins to treat $N.", TRUE, ch, 0, vict, TO_NOTVICT);
   }
-  if (success_test(i, target) > 0) {
+  if (success_test(skill, target) > 0) {
     act("$N appears better.", FALSE, ch, 0, vict, TO_CHAR);
     if (ch == vict) {
       send_to_char(ch, "The pain seems significantly better.\r\n");
