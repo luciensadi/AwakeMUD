@@ -20,7 +20,6 @@
 #include <unordered_map>
 
 #if defined(WIN32) && !defined(__CYGWIN__)
-#define popen(x,y) _popen(x,y)
 #else
 #include <sys/time.h>
 #endif
@@ -364,7 +363,7 @@ ACMD(do_copyover)
 
   chdir ("..");
 
-  execl (EXE_FILE, "awake", buf2, buf, (char *) NULL);
+  execl (EXE_FILE, "awake", buf2, buf, (char *) NULL); // Flawfinder: ignore
 
   /* Failed - sucessful exec will not return */
 
@@ -1051,14 +1050,14 @@ void do_stat_room(struct char_data * ch)
 
   if (rm->ex_description)
   {
-    strcpy(buf, "Extra descs:^c");
+    strlcpy(buf, "Extra descs:^c", sizeof(buf));
     for (desc = rm->ex_description; desc; desc = desc->next) {
       strlcat(buf, " ", sizeof(buf));
       strlcat(buf, desc->keyword, sizeof(buf));
     }
     send_to_char(ch, "%s^n\r\n", buf);
   }
-  strcpy(buf, "Chars present:^y");
+  strlcpy(buf, "Chars present:^y", sizeof(buf));
   for (found = 0, k = rm->people; k; k = k->next_in_room)
   {
     if (!CAN_SEE(ch, k))
@@ -1083,7 +1082,7 @@ void do_stat_room(struct char_data * ch)
 
   if (rm->contents)
   {
-    strcpy(buf, "Contents:^g");
+    strlcpy(buf, "Contents:^g", sizeof(buf));
     for (found = 0, j = rm->contents; j; j = j->next_content) {
       if (!CAN_SEE_OBJ(ch, j))
         continue;
@@ -1123,7 +1122,7 @@ void do_stat_room(struct char_data * ch)
   {
     if (rm->dir_option[i]) {
       if (!rm->dir_option[i]->to_room)
-        strcpy(buf1, " ^cNONE^n");
+        strlcpy(buf1, " ^cNONE^n", sizeof(buf1));
       else
         snprintf(buf1, sizeof(buf1), "^c%8ld^n", rm->dir_option[i]->to_room->number);
       sprintbit(rm->dir_option[i]->exit_info, exit_bits, buf2, sizeof(buf2));
@@ -1132,9 +1131,9 @@ void do_stat_room(struct char_data * ch)
               rm->dir_option[i]->keyword ? rm->dir_option[i]->keyword : "None", buf2);
       send_to_char(buf, ch);
       if (rm->dir_option[i]->general_description)
-        strcpy(buf, rm->dir_option[i]->general_description);
+        strlcpy(buf, rm->dir_option[i]->general_description, sizeof(buf));
       else
-        strcpy(buf, "  No exit description.\r\n");
+        strlcpy(buf, "  No exit description.\r\n", sizeof(buf));
       send_to_char(buf, ch);
     }
   }
@@ -1220,11 +1219,11 @@ void do_stat_object(struct char_data * ch, struct obj_data * j)
   if (GET_OBJ_RNUM(j) >= 0)
   {
     if (GET_OBJ_TYPE(j) == ITEM_WEAPON)
-      strcpy(buf2, (obj_index[GET_OBJ_RNUM(j)].wfunc ? "^cExists^n" : "None"));
+      strlcpy(buf2, (obj_index[GET_OBJ_RNUM(j)].wfunc ? "^cExists^n" : "None"), sizeof(buf2));
     else
-      strcpy(buf2, (obj_index[GET_OBJ_RNUM(j)].func ? "^cExists^n" : "None"));
+      strlcpy(buf2, (obj_index[GET_OBJ_RNUM(j)].func ? "^cExists^n" : "None"), sizeof(buf2));
   } else
-    strcpy(buf2, "None");
+    strlcpy(buf2, "None", sizeof(buf2));
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "VNum: [^g%8ld^n], RNum: [%5ld], Type: %s, SpecProc: %s\r\n",
           virt, GET_OBJ_RNUM(j), buf1, buf2);
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "L-Des: %s\r\n",
@@ -1441,16 +1440,16 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
   switch (GET_SEX(k))
   {
   case SEX_NEUTRAL:
-    strcpy(buf, "NEUTRAL-SEX");
+    strlcpy(buf, "NEUTRAL-SEX", sizeof(buf));
     break;
   case SEX_MALE:
-    strcpy(buf, "MALE");
+    strlcpy(buf, "MALE", sizeof(buf));
     break;
   case SEX_FEMALE:
-    strcpy(buf, "FEMALE");
+    strlcpy(buf, "FEMALE", sizeof(buf));
     break;
   default:
-    strcpy(buf, "ILLEGAL-SEX!!");
+    strlcpy(buf, "ILLEGAL-SEX!!", sizeof(buf));
     break;
   }
 
@@ -1508,8 +1507,8 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
              GET_TKE(k),
              GET_SYSTEM_POINTS(k));
 
-  strcpy(buf1, (const char *) asctime(localtime(&(k->player.time.birth))));
-  strcpy(buf2, (const char *) asctime(localtime(&(k->player.time.lastdisc))));
+  strlcpy(buf1, (const char *) asctime(localtime(&(k->player.time.birth))), sizeof(buf1));
+  strlcpy(buf2, (const char *) asctime(localtime(&(k->player.time.lastdisc))), sizeof(buf2));
   buf1[10] = buf2[10] = '\0';
 
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Created: [%s], Last Online: [%s], Played [%dh %dm]\r\n",
@@ -1631,16 +1630,16 @@ void do_stat_mobile(struct char_data * ch, struct char_data * k)
   switch (GET_SEX(k))
   {
   case SEX_NEUTRAL:
-    strcpy(buf, "NEUTRAL-SEX");
+    strlcpy(buf, "NEUTRAL-SEX", sizeof(buf));
     break;
   case SEX_MALE:
-    strcpy(buf, "MALE");
+    strlcpy(buf, "MALE", sizeof(buf));
     break;
   case SEX_FEMALE:
-    strcpy(buf, "FEMALE");
+    strlcpy(buf, "FEMALE", sizeof(buf));
     break;
   default:
-    strcpy(buf, "ILLEGAL-SEX!!");
+    strlcpy(buf, "ILLEGAL-SEX!!", sizeof(buf));
     break;
   }
   send_to_char(ch, "^c%s^n ", pc_race_types[(int)GET_RACE(k)]);
@@ -1807,7 +1806,7 @@ ACMD(do_stat)
       if ((idnum = atoi(buf2)) > 0) {
         const char *char_name = get_player_name(idnum);
         if (char_name) {
-          strcpy(buf2, char_name);
+          strlcpy(buf2, char_name, sizeof(buf2));
           delete [] char_name;
         } else {
           send_to_char(ch, "Idnum %d does not correspond to any existing PC.\r\n", idnum);
@@ -4004,7 +4003,7 @@ ACMD(do_show)
   skip_spaces(&argument);
 
   if (!*argument) {
-    strcpy(buf, "Show options:\r\n");
+    strlcpy(buf, "Show options:\r\n", sizeof(buf));
     for (j = 0, i = 1; fields[i].level; i++)
       if (access_level(ch, fields[i].level))
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-15s%s", fields[i].cmd, (!(++j % 5) ? "\r\n" : ""));
@@ -4013,7 +4012,7 @@ ACMD(do_show)
     return;
   }
 
-  strcpy(arg, two_arguments(argument, field, value));
+  strlcpy(arg, two_arguments(argument, field, value), sizeof(arg));
 
   for (l = 0; *(fields[l].cmd) != '\n'; l++)
     if (!strncmp(field, fields[l].cmd, strlen(field)))
@@ -4077,7 +4076,7 @@ ACMD(do_show)
               genders[(int) GET_SEX(vict)], GET_LEVEL(vict));
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Y: %-8ld  Bal: %-8ld  Karma: %-8d\r\n",
               GET_NUYEN(vict), GET_BANK(vict), GET_KARMA(vict));
-      strcpy(birth, ctime(&vict->player.time.birth));
+      strlcpy(birth, ctime(&vict->player.time.birth), sizeof(birth));
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Started: %-20.16s  Last: %-20.16s  Played: %3dh %2dm\r\n",
               birth, ctime(&vict->player.time.lastdisc),
               (int) (vict->player.time.played / 3600),
@@ -4130,7 +4129,7 @@ ACMD(do_show)
     send_to_char(buf, ch);
     break;
   case 5:
-    strcpy(buf, "Errant Rooms\r\n------------\r\n");
+    strlcpy(buf, "Errant Rooms\r\n------------\r\n", sizeof(buf));
     for (i = 0, k = 0; i <= top_of_world; i++)
       for (j = 0; j < NUM_OF_DIRS; j++)
         if (world[i].dir_option[j] && !world[i].dir_option[j]->to_room && i != last) {
@@ -4140,7 +4139,7 @@ ACMD(do_show)
     send_to_char(buf, ch);
     break;
   case 6:
-    strcpy(buf, "Death Traps\r\n-----------\r\n");
+    strlcpy(buf, "Death Traps\r\n-----------\r\n", sizeof(buf));
     for (i = 0, j = 0; i <= top_of_world; i++)
       if (ROOM_FLAGGED(&world[i], ROOM_DEATH))
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%2d: [%8ld] %s %s\r\n", ++j,
@@ -4152,7 +4151,7 @@ ACMD(do_show)
   case 7:
 #define GOD_ROOMS_ZONE 0
 
-    strcpy(buf, "Godrooms\r\n--------------------------\r\n");
+    strlcpy(buf, "Godrooms\r\n--------------------------\r\n", sizeof(buf));
     for (i = 0, j = 0; i <= zone_table[real_zone(GOD_ROOMS_ZONE)].top; i++)
       if (world[i].zone == GOD_ROOMS_ZONE && i > 1 && !(i >= 8 && i <= 12))
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%2d: [%8ld] %s %s\r\n", j++, world[i].number,
@@ -4231,7 +4230,7 @@ ACMD(do_show)
     break;
   case 13:
     {
-      strcpy(buf, "Jackpoints\r\n---------\r\n");
+      strlcpy(buf, "Jackpoints\r\n---------\r\n", sizeof(buf));
 
       char io_color[3];
       for (i = 0, j = 0; i <= top_of_world; i++) {
@@ -4342,7 +4341,7 @@ ACMD(do_show)
     send_to_char("\r\n", ch);
     break;
   case 17:
-    strcpy(buf, "Exitless Rooms\r\n-----------\r\n");
+    strlcpy(buf, "Exitless Rooms\r\n-----------\r\n", sizeof(buf));
     for (i = 0, j = 0; i <= top_of_world; i++) {
       // Don't need to hear about the imm zones.
       if (!room_has_any_exits(&world[i])) {
@@ -4355,7 +4354,7 @@ ACMD(do_show)
     send_to_char(buf, ch);
     break;
   case 18:
-    strcpy(buf, "Trap Rooms\r\n-----------\r\n");
+    strlcpy(buf, "Trap Rooms\r\n-----------\r\n", sizeof(buf));
     int dir;
     for (i = 0, j = 0; i <= top_of_world; i++) {
       for (dir = 0; dir <= DOWN; dir++) {
@@ -4387,7 +4386,7 @@ ACMD(do_show)
     display_pockets_to_char(ch, vict);
     break;
   case 20:
-    strcpy(buf, "Storage Rooms\r\n-----------\r\n");
+    strlcpy(buf, "Storage Rooms\r\n-----------\r\n", sizeof(buf));
     for (i = 0, j = 0; i <= top_of_world; i++)
       if (ROOM_FLAGGED(&world[i], ROOM_STORAGE))
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%4d: [%8ld] %s %s\r\n", ++j,
@@ -4486,7 +4485,7 @@ ACMD(do_show)
       for (i = 0; i < ROOM_MAX; i++) {
         if (str_str(room_bits[i], value)) {
           send_to_char(ch, "Rooms with flag %s set:\r\n", room_bits[i]);
-          strcpy(buf, "Exitless Rooms\r\n-----------\r\n");
+          strlcpy(buf, "Exitless Rooms\r\n-----------\r\n", sizeof(buf));
           for (k = 0, j = 0; k <= top_of_world; k++)
             if (ROOM_FLAGGED(&world[k], i))
               send_to_char(ch, "%4d: [%8ld] %s %s\r\n", ++j,
@@ -4730,7 +4729,7 @@ ACMD(do_set)
     strlcpy(buf, one_argument(buf, name), sizeof(buf));
   }
   half_chop(buf, field, buf2);
-  strcpy(val_arg, buf2);
+  strlcpy(val_arg, buf2, sizeof(val_arg));
 
   if (!*name || !*field) {
     send_to_char("Usage: set <victim> <field> <value>\r\n", ch);
@@ -4818,7 +4817,7 @@ ACMD(do_set)
   if (l != 86)
     mudlog(buf, ch, LOG_WIZLOG, TRUE );
 
-  strcpy(buf, "Okay.");  /* can't use OK macro here 'cause of \r\n */
+  strlcpy(buf, "Okay.", sizeof(buf));  /* can't use OK macro here 'cause of \r\n */
   switch (l) {
   case 0:
     SET_OR_REMOVE(PRF_FLAGS(vict), PRF_CONNLOG);
@@ -5074,7 +5073,7 @@ ACMD(do_set)
       } else
         snprintf(buf, sizeof(buf), "That room does not exist!");
     } else
-      strcpy(buf, "Must be 'off' or a room's virtual number.\r\n");
+      strlcpy(buf, "Must be 'off' or a room's virtual number.\r\n", sizeof(buf));
     break;
   case 38:
     if (GET_IDNUM(ch) != 1 || !IS_NPC(vict)) {
@@ -6248,53 +6247,6 @@ ACMD(do_settime)
   }
 
   send_to_char("Ok.\r\n", ch);
-  return;
-}
-
-ACMD(do_tail)
-{
-  char arg[MAX_STRING_LENGTH];
-  FILE *out = NULL;
-  int lines = 20;
-
-  //out = new FILE;
-  char buf[MAX_STRING_LENGTH];
-
-  two_arguments(argument, arg, buf);
-
-  if ( !*arg ) {
-    send_to_char( "Syntax note: tail <lines into history to read> <logfile>\r\n", ch );
-    send_to_char( "The following logs are available:\r\n", ch );
-    snprintf(buf, sizeof(buf), "ls -C ../log" );
-  } else {
-    if ( atoi( arg ) != 0 ) {
-      lines = atoi( arg );
-      if ( lines < 0 )
-        lines = 0 - lines;
-      // strcpy( arg, buf );
-    }
-
-    // Only allow letters, periods, numbers, and dashes.
-    int index = 0;
-    for (char *ptr = buf; *ptr && index < MAX_STRING_LENGTH; ptr++) {
-      if (!isalnum(*ptr) && *ptr != '.' && *ptr != '-')
-        continue;
-      else
-        arg[index++] = *ptr;
-    }
-    arg[index] = '\0';
-
-    send_to_char(ch, "tail -%d ../log/%s\r\n", lines, arg );
-  }
-  snprintf(arg, sizeof(arg), "%s", buf );
-
-  out=popen( arg, "r");
-
-  while (fgets(buf, MAX_STRING_LENGTH-5, out) != NULL) {
-    strlcat(buf,"\r", sizeof(buf));
-    send_to_char( buf, ch );
-  }
-  fclose( out );
   return;
 }
 

@@ -346,7 +346,6 @@ ACMD_DECLARE(do_survey);
 ACMD_DECLARE(do_switch);
 ACMD_DECLARE(do_switched_message_history);
 ACMD_DECLARE(do_syspoints);
-ACMD_DECLARE(do_tail);
 ACMD_DECLARE(do_teleport);
 ACMD_DECLARE(do_tell);
 ACMD_DECLARE(do_think);
@@ -871,7 +870,6 @@ struct command_info cmd_info[] =
     { "take"       , POS_RESTING , do_get      , 0, SCMD_TAKE, FALSE },
     { "target"     , POS_SITTING , do_target   , 0, 0, FALSE },
     { "taste"      , POS_RESTING , do_eat      , 0, SCMD_TASTE, FALSE },
-    { "tail"       , POS_DEAD    , do_tail     , LVL_DEVELOPER, 0, FALSE },
     { "teleport"   , POS_DEAD    , do_teleport , LVL_CONSPIRATOR, 0, FALSE },
     { "think"      , POS_LYING   , do_think    , 0, 0, FALSE },
     { "throw"      , POS_FIGHTING, do_throw    , 0, 0, FALSE },
