@@ -45,6 +45,27 @@ void update_withdrawal_flags(struct char_data *ch);
 void _put_char_in_withdrawal(struct char_data *ch, int drug_id, bool is_guided);
 bool _take_anti_drug_chems(struct char_data *ch, int drug_id);
 
+ACMD(do_drugs) {
+  FAILURE_CASE(IS_NPC(ch), "NPCs don't have drug information.\r\n");
+
+  send_to_char(ch, "The following OOC information is available on your drug states:\r\n");
+
+  for (int drug_id = MIN_DRUG; drug_id < NUM_DRUGS; drug_id++) {
+    if (GET_DRUG_LIFETIME_DOSES(ch, drug_id)) {
+      send_to_char(ch, "^W%s^n: ^c%d^n tolerance, ^c%d^n lifetime doses.",
+                   drug_types[drug_id].name,
+                   GET_DRUG_TOLERANCE_LEVEL(ch, drug_id),
+                   GET_DRUG_LIFETIME_DOSES(ch, drug_id));
+      if (GET_DRUG_ADDICT(ch, drug_id) || GET_DRUG_ADDICTION_EDGE(ch, drug_id)) {
+        send_to_char(ch, " %s, addiction edge ^c%d^n.",
+                     GET_DRUG_ADDICT(ch, drug_id) ? "^yAddicted^n" : "^cNot addicted^n",
+                     GET_DRUG_ADDICTION_EDGE(ch, drug_id));
+      }
+      send_to_char("\r\n", ch);
+    }
+  }
+}
+
 
 // Given a character and a drug object, dose the character with that drug object, then extract it if needed. Effects apply at next limit tick.
 bool do_drug_take(struct char_data *ch, struct obj_data *obj) {

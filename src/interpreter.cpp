@@ -175,6 +175,7 @@ ACMD_DECLARE(do_drag);
 ACMD_DECLARE(do_drink);
 ACMD_DECLARE(do_drive);
 ACMD_DECLARE(do_drop);
+ACMD_DECLARE(do_drugs);
 ACMD_DECLARE(do_eat);
 ACMD_DECLARE(do_echo);
 ACMD_DECLARE(do_new_echo);
@@ -580,6 +581,7 @@ struct command_info cmd_info[] =
     { "drop"       , POS_LYING   , do_drop     , 0, SCMD_DROP, FALSE },
     { "draw"       , POS_RESTING , do_draw     , 0, 0, FALSE },
     { "driveby"    , POS_SITTING , do_driveby  , 0, 0, FALSE },
+    { "drugs"      , POS_MORTALLYW, do_drugs   , 0, 0, FALSE },
 
     { "eat"        , POS_RESTING , do_eat      , 0, SCMD_EAT, FALSE },
     { "echo"       , POS_SLEEPING, do_new_echo , 0, SCMD_ECHO, FALSE },
