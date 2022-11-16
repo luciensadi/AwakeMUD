@@ -504,6 +504,11 @@ void apply_vision_bits_from_implant(struct char_data *ch, struct obj_data *impla
 }
 
 bool has_flare_compensation(struct char_data *ch) {
+  // Adept flare comp.
+  if (GET_POWER(ch, ADEPT_FLARE)) {
+    return TRUE;
+  }
+    
   // Find cybernetic flare comp.
   for (struct obj_data *cyber = ch->cyberware; cyber; cyber = cyber->next_content) {
     if (GET_CYBERWARE_TYPE(cyber) == CYB_EYES && IS_SET(GET_CYBERWARE_FLAGS(cyber), EYE_FLARECOMP)) {
