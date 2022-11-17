@@ -202,7 +202,7 @@ void assign_johnsons(void);
 void randomize_shop_prices(void);
 int zone_is_empty(int zone_nr);
 void reset_zone(int zone, int reboot);
-int file_to_string(const char *name, char *buf);
+int file_to_string(const char *name, char *buf, size_t buf_size);
 int file_to_string_alloc(const char *name, char **buf);
 void check_start_rooms(void);
 void renum_world(void);
@@ -4974,8 +4974,10 @@ int file_to_string_alloc(const char *name, char **buf)
 {
   char temp[MAX_STRING_LENGTH];
 
-  if (file_to_string(name, temp) < 0)
+  if (file_to_string(name, temp, sizeof(temp)) < 0)
     return -1;
+
+  log_vfprintf("file_to_string_alloc: File '%s' read out as '%s'.", name, temp);
 
   DELETE_ARRAY_IF_EXTANT(*buf);
 
@@ -4985,11 +4987,11 @@ int file_to_string_alloc(const char *name, char **buf)
 }
 
 /* read contents of a text file, and place in buf */
-int file_to_string(const char *name, char *buf)
+int file_to_string(const char *name, char *buf, size_t buf_size)
 {
   FILE *fl;
   // Made it hella long. It's 2020, let clients word wrap their own shit.
-  char tmp[2000];
+  char tmp[MAX_STRING_LENGTH];
   memset(tmp, 0, sizeof(tmp));
 
   *buf = '\0';
@@ -5010,7 +5012,7 @@ int file_to_string(const char *name, char *buf)
         *buf = '\0';
         return (-1);
       }
-      strlcat(buf, tmp, sizeof(buf));
+      strlcat(buf, tmp, buf_size);
     }
   } while (!feof(fl));
 
