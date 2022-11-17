@@ -2985,6 +2985,8 @@ ACMD(do_deduct)
 
   // Since we subtracted rep for this, we need to re-add it.
   GET_REP(vict) += (int) (k / 100);
+  // We also need to account for the TKE loss.
+  GET_TKE(vict) += (int) (k / 100);
 
   send_to_char(vict, "You have been deducted %0.2f karma for %s%s^n\r\n", (float)k*0.01, reason, ispunct(get_final_character_from_string(reason)) ? "" : ".");
 
