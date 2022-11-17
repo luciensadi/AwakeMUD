@@ -3301,8 +3301,8 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
         }
 
       } else {
-        if (PLR_FLAGGED(ch, PLR_DOCWAGON_READY)) {
-          docwagon_retrieve(ch);
+        if (PLR_FLAGGED(victim, PLR_DOCWAGON_READY)) {
+          docwagon_retrieve(victim);
           return TRUE;
         } else {
           act("$n slumps in a pile. You hear sirens as a DocWagon rushes in and grabs $m.", FALSE, victim, 0, 0, TO_ROOM);
