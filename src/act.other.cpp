@@ -1535,9 +1535,14 @@ ACMD(do_skills)
         strlcat(buf, buf2, sizeof(buf));
       }
     }
-    snprintf(buf2, sizeof(buf2), "You have %.2f powerpoints remaining and %.2f points of powers activated.\r\n", (float)GET_PP(ch) / 100,
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "You have ^c%.2f^n powerpoints remaining and ^c%.2f^n points of powers activated.\r\n", (float)GET_PP(ch) / 100,
                   (float)GET_POWER_POINTS(ch) / 100);
-    strlcat(buf, buf2, sizeof(buf));
+
+#ifndef DIES_IRAE
+    // In Dies Irae, the addpoint command is not available.
+    int unpurchased_points = (int)(GET_TKE(ch) / 50) + 1 - ch->points.extrapp;
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "You have ^c%d^n point%s of ^WADDPOINT^n available.\r\n", unpurchased_points, unpurchased_points == 1 ? "" : "s");
+#endif
   }
   send_to_char(buf, ch);
 }

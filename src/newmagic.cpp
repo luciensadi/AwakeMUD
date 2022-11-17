@@ -5963,6 +5963,8 @@ ACMD(do_initiate)
     return;
   }
 
+  skip_spaces(&argument);
+
   if (subcmd == SCMD_INITIATE && init_cost(ch, FALSE)) {
     // Enforce grade restrictions. We can't do this init_cost since it's used elsewhere.
     if ((GET_GRADE(ch) + 1) > INITIATION_CAP) {
@@ -5986,15 +5988,14 @@ ACMD(do_initiate)
       return;
     }
 
-    if (GET_KARMA(ch) < 2000) {
-      send_to_char("You do not have enough karma to purchase a powerpoint. It costs 20 karma.\r\n", ch);
-      return;
-    }
+    FAILURE_CASE(GET_KARMA(ch) < 2000, "You do not have enough karma to purchase a powerpoint. It costs 20 karma.\r\n");
 
     if (ch->points.extrapp > (int)(GET_TKE(ch) / 50)) {
       send_to_char(ch, "You haven't earned enough TKE to purchase %s powerpoint yet. You need at least %d.\r\n", ch->points.extrapp ? "another" : "a", 50 * ch->points.extrapp);
       return;
     }
+
+    FAILURE_CASE(!*argument || str_cmp(argument, "confirm") != 0, "If you're sure you want to spend 20 karma to purchase a powerpoint, type ^WADDPOINT CONFIRM^n.\r\n");
 
     GET_KARMA(ch) -= 2000;
     GET_PP(ch) += 100;
