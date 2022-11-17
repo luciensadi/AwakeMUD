@@ -6581,18 +6581,22 @@ ACMD(do_shopfind)
       continue;
     }
 
+    // Get their location.
+    location = -1;
+    for (struct char_data *i = character_list; i; i = i->next)
+      if (GET_MOB_VNUM(i) == shop_table[shop_nr].keeper && i->in_room) {
+        location = GET_ROOM_VNUM(i->in_room);
+        break;
+      }
+
     for (struct shop_sell_data *sell = shop_table[shop_nr].selling; sell; sell = sell->next) {
       int real_obj = real_object(sell->vnum);
-      if (real_obj < 0)
+      if (real_obj < 0) {
+        mudlog_vfprintf(NULL, LOG_SYSLOG, "Warning: Shop %ld has invalid item %ld for sale!", shop_table[shop_nr].vnum, sell->vnum);
         continue;
-
-      location = -1;
+      }
 
       if (number) {
-        for (struct char_data *i = character_list; i; i = i->next)
-          if (GET_MOB_VNUM(i) == shop_table[shop_nr].keeper && i->in_room)
-            location = GET_ROOM_VNUM(i->in_room);
-
         if (sell->vnum == number) {
           send_to_char(ch, "%3d)  Shop %8ld (%s @ %ld)\r\n",
                        ++index,
@@ -6601,10 +6605,6 @@ ACMD(do_shopfind)
                        location);
         }
       } else if (isname(buf2, obj_proto[real_obj].text.name) || isname(buf2, obj_proto[real_obj].text.keywords)) {
-        for (struct char_data *i = character_list; i; i = i->next)
-          if (GET_MOB_VNUM(i) == shop_table[shop_nr].keeper && i->in_room)
-            location = GET_ROOM_VNUM(i->in_room);
-
         send_to_char(ch, "%3d)  Shop %8ld (%s @ %ld) sells %s (%ld)\r\n",
                      ++index,
                      shop_table[shop_nr].vnum,
