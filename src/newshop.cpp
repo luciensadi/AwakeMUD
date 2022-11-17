@@ -2249,7 +2249,7 @@ SPECIAL(shop_keeper)
 
   skip_spaces(&argument);
   if (CMD_IS("buy"))
-    shop_buy(argument, sizeof(argument), ch, keeper, shop_nr);
+    shop_buy(argument, strlen(argument), ch, keeper, shop_nr);
   else if (CMD_IS("sell"))
     shop_sell(argument, ch, keeper, shop_nr);
   else if (CMD_IS("list"))

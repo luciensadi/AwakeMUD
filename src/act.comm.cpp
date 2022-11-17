@@ -65,20 +65,23 @@ ACMD(do_say)
 
   FAILURE_CASE(AFF_FLAGGED(ch, AFF_RIG), "You have no mouth.");
 
+  char arg_known_size[MAX_INPUT_LENGTH + 1];
+  strlcpy(arg_known_size, argument, sizeof(arg_known_size));
+
   if (PLR_FLAGGED(ch, PLR_MATRIX)) {
-    if (subcmd != SCMD_OSAY && !has_required_language_ability_for_sentence(ch, argument, language))
+    if (subcmd != SCMD_OSAY && !has_required_language_ability_for_sentence(ch, arg_known_size, language))
       return;
 
     // We specifically do not use color highlights in the Matrix. Some people want their mtx persona distinct from their normal one.
 
     if (ch->persona) {
       // Send the self-referencing message to the decker and store it in their history.
-      snprintf(buf, sizeof(buf), "You say, \"%s^n\"\r\n", capitalize(argument));
+      snprintf(buf, sizeof(buf), "You say, \"%s^n\"\r\n", capitalize(arg_known_size));
       send_to_icon(ch->persona, buf);
       store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, buf);
 
       // Send the message to the rest of the host. Store it to the recipients' says history.
-      snprintf(buf, sizeof(buf), "%s^n says, \"%s^n\"\r\n", ch->persona->name, capitalize(argument));
+      snprintf(buf, sizeof(buf), "%s^n says, \"%s^n\"\r\n", ch->persona->name, capitalize(arg_known_size));
       // send_to_host(ch->persona->in_host, buf, ch->persona, TRUE);
       for (struct matrix_icon *i = matrix[ch->persona->in_host].icons; i; i = i->next_in_host) {
         if (ch->persona != i && i->decker && has_spotted(i, ch->persona)) {
@@ -95,12 +98,12 @@ ACMD(do_say)
       for (struct char_data *targ = get_ch_in_room(ch)->people; targ; targ = targ->next_in_room)
         if (targ != ch && PLR_FLAGGED(targ, PLR_MATRIX) && !IS_IGNORING(targ, is_blocking_ic_interaction_from, ch)) {
           // Send and store.
-          snprintf(buf, sizeof(buf), "Your hitcher says, \"%s^n\"\r\n", capitalize(argument));
+          snprintf(buf, sizeof(buf), "Your hitcher says, \"%s^n\"\r\n", capitalize(arg_known_size));
           send_to_char(buf, targ);
           store_message_to_history(targ->desc, COMM_CHANNEL_SAYS, buf);
         }
       // Send and store.
-      snprintf(buf, sizeof(buf), "You send, down the line, \"%s^n\"\r\n", capitalize(argument));
+      snprintf(buf, sizeof(buf), "You send, down the line, \"%s^n\"\r\n", capitalize(arg_known_size));
       send_to_char(buf, ch);
       store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, buf);
     }
@@ -108,8 +111,8 @@ ACMD(do_say)
   }
 
   if (subcmd == SCMD_SAYTO) {
-    half_chop(argument, buf, buf2);
-    strlcpy(argument, buf2, sizeof(argument));
+    half_chop(arg_known_size, buf, buf2);
+    strlcpy(arg_known_size, buf2, sizeof(arg_known_size));
 
     if (ch->in_veh)
       to = get_char_veh(ch, buf, ch->in_veh);
@@ -123,12 +126,12 @@ ACMD(do_say)
   }
 
   // This is down here to handle speech after sayto. Note that matrix has no sayto, so we did it there as well.
-  if (subcmd != SCMD_OSAY && !has_required_language_ability_for_sentence(ch, argument, language))
+  if (subcmd != SCMD_OSAY && !has_required_language_ability_for_sentence(ch, arg_known_size, language))
     return;
 
   if (subcmd == SCMD_OSAY) {
     // No color highlights for osay.
-    snprintf(buf, sizeof(buf), "$n^n says ^mOOCly^n, \"%s%s^n\"", capitalize(argument), get_final_character_from_string(argument) == '^' ? "^" : "");
+    snprintf(buf, sizeof(buf), "$n^n says ^mOOCly^n, \"%s%s^n\"", capitalize(arg_known_size), get_final_character_from_string(arg_known_size) == '^' ? "^" : "");
     for (tmp = ch->in_room ? ch->in_room->people : ch->in_veh->people; tmp; tmp = ch->in_room ? tmp->next_in_room : tmp->next_in_veh) {
       // Replicate act() in a way that lets us capture the message.
       if (can_send_act_to_target(ch, FALSE, NULL, NULL, tmp, TO_ROOM) && !IS_IGNORING(tmp, is_blocking_osays_from, ch)) {
@@ -165,8 +168,8 @@ ACMD(do_say)
               (to ? buf2 : ""),
               (IS_NPC(tmp) || GET_SKILL(tmp, language) > 0) ? skills[language].name : "an unknown language",
               (PRF_FLAGGED(tmp, PRF_NOHIGHLIGHT) || PRF_FLAGGED(tmp, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch),
-              capitalize(replace_too_long_words(tmp, ch, argument, language, GET_CHAR_COLOR_HIGHLIGHT(ch))),
-              ispunct(get_final_character_from_string(argument)) ? "" : "."
+              capitalize(replace_too_long_words(tmp, ch, arg_known_size, language, GET_CHAR_COLOR_HIGHLIGHT(ch))),
+              ispunct(get_final_character_from_string(arg_known_size)) ? "" : "."
             );
 
       // Note: includes act()
@@ -188,8 +191,8 @@ ACMD(do_say)
                 (to ? buf2 : ""),
                 (IS_NPC(veh->rigger) || GET_SKILL(veh->rigger, language) > 0) ? skills[language].name : "an unknown language",
                 (PRF_FLAGGED(veh->rigger, PRF_NOHIGHLIGHT) || PRF_FLAGGED(veh->rigger, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch),
-                capitalize(replace_too_long_words(veh->rigger, ch, argument, language, GET_CHAR_COLOR_HIGHLIGHT(ch))),
-                ispunct(get_final_character_from_string(argument)) ? "" : "."
+                capitalize(replace_too_long_words(veh->rigger, ch, arg_known_size, language, GET_CHAR_COLOR_HIGHLIGHT(ch))),
+                ispunct(get_final_character_from_string(arg_known_size)) ? "" : "."
               );
         store_message_to_history(veh->rigger->desc, COMM_CHANNEL_SAYS, perform_act(buf, ch, NULL, NULL, veh->rigger));
       }
@@ -201,9 +204,9 @@ ACMD(do_say)
     send_to_char(OK, ch);
 
   else {
-    delete_doubledollar(argument);
+    delete_doubledollar(arg_known_size);
     if(subcmd == SCMD_OSAY) {
-      snprintf(buf, sizeof(buf), "You say ^mOOCly^n, \"%s^n\"\r\n", capitalize(argument));
+      snprintf(buf, sizeof(buf), "You say ^mOOCly^n, \"%s^n\"\r\n", capitalize(arg_known_size));
       send_to_char(buf, ch);
       store_message_to_history(ch->desc, COMM_CHANNEL_OSAYS, buf);
     }
@@ -216,8 +219,8 @@ ACMD(do_say)
                (to ? buf2 : ""),
                skills[language].name,
                (PRF_FLAGGED(ch, PRF_NOHIGHLIGHT) || PRF_FLAGGED(ch, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch),
-               capitalize(argument),
-               ispunct(get_final_character_from_string(argument)) ? "" : ".");
+               capitalize(arg_known_size),
+               ispunct(get_final_character_from_string(arg_known_size)) ? "" : ".");
       send_to_char(buf, ch);
       store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, buf);
     }

@@ -1422,7 +1422,7 @@ bool mobact_process_movement(struct char_data *ch) {
         && number(0, ELEVATOR_BUTTON_PRESS_CHANCE) == 0)
     {
       char argument[500];
-      strlcpy(argument, "button", sizeof(argument));
+      strlcpy(argument, "button", 10);
       ch->in_room->func(ch, ch->in_room, find_command("push"), argument);
       return TRUE;
     }
