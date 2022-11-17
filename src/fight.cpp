@@ -66,6 +66,7 @@ bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype, bo
 bool damage(struct char_data *ch, struct char_data *victim, int dam, int attacktype, bool is_physical);
 bool damage_without_message(struct char_data *ch, struct char_data *victim, int dam, int attacktype, bool is_physical);
 bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int attacktype, bool is_physical, bool send_message);
+void docwagon_retrieve(struct char_data *ch);
 
 SPECIAL(weapon_dominator);
 SPECIAL(pocket_sec);
@@ -923,6 +924,7 @@ void raw_kill(struct char_data * ch)
       char_from_room(ch);
       char_to_room(ch, &world[i]);
       PLR_FLAGS(ch).SetBit(PLR_JUST_DIED);
+      PLR_FLAGS(ch).RemoveBit(PLR_DOCWAGON_READY);
     }
   }
 
@@ -977,6 +979,12 @@ void death_penalty(struct char_data *ch)
 
 void die(struct char_data * ch)
 {
+  // If they're ready for docwagon retrieval, save them.
+  if (PLR_FLAGGED(ch, PLR_DOCWAGON_READY)) {
+    docwagon_retrieve(ch);
+    return;
+  }
+
   struct room_data *temp_room = get_ch_in_room(ch);
 
   if (!(MOB_FLAGGED(ch, MOB_INANIMATE) || IS_PROJECT(ch) || IS_SPIRIT(ch) || IS_ANY_ELEMENTAL(ch))) {
@@ -1015,11 +1023,17 @@ ACMD(do_die)
 
   /* If they're still okay... */
   if ( GET_PHYSICAL(ch) >= 100 && GET_MENTAL(ch) >= 100 ) {
-    send_to_char("Your mother would be so sad.. :(\n\r",ch);
+    send_to_char("Your mother would be so sad... :(\n\r",ch);
     return;
   }
 
-  send_to_char("You give up the will to live..\n\r",ch);
+  // If they're ready to be docwagon'd out, save them.
+  if (PLR_FLAGGED(ch, PLR_DOCWAGON_READY)) {
+    docwagon_retrieve(ch);
+    return;
+  }
+
+  send_to_char("You give up the will to live...\n\r",ch);
 
   /* log it */
   snprintf(buf, sizeof(buf),"%s gave up the will to live. {%s%s (%ld)}",
@@ -2204,9 +2218,143 @@ void docwagon_message(struct char_data *ch)
   mudlog(buf, ch, LOG_DEATHLOG, TRUE);
 }
 
+void docwagon_retrieve(struct char_data *ch) {
+  struct room_data *room = get_ch_in_room(ch);
+
+  if (!PLR_FLAGGED(ch, PLR_DOCWAGON_READY)) {
+    mudlog("SYSERR: Got someone in docwagon_retrieve() who was not DOCWAGON_READY.", ch, LOG_SYSLOG, TRUE);
+  }
+  PLR_FLAGS(ch).RemoveBit(PLR_DOCWAGON_READY);
+
+  if (FIGHTING(ch) && FIGHTING(FIGHTING(ch)) == ch)
+    stop_fighting(FIGHTING(ch));
+  if (CH_IN_COMBAT(ch))
+    stop_fighting(ch);
+
+  // Stop all their sustained spells as if they died.
+  if (GET_SUSTAINED(ch)) {
+    struct sustain_data *next;
+    for (struct sustain_data *sust = GET_SUSTAINED(ch); sust; sust = next) {
+      next = sust->next;
+      if (next && sust->idnum == next->idnum)
+        next = next->next;
+      end_sustained_spell(ch, sust);
+    }
+  }
+
+  // Remove them from the Matrix.
+  if (ch->persona) {
+    snprintf(buf, sizeof(buf), "%s depixelizes and vanishes from the host.\r\n", CAP(ch->persona->name));
+    send_to_host(ch->persona->in_host, buf, ch->persona, TRUE);
+    extract_icon(ch->persona);
+    ch->persona = NULL;
+    PLR_FLAGS(ch).RemoveBit(PLR_MATRIX);
+  } else if (PLR_FLAGGED(ch, PLR_MATRIX))
+    for (struct char_data *temp = room->people; temp; temp = temp->next_in_room)
+      if (PLR_FLAGGED(temp, PLR_MATRIX))
+        temp->persona->decker->hitcher = NULL;
+  docwagon_message(ch);
+  // death_penalty(ch);  /* Penalty for deadly wounds */
+
+  // They just got patched up: heal them slightly, make them stunned.
+  GET_PHYSICAL(ch) = 400;
+  GET_MENTAL(ch) = 0;
+  GET_POS(ch) = POS_STUNNED;
+
+  // Restore their salvation ticks.
+  GET_PC_SALVATION_TICKS(ch) = 5;
+
+  // Disable bioware etc that resets on death.
+  for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content) {
+    switch (GET_BIOWARE_TYPE(bio)) {
+      case BIO_ADRENALPUMP:
+        if (GET_OBJ_VAL(bio, 5) > 0) {
+          for (int i = 0; i < MAX_OBJ_AFFECT; i++)
+            affect_modify(ch,
+                          bio->affected[i].location,
+                          bio->affected[i].modifier,
+                          bio->obj_flags.bitvector, FALSE);
+          GET_OBJ_VAL(bio, 5) = 0;
+        }
+        break;
+      case BIO_PAINEDITOR:
+        GET_BIOWARE_IS_ACTIVATED(bio) = 0;
+        break;
+    }
+  }
+
+  // Extinguish their fire, if any.
+  ch->points.fire[0] = 0;
+
+  send_to_char("\r\n\r\nYour last conscious memory is the arrival of a DocWagon.\r\n", ch);
+  {
+    rnum_t recovery_room = 0;
+
+    switch (GET_JURISDICTION(room)) {
+      case ZONE_SEATTLE:
+        recovery_room = real_room(RM_SEATTLE_DOCWAGON);
+        break;
+      case ZONE_PORTLAND:
+        recovery_room = real_room(RM_PORTLAND_DOCWAGON);
+        break;
+      case ZONE_CARIB:
+        recovery_room = real_room(RM_CARIB_DOCWAGON);
+        break;
+      case ZONE_OCEAN:
+        recovery_room = real_room(RM_OCEAN_DOCWAGON);
+        break;
+      default:
+        mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Unknown jurisdiction %d encountered in docwagon_retrieve()! %s being sent to Dante's.", GET_JURISDICTION(room), GET_CHAR_NAME(ch));
+        recovery_room = real_room(RM_ENTRANCE_TO_DANTES);
+        break;
+    }
+
+    if (recovery_room < 0) {
+      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Invalid docwagon room specified for jurisdiction %d! %s being sent to A Bright Light.", GET_JURISDICTION(room), GET_CHAR_NAME(ch));
+      recovery_room = 0;
+    }
+
+    char_from_room(ch);
+    char_to_room(ch, &world[recovery_room]);
+  }
+
+  if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED) || GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD) {
+    send_to_char("Your DocWagon rescue is free due to your newbie status, and you've been restored to full health.\r\n", ch);
+    GET_PHYSICAL(ch) = 1000;
+    GET_MENTAL(ch) = 1000;
+    GET_POS(ch) = POS_STANDING;
+  } else {
+    struct obj_data *docwagon = find_best_active_docwagon_modulator(ch);
+
+    // Compensate for edge case: Their modulator was destroyed since they were flagged.
+    if (docwagon) {
+      int dw_random_cost = number(8, 12) * 500 / GET_DOCWAGON_CONTRACT_GRADE(docwagon);
+      int creds = MAX(dw_random_cost, (int)(GET_NUYEN(ch) / 10));
+
+      send_to_char(ch, "DocWagon demands %d nuyen for your rescue.\r\n", creds);
+
+      if ((GET_NUYEN(ch) + GET_BANK(ch)) < creds) {
+        send_to_char("Not finding sufficient payment, your DocWagon contract was retracted.\r\n", ch);
+        extract_obj(docwagon);
+      }
+      else if (GET_BANK(ch) < creds) {
+        lose_nuyen(ch, creds - GET_BANK(ch), NUYEN_OUTFLOW_DOCWAGON);
+        lose_bank(ch, GET_BANK(ch), NUYEN_OUTFLOW_DOCWAGON);
+      }
+      else {
+        lose_bank(ch, creds, NUYEN_OUTFLOW_DOCWAGON);
+      }
+    }
+  }
+
+  if (PLR_FLAGGED(ch, PLR_SENT_DOCWAGON_PLAYER_ALERT)) {
+    alert_player_doctors_of_contract_withdrawal(ch, FALSE);
+    PLR_FLAGS(ch).RemoveBit(PLR_SENT_DOCWAGON_PLAYER_ALERT);
+  }
+}
+
 bool docwagon(struct char_data *ch)
 {
-  int i, creds;
   struct obj_data *docwagon = NULL;
   char rollbuf[500];
 
@@ -2237,108 +2385,20 @@ bool docwagon(struct char_data *ch)
   // In an area with 4 or less security level: Basic has a 75% chance of rescue, Gold has 87.5% rescue, Plat has 93.8% chance.
   if (successes > 0)
   {
-    if (FIGHTING(ch) && FIGHTING(FIGHTING(ch)) == ch)
-      stop_fighting(FIGHTING(ch));
-    if (CH_IN_COMBAT(ch))
-      stop_fighting(ch);
-    if (GET_SUSTAINED(ch)) {
-      struct sustain_data *next;
-      for (struct sustain_data *sust = GET_SUSTAINED(ch); sust; sust = next) {
-        next = sust->next;
-        if (next && sust->idnum == next->idnum)
-          next = next->next;
-        end_sustained_spell(ch, sust);
-      }
-    }
-    if (ch->persona) {
-      snprintf(buf, sizeof(buf), "%s depixelizes and vanishes from the host.\r\n", CAP(ch->persona->name));
-      send_to_host(ch->persona->in_host, buf, ch->persona, TRUE);
-      extract_icon(ch->persona);
-      ch->persona = NULL;
-      PLR_FLAGS(ch).RemoveBit(PLR_MATRIX);
-    } else if (PLR_FLAGGED(ch, PLR_MATRIX))
-      for (struct char_data *temp = room->people; temp; temp = temp->next_in_room)
-        if (PLR_FLAGGED(temp, PLR_MATRIX))
-          temp->persona->decker->hitcher = NULL;
-    docwagon_message(ch);
-    // death_penalty(ch);  /* Penalty for deadly wounds */
-    GET_PHYSICAL(ch) = 400;
-    GET_MENTAL(ch) = 0;
-    GET_POS(ch) = POS_STUNNED;
-    for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content) {
-      switch (GET_BIOWARE_TYPE(bio)) {
-        case BIO_ADRENALPUMP:
-          if (GET_OBJ_VAL(bio, 5) > 0) {
-            for (i = 0; i < MAX_OBJ_AFFECT; i++)
-              affect_modify(ch,
-                            bio->affected[i].location,
-                            bio->affected[i].modifier,
-                            bio->obj_flags.bitvector, FALSE);
-            GET_OBJ_VAL(bio, 5) = 0;
-          }
-          break;
-        case BIO_PAINEDITOR:
-          GET_BIOWARE_IS_ACTIVATED(bio) = 0;
-          break;
-      }
-    }
-
-    ch->points.fire[0] = 0;
-    send_to_char("\r\n\r\nYour last conscious memory is the arrival of a DocWagon.\r\n", ch);
-    switch (GET_JURISDICTION(room)) {
-      case ZONE_SEATTLE:
-        i = real_room(RM_SEATTLE_DOCWAGON);
-        break;
-      case ZONE_PORTLAND:
-        i = real_room(RM_PORTLAND_DOCWAGON);
-        break;
-      case ZONE_CARIB:
-        i = real_room(RM_CARIB_DOCWAGON);
-        break;
-      case ZONE_OCEAN:
-        i = real_room(RM_OCEAN_DOCWAGON);
-        break;
-    }
-    char_from_room(ch);
-    char_to_room(ch, &world[i]);
-
-    if (!PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED) && GET_TKE(ch) >= NEWBIE_KARMA_THRESHOLD) {
-      int dw_random_cost = number(8, 12) * 500 / GET_DOCWAGON_CONTRACT_GRADE(docwagon);
-      creds = MAX(dw_random_cost, (int)(GET_NUYEN(ch) / 10));
-      send_to_char(ch, "DocWagon demands %d nuyen for your rescue.\r\n", creds);
-      if ((GET_NUYEN(ch) + GET_BANK(ch)) < creds) {
-        send_to_char("Not finding sufficient payment, your DocWagon contract was retracted.\r\n", ch);
-        extract_obj(docwagon);
-      } else if (GET_BANK(ch) < creds) {
-        lose_nuyen(ch, creds - GET_BANK(ch), NUYEN_OUTFLOW_DOCWAGON);
-        lose_bank(ch, GET_BANK(ch), NUYEN_OUTFLOW_DOCWAGON);
-      } else {
-        lose_bank(ch, creds, NUYEN_OUTFLOW_DOCWAGON);
-      }
-    } else {
-      send_to_char("Your DocWagon rescue is free due to your newbie status, and you've been restored to full health.\r\n", ch);
-      GET_PHYSICAL(ch) = 1000;
-      GET_MENTAL(ch) = 1000;
-      GET_POS(ch) = POS_STANDING;
-    }
-
-    if (PLR_FLAGGED(ch, PLR_SENT_DOCWAGON_PLAYER_ALERT)) {
-      alert_player_doctors_of_contract_withdrawal(ch, FALSE);
-      PLR_FLAGS(ch).RemoveBit(PLR_SENT_DOCWAGON_PLAYER_ALERT);
-    }
-
-    return TRUE;
+    send_to_char(ch, "%s^n chirps cheerily: an automated DocWagon trauma team is on its way!\r\n", CAP(GET_OBJ_NAME(docwagon)));
+    send_to_char(ch, "^L[OOC: You can choose to wait for player assistance to arrive, or you can get picked up immediately by entering ^wDIE^L. See ^wHELP DOCWAGON^L for more details.]\r\n");
+    PLR_FLAGS(ch).SetBit(PLR_DOCWAGON_READY);
   } else {
     send_to_char(ch, "%s^n vibrates, sending out a trauma call that will hopefully be answered.\r\n", CAP(GET_OBJ_NAME(docwagon)));
+  }
 
-    if ((ch->in_room || ch->in_veh) && !PRF_FLAGGED(ch, PRF_DONT_ALERT_PLAYER_DOCTORS_ON_MORT)) {
-      int num_responders = alert_player_doctors_of_mort(ch, docwagon);
-      if (num_responders > 0) {
-        send_to_char(ch, "^L[OOC: There %s %d player%s online who may be able to respond to your DocWagon call.]^n\r\n",
-                     num_responders == 1 ? "is" : "are",
-                     num_responders,
-                     num_responders == 1 ? "" : "s");
-      }
+  if ((ch->in_room || ch->in_veh) && !PRF_FLAGGED(ch, PRF_DONT_ALERT_PLAYER_DOCTORS_ON_MORT)) {
+    int num_responders = alert_player_doctors_of_mort(ch, docwagon);
+    if (num_responders > 0) {
+      send_to_char(ch, "^L[OOC: There %s ^w%d^L player%s online who may be able to respond to your DocWagon call.]^n\r\n",
+                   num_responders == 1 ? "is" : "are",
+                   num_responders,
+                   num_responders == 1 ? "" : "s");
     }
   }
 
@@ -3240,8 +3300,14 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
           act("$n is dead!  R.I.P.", FALSE, victim, 0, 0, TO_ROOM);
         }
 
-      } else
-        act("$n slumps in a pile. You hear sirens as a DocWagon rushes in and grabs $m.", FALSE, victim, 0, 0, TO_ROOM);
+      } else {
+        if (PLR_FLAGGED(ch, PLR_DOCWAGON_READY)) {
+          docwagon_retrieve(ch);
+          return TRUE;
+        } else {
+          act("$n slumps in a pile. You hear sirens as a DocWagon rushes in and grabs $m.", FALSE, victim, 0, 0, TO_ROOM);
+        }
+      }
 
       for (int i = 0; i < NUM_WEARS; i++) {
         if (GET_EQ(victim, i) && GET_OBJ_TYPE(GET_EQ(victim, i)) == ITEM_DOCWAGON) {

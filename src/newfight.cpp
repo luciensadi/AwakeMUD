@@ -889,42 +889,51 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
 
     // Handle spirits and elementals being divas, AKA having Immunity to Normal Weapons (SR3 p188, 264).
     // This also requires that the attacker is not using killing hands while unarmed, and is not using a weapon focus that they are bonded to.
-    if ((IS_SPIRIT(def->ch) || IS_ANY_ELEMENTAL(def->ch))
-        && (att->weapon ? (GET_WEAPON_FOCUS_RATING(att->weapon) == 0 || !WEAPON_FOCUS_USABLE_BY(att->weapon, att->ch)) : !GET_POWER(att->ch, ADEPT_KILLING_HANDS))
-    {
-      // We require that the attack's power is greater than double the spirit's force, otherwise it takes no damage.
-      // If the attack's power is greater, subtract double the level from it.
-      int minimum_power_to_damage_opponent = (GET_LEVEL(def->ch) * 2) + 1;
-      if (att->melee->power_before_armor < minimum_power_to_damage_opponent) {
-        bool target_died = 0;
+    if (IS_SPIRIT(def->ch) || IS_ANY_ELEMENTAL(def->ch)) {
+      bool has_magic_weapon;
 
-        send_to_char(att->ch, "^o(OOC: %s is immune to normal weapons! You need at least ^O%d^o weapon power to damage %s, and you only have %d.)^n\r\n",
-                     decapitalize_a_an(GET_CHAR_NAME(def->ch)),
-                     minimum_power_to_damage_opponent,
-                     HMHR(def->ch),
-                     att->melee->power_before_armor
-                    );
-        target_died = damage(att->ch, def->ch, 0, att->melee->dam_type, att->melee->is_physical);
-
-        //Handle suprise attack/alertness here -- spirits melee.
-        if (!target_died && IS_NPC(def->ch)) {
-          if (AFF_FLAGGED(def->ch, AFF_SURPRISE))
-            AFF_FLAGS(def->ch).RemoveBit(AFF_SURPRISE);
-
-          GET_MOBALERT(def->ch) = MALERT_ALARM;
-          GET_MOBALERTTIME(def->ch) = 30;
-
-          // Process flame aura here since the spirit will otherwise end combat evaluation here.
-          handle_flame_aura(att, def);
-        }
-        return target_died;
+      if (att->weapon) {
+        has_magic_weapon = GET_WEAPON_FOCUS_RATING(att->weapon) > 0 && WEAPON_FOCUS_USABLE_BY(att->weapon, att->ch);
       } else {
-        // SR3 p264: Spirits/elementals get 2*essence armor against normal weapons.
-        // This is specifically a -= because we expect that this power has already been set.
-        att->melee->power -= GET_LEVEL(def->ch) * 2;
-        snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), " After spirit resist: ^c%d%s^n.",
-                 att->melee->power,
-                 GET_WOUND_NAME(att->melee->damage_level));
+        has_magic_weapon = GET_POWER(att->ch, ADEPT_KILLING_HANDS);
+      }
+
+      // If you're not using a magic weapon, the spirit uses its Immunity to Normal Weapons power.
+      if (!has_magic_weapon) {
+        // We require that the attack's power is greater than double the spirit's force, otherwise it takes no damage.
+        // If the attack's power is greater, subtract double the level from it.
+        int minimum_power_to_damage_opponent = (GET_LEVEL(def->ch) * 2) + 1;
+        if (att->melee->power_before_armor < minimum_power_to_damage_opponent) {
+          bool target_died = 0;
+
+          send_to_char(att->ch, "^o(OOC: %s is immune to normal weapons! You need at least ^O%d^o weapon power to damage %s, and you only have %d.)^n\r\n",
+                       decapitalize_a_an(GET_CHAR_NAME(def->ch)),
+                       minimum_power_to_damage_opponent,
+                       HMHR(def->ch),
+                       att->melee->power_before_armor
+                      );
+          target_died = damage(att->ch, def->ch, 0, att->melee->dam_type, att->melee->is_physical);
+
+          //Handle suprise attack/alertness here -- spirits melee.
+          if (!target_died && IS_NPC(def->ch)) {
+            if (AFF_FLAGGED(def->ch, AFF_SURPRISE))
+              AFF_FLAGS(def->ch).RemoveBit(AFF_SURPRISE);
+
+            GET_MOBALERT(def->ch) = MALERT_ALARM;
+            GET_MOBALERTTIME(def->ch) = 30;
+
+            // Process flame aura here since the spirit will otherwise end combat evaluation here.
+            handle_flame_aura(att, def);
+          }
+          return target_died;
+        } else {
+          // SR3 p264: Spirits/elementals get 2*essence armor against normal weapons.
+          // This is specifically a -= because we expect that this power has already been set.
+          att->melee->power -= GET_LEVEL(def->ch) * 2;
+          snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), " After spirit resist: ^c%d%s^n.",
+                   att->melee->power,
+                   GET_WOUND_NAME(att->melee->damage_level));
+        }
       }
     }
 

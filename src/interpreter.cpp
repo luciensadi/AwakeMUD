@@ -2950,7 +2950,7 @@ void nanny(struct descriptor_data * d, char *arg)
 
         d->character = playerDB.LoadChar(char_name, false);
         d->character->desc = d;
-        PLR_FLAGS(d->character).RemoveBit(PLR_JUST_DIED);
+        PLR_FLAGS(d->character).RemoveBits(PLR_JUST_DIED, PLR_DOCWAGON_READY, ENDBIT);
         if (PLR_FLAGGED(d->character, PLR_NEWBIE)) {
           GET_PHYSICAL(d->character) = GET_MAX_PHYSICAL(d->character);
           GET_MENTAL(d->character) = GET_MAX_MENTAL(d->character);

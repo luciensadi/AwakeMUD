@@ -464,6 +464,7 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
         GET_OBJ_VAL(bio, 5) = 0;
       }
     PLR_FLAGS(ch).SetBit(PLR_JUST_DIED);
+    PLR_FLAGS(ch).RemoveBit(PLR_DOCWAGON_READY);
     if (CH_IN_COMBAT(ch))
       stop_fighting(ch);
     log_death_trap(ch);

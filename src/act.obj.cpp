@@ -1828,9 +1828,23 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
       act("You can't donate $p: It was given to you by staff.", FALSE, ch, obj, 0, TO_CHAR);
       return 0;
     }
+
     if (IS_OBJ_STAT(obj, ITEM_EXTRA_NOSELL) || IS_OBJ_STAT(obj, ITEM_EXTRA_NORENT)) {
       act("You can't donate $p: It's flagged !SELL or !RENT.", FALSE, ch, obj, 0, TO_CHAR);
       return 0;
+    }
+
+    // Check contents too.
+    for (struct obj_data *contained = obj->contains; contained; contained = contained->next_content) {
+      if (IS_OBJ_STAT(contained, ITEM_EXTRA_WIZLOAD)) {
+        act("You can't donate contained item $p: It was given to you by staff.", FALSE, ch, contained, 0, TO_CHAR);
+        return 0;
+      }
+
+      if (IS_OBJ_STAT(contained, ITEM_EXTRA_NOSELL) || IS_OBJ_STAT(obj, ITEM_EXTRA_NORENT)) {
+        act("You can't donate contained item $p: It's flagged !SELL or !RENT.", FALSE, ch, contained, 0, TO_CHAR);
+        return 0;
+      }
     }
   }
 

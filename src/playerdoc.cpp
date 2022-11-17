@@ -119,8 +119,8 @@ int alert_player_doctors_of_mort(struct char_data *ch, struct obj_data *docwagon
           break;
       }
 
-      // If they're not AFK or idle, let the player know that other players were pinged and may be coming.
-      if (plr->char_specials.timer < 5 && !PRF_FLAGGED(plr, PRF_AFK)) {
+      // If they're not staff, AFK, idle, or participating in a PRUN, add them to the potential rescuer count that will be sent to the downed player.
+      if (GET_LEVEL(plr) == LVL_MORTAL && plr->char_specials.timer < 5 && !PRF_FLAGGED(plr, PRF_AFK) && !PRF_FLAGGED(plr, PRF_QUEST)) {
         potential_rescuer_count++;
       }
     }
@@ -142,10 +142,6 @@ void alert_player_doctors_of_contract_withdrawal(struct char_data *ch, bool with
     return;
   }
   PLR_FLAGS(ch).RemoveBit(PLR_SENT_DOCWAGON_PLAYER_ALERT);
-
-  if (!find_best_active_docwagon_modulator(ch)) {
-    return;
-  }
 
   for (struct char_data *plr = character_list; plr; plr = plr->next) {
     if (IS_NPC(plr) || !plr->desc || plr == ch)
