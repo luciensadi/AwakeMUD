@@ -888,11 +888,12 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
              GET_SHORT_WOUND_NAME(att->melee->damage_level));
 
     // Handle spirits and elementals being divas, AKA having Immunity to Normal Weapons (SR3 p188, 264).
-    // Namely: We require that the attack's power is greater than double the spirit's force, otherwise it takes no damage.
-    // If the attack's power is greater, subtract double the level from it.
+    // This also requires that the attacker is not using killing hands while unarmed, and is not using a weapon focus that they are bonded to.
     if ((IS_SPIRIT(def->ch) || IS_ANY_ELEMENTAL(def->ch))
-        && (!att->weapon || GET_WEAPON_FOCUS_RATING(att->weapon) == 0 || !WEAPON_FOCUS_USABLE_BY(att->weapon, att->ch)))
+        && (att->weapon ? (GET_WEAPON_FOCUS_RATING(att->weapon) == 0 || !WEAPON_FOCUS_USABLE_BY(att->weapon, att->ch)) : !GET_POWER(att->ch, ADEPT_KILLING_HANDS))
     {
+      // We require that the attack's power is greater than double the spirit's force, otherwise it takes no damage.
+      // If the attack's power is greater, subtract double the level from it.
       int minimum_power_to_damage_opponent = (GET_LEVEL(def->ch) * 2) + 1;
       if (att->melee->power_before_armor < minimum_power_to_damage_opponent) {
         bool target_died = 0;
