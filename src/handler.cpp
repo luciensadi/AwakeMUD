@@ -1670,16 +1670,12 @@ struct obj_data *unequip_char(struct char_data * ch, int pos, bool focus)
   struct obj_data *obj;
 
   if (pos < 0 || pos >= NUM_WEARS) {
-    char errbuf[1000];
-    snprintf(errbuf, sizeof(errbuf), "SYSERR: pos < 0 || pos >= NUM_WEARS, %s - %d", GET_NAME(ch), pos);
-    mudlog(errbuf, ch, LOG_SYSLOG, TRUE);
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: pos < 0 || pos >= NUM_WEARS: %s - %d", GET_CHAR_NAME(ch), pos);
     return NULL;
   }
 
   if (!GET_EQ(ch, pos)) {
-    char errbuf[1000];
-    snprintf(errbuf, sizeof(errbuf), "SYSERR: Trying to remove non-existent item from %s at %d", GET_NAME(ch), pos);
-    mudlog(errbuf, ch, LOG_SYSLOG, TRUE);
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Trying to remove non-existent item from %s at %d", GET_CHAR_NAME(ch), pos);
     return NULL;
   }
 
