@@ -261,9 +261,15 @@ ACMD(do_design)
   }
   if (!(comp = can_program(ch)))
     return;
-  for (prog = comp->contains; prog; prog = prog->next_content)
-    if ((isname(argument, prog->text.keywords) || isname(argument, prog->restring)) && GET_OBJ_TYPE(prog) == ITEM_DESIGN)
+
+  for (prog = comp->contains; prog; prog = prog->next_content) {
+    if (GET_OBJ_TYPE(prog) != ITEM_DESIGN)
+      continue;
+
+    if (isname(argument, prog->text.keywords) || isname(argument, get_string_after_color_code_removal(prog->restring, ch)))
       break;
+  }
+  
   if (!prog) {
     send_to_char(ch, "The program design isn't on that computer.\r\n");
     return;
@@ -443,9 +449,14 @@ ACMD(do_copy)
 
   skip_spaces(&argument);
 
-  for (prog = comp->contains; prog; prog = prog->next_content)
-    if ((isname(argument, prog->text.keywords) || isname(argument, prog->restring)) && GET_OBJ_TYPE(prog) == ITEM_PROGRAM)
+  for (prog = comp->contains; prog; prog = prog->next_content) {
+    if (GET_OBJ_TYPE(prog) != ITEM_PROGRAM)
+      continue;
+
+    if (isname(argument, prog->text.keywords) || isname(argument, get_string_after_color_code_removal(prog->restring, ch)))
       break;
+  }
+
 
   FAILURE_CASE(!prog, "The program isn't on that computer.");
   FAILURE_CASE(GET_OBJ_TIMER(prog), "You can't copy from an optical chip.");
