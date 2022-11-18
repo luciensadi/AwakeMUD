@@ -1973,7 +1973,7 @@ void magic_loss(struct char_data *ch, int magic, bool msg)
 // Note: some kits may still have workshop grade of 0 instead of TYPE_KIT.
 #define IS_KIT(obj, type) ( GET_OBJ_TYPE((obj)) == ITEM_WORKSHOP && GET_WORKSHOP_TYPE((obj)) == type && (GET_WORKSHOP_GRADE((obj)) == TYPE_KIT || GET_WORKSHOP_GRADE((obj)) == 0) )
 bool has_kit(struct char_data * ch, int type)
-{  
+{
   for (struct obj_data *obj = ch->carrying; obj; obj = obj->next_content) {
     if (IS_KIT(obj, type)) {
       return TRUE;
@@ -1985,7 +1985,7 @@ bool has_kit(struct char_data * ch, int type)
       return TRUE;
     }
   }
-  
+
   return FALSE;
 }
 
@@ -5254,6 +5254,95 @@ bool is_custom_ware(struct obj_data *ware) {
       mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Got non-'ware obj %s (%ld) to is_custom_ware!", GET_OBJ_NAME(ware), GET_OBJ_VNUM(ware));
       return FALSE;
   }
+}
+
+extern int max_ability(int power_idx);
+void render_targets_abilities_to_viewer(struct char_data *viewer, struct char_data *vict) {
+  if (IS_NPC(vict)) {
+    send_to_char("NPCs don't have abilities.\r\n", viewer);
+    return;
+  }
+
+  if (GET_TRADITION(vict) != TRAD_ADEPT) {
+    send_to_char(viewer, "%s isn't an adept.\r\n", GET_CHAR_NAME(vict));
+    return;
+  }
+
+  bool screenreader = PRF_FLAGGED(viewer, PRF_SCREENREADER);
+  bool already_printed = FALSE;
+
+  for (int power_idx = 1; power_idx < ADEPT_NUMPOWER; power_idx++) {
+    if (GET_POWER_TOTAL(vict, power_idx) > 0) {
+      // Send the intro string.
+      if (screenreader) {
+        if (!already_printed) {
+          send_to_char(viewer, "%s %s the following abilities:\r\n",
+                       vict == viewer ? "You" : GET_CHAR_NAME(vict),
+                       vict == viewer ? "have" : "has");
+        }
+        send_to_char(viewer, "%s (%0.2f PP): %s",
+                     adept_powers[power_idx],
+                     ((float) ability_cost(power_idx, 1)) / 100,
+                     GET_POWER_ACT(vict, power_idx) > 0 ? "active" : "");
+      } else {
+        if (!already_printed) {
+          send_to_char("^WPP      Ability              Level (Active)^n\r\n", viewer);
+        }
+        send_to_char(viewer, "^c%0.2f^n    %-20s", ((float)ability_cost(power_idx, 1))/100, adept_powers[power_idx]);
+      }
+
+      already_printed = TRUE;
+
+      if (max_ability(power_idx) > 1) {
+        if (power_idx == ADEPT_KILLING_HANDS) {
+          if (screenreader) {
+            send_to_char(viewer, " (current level %s, max level %s)",
+                         GET_WOUND_NAME(GET_POWER_ACT(vict, power_idx)),
+                         GET_WOUND_NAME(GET_POWER_TOTAL(vict, power_idx)));
+          } else {
+            send_to_char(viewer, " %s", GET_WOUND_NAME(GET_POWER_TOTAL(vict, power_idx)));
+            if (GET_POWER_ACT(vict, power_idx))
+              send_to_char(viewer, " ^Y(%s)^n", GET_WOUND_NAME(GET_POWER_ACT(vict, power_idx)));
+          }
+        } else {
+          if (screenreader) {
+            send_to_char(viewer, " (current level %d, max level %d)",
+                         GET_POWER_ACT(vict, power_idx),
+                         GET_POWER_TOTAL(vict, power_idx));
+          } else {
+            send_to_char(viewer, " +%d", GET_POWER_TOTAL(vict, power_idx));
+            if (GET_POWER_ACT(vict, power_idx))
+              send_to_char(viewer, " ^Y(%d)^n", GET_POWER_ACT(vict, power_idx));
+          }
+        }
+      } else if (!screenreader && GET_POWER_ACT(vict, power_idx)) {
+        send_to_char(viewer, " ^Y(active)^n");
+      }
+      send_to_char("\r\n", viewer);
+    }
+  }
+
+  if (!already_printed) {
+    send_to_char(viewer, "%s %s no abilities.\r\n",
+                 vict == viewer ? "You" : GET_CHAR_NAME(vict),
+                 vict == viewer ? "have" : "has");
+  }
+
+  send_to_char(viewer, "\r\n%s %s ^c%.2f^n powerpoints remaining and ^c%.2f^n points of powers activated.\r\n",
+               vict == viewer ? "You" : GET_CHAR_NAME(vict),
+               vict == viewer ? "have" : "has",
+               (float) GET_PP(vict) / 100,
+               (float) GET_POWER_POINTS(vict) / 100);
+
+#ifndef DIES_IRAE
+  // In Dies Irae, the addpoint command is not available.
+  int unpurchased_points = (int)(GET_TKE(vict) / 50) + 1 - vict->points.extrapp;
+  send_to_char(viewer, "%s %s ^c%d^n point%s of ^WADDPOINT^n available.\r\n",
+               vict == viewer ? "You" : GET_CHAR_NAME(vict),
+               vict == viewer ? "have" : "has",
+               unpurchased_points,
+               unpurchased_points == 1 ? "" : "s");
+#endif
 }
 
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.

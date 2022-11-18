@@ -4269,34 +4269,9 @@ ACMD(do_show)
       send_to_char(ch, "You can't see anyone named '%s'.\r\n", value);
       return;
     }
-    send_to_char(ch, "%s's abilities:", GET_NAME(vict));
-    j = 0;
-    snprintf(buf, sizeof(buf), "\r\n");
-    for (i = 1; i < ADEPT_NUMPOWER; i++) {
-      if (GET_POWER_TOTAL(vict, i) > 0) {
-        snprintf(buf2, sizeof(buf2), "%-20s", adept_powers[i]);
-        if (max_ability(i) > 1)
-          switch (i) {
-          case ADEPT_KILLING_HANDS:
-            snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " %-8s", GET_WOUND_NAME(GET_POWER_TOTAL(vict, i)));
-            if (GET_POWER_ACT(vict, i))
-              snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " ^Y(%-8s)^n", GET_WOUND_NAME(GET_POWER_ACT(vict, i)));
-            strlcat(buf2, "\r\n", sizeof(buf2));
-            break;
-          default:
-            snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " +%d", GET_POWER_TOTAL(vict, i));
-            if (GET_POWER_ACT(vict, i))
-              snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " ^Y(%d)^n", GET_POWER_ACT(vict, i));
-            strlcat(buf2, "\r\n", sizeof(buf2));
-            break;
-          }
-        else
-          strlcat(buf2, "\r\n", sizeof(buf2));
-        strlcat(buf, buf2, sizeof(buf));
-      }
-    }
-    send_to_char(buf, ch);
-    send_to_char("\r\n", ch);
+
+    send_to_char(ch, "%s's abilities:\r\n", GET_CHAR_NAME(vict));
+    render_targets_abilities_to_viewer(ch, vict);
     break;
   case 15:
     if (!*value) {

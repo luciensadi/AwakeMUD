@@ -1497,56 +1497,13 @@ ACMD(do_skills)
         strlcat(buf, buf2, sizeof(buf));
       }
     }
+    send_to_char(buf, ch);
+  } else if (subcmd == SCMD_ABILITIES) {
+    render_targets_abilities_to_viewer(ch, ch);
   } else {
-    if (!IS_NPC(ch) && GET_TRADITION(ch) != TRAD_ADEPT) {
-      send_to_char("You do not have any abilities.\r\n", ch);
-      return;
-    }
-    if(subcmd == SCMD_ABILITIES) {
-      snprintf(ENDOF(buf), sizeof(buf), "PP      Ability              Level (Active)\r\n");
-    }
-    extern int max_ability(int i);
-    for (i = 1; i < ADEPT_NUMPOWER; i++) {
-      if (!mode_all && *arg && !is_abbrev(arg, adept_powers[i]))
-        continue;
-
-      if (GET_POWER_TOTAL(ch, i) > 0) {
-        extern int ability_cost(int abil, int level);
-        snprintf(buf2, sizeof(buf2), "%0.2f    %-20s", ((float)ability_cost(i, 1))/100, adept_powers[i]);
-        if (max_ability(i) > 1)
-          switch (i) {
-          case ADEPT_KILLING_HANDS:
-            snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " %-8s", GET_WOUND_NAME(GET_POWER_TOTAL(ch, i)));
-            if (GET_POWER_ACT(ch, i))
-              snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " ^Y(%-8s)^n", GET_WOUND_NAME(GET_POWER_ACT(ch, i)));
-            strlcat(buf2, "\r\n", sizeof(buf2));
-            break;
-          default:
-            snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " +%d", GET_POWER_TOTAL(ch, i));
-            if (GET_POWER_ACT(ch, i))
-              snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " ^Y(%d)^n", GET_POWER_ACT(ch, i));
-            strlcat(buf2, "\r\n", sizeof(buf2));
-            break;
-          }
-        else if (GET_POWER_ACT(ch, i))
-          strlcat(buf2, " ^Y(active)^n\r\n", sizeof(buf2));
-        else
-          strlcat(buf2, "\r\n", sizeof(buf2));
-        strlcat(buf, buf2, sizeof(buf));
-      }
-    }
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "You have ^c%.2f^n powerpoints remaining and ^c%.2f^n points of powers activated.\r\n", (float)GET_PP(ch) / 100,
-                  (float)GET_POWER_POINTS(ch) / 100);
-
-#ifndef DIES_IRAE
-    // In Dies Irae, the addpoint command is not available.
-    int unpurchased_points = (int)(GET_TKE(ch) / 50) + 1 - ch->points.extrapp;
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "You have ^c%d^n point%s of ^WADDPOINT^n available.\r\n", unpurchased_points, unpurchased_points == 1 ? "" : "s");
-#endif
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Unknown subcmd %d to do_skills!", subcmd);
   }
-  send_to_char(buf, ch);
 }
-
 
 ACMD(do_reload)
 {
