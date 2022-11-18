@@ -2599,7 +2599,7 @@ void nanny(struct descriptor_data * d, char *arg)
     helpedit_parse(d, arg);
     break;
   case CON_GET_NAME:            /* wait for input of name */
-    d->idle_tics = 0;
+    d->idle_ticks = 0;
 
     if (!*arg) {
       d->invalid_name++;
@@ -2707,7 +2707,7 @@ void nanny(struct descriptor_data * d, char *arg)
      */
 
     // Clear their idle counter so they don't get dropped mysteriously.
-    d->idle_tics = 0;
+    d->idle_ticks = 0;
 
     if (!*arg) {
       close_socket(d);

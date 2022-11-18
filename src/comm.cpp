@@ -1686,7 +1686,7 @@ void init_descriptor (struct descriptor_data *newd, int desc)
 
   newd->descriptor = desc;
   newd->connected = CON_GET_NAME;
-  newd->idle_tics = 0;
+  newd->idle_ticks = 0;
   newd->wait = 1;
   newd->output = newd->small_outbuf;
   newd->bufspace = SMALL_BUFSIZE - 1;
@@ -2391,7 +2391,7 @@ void check_idle_passwords(void)
     if (STATE(d) != CON_PASSWORD && STATE(d) != CON_GET_NAME)
       continue;
 
-    if (++d->idle_tics >= 12 ) {
+    if (++d->idle_ticks >= 12 ) {
       /* 120 seconds RL, or 2 minutes */
       if (STATE(d) == CON_PASSWORD)
         echo_on(d);

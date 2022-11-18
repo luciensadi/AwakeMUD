@@ -26,6 +26,7 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 // What karma / nuyen multipliers do you want your game to have? This effects grind length, higher is faster.
 #define KARMA_GAIN_MULTIPLIER                                  2.0
 #define NUYEN_GAIN_MULTIPLIER                                  2.0
+#define GROUP_QUEST_REWARD_MULTIPLIER                          1.5
 
 // How well should markets regenerate over time? (currently every 2 mins)
 #define MAX_PAYDATA_MARKET_INCREASE_PER_TICK                   250

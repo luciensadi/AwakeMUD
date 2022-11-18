@@ -970,7 +970,7 @@ struct descriptor_data
   u_short peer_port;            /* port of peer                         */
   char host[HOST_LENGTH+1];       /* hostname                           */
   byte bad_pws;                   /* number of bad pw attemps this login        */
-  byte idle_tics;               /* tics idle at password prompt         */
+  byte idle_ticks;               /* tics idle at password prompt         */
   byte invalid_name;              /* number of invalid name attempts    */
   int connected;                          /* mode of 'connectedness'            */
   int wait;                               /* wait for how many loops            */
