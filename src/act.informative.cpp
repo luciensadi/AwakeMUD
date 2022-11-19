@@ -6795,8 +6795,14 @@ ACMD(do_mort_show)
 }
 
 ACMD(do_karma){
-  int grace_days = 50 + (GET_TKE(ch) / NUMBER_OF_TKE_POINTS_PER_REAL_DAY_OF_EXTRA_IDLE_DELETE_GRACE_PERIOD);
-  send_to_char(ch, "You have ^c%d^n reputation and ^c%d^n notoriety. You've earned a lifetime total of ^c%d^n karma, which gives you ^c%d^n days of idle-delete grace time.\r\n", GET_REP(ch), GET_NOT(ch), GET_TKE(ch), grace_days);
+  send_to_char(ch, "You have ^c%d^n reputation and ^c%d^n notoriety. You've earned a lifetime total of ^c%d^n karma", GET_REP(ch), GET_NOT(ch), GET_TKE(ch));
+
+  if (PLR_FLAGGED(ch, PLR_NODELETE)) {
+    send_to_char(", and will never be idle-deleted.\r\n", ch);
+  } else {
+    int grace_days = 50 + (GET_TKE(ch) / NUMBER_OF_TKE_POINTS_PER_REAL_DAY_OF_EXTRA_IDLE_DELETE_GRACE_PERIOD);
+    send_to_char(ch, ", which gives you ^c%d^n days of idle-delete grace time.\r\n", grace_days);
+  }
 }
 
 #define STAFF_LEADERBOARD_SYNTAX_STRING "Syntax: leaderboard <option>, where option is one of: tke, reputation, notoriety, nuyen, syspoints, blocks, hardcore\r\n"
