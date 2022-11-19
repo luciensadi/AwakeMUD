@@ -881,15 +881,15 @@ const char *where[] =
 
 const char *hands[] =
   {
-    "<right hand>         ",
-    "<left hand>          ",
+    "<hand>               ",
+    "<off hand>           ",
     "<both hands>         ",
   };
 
 const char *wielding_hands[] =
   {
-    "<right hand (w)>     ",
-    "<left hand (w)>      ",
+    "<wielded>            ",
+    "<wielded (offhand)>  ",
     "<both hands>         ",
   };
 
