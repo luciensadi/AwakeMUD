@@ -3038,7 +3038,7 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
     trauma = FALSE;
   }
 
-  if (GET_PHYSICAL(victim) > 0)
+  if (GET_PHYSICAL(victim) <= 0)
     awake = FALSE;
 
   if (dam > 0) {
@@ -3106,7 +3106,7 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
     }
   }
   if (!awake && GET_PHYSICAL(victim) <= 0)
-    victim->points.lastdamage = time(0);
+    GET_LAST_DAMAGETIME(victim) = time(0);
 
   if (update_pos(victim)) {
     // They died from dumpshock.

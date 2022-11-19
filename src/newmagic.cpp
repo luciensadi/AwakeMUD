@@ -1687,7 +1687,11 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       break;
     case SPELL_STABILIZE:
       WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
-      success = success_test(skill, 4 + ((GET_LAST_DAMAGETIME(vict) - time(0)) / SECS_PER_MUD_HOUR) + target_modifiers);
+      {
+        // Removing wound age modifier because time() can be seconds OR milliseconds depending on platform.
+        // int wound_age_modifier = ((GET_LAST_DAMAGETIME(vict) - time(0)) / SECS_PER_MUD_HOUR);
+        success = success_test(skill, 4 /* + wound_age_modifier */ + target_modifiers);
+      }
       snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
       act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
       if (success > 0 && force >= (GET_PHYSICAL(vict) <= 0 ? -(GET_PHYSICAL(vict) / 100) : 50)) {
