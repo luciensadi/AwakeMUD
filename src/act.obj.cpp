@@ -25,6 +25,7 @@
 #include "newdb.hpp"
 #include "limits.hpp"
 #include "ignore_system.hpp"
+#include "newmagic.hpp"
 
 /* extern variables */
 extern int drink_aff[][3];
@@ -4369,30 +4370,56 @@ ACMD(do_draw)
 
 ACMD(do_break)
 {
-  struct obj_data *obj = ch->cyberware, *contents = NULL;
-  for (; obj; obj = obj->next_content)
-    if (GET_OBJ_VAL(obj, 0) == CYB_TOOTHCOMPARTMENT && GET_OBJ_VAL(obj, 3))
-      break;
+  skip_spaces(&argument);
 
-  if (!obj)
-    send_to_char("You don't have a breakable tooth compartment.\r\n", ch);
-  else if (!(contents = obj->contains))
-    send_to_char("Your tooth compartment is empty, so breaking it now would be a waste.\r\n", ch);
-  else {
-    if (GET_OBJ_TYPE(contents) != ITEM_DRUG) {
-      send_to_char(ch, "Your tooth compartment contains something that isn't drugs! Aborting.\r\n");
-      snprintf(buf, sizeof(buf), "%s's tooth compartment contains non-drug item %s!", GET_CHAR_NAME(ch), GET_OBJ_NAME(contents));
-      mudlog(buf, ch, LOG_SYSLOG, TRUE);
-      return;
+  // Mindlink.
+  if (is_abbrev(argument, "mindlink")) {
+    for (struct sustain_data *sust = GET_SUSTAINED(ch); sust; sust = sust->next) {
+      if (sust->spell == SPELL_MINDLINK) {
+        send_to_char("You dissolve your mindlink.\r\n", ch);
+        end_sustained_spell(ch, sust);
+        return;
+      }
     }
+    send_to_char("You are not currently under a mindlink.\r\n", ch);
+    return;
+  }
 
-    send_to_char("You bite down hard on the tooth compartment, breaking it open.\r\n", ch);
-    obj_from_cyberware(obj);
-    GET_ESSHOLE(ch) += GET_CYBERWARE_ESSENCE_COST(obj);
-    obj_from_obj(contents);
-    extract_obj(obj);
-    if (do_drug_take(ch, contents))
-      return;
+  // Tooth compartment.
+  if (is_abbrev(argument, "tooth compartment") || is_abbrev(argument, "compartment")) {
+    struct obj_data *obj = ch->cyberware, *contents = NULL;
+    for (; obj; obj = obj->next_content)
+      if (GET_OBJ_VAL(obj, 0) == CYB_TOOTHCOMPARTMENT && GET_OBJ_VAL(obj, 3))
+        break;
+
+    if (!obj)
+      send_to_char("You don't have a breakable tooth compartment.\r\n", ch);
+    else if (!(contents = obj->contains))
+      send_to_char("Your tooth compartment is empty, so breaking it now would be a waste.\r\n", ch);
+    else {
+      if (GET_OBJ_TYPE(contents) != ITEM_DRUG) {
+        send_to_char(ch, "Your tooth compartment contains something that isn't drugs! Aborting.\r\n");
+        snprintf(buf, sizeof(buf), "%s's tooth compartment contains non-drug item %s!", GET_CHAR_NAME(ch), GET_OBJ_NAME(contents));
+        mudlog(buf, ch, LOG_SYSLOG, TRUE);
+        return;
+      }
+
+      send_to_char("You bite down hard on the tooth compartment, breaking it open.\r\n", ch);
+      obj_from_cyberware(obj);
+      GET_ESSHOLE(ch) += GET_CYBERWARE_ESSENCE_COST(obj);
+      obj_from_obj(contents);
+      extract_obj(obj);
+      if (do_drug_take(ch, contents))
+        return;
+    }
+    return;
+  }
+
+  // No matches found.
+  if (*argument) {
+    send_to_char("You can only break mindlinks and tooth compartments. Are you looking for the ^WDESTROY^n or ^WJUNK^n commands?\r\n", ch);
+  } else {
+    send_to_char("Syntax: ^WBREAK TOOTH^n or ^WBREAK MINDLINK^n.\r\n", ch);
   }
 }
 

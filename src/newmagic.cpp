@@ -1563,6 +1563,11 @@ void cast_detection_spell(struct char_data *ch, int spell, int force, char *arg,
         act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
         vict->char_specials.mindlink = ch;
         ch->char_specials.mindlink = vict;
+
+        send_to_char(vict, "(OOC notice: ^c%s^n has cast the Mindlink spell on you, allowing for telepathic communication "
+                     "via the ^WTHINK^n command. If you wish to terminate this, you can ##^WBREAK MINDLINK^n, "
+                     "or ##^WBLOCK %s^W MINDLINKS^n to prevent new ones from being made.)\r\n",
+                     GET_CHAR_NAME(ch), GET_CHAR_NAME(ch));
       } else send_to_char(FAILED_CAST, ch);
       spell_drain(ch, spell, force, 0, direct_sustain);
       break;
@@ -6278,15 +6283,42 @@ ACMD(do_think)
   for (spell = GET_SUSTAINED(ch); spell; spell = spell->next)
     if (spell->spell == SPELL_MINDLINK)
       break;
-  if (!spell || !*argument) {
-    send_to_char("You think about life, the universe and everything.\r\n", ch);
+
+  if (!*argument) {
+    send_to_char(ch, "Syntax: ^WTHINK <message>^n\r\n");
     return;
   }
+
   skip_spaces(&argument);
-  snprintf(buf, sizeof(buf), "^rYou hear $v in your mind say, \"%s\"", argument);
+
+  char formatted_think_string[MAX_INPUT_LENGTH + 5];
+  snprintf(formatted_think_string, sizeof(formatted_think_string), "%s%s", CAP(argument), ispunct(get_final_character_from_string(argument)) ? "" : ".");
+
+  if (!spell) {
+    // RP form: Thinking to yourself. Printed to privileged people in the room to allow for RP adjustment in scenes.
+    send_to_char(ch, "You think to yourself, \"%s^n\"\r\n", formatted_think_string);
+    for (struct char_data *viewer = ch->in_room ? ch->in_room->people : ch->in_veh->people;
+         viewer;
+         viewer = (ch->in_room ? viewer->next_in_room : viewer->next_in_veh))
+    {
+      if (viewer == ch || !AWAKE(viewer))
+        continue;
+
+      if (access_level(viewer, LVL_FIXER) || (PRF_FLAGGED(viewer, PRF_QUEST) && PRF_FLAGGED(ch, PRF_QUESTOR))) {
+        send_to_char(viewer, "^LOOC: %s thinks to %s, \"%s^n\"^n\r\n",
+                     GET_CHAR_NAME(ch),
+                     GET_SEX(ch) == SEX_NEUTRAL ? "themselves" : (GET_SEX(ch) == SEX_MALE ? "himself" : "herself"),
+                     formatted_think_string);
+      }
+    }
+    return;
+  }
+
+  // We don't show communication mindlinks to privileged folks.
+  snprintf(buf, sizeof(buf), "^rYou hear $v^r in your mind say, \"%s^r\"^n", formatted_think_string);
   if (!IS_IGNORING(ch->char_specials.mindlink, is_blocking_mindlinks_from, ch))
     act(buf, FALSE, ch, 0, ch->char_specials.mindlink, TO_VICT);
-  send_to_char(ch, "You think, \"%s\"\r\n", argument);
+  send_to_char(ch, "You think across your mindlink^n, \"%s^n\"\r\n", formatted_think_string);
 }
 
 int get_spell_affected_successes(struct char_data * ch, int type)

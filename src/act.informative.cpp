@@ -6667,7 +6667,7 @@ ACMD(do_status)
       } else if (SPELL_HAS_SUBTYPE(sust->spell)) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (%s)", attributes[sust->subtype]);
       }
-      if (IS_SENATOR(ch) && sust->other && sust->other != targ)
+      if ((IS_SENATOR(ch) || sust->spell == SPELL_MINDLINK) && sust->other && sust->other != targ)
         send_to_char(ch, "%s (cast by ^c%s^n)\r\n", buf, GET_CHAR_NAME(sust->other));
       else
         send_to_char(ch, "%s\r\n", buf);
@@ -6682,8 +6682,8 @@ ACMD(do_status)
     for (struct sustain_data *sust = GET_SUSTAINED(targ); sust; sust = sust->next) {
       if (sust->caster || sust->spirit == targ) {
         send_to_char(ch, "%d) %s (force %d, %d successes%s)", i, get_spell_name(sust->spell, sust->subtype), sust->force, sust->success, warn_if_spell_under_potential(sust));
-        if (IS_SENATOR(ch) && sust->caster) {
-          send_to_char(ch, " (Cast on %s)", GET_CHAR_NAME(sust->other));
+        if ((IS_SENATOR(ch) || sust->spell == SPELL_MINDLINK)) {
+          send_to_char(ch, " (Cast on ^c%s^n)", GET_CHAR_NAME(sust->other));
         }
         if (sust->focus) {
           send_to_char(ch, " (Sustained by %s)", GET_OBJ_NAME(sust->focus));
