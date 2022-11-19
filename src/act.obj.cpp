@@ -1918,6 +1918,10 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
     return 0;
   }
 
+  // A portion of all donated items are extracted instead.
+  if (mode == SCMD_DONATE && !number(0, 6))
+    mode = SCMD_JUNK;
+
   if (mode == SCMD_DONATE || mode == SCMD_JUNK) {
     if (GET_OBJ_VNUM(obj) == OBJ_NEOPHYTE_SUBSIDY_CARD && GET_OBJ_VAL(obj, 1) > 0) {
       // TODO: Make it so you can use partial amounts for rent payments- this will suck with 1 nuyen left.
@@ -2082,21 +2086,15 @@ ACMD(do_drop)
   case SCMD_DONATE:
     sname = "donate";
     mode = SCMD_DONATE;
-    switch (number(0, 6)) {
+    switch (number(0, 2)) {
     case 0:
-      mode = SCMD_JUNK;
-      break;
-    case 6:
-    case 1:
       random_donation_room = &world[real_room(donation_room_1)];
       break;
-    case 5:
+    case 1:
+      random_donation_room = &world[real_room(donation_room_3)];
+      break;
     case 2:
       random_donation_room = &world[real_room(donation_room_2)];
-      break;
-    case 4:
-    case 3:
-      random_donation_room = &world[real_room(donation_room_3)];
       break;
     }
     if (!random_donation_room && mode != SCMD_JUNK) {
