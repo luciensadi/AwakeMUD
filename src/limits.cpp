@@ -732,8 +732,14 @@ void process_regeneration(int half_hour)
   for (ch = character_list; ch; ch = next_char) {
     next_char = ch->next;
     if (GET_TEMP_QUI_LOSS(ch) > 0) {
+      int old_qui = GET_QUI(ch);
+
       GET_TEMP_QUI_LOSS(ch)--;
       affect_total(ch);
+
+      if (old_qui <= 0 && GET_QUI(ch) > 0) {
+        send_to_char("Your muscles unlock, and you find you can move again.\r\n", ch);
+      }
     }
     if (GET_POS(ch) >= POS_STUNNED) {
       // Apply healing.
@@ -750,12 +756,16 @@ void process_regeneration(int half_hour)
 
         physical_gain(ch);
         if (!has_pedit && old_phys != GET_MAX_PHYSICAL(ch) && GET_PHYSICAL(ch) == GET_MAX_PHYSICAL(ch)) {
-          send_to_char(ch, "The last of your injuries has healed.\r\n");
+          send_to_char("The last of your injuries has healed.\r\n", ch);
         }
 
         mental_gain(ch);
-        if (!has_pedit && old_ment != GET_MAX_MENTAL(ch) && GET_MENTAL(ch) == GET_MAX_MENTAL(ch)) {
-          send_to_char(ch, "You feel fully alert again.\r\n");
+        if (!has_pedit && old_ment != GET_MAX_MENTAL(ch)) {
+          if (GET_MENTAL(ch) == GET_MAX_MENTAL(ch)) {
+            send_to_char("You feel fully alert again.\r\n", ch);
+          } else if (old_ment < 100 && GET_MENTAL(ch) >= 100){
+            send_to_char("You regain consciousness.\r\n", ch);
+          }
         }
       }
 
