@@ -114,6 +114,7 @@ const char *sol[] =
     "equip on target",
     "install in target",
     "load at location",
+    "load in host",
     "\n"
   };
 
@@ -133,6 +134,8 @@ const char *soo[] =
     "deliver to location",
     "destroy one",
     "destroy many",
+    "return paydata",
+    "upload to host",
     "\n"
   };
 
@@ -142,7 +145,7 @@ const char *smo[] =
     "escort",
     "kill one",
     "kill many",
-    "hunt",
+    "hunt escortee",
     "\n"
   };
 
