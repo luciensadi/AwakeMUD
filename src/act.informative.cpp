@@ -5073,6 +5073,8 @@ ACMD_CONST(do_who) {
   do_who(ch, not_const, cmd, subcmd);
 }
 
+bool characterNameCompareFunction(struct char_data *a, struct char_data *b) {return a < b;}
+
 ACMD(do_quickwho)
 {
   struct descriptor_data *d;
@@ -5083,6 +5085,7 @@ ACMD(do_quickwho)
   strlcpy(buf, "Currently in-game: ", sizeof(buf));
 
   for (int candidate_level = LVL_MAX; candidate_level >= LVL_MORTAL; candidate_level--) {
+    std::vector<struct char_data *> found_list = {};
     for (d = descriptor_list; d; d = d->next) {
       if (DESCRIPTOR_CONN_STATE_NOT_PLAYING(d))
         continue;
@@ -5097,21 +5100,32 @@ ACMD(do_quickwho)
       if (GET_INCOG_LEV(tch) > GET_LEVEL(ch))
         continue;
 
-      if (PRF_FLAGGED(ch, PRF_NOCOLOR)) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s%s%s",
-                  printed ? ", " : "",
-                  GET_CHAR_NAME(tch),
-                  GET_LEVEL(tch) > LVL_MORTAL ? " (staff)" : ""
-                );
-      } else {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s%s%s^n",
-                  printed ? ", " : "",
-                  get_level_wholist_color(GET_LEVEL(tch)),
-                  GET_CHAR_NAME(tch)
-                );
-      }
+      // Add the target to the candidate list.
+      found_list.push_back(tch);
+    }
 
-      printed = TRUE;
+    // Now print the candidates if any.
+    if (!found_list.empty()) {
+      // Sort the list by character name, alphabetically.
+      std::sort(found_list.begin(), found_list.end(), characterNameCompareFunction);
+
+      // Print its contents.
+      for (auto iter: found_list) {
+        if (PRF_FLAGGED(ch, PRF_NOCOLOR)) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s%s%s",
+                    printed ? ", " : "",
+                    GET_CHAR_NAME((iter)),
+                    GET_LEVEL((iter)) > LVL_MORTAL ? " (staff)" : ""
+                  );
+        } else {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s%s%s^n",
+                    printed ? ", " : "",
+                    get_level_wholist_color(GET_LEVEL((iter))),
+                    GET_CHAR_NAME((iter))
+                  );
+        }
+        printed = TRUE;
+      }
     }
   }
   send_to_char(ch, "%s\r\n", buf);
