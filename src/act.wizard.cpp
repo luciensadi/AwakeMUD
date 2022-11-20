@@ -7241,17 +7241,35 @@ int audit_zone_objects_(struct char_data *ch, int zone_num, bool verbose) {
     }
 
     // Flag objects with zero weight
-    if (GET_OBJ_TYPE(obj) != ITEM_OTHER && GET_OBJ_WEIGHT(obj) <= 0) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - no or negative weight^n.\r\n");
-      printed = TRUE;
-      issues++;
-    }
-
-    // Flag objects with high weight-- except fountains, which are often given high weights.
-    if (GET_OBJ_TYPE(obj) != ITEM_OTHER && GET_OBJ_TYPE(obj) != ITEM_FOUNTAIN && GET_OBJ_WEIGHT(obj) >= 100.0) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - high weight %0.2f^n.\r\n", GET_OBJ_WEIGHT(obj));
-      printed = TRUE;
-      issues++;
+    switch (GET_OBJ_TYPE(obj)) {
+      case ITEM_DESTROYABLE:
+      case ITEM_FOUNTAIN:
+      case ITEM_GRAFFITI:
+      case ITEM_LOADED_DECORATION:
+        // Never complain about item types that usually just live in rooms.
+        break;
+      case ITEM_KEY:
+        // Keys should be light.
+        if (GET_OBJ_WEIGHT(obj) >= 0.4) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - high key weight ^c%0.2f kgs^n.\r\n", GET_OBJ_WEIGHT(obj));
+          printed = TRUE;
+          issues++;
+        }
+        // Fall through
+      default:
+        // Weightless?
+        if (GET_OBJ_WEIGHT(obj) <= 0) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - no or negative weight^n.\r\n");
+          printed = TRUE;
+          issues++;
+        }
+        // Extremely heavy?
+        if (GET_OBJ_WEIGHT(obj) >= 100.0) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - high weight %0.2f kgs^n.\r\n", GET_OBJ_WEIGHT(obj));
+          printed = TRUE;
+          issues++;
+        }
+        break;
     }
 
     // Flag objects that can't be picked up, other than the ones that we generally expect to be non-gettable.
