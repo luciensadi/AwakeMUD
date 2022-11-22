@@ -3238,7 +3238,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "You should EXAMINE this deck, or jack in and view its SOFTWARE.");
       break;
     case ITEM_DRUG:
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It contains %d dose%s of ^c%s^n, which ",
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It contains ^c%d^n dose%s of ^c%s^n, which ",
                GET_OBJ_DRUG_DOSES(j),
                GET_OBJ_DRUG_DOSES(j) != 1 ? "s" : "",
                drug_types[GET_OBJ_DRUG_TYPE(j)].name);
@@ -3713,6 +3713,11 @@ ACMD(do_examine)
                    ammo_type[GET_OBJ_VAL(tmp_object, 2)].name,GET_OBJ_VAL(tmp_object, 9) != 1 ? "s" : "");
       send_to_char(ch, "It can hold a maximum of %d %s round%s.\r\n", GET_OBJ_VAL(tmp_object, 0), weapon_types[GET_OBJ_VAL(tmp_object, 1)],
                    GET_OBJ_VAL(tmp_object, 0) != 1 ? "s" : "");
+    } else if (GET_OBJ_TYPE(tmp_object) == ITEM_DRUG) {
+      send_to_char(ch, "It has %d dose%s of %s left.\r\n",
+                   GET_OBJ_DRUG_DOSES(tmp_object),
+                   GET_OBJ_DRUG_DOSES(tmp_object) == 1 ? "" : "s",
+                   drug_types[GET_OBJ_DRUG_TYPE(tmp_object)].name);
     } else if (GET_OBJ_TYPE(tmp_object) == ITEM_GUN_AMMO) {
       if (GET_OBJ_VAL(tmp_object, 3))
         send_to_char(ch, "It has %d/%d %s round%s of %s ammunition left.\r\n", GET_OBJ_VAL(tmp_object, 0), GET_OBJ_VAL(tmp_object, 0) +
