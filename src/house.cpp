@@ -1062,6 +1062,8 @@ void hcontrol_list_houses(struct char_data *ch)
   strlcat(buf, "-------  ------  ------  --------------  -----------\r\n", sizeof(buf));
   send_to_char(buf, ch);
 
+  int global_total_apartment_crap = 0;
+
   for (struct landlord *llord = landlords; llord; llord = llord->next)
     for (struct house_control_rec *house = llord->rooms; house; house = house->next)
       if (house->owner)
@@ -1078,6 +1080,7 @@ void hcontrol_list_houses(struct char_data *ch)
             for (struct obj_data *obj = veh->contents; obj; obj = obj->next_content)
               total += count_objects(obj);
           }
+          global_total_apartment_crap += total;
         } else
           total = -1;
 
@@ -1099,6 +1102,8 @@ void hcontrol_list_houses(struct char_data *ch)
         send_to_char(buf, ch);
         DELETE_ARRAY_IF_EXTANT(own_name);
       }
+
+  send_to_char(ch, "Global total crap: %d items.\r\n", global_total_apartment_crap);
 }
 
 void hcontrol_destroy_house(struct char_data * ch, char *arg)
