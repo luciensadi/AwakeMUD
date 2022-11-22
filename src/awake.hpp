@@ -296,7 +296,7 @@ enum {
 #define PLR_DELETED                         11 /* Player deleted - space reusable        */
 #define PLR_NODELETE                        12 /* Player shouldn't be deleted            */
 #define PLR_NOSTAT                          14 /* Player cannot be statted, etc          */
-#define PLR_LOADROOM                        15 /* Player uses nonstandard loadroom       */
+#define PLR_IN_CHARGEN                      15 /* Player is currently in chargen         */
 #define PLR_INVSTART                        16 /* Player should enter game wizinvis      */
 #define PLR_OLC                             19 /* Player has access to olc commands      */
 #define PLR_MATRIX                          20 /* Player is in the Matrix                */

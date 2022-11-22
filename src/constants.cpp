@@ -479,7 +479,7 @@ const char *player_bits[] =
     "!DELETE",
     "PACKING",
     "!STAT",
-    "LOADRM",
+    "IN-CHARGEN",
     "INVST",
     "!USED",
     "!USED",

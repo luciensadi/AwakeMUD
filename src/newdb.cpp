@@ -431,6 +431,12 @@ bool load_char(const char *name, char_data *ch, bool logon)
   // Unset the cyberdoc flag on load.
   PRF_FLAGS(ch).RemoveBit(PRF_TOUCH_ME_DADDY);
 
+  // Warn if we have the chargen flag, then unset it (this is an error case)
+  if (PLR_FLAGGED(ch, PLR_IN_CHARGEN)) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: %s still had the chargen bit on load! Removing it.", GET_CHAR_NAME(ch));
+    PLR_FLAGS(ch).RemoveBit(PLR_IN_CHARGEN);
+  }
+
   ch->player.physical_text.room_desc = str_dup(get_string_after_color_code_removal(row[9], ch));
   ch->player.background = str_dup(row[10]);
   ch->player.physical_text.keywords = str_dup(row[11]);
@@ -1608,6 +1614,7 @@ char_data *CreateChar(char_data *ch)
                           PRF_NOHASSLE, PRF_AUTOINVIS, PRF_AUTOEXIT, ENDBIT);
   } else {
     PLR_FLAGS(ch).SetBit(PLR_NOT_YET_AUTHED);
+    PLR_FLAGS(ch).RemoveBit(PLR_IN_CHARGEN);
     GET_IDNUM(ch) = MAX(playerDB.find_open_id(), highest_idnum_in_use + 1);
   }
 

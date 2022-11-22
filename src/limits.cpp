@@ -498,6 +498,7 @@ void check_idling(void)
         char_to_room(ch, &world[1]);
       }
 #endif
+
         /* Disabled-- I get protecting them by moving them to the void, but why DC them?
         else if (ch->char_specials.timer > 30) {
           if (ch->in_room)
@@ -515,15 +516,20 @@ void check_idling(void)
         }
         */
 
-      else if (!ch->desc && !PLR_FLAGGED(ch, PLR_PROJECT) && ch->char_specials.timer > NUM_MINUTES_BEFORE_LINKDEAD_EXTRACTION) {
+      if (!ch->desc && !PLR_FLAGGED(ch, PLR_PROJECT) && (ch->char_specials.timer > NUM_MINUTES_BEFORE_LINKDEAD_EXTRACTION || PLR_FLAGGED(ch, PLR_IN_CHARGEN))) {
         snprintf(buf, sizeof(buf), "%s removed from game (no link).", GET_CHAR_NAME(ch));
         mudlog(buf, ch, LOG_CONNLOG, TRUE);
         extract_char(ch);
-      } else if (IS_SENATOR(ch) && ch->char_specials.timer > 15 &&
-                 GET_INVIS_LEV(ch) < 2 &&
-                 access_level(ch, LVL_EXECUTIVE) &&
-                 PRF_FLAGGED(ch, PRF_AUTOINVIS))
+        return;
+      }
+
+      // Auto-invis idle staff.
+      if (access_level(ch, LVL_EXECUTIVE) && ch->char_specials.timer > 15 &&
+          GET_INVIS_LEV(ch) < 2 &&
+          PRF_FLAGGED(ch, PRF_AUTOINVIS))
+      {
         perform_immort_invis(ch, 2);
+      }
     }
   }
 }

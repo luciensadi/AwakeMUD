@@ -2870,6 +2870,7 @@ void nanny(struct descriptor_data * d, char *arg)
 
     if (STATE(d) == CON_CNFPASSWD) {
       STATE(d) = CON_CCREATE;
+      PLR_FLAGS(d->character).SetBit(PLR_IN_CHARGEN);
       init_create_vars(d);
       ccr_pronoun_menu(d);
     } else {
