@@ -6294,6 +6294,9 @@ bool restring_with_args(struct char_data *ch, char *argument, bool using_sysp) {
     return FALSE;
   }
 
+  // TODO: Wrap this in an ifcheck so we don't double up on neutrals.
+  strlcat(buf, "^n", sizeof(buf));
+
   int length_with_no_color = get_string_length_after_color_code_removal(buf, ch);
 
   // Silent failure: We already sent the error message in get_string_length_after_color_code_removal().
