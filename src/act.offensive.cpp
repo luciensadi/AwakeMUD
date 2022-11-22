@@ -745,6 +745,11 @@ ACMD(do_kick)
   struct char_data *vict;
   int dir;
 
+  if (AFF_FLAGGED(ch, AFF_PRONE)) {
+    send_to_char(ch, "You flail ineffectually-- it's hard to get leverage while prone.\r\n");
+    return;
+  }
+
   two_arguments(argument, arg, buf2);
 
   if (!*arg) {
