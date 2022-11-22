@@ -675,7 +675,8 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
     // Special handling for stackable things. TODO: Review this to make sure sell struct etc is updated appropriately.
     if ((GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(obj, 0) == TYPE_PARTS)
         || (GET_OBJ_TYPE(obj) == ITEM_MAGIC_TOOL && GET_OBJ_VAL(obj, 0) == TYPE_SUMMONING)
-        || (GET_OBJ_TYPE(obj) == ITEM_GUN_AMMO))
+        || (GET_OBJ_TYPE(obj) == ITEM_GUN_AMMO)
+        || (GET_OBJ_TYPE(obj) == ITEM_DRUG))
     {
       bought = 0;
       float current_obj_weight = 0;
@@ -764,7 +765,59 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
 
           obj_to_char(obj, ch);
         }
-        // TODO: Handle decrementing shop amounts here (->stock). Currently, shop items are not decremented on sale for these item types.
+      }
+
+      // Give them the item (it's drugs)
+      else if (GET_OBJ_TYPE(obj) == ITEM_DRUG) {
+        print_multiples_at_end = FALSE;
+
+        // Update its quantity and weight to match the increased dose count. Cost already done above.
+        GET_OBJ_DRUG_DOSES(obj) *= bought;
+        GET_OBJ_WEIGHT(obj) *= bought;
+
+        // In theory this is dead code now after the 'you can only carry x' code change above. Will see.
+        if (GET_OBJ_WEIGHT(obj) > CAN_CARRY_W(ch)) {
+          send_to_char("You start gathering up the doses you paid for, but realize you can't carry it all! The shopkeeper scowls at you, then refunds you in cash.\r\n", ch);
+          // In this specific instance, we not only assign raw nuyen, we also decrement the purchase nuyen counter. It's a refund, after all.
+          long refund_amount = price * bought;
+          GET_NUYEN_RAW(ch) += refund_amount;
+          GET_NUYEN_INCOME_THIS_PLAY_SESSION(ch, NUYEN_OUTFLOW_SHOP_PURCHASES) -= refund_amount;
+          extract_obj(obj);
+          return FALSE;
+        }
+
+        struct obj_data *orig = ch->carrying;
+        for (; orig; orig = orig->next_content) {
+          if (GET_OBJ_TYPE(orig) == ITEM_DRUG && GET_OBJ_DRUG_TYPE(orig) == GET_OBJ_DRUG_TYPE(obj))
+            break;
+        }
+        if (orig) {
+          // They were carrying one already. Combine them.
+          snprintf(buf2, sizeof(buf2), "You add the purchased %d doses", GET_OBJ_DRUG_DOSES(obj));
+          combine_drugs(ch, obj, orig, FALSE);
+          snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " into %s.", GET_OBJ_NAME(orig));
+        } else {
+          // Just give the purchased thing to them directly. Handle restring if needed.
+          if (bought > 1) {
+            char new_name_buf[500];
+
+            // Compose the new name.
+            snprintf(new_name_buf, sizeof(new_name_buf), "a box of %s %ss",
+              drug_types[GET_OBJ_DRUG_TYPE(obj)].name,
+              drug_types[GET_OBJ_DRUG_TYPE(obj)].delivery_method
+            );
+
+            // Commit the change.
+            obj->restring = str_dup(new_name_buf);
+
+            snprintf(buf2, sizeof(buf2), "You now have %s (contains %d doses).", GET_OBJ_NAME(obj), GET_OBJ_DRUG_DOSES(obj));
+          } else {
+            snprintf(buf2, sizeof(buf2), "You now have %s.", GET_OBJ_NAME(obj));
+          }
+          // buf2 is sent to the character with a newline appended at the end of the function.
+
+          obj_to_char(obj, ch);
+        }
       }
 
       // Give them the item (it's parts or conjuring materials)
@@ -783,6 +836,16 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
           obj_to_char(obj, ch);
         }
         send_to_char("[OOC: Your purchase has been bundled up into one unit with the appropriate value.]\r\n", ch);
+      }
+
+      if (sell) {
+        if (sell->type == SELL_BOUGHT && (sell->stock -= bought) <= 0) {
+          struct shop_sell_data *temp;
+          REMOVE_FROM_LIST(sell, shop_table[shop_nr].selling, next);
+          delete sell;
+          sell = NULL;
+        } else if (sell->type == SELL_STOCK)
+          sell->stock = MAX(0, sell->stock - bought);
       }
     }
 
