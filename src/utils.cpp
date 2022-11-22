@@ -5347,6 +5347,31 @@ void render_targets_abilities_to_viewer(struct char_data *viewer, struct char_da
 #endif
 }
 
+bool keyword_appears_in_obj(const char *keyword, struct obj_data *obj, bool search_keywords, bool search_name, bool search_desc) {
+  if (!keyword || !*keyword) {
+    return FALSE;
+  }
+
+  if (search_keywords && isname(keyword, obj->text.keywords))
+    return TRUE;
+
+  if (search_name) {
+    if (isname(keyword, get_string_after_color_code_removal(obj->text.name, NULL)))
+      return TRUE;
+    if (obj->restring && isname(keyword, get_string_after_color_code_removal(obj->restring, NULL)))
+      return TRUE;
+  }
+
+  if (search_desc) {
+    if (isname(keyword, get_string_after_color_code_removal(obj->text.room_desc, NULL)))
+      return TRUE;
+    if (isname(keyword, get_string_after_color_code_removal(obj->text.look_desc, NULL)))
+      return TRUE;
+  }
+
+  return FALSE;
+}
+
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.
 // Great for swapping out old Classic weapons, cyberware, etc for the new guaranteed-canon versions.
 #define PAIR(classic, current) case (classic): return (current);
