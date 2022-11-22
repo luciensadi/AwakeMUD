@@ -236,21 +236,33 @@ bool uninstall_ware_from_target_character(struct obj_data *obj, struct char_data
   char buf[MAX_STRING_LENGTH], buf3[MAX_STRING_LENGTH];
 
   if (remover == victim) {
-    send_to_char(remover, "You can't operate on yourself!\r\n");
-    mudlog("SYSERR: remover = victim in uninstall_ware_from_target_character(). That's not supposed to happen!", remover, LOG_SYSLOG, TRUE);
-    return FALSE;
+    if (!access_level(remover, LVL_ADMIN)) {
+      send_to_char(remover, "You can't operate on yourself!\r\n");
+      mudlog("SYSERR: remover = victim in uninstall_ware_from_target_character(). That's not supposed to happen!", remover, LOG_SYSLOG, TRUE);
+      return FALSE;
+    } else {
+      act("Allowing self-operation for $n: Staff", FALSE, remover, 0, 0, TO_ROLLS);
+    }
   }
 
   if (GET_OBJ_TYPE(obj) != ITEM_BIOWARE && GET_OBJ_TYPE(obj) != ITEM_CYBERWARE) {
     snprintf(buf3, sizeof(buf3), "SYSERR: Non-ware object '%s' (%ld) passed to uninstall_ware_from_target_character()!", GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj));
     mudlog(buf3, remover, LOG_SYSLOG, TRUE);
-    send_to_char(remover, "An unexpected error occurred when trying to uninstall %s.\r\n", GET_OBJ_NAME(obj));
-    return FALSE;
+    if (!access_level(remover, LVL_ADMIN)) {
+      send_to_char(remover, "An unexpected error occurred when trying to uninstall %s.\r\n", GET_OBJ_NAME(obj));
+      return FALSE;
+    } else {
+      act("Allowing uninstallation of non-ware for $n from $N: Staff", FALSE, remover, 0, victim, TO_ROLLS);
+    }
   }
 
   if (GET_OBJ_COST(obj) == 0 && !IS_NPC(remover)) {
-    send_to_char(remover, "%s is Chargen 'ware, so it can't be removed by player cyberdocs. Have your patient sell it to an NPC doc.\r\n", capitalize(GET_OBJ_NAME(obj)));
-    return FALSE;
+    if (!access_level(remover, LVL_ADMIN)) {
+      send_to_char(remover, "%s is Chargen 'ware, so it can't be removed by player cyberdocs. Have your patient sell it to an NPC doc.\r\n", capitalize(GET_OBJ_NAME(obj)));
+      return FALSE;
+    } else {
+      act("Allowing uninstallation of chargen 'ware for $n from $N: Staff", FALSE, remover, 0, victim, TO_ROLLS);
+    }
   }
 
   if (GET_OBJ_TYPE(obj) == ITEM_BIOWARE) {
@@ -264,9 +276,8 @@ bool uninstall_ware_from_target_character(struct obj_data *obj, struct char_data
 
   if (!IS_NPC(remover)) {
     const char *representation = generate_new_loggable_representation(obj);
-    snprintf(buf, sizeof(buf), "Player Cyberdoc: %s uninstalled %s from %s.", GET_CHAR_NAME(remover), representation, GET_CHAR_NAME(victim));
+    mudlog_vfprintf(remover, LOG_GRIDLOG, "Player Cyberdoc: %s uninstalled %s from %s.", GET_CHAR_NAME(remover), representation, GET_CHAR_NAME(victim));
     delete [] representation;
-    mudlog(buf, remover, LOG_GRIDLOG, TRUE);
   }
 
   act("$n takes out a sharpened scalpel and lies $N down on the operating table.",
@@ -302,9 +313,13 @@ bool install_ware_in_target_character(struct obj_data *ware, struct char_data *i
   char buf[MAX_STRING_LENGTH], buf3[MAX_STRING_LENGTH];
 
   if (installer == recipient) {
-    send_to_char(installer, "You can't operate on yourself!\r\n");
-    mudlog("SYSERR: installer = recipient in install_ware_in_target_character(). That's not supposed to happen!", installer, LOG_SYSLOG, TRUE);
-    return FALSE;
+    if (!access_level(installer, LVL_ADMIN)) {
+      send_to_char(installer, "You can't operate on yourself!\r\n");
+      mudlog("SYSERR: installer = recipient in install_ware_in_target_character(). That's not supposed to happen!", installer, LOG_SYSLOG, TRUE);
+      return FALSE;
+    } else {
+      act("Allowing self-operation for $n: Staff", FALSE, installer, 0, 0, TO_ROLLS);
+    }
   }
 
   strlcpy(buf, GET_CHAR_NAME(recipient), sizeof(buf));
@@ -327,7 +342,7 @@ bool install_ware_in_target_character(struct obj_data *ware, struct char_data *i
     default:
       snprintf(buf3, sizeof(buf3), "SYSERR: Non-ware object '%s' (%ld) passed to install_ware_in_target_character()!", GET_OBJ_NAME(ware), GET_OBJ_VNUM(ware));
       mudlog(buf3, installer, LOG_SYSLOG, TRUE);
-      send_to_char(installer, "An unexpected error occurred when trying to install %s (code 1.\r\n", GET_OBJ_NAME(ware));
+      send_to_char(installer, "An unexpected error occurred when trying to install %s (code 1).\r\n", GET_OBJ_NAME(ware));
       send_to_char(recipient, "An unexpected error occurred when trying to install %s (code 1).\r\n", GET_OBJ_NAME(ware));
       return FALSE;
   }
@@ -557,9 +572,16 @@ bool install_ware_in_target_character(struct obj_data *ware, struct char_data *i
     obj_to_bioware(ware, recipient);
   }
 
+  // Sanity check.
+  else {
+    mudlog_vfprintf(installer, LOG_SYSLOG, "CRITICAL SYSERR: Not only is %s (%ld) not cyberware or bioware, our prior check to ensure safety failed!!", GET_OBJ_NAME(ware), GET_OBJ_VNUM(ware));
+    return FALSE;
+  }
+
   if (!IS_NPC(installer)) {
-    snprintf(buf, sizeof(buf), "Player Cyberdoc: %s installed %s in %s.", GET_CHAR_NAME(installer), GET_OBJ_NAME(ware), GET_CHAR_NAME(recipient));
-    mudlog(buf, installer, LOG_GRIDLOG, TRUE);
+    const char *representation = generate_new_loggable_representation(ware);
+    mudlog_vfprintf(installer, LOG_GRIDLOG, "Player Cyberdoc: %s installed %s in %s.", GET_CHAR_NAME(installer), GET_OBJ_NAME(ware), GET_CHAR_NAME(recipient));
+    delete [] representation;
   }
 
   // Send installation messages.
