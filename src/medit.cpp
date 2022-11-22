@@ -721,9 +721,29 @@ void medit_parse(struct descriptor_data *d, const char *arg)
       send_to_char("Mobile not saved, aborting.\r\n", d->character);
       STATE(d) = CON_PLAYING;
       // complete nuke
-      if (d->edit_mob)
-        Mem->DeleteCh(d->edit_mob);
-      d->edit_mob = NULL;
+      if (MOB) {
+        // Wipe out our cloned equipment etc.
+        {
+          struct obj_data *obj;
+          while ((obj = MOB->cyberware)) {
+            obj_from_cyberware(obj);
+            extract_obj(obj);
+          }
+          while ((obj = MOB->bioware)) {
+            obj_from_bioware(obj);
+            extract_obj(obj);
+          }
+          for (int wearloc = 0; wearloc < NUM_WEARS; wearloc++) {
+            if ((obj = GET_EQ(MOB, wearloc))) {
+              unequip_char(MOB, wearloc, FALSE);
+              extract_obj(obj);
+            }
+          }
+        }
+
+        Mem->DeleteCh(MOB);
+      }
+      MOB = NULL;
       d->edit_number = 0;
       d->edit_zone = 0;
       PLR_FLAGS(d->character).RemoveBit(PLR_EDITING);
