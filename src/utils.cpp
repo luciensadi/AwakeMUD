@@ -5352,6 +5352,11 @@ bool keyword_appears_in_obj(const char *keyword, struct obj_data *obj, bool sear
     return FALSE;
   }
 
+  if (!obj) {
+    mudlog("SYSERR: Received NULL obj to keyword_appears_in_obj()!", NULL, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+
   if (search_keywords && isname(keyword, obj->text.keywords))
     return TRUE;
 
@@ -5366,6 +5371,71 @@ bool keyword_appears_in_obj(const char *keyword, struct obj_data *obj, bool sear
     if (isname(keyword, get_string_after_color_code_removal(obj->text.room_desc, NULL)))
       return TRUE;
     if (isname(keyword, get_string_after_color_code_removal(obj->text.look_desc, NULL)))
+      return TRUE;
+  }
+
+  return FALSE;
+}
+
+bool keyword_appears_in_char(const char *keyword, struct char_data *ch, bool search_keywords, bool search_name, bool search_desc) {
+  if (!keyword || !*keyword) {
+    return FALSE;
+  }
+
+  if (!ch) {
+    mudlog("SYSERR: Received NULL ch to keyword_appears_in_char()!", NULL, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+
+  if (search_keywords && isname(keyword, ch->player.physical_text.keywords))
+    return TRUE;
+
+  if (search_name) {
+    if (isname(keyword, get_string_after_color_code_removal(ch->player.physical_text.name, NULL)))
+      return TRUE;
+    if (ch->player.char_name && isname(keyword, get_string_after_color_code_removal(ch->player.char_name, NULL)))
+      return TRUE;
+  }
+
+  if (search_desc) {
+    if (isname(keyword, get_string_after_color_code_removal(ch->player.physical_text.room_desc, NULL)))
+      return TRUE;
+    if (isname(keyword, get_string_after_color_code_removal(ch->player.physical_text.look_desc, NULL)))
+      return TRUE;
+
+    // Since this is not a common use case, we use full keyword matching here to prevent mixups like 'hu' from 'hunter' matching 'human'
+    if (!str_cmp(keyword, pc_race_types[(int) GET_RACE(ch)]))
+      return TRUE;
+    if (!str_cmp(keyword, genders[(int) GET_SEX(ch)]))
+      return TRUE;
+  }
+
+  return FALSE;
+}
+
+bool keyword_appears_in_veh(const char *keyword, struct veh_data *veh, bool search_name, bool search_desc) {
+  if (!keyword || !*keyword) {
+    return FALSE;
+  }
+
+  if (!veh) {
+    mudlog("SYSERR: Received NULL veh to keyword_appears_in_veh()!", NULL, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+
+  if (search_name) {
+    if (isname(keyword, get_string_after_color_code_removal(veh->name, NULL)))
+      return TRUE;
+    if (veh->restring && isname(keyword, get_string_after_color_code_removal(veh->restring, NULL)))
+      return TRUE;
+    if (isname(keyword, get_string_after_color_code_removal(veh->description, NULL)))
+      return TRUE;
+  }
+
+  if (search_desc) {
+    if (isname(keyword, get_string_after_color_code_removal(veh->long_description, NULL)))
+      return TRUE;
+    if (veh->restring_long && isname(keyword, get_string_after_color_code_removal(veh->restring_long, NULL)))
       return TRUE;
   }
 

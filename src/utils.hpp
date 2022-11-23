@@ -139,7 +139,11 @@ int     get_focus_bond_cost(struct obj_data *obj);
 bool    char_is_in_social_room(struct char_data *ch);
 bool    is_custom_ware(struct obj_data *ware);
 void    render_targets_abilities_to_viewer(struct char_data *viewer, struct char_data *vict);
-bool    keyword_appears_in_obj(const char *keyword, struct obj_data *obj, bool search_keywords, bool search_name, bool search_desc=0);
+
+
+bool    keyword_appears_in_obj(const char *keyword, struct obj_data *obj, bool search_keywords=1, bool search_name=1, bool search_desc=0);
+bool    keyword_appears_in_char(const char *keyword, struct char_data *ch, bool search_keywords=1, bool search_name=1, bool search_desc=0);
+bool    keyword_appears_in_veh(const char *keyword, struct veh_data *veh, bool search_name=1, bool search_desc=0);
 
 struct obj_data *find_best_active_docwagon_modulator(struct char_data *ch);
 
