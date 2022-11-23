@@ -1879,12 +1879,14 @@ void damage_door(struct char_data *ch, struct room_data *room, int dir, int powe
     return;
   }
 
-  if (IS_SET(type, DAMOBJ_MANIPULATION))
-  {
-    rating = room->dir_option[dir]->barrier;
+  if (IS_SET(type, DAMOBJ_MANIPULATION)) {
     REMOVE_BIT(type, DAMOBJ_MANIPULATION);
-  } else
+    rating = room->dir_option[dir]->barrier;
+  } else if (type == DAMOBJ_CRUSH) {
+    rating = room->dir_option[dir]->barrier;
+  } else {
     rating = room->dir_option[dir]->barrier * 2;
+  }
 
   switch (room->dir_option[dir]->material) {
     // Model weak materials.
@@ -5621,6 +5623,7 @@ bool next_combat_list_is_valid(struct char_data *ncl) {
 }
 
 /* control the fights going on.  Called every 2 seconds from comm.c. */
+// aka combat_loop
 unsigned long violence_loop_counter = 0;
 void perform_violence(void)
 {
@@ -5706,6 +5709,22 @@ void perform_violence(void)
       mobact_change_firemode(ch);
     }
 
+    // On fire and panicking, or engulfed? Lose your action.
+    if ((ch->points.fire[0] > 0 && success_test(GET_WIL(ch), 6, ch, "process_violence fire test") < 0) || engulfed)
+    {
+      send_to_char("^RThe flames engulfing you cause you to panic!^n\r\n", ch);
+      act("$n panics and flails ineffectually.", TRUE, ch, 0, 0, TO_ROOM);
+      continue;
+    }
+
+    // Skip people who are surprised, but only if they're in combat with someone who is attacking them.
+    if (AFF_FLAGGED(ch, AFF_SURPRISE)) {
+      if (FIGHTING(ch) && FIGHTING(FIGHTING(ch)) == ch) {
+        act("Skipping $n's action: Surprised.", FALSE, ch, 0, 0, TO_ROLLS);
+        continue;
+      }
+    }
+
     // Process spirit attacks.
     for (struct spirit_sustained *ssust = SPIRIT_SUST(ch); ssust; ssust = ssust->next) {
       if (ssust->type == ENGULF) {
@@ -5753,13 +5772,6 @@ void perform_violence(void)
         engulfed = TRUE;
         break;
       }
-    }
-
-    // On fire and panicking, or engulfed? Lose your action.
-    if ((ch->points.fire[0] > 0 && success_test(GET_WIL(ch), 6) < 0)
-        || engulfed)
-    {
-      continue;
     }
 
     // Process banishment actions.
