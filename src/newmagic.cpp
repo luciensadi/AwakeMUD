@@ -1743,7 +1743,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       // fall through
     case SPELL_HEAL:
       if (AFF_FLAGGED(vict, AFF_HEALED)) {
-        send_to_char(ch, "%s has been healed to recently for this spell.\r\n", GET_NAME(vict));
+        send_to_char(ch, "%s has been healed too recently for this spell.\r\n", GET_NAME(vict));
         return;
       }
 

@@ -4442,6 +4442,13 @@ ACMD(do_show)
         printed = TRUE;
       }
 
+      if ((GET_RACE(&mob_proto[i]) != RACE_SPIRIT && keyword_appears_in_char("spirit", &mob_proto[i]))
+          || (GET_RACE(&mob_proto[i]) != RACE_ELEMENTAL && keyword_appears_in_char("elemental", &mob_proto[i])))
+      {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s spirit or elemental keyword with mismatched race", printed ? ";" : " has");
+        printed = TRUE;
+      }
+
       if (printed)
         send_to_char(ch, "%s\r\n", buf);
     }
@@ -7031,6 +7038,14 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
     // Flag mobs with no weight or height.
     if (GET_HEIGHT(mob) == 0 || GET_WEIGHT(mob) == 0.0) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - missing vital statistics (weight %d, height %d)^n.\r\n", GET_HEIGHT(mob), GET_WEIGHT(mob));
+      printed = TRUE;
+      issues++;
+    }
+
+    if ((GET_RACE(&mob_proto[i]) != RACE_SPIRIT && keyword_appears_in_char("spirit", &mob_proto[i]))
+        || (GET_RACE(&mob_proto[i]) != RACE_ELEMENTAL && keyword_appears_in_char("elemental", &mob_proto[i])))
+    {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s spirit or elemental keyword with mismatched race", printed ? ";" : " has");
       printed = TRUE;
       issues++;
     }
