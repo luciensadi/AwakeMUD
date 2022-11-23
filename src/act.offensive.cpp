@@ -290,7 +290,28 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
         snprintf(buf, sizeof(buf), "$n attacks the door to %s.", thedirs[dir]);
         act(buf, FALSE, ch, 0, 0, TO_ROOM);
       }
-      damage_door(ch, ch->in_room, dir, (int)(GET_STR(ch) / 2), DAMOBJ_CRUSH);
+
+      int power = GET_STR(ch);
+
+      for (struct obj_data *cyber = ch->cyberware; cyber; cyber = cyber->next_content) {
+        if (GET_CYBERWARE_TYPE(cyber) == CYB_BONELACING) {
+          switch (GET_CYBERWARE_LACING_TYPE(cyber)) {
+            case BONE_PLASTIC:
+              power += 2;
+              break;
+            case BONE_ALUMINIUM:
+            case BONE_CERAMIC:
+              power += 3;
+              break;
+            case BONE_TITANIUM:
+              power += 4;
+              break;
+          }
+          break;
+        }
+      }
+
+      damage_door(ch, ch->in_room, dir, (int)(power / 2), DAMOBJ_CRUSH);
     }
     return TRUE;
   }
