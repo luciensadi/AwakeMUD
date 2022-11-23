@@ -7045,7 +7045,7 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
     if ((GET_RACE(mob) != RACE_SPIRIT && keyword_appears_in_char("spirit", mob))
         || (GET_RACE(mob) != RACE_ELEMENTAL && keyword_appears_in_char("elemental", mob)))
     {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s spirit or elemental keyword with mismatched race", printed ? ";" : " has");
+      strlcat(buf, "  - spirit or elemental keyword with mismatched race.\r\n", sizeof(buf));
       printed = TRUE;
       issues++;
     }
