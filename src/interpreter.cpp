@@ -102,6 +102,9 @@ extern void ccr_pronoun_menu(struct descriptor_data *d);
 extern void disable_xterm_256(descriptor_t *apDescriptor);
 extern void enable_xterm_256(descriptor_t *apDescriptor);
 
+// Some commands are not supported but are common in other games. We handle those with these SCMDs.
+#define SCMD_INTRODUCE 0
+
 /* prototypes for all do_x functions. */
 ACMD_DECLARE(do_olcon);
 ACMD_DECLARE(do_abilityset);
@@ -367,6 +370,7 @@ ACMD_DECLARE(do_unban);
 ACMD_DECLARE(do_unbond);
 ACMD_DECLARE(do_ungroup);
 ACMD_DECLARE(do_unpack);
+ACMD_DECLARE(do_unsupported_command);
 ACMD_DECLARE(do_upgrade);
 ACMD_DECLARE(do_use);
 ACMD_DECLARE(do_users);
@@ -660,6 +664,7 @@ struct command_info cmd_info[] =
     { "insult"     , POS_LYING   , do_insult   , 0, 0, FALSE },
     { "invis"      , POS_DEAD    , do_invis    , LVL_BUILDER, 0, FALSE },
     { "invitations", POS_LYING   , do_invitations, 0, 0, FALSE },
+    { "introduce"  , POS_DEAD    , do_unsupported_command, 0, SCMD_INTRODUCE, FALSE },
     { "items"      , POS_LYING   , do_items    , 0, 0, FALSE },
 
     { "jack"       , POS_SITTING , do_jack     , 0, 0, FALSE },
@@ -3348,6 +3353,18 @@ void log_command(struct char_data *ch, const char *argument, const char *tcname)
   log(cmd_buf);
 }
 #endif
+
+ACMD(do_unsupported_command) {
+  switch (subcmd) {
+    case SCMD_INTRODUCE:
+      send_to_char("(Sorry, that command isn't supported here. Instead, you can introduce yourself with the ^WSAY^n or ^WEMOTE^n commands, and the listeners can ^WREMEMBER^n you.)\r\n", ch);
+      return;
+    default:
+      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Unsupported SCMD to do_unsupported_command(): %d", subcmd);
+      send_to_char("Sorry, that command isn't supported here.\r\n", ch);
+      return;
+  }
+}
 
 // Attempts to map common typos to their actual commands.
 #define COMMAND_ALIAS(typo, corrected)   if (strncmp(arg, (typo), strlen(arg)) == 0) { return find_command_in_x((corrected), cmd_info); }

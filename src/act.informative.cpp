@@ -113,6 +113,8 @@ extern int num_elevators;
 
 const char *get_command_hints_for_obj(struct obj_data *obj);
 
+// ACMD_DECLARE(do_unsupported_command);
+
 /* blood stuff */
 
 const char* blood_messages[] = {
@@ -1440,7 +1442,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
       strlcat(buf, " is sitting in the drivers seat.", sizeof(buf));
   } else if ((obj = get_mount_manned_by_ch(i))) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " is manning %s.", GET_OBJ_NAME(obj));
-  } else if (affected_by_spell(ch, SPELL_LEVITATE)) {
+  } else if (affected_by_spell(i, SPELL_LEVITATE)) {
     strlcat(buf, " is here, hovering above the ground.", sizeof(buf));
   } else {
     if (GET_DEFPOS(i))
@@ -6125,6 +6127,13 @@ ACMD(do_commands)
       // Skip any commands that don't match the prefix provided.
       if (!mode_all && *arg && !is_abbrev(arg, mtx_info[cmd_num].command))
         continue;
+
+      // Skip any unsupported commands.
+      /*
+      if (mtx_info[cmd_num].command_pointer == do_unsupported_command)
+        continue;
+      */
+
       if (mtx_info[cmd_num].minimum_level >= 0 &&
           ((!IS_NPC(vict) && GET_REAL_LEVEL(vict) >= mtx_info[cmd_num].minimum_level) ||
            (IS_NPC(vict) && vict->desc->original && GET_REAL_LEVEL(vict->desc->original) >= mtx_info[cmd_num].minimum_level))) {
@@ -6141,6 +6150,12 @@ ACMD(do_commands)
       // Skip any commands that don't match the prefix provided.
       if (!mode_all && *arg && !is_abbrev(arg, rig_info[cmd_num].command))
         continue;
+
+      // Skip any unsupported commands.
+      /*
+      if (rig_info[cmd_num].command_pointer == do_unsupported_command)
+        continue;
+      */
 
       if (rig_info[cmd_num].minimum_level >= 0 &&
           ((!IS_NPC(vict) && GET_REAL_LEVEL(vict) >= rig_info[cmd_num].minimum_level) ||
@@ -6160,6 +6175,12 @@ ACMD(do_commands)
       // Skip any commands that don't match the prefix provided.
       if (!mode_all && *arg && !is_abbrev(arg, cmd_info[i].command))
         continue;
+
+      // TODO: Skip any unsupported commands.
+      /*
+      if ((cmd_info[cmd_num].command_pointer) == &do_unsupported_command)
+        continue;
+      */
 
       if (cmd_info[i].minimum_level >= 0 &&
           ((!IS_NPC(vict) && GET_REAL_LEVEL(vict) >= cmd_info[i].minimum_level) ||
