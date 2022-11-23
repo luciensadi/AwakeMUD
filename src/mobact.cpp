@@ -122,7 +122,7 @@ bool mob_is_aggressive(struct char_data *ch, bool include_base_aggression) {
   snprintf(buf2, sizeof(buf2), "According to old logic, $n should be %s.",
            MOB_FLAGS(ch).AreAnySet(MOB_AGGRESSIVE, MOB_AGGR_ELF, MOB_AGGR_DWARF, MOB_AGGR_ORK, MOB_AGGR_TROLL, MOB_AGGR_HUMAN, ENDBIT) ? "aggro" : "calm");
 
-  act(buf2, FALSE, ch, NULL, NULL, TO_ROOM);
+  act(buf2, FALSE, ch, NULL, NULL, TO_ROLLS);
 #endif
 
   // Escortees can never be aggressive.
@@ -138,7 +138,7 @@ bool mob_is_aggressive(struct char_data *ch, bool include_base_aggression) {
     if (MOB_FLAGS(ch).IsSetPrecomputed(i, AGGRESSION_OCTETS[i])) {
 #ifdef MOBACT_DEBUG
       snprintf(buf2, sizeof(buf2), "Found match in octet %d.", i);
-      act(buf2, FALSE, ch, NULL, NULL, TO_ROOM);
+      act(buf2, FALSE, ch, NULL, NULL, TO_ROLLS);
 #endif
       return TRUE;
     }
@@ -390,7 +390,7 @@ void mobact_change_firemode(struct char_data *ch) {
     // Melee fighters never want to be prone, so they'll stand up from that.
     if (AFF_FLAGGED(ch, AFF_PRONE)) {
 #ifdef MOBACT_DEBUG
-      act("$n is prone with a non-gun weapon; standing.", FALSE, ch, NULL, NULL, TO_ROOM);
+      act("$n is prone with a non-gun weapon; standing.", FALSE, ch, NULL, NULL, TO_ROLLS);
 #endif
       strncpy(buf3, "", sizeof(buf3));
       do_prone(ch, buf3, 0, 0);
