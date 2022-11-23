@@ -6582,7 +6582,7 @@ ACMD(do_shopfind)
                        mob_proto[real_mob].player.physical_text.name,
                        location);
         }
-      } else if (keyword_appears_in_obj(buf2, &obj_proto[real_obj], TRUE, TRUE)) {
+      } else if (keyword_appears_in_obj(buf2, &obj_proto[real_obj])) {
         send_to_char(ch, "%3d)  Shop %8ld (%s @ %ld) sells %s (%ld)\r\n",
                      ++index,
                      shop_table[shop_nr].vnum,
