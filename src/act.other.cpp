@@ -65,7 +65,6 @@ extern bool read_extratext(struct char_data * ch);
 extern int return_general(int skill_num);
 extern int belongs_to(struct char_data *ch, struct obj_data *obj);
 extern char *make_desc(struct char_data *ch, struct char_data *i, char *buf, int act, bool dont_capitalize_a_an, size_t buf_size);
-extern void weight_change_object(struct obj_data * obj, float weight);
 extern bool does_weapon_have_bayonet(struct obj_data *weapon);
 extern void turn_hardcore_on_for_character(struct char_data *ch);
 extern void disable_xterm_256(descriptor_t *apDescriptor);

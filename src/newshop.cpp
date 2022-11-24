@@ -27,6 +27,7 @@ extern struct obj_data *get_first_credstick(struct char_data *ch, const char *ar
 extern void reduce_abilities(struct char_data *vict);
 extern void do_probe_object(struct char_data * ch, struct obj_data * j);
 extern void wire_nuyen(struct char_data *ch, int amount, vnum_t character_id);
+extern void weight_change_object(struct obj_data * obj, float weight);
 extern char *short_object(int virt, int where);
 ACMD_DECLARE(do_say);
 ACMD_DECLARE(do_new_echo);
@@ -695,10 +696,11 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
     }
 
     // Special handling for stackable things. TODO: Review this to make sure sell struct etc is updated appropriately.
-    if ((GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(obj, 0) == TYPE_PARTS)
-        || (GET_OBJ_TYPE(obj) == ITEM_MAGIC_TOOL && GET_OBJ_VAL(obj, 0) == TYPE_SUMMONING)
-        || (GET_OBJ_TYPE(obj) == ITEM_GUN_AMMO)
-        || (GET_OBJ_TYPE(obj) == ITEM_DRUG))
+    if ((GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(obj) == TYPE_PARTS)
+        || (GET_OBJ_TYPE(obj) == ITEM_MAGIC_TOOL && GET_MAGIC_TOOL_TYPE(obj) == TYPE_SUMMONING)
+        || GET_OBJ_TYPE(obj) == ITEM_GUN_AMMO
+        || GET_OBJ_TYPE(obj) == ITEM_DRUG
+        || GET_OBJ_VNUM(obj) == OBJ_ANTI_DRUG_CHEMS)
     {
       bought = 0;
       float current_obj_weight = 0;
@@ -836,6 +838,45 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
           } else {
             snprintf(buf2, sizeof(buf2), "You now have %s.", GET_OBJ_NAME(obj));
           }
+          // buf2 is sent to the character with a newline appended at the end of the function.
+
+          obj_to_char(obj, ch);
+        }
+      }
+
+      // Give them the item (it's chems)
+      else if (GET_OBJ_VNUM(obj) == OBJ_ANTI_DRUG_CHEMS) {
+        print_multiples_at_end = FALSE;
+
+        // Update its quantity and weight to match the increased dose count. Cost already done above.
+        GET_CHEMS_QTY(obj) *= bought;
+        GET_OBJ_WEIGHT(obj) *= bought;
+
+        // In theory this is dead code now after the 'you can only carry x' code change above. Will see.
+        if (GET_OBJ_WEIGHT(obj) > CAN_CARRY_W(ch)) {
+          send_to_char("You start gathering up the doses you paid for, but realize you can't carry it all! The shopkeeper scowls at you, then refunds you in cash.\r\n", ch);
+          // In this specific instance, we not only assign raw nuyen, we also decrement the purchase nuyen counter. It's a refund, after all.
+          long refund_amount = price * bought;
+          GET_NUYEN_RAW(ch) += refund_amount;
+          GET_NUYEN_INCOME_THIS_PLAY_SESSION(ch, NUYEN_OUTFLOW_SHOP_PURCHASES) -= refund_amount;
+          extract_obj(obj);
+          return FALSE;
+        }
+
+        struct obj_data *orig = ch->carrying;
+        for (; orig; orig = orig->next_content) {
+          if (GET_OBJ_VNUM(orig) == OBJ_ANTI_DRUG_CHEMS)
+            break;
+        }
+        if (orig) {
+          // They were carrying one already. Combine them.
+          snprintf(buf2, sizeof(buf2), "You add the purchased %d doses", GET_CHEMS_QTY(obj));
+          GET_CHEMS_QTY(orig) += GET_CHEMS_QTY(obj);
+          weight_change_object(orig, GET_OBJ_WEIGHT(obj));
+          snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " into %s.", GET_OBJ_NAME(orig));
+        } else {
+          // Just give the purchased thing to them directly. Handle restring if needed.
+          snprintf(buf2, sizeof(buf2), "You now have %s (contains %d doses).", GET_OBJ_NAME(obj), GET_CHEMS_QTY(obj));
           // buf2 is sent to the character with a newline appended at the end of the function.
 
           obj_to_char(obj, ch);
