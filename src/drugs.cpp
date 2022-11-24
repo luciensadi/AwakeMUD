@@ -480,6 +480,11 @@ void process_withdrawal(struct char_data *ch) {
     // Calculate time since last fix.
     time_t days_since_last_fix = (current_time - GET_DRUG_LAST_FIX(ch, drug_id)) / SECS_PER_MUD_DAY;
 
+    if (GET_LEVEL(ch) > LVL_MORTAL) {
+      send_to_char("Accelerating withdrawal due to staff status.\r\n", ch);
+      days_since_last_fix = drug_types[drug_id].fix_factor;
+    }
+
     // If they're not currently high / coming down, tick down their dose (it metabolizes away).
     if (GET_DRUG_DOSE(ch, drug_id) > 0 && (GET_DRUG_STAGE(ch, drug_id) != DRUG_STAGE_ONSET && GET_DRUG_STAGE(ch, drug_id) != DRUG_STAGE_COMEDOWN))
       GET_DRUG_DOSE(ch, drug_id)--;
