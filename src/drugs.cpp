@@ -29,8 +29,8 @@
 
 extern int raw_stat_loss(struct char_data *);
 extern bool check_adrenaline(struct char_data *, int);
+extern void weight_change_object(struct obj_data *, float);
 
-ACMD_DECLARE(do_use);
 ACMD_DECLARE(do_look);
 
 // ----------------- Helper Prototypes
@@ -103,6 +103,8 @@ bool do_drug_take(struct char_data *ch, struct obj_data *obj) {
   // Onboard doses until the object runs out or they end up high (whichever comes first)
   int doses_to_take = MIN(available_drug_doses, GET_DRUG_TOLERANCE_LEVEL(ch, drug_id) + 1);
   GET_OBJ_DRUG_DOSES(obj) -= doses_to_take;
+  weight_change_object(obj, -1 * (doses_to_take * 0.01));
+
   if (_apply_doses_of_drug_to_char(doses_to_take, drug_id, ch)) {
     return TRUE;
   }
@@ -113,9 +115,16 @@ bool do_drug_take(struct char_data *ch, struct obj_data *obj) {
   // The message we give the character depends on if they've passed their tolerance dose yet.
   if (!_drug_dose_exceeds_tolerance(ch, drug_id)) {
     // They didn't take enough. Give the appropriate message.
-    send_to_char(ch, "You take a hit from %s, but it doesn't kick in-- you'll need to take more to surpass your tolerance of %d.\r\n", GET_OBJ_NAME(obj), GET_DRUG_TOLERANCE_LEVEL(ch, drug_id));
+    send_to_char(ch, "You take %d dose%s from %s, but it doesn't kick in-- you'll need to take more to surpass your tolerance of %d.\r\n",
+                 doses_to_take,
+                 doses_to_take == 1 ? "" : "s",
+                 GET_OBJ_NAME(obj),
+                 GET_DRUG_TOLERANCE_LEVEL(ch, drug_id));
   } else {
-    send_to_char(ch, "You take a hit from %s.\r\n", GET_OBJ_NAME(obj));
+    send_to_char(ch, "You take %d dose%s from %s.\r\n",
+                 doses_to_take,
+                 doses_to_take == 1 ? "" : "s",
+                GET_OBJ_NAME(obj));
   }
 
   // Remove the doses from the drug.
@@ -1053,7 +1062,8 @@ bool _take_anti_drug_chems(struct char_data *ch, int drug_id) {
 
       if (chems_avail >= doses_required) {
         GET_CHEMS_QTY(chems) -= doses_required;
-        // TODO: Weight change.
+        weight_change_object(chems, doses_required * 0.01);
+
         if (GET_CHEMS_QTY(chems) <= 0) {
           send_to_char(ch, "You take the edge off your %s addiction with the last dose from %s.\r\n", drug_types[drug_id].name, GET_OBJ_NAME(chems));
           extract_obj(chems);

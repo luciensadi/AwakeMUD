@@ -3669,8 +3669,12 @@ bool combine_drugs(struct char_data *ch, struct obj_data *from, struct obj_data 
                  GET_OBJ_NAME(into));
   }
 
+  // Combine their doses.
   GET_OBJ_DRUG_DOSES(into) += GET_OBJ_DRUG_DOSES(from);
   GET_OBJ_DRUG_DOSES(from) = 0;
+
+  // Combine their weights.
+  weight_change_object(into, GET_OBJ_WEIGHT(from));
 
   extract_obj(from);
 
