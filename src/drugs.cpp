@@ -1001,9 +1001,11 @@ const char *get_time_until_withdrawal_ends(struct char_data *ch, int drug_id) {
 
   // How many days must elapse in total before we're off the drug?
   int ig_days = GET_DRUG_ADDICTION_EDGE(ch, drug_id);
+  int irl_secs = ig_days * SECS_PER_MUD_DAY;
+  int irl_mins = (irl_secs / 60) + 1;
 
   if (ig_days > 0)
-    snprintf(time_buf, sizeof(time_buf), "%d day%s", ig_days, ig_days != 1 ? "s" : "");
+    snprintf(time_buf, sizeof(time_buf), "%d minute%s", irl_mins, irl_mins != 1 ? "s" : "");
   else
     strlcpy(time_buf, "<1 day", sizeof(time_buf));
 
