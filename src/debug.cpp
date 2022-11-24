@@ -121,6 +121,12 @@ ACMD(do_debug) {
 
   if (is_abbrev(arg1, "withdraw")) {
     send_to_char(ch, "OK, processing withdrawal.\r\n");
+
+    for (int drug_id = MIN_DRUG; drug_id < NUM_DRUGS; drug_id++) {
+      // Calculate time since last fix.
+      GET_DRUG_LAST_FIX(ch, drug_id) -= SECS_PER_MUD_DAY;
+    }
+
     process_withdrawal(ch);
     return;
   }

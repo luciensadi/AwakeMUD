@@ -3122,8 +3122,12 @@ ACMD(do_restore)
 
   // Restore-single-target mode.
   restore_character(vict, TRUE);
+
+  // Single target also strips all drug info (fully remove edge, addiction etc)
+  clear_all_drug_data_for_char(vict);
+
   act("You have been fully healed by $N!", FALSE, vict, 0, ch, TO_CHAR);
-  snprintf(buf, sizeof(buf), "%s restored %s.", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict));
+  snprintf(buf, sizeof(buf), "%s fully restored %s.", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict));
   mudlog(buf, ch, LOG_WIZLOG, TRUE);
   send_to_char(OK, ch);
   return;

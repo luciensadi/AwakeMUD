@@ -164,7 +164,7 @@ bool process_drug_point_update_tick(struct char_data *ch) {
       switch (drug_id) {
         case DRUG_JAZZ:
           GET_DRUG_DURATION(ch, drug_id) = 100 * srdice();
-          if (damage(ch, ch, convert_damage(stage(-success_test(bod_for_success_test, 8 - toxin_extractor_rating), LIGHT)), TYPE_BIOWARE, 0)) {
+          if (damage(ch, ch, convert_damage(stage(-success_test(bod_for_success_test, 8 - toxin_extractor_rating, ch, "jazz damage resist"), LIGHT)), TYPE_BIOWARE, 0)) {
             return TRUE;
           }
           break;
@@ -175,7 +175,7 @@ bool process_drug_point_update_tick(struct char_data *ch) {
             // so instead of applying permanent subsystem damage, we just deal CHONKY damage that increases based on the number of doses you took.
             int damage_level = LIGHT + GET_DRUG_DOSE(ch, DRUG_KAMIKAZE);
             int power = 12 - toxin_extractor_rating;
-            int resist_test_successes = success_test(bod_for_success_test, power);
+            int resist_test_successes = success_test(bod_for_success_test, power, ch, "kamikaze damage resist");
             int damage_boxes = convert_damage(stage(-resist_test_successes, damage_level));
 
             snprintf(roll_buf, sizeof(roll_buf), "%s's %s comedown damage: Power %d, DL %d, resist success %d, staged and converted to %d boxes of mental damage.",
@@ -199,7 +199,7 @@ bool process_drug_point_update_tick(struct char_data *ch) {
           {
             int damage_level = DEADLY;
             int power = 8 - toxin_extractor_rating;
-            int resist_test_successes = success_test(bod_for_success_test, power);
+            int resist_test_successes = success_test(bod_for_success_test, power, ch, "nitro damage resist");
             int damage_boxes = convert_damage(stage(-resist_test_successes, damage_level));
 
             snprintf(roll_buf, sizeof(roll_buf), "%s's %s comedown damage: Power %d, DL %d, resist success %d, staged and converted to %d boxes of mental damage.",
@@ -259,7 +259,7 @@ bool process_drug_point_update_tick(struct char_data *ch) {
         }
 
         // How many successes did we roll to stage down the damage?
-        int resist_test_successes = success_test(GET_REAL_BOD(ch) - (GET_BIOOVER(ch) / 2), power);
+        int resist_test_successes = success_test(GET_REAL_BOD(ch) - (GET_BIOOVER(ch) / 2), power, ch, "onset damage resist");
 
         // Calculate the boxes of damage to apply.
         damage_boxes = convert_damage(stage(-resist_test_successes, damage_level));
@@ -469,6 +469,7 @@ void apply_drug_modifiers_to_ch(struct char_data *ch) {
 // Called once per in-game hour.
 void process_withdrawal(struct char_data *ch) {
   time_t current_time = time(0);
+  char rbuf[1000];
 
   // Skip anyone who has not enabled drugs.
   if (!PLR_FLAGGED(ch, PLR_ENABLED_DRUGS)) {
@@ -480,22 +481,22 @@ void process_withdrawal(struct char_data *ch) {
     // Calculate time since last fix.
     time_t days_since_last_fix = (current_time - GET_DRUG_LAST_FIX(ch, drug_id)) / SECS_PER_MUD_DAY;
 
-    if (GET_LEVEL(ch) > LVL_MORTAL) {
-      send_to_char("Accelerating withdrawal due to staff status.\r\n", ch);
-      days_since_last_fix = drug_types[drug_id].fix_factor;
-    }
-
     // If they're not currently high / coming down, tick down their dose (it metabolizes away).
     if (GET_DRUG_DOSE(ch, drug_id) > 0 && (GET_DRUG_STAGE(ch, drug_id) != DRUG_STAGE_ONSET && GET_DRUG_STAGE(ch, drug_id) != DRUG_STAGE_COMEDOWN))
       GET_DRUG_DOSE(ch, drug_id)--;
 
     // If they're currently unaffected but have a tolerance, tick down tolerance-- speed configurable in config.hpp.
-    if (!GET_DRUG_ADDICT(ch, drug_id)
-        && GET_DRUG_TOLERANCE_LEVEL(ch, drug_id) > 0
-        && GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_UNAFFECTED
-        && number(0, AVG_HOURS_PER_TOLERANCE_TICKDOWN) == 0)
-    {
-      GET_DRUG_TOLERANCE_LEVEL(ch, drug_id)--;
+    if (!GET_DRUG_ADDICT(ch, drug_id) && GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_UNAFFECTED) {
+      if (GET_DRUG_TOLERANCE_LEVEL(ch, drug_id) > 0 && number(0, AVG_HOURS_PER_TOLERANCE_TICKDOWN) == 0) {
+        GET_DRUG_TOLERANCE_LEVEL(ch, drug_id)--;
+      }
+      continue;
+    }
+
+    // If we've gotten here, they're addicted, high, or in withdrawal.
+    if (GET_LEVEL(ch) > LVL_MORTAL) {
+      send_to_char(ch, "Accelerating %s withdrawal due to staff status.\r\n", drug_types[drug_id].name);
+      days_since_last_fix = drug_types[drug_id].fix_factor;
     }
 
     // Tick up addiction / withdrawal stat losses. Houseruled from Addiction Effects (M&M p109).
@@ -542,19 +543,20 @@ void process_withdrawal(struct char_data *ch) {
       if (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_GUIDED_WITHDRAWAL || GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_FORCED_WITHDRAWAL) {
         // Decrement their edge, allowing their addiction rating to decrease.
         if (days_since_last_fix > GET_DRUG_LAST_WITHDRAWAL_TICK(ch, drug_id)) {
-          if (GET_LEVEL(ch) > LVL_MORTAL) {
-            send_to_char(ch, "%s withdrawal: d_s_l_f %d > l_w_t %d, ticking down edge.\r\n",
-                         GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_FORCED_WITHDRAWAL ? "Forced" : "Guided",
-                         days_since_last_fix,
-                         GET_DRUG_LAST_WITHDRAWAL_TICK(ch, drug_id));
-          }
+          snprintf(rbuf, sizeof(rbuf), "$n: %s withdrawal: d_s_l_f %ld > l_w_t %d, ticking down edge.\r\n",
+                   GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_FORCED_WITHDRAWAL ? "Forced" : "Guided",
+                   days_since_last_fix,
+                   GET_DRUG_LAST_WITHDRAWAL_TICK(ch, drug_id));
+          act(rbuf, FALSE, ch, 0, 0, TO_ROLLS);
+
           GET_DRUG_LAST_WITHDRAWAL_TICK(ch, drug_id) = days_since_last_fix + (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_GUIDED_WITHDRAWAL ? 2 : 1);
-          if (GET_LEVEL(ch) > LVL_MORTAL) {
-            send_to_char(ch, " - New l_w_t = %d. Edge goes from %d to %d.\r\n",
-                         GET_DRUG_LAST_WITHDRAWAL_TICK(ch, drug_id),
-                         GET_DRUG_ADDICTION_EDGE(ch, drug_id),
-                         GET_DRUG_ADDICTION_EDGE(ch, drug_id) - 1);
-          }
+
+          snprintf(rbuf, sizeof(rbuf), " - New l_w_t = %d. Edge goes from %d to %d.\r\n",
+                   GET_DRUG_LAST_WITHDRAWAL_TICK(ch, drug_id),
+                   GET_DRUG_ADDICTION_EDGE(ch, drug_id),
+                   GET_DRUG_ADDICTION_EDGE(ch, drug_id) - 1);
+          act(rbuf, FALSE, ch, 0, 0, TO_ROLLS);
+
           if (--GET_DRUG_ADDICTION_EDGE(ch, drug_id) <= 0) {
             GET_DRUG_STAGE(ch, drug_id) = DRUG_STAGE_UNAFFECTED;
             GET_DRUG_ADDICT(ch, drug_id) = 0;
@@ -886,10 +888,10 @@ bool _specific_addiction_test(struct char_data *ch, int drug_id, bool is_mental,
   // Being trapped in a drug addiction loop is not fun, so we cap the TN here.
   int tn = MIN(MAX_ADDICTION_TEST_DIFFICULTY, base_addiction_rating + GET_DRUG_ADDICTION_EDGE(ch, drug_id));
 
-  int num_successes = success_test(dice, tn);
+  int num_successes = success_test(dice, tn, ch, "specific addiction test");
   bool addiction_passed = (num_successes > 0);
 
-  snprintf(buf, sizeof(buf), "%s's %s %s addiction %s test: %s(%d) vs addiction factor(%d) + edge(%d) (capped: %s) = %d hits (%s).",
+  snprintf(buf, sizeof(buf), "%s's %s %s addiction %s test: %s(%d) vs addiction factor(%d) + edge(%d) (capped: %s: final TN %d) = %d hits (%s).",
            GET_CHAR_NAME(ch),
            drug_types[drug_id].name,
            is_mental ? "mental" : "physical",
@@ -899,6 +901,7 @@ bool _specific_addiction_test(struct char_data *ch, int drug_id, bool is_mental,
            base_addiction_rating,
            GET_DRUG_ADDICTION_EDGE(ch, drug_id),
            tn != base_addiction_rating + GET_DRUG_ADDICTION_EDGE(ch, drug_id) ? "yes" : "no",
+           tn,
            num_successes,
            addiction_passed ? "passed" : "failed, RIP");
   act(buf, FALSE, ch, 0, 0, TO_ROLLS);
@@ -1059,11 +1062,11 @@ bool _take_anti_drug_chems(struct char_data *ch, int drug_id) {
         }
         return TRUE;
       } else {
-        doses_required -= GET_CHEMS_QTY(chems);
         send_to_char(ch, "You knock back the last dose%s from %s, but it's%snot quite enough.\r\n",
                      GET_CHEMS_QTY(chems) == 1 ? "" : "s",
-                     doses_required != GET_DRUG_ADDICTION_EDGE(ch, drug_id) ? " still" : " ",
-                     GET_OBJ_NAME(chems));
+                     GET_OBJ_NAME(chems),
+                     doses_required != GET_DRUG_ADDICTION_EDGE(ch, drug_id) ? " still" : " ");
+        doses_required -= GET_CHEMS_QTY(chems);
         GET_CHEMS_QTY(chems) = 0;
         extract_obj(chems);
       }
