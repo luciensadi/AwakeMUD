@@ -121,6 +121,7 @@ int alert_player_doctors_of_mort(struct char_data *ch, struct obj_data *docwagon
 
       // If they're not staff, AFK, idle, or participating in a PRUN, add them to the potential rescuer count that will be sent to the downed player.
       if (GET_LEVEL(plr) == LVL_MORTAL && plr->char_specials.timer < 5 && !PRF_FLAGGED(plr, PRF_AFK) && !PRF_FLAGGED(plr, PRF_QUEST)) {
+        send_to_char("^c(Please send a ^WTELL^c or announce on ^WOOC^c if you're on your way!)^n\r\n", plr);
         potential_rescuer_count++;
       }
     }
