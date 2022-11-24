@@ -945,6 +945,7 @@ bool seek_drugs(struct char_data *ch, int drug_id) {
   int dosage_cost = _seek_drugs_purchase_cost(ch, drug_id);
 
   send_to_char(ch, "You enter a fugue state, wandering the streets in search of more %s!\r\n", drug_types[drug_id].name);
+  act("$n enters a fugue state and wanders off!", TRUE, ch, 0, 0, TO_ROOM);
 
   if (GET_NUYEN(ch) < dosage_cost && GET_BANK(ch) + GET_NUYEN(ch) < dosage_cost) {
     send_to_char("Without enough cash nuyen in your pockets to cover your drug habit, things take a turn for the worse...\r\n", ch);
@@ -1002,12 +1003,12 @@ const char *get_time_until_withdrawal_ends(struct char_data *ch, int drug_id) {
   // How many days must elapse in total before we're off the drug?
   int ig_days = GET_DRUG_ADDICTION_EDGE(ch, drug_id);
   int irl_secs = ig_days * SECS_PER_MUD_DAY;
-  int irl_mins = (irl_secs / 60) + 1;
+  int irl_mins = (irl_secs / 60);
 
-  if (ig_days > 0)
+  if (irl_secs >= 60)
     snprintf(time_buf, sizeof(time_buf), "%d minute%s", irl_mins, irl_mins != 1 ? "s" : "");
   else
-    strlcpy(time_buf, "<1 day", sizeof(time_buf));
+    snprintf(time_buf, sizeof(time_buf), "%d second%s", irl_secs, irl_secs != 1 ? "s" : "");
 
   return (const char *) time_buf;
 }
@@ -1044,6 +1045,7 @@ bool _take_anti_drug_chems(struct char_data *ch, int drug_id) {
 
       if (chems_avail >= doses_required) {
         GET_CHEMS_QTY(chems) -= doses_required;
+        // TODO: Weight change.
         if (GET_CHEMS_QTY(chems) <= 0) {
           send_to_char(ch, "You take the edge off your %s addiction with the last dose from %s.\r\n", drug_types[drug_id].name, GET_OBJ_NAME(chems));
           extract_obj(chems);

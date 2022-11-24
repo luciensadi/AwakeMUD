@@ -119,6 +119,12 @@ ACMD(do_debug) {
     return;
   }
 
+  if (is_abbrev(arg1, "withdraw")) {
+    send_to_char(ch, "OK, processing withdrawal.\r\n");
+    process_withdrawal(ch);
+    return;
+  }
+
   if (!str_cmp(arg1, "idledeletechar")) {
     extern MYSQL *mysql;
 
