@@ -2523,7 +2523,7 @@ void do_probe_veh(struct char_data *ch, struct veh_data * k)
           k->body, k->armor, k->seating[SEATING_FRONT], k->seating[SEATING_REAR]);
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Its signature rating is ^c%d^n, and its NERP pilot rating is ^c%d^n.\r\n",
           k->sig, k->pilot);
-  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It has ^c%d^n slots in its autonav and carrying capacity of ^c%d^n (%d in use).\r\n",
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It has a grade ^c%d^n autonav and carrying capacity of ^c%d^n (%d in use).\r\n",
           k->autonav, (int)k->load, (int)k->usedload);
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Its engine is adapted for ^c%s^n. If loaded into another vehicle, it takes up ^c%d^n load.\r\n",
                   engine_types[k->engine], calculate_vehicle_entry_load(k));
