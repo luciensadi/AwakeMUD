@@ -25,6 +25,7 @@ public:
   void CallSpec();
   void RemoveObjNum(int num);
   void RemoveQuestObjs(int id);
+  void DisassociateCyberdeckPartsFromDeck(struct obj_data *deck);
 
   #ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
   void CheckPointers();

@@ -2889,7 +2889,7 @@ enum {
 #define SMARTLINK_II_MODIFIER 3
 #define SMARTLINK_I_MODIFIER  2
 
-#endif
+#define DECK_FLAG_HAS_PART_POINTING_TO_IT (1 << 0)
 
 // Don't actually change this value unless you're rewriting regeneration etc.
 #define TEMP_QUI_LOSS_DIVISOR                 4
@@ -2921,3 +2921,5 @@ enum {
 // when they're actually used. Casting to void does nothing but the compiler will stop thinking it's
 // unused. This is the same way Q_UNUSED is used in Qt. -- Nodens
 #define UNUSED(expr) (void)(expr)
+
+#endif // _awake_h_

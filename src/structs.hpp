@@ -136,6 +136,8 @@ struct obj_data
   struct obj_data *next_content;  /* For 'contains' lists             */
   struct host_data *in_host;      /* For tracking if the object is in a Matrix host. */
 
+  struct obj_data *cyberdeck_part_pointer;
+
   struct char_data *targ;	  /* Data for mounts */
   struct veh_data *tveh;
 
@@ -146,7 +148,7 @@ struct obj_data
       item_number(0), in_room(NULL), in_veh(NULL), vfront(FALSE), ex_description(NULL),
       restring(NULL), photo(NULL), graffiti(NULL), source_info(NULL), carried_by(NULL),
       worn_by(NULL), worn_on(0), in_obj(NULL), contains(NULL), next_content(NULL),
-      in_host(NULL), targ(NULL), tveh(NULL)
+      in_host(NULL), cyberdeck_part_pointer(NULL), targ(NULL), tveh(NULL)
   {
     #ifdef USE_DEBUG_CANARIES
       canary = CANARY_VALUE;

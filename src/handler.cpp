@@ -2300,9 +2300,8 @@ void extract_obj(struct obj_data * obj)
 
   if (IS_OBJ_STAT(obj, ITEM_EXTRA_KEPT)) {
     const char *representation = generate_new_loggable_representation(obj);
-    snprintf(buf, sizeof(buf), "extract_obj: Destroying KEPT item: %s", representation);
+    mudlog_vfprintf(NULL, LOG_PURGELOG, "extract_obj: Destroying KEPT item: %s", representation);
     delete [] representation;
-    mudlog(buf, NULL, LOG_PURGELOG, TRUE);
   }
 
   if (GET_OBJ_VNUM(obj) == OBJ_VEHCONTAINER && (GET_VEHCONTAINER_VEH_VNUM(obj) || GET_VEHCONTAINER_VEH_IDNUM(obj) || GET_VEHCONTAINER_VEH_OWNER(obj))) {
@@ -2317,6 +2316,19 @@ void extract_obj(struct obj_data * obj)
     DELETE_ARRAY_IF_EXTANT(owner);
     mudlog(buf, NULL, LOG_CHEATLOG, TRUE);
     mudlog(buf, NULL, LOG_PURGELOG, TRUE);
+  }
+
+  // Iterate through all cyberdeck parts and designs in the game, making sure none point to this.
+  if ((GET_OBJ_TYPE(obj) == ITEM_CYBERDECK || GET_OBJ_TYPE(obj) == ITEM_CUSTOM_DECK)) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "DBL contains %d items.", ObjList.NumItems());
+    // TODO: It's very likely that you will need to create a whole new list just for cyberdeck parts to avoid iterating over the whole game.
+    if (IS_SET(GET_CYBERDECK_FLAGS(obj), DECK_FLAG_HAS_PART_POINTING_TO_IT)) {
+      mudlog("Removing parts from cyberdeck", NULL, LOG_GRIDLOG, TRUE);
+      ObjList.DisassociateCyberdeckPartsFromDeck(obj);
+      REMOVE_BIT(GET_CYBERDECK_FLAGS(obj), DECK_FLAG_HAS_PART_POINTING_TO_IT);
+    } else {
+      mudlog("NOT removing parts from cyberdeck: It's not dirty", NULL, LOG_GRIDLOG, TRUE);
+    }
   }
 
   if (obj->in_room)

@@ -490,12 +490,13 @@ void update_buildrepair(void)
             send_to_char(desc->character, "You realise you have botched installing %s.\r\n", GET_OBJ_NAME(PROG));
             extract_obj(PROG);
           } else {
-            send_to_char(desc->character, "You finish installing %s into %s.\r\n", GET_OBJ_NAME(PROG), GET_OBJ_NAME(PROG->contains));
+            send_to_char(desc->character, "You finish installing %s into %s.\r\n", GET_OBJ_NAME(PROG), GET_OBJ_NAME(PROG->cyberdeck_part_pointer));
             CH->char_specials.timer = 0;
             obj_from_char(PROG);
-            obj_to_obj(PROG, PROG->contains);
+            obj_to_obj(PROG, PROG->cyberdeck_part_pointer);
             GET_PART_BUILDER_IDNUM(PROG) = 0; // Wipe out the builder's idnum so it can be worked on by someone else.
-            PROG->contains = NULL;
+            REMOVE_BIT(GET_CYBERDECK_FLAGS(PROG->cyberdeck_part_pointer), DECK_FLAG_HAS_PART_POINTING_TO_IT);
+            PROG->cyberdeck_part_pointer = NULL;
             GET_OBJ_VAL(PROG, 4) = -2;
             if (!GET_OBJ_VAL(PROG->in_obj, 0))
               GET_OBJ_VAL(PROG->in_obj, 0) = GET_OBJ_VAL(PROG, 2);

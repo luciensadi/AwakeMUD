@@ -186,6 +186,36 @@ void objList::UpdateObjsIDelete(const struct obj_data *proto, int rnum, int new_
   }
 }
 
+void objList::DisassociateCyberdeckPartsFromDeck(struct obj_data *deck)
+{
+  PERF_PROF_SCOPE(updatecounters_, __func__);
+
+  static nodeStruct<struct obj_data *> *temp, *next;
+
+  // Iterate through the list.
+  for (temp = head; temp; temp = next) {
+    next = temp->next;
+
+    // Precondition: The object being examined must exist.
+    if (!OBJ) {
+      mudlog("SYSERR: DisassociateCyberdeckPartsFromDeck encountered a non-existent object.", NULL, LOG_SYSLOG, TRUE);
+      continue;
+    }
+
+    // If it's a part, make sure it doesn't contain our deck.
+    if (GET_OBJ_TYPE(OBJ) == ITEM_PART) {
+      if (OBJ->cyberdeck_part_pointer == deck) {
+        mudlog_vfprintf(NULL, LOG_SYSLOG, "^GDisassociating part %s (%ld) from deck %s (%ld) in preparation for deck deletion.^n",
+                        GET_OBJ_NAME(OBJ),
+                        GET_OBJ_VNUM(OBJ),
+                        GET_OBJ_NAME(deck),
+                        GET_OBJ_VNUM(deck));
+        OBJ->cyberdeck_part_pointer = NULL;
+      }
+    }
+  }
+}
+
 // this function runs through the list and checks the timers of each
 // object, extracting them if their timers hit 0
 void objList::UpdateCounters(void)

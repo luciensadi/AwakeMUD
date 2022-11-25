@@ -1401,6 +1401,9 @@ void do_stat_object(struct char_data * ch, struct obj_data * j)
           strlcat(buf, ",\r\n", sizeof(buf));
     }
   }
+  if (j->cyberdeck_part_pointer) {
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^n\r\nCyberdeck Part Pointer: ^c%s^n", GET_OBJ_NAME(j->cyberdeck_part_pointer));
+  }
   strlcat(buf, "^n\r\n", sizeof(buf));
   found = 0;
   strlcat(buf, "Affections:", sizeof(buf));
