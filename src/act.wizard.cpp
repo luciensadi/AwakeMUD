@@ -221,9 +221,10 @@ ACMD(do_copyover)
       continue;
 
     if (GET_QUEST(och)) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s%s",
-               num_questors > 0 ? "^n, ^c" : "^c",
-               GET_CHAR_NAME(och));
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^c%s%s^n (idle: %d)",
+               num_questors > 0 ? ", " : "",
+               GET_CHAR_NAME(och),
+               och->char_specials.timer);
       num_questors += 1;
     }
     // Count PCs in cabs.
