@@ -97,12 +97,21 @@ bool House_load(struct house_control_rec *house)
   struct nested_obj contained_obj_entry;
 
   room = house->vnum;
-  if ((rnum = real_room(room)) == NOWHERE)
+  if ((rnum = real_room(room)) == NOWHERE) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "Not loading house %ld: Real room does not exist.", room);
     return FALSE;
-  if (!House_get_filename(room, fname, sizeof(fname)))
+  }
+
+  if (!House_get_filename(room, fname, sizeof(fname))) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "Not loading house %ld: Cannot generate filename.", room);
     return FALSE;
-  if (!(fl.Open(fname, "r+b"))) /* no file found */
+  }
+
+  if (!(fl.Open(fname, "r+b"))) { /* no file found */
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "Not loading house %ld: File not found.", room);
     return FALSE;
+  }
+
   log_vfprintf("Loading house file %s.", fname);
   VTable data;
   data.Parse(&fl);
@@ -530,15 +539,20 @@ void House_crashsave(vnum_t vnum)
 
   // House filename is not kosher? Skip. Otherwise, populate buf with filename.
   if (house) {
-    if (!House_get_filename(vnum, buf, sizeof(buf)))
+    if (!House_get_filename(vnum, buf, sizeof(buf))) {
+      mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Bailing on saving house %ld: Cannot generate filename!", vnum);
       return;
+    }
   } else {
-    if (!Storage_get_filename(vnum, buf, sizeof(buf)))
+    if (!Storage_get_filename(vnum, buf, sizeof(buf))) {
+      mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Bailing on saving storage room %ld: Cannot generate filename!", vnum);
       return;
+    }
   }
 
   // If it has no guests and no objects, why save it?
   if (!should_we_keep_this_file) {
+    log_vfprintf(NULL, LOG_SYSLOG, "Deleting file for house %ld: Has no guests and no contents.", vnum);
     House_delete_file(vnum, buf);
     return;
   }
@@ -1477,14 +1491,14 @@ void warn_about_apartment_deletion() {
 
       int days_until_deletion = (house->date - time(0)) / (60 * 60 * 24);
 
-      if (days_until_deletion <= 5 && days_until_deletion > 0) {
-        snprintf(buf, sizeof(buf), "Remember to pay your rent for apartment %s. It will be deemed abandoned and its contents reclaimed in %d days.\r\n", house->name, days_until_deletion);
+      if (days_until_deletion <= 5) {
+        mudlog_vfprintf(NULL, LOG_GRIDLOG, "Sending %d-day rent warning message for apartment %s to %ld.", days_until_deletion, house->name, house->owner);
+        if (days_until_deletion > 0) {
+          snprintf(buf, sizeof(buf), "Remember to pay your rent for apartment %s! It will be deemed abandoned and its contents reclaimed at any time.\r\n", house->name);
+        } else {
+          snprintf(buf, sizeof(buf), "Remember to pay your rent for apartment %s. It will be deemed abandoned and its contents reclaimed in %d days.\r\n", house->name, days_until_deletion);
+        }
         raw_store_mail(house->owner, 0, "Your landlord", buf);
-        //log(buf);
-      } else if (days_until_deletion <= 0) {
-        snprintf(buf, sizeof(buf), "Remember to pay your rent for apartment %s! It will be deemed abandoned and its contents reclaimed at any time.\r\n", house->name);
-        raw_store_mail(house->owner, 0, "Your landlord", buf);
-        //log(buf);
       } else {
         //log_vfprintf("House %s is OK-- %d days left (%d - %d)", house->name, days_until_deletion, house->date, time(0));
       }
