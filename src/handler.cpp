@@ -2323,11 +2323,8 @@ void extract_obj(struct obj_data * obj)
     mudlog_vfprintf(NULL, LOG_SYSLOG, "DBL contains %d items.", ObjList.NumItems());
     // TODO: It's very likely that you will need to create a whole new list just for cyberdeck parts to avoid iterating over the whole game.
     if (IS_SET(GET_CYBERDECK_FLAGS(obj), DECK_FLAG_HAS_PART_POINTING_TO_IT)) {
-      mudlog("Removing parts from cyberdeck", NULL, LOG_GRIDLOG, TRUE);
       ObjList.DisassociateCyberdeckPartsFromDeck(obj);
       REMOVE_BIT(GET_CYBERDECK_FLAGS(obj), DECK_FLAG_HAS_PART_POINTING_TO_IT);
-    } else {
-      mudlog("NOT removing parts from cyberdeck: It's not dirty", NULL, LOG_GRIDLOG, TRUE);
     }
   }
 

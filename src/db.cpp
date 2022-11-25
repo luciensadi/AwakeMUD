@@ -4976,7 +4976,7 @@ int file_to_string_alloc(const char *name, char **buf)
   if (file_to_string(name, temp, sizeof(temp)) < 0)
     return -1;
 
-  log_vfprintf("file_to_string_alloc: File '%s' read out as '%s'.", name, temp);
+  // log_vfprintf("file_to_string_alloc: File '%s' read out as '%s'.", name, temp);
 
   DELETE_ARRAY_IF_EXTANT(*buf);
 

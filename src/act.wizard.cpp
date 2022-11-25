@@ -1402,7 +1402,12 @@ void do_stat_object(struct char_data * ch, struct obj_data * j)
     }
   }
   if (j->cyberdeck_part_pointer) {
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^n\r\nCyberdeck Part Pointer: ^c%s^n", GET_OBJ_NAME(j->cyberdeck_part_pointer));
+    if (GET_OBJ_TYPE(j) == ITEM_PART) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^n\r\nCyberdeck Part Pointer: ^c%s^n", GET_OBJ_NAME(j->cyberdeck_part_pointer));
+    } else {
+      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Non-part %s (%ld) has a cyberdeck part pointer set!! Clearing it.", GET_OBJ_NAME(j), GET_OBJ_VNUM(j));
+      j->cyberdeck_part_pointer = NULL;
+    }
   }
   strlcat(buf, "^n\r\n", sizeof(buf));
   found = 0;

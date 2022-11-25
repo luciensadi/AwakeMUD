@@ -552,7 +552,7 @@ void House_crashsave(vnum_t vnum)
 
   // If it has no guests and no objects, why save it?
   if (!should_we_keep_this_file) {
-    log_vfprintf("Deleting file for house %ld: Has no guests and no contents.", vnum);
+    // log_vfprintf("Deleting file for house %ld: Has no guests and no contents.", vnum);
     House_delete_file(vnum, buf);
     return;
   }

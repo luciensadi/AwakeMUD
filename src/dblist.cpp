@@ -192,6 +192,16 @@ void objList::DisassociateCyberdeckPartsFromDeck(struct obj_data *deck)
 
   static nodeStruct<struct obj_data *> *temp, *next;
 
+  if (!deck) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: DisassociateCyberdeckPartsFromDeck passed a NULL deck!");
+    return;
+  }
+
+  if (GET_OBJ_TYPE(deck) != ITEM_CYBERDECK && GET_OBJ_TYPE(deck) != ITEM_CUSTOM_DECK) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: DisassociateCyberdeckPartsFromDeck passed non-deck item %s^n (%ld)!", GET_OBJ_NAME(deck), GET_OBJ_VNUM(deck));
+    return;
+  }
+
   // Iterate through the list.
   for (temp = head; temp; temp = next) {
     next = temp->next;
@@ -205,7 +215,7 @@ void objList::DisassociateCyberdeckPartsFromDeck(struct obj_data *deck)
     // If it's a part, make sure it doesn't contain our deck.
     if (GET_OBJ_TYPE(OBJ) == ITEM_PART) {
       if (OBJ->cyberdeck_part_pointer == deck) {
-        mudlog_vfprintf(NULL, LOG_SYSLOG, "^GDisassociating part %s (%ld) from deck %s (%ld) in preparation for deck deletion.^n",
+        mudlog_vfprintf(NULL, LOG_SYSLOG, "Disassociating in-progress part %s (%ld) from deck %s (%ld) [deck destroyed OR another part completed].",
                         GET_OBJ_NAME(OBJ),
                         GET_OBJ_VNUM(OBJ),
                         GET_OBJ_NAME(deck),
