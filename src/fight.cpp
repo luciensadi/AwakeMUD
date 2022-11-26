@@ -1882,8 +1882,10 @@ void damage_door(struct char_data *ch, struct room_data *room, int dir, int powe
   if (IS_SET(type, DAMOBJ_MANIPULATION)) {
     REMOVE_BIT(type, DAMOBJ_MANIPULATION);
     rating = room->dir_option[dir]->barrier;
+  /*
   } else if (type == DAMOBJ_CRUSH) {
     rating = room->dir_option[dir]->barrier;
+  */
   } else {
     rating = room->dir_option[dir]->barrier * 2;
   }

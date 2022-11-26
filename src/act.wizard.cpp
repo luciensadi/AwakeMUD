@@ -628,7 +628,6 @@ ACMD(do_gecho)
       send_to_char(OK, ch);
     else
       act(argument, FALSE, ch, 0, 0, TO_CHAR);
-    argument[50] = '\0';
     snprintf(buf, sizeof(buf), "%s gecho'd '%s'", GET_CHAR_NAME(ch), argument);
     mudlog(buf, ch, LOG_WIZLOG, TRUE);
   }
