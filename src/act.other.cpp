@@ -283,10 +283,16 @@ ACMD(do_steal)
           if (!(CAN_WEAR(obj, ITEM_WEAR_TAKE)))
             send_to_char("You can't take that.\r\n", ch);
           else {
-            char *representation = generate_new_loggable_representation(obj);
-            snprintf(buf, sizeof(buf), "%s steals from %s: %s", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), representation);
-            mudlog(buf, ch, IS_OBJ_STAT(obj, ITEM_EXTRA_WIZLOAD) ? LOG_WIZITEMLOG : LOG_CHEATLOG, TRUE);
-            delete [] representation;
+            if (!IS_NPC(vict)) {
+              char *representation = generate_new_loggable_representation(obj);
+              mudlog_vfprintf(ch,
+                              IS_OBJ_STAT(obj, ITEM_EXTRA_WIZLOAD) ? LOG_WIZITEMLOG : LOG_CHEATLOG,
+                              "%s steals from %s: %s",
+                              GET_CHAR_NAME(ch),
+                              GET_CHAR_NAME(vict),
+                              representation);
+              delete [] representation;
+            }
 
             obj_from_char(obj);
             obj_to_char(obj, ch);
