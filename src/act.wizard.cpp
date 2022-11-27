@@ -60,7 +60,8 @@ extern FILE *player_fl;
 extern int restrict_mud;
 
 /* for rooms */
-extern void House_save_all();
+extern void save_all_apartments_and_storage_rooms();
+
 /* for chars */
 
 extern struct time_info_data time_info;
@@ -341,7 +342,7 @@ ACMD(do_copyover)
   fclose (fp);
 
   log("Saving houses.");
-  House_save_all();
+  save_all_apartments_and_storage_rooms();
   /* Close reserve and other always-open files and release other resources */
 
   // Save vehicles.
@@ -1890,7 +1891,7 @@ ACMD(do_shutdown)
   } else
     send_to_char("Unknown shutdown option.\r\n", ch);
 
-  House_save_all();
+  save_all_apartments_and_storage_rooms();
 }
 
 void stop_snooping(struct char_data * ch)

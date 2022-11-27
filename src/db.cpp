@@ -81,6 +81,7 @@ extern void handle_weapon_attachments(struct obj_data *obj);
 extern void ensure_mob_has_ammo_for_weapon(struct char_data *ch, struct obj_data *weapon);
 extern void reset_host_paydata(rnum_t rnum);
 extern bool player_is_dead_hardcore(long id);
+extern void load_apartment_complexes();
 
 extern void auto_repair_obj(struct obj_data *obj);
 
@@ -681,7 +682,8 @@ void DBInit()
   purge_unowned_vehs();
 
   log("Booting houses.");
-  House_boot();
+  load_apartment_complexes();
+  warn_about_apartment_deletion();
   boot_time = time(0);
 
   log("Loading shop orders.");
@@ -694,13 +696,6 @@ void DBInit()
   boot_escalators();
 
   log("DBInit -- DONE.");
-
-  // Put things here that you want to test.
-  {
-    extern void load_apartment_complexes();
-    load_apartment_complexes();
-    exit(0);
-  }
 }
 
 /* A simple method to clean up after our DB. */

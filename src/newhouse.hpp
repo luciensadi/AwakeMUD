@@ -18,6 +18,9 @@ class ApartmentRoom;
 class Apartment;
 class ApartmentComplex;
 
+extern void warn_about_apartment_deletion();
+extern void save_all_apartments_and_storage_rooms();
+
 extern std::vector<ApartmentComplex> global_apartment_complexes;
 
 /* An ApartmentComplex is composed of N Apartments, and has tracking data for landlord info. */
@@ -64,7 +67,7 @@ class Apartment {
     const char *full_name = NULL; // Evergreen Multiplex's Unit 309 (derived)
     int lifestyle = 0;
     long nuyen_per_month = 0;
-    bf::path base_info_path;
+    bf::path base_directory;
 
     // Location and world data for the primary / entrance room.
     vnum_t atrium = NOWHERE;
@@ -95,6 +98,8 @@ class Apartment {
     vnum_t get_atrium_vnum() { return atrium; }
     long get_rent_cost() { return nuyen_per_month; }
     time_t get_paid_until() { return paid_until; }
+    std::vector<ApartmentRoom> get_rooms() { return rooms; }
+    void list_guests_to_char(struct char_data *ch);
 
     // Mutators
     void set_owner(idnum_t);
@@ -111,6 +116,7 @@ class Apartment {
     bool can_enter_by_idnum(idnum_t idnum);
     bool has_owner_privs(struct char_data *ch);
     bool has_owner() { return owned_by_pgroup || owned_by_player; }
+    bool owner_is_valid();
 };
 
 /* An ApartmentRoom describes a discrete room in the world. */
@@ -141,8 +147,12 @@ class ApartmentRoom {
     bool has_owner_privs(struct char_data *ch) { return apartment->has_owner_privs(ch); }
     bool can_enter(struct char_data *ch) { return apartment->can_enter(ch); }
     bool can_enter_by_idnum(idnum_t idnum) { return apartment->can_enter_by_idnum(idnum); }
+    bool is_guest(idnum_t idnum);
+    void list_guests_to_char(struct char_data *ch) { apartment->list_guests_to_char(ch); }
 
     void save_storage();
+    bool delete_guest(idnum_t idnum);
+    void add_guest(idnum_t idnum);
 
     // Restore the apartment's default description.
     void purge_contents();

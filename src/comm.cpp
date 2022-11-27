@@ -179,6 +179,8 @@ void process_wheres_my_car();
 extern int calculate_distance_between_rooms(vnum_t start_room_vnum, vnum_t target_room_vnum, bool ignore_roads);
 void set_descriptor_canaries(struct descriptor_data *newd);
 
+extern void save_all_apartments_and_storage_rooms();
+
 extern int modify_target_rbuf_magical(struct char_data *ch, char *rbuf, int rbuf_len);
 
 #ifdef USE_DEBUG_CANARIES
@@ -200,7 +202,7 @@ int game_main(int argc, char **argv)
 #else
 int main(int argc, char **argv)
 #endif
-{  
+{
   int pos = 1;
   const char *dir;
   port = DFLT_PORT;
@@ -436,8 +438,8 @@ void init_game(int port)
   log("Entering game loop.");
   game_loop(mother_desc);
 
-  log("Saving all players.");
-  House_save_all();
+  log("Saving all apartments and storage rooms.");
+  save_all_apartments_and_storage_rooms();
 
   log("Closing all sockets.");
   while (descriptor_list)
@@ -991,7 +993,7 @@ void game_loop(int mother_desc)
 
     // Every 70 MUD minutes
     if (!(pulse % (70 * SECS_PER_MUD_MINUTE * PASSES_PER_SEC)))
-      House_save_all();
+      save_all_apartments_and_storage_rooms();
 
     // Every MUD day
     if (!(pulse % (24 * SECS_PER_MUD_HOUR * PASSES_PER_SEC)))
@@ -2476,7 +2478,7 @@ void free_up_memory(int Empty)
     delete ch;
   }
   // Write houses.
-  House_save_all();
+  save_all_apartments_and_storage_rooms();
   // Die.
   exit(ERROR_UNABLE_TO_FREE_MEMORY_IN_CLEARSTACKS);
 }
@@ -2484,21 +2486,21 @@ void free_up_memory(int Empty)
 void hupsig(int Empty)
 {
   mudlog("Received SIGHUP.  Shutting down...", NULL, LOG_SYSLOG, TRUE);
-  House_save_all();
+  save_all_apartments_and_storage_rooms();
   exit(EXIT_CODE_ZERO_ALL_IS_WELL);
 }
 
 void intsig(int Empty)
 {
   mudlog("Received SIGINT.  Shutting down...", NULL, LOG_SYSLOG, TRUE);
-  House_save_all();
+  save_all_apartments_and_storage_rooms();
   exit(EXIT_CODE_ZERO_ALL_IS_WELL);
 }
 
 void termsig(int Empty)
 {
   mudlog("Received SIGTERM.  Shutting down...", NULL, LOG_SYSLOG, TRUE);
-  House_save_all();
+  save_all_apartments_and_storage_rooms();
   exit(EXIT_CODE_ZERO_ALL_IS_WELL);
 }
 

@@ -9,6 +9,7 @@ namespace bf = boost::filesystem;
 #include "awake.hpp"
 #include "structs.hpp"
 #include "db.hpp"
+#include "newdb.hpp"
 #include "utils.hpp"
 #include "playergroup_classes.hpp"
 #include "handler.hpp"
@@ -20,7 +21,9 @@ namespace bf = boost::filesystem;
 using nlohmann::json;
 
 extern void ASSIGNMOB(long mob, SPECIAL(fname));
+extern bool Storage_get_filename(vnum_t vnum, char *filename, int filename_size);
 extern void Storage_save(const char *file_name, struct room_data *room);
+extern bool player_is_dead_hardcore(long id);
 
 SPECIAL(landlord_spec);
 
@@ -29,6 +32,32 @@ ACMD_DECLARE(do_say);
 void remove_vehicles_from_apartment(struct room_data *room);
 
 std::vector<ApartmentComplex> global_apartment_complexes = {};
+
+/* The house command, used by mortal house owners to assign guests */
+ACMD(do_house) {
+  one_argument(argument, arg);
+
+  FAILURE_CASE(!ch->in_room || !ch->in_room->apartment, "You must be in your house to set guests.\r\n");
+  FAILURE_CASE(!ch->in_room->apartment->has_owner_privs(ch), "You're not an owner or landlord here.\r\n");
+
+  if (!*arg) {
+    ch->in_room->apartment->list_guests_to_char(ch);
+    return;
+  }
+
+  // They're adding or deleting a guest. Look them up.
+  idnum_t idnum = get_player_id(arg);
+
+  FAILURE_CASE(idnum < 0, "No such player.\r\n");
+  FAILURE_CASE(idnum == GET_IDNUM(ch), "You can't add yourself as a guest.\r\n");
+
+  if (ch->in_room->apartment->delete_guest(idnum)) {
+    send_to_char("Guest deleted.\r\n", ch);
+  } else {
+    ch->in_room->apartment->add_guest(idnum);
+    send_to_char("Guest added.\r\n", ch);
+  }
+}
 
 void _json_parse_from_file(bf::path path, json &target) {
   if (!exists(path)) {
@@ -71,6 +100,38 @@ void load_apartment_complexes() {
   // EVENTUAL TODO: Sanity checks for things like reused vnums, etc.
 }
 
+void save_all_apartments_and_storage_rooms() {
+  for (auto complex : global_apartment_complexes) {
+    for (auto apartment : complex.get_apartments()) {
+      // Invalid lease? Break it and bail.
+      if (!apartment.has_owner() || !apartment.owner_is_valid()) {
+        apartment.break_lease();
+        continue;
+      }
+
+      // Otherwise, save all the rooms.
+      for (auto room : apartment.get_rooms()) {
+        room.save_storage();
+      }
+    }
+  }
+
+  // TODO: Where are our apartment warnings being sent? Make sure they survived the transition.
+
+  // Save all storage rooms.
+  for (rnum_t x = 0; x <= top_of_world; x++) {
+    if (ROOM_FLAGGED(&world[x], ROOM_STORAGE)) {
+      char filename[100];
+
+      if (Storage_get_filename(GET_ROOM_VNUM(&world[x]), filename, sizeof(filename))) {
+        Storage_save(filename, &world[x]);
+      } else {
+        mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Unable to save storage room %ld: Can't get filename!", GET_ROOM_VNUM(&world[x]));
+      }
+    }
+  }
+}
+
 /*********** ApartmentComplex ************/
 ApartmentComplex::ApartmentComplex(bf::path filename) :
   base_directory(filename)
@@ -98,7 +159,7 @@ ApartmentComplex::ApartmentComplex(bf::path filename) :
     for (bf::directory_iterator itr(base_directory); itr != end_itr; ++itr) {
       if (is_directory(itr->status())) {
         bf::path room_path = itr->path();
-        log_vfprintf(" --- Initializing apartment from file %s.", room_path.string().c_str());
+        log_vfprintf(" --- Initializing apartment %s.", room_path.filename().string().c_str());
         Apartment apartment = Apartment(this, room_path);
         apartments.push_back(apartment);
         log_vfprintf(" --- Fully loaded %s.", apartment.get_name());
@@ -166,7 +227,7 @@ bool ApartmentComplex::ch_already_rents_here(struct char_data *ch) {
 
 /* Load this apartment entry from files. */
 Apartment::Apartment(ApartmentComplex *complex, bf::path base_directory) :
-  complex(complex)
+  base_directory(base_directory), complex(complex)
 {
   // Load base info from <name>/info.
   {
@@ -190,15 +251,20 @@ Apartment::Apartment(ApartmentComplex *complex, bf::path base_directory) :
     json base_info;
     _json_parse_from_file(base_directory / "lease.json", base_info);
 
-    idnum_t owner = base_info["owner"].get<idnum_t>();
-    if (owner < 0) {
-      // TODO: Populate pgroup info from owner
-    } else {
-      owned_by_player = owner;
-    }
-
     paid_until = base_info["paid_until"].get<time_t>();
     guests = base_info["guests"].get<std::vector<idnum_t>>();
+
+    idnum_t owner = base_info["owner"].get<idnum_t>();
+    if (owner < 0) {
+      // Negative numbers indicate pgroup ownership
+      owned_by_pgroup = Playergroup::find_pgroup(-1 * owner);
+    } else {
+      owned_by_player = owner;
+      if (!does_player_exist(owner) || player_is_dead_hardcore(owner)) {
+        // Unit's not valid.
+        break_lease();
+      }
+    }
   }
 
   // TODO: Load storage info from <name>/storage.
@@ -213,10 +279,10 @@ Apartment::Apartment(ApartmentComplex *complex, bf::path base_directory) :
     for (bf::directory_iterator itr(base_directory); itr != end_itr; ++itr) {
       if (is_directory(itr->status())) {
         bf::path room_path = itr->path();
-        log_vfprintf(" ----- Initializing sub-room from file %s.", room_path.string().c_str());
+        log_vfprintf(" ----- Initializing sub-room '%s'.", room_path.filename().string().c_str());
         ApartmentRoom apartment_room = ApartmentRoom(this, room_path);
         rooms.push_back(apartment_room);
-        log_vfprintf(" ----- Fully loaded sub-room at %ld.", apartment_room.get_vnum());
+        log_vfprintf(" ----- Fully loaded %s's %s at %ld.", name, room_path.filename().string().c_str(), apartment_room.get_vnum());
       }
     }
   }
@@ -225,18 +291,33 @@ Apartment::Apartment(ApartmentComplex *complex, bf::path base_directory) :
   char tmp_buf[100];
   snprintf(tmp_buf, sizeof(tmp_buf), "%s's Unit %s", complex->display_name, name);
   full_name = str_dup(tmp_buf);
-
-  log_vfprintf(" ---- Applying changes from %s to world...", full_name);
-
-  // TODO: Set house flag, ensure door, etc.
 }
 
-/* TODO: Write lease data to <apartment name>/lease. This includes:
-   - Owner ID (negative for pgroup ID)
-   - Paid until
-   - Guest info
-*/
-void Apartment::save_lease() {}
+bool Apartment::owner_is_valid() {
+  if (owned_by_player > 0) {
+    return does_player_exist(owned_by_player) && !player_is_dead_hardcore(owned_by_player);
+  } else {
+    return owned_by_pgroup != NULL;
+    // TODO: When a pgroup is disbanded, must clean it out of apartment references too.
+  }
+}
+
+/* Write lease data to <apartment name>/lease. */
+void Apartment::save_lease() {
+  json lease_data;
+
+  if (owned_by_player > 0) {
+    lease_data["owner"] = owned_by_player;
+  } else {
+    lease_data["owner"] = -1 * owned_by_pgroup->get_idnum();
+  }
+  lease_data["paid_until"] = paid_until;
+  lease_data["guests"] = guests;
+
+  bf::ofstream o(base_directory / "lease.json");
+  o << std::setw(4) << lease_data << std::endl;
+  o.close();
+}
 
 /* Delete <apartment name>/lease and restore default descs. */
 void Apartment::break_lease() {
@@ -245,8 +326,10 @@ void Apartment::break_lease() {
   // Clear lease data.
   owned_by_player = 0;
   owned_by_pgroup = NULL;
+  paid_until = 0;
 
-  // TODO: Delete the lease file.
+  // Overwrite the lease file.
+  save_lease();
 
   // Iterate over rooms and restore them.
   for (auto room: rooms) {
@@ -270,7 +353,15 @@ bool Apartment::can_enter(struct char_data *ch) {
     if (GET_IDNUM(ch) == owned_by_player)
       return TRUE;
   } else if (owned_by_pgroup) {
-    // TODO: Pgroup entry.
+    // Not a member of any group, or member of wrong group.
+    if (!GET_PGROUP_MEMBER_DATA(ch) || GET_PGROUP(ch) != owned_by_pgroup) {
+      return FALSE;
+    }
+
+    // Doesn't have the right perms.
+    if (!GET_PGROUP_MEMBER_DATA(ch)->privileges.AreAnySet(PRIV_LEADER, PRIV_LANDLORD, PRIV_TENANT, ENDBIT)) {
+      return FALSE;
+    }
   } else {
     mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: %s is owned by neither player nor group! Allowing entry.", full_name);
     return TRUE;
@@ -395,12 +486,25 @@ bool Apartment::has_owner_privs(struct char_data *ch) {
   }
 
   if (owned_by_pgroup) {
-    // TODO: Handle this
+    // Not a member of any group, or member of wrong group.
+    if (!GET_PGROUP_MEMBER_DATA(ch) || GET_PGROUP(ch) != owned_by_pgroup) {
+      return FALSE;
+    }
+
+    // Doesn't have the right perms.
+    if (!GET_PGROUP_MEMBER_DATA(ch)->privileges.AreAnySet(PRIV_LEADER, PRIV_LANDLORD, ENDBIT)) {
+      return FALSE;
+    }
   }
 
   return FALSE;
 }
 
+void Apartment::list_guests_to_char(struct char_data *ch) {
+  for (auto guest_idnum : guests) {
+    // todo: look up player by idnum and list them
+  }
+}
 
 /********** ApartmentRoom ************/
 
@@ -443,8 +547,6 @@ void ApartmentRoom::purge_contents() {
 
   struct room_data *room = &world[rnum];
 
-
-
   // TODO: Write a storage file, then back it up to <name>/expired/storage_<ownerid>_<epoch>
 
   // Purge all contents, logging as we go.
@@ -452,15 +554,18 @@ void ApartmentRoom::purge_contents() {
   for (struct obj_data *obj = room->contents, *next_o; obj; obj = next_o) {
     next_o = obj->next_content;
 
-    // TODO: If this is belongings, don't purge it. Move it somewhere safe instead?
-
     const char *representation = generate_new_loggable_representation(obj);
-    mudlog_vfprintf(NULL, LOG_PURGELOG, "Apartment cleanup for %s (%ld) has purged %s (cost: %d).", apartment->full_name, GET_ROOM_VNUM(room), representation, GET_OBJ_COST(obj));
+
+    // If this is belongings, don't purge it. Move it somewhere safe instead?
+    if (GET_OBJ_TYPE(obj) == ITEM_CONTAINER && obj->obj_flags.extra_flags.IsSet(ITEM_EXTRA_CORPSE)) {
+      mudlog_vfprintf(NULL, LOG_PURGELOG, "Apartment cleanup for %s (%ld) REFUSING to purge corpse %s.", apartment->full_name, GET_ROOM_VNUM(room), representation);
+    } else {
+      mudlog_vfprintf(NULL, LOG_PURGELOG, "Apartment cleanup for %s (%ld) has purged %s (cost: %d).", apartment->full_name, GET_ROOM_VNUM(room), representation, GET_OBJ_COST(obj));
+      total_value_destroyed += GET_OBJ_COST(obj);
+      extract_obj(obj);
+    }
+
     delete [] representation;
-
-    total_value_destroyed += GET_OBJ_COST(obj);
-
-    extract_obj(obj);
   }
   mudlog_vfprintf(NULL, LOG_PURGELOG, "Total value destroyed: %d nuyen.", total_value_destroyed);
 
@@ -490,9 +595,43 @@ void ApartmentRoom::restore_default_desc() {
   send_to_room("You blink, then shrug-- this place must have always looked this way.\r\n", room);
 }
 
-/* TODO: Write storage data to <apartment name>/storage. This is basically the existing houses/<vnum> file. */
+/* Write storage data to <apartment name>/storage. This is basically the existing houses/<vnum> file. */
 void ApartmentRoom::save_storage() {
-  Storage_save(storage_path.string().c_str(), &world[real_room(vnum)]);
+  struct room_data *room = &world[real_room(vnum)];
+
+  // If the dirty bit is not set, we don't save the contents-- it means nobody is or was here since last save.
+  // YES, this does induce bugs, like evaluate programs not decaying if nobody is around to see it happen--
+  // but fuck it, if someone exploits it we'll just ban them. Easy enough.
+  if (!room->dirty_bit && !room->people)
+    return;
+
+  // Clear the dirty bit now that we've processed it.
+  room->dirty_bit = FALSE;
+
+  // Write the file.
+  Storage_save(storage_path.string().c_str(), room);
+}
+
+bool ApartmentRoom::is_guest(idnum_t idnum) {
+  auto it = find(apartment->guests.begin(), apartment->guests.end(), idnum);
+  return (it != apartment->guests.end());
+}
+
+bool ApartmentRoom::delete_guest(idnum_t idnum) {
+  auto it = find(apartment->guests.begin(), apartment->guests.end(), idnum);
+  if (it != apartment->guests.end()) {
+    apartment->guests.erase(it);
+    apartment->save_lease();
+    return TRUE;
+  }
+  return FALSE;
+}
+
+void ApartmentRoom::add_guest(idnum_t idnum) {
+  if (!is_guest(idnum)) {
+    apartment->guests.push_back(idnum);
+    apartment->save_lease();
+  }
 }
 
 // Given a room, move all vehicles from it to the Seattle garage, logging as we go.
