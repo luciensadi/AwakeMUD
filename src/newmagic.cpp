@@ -3823,7 +3823,7 @@ ACMD(do_cast)
     FAILURE_CASE(IS_WORKING(ch), "You're too busy to cast a ritual spell.\r\n");
     FAILURE_CASE(CH_IN_COMBAT(ch), "Ritual cast while fighting?? You ARE mad!\r\n");
     FAILURE_CASE(IS_PROJECT(ch), "You can't manipulate physical objects in this form, so setting up a ritual space will be hard.\r\n");
-    FAILURE_CASE(!ROOM_FLAGGED(in_room, ROOM_HOUSE), "Ritual casting requires an undisturbed place with room to move around-- you'll need to be in an apartment.\r\n");
+    FAILURE_CASE(!in_room->apartment, "Ritual casting requires an undisturbed place with room to move around-- you'll need to be in an apartment.\r\n");
     FAILURE_CASE(ch->in_veh, "Ritual casting requires more space to move around-- you'll need to leave your vehicle.\r\n");
     FAILURE_CASE(!spell_is_valid_ritual_spell(spell->type), "That spell isn't eligible for ritual casting. You can only ritual-cast buffs.\r\n");
 

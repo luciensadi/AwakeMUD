@@ -42,6 +42,7 @@
 #include "config.hpp"
 #include "transport.hpp"
 #include "memory.hpp"
+#include "newhouse.hpp"
 
 extern class objList ObjList;
 extern int modify_target(struct char_data *ch);
@@ -49,7 +50,6 @@ extern void end_quest(struct char_data *ch);
 extern char *cleanup(char *dest, const char *src);
 extern void damage_equip(struct char_data *ch, struct char_data *victim, int power, int type);
 extern bool check_adrenaline(struct char_data *, int);
-extern bool House_can_enter_by_idnum(long idnum, vnum_t house);
 extern int get_paydata_market_maximum(int host_color);
 extern int get_paydata_market_minimum(int host_color);
 extern void wire_nuyen(struct char_data *ch, int amount, vnum_t character_id);
@@ -1155,7 +1155,7 @@ void save_vehicles(bool fromCopyover)
       // Otherwise, derive the garage from its location.
       else if (!fromCopyover
                && (!ROOM_FLAGGED(temp_room, ROOM_GARAGE)
-                   || (ROOM_FLAGGED(temp_room, ROOM_HOUSE) && !House_can_enter_by_idnum(veh->owner, temp_room->number))))
+                   || (temp_room->apartment && !temp_room->apartment->can_enter_by_idnum(veh->owner))))
       {
        /* snprintf(buf, sizeof(buf), "Falling back to a garage for non-garage-room veh %s (in '%s' %ld).",
                    GET_VEH_NAME(veh), GET_ROOM_NAME(temp_room), GET_ROOM_VNUM(temp_room));

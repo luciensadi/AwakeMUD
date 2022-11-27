@@ -38,6 +38,7 @@
 #include "helpedit.hpp"
 #include "archetypes.hpp"
 #include "ignore_system.hpp"
+#include "newhouse.hpp"
 
 #if defined(__CYGWIN__)
 #include <crypt.h>
@@ -2523,7 +2524,6 @@ void nanny(struct descriptor_data * d, char *arg)
   extern vnum_t frozen_start_room;
   extern vnum_t newbie_start_room;
   extern int max_bad_pws;
-  extern bool House_can_enter(struct char_data *ch, vnum_t vnum);
   vnum_t load_room_vnum;
   rnum_t load_room_rnum;
   bool dirty_password = FALSE;
@@ -3062,7 +3062,7 @@ void nanny(struct descriptor_data * d, char *arg)
       }
 
       // Post-processing: Characters who are trying to load into a house get rejected if they're not allowed in there.
-      if (ROOM_FLAGGED(&world[load_room_rnum], ROOM_HOUSE) && !House_can_enter(d->character, world[load_room_rnum].number)) {
+      if (world[load_room_rnum].apartment && !world[load_room_rnum].apartment->can_enter(d->character)) {
         load_room_vnum = mortal_start_room;
         load_room_rnum = real_room(mortal_start_room);
       }

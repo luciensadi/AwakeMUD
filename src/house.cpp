@@ -40,7 +40,7 @@ extern bool player_is_dead_hardcore(long id);
 struct landlord *landlords = NULL;
 ACMD_CONST(do_say);
 
-void remove_vehicles_from_apartment(struct room_data *room);
+extern void remove_vehicles_from_apartment(struct room_data *room);
 void warn_about_apartment_deletion();
 
 void House_delete_file(vnum_t vnum, char *name);
@@ -346,8 +346,7 @@ void validate_in_obj_pointers(struct obj_data *obj, struct obj_data *in_obj) {
 }
 #define FILEBUF_SIZE 8192
 
-void House_save(struct house_control_rec *house, const char *file_name, long rnum)
-{
+void Storage_save(const char *file_name, struct room_data *room) {
   int level = 0;
   struct obj_data *obj = NULL;
 
@@ -368,17 +367,7 @@ void House_save(struct house_control_rec *house, const char *file_name, long rnu
   fprintf(fl, "[METADATA]\n");
   fprintf(fl, "\tVersion:\t%d\n", VERSION_HOUSE_FILE);
 
-  // Are we saving an apartment? If so, store guest list.
-  if (house) {
-    fprintf(fl, "[GUESTS]\n");
-    for (int o = 0; o < MAX_GUESTS; o++) {
-      // Don't write out empty guest slots.
-      if (house->guests[o])
-        fprintf(fl, "\tGuest%d:\t%ld\n", o, house->guests[o]);
-    }
-  }
-
-  obj = world[rnum].contents;
+  obj = room->contents;
 
   for (struct obj_data *tmp_obj = obj; tmp_obj; tmp_obj = tmp_obj->next_content) {
     validate_in_obj_pointers(tmp_obj, NULL);
@@ -557,8 +546,8 @@ void House_crashsave(vnum_t vnum)
     return;
   }
 
-  // Save it.
-  House_save(find_house(vnum), buf, rnum);
+  // Save it. asdf todo
+  // House_save(find_house(vnum), buf, rnum);
 }
 
 /* Delete a house save file */
@@ -629,289 +618,7 @@ bool ch_already_rents_here(struct house_control_rec *room, struct char_data *ch)
   return FALSE;
 }
 
-void display_room_list_to_character(struct char_data *ch, struct landlord *lord) {
-  bool printed_message_yet = FALSE;
 
-  if (PRF_FLAGGED(ch, PRF_SCREENREADER)) {
-    for (struct house_control_rec *room_record = lord->rooms; room_record; room_record = room_record->next) {
-      if (!room_record->owner) {
-        if (!printed_message_yet)
-          send_to_char(ch, "The following rooms are free: \r\n");
-
-        printed_message_yet = TRUE;
-        send_to_char(ch, "Room %s (lifestyle %s): %d nuyen.\r\n",
-                     room_record->name,
-                     lifestyle[room_record->mode].name,
-                     lord->basecost * lifestyle[room_record->mode].cost);
-      }
-    }
-
-    if (!printed_message_yet) {
-      send_to_char(ch, "It looks like all the rooms here have been claimed.\r\n");
-    }
-    return;
-  }
-
-  // Non-screenreader display.
-  bool on_first_entry_in_column = TRUE;
-  strlcpy(buf, "", sizeof(buf));
-  for (struct house_control_rec *room_record = lord->rooms; room_record; room_record = room_record->next) {
-    if (!room_record->owner) {
-      if (!printed_message_yet) {
-        send_to_char(ch, "The following rooms are free: \r\n");
-        send_to_char(ch, "Name     Class     Price      Name     Class     Price\r\n");
-        send_to_char(ch, "-----    ------    ------     -----    ------    -----\r\n");
-      }
-
-      printed_message_yet = TRUE;
-
-      send_to_char(ch, "%s%-5s    %-6s    %-8d%s",
-              on_first_entry_in_column ? "" : "   ",
-              room_record->name,
-              lifestyle[room_record->mode].name,
-              lord->basecost * lifestyle[room_record->mode].cost,
-              on_first_entry_in_column ? "" : "\r\n");
-      on_first_entry_in_column = !on_first_entry_in_column;
-    }
-  }
-
-  if (!printed_message_yet) {
-    send_to_char("It looks like all the rooms here have been claimed.\r\n", ch);
-  }
-}
-
-SPECIAL(landlord_spec)
-{
-  struct char_data *recep = (struct char_data *) me;
-  struct obj_data *obj = NULL;
-  struct landlord *lord;
-  struct house_control_rec *room_record;
-  char buf3[MAX_STRING_LENGTH];
-
-  if (!(CMD_IS("list") || CMD_IS("retrieve") || CMD_IS("lease")
-        || CMD_IS("leave") || CMD_IS("break") || CMD_IS("pay") || CMD_IS("status")))
-    return FALSE;
-
-  if (!CAN_SEE(recep, ch)) {
-    do_say(recep, "I don't deal with people I can't see!", 0, 0);
-    return TRUE;
-  }
-  for (lord = landlords; lord; lord = lord->next)
-    if (GET_MOB_VNUM(recep) == lord->vnum)
-      break;
-  if (!lord)
-    return FALSE;
-  one_argument(argument, arg);
-
-  if (CMD_IS("list")) {
-    display_room_list_to_character(ch, lord);
-    return TRUE;
-  } else if (CMD_IS("retrieve")) {
-    if (!*arg) {
-      do_say(recep, "Which room would you like the key to?", 0, 0);
-      return TRUE;
-    }
-    room_record = find_room(arg, lord->rooms, recep);
-    if (!room_record)
-      return TRUE;
-    else if (room_record->owner != GET_IDNUM(ch))
-      do_say(recep, "I would get fired if I did that.", 0, 0);
-    else {
-      do_say(recep, "Here you go...", 0, 0);
-      struct obj_data *key = read_object(room_record->key, VIRTUAL);
-      obj_to_char(key, ch);
-    }
-    return TRUE;
-  } else if (CMD_IS("lease")) {
-    if (!*arg) {
-      do_say(recep, "Which room would you like to lease?", 0, 0);
-
-      display_room_list_to_character(ch, lord);
-
-      return TRUE;
-    }
-    room_record = find_room(arg, lord->rooms, recep);
-    if (!room_record) {
-      // this is already handled in find_room
-      // do_say(recep, "Which room is that?", 0, 0);
-      return TRUE;
-    } else if (room_record->owner) {
-      do_say(recep, "Sorry, I'm afraid that room is already taken.", 0, 0);
-      return TRUE;
-    } else if (ch_already_rents_here(lord->rooms, ch)) {
-      do_say(recep, "Sorry, we only allow people to lease one room at a time here.", 0, 0);
-      return TRUE;
-    }
-    int cost = lord->basecost * lifestyle[room_record->mode].cost, origcost = cost;
-
-    snprintf(buf3, sizeof(buf3), "That will be %d nuyen.", cost);
-    do_say(recep, buf3, 0, 0);
-    for (obj = ch->carrying; obj; obj = obj->next_content)
-      if (GET_OBJ_VNUM(obj) == 119 && GET_OBJ_VAL(obj, 0) == GET_IDNUM(ch)) {
-        if (cost >= GET_OBJ_VAL(obj, 1))
-          cost -= GET_OBJ_VAL(obj, 1);
-        else
-          cost = 0;
-        break;
-      }
-    if (GET_NUYEN(ch) < cost) {
-      if (GET_BANK(ch) >= cost) {
-        do_say(recep, "You don't have the money on you, so I'll transfer it from your bank account.", 0, 0);
-        lose_bank(ch, cost, NUYEN_OUTFLOW_HOUSING);
-      } else {
-        do_say(recep, "Sorry, you don't have the required funds.", 0, 0);
-        return TRUE;
-      }
-    } else {
-      lose_nuyen(ch, cost, NUYEN_OUTFLOW_HOUSING);
-      send_to_char(ch, "You hand over the cash.\r\n");
-    }
-    if (obj) {
-      if (origcost >= GET_OBJ_VAL(obj, 1)) {
-        send_to_char("Your housing card is empty.\r\n", ch);
-        extract_obj(obj);
-      } else {
-        GET_OBJ_VAL(obj, 1) -= origcost;
-        send_to_char(ch, "Your housing card has %d nuyen left on it.\r\n", GET_OBJ_VAL(obj, 1));
-      }
-    }
-    struct obj_data *key = read_object(room_record->key, VIRTUAL);
-    if (!key) {
-      snprintf(buf, sizeof(buf), "SYSERR: Room record for %ld specifies key vnum %ld, but it does not exist! '%s' (%ld) can't access %s apartment.",
-              room_record->vnum, room_record->key, GET_CHAR_NAME(ch), GET_IDNUM(ch), HSHR(ch));
-      mudlog(buf, ch, LOG_SYSLOG, TRUE);
-      do_say(recep, "I seem to have misplaced your key. I've refunded you the nuyen in cash.", 0, 0);
-      GET_NUYEN_RAW(ch) += cost;
-      GET_NUYEN_INCOME_THIS_PLAY_SESSION(ch, NUYEN_OUTFLOW_HOUSING) -= cost;
-    } else {
-      do_say(recep, "Thank you, here is your key.", 0, 0);
-      obj_to_char(key, ch);
-      room_record->owner = GET_IDNUM(ch);
-      room_record->date = time(0) + (SECS_PER_REAL_DAY*30);
-
-      int rnum = real_room(room_record->vnum);
-      ROOM_FLAGS(&world[rnum]).SetBit(ROOM_HOUSE);
-      ROOM_FLAGS(&world[room_record->atrium]).SetBit(ROOM_ATRIUM);
-
-      // Shift all the vehicles out of it.
-      remove_vehicles_from_apartment(&world[rnum]);
-
-      House_crashsave(room_record->vnum);
-      House_save_control();
-    }
-    return TRUE;
-  } else if (CMD_IS("leave") || CMD_IS("break")) {
-    if (!*arg) {
-      do_say(recep, "Which room would you like to leave?", 0, 0);
-      return TRUE;
-    }
-    room_record = find_room(arg, lord->rooms, recep);
-    if (!room_record)
-      do_say(recep, "Which room is that?", 0, 0);
-    else if (room_record->owner != GET_IDNUM(ch))
-      do_say(recep, "I would get fired if I did that.", 0, 0);
-    else {
-      room_record->owner = 0;
-      int rnum = real_room(room_record->vnum);
-      ROOM_FLAGS(&world[rnum]).RemoveBit(ROOM_HOUSE);
-      remove_vehicles_from_apartment(&world[rnum]);
-
-      // Check to see if there are any other houses associated with this atrium. If not, disassociate it.
-      {
-        struct room_data *atrium = &world[room_record->atrium];
-        bool have_other_houses = FALSE;
-
-        for (int i = NORTH; i <= DOWN && !have_other_houses; i++) {
-          if (atrium->dir_option[i] && atrium->dir_option[i]->to_room && ROOM_FLAGGED(atrium->dir_option[i]->to_room, ROOM_HOUSE))
-            have_other_houses = TRUE;
-        }
-
-        if (!have_other_houses)
-          ROOM_FLAGS(atrium).RemoveBit(ROOM_ATRIUM);
-      }
-
-      House_save_control();
-      House_get_filename(room_record->vnum, buf2, MAX_STRING_LENGTH);
-      House_delete_file(room_record->vnum, buf2);
-      do_say(recep, "I hope you enjoyed your time here.", 0, 0);
-    }
-    return TRUE;
-  } else if (CMD_IS("pay")) {
-    if (!*arg) {
-      do_say(recep, "Which room would you like to pay the rent to?", 0, 0);
-      return TRUE;
-    }
-    room_record = find_room(arg, lord->rooms, recep);
-    if (!room_record)
-      do_say(recep, "Which room is that?", 0, 0);
-    else if (room_record->owner != GET_IDNUM(ch))
-      do_say(recep, "But that isn't your room.", 0, 0);
-    else {
-      int cost = lord->basecost * lifestyle[room_record->mode].cost, origcost = cost;
-      snprintf(buf3, sizeof(buf3), "That will be %d nuyen.", cost);
-      do_say(recep, buf3, 0, 0);
-      for (obj = ch->carrying; obj; obj = obj->next_content)
-        if (GET_OBJ_VNUM(obj) == 119 && GET_OBJ_VAL(obj, 0) == GET_IDNUM(ch)) {
-          if (cost >= GET_OBJ_VAL(obj, 1))
-            cost -= GET_OBJ_VAL(obj, 1);
-          else
-            cost = 0;
-          break;
-        }
-      if (GET_NUYEN(ch) < cost) {
-        if (GET_BANK(ch) >= cost) {
-          do_say(recep, "You don't have the money on you, so I'll transfer it from your bank account.", 0, 0);
-          lose_bank(ch, cost, NUYEN_OUTFLOW_HOUSING);
-        } else {
-          do_say(recep, "Sorry, you don't have the required funds.", 0, 0);
-          return TRUE;
-        }
-      } else {
-        lose_nuyen(ch, cost, NUYEN_OUTFLOW_HOUSING);
-        send_to_char(ch, "You hand over the cash.\r\n");
-      }
-      if (obj) {
-        if (origcost >= GET_OBJ_VAL(obj, 1)) {
-          send_to_char("Your housing card is empty.\r\n", ch);
-          extract_obj(obj);
-        } else {
-          GET_OBJ_VAL(obj, 1) -= origcost;
-          GET_NUYEN_INCOME_THIS_PLAY_SESSION(ch, NUYEN_OUTFLOW_HOUSING) += cost;
-          send_to_char(ch, "Your housing card has %d nuyen left on it.\r\n", GET_OBJ_VAL(obj, 1));
-        }
-      }
-      do_say(recep, "You are paid up for the next period.", 0, 0);
-      room_record->date += SECS_PER_REAL_DAY*30;
-      House_save_control();
-    }
-    return TRUE;
-  } else if (CMD_IS("status")) {
-    if (!*arg) {
-      do_say(recep, "Which room would you like to check the rent on?", 0, 0);
-      return TRUE;
-    }
-    room_record = find_room(arg, lord->rooms, recep);
-    if (!room_record)
-      do_say(recep, "Which room is that?", 0, 0);
-    else if (room_record->owner && room_record->owner != GET_IDNUM(ch))
-      do_say(recep, "I'm afraid I can't release that information.", 0, 0);
-    else if (!room_record->owner)
-      do_say(recep, "That room is currently available for lease.", 0, 0);
-    else {
-      if (room_record->date - time(0) < 0) {
-        strlcpy(buf2, "Your rent has expired on that apartment.", sizeof(buf2));
-        do_say(recep, buf2, 0, 0);
-      } else {
-        snprintf(buf2, sizeof(buf2), "You are paid for another %d days.", (int)((room_record->date - time(0)) / 86400));
-        do_say(recep, buf2, 0, 0);
-        strlcpy(buf2, "Note: Those are real-world days.", sizeof(buf2));
-        do_say(recep, buf2, 0, SCMD_OSAY);
-      }
-    }
-    return TRUE;
-  }
-  return FALSE;
-}
 /* call from boot_db - will load control recs, load objs, set atrium bits */
 /* should do sanity checks on vnums & remove invalid records */
 // aka boot_houses
@@ -940,11 +647,7 @@ void House_boot(void)
       fprintf(stderr, "Format error in landlord #%d.\r\n", i);
       return;
     }
-    if (real_mobile(landlord_vnum) < 0) {
-      log_vfprintf("SYSERR: Landlord vnum %ld does not match up with a real NPC. Terminating.\r\n", landlord_vnum);
-      exit(ERROR_CANNOT_RESOLVE_VNUM);
-    }
-    ASSIGNMOB(landlord_vnum, landlord_spec);
+
     templ = new struct landlord;
     templ->vnum = landlord_vnum;
     templ->race.FromString(name);
@@ -1034,7 +737,6 @@ void House_boot(void)
         first = temp;
       if (temp->owner) {
         ROOM_FLAGS(apartment).SetBit(ROOM_HOUSE);
-        ROOM_FLAGS(&world[temp->atrium]).SetBit(ROOM_ATRIUM);
       }
       last = temp;
     }
@@ -1122,7 +824,7 @@ void hcontrol_list_houses(struct char_data *ch)
 void hcontrol_destroy_house(struct char_data * ch, char *arg)
 {
   struct house_control_rec *i = NULL;
-  vnum_t real_atrium, real_house;
+  vnum_t real_house;
 
   if (!*arg)
   {
@@ -1134,10 +836,6 @@ void hcontrol_destroy_house(struct char_data * ch, char *arg)
     send_to_char("Unknown house.\r\n", ch);
     return;
   }
-  if ((real_atrium = real_room(i->atrium)) < 0)
-    log("SYSERR: House had invalid atrium!");
-  else
-    ROOM_FLAGS(&world[real_atrium]).RemoveBit(ROOM_ATRIUM);
 
   if ((real_house = real_room(i->vnum)) < 0)
     log("SYSERR: House had invalid vnum!");
@@ -1150,12 +848,6 @@ void hcontrol_destroy_house(struct char_data * ch, char *arg)
     i->owner = 0;
     send_to_char("House deleted.\r\n", ch);
     House_save_control();
-
-    for (struct landlord *llord = landlords; llord; llord = llord->next)
-      for (i = llord->rooms; i; i = i->next)
-        if (i->atrium >= 0) {
-          ROOM_FLAGS(&world[real_atrium]).SetBit(ROOM_ATRIUM);
-        }
   }
 }
 
@@ -1393,56 +1085,6 @@ void House_save_all(void)
     }
 }
 
-bool House_can_enter_by_idnum(long idnum, vnum_t house) {
-  struct house_control_rec *room = find_house(house);
-
-  if (idnum <= 0 || !room)
-    return FALSE;
-
-  if (idnum == room->owner)
-    return TRUE;
-
-  for (int guest = 0; guest < MAX_GUESTS; guest++)
-    if (idnum == room->guests[guest])
-      return TRUE;
-
-  return FALSE;
-}
-
-
-/* note: arg passed must be house vnum, so there. */
-bool House_can_enter(struct char_data *ch, vnum_t house)
-{
-  int j;
-  struct house_control_rec *room = find_house(house);
-
-  // No room? No entry.
-  if (!room)
-    return FALSE;
-
-  // NPC, but not a spirit or elemental? No entry.
-  if (IS_NPC(ch) && !(IS_SPIRIT(ch) || IS_PC_CONJURED_ELEMENTAL(ch)))
-    return FALSE;
-
-  // Admins, astral projections, and owners can enter any room.
-  if (GET_LEVEL(ch) >= LVL_ADMIN || GET_IDNUM(ch) == room->owner || IS_ASTRAL(ch))
-    return TRUE;
-
-  // Guests can enter any room.
-  for (j = 0; j < MAX_GUESTS; j++)
-    if (GET_IDNUM(ch) == room->guests[j])
-      return TRUE;
-
-#ifdef IS_BUILDPORT
-  if (GET_LEVEL(ch) >= LVL_BUILDER) {
-    send_to_char("(OOC: Entry allowed via staff override.)\r\n", ch);
-    return TRUE;
-  }
-#endif
-
-  return FALSE;
-}
-
 void House_list_guests(struct char_data *ch, struct house_control_rec *i, int quiet)
 {
   int j;
@@ -1469,15 +1111,6 @@ void House_list_guests(struct char_data *ch, struct house_control_rec *i, int qu
     strlcat(buf, "None", sizeof(buf));
   strlcat(buf, "\r\n", sizeof(buf));
   send_to_char(buf, ch);
-}
-
-void remove_vehicles_from_apartment(struct room_data *room) {
-  struct veh_data *veh;
-  while ((veh = room->vehicles)) {
-    veh_from_room(veh);
-    veh_to_room(veh, &world[real_room(RM_SEATTLE_PARKING_GARAGE)]);
-  }
-  save_vehicles(FALSE);
 }
 
 void warn_about_apartment_deletion() {

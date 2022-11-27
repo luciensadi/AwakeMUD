@@ -1801,7 +1801,7 @@ void look_in_veh(struct char_data * ch)
       send_to_char(ch, "\r\n^CAround you is %s^n%s%s%s%s%s%s%s\r\n", GET_ROOM_NAME(veh->in_room),
                    ROOM_FLAGGED(veh->in_room, ROOM_GARAGE) ? " (Garage)" : "",
                    ROOM_FLAGGED(veh->in_room, ROOM_STORAGE) && !ROOM_FLAGGED(veh->in_room, ROOM_CORPSE_SAVE_HACK) ? " (Storage)" : "",
-                   ROOM_FLAGGED(veh->in_room, ROOM_HOUSE) ? " (Apartment)" : "",
+                   veh->in_room->apartment ? " (Apartment)" : "",
                    ROOM_FLAGGED(veh->in_room, ROOM_STERILE) ? " (Sterile)" : "",
                    ROOM_FLAGGED(veh->in_room, ROOM_ARENA) ? " ^y(Arena)^n" : "",
                    veh->in_room->matrix && real_host(veh->in_room->matrix) >= 1 ? " (Jackpoint)" : "",
@@ -2132,7 +2132,7 @@ void look_in_direction(struct char_data * ch, int dir)
     else if (IS_SET(EXIT(ch, dir)->exit_info, EX_ISDOOR) && EXIT(ch, dir)->keyword)
       send_to_char(ch, "The %s is open.\r\n", fname(EXIT(ch, dir)->keyword), !strcmp(fname(EXIT(ch, dir)->keyword), "doors") ? "are" : "is");
 
-    if (ROOM_FLAGGED(ch->in_room, ROOM_HOUSE)){
+    if (ch->in_room->apartment){
       /* Apartments have peepholes. */
       send_to_char("Through the peephole, you see:\r\n", ch);
       peek_into_adjacent(ch, dir);
@@ -7227,7 +7227,7 @@ void display_room_name(struct char_data *ch) {
     send_to_char(ch, "^C%s^n%s%s%s%s%s%s%s\r\n", GET_ROOM_NAME(ch->in_room),
                  ROOM_FLAGGED(ch->in_room, ROOM_GARAGE) ? " (Garage)" : "",
                  ROOM_FLAGGED(ch->in_room, ROOM_STORAGE) && !ROOM_FLAGGED(ch->in_room, ROOM_CORPSE_SAVE_HACK) ? " (Storage)" : "",
-                 ROOM_FLAGGED(ch->in_room, ROOM_HOUSE) ? " (Apartment)" : "",
+                 ch->in_room->apartment ? " (Apartment)" : "",
                  ROOM_FLAGGED(ch->in_room, ROOM_STERILE) ? " (Sterile)" : "",
                  ROOM_FLAGGED(ch->in_room, ROOM_ARENA) ? " ^y(Arena)^n" : "",
                  ch->in_room->matrix && real_host(ch->in_room->matrix) >= 1 ? " (Jackpoint)" : "",

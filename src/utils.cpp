@@ -44,6 +44,8 @@
 #include "bullet_pants.hpp"
 #include "invis_resistance_tests.hpp"
 #include "vision_overhaul.hpp"
+#include "newhouse.hpp"
+#include "interpreter.hpp"
 
 extern class memoryClass *Mem;
 extern struct time_info_data time_info;
@@ -76,6 +78,8 @@ extern SPECIAL(fence);
 extern SPECIAL(taxi);
 extern SPECIAL(painter);
 extern SPECIAL(nerp_skills_teacher);
+
+ACMD_DECLARE(do_say);
 
 bool npc_can_see_in_any_situation(struct char_data *npc);
 
@@ -4689,7 +4693,7 @@ bool room_accessible_to_vehicle_piloted_by_ch(struct room_data *room, struct veh
       return FALSE;
   }
 
-  if (ROOM_FLAGGED(room, ROOM_HOUSE) && !House_can_enter(ch, GET_ROOM_VNUM(room))) {
+  if (room->apartment && room->apartment->can_enter(ch)) {
     return FALSE;
   }
 
@@ -4727,7 +4731,7 @@ bool room_accessible_to_vehicle_piloted_by_ch(struct room_data *room, struct veh
       return FALSE;
     }
 
-    if (ROOM_FLAGGED(room, ROOM_HOUSE) && !House_can_enter(tch, GET_ROOM_VNUM(room))) {
+    if (room->apartment && room->apartment->can_enter(tch)) {
       return FALSE;
     }
   }
@@ -5444,6 +5448,12 @@ bool keyword_appears_in_veh(const char *keyword, struct veh_data *veh, bool sear
   }
 
   return FALSE;
+}
+
+void mob_say(struct char_data *mob, const char *msg) {
+  static char not_const[MAX_STRING_LENGTH];
+  strlcpy(not_const, msg, sizeof(not_const));
+  do_say(mob, not_const, 0, 0);
 }
 
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.

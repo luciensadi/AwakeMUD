@@ -48,7 +48,6 @@ struct landlord
 #define TOROOM(room_rnum, dir) ((world[(room_rnum)].dir_option[(dir)] && world[(room_rnum)].dir_option[(dir)]->to_room) ? \
                             real_room(world[(room_rnum)].dir_option[(dir)]->to_room->number) : NOWHERE)
 
-bool House_can_enter(struct char_data *ch, vnum_t house);
 void House_listrent(struct char_data *ch, vnum_t vnum);
 void House_boot(void);
 void House_save_all(void);

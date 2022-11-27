@@ -59,6 +59,7 @@
 #include "transport.hpp"
 #include "bullet_pants.hpp"
 #include "lexicons.hpp"
+#include "newhouse.hpp"
 
 ACMD_DECLARE(do_reload);
 
@@ -80,8 +81,6 @@ extern void handle_weapon_attachments(struct obj_data *obj);
 extern void ensure_mob_has_ammo_for_weapon(struct char_data *ch, struct obj_data *weapon);
 extern void reset_host_paydata(rnum_t rnum);
 extern bool player_is_dead_hardcore(long id);
-
-extern bool House_can_enter_by_idnum(long idnum, vnum_t house);
 
 extern void auto_repair_obj(struct obj_data *obj);
 
@@ -5533,7 +5532,7 @@ void load_saved_veh()
 
     // Can't get there? Pull your veh out.
     rnum_t veh_room_rnum = real_room(veh_room_vnum);
-    if (veh_room_rnum < 0 || (veh->owner > 0 && ROOM_FLAGGED(&world[veh_room_rnum], ROOM_HOUSE) && !House_can_enter_by_idnum(veh->owner, veh_room_vnum))) {
+    if (veh_room_rnum < 0 || (veh->owner > 0 && world[veh_room_rnum].apartment && !world[veh_room_rnum].apartment->can_enter_by_idnum(veh->owner))) {
       veh_room_vnum = RM_SEATTLE_PARKING_GARAGE;
     }
 
@@ -5809,7 +5808,7 @@ void load_saved_veh()
       }
       if (!veh->in_veh) {
         rnum_t veh_room_rnum = real_room(veh_room_vnum);
-        if (veh_room_rnum < 0 || (veh->owner > 0 && ROOM_FLAGGED(&world[veh_room_rnum], ROOM_HOUSE) && !House_can_enter_by_idnum(veh->owner, veh_room_vnum))) {
+        if (veh_room_rnum < 0 || (veh->owner > 0 && world[veh_room_rnum].apartment && !world[veh_room_rnum].apartment->can_enter_by_idnum(veh->owner))) {
           veh_room_vnum = RM_SEATTLE_PARKING_GARAGE;
           snprintf(buf, sizeof(buf), "SYSERR: Attempted to restore vehicle %s (%ld) inside nonexistent carrier, and no valid room was found! Dumping to Seattle Garage (%ld).\r\n",
                    veh->name, veh->veh_number, veh_room_vnum);

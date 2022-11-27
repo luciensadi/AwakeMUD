@@ -25,6 +25,7 @@
 #include "config.hpp"
 #include "ignore_system.hpp"
 #include "invis_resistance_tests.hpp"
+#include "newhouse.hpp"
 
 /* external functs */
 int special(struct char_data * ch, int cmd, char *arg);
@@ -110,12 +111,10 @@ int can_move(struct char_data *ch, int dir, int extra)
     }
   }
 
-  if (ROOM_FLAGGED(EXIT(ch, dir)->to_room, ROOM_HOUSE))
-    if (!House_can_enter(ch, EXIT(ch, dir)->to_room->number))
-    {
-      send_to_char("That's private property -- no trespassing!\r\n", ch);
-      return 0;
-    }
+  if (EXIT(ch, dir)->to_room->apartment && !EXIT(ch, dir)->to_room->apartment->can_enter(ch)) {
+    send_to_char("That's private property -- no trespassing!\r\n", ch);
+    return 0;
+  }
   if (ROOM_FLAGGED(EXIT(ch, dir)->to_room, ROOM_TUNNEL) && !IS_ASTRAL(ch)) {
     int num_occupants = 0;
     for (struct char_data *in_room_ptr = EXIT(ch, dir)->to_room->people; in_room_ptr && num_occupants < 2; in_room_ptr = in_room_ptr->next_in_room) {
@@ -743,18 +742,24 @@ void move_vehicle(struct char_data *ch, int dir)
   }
 
   if (IS_SET(EXIT(veh, dir)->exit_info, EX_CLOSED)) {
-      if ((ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_HOUSE) // It only checks house, not garage, so drones can enter/leave apts.
-             && House_can_enter(ch, EXIT(veh, dir)->to_room->number)
-             && has_key(ch, (EXIT(veh, dir)->key)))
-          || (ROOM_FLAGGED(veh->in_room, ROOM_HOUSE)))
-      {
-          send_to_char("The remote on your key beeps, allowing the door to swing open briefly enough to slide through.\r\n", ch);
-          snprintf(buf, sizeof(buf), "A door beeps before swinging open electronically to allow %s through in that brief moment.\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
-          send_to_room(buf, get_veh_in_room(veh), veh);
-      } else {
-          send_to_char(CANNOT_GO_THAT_WAY, ch);
-          return;
+    if (EXIT(veh, dir)->to_room->apartment || veh->in_room->apartment) {
+      if (IS_SET(EXIT(veh, dir)->exit_info, EX_LOCKED) && !has_key(ch, (EXIT(veh, dir)->key))) {
+        send_to_char("You need the key in your inventory to use the garage door opener.\r\n", ch);
+        return;
       }
+
+      if (EXIT(veh, dir)->to_room->apartment && !EXIT(veh, dir)->to_room->apartment->can_enter(ch)) {
+        send_to_char("That's private property-- no trespassing.\r\n", ch);
+        return;
+      }
+
+      send_to_char("The remote on your key beeps, and the door swings open just enough to let you through.\r\n", ch);
+      snprintf(buf, sizeof(buf), "A door beeps before briefly opening just enough to allow %s through.\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
+      send_to_room(buf, get_veh_in_room(veh), veh);
+    } else {
+      send_to_char(CANNOT_GO_THAT_WAY, ch);
+      return;
+    }
   }
 
 #ifdef DEATH_FLAGS
@@ -789,7 +794,7 @@ void move_vehicle(struct char_data *ch, int dir)
   if (special(ch, convert_dir[dir], &empty_argument))
     return;
 
-  if (ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_HOUSE) && !House_can_enter(ch, EXIT(veh, dir)->to_room->number)) {
+  if (EXIT(veh, dir)->to_room->apartment && !EXIT(veh, dir)->to_room->apartment->can_enter(ch)) {
     send_to_char("You can't use other people's garages without permission.\r\n", ch);
     return;
   }
@@ -2038,44 +2043,28 @@ ACMD(do_leave)
   }
 
   // If you're in an apartment, you're able to leave to the atriun no matter what. Prevents lockin.
-  if (ROOM_FLAGGED(in_room, ROOM_HOUSE)) {
-    for (door = 0; door < NUM_OF_DIRS; door++) {
-      if (EXIT(ch, door) && EXIT(ch, door)->to_room && ROOM_FLAGGED(EXIT(ch, door)->to_room, ROOM_ATRIUM)) {
-        send_to_char(ch, "You make your way out of the residence through the door to %s, leaving it locked behind you.\r\n", thedirs[door]);
-        act("$n leaves the residence.", TRUE, ch, 0, 0, TO_ROOM);
+  if (in_room->apartment) {
+    rnum_t atrium_rnum = real_room(in_room->apartment->get_atrium_vnum());
 
-        // Transfer the char.
-        struct room_data *target_room = EXIT(ch, door)->to_room;
-        char_from_room(ch);
-        char_to_room(ch, target_room);
-
-        // Message the room.
-        snprintf(buf, sizeof(buf), "$n enters from %s.", thedirs[rev_dir[door]]);
-        act(buf, TRUE, ch, 0, 0, TO_ROOM);
-
-        // If not screenreader, look.
-        if (!PRF_FLAGGED(ch, PRF_SCREENREADER))
-          look_at_room(ch, 0, 0);
-        return;
-      }
+    if (atrium_rnum < 0) {
+      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Atrium for %s was inaccessible! Using A Bright Light.", in_room->apartment->get_full_name());
+      atrium_rnum = 0; // A Bright Light
     }
-    // If we got here, there was no valid exit. Error condition.
-    snprintf(buf, sizeof(buf), "WARNING: %s attempted to leave apartment, but there was no valid exit! Rescuing to Dante's.",
-             GET_CHAR_NAME(ch));
 
-    struct room_data *room = &world[real_room(RM_DANTES_GARAGE)];
-    if (room) {
-      act("$n leaves the residence.", TRUE, ch, 0, 0, TO_ROOM);
-      char_from_room(ch);
-      char_to_room(ch, room);
-      act("$n steps out of the shadows, looking slightly confused.", TRUE, ch, 0, 0, TO_ROOM);
-      send_to_char("(System message: Something went wrong with getting you out of the apartment. Staff has been notified, and you have been relocated to Dante's Inferno.)\r\n", ch);
-      return;
-    } else {
-      snprintf(buf, sizeof(buf), "^RERROR:^g %s attempted to leave apartment, but there was no valid exit, and Dante's was unreachable! They're FUCKED.",
-               GET_CHAR_NAME(ch));
-    }
-    mudlog(buf, ch, LOG_SYSLOG, TRUE);
+    act("You leave the residence.", TRUE, ch, 0, 0, TO_CHAR);
+    act("$n leaves the residence.", TRUE, ch, 0, 0, TO_ROOM);
+
+    // Transfer the char.
+    struct room_data *target_room = &world[atrium_rnum];
+    char_from_room(ch);
+    char_to_room(ch, target_room);
+
+    act("$n arrives.", TRUE, ch, 0, 0, TO_ROOM);
+
+    // If not screenreader, look.
+    if (!PRF_FLAGGED(ch, PRF_SCREENREADER))
+      look_at_room(ch, 0, 0);
+    return;
   }
 
   // If you're in a PGHQ, you teleport to the first room of the PGHQ's zone.

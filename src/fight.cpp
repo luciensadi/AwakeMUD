@@ -25,6 +25,7 @@
 #include "invis_resistance_tests.hpp"
 #include "playerdoc.hpp"
 #include "sound_propagation.hpp"
+#include "newhouse.hpp"
 
 /* Structures */
 struct char_data *combat_list = NULL;   /* head of l-list of fighting chars */
@@ -95,10 +96,8 @@ extern char *get_player_name(vnum_t id);
 extern bool mob_is_aggressive(struct char_data *ch, bool include_base_aggression);
 
 // Corpse saving externs.
-extern void House_save(struct house_control_rec *house, const char *file_name, long rnum);
 extern void write_world_to_disk(int vnum);
 extern bool Storage_get_filename(vnum_t vnum, char *filename, int filename_size);
-extern bool House_get_filename(vnum_t vnum, char *filename, int filename_size);
 
 extern bool item_should_be_treated_as_melee_weapon(struct obj_data *obj);
 extern bool item_should_be_treated_as_ranged_weapon(struct obj_data *obj);
@@ -109,6 +108,8 @@ extern bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_
 
 extern void mobact_change_firemode(struct char_data *ch);
 extern bool dumpshock(struct matrix_icon *icon);
+
+extern void Storage_save(const char *file_name, struct room_data *room);
 
 /* Weapon attack texts */
 struct attack_hit_type attack_hit_text[] =
@@ -714,7 +715,7 @@ void make_corpse(struct char_data * ch)
       char filename[500];
       filename[0] = 0;
 
-      if (!ROOM_FLAGGED(ch->in_room, ROOM_STORAGE) && !ROOM_FLAGGED(ch->in_room, ROOM_HOUSE)) {
+      if (!ROOM_FLAGGED(ch->in_room, ROOM_STORAGE) && !ch->in_room->apartment) {
         snprintf(buf, sizeof(buf), "Setting storage flag for %s (%ld) due to player corpse being in it.",
                  GET_ROOM_NAME(ch->in_room),
                  GET_ROOM_VNUM(ch->in_room));
@@ -734,25 +735,23 @@ void make_corpse(struct char_data * ch)
         }
       }
 
-      if (ROOM_FLAGGED(ch->in_room, ROOM_STORAGE)) {
-        if (!Storage_get_filename(GET_ROOM_VNUM(ch->in_room), filename, sizeof(filename))) {
-          mudlog("WARNING: Failed to make room into a save room for corpse - no filename!!", ch, LOG_SYSLOG, TRUE);
-          send_to_char("WARNING: Due to an error, your corpse will not be saved on copyover or crash! Prioritize retrieving it!\r\n", ch);
-          return;
-        }
-      } else if (ROOM_FLAGGED(ch->in_room, ROOM_HOUSE)) {
-        if (!House_get_filename(GET_ROOM_VNUM(ch->in_room), filename, sizeof(filename))) {
-          mudlog("WARNING: Failed to make room into a save room for corpse - no filename!!", ch, LOG_SYSLOG, TRUE);
-          send_to_char("WARNING: Due to an error, your corpse will not be saved on copyover or crash! Prioritize retrieving it!\r\n", ch);
-          return;
-        }
-      } else {
-        mudlog("WARNING: Failed to make room into a save room for corpse - flag not set!!", ch, LOG_SYSLOG, TRUE);
-        send_to_char("WARNING: Due to an error, your corpse will not be saved on copyover or crash! Prioritize retrieving it!\r\n", ch);
+      if (ch->in_room->apartment) {
+        ch->in_room->apartment->save_storage();
         return;
       }
 
-      House_save(NULL, filename, real_room(GET_ROOM_VNUM(ch->in_room)));
+      if (ROOM_FLAGGED(ch->in_room, ROOM_STORAGE)) {
+        if (!Storage_get_filename(GET_ROOM_VNUM(ch->in_room), filename, sizeof(filename))) {
+          mudlog("WARNING: Failed to make room into a save room for corpse - no filename!!", ch, LOG_SYSLOG, TRUE);
+          send_to_char("^RWARNING:^W Due to an error, your corpse will not be saved on copyover or crash! Prioritize retrieving it!^n\r\n", ch);
+          return;
+        }
+        Storage_save(filename, ch->in_room);
+      } else {
+        mudlog("WARNING: Failed to make room into a save room for corpse - flag not set!!", ch, LOG_SYSLOG, TRUE);
+        send_to_char("^RWARNING:^W Due to an error, your corpse will not be saved on copyover or crash! Prioritize retrieving it!^n\r\n", ch);
+        return;
+      }
     }
   }
 }
@@ -4827,7 +4826,7 @@ void explode_explosive_grenade(struct char_data *ch, struct obj_data *weapon, st
 
   extract_obj(weapon);
 
-  if (ROOM_FLAGGED(room, ROOM_PEACEFUL) || ROOM_FLAGGED(room, ROOM_HOUSE)) {
+  if (ROOM_FLAGGED(room, ROOM_PEACEFUL) || room->apartment) {
     mudlog_vfprintf(ch, LOG_CHEATLOG, "Somehow, %s got an explosive grenade into an invalid room!", GET_CHAR_NAME(ch));
     return;
   }
@@ -4907,7 +4906,7 @@ void explode_flashbang_grenade(struct char_data *ch, struct obj_data *weapon, st
 
   extract_obj(weapon);
 
-  if (ROOM_FLAGGED(room, ROOM_PEACEFUL) || ROOM_FLAGGED(room, ROOM_HOUSE)) {
+  if (ROOM_FLAGGED(room, ROOM_PEACEFUL) || room->apartment) {
     mudlog_vfprintf(ch, LOG_CHEATLOG, "Somehow, %s got a flashbang grenade into an invalid room!", GET_CHAR_NAME(ch));
     return;
   }
@@ -5118,7 +5117,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
 
   struct room_data *in_room = ch->char_specials.rigging ? ch->char_specials.rigging->in_room : ch->in_room;
 
-  if (in_room->peaceful || ROOM_FLAGGED(in_room, ROOM_HOUSE))
+  if (in_room->peaceful || room->apartment)
   {
     send_to_char("This room just has a peaceful, easy feeling...\r\n", ch);
     return;
@@ -5137,7 +5136,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
       send_to_char("There seems to be something in the way...\r\n", ch);
       return;
     }
-    if (nextroom->peaceful || ROOM_FLAGGED(nextroom, ROOM_HOUSE)) {
+    if (nextroom->peaceful || nextroom->apartment) {
       send_to_char("Nah - leave them in peace.\r\n", ch);
       return;
     }
