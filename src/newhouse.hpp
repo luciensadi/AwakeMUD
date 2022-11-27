@@ -63,7 +63,8 @@ class Apartment {
     friend class ApartmentComplex;
 
     // Info about the apartment.
-    const char *name = NULL; // 309
+    const char *shortname = NULL; // 309
+    const char *name = NULL; // Unit 309
     const char *full_name = NULL; // Evergreen Multiplex's Unit 309 (derived)
     int lifestyle = 0;
     long nuyen_per_month = 0;
@@ -116,6 +117,7 @@ class Apartment {
     bool can_enter_by_idnum(idnum_t idnum);
     bool has_owner_privs(struct char_data *ch);
     bool has_owner() { return owned_by_pgroup || owned_by_player; }
+    int get_owner_id();
     bool owner_is_valid();
 };
 
@@ -128,6 +130,7 @@ class ApartmentRoom {
     // What desc will be restored when this apartment's lease is broken?
     const char *default_room_desc = NULL;
 
+    bf::path base_path;
     bf::path storage_path;
 
     // Backlink to our apartment.
@@ -151,6 +154,7 @@ class ApartmentRoom {
     void list_guests_to_char(struct char_data *ch) { apartment->list_guests_to_char(ch); }
 
     void save_storage();
+    void load_storage();
     bool delete_guest(idnum_t idnum);
     void add_guest(idnum_t idnum);
 

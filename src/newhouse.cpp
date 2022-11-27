@@ -24,6 +24,7 @@ extern void ASSIGNMOB(long mob, SPECIAL(fname));
 extern bool Storage_get_filename(vnum_t vnum, char *filename, int filename_size);
 extern void Storage_save(const char *file_name, struct room_data *room);
 extern bool player_is_dead_hardcore(long id);
+extern bool House_load_storage(struct room_data *world_room, const char *filename);
 
 SPECIAL(landlord_spec);
 
@@ -33,12 +34,19 @@ void remove_vehicles_from_apartment(struct room_data *room);
 
 std::vector<ApartmentComplex> global_apartment_complexes = {};
 
+/* TODO: House editing:
+   - houseedit create complex (OLC menu, specify name, shortname, and landlord vnum)
+   - houseedit create apartment (OLC menu, specify name, cost, etc)
+   - stand in subroom: houseedit addroom <apartment name> "<room name>"
+     - sets default desc to what's currently set
+*/
+
 /* The house command, used by mortal house owners to assign guests */
 ACMD(do_house) {
   one_argument(argument, arg);
 
-  FAILURE_CASE(!ch->in_room || !ch->in_room->apartment, "You must be in your house to set guests.\r\n");
-  FAILURE_CASE(!ch->in_room->apartment->has_owner_privs(ch), "You're not an owner or landlord here.\r\n");
+  FAILURE_CASE(!ch->in_room || !ch->in_room->apartment, "You must be in your house to set guests.");
+  FAILURE_CASE(!ch->in_room->apartment->has_owner_privs(ch), "You're not an owner or landlord here.");
 
   if (!*arg) {
     ch->in_room->apartment->list_guests_to_char(ch);
@@ -48,8 +56,8 @@ ACMD(do_house) {
   // They're adding or deleting a guest. Look them up.
   idnum_t idnum = get_player_id(arg);
 
-  FAILURE_CASE(idnum < 0, "No such player.\r\n");
-  FAILURE_CASE(idnum == GET_IDNUM(ch), "You can't add yourself as a guest.\r\n");
+  FAILURE_CASE(idnum < 0, "No such player.");
+  FAILURE_CASE(idnum == GET_IDNUM(ch), "You can't add yourself as a guest.");
 
   if (ch->in_room->apartment->delete_guest(idnum)) {
     send_to_char("Guest deleted.\r\n", ch);
@@ -91,9 +99,9 @@ void load_apartment_complexes() {
     if (is_directory(itr->status())) {
       bf::path filename = itr->path();
       log_vfprintf(" - Initializing apartment complex from file %s.", filename.string().c_str());
-      ApartmentComplex complex = ApartmentComplex(filename);
-      global_apartment_complexes.push_back(complex);
-      log_vfprintf(" - Fully loaded %s.", complex.get_name());
+      ApartmentComplex *complex = new ApartmentComplex(filename);
+      global_apartment_complexes.push_back(*complex);
+      log_vfprintf(" - Fully loaded %s.", complex->get_name());
     }
   }
 
@@ -103,25 +111,45 @@ void load_apartment_complexes() {
 void save_all_apartments_and_storage_rooms() {
   for (auto complex : global_apartment_complexes) {
     for (auto apartment : complex.get_apartments()) {
-      // Invalid lease? Break it and bail.
+      // Skip non-leased apartments.
+      if (apartment.get_paid_until() == 0)
+        continue;
+
+      // Invalid owner? Break it and bail.
       if (!apartment.has_owner() || !apartment.owner_is_valid()) {
+        mudlog_vfprintf(NULL, LOG_GRIDLOG, "Breaking lease on %s: No owner, or owner is no longer valid.", apartment.get_full_name());
         apartment.break_lease();
         continue;
       }
 
-      // Otherwise, save all the rooms.
+      // Invalid lease? Break it and bail.
+      if (apartment.get_paid_until() < time(0)) {
+        mudlog_vfprintf(NULL, LOG_GRIDLOG, "Breaking lease on %s: Lease expired.", apartment.get_full_name());
+        apartment.break_lease();
+        continue;
+      }
+
+      // Otherwise, save all the rooms (save_storage logic will skip any that haven't been altered)
       for (auto room : apartment.get_rooms()) {
         room.save_storage();
       }
     }
   }
 
-  // TODO: Where are our apartment warnings being sent? Make sure they survived the transition.
-
   // Save all storage rooms.
   for (rnum_t x = 0; x <= top_of_world; x++) {
-    if (ROOM_FLAGGED(&world[x], ROOM_STORAGE)) {
+    struct room_data *room = &world[x];
+
+    if (ROOM_FLAGGED(room, ROOM_STORAGE)) {
       char filename[100];
+
+      // We only save rooms that have potentially had their contents modified since we last saw them.
+      if (!room->dirty_bit && !room->people) {
+        continue;
+      }
+
+      // Clear the dirty bit now that we've processed it.
+      room->dirty_bit = FALSE;
 
       if (Storage_get_filename(GET_ROOM_VNUM(&world[x]), filename, sizeof(filename))) {
         Storage_save(filename, &world[x]);
@@ -160,9 +188,9 @@ ApartmentComplex::ApartmentComplex(bf::path filename) :
       if (is_directory(itr->status())) {
         bf::path room_path = itr->path();
         log_vfprintf(" --- Initializing apartment %s.", room_path.filename().string().c_str());
-        Apartment apartment = Apartment(this, room_path);
-        apartments.push_back(apartment);
-        log_vfprintf(" --- Fully loaded %s.", apartment.get_name());
+        Apartment *apartment = new Apartment(this, room_path);
+        apartments.push_back(*apartment);
+        log_vfprintf(" --- Fully loaded %s.", apartment->get_name());
       }
     }
   }
@@ -197,7 +225,7 @@ void ApartmentComplex::display_room_list_to_character(struct char_data *ch) {
 
   for (auto apartment : available_apartments) {
     if (PRF_FLAGGED(ch, PRF_SCREENREADER)) {
-      send_to_char(ch, "Unit %s (lifestyle %s, %d room%s, of which %d %s): %d nuyen.\r\n",
+      send_to_char(ch, "%s (lifestyle %s, %d room%s, of which %d %s): %d nuyen.\r\n",
                    apartment.name,
                    "placeholder", // lifestyles[apartment.lifestyle].name,
                    apartment.rooms.size(),
@@ -217,6 +245,9 @@ void ApartmentComplex::display_room_list_to_character(struct char_data *ch) {
 }
 
 bool ApartmentComplex::ch_already_rents_here(struct char_data *ch) {
+  if (IS_NPC(ch))
+    return FALSE;
+
   for (auto apartment: apartments) {
     if (apartment.owned_by_player == GET_IDNUM(ch))
       return TRUE;
@@ -235,6 +266,7 @@ Apartment::Apartment(ApartmentComplex *complex, bf::path base_directory) :
     json base_info;
     _json_parse_from_file(base_directory / "info.json", base_info);
 
+    shortname = str_dup(base_info["short_name"].get<std::string>().c_str());
     name = str_dup(base_info["name"].get<std::string>().c_str());
     lifestyle = base_info["lifestyle"].get<int>();
     nuyen_per_month = base_info["rent"].get<long>();
@@ -280,37 +312,39 @@ Apartment::Apartment(ApartmentComplex *complex, bf::path base_directory) :
       if (is_directory(itr->status())) {
         bf::path room_path = itr->path();
         log_vfprintf(" ----- Initializing sub-room '%s'.", room_path.filename().string().c_str());
-        ApartmentRoom apartment_room = ApartmentRoom(this, room_path);
-        rooms.push_back(apartment_room);
-        log_vfprintf(" ----- Fully loaded %s's %s at %ld.", name, room_path.filename().string().c_str(), apartment_room.get_vnum());
+        ApartmentRoom *apartment_room = new ApartmentRoom(this, room_path);
+        rooms.push_back(*apartment_room);
+        log_vfprintf(" ----- Fully loaded %s's %s at %ld.", name, room_path.filename().string().c_str(), apartment_room->get_vnum());
       }
     }
   }
 
   // Calculate any derived data.
   char tmp_buf[100];
-  snprintf(tmp_buf, sizeof(tmp_buf), "%s's Unit %s", complex->display_name, name);
+  snprintf(tmp_buf, sizeof(tmp_buf), "%s's %s", complex->display_name, name);
   full_name = str_dup(tmp_buf);
 }
 
 bool Apartment::owner_is_valid() {
-  if (owned_by_player > 0) {
-    return does_player_exist(owned_by_player) && !player_is_dead_hardcore(owned_by_player);
-  } else {
-    return owned_by_pgroup != NULL;
-    // TODO: When a pgroup is disbanded, must clean it out of apartment references too.
+  // TODO: When a pgroup is disbanded, must clean it out of apartment references too.
+  if (owned_by_pgroup)
+    return TRUE;
+
+  return does_player_exist(owned_by_player) && !player_is_dead_hardcore(owned_by_player);
+}
+
+int Apartment::get_owner_id() {
+  if (owned_by_pgroup) {
+    return -1 * owned_by_pgroup->get_idnum();
   }
+  return owned_by_player;
 }
 
 /* Write lease data to <apartment name>/lease. */
 void Apartment::save_lease() {
   json lease_data;
 
-  if (owned_by_player > 0) {
-    lease_data["owner"] = owned_by_player;
-  } else {
-    lease_data["owner"] = -1 * owned_by_pgroup->get_idnum();
-  }
+  lease_data["owner"] = get_owner_id();
   lease_data["paid_until"] = paid_until;
   lease_data["guests"] = guests;
 
@@ -327,6 +361,7 @@ void Apartment::break_lease() {
   owned_by_player = 0;
   owned_by_pgroup = NULL;
   paid_until = 0;
+  guests.empty();
 
   // Overwrite the lease file.
   save_lease();
@@ -349,19 +384,19 @@ bool Apartment::can_enter(struct char_data *ch) {
     return TRUE;
 
   // Check for owner status or pgroup perms.
-  if (owned_by_player > 0) {
+  if (owned_by_pgroup) {
+    // Not a member of any group, or member of wrong group.
+    if (GET_PGROUP_MEMBER_DATA(ch)
+        && GET_PGROUP(ch) == owned_by_pgroup
+        && GET_PGROUP_MEMBER_DATA(ch)->privileges.AreAnySet(PRIV_LEADER, PRIV_LANDLORD, PRIV_TENANT, ENDBIT))
+    {
+      return TRUE;
+    }
+    // Owned by a pgroup, but this ch does not have perms in it: Fall through.
+  } else if (owned_by_player > 0) {
     if (GET_IDNUM(ch) == owned_by_player)
       return TRUE;
-  } else if (owned_by_pgroup) {
-    // Not a member of any group, or member of wrong group.
-    if (!GET_PGROUP_MEMBER_DATA(ch) || GET_PGROUP(ch) != owned_by_pgroup) {
-      return FALSE;
-    }
-
-    // Doesn't have the right perms.
-    if (!GET_PGROUP_MEMBER_DATA(ch)->privileges.AreAnySet(PRIV_LEADER, PRIV_LANDLORD, PRIV_TENANT, ENDBIT)) {
-      return FALSE;
-    }
+    // Owned by a player, but not this one: Fall through.
   } else {
     mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: %s is owned by neither player nor group! Allowing entry.", full_name);
     return TRUE;
@@ -480,11 +515,6 @@ bool Apartment::issue_key(struct char_data *ch) {
 }
 
 bool Apartment::has_owner_privs(struct char_data *ch) {
-  if (owned_by_player) {
-    if (GET_IDNUM(ch) == owned_by_player)
-      return TRUE;
-  }
-
   if (owned_by_pgroup) {
     // Not a member of any group, or member of wrong group.
     if (!GET_PGROUP_MEMBER_DATA(ch) || GET_PGROUP(ch) != owned_by_pgroup) {
@@ -495,21 +525,52 @@ bool Apartment::has_owner_privs(struct char_data *ch) {
     if (!GET_PGROUP_MEMBER_DATA(ch)->privileges.AreAnySet(PRIV_LEADER, PRIV_LANDLORD, ENDBIT)) {
       return FALSE;
     }
+  } else {
+    return GET_IDNUM(ch) == owned_by_player;
   }
 
   return FALSE;
 }
 
 void Apartment::list_guests_to_char(struct char_data *ch) {
+  send_to_char(ch, "  Guests: ");
+
+  if (guests.empty()) {
+    send_to_char("None.\r\n", ch);
+    return;
+  }
+
+  bool printed_guest_yet = FALSE;
+
+  std::vector<idnum_t> invalid_guests = {};
   for (auto guest_idnum : guests) {
-    // todo: look up player by idnum and list them
+    const char *temp;
+
+    if (!(temp = get_player_name(guest_idnum))) {
+      invalid_guests.push_back(guest_idnum);
+      continue;
+    }
+
+    send_to_char(ch, "%s%s", printed_guest_yet ? ", " : "", temp);
+    DELETE_ARRAY_IF_EXTANT(temp);
+
+    printed_guest_yet = TRUE;
+  }
+
+  // Drop any invalid guests.
+  for (auto guest_idnum : invalid_guests) {
+    guests.erase(find(guests.begin(), guests.end(), guest_idnum));
+  }
+
+  if (!printed_guest_yet) {
+    send_to_char("None.\r\n", ch);
   }
 }
 
 /********** ApartmentRoom ************/
 
 ApartmentRoom::ApartmentRoom(Apartment *apartment, bf::path filename) :
-  apartment(apartment)
+  base_path(filename), apartment(apartment)
 {
   {
     json base_info;
@@ -523,22 +584,35 @@ ApartmentRoom::ApartmentRoom(Apartment *apartment, bf::path filename) :
       exit(1);
     }
 
-    default_room_desc = str_dup(base_info["default_desc"].get<std::string>().c_str());
+    { // Scope in the room desc var.
+      char room_desc_with_terminal_codes[MAX_STRING_LENGTH];
+      snprintf(room_desc_with_terminal_codes, sizeof(room_desc_with_terminal_codes),
+               "  %s^n\r\n", base_info["default_desc"].get<std::string>().c_str());
+      default_room_desc = str_dup(room_desc_with_terminal_codes);
+    }
 
     log_vfprintf(" ----- Applying changes from %s to world...", filename.filename().string().c_str());
 
-    // Set house flag, apartment pointer, etc.
     struct room_data *room = &world[rnum];
+
+    if (room->apartment) {
+      log_vfprintf("ERROR: Room %ld already had an apartment entry! Terminating.", GET_ROOM_VNUM(room));
+      exit(1);
+    }
+
+    // Set apartment pointer, etc.
     room->apartment = this;
 
     // Load storage contents.
     storage_path = filename / "storage";
+    load_storage();
   }
 }
 
 /* Purge the contents of this apartment, logging as we go. */
 void ApartmentRoom::purge_contents() {
   rnum_t rnum = real_room(vnum);
+  bool had_anything = FALSE;
 
   if (rnum < 0) {
     mudlog_vfprintf(NULL, LOG_SYSLOG, "Refusing to purge contents for %ld: Invalid vnum", vnum);
@@ -547,33 +621,49 @@ void ApartmentRoom::purge_contents() {
 
   struct room_data *room = &world[rnum];
 
-  // TODO: Write a storage file, then back it up to <name>/expired/storage_<ownerid>_<epoch>
+  // Write a backup storage file to <name>/expired/storage_<ownerid>_<epoch>
+  char timestr[100];
+  snprintf(timestr, sizeof(timestr), "%ld_%d", time(0), apartment->get_owner_id());
+  bf::path expired_storage_path = base_path / "expired" / timestr;
+  Storage_save(expired_storage_path.string().c_str(), room);
 
-  // Purge all contents, logging as we go.
-  int total_value_destroyed = 0;
-  for (struct obj_data *obj = room->contents, *next_o; obj; obj = next_o) {
-    next_o = obj->next_content;
+  if (room->contents) {
+    had_anything = TRUE;
 
-    const char *representation = generate_new_loggable_representation(obj);
+    // Purge all contents, logging as we go.
+    int total_value_destroyed = 0;
+    for (struct obj_data *obj = room->contents, *next_o; obj; obj = next_o) {
+      next_o = obj->next_content;
 
-    // If this is belongings, don't purge it. Move it somewhere safe instead?
-    if (GET_OBJ_TYPE(obj) == ITEM_CONTAINER && obj->obj_flags.extra_flags.IsSet(ITEM_EXTRA_CORPSE)) {
-      mudlog_vfprintf(NULL, LOG_PURGELOG, "Apartment cleanup for %s (%ld) REFUSING to purge corpse %s.", apartment->full_name, GET_ROOM_VNUM(room), representation);
-    } else {
-      mudlog_vfprintf(NULL, LOG_PURGELOG, "Apartment cleanup for %s (%ld) has purged %s (cost: %d).", apartment->full_name, GET_ROOM_VNUM(room), representation, GET_OBJ_COST(obj));
-      total_value_destroyed += GET_OBJ_COST(obj);
-      extract_obj(obj);
+      const char *representation = generate_new_loggable_representation(obj);
+
+      // If this is belongings, don't purge it. TODO: Move it somewhere safe.
+      if (GET_OBJ_TYPE(obj) == ITEM_CONTAINER && obj->obj_flags.extra_flags.IsSet(ITEM_EXTRA_CORPSE)) {
+        mudlog_vfprintf(NULL, LOG_PURGELOG, "Apartment cleanup for %s (%ld) REFUSING to purge corpse %s.", apartment->full_name, GET_ROOM_VNUM(room), representation);
+      } else {
+        mudlog_vfprintf(NULL, LOG_PURGELOG, "Apartment cleanup for %s (%ld) has purged %s (cost: %d).", apartment->full_name, GET_ROOM_VNUM(room), representation, GET_OBJ_COST(obj));
+        total_value_destroyed += GET_OBJ_COST(obj);
+        extract_obj(obj);
+      }
+
+      delete [] representation;
     }
-
-    delete [] representation;
+    mudlog_vfprintf(NULL, LOG_PURGELOG, "Total value destroyed: %d nuyen.", total_value_destroyed);
   }
-  mudlog_vfprintf(NULL, LOG_PURGELOG, "Total value destroyed: %d nuyen.", total_value_destroyed);
 
   // Transfer all vehicles to the nearest garage.
-  remove_vehicles_from_apartment(room);
+  if (room->vehicles) {
+    had_anything = TRUE;
+    remove_vehicles_from_apartment(room);
+  }
 
   // Notify the room.
-  send_to_room("A pair of movers comes through and cleans up with brisk efficiency.\r\n", room);
+  if (had_anything)
+    send_to_room("A pair of movers comes through and cleans up with brisk efficiency.\r\n", room);
+
+  // Save it. Set the dirty bit to ensure it's done.
+  room->dirty_bit = TRUE;
+  save_storage();
 }
 
 /* Overwrite the room's desc with the default. */
@@ -586,6 +676,11 @@ void ApartmentRoom::restore_default_desc() {
   }
 
   struct room_data *room = &world[rnum];
+
+  if (!str_cmp(room->description, default_room_desc)) {
+    // No action to take-- bail out.
+    return;
+  }
 
   delete [] room->description;
   room->description = str_dup(default_room_desc);
@@ -610,6 +705,12 @@ void ApartmentRoom::save_storage() {
 
   // Write the file.
   Storage_save(storage_path.string().c_str(), room);
+}
+
+void ApartmentRoom::load_storage() {
+  struct room_data *room = &world[real_room(vnum)];
+
+  House_load_storage(room, storage_path.string().c_str());
 }
 
 bool ApartmentRoom::is_guest(idnum_t idnum) {
@@ -707,7 +808,7 @@ SPECIAL(landlord_spec)
       }
     }
 
-    mob_say(recep, "Sorry, I don't recognize that unit number.");
+    mob_say(recep, "Sorry, I don't recognize that unit name.");
     return TRUE;
   }
 
@@ -734,7 +835,7 @@ SPECIAL(landlord_spec)
       }
     }
 
-    mob_say(recep, "Sorry, I don't recognize that unit number.");
+    mob_say(recep, "Sorry, I don't recognize that unit name.");
     return TRUE;
   }
 
@@ -756,7 +857,7 @@ SPECIAL(landlord_spec)
       }
     }
 
-    mob_say(recep, "Sorry, I don't recognize that unit number.");
+    mob_say(recep, "Sorry, I don't recognize that unit name.");
     return TRUE;
   }
 
@@ -778,7 +879,7 @@ SPECIAL(landlord_spec)
       }
     }
 
-    mob_say(recep, "Sorry, I don't recognize that unit number.");
+    mob_say(recep, "Sorry, I don't recognize that unit name.");
     return TRUE;
   }
 
@@ -808,7 +909,7 @@ SPECIAL(landlord_spec)
       }
     }
 
-    mob_say(recep, "Sorry, I don't recognize that unit number.");
+    mob_say(recep, "Sorry, I don't recognize that unit name.");
     return TRUE;
   }
   return FALSE;

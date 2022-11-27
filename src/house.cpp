@@ -83,32 +83,18 @@ bool Storage_get_filename(vnum_t vnum, char *filename, int filename_size)
 }
 
 /* Load all objects for a house */
-bool House_load(struct house_control_rec *house)
+bool House_load_storage(struct room_data *world_room, const char *filename)
 {
-  vnum_t room;
   File fl;
   char fname[MAX_STRING_LENGTH];
-  rnum_t rnum;
   struct obj_data *obj = NULL, *last_obj = NULL;
-  long vnum;
   int inside = 0, last_inside = 0;
   int house_version = 0;
   std::vector<nested_obj> contained_obj;
   struct nested_obj contained_obj_entry;
 
-  room = house->vnum;
-  if ((rnum = real_room(room)) == NOWHERE) {
-    mudlog_vfprintf(NULL, LOG_SYSLOG, "Not loading house %ld: Real room does not exist.", room);
-    return FALSE;
-  }
-
-  if (!House_get_filename(room, fname, sizeof(fname))) {
-    mudlog_vfprintf(NULL, LOG_SYSLOG, "Not loading house %ld: Cannot generate filename.", room);
-    return FALSE;
-  }
-
   if (!(fl.Open(fname, "r+b"))) { /* no file found */
-    mudlog_vfprintf(NULL, LOG_SYSLOG, "Not loading house %ld: File not found.", room);
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "Not loading house %ld: File not found.", GET_ROOM_VNUM(world_room));
     return FALSE;
   }
 
@@ -119,13 +105,10 @@ bool House_load(struct house_control_rec *house)
   snprintf(buf3, sizeof(buf3), "house-load %s", fname);
   house_version = data.GetInt("METADATA/Version", 0);
 
-  for (int i = 0; i < MAX_GUESTS; i++)
-  {
+  for (int i = 0; i < MAX_GUESTS; i++) {
     snprintf(buf, sizeof(buf), "GUESTS/Guest%d", i);
-    long p = data.GetLong(buf, 0);
-    if (!p || !(does_player_exist(p)))
-      p = 0;
-    house->guests[i] = p;
+    data.GetLong(buf, 0);
+    // We discard this data - guests are handled in newhouse.
   }
 
   int num_objs = data.NumSubsections("HOUSE");
@@ -134,7 +117,7 @@ bool House_load(struct house_control_rec *house)
   {
     const char *sect_name = data.GetIndexSection("HOUSE", i);
     snprintf(buf, sizeof(buf), "%s/Vnum", sect_name);
-    vnum = data.GetLong(buf, 0);
+    vnum_t vnum = data.GetLong(buf, 0);
     if ((obj = read_object(vnum, VIRTUAL))) {
       // Wipe its cost-- we're restoring from the saved value.
       GET_OBJ_COST(obj) = 0;
@@ -209,7 +192,7 @@ bool House_load(struct house_control_rec *house)
           //Found our container?
           if (inside < last_inside) {
             if (inside == 0)
-              obj_to_room(obj, &world[rnum]);
+              obj_to_room(obj, world_room);
 
             auto it = contained_obj.end();
             while ((it = std::find_if(contained_obj.begin(), contained_obj.end(), find_level(inside+1))) != contained_obj.end()) {
@@ -231,7 +214,7 @@ bool House_load(struct house_control_rec *house)
           last_inside = inside;
         }
         else
-          obj_to_room(obj, &world[rnum]);
+          obj_to_room(obj, world_room);
 
         last_inside = inside;
       }
@@ -256,18 +239,18 @@ bool House_load(struct house_control_rec *house)
           if (last_obj)
             obj_to_obj(obj, last_obj);
           else
-            obj_to_room(obj, &world[rnum]);
+            obj_to_room(obj, world_room);
         }
         else
-          obj_to_room(obj, &world[rnum]);
+          obj_to_room(obj, world_room);
 
         last_inside = inside;
         last_obj = obj;
       }
       else {
-        snprintf(buf2, sizeof(buf2), "Load ERROR: Unknown file format for house Rnum %ld. Dumping valid objects to room.", rnum);
+        snprintf(buf2, sizeof(buf2), "Load ERROR: Unknown file format for house %ld. Dumping valid objects to room.", GET_ROOM_VNUM(world_room));
         mudlog(buf2, NULL, LOG_SYSLOG, TRUE);
-        obj_to_room(obj, &world[rnum]);
+        obj_to_room(obj, world_room);
       }
     } else {
       snprintf(buf2, sizeof(buf2), "Losing object %ld (%s / %s; )- it's not a valid object.",
@@ -281,7 +264,7 @@ bool House_load(struct house_control_rec *house)
     // Failsafe. If something went wrong and we still have objects stored in the vector, dump them in the room.
     if (!contained_obj.empty()) {
       for (auto it : contained_obj)
-        obj_to_room(it.obj, &world[rnum]);
+        obj_to_room(it.obj, world_room);
 
       contained_obj.clear();
     }
