@@ -200,7 +200,7 @@ int game_main(int argc, char **argv)
 #else
 int main(int argc, char **argv)
 #endif
-{
+{  
   int pos = 1;
   const char *dir;
   port = DFLT_PORT;

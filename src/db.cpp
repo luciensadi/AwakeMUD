@@ -695,6 +695,13 @@ void DBInit()
   boot_escalators();
 
   log("DBInit -- DONE.");
+
+  // Put things here that you want to test.
+  {
+    extern void load_apartment_complexes();
+    load_apartment_complexes();
+    exit(0);
+  }
 }
 
 /* A simple method to clean up after our DB. */
