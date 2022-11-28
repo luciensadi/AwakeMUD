@@ -46,6 +46,7 @@
 #include "ignore_system.hpp"
 #include "newmagic.hpp"
 #include "newmatrix.hpp"
+#include "newhouse.hpp"
 
 const char *CCHAR;
 
@@ -7222,7 +7223,11 @@ void display_room_name(struct char_data *ch) {
 
   if ((PRF_FLAGGED(ch, PRF_ROOMFLAGS) && GET_REAL_LEVEL(ch) >= LVL_BUILDER)) {
     ROOM_FLAGS(ch->in_room).PrintBits(buf, MAX_STRING_LENGTH, room_bits, ROOM_MAX);
-    send_to_char(ch, "^C[%5ld] %s [ %s ]^n\r\n", GET_ROOM_VNUM(ch->in_room), GET_ROOM_NAME(ch->in_room), buf);
+    send_to_char(ch, "^C[%5ld] %s [ %s ]", GET_ROOM_VNUM(ch->in_room), GET_ROOM_NAME(ch->in_room), buf);
+    if (ch->in_room->apartment) {
+      send_to_char(ch, " ^c(Apartment - %s's %s^c)", ch->in_room->apartment->get_full_name(), ch->in_room->apartment->get_name());
+    }
+    send_to_char("^n\r\n", ch);
   } else {
     send_to_char(ch, "^C%s^n%s%s%s%s%s%s%s\r\n", GET_ROOM_NAME(ch->in_room),
                  ROOM_FLAGGED(ch->in_room, ROOM_GARAGE) ? " (Garage)" : "",

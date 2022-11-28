@@ -21,7 +21,7 @@ class ApartmentComplex;
 extern void warn_about_apartment_deletion();
 extern void save_all_apartments_and_storage_rooms();
 
-extern std::vector<ApartmentComplex> global_apartment_complexes;
+extern std::vector<ApartmentComplex*> global_apartment_complexes;
 
 /* An ApartmentComplex is composed of N Apartments, and has tracking data for landlord info. */
 class ApartmentComplex {
@@ -37,7 +37,7 @@ class ApartmentComplex {
     // The vnum of the landlord
     vnum_t landlord_vnum;
 
-    std::vector<Apartment> apartments = {};
+    std::vector<Apartment*> apartments = {};
 
   public:
     // Given a filename to read from, instantiate an apartment complex.
@@ -46,7 +46,7 @@ class ApartmentComplex {
     // Accessors.
     const char *get_name() { return display_name; }
     vnum_t get_landlord_vnum() { return landlord_vnum; }
-    std::vector<Apartment> get_apartments() { return apartments; }
+    std::vector<Apartment*> get_apartments() { return apartments; }
 
     // Save function.
     void save();
@@ -76,7 +76,7 @@ class Apartment {
     dir_t exit_dir = NORTH;
 
     // Info about rooms this apartment has. First one is the entrance and attaches to atrium.
-    std::vector<ApartmentRoom> rooms = {};
+    std::vector<ApartmentRoom*> rooms = {};
     int garages = 0;
 
     // Info about the owner and lease.
@@ -99,7 +99,7 @@ class Apartment {
     vnum_t get_atrium_vnum() { return atrium; }
     long get_rent_cost() { return nuyen_per_month; }
     time_t get_paid_until() { return paid_until; }
-    std::vector<ApartmentRoom> get_rooms() { return rooms; }
+    std::vector<ApartmentRoom*> get_rooms() { return rooms; }
     void list_guests_to_char(struct char_data *ch);
 
     // Mutators
@@ -118,6 +118,7 @@ class Apartment {
     bool has_owner_privs(struct char_data *ch);
     bool has_owner() { return owned_by_pgroup || owned_by_player; }
     int get_owner_id();
+    Playergroup *get_owner_pgroup() { return owned_by_pgroup; }
     bool owner_is_valid();
 };
 
@@ -129,6 +130,9 @@ class ApartmentRoom {
 
     // What desc will be restored when this apartment's lease is broken?
     const char *default_room_desc = NULL;
+
+    // What is this subroom's name? (Only used for debugging)
+    const char *name = NULL;
 
     bf::path base_path;
     bf::path storage_path;
@@ -146,6 +150,7 @@ class ApartmentRoom {
     // Will add setters and save function if OLC is added for these.
     vnum_t get_atrium_vnum() { return apartment->get_atrium_vnum(); }
     const char *get_full_name() { return apartment->get_full_name(); }
+    const char *get_name() { return name; }
     bool has_owner() { return apartment->has_owner(); }
     bool has_owner_privs(struct char_data *ch) { return apartment->has_owner_privs(ch); }
     bool can_enter(struct char_data *ch) { return apartment->can_enter(ch); }

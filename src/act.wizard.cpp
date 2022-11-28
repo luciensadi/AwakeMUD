@@ -4335,7 +4335,7 @@ ACMD(do_show)
     for (i = 0, j = 0; i <= top_of_world; i++) {
       // Don't need to hear about the imm zones.
       if (!room_has_any_exits(&world[i])) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%4d: [%6ld] %s %s\r\n", ++j,
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%4d: [%6ld] %s %s^n\r\n", ++j,
                 world[i].number,
                 vnum_from_non_connected_zone(world[i].number) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(connected)" : "*"),
                 world[i].name);
@@ -4350,7 +4350,7 @@ ACMD(do_show)
       for (dir = 0; dir <= DOWN; dir++) {
         if (world[i].dir_option[dir] && world[i].dir_option[dir]->to_room) {
           if (!room_has_any_exits(world[i].dir_option[dir]->to_room)) {
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%4d: [%6ld] %s %s: %s\r\n", ++j,
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%4d: [%6ld] %s %s^n: %s^n\r\n", ++j,
                     world[i].number,
                     vnum_from_non_connected_zone(world[i].number) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(connected)" : "*"),
                     world[i].name,
@@ -4379,7 +4379,7 @@ ACMD(do_show)
     strlcpy(buf, "Storage Rooms\r\n-----------\r\n", sizeof(buf));
     for (i = 0, j = 0; i <= top_of_world; i++)
       if (ROOM_FLAGGED(&world[i], ROOM_STORAGE))
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%4d: [%8ld] %s %s\r\n", ++j,
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%4d: [%8ld] %s %s^n\r\n", ++j,
                 world[i].number,
                 vnum_from_non_connected_zone(world[i].number) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(connected)" : "*"),
                 world[i].name);

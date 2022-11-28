@@ -1537,7 +1537,7 @@ void mobile_activity(void)
     }
 
     if (ch->nr == 0) {
-      mudlog("SYSERR: Encountered zeroed char in mobile_activity().", NULL, LOG_SYSLOG, TRUE);
+      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Encountered zeroed char %s (%ld) in mobile_activity().", GET_CHAR_NAME(ch), GET_MOB_VNUM(ch));
       continue;
     }
 

@@ -86,23 +86,22 @@ bool Storage_get_filename(vnum_t vnum, char *filename, int filename_size)
 bool House_load_storage(struct room_data *world_room, const char *filename)
 {
   File fl;
-  char fname[MAX_STRING_LENGTH];
   struct obj_data *obj = NULL, *last_obj = NULL;
   int inside = 0, last_inside = 0;
   int house_version = 0;
   std::vector<nested_obj> contained_obj;
   struct nested_obj contained_obj_entry;
 
-  if (!(fl.Open(fname, "r+b"))) { /* no file found */
+  if (!(fl.Open(filename, "r+b"))) { /* no file found */
     mudlog_vfprintf(NULL, LOG_SYSLOG, "Not loading house %ld: File not found.", GET_ROOM_VNUM(world_room));
     return FALSE;
   }
 
-  log_vfprintf("Loading house file %s.", fname);
+  log_vfprintf("Loading house file %s.", filename);
   VTable data;
   data.Parse(&fl);
   fl.Close();
-  snprintf(buf3, sizeof(buf3), "house-load %s", fname);
+  snprintf(buf3, sizeof(buf3), "house-load %s", filename);
   house_version = data.GetInt("METADATA/Version", 0);
 
   for (int i = 0; i < MAX_GUESTS; i++) {
@@ -340,7 +339,7 @@ void Storage_save(const char *file_name, struct room_data *room) {
     perror("SYSERR: Error saving house file");
     return;
   } else {
-    // log_vfprintf("Saving house %s.", file_name);
+    // log_vfprintf("Saving storage room %s.", file_name);
   }
 
   char print_buffer[FILEBUF_SIZE];
@@ -529,233 +528,6 @@ bool ch_already_rents_here(struct house_control_rec *room, struct char_data *ch)
       return TRUE;
 
   return FALSE;
-}
-
-/* "House Control" functions */
-
-int count_objects(struct obj_data *obj) {
-  if (!obj)
-    return 0;
-
-  int total = 1; // self
-
-  for (struct obj_data *contents = obj->contains; contents; contents = contents->next_content)
-    total += count_objects(contents);
-
-  return total;
-}
-
-const char *HCONTROL_FORMAT =
-  "Usage:  hcontrol destroy <house vnum>\r\n"
-  "       hcontrol show\r\n";
-void hcontrol_list_houses(struct char_data *ch)
-{
-  char *own_name;
-
-  strlcpy(buf, "Address  Atrium  Guests  Owner           Crap Count\r\n", sizeof(buf));
-  strlcat(buf, "-------  ------  ------  --------------  -----------\r\n", sizeof(buf));
-  send_to_char(buf, ch);
-
-  int global_total_apartment_crap = 0;
-
-  for (struct landlord *llord = landlords; llord; llord = llord->next)
-    for (struct house_control_rec *house = llord->rooms; house; house = house->next)
-      if (house->owner)
-      {
-        int house_rnum = real_room(house->vnum);
-        int total = 0;
-
-        // Count the crap in it, if it exists.
-        if (house_rnum > -1) {
-          for (struct obj_data *obj = world[house_rnum].contents; obj; obj = obj->next_content)
-            total += count_objects(obj);
-          for (struct veh_data *veh = world[house_rnum].vehicles; veh; veh = veh->next_veh) {
-            total += 1;
-            for (struct obj_data *obj = veh->contents; obj; obj = obj->next_content)
-              total += count_objects(obj);
-          }
-          global_total_apartment_crap += total;
-        } else
-          total = -1;
-
-        // Get the number of objects in it.
-        own_name = get_player_name(house->owner);
-        if (!own_name)
-          own_name = str_dup("<UNDEF>");
-
-        // Get the number of guests in it.
-        int guest_num = 0;
-        for (int j = 0; j < MAX_GUESTS; j++) {
-          if (house->guests[j] != 0)
-            guest_num++;
-        }
-
-        // Output the line.
-        snprintf(buf, sizeof(buf), "%7ld %7ld    %2d    %-14s  %d\r\n",
-                house->vnum, world[house->atrium].number, guest_num, CAP(own_name), total);
-        send_to_char(buf, ch);
-        DELETE_ARRAY_IF_EXTANT(own_name);
-      }
-
-  send_to_char(ch, "Global total crap: %d items.\r\n", global_total_apartment_crap);
-}
-
-void hcontrol_destroy_house(struct char_data * ch, char *arg)
-{
-  struct house_control_rec *i = NULL;
-  vnum_t real_house;
-
-  if (!*arg)
-  {
-    send_to_char(HCONTROL_FORMAT, ch);
-    return;
-  }
-  if ((i = find_house(atoi(arg))) == NULL)
-  {
-    send_to_char("Unknown house.\r\n", ch);
-    return;
-  }
-
-  if ((real_house = real_room(i->vnum)) < 0)
-    log("SYSERR: House had invalid vnum!");
-  else
-  {
-    ROOM_FLAGS(&world[real_house]).RemoveBit(ROOM_HOUSE);
-    remove_vehicles_from_apartment(&world[real_house]);
-    House_get_filename(i->vnum, buf2, MAX_STRING_LENGTH);
-    House_delete_file(i->vnum, buf2);
-    i->owner = 0;
-    send_to_char("House deleted.\r\n", ch);
-    House_save_control();
-  }
-}
-
-void hcontrol_display_house_by_number(struct char_data * ch, vnum_t house_number) {
-  struct house_control_rec *i = NULL;
-  vnum_t real_house;
-
-  if (!(i = find_house(house_number))) {
-    send_to_char(ch, "There is no house numbered %ld.\r\n", house_number);
-    return;
-  }
-
-  if ((real_house = real_room(i->vnum)) < 0) {
-    send_to_char(ch, "House %ld has an invalid room! Bailing out.\r\n", house_number);
-    return;
-  }
-
-  const char *player_name = get_player_name(i->owner);
-  send_to_char(ch, "House ^c%ld^n (^c%s^n) is owned by ^c%s^n (^c%ld^n).\r\n",
-               i->vnum,
-               GET_ROOM_NAME(&world[real_house]),
-               player_name,
-               i->owner
-             );
-  if (player_name)
-    delete [] player_name;
-
-  send_to_char(ch, "It is paid up until epoch ^c%ld^n.\r\n", i->date);
-
-  send_to_char(ch, "Guests:\r\n");
-  bool printed_guest_yet = FALSE;
-  for (int guest_idx = 0; guest_idx < MAX_GUESTS; guest_idx++) {
-    if (i->guests[guest_idx]) {
-      printed_guest_yet = TRUE;
-      const char *player_name = get_player_name(i->guests[guest_idx]);
-      send_to_char(ch, "  ^c%s^n (^c%ld^n)\r\n", player_name, i->guests[guest_idx]);
-      if (player_name)
-        delete [] player_name;
-    }
-  }
-  if (!printed_guest_yet)
-    send_to_char("  ^cNone.^n\r\n", ch);
-
-  int obj_count = 0, veh_count = 0;
-  for (struct obj_data *obj = world[real_house].contents; obj; obj = obj->next_content)
-    obj_count += count_objects(obj);
-  for (struct veh_data *veh = world[real_house].vehicles; veh; veh = veh->next_veh) {
-    veh_count ++;
-    for (struct obj_data *obj = veh->contents; obj; obj = obj->next_content)
-      obj_count += count_objects(obj);
-  }
-  send_to_char(ch, "It contains ^c%d^n objects and ^c%d^n vehicles.\r\n", obj_count, veh_count);
-}
-
-void hcontrol_display_house_with_owner_or_guest(struct char_data * ch, const char *name, vnum_t idnum) {
-  send_to_char(ch, "Fetching data for owner/guest ^c%s^n (^c%ld^n)...\r\n", name, idnum);
-
-  bool printed_something = FALSE;
-  for (struct landlord *llord = landlords; llord; llord = llord->next) {
-    for (struct house_control_rec *house = llord->rooms; house; house = house->next) {
-      if (house->owner == idnum) {
-        send_to_char(ch, "- Owner of house ^c%ld^n.\r\n", house->vnum);
-        printed_something = TRUE;
-      }
-
-      else {
-        for (int guest_idx = 0; guest_idx < MAX_GUESTS; guest_idx++) {
-          if (house->guests[guest_idx] == idnum) {
-            const char *player_name = get_player_name(house->owner);
-            send_to_char(ch, "- Guest at house ^c%ld^n, owned by ^c%s^n (^c%ld^n).\r\n", house->vnum, player_name, house->owner);
-            printed_something = TRUE;
-            if (player_name)
-              delete [] player_name;
-            break;
-          }
-        }
-      }
-    }
-  }
-
-  if (!printed_something) {
-    send_to_char("- No records found.\r\n", ch);
-  }
-}
-
-/* The hcontrol command itself, used by imms to create/destroy houses */
-ACMD(do_hcontrol)
-{
-  char arg1[MAX_INPUT_LENGTH], arg2[MAX_INPUT_LENGTH];
-  int house_number;
-  vnum_t idnum;
-
-  skip_spaces(&argument);
-  half_chop(argument, arg1, arg2);
-
-  if (is_abbrev(arg1, "destroy")) {
-    if (GET_LEVEL(ch) >= LVL_EXECUTIVE) {
-      hcontrol_destroy_house(ch, arg2);
-    } else {
-      send_to_char("Sorry, you can't do that at your level.\r\n", ch);
-    }
-    return;
-  }
-
-  if (is_abbrev(arg1, "show")) {
-    // With no argument, we default to the standard behavior.
-    if (!*arg2) {
-      hcontrol_list_houses(ch);
-      return;
-    }
-
-    // If the argument is an int, we assume you want to know about a specific house.
-    if ((house_number = atoi(arg2)) > 0) {
-      hcontrol_display_house_by_number(ch, house_number);
-      return;
-    }
-
-    // Otherwise, it's assumed to be a character name. Look up their houses and also houses where they're a guest.
-    if ((idnum = get_player_id(arg2)) > 0) {
-      hcontrol_display_house_with_owner_or_guest(ch, capitalize(arg2), idnum);
-    } else {
-      send_to_char(ch, "There is no player named '%s'.\r\n", arg2);
-    }
-
-    return;
-  }
-
-  // No valid command found.
-  send_to_char("Usage: hcontrol destroy <apartment number>; or hcontrol show; or hcontrol show (<apartment number> | <character name>).\r\n", ch);
 }
 
 

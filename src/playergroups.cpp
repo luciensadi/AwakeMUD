@@ -25,6 +25,7 @@
 // Externs from other files.
 extern void store_mail(long to, struct char_data *from, const char *message_pointer);
 extern void raw_store_mail(long to, long from_id, const char *from_name, const char *message_pointer);
+extern void save_all_apartments_and_storage_rooms();
 
 // Prototypes from this file.
 void perform_pgroup_grant_revoke(struct char_data *ch, char *argument, bool revoke);
@@ -598,6 +599,9 @@ void do_pgroup_disband(struct char_data *ch, char *argument) {
 
   // Save the changes to the DB.
   pgr->save_pgroup_to_db();
+
+  // Breaking of pgroup leases is done during apartment save. Trigger that now.
+  save_all_apartments_and_storage_rooms();
 }
 
 void do_pgroup_donate(struct char_data *ch, char *argument) {
@@ -1647,4 +1651,28 @@ const char *pgroup_print_privileges(Bitfield privileges, bool full) {
   if (is_first)
     strlcpy(output, "(none)", sizeof(output));
   return output;
+}
+
+bool pgroup_char_has_any_priv(idnum_t char_idnum, idnum_t pgroup_idnum, Bitfield privileges) {
+  MYSQL_RES *res;
+  MYSQL_ROW row;
+  Bitfield derived_privileges;
+
+  char query_buf[512];
+  snprintf(query_buf, sizeof(query_buf), "SELECT Privileges FROM pfiles_playergroups WHERE `idnum` = %ld AND `group` = %ld",
+           char_idnum, pgroup_idnum);
+  mysql_wrapper(mysql, query_buf);
+
+  if (!(res = mysql_use_result(mysql)))
+    return FALSE;
+  if (!(row = mysql_fetch_row(res))) {
+    mysql_free_result(res);
+    return FALSE;
+  }
+
+  derived_privileges.FromString(row[0]);
+
+  mysql_free_result(res);
+
+  return privileges.AreAnyShared(derived_privileges);
 }

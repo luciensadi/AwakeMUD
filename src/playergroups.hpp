@@ -19,10 +19,10 @@
 #define PRIV_RECRUITER                      9      // Can invite members.
 #define PRIV_TENANT                         10     // Can enter PG apartments.
 #define PRIV_TREASURER                      11     // Can wire money from the PG bank account.
-#define PRIV_MAX                            12     
+#define PRIV_MAX                            12
 /* Not an actual priv-- used for iteration over pgroup_privileges[].
    Must always be equal to total number of privileges, not including priv_none of course. */
-   
+
 #define PRIV_NONE                           PRIV_MAX + 1  // No privilege required. A metaprivilege, so it's fine if it shifts.
 
 // Playergroup settings.
@@ -106,5 +106,7 @@ void do_pgroup_status(struct char_data *ch, char *argument);
 void do_pgroup_transfer(struct char_data *ch, char *argument);
 void do_pgroup_vote(struct char_data *ch, char *argument);
 void do_pgroup_wire(struct char_data *ch, char *argument);
+
+bool pgroup_char_has_any_priv(idnum_t char_idnum, idnum_t pgroup_idnum, Bitfield privileges);
 
 #endif
