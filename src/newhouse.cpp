@@ -36,7 +36,14 @@ std::vector<ApartmentComplex*> global_apartment_complexes = {};
 
 // TODO: Restore functionality to hcontrol command
 
+// TODO: write houseedit command
+
 // TODO: When a pgroup has no members left, it should be auto-disabled.
+
+// TODO: if IS_BUILDPORT, find_pgroup must always return a group instance with the requested idnum, even if it doesn't exist
+
+// TODO: Verify that an apartment owned by non-buildport player id X is not permanently borked when loaded on the buildport and then transferred back to main
+// TODO: same as above, but for pgroups instead
 
 // EVENTUAL TODO: Sanity checks for things like reused vnums, etc.
 
@@ -112,6 +119,7 @@ void save_all_apartments_and_storage_rooms() {
       if (apartment->get_paid_until() == 0)
         continue;
 
+#ifndef IS_BUILDPORT
       // Invalid owner? Break it and bail.
       if (!apartment->has_owner() || !apartment->owner_is_valid()) {
         mudlog_vfprintf(NULL, LOG_GRIDLOG, "Breaking lease on %s: No owner, or owner is no longer valid.", apartment->get_full_name());
@@ -125,6 +133,7 @@ void save_all_apartments_and_storage_rooms() {
         apartment->break_lease();
         continue;
       }
+#endif
 
       log_vfprintf("Saving apartment %s...", apartment->get_name());
 
@@ -315,10 +324,12 @@ Apartment::Apartment(ApartmentComplex *complex, bf::path base_directory) :
       owned_by_pgroup = Playergroup::find_pgroup(-1 * owner);
     } else {
       owned_by_player = owner;
+#ifndef IS_BUILDPORT
       if (!does_player_exist(owner) || player_is_dead_hardcore(owner)) {
         // Unit's not valid.
         break_lease();
       }
+#endif
     }
   }
 
@@ -668,11 +679,13 @@ void ApartmentRoom::purge_contents() {
 
   struct room_data *room = &world[rnum];
 
+#ifndef IS_BUILDPORT
   // Write a backup storage file to <name>/expired/storage_<ownerid>_<epoch>
   char timestr[100];
   snprintf(timestr, sizeof(timestr), "%ld_%ld", time(0), apartment->get_owner_id());
   bf::path expired_storage_path = base_path / "expired" / timestr;
   Storage_save(expired_storage_path.string().c_str(), room);
+#endif
 
   if (room->contents) {
     had_anything = TRUE;

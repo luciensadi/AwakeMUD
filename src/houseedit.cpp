@@ -14,9 +14,6 @@ void houseedit_reload(struct room_data *room) {
   // TODO
 }
 
-// TODO: Question-- if we destroy leases when the player doesn't exist, but we expect updates to house structure to persist between buildport and normal, how do we handle players not existing on buildport?
-// Potential ans: Ifdef buildport, don't destroy anything, just assume it's kosher and roll with it.
-
 ACMD(do_houseedit) {
   char mode[100];
   char *remainder = one_argument(argument, mode);
