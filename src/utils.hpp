@@ -140,6 +140,7 @@ bool    char_is_in_social_room(struct char_data *ch);
 bool    is_custom_ware(struct obj_data *ware);
 void    render_targets_abilities_to_viewer(struct char_data *viewer, struct char_data *vict);
 void    mob_say(struct char_data *mob, const char *msg);
+const char *get_room_desc(struct room_data *room);
 
 
 bool    keyword_appears_in_obj(const char *keyword, struct obj_data *obj, bool search_keywords=1, bool search_name=1, bool search_desc=0);
@@ -371,7 +372,6 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define IS_LOW(room)	(light_level((room)) == LIGHT_MINLIGHT || light_level((room)) == LIGHT_PARTLIGHT)
 
 #define GET_ROOM_NAME(room) ((room) ? (room)->name : "(null room name)")
-#define GET_ROOM_DESC(room) ((room) ? ((room)->night_desc && weather_info.sunlight == SUN_DARK ? (room)->night_desc : (room)->description) : "(null room desc)")
 
 #define VALID_ROOM_RNUM(rnum) ((rnum) != NOWHERE && (rnum) <= top_of_world)
 

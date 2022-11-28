@@ -1809,10 +1809,7 @@ void look_in_veh(struct char_data * ch)
                    ROOM_FLAGGED(veh->in_room, ROOM_ENCOURAGE_CONGREGATION) ? " ^W(Socialization Bonus)^n" : "");
 
       if (get_speed(veh) <= 200) {
-        if (veh->in_room->night_desc && weather_info.sunlight == SUN_DARK)
-          send_to_char(veh->in_room->night_desc, ch);
-        else
-          send_to_char(veh->in_room->description, ch);
+        send_to_char(get_room_desc(veh->in_room), ch);
       } else {
         send_to_char("Your surroundings blur past.\r\n", ch);
       }
@@ -7246,8 +7243,5 @@ void display_room_desc(struct char_data *ch) {
     return;
   }
 
-  if (ch->in_room->night_desc && weather_info.sunlight == SUN_DARK)
-    send_to_char(ch->in_room->night_desc, ch);
-  else
-    send_to_char(ch->in_room->description, ch);
+  send_to_char(get_room_desc(ch->in_room), ch);
 }

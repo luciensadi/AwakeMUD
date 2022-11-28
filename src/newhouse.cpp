@@ -15,6 +15,7 @@ namespace bf = boost::filesystem;
 #include "handler.hpp"
 #include "limits.hpp"
 #include "interpreter.hpp"
+#include "newmail.hpp"
 #include "newhouse.hpp"
 
 #include "nlohmann/json.hpp"
@@ -36,6 +37,13 @@ std::vector<ApartmentComplex*> global_apartment_complexes = {};
 
 // TODO: Restore functionality to hcontrol command
 
+// TODO: Add logic for mailing pgroup officers with apartment deletion warnings.
+
+// TODO: Mail player owner when a lease is broken. If owned by pgroup, write log.
+
+// TODO: Rewrite so that decorations are saved instead of default descs
+// TODO: The decorate command must enforce two initial spaces and ^n\r\n at end.
+
 // TODO: write houseedit command
 
 // TODO: When a pgroup has no members left, it should be auto-disabled.
@@ -48,6 +56,23 @@ std::vector<ApartmentComplex*> global_apartment_complexes = {};
 // EVENTUAL TODO: Sanity checks for things like reused vnums, etc.
 
 // EVENTUAL TODO: When purging contents and encoutering belongings, move them somewhere safe.
+
+ACMD(do_decorate) {
+  extern void write_world_to_disk(int vnum);
+
+  FAILURE_CASE(ch->in_veh, "You can't decorate the interior of vehicles, but you can still customize the outside by visiting a painting booth.\r\n");
+  FAILURE_CASE(!ch->in_room || !ch->in_room->apartment, "You must be in an apartment to decorate it.");
+  FAILURE_CASE(!ch->in_room->apartment->has_owner_privs(ch), "You must be the owner of this apartment to decorate it.")
+
+  PLR_FLAGS(ch).SetBit(PLR_WRITING);
+  send_to_char("Enter your new room description. Terminate with a @ on a new line. Your new desc will be automatically indented and newline-terminated.\r\n", ch);
+  act("$n starts to move things around the room.", TRUE, ch, 0, 0, TO_ROOM);
+  STATE(ch->desc) = CON_DECORATE;
+  DELETE_D_STR_IF_EXTANT(ch->desc);
+  INITIALIZE_NEW_D_STR(ch->desc);
+  ch->desc->max_str = MAX_MESSAGE_LENGTH;
+  ch->desc->mail_to = 0;
+}
 
 /* The house command, used by mortal house owners to assign guests */
 ACMD(do_house) {
@@ -397,7 +422,7 @@ void Apartment::break_lease() {
   // Iterate over rooms and restore them.
   for (auto &room: rooms) {
     room->purge_contents();
-    room->restore_default_desc();
+    room->delete_decoration();
   }
 }
 
@@ -643,12 +668,7 @@ ApartmentRoom::ApartmentRoom(Apartment *apartment, bf::path filename) :
     exit(1);
   }
 
-  { // Scope in the room desc var.
-    char room_desc_with_terminal_codes[MAX_STRING_LENGTH];
-    snprintf(room_desc_with_terminal_codes, sizeof(room_desc_with_terminal_codes),
-             "  %s^n\r\n", base_info["default_desc"].get<std::string>().c_str());
-    default_room_desc = str_dup(room_desc_with_terminal_codes);
-  }
+  decoration = str_dup(base_info["decoration"].get<std::string>().c_str());
 
   log_vfprintf(" ----- Applying changes from %s to world...", filename.filename().string().c_str());
 
@@ -727,7 +747,7 @@ void ApartmentRoom::purge_contents() {
 }
 
 /* Overwrite the room's desc with the default. */
-void ApartmentRoom::restore_default_desc() {
+void ApartmentRoom::delete_decoration() {
   rnum_t rnum = real_room(vnum);
 
   if (rnum < 0) {
@@ -737,15 +757,13 @@ void ApartmentRoom::restore_default_desc() {
 
   struct room_data *room = &world[rnum];
 
-  if (!str_cmp(room->description, default_room_desc)) {
+  if (!decoration) {
     // No action to take-- bail out.
     return;
   }
 
-  delete [] room->description;
-  room->description = str_dup(default_room_desc);
-
-  mudlog_vfprintf(NULL, LOG_SYSLOG, "Restored default room desc to room %ld.", GET_ROOM_VNUM(room));
+  delete [] decoration;
+  decoration = NULL;
 
   send_to_room("You blink, then shrug-- this place must have always looked this way.\r\n", room);
 }
@@ -983,4 +1001,45 @@ SPECIAL(landlord_spec)
     return TRUE;
   }
   return FALSE;
+}
+
+void warn_about_apartment_deletion() {
+  char buf[1000];
+
+  // log("Beginning apartment deletion warning cycle.");
+  for (auto &complex : global_apartment_complexes) {
+    for (auto &apartment : complex->get_apartments()) {
+      if (!apartment->has_owner() || !apartment->owner_is_valid()) {
+        //log_vfprintf("No owner for %s.", house->name);
+        continue;
+      }
+
+      int days_until_deletion = (apartment->get_paid_until() - time(0)) / (60 * 60 * 24);
+
+      if (days_until_deletion > 5) {
+        //log_vfprintf("House %s is OK-- %d days left (%d - %d)", house->name, days_until_deletion, house->date, time(0));
+        continue;
+      }
+
+      mudlog_vfprintf(NULL, LOG_GRIDLOG, "Sending %d-day rent warning message for apartment %s to %ld.",
+                      days_until_deletion,
+                      apartment->get_full_name(),
+                      apartment->get_owner_id());
+
+      if (apartment->get_owner_pgroup()) {
+        // TODO
+      } else {
+        if (days_until_deletion > 0) {
+          snprintf(buf, sizeof(buf), "Remember to pay your rent for apartment %s^n! It will be deemed abandoned and its contents reclaimed ^Rat any time^n.\r\n",
+                   apartment->get_full_name());
+        } else {
+          snprintf(buf, sizeof(buf), "Remember to pay your rent for apartment %s^n. It will be deemed abandoned and its contents reclaimed in %d days.\r\n",
+                   apartment->get_full_name(),
+                   days_until_deletion);
+        }
+        raw_store_mail(apartment->get_owner_id(), 0, "Your landlord", buf);
+      }
+    }
+  }
+  // log("Apartment deletion warning cycle complete.");
 }

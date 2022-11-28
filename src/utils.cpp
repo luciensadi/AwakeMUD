@@ -5456,6 +5456,28 @@ void mob_say(struct char_data *mob, const char *msg) {
   do_say(mob, not_const, 0, 0);
 }
 
+const char *get_room_desc(struct room_data *room) {
+  static char room_desc[MAX_STRING_LENGTH];
+  strlcpy(room_desc, "  (null)\r\n", sizeof(room_desc));
+
+  if (!room) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Received NULL room to GET_ROOM_DESC()!", GET_ROOM_NAME(room), GET_ROOM_VNUM(room));
+    return room_desc;
+  }
+
+  if (room->apartment && room->apartment->get_decoration()) {
+    strlcpy(room_desc, room->apartment->get_decoration(), sizeof(room_desc));
+  } else if (weather_info.sunlight == SUN_DARK && room->night_desc) {
+    strlcpy(room_desc, room->night_desc, sizeof(room_desc));
+  } else if (room->description) {
+    strlcpy(room_desc, room->description, sizeof(room_desc));
+  } else {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Room %s (%ld) has all NULL descriptions!", GET_ROOM_NAME(room), GET_ROOM_VNUM(room));
+  }
+
+  return room_desc;
+}
+
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.
 // Great for swapping out old Classic weapons, cyberware, etc for the new guaranteed-canon versions.
 #define PAIR(classic, current) case (classic): return (current);

@@ -48,6 +48,7 @@
 #include "newmail.hpp"
 #include "transport.hpp"
 #include "vision_overhaul.hpp"
+#include "newhouse.hpp"
 
 #if defined(__CYGWIN__)
 #include <crypt.h>
@@ -1048,6 +1049,10 @@ void do_stat_room(struct char_data * ch)
     send_to_char(rm->description, ch);
   else
     send_to_char("  None.\r\n", ch);
+
+  if (rm->apartment && rm->apartment->get_decoration()) {
+    send_to_char(ch, "Decoration:\r\n%s", rm->apartment->get_decoration());
+  }
 
   if (rm->ex_description)
   {
@@ -6800,7 +6805,7 @@ int audit_zone_rooms_(struct char_data *ch, int zone_num, bool verbose) {
       printed = TRUE;
     }
 
-    if (!strcmp(GET_ROOM_DESC(room), STRING_ROOM_DESC_UNFINISHED)) {
+    if (!strcmp(room->description, STRING_ROOM_DESC_UNFINISHED)) {
       strlcat(buf, "  - Default room desc used.\r\n", sizeof(buf));
       issues++;
       printed = TRUE;

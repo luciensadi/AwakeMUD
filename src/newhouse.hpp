@@ -134,7 +134,7 @@ class ApartmentRoom {
     vnum_t vnum = -1;
 
     // What desc will be restored when this apartment's lease is broken?
-    const char *default_room_desc = NULL;
+    const char *decoration = NULL;
 
     // What is this subroom's name? (Only used for debugging)
     const char *name = NULL;
@@ -150,7 +150,7 @@ class ApartmentRoom {
 
     // Getters.
     vnum_t get_vnum() { return vnum; }
-    const char *get_default_room_desc() { return default_room_desc; }
+    const char *get_decoration() { return decoration; }
 
     // Will add setters and save function if OLC is added for these.
     vnum_t get_atrium_vnum() { return apartment->get_atrium_vnum(); }
@@ -170,7 +170,7 @@ class ApartmentRoom {
 
     // Restore the apartment's default description.
     void purge_contents();
-    void restore_default_desc();
+    void delete_decoration();
 };
 
 #endif // _newhouse_h_
