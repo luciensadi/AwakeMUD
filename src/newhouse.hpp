@@ -100,7 +100,7 @@ class Apartment {
     long get_rent_cost() { return nuyen_per_month; }
     time_t get_paid_until() { return paid_until; }
     std::vector<ApartmentRoom*> get_rooms() { return rooms; }
-    void list_guests_to_char(struct char_data *ch);
+    std::vector<long> get_guests() { return guests; }
 
     // Mutators
     void set_owner(idnum_t);
@@ -116,10 +116,15 @@ class Apartment {
     bool can_enter(struct char_data *ch);
     bool can_enter_by_idnum(idnum_t idnum);
     bool has_owner_privs(struct char_data *ch);
+    bool has_owner_privs_by_idnum(idnum_t idnum);
     bool has_owner() { return owned_by_pgroup || owned_by_player; }
-    int get_owner_id();
+    idnum_t get_owner_id();
     Playergroup *get_owner_pgroup() { return owned_by_pgroup; }
     bool owner_is_valid();
+    void list_guests_to_char(struct char_data *ch);
+
+    // Returns new-- must delete output!
+    const char *get_owner_name__returns_new();
 };
 
 /* An ApartmentRoom describes a discrete room in the world. */

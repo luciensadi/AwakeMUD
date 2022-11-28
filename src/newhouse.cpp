@@ -34,21 +34,7 @@ void remove_vehicles_from_apartment(struct room_data *room);
 
 std::vector<ApartmentComplex*> global_apartment_complexes = {};
 
-/* TODO: House editing:
-   - houseedit import [confirm]:  (load and transfer all old houses to new format)
-   - houseedit reload [confirm]: (reloads the apartment you're standing in)
-
-   - houseedit complex create: (OLC menu, specify name, shortname, and landlord vnum)
-   - houseedit complex list: (list all complexes)
-   - houseedit complex <name>: (OLC menu)
-
-   - houseedit apartment create <complex>: (OLC menu)
-   - houseedit apartment list: <complex>
-   - houseedit apartment <name>: (OLC menu)
-   - houseedit apartment <name> addroom <room name>: (adds/overrides current room, sets current desc)
-*/
-
-// TODO: Add administrative commands to load storage etc from files without a copyover.
+// TODO: Restore functionality to hcontrol command
 
 // TODO: When a pgroup has no members left, it should be auto-disabled.
 
@@ -364,7 +350,7 @@ bool Apartment::owner_is_valid() {
   return does_player_exist(owned_by_player) && !player_is_dead_hardcore(owned_by_player);
 }
 
-int Apartment::get_owner_id() {
+idnum_t Apartment::get_owner_id() {
   if (owned_by_pgroup) {
     return -1 * owned_by_pgroup->get_idnum();
   }
@@ -567,6 +553,23 @@ bool Apartment::has_owner_privs(struct char_data *ch) {
   return FALSE;
 }
 
+bool Apartment::has_owner_privs_by_idnum(idnum_t idnum) {
+  Bitfield required_privileges;
+
+  // No idnum? No ownership.
+  if (idnum <= 0)
+    return FALSE;
+
+  if (owned_by_pgroup) {
+    required_privileges.SetBits(PRIV_LEADER, PRIV_LANDLORD, ENDBIT);
+    return pgroup_char_has_any_priv(idnum, owned_by_pgroup->get_idnum(), required_privileges);
+  } else {
+    return idnum == owned_by_player;
+  }
+
+  return FALSE;
+}
+
 void Apartment::list_guests_to_char(struct char_data *ch) {
   send_to_char(ch, "  Guests: ");
 
@@ -599,6 +602,17 @@ void Apartment::list_guests_to_char(struct char_data *ch) {
 
   if (!printed_guest_yet) {
     send_to_char("None.\r\n", ch);
+  }
+}
+
+// Returns new-- must delete output!
+const char * Apartment::get_owner_name__returns_new() {
+  if (owned_by_pgroup) {
+    char pgroup_buf[1000];
+    snprintf(pgroup_buf, sizeof(pgroup_buf), "Group %s^n", owned_by_pgroup->get_name());
+    return str_dup(pgroup_buf);
+  } else {
+    return get_player_name(owned_by_player);
   }
 }
 
@@ -656,7 +670,7 @@ void ApartmentRoom::purge_contents() {
 
   // Write a backup storage file to <name>/expired/storage_<ownerid>_<epoch>
   char timestr[100];
-  snprintf(timestr, sizeof(timestr), "%ld_%d", time(0), apartment->get_owner_id());
+  snprintf(timestr, sizeof(timestr), "%ld_%ld", time(0), apartment->get_owner_id());
   bf::path expired_storage_path = base_path / "expired" / timestr;
   Storage_save(expired_storage_path.string().c_str(), room);
 
