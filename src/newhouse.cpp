@@ -37,11 +37,17 @@ std::vector<ApartmentComplex*> global_apartment_complexes = {};
 
 // TODO: Restore functionality to hcontrol command
 
+// TODO: can_houseedit_complex
+
+// TODO: Add apartmentroom saving: vnum (for delete/create); decoration (for decorate)
+// Decoration could just write a flat file with the text of the decoration and nothing else.
+
+// TODO: set_decoration, save_decoration
+
 // TODO: Add logic for mailing pgroup officers with apartment deletion warnings.
 
 // TODO: Mail player owner when a lease is broken. If owned by pgroup, write log.
 
-// TODO: Rewrite so that decorations are saved instead of default descs
 // TODO: The decorate command must enforce two initial spaces and ^n\r\n at end.
 
 // TODO: write houseedit command
@@ -205,6 +211,7 @@ ApartmentComplex::ApartmentComplex(bf::path filename) :
 
     display_name = str_dup(base_info["display_name"].get<std::string>().c_str());
     landlord_vnum = (vnum_t) base_info["landlord_vnum"].get<vnum_t>();
+    editors = base_info["editors"].get<std::vector<idnum_t>>();
 
     if (real_mobile(landlord_vnum) < 0) {
       log_vfprintf("SYSERR: Landlord vnum %ld does not match up with a real NPC. Terminating.\r\n", landlord_vnum);
@@ -228,6 +235,11 @@ ApartmentComplex::ApartmentComplex(bf::path filename) :
       }
     }
   }
+}
+
+bool ApartmentComplex::can_houseedit_complex(struct char_data *ch) {
+  // TODO
+  return TRUE;
 }
 
 void ApartmentComplex::display_room_list_to_character(struct char_data *ch) {
@@ -310,6 +322,60 @@ bool ApartmentComplex::ch_already_rents_here(struct char_data *ch) {
       return TRUE;
   }
   return FALSE;
+}
+
+const char *ApartmentComplex::list_editors() {
+  static char buf[500];
+
+  strlcpy(buf, "", sizeof(buf));
+
+  bool printed_anything = FALSE;
+  for (auto editor_id : editors) {
+    const char *name = get_player_name(editor_id);
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s^c%s^n", printed_anything ? ", " : "", name);
+    delete [] name;
+    printed_anything = TRUE;
+  }
+
+  if (!printed_anything)
+    strlcpy(buf, "Nobody.", sizeof(buf));
+
+  return buf;
+}
+
+void ApartmentComplex::clone_from(ApartmentComplex *source) {
+  delete [] display_name;
+  display_name = str_dup(source->display_name);
+
+  landlord_vnum = source->landlord_vnum;
+
+  base_directory = source->base_directory;
+
+  editors.clear();
+  for (auto idnum : source->editors) {
+    editors.push_back(idnum);
+  }
+}
+
+bool ApartmentComplex::set_landlord_vnum(vnum_t vnum) {
+  rnum_t rnum = real_mobile(vnum);
+
+  if (rnum < 0)
+    return FALSE;
+
+  landlord_vnum = vnum;
+  return TRUE;
+}
+
+bool ApartmentComplex::set_name(const char *name) {
+  delete [] display_name;
+  display_name = str_dup(name);
+  return TRUE;
+}
+
+void ApartmentComplex::save() {
+  // TODO: Ensure all directories exist
+  // TODO: Write out base info file
 }
 /*********** Apartment ************/
 
@@ -687,6 +753,24 @@ ApartmentRoom::ApartmentRoom(Apartment *apartment, bf::path filename) :
   load_storage();
 }
 
+void ApartmentRoom::save_info() {
+  json info_data;
+
+  info_data["vnum"] = vnum;
+
+  bf::ofstream o(base_path / "info.json");
+  o << std::setw(4) << info_data << std::endl;
+  o.close();
+}
+
+void ApartmentRoom::save_decoration() {
+  // TODO
+}
+
+void ApartmentRoom::set_decoration(const char *new_desc) {
+  // TODO
+}
+
 /* Purge the contents of this apartment, logging as we go. */
 void ApartmentRoom::purge_contents() {
   rnum_t rnum = real_room(vnum);
@@ -815,6 +899,8 @@ void ApartmentRoom::add_guest(idnum_t idnum) {
   }
 }
 
+///////////////////////// Utility functions ////////////////////////////////
+
 // Given a room, move all vehicles from it to the Seattle garage, logging as we go.
 void remove_vehicles_from_apartment(struct room_data *room) {
   struct room_data *garage = &world[real_room(RM_SEATTLE_PARKING_GARAGE)];
@@ -831,6 +917,75 @@ void remove_vehicles_from_apartment(struct room_data *room) {
   save_vehicles(FALSE);
 }
 
+// Send warnings about expiring apartments.
+void warn_about_apartment_deletion() {
+  char buf[1000];
+
+  // log("Beginning apartment deletion warning cycle.");
+  for (auto &complex : global_apartment_complexes) {
+    for (auto &apartment : complex->get_apartments()) {
+      if (!apartment->has_owner() || !apartment->owner_is_valid()) {
+        //log_vfprintf("No owner for %s.", apartment->get_full_name());
+        continue;
+      }
+
+      int days_until_deletion = (apartment->get_paid_until() - time(0)) / (60 * 60 * 24);
+
+      if (days_until_deletion > 5) {
+        //log_vfprintf("House %s is OK-- %d days left (%d - %d)", apartment->get_full_name(), days_until_deletion, apartment->get_paid_until(), time(0));
+        continue;
+      }
+
+      mudlog_vfprintf(NULL, LOG_GRIDLOG, "Sending %d-day rent warning message for apartment %s to %ld.",
+                      days_until_deletion,
+                      apartment->get_full_name(),
+                      apartment->get_owner_id());
+
+      if (apartment->get_owner_pgroup()) {
+        // TODO
+      } else {
+        if (days_until_deletion > 0) {
+          snprintf(buf, sizeof(buf), "Remember to pay your rent for apartment %s^n! It will be deemed abandoned and its contents reclaimed ^Rat any time^n.\r\n",
+                   apartment->get_full_name());
+        } else {
+          snprintf(buf, sizeof(buf), "Remember to pay your rent for apartment %s^n. It will be deemed abandoned and its contents reclaimed in %d days.\r\n",
+                   apartment->get_full_name(),
+                   days_until_deletion);
+        }
+        raw_store_mail(apartment->get_owner_id(), 0, "Your landlord", buf);
+      }
+    }
+  }
+  // log("Apartment deletion warning cycle complete.");
+}
+
+// Given a name, return the complex that starts with it, or NULL on error.
+// Error condition: More than one complex matches.
+ApartmentComplex *find_apartment_complex(const char *name, struct char_data *ch) {
+  std::vector<ApartmentComplex *> found_complexes = {};
+
+  for (auto &complex : global_apartment_complexes) {
+    if (is_abbrev(name, complex->get_name()))
+      found_complexes.push_back(complex);
+  }
+
+  if (found_complexes.size() == 1)
+    return found_complexes.front();
+
+  if (ch) {
+    if (found_complexes.size() > 1) {
+      send_to_char(ch, "Please refine your query. The following complexes matched your search '%s':\r\n", name);
+      for (auto &complex : found_complexes)
+        send_to_char(ch, "  %s\r\n", complex->get_name());
+      return NULL;
+    }
+
+    send_to_char(ch, "No complexes matched your search '%s'.\r\n", name);
+    return NULL;
+  }
+
+  return NULL;
+}
 
 //////////////////////////// The Landlord spec. ///////////////////////////////
 class ApartmentComplex *get_complex_headed_by_landlord(vnum_t vnum) {
@@ -1001,45 +1156,4 @@ SPECIAL(landlord_spec)
     return TRUE;
   }
   return FALSE;
-}
-
-void warn_about_apartment_deletion() {
-  char buf[1000];
-
-  // log("Beginning apartment deletion warning cycle.");
-  for (auto &complex : global_apartment_complexes) {
-    for (auto &apartment : complex->get_apartments()) {
-      if (!apartment->has_owner() || !apartment->owner_is_valid()) {
-        //log_vfprintf("No owner for %s.", house->name);
-        continue;
-      }
-
-      int days_until_deletion = (apartment->get_paid_until() - time(0)) / (60 * 60 * 24);
-
-      if (days_until_deletion > 5) {
-        //log_vfprintf("House %s is OK-- %d days left (%d - %d)", house->name, days_until_deletion, house->date, time(0));
-        continue;
-      }
-
-      mudlog_vfprintf(NULL, LOG_GRIDLOG, "Sending %d-day rent warning message for apartment %s to %ld.",
-                      days_until_deletion,
-                      apartment->get_full_name(),
-                      apartment->get_owner_id());
-
-      if (apartment->get_owner_pgroup()) {
-        // TODO
-      } else {
-        if (days_until_deletion > 0) {
-          snprintf(buf, sizeof(buf), "Remember to pay your rent for apartment %s^n! It will be deemed abandoned and its contents reclaimed ^Rat any time^n.\r\n",
-                   apartment->get_full_name());
-        } else {
-          snprintf(buf, sizeof(buf), "Remember to pay your rent for apartment %s^n. It will be deemed abandoned and its contents reclaimed in %d days.\r\n",
-                   apartment->get_full_name(),
-                   days_until_deletion);
-        }
-        raw_store_mail(apartment->get_owner_id(), 0, "Your landlord", buf);
-      }
-    }
-  }
-  // log("Apartment deletion warning cycle complete.");
 }

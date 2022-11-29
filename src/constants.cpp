@@ -781,11 +781,11 @@ const char *connected_types[] =
   {
     "Playing",                                    // 0
     "Disconnecting",
-    "Get name",
-    "Confirm name",
-    "Get password",
-    "Get new PW",                                 // 5
-    "Confirm new PW",
+    "Get Name",
+    "Confirm Name",
+    "Get Password",
+    "Get New PW",                                 // 5
+    "Confirm New PW",
     "CharGen",
     "Reading MOTD",
     "Main Menu",
@@ -795,7 +795,7 @@ const char *connected_types[] =
     "Changing PW 3",
     "Self-Delete 1",
     "Self-Delete 2",                              // 15
-    "Quit menu",
+    "Quit Menu",
     "Changing PW Q1",
     "Changing PW Q2",
     "Changing PW Q3",
@@ -824,9 +824,11 @@ const char *connected_types[] =
     "Background Customizing",
     "Trideo Message Adding",
     "Creating Ammo",
-    "Asking name",
-    "Playergroup editing",
-    "Helpfile editing",
+    "Asking Name",
+    "Playergroup Editing",
+    "Helpfile Editing",
+    "Apartment Complex Editing",
+    "Apartment Editing",
     "\n"
   };
 

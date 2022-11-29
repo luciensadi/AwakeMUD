@@ -5,24 +5,22 @@
 #include "db.hpp"
 #include "newdb.hpp"
 #include "newhouse.hpp"
+#include "houseedit_complex.hpp"
+#include "houseedit_apartment.hpp"
 
-void houseedit_import() {
-  // TODO
-}
-
-void houseedit_reload(struct room_data *room) {
-  // TODO
-}
+void houseedit_import();
+void houseedit_reload(struct room_data *room);
 
 ACMD(do_houseedit) {
-  char mode[100];
-  char *remainder = one_argument(argument, mode);
+  char mode[100], func[100];
+  char *mode_remainder = one_argument(argument, mode);
+  char *func_remainder = one_argument(mode_remainder, func);
 
   if (is_abbrev(mode, "import")) {
     // Import apartments from old format to new format. Destructive!
     FAILURE_CASE(GET_LEVEL(ch) < LVL_PRESIDENT, "You're not erudite enough to do that.");
     FAILURE_CASE(!ch->in_room || !ch->in_room->apartment, "You must be standing in an apartment for that.");
-    FAILURE_CASE(str_cmp(remainder, "confirm"), "Syntax: HOUSEEDIT IMPORT CONFIRM.");
+    FAILURE_CASE(str_cmp(func, "confirm"), "To blow away existing apartments and load from old files, HOUSEEDIT IMPORT CONFIRM.");
 
     mudlog_vfprintf(ch, LOG_SYSLOG, "House import started by %s.", GET_CHAR_NAME(ch));
     houseedit_import();
@@ -34,7 +32,7 @@ ACMD(do_houseedit) {
     // Reload the storage for the subroom you're currently standing in.
     FAILURE_CASE(GET_LEVEL(ch) < LVL_EXECUTIVE, "You're not erudite enough to do that.");
     FAILURE_CASE(!ch->in_room || !ch->in_room->apartment, "You must be standing in an apartment for that.");
-    FAILURE_CASE(str_cmp(remainder, "confirm"), "Syntax: HOUSEEDIT RELOAD CONFIRM.");
+    FAILURE_CASE(str_cmp(func, "confirm"), "To reload apartment storage for your current room, HOUSEEDIT RELOAD CONFIRM.");
 
     mudlog_vfprintf(ch, LOG_SYSLOG, "House reload for %s started by %s.", ch->in_room->apartment->get_full_name(), GET_CHAR_NAME(ch));
     houseedit_reload(ch->in_room);
@@ -48,20 +46,23 @@ ACMD(do_houseedit) {
        - houseedit complex list: (list all complexes)
        - houseedit complex <name>: (OLC menu)
     */
-    if (is_abbrev(mode, "create")) {
-      // TODO: create new complex
-    }
-    else if (is_abbrev(mode, "delete")) {
-      FAILURE_CASE(GET_LEVEL(ch) < LVL_ADMIN, "You're not erudite enough to do that.");
-      // TODO: delete existing complex (empty / has no apartments)
-    }
-    else if (is_abbrev(mode, "list")) {
-      // TODO: list complexes
-    }
-    else {
-      // TODO: edit existing complex (or the one you're standing in if no name given)
+    if (is_abbrev(func, "create")) {
+      houseedit_create_complex(ch);
+      return;
     }
 
+    if (is_abbrev(func, "delete")) {
+      FAILURE_CASE(GET_LEVEL(ch) < LVL_ADMIN, "You're not erudite enough to do that.");
+      houseedit_delete_complex(ch, func_remainder);
+      return;
+    }
+
+    if (is_abbrev(func, "list")) {
+      houseedit_list_complexes(ch, func_remainder);
+      return;
+    }
+
+    houseedit_edit_existing_complex(ch, mode_remainder);
     return;
   }
 
@@ -73,14 +74,14 @@ ACMD(do_houseedit) {
        - houseedit apartment <name> addroom <room name>: (adds/overrides current room, sets current desc)
        - houseedit apartment <name> delroom: (deletes current room from apartment)
     */
-    if (is_abbrev(mode, "create")) {
+    if (is_abbrev(func, "create")) {
       // TODO: create new apartment in named complex
     }
-    else if (is_abbrev(mode, "delete")) {
+    else if (is_abbrev(func, "delete")) {
       FAILURE_CASE(GET_LEVEL(ch) < LVL_ADMIN, "You're not erudite enough to do that.");
       // TODO: delete existing apartment (cannot be leased)
     }
-    else if (is_abbrev(mode, "list")) {
+    else if (is_abbrev(func, "list")) {
       // TODO: list apartments in named complex
     }
     else {
@@ -94,4 +95,12 @@ ACMD(do_houseedit) {
 
   send_to_char(ch, "Valid modes are IMPORT, RELOAD, COMPLEX, APARTMENT.\r\n");
   return;
+}
+
+void houseedit_import() {
+  // TODO
+}
+
+void houseedit_reload(struct room_data *room) {
+  // TODO
 }

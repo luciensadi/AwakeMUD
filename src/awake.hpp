@@ -2139,55 +2139,58 @@ enum {
 
 /* modes of connectedness: used by descriptor_data.state */
 
-#define CON_PLAYING      0              /* Playing - Nominal state      */
-#define CON_CLOSE        1              /* Disconnecting                */
-#define CON_GET_NAME     2              /* By what name ..?             */
-#define CON_NAME_CNFRM   3              /* Did I get that right, x?     */
-#define CON_PASSWORD     4              /* Password:                    */
-#define CON_NEWPASSWD    5              /* Give me a password for x     */
-#define CON_CNFPASSWD    6              /* Please retype password:      */
-#define CON_CCREATE      7
-#define CON_RMOTD        8              /* PRESS RETURN after MOTD      */
-#define CON_MENU         9              /* Your choice: (main menu)     */
-#define CON_PART_CREATE  10
-#define CON_CHPWD_GETOLD 11             /* Changing passwd: get old     */
-#define CON_CHPWD_GETNEW 12             /* Changing passwd: get new     */
-#define CON_CHPWD_VRFY   13             /* Verify new password          */
-#define CON_DELCNF1      14             /* Delete confirmation 1        */
-#define CON_DELCNF2      15             /* Delete confirmation 2        */
-#define CON_QMENU        16             /* quit menu                    */
-#define CON_QGETOLDPW    17
-#define CON_QGETNEWPW    18
-#define CON_QVERIFYPW    19
-#define CON_QDELCONF1    20
-#define CON_QDELCONF2    21
-#define CON_SPELL_CREATE 22             /* Spell creation menus         */
-#define CON_PCUSTOMIZE   23             /* customize persona description menu */
-#define CON_ACUSTOMIZE   24             /* customize reflection description menu */
-#define CON_FCUSTOMIZE   25
-#define CON_VEDIT        26
-#define CON_IEDIT        27  /* olc edit mode */
-#define CON_REDIT        28  /* olc edit mode */
-#define CON_MEDIT        29
-#define CON_QEDIT        30
-#define CON_SHEDIT       31
-#define CON_ZEDIT        32
-#define CON_HEDIT        33
-#define CON_ICEDIT       34
-#define CON_PRO_CREATE   35
-#define CON_DECK_CREATE  36
-#define CON_SPE_CREATE   37
-#define CON_INITIATE     38
-#define CON_DECORATE     39
-#define CON_POCKETSEC    40
-#define CON_VEHCUST      41
-#define CON_BCUSTOMIZE   42
-#define CON_TRIDEO       43
-#define CON_AMMO_CREATE  44
-#define CON_ASKNAME      45            /* Ask user for name            */
-#define CON_PGEDIT       46
-#define CON_HELPEDIT     47
+#define CON_PLAYING             0              /* Playing - Nominal state      */
+#define CON_CLOSE               1              /* Disconnecting                */
+#define CON_GET_NAME            2              /* By what name ..?             */
+#define CON_NAME_CNFRM          3              /* Did I get that right, x?     */
+#define CON_PASSWORD            4              /* Password:                    */
+#define CON_NEWPASSWD           5              /* Give me a password for x     */
+#define CON_CNFPASSWD           6              /* Please retype password:      */
+#define CON_CCREATE             7
+#define CON_RMOTD               8              /* PRESS RETURN after MOTD      */
+#define CON_MENU                9              /* Your choice: (main menu)     */
+#define CON_PART_CREATE         10
+#define CON_CHPWD_GETOLD        11             /* Changing passwd: get old     */
+#define CON_CHPWD_GETNEW        12             /* Changing passwd: get new     */
+#define CON_CHPWD_VRFY          13             /* Verify new password          */
+#define CON_DELCNF1             14             /* Delete confirmation 1        */
+#define CON_DELCNF2             15             /* Delete confirmation 2        */
+#define CON_QMENU               16             /* quit menu                    */
+#define CON_QGETOLDPW           17
+#define CON_QGETNEWPW           18
+#define CON_QVERIFYPW           19
+#define CON_QDELCONF1           20
+#define CON_QDELCONF2           21
+#define CON_SPELL_CREATE        22             /* Spell creation menus         */
+#define CON_PCUSTOMIZE          23             /* customize persona description menu */
+#define CON_ACUSTOMIZE          24             /* customize reflection description menu */
+#define CON_FCUSTOMIZE          25
+#define CON_VEDIT               26
+#define CON_IEDIT               27  /* olc edit mode */
+#define CON_REDIT               28  /* olc edit mode */
+#define CON_MEDIT               29
+#define CON_QEDIT               30
+#define CON_SHEDIT              31
+#define CON_ZEDIT               32
+#define CON_HEDIT               33
+#define CON_ICEDIT              34
+#define CON_PRO_CREATE          35
+#define CON_DECK_CREATE         36
+#define CON_SPE_CREATE          37
+#define CON_INITIATE            38
+#define CON_DECORATE            39
+#define CON_POCKETSEC           40
+#define CON_VEHCUST             41
+#define CON_BCUSTOMIZE          42
+#define CON_TRIDEO              43
+#define CON_AMMO_CREATE         44
+#define CON_ASKNAME             45            /* Ask user for name            */
+#define CON_PGEDIT              46
+#define CON_HELPEDIT            47
+#define CON_HOUSEEDIT_COMPLEX   48
+#define CON_HOUSEEDIT_APARTMENT 49
 // If you add another state, you need to touch comm.cpp's close_socket and make sure it's reflected there!
+// Also add it to constants's connected_types.
 
 /* arbitrary constants used by index_boot() (must be unique) */
 #define DB_BOOT_WLD     0

@@ -19,6 +19,8 @@
 #include "vision_overhaul.hpp"
 #include "drugs.hpp"
 
+class ApartmentComplex;
+class Apartment;
 class ApartmentRoom;
 
 #define SPECIAL(name) \
@@ -1034,6 +1036,12 @@ struct descriptor_data
   struct host_data *edit_host;  /* hedit */
   struct matrix_icon *edit_icon; /* icedit */
   struct help_data *edit_helpfile;
+  ApartmentComplex *edit_complex;
+  ApartmentComplex *edit_complex_original;
+  Apartment *edit_apartment;
+  Apartment *edit_apartment_original;
+  ApartmentRoom *edit_apartment_room;
+  ApartmentRoom *edit_apartment_room_original;
   // If you add more of these edit_whatevers, touch comm.cpp's free_editing_structs and add them!
 
   Playergroup *edit_pgroup; /* playergroups */
@@ -1051,7 +1059,9 @@ struct descriptor_data
       invalid_command_counter(0), iedit_limit_edits(0), misc_data(NULL),
       edit_obj(NULL), edit_room(NULL), edit_mob(NULL), edit_quest(NULL), edit_shop(NULL),
       edit_zon(NULL), edit_cmd(NULL), edit_veh(NULL), edit_host(NULL), edit_icon(NULL),
-      edit_helpfile(NULL), edit_pgroup(NULL), canary(CANARY_VALUE), pProtocol(NULL)
+      edit_helpfile(NULL), edit_complex(NULL), edit_complex_original(NULL),
+      edit_apartment(NULL), edit_apartment_original(NULL), edit_apartment_room(NULL),
+      edit_apartment_room_original(NULL), edit_pgroup(NULL), canary(CANARY_VALUE), pProtocol(NULL)
   {
     // Zero out the communication history for all channels.
     for (int channel = 0; channel < NUM_COMMUNICATION_CHANNELS; channel++)

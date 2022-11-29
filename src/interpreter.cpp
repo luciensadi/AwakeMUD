@@ -77,6 +77,8 @@ void dbuild_parse(struct descriptor_data *d, const char *arg);
 void pbuild_parse(struct descriptor_data *d, const char *arg);
 void spedit_parse(struct descriptor_data *d, const char *arg);
 void aedit_parse(struct descriptor_data *d, const char *arg);
+void houseedit_apartment_parse(struct descriptor_data *d, const char *arg);
+void houseedit_complex_parse(struct descriptor_data *d, const char *arg);
 void free_shop(struct shop_data *shop);
 void free_quest(struct quest_data *quest);
 void init_parse(struct descriptor_data *d, char *arg);
@@ -219,6 +221,7 @@ ACMD_DECLARE(do_hide);
 ACMD_DECLARE(do_hit);
 ACMD_DECLARE(do_highlight);
 ACMD_DECLARE(do_house);
+ACMD_DECLARE(do_houseedit);
 ACMD_DECLARE(do_hp);
 ACMD_DECLARE(do_iclist);
 ACMD_DECLARE(do_ignore);
@@ -640,6 +643,7 @@ struct command_info cmd_info[] =
     { "hold"       , POS_RESTING , do_grab     , 1, 0, FALSE },
     { "holster"    , POS_RESTING , do_holster  , 0, 0, FALSE },
     { "house"      , POS_LYING   , do_house    , 0, 0, FALSE },
+    { "houseedit"  , POS_SLEEPING, do_houseedit, LVL_BUILDER, 0, FALSE },
     { "ht"         , POS_DEAD    , do_gen_comm , 0, SCMD_HIREDTALK, FALSE },
     { "hts"        , POS_DEAD    , do_switched_message_history, 0, COMM_CHANNEL_HIRED, TRUE },
     { "hp"         , POS_DEAD    , do_hp       , 0, 0, TRUE },
@@ -2602,6 +2606,12 @@ void nanny(struct descriptor_data * d, char *arg)
     break;
   case CON_HELPEDIT:
     helpedit_parse(d, arg);
+    break;
+  case CON_HOUSEEDIT_COMPLEX:
+    houseedit_complex_parse(d, arg);
+    break;
+  case CON_HOUSEEDIT_APARTMENT:
+    houseedit_apartment_parse(d, arg);
     break;
   case CON_GET_NAME:            /* wait for input of name */
     d->idle_ticks = 0;

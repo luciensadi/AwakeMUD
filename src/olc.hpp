@@ -379,4 +379,11 @@ extern void write_index_file(const char *suffix);
 #define SHEDIT_ETTI		25
 #define SHEDIT_SHOPNAME		26
 
+#define HOUSEEDIT_COMPLEX_MAIN_MENU   0
+#define HOUSEEDIT_COMPLEX_NAME        1
+#define HOUSEEDIT_COMPLEX_LANDLORD    2
+#define HOUSEEDIT_COMPLEX_EDITORS     3
+
+#define HOUSEEDIT_APARTMENT_MAIN_MENU 0
+
 #endif

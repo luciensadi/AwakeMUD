@@ -20,6 +20,7 @@ class ApartmentComplex;
 
 extern void warn_about_apartment_deletion();
 extern void save_all_apartments_and_storage_rooms();
+extern ApartmentComplex *find_apartment_complex(const char *name, struct char_data *ch=NULL);
 
 extern std::vector<ApartmentComplex*> global_apartment_complexes;
 
@@ -29,24 +30,35 @@ class ApartmentComplex {
     friend class Apartment;
 
     // The name of the complex (Evergreen Multipliex)
-    const char *display_name;
+    const char *display_name = NULL;
 
     // The name of the directory where we store this complex's data.
     bf::path base_directory;
 
     // The vnum of the landlord
-    vnum_t landlord_vnum;
+    vnum_t landlord_vnum = -1;
 
     std::vector<Apartment*> apartments = {};
+    std::vector<idnum_t> editors = {};
 
   public:
     // Given a filename to read from, instantiate an apartment complex.
     ApartmentComplex(bf::path filename);
+    // Create an empty complex.
+    ApartmentComplex() : display_name(str_dup("Unnamed Complex")) {}
 
     // Accessors.
     const char *get_name() { return display_name; }
     vnum_t get_landlord_vnum() { return landlord_vnum; }
     std::vector<Apartment*> get_apartments() { return apartments; }
+    std::vector<idnum_t> get_editors() { return editors; }
+
+    // Mutators.
+    bool set_landlord_vnum(vnum_t vnum);
+    bool set_name(const char *name);
+
+    // Clone our data from the provided complex.
+    void clone_from(ApartmentComplex *);
 
     // Save function.
     void save();
@@ -54,6 +66,8 @@ class ApartmentComplex {
     // Utils / misc
     void display_room_list_to_character(struct char_data *ch);
     bool ch_already_rents_here(struct char_data *ch);
+    bool can_houseedit_complex(struct char_data *ch);
+    const char *list_editors();
 };
 
 /* An Apartment is composed of N ApartmentRooms, and has tracking data for the lease etc. */
@@ -148,11 +162,9 @@ class ApartmentRoom {
   public:
     ApartmentRoom(Apartment *apartment, bf::path filename);
 
-    // Getters.
+    // Accessors.
     vnum_t get_vnum() { return vnum; }
     const char *get_decoration() { return decoration; }
-
-    // Will add setters and save function if OLC is added for these.
     vnum_t get_atrium_vnum() { return apartment->get_atrium_vnum(); }
     const char *get_full_name() { return apartment->get_full_name(); }
     const char *get_name() { return name; }
@@ -161,10 +173,20 @@ class ApartmentRoom {
     bool can_enter(struct char_data *ch) { return apartment->can_enter(ch); }
     bool can_enter_by_idnum(idnum_t idnum) { return apartment->can_enter_by_idnum(idnum); }
     bool is_guest(idnum_t idnum);
-    void list_guests_to_char(struct char_data *ch) { apartment->list_guests_to_char(ch); }
+    ApartmentComplex *get_complex() { return apartment->complex; }
 
+    // Mutators.
+    void set_decoration(const char *new_desc);
+
+    // Save functions.
     void save_storage();
+    void save_info();
+    void save_decoration();
+
+    // Utility.
+    void list_guests_to_char(struct char_data *ch) { apartment->list_guests_to_char(ch); }
     void load_storage();
+
     bool delete_guest(idnum_t idnum);
     void add_guest(idnum_t idnum);
 

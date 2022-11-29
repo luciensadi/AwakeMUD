@@ -69,6 +69,7 @@
 #include "config.hpp"
 #include "ignore_system.hpp"
 #include "dblist.hpp"
+#include "newhouse.hpp"
 
 
 const unsigned perfmon::kPulsePerSecond = PASSES_PER_SEC;
@@ -2223,10 +2224,13 @@ void free_editing_structs(descriptor_data *d, int state)
     Mem->DeleteIcon(d->edit_icon);
     d->edit_icon = NULL;
   }
-  if (d->edit_pgroup) {
-    delete d->edit_pgroup;
-    d->edit_pgroup = NULL;
-  }
+
+#define DELETE_EDITING_INFO(field) { if ((field)) { delete (field); (field) = NULL; }}
+  DELETE_EDITING_INFO(d->edit_pgroup);
+  DELETE_EDITING_INFO(d->edit_complex);
+  DELETE_EDITING_INFO(d->edit_apartment);
+  DELETE_EDITING_INFO(d->edit_apartment_room);
+#undef DELETE_EDITING_INFO
 }
 
 void close_socket(struct descriptor_data *d)
@@ -2321,7 +2325,7 @@ void close_socket(struct descriptor_data *d)
     /* added to Free up temporary editing constructs */
     if (d->connected == CON_PLAYING
         || d->connected == CON_PART_CREATE
-        || (d->connected >= CON_SPELL_CREATE && d->connected <= CON_HELPEDIT && d->connected != CON_ASKNAME))
+        || (d->connected >= CON_SPELL_CREATE && d->connected <= CON_HOUSEEDIT_APARTMENT && d->connected != CON_ASKNAME))
     {
       if (d->connected == CON_VEHCUST)
         d->edit_veh = NULL;
