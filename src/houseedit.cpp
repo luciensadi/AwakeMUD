@@ -46,23 +46,35 @@ ACMD(do_houseedit) {
        - houseedit complex list: (list all complexes)
        - houseedit complex <name>: (OLC menu)
     */
-    if (is_abbrev(func, "create")) {
-      houseedit_create_complex(ch);
-      return;
-    }
-
-    if (is_abbrev(func, "delete")) {
-      FAILURE_CASE(GET_LEVEL(ch) < LVL_ADMIN, "You're not erudite enough to do that.");
-      houseedit_delete_complex(ch, func_remainder);
-      return;
-    }
-
+    // You can list even without OLC.
     if (is_abbrev(func, "list")) {
       houseedit_list_complexes(ch, func_remainder);
       return;
     }
 
-    houseedit_edit_existing_complex(ch, mode_remainder);
+    if (is_abbrev(func, "create")) {
+      FAILURE_CASE(!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC), YOU_NEED_OLC_FOR_THAT);
+      
+      houseedit_create_complex(ch);
+      return;
+    }
+
+    if (is_abbrev(func, "delete")) {
+      FAILURE_CASE(!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC), YOU_NEED_OLC_FOR_THAT);
+      FAILURE_CASE(GET_LEVEL(ch) < LVL_ADMIN, "You're not erudite enough to do that.");
+
+      houseedit_delete_complex(ch, func_remainder);
+      return;
+    }
+
+    if (is_abbrev(func, "delete")) {
+      FAILURE_CASE(!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC), YOU_NEED_OLC_FOR_THAT);
+
+      houseedit_edit_existing_complex(ch, mode_remainder);
+      return;
+    }
+
+    send_to_char("Valid modes are COMPLEX LIST / CREATE / DELETE / EDIT.\r\n", ch);
     return;
   }
 
@@ -74,22 +86,33 @@ ACMD(do_houseedit) {
        - houseedit apartment <name> addroom <room name>: (adds/overrides current room, sets current desc)
        - houseedit apartment <name> delroom: (deletes current room from apartment)
     */
-    if (is_abbrev(func, "create")) {
-      // TODO: create new apartment in named complex
+
+    if (is_abbrev(func, "list")) {
+      // TODO: list apartments in named complex
+      return;
     }
-    else if (is_abbrev(func, "delete")) {
+
+    if (is_abbrev(func, "create")) {
+      FAILURE_CASE(!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC), YOU_NEED_OLC_FOR_THAT);
+      // TODO: create new apartment in named complex
+      return;
+    }
+
+    if (is_abbrev(func, "delete")) {
+      FAILURE_CASE(!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC), YOU_NEED_OLC_FOR_THAT);
       FAILURE_CASE(GET_LEVEL(ch) < LVL_ADMIN, "You're not erudite enough to do that.");
       // TODO: delete existing apartment (cannot be leased)
+      return;
     }
-    else if (is_abbrev(func, "list")) {
-      // TODO: list apartments in named complex
-    }
-    else {
+
+    if (is_abbrev(func, "edit")) {
+      FAILURE_CASE(!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC), YOU_NEED_OLC_FOR_THAT);
       // TODO: edit named apartment (or the one you're standing in if no name given)
       // TODO: add room via `houseedit apartment <name> addroom <room name>`
       // TODO: delete room via `houseedit apartment <name> delroom`
     }
 
+    send_to_char("Valid modes are APARTMENT LIST / CREATE / DELETE / EDIT.\r\n", ch);
     return;
   }
 
