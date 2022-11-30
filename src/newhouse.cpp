@@ -41,6 +41,8 @@ const bf::path global_housing_dir = bf::system_complete("lib") / "housing";
 
 // TODO: Restore functionality to hcontrol command
 
+// TODO: Go over all the load/save functions and make sure they're trued up with current needs
+
 // TODO: Add apartmentroom saving: vnum (for delete/create); decoration (for decorate)
 // Decoration could just write a flat file with the text of the decoration and nothing else.
 
@@ -156,7 +158,7 @@ void save_all_apartments_and_storage_rooms() {
 
       // Otherwise, save all the rooms (save_storage logic will skip any that haven't been altered)
       for (auto &room : apartment->get_rooms()) {
-        log_vfprintf("Saving subroom %s...", room->get_name());
+        log_vfprintf("Saving subroom %ld...", room->get_vnum());
         room->save_storage();
       }
     }
@@ -187,6 +189,8 @@ void save_all_apartments_and_storage_rooms() {
 }
 
 /*********** ApartmentComplex ************/
+ApartmentComplex::ApartmentComplex() : display_name(str_dup("Unnamed Complex")) {}
+
 ApartmentComplex::ApartmentComplex(bf::path filename) :
   base_directory(filename)
 {
@@ -367,9 +371,9 @@ void ApartmentComplex::display_room_list_to_character(struct char_data *ch) {
     int non_garage = apartment->rooms.size() - apartment->garages;
 
     if (PRF_FLAGGED(ch, PRF_SCREENREADER)) {
-      send_to_char(ch, "%s (lifestyle %s, %d room%s, of which %d %s): %d nuyen.\r\n",
+      send_to_char(ch, "%s (lifestyle %s, %ld room%s, of which %d %s): %ld nuyen.\r\n",
                    apartment->name,
-                   "placeholder", // lifestyles[apartment->lifestyle].name,
+                   apartment->get_lifestyle_string(), // lifestyles[apartment->lifestyle].name,
                    apartment->rooms.size(),
                    apartment->rooms.size() == 1 ? "" : "s",
                    apartment->garages,
@@ -380,7 +384,7 @@ void ApartmentComplex::display_room_list_to_character(struct char_data *ch) {
                    color_toggle ? "^W" : "^w",
                    apartment->name,
                    color_toggle ? "^W" : "^w",
-                   "placeholder", // lifestyles[apartment->lifestyle].name,
+                   apartment->get_lifestyle_string(), // lifestyles[apartment->lifestyle].name,
                    non_garage,
                    apartment->garages,
                    apartment->get_rent_cost());
@@ -458,7 +462,29 @@ bool ApartmentComplex::set_name(const char *name) {
   display_name = str_dup(name);
   return TRUE;
 }
+
+const char *ApartmentComplex::list_apartments__returns_new() {
+  char result[MAX_STRING_LENGTH];
+  result[0] = '\0';
+
+  for (auto &apartment: apartments) {
+    snprintf(ENDOF(result), sizeof(result) + strlen(result), "  - %s (lifestyle %s, %ld room%s, of which %d %s): %ld nuyen.\r\n",
+             apartment->name,
+             apartment->get_lifestyle_string(), // lifestyles[apartment->lifestyle].name,
+             apartment->rooms.size(),
+             apartment->rooms.size() == 1 ? "" : "s",
+             apartment->garages,
+             apartment->garages == 1 ? "is a garage" : "are garages",
+             apartment->get_rent_cost());
+  }
+  return str_dup(result);
+}
 /*********** Apartment ************/
+
+/* Blank apartment for editing. */
+Apartment::Apartment() :
+  shortname(str_dup("unnamed")), name(str_dup("Unit Unnamed")), full_name(str_dup("Somewhere's Unit Unnamed"))
+{}
 
 /* Load this apartment entry from files. */
 Apartment::Apartment(ApartmentComplex *complex, bf::path base_directory) :
@@ -522,6 +548,44 @@ Apartment::Apartment(ApartmentComplex *complex, bf::path base_directory) :
   char tmp_buf[100];
   snprintf(tmp_buf, sizeof(tmp_buf), "%s's %s", complex->display_name, name);
   full_name = str_dup(tmp_buf);
+}
+
+#define REPLACE_STR(item) {delete [] item; item = str_dup(source->item);}
+#define REPLACE(item) {item = source->item;}
+void Apartment::clone_from(Apartment *source) {
+  REPLACE_STR(shortname);
+  REPLACE_STR(name);
+  REPLACE_STR(full_name);
+
+  REPLACE(lifestyle);
+  REPLACE(nuyen_per_month);
+  REPLACE(base_directory);
+
+  REPLACE(atrium);
+  REPLACE(key_vnum);
+
+  rooms.clear();
+  for (auto &room : source->rooms) {
+    rooms.push_back(room);
+  }
+
+  // TODO: Ensure garages is recalculated every time we change the rooms list on save
+  REPLACE(garages);
+
+  REPLACE(owned_by_player);
+  REPLACE(owned_by_pgroup);
+  REPLACE(paid_until);
+
+  guests.clear();
+  for (auto idnum : source->guests) {
+    guests.push_back(idnum);
+  }
+
+  REPLACE(complex);
+}
+
+bool Apartment::can_houseedit_apartment(struct char_data *ch) {
+  return complex->can_houseedit_complex(ch);
 }
 
 bool Apartment::owner_is_valid() {
@@ -825,7 +889,7 @@ const char *Apartment::get_lifestyle_string() {
 /********** ApartmentRoom ************/
 
 ApartmentRoom::ApartmentRoom(Apartment *apartment, bf::path filename) :
-  name(str_dup(filename.filename().string().c_str())), base_path(filename), apartment(apartment)
+  base_path(filename), apartment(apartment)
 {
   // Read from info.json.
   json base_info;
@@ -1045,7 +1109,7 @@ struct room_data *ApartmentRoom::get_world_room() {
   rnum_t rnum = real_room(vnum);
 
   if (rnum < 0) {
-    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: %s's %s has invalid vnum %ld!", get_full_name(), get_name(), vnum);
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: %s has invalid room vnum %ld!", get_full_name(), vnum);
     return NULL;
   }
 
@@ -1115,6 +1179,15 @@ void warn_about_apartment_deletion() {
 // Given a name, return the complex that starts with it, or NULL on error.
 // Error condition: More than one complex matches.
 ApartmentComplex *find_apartment_complex(const char *name, struct char_data *ch) {
+  if (!name || !*name) {
+    // Get the one they're standing in.
+    if (ch->in_room && ch->in_room->apartment) {
+      return ch->in_room->apartment->get_complex();
+    }
+    send_to_char("You must provide a complex name OR be standing in an apartment to do that.\r\n", ch);
+    return NULL;
+  }
+
   std::vector<ApartmentComplex *> found_complexes = {};
 
   for (auto &complex : global_apartment_complexes) {
@@ -1146,6 +1219,32 @@ ApartmentComplex *get_complex_headed_by_landlord(vnum_t vnum) {
       return candidate_complex;
     }
   }
+  return NULL;
+}
+
+Apartment *find_apartment(const char *full_name, struct char_data *ch) {
+  std::vector<Apartment *> found_apartments = {};
+
+  for (auto &complex : global_apartment_complexes)
+    for (auto &apartment : complex->get_apartments())
+      if (is_abbrev(full_name, apartment->get_full_name()))
+        found_apartments.push_back(apartment);
+
+  if (found_apartments.size() == 1)
+    return found_apartments.front();
+
+  if (ch) {
+    if (found_apartments.size() > 1) {
+      send_to_char(ch, "Please refine your query. The following apartments matched your full-name search '%s':\r\n", full_name);
+      for (auto &apartment : found_apartments)
+        send_to_char(ch, "  %s\r\n", apartment->get_full_name());
+      return NULL;
+    }
+
+    send_to_char(ch, "No apartments matched your full-name search '%s'. Remember to include the possessive complex name too, like [Evergreen Multiplex's Unit 3A].\r\n", full_name);
+    return NULL;
+  }
+
   return NULL;
 }
 

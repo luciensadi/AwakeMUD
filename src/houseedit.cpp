@@ -72,33 +72,35 @@ ACMD(do_houseedit) {
     return;
   }
 
-  else if (is_abbrev(mode, "apartment")) {
+  else if (is_abbrev(mode, "apartment")) {    
     // List existing apartments in the given complex.
     if (is_abbrev(func, "list")) {
-      // TODO: list apartments in named complex (or the one you're standing in)
-      // houseedit apartment list [complex]
+      houseedit_list_apartments(ch, func_remainder);
       return;
     }
 
+    // Create a new apartment in the complex you're standing in, or the named one provided
     if (is_abbrev(func, "create")) {
       FAILURE_CASE(!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC), YOU_NEED_OLC_FOR_THAT);
-      // TODO: create new apartment in named complex (or the one you're standing in)
-      // houseedit apartment create [complex]: (OLC menu)
+
+      houseedit_create_apartment(ch, func_remainder);
       return;
     }
 
+    // Delete an empty, non-leased apartment you're standing in, or one matching the full name provided.
     if (is_abbrev(func, "delete")) {
       FAILURE_CASE(!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC), YOU_NEED_OLC_FOR_THAT);
       FAILURE_CASE(GET_LEVEL(ch) < LVL_ADMIN, "You're not erudite enough to do that.");
-      // TODO: delete existing apartment in complex you're standing in (or the one you're standing in) (cannot be leased)
-      // houseedit apartment delete [name]
+
+      houseedit_delete_apartment(ch, func_remainder);
       return;
     }
 
+    // Edit the apartment you're standing in, or one matching the full name provided.
     if (is_abbrev(func, "edit")) {
       FAILURE_CASE(!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC), YOU_NEED_OLC_FOR_THAT);
       // TODO: edit named apartment in the complex you're standing in (or the one you're standing in if no name given)
-      // houseedit apartment edit [name]
+      houseedit_edit_apartment(ch, func_remainder);
       return;
     }
 
@@ -106,23 +108,7 @@ ACMD(do_houseedit) {
     return;
   }
 
-  else if (is_abbrev(mode, "subroom") || is_abbrev(mode, "room")) {
-    if (is_abbrev(func, "list")) {
-      // TODO: list rooms in the apartment you're standing in.
-      return;
-    }
-
-    if (is_abbrev(func, "setname")) {
-      FAILURE_CASE(!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC), YOU_NEED_OLC_FOR_THAT);
-      // TODO: Update name of currently-occupied subroom to new value.
-      return;
-    }
-
-    send_to_char("Valid modes are SUBROOM LIST / SETNAME.\r\n", ch);
-    return;
-  }
-
-  send_to_char(ch, "Valid modes are IMPORT, RELOAD, COMPLEX, APARTMENT, SUBROOM.\r\n");
+  send_to_char(ch, "Valid modes are IMPORT, RELOAD, COMPLEX, APARTMENT.\r\n");
   return;
 }
 

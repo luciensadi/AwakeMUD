@@ -62,6 +62,8 @@ void houseedit_list_complexes(struct char_data *ch, char *arg) {
 }
 
 void houseedit_edit_existing_complex(struct char_data *ch, char *arg) {
+  FAILURE_CASE(!ch->desc, "I don't know how you got here, but this won't work.");
+
   ApartmentComplex *complex;
 
   if (!*arg) {
@@ -212,6 +214,13 @@ void houseedit_complex_parse(struct descriptor_data *d, const char *arg) {
       }
       break;
     case HOUSEEDIT_COMPLEX_NAME:
+      for (auto &complex : global_apartment_complexes) {
+        if (complex != d->edit_complex_original && !strcmp(arg, complex->get_name())) {
+          send_to_char("That complex name is already in use. Please choose another.\r\n", CH);
+          houseedit_display_complex_edit_menu(d);
+          return;
+        }
+      }
       d->edit_complex->set_name(arg);
       houseedit_display_complex_edit_menu(d);
       break;

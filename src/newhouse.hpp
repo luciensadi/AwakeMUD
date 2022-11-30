@@ -23,6 +23,7 @@ extern const bf::path global_housing_dir;
 extern void warn_about_apartment_deletion();
 extern void save_all_apartments_and_storage_rooms();
 extern ApartmentComplex *find_apartment_complex(const char *name, struct char_data *ch=NULL);
+extern Apartment *find_apartment(const char *full_name, struct char_data *ch);
 
 extern std::vector<ApartmentComplex*> global_apartment_complexes;
 
@@ -31,6 +32,8 @@ extern SPECIAL(landlord_spec);
 /* An ApartmentComplex is composed of N Apartments, and has tracking data for landlord info. */
 class ApartmentComplex {
   private:
+    // !!! ADDING ANY VARIABLES? UPDATE CLONE_FROM() !!!
+
     friend class Apartment;
 
     // The name of the complex (Evergreen Multipliex)
@@ -48,8 +51,7 @@ class ApartmentComplex {
   public:
     // Given a filename to read from, instantiate an apartment complex.
     ApartmentComplex(bf::path filename);
-    // Create an empty complex.
-    ApartmentComplex() : display_name(str_dup("Unnamed Complex")) {}
+    ApartmentComplex();
 
     // Accessors.
     const char *get_name() { return display_name; }
@@ -72,6 +74,7 @@ class ApartmentComplex {
     void save();
 
     // Utils / misc
+    const char *list_apartments__returns_new();
     void display_room_list_to_character(struct char_data *ch);
     bool ch_already_rents_here(struct char_data *ch);
     bool can_houseedit_complex(struct char_data *ch);
@@ -82,6 +85,8 @@ class ApartmentComplex {
 /* An Apartment is composed of N ApartmentRooms, and has tracking data for the lease etc. */
 class Apartment {
   private:
+    // !!! ADDING ANY VARIABLES? UPDATE CLONE_FROM() !!!
+
     friend class ApartmentRoom;
     friend class ApartmentComplex;
 
@@ -113,6 +118,7 @@ class Apartment {
   public:
     // Given a filename to read from, instantiate an individual apartment.
     Apartment(ApartmentComplex *complex, bf::path filename);
+    Apartment();
 
     // Accessors
     const char *get_short_name() { return shortname; }
@@ -128,12 +134,16 @@ class Apartment {
     // Mutators
     void set_owner(idnum_t);
     void set_paid_until(time_t);
+    void set_complex(ApartmentComplex *new_complex) {complex = new_complex;}
 
     bool create_or_extend_lease(struct char_data *ch);
     void save_lease();
     void break_lease();
 
     bool issue_key(struct char_data *ch);
+
+    // Clone our data from the provided apartment.
+    void clone_from(Apartment *);
 
     // Utility / misc
     bool can_enter(struct char_data *ch);
@@ -147,6 +157,7 @@ class Apartment {
     void list_guests_to_char(struct char_data *ch);
     const char *list_rooms__returns_new(bool indent);
     const char *get_lifestyle_string();
+    bool can_houseedit_apartment(struct char_data *ch);
 
     // Returns new-- must delete output!
     const char *get_owner_name__returns_new();
@@ -160,9 +171,6 @@ class ApartmentRoom {
 
     // What desc will be restored when this apartment's lease is broken?
     const char *decoration = NULL;
-
-    // What is this subroom's name? (Only used for debugging)
-    const char *name = NULL;
 
     bf::path base_path;
     bf::path storage_path;
@@ -178,12 +186,12 @@ class ApartmentRoom {
     const char *get_decoration() { return decoration; }
     vnum_t get_atrium_vnum() { return apartment->get_atrium_vnum(); }
     const char *get_full_name() { return apartment->get_full_name(); }
-    const char *get_name() { return name; }
     bool has_owner() { return apartment->has_owner(); }
     bool has_owner_privs(struct char_data *ch) { return apartment->has_owner_privs(ch); }
     bool can_enter(struct char_data *ch) { return apartment->can_enter(ch); }
     bool can_enter_by_idnum(idnum_t idnum) { return apartment->can_enter_by_idnum(idnum); }
     bool is_guest(idnum_t idnum);
+    Apartment *get_apartment() { return apartment; }
     ApartmentComplex *get_complex() { return apartment->complex; }
 
     // Mutators.

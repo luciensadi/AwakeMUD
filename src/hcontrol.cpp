@@ -85,15 +85,15 @@ void hcontrol_display_house_by_name(struct char_data * ch, vnum_t house_number) 
         for (auto &room : apartment->get_rooms()) {
           rnum_t rnum = real_room(room->get_vnum());
           if (rnum < 0) {
-            send_to_char(ch, "%s^n: ERRONEOUS (invalid vnum)\r\n", room->get_name());
+            send_to_char(ch, "    n/a^n: ERRONEOUS (invalid vnum %ld)\r\n", room->get_vnum());
           } else {
             struct room_data *world_room = &world[rnum];
 
             // TODO: Fill out crap count.
             int crap_count_obj = -1, crap_count_veh = -1;
 
-            send_to_char(ch, "%s^n: %s^n (%ld) [%d items, %d vehicles]\r\n",
-                         room->get_name(),
+            send_to_char(ch, "%7ld^n: %s^n (%ld) [%d items, %d vehicles]\r\n",
+                         room->get_vnum(),
                          GET_ROOM_NAME(world_room),
                          GET_ROOM_VNUM(world_room),
                          crap_count_obj,
