@@ -3586,7 +3586,7 @@ SPECIAL(bank)
     else if (!*buf1)
       send_to_char("Who do you want to wire funds to?\r\n", ch);
     else {
-      vnum_t isfile = -1;
+      idnum_t isfile = -1;
       if ((isfile = get_player_id(buf1)) == -1) {
         send_to_char("It won't let you transfer to that account.\r\n", ch);
         return TRUE;

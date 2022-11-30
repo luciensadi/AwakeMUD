@@ -1047,7 +1047,7 @@ void do_pgroup_wire(struct char_data *ch, char *argument) {
   }
 
   struct char_data *vict = NULL;
-  long isfile = FALSE;
+  idnum_t isfile = FALSE;
   if (!(vict = get_player_vis(ch, buf1, FALSE))) {
     if ((isfile = get_player_id(buf1)) == -1) {
       send_to_char("There is no such player.\r\n", ch);

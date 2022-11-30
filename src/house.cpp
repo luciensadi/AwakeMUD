@@ -37,7 +37,6 @@ extern void handle_weapon_attachments(struct obj_data *obj);
 extern void raw_store_mail(long to, long from_id, const char *from_name, const char *message_pointer);
 extern bool player_is_dead_hardcore(long id);
 
-struct landlord *landlords = NULL;
 ACMD_CONST(do_say);
 
 extern void remove_vehicles_from_apartment(struct room_data *room);

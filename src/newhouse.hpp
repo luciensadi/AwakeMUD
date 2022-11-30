@@ -18,11 +18,15 @@ class ApartmentRoom;
 class Apartment;
 class ApartmentComplex;
 
+extern const bf::path global_housing_dir;
+
 extern void warn_about_apartment_deletion();
 extern void save_all_apartments_and_storage_rooms();
 extern ApartmentComplex *find_apartment_complex(const char *name, struct char_data *ch=NULL);
 
 extern std::vector<ApartmentComplex*> global_apartment_complexes;
+
+extern SPECIAL(landlord_spec);
 
 /* An ApartmentComplex is composed of N Apartments, and has tracking data for landlord info. */
 class ApartmentComplex {
@@ -54,8 +58,12 @@ class ApartmentComplex {
     std::vector<idnum_t> get_editors() { return editors; }
 
     // Mutators.
-    bool set_landlord_vnum(vnum_t vnum);
+    bool set_landlord_vnum(vnum_t vnum, bool perform_landlord_overlap_test);
     bool set_name(const char *name);
+    void toggle_editor(idnum_t idnum);
+    void add_editor(idnum_t idnum);
+    void remove_editor(idnum_t idnum);
+    void set_base_directory(bf::path path) { base_directory = path; }
 
     // Clone our data from the provided complex.
     void clone_from(ApartmentComplex *);
@@ -68,6 +76,7 @@ class ApartmentComplex {
     bool ch_already_rents_here(struct char_data *ch);
     bool can_houseedit_complex(struct char_data *ch);
     const char *list_editors();
+    void mark_as_deleted();
 };
 
 /* An Apartment is composed of N ApartmentRooms, and has tracking data for the lease etc. */
@@ -186,6 +195,7 @@ class ApartmentRoom {
     // Utility.
     void list_guests_to_char(struct char_data *ch) { apartment->list_guests_to_char(ch); }
     void load_storage();
+    void load_storage_from_specified_path(bf::path path);
 
     bool delete_guest(idnum_t idnum);
     void add_guest(idnum_t idnum);

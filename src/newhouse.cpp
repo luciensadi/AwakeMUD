@@ -32,25 +32,22 @@ SPECIAL(landlord_spec);
 ACMD_DECLARE(do_say);
 
 void remove_vehicles_from_apartment(struct room_data *room);
+void write_json_file(bf::path path, json *contents);
+void _json_parse_from_file(bf::path path, json &target);
 
 std::vector<ApartmentComplex*> global_apartment_complexes = {};
 
-// TODO: Restore functionality to hcontrol command
+const bf::path global_housing_dir = bf::system_complete("lib") / "housing";
 
-// TODO: can_houseedit_complex
+// TODO: Restore functionality to hcontrol command
 
 // TODO: Add apartmentroom saving: vnum (for delete/create); decoration (for decorate)
 // Decoration could just write a flat file with the text of the decoration and nothing else.
 
-// TODO: set_decoration, save_decoration
-
-// TODO: Add logic for mailing pgroup officers with apartment deletion warnings.
-
-// TODO: Mail player owner when a lease is broken. If owned by pgroup, write log.
+// TODO: Mail player owner when a lease is broken.
+// EVENTUAL TODO: Write pgroup log when a lease is broken.
 
 // TODO: The decorate command must enforce two initial spaces and ^n\r\n at end.
-
-// TODO: write houseedit command
 
 // TODO: When a pgroup has no members left, it should be auto-disabled.
 
@@ -58,6 +55,8 @@ std::vector<ApartmentComplex*> global_apartment_complexes = {};
 
 // TODO: Verify that an apartment owned by non-buildport player id X is not permanently borked when loaded on the buildport and then transferred back to main
 // TODO: same as above, but for pgroups instead
+
+// EVENTUAL TODO: Add logic for mailing pgroup officers with apartment deletion warnings.
 
 // EVENTUAL TODO: Sanity checks for things like reused vnums, etc.
 
@@ -107,31 +106,18 @@ ACMD(do_house) {
   }
 }
 
-void _json_parse_from_file(bf::path path, json &target) {
-  if (!exists(path)) {
-    log_vfprintf("FATAL ERROR: Unable to find file at path %s. Terminating.");
-    exit(1);
-  }
-
-  bf::ifstream f(path);
-  target = json::parse(f);
-  f.close();
-}
-
 void load_apartment_complexes() {
   // Iterate over the contents of the lib/housing directory.
-  bf::path housing_dir = bf::system_complete("housing");
-
-  if (!exists(housing_dir)) {
+  if (!exists(global_housing_dir)) {
     log("FATAL ERROR: Unable to find lib/housing. Terminating.");
-    log_vfprintf("Rendered path: %s", housing_dir.string().c_str());
+    log_vfprintf("Rendered path: %s", global_housing_dir.string().c_str());
     exit(1);
   }
 
   log("Loading apartment complexes:");
 
   bf::directory_iterator end_itr; // default construction yields past-the-end
-  for (bf::directory_iterator itr(housing_dir); itr != end_itr; ++itr) {
+  for (bf::directory_iterator itr(global_housing_dir); itr != end_itr; ++itr) {
     if (is_directory(itr->status())) {
       bf::path filename = itr->path();
       log_vfprintf(" - Initializing apartment complex from file %s.", filename.string().c_str());
@@ -207,7 +193,7 @@ ApartmentComplex::ApartmentComplex(bf::path filename) :
   // Load info from <filename>/info
   {
     json base_info;
-    _json_parse_from_file(base_directory / "info.json", base_info);
+    _json_parse_from_file(base_directory / "complex_info.json", base_info);
 
     display_name = str_dup(base_info["display_name"].get<std::string>().c_str());
     landlord_vnum = (vnum_t) base_info["landlord_vnum"].get<vnum_t>();
@@ -237,8 +223,98 @@ ApartmentComplex::ApartmentComplex(bf::path filename) :
   }
 }
 
+void ApartmentComplex::save() {
+  // Ensure our base directory exists.
+  if (!bf::exists(base_directory)) {
+    bf::create_directory(base_directory);
+  }
+
+  // Compose the info file.
+  json base_info;
+
+  base_info["display_name"] = std::string(display_name);
+  base_info["landlord_vnum"] = landlord_vnum;
+  base_info["editors"] = editors;
+
+  // Write it out.
+  write_json_file(base_directory / "complex_info.json", &base_info);
+}
+
+void ApartmentComplex::mark_as_deleted() {
+  char deleted_name[500];
+  snprintf(deleted_name, sizeof(deleted_name), "deleted-complex-%ld-%s", time(0), display_name);
+  bf::rename(base_directory, bf::system_complete("deleted-housing") / deleted_name);
+}
+
+void ApartmentComplex::add_editor(idnum_t idnum) {
+  // Error case.
+  if (idnum <= 0) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Received invalid editor idnum %ld to add_editor() for %s.", idnum, display_name);
+    return;
+  }
+
+  // Already there.
+  if (find(editors.begin(), editors.end(), idnum) != editors.end()) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Not adding editor idnum %ld to %s: Already an editor.", idnum, display_name);
+    return;
+  }
+
+  editors.push_back(idnum);
+}
+
+void ApartmentComplex::remove_editor(idnum_t idnum) {
+  // Error case.
+  if (idnum <= 0) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Received invalid editor idnum %ld to remove_editor() for %s.", idnum, display_name);
+    return;
+  }
+
+  auto it = find(editors.begin(), editors.end(), idnum);
+
+  // Not there.
+  if (it == editors.end()) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Can't remove editor idnum %ld from %s: Not an editor.", idnum, display_name);
+    return;
+  }
+
+  editors.erase(it);
+}
+
+void ApartmentComplex::toggle_editor(idnum_t idnum) {
+  auto it = find(editors.begin(), editors.end(), idnum);
+
+  if (it == editors.end())
+    add_editor(idnum);
+  else
+    remove_editor(idnum);
+}
+
+const char *ApartmentComplex::list_editors() {
+  static char buf[500];
+
+  strlcpy(buf, "", sizeof(buf));
+
+  bool printed_anything = FALSE;
+  for (auto editor_id : editors) {
+    const char *name = get_player_name(editor_id);
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s^c%s^n", printed_anything ? ", " : "", name);
+    delete [] name;
+    printed_anything = TRUE;
+  }
+
+  if (!printed_anything)
+    strlcpy(buf, "Nobody.", sizeof(buf));
+
+  return buf;
+}
+
 bool ApartmentComplex::can_houseedit_complex(struct char_data *ch) {
-  // TODO
+  if (GET_LEVEL(ch) >= LVL_ADMIN)
+    return TRUE;
+
+  if (find(editors.begin(), editors.end(), GET_IDNUM(ch)) != editors.end())
+    return TRUE;
+
   return TRUE;
 }
 
@@ -324,28 +400,32 @@ bool ApartmentComplex::ch_already_rents_here(struct char_data *ch) {
   return FALSE;
 }
 
-const char *ApartmentComplex::list_editors() {
-  static char buf[500];
-
-  strlcpy(buf, "", sizeof(buf));
-
-  bool printed_anything = FALSE;
-  for (auto editor_id : editors) {
-    const char *name = get_player_name(editor_id);
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s^c%s^n", printed_anything ? ", " : "", name);
-    delete [] name;
-    printed_anything = TRUE;
-  }
-
-  if (!printed_anything)
-    strlcpy(buf, "Nobody.", sizeof(buf));
-
-  return buf;
-}
-
 void ApartmentComplex::clone_from(ApartmentComplex *source) {
   delete [] display_name;
   display_name = str_dup(source->display_name);
+
+  if (source->landlord_vnum != landlord_vnum) {
+    rnum_t rnum;
+
+    // Remove the spec from the old mob.
+    if (landlord_vnum > 0 && (rnum = real_mobile(landlord_vnum)) >= 0) {
+      if (mob_index[rnum].sfunc == landlord_spec)
+        mob_index[rnum].sfunc = NULL;
+      if (mob_index[rnum].func == landlord_spec)
+        mob_index[rnum].func = mob_index[rnum].sfunc;
+    }
+
+    // Assign the spec to the new mob if it doesn't have it already.
+    if (source->landlord_vnum > 0 && (rnum = real_mobile(source->landlord_vnum)) >= 0) {
+      if (mob_index[rnum].sfunc != landlord_spec && mob_index[rnum].func != landlord_spec) {
+        if (mob_index[rnum].sfunc) {
+          log_vfprintf("SYSERR: Assigning too many specs to mob #%d. Losing one.", source->landlord_vnum);
+        }
+        mob_index[rnum].sfunc = mob_index[rnum].func;
+        mob_index[rnum].func = landlord_spec;
+      }
+    }
+  }
 
   landlord_vnum = source->landlord_vnum;
 
@@ -357,11 +437,17 @@ void ApartmentComplex::clone_from(ApartmentComplex *source) {
   }
 }
 
-bool ApartmentComplex::set_landlord_vnum(vnum_t vnum) {
+bool ApartmentComplex::set_landlord_vnum(vnum_t vnum, bool perform_landlord_overlap_test) {
   rnum_t rnum = real_mobile(vnum);
 
-  if (rnum < 0)
+  if (rnum < 0) {
     return FALSE;
+  }
+
+  // Refuse to assign landlord status to mobs that are already landlords.
+  if (perform_landlord_overlap_test && (mob_index[rnum].sfunc == landlord_spec || mob_index[rnum].func == landlord_spec)) {
+    return FALSE;
+  }
 
   landlord_vnum = vnum;
   return TRUE;
@@ -371,11 +457,6 @@ bool ApartmentComplex::set_name(const char *name) {
   delete [] display_name;
   display_name = str_dup(name);
   return TRUE;
-}
-
-void ApartmentComplex::save() {
-  // TODO: Ensure all directories exist
-  // TODO: Write out base info file
 }
 /*********** Apartment ************/
 
@@ -387,7 +468,7 @@ Apartment::Apartment(ApartmentComplex *complex, bf::path base_directory) :
   {
     log_vfprintf(" ---- Loading apartment base data for %s.", base_directory.filename().string().c_str());
     json base_info;
-    _json_parse_from_file(base_directory / "info.json", base_info);
+    _json_parse_from_file(base_directory / "apartment_info.json", base_info);
 
     shortname = str_dup(base_info["short_name"].get<std::string>().c_str());
     name = str_dup(base_info["name"].get<std::string>().c_str());
@@ -723,8 +804,9 @@ const char * Apartment::get_owner_name__returns_new() {
 ApartmentRoom::ApartmentRoom(Apartment *apartment, bf::path filename) :
   name(str_dup(filename.filename().string().c_str())), base_path(filename), apartment(apartment)
 {
+  // Read from info.json.
   json base_info;
-  _json_parse_from_file(filename / "info.json", base_info);
+  _json_parse_from_file(filename / "room_info.json", base_info);
 
   vnum = base_info["vnum"].get<vnum_t>();
 
@@ -734,7 +816,11 @@ ApartmentRoom::ApartmentRoom(Apartment *apartment, bf::path filename) :
     exit(1);
   }
 
-  decoration = str_dup(base_info["decoration"].get<std::string>().c_str());
+  // Read decoration from standalone file.
+  bf::ifstream ifs(base_path / "decoration.txt");
+  std::string content((std::istreambuf_iterator<char>(ifs)), (std::istreambuf_iterator<char>()));
+  ifs.close();
+  decoration = str_dup(content.c_str());
 
   log_vfprintf(" ----- Applying changes from %s to world...", filename.filename().string().c_str());
 
@@ -764,11 +850,17 @@ void ApartmentRoom::save_info() {
 }
 
 void ApartmentRoom::save_decoration() {
-  // TODO
+  bf::ofstream o(base_path / "decoration.txt");
+  o << decoration << std::endl;
+  o.close();
 }
 
 void ApartmentRoom::set_decoration(const char *new_desc) {
-  // TODO
+  delete [] decoration;
+
+  // TODO: Apply consistent formatting, terminate color code
+
+  decoration = str_dup(new_desc);
 }
 
 /* Purge the contents of this apartment, logging as we go. */
@@ -784,10 +876,16 @@ void ApartmentRoom::purge_contents() {
   struct room_data *room = &world[rnum];
 
 #ifndef IS_BUILDPORT
+  // Ensure the expired directory exists.
+  bf::path expired_path = base_path / "expired";
+  if (!bf::exists(expired_path)) {
+    bf::create_directory(expired_path);
+  }
+
   // Write a backup storage file to <name>/expired/storage_<ownerid>_<epoch>
-  char timestr[100];
-  snprintf(timestr, sizeof(timestr), "%ld_%ld", time(0), apartment->get_owner_id());
-  bf::path expired_storage_path = base_path / "expired" / timestr;
+  char filename[100];
+  snprintf(filename, sizeof(filename), "%ld_%ld", time(0), apartment->get_owner_id());
+  bf::path expired_storage_path = expired_path / filename;
   Storage_save(expired_storage_path.string().c_str(), room);
 #endif
 
@@ -872,9 +970,30 @@ void ApartmentRoom::save_storage() {
 }
 
 void ApartmentRoom::load_storage() {
-  struct room_data *room = &world[real_room(vnum)];
+  load_storage_from_specified_path(storage_path);
+}
 
-  House_load_storage(room, storage_path.string().c_str());
+void ApartmentRoom::load_storage_from_specified_path(bf::path path) {
+  // We assume our room exists. If it doesn't, we'll crash at this point.
+  rnum_t rnum = real_room(vnum);
+
+  if (rnum < 0) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: ApartmentRoom %s is associated with non-existent vnum %ld!", get_full_name(), vnum);
+    return;
+  }
+
+  struct room_data *room = &world[rnum];
+
+  // Blow away any existing storage.
+  while (room->contents) {
+    const char *representation = generate_new_loggable_representation(room->contents);
+    mudlog_vfprintf(NULL, LOG_PURGELOG, "Purging room contents in preparation for storage load: %s", representation);
+    extract_obj(room->contents);
+    delete [] representation;
+  }
+
+  // Perform load.
+  House_load_storage(room, path.string().c_str());
 }
 
 bool ApartmentRoom::is_guest(idnum_t idnum) {
@@ -987,8 +1106,7 @@ ApartmentComplex *find_apartment_complex(const char *name, struct char_data *ch)
   return NULL;
 }
 
-//////////////////////////// The Landlord spec. ///////////////////////////////
-class ApartmentComplex *get_complex_headed_by_landlord(vnum_t vnum) {
+ApartmentComplex *get_complex_headed_by_landlord(vnum_t vnum) {
   for (auto &candidate_complex : global_apartment_complexes) {
     if (vnum == candidate_complex->get_landlord_vnum()) {
       return candidate_complex;
@@ -996,6 +1114,25 @@ class ApartmentComplex *get_complex_headed_by_landlord(vnum_t vnum) {
   }
   return NULL;
 }
+
+void write_json_file(bf::path path, json *contents) {
+  bf::ofstream ofs(path);
+  ofs << std::setw(4) << *contents << std::endl;
+  ofs.close();
+}
+
+void _json_parse_from_file(bf::path path, json &target) {
+  if (!exists(path)) {
+    log_vfprintf("FATAL ERROR: Unable to find file at path %s. Terminating.");
+    exit(1);
+  }
+
+  bf::ifstream f(path);
+  target = json::parse(f);
+  f.close();
+}
+
+//////////////////////////// The Landlord spec. ///////////////////////////////
 
 SPECIAL(landlord_spec)
 {

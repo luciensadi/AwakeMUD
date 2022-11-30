@@ -1,0 +1,9 @@
+{
+  "short_name": "3A",
+  "name": "Unit 3A",
+  "lifestyle": 1,
+  "rent": 50000,
+  "atrium": 4321,
+  "key": 100,
+  "exit_dir": 1
+}

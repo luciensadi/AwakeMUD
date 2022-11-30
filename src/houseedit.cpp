@@ -8,8 +8,8 @@
 #include "houseedit_complex.hpp"
 #include "houseedit_apartment.hpp"
 
-void houseedit_import();
-void houseedit_reload(struct room_data *room);
+void houseedit_import(struct char_data *ch);
+void houseedit_reload(struct char_data *ch);
 
 ACMD(do_houseedit) {
   char mode[100], func[100];
@@ -22,21 +22,17 @@ ACMD(do_houseedit) {
     FAILURE_CASE(!ch->in_room || !ch->in_room->apartment, "You must be standing in an apartment for that.");
     FAILURE_CASE(str_cmp(func, "confirm"), "To blow away existing apartments and load from old files, HOUSEEDIT IMPORT CONFIRM.");
 
-    mudlog_vfprintf(ch, LOG_SYSLOG, "House import started by %s.", GET_CHAR_NAME(ch));
-    houseedit_import();
-    mudlog("House import completed.", ch, LOG_SYSLOG, TRUE);
+
+    houseedit_import(ch);
     return;
   }
 
   if (is_abbrev(mode, "reload")) {
     // Reload the storage for the subroom you're currently standing in.
     FAILURE_CASE(GET_LEVEL(ch) < LVL_EXECUTIVE, "You're not erudite enough to do that.");
-    FAILURE_CASE(!ch->in_room || !ch->in_room->apartment, "You must be standing in an apartment for that.");
     FAILURE_CASE(str_cmp(func, "confirm"), "To reload apartment storage for your current room, HOUSEEDIT RELOAD CONFIRM.");
 
-    mudlog_vfprintf(ch, LOG_SYSLOG, "House reload for %s started by %s.", ch->in_room->apartment->get_full_name(), GET_CHAR_NAME(ch));
-    houseedit_reload(ch->in_room);
-    mudlog("House reload completed.", ch, LOG_SYSLOG, TRUE);
+    houseedit_reload(ch);
     return;
   }
 
@@ -53,24 +49,24 @@ ACMD(do_houseedit) {
     }
 
     if (is_abbrev(func, "create")) {
-      FAILURE_CASE(!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC), YOU_NEED_OLC_FOR_THAT);
-      
+      FAILURE_CASE(!PLR_FLAGGED(ch, PLR_OLC) && !access_level(ch, LVL_PRESIDENT), YOU_NEED_OLC_FOR_THAT);
+
       houseedit_create_complex(ch);
       return;
     }
 
     if (is_abbrev(func, "delete")) {
-      FAILURE_CASE(!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC), YOU_NEED_OLC_FOR_THAT);
+      FAILURE_CASE(!PLR_FLAGGED(ch, PLR_OLC) && !access_level(ch, LVL_PRESIDENT), YOU_NEED_OLC_FOR_THAT);
       FAILURE_CASE(GET_LEVEL(ch) < LVL_ADMIN, "You're not erudite enough to do that.");
 
       houseedit_delete_complex(ch, func_remainder);
       return;
     }
 
-    if (is_abbrev(func, "delete")) {
-      FAILURE_CASE(!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC), YOU_NEED_OLC_FOR_THAT);
+    if (is_abbrev(func, "edit")) {
+      FAILURE_CASE(!PLR_FLAGGED(ch, PLR_OLC) && !access_level(ch, LVL_PRESIDENT), YOU_NEED_OLC_FOR_THAT);
 
-      houseedit_edit_existing_complex(ch, mode_remainder);
+      houseedit_edit_existing_complex(ch, func_remainder);
       return;
     }
 
@@ -110,6 +106,7 @@ ACMD(do_houseedit) {
       // TODO: edit named apartment (or the one you're standing in if no name given)
       // TODO: add room via `houseedit apartment <name> addroom <room name>`
       // TODO: delete room via `houseedit apartment <name> delroom`
+      return;
     }
 
     send_to_char("Valid modes are APARTMENT LIST / CREATE / DELETE / EDIT.\r\n", ch);
@@ -120,10 +117,20 @@ ACMD(do_houseedit) {
   return;
 }
 
-void houseedit_import() {
+void houseedit_import(struct char_data *ch) {
+  FAILURE_CASE(!ch->in_room || !ch->in_room->apartment, "You must be standing in an apartment for that.");
+
+  mudlog_vfprintf(ch, LOG_SYSLOG, "House import started by %s.", GET_CHAR_NAME(ch));
   // TODO
+  mudlog("House import completed.", ch, LOG_SYSLOG, TRUE);
 }
 
-void houseedit_reload(struct room_data *room) {
-  // TODO
+void houseedit_reload(struct char_data *ch) {
+  FAILURE_CASE(!ch->in_room || !ch->in_room->apartment, "You must be standing in an apartment for that.");
+
+  // TODO: Verify that file exists.
+
+  mudlog_vfprintf(ch, LOG_SYSLOG, "House reload for %s started by %s.", ch->in_room->apartment->get_full_name(), GET_CHAR_NAME(ch));
+  // TODO: Read from file via load_storage_from_specified_path().
+  mudlog("House reload completed.", ch, LOG_SYSLOG, TRUE);
 }

@@ -1902,7 +1902,7 @@ bool does_player_exist(long id)
   return TRUE;
 }
 
-vnum_t get_player_id(char *name)
+idnum_t get_player_id(const char *name)
 {
   if (!name || !*name || !str_cmp(name, CHARACTER_DELETED_NAME_FOR_SQL))
     return -1;

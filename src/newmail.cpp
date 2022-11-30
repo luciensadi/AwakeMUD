@@ -215,7 +215,7 @@ SPECIAL(postmaster)
 }
 
 void postmaster_send_mail(struct char_data * ch, struct char_data *mailman, int cmd, char *arg) {
-  long recipient;
+  idnum_t recipient;
   char buf[256];
 
   /* Require that the user be of the right level to use the mail system. */
