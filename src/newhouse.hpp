@@ -96,7 +96,6 @@ class Apartment {
     // Location and world data for the primary / entrance room.
     vnum_t atrium = NOWHERE;
     vnum_t key_vnum = NOTHING;
-    dir_t exit_dir = NORTH;
 
     // Info about rooms this apartment has. First one is the entrance and attaches to atrium.
     std::vector<ApartmentRoom*> rooms = {};
@@ -116,6 +115,7 @@ class Apartment {
     Apartment(ApartmentComplex *complex, bf::path filename);
 
     // Accessors
+    const char *get_short_name() { return shortname; }
     const char *get_name() { return name; }
     const char *get_full_name() { return full_name; }
     vnum_t get_key_vnum() { return key_vnum; }
@@ -145,6 +145,8 @@ class Apartment {
     Playergroup *get_owner_pgroup() { return owned_by_pgroup; }
     bool owner_is_valid();
     void list_guests_to_char(struct char_data *ch);
+    const char *list_rooms__returns_new(bool indent);
+    const char *get_lifestyle_string();
 
     // Returns new-- must delete output!
     const char *get_owner_name__returns_new();
@@ -199,6 +201,8 @@ class ApartmentRoom {
 
     bool delete_guest(idnum_t idnum);
     void add_guest(idnum_t idnum);
+
+    struct room_data *get_world_room();
 
     // Restore the apartment's default description.
     void purge_contents();

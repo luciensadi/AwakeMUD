@@ -37,17 +37,13 @@ ACMD(do_houseedit) {
   }
 
   if (is_abbrev(mode, "complex")) {
-    /* - houseedit complex create: (OLC menu, specify name, shortname, and landlord vnum)
-       - houseedit complex delete <name> (deletes a complex, but only if it has no apartments)
-       - houseedit complex list: (list all complexes)
-       - houseedit complex <name>: (OLC menu)
-    */
-    // You can list even without OLC.
+    // List the complexes in game.
     if (is_abbrev(func, "list")) {
       houseedit_list_complexes(ch, func_remainder);
       return;
     }
 
+    // Create a new complex.
     if (is_abbrev(func, "create")) {
       FAILURE_CASE(!PLR_FLAGGED(ch, PLR_OLC) && !access_level(ch, LVL_PRESIDENT), YOU_NEED_OLC_FOR_THAT);
 
@@ -55,6 +51,7 @@ ACMD(do_houseedit) {
       return;
     }
 
+    // Delete an existing empty complex.
     if (is_abbrev(func, "delete")) {
       FAILURE_CASE(!PLR_FLAGGED(ch, PLR_OLC) && !access_level(ch, LVL_PRESIDENT), YOU_NEED_OLC_FOR_THAT);
       FAILURE_CASE(GET_LEVEL(ch) < LVL_ADMIN, "You're not erudite enough to do that.");
@@ -63,6 +60,7 @@ ACMD(do_houseedit) {
       return;
     }
 
+    // Edit an existing complex.
     if (is_abbrev(func, "edit")) {
       FAILURE_CASE(!PLR_FLAGGED(ch, PLR_OLC) && !access_level(ch, LVL_PRESIDENT), YOU_NEED_OLC_FOR_THAT);
 
@@ -75,37 +73,32 @@ ACMD(do_houseedit) {
   }
 
   else if (is_abbrev(mode, "apartment")) {
-    /* - houseedit apartment create <complex>: (OLC menu)
-       - houseedit apartment list <complex>
-       - houseedit apartment delete <name> (deletes apartment, but only if not leased)
-       - houseedit apartment <name>: (OLC menu)
-       - houseedit apartment <name> addroom <room name>: (adds/overrides current room, sets current desc)
-       - houseedit apartment <name> delroom: (deletes current room from apartment)
-    */
-
+    // List existing apartments in the given complex.
     if (is_abbrev(func, "list")) {
-      // TODO: list apartments in named complex
+      // TODO: list apartments in named complex (or the one you're standing in)
+      // houseedit apartment list [complex]
       return;
     }
 
     if (is_abbrev(func, "create")) {
       FAILURE_CASE(!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC), YOU_NEED_OLC_FOR_THAT);
-      // TODO: create new apartment in named complex
+      // TODO: create new apartment in named complex (or the one you're standing in)
+      // houseedit apartment create [complex]: (OLC menu)
       return;
     }
 
     if (is_abbrev(func, "delete")) {
       FAILURE_CASE(!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC), YOU_NEED_OLC_FOR_THAT);
       FAILURE_CASE(GET_LEVEL(ch) < LVL_ADMIN, "You're not erudite enough to do that.");
-      // TODO: delete existing apartment (cannot be leased)
+      // TODO: delete existing apartment in complex you're standing in (or the one you're standing in) (cannot be leased)
+      // houseedit apartment delete [name]
       return;
     }
 
     if (is_abbrev(func, "edit")) {
       FAILURE_CASE(!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC), YOU_NEED_OLC_FOR_THAT);
-      // TODO: edit named apartment (or the one you're standing in if no name given)
-      // TODO: add room via `houseedit apartment <name> addroom <room name>`
-      // TODO: delete room via `houseedit apartment <name> delroom`
+      // TODO: edit named apartment in the complex you're standing in (or the one you're standing in if no name given)
+      // houseedit apartment edit [name]
       return;
     }
 
@@ -113,7 +106,23 @@ ACMD(do_houseedit) {
     return;
   }
 
-  send_to_char(ch, "Valid modes are IMPORT, RELOAD, COMPLEX, APARTMENT.\r\n");
+  else if (is_abbrev(mode, "subroom") || is_abbrev(mode, "room")) {
+    if (is_abbrev(func, "list")) {
+      // TODO: list rooms in the apartment you're standing in.
+      return;
+    }
+
+    if (is_abbrev(func, "setname")) {
+      FAILURE_CASE(!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC), YOU_NEED_OLC_FOR_THAT);
+      // TODO: Update name of currently-occupied subroom to new value.
+      return;
+    }
+
+    send_to_char("Valid modes are SUBROOM LIST / SETNAME.\r\n", ch);
+    return;
+  }
+
+  send_to_char(ch, "Valid modes are IMPORT, RELOAD, COMPLEX, APARTMENT, SUBROOM.\r\n");
   return;
 }
 

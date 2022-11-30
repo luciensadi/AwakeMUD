@@ -477,8 +477,6 @@ Apartment::Apartment(ApartmentComplex *complex, bf::path base_directory) :
 
     atrium = base_info["atrium"].get<vnum_t>();
     key_vnum = base_info["key"].get<vnum_t>();
-
-    exit_dir = base_info["exit_dir"].get<dir_t>();
   }
 
   // Load lease info from <name>/lease.
@@ -799,6 +797,31 @@ const char * Apartment::get_owner_name__returns_new() {
   }
 }
 
+// Returns new-- must delete output!
+const char *Apartment::list_rooms__returns_new(bool indent) {
+  char result[MAX_STRING_LENGTH];
+  result[0] = '\0';
+  struct room_data *world_room;
+
+  bool already_printed = FALSE;
+  for (auto &room: rooms) {
+    if (!(world_room = room->get_world_room()))
+      break;
+
+    snprintf(ENDOF(result), sizeof(result) + strlen(result), "%s%s^n (%ld)\r\n",
+             indent ? "   - " : (already_printed ? ", " : ""),
+             GET_ROOM_NAME(world_room),
+             GET_ROOM_VNUM(world_room));
+
+    already_printed = TRUE;
+  }
+  return str_dup(result);
+}
+
+const char *Apartment::get_lifestyle_string() {
+  return "n/a";
+}
+
 /********** ApartmentRoom ************/
 
 ApartmentRoom::ApartmentRoom(Apartment *apartment, bf::path filename) :
@@ -1018,6 +1041,17 @@ void ApartmentRoom::add_guest(idnum_t idnum) {
   }
 }
 
+struct room_data *ApartmentRoom::get_world_room() {
+  rnum_t rnum = real_room(vnum);
+
+  if (rnum < 0) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: %s's %s has invalid vnum %ld!", get_full_name(), get_name(), vnum);
+    return NULL;
+  }
+
+  return &world[rnum];
+}
+
 ///////////////////////// Utility functions ////////////////////////////////
 
 // Given a room, move all vehicles from it to the Seattle garage, logging as we go.
@@ -1137,8 +1171,8 @@ void _json_parse_from_file(bf::path path, json &target) {
 SPECIAL(landlord_spec)
 {
   class ApartmentComplex *complex;
-
   struct char_data *recep = (struct char_data *) me;
+  char say_string[500];
 
   if (!(CMD_IS("list") || CMD_IS("retrieve") || CMD_IS("lease")
         || CMD_IS("leave") || CMD_IS("break") || CMD_IS("pay") || CMD_IS("status")))
@@ -1169,9 +1203,10 @@ SPECIAL(landlord_spec)
     }
 
     for (auto &apartment : complex->get_apartments()) {
-      if (is_abbrev(arg, apartment->get_name())) {
+      if (is_abbrev(arg, apartment->get_name()) || is_abbrev(arg, apartment->get_short_name())) {
         if (!apartment->has_owner_privs(ch)) {
-          mob_say(recep, "I would get fired if I did that.");
+          snprintf(say_string, sizeof(say_string), "You're not the owner of %s.", apartment->get_name());
+          mob_say(recep, say_string);
         } else {
           mob_say(recep, "Here you go...");
           apartment->issue_key(ch);
@@ -1192,9 +1227,10 @@ SPECIAL(landlord_spec)
     }
 
     for (auto &apartment : complex->get_apartments()) {
-      if (is_abbrev(arg, apartment->get_name())) {
+      if (is_abbrev(arg, apartment->get_name()) || is_abbrev(arg, apartment->get_short_name())) {
         if (apartment->has_owner()) {
-          mob_say(recep, "Sorry, I'm afraid that room is already taken.");
+          snprintf(say_string, sizeof(say_string), "Sorry, I'm afraid room %s is already taken.", apartment->get_name());
+          mob_say(recep, say_string);
         } else if (complex->ch_already_rents_here(ch)) {
           mob_say(recep, "Sorry, we only allow people to lease one room at a time here.");
         } else {
@@ -1218,20 +1254,13 @@ SPECIAL(landlord_spec)
     }
 
     for (auto &apartment : complex->get_apartments()) {
-      if (is_abbrev(arg, apartment->get_name())) {
+      if (is_abbrev(arg, apartment->get_name()) || is_abbrev(arg, apartment->get_short_name())) {
         if (!apartment->has_owner_privs(ch)) {
-          mob_say(recep, "I would get fired if I did that.");
+          snprintf(say_string, sizeof(say_string), "I would get fired if I let you break the lease on %s.", apartment->get_name());
+          mob_say(recep, say_string);
         } else {
           apartment->break_lease();
           mob_say(recep, "I hope you enjoyed your time here.");
-
-          assert(!apartment->has_owner_privs(ch));
-
-          for (auto &apartment_v2 : complex->get_apartments()) {
-            if (is_abbrev(arg, apartment_v2->get_name())) {
-              assert(!apartment_v2->has_owner_privs(ch));
-            }
-          }
         }
         return TRUE;
       }
@@ -1248,9 +1277,10 @@ SPECIAL(landlord_spec)
     }
 
     for (auto &apartment : complex->get_apartments()) {
-      if (is_abbrev(arg, apartment->get_name())) {
+      if (is_abbrev(arg, apartment->get_name()) || is_abbrev(arg, apartment->get_short_name())) {
         if (!apartment->has_owner_privs(ch)) {
-          mob_say(recep, "You aren't an owner of that apartment.");
+          snprintf(say_string, sizeof(say_string), "You aren't the owner of %s.", apartment->get_name());
+          mob_say(recep, say_string);
         } else {
           apartment->create_or_extend_lease(ch);
           mob_say(recep, "You are paid up for the next period.");
@@ -1270,16 +1300,19 @@ SPECIAL(landlord_spec)
     }
 
     for (auto &apartment : complex->get_apartments()) {
-      if (is_abbrev(arg, apartment->get_name())) {
+      if (is_abbrev(arg, apartment->get_name()) || is_abbrev(arg, apartment->get_short_name())) {
         if (!apartment->has_owner()) {
-          mob_say(recep, "That room is currently available for lease.");
+          snprintf(say_string, sizeof(say_string), "%s is currently available for lease.", CAP(apartment->get_name()));
+          mob_say(recep, say_string);
         } else if (!apartment->has_owner_privs(ch)) {
-          mob_say(recep, "I'm afraid I can't release that information.");
+          snprintf(say_string, sizeof(say_string), "%s has been leased.", CAP(apartment->get_name()));
+          mob_say(recep, say_string);
         } else {
           if (apartment->get_paid_until() - time(0) < 0) {
-            mob_say(recep, "Your rent has expired on that apartment.");
+            snprintf(say_string, sizeof(say_string), "Your rent has expired on %s.", apartment->get_name());
+            mob_say(recep, say_string);
           } else {
-            snprintf(buf2, sizeof(buf2), "You are paid for another %d days.", (int)((apartment->get_paid_until() - time(0)) / 86400));
+            snprintf(buf2, sizeof(buf2), "You are paid on %s for another %d days.", apartment->get_name(), (int)((apartment->get_paid_until() - time(0)) / 86400));
             mob_say(recep, buf2);
             strlcpy(buf2, "Note: Those are real-world days.", sizeof(buf2));
             do_say(recep, buf2, 0, SCMD_OSAY);
