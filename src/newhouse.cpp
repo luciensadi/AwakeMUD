@@ -43,6 +43,9 @@ const bf::path global_housing_dir = bf::system_complete("lib") / "housing";
 
 // TODO: Go over all the load/save functions and make sure they're trued up with current needs
 
+// TODO: Instead of moving complexes out of the housing dir, just prefix them with the deletion string,
+// and tune the loading function to not pick up things starting with deleted-.*
+
 // TODO: Add apartmentroom saving: vnum (for delete/create); decoration (for decorate)
 // Decoration could just write a flat file with the text of the decoration and nothing else.
 
@@ -54,6 +57,7 @@ const bf::path global_housing_dir = bf::system_complete("lib") / "housing";
 // TODO: When a pgroup has no members left, it should be auto-disabled.
 
 // TODO: if IS_BUILDPORT, find_pgroup must always return a group instance with the requested idnum, even if it doesn't exist
+// ... why though? what was the logic behind this constraint?
 
 // TODO: Verify that an apartment owned by non-buildport player id X is not permanently borked when loaded on the buildport and then transferred back to main
 // TODO: same as above, but for pgroups instead
