@@ -57,7 +57,7 @@ const bf::path global_housing_dir = bf::system_complete("lib") / "housing";
 // Decoration could just write a flat file with the text of the decoration and nothing else.
 
 // TODO: Mail player owner when a lease is broken.
-// EVENTUAL TODO: Write pgroup log when a lease is broken.
+// EVENTUALTODO: Write pgroup log when a lease is broken.
 
 // TODO: The decorate command must enforce two initial spaces and ^n\r\n at end.
 
@@ -69,11 +69,11 @@ const bf::path global_housing_dir = bf::system_complete("lib") / "housing";
 // TODO: Verify that an apartment owned by non-buildport player id X is not permanently borked when loaded on the buildport and then transferred back to main
 // TODO: same as above, but for pgroups instead
 
-// EVENTUAL TODO: Add logic for mailing pgroup officers with apartment deletion warnings.
+// EVENTUALTODO: Add logic for mailing pgroup officers with apartment deletion warnings.
 
-// EVENTUAL TODO: Sanity checks for things like reused vnums, etc.
+// EVENTUALTODO: Sanity checks for things like reused vnums, etc.
 
-// EVENTUAL TODO: When purging contents and encoutering belongings, move them somewhere safe.
+// EVENTUALTODO: When purging contents and encoutering belongings, move them somewhere safe.
 
 ACMD(do_decorate) {
   extern void write_world_to_disk(int vnum);
@@ -908,6 +908,39 @@ const char *Apartment::get_lifestyle_string() {
 void Apartment::mark_as_deleted() {
   // TODO: Write deletion record.
   // .erase(find(global_apartment_complexes.begin(), global_apartment_complexes.end(), complex));
+}
+
+void Apartment::set_complex(ApartmentComplex *new_complex) {
+  // Remove us from our existing complex.
+  complex->apartments.erase(find(complex->apartments.begin(), complex->apartments.end(), this));
+
+  // Add us to the new complex.
+  complex = new_complex;
+  complex->apartments.push_back(this);
+}
+
+bool Apartment::set_rent(long amount, struct char_data *ch) {
+  // Rent value must be 1 or greater.
+  if (amount <= 0) {
+    if (ch)
+      send_to_char("The Sprawl isn't that kind-- rent values must be greater than 0.\r\n", ch);
+    return FALSE;
+  }
+
+  // TODO: Add lifestyle constraints (must be within range for lifestyle)
+
+  nuyen_per_month = amount;
+  return TRUE;
+}
+
+bool Apartment::set_lifestyle(int new_lifestyle, struct char_data *ch) {
+  // TODO: Must be a valid lifestyle
+
+  // TODO: Enforce rent being within range for lifestyle
+
+  lifestyle = new_lifestyle;
+
+  return TRUE;
 }
 
 /********** ApartmentRoom ************/

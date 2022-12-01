@@ -118,6 +118,7 @@ void houseedit_display_apartment_edit_menu(struct descriptor_data *d) {
 
 void houseedit_apartment_parse(struct descriptor_data *d, const char *arg) {
   long parsed_long = atol(arg);
+  long parsed_int = atoi(arg);
 
   switch (d->edit_mode) {
     case HOUSEEDIT_APARTMENT_MAIN_MENU:
@@ -135,8 +136,10 @@ void houseedit_apartment_parse(struct descriptor_data *d, const char *arg) {
           d->edit_mode = HOUSEEDIT_APARTMENT_ATRIUM;
           break;
         case '4': // lifestyle
-          // TODO - present list of lifestyles, select from among them
-          d->edit_mode = HOUSEEDIT_APARTMENT_LIFESTYLE;
+          // EVENTUALTODO - present list of lifestyles, select from among them
+          // d->edit_mode = HOUSEEDIT_APARTMENT_LIFESTYLE;
+          send_to_char("Lifestyles not yet implemented.\r\n", CH);
+          houseedit_display_apartment_edit_menu(d);
           break;
         case '5': // rent
           send_to_char("Enter the new rent amount per month: ", CH);
@@ -147,11 +150,16 @@ void houseedit_apartment_parse(struct descriptor_data *d, const char *arg) {
           d->edit_mode = HOUSEEDIT_APARTMENT_KEY;
           break;
         case '7': // complex
-          // TODO
+          send_to_char("Enter the name of the complex you'd like this apartment to be part of: ", CH);
           d->edit_mode = HOUSEEDIT_APARTMENT_COMPLEX;
           break;
         case '8': // rooms
-          // TODO - present list of rooms, give option to add/delete by vnum
+          {
+            const char *rooms = APT->list_rooms__returns_new(TRUE);
+            send_to_char(CH, "%s\r\n", rooms);
+            delete [] rooms;
+            send_to_char("Enter a vnum to add or remove: ", CH);
+          }
           d->edit_mode = HOUSEEDIT_APARTMENT_ROOMS;
           break;
         case 'q': // quit and save
@@ -216,7 +224,7 @@ void houseedit_apartment_parse(struct descriptor_data *d, const char *arg) {
         return;
       }
 
-      d->edit_complex->set_name(arg);
+      APT->set_name(arg);
       houseedit_display_apartment_edit_menu(d);
       break;
     case HOUSEEDIT_APARTMENT_ATRIUM:
@@ -230,12 +238,14 @@ void houseedit_apartment_parse(struct descriptor_data *d, const char *arg) {
           return;
         }
 
-        d->edit_apartment->set_atrium(vnum);
-        houseedit_display_apartment_edit_menu(d);
+        APT->set_atrium(vnum);
       }
+      houseedit_display_apartment_edit_menu(d);
       break;
     case HOUSEEDIT_APARTMENT_LIFESTYLE:
-      // TODO
+      // We push all the error checking into the lifestyle setting function.
+      APT->set_lifestyle(parsed_int, CH);
+      houseedit_display_apartment_edit_menu(d);
       break;
     case HOUSEEDIT_APARTMENT_RENT:
       // Don't allow changes to leased apartment rents.
@@ -245,14 +255,9 @@ void houseedit_apartment_parse(struct descriptor_data *d, const char *arg) {
         return;
       }
 
-      // Rent value must be 1 or greater.
-      if (parsed_long <= 0) {
-        send_to_char("The Sprawl isn't that kind-- rent values must be greater than 0.\r\n", CH);
-        houseedit_display_apartment_edit_menu(d);
-        return;
-      }
-
-      // TODO: Constrain to lifestyle's accepted range.
+      // We push all the remaining error checking into the rent setting function.
+      APT->set_rent(parsed_long, CH);
+      houseedit_display_apartment_edit_menu(d);
       break;
     case HOUSEEDIT_APARTMENT_KEY:
       {
@@ -266,14 +271,33 @@ void houseedit_apartment_parse(struct descriptor_data *d, const char *arg) {
         }
 
         d->edit_apartment->set_key_vnum(vnum);
-        houseedit_display_apartment_edit_menu(d);
       }
+      houseedit_display_apartment_edit_menu(d);
       break;
     case HOUSEEDIT_APARTMENT_COMPLEX:
-      // TODO
+      {
+        ApartmentComplex *complex = find_apartment_complex(arg, CH);
+
+        if (complex) {
+          // Require edit access to that complex.
+          if (!complex->can_houseedit_complex(CH)) {
+            send_to_char(CH, "Sorry, you don't have access to edit %s.\r\n", complex->get_name());
+          } else {
+            // Transfer it. Handling happens in apartment transfer func.
+            APT->set_complex(complex);
+          }
+        }
+      }
+      houseedit_display_apartment_edit_menu(d);
       break;
     case HOUSEEDIT_APARTMENT_ROOMS:
-      // TODO
+      // TODO: Enforce can_edit_zone for the room vnum
+      // TODO: Adding
+        // TODO: Enforce that room is not part of an apt already
+        // TODO: Add apartmentroom that points to room, then add it
+      // TODO: Removing
+        // TODO: Enforce that room is already part of this apt
+        // TODO: Remove room and delete apartmentroom for it
       break;
     default:
       mudlog_vfprintf(CH, LOG_SYSLOG, "SYSERR: Unknown edit state %d in houseedit_apartment_parse()! Restoring to main menu.", d->edit_mode);

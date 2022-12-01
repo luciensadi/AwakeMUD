@@ -136,10 +136,12 @@ class Apartment {
     // Mutators
     void set_owner(idnum_t);
     void set_paid_until(time_t);
-    void set_complex(ApartmentComplex *new_complex) {complex = new_complex;}
+    void set_complex(ApartmentComplex *new_complex);
     void set_name(const char *newname) {delete [] name; name = str_dup(newname);}
     void set_atrium(vnum_t vnum) {atrium = vnum;}
     void set_key_vnum(vnum_t vnum) {key_vnum = vnum;}
+    bool set_rent(long amount, struct char_data *ch=NULL);
+    bool set_lifestyle(int new_lifestyle, struct char_data *ch=NULL);
 
     bool create_or_extend_lease(struct char_data *ch);
     void save_lease();
