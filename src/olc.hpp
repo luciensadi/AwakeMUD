@@ -391,6 +391,7 @@ extern void write_index_file(const char *suffix);
 #define HOUSEEDIT_APARTMENT_LIFESTYLE 4
 #define HOUSEEDIT_APARTMENT_RENT      5
 #define HOUSEEDIT_APARTMENT_KEY       6
-#define HOUSEEDIT_APARTMENT_ROOMS     7
+#define HOUSEEDIT_APARTMENT_COMPLEX   7
+#define HOUSEEDIT_APARTMENT_ROOMS     8
 
 #endif

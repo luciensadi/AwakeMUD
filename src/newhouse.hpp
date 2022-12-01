@@ -119,6 +119,7 @@ class Apartment {
     // Given a filename to read from, instantiate an individual apartment.
     Apartment(ApartmentComplex *complex, bf::path filename);
     Apartment();
+    ~Apartment();
 
     // Accessors
     const char *get_short_name() { return shortname; }
@@ -130,11 +131,15 @@ class Apartment {
     time_t get_paid_until() { return paid_until; }
     std::vector<ApartmentRoom*> get_rooms() { return rooms; }
     std::vector<long> get_guests() { return guests; }
+    ApartmentComplex *get_complex() { return complex; }
 
     // Mutators
     void set_owner(idnum_t);
     void set_paid_until(time_t);
     void set_complex(ApartmentComplex *new_complex) {complex = new_complex;}
+    void set_name(const char *newname) {delete [] name; name = str_dup(newname);}
+    void set_atrium(vnum_t vnum) {atrium = vnum;}
+    void set_key_vnum(vnum_t vnum) {key_vnum = vnum;}
 
     bool create_or_extend_lease(struct char_data *ch);
     void save_lease();
@@ -158,6 +163,7 @@ class Apartment {
     const char *list_rooms__returns_new(bool indent);
     const char *get_lifestyle_string();
     bool can_houseedit_apartment(struct char_data *ch);
+    void mark_as_deleted();
 
     // Returns new-- must delete output!
     const char *get_owner_name__returns_new();

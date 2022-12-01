@@ -2131,11 +2131,11 @@ enum {
 
 /* END SUBCOMMANDS SECTION */
 
-#define FREE    0
-#define SIMPLE    1
-#define COMPLEX    2
-#define EXCLUSIVE  3
-#define NOCOMBAT  4
+#define ACTION_FREE       0
+#define ACTION_SIMPLE     1
+#define ACTION_COMPLEX    2
+#define ACTION_EXCLUSIVE  3
+#define ACTION_NOCOMBAT   4
 
 /* modes of connectedness: used by descriptor_data.state */
 

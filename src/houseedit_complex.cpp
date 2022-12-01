@@ -8,6 +8,8 @@
 #include "newhouse.hpp"
 #include "houseedit_complex.hpp"
 
+#define COMPLEX d->edit_complex
+
 void houseedit_create_complex(struct char_data *ch) {
   FAILURE_CASE(!ch->desc, "I don't know how you got here, but this won't work.");
 
@@ -91,7 +93,7 @@ void houseedit_display_complex_edit_menu(struct descriptor_data *d) {
   rnum_t landlord_rnum;
 
   // Fetch landlord name if available.
-  if ((landlord_rnum = real_mobile(d->edit_complex->get_landlord_vnum())) < 0) {
+  if ((landlord_rnum = real_mobile(COMPLEX->get_landlord_vnum())) < 0) {
     strlcpy(landlord_name, "(invalid)", sizeof(landlord_name));
   } else {
     strlcpy(landlord_name, GET_CHAR_NAME(&mob_proto[landlord_rnum]), sizeof(landlord_name));
@@ -99,9 +101,9 @@ void houseedit_display_complex_edit_menu(struct descriptor_data *d) {
 
   // Display info.
   send_to_char("^WApartment Complex Editing^n\r\n", CH);
-  send_to_char(CH, "1) Name:     ^c%s^n\r\n", d->edit_complex->get_name());
-  send_to_char(CH, "2) Landlord: ^c%s^n (^c%ld^n)\r\n", landlord_name, d->edit_complex->get_landlord_vnum());
-  send_to_char(CH, "3) Editors:  ^c%s^n\r\n", d->edit_complex->list_editors());
+  send_to_char(CH, "1) Name:     ^c%s^n\r\n", COMPLEX->get_name());
+  send_to_char(CH, "2) Landlord: ^c%s^n (^c%ld^n)\r\n", landlord_name, COMPLEX->get_landlord_vnum());
+  send_to_char(CH, "3) Editors:  ^c%s^n\r\n", COMPLEX->list_editors());
   send_to_char("\r\n", CH);
   send_to_char("q) Quit and Save\r\n", CH);
   send_to_char("x) Quit Without Saving\r\n", CH);
@@ -127,7 +129,7 @@ void houseedit_complex_parse(struct descriptor_data *d, const char *arg) {
         d->edit_mode = HOUSEEDIT_COMPLEX_LANDLORD;
       }
       else if (*arg == '3') { // Editors
-        send_to_char(CH, "The current editor set is %s. Enter a name to add/remove, or 0 to quit: ", d->edit_complex->list_editors());
+        send_to_char(CH, "The current editor set is %s. Enter a name to add/remove, or 0 to quit: ", COMPLEX->list_editors());
         d->edit_mode = HOUSEEDIT_COMPLEX_EDITORS;
       }
       else if (*arg == 'q' || *arg == 'x') {
@@ -142,12 +144,12 @@ void houseedit_complex_parse(struct descriptor_data *d, const char *arg) {
                             d->edit_complex_original->get_name(),
                             d->edit_complex_original->get_landlord_vnum(),
                             d->edit_complex_original->list_editors(),
-                            d->edit_complex->get_name(),
-                            d->edit_complex->get_landlord_vnum(),
-                            d->edit_complex->list_editors());
+                            COMPLEX->get_name(),
+                            COMPLEX->get_landlord_vnum(),
+                            COMPLEX->list_editors());
 
             // Landlord spec is cleared/set here.
-            d->edit_complex_original->clone_from(d->edit_complex);
+            d->edit_complex_original->clone_from(COMPLEX);
 
             // Write to disk.
             d->edit_complex_original->save();
@@ -156,7 +158,7 @@ void houseedit_complex_parse(struct descriptor_data *d, const char *arg) {
           else {
             // Compose our new base path.
             {
-              const char *name_without_color = get_string_after_color_code_removal(d->edit_complex->get_name(), CH);
+              const char *name_without_color = get_string_after_color_code_removal(COMPLEX->get_name(), CH);
               if (!name_without_color || !*name_without_color) {
                 send_to_char("Sorry, you've specified an invalid complex name. You can't save without one.\r\n", CH);
                 houseedit_display_complex_edit_menu(d);
@@ -171,41 +173,41 @@ void houseedit_complex_parse(struct descriptor_data *d, const char *arg) {
                 return;
               }
 
-              d->edit_complex->set_base_directory(new_save_dir);
+              COMPLEX->set_base_directory(new_save_dir);
             }
 
             // Log.
             mudlog_vfprintf(CH, LOG_WIZLOG, "%s wrote new complex %s (%ld).\r\n",
                             GET_CHAR_NAME(CH),
-                            d->edit_complex->get_name(),
-                            d->edit_complex->get_landlord_vnum());
+                            COMPLEX->get_name(),
+                            COMPLEX->get_landlord_vnum());
 
             // Add to global list.
-            global_apartment_complexes.push_back(d->edit_complex);
+            global_apartment_complexes.push_back(COMPLEX);
 
             // Enact our landlord spec changes.
-            rnum_t rnum = real_mobile(d->edit_complex->get_landlord_vnum());
+            rnum_t rnum = real_mobile(COMPLEX->get_landlord_vnum());
             if (rnum >= 0) {
               if (mob_index[rnum].sfunc) {
-                log_vfprintf("SYSERR: Assigning too many specs to mob #%d. Losing one.", d->edit_complex->get_landlord_vnum());
+                log_vfprintf("SYSERR: Assigning too many specs to mob #%d. Losing one.", COMPLEX->get_landlord_vnum());
               }
               mob_index[rnum].sfunc = mob_index[rnum].func;
               mob_index[rnum].func = landlord_spec;
             }
 
             // Write to disk.
-            d->edit_complex->save();
+            COMPLEX->save();
 
             // Null edit_complex so it's not deleted later.
-            d->edit_complex = NULL;
+            COMPLEX = NULL;
           }
           // Fall through.
         } else {
           send_to_char("OK, discarding changes.\r\n", CH);
         }
 
-        delete d->edit_complex;
-        d->edit_complex = NULL;
+        delete COMPLEX;
+        COMPLEX = NULL;
         STATE(d) = CON_PLAYING;
       }
       else {
@@ -214,6 +216,13 @@ void houseedit_complex_parse(struct descriptor_data *d, const char *arg) {
       }
       break;
     case HOUSEEDIT_COMPLEX_NAME:
+      // No color allowed.
+      if (strcmp(arg, get_string_after_color_code_removal(arg, NULL))) {
+        send_to_char("Complex names can't contain color codes. Try again: ", CH);
+        return;
+      }
+
+      // Enforce uniqueness.
       for (auto &complex : global_apartment_complexes) {
         if (complex != d->edit_complex_original && !strcmp(arg, complex->get_name())) {
           send_to_char("That complex name is already in use. Please choose another.\r\n", CH);
@@ -221,7 +230,8 @@ void houseedit_complex_parse(struct descriptor_data *d, const char *arg) {
           return;
         }
       }
-      d->edit_complex->set_name(arg);
+
+      COMPLEX->set_name(arg);
       houseedit_display_complex_edit_menu(d);
       break;
     case HOUSEEDIT_COMPLEX_LANDLORD:
@@ -245,7 +255,7 @@ void houseedit_complex_parse(struct descriptor_data *d, const char *arg) {
         }
 
         // Set the landlord vnum (additional error checking in this function)
-        if (!d->edit_complex->set_landlord_vnum(vnum, FALSE)) {
+        if (!COMPLEX->set_landlord_vnum(vnum, FALSE)) {
           send_to_char("That's not an acceptable landlord vnum.\r\n", CH);
           houseedit_display_complex_edit_menu(d);
           return;
@@ -271,9 +281,9 @@ void houseedit_complex_parse(struct descriptor_data *d, const char *arg) {
           return;
         }
 
-        d->edit_complex->toggle_editor(idnum);
+        COMPLEX->toggle_editor(idnum);
 
-        send_to_char(CH, "The editor set is now %s. Enter an idnum to add/remove, or 0 to quit: ", d->edit_complex->list_editors());
+        send_to_char(CH, "The editor set is now %s. Enter an idnum to add/remove, or 0 to quit: ", COMPLEX->list_editors());
         return;
       }
       break;
@@ -283,3 +293,5 @@ void houseedit_complex_parse(struct descriptor_data *d, const char *arg) {
       break;
   }
 }
+
+#undef COMPLEX

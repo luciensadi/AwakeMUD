@@ -21,6 +21,11 @@ namespace bf = boost::filesystem;
 #include "nlohmann/json.hpp"
 using nlohmann::json;
 
+#define COMPLEX_INFO_FILE_NAME   "complex_info.json"
+#define APARTMENT_INFO_FILE_NAME "apartment_info.json"
+#define LEASE_INFO_FILE_NAME     "lease.json"
+#define ROOM_INFO_FILE_NAME      "room_info.json"
+
 extern void ASSIGNMOB(long mob, SPECIAL(fname));
 extern bool Storage_get_filename(vnum_t vnum, char *filename, int filename_size);
 extern void Storage_save(const char *file_name, struct room_data *room);
@@ -38,6 +43,8 @@ void _json_parse_from_file(bf::path path, json &target);
 std::vector<ApartmentComplex*> global_apartment_complexes = {};
 
 const bf::path global_housing_dir = bf::system_complete("lib") / "housing";
+
+// TODO: Length and color constraints for strings (short, long, etc)
 
 // TODO: Restore functionality to hcontrol command
 
@@ -201,7 +208,7 @@ ApartmentComplex::ApartmentComplex(bf::path filename) :
   // Load info from <filename>/info
   {
     json base_info;
-    _json_parse_from_file(base_directory / "complex_info.json", base_info);
+    _json_parse_from_file(base_directory / COMPLEX_INFO_FILE_NAME, base_info);
 
     display_name = str_dup(base_info["display_name"].get<std::string>().c_str());
     landlord_vnum = (vnum_t) base_info["landlord_vnum"].get<vnum_t>();
@@ -245,7 +252,7 @@ void ApartmentComplex::save() {
   base_info["editors"] = editors;
 
   // Write it out.
-  write_json_file(base_directory / "complex_info.json", &base_info);
+  write_json_file(base_directory / COMPLEX_INFO_FILE_NAME, &base_info);
 }
 
 void ApartmentComplex::mark_as_deleted() {
@@ -498,7 +505,7 @@ Apartment::Apartment(ApartmentComplex *complex, bf::path base_directory) :
   {
     log_vfprintf(" ---- Loading apartment base data for %s.", base_directory.filename().string().c_str());
     json base_info;
-    _json_parse_from_file(base_directory / "apartment_info.json", base_info);
+    _json_parse_from_file(base_directory / APARTMENT_INFO_FILE_NAME, base_info);
 
     shortname = str_dup(base_info["short_name"].get<std::string>().c_str());
     name = str_dup(base_info["name"].get<std::string>().c_str());
@@ -513,7 +520,7 @@ Apartment::Apartment(ApartmentComplex *complex, bf::path base_directory) :
   {
     log_vfprintf(" ---- Loading apartment lease data for %s.", name);
     json base_info;
-    _json_parse_from_file(base_directory / "lease.json", base_info);
+    _json_parse_from_file(base_directory / LEASE_INFO_FILE_NAME, base_info);
 
     paid_until = base_info["paid_until"].get<time_t>();
     guests = base_info["guests"].get<std::vector<idnum_t>>();
@@ -552,6 +559,14 @@ Apartment::Apartment(ApartmentComplex *complex, bf::path base_directory) :
   char tmp_buf[100];
   snprintf(tmp_buf, sizeof(tmp_buf), "%s's %s", complex->display_name, name);
   full_name = str_dup(tmp_buf);
+}
+
+Apartment::~Apartment() {
+  // Delete us from our parent complex.
+  if (complex)
+    complex->apartments.erase(find(complex->apartments.begin(), complex->apartments.end(), this));
+
+  // TODO: Do we need to delete our children rooms or anything else?
 }
 
 #define REPLACE_STR(item) {delete [] item; item = str_dup(source->item);}
@@ -614,7 +629,7 @@ void Apartment::save_lease() {
   lease_data["paid_until"] = paid_until;
   lease_data["guests"] = guests;
 
-  bf::ofstream o(base_directory / "lease.json");
+  bf::ofstream o(base_directory / LEASE_INFO_FILE_NAME);
   o << std::setw(4) << lease_data << std::endl;
   o.close();
 }
@@ -890,14 +905,19 @@ const char *Apartment::get_lifestyle_string() {
   return "n/a";
 }
 
+void Apartment::mark_as_deleted() {
+  // TODO: Write deletion record.
+  // .erase(find(global_apartment_complexes.begin(), global_apartment_complexes.end(), complex));
+}
+
 /********** ApartmentRoom ************/
 
 ApartmentRoom::ApartmentRoom(Apartment *apartment, bf::path filename) :
   base_path(filename), apartment(apartment)
 {
-  // Read from info.json.
+  // Read from room info file.
   json base_info;
-  _json_parse_from_file(filename / "room_info.json", base_info);
+  _json_parse_from_file(filename / ROOM_INFO_FILE_NAME, base_info);
 
   vnum = base_info["vnum"].get<vnum_t>();
 
@@ -935,7 +955,7 @@ void ApartmentRoom::save_info() {
 
   info_data["vnum"] = vnum;
 
-  bf::ofstream o(base_path / "info.json");
+  bf::ofstream o(base_path / ROOM_INFO_FILE_NAME);
   o << std::setw(4) << info_data << std::endl;
   o.close();
 }
@@ -1228,6 +1248,9 @@ ApartmentComplex *get_complex_headed_by_landlord(vnum_t vnum) {
 
 Apartment *find_apartment(const char *full_name, struct char_data *ch) {
   std::vector<Apartment *> found_apartments = {};
+
+  if (!*arg && ch && ch->in_room && ch->in_room->apartment)
+    return ch->in_room->apartment->get_apartment();
 
   for (auto &complex : global_apartment_complexes)
     for (auto &apartment : complex->get_apartments())
