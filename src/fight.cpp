@@ -463,10 +463,22 @@ void set_fighting(struct char_data * ch, struct veh_data * vict)
   if (CH_IN_COMBAT(ch))
     return;
 
-  ch->next_fighting = combat_list;
-  combat_list = ch;
-  roll_individual_initiative(ch);
-  order_list(TRUE);
+  // Check to see if they're already in the combat list.
+  bool already_there = FALSE;
+  for (struct char_data *tmp = combat_list; tmp; tmp = tmp->next_fighting) {
+    if (tmp == ch) {
+      mudlog("SYSERR: Attempted to re-add character to combat list!", ch, LOG_SYSLOG, TRUE);
+      already_there = TRUE;
+    }
+  }
+  if (!already_there) {
+    // Setting init to 0 here means new combat actually starts with the next global re-roll.
+    // This prevents arbitray length out-of-initiative states as new combats are initiated.
+    // Also need to avoid being first in the list to avoid setting off an early global re-roll.
+    GET_INIT_ROLL(ch) = 0;
+    ch->next_fighting = combat_list->next_fighting;
+    combat_list->next_fighting = ch;
+  }
 
   FIGHTING_VEH(ch) = vict;
   GET_POS(ch) = POS_FIGHTING;
