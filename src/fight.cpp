@@ -359,7 +359,7 @@ void check_killer(struct char_data * ch, struct char_data * vict)
 void set_fighting(struct char_data * ch, struct char_data * vict, ...)
 {
   struct follow_type *k;
-  if (ch == vict)
+  if (ch == vict || !vict)
     return;
 
   if (IS_NPC(ch)) {
@@ -395,17 +395,30 @@ void set_fighting(struct char_data * ch, struct char_data * vict, ...)
     }
   }
   if (!already_there) {
-    ch->next_fighting = combat_list;
-    combat_list = ch;
+    // Setting init to 0 here means new combat actually starts with the next global re-roll.
+    // This prevents arbitray length out-of-initiative states as new combats are initiated.
+    // Also need to avoid being first in the list to avoid setting off an early global re-roll.
+    GET_INIT_ROLL(ch) = 0;
+    ch->next_fighting = combat_list->next_fighting;
+    combat_list->next_fighting = ch;
   }
 
-  // We set fighting before we call roll_individual_initiative() because we need the fighting target there.
   FIGHTING(ch) = vict;
   GET_POS(ch) = POS_FIGHTING;
 
-  roll_individual_initiative(ch);
-  order_list(TRUE);
-
+  // Here we set the Surprise flag to our target if conditions are met. Clearing of flag and alert status are handled
+  // in hit_with_multi_weapon_toggle() as soon as a suprised NPC gets damaged in combat. Otherwise we can't
+  // properly enter the surprise state due to mobs being continuously alert.
+  // Also the no defense condition happens in the hit_with_multi_weapon_toggle() and we can't remove surprise
+  // flag until we process all that.
+  if (IS_NPC(vict)
+      && !MOB_FLAGGED(vict, MOB_INANIMATE)
+      && GET_MOBALERT(vict) == MALERT_CALM
+      && success_test(GET_REA(ch), 4) > success_test(GET_REA(vict), 4)) {
+    act("You surprise $n!", TRUE, FIGHTING(ch), 0, ch, TO_VICT);
+    AFF_FLAGS(FIGHTING(ch)).SetBit(AFF_SURPRISE);
+  }
+    
   if (!(AFF_FLAGGED(ch, AFF_MANNING) || PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_RIG)))
   {
     if (!(GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD)))
@@ -5494,7 +5507,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
 
 void roll_individual_initiative(struct char_data *ch)
 {
-  if (AWAKE(ch))
+  if (AWAKE(ch) && !AFF_FLAGGED(ch, AFF_SURPRISE))
   {
     // While rigging, riggers receive only the modifications given them by the vehicle control rig (see Vehicles and Drones, p. 130) they are using.
     if (AFF_FLAGGED(ch, AFF_PILOT) || PLR_FLAGGED(ch, PLR_REMOTE)) {
@@ -5522,21 +5535,9 @@ void roll_individual_initiative(struct char_data *ch)
       else
         GET_INIT_ROLL(ch) += 20;
     }
-    // Here we set the Surprise flag to our target if conditions are met. Clearing of flag and alert status are handled
-    // in hit_with_multi_weapon_toggle() as soon as a suprised NPC gets damaged in combat. Otherwise we can't
-    // properly enter the surprise state due to mobs being continously alert. Because we were handling this in
-    // init state and either the flag was getting stripped or the mob became alert before we ever tried to hit it.
-    // Also the no defense condition happens in the hit_with_multi_weapon_toggle() and we can't remove surprise
-    // flag until we process all that.
-    if (FIGHTING(ch)
-        && IS_NPC(FIGHTING(ch))
-        && !MOB_FLAGGED(FIGHTING(ch), MOB_INANIMATE)
-        && GET_MOBALERT(FIGHTING(ch)) == MALERT_CALM
-        && success_test(GET_REA(ch), 4) > success_test(GET_REA(FIGHTING(ch)), 4)) {
-      GET_INIT_ROLL(FIGHTING(ch)) = 0;
-      act("You surprise $n!", TRUE, FIGHTING(ch), 0, ch, TO_VICT);
-      AFF_FLAGS(FIGHTING(ch)).SetBit(AFF_SURPRISE);
-    }
+  } else {
+    // Surprised or not awake, so you don't get to act
+    GET_INIT_ROLL(ch) = 0;
   }
   char rbuf[MAX_STRING_LENGTH];
   snprintf(rbuf, sizeof(rbuf),"Init: %2d %s", GET_INIT_ROLL(ch), GET_NAME(ch));
