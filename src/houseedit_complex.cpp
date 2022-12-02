@@ -52,6 +52,28 @@ void houseedit_delete_complex(struct char_data *ch, char *arg) {
   delete complex;
 }
 
+void houseedit_show_complex(struct char_data *ch, char *arg) {
+  ApartmentComplex *complex;
+
+  // Find the referenced complex. Error messages sent during function eval.
+  if (!(complex = find_apartment_complex(arg, ch)))
+    return;
+
+  char landlord_name[500];
+  rnum_t landlord_rnum;
+
+  // Fetch landlord name if available.
+  if ((landlord_rnum = real_mobile(complex->get_landlord_vnum())) < 0) {
+    strlcpy(landlord_name, "(invalid)", sizeof(landlord_name));
+  } else {
+    strlcpy(landlord_name, GET_CHAR_NAME(&mob_proto[landlord_rnum]), sizeof(landlord_name));
+  }
+
+  send_to_char(ch, "Name:     ^c%s^n\r\n", complex->get_name());
+  send_to_char(ch, "Landlord: ^c%s^n (^c%ld^n)\r\n", landlord_name, complex->get_landlord_vnum());
+  send_to_char(ch, "Editors:  ^c%s^n\r\n", complex->list_editors());
+}
+
 void houseedit_list_complexes(struct char_data *ch, char *arg) {
   if (global_apartment_complexes.size() <= 0) {
     send_to_char("There are no complexes currently defined.\r\n", ch);

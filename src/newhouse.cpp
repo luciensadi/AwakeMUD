@@ -489,6 +489,10 @@ const char *ApartmentComplex::list_apartments__returns_new() {
   char result[MAX_STRING_LENGTH];
   result[0] = '\0';
 
+  if (apartments.empty()) {
+    return str_dup("n/a\r\n");
+  }
+
   for (auto &apartment: apartments) {
     snprintf(ENDOF(result), sizeof(result) + strlen(result), "  - %s (lifestyle %s, %ld room%s, of which %d %s): %ld nuyen.\r\n",
              apartment->name,
@@ -499,6 +503,7 @@ const char *ApartmentComplex::list_apartments__returns_new() {
              apartment->garages == 1 ? "is a garage" : "are garages",
              apartment->get_rent_cost());
   }
+  
   return str_dup(result);
 }
 
@@ -940,6 +945,10 @@ const char *Apartment::list_rooms__returns_new(bool indent) {
   result[0] = '\0';
   struct room_data *world_room;
 
+  if (rooms.empty()) {
+    return str_dup("n/a\r\n");
+  }
+
   bool already_printed = FALSE;
   for (auto &room: rooms) {
     if (!(world_room = room->get_world_room()))
@@ -1049,6 +1058,16 @@ void Apartment::recalculate_garages() {
         garages++;
     }
   }
+}
+
+void Apartment::set_name(const char *newname) {
+  delete [] name;
+  name = str_dup(newname);
+
+  delete [] full_name;
+  char formatted_name[100];
+  snprintf(formatted_name, sizeof(formatted_name), "%s's %s", complex->get_name(), newname);
+  full_name = str_dup(formatted_name);
 }
 
 /********** ApartmentRoom ************/

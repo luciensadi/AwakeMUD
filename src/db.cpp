@@ -5112,8 +5112,11 @@ void clear_icon(struct matrix_icon *icon)
 }
 
 /* returns the real number of the room with given virtual number */
-long real_room(long virt)
+rnum_t real_room(vnum_t virt)
 {
+  if (virt < 0)
+    return -1;
+
   long bot, top, mid;
 
   bot = 0;
@@ -5139,8 +5142,11 @@ long real_room(long virt)
 }
 
 /* returns the real number of the monster with given virtual number */
-long real_mobile(long virt)
+rnum_t real_mobile(vnum_t virt)
 {
+  if (virt < 0)
+    return -1;
+
   int bot, top, mid;
 
   bot = 0;
@@ -5161,8 +5167,11 @@ long real_mobile(long virt)
   }
 }
 
-long real_quest(long virt)
+rnum_t real_quest(vnum_t virt)
 {
+  if (virt < 0)
+    return -1;
+
   int bot, top, mid;
 
   bot = 0;
@@ -5182,8 +5191,11 @@ long real_quest(long virt)
   }
 }
 
-long real_shop(long virt)
+rnum_t real_shop(vnum_t virt)
 {
+  if (virt < 0)
+    return -1;
+
   int bot, top, mid;
 
   bot = 0;
@@ -5203,8 +5215,11 @@ long real_shop(long virt)
   }
 }
 
-long real_zone(long virt)
+rnum_t real_zone(vnum_t virt)
 {
+  if (virt < 0)
+    return -1;
+
   int bot, top, mid;
 
   bot = 0;
@@ -5225,8 +5240,11 @@ long real_zone(long virt)
   }
 }
 
-long real_vehicle(long virt)
+rnum_t real_vehicle(vnum_t virt)
 {
+  if (virt < 0)
+    return -1;
+
   int bot, top, mid;
   bot = 0;
   top = top_of_veht;
@@ -5244,8 +5262,11 @@ long real_vehicle(long virt)
   }
 }
 
-long real_host(long virt)
+rnum_t real_host(vnum_t virt)
 {
+  if (virt < 0)
+    return -1;
+
   int bot, top, mid;
   bot = 0;
   top = top_of_matrix;
@@ -5263,8 +5284,11 @@ long real_host(long virt)
   }
 }
 
-long real_ic(long virt)
+rnum_t real_ic(vnum_t virt)
 {
+  if (virt < 0)
+    return -1;
+
   int bot, top, mid;
   bot = 0;
   top = top_of_ic;
@@ -5283,8 +5307,11 @@ long real_ic(long virt)
 }
 
 /* returns the real number of the object with given virtual number */
-long real_object(long virt)
+rnum_t real_object(vnum_t virt)
 {
+  if (virt < 0)
+    return -1;
+    
   long bot, top, mid;
 
   bot = 0;

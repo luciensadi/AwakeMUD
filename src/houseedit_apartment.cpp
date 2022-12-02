@@ -22,8 +22,38 @@ void houseedit_list_apartments(struct char_data *ch, const char *func_remainder)
     return;
 
   const char *output = complex->list_apartments__returns_new();
-  send_to_char(ch, "%s has the following apartments:\r\n%s\r\n", output);
+  send_to_char(ch, "%s has the following apartments:\r\n%s\r\n", complex->get_name(), output);
   delete [] output;
+}
+
+void houseedit_show_apartment(struct char_data *ch, char *arg) {
+  Apartment *apartment = find_apartment(arg, ch);
+
+  // Find the referenced apartment. Error messages sent during function eval.
+  if (!apartment)
+    return;
+
+  vnum_t key_vnum = apartment->get_key_vnum();
+  rnum_t key_rnum = real_object(key_vnum);
+
+  vnum_t atrium_vnum = apartment->get_atrium_vnum();
+  rnum_t atrium_rnum = real_room(atrium_vnum);
+
+  const char *room_string = apartment->list_rooms__returns_new(TRUE);
+
+  send_to_char(ch, "Shortname:      %s^n\r\n", apartment->get_short_name());
+  send_to_char(ch, "Display name:   %s^n\r\n", apartment->get_name());
+  send_to_char(ch, "Escape To:      %s^n (^c%ld^n)\r\n", atrium_rnum >= 0 ? GET_ROOM_NAME(&world[atrium_rnum]) : "^y(none)^n", atrium_vnum);
+  send_to_char(ch, "\r\n");
+  send_to_char(ch, "Lifestyle:      %s^n\r\n", apartment->get_lifestyle_string());
+  send_to_char(ch, "Cost per month: ^c%ld^n nuyen^n\r\n", apartment->get_rent_cost());
+  send_to_char(ch, "Key:            %s^n (^c%ld^n)^n\r\n", key_rnum >= 0 ? GET_OBJ_NAME(&obj_proto[key_rnum]) : "^y(none)^n", key_vnum);
+  send_to_char(ch, "\r\n");
+  send_to_char(ch, "Complex:        %s^n\r\n", apartment->get_complex() ? apartment->get_complex()->get_name() : "^y(null)^n");
+  send_to_char(ch, "\r\n");
+  send_to_char(ch, "Rooms:\r\n%s^n\r\n", room_string);
+
+  delete [] room_string;
 }
 
 void houseedit_create_apartment(struct char_data *ch, const char *func_remainder) {
@@ -283,7 +313,7 @@ void houseedit_apartment_parse(struct descriptor_data *d, const char *arg) {
         APT->set_name(default_name);
       }
 
-      d->edit_apartment->set_name(arg);
+      d->edit_apartment->set_short_name(arg);
 
       houseedit_display_apartment_edit_menu(d);
       break;

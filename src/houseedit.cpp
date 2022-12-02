@@ -43,6 +43,12 @@ ACMD(do_houseedit) {
       return;
     }
 
+    // Show details about a specific complex.
+    if (is_abbrev(func, "show")) {
+      houseedit_show_complex(ch, func_remainder);
+      return;
+    }
+
     // Create a new complex.
     if (is_abbrev(func, "create")) {
       FAILURE_CASE(!PLR_FLAGGED(ch, PLR_OLC) && !access_level(ch, LVL_PRESIDENT), YOU_NEED_OLC_FOR_THAT);
@@ -76,6 +82,12 @@ ACMD(do_houseedit) {
     // List existing apartments in the given complex.
     if (is_abbrev(func, "list")) {
       houseedit_list_apartments(ch, func_remainder);
+      return;
+    }
+
+    // Show details about a specific apartment.
+    if (is_abbrev(func, "show")) {
+      houseedit_show_apartment(ch, func_remainder);
       return;
     }
 

@@ -1050,6 +1050,12 @@ void do_stat_room(struct char_data * ch)
   else
     send_to_char("  None.\r\n", ch);
 
+  if (GET_APARTMENT(rm)) {
+    send_to_char(ch, "Complex: %s, Apartment: %s, Subroom: %s\r\n",
+                 GET_APARTMENT(rm)->get_complex() ? GET_APARTMENT(rm)->get_complex()->get_name() : "^RN^n",
+                 GET_APARTMENT(rm)->get_name(),
+                 GET_APARTMENT_SUBROOM(rm) ? "Y" : "^RN^n");
+  }
   if (GET_APARTMENT_DECORATION(rm)) {
     send_to_char(ch, "Decoration:\r\n%s", GET_APARTMENT_DECORATION(rm));
   }
