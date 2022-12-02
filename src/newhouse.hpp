@@ -33,8 +33,8 @@ extern SPECIAL(landlord_spec);
 #define GET_APARTMENT(room)                     ((room)->apartment)
 #define GET_APARTMENT_SUBROOM(room)             ((room)->apartment_room)
 #define GET_APARTMENT_DECORATION(room)          ((room)->apartment_room ? (room)->apartment_room->get_decoration() : NULL)
-#define CH_CAN_ENTER_APARTMENT(room, ch)        ((room) && (room)->apartment && (room)->apartment->can_enter(ch))
-#define IDNUM_CAN_ENTER_APARTMENT(room, idnum)  ((room) && (room)->apartment && (room)->apartment->can_enter_by_idnum(idnum))
+#define CH_CAN_ENTER_APARTMENT(room, ch)        (((room) && (room)->apartment) ? (room)->apartment->can_enter(ch) : TRUE)
+#define IDNUM_CAN_ENTER_APARTMENT(room, idnum)  (((room) && (room)->apartment) ? (room)->apartment->can_enter_by_idnum(idnum) : TRUE)
 
 /* An ApartmentComplex is composed of N Apartments, and has tracking data for landlord info. */
 class ApartmentComplex {
