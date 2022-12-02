@@ -164,7 +164,52 @@ void houseedit_apartment_parse(struct descriptor_data *d, const char *arg) {
           break;
         case 'q': // quit and save
         case 'x': // quit, no save
-          // TODO
+          if (*arg == 'q') {
+            if (!APT->get_complex() || !APT->get_short_name() || !*APT->get_short_name()) {
+              send_to_char("You'll need to specify the complex and shortname first.\r\n", CH);
+              return;
+            }
+
+            send_to_char("OK, saving changes.\r\n", CH);
+
+            // It already existed: Overwrite.
+            if (d->edit_apartment_original) {
+              // Log.
+              mudlog_vfprintf(CH, LOG_WIZLOG, "%s overwriting apartment: %s.",
+                              GET_CHAR_NAME(CH),
+                              d->edit_apartment_original->get_full_name());
+
+              // Copy over our changes.
+              d->edit_apartment_original->clone_from(APT);
+
+              // Write to disk.
+              d->edit_apartment_original->save();
+            }
+            // It didn't exist: Save new.
+            else {
+              // Log.
+              mudlog_vfprintf(CH, LOG_WIZLOG, "%s wrote new apartment: %s.",
+                              GET_CHAR_NAME(CH),
+                              APT->get_full_name());
+
+              // Add to complex's room list.
+              COMPLEX->add_apartment(APT);
+
+              // Write to disk.
+              APT->save();
+
+              // Null edit_apartment so it's not deleted later.
+              APT = NULL;
+            }
+            // Fall through.
+          } else {
+            send_to_char("OK, discarding changes.\r\n", CH);
+          }
+
+          delete APT;
+          APT = NULL;
+          d->edit_apartment_original = NULL;
+          STATE(d) = CON_PLAYING;
           break;
         default:
           send_to_char("That's not a valid choice.\r\n", CH);
@@ -173,32 +218,51 @@ void houseedit_apartment_parse(struct descriptor_data *d, const char *arg) {
       }
       break;
     case HOUSEEDIT_APARTMENT_SHORTNAME:
-      // No color allowed.
-      if (strcmp(arg, get_string_after_color_code_removal(arg, NULL))) {
-        send_to_char("Apartment shortnames can't contain color codes. Try again: ", CH);
-        return;
-      }
+      {
+        // No color allowed.
+        if (strcmp(arg, get_string_after_color_code_removal(arg, NULL))) {
+          send_to_char("Apartment shortnames can't contain color codes. Try again: ", CH);
+          return;
+        }
 
-      // Enforce uniqueness.
-      if (COMPLEX) {
-        for (auto &apartment : COMPLEX->get_apartments()) {
-          if (!strcmp(arg, apartment->get_short_name())) {
-            send_to_char("That short name is already in use in this complex. Please choose another: ", CH);
+        // Enforce uniqueness.
+        if (COMPLEX) {
+          for (auto &apartment : COMPLEX->get_apartments()) {
+            if (!strcmp(arg, apartment->get_short_name())) {
+              send_to_char("That short name is already in use in this complex. Please choose another: ", CH);
+              return;
+            }
+          }
+        }
+
+        // Enforce character constraints (0-9a-zA-Z)
+        for (const char *chk = arg; *chk; chk++) {
+          if (!isalnum(*chk)) {
+            send_to_char("Shortnames can only contain letters and/or numbers (ex: 3A). Please choose another: ", CH);
             return;
           }
         }
+
+        // Create our new dir and check to make sure it doesn't already exist.
+        bf::path new_save_dir = APT->get_base_directory() / arg; // safe because we filtered characters earlier
+        if (bf::exists(new_save_dir) && (!d->edit_apartment_original || new_save_dir != d->edit_apartment_original->get_base_directory())) {
+          send_to_char("There's already a directory that matches your new apartment. You'll need to change its name.\r\n", CH);
+          houseedit_display_apartment_edit_menu(d);
+          return;
+        }
+        APT->set_base_directory(new_save_dir);
+
+        // If the apartment's name doesn't contain this string, clear it.
+        if (APT->get_name() && !strstr(APT->get_name(), arg)) {
+          send_to_char(CH, "%s is not contained in %s, so I'll create a new apartment name.\r\n", arg, APT->get_name());
+
+          char default_name[500];
+          snprintf(default_name, sizeof(default_name), "Unit %s", arg);
+          APT->set_name(default_name);
+        }
+
+        d->edit_apartment->set_name(arg);
       }
-
-      // If the apartment's name doesn't contain this string, clear it.
-      if (APT->get_name() && !strstr(APT->get_name(), arg)) {
-        send_to_char(CH, "%s is not contained in %s, so I'll create a new apartment name.\r\n", arg, APT->get_name());
-
-        char default_name[500];
-        snprintf(default_name, sizeof(default_name), "Unit %s", arg);
-        APT->set_name(default_name);
-      }
-
-      d->edit_apartment->set_name(arg);
       houseedit_display_apartment_edit_menu(d);
       break;
     case HOUSEEDIT_APARTMENT_NAME:

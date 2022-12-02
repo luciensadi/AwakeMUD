@@ -58,6 +58,7 @@ class ApartmentComplex {
     vnum_t get_landlord_vnum() { return landlord_vnum; }
     std::vector<Apartment*> get_apartments() { return apartments; }
     std::vector<idnum_t> get_editors() { return editors; }
+    bf::path get_base_directory() { return base_directory; }
 
     // Mutators.
     bool set_landlord_vnum(vnum_t vnum, bool perform_landlord_overlap_test);
@@ -66,6 +67,7 @@ class ApartmentComplex {
     void add_editor(idnum_t idnum);
     void remove_editor(idnum_t idnum);
     void set_base_directory(bf::path path) { base_directory = path; }
+    void add_apartment(Apartment *apartment);
 
     // Clone our data from the provided complex.
     void clone_from(ApartmentComplex *);
@@ -132,6 +134,7 @@ class Apartment {
     std::vector<ApartmentRoom*> get_rooms() { return rooms; }
     std::vector<long> get_guests() { return guests; }
     ApartmentComplex *get_complex() { return complex; }
+    bf::path get_base_directory() { return base_directory; }
 
     // Mutators
     void set_owner(idnum_t);
@@ -142,10 +145,12 @@ class Apartment {
     void set_key_vnum(vnum_t vnum) {key_vnum = vnum;}
     bool set_rent(long amount, struct char_data *ch=NULL);
     bool set_lifestyle(int new_lifestyle, struct char_data *ch=NULL);
+    void set_base_directory(bf::path path) { base_directory = path; }
 
     bool create_or_extend_lease(struct char_data *ch);
     void save_lease();
     void break_lease();
+    void save();
 
     bool issue_key(struct char_data *ch);
 

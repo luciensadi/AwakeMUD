@@ -490,6 +490,16 @@ const char *ApartmentComplex::list_apartments__returns_new() {
   }
   return str_dup(result);
 }
+
+void ApartmentComplex::add_apartment(Apartment *apartment) {
+  if (find(apartments.begin(), apartments.end(), apartment) != apartments.end()) {
+    mudlog("SYSERR: Attempted to add apartment to complex, but it was already there!", NULL, LOG_SYSLOG, TRUE);
+    return;
+  }
+
+  // Add us to the new complex.
+  apartments.push_back(apartment);
+}
 /*********** Apartment ************/
 
 /* Blank apartment for editing. */
@@ -619,6 +629,10 @@ idnum_t Apartment::get_owner_id() {
     return -1 * owned_by_pgroup->get_idnum();
   }
   return owned_by_player;
+}
+
+void Apartment::save() {
+  // TODO
 }
 
 /* Write lease data to <apartment name>/lease. */
@@ -912,7 +926,8 @@ void Apartment::mark_as_deleted() {
 
 void Apartment::set_complex(ApartmentComplex *new_complex) {
   // Remove us from our existing complex.
-  complex->apartments.erase(find(complex->apartments.begin(), complex->apartments.end(), this));
+  if (complex)
+    complex->apartments.erase(find(complex->apartments.begin(), complex->apartments.end(), this));
 
   // Add us to the new complex.
   complex = new_complex;

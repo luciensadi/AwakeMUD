@@ -139,7 +139,7 @@ void houseedit_complex_parse(struct descriptor_data *d, const char *arg) {
           // It already existed: Overwrite.
           if (d->edit_complex_original) {
             // Log.
-            mudlog_vfprintf(CH, LOG_WIZLOG, "%s overwriting complex %s (%ld) [%s] to %s (%ld) [%s].\r\n",
+            mudlog_vfprintf(CH, LOG_WIZLOG, "%s overwriting complex %s (%ld) [%s] to %s (%ld) [%s].",
                             GET_CHAR_NAME(CH),
                             d->edit_complex_original->get_name(),
                             d->edit_complex_original->get_landlord_vnum(),
@@ -177,7 +177,7 @@ void houseedit_complex_parse(struct descriptor_data *d, const char *arg) {
             }
 
             // Log.
-            mudlog_vfprintf(CH, LOG_WIZLOG, "%s wrote new complex %s (%ld).\r\n",
+            mudlog_vfprintf(CH, LOG_WIZLOG, "%s wrote new complex %s (%ld).",
                             GET_CHAR_NAME(CH),
                             COMPLEX->get_name(),
                             COMPLEX->get_landlord_vnum());
@@ -208,6 +208,7 @@ void houseedit_complex_parse(struct descriptor_data *d, const char *arg) {
 
         delete COMPLEX;
         COMPLEX = NULL;
+        d->edit_complex_original = NULL;
         STATE(d) = CON_PLAYING;
       }
       else {
