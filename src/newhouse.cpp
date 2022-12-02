@@ -44,43 +44,39 @@ std::vector<ApartmentComplex*> global_apartment_complexes = {};
 
 const bf::path global_housing_dir = bf::system_complete("lib") / "housing";
 
-// TODO: Length and color constraints for strings (short, long, etc)
+// TODO: Add back crap counts and formatting to hcontrol command
 
-// TODO: Restore functionality to hcontrol command
+// TODO: houseedit import
 
-// TODO: Go over all the load/save functions and make sure they're trued up with current needs
+// TODO: Verify through testing that an apartment owned by non-buildport player id X is not permanently borked when loaded on the buildport and then transferred back to main
 
-// TODO: Instead of moving complexes out of the housing dir, just prefix them with the deletion string,
-// and tune the loading function to not pick up things starting with deleted-.*
-
-// TODO: Add apartmentroom saving: vnum (for delete/create); decoration (for decorate)
-// Decoration could just write a flat file with the text of the decoration and nothing else.
-
-// TODO: Mail player owner when a lease is broken.
-// EVENTUALTODO: Write pgroup log when a lease is broken.
-
-// TODO: The decorate command must enforce two initial spaces and ^n\r\n at end.
-
-// TODO: When a pgroup has no members left, it should be auto-disabled.
-
-// TODO: if IS_BUILDPORT, find_pgroup must always return a group instance with the requested idnum, even if it doesn't exist
-// ... why though? what was the logic behind this constraint?
-
-// TODO: Verify that an apartment owned by non-buildport player id X is not permanently borked when loaded on the buildport and then transferred back to main
-// TODO: same as above, but for pgroups instead
-
-// EVENTUALTODO: Add logic for mailing pgroup officers with apartment deletion warnings.
+// TODO: Run under leak checker and see if complex and apartment clone_from leaks memory.
+// TODO: Verify if we need to delete our children apartment/rooms in our destructor.
 
 // EVENTUALTODO: Sanity checks for things like reused vnums, etc.
 
 // EVENTUALTODO: When purging contents and encoutering belongings, move them somewhere safe.
 
+// EVENTUALTODOs for pgroups:
+// - Write pgroup log when a lease is broken.
+// - When a pgroup has no members left, it should be auto-disabled.
+// - if IS_BUILDPORT, find_pgroup must always return a group instance with the requested idnum, even if it doesn't exist
+// - Add logic for mailing pgroup officers with apartment deletion warnings.
+// - Verify that an apartment owned by non-buildport pgroup X is not permanently borked when loaded on the buildport and then transferred back to main
+
+// EVENTUALTODOs for lifestyle:
+// - Add houseedit apartment lifestyle selection
+// - Add accessor / mutator for lifestyle w/ bounds checking
+// - Add bounds checking to rent setting based on lifestyle
+// - Force rent to conform to range when changing lifestyle
+
 ACMD(do_decorate) {
   extern void write_world_to_disk(int vnum);
 
   FAILURE_CASE(ch->in_veh, "You can't decorate the interior of vehicles, but you can still customize the outside by visiting a painting booth.\r\n");
-  FAILURE_CASE(!ch->in_room || !ch->in_room->apartment, "You must be in an apartment to decorate it.");
-  FAILURE_CASE(!ch->in_room->apartment->has_owner_privs(ch), "You must be the owner of this apartment to decorate it.")
+  FAILURE_CASE(!ch->in_room || !GET_APARTMENT(ch->in_room), "You must be in an apartment to decorate it.");
+  FAILURE_CASE(!GET_APARTMENT(ch->in_room)->has_owner_privs(ch), "You must be the owner of this apartment to decorate it.")
+  FAILURE_CASE(!GET_APARTMENT_SUBROOM(ch->in_room), "This apartment is bugged! Notify staff.");
 
   PLR_FLAGS(ch).SetBit(PLR_WRITING);
   send_to_char("Enter your new room description. Terminate with a @ on a new line. Your new desc will be automatically indented and newline-terminated.\r\n", ch);
@@ -96,11 +92,11 @@ ACMD(do_decorate) {
 ACMD(do_house) {
   one_argument(argument, arg);
 
-  FAILURE_CASE(!ch->in_room || !ch->in_room->apartment, "You must be in your house to set guests.");
-  FAILURE_CASE(!ch->in_room->apartment->has_owner_privs(ch), "You're not an owner or landlord here.");
+  FAILURE_CASE(!ch->in_room || !GET_APARTMENT(ch->in_room), "You must be in your house to set guests.");
+  FAILURE_CASE(!GET_APARTMENT(ch->in_room)->has_owner_privs(ch), "You're not an owner or landlord here.");
 
   if (!*arg) {
-    ch->in_room->apartment->list_guests_to_char(ch);
+    GET_APARTMENT(ch->in_room)->list_guests_to_char(ch);
     return;
   }
 
@@ -111,10 +107,10 @@ ACMD(do_house) {
   FAILURE_CASE(player_is_dead_hardcore(idnum), "Permanently-dead characters can't be added as guests.");
   FAILURE_CASE(idnum == GET_IDNUM(ch), "You can't add yourself as a guest.");
 
-  if (ch->in_room->apartment->delete_guest(idnum)) {
+  if (GET_APARTMENT(ch->in_room)->delete_guest(idnum)) {
     send_to_char("Guest deleted.\r\n", ch);
   } else {
-    ch->in_room->apartment->add_guest(idnum);
+    GET_APARTMENT(ch->in_room)->add_guest(idnum);
     send_to_char("Guest added.\r\n", ch);
   }
 }
@@ -143,14 +139,13 @@ void load_apartment_complexes() {
 
 void save_all_apartments_and_storage_rooms() {
   for (auto &complex : global_apartment_complexes) {
-    log_vfprintf("Saving complex %s...", complex->get_name());
     for (auto &apartment : complex->get_apartments()) {
       // Skip non-leased apartments.
       if (apartment->get_paid_until() == 0)
         continue;
 
 #ifndef IS_BUILDPORT
-      // Invalid owner? Break it and bail.
+      // Leased with no or invalid owner? Break the lease and bail.
       if (!apartment->has_owner() || !apartment->owner_is_valid()) {
         mudlog_vfprintf(NULL, LOG_GRIDLOG, "Breaking lease on %s: No owner, or owner is no longer valid.", apartment->get_full_name());
         apartment->break_lease();
@@ -165,11 +160,9 @@ void save_all_apartments_and_storage_rooms() {
       }
 #endif
 
-      log_vfprintf("Saving apartment %s...", apartment->get_name());
-
       // Otherwise, save all the rooms (save_storage logic will skip any that haven't been altered)
       for (auto &room : apartment->get_rooms()) {
-        log_vfprintf("Saving subroom %ld...", room->get_vnum());
+        log_vfprintf("Saving storage contents for %s's %ld.", apartment->get_full_name(), room->get_vnum());
         room->save_storage();
       }
     }
@@ -238,6 +231,12 @@ ApartmentComplex::ApartmentComplex(bf::path filename) :
   }
 }
 
+ApartmentComplex::~ApartmentComplex() {
+  auto it = find(global_apartment_complexes.begin(), global_apartment_complexes.end(), this);
+  if (it != global_apartment_complexes.end())
+    global_apartment_complexes.erase(it);
+}
+
 void ApartmentComplex::save() {
   // Ensure our base directory exists.
   if (!bf::exists(base_directory)) {
@@ -257,7 +256,7 @@ void ApartmentComplex::save() {
 
 void ApartmentComplex::mark_as_deleted() {
   char deleted_name[500];
-  snprintf(deleted_name, sizeof(deleted_name), "deleted-complex-%ld-%s", time(0), display_name);
+  snprintf(deleted_name, sizeof(deleted_name), "%s-%ld", display_name, time(0));
   bf::rename(base_directory, bf::system_complete("deleted-housing") / deleted_name);
 }
 
@@ -450,6 +449,15 @@ void ApartmentComplex::clone_from(ApartmentComplex *source) {
   for (auto idnum : source->editors) {
     editors.push_back(idnum);
   }
+
+  // Create an empty temp vector and swap its contents with apartments, deallocating them.
+  std::vector<Apartment *>().swap(apartments);
+  for (auto &apartment : source->apartments) {
+    Apartment *new_apt = new Apartment();
+    new_apt->clone_from(apartment);
+    new_apt->complex = this;
+    apartments.push_back(new_apt);
+  }
 }
 
 bool ApartmentComplex::set_landlord_vnum(vnum_t vnum, bool perform_landlord_overlap_test) {
@@ -509,7 +517,7 @@ Apartment::Apartment() :
 
 /* Load this apartment entry from files. */
 Apartment::Apartment(ApartmentComplex *complex, bf::path base_directory) :
-  base_directory(base_directory), complex(complex)
+  base_directory(base_directory), garages(0), complex(complex)
 {
   // Load base info from <name>/info.
   {
@@ -563,6 +571,7 @@ Apartment::Apartment(ApartmentComplex *complex, bf::path base_directory) :
         log_vfprintf(" ----- Fully loaded %s's %s at %ld.", name, room_path.filename().string().c_str(), apartment_room->get_vnum());
       }
     }
+    recalculate_garages();
   }
 
   // Calculate any derived data.
@@ -575,12 +584,11 @@ Apartment::~Apartment() {
   // Delete us from our parent complex.
   if (complex)
     complex->apartments.erase(find(complex->apartments.begin(), complex->apartments.end(), this));
-
-  // TODO: Do we need to delete our children rooms or anything else?
 }
 
 #define REPLACE_STR(item) {delete [] item; item = str_dup(source->item);}
 #define REPLACE(item) {item = source->item;}
+// Note that we discard and overwrite the room vector here.
 void Apartment::clone_from(Apartment *source) {
   REPLACE_STR(shortname);
   REPLACE_STR(name);
@@ -593,12 +601,14 @@ void Apartment::clone_from(Apartment *source) {
   REPLACE(atrium);
   REPLACE(key_vnum);
 
-  rooms.clear();
+  // Create an empty temp vector and swap its contents with rooms, deallocating previous ones.
+  std::vector<ApartmentRoom *>().swap(rooms);
   for (auto &room : source->rooms) {
-    rooms.push_back(room);
+    ApartmentRoom *new_room = new ApartmentRoom(room);
+    new_room->apartment = this;
+    rooms.push_back(new_room);
   }
 
-  // TODO: Ensure garages is recalculated every time we change the rooms list on save
   REPLACE(garages);
 
   REPLACE(owned_by_player);
@@ -631,8 +641,26 @@ idnum_t Apartment::get_owner_id() {
   return owned_by_player;
 }
 
-void Apartment::save() {
-  // TODO
+void Apartment::save_base_info() {
+  // Ensure our base directory exists.
+  if (!bf::exists(base_directory)) {
+    bf::create_directory(base_directory);
+  }
+
+  json base_info;
+
+  base_info["short_name"] = std::string(shortname);
+  base_info["name"] = std::string(name);
+  // Full name is derived and not saved here.
+
+  base_info["lifestyle"] = lifestyle;
+  base_info["rent"] = nuyen_per_month;
+
+  base_info["atrium"] = atrium;
+  base_info["key"] = key_vnum;
+
+  // Write it out.
+  write_json_file(base_directory / APARTMENT_INFO_FILE_NAME, &base_info);
 }
 
 /* Write lease data to <apartment name>/lease. */
@@ -651,6 +679,15 @@ void Apartment::save_lease() {
 /* Delete <apartment name>/lease and restore default descs. */
 void Apartment::break_lease() {
   mudlog_vfprintf(NULL, LOG_GRIDLOG, "Cleaning up lease for %s's %s.", complex->display_name, name);
+
+  // Mail the owner.
+  if (owned_by_pgroup) {
+    // EVENTUALTODO
+  } else {
+    char mail_buf[1000];
+    snprintf(mail_buf, sizeof(mail_buf), "The lease on %s has expired, and its contents have been reclaimed.\r\n", get_full_name());
+    raw_store_mail(get_owner_id(), 0, "Your former landlord", mail_buf);
+  }
 
   // Clear lease data.
   owned_by_player = 0;
@@ -920,8 +957,9 @@ const char *Apartment::get_lifestyle_string() {
 }
 
 void Apartment::mark_as_deleted() {
-  // TODO: Write deletion record.
-  // .erase(find(global_apartment_complexes.begin(), global_apartment_complexes.end(), complex));
+  char deleted_name[500];
+  snprintf(deleted_name, sizeof(deleted_name), "%s-%ld", name, time(0));
+  bf::rename(base_directory, complex->base_directory / "deleted-apartments" / deleted_name);
 }
 
 void Apartment::set_complex(ApartmentComplex *new_complex) {
@@ -942,20 +980,72 @@ bool Apartment::set_rent(long amount, struct char_data *ch) {
     return FALSE;
   }
 
-  // TODO: Add lifestyle constraints (must be within range for lifestyle)
-
   nuyen_per_month = amount;
   return TRUE;
 }
 
 bool Apartment::set_lifestyle(int new_lifestyle, struct char_data *ch) {
-  // TODO: Must be a valid lifestyle
-
-  // TODO: Enforce rent being within range for lifestyle
-
   lifestyle = new_lifestyle;
 
   return TRUE;
+}
+
+bool Apartment::is_guest(idnum_t idnum) {
+  auto it = find(guests.begin(), guests.end(), idnum);
+  return (it != guests.end());
+}
+
+bool Apartment::delete_guest(idnum_t idnum) {
+  auto it = find(guests.begin(), guests.end(), idnum);
+  if (it != guests.end()) {
+    guests.erase(it);
+    save_lease();
+    return TRUE;
+  }
+  return FALSE;
+}
+
+void Apartment::add_guest(idnum_t idnum) {
+  if (!is_guest(idnum)) {
+    guests.push_back(idnum);
+    save_lease();
+  }
+}
+
+void Apartment::add_room(ApartmentRoom *room) {
+  auto it = find(rooms.begin(), rooms.end(), room);
+  if (it == rooms.end()) {
+    rooms.push_back(room);
+  } else {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Attempted to add room %ld to %s, but it was already there!", room->vnum, get_full_name());
+  }
+
+  recalculate_garages();
+}
+
+void Apartment::delete_room(ApartmentRoom *room) {
+  auto it = find(rooms.begin(), rooms.end(), room);
+  if (it != rooms.end()) {
+    rooms.erase(it);
+  } else {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Attempted to remove room %ld from %s, but it wasn't a member!", room->vnum, get_full_name());
+  }
+
+  recalculate_garages();
+}
+
+void Apartment::recalculate_garages() {
+  garages = 0;
+
+  for (auto &room : rooms) {
+    rnum_t rnum = real_room(room->vnum);
+    if (rnum < 0) {
+      mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Invalid subroom %ld while calculating garages for %s!", room->vnum, get_full_name());
+    } else {
+      if (ROOM_FLAGGED(&world[rnum], ROOM_GARAGE))
+        garages++;
+    }
+  }
 }
 
 /********** ApartmentRoom ************/
@@ -979,23 +1069,47 @@ ApartmentRoom::ApartmentRoom(Apartment *apartment, bf::path filename) :
   bf::ifstream ifs(base_path / "decoration.txt");
   std::string content((std::istreambuf_iterator<char>(ifs)), (std::istreambuf_iterator<char>()));
   ifs.close();
-  decoration = str_dup(content.c_str());
+  decoration = *(content.c_str()) ? str_dup(content.c_str()) : NULL;
 
   log_vfprintf(" ----- Applying changes from %s to world...", filename.filename().string().c_str());
 
   struct room_data *room = &world[rnum];
 
-  if (room->apartment) {
+  if (GET_APARTMENT(room) || GET_APARTMENT_SUBROOM(room)) {
     log_vfprintf("ERROR: Room %ld already had an apartment entry! Terminating.", GET_ROOM_VNUM(room));
     exit(1);
   }
 
   // Set apartment pointer, etc.
-  room->apartment = this;
+  room->apartment_room = this;
+  room->apartment = apartment;
 
   // Load storage contents.
   storage_path = filename / "storage";
   load_storage();
+}
+
+// Note that we DO NOT set room's backlink pointers to us here. You MUST true up later.
+ApartmentRoom::ApartmentRoom(Apartment *apartment, struct room_data *room) :
+  apartment(apartment)
+{
+  vnum = GET_ROOM_VNUM(room);
+  decoration = NULL;
+
+  char vnum_as_string[50];
+  snprintf(vnum_as_string, sizeof(vnum_as_string), "%ld", vnum);
+  base_path = apartment->base_directory / vnum_as_string;
+
+  storage_path = base_path / "storage";
+}
+
+// Clone, duplicating the decoration but straight referencing apartment.
+ApartmentRoom::ApartmentRoom(ApartmentRoom *source) {
+  vnum = source->vnum;
+  decoration = source->decoration ? str_dup(source->decoration) : NULL;
+  base_path = source->base_path;
+  storage_path = source->storage_path;
+  apartment = source->apartment;
 }
 
 void ApartmentRoom::save_info() {
@@ -1015,9 +1129,24 @@ void ApartmentRoom::save_decoration() {
 }
 
 void ApartmentRoom::set_decoration(const char *new_desc) {
+  // Wipe out existing decoration.
   delete [] decoration;
+  decoration = NULL;
 
-  // TODO: Apply consistent formatting, terminate color code
+  // Clearing decoration.
+  if (!*new_desc)
+    return;
+
+  // Initialize our formatted desc.
+  size_t new_desc_len = strlen(new_desc);
+  size_t formatted_desc_size = new_desc_len + 1000;
+  char formatted_desc[formatted_desc_size];
+  strlcpy(formatted_desc, new_desc, formatted_desc_size);
+
+  // Ensure that it's terminated with a color code.
+  if (new_desc[new_desc_len - 2] != '^' || (new_desc[new_desc_len - 1] != 'n' || new_desc[new_desc_len - 1] != 'N')) {
+    strlcat(formatted_desc, "^n", formatted_desc_size);
+  }
 
   decoration = str_dup(new_desc);
 }
@@ -1155,26 +1284,10 @@ void ApartmentRoom::load_storage_from_specified_path(bf::path path) {
   House_load_storage(room, path.string().c_str());
 }
 
-bool ApartmentRoom::is_guest(idnum_t idnum) {
-  auto it = find(apartment->guests.begin(), apartment->guests.end(), idnum);
-  return (it != apartment->guests.end());
-}
-
-bool ApartmentRoom::delete_guest(idnum_t idnum) {
-  auto it = find(apartment->guests.begin(), apartment->guests.end(), idnum);
-  if (it != apartment->guests.end()) {
-    apartment->guests.erase(it);
-    apartment->save_lease();
-    return TRUE;
-  }
-  return FALSE;
-}
-
-void ApartmentRoom::add_guest(idnum_t idnum) {
-  if (!is_guest(idnum)) {
-    apartment->guests.push_back(idnum);
-    apartment->save_lease();
-  }
+const char * ApartmentRoom::get_full_name() {
+  static char fullname[80];
+  snprintf(fullname, sizeof(fullname), "%s's %ld", apartment->full_name, vnum);
+  return fullname;
 }
 
 struct room_data *ApartmentRoom::get_world_room() {
@@ -1220,7 +1333,7 @@ void warn_about_apartment_deletion() {
 
       int days_until_deletion = (apartment->get_paid_until() - time(0)) / (60 * 60 * 24);
 
-      if (days_until_deletion > 5) {
+      if (days_until_deletion != 14 && days_until_deletion != 7 && days_until_deletion > 5) {
         //log_vfprintf("House %s is OK-- %d days left (%d - %d)", apartment->get_full_name(), days_until_deletion, apartment->get_paid_until(), time(0));
         continue;
       }
@@ -1231,9 +1344,9 @@ void warn_about_apartment_deletion() {
                       apartment->get_owner_id());
 
       if (apartment->get_owner_pgroup()) {
-        // TODO
+        // EVENTUALTODO
       } else {
-        if (days_until_deletion > 0) {
+        if (days_until_deletion <= 0) {
           snprintf(buf, sizeof(buf), "Remember to pay your rent for apartment %s^n! It will be deemed abandoned and its contents reclaimed ^Rat any time^n.\r\n",
                    apartment->get_full_name());
         } else {
@@ -1253,8 +1366,8 @@ void warn_about_apartment_deletion() {
 ApartmentComplex *find_apartment_complex(const char *name, struct char_data *ch) {
   if (!name || !*name) {
     // Get the one they're standing in.
-    if (ch->in_room && ch->in_room->apartment) {
-      return ch->in_room->apartment->get_complex();
+    if (ch->in_room && GET_APARTMENT(ch->in_room)) {
+      return GET_APARTMENT(ch->in_room)->get_complex();
     }
     send_to_char("You must provide a complex name OR be standing in an apartment to do that.\r\n", ch);
     return NULL;
@@ -1297,8 +1410,8 @@ ApartmentComplex *get_complex_headed_by_landlord(vnum_t vnum) {
 Apartment *find_apartment(const char *full_name, struct char_data *ch) {
   std::vector<Apartment *> found_apartments = {};
 
-  if (!*arg && ch && ch->in_room && ch->in_room->apartment)
-    return ch->in_room->apartment->get_apartment();
+  if (!*arg && ch && ch->in_room && GET_APARTMENT(ch->in_room))
+    return GET_APARTMENT(ch->in_room);
 
   for (auto &complex : global_apartment_complexes)
     for (auto &apartment : complex->get_apartments())
@@ -1338,6 +1451,22 @@ void _json_parse_from_file(bf::path path, json &target) {
   bf::ifstream f(path);
   target = json::parse(f);
   f.close();
+}
+
+void globally_rewrite_room_to_apartment_pointers() {
+  for (auto &complex : global_apartment_complexes) {
+    for (auto &apartment : complex->get_apartments()) {
+      for (auto &room : apartment->get_rooms()) {
+        rnum_t rnum = real_room(room->get_vnum());
+        if (rnum < 0) {
+          mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Previously-valid apartment room %ld from %s no longer exists!", room->get_vnum(), apartment->get_full_name());
+        } else {
+          world[rnum].apartment = apartment;
+          world[rnum].apartment_room = room;
+        }
+      }
+    }
+  }
 }
 
 //////////////////////////// The Landlord spec. ///////////////////////////////

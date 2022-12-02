@@ -34,7 +34,6 @@ extern void ASSIGNMOB(long mob, SPECIAL(fname));
 extern void add_phone_to_list(struct obj_data *obj);
 extern void auto_repair_obj(struct obj_data *obj);
 extern void handle_weapon_attachments(struct obj_data *obj);
-extern void raw_store_mail(long to, long from_id, const char *from_name, const char *message_pointer);
 extern bool player_is_dead_hardcore(long id);
 
 ACMD_CONST(do_say);

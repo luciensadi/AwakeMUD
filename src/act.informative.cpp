@@ -1802,7 +1802,7 @@ void look_in_veh(struct char_data * ch)
       send_to_char(ch, "\r\n^CAround you is %s^n%s%s%s%s%s%s%s\r\n", GET_ROOM_NAME(veh->in_room),
                    ROOM_FLAGGED(veh->in_room, ROOM_GARAGE) ? " (Garage)" : "",
                    ROOM_FLAGGED(veh->in_room, ROOM_STORAGE) && !ROOM_FLAGGED(veh->in_room, ROOM_CORPSE_SAVE_HACK) ? " (Storage)" : "",
-                   veh->in_room->apartment ? " (Apartment)" : "",
+                   GET_APARTMENT(veh->in_room) ? " (Apartment)" : "",
                    ROOM_FLAGGED(veh->in_room, ROOM_STERILE) ? " (Sterile)" : "",
                    ROOM_FLAGGED(veh->in_room, ROOM_ARENA) ? " ^y(Arena)^n" : "",
                    veh->in_room->matrix && real_host(veh->in_room->matrix) >= 1 ? " (Jackpoint)" : "",
@@ -2130,7 +2130,7 @@ void look_in_direction(struct char_data * ch, int dir)
     else if (IS_SET(EXIT(ch, dir)->exit_info, EX_ISDOOR) && EXIT(ch, dir)->keyword)
       send_to_char(ch, "The %s is open.\r\n", fname(EXIT(ch, dir)->keyword), !strcmp(fname(EXIT(ch, dir)->keyword), "doors") ? "are" : "is");
 
-    if (ch->in_room->apartment){
+    if (GET_APARTMENT(ch->in_room)){
       /* Apartments have peepholes. */
       send_to_char("Through the peephole, you see:\r\n", ch);
       peek_into_adjacent(ch, dir);
@@ -7221,15 +7221,15 @@ void display_room_name(struct char_data *ch) {
   if ((PRF_FLAGGED(ch, PRF_ROOMFLAGS) && GET_REAL_LEVEL(ch) >= LVL_BUILDER)) {
     ROOM_FLAGS(ch->in_room).PrintBits(buf, MAX_STRING_LENGTH, room_bits, ROOM_MAX);
     send_to_char(ch, "^C[%5ld] %s [ %s ]", GET_ROOM_VNUM(ch->in_room), GET_ROOM_NAME(ch->in_room), buf);
-    if (ch->in_room->apartment) {
-      send_to_char(ch, " ^c(Apartment - %s^c)", ch->in_room->apartment->get_full_name());
+    if (GET_APARTMENT(ch->in_room)) {
+      send_to_char(ch, " ^c(Apartment - %s^c)", GET_APARTMENT(ch->in_room)->get_full_name());
     }
     send_to_char("^n\r\n", ch);
   } else {
     send_to_char(ch, "^C%s^n%s%s%s%s%s%s%s\r\n", GET_ROOM_NAME(ch->in_room),
                  ROOM_FLAGGED(ch->in_room, ROOM_GARAGE) ? " (Garage)" : "",
                  ROOM_FLAGGED(ch->in_room, ROOM_STORAGE) && !ROOM_FLAGGED(ch->in_room, ROOM_CORPSE_SAVE_HACK) ? " (Storage)" : "",
-                 ch->in_room->apartment ? " (Apartment)" : "",
+                 GET_APARTMENT(ch->in_room) ? " (Apartment)" : "",
                  ROOM_FLAGGED(ch->in_room, ROOM_STERILE) ? " (Sterile)" : "",
                  ROOM_FLAGGED(ch->in_room, ROOM_ARENA) ? " ^y(Arena)^n" : "",
                  ch->in_room->matrix && real_host(ch->in_room->matrix) >= 1 ? " (Jackpoint)" : "",

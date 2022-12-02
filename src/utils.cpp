@@ -4693,7 +4693,7 @@ bool room_accessible_to_vehicle_piloted_by_ch(struct room_data *room, struct veh
       return FALSE;
   }
 
-  if (room->apartment && room->apartment->can_enter(ch)) {
+  if (!CH_CAN_ENTER_APARTMENT(room, ch)) {
     return FALSE;
   }
 
@@ -4731,7 +4731,7 @@ bool room_accessible_to_vehicle_piloted_by_ch(struct room_data *room, struct veh
       return FALSE;
     }
 
-    if (room->apartment && room->apartment->can_enter(tch)) {
+    if (!CH_CAN_ENTER_APARTMENT(room, tch)) {
       return FALSE;
     }
   }
@@ -5465,8 +5465,8 @@ const char *get_room_desc(struct room_data *room) {
     return room_desc;
   }
 
-  if (room->apartment && room->apartment->get_decoration()) {
-    strlcpy(room_desc, room->apartment->get_decoration(), sizeof(room_desc));
+  if (GET_APARTMENT_DECORATION(room)) {
+    strlcpy(room_desc, GET_APARTMENT_DECORATION(room), sizeof(room_desc));
   } else if (weather_info.sunlight == SUN_DARK && room->night_desc) {
     strlcpy(room_desc, room->night_desc, sizeof(room_desc));
   } else if (room->description) {
@@ -5476,6 +5476,16 @@ const char *get_room_desc(struct room_data *room) {
   }
 
   return room_desc;
+}
+
+// Return TRUE if all chars in string are in [a-zA-Z0-9_.'"-], FALSE otherwise
+bool string_is_valid_for_paths(const char *str) {
+  for (const char *c = str; *c; c++) {
+    if (!isalnum(*c) && *c != '_' && *c != '-' && *c != '.' && *c != '\'' && *c != '"')
+      return FALSE;
+  }
+
+  return TRUE;
 }
 
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.

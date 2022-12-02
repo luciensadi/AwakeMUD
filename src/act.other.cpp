@@ -104,7 +104,7 @@ ACMD(do_quit)
     if (GET_QUEST(ch))
       end_quest(ch);
 
-    if (save_room->apartment && !save_room->apartment->can_enter(ch)) {
+    if (CH_CAN_ENTER_APARTMENT(save_room, ch)) {
       // Only guests and owners can load back into an apartment.
       GET_LOADROOM(ch) = save_room->number;
     } else {

@@ -1153,9 +1153,7 @@ void save_vehicles(bool fromCopyover)
       }
 
       // Otherwise, derive the garage from its location.
-      else if (!fromCopyover
-               && (!ROOM_FLAGGED(temp_room, ROOM_GARAGE)
-                   || (temp_room->apartment && !temp_room->apartment->can_enter_by_idnum(veh->owner))))
+      else if (!fromCopyover && (!ROOM_FLAGGED(temp_room, ROOM_GARAGE) || !IDNUM_CAN_ENTER_APARTMENT(temp_room, veh->owner)))
       {
        /* snprintf(buf, sizeof(buf), "Falling back to a garage for non-garage-room veh %s (in '%s' %ld).",
                    GET_VEH_NAME(veh), GET_ROOM_NAME(temp_room), GET_ROOM_VNUM(temp_room));

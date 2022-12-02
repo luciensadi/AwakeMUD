@@ -266,11 +266,11 @@ void string_add(struct descriptor_data *d, char *str)
       DELETE_D_STR_IF_EXTANT(d);
       STATE(d) = CON_PLAYING;
     } else if (STATE(d) == CON_DECORATE) {
-      if (!d->character->in_room->apartment) {
+      if (!d->character->in_room || !GET_APARTMENT_SUBROOM(d->character->in_room)) {
         mudlog("SYSERR: Decoration command completed in room without apartment data!", d->character, LOG_SYSLOG, TRUE);
         send_to_char("Sorry, an error has occurred. Your decoration was NOT saved.\r\n", d->character);
       } else {
-        d->character->in_room->apartment->set_decoration(*d->str);
+        GET_APARTMENT_SUBROOM(d->character->in_room)->set_decoration(*d->str);
         DELETE_D_STR_IF_EXTANT(d);
       }
       STATE(d) = CON_PLAYING;

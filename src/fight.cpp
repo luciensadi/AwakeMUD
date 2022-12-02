@@ -715,7 +715,7 @@ void make_corpse(struct char_data * ch)
       char filename[500];
       filename[0] = 0;
 
-      if (!ROOM_FLAGGED(ch->in_room, ROOM_STORAGE) && !ch->in_room->apartment) {
+      if (!ROOM_FLAGGED(ch->in_room, ROOM_STORAGE) && !GET_APARTMENT(ch->in_room)) {
         snprintf(buf, sizeof(buf), "Setting storage flag for %s (%ld) due to player corpse being in it.",
                  GET_ROOM_NAME(ch->in_room),
                  GET_ROOM_VNUM(ch->in_room));
@@ -735,8 +735,8 @@ void make_corpse(struct char_data * ch)
         }
       }
 
-      if (ch->in_room->apartment) {
-        ch->in_room->apartment->save_storage();
+      if (GET_APARTMENT_SUBROOM(ch->in_room)) {
+        GET_APARTMENT_SUBROOM(ch->in_room)->save_storage();
         return;
       }
 
@@ -4700,8 +4700,8 @@ bool ranged_response(struct char_data *ch, struct char_data *vict)
   if (!vict
       || ch->in_room == vict->in_room
       || GET_POS(vict) <= POS_STUNNED
-      || (!ch->in_room || ch->in_room->peaceful)
-      || (!vict->in_room || vict->in_room->peaceful)
+      || (!ch->in_room || ROOM_IS_PEACEFUL(ch->in_room))
+      || (!vict->in_room || ROOM_IS_PEACEFUL(vict->in_room))
       || CH_IN_COMBAT(vict))
   {
     return FALSE;
@@ -4826,7 +4826,7 @@ void explode_explosive_grenade(struct char_data *ch, struct obj_data *weapon, st
 
   extract_obj(weapon);
 
-  if (ROOM_FLAGGED(room, ROOM_PEACEFUL) || room->apartment) {
+  if (ROOM_FLAGGED(room, ROOM_PEACEFUL) || GET_APARTMENT(room)) {
     mudlog_vfprintf(ch, LOG_CHEATLOG, "Somehow, %s got an explosive grenade into an invalid room!", GET_CHAR_NAME(ch));
     return;
   }
@@ -4906,7 +4906,7 @@ void explode_flashbang_grenade(struct char_data *ch, struct obj_data *weapon, st
 
   extract_obj(weapon);
 
-  if (ROOM_FLAGGED(room, ROOM_PEACEFUL) || room->apartment) {
+  if (ROOM_FLAGGED(room, ROOM_PEACEFUL) || GET_APARTMENT(room)) {
     mudlog_vfprintf(ch, LOG_CHEATLOG, "Somehow, %s got a flashbang grenade into an invalid room!", GET_CHAR_NAME(ch));
     return;
   }
@@ -5117,7 +5117,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
 
   struct room_data *in_room = ch->char_specials.rigging ? ch->char_specials.rigging->in_room : ch->in_room;
 
-  if (in_room->peaceful || room->apartment)
+  if (ROOM_IS_PEACEFUL(in_room))
   {
     send_to_char("This room just has a peaceful, easy feeling...\r\n", ch);
     return;
@@ -5136,7 +5136,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
       send_to_char("There seems to be something in the way...\r\n", ch);
       return;
     }
-    if (nextroom->peaceful || nextroom->apartment) {
+    if (ROOM_IS_PEACEFUL(nextroom)) {
       send_to_char("Nah - leave them in peace.\r\n", ch);
       return;
     }
@@ -5265,7 +5265,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
       return;
     }
 
-    if (get_ch_in_room(vict)->peaceful) {
+    if (!vict->in_room || ROOM_IS_PEACEFUL(vict->in_room)) {
       send_to_char("Nah - leave them in peace.\r\n", ch);
       return;
     }
@@ -5445,7 +5445,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
     } else if (!IS_SET(EXIT2(nextroom, dir)->exit_info, EX_CLOSED) && isname(target, EXIT2(nextroom, dir)->keyword) ) {
       send_to_char("You can only damage closed doors!\r\n", ch);
       return;
-    } else if (nextroom->peaceful) {
+    } else if (ROOM_IS_PEACEFUL(nextroom)) {
       send_to_char("Nah - leave it in peace.\r\n", ch);
       return;
     } else if (distance > range) {

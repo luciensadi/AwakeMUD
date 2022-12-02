@@ -17,6 +17,7 @@
 #include "invis_resistance_tests.hpp"
 #include "newdb.hpp"
 #include "playerdoc.hpp"
+#include "newhouse.hpp"
 
 #define POWER(name) void (name)(struct char_data *ch, struct char_data *spirit, struct spirit_data *spiritdata, char *arg)
 #define FAILED_CAST "You fail to bind the mana to your will.\r\n"
@@ -3820,10 +3821,11 @@ ACMD(do_cast)
 
   // Restrictions for the houseruled ritual spell system.
   if (subcmd == SCMD_RITUAL_CAST) {
+    FAILURE_CASE(!in_room, "You can't quite figure out where to put things...\r\n");
     FAILURE_CASE(IS_WORKING(ch), "You're too busy to cast a ritual spell.\r\n");
     FAILURE_CASE(CH_IN_COMBAT(ch), "Ritual cast while fighting?? You ARE mad!\r\n");
     FAILURE_CASE(IS_PROJECT(ch), "You can't manipulate physical objects in this form, so setting up a ritual space will be hard.\r\n");
-    FAILURE_CASE(!in_room->apartment, "Ritual casting requires an undisturbed place with room to move around-- you'll need to be in an apartment.\r\n");
+    FAILURE_CASE(!GET_APARTMENT(in_room), "Ritual casting requires an undisturbed place with room to move around-- you'll need to be in an apartment.\r\n");
     FAILURE_CASE(ch->in_veh, "Ritual casting requires more space to move around-- you'll need to leave your vehicle.\r\n");
     FAILURE_CASE(!spell_is_valid_ritual_spell(spell->type), "That spell isn't eligible for ritual casting. You can only ritual-cast buffs.\r\n");
 

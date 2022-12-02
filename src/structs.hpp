@@ -271,7 +271,9 @@ struct room_data
 
   struct obj_data *best_workshop[NUM_WORKSHOP_TYPES];
 
-  class ApartmentRoom *apartment;
+  // Apartment/housing information.
+  class Apartment *apartment;
+  class ApartmentRoom *apartment_room;
 
 #ifdef USE_DEBUG_CANARIES
   int canary;
@@ -283,7 +285,7 @@ struct room_data
       address(NULL), blood(0), debris(0), spec(0), rating(0), cover(0), crowd(0),
       type(0), x(0), y(0), z(0), peaceful(0), func(NULL), dirty_bit(FALSE),
       staff_level_lock(0), elevator_number(0), contents(NULL), people(NULL),
-      vehicles(NULL), watching(NULL), apartment(NULL)
+      vehicles(NULL), watching(NULL), apartment(NULL), apartment_room(NULL)
   {
     ZERO_OUT_ARRAY(dir_option, NUM_OF_DIRS);
     ZERO_OUT_ARRAY(temporary_stored_exit, NUM_OF_DIRS);

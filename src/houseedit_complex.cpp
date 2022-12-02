@@ -223,6 +223,12 @@ void houseedit_complex_parse(struct descriptor_data *d, const char *arg) {
         return;
       }
 
+      // Must be a valid filename.
+      if (!string_is_valid_for_paths(arg)) {
+        send_to_char("Complex names can only contain letters, numbers, and certain punctuation. Try again: ", CH);
+        return;
+      }
+
       // Enforce uniqueness.
       for (auto &complex : global_apartment_complexes) {
         if (complex != d->edit_complex_original && !strcmp(arg, complex->get_name())) {

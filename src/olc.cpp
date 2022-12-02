@@ -99,7 +99,7 @@ bool can_edit_zone(struct char_data *ch, rnum_t real_zone) {
   for (int i = 0; i < NUM_ZONE_EDITOR_IDS; i++)
     if (zone_table[real_zone].editor_ids[i] == GET_IDNUM(ch))
       return TRUE;
-      
+
   return FALSE;
 }
 

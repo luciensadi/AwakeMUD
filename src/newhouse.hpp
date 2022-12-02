@@ -24,10 +24,17 @@ extern void warn_about_apartment_deletion();
 extern void save_all_apartments_and_storage_rooms();
 extern ApartmentComplex *find_apartment_complex(const char *name, struct char_data *ch=NULL);
 extern Apartment *find_apartment(const char *full_name, struct char_data *ch);
+extern void globally_rewrite_room_to_apartment_pointers();
 
 extern std::vector<ApartmentComplex*> global_apartment_complexes;
 
 extern SPECIAL(landlord_spec);
+
+#define GET_APARTMENT(room)                     ((room)->apartment)
+#define GET_APARTMENT_SUBROOM(room)             ((room)->apartment_room)
+#define GET_APARTMENT_DECORATION(room)          ((room)->apartment_room ? (room)->apartment_room->get_decoration() : NULL)
+#define CH_CAN_ENTER_APARTMENT(room, ch)        ((room) && (room)->apartment && (room)->apartment->can_enter(ch))
+#define IDNUM_CAN_ENTER_APARTMENT(room, idnum)  ((room) && (room)->apartment && (room)->apartment->can_enter_by_idnum(idnum))
 
 /* An ApartmentComplex is composed of N Apartments, and has tracking data for landlord info. */
 class ApartmentComplex {
@@ -52,6 +59,7 @@ class ApartmentComplex {
     // Given a filename to read from, instantiate an apartment complex.
     ApartmentComplex(bf::path filename);
     ApartmentComplex();
+    ~ApartmentComplex();
 
     // Accessors.
     const char *get_name() { return display_name; }
@@ -131,7 +139,6 @@ class Apartment {
     vnum_t get_atrium_vnum() { return atrium; }
     long get_rent_cost() { return nuyen_per_month; }
     time_t get_paid_until() { return paid_until; }
-    std::vector<ApartmentRoom*> get_rooms() { return rooms; }
     std::vector<long> get_guests() { return guests; }
     ApartmentComplex *get_complex() { return complex; }
     bf::path get_base_directory() { return base_directory; }
@@ -147,10 +154,15 @@ class Apartment {
     bool set_lifestyle(int new_lifestyle, struct char_data *ch=NULL);
     void set_base_directory(bf::path path) { base_directory = path; }
 
+
+    std::vector<ApartmentRoom*> get_rooms() { return rooms; }
+    void add_room(ApartmentRoom *);
+    void delete_room(ApartmentRoom *);
+
     bool create_or_extend_lease(struct char_data *ch);
     void save_lease();
     void break_lease();
-    void save();
+    void save_base_info();
 
     bool issue_key(struct char_data *ch);
 
@@ -171,6 +183,11 @@ class Apartment {
     const char *get_lifestyle_string();
     bool can_houseedit_apartment(struct char_data *ch);
     void mark_as_deleted();
+    void recalculate_garages();
+
+    bool delete_guest(idnum_t idnum);
+    void add_guest(idnum_t idnum);
+    bool is_guest(idnum_t idnum);
 
     // Returns new-- must delete output!
     const char *get_owner_name__returns_new();
@@ -179,6 +196,8 @@ class Apartment {
 /* An ApartmentRoom describes a discrete room in the world. */
 class ApartmentRoom {
   private:
+    friend class Apartment;
+
     // What is the vnum of this room? (We don't store rnum since that changes)
     vnum_t vnum = -1;
 
@@ -193,19 +212,15 @@ class ApartmentRoom {
 
   public:
     ApartmentRoom(Apartment *apartment, bf::path filename);
+    ApartmentRoom(Apartment *apartment, struct room_data *room);
+    ApartmentRoom(ApartmentRoom *);
 
     // Accessors.
     vnum_t get_vnum() { return vnum; }
     const char *get_decoration() { return decoration; }
-    vnum_t get_atrium_vnum() { return apartment->get_atrium_vnum(); }
-    const char *get_full_name() { return apartment->get_full_name(); }
-    bool has_owner() { return apartment->has_owner(); }
-    bool has_owner_privs(struct char_data *ch) { return apartment->has_owner_privs(ch); }
-    bool can_enter(struct char_data *ch) { return apartment->can_enter(ch); }
-    bool can_enter_by_idnum(idnum_t idnum) { return apartment->can_enter_by_idnum(idnum); }
-    bool is_guest(idnum_t idnum);
     Apartment *get_apartment() { return apartment; }
     ApartmentComplex *get_complex() { return apartment->complex; }
+    bf::path get_base_directory() { return base_path; }
 
     // Mutators.
     void set_decoration(const char *new_desc);
@@ -216,12 +231,9 @@ class ApartmentRoom {
     void save_decoration();
 
     // Utility.
-    void list_guests_to_char(struct char_data *ch) { apartment->list_guests_to_char(ch); }
     void load_storage();
     void load_storage_from_specified_path(bf::path path);
-
-    bool delete_guest(idnum_t idnum);
-    void add_guest(idnum_t idnum);
+    const char *get_full_name();
 
     struct room_data *get_world_room();
 

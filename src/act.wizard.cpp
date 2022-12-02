@@ -1050,8 +1050,8 @@ void do_stat_room(struct char_data * ch)
   else
     send_to_char("  None.\r\n", ch);
 
-  if (rm->apartment && rm->apartment->get_decoration()) {
-    send_to_char(ch, "Decoration:\r\n%s", rm->apartment->get_decoration());
+  if (GET_APARTMENT_DECORATION(rm)) {
+    send_to_char(ch, "Decoration:\r\n%s", GET_APARTMENT_DECORATION(rm));
   }
 
   if (rm->ex_description)

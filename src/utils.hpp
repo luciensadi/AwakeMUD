@@ -141,6 +141,7 @@ bool    is_custom_ware(struct obj_data *ware);
 void    render_targets_abilities_to_viewer(struct char_data *viewer, struct char_data *vict);
 void    mob_say(struct char_data *mob, const char *msg);
 const char *get_room_desc(struct room_data *room);
+bool    string_is_valid_for_paths(const char *str);
 
 
 bool    keyword_appears_in_obj(const char *keyword, struct obj_data *obj, bool search_keywords=1, bool search_name=1, bool search_desc=0);
@@ -385,6 +386,8 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define GET_BACKGROUND_AURA(room)  ((room) ? (room)->background[1] : 0)
 #define GET_SETTABLE_BACKGROUND_COUNT(room) ((room)->background[0])
 #define GET_SETTABLE_BACKGROUND_AURA(room)  ((room)->background[1])
+
+#define ROOM_IS_PEACEFUL(room) ((room)->peaceful || GET_APARTMENT((room)))
 
 /* zone utils ************************************************************/
 

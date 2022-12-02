@@ -10,6 +10,8 @@
 #define APT d->edit_apartment
 #define COMPLEX d->edit_apartment->get_complex()
 
+extern bool can_edit_zone(struct char_data *ch, rnum_t real_zone);
+
 void houseedit_display_apartment_edit_menu(struct descriptor_data *d);
 
 void houseedit_list_apartments(struct char_data *ch, const char *func_remainder) {
@@ -59,7 +61,7 @@ void houseedit_delete_apartment(struct char_data *ch, const char *func_remainder
   // Mark files as deleted.
   apartment->mark_as_deleted();
 
-  // Delete in-memory record.
+  // Delete in-memory record. Removal from its complex is done in deconstruction.
   delete apartment;
 }
 
@@ -80,6 +82,14 @@ void houseedit_edit_apartment(struct char_data *ch, const char *func_remainder) 
   ch->desc->edit_apartment->clone_from(apartment);
   ch->desc->edit_apartment_original = apartment;
   houseedit_display_apartment_edit_menu(ch->desc);
+}
+
+void houseedit_display_room_edit_menu(struct descriptor_data *d) {
+  const char *rooms = APT->list_rooms__returns_new(TRUE);
+  send_to_char(CH, "%s\r\n", rooms);
+  delete [] rooms;
+  send_to_char("Enter a vnum to add or remove, or 0 to quit: ", CH);
+  d->edit_mode = HOUSEEDIT_APARTMENT_ROOMS;
 }
 
 ///////////////////////////// OLC functions below //////////////////////////////
@@ -154,13 +164,7 @@ void houseedit_apartment_parse(struct descriptor_data *d, const char *arg) {
           d->edit_mode = HOUSEEDIT_APARTMENT_COMPLEX;
           break;
         case '8': // rooms
-          {
-            const char *rooms = APT->list_rooms__returns_new(TRUE);
-            send_to_char(CH, "%s\r\n", rooms);
-            delete [] rooms;
-            send_to_char("Enter a vnum to add or remove: ", CH);
-          }
-          d->edit_mode = HOUSEEDIT_APARTMENT_ROOMS;
+          houseedit_display_room_edit_menu(d);
           break;
         case 'q': // quit and save
         case 'x': // quit, no save
@@ -183,7 +187,7 @@ void houseedit_apartment_parse(struct descriptor_data *d, const char *arg) {
               d->edit_apartment_original->clone_from(APT);
 
               // Write to disk.
-              d->edit_apartment_original->save();
+              d->edit_apartment_original->save_base_info();
             }
             // It didn't exist: Save new.
             else {
@@ -192,15 +196,20 @@ void houseedit_apartment_parse(struct descriptor_data *d, const char *arg) {
                               GET_CHAR_NAME(CH),
                               APT->get_full_name());
 
-              // Add to complex's room list.
+              // Add to complex's apartment list.
               COMPLEX->add_apartment(APT);
 
               // Write to disk.
-              APT->save();
+              APT->save_base_info();
 
               // Null edit_apartment so it's not deleted later.
               APT = NULL;
             }
+
+            // Globally true up room->apartment_room and room->apartment pointers.
+            // This is technically overkill in the case of writing a new apartment, but let's do it anyways.
+            globally_rewrite_room_to_apartment_pointers();
+
             // Fall through.
           } else {
             send_to_char("OK, discarding changes.\r\n", CH);
@@ -218,31 +227,37 @@ void houseedit_apartment_parse(struct descriptor_data *d, const char *arg) {
       }
       break;
     case HOUSEEDIT_APARTMENT_SHORTNAME:
-      {
-        // No color allowed.
-        if (strcmp(arg, get_string_after_color_code_removal(arg, NULL))) {
-          send_to_char("Apartment shortnames can't contain color codes. Try again: ", CH);
-          return;
-        }
+      // No color allowed.
+      if (strcmp(arg, get_string_after_color_code_removal(arg, NULL))) {
+        send_to_char("Apartment shortnames can't contain color codes. Try again: ", CH);
+        return;
+      }
 
-        // Enforce uniqueness.
-        if (COMPLEX) {
-          for (auto &apartment : COMPLEX->get_apartments()) {
-            if (!strcmp(arg, apartment->get_short_name())) {
-              send_to_char("That short name is already in use in this complex. Please choose another: ", CH);
-              return;
-            }
-          }
-        }
+      // Must be a valid filename.
+      if (!string_is_valid_for_paths(arg)) {
+        send_to_char("Apartment shortnames can only contain letters, numbers, and certain punctuation. Try again: ", CH);
+        return;
+      }
 
-        // Enforce character constraints (0-9a-zA-Z)
-        for (const char *chk = arg; *chk; chk++) {
-          if (!isalnum(*chk)) {
-            send_to_char("Shortnames can only contain letters and/or numbers (ex: 3A). Please choose another: ", CH);
+      // Enforce uniqueness.
+      if (COMPLEX) {
+        for (auto &apartment : COMPLEX->get_apartments()) {
+          if (!strcmp(arg, apartment->get_short_name())) {
+            send_to_char("That short name is already in use in this complex. Please choose another: ", CH);
             return;
           }
         }
+      }
 
+      // Enforce character constraints (0-9a-zA-Z)
+      for (const char *chk = arg; *chk; chk++) {
+        if (!isalnum(*chk)) {
+          send_to_char("Shortnames can only contain letters and/or numbers (ex: 3A). Please choose another: ", CH);
+          return;
+        }
+      }
+
+      {
         // Create our new dir and check to make sure it doesn't already exist.
         bf::path new_save_dir = APT->get_base_directory() / arg; // safe because we filtered characters earlier
         if (bf::exists(new_save_dir) && (!d->edit_apartment_original || new_save_dir != d->edit_apartment_original->get_base_directory())) {
@@ -251,24 +266,31 @@ void houseedit_apartment_parse(struct descriptor_data *d, const char *arg) {
           return;
         }
         APT->set_base_directory(new_save_dir);
-
-        // If the apartment's name doesn't contain this string, clear it.
-        if (APT->get_name() && !strstr(APT->get_name(), arg)) {
-          send_to_char(CH, "%s is not contained in %s, so I'll create a new apartment name.\r\n", arg, APT->get_name());
-
-          char default_name[500];
-          snprintf(default_name, sizeof(default_name), "Unit %s", arg);
-          APT->set_name(default_name);
-        }
-
-        d->edit_apartment->set_name(arg);
       }
+
+      // If the apartment's name doesn't contain this string, clear it.
+      if (APT->get_name() && !strstr(APT->get_name(), arg)) {
+        send_to_char(CH, "%s is not contained in %s, so I'll create a new apartment name.\r\n", arg, APT->get_name());
+
+        char default_name[500];
+        snprintf(default_name, sizeof(default_name), "Unit %s", arg);
+        APT->set_name(default_name);
+      }
+
+      d->edit_apartment->set_name(arg);
+
       houseedit_display_apartment_edit_menu(d);
       break;
     case HOUSEEDIT_APARTMENT_NAME:
       // No color allowed.
       if (strcmp(arg, get_string_after_color_code_removal(arg, NULL))) {
         send_to_char("Apartment names can't contain color codes. Try again: ", CH);
+        return;
+      }
+
+      // Must be a valid filename.
+      if (!string_is_valid_for_paths(arg)) {
+        send_to_char("Apartment names can only contain letters, numbers, and certain punctuation. Try again: ", CH);
         return;
       }
 
@@ -355,13 +377,59 @@ void houseedit_apartment_parse(struct descriptor_data *d, const char *arg) {
       houseedit_display_apartment_edit_menu(d);
       break;
     case HOUSEEDIT_APARTMENT_ROOMS:
-      // TODO: Enforce can_edit_zone for the room vnum
-      // TODO: Adding
-        // TODO: Enforce that room is not part of an apt already
-        // TODO: Add apartmentroom that points to room, then add it
-      // TODO: Removing
-        // TODO: Enforce that room is already part of this apt
-        // TODO: Remove room and delete apartmentroom for it
+      {
+        vnum_t vnum = parsed_long;
+        rnum_t rnum = real_room(vnum);
+
+        if (vnum == 0) {
+          // They want to quit.
+          houseedit_display_apartment_edit_menu(d);
+          return;
+        }
+
+        if (rnum < 0) {
+          send_to_char("That's not a valid vnum.\r\n", CH);
+          houseedit_display_apartment_edit_menu(d);
+          return;
+        }
+
+        struct room_data *room = &world[rnum];
+
+        // First, iterate through our own rooms. If it's there, we want to remove it.
+        for (auto &apt_room : APT->get_rooms()) {
+          if (apt_room->get_vnum() == GET_ROOM_VNUM(room)) {
+            APT->delete_room(apt_room);
+            send_to_char(CH, "OK, deleted %s^n from the room list.", GET_ROOM_NAME(room));
+            houseedit_display_room_edit_menu(d);
+            return;
+          }
+        }
+
+        // It wasn't there, so we want to add it. We require that the builder has edit perms over this room.
+        int real_zonenum = get_zone_index_number_from_vnum(vnum);
+        if (real_zonenum < 0 || real_zonenum > top_of_zone_table) {
+          send_to_char(CH, "%ld is not part of any zone.\r\n", vnum);
+        } else if (!can_edit_zone(CH, real_zonenum)) {
+          send_to_char(CH, "Sorry, you don't have access to edit zone %ld.\r\n", zone_table[(real_zonenum)].number);
+        } else if (zone_table[(real_zonenum)].connected && !(access_level(CH, LVL_EXECUTIVE) || PLR_FLAGGED(CH, PLR_EDCON))) {
+          send_to_char(CH, "Sorry, zone %d is marked as connected to the game world, so you can't edit it.\r\n", zone_table[(real_zonenum)].number);
+        }
+        // They have edit permissions, so we can go ahead and add it.
+        else {
+          // Sanity check: Room may not be part of an apartment already.
+          if (GET_APARTMENT(room) && GET_APARTMENT(room) != d->edit_apartment_original) {
+            send_to_char(CH, "That room is already part of %s.", GET_APARTMENT(room)->get_full_name());
+            houseedit_display_room_edit_menu(d);
+            return;
+          }
+
+          // Add ApartmentRoom that points to room, then add it to our list of rooms.
+          ApartmentRoom *new_aptroom = new ApartmentRoom(APT, room);
+          APT->add_room(new_aptroom);
+          send_to_char("Done.\r\n", CH);
+        }
+      }
+      houseedit_display_room_edit_menu(d);
       break;
     default:
       mudlog_vfprintf(CH, LOG_SYSLOG, "SYSERR: Unknown edit state %d in houseedit_apartment_parse()! Restoring to main menu.", d->edit_mode);

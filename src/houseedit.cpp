@@ -9,7 +9,7 @@
 #include "houseedit_apartment.hpp"
 
 void houseedit_import(struct char_data *ch);
-void houseedit_reload(struct char_data *ch);
+void houseedit_reload(struct char_data *ch, const char *filename);
 
 ACMD(do_houseedit) {
   char mode[100], func[100];
@@ -19,7 +19,7 @@ ACMD(do_houseedit) {
   if (is_abbrev(mode, "import")) {
     // Import apartments from old format to new format. Destructive!
     FAILURE_CASE(GET_LEVEL(ch) < LVL_PRESIDENT, "You're not erudite enough to do that.");
-    FAILURE_CASE(!ch->in_room || !ch->in_room->apartment, "You must be standing in an apartment for that.");
+    FAILURE_CASE(!ch->in_room || !GET_APARTMENT(ch->in_room), "You must be standing in an apartment for that.");
     FAILURE_CASE(str_cmp(func, "confirm"), "To blow away existing apartments and load from old files, HOUSEEDIT IMPORT CONFIRM.");
 
 
@@ -30,9 +30,9 @@ ACMD(do_houseedit) {
   if (is_abbrev(mode, "reload")) {
     // Reload the storage for the subroom you're currently standing in.
     FAILURE_CASE(GET_LEVEL(ch) < LVL_EXECUTIVE, "You're not erudite enough to do that.");
-    FAILURE_CASE(str_cmp(func, "confirm"), "To reload apartment storage for your current room, HOUSEEDIT RELOAD CONFIRM.");
+    FAILURE_CASE(!ch->in_room || !GET_APARTMENT_SUBROOM(ch->in_room), "You must be standing in an apartment for that.");
 
-    houseedit_reload(ch);
+    houseedit_reload(ch, func_remainder);
     return;
   }
 
@@ -72,7 +72,7 @@ ACMD(do_houseedit) {
     return;
   }
 
-  else if (is_abbrev(mode, "apartment")) {    
+  else if (is_abbrev(mode, "apartment")) {
     // List existing apartments in the given complex.
     if (is_abbrev(func, "list")) {
       houseedit_list_apartments(ch, func_remainder);
@@ -99,7 +99,7 @@ ACMD(do_houseedit) {
     // Edit the apartment you're standing in, or one matching the full name provided.
     if (is_abbrev(func, "edit")) {
       FAILURE_CASE(!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC), YOU_NEED_OLC_FOR_THAT);
-      // TODO: edit named apartment in the complex you're standing in (or the one you're standing in if no name given)
+
       houseedit_edit_apartment(ch, func_remainder);
       return;
     }
@@ -112,20 +112,31 @@ ACMD(do_houseedit) {
   return;
 }
 
-void houseedit_import(struct char_data *ch) {
-  FAILURE_CASE(!ch->in_room || !ch->in_room->apartment, "You must be standing in an apartment for that.");
+// Overwrite this room's storage with what's on disk.
+void houseedit_reload(struct char_data *ch, const char *filename) {
+  FAILURE_CASE(!ch->in_room || !GET_APARTMENT_SUBROOM(ch->in_room), "You must be standing in an apartment for that.");
+  FAILURE_CASE(!filename || !*filename, "Syntax: ^WHOUSEEDIT RELOAD <filename to load from>^n");
 
+  // Sanitize filename.
+  for (const char *c = filename; *c; c++)
+    FAILURE_CASE(!string_is_valid_for_paths(filename), "That's not a filename. You must specify a filename that exists at this subroom's base directory.");
+
+  //  Verify that file exists.
+  bf::path new_path = GET_APARTMENT_SUBROOM(ch->in_room)->get_base_directory() / filename;
+  if (!exists(new_path)) {
+    send_to_char(ch, "There is no file at path '%s'.\r\n", new_path.string().c_str());
+    return;
+  }
+
+  // Log and load.
+  mudlog_vfprintf(ch, LOG_SYSLOG, "House reload for %s started by %s.", GET_APARTMENT_SUBROOM(ch->in_room)->get_full_name(), GET_CHAR_NAME(ch));
+  GET_APARTMENT_SUBROOM(ch->in_room)->load_storage_from_specified_path(new_path);
+  mudlog("House reload completed.", ch, LOG_SYSLOG, TRUE);
+}
+
+// Load old house files, parse, and transfer to new format.
+void houseedit_import(struct char_data *ch) {
   mudlog_vfprintf(ch, LOG_SYSLOG, "House import started by %s.", GET_CHAR_NAME(ch));
   // TODO
   mudlog("House import completed.", ch, LOG_SYSLOG, TRUE);
-}
-
-void houseedit_reload(struct char_data *ch) {
-  FAILURE_CASE(!ch->in_room || !ch->in_room->apartment, "You must be standing in an apartment for that.");
-
-  // TODO: Verify that file exists.
-
-  mudlog_vfprintf(ch, LOG_SYSLOG, "House reload for %s started by %s.", ch->in_room->apartment->get_full_name(), GET_CHAR_NAME(ch));
-  // TODO: Read from file via load_storage_from_specified_path().
-  mudlog("House reload completed.", ch, LOG_SYSLOG, TRUE);
 }

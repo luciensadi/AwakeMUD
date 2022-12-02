@@ -111,7 +111,7 @@ int can_move(struct char_data *ch, int dir, int extra)
     }
   }
 
-  if (EXIT(ch, dir)->to_room->apartment && !EXIT(ch, dir)->to_room->apartment->can_enter(ch)) {
+  if (!CH_CAN_ENTER_APARTMENT(EXIT(ch, dir)->to_room, ch)) {
     send_to_char("That's private property -- no trespassing!\r\n", ch);
     return 0;
   }
@@ -742,13 +742,13 @@ void move_vehicle(struct char_data *ch, int dir)
   }
 
   if (IS_SET(EXIT(veh, dir)->exit_info, EX_CLOSED)) {
-    if (EXIT(veh, dir)->to_room->apartment || veh->in_room->apartment) {
+    if (GET_APARTMENT(EXIT(veh, dir)->to_room) || GET_APARTMENT(veh->in_room)) {
       if (IS_SET(EXIT(veh, dir)->exit_info, EX_LOCKED) && !has_key(ch, (EXIT(veh, dir)->key))) {
         send_to_char("You need the key in your inventory to use the garage door opener.\r\n", ch);
         return;
       }
 
-      if (EXIT(veh, dir)->to_room->apartment && !EXIT(veh, dir)->to_room->apartment->can_enter(ch)) {
+      if (!CH_CAN_ENTER_APARTMENT(EXIT(veh, dir)->to_room, ch)) {
         send_to_char("That's private property-- no trespassing.\r\n", ch);
         return;
       }
@@ -794,7 +794,7 @@ void move_vehicle(struct char_data *ch, int dir)
   if (special(ch, convert_dir[dir], &empty_argument))
     return;
 
-  if (EXIT(veh, dir)->to_room->apartment && !EXIT(veh, dir)->to_room->apartment->can_enter(ch)) {
+  if (!CH_CAN_ENTER_APARTMENT(EXIT(veh, dir)->to_room, ch)) {
     send_to_char("You can't use other people's garages without permission.\r\n", ch);
     return;
   }
@@ -2043,11 +2043,11 @@ ACMD(do_leave)
   }
 
   // If you're in an apartment, you're able to leave to the atriun no matter what. Prevents lockin.
-  if (in_room->apartment) {
-    rnum_t atrium_rnum = real_room(in_room->apartment->get_atrium_vnum());
+  if (GET_APARTMENT(in_room)) {
+    rnum_t atrium_rnum = real_room(GET_APARTMENT(in_room)->get_atrium_vnum());
 
     if (atrium_rnum < 0) {
-      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Atrium for %s was inaccessible! Using A Bright Light.", in_room->apartment->get_full_name());
+      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Atrium for %s was inaccessible! Using A Bright Light.", GET_APARTMENT(in_room)->get_full_name());
       atrium_rnum = 0; // A Bright Light
     }
 
