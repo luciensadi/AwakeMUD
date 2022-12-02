@@ -672,7 +672,7 @@ bool follower_can_receive_reward(struct char_data *follower, struct char_data *l
     return FALSE;
   }
 
-  if (follower->char_specials.timer >= 10 || PRF_FLAGGED(follower, PRF_AFK)) {
+  if (follower->char_specials.timer >= IDLE_TIMER_PAYOUT_THRESHOLD || PRF_FLAGGED(follower, PRF_AFK)) {
     if (send_message) {
       send_to_char(leader, "^y(OOC note: %s is idle/AFK, so didn't get a cut of the pay.)^n\r\n", GET_CHAR_NAME(follower), HSSH(follower));
       send_to_char(follower, "^y(OOC note: You are idle/AFK, so you didn't get a cut of %s's pay.)^n\r\n", GET_CHAR_NAME(leader));

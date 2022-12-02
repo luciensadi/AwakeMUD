@@ -176,6 +176,15 @@ bool vict_is_valid_target(struct char_data *ch, struct char_data *vict) {
   if (!ch || !vict || ch == vict)
     return FALSE;
 
+  // Idle PC? Failure.
+  if (!vict->desc || vict->char_specials.timer >= IDLE_TIMER_AGGRO_THRESHOLD) {
+#ifdef MOBACT_DEBUG
+    snprintf(buf3, sizeof(buf3), "vict_is_valid_target: Skipping %s - Idle / linkdead PC.", GET_CHAR_NAME(vict));
+    do_say(ch, buf3, 0, 0);
+#endif
+    return FALSE;
+  }
+
   // Can't see? Failure.
   if (!CAN_SEE_ROOM_SPECIFIED(ch, vict, get_ch_in_room(ch))) {
 #ifdef MOBACT_DEBUG
