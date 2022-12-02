@@ -32,6 +32,18 @@ void houseedit_delete_complex(struct char_data *ch, char *arg) {
 
   mudlog_vfprintf(ch, LOG_SYSLOG, "%s deleted empty apartment complex %s.", GET_CHAR_NAME(ch), complex->get_name());
 
+  // Un-mark our landlord.
+  {
+    rnum_t rnum;
+    if (complex->get_landlord_vnum() > 0 && (rnum = real_mobile(complex->get_landlord_vnum())) >= 0) {
+      if (mob_index[rnum].sfunc == landlord_spec)
+        mob_index[rnum].sfunc = NULL;
+      if (mob_index[rnum].func == landlord_spec)
+        mob_index[rnum].func = mob_index[rnum].sfunc;
+    }
+  }
+
+  // Remove the complex from the global list.
   global_apartment_complexes.erase(find(global_apartment_complexes.begin(), global_apartment_complexes.end(), complex));
 
   // Archive the complex files so they're not re-loaded on copyover.
