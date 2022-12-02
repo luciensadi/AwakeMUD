@@ -227,6 +227,12 @@ void houseedit_apartment_parse(struct descriptor_data *d, const char *arg) {
       }
       break;
     case HOUSEEDIT_APARTMENT_SHORTNAME:
+      // Length constraints.
+      if (strlen(arg) < 1 || strlen(arg) > 20) {
+        send_to_char("Name must be between 1 and 20 characters. Try again: ", CH);
+        return;
+      }
+
       // No color allowed.
       if (strcmp(arg, get_string_after_color_code_removal(arg, NULL))) {
         send_to_char("Apartment shortnames can't contain color codes. Try again: ", CH);
@@ -282,6 +288,12 @@ void houseedit_apartment_parse(struct descriptor_data *d, const char *arg) {
       houseedit_display_apartment_edit_menu(d);
       break;
     case HOUSEEDIT_APARTMENT_NAME:
+      // Length constraints.
+      if (strlen(arg) < 3 || strlen(arg) > 30) {
+        send_to_char("Name must be between 3 and 30 characters. Try again: ", CH);
+        return;
+      }
+
       // No color allowed.
       if (strcmp(arg, get_string_after_color_code_removal(arg, NULL))) {
         send_to_char("Apartment names can't contain color codes. Try again: ", CH);

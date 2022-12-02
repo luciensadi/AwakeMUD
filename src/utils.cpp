@@ -5481,7 +5481,7 @@ const char *get_room_desc(struct room_data *room) {
 // Return TRUE if all chars in string are in [a-zA-Z0-9_.'"-], FALSE otherwise
 bool string_is_valid_for_paths(const char *str) {
   for (const char *c = str; *c; c++) {
-    if (!isalnum(*c) && *c != '_' && *c != '-' && *c != '.' && *c != '\'' && *c != '"')
+    if (!isalnum(*c) && *c != '_' && *c != '-' && *c != '.' && *c != '\'' && *c != '"' && *c != ' ')
       return FALSE;
   }
 

@@ -310,6 +310,9 @@ const char *ApartmentComplex::list_editors() {
 
   bool printed_anything = FALSE;
   for (auto editor_id : editors) {
+    if (get_player_rank(editor_id) < LVL_BUILDER)
+      continue;
+
     const char *name = get_player_name(editor_id);
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s^c%s^n", printed_anything ? ", " : "", name);
     delete [] name;
@@ -317,7 +320,7 @@ const char *ApartmentComplex::list_editors() {
   }
 
   if (!printed_anything)
-    strlcpy(buf, "Nobody.", sizeof(buf));
+    strlcpy(buf, "^yNobody^n", sizeof(buf));
 
   return buf;
 }

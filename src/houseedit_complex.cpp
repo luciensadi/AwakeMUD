@@ -134,6 +134,20 @@ void houseedit_complex_parse(struct descriptor_data *d, const char *arg) {
       }
       else if (*arg == 'q' || *arg == 'x') {
         if (*arg == 'q') {
+          // Sanity check: Name must be valid.
+          if (!COMPLEX->get_name() || !*COMPLEX->get_name()) {
+            send_to_char("You must specify a valid name to save this complex.\r\n", CH);
+            houseedit_display_complex_edit_menu(d);
+            return;
+          }
+
+          // Sanity check: Landlord must be valid.
+          if (COMPLEX->get_landlord_vnum() <= 0 || real_mobile(COMPLEX->get_landlord_vnum()) < 0) {
+            send_to_char("You must specify a valid landlord vnum to save this complex.\r\n", CH);
+            houseedit_display_complex_edit_menu(d);
+            return;
+          }
+
           send_to_char("OK, saving changes.\r\n", CH);
 
           // It already existed: Overwrite.
@@ -217,6 +231,12 @@ void houseedit_complex_parse(struct descriptor_data *d, const char *arg) {
       }
       break;
     case HOUSEEDIT_COMPLEX_NAME:
+      // Length constraints.
+      if (strlen(arg) < 5 || strlen(arg) > 40) {
+        send_to_char("Name must be between 5 and 40 characters. Try again: ", CH);
+        return;
+      }
+
       // No color allowed.
       if (strcmp(arg, get_string_after_color_code_removal(arg, NULL))) {
         send_to_char("Complex names can't contain color codes. Try again: ", CH);
@@ -288,9 +308,16 @@ void houseedit_complex_parse(struct descriptor_data *d, const char *arg) {
           return;
         }
 
+        // They must be a builder.
+        if (get_player_rank(idnum) < LVL_BUILDER) {
+          send_to_char("You must specify a staff member.\r\n", CH);
+          houseedit_display_complex_edit_menu(d);
+          return;
+        }
+
         COMPLEX->toggle_editor(idnum);
 
-        send_to_char(CH, "The editor set is now %s. Enter an idnum to add/remove, or 0 to quit: ", COMPLEX->list_editors());
+        send_to_char(CH, "The editor set is now %s. Enter a name to add/remove, or 0 to quit: ", COMPLEX->list_editors());
         return;
       }
       break;
