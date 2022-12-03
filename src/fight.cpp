@@ -359,7 +359,9 @@ void check_killer(struct char_data * ch, struct char_data * vict)
 void set_fighting(struct char_data * ch, struct char_data * vict, ...)
 {
   struct follow_type *k;
-  if (ch == vict)
+  struct char_data * combat_list_head = NULL;
+  
+  if (!ch || !vict || ch == vict)
     return;
 
   if (IS_NPC(ch)) {
@@ -395,8 +397,15 @@ void set_fighting(struct char_data * ch, struct char_data * vict, ...)
     }
   }
   if (!already_there) {
-    ch->next_fighting = combat_list;
-    combat_list = ch;
+    if (!combat_list) {
+      combat_list = ch;
+    } else {
+      // Global re-roll happens when the head of the list reaches 0 init. In order to prevent new
+      // combantants from arbitrarily delaying the next global re-roll, we want to hang on to the
+      // original head.
+      combat_list_head = combat_list;
+      ch->next_fighting = combat_list->next_fighting;
+      combat_list = ch;
   }
 
   // We set fighting before we call roll_individual_initiative() because we need the fighting target there.
@@ -405,6 +414,12 @@ void set_fighting(struct char_data * ch, struct char_data * vict, ...)
 
   roll_individual_initiative(ch);
   order_list(TRUE);
+  
+  // Put back the original combat list head.
+  if (combat_list_head) {
+    combat_list_head->next_fighting = combat_list;
+    combat_list = combat_list_head;
+  }
 
   if (!(AFF_FLAGGED(ch, AFF_MANNING) || PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_RIG)))
   {
@@ -446,6 +461,10 @@ void set_fighting(struct char_data * ch, struct char_data * vict, ...)
 void set_fighting(struct char_data * ch, struct veh_data * vict)
 {
   struct follow_type *k;
+  struct char_data * combat_list_head = NULL;
+
+  if (!ch || !vict)
+    return;
 
   if (CH_IN_COMBAT(ch))
     return;
@@ -459,17 +478,29 @@ void set_fighting(struct char_data * ch, struct veh_data * vict)
     }
   }
   if (!already_there) {
-    // Setting init to 0 here means new combat actually starts with the next global re-roll.
-    // This prevents arbitray length out-of-initiative states as new combats are initiated.
-    // Also need to avoid being first in the list to avoid setting off an early global re-roll.
-    GET_INIT_ROLL(ch) = 0;
-    ch->next_fighting = combat_list->next_fighting;
-    combat_list->next_fighting = ch;
+    if (!combat_list) {
+      combat_list = ch;
+    } else {
+      // Global re-roll happens when the head of the list reaches 0 init. In order to prevent new
+      // combantants from arbitrarily delaying the next global re-roll, we want to hang on to the
+      // original head.
+      combat_list_head = combat_list;
+      ch->next_fighting = combat_list->next_fighting;
+      combat_list = ch;
   }
 
   FIGHTING_VEH(ch) = vict;
   GET_POS(ch) = POS_FIGHTING;
 
+  roll_individual_initiative(ch);
+  order_list(TRUE);
+  
+  // Put back the original combat list head.
+  if (combat_list_head) {
+    combat_list_head->next_fighting = combat_list;
+    combat_list = combat_list_head;
+  }
+  
   if (!(GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD)))
     find_and_draw_weapon(ch);
 
