@@ -360,7 +360,9 @@ void check_killer(struct char_data * ch, struct char_data * vict)
 void set_fighting(struct char_data * ch, struct char_data * vict, ...)
 {
   struct follow_type *k;
-  if (ch == vict)
+  struct char_data * combat_list_head = NULL;
+
+  if (!ch || !vict || ch == vict)
     return;
 
   if (IS_NPC(ch)) {
@@ -396,8 +398,16 @@ void set_fighting(struct char_data * ch, struct char_data * vict, ...)
     }
   }
   if (!already_there) {
-    ch->next_fighting = combat_list;
-    combat_list = ch;
+    if (!combat_list) {
+      combat_list = ch;
+    } else {
+      // Global re-roll happens when the head of the list reaches 0 init. In order to prevent new
+      // combantants from arbitrarily delaying the next global re-roll, we want to hang on to the
+      // original head.
+      combat_list_head = combat_list;
+      ch->next_fighting = combat_list->next_fighting;
+      combat_list = ch;
+    }
   }
 
   // We set fighting before we call roll_individual_initiative() because we need the fighting target there.
@@ -406,6 +416,12 @@ void set_fighting(struct char_data * ch, struct char_data * vict, ...)
 
   roll_individual_initiative(ch);
   order_list(TRUE);
+
+  // Put back the original combat list head.
+  if (combat_list_head) {
+    combat_list_head->next_fighting = combat_list;
+    combat_list = combat_list_head;
+  }
 
   if (!(AFF_FLAGGED(ch, AFF_MANNING) || PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_RIG)))
   {
@@ -447,17 +463,46 @@ void set_fighting(struct char_data * ch, struct char_data * vict, ...)
 void set_fighting(struct char_data * ch, struct veh_data * vict)
 {
   struct follow_type *k;
+  struct char_data * combat_list_head = NULL;
+
+  if (!ch || !vict)
+    return;
 
   if (CH_IN_COMBAT(ch))
     return;
 
-  ch->next_fighting = combat_list;
-  combat_list = ch;
-  roll_individual_initiative(ch);
-  order_list(TRUE);
+  // Check to see if they're already in the combat list.
+  bool already_there = FALSE;
+  for (struct char_data *tmp = combat_list; tmp; tmp = tmp->next_fighting) {
+    if (tmp == ch) {
+      mudlog("SYSERR: Attempted to re-add character to combat list!", ch, LOG_SYSLOG, TRUE);
+      already_there = TRUE;
+    }
+  }
+  if (!already_there) {
+    if (!combat_list) {
+      combat_list = ch;
+    } else {
+      // Global re-roll happens when the head of the list reaches 0 init. In order to prevent new
+      // combantants from arbitrarily delaying the next global re-roll, we want to hang on to the
+      // original head.
+      combat_list_head = combat_list;
+      ch->next_fighting = combat_list->next_fighting;
+      combat_list = ch;
+    }
+  }
 
   FIGHTING_VEH(ch) = vict;
   GET_POS(ch) = POS_FIGHTING;
+
+  roll_individual_initiative(ch);
+  order_list(TRUE);
+
+  // Put back the original combat list head.
+  if (combat_list_head) {
+    combat_list_head->next_fighting = combat_list;
+    combat_list = combat_list_head;
+  }
 
   if (!(GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD)))
     find_and_draw_weapon(ch);
@@ -5697,8 +5742,10 @@ void perform_violence(void)
     }
 
     // You get no action if you're out of init.
-    if (GET_INIT_ROLL(ch) <= 0 && !IS_JACKED_IN(ch) && PRF_FLAGGED(ch, PRF_SEE_TIPS)) {
-      send_to_char("^L(OOC: You're out of initiative! Waiting for combat round reset.)^n\r\n", ch);
+    if (GET_INIT_ROLL(ch) <= 0 && !IS_JACKED_IN(ch)) {
+      if (PRF_FLAGGED(ch, PRF_SEE_TIPS)) {
+        send_to_char("^L(OOC: You're out of initiative! Waiting for combat round reset.)^n\r\n", ch);
+      }
       continue;
     }
 

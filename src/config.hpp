@@ -145,6 +145,11 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 
 #define NUM_MINUTES_BEFORE_LINKDEAD_EXTRACTION                 5
 
+// After how many minutes with no commands will you stop triggering aggro and blocking zone resets?
+#define IDLE_TIMER_AGGRO_THRESHOLD                             5
+#define IDLE_TIMER_PAYOUT_THRESHOLD                            10
+#define IDLE_TIMER_ZONE_RESET_THRESHOLD                        20
+
 // What is the multiplier at which a cyberdoc will buy 'ware from you?
 #define CYBERDOC_MAXIMUM_SELL_TO_SHOPKEEP_MULTIPLIER           0.30
 

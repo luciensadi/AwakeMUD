@@ -233,6 +233,11 @@ int gain_karma(struct char_data * ch, int gain, bool rep, bool limits, bool mult
   if (!IS_NPC(ch) && ((GET_LEVEL(ch) < 1 || IS_SENATOR(ch))))
     return 0;
 
+  if (ch->char_specials.timer >= IDLE_TIMER_PAYOUT_THRESHOLD) {
+    send_to_char("Your karma gain was suppressed due to you being idle.\r\n", ch);
+    return 0;
+  }
+
   // NPCs have a standard gain formula, no frills. No multiplier either.
   if (IS_NPC(ch)) {
     GET_KARMA(ch) += (int)(gain / 10);

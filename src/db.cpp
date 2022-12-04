@@ -4507,14 +4507,14 @@ void reset_zone(int zone, int reboot)
 
 }
 
-/* for use in reset_zone; return TRUE if zone 'nr' is Free of PC's  */
+/* for use in reset_zone; return TRUE if zone 'nr' is Free of non-idle PC's  */
 int zone_is_empty(int zone_nr)
 {
   struct descriptor_data *i;
 
   for (i = descriptor_list; i; i = i->next)
-    if (!i->connected && i->character->in_room)
-      if (i->character->in_room->zone == zone_nr)
+    if (!i->connected && i->character && i->character->char_specials.timer < IDLE_TIMER_ZONE_RESET_THRESHOLD)
+      if (i->character->in_room && i->character->in_room->zone == zone_nr)
         return 0;
 
   return 1;

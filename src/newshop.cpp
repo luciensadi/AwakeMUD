@@ -375,7 +375,7 @@ bool install_ware_in_target_character(struct obj_data *ware, struct char_data *i
       esscost *= 2;
 
     // Check to see if the operation is even possible with their current essence / hole.
-    if (GET_REAL_ESS(recipient) + GET_ESSHOLE(recipient) < esscost) {
+    if (GET_REAL_ESS(recipient) + GET_ESSHOLE(recipient) <= esscost) {
       if (IS_NPC(installer)) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " That operation would kill you!");
         do_say(installer, buf, cmd_say, SCMD_SAYTO);
