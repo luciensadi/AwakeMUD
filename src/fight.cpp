@@ -360,7 +360,7 @@ void set_fighting(struct char_data * ch, struct char_data * vict, ...)
 {
   struct follow_type *k;
   struct char_data * combat_list_head = NULL;
-  
+
   if (!ch || !vict || ch == vict)
     return;
 
@@ -406,6 +406,7 @@ void set_fighting(struct char_data * ch, struct char_data * vict, ...)
       combat_list_head = combat_list;
       ch->next_fighting = combat_list->next_fighting;
       combat_list = ch;
+    }
   }
 
   // We set fighting before we call roll_individual_initiative() because we need the fighting target there.
@@ -414,7 +415,7 @@ void set_fighting(struct char_data * ch, struct char_data * vict, ...)
 
   roll_individual_initiative(ch);
   order_list(TRUE);
-  
+
   // Put back the original combat list head.
   if (combat_list_head) {
     combat_list_head->next_fighting = combat_list;
@@ -487,6 +488,7 @@ void set_fighting(struct char_data * ch, struct veh_data * vict)
       combat_list_head = combat_list;
       ch->next_fighting = combat_list->next_fighting;
       combat_list = ch;
+    }
   }
 
   FIGHTING_VEH(ch) = vict;
@@ -494,13 +496,13 @@ void set_fighting(struct char_data * ch, struct veh_data * vict)
 
   roll_individual_initiative(ch);
   order_list(TRUE);
-  
+
   // Put back the original combat list head.
   if (combat_list_head) {
     combat_list_head->next_fighting = combat_list;
     combat_list = combat_list_head;
   }
-  
+
   if (!(GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD)))
     find_and_draw_weapon(ch);
 
