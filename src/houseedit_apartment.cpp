@@ -222,7 +222,7 @@ void houseedit_apartment_parse(struct descriptor_data *d, const char *arg) {
                   world[rnum].apartment_room = NULL;
                 }
 
-                // Delete the files for the prior world-rooms.
+                // TODO: Delete the files for the prior world-rooms, or otherwise invalidate them.
               }
 
               // Copy over our changes.

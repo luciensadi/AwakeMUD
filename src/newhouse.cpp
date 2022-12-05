@@ -527,8 +527,9 @@ const char *ApartmentComplex::list_apartments__returns_new() {
   }
 
   for (auto &apartment: apartments) {
-    snprintf(ENDOF(result), sizeof(result) + strlen(result), "  - ^C%s^n (lifestyle ^c%s^n, ^c%ld^n room%s, of which ^c%d^n %s): ^c%ld^n nuyen.\r\n",
+    snprintf(ENDOF(result), sizeof(result) + strlen(result), "  - ^C%s^n @ ^c%ld^n (lifestyle ^c%s^n, ^c%ld^n room%s, of which ^c%d^n %s): ^c%ld^n nuyen.\r\n",
              apartment->name,
+             apartment->rooms.empty() ? -1 : apartment->rooms.front()->get_vnum(),
              apartment->get_lifestyle_string(), // lifestyles[apartment->lifestyle].name,
              apartment->rooms.size(),
              apartment->rooms.size() == 1 ? "" : "s",
@@ -687,6 +688,7 @@ void Apartment::clone_from(Apartment *source) {
     guests.push_back(idnum);
   }
 
+  // Note that we're not pushing ourselves into the complex's list! This may cause issues.
   REPLACE(complex);
 }
 
