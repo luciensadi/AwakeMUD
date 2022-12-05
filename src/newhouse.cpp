@@ -45,13 +45,13 @@ std::vector<ApartmentComplex*> global_apartment_complexes = {};
 
 const bf::path global_housing_dir = bf::system_complete("lib") / "housing";
 
-// TODO: After decorating, have them look.
-
 // TODO: Indent desc, OR remove note about desc formatting from modify
 
 // TODO: Add back crap counts and formatting to hcontrol command
 
 // TODO: Verify hcontrol destroy works, or remove all hints about it
+
+// TODO: Security testing and verification that it's not possible to specify apt names that traverse directories.
 
 // TODO: Thoroughly test houseedit complex
 // - list
@@ -68,9 +68,6 @@ const bf::path global_housing_dir = bf::system_complete("lib") / "housing";
 // - edit
 
 // TODO: Verify through testing that an apartment owned by non-buildport player id X is not permanently borked when loaded on the buildport and then transferred back to main
-
-// TODO: Run under leak checker and see if complex and apartment clone_from leaks memory.
-// TODO: Verify if we need to delete our children apartment/rooms in our destructor.
 
 // EVENTUALTODO: Sanity checks for things like reused vnums, etc.
 
