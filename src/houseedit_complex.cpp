@@ -89,10 +89,11 @@ void houseedit_list_complexes(struct char_data *ch, char *arg) {
     if (arg && *arg && !is_abbrev(arg, complex->get_name()))
       continue;
 
-    send_to_char(ch, "  %s^n: Landlord ^c%ld^n, ^c%d^n apartments, editable by: %s\r\n",
+    send_to_char(ch, "  ^C%s^n: Landlord ^c%ld^n, ^c%d^n apartment%s, editable by: %s\r\n",
                  complex->get_name(),
                  complex->get_landlord_vnum(),
                  complex->get_apartments().size(),
+                 complex->get_apartments().size() == 1 ? "" : "s",
                  complex->list_editors());
   }
 }
@@ -102,15 +103,9 @@ void houseedit_edit_existing_complex(struct char_data *ch, char *arg) {
 
   ApartmentComplex *complex;
 
-  if (!*arg) {
-    // Use the one they're standing in.
-    FAILURE_CASE(!ch->in_room || !ch->in_room->apartment, "You must either stand in an apartment OR use ^WHOUSEEDIT COMPLEX <name>^n.");
-    complex = ch->in_room->apartment->get_complex();
-  } else {
-    // Find the referenced complex. Error messages sent during function eval.
-    if (!(complex = find_apartment_complex(arg, ch)))
-      return;
-  }
+  // Find the referenced complex. Error messages sent during function eval.
+  if (!(complex = find_apartment_complex(arg, ch)))
+    return;
 
   FAILURE_CASE(!complex->can_houseedit_complex(ch), "You don't have edit access for that complex.");
 
@@ -342,11 +337,22 @@ void houseedit_complex_parse(struct descriptor_data *d, const char *arg) {
           return;
         }
 
-        // They must be a builder.
-        if (get_player_rank(idnum) < LVL_BUILDER) {
-          send_to_char("You must specify a staff member.\r\n", CH);
-          houseedit_display_complex_edit_menu(d);
-          return;
+        {
+          int rank = get_player_rank(idnum);
+
+          // They must be a builder.
+          if (rank < LVL_BUILDER) {
+            send_to_char("You must specify a staff member.\r\n", CH);
+            houseedit_display_complex_edit_menu(d);
+            return;
+          }
+
+          // They can't be high-level staff.
+          if (rank >= MIN_LEVEL_TO_IGNORE_HOUSEEDIT_EDITOR_STATUS) {
+            send_to_char("There's no need to make them an editor-- they have global privs.\r\n", CH);
+            houseedit_display_complex_edit_menu(d);
+            return;
+          }
         }
 
         COMPLEX->toggle_editor(idnum);

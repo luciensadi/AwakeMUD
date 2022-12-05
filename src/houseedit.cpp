@@ -8,6 +8,8 @@
 #include "houseedit_complex.hpp"
 #include "houseedit_apartment.hpp"
 
+extern void ASSIGNMOB(long mob, SPECIAL(fname));
+
 void houseedit_import(struct char_data *ch);
 void houseedit_reload(struct char_data *ch, const char *filename);
 
@@ -19,9 +21,7 @@ ACMD(do_houseedit) {
   if (is_abbrev(mode, "import")) {
     // Import apartments from old format to new format. Destructive!
     FAILURE_CASE(GET_LEVEL(ch) < LVL_PRESIDENT, "You're not erudite enough to do that.");
-    FAILURE_CASE(!ch->in_room || !GET_APARTMENT(ch->in_room), "You must be standing in an apartment for that.");
     FAILURE_CASE(str_cmp(func, "confirm"), "To blow away existing apartments and load from old files, HOUSEEDIT IMPORT CONFIRM.");
-
 
     houseedit_import(ch);
     return;
@@ -148,7 +148,146 @@ void houseedit_reload(struct char_data *ch, const char *filename) {
 
 // Load old house files, parse, and transfer to new format.
 void houseedit_import(struct char_data *ch) {
+  int old_house_lifestyle_multiplier[] = { 1, 3, 10, 25 };
+
   mudlog_vfprintf(ch, LOG_SYSLOG, "House import started by %s.", GET_CHAR_NAME(ch));
-  // TODO
+
+  std::vector<ApartmentComplex*> read_apartment_complexes = {};
+
+  // Read the old house control file. Ripped most of this code straight from house.cpp.
+  FILE *fl;
+  int num_complexes;
+  char line[256], storage_file_name[256];
+  bf::path old_house_directory("house");
+
+  if (!(fl = fopen(HCONTROL_FILE, "r+b"))) {
+    log("House control file does not exist.");
+    return;
+  }
+
+  if (!get_line(fl, line) || sscanf(line, "%d", &num_complexes) != 1) {
+    log("Error at beginning of house control file.");
+    return;
+  }
+
+  // Go through each apartment complex entry.
+  for (int i = 0; i < num_complexes; i++) {
+    idnum_t owner;
+    time_t paid_until;
+    vnum_t landlord_vnum, house_vnum, key_vnum, atrium;
+    char name[20];
+    int basecost, num_rooms, lifestyle, atrium_dir;
+
+    get_line(fl, line);
+    if (sscanf(line, "%ld %s %d %d", &landlord_vnum, name, &basecost, &num_rooms) != 4) {
+      mudlog_vfprintf(ch, LOG_SYSLOG, "Format error in landlord #%d. Terminating.", i);
+      fclose(fl);
+      return;
+    }
+
+    rnum_t landlord_rnum = real_mobile(landlord_vnum);
+    if (landlord_rnum < 0) {
+      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Landlord vnum %ld does not match up with a real NPC. Terminating.", landlord_vnum);
+      fclose(fl);
+      return;
+    }
+
+    // Create a complex to represent this one.
+    mudlog_vfprintf(ch, LOG_SYSLOG, "Loaded complex %s (landlord %ld).", name, landlord_vnum);
+    ApartmentComplex *complex = new ApartmentComplex(landlord_vnum);
+    read_apartment_complexes.push_back(complex);
+
+    // Assign our landlord spec.
+    ASSIGNMOB(landlord_vnum, landlord_spec);
+
+    // Write our complex to ensure the directory exists.
+    complex->save();
+
+    // Go through each apartment in the apartment complex entry.
+    for (int x = 0; x < num_rooms; x++) {
+      int unused;
+
+      get_line(fl, line);
+      if (sscanf(line, "%ld %ld %d %d %s %ld %d %ld", &house_vnum, &key_vnum, &atrium_dir, &lifestyle, name,
+                 &owner, &unused, &paid_until) != 8) {
+        mudlog_vfprintf(ch, LOG_SYSLOG, "Format error in landlord #%ld room #%d. Terminating.", landlord_vnum, x);
+        return;
+      }
+
+      rnum_t house_rnum = real_room(house_vnum);
+
+      if (house_rnum < 0) {
+        mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: House vnum %ld does not match up with a real room. Terminating.", house_vnum);
+        fclose(fl);
+        return;
+      }
+
+      // Attempt to map the atrium.
+      if (!EXIT2(&world[house_rnum], atrium_dir) || !EXIT2(&world[house_rnum], atrium_dir)->to_room) {
+        mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: House vnum %ld's atrium exit does not exist. Terminating.", house_vnum);
+        fclose(fl);
+        return;
+      }
+      atrium = GET_ROOM_VNUM(EXIT2(&world[house_rnum], atrium_dir)->to_room);
+
+      // Create an apartment to represent this.
+      Apartment *apartment = new Apartment(complex, name, key_vnum, atrium, lifestyle, owner, paid_until);
+      mudlog_vfprintf(ch, LOG_SYSLOG, "Loading apartment %s (loc %ld, key %ld, atrium %ld, lifestyle %d, owner %ld, paid %ld).",
+                      name, house_vnum, key_vnum, atrium, lifestyle, owner, paid_until);
+
+      // Calculate and apply rent.
+      int rent = basecost * old_house_lifestyle_multiplier[lifestyle];
+      apartment->set_rent(rent);
+
+      // Write our apartment to ensure the directory exists.
+      apartment->save_base_info();
+
+      // Create a room for its entry and save it to create its directory.
+      ApartmentRoom *room = new ApartmentRoom(apartment, &world[house_rnum]);
+      room->save_info();
+
+      // Apply it to the world.
+      world[house_rnum].apartment = apartment;
+      world[house_rnum].apartment_room = room;
+
+      // Clone the current desc as a decoration.
+      if (*(world[house_rnum].description)) {
+        room->set_decoration(world[house_rnum].description);
+        room->save_decoration();
+      }
+
+      // Check to see if the old storage file exists.
+      snprintf(storage_file_name, sizeof(storage_file_name), "%ld.house", house_vnum);
+      bf::path original_save_file = old_house_directory / storage_file_name;
+      if (bf::exists(original_save_file)) {
+        mudlog_vfprintf(ch, LOG_SYSLOG, "Transferring storage for subroom %ld.", house_vnum);
+        // It does exist-- clone it over, then immediately load it so we don't lose contents to an overwrite.
+        bf::path new_save_file = room->get_base_directory() / "storage";
+        bf::copy_file(original_save_file, new_save_file);
+        room->load_storage_from_specified_path(new_save_file);
+      } else {
+        mudlog_vfprintf(ch, LOG_SYSLOG, "Subroom %ld had no storage.", house_vnum);
+      }
+
+      // Add our new room to our apartment.
+      apartment->add_room(room);
+
+      // Add our new apartment to our complex.
+      complex->add_apartment(apartment);
+    }
+  }
+
+  fclose(fl);
+
+  // Add our complex list to our global one. If there are overlaps, complain loudly.
+  for (auto *our_complex : read_apartment_complexes) {
+    for (auto *existing_complex : global_apartment_complexes) {
+      if (!str_cmp(our_complex->get_name(), existing_complex->get_name())) {
+        mudlog_vfprintf(ch, LOG_SYSLOG, "YOU DONE GOOFED: New complex is OVERWRITING existing complex %s!", existing_complex->get_name());
+      }
+    }
+    global_apartment_complexes.push_back(our_complex);
+  }
+
   mudlog("House import completed.", ch, LOG_SYSLOG, TRUE);
 }

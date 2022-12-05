@@ -24,7 +24,6 @@ extern void warn_about_apartment_deletion();
 extern void save_all_apartments_and_storage_rooms();
 extern ApartmentComplex *find_apartment_complex(const char *name, struct char_data *ch=NULL);
 extern Apartment *find_apartment(const char *full_name, struct char_data *ch);
-extern void globally_rewrite_room_to_apartment_pointers();
 
 extern std::vector<ApartmentComplex*> global_apartment_complexes;
 
@@ -35,6 +34,8 @@ extern SPECIAL(landlord_spec);
 #define GET_APARTMENT_DECORATION(room)          ((room)->apartment_room ? (room)->apartment_room->get_decoration() : NULL)
 #define CH_CAN_ENTER_APARTMENT(room, ch)        (((room) && (room)->apartment) ? (room)->apartment->can_enter(ch) : TRUE)
 #define IDNUM_CAN_ENTER_APARTMENT(room, idnum)  (((room) && (room)->apartment) ? (room)->apartment->can_enter_by_idnum(idnum) : TRUE)
+
+#define MIN_LEVEL_TO_IGNORE_HOUSEEDIT_EDITOR_STATUS  LVL_ADMIN
 
 /* An ApartmentComplex is composed of N Apartments, and has tracking data for landlord info. */
 class ApartmentComplex {
@@ -58,6 +59,7 @@ class ApartmentComplex {
   public:
     // Given a filename to read from, instantiate an apartment complex.
     ApartmentComplex(bf::path filename);
+    ApartmentComplex(vnum_t);
     ApartmentComplex();
     ~ApartmentComplex();
 
@@ -128,6 +130,7 @@ class Apartment {
   public:
     // Given a filename to read from, instantiate an individual apartment.
     Apartment(ApartmentComplex *complex, bf::path filename);
+    Apartment(ApartmentComplex *complex, const char *, vnum_t, vnum_t, int, idnum_t, time_t);
     Apartment();
     ~Apartment();
 
@@ -163,6 +166,7 @@ class Apartment {
 
     bool create_or_extend_lease(struct char_data *ch);
     void save_lease();
+    void save_rooms();
     void break_lease();
     void save_base_info();
 

@@ -213,11 +213,35 @@ void houseedit_apartment_parse(struct descriptor_data *d, const char *arg) {
                               GET_CHAR_NAME(CH),
                               d->edit_apartment_original->get_full_name());
 
+
+              for (auto &room : d->edit_apartment_original->get_rooms()) {
+                // Strip apartment status from all prior world-rooms.
+                rnum_t rnum = real_room(room->get_vnum());
+                if (rnum >= 0) {
+                  world[rnum].apartment = NULL;
+                  world[rnum].apartment_room = NULL;
+                }
+
+                // Delete the files for the prior world-rooms.
+              }
+
               // Copy over our changes.
               d->edit_apartment_original->clone_from(APT);
 
+              for (auto &room : d->edit_apartment_original->get_rooms()) {
+                // Apply room status to all new rooms.
+                rnum_t rnum = real_room(room->get_vnum());
+                if (rnum >= 0) {
+                  world[rnum].apartment = d->edit_apartment_original;
+                  world[rnum].apartment_room = room;
+                }
+
+                // We don't write the files for the new world-rooms here-- that's done in save_rooms().
+              }
+
               // Write to disk.
               d->edit_apartment_original->save_base_info();
+              d->edit_apartment_original->save_rooms();
             }
             // It didn't exist: Save new.
             else {
@@ -231,14 +255,11 @@ void houseedit_apartment_parse(struct descriptor_data *d, const char *arg) {
 
               // Write to disk.
               APT->save_base_info();
+              APT->save_rooms();
 
               // Null edit_apartment so it's not deleted later.
               APT = NULL;
             }
-
-            // Globally true up room->apartment_room and room->apartment pointers.
-            // This is technically overkill in the case of writing a new apartment, but let's do it anyways.
-            globally_rewrite_room_to_apartment_pointers();
 
             // Fall through.
           } else {

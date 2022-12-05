@@ -272,6 +272,9 @@ void string_add(struct descriptor_data *d, char *str)
       } else {
         GET_APARTMENT_SUBROOM(d->character->in_room)->set_decoration(*d->str);
         DELETE_D_STR_IF_EXTANT(d);
+        if (!PRF_FLAGGED(d->character, PRF_SCREENREADER)) {
+          look_at_room(d->character, 1, 0);
+        }
       }
       STATE(d) = CON_PLAYING;
     } else if (STATE(d) == CON_SPELL_CREATE && d->edit_mode == 3) {
