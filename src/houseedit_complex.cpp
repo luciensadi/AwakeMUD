@@ -227,6 +227,7 @@ void houseedit_complex_parse(struct descriptor_data *d, const char *arg) {
 
             // Add to global list.
             global_apartment_complexes.push_back(COMPLEX);
+            sort(global_apartment_complexes.begin(), global_apartment_complexes.end(), apartment_complex_sort_func);
 
             // Enact our landlord spec changes.
             rnum_t rnum = real_mobile(COMPLEX->get_landlord_vnum());

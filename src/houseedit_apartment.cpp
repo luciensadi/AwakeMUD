@@ -51,6 +51,13 @@ void houseedit_show_apartment(struct char_data *ch, char *arg) {
   send_to_char(ch, "\r\n");
   send_to_char(ch, "Complex:        %s^n\r\n", apartment->get_complex() ? apartment->get_complex()->get_name() : "^y(null)^n");
   send_to_char(ch, "\r\n");
+  if (apartment->get_paid_until() > 0) {
+    const char *owner_name = apartment->get_owner_name__returns_new();
+    send_to_char(ch, "Leased To:      %s^n (%ld)\r\n", owner_name, apartment->get_owner_id());
+    send_to_char(ch, "For the next:   %ld seconds\r\n", apartment->get_paid_until() - time(0));
+    delete [] owner_name;
+    send_to_char(ch, "\r\n");
+  }
   send_to_char(ch, "Rooms:\r\n%s^n\r\n", room_string);
 
   delete [] room_string;

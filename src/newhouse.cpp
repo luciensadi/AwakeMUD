@@ -45,8 +45,6 @@ std::vector<ApartmentComplex*> global_apartment_complexes = {};
 
 const bf::path global_housing_dir = bf::system_complete("lib") / "housing";
 
-// TODO: Indent desc, OR remove note about desc formatting from modify
-
 // TODO: Add back crap counts and formatting to hcontrol command
 
 // TODO: Verify hcontrol destroy works, or remove all hints about it
@@ -95,7 +93,7 @@ ACMD(do_decorate) {
   FAILURE_CASE(!GET_APARTMENT_SUBROOM(ch->in_room), "This apartment is bugged! Notify staff.");
 
   PLR_FLAGS(ch).SetBit(PLR_WRITING);
-  send_to_char("Enter your new room description. Terminate with a @ on a new line. Your new desc will be automatically indented and newline-terminated.\r\n", ch);
+  send_to_char("Enter your new room description. Terminate with a @ on a new line. No formatting will be applied, so indent as/if desired! MUD-standard indent is 3 spaces.\r\n", ch);
   act("$n starts to move things around the room.", TRUE, ch, 0, 0, TO_ROOM);
   STATE(ch->desc) = CON_DECORATE;
   DELETE_D_STR_IF_EXTANT(ch->desc);
@@ -151,6 +149,8 @@ void load_apartment_complexes() {
       log_vfprintf(" - Fully loaded %s.", complex->get_name());
     }
   }
+  // Sort after fully loaded.
+  sort(global_apartment_complexes.begin(), global_apartment_complexes.end(), apartment_complex_sort_func);
 }
 
 void save_all_apartments_and_storage_rooms() {
@@ -261,6 +261,7 @@ ApartmentComplex::ApartmentComplex(bf::path filename) :
         log_vfprintf(" --- Fully loaded %s.", apartment->get_name());
       }
     }
+    sort(apartments.begin(), apartments.end(), apartment_sort_func);
   }
 }
 
@@ -391,6 +392,8 @@ void ApartmentComplex::display_room_list_to_character(struct char_data *ch) {
   }
 
   if (!owned_apartments.empty()) {
+    sort(owned_apartments.begin(), owned_apartments.end(), apartment_sort_func);
+
     bool first_print = TRUE;
     send_to_char(ch, "You have ownership control over the following apartment%s: ", owned_apartments.size() == 1 ? "" : "s");
     for (auto &apartment : apartments) {
@@ -404,6 +407,8 @@ void ApartmentComplex::display_room_list_to_character(struct char_data *ch) {
     send_to_char(ch, "It looks like all the rooms here have been claimed.\r\n");
     return;
   }
+
+  sort(available_apartments.begin(), available_apartments.end(), apartment_sort_func);
 
   send_to_char(ch, "The following rooms are free: \r\n");
 
@@ -494,6 +499,7 @@ void ApartmentComplex::clone_from(ApartmentComplex *source) {
     new_apt->complex = this;
     apartments.push_back(new_apt);
   }
+  sort(apartments.begin(), apartments.end(), apartment_sort_func);
 }
 
 bool ApartmentComplex::set_landlord_vnum(vnum_t vnum, bool perform_landlord_overlap_test) {
@@ -549,6 +555,7 @@ void ApartmentComplex::add_apartment(Apartment *apartment) {
 
   // Add us to the new complex.
   apartments.push_back(apartment);
+  sort(apartments.begin(), apartments.end(), apartment_sort_func);
 }
 /*********** Apartment ************/
 
@@ -669,8 +676,9 @@ void Apartment::clone_from(Apartment *source) {
   REPLACE(atrium);
   REPLACE(key_vnum);
 
-  // Create an empty temp vector and swap its contents with rooms, deallocating previous ones.
+  // Create an empty temp vector and swap its contents with our current rooms vector, deallocating previous rooms.
   std::vector<ApartmentRoom *>().swap(rooms);
+  // Copy over the apartment's rooms.
   for (auto &room : source->rooms) {
     ApartmentRoom *new_room = new ApartmentRoom(room);
     new_room->apartment = this;
@@ -1036,10 +1044,12 @@ void Apartment::list_guests_to_char(struct char_data *ch) {
 
 // Returns new-- must delete output!
 const char * Apartment::get_owner_name__returns_new() {
+  char buf[1000];
   if (owned_by_pgroup) {
-    char pgroup_buf[1000];
-    snprintf(pgroup_buf, sizeof(pgroup_buf), "Group %s^n", owned_by_pgroup->get_name());
-    return str_dup(pgroup_buf);
+    snprintf(buf, sizeof(buf), "Group %s^n", owned_by_pgroup->get_name());
+    return str_dup(buf);
+  } else if (owned_by_player < 0) {
+    return str_dup("Unloaded Group");
   } else {
     return get_player_name(owned_by_player);
   }
@@ -1088,6 +1098,7 @@ void Apartment::set_complex(ApartmentComplex *new_complex) {
   // Add us to the new complex.
   complex = new_complex;
   complex->apartments.push_back(this);
+  sort(complex->apartments.begin(), complex->apartments.end(), apartment_sort_func);
 }
 
 bool Apartment::set_rent(long amount, struct char_data *ch) {
@@ -1633,6 +1644,14 @@ void globally_rewrite_room_to_apartment_pointers() {
       }
     }
   }
+}
+
+bool apartment_sort_func(Apartment *i1, Apartment *i2) {
+  return strcmp(i1->get_name(), i2->get_name()) < 0;
+}
+
+bool apartment_complex_sort_func(ApartmentComplex *i1, ApartmentComplex *i2) {
+  return strcmp(i1->get_name(), i2->get_name()) < 0;
 }
 
 //////////////////////////// The Landlord spec. ///////////////////////////////

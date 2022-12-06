@@ -25,6 +25,9 @@ extern void save_all_apartments_and_storage_rooms();
 extern ApartmentComplex *find_apartment_complex(const char *name, struct char_data *ch=NULL);
 extern Apartment *find_apartment(const char *full_name, struct char_data *ch);
 
+extern bool apartment_sort_func(Apartment *, Apartment *);
+extern bool apartment_complex_sort_func(ApartmentComplex *, ApartmentComplex *);
+
 extern std::vector<ApartmentComplex*> global_apartment_complexes;
 
 extern SPECIAL(landlord_spec);
