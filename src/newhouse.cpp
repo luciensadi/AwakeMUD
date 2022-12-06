@@ -51,6 +51,8 @@ const bf::path global_housing_dir = bf::system_complete("lib") / "housing";
 
 // TODO: Security testing and verification that it's not possible to specify apt names that traverse directories.
 
+// TODO: Consider allowing guests to view status of and pay apartments.
+
 // TODO: Thoroughly test houseedit complex
 // - list
 // - show
@@ -1446,6 +1448,12 @@ struct room_data *ApartmentRoom::get_world_room() {
   }
 
   return &world[rnum];
+}
+
+void ApartmentRoom::delete_info() {
+  if (bf::exists(base_path / ROOM_INFO_FILE_NAME)) {
+    bf::remove(base_path / ROOM_INFO_FILE_NAME);
+  }
 }
 
 ///////////////////////// Utility functions ////////////////////////////////

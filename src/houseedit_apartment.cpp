@@ -229,7 +229,8 @@ void houseedit_apartment_parse(struct descriptor_data *d, const char *arg) {
                   world[rnum].apartment_room = NULL;
                 }
 
-                // TODO: Delete the files for the prior world-rooms, or otherwise invalidate them.
+                // Invalidate the room on disk. This ensures it's not brought back on copyover.
+                room->delete_info();
               }
 
               // Copy over our changes.

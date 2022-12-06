@@ -18,27 +18,41 @@ int count_objects(struct obj_data *obj) {
   return total;
 }
 
-/* The hcontrol command itself, used by imms to create/destroy houses */
+bool name_compare_func(const char *a, const char *b) {
+  return strcmp(a, b) < 0;
+}
 
+/* The hcontrol command itself, used by imms to create/destroy houses */
 const char *HCONTROL_FORMAT =
   "Usage:  hcontrol destroy <full apartment name with complex>\r\n"
   "        hcontrol show\r\n"
   "        hcontrol show <full apt name | character name>\r\n";
 
 void hcontrol_list_houses(struct char_data *ch) {
+  char compose_buf[1000];
+  std::vector<const char *> entries = {};
+
   for (auto &complex : global_apartment_complexes) {
     for (auto &apartment : complex->get_apartments()) {
-      // TODO: Add back in info like formatting, guest count, crap count etc
-      const char *owner_name = apartment->get_owner_name__returns_new();
+      if (apartment->get_paid_until() > 0) {
+        // TODO: Add back in info like formatting, guest count, crap count etc
+        const char *owner_name = apartment->get_owner_name__returns_new();
 
-      if (!owner_name)
-        owner_name = str_dup("<UNDEF>");
+        if (!owner_name)
+          owner_name = str_dup("<UNDEF>");
 
-      send_to_char(ch, "%s: owner %s (%ld)\r\n", apartment->get_full_name(), CAP(owner_name), apartment->get_owner_id());
+        snprintf(compose_buf, sizeof(compose_buf), "%s (%ld): %s\r\n", CAP(owner_name), apartment->get_owner_id(), apartment->get_full_name());
+        entries.push_back(str_dup(compose_buf));
 
-      DELETE_ARRAY_IF_EXTANT(owner_name);
+        DELETE_ARRAY_IF_EXTANT(owner_name);
+      }
     }
   }
+
+  sort(entries.begin(), entries.end(), name_compare_func);
+
+  for (auto &entry : entries)
+    send_to_char(entry, ch);
 }
 
 void hcontrol_destroy_house(struct char_data * ch, char *arg) {
@@ -62,6 +76,7 @@ void hcontrol_destroy_house(struct char_data * ch, char *arg) {
       }
     }
   }
+  send_to_char("No apartment matched your search. Please use the exact and full name of the apartment, like 'Triple Tree Inn - Garages's Unit B2'.\r\n", ch);
 }
 
 void hcontrol_display_house_by_name(struct char_data * ch, vnum_t house_number) {
@@ -116,13 +131,13 @@ void hcontrol_display_house_with_owner_or_guest(struct char_data * ch, const cha
   for (auto &complex : global_apartment_complexes) {
     for (auto &apartment : complex->get_apartments()) {
       if (apartment->has_owner_privs_by_idnum(idnum)) {
-        send_to_char(ch, "- Owner privileges at %s.\r\n", apartment->get_full_name());
+        send_to_char(ch, "- Owner privileges at ^c%s^n.\r\n", apartment->get_full_name());
         printed_something = TRUE;
       } else {
         // Traditional guests.
         if (find(apartment->get_guests().begin(), apartment->get_guests().end(), idnum) != apartment->get_guests().end()) {
           const char *owner_name = apartment->get_owner_name__returns_new();
-          send_to_char(ch, "- Guest at %s, owned by ^c%s^n (^c%ld^n).\r\n", apartment->get_full_name(), owner_name, apartment->get_owner_id());
+          send_to_char(ch, "- Guest at ^c%s^n, owned by ^c%s^n (^c%ld^n).\r\n", apartment->get_full_name(), owner_name, apartment->get_owner_id());
           delete [] owner_name;
           printed_something = TRUE;
         }
@@ -131,7 +146,7 @@ void hcontrol_display_house_with_owner_or_guest(struct char_data * ch, const cha
           Bitfield required_privileges;
           required_privileges.SetBits(PRIV_LEADER, PRIV_LANDLORD, PRIV_TENANT, ENDBIT);
           if (pgroup_char_has_any_priv(idnum, apartment->get_owner_pgroup()->get_idnum(), required_privileges))
-          send_to_char(ch, "- Can enter %s due to pgroup privileges.\r\n", apartment->get_full_name());
+          send_to_char(ch, "- Can enter ^c%s^n due to pgroup privileges.\r\n", apartment->get_full_name());
         }
       }
     }
@@ -146,7 +161,6 @@ void hcontrol_display_house_with_owner_or_guest(struct char_data * ch, const cha
 ACMD(do_hcontrol)
 {
   char arg1[MAX_INPUT_LENGTH], arg2[MAX_INPUT_LENGTH];
-  int house_number;
   vnum_t idnum;
 
   skip_spaces(&argument);
@@ -168,17 +182,9 @@ ACMD(do_hcontrol)
       return;
     }
 
-    // If the argument is an int, we assume you want to know about a specific house.
-    if ((house_number = atoi(arg2)) > 0) {
-      // hcontrol_display_house_by_number(ch, house_number);
-      send_to_char("Not implemented\r\n", ch);
-      return;
-    }
-
     // Otherwise, it's assumed to be a character name. Look up their houses and also houses where they're a guest.
     if ((idnum = get_player_id(arg2)) > 0) {
-      // hcontrol_display_house_with_owner_or_guest(ch, capitalize(arg2), idnum);
-      send_to_char("Not implemented\r\n", ch);
+      hcontrol_display_house_with_owner_or_guest(ch, capitalize(arg2), idnum);
     } else {
       send_to_char(ch, "There is no player named '%s'.\r\n", arg2);
     }

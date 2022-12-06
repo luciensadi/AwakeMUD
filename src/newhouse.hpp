@@ -247,8 +247,9 @@ class ApartmentRoom {
     struct room_data *get_world_room();
 
     // Restore the apartment's default description.
-    void purge_contents();
     void delete_decoration();
+    void purge_contents();
+    void delete_info();
 };
 
 #endif // _newhouse_h_

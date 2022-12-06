@@ -30,45 +30,11 @@
 #include "limits.hpp"
 
 extern char *cleanup(char *dest, const char *src);
-extern void ASSIGNMOB(long mob, SPECIAL(fname));
 extern void add_phone_to_list(struct obj_data *obj);
 extern void auto_repair_obj(struct obj_data *obj);
 extern void handle_weapon_attachments(struct obj_data *obj);
-extern bool player_is_dead_hardcore(long id);
-
-ACMD_CONST(do_say);
-
-extern void remove_vehicles_from_apartment(struct room_data *room);
-void warn_about_apartment_deletion();
-
-void House_delete_file(vnum_t vnum, char *name);
-
-struct life_data
-{
-  const char *name;
-  sh_int cost;
-};
-
-struct life_data lifestyle[] =
-  {
-    { "Low", 1
-    },
-    { "Middle", 3 },
-    { "High", 10 },
-    { "Luxury", 25 }
-  };
 
 /* First, the basics: finding the filename; loading/saving objects */
-
-/* Return a filename given a house vnum */
-bool House_get_filename(vnum_t vnum, char *filename, int filename_size)
-{
-  if (vnum == NOWHERE)
-    return FALSE;
-
-  snprintf(filename, filename_size, "house/%ld.house", vnum);
-  return TRUE;
-}
 
 // Same, but for storage.
 bool Storage_get_filename(vnum_t vnum, char *filename, int filename_size)
@@ -446,32 +412,3 @@ void Storage_save(const char *file_name, struct room_data *room) {
 }
 #undef FILEBUF_SIZE
 #undef APPEND_IF_CHANGED
-
-/* Delete a house save file */
-void House_delete_file(vnum_t vnum, char *name)
-{
-  char buf[MAX_INPUT_LENGTH];
-  FILE *fl;
-
-  if (!name || !*name)
-    return;
-  if (!(fl = fopen(name, "rb"))) {
-    if (errno != ENOENT) {
-      snprintf(buf, sizeof(buf), "SYSERR: Error deleting house file #%ld. (1)", vnum);
-      perror(buf);
-    }
-    return;
-  }
-  fclose(fl);
-  if (unlink(name) < 0) {
-    snprintf(buf, sizeof(buf), "SYSERR: Error deleting house file #%ld. (2)", vnum);
-    perror(buf);
-  }
-}
-
-/******************************************************************
- *  Functions for house administration (creation, deletion, etc.  *
- *****************************************************************/
-
-
-/* Misc. administrative functions */
