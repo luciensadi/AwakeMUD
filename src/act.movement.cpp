@@ -2081,10 +2081,20 @@ ACMD(do_leave)
   // If you're in a PGHQ, you teleport to the first room of the PGHQ's zone.
   if (in_room->zone >= 0 && zone_table[in_room->zone].is_pghq) {
     rnum_t entrance_rnum = real_room(zone_table[in_room->zone].number * 100);
-    if (entrance_rnum) {
-      send_to_char("You glance around to get your bearings, then head for the entrance.\r\n\r\n", ch);
+    if (entrance_rnum >= 0) {
+      struct room_data *entrance = &world[entrance_rnum];
+
+      // Attempt to find the exit to a non-HQ room from there.
+      for (int dir = 0; dir < NUM_OF_DIRS; dir++) {
+        if (EXIT2(entrance, dir) && EXIT2(entrance, dir)->to_room && EXIT2(entrance, dir)->to_room->zone != in_room->zone) {
+          entrance = EXIT2(entrance, dir)->to_room;
+          break;
+        }
+      }
+
+      send_to_char("You glance around to get your bearings, then head for the exit.\r\n\r\n", ch);
       char_from_room(ch);
-      char_to_room(ch, &world[entrance_rnum]);
+      char_to_room(ch, entrance);
     } else {
       mudlog("SYSERR: Could not get player to PGHQ entrance, does it not exist?", ch, LOG_SYSLOG, TRUE);
       send_to_char("The walls feel like they're closing in on you, and you panic! A few minutes of breathless flight later, you find yourself somewhere else...\r\n\r\n", ch);
