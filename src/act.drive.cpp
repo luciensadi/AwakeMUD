@@ -249,6 +249,11 @@ ACMD(do_drive)
     return;
   }
   if (VEH->cspeed == SPEED_OFF || VEH->dest) {
+    if (VEH->hood) {
+      send_to_char("You can't drive with the hood up.\r\n", ch);
+      return;
+    }
+
     AFF_FLAGS(ch).SetBit(AFF_PILOT);
     VEH->cspeed = SPEED_CRUISING;
     VEH->lastin[0] = VEH->in_room;
@@ -333,6 +338,11 @@ ACMD(do_rig)
       return;
     }
 
+    if (VEH->hood) {
+      send_to_char("You can't drive with the hood up.\r\n", ch);
+      return;
+    }
+
     // No perception while rigging. Specifically only checks player perception.
     if (PLR_FLAGGED(ch, PLR_PERCEIVE)) {
       ACMD_DECLARE(do_astral);
@@ -378,7 +388,7 @@ ACMD(do_vemote)
   RIG_VEH(ch, veh)
   snprintf(buf, sizeof(buf), "%s%s%s^n\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)), argument, ispunct(get_final_character_from_string(argument)) ? "" : ".");
   if (veh->in_room)
-    send_to_room(buf, veh->in_room);
+    send_to_room(buf, veh->in_room, veh);
   else
     send_to_veh(buf, veh->in_veh, ch, TRUE);
   snprintf(buf, sizeof(buf), "Your vehicle%s%s^n\r\n", argument, ispunct(get_final_character_from_string(argument)) ? "" : ".");
