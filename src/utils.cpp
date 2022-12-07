@@ -4681,24 +4681,6 @@ int get_zone_index_number_from_vnum(vnum_t vnum) {
 }
 
 bool room_accessible_to_vehicle_piloted_by_ch(struct room_data *room, struct veh_data *veh, struct char_data *ch) {
-  if (veh->type == VEH_BIKE && ROOM_FLAGGED(room, ROOM_NOBIKE))
-    return FALSE;
-
-  if (!ROOM_FLAGGED(room, ROOM_ROAD) && !ROOM_FLAGGED(room, ROOM_GARAGE)) {
-    if (veh->type != VEH_BIKE && veh->type != VEH_DRONE)
-      return FALSE;
-  }
-
-  if (ROOM_FLAGGED(room, ROOM_HOUSE) && !House_can_enter(ch, GET_ROOM_VNUM(room))) {
-    return FALSE;
-  }
-
-  #ifdef DEATH_FLAGS
-    if (ROOM_FLAGGED(room, ROOM_DEATH)) {
-      return FALSE;
-    }
-  #endif
-
   // Flying vehicles can traverse any terrain.
   if (!ROOM_FLAGGED(room, ROOM_ALL_VEHICLE_ACCESS) && !veh_can_traverse_air(veh)) {
     // Non-flying vehicles can't pass fall rooms.
@@ -4717,6 +4699,24 @@ bool room_accessible_to_vehicle_piloted_by_ch(struct room_data *room, struct veh
       }
     }
   }
+
+  if (ROOM_FLAGGED(room, ROOM_HOUSE) && !House_can_enter(ch, GET_ROOM_VNUM(room))) {
+    return FALSE;
+  }
+
+  if (!IS_WATER(room) && !ROOM_FLAGGED(room, ROOM_ROAD) && !ROOM_FLAGGED(room, ROOM_GARAGE)) {
+    if (veh->type != VEH_BIKE && veh->type != VEH_DRONE)
+      return FALSE;
+  }
+
+  if (veh->type == VEH_BIKE && ROOM_FLAGGED(room, ROOM_NOBIKE))
+    return FALSE;
+
+  #ifdef DEATH_FLAGS
+    if (ROOM_FLAGGED(room, ROOM_DEATH)) {
+      return FALSE;
+    }
+  #endif
 
   if (ROOM_FLAGGED(room, ROOM_TOO_CRAMPED_FOR_CHARACTERS) && (veh->body > 1 || veh->type != VEH_DRONE)) {
     return FALSE;

@@ -742,9 +742,11 @@ void move_vehicle(struct char_data *ch, int dir)
       return;
   }
 
+  struct room_data *room = EXIT(veh, dir)->to_room;
+
   if (IS_SET(EXIT(veh, dir)->exit_info, EX_CLOSED)) {
-      if ((ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_HOUSE) // It only checks house, not garage, so drones can enter/leave apts.
-             && House_can_enter(ch, EXIT(veh, dir)->to_room->number)
+      if ((ROOM_FLAGGED(room, ROOM_HOUSE) // It only checks house, not garage, so drones can enter/leave apts.
+             && House_can_enter(ch, room->number)
              && has_key(ch, (EXIT(veh, dir)->key)))
           || (ROOM_FLAGGED(veh->in_room, ROOM_HOUSE)))
       {
@@ -758,22 +760,22 @@ void move_vehicle(struct char_data *ch, int dir)
   }
 
 #ifdef DEATH_FLAGS
-  if (ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_DEATH)) {
+  if (ROOM_FLAGGED(room, ROOM_DEATH)) {
     send_to_char(CANNOT_GO_THAT_WAY, ch);
     return;
   }
 #endif
 
   // Flying vehicles can traverse any terrain.
-  if (!ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_ALL_VEHICLE_ACCESS) && !veh_can_traverse_air(veh)) {
+  if (!ROOM_FLAGGED(room, ROOM_ALL_VEHICLE_ACCESS) && !veh_can_traverse_air(veh)) {
     // Non-flying vehicles can't pass fall rooms.
-    if (ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_FALL)) {
+    if (ROOM_FLAGGED(room, ROOM_FALL)) {
       send_to_char(ch, "%s would plunge to its destruction!\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
       return;
     }
 
     // Check to see if your vehicle can handle the terrain type you're giving it.
-    if (IS_WATER(EXIT(veh, dir)->to_room)) {
+    if (IS_WATER(room)) {
       if (!veh_can_traverse_water(veh)) {
         send_to_char(ch, "%s would sink!\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
         return;
@@ -789,39 +791,48 @@ void move_vehicle(struct char_data *ch, int dir)
   if (special(ch, convert_dir[dir], &empty_argument))
     return;
 
-  if (ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_HOUSE) && !House_can_enter(ch, EXIT(veh, dir)->to_room->number)) {
+  if (ROOM_FLAGGED(room, ROOM_HOUSE) && !House_can_enter(ch, room->number)) {
     send_to_char("You can't use other people's garages without permission.\r\n", ch);
     return;
   }
 
-  if ((!ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_ROAD) && !ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_GARAGE))
-      && !IS_WATER(EXIT(veh, dir)->to_room) && (veh->type != VEH_DRONE && veh->type != VEH_BIKE))
-  {
-    send_to_char("That's not an easy path-- only drones and bikes have a chance of making it through.\r\n", ch);
-    return;
+  if (!IS_WATER(room) && !ROOM_FLAGGED(room, ROOM_ROAD) && !ROOM_FLAGGED(room, ROOM_GARAGE)) {
+    if (veh->type != VEH_DRONE && veh->type != VEH_BIKE) {
+      send_to_char("That's not an easy path-- only drones and bikes have a chance of making it through.\r\n", ch);
+      return;
+    }
   }
 
-  if (veh->type == VEH_BIKE && ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_NOBIKE)) {
+  if (veh->type == VEH_BIKE && ROOM_FLAGGED(room, ROOM_NOBIKE)) {
     send_to_char(CANNOT_GO_THAT_WAY, ch);
     return;
   }
 
-  if (ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_TOO_CRAMPED_FOR_CHARACTERS) && (veh->body > 1 || veh->type != VEH_DRONE)) {
+#ifdef DEATH_FLAGS
+  if (ROOM_FLAGGED(room, ROOM_DEATH)) {
+    return FALSE;
+  }
+#endif
+
+  if (ROOM_FLAGGED(room, ROOM_TOO_CRAMPED_FOR_CHARACTERS) && (veh->body > 1 || veh->type != VEH_DRONE)) {
     send_to_char("Your vehicle is too big to fit in there, but a small drone might make it in.\r\n", ch);
     return;
   }
 
-  if (ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_STAFF_ONLY)) {
-    for (struct char_data *tch = veh->people; tch; tch = tch->next_in_veh) {
-      if (!IS_NPC(tch) && !access_level(tch, LVL_BUILDER)) {
-        send_to_char("Everyone in the vehicle must be a member of the game's administration to go there.\r\n", ch);
-        return;
-      }
+  for (struct char_data *tch = veh->people; tch; tch = tch->next_in_veh) {
+    if (ROOM_FLAGGED(room, ROOM_STAFF_ONLY) && !IS_NPC(tch) && !access_level(tch, LVL_BUILDER)) {
+      send_to_char("Everyone in the vehicle must be a member of the game's administration to go there.\r\n", ch);
+      return;
+    }
+
+    if (ROOM_FLAGGED(room, ROOM_HOUSE) && !House_can_enter(tch, GET_ROOM_VNUM(room))) {
+      send_to_char("Everyone in the vehicle must be a guest of the apartment to go there.\r\n", ch);
+      return;
     }
   }
 
   // Sanity check: Did you update the impassibility code without updating this?
-  if (!room_accessible_to_vehicle_piloted_by_ch(EXIT(veh, dir)->to_room, veh, ch)) {
+  if (!room_accessible_to_vehicle_piloted_by_ch(room, veh, ch)) {
     mudlog("SYSERR: room_accessible_to_vehicle() does not match move_vehicle() constraints!", ch, LOG_SYSLOG, TRUE);
     send_to_char(CANNOT_GO_THAT_WAY, ch);
     return;
