@@ -103,8 +103,8 @@ void mental_gain(struct char_data * ch)
   else if (ch->in_room && ROOM_FLAGGED(ch->in_room, ROOM_STERILE))
     gain *= 1.5;
 
-  if (GET_TRADITION(ch) == TRAD_ADEPT)
-    gain *= (float) 1 + (GET_POWER(ch, ADEPT_HEALING) / 3);
+  if (GET_TRADITION(ch) == TRAD_ADEPT && GET_POWER(ch, ADEPT_HEALING) > 0)
+    gain *= ((float) 1 + GET_POWER(ch, ADEPT_HEALING) / 2);
   if (GET_BIOOVER(ch) > 0)
     gain /= GET_BIOOVER(ch);
 
@@ -156,6 +156,8 @@ void physical_gain(struct char_data * ch)
 
   if (char_is_in_social_room(ch))
     gain *= 2;
+  else if (ch->in_room && ROOM_FLAGGED(ch->in_room, ROOM_STERILE))
+    gain *= 1.8;
 
   if (IS_NPC(ch))
     gain *= 2;
@@ -181,8 +183,8 @@ void physical_gain(struct char_data * ch)
 
     gain *= get_drug_heal_multiplier(ch);
   }
-  if (GET_TRADITION(ch) == TRAD_ADEPT)
-    gain *= GET_POWER(ch, ADEPT_HEALING) + 1;
+  if (GET_TRADITION(ch) == TRAD_ADEPT && GET_POWER(ch, ADEPT_HEALING) > 0)
+    gain *= ((float) 1 + GET_POWER(ch, ADEPT_HEALING) / 2);
   if (GET_BIOOVER(ch) > 0)
     gain /= GET_BIOOVER(ch);
   GET_PHYSICAL(ch) = MIN(GET_MAX_PHYSICAL(ch), GET_PHYSICAL(ch) + gain);
