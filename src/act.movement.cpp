@@ -795,7 +795,7 @@ void move_vehicle(struct char_data *ch, int dir)
   }
 
   if ((!ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_ROAD) && !ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_GARAGE))
-      && (veh->type != VEH_DRONE && veh->type != VEH_BIKE))
+      && !IS_WATER(EXIT(veh, dir)->to_room) && (veh->type != VEH_DRONE && veh->type != VEH_BIKE))
   {
     send_to_char("That's not an easy path-- only drones and bikes have a chance of making it through.\r\n", ch);
     return;
