@@ -2059,7 +2059,7 @@ ACMD(do_treat)
   // There's a LAST_HEAL cap, unless the person is morted-- then you can attempt regardless.
   // Since mages and adepts have additional healing tools (heal spell, empathic), max-cap chars (aka mundanes) get more attempts.
   // Max-skill mages and adepts: 3 total treat attempts. Max-skill mundane: 5 total treat attempts.
-  int biotech_cap = MAX(1, GET_SKILL(ch, SKILL_BIOTECH) / 4) + (GET_SKILL(ch, SKILL_BIOTECH) >= LEARNED_LEVEL ? 1 : 0);
+  int biotech_cap = MAX(0, GET_SKILL(ch, SKILL_BIOTECH) / 4) + (GET_SKILL(ch, SKILL_BIOTECH) >= LEARNED_LEVEL ? 1 : 0);
   if (LAST_HEAL(vict) > biotech_cap && GET_PHYSICAL(vict) > 0) {
     snprintf(buf, sizeof(buf), "LAST_HEAL($n for $N): %d > 1/3rd biotech (%d), so can't treat.", LAST_HEAL(vict), biotech_cap);
     act(buf, FALSE, ch, 0, vict, TO_ROLLS);
@@ -2139,7 +2139,7 @@ ACMD(do_treat)
 
   // House rule: If you've been treated recently, the TN goes up, but you can still try it.
   if (LAST_HEAL(vict) > 0) {
-    int tn_increase = MIN(LAST_HEAL(vict) * 3/2, 6);
+    int tn_increase = MIN(LAST_HEAL(vict) * 3/2, 8);
     snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), ", +%d for recent heal attempt", tn_increase);
     target += tn_increase;
   }
