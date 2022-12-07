@@ -2142,13 +2142,13 @@ ACMD(do_treat)
       GET_MENTAL(vict) = 0;
       LAST_HEAL(vict) = MAX(1, (int)(GET_MAX_PHYSICAL(vict) / 100));
     } else if (GET_PHYSICAL(vict) <= (GET_MAX_PHYSICAL(vict) * 2/5)) {
-      GET_PHYSICAL(vict) += (int)(GET_MAX_PHYSICAL(vict) * 3/1000);
+      GET_PHYSICAL(vict) += (int)(GET_MAX_PHYSICAL(vict) * 3/10);
       LAST_HEAL(vict) = (int)(GET_MAX_PHYSICAL(vict) * 3/1000);
     } else if (GET_PHYSICAL(vict) <= (GET_MAX_PHYSICAL(vict) * 7/10)) {
-      GET_PHYSICAL(vict) += (int)(GET_MAX_PHYSICAL(vict) / 500);
+      GET_PHYSICAL(vict) += (int)(GET_MAX_PHYSICAL(vict) / 5);
       LAST_HEAL(vict) = (int)(GET_MAX_PHYSICAL(vict) / 500);
     } else if (GET_PHYSICAL(vict) <= (GET_MAX_PHYSICAL(vict) * 9/10)) {
-      GET_PHYSICAL(vict) += (int)(GET_MAX_PHYSICAL(vict) / 1000);
+      GET_PHYSICAL(vict) += (int)(GET_MAX_PHYSICAL(vict) / 10);
       LAST_HEAL(vict) = (int)(GET_MAX_PHYSICAL(vict) / 1000);
     }
     update_pos(vict);
