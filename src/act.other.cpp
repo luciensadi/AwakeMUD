@@ -2056,7 +2056,8 @@ ACMD(do_treat)
   FAILURE_CASE(IS_SENATOR(ch) && !access_level(ch, LVL_ADMIN) && !IS_NPC(vict) && !IS_SENATOR(vict), "Staff can't treat players this way. Use the RESTORE command if you have it.");
   FAILURE_CASE(CH_IN_COMBAT(vict), "You can't treat someone who's in combat!");
 
-  if (LAST_HEAL(vict) >= 5) {
+  // There's a LAST_HEAL cap, unless the person is morted-- then you can attempt regardless.
+  if (LAST_HEAL(vict) >= 5 && GET_PHYSICAL(vict) > 0) {
     snprintf(buf, sizeof(buf), "LAST_HEAL($n): %d >= 5, so can't treat.", LAST_HEAL(vict));
     act(buf, FALSE, vict, 0, 0, TO_ROLLS);
     if (ch == vict) {
@@ -2073,7 +2074,7 @@ ACMD(do_treat)
     target = 8;
   else if (GET_PHYSICAL(vict) <= (GET_MAX_PHYSICAL(vict) * 7/10))
     target = 6;
-  else if (GET_PHYSICAL(vict) <= (GET_MAX_PHYSICAL(vict) * 9/10))
+  else if (GET_PHYSICAL(vict) <= GET_MAX_PHYSICAL(vict))
     target = 4;
   else {
     if (ch == vict) {
@@ -2090,8 +2091,8 @@ ACMD(do_treat)
     return;
   }
 
-  FAILURE_CASE(GET_NUYEN(ch) < 200, "You'll need 200 nuyen on hand to cover the cost of supplies.");
-  lose_nuyen(ch, 200, NUYEN_OUTFLOW_GENERIC_SPEC_PROC);
+  FAILURE_CASE(GET_NUYEN(ch) < 150, "You'll need 150 nuyen on hand to cover the cost of supplies.");
+  lose_nuyen(ch, 150, NUYEN_OUTFLOW_GENERIC_SPEC_PROC);
 
   char rbuf[1000];
   snprintf(rbuf, sizeof(rbuf), "Treat TN: Base %d", target);
@@ -2135,7 +2136,7 @@ ACMD(do_treat)
 
   // House rule: If you've been treated recently, the TN goes up, but you can still try it.
   if (LAST_HEAL(vict) > 0) {
-    int tn_increase = LAST_HEAL(vict) * 2;
+    int tn_increase = MIN(LAST_HEAL(vict) * 3/2, 8);
     snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), ", +%d for recent heal attempt", tn_increase);
     target += tn_increase;
   }

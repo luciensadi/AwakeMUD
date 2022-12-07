@@ -900,6 +900,9 @@ struct char_data
   std::unordered_map<idnum_t, bool> *pc_invis_resistance_test_results;
   std::unordered_map<idnum_t, bool> *mob_invis_resistance_test_results;
 
+  // Another unordered map to track who we've sent docwagon alerts to.
+  std::unordered_map<idnum_t, bool> sent_docwagon_messages_to = {};
+
   bool alias_dirty_bit;
 
   /* Named after 'magic bullet pants', the 'technology' in FPS games that allows you to never have to worry about which mag has how much ammo in it. */

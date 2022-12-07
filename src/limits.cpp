@@ -104,7 +104,7 @@ void mental_gain(struct char_data * ch)
     gain *= 1.5;
 
   if (GET_TRADITION(ch) == TRAD_ADEPT)
-    gain *= GET_POWER(ch, ADEPT_HEALING) + 1;
+    gain *= (float) 1 + (GET_POWER(ch, ADEPT_HEALING) / 3);
   if (GET_BIOOVER(ch) > 0)
     gain /= GET_BIOOVER(ch);
 

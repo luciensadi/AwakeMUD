@@ -232,7 +232,7 @@ bool update_pos(struct char_data * victim, bool protect_spells_from_purge)
       if (was_morted && !PRF_FLAGGED(victim, PRF_DONT_ALERT_PLAYER_DOCTORS_ON_MORT)) {
         alert_player_doctors_of_contract_withdrawal(victim, FALSE);
       }
-      PLR_FLAGS(victim).RemoveBit(PLR_SENT_DOCWAGON_PLAYER_ALERT);
+      victim->sent_docwagon_messages_to.clear();
     }
 
     // Pain editor prevents stunned condition.
@@ -254,7 +254,7 @@ bool update_pos(struct char_data * victim, bool protect_spells_from_purge)
       if (was_morted && !PRF_FLAGGED(victim, PRF_DONT_ALERT_PLAYER_DOCTORS_ON_MORT)) {
         alert_player_doctors_of_contract_withdrawal(victim, FALSE);
       }
-      PLR_FLAGS(victim).RemoveBit(PLR_SENT_DOCWAGON_PLAYER_ALERT);
+      victim->sent_docwagon_messages_to.clear();
     }
 
     GET_POS(victim) = POS_STANDING;
@@ -2419,26 +2419,31 @@ bool docwagon(struct char_data *ch)
   if (!room)
     return FALSE;
 
-  int docwagon_tn = MAX(GET_SECURITY_LEVEL(room), 4);
-  int docwagon_dice = GET_DOCWAGON_CONTRACT_GRADE(docwagon) + 1;
-  int successes = success_test(docwagon_dice, docwagon_tn);
-
-  snprintf(rollbuf, sizeof(rollbuf), "$n: DocWagon rescue roll: %d dice vs TN %d netted %d hit(s).", docwagon_dice, docwagon_tn, successes);
-  act(rollbuf, TRUE, ch, 0, 0, TO_ROLLS);
-
-  if (successes <= 0 && access_level(ch, LVL_BUILDER) && PRF_FLAGGED(ch, PRF_PACIFY)) {
-    act("$n: Overriding failed DocWagon roll due to pacified staff level.", TRUE, ch, 0, 0, TO_ROLLS);
-    successes = 1;
-  }
-
-  // In an area with 4 or less security level: Basic has a 75% chance of rescue, Gold has 87.5% rescue, Plat has 93.8% chance.
-  if (successes > 0)
-  {
-    send_to_char(ch, "%s^n chirps cheerily: an automated DocWagon trauma team is on its way!\r\n", CAP(GET_OBJ_NAME(docwagon)));
+  if (PLR_FLAGGED(ch, PLR_DOCWAGON_READY)) {
+    send_to_char(ch, "%s^n buzzes contentedly: the automated DocWagon trauma team remains en route.\r\n", CAP(GET_OBJ_NAME(docwagon)));
     send_to_char(ch, "^L[OOC: You can choose to wait for player assistance to arrive, or you can get picked up immediately by entering ^wDIE^L. See ^wHELP DOCWAGON^L for more details.]\r\n");
-    PLR_FLAGS(ch).SetBit(PLR_DOCWAGON_READY);
   } else {
-    send_to_char(ch, "%s^n vibrates, sending out a trauma call that will hopefully be answered.\r\n", CAP(GET_OBJ_NAME(docwagon)));
+    int docwagon_tn = MAX(GET_SECURITY_LEVEL(room), 4);
+    int docwagon_dice = GET_DOCWAGON_CONTRACT_GRADE(docwagon) + 1;
+    int successes = success_test(docwagon_dice, docwagon_tn);
+
+    snprintf(rollbuf, sizeof(rollbuf), "$n: DocWagon rescue roll: %d dice vs TN %d netted %d hit(s).", docwagon_dice, docwagon_tn, successes);
+    act(rollbuf, TRUE, ch, 0, 0, TO_ROLLS);
+
+    if (successes <= 0 && access_level(ch, LVL_BUILDER) && PRF_FLAGGED(ch, PRF_PACIFY)) {
+      act("$n: Overriding failed DocWagon roll due to pacified staff level.", TRUE, ch, 0, 0, TO_ROLLS);
+      successes = 1;
+    }
+
+    // In an area with 4 or less security level: Basic has a 75% chance of rescue, Gold has 87.5% rescue, Plat has 93.8% chance.
+    if (successes > 0)
+    {
+      send_to_char(ch, "%s^n chirps cheerily: an automated DocWagon trauma team is on its way!\r\n", CAP(GET_OBJ_NAME(docwagon)));
+      send_to_char(ch, "^L[OOC: You can choose to wait for player assistance to arrive, or you can get picked up immediately by entering ^wDIE^L. See ^wHELP DOCWAGON^L for more details.]\r\n");
+      PLR_FLAGS(ch).SetBit(PLR_DOCWAGON_READY);
+    } else {
+      send_to_char(ch, "%s^n vibrates, sending out a trauma call that will hopefully be answered.\r\n", CAP(GET_OBJ_NAME(docwagon)));
+    }
   }
 
   if ((ch->in_room || ch->in_veh) && !PRF_FLAGGED(ch, PRF_DONT_ALERT_PLAYER_DOCTORS_ON_MORT)) {
@@ -3325,8 +3330,16 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
         send_to_char("You are mortally wounded, and will die soon, if not "
                      "aided.\r\n", victim);
       }
-      if (!IS_NPC(victim))
+      if (!IS_NPC(victim)) {
+        // All NPCs (should) stop hitting PCs when they're mortally wounded.
+        for (struct char_data *fighter = combat_list, *next_fighter; fighter; fighter = next_fighter) {
+          next_fighter = fighter->next_fighting;
+          if (IS_NPC(fighter) && FIGHTING(fighter) == victim)
+            stop_fighting(fighter);
+        }
+
         did_docwagon = docwagon(victim);
+      }
       break;
     case POS_STUNNED:
       if (IS_NPC(victim) && MOB_FLAGGED(victim, MOB_INANIMATE)) {

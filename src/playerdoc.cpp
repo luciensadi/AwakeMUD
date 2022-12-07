@@ -15,6 +15,8 @@ extern int isname(const char *str, const char *namelist);
 
 const char *get_char_representation_for_docwagon(struct char_data *ch, struct char_data *plr);
 
+#define IS_VALID_POTENTIAL_RESCUER(plr) (GET_LEVEL(plr) == LVL_MORTAL && plr->char_specials.timer < 5 && !PRF_FLAGGED(plr, PRF_AFK) && !PRF_FLAGGED(plr, PRF_QUEST))
+
 int alert_player_doctors_of_mort(struct char_data *ch, struct obj_data *docwagon) {
   char location_info[500], speech_buf[500];
   int potential_rescuer_count = 0;
@@ -34,10 +36,6 @@ int alert_player_doctors_of_mort(struct char_data *ch, struct obj_data *docwagon
   if (PRF_FLAGGED(ch, PRF_DONT_ALERT_PLAYER_DOCTORS_ON_MORT))
     return 0;
 
-  // If we were doing this right, instead of setting this bit, we'd have a vector on each PC that tracked who we've received alerts from.
-  // I don't have the spoons to code that right now, though. Something to improve on later. -LS
-  PLR_FLAGS(ch).SetBit(PLR_SENT_DOCWAGON_PLAYER_ALERT);
-
   if ((gridguide_coords = get_gridguide_coordinates_for_room(in_room))) {
     snprintf(location_info, sizeof(location_info), "GridGuide coordinates [%s], AKA '%s' (%ld)", gridguide_coords, decapitalize_a_an(GET_ROOM_NAME(in_room)), GET_ROOM_VNUM(in_room));
   } else {
@@ -48,83 +46,99 @@ int alert_player_doctors_of_mort(struct char_data *ch, struct obj_data *docwagon
     if (IS_NPC(plr) || !plr->desc || plr == ch)
       continue;
 
+    if (!AFF_FLAGGED(plr, AFF_WEARING_ACTIVE_DOCWAGON_RECEIVER) || !AWAKE(plr))
+      continue;
+
     if (IS_IGNORING(plr, is_blocking_ic_interaction_from, ch) || IS_IGNORING(ch, is_blocking_ic_interaction_from, plr))
       continue;
 
-    if (AFF_FLAGGED(plr, AFF_WEARING_ACTIVE_DOCWAGON_RECEIVER) && AWAKE(plr)) {
-      const char *display_string = decapitalize_a_an(get_char_representation_for_docwagon(ch, plr));
+    // Compose the display string.
+    const char *display_string = decapitalize_a_an(get_char_representation_for_docwagon(ch, plr));
 
-      switch (GET_DOCWAGON_CONTRACT_GRADE(docwagon)) {
-        case DOCWAGON_GRADE_PLATINUM:
-          snprintf(speech_buf, sizeof(speech_buf),
-                   "Any available unit, we have a Platinum-grade contractee downed at %s."
-                   " Records show them as %s. This is a highest-priority recovery!",
-                   location_info,
-                   get_string_after_color_code_removal(display_string, NULL));
+    // We already sent this person a message, so just prompt them instead of doing the whole thing.
+    if (ch->sent_docwagon_messages_to.find(GET_IDNUM(plr)) != ch->sent_docwagon_messages_to.end()) {
+      send_to_char(plr, "Your DocWagon receiver vibrates, indicating that %s still needs assistance.\r\n", display_string);
 
-          send_to_char(plr,
-                       "Your DocWagon receiver emits a shrill alarm, followed by a brusque human voice: \"^Y%s^n\"\r\n",
-                       capitalize(replace_too_long_words(plr, NULL, speech_buf, SKILL_ENGLISH, "^Y")));
-
-          if (plr->in_room) {
-            act("$n's DocWagon receiver emits a shrill alarm.", TRUE, plr, 0, 0, TO_ROOM);
-            for (struct char_data *mob = plr->in_room->people; mob; mob = mob->next_in_room) {
-              if (IS_NPC(mob) && !mob->desc) {
-                GET_MOBALERT(mob) = MAX(GET_MOBALERT(mob), MALERT_ALERT);
-                GET_MOBALERTTIME(mob) = MAX(GET_MOBALERTTIME(mob), 20);
-              }
-            }
-          } else if (plr->in_veh) {
-            act("$n's DocWagon receiver emits a shrill alarm.", TRUE, plr, 0, 0, TO_VEH);
-          }
-          break;
-        case DOCWAGON_GRADE_GOLD:
-          snprintf(speech_buf, sizeof(speech_buf),
-                   "Recovery specialist, a Gold-grade contractee has been downed at %s. Records show them as %s. Render aid if possible.",
-                   location_info,
-                   get_string_after_color_code_removal(display_string, NULL));
-
-          send_to_char(plr,
-                       "Your DocWagon receiver beeps loudly, followed by an automated voice: \"^y%s^n\"\r\n",
-                       capitalize(replace_too_long_words(plr, NULL, speech_buf, SKILL_ENGLISH, "^y")));
-
-          if (plr->in_room) {
-            act("$n's DocWagon receiver beeps loudly.", TRUE, plr, 0, 0, TO_ROOM);
-            for (struct char_data *mob = plr->in_room->people; mob; mob = mob->next_in_room) {
-              if (IS_NPC(mob) && !mob->desc) {
-                GET_MOBALERT(mob) = MAX(GET_MOBALERT(mob), MALERT_ALERT);
-                GET_MOBALERTTIME(mob) = MAX(GET_MOBALERTTIME(mob), 20);
-              }
-            }
-          } else if (plr->in_veh) {
-            act("$n's DocWagon receiver beeps loudly.", TRUE, plr, 0, 0, TO_VEH);
-          }
-          break;
-        case DOCWAGON_GRADE_BASIC:
-        default:
-          if (GET_DOCWAGON_CONTRACT_GRADE(docwagon) != DOCWAGON_GRADE_BASIC) {
-            char oopsbuf[500];
-            snprintf(oopsbuf, sizeof(oopsbuf), "SYSERR: Unknown DocWagon modulator grade %d for %s (%ld)!", GET_DOCWAGON_CONTRACT_GRADE(docwagon), GET_OBJ_NAME(docwagon), GET_OBJ_VNUM(docwagon));
-            mudlog(oopsbuf, ch, LOG_SYSLOG, TRUE);
-          }
-
-          snprintf(speech_buf, sizeof(speech_buf),
-                   "Notice: Basic-grade contractee downed at %s. Recover if safe to do so.",
-                   location_info);
-
-          send_to_char(plr,
-                       "Your DocWagon receiver vibrates, and text flashes up on its screen: \"^W%s^n\" An accompanying image of %s^n is displayed.\r\n",
-                       capitalize(replace_too_long_words(plr, NULL, speech_buf, SKILL_ENGLISH, "^W")),
-                       display_string);
-          break;
-      }
-
-      // If they're not staff, AFK, idle, or participating in a PRUN, add them to the potential rescuer count that will be sent to the downed player.
-      if (GET_LEVEL(plr) == LVL_MORTAL && plr->char_specials.timer < 5 && !PRF_FLAGGED(plr, PRF_AFK) && !PRF_FLAGGED(plr, PRF_QUEST)) {
-        send_to_char("^c(Please send a ^WTELL^c or announce on ^WOOC^c if you're on your way!)^n\r\n", plr);
+      if (IS_VALID_POTENTIAL_RESCUER(plr)) {
         potential_rescuer_count++;
       }
+
+      continue;
     }
+
+    switch (GET_DOCWAGON_CONTRACT_GRADE(docwagon)) {
+      case DOCWAGON_GRADE_PLATINUM:
+        snprintf(speech_buf, sizeof(speech_buf),
+                 "Any available unit, we have a Platinum-grade contractee downed at %s."
+                 " Records show them as %s. This is a highest-priority recovery!",
+                 location_info,
+                 get_string_after_color_code_removal(display_string, NULL));
+
+        send_to_char(plr,
+                     "Your DocWagon receiver emits a shrill alarm, followed by a brusque human voice: \"^Y%s^n\"\r\n",
+                     capitalize(replace_too_long_words(plr, NULL, speech_buf, SKILL_ENGLISH, "^Y")));
+
+        if (plr->in_room) {
+          act("$n's DocWagon receiver emits a shrill alarm.", TRUE, plr, 0, 0, TO_ROOM);
+          for (struct char_data *mob = plr->in_room->people; mob; mob = mob->next_in_room) {
+            if (IS_NPC(mob) && !mob->desc) {
+              GET_MOBALERT(mob) = MAX(GET_MOBALERT(mob), MALERT_ALERT);
+              GET_MOBALERTTIME(mob) = MAX(GET_MOBALERTTIME(mob), 20);
+            }
+          }
+        } else if (plr->in_veh) {
+          act("$n's DocWagon receiver emits a shrill alarm.", TRUE, plr, 0, 0, TO_VEH);
+        }
+        break;
+      case DOCWAGON_GRADE_GOLD:
+        snprintf(speech_buf, sizeof(speech_buf),
+                 "Recovery specialist, a Gold-grade contractee has been downed at %s. Records show them as %s. Render aid if possible.",
+                 location_info,
+                 get_string_after_color_code_removal(display_string, NULL));
+
+        send_to_char(plr,
+                     "Your DocWagon receiver beeps loudly, followed by an automated voice: \"^y%s^n\"\r\n",
+                     capitalize(replace_too_long_words(plr, NULL, speech_buf, SKILL_ENGLISH, "^y")));
+
+        if (plr->in_room) {
+          act("$n's DocWagon receiver beeps loudly.", TRUE, plr, 0, 0, TO_ROOM);
+          for (struct char_data *mob = plr->in_room->people; mob; mob = mob->next_in_room) {
+            if (IS_NPC(mob) && !mob->desc) {
+              GET_MOBALERT(mob) = MAX(GET_MOBALERT(mob), MALERT_ALERT);
+              GET_MOBALERTTIME(mob) = MAX(GET_MOBALERTTIME(mob), 20);
+            }
+          }
+        } else if (plr->in_veh) {
+          act("$n's DocWagon receiver beeps loudly.", TRUE, plr, 0, 0, TO_VEH);
+        }
+        break;
+      case DOCWAGON_GRADE_BASIC:
+      default:
+        if (GET_DOCWAGON_CONTRACT_GRADE(docwagon) != DOCWAGON_GRADE_BASIC) {
+          char oopsbuf[500];
+          snprintf(oopsbuf, sizeof(oopsbuf), "SYSERR: Unknown DocWagon modulator grade %d for %s (%ld)!", GET_DOCWAGON_CONTRACT_GRADE(docwagon), GET_OBJ_NAME(docwagon), GET_OBJ_VNUM(docwagon));
+          mudlog(oopsbuf, ch, LOG_SYSLOG, TRUE);
+        }
+
+        snprintf(speech_buf, sizeof(speech_buf),
+                 "Notice: Basic-grade contractee downed at %s. Recover if safe to do so.",
+                 location_info);
+
+        send_to_char(plr,
+                     "Your DocWagon receiver vibrates, and text flashes up on its screen: \"^W%s^n\" An accompanying image of %s^n is displayed.\r\n",
+                     capitalize(replace_too_long_words(plr, NULL, speech_buf, SKILL_ENGLISH, "^W")),
+                     display_string);
+        break;
+    }
+
+    // If they're not staff, AFK, idle, or participating in a PRUN, add them to the potential rescuer count that will be sent to the downed player.
+    if (IS_VALID_POTENTIAL_RESCUER(plr)) {
+      send_to_char("^c(Please send a ^WTELL^c or announce on ^WOOC^c if you're on your way!)^n\r\n", plr);
+      potential_rescuer_count++;
+    }
+
+    // Add them to our sent-to list.
+    ch->sent_docwagon_messages_to.insert(std::make_pair(GET_IDNUM(plr), TRUE));
   }
 
   return potential_rescuer_count;
@@ -138,11 +152,10 @@ void alert_player_doctors_of_contract_withdrawal(struct char_data *ch, bool with
     return;
   }
 
-  if (!PLR_FLAGGED(ch, PLR_SENT_DOCWAGON_PLAYER_ALERT)) {
+  if (ch->sent_docwagon_messages_to.empty()) {
     // They hadn't actually alerted yet.
     return;
   }
-  PLR_FLAGS(ch).RemoveBit(PLR_SENT_DOCWAGON_PLAYER_ALERT);
 
   for (struct char_data *plr = character_list; plr; plr = plr->next) {
     if (IS_NPC(plr) || !plr->desc || plr == ch)
@@ -150,6 +163,11 @@ void alert_player_doctors_of_contract_withdrawal(struct char_data *ch, bool with
 
     if (IS_IGNORING(plr, is_blocking_ic_interaction_from, ch) || IS_IGNORING(ch, is_blocking_ic_interaction_from, plr))
       continue;
+
+    // We didn't message this person.
+    if (ch->sent_docwagon_messages_to.find(GET_IDNUM(plr)) == ch->sent_docwagon_messages_to.end()) {
+      continue;
+    }
 
     if (AFF_FLAGGED(plr, AFF_WEARING_ACTIVE_DOCWAGON_RECEIVER)) {
       const char *display_string = get_string_after_color_code_removal(CAP(get_char_representation_for_docwagon(ch, plr)), NULL);
@@ -188,6 +206,9 @@ void alert_player_doctors_of_contract_withdrawal(struct char_data *ch, bool with
       }
     }
   }
+
+  // Purge their Docwagon list.
+  ch->sent_docwagon_messages_to.clear();
 }
 
 bool handle_player_docwagon_track(struct char_data *ch, char *argument) {
@@ -198,7 +219,7 @@ bool handle_player_docwagon_track(struct char_data *ch, char *argument) {
     return FALSE;
 
   for (struct char_data *vict = character_list; vict; vict = vict->next) {
-    if (IS_NPC(vict) || !vict->desc || GET_POS(vict) != POS_MORTALLYW || !PLR_FLAGGED(vict, PLR_SENT_DOCWAGON_PLAYER_ALERT))
+    if (IS_NPC(vict) || !vict->desc || GET_POS(vict) != POS_MORTALLYW)
       continue;
 
     if (IS_IGNORING(vict, is_blocking_ic_interaction_from, ch) || IS_IGNORING(ch, is_blocking_ic_interaction_from, vict))
