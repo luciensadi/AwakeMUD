@@ -2042,38 +2042,27 @@ ACMD(do_treat)
   if (subcmd && (!IS_NPC(ch) || !(GET_MOB_SPEC(ch) || GET_MOB_SPEC2(ch))))
     return;
 
-  if (IS_ASTRAL(ch)) {
-    send_to_char("You can't physically treat someone while projecting.\r\n", ch);
-    return;
-  }
-  if (CH_IN_COMBAT(ch)) {
-    send_to_char("Administer first aid while fighting?!?\r\n", ch);
-    return;
-  }
-
-  if (!*argument) {
-    send_to_char("Treat who?!\r\n", ch);
-    return;
-  }
+  FAILURE_CASE(IS_ASTRAL(ch), "You can't physically treat someone while projecting.");
+  FAILURE_CASE(CH_IN_COMBAT(ch), "Administer first aid while fighting?!?");
+  FAILURE_CASE(!*argument, "Syntax: TREAT <target>");
 
   any_one_arg(argument, arg);
+
   if (!(vict = get_char_room_vis(ch, arg))) {
     send_to_char(ch, "You can't seem to find a '%s' here.\r\n", arg);
     return;
   }
 
-  if (CH_IN_COMBAT(vict)) {
-    act("Not while $E's fighting!", FALSE, ch, 0, vict, TO_CHAR);
-    return;
-  } else if (LAST_HEAL(vict) != 0
-             || (!IS_NPC(vict)
-                 && !IS_SENATOR(vict)
-                 && IS_SENATOR(ch)
-                 && !access_level(ch, LVL_ADMIN))) {
+  FAILURE_CASE(IS_SENATOR(ch) && !access_level(ch, LVL_ADMIN) && !IS_NPC(vict) && !IS_SENATOR(vict), "Staff can't treat players this way. Use the RESTORE command if you have it.");
+  FAILURE_CASE(CH_IN_COMBAT(vict), "You can't treat someone who's in combat!");
+
+  if (LAST_HEAL(vict) >= 5) {
+    snprintf(buf, sizeof(buf), "LAST_HEAL($n): %d >= 5, so can't treat.", LAST_HEAL(vict));
+    act(buf, FALSE, vict, 0, 0, TO_ROLLS);
     if (ch == vict) {
-      send_to_char(ch, "You're not able to treat your wounds right now.\r\n");
+      send_to_char(ch, "You've been healed too recently for that.\r\n");
     } else {
-      act("Treating $N will not do $M any good.", FALSE, ch, 0, vict, TO_CHAR);
+      act("$N has been treated too recently for you to try again.", FALSE, ch, 0, vict, TO_CHAR);
     }
     return;
   }
@@ -2100,8 +2089,18 @@ ACMD(do_treat)
     }
     return;
   }
-  if (vict->in_room && ROOM_FLAGGED(vict->in_room, ROOM_STERILE))
+
+  FAILURE_CASE(GET_NUYEN(ch) < 200, "You'll need 200 nuyen on hand to cover the cost of supplies.");
+  lose_nuyen(ch, 200, NUYEN_OUTFLOW_GENERIC_SPEC_PROC);
+
+  char rbuf[1000];
+  snprintf(rbuf, sizeof(rbuf), "Treat TN: Base %d", target);
+
+  if (vict->in_room && ROOM_FLAGGED(vict->in_room, ROOM_STERILE)) {
     target -= 2;
+    strlcat(rbuf, ", -2 for sterile room", sizeof(rbuf));
+  }
+
   skill = get_skill(ch, SKILL_BIOTECH, target);
 
   if (find_workshop(ch, TYPE_MEDICAL))
@@ -2109,27 +2108,49 @@ ACMD(do_treat)
 
   kit = has_kit(ch, TYPE_MEDICAL);
 
-  if (!kit && !subcmd && !shop)
+  if (!kit && !subcmd && !shop) {
+    strlcat(rbuf, ", +4 for no tools", sizeof(rbuf));
     target += 4;
-
-  if (!shop)
+  }
+  else if (!shop) {
+    strlcat(rbuf, ", +1 for kit only", sizeof(rbuf));
     target++;
-  if (GET_REAL_BOD(vict) >= 10)
-    target -= 3;
-  else if (GET_REAL_BOD(vict) >= 7)
-    target -= 2;
-  else if (GET_REAL_BOD(vict) >= 4)
-    target--;
+  }
 
-  if (GET_REAL_MAG(vict) > 0)
+  if (GET_REAL_BOD(vict) >= 10) {
+    strlcat(rbuf, ", -3 for great vict bod", sizeof(rbuf));
+    target -= 3;
+  } else if (GET_REAL_BOD(vict) >= 7) {
+    strlcat(rbuf, ", -2 for good vict bod", sizeof(rbuf));
+    target -= 2;
+  } else if (GET_REAL_BOD(vict) >= 4) {
+    strlcat(rbuf, ", -1 for okay vict bod", sizeof(rbuf));
+    target--;
+  }
+
+  if (GET_REAL_MAG(vict) > 0) {
+    strlcat(rbuf, ", +2 for treating magically-active", sizeof(rbuf));
     target += 2;
+  }
+
+  // House rule: If you've been treated recently, the TN goes up, but you can still try it.
+  if (LAST_HEAL(vict) > 0) {
+    int tn_increase = LAST_HEAL(vict) * 2;
+    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), ", +%d for recent heal attempt", tn_increase);
+    target += tn_increase;
+  }
 
   if (ch == vict) {
     act("$n begins to treat $mself.", TRUE, ch, 0, vict, TO_NOTVICT);
   } else {
     act("$n begins to treat $N.", TRUE, ch, 0, vict, TO_NOTVICT);
   }
-  if (success_test(skill, target) > 0) {
+
+  int successes = success_test(skill, target);
+  snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), ". Rolled %d dice VS TN %d and got %d success%s.", skill, target, successes, successes == 1 ? "" : "es");
+  act(rbuf, FALSE, ch, 0, 0, TO_ROLLS);
+
+  if (successes > 0) {
     act("$N appears better.", FALSE, ch, 0, vict, TO_CHAR);
     if (ch == vict) {
       send_to_char(ch, "The pain seems significantly better.\r\n");
@@ -2137,20 +2158,25 @@ ACMD(do_treat)
       act("The pain seems significantly less after $n's treatment.",
           FALSE, ch, 0, vict, TO_VICT);
     }
-    if (GET_PHYSICAL(vict) < 100) {
-      GET_PHYSICAL(vict) = MIN(GET_MAX_PHYSICAL(vict), 100);
-      GET_MENTAL(vict) = 0;
-      LAST_HEAL(vict) = MAX(1, (int)(GET_MAX_PHYSICAL(vict) / 100));
-    } else if (GET_PHYSICAL(vict) <= (GET_MAX_PHYSICAL(vict) * 2/5)) {
-      GET_PHYSICAL(vict) += (int)(GET_MAX_PHYSICAL(vict) * 3/1000);
-      LAST_HEAL(vict) = (int)(GET_MAX_PHYSICAL(vict) * 3/1000);
-    } else if (GET_PHYSICAL(vict) <= (GET_MAX_PHYSICAL(vict) * 7/10)) {
-      GET_PHYSICAL(vict) += (int)(GET_MAX_PHYSICAL(vict) / 500);
-      LAST_HEAL(vict) = (int)(GET_MAX_PHYSICAL(vict) / 500);
-    } else if (GET_PHYSICAL(vict) <= (GET_MAX_PHYSICAL(vict) * 9/10)) {
-      GET_PHYSICAL(vict) += (int)(GET_MAX_PHYSICAL(vict) / 1000);
-      LAST_HEAL(vict) = (int)(GET_MAX_PHYSICAL(vict) / 1000);
+
+    // Rectify negative mental.
+    if (GET_MENTAL(vict) < 0) {
+      GET_MENTAL(vict) = MAX(GET_MENTAL(vict), 0);
     }
+
+    // Add a box of health. They get a second box if they're still mortally wounded.
+    GET_PHYSICAL(vict) += MIN(GET_MAX_PHYSICAL(vict), 100);
+    if (GET_PHYSICAL(vict) <= 0)
+      GET_PHYSICAL(vict) += MIN(GET_MAX_PHYSICAL(vict), 100);
+
+    // Tack on additional boxes for good rolls.
+    int extra_heal = successes / 3;
+    if (extra_heal > 0) {
+      send_to_char("Your treatment was highly successful!\r\n", ch);
+      act("$n's treatment was highly successful!", TRUE, ch, 0, 0, TO_ROOM);
+      GET_PHYSICAL(vict) = MIN(GET_MAX_PHYSICAL(vict), GET_PHYSICAL(vict) + extra_heal * 100);
+    }
+
     update_pos(vict);
   } else {
     if (ch == vict) {
@@ -2159,8 +2185,13 @@ ACMD(do_treat)
       act("Your treatment does nothing for $N.", FALSE, ch, 0, vict, TO_CHAR);
       act("$n's treatment doesn't help your wounds.", FALSE, ch, 0, vict, TO_VICT);
     }
-    LAST_HEAL(vict) = 3;
   }
+
+  // Regardless of success or failure, increment last_heal to discourage spam.
+  LAST_HEAL(vict)++;
+
+  // Treater gets a wait state.
+  WAIT_STATE(ch, 2 RL_SEC);
 }
 
 ACMD(do_astral)
