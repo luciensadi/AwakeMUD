@@ -938,7 +938,7 @@ void move_vehicle(struct char_data *ch, int dir)
   }
 }
 
-int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vict)
+int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vict, struct veh_data *vict_veh)
 {
   struct room_data *was_in = NULL;
   struct follow_type *k, *next;
@@ -1021,7 +1021,7 @@ int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vic
     } else if (GET_REAL_LEVEL(ch) == 1) {
       send_to_char("Sorry, that area is for game administration only.\r\n", ch);
     } else {
-      send_to_char(ch, "Sorry, you need to be a level-%d immortal to go there.\r\n", EXIT(ch, dir)->to_room->staff_level_lock);
+      send_to_char(ch, "Sorry, you need to be a level-%d staff member to go there.\r\n", EXIT(ch, dir)->to_room->staff_level_lock);
     }
     return 0;
   }
@@ -1059,6 +1059,32 @@ int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vic
     send_to_char("You are wearing too much armor to move!\r\n", ch);
     return 0;
   }
+
+  // Flying vehicles can traverse any terrain.
+  if (vict_veh && !ROOM_FLAGGED(EXIT(ch, dir)->to_room, ROOM_ALL_VEHICLE_ACCESS) && !veh_can_traverse_air(vict_veh)) {
+    // Non-flying vehicles can't pass fall rooms.
+    if (ROOM_FLAGGED(EXIT(ch, dir)->to_room, ROOM_FALL)) {
+      send_to_char(ch, "%s would plunge to its destruction!\r\n", capitalize(GET_VEH_NAME_NOFORMAT(vict_veh)));
+      return 0;
+    }
+
+    // Check to see if your vehicle can handle the terrain type you're giving it.
+    if (IS_WATER(EXIT(ch, dir)->to_room)) {
+      if (!veh_can_traverse_water(vict_veh)) {
+        send_to_char(ch, "%s would sink!\r\n", capitalize(GET_VEH_NAME_NOFORMAT(vict_veh)));
+        return 0;
+      }
+    } else {
+      if (!veh_can_traverse_land(vict_veh)) {
+        // Do nothing-- you can put boats on wheels for the purpose of dragging them.
+        /*
+        send_to_char(ch, "You'll have a hard time getting %s on land.\r\n", GET_VEH_NAME(vict_veh));
+        return 0;
+        */
+      }
+    }
+  }
+
   if (AFF_FLAGGED(ch, AFF_BINDING)) {
     if (success_test(GET_STR(ch), ch->points.binding) > 0) {
       act("$n breaks the bindings at $s feet!", TRUE, ch, 0, 0, TO_ROOM);
@@ -1070,6 +1096,7 @@ int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vic
       return 0;
     }
   }
+
   if (IS_SET(EXIT(ch, dir)->exit_info, EX_CLOSED)) {
     if (EXIT(ch, dir)->keyword)
       send_to_char(ch, "You pass through the closed %s.\r\n", fname(EXIT(ch, dir)->keyword));
@@ -1813,7 +1840,7 @@ ACMD(do_drag)
       }
     } else {
       struct room_data *in_room = ch->in_room;
-      perform_move(ch, dir, 0, NULL);
+      perform_move(ch, dir, 0, NULL, veh);
       // Message only if we succeeded.
       if (in_room != ch->in_room) {
         send_to_char(ch, "Heaving and straining, you drag %s along with you.\r\n", drag_veh_name);

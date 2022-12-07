@@ -206,10 +206,8 @@ void    look_at_room(struct char_data *ch, int mode, int is_quicklook);
 void    peek_into_adjacent(struct char_data * ch, int dir);
 
 /* in act.movmement.c */
-int     do_simple_move(struct char_data *ch, int dir, int extra, struct
-                       char_data *vict);
-int perform_move(struct char_data *ch, int dir, int extra, struct char_data
-                 *vict);
+int     do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *vict);
+int     perform_move(struct char_data *ch, int dir, int extra, struct char_data *vict, struct veh_data *vict_veh=NULL);
 
 // Currently not used anywhere.
 void    reverse_obj_list(struct obj_data **obj);
