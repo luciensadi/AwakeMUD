@@ -4540,9 +4540,24 @@ ACMD(do_spray)
 
   for (struct obj_data *obj = ch->carrying; obj; obj = obj->next_content)
     if (GET_OBJ_SPEC(obj) && GET_OBJ_SPEC(obj) == spraypaint) {
-      if (get_string_length_after_color_code_removal(argument, ch) >= LINE_LENGTH) {
+      int length = get_string_length_after_color_code_removal(argument, ch);
+
+      if (length >= LINE_LENGTH) {
         send_to_char("There isn't that much paint in there.\r\n", ch);
         return;
+      }
+
+      // If it's too short, check to make sure there's at least one space in it.
+      if (length < 10) {
+        const char *ptr = argument;
+        for (; *ptr; ptr++) {
+          if (*ptr == ' ')
+            break;
+        }
+        if (!*ptr) {
+          send_to_char(ch, "Please write out something to spray, like 'spray A coiling dragon mural'.\r\n");
+          return;
+        }
       }
 
       {
