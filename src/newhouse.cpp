@@ -1101,6 +1101,9 @@ void Apartment::set_complex(ApartmentComplex *new_complex) {
   complex = new_complex;
   complex->apartments.push_back(this);
   sort(complex->apartments.begin(), complex->apartments.end(), apartment_sort_func);
+
+  // Change our save directory.
+  base_directory = complex->base_directory;
 }
 
 bool Apartment::set_rent(long amount, struct char_data *ch) {
