@@ -45,13 +45,13 @@ std::vector<ApartmentComplex*> global_apartment_complexes = {};
 
 const bf::path global_housing_dir = bf::system_complete("lib") / "housing";
 
+// TODO: if you're standing in a complex and do 'houseedit apartment show X', it should search for shortnames / fullnames in the complex you're standing in before it does a full MUD search
+
 // TODO: Add back crap counts and formatting to hcontrol command
 
 // TODO: Verify hcontrol destroy works, or remove all hints about it
 
 // TODO: Security testing and verification that it's not possible to specify apt names that traverse directories.
-
-// TODO: Consider allowing guests to view status of and pay apartments.
 
 // TODO: Thoroughly test houseedit complex
 // - list
@@ -944,13 +944,6 @@ bool Apartment::create_or_extend_lease(struct char_data *ch) {
     }
   }
 
-  if (!issue_key(ch)) {
-    send_to_char(ch, "(OOC: Oops, looks like that apartment is broken. You've been refunded %d nuyen in cash.)\r\n", nuyen_per_month);
-    GET_NUYEN_RAW(ch) += nuyen_per_month;
-    GET_NUYEN_INCOME_THIS_PLAY_SESSION(ch, NUYEN_OUTFLOW_HOUSING) -= nuyen_per_month;
-    return FALSE;
-  }
-
   if (!has_owner()) {
     owned_by_player = GET_IDNUM(ch);
     paid_until = time(0) + (SECS_PER_REAL_DAY*30);
@@ -1777,12 +1770,13 @@ SPECIAL(landlord_spec)
 
     for (auto &apartment : complex->get_apartments()) {
       if (is_abbrev(arg, apartment->get_name()) || is_abbrev(arg, apartment->get_short_name())) {
-        if (!apartment->has_owner_privs(ch)) {
+        if (!apartment->has_owner_privs(ch) && !apartment->is_guest(GET_IDNUM(ch))) {
           snprintf(say_string, sizeof(say_string), "You aren't the owner of %s.", apartment->get_name());
           mob_say(recep, say_string);
         } else {
-          apartment->create_or_extend_lease(ch);
-          mob_say(recep, "You are paid up for the next period.");
+          if (apartment->create_or_extend_lease(ch)) {
+            mob_say(recep, "You are paid up for the next period.");
+          }
         }
         return TRUE;
       }
@@ -1803,15 +1797,15 @@ SPECIAL(landlord_spec)
         if (!apartment->has_owner()) {
           snprintf(say_string, sizeof(say_string), "%s is currently available for lease.", CAP(apartment->get_name()));
           mob_say(recep, say_string);
-        } else if (!apartment->has_owner_privs(ch)) {
+        } else if (!apartment->has_owner_privs(ch) && !apartment->is_guest(GET_IDNUM(ch))) {
           snprintf(say_string, sizeof(say_string), "%s has been leased.", CAP(apartment->get_name()));
           mob_say(recep, say_string);
         } else {
           if (apartment->get_paid_until() - time(0) < 0) {
-            snprintf(say_string, sizeof(say_string), "Your rent has expired on %s.", apartment->get_name());
+            snprintf(say_string, sizeof(say_string), "%s's rent has expired.", CAP(apartment->get_name()));
             mob_say(recep, say_string);
           } else {
-            snprintf(buf2, sizeof(buf2), "You are paid on %s for another %d days.", apartment->get_name(), (int)((apartment->get_paid_until() - time(0)) / 86400));
+            snprintf(buf2, sizeof(buf2), "%s is paid up for another %d days.", CAP(apartment->get_name()), (int)((apartment->get_paid_until() - time(0)) / 86400));
             mob_say(recep, buf2);
             strlcpy(buf2, "Note: Those are real-world days.", sizeof(buf2));
             do_say(recep, buf2, 0, SCMD_OSAY);
