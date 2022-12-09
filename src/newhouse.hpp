@@ -193,6 +193,7 @@ class Apartment {
     bool can_houseedit_apartment(struct char_data *ch);
     void mark_as_deleted();
     void recalculate_garages();
+    void apply_rooms();
 
     bool delete_guest(idnum_t idnum);
     void add_guest(idnum_t idnum);
@@ -223,6 +224,7 @@ class ApartmentRoom {
     ApartmentRoom(Apartment *apartment, bf::path filename);
     ApartmentRoom(Apartment *apartment, struct room_data *room);
     ApartmentRoom(ApartmentRoom *);
+    ~ApartmentRoom();
 
     // Accessors.
     vnum_t get_vnum() { return vnum; }

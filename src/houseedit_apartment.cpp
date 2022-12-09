@@ -175,6 +175,12 @@ void houseedit_apartment_parse(struct descriptor_data *d, const char *arg) {
           d->edit_mode = HOUSEEDIT_APARTMENT_SHORTNAME;
           break;
         case '2': // display name
+          if (is_abbrev("unnamed-", APT->get_name())) {
+            send_to_char(CH, "You need to set the shortname first.\r\n");
+            houseedit_display_room_edit_menu(d);
+            return;
+          }
+
           send_to_char("Enter the new display name [ex: Unit 3A]: ", CH);
           d->edit_mode = HOUSEEDIT_APARTMENT_NAME;
           break;
@@ -264,6 +270,9 @@ void houseedit_apartment_parse(struct descriptor_data *d, const char *arg) {
               // Write to disk.
               APT->save_base_info();
               APT->save_rooms();
+
+              // Apply to world.
+              APT->apply_rooms();
 
               // Null edit_apartment so it's not deleted later.
               APT = NULL;

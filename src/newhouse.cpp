@@ -21,10 +21,11 @@ namespace bf = boost::filesystem;
 #include "nlohmann/json.hpp"
 using nlohmann::json;
 
-#define COMPLEX_INFO_FILE_NAME   "complex_info.json"
-#define APARTMENT_INFO_FILE_NAME "apartment_info.json"
-#define LEASE_INFO_FILE_NAME     "lease.json"
-#define ROOM_INFO_FILE_NAME      "room_info.json"
+#define COMPLEX_INFO_FILE_NAME      "complex_info.json"
+#define APARTMENT_INFO_FILE_NAME    "apartment_info.json"
+#define LEASE_INFO_FILE_NAME        "lease.json"
+#define ROOM_INFO_FILE_NAME         "room_info.json"
+#define DELETED_APARTMENTS_DIR_NAME "deleted-apartments"
 
 extern void ASSIGNMOB(long mob, SPECIAL(fname));
 extern bool Storage_get_filename(vnum_t vnum, char *filename, int filename_size);
@@ -48,24 +49,6 @@ const bf::path global_housing_dir = bf::system_complete("lib") / "housing";
 // TODO: if you're standing in a complex and do 'houseedit apartment show X', it should search for shortnames / fullnames in the complex you're standing in before it does a full MUD search
 
 // TODO: Add back crap counts and formatting to hcontrol command
-
-// TODO: Verify hcontrol destroy works, or remove all hints about it
-
-// TODO: Security testing and verification that it's not possible to specify apt names that traverse directories.
-
-// TODO: Thoroughly test houseedit complex
-// - list
-// - show
-// - create
-// - delete
-// - edit
-
-// TODO: Thoroughly test houseedit apartment
-// - list
-// - show
-// - create
-// - delete
-// - edit
 
 // TODO: Verify through testing that an apartment owned by non-buildport player id X is not permanently borked when loaded on the buildport and then transferred back to main
 
@@ -257,7 +240,14 @@ ApartmentComplex::ApartmentComplex(bf::path filename) :
     for (bf::directory_iterator itr(base_directory); itr != end_itr; ++itr) {
       if (is_directory(itr->status())) {
         bf::path room_path = itr->path();
-        log_vfprintf(" --- Initializing apartment %s.", room_path.filename().string().c_str());
+
+#define ROOM_NAME room_path.filename().string().c_str()
+        if (!str_cmp(ROOM_NAME, DELETED_APARTMENTS_DIR_NAME))
+          continue;
+
+        log_vfprintf(" --- Initializing apartment %s.", ROOM_NAME);
+#undef ROOM_NAME
+
         Apartment *apartment = new Apartment(this, room_path);
         apartments.push_back(apartment);
         log_vfprintf(" --- Fully loaded %s.", apartment->get_name());
@@ -564,7 +554,16 @@ void ApartmentComplex::add_apartment(Apartment *apartment) {
 /* Blank apartment for editing. */
 Apartment::Apartment() :
   shortname(str_dup("unnamed")), name(str_dup("Unit Unnamed")), full_name(str_dup("Somewhere's Unit Unnamed"))
-{}
+{
+  snprintf(buf, sizeof(buf), "unnamed-%ld", time(0));
+  set_short_name(buf);
+
+  snprintf(buf, sizeof(buf), "Unit %s", shortname);
+  name = str_dup(buf);
+
+  snprintf(buf, sizeof(buf), "Somewhere's %s", name);
+  full_name = str_dup(buf);
+}
 
 Apartment::Apartment(ApartmentComplex *complex, const char *new_name, vnum_t key_vnum, vnum_t new_atrium, int new_lifestyle, idnum_t owner, time_t paid_until) :
   lifestyle(new_lifestyle), atrium(new_atrium), key_vnum(key_vnum), owned_by_player(owner), paid_until(paid_until), complex(complex)
@@ -660,6 +659,14 @@ Apartment::~Apartment() {
     auto it = find(complex->apartments.begin(), complex->apartments.end(), this);
     if (it != complex->apartments.end())
       complex->apartments.erase(it);
+  }
+
+  // Delete any pointers to us from rooms.
+  for (auto &room : rooms) {
+    rnum_t rnum = real_room(room->vnum);
+    if (rnum >= 0 && world[rnum].apartment == this) {
+      world[rnum].apartment = NULL;
+    }
   }
 }
 
@@ -1080,9 +1087,16 @@ const char *Apartment::get_lifestyle_string() {
 }
 
 void Apartment::mark_as_deleted() {
+  bf::path deleted_apartments = complex->base_directory / DELETED_APARTMENTS_DIR_NAME;
+
+  // Ensure our deleted-apartments dir exists.
+  if (!bf::exists(deleted_apartments)) {
+    bf::create_directory(deleted_apartments);
+  }
+
   char deleted_name[500];
   snprintf(deleted_name, sizeof(deleted_name), "%s-%ld", name, time(0));
-  bf::rename(base_directory, complex->base_directory / "deleted-apartments" / deleted_name);
+  bf::rename(base_directory, deleted_apartments / deleted_name);
 }
 
 void Apartment::set_complex(ApartmentComplex *new_complex) {
@@ -1096,7 +1110,7 @@ void Apartment::set_complex(ApartmentComplex *new_complex) {
   sort(complex->apartments.begin(), complex->apartments.end(), apartment_sort_func);
 
   // Change our save directory.
-  base_directory = complex->base_directory;
+  base_directory = complex->base_directory / shortname;
 }
 
 bool Apartment::set_rent(long amount, struct char_data *ch) {
@@ -1185,6 +1199,18 @@ void Apartment::set_name(const char *newname) {
   full_name = str_dup(formatted_name);
 }
 
+void Apartment::apply_rooms() {
+  for (auto &room : rooms) {
+    rnum_t rnum = real_room(room->vnum);
+    if (rnum >= 0) {
+      world[rnum].apartment = this;
+      world[rnum].apartment_room = room;
+    } else {
+      mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Invalid vnum %ld when applying rooms for %s!", room->vnum, get_full_name());
+    }
+  }
+}
+
 /********** ApartmentRoom ************/
 
 ApartmentRoom::ApartmentRoom(Apartment *apartment, bf::path filename) :
@@ -1247,6 +1273,14 @@ ApartmentRoom::ApartmentRoom(ApartmentRoom *source) {
   base_path = source->base_path;
   storage_path = source->storage_path;
   apartment = source->apartment;
+}
+
+ApartmentRoom::~ApartmentRoom() {
+  // Make sure nobody's pointing to us.
+  rnum_t rnum = real_room(vnum);
+  if (rnum >= 0 && world[rnum].apartment_room == this) {
+    world[rnum].apartment_room = NULL;
+  }
 }
 
 void ApartmentRoom::save_info() {
