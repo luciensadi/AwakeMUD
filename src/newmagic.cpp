@@ -1663,13 +1663,15 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       }
 
       base_target = 0;
+      bool drugged = FALSE;
       for (int i = MIN_DRUG; i < NUM_DRUGS; i++) {
         if (GET_DRUG_STAGE(vict, i) != DRUG_STAGE_UNAFFECTED) {
           base_target = MAX(base_target, drug_types[i].power);
+          drugged = TRUE;
         }
       }
 
-      if (!base_target) {
+      if (!drugged) {
         send_to_char("They aren't affected by any drugs.\r\n", ch);
         return;
       }
