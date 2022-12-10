@@ -104,7 +104,7 @@ void mental_gain(struct char_data * ch)
     gain *= 1.5;
 
   if (GET_TRADITION(ch) == TRAD_ADEPT && GET_POWER(ch, ADEPT_HEALING) > 0)
-    gain *= ((float) GET_POWER(ch, ADEPT_HEALING) / 2 + 1);
+    gain *= (((float) GET_POWER(ch, ADEPT_HEALING) / 2) + 1);
   if (GET_BIOOVER(ch) > 0)
     gain /= GET_BIOOVER(ch);
 
@@ -184,7 +184,7 @@ void physical_gain(struct char_data * ch)
     gain *= get_drug_heal_multiplier(ch);
   }
   if (GET_TRADITION(ch) == TRAD_ADEPT && GET_POWER(ch, ADEPT_HEALING) > 0)
-    gain *= ((float) GET_POWER(ch, ADEPT_HEALING) / 2 + 1);
+    gain *= (((float) GET_POWER(ch, ADEPT_HEALING) / 2) + 1);
   if (GET_BIOOVER(ch) > 0)
     gain /= GET_BIOOVER(ch);
   GET_PHYSICAL(ch) = MIN(GET_MAX_PHYSICAL(ch), GET_PHYSICAL(ch) + gain);
