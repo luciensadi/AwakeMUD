@@ -70,6 +70,7 @@ extern vnum_t newbie_start_room;
 extern int frozen_start_room;
 extern int last;
 extern int max_ability(int i);
+extern int count_objects(struct obj_data *obj);
 
 extern const char *wound_arr[];
 extern const char *material_names[];
@@ -4008,9 +4009,10 @@ ACMD(do_show)
                { "storage",        LVL_BUILDER },
                { "anomalies",      LVL_BUILDER },
                { "roomflag",       LVL_BUILDER },
-               { "markets",        LVL_VICEPRES},
-               { "weight",         LVL_PRESIDENT},
-               { "ignore",         LVL_FIXER},
+               { "markets",        LVL_VICEPRES },
+               { "weight",         LVL_PRESIDENT },
+               { "ignore",         LVL_FIXER },
+               { "vehicles",       LVL_ADMIN },
                { "\n", 0 }
              };
 
@@ -4524,6 +4526,44 @@ ACMD(do_show)
       return;
     }
     display_characters_ignore_entries(ch, vict);
+    return;
+  case 26:
+    {
+      idnum_t idnum;
+      if (!*value) {
+        idnum = -1;
+        send_to_char("All player-owned vehicles in game:\r\n", ch);
+      } else {
+        if ((idnum = get_player_id(value)) <= 0) {
+          send_to_char(ch, "'%s' is not a character name.\r\n", value);
+          return;
+        } else {
+          send_to_char(ch, "Vehicles owned by %s:\r\n", value);
+        }
+      }
+
+      int total_crap = 0;
+      for (struct veh_data *tmp = veh_list; tmp; tmp = tmp->next) {
+        if (tmp->owner == idnum || (tmp->owner > 0 && idnum == -1)) {
+          // Count crap.
+          int crap_count = tmp->contents ? count_objects(tmp->contents) : 0;
+          total_crap += crap_count;
+
+          // Display.
+          struct room_data *in_room = get_veh_in_room(tmp);
+          const char *owner_name = get_player_name(tmp->owner);
+          send_to_char(ch, "%-30.30s^n  ", get_string_after_color_code_removal(GET_VEH_NAME(tmp), NULL));
+          send_to_char(ch, "%30.30s^n (%6ld)  %3d item%s, owned by %s^n\r\n",
+                       in_room ? get_string_after_color_code_removal(GET_ROOM_NAME(in_room), NULL) : "towed?",
+                       in_room ? GET_ROOM_VNUM(in_room) : -1,
+                       crap_count,
+                       crap_count == 1 ? "" : "s",
+                       owner_name);
+          delete [] owner_name;
+        }
+      }
+      send_to_char(ch, "Total crap: %d\r\n", total_crap);
+    }
     return;
   default:
     send_to_char("Sorry, I don't understand that.\r\n", ch);
