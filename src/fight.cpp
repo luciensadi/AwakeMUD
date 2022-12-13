@@ -5699,6 +5699,8 @@ void perform_violence(void)
     initiative_until_global_reroll = GET_INIT_ROLL(combat_list);
   }
 
+  initiative_until_global_reroll -= 10;
+
   // This while-loop replaces the combat list for-loop so we can do better edge case checking.
   ch = NULL;
   bool first_iteration = TRUE;
@@ -6159,7 +6161,6 @@ void perform_violence(void)
     }
   }
 
-  initiative_until_global_reroll -= 10;
   mudlog("Combat list complete.", NULL, LOG_SYSLOG, TRUE);
 }
 
