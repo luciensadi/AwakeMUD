@@ -709,8 +709,8 @@ bool _sort_pairs_by_weight(std::pair<int, int> a, std::pair<int, int> b) {
 
 ACMD(do_flee)
 {
-  if (AFF_FLAGGED(ch, AFF_PRONE)) {
-    send_to_char("It's a struggle to flee while prone!\r\n", ch);
+  if (AFF_FLAGGED(ch, AFF_PRONE) || GET_POS(ch) <= POS_SITTING) {
+    send_to_char("It's a struggle to flee while not on your feet!\r\n", ch);
     return;
   }
 
