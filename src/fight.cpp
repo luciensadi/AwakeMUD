@@ -2396,10 +2396,7 @@ void docwagon_retrieve(struct char_data *ch) {
     }
   }
 
-  if (PLR_FLAGGED(ch, PLR_SENT_DOCWAGON_PLAYER_ALERT)) {
-    alert_player_doctors_of_contract_withdrawal(ch, FALSE);
-    PLR_FLAGS(ch).RemoveBit(PLR_SENT_DOCWAGON_PLAYER_ALERT);
-  }
+  alert_player_doctors_of_contract_withdrawal(ch, FALSE);
 }
 
 bool docwagon(struct char_data *ch)
