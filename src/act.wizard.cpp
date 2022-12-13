@@ -5702,14 +5702,17 @@ ACMD(do_zlist)
 
   if (!*buf && !*buf1) {
     zonenum = real_zone(ch->player_specials->saved.zonenum);
+    FAILURE_CASE(zonenum < 0, "You need to ZSWITCH to a valid zone first.");
     first = 0;
     last = zone_table[zonenum].num_cmds;
   } else if (*buf && !*buf1) {     // if there is not a second argument, then the
     zonenum = real_zone(atoi(buf));  // is considered the zone number
+    FAILURE_CASE(zonenum < 0, "You need to ZSWITCH to a valid zone first.");
     first = 0;
     last = zone_table[zonenum].num_cmds;
   } else {
     zonenum = real_zone(ch->player_specials->saved.zonenum);
+    FAILURE_CASE(zonenum < 0, "You need to ZSWITCH to a valid zone first.");
     first = MAX(0, MIN(atoi(buf), zone_table[zonenum].num_cmds));
     last = MIN(atoi(buf1), zone_table[zonenum].num_cmds);
   }
