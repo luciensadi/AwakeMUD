@@ -266,3 +266,59 @@ const char *get_char_representation_for_docwagon(struct char_data *ch, struct ch
 
   return display_string;
 }
+
+ACMD(do_docwagon) {
+  send_to_char(ch, "Command not yet implemented.\r\n");
+/*
+  int mode = 0;
+
+  skip_spaces(&arg);
+
+  if (!*arg) {
+    send_to_char("Syntax: DOCWAGON (ACCEPT|WITHDRAW) <name>\r\n", ch);
+    return;
+  }
+
+  if (is_abbrev(arg, "accept") || is_abbrev(arg, "acknowledge") || is_abbrev(arg, "take")) {
+    mode = 1;
+  }
+  else if (is_abbrev(arg, "decline") || is_abbrev(arg, "withdraw") || is_abbrev(arg, "reject") || is_abbrev(arg, "drop")) {
+    mode = 2;
+  }
+  else {
+    send_to_char("Syntax: DOCWAGON (ACCEPT|WITHDRAW) <name>\r\n", ch);
+    return;
+  }
+
+  const char *remainder = any_one_arg(arg, buf);
+
+  // Find the downed person.
+  for (struct char_data *tmp = character_list; tmp; tmp = tmp->next) {
+    if (!keyword_appears_in_char(buf, tmp, TRUE, TRUE, FALSE))
+      continue;
+
+    if (PRF_FLAGGED(tmp, PRF_DONT_ALERT_PLAYER_DOCTORS_ON_MORT))
+      continue;
+
+    if (IS_NPC(tmp) || !tmp->desc || tmp == ch)
+      continue;
+
+    if (IS_IGNORING(tmp, is_blocking_ic_interaction_from, ch) || IS_IGNORING(ch, is_blocking_ic_interaction_from, tmp))
+      continue;
+
+    // TODO: must have sent us a message
+
+    // TODO: if we've already ack'd, don't ack again-- if already refused, don't refuse again
+
+    // TODO: log it
+
+    if (mode == 1) {
+      send_to_char(tmp, "Your DocWagon modulator buzzes-- someone has acknowledged your request for assistance and is on their way!\r\n");
+    } else {
+      send_to_char(tmp, "Your DocWagon modulator buzzes-- someone who was on their way has dropped the contract.\r\n");
+    }
+    send_to_char(ch, "You anonymously notify them that you're %son the way.", mode != 1 ? "no longer " : "");
+    return;
+  }
+*/
+}

@@ -2813,199 +2813,210 @@ ACMD(do_charge) {
   mudlog(buf2, ch, LOG_WIZLOG, TRUE);
 }
 
+void staff_induced_karma_alteration_for_online_char(struct char_data *ch, struct char_data *vict, int karma_times_100, const char *reason, bool add_karma) {
+  float karma = ((float) karma_times_100) / 100;
+
+  if (add_karma) {
+    if (GET_KARMA(vict) + karma_times_100 > MYSQL_UNSIGNED_MEDIUMINT_MAX) {
+      send_to_char(ch, "That would put %s over the absolute karma maximum. You may award up to %d points of karma. Otherwise, tell %s to spend what %s has, or compensate %s some other way.\r\n",
+                   GET_CHAR_NAME(vict),
+                   MYSQL_UNSIGNED_MEDIUMINT_MAX - GET_KARMA(vict),
+                   HMHR(vict),
+                   HSSH(vict),
+                   HMHR(vict));
+      return;
+    }
+
+    // Add to karma.
+    GET_KARMA(vict) += karma_times_100;
+
+    // Add to rep.
+    GET_REP(vict) += karma;
+
+    // Add to TKE.
+    GET_TKE(vict) += karma;
+  } else {
+    if (GET_KARMA(vict) - karma_times_100 < 0) {
+      send_to_char(ch, "That would put %s under zero karma. You may deduct up to %d points of karma.\r\n",
+                   GET_CHAR_NAME(vict),
+                   GET_KARMA(vict));
+      return;
+    }
+
+    // Add to karma.
+    GET_KARMA(vict) -= karma_times_100;
+
+    // Make no changes to rep or TKE.
+  }
+
+  // Notify the victim.
+  send_to_char(vict, "You have been %s %0.2f karma for %s%s^n\r\n",
+               add_karma ? "awarded" : "deducted",
+               karma,
+               reason,
+               ispunct(get_final_character_from_string(reason)) ? "" : ".");
+
+  // Notify the ch.
+  send_to_char(ch, "You %s %s %0.2f karma for %s%s^n\r\n",
+               add_karma ? "awarded" : "deducted",
+               GET_CHAR_NAME(vict),
+               karma,
+               reason,
+               ispunct(get_final_character_from_string(reason)) ? "" : ".");
+
+  // Log it.
+  snprintf(buf2, sizeof(buf2), "%s %s %0.2f karma to %s for %s^g (%d to %d).",
+           GET_CHAR_NAME(ch),
+           add_karma ? "awarded" : "deducted",
+           karma,
+           GET_CHAR_NAME(vict),
+           reason,
+           GET_KARMA(vict) - karma_times_100,
+           GET_KARMA(vict));
+  mudlog(buf2, ch, LOG_WIZLOG, TRUE);
+
+  // Persist results.
+  playerDB.SaveChar(vict);
+}
+
+void staff_induced_karma_alteration_for_offline_char(struct char_data *ch, const char *name, int karma_times_100, const char *reason, bool add_karma) {
+  float karma = ((float) karma_times_100) / 100;
+
+  char query_buf[MAX_INPUT_LENGTH + 1000], tmp[MAX_INPUT_LENGTH];
+
+  snprintf(query_buf, sizeof(query_buf), "SELECT idnum, karma FROM pfiles WHERE name='%s';",
+           prepare_quotes(tmp, name, sizeof(buf2) / sizeof(tmp[0])));
+
+  FAILURE_CASE(mysql_wrapper(mysql, query_buf), "An unexpected error occurred (query failed).");
+
+  MYSQL_RES *res = mysql_use_result(mysql);
+
+  FAILURE_CASE(!res, "An unexpected error occurred (use_result failed).");
+
+  MYSQL_ROW row = mysql_fetch_row(res);
+
+  if (!row && mysql_field_count(mysql)) {
+    mysql_free_result(res);
+    send_to_char(ch, "Could not find a PC named %s^n.\r\n", name);
+    return;
+  }
+
+  long idnum = atol(row[0]);
+  int old_karma = atoi(row[1]);
+  mysql_free_result(res);
+
+  if (add_karma) {
+    if (old_karma + karma_times_100 > MYSQL_UNSIGNED_MEDIUMINT_MAX) {
+      send_to_char(ch, "That would put them over the absolute karma maximum. You may award up to %d points of karma.\r\n",
+                   MYSQL_UNSIGNED_MEDIUMINT_MAX - old_karma);
+      return;
+    }
+
+    snprintf(query_buf, sizeof(query_buf), "UPDATE pfiles SET Karma = Karma + %d, Rep = Rep + %d, TKE = TKE + %d WHERE idnum='%ld';",
+             karma_times_100,
+             (int) karma,
+             (int) karma,
+             idnum);
+  } else {
+    if (old_karma - karma_times_100 < 0) {
+      send_to_char(ch, "That would put them at negative karma. You may deduct up to %d points of karma.\r\n",
+                   old_karma);
+      return;
+    }
+
+    snprintf(query_buf, sizeof(query_buf), "UPDATE pfiles SET Karma = Karma - %d WHERE idnum='%ld';",
+             karma_times_100,
+             idnum);
+  }
+
+  FAILURE_CASE(mysql_wrapper(mysql, query_buf), "An unexpected error occurred on update (query failed).");
+
+  // Mail the victim.
+  snprintf(buf, sizeof(buf), "You have been %s %0.2f karma for %s%s^n\r\n",
+           add_karma ? "awarded" : "deducted",
+           karma,
+           reason,
+           ispunct(get_final_character_from_string(reason)) ? "" : ".");
+  store_mail(idnum, ch, buf);
+
+  // Notify the actor.
+  send_to_char(ch, "You %s %s %0.2f karma for %s%s^n\r\n",
+               add_karma ? "award" : "deduct",
+               capitalize(arg),
+               karma,
+               reason,
+               ispunct(get_final_character_from_string(reason)) ? "" : ".");
+
+  // Log it.
+  snprintf(buf, sizeof(buf), "%s %s %s %0.2f karma for %s^g (%d to %d).",
+           GET_CHAR_NAME(ch),
+           add_karma ? "awarded" : "deducted",
+           capitalize(arg),
+           karma,
+           reason,
+           old_karma,
+           old_karma + karma_times_100);
+  mudlog(buf, ch, LOG_WIZLOG, TRUE);
+}
+
 ACMD(do_award)
 {
-  MYSQL_RES *res;
-  MYSQL_ROW row;
-
   struct char_data *vict;
   char amt[MAX_STRING_LENGTH];
   char reason[MAX_STRING_LENGTH];
-  int k;
 
   half_chop(argument, arg, buf);
   half_chop(buf, amt, reason);
 
-  k = atoi(amt);
+  int karma_times_100 = atoi(amt);
 
-  if (!*arg || !*amt || !*reason || k <= 0 ) {
+  if (!*arg || !*amt || !*reason || karma_times_100 <= 0 ) {
     send_to_char("Syntax: award <player> <karma x 100> <Reason for award>\r\n", ch);
     return;
   }
 
   if (!(vict = get_char_vis(ch, arg))) {
-    snprintf(buf, sizeof(buf), "SELECT idnum, karma FROM pfiles WHERE name='%s';", prepare_quotes(buf2, arg, sizeof(buf2) / sizeof(buf2[0])));
-    if (mysql_wrapper(mysql, buf)) {
-      send_to_char("An unexpected error occurred (query failed).\r\n", ch);
-      return;
-    }
-    if (!(res = mysql_use_result(mysql))) {
-      send_to_char("An unexpected error occurred (use_result failed).\r\n", ch);
-      return;
-    }
-    row = mysql_fetch_row(res);
-    if (!row && mysql_field_count(mysql)) {
-      mysql_free_result(res);
-      send_to_char(ch, "Could not find a PC named %s.\r\n", arg);
-      return;
-    }
-    long idnum = atol(row[0]);
-    int old_karma = atoi(row[1]);
-    mysql_free_result(res);
-
-    // Now that we've confirmed the player exists, update them.
-    snprintf(buf, sizeof(buf), "UPDATE pfiles SET Karma = Karma + %d WHERE idnum='%ld';", k, idnum);
-    if (mysql_wrapper(mysql, buf)) {
-      send_to_char("An unexpected error occurred on update (query failed).\r\n", ch);
-      return;
-    }
-
-    // Mail the victim.
-    snprintf(buf, sizeof(buf), "You have been awarded %0.2f karma for %s%s^n\r\n",
-            (float)k*0.01,
-            reason,
-            ispunct(get_final_character_from_string(reason)) ? "" : ".");
-    store_mail(idnum, ch, buf);
-
-    // Notify the actor.
-    send_to_char(ch, "You award %0.2f karma to %s for %s%s^n\r\n",
-                (float)k*0.01,
-                capitalize(arg),
-                reason,
-                ispunct(get_final_character_from_string(reason)) ? "" : ".");
-
-    // Log it.
-    snprintf(buf, sizeof(buf), "%s awarded %0.2f karma to %s for %s^g (%d to %d).",
-            GET_CHAR_NAME(ch),
-            (float)k*0.01,
-            arg,
-            reason,
-            old_karma,
-            old_karma + k);
-    mudlog(buf, ch, LOG_WIZLOG, TRUE);
-    return;
-  }
-
-  if (IS_SENATOR(vict)) {
-    send_to_char(ch, "Staff can't receive karma this way. Use the SET command.\r\n", ch);
-    return;
-  }
-
-  if (GET_KARMA(vict) + k > MYSQL_UNSIGNED_MEDIUMINT_MAX) {
-    send_to_char(ch, "That would put %s over the absolute karma maximum. You may award up to %d points of karma. Otherwise, tell %s to spend what %s has, or compensate %s some other way.\r\n",
-                 GET_CHAR_NAME(vict), MYSQL_UNSIGNED_MEDIUMINT_MAX - GET_KARMA(vict), HMHR(vict), HSSH(vict), HMHR(vict));
+    staff_induced_karma_alteration_for_offline_char(ch, arg, karma_times_100, reason, TRUE);
     return;
   }
 
   if (vict->desc && vict->desc->original)
-    gain_karma(vict->desc->original, k, TRUE, FALSE, FALSE);
-  else
-    gain_karma(vict, k, TRUE, FALSE, FALSE);
+    vict = vict->desc->original;
 
-  // Since we added rep for this, we need to remove it.
-  GET_REP(vict) -= (int) (k / 100);
+  FAILURE_CASE(IS_SENATOR(vict), "Staff can't receive karma this way. Use the SET command");
+  FAILURE_CASE(IS_NPC(vict), "Not on NPCs.");
 
-  send_to_char(vict, "You have been awarded %0.2f karma for %s%s^n\r\n", (float)k*0.01, reason, ispunct(get_final_character_from_string(reason)) ? "" : ".");
-
-  send_to_char(ch, "You awarded %0.2f karma to %s for %s%s^n\r\n", (float)k*0.01, GET_CHAR_NAME(vict), reason, ispunct(get_final_character_from_string(reason)) ? "" : ".");
-
-  snprintf(buf2, sizeof(buf2), "%s awarded %0.2f karma to %s for %s^g (%d to %d).",
-          GET_CHAR_NAME(ch), (float)k*0.01,
-          GET_CHAR_NAME(vict), reason, GET_KARMA(vict) - k, GET_KARMA(vict));
-  mudlog(buf2, ch, LOG_WIZLOG, TRUE);
+  staff_induced_karma_alteration_for_online_char(ch, vict, karma_times_100, reason, TRUE);
 }
 
 ACMD(do_deduct)
 {
-  MYSQL_ROW row;
-  MYSQL_RES *res;
-
   struct char_data *vict;
   char amt[MAX_STRING_LENGTH];
   char reason[MAX_STRING_LENGTH];
-  int k;
+  int karma_times_100;
 
   half_chop(argument, arg, buf);
   half_chop(buf, amt, reason);
 
-  k = atoi(amt);
+  karma_times_100 = atoi(amt);
 
-  if (!*arg || !*amt || !*reason || k <= 0 ) {
+  if (!*arg || !*amt || !*reason || karma_times_100 <= 0 ) {
     send_to_char("Syntax: deduct <player> <karma x 100> <Reason for penalty>\r\n", ch);
     return;
   }
   if (!(vict = get_char_vis(ch, arg))) {
-    snprintf(buf, sizeof(buf), "SELECT idnum, karma FROM pfiles WHERE name='%s';", prepare_quotes(buf2, arg, sizeof(buf2) / sizeof(buf2[0])));
-    if (mysql_wrapper(mysql, buf)) {
-      send_to_char("An unexpected error occurred (query failed).\r\n", ch);
-      return;
-    }
-    if (!(res = mysql_use_result(mysql))) {
-      send_to_char("An unexpected error occurred (use_result failed).\r\n", ch);
-      return;
-    }
-    row = mysql_fetch_row(res);
-    if (!row && mysql_field_count(mysql)) {
-      mysql_free_result(res);
-      send_to_char(ch, "Could not find a PC named %s.\r\n", arg);
-      return;
-    }
-    long idnum = atol(row[0]);
-    int old_karma = atoi(row[1]);
-    mysql_free_result(res);
-
-    // Now that we've confirmed the player exists, update them.
-    snprintf(buf, sizeof(buf), "UPDATE pfiles SET Karma = Karma - %d WHERE idnum='%ld';", k, idnum);
-    if (mysql_wrapper(mysql, buf)) {
-      send_to_char("An unexpected error occurred on update (query failed).\r\n", ch);
-      return;
-    }
-
-    // Mail the victim.
-    snprintf(buf, sizeof(buf), "You have been deducted %0.2f karma for %s%s^n\r\n",
-            (float)k*0.01,
-            reason,
-            ispunct(get_final_character_from_string(reason)) ? "" : ".");
-    store_mail(idnum, ch, buf);
-
-    // Notify the actor.
-    send_to_char(ch, "You deduct %0.2f karma from %s for %s%s^n\r\n",
-                (float)k*0.01,
-                capitalize(arg),
-                reason,
-                ispunct(get_final_character_from_string(reason)) ? "" : ".");
-
-    // Log it.
-    snprintf(buf, sizeof(buf), "%s deduct %0.2f karma from %s for %s^g (%d to %d).",
-            GET_CHAR_NAME(ch),
-            (float)k*0.01,
-            arg,
-            reason,
-            old_karma,
-            old_karma - k);
-    mudlog(buf, ch, LOG_WIZLOG, TRUE);
+    staff_induced_karma_alteration_for_offline_char(ch, arg, karma_times_100, reason, FALSE);
     return;
   }
 
   if (vict->desc && vict->desc->original)
-    gain_karma(vict->desc->original, k * -1, TRUE, FALSE, FALSE);
-  else
-    gain_karma(vict, k * -1, TRUE, FALSE, FALSE);
+    vict = vict->desc->original;
 
-  // Since we subtracted rep for this, we need to re-add it.
-  GET_REP(vict) += (int) (k / 100);
-  // We also need to account for the TKE loss.
-  GET_TKE(vict) += (int) (k / 100);
+  FAILURE_CASE(IS_SENATOR(vict), "Staff can't lose karma this way. Use the SET command");
+  FAILURE_CASE(IS_NPC(vict), "Not on NPCs.");
 
-  send_to_char(vict, "You have been deducted %0.2f karma for %s%s^n\r\n", (float)k*0.01, reason, ispunct(get_final_character_from_string(reason)) ? "" : ".");
-
-  send_to_char(ch, "You deduct %0.2f karma from %s for %s%s^n\r\n", (float)k*0.01,
-          GET_NAME(vict), reason, ispunct(get_final_character_from_string(reason)) ? "" : ".");
-
-  snprintf(buf2, sizeof(buf2), "%s deducted %0.2f karma from %s for %s^g (%d to %d).",
-          GET_CHAR_NAME(ch), (float)k*0.01,
-          GET_CHAR_NAME(vict), reason, GET_KARMA(vict) + k, GET_KARMA(vict));
-  mudlog(buf2, ch, LOG_WIZLOG, TRUE);
+  staff_induced_karma_alteration_for_online_char(ch, vict, karma_times_100, reason, FALSE);
 }
 
 // Restores a character to peak physical condition.
