@@ -3167,17 +3167,25 @@ int vnum_object_armors(char *searchname, struct char_data * ch)
   for (nr = 0; nr <= top_of_objt; nr++) {
     if (GET_OBJ_TYPE(&obj_proto[nr]) != ITEM_WORN)
       continue;
-    if (GET_OBJ_VAL(&obj_proto[nr],0) + GET_OBJ_VAL(&obj_proto[nr],1) <= 20)
+
+    float bal = GET_WORN_BALLISTIC(&obj_proto[nr]);
+    float imp = GET_WORN_IMPACT(&obj_proto[nr]);
+    if (GET_WORN_MATCHED_SET(&obj_proto[nr])) {
+      bal /= 100;
+      imp /= 100;
+    }
+
+    if (bal + imp <= 20)
       continue;
 
     sprint_obj_mods( &obj_proto[nr], xbuf, sizeof(xbuf));
 
     ++found;
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%5ld -%2d] ^c%3db %3di^n %s^n^y%s^n%s\r\n",
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%5ld -%2d] ^c%0.2fb %0.2fi^n %s^n^y%s^n%s\r\n",
             OBJ_VNUM_RNUM(nr),
             ObjList.CountObj(nr),
-            GET_WORN_MATCHED_SET(&obj_proto[nr]) ? GET_WORN_BALLISTIC(&obj_proto[nr]) / 100 : GET_WORN_BALLISTIC(&obj_proto[nr]),
-            GET_WORN_MATCHED_SET(&obj_proto[nr]) ? GET_WORN_IMPACT(&obj_proto[nr]) / 100 : GET_WORN_IMPACT(&obj_proto[nr]),
+            bal,
+            imp,
             obj_proto[nr].text.name,
             xbuf,
             obj_proto[nr].source_info ? "  ^g(canon)^n" : "");
@@ -3188,17 +3196,25 @@ int vnum_object_armors(char *searchname, struct char_data * ch)
     for (nr = 0; nr <= top_of_objt; nr++) {
       if (GET_OBJ_TYPE(&obj_proto[nr]) != ITEM_WORN)
         continue;
-      if (GET_OBJ_VAL(&obj_proto[nr],0) + GET_OBJ_VAL(&obj_proto[nr],1) != total)
+
+      float bal = GET_WORN_BALLISTIC(&obj_proto[nr]);
+      float imp = GET_WORN_IMPACT(&obj_proto[nr]);
+      if (GET_WORN_MATCHED_SET(&obj_proto[nr])) {
+        bal /= 100;
+        imp /= 100;
+      }
+
+      if (bal + imp != total)
         continue;
 
       sprint_obj_mods( &obj_proto[nr], xbuf, sizeof(xbuf) );
 
       ++found;
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%5ld -%2d] ^c%3db %3di^n %s^n^y%s^n%s\r\n",
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%5ld -%2d] ^c%0.2fb %0.2fi^n %s^n^y%s^n%s\r\n",
               OBJ_VNUM_RNUM(nr),
               ObjList.CountObj(nr),
-              GET_WORN_BALLISTIC(&obj_proto[nr]),
-              GET_WORN_IMPACT(&obj_proto[nr]),
+              bal,
+              imp,
               obj_proto[nr].text.name,
               xbuf,
               obj_proto[nr].source_info ? "  ^g(canon)^n" : "");
