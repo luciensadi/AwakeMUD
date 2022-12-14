@@ -1657,35 +1657,37 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
   bool cyber = TRUE;
   switch (spell) {
     case SPELL_DETOX:
-      if (AFF_FLAGGED(vict, AFF_DETOX)) {
-        send_to_char(ch, "They're already undergoing detox.\r\n");
-        return;
-      }
-
-      base_target = 0;
-      bool drugged = FALSE;
-      for (int i = MIN_DRUG; i < NUM_DRUGS; i++) {
-        if (GET_DRUG_STAGE(vict, i) != DRUG_STAGE_UNAFFECTED) {
-          base_target = MAX(base_target, drug_types[i].power);
-          drugged = TRUE;
+      {
+        if (AFF_FLAGGED(vict, AFF_DETOX)) {
+          send_to_char(ch, "They're already undergoing detox.\r\n");
+          return;
         }
-      }
 
-      if (!drugged) {
-        send_to_char("They aren't affected by any drugs.\r\n", ch);
-        return;
+        base_target = 0;
+        bool drugged = FALSE;
+        for (int i = MIN_DRUG; i < NUM_DRUGS; i++) {
+          if (GET_DRUG_STAGE(vict, i) != DRUG_STAGE_UNAFFECTED) {
+            base_target = MAX(base_target, drug_types[i].power);
+            drugged = TRUE;
+          }
+        }
+
+        if (!drugged) {
+          send_to_char("They aren't affected by any drugs.\r\n", ch);
+          return;
+        }
+        WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
+        success = success_test(skill, base_target + target_modifiers);
+        snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
+        act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
+        if (success > 0) {
+          direct_sustain = create_sustained(ch, vict, spell, force, 0, success, spells[SPELL_STABILIZE].draindamage);
+          send_to_char("You notice the effects of the drugs suddenly wear off.\r\n", vict);
+          act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
+        } else
+          send_to_char(FAILED_CAST, ch);
+        spell_drain(ch, spell, force, 0, direct_sustain);
       }
-      WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
-      success = success_test(skill, base_target + target_modifiers);
-      snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
-      act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
-      if (success > 0) {
-        direct_sustain = create_sustained(ch, vict, spell, force, 0, success, spells[SPELL_STABILIZE].draindamage);
-        send_to_char("You notice the effects of the drugs suddenly wear off.\r\n", vict);
-        act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
-      } else
-        send_to_char(FAILED_CAST, ch);
-      spell_drain(ch, spell, force, 0, direct_sustain);
       break;
     case SPELL_STABILIZE:
       WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
