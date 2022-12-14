@@ -37,7 +37,7 @@ void    close_socket(struct descriptor_data *d);
 // int     gettimeofday(struct timeval *t, struct timezone *dummy);
 
 const char *perform_act(const char *orig, struct char_data *ch, struct obj_data *obj,
-                    void *vict_obj, struct char_data *to);
+                    void *vict_obj, struct char_data *to, bool skip_you_stanzas);
 
 const char *act(const char *str, int hide_invisible, struct char_data *ch,
             struct obj_data *obj, void *vict_obj, int type);
