@@ -671,8 +671,10 @@ void affect_total(struct char_data * ch)
             }
 
             // Keep track of which worn item provides the highest total value.
-            if (bal + imp > highestbal + highestimp) {
+            if (bal > highestbal) {
               highestbal = bal;
+            }
+            if (imp > highestimp) {
               highestimp = imp;
             }
 
