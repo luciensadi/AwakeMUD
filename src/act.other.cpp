@@ -2144,6 +2144,12 @@ ACMD(do_treat)
     target += tn_increase;
   }
 
+  // Cap the TN.
+  if (target > 12) {
+    strlcat(rbuf, ". TN capped to 12", sizeof(rbuf));
+    target = 12;
+  }
+
   if (ch == vict) {
     act("$n begins to treat $mself.", TRUE, ch, 0, vict, TO_NOTVICT);
   } else {
